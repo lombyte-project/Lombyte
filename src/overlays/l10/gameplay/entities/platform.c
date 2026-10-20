@@ -1591,50 +1591,50 @@ extern void func_L00_002633D8_f(float, float, void *, int *, float *,
                                 void *) __asm__("FUN_L00_00262360");
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 
-void FUN_L10_002d8d30(char *m) {
+void FUN_L10_002d8d30(char *moby) {
     enum {
         SPARK_STATE_WAIT_FOR_TIMER = 0,
         SPARK_STATE_TRAVERSE_PATH = 1
     };
-    char *d = *(char **)(m + 0x78);
+    char *spark_vars = *(char **)(moby + 0x78);
     int *path;
     float pos[4];
     int seg;
     float frac;
     float len;
-    if (*(int *)d == -1) {
-        func_001E9730_2da0f0(D_L10_001DD120, *(short *)(m + 0xB2));
-        delete_moby(m);
+    if (*(int *)spark_vars == -1) {
+        func_001E9730_2da0f0(D_L10_001DD120, *(short *)(moby + 0xB2));
+        delete_moby(moby);
         return;
     }
-    path = D_L10_001B0930[*(int *)d];
-    ((unsigned char *)m)[0x30] = 0xFF;
-    switch (((unsigned char *)m)[0x20]) {
+    path = D_L10_001B0930[*(int *)spark_vars];
+    ((unsigned char *)moby)[0x30] = 0xFF;
+    switch (((unsigned char *)moby)[0x20]) {
     case SPARK_STATE_WAIT_FOR_TIMER:
-        if (*(int *)(d + 0xC) != -1) {
-            FUN_L00_0023e838(*(int *)(d + 0xC));
-            *(int *)(d + 0xC) = -1;
+        if (*(int *)(spark_vars + 0xC) != -1) {
+            FUN_L00_0023e838(*(int *)(spark_vars + 0xC));
+            *(int *)(spark_vars + 0xC) = -1;
         }
-        if (*(int *)(d + 0x10) != -1) {
-            char *e = ((char *)&D_0013E550) + *(int *)(d + 0x10) * 0x70;
-            if (*(char **)(e + 0x88) == m && ((unsigned char *)e)[0x74] != 0) {
-                release_voice_slot(*(int *)(d + 0x10));
+        if (*(int *)(spark_vars + 0x10) != -1) {
+            char *voice_entry = ((char *)&D_0013E550) + *(int *)(spark_vars + 0x10) * 0x70;
+            if (*(char **)(voice_entry + 0x88) == moby && ((unsigned char *)voice_entry)[0x74] != 0) {
+                release_voice_slot(*(int *)(spark_vars + 0x10));
             }
         }
-        *(int *)(d + 0x10) = -1;
-        if (func_001F9908_v(d + 8) != 0) {
-            m[0x20] = 1;
-            *(int *)(d + 4) = 0;
+        *(int *)(spark_vars + 0x10) = -1;
+        if (func_001F9908_v(spark_vars + 8) != 0) {
+            moby[0x20] = 1;
+            *(int *)(spark_vars + 4) = 0;
         }
         break;
     case SPARK_STATE_TRAVERSE_PATH:
         len = distance_xyz((char *)path + 0x10, (char *)path + 0x20);
-        *(float *)(d + 4) += frame_time * 5.0f;
-        func_L00_002633D8_f(*(float *)(d + 4), len, path, &seg, &frac, pos);
-        if (*(int *)(d + 0xC) == -1) {
-            *(int *)(d + 0xC) = FUN_L00_0023e738(pos, 3.0f, 0.0f, 1.0f, 1.0f, 0.5f);
+        *(float *)(spark_vars + 4) += frame_time * 5.0f;
+        func_L00_002633D8_f(*(float *)(spark_vars + 4), len, path, &seg, &frac, pos);
+        if (*(int *)(spark_vars + 0xC) == -1) {
+            *(int *)(spark_vars + 0xC) = FUN_L00_0023e738(pos, 3.0f, 0.0f, 1.0f, 1.0f, 0.5f);
         } else {
-            char *l = D_L10_00180740 + *(int *)(d + 0xC) * 32;
+            char *l = D_L10_00180740 + *(int *)(spark_vars + 0xC) * 32;
             qcopy(l + 0x10, pos);
             *(float *)(l + 0) = 1.0f;
             *(float *)(l + 0x1C) = 3.0f;
@@ -1645,20 +1645,20 @@ void FUN_L10_002d8d30(char *m) {
         if (random_integer_below(2) != 0)
             return;
         if (D_L10_0015F5CC & 1) {
-            FUN_L10_002dd270(m, pos, path, *(float *)(d + 4), frame_time * 5.0f, len);
+            FUN_L10_002dd270(moby, pos, path, *(float *)(spark_vars + 4), frame_time * 5.0f, len);
         }
-        if (voice_is_playing(m, *(int *)(d + 0x10)) == 0) {
-            int r = trooper_play_sound(0, 0xC, m, 0x442);
-            *(int *)(d + 0x10) = r;
+        if (voice_is_playing(moby, *(int *)(spark_vars + 0x10)) == 0) {
+            int r = trooper_play_sound(0, 0xC, moby, 0x442);
+            *(int *)(spark_vars + 0x10) = r;
             if (r != -1) {
                 *(OvlQuad *)(((char *)&voice_positions) + r * 0x70) = *(OvlQuad *)pos;
             }
         } else {
-            *(OvlQuad *)(((char *)&voice_positions) + *(int *)(d + 0x10) * 0x70) = *(OvlQuad *)pos;
+            *(OvlQuad *)(((char *)&voice_positions) + *(int *)(spark_vars + 0x10) * 0x70) = *(OvlQuad *)pos;
         }
         if (seg == *path - 1) {
-            m[0x20] = 0;
-            *(int *)(d + 8) = scale_game_frames(0x78);
+            moby[0x20] = 0;
+            *(int *)(spark_vars + 8) = scale_game_frames(0x78);
         }
         break;
     }
