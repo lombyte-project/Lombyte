@@ -664,7 +664,7 @@ extern void transform_vector_by_basis(void *, void *, void *);
 extern void vu_euler_rotation_basis(void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L17_002d77f0(char *m) {
+void FUN_L17_002d77f0(char *moby) {
     enum {
         RING_INITIALIZE = 0,
         RING_ROTATE_AND_DRAW = 1
@@ -681,36 +681,36 @@ void FUN_L17_002d77f0(char *m) {
     OvlQuad sp100[1];
     int j;
     int k;
-    float *d;
+    float *ring_vars;
     float len;
     float g;
     float f21;
     float f20;
-    int c;
+    int particle_lifetime;
     char *w;
 
-    d = *(float **)(m + 0x78);
+    ring_vars = *(float **)(moby + 0x78);
     if (FUN_L00_0020d568() != 0) {
-        switch (*(unsigned char *)(m + 0x20)) {
+        switch (*(unsigned char *)(moby + 0x20)) {
         case RING_INITIALIZE:
-            *(unsigned char *)(m + 0x30) = 0xFF;
-            *(unsigned char *)(m + 0x20) = 1;
-            d[1] = d[0] * *(float *)&D_L17_00161B78 * DEG_TO_RAD * frame_time;
+            *(unsigned char *)(moby + 0x30) = 0xFF;
+            *(unsigned char *)(moby + 0x20) = 1;
+            ring_vars[1] = ring_vars[0] * *(float *)&D_L17_00161B78 * DEG_TO_RAD * frame_time;
             break;
         case RING_ROTATE_AND_DRAW:
-            *(float *)(m + 0x40) = fast_add_rotations(*(float *)(m + 0x40), d[1]);
-            enqueue_callback_list_1(FUN_L17_002d7cf0, m);
+            *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), ring_vars[1]);
+            enqueue_callback_list_1(FUN_L17_002d7cf0, moby);
             break;
         }
-        subtract_vector_xyz(sp0, &hero.motion.pos, (m + 0x10));
-        if (dot_vectors_xyz(sp0, (m + 0xC0)) > 0.0f) {
-            normalize_vector_xyz(sp10, (m + 0xC0), 1.0f);
+        subtract_vector_xyz(sp0, &hero.motion.pos, (moby + 0x10));
+        if (dot_vectors_xyz(sp0, (moby + 0xC0)) > 0.0f) {
+            normalize_vector_xyz(sp10, (moby + 0xC0), 1.0f);
         } else {
-            normalize_vector_xyz(sp10, (m + 0xC0), -1.0f);
+            normalize_vector_xyz(sp10, (moby + 0xC0), -1.0f);
         }
         {
             int i;
-            blk.p10 = m;
+            blk.p10 = moby;
             blk.v14 = 0x10001;
             blk.i20 = 1;
             blk.c18 = 1;
@@ -718,8 +718,8 @@ void FUN_L17_002d77f0(char *m) {
             blk.f8 = 1.0f;
             blk.fC = 5627.9248046875f;
             blk.c19 = 1;
-            blk.h1A = *(unsigned short *)(m + 0xA6);
-            vu_euler_rotation_basis(mat1, m + 0x40);
+            blk.h1A = *(unsigned short *)(moby + 0xA6);
+            vu_euler_rotation_basis(mat1, moby + 0x40);
             normalize_vector_triplet(mat1);
             copy_matrix_rotation(mat2, mat1);
             i = 0;
@@ -737,33 +737,33 @@ void FUN_L17_002d77f0(char *m) {
                                                wrap_angle(convert_integer_to_float(i) * 2.0943952f)),
                             f21));
                     transform_vector(spC0, spC0, mat2);
-                    FUN_L00_001ff290(spD0, spC0, (m + 0x10));
-                    if (FUN_001f9b48((m + 0x10), &hero.motion.pos) < 30.0f) {
-                        collision_line((m + 0x10), spC0, 9, m, &blk);
+                    FUN_L00_001ff290(spD0, spC0, (moby + 0x10));
+                    if (FUN_001f9b48((moby + 0x10), &hero.motion.pos) < 30.0f) {
+                        collision_line((moby + 0x10), spC0, 9, moby, &blk);
                     }
-                    spD0[0] = *(OvlQuad *)(m + 0x10);
+                    spD0[0] = *(OvlQuad *)(moby + 0x10);
                     *(float *)((char *)spD0 + 0xC) = *(float *)&D_L17_00161B84;
                     if (fast_bsphere_check((char *)spD0, 20.0f) != -1 && (j == 0 || j == 4)) {
                         spF0[0] = 0;
                         *(float *)((char *)spF0 + 8) = 12.0f;
-                        transform_vector_by_basis(spF0, spF0, (m + 0xC0));
+                        transform_vector_by_basis(spF0, spF0, (moby + 0xC0));
                         {
                             for (k = 0; k < *(int *)&D_L17_00161B88; k++) {
                                 f20 = -1.0f;
                                 if (rand() & 1)
                                     f20 = 1.0f;
-                                c = func_001FA898_r(multiply_global_factor_ed64(random_float_between(
+                                particle_lifetime = func_001FA898_r(multiply_global_factor_ed64(random_float_between(
                                     *(float *)&D_L17_00161B90 * 0.5f, *(float *)&D_L17_00161B90)));
-                                if (c <= 0)
-                                    c = 1;
-                                subtract_vector_xyz(sp100, spC0, (m + 0x10));
+                                if (particle_lifetime <= 0)
+                                    particle_lifetime = 1;
+                                subtract_vector_xyz(sp100, spC0, (moby + 0x10));
                                 spF0[0] = sp100[0];
                                 scale_vector_xyz(spF0, spF0, f20);
                                 len = vector_length_xyz(spF0);
                                 if (f20 < 0.0f)
                                     spE0[0] = spC0[0];
                                 else
-                                    spE0[0] = *(OvlQuad *)(m + 0x10);
+                                    spE0[0] = *(OvlQuad *)(moby + 0x10);
                                 scale_vector_xyz(spF0, spF0, random_float_between(0.0f, 0.9f));
                                 w = (char *)sp100;
                                 FUN_L00_001ff290(w, spE0, spF0);
@@ -771,9 +771,9 @@ void FUN_L17_002d77f0(char *m) {
                                 f20 *= 10.0f;
                                 normalize_vector_xyz(
                                     spF0, spF0,
-                                    random_float_between(f20, len / convert_integer_to_float(c * 4)));
+                                    random_float_between(f20, len / convert_integer_to_float(particle_lifetime * 4)));
                                 FUN_L00_002730e0((float *)spE0, (char *)spF0,
-                                                 *(int *)&D_L17_00161B94, c & 0xFF,
+                                                 *(int *)&D_L17_00161B94, particle_lifetime & 0xFF,
                                                  random_integer_below(0xFF) & 0xFF, 0,
                                                  *(float *)&D_L17_00161B8C);
                             }
