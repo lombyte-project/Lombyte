@@ -141,6 +141,7 @@ void FUN_L14_00235600(void) {
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
+        HERO_STATE_ITEM_ANIMATION_RELEASE_GATE = 46,
         HERO_STATE_GRIND_OBSTACLE_RECOVERY = 66,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
         HERO_STATE_TARGET_POSE_APPROACH_ANIMATION_WAIT = 102,
@@ -558,7 +559,7 @@ void FUN_L14_00235600(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 46: {
+                case HERO_STATE_ITEM_ANIMATION_RELEASE_GATE: {
                     int mask = hero.items[0].button_mask;
                     if (((unsigned char *)hero.moby)[0x52] == 0x2E && hero.anim_frame > 28.0f) {
                         if (controller_state.held & mask) {
