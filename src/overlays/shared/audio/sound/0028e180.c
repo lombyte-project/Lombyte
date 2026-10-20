@@ -29,7 +29,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 void FUN_L00_0028e180(unsigned char *moby) {
-    char *d = *(char **)(moby + 0x78);
+    char *proximity_state_data = *(char **)(moby + 0x78);
     float *moby_position;
     float proximity_test_position[4];
     int v;
@@ -54,11 +54,11 @@ void FUN_L00_0028e180(unsigned char *moby) {
             }
         }
         moby_position = (float *)(moby + 0x10);
-        if (*(short *)(d + 0xC) != 0) {
+        if (*(short *)(proximity_state_data + 0xC) != 0) {
             transform_vector_by_basis(proximity_test_position, D_L00_001BD880 + ship_index[0] * 16, moby + 0xC0);
             add_vector_xyz(proximity_test_position, proximity_test_position, moby_position);
             if (FUN_001f9b48(proximity_test_position, &hero.motion.pos) > 4.1f) {
-                *(short *)(d + 0xC) = 0;
+                *(short *)(proximity_state_data + 0xC) = 0;
             }
         } else {
             q = (unsigned char *)(&hero.motion.pos);
@@ -66,14 +66,14 @@ void FUN_L00_0028e180(unsigned char *moby) {
                 transform_vector_by_basis(proximity_test_position, D_L00_001BD880 + ship_index[0] * 16, moby + 0xC0);
                 add_vector_xyz(proximity_test_position, proximity_test_position, moby_position);
                 if (FUN_001f9b48(proximity_test_position, q) < 4.0f) {
-                    *(short *)(d + 0xC) = 1;
+                    *(short *)(proximity_state_data + 0xC) = 1;
                 }
             }
         }
         if (*(unsigned short *)(moby + 0x34) & 1) {
-            *(short *)(d + 0xC) = 0;
+            *(short *)(proximity_state_data + 0xC) = 0;
         }
-        if (*(short *)(d + 0xC) != 0) {
+        if (*(short *)(proximity_state_data + 0xC) != 0) {
             int r = try_set_help_message(2, 0x53E4) != 0;
             if ((*(int *)(((char *)&D_0013CAE4)) & 0x10) && r) {
                 if (current_level_index == 10 && hero.vehicle_mode == 1) {
