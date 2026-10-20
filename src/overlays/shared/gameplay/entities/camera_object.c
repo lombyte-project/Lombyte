@@ -1734,32 +1734,32 @@ extern int FUN_L00_002a7210(void *, void *, float, float);
 extern int FUN_L00_0025e3f8(void *);
 extern int FUN_L00_002c5be8(void *);
 
-void FUN_L00_002a82c0(unsigned char *m) {
-    N_2a82c0 *n = D_L00_0015FFE4;
+void FUN_L00_002a82c0(unsigned char *wrench_moby) {
+    N_2a82c0 *scanned_moby = D_L00_0015FFE4;
     struct Hero *g;
     int r;
-    if (n == 0)
+    if (scanned_moby == 0)
         return;
     g = &hero;
     do {
-        if (n->type == 0xFE)
+        if (scanned_moby->type == 0xFE)
             return;
-        if (n->type == 0xFD)
+        if (scanned_moby->type == 0xFD)
             return;
-        if (n && n->info && *(short *)(n->info + 0x46) == 0x13) {
-            if (FUN_001f9b48((char *)n + 0x10, m + 0x10) < 2.7f) {
-                r = FUN_L00_002a7210(n, ((void *)g->moby),
+        if (scanned_moby && scanned_moby->info && *(short *)(scanned_moby->info + 0x46) == 0x13) {
+            if (FUN_001f9b48((char *)scanned_moby + 0x10, wrench_moby + 0x10) < 2.7f) {
+                r = FUN_L00_002a7210(scanned_moby, ((void *)g->moby),
                                      random_float_between(-30.0f, 30.0f) * DEG_TO_RAD, 0.0f);
                 goto check;
             }
-        } else if (FUN_L00_0025e3f8(n) && FUN_001f9b48((char *)n + 0x10, m + 0x10) < 2.7f) {
-            r = FUN_L00_002c5be8(n);
+        } else if (FUN_L00_0025e3f8(scanned_moby) && FUN_001f9b48((char *)scanned_moby + 0x10, wrench_moby + 0x10) < 2.7f) {
+            r = FUN_L00_002c5be8(scanned_moby);
         check:
             if (r)
                 return;
         }
-        n = n->next;
-    } while (n);
+        scanned_moby = scanned_moby->next;
+    } while (scanned_moby);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A96B8), where it is exact; names translated to the US level program. */
 
