@@ -620,7 +620,7 @@ void FUN_L00_002bb0b0(void *mv) {
     V_2bb0b0 mat[4];
     V_2bb0b0 *pos = *(V_2bb0b0 **)((char *)mv + 0x78);
     unsigned int c;
-    float s;
+    float corner_scale;
     int i;
     quad.tex = tex_2bb0b0(0xB);
     quad.unk88 = 0x8000000048L;
@@ -640,9 +640,9 @@ void FUN_L00_002bb0b0(void *mv) {
     quad.color[2] = c;
     quad.color[1] = c;
     quad.color[0] = c;
-    s = D_L00_00161648 + rnd_2bb0b0(0.0f, 0.025f);
+    corner_scale = D_L00_00161648 + rnd_2bb0b0(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
-        vmul_2bb0b0(s, &quad.corner[i], &D_L00_001DB560[i]);
+        vmul_2bb0b0(corner_scale, &quad.corner[i], &D_L00_001DB560[i]);
         xform_2bb0b0(&quad.corner[i], &quad.corner[i], &mat[0]);
         quad.uv[i].u = D_L00_001DB5A0[i].u;
         quad.uv[i].v = D_L00_001DB5A0[i].v;
@@ -653,9 +653,9 @@ void FUN_L00_002bb0b0(void *mv) {
     quad.color[2] = c;
     quad.color[1] = c;
     quad.color[0] = c;
-    s = D_L00_0016164C + rnd_2bb0b0(0.0f, 0.05f);
+    corner_scale = D_L00_0016164C + rnd_2bb0b0(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
-        vmul_2bb0b0(s, &quad.corner[i], &D_L00_001DB560[i]);
+        vmul_2bb0b0(corner_scale, &quad.corner[i], &D_L00_001DB560[i]);
         xform_2bb0b0(&quad.corner[i], &quad.corner[i], &mat[0]);
         quad.uv[i].u = D_L00_001DB5A0[i].u;
         quad.uv[i].v = D_L00_001DB5A0[i].v;
