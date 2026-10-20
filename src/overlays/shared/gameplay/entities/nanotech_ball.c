@@ -1905,46 +1905,46 @@ s32 FUN_001f96f8_002dbc30(s32) __asm__("FUN_001f96f8");
 void FUN_00212f90_002dbc30(void *, s32, s32, s32) __asm__("FUN_00212f90");
 f32 FUN_001f9b80_002dbc30(void *, void *) __asm__("FUN_001f9b80");
 void FUN_001f9a10_002dbc30(void *, void *, void *) __asm__("FUN_001f9a10");
-s32 FUN_L00_002dbc30(u8 *m, u8 *v, u8 *t, f32 f) {
-    u8 *o = FUN_L00_002db890_002dbc30(m);
+s32 FUN_L00_002dbc30(u8 *moby, u8 *v, u8 *target, f32 target_height_offset) {
+    u8 *projectile_record = FUN_L00_002db890_002dbc30(moby);
     u8 *x;
     u8 *d;
-    if (o == 0)
+    if (projectile_record == 0)
         return 0;
-    if (m == 0 || m[0x20] == 0xFE || m[0x20] == 0xFD || *(s16 *)(o + 0x68) == 8)
+    if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD || *(s16 *)(projectile_record + 0x68) == 8)
         goto fail;
-    m[0x31] = 1;
-    *(u16 *)(m + 0x34) &= 0xFFFC;
+    moby[0x31] = 1;
+    *(u16 *)(moby + 0x34) &= 0xFFFC;
     if (*(f32 *)(v + 0xC) == 1.23456f) {
-        if (m[0x53] != *(u8 *)(*(u8 **)(o + 0x70) + 6)) {
-            u8 c = *(u8 *)(*(u8 **)(o + 0x70) + 6);
-            FUN_00212f90_002dbc30(m, c, 0, FUN_001f96f8_002dbc30(0x14));
+        if (moby[0x53] != *(u8 *)(*(u8 **)(projectile_record + 0x70) + 6)) {
+            u8 c = *(u8 *)(*(u8 **)(projectile_record + 0x70) + 6);
+            FUN_00212f90_002dbc30(moby, c, 0, FUN_001f96f8_002dbc30(0x14));
         }
-        *(s32 *)(m + 0x98) = *(s32 *)(o + 0x88);
-        *(s16 *)(o + 0x68) = 6;
+        *(s32 *)(moby + 0x98) = *(s32 *)(projectile_record + 0x88);
+        *(s16 *)(projectile_record + 0x68) = 6;
     } else {
-        if (m[0x53] != *(u8 *)(*(u8 **)(o + 0x70) + 5)) {
-            u8 c = *(u8 *)(*(u8 **)(o + 0x70) + 5);
-            FUN_00212f90_002dbc30(m, c, 0, FUN_001f96f8_002dbc30(0));
+        if (moby[0x53] != *(u8 *)(*(u8 **)(projectile_record + 0x70) + 5)) {
+            u8 c = *(u8 *)(*(u8 **)(projectile_record + 0x70) + 5);
+            FUN_00212f90_002dbc30(moby, c, 0, FUN_001f96f8_002dbc30(0));
         }
-        *(s16 *)(o + 0x68) = 5;
+        *(s16 *)(projectile_record + 0x68) = 5;
     }
-    qcopy(o + 0x10, v);
-    *(s32 *)(o + 0x94) = FUN_001f96f8_002dbc30(300);
-    *(u8 **)(o + 0x74) = t;
-    if (t != 0) {
-        x = FUN_002141f8_002dbc30(t);
+    qcopy(projectile_record + 0x10, v);
+    *(s32 *)(projectile_record + 0x94) = FUN_001f96f8_002dbc30(300);
+    *(u8 **)(projectile_record + 0x74) = target;
+    if (target != 0) {
+        x = FUN_002141f8_002dbc30(target);
         if (x != 0)
             *(u16 *)(x + 0x1E) |= 0x80;
-        qcopy(o + 0x40, t + 0x10);
-        *(f32 *)(o + 0x90) = f;
-        *(f32 *)(o + 0x48) += f;
+        qcopy(projectile_record + 0x40, target + 0x10);
+        *(f32 *)(projectile_record + 0x90) = target_height_offset;
+        *(f32 *)(projectile_record + 0x48) += target_height_offset;
     }
-    if (FUN_001f9b80_002dbc30(m + 0x10, D_0013F3D0_002dbc30) < 1.0f) {
-        FUN_001f9a10_002dbc30(m + 0x10, m + 0x10, o + 0x10);
+    if (FUN_001f9b80_002dbc30(moby + 0x10, D_0013F3D0_002dbc30) < 1.0f) {
+        FUN_001f9a10_002dbc30(moby + 0x10, moby + 0x10, projectile_record + 0x10);
     }
-    if (*(s16 *)(o + 0x9C) >= 0) {
-        FUN_0022da68_002dbc30(*(s16 *)(o + 0x9C), 0, m);
+    if (*(s16 *)(projectile_record + 0x9C) >= 0) {
+        FUN_0022da68_002dbc30(*(s16 *)(projectile_record + 0x9C), 0, moby);
     }
     return 2;
 fail:
