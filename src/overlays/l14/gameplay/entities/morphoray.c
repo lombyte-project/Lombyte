@@ -1125,21 +1125,21 @@ extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
 void FUN_L14_00307510(struct Moby *moby) {
-    char *d = (char *)moby->pvars;
-    char *p = D_L14_001B0BB0[*(int *)(d + 0x78)];
+    char *flying_car_data = (char *)moby->pvars;
+    char *path = D_L14_001B0BB0[*(int *)(flying_car_data + 0x78)];
     int i;
-    for (i = 0; i < *(int *)p; i++) {
-        int o = i * 16;
-        float f = fast_vec_dist(p + (o + 0x10), p + (((i + 1) % *(int *)p) * 16 + 0x10));
-        *(float *)(p + o + 0x1C) = f;
+    for (i = 0; i < *(int *)path; i++) {
+        int point_byte_offset = i * 16;
+        float segment_length = fast_vec_dist(path + (point_byte_offset + 0x10), path + (((i + 1) % *(int *)path) * 16 + 0x10));
+        *(float *)(path + point_byte_offset + 0x1C) = segment_length;
     }
-    *(int *)(d + 0x70) = 0;
-    *(int *)(d + 0x74) = 0;
-    qcopy(&moby->pos, p + 0x10);
-    moby->rot.z = fast_arc_tan(*(float *)(p + 0x20) - *(float *)(p + 0x10),
-                                           *(float *)(p + 0x24) - *(float *)(p + 0x14));
-    *(float *)(d + 0x90) = *(float *)(d + 0x94) = *(float *)(d + 0x98) = *(float *)(d + 0x80) =
-        *(float *)(d + 0x84) = *(float *)(d + 0x88) = 0.0f;
+    *(int *)(flying_car_data + 0x70) = 0;
+    *(int *)(flying_car_data + 0x74) = 0;
+    qcopy(&moby->pos, path + 0x10);
+    moby->rot.z = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
+                                           *(float *)(path + 0x24) - *(float *)(path + 0x14));
+    *(float *)(flying_car_data + 0x90) = *(float *)(flying_car_data + 0x94) = *(float *)(flying_car_data + 0x98) = *(float *)(flying_car_data + 0x80) =
+        *(float *)(flying_car_data + 0x84) = *(float *)(flying_car_data + 0x88) = 0.0f;
 }
 #include "rnc/audio/voice_pool.h"
 /* Flies the moby along its path. At the end of the path (or once it has sunk to the floor height) it bursts,
