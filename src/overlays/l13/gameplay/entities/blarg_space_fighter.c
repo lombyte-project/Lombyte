@@ -2583,21 +2583,21 @@ extern int rand_q(void) __asm__("FUN_001160d8");
 extern int below_q(int) __asm__("FUN_00213260");
 
 extern unsigned char D_L13_001D3558[];
-int FUN_L13_002e86f8(void *unused, unsigned char *p, int base, int n) {
-    int j = rand_q() % n;
+int FUN_L13_002e86f8(void *unused, unsigned char *moby_data, int base, int line_count) {
+    int j = rand_q() % line_count;
     int id = D_L13_001D3558[base + j];
     int i;
     int lt;
     if (base < 0x1D) {
         if (base < 0xC) {
-            if (p[0x148] != 0)
+            if (moby_data[0x148] != 0)
                 return 0;
-            if (*(short *)(p + 0x144) > 0)
+            if (*(short *)(moby_data + 0x144) > 0)
                 return 0;
         } else {
-            if (*(short *)(p + 0x146) > 0)
+            if (*(short *)(moby_data + 0x146) > 0)
                 return 0;
-            if (p[0x148] != 0 && base >= 0x17 && base < 0x1B)
+            if (moby_data[0x148] != 0 && base >= 0x17 && base < 0x1B)
                 return 0;
         }
     }
@@ -2607,25 +2607,25 @@ int FUN_L13_002e86f8(void *unused, unsigned char *p, int base, int n) {
             return 0;
     }
     if (base < 0x1D) {
-        for (i = 0; i < n; i++) {
-            if ((*(int *)(p + 0x13C) >> id) & 1) {
+        for (i = 0; i < line_count; i++) {
+            if ((*(int *)(moby_data + 0x13C) >> id) & 1) {
                 if (base < 0xC && below_q(4) == 0)
-                    *(int *)(p + 0x13C) &= ~(1 << id);
+                    *(int *)(moby_data + 0x13C) &= ~(1 << id);
                 j++;
-                j %= n;
+                j %= line_count;
                 id = D_L13_001D3558[base + j];
             } else {
                 music_stream_state.queued_secondary_track = id + 50000;
-                p[0x13A] = 1;
-                *(int *)(p + 0x13C) |= 1 << id;
+                moby_data[0x13A] = 1;
+                *(int *)(moby_data + 0x13C) |= 1 << id;
                 return 1;
             }
         }
         if (base < 0xC)
-            *(int *)(p + 0x13C) &= ~(1 << id);
+            *(int *)(moby_data + 0x13C) &= ~(1 << id);
     } else {
         music_stream_state.queued_secondary_track = id + 50000;
-        p[0x13A] = 1;
+        moby_data[0x13A] = 1;
         return 1;
     }
     return 0;
