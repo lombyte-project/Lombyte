@@ -142,6 +142,7 @@ void FUN_L03_0021c668(void) {
         HERO_STATE_FALL_ALT = 45,
         HERO_STATE_IDLE_ALT = 83,
         HERO_STATE_RUN_ALT = 84,
+        HERO_STATE_DYING_ALT = 87,
         HERO_STATE_SLIP_ALT = 88,
         HERO_STATE_TARGET_POSE_APPROACH = 101,
         HERO_STATE_TARGET_POSE_APPROACH_ANIMATION_WAIT = 102,
@@ -460,7 +461,7 @@ void FUN_L03_0021c668(void) {
                     break;
                 case HERO_STATE_DYING:
                 case 71:
-                case 87:
+                case HERO_STATE_DYING_ALT:
                 case 98:
                 case HERO_STATE_WATER_DEATH:
                 case 128:
