@@ -497,14 +497,14 @@ void FUN_L00_00262608(S_262608 *history_state, int dec) {
     if (dec) {
         done = 1;
         for (i = 0; i < history_state->n; i++) {
-            unsigned char *q = (unsigned char *)*(int *)((char *)&history_state->w[i] + 0x10);
-            if (q) {
-                int v = q[0x23];
+            unsigned char *history_moby = (unsigned char *)*(int *)((char *)&history_state->w[i] + 0x10);
+            if (history_moby) {
+                int v = history_moby[0x23];
                 int a = v;
                 if (dec < v)
                     v = dec;
                 a -= v;
-                q[0x23] = a;
+                history_moby[0x23] = a;
                 if ((unsigned char)a)
                     done = 0;
             }
