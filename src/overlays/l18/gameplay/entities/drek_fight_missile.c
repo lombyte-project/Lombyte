@@ -1543,6 +1543,9 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         DREK_BOSS_DEATH_EXPLOSIONS = 0x1A,
         DREK_BOSS_RUN_ENDING_SEQUENCE = 0x1B
     };
+    enum {
+        DREK_BOSS_APPROACH_PATH_START = 9
+    };
     BossData *boss_data = (BossData *)moby->f78;
     BossMoby *tgt;
     float v0[4];
@@ -1780,7 +1783,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             blend_moby_animation(moby, 10, 0, scale_game_frames(0x14));
         }
         break;
-    case 9: {
+    case DREK_BOSS_APPROACH_PATH_START: {
         float lvl;
         int hit;
 
