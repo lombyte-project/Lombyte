@@ -674,7 +674,17 @@ extern s32 D_L00_0015F6A0_gp[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
 extern u8 D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") __attribute__((section(".data")));
 extern s32 D_L00_00197300_20dd20[] __asm__("D_L00_00197300") __attribute__((section(".data")));
 extern u8 D_L00_0017CA80_20dd20[] __asm__("D_L00_0017CA80") __attribute__((section(".data")));
-extern u8 D_L00_0017A680_20dd20[] __asm__("D_L00_0017A680") __attribute__((section(".data")));
+struct AngleFields_20dd20 {
+    u8 pad[0x5e4];
+    f32 unk5E4;
+    u8 pad5E8[0x3c];
+    f32 unk624, unk628;
+    u8 pad62C[0x68];
+    f32 unk694;
+    u8 pad698[0x3c];
+    f32 unk6D4, unk6D8;
+};
+extern struct AngleFields_20dd20 D_L00_0017A680_20dd20 __asm__("D_L00_0017A680") __attribute__((section(".data")));
 extern u8 *FUN_L00_0024f028_20dd20(struct Moby *, s32) __asm__("FUN_L00_0024f028");
 extern void FUN_L00_0024f0e8_20dd20(struct Moby *, u8 **) __asm__("FUN_L00_0024f0e8");
 extern void FUN_L00_0024f190_20dd20(struct Moby *, u8 *) __asm__("FUN_L00_0024f190");
@@ -774,7 +784,7 @@ void FUN_L00_0020dd20(void) {
         if (r != 0 || o[0x32] != 0) {
             if (out != 0.0f) {
                 f32 x = frame_scale_sq;
-                u8 *tbl = D_L00_0017A680_20dd20;
+                u8 *tbl = (u8 *)&D_L00_0017A680_20dd20;
                 *(f32 *)(tbl + 0x694) = out;
                 *(f32 *)(tbl + 0x5E4) = out;
                 *(f32 *)(tbl + 0x6D4) = x * 0.05f;

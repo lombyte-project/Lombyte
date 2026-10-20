@@ -113,7 +113,7 @@ extern LevelRenderState level_render_state __asm__("D_0013E030");
 extern u8 voice_volume_records_macro[] __asm__("D_0013E5C0") MACRO_ADDR;
 extern s32 sound_bank_handle __asm__("D_0015ED5C");
 extern s16 D_0015EE48 __attribute__((sda));
-extern s16 D_0015EE48_macro[2] __asm__("D_0015EE48") MACRO_ADDR;
+extern s16 D_0015EE48_macro __asm__("D_0015EE48") MACRO_ADDR;
 extern f32 sequence_macro __asm__("D_0015F43C") MACRO_ADDR;
 extern s32 space_load_in_progress __asm__("D_0015F618") MACRO_ADDR;
 extern f32 D_00160404 MACRO_ADDR;
@@ -244,8 +244,8 @@ void update_level_gameplay_frame(void) {
             }
             parse_space_scene_chunk(0);
         } else {
-            if (D_0015EE48_macro[1] != 0) {
-                D_0015EE48_macro[1] = 0;
+            if ((&D_0015EE48_macro)[1] != 0) {
+                (&D_0015EE48_macro)[1] = 0;
             }
             space_load_in_progress = 1;
             return;

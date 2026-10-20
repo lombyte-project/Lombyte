@@ -12,7 +12,7 @@ INCLUDE_ASM(
 #include "rnc/rendering/fs_aa_buffer.h"
 #include "rnc/rendering/fs_aa_packets.h"
 
-extern void *active_fs_aa_buffer __asm__("D_0015EEB8") MACRO_ADDR;
+extern void *D_0015EEB8_macro __asm__("D_0015EEB8") MACRO_ADDR;
 extern s32 display_buffer_address_macro __asm__("D_0015EE80") MACRO_ADDR;
 extern s32 draw_buffer_address_macro __asm__("D_0015EE84") MACRO_ADDR;
 extern s32 depth_buffer_address_macro __asm__("D_0015EE88") MACRO_ADDR;
@@ -20,7 +20,7 @@ extern s32 depth_buffer_address_macro __asm__("D_0015EE88") MACRO_ADDR;
 extern void sceGsSetDefDispEnv(void *, s16, s16, s16, s16, s16);
 extern s32 sceGsSetDefDrawEnv(void *, s16, s16, s16, s16, s16);
 
-#define FA ((struct FsAaBuf *)active_fs_aa_buffer)
+#define FA ((struct FsAaBuf *)D_0015EEB8_macro)
 
 void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width,
                         s32 storage_height, s32 display_offset_x,
@@ -30,7 +30,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
                         s32 storage_height, s32 display_offset_x, s32 display_offset_y) {
     u8 *q;
 
-    active_fs_aa_buffer = &fs_aa_buffer;
+    D_0015EEB8_macro = &fs_aa_buffer;
     fs_aa_buffer.display_width = display_width;
     fs_aa_buffer.display_height = display_height;
     fs_aa_buffer.storage_width = storage_width;

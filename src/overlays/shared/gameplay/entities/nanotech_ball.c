@@ -2763,7 +2763,7 @@ typedef int u128_DF168 __attribute__((mode(TI)));
 
 typedef struct { int pad[5]; int f14; } E04_DF168;
 
-typedef struct { short idx; short pad; float f; int pad2[3]; char *p; } E04;
+typedef struct { short idx; short angle; float f; float phase; float phase_step; float speed; char *p; } E04;
 
 extern E04 D_L00_001E4C80[];
 extern char D_L00_00161B60[] __attribute__((section(".sdata")));
@@ -2866,14 +2866,14 @@ typedef struct Particle41 {
     u8 pad0[0xA]; s16 life; float size; V41 pos; Tail41 tail;
 } Particle41;
 
-typedef struct {
-    s16 segment,angle; float distance,phase,phase_step,speed; Particle41 *particle;
-} Entry41;
 
 
 extern V41 D_L00_001E4B40[];
+extern E04 D_L00_001E4C80_lui[] __asm__("D_L00_001E4C80");
 extern char D_0013E533[] NOT_SDA;
 extern char D_L00_00161B60[] MACRO_ADDR;
+extern int D_L00_00161B54 __attribute__((sda));
+extern int D_L00_00161B58_gp __asm__("D_L00_00161B58") __attribute__((sda));
 extern char D_L00_00161B70[] MACRO_ADDR;
 extern char D_L00_00166FD0[];
 extern char D_L00_00173E60[];
@@ -2898,7 +2898,6 @@ extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern int collision_line_ddf60(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_L00_001618D8;
 extern short D_L00_001E6008[];
 extern void FUN_L00_0025b6b8(void *,void *,void *,float);
 extern void FUN_L00_00267a08(void *);
@@ -2915,13 +2914,6 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 float absolute_float(float input) __asm__("func_001F99C0");
 s32 scale_frames_ddf60(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002ddcb8(char *a, char *b);
-extern V41 vec30_41 __asm__("D_L00_00161B60") MACRO_ADDR;
-extern V41 vec40_41 __asm__("D_L00_00161B70") MACRO_ADDR;
-extern int tick41 __asm__("D_L00_00161B54") __attribute__((sda));
-extern float wave41 __asm__("D_L00_00161B58") __attribute__((sda));
-extern V41 ring41[] __asm__("D_L00_001E6020");
-extern V41 ring41b[] __asm__("D_L00_001E5EE0");
-extern Entry41 entries41[] __asm__("D_L00_001E4C80");
 extern Particle41 *new_particle41(void *,float,float,float,int,void *,float,int) __asm__("FUN_L00_0026d000");
 
 void FUN_L00_002ddf60(void *moby,void *position) {
@@ -2971,27 +2963,27 @@ void FUN_L00_002ddf60(void *moby,void *position) {
         D_L00_001E6008[0]=(u16)D_L00_001E6008[0]+4;
         for(i=1;i<10;i++)D_L00_001E6008[i]=D_L00_001E6008[i-1]-32;
     }
-    transform_vector_by_basis(&start,&vec30_41,orientation);
+    transform_vector_by_basis(&start,&(*(V41 *)D_L00_00161B60),orientation);
     add_vector_xyz(&start,&start,&step);
-    transform_vector_by_basis(&end,&vec40_41,orientation);
+    transform_vector_by_basis(&end,&(*(V41 *)D_L00_00161B70),orientation);
     add_vector_xyz(&end,&end,&step);
-    t=(float)tick41/convert_integer_to_float(scale_frames_ddf60(60));
-    tick41++;
+    t=(float)D_L00_00161B54/convert_integer_to_float(scale_frames_ddf60(60));
+    D_L00_00161B54++;
     step.f.x=start.f.x+(end.f.x-start.f.x)*t;
     step.f.y=start.f.y+(end.f.y-start.f.y)*t;
     step.f.z=start.f.z+(end.f.z-start.f.z)*t;
-    if(tick41>=scale_frames_ddf60(60)) {
-        qcopy(&vec30_41,&vec40_41);
+    if(D_L00_00161B54>=scale_frames_ddf60(60)) {
+        qcopy(&(*(V41 *)D_L00_00161B60),&(*(V41 *)D_L00_00161B70));
         fast_vec_normalize(&axis,orientation,D_L00_00161B84);
         tmp_a.q=0; tmp_b.q=0;
         tmp_a.f.z=0.1f; tmp_a.f.w=1.0f;
         tmp_b.f.x=1.0f; tmp_b.f.w=1.0f;
         angle=fast_add_rotations(D_L00_00161B80,random_float_between(45.0f,315.0f)*0.0174532924f);
-        func_002156E0_2D9EA0(&vec40_41,&tmp_a,angle,&tmp_b);
+        func_002156E0_2D9EA0(&(*(V41 *)D_L00_00161B70),&tmp_a,angle,&tmp_b);
         D_L00_00161B80=angle;
-        tick41=0;
+        D_L00_00161B54=0;
     }
-    wave41=fast_add_rotations(wave41,0.1f);
+    (*(float *)&D_L00_00161B58_gp)=fast_add_rotations((*(float *)&D_L00_00161B58_gp),0.1f);
     qcopy(&axis,&orient[2]);
     qcopy(&frame[2],&axis);
     cross_vectors_xyz(&frame[1],&step,&frame[2]);
@@ -3001,7 +2993,7 @@ void FUN_L00_002ddf60(void *moby,void *position) {
     for(k=0;k<20;k++) {
         fast_vec_scale(&tmp_a,&D_L00_001E4B40[k],0.1f);
         transform_vector_by_basis(&tmp_a,&tmp_a,frame);
-        add_vector_xyz(&ring41[k],D_L00_001E5F40,&tmp_a);
+        add_vector_xyz(&((V41 *)D_L00_001E6020)[k],D_L00_001E5F40,&tmp_a);
     }
     }
     { int i;
@@ -3032,10 +3024,10 @@ void FUN_L00_002ddf60(void *moby,void *position) {
         qcopy(&axis,&basis_c);
         radius=(float)i*0.3f;
         phase=(float)i*0.7f;
-        { V41 *dst=ring41+i*20; unsigned int j;
+        { V41 *dst=((V41 *)D_L00_001E6020)+i*20; unsigned int j;
         for(j=0;j<20;j++) {
             angle=radius+0.1f;
-            angle+=fast_sin(fast_add_rotations(wave41+phase,0.0f))*0.1f;
+            angle+=fast_sin(fast_add_rotations((*(float *)&D_L00_00161B58_gp)+phase,0.0f))*0.1f;
             fast_vec_scale(&tmp_f,(char *)D_L00_001E4B40+j*16,angle);
             transform_vector_by_basis(&tmp_f,&tmp_f,&interp);
             add_vector_xyz(dst+j,D_L00_001E5F40+i*16,&tmp_f);
@@ -3048,13 +3040,13 @@ void FUN_L00_002ddf60(void *moby,void *position) {
     { int count,sparks;
     count=0; sparks=0;
     for(i=0;i<200;i++) {
-        if(!entries41[i].particle && count<5) {
+        if(!D_L00_001E4C80_lui[i].p && count<5) {
             for(segment=9;segment>=0 && D_L00_001E6008[segment]<64;segment--);
             if(segment>0) {
                 if(segment>=2 && sparks<2) {
                     { int k=random_integer_below(20);
                     amount=random_float_between(0.2f,1.0f);
-                    k=(int)&ring41[k];
+                    k=(int)&((V41 *)D_L00_001E6020)[k];
                     lerp_vector(&tmp_a,(V41 *)k,(V41 *)k+segment*20,amount); }
                     lerp_vector(&tmp_c,D_L00_001E5F40,D_L00_001E5F40+segment*16,amount);
                     speed=random_float_between(60000.0f,180000.0f);
@@ -3071,60 +3063,60 @@ void FUN_L00_002ddf60(void *moby,void *position) {
                 clear_u64_value(&tmp_b);
                 speed=random_float_between(60000.0f,180000.0f);
                 { Particle41 *main=new_particle41(&tmp_a,0.0f,1.0f,1.0f,6,&tmp_b,speed,0x7F404040);
-                entries41[i].particle=main;
+                D_L00_001E4C80_lui[i].p=(char *)main;
                 if(main) { Tail41 *tail=&main->tail; main->life=200; tail->mode=2; count++; tail->r=127; tail->g=200; } }
-                entries41[i].segment=segment;
-                entries41[i].distance=0;
-                entries41[i].phase=0;
-                entries41[i].angle=random_integer_below(20);
-                entries41[i].phase_step=random_float_between(0.1f,0.8f);
-                entries41[i].speed=random_float_between(0.1f,0.4f);
+                D_L00_001E4C80_lui[i].idx=segment;
+                D_L00_001E4C80_lui[i].f=0;
+                D_L00_001E4C80_lui[i].phase=0;
+                D_L00_001E4C80_lui[i].angle=random_integer_below(20);
+                D_L00_001E4C80_lui[i].phase_step=random_float_between(0.1f,0.8f);
+                D_L00_001E4C80_lui[i].speed=random_float_between(0.1f,0.4f);
             }
         }
-        if(entries41[i].particle) {
+        if(D_L00_001E4C80_lui[i].p) {
 
-            subtract_vector_xyz(&tmp_a,D_L00_001E5F30+entries41[i].segment*16,D_L00_001E5F40+entries41[i].segment*16);
+            subtract_vector_xyz(&tmp_a,D_L00_001E5F30+D_L00_001E4C80_lui[i].idx*16,D_L00_001E5F40+D_L00_001E4C80_lui[i].idx*16);
             length=fast_vec_length(&tmp_a);
-            entries41[i].distance+=entries41[i].speed;
-            (entries41[i].particle)->life=200;
-            if(length<entries41[i].distance) {
-                entries41[i].segment=(u16)entries41[i].segment-1;
-                if(entries41[i].segment<=0) { FUN_L00_00267a08(entries41[i].particle); entries41[i].particle=0; }
+            D_L00_001E4C80_lui[i].f+=D_L00_001E4C80_lui[i].speed;
+            ((Particle41 *)D_L00_001E4C80_lui[i].p)->life=200;
+            if(length<D_L00_001E4C80_lui[i].f) {
+                D_L00_001E4C80_lui[i].idx=(u16)D_L00_001E4C80_lui[i].idx-1;
+                if(D_L00_001E4C80_lui[i].idx<=0) { FUN_L00_00267a08(D_L00_001E4C80_lui[i].p); D_L00_001E4C80_lui[i].p=0; }
                 else {
-                    entries41[i].distance-=length;
-                    subtract_vector_xyz(&tmp_a,D_L00_001E5F30+entries41[i].segment*16,D_L00_001E5F40+entries41[i].segment*16);
+                    D_L00_001E4C80_lui[i].f-=length;
+                    subtract_vector_xyz(&tmp_a,D_L00_001E5F30+D_L00_001E4C80_lui[i].idx*16,D_L00_001E5F40+D_L00_001E4C80_lui[i].idx*16);
                     length=fast_vec_length(&tmp_a);
                 }
             }
-                if(entries41[i].particle) {
+                if(D_L00_001E4C80_lui[i].p) {
 
-                amount=entries41[i].distance/length;
-                if(entries41[i].segment==2)(entries41[i].particle)->life=100;
-                else if(entries41[i].segment<2) {
-                    (entries41[i].particle)->life=truncate_float_to_s32((1.0f-amount)*100.0f);
-                    if((entries41[i].particle)->life<61)(entries41[i].particle)->life=60;
+                amount=D_L00_001E4C80_lui[i].f/length;
+                if(D_L00_001E4C80_lui[i].idx==2)((Particle41 *)D_L00_001E4C80_lui[i].p)->life=100;
+                else if(D_L00_001E4C80_lui[i].idx<2) {
+                    ((Particle41 *)D_L00_001E4C80_lui[i].p)->life=truncate_float_to_s32((1.0f-amount)*100.0f);
+                    if(((Particle41 *)D_L00_001E4C80_lui[i].p)->life<61)((Particle41 *)D_L00_001E4C80_lui[i].p)->life=60;
                 }
 
-                if(entries41[i].segment==1) {
-                    subtract_vector_xyz(&tmp_b,position,&(entries41[i].particle)->pos);
-                    fast_vec_normalize(&tmp_b,&tmp_b,entries41[i].speed);
-                    add_vector_xyz(&(entries41[i].particle)->pos,&(entries41[i].particle)->pos,&tmp_b);
-                    (entries41[i].particle)->size*=1.0f+D_0015ED60*-0.0500000119f;
+                if(D_L00_001E4C80_lui[i].idx==1) {
+                    subtract_vector_xyz(&tmp_b,position,&((Particle41 *)D_L00_001E4C80_lui[i].p)->pos);
+                    fast_vec_normalize(&tmp_b,&tmp_b,D_L00_001E4C80_lui[i].speed);
+                    add_vector_xyz(&((Particle41 *)D_L00_001E4C80_lui[i].p)->pos,&((Particle41 *)D_L00_001E4C80_lui[i].p)->pos,&tmp_b);
+                    ((Particle41 *)D_L00_001E4C80_lui[i].p)->size*=1.0f+D_0015ED60*-0.0500000119f;
                 } else {
                     fast_vec_scale(&tmp_a,&tmp_a,amount);
-                    add_vector_xyz(&(entries41[i].particle)->pos,D_L00_001E5F40+entries41[i].segment*16,&tmp_a);
-                    j=entries41[i].angle;
-                    subtract_vector_xyz(&tmp_b,(char *)ring41+entries41[i].segment*320+j*16,D_L00_001E5F40+entries41[i].segment*16);
-                    subtract_vector_xyz(&tmp_c,(char *)ring41b+entries41[i].segment*320+j*16,D_L00_001E5F30+entries41[i].segment*16);
+                    add_vector_xyz(&((Particle41 *)D_L00_001E4C80_lui[i].p)->pos,D_L00_001E5F40+D_L00_001E4C80_lui[i].idx*16,&tmp_a);
+                    j=D_L00_001E4C80_lui[i].angle;
+                    subtract_vector_xyz(&tmp_b,(char *)((V41 *)D_L00_001E6020)+D_L00_001E4C80_lui[i].idx*320+j*16,D_L00_001E5F40+D_L00_001E4C80_lui[i].idx*16);
+                    subtract_vector_xyz(&tmp_c,(char *)((V41 *)D_L00_001E5EE0)+D_L00_001E4C80_lui[i].idx*320+j*16,D_L00_001E5F30+D_L00_001E4C80_lui[i].idx*16);
                     FUN_L00_0025b6b8(&motion,&tmp_b,&tmp_c,amount);
                     j=(j+19)%20;
-                    subtract_vector_xyz(&tmp_d,(char *)ring41+entries41[i].segment*320+j*16,D_L00_001E5F40+entries41[i].segment*16);
-                    subtract_vector_xyz(&tmp_e,(char *)ring41b+entries41[i].segment*320+j*16,D_L00_001E5F30+entries41[i].segment*16);
+                    subtract_vector_xyz(&tmp_d,(char *)((V41 *)D_L00_001E6020)+D_L00_001E4C80_lui[i].idx*320+j*16,D_L00_001E5F40+D_L00_001E4C80_lui[i].idx*16);
+                    subtract_vector_xyz(&tmp_e,(char *)((V41 *)D_L00_001E5EE0)+D_L00_001E4C80_lui[i].idx*320+j*16,D_L00_001E5F30+D_L00_001E4C80_lui[i].idx*16);
                     FUN_L00_0025b6b8(&interp,&tmp_d,&tmp_e,amount);
-                    FUN_L00_0025b6b8(&motion,&motion,&interp,entries41[i].phase);
-                    entries41[i].phase+=entries41[i].phase_step;
-                    if(entries41[i].phase>=1.0f) { entries41[i].phase-=1.0f; entries41[i].angle=j; }
-                    add_vector_xyz(&(entries41[i].particle)->pos,&(entries41[i].particle)->pos,&motion);
+                    FUN_L00_0025b6b8(&motion,&motion,&interp,D_L00_001E4C80_lui[i].phase);
+                    D_L00_001E4C80_lui[i].phase+=D_L00_001E4C80_lui[i].phase_step;
+                    if(D_L00_001E4C80_lui[i].phase>=1.0f) { D_L00_001E4C80_lui[i].phase-=1.0f; D_L00_001E4C80_lui[i].angle=j; }
+                    add_vector_xyz(&((Particle41 *)D_L00_001E4C80_lui[i].p)->pos,&((Particle41 *)D_L00_001E4C80_lui[i].p)->pos,&motion);
                 }
             }
         }

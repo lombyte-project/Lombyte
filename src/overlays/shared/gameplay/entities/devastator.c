@@ -2873,7 +2873,8 @@ typedef struct FlameHit_2b77f0 {
     s32 mode;
 } FlameHit_2b77f0;
 
-extern Vec_2b2100 D_L00_0015F580_2b77f0 __asm__("D_L00_0015F580") MACRO_ADDR;
+typedef Vec_2b2100 Vec_2b77f0;
+extern Vec_2b77f0 D_L00_0015F580_2b77f0 __asm__("D_L00_0015F580") MACRO_ADDR;
 extern f32 D_L00_001614F0 __attribute__((sda));
 extern f32 D_L00_00161500 __attribute__((sda));
 extern f32 D_L00_00161510 __attribute__((sda));

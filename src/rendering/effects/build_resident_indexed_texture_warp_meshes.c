@@ -7,7 +7,7 @@
 #include "rnc/rendering/level_render_state.h"
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
-extern u32 warp_trail_colors[][2] __asm__("D_001D9A30");
+extern u32 D_001D9A30[];
 extern f32 warp_trail_widths __asm__("D_001604D0") __attribute__((sda));
 
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
@@ -130,8 +130,8 @@ texture_ready:
                         age--;
                         progress = convert_integer_to_float(page - age) * 0.03125f;
                         quad.colors[vertex] = fast_tween_color(
-                            warp_trail_colors[level_render_state.content_variant][0],
-                            warp_trail_colors[level_render_state.content_variant][1], progress);
+                            D_001D9A30[level_render_state.content_variant * 2],
+                            D_001D9A30[level_render_state.content_variant * 2 + 1], progress);
                         progress = 1.0f - progress * progress;
                         normalize_vector(position, &workspace.edge_normals[vertex],
                                          progress *
