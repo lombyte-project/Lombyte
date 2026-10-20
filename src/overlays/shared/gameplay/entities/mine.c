@@ -2058,46 +2058,46 @@ float itof_2af5b8(int) __asm__("FUN_001fa6c0");
 int tick_2af5b8(void *) __asm__("FUN_001f9770");
 void debris_update(unsigned char *m) __asm__("FUN_L00_002af5b8");
 extern C_2af5b8 D_L00_00161438 __attribute__((section(".data")));
-void debris_update(unsigned char *m) {
-    W_2af5b8 *w = *(W_2af5b8 **)(m + 0x78);
+void debris_update(unsigned char *debris_moby) {
+    W_2af5b8 *w = *(W_2af5b8 **)(debris_moby + 0x78);
     C_2af5b8 c;
     V_2af5b8 v;
-    V_2af5b8 t;
+    V_2af5b8 random_direction;
     int i;
     float f;
-    if (m[0xBC] & 1) {
+    if (debris_moby[0xBC] & 1) {
         for (i = 0; i < 1; i++) {
             c = D_L00_00161438;
-            *(OvlQuad *)&t = 0;
-            t.f[0] = rndf_2af5b8(-1.0f, 1.0f);
-            t.f[1] = rndf_2af5b8(-1.0f, 1.0f);
-            t.f[2] = rndf_2af5b8(-1.0f, 1.0f);
-            *(OvlQuad *)&v = *(OvlQuad *)&t;
+            *(OvlQuad *)&random_direction = 0;
+            random_direction.f[0] = rndf_2af5b8(-1.0f, 1.0f);
+            random_direction.f[1] = rndf_2af5b8(-1.0f, 1.0f);
+            random_direction.f[2] = rndf_2af5b8(-1.0f, 1.0f);
+            *(OvlQuad *)&v = *(OvlQuad *)&random_direction;
             scale_2af5b8(&v, &v, D_0015ED6C_2af5b8);
-            if (m[0xBC] & 0xFE) {
-                int a = FUN_L00_0025c0e8_c(c.c[rndi_2af5b8(4)], m[0xBC] >> 1);
-                int b = FUN_L00_0025c0e8_c(0x4FFF, m[0xBC] >> 1);
-                FUN_L00_00269958(m + 0x10, &v, a, b, fr_2af5b8(0x2D), 0x32, 0x78, 1);
+            if (debris_moby[0xBC] & 0xFE) {
+                int a = FUN_L00_0025c0e8_c(c.c[rndi_2af5b8(4)], debris_moby[0xBC] >> 1);
+                int b = FUN_L00_0025c0e8_c(0x4FFF, debris_moby[0xBC] >> 1);
+                FUN_L00_00269958(debris_moby + 0x10, &v, a, b, fr_2af5b8(0x2D), 0x32, 0x78, 1);
             } else {
-                FUN_L00_00269958(m + 0x10, &v, c.c[rndi_2af5b8(4)], 0x4FFF, fr_2af5b8(0x2D), 0x32, 0x78,
+                FUN_L00_00269958(debris_moby + 0x10, &v, c.c[rndi_2af5b8(4)], 0x4FFF, fr_2af5b8(0x2D), 0x32, 0x78,
                             1);
             }
         }
     }
-    *(float *)(m + 0x40) = app_2af5b8(*(float *)(m + 0x40), w->x10);
-    *(float *)(m + 0x44) = app_2af5b8(*(float *)(m + 0x44), w->x14);
-    add_2af5b8(m + 0x10, m + 0x10, w);
+    *(float *)(debris_moby + 0x40) = app_2af5b8(*(float *)(debris_moby + 0x40), w->x10);
+    *(float *)(debris_moby + 0x44) = app_2af5b8(*(float *)(debris_moby + 0x44), w->x14);
+    add_2af5b8(debris_moby + 0x10, debris_moby + 0x10, w);
     w->x8 -= D_0015ED70_2af5b8 * 14.6f;
-    if (*(float *)(m + 0x10) < 0.0f || *(float *)(m + 0x14) < 0.0f || *(float *)(m + 0x18) < 0.0f) {
-        kill_2af5b8(m);
+    if (*(float *)(debris_moby + 0x10) < 0.0f || *(float *)(debris_moby + 0x14) < 0.0f || *(float *)(debris_moby + 0x18) < 0.0f) {
+        kill_2af5b8(debris_moby);
         return;
     }
     if (w->x18 < w->x1a / 4) {
         f = itof_2af5b8(w->x18);
-        *(float *)(m + 0x2C) = w->x1c * f / itof_2af5b8(w->x1a / 4);
+        *(float *)(debris_moby + 0x2C) = w->x1c * f / itof_2af5b8(w->x1a / 4);
     }
     if (tick_2af5b8(&w->x18))
-        kill_2af5b8(m);
+        kill_2af5b8(debris_moby);
 }
 extern float D_0015ED6C_2af8b0 __asm__("D_0015ED6C");
 typedef struct {
