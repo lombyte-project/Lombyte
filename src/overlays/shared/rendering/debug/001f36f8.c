@@ -515,6 +515,9 @@ void FUN_L00_001f4598(void) {
         DEBUG_OPTION_ROW_SCENE_INDEX = 9,
         DEBUG_OPTION_ROW_SEGMENT_INDEX = 10
     };
+    enum {
+        DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET = 2
+    };
     DebugRowCounts row_counts;
     union {
         struct {
@@ -596,7 +599,7 @@ void FUN_L00_001f4598(void) {
                 case 1:
                     g_debug_menu.update_flags = 0;
                     break;
-                case 2:
+                case DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET:
                     g_debug_menu.update_flags = 0;
                     subtract_vector_xyz(scratch.sample.hero_offset, &hero.motion.pos,
                                         D_L00_00166C80.camera.position);
