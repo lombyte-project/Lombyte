@@ -2141,26 +2141,26 @@ extern int FUN_L00_0025faf0(float *p, int idx);
 
 extern char *D_L15_0015EF48[] __attribute__((section(".sdata")));
 int FUN_L15_002f85a8(char *moby) {
-    int *e = *(int **)(D_L15_0015EF48[2] + *(short *)(moby + 0x84) * 32 + 0x1C);
+    int *slot_data = *(int **)(D_L15_0015EF48[2] + *(short *)(moby + 0x84) * 32 + 0x1C);
     int r;
     int i;
-    if (e[10] >= 0 && FUN_L00_0025fa38(D_0013E533 + 0xE9D, e[10])) {
+    if (slot_data[10] >= 0 && FUN_L00_0025fa38(D_0013E533 + 0xE9D, slot_data[10])) {
         return 0;
     }
-    if (e[3] >= 0) {
-        if (is_point_inside_clip_volume(D_0013E533 + 0xE9D, e[3])) {
+    if (slot_data[3] >= 0) {
+        if (is_point_inside_clip_volume(D_0013E533 + 0xE9D, slot_data[3])) {
             return 1;
         }
-    } else if (e[4] >= 0) {
-        if (FUN_L00_0025fa38(D_0013E533 + 0xE9D, e[4])) {
+    } else if (slot_data[4] >= 0) {
+        if (FUN_L00_0025fa38(D_0013E533 + 0xE9D, slot_data[4])) {
             return 1;
         }
-    } else if (e[2] >= 0) {
-        if (FUN_L00_0025faf0((float *)(D_0013E533 + 0xE9D), e[2])) {
+    } else if (slot_data[2] >= 0) {
+        if (FUN_L00_0025faf0((float *)(D_0013E533 + 0xE9D), slot_data[2])) {
             return 1;
         }
-    } else if (e[5] >= 0) {
-        i = e[5];
+    } else if (slot_data[5] >= 0) {
+        i = slot_data[5];
         if (point_in_path_xy((float *)(D_0013E533 + 0xE9D), (float *)(D_L15_001B0AB0[i] + 4),
                              D_L15_001B0AB0[i][0])) {
             return 1;
