@@ -2087,7 +2087,7 @@ void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 /* scrolls the two texture-offset accumulators and draws the 10x20 band of
    textured quads between the D_L00_001DC060/001DC1A0 rings, skipping
    back-facing ones */
-void FUN_L00_002bdc50(void *o) {
+void FUN_L00_002bdc50(void *moby) {
     Quad quad;
     OvlVec4 edge_to_corner0, edge_to_corner2, face_normal, camera_to_corner1;
     float y, a, b, texture_scroll_step;
@@ -2097,8 +2097,8 @@ void FUN_L00_002bdc50(void *o) {
     if (D_L00_0016178C <= -8.0f) D_L00_0016178C += 8.0f;
     FUN_L00_002be078(D_L00_001DC020, D_L00_0016176C, D_L00_00161770, 12, D_L00_00161774, D_L00_00161778, D_L00_0016177C, D_L00_00161784);
     FUN_L00_002be078(D_L00_001DC0E0, D_L00_0016176C, D_L00_00161770, 12, D_L00_00161774, D_L00_00161778, D_L00_0016177C, D_L00_00161788);
-    FUN_L00_002be650(o);
-    FUN_L00_002be890(o);
+    FUN_L00_002be650(moby);
+    FUN_L00_002be890(moby);
     k = D_0013E535;
     c = k ? D_L00_00161798 : D_L00_00161794;
     quad.tex = FUN_001f44b8(D_L00_0016179C);
