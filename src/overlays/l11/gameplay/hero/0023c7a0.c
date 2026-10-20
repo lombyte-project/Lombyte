@@ -45,10 +45,10 @@ void FUN_L11_0023c7a0(void) {
         }
     }
     if (state == 0xE) {
-        struct Hero *a = &hero;
-        a->base_condition = 1;
-        a->unk22A4 = 0.2f;
-        a->water_surface_z = a->ground_z.f + 0.2f;
+        struct Hero *hero_ptr = &hero;
+        hero_ptr->base_condition = 1;
+        hero_ptr->unk22A4 = 0.2f;
+        hero_ptr->water_surface_z = hero_ptr->ground_z.f + 0.2f;
     }
     if (state == 0) {
         struct Hero *b = &hero;
@@ -61,9 +61,9 @@ void FUN_L11_0023c7a0(void) {
         b2->base_condition = 1;
     }
     if (current_level_index == 0xD) {
-        struct Hero *c = &hero;
-        if (c->state.current != 0x7B) {
-            if (coll_sphere(c->unk234 + 0.03f, &c->motion.unkD0, 2, 0)) {
+        struct Hero *collision_hero_ptr = &hero;
+        if (collision_hero_ptr->state.current != 0x7B) {
+            if (coll_sphere(collision_hero_ptr->unk234 + 0.03f, &collision_hero_ptr->motion.unkD0, 2, 0)) {
                 if (collision_hit_material() == 0xB) {
                     hero_set_state(0x7B, 1);
                     return;
