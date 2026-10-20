@@ -1,10 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/render_configured_text_label/FUN_0021a328.s", FUN_0021a328);
-#else
-#include "types.h"
 #include "rnc/ui/text/text_region.h"
 
 #include "sda.h"
@@ -37,13 +31,13 @@ extern void disable_global_state_flag(void) __asm__("func_001F61F8");
 extern void font_print_window(struct TextRegion *, long, char *, int, long,
                               u8 *) __asm__("func_001F7090");
 extern int scale_game_frames(int) __asm__("func_001F96F8");
-extern long fast_tween_color(int, int, float) __asm__("func_001FA6E0");
+extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern char *get_help_message_text(int) __asm__("func_001FDD10");
 extern int find_help_entry(short, int, u16 *) __asm__("func_001FECC8");
-extern long fade_menu_color(int, long, int) __asm__("func_0021B6D8");
+extern s32 fade_menu_color(s32, s32, s32) __asm__("func_0021B6D8");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern void *memset(void *, int, unsigned int);
-extern int sprintf(char *, const char *, ...) __asm__("func_00116248");
+extern int sprintf(char *, const char *, ...);
 
 int render_configured_text_label(struct MenuScreen *label) __asm__("FUN_0021a328");
 
@@ -63,13 +57,14 @@ int render_configured_text_label(struct MenuScreen *label) {
     int y;
     int text_style;
     long texture_tex0;
-    long color;
+    int color;
     int remaining_frames;
     int visible_height;
     int text_extent;
     struct MenuGridCell *entry;
     u8 *availability_table;
     int item_id;
+    int id;
 
     text = empty_label_text;
     font = normal_font_metrics;
@@ -112,23 +107,21 @@ int render_configured_text_label(struct MenuScreen *label) {
         entry = &page->data.grid.cells[value_index];
         if (entry->kind == 0) {
             availability_table = item_available;
-            flags = availability_table[entry->id];
+            id = availability_table[entry->id];
         } else {
             availability_table = alternate_item_available;
-            flags = availability_table[entry->id];
+            id = availability_table[entry->id];
         }
-        if (flags == 0) {
+        if (id == 0) {
             value_index = -1;
             remaining_frames = 0;
         }
     } else if (selector_flags & 0x1000) {
         struct MenuScreen *page = menu_system.current->focus;
         value_index = page->data.list.selected;
-        {
-            short sid = page->data.list.items[value_index].text;
-            label->data.label.text_id = 0xFFFF;
-            find_help_entry(sid, 1, (u16 *)&label->data.label.text_id);
-        }
+        id = page->data.list.items[value_index].text;
+        label->data.label.text_id = 0xFFFF;
+        find_help_entry(id, 1, (u16 *)&label->data.label.text_id);
     } else {
         struct MenuScreen *page = menu_system.current->focus;
         item_id = page->data.grid.cells[page->data.grid.selected_cell].id;
@@ -238,12 +231,9 @@ int render_configured_text_label(struct MenuScreen *label) {
         c.flags |= 4;
         font_print_window(&c, color, text, -1, texture_tex0, font);
         c.flags ^= 4;
-        draw_flags = label->data.label.flags;
-        text_extent = c.rendered_height + 4;
-        visible_height = c.bottom - c.top;
-        if (!(draw_flags & 0x2000) && text_extent >= visible_height) {
-            if (!(draw_flags & 0x400)) {
-                label->data.label.flags = draw_flags | 0x400;
+        if (!(label->data.label.flags & 0x2000) && c.rendered_height + 4 >= c.bottom - c.top) {
+            if (!(label->data.label.flags & 0x400)) {
+                label->data.label.flags |= 0x400;
                 label->data.label.scroll_offset = -(label->height * 8);
             }
         } else if (label->data.label.flags & 0x400) {
@@ -251,12 +241,21 @@ int render_configured_text_label(struct MenuScreen *label) {
             label->data.label.flags ^= 0x400;
         }
         c.anchor_y = y - (label->data.label.scroll_offset >> 4);
-        c.top += text_shadow_y_gp;
-        c.bottom += text_shadow_y_gp;
-        c.left += text_shadow_x_gp;
-        c.right += text_shadow_x_gp;
-        c.anchor_x += text_shadow_x_gp;
-        c.anchor_y += text_shadow_y_gp;
+        {
+            int dy = (u16)text_shadow_y_gp;
+            int dx = (u16)text_shadow_x_gp;
+            /* Fakematch: zero-extending reads of top and bottom keep gcse from
+               merging them with the height test's loads above. */
+            int top = (u16)c.top;
+            int bottom = (u16)c.bottom;
+
+            c.top = top + dy;
+            c.bottom = bottom + dy;
+            c.left += dx;
+            c.right += dx;
+            c.anchor_x += dx;
+            c.anchor_y += dy;
+        }
         disable_global_state_flag();
         font_print_window(&c, 0x80000000L, text, -1, texture_tex0, font);
         enable_global_state_flag();
@@ -287,7 +286,9 @@ int render_configured_text_label(struct MenuScreen *label) {
             font_print_window(&c, color, text, -1, texture_tex0, font);
             if (label->data.label.flags & 0x400) {
                 label->data.label.scroll_offset += (controller_state.held & 1) ? 10 : 3;
-                label->data.label.scroll_offset %= (c.rendered_height + text_line_spacing * 3) * 16;
+                /* Fakematch: volatile keeps the store of the sum before the modulo. */
+                *(volatile int *)&label->data.label.scroll_offset =
+                    label->data.label.scroll_offset % ((c.rendered_height + text_line_spacing * 3) * 16);
             }
         }
     }
@@ -297,4 +298,3 @@ int render_configured_text_label(struct MenuScreen *label) {
 
 extern __typeof__(render_configured_text_label) func_0021A328
     __attribute__((alias("FUN_0021a328")));
-#endif /* NON_MATCHING */

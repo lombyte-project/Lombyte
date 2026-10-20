@@ -1670,7 +1670,7 @@ segments:
           - [0x11b288, c, ui/menus/enter_menu_choice_list]
           - [0x11b290, c, ui/menus/leave_menu_choice_list]
           - [0x11b298, c, ui/menus/fun_0021a318]
-          - [0x11b2a8, c, assembly/textbin/ui/menus/render_configured_text_label]
+          - [0x11b2a8, c, ui/menus/render_configured_text_label]
           - [0x11bb74, textbin, text_gap_0021abf4_before_fun_0021abf8]
           - [0x11bb78, c, ui/menus/update_menu_entry_actions]
           - [0x11c148, c, textbin/render_localized_ui_entry_list]
