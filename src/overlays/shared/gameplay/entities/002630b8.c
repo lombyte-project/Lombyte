@@ -307,15 +307,15 @@ void attach_manipulator() __asm__("FUN_0020cb10");
 void detach_manipulator() __asm__("FUN_0020cb88");
 /* While D_0015EDB7 is set attaches the manipulator, sets floats 0x20..0x28 to x; else detaches. */
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
-void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p) {
+void FUN_L00_00263ac8(float x, int owner_moby, int b, unsigned char *manipulator) {
     if (D_0015EDB7) {
-        if (p[1] == 0)
+        if (manipulator[1] == 0)
             attach_manipulator();
-        *(float *)(p + 0x20) = x;
-        *(float *)(p + 0x24) = x;
-        *(float *)(p + 0x28) = x;
-    } else if (p[1])
-        detach_manipulator(a, p);
+        *(float *)(manipulator + 0x20) = x;
+        *(float *)(manipulator + 0x24) = x;
+        *(float *)(manipulator + 0x28) = x;
+    } else if (manipulator[1])
+        detach_manipulator(owner_moby, manipulator);
 }
 void FUN_L00_00263b38(char *p, float x) {
     if (*(unsigned char *)0x15EDB7) {
