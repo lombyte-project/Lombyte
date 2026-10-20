@@ -94,36 +94,36 @@ extern void FUN_L00_00250df8(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, float b) {
-    unsigned char *m = func_0020D348_m(0x3F1);
-    if (m) {
-        char *d = *(char **)(m + 0x78);
-        float f;
-        *(char **)(d + 0x1C) = owner;
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = func_001FA898_r(a);
-        *(int *)(m + 0x40) = 0;
-        m[0x31] = 1;
-        f = vector_length_xy(dir);
-        *(float *)(m + 0x44) = -fast_arc_tan(f, dir[2]);
-        *(float *)(m + 0x48) = fast_arc_tan(dir[0], dir[1]);
-        *(float *)(d + 0x10) = 1.0f;
+    unsigned char *spawned_moby = func_0020D348_m(0x3F1);
+    if (spawned_moby) {
+        char *moby_vars = *(char **)(spawned_moby + 0x78);
+        float direction_length_xy;
+        *(char **)(moby_vars + 0x1C) = owner;
+        spawned_moby[0x30] = 0xFF;
+        *(short *)(spawned_moby + 0x32) = func_001FA898_r(a);
+        *(int *)(spawned_moby + 0x40) = 0;
+        spawned_moby[0x31] = 1;
+        direction_length_xy = vector_length_xy(dir);
+        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(direction_length_xy, dir[2]);
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(dir[0], dir[1]);
+        *(float *)(moby_vars + 0x10) = 1.0f;
         if (b > 0.0f) {
-            fast_vec_normalize(d, dir, b);
+            fast_vec_normalize(moby_vars, dir, b);
         } else {
-            qcopy(d, dir);
+            qcopy(moby_vars, dir);
             b = fast_vec_length(dir);
         }
-        qcopy(m + 0x10, pos);
-        *(int *)(d + 0x18) = *(int *)(d + 0x14) = func_001FA898_r(a / b);
-        *(short *)(m + 0x34) = 0x200;
-        *(float *)(m + 0x2C) =
-            *(float *)(*(char **)(m + 0x24) + 0x24) *
+        qcopy(spawned_moby + 0x10, pos);
+        *(int *)(moby_vars + 0x18) = *(int *)(moby_vars + 0x14) = func_001FA898_r(a / b);
+        *(short *)(spawned_moby + 0x34) = 0x200;
+        *(float *)(spawned_moby + 0x2C) =
+            *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) *
             (*(float *)(owner + 0x2C) / *(float *)(*(char **)(owner + 0x24) + 0x24));
-        m[0x23] = func_001FA898_r(*(float *)(d + 0x10) * 24.0f);
-        set_moby_color(m, 0xFF, 0xFF, 0xFF);
-        FUN_L00_00250df8(m);
+        spawned_moby[0x23] = func_001FA898_r(*(float *)(moby_vars + 0x10) * 24.0f);
+        set_moby_color(spawned_moby, 0xFF, 0xFF, 0xFF);
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 #include "rnc/overlay/quad.h"
 #include "rnc/gameplay/entities/moby.h"
