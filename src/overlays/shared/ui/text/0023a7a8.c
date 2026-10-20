@@ -184,12 +184,12 @@ int scale_game_frames(int) __asm__("FUN_001f96f8");
 int FUN_L00_0023ac78(int call) {
     int positive_timer_count = 0;
     E_23ac78 *hud_element;
-    H_23ac78 *h;
+    H_23ac78 *hud_timer_refresh_control;
     FUN_L00_0023adb8();
     hud_element = hud_elements;
-    h = &D_L00_0017E4D8;
+    hud_timer_refresh_control = &D_L00_0017E4D8;
     do {
-        if ((hud_element->flags & 0x10) || h->b != 0) {
+        if ((hud_element->flags & 0x10) || hud_timer_refresh_control->b != 0) {
             if (hud_element->t < scale_game_frames(10)) {
                 hud_element->t = scale_game_frames(10);
             }
