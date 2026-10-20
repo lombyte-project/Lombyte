@@ -1687,28 +1687,28 @@ typedef struct {
 } O;
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void FUN_L00_0020fca8(int i, int v) {
-    struct Hero *e; /* hero shifted by i slots, so items[0] is slot i */
+    struct Hero *slot_owner; /* hero shifted by i slots, so items[0] is slot i */
     {
-        struct Hero *f = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
-        O *o;
-        f->items[0].unk14 = v;
-        if (f->items[0].state != 3) {
-            o = (O *)f->items[0].moby;
-            f->items[0].state = 3;
-            if (o && o->t != 0xfe && o->t != 0xfd && o->fn)
-                o->fn();
+        struct Hero *pre_removal_slot_owner = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
+        O *item_moby;
+        pre_removal_slot_owner->items[0].unk14 = v;
+        if (pre_removal_slot_owner->items[0].state != 3) {
+            item_moby = (O *)pre_removal_slot_owner->items[0].moby;
+            pre_removal_slot_owner->items[0].state = 3;
+            if (item_moby && item_moby->t != 0xfe && item_moby->t != 0xfd && item_moby->fn)
+                item_moby->fn();
         }
     }
-    e = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
-    e->items[0].state = 0;
-    e->items[0].item_id = 0;
-    if (e->items[0].moby) {
-        mark_moby_for_removal(e->items[0].moby);
-        e->items[0].moby = 0;
+    slot_owner = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
+    slot_owner->items[0].state = 0;
+    slot_owner->items[0].item_id = 0;
+    if (slot_owner->items[0].moby) {
+        mark_moby_for_removal(slot_owner->items[0].moby);
+        slot_owner->items[0].moby = 0;
     }
-    if (e->items[0].moby2 && i != 3) {
-        mark_moby_for_removal(e->items[0].moby2);
-        e->items[0].moby2 = 0;
+    if (slot_owner->items[0].moby2 && i != 3) {
+        mark_moby_for_removal(slot_owner->items[0].moby2);
+        slot_owner->items[0].moby2 = 0;
     }
 }
 #define NOT_SDA
