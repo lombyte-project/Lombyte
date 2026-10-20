@@ -21,7 +21,7 @@ f32 FUN_L00_0025b750_261630(f32, f32, f32) __asm__("FUN_L00_0025b750");
 void FUN_L00_00261630(u8 *o, u8 *s, f32 a, f32 b) {
     OvlQuad v[1];
     u8 *pos;
-    s32 n, t;
+    s32 movement_unconstrained, t;
     f32 planar_distance;
     if (*(s16 *)(s + 0x28) == 0) {
         pos = o + 0x10;
@@ -37,10 +37,10 @@ void FUN_L00_00261630(u8 *o, u8 *s, f32 a, f32 b) {
     qcopy(v, pos);
     ((f32 *)v)[0] += FUN_001f9dc8_261630(*(f32 *)(o + 0x48)) * *(f32 *)(s + 0x14);
     ((f32 *)v)[1] += FUN_001f9de0_261630(*(f32 *)(o + 0x48)) * *(f32 *)(s + 0x14);
-    n = FUN_L00_00258490_261630(o, pos, v, 0, a, *(f32 *)(s + 0x10), b, 0.52359879f);
+    movement_unconstrained = FUN_L00_00258490_261630(o, pos, v, 0, a, *(f32 *)(s + 0x10), b, 0.52359879f);
     *(f32 *)(o + 0x18) = FUN_00213508_261630(pos, 0, 0.5f);
     planar_distance = FUN_001f9b80_261630(pos, s);
-    if (n == 0 || *(f32 *)(s + 0x1C) < planar_distance) {
+    if (movement_unconstrained == 0 || *(f32 *)(s + 0x1C) < planar_distance) {
         *(f32 *)(s + 0x24) = FUN_001f9e90_261630(*(f32 *)(s + 0) - *(f32 *)(o + 0x10),
                                                  *(f32 *)(s + 4) - *(f32 *)(o + 0x14));
         t = FUN_001f96f8_261630(0x1E);
