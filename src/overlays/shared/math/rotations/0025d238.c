@@ -299,7 +299,7 @@ float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_star
     OvlQuad query_point_copy[1];
     OvlQuad g[1];
     float *output_component, *fa, *fb;
-    float res, t, u;
+    float res, negative_query_direction_dot, u;
     int i;
     if (r > 0.0f && fabs_25dcd8(((float *)query_point)[2] - ((float *)segment_start)[2]) < r &&
         fabs_25dcd8(((float *)query_point)[2] - ((float *)b)[2]) < r) {
@@ -315,9 +315,9 @@ float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_star
     d[1] = *segment_start;
     vscl_25dcd8(d, d, 1.0f);
     qcopy(direction_copy, d);
-    t = -dot_25dcd8(query_point, d);
+    negative_query_direction_dot = -dot_25dcd8(query_point, d);
     u = dot_25dcd8(&d[1], direction_copy);
-    scale_vector_xyz(out, d, -(t + u) / dot_25dcd8(d, direction_copy));
+    scale_vector_xyz(out, d, -(negative_query_direction_dot + u) / dot_25dcd8(d, direction_copy));
     vadd_25dcd8(out, out, &d[1]);
     i = 0;
     fb = (float *)b;
