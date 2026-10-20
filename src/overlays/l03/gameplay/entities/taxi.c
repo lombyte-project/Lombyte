@@ -1203,7 +1203,7 @@ extern void attach_2da710(void *, int, void *) __asm__("FUN_0020cb10");
 /* During the cutscene, nudges a camera value at two time windows and attaches
  * the shared manipulator to every listed moby of the same class as m. */
 void FUN_L03_002da710(struct Moby *m) {
-    char *s;
+    char *shared_attachment_record;
     int i;
 
     if (D_L03_0015F5C4 == 2 && big_head_cheat_enabled != 0) {
@@ -1215,12 +1215,12 @@ void FUN_L03_002da710(struct Moby *m) {
         }
         for (i = 0; i < D_L03_0016C960.n; i++) {
             if (*(short *)(D_L03_0016C960.list[i] + 0xA6) == m->oclass) {
-                s = D_L03_0017C540;
-                if (((unsigned char *)s)[1] == 0) {
-                    attach_2da710(D_L03_0016C960.list[i], 0, s);
-                    *(float *)(s + 0x20) = D_L03_00161BB4;
-                    *(float *)(s + 0x24) = D_L03_00161BB4;
-                    *(float *)(s + 0x28) = D_L03_00161BB4;
+                shared_attachment_record = D_L03_0017C540;
+                if (((unsigned char *)shared_attachment_record)[1] == 0) {
+                    attach_2da710(D_L03_0016C960.list[i], 0, shared_attachment_record);
+                    *(float *)(shared_attachment_record + 0x20) = D_L03_00161BB4;
+                    *(float *)(shared_attachment_record + 0x24) = D_L03_00161BB4;
+                    *(float *)(shared_attachment_record + 0x28) = D_L03_00161BB4;
                 }
             }
         }
