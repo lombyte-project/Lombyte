@@ -15,14 +15,14 @@ extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 void FUN_L07_00288968(void *input_position, void *output_position, void *pivot_position, void *inverse_rotation_angles, void *forward_rotation_angles) {
-    float m0[16];
-    float m1[16];
+    float inverse_rotation_matrix[16];
+    float forward_rotation_matrix[16];
     float v[4];
-    euler_rotation_matrix(m0, inverse_rotation_angles);
-    transpose_rotation_matrix(m0, m0);
-    euler_rotation_matrix(m1, forward_rotation_angles);
+    euler_rotation_matrix(inverse_rotation_matrix, inverse_rotation_angles);
+    transpose_rotation_matrix(inverse_rotation_matrix, inverse_rotation_matrix);
+    euler_rotation_matrix(forward_rotation_matrix, forward_rotation_angles);
     subtract_vector_xyz(v, input_position, pivot_position);
-    transform_vector(v, v, m0);
-    transform_vector(v, v, m1);
+    transform_vector(v, v, inverse_rotation_matrix);
+    transform_vector(v, v, forward_rotation_matrix);
     add_vector_xyz(output_position, v, pivot_position);
 }
