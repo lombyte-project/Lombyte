@@ -519,17 +519,17 @@ void floating_platform_update(char *moby) {
         float bob = fast_cos(fast_normalize_angle(compute_interpolated_record_value(moby) * 6.2831855f / 118.0f)) * 0.75f;
         int i;
         for (i = 0; i < 3; i++) {
-            float *p = (float *)(data + 0x224) + i;
-            float a = fast_add_rotations(*p, *(float *)&D_L04_0016195C * DEG_TO_RAD * frame_time);
+            float *ring_angle_ptr = (float *)(data + 0x224) + i;
+            float ring_angle = fast_add_rotations(*ring_angle_ptr, *(float *)&D_L04_0016195C * DEG_TO_RAD * frame_time);
             float g = frame_scale_sq;
-            *p = a;
-            *(float *)(data + 0x108 + i * 0x80) = a;
+            *ring_angle_ptr = ring_angle;
+            *(float *)(data + 0x108 + i * 0x80) = ring_angle;
             update_joint_animation(moby, data + 0xA0 + i * 0x80, i, g * 0.03f, g * 0.3f);
         }
         if (*(int *)(data + 0x230) != -1) {
-            char *o = D_L04_0015FFD8 + (*(int *)(data + 0x230) << 8);
-            if (*(short *)(o + 0xA6) == 0x118) {
-                off = **(float **)(o + 0x78) * 15.0f;
+            char *linked_moby = D_L04_0015FFD8 + (*(int *)(data + 0x230) << 8);
+            if (*(short *)(linked_moby + 0xA6) == 0x118) {
+                off = **(float **)(linked_moby + 0x78) * 15.0f;
             }
         } else {
             off = 15.0f;
