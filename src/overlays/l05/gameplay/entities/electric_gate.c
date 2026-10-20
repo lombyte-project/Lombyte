@@ -1986,101 +1986,101 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 
 void shady_salesman_update(WM *m) __asm__("FUN_L05_003180a0");
-void shady_salesman_update(WM *m) {
+void shady_salesman_update(WM *moby) {
     enum {
         SHADY_SALESMAN_INITIALIZE = 0,
         SHADY_SALESMAN_UPDATE_DIALOGUE = 1
     };
     L16WatchScratch scratch;
-    WD *d = m->data;
+    WD *npc_data = moby->data;
     float rate;
     float head_rate;
     int tracking;
-    FUN_L02_002e0cd8((char *)m);
-    if (m->opacity) {
-        if (FUN_001f9b48(m->position, D_L05_001671C0) < 40.0f) {
-            FUN_L00_0025a120(m);
-            m->b7F = 0x20;
+    FUN_L02_002e0cd8((char *)moby);
+    if (moby->opacity) {
+        if (FUN_001f9b48(moby->position, D_L05_001671C0) < 40.0f) {
+            FUN_L00_0025a120(moby);
+            moby->b7F = 0x20;
         }
     }
-    switch (m->state) {
+    switch (moby->state) {
     case SHADY_SALESMAN_INITIALIZE:
         if (D_0013D4FF) {
-            mark_moby_for_removal(m);
+            mark_moby_for_removal(moby);
             return;
         }
-        m->position[2] += 0.5f;
-        m->position[2] = probe_ground_height(m->position, 0, 0.5f);
-        d->ptr20 = (void *)D_L05_00161EF8;
-        m->state = 1;
-        initialize_npc_dialogue(m, d);
+        moby->position[2] += 0.5f;
+        moby->position[2] = probe_ground_height(moby->position, 0, 0.5f);
+        npc_data->ptr20 = (void *)D_L05_00161EF8;
+        moby->state = 1;
+        initialize_npc_dialogue(moby, npc_data);
         break;
     case SHADY_SALESMAN_UPDATE_DIALOGUE:
-        if (update_npc_dialogue(m, d))
-            begin_dialogue_camera_transition(m, 2.0f);
-        if ((unsigned)(d->sub - 3) < 2) {
+        if (update_npc_dialogue(moby, npc_data))
+            begin_dialogue_camera_transition(moby, 2.0f);
+        if ((unsigned)(npc_data->sub - 3) < 2) {
             FUN_L00_00260860(0x17, 1);
             queue_dialogue_message(0x1396, -1);
             memcard_save_data(0, -1);
-            mark_moby_for_removal(m);
+            mark_moby_for_removal(moby);
             return;
         }
-        if (m->animation == 0 && FUN_001f9740((char *)d + 0x154)) {
-            d->idle_timer =
+        if (moby->animation == 0 && FUN_001f9740((char *)npc_data + 0x154)) {
+            npc_data->idle_timer =
                 random_float_between_cf(multiply_global_factor_ed64(truncate_float_to_s32_cf(1200.0f, 2400.0f)));
-            if (m->animation != 1)
-                blend_moby_animation(m, 1, 0, scale_game_frames(10));
-        } else if (m->animation == 1 && (m->flags70 & 2)) {
-            blend_moby_animation(m, 0, 0, scale_game_frames(10));
+            if (moby->animation != 1)
+                blend_moby_animation(moby, 1, 0, scale_game_frames(10));
+        } else if (moby->animation == 1 && (moby->flags70 & 2)) {
+            blend_moby_animation(moby, 0, 0, scale_game_frames(10));
         }
         break;
     }
     rate = 0.02f;
     head_rate = 0.3f;
     tracking = 0;
-    if (m->animation == 0) {
+    if (moby->animation == 0) {
         char *player = (char *)&D_0013E633_watch + 0xE9D;
         tracking = 1;
-        if (vector_distance(m->position, player) < 8.0f &&
+        if (vector_distance(moby->position, player) < 8.0f &&
             FUN_001f9e90_cf(
-                m->yaw,
+                moby->yaw,
                 FUN_001fa688_cf(((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[0] -
-                                    m->position[0],
+                                    moby->position[0],
                                 ((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[1] -
-                                    m->position[1])) < 1.5707964f) {
+                                    moby->position[1])) < 1.5707964f) {
             if (vector_length_xyz(player + 0x80) > 0.01f)
-                d->moving_timer = scale_game_frames(120);
+                npc_data->moving_timer = scale_game_frames(120);
             else
-                tick_countdown_32(&d->moving_timer);
-        } else if (d->moving_timer) {
-            d->moving_timer = 0;
-            qcopy(d->target, (char *)&D_0013E633_watch + 0xEED);
+                tick_countdown_32(&npc_data->moving_timer);
+        } else if (npc_data->moving_timer) {
+            npc_data->moving_timer = 0;
+            qcopy(npc_data->target, (char *)&D_0013E633_watch + 0xEED);
         }
-        if (tick_countdown_32(&d->target_timer)) {
+        if (tick_countdown_32(&npc_data->target_timer)) {
             float heading;
-            d->target_timer =
+            npc_data->target_timer =
                 random_float_between_cf(multiply_global_factor_ed64(truncate_float_to_s32_cf(180.0f, 300.0f)));
             heading =
-                fast_add_rotations(m->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * DEG_TO_RAD);
-            build_spherical_offset(d->target, 6.0f, heading,
+                fast_add_rotations(moby->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * DEG_TO_RAD);
+            build_spherical_offset(npc_data->target, 6.0f, heading,
                                    truncate_float_to_s32_cf(0.0f, 30.0f) * DEG_TO_RAD);
-            add_vector_xyz(d->target, d->target, m->position);
+            add_vector_xyz(npc_data->target, npc_data->target, moby->position);
         }
-        if (d->moving_timer) {
+        if (npc_data->moving_timer) {
             qcopy(scratch.target, (char *)&D_0013E633_watch + 0xEED);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, d->target);
+            qcopy(scratch.target, npc_data->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, m->position);
+        qcopy(scratch.eye, moby->position);
         scratch.eye[2] += 1.0f;
         subtract_vector_xyz(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), m->yaw);
+        yaw = fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), moby->yaw);
         pitch = -FUN_001fa688_cf(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
@@ -2090,14 +2090,14 @@ void shady_salesman_update(WM *m) {
             pitch = 0.5235988f;
         else if (pitch < -0.5235988f)
             pitch = -0.5235988f;
-        d->pitch = pitch;
-        d->yaw = yaw * 0.6f;
-        d->head_yaw = yaw * 0.4f;
+        npc_data->pitch = pitch;
+        npc_data->yaw = yaw * 0.6f;
+        npc_data->head_yaw = yaw * 0.4f;
     }
     if (D_0015EDB0_b)
-        d->height = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+        npc_data->height = 2.75f;
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, npc_data->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, npc_data->head, 1);
 }
 
 extern int D_L05_001612D8_318a68[] __asm__("D_L05_001612D8") MACRO_ADDR;
