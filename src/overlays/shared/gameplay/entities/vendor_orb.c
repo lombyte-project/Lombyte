@@ -2609,7 +2609,7 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
     char *base = D_L00_00166E10;
     char *axis = base + 0x20;
     char *camera_state = *(char **)(camera + 0x70);
-    char *q = camera_state + 0x1A8;
+    char *blend_output_block = camera_state + 0x1A8;
     char *reference_direction = camera_state + 0x130;
     float dot;
     float len;
@@ -2647,7 +2647,7 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
     if (t > 1.0f) {
         t = 1.0f;
     }
-    *(float *)(q + 0x1C) = cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, t) * sign;
+    *(float *)(blend_output_block + 0x1C) = cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, t) * sign;
     return r;
 }
 void FUN_001f9a28_c2(void *, void *, void *) __asm__("FUN_001f9a28");
