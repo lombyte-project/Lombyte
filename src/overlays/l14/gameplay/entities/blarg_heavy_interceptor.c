@@ -1387,23 +1387,23 @@ extern int FUN_L00_0025d808_2afb40(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
 extern short D_L14_001613FC __attribute__((sda));
-void FUN_L14_002ae900(struct Moby *moby, float a, float b, float c) {
+void FUN_L14_002ae900(struct Moby *moby, float position_easing_factor, float b, float path_direction_multiplier) {
     char *data = (char *)moby->pvars;
     int *list = D_L14_001B0BB0[*(int *)(data + 0x204)];
-    float tmp[4];
+    float target_position[4];
     if (*(short *)(data + 0x208) != 0) {
-        qcopy(tmp, (char *)list + list[0] * 16);
+        qcopy(target_position, (char *)list + list[0] * 16);
     } else {
-        if (FUN_L00_0025d808_2afb40(list, tmp, data + 0x80, data + 0x8C, 0, b * frame_time * c) !=
+        if (FUN_L00_0025d808_2afb40(list, target_position, data + 0x80, data + 0x8C, 0, b * frame_time * path_direction_multiplier) !=
             0) {
             *(short *)(data + 0x208) = 1;
         }
     }
-    FUN_L00_0025b8c0_c(&moby->pos.x, (float *)(data + 0x194), tmp[0], a,
+    FUN_L00_0025b8c0_c(&moby->pos.x, (float *)(data + 0x194), target_position[0], position_easing_factor,
                        *(float *)&D_L14_001613FC, 0.0f);
-    FUN_L00_0025b8c0_c(&moby->pos.y, (float *)(data + 0x198), tmp[1], a,
+    FUN_L00_0025b8c0_c(&moby->pos.y, (float *)(data + 0x198), target_position[1], position_easing_factor,
                        *(float *)&D_L14_001613FC, 0.0f);
-    FUN_L00_0025b8c0_c(&moby->pos.z, (float *)(data + 0x19C), tmp[2], a,
+    FUN_L00_0025b8c0_c(&moby->pos.z, (float *)(data + 0x19C), target_position[2], position_easing_factor,
                        *(float *)&D_L14_001613FC, 0.0f);
 }
 extern f32 D_L14_001613A8 __attribute__((sda));
