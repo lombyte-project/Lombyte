@@ -92,6 +92,9 @@ int hero_set_state(int a, int b) {
         HERO_STATE_WRENCH_COMBO_ALT = 0x70,
         HERO_STATE_DEATH_FALL = 0x77
     };
+    enum {
+        HERO_STATE_DOUBLE_JUMP = 0xE
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -710,7 +713,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
-    case 0xE:
+    case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
