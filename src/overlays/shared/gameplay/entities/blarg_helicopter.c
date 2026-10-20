@@ -1733,16 +1733,16 @@ void FUN_L03_002db480(char *moby) {
 
     if (D_L03_0015F5C4 == 2 && D_0015EDB0 != 0) {
         for (i = 0; i < D_L03_0016C960.count; i++) {
-            char *e = D_L03_0016C960.mobys[i];
+            char *candidate_moby = D_L03_0016C960.mobys[i];
 
-            if (*(short *)(e + 0xA6) == *(short *)(moby + 0xA6)) {
-                unsigned char *s = D_L03_0017C540;
+            if (*(short *)(candidate_moby + 0xA6) == *(short *)(moby + 0xA6)) {
+                unsigned char *manipulator = D_L03_0017C540;
 
-                if (s[1] == 0) {
-                    attach_manipulator(e, 1, s);
-                    *(float *)(s + 0x20) = *(float *)&D_L03_00161BC4;
-                    *(float *)(s + 0x24) = *(float *)&D_L03_00161BC4;
-                    *(float *)(s + 0x28) = *(float *)&D_L03_00161BC4;
+                if (manipulator[1] == 0) {
+                    attach_manipulator(candidate_moby, 1, manipulator);
+                    *(float *)(manipulator + 0x20) = *(float *)&D_L03_00161BC4;
+                    *(float *)(manipulator + 0x24) = *(float *)&D_L03_00161BC4;
+                    *(float *)(manipulator + 0x28) = *(float *)&D_L03_00161BC4;
                 }
             }
         }
