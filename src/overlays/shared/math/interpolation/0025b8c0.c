@@ -12,16 +12,16 @@ extern void FUN_L00_0025b798(float *ptr, float rate, float b, float c, float lim
 float absolute_float(float input) __asm__("func_001F99C0");
 
 float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
-float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) {
-    float n, d;
-    FUN_L00_0025b798(v, t - *p, u1, u2, eps);
-    n = *p + *v;
-    d = t - n;
-    *p = n;
-    if (absolute_float(d) < eps * 0.01f) {
-        *p = t;
+float vendor_spring(float *value, float *v, float target_value, float u1, float u2, float eps) {
+    float next_value, remaining_error;
+    FUN_L00_0025b798(v, target_value - *value, u1, u2, eps);
+    next_value = *value + *v;
+    remaining_error = target_value - next_value;
+    *value = next_value;
+    if (absolute_float(remaining_error) < eps * 0.01f) {
+        *value = target_value;
         *(int *)v = 0;
         return *v;
     }
-    return d;
+    return remaining_error;
 }
