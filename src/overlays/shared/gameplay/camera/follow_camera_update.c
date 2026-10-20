@@ -430,17 +430,17 @@ void FUN_L00_002e9dd0(char *camera_object) {
 }
 void FUN_L00_002e9dd0();
 /* Clears seven words of the object at p+0x70, calls FUN_L00_002e9dd0, clears 0x7E. */
-void FUN_L00_002e9ef0(char *p) {
-    int *q = *(int **)(p + 0x70);
-    q[0] = 0;
-    q[2] = 0;
-    q[1] = 0;
-    q[3] = 0;
-    q[4] = 0;
-    q[5] = 0;
-    q[6] = 0;
-    FUN_L00_002e9dd0(p);
-    *(short *)(p + 0x7E) = 0;
+void FUN_L00_002e9ef0(char *camera_object) {
+    int *camera_state = *(int **)(camera_object + 0x70);
+    camera_state[0] = 0;
+    camera_state[2] = 0;
+    camera_state[1] = 0;
+    camera_state[3] = 0;
+    camera_state[4] = 0;
+    camera_state[5] = 0;
+    camera_state[6] = 0;
+    FUN_L00_002e9dd0(camera_object);
+    *(short *)(camera_object + 0x7E) = 0;
 }
 typedef struct {
     float f[4];
