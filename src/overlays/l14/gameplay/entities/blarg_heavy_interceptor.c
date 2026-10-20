@@ -1537,9 +1537,9 @@ void FUN_L14_002aed50(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
     s32 step;
     s32 i;
-    f32 f = *(f32 *)(data + 0x164) + 0.5f;
-    *(f32 *)(data + 0x164) = f;
-    step = truncate_float_to_s32(f);
+    f32 advanced_blink_phase = *(f32 *)(data + 0x164) + 0.5f;
+    *(f32 *)(data + 0x164) = advanced_blink_phase;
+    step = truncate_float_to_s32(advanced_blink_phase);
     if (1.0f <= *(f32 *)(data + 0x164))
         *(s32 *)(data + 0x164) = 0;
     for (i = 0; i < D_L14_00161418; i++) {
