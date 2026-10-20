@@ -986,7 +986,7 @@ void turret_update(struct Moby *moby) {
     TurretBeam *beam;
     float len;
     float stick_y;
-    int n;
+    int beam_frame_count;
     int i;
 
     vars = (TurretVars *)moby->pvars;
@@ -1067,11 +1067,11 @@ void turret_update(struct Moby *moby) {
                 beam->pos[0] = tmp.f[0];
                 beam->pos[1] = tmp.f[1];
                 beam->pos[2] = tmp.f[2];
-                n = ++vars->beam_frames;
-                if (n > 40 || !(n & 4)) {
+                beam_frame_count = ++vars->beam_frames;
+                if (beam_frame_count > 40 || !(beam_frame_count & 4)) {
                     beam->size = 4.0f;
                     beam->alpha = 0.4f;
-                } else if (n >= 25 && (n & 0xA) == 0xA) {
+                } else if (beam_frame_count >= 25 && (beam_frame_count & 0xA) == 0xA) {
                     beam->size = 4.0f;
                     beam->alpha = 0.4f;
                 } else {
