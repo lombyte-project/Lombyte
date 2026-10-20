@@ -1212,8 +1212,8 @@ void FUN_L08_002d5d08(char *moby) {
     float a[4];
     float b[4];
     float c[4];
-    char *d = *(char **)(moby + 0x78);
-    short *list = D_L08_001AC040[((Blk_7010 *)D_L08_0015FFD8 + *(int *)(d + 0x144))->group];
+    char *moby_vars = *(char **)(moby + 0x78);
+    short *list = D_L08_001AC040[((Blk_7010 *)D_L08_0015FFD8 + *(int *)(moby_vars + 0x144))->group];
     char *other;
     unsigned short index;
     int i;
@@ -1222,29 +1222,29 @@ void FUN_L08_002d5d08(char *moby) {
     index = *list & 0x7FFF;
     other = (char *)((Blk_7010 *)D_L08_0015FFD8 + index);
     for (i = 0; i < 40 && D_L08_0015FFBC >= 50; i++) {
-        char *m;
-        if (random_integer_below_c2(0xFF) & 1) m = func_0020D348_m(0x310); else m = func_0020D348_m(0x311);
-        if (m != 0) {
+        char *spawned_debris_moby;
+        if (random_integer_below_c2(0xFF) & 1) spawned_debris_moby = func_0020D348_m(0x310); else spawned_debris_moby = func_0020D348_m(0x311);
+        if (spawned_debris_moby != 0) {
             float ang;
-            *(short *)(m + 0x32) = 0x40;
-            *(unsigned char *)(m + 0x30) = 0xFF;
-            m[0x31] = 1;
-            *(float *)(m + 0x40) = func_00214158_2D6C58();
-            *(float *)(m + 0x44) = func_00214158_2D6C58();
-            *(float *)(m + 0x48) = func_00214158_2D6C58();
+            *(short *)(spawned_debris_moby + 0x32) = 0x40;
+            *(unsigned char *)(spawned_debris_moby + 0x30) = 0xFF;
+            spawned_debris_moby[0x31] = 1;
+            *(float *)(spawned_debris_moby + 0x40) = func_00214158_2D6C58();
+            *(float *)(spawned_debris_moby + 0x44) = func_00214158_2D6C58();
+            *(float *)(spawned_debris_moby + 0x48) = func_00214158_2D6C58();
             a[0] = random_float_between_c4(-1.0f, 1.0f);
             a[1] = random_float_between_c4(-1.0f, 1.0f);
             a[2] = random_float_between_c4(-1.0f, 1.0f);
             a[3] = 1.0f;
-            transform_vector(a, a, D_L08_001600EC + (*(int *)(d + 0x148) << 7));
-            qcopy(m + 0x10, a);
+            transform_vector(a, a, D_L08_001600EC + (*(int *)(moby_vars + 0x148) << 7));
+            qcopy(spawned_debris_moby + 0x10, a);
             ang = random_float_between_c4(-0.2617994f, 0.2617994f);
             clear_u64_value(b);
             c[0] = fast_cos_c3(ang) * (D_0015ED6C_lui * 15.0f);
             c[1] = fast_sin(ang) * (D_0015ED6C_lui * 15.0f);
             c[2] = 0.0f;
             c[2] = random_float_between_c4(D_0015ED6C_lui * 8.0f, D_0015ED6C_lui * 12.0f);
-            FUN_L05_00318648(m, (int)moby, c, b, func_001FA898_2D6C58(random_float_between_c4(60.0f, 90.0f)));
+            FUN_L05_00318648(spawned_debris_moby, (int)moby, c, b, func_001FA898_2D6C58(random_float_between_c4(60.0f, 90.0f)));
         }
     }
     while (1) {
