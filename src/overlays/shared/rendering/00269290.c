@@ -1127,10 +1127,10 @@ extern int FUN_00213260_26bed0(int) __asm__("FUN_00213260");
 
 extern unsigned char *D_L00_001B20C0 __attribute__((section(".data")));
 unsigned char *mine_debris(void *a, void *b, int c, int d, float f, int n, int k) __asm__("FUN_L00_0026bed0");
-unsigned char *mine_debris(void *a, void *b, int c, int d, float f, int n, int k) {
-    unsigned char *m;
-    unsigned char *q;
-    if (n == 0) {
+unsigned char *mine_debris(void *spawn_position, void *b, int initial_color, int final_color, float initial_size, int lifetime, int k) {
+    unsigned char *particle;
+    unsigned char *particle_data;
+    if (lifetime == 0) {
         return 0;
     }
     if (D_L00_0015F5D0 > 0.9f && FUN_00213260_26bed0(3) == 0)
@@ -1139,30 +1139,30 @@ unsigned char *mine_debris(void *a, void *b, int c, int d, float f, int n, int k
         return 0;
     if (D_L00_0015F5D0 > 1.0f && FUN_00213260_26bed0(1) == 0)
         return 0;
-    m = FUN_L00_002678b8_26bed0(0x10);
-    if (m) {
-        qcopy(m + 0x10, a);
-        *(int *)(m + 4) = c;
-        m[9] = FUN_001fa6d0_26bed0(4.0f) + 0x40;
-        m[1] = 0;
-        *(float *)(m + 0xC) = f;
-        m[3] = 0x44;
-        m[8] = FUN_001160d8_26bed0();
+    particle = FUN_L00_002678b8_26bed0(0x10);
+    if (particle) {
+        qcopy(particle + 0x10, spawn_position);
+        *(int *)(particle + 4) = initial_color;
+        particle[9] = FUN_001fa6d0_26bed0(4.0f) + 0x40;
+        particle[1] = 0;
+        *(float *)(particle + 0xC) = initial_size;
+        particle[3] = 0x44;
+        particle[8] = FUN_001160d8_26bed0();
         {
             unsigned char *t = D_L00_001B20C0;
-            m[2] = *(k != 3 ? t + k : t);
+            particle[2] = *(k != 3 ? t + k : t);
         }
-        q = m + 0x20;
-        *(s16 *)(m + 0xA) = n;
-        *(s16 *)(q + 0x18) = n;
-        *(float *)(q + 0x1C) = f;
-        *(int *)(q + 0x10) = c;
-        *(int *)(q + 0x14) = d;
-        *(s16 *)(q + 0x1A) = k;
-        qcopy(q, b);
-        *(float *)(q + 0xC) = ((float *)a)[2] - 0.5f;
+        particle_data = particle + 0x20;
+        *(s16 *)(particle + 0xA) = lifetime;
+        *(s16 *)(particle_data + 0x18) = lifetime;
+        *(float *)(particle_data + 0x1C) = initial_size;
+        *(int *)(particle_data + 0x10) = initial_color;
+        *(int *)(particle_data + 0x14) = final_color;
+        *(s16 *)(particle_data + 0x1A) = k;
+        qcopy(particle_data, b);
+        *(float *)(particle_data + 0xC) = ((float *)spawn_position)[2] - 0.5f;
     }
-    return m;
+    return particle;
 }
 /* Ported from rac1-decomp src/overlays/shared/partupd_0026A130.c (func_L00_0026CF28) */
 
