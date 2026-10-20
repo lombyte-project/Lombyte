@@ -22,7 +22,7 @@ unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int lifetime_frames, i
     if (particle) {
         unsigned char *particle_data;
         float time_scale;
-        float t;
+        float frame_scaled_increment;
         qcopy(particle + 0x10, pos);
         *(int *)(particle + 4) = (initial_alpha << 24) | col;
         *(float *)(particle + 0x1C) = pw;
@@ -34,11 +34,11 @@ unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int lifetime_frames, i
         particle[8] = FUN_00213260_2712b8(0xFF);
         particle[2] = *D_L00_001B2130;
         *(short *)(particle + 0xA) = lifetime_frames;
-        t = (float)n * frame_scale;
+        frame_scaled_increment = (float)n * frame_scale;
         *(float *)(particle_data + 0) = vec[0];
         *(float *)(particle_data + 4) = vec[1];
         *(float *)(particle_data + 8) = vec[2];
-        particle_data[0x10] = FUN_001fa6d0_2712b8(t);
+        particle_data[0x10] = FUN_001fa6d0_2712b8(frame_scaled_increment);
         time_scale = frame_scale;
         *(float *)(particle_data + 0xC) = w;
         particle_data[0x12] = col >> 8;
