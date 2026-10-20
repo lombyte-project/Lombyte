@@ -140,16 +140,16 @@ void FUN_L14_002df138(u8 *moby) {
 extern void FUN_L14_002df510(struct Moby *, void *, int, int, int);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-void FUN_L14_002df458(struct Moby *m) {
-    char *moby_vars = (char *)m->pvars;
+void FUN_L14_002df458(struct Moby *ribbon_moby) {
+    char *moby_vars = (char *)ribbon_moby->pvars;
     float v = *(float *)(moby_vars + 0x1EC) - frame_scale * 0.2f;
     *(float *)(moby_vars + 0x1EC) = v;
     if (v <= -8.0f) {
         *(float *)(moby_vars + 0x1EC) = v + 8.0f;
     }
     vu1_add_g_sregister(0x47, 0x51001);
-    FUN_L14_002df510(m, moby_vars, 0x80, 0x40, 10);
-    FUN_L14_002df510(m, moby_vars + 0xA0, 0x30, 0x10, 0x14);
+    FUN_L14_002df510(ribbon_moby, moby_vars, 0x80, 0x40, 10);
+    FUN_L14_002df510(ribbon_moby, moby_vars + 0xA0, 0x30, 0x10, 0x14);
 }
 /* Draws a two-layer ribbon along a path of points: each segment builds a basis from the segment direction and
  * the camera, sweeps two textured quads (an outer glow and an inner core) across it and, for the alpha-0x10
