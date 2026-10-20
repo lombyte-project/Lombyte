@@ -945,15 +945,15 @@ void FUN_L10_002c9c70(struct Moby *moby) {
         break;
     }
 }
-void FUN_L10_002d7b18(struct Moby *a, float t) {
-    float c = a->pos.z;
-    float d = t - c;
-    if (0.1f < d) {
-        a->pos.z = c + 0.1f;
-    } else if (d < -0.1f) {
-        a->pos.z = c - 0.1f;
+void FUN_L10_002d7b18(struct Moby *moby, float target_height) {
+    float current_height = moby->pos.z;
+    float height_delta = target_height - current_height;
+    if (0.1f < height_delta) {
+        moby->pos.z = current_height + 0.1f;
+    } else if (height_delta < -0.1f) {
+        moby->pos.z = current_height - 0.1f;
     } else {
-        a->pos.z = t;
+        moby->pos.z = target_height;
     }
 }
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
