@@ -213,35 +213,35 @@ extern short D_L18_0016222C __attribute__((sda));
 int FUN_L18_002f0120(char *moby, float *vec) {
     float buf[4];
     float v[4];
-    char *d = *(char **)(moby + 0x78);
-    char *p;
+    char *missile_vars = *(char **)(moby + 0x78);
+    char *linked_moby;
     float yaw;
 
     fast_vec_sub(buf, vec, moby + 0x10);
-    yaw = fast_add_rotations(fast_arc_tan(buf[0], buf[1]), *(float *)(d + 0x148));
-    approach_angle((float *)(moby + 0x48), (float *)(d + 0x140), yaw, *(float *)(d + 0x150),
-                     *(float *)(d + 0x150), *(float *)(d + 0x154));
+    yaw = fast_add_rotations(fast_arc_tan(buf[0], buf[1]), *(float *)(missile_vars + 0x148));
+    approach_angle((float *)(moby + 0x48), (float *)(missile_vars + 0x140), yaw, *(float *)(missile_vars + 0x150),
+                     *(float *)(missile_vars + 0x150), *(float *)(missile_vars + 0x154));
     *(float *)(moby + 0x10) +=
         fast_cos(*(float *)(moby + 0x48)) * (*(float *)&D_L18_00162214_gp * frame_time);
     *(float *)(moby + 0x14) +=
         fast_sin(*(float *)(moby + 0x48)) * (*(float *)&D_L18_00162214_gp * frame_time);
-    FUN_00213f38_c((float *)(moby + 0x18), (float *)(d + 0x144), vec[2], *(float *)(d + 0x158),
-                   *(float *)(d + 0x158), *(float *)(d + 0x15C));
-    *(float *)(moby + 0x44) = *(float *)&D_L18_0016222C * *(float *)(d + 0x144);
+    FUN_00213f38_c((float *)(moby + 0x18), (float *)(missile_vars + 0x144), vec[2], *(float *)(missile_vars + 0x158),
+                   *(float *)(missile_vars + 0x158), *(float *)(missile_vars + 0x15C));
+    *(float *)(moby + 0x44) = *(float *)&D_L18_0016222C * *(float *)(missile_vars + 0x144);
     if (fast_vec_length(buf) < 2.0f) {
         return 1;
     }
-    if (tick_countdown_32((int *)(d + 0x160))) {
+    if (tick_countdown_32((int *)(missile_vars + 0x160))) {
         return 1;
     }
-    p = *(char **)(d + 0x16C);
-    if (p) {
-        fast_vec_sub(v, moby + 0x10, p + 0x10);
+    linked_moby = *(char **)(missile_vars + 0x16C);
+    if (linked_moby) {
+        fast_vec_sub(v, moby + 0x10, linked_moby + 0x10);
         if (!(vector_length_xy(v) < 4.5f)) {
             return 0;
         }
         set_vector_length_xy(v, v, random_float_between_alt(15.0f, 20.0f));
-        fast_vec_add(v, v, *(char **)(d + 0x16C) + 0x10);
+        fast_vec_add(v, v, *(char **)(missile_vars + 0x16C) + 0x10);
         v[2] = vec[2];
         qcopy(vec, v);
     }
