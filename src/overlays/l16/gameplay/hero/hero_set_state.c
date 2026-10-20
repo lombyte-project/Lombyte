@@ -104,6 +104,7 @@ extern char D_L16_0017C380[];
 extern char D_L16_0017C3C0[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_GRIND_JUMP = 0x29,
         HERO_STATE_GRIND_ATTACK = 0x2B,
         HERO_STATE_GRIND_HURT = 0x42,
         HERO_STATE_VEHICLE_IDLE = 0x53,
@@ -1182,7 +1183,7 @@ int hero_set_state(int a, int b) {
     case 0x11:
     case 0x12:
     case 0x1C:
-    case 0x29:
+    case HERO_STATE_GRIND_JUMP:
     case 0x2A:
     case 0x3C:
     case 0x49:
