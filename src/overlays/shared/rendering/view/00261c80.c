@@ -12,79 +12,79 @@ extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 extern short D_L02_001B0E30[] __attribute__((section(".data")));
 extern char *D_L02_001D1B80[] __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
-int FUN_L02_00261c80(char *a, char *o, float best) {
+int FUN_L02_00261c80(char *a, char *output_data, float best) {
     struct Hero *g = &hero_lui;
-    char *m;
-    char *p;
+    char *selected_moby;
+    char *candidate_moby;
     int res;
     int i;
     int j;
     float d;
 
-    m = ((char *)g->moby);
+    selected_moby = ((char *)g->moby);
     res = 0;
     if (g->state.control_mode == 0x18 || g->state.current == 0x72) {
-        m = 0;
+        selected_moby = 0;
         res = 2;
     }
     for (i = 1; i <= D_L02_001B0E30[0]; i++) {
-        p = D_L00_0015FFD8_25fcb8 + (D_L02_001B0E30[i] << 8);
-        if (p == 0)
+        candidate_moby = D_L00_0015FFD8_25fcb8 + (D_L02_001B0E30[i] << 8);
+        if (candidate_moby == 0)
             continue;
-        if (*(short *)(p + 0xA6) != 0xCB && *(short *)(p + 0xA6) != 0x76C)
+        if (*(short *)(candidate_moby + 0xA6) != 0xCB && *(short *)(candidate_moby + 0xA6) != 0x76C)
             continue;
-        if (*(unsigned char *)(p + 0x20) == 0xFE)
+        if (*(unsigned char *)(candidate_moby + 0x20) == 0xFE)
             continue;
-        if (*(unsigned char *)(p + 0x20) == 0xFD)
+        if (*(unsigned char *)(candidate_moby + 0x20) == 0xFD)
             continue;
-        if (*(unsigned char *)(p + 0x20) != 3)
+        if (*(unsigned char *)(candidate_moby + 0x20) != 3)
             continue;
-        d = FUN_001f9b80_25fcb8(a + 0x10, p + 0x10);
+        d = FUN_001f9b80_25fcb8(a + 0x10, candidate_moby + 0x10);
         if (d < best) {
-            m = p;
+            selected_moby = candidate_moby;
             best = d;
             res = 1;
         }
     }
     for (j = 0; j < 20; j++) {
-        p = D_L02_001D1B80[j];
-        if (p == 0)
+        candidate_moby = D_L02_001D1B80[j];
+        if (candidate_moby == 0)
             continue;
-        if (*(short *)(p + 0xA6) != 0x10E)
+        if (*(short *)(candidate_moby + 0xA6) != 0x10E)
             continue;
-        if (*(unsigned char *)(p + 0x20) == 0xFE)
+        if (*(unsigned char *)(candidate_moby + 0x20) == 0xFE)
             continue;
-        if (*(unsigned char *)(p + 0x20) == 0xFD)
+        if (*(unsigned char *)(candidate_moby + 0x20) == 0xFD)
             continue;
-        if (*(unsigned char *)(p + 0xBC) == 0)
+        if (*(unsigned char *)(candidate_moby + 0xBC) == 0)
             continue;
-        d = FUN_001f9b80_25fcb8(a + 0x10, p + 0x10);
+        d = FUN_001f9b80_25fcb8(a + 0x10, candidate_moby + 0x10);
         if (d < best) {
-            m = p;
+            selected_moby = candidate_moby;
             best = d;
             res = 1;
         }
     }
-    if (m != 0) {
-        *(char **)(o + 0x40) = m;
-        qcopy(o, m + 0x10);
-        qcopy(o + 0x10, m + 0x40);
+    if (selected_moby != 0) {
+        *(char **)(output_data + 0x40) = selected_moby;
+        qcopy(output_data, selected_moby + 0x10);
+        qcopy(output_data + 0x10, selected_moby + 0x40);
         g = &hero_lui;
-        if (m == ((char *)g->moby)) {
-            qcopy(o + 0x20, &g->motion.unkC0);
-            qcopy(o + 0x30, &g->motion.unkD0);
+        if (selected_moby == ((char *)g->moby)) {
+            qcopy(output_data + 0x20, &g->motion.unkC0);
+            qcopy(output_data + 0x30, &g->motion.unkD0);
         } else {
-            qcopy(o + 0x30, o);
-            *(float *)(o + 0x38) += 0.6f;
-            qcopy(o + 0x20, o + 0x30);
+            qcopy(output_data + 0x30, output_data);
+            *(float *)(output_data + 0x38) += 0.6f;
+            qcopy(output_data + 0x20, output_data + 0x30);
         }
     } else {
-        *(char **)(o + 0x40) = 0;
-        qzero(o);
-        qzero(o + 0x10);
-        qzero(o + 0x30);
-        qzero(o + 0x20);
+        *(char **)(output_data + 0x40) = 0;
+        qzero(output_data);
+        qzero(output_data + 0x10);
+        qzero(output_data + 0x30);
+        qzero(output_data + 0x20);
     }
-    *(int *)(o + 0x44) = res;
+    *(int *)(output_data + 0x44) = res;
     return res;
 }
