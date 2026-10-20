@@ -37,8 +37,8 @@ void FUN_L16_002097a0(void) {
         if (g->frames_off_ground.s == 0 || g->ground_distance < 0.3f) {
             g->unk12E7 = 1;
             if (g->vehicle_mode == 0) {
-                char *p = (char *)g->items[1].moby;
-                if (p != 0 && *(short *)(p + 0xA6) == 0xAD)
+                char *item_moby = (char *)g->items[1].moby;
+                if (item_moby != 0 && *(short *)(item_moby + 0xA6) == 0xAD)
                     g->unk308 = 1;
             }
         }
@@ -51,9 +51,9 @@ void FUN_L16_002097a0(void) {
     }
     if (st == 0) {
         struct Hero *q = &hero;
-        float d = q->water_surface_z - q->ground_z.f;
-        q->unk22A4 = d;
-        if (d < 0.85f && 0.25f < d)
+        float water_depth = q->water_surface_z - q->ground_z.f;
+        q->unk22A4 = water_depth;
+        if (water_depth < 0.85f && 0.25f < water_depth)
             q->unk20A9 = 1;
         {
             struct Hero *flag = &hero;
