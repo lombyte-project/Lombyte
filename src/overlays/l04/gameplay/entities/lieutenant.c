@@ -450,30 +450,30 @@ extern void refl_2e5178(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 rnd_2e5178(f32, f32) __asm__("FUN_L00_00257c48");
 extern void kill_2e5178(void *) __asm__("FUN_0020c828");
-void FUN_L04_002e5178(M2e5178 *m) {
+void FUN_L04_002e5178(M2e5178 *entity) {
     enum {
         ENTITY_MOTION_STATE_BOUNCE = 0,
         ENTITY_MOTION_STATE_DECAY_AND_REMOVE = 1
     };
-    PV2e5178 *pv = m->pv;
+    PV2e5178 *pv = entity->pv;
     u128 old;
-    u128 *t;
-    qcopy(&old, m->pos);
+    u128 *collision_normal;
+    qcopy(&old, entity->pos);
     pv->vel[2] -= frame_time_sq * 20.0f;
-    fast_vec_add(m->pos, m->pos, pv->vel);
-    m->f40 = appr_2e5178(m->f40, pv->f20);
-    m->f44 = appr_2e5178(m->f44, pv->f24);
-    m->f48 = appr_2e5178(m->f48, pv->f28);
-    switch (m->b20) {
+    fast_vec_add(entity->pos, entity->pos, pv->vel);
+    entity->f40 = appr_2e5178(entity->f40, pv->f20);
+    entity->f44 = appr_2e5178(entity->f44, pv->f24);
+    entity->f48 = appr_2e5178(entity->f48, pv->f28);
+    switch (entity->b20) {
     case ENTITY_MOTION_STATE_BOUNCE:
-        if (m->pos[2] < pv->f4 - 3.0f) {
-            m->b20 = 1;
-        } else if (tick_2e5178(&pv->hE) && pv->hC != 0 && coll_2e5178(m->pos, 2, 0, pv->f8)) {
-            t = tgt_2e5178;
-            if (fast_vec_dot(pv->vel, t) < 0.0f) {
-                qcopy(m->pos, t - 1);
+        if (entity->pos[2] < pv->f4 - 3.0f) {
+            entity->b20 = 1;
+        } else if (tick_2e5178(&pv->hE) && pv->hC != 0 && coll_2e5178(entity->pos, 2, 0, pv->f8)) {
+            collision_normal = tgt_2e5178;
+            if (fast_vec_dot(pv->vel, collision_normal) < 0.0f) {
+                qcopy(entity->pos, collision_normal - 1);
                 pv->hC--;
-                refl_2e5178(pv->vel, pv->vel, t);
+                refl_2e5178(pv->vel, pv->vel, collision_normal);
                 fast_vec_scale(pv->vel, pv->vel, 0.75f);
                 pv->f20 = 0.0f;
                 pv->f24 = rnd_2e5178(g48_2e5178, g4c_2e5178) * DEG_TO_RAD * frame_time;
@@ -482,11 +482,11 @@ void FUN_L04_002e5178(M2e5178 *m) {
         }
         break;
     case ENTITY_MOTION_STATE_DECAY_AND_REMOVE:
-        m->f2c *= 0.9f;
-        if (m->b23 < 4) {
-            kill_2e5178(m);
+        entity->f2c *= 0.9f;
+        if (entity->b23 < 4) {
+            kill_2e5178(entity);
         } else {
-            m->b23 -= 4;
+            entity->b23 -= 4;
         }
         break;
     }
