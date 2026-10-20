@@ -2600,19 +2600,19 @@ void FUN_L14_002b5428(struct Moby *moby) {
     int raw = moby->state;
     unsigned char state = raw;
     char *data = (char *)moby->pvars;
-    float t;
+    float spring_target;
     if (state == 0 || state == 9 || state == 1)
         return;
-    t = *(float *)&D_L14_00161540_d;
+    spring_target = *(float *)&D_L14_00161540_d;
     if ((raw >= 2 && raw <= 3) || state == 7) {
-        t = t * 1.5f;
+        spring_target = spring_target * 1.5f;
     } else {
         FUN_L00_0025b8c0_c((float *)(data + 0x168), (float *)(data + 0x16C),
                            *(float *)&D_L14_0016153C, 0.002f, 0.2f, 0.0f);
         FUN_L00_00262b00_c(*(float *)&D_L14_00161538, *(float *)(data + 0x168), moby,
                            (float *)(data + 0xC0), (float *)(data + 0xC4));
     }
-    FUN_L00_0025b8c0_c((float *)(data + 0x160), (float *)(data + 0x164), t, 0.003f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0_c((float *)(data + 0x160), (float *)(data + 0x164), spring_target, 0.003f, 0.2f, 0.0f);
     FUN_L00_00262b80_c(moby, data + 0xC8, data + 0xCC, *(float *)(data + 0x160),
                        *(float *)&D_L14_00161544, *(float *)&D_L14_00161548);
 }
