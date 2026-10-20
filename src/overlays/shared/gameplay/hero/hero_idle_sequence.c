@@ -1916,7 +1916,7 @@ extern V_208b60 D_L00_001AEB90;
 extern T_208b60 D_L00_0017C300[];
 void FUN_L00_00208b60(void) {
     V_208b60 v, w, x;
-    f32 k, d, a, c, s, h, hi, lo, sc;
+    f32 k, rotation_step, planar_angle, c, s, probe_reference_z, hi, lo, sc;
     T_208b60 *t;
     V_208b60 *pw, *px;
     s32 i;
@@ -1929,16 +1929,16 @@ void FUN_L00_00208b60(void) {
     k = 0.97f;
     if (G.h30E != 0 || G.i208C == 4)
         k = 1.5f;
-    d = fast_subtract_rotations(k, G.fD20);
-    if (0.052f < d)
-        d = 0.052f;
-    else if (d < -0.052f)
-        d = -0.052f;
-    G.fD20 = fast_add_rotations(G.fD20, d);
+    rotation_step = fast_subtract_rotations(k, G.fD20);
+    if (0.052f < rotation_step)
+        rotation_step = 0.052f;
+    else if (rotation_step < -0.052f)
+        rotation_step = -0.052f;
+    G.fD20 = fast_add_rotations(G.fD20, rotation_step);
     FUN_0020d510_208b60(G.m2080, &v);
-    a = angle_atan2(v.f[0], v.f[1]);
-    c = FUN_001f9dc8_208b60(a);
-    s = FUN_001f9de0_208b60(a);
+    planar_angle = angle_atan2(v.f[0], v.f[1]);
+    c = FUN_001f9dc8_208b60(planar_angle);
+    s = FUN_001f9de0_208b60(planar_angle);
     {
         f32 e = FUN_001f9dc8_208b60(G.fD20);
         v.f[0] = c * e;
@@ -1946,15 +1946,15 @@ void FUN_L00_00208b60(void) {
     }
     v.f[2] = -FUN_001f9de0_208b60(G.fD20);
     qcopy(&D_L00_001AEB90, &v);
-    h = G.f2D8;
-    if (h < 1.0f) {
+    probe_reference_z = G.f2D8;
+    if (probe_reference_z < 1.0f) {
         f32 t = G.f2F0;
         if (1.0f <= t)
-            h = t;
+            probe_reference_z = t;
         else {
             t = G.f2F4;
             if (1.0f < t)
-                h = t;
+                probe_reference_z = t;
             else {
                 G.m2080->f84 = 0.0f;
                 G.m2080->f88 = 0.0f;
@@ -1962,7 +1962,7 @@ void FUN_L00_00208b60(void) {
             }
         }
     }
-    hi = h;
+    hi = probe_reference_z;
     lo = hi;
     pw = &w;
     px = &x;
@@ -1976,7 +1976,7 @@ void FUN_L00_00208b60(void) {
         w.f[0] += c * t->x * sc;
         w.f[1] += s * t->y * sc;
         w.f[2] += t->z * sc;
-        normalize_vector_xyz(px, &v, ((w.f[2] - h) + 0.5f) / -v.f[2]);
+        normalize_vector_xyz(px, &v, ((w.f[2] - probe_reference_z) + 0.5f) / -v.f[2]);
         FUN_001f9a10_208b60(px, pw, px);
         if (collision_line(pw, px, 0x22, 0, 0)) {
             lo = FUN_001f99d0_208b60(lo, u->hit_z);
