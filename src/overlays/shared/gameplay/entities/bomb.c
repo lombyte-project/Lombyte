@@ -369,20 +369,20 @@ remove:
  * the US level program (data still reached through the MACRO_ADDR form). */
 // resets the fields of a record (if non-null) to their defaults
 /* Fills the block from 0x78 with fixed defaults and -1 ids. */
-void FUN_L00_002c92d8(char *a) {
-    if (a != 0) {
-        *(int *)(a + 0x78) = 0;
-        *(float *)(a + 0x7C) = 0.05f;
-        *(float *)(a + 0x80) = 0.863f;
-        *(int *)(a + 0x84) = 4;
-        *(int *)(a + 0x88) = 3;
-        *(float *)(a + 0x8C) = 0.625f;
-        *(short *)(a + 0x9C) = -1;
-        *(short *)(a + 0x9E) = -1;
-        *(int *)(a + 0xA0) = -1;
-        *(int *)(a + 0xA4) = -1;
-        *(int *)(a + 0xA8) = -1;
-        *(int *)(a + 0xAC) = -1;
+void FUN_L00_002c92d8(char *record) {
+    if (record != 0) {
+        *(int *)(record + 0x78) = 0;
+        *(float *)(record + 0x7C) = 0.05f;
+        *(float *)(record + 0x80) = 0.863f;
+        *(int *)(record + 0x84) = 4;
+        *(int *)(record + 0x88) = 3;
+        *(float *)(record + 0x8C) = 0.625f;
+        *(short *)(record + 0x9C) = -1;
+        *(short *)(record + 0x9E) = -1;
+        *(int *)(record + 0xA0) = -1;
+        *(int *)(record + 0xA4) = -1;
+        *(int *)(record + 0xA8) = -1;
+        *(int *)(record + 0xAC) = -1;
     }
 }
 
