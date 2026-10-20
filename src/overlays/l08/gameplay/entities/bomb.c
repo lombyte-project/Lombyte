@@ -1488,46 +1488,46 @@ extern float FUN_001f9b48(void *, void *);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
 char *FUN_L08_002daa10(struct Moby *moby) {
-    short *t = D_L08_001AC040[moby->group];
+    short *group_entry = D_L08_001AC040[moby->group];
     char *best;
-    char *p;
+    char *candidate_moby;
     float bestD, bestA;
     int idx;
     struct Hero *base;
-    if (t == 0)
+    if (group_entry == 0)
         return 0;
     best = 0;
-    idx = *(unsigned short *)t & 0x7FFF;
-    p = D_L08_0015FFD8 + (idx << 8);
+    idx = *(unsigned short *)group_entry & 0x7FFF;
+    candidate_moby = D_L08_0015FFD8 + (idx << 8);
     bestA = 0.0f;
     bestD = bestA;
     for (;;) {
-        if (*(short *)(p + 0xA6) != 0x14D && *(unsigned char *)(p + 0xBC) == 0) {
-            float ang, d, a;
-            a = fast_arc_tan(*(float *)(p + 0x10) - moby->pos.x,
-                             *(float *)(p + 0x14) - moby->pos.y);
+        if (*(short *)(candidate_moby + 0xA6) != 0x14D && *(unsigned char *)(candidate_moby + 0xBC) == 0) {
+            float ang, candidate_distance, candidate_heading;
+            candidate_heading = fast_arc_tan(*(float *)(candidate_moby + 0x10) - moby->pos.x,
+                             *(float *)(candidate_moby + 0x14) - moby->pos.y);
             base = &hero;
             ang = fast_difference_between_rotations(
-                a, fast_arc_tan(base->motion.pos.f[0] - moby->pos.x,
+                candidate_heading, fast_arc_tan(base->motion.pos.f[0] - moby->pos.x,
                                 base->motion.pos.f[1] - moby->pos.y));
-            d = FUN_001f9b48(&moby->pos, p + 0x10);
+            candidate_distance = FUN_001f9b48(&moby->pos, candidate_moby + 0x10);
             if (ang < 1.5707964f) {
                 if (bestA < ang) {
-                    best = p;
-                    bestD = d;
+                    best = candidate_moby;
+                    bestD = candidate_distance;
                     bestA = ang;
                 }
-            } else if ((d >= 16.0f && (d < bestD || bestD < 16.0f)) || (d < 16.0f && bestD < d)) {
-                best = p;
-                bestD = d;
+            } else if ((candidate_distance >= 16.0f && (candidate_distance < bestD || bestD < 16.0f)) || (candidate_distance < 16.0f && bestD < candidate_distance)) {
+                best = candidate_moby;
+                bestD = candidate_distance;
                 bestA = ang;
             }
         }
-        if (*t < -1)
+        if (*group_entry < -1)
             return best;
-        t++;
-        idx = *(unsigned short *)t & 0x7FFF;
-        p = D_L08_0015FFD8 + (idx << 8);
+        group_entry++;
+        idx = *(unsigned short *)group_entry & 0x7FFF;
+        candidate_moby = D_L08_0015FFD8 + (idx << 8);
     }
 }
 /* Update function of the blarg bomb thrower: hit reactions, then a state machine that walks to its bomb crate, picks up and throws bombs at the hero. */
