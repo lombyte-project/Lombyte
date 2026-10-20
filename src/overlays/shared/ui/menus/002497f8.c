@@ -34,34 +34,34 @@ extern int sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");
  * or other % escape. */
 void FUN_L00_0024a618(s32 idx, u8 *out) {
     u8 buf[16];
-    u8 *s;
-    u8 *t;
+    u8 *label_cursor;
+    u8 *substitution_cursor;
 
-    s = get_help_message_text(D_L00_001841F0.items[idx].label);
-    t = buf;
-    if (s == 0) {
+    label_cursor = get_help_message_text(D_L00_001841F0.items[idx].label);
+    substitution_cursor = buf;
+    if (label_cursor == 0) {
         return;
     }
-    while (*s != 0 && *s != '%') {
-        *out++ = *s++;
+    while (*label_cursor != 0 && *label_cursor != '%') {
+        *out++ = *label_cursor++;
     }
-    if (*s == 0) {
-        *out = *s;
+    if (*label_cursor == 0) {
+        *out = *label_cursor;
         return;
     }
-    s++;
-    if (*s == 'b') {
+    label_cursor++;
+    if (*label_cursor == 'b') {
         sprintf_alt((char *)buf, D_L00_0015FE38,
                     D_L00_001C40B0[D_L00_001841F0.items[idx].cost_index].f0);
     } else {
         sprintf_alt((char *)buf, D_L00_0015FE40);
     }
-    s++;
-    while (*t != 0) {
-        *out++ = *t++;
+    label_cursor++;
+    while (*substitution_cursor != 0) {
+        *out++ = *substitution_cursor++;
     }
-    while (*s != 0) {
-        *out++ = *s++;
+    while (*label_cursor != 0) {
+        *out++ = *label_cursor++;
     }
     *out = 0;
 }
