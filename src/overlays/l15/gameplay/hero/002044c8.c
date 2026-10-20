@@ -632,7 +632,7 @@ void FUN_L15_0020ed50(void) {
     Vec4 spatial_or_hit_descriptor_tail_work;
     Vec4 motion_work_vector;
     Vec4 m40[4];
-    Vec4 m80[4];
+    Vec4 transposed_yaw_rotation_matrix[4];
     Vec4 vC0;
     Vec4 vD0;
 
@@ -1253,8 +1253,8 @@ void FUN_L15_0020ed50(void) {
         clear_u64_value(&spatial_or_hit_descriptor_tail_work);
         spatial_or_hit_descriptor_tail_work.f[2] = hero.motion.rot.f[2];
         euler_rotation_matrix(m40, &spatial_or_hit_descriptor_tail_work);
-        transpose_rotation_matrix(m80, m40);
-        transform_vector(&spatial_or_hit_descriptor_work, &spatial_or_hit_descriptor_work, m80);
+        transpose_rotation_matrix(transposed_yaw_rotation_matrix, m40);
+        transform_vector(&spatial_or_hit_descriptor_work, &spatial_or_hit_descriptor_work, transposed_yaw_rotation_matrix);
         v10.f[0] = -fast_arc_tan(square_root(spatial_or_hit_descriptor_work.f[0] * spatial_or_hit_descriptor_work.f[0] + spatial_or_hit_descriptor_work.f[2] * spatial_or_hit_descriptor_work.f[2]), spatial_or_hit_descriptor_work.f[1]);
         v10.f[1] = fast_arc_tan(spatial_or_hit_descriptor_work.f[2], spatial_or_hit_descriptor_work.f[0]);
         FUN_L00_0025bc98(&hero.motion.rot.f[1], v10.f[1], &hero.motion.unkA0.f[1], 0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f,
@@ -1756,14 +1756,14 @@ void FUN_L15_0020ed50(void) {
         }
         FUN_L01_00232290();
         if (hero.unk930 > 0.0f) {
-            Vec4 *p = &hero.move_impulse;
+            Vec4 *move_impulse_ptr = &hero.move_impulse;
             FUN_L00_002132b8(0.7f, 0.0f);
             spatial_or_hit_descriptor_work.q = hero.move_impulse.q;
             hero.target_speed += forward_component(&spatial_or_hit_descriptor_work);
             if (hero.target_speed < frame_time * 0.7f) {
                 hero.target_speed = frame_time * 0.7f;
             }
-            clear_u64_value(p);
+            clear_u64_value(move_impulse_ptr);
         }
         k = 1.0f;
         if (hero.state.step == 1 && hero.unk3BE == 0) {
