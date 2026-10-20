@@ -1168,7 +1168,7 @@ void FUN_L00_002bc1a0(void *mv) {
     V_2bc1a0 mat[4];
     V_2bc1a0 scaled_corner;
     V_2bc1a0 scaled_basis_offset;
-    V_2bc1a0 e;
+    V_2bc1a0 camera_facing_offset;
     unsigned int c;
     int i;
     FUN_001f9a68_2bc1a0(D_L00_001616BC, &scaled_basis_offset, moby_bytes + 0xD0);
@@ -1195,13 +1195,13 @@ void FUN_L00_002bc1a0(void *mv) {
     quad.color[2] = c;
     quad.color[1] = c;
     quad.color[0] = c;
-    FUN_001f9a28_2bc1a0(&e, &(*(V_2bc1a0 *)g_debug_camera), &mat[3]);
-    FUN_001f9bf8_2bc1a0(&mat[0], &e, 1.0f);
+    FUN_001f9a28_2bc1a0(&camera_facing_offset, &(*(V_2bc1a0 *)g_debug_camera), &mat[3]);
+    FUN_001f9bf8_2bc1a0(&mat[0], &camera_facing_offset, 1.0f);
     FUN_001f9ad8_2bc1a0(&mat[1], &mat[0], &(*(V_2bc1a0 *)D_0013F5E0));
     FUN_001f9bf8_2bc1a0(&mat[1], &mat[1], -1.0f);
     FUN_001f9ad8_2bc1a0(&mat[2], &mat[1], &mat[0]);
-    FUN_001f9a68_2bc1a0(0.2f, &e, &mat[0]);
-    FUN_001f9a10_2bc1a0(&mat[3], &mat[3], &e);
+    FUN_001f9a68_2bc1a0(0.2f, &camera_facing_offset, &mat[0]);
+    FUN_001f9a10_2bc1a0(&mat[3], &mat[3], &camera_facing_offset);
     for (i = 3; i >= 0; i--) {
         FUN_001f9a68_2bc1a0(D_L00_001616B8, &scaled_corner, &D_L00_001DBB60[3 - i]);
         FUN_001f9d20_2bc1a0(&quad.corner[3 - i], &scaled_corner, &mat[0]);
