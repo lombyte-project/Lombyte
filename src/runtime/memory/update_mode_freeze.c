@@ -49,6 +49,9 @@ void update_mode_freeze(void) {
         VIDEO_MODE_TEST_PREVIEW_ACTIVE = 2,
         VIDEO_MODE_TEST_AWAIT_TIMEOUT_ACK = 3
     };
+    enum {
+        FREEZE_MODE_VIDEO_MODE_TEST = 6
+    };
     s32 video_mode;
     s32 step;
     sound_update();
@@ -90,7 +93,7 @@ void update_mode_freeze(void) {
         }
         break;
 
-    case 6:
+    case FREEZE_MODE_VIDEO_MODE_TEST:
         switch (freeze.unk1C) {
         case VIDEO_MODE_TEST_INPUT_DELAY:
             if (freeze.unk4 != 0) {
