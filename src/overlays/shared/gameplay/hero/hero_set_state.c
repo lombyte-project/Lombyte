@@ -483,10 +483,10 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_002147
 int FUN_L00_00222158(void);
 int FUN_L00_00222158(void) {
     char *g0, *g, *gb, *g2, *g3;
-    char *m;
+    char *candidate_moby;
     char *best;
-    char *q;
-    float bestd, d, max_target_distance, target_angle_limit, target_elevation_angle_limit, x;
+    char *candidate_data;
+    float bestd, target_score, max_target_distance, target_angle_limit, target_elevation_angle_limit, x;
     int k;
     int out;
     float v[4];
@@ -499,16 +499,16 @@ int FUN_L00_00222158(void) {
     best = 0;
     bestd = 1e8f;
     *(int *)(g0 + 0x968) = 0;
-    for (m = D_L00_0015FFE4; m != 0; m = *(char **)(m + 0x28)) {
-        if (*(short *)(m + 0xA6) != 0x2F6)
+    for (candidate_moby = D_L00_0015FFE4; candidate_moby != 0; candidate_moby = *(char **)(candidate_moby + 0x28)) {
+        if (*(short *)(candidate_moby + 0xA6) != 0x2F6)
             continue;
-        if (*(unsigned short *)(m + 0x34) & 1)
+        if (*(unsigned short *)(candidate_moby + 0x34) & 1)
             continue;
-        q = *(char **)(m + 0x78);
-        if (*(int *)q != 0)
+        candidate_data = *(char **)(candidate_moby + 0x78);
+        if (*(int *)candidate_data != 0)
             continue;
-        if (*(float *)(q + 0x20) != 0.0f &&
-            *(float *)(q + 0x20) < FUN_001f9b48((char *)(&hero.motion.pos), m + 0x10))
+        if (*(float *)(candidate_data + 0x20) != 0.0f &&
+            *(float *)(candidate_data + 0x20) < FUN_001f9b48((char *)(&hero.motion.pos), candidate_moby + 0x10))
             continue;
         g = (char *)((char *)&D_0013F350);
         k = *(int *)(g + 0x2084);
@@ -523,21 +523,21 @@ int FUN_L00_00222158(void) {
         if (*(int *)(gb + 0x208C) == 0xF)
             x = *(float *)(gb + 0x57C);
         max_target_distance = 30.0f;
-        if (*(float *)(q + 0x20) != 0.0f)
-            max_target_distance = *(float *)(q + 0x20);
-        d = FUN_L00_0020d6b0(m, &out, x, max_target_distance, target_angle_limit, target_elevation_angle_limit);
+        if (*(float *)(candidate_data + 0x20) != 0.0f)
+            max_target_distance = *(float *)(candidate_data + 0x20);
+        target_score = FUN_L00_0020d6b0(candidate_moby, &out, x, max_target_distance, target_angle_limit, target_elevation_angle_limit);
         if (out != 0)
             continue;
         gb += 0x80;
-        if (vector_distance_xy(gb, m + 0x10) < 4.0f)
+        if (vector_distance_xy(gb, candidate_moby + 0x10) < 4.0f)
             continue;
-        if (*(unsigned char *)(m + 0x31) == 0)
-            d += 10.0f;
-        if (*(int *)(q + 0x1C) >= 0 && is_point_inside_clip_volume(gb, *(int *)(q + 0x1C)) != 0)
+        if (*(unsigned char *)(candidate_moby + 0x31) == 0)
+            target_score += 10.0f;
+        if (*(int *)(candidate_data + 0x1C) >= 0 && is_point_inside_clip_volume(gb, *(int *)(candidate_data + 0x1C)) != 0)
             continue;
-        if (d < bestd) {
-            bestd = d;
-            best = m;
+        if (target_score < bestd) {
+            bestd = target_score;
+            best = candidate_moby;
         }
     }
     if (best != 0) {
