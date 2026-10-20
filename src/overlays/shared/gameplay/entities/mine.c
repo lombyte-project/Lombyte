@@ -1169,21 +1169,21 @@ void FUN_001f99f8_2ace70(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00250df8_2ace70(void *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_bomb(int owner, void *pos) __asm__("FUN_L00_002ace70");
 unsigned char *spawn_bomb(int owner, void *pos) {
-    unsigned char *m = FUN_0020c4f8_2ace70(0x79);
-    if (m) {
-        V_2ace70 u, t;
-        unsigned char *v = *(unsigned char **)(m + 0x78);
+    unsigned char *bomb_moby = FUN_0020c4f8_2ace70(0x79);
+    if (bomb_moby) {
+        V_2ace70 u, random_rotation;
+        unsigned char *v = *(unsigned char **)(bomb_moby + 0x78);
         struct Hero *g;
         float a;
-        t.q = 0;
-        t.f[0] = FUN_002132a8_2ace70(-3.1415927f, 3.1415927f);
-        t.f[1] = FUN_002132a8_2ace70(-3.1415927f, 3.1415927f);
-        t.f[2] = FUN_002132a8_2ace70(-3.1415927f, 3.1415927f);
-        u.q = t.q;
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        m[0x20] = 0;
+        random_rotation.q = 0;
+        random_rotation.f[0] = FUN_002132a8_2ace70(-3.1415927f, 3.1415927f);
+        random_rotation.f[1] = FUN_002132a8_2ace70(-3.1415927f, 3.1415927f);
+        random_rotation.f[2] = FUN_002132a8_2ace70(-3.1415927f, 3.1415927f);
+        u.q = random_rotation.q;
+        bomb_moby[0x30] = 0xFF;
+        *(short *)(bomb_moby + 0x32) = 0xFF;
+        bomb_moby[0x31] = 1;
+        bomb_moby[0x20] = 0;
         *(int *)(v + 0x50) = owner;
         *(short *)(v + 0x56) = 0;
         *(short *)(v + 0x6A) = 0;
@@ -1191,18 +1191,18 @@ unsigned char *spawn_bomb(int owner, void *pos) {
         g = &hero;
         *(float *)(v + 0x6C) = FUN_001f9e90_2ace70(g->unk670, g->unk674);
         *(int *)(v + 0x64) = 0;
-        qcopy(m + 0x10, pos);
+        qcopy(bomb_moby + 0x10, pos);
         FUN_001f99f8_2ace70(v);
-        qcopy(m + 0x40, &u);
+        qcopy(bomb_moby + 0x40, &u);
         a = FUN_002132a8_2ace70(D_0015ED6C_2ace70 * 1.0471976f, D_0015ED6C_2ace70 * 3.1415927f);
         {
             float d = D_0015ED6C_2ace70;
             *(float *)(v + 0x58) = a;
             *(float *)(v + 0x5C) = FUN_002132a8_2ace70(d * 1.0471976f, d * 3.1415927f);
         }
-        FUN_L00_00250df8_2ace70(m);
+        FUN_L00_00250df8_2ace70(bomb_moby);
     }
-    return m;
+    return bomb_moby;
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002AB910.c: func_L00_002AE278). */
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
