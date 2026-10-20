@@ -744,14 +744,14 @@ void FUN_L14_00305d28(Moby_3071B0 *moby) {
         Moby_3071B0 *owner = data->owner;
         Moby_3071B0 **slots;
         int i;
-        float t;
+        float remaining_timer_fraction;
         if (!func_L00_0028EB98_3071B0(moby, data->voice)) {
             data->voice = func_0022ED80_3071B0(0, 4, moby);
         }
         func_001F9938_3071B0(&data->timer);
         slots = data->slots.m;
-        t = func_001FA888_3071B0(data->timer) * data->rate;
-        owner->f44 = func_L00_0025C700_3071B0(D_L14_00162200 * 0.017453292f, 0.0f, t);
+        remaining_timer_fraction = func_001FA888_3071B0(data->timer) * data->rate;
+        owner->f44 = func_L00_0025C700_3071B0(D_L14_00162200 * 0.017453292f, 0.0f, remaining_timer_fraction);
         for (i = 0; i < 6; i++) {
             func_001F9C30_3071B0(vec, owner->fE0, D_L14_001621F8 * (float)i + D_L14_001621FC);
             func_001F9BD8_3071B0(slots[i]->pos, owner->pos, vec);
