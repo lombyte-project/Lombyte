@@ -1313,7 +1313,7 @@ extern int FUN_L00_002603d0_2ad410(M910 *) __asm__("FUN_L00_002603d0");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 
-int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
+int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *thrown_moby, int mode) {
     U910 position, velocity, previous, hero_position, offset, start;
     int timer;
     int object_hit;
@@ -1324,8 +1324,8 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
         return 0;
     if (D_L00_0015F5C4_002acbf0 != 0)
         return 0;
-    qcopy(&previous, &m->pos);
-    if (m->state == 0) {
+    qcopy(&previous, &thrown_moby->pos);
+    if (thrown_moby->state == 0) {
         position.f[0] = fast_cos(fast_add_rotations(-0.361968f,
                              fast_arc_tan(hero.unk670, hero.unk674))) * 0.859039f;
         position.f[1] = fast_sin(fast_add_rotations(-0.361968f,
@@ -1342,7 +1342,7 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
     } else {
         W910 *holder_vars = v->holder->v;
         int holder_flag;
-        qcopy(&position, &m->pos);
+        qcopy(&position, &thrown_moby->pos);
         qcopy(&velocity, &v->vel);
         holder_flag = *(int *)((char *)holder_vars + 0x50);
         timer = v->timer;
@@ -1397,7 +1397,7 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
             add_vector_xyz(&position, &position, &velocity);
             velocity.f[2] -= D_0015ED70_2ad410 * 11.0f;
         }
-        if (!ray_hits(&previous, &position, 0x10, m, 0))
+        if (!ray_hits(&previous, &position, 0x10, thrown_moby, 0))
             continue;
         if (!collision_hit_material() && 0.0f < velocity.f[2])
             continue;
@@ -1443,7 +1443,7 @@ check_surface:
             goto return_zero;
     }
     if (mode != 2 || !coll_hit.moby || !FUN_L00_002603d0_2ad410(coll_hit.moby))
-        enqueue_callback_list_1(FUN_L00_002acbf0, m);
+        enqueue_callback_list_1(FUN_L00_002acbf0, thrown_moby);
     if (!object_hit && v->last_hit) {
         if (v->last_hit->state == 0xfe) {
             v->hit_count = 0;
