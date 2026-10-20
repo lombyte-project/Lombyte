@@ -226,7 +226,7 @@ extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa6
 int FUN_L00_00229910(void) {
     struct Hero *g = &hero;
     V_229910_00229910 v, w;
-    float d;
+    float height_delta;
     if (g->motion.unk164 < g->unk234 / (float)FUN_001f96f8_00229910(20))
         return 0;
     if (0.52359879f < fast_difference_between_rotations(angle_atan2(g->motion.displacement.f[0],
@@ -240,8 +240,8 @@ int FUN_L00_00229910(void) {
     v.f[2] += 0.47f;
     w.f[2] -= 1.0f;
     if (collision_line(&v, &w, 2, ((void *)g->moby), 0)) {
-        d = D_L00_00173E68_00229910 - g->motion.pos.f[2];
-        if (d < 0.37f && -1.0f < d)
+        height_delta = D_L00_00173E68_00229910 - g->motion.pos.f[2];
+        if (height_delta < 0.37f && -1.0f < height_delta)
             return 1;
     }
     return 0;
