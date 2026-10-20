@@ -843,14 +843,14 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
     };
     char *data = (char *)moby->pvars;
     int st;
-    float t;
+    float damage_amount;
     int v;
-    t = 0.0f;
-    v = hit_reaction(moby, find_moby_hit(moby, 0x330000, 0), data + 0x20, 0, &st, &t, 0, 4);
+    damage_amount = 0.0f;
+    v = hit_reaction(moby, find_moby_hit(moby, 0x330000, 0), data + 0x20, 0, &st, &damage_amount, 0, 4);
     if (st != 1 && moby->state < 7) {
-        float f = *(float *)(data + 0x20) - t;
-        *(float *)(data + 0x20) = f;
-        if (f <= 0.0f)
+        float remaining_health = *(float *)(data + 0x20) - damage_amount;
+        *(float *)(data + 0x20) = remaining_health;
+        if (remaining_health <= 0.0f)
             v = 1;
         if (moby->state == 1)
             moby->state = 2;
