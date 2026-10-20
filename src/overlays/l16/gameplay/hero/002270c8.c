@@ -166,6 +166,7 @@ void FUN_L16_002270c8(void) {
         HERO_STATE_SLIP_ALT = 88,
         HERO_STATE_CIRCLE_HOLD_ALT = 89,
         HERO_STATE_APPROACH_TARGET_POSE = 101,
+        HERO_STATE_TARGET_POSE_ANIMATION_WAIT = 102,
         HERO_STATE_AT_TARGET_POSE = 103,
         HERO_STATE_WATER_DEATH = 106,
         HERO_STATE_DEATH_FALL = 119
@@ -937,7 +938,7 @@ void FUN_L16_002270c8(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case 102:
+                case HERO_STATE_TARGET_POSE_ANIMATION_WAIT:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
