@@ -1829,23 +1829,23 @@ void FUN_L15_002edbe0(struct Moby *moby) {
     FUN_L00_00250320_2edbe0(moby, &r, &g, &b);
     color = (D_L15_001621EC << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 46; i++) {
-        float *s = D_L15_001DE860[i];
-        float x = s[0];
-        float y = s[1];
+        float *template_vertex = D_L15_001DE860[i];
+        float x = template_vertex[0];
+        float y = template_vertex[1];
         float rad = FUN_001f9988_2edbe0(x * x + y * y);
         float a = FUN_L00_00200260_2edbe0(rad, D_L15_001621F0);
         float w = FUN_001fa610_2edbe0(a * 6.2831855f / D_L15_001621F0);
         float z = FUN_001f9de0_2edbe0(FUN_001fa580_2edbe0(w, data->angle));
-        D_L15_001DECB0[i][0] = D_L15_00162200 * s[0] + moby->pos.x;
-        D_L15_001DECB0[i][1] = D_L15_00162200 * s[1] + moby->pos.y;
-        D_L15_001DECB0[i][2] = D_L15_00162200 * s[2] + moby->pos.z + D_L15_001621F8 * z;
+        D_L15_001DECB0[i][0] = D_L15_00162200 * template_vertex[0] + moby->pos.x;
+        D_L15_001DECB0[i][1] = D_L15_00162200 * template_vertex[1] + moby->pos.y;
+        D_L15_001DECB0[i][2] = D_L15_00162200 * template_vertex[2] + moby->pos.z + D_L15_001621F8 * z;
         D_L15_001DF048[i] = color;
     }
     for (j = 0; j < 2; j++) {
         for (n = 0; n < 46; n++) {
-            Quad4_2edbe0 t = D_L15_00162208;
-            D_L15_001DEED8[n][0] = D_L15_001DEA88[n][0] + FUN_L00_00200260_2edbe0(scale * t.f[j][0], 1.0f);
-            D_L15_001DEED8[n][1] = D_L15_001DEA88[n][1] + FUN_L00_00200260_2edbe0(scale * t.f[j][1], 1.0f);
+            Quad4_2edbe0 uv_scroll_factors = D_L15_00162208;
+            D_L15_001DEED8[n][0] = D_L15_001DEA88[n][0] + FUN_L00_00200260_2edbe0(scale * uv_scroll_factors.f[j][0], 1.0f);
+            D_L15_001DEED8[n][1] = D_L15_001DEA88[n][1] + FUN_L00_00200260_2edbe0(scale * uv_scroll_factors.f[j][1], 1.0f);
         }
         FUN_001f76a0_2edbe0();
         for (k = 0; k < 1; k++) {
