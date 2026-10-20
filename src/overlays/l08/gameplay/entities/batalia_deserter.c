@@ -325,12 +325,12 @@ void FUN_L08_003063f0(struct Moby *moby) {
             char *candidate_moby = D_L08_0016D060_d.objs[i];
             if (*(short *)(candidate_moby + 0xA6) == moby->oclass || *(short *)(candidate_moby + 0xA6) == 0x306) {
                 if (D_L08_0017CC40_d[1] == 0) {
-                    float f;
+                    float replicated_value;
                     attach_manipulator(candidate_moby, 0, D_L08_0017CC40_d);
-                    f = *(float *)&D_L08_00162300;
-                    *(float *)(D_L08_0017CC40_d + 0x20) = f;
-                    *(float *)(D_L08_0017CC40_d + 0x24) = f;
-                    *(float *)(D_L08_0017CC40_d + 0x28) = f;
+                    replicated_value = *(float *)&D_L08_00162300;
+                    *(float *)(D_L08_0017CC40_d + 0x20) = replicated_value;
+                    *(float *)(D_L08_0017CC40_d + 0x24) = replicated_value;
+                    *(float *)(D_L08_0017CC40_d + 0x28) = replicated_value;
                 }
             }
         }
