@@ -1610,8 +1610,8 @@ void FUN_L13_002ce688(unsigned char *source_moby, void *effect_position, int emi
     float vC[4];
     Blk24 vG;
     Blk24 vH;
-    int n;
-    int t;
+    int extra_emission_count;
+    int debris_variant_index;
     int s;
     float len;
     float f21;
@@ -1658,8 +1658,8 @@ void FUN_L13_002ce688(unsigned char *source_moby, void *effect_position, int emi
         add_vector_xyz(vD, vD, vB);
         subtract_vector_xyz_c2(vE, vD, pA);
         normalize_vector_xyz(vE, vE, random_float_between(0.025f, 0.23f));
-        t = random_integer_below_c(2);
-        spawn_crate_debris(source_moby, vE, vD, &D_L13_0015F580, t + 0x163, 0, 1.2f, 2.4f);
+        debris_variant_index = random_integer_below_c(2);
+        spawn_crate_debris(source_moby, vE, vD, &D_L13_0015F580, debris_variant_index + 0x163, 0, 1.2f, 2.4f);
     }
     if (emit_extra_effects == 0) {
         return;
@@ -1667,11 +1667,11 @@ void FUN_L13_002ce688(unsigned char *source_moby, void *effect_position, int emi
     subtract_vector_xyz_c2(vD, D_L13_001670C0, pA);
     clear_u64_value(vC);
     len = vector_length_xyz(vD);
-    n = (len < 8.0f) ? func_001FA898_s(len) + 2 : 10;
+    extra_emission_count = (len < 8.0f) ? func_001FA898_s(len) + 2 : 10;
     f21 = (len < 7.0f) ? 7.0f - len : 0.0f;
-    if (n > 0) {
+    if (extra_emission_count > 0) {
         p = vG.b;
-        j = n;
+        j = extra_emission_count;
         do {
             r = random_float_between(8.0f, 10.0f);
             j--;
