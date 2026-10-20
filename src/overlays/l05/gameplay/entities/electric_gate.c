@@ -371,7 +371,7 @@ void FUN_L05_0030e508(char *moby) {
     float v[4];
     float pos;
     float speed;
-    char *e;
+    char *pose_entry;
     float len;
     float reach;
 
@@ -399,14 +399,14 @@ void FUN_L05_0030e508(char *moby) {
         }
         break;
     case MOBY_SLIDE_TO_END_POINT:
-        e = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
+        pose_entry = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
         reach = *(float *)(data + 0x18) * 3.0f;
         pos = 0.0f;
-        fast_vec_normalize(v, e + 0x10, reach);
+        fast_vec_normalize(v, pose_entry + 0x10, reach);
         if (*(int *)(data + 0x1C) != 0) {
             fast_vec_scale(v, v, -1.0f);
         }
-        add_vector_xyz(v, e + 0x30, v);
+        add_vector_xyz(v, pose_entry + 0x30, v);
         subtract_vector_xyz(v, v, moby + 0x10);
         len = vector_length_xyz(v);
         speed = vector_length_xyz(data);
@@ -419,12 +419,12 @@ void FUN_L05_0030e508(char *moby) {
         }
         break;
     case MOBY_LOWER_BELOW_POSE_HEIGHT:
-        e = (char *)D_L05_001600EC;
-        e += *(int *)(data + 0x10) << 7;
-        advance_accelerated_scalar(*(float *)(e + 0x38) - 5.9f, frame_time_sq * 20.0f,
+        pose_entry = (char *)D_L05_001600EC;
+        pose_entry += *(int *)(data + 0x10) << 7;
+        advance_accelerated_scalar(*(float *)(pose_entry + 0x38) - 5.9f, frame_time_sq * 20.0f,
                                    frame_time_sq * 40.0f, frame_time * 10.0f,
                                    (float *)(moby + 0x18), (float *)(data + 8));
-        if (*(float *)(moby + 0x18) < *(float *)(e + 0x38) - 5.9f) {
+        if (*(float *)(moby + 0x18) < *(float *)(pose_entry + 0x38) - 5.9f) {
             *(u8 *)(moby + 0x20) = 4;
         }
         break;
