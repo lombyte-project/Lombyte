@@ -2504,16 +2504,16 @@ extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 
-void FUN_L05_00305898(char *m) {
-    char **slots = (char **)(*(char **)(m + 0x78) + 0x1A0);
+void FUN_L05_00305898(char *moby) {
+    char **slots = (char **)(*(char **)(moby + 0x78) + 0x1A0);
     struct Hero *base;
-    Hit_306CF0 h;
+    Hit_306CF0 hit_info;
     int i;
     int j;
     for (i = 0; i < 8; i++) {
-        char *e = slots[i];
-        if (e != 0) {
-            if (*(unsigned char *)e != 2 || *(short *)(e + 0x32) == 0) {
+        char *tracked_particle = slots[i];
+        if (tracked_particle != 0) {
+            if (*(unsigned char *)tracked_particle != 2 || *(short *)(tracked_particle + 0x32) == 0) {
                 slots[i] = 0;
             }
         }
@@ -2521,21 +2521,21 @@ void FUN_L05_00305898(char *m) {
     base = &hero;
     if (base->items[2].item_id == 6)
         return;
-    h.flags |= 1;
-    h.owner = m;
-    h.x14 = 1;
-    h.x1C = 1.0f;
-    subtract_vector_xyz(h.v, &base->motion.pos, m + 0x10);
-    h.v[2] = 0.0f;
-    set_vector_length_xy(h.v, h.v, 1.5f);
-    h.v[2] = 1.0f;
-    h.v[3] = 5627.9248f;
-    h.x19 = 1;
-    h.type = *(short *)(m + 0xA6);
-    h.x18 = 0;
+    hit_info.flags |= 1;
+    hit_info.owner = moby;
+    hit_info.x14 = 1;
+    hit_info.x1C = 1.0f;
+    subtract_vector_xyz(hit_info.v, &base->motion.pos, moby + 0x10);
+    hit_info.v[2] = 0.0f;
+    set_vector_length_xy(hit_info.v, hit_info.v, 1.5f);
+    hit_info.v[2] = 1.0f;
+    hit_info.v[3] = 5627.9248f;
+    hit_info.x19 = 1;
+    hit_info.type = *(short *)(moby + 0xA6);
+    hit_info.x18 = 0;
     for (j = 0; j < 8; j++) {
         if (slots[j] != 0) {
-            collect_mobies_in_sphere(slots[j] + 0x10, 0, m, &h, 0.75f);
+            collect_mobies_in_sphere(slots[j] + 0x10, 0, moby, &hit_info, 0.75f);
         }
     }
 }
