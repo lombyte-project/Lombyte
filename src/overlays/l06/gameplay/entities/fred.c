@@ -5592,53 +5592,53 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short *D_L06_001ABFC0[];
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
-void FUN_L06_002fda30(char *m) {
+void FUN_L06_002fda30(char *moby) {
     enum {
         WAIT_FOR_HERO_IN_CLIP_VOLUME = 0,
         WAIT_FOR_ANIMATION_SIGNAL = 1,
         ACTIVATE_LISTED_MOBYS_AT_INTERVAL = 2
     };
-    int *d = *(int **)(m + 0x78);
-    switch (((unsigned char *)m)[0x20]) {
+    int *moby_vars = *(int **)(moby + 0x78);
+    switch (((unsigned char *)moby)[0x20]) {
     case WAIT_FOR_HERO_IN_CLIP_VOLUME:
-        if (d[1] >= 0 && is_point_inside_clip_volume(&hero.motion.pos, d[1])) {
-            m[0x20] = 1;
-            if (((unsigned char *)m)[0x53] != 1) {
-                blend_moby_animation(m, 1, 0, 5);
+        if (moby_vars[1] >= 0 && is_point_inside_clip_volume(&hero.motion.pos, moby_vars[1])) {
+            moby[0x20] = 1;
+            if (((unsigned char *)moby)[0x53] != 1) {
+                blend_moby_animation(moby, 1, 0, 5);
             }
         }
         break;
     case WAIT_FOR_ANIMATION_SIGNAL:
-        if (m[0x70] & 2) {
-            if (d[0] >= 0) {
-                m[0x20] = 2;
+        if (moby[0x70] & 2) {
+            if (moby_vars[0] >= 0) {
+                moby[0x20] = 2;
             } else {
-                m[0x20] = 3;
+                moby[0x20] = 3;
             }
-            if (((unsigned char *)m)[0x53] != 2) {
-                blend_moby_animation(m, 2, 0, 5);
+            if (((unsigned char *)moby)[0x53] != 2) {
+                blend_moby_animation(moby, 2, 0, 5);
             }
         }
         break;
     case ACTIVATE_LISTED_MOBYS_AT_INTERVAL:
-        if (tick_countdown_32_alt(d + 2)) {
+        if (tick_countdown_32_alt(moby_vars + 2)) {
             float found = 0.0f;
-            short *list = D_L06_001ABFC0[d[0]];
+            short *list = D_L06_001ABFC0[moby_vars[0]];
             if (list != 0) {
-                short *p = list;
-                char *pos = m + 0x10;
+                short *moby_list_entry = list;
+                char *pos = moby + 0x10;
                 do {
-                    if (FUN_L06_002e9d10(D_L06_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8),
+                    if (FUN_L06_002e9d10(D_L06_0015FFD8 + ((*(unsigned short *)moby_list_entry & 0x7FFF) << 8),
                                          pos)) {
                         found = 1.0f;
                         break;
                     }
-                } while (*p++ >= 0);
+                } while (*moby_list_entry++ >= 0);
             }
             if (found != 0.0f) {
-                d[2] = scale_game_frames(0x14);
+                moby_vars[2] = scale_game_frames(0x14);
             } else {
-                m[0x20] = 3;
+                moby[0x20] = 3;
             }
         }
         break;
