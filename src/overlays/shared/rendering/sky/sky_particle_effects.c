@@ -38,45 +38,45 @@ extern G_288ec0 *D_L00_0016051C_288ec0 __asm__("D_L00_0016051C");
 void sky_particles_init(s32 randomized_count, s32 orbiting_count) __asm__("FUN_L00_00288ec0");
 void sky_particles_init(s32 randomized_count, s32 orbiting_count) {
     s32 i;
-    E_288ec0 *e;
+    E_288ec0 *particle;
     f32 x, y;
-    s32 t, u, c;
+    s32 color_channel_offset, u, packed_color;
     D_L00_0016051C_288ec0->n = randomized_count + orbiting_count;
     for (i = 0; i < D_L00_0016051C_288ec0->n; i++) {
-        e = &D_L00_0016051C_288ec0->list[i];
+        particle = &D_L00_0016051C_288ec0->list[i];
         if (i >= randomized_count) {
-            s16 *h = &e->hC;
-            e->b0 = 0;
-            e->hC = rand() >> 16;
-            h[1] = rand() >> 16;
-            e->b2 = 1;
-            e->b3 = 0x48;
-            e->f1C = 0.16f;
+            s16 *phase_halves = &particle->hC;
+            particle->b0 = 0;
+            particle->hC = rand() >> 16;
+            phase_halves[1] = rand() >> 16;
+            particle->b2 = 1;
+            particle->b3 = 0x48;
+            particle->f1C = 0.16f;
         } else {
-            e->b0 = 1;
-            e->hC = random_integer_below(0x100);
-            e->b2 = (rand() >> 16) & 1;
-            e->b3 = 0x48;
-            e->f8 = random_angle_radians();
-            e->f1C = convert_integer_to_float(random_integer_below(0x30) + 0x20) * 0.00390625f;
+            particle->b0 = 1;
+            particle->hC = random_integer_below(0x100);
+            particle->b2 = (rand() >> 16) & 1;
+            particle->b3 = 0x48;
+            particle->f8 = random_angle_radians();
+            particle->f1C = convert_integer_to_float(random_integer_below(0x30) + 0x20) * 0.00390625f;
             x = random_angle_radians();
             y = random_angle_radians();
-            e->f10 = fast_cos(x) * fast_sin(y) * 50.0f;
-            e->f14 = fast_sin(x) * fast_sin(y) * 50.0f;
-            e->f18 = fast_cos(y) * fast_cos(y) * 36.0f + 16.0f;
-            t = random_integer_below(0x18);
+            particle->f10 = fast_cos(x) * fast_sin(y) * 50.0f;
+            particle->f14 = fast_sin(x) * fast_sin(y) * 50.0f;
+            particle->f18 = fast_cos(y) * fast_cos(y) * 36.0f + 16.0f;
+            color_channel_offset = random_integer_below(0x18);
             u = random_integer_below(0x20) << 24;
             if ((rand() >> 16) & 1) {
-                c = t << 16;
-                c += 0x30505050;
-                c = u - -c;
+                packed_color = color_channel_offset << 16;
+                packed_color += 0x30505050;
+                packed_color = u - -packed_color;
             } else {
-                c = t << 8;
-                c += 0x30505050;
-                c = u - -c;
-                c |= t;
+                packed_color = color_channel_offset << 8;
+                packed_color += 0x30505050;
+                packed_color = u - -packed_color;
+                packed_color |= color_channel_offset;
             }
-            *(u32 *)&e->hC = c;
+            *(u32 *)&particle->hC = packed_color;
         }
     }
 }
