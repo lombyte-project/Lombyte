@@ -334,7 +334,7 @@ void update_debug_camera(void) {
         {
             Vec4 r[4];
             Vec4 m[4];
-            Vec4 n[4];
+            Vec4 rolled_basis[4];
             float sine = fast_sin(g_debug_menu.roll_speed);
             float cosine = fast_cos(g_debug_menu.roll_speed);
             set_identity_matrix(r);
@@ -343,8 +343,8 @@ void update_debug_camera(void) {
             r[2].f[1] = sine;
             r[2].f[2] = cosine;
             copy_matrix_rotation(m, D_L00_00166C80.camera.basis);
-            multiply_matrix(n, m, r);
-            copy_matrix3x4(D_L00_00166C80.camera.basis, n);
+            multiply_matrix(rolled_basis, m, r);
+            copy_matrix3x4(D_L00_00166C80.camera.basis, rolled_basis);
         }
     } else {
         g_debug_menu.roll_speed = g_debug_menu.roll_speed / 1.5f;
