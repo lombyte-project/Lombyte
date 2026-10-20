@@ -1648,18 +1648,18 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L18_002d88b8(struct Moby *moby) {
     float v[4];
-    float m[4];
+    float world_emission_direction[4];
     float a[4];
     float b[4];
     float c[4];
-    int n;
+    int spark_count;
     float r;
     float ang;
     int i0, i1, i2, i3, i4;
     char *mat = &moby->rot_row0;
     int i;
 
-    n = random_integer_below(5) + 5;
+    spark_count = random_integer_below(5) + 5;
     r = random_float_between(1.0f, 2.5f);
     ang = random_angle_radians();
     v[0] = fast_cos(ang) * r;
@@ -1667,11 +1667,11 @@ void FUN_L18_002d88b8(struct Moby *moby) {
     v[2] = 0.0f;
     transform_vector_by_basis(v, v, mat);
     add_vector_xyz(v, v, &moby->pos);
-    set_vector_unit_z(m);
-    transform_vector_by_basis(m, m, mat);
-    for (i = 0; i < n; i++) {
+    set_vector_unit_z(world_emission_direction);
+    transform_vector_by_basis(world_emission_direction, world_emission_direction, mat);
+    for (i = 0; i < spark_count; i++) {
         FUN_L00_00257d78(c, 0.0f, (*(float *)&(D_L18_00161A78)) * frame_time);
-        normalize_vector_xyz(a, m,
+        normalize_vector_xyz(a, world_emission_direction,
                              (*(float *)&(D_L18_00161A68)) *
                                  (random_float_between(-(*(float *)&(D_L18_00161A74)),
                                                            (*(float *)&(D_L18_00161A74))) +
