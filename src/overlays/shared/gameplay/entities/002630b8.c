@@ -384,10 +384,10 @@ int FUN_001fdd10_00263d40(int) __asm__("FUN_001fdd10");
 void FUN_001165b8_00263d40(char *, int) __asm__("FUN_001165b8");
 /* Calls strcpy with D_L00_00179118 and get_help_message_text(a); stores b (default 0xB4 frames). */
 void queue_dialogue_message(int a, int b) __asm__("FUN_L00_00263d40");
-void queue_dialogue_message(int a, int b) {
+void queue_dialogue_message(int message_id, int b) {
     if (b == -1)
         b = FUN_001f96f8_00263d40(0xB4);
-    FUN_001165b8_00263d40(D_L00_00179118, FUN_001fdd10_00263d40(a));
+    FUN_001165b8_00263d40(D_L00_00179118, FUN_001fdd10_00263d40(message_id));
     D_L00_0015F640 = b;
 }
 extern u8 D_L00_00179118[];
