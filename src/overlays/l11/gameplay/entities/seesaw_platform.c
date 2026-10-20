@@ -272,7 +272,7 @@ extern void zero_vector_d1b0(void *) __asm__("FUN_001f99f8");
 
 /* Places the child moby sets spawned by FUN_L11_0030c788 around this one, opened by the progress values
    D_L11_00161EC4..ED8. */
-void FUN_L11_0030d1b0(struct Moby *m) {
+void FUN_L11_0030d1b0(struct Moby *parent_moby) {
     Vec4f v;
     Vec4f a;
     Vec4f b;
@@ -284,17 +284,17 @@ void FUN_L11_0030d1b0(struct Moby *m) {
     for (i = 0; i < 6; i++) {
         int s = (i >= 3) ? 1 : -1;
         float ang = (float)(i % 3) * 0.5235988f - (D_L11_00161EB8 * (1.0f - D_L11_00161EC4) + 30.0f) * 0.017453292f;
-        qcopy_nc(&D_L11_001DA710[i]->rot, &m->rot);
+        qcopy_nc(&D_L11_001DA710[i]->rot, &parent_moby->rot);
         D_L11_001DA710[i]->rot.z = fast_add_rotations(D_L11_001DA710[i]->rot.z, (float)s * 1.5707964f);
         D_L11_001DA710[i]->rot.y = D_L11_00161EBC * 0.017453292f;
         D_L11_001DA710[i]->rot.x = ang;
         euler_rotation_basis(&D_L11_001DA710[i]->rot_row0, &D_L11_001DA710[i]->rot);
         zero_vector_d1b0(&v);
-        normalize_vector_xyz(&v, &m->rot_row0, 14.0f);
+        normalize_vector_xyz(&v, &parent_moby->rot_row0, 14.0f);
         v.z += D_L11_00161EAC;
-        add_vector_xyz(&v, &v, &m->pos);
+        add_vector_xyz(&v, &v, &parent_moby->pos);
         normalize_vector_xyz(&a, &D_L11_001DA710[i]->rot_row2, D_L11_00161EB0);
-        normalize_vector_xyz(&b, &m->rot_row1, (float)s * D_L11_00161EB4);
+        normalize_vector_xyz(&b, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
         add_vector_xyz(&a, &a, &b);
         add_vector_xyz(&a, &a, &v);
         qcopy_nc(&D_L11_001DA710[i]->pos, &a);
@@ -305,17 +305,17 @@ void FUN_L11_0030d1b0(struct Moby *m) {
         int k = (j & 1) ? -1 : 1;
         float ang = (float)(j % 2) * 0.5235988f - (D_L11_00161EB8 * (1.0f - D_L11_00161EC4) + 15.0f) * 0.017453292f;
         float r;
-        qcopy_nc(&D_L11_00161F20[j]->rot, &m->rot);
+        qcopy_nc(&D_L11_00161F20[j]->rot, &parent_moby->rot);
         D_L11_00161F20[j]->rot.z = fast_add_rotations(D_L11_00161F20[j]->rot.z, (float)s * 1.5707964f);
         D_L11_00161F20[j]->rot.y = D_L11_00161EBC * 0.017453292f;
         D_L11_00161F20[j]->rot.x = ang;
         euler_rotation_basis(&D_L11_00161F20[j]->rot_row0, &D_L11_00161F20[j]->rot);
         zero_vector_d1b0(&v);
-        normalize_vector_xyz(&v, &m->rot_row0, 14.0f);
+        normalize_vector_xyz(&v, &parent_moby->rot_row0, 14.0f);
         v.z += D_L11_00161EAC;
-        add_vector_xyz(&v, &v, &m->pos);
+        add_vector_xyz(&v, &v, &parent_moby->pos);
         normalize_vector_xyz(&a, &D_L11_00161F20[j]->rot_row2, D_L11_00161EB0);
-        normalize_vector_xyz(&b, &m->rot_row1, (float)s * D_L11_00161EB4);
+        normalize_vector_xyz(&b, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
         add_vector_xyz(&a, &a, &b);
         add_vector_xyz(&a, &a, &v);
         qcopy(&D_L11_00161F20[j]->pos, &a);
@@ -349,10 +349,10 @@ void FUN_L11_0030d1b0(struct Moby *m) {
             signed_axis0_offset = 20.0f;
         }
         signed_axis0_offset *= sgn;
-        normalize_vector_xyz(&v, &m->rot_row0, signed_axis0_offset + 14.0f);
+        normalize_vector_xyz(&v, &parent_moby->rot_row0, signed_axis0_offset + 14.0f);
         v.z = D_L11_00161F08;
-        add_vector_xyz(&D_L11_00161F10[q]->pos, &v, &m->pos);
-        qcopy_nc(&D_L11_00161F10[q]->rot, &m->rot);
+        add_vector_xyz(&D_L11_00161F10[q]->pos, &v, &parent_moby->pos);
+        qcopy_nc(&D_L11_00161F10[q]->rot, &parent_moby->rot);
         FUN_L00_00250df8(D_L11_00161F10[q]);
     }
 }
