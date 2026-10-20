@@ -1921,7 +1921,7 @@ void robot_qwark_update(struct Moby *m) {
         ROBOT_QWARK_RESOLVE_DIALOGUE = 2,
         ROBOT_QWARK_BROKEN_SPARKING = 3
     };
-    struct TalkerVars *d = (struct TalkerVars *)m->pvars;
+    struct TalkerVars *dialogue_state = (struct TalkerVars *)m->pvars;
     TalkerHit *hit;
     u8 type;
     char *w;
@@ -1966,14 +1966,14 @@ void robot_qwark_update(struct Moby *m) {
     case ROBOT_QWARK_INITIALIZE:
         m->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
         m->state = 1;
-        talker_init(m, d);
+        talker_init(m, dialogue_state);
         if (D_0013D388[0x19] != 0) {
-            d->mode = 1;
-            d->unk36 = 2;
+            dialogue_state->mode = 1;
+            dialogue_state->unk36 = 2;
         }
         break;
     case ROBOT_QWARK_UPDATE_DIALOGUE:
-        if (talker_update(m, d)) {
+        if (talker_update(m, dialogue_state)) {
             D_0013D388[0x19] = 1;
             begin_dialogue_camera_transition(m, 2.7f);
             m->state = 2;
@@ -1984,8 +1984,8 @@ void robot_qwark_update(struct Moby *m) {
             break;
         }
         m->state = 1;
-        if (d->mode == 2 && d->warp != -1) {
-            w = D_L03_001600EC + d->warp * 128;
+        if (dialogue_state->mode == 2 && dialogue_state->warp != -1) {
+            w = D_L03_001600EC + dialogue_state->warp * 128;
             jet_reset_camera(w + 0x30, w + 0x70);
         }
         break;
