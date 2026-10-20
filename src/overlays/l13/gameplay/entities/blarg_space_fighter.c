@@ -143,7 +143,7 @@ void FUN_L13_002c1528(Moby_2C27B0 *rocket_moby) {
     V4_2C27B0 vel;
     V4_2C27B0 dir;
     Hit_2C27B0 *hit;
-    float t;
+    float trail_segment_start_fraction;
     float yaw;
     float pitch;
 
@@ -164,9 +164,9 @@ void FUN_L13_002c1528(Moby_2C27B0 *rocket_moby) {
     normalize_vector_xyz(&scratch_vector, rocket_data, -random_float_between(D_0015ED6C * 0.1f, D_0015ED6C));
     add_vector_xyz(&vel, &vel, &scratch_vector);
     FUN_L00_002712b8(&rocket_moby->pos, (float *)&vel, scale_game_frames_alt(6), 0x7F, 0xB0B0B0, 3, 80000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
-    for (t = 0.0f; t < 1.0f; t += 0.33333334f) {
+    for (trail_segment_start_fraction = 0.0f; trail_segment_start_fraction < 1.0f; trail_segment_start_fraction += 0.33333334f) {
         unsigned char *particle;
-        normalize_vector_xyz(&scratch_vector, rocket_data, random_float_between(t, t + 0.33333334f) * rocket_data->speed);
+        normalize_vector_xyz(&scratch_vector, rocket_data, random_float_between(trail_segment_start_fraction, trail_segment_start_fraction + 0.33333334f) * rocket_data->speed);
         add_vector_xyz(&scratch_vector, &scratch_vector, &rocket_moby->pos);
         particle = FUN_L00_002712b8(&scratch_vector, (float *)&vel, scale_game_frames_alt(0x3C), 0x7F, 0x606060, 3, 80000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
         if (particle != 0) {
@@ -185,9 +185,9 @@ void FUN_L13_002c1528(Moby_2C27B0 *rocket_moby) {
         Hero_2C27B0 *h = (Hero_2C27B0 *)(D_0013F350);
         if (h->veh != 0 && h->veh->cls_id == 0x45 && rocket_data->owner->state != 5) {
             Veh_2C27B0 *vd = h->veh->data;
-            float a = fast_add_rotations_c(h->veh->rot.z, vd->f90);
+            float vehicle_lead_yaw = fast_add_rotations_c(h->veh->rot.z, vd->f90);
             float b = fast_add_rotations_c(h->veh->rot.y, vd->f94);
-            build_spherical_offset_c(&scratch_vector, distance_xyz(&rocket_moby->pos, &h->veh->pos) / (rocket_data->speed + 24.0f) * vd->f64, a, -b);
+            build_spherical_offset_c(&scratch_vector, distance_xyz(&rocket_moby->pos, &h->veh->pos) / (rocket_data->speed + 24.0f) * vd->f64, vehicle_lead_yaw, -b);
             add_vector_xyz(&scratch_vector, &scratch_vector, &h->veh->pos);
             yaw = fast_arc_tan(scratch_vector.x - rocket_moby->pos.x, scratch_vector.y - rocket_moby->pos.y);
             pitch = -fast_arc_tan(vector_distance(&rocket_moby->pos, &scratch_vector), scratch_vector.z - rocket_moby->pos.z);
