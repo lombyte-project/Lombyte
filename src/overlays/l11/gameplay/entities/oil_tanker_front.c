@@ -631,30 +631,30 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 
 void FUN_L11_00317678(struct Moby *moby) {
-    char *d = (char *)moby->pvars;
-    int i = *(int *)(d + 0x68);
-    char *t = *(char **)(d + 0xF0);
-    int n;
-    float a[4];
+    char *chain_vars = (char *)moby->pvars;
+    int i = *(int *)(chain_vars + 0x68);
+    char *path = *(char **)(chain_vars + 0xF0);
+    int path_point_count;
+    float current_path_point[4];
     float b[4];
-    float c[4];
+    float lookahead_path_point[4];
     float *pb;
     float *pc;
     float x, y, z;
-    qcopy(a, t + i * 16 + 0x10);
-    n = *(int *)t;
-    qcopy(pb = b, t + (i + 1) % n * 16 + 0x10);
-    qcopy(pc = c, t + (i + 2) % n * 16 + 0x10);
-    x = fast_arc_tan(a[0] - b[0], a[1] - b[1]);
-    y = fast_arc_tan(b[0] - c[0], b[1] - c[1]);
-    z = fast_arc_tan(vector_distance(a, pb), b[2] - a[2]);
+    qcopy(current_path_point, path + i * 16 + 0x10);
+    path_point_count = *(int *)path;
+    qcopy(pb = b, path + (i + 1) % path_point_count * 16 + 0x10);
+    qcopy(pc = lookahead_path_point, path + (i + 2) % path_point_count * 16 + 0x10);
+    x = fast_arc_tan(current_path_point[0] - b[0], current_path_point[1] - b[1]);
+    y = fast_arc_tan(b[0] - lookahead_path_point[0], b[1] - lookahead_path_point[1]);
+    z = fast_arc_tan(vector_distance(current_path_point, pb), b[2] - current_path_point[2]);
     moby->rot.y = fast_add_rotations(
-        fast_subtract_rotations(fast_arc_tan(vector_distance(pb, pc), c[2] - b[2]), z) *
-            *(float *)(d + 0x6C),
+        fast_subtract_rotations(fast_arc_tan(vector_distance(pb, pc), lookahead_path_point[2] - b[2]), z) *
+            *(float *)(chain_vars + 0x6C),
         z);
     moby->rot.z =
-        fast_add_rotations(fast_subtract_rotations(y, x) * *(float *)(d + 0x6C), x);
-    lerp_vector(&moby->pos, a, pb, *(float *)(d + 0x6C));
+        fast_add_rotations(fast_subtract_rotations(y, x) * *(float *)(chain_vars + 0x6C), x);
+    lerp_vector(&moby->pos, current_path_point, pb, *(float *)(chain_vars + 0x6C));
 }
 extern float D_L11_00162324 __attribute__((sda));
 extern float D_L11_00162328 __attribute__((sda));
