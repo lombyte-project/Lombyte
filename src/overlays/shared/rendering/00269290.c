@@ -1003,21 +1003,21 @@ int FUN_001f9770_0026ba68(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08_0026ba68(unsigned char *) __asm__("FUN_L00_00267a08");
 int FUN_001f96f8_0026ba68(int) __asm__("FUN_001f96f8");
 int FUN_001fa6d0_0026ba68(float) __asm__("FUN_001fa6d0");
-void FUN_L00_0026ba68(unsigned char *p) {
-    u128 t;
-    int *e = (int *)(p + 0x20);
-    p[8] += p[0x20];
-    if (e[1] == 0) {
-        u128 *d = (u128 *)(p + 0x10);
-        qcopy(d, (char *)e[2] + 0x10);
-        FUN_001f9a28_0026ba68(&t, D_L00_00166DC0_0026ba68, d);
-        FUN_001f9bf8_0026ba68(&t, &t, 0.01f);
-        FUN_001f9a10_0026ba68(d, d, &t);
-    } else if (FUN_001f9770_0026ba68(p + 0xa))
-        FUN_L00_00267a08_0026ba68(p);
+void FUN_L00_0026ba68(unsigned char *particle) {
+    u128 position_offset;
+    int *particle_data = (int *)(particle + 0x20);
+    particle[8] += particle[0x20];
+    if (particle_data[1] == 0) {
+        u128 *particle_position = (u128 *)(particle + 0x10);
+        qcopy(particle_position, (char *)particle_data[2] + 0x10);
+        FUN_001f9a28_0026ba68(&position_offset, D_L00_00166DC0_0026ba68, particle_position);
+        FUN_001f9bf8_0026ba68(&position_offset, &position_offset, 0.01f);
+        FUN_001f9a10_0026ba68(particle_position, particle_position, &position_offset);
+    } else if (FUN_001f9770_0026ba68(particle + 0xa))
+        FUN_L00_00267a08_0026ba68(particle);
     else
-        *(int *)(p + 4) =
-            (FUN_001fa6d0_0026ba68(*(short *)(p + 0xa) * (127.0f / FUN_001f96f8_0026ba68(6)))
+        *(int *)(particle + 4) =
+            (FUN_001fa6d0_0026ba68(*(short *)(particle + 0xa) * (127.0f / FUN_001f96f8_0026ba68(6)))
              << 24) |
             0xffffff;
 }
