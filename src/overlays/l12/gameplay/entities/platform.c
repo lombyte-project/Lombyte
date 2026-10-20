@@ -3099,12 +3099,12 @@ extern void FUN_L00_00263d40(int, int);
 extern void clear_vector(void *) __asm__("func_001F99F8");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
-void FUN_L12_002ebca8(struct Moby *m, int flag) {
-    char *d = (char *)m->pvars;
-    float a[4];
+void FUN_L12_002ebca8(struct Moby *moby, int flag) {
+    char *moby_vars = (char *)moby->pvars;
+    float explosion_position[4];
     float b[4];
     unsigned char *q;
-    if (find_moby_hit(m, 0xA30000, 0) != 0) {
+    if (find_moby_hit(moby, 0xA30000, 0) != 0) {
         if (hero.state.current != 0x32) {
             D_0015EE04 += 1;
             if (D_0015EE04 >= 5) {
@@ -3116,27 +3116,27 @@ void FUN_L12_002ebca8(struct Moby *m, int flag) {
                 }
             }
         }
-        qcopy(a, &m->pos);
+        qcopy(explosion_position, &moby->pos);
         clear_vector(b);
-        FUN_L00_00260a88(m, 0x1F, 0x4A, 2, -1);
-        *(int *)(d + 0xA4) = scale_game_frames(500);
-        spawn_explosion(m, b, a, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, -1, 3.0f, 15.0f, 1,
+        FUN_L00_00260a88(moby, 0x1F, 0x4A, 2, -1);
+        *(int *)(moby_vars + 0xA4) = scale_game_frames(500);
+        spawn_explosion(moby, b, explosion_position, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, -1, 3.0f, 15.0f, 1,
                          1, -1, 0);
     }
-    m->hit_slot = 0xFF;
+    moby->hit_slot = 0xFF;
     if (*(int *)&D_L12_001619B4 != 0 && flag != 0) {
-        m->collision = 0;
-        m->flags = (m->flags | 0x41) & 0xEFFF;
+        moby->collision = 0;
+        moby->flags = (moby->flags | 0x41) & 0xEFFF;
     }
-    if (*(int *)(d + 0xA4) == 0 && (m->flags & 1) == 0)
+    if (*(int *)(moby_vars + 0xA4) == 0 && (moby->flags & 1) == 0)
         return;
-    if (tick_countdown_32_alt((int *)(d + 0xA4)) != 0 && flag != 0 &&
+    if (tick_countdown_32_alt((int *)(moby_vars + 0xA4)) != 0 && flag != 0 &&
         *(int *)&D_L12_001619B4 == 0) {
-        m->collision = m->pclass->collision;
-        m->flags = (m->flags & 0xFFBE) | 0x1000;
+        moby->collision = moby->pclass->collision;
+        moby->flags = (moby->flags & 0xFFBE) | 0x1000;
     } else {
-        m->collision = 0;
-        m->flags = (m->flags | 0x41) & 0xEFFF;
+        moby->collision = 0;
+        moby->flags = (moby->flags | 0x41) & 0xEFFF;
     }
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002ED228), where it is exact; names translated to the US level program. */
