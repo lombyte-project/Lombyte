@@ -297,18 +297,18 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_00269c70(char *m) {
-    float *p;
-    p = (float *)(m + 0x20);
-    if (fast_dec_timer(p)) {
-        free_effect_particle(m);
+void FUN_L00_00269c70(char *particle) {
+    float *particle_data;
+    particle_data = (float *)(particle + 0x20);
+    if (fast_dec_timer(particle_data)) {
+        free_effect_particle(particle);
         return;
     }
-    *(float *)(m + 0xC) += p[1];
-    if (scale_game_frames(6) > *(int *)(m + 0x20)) {
+    *(float *)(particle + 0xC) += particle_data[1];
+    if (scale_game_frames(6) > *(int *)(particle + 0x20)) {
 
-        *(int *)(m + 4) = (*(int *)(m + 4) & 0xFFFFFF) |
-                          ((*(int *)(m + 0x20) * 127 / scale_game_frames(6)) << 24);
+        *(int *)(particle + 4) = (*(int *)(particle + 4) & 0xFFFFFF) |
+                          ((*(int *)(particle + 0x20) * 127 / scale_game_frames(6)) << 24);
     }
 }
 #ifndef NON_MATCHING
