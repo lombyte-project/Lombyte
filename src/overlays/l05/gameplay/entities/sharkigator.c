@@ -3468,25 +3468,25 @@ extern short *D_L05_001ABCC0[];
 void FUN_L05_0030d5c0(char *moby);
 void FUN_L05_0030d5c0(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    short *p = D_L05_001ABCC0[*(unsigned char *)(moby + 0x21)];
+    short *group_member_list = D_L05_001ABCC0[*(unsigned char *)(moby + 0x21)];
     char(*base)[256] = (char(*)[256])D_L05_0015FFD8;
     do {
-        int idx = *p & 0x7FFF;
-        char *m = (char *)(idx * 256 + (int)base);
-        if (*(short *)(m + 0xA6) == 0x33F) {
-            char *d2 = *(char **)(m + 0x78);
-            char *q;
-            float f;
-            if (*(int *)(data + 0xC) != 0 || *(float *)(d2 + 4) == *(float *)(data + 4)) {
-                f = *(float *)(moby + 0x18);
+        int idx = *group_member_list & 0x7FFF;
+        char *linked_water_moby = (char *)(idx * 256 + (int)base);
+        if (*(short *)(linked_water_moby + 0xA6) == 0x33F) {
+            char *linked_water_data = *(char **)(linked_water_moby + 0x78);
+            char *water_record;
+            float linked_water_height;
+            if (*(int *)(data + 0xC) != 0 || *(float *)(linked_water_data + 4) == *(float *)(data + 4)) {
+                linked_water_height = *(float *)(moby + 0x18);
             } else {
-                f = *(float *)(d2 + 4) + (*(float *)(moby + 0x18) - *(float *)(data + 4));
+                linked_water_height = *(float *)(linked_water_data + 4) + (*(float *)(moby + 0x18) - *(float *)(data + 4));
             }
-            *(float *)(m + 0x18) = f;
-            q = D_L05_001D6880 + *(int *)(d2 + 0x14) * 0x1190;
-            *(float *)(q + 8) = *(float *)(base[idx] + 0x18);
+            *(float *)(linked_water_moby + 0x18) = linked_water_height;
+            water_record = D_L05_001D6880 + *(int *)(linked_water_data + 0x14) * 0x1190;
+            *(float *)(water_record + 8) = *(float *)(base[idx] + 0x18);
         }
-    } while (*p++ >= 0);
+    } while (*group_member_list++ >= 0);
 }
 
 s32 D_L05_001CAD28[1] __attribute__((section(".data"))) = {0};
