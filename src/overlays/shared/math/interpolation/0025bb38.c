@@ -40,26 +40,26 @@ extern float FUN_001fa580_0025bc98(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f99c0_0025bc98(float) __asm__("FUN_001f99c0");
 
 float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c);
-float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c) {
-    float d;
-    if (n == 2) {
-        if ((0.0f < x && *p < 0.0f) || (x < 0.0f && 0.0f < *p)) {
-            n = 1;
+float FUN_L00_0025bc98(float *current_angle, float *angular_velocity, int rotation_direction, float x, float a, float b, float c) {
+    float angle_error;
+    if (rotation_direction == 2) {
+        if ((0.0f < x && *current_angle < 0.0f) || (x < 0.0f && 0.0f < *current_angle)) {
+            rotation_direction = 1;
             if (x < 0.0f)
-                n = -1;
+                rotation_direction = -1;
         } else {
-            n = 0;
+            rotation_direction = 0;
         }
     }
-    d = FUN_L00_0025bb38_0025bc98(x, n, *p);
-    FUN_L00_0025b798_0025bc98(q, d, a, b, c);
-    d = FUN_L00_0025bb38_0025bc98(x, n, *p = FUN_001fa580_0025bc98(*p, *q));
-    if (FUN_001f99c0_0025bc98(d) < c * 0.01f) {
-        *p = x;
-        *q = 0;
-        return *q;
+    angle_error = FUN_L00_0025bb38_0025bc98(x, rotation_direction, *current_angle);
+    FUN_L00_0025b798_0025bc98(angular_velocity, angle_error, a, b, c);
+    angle_error = FUN_L00_0025bb38_0025bc98(x, rotation_direction, *current_angle = FUN_001fa580_0025bc98(*current_angle, *angular_velocity));
+    if (FUN_001f99c0_0025bc98(angle_error) < c * 0.01f) {
+        *current_angle = x;
+        *angular_velocity = 0;
+        return *angular_velocity;
     }
-    return d;
+    return angle_error;
 }
 extern float FUN_001fa5c8_25be00(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_001fa580_25be00(float, float) __asm__("FUN_001fa580");
