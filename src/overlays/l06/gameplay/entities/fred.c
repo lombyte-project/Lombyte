@@ -7988,7 +7988,7 @@ void FUN_L06_00305170(char *moby) {
     float rotation_scale_matrix[16];
     float b[16];
     float mat[5][16];
-    int s[10];
+    int shared_helper_arguments[10];
     char *data;
     float *transform_matrix_base;
     int *sp;
@@ -8009,7 +8009,7 @@ void FUN_L06_00305170(char *moby) {
                                   ((long)D_L06_001621CC << 6) | 0x8000000000L);
     font_queue_vu_state();
     transform_matrix_base = mat[0];
-    sp = s;
+    sp = shared_helper_arguments;
     pp = mat[0] + 12;
     tp = D_L06_001FE890;
     mp = transform_matrix_base;
@@ -8023,15 +8023,15 @@ void FUN_L06_00305170(char *moby) {
         pp[3] = 1.0f;
         pp += 16;
     }
-    s[0] = D_L06_00162234;
-    s[2] = (int)(data + 0xF00);
-    s[1] = D_L06_00162238;
-    s[3] = D_L06_001621E0;
-    s[4] = D_L06_001621E4;
-    *(float *)&s[7] = D_L06_001621F4;
-    *(float *)&s[8] = *(float *)&D_L06_001621F8_gp;
-    s[5] = 0x1E;
-    s[6] = (int)data;
+    shared_helper_arguments[0] = D_L06_00162234;
+    shared_helper_arguments[2] = (int)(data + 0xF00);
+    shared_helper_arguments[1] = D_L06_00162238;
+    shared_helper_arguments[3] = D_L06_001621E0;
+    shared_helper_arguments[4] = D_L06_001621E4;
+    *(float *)&shared_helper_arguments[7] = D_L06_001621F4;
+    *(float *)&shared_helper_arguments[8] = *(float *)&D_L06_001621F8_gp;
+    shared_helper_arguments[5] = 0x1E;
+    shared_helper_arguments[6] = (int)data;
     pp = transform_matrix_base;
     for (j = 3; j >= 0; j--) {
         FUN_L06_00216b88(sp, pp);
