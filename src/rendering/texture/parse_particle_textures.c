@@ -23,23 +23,23 @@ void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src,
                              s32 count) __asm__("FUN_002026c8");
 
 void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src, s32 count) {
-    s32 n;
+    s32 relocation_count;
     s32 offset;
     s32 size;
     s32 i;
-    s32 a;
+    s32 start_page;
     s32 b;
-    s32 c;
-    s32 d;
-    s32 *p;
+    s32 end_page;
+    s32 end_extent;
+    s32 *relocation_cursor;
 
-    p = hdr->ptrs;
-    n = hdr->count;
+    relocation_cursor = hdr->ptrs;
+    relocation_count = hdr->count;
     offset = hdr->data_offset;
     size = hdr->data_size;
-    for (i = 0; i < n; i = i + 1, p = p + 1) {
+    for (i = 0; i < relocation_count; i = i + 1, relocation_cursor = relocation_cursor + 1) {
         s32 v;
-        v = *p;
+        v = *relocation_cursor;
         if (v == 0) {
             D_001CDF80[i] = (s32)D_001CE180;
         } else {
@@ -49,12 +49,12 @@ void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src, s32 co
     copy_memory_aligned(D_001CE180, (u8 *)hdr + offset, size);
     D_001600C0 = 0;
     while (D_001600C0 < count) {
-        a = base + *src++;
+        start_page = base + *src++;
         b = *src++;
-        c = base + *src++;
-        d = *src++;
-        D_001CD980[D_001600C0].tex0 = (a << 4) + b;
-        D_001CD980[D_001600C0].tex1 = (c << 4) + log2dim(d);
+        end_page = base + *src++;
+        end_extent = *src++;
+        D_001CD980[D_001600C0].tex0 = (start_page << 4) + b;
+        D_001CD980[D_001600C0].tex1 = (end_page << 4) + log2dim(end_extent);
         D_001600C0 = D_001600C0 + 1;
     }
 }
