@@ -2779,38 +2779,38 @@ typedef struct { char pad[0x48]; float rz; } M_af68;
 typedef struct { float x, y, z, w; } N_af68;
 
 /* Follows a path: steers toward the current node, slows to a stop near the end, returns 1 once stopped. */
-int FUN_L12_002eaf68(struct Moby *m, int idx) {
+int FUN_L12_002eaf68(struct Moby *moby, int idx) {
     char *path = D_L12_001B0930_f[idx];
-    char *d = (char *)m->pvars;
+    char *moby_vars = (char *)moby->pvars;
     float sum = 0.0f;
     float v[20]; /* target record from the finder; also the step vector */
     int i;
-    float a;
-    for (i = *(int *)(d + 0xB4); i < *(int *)path - 1; i++)
+    float target_heading;
+    for (i = *(int *)(moby_vars + 0xB4); i < *(int *)path - 1; i++)
         sum += *(float *)(path + i * 16 + 0x1C);
     if (sum > 5.0f) {
-        a = atan_f(*(float *)((*(int *)(d + 0xB4) << 4) + path + 0x10) - m->pos.x,
-                   *(float *)((*(int *)(d + 0xB4) << 4) + path + 0x14) - m->pos.y);
-        ((M_af68 *)m)->rz = turn_f((float *)(d + 0x88), ((M_af68 *)m)->rz, a, 0.004f, 0.3f, D_0015ED6C_f * 0.7853982f);
-        appr_f(d + 0x94, D_0015ED6C_f * 10.0f, D_0015ED70_f * 7.0f);
+        target_heading = atan_f(*(float *)((*(int *)(moby_vars + 0xB4) << 4) + path + 0x10) - moby->pos.x,
+                   *(float *)((*(int *)(moby_vars + 0xB4) << 4) + path + 0x14) - moby->pos.y);
+        ((M_af68 *)moby)->rz = turn_f((float *)(moby_vars + 0x88), ((M_af68 *)moby)->rz, target_heading, 0.004f, 0.3f, D_0015ED6C_f * 0.7853982f);
+        appr_f(moby_vars + 0x94, D_0015ED6C_f * 10.0f, D_0015ED70_f * 7.0f);
     } else {
-        ahead_f(m, v, 48.0f);
-        a = atan_f(v[0] - m->pos.x, v[1] - m->pos.y);
-        ((M_af68 *)m)->rz = turn_f((float *)(d + 0x88), ((M_af68 *)m)->rz, a, 0.004f, 0.3f, D_0015ED6C_f * 0.7853982f);
-        appr_f(d + 0x94, 0.0f, D_0015ED70_f * 9.0f);
-        sum = *(float *)(d + 0x94);
+        ahead_f(moby, v, 48.0f);
+        target_heading = atan_f(v[0] - moby->pos.x, v[1] - moby->pos.y);
+        ((M_af68 *)moby)->rz = turn_f((float *)(moby_vars + 0x88), ((M_af68 *)moby)->rz, target_heading, 0.004f, 0.3f, D_0015ED6C_f * 0.7853982f);
+        appr_f(moby_vars + 0x94, 0.0f, D_0015ED70_f * 9.0f);
+        sum = *(float *)(moby_vars + 0x94);
         if (sum == 0.0f)
             return 1;
     }
-    sub_f(v, &((N_af68 *)path)[*(int *)(d + 0xB4) + 1], &m->pos);
-    norm_f(d + 0x70, v, *(float *)(d + 0x94));
-    add_f(&m->pos, &m->pos, d + 0x70);
-    if (dist_f(&m->pos, &((N_af68 *)path)[*(int *)(d + 0xB4) + 1]) < 2.0f) {
-        (*(int *)(d + 0xB4))++;
-        if (*(int *)path - 1 < *(int *)(d + 0xB4))
-            *(int *)(d + 0xB4) = *(int *)path - 1;
+    sub_f(v, &((N_af68 *)path)[*(int *)(moby_vars + 0xB4) + 1], &moby->pos);
+    norm_f(moby_vars + 0x70, v, *(float *)(moby_vars + 0x94));
+    add_f(&moby->pos, &moby->pos, moby_vars + 0x70);
+    if (dist_f(&moby->pos, &((N_af68 *)path)[*(int *)(moby_vars + 0xB4) + 1]) < 2.0f) {
+        (*(int *)(moby_vars + 0xB4))++;
+        if (*(int *)path - 1 < *(int *)(moby_vars + 0xB4))
+            *(int *)(moby_vars + 0xB4) = *(int *)path - 1;
     }
-    FUN_L12_002eae00(m);
+    FUN_L12_002eae00(moby);
     return 0;
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002EC5A0), where it is exact; names translated to the US level program. */
