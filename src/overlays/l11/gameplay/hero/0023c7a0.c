@@ -92,13 +92,13 @@ void FUN_L11_0023c7a0(void) {
         d->on_slip_ground = 1;
     }
     {
-        struct Hero *h = &hero;
-        if (h->selector_13) {
-            if (h->state.current != 0x7F) {
-                float absolute_water_surface_z_difference = absolute_float(h->water_surface_z - (h->motion.pos.f[2] + 0.25f));
+        struct Hero *hero_ptr = &hero;
+        if (hero_ptr->selector_13) {
+            if (hero_ptr->state.current != 0x7F) {
+                float absolute_water_surface_z_difference = absolute_float(hero_ptr->water_surface_z - (hero_ptr->motion.pos.f[2] + 0.25f));
                 if (absolute_water_surface_z_difference < 1.0f) {
-                    if (h->water_surface_z - h->motion.pos.f[2] > 0.0f) {
-                        if (h->motion.displacement.f[2] < 0.0f) {
+                    if (hero_ptr->water_surface_z - hero_ptr->motion.pos.f[2] > 0.0f) {
+                        if (hero_ptr->motion.displacement.f[2] < 0.0f) {
                             FUN_L00_0020b930();
                             hero_set_state(HERO_STATE_SINK, 1);
                         }
