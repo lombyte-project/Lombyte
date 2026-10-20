@@ -3069,7 +3069,7 @@ void FUN_L00_0020b5b8(void) {
     f32 f;
     f32 r;
     f32 max_hit_distance;
-    f32 a, b, projected_x_displacement, projected_y_displacement;
+    f32 vertical_acceleration_times_frames, b, projected_x_displacement, projected_y_displacement;
 
     g = &hero;
     if (g->ground_distance < 0.4f) {
@@ -3086,11 +3086,11 @@ void FUN_L00_0020b5b8(void) {
     prediction_frames = scale_game_frames(0x14);
     {
         f32 st = (f32)prediction_frames;
-        a = g->unk4A0 * st;
+        vertical_acceleration_times_frames = g->unk4A0 * st;
         b = g->motion.velocity.f[2] * st;
         projected_x_displacement = g->motion.displacement.f[0] * st;
         projected_y_displacement = g->motion.displacement.f[1] * st;
-        v.f[2] = v.f[2] + b - a * st * 0.5f;
+        v.f[2] = v.f[2] + b - vertical_acceleration_times_frames * st * 0.5f;
     }
     v.f[0] = v.f[0] + projected_x_displacement;
     v.f[1] = v.f[1] + projected_y_displacement;
