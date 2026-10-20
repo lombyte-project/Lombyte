@@ -654,10 +654,10 @@ int FUN_L00_00259430(int *packed_countdown, int b) {
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
-float FUN_L00_00259468(float *a, float *b, int *out, float f) {
+float FUN_L00_00259468(float *base_values, float *b, int *out, float f) {
     int truncated_ratio = truncate_float_to_s32(b[2] / f);
     float truncated_ratio_float = convert_integer_to_float(truncated_ratio);
-    float r = a[2] + b[2] * truncated_ratio_float - convert_integer_to_float((truncated_ratio * truncated_ratio + truncated_ratio) >> 1) * f;
+    float r = base_values[2] + b[2] * truncated_ratio_float - convert_integer_to_float((truncated_ratio * truncated_ratio + truncated_ratio) >> 1) * f;
     if (out) {
         *out = truncated_ratio;
     }
