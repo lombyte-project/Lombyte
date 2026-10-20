@@ -587,30 +587,30 @@ void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_002726d8(P_2726d8 *p) {
-    Q_2726d8 *q = &p->q;
-    u128_2726d8 t;
-    f32 save, sc, r2, f;
-    if (p->q.owner == 0 || *(s16 *)(p->q.owner + 0xA6) != q->x8 || p->q.owner[0x20] == 0xFE ||
-        p->q.owner[0x20] == 0xFD) {
-        free_effect_particle(p);
+void FUN_L00_002726d8(P_2726d8 *particle) {
+    Q_2726d8 *q = &particle->q;
+    u128_2726d8 position_delta;
+    f32 save, sc, length_jitter, target_length;
+    if (particle->q.owner == 0 || *(s16 *)(particle->q.owner + 0xA6) != q->x8 || particle->q.owner[0x20] == 0xFE ||
+        particle->q.owner[0x20] == 0xFD) {
+        free_effect_particle(particle);
         return;
     }
     sc = q->xC * random_float_between(0.5f, 1.0f);
-    save = p->unk2C;
-    qcopy(&t, &p->pos);
-    moby_point_position(p->q.owner, q->x4, &p->pos);
-    fast_vec_sub(&t, &t, &p->pos);
-    r2 = random_float_between(-0.021f, 0.021f);
-    if (fast_vec_length(&t) < 0.0625f) {
-        f = r2 + 0.0625f;
+    save = particle->unk2C;
+    qcopy(&position_delta, &particle->pos);
+    moby_point_position(particle->q.owner, q->x4, &particle->pos);
+    fast_vec_sub(&position_delta, &position_delta, &particle->pos);
+    length_jitter = random_float_between(-0.021f, 0.021f);
+    if (fast_vec_length(&position_delta) < 0.0625f) {
+        target_length = length_jitter + 0.0625f;
     } else {
-        f = fast_vec_length(&t) + r2;
+        target_length = fast_vec_length(&position_delta) + length_jitter;
     }
-    fast_vec_normalize(&t, &t, f);
-    fast_vec_add((u8 *)p + 0x20, &p->pos, &t);
-    *(f32 *)((u8 *)p + 0x1C) = sc;
-    p->unk2C = save;
+    fast_vec_normalize(&position_delta, &position_delta, target_length);
+    fast_vec_add((u8 *)particle + 0x20, &particle->pos, &position_delta);
+    *(f32 *)((u8 *)particle + 0x1C) = sc;
+    particle->unk2C = save;
 }
 void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
