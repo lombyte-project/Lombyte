@@ -1401,19 +1401,19 @@ extern char *func_0020D348_m(int);
 
 /* Creates a class 0xA7 moby carrying a in its data; sets bytes 0x30/0x31, 0x32 and state 0. */
 char *FUN_L00_002b4138(int a) {
-    char *m = func_0020D348_m(0xA7);
-    if (m != 0) {
-        int *p = *(int **)(m + 0x78);
-        p[1] = a;
-        p[0] = 0;
-        p[2] = 0;
-        p[3] = 0;
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0x7E;
-        *(unsigned char *)(m + 0x31) = 0;
-        *(unsigned char *)(m + 0x20) = 0;
+    char *spawned_moby = func_0020D348_m(0xA7);
+    if (spawned_moby != 0) {
+        int *moby_vars = *(int **)(spawned_moby + 0x78);
+        moby_vars[1] = a;
+        moby_vars[0] = 0;
+        moby_vars[2] = 0;
+        moby_vars[3] = 0;
+        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        *(short *)(spawned_moby + 0x32) = 0x7E;
+        *(unsigned char *)(spawned_moby + 0x31) = 0;
+        *(unsigned char *)(spawned_moby + 0x20) = 0;
     }
-    return m;
+    return spawned_moby;
 }
 typedef union {
     OvlQuad q;
