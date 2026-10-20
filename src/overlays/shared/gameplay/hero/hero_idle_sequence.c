@@ -1779,7 +1779,7 @@ extern int FUN_L00_0020d568(void);
 
 void FUN_L00_00208820(void) {
     OvlQuad v[1];
-    float minimum_top_gap, f, top_gap;
+    float minimum_top_gap, second_position_offset, top_gap;
     unsigned char *hero_moby;
 
     ((unsigned char *)hero.moby)[0xA4] = 0xFF;
@@ -1802,14 +1802,14 @@ void FUN_L00_00208820(void) {
         if (top_gap < minimum_top_gap)
             top_gap = minimum_top_gap;
         FUN_L00_0024eed8(((unsigned char *)hero.moby), 0, v, hero.unk234, top_gap);
-        f = hero.unk234 + minimum_top_gap;
+        second_position_offset = hero.unk234 + minimum_top_gap;
         if (hero.state.control_mode == 4)
-            f += 0.15f;
+            second_position_offset += 0.15f;
         if (FUN_L00_0020d568())
-            f = hero.unk224;
+            second_position_offset = hero.unk224;
         qcopy(v, &hero.motion.pos);
-        FUN_L00_002336e8(v, v, f);
-        top_gap = hero.capsule_top - f;
+        FUN_L00_002336e8(v, v, second_position_offset);
+        top_gap = hero.capsule_top - second_position_offset;
         if (top_gap < minimum_top_gap)
             top_gap = minimum_top_gap;
         FUN_L00_0024eed8(((unsigned char *)hero.moby), 1, v, hero.unk234, top_gap);
