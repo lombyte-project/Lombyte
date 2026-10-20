@@ -155,6 +155,10 @@ extern int FUN_L00_0020d568(void);
 
 void electric_water_update(struct Moby *moby) __asm__("FUN_L15_002d6810");
 void electric_water_update(struct Moby *moby) {
+    enum {
+        ELECTRIC_WATER_INITIALIZE = 0,
+        ELECTRIC_WATER_SWITCH_DISABLED = 3
+    };
     float tmp[4];
     HitRecord hit;
     ElectricWaterVars *vars = (ElectricWaterVars *)moby->pvars;
@@ -191,7 +195,7 @@ void electric_water_update(struct Moby *moby) {
     }
 
     switch (moby->state) {
-    case 0:
+    case ELECTRIC_WATER_INITIALIZE:
         moby->update_dist = 0xFF;
         for (reset_sw = 0; reset_sw < 4; reset_sw++) {
             if (vars->switches[reset_sw] == -1) {
@@ -432,7 +436,7 @@ void electric_water_update(struct Moby *moby) {
         }
         break;
 
-    case 3:
+    case ELECTRIC_WATER_SWITCH_DISABLED:
         for (i = 0; i < 3; i++) {
             if (vars->lamps[i] != -1) {
                 set_moby_color(&moby_array[vars->lamps[i]], 0x40, 0x40, 0x40);
