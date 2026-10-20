@@ -2078,7 +2078,7 @@ void FUN_L13_002b89f8(char *rot, char *from, char *moby, int icon, long color, i
     float pos[4];
     float len;
     int x, y;
-    IconEC5D0 *t;
+    IconEC5D0 *icon_definition;
 
     qzero(turn);
     turn[2] = *(float *)(rot + 8);
@@ -2093,18 +2093,18 @@ void FUN_L13_002b89f8(char *rot, char *from, char *moby, int icon, long color, i
     y = func_001FA898_r(-pos[1]);
     if (len < 46.0f) {
         if (len > 38.0f) {
-            float f;
+            float distance_weighted_alpha;
             len = 46.0f - len;
-            f = convert_integer_to_float(((unsigned long)color >> 24) & 0xFF) * len;
+            distance_weighted_alpha = convert_integer_to_float(((unsigned long)color >> 24) & 0xFF) * len;
             color &= 0xFFFFFF;
-            color = (func_001FA898_r(f * 0.125f) << 24) | color;
+            color = (func_001FA898_r(distance_weighted_alpha * 0.125f) << 24) | color;
         }
-        t = &D_L13_001CBDB8[icon];
+        icon_definition = &D_L13_001CBDB8[icon];
         y -= 0x50;
         y += *(int *)(frame_size);
         x += 0x1B0;
-        draw_textured_quad(x - t->x, y - t->y, t->w, t->h, t->u, t->v, t->w, t->h, color,
-                           get_effect_texture(tex + 0x28 + t->tex));
+        draw_textured_quad(x - icon_definition->x, y - icon_definition->y, icon_definition->w, icon_definition->h, icon_definition->u, icon_definition->v, icon_definition->w, icon_definition->h, color,
+                           get_effect_texture(tex + 0x28 + icon_definition->tex));
     }
 }
 /* Ported from rac1-decomp src/overlays/l13_gemlik/vendor_002B2020.c (func_L13_002B9E50) */
