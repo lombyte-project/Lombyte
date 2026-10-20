@@ -185,7 +185,7 @@ s32 FUN_L15_00208e10(s32 arg) {
     u8 *mob;
     s32 flag;
     s32 id;
-    f32 a, b, e;
+    f32 horizontal_knockback_scale, b, knockback_scale_factor;
     V_210ce8 v;
 
     if (hero.state.control_mode == 0x14) {
@@ -292,14 +292,14 @@ s32 FUN_L15_00208e10(s32 arg) {
         } else {
             hero_set_state(HERO_STATE_HURT, 1);
         }
-        e = D_0015ED6C_210ce8;
-        a = e * 5.7f;
-        b = e * 2.4f;
+        knockback_scale_factor = D_0015ED6C_210ce8;
+        horizontal_knockback_scale = knockback_scale_factor * 5.7f;
+        b = knockback_scale_factor * 2.4f;
         if (hero.unk12E7 != 0) {
-            a = 0.0f;
-            b = e * 1.7f;
+            horizontal_knockback_scale = 0.0f;
+            b = knockback_scale_factor * 1.7f;
         }
-        FUN_L00_00210c80_210ce8(&v, flag, a, b);
+        FUN_L00_00210c80_210ce8(&v, flag, horizontal_knockback_scale, b);
         if (flag != 0 && tbl->b28 == 4) {
             v.f[2] += v.f[2];
         }
