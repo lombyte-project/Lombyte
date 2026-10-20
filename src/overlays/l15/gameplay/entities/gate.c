@@ -894,7 +894,7 @@ void construction_arm_update(struct Moby *moby)
         CONSTRUCTION_ARM_WAIT_FOR_EXIT_ANIMATION = 5,
         CONSTRUCTION_ARM_DESTROY = 6
     };
-    UpdateVars_2938 *d = (UpdateVars_2938 *)moby->pvars;
+    UpdateVars_2938 *arm_vars = (UpdateVars_2938 *)moby->pvars;
     int hit = 0;
     char *slot;
     int ready, count;
@@ -912,19 +912,19 @@ void construction_arm_update(struct Moby *moby)
             moby->state = 6;
     }
     if (moby->state != 0) {
-        d->facing = d->yaw;
-        FUN_00251fd0(frame_scale_sq * 0.03f, frame_scale_sq * 0.3f, moby, d, 0);
+        arm_vars->facing = arm_vars->yaw;
+        FUN_00251fd0(frame_scale_sq * 0.03f, frame_scale_sq * 0.3f, moby, arm_vars, 0);
     }
     switch (moby->state) {
     case CONSTRUCTION_ARM_INITIALIZE:
-        d->timer = truncate_float_to_s32(random_float_between(
+        arm_vars->timer = truncate_float_to_s32(random_float_between(
             FUN_L15_001f8648(D_L15_00161A00 * 60.0f), FUN_L15_001f8648(D_L15_00161A04 * 60.0f)));
-        *(int *)&d->yaw_velocity = d->side = *(int *)&d->yaw = 0;
+        *(int *)&arm_vars->yaw_velocity = arm_vars->side = *(int *)&arm_vars->yaw = 0;
         moby->update_dist = 0xff;
         moby->state = 1;
         break;
     case CONSTRUCTION_ARM_WAIT_TO_TURN:
-        if (fast_dec_timer_s16(&d->timer) && FUN_001f9b48(D_L15_001673C0, &moby->pos) < 42.0f) {
+        if (fast_dec_timer_s16(&arm_vars->timer) && FUN_001f9b48(D_L15_001673C0, &moby->pos) < 42.0f) {
             ready = 1;
             if (moby->group != 0xff) {
                 slot = (char *)D_L15_001ABE40[moby->group];
@@ -937,35 +937,35 @@ void construction_arm_update(struct Moby *moby)
                         count++;
                 } while ((short)*list++ >= 0);
                 if (count != 0) {
-                    d->timer = scale_game_frames(60);
+                    arm_vars->timer = scale_game_frames(60);
                     ready = 0;
                 }
             }
             if (ready) {
-                d->target_yaw = random_float_between(-0.20943952f, 0.20943952f);
+                arm_vars->target_yaw = random_float_between(-0.20943952f, 0.20943952f);
                 moby->state = 2;
             }
         }
         break;
     case CONSTRUCTION_ARM_TURN_TO_TARGET_YAW:
-        d->side = FUN_L00_00257b90(0, 1);
-        if (fast_difference_between_rotations(d->yaw, d->target_yaw) < 0.008726646f) {
-            animation = d->side;
+        arm_vars->side = FUN_L00_00257b90(0, 1);
+        if (fast_difference_between_rotations(arm_vars->yaw, arm_vars->target_yaw) < 0.008726646f) {
+            animation = arm_vars->side;
             animation *= 2;
             blend_moby_animation(moby, animation + 1, 0, scale_game_frames(6));
             moby->state = 3;
         }
-        d->yaw = spring_turn(&d->yaw_velocity, d->yaw, d->target_yaw,
+        arm_vars->yaw = spring_turn(&arm_vars->yaw_velocity, arm_vars->yaw, arm_vars->target_yaw,
                              frame_time_sq * 1.5707964f, frame_time_sq * 0.7853982f,
                              frame_time * 0.7853982f);
         break;
     case CONSTRUCTION_ARM_WAIT_FOR_ENTRY_ANIMATION:
-        if (moby->prev_seq == d->side * 2 + 1 && (moby->anim_flags & 2)) {
-            d->timer = scale_game_frames(FUN_L00_00257b90(15, 45));
-            animation = d->side;
+        if (moby->prev_seq == arm_vars->side * 2 + 1 && (moby->anim_flags & 2)) {
+            arm_vars->timer = scale_game_frames(FUN_L00_00257b90(15, 45));
+            animation = arm_vars->side;
             animation *= 2;
             blend_moby_animation(moby, animation + 2, 0, scale_game_frames(3));
-            d->direction = random_angle_radians_7880();
+            arm_vars->direction = random_angle_radians_7880();
             moby->state = 4;
         }
         break;
@@ -975,8 +975,8 @@ void construction_arm_update(struct Moby *moby)
             speed = random_float_between(D_L15_001619FC / 5.0f, D_L15_001619FC) * frame_time;
             spread = random_float_between(0.0f, D_L15_001619FC / 5.0f) * frame_time;
             direction = random_angle_radians_7880();
-            velocity.f[0] = fast_cos(d->direction) * speed;
-            velocity.f[1] = fast_sin(d->direction) * speed;
+            velocity.f[0] = fast_cos(arm_vars->direction) * speed;
+            velocity.f[1] = fast_sin(arm_vars->direction) * speed;
             velocity.f[2] = 0.0f;
             offset.f[0] = fast_cos(direction) * spread;
             offset.f[1] = fast_sin(direction) * spread;
@@ -989,18 +989,18 @@ void construction_arm_update(struct Moby *moby)
             duration = FUN_L00_00257b90(first, duration);
             FUN_0025c2f0(40000.0f, &origin, &velocity, D_L15_001619EC, D_L15_001619EC, duration, 1);
         }
-        if (fast_dec_timer_s16(&d->timer)) {
-            animation = d->side;
+        if (fast_dec_timer_s16(&arm_vars->timer)) {
+            animation = arm_vars->side;
             animation *= 2;
             blend_moby_animation(moby, animation + 3, 0, scale_game_frames(6));
             moby->state = 5;
         }
         break;
     case CONSTRUCTION_ARM_WAIT_FOR_EXIT_ANIMATION:
-        if (moby->prev_seq == d->side * 2 + 3 && (moby->anim_flags & 2)) {
+        if (moby->prev_seq == arm_vars->side * 2 + 3 && (moby->anim_flags & 2)) {
             minimum = FUN_L15_001f8648(D_L15_00161A00 * 60.0f);
             maximum = FUN_L15_001f8648(D_L15_00161A04 * 60.0f);
-            d->timer = truncate_float_to_s32(random_float_between(minimum, maximum));
+            arm_vars->timer = truncate_float_to_s32(random_float_between(minimum, maximum));
             duration = scale_game_frames(6);
             blend_moby_animation(moby, 0, 0, duration);
             moby->state = 1;
