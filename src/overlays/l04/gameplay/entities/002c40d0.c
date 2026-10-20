@@ -15,14 +15,14 @@ extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022d
 
 /* Moby state 9 while FUN_L00_002dbc30 reports a hit; allocates a voice when the short at 0x68 of FUN_L00_002db890(moby) is 6. */
 int FUN_L04_002c40d0(struct Moby *moby, int a, int b, float f) {
-    char *h = FUN_L00_002db890(moby);
+    char *moby_callback_result = FUN_L00_002db890(moby);
     int r = FUN_L00_002dbc30(moby, a, b, f);
     if (r != 0) {
         moby->state = 0x9;
     } else if ((unsigned char)moby->state == 0x9) {
         moby->state = 1;
     }
-    if (*(short *)(h + 0x68) == 6) {
+    if (*(short *)(moby_callback_result + 0x68) == 6) {
         allocate_voice_for_target_entry(1, 0, moby);
     }
     return r;
