@@ -8,14 +8,14 @@
 
 /* 1 when m is the hero's current moby of interest: unk4F8 in control mode 3
    or state 0x1C, otherwise unk2FC while unk30E is clear. */
-s32 FUN_L01_00277fb8(struct Moby *m) {
-    struct Hero *h = &hero;
+s32 FUN_L01_00277fb8(struct Moby *candidate_moby) {
+    struct Hero *hero_ptr = &hero;
 
-    if (h->state.control_mode == 3 || h->state.current == 0x1C) {
-        if ((struct Moby *)h->unk4F8 == m) {
+    if (hero_ptr->state.control_mode == 3 || hero_ptr->state.current == 0x1C) {
+        if ((struct Moby *)hero_ptr->unk4F8 == candidate_moby) {
             return 1;
         }
-    } else if (h->air_frames.s == 0 && h->ground_moby == m) {
+    } else if (hero_ptr->air_frames.s == 0 && hero_ptr->ground_moby == candidate_moby) {
         return 1;
     }
     return 0;
