@@ -70,10 +70,10 @@ void update_map_icons(s32 level, s32 flag) {
     } else {
         /* D_001A01F4 is &level_map_selection.posx: a null-guarded reset that can
            never run, but retail still emits it with p folded to 0. */
-        s32 *p = D_001A01F4;
-        if (p == 0) {
-            p[level] = 0x8000000;
-            p[level + 20] = 0x8000000;
+        s32 *pan_reset_base = D_001A01F4;
+        if (pan_reset_base == 0) {
+            pan_reset_base[level] = 0x8000000;
+            pan_reset_base[level + 20] = 0x8000000;
         }
     }
 
