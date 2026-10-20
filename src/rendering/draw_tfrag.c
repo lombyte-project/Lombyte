@@ -37,7 +37,7 @@ void draw_tfrag(void) __asm__("FUN_002333a8");
 void draw_tfrag(void) {
     struct Locals L;
     s32 packet;
-    u8 *p;
+    u8 *camera_position_ptr;
 
     packet = render_packet_cursor.addr;
     D_00160EBC = packet;
@@ -46,10 +46,10 @@ void draw_tfrag(void) {
     render_packet_cursor.addr = packet;
     noop_core_callback_secondary(D_00160E70, 1);
     set_identity_matrix(&L);
-    p = camera_position;
-    fast_vec_scale(&L.v30, p, -1024.0f);
+    camera_position_ptr = camera_position;
+    fast_vec_scale(&L.v30, camera_position_ptr, -1024.0f);
     L.v3C = 1.0f;
-    multiply_matrix(&L, p - 0x100, &L);
+    multiply_matrix(&L, camera_position_ptr - 0x100, &L);
     write_vif_unpack_packet(5, &L, 4);
     write_vif_unpack_packet(0x14D, &L, 4);
     if (draw_config.tfrag.enabled != 0) {
