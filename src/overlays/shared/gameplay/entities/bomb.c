@@ -2328,34 +2328,34 @@ int FUN_001f96f8_2cdcc0(int) __asm__("FUN_001f96f8");
 void FUN_001f9a10_2cdcc0(void *, void *, void *) __asm__("FUN_001f9a10");
 unsigned char *FUN_L00_002ce1f0_2cdcc0(unsigned char *, void *) __asm__("FUN_L00_002ce1f0");
 void FUN_L00_002cdcc0(void) {
-    P_2cdcc0 *p = &(*(P_2cdcc0 *)((char *)&hero));
-    S_2cdcc0 *s;
+    P_2cdcc0 *hero_state = &(*(P_2cdcc0 *)((char *)&hero));
+    S_2cdcc0 *usage_stats;
     float d[4] __attribute__((aligned(16)));
     float v[4] __attribute__((aligned(16)));
-    unsigned char *m;
+    unsigned char *spawned_moby;
     int i;
-    p->b1FF5 = 0;
+    hero_state->b1FF5 = 0;
     if (FUN_L00_00233e98_2cdcc0(0x18)) {
-        d[0] = FUN_001f9dc8_2cdcc0(p->f98) * 0.25f;
-        d[1] = FUN_001f9de0_2cdcc0(p->f98) * 0.25f;
+        d[0] = FUN_001f9dc8_2cdcc0(hero_state->f98) * 0.25f;
+        d[1] = FUN_001f9de0_2cdcc0(hero_state->f98) * 0.25f;
         d[2] = 0.25f;
-        if (p->b1FF6 < 6) {
+        if (hero_state->b1FF6 < 6) {
             FUN_L00_00233db8_2cdcc0(0x18, 1);
-            s = &D_00141680_2cdcc0;
-            if (s->hC0 < 0xFFFF) {
-                s->hC0++;
+            usage_stats = &D_00141680_2cdcc0;
+            if (usage_stats->hC0 < 0xFFFF) {
+                usage_stats->hC0++;
             }
-            if (FUN_001f96f8_2cdcc0(D_0015EEA4_2cdcc0) / 600 > s->hC2) {
-                s->hC2 = FUN_001f96f8_2cdcc0(D_0015EEA4_2cdcc0) / 600;
+            if (FUN_001f96f8_2cdcc0(D_0015EEA4_2cdcc0) / 600 > usage_stats->hC2) {
+                usage_stats->hC2 = FUN_001f96f8_2cdcc0(D_0015EEA4_2cdcc0) / 600;
             }
-            s->wC4 = s->wC4 | (1 << current_level_index) | 0x80000000;
+            usage_stats->wC4 = usage_stats->wC4 | (1 << current_level_index) | 0x80000000;
 
-            FUN_001f9a10_2cdcc0(v, p->v80, p->p2080 + 0xE0);
-            FUN_001f9a10_2cdcc0(v, v, p->p2080 + 0xC0);
-            for (i = p->b1FF6; i < 6; i++) {
-                m = FUN_L00_002ce1f0_2cdcc0(m, v);
-                if (m) {
-                    qcopy(*(void **)(m + 0x78), d);
+            FUN_001f9a10_2cdcc0(v, hero_state->v80, hero_state->p2080 + 0xE0);
+            FUN_001f9a10_2cdcc0(v, v, hero_state->p2080 + 0xC0);
+            for (i = hero_state->b1FF6; i < 6; i++) {
+                spawned_moby = FUN_L00_002ce1f0_2cdcc0(spawned_moby, v);
+                if (spawned_moby) {
+                    qcopy(*(void **)(spawned_moby + 0x78), d);
                 }
             }
         }
