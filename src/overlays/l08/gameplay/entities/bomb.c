@@ -2205,31 +2205,31 @@ extern float D_0015ED6C_lui __asm__("D_0015ED6C");
 extern float D_0015ED70;
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
 
-int FUN_L08_002dc648(struct Moby *m) {
-    char *d = (char *)m->pvars;
+int FUN_L08_002dc648(struct Moby *moby) {
+    char *shuttle_vars = (char *)moby->pvars;
     int *path;
-    float a = D_0015ED70 * 0.1f;
+    float path_acceleration_step = D_0015ED70 * 0.1f;
     float b = D_0015ED6C_lui * 0.08f;
-    path = *(int **)(d + 0x120);
-    advance_accelerated_scalar((float *)(d + 0xE4), (float *)(d + 0xE8), *(float *)(d + 0x104), a,
-                                 a, b);
-    *(float *)(d + 0x110) =
-        fast_add_rotations(*(float *)(d + 0x110), *(float *)(d + 0xE8) * 50.0f);
-    sample_camera_path(path, 0, d + 0x60, (float *)(d + 0x70), 0,
-                         *(float *)(d + 0xE4) * (float)(*path - 1));
-    *(int *)(d + 0x74) = 0;
-    if (absolute_float(*(float *)(d + 0xE4) - *(float *)(d + 0x104)) < 0.2f) {
-        advance_accelerated_scalar((float *)(d + 0x108), (float *)(d + 0x10C), 3.14159f,
+    path = *(int **)(shuttle_vars + 0x120);
+    advance_accelerated_scalar((float *)(shuttle_vars + 0xE4), (float *)(shuttle_vars + 0xE8), *(float *)(shuttle_vars + 0x104), path_acceleration_step,
+                                 path_acceleration_step, b);
+    *(float *)(shuttle_vars + 0x110) =
+        fast_add_rotations(*(float *)(shuttle_vars + 0x110), *(float *)(shuttle_vars + 0xE8) * 50.0f);
+    sample_camera_path(path, 0, shuttle_vars + 0x60, (float *)(shuttle_vars + 0x70), 0,
+                         *(float *)(shuttle_vars + 0xE4) * (float)(*path - 1));
+    *(int *)(shuttle_vars + 0x74) = 0;
+    if (absolute_float(*(float *)(shuttle_vars + 0xE4) - *(float *)(shuttle_vars + 0x104)) < 0.2f) {
+        advance_accelerated_scalar((float *)(shuttle_vars + 0x108), (float *)(shuttle_vars + 0x10C), 3.14159f,
                                      D_0015ED70 * 2.0943952f, D_0015ED70 * 2.0943952f,
                                      D_0015ED6C_lui * 6.2831855f);
     } else {
-        *(int *)(d + 0x108) = 0;
+        *(int *)(shuttle_vars + 0x108) = 0;
     }
-    if (*(float *)(d + 0x104) == 0.0f) {
-        *(float *)(d + 0x78) = fast_add_rotations(*(float *)(d + 0x78), 3.14159f);
+    if (*(float *)(shuttle_vars + 0x104) == 0.0f) {
+        *(float *)(shuttle_vars + 0x78) = fast_add_rotations(*(float *)(shuttle_vars + 0x78), 3.14159f);
     }
-    *(float *)(d + 0x78) = fast_add_rotations(*(float *)(d + 0x78), *(float *)(d + 0x108));
-    return *(float *)(d + 0xE4) == *(float *)(d + 0x104);
+    *(float *)(shuttle_vars + 0x78) = fast_add_rotations(*(float *)(shuttle_vars + 0x78), *(float *)(shuttle_vars + 0x108));
+    return *(float *)(shuttle_vars + 0xE4) == *(float *)(shuttle_vars + 0x104);
 }
 #define NOT_SDA
 
