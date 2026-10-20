@@ -325,17 +325,17 @@ int FUN_L01_0028b828(T_28b828 *path, int b) {
 /* 0x0028b878, 76 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
-int FUN_L01_0028b878(char *p) {
+int FUN_L01_0028b878(char *path_descriptor) {
     int max = 0;
     int next;
-    if (p[4] >= 0) {
-        max = **(int **)(p + 0x10) - 1;
+    if (path_descriptor[4] >= 0) {
+        max = **(int **)(path_descriptor + 0x10) - 1;
     }
-    next = *(int *)p + 1;
+    next = *(int *)path_descriptor + 1;
     if (max < next) {
         next %= max + 1;
     }
-    *(int *)p = next;
+    *(int *)path_descriptor = next;
     return next;
 }
 
