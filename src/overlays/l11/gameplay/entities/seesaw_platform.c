@@ -2427,12 +2427,12 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
     float x, y;
     float half_fov, tn;
     float ratio;
-    float t;
+    float collision_adjusted_pitch;
     float k;
     float fov;
     struct PadState *pad;
     struct Hero *g;
-    char *p;
+    char *collision_result;
     int hc;
 
     up.q = 0;
@@ -2584,8 +2584,8 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
     ship_moby->rot.y = fast_add_rot_2838(ship_vars->f34, -ship_vars->f70 * D_L11_00162154);
     ship_moby->rot.z = fast_add_rot_2838(ship_vars->f38, -ship_vars->f6C * D_L11_00162158);
     if (coll_sphere(2.0f, &ship_moby->pos, 0, ship_moby)) {
-        p = D_L11_00174840;
-        if (*(char **)(p + 0x18) == 0) {
+        collision_result = D_L11_00174840;
+        if (*(char **)(collision_result + 0x18) == 0) {
             spawn_explosion(ship_moby, D_L11_0015F580, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f,
                              9.0f, 1.0f, -1, 50.0f, 1, 1, -1, 0);
             ship_moby->visible = 0;
@@ -2593,28 +2593,28 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
             ship_moby->flags |= 1;
             ship_vars->iF8 = scale_game_frames(0x5A);
         } else {
-            hc = *(short *)(*(char **)(p + 0x18) + 0xA6);
+            hc = *(short *)(*(char **)(collision_result + 0x18) + 0xA6);
             if (hc != 0 && hc != 0x192 && hc != 0x4C2 && hc != 0x4C3) {
-                qcopy(&ship_moby->pos, p + 0x30);
-                FUN_L00_001ff660(dir, dir, p + 0x40);
+                qcopy(&ship_moby->pos, collision_result + 0x30);
+                FUN_L00_001ff660(dir, dir, collision_result + 0x40);
                 ship_vars->f38 = fast_add_rot_2838(
                     ship_vars->f38,
                     fast_sub_rot_2838(atan2_2838(dir[0], dir[1]), ship_vars->f38) * D_L11_00162008);
-                t = fast_add_rot_2838(
+                collision_adjusted_pitch = fast_add_rot_2838(
                     ship_vars->f34,
                     fast_sub_rot_2838(-atan2_2838(vector_length_xy_2838(dir), dir[2]), ship_vars->f34) *
                         D_L11_0016200C);
                 k = ship_vars->speed * D_L11_0016204C;
-                ship_vars->f34 = t;
+                ship_vars->f34 = collision_adjusted_pitch;
                 ship_vars->speed = k;
                 if (ship_vars->iDC == 0) {
                     hero.ship_hp = hero.ship_hp - D_L11_00162050;
                     if (hero.ship_hp < 0.0f) {
-                        subtract_vector_2838(side, p + 0x50, p + 0x60);
+                        subtract_vector_2838(side, collision_result + 0x50, collision_result + 0x60);
                         fast_vec_normalize(side, side, 1.0f);
-                        FUN_L00_001ff660(vel, dir, p + 0x40);
+                        FUN_L00_001ff660(vel, dir, collision_result + 0x40);
                         fast_vec_normalize(vel, vel, frame_time + frame_time);
-                        fast_vec_normalize(up.v, p + 0x40, 1.0f);
+                        fast_vec_normalize(up.v, collision_result + 0x40, 1.0f);
                         spawn_explosion(ship_moby, vel, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f,
                                          9.0f, 1.0f, -1, 50.0f, 1, 1, -1, 0);
                         ship_moby->state = 7;
