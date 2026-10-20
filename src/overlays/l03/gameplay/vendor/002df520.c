@@ -326,11 +326,11 @@ extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern s32 D_L03_00167074 NOT_SDA;
 /* vendor camera init: aims the camera data at the hero, resets its blend state and places it (FUN_L03_002eb7e0) */
 void FUN_L03_002eb978(void *arg) {
-    char *m = arg;
-    char *e = *(char **)((char *)D_L03_0015EF50 + *(s16 *)(m + 0x84) * 32 + 0x1C);
+    char *camera = arg;
+    char *e = *(char **)((char *)D_L03_0015EF50 + *(s16 *)(camera + 0x84) * 32 + 0x1C);
     char *target;
     char *pos;
-    char *d;
+    char *camera_data;
     char *timer;
     char *ang;
     int tbl;
@@ -340,34 +340,34 @@ void FUN_L03_002eb978(void *arg) {
     float mtx[12];
     float v[4];
 
-    target = *(char **)(m + 0x70) + 0xB0;
+    target = *(char **)(camera + 0x70) + 0xB0;
     *(float *)(target + 0x14) = 1.5f;
     *(struct Moby **)(target + 0x10) = hero.moby;
     qcopy(target, &hero.motion.pos);
     *(s32 *)(target + 0xC) = 0;
-    d = *(char **)(m + 0x70);
-    p = (float *)(d + 0xD0);
+    camera_data = *(char **)(camera + 0x70);
+    p = (float *)(camera_data + 0xD0);
     f = *(float *)(e + 0x20);
     p[2] = f;
-    *(float *)(d + 0xD0) = f;
+    *(float *)(camera_data + 0xD0) = f;
     p[4] = *(float *)(e + 0x24);
-    pos = *(char **)(m + 0x70);
+    pos = *(char **)(camera + 0x70);
     *(s32 *)(pos + 0x28) = 0;
     *(float *)(pos + 0x20) = 0.01f;
     *(float *)(pos + 0x24) = 0.2f;
     clear_u64_value_eb978(pos + 0x10);
     qcopy(pos, &hero.motion.pos);
-    timer = *(char **)(m + 0x70);
+    timer = *(char **)(camera + 0x70);
     ((s32 *)timer)[12] = scale_game_frames(0x78);
     tbl = D_L03_0015EF50;
-    ang = *(char **)(m + 0x70) + 0xF0;
+    ang = *(char **)(camera + 0x70) + 0xF0;
     *(s32 *)(ang + 0x30) = 0;
     *(s32 *)(ang + 0x28) = 0;
     *(s32 *)(ang + 0x2C) = 0;
     *(float *)(ang + 0x34) = hero.motion.pos.f[2];
     *(s32 *)(ang + 0x20) = 0;
     *(s32 *)(ang + 0x24) = 0;
-    i = (*(s16 *)(m + 0x84) << 5) + tbl;
+    i = (*(s16 *)(camera + 0x84) << 5) + tbl;
     i += 0x10;
     p = (float *)i;
     v[0] = p[0];
@@ -376,8 +376,8 @@ void FUN_L03_002eb978(void *arg) {
     v[3] = 0.0f;
     euler_rotation_basis(mtx, v);
     qcopy(ang, mtx);
-    FUN_L03_002eb7e0(m);
-    *(s16 *)(m + 0x7E) = 0;
+    FUN_L03_002eb7e0(camera);
+    *(s16 *)(camera + 0x7E) = 0;
     D_L03_00167074 = 0x78;
 }
 #include "sda.h"
