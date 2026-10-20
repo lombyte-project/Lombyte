@@ -1482,7 +1482,7 @@ extern E_2a7780 effects[] __asm__("D_L00_001D92E8");
 extern int last_frame __asm__("D_L00_001613C0");
 extern f32 uv_scale __asm__("D_L00_001613BC") __attribute__((sda));
 /* Draws the animated quad-strip effect attached to o; the effect set is chosen by state 0x17..0x19 / 0x2B. */
-void FUN_L00_002a7780(O_2a7780 *o) {
+void FUN_L00_002a7780(O_2a7780 *effect_owner) {
     R_2a7780 *r;
     E_2a7780 *effect_config;
     V_2a7780 v;
@@ -1493,7 +1493,7 @@ void FUN_L00_002a7780(O_2a7780 *o) {
     s32 i, j, elapsed_frames, cur;
     f32 effect_progress, w;
 
-    r = o->r;
+    r = effect_owner->r;
     if (r == 0) return;
     if (r->f70 == 0.0f) return;
     if (r->f70 == 1.0f) {
