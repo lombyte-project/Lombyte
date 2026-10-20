@@ -24,14 +24,14 @@ float FUN_L00_0025bb38(int rotation_direction, float x, float y) {
 }
 extern float FUN_L00_0025bb38_c(float, void *, float) __asm__("FUN_L00_0025bb38");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-void FUN_L00_0025bc00(float *p, void *o, float a, float lim) {
-    float r = FUN_L00_0025bb38_c(a, o, *p);
+void FUN_L00_0025bc00(float *current_angle, void *rotation_direction, float target_angle, float lim) {
+    float r = FUN_L00_0025bb38_c(target_angle, rotation_direction, *current_angle);
     if (lim < r)
         r = lim;
     else if (r < -lim)
         r = -lim;
-    *p = fast_add_rotations(*p, r);
-    FUN_L00_0025bb38_c(a, o, *p);
+    *current_angle = fast_add_rotations(*current_angle, r);
+    FUN_L00_0025bb38_c(target_angle, rotation_direction, *current_angle);
 }
 extern float FUN_L00_0025bb38_0025bc98(float, int, float) __asm__("FUN_L00_0025bb38");
 extern void FUN_L00_0025b798_0025bc98(float *, float, float, float,
