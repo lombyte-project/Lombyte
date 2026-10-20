@@ -2928,11 +2928,11 @@ extern void FUN_L00_00211e30_211f38(int, float, float, float) __asm__("FUN_L00_0
 
 void FUN_L00_00211f38(void) {
     struct Hero *g = &hero;
-    float t, a, b, c;
-    t = (g->unk229C + 1.0f) * 0.5f;
-    a = frame_scale_sq * 0.019f * t;
+    float stick_turn_scale, a, b, c;
+    stick_turn_scale = (g->unk229C + 1.0f) * 0.5f;
+    a = frame_scale_sq * 0.019f * stick_turn_scale;
     b = frame_scale_sq * 0.1f;
-    c = D_0015ED6C_211f38 * 9.948377f * t;
+    c = D_0015ED6C_211f38 * 9.948377f * stick_turn_scale;
     if (g->unk3BE) {
         a *= 1.1f;
         c *= 1.2f;
