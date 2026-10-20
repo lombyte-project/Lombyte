@@ -247,7 +247,7 @@ extern void FUN_L07_00312e70(char *, float, int, float, int);
 void FUN_L07_003131b0(char *moby) {
     RopeQuad v;
     char blk[0x30];
-    RopeVec d;
+    RopeVec rope_direction;
     char *data;
     float one;
 
@@ -261,9 +261,9 @@ void FUN_L07_003131b0(char *moby) {
     FUN_L07_00312e70(moby, one, 0, one, 0x20000080);
     FUN_L07_00312e70(moby, 0.7f, 10, 2.0f, 0x28008080);
     FUN_L07_00312e70(moby, 0.4f, 20, 3.0f, 0x30B0FFFF);
-    subtract_vector_xyz(d, data + 0x120, data + 0x110);
-    normalize_vector_xyz(d, d, one);
-    make_hit_descriptor(blk, moby, 0x30000, 1.00012302f, d);
+    subtract_vector_xyz(rope_direction, data + 0x120, data + 0x110);
+    normalize_vector_xyz(rope_direction, rope_direction, one);
+    make_hit_descriptor(blk, moby, 0x30000, 1.00012302f, rope_direction);
     if (collision_line(data + 0x110, data + 0x120, 0, moby, blk) == 0) {
         probe_world_sphere(0.5f, data + 0x120, 0, moby, blk);
     }
