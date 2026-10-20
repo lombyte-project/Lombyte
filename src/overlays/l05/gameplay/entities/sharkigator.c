@@ -509,30 +509,30 @@ void FUN_L05_002d6f48(unsigned char *moby);
 
 /* Per-frame glow: updates three parts, pulses the colour, and queues a redraw
  * once per frame. */
-void FUN_L05_002d7020(char *m) {
+void FUN_L05_002d7020(char *moby) {
     char *v;
     int i;
     int c;
-    int f;
+    int current_frame;
     int k;
-    int *p;
+    int *last_queued_frame_ptr;
 
-    if (*(unsigned char *)(m + 0x21) != 0xFF && *(unsigned char *)(m + 0x31) != 0) {
-        v = *(char **)(m + 0x78);
+    if (*(unsigned char *)(moby + 0x21) != 0xFF && *(unsigned char *)(moby + 0x31) != 0) {
+        v = *(char **)(moby + 0x78);
         for (i = 0; i < 3; i++) {
-            moby_point_position(m, i, v + 0x330 + i * 16);
+            moby_point_position(moby, i, v + 0x330 + i * 16);
         }
         *(float *)(v + 0x368) = rot_2d7020(*(float *)(v + 0x368), frame_time * 1.9198622f);
         c = lerp_2d7020(sin_2d7020(*(float *)(v + 0x368)) * 0.5f + 0.5f, 0x1E1EB4, 0x1EB41E);
-        f = frame_number;
-        *(int *)(m + 0x90) = c;
+        current_frame = frame_number;
+        *(int *)(moby + 0x90) = c;
         k = (c & 0xFF0000) | 0x30000000;
         *(int *)(v + 0x360) = k | (c & 0xFF00) | (c & 0xFF);
-        if (f != 0) {
-            p = *(int **)(v + 0x364);
-            if (f != *p) {
-                *p = f;
-                queue_2d7020(FUN_L05_002d6f48, m);
+        if (current_frame != 0) {
+            last_queued_frame_ptr = *(int **)(v + 0x364);
+            if (current_frame != *last_queued_frame_ptr) {
+                *last_queued_frame_ptr = current_frame;
+                queue_2d7020(FUN_L05_002d6f48, moby);
             }
         }
     }
