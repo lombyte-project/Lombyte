@@ -919,8 +919,8 @@ void FUN_L17_002dc3f8(struct Moby *m) {
     float w[12];
     float pos[4];
     float q[4];
-    float d[4];
-    float t[4];
+    float scaled_particle_vector[4];
+    float random_direction[4];
     int out;
     char *data = (char *)m->pvars;
     char *r;
@@ -960,14 +960,14 @@ void FUN_L17_002dc3f8(struct Moby *m) {
                 m->pos.z = m->pos.z - 1.0f;
                 i = 0x95;
                 do {
-                    *(OvlQuad *)t = 0;
-                    t[0] = random_float_between_alt(-1.0f, 1.0f);
-                    t[1] = random_float_between_alt(-1.0f, 1.0f);
-                    t[2] = random_float_between_alt(-0.5f, 2.0f);
-                    *(OvlQuad *)d = *(OvlQuad *)t;
+                    *(OvlQuad *)random_direction = 0;
+                    random_direction[0] = random_float_between_alt(-1.0f, 1.0f);
+                    random_direction[1] = random_float_between_alt(-1.0f, 1.0f);
+                    random_direction[2] = random_float_between_alt(-0.5f, 2.0f);
+                    *(OvlQuad *)scaled_particle_vector = *(OvlQuad *)random_direction;
                     normalize_vector_xyz(
-                        d, d, random_float_between_alt(frame_time * 4.0f, frame_time * 8.0f));
-                    FUN_L00_0026f080(&m->pos, d, random_float_between_alt(0.05f, 0.1f) * 210000.0f,
+                        scaled_particle_vector, scaled_particle_vector, random_float_between_alt(frame_time * 4.0f, frame_time * 8.0f));
+                    FUN_L00_0026f080(&m->pos, scaled_particle_vector, random_float_between_alt(0.05f, 0.1f) * 210000.0f,
                                      yy);
                 } while (--i >= 0);
                 mark_moby_for_removal_u(m);
