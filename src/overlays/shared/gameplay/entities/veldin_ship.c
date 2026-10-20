@@ -714,7 +714,7 @@ void FUN_L00_002d1428(M2d1428 *moby) {
     O2d1428 *vars;
     M2d1428 *chain_cursor, *parent_moby, *next;
     V2d1428 collision_start, g, c2, hero_local_offset, b, previous_position, previous_rotation, position_delta;
-    f32 f, v;
+    f32 acceleration_scale_or_speed, v;
     s32 hit;
 
     vars = moby->vars;
@@ -752,17 +752,17 @@ void FUN_L00_002d1428(M2d1428 *moby) {
                 break;
             }
         }
-        f = D_0015ED70_alt;
-        vars->vel.z -= f * 9.8f;
+        acceleration_scale_or_speed = D_0015ED70_alt;
+        vars->vel.z -= acceleration_scale_or_speed * 9.8f;
         vars->vel.z = (vars->vel.z < -0.3f) ? -0.3f : vars->vel.z;
         vars->vel.z = (0.3f < vars->vel.z) ? 0.3f : vars->vel.z;
         if (vars->path) {
             if (vars->parent == 0) {
-                vars->vel.w -= f * 10.0f;
+                vars->vel.w -= acceleration_scale_or_speed * 10.0f;
                 if (approach_value(&vars->fF4, 0.0f, FUN_001f99c0(vars->vel.w)) == 0.0f)
                     vars->vel.w = 0.0f;
             } else {
-                vars->vel.w -= f * 10.0f;
+                vars->vel.w -= acceleration_scale_or_speed * 10.0f;
                 if (approach_value(&vars->fF4, vars->parent->vars->fF4 + 1.0f, FUN_001f99c0(vars->vel.w)) ==
                     0.0f)
                     *(s32 *)&vars->vel.w = 0;
@@ -799,8 +799,8 @@ void FUN_L00_002d1428(M2d1428 *moby) {
                 hit = 1;
         }
         if (hit != 0) {
-            f = vector_length_xyz(&vars->vel);
-            if (D_0015ED6C_c * 0.5f < f) {
+            acceleration_scale_or_speed = vector_length_xyz(&vars->vel);
+            if (D_0015ED6C_c * 0.5f < acceleration_scale_or_speed) {
                 if (moby->oclass == 0x1F9 && moby->state == 1) {
                     moby->bBC = 0;
                     moby->state = 5;
