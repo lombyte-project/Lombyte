@@ -585,12 +585,12 @@ void FUN_L00_002165b8(void) {
     };
     struct Hero *g = &hero;
     float v[2];
-    int m, st, k;
-    m = g->unk20B3;
+    int effective_tilt_mode, st, k;
+    effective_tilt_mode = g->unk20B3;
     if (g->unk1F8) {
-        m = 1;
+        effective_tilt_mode = 1;
     }
-    switch (m) {
+    switch (effective_tilt_mode) {
     case HERO_TILT_RETURN_TO_ZERO:
         st = g->state.current;
         if ((u32)(st - 0x25) < 2) {
