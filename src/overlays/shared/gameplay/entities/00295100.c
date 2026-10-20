@@ -359,10 +359,10 @@ int f215b10_298840(void) __asm__("FUN_00215b10");
 extern char D_L00_0017C440[] __attribute__((section(".data")));
 extern float D_L00_0015F59C;
 void start_scene(int a) __asm__("FUN_L00_00298840");
-void start_scene(int a) {
-    O_298840 *o;
+void start_scene(int scene_id) {
+    O_298840 *moby;
     int t, i;
-    if (a < 0)
+    if (scene_id < 0)
         return;
     if (hero.health.hp == 0) {
         f211250_298840();
@@ -378,7 +378,7 @@ void start_scene(int a) {
     memset_298840(D_L00_0017C400_298840, 0, 0x40);
     memset_298840(D_L00_0017C3C0_298840, 0, 0x40);
     t = D_L00_001611CC - 0x3C000;
-    D_L00_0016C860_298840.x30 = a;
+    D_L00_0016C860_298840.x30 = scene_id;
     D_L00_0015F59C = 1.0f;
     D_L00_0015F5A0_298840 = 0;
     D_L00_0016C860_298840.x34 = 0;
@@ -401,9 +401,9 @@ void start_scene(int a) {
     f1f4a58_298840(scale_game_frames(6));
     update_audio_stream_until_idle(1);
     update_world_object_animation();
-    for (o = D_L00_0015FFDC_298840; o->st != 0xFF; o++) {
-        if (!(o->st & 0x80) && (o->type == 0x4A || o->type == 0xCB))
-            o->flags |= 0x80;
+    for (moby = D_L00_0015FFDC_298840; moby->st != 0xFF; moby++) {
+        if (!(moby->st & 0x80) && (moby->type == 0x4A || moby->type == 0xCB))
+            moby->flags |= 0x80;
     }
     music_stream_state.queued_secondary_track = D_L00_0016C860_298840.x30;
     while (music_stream_state.secondary.state != 3) {
