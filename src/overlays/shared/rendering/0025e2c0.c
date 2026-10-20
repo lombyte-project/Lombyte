@@ -21,30 +21,30 @@ void FUN_L15_0025e2c0(int color, u128 *pos, char *owner) {
     Vec4 target;
     Vec4 step;
     u128 at;
-    unsigned char *p;
+    unsigned char *particle;
     char *from;
-    u128 *a;
+    u128 *vector_scratch;
     u128 *b;
 
     target.q = *pos;
-    p = create_part(0x1F);
-    if (p != 0) {
-        a = &at;
+    particle = create_part(0x1F);
+    if (particle != 0) {
+        vector_scratch = &at;
         from = owner + 0x10;
-        subtract_vector_xyz(a, &target, from);
+        subtract_vector_xyz(vector_scratch, &target, from);
         b = &step.q;
-        *b = *a;
+        *b = *vector_scratch;
         fast_vec_scale(b, b, 0.25f);
-        add_vector_xyz(a, from, b);
-        *(u128 *)(p + 0x10) = *a;
-        *(u128 *)(p + 0x20) = target.q;
-        *(int *)(p + 4) = color;
-        *(int *)(p + 0xC) = color & 0xFFFFFF;
-        p[9] = truncate_float_to_s32(4.0f) + 0x70;
-        p[3] = 0x44;
-        p[1] = 2;
-        *(short *)(p + 0xA) = scale_game_frames(D_L15_001601FC);
-        *(char **)(p + 0x30) = owner;
+        add_vector_xyz(vector_scratch, from, b);
+        *(u128 *)(particle + 0x10) = *vector_scratch;
+        *(u128 *)(particle + 0x20) = target.q;
+        *(int *)(particle + 4) = color;
+        *(int *)(particle + 0xC) = color & 0xFFFFFF;
+        particle[9] = truncate_float_to_s32(4.0f) + 0x70;
+        particle[3] = 0x44;
+        particle[1] = 2;
+        *(short *)(particle + 0xA) = scale_game_frames(D_L15_001601FC);
+        *(char **)(particle + 0x30) = owner;
     }
 }
 
