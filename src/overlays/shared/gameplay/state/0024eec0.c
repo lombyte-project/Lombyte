@@ -24,7 +24,7 @@ void subtract_vector_xyz(Vec4 *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector(Vec4 *, Vec4 *, Mtx *) __asm__("FUN_001f9d20");
 void fast_vec_scale(Vec4 *, Vec4 *, float) __asm__("FUN_001f9a68");
 void FUN_L00_0024eed8(char *p, int idx, void *v, float a, float b);
-void FUN_L00_0024eed8(char *moby, int idx, void *v, float a, float b) {
+void FUN_L00_0024eed8(char *moby, int idx, void *v, float unscaled_entry_w, float b) {
     Mtx transposed_rotation;
     Vec4 local_offset;
     Ent32 *e = &(*(Tbl **)(moby + 0x94))->e[idx];
@@ -35,7 +35,7 @@ void FUN_L00_0024eed8(char *moby, int idx, void *v, float a, float b) {
     fast_vec_scale(&local_offset, &local_offset, k);
     qcopy(&e->v, &local_offset);
     e->b = b * k;
-    e->v.w = a * k;
+    e->v.w = unscaled_entry_w * k;
 }
 #define NOT_SDA
 
