@@ -969,13 +969,13 @@ void FUN_L11_003181f0(struct Moby *moby) {
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L11_00318488(struct Moby *m) {
-    char *d = (char *)m->pvars;
-    m->state = 1;
-    m->collision = 0;
-    fast_vec_sub(d + 0x10, &m->pos, d);
-    *(float *)(d + 0x20) = random_float_between_alt(20.0f, 60.0f) * DEG_TO_RAD * D_0015ED6C_n[1];
-    *(float *)(d + 0x24) = random_float_between_alt(20.0f, 60.0f) * DEG_TO_RAD * D_0015ED6C_n[1];
+void FUN_L11_00318488(struct Moby *link_moby) {
+    char *link_vars = (char *)link_moby->pvars;
+    link_moby->state = 1;
+    link_moby->collision = 0;
+    fast_vec_sub(link_vars + 0x10, &link_moby->pos, link_vars);
+    *(float *)(link_vars + 0x20) = random_float_between_alt(20.0f, 60.0f) * DEG_TO_RAD * D_0015ED6C_n[1];
+    *(float *)(link_vars + 0x24) = random_float_between_alt(20.0f, 60.0f) * DEG_TO_RAD * D_0015ED6C_n[1];
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00319FA0), where it is exact; names translated to the US level program. */
 
