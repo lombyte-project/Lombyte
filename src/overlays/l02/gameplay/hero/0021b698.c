@@ -556,7 +556,7 @@ s32 FUN_L02_00222270(s32 mode) {
     s32 mask;
     s32 i;
     u128_222270 *collision_response_data;
-    f32 h;
+    f32 probe_height_or_displacement_length;
     if (hero.unk1CC != 0) {
         return 1;
     }
@@ -588,11 +588,11 @@ s32 FUN_L02_00222270(s32 mode) {
                 break;
         } else {
             s32 collision_probe_result;
-            h = hero.capsule_top - hero.unk224;
-            if (h < 0.05f) {
-                h = 0.05f;
+            probe_height_or_displacement_length = hero.capsule_top - hero.unk224;
+            if (probe_height_or_displacement_length < 0.05f) {
+                probe_height_or_displacement_length = 0.05f;
             }
-            collision_probe_result = coll2_222270(&hero.motion.pos.q, mask, hero.unk234, hero.moby, h);
+            collision_probe_result = coll2_222270(&hero.motion.pos.q, mask, hero.unk234, hero.moby, probe_height_or_displacement_length);
             if (!(collision_probe_result | coll3_222270(&hero.motion.pos.q, hero.unk234)))
                 break;
         }
@@ -605,8 +605,8 @@ s32 FUN_L02_00222270(s32 mode) {
     }
     vsub_222270(&hero.motion.pos.q, &hero.motion.pos.q, &v);
     vsub_222270(&w, &hero.motion.pos.q, &old);
-    h = vlen_222270(&w);
-    if (hero.unk234 * 1.5f < h) {
+    probe_height_or_displacement_length = vlen_222270(&w);
+    if (hero.unk234 * 1.5f < probe_height_or_displacement_length) {
         if (mode == 0xF) {
             if (512.0f < w.f[0])
                 w.f[0] = 512.0f;
