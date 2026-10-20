@@ -1545,6 +1545,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         DREK_BOSS_RUN_ENDING_SEQUENCE = 0x1B
     };
     enum {
+        DREK_BOSS_PHASE_FIRST_ARENA_PATH = 0,
         DREK_BOSS_PHASE_SECOND_ARENA_PATH = 1,
         DREK_BOSS_PHASE_THIRD_ARENA_PATH = 2,
         DREK_BOSS_PHASE_BEFORE_MISSILE_GROUP = 4,
@@ -2408,7 +2409,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             int ticks;
 
             switch (boss_data->f34C) {
-            case 0:
+            case DREK_BOSS_PHASE_FIRST_ARENA_PATH:
                 ticks = scale_game_frames(0xE10);
                 break;
             case DREK_BOSS_PHASE_SECOND_ARENA_PATH:
