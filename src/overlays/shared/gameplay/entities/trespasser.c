@@ -207,34 +207,34 @@ int FUN_001f96f8_002c52a8(int) __asm__("FUN_001f96f8");
 void FUN_L00_00250df8_002c52a8(void *) __asm__("FUN_L00_00250df8");
 void FUN_L00_0025d1b8_002c52a8(void *) __asm__("FUN_L00_0025d1b8");
 unsigned char *spawn_on_path(u128 *a, int b, int c, int d) __asm__("FUN_L00_002c52a8");
-unsigned char *spawn_on_path(u128 *a, int b, int c, int d) {
-    unsigned char *m = 0;
+unsigned char *spawn_on_path(u128 *spawn_position, int b, int c, int d) {
+    unsigned char *spawned_moby = 0;
     {
         S179AC0_2c52a8 *e = (S179AC0_2c52a8 *)(b * 0x4C + (u8 *)D_L00_00179AC0_002c52a8);
         if (e->h3A > 0)
-            m = FUN_0020c4f8_002c52a8(e->h3A);
+            spawned_moby = FUN_0020c4f8_002c52a8(e->h3A);
     }
-    if (m) {
-        int *q;
-        m[0x30] = 0xff;
-        *(short *)(m + 0x32) = 0xff;
-        q = *(int **)(m + 0x78);
-        m[0x31] = 1;
-        m[0x20] = 1;
-        m[0xbc] = 0;
-        qcopy(m + 0x10, a);
+    if (spawned_moby) {
+        int *moby_vars;
+        spawned_moby[0x30] = 0xff;
+        *(short *)(spawned_moby + 0x32) = 0xff;
+        moby_vars = *(int **)(spawned_moby + 0x78);
+        spawned_moby[0x31] = 1;
+        spawned_moby[0x20] = 1;
+        spawned_moby[0xbc] = 0;
+        qcopy(spawned_moby + 0x10, spawn_position);
         if (c == -1)
-            q[0] = ((VendorItemInfo *)(b * 0x18 + (u8 *)D_L00_001C40B0))->hC;
+            moby_vars[0] = ((VendorItemInfo *)(b * 0x18 + (u8 *)D_L00_001C40B0))->hC;
         else
-            q[0] = c;
-        q[2] = b;
-        *(float *)(q + 3) = (float)d;
-        q[8] = FUN_001f96f8_002c52a8(0x10);
-        *(float *)(q + 10) = *(float *)(m + 0x18);
-        FUN_L00_00250df8_002c52a8(m);
-        FUN_L00_0025d1b8_002c52a8(m);
+            moby_vars[0] = c;
+        moby_vars[2] = b;
+        *(float *)(moby_vars + 3) = (float)d;
+        moby_vars[8] = FUN_001f96f8_002c52a8(0x10);
+        *(float *)(moby_vars + 10) = *(float *)(spawned_moby + 0x18);
+        FUN_L00_00250df8_002c52a8(spawned_moby);
+        FUN_L00_0025d1b8_002c52a8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 typedef struct {
     char pad[0x34];
