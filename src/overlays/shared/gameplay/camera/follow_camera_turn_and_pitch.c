@@ -99,7 +99,7 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     float r;
     float lim;
     float sel;
-    float a;
+    float reference_dot_product;
     float b;
     float ang;
     float z;
@@ -139,11 +139,11 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     } else {
         FUN_00214890_2e8bb8(c, c, base + 0x20, *(float *)(c + 0x34));
     }
-    a = FUN_001f9ab0_2e8bb8(c, base + 0x20);
+    reference_dot_product = FUN_001f9ab0_2e8bb8(c, base + 0x20);
     b = FUN_001f9af0_2e8bb8(c);
     FUN_001f9ad8_2e8bb8(axis, base + 0x20, c);
     FUN_001f9bf8_2e8bb8(axis, axis, 1.0f);
-    ang = FUN_001f9e90_2e8bb8(b, a);
+    ang = FUN_001f9e90_2e8bb8(b, reference_dot_product);
     if (FUN_001f99c0_2e8bb8(ang) < FUN_001f99c0_2e8bb8(lim) && sel == D_L00_00161CC0) {
         *(float *)(turn_pitch_state + 8) = ang / 0.69813168f;
     }
