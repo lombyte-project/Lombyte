@@ -345,9 +345,9 @@ void FUN_L00_0020d330(void) {
 s32 hero_slot_moby(s32 i) __asm__("FUN_L00_0020d460");
 s32 hero_slot_moby(s32 i) {
     /* hero shifted by i slots, so items[0] is slot i */
-    struct Hero *p = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
-    if (p->items[0].state == 2) {
-        return (s32)p->items[0].moby;
+    struct Hero *slot_owner = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
+    if (slot_owner->items[0].state == 2) {
+        return (s32)slot_owner->items[0].moby;
     }
     return 0;
 }
