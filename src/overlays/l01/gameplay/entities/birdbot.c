@@ -2846,7 +2846,7 @@ extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da
 BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 kind) {
     Vec4 position_copy;
     Vec4 direction_copy;
-    Vec4 c;
+    Vec4 target_position_copy;
     BeamMoby *created_moby;
     BeamVars *v;
     Vec4 *pp;
@@ -2855,10 +2855,10 @@ BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 k
 
     pp = &position_copy;
     pd = &direction_copy;
-    pc = &c;
+    pc = &target_position_copy;
     position_copy.q = *pos;
     direction_copy.q = *dir;
-    c.q = *color;
+    target_position_copy.q = *color;
     created_moby = create_moby(0x2AE);
     if (created_moby != NULL) {
         v = created_moby->vars;
