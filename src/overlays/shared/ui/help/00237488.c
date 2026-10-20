@@ -1663,9 +1663,9 @@ int FUN_L05_002551b8(void) {
     return r;
 }
 int FUN_L05_002551d0(void) {
-    struct Hero *p = &hero;
-    int f = p->unk8CE;
-    if (p->unk884 == 0) {
+    struct Hero *hero_ptr = &hero;
+    int f = hero_ptr->unk8CE;
+    if (hero_ptr->unk884 == 0) {
         int r = 0x7D;
         if (f == 0)
             r = 0x52;
