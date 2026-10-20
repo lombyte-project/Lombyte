@@ -1140,6 +1140,12 @@ extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 
 void ultramech_scientist_update(struct Moby *moby) __asm__("FUN_L15_002ec760");
 void ultramech_scientist_update(struct Moby *moby) {
+    enum {
+        ULTRAMECH_SCIENTIST_INITIALIZE = 0,
+        ULTRAMECH_SCIENTIST_WAIT_FOR_DIALOGUE = 1,
+        ULTRAMECH_SCIENTIST_START_FIRST_SCENE = 5,
+        ULTRAMECH_SCIENTIST_SAVE_AND_DISABLE = 8
+    };
     char *data;
     char *hero_pos;
     struct Moby *other;
@@ -1174,7 +1180,7 @@ void ultramech_scientist_update(struct Moby *moby) {
     }
 
     switch (moby->state) {
-    case 0:
+    case ULTRAMECH_SCIENTIST_INITIALIZE:
         moby->state = 1;
         moby->update_dist = 0xFF;
         *(float *)(data + 0xC) = 20.0f;
@@ -1214,7 +1220,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         }
         }
         break;
-    case 1:
+    case ULTRAMECH_SCIENTIST_WAIT_FOR_DIALOGUE:
         hero_pos = D_0013E533 + 0xE9D;
         if (is_point_inside_clip_volume(hero_pos, *(int *)(data + 0x27C)) == 0) {
             break;
@@ -1320,7 +1326,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         }
         moby->state = 5;
         break;
-    case 5:
+    case ULTRAMECH_SCIENTIST_START_FIRST_SCENE:
         start_scene(1);
         moby->state = 6;
         break;
@@ -1340,7 +1346,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         memcard_save_data(0, -1);
         moby->state = 9;
         break;
-    case 8:
+    case ULTRAMECH_SCIENTIST_SAVE_AND_DISABLE:
         memcard_save_data(0, -1);
         moby->state = 9;
         break;
