@@ -19,14 +19,14 @@ extern s32 sceGsSyncV(s32);
 
 void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
-void fade_to_black(s32 n) {
+void fade_to_black(s32 frame_count) {
     s32 i;
 
     vu1_sync_chain(1);
     sceGsSyncV(0);
     game_frame_counter += 1;
     vu1_init_chain();
-    for (i = n - 1; i >= 0; i--) {
+    for (i = frame_count - 1; i >= 0; i--) {
         put_draw_buffer_large();
         append_gif_transfer_packet();
         emit_rgba_draw_packet(0, 0, 0, 0x80);
