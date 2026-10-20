@@ -272,32 +272,32 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 char *FUN_L13_003061c8(float speed, float *pos, float *dir, void *arg) {
-    char *m;
-    char *p;
-    float d;
-    m = create_moby(0x4D6);
-    if (m != 0) {
-        *(int *)(m + 0x40) = 0;
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = 0x7F;
-        m[0x31] = 1;
-        p = *(char **)(m + 0x78);
-        d = vector_length_xy(dir);
-        *(float *)(m + 0x44) = -fast_arc_tan(d, dir[2]);
-        *(float *)(m + 0x48) = fast_arc_tan(dir[0], dir[1]);
-        qcopy(m + 0x10, pos);
-        qcopy(p + 0x10, pos);
-        qcopy(p, dir);
-        blend_moby_animation(m, 1, 0, scale_game_frames(5));
-        *(short *)(m + 0x34) = 0x208;
-        *(int *)(p + 0x24) = 1;
-        *(void **)(p + 0x20) = arg;
-        *(float *)(p + 0x28) = speed;
-        m[0x23] = 0x10;
-        *(int *)(p + 0x2C) = func_001FA898_r(speed / fast_vec_length(p) + 1.0f);
-        FUN_L00_00250df8(m);
+    char *moby;
+    char *moby_vars;
+    float direction_length_xy;
+    moby = create_moby(0x4D6);
+    if (moby != 0) {
+        *(int *)(moby + 0x40) = 0;
+        *(unsigned char *)(moby + 0x30) = 0xFF;
+        *(short *)(moby + 0x32) = 0x7F;
+        moby[0x31] = 1;
+        moby_vars = *(char **)(moby + 0x78);
+        direction_length_xy = vector_length_xy(dir);
+        *(float *)(moby + 0x44) = -fast_arc_tan(direction_length_xy, dir[2]);
+        *(float *)(moby + 0x48) = fast_arc_tan(dir[0], dir[1]);
+        qcopy(moby + 0x10, pos);
+        qcopy(moby_vars + 0x10, pos);
+        qcopy(moby_vars, dir);
+        blend_moby_animation(moby, 1, 0, scale_game_frames(5));
+        *(short *)(moby + 0x34) = 0x208;
+        *(int *)(moby_vars + 0x24) = 1;
+        *(void **)(moby_vars + 0x20) = arg;
+        *(float *)(moby_vars + 0x28) = speed;
+        moby[0x23] = 0x10;
+        *(int *)(moby_vars + 0x2C) = func_001FA898_r(speed / fast_vec_length(moby_vars) + 1.0f);
+        FUN_L00_00250df8(moby);
     }
-    return m;
+    return moby;
 }
 #include "qzero.h"
 
