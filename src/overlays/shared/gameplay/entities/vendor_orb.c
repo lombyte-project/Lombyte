@@ -441,8 +441,8 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_002eac18(int);
 
 /* Moby state 4: clears two globals, calls 002eac18(3); control mode 0x13: calls 002223f8(0, 1). */
-void FUN_L00_002e0340(char *a) {
-    if (*(unsigned char *)(a + 0x20) == 4) {
+void FUN_L00_002e0340(char *moby) {
+    if (*(unsigned char *)(moby + 0x20) == 4) {
         D_L00_0015F404 = 0;
         *(int *)&D_L00_0015F3FC = 0;
         FUN_L00_002eac18(3);
