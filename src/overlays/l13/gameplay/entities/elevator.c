@@ -709,30 +709,30 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L13_002b4a58(struct Moby *m, char *p) {
+void FUN_L13_002b4a58(struct Moby *moby, char *moby_vars) {
     enum {
         HIT_REACTION_NONE = 11
     };
-    float *tm = (float *)(p + 0x20);
-    char *q;
+    float *tm = (float *)(moby_vars + 0x20);
+    char *hit_record;
     int k;
     int r;
-    if (m->state != 2) {
-        q = find_moby_hit(m, 0x330000, 0);
-        r = hit_reaction(m, q, tm, 0, &k, 0, 0, 4);
-        if (q != 0) {
-            if (*(int *)(q + 0x24) & 0x800000) {
-                char *t = *(char **)(q + 0x20);
+    if (moby->state != 2) {
+        hit_record = find_moby_hit(moby, 0x330000, 0);
+        r = hit_reaction(moby, hit_record, tm, 0, &k, 0, 0, 4);
+        if (hit_record != 0) {
+            if (*(int *)(hit_record + 0x24) & 0x800000) {
+                char *t = *(char **)(hit_record + 0x20);
                 if (t == 0) {
-                    *(int *)(q + 0x2C) = 0;
+                    *(int *)(hit_record + 0x2C) = 0;
                     k = 1;
                 } else {
                     float f = fast_difference_between_rotations(
-                        fast_arc_tan(*(float *)(t + 0x10) - m->pos.x,
-                                     *(float *)(t + 0x14) - m->pos.y),
-                        *(float *)(*(char **)(*(char **)(p + 0x70) + 0x78) + 0x54));
+                        fast_arc_tan(*(float *)(t + 0x10) - moby->pos.x,
+                                     *(float *)(t + 0x14) - moby->pos.y),
+                        *(float *)(*(char **)(*(char **)(moby_vars + 0x70) + 0x78) + 0x54));
                     if (f < 1.65806282f) {
-                        *(int *)(q + 0x2C) = 0;
+                        *(int *)(hit_record + 0x2C) = 0;
                         k = 1;
                     }
                 }
@@ -756,13 +756,13 @@ void FUN_L13_002b4a58(struct Moby *m, char *p) {
             break;
         }
         if (k >= 2) {
-            float f1 = *(float *)(q + 0x2C);
+            float f1 = *(float *)(hit_record + 0x2C);
             float f0 = *tm;
             if (f0 <= f1) {
                 char *x;
                 *(int *)tm = 0;
-                m->flags &= 0xEFFF;
-                x = *(char **)(p + 0x70);
+                moby->flags &= 0xEFFF;
+                x = *(char **)(moby_vars + 0x70);
                 if (x != 0) {
                     if (*(short *)(x + 0xA6) == 0x1D) {
                         unsigned char st = x[0x20];
@@ -772,22 +772,22 @@ void FUN_L13_002b4a58(struct Moby *m, char *p) {
                         }
                     }
                 }
-                FUN_L00_00257470(m, 0, -1);
-                p[0x67] = 0x78;
-                trooper_anim_update(m, (short *)(p + 0x60));
-                if (m->prev_seq != 3)
-                    blend_moby_animation(m, 3, 1, 0);
-                m->state = 2;
+                FUN_L00_00257470(moby, 0, -1);
+                moby_vars[0x67] = 0x78;
+                trooper_anim_update(moby, (short *)(moby_vars + 0x60));
+                if (moby->prev_seq != 3)
+                    blend_moby_animation(moby, 3, 1, 0);
+                moby->state = 2;
             } else {
                 *tm = f0 - f1;
-                *(unsigned char *)(p + 0x67) = 0xFA;
-                *(short *)(p + 0x26) = scale_game_frames(0x3C);
-                trooper_anim_update(m, (short *)(p + 0x60));
+                *(unsigned char *)(moby_vars + 0x67) = 0xFA;
+                *(short *)(moby_vars + 0x26) = scale_game_frames(0x3C);
+                trooper_anim_update(moby, (short *)(moby_vars + 0x60));
             }
         }
     }
-    m->hit_slot = 0xFF;
-    trooper_anim_finish(m, p + 0x60);
+    moby->hit_slot = 0xFF;
+    trooper_anim_finish(moby, moby_vars + 0x60);
 }
 /* Updates the gem-lock turret: idle animations, then a burst of particles when destroyed. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5E30), where it is exact; names translated to the US level program. */
