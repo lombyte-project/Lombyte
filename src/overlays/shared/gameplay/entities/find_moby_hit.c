@@ -178,7 +178,7 @@ extern T_259bc8 moby_hits[] __asm__("D_L00_00178100") __attribute__((section(".d
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 
 void spawn_nearby_effect(unsigned char *m, int x, int y, u128 *p, u128 *q, float f) __asm__("FUN_L00_00259bc8");
-void spawn_nearby_effect(unsigned char *owner_moby, int x, int y, u128 *p, u128 *q, float f) {
+void spawn_nearby_effect(unsigned char *owner_moby, int x, int y, u128 *p, u128 *direction_vector, float f) {
     int i = D_L00_00173E40.idx;
     T_259bc8 *hit_record;
     if (owner_moby[0xA4] != 0xFF) {
@@ -192,13 +192,13 @@ void spawn_nearby_effect(unsigned char *owner_moby, int x, int y, u128 *p, u128 
     hit_record->f = f;
     hit_record->owner = owner_moby;
     hit_record->z = 0;
-    if (fast_vec_length(q) > 0.0001f) {
+    if (fast_vec_length(direction_vector) > 0.0001f) {
         hit_record->flag = 1;
     } else {
         hit_record->flag = 0;
     }
     qcopy(&moby_hits[i].a, p);
-    qcopy(&moby_hits[i].b, q);
+    qcopy(&moby_hits[i].b, direction_vector);
     owner_moby[0xA4] = i;
     D_L00_00173E40.idx = (i + 1) & 0x3F;
 }
