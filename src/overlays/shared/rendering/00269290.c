@@ -2604,56 +2604,56 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-void FUN_L00_0026f280(char *m) {
-    char *p = m + 0x20;
+void FUN_L00_0026f280(char *particle) {
+    char *particle_data = particle + 0x20;
     float v[3];
     char *q;
-    float a, k;
-    if (fast_dec_timer_s16(m + 0xA)) {
-        free_effect_particle(m);
+    float offset_angle, k;
+    if (fast_dec_timer_s16(particle + 0xA)) {
+        free_effect_particle(particle);
         return;
     }
-    if (*(float *)(m + 0x18) > *(float *)(p + 0x10)) {
+    if (*(float *)(particle + 0x18) > *(float *)(particle_data + 0x10)) {
         int s;
-        *(int *)(p + 8) = 0;
-        s = *(short *)(m + 0xA);
+        *(int *)(particle_data + 8) = 0;
+        s = *(short *)(particle + 0xA);
         if (scale_game_frames(0xE) - 2 < s)
-            *(short *)(m + 0xA) = scale_game_frames(0xE) - 2;
+            *(short *)(particle + 0xA) = scale_game_frames(0xE) - 2;
     }
-    if (*(float *)(p + 0x10) < *(float *)(m + 0x18) + frame_time * 1.3f * 40.0f) {
+    if (*(float *)(particle_data + 0x10) < *(float *)(particle + 0x18) + frame_time * 1.3f * 40.0f) {
         if (random_integer_below(0x14) == 0) {
-            int s = *(short *)(m + 0xA);
+            int s = *(short *)(particle + 0xA);
             if (scale_game_frames(0xE) - 2 < s)
-                *(short *)(m + 0xA) = scale_game_frames(0xE) - 2;
+                *(short *)(particle + 0xA) = scale_game_frames(0xE) - 2;
         }
     }
-    if (*(short *)(m + 0xA) < scale_game_frames(0xE)) {
-        int r = *(unsigned char *)(m + 7);
-        *(int *)(m + 4) = ((r * *(short *)(m + 0xA) / scale_game_frames(0xE)) << 24) |
-                          (*(int *)(m + 4) & 0xFFFFFF);
+    if (*(short *)(particle + 0xA) < scale_game_frames(0xE)) {
+        int r = *(unsigned char *)(particle + 7);
+        *(int *)(particle + 4) = ((r * *(short *)(particle + 0xA) / scale_game_frames(0xE)) << 24) |
+                          (*(int *)(particle + 4) & 0xFFFFFF);
     }
-    *(float *)(m + 0xC) += D_0015ED60_c * 840.00006f;
-    if (*(float *)(p + 0xC) < *(float *)(m + 0xC))
-        *(float *)(m + 0xC) = *(float *)(p + 0xC);
-    v[0] = *(float *)(p + 0);
-    v[1] = *(float *)(p + 4);
-    v[2] = *(float *)(p + 8);
+    *(float *)(particle + 0xC) += D_0015ED60_c * 840.00006f;
+    if (*(float *)(particle_data + 0xC) < *(float *)(particle + 0xC))
+        *(float *)(particle + 0xC) = *(float *)(particle_data + 0xC);
+    v[0] = *(float *)(particle_data + 0);
+    v[1] = *(float *)(particle_data + 4);
+    v[2] = *(float *)(particle_data + 8);
     {
         float len = vector_length_xy(v);
         set_vector_length_xy(v, v, D_0015ED60_c * -0.029999971f * len + len);
     }
-    fast_vec_add(m + 0x10, m + 0x10, v);
+    fast_vec_add(particle + 0x10, particle + 0x10, v);
     approach_value(v + 2, frame_time * 1.3f, frame_time_sq * 5.0f);
-    *(float *)(p + 0) = v[0];
-    *(float *)(p + 4) = v[1];
-    *(float *)(p + 8) = v[2];
-    *(float *)(p + 0x14) = fast_add_rotations(*(float *)(p + 0x14), *(float *)(p + 0x18));
-    a = fast_add_rotations(D_L00_00166DD8_d, 1.5707964f);
-    k = fast_sin(*(float *)(p + 0x14)) * *(float *)(p + 0x1C);
-    v[0] = fast_cos(a) * k;
-    v[1] = fast_sin(a) * k;
+    *(float *)(particle_data + 0) = v[0];
+    *(float *)(particle_data + 4) = v[1];
+    *(float *)(particle_data + 8) = v[2];
+    *(float *)(particle_data + 0x14) = fast_add_rotations(*(float *)(particle_data + 0x14), *(float *)(particle_data + 0x18));
+    offset_angle = fast_add_rotations(D_L00_00166DD8_d, 1.5707964f);
+    k = fast_sin(*(float *)(particle_data + 0x14)) * *(float *)(particle_data + 0x1C);
+    v[0] = fast_cos(offset_angle) * k;
+    v[1] = fast_sin(offset_angle) * k;
     v[2] = 0;
-    fast_vec_add(m + 0x10, m + 0x10, v);
+    fast_vec_add(particle + 0x10, particle + 0x10, v);
 }
 extern float D_0015ED70_0026f548 __asm__("D_0015ED70");
 unsigned char *FUN_L00_002678b8_0026f548(int) __asm__("FUN_L00_002678b8");
