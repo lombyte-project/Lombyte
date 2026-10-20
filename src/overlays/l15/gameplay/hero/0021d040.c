@@ -140,6 +140,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 void FUN_L15_0021d040(void) {
     enum {
+        HERO_STATE_WAIT_FOR_ITEM_BUTTON_RELEASE = 23,
         HERO_STATE_LEDGE_HANG_ENTRY = 24,
         HERO_STATE_LEDGE_HANG = 25,
         HERO_STATE_LEDGE_SHIMMY_YAW_PLUS_90 = 26,
@@ -660,7 +661,7 @@ void FUN_L15_0021d040(void) {
                         }
                     }
                     break;
-                case 23:
+                case HERO_STATE_WAIT_FOR_ITEM_BUTTON_RELEASE:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
