@@ -781,7 +781,7 @@ void moving_platform_small_update(char *moby) {
     char *pa;
     char *pb;
     char *pc;
-    char *p;
+    char *initial_path_position;
     int *path;
     char *pos;
     char *vel;
@@ -797,7 +797,7 @@ void moving_platform_small_update(char *moby) {
     float speed;
     float base;
     float d;
-    unsigned char *e;
+    unsigned char *voice_slot_entry;
 
     data = *(char **)(moby + 0x78);
     scale_vector_xyz(delta, moby + 0x10, -1.0f);
@@ -812,11 +812,11 @@ void moving_platform_small_update(char *moby) {
         } else {
             pa[4] = 1;
         }
-        p = *(char **)(data + 0xC0) + 0x10;
+        initial_path_position = *(char **)(data + 0xC0) + 0x10;
         if (pa[4] >= 0) {
-            p += (**(int **)(pa + 0x10) - 1) * 0x10;
+            initial_path_position += (**(int **)(pa + 0x10) - 1) * 0x10;
         }
-        qcopy_nc(moby + 0x10, p);
+        qcopy_nc(moby + 0x10, initial_path_position);
         *(int *)pa = pa[4] < 0 ? 0 : **(int **)(pa + 0x10) - 1;
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)(data + 0xFC);
         *(int *)(data + 0x104) = -1;
@@ -856,8 +856,8 @@ void moving_platform_small_update(char *moby) {
             pb[4] = pb[4] * -1;
             idx = *(int *)(data + 0x104);
             if (idx != -1) {
-                e = (unsigned char *)D_0013E550_294c08 + idx * 0x70;
-                if (*(char **)(e + 0x88) == moby && e[0x74]) {
+                voice_slot_entry = (unsigned char *)D_0013E550_294c08 + idx * 0x70;
+                if (*(char **)(voice_slot_entry + 0x88) == moby && voice_slot_entry[0x74]) {
                     release_voice_slot(idx);
                 }
             }
@@ -904,8 +904,8 @@ void moving_platform_small_update(char *moby) {
             if ((next == end || *(int *)(data + 0x108) != 0) && *(int *)(data + 0xF0) > 0) {
                 idx = *(int *)(data + 0x104);
                 if (idx != -1) {
-                    e = (unsigned char *)D_0013E550_294c08 + idx * 0x70;
-                    if (*(char **)(e + 0x88) == moby && e[0x74]) {
+                    voice_slot_entry = (unsigned char *)D_0013E550_294c08 + idx * 0x70;
+                    if (*(char **)(voice_slot_entry + 0x88) == moby && voice_slot_entry[0x74]) {
                         release_voice_slot(idx);
                     }
                 }
