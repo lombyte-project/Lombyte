@@ -7927,33 +7927,33 @@ extern void FUN_L00_00259858(char *a, int b, int c, float d);
 extern float D_L06_001621E8 __attribute__((sda));
 extern float D_L06_001621EC __attribute__((sda));
 extern float D_L06_001621F0 __attribute__((sda));
-void FUN_L06_00305000(char *m) {
+void FUN_L06_00305000(char *moby) {
     float P[4];
     float Q[4];
     float A[12];
-    FUN_L00_00259858((char *)A, (int)m, 0x10000, 6.0f);
+    FUN_L00_00259858((char *)A, (int)moby, 0x10000, 6.0f);
     P[0] = D_L06_001621E8;
     P[1] = D_L06_001621EC;
     P[2] = D_L06_001621F0;
     Q[0] = -D_L06_001621E8;
     Q[1] = D_L06_001621EC;
     Q[2] = D_L06_001621F0;
-    transform_vector_by_basis(P, P, m + 0xC0);
-    fast_vec_add(P, P, m + 0x10);
-    transform_vector_by_basis(Q, Q, m + 0xC0);
-    fast_vec_add(Q, Q, m + 0x10);
-    coll_line_fix(P, Q, 0, (int)m, (int)A);
+    transform_vector_by_basis(P, P, moby + 0xC0);
+    fast_vec_add(P, P, moby + 0x10);
+    transform_vector_by_basis(Q, Q, moby + 0xC0);
+    fast_vec_add(Q, Q, moby + 0x10);
+    coll_line_fix(P, Q, 0, (int)moby, (int)A);
     P[0] = D_L06_001621E8;
     P[1] = -D_L06_001621EC;
     P[2] = D_L06_001621F0;
     Q[0] = -D_L06_001621E8;
     Q[1] = -D_L06_001621EC;
     Q[2] = D_L06_001621F0;
-    transform_vector_by_basis(P, P, m + 0xC0);
-    fast_vec_add(P, P, m + 0x10);
-    transform_vector_by_basis(Q, Q, m + 0xC0);
-    fast_vec_add(Q, Q, m + 0x10);
-    coll_line_fix(P, Q, 0, (int)m, (int)A);
+    transform_vector_by_basis(P, P, moby + 0xC0);
+    fast_vec_add(P, P, moby + 0x10);
+    transform_vector_by_basis(Q, Q, moby + 0xC0);
+    fast_vec_add(Q, Q, moby + 0x10);
+    coll_line_fix(P, Q, 0, (int)moby, (int)A);
 }
 
 #define NOT_SDA
