@@ -248,30 +248,30 @@ void FUN_L07_0031f900(unsigned char *moby) {
     case TRAIL_STATE_UPDATE:
         if (scene_state == 2) {
             char *g = D_L07_0016C8E0;
-            int s = *(int *)(g + 0x30);
-            if (s == 1 || s == 2) {
+            int trail_source_selector = *(int *)(g + 0x30);
+            if (trail_source_selector == 1 || trail_source_selector == 2) {
                 float point_0_position[4], point_1_position[4], point_2_position[4], b0[4], b1[4], b2[4], c0[4], c1[4], c2[4];
                 int idx = 0;
-                char *o;
-                if (s == 1)
+                char *trail_source_moby;
+                if (trail_source_selector == 1)
                     idx = 3;
-                if (s == 2)
+                if (trail_source_selector == 2)
                     idx = 4;
-                o = *(char **)(g - (-(idx * 4)) + 0x178);
-                moby_point_position(o, 0, point_0_position);
-                moby_point_position(o, 3, b0);
+                trail_source_moby = *(char **)(g - (-(idx * 4)) + 0x178);
+                moby_point_position(trail_source_moby, 0, point_0_position);
+                moby_point_position(trail_source_moby, 3, b0);
                 subtract_vector_xyz(c0, point_0_position, b0);
                 normalize_vector_xyz(c0, c0, *(float *)&D_L07_00161CD8);
                 draw_trail(point_0_position, point_0_position, c0, *(float *)&D_L07_00161CDC,
                                  *(float *)&D_L07_00161CE0);
-                moby_point_position(o, 1, point_1_position);
-                moby_point_position(o, 4, b1);
+                moby_point_position(trail_source_moby, 1, point_1_position);
+                moby_point_position(trail_source_moby, 4, b1);
                 subtract_vector_xyz(c1, point_1_position, b1);
                 normalize_vector_xyz(c1, c1, *(float *)&D_L07_00161CD8);
                 draw_trail(point_1_position, point_1_position, c1, *(float *)&D_L07_00161CDC,
                                  *(float *)&D_L07_00161CE0);
-                moby_point_position(o, 2, point_2_position);
-                moby_point_position(o, 5, b2);
+                moby_point_position(trail_source_moby, 2, point_2_position);
+                moby_point_position(trail_source_moby, 5, b2);
                 subtract_vector_xyz(c2, point_2_position, b2);
                 normalize_vector_xyz(c2, c2, *(float *)&D_L07_00161CD8);
                 draw_trail(point_2_position, point_2_position, c2, *(float *)&D_L07_00161CDC,
