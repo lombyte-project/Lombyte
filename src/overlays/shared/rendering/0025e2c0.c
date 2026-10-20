@@ -56,33 +56,33 @@ void load_display_text_resource_entry(void *arg0, s32 *arg1) __asm__("FUN_00214b
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern int *D_L15_001B2770 NOT_SDA;
-unsigned char *FUN_L15_002647f0(void *pos, float *p, float *c, int d, int e, int f, int g, int h,
+unsigned char *FUN_L15_002647f0(void *pos, float *p_vector, float *c_vector, int d, int e, int f, int g, int h,
                                 char *owner) {
     unsigned char *r = create_part(0x47);
     if (r != 0) {
-        int *q, *q2;
+        int *packed_p_vector, *packed_c_vector;
         float p_vector_scratch[4], c_vector_scratch[4];
         qcopy(r + 0x10, pos);
-        q = (int *)(r + 0x20);
-        q2 = (int *)(r + 0x24);
+        packed_p_vector = (int *)(r + 0x20);
+        packed_c_vector = (int *)(r + 0x24);
         *(int *)(r + 4) = d;
         r[9] = func_001FA898_r(4.0f) + 0x40;
         r[3] = 0x44;
         r[1] = 0;
-        *(float *)(r + 0xC) = func_001FA898_r(p[3] * 210000.0f);
+        *(float *)(r + 0xC) = func_001FA898_r(p_vector[3] * 210000.0f);
         r[8] = random_integer_below(0xFF);
         r[2] = *(unsigned char *)D_L15_001B2770;
         *(short *)(r + 0xA) = f;
-        pack_vector_xyz_with_shared_scale(p, q);
-        pack_vector_xyz_with_shared_scale(c, q2);
-        load_display_text_resource_entry(p_vector_scratch, q);
-        load_display_text_resource_entry(c_vector_scratch, q2);
-        q[2] = d;
-        q[3] = e;
-        *(short *)(q + 4) = f;
-        *(short *)((char *)q + 0x12) = g;
-        *(short *)((char *)q + 0x14) = h;
-        q[6] = *(int *)(owner + 0x78);
+        pack_vector_xyz_with_shared_scale(p_vector, packed_p_vector);
+        pack_vector_xyz_with_shared_scale(c_vector, packed_c_vector);
+        load_display_text_resource_entry(p_vector_scratch, packed_p_vector);
+        load_display_text_resource_entry(c_vector_scratch, packed_c_vector);
+        packed_p_vector[2] = d;
+        packed_p_vector[3] = e;
+        *(short *)(packed_p_vector + 4) = f;
+        *(short *)((char *)packed_p_vector + 0x12) = g;
+        *(short *)((char *)packed_p_vector + 0x14) = h;
+        packed_p_vector[6] = *(int *)(owner + 0x78);
     }
     return r;
 }
