@@ -438,7 +438,7 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
     };
     char *data = *(char **)(moby + 0x78);
     char *path;
-    float orig[4], delta[4], tmp[4];
+    float orig[4], delta[4], path_segment_offset[4];
     if (*(int *)(data + 0xB4) == -1) {
         return;
     }
@@ -516,7 +516,7 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
         } else {
             int i;
             float f20, t;
-            char *q;
+            char *segment_start_position;
             if (!voice_is_playing(moby, *(int *)(data + 0xC4))) {
                 *(int *)(data + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
             }
@@ -557,10 +557,10 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
             if (i == *(int *)path - 1) {
                 qcopy((moby + 0x10), path + 0x10 + i * 16);
             } else {
-                q = path + 0x10 + i * 16;
-                subtract_vector_xyz(tmp, path + 0x20 + i * 16, q);
-                scale_vector_xyz(tmp, tmp, f20);
-                add_vector_xyz((moby + 0x10), tmp, q);
+                segment_start_position = path + 0x10 + i * 16;
+                subtract_vector_xyz(path_segment_offset, path + 0x20 + i * 16, segment_start_position);
+                scale_vector_xyz(path_segment_offset, path_segment_offset, f20);
+                add_vector_xyz((moby + 0x10), path_segment_offset, segment_start_position);
             }
             F(data, 0xBC) = F(moby, 0x18) - orig[2];
         }
