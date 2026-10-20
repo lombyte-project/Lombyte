@@ -1046,9 +1046,9 @@ int FUN_L00_002cae60(char *m, int a, int b, float f) {
 extern int FUN_L00_002dbe20(void *);
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 5. */
-int FUN_L00_002caf10(char *a) {
-    int r = FUN_L00_002dbe20(a);
-    a[0x20] = 5;
+int FUN_L00_002caf10(char *moby) {
+    int r = FUN_L00_002dbe20(moby);
+    moby[0x20] = 5;
     return r;
 }
 /* Returns the word at +0x14 of the moby data, or 0 when either pointer is null. */
