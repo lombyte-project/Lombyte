@@ -20,29 +20,29 @@ extern short D_L08_00160200 __attribute__((sda));
 extern short D_L08_00160204 __attribute__((sda));
 extern short D_L08_00160208 __attribute__((sda));
 extern unsigned char *D_L08_001B291C __attribute__((section(".data")));
-unsigned char *FUN_L08_00279f00(char *a) {
+unsigned char *FUN_L08_00279f00(char *source_moby) {
     float v[4];
-    unsigned char *m = FUN_L00_002678b8(0x27);
-    char *p;
-    char *q;
-    if (m != 0) {
-        p = a + 0x10;
-        q = (char *)m + 0x20;
-        subtract_vector_xyz(v, p, D_L08_001675C0);
+    unsigned char *effect = FUN_L00_002678b8(0x27);
+    char *source_position;
+    char *effect_data;
+    if (effect != 0) {
+        source_position = source_moby + 0x10;
+        effect_data = (char *)effect + 0x20;
+        subtract_vector_xyz(v, source_position, D_L08_001675C0);
         normalize_vector_xyz(v, v, *(float *)&D_L08_00160208);
-        add_vector_xyz(m + 0x10, p, v);
-        *(int *)(m + 4) = *(int *)&D_L08_00160204;
-        m[9] = func_001FA898_r(4.0f) + 0x40;
-        m[3] = 0x48;
-        m[1] = 0;
-        m[2] = *D_L08_001B291C;
-        *(float *)(m + 0xC) = *(float *)&D_L08_00160200;
-        *(short *)(m + 0xA) = scale_game_frames(0x1E);
-        *(float *)(m + 0x20) = 255.0f;
-        *(char **)(q + 4) = a;
-        *(int *)(q + 8) = 0;
+        add_vector_xyz(effect + 0x10, source_position, v);
+        *(int *)(effect + 4) = *(int *)&D_L08_00160204;
+        effect[9] = func_001FA898_r(4.0f) + 0x40;
+        effect[3] = 0x48;
+        effect[1] = 0;
+        effect[2] = *D_L08_001B291C;
+        *(float *)(effect + 0xC) = *(float *)&D_L08_00160200;
+        *(short *)(effect + 0xA) = scale_game_frames(0x1E);
+        *(float *)(effect + 0x20) = 255.0f;
+        *(char **)(effect_data + 4) = source_moby;
+        *(int *)(effect_data + 8) = 0;
     }
-    return m;
+    return effect;
 }
 
 #define NOT_SDA
