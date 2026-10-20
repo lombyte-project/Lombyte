@@ -308,7 +308,7 @@ void crate_drop_bolts(u8 *crate_moby) {
     s32 cnt, i;
     u8 *b, *spawned_moby, *spawned_vars;
     s16 crate_class;
-    f32 launch_angle, r, e;
+    f32 launch_angle, r, trajectory_time;
 
     b = *(u8 **)(crate_moby + 0x78);
     crate_class = *(s16 *)(crate_moby + 0xA6);
@@ -400,17 +400,17 @@ void crate_drop_bolts(u8 *crate_moby) {
                     *(f32 *)(spawned_vars + 0x18) - D_0015ED70 * 10.8f * -0.5f,
                     *(f32 *)(spawned_moby + 0x18) -
                         *(f32 *)(D_L00_001B04B0_2d0538[*(s32 *)(b + 0xC0)] + 0x18));
-                e = 120.0f;
+                trajectory_time = 120.0f;
                 if ((f32)k >= 1.0f && f54 > 0.0f && f54 < 120.0f)
-                    e = f54;
-                scale_vector_xyz(&trajectory_vector, spawned_vars + 0x10, e);
+                    trajectory_time = f54;
+                scale_vector_xyz(&trajectory_vector, spawned_vars + 0x10, trajectory_time);
                 add_vector_xyz(&trajectory_vector, &trajectory_vector, crate_moby + 0x10);
                 FUN_L00_00261b48(*(s32 *)(b + 0xC0), crate_moby + 0x10, &trajectory_vector, &adjusted_position);
                 fast_vec_sub(&trajectory_vector, &adjusted_position, spawned_moby + 0x10);
                 trajectory_vector.f[2] = 0.0f;
                 normalize_vector_xyz(&scratch_vector, &trajectory_vector, 0.25f);
                 fast_vec_sub(&trajectory_vector, &trajectory_vector, &scratch_vector);
-                scale_vector_xyz(&trajectory_vector, &trajectory_vector, 1.0f / e);
+                scale_vector_xyz(&trajectory_vector, &trajectory_vector, 1.0f / trajectory_time);
                 *(f32 *)(spawned_vars + 0x10) = trajectory_vector.f[0];
                 *(f32 *)(spawned_vars + 0x14) = trajectory_vector.f[1];
             }
