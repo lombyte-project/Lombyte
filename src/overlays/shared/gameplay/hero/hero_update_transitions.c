@@ -161,6 +161,7 @@ void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
 void hero_update_transitions(void) {
     enum {
         HERO_STATE_DOUBLE_JUMP = 14,
+        HERO_STATE_LEDGE_HANG_ENTRY = 24,
         HERO_STATE_LEDGE_HANG = 25,
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
@@ -1641,7 +1642,7 @@ void hero_update_transitions(void) {
                         hero.unk1E4 = scale_game_frames(8);
                     }
                     break;
-                case 24:
+                case HERO_STATE_LEDGE_HANG_ENTRY:
                     if (13.5f < hero.anim_frame) {
                         hero_set_state(0x19, 0);
                     }
