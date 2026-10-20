@@ -531,6 +531,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
                      char *g) {
     enum {
         MOBY_CLASS_ORANGE_RADAR_CONTACT = 0x52,
+        MOBY_CLASS_YELLOW_RADAR_CONTACT = 0x53,
         MOBY_CLASS_FLAG_GATED_MARKED_TARGET = 0x6F,
         MOBY_CLASS_GRAY_RADAR_CONTACT = 0xE0,
         MOBY_CLASS_GRAY_RADAR_QUAD_CONTACT = 0xE4,
@@ -611,7 +612,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
         case MOBY_CLASS_ORANGE_RADAR_CONTACT:
             FUN_L17_002eaae0(radar_rotation, radar_origin, scanned_moby, 1, 0x70004080, *(int *)(ship_vars + 0x104));
             break;
-        case 0x53:
+        case MOBY_CLASS_YELLOW_RADAR_CONTACT:
             FUN_L17_002eaae0(radar_rotation, radar_origin, scanned_moby, 1, 0x70007080, *(int *)(ship_vars + 0x104));
             break;
         case MOBY_CLASS_UNMARKED_COUNTED_TARGET:
