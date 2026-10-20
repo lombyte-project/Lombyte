@@ -916,11 +916,11 @@ extern int D_L15_001ABE40[];
 extern int D_L15_0015FFD8;
 
 void FUN_L15_002ebf28(int idx, int show) {
-    short *p = (short *)D_L15_001ABE40[idx];
-    if (p == 0)
+    short *moby_index_entry = (short *)D_L15_001ABE40[idx];
+    if (moby_index_entry == 0)
         return;
     while (1) {
-        unsigned char *moby = (unsigned char *)(D_L15_0015FFD8 + ((*p & 0x7FFF) << 8));
+        unsigned char *moby = (unsigned char *)(D_L15_0015FFD8 + ((*moby_index_entry & 0x7FFF) << 8));
         if (show) {
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
             moby[0x31] = 1;
@@ -930,7 +930,7 @@ void FUN_L15_002ebf28(int idx, int show) {
             moby[0x31] = 0;
             *(unsigned short *)(moby + 0x34) |= 3;
         }
-        if (*p++ < 0)
+        if (*moby_index_entry++ < 0)
             return;
     }
 }
