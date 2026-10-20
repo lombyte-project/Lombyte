@@ -587,14 +587,14 @@ void FUN_001f9a10_26a9f0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern unsigned char *D_L00_001B20AC __attribute__((section(".data")));
 void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int b18, int b19,
                       float x, float y);
-void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int b18, int b19,
+void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int lifetime, int b1A, int b18, int b19,
                       float x, float y) {
-    unsigned char *m;
+    unsigned char *particle;
     unsigned char *q;
-    V_26a9f0 t;
+    V_26a9f0 velocity_offset;
     V_26a9f0 v;
 
-    if (0 == n) {
+    if (0 == lifetime) {
         return;
     }
     if (0.85f < D_L00_0015F5D0 || 0.85f < D_L00_0015F5D4) {
@@ -612,29 +612,29 @@ void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int 
             return;
         }
     }
-    m = FUN_L00_002678b8_26a9f0(0xB);
-    if (m == 0) {
+    particle = FUN_L00_002678b8_26a9f0(0xB);
+    if (particle == 0) {
         return;
     }
-    qcopy(m + 0x10, pos);
-    *(int *)(m + 4) = col;
-    m[9] = FUN_001fa6d0_26a9f0(4.0f) - 0x60;
-    m[3] = (FUN_00213260_26a9f0(100) < 0x14) ? 0x44 : 0x48;
-    m[1] = 0;
-    q = m + 0x20;
-    *(int *)(m + 0xC) = 0;
-    m[8] = FUN_001160d8_26a9f0();
-    m[2] = *D_L00_001B20AC;
+    qcopy(particle + 0x10, pos);
+    *(int *)(particle + 4) = col;
+    particle[9] = FUN_001fa6d0_26a9f0(4.0f) - 0x60;
+    particle[3] = (FUN_00213260_26a9f0(100) < 0x14) ? 0x44 : 0x48;
+    particle[1] = 0;
+    q = particle + 0x20;
+    *(int *)(particle + 0xC) = 0;
+    particle[8] = FUN_001160d8_26a9f0();
+    particle[2] = *D_L00_001B20AC;
     v.q = 0;
     v.f[0] = FUN_002132a8_26a9f0(-1.0f, 1.0f);
     v.f[1] = FUN_002132a8_26a9f0(-1.0f, 1.0f);
     v.f[2] = FUN_002132a8_26a9f0(-1.0f, 1.0f);
-    t.q = v.q;
-    FUN_001f9bf8_26a9f0(&t, &t, y);
-    FUN_001f9a10_26a9f0(q, dir, &t);
+    velocity_offset.q = v.q;
+    FUN_001f9bf8_26a9f0(&velocity_offset, &velocity_offset, y);
+    FUN_001f9a10_26a9f0(q, dir, &velocity_offset);
     *(float *)(q + 0xC) = y * 0.75f;
-    *(short *)(m + 0xA) = n;
-    q[0x1B] = n;
+    *(short *)(particle + 0xA) = lifetime;
+    q[0x1B] = lifetime;
     q[0x18] = b1A;
     *(float *)(q + 0x1C) = x;
     *(int *)(q + 0x10) = col;
