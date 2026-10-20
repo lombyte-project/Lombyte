@@ -711,7 +711,7 @@ void FUN_L00_002d1428(M2d1428 *moby) {
         CRATE_STATE_IMPACT_TRIGGERED = 5
     };
     O2d1428 *vars;
-    M2d1428 *p, *parent_moby, *next;
+    M2d1428 *chain_cursor, *parent_moby, *next;
     V2d1428 collision_start, g, c2, hero_local_offset, b, previous_position, previous_rotation, position_delta;
     f32 f, v;
     s32 hit;
@@ -719,16 +719,16 @@ void FUN_L00_002d1428(M2d1428 *moby) {
     vars = moby->vars;
     if (vars->iB4 == D_L00_0015F5CC)
         return;
-    p = moby;
+    chain_cursor = moby;
     do {
-        next = p;
-        p = next->vars->parent;
-    } while (p != 0);
-    p = next;
+        next = chain_cursor;
+        chain_cursor = next->vars->parent;
+    } while (chain_cursor != 0);
+    chain_cursor = next;
     do {
-        moby = p;
+        moby = chain_cursor;
         vars = moby->vars;
-        p = vars->next;
+        chain_cursor = vars->next;
         if (!(vars->flags & 4))
             vars->flags &= ~0x10;
         vars->flags &= ~4;
@@ -814,7 +814,7 @@ void FUN_L00_002d1428(M2d1428 *moby) {
             vars->flags |= 4;
             fast_vec_add(&moby->pos, &moby->pos, &vars->vel);
         }
-    } while (p != 0);
+    } while (chain_cursor != 0);
 }
 #include "rnc/gameplay/entities/moby.h"
 
