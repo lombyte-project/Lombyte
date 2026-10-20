@@ -146,43 +146,43 @@ extern void draw_geometry_quad(void *, void *, int);
 
 void FUN_L12_002ecac0(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    Quad q;
-    float m[12];
+    Quad quad;
+    float rotation_matrix[12];
     float pos[4];
     float a, b;
     int i, col;
-    copy_matrix_rotation(m, &moby->rot_row0);
+    copy_matrix_rotation(rotation_matrix, &moby->rot_row0);
     qcopy(pos, &moby->pos);
     pos[2] = pos[2] + *(float *)(data + 8);
     pos[3] = 1.0f;
-    q.g[1] = get_effect_texture(0x10);
-    q.g[0] = 0;
-    q.g[2] = 0xFF9000000260UL;
-    q.g[3] = (long)D_L12_00161A0C | ((long)D_L12_00161A10 << 2) |
+    quad.g[1] = get_effect_texture(0x10);
+    quad.g[0] = 0;
+    quad.g[2] = 0xFF9000000260UL;
+    quad.g[3] = (long)D_L12_00161A0C | ((long)D_L12_00161A10 << 2) |
              ((long)D_L12_00161A14 << 4) | ((long)D_L12_00161A18 << 6) |
              (0x8000L << 24);
     col = fast_tween_color(D_L12_00161A1C, D_L12_00161A20,
                        (fast_sin(*(float *)data) + 1.0f) * 0.5f);
     for (i = 0; i < 4; i++) {
-        q.uv[i * 2] = 0.5f;
-        *(&q.uv[i * 2] + 1) = 0.5f;
-        q.c[i] = col;
-        qcopy(&q.v[i * 4], D_L12_001F5B20 + i * 16);
+        quad.uv[i * 2] = 0.5f;
+        *(&quad.uv[i * 2] + 1) = 0.5f;
+        quad.c[i] = col;
+        qcopy(&quad.v[i * 4], D_L12_001F5B20 + i * 16);
     }
     for (a = -0.4f; a < 0.36f; a += 0.1f) {
         b = a + 0.1f;
-        q.v[9] = a;
-        q.v[1] = a;
-        q.v[13] = b;
-        q.v[5] = b;
+        quad.v[9] = a;
+        quad.v[1] = a;
+        quad.v[13] = b;
+        quad.v[5] = b;
         if (moby->command & 1) {
-            q.v[2] = -fast_cos(a * *(float *)&D_L12_00161A24) + 2.0f;
-            q.v[6] = -fast_cos(b * *(float *)&D_L12_00161A24) + 2.0f;
+            quad.v[2] = -fast_cos(a * *(float *)&D_L12_00161A24) + 2.0f;
+            quad.v[6] = -fast_cos(b * *(float *)&D_L12_00161A24) + 2.0f;
         } else {
-            q.v[2] = fast_cos(a * *(float *)&D_L12_00161A24);
-            q.v[6] = fast_cos(b * *(float *)&D_L12_00161A24);
+            quad.v[2] = fast_cos(a * *(float *)&D_L12_00161A24);
+            quad.v[6] = fast_cos(b * *(float *)&D_L12_00161A24);
         }
-        draw_geometry_quad(&q, m, 0);
+        draw_geometry_quad(&quad, rotation_matrix, 0);
     }
 }
 #define NOT_SDA
