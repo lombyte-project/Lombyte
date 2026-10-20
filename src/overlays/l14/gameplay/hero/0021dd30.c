@@ -556,6 +556,7 @@ extern s32 FUN_L00_00211870(f32);
 
 void FUN_L14_00228cd0(void) {
     enum {
+        HERO_STATE_VEHICLE_HURT = 0x56,
         HERO_STATE_MOVE_TO_TARGET_POSITION = 0x65
     };
     struct MobyView *moby = MV(hero.moby);
@@ -2339,7 +2340,7 @@ void FUN_L14_00228cd0(void) {
         }
         break;
     }
-    case 0x56: {
+    case HERO_STATE_VEHICLE_HURT: {
         f32 len = vector_length_xy(&hero.motion.velocity);
         f32 l2 = len;
         if (hero.air_frames.s != 0) {
