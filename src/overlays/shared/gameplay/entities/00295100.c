@@ -1499,7 +1499,7 @@ extern void f12e418_29ab70(int) __asm__("FUN_0012e418");
 extern void f216088_29ab70(void) __asm__("FUN_00216088");
 extern void f12dc80_29ab70(void) __asm__("FUN_0012dc80");
 extern int D_L00_00161070 __attribute__((sda));
-void FUN_L00_0029ab70(int a) {
+void FUN_L00_0029ab70(int exit_cutscene_completed) {
     Vec4_29ab70 v;
     Vec4_29ab70 r;
     char *g = D_L00_001CA4C0_29ab70;
@@ -1521,7 +1521,7 @@ void FUN_L00_0029ab70(int a) {
         r.x = 0.0f;
         r.y = 0.0f;
         r.z = f1fa580_29ab70(*(float *)(*(char **)(g + 0x1C) + 0x48), 3.1415927f);
-        if (a == 0) {
+        if (exit_cutscene_completed == 0) {
             f216f90_29ab70(&v, &r, 0, 0);
             f2eac18_29ab70(2);
         } else {
