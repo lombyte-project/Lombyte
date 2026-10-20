@@ -2855,13 +2855,13 @@ extern void FUN_00214598(void *, void *);
 /* Multiplies the 001fa050 matrices of (x, y, z) and of hero.unk40, stored back by 00214598. */
 void FUN_L00_00211cf8(float x, float y, float z) {
     float in[3];
-    float t[16], u[16];
+    float input_rotation_matrix[16], u[16];
     in[0] = x;
     in[1] = y;
     in[2] = z;
-    euler_rotation_matrix(t, in);
+    euler_rotation_matrix(input_rotation_matrix, in);
     euler_rotation_matrix(u, D_0013E533_lui + 0xEAD);
-    multiply_matrix(u, u, t);
+    multiply_matrix(u, u, input_rotation_matrix);
     FUN_00214598(u, D_0013E533_lui + 0xEAD);
 }
 typedef float V4_211d78[4] __attribute__((aligned(16)));
