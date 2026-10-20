@@ -654,7 +654,7 @@ extern s32_2e1f28 D_C68_2e1f28[] __asm__("D_L00_00161C68") __attribute__((sectio
 extern s32_2e1f28 D_C78_2e1f28[] __asm__("D_L00_00161C78") __attribute__((section(".sdata")));
 extern s32_2e1f28 D_C88_2e1f28[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
 s32_2e1f28 FUN_L00_002e1f28(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b);
-s32_2e1f28 FUN_L00_002e1f28(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b) {
+s32_2e1f28 FUN_L00_002e1f28(s32_2e1f28 id, s32_2e1f28 endpoint_effect_flags, s32_2e1f28 b) {
     s32_2e1f28 i, j;
     for (i = 0; i < 3; i++) {
         if (D_C88_2e1f28[i] == id)
@@ -668,7 +668,7 @@ s32_2e1f28 FUN_L00_002e1f28(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b) {
             D_C28_2e1f28[j] = 0;
             D_C38_2e1f28[j] = -1;
             D_C48_2e1f28[j] = -1;
-            D_C58_2e1f28[j] = a;
+            D_C58_2e1f28[j] = endpoint_effect_flags;
             D_C68_2e1f28[j] = b;
             D_C78_2e1f28[j] = 0;
             D_BF8_2e1f28[j] = 1;
