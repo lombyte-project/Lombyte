@@ -2595,7 +2595,7 @@ void FUN_L00_002ce358(struct Moby *updated_moby) {
     s32 i, count, category, random, health;
     s32 state;
     struct Moby *drone;
-    s32 k, n;
+    s32 k, exclusion_clear_index;
 
     if (D_L00_0015F5C4_2c8440 == 2 || D_L00_0015F5C4_2c8440 == 5 ||
         D_L00_0015F5C4_2c8440 == 6 || hero.state.current == 0x32) {
@@ -2633,8 +2633,8 @@ void FUN_L00_002ce358(struct Moby *updated_moby) {
                     }
                 }
             }
-            for (n = count; n < 9; n++)
-                ((DroneSlots_2CF808 *)&hero)->exclusions[n] = 0;
+            for (exclusion_clear_index = count; exclusion_clear_index < 9; exclusion_clear_index++)
+                ((DroneSlots_2CF808 *)&hero)->exclusions[exclusion_clear_index] = 0;
             other = func_L00_002CF3D8_2CF808(&hero.motion, ((DroneSlots_2CF808 *)&hero)->exclusions);
             if (other != 0) {
                 char *h;
