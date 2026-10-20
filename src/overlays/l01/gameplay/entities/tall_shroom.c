@@ -708,23 +708,23 @@ extern f32 frame_delta_time __asm__("D_0015ED7C");
 void FUN_L01_0030f0e0(void);
 void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
 
-void FUN_L01_0030f208(ScrollMoby *m) {
+void FUN_L01_0030f208(ScrollMoby *moby) {
     enum {
         UV_SCROLL_STATE_INITIALIZE = 0,
         UV_SCROLL_STATE_UPDATE_AND_QUEUE_DRAW = 1
     };
-    f32 d;
+    f32 uv_scroll_delta;
 
-    switch (m->state) {
+    switch (moby->state) {
     case UV_SCROLL_STATE_INITIALIZE:
         D_L01_00162110[0] = 0.0f;
         D_L01_00162110[1] = 0.0f;
-        m->state = 1;
+        moby->state = 1;
         break;
     case UV_SCROLL_STATE_UPDATE_AND_QUEUE_DRAW:
-        d = frame_delta_time * 0.025f;
-        D_L01_00162110[0] += d;
-        D_L01_00162110[1] += d;
+        uv_scroll_delta = frame_delta_time * 0.025f;
+        D_L01_00162110[0] += uv_scroll_delta;
+        D_L01_00162110[1] += uv_scroll_delta;
         if (D_L01_00162110[0] > 1.0f) {
             D_L01_00162110[0] -= 1.0f;
         }
@@ -737,7 +737,7 @@ void FUN_L01_0030f208(ScrollMoby *m) {
         if (D_L01_00162110[1] < -1.0f) {
             D_L01_00162110[1] += 1.0f;
         }
-        enqueue_callback_list_1(FUN_L01_0030f0e0, m);
+        enqueue_callback_list_1(FUN_L01_0030f0e0, moby);
         break;
     }
 }
