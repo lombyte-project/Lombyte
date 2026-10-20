@@ -949,15 +949,11 @@ int FUN_L02_002fb788(char *moby, float a, float b) {
     }
     return 0;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb9c8.s", FUN_L02_002fb9c8);
-#else
-extern int D_L02_0015FFD8 __attribute__((section(".data")));
 #include "rnc/input/pad_state.h"
+
+extern int D_L02_0015FFD8 MACRO_ADDR;
 extern int D_L02_001ABE40[];
-extern char *D_L02_0015EF50;
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
-extern char D_0013CA44[];
 extern void FUN_L00_002e8388(char *);
 extern int FUN_L00_002e83c0(char *);
 extern void FUN_L00_002e8450(int, float, float) __asm__("FUN_L00_002e8450");
@@ -970,17 +966,10 @@ extern void FUN_L00_002e8648(void) __asm__("FUN_L00_002e8648");
 extern void FUN_L00_002e8918(float, float, float *) __asm__("FUN_L00_002e8918");
 extern void FUN_L00_002e8970(float, float, void *);
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern int scale_game_frames(int);
 extern float absolute_float(float);
-extern void FUN_L02_002f6570(int);
-extern void FUN_L02_002f6598(float, float, float);
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
-int FUN_L02_002fb9c8(char *moby) {
+void FUN_L02_002fb9c8(char *moby) {
     char *data = *(char **)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1c);
     char *target;
     unsigned short *group;
@@ -1006,20 +995,48 @@ int FUN_L02_002fb9c8(char *moby) {
     index = *(int *)(data + 0x44);
     if (index >= 0) {
         group = (unsigned short *)D_L02_001ABE40[index];
-        if (group == 0) goto invalid;
-        id = *group;
-        target = (char *)(D_L02_0015FFD8 + ((id & 0x7fff) << 8));
-        if (*(signed char *)(target + 0x20) < 0) {
-            do {
-                if ((int)(*group << 16) < 0) goto invalid;
-                group++;
-                id = *group;
-                target = (char *)(D_L02_0015FFD8 + ((id & 0x7fff) << 8));
-            } while (*(signed char *)(target + 0x20) < 0);
+        if (group == 0) {
+            *(short *)(data + 0x20) = -1;
+            FUN_L00_002e8388(moby);
+            return;
+        }
+        {
+            char *t;
+            char *u;
+            int b;
+            {
+                int e = *group;
+                b = D_L02_0015FFD8;
+                t = (char *)(b + ((e & 0x7fff) << 8));
+                id = e;
+            }
+            if (*(signed char *)(t + 0x20) < 0) {
+                do {
+                    if ((id << 16) < 0) {
+                        *(short *)(data + 0x20) = -1;
+                        FUN_L00_002e8388(moby);
+                        return;
+                    }
+                    group++;
+                    {
+                        int e = *group;
+                        b = D_L02_0015FFD8;
+                        u = (char *)(b + ((e & 0x7fff) << 8));
+                        id = e;
+                    }
+                } while (*(signed char *)(u + 0x20) < 0);
+                target = u;
+            } else {
+                target = t;
+            }
         }
     } else {
         target = (char *)(D_L02_0015FFD8 + (*(int *)(data + 0x28) << 8));
-        if (*(signed char *)(target + 0x20) < 0) goto invalid;
+        if (*(signed char *)(target + 0x20) < 0) {
+            *(short *)(data + 0x20) = -1;
+            FUN_L00_002e8388(moby);
+            return;
+        }
     }
     *(char **)(data + 0x48) = target;
     if (*(short *)(data + 0x3c) == 6 && (char *)hero_lui.ground_moby != target) {
@@ -1171,22 +1188,14 @@ int FUN_L02_002fb9c8(char *moby) {
             if (hit && fast_difference_between_rotations(angle, *(float *)(data + 0x40)) > 1.9198622f) {
                 if (*(float *)(data + 0x34) != 0.0f)
                     FUN_L00_002e8450(0, *(float *)(data + 0x34) + 3.36f, 0.003f);
-                else {
-                    goto zero_offset;
-invalid:
-                    *(short *)(data + 0x20) = -1;
-                    FUN_L00_002e8388(moby);
-                    return;
-zero_offset:
+                else
                     FUN_L00_002e8450(0, 8.0f, 0.003f);
-                }
             }
         }
         FUN_L02_002f6570(176);
     }
     return;
 }
-#endif
 #define NOT_SDA __attribute__((section(".data")))
 
 #define MACRO_ADDR __attribute__((section(".sdata")))
@@ -1195,7 +1204,6 @@ zero_offset:
 
 extern char *D_L02_0015EF50;
 extern char *D_L02_00167400_c298 __asm__("D_L02_00167400") NOT_SDA;
-extern int FUN_L02_002fb9c8(char *);
 
 int FUN_L02_002fc298(char *moby) {
     char *cam = *(char **)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);

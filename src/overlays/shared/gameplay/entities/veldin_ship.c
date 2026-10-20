@@ -3479,9 +3479,6 @@ void particle_spawner_smoke_fire_update(P *p) {
         return;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d73e8.s", FUN_L00_002d73e8);
-#else
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002D8898.c: func_L00_002D8898). */
 #include "rnc/rendering/geometry_quad.h"
 extern float D_L00_001D02E0[];
@@ -3509,8 +3506,6 @@ extern float D_L00_001E1200[][4];
 extern float D_L00_001E13E0[];
 extern float D_L00_001E13E4[];
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void fast_draw_quad_real(void *, int, int) __asm__("FUN_001f7d30");
 void FUN_L00_002d73e8(P *p) {
     Vec4 position, up;
     Vec4 facing[4], flipped[4];
@@ -3522,6 +3517,8 @@ void FUN_L00_002d73e8(P *p) {
     int alpha, i, k, j, index, l;
     float width, height, phase, one;
     float *vertex;
+    Vec4 *front;
+    int (*rows)[4];
 
     mesh_alpha = q->mesh_alpha << 24;
     mesh_color = q->mesh_blue << 16 | q->mesh_green << 8 | q->mesh_red;
@@ -3537,11 +3534,7 @@ void FUN_L00_002d73e8(P *p) {
     fast_vec_normalize(&facing[1], &facing[1], 1.0f);
     fast_vec_cross(&facing[2], &facing[1], &facing[0]);
     qcopy(&facing[3], &position);
-    /* Fakematch: the do-while(0) gives flipped's address s1 and facing's s2 as retail
-     * does (BYTES 29 -> 15). Still off: the mesh branch's primitive constant
-     * register (v0, retail v1) and the ring loop's s2/s3/s5 pointers; the
-     * latter come from the GCSE copy of facing's address at the end of block 0,
-     * which prefers s2. */
+    /* Fakematch: the do-while(0) gives flipped's address s1 and facing's s2 as retail does. */
     do {
         fast_vec_scale(&flipped[0], &facing[0], -1.0f);
         fast_vec_cross(&flipped[1], &flipped[0], &up);
@@ -3557,10 +3550,13 @@ void FUN_L00_002d73e8(P *p) {
     quad.reserved.value = 0;
     vu1_add_g_sregister(0x4A, 0);
     vu1_add_g_sregister(0x47, 0x51001);
+    /* Fakematch: the front copy gives the GCSE copy of facing's address a source with
+     * no s2 preference, so the final loop's pointers rotate as retail. */
+    front = facing;
     for (i = q->start; i < end; i++) {
         phase = D_L00_001D31C0[i] - D_L00_001D4480[i] * frame_scale;
         D_L00_001D31C0[i] = phase;
-        transform = D_L00_001D2860[i] ? flipped : facing;
+        transform = D_L00_001D2860[i] ? flipped : front;
         if (phase <= -8.0f) {
             D_L00_001D31C0[i] = phase + 8.0f;
         }
@@ -3568,11 +3564,14 @@ void FUN_L00_002d73e8(P *p) {
         width = D_L00_001D02E0[i];
         height = D_L00_001D15A0[i];
         if (D_L00_001D2D10[i]) {
+            /* Fakematch: reading the index table through rows sets its address ahead of the
+             * primitive constant, which then takes v1 as retail. */
+            rows = D_L00_001E1380;
             quad.primitive = 0x8000000044L;
             one = 1.0f;
             for (k = 2; k < 4; k++) {
                 for (j = 0; j < 4; j++) {
-                    index = D_L00_001E1380[k][j];
+                    index = rows[k][j];
                     vertex = D_L00_001E12C0[index];
                     quad.positions[j].f[0] = vertex[0];
                     quad.positions[j].f[1] = vertex[1] * width;
@@ -3641,7 +3640,6 @@ void FUN_L00_002d73e8(P *p) {
         }
     }
 }
-#endif
 
 s16 D_L00_001D60A0[1200] = {0};
 s16 D_L01_001D6520[1200] = {0};

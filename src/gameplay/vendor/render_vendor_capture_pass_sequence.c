@@ -1,14 +1,6 @@
-#include "types.h"
-#include "asm.h"
-#include "rnc/ui/vendor/vendor_capture.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/vendor/render_vendor_capture_pass_sequence/FUN_00239780.s", FUN_00239780);
-#else
-/* Near miss, 4 rows: sched1 issues the a0 argument copy before the a2 one at the first call
-   (an LUID tie). The loop locals sit at function scope with the point_indices pointer set
-   before the loop, which gives retail's spill-slot order. */
 /* Ported from rac1-decomp (src/game/vendor.c: func_0023AA38). */
+#include "types.h"
+#include "rnc/ui/vendor/vendor_capture.h"
 #include "eetypes.h"
 #include "sda.h"
 #include "qcopy.h"
@@ -66,6 +58,7 @@ void render_vendor_capture_pass_sequence(char *capture_context) {
     float transition_factor;
     float remaining_factor;
     int pass_index;
+    int saved_transition;
     long texture_tex0;
     int *point_index_pointer = point_indices;
 
@@ -73,6 +66,10 @@ void render_vendor_capture_pass_sequence(char *capture_context) {
         point_indices[0] = pass_index * 4;
         point_indices[1] = pass_index * 4 + 1;
         point_indices[2] = pass_index * 4 + 2;
+        /* Fakematch: a load/store pair that reload_cse deletes; it moves the a0 argument
+           copy after the point_indices stores in sched1. */
+        saved_transition = capture_secondary_transition_active;
+        capture_secondary_transition_active = saved_transition;
         transform_scaled_vertex_batch(capture_context, 3, point_index_pointer,
                                       (char *)attachment_points);
         qcopy(origin, attachment_points);
@@ -166,7 +163,8 @@ void render_vendor_capture_pass_sequence(char *capture_context) {
         vu1_add_g_sregister(8, 0);
     }
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(render_vendor_capture_pass_sequence) func_00239780 __attribute__((alias("FUN_00239780")));
 
 struct CaptureBoundsAdjustment capture_bounds_adjustments[6] = {
     {0.01f, 0.01f, 0.009f, 0.01f}, {0.01f, 0.03f, 0.03f, 0.03f}, {0.03f, 0.0f, 0.0f, 0.0f},

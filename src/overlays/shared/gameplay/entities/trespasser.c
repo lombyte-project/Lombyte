@@ -691,9 +691,6 @@ void FUN_L00_002c82f0(Vec4_2c82f0 *a, u8 *m, void *c) {
     m[0x20] = 2;
 }
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bffa8.s", FUN_L00_002bffa8);
-#else
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002C12B0.c: func_L00_002C12B0). */
 #include "rnc/math/fast_math.h"
 typedef struct { char pad0[10]; unsigned char radius; char padB[5]; float height; } AimInfo;
@@ -1080,16 +1077,19 @@ void doom_bot_update(struct Moby *moby) {
         if (!blocked) { if (moby->prev_seq!=5) blend_moby_animation(moby,5,0,scale_game_frames(5)); }
         else moby->state=2;
     }
-    /* Fakematch: the do-while(0) splits the scheduling region (BYTES 3 -> 2); retail still sets the turn call's a1 before a0. */
+    /* Fakematch: the do-while(0) splits the scheduling region. */
 Falling: do {
         float direction=fast_arc_tan(data->velocity.f[0],data->velocity.f[1]);
         DoomBotParams *hp=(DoomBotParams*)&hero;
         FUN_L00_00258278(moby,&data->turn_velocity,direction,
             hp->turn_k,hp->turn_d,hp->turn_max);
+        /* Fakematch: no-op update of data; it depends on the a1 setup, so a1 is scheduled before a0. */
+        data=(DoomBotVars*)((int)data|((unsigned char)(int)data>>8));
     } while (0);
         FUN_L00_002bebc8((char*)data);
 Contact:
-        moby->state=FUN_L00_002bfec8(moby);
+        /* Fakematch: the zero term keeps data live so combine keeps the no-op update above. */
+        moby->state=FUN_L00_002bfec8(moby)|((unsigned char)(int)data>>8);
         break;
     case 15: moby->state=0; break;
     default: moby->state=0; break;
@@ -1099,7 +1099,6 @@ Contact:
         moby->pos.z<2.0f || moby->pos.z>1021.0f) mark_moby_for_removal(moby);
     return;
 }
-#endif
 extern float D_L00_00173E68_2c1778 __asm__("D_L00_00173E68") __attribute__((section(".data")));
 extern int D_L00_0015F5CC_2c1778[1] __asm__("D_L00_0015F5CC");
 void FUN_00213508_2c1778(void *, int, float) __asm__("FUN_00213508");

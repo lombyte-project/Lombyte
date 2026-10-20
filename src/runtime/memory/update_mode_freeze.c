@@ -1,16 +1,5 @@
 #include "types.h"
-#include "asm.h"
 #include "rnc/globals.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM(
-    "config/us/expected/asm/assembly/textbin/runtime/memory/update_mode_freeze/FUN_001fce28.s",
-    FUN_001fce28);
-#else
-/* Near miss, 2 rows: the reloaded unk1C lands in v1 instead of a1. */
-#include "types.h"
-#include "rnc/globals.h"
-
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/input/pad_state.h"
@@ -55,6 +44,7 @@ void update_mode_freeze(void) __asm__("FUN_001fce28");
 
 void update_mode_freeze(void) {
     s32 video_mode;
+    s32 step;
     sound_update();
     if (freeze.unk4 != 0) {
         freeze.unk4--;
@@ -190,26 +180,34 @@ void update_mode_freeze(void) {
                 freeze.unk24--;
             } else if (freeze.unk20 != 0) {
                 freeze.unk20--;
-            } else if (freeze.unk1C == 2) {
-                if (hero.unk880 != (-1)) {
-                    set_animation_parameter(hero.unk880, 0);
-                    hero.unk880 = -1;
-                }
-                update_resource_counter();
-                if (scale_game_frames(0x1068) < hero.unk19C) {
-                    if (current_level_index == 5) {
-                        D_0015EE38++;
-                    } else if (current_level_index == 0x10) {
-                        D_0015EE3C++;
-                    }
-                }
-                game_mode = 0;
-                noop_callback_k(D_00141050, D_00141050 + 0x10, 0, 1);
             } else {
-                game_mode = 0;
-                if (hero.unk89A >= 3) {
-                    hero.unk89A = (s16)(((u16)hero.unk89A) - 1);
-                    hero.unk890[0xBC] = 3;
+                step = freeze.unk1C;
+                /* Fakematch: a never-true test that combine folds away; it makes step
+                   live in two blocks, so global-alloc gives it a1. */
+                video_mode = requested_video_mode;
+                if (video_mode < 0) {
+                    freeze.unk1C = step;
+                } else if (step == 2) {
+                    if (hero.unk880 != (-1)) {
+                        set_animation_parameter(hero.unk880, 0);
+                        hero.unk880 = -1;
+                    }
+                    update_resource_counter();
+                    if (scale_game_frames(0x1068) < hero.unk19C) {
+                        if (current_level_index == 5) {
+                            D_0015EE38++;
+                        } else if (current_level_index == 0x10) {
+                            D_0015EE3C++;
+                        }
+                    }
+                    game_mode = 0;
+                    noop_callback_k(D_00141050, D_00141050 + 0x10, 0, 1);
+                } else {
+                    game_mode = 0;
+                    if (hero.unk89A >= 3) {
+                        hero.unk89A = (s16)(((u16)hero.unk89A) - 1);
+                        hero.unk890[0xBC] = 3;
+                    }
                 }
             }
             break;
@@ -384,4 +382,5 @@ void update_mode_freeze(void) {
         snd_flush_sound_commands();
     }
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(update_mode_freeze) func_001FCE28 __attribute__((alias("FUN_001fce28")));

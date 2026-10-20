@@ -1,11 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/texture/upload_mip_texture/FUN_00202270.s", FUN_00202270);
-#else
-
-#include "types.h"
 #include "rnc/sdk/libgraph.h"
 #include "eetypes.h"
 #include "sda.h"
@@ -34,7 +27,7 @@ typedef struct {
 } MipTextureUpload;
 
 extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
-extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("func_001F97E8");
+extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("FUN_001f97e8");
 extern void FlushCache(s32);
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(sceGsLoadImage *, u128 *);
@@ -47,7 +40,7 @@ s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) {
     MipTextureUpload upload;
     sceGsLoadImage load_image;
     s32 mip_index;
-    s32 indexed_pixel_format;
+    s32 header_byte;
     s32 allocation_bytes;
     s32 *buffer_width;
     u64 tex0_word;
@@ -56,18 +49,18 @@ s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) {
 
     fill_transfer_words(&upload, 0, sizeof(upload));
     switch (tex->pixel_storage_format) {
-    default:
-        break;
     case 0:
     case 2:
         upload.palette_address = 0;
         upload.palette_size = 0;
-        break;
+        /* Fakematch: this always-true test gives case 0x13/0x14 a second predecessor. */
+        header_byte = tex->pad0[0];
+        if (header_byte >= 0)
+            break;
     case 0x13:
     case 0x14:
-        indexed_pixel_format = ((volatile MipTextureHeader *)tex)->pixel_storage_format;
         upload.palette_address = (s32)tex->data;
-        if (indexed_pixel_format == 0x14) {
+        if (tex->pixel_storage_format == 0x14) {
             if (tex->palette_storage_format == 0) {
                 upload.palette_size = 0x40;
             } else {
@@ -165,5 +158,3 @@ s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) {
 }
 
 extern __typeof__(upload_mip_texture) func_00202270 __attribute__((alias("FUN_00202270")));
-
-#endif /* NON_MATCHING */

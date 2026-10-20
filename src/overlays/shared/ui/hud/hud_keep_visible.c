@@ -621,56 +621,51 @@ void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void mine_blend_color(void) {
     FUN_L00_00235ea0();
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00237200.s", FUN_L00_00237200);
-#else
-extern int pal_mode __asm__("D_0015ED80");
-extern int current_level_index_sda __asm__("D_0015ED84") __attribute__((sda));
-extern int D_L00_0015F770 __attribute__((sda));
-extern unsigned char D_L00_0017E530[];
-extern int freeze_stats_time_ref[] __asm__("D_0015EE58");
-extern int freeze_stats_score_ref_a[] __asm__("D_0015EE68");
-extern float D_0013F3D0[];
-extern void *memcpy(void *, const void *, unsigned int);
+#include "eetypes.h"
+#include "qcopy.h"
+#include "rnc/math/vector.h"
+extern s32 D_L00_0015F770_gp __asm__("D_L00_0015F770") __attribute__((sda));
+extern s32 D_L00_0015F648_macro __asm__("D_L00_0015F648") MACRO_ADDR;
+extern u8 D_L00_0017E530[] NOT_SDA;
+extern char D_0013F3D0[];
+extern s32 freeze_stats_time_ref[] __asm__("D_0015EE58") __attribute__((section(".sdata")));
+extern s32 freeze_stats_score_ref_a[] __asm__("D_0015EE68") __attribute__((section(".sdata")));
+extern char freeze_stats_time_format[] __asm__("D_L00_001E84C0") NOT_SDA;
+extern char freeze_stats_score_format[] __asm__("D_L00_0015F778") NOT_SDA;
+extern s32 pal_mode __asm__("D_0015ED80");
+extern s32 current_level_index __asm__("D_0015ED84");
+extern s32 measure_text_width_regular(u8 *, s32) __asm__("FUN_001f6250");
+extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
+extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
+extern void font_print_center_large(s32, s32, s32, u8 *, s32) __asm__("FUN_001f6af0");
+extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
+extern s32 sprintf(char *, const char *, ...) __asm__("FUN_00116248");
+extern void draw_framed_text(s32, s32, s32, char *) __asm__("FUN_00201200");
 
-extern float FUN_00200240(unsigned int) __asm__("FUN_001fa6c0");
-extern float FUN_001fef10(float) __asm__("FUN_001f96b0");
-extern int FUN_00200250(float) __asm__("FUN_001fa6d0");
-extern int FUN_001fb090(const char *, int) __asm__("FUN_L00_001fb090");
-extern void *FUN_0023b208(int, int) __asm__("FUN_001ff960");
-extern void FUN_0023b4d8(void *, int, int, int, int, int) __asm__("FUN_001ffc30");
-extern void FUN_0023b860(void *, int, int, int, int, int) __asm__("FUN_001ffe18");
-extern void FUN_001fb9a8(int, int, int, const char *, int) __asm__("FUN_001f6af0");
-extern float FUN_001ff450(float *, float *) __asm__("FUN_001f9b48");
-extern const char freeze_stats_score_format[] __asm__("D_L00_0015F778");
-extern const char freeze_stats_time_format[] __asm__("D_L00_001E84C0");
-extern char *FUN_00203ad8(int) __asm__("FUN_001fdd10");
-extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
-extern void FUN_0023cf80(int, int, int, char *) __asm__("FUN_00201200");
-
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) HudPoint_237200;
 int FUN_L00_00237200(HudElem *e) {
-    int y, i, width, left, other_width, other_left;
-    unsigned int alpha, color, level, elapsed, extra, interval, minute_scale, remainder, seconds;
+    int y, i;
+    int alpha, color, level;
     float fade;
-    HudPoint_237200 points[2];
-    HudPoint_237200 point;
+    Vec4 points[2];
+    Vec4 point;
     char text[64];
-    const char *line;
-    unsigned char *opacity = (unsigned char *)e + 0x70;
+    u8 *opacity = e->cnt;
     int text_y;
+    int text_color;
+    int never = 0;
 
     if (pal_mode != 0) {
-        y = D_L00_0015F770 + 0xa;
+        y = D_L00_0015F770_gp + 0xa;
     } else {
-        y = D_L00_0015F770 + 0x12;
+        y = D_L00_0015F770_gp + 0x12;
     }
-    fade = FUN_00200240(*opacity);
-    fade /= FUN_001fef10(8.0f);
+    fade = convert_integer_to_float(*opacity);
+    fade /= scale_game_seconds(8.0f);
     if (fade < 0.0f) fade = 0.0f;
     if (fade > 1.0f) fade = 1.0f;
     text_y = y + 8;
-    alpha = FUN_00200250(fade * 128.0f);
+    alpha = truncate_float_to_s32(fade * 128.0f);
     color = (alpha << 24) | 0x40f040;
     i = 0;
     if (D_L00_0017E530[0] > 1) {
@@ -679,79 +674,77 @@ int FUN_L00_00237200(HudElem *e) {
         } while (D_L00_0017E530[i] > 1 && i < 0x80);
     }
     if (D_L00_0017E530[i] == 1) {
+        int width, left, second_width, second_left, x, w, right;
+        s32 frame;
         D_L00_0017E530[i] = 0;
-        width = FUN_001fb090((const char *)D_L00_0017E530, -1);
+        width = measure_text_width_regular(D_L00_0017E530, -1);
         left = 0xe0 - (width >> 1);
-        {
-            int other_width = FUN_001fb090((const char *)&D_L00_0017E530[1] + i, -1);
-            other_left = 0xe0 - (other_width >> 1);
-            if (left >= other_left) {
-                width = other_width;
-            } else {
-                other_left = left;
-            }
-            left = other_left;
+        second_width = measure_text_width_regular(&D_L00_0017E530[1] + i, -1);
+        second_left = 0xe0 - (second_width >> 1);
+        if (left >= second_left) {
+            x = second_left;
+            w = second_width;
+        } else {
+            x = left;
+            w = width;
         }
-        other_left = left + 0x20;
-        FUN_0023b4d8(FUN_0023b208(0x7580, 0), other_left, y, width, 0x36, alpha);
-        other_left = color;
-        FUN_0023b4d8(FUN_0023b208(0x7580, 1), left, y, 0x20, 0x36, alpha);
-        FUN_0023b860(FUN_0023b208(0x7580, 1), (width + 0x20) + left, y, 0x20, 0x36, alpha);
-        FUN_001fb9a8(0x100, text_y, other_left, (const char *)D_L00_0017E530, -1);
-        FUN_001fb9a8(0x100, y + 0x1b, other_left, (const char *)&D_L00_0017E530[1] + i, -1);
-        level = current_level_index_sda;
+        draw_hud_sprite(get_icon_frame(0x7580, 0), x + 0x20, y, w, 0x36, alpha);
+        text_color = color;
+        draw_hud_sprite(get_icon_frame(0x7580, 1), x, y, 0x20, 0x36, alpha);
+        frame = get_icon_frame(0x7580, 1);
+        right = w + 0x20;
+        draw_hud_sprite_flipped(frame, x + right, y, 0x20, 0x36, alpha);
+        font_print_center_large(0x100, text_y, text_color, D_L00_0017E530, -1);
+        font_print_center_large(0x100, y + 0x1b, text_color, &D_L00_0017E530[1] + i, -1);
     } else {
-        int width, left;
-        width = FUN_001fb090((const char *)D_L00_0017E530, -1);
+        int width, left, right;
+        s32 frame;
+        width = measure_text_width_regular(D_L00_0017E530, -1);
         left = 0xe0 - (width >> 1);
-        FUN_0023b4d8(FUN_0023b208(0x7580, 1), left, y, 0x20, 0x20, alpha);
-        FUN_0023b4d8(FUN_0023b208(0x7580, 0), left + 0x20, y, width, 0x20, alpha);
-        line = FUN_0023b208(0x7580, 1);
-        width += 0x20;
-        FUN_0023b860((void *)line, left + width, y, 0x20, 0x20, alpha);
-        FUN_001fb9a8(0x100, text_y, color, (const char *)D_L00_0017E530, -1);
-        level = *(int *)0x15ed84;
+        draw_hud_sprite(get_icon_frame(0x7580, 1), left, y, 0x20, 0x20, alpha);
+        draw_hud_sprite(get_icon_frame(0x7580, 0), left + 0x20, y, width, 0x20, alpha);
+        frame = get_icon_frame(0x7580, 1);
+        right = width + 0x20;
+        draw_hud_sprite_flipped(frame, left + right, y, 0x20, 0x20, alpha);
+        font_print_center_large(0x100, text_y, color, D_L00_0017E530, -1);
     }
+    level = current_level_index;
     if (level == 5 || level == 0x10) {
-        typedef unsigned int quadword __attribute__((mode(TI), aligned(16)));
-        *(quadword *)&points[0] = 0;
-        *(quadword *)&points[1] = 0;
-        points[0].x = 294.5f;
-        points[0].y = 225.4f;
-        points[0].z = 100.0f;
-        points[1].x = 115.7f;
-        points[1].y = 287.0f;
-        points[1].z = 119.5f;
-        {
-            float *point_data;
-            line = level == 5 ? memcpy(&point, &points[0], 16) : memcpy(&point, &points[1], 16);
-            point_data = (float *)line;
-            if (FUN_001ff450(D_0013F3D0, point_data) < 5.0f) {
-                *(int *)0x15f648 = y + 100;
-                extra = current_level_index_sda == 0x10 ? 1 : 0;
-                elapsed = freeze_stats_time_ref[extra];
-                extra = freeze_stats_score_ref_a[extra];
-                if (elapsed != 0) {
-                    const char *message;
-                    interval = pal_mode != 0 ? 3000 : 3600;
-                    seconds = elapsed / interval;
-                    other_width = interval;
-                    interval /= 60;
-                    remainder = elapsed - seconds * other_width;
-                    other_left = remainder / interval;
-                    remainder = (remainder - other_left * interval) * 100 / interval;
-                    line = freeze_stats_time_format;
-                    message = FUN_00203ad8(0x531b);
-                    sprintf(text, line, message, seconds, other_left, remainder);
-                    FUN_0023cf80(0x100, y + 0x28, color, text);
-                    if (extra != 0) {
-                        sprintf(text, freeze_stats_score_format, FUN_00203ad8(0x531c), extra);
-                        FUN_0023cf80(0x100, y + 0x48, color, text);
-                    }
+        points[0].q = 0;
+        points[1].q = 0;
+        points[0].f[0] = 294.5f;
+        points[0].f[1] = 225.4f;
+        points[0].f[2] = 100.0f;
+        points[1].f[0] = 115.7f;
+        points[1].f[1] = 287.0f;
+        points[1].f[2] = 119.5f;
+        if (level == 5) {
+            qcopy(&point, &points[0]);
+        } else {
+            qcopy(&point, &points[1]);
+        }
+        if (fast_vec_dist(D_0013F3D0, &point) < 5.0f) {
+            int elapsed, score, interval, unit, minutes, rest, seconds, hundredths;
+            D_L00_0015F648_macro = y + 100;
+            elapsed = freeze_stats_time_ref[current_level_index == 0x10];
+            score = freeze_stats_score_ref_a[current_level_index == 0x10];
+            if (elapsed != 0) {
+                interval = pal_mode != 0 ? 3000 : 3600;
+                unit = interval / 60;
+                minutes = elapsed / interval;
+                rest = elapsed - minutes * interval;
+                seconds = rest / unit;
+                rest = rest - seconds * unit;
+                hundredths = rest * 100 / unit;
+                sprintf(text, freeze_stats_time_format, get_help_message_text(0x531b), minutes, seconds, hundredths);
+                draw_framed_text(0x100, y + 0x28, color, text);
+                if (score != 0) {
+                    sprintf(text, freeze_stats_score_format, get_help_message_text(0x531c), score);
+                    draw_framed_text(0x100, y + 0x48, color, text);
                 }
             }
         }
     }
-    return *(int *)((char *)e + 0x58);
+    /* Fakematch: the never-taken text_color use keeps the then-branch color copy in its own register. */
+    return e->w + (text_color & never);
 }
-#endif

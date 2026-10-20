@@ -1,13 +1,6 @@
-#include "asm.h"
-
-/* Exact SDK/library unit sceGsSetDefDispEnv; symbolic expected assembly retained pending source recovery. */
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/dma/sce_gs_set_def_disp_env/sceGsSetDefDispEnv.s",
-            sceGsSetDefDispEnv);
-#else
 #include "types.h"
 #include "rnc/sdk/libgraph.h"
+
 typedef struct {
     s16 nSInterlace;
     u16 wMode;
@@ -21,6 +14,11 @@ extern s32 checkModelVersion(void);
 extern void InvokeKernelSyscall0080(s32 mode, s32 *horizontal, s32 *vertical,
                                      s32 *display_width, s32 *display_height);
 extern void scePrintf(const char *format, ...);
+extern char D_00153040[];
+
+/* The progressive arms spell this out three times: cc1 merges the divides but keeps
+   each zero check, and retail's load order needs all three. */
+#define MAGNIFICATION(w) (((w) + 0x9ff) / (w))
 
 void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s16 width,
                         s16 height, s16 horizontal_offset, s16 vertical_offset) {
@@ -31,6 +29,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
     u64 display_width;
     u16 interlace;
     u64 display_vertical;
+    u64 progressive_width;
 
     state = GetCoreDataTable();
     if (!((u32)(state->wMode - 2) < 2) && checkModelVersion() != 0) {
@@ -60,7 +59,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
             s32 scale;
             u64 value;
             scaled_horizontal = (s64)kernel_horizontal;
-            scale = (width + 0x9ff) / width;
+            scale = MAGNIFICATION(width);
             display_vertical = (u64)((vertical_offset + kernel_vertical + 0x32) & 0xfff) << 12;
             display_width = (u64)(s64)(scale * width - 1) << 32;
             scaled_horizontal = scaled_horizontal + 0x27c;
@@ -76,20 +75,22 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
             output->display = display_width | display_vertical;
         } else {
             s64 horizontal;
-            scale = (width + 0x9ff) / width;
+            u64 value;
+
+            scale = MAGNIFICATION(width);
+            progressive_width = (u64)(s64)(MAGNIFICATION(width) * width - 1) << 32;
+            value = ((s64)(MAGNIFICATION(width) - 1) << 23) | progressive_width;
             horizontal = (s64)kernel_horizontal + 0x27c;
-            output->display = ((s64)(scale - 1) << 23) |
-                              (((u64)(s64)(scale * width - 1) << 32) |
-                               (((horizontal + horizontal_offset * scale) & 0xfff) |
-                                ((s64)(height - 1) << 44)) |
-                               ((s64)((vertical_offset + kernel_vertical + 0x19) & 0xfff) << 12));
+            output->display = (value | (((horizontal + horizontal_offset * scale) & 0xfff) |
+                                        ((s64)(height - 1) << 44))) |
+                              ((s64)((vertical_offset + kernel_vertical + 0x19) & 0xfff) << 12);
         }
     } else if ((s16)mode == 3) {
         if ((s16)interlace == 1) {
             s32 scale;
             u64 value;
             scaled_horizontal = (s64)kernel_horizontal;
-            scale = (width + 0x9ff) / width;
+            scale = MAGNIFICATION(width);
             display_vertical = (u64)((vertical_offset + kernel_vertical + 0x48) & 0xfff) << 12;
             display_width = (u64)(s64)(scale * width - 1) << 32;
             scaled_horizontal = scaled_horizontal + 0x290;
@@ -105,13 +106,15 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
             output->display = display_width | display_vertical;
         } else {
             s64 horizontal;
-            scale = (width + 0x9ff) / width;
+            u64 value;
+
+            scale = MAGNIFICATION(width);
+            progressive_width = (u64)(s64)(MAGNIFICATION(width) * width - 1) << 32;
+            value = ((s64)(MAGNIFICATION(width) - 1) << 23) | progressive_width;
             horizontal = (s64)kernel_horizontal + 0x290;
-            output->display = ((s64)(scale - 1) << 23) |
-                              (((u64)(s64)(scale * width - 1) << 32) |
-                               (((horizontal + horizontal_offset * scale) & 0xfff) |
-                                ((s64)(height - 1) << 44)) |
-                               ((s64)((vertical_offset + kernel_vertical + 0x24) & 0xfff) << 12));
+            output->display = (value | (((horizontal + horizontal_offset * scale) & 0xfff) |
+                                        ((s64)(height - 1) << 44))) |
+                              ((s64)((vertical_offset + kernel_vertical + 0x24) & 0xfff) << 12);
         }
     } else if ((s16)mode == 0x50) {
         output->display = ((u64)(s64)(height - 1) << 44) |
@@ -122,8 +125,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
                                    ((s64)(horizontal_offset * 2) + 0xe8))) & 0xfff)) |
                           ((u64)(s64)(width * 2 - 1) << 32);
     } else {
-        scePrintf("sceGsDefDispEnv:Not support displaymode for 0x%x!!\n");
+        scePrintf(D_00153040);
     }
     output->bgcolor = 0;
 }
-#endif

@@ -451,6 +451,8 @@ RODATA_OVERLAYS = {
     "sdk/library/GetRomName": (0x153C00, 0x54B80, 12),
     "draw_scrolling_sky_shells": (0x1E88F0, 0xE9870, 20),  # switch table
     "update_streamed_moby_animation": (0x1E88B0, 0xE9830, 28),  # switch table
+    "update_mode_freeze": (0x1E79A0, 0xE8920, 124),  # switch table
+    "render_vendor_capture_pass_sequence": (0x1E8AD0, 0xE9A50, 24),  # switch table
 }
 
 # Recovered C units that define the small-data variables their original
@@ -497,11 +499,11 @@ DATA_OVERLAYS = {
     "assembly/textbin/ui/menus/update_preview_animation_and_attachments": (0x1D6080, 0xD7000, 56),
     "assembly/textbin/rendering/register_shrub_render_class": (0x1D8030, 0xD8FB0, 128),
     "gameplay/fun_0022e1b0": (0x1D9890, 0xDA810, 384),
-    "assembly/textbin/rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1D9A10, 0xDA990, 32),
+    "rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1D9A10, 0xDA990, 32),
     "assembly/textbin/ui/map/draw_level_selection_map": (0x1DDE28, 0xDEDA8, 320),
     "rendering/register_object_render_class": (0x1E1900, 0xE2880, 256),
     "gameplay/vendor/render_capture_scrolling_text": (0x1E6018, 0xE6F98, 512),
-    "assembly/textbin/gameplay/vendor/render_vendor_capture_pass_sequence": (0x1E6218, 0xE7198, 96),
+    "gameplay/vendor/render_vendor_capture_pass_sequence": (0x1E6218, 0xE7198, 96),
     "textbin/render_vendor_capture_texture_overlays_pass": (0x1E6620, 0xE75A0, 64),
     "textbin/rebuild_configured_text_label_list": (0x1E8728, 0xE96A8, 60),
     "ui/menus/update_menu_resource_stream": (0x1E87D0, 0xE9750, 24),
