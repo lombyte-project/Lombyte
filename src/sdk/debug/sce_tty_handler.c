@@ -34,7 +34,7 @@ void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
         TTY_CLEAR_SEND_BUSY = 4
     };
     Deci2Hdr *hdr;
-    s32 n;
+    s32 send_result;
     s32 off;
 
     switch (event) {
@@ -60,13 +60,13 @@ void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
         }
         break;
     case TTY_SEND_PENDING_BYTES:
-        n = SceDeci2ExSend(tty->socket, tty->wbuf, tty->wlen);
-        if (n < 0) {
-            kprintf(D_00152750, n);
+        send_result = SceDeci2ExSend(tty->socket, tty->wbuf, tty->wlen);
+        if (send_result < 0) {
+            kprintf(D_00152750, send_result);
             tty->busy = 0;
         } else {
-            tty->wbuf += n;
-            tty->wlen -= n;
+            tty->wbuf += send_result;
+            tty->wlen -= send_result;
         }
         break;
     case TTY_CLEAR_SEND_BUSY:
