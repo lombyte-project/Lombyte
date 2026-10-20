@@ -1717,7 +1717,7 @@ extern char D_L13_001f4980[];
 extern char D_L13_001f49a8[];
 #include "rnc/audio/voice_pool.h"
 
-void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
+void FUN_L13_002cecb8(struct Moby *moby, unsigned char *moby_data, float *health) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
@@ -1776,8 +1776,8 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
                     moby->flags &= 0xefff;
                     *(OvlQuad *)position = *(OvlQuad *)velocity;
                     FUN_L00_00257470(moby, 0, -1);
-                    d[0x67] = 0x78;
-                    trooper_anim_update(moby, (short *)(d + 0x60));
+                    moby_data[0x67] = 0x78;
+                    trooper_anim_update(moby, (short *)(moby_data + 0x60));
                     moby_point_position(moby, 0, velocity);
                     emit_effect_l13(moby, position, velocity, 0.0f, 0.0f,
                                     10, 3, 16, 4.0f, 2.0f, 0.0f, 1.0f,
@@ -1785,7 +1785,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
                     if (moby->prev_seq != 1) {
                         blend_moby_animation((MobyAnim *)moby, 1, 0, 0);
                     }
-                    link = *(int *)(d + 0x70);
+                    link = *(int *)(moby_data + 0x70);
                     if (link != -1) {
                         record = (VoicePoolWindow *)((u8 *)&voice_pool + link * 0x70);
                         if ((struct Moby *)record->voice.owner == moby &&
@@ -1793,20 +1793,20 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
                             release_voice_slot(link);
                         }
                     }
-                    *(int *)(d + 0x70) = -1;
+                    *(int *)(moby_data + 0x70) = -1;
                     moby->state = 2;
                 } else {
                     *health -= *(float *)(src + 0x2c);
-                    d[0x67] = 0xfa;
-                    *(short *)(d + 0x26) = scale_game_frames(0x3c);
-                    trooper_anim_update(moby, (short *)(d + 0x60));
+                    moby_data[0x67] = 0xfa;
+                    *(short *)(moby_data + 0x26) = scale_game_frames(0x3c);
+                    trooper_anim_update(moby, (short *)(moby_data + 0x60));
                 }
             }
         }
 mark:
         moby->hit_slot = 0xff;
     }
-    trooper_anim_finish(moby, d + 0x60);
+    trooper_anim_finish(moby, moby_data + 0x60);
 }
 extern int FUN_001160d8(void);
 extern int start_moby_voice(int, int, void *) __asm__("FUN_L13_00297fa0");
