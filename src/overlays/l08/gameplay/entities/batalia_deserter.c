@@ -782,12 +782,12 @@ void FUN_L08_00308f68(int x) {
     int i;
     int *element_counts = D_L08_001623C8;
     float **b = D_L08_001623D8;
-    float **c = D_L08_001623D0;
-    int **e = D_L08_001623E8;
+    float **float_triplet_tables = D_L08_001623D0;
+    int **element_word_tables = D_L08_001623E8;
 
     for (i = 0; i < 2; i++) {
         FUN_L08_00258090(D_L08_001F8560, b[i], element_counts[i], &D_L08_00162408[x]);
-        FUN_L00_001fde98(element_counts[i], c[i], e[i], D_L08_001F8560, 1);
+        FUN_L00_001fde98(element_counts[i], float_triplet_tables[i], element_word_tables[i], D_L08_001F8560, 1);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */
