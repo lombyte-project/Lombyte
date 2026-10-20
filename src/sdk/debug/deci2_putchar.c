@@ -8,7 +8,7 @@ extern s32 Kputs(s8 *text);
 
 void deci2Putchar(s32 c) __asm__("deci2Putchar");
 
-void deci2Putchar(s32 c) {
+void deci2Putchar(s32 output_byte) {
     s32 index = D_0012FBFC[0];
 
     if (index >= 126) {
@@ -17,13 +17,13 @@ void deci2Putchar(s32 c) {
         Kputs(D_00154D00);
         index = D_0012FBFC[0];
     }
-    if (c == '\n') {
-        D_00154D00[index] = (s8)c;
+    if (output_byte == '\n') {
+        D_00154D00[index] = (s8)output_byte;
         D_00154D00[index + 1] = 0;
         D_0012FBFC[0] = 0;
         Kputs(D_00154D00);
     } else {
-        D_00154D00[index] = (s8)c;
+        D_00154D00[index] = (s8)output_byte;
         D_0012FBFC[0] = index + 1;
     }
 }
