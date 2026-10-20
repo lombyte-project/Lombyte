@@ -594,16 +594,16 @@ extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
-void FUN_L11_0031a1c0(char *m) {
-    char *d = *(char **)(m + 0x78);
-    char *info = find_moby_hit(m, 0x330000, 0);
+void FUN_L11_0031a1c0(char *moby) {
+    char *moby_vars = *(char **)(moby + 0x78);
+    char *info = find_moby_hit(moby, 0x330000, 0);
     struct Hero *g;
-    ((unsigned char *)m)[0xA4] = 0xFF;
+    ((unsigned char *)moby)[0xA4] = 0xFF;
     g = &hero;
     if (g->state.current != 0x32) {
-        *(unsigned short *)(m + 0x34) &= 0xEFFF;
+        *(unsigned short *)(moby + 0x34) &= 0xEFFF;
     } else {
-        *(unsigned short *)(m + 0x34) |= 0x1000;
+        *(unsigned short *)(moby + 0x34) |= 0x1000;
     }
     if (info != 0) {
         char *st = (char *)D_00141968;
@@ -624,30 +624,30 @@ void FUN_L11_0031a1c0(char *m) {
                 queue_dialogue_message(0x53D6, -1);
             }
         }
-        if (*(int *)(d + 0x88) != 0) {
+        if (*(int *)(moby_vars + 0x88) != 0) {
             st2 = 6;
-            cur = ((unsigned char *)m)[0x20];
+            cur = ((unsigned char *)moby)[0x20];
         } else {
-            cur = ((unsigned char *)m)[0x20];
+            cur = ((unsigned char *)moby)[0x20];
             st2 = 2;
         }
         if (cur != st2) {
-            m[0x20] = st2;
-            if (((unsigned char *)m)[0x53] != 1) {
-                blend_moby_animation(m, 1, 0, scale_game_frames(10));
+            moby[0x20] = st2;
+            if (((unsigned char *)moby)[0x53] != 1) {
+                blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
         }
-    } else if (((unsigned char *)m)[0x20] == 5) {
+    } else if (((unsigned char *)moby)[0x20] == 5) {
         struct Hero *g2 = &hero;
         if (g2->state.current != 0x32) {
-            m[0x20] = 4;
-            *(int *)(m + 0x94) = 0;
-            *(unsigned short *)(m + 0x34) |= 1;
+            moby[0x20] = 4;
+            *(int *)(moby + 0x94) = 0;
+            *(unsigned short *)(moby + 0x34) |= 1;
         }
-        if (coll_sphere(1.0f, m + 0x10, 0, m)) {
-            m[0x20] = 6;
-            if (((unsigned char *)m)[0x53] != 1) {
-                blend_moby_animation(m, 1, 0, scale_game_frames(10));
+        if (coll_sphere(1.0f, moby + 0x10, 0, moby)) {
+            moby[0x20] = 6;
+            if (((unsigned char *)moby)[0x53] != 1) {
+                blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
         }
     }
