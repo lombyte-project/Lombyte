@@ -22,30 +22,30 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
 void FUN_L17_002cbc10(char *m) {
-    char *d;
-    char *e;
+    char *turret_vars;
+    char *hit_animation_state;
     char *r;
     int st;
     float fv;
     int s;
-    d = *(char **)(m + 0x78);
+    turret_vars = *(char **)(m + 0x78);
     if (*(unsigned char *)(m + 0x20) != 0) {
         fv = 0.0f;
         r = find_moby_hit(m, 0x330000, 0);
         if (r != 0) {
             if (*(int *)(r + 0x20) != 0) {
-                int h = *(short *)(*(char **)(r + 0x20) + 0xA6);
-                if (h != 0x3F1) {
-                    if (h != 0x127)
+                int hit_moby_class_id = *(short *)(*(char **)(r + 0x20) + 0xA6);
+                if (hit_moby_class_id != 0x3F1) {
+                    if (hit_moby_class_id != 0x127)
                         r = 0;
                 }
             }
         }
-        e = d + 0x60;
-        hit_reaction(m, r, d + 0x20, 0, &st, &fv, 0, 4);
+        hit_animation_state = turret_vars + 0x60;
+        hit_reaction(m, r, turret_vars + 0x20, 0, &st, &fv, 0, 4);
         if (st != 1 && *(unsigned char *)(m + 0x20) != 4) {
-            float t = *(float *)(d + 0x20) - fv;
-            *(float *)(d + 0x20) = t;
+            float t = *(float *)(turret_vars + 0x20) - fv;
+            *(float *)(turret_vars + 0x20) = t;
             s = 0xB;
             if (t <= 0.0f)
                 s = 1;
@@ -53,11 +53,11 @@ void FUN_L17_002cbc10(char *m) {
                 *(unsigned char *)(m + 0x20) = 4;
                 *(short *)(m + 0x34) &= 0xEFFF;
             }
-            *(unsigned char *)(d + 0x67) = 0xF0;
-            trooper_anim_update(m, (short *)e);
+            *(unsigned char *)(turret_vars + 0x67) = 0xF0;
+            trooper_anim_update(m, (short *)hit_animation_state);
         }
         *(unsigned char *)(m + 0xA4) = 0xFF;
-        trooper_anim_finish(m, e);
+        trooper_anim_finish(m, hit_animation_state);
     }
 }
 
