@@ -1026,41 +1026,41 @@ extern int FUN_001fa6d0_26bb70(float) __asm__("FUN_001fa6d0");
 extern int FUN_001160d8_26bb70(void) __asm__("FUN_001160d8");
 
 extern unsigned char *D_L00_001B20BC __attribute__((section(".data")));
-unsigned char *FUN_L00_0026bb70(void *a, void *b, int c, int d, float f, int n, int e, int g,
-                                int h) {
-    unsigned char *m;
-    unsigned char *q;
-    if (n == 0) {
+unsigned char *FUN_L00_0026bb70(void *spawn_position, void *b, int initial_color, int final_color, float initial_size, int lifetime, int e, int g,
+                                int blend_mode) {
+    unsigned char *particle;
+    unsigned char *particle_data;
+    if (lifetime == 0) {
         return 0;
     }
-    m = FUN_L00_002678b8_26bb70(0xF);
-    if (m) {
-        qcopy(m + 0x10, a);
-        *(int *)(m + 4) = c;
-        m[9] = FUN_001fa6d0_26bb70(4.0f) - 0x60;
-        if (h != -1) {
-            m[3] = h;
+    particle = FUN_L00_002678b8_26bb70(0xF);
+    if (particle) {
+        qcopy(particle + 0x10, spawn_position);
+        *(int *)(particle + 4) = initial_color;
+        particle[9] = FUN_001fa6d0_26bb70(4.0f) - 0x60;
+        if (blend_mode != -1) {
+            particle[3] = blend_mode;
         } else {
-            m[3] = 0x48;
+            particle[3] = 0x48;
         }
-        m[1] = 0;
-        *(float *)(m + 0xC) = f;
-        m[8] = FUN_001160d8_26bb70();
+        particle[1] = 0;
+        *(float *)(particle + 0xC) = initial_size;
+        particle[8] = FUN_001160d8_26bb70();
         if (g == -1) {
-            m[2] = *D_L00_001B20BC;
+            particle[2] = *D_L00_001B20BC;
         } else {
-            m[2] = g;
+            particle[2] = g;
         }
-        q = m + 0x20;
-        *(s16 *)(m + 0xA) = n;
-        *(s16 *)(q + 0x18) = n;
-        *(float *)(q + 0x1C) = f;
-        *(int *)(q + 0x10) = c;
-        *(int *)(q + 0x14) = d;
-        *(s16 *)(q + 0x1A) = e;
-        qcopy(q, b);
+        particle_data = particle + 0x20;
+        *(s16 *)(particle + 0xA) = lifetime;
+        *(s16 *)(particle_data + 0x18) = lifetime;
+        *(float *)(particle_data + 0x1C) = initial_size;
+        *(int *)(particle_data + 0x10) = initial_color;
+        *(int *)(particle_data + 0x14) = final_color;
+        *(s16 *)(particle_data + 0x1A) = e;
+        qcopy(particle_data, b);
     }
-    return m;
+    return particle;
 }
 typedef union {
     u128 q;
