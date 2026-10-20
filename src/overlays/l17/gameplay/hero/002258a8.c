@@ -154,6 +154,7 @@ void FUN_L17_002258a8(void) {
         HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW = 26,
         HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW = 27,
         HERO_STATE_LEDGE_JUMP = 28,
+        HERO_STATE_LOOK_RELEASE_WAIT = 30,
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
@@ -2876,7 +2877,7 @@ void FUN_L17_002258a8(void) {
                         hero_set_state(0x53, 0);
                     }
                     break;
-                case 30:
+                case HERO_STATE_LOOK_RELEASE_WAIT:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
