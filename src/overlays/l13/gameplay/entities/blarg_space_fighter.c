@@ -627,33 +627,33 @@ void FUN_L13_002c2d30(unsigned char *moby) {
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
     };
-    unsigned char *d;
+    unsigned char *moby_data;
     char *r;
     int st;
     int flag;
     int r2;
     float damage_amount;
-    float t;
+    float downward_effect_z;
     float fl;
     char point_2_position[16];
     char point_3_position[16];
     char downward_effect_vector[16];
     float z[4];
 
-    d = *(unsigned char **)(moby + 0x78);
+    moby_data = *(unsigned char **)(moby + 0x78);
     if (moby[0x20] == 0) return;
-    if (*(int *)(d + 0x110) == -1 || FUN_L13_002c2d30_update(moby, *(int *)(d + 0x110)) == 0) {
-        *(int *)(d + 0x110) = -1;
-        *(int *)(d + 0x110) = FUN_L13_002c2d30_allocate(1, 4, moby);
+    if (*(int *)(moby_data + 0x110) == -1 || FUN_L13_002c2d30_update(moby, *(int *)(moby_data + 0x110)) == 0) {
+        *(int *)(moby_data + 0x110) = -1;
+        *(int *)(moby_data + 0x110) = FUN_L13_002c2d30_allocate(1, 4, moby);
     }
-    FUN_L00_00262b00(0.5f, frame_time * 1.39626336f, moby, (float *)(d + 0x100), (float *)(d + 0x104));
-    FUN_L00_00262b80(moby, d + 0x108, d + 0x10C, 0.104719758f, frame_time * 0.314159274f, frame_time * 0.366519153f);
-    *(float *)(moby + 0x10) = *(float *)(d + 0xC0) + fast_sin(*(float *)(d + 0x108));
-    *(float *)(moby + 0x14) = *(float *)(d + 0xC4) + fast_sin(*(float *)(d + 0x10C));
+    FUN_L00_00262b00(0.5f, frame_time * 1.39626336f, moby, (float *)(moby_data + 0x100), (float *)(moby_data + 0x104));
+    FUN_L00_00262b80(moby, moby_data + 0x108, moby_data + 0x10C, 0.104719758f, frame_time * 0.314159274f, frame_time * 0.366519153f);
+    *(float *)(moby + 0x10) = *(float *)(moby_data + 0xC0) + fast_sin(*(float *)(moby_data + 0x108));
+    *(float *)(moby + 0x14) = *(float *)(moby_data + 0xC4) + fast_sin(*(float *)(moby_data + 0x10C));
     *(Q_2C27B0 *)z = 0;
     fl = random_float_between(4.5f, 5.5f);
-    t = -(fl * frame_time);
-    z[2] = t;
+    downward_effect_z = -(fl * frame_time);
+    z[2] = downward_effect_z;
     *(Q_2C27B0 *)downward_effect_vector = *(Q_2C27B0 *)z;
     FUN_L00_0024f7c8(moby, 2, point_2_position);
     FUN_L00_0024f7c8(moby, 3, point_3_position);
@@ -675,18 +675,18 @@ void FUN_L13_002c2d30(unsigned char *moby) {
     *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L13_00161490;
     damage_amount = 0.0f;
     r = FUN_L00_0025a420(moby, 0x330000, 0);
-    st = FUN_L13_002c2d30_collision(moby, r, d + 0x20, 0, &flag, &damage_amount, 0, 4);
+    st = FUN_L13_002c2d30_collision(moby, r, moby_data + 0x20, 0, &flag, &damage_amount, 0, 4);
     if (r != 0) {
-        char *q = *(char **)(r + 0x20);
-        if (q != 0 && *(short *)(q + 0xA6) == 0x4D1) {
+        char *hit_moby = *(char **)(r + 0x20);
+        if (hit_moby != 0 && *(short *)(hit_moby + 0xA6) == 0x4D1) {
             flag = 1;
             damage_amount = 0.0f;
         }
     }
     if (flag != 1) {
-        *(float *)(d + 0x20) = *(float *)(d + 0x20) - damage_amount;
+        *(float *)(moby_data + 0x20) = *(float *)(moby_data + 0x20) - damage_amount;
         if (moby[0x53] != 7) blend_moby_animation_c13(moby, 7, 0, 5);
-        if (*(float *)(d + 0x20) <= 0.0f) {
+        if (*(float *)(moby_data + 0x20) <= 0.0f) {
             st = 1;
         } else {
             moby[0x20] = 7;
@@ -694,7 +694,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
         switch (st) {
         case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
         case HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE:
-            d[0x67] = 0xFA;
+            moby_data[0x67] = 0xFA;
             break;
         case HIT_REACTION_LOW_INTERPOLATION_TARGET:
         case HIT_REACTION_LOW_INTERPOLATION_TARGET_ALTERNATE:
@@ -702,42 +702,42 @@ void FUN_L13_002c2d30(unsigned char *moby) {
         case HIT_REACTION_LOW_INTERPOLATION_TARGET_THIRD_ALTERNATE:
         case HIT_REACTION_LOW_INTERPOLATION_TARGET_FOURTH_ALTERNATE:
         case HIT_REACTION_LOW_INTERPOLATION_TARGET_FIFTH_ALTERNATE:
-            d[0x67] = 0x78;
+            moby_data[0x67] = 0x78;
             break;
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_REMOVE:
             FUN_L00_00257470(moby, 0, -1);
             moby[0x20] = 8;
-            d[0x67] = 0xF0;
+            moby_data[0x67] = 0xF0;
             break;
         case HIT_REACTION_NONE:
         case HIT_REACTION_NO_HIT:
         default:
             break;
         }
-        trooper_anim_update(moby, d + 0x60);
+        trooper_anim_update(moby, moby_data + 0x60);
     }
     moby[0xA4] = 0xFF;
-    trooper_anim_finish(moby, d + 0x60);
+    trooper_anim_finish(moby, moby_data + 0x60);
     if (moby[0x20] == 4) {
-        *(float *)(d + 0xD8) = 50.0f;
+        *(float *)(moby_data + 0xD8) = 50.0f;
     } else {
-        *(float *)(d + 0xD8) = 40.0f;
+        *(float *)(moby_data + 0xD8) = 40.0f;
     }
     {
-        char *ptr = D_L13_001B07B0[*(int *)(d + 0xD0)];
-        r2 = FUN_L00_0025ff38(*(float *)(d + 0xD8), moby, d + 0x70, 0, 0, ptr + 0x10, *(int *)ptr);
+        char *ptr = D_L13_001B07B0[*(int *)(moby_data + 0xD0)];
+        r2 = FUN_L00_0025ff38(*(float *)(moby_data + 0xD8), moby, moby_data + 0x70, 0, 0, ptr + 0x10, *(int *)ptr);
     }
     if (r2 != 2) {
-        if (*(float *)(d + 0xD8) < vector_distance(moby + 0x10, d + 0x70) ||
-            8.0f < FUN_001f99c0(*(float *)(moby + 0x18) - *(float *)(d + 0x78))) {
-            *(int *)(d + 0xB4) = 2;
+        if (*(float *)(moby_data + 0xD8) < vector_distance(moby + 0x10, moby_data + 0x70) ||
+            8.0f < FUN_001f99c0(*(float *)(moby + 0x18) - *(float *)(moby_data + 0x78))) {
+            *(int *)(moby_data + 0xB4) = 2;
         } else if (moby[0x20] != 5 && collision_line(moby + 0x10, D_0013F350 + 0xD0, 2, moby, 0) != 0) {
-            *(int *)(d + 0xB4) = 2;
+            *(int *)(moby_data + 0xB4) = 2;
         }
     }
-    if (*(int *)(d + 0xB0) == 0) {
-        *(int *)(d + 0xB0) = D_001413D0[0];
+    if (*(int *)(moby_data + 0xB0) == 0) {
+        *(int *)(moby_data + 0xB0) = D_001413D0[0];
     }
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4A68), where it is exact; names translated to the US level program. */
