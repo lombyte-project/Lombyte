@@ -2457,7 +2457,7 @@ void FUN_L16_002e8970(struct Moby *moby) {
     char *g = (char *)&hero.motion.pos;
     char *data = (char *)moby->pvars;
     char *target;
-    int n;
+    int target_status;
     float pos[4];
     if (!is_point_inside_clip_volume_u(g, *(int *)(data + 8)))
         return;
@@ -2479,8 +2479,8 @@ void FUN_L16_002e8970(struct Moby *moby) {
         }
         break;
     case TARGET_CYCLE_POLL_STATUS:
-        n = FUN_L16_002e0e28(target);
-        switch (n) {
+        target_status = FUN_L16_002e0e28(target);
+        switch (target_status) {
         case TARGET_STATUS_INACTIVE:
             moby->state = 1;
             break;
