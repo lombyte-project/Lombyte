@@ -492,28 +492,28 @@ typedef struct {
     int i10;
     void *p14;
 } Q_272438;
-void FUN_L00_00272438(unsigned char *m) {
-    u128_272438 *pos = (u128_272438 *)(m + 0x10);
-    Q_272438 *q = (Q_272438 *)(m + 0x20);
+void FUN_L00_00272438(unsigned char *particle) {
+    u128_272438 *pos = (u128_272438 *)(particle + 0x10);
+    Q_272438 *particle_data = (Q_272438 *)(particle + 0x20);
     volatile u128_272438 old;
-    volatile u128_272438 t;
+    volatile u128_272438 position_copy;
     float x, y;
     int r;
     old = *pos;
-    q->unk4 += q->unk8;
-    FUN_L00_00262360_272438(q->i0, &x, &y, pos, q->unk4, q->fc);
-    if (fast_dec_timer(m + 0xA)) {
-        free_effect_particle(m);
+    particle_data->unk4 += particle_data->unk8;
+    FUN_L00_00262360_272438(particle_data->i0, &x, &y, pos, particle_data->unk4, particle_data->fc);
+    if (fast_dec_timer(particle + 0xA)) {
+        free_effect_particle(particle);
         return;
     }
-    if ((float)*(short *)(m + 0xA) < (float)FUN_001f96f8_272438(0x1E) * 0.25f) {
-        float a = FUN_001fa6c0_272438(*(short *)(m + 0xA));
-        *(int *)(m + 4) = FUN_L00_0025bfe0_272438(
-            0.7f, 0.7f, 0.7f, a * 0.08f / ((float)FUN_001f96f8_272438(0x1E) * 0.25f));
+    if ((float)*(short *)(particle + 0xA) < (float)FUN_001f96f8_272438(0x1E) * 0.25f) {
+        float remaining_lifetime_frames = FUN_001fa6c0_272438(*(short *)(particle + 0xA));
+        *(int *)(particle + 4) = FUN_L00_0025bfe0_272438(
+            0.7f, 0.7f, 0.7f, remaining_lifetime_frames * 0.08f / ((float)FUN_001f96f8_272438(0x1E) * 0.25f));
     }
-    r = probe_world_sphere(0.15f, pos, 0x10, q->p14, 0);
-    t = *pos;
-    FUN_L00_0025a9f8_272438(q->p14, (void *)&t, D_L00_00177F00_272438, r, 0, 0x810001, 2, 1, 2.0f,
+    r = probe_world_sphere(0.15f, pos, 0x10, particle_data->p14, 0);
+    position_copy = *pos;
+    FUN_L00_0025a9f8_272438(particle_data->p14, (void *)&position_copy, D_L00_00177F00_272438, r, 0, 0x810001, 2, 1, 2.0f,
                             1.0f, 1.0f);
 }
 typedef struct {
