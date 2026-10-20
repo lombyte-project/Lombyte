@@ -1511,45 +1511,45 @@ unsigned char *FUN_L00_00274948(u128 *position, u128 *b, int initial_alpha, int 
 s32 FUN_001f9770_274a70(void *) __asm__("FUN_001f9770");
 void FUN_001f9a10_274a70(void *, void *, void *) __asm__("FUN_001f9a10");
 f32 spread_k(f32, f32) __asm__("FUN_L00_00257c48");
-void FUN_L00_00274a70(u8 *p) {
-    u8 *q = p + 0x20;
+void FUN_L00_00274a70(u8 *particle) {
+    u8 *particle_data = particle + 0x20;
     s32 k, n;
     f32 f;
-    if (*(f32 *)(p + 0x10) < 2.0f || 1021.0f < *(f32 *)(p + 0x10) || *(f32 *)(p + 0x14) < 2.0f ||
-        1021.0f < *(f32 *)(p + 0x14) || *(f32 *)(p + 0x18) < 2.0f || 1021.0f < *(f32 *)(p + 0x18))
+    if (*(f32 *)(particle + 0x10) < 2.0f || 1021.0f < *(f32 *)(particle + 0x10) || *(f32 *)(particle + 0x14) < 2.0f ||
+        1021.0f < *(f32 *)(particle + 0x14) || *(f32 *)(particle + 0x18) < 2.0f || 1021.0f < *(f32 *)(particle + 0x18))
         goto kill;
-    k = *(s16 *)(q + 0x16);
+    k = *(s16 *)(particle_data + 0x16);
     if (k == 1) {
-        qcopy(p + 0x10, *(u8 **)(*(u8 **)(q + 0x1C) + 0x78) + 0xD0);
+        qcopy(particle + 0x10, *(u8 **)(*(u8 **)(particle_data + 0x1C) + 0x78) + 0xD0);
     } else if (k == 3) {
-        qcopy(p + 0x10, *(u8 **)(*(u8 **)(q + 0x1C) + 0x78) + 0xE0);
+        qcopy(particle + 0x10, *(u8 **)(*(u8 **)(particle_data + 0x1C) + 0x78) + 0xE0);
     } else if (k == 2) {
-        qcopy(p + 0x10, *(u8 **)(*(u8 **)(q + 0x1C) + 0x78) + 0x1F0);
+        qcopy(particle + 0x10, *(u8 **)(*(u8 **)(particle_data + 0x1C) + 0x78) + 0x1F0);
     } else if (k == 4) {
-        f32 z = *(f32 *)(p + 0x18);
-        qcopy(p + 0x10, *(u8 **)(q + 0x1C) + 0x10);
-        *(f32 *)(p + 0x18) = z + 0.2f;
+        f32 z = *(f32 *)(particle + 0x18);
+        qcopy(particle + 0x10, *(u8 **)(particle_data + 0x1C) + 0x10);
+        *(f32 *)(particle + 0x18) = z + 0.2f;
     } else {
-        FUN_001f9a10_274a70(p + 0x10, p + 0x10, q);
+        FUN_001f9a10_274a70(particle + 0x10, particle + 0x10, particle_data);
     }
-    if (*(f32 *)(p + 0x10) < 2.0f || 1021.0f < *(f32 *)(p + 0x10) || *(f32 *)(p + 0x14) < 2.0f ||
-        1021.0f < *(f32 *)(p + 0x14) || *(f32 *)(p + 0x18) < 2.0f || 1021.0f < *(f32 *)(p + 0x18))
+    if (*(f32 *)(particle + 0x10) < 2.0f || 1021.0f < *(f32 *)(particle + 0x10) || *(f32 *)(particle + 0x14) < 2.0f ||
+        1021.0f < *(f32 *)(particle + 0x14) || *(f32 *)(particle + 0x18) < 2.0f || 1021.0f < *(f32 *)(particle + 0x18))
         goto kill;
-    n = p[8];
+    n = particle[8];
     n += truncate_float_to_s32(spread_k(0.0f, 64.0f));
     if (n >= 0x100)
         n -= 0xFF;
-    p[8] = n;
-    if (FUN_001f9770_274a70(p + 0xA) != 0) {
+    particle[8] = n;
+    if (FUN_001f9770_274a70(particle + 0xA) != 0) {
     kill:
-        free_effect_particle(p);
+        free_effect_particle(particle);
         return;
     }
-    *(u32 *)(p + 4) =
-        (truncate_float_to_s32(convert_integer_to_float(*(s16 *)(p + 0xA)) * *(f32 *)(q + 0x10) *
-                             convert_integer_to_float(*(s16 *)(q + 0x14)))
+    *(u32 *)(particle + 4) =
+        (truncate_float_to_s32(convert_integer_to_float(*(s16 *)(particle + 0xA)) * *(f32 *)(particle_data + 0x10) *
+                             convert_integer_to_float(*(s16 *)(particle_data + 0x14)))
          << 24) |
-        *(u32 *)(q + 0x18);
+        *(u32 *)(particle_data + 0x18);
 }
 /* spawns a particle at pos with a colour byte taken from a table and a heading */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00275B98), where it is exact; names translated to the US level program. */
