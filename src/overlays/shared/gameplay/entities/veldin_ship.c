@@ -3287,12 +3287,12 @@ void FUN_L00_002d6cd0(char *moby) {
     v.f[2] -= 0.333000004f;
     for (i = 0; i < 4; i++) {
         {
-            float h = vars->a[i] + vars->b[i];
-            vars->a[i] = h;
-            if (255.0f <= h) {
-                vars->a[i] = h - 255.0f;
-            } else if (h <= 0.0f) {
-                vars->a[i] = h + 255.0f;
+            float unwrapped_particle_byte_value = vars->a[i] + vars->b[i];
+            vars->a[i] = unwrapped_particle_byte_value;
+            if (255.0f <= unwrapped_particle_byte_value) {
+                vars->a[i] = unwrapped_particle_byte_value - 255.0f;
+            } else if (unwrapped_particle_byte_value <= 0.0f) {
+                vars->a[i] = unwrapped_particle_byte_value + 255.0f;
             }
         }
         if (fast_dec_timer(&vars->c[i])) {
