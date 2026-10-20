@@ -346,14 +346,14 @@ int mine_fall(char *moby, char *st) {
         *(float *)(moby + 0x18) = *(float *)(moby + 0x18) - *(float *)(st + 0x28);
         fast_vec_normalize_c(surface_normal, (char *)g + 0x10, one);
         if (0.7070000171661377f <= surface_normal[2]) {
-            float e = fast_vec_dot_c(st, surface_normal);
-            if (e < 0.0f) {
+            float motion_normal_dot = fast_vec_dot_c(st, surface_normal);
+            if (motion_normal_dot < 0.0f) {
                 q = (char *)g - 0x30;
                 if (*(int *)(q + 0x18) == 0 || *(int *)(q + 0x1C) > 0) {
                     flags |= 1;
                     *(short *)(st + 0x3E) = 2;
                 }
-                fast_vec_normalize_c(normal_response_vector, surface_normal, e);
+                fast_vec_normalize_c(normal_response_vector, surface_normal, motion_normal_dot);
                 subtract_vector_xyz(st, st, normal_response_vector);
                 if (*(short *)(st + 0x3E) == 2) {
                     f6c = fast_vec_length(st);
@@ -362,10 +362,10 @@ int mine_fall(char *moby, char *st) {
                 }
             }
         } else {
-            float d = fast_vec_dot_c(st, surface_normal);
-            if (d < 0.0f) {
-                d = d * -(*(float *)(st + 0x30) + one);
-                fast_vec_normalize_c(normal_response_vector, surface_normal, d);
+            float normal_response_scale = fast_vec_dot_c(st, surface_normal);
+            if (normal_response_scale < 0.0f) {
+                normal_response_scale = normal_response_scale * -(*(float *)(st + 0x30) + one);
+                fast_vec_normalize_c(normal_response_vector, surface_normal, normal_response_scale);
                 add_vector_xyz_c(st, st, normal_response_vector);
             }
         }
