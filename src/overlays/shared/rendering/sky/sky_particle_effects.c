@@ -301,17 +301,17 @@ extern u8 D_L00_001BD7B0[] __attribute__((section(".data")));
 void FUN_L00_00289cb8(void) {
     Part *init_particle;
     Part *update_particle;
-    PU *q2;
+    PU *update_state;
     s32 i2;
     s32 k2;
-    PU *q;
+    PU *init_phases;
     s32 i;
     s32 k;
     s32 j;
     s32 r;
     s32 color_channel_offset;
     s32 color_high_byte_offset;
-    f32 a;
+    f32 azimuth_radians;
     f32 b;
 
     D_L00_0016051C_c3->h4 = 0;
@@ -323,9 +323,9 @@ void FUN_L00_00289cb8(void) {
             init_particle = &D_L00_0016051C_c3->parts[i];
             if (i >= 0xF0) {
                 init_particle->type = 0;
-                q = &init_particle->u;
-                q->h.h0 = rand() >> 16;
-                q->h.h2 = rand() >> 16;
+                init_phases = &init_particle->u;
+                init_phases->h.h0 = rand() >> 16;
+                init_phases->h.h2 = rand() >> 16;
                 init_particle->b3 = 0x48;
                 init_particle->b2 = 1;
                 init_particle->f1C = 0.18f;
@@ -353,10 +353,10 @@ void FUN_L00_00289cb8(void) {
                 init_particle->b3 = 0x48;
                 init_particle->f8 = random_angle_radians();
                 init_particle->f1C = convert_integer_to_float(random_integer_below(0x30) + 0x20) * 0.00390625f;
-                a = random_angle_radians();
+                azimuth_radians = random_angle_radians();
                 b = random_angle_radians();
-                init_particle->f10 = fast_cos(a) * fast_sin(b) * 50.0f;
-                init_particle->f14 = fast_sin(a) * fast_sin(b) * 50.0f;
+                init_particle->f10 = fast_cos(azimuth_radians) * fast_sin(b) * 50.0f;
+                init_particle->f14 = fast_sin(azimuth_radians) * fast_sin(b) * 50.0f;
                 init_particle->f18 = fast_cos(b) * 50.0f;
                 color_channel_offset = random_integer_below(0x18) + 8;
                 color_high_byte_offset = random_integer_below(0x20) << 24;
@@ -377,13 +377,13 @@ void FUN_L00_00289cb8(void) {
     for (i2 = 0; i2 < D_L00_0016051C_c3->count; i2++) {
         update_particle = &D_L00_0016051C_c3->parts[i2];
         if (update_particle->type == 0) {
-            q2 = &update_particle->u;
+            update_state = &update_particle->u;
             update_particle->u.h.h0++;
-            q2->h.h2++;
-            a = convert_integer_to_float((update_particle->u.h.h0 & 0xFFF) - 0x800) * 0.0015339808f;
-            b = convert_integer_to_float((q2->h.h2 & 0xFFF) - 0x800) * 0.0015339808f;
-            update_particle->f10 = fast_cos(a) * fast_sin(b) * 50.0f;
-            update_particle->f14 = fast_sin(a) * fast_sin(b) * 50.0f;
+            update_state->h.h2++;
+            azimuth_radians = convert_integer_to_float((update_particle->u.h.h0 & 0xFFF) - 0x800) * 0.0015339808f;
+            b = convert_integer_to_float((update_state->h.h2 & 0xFFF) - 0x800) * 0.0015339808f;
+            update_particle->f10 = fast_cos(azimuth_radians) * fast_sin(b) * 50.0f;
+            update_particle->f14 = fast_sin(azimuth_radians) * fast_sin(b) * 50.0f;
             update_particle->f18 = fast_cos(b) * 50.0f;
             update_particle->col &= 0xFFFFFF;
             if (((u16)update_particle->u.h.h0 & 0x3F) < 8) {
@@ -392,13 +392,13 @@ void FUN_L00_00289cb8(void) {
                 update_particle->col |= 0x24000000;
             }
         } else if (update_particle->type == 2) {
-            q2 = &update_particle->u;
-            q2->c.c2 = (q2->c.c2 + 1) % 0x30;
-            if (q2->c.c2 == 0) {
-                update_particle->f8 = convert_integer_to_float((q2->c.c1 << 5) + ((rand() >> 16) & 0xF) - 8) *
+            update_state = &update_particle->u;
+            update_state->c.c2 = (update_state->c.c2 + 1) % 0x30;
+            if (update_state->c.c2 == 0) {
+                update_particle->f8 = convert_integer_to_float((update_state->c.c1 << 5) + ((rand() >> 16) & 0xF) - 8) *
                          0.024543693f;
             }
-            k2 = q2->c.c2 * 4;
+            k2 = update_state->c.c2 * 4;
             if (k2 > 0x60)
                 k2 = 0xC0 - k2;
             {
