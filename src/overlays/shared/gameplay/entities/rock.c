@@ -715,9 +715,9 @@ void FUN_L01_002fb5b0(char *moby) {
         moby[0xBC] = 1;
         {
             int o = *(int *)(trigger_vars + 0x24) << 7;
-            char *t = D_L01_001600EC_q;
-            qcopy(trigger_vars, (char *)(o + (int)t) + 0x30);
-            qcopy(trigger_vars + 0x10, (char *)(o + (int)t) + 0x70);
+            char *record_table_base = D_L01_001600EC_q;
+            qcopy(trigger_vars, (char *)(o + (int)record_table_base) + 0x30);
+            qcopy(trigger_vars + 0x10, (char *)(o + (int)record_table_base) + 0x70);
         }
         break;
     }
