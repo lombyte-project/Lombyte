@@ -265,34 +265,34 @@ void FUN_L11_003089d0(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030A318), where it is exact; names translated to the US level program. */
 
 char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len, float z) {
-    char *m = func_0020D348_m(0x3F9);
-    if (m != 0) {
-        char *p = *(char **)(m + 0x78);
+    char *spawned_moby = func_0020D348_m(0x3F9);
+    if (spawned_moby != 0) {
+        char *moby_vars = *(char **)(spawned_moby + 0x78);
         int r;
-        *(int *)(m + 0x94) = 0;
-        *(int *)(p + 0x1C) = owner;
-        *(unsigned char *)(m + 0x30) = 0xFF;
-        *(short *)(m + 0x32) = truncate_float_to_s32(size);
-        *(int *)(m + 0x40) = 0;
-        m[0x31] = 1;
-        *(float *)(m + 0x44) = -fast_arc_tan(vector_length_xy(dir), dir[2]);
-        *(float *)(m + 0x48) = fast_arc_tan(dir[0], dir[1]);
-        *(float *)(p + 0x10) = 1.0f;
+        *(int *)(spawned_moby + 0x94) = 0;
+        *(int *)(moby_vars + 0x1C) = owner;
+        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
+        *(short *)(spawned_moby + 0x32) = truncate_float_to_s32(size);
+        *(int *)(spawned_moby + 0x40) = 0;
+        spawned_moby[0x31] = 1;
+        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(dir), dir[2]);
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(dir[0], dir[1]);
+        *(float *)(moby_vars + 0x10) = 1.0f;
         if (len > 0.0f) {
-            fast_vec_normalize(p, dir, len);
+            fast_vec_normalize(moby_vars, dir, len);
         } else {
-            qcopy(p, dir);
+            qcopy(moby_vars, dir);
             len = fast_vec_length(dir);
         }
-        qcopy(m + 0x10, pos);
+        qcopy(spawned_moby + 0x10, pos);
         r = truncate_float_to_s32(size / len);
-        *(int *)(p + 0x14) = r;
-        *(float *)(p + 0x20) = z;
-        *(int *)(p + 0x18) = r - 13;
-        *(short *)(m + 0x34) = 0x200;
-        FUN_L00_00250df8(m);
+        *(int *)(moby_vars + 0x14) = r;
+        *(float *)(moby_vars + 0x20) = z;
+        *(int *)(moby_vars + 0x18) = r - 13;
+        *(short *)(spawned_moby + 0x34) = 0x200;
+        FUN_L00_00250df8(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
