@@ -531,13 +531,13 @@ extern f32 FUN_L00_00233d30_32b90(void *) __asm__("FUN_L00_00233d30");
 extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
 extern s32 FUN_L00_002595a0_32b90(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 
-f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
+f32 FUN_L00_00232b90(f32 prediction_frames, f32 b, f32 target_height) {
     enum {
         GRAVITY_MODE_WORLD_Z = 0,
         GRAVITY_MODE_VECTOR_AXIS = 1,
         GRAVITY_MODE_DIRECTION_AXIS = 2
     };
-    f32 t[4];
+    f32 trajectory_endpoint[4];
     V4_32b90 v;
     V4_32b90 trajectory_work_vector;
     V4_32b90 hero_position_copy;
@@ -546,22 +546,22 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
 
     switch (hero.unk20B3) {
     case GRAVITY_MODE_WORLD_Z:
-        if (c < 0.0f) {
-            FUN_001f9a68_32b90(t, &hero.motion.velocity, a);
-            t[2] -= ((a * a + a) * 0.5f) * b;
-            FUN_001f9a10_32b90(t, t, &hero.motion.pos);
+        if (target_height < 0.0f) {
+            FUN_001f9a68_32b90(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
+            trajectory_endpoint[2] -= ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * b;
+            FUN_001f9a10_32b90(trajectory_endpoint, trajectory_endpoint, &hero.motion.pos);
             v.q = hero.motion.pos.q;
-            FUN_L00_0025d238_32b90(&v, t);
+            FUN_L00_0025d238_32b90(&v, trajectory_endpoint);
             qcopy(&v, &hero.motion.pos);
-            if (collision_line(&v, t, 0x24, 0, 0) != 0) {
+            if (collision_line(&v, trajectory_endpoint, 0x24, 0, 0) != 0) {
                 if (FUN_L00_00233d30_32b90((f32 *)coll_hit_normal) <= 0.87266463f) {
-                    c = *(f32 *)(coll_hit_normal - 0x18);
+                    target_height = *(f32 *)(coll_hit_normal - 0x18);
                 }
             }
         }
-        if (c > 0.0f) {
+        if (target_height > 0.0f) {
             if (FUN_L00_002595a0_32b90(&o[0], &o[1], b * -0.5f, hero.motion.velocity.f[2] - b * -0.5f,
-                                       hero.motion.pos.f[2] - c) > 0 &&
+                                       hero.motion.pos.f[2] - target_height) > 0 &&
                 o[0] > 0.0f) {
                 return o[0];
             }
@@ -571,13 +571,13 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
         qcopy(&v, &hero.unk270);
         FUN_001f9bf8_32b90(&v, &v, b);
         FUN_001f9a68_32b90(&v, &v, -1.0f);
-        FUN_001f9a68_32b90(t, &hero.motion.velocity, a);
-        FUN_001f9a68_32b90(&trajectory_work_vector, &v, ((a * a + a) * 0.5f) * b);
-        FUN_001f9a10_32b90(t, &trajectory_work_vector, t);
-        FUN_001f9a10_32b90(t, &hero.motion.pos, t);
+        FUN_001f9a68_32b90(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
+        FUN_001f9a68_32b90(&trajectory_work_vector, &v, ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * b);
+        FUN_001f9a10_32b90(trajectory_endpoint, &trajectory_work_vector, trajectory_endpoint);
+        FUN_001f9a10_32b90(trajectory_endpoint, &hero.motion.pos, trajectory_endpoint);
         hero_position_copy.q = hero.motion.pos.q;
-        FUN_L00_0025d238_32b90(&hero_position_copy, t);
-        if (collision_line(&hero.motion.pos, t, 0x24, 0, 0) != 0) {
+        FUN_L00_0025d238_32b90(&hero_position_copy, trajectory_endpoint);
+        if (collision_line(&hero.motion.pos, trajectory_endpoint, 0x24, 0, 0) != 0) {
             f32 nb;
             nb = b * -0.5f;
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
@@ -595,13 +595,13 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
         FUN_001f9a28_32b90(&v, &hero.motion.pos, &trajectory_work_vector);
         FUN_001f9bf8_32b90(&v, &v, b);
         FUN_001f9a68_32b90(&v, &v, -1.0f);
-        FUN_001f9a68_32b90(t, &hero.motion.velocity, a);
-        FUN_001f9a68_32b90(&trajectory_work_vector, &v, ((a * a + a) * 0.5f) * b);
-        FUN_001f9a10_32b90(t, &trajectory_work_vector, t);
-        FUN_001f9a10_32b90(t, &hero.motion.pos, t);
+        FUN_001f9a68_32b90(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
+        FUN_001f9a68_32b90(&trajectory_work_vector, &v, ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * b);
+        FUN_001f9a10_32b90(trajectory_endpoint, &trajectory_work_vector, trajectory_endpoint);
+        FUN_001f9a10_32b90(trajectory_endpoint, &hero.motion.pos, trajectory_endpoint);
         hero_position_copy.q = hero.motion.pos.q;
-        FUN_L00_0025d238_32b90(&hero_position_copy, t);
-        if (collision_line(&hero.motion.pos, t, 0x24, 0, 0) != 0) {
+        FUN_L00_0025d238_32b90(&hero_position_copy, trajectory_endpoint);
+        if (collision_line(&hero.motion.pos, trajectory_endpoint, 0x24, 0, 0) != 0) {
             f32 nb;
             nb = b * -0.5f;
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
@@ -613,7 +613,7 @@ f32 FUN_L00_00232b90(f32 a, f32 b, f32 c) {
         }
         break;
     }
-    return a;
+    return prediction_frames;
 }
 #define NOT_SDA
 
