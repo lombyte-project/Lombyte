@@ -26,12 +26,12 @@ extern void draw_centered_capture_background(int, int) __asm__("func_001FB740");
 extern void vu1_add_g_sregister(int, long) __asm__("func_00233980");
 extern void update_scrolling_status_message(char *) __asm__("func_00238520");
 extern void render_vendor_item_details_pass(char *) __asm__("func_002389E0");
-extern void render_capture_effect_pass(char *) __asm__("func_00238630");
+extern void render_capture_effect_pass(char *) __asm__("FUN_00238630");
 extern void render_vendor_buy_label_pass(char *, int, int) __asm__("func_00238F08");
 extern void render_vendor_purchase_prompt_pass(char *) __asm__("func_00239160");
-extern void render_vendor_item_icon_strip_pass(char *) __asm__("func_002386E8");
+extern void render_vendor_item_icon_strip_pass(char *) __asm__("FUN_002386e8");
 extern void render_vendor_capture_texture_overlays_pass(int, float, float) __asm__("func_00239328");
-extern void setup_view_context(void) __asm__("func_00239750");
+extern void setup_view_context(void) __asm__("FUN_00239750");
 extern void vu1_tex_flush(void) __asm__("func_00233B68");
 extern void append_subpixel_textured_screen_quad(float, float, float, float, int, int, int, int,
                                                  long, long) __asm__("func_001F55D8");
