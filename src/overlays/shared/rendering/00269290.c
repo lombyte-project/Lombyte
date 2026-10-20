@@ -1578,7 +1578,7 @@ int FUN_001160d8_0026ced0(void) __asm__("FUN_001160d8");
 float FUN_001fa6c0_0026ced0(int) __asm__("FUN_001fa6c0");
 
 extern unsigned char *D_L00_001B20D8 __attribute__((section(".data")));
-void FUN_L00_0026ced0(u128 *spawn_position, u128 *initial_velocity, int initial_color, int d, int lifetime, float s) {
+void FUN_L00_0026ced0(u128 *spawn_position, u128 *initial_velocity, int initial_color, int d, int lifetime, float target_particle_scalar) {
     unsigned char *particle = FUN_L00_002678b8_0026ced0(0x16);
     if (particle) {
         unsigned char *v = particle + 0x20;
@@ -1587,13 +1587,13 @@ void FUN_L00_0026ced0(u128 *spawn_position, u128 *initial_velocity, int initial_
         particle[9] = FUN_001fa6d0_0026ced0(4.0f) + 0x70;
         particle[1] = 0;
         particle[3] = 0x44;
-        *(float *)(particle + 0xc) = s * 0.2f;
+        *(float *)(particle + 0xc) = target_particle_scalar * 0.2f;
         particle[8] = FUN_001160d8_0026ced0();
         particle[2] = *D_L00_001B20D8;
         *(short *)(particle + 0xA) = lifetime;
         *(short *)(v + 0x18) = lifetime;
         lifetime_float = FUN_001fa6c0_0026ced0(lifetime);
-        *(float *)(v + 0x1c) = (s - *(float *)(particle + 0xc)) / lifetime_float;
+        *(float *)(v + 0x1c) = (target_particle_scalar - *(float *)(particle + 0xc)) / lifetime_float;
         *(int *)(v + 0x10) = initial_color;
         *(int *)(v + 0x14) = d;
         qcopy(v, initial_velocity);
