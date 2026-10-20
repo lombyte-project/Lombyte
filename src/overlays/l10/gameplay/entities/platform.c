@@ -104,7 +104,7 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int func_001F9850_95a38(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern char D_L10_001DC510[];
-void FUN_L10_00295a38(char *m) {
+void FUN_L10_00295a38(char *platform_moby) {
     enum {
         PLATFORM_STATE_INITIALIZE = 0,
         PLATFORM_STATE_RISING = 1,
@@ -112,53 +112,53 @@ void FUN_L10_00295a38(char *m) {
         PLATFORM_STATE_DESCENDING = 3,
         PLATFORM_STATE_WAIT_AT_ORIGINAL_HEIGHT = 4
     };
-    char *d = *(char **)(m + 0x78);
-    if (d == 0) {
-        stub_printf(D_L10_001DC510, *(short *)(m + 0xA6), *(short *)(m + 0xB2));
-        delete_moby(m);
+    char *platform_vars = *(char **)(platform_moby + 0x78);
+    if (platform_vars == 0) {
+        stub_printf(D_L10_001DC510, *(short *)(platform_moby + 0xA6), *(short *)(platform_moby + 0xB2));
+        delete_moby(platform_moby);
         return;
     }
-    switch (*(unsigned char *)(m + 0x20)) {
+    switch (*(unsigned char *)(platform_moby + 0x20)) {
     case PLATFORM_STATE_INITIALIZE:
-        d[0x28] = 4;
-        *(short *)(d + 0x3E) = 5;
-        *(int *)(d + 0x20) = 0;
-        *(short *)(d + 0x24) = 0;
-        *(OvlQuad *)(d + 0xA0) = *(OvlQuad *)(m + 0x10);
-        m[0x20] = 1;
+        platform_vars[0x28] = 4;
+        *(short *)(platform_vars + 0x3E) = 5;
+        *(int *)(platform_vars + 0x20) = 0;
+        *(short *)(platform_vars + 0x24) = 0;
+        *(OvlQuad *)(platform_vars + 0xA0) = *(OvlQuad *)(platform_moby + 0x10);
+        platform_moby[0x20] = 1;
         break;
     case PLATFORM_STATE_RISING: {
         float lim;
-        *(float *)(m + 0x18) = *(float *)(m + 0x18) + 1.5f / scale_time(45.0f);
-        lim = *(float *)(d + 0xA8) + 1.5f;
-        if (lim <= *(float *)(m + 0x18)) {
-            *(float *)(m + 0x18) = lim;
-            m[0x20] = 2;
-            *(int *)(d + 0xB0) = func_001F9850_95a38(0x78);
+        *(float *)(platform_moby + 0x18) = *(float *)(platform_moby + 0x18) + 1.5f / scale_time(45.0f);
+        lim = *(float *)(platform_vars + 0xA8) + 1.5f;
+        if (lim <= *(float *)(platform_moby + 0x18)) {
+            *(float *)(platform_moby + 0x18) = lim;
+            platform_moby[0x20] = 2;
+            *(int *)(platform_vars + 0xB0) = func_001F9850_95a38(0x78);
         }
         break;
     }
     case PLATFORM_STATE_WAIT_AT_UPPER_HEIGHT:
-        if (fast_dec_timer((int *)(d + 0xB0))) {
-            allocate_voice_for_target_entry(0, 0, (int)m);
-            m[0x20] = 3;
+        if (fast_dec_timer((int *)(platform_vars + 0xB0))) {
+            allocate_voice_for_target_entry(0, 0, (int)platform_moby);
+            platform_moby[0x20] = 3;
         }
         break;
     case PLATFORM_STATE_DESCENDING: {
         float lim;
-        *(float *)(m + 0x18) = *(float *)(m + 0x18) - 1.5f / scale_time(45.0f);
-        lim = *(float *)(d + 0xA8);
-        if (*(float *)(m + 0x18) <= lim) {
-            *(float *)(m + 0x18) = lim;
-            m[0x20] = 4;
-            *(int *)(d + 0xB0) = func_001F9850_95a38(0x78);
+        *(float *)(platform_moby + 0x18) = *(float *)(platform_moby + 0x18) - 1.5f / scale_time(45.0f);
+        lim = *(float *)(platform_vars + 0xA8);
+        if (*(float *)(platform_moby + 0x18) <= lim) {
+            *(float *)(platform_moby + 0x18) = lim;
+            platform_moby[0x20] = 4;
+            *(int *)(platform_vars + 0xB0) = func_001F9850_95a38(0x78);
         }
         break;
     }
     case PLATFORM_STATE_WAIT_AT_ORIGINAL_HEIGHT:
-        if (fast_dec_timer((int *)(d + 0xB0))) {
-            allocate_voice_for_target_entry(0, 0, (int)m);
-            m[0x20] = 1;
+        if (fast_dec_timer((int *)(platform_vars + 0xB0))) {
+            allocate_voice_for_target_entry(0, 0, (int)platform_moby);
+            platform_moby[0x20] = 1;
         }
         break;
     }
