@@ -2535,7 +2535,7 @@ void FUN_L14_002b5290(struct Moby *m) {
     float f4;
     char *hit_record;
     int k;
-    float t;
+    float remaining_health;
     if (m->state == 0 || m->state == 9)
         return;
     m->scale = m->pclass->scale;
@@ -2550,9 +2550,9 @@ void FUN_L14_002b5290(struct Moby *m) {
     }
     k = FUN_L00_0025a478_c(m, hit_record, moby_vars + 0x20, 0, &loc0, &f4, 0, 4);
     if (loc0 != 1 && m->state != 9) {
-        t = *(float *)(moby_vars + 0x20) - f4;
-        *(float *)(moby_vars + 0x20) = t;
-        if (t <= 0.0f)
+        remaining_health = *(float *)(moby_vars + 0x20) - f4;
+        *(float *)(moby_vars + 0x20) = remaining_health;
+        if (remaining_health <= 0.0f)
             k = 1;
         switch (k) {
         case HIT_REACTION_NO_ACTION:
