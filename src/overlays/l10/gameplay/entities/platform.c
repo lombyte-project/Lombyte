@@ -691,10 +691,10 @@ void FUN_L10_002c7a20(struct Moby *moby) {
         MOBY_STATE_ACTIVE_WITH_SOUND = 1
     };
     char *data = (char *)moby->pvars;
-    float d[16];
+    float rotation_matrix[16];
     float v[4];
     float r[4];
-    float s[4];
+    float position_step[4];
     switch (moby->state) {
     case MOBY_STATE_WAIT_FOR_ACTIVATION:
         *(int *)(data + 0x10) = -1;
@@ -705,15 +705,15 @@ void FUN_L10_002c7a20(struct Moby *moby) {
         break;
     case MOBY_STATE_ACTIVE_WITH_SOUND:
         qcopy(v, &moby->pos);
-        euler_rotation_matrix(d, &moby->rot.x);
+        euler_rotation_matrix(rotation_matrix, &moby->rot.x);
         clear_u64_value(r);
         r[2] = *(float *)data * 3.0f * D_0015ED6C_c;
-        transform_vector(r, r, d);
-        scale_vector_xyz(s, r, 0.33f);
+        transform_vector(r, r, rotation_matrix);
+        scale_vector_xyz(position_step, r, 0.33f);
         FUN_L00_0026fd28((char *)v, (char *)r, 0x40, (int)moby);
-        add_vector_xyz(v, v, s);
+        add_vector_xyz(v, v, position_step);
         FUN_L00_0026fd28((char *)v, (char *)r, 0x40, (int)moby);
-        add_vector_xyz(v, v, s);
+        add_vector_xyz(v, v, position_step);
         FUN_L00_0026fd28((char *)v, (char *)r, 0x40, (int)moby);
         if (voice_is_playing(moby, *(int *)(data + 0x10)) == 0) {
             *(int *)(data + 0x10) = FUN_L00_0028dc90(0, 4, (int)moby, 0x519);
@@ -724,8 +724,8 @@ void FUN_L10_002c7a20(struct Moby *moby) {
             moby->state = 0;
             k = *(int *)(data + 0x10);
             if (k != -1) {
-                unsigned char *e = (unsigned char *)D_0013E550 + k * 0x70;
-                if (*(unsigned char **)(e + 0x88) == moby && e[0x74] != 0) {
+                unsigned char *voice_entry = (unsigned char *)D_0013E550 + k * 0x70;
+                if (*(unsigned char **)(voice_entry + 0x88) == moby && voice_entry[0x74] != 0) {
                     release_voice_slot(k);
                 }
             }
