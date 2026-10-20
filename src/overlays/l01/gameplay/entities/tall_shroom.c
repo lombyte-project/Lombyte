@@ -91,7 +91,7 @@ void FUN_L01_0030acb8(struct Moby *moby) {
     s32 *data;
     struct Moby *hint_candidate_moby;
     struct Moby *health_hint_candidate_moby;
-    s32 t;
+    s32 usage_time_value;
 
     data = (s32 *)moby->pvars;
     tick_countdown_32(&data[6]);
@@ -128,9 +128,9 @@ void FUN_L01_0030acb8(struct Moby *moby) {
         if (is_point_inside_clip_volume(&hero.motion.pos, data[15]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && help_state.state == 0 &&
             help_state.cur == -1) {
-            t = scale_game_frames(D_0015EEA4_macro) - usage_stats.stat[9].unk2 * 600;
+            usage_time_value = scale_game_frames(D_0015EEA4_macro) - usage_stats.stat[9].unk2 * 600;
             /* "< 1" rather than "!": cc1 would otherwise test the bit as (v >> level) & 1 */
-            if (scale_game_frames(216000) < t && (u32)(help_records[0x43].v & (1 << current_level_index_macro)) < 1) {
+            if (scale_game_frames(216000) < usage_time_value && (u32)(help_records[0x43].v & (1 << current_level_index_macro)) < 1) {
                 help_request(0x3EF, 0x43);
             }
         }
@@ -167,8 +167,8 @@ void FUN_L01_0030acb8(struct Moby *moby) {
                 if (usage_stats.stat[22].count < 0xFFFF) {
                     usage_stats.stat[22].count++;
                 }
-                t = scale_game_frames(D_0015EEA4_macro) / 600;
-                if (usage_stats.stat[22].unk2 < t) {
+                usage_time_value = scale_game_frames(D_0015EEA4_macro) / 600;
+                if (usage_stats.stat[22].unk2 < usage_time_value) {
                     usage_stats.stat[22].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
                 }
                 usage_stats.stat[22].level_mask = usage_stats.stat[22].level_mask | (1 << current_level_index_macro) | 0x80000000;
@@ -178,8 +178,8 @@ void FUN_L01_0030acb8(struct Moby *moby) {
                 if (usage_stats.stat[23].count < 0xFFFF) {
                     usage_stats.stat[23].count++;
                 }
-                t = scale_game_frames(D_0015EEA4_macro) / 600;
-                if (usage_stats.stat[23].unk2 < t) {
+                usage_time_value = scale_game_frames(D_0015EEA4_macro) / 600;
+                if (usage_stats.stat[23].unk2 < usage_time_value) {
                     usage_stats.stat[23].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
                 }
                 usage_stats.stat[23].level_mask = usage_stats.stat[23].level_mask | (1 << current_level_index_macro) | 0x80000000;
@@ -197,8 +197,8 @@ void FUN_L01_0030acb8(struct Moby *moby) {
                     if (usage_stats.stat[13].count < 0xFFFF) {
                         usage_stats.stat[13].count++;
                     }
-                    t = scale_game_frames(D_0015EEA4_macro) / 600;
-                    if (usage_stats.stat[13].unk2 < t) {
+                    usage_time_value = scale_game_frames(D_0015EEA4_macro) / 600;
+                    if (usage_stats.stat[13].unk2 < usage_time_value) {
                         usage_stats.stat[13].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
                     }
                     usage_stats.stat[13].level_mask = usage_stats.stat[13].level_mask | (1 << current_level_index_macro) | 0x80000000;
