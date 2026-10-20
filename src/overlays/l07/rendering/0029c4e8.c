@@ -22,7 +22,7 @@ extern unsigned char *D_L07_001B2164 __attribute__((section(".data")));
 void FUN_L07_0029c4e8(void *pos, void *pos2) {
     unsigned char *particle = create_part(0x41);
     if (particle) {
-        float *f = (float *)(particle + 0x20);
+        float *particle_payload = (float *)(particle + 0x20);
         qcopy(particle + 0x10, pos);
         *(int *)(particle + 4) = FUN_L00_0025bfe0(1.0f, 1.0f, 1.0f, 0.6f);
         particle[9] = func_001FA898_r(4.0f) + 0x40;
@@ -31,12 +31,12 @@ void FUN_L07_0029c4e8(void *pos, void *pos2) {
         *(float *)(particle + 0xC) = random_float_between_alt(20000.0f, 120000.0f);
         particle[8] = 0;
         particle[2] = *D_L07_001B2164;
-        f[4] = 1.0f;
-        f[5] = 1.0f;
-        f[6] = 1.0f;
-        f[7] = 0.6f;
+        particle_payload[4] = 1.0f;
+        particle_payload[5] = 1.0f;
+        particle_payload[6] = 1.0f;
+        particle_payload[7] = 0.6f;
         *(short *)(particle + 0xA) = scale_game_frames(0x50);
-        qcopy(f, pos2);
+        qcopy(particle_payload, pos2);
     }
 }
 #include "rnc/math/vector.h"
