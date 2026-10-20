@@ -776,7 +776,7 @@ void moving_platform_small_update(char *moby) {
     float delta[4];
     float old_rot[4];
     float step[4];
-    float tmp[4];
+    float endpoint_delta_or_position[4];
     char *data;
     char *pa;
     char *pb;
@@ -847,11 +847,11 @@ void moving_platform_small_update(char *moby) {
         if (pb[4] < 0) {
             base = *(float *)(data + 0x110) - base;
         }
-        subtract_vector_xyz(tmp, *(char **)(pb + 0x10) + **(int **)(pb + 0x10) * 0x10, *(char **)(pb + 0x10) + 0x10);
-        *(OvlQuad *)step = *(OvlQuad *)tmp;
+        subtract_vector_xyz(endpoint_delta_or_position, *(char **)(pb + 0x10) + **(int **)(pb + 0x10) * 0x10, *(char **)(pb + 0x10) + 0x10);
+        *(OvlQuad *)step = *(OvlQuad *)endpoint_delta_or_position;
         fast_vec_normalize(step, step, base);
-        add_vector_xyz(tmp, *(char **)(pb + 0x10) + 0x10, step);
-        *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)tmp;
+        add_vector_xyz(endpoint_delta_or_position, *(char **)(pb + 0x10) + 0x10, step);
+        *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)endpoint_delta_or_position;
         if (*(int *)(data + 0x10C) >= scale_game_frames(240)) {
             pb[4] = pb[4] * -1;
             idx = *(int *)(data + 0x104);
