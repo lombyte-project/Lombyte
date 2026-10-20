@@ -2787,15 +2787,15 @@ extern s32 FUN_001f99a8_5e80(s32) __asm__("FUN_001f99a8");
 extern s32 FUN_001f96f8_5e80(s32) __asm__("FUN_001f96f8");
 extern void FUN_0022da68_5e80(int, int, void *) __asm__("FUN_0022da68");
 
-void FUN_L16_002d5e80(struct Moby *m) {
-    char *d = (char *)m->pvars;
-    if (*(int *)(d + 8) == 0) {
+void FUN_L16_002d5e80(struct Moby *moby) {
+    char *moby_data = (char *)moby->pvars;
+    if (*(int *)(moby_data + 8) == 0) {
         if (FUN_001f99a8_5e80(D_L16_00161A88 - D_L16_0015F5CC) >= 4) {
             D_L16_00161A88 = D_L16_0015F5CC;
-            FUN_0022da68_5e80(0, 0, m);
+            FUN_0022da68_5e80(0, 0, moby);
         }
     }
-    *(int *)(d + 8) = FUN_001f96f8_5e80(5);
+    *(int *)(moby_data + 8) = FUN_001f96f8_5e80(5);
 }
 /* Drive a triggered scene, player pose and objective completion. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D72C0), where it is exact; names translated to the US level program. */
