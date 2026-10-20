@@ -7984,23 +7984,23 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
-void FUN_L06_00305170(char *m) {
-    float a[16];
+void FUN_L06_00305170(char *moby) {
+    float rotation_scale_matrix[16];
     float b[16];
     float mat[5][16];
     int s[10];
     char *data;
-    float *m0;
+    float *transform_matrix_base;
     int *sp;
     float *pp;
     float *tp;
     float *mp;
     int i;
     int j;
-    data = *(char **)(m + 0x78);
-    euler_rotation_matrix(a, (float *)(m + 0x40));
+    data = *(char **)(moby + 0x78);
+    euler_rotation_matrix(rotation_scale_matrix, (float *)(moby + 0x40));
     set_scale_matrix(b, *(float *)&D_L06_00162208_gp);
-    multiply_matrix(a, a, b);
+    multiply_matrix(rotation_scale_matrix, rotation_scale_matrix, b);
     vu1_add_g_sregister(6, get_effect_texture(0xE));
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(8, 0);
@@ -8008,17 +8008,17 @@ void FUN_L06_00305170(char *m) {
                                   ((long)D_L06_001621C8 << 4) |
                                   ((long)D_L06_001621CC << 6) | 0x8000000000L);
     font_queue_vu_state();
-    m0 = mat[0];
+    transform_matrix_base = mat[0];
     sp = s;
     pp = mat[0] + 12;
     tp = D_L06_001FE890;
-    mp = m0;
+    mp = transform_matrix_base;
     for (i = 0; i < 4; i++) {
         euler_rotation_matrix(mp, tp);
         tp += 4;
-        multiply_matrix(mp, a, mp);
+        multiply_matrix(mp, rotation_scale_matrix, mp);
         mp += 16;
-        add_vector_xyz(pp, pp, m + 0x10);
+        add_vector_xyz(pp, pp, moby + 0x10);
         pp[2] += (float)i * 1.7f + 0.6f;
         pp[3] = 1.0f;
         pp += 16;
@@ -8032,7 +8032,7 @@ void FUN_L06_00305170(char *m) {
     *(float *)&s[8] = *(float *)&D_L06_001621F8_gp;
     s[5] = 0x1E;
     s[6] = (int)data;
-    pp = m0;
+    pp = transform_matrix_base;
     for (j = 3; j >= 0; j--) {
         FUN_L06_00216b88(sp, pp);
         pp += 16;
