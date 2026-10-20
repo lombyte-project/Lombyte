@@ -165,57 +165,57 @@ extern struct {
 
 /* Watcher moby update: wakes when the hero is near, then turns its head toward the hero or a random target. */
 void batalia_deserter_update(WM *m) __asm__("FUN_L08_00305270");
-void batalia_deserter_update(WM *m) {
+void batalia_deserter_update(WM *moby) {
     enum {
         DESERTER_INITIALIZE = 0,
         DESERTER_WAIT_FOR_PLAYER = 1,
         DESERTER_UPDATE_DIALOGUE = 2
     };
     L16WatchScratch scratch;
-    WD8 *d = (WD8 *)m->data;
+    WD8 *deserter_data = (WD8 *)moby->data;
     float rate;
     float head_rate;
     int tracking;
-    FUN_L08_00305138_c(m);
-    if (m->opacity) {
-        if (FUN_001f9b48(m->position, D_L08_001675C0_c) < 30.0f) {
-            FUN_L00_0025a120(m);
-            m->b7F = 0x18;
+    FUN_L08_00305138_c(moby);
+    if (moby->opacity) {
+        if (FUN_001f9b48(moby->position, D_L08_001675C0_c) < 30.0f) {
+            FUN_L00_0025a120(moby);
+            moby->b7F = 0x18;
         }
     }
-    switch (m->state) {
+    switch (moby->state) {
     case DESERTER_INITIALIZE:
-        if (m->animation != 1)
-            blend_moby_animation(m, 1, 0, scale_game_frames(20));
-        if (D_0013DD49 && visited52[((unsigned char *)m)[0xB0] + current_level_index * 16] == 0xFF) {
-            mark_moby_for_removal(m);
+        if (moby->animation != 1)
+            blend_moby_animation(moby, 1, 0, scale_game_frames(20));
+        if (D_0013DD49 && visited52[((unsigned char *)moby)[0xB0] + current_level_index * 16] == 0xFF) {
+            mark_moby_for_removal(moby);
             return;
         }
-        d->f2C = 4.0f;
-        d->p40 = (void *)D_L08_001622E8;
-        m->state = 1;
-        if (d->i64 >= 0)
-            initialize_npc_dialogue(m, (char *)d + 0x20);
+        deserter_data->f2C = 4.0f;
+        deserter_data->p40 = (void *)D_L08_001622E8;
+        moby->state = 1;
+        if (deserter_data->i64 >= 0)
+            initialize_npc_dialogue(moby, (char *)deserter_data + 0x20);
         break;
     case DESERTER_WAIT_FOR_PLAYER:
-        if (vector_distance(m->position, (char *)&D_0013E633_watch + 0xE9D) < 8.0f) {
-            jet_clear_persistent(((unsigned char *)m)[0xB0]);
-            m->state = 2;
+        if (vector_distance(moby->position, (char *)&D_0013E633_watch + 0xE9D) < 8.0f) {
+            jet_clear_persistent(((unsigned char *)moby)[0xB0]);
+            moby->state = 2;
         }
         break;
     case DESERTER_UPDATE_DIALOGUE:
-        if (m->flags70 & 2) {
-            if (m->animation != random_integer_below(2) + 1)
-                blend_moby_animation(m, random_integer_below(2) + 1, 0, scale_game_frames(20));
+        if (moby->flags70 & 2) {
+            if (moby->animation != random_integer_below(2) + 1)
+                blend_moby_animation(moby, random_integer_below(2) + 1, 0, scale_game_frames(20));
         }
-        if (D_0013F350_g.f2FC == 0 && (scale_game_frames(30) < D_0013F350_g.f300 || d->h56 != 0)) {
-            update_npc_dialogue(m, (char *)d + 0x20);
-            begin_dialogue_camera_transition(m, 2.2f);
+        if (D_0013F350_g.f2FC == 0 && (scale_game_frames(30) < D_0013F350_g.f300 || deserter_data->h56 != 0)) {
+            update_npc_dialogue(moby, (char *)deserter_data + 0x20);
+            begin_dialogue_camera_transition(moby, 2.2f);
         }
-        if (d->h24 == 4) {
+        if (deserter_data->h24 == 4) {
             unlock_planet(9);
             memcard_save_data(0, -1);
-            mark_moby_for_removal(m);
+            mark_moby_for_removal(moby);
             return;
         }
         break;
@@ -223,49 +223,49 @@ void batalia_deserter_update(WM *m) {
     rate = 0.02f;
     head_rate = 0.3f;
     tracking = 0;
-    if (m->animation == 1) {
+    if (moby->animation == 1) {
         char *player = (char *)&D_0013E633_watch + 0xE9D;
         tracking = 1;
-        if (vector_distance(m->position, player) < 8.0f &&
+        if (vector_distance(moby->position, player) < 8.0f &&
             FUN_001f9e90_cf(
-                m->yaw,
+                moby->yaw,
                 FUN_001fa688_cf(((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[0] -
-                                    m->position[0],
+                                    moby->position[0],
                                 ((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[1] -
-                                    m->position[1])) < 1.5707964f) {
+                                    moby->position[1])) < 1.5707964f) {
             if (vector_length_xyz_c(player + 0x80) > 0.01f)
-                d->moving_timer = scale_game_frames_c(120);
+                deserter_data->moving_timer = scale_game_frames_c(120);
             else
-                tick_countdown_32(&d->moving_timer);
-        } else if (d->moving_timer) {
-            d->moving_timer = 0;
-            qcopy(d->target, (char *)&D_0013E633_watch + 0xEED);
+                tick_countdown_32(&deserter_data->moving_timer);
+        } else if (deserter_data->moving_timer) {
+            deserter_data->moving_timer = 0;
+            qcopy(deserter_data->target, (char *)&D_0013E633_watch + 0xEED);
         }
-        if (tick_countdown_32(&d->target_timer)) {
+        if (tick_countdown_32(&deserter_data->target_timer)) {
             float heading;
-            d->target_timer =
+            deserter_data->target_timer =
                 random_float_between_cf(multiply_global_factor_ed64(truncate_float_to_s32_cf(180.0f, 300.0f)));
             heading =
-                fast_add_rotations(m->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * DEG_TO_RAD);
-            build_spherical_offset(d->target, 6.0f, heading,
+                fast_add_rotations(moby->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * DEG_TO_RAD);
+            build_spherical_offset(deserter_data->target, 6.0f, heading,
                                    truncate_float_to_s32_cf(0.0f, 30.0f) * DEG_TO_RAD);
-            add_vector_xyz(d->target, d->target, m->position);
+            add_vector_xyz(deserter_data->target, deserter_data->target, moby->position);
         }
-        if (d->moving_timer) {
+        if (deserter_data->moving_timer) {
             qcopy(scratch.target, (char *)&D_0013E633_watch + 0xEED);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, d->target);
+            qcopy(scratch.target, deserter_data->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, m->position);
+        qcopy(scratch.eye, moby->position);
         scratch.eye[2] += 1.0f;
         subtract_vector_xyz_c(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), m->yaw);
+        yaw = fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), moby->yaw);
         pitch = -FUN_001fa688_cf(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
@@ -275,13 +275,13 @@ void batalia_deserter_update(WM *m) {
             pitch = 0.5235988f;
         else if (pitch < -0.5235988f)
             pitch = -0.5235988f;
-        d->pitch = pitch;
-        d->head_yaw = d->yaw = yaw * 0.5f;
+        deserter_data->pitch = pitch;
+        deserter_data->head_yaw = deserter_data->yaw = yaw * 0.5f;
     }
     if (D_0015EDB0_b)
-        d->height = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+        deserter_data->height = 2.75f;
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, deserter_data->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, deserter_data->head, 1);
 }
 #include "sda.h"
 
