@@ -2373,7 +2373,7 @@ void blarg_trooper_update(struct Moby *moby) {
             } p;
         } w;
     } st;
-    int n;
+    int hit_reaction_status;
     float dmg;
     float ang;
     float ang2;
@@ -2451,7 +2451,7 @@ void blarg_trooper_update(struct Moby *moby) {
         best = 0.0f;
     }
     hit = find_moby_hit(moby, 0x210000, 0);
-    r = hit_reaction(moby, hit, data + 0x20, 0, &n, &dmg, 0, 4);
+    r = hit_reaction(moby, hit, data + 0x20, 0, &hit_reaction_status, &dmg, 0, 4);
     fast_dec_timer_s16(data + 0xF0);
     fast_dec_timer_s16(data + 0xF2);
     if (hit != 0 && moby->state < 0xB && *(short *)(data + 0xF0) == 0) {
