@@ -1160,7 +1160,7 @@ void fred_pokitaru_update(struct Moby *moby) {
         FRED_POKITARU_WAIT_FOR_DIALOGUE_END = 2
     };
     WS11 scratch;
-    struct PokSentryVars *d = (struct PokSentryVars *)moby->pvars;
+    struct PokSentryVars *moby_vars = (struct PokSentryVars *)moby->pvars;
     float rate;
     float head_rate;
     int tracking;
@@ -1179,11 +1179,11 @@ void fred_pokitaru_update(struct Moby *moby) {
             mark_moby_for_removal_f0e40(moby);
             return;
         }
-        initialize_npc_dialogue(moby, d);
-        d->f0C = 4.0f;
+        initialize_npc_dialogue(moby, moby_vars);
+        moby_vars->f0C = 4.0f;
         break;
     case FRED_POKITARU_CHECK_DIALOGUE:
-        if (update_npc_dialogue(moby, d)) {
+        if (update_npc_dialogue(moby, moby_vars)) {
             begin_dialogue_camera_transition(moby, 3.0f);
             moby->state = 2;
         }
@@ -1202,14 +1202,14 @@ void fred_pokitaru_update(struct Moby *moby) {
             absolute_float_f0e40(hero.motion.pos.f[2] - moby->pos.z) < 4.0f) {
             char *entry;
             jet_clear_persistent(moby->mission);
-            entry = D_L11_001600EC + d->slot * 128;
+            entry = D_L11_001600EC + moby_vars->slot * 128;
             jet_reset_camera(entry + 0x30, entry + 0x70);
         }
         break;
     case FRED_POKITARU_WAIT_FOR_DIALOGUE_END:
         if (D_L11_0015F5C4 != 2) {
             moby->state = 1;
-            if (d->h04 == 2) {
+            if (moby_vars->h04 == 2) {
                 alternate_item_available[1] = 0;
                 discount_purchase_pricing[0] = 1;
                 D_0013D50B = 1;
@@ -1232,27 +1232,27 @@ void fred_pokitaru_update(struct Moby *moby) {
                                           ((WP11 *)(D_0013E533 + 0xE1D))->aim[1] - moby->pos.y)) <
                 1.5707964f) {
             if (fast_vec_length(player + 0x80) > 0.01f)
-                d->moving_timer = scale_game_frames(120);
+                moby_vars->moving_timer = scale_game_frames(120);
             else
-                fast_dec_timer(&d->moving_timer);
-        } else if (d->moving_timer) {
-            d->moving_timer = 0;
-            qcopy(d->target, hero.motion.unkD0.f);
+                fast_dec_timer(&moby_vars->moving_timer);
+        } else if (moby_vars->moving_timer) {
+            moby_vars->moving_timer = 0;
+            qcopy(moby_vars->target, hero.motion.unkD0.f);
         }
-        if (fast_dec_timer(&d->target_timer)) {
+        if (fast_dec_timer(&moby_vars->target_timer)) {
             float heading;
-            d->target_timer =
+            moby_vars->target_timer =
                 truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
             heading = fast_add_rotations(moby->rot.z, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
-            FUN_00214db0(d->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
-            fast_vec_add(d->target, d->target, &moby->pos);
+            FUN_00214db0(moby_vars->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
+            fast_vec_add(moby_vars->target, moby_vars->target, &moby->pos);
         }
-        if (d->moving_timer) {
+        if (moby_vars->moving_timer) {
             qcopy(scratch.target, hero.motion.unkD0.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, d->target);
+            qcopy(scratch.target, moby_vars->target);
         }
     }
     if (tracking) {
@@ -1271,13 +1271,13 @@ void fred_pokitaru_update(struct Moby *moby) {
             pitch = 0.5235988f;
         else if (pitch < -0.5235988f)
             pitch = -0.5235988f;
-        d->pitch = pitch;
-        d->head_yaw = d->yaw = yaw * 0.5f;
+        moby_vars->pitch = pitch;
+        moby_vars->head_yaw = moby_vars->yaw = yaw * 0.5f;
     }
     if (big_head_cheat_enabled)
-        d->height = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, d->body, 0);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, d->head, 1);
+        moby_vars->height = 2.75f;
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_vars->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_vars->head, 1);
 }
 #include "qcopy.h"
 
