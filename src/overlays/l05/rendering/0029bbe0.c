@@ -48,7 +48,7 @@ extern int truncate_float_to_s32_q(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L05_001B25C8 __attribute__((section(".data")));
 unsigned char *FUN_L05_0029be70(void *pos, void *vel, int initial_word_at_04, int byte_table_index, float a, float b,
-                                float c) {
+                                float initial_float_at_38) {
     unsigned char *allocated_object = FUN_L00_002678b8_q(0x32);
     unsigned char *velocity_block;
     if (allocated_object != 0) {
@@ -65,7 +65,7 @@ unsigned char *FUN_L05_0029be70(void *pos, void *vel, int initial_word_at_04, in
         qcopy(velocity_block, vel);
         *(float *)(velocity_block + 0x10) = b;
         *(int *)(velocity_block + 0x14) = truncate_float_to_s32_q(random_float_between_alt_q(-3.0f, 3.0f));
-        *(float *)(velocity_block + 0x18) = c;
+        *(float *)(velocity_block + 0x18) = initial_float_at_38;
     }
     return allocated_object;
 }
