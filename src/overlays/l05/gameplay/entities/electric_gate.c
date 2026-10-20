@@ -916,49 +916,49 @@ extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 
 /* Gate: waits for its trigger moby, then rises to topZ and swings its yaw back to 0, with sounds per class. */
-void FUN_L05_00314eb0(struct Moby *m) {
+void FUN_L05_00314eb0(struct Moby *gate_moby) {
     enum {
         GATE_INITIALIZE = 0,
         GATE_WAIT_FOR_TRIGGER = 1,
         GATE_RAISE_AND_SWING = 2
     };
-    struct GateVars *d = (struct GateVars *)m->pvars;
-    struct Moby *t;
+    struct GateVars *gate_vars = (struct GateVars *)gate_moby->pvars;
+    struct Moby *trigger_moby;
 
-    switch (m->state) {
+    switch (gate_moby->state) {
     case GATE_INITIALIZE:
-        d->topZ = m->pos.z + 1.0f;
-        m->state = 1;
-        m->pos.z -= 8.0f;
+        gate_vars->topZ = gate_moby->pos.z + 1.0f;
+        gate_moby->state = 1;
+        gate_moby->pos.z -= 8.0f;
         break;
     case GATE_WAIT_FOR_TRIGGER:
-        t = (struct Moby *)((d->trigger << 8) + gate_mobys_314eb0);
-        if (t->command == 1) {
-            m->state = 2;
+        trigger_moby = (struct Moby *)((gate_vars->trigger << 8) + gate_mobys_314eb0);
+        if (trigger_moby->command == 1) {
+            gate_moby->state = 2;
             break;
         }
-        if (t->command == 2) {
-            m->pos.z = d->topZ;
-            m->state = 3;
-            m->rot.y = 0.0f;
+        if (trigger_moby->command == 2) {
+            gate_moby->pos.z = gate_vars->topZ;
+            gate_moby->state = 3;
+            gate_moby->rot.y = 0.0f;
         }
         break;
     case GATE_RAISE_AND_SWING:
-        if (gate_tick_314eb0(&d->riseTimer)) {
-            advance_accelerated_scalar(d->topZ, D_L05_00161E80 * frame_time_sq, D_L05_00161E84 * frame_time_sq,
-                                       D_L05_00161E88 * frame_time, &m->pos.z, &d->riseSpeed);
-            if (m->oclass == 0x355 && FUN_001f99c0(m->pos.z - d->topZ) < 3.0f &&
-                3.0f < FUN_001f99c0(d->topZ - m->pos.z + d->riseSpeed))
-                func_0022ED80_i(0, 0, m);
+        if (gate_tick_314eb0(&gate_vars->riseTimer)) {
+            advance_accelerated_scalar(gate_vars->topZ, D_L05_00161E80 * frame_time_sq, D_L05_00161E84 * frame_time_sq,
+                                       D_L05_00161E88 * frame_time, &gate_moby->pos.z, &gate_vars->riseSpeed);
+            if (gate_moby->oclass == 0x355 && FUN_001f99c0(gate_moby->pos.z - gate_vars->topZ) < 3.0f &&
+                3.0f < FUN_001f99c0(gate_vars->topZ - gate_moby->pos.z + gate_vars->riseSpeed))
+                func_0022ED80_i(0, 0, gate_moby);
         }
-        if (gate_tick_314eb0(&d->swingTimer)) {
-            FUN_L00_0025be00(&m->rot.y, &d->swingSpeed, 0.0f, D_L05_00161E8C * 0.017453292f * frame_time_sq,
+        if (gate_tick_314eb0(&gate_vars->swingTimer)) {
+            FUN_L00_0025be00(&gate_moby->rot.y, &gate_vars->swingSpeed, 0.0f, D_L05_00161E8C * 0.017453292f * frame_time_sq,
                              D_L05_00161E90 * 0.017453292f * frame_time_sq,
                              D_L05_00161E94 * 0.017453292f * frame_time);
-            if (m->rot.y == 0.0f)
-                m->state = 3;
-        } else if (d->swingTimer == 1 && m->oclass == 0x354) {
-            func_0022ED80_i(0, 0, m);
+            if (gate_moby->rot.y == 0.0f)
+                gate_moby->state = 3;
+        } else if (gate_vars->swingTimer == 1 && gate_moby->oclass == 0x354) {
+            func_0022ED80_i(0, 0, gate_moby);
         }
         break;
     }
