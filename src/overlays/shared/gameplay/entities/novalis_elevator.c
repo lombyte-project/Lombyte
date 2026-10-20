@@ -1115,42 +1115,42 @@ typedef union {
 
 void FUN_L01_002e35a8(char *moby, char *state) {
     V4_w22c v;
-    V4_w22c q;
-    V4_w22c p;
-    char *e;
-    float a, b, c, d, t, dist;
+    V4_w22c target_aim_position;
+    V4_w22c spawn_offset;
+    char *target_moby;
+    float a, b, c, d, target_yaw, dist;
 
     if (fast_dec_timer_s16(state + 0x4E) == 0)
         return;
     qzero(&v);
     fast_vec_add(&v, &v, moby + 0x10);
     v.f[2] = v.f[2] + D_L01_00161914;
-    e = FUN_L01_002e32a8_u(moby, &v, moby + 0x40, D_L01_00161908 * DEG_TO_RAD,
+    target_moby = FUN_L01_002e32a8_u(moby, &v, moby + 0x40, D_L01_00161908 * DEG_TO_RAD,
                          D_L01_0016190C * DEG_TO_RAD, D_L01_00161904, 2.0f, 3.1415927f,
                          3.1415927f);
-    if (e != 0) {
-        *(char **)(state + 0x68) = e;
+    if (target_moby != 0) {
+        *(char **)(state + 0x68) = target_moby;
         if (hero.motion.pos.f[2] + 1.1f < *(float *)(moby + 0x18)) {
-            t = fast_arc_tan(*(float *)(e + 0x10) - *(float *)(moby + 0x10),
-                             *(float *)(e + 0x14) - *(float *)(moby + 0x14));
-            if (fast_difference_between_rotations(*(float *)(moby + 0x48), t) < 0.5235988f) {
+            target_yaw = fast_arc_tan(*(float *)(target_moby + 0x10) - *(float *)(moby + 0x10),
+                             *(float *)(target_moby + 0x14) - *(float *)(moby + 0x14));
+            if (fast_difference_between_rotations(*(float *)(moby + 0x48), target_yaw) < 0.5235988f) {
                 if (cutscene_mode != 2) {
                     char *r;
-                    qcopy(&q, e + 0x10);
-                    r = suck_get_aim_height(e);
+                    qcopy(&target_aim_position, target_moby + 0x10);
+                    r = suck_get_aim_height(target_moby);
                     if (r != 0)
-                        q.f[2] = q.f[2] + *(float *)(r + 0x10);
+                        target_aim_position.f[2] = target_aim_position.f[2] + *(float *)(r + 0x10);
                     else
-                        q.f[2] = q.f[2] + D_L01_00161914;
-                    fast_vec_sub(&p, &q, &v);
-                    fast_vec_normalize(&p, &p, D_L01_00161910);
-                    fast_vec_add(&v, &v, &p);
-                    a = fast_arc_tan(q.f[0] - v.f[0], q.f[1] - v.f[1]);
-                    dist = vector_distance(&v, &q);
-                    b = -fast_arc_tan(dist, q.f[2] - v.f[2]);
-                    c = fast_arc_tan(q.f[0] - v.f[0], q.f[1] - v.f[1]);
-                    dist = vector_distance(&v, &q);
-                    d = -fast_arc_tan(dist, q.f[2] - v.f[2]);
+                        target_aim_position.f[2] = target_aim_position.f[2] + D_L01_00161914;
+                    fast_vec_sub(&spawn_offset, &target_aim_position, &v);
+                    fast_vec_normalize(&spawn_offset, &spawn_offset, D_L01_00161910);
+                    fast_vec_add(&v, &v, &spawn_offset);
+                    a = fast_arc_tan(target_aim_position.f[0] - v.f[0], target_aim_position.f[1] - v.f[1]);
+                    dist = vector_distance(&v, &target_aim_position);
+                    b = -fast_arc_tan(dist, target_aim_position.f[2] - v.f[2]);
+                    c = fast_arc_tan(target_aim_position.f[0] - v.f[0], target_aim_position.f[1] - v.f[1]);
+                    dist = vector_distance(&v, &target_aim_position);
+                    d = -fast_arc_tan(dist, target_aim_position.f[2] - v.f[2]);
                     FUN_L01_0030c898(moby, &v, a, b, c, d);
                     *(short *)(state + 0x4E) = scale_game_frames(D_L01_00161900);
                     *(int *)(state + 0x64) = *(int *)(state + 0x64) + 1;
