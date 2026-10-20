@@ -1767,21 +1767,21 @@ typedef struct {
 extern CamSlot_316030 *D_L01_0015EF50_316030 __asm__("D_L01_0015EF50");
 extern CamTarget_316030 *D_L01_0015F70C_316030 __asm__("D_L01_0015F70C");
 
-void FUN_L01_00316030(CamUser_316030 *o) {
-    CamData_316030 *d = D_L01_0015EF50_316030[o->slot].data;
+void FUN_L01_00316030(CamUser_316030 *camera_user) {
+    CamData_316030 *camera_preset = D_L01_0015EF50_316030[camera_user->slot].data;
 
-    if (hero.unk2284 == o->unk86) {
-        if (d->target < 0) {
+    if (hero.unk2284 == camera_user->unk86) {
+        if (camera_preset->target < 0) {
             return;
         }
-        if (hero.unk560 == D_L01_0015F70C_316030[d->target].unk10 && hero.unk570 == 0) {
+        if (hero.unk560 == D_L01_0015F70C_316030[camera_preset->target].unk10 && hero.unk570 == 0) {
             return;
         }
     }
-    if (d->kind == 3) {
-        o->mode = 5;
+    if (camera_preset->kind == 3) {
+        camera_user->mode = 5;
     } else {
-        o->mode = 3;
+        camera_user->mode = 3;
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00318260), where it is exact; names translated to the US level program. */
