@@ -2361,34 +2361,34 @@ extern unsigned char D_0014C190[] NOT_SDA;
 void mark_moby_for_removal_d650(struct Obj *obj) __asm__("FUN_0020c828");
 
 void block_cave_update(struct Moby *m) __asm__("FUN_L10_002dd650");
-void block_cave_update(struct Moby *m) {
+void block_cave_update(struct Moby *moby) {
     int i;
     char *e;
     float w[16];
     float v[4];
-    unsigned short id = m->save_id;
+    unsigned short id = moby->save_id;
     if (D_L10_001BB6B0.collected[(short)id] != 0 ||
         (*(int *)(D_0014C190 + (((short)id >> 5) * 4 + (D_0015ED84_m << 8))) >> (id & 0x1F)) & 1) {
-        mark_moby_for_removal_d650(m);
+        mark_moby_for_removal_d650(moby);
         return;
     }
-    m->draw_dist = 0x80;
+    moby->draw_dist = 0x80;
     e = D_L10_00178580;
     for (i = 0; i < 0x40; i++, e += 0x40) {
-        if (*(char **)(e + 0x34) == m) {
+        if (*(char **)(e + 0x34) == moby) {
             if (*(int *)(e + 0x24) & 0x20000) {
-                char *o = *(char **)(e + 0x20);
-                if (*(short *)(o + 0xA6) == 0xAC || *(short *)(o + 0xA6) == 0x99) {
-                    subtract_vector_xyz(v, &m->pos, o + 0x10);
-                    transpose_rotation_matrix(w, &m->rot_row0);
+                char *other_moby = *(char **)(e + 0x20);
+                if (*(short *)(other_moby + 0xA6) == 0xAC || *(short *)(other_moby + 0xA6) == 0x99) {
+                    subtract_vector_xyz(v, &moby->pos, other_moby + 0x10);
+                    transpose_rotation_matrix(w, &moby->rot_row0);
                     transform_vector(v, v, w);
                     if (v[0] > 0.25f) {
-                        *(int *)(D_0014C190 + (((short)m->save_id >> 5) * 4 +
+                        *(int *)(D_0014C190 + (((short)moby->save_id >> 5) * 4 +
                                                (D_0015ED84_m << 8))) |=
-                            1 << (m->save_id & 0x1F);
-                        D_L10_001BA950[(short)m->save_id >> 5] |=
-                            1 << (m->save_id & 0x1F);
-                        mark_moby_for_removal_d650(m);
+                            1 << (moby->save_id & 0x1F);
+                        D_L10_001BA950[(short)moby->save_id >> 5] |=
+                            1 << (moby->save_id & 0x1F);
+                        mark_moby_for_removal_d650(moby);
                         return;
                     }
                     *(int *)(e + 0x34) = 0;
