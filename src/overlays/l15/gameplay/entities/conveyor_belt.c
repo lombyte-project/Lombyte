@@ -490,7 +490,7 @@ void FUN_L15_002eac90(struct Moby *moby) {
     float scale;
     int r, g, b;
     int color;
-    int i, j, uv_buffer_index, n, draw_buffer_index;
+    int i, j, uv_buffer_index, uv_vertex_index, draw_buffer_index;
 
     scale = convert_integer_to_float(D_L15_0015F5CC) * (D_L15_00162104 * frame_time);
     vu1_add_gs_register(6, get_effect_texture(D_L15_001620F0));
@@ -520,13 +520,13 @@ void FUN_L15_002eac90(struct Moby *moby) {
     }
     for (i = 0; i < 2; i++) {
         for (uv_buffer_index = 0; uv_buffer_index < 3; uv_buffer_index++) {
-            for (n = 0; n < D_L15_00162080[uv_buffer_index]; n++) {
+            for (uv_vertex_index = 0; uv_vertex_index < D_L15_00162080[uv_buffer_index]; uv_vertex_index++) {
                 T4 tbl = D_L15_00162108;
-                *(float *)(n * 8 + D_L15_001620A0[uv_buffer_index]) =
-                    *(float *)(n * 8 + D_L15_001620D0[uv_buffer_index]) +
+                *(float *)(uv_vertex_index * 8 + D_L15_001620A0[uv_buffer_index]) =
+                    *(float *)(uv_vertex_index * 8 + D_L15_001620D0[uv_buffer_index]) +
                     FUN_L00_00200260(scale * tbl.p[i].v[0], 1.0f);
-                *(float *)(n * 8 + D_L15_001620A0[uv_buffer_index] + 4) =
-                    *(float *)(n * 8 + D_L15_001620D0[uv_buffer_index] + 4) +
+                *(float *)(uv_vertex_index * 8 + D_L15_001620A0[uv_buffer_index] + 4) =
+                    *(float *)(uv_vertex_index * 8 + D_L15_001620D0[uv_buffer_index] + 4) +
                     FUN_L00_00200260(scale * tbl.p[i].v[1], 1.0f);
             }
         }
