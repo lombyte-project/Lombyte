@@ -559,57 +559,57 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 
 /* Spawns one of four pebble classes at the spawner, scattered sideways off the end of its path. */
 struct Moby *FUN_L09_002eaa50(struct Moby *owner) {
-    struct Moby *m;
+    struct Moby *spawned_moby;
     PebbleVars *ovars;
     PebbleVars *vars;
     PebblePath *path;
     f32 r;
-    Vec4 a;
+    Vec4 path_displacement;
     Vec4 b;
 
-    m = create_moby_2eaa50(random_integer_below_2eaa50(4) + 0x107);
-    if (m != 0) {
+    spawned_moby = create_moby_2eaa50(random_integer_below_2eaa50(4) + 0x107);
+    if (spawned_moby != 0) {
         ovars = (PebbleVars *)owner->pvars;
-        vars = (PebbleVars *)m->pvars;
-        qcopy(&m->pos, &owner->pos);
+        vars = (PebbleVars *)spawned_moby->pvars;
+        qcopy(&spawned_moby->pos, &owner->pos);
         ovars->count++;
         vars->owner = owner;
         vars->path = ovars->path;
         vars->unk48 = 1;
         vars->unk14 = 0;
-        m->command = 1;
-        m->visible = 1;
-        m->update_dist = 0xFF;
-        m->draw_dist = 0xFF;
-        glow_n(m, 0x80, 0x80, 0x80);
-        m->alpha = 0;
-        m->scale *= random_float_2eaa50(0.4f, 0.85f);
+        spawned_moby->command = 1;
+        spawned_moby->visible = 1;
+        spawned_moby->update_dist = 0xFF;
+        spawned_moby->draw_dist = 0xFF;
+        glow_n(spawned_moby, 0x80, 0x80, 0x80);
+        spawned_moby->alpha = 0;
+        spawned_moby->scale *= random_float_2eaa50(0.4f, 0.85f);
         vars->spin_x = random_float_2eaa50(-0.0052359877f, 0.0052359877f);
         vars->spin_y = random_float_2eaa50(-0.0052359877f, 0.0052359877f);
         if (vars->path >= 0) {
             path = D_L09_001B0630_2eaa50[vars->path];
             r = random_float_2eaa50(-30.0f, 30.0f);
-            subtract_vector_xyz(&a, &path->pts[path->count - 1], &path->pts[path->count - 2]);
+            subtract_vector_xyz(&path_displacement, &path->pts[path->count - 1], &path->pts[path->count - 2]);
             subtract_vector_xyz(&b, &path->pts[1], &path->pts[0]);
-            cross_vectors_xyz(&b, &b, &a);
+            cross_vectors_xyz(&b, &b, &path_displacement);
             b.f[2] = 0.0f;
             normalize_vector_xyz(vars, &b, r);
-            subtract_vector_xyz(&a, &path->pts[path->count - 1], &path->pts[0]);
-            cross_vectors_xyz(&b, &b, &a);
+            subtract_vector_xyz(&path_displacement, &path->pts[path->count - 1], &path->pts[0]);
+            cross_vectors_xyz(&b, &b, &path_displacement);
             normalize_vector_xyz(&b, &b, random_float_2eaa50(0.0f, 5.0f));
             add_vector_xyz(vars, vars, &b);
             qcopy(&vars->start, &path->pts[0]);
             qcopy(&vars->offset, &ovars->offset);
-            add_vector_xyz(&m->pos, &path->pts[0], vars);
-            add_vector_xyz(&m->pos, &m->pos, D_L09_00166F40_2eaa50);
-            subtract_vector_xyz(&m->pos, &m->pos, &vars->offset);
+            add_vector_xyz(&spawned_moby->pos, &path->pts[0], vars);
+            add_vector_xyz(&spawned_moby->pos, &spawned_moby->pos, D_L09_00166F40_2eaa50);
+            subtract_vector_xyz(&spawned_moby->pos, &spawned_moby->pos, &vars->offset);
             vars->speed = r / 20.0f + 10.0f;
-            m->scale *= r / 100.0f + 1.0f;
+            spawned_moby->scale *= r / 100.0f + 1.0f;
             vars->speed *= D_0015ED6C_2eaa50;
         }
-        upd_a(m);
+        upd_a(spawned_moby);
     }
-    return m;
+    return spawned_moby;
 }
 #define NOT_SDA
 
