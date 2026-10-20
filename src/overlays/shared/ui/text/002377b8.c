@@ -139,29 +139,29 @@ extern D00237ae8 D_L00_0017DAC0[];
 extern E00237ae8 item_defs[] __asm__("D_L00_00179AC0");
 extern s32 pause_iop_sprite_lists[] __asm__("D_00141EA0");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-void FUN_L00_00237ae8(O00237ae8 *o) {
+void FUN_L00_00237ae8(O00237ae8 *hud_element) {
     s32 i;
-    D00237ae8 *d;
-    s32 *s;
+    D00237ae8 *slot_entry;
+    s32 *item_id_cursor;
     E00237ae8 *tab;
     D_L00_0015FA90 = 8;
     D_L00_0015FAC0 = &D_L00_0015F738;
-    o->x48 = 0;
-    o->x4a = 0;
-    o->x58 = D_L00_0015F718_gp;
-    o->x5c = D_L00_0015F71C_gp;
-    o->x74 = -2;
-    o->x78 = scale_game_frames(0x1E);
-    o->x70 = 0;
+    hud_element->x48 = 0;
+    hud_element->x4a = 0;
+    hud_element->x58 = D_L00_0015F718_gp;
+    hud_element->x5c = D_L00_0015F71C_gp;
+    hud_element->x74 = -2;
+    hud_element->x78 = scale_game_frames(0x1E);
+    hud_element->x70 = 0;
     D_L00_0015F72C = 0;
-    d = D_L00_0017DAC0;
+    slot_entry = D_L00_0017DAC0;
     tab = item_defs;
-    s = pause_iop_sprite_lists;
+    item_id_cursor = pause_iop_sprite_lists;
     for (i = 7; i >= 0; i--) {
-        d->x18 = *s;
-        d->x0 = tab[*s].x38;
-        s++;
-        d++;
+        slot_entry->x18 = *item_id_cursor;
+        slot_entry->x0 = tab[*item_id_cursor].x38;
+        item_id_cursor++;
+        slot_entry++;
     }
 }
 typedef struct {
