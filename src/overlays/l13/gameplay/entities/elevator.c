@@ -919,20 +919,20 @@ void FUN_L13_002b4fb8(Level13VendorMoby *moby) {
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern f32 D_0015ED70;
 
-void FUN_L13_002b4ff0(struct Moby *m, char *d) {
-    float ground = probe_ground_height(&m->pos, 0, 0.5f);
-    float z = m->pos.z;
+void FUN_L13_002b4ff0(struct Moby *moby, char *moby_vars) {
+    float ground = probe_ground_height(&moby->pos, 0, 0.5f);
+    float z = moby->pos.z;
     if (ground < z + 0.3f) {
-        float v = *(float *)(d + 0x128) - *(float *)&D_0015ED70 * 9.8f;
-        *(float *)(d + 0x128) = v;
-        m->pos.z = m->pos.z + v;
-        if (m->pos.z < ground)
-            m->pos.z = ground;
+        float v = *(float *)(moby_vars + 0x128) - *(float *)&D_0015ED70 * 9.8f;
+        *(float *)(moby_vars + 0x128) = v;
+        moby->pos.z = moby->pos.z + v;
+        if (moby->pos.z < ground)
+            moby->pos.z = ground;
     } else if (z < ground) {
-        m->pos.z = z + *(float *)&D_0015ED70 * 9.8f;
-        qzero(d + 0x120);
+        moby->pos.z = z + *(float *)&D_0015ED70 * 9.8f;
+        qzero(moby_vars + 0x120);
     } else {
-        qzero(d + 0x120);
+        qzero(moby_vars + 0x120);
     }
 }
 
