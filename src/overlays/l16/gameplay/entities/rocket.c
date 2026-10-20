@@ -1757,41 +1757,41 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void draw_geometry_quad_alt(void *, void *, int) __asm__("FUN_001f7d30");
 
 void FUN_L16_002cef60(char *moby) {
-    GlowQuad q;
+    GlowQuad glow_quad;
     float mat[4][4] __attribute__((aligned(16)));
-    short *p;
-    char *m;
+    short *group_entry;
+    char *group_moby;
     int color;
     int i;
 
-    q.tex = get_effect_texture_alt(0xB);
-    q.alpha = 0x8000000048L;
-    q.q80 = 0xFF9000000260L;
-    q.z70 = 5;
-    q.uv[0].x = 0.0f;
-    q.uv[0].y = 0.0f;
-    q.uv[1].x = 0.0f;
-    q.uv[1].y = 1.0f;
-    q.uv[2].x = 1.0f;
-    q.uv[2].y = 0.0f;
-    q.uv[3].x = 1.0f;
-    q.uv[3].y = 1.0f;
+    glow_quad.tex = get_effect_texture_alt(0xB);
+    glow_quad.alpha = 0x8000000048L;
+    glow_quad.q80 = 0xFF9000000260L;
+    glow_quad.z70 = 5;
+    glow_quad.uv[0].x = 0.0f;
+    glow_quad.uv[0].y = 0.0f;
+    glow_quad.uv[1].x = 0.0f;
+    glow_quad.uv[1].y = 1.0f;
+    glow_quad.uv[2].x = 1.0f;
+    glow_quad.uv[2].y = 0.0f;
+    glow_quad.uv[3].x = 1.0f;
+    glow_quad.uv[3].y = 1.0f;
     for (i = 0; i < 4; i++) {
-        scale_vector_xyz_c(q.v[i], D_L16_001D3130[i], 0.2f);
+        scale_vector_xyz_c(glow_quad.v[i], D_L16_001D3130[i], 0.2f);
     }
-    p = (short *)D_L16_001ABCC0_c2[((unsigned char *)moby)[0x21]];
-    for (;; p++) {
-        m = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+    group_entry = (short *)D_L16_001ABCC0_c2[((unsigned char *)moby)[0x21]];
+    for (;; group_entry++) {
+        group_moby = D_L16_0015FFD8 + ((*(unsigned short *)group_entry & 0x7FFF) << 8);
         color = fast_tween_color(D_L16_001619E0, D_L16_001619E4,
-                               (fast_sin_alt(*(float *)(*(char **)(m + 0x78) + 0x11C)) + 1.0f) * 0.5f);
-        q.rgba[3] = color;
-        q.rgba[2] = color;
-        q.rgba[1] = color;
-        q.rgba[0] = color;
-        if (m != 0 && *(short *)(m + 0xA6) == 0x21D && (unsigned char)m[0x20] != 0xFE &&
-            (unsigned char)m[0x20] != 0xFD) {
+                               (fast_sin_alt(*(float *)(*(char **)(group_moby + 0x78) + 0x11C)) + 1.0f) * 0.5f);
+        glow_quad.rgba[3] = color;
+        glow_quad.rgba[2] = color;
+        glow_quad.rgba[1] = color;
+        glow_quad.rgba[0] = color;
+        if (group_moby != 0 && *(short *)(group_moby + 0xA6) == 0x21D && (unsigned char)group_moby[0x20] != 0xFE &&
+            (unsigned char)group_moby[0x20] != 0xFD) {
             /* basis facing the camera, origin just above the part */
-            qcopy(mat[3], m + 0x10);
+            qcopy(mat[3], group_moby + 0x10);
             mat[3][2] += 0.2f;
             mat[3][3] = 1.0f;
             subtract_vector_xyz(mat[0], D_L16_001671C0, mat[3]);
@@ -1799,10 +1799,10 @@ void FUN_L16_002cef60(char *moby) {
             cross_vectors_xyz(mat[1], mat[0], (u8 *)&hero.gravity_dir);
             normalize_vector_xyz(mat[1], mat[1], -1.0f);
             cross_vectors_xyz(mat[2], mat[1], mat[0]);
-            draw_geometry_quad_alt(&q, mat, 0);
+            draw_geometry_quad_alt(&glow_quad, mat, 0);
         }
         /* a negative entry ends the group */
-        if (*p < 0)
+        if (*group_entry < 0)
             return;
     }
 }
