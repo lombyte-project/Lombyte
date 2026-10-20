@@ -396,28 +396,28 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-char *FUN_L17_002e94d8(struct Moby *src, char *pos, float *v, float f) {
+char *FUN_L17_002e94d8(struct Moby *src, char *pos, float *v, float movement_speed) {
     char *r = func_0020D348_m(0x558);
     if (r != 0) {
-        char *d;
-        char *p = r + 0x10;
-        float tmp[4];
+        char *spawned_vars;
+        char *spawned_position = r + 0x10;
+        float target_delta[4];
         *(unsigned char *)(r + 0x30) = 0xFF;
         *(short *)(r + 0x32) = 0xFF;
         r[0x31] = 1;
         r[0x20] = 0;
         *(long *)(r + 0x38) = src->spawn_frame;
-        qcopy(p, pos);
-        d = *(char **)(r + 0x78);
-        *(float *)(d + 0x40) = f;
-        qcopy(d + 0x10, v);
-        *(int *)(d + 0x38) = scale_game_frames(0x258);
-        *(char **)(d + 0x3C) = src;
-        fast_vec_sub(tmp, d + 0x10, p);
-        fast_vec_normalize(d, tmp, *(float *)(d + 0x40));
+        qcopy(spawned_position, pos);
+        spawned_vars = *(char **)(r + 0x78);
+        *(float *)(spawned_vars + 0x40) = movement_speed;
+        qcopy(spawned_vars + 0x10, v);
+        *(int *)(spawned_vars + 0x38) = scale_game_frames(0x258);
+        *(char **)(spawned_vars + 0x3C) = src;
+        fast_vec_sub(target_delta, spawned_vars + 0x10, spawned_position);
+        fast_vec_normalize(spawned_vars, target_delta, *(float *)(spawned_vars + 0x40));
         *(float *)(r + 0x48) =
             fast_arc_tan(v[0] - *(float *)(r + 0x10), v[1] - *(float *)(r + 0x14));
-        *(float *)(r + 0x44) = -fast_arc_tan(vector_distance(p, v), v[2] - *(float *)(r + 0x18));
+        *(float *)(r + 0x44) = -fast_arc_tan(vector_distance(spawned_position, v), v[2] - *(float *)(r + 0x18));
     }
     return r;
 }
