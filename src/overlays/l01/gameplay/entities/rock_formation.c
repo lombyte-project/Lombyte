@@ -1353,7 +1353,7 @@ void FUN_L01_002feb58(void *arg) {
     s32 j;
     s32 k;
     s32 n;
-    s32 m;
+    s32 vertex_pair_start_index;
     Vec4 *v;
     Vec4 *w;
     f32 glow_factor;
@@ -1371,7 +1371,7 @@ void FUN_L01_002feb58(void *arg) {
         for (n = 0; n < 4; n++) {
             k--;
             w = (D_L01_001FBC80 + n)->verts;
-            for (m = 0; m < (D_L01_001FBC80 + n)->count; m += 2) {
+            for (vertex_pair_start_index = 0; vertex_pair_start_index < (D_L01_001FBC80 + n)->count; vertex_pair_start_index += 2) {
                 if (k & 1) {
                     w[0].f[2] += 0.05f;
                     w[0].f[3] -= 0.05f;
