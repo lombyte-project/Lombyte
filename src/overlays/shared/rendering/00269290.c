@@ -551,25 +551,25 @@ void FUN_L00_00267a08_0026a880(unsigned char *) __asm__("FUN_L00_00267a08");
 int FUN_001fa6d0_0026a880(float) __asm__("FUN_001fa6d0");
 void FUN_001f9a10_0026a880(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a68_0026a880(void *, void *, float) __asm__("FUN_001f9a68");
-void FUN_L00_0026a880(unsigned char *p) {
-    float *e = (float *)(p + 0x20);
-    int a, b;
+void FUN_L00_0026a880(unsigned char *particle) {
+    float *particle_data = (float *)(particle + 0x20);
+    int blue_byte, b;
     float dt;
-    e[7] += D_0015ED60_0026a880 * -0.04f;
-    if (e[7] <= 0.0f || FUN_001f9770_0026a880(p + 0xa)) {
-        FUN_L00_00267a08_0026a880(p);
+    particle_data[7] += D_0015ED60_0026a880 * -0.04f;
+    if (particle_data[7] <= 0.0f || FUN_001f9770_0026a880(particle + 0xa)) {
+        FUN_L00_00267a08_0026a880(particle);
         return;
     }
     dt = D_0015ED60_0026a880;
-    *(float *)(p + 0xc) += dt * 12000.0f;
-    if (e[6] < 0.225f)
-        e[6] += dt * 0.0484f;
-    a = FUN_001fa6d0_0026a880(e[6] * 255.0f) & 0xFF;
-    b = FUN_001fa6d0_0026a880(e[7] * 255.0f);
-    *(int *)(p + 4) = *(unsigned short *)(p + 4) | (a << 16) | (b << 24);
-    FUN_001f9a10_0026a880(p + 0x10, p + 0x10, e);
-    FUN_001f9a68_0026a880(e, e, D_0015ED60_0026a880 * -0.100000024f + 1.0f);
-    p[8]--;
+    *(float *)(particle + 0xc) += dt * 12000.0f;
+    if (particle_data[6] < 0.225f)
+        particle_data[6] += dt * 0.0484f;
+    blue_byte = FUN_001fa6d0_0026a880(particle_data[6] * 255.0f) & 0xFF;
+    b = FUN_001fa6d0_0026a880(particle_data[7] * 255.0f);
+    *(int *)(particle + 4) = *(unsigned short *)(particle + 4) | (blue_byte << 16) | (b << 24);
+    FUN_001f9a10_0026a880(particle + 0x10, particle + 0x10, particle_data);
+    FUN_001f9a68_0026a880(particle_data, particle_data, D_0015ED60_0026a880 * -0.100000024f + 1.0f);
+    particle[8]--;
 }
 typedef union {
     OvlQuad q;
