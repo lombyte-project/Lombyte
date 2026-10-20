@@ -238,7 +238,7 @@ void FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *,
                                void *) __asm__("FUN_L00_00260668");
 void FUN_L00_0025f730_002604f0(void *, float) __asm__("FUN_L00_0025f730");
 int FUN_L00_002604f0(u8 *a, u8 *b, void *c, void *d, void *e, void *f);
-int FUN_L00_002604f0(u8 *a, u8 *b, void *position, void *rotation, void *transformed_position, void *transformed_rotation) {
+int FUN_L00_002604f0(u8 *comparison_object, u8 *b, void *position, void *rotation, void *transformed_position, void *transformed_rotation) {
     float m2[16] __attribute__((aligned(16)));
     float m[16] __attribute__((aligned(16)));
     V4_2604f0 translation_adjustment;
@@ -253,10 +253,10 @@ int FUN_L00_002604f0(u8 *a, u8 *b, void *position, void *rotation, void *transfo
     FUN_00214598_002604f0(m, transformed_rotation);
     if (*(int *)(r + 0x3C) & 4) {
         FUN_001f9a10_002604f0(transformed_position, transformed_position, r + 0x10);
-        FUN_L00_00260668_002604f0(a, b, transformed_position, transformed_rotation, position, rotation);
+        FUN_L00_00260668_002604f0(comparison_object, b, transformed_position, transformed_rotation, position, rotation);
         return 1;
     }
-    if (a[0x22] && a[0x22] < b[0x22]) {
+    if (comparison_object[0x22] && comparison_object[0x22] < b[0x22]) {
         qcopy(translation_adjustment, r + 0x10);
         FUN_L00_0025f730_002604f0(translation_adjustment, 1.0f);
         FUN_001f9a10_002604f0(transformed_position, transformed_position, translation_adjustment);
