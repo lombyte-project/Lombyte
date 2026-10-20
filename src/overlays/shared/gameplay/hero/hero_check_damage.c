@@ -1347,12 +1347,12 @@ void spawn_hero_item_mobies(void) {
 
 float absolute_float(float input) __asm__("func_001F99C0");
 
-float FUN_L00_0020f0b8(float *a, float *b) {
+float FUN_L00_0020f0b8(float *first_components, float *b) {
     float absolute_difference_sum = 0.0f;
     int i, j;
     for (i = 0; i < 3; i++) {
         float *second_component_cursor = (float *)((i << 4) + (int)b);
-        float *first_component_cursor = (float *)((i << 4) + (int)a);
+        float *first_component_cursor = (float *)((i << 4) + (int)first_components);
         for (j = 0; j < 3; j++) {
             absolute_difference_sum += absolute_float(*first_component_cursor++ - *second_component_cursor++);
         }
