@@ -418,7 +418,7 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
     DoorVars *vars = (DoorVars *)moby->pvars;
     s32 open = 0;
     s32 close = 0;
-    struct Moby *m;
+    struct Moby *candidate_moby;
     f32 step;
     f32 limit;
     f32 yaw;
@@ -432,13 +432,13 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
                        !is_point_inside_clip_volume(D_L15_001673C0, vars->close_volume)) {
                 close = 1;
             }
-            for (m = (struct Moby *)D_L15_0015FFE4; m != 0; m = m->next) {
-                if (suck_get_aim_height(m) == 0) {
+            for (candidate_moby = (struct Moby *)D_L15_0015FFE4; candidate_moby != 0; candidate_moby = candidate_moby->next) {
+                if (suck_get_aim_height(candidate_moby) == 0) {
                     continue;
                 }
-                if (is_point_inside_clip_volume(&m->pos, vars->open_volume)) {
+                if (is_point_inside_clip_volume(&candidate_moby->pos, vars->open_volume)) {
                     open = 1;
-                } else if (!is_point_inside_clip_volume(&m->pos, vars->close_volume)) {
+                } else if (!is_point_inside_clip_volume(&candidate_moby->pos, vars->close_volume)) {
                     close = 1;
                 }
             }
