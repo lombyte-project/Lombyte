@@ -46,7 +46,7 @@ s32 FUN_L00_00249d80(s32 key) {
     s32 *times;
     MenuCacheQuad *base;
     MenuCacheQuad *other;
-    MenuCacheQuad temp;
+    MenuCacheQuad selected_entry_copy;
 
     if (!D_L00_001841F0_49d80.enabled) {
         return 0;
@@ -79,12 +79,12 @@ s32 FUN_L00_00249d80(s32 key) {
     if (i != 0) {
         base = (MenuCacheQuad *)&D_L00_001841F0_49d80.entries[0];
         other = base + i;
-        temp = *other;
+        selected_entry_copy = *other;
         /* Fakematch: see the loop above. */
         miss++;
         miss--;
         *other = *base;
-        *base = temp;
+        *base = selected_entry_copy;
     }
     D_L00_001841F0_49d80.entries[0].last_used = D_L00_0015F3F8;
     return miss;
