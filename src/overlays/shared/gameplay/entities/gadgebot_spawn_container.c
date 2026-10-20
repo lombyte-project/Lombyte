@@ -2323,7 +2323,7 @@ void FUN_L06_002f2250(void) {
         int count;
         int wanted;
         int target;
-        char *p;
+        char *target_capacity_record;
         index = 0;
         for (m = 0; m < target_count; m++) {
             if (weight < weights[m]) {
@@ -2335,8 +2335,8 @@ void FUN_L06_002f2250(void) {
         target = targets[index];
         count = 0;
         wanted = 1;
-        p = (char *)suck_get_aim_height(target);
-        if (p != 0) wanted = S16(p, 4);
+        target_capacity_record = (char *)suck_get_aim_height(target);
+        if (target_capacity_record != 0) wanted = S16(target_capacity_record, 4);
         while (count < wanted) {
             float best_score = 9999999.0f;
             char *best_moby = 0;
