@@ -3075,45 +3075,45 @@ extern void FUN_L18_002d8888(void *, int, int);
 
 unsigned char *FUN_L18_002f6e10(struct Moby *self) {
     char *data = (char *)self->pvars;
-    short *p = D_L18_001AC240_c2[*(int *)(data + 0x398)];
+    short *group_entry = D_L18_001AC240_c2[*(int *)(data + 0x398)];
     unsigned char *best = 0;
     float bestd = 1024.0f;
     float v[4];
-    if (p == 0) {
+    if (group_entry == 0) {
         return 0;
     }
     goto start;
     for (;;) {
     start: {
-        int off = (*(unsigned short *)p & 0x7FFF) << 8;
-        unsigned char *m = (unsigned char *)((int)off + (int)D_L18_0015FFD8);
-        if (*(short *)(m + 0xA6) == 0x24B) {
-            char *c = data + 0x3C0;
-            unsigned char *q;
-            FUN_L18_002d8858(m);
-            q = D_L18_0015FFD8 + off;
-            if (vector_distance(q + 0x10, c) < *(float *)&D_L18_00162338) {
+        int off = (*(unsigned short *)group_entry & 0x7FFF) << 8;
+        unsigned char *listed_moby = (unsigned char *)((int)off + (int)D_L18_0015FFD8);
+        if (*(short *)(listed_moby + 0xA6) == 0x24B) {
+            char *selection_origin = data + 0x3C0;
+            unsigned char *candidate_moby;
+            FUN_L18_002d8858(listed_moby);
+            candidate_moby = D_L18_0015FFD8 + off;
+            if (vector_distance(candidate_moby + 0x10, selection_origin) < *(float *)&D_L18_00162338) {
                 unsigned char *r;
                 int a, b;
                 float dot;
 
-                subtract_vector_xyz(v, q + 0x10, c);
+                subtract_vector_xyz(v, candidate_moby + 0x10, selection_origin);
                 r = D_L18_0015FFD8 + off;
                 a = scale_game_frames(0x3C);
                 b = scale_game_frames(*(int *)&D_L18_0016233C);
                 FUN_L18_002d8888(r, a, b);
                 dot = dot_vectors_xyz(v, &self->rot_row0);
                 if (0.333f < dot) {
-                    float d = vector_length_xyz(v);
-                    if (d < bestd) {
-                        bestd = d;
-                        best = q;
+                    float candidate_distance = vector_length_xyz(v);
+                    if (candidate_distance < bestd) {
+                        bestd = candidate_distance;
+                        best = candidate_moby;
                     }
                 }
             }
         }
     }
-        if (*p++ < 0) {
+        if (*group_entry++ < 0) {
             break;
         }
     }
