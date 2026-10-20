@@ -1557,14 +1557,14 @@ void FUN_L14_00315290(struct UpdateCam *cam) {
             float sum = 0.0f;
             float total;
             float ang;
-            int m;
-            int n;
-            for (m = lo; m < camera_run->seg; m++)
-                sum += *(float *)(path + (m * 16 + 0x1C));
+            int traversed_segment_index;
+            int remaining_segment_index;
+            for (traversed_segment_index = lo; traversed_segment_index < camera_run->seg; traversed_segment_index++)
+                sum += *(float *)(path + (traversed_segment_index * 16 + 0x1C));
             total = sum;
             sum += camera_run->t;
-            for (n = camera_run->seg; n < fov_stops->seg[i + 1]; n++)
-                total += *(float *)(path + (n * 16 + 0x1C));
+            for (remaining_segment_index = camera_run->seg; remaining_segment_index < fov_stops->seg[i + 1]; remaining_segment_index++)
+                total += *(float *)(path + (remaining_segment_index * 16 + 0x1C));
             ang = cosine_interpolate(fov_stops->fov[i], fov_stops->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
             D_L14_0016D140.fB0 = fast_sin_5290(ang) / fast_cos_5290(ang);
             update_view_context();
