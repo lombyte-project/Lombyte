@@ -43,9 +43,9 @@ void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *
     clamped = 0;
     point_index = convert_float_to_word(progress);
     if (loop == 0) {
-        s32 n = path->count - 2;
-        if (!(point_index < n)) {
-            point_index = n;
+        s32 last_segment_index = path->count - 2;
+        if (!(point_index < last_segment_index)) {
+            point_index = last_segment_index;
             clamped = 1;
         }
     }
