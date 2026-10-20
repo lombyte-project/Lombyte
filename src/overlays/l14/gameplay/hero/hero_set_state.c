@@ -86,7 +86,8 @@ int hero_set_state(int a, int b) {
         HERO_STATE_VEHICLE_RUN = 0x54,
         HERO_STATE_VEHICLE_FALL = 0x55,
         HERO_STATE_VEHICLE_HURT = 0x56,
-        HERO_STATE_VEHICLE_DYING = 0x57
+        HERO_STATE_VEHICLE_DYING = 0x57,
+        HERO_STATE_GRAVITY_STOP = 0x66
     };
     int old2088;
     char *moby;
@@ -420,7 +421,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x66: {
+    case HERO_STATE_GRAVITY_STOP: {
         struct Hero *p = &hero;
         char *v = (char *)&p->motion.unk110;
         p->state.control_mode = 1;
