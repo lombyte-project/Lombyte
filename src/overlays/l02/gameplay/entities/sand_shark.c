@@ -317,6 +317,7 @@ void sand_shark_update(struct Moby *moby) {
         SAND_SHARK_WANDER_AROUND_HOME = 2,
         SAND_SHARK_WAIT_FOR_TARGET_IN_VOLUME = 3,
         SAND_SHARK_APPROACH_TARGET = 5,
+        SAND_SHARK_CLOSE_RANGE_ATTACK = 6,
         SAND_SHARK_RETURN_HOME = 7,
         SAND_SHARK_KNOCKBACK_UNTIL_LANDING = 8,
         SAND_SHARK_WAIT_FOR_HERO_LAUNCH_TRIGGER = 12,
@@ -652,7 +653,7 @@ void sand_shark_update(struct Moby *moby) {
             moby->state = 0x12;
         }
         break;
-    case 6:
+    case SAND_SHARK_CLOSE_RANGE_ATTACK:
         FUN_L00_00258278_c(moby, atan2_e50(vars->target.f[0] - moby->pos.x, vars->target.f[1] - moby->pos.y), &vars->turn_vel,
                  0.05f, 0.3f, 0.2f);
         if (moby->seq == moby->prev_seq && in_window_e50(moby, 13.0f)) {
