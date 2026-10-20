@@ -3038,12 +3038,12 @@ void floating_platform_update(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
     float v[4];
     float w[4];
-    float d[4];
-    char *p;
-    char *q;
+    float position_delta[4];
+    char *position;
+    char *current_rotation;
     float *r;
     float k;
-    float t;
+    float rotation_y_phase;
     switch (moby[0x20]) {
     case FLOATING_PLATFORM_INITIALIZE:
         *(int *)(data + 0x78) = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
@@ -3058,22 +3058,22 @@ void floating_platform_update(unsigned char *moby) {
             *(int *)(data + 0x78) = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
                 (float)D_L05_00161CE4, (float)D_L05_00161CE8)));
         }
-        p = (char *)moby + 0x10;
-        qcopy(v, p);
+        position = (char *)moby + 0x10;
+        qcopy(v, position);
         r = w;
-        q = (char *)moby + 0x40;
-        qcopy(r, q);
-        t = fast_add_rotations(*(float *)(data + 0x60),
+        current_rotation = (char *)moby + 0x40;
+        qcopy(r, current_rotation);
+        rotation_y_phase = fast_add_rotations(*(float *)(data + 0x60),
                                D_L05_00161CD4 * DEG_TO_RAD * frame_time);
         k = D_L05_00161CD8 * DEG_TO_RAD * frame_time;
-        *(float *)(data + 0x60) = t;
+        *(float *)(data + 0x60) = rotation_y_phase;
         *(float *)(data + 0x6C) = fast_add_rotations(*(float *)(data + 0x6C), k);
         *(float *)(moby + 0x44) =
             D_L05_00161CDC * DEG_TO_RAD * fast_sin(*(float *)(data + 0x60));
         *(float *)(moby + 0x40) =
             D_L05_00161CE0 * DEG_TO_RAD * fast_sin(*(float *)(data + 0x6C));
-        subtract_vector_xyz(d, p, v);
-        update_entity_matrix(data + 0x20, d, r, q);
+        subtract_vector_xyz(position_delta, position, v);
+        update_entity_matrix(data + 0x20, position_delta, r, current_rotation);
         break;
     }
 }
