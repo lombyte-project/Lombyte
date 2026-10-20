@@ -529,7 +529,7 @@ void metropolis_train_locomotive_update(char *moby) {
     int i6;
     float lim;
     char *linked_moby;
-    int n;
+    int second_path_node_index;
     char *second_path;
     u32 mode;
     int ident;
@@ -564,18 +564,18 @@ void metropolis_train_locomotive_update(char *moby) {
         if (data->iAC != -1) {
             second_path = D_L03_001B05B0_292e98[data->iAC];
             data->iD4 = -1;
-            n = 0;
+            second_path_node_index = 0;
             if (*(int *)second_path > 0) {
-                if (*(float *)(second_path + n * 0x10 + 0x1C) == 1.0f) {
-                    data->iD4 = n;
+                if (*(float *)(second_path + second_path_node_index * 0x10 + 0x1C) == 1.0f) {
+                    data->iD4 = second_path_node_index;
                 } else {
                 next:
-                    n++;
-                    if (n < *(int *)second_path) {
-                        if (*(float *)((n << 4) + second_path + 0x1C) != 1.0f) {
+                    second_path_node_index++;
+                    if (second_path_node_index < *(int *)second_path) {
+                        if (*(float *)((second_path_node_index << 4) + second_path + 0x1C) != 1.0f) {
                             goto next;
                         }
-                        data->iD4 = n;
+                        data->iD4 = second_path_node_index;
                     }
                 }
             }
