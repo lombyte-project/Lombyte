@@ -107,11 +107,11 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
-    float p[4];
+    float visibility_sphere[4];
     float vel[4];
     float acc[4];
-    float s;
-    int a, b, c, c1;
+    float frame_count_scale;
+    int frame_count, b, third_frame_count, c1;
     if (*burst < 0) {
         if (++*burst != 0)
             return;
@@ -124,9 +124,9 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
     }
     if (32.0f < fast_vec_dist(D_L10_00167240, pos))
         return;
-    qcopy(p, pos);
-    p[3] = 2.0f;
-    if (fast_bsphere_check((char *)p, 32.0f) == -1 && random_integer_below(3) != 0)
+    qcopy(visibility_sphere, pos);
+    visibility_sphere[3] = 2.0f;
+    if (fast_bsphere_check((char *)visibility_sphere, 32.0f) == -1 && random_integer_below(3) != 0)
         return;
     if (!fast_dec_timer_s16(timer))
         return;
@@ -136,14 +136,14 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
     acc[2] += D_L10_00161F6C * frame_time;
     vel[3] = random_float_between(D_L10_00161F74, D_L10_00161F78);
     acc[3] = random_float_between(D_L10_00161F7C, D_L10_00161F80);
-    s = random_float_between(1.0f - D_L10_00161F90, D_L10_00161F90 + 1.0f);
-    a = func_001FA898_r((float)D_L10_00161F84 * s);
-    b = func_001FA898_r((float)D_L10_00161F88 * s);
-    c = func_001FA898_r((float)D_L10_00161F8C * s);
+    frame_count_scale = random_float_between(1.0f - D_L10_00161F90, D_L10_00161F90 + 1.0f);
+    frame_count = func_001FA898_r((float)D_L10_00161F84 * frame_count_scale);
+    b = func_001FA898_r((float)D_L10_00161F88 * frame_count_scale);
+    third_frame_count = func_001FA898_r((float)D_L10_00161F8C * frame_count_scale);
     c1 = fast_tween_color(D_L10_00161F94, D_L10_00161F98, random_float_between(0.0f, 1.0f));
     spawn_spark(pos, vel, acc, c1,
-                 fast_tween_color(D_L10_00161F9C, D_L10_00161FA0, random_float_between(0.0f, 1.0f)), a,
-                 b, c, -1);
+                 fast_tween_color(D_L10_00161F9C, D_L10_00161FA0, random_float_between(0.0f, 1.0f)), frame_count,
+                 b, third_frame_count, -1);
     *timer = func_001FA898_r(random_float_between((float)D_L10_00161FA4, (float)D_L10_00161FA8));
 }
 
