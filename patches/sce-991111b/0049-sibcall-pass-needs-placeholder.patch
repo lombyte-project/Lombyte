@@ -1,61 +1,23 @@
---- a/gcc/config/mips/mips.c
-+++ b/gcc/config/mips/mips.c
-@@ -249,6 +249,9 @@
- char *mips_astra_no_sibcall;
- /* ASTRA P22: re-enable sibling calls per unit.  */
- char *mips_astra_sibcall;
-+/* ASTRA 0049: run the Cygnus sibcall pass's CFG cleanup without a
-+   CALL_PLACEHOLDER (the pre-0049 behavior) per unit.  */
-+char *mips_astra_cygnus_cfg;
- char *mips_cpu_string;		/* for -mcpu=<xxx> */
- char *mips_isa_string;		/* for -mips{1,2,3,4} */
- char *mips_abi_string;		/* for -mabi={32,n32,64,eabi} */
---- a/gcc/config/mips/mips.h
-+++ b/gcc/config/mips/mips.h
-@@ -605,12 +605,15 @@
- extern char *mips_astra_no_sibcall;
- /* ASTRA P22: sibling calls are off by default (retail behavior).  */
- extern char *mips_astra_sibcall;
-+/* ASTRA 0049: opt back into the Cygnus sibcall pass's CFG cleanup.  */
-+extern char *mips_astra_cygnus_cfg;
- 
- #define TARGET_OPTIONS							\
- {									\
-   SUBTARGET_TARGET_OPTIONS						\
-   { "astra-no-sibcall", &mips_astra_no_sibcall },\
-   { "astra-sibcall", &mips_astra_sibcall },\
-+  { "astra-cygnus-cfg", &mips_astra_cygnus_cfg },\
-   { "cpu=",	&mips_cpu_string	},				\
-   { "ips",	&mips_isa_string	},				\
-   { "entry",	&mips_entry_string	},				\
+diff --git a/gcc/sibcall.c b/gcc/sibcall.c
+index f2dec78..d2d6a70 100644
 --- a/gcc/sibcall.c
 +++ b/gcc/sibcall.c
-@@ -317,6 +317,9 @@
- 
-    Replace the CALL_PLACEHOLDER with an appropriate insn chain.  */
- 
-+/* ASTRA 0049: -mastra-cygnus-cfg restores the pre-0049 behavior.  */
-+extern char *mips_astra_cygnus_cfg;
-+
- void
- optimize_sibling_and_tail_recursive_calls ()
- {
-@@ -330,6 +333,20 @@
+@@ -330,6 +330,20 @@ optimize_sibling_and_tail_recursive_calls ()
  
    insns = get_insns ();
  
-+  /* ASTRA 0049: gcc-2.95.2 (and the SN compiler) have no such pass.  With
-+     no CALL_PLACEHOLDER to resolve (sibling calls are off by default since
-+     0022, so only tail recursion creates them) the jump_optimize_minimal
-+     and CFG work below would only reshape the RTL before the first jump
-+     pass: it deletes the jump to the return label after the last return,
-+     which lets jump.c if-convert `return 1; ... return 0;' tails that SN
-+     leaves as branches.  -mastra-cygnus-cfg keeps the old behavior.  */
++  /* gcc-2.95.2 and the retail compiler have no such pass.  Without a
++     CALL_PLACEHOLDER to resolve (sibling calls are off, so only tail
++     recursion makes one) the jump_optimize_minimal and CFG work below
++     would only reshape the RTL before the first jump pass: it deletes the
++     jump to the return label after the last return, which lets jump.c
++     if-convert `return 1; ... return 0;' tails that retail keeps as
++     branches.  */
 +  for (insn = insns; insn; insn = NEXT_INSN (insn))
 +    if (GET_CODE (insn) == CALL_INSN
 +	&& GET_CODE (PATTERN (insn)) == CALL_PLACEHOLDER)
 +      break;
-+  if (insn == 0 && ! mips_astra_cygnus_cfg)
++  if (insn == 0)
 +    return;
 +
    /* We do not perform these calls when flag_exceptions is true, so this

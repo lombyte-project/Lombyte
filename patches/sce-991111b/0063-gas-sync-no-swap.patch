@@ -1,0 +1,13 @@
+diff --git a/gas/config/tc-mips.c b/gas/config/tc-mips.c
+index 229f815..00ba431 100644
+--- a/gas/config/tc-mips.c
++++ b/gas/config/tc-mips.c
+@@ -2094,7 +2094,7 @@ append_insn (place, ip, address_expr, reloc_type, unmatched_hi)
+ 	      || (mips_opts.mips16 && prev_insn_fixp)
+ 	      /* If the previous instruction is a sync, sync.l, or 
+ 		 sync.p, we can not swap. */
+-	      || (prev_pinfo && INSN_SYNC))
++	      || (prev_pinfo & INSN_SYNC))
+ 	    {
+ 	      /* We could do even better for unconditional branches to
+ 		 portions of this object file; we could pick up the

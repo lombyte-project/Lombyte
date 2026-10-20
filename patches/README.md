@@ -1,30 +1,14 @@
-# Compiler patch surfaces
+# Compiler patches
 
-Every compiler patch this project uses is reproducible from this directory.
-`make elf` needs only the game compiler, which this directory also rebuilds;
-units whose *other* compiler is unavailable are rebuilt from the retail oracle,
-so the public build stays green without a patched toolchain.
+Every compiler this project builds comes from public source plus the patches
+in this directory. Binary-only compilers (SN ProDG) are used as they are.
 
-## Rules
+1. The source is pinned: a git revision, or an archive with its SHA-256.
+2. Patches are plain `git apply` patches at the source root. The folder's
+   `README.md` records each patch's SHA-256 and why it exists.
+3. `make elf` and `make overlays` check the result byte for byte.
 
-1. Sources must be public and pinned: a git URL + revision, or an archive with
-   a SHA-256 recorded in the lineage `README.md`.
-2. Patches are plain `git apply` patches at the source root, with the SHA-256
-   of the patch file recorded in the lineage `README.md`.
-3. The build recipe records the resulting `cc1` hash (`--verify-hashes` in
-   `scripts/build-patched-toolchain.py`).
-4. Binary-only compilers (the SN ProDG line used by the default route) are not
-   patchable here; they are used as-is.
-
-## Lineages
-
-| id | lineage | source | patch | status |
-| :--- | :--- | :--- | :--- | :--- |
-| `ee-gcc-2.9-991111-01` | Sony/Cygnus EE 2.9-ee-991111-01 | <https://github.com/SSXModding/ps2-ee-toolchain> @ `b595ded` | [`patched-ee-gcc.patch`](ee-gcc-2.9-991111-01/patched-ee-gcc.patch) | built, used by the `patched` route |
-| `sce-991111b` | Sony/Cygnus EE 2.9-ee-991111b | recovered archive, see [`sce-991111b/README.md`](sce-991111b/README.md) | production stack in [`sce-991111b/`](sce-991111b/README.md#production-stack-game-compiler) | game compiler, production stack through `0062` (cc1 bytes are host-dependent, see its README); 55/58 joint gate; SDK assembler `sdk-as` (`0000` + `0059`, [README](sce-991111b/README.md#sdk-assembler)) |
-
-## Building
-
-See [`docs/patched-toolchain.md`](../docs/patched-toolchain.md). Offline builds
-accept `--source-dir` plus `--bison`; the recipe verifies the source revision,
-the patch hash and (with `--verify-hashes`) the produced `cc1` and driver.
+| Folder | Compiler | Source | Used for |
+| :--- | :--- | :--- | :--- |
+| [`sce-991111b/`](sce-991111b/README.md) | Sony/Cygnus EE-GCC 2.9-ee-991111b | Internet Archive copy of `gnu-ee-binutils-gcc-1.1.tar.gz` | the game compiler and the SDK assembler `sdk-as`; built by `scripts/build-game-compiler.py` |
+| [`ee-gcc-2.9-991111-01/`](ee-gcc-2.9-991111-01/README.md) | Sony/Cygnus EE-GCC 2.9-ee-991111-01 | <https://github.com/SSXModding/ps2-ee-toolchain> at `b595ded` | the optional patched profile ([docs/patched-toolchain.md](../docs/patched-toolchain.md)) |

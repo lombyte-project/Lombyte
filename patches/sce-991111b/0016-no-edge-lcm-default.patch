@@ -1,5 +1,5 @@
 diff --git a/gcc/toplev.c b/gcc/toplev.c
-index 219cc9b..ba67047 100644
+index 219cc9b..6497b31 100644
 --- a/gcc/toplev.c
 +++ b/gcc/toplev.c
 @@ -573,7 +573,9 @@ static int flag_gcse;
@@ -7,8 +7,8 @@ index 219cc9b..ba67047 100644
  /* Nonzero means use the edge based lcm for gcse from morgans Book.  */
  
 -int flag_edge_lcm = 1;
-+/* ASTRA P16: SN's GCSE predates edge-based LCM; make the parity default
-+   equivalent to -fno-edge-lcm while retaining explicit -fedge-lcm.  */
++/* Off by default: the retail compiler's GCSE predates edge-based LCM.
++   -fedge-lcm still turns it on.  */
 +int flag_edge_lcm = 0;
  
  /* Nonzero means when using the edge based lcm for gcse from morgans Book, 

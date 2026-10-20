@@ -1,12 +1,14 @@
+diff --git a/gcc/local-alloc.c b/gcc/local-alloc.c
+index 10be233..a9e6234 100644
 --- a/gcc/local-alloc.c
 +++ b/gcc/local-alloc.c
-@@ -637,13 +637,11 @@
+@@ -637,13 +637,11 @@ function_invariant_p (x)
  {
    if (CONSTANT_P (x))
      return 1;
 -  if (x == frame_pointer_rtx || x == hard_frame_pointer_rtx 
 -      || x == arg_pointer_rtx)
-+  /* ASTRA PB1 (gcc-2.95.2): the hard frame pointer is not invariant here.  */
++  /* gcc-2.95.2: the hard frame pointer is not invariant here.  */
 +  if (x == frame_pointer_rtx || x == arg_pointer_rtx)
      return 1;
    if (GET_CODE (x) == PLUS
@@ -17,20 +19,22 @@
        && CONSTANT_P (XEXP (x, 1)))
      return 1;
    return 0;
-@@ -754,7 +752,9 @@
+@@ -754,7 +752,9 @@ update_equiv_regs ()
  	  && REG_N_SETS (regno) == 1
  	  && reg_equiv_init_insns[regno] != 0
  	  && reg_equiv_init_insns[regno] != const0_rtx
 -	  && ! find_reg_note (insn, REG_EQUIV, NULL_RTX)
-+	  /* ASTRA PB1 (gcc-2.95.2): test the initialising insn's note.  */
++	  /* gcc-2.95.2: test the initialising insn's note.  */
 +	  && ! find_reg_note (XEXP (reg_equiv_init_insns[regno], 0),
 +			      REG_EQUIV, NULL_RTX)
  	  && ! contains_replace_regs (XEXP (dest, 0), reg_equiv_replace))
  	{
  	  rtx init_insn = XEXP (reg_equiv_init_insns[regno], 0);
+diff --git a/gcc/regclass.c b/gcc/regclass.c
+index fc8e665..95090c2 100644
 --- a/gcc/regclass.c
 +++ b/gcc/regclass.c
-@@ -1182,6 +1182,7 @@
+@@ -1182,6 +1182,7 @@ record_reg_classes (n_alts, n_ops, ops, modes, constraints, insn)
  	  rtx op = ops[i];
  	  enum machine_mode mode = modes[i];
  	  int allows_mem = 0;
@@ -38,11 +42,11 @@
  	  int win = 0;
  	  unsigned char c;
  
-@@ -1285,6 +1286,13 @@
+@@ -1285,6 +1286,13 @@ record_reg_classes (n_alts, n_ops, ops, modes, constraints, insn)
  	      case '0':  case '1':  case '2':  case '3':  case '4':
  	      case '5':  case '6':  case '7':  case '8':  case '9':
  	      case 'p':
-+		/* ASTRA PB2 (gcc-2.95.2): an address operand wants a register
++		/* gcc-2.95.2: an address operand wants a register
 +		   that can be the base of an address.  */
 +		allows_addr = 1;
 +		win = address_operand (op, GET_MODE (op));
@@ -52,7 +56,7 @@
  		break;
  
  	      case 'm':  case 'o':  case 'V':
-@@ -1465,7 +1473,7 @@
+@@ -1465,7 +1473,7 @@ record_reg_classes (n_alts, n_ops, ops, modes, constraints, insn)
  	  /* The only other way this alternative can be used is if this is a
  	     constant that could be placed into memory.  */
  
@@ -61,9 +65,11 @@
  	    alt_cost += MEMORY_MOVE_COST (mode, classes[i], 1);
  	  else
  	    alt_fail = 1;
+diff --git a/gcc/reload1.c b/gcc/reload1.c
+index 6a8342b..0ec2a92 100644
 --- a/gcc/reload1.c
 +++ b/gcc/reload1.c
-@@ -39,6 +39,10 @@
+@@ -39,6 +39,10 @@ Boston, MA 02111-1307, USA.  */
  #include "real.h"
  #include "toplev.h"
  
@@ -74,7 +80,7 @@
  /* This file contains the reload pass of the compiler, which is
     run after register allocation has been done.  It checks that
     each insn is valid (operands required to be in registers really
-@@ -426,7 +430,7 @@
+@@ -426,7 +430,7 @@ static void delete_output_reload	PROTO((rtx, int, int));
  static void delete_address_reloads	PROTO((rtx, rtx));
  static void delete_address_reloads_1	PROTO((rtx, rtx, rtx));
  static rtx inc_for_reload		PROTO((rtx, rtx, rtx, int));
@@ -83,7 +89,7 @@
  static void reload_cse_regs_1		PROTO((rtx));
  static void reload_cse_invalidate_regno	PROTO((int, enum machine_mode, int));
  static int reload_cse_mem_conflict_p	PROTO((rtx, rtx));
-@@ -443,6 +447,9 @@
+@@ -443,6 +447,9 @@ static void reload_combine_note_use PROTO((rtx *, rtx));
  static void reload_combine_note_store PROTO((rtx, rtx));
  static void reload_cse_move2add PROTO((rtx));
  static void move2add_note_store PROTO((rtx, rtx));
@@ -93,7 +99,7 @@
  
  /* Initialize the reload pass once per compilation.  */
  
-@@ -506,7 +513,8 @@
+@@ -506,7 +513,8 @@ new_insn_chain ()
  
    if (unused_insn_chains == 0)
      {
@@ -103,7 +109,7 @@
        c->live_before = OBSTACK_ALLOC_REG_SET (&reload_obstack);
        c->live_after = OBSTACK_ALLOC_REG_SET (&reload_obstack);
      }
-@@ -662,7 +670,7 @@
+@@ -662,7 +670,7 @@ reload (first, global, dumpfile)
    reg_max_ref_width = (int *) xmalloc (max_regno * sizeof (int));
    bzero ((char *) reg_max_ref_width, max_regno * sizeof (int));
    reg_old_renumber = (short *) xmalloc (max_regno * sizeof (short));
@@ -112,7 +118,7 @@
    pseudo_forbidden_regs
      = (HARD_REG_SET *) xmalloc (max_regno * sizeof (HARD_REG_SET));
    pseudo_previous_regs
-@@ -1124,11 +1132,13 @@
+@@ -1124,11 +1132,13 @@ reload (first, global, dumpfile)
       which are only valid during and after reload.  */
    reload_completed = 1;
  
@@ -131,7 +137,7 @@
  
    for (insn = first; insn; insn = NEXT_INSN (insn))
      if (GET_RTX_CLASS (GET_CODE (insn)) == 'i')
-@@ -1150,6 +1160,7 @@
+@@ -1150,6 +1160,7 @@ reload (first, global, dumpfile)
  	  {
  	    if (REG_NOTE_KIND (*pnote) == REG_DEAD
  		|| REG_NOTE_KIND (*pnote) == REG_UNUSED
@@ -139,7 +145,7 @@
  		|| REG_NOTE_KIND (*pnote) == REG_RETVAL
  		|| REG_NOTE_KIND (*pnote) == REG_LIBCALL)
  	      *pnote = XEXP (*pnote, 1);
-@@ -1157,6 +1168,10 @@
+@@ -1157,6 +1168,10 @@ reload (first, global, dumpfile)
  	      pnote = &XEXP (*pnote, 1);
  	  }
  
@@ -150,7 +156,7 @@
  	/* And simplify (subreg (reg)) if it appears as an operand.  */
  	cleanup_subreg_operands (insn);
        }
-@@ -1166,13 +1181,21 @@
+@@ -1166,13 +1181,21 @@ reload (first, global, dumpfile)
    if (flag_stack_check && ! STACK_CHECK_BUILTIN)
      {
        HOST_WIDE_INT size = get_frame_size () + STACK_CHECK_FIXED_FRAME_SIZE;
@@ -174,7 +180,7 @@
      }
  
    /* Indicate that we no longer have known memory locations or constants.  */
-@@ -4121,26 +4144,6 @@
+@@ -4121,26 +4144,6 @@ order_regs_for_reload (chain)
       Among them, if REG_ALLOC_ORDER is defined, use that order.
       Otherwise, prefer registers not preserved by calls.  */
  
@@ -201,7 +207,7 @@
  #ifdef REG_ALLOC_ORDER
    for (i = 0; i < FIRST_PSEUDO_REGISTER; i++)
      {
-@@ -4179,9 +4182,6 @@
+@@ -4179,9 +4182,6 @@ order_regs_for_reload (chain)
    for (i = 0; i < FIRST_PSEUDO_REGISTER; i++)
      if (TEST_HARD_REG_BIT (bad_spill_regs, hard_reg_n_uses[i].regno))
        potential_reload_regs[o++] = hard_reg_n_uses[i].regno;
@@ -211,7 +217,7 @@
  }
  
  /* Reload pseudo-registers into hard regs around each insn as needed.
-@@ -4404,17 +4404,37 @@
+@@ -4404,17 +4404,37 @@ reload_as_needed (live_known)
  			  break;
  			}
  		      if (n == 1)
@@ -255,15 +261,15 @@
  	  for (x = REG_NOTES (insn); x; x = XEXP (x, 1))
  	    if (REG_NOTE_KIND (x) == REG_INC)
  	      {
-@@ -4429,7 +4449,6 @@
+@@ -4428,7 +4448,6 @@ reload_as_needed (live_known)
+ 		if (i == n_reloads)
  		  forget_old_reloads_1 (XEXP (x, 0), NULL_RTX);
  	      }
- #endif
 -#endif
+ #endif
  	}
        /* A reload reg's contents are unknown after a label.  */
-       if (GET_CODE (insn) == CODE_LABEL)
-@@ -5185,12 +5204,6 @@
+@@ -5185,12 +5204,6 @@ reload_reg_free_for_value_p (regno, opnum, type, value, out, reloadnum,
    int i;
    int copy = 0;
  
@@ -276,7 +282,7 @@
    if (out == const0_rtx)
      {
        copy = 1;
-@@ -5431,19 +5444,9 @@
+@@ -5431,19 +5444,9 @@ allocate_reload_reg (chain, r, last_reload, noerror)
  	 allocating the first one in such a way that we are not left with
  	 sufficient groups to handle the rest.  */
  
@@ -296,7 +302,7 @@
  	i = -1;
  	  
        for (count = 0; count < n_spills; count++)
-@@ -5791,6 +5794,7 @@
+@@ -5791,6 +5794,7 @@ choose_reload_regs (chain)
        for (j = 0; j < n_reloads; j++)
  	{
  	  register int r = reload_order[j];
@@ -304,7 +310,7 @@
  
  	  /* Ignore reloads that got marked inoperative.  */
  	  if (reload_out[r] == 0 && reload_in[r] == 0
-@@ -6020,9 +6024,23 @@
+@@ -6020,9 +6024,23 @@ choose_reload_regs (chain)
  		  || GET_CODE (reload_in[r]) == MEM)
  	      && (reload_nregs[r] == max_group_size
  		  || ! reg_classes_intersect_p (reload_reg_class[r], group_class)))
@@ -329,7 +335,7 @@
  				  -1, NULL_PTR, 0, reload_mode[r]);
  	      int regno;
  
-@@ -6285,6 +6303,7 @@
+@@ -6285,6 +6303,7 @@ choose_reload_regs (chain)
  	     pass just to remove such reloads, make another pass, since the
  	     removal of one reload might allow us to inherit another one.  */
  	  else if ((! reload_out[r] || reload_out_reg[r])
@@ -337,7 +343,7 @@
  		   && remove_address_replacements (reload_in[r]) && pass)
  	    pass = 2;
  	}
-@@ -6846,6 +6865,7 @@
+@@ -6846,6 +6865,7 @@ emit_reload_insns (chain)
  		  int secondary_reload = reload_secondary_in_reload[j];
  		  rtx real_oldequiv = oldequiv;
  		  rtx real_old = old;
@@ -345,7 +351,7 @@
  
  		  /* If OLDEQUIV is a pseudo with a MEM, get the real MEM
  		     and similarly for OLD.
-@@ -6854,30 +6874,42 @@
+@@ -6854,30 +6874,42 @@ emit_reload_insns (chain)
  		     equivalent MEM, we must fall back to reload_in, which
  		     will have all the necessary substitutions registered.
  		     Likewise for a pseudo that can't be replaced with its
@@ -403,7 +409,7 @@
  		    }
  
  		  second_reload_reg = reload_reg_rtx[secondary_reload];
-@@ -7787,9 +7819,13 @@
+@@ -7787,9 +7819,13 @@ gen_reload (out, in, opnum, type)
  	 DEFINE_PEEPHOLE should be specified that recognizes the sequence
  	 we emit below.  */
  
@@ -418,7 +424,7 @@
  	tem = op0, op0 = op1, op1 = tem;
  
        gen_reload (out, op0, opnum, type);
-@@ -8305,7 +8341,7 @@
+@@ -8305,7 +8341,7 @@ inc_for_reload (reloadreg, in, value, inc_amount)
  
  static int
  constraint_accepts_reg_p (string, reg)
@@ -427,7 +433,7 @@
       rtx reg;
  {
    int value = 0;
-@@ -8721,6 +8757,14 @@
+@@ -8721,6 +8757,14 @@ reload_cse_regs_1 (first)
  	    reload_cse_invalidate_mem (callmem);
  	}
  
@@ -442,7 +448,7 @@
        body = PATTERN (insn);
        if (GET_CODE (body) == SET)
  	{
-@@ -9079,7 +9123,7 @@
+@@ -9079,7 +9123,7 @@ reload_cse_simplify_operands (insn)
  #ifdef REGISTER_CONSTRAINTS
    int i,j;
  
@@ -451,7 +457,7 @@
    
    /* Vector recording how bad an alternative is.  */
    int *alternative_reject;
-@@ -9113,7 +9157,7 @@
+@@ -9113,7 +9157,7 @@ reload_cse_simplify_operands (insn)
      {
        enum machine_mode mode;
        int regno;
@@ -460,7 +466,7 @@
  
        op_alt_regno[i] = (int *) alloca (recog_n_alternatives * sizeof (int));
        for (j = 0; j < recog_n_alternatives; j++)
-@@ -9922,6 +9966,24 @@
+@@ -9922,6 +9966,24 @@ static enum machine_mode reg_mode[FIRST_PSEUDO_REGISTER];
     reload_cse_move2add and move2add_note_store.  */
  static int move2add_luid;
  
@@ -485,7 +491,7 @@
  static void
  reload_cse_move2add (first)
       rtx first;
-@@ -9973,8 +10035,9 @@
+@@ -9973,8 +10035,9 @@ reload_cse_move2add (first)
  	      if (GET_CODE (src) == CONST_INT && reg_base_reg[regno] < 0)
  		{
  		  int success = 0;
@@ -497,7 +503,7 @@
  		  /* (set (reg) (plus (reg) (const_int 0))) is not canonical;
  		     use (set (reg) (reg)) instead.
  		     We don't delete this insn, nor do we convert it into a
-@@ -10019,8 +10082,10 @@
+@@ -10019,8 +10082,10 @@ reload_cse_move2add (first)
  		      && GET_CODE (XEXP (SET_SRC (set), 1)) == CONST_INT)
  		    {
  		      rtx src3 = XEXP (SET_SRC (set), 1);
@@ -510,7 +516,7 @@
  		      int success = 0;
  
  		      if (new_src == const0_rtx)
-@@ -10158,3 +10223,33 @@
+@@ -10158,3 +10223,33 @@ move2add_note_store (dst, set)
  	}
      }
  }

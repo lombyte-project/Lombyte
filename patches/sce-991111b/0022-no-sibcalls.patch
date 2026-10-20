@@ -1,0 +1,13 @@
+diff --git a/gcc/calls.c b/gcc/calls.c
+index c4e29c7..d68cadf 100644
+--- a/gcc/calls.c
++++ b/gcc/calls.c
+@@ -2028,6 +2028,8 @@ expand_call (exp, target, ignore)
+ 	      || 1
+ #endif
+ 	      || flag_exceptions
++	      /* The retail compiler makes no sibling calls.  */
++	      || 1
+ 	      || ! stmt_loop_nest_empty ()
+ 		 /* The structure value address is used and modified in the
+ 		    loop below.  It does not seem worth th effort to save and

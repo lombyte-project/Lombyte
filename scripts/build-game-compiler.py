@@ -43,19 +43,17 @@ ARCHIVE_URLS = (
 ARCHIVE_SHA256 = "1f518043e252d6eda726386971d52eda26541ab936ea73a9783d73712b595f92"
 ARCHIVE_TOP = "gnu-ee-binutils-gcc"
 
-# Production stack, in application order (patches/sce-991111b/README.md).
+# The game compiler stack, in application order (patches/sce-991111b/README.md).
 PATCH_ORDER = (
-    "0000", "0001", "0015", "0016", "0019", "0020", "0021", "0022", "0025",
-    "0026", "0027", "0028", "0029", "0030", "0031", "0032", "0033",
-    "0037", "0036", "0044", "0045", "0046", "0047", "0048", "0049", "0050",
-    "0051", "0052", "0053", "0054", "0055", "0056", "0057", "0058", "0060",
-    "0061", "0062",
+    "0000", "0001", "0016", "0020", "0022", "0027", "0029", "0037", "0044",
+    "0045", "0047", "0048", "0049", "0051", "0052", "0053", "0054", "0055",
+    "0056", "0057", "0058", "0060", "0061", "0062",
 )
 
 # The SDK assembler: the archive's GNU as with none of the game's assembler
-# patches, only the host fixes and the delay slot fill of retail's SDK
-# assembler (patches/sce-991111b/README.md).
-SDK_AS_PATCH_ORDER = ("0000", "0059")
+# patches, only the host fixes, binutils' fix of the sync test and the delay
+# slot rules of retail's SDK assembler (patches/sce-991111b/README.md).
+SDK_AS_PATCH_ORDER = ("0000", "0063", "0059")
 
 BISON_URLS = (
     "https://ftp.gnu.org/gnu/bison/bison-1.28.tar.gz",
@@ -69,15 +67,14 @@ BISON_SHA256 = "c5d3e4858e17cb440cee9de7837f07277bcfb03507e9d2f0c506cab5efe36c3a
 HOST_CFLAGS = "-O2 -fno-strict-aliasing -fcommon -std=gnu89 -D_GNU_SOURCE"
 HOST_OBJECTS_CFLAGS_MK = "obstack.o gcc.o mkstemp.o: override CFLAGS = -g\n"
 
-# Hashes of a build of the current stack (through 0056, without the retired
-# 0034) on the Linux cloud host, with the default --work directory inside the
-# checkout. Rebuilds on other hosts or paths embed their own build paths and
+# Hashes of a build of the current stacks on the Linux cloud host, with the
+# default --work directory inside the checkout. Rebuilds on other hosts or paths embed their own build paths and
 # may differ; the full-ELF gate (`make elf`) is the check that matters.
 REFERENCE_HASHES = {
-    "cc1": "1dc6124edb4431336e8a0270004834402acf3e81358933d3357cfc30aa4cc0a2",
-    "cpp": "147aa9875b47be026a25e1b7859bf545c364862d9f2731cbbbbc4f6af50eb288",
-    "xgcc": "693c6e50b74d5cea3ca61a4af4e3a9002f121d1fc240d0b5db6b7bd0f502dc17",
-    "as": "5fb49530da24d8621a561596fcb76ebb8183043bee6d37199064b690274f0ab9",
+    "cc1": "e743fc337f997842d143bb1e870ba3d6a5aecd7056700c0bbf6672d8d2f17850",
+    "cpp": "45b15c9c451eb003e4565a571120974680164d5537fa94c5bfa336075e25f064",
+    "xgcc": "799912e0b2174799b9aa8e647e00ccfaabd64b22e13dc35496b46ebb9bc98a99",
+    "as": "fe87060e6ff8660bac31474cac6c41ee4d9d44e5878f54f75d8dfcc35bc9022f",
     "sdk-as": "ef6bef9e1c1fe4738700240ee15c687a42147e6e12fef4d2e3e9c96ac98aa90b",
 }
 
@@ -229,7 +226,7 @@ def apply_patches(source: Path, order: tuple[str, ...] = PATCH_ORDER) -> None:
     # Apply from the repository root with --directory: run from inside the
     # checkout, git resolves the patch paths against the repository root and
     # skips every path that is not there with exit status 0, so no patch lands
-    # and the first hunk that no longer matches (0046) is blamed instead.
+    # and the first hunk that no longer matches is blamed instead.
     try:
         directory = ["--directory", str(source.resolve().relative_to(Path.cwd().resolve()))]
     except ValueError:

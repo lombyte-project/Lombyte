@@ -73,7 +73,8 @@ there on with the game compiler. The game compiler's `cc1` output is assembled
 by `Ps2EeAs`, which pads short loops and `div` instructions itself; the game
 code is compiled without `-g`, whose line labels the assembler would take for
 branch targets. SDK code is compiled without `-g` too and assembled by
-`sdk-as`, the source archive's GNU `as` with patch
+`sdk-as`, the source archive's GNU `as` with binutils' fix of its `sync`
+test ([`0063`](../patches/sce-991111b/0063-gas-sync-no-swap.patch)) and
 [`0059`](../patches/sce-991111b/0059-gas-sdk-delay-slots.patch): where `cc1`
 left a jump or branch delay slot empty, retail's SDK assembler moved the
 instruction before it into the slot. Pending `INCLUDE_ASM` wrappers are

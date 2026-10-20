@@ -1,3 +1,5 @@
+diff --git a/gcc/cse.c b/gcc/cse.c
+index 59311f8..5da9d25 100644
 --- a/gcc/cse.c
 +++ b/gcc/cse.c
 @@ -1,5 +1,5 @@
@@ -7,13 +9,13 @@
  
  This file is part of GNU CC.
  
-@@ -34,6 +34,40 @@
+@@ -34,6 +34,40 @@ Boston, MA 02111-1307, USA.  */
  #include "expr.h"
  #include "toplev.h"
  #include "output.h"
 +#include "splay-tree.h"
 +
-+/* ASTRA Path B shims for the 2.9 tree: no fnotice, no do_float_handler.  */
++/* The 2.9 tree has no fnotice and no do_float_handler (from gcc-2.95.2).  */
 +#define fnotice fprintf
 +static int
 +do_float_handler (fn, data)
@@ -33,7 +35,7 @@
 +  return 1;
 +}
 +
-+/* ASTRA Path B shim: the 2.9 tree's libiberty predates splay_tree_compare_ints.  */
++/* The 2.9 tree's libiberty has no splay_tree_compare_ints (from gcc-2.95.2).  */
 +static int
 +splay_tree_compare_ints (k1, k2)
 +     splay_tree_key k1;
@@ -48,7 +50,7 @@
  
  /* The basic idea of common subexpression elimination is to go
     through the code, keeping a record of expressions that would
-@@ -274,11 +308,6 @@
+@@ -274,11 +308,6 @@ static rtx prev_insn;
  
  static rtx this_insn;
  
@@ -60,7 +62,7 @@
  /* Index by register number, gives the number of the next (or
     previous) register in the chain of registers sharing the same
     value.
-@@ -290,19 +319,36 @@
+@@ -290,19 +319,36 @@ static int *reg_qty;
  static int *reg_next_eqv;
  static int *reg_prev_eqv;
  
@@ -107,7 +109,7 @@
  
  /* A HARD_REG_SET containing all the hard registers for which there is 
     currently a REG expression in the hash table.  Note the difference
-@@ -316,14 +362,6 @@
+@@ -316,14 +362,6 @@ static HARD_REG_SET hard_regs_in_table;
  
  static HARD_REG_SET regs_invalidated_by_call;
  
@@ -122,7 +124,7 @@
  /* CUID of insn that starts the basic block currently being cse-processed.  */
  
  static int cse_basic_block_start;
-@@ -447,7 +485,7 @@
+@@ -447,7 +485,7 @@ struct table_elt
  
  #define HASH(X, M)	\
   (GET_CODE (X) == REG && REGNO (X) >= FIRST_PSEUDO_REGISTER	\
@@ -131,7 +133,7 @@
    : canon_hash (X, M) % NBUCKETS)
  
  /* Determine whether register number N is considered a fixed register for CSE.
-@@ -492,10 +530,29 @@
+@@ -492,10 +530,29 @@ struct table_elt
        : 2)								\
     : notreg_cost(X))
  
@@ -162,7 +164,7 @@
  
  #ifdef ADDRESS_COST
  /* The ADDRESS_COST macro does not deal with ADDRESSOF nodes.  But,
-@@ -663,9 +720,33 @@
+@@ -663,9 +720,33 @@ static void cse_check_loop_start PROTO((rtx, rtx));
  static void cse_set_around_loop	PROTO((rtx, rtx, rtx));
  static rtx cse_basic_block	PROTO((rtx, rtx, struct branch_path *, int));
  static void count_reg_usage	PROTO((rtx, int *, rtx, int));
@@ -196,7 +198,7 @@
  /* Return an estimate of the cost of computing rtx X.
     One use is in cse, to decide which expression to keep in the hash table.
     Another is in rtl generation, to pick the cheapest way to multiply.
-@@ -787,6 +868,57 @@
+@@ -787,6 +868,57 @@ rtx_cost (x, outer_code)
    return total;
  }
  
@@ -254,7 +256,7 @@
  /* Clear the hash table and initialize each register with its own quantity,
     for a new basic block.  */
  
-@@ -797,11 +929,15 @@
+@@ -797,11 +929,15 @@ new_basic_block ()
  
    next_qty = max_reg;
  
@@ -274,7 +276,7 @@
    CLEAR_HARD_REG_SET (hard_regs_in_table);
  
    /* The per-quantity values used to be initialized here, but it is
-@@ -838,7 +974,7 @@
+@@ -838,7 +974,7 @@ make_new_qty (reg)
    if (next_qty >= max_qty)
      abort ();
  
@@ -283,7 +285,7 @@
    qty_first_reg[q] = reg;
    qty_last_reg[q] = reg;
    qty_const[q] = qty_const_insn[q] = 0;
-@@ -855,13 +991,13 @@
+@@ -855,13 +991,13 @@ make_regs_eqv (new, old)
       register int new, old;
  {
    register int lastr, firstr;
@@ -299,7 +301,7 @@
    firstr = qty_first_reg[q];
    lastr = qty_last_reg[q];
  
-@@ -915,7 +1051,7 @@
+@@ -915,7 +1051,7 @@ static void
  delete_reg_equiv (reg)
       register int reg;
  {
@@ -308,7 +310,7 @@
    register int p, n;
  
    /* If invalid, do nothing.  */
-@@ -934,7 +1070,7 @@
+@@ -934,7 +1070,7 @@ delete_reg_equiv (reg)
    else
      qty_first_reg[q] = n;
  
@@ -317,7 +319,7 @@
  }
  
  /* Remove any invalid expressions from the hash table
-@@ -972,10 +1108,10 @@
+@@ -972,10 +1108,10 @@ mention_regs (x)
  
        for (i = regno; i < endregno; i++)
  	{
@@ -330,7 +332,7 @@
  	}
  
        return 0;
-@@ -989,19 +1125,19 @@
+@@ -989,19 +1125,19 @@ mention_regs (x)
      {
        int i = REGNO (SUBREG_REG (x));
  
@@ -353,7 +355,7 @@
        return 0;
      }
  
-@@ -1069,7 +1205,7 @@
+@@ -1069,7 +1205,7 @@ insert_regs (x, classp, modified)
  	 wrong mode for that equivalence, don't do anything here.  */
  
        if (REGNO_QTY_VALID_P (regno)
@@ -362,7 +364,7 @@
  	return 0;
  
        if (modified || ! REGNO_QTY_VALID_P (regno))
-@@ -1086,7 +1222,7 @@
+@@ -1086,7 +1222,7 @@ insert_regs (x, classp, modified)
  		}
  
  	  make_new_qty (regno);
@@ -371,7 +373,7 @@
  	  return 1;
  	}
  
-@@ -1111,9 +1247,9 @@
+@@ -1111,9 +1247,9 @@ insert_regs (x, classp, modified)
  	 for the full register.  Since we don't invalidate the SUBREG
  	 here first, we might have to bump up REG_TICK so that mention_regs
  	 will do the right thing.  */
@@ -384,7 +386,7 @@
        mention_regs (x);
        return 1;
      }
-@@ -1448,12 +1584,12 @@
+@@ -1448,12 +1584,12 @@ insert (x, classp, hash, mode)
    if (elt->is_const && classp && GET_CODE (classp->exp) == REG
        && GET_CODE (x) != REG)
      {
@@ -401,7 +403,7 @@
  	   && ! elt->is_const)
      {
        register struct table_elt *p;
-@@ -1462,17 +1598,17 @@
+@@ -1462,17 +1598,17 @@ insert (x, classp, hash, mode)
  	{
  	  if (p->is_const && GET_CODE (p->exp) != REG)
  	    {
@@ -424,7 +426,7 @@
  
    /* If this is a constant with symbolic value,
       and it has a term with an explicit integer value,
-@@ -1564,6 +1700,28 @@
+@@ -1564,6 +1700,28 @@ merge_equiv_classes (class1, class2)
      }
  }
  
@@ -453,7 +455,7 @@
  /* Remove from the hash table, or mark as invalid,
     all expressions whose values could be altered by storing in X.
     X is a register, a subreg, or a memory reference with nonvarying address
-@@ -1607,7 +1765,7 @@
+@@ -1607,7 +1765,7 @@ invalidate (x, full_mode)
  	 overlap these registers.  */
  
        delete_reg_equiv (regno);
@@ -462,7 +464,7 @@
  
        if (regno >= FIRST_PSEUDO_REGISTER)
  	{
-@@ -1634,7 +1792,7 @@
+@@ -1634,7 +1792,7 @@ invalidate (x, full_mode)
  	      in_table |= TEST_HARD_REG_BIT (hard_regs_in_table, i);
  	      CLEAR_HARD_REG_BIT (hard_regs_in_table, i);
  	      delete_reg_equiv (i);
@@ -471,7 +473,7 @@
  	    }
  
  	  if (in_table)
-@@ -1783,8 +1941,8 @@
+@@ -1783,8 +1941,8 @@ rehash_using_reg (x)
       valid entries in the table, we have no work to do.  */
  
    if (GET_CODE (x) != REG
@@ -482,7 +484,7 @@
      return;
  
    /* Scan all hash chains looking for valid entries that mention X.
-@@ -1837,8 +1995,8 @@
+@@ -1837,8 +1995,8 @@ invalidate_for_call ()
      if (TEST_HARD_REG_BIT (regs_invalidated_by_call, regno))
        {
  	delete_reg_equiv (regno);
@@ -493,7 +495,7 @@
  
  	in_table |= (TEST_HARD_REG_BIT (hard_regs_in_table, regno) != 0);
        }
-@@ -2010,7 +2168,7 @@
+@@ -2010,7 +2168,7 @@ canon_hash (x, mode)
  	    do_not_record = 1;
  	    return 0;
  	  }
@@ -502,7 +504,7 @@
  	return hash;
        }
  
-@@ -2202,15 +2360,15 @@
+@@ -2202,15 +2360,15 @@ exp_equiv_p (x, y, validate, equal_values)
  	 equivalent.  We only have to validate if Y is a register.  */
        if (CONSTANT_P (x) && GET_CODE (y) == REG
  	  && REGNO_QTY_VALID_P (REGNO (y))
@@ -523,7 +525,7 @@
  	return 1;
  
        return 0;
-@@ -2247,14 +2405,14 @@
+@@ -2247,14 +2405,14 @@ exp_equiv_p (x, y, validate, equal_values)
  	   equivalent.  If there are and we are not to validate, they
  	   are equivalent.  Otherwise, ensure all regs are up-to-date.  */
  
@@ -540,7 +542,7 @@
  	    return 0;
  
  	return 1;
-@@ -2413,20 +2571,20 @@
+@@ -2413,20 +2571,20 @@ set_nonvarying_address_components (addr, size, pbase, pstart, pend)
    if (GET_CODE (base) == REG
        && qty_const != 0
        && REGNO_QTY_VALID_P (REGNO (base))
@@ -567,7 +569,7 @@
      }
    /* This can happen as the result of virtual register instantiation,
       if the initial offset is too large to be a valid address.  */
-@@ -2435,16 +2593,16 @@
+@@ -2435,16 +2593,16 @@ set_nonvarying_address_components (addr, size, pbase, pstart, pend)
  	   && GET_CODE (XEXP (base, 1)) == REG
  	   && qty_const != 0
  	   && REGNO_QTY_VALID_P (REGNO (XEXP (base, 0)))
@@ -590,7 +592,7 @@
  
        /* One of the two values must be a constant.  */
        if (GET_CODE (base) != CONST_INT)
-@@ -2546,8 +2704,8 @@
+@@ -2546,8 +2704,8 @@ cse_rtx_varies_p (x)
  
    if (GET_CODE (x) == REG
        && REGNO_QTY_VALID_P (REGNO (x))
@@ -601,7 +603,7 @@
      return 0;
  
    if (GET_CODE (x) == PLUS
-@@ -2555,8 +2713,8 @@
+@@ -2555,8 +2713,8 @@ cse_rtx_varies_p (x)
        && GET_CODE (XEXP (x, 0)) == REG
        && REGNO_QTY_VALID_P (REGNO (XEXP (x, 0)))
        && (GET_MODE (XEXP (x, 0))
@@ -612,7 +614,7 @@
      return 0;
  
    /* This can happen as the result of virtual register instantiation, if
-@@ -2569,12 +2727,12 @@
+@@ -2569,12 +2727,12 @@ cse_rtx_varies_p (x)
        && GET_CODE (XEXP (x, 1)) == REG
        && REGNO_QTY_VALID_P (REGNO (XEXP (x, 0)))
        && (GET_MODE (XEXP (x, 0))
@@ -629,7 +631,7 @@
      return 0;
  
    return rtx_varies_p (x);
-@@ -2630,10 +2788,10 @@
+@@ -2630,10 +2788,10 @@ canon_reg (x, insn)
  	    || ! REGNO_QTY_VALID_P (REGNO (x)))
  	  return x;
  
@@ -642,7 +644,7 @@
        }
        
      default:
-@@ -4574,6 +4732,28 @@
+@@ -4574,6 +4732,28 @@ cse_gen_binary (code, mode, op0, op1)
      return gen_rtx_fmt_ee (code, mode, op0, op1);
  }
  
@@ -671,7 +673,7 @@
  /* Like simplify_binary_operation except used for relational operators.
     MODE is the mode of the operands, not that of the result.  If MODE
     is VOIDmode, both operands must also be VOIDmode and we compare the
-@@ -4635,19 +4815,20 @@
+@@ -4635,19 +4815,20 @@ simplify_relational_operation (code, mode, op0, op1)
    else if (GET_CODE (op0) == CONST_DOUBLE && GET_CODE (op1) == CONST_DOUBLE
  	   && GET_MODE_CLASS (GET_MODE (op0)) == MODE_FLOAT)
      {
@@ -702,7 +704,7 @@
      }
  #endif  /* not REAL_IS_NOT_DOUBLE, or REAL_ARITHMETIC */
  
-@@ -4937,21 +5118,6 @@
+@@ -4937,21 +5118,6 @@ fold_rtx (x, insn)
    switch (code)
      {
      case CONST:
@@ -724,7 +726,7 @@
      case CONST_INT:
      case CONST_DOUBLE:
      case SYMBOL_REF:
-@@ -5198,9 +5364,9 @@
+@@ -5198,9 +5364,9 @@ fold_rtx (x, insn)
  
  	if (GET_CODE (addr) == REG
  	    && REGNO_QTY_VALID_P (REGNO (addr))
@@ -737,7 +739,7 @@
  
  	/* If address is constant, split it into a base and integer offset.  */
  	if (GET_CODE (addr) == SYMBOL_REF || GET_CODE (addr) == LABEL_REF)
-@@ -5293,7 +5459,11 @@
+@@ -5293,7 +5459,11 @@ fold_rtx (x, insn)
  		    /* Indicate this is a constant.  This isn't a 
  		       valid form of CONST, but it will only be used
  		       to fold the next insns and then discarded, so
@@ -750,7 +752,7 @@
  		    return gen_rtx_CONST (GET_MODE (new), new);
  		  }
  	      }
-@@ -5338,12 +5508,12 @@
+@@ -5338,12 +5508,12 @@ fold_rtx (x, insn)
  	    /* This is the same as calling equiv_constant; it is duplicated
  	       here for speed.  */
  	    if (REGNO_QTY_VALID_P (REGNO (arg))
@@ -767,7 +769,7 @@
  	    break;
  
  	  case CONST:
-@@ -5566,8 +5736,8 @@
+@@ -5566,8 +5736,8 @@ fold_rtx (x, insn)
  		  && (folded_arg0 == folded_arg1
  		      || (GET_CODE (folded_arg0) == REG
  			  && GET_CODE (folded_arg1) == REG
@@ -778,7 +780,7 @@
  		      || ((p0 = lookup (folded_arg0,
  					(safe_hash (folded_arg0, mode_arg0)
  					 % NBUCKETS), mode_arg0))
-@@ -5584,7 +5754,7 @@
+@@ -5584,7 +5754,7 @@ fold_rtx (x, insn)
  		 (we only check the reverse if not floating-point).  */
  	      else if (GET_CODE (folded_arg0) == REG)
  		{
@@ -787,7 +789,7 @@
  
  		  if (REGNO_QTY_VALID_P (REGNO (folded_arg0))
  		      && (comparison_dominates_p (qty_comparison_code[qty], code)
-@@ -5596,7 +5766,7 @@
+@@ -5596,7 +5766,7 @@ fold_rtx (x, insn)
  			      && rtx_equal_p (qty_comparison_const[qty],
  					      const_arg1))
  			  || (GET_CODE (folded_arg1) == REG
@@ -796,7 +798,7 @@
  				  == qty_comparison_qty[qty]))))
  		    return (comparison_dominates_p (qty_comparison_code[qty],
  						    code)
-@@ -5724,7 +5894,15 @@
+@@ -5724,7 +5894,15 @@ fold_rtx (x, insn)
  	     hence not save anything) or be incorrect.  */
  	  if (const_arg1 != 0 && GET_CODE (const_arg1) == CONST_INT
  	      && INTVAL (const_arg1) < 0
@@ -813,7 +815,7 @@
  	      && GET_CODE (folded_arg1) == REG)
  	    {
  	      rtx new_const = GEN_INT (- INTVAL (const_arg1));
-@@ -5871,6 +6049,12 @@
+@@ -5871,6 +6049,12 @@ fold_rtx (x, insn)
  					const_arg1 ? const_arg1 : folded_arg1,
  					const_arg2 ? const_arg2 : XEXP (x, 2));
        break;
@@ -826,7 +828,7 @@
      }
  
    return new ? new : x;
-@@ -5885,8 +6069,8 @@
+@@ -5885,8 +6069,8 @@ equiv_constant (x)
  {
    if (GET_CODE (x) == REG
        && REGNO_QTY_VALID_P (REGNO (x))
@@ -837,7 +839,7 @@
  
    if (x == 0 || CONSTANT_P (x))
      return x;
-@@ -6032,7 +6216,7 @@
+@@ -6032,7 +6216,7 @@ record_jump_cond (code, mode, op0, op1, reversed_nonequality)
    /* If OP0 and OP1 are known equal, and either is a paradoxical SUBREG,
       we know that they are also equal in the smaller mode (this is also
       true for all smaller modes whether or not there is a SUBREG, but
@@ -846,7 +848,7 @@
  
    /* Note that GET_MODE (op0) may not equal MODE.  */
    if (code == EQ && GET_CODE (op0) == SUBREG
-@@ -6165,7 +6349,7 @@
+@@ -6165,7 +6349,7 @@ record_jump_cond (code, mode, op0, op1, reversed_nonequality)
  	  op0_elt->in_struct = op0_in_struct;
  	}
  
@@ -855,7 +857,7 @@
        if (GET_CODE (op1) == REG)
  	{
  	  /* Look it up again--in case op0 and op1 are the same.  */
-@@ -6185,13 +6369,13 @@
+@@ -6185,13 +6369,13 @@ record_jump_cond (code, mode, op0, op1, reversed_nonequality)
  	      op1_elt->in_struct = op1_in_struct;
  	    }
  
@@ -873,7 +875,7 @@
  	}
  
        return;
-@@ -7116,8 +7300,8 @@
+@@ -7116,8 +7300,8 @@ cse_insn (insn, libcall_insn)
  	 their lifetimes will likely abut instead of overlapping.  */
        if (GET_CODE (dest) == REG
  	  && REGNO_QTY_VALID_P (REGNO (dest))
@@ -884,7 +886,7 @@
  	  && GET_CODE (src) == REG && REGNO (src) == REGNO (dest)
  	  /* Don't do this if the original insn had a hard reg as
  	     SET_SRC.  */
-@@ -7126,7 +7310,7 @@
+@@ -7126,7 +7310,7 @@ cse_insn (insn, libcall_insn)
  	/* We can't call canon_reg here because it won't do anything if
  	   SRC is a hard register.  */
  	{
@@ -893,7 +895,7 @@
  	  rtx new_src
  	    = (first >= FIRST_PSEUDO_REGISTER
  	       ? regno_reg_rtx[first] : gen_rtx_REG (GET_MODE (src), first));
-@@ -7165,12 +7349,24 @@
+@@ -7165,12 +7349,24 @@ cse_insn (insn, libcall_insn)
  	 equivalent constant, we want to add a REG_NOTE.   We don't want
  	 to write a REG_EQUAL note for a constant pseudo since verifying that
  	 that pseudo hasn't been eliminated is a pain.  Such a note also
@@ -920,7 +922,7 @@
  	  /* Record the actual constant value in a REG_EQUAL note, making
  	     a new one if one does not already exist.  */
  	  if (tem)
-@@ -7191,11 +7387,11 @@
+@@ -7191,11 +7387,11 @@ cse_insn (insn, libcall_insn)
  	     the last set for this quantity was for this register.  */
  
  	  if (REGNO_QTY_VALID_P (REGNO (dest))
@@ -934,7 +936,7 @@
  
  	      if ((tem = single_set (const_insn)) != 0
  		  && rtx_equal_p (SET_DEST (tem), dest))
-@@ -7328,9 +7524,12 @@
+@@ -7328,9 +7524,12 @@ cse_insn (insn, libcall_insn)
  		 && GET_CODE (NEXT_INSN (p)) != BARRIER
  		 && GET_CODE (NEXT_INSN (p)) != CODE_LABEL)
  	    {
@@ -948,7 +950,7 @@
  	      else
  		p = NEXT_INSN (p);
  	    }
-@@ -7452,7 +7651,12 @@
+@@ -7452,7 +7651,12 @@ cse_insn (insn, libcall_insn)
  	    enum machine_mode mode
  	      = GET_MODE (src) == VOIDmode ? GET_MODE (dest) : GET_MODE (src);
  
@@ -962,7 +964,7 @@
  	      {
  		register struct table_elt *elt;
  
-@@ -7519,6 +7723,12 @@
+@@ -7519,6 +7723,12 @@ cse_insn (insn, libcall_insn)
  	  invalidate (XEXP (dest, 0), GET_MODE (dest));
        }
  
@@ -975,7 +977,7 @@
    /* Make sure registers mentioned in destinations
       are safe for use in an expression to be inserted.
       This removes from the hash table
-@@ -7557,10 +7767,10 @@
+@@ -7557,10 +7767,10 @@ cse_insn (insn, libcall_insn)
  
  	      for (i = regno; i < endregno; i++)
  		{
@@ -988,7 +990,7 @@
  		    }
  		}
  	    }
-@@ -7754,15 +7964,20 @@
+@@ -7754,15 +7964,20 @@ cse_insn (insn, libcall_insn)
       then be used in the sequel and we may be changing a two-operand insn
       into a three-operand insn.
  
@@ -1012,7 +1014,7 @@
      {
        rtx prev = PREV_INSN (insn);
        while (prev && GET_CODE (prev) == NOTE)
-@@ -7836,7 +8051,7 @@
+@@ -7836,7 +8051,7 @@ cse_insn (insn, libcall_insn)
    prev_insn = insn;
  }
  
@@ -1021,7 +1023,7 @@
  static void
  invalidate_memory ()
  {
-@@ -7864,8 +8079,8 @@
+@@ -7864,8 +8079,8 @@ note_mem_written (addr)
        && GET_CODE (XEXP (addr, 0)) == REG
        && REGNO (XEXP (addr, 0)) == STACK_POINTER_REGNUM)
      {
@@ -1032,7 +1034,7 @@
  
        /* This should be *very* rare.  */
        if (TEST_HARD_REG_BIT (hard_regs_in_table, STACK_POINTER_REGNUM))
-@@ -7974,7 +8189,7 @@
+@@ -7974,7 +8189,7 @@ cse_process_notes (x, object)
        }
  
      case REG:
@@ -1041,7 +1043,7 @@
  
        /* Return a constant or a constant register.  */
        if (REGNO_QTY_VALID_P (REGNO (x))
-@@ -8532,20 +8747,8 @@
+@@ -8532,20 +8747,8 @@ cse_main (f, nregs, after_loop, file)
  
    max_insn_uid = get_max_uid ();
  
@@ -1062,7 +1064,7 @@
  
  #ifdef LOAD_EXTEND_OP
  
-@@ -8636,7 +8839,7 @@
+@@ -8636,7 +8839,7 @@ cse_main (f, nregs, after_loop, file)
        max_qty = val.nsets * 2;
        
        if (file)
@@ -1071,7 +1073,7 @@
  		 INSN_UID (insn), val.last ? INSN_UID (val.last) : 0,
  		 val.nsets);
  
-@@ -8733,8 +8936,6 @@
+@@ -8733,8 +8936,6 @@ cse_basic_block (from, to, next_branch, around_loop)
    for (insn = from; insn != to; insn = NEXT_INSN (insn))
      {
        register enum rtx_code code = GET_CODE (insn);
@@ -1080,7 +1082,7 @@
  
        /* If we have processed 1,000 insns, flush the hash table to
  	 avoid extreme quadratic behavior.  We must not include NOTEs
-@@ -8747,17 +8948,7 @@
+@@ -8747,17 +8948,7 @@ cse_basic_block (from, to, next_branch, around_loop)
  	 Perhaps for 2.9.  */
        if (code != NOTE && num_insns++ > 1000)
  	{

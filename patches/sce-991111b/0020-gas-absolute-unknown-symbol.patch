@@ -1,11 +1,12 @@
 diff --git a/gas/config/tc-mips.c b/gas/config/tc-mips.c
+index 229f815..99b7158 100644
 --- a/gas/config/tc-mips.c
 +++ b/gas/config/tc-mips.c
-@@ -4954,9 +4954,26 @@
+@@ -4954,9 +4954,26 @@ macro (ip)
  	     With a constant we always use the latter case.  */
  	  if (breg == 0)
  	    {
-+	      /* ASTRA P20: the retail R5900 assembler decides at the use:
++	      /* The retail R5900 assembler decides at the use:
 +		 a symbol whose size is still unknown (no .extern seen yet)
 +		 gets the absolute lui/<op> form in both reorder and noreorder
 +		 mode; the deferred relaxation pair would resolve to gp at
