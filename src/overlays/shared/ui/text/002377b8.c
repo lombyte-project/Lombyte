@@ -1244,9 +1244,9 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void FUN_L00_001fb470(s32, s32, s32, char *, s32);
 
 /* Draws the short counter panel, its spinning icon, and a pulsing label. */
-s32 FUN_L00_0023a2d0(Hud *m) {
+s32 FUN_L00_0023a2d0(Hud *hud_element) {
     char buf[16];
-    u8 *q;
+    u8 *visibility_counters;
     s32 x, y, panel_right, panel_left, slide, alpha, text_alpha;
     s32 color, shadow, period, text_x, text_y;
     f32 open, text, pulse, scaled_text;
@@ -1258,21 +1258,21 @@ s32 FUN_L00_0023a2d0(Hud *m) {
         if (pal_mode_reload[0] == 0)
             y = alternate_y;
     }
-    x = m->x;
+    x = hud_element->x;
     if (hero.vehicle_mode == 2)
-        return m->ret;
+        return hud_element->ret;
     if (hero.state.current == 50)
-        return m->ret;
-    q = m->ab;
-    if (q[0] == 0)
-        return m->ret;
+        return hud_element->ret;
+    visibility_counters = hud_element->ab;
+    if (visibility_counters[0] == 0)
+        return hud_element->ret;
 
-    open = convert_integer_to_float(q[0]) / convert_integer_to_float(D_L00_0015F7F0_gp);
+    open = convert_integer_to_float(visibility_counters[0]) / convert_integer_to_float(D_L00_0015F7F0_gp);
     if (1.0f < open)
         open = 1.0f;
     else if (open < 0.0f)
         open = 0.0f;
-    text = convert_integer_to_float(q[1]) / convert_integer_to_float(D_L00_0015F7F0_gp);
+    text = convert_integer_to_float(visibility_counters[1]) / convert_integer_to_float(D_L00_0015F7F0_gp);
     if (1.0f < text)
         text = 1.0f;
     else if (text < 0.0f)
@@ -1286,7 +1286,7 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     panel_left = panel_right - slide;
     draw_hud_sprite(get_icon_frame(0x7580, 0), panel_left, y, slide + 16, 32, alpha);
     draw_hud_sprite(get_icon_frame(0x7580, 1), panel_left - 32, y, 32, 32, alpha);
-    draw_hud_icon(m, get_icon_frame(0x754f, D_L00_0015F5CC % 60 >> 1), x - 32, y, 0, text_alpha);
+    draw_hud_icon(hud_element, get_icon_frame(0x754f, D_L00_0015F5CC % 60 >> 1), x - 32, y, 0, text_alpha);
 
     sprintf_alt(buf, D_L00_0015F918);
     text_x = x + D_L00_0015F904;
@@ -1302,7 +1302,7 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     FUN_L00_001fb470(text_x + 1, text_y + 1, shadow, buf, -1);
     FUN_L00_001fb470(text_x, text_y, color, buf, -1);
 out:
-    return m->ret;
+    return hud_element->ret;
 }
 extern short D_00140986 __attribute__((section(".data")));
 int hud_screen_position(char *, int *, int *) __asm__("FUN_L00_00235a70");
