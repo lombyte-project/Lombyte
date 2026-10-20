@@ -334,7 +334,7 @@ void FUN_L03_002eb978(void *arg) {
     char *timer;
     char *ang;
     int tbl;
-    float *p;
+    float *camera_parameter_values;
     int i;
     float f;
     float mtx[12];
@@ -346,11 +346,11 @@ void FUN_L03_002eb978(void *arg) {
     qcopy(target, &hero.motion.pos);
     *(s32 *)(target + 0xC) = 0;
     camera_data = *(char **)(camera + 0x70);
-    p = (float *)(camera_data + 0xD0);
+    camera_parameter_values = (float *)(camera_data + 0xD0);
     f = *(float *)(camera_config + 0x20);
-    p[2] = f;
+    camera_parameter_values[2] = f;
     *(float *)(camera_data + 0xD0) = f;
-    p[4] = *(float *)(camera_config + 0x24);
+    camera_parameter_values[4] = *(float *)(camera_config + 0x24);
     pos = *(char **)(camera + 0x70);
     *(s32 *)(pos + 0x28) = 0;
     *(float *)(pos + 0x20) = 0.01f;
@@ -369,10 +369,10 @@ void FUN_L03_002eb978(void *arg) {
     *(s32 *)(ang + 0x24) = 0;
     i = (*(s16 *)(camera + 0x84) << 5) + tbl;
     i += 0x10;
-    p = (float *)i;
-    v[0] = p[0];
-    v[1] = p[1];
-    v[2] = p[2];
+    camera_parameter_values = (float *)i;
+    v[0] = camera_parameter_values[0];
+    v[1] = camera_parameter_values[1];
+    v[2] = camera_parameter_values[2];
     v[3] = 0.0f;
     euler_rotation_basis(mtx, v);
     qcopy(ang, mtx);
