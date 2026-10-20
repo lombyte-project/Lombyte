@@ -2787,7 +2787,7 @@ extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, i
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 
-void FUN_L08_002de528(char *moby, int a, int n, int flag) {
+void FUN_L08_002de528(char *moby, int transform_index, int spawn_count, int flag) {
     float vec[4];
     float vec2[4];
     float vec3[4];
@@ -2799,32 +2799,32 @@ void FUN_L08_002de528(char *moby, int a, int n, int flag) {
     } else {
         FUN_L00_0025e450_c(moby, data + 0x20, moby + 0x10, 0.0f, 0.0f, 0x2D, 0x1E, 0x1E, 10.0f, 6.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
     }
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < spawn_count; i++) {
         {
-            char *m;
+            char *spawned_moby;
             if (flag) {
-                if (random_integer_below_c(0xFF) & 1) m = func_0020D348_m(0x30E); else m = func_0020D348_m(0x30F);
+                if (random_integer_below_c(0xFF) & 1) spawned_moby = func_0020D348_m(0x30E); else spawned_moby = func_0020D348_m(0x30F);
             } else {
-                if (random_integer_below_c(0xFF) & 1) m = func_0020D348_m(0x310); else m = func_0020D348_m(0x311);
+                if (random_integer_below_c(0xFF) & 1) spawned_moby = func_0020D348_m(0x310); else spawned_moby = func_0020D348_m(0x311);
             }
-            *(short *)(m + 0x32) = 0x40;
-            m[0x31] = 1;
-            m[0x30] = 0x40;
-            *(long *)(m + 0x38) = *(long *)(moby + 0x38);
-            *(float *)(m + 0x40) = random_angle_radians_c3();
-            *(float *)(m + 0x44) = random_angle_radians_c3();
-            *(float *)(m + 0x48) = random_angle_radians_c3();
+            *(short *)(spawned_moby + 0x32) = 0x40;
+            spawned_moby[0x31] = 1;
+            spawned_moby[0x30] = 0x40;
+            *(long *)(spawned_moby + 0x38) = *(long *)(moby + 0x38);
+            *(float *)(spawned_moby + 0x40) = random_angle_radians_c3();
+            *(float *)(spawned_moby + 0x44) = random_angle_radians_c3();
+            *(float *)(spawned_moby + 0x48) = random_angle_radians_c3();
             vec[0] = random_float_between_c3(-1.0f, 1.0f);
             vec[1] = random_float_between_c3(-1.0f, 1.0f);
             vec[2] = random_float_between_c3(-1.0f, 1.0f);
             vec[3] = 1.0f;
-            transform_vector(vec, vec, D_L08_001600EC + (a << 7));
-            qcopy(m + 0x10, vec);
+            transform_vector(vec, vec, D_L08_001600EC + (transform_index << 7));
+            qcopy(spawned_moby + 0x10, vec);
             clear_u64_value(vec2);
             subtract_vector_xyz(vec3, vec, moby + 0x10);
             set_vector_length_xy(vec3, vec3, random_float_between_c3(D_0015ED6C_lui * 12.0f, D_0015ED6C_lui * 15.0f));
             vec3[2] = random_float_between_c3(D_0015ED6C_lui * 6.0f, D_0015ED6C_lui * 18.0f);
-            FUN_L05_00318648(m, (int)moby, vec3, vec2, func_001FA898_r(random_float_between_c3(60.0f, 90.0f)));
+            FUN_L05_00318648(spawned_moby, (int)moby, vec3, vec2, func_001FA898_r(random_float_between_c3(60.0f, 90.0f)));
         }
     }
 }
