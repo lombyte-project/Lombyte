@@ -359,11 +359,11 @@ void FUN_L10_00298b68(struct Moby *moby) {
         D_00141948 = 0;
     }
     if (vars->switch_a != -1 && vars->switch_b != -1) {
-        struct Moby *a = (struct Moby *)((vars->switch_a << 8) + (int)D_L10_0015FFD8_98b68);
-        if (a->oclass == 0x325) {
+        struct Moby *switch_a_moby = (struct Moby *)((vars->switch_a << 8) + (int)D_L10_0015FFD8_98b68);
+        if (switch_a_moby->oclass == 0x325) {
             struct Moby *b = (struct Moby *)((vars->switch_b << 8) + (int)D_L10_0015FFD8_98b68);
-            if (b->oclass == a->oclass) {
-                int *a_vars = (int *)a->pvars;
+            if (b->oclass == switch_a_moby->oclass) {
+                int *a_vars = (int *)switch_a_moby->pvars;
                 int *b_vars = (int *)b->pvars;
                 if (D_0014C050_98b68[moby->mission + current_level_index * 16] == 0xFF) {
                     a_vars[2] |= 8;
