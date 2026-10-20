@@ -60,7 +60,7 @@ extern void FUN_L10_002e91b8(unsigned char *m);
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
 
-void FUN_L10_002e9028(unsigned char *m) {
+void FUN_L10_002e9028(unsigned char *moby) {
     enum {
         MOBY_UPDATE_INITIALIZE = 0,
         MOBY_UPDATE_ACTIVE = 1
@@ -68,18 +68,18 @@ void FUN_L10_002e9028(unsigned char *m) {
     float v[4] __attribute__((aligned(16)));
     float mtx[16] __attribute__((aligned(16)));
     char *player;
-    unsigned int s = m[0x20];
-    switch (s) {
+    unsigned int update_state = moby[0x20];
+    switch (update_state) {
     case MOBY_UPDATE_INITIALIZE:
-        m[0x20] = 1;
-        *(unsigned short *)(m + 0x34) |= 1;
-        m[0x31] = 0;
+        moby[0x20] = 1;
+        *(unsigned short *)(moby + 0x34) |= 1;
+        moby[0x31] = 0;
         break;
     case MOBY_UPDATE_ACTIVE:
         player = (&hero.motion.pos);
-        if (FUN_001f9b48(m + 0x10, player) < 8.0f) {
-            subtract_vector_xyz(v, player + 0x50, m + 0x10);
-            transpose_rotation_matrix(mtx, m + 0xC0);
+        if (FUN_001f9b48(moby + 0x10, player) < 8.0f) {
+            subtract_vector_xyz(v, player + 0x50, moby + 0x10);
+            transpose_rotation_matrix(mtx, moby + 0xC0);
             transform_vector(v, v, mtx);
             if (-5.0f < v[0] && v[0] < 5.0f && 0.0f < v[2] && v[2] < 8.0f) {
                 if (v[1] < 0.5f) {
@@ -91,7 +91,7 @@ void FUN_L10_002e9028(unsigned char *m) {
                 hero.unk22CB = 0;
             }
         }
-        enqueue_callback_list_1(FUN_L10_002e91b8, m);
+        enqueue_callback_list_1(FUN_L10_002e91b8, moby);
         break;
     }
 }
