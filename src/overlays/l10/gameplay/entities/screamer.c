@@ -341,7 +341,7 @@ void FUN_L10_002dfc38(struct Moby *moby) {
     float v[4];
     float w[4];
     int st;
-    int r19;
+    int target_selection_status;
     float ang;
 
     if (data->f38 != 0) {
@@ -391,8 +391,8 @@ void FUN_L10_002dfc38(struct Moby *moby) {
     else data->f180 = data->f178;
 
     if (data->f174 == 2) {
-        r19 = ahead_f(data->f180, moby, data->fC0);
-        if (r19 != 2) {
+        target_selection_status = ahead_f(data->f180, moby, data->fC0);
+        if (target_selection_status != 2) {
             Anim_2DFC38 *bp = &D_L10_001600EC_2DFC38[data->f194];
             subtract_vector_xyz(v, D_0013F3D0, bp->f30);
             v[3] = 0.0f;
@@ -401,14 +401,14 @@ void FUN_L10_002dfc38(struct Moby *moby) {
         }
     } else if (moby->state == 1 && data->f18C >= 0) {
         Path_2DFC38 *path = D_L10_001B0C30_2DFC38[data->f18C];
-        r19 = activate_effect_l08(data->f180, moby, data->fC0, 0, 0, path->pts, path->count);
+        target_selection_status = activate_effect_l08(data->f180, moby, data->fC0, 0, 0, path->pts, path->count);
     } else if (moby->state != 1 && data->f17C >= 0) {
         Path_2DFC38 *path = D_L10_001B0C30_2DFC38[data->f17C];
-        r19 = activate_effect_l08(data->f180, moby, data->fC0, 0, 0, path->pts, path->count);
+        target_selection_status = activate_effect_l08(data->f180, moby, data->fC0, 0, 0, path->pts, path->count);
     } else {
-        r19 = ahead_f(data->f180, moby, data->fC0);
+        target_selection_status = ahead_f(data->f180, moby, data->fC0);
     }
-    if (r19 != 2) {
+    if (target_selection_status != 2) {
         if (data->f180 < vector_distance(data->f130, data->fC0)) data->f104 = 2;
         else if (moby->visible == 0) data->f104 = 2;
     }
