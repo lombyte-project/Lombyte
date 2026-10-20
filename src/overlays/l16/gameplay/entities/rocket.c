@@ -142,12 +142,12 @@ extern int D_L16_0015FFD8_d __asm__("D_L16_0015FFD8");
  * the US level program (data still reached through the MACRO_ADDR form). */
 // For each listed moby of class 0x21D: sets its state bytes and clears bit 0 of its flags.
 void FUN_L16_002ceca8(int idx) {
-    short *p = (short *)D_L16_001ABCC0_u[idx];
-    if (p != 0) {
+    short *group_entry = (short *)D_L16_001ABCC0_u[idx];
+    if (group_entry != 0) {
         do {
             char *moby;
         again:
-            moby = D_L16_0015FFD8_d + ((*p & 0x7FFF) << 8);
+            moby = D_L16_0015FFD8_d + ((*group_entry & 0x7FFF) << 8);
             if (*(short *)(moby + 0xA6) != 0x21D)
                 goto again;
             {
@@ -158,7 +158,7 @@ void FUN_L16_002ceca8(int idx) {
                 moby[0x20] = two;
                 *(unsigned short *)(moby + 0x34) = flags;
             }
-        } while (*p++ >= 0);
+        } while (*group_entry++ >= 0);
     }
 }
 
