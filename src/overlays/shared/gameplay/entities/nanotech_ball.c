@@ -2198,25 +2198,25 @@ void FUN_001fa050_002dc938(Mtx_002dc938 *, void *) __asm__("FUN_001fa050");
 void FUN_001fa2b8_002dc938(void *, Mtx_002dc938 *) __asm__("FUN_001fa2b8");
 void FUN_0020e098_002dc938(char *) __asm__("FUN_0020e098");
 void FUN_0020c828_002dc938(char *) __asm__("FUN_0020c828");
-void FUN_L00_002dc938(char *p, char *q, int flag) {
-    Mtx_002dc938 m;
+void FUN_L00_002dc938(char *moby, char *suction_record, int flag) {
+    Mtx_002dc938 rotation_matrix;
     void (*fn)(char *);
     if (flag)
-        FUN_L00_002dbf28_002dc938(p, q);
-    *(int *)(p + 0x98) = *(int *)(q + 0x84);
-    qzero(p + 0x40);
-    FUN_001fa050_002dc938(&m, p + 0x40);
-    FUN_001fa2b8_002dc938(p + 0xC0, &m);
-    FUN_0020e098_002dc938(p);
-    *(unsigned short *)(p + 0x34) &= ~4;
-    *(int *)(p + 0x98) = *(int *)(q + 0x84);
-    *(float *)(p + 0x2C) = *(float *)(*(char **)(p + 0x24) + 0x24);
-    *(short *)(q + 0x68) = 0;
-    fn = *(void (**)(char *))(*(char **)(*(char **)(p + 0x24) + 0x2C) + 0x14);
+        FUN_L00_002dbf28_002dc938(moby, suction_record);
+    *(int *)(moby + 0x98) = *(int *)(suction_record + 0x84);
+    qzero(moby + 0x40);
+    FUN_001fa050_002dc938(&rotation_matrix, moby + 0x40);
+    FUN_001fa2b8_002dc938(moby + 0xC0, &rotation_matrix);
+    FUN_0020e098_002dc938(moby);
+    *(unsigned short *)(moby + 0x34) &= ~4;
+    *(int *)(moby + 0x98) = *(int *)(suction_record + 0x84);
+    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24);
+    *(short *)(suction_record + 0x68) = 0;
+    fn = *(void (**)(char *))(*(char **)(*(char **)(moby + 0x24) + 0x2C) + 0x14);
     if (fn)
-        fn(p);
+        fn(moby);
     else
-        FUN_0020c828_002dc938(p);
+        FUN_0020c828_002dc938(moby);
 }
 #include "sda.h"
 
