@@ -767,7 +767,10 @@ void doom_bot_update(struct Moby *moby) __asm__("FUN_L00_002bffa8");
 void doom_bot_update(struct Moby *moby) {
     enum {
         DOOM_BOT_ALIGN_TO_TARGET = 6,
+        DOOM_BOT_COLLISION_RECOVERY_FALL = 8,
         DOOM_BOT_DETONATE = 11,
+        DOOM_BOT_WAIT_FOR_TRANSITION_ANIMATION = 12,
+        DOOM_BOT_INITIAL_FALL = 14,
         DOOM_BOT_RESET_TO_INITIALIZE = 15
     };
     OvlVec4 scratch[4];
@@ -860,7 +863,7 @@ void doom_bot_update(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         debug_print(D_L00_001E9B48); moby->state=1; break;
-    case 8: {
+    case DOOM_BOT_COLLISION_RECOVERY_FALL: {
         DoomBotParams *hp;
         fast_vec_add(&scratch[0],&moby->pos,&data->velocity);
         data->velocity.f[2]-=frame_time_sq*9.0f;
@@ -1055,7 +1058,7 @@ void doom_bot_update(struct Moby *moby) {
     }
     mark_moby_for_removal(moby);
     return;
-    case 12:
+    case DOOM_BOT_WAIT_FOR_TRANSITION_ANIMATION:
         if (moby->anim_flags&2) {
             moby->state=4;
             if (moby->prev_seq!=7) blend_moby_animation(moby,7,0,scale_game_frames(10));
@@ -1064,7 +1067,7 @@ void doom_bot_update(struct Moby *moby) {
         break;
     case 13:
         debug_print(D_L00_001E9B70); break;
-    case 14: {
+    case DOOM_BOT_INITIAL_FALL: {
         DoomBotParams *hp;
         fast_vec_add(&scratch[1],&moby->pos,&data->velocity);
         if (coll_sphere(&moby->pos,scale*0.5f,1,moby) && coll_hit.moby && ((struct Moby *)coll_hit.moby)->oclass==186) {
