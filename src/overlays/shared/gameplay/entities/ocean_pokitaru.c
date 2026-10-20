@@ -530,18 +530,18 @@ void FUN_L11_0030a908(struct Moby *moby) {
     Vec4f side_offset;
     Vec4f a;
     Vec4f b;
-    Vec4f c[4];
-    Vec4f d0;
-    Vec4f d1;
-    Quad_30a908 q;
-    Data_30a908 *d = (Data_30a908 *)moby->pvars;
+    Vec4f strip_corners[4];
+    Vec4f first_strip_edge_delta;
+    Vec4f second_strip_edge_delta;
+    Quad_30a908 far_quad;
+    Data_30a908 *ocean_vars = (Data_30a908 *)moby->pvars;
     float saved_fog_228 = ((Fog_30a908 *)D_L11_0016D440)->f228;
     float s22C = ((Fog_30a908 *)D_L11_0016D440)->f22C;
     int i;
     int layer;
     int colA;
     int colB;
-    int n;
+    int vertex_count;
     float t;
     float x;
     float y;
@@ -572,76 +572,76 @@ void FUN_L11_0030a908(struct Moby *moby) {
     FUN_001f9bf8_30a908(&b, &b, 1.0f);
     FUN_001f9bf8_30a908(&scratch_vector, &a, -75.0f);
     FUN_001f9bf8_30a908(&side_offset, &b, -87.0f);
-    FUN_001f9a10_30a908(&c[0], &scratch_vector, &side_offset);
+    FUN_001f9a10_30a908(&strip_corners[0], &scratch_vector, &side_offset);
     FUN_001f9bf8_30a908(&side_offset, &b, 87.0f);
-    FUN_001f9a10_30a908(&c[2], &scratch_vector, &side_offset);
-    FUN_001f9bf8_30a908(&scratch_vector, &a, d->f28);
+    FUN_001f9a10_30a908(&strip_corners[2], &scratch_vector, &side_offset);
+    FUN_001f9bf8_30a908(&scratch_vector, &a, ocean_vars->f28);
     FUN_001f9bf8_30a908(&side_offset, &b, -750.0f);
-    FUN_001f9a10_30a908(&c[1], &scratch_vector, &side_offset);
+    FUN_001f9a10_30a908(&strip_corners[1], &scratch_vector, &side_offset);
     FUN_001f9bf8_30a908(&side_offset, &b, 750.0f);
-    FUN_001f9a10_30a908(&c[3], &scratch_vector, &side_offset);
+    FUN_001f9a10_30a908(&strip_corners[3], &scratch_vector, &side_offset);
     for (i = 0; i < 4; i++) {
-        Vec4f *p = &c[i];
-        FUN_001f9a10_30a908(p, p, D_L11_001677C0_30a908);
-        p->z = tide_level_macro;
+        Vec4f *strip_corner = &strip_corners[i];
+        FUN_001f9a10_30a908(strip_corner, strip_corner, D_L11_001677C0_30a908);
+        strip_corner->z = tide_level_macro;
     }
-    FUN_001f9a28_30a908(&d0, &c[1], &c[0]);
-    FUN_001f9a28_30a908(&d1, &c[3], &c[2]);
+    FUN_001f9a28_30a908(&first_strip_edge_delta, &strip_corners[1], &strip_corners[0]);
+    FUN_001f9a28_30a908(&second_strip_edge_delta, &strip_corners[3], &strip_corners[2]);
     t = 10.0f;
     for (i = 0; i < 12; i += 2) {
-        float f = FUN_001fa6c0_30a908(i) / 10.0f;
-        int col = FUN_001fa6e0_30a908(d->f0, d->f4, FUN_001fa6c0_30a908(i) / t);
-        FUN_001f9a68_30a908(&scratch_vector, &d0, f);
+        float strip_fraction = FUN_001fa6c0_30a908(i) / 10.0f;
+        int col = FUN_001fa6e0_30a908(ocean_vars->f0, ocean_vars->f4, FUN_001fa6c0_30a908(i) / t);
+        FUN_001f9a68_30a908(&scratch_vector, &first_strip_edge_delta, strip_fraction);
         D_L11_001D9E08[i] = col;
         D_L11_001DA310[i].u = 0.0f;
         D_L11_001DA310[i].v = 0.0f;
-        FUN_001f9a10_30a908(&scratch_vector, &scratch_vector, &c[0]);
+        FUN_001f9a10_30a908(&scratch_vector, &scratch_vector, &strip_corners[0]);
         D_L11_001D9B08[i].x = scratch_vector.x;
         D_L11_001D9B08[i].y = scratch_vector.y;
         D_L11_001D9B08[i].z = scratch_vector.z;
-        FUN_001f9a68_30a908(&scratch_vector, &d1, f);
+        FUN_001f9a68_30a908(&scratch_vector, &second_strip_edge_delta, strip_fraction);
         D_L11_001D9E08[i + 1] = col;
         D_L11_001DA310[i + 1].u = 0.0f;
         D_L11_001DA310[i + 1].v = 0.0f;
-        FUN_001f9a10_30a908(&scratch_vector, &scratch_vector, &c[2]);
+        FUN_001f9a10_30a908(&scratch_vector, &scratch_vector, &strip_corners[2]);
         D_L11_001D9B08[i + 1].x = scratch_vector.x;
         D_L11_001D9B08[i + 1].y = scratch_vector.y;
         D_L11_001D9B08[i + 1].z = scratch_vector.z;
     }
     func_L00_001FDE48_30a908(0xC, D_L11_001D9B08, D_L11_001D9E08, D_L11_001DA310, 1);
-    q.z78 = FUN_001f44b8_30a908(0x16);
-    q.q80 = 0xFF9000000260L;
-    q.q88 = 0x8000000044L;
-    q.z70 = 0;
-    if (d->f14 < ((Cam_30a908 *)D_L11_00167680)->z - d->f24 &&
+    far_quad.z78 = FUN_001f44b8_30a908(0x16);
+    far_quad.q80 = 0xFF9000000260L;
+    far_quad.q88 = 0x8000000044L;
+    far_quad.z70 = 0;
+    if (ocean_vars->f14 < ((Cam_30a908 *)D_L11_00167680)->z - ocean_vars->f24 &&
         hero.state.current != 0x1D && D_L11_0016D180 == 0) {
-        q.uv[0].u = 0.0f;
-        q.uv[0].v = 0.0f;
-        q.uv[1].u = 0.0f;
-        q.uv[1].v = 0.0f;
-        q.uv[2].u = 0.0f;
-        q.uv[2].v = 0.0f;
-        q.uv[3].u = 0.0f;
-        q.uv[3].v = 0.0f;
-        q.col[0] = d->f4;
-        q.col[1] = d->f8;
-        q.col[2] = q.col[0];
-        q.col[3] = q.col[1];
-        *(u128 *)&q.v[0] = *(u128 *)&c[1];
-        *(u128 *)&q.v[1] = *(u128 *)&c[1];
-        q.v[1].z = ((Cam_30a908 *)D_L11_00167680)->z - d->f24;
-        *(u128 *)&q.v[2] = *(u128 *)&c[3];
-        *(u128 *)&q.v[3] = *(u128 *)&c[3];
-        q.v[3].z = ((Cam_30a908 *)D_L11_00167680)->z - d->f24;
-        FUN_001f7d30_30a908(&q, 0, 0);
+        far_quad.uv[0].u = 0.0f;
+        far_quad.uv[0].v = 0.0f;
+        far_quad.uv[1].u = 0.0f;
+        far_quad.uv[1].v = 0.0f;
+        far_quad.uv[2].u = 0.0f;
+        far_quad.uv[2].v = 0.0f;
+        far_quad.uv[3].u = 0.0f;
+        far_quad.uv[3].v = 0.0f;
+        far_quad.col[0] = ocean_vars->f4;
+        far_quad.col[1] = ocean_vars->f8;
+        far_quad.col[2] = far_quad.col[0];
+        far_quad.col[3] = far_quad.col[1];
+        *(u128 *)&far_quad.v[0] = *(u128 *)&strip_corners[1];
+        *(u128 *)&far_quad.v[1] = *(u128 *)&strip_corners[1];
+        far_quad.v[1].z = ((Cam_30a908 *)D_L11_00167680)->z - ocean_vars->f24;
+        *(u128 *)&far_quad.v[2] = *(u128 *)&strip_corners[3];
+        *(u128 *)&far_quad.v[3] = *(u128 *)&strip_corners[3];
+        far_quad.v[3].z = ((Cam_30a908 *)D_L11_00167680)->z - ocean_vars->f24;
+        FUN_001f7d30_30a908(&far_quad, 0, 0);
     }
     FUN_00233980_30a908(0x42, 0x8000000048L);
     FUN_00233980_30a908(8, 0);
     FUN_00233980_30a908(0x14, 0xFF9000000260L);
     FUN_00233980_30a908(0x47, 0x513F1);
-    colA = d->fC;
-    colB = d->f10;
-    t = 1.0f - (((Cam_30a908 *)D_L11_00167680)->z - tide_level_macro) / d->f2C;
+    colA = ocean_vars->fC;
+    colB = ocean_vars->f10;
+    t = 1.0f - (((Cam_30a908 *)D_L11_00167680)->z - tide_level_macro) / ocean_vars->f2C;
     if (t > 1.0f) {
         t = 1.0f;
     }
@@ -650,50 +650,50 @@ void FUN_L11_0030a908(struct Moby *moby) {
         colB = FUN_001fa6e0_30a908(0, colB, t);
         for (layer = 0; layer < 2; layer++) {
             int id = layer + 0x28;
-            FUN_00233980_30a908(6, FUN_001f44b8_30a908(d->f1C + id));
-            for (y = d->f18 * -2.0f; y < d->f18 * 2.0f; y += d->f18) {
-                n = 0;
-                for (x = d->f18 * -2.0f; x < d->f18 * 2.0f; x += d->f18) {
-                    D_L11_001DA510[n].u = x / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
-                    D_L11_001DA510[n].v = y / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
-                    D_L11_001D9F08[n].x = x + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
-                    D_L11_001D9F08[n].y = y + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
-                    D_L11_001D9F08[n].z = tide_level_macro;
-                    i = n + 1;
-                    D_L11_001DA510[i].u = x / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
-                    D_L11_001DA510[i].v = (y + d->f18) / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+            FUN_00233980_30a908(6, FUN_001f44b8_30a908(ocean_vars->f1C + id));
+            for (y = ocean_vars->f18 * -2.0f; y < ocean_vars->f18 * 2.0f; y += ocean_vars->f18) {
+                vertex_count = 0;
+                for (x = ocean_vars->f18 * -2.0f; x < ocean_vars->f18 * 2.0f; x += ocean_vars->f18) {
+                    D_L11_001DA510[vertex_count].u = x / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
+                    D_L11_001DA510[vertex_count].v = y / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    D_L11_001D9F08[vertex_count].x = x + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
+                    D_L11_001D9F08[vertex_count].y = y + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    D_L11_001D9F08[vertex_count].z = tide_level_macro;
+                    i = vertex_count + 1;
+                    D_L11_001DA510[i].u = x / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
+                    D_L11_001DA510[i].v = (y + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
                     D_L11_001D9F08[i].x = x + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
-                    D_L11_001D9F08[i].y = y + d->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    D_L11_001D9F08[i].y = y + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
                     D_L11_001D9F08[i].z = tide_level_macro;
-                    i = n + 2;
-                    D_L11_001DA510[i].u = (x + d->f18) / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
-                    D_L11_001DA510[i].v = y / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
-                    D_L11_001D9F08[i].x = x + d->f18 + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
+                    i = vertex_count + 2;
+                    D_L11_001DA510[i].u = (x + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
+                    D_L11_001DA510[i].v = y / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    D_L11_001D9F08[i].x = x + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
                     D_L11_001D9F08[i].y = y + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
                     D_L11_001D9F08[i].z = tide_level_macro;
-                    i = n + 3;
-                    D_L11_001DA510[i].u = (x + d->f18) / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
-                    D_L11_001DA510[i].v = (y + d->f18) / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
-                    D_L11_001D9F08[i].x = x + d->f18 + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
-                    D_L11_001D9F08[i].y = y + d->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    i = vertex_count + 3;
+                    D_L11_001DA510[i].u = (x + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
+                    D_L11_001DA510[i].v = (y + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    D_L11_001D9F08[i].x = x + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
+                    D_L11_001D9F08[i].y = y + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
                     D_L11_001D9F08[i].z = tide_level_macro;
-                    for (i = n; i < n + 4; i++) {
+                    for (i = vertex_count; i < vertex_count + 4; i++) {
                         scratch_vector.x = D_L11_001D9F08[i].x - ((Cam_30a908 *)D_L11_00167680)->x;
                         scratch_vector.y = D_L11_001D9F08[i].y - ((Cam_30a908 *)D_L11_00167680)->y;
                         scratch_vector.z = D_L11_001D9F08[i].z - ((Cam_30a908 *)D_L11_00167680)->z;
                         scratch_vector.w = 1.0f;
-                        t = FUN_001f9b20_30a908(&scratch_vector) / (d->f18 * 2.0f);
+                        t = FUN_001f9b20_30a908(&scratch_vector) / (ocean_vars->f18 * 2.0f);
                         if (t > 1.0f) {
                             t = 1.0f;
                         }
                         D_L11_001DA208[i] = FUN_001fa6e0_30a908(colA, colB, t);
                     }
-                    n += 4;
-                    if (n >= 0x40) {
+                    vertex_count += 4;
+                    if (vertex_count >= 0x40) {
                         FUN_001f97b0_30a908();
                     }
                 }
-                func_L00_001FDE48_30a908(n, D_L11_001D9F08, D_L11_001DA208, D_L11_001DA510, 1);
+                func_L00_001FDE48_30a908(vertex_count, D_L11_001D9F08, D_L11_001DA208, D_L11_001DA510, 1);
             }
         }
     }
