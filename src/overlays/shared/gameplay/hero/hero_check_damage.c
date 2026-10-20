@@ -895,8 +895,8 @@ u8 *FUN_L00_0024f028_0020e360(u8 *, s32) __asm__("FUN_L00_0024f028");
 s32 FUN_001f96f8_0020e360(s32) __asm__("FUN_001f96f8");
 void FUN_L00_0024f3e0_0020e360(u8 *, u8 *, s32, s32, s32, s32) __asm__("FUN_L00_0024f3e0");
 void FUN_L00_0020e360(s32 a, s32 b) {
-    s32 t, i;
-    u8 *o;
+    s32 item_id_or_animation_id, i;
+    u8 *slot_animation_object;
     if (hero.vehicle_mode)
         return;
     if (!hero.unk20A8)
@@ -907,9 +907,9 @@ void FUN_L00_0020e360(s32 a, s32 b) {
         return;
     if (!b)
         return;
-    t = FUN_L00_0020d498_0020e360(0);
-    t = item_defs_lui[t].animation;
-    if (t == -1)
+    item_id_or_animation_id = FUN_L00_0020d498_0020e360(0);
+    item_id_or_animation_id = item_defs_lui[item_id_or_animation_id].animation;
+    if (item_id_or_animation_id == -1)
         return;
     for (i = 0; i < 2; i++) {
         if (hero.unkD08[i] != 0)
@@ -917,14 +917,14 @@ void FUN_L00_0020e360(s32 a, s32 b) {
         if (i == 1 && hero.unk20AB != 2)
             break;
         {
-            o = FUN_L00_0024f028_0020e360((u8 *)hero.moby, D_L00_0015F6A0_gp[i]);
-            hero.unkD08[i] = o;
-            if (o) {
+            slot_animation_object = FUN_L00_0024f028_0020e360((u8 *)hero.moby, D_L00_0015F6A0_gp[i]);
+            hero.unkD08[i] = slot_animation_object;
+            if (slot_animation_object) {
                 hero.unkD14 = 0;
-                *(s32 *)(o + 8) = 0;
-                FUN_L00_0024f3e0_0020e360((u8 *)hero.moby, o, t, 0,
+                *(s32 *)(slot_animation_object + 8) = 0;
+                FUN_L00_0024f3e0_0020e360((u8 *)hero.moby, slot_animation_object, item_id_or_animation_id, 0,
                                           FUN_001f96f8_0020e360(0xF), 1);
-                *(f32 *)(o + 0x28) = 1.0f;
+                *(f32 *)(slot_animation_object + 0x28) = 1.0f;
             }
         }
     }
