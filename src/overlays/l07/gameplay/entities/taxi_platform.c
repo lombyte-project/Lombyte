@@ -272,17 +272,17 @@ extern float advance_accelerated_scalar(float *, float *, float, float, float,
 extern int FUN_L00_00258ad0(int a, int b, int g, int e, float c, float d);
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L07_0030f0f8(char *a, char *b, float f12, float f13, float f14) {
+void FUN_L07_0030f0f8(char *moby, char *b, float f12, float f13, float f14) {
     float v[4];
-    char *q;
-    if (**(float **)(b + 0x12C) - 0.3f < *(float *)(a + 0x18)) {
+    char *velocity;
+    if (**(float **)(b + 0x12C) - 0.3f < *(float *)(moby + 0x18)) {
         *(float *)(b + 0xD8) -= frame_time * 9.8f;
     }
-    qcopy(v, a + 0x10);
+    qcopy(v, moby + 0x10);
     advance_accelerated_scalar(v + 2, (float *)(b + 0xD8), *(float *)(b + 0x138), f12, f13, f14);
-    q = b + 0xD0;
-    if (FUN_L00_00258ad0((int)a, (int)q, 0x400, 0x10, 1.0f, 0.0f)) {
-        fast_vec_scale(q, q, 0.5f);
+    velocity = b + 0xD0;
+    if (FUN_L00_00258ad0((int)moby, (int)velocity, 0x400, 0x10, 1.0f, 0.0f)) {
+        fast_vec_scale(velocity, velocity, 0.5f);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003105C0), where it is exact; names translated to the US level program. */
