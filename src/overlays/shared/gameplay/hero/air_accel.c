@@ -720,7 +720,7 @@ extern void FUN_L00_00262840(char *o);
 extern void FUN_L01_00231ae0_u(void) __asm__("FUN_L01_00231ae0");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
-void FUN_L01_00231348(int a, int b, int c) {
+void FUN_L01_00231348(int vehicle_mode, int b, int new_moby) {
     char *g;
     FUN_L00_0020e698();
     g = (char *)D_0013E533 + 0xE1D;
@@ -732,9 +732,9 @@ void FUN_L01_00231348(int a, int b, int c) {
     FUN_L00_00232fe8();
     FUN_L00_00206c08();
     FUN_L00_00205538();
-    *(char *)(g + 0x20A4) = a;
-    *(int *)(g + 0xA84) = c;
-    *(int *)(g + 0x2080) = c;
+    *(char *)(g + 0x20A4) = vehicle_mode;
+    *(int *)(g + 0xA84) = new_moby;
+    *(int *)(g + 0x2080) = new_moby;
     FUN_L01_00231ae0_u();
     *(float *)(g + 0x220) = *(float *)(g + 0x228);
     *(float *)(g + 0x224) = *(float *)(g + 0x22C);
@@ -745,7 +745,7 @@ void FUN_L01_00231348(int a, int b, int c) {
     FUN_L00_00257024(*(void **)(g + 0x2080));
     FUN_L00_00207a58();
     *(short *)(g + 0x22CC) = b;
-    if (a == 1) {
+    if (vehicle_mode == 1) {
         *(unsigned short *)(g + 0x22B0) = *(unsigned short *)(g + 0x22A8);
         *(int *)(g + 0x22A8) = *(int *)(g + 0x22AC);
     }
