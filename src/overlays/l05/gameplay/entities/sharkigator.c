@@ -2581,40 +2581,40 @@ typedef struct {
 /* Same routine as FUN_L16_002cf9f8, with this level's data layout. */
 void FUN_L05_00306e10(char *obj) {
     L16PatrolMoby *moby = (L16PatrolMoby *)obj;
-    L05PatrolData *d = moby->data;
+    L05PatrolData *patrol_data = moby->data;
     float target[4];
     float heading, distance;
 
-    FUN_L05_00306d30((char *)moby, d->node, target);
+    FUN_L05_00306d30((char *)moby, patrol_data->node, target);
     heading = fast_arc_tan(target[0] - moby->position[0], target[1] - moby->position[1]);
     for (;;) {
         L16PatrolPath *path;
         L16PatrolPath *base;
 
-        FUN_L05_00306d30((char *)moby, d->node, target);
-        distance = vector_distance(target, d->position);
+        FUN_L05_00306d30((char *)moby, patrol_data->node, target);
+        distance = vector_distance(target, patrol_data->position);
         if ((fast_difference_between_rotations(heading, moby->yaw) < 1.5707964f || distance > 4.0f) && distance > 2.0f) {
             break;
         }
-        path = d->path;
-        d->node = (d->node + 1) % path->count;
-        base = (L16PatrolPath *)D_L05_001B0930[d->base_path];
+        path = patrol_data->path;
+        patrol_data->node = (patrol_data->node + 1) % path->count;
+        base = (L16PatrolPath *)D_L05_001B0930[patrol_data->base_path];
         if (path != base) {
             /* At the last node of a branch: back to the base path, five nodes past its nearest one. */
-            if (d->node == path->count - 1) {
-                d->path = base;
-                d->node = FUN_L01_0028b510(d->position, base, 0.0f);
-                d->node = FUN_L00_0025d7a0((char *)d->path, d->node, 5, 1);
+            if (patrol_data->node == path->count - 1) {
+                patrol_data->path = base;
+                patrol_data->node = FUN_L01_0028b510(patrol_data->position, base, 0.0f);
+                patrol_data->node = FUN_L00_0025d7a0((char *)patrol_data->path, patrol_data->node, 5, 1);
             }
-        } else if (path->points[d->node][3] > 0.0f && random_integer_below_e10(100) > 0) {
+        } else if (path->points[patrol_data->node][3] > 0.0f && random_integer_below_e10(100) > 0) {
             /* At a marked node of the base path: more often than not, onto the branch the mark names. */
-            int branch = trunc_f2i_e10(d->path->points[d->node][3]) - 1;
+            int branch = trunc_f2i_e10(patrol_data->path->points[patrol_data->node][3]) - 1;
 
-            d->path = (L16PatrolPath *)D_L05_001B0930[d->branch_path[branch]];
-            d->node = 0;
+            patrol_data->path = (L16PatrolPath *)D_L05_001B0930[patrol_data->branch_path[branch]];
+            patrol_data->node = 0;
         }
         /* The same two statements as before the loop, written out again: the compiler merges the copies. */
-        FUN_L05_00306d30((char *)moby, d->node, target);
+        FUN_L05_00306d30((char *)moby, patrol_data->node, target);
         heading = fast_arc_tan(target[0] - moby->position[0], target[1] - moby->position[1]);
     }
 }
