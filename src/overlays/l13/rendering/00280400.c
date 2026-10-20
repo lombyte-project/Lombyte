@@ -15,34 +15,34 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L13_001B2490 NOT_SDA;
-unsigned char *FUN_L13_00280400(char *moby, unsigned char a, int b, int c, unsigned char d, float x,
+unsigned char *FUN_L13_00280400(char *moby, unsigned char joint_index, int b, int c, unsigned char d, float x,
                                 float y, float z) {
-    unsigned char *e = create_part(0x44);
-    if (e != 0) {
-        char *p;
+    unsigned char *particle = create_part(0x44);
+    if (particle != 0) {
+        char *world_position;
         int v;
         unsigned short t;
         unsigned char *s;
-        *(int *)(e + 4) = b;
-        *(int *)(e + 0xC) = c;
-        p = (char *)e + 0x10;
+        *(int *)(particle + 4) = b;
+        *(int *)(particle + 0xC) = c;
+        world_position = (char *)particle + 0x10;
         v = func_001FA898_r(0.4f);
-        e[9] = (((short)*(unsigned short *)(moby + 0x32) >> 5) << 4) + v;
-        e[3] = 0x48;
-        e[1] = 3;
-        e[2] = *D_L13_001B2490;
-        moby_point_position(moby, a, p);
-        qcopy(e + 0x20, p);
-        *(float *)(e + 0x2C) = y;
-        *(float *)(e + 0x1C) = x;
-        *(char **)(e + 0x30) = moby;
-        s = e + 0x30;
+        particle[9] = (((short)*(unsigned short *)(moby + 0x32) >> 5) << 4) + v;
+        particle[3] = 0x48;
+        particle[1] = 3;
+        particle[2] = *D_L13_001B2490;
+        moby_point_position(moby, joint_index, world_position);
+        qcopy(particle + 0x20, world_position);
+        *(float *)(particle + 0x2C) = y;
+        *(float *)(particle + 0x1C) = x;
+        *(char **)(particle + 0x30) = moby;
+        s = particle + 0x30;
         t = *(unsigned short *)(moby + 0xA6);
         *(short *)(s + 6) = t;
-        s[4] = a;
+        s[4] = joint_index;
         *(float *)(s + 8) = x;
         *(float *)(s + 0xC) = z;
         s[5] = d;
     }
-    return e;
+    return particle;
 }
