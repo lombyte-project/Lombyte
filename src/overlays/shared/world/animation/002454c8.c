@@ -63,7 +63,7 @@ void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 void fade_to_black(s32) __asm__("FUN_001f4a58");
 void FUN_L00_00245610(s32 i, s32 p);
 void FUN_L00_00245610(s32 i, s32 fade_frame_count) {
-    s32 n;
+    s32 pointer_index;
     s32 *offset_entry;
     if (pal_mode == 0) {
         start_audio_stream_read(H245610.buf, T_245610.x[i].a, T_245610.x[i].b);
@@ -76,12 +76,12 @@ void FUN_L00_00245610(s32 i, s32 fade_frame_count) {
     }
     update_audio_stream_until_idle(1);
     offset_entry = (s32 *)H245610.buf;
-    n = 0;
+    pointer_index = 0;
     if (offset_entry[1] != 0) {
         do {
-            H245610.ptr[n] = (s32)(H245610.buf + (offset_entry[0] + 0x800));
-            n++;
+            H245610.ptr[pointer_index] = (s32)(H245610.buf + (offset_entry[0] + 0x800));
+            pointer_index++;
             offset_entry += 2;
-        } while (n < 70 && offset_entry[1] != 0);
+        } while (pointer_index < 70 && offset_entry[1] != 0);
     }
 }
