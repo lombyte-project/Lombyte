@@ -3013,10 +3013,10 @@ extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((sectio
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 /* Ported from rac1-decomp src/overlays/l01_novalis/vendor_002BA898.c (func_L01_002F8B00) */
 void bomber_jet_update(GunshipMoby *m) __asm__("FUN_L01_002f7728");
-void bomber_jet_update(GunshipMoby *m) {
-    GunshipVars *d = m->vars;
-    GunshipFollow *sub = &d->sub;
-    float s;
+void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
+    GunshipVars *gunship_vars = bomber_jet_moby->vars;
+    GunshipFollow *sub = &gunship_vars->sub;
+    float distance_scale;
     void *hit;
     int i;
     int j;
@@ -3026,79 +3026,79 @@ void bomber_jet_update(GunshipMoby *m) {
     SplashVec pos;
     SplashVec col;
     {
-        float dist = distance_xyz(m->pos, camera_pos);
+        float dist = distance_xyz(bomber_jet_moby->pos, camera_pos);
         float x0 = gunship_near_dist;
         float k = -((1.0f - gunship_min_scale) / (gunship_far_dist - x0));
-        s = k * dist + (1.0f - k * x0);
+        distance_scale = k * dist + (1.0f - k * x0);
     }
-    hit = find_moby_hit(m, 0x800000, 0);
-    m->bA4 = 0xFF;
+    hit = find_moby_hit(bomber_jet_moby, 0x800000, 0);
+    bomber_jet_moby->bA4 = 0xFF;
     if (hit != 0) {
         if (gunship_banner_shown == 0) {
             gunship_banner_shown = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             queue_dialogue_message(0x53D6, -1);
         }
-        subtract_vector_xyz(&b, d->vD0, d->vE0);
+        subtract_vector_xyz(&b, gunship_vars->vD0, gunship_vars->vE0);
         *(u128 *)&a = *(u128 *)&b;
-        spawn_explosion(m, &a, m->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, 1, 15.0f, 1, 1, -1, 0);
-        spawn_debris((char *)m, &a, s * 2.0f);
+        spawn_explosion(bomber_jet_moby, &a, bomber_jet_moby->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, 1, 15.0f, 1, 1, -1, 0);
+        spawn_debris((char *)bomber_jet_moby, &a, distance_scale * 2.0f);
         for (i = 0; i < 4; i++) {
-            if (d->tethers[i] != -1) {
-                mark_moby_for_removal((GunshipMoby *)(moby_array + (d->tethers[i] << 8)));
+            if (gunship_vars->tethers[i] != -1) {
+                mark_moby_for_removal((GunshipMoby *)(moby_array + (gunship_vars->tethers[i] << 8)));
             }
         }
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(bomber_jet_moby);
         return;
     }
     do {
-        if (m->state == 0) {
+        if (bomber_jet_moby->state == 0) {
             if (sub->path != -1) {
                 GunshipPath *path = (GunshipPath *)paths[sub->path];
                 j = 0;
-                d->speed = d->speed * 2.0f;
+                gunship_vars->speed = gunship_vars->speed * 2.0f;
                 if (distance_xyz((char *)path + 0x10, (char *)path + (path->count << 4)) < 0.5f) {
                     path->count--;
                 }
                 for (i = 0; i < path->count; i++) {
                     if (((GunshipPath *)((char *)path + (i << 4)))->w == 1.0f) {
-                        d->stop_nodes[j] = i;
+                        gunship_vars->stop_nodes[j] = i;
                         j++;
                         if (j >= 4) break;
                     }
                 }
-                d->gun_side = 0;
-                d->last_fire_node = -1;
-                d->cutscene_timer = -1;
-                d->base_scale = m->scale;
-                d->base_speed = d->speed;
+                gunship_vars->gun_side = 0;
+                gunship_vars->last_fire_node = -1;
+                gunship_vars->cutscene_timer = -1;
+                gunship_vars->base_scale = bomber_jet_moby->scale;
+                gunship_vars->base_speed = gunship_vars->speed;
             } else {
-                stub_printf(gunship_no_path_fmt, m->oclass, truncate_float_to_s32_f((float)(((int)m - moby_array) >> 8)));
+                stub_printf(gunship_no_path_fmt, bomber_jet_moby->oclass, truncate_float_to_s32_f((float)(((int)bomber_jet_moby - moby_array) >> 8)));
             }
-            m->b30 = 0xFF;
-            m->h32 = 0xFF;
+            bomber_jet_moby->b30 = 0xFF;
+            bomber_jet_moby->h32 = 0xFF;
         }
-        if (1.0f < s) s = 1.0f;
-        if (s < gunship_min_scale) s = gunship_min_scale;
-        m->scale = d->base_scale * s;
-        d->speed = d->base_speed * s;
-        if (175.0f <= m->pos[2]) {
-            m->alpha = 0;
-        } else if (125.0f < m->pos[2] && m->pos[2] < 175.0f) {
-            m->alpha = truncate_float_to_s32_f((175.0f - m->pos[2]) * 128.0f / 50.0f);
-        } else if (m->pos[2] <= 125.0f) {
-            m->alpha = 0x80;
+        if (1.0f < distance_scale) distance_scale = 1.0f;
+        if (distance_scale < gunship_min_scale) distance_scale = gunship_min_scale;
+        bomber_jet_moby->scale = gunship_vars->base_scale * distance_scale;
+        gunship_vars->speed = gunship_vars->base_speed * distance_scale;
+        if (175.0f <= bomber_jet_moby->pos[2]) {
+            bomber_jet_moby->alpha = 0;
+        } else if (125.0f < bomber_jet_moby->pos[2] && bomber_jet_moby->pos[2] < 175.0f) {
+            bomber_jet_moby->alpha = truncate_float_to_s32_f((175.0f - bomber_jet_moby->pos[2]) * 128.0f / 50.0f);
+        } else if (bomber_jet_moby->pos[2] <= 125.0f) {
+            bomber_jet_moby->alpha = 0x80;
         }
-        if (d->trigger_volume != -1) {
-            if (m->state == 0) {
-                gunship_follow_path((char *)m);
+        if (gunship_vars->trigger_volume != -1) {
+            if (bomber_jet_moby->state == 0) {
+                gunship_follow_path((char *)bomber_jet_moby);
             }
-            if (d->cutscene_timer == -1 && is_point_inside_clip_volume(&hero.motion.pos, d->trigger_volume)) {
-                if (moby_collected[(short)m->uid] != 0
-                    || (level_moby_killed[current_level_index_macro][(short)m->uid >> 5] >> (m->uid & 0x1F)) & 1) {
+            if (gunship_vars->cutscene_timer == -1 && is_point_inside_clip_volume(&hero.motion.pos, gunship_vars->trigger_volume)) {
+                if (moby_collected[(short)bomber_jet_moby->uid] != 0
+                    || (level_moby_killed[current_level_index_macro][(short)bomber_jet_moby->uid >> 5] >> (bomber_jet_moby->uid & 0x1F)) & 1) {
                     for (j = 0; j < 4; j++) {
-                        if (d->turrets[j] != -1) {
-                            GunshipMoby *o = (GunshipMoby *)(moby_array + (d->turrets[j] << 8));
+                        if (gunship_vars->turrets[j] != -1) {
+                            GunshipMoby *o = (GunshipMoby *)(moby_array + (gunship_vars->turrets[j] << 8));
                             if (o != 0 && o->oclass == 0x1CB && o->state != 0xFE && o->state != 0xFD) {
                                 GunshipTurretVars *t = o->vars;
                                 t->activated = 1;
@@ -3106,32 +3106,32 @@ void bomber_jet_update(GunshipMoby *m) {
                             }
                         }
                     }
-                    mark_moby_for_removal(m);
+                    mark_moby_for_removal(bomber_jet_moby);
                     return;
                 }
-                m->flags &= 0xFFBE;
-                if (d->cutscene_camera != -1) {
+                bomber_jet_moby->flags &= 0xFFBE;
+                if (gunship_vars->cutscene_camera != -1) {
                     hero_set_state(0x72, 0);
-                    cutscene_camera_start(camera_points + (d->cutscene_camera << 7) + 0x30, camera_points + (d->cutscene_camera << 7) + 0x70, 0, 0, 0);
+                    cutscene_camera_start(camera_points + (gunship_vars->cutscene_camera << 7) + 0x30, camera_points + (gunship_vars->cutscene_camera << 7) + 0x70, 0, 0, 0);
                     cutscene_active = 1;
-                    m->w94 = 0;
-                    m->flags &= 0xEFFF;
-                    d->cutscene_timer = scale_game_frames(0x1FE);
+                    bomber_jet_moby->w94 = 0;
+                    bomber_jet_moby->flags &= 0xEFFF;
+                    gunship_vars->cutscene_timer = scale_game_frames(0x1FE);
                 }
-            } else if (d->cutscene_timer != -1) {
-                if (fast_dec_timer(&d->cutscene_timer)) {
+            } else if (gunship_vars->cutscene_timer != -1) {
+                if (fast_dec_timer(&gunship_vars->cutscene_timer)) {
                     cutscene_camera_stop(0);
                     hero_set_state(0, 1);
                     cutscene_active = 0;
-                    level_moby_killed[current_level_index_macro][(short)m->uid >> 5] |= 1 << (m->uid & 0x1F);
-                    moby_killed[(short)m->uid >> 5] |= 1 << (m->uid & 0x1F);
-                    mark_moby_for_removal(m);
+                    level_moby_killed[current_level_index_macro][(short)bomber_jet_moby->uid >> 5] |= 1 << (bomber_jet_moby->uid & 0x1F);
+                    moby_killed[(short)bomber_jet_moby->uid >> 5] |= 1 << (bomber_jet_moby->uid & 0x1F);
+                    mark_moby_for_removal(bomber_jet_moby);
                     return;
                 }
-                if (d->cutscene_timer == scale_game_frames(0x3C)) {
+                if (gunship_vars->cutscene_timer == scale_game_frames(0x3C)) {
                     for (j = 0; j < 4; j++) {
-                        if (d->turrets[j] != -1) {
-                            GunshipMoby *o = (GunshipMoby *)((d->turrets[j] << 8) + moby_array);
+                        if (gunship_vars->turrets[j] != -1) {
+                            GunshipMoby *o = (GunshipMoby *)((gunship_vars->turrets[j] << 8) + moby_array);
                             if (o->oclass == 0x1CB) {
                                 GunshipTurretVars *t = o->vars;
                                 t->activated = 1;
@@ -3140,22 +3140,22 @@ void bomber_jet_update(GunshipMoby *m) {
                         }
                     }
                 }
-                gunship_follow_path((char *)m);
+                gunship_follow_path((char *)bomber_jet_moby);
             } else {
-                m->flags |= 0x41;
+                bomber_jet_moby->flags |= 0x41;
                 break;
             }
         } else {
-            gunship_follow_path((char *)m);
+            gunship_follow_path((char *)bomber_jet_moby);
         }
-        m->flags |= 0x1000;
-        d->b2B = 1;
-        d->b2C = 0x2F;
-        if (d->last_fire_node != d->sub.cur) {
+        bomber_jet_moby->flags |= 0x1000;
+        gunship_vars->b2B = 1;
+        gunship_vars->b2C = 0x2F;
+        if (gunship_vars->last_fire_node != gunship_vars->sub.cur) {
             int found = -1;
             for (i = 0; i < 4; i++) {
-                unsigned char *t = d->stop_nodes;
-                if (d->sub.cur == t[i]) found = i;
+                unsigned char *t = gunship_vars->stop_nodes;
+                if (gunship_vars->sub.cur == t[i]) found = i;
             }
             if (found != -1) {
                 int cnt;
@@ -3164,18 +3164,18 @@ void bomber_jet_update(GunshipMoby *m) {
                 b = gunship_no_targets;
                 cnt = 0;
                 for (i = 0; i < 4; i++) {
-                    if (d->targets[found][i] != -1) {
-                        a.v[j] = d->targets[found][i];
+                    if (gunship_vars->targets[found][i] != -1) {
+                        a.v[j] = gunship_vars->targets[found][i];
                         j++;
-                        b.v[cnt] = d->targets[found][i];
+                        b.v[cnt] = gunship_vars->targets[found][i];
                         cnt++;
                     }
                 }
                 if (j == 0) break;
-                if (is_point_inside_clip_volume(camera_pos, d->camera_block_volume)) break;
+                if (is_point_inside_clip_volume(camera_pos, gunship_vars->camera_block_volume)) break;
                 for (i = j - 1; i >= 0; i--) {
-                    if (collision_line(camera_pos, camera_points + (a.v[i] << 7) + 0x30, 0x86, m, 0)) {
-                        if (collision_hit.moby == 0 || collision_hit.moby != m) {
+                    if (collision_line(camera_pos, camera_points + (a.v[i] << 7) + 0x30, 0x86, bomber_jet_moby, 0)) {
+                        if (collision_hit.moby == 0 || collision_hit.moby != bomber_jet_moby) {
                             b.v[i] = -1;
                             cnt--;
                             break;
@@ -3195,28 +3195,28 @@ void bomber_jet_update(GunshipMoby *m) {
                 if (j != 0) {
                     GunshipMoby *bm;
                     i = a.v[random_integer_below(j)];
-                    d->gun_side ^= 1;
-                    moby_point_position(m, d->gun_side, &pos);
+                    gunship_vars->gun_side ^= 1;
+                    moby_point_position(bomber_jet_moby, gunship_vars->gun_side, &pos);
                     subtract_vector_xyz(&dir, camera_points + (i << 7) + 0x30, &pos);
                     normalize_vector_xyz(&dir, &dir, frame_time_macro * 160.0f);
                     col.q = *(u128 *)((i << 7) + (int)camera_points + 0x30);
-                    bm = spawn_beam(m, &pos, &dir, &col, is_point_inside_clip_volume(&hero.motion.pos, d->beam_volume), d->trigger_volume != -1);
+                    bm = spawn_beam(bomber_jet_moby, &pos, &dir, &col, is_point_inside_clip_volume(&hero.motion.pos, gunship_vars->beam_volume), gunship_vars->trigger_volume != -1);
                     if (bm != 0) {
                         int k = 0;
                         int *out = (int *)((char *)bm->vars + 0x20);
                         {
-                            unsigned char *t = d->stop_nodes;
-                            d->last_fire_node = t[found];
+                            unsigned char *t = gunship_vars->stop_nodes;
+                            gunship_vars->last_fire_node = t[found];
                         }
                         for (i = 0; i < 8; i++) {
-                            if (d->guards[i] != -1) {
-                                GunshipMoby *o = (GunshipMoby *)((d->guards[i] << 8) + moby_array);
+                            if (gunship_vars->guards[i] != -1) {
+                                GunshipMoby *o = (GunshipMoby *)((gunship_vars->guards[i] << 8) + moby_array);
                                 if (o->oclass == 0x2BC) {
                                     GunshipGuardVars *g = o->vars;
                                     if (g->f4 == 0 && g->f0 == 0 && random_integer_below(0x64) < 0x64
                                         && is_point_inside_clip_volume(&hero.motion.pos, g->f8)
                                         && is_point_inside_clip_volume(camera_pos, g->f8)) {
-                                        out[k] = d->guards[i];
+                                        out[k] = gunship_vars->guards[i];
                                         k++;
                                     }
                                     if (k >= 4) break;
@@ -3227,7 +3227,7 @@ void bomber_jet_update(GunshipMoby *m) {
                 }
             }
         }
-    } while (d->cutscene_timer > scale_game_frames(0x1FE) - scale_game_frames(0x78));
+    } while (gunship_vars->cutscene_timer > scale_game_frames(0x1FE) - scale_game_frames(0x78));
 }
 f32 FUN_001f99c0(f32);
 
