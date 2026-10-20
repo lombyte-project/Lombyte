@@ -397,11 +397,11 @@ s32 get_help_message_text() __asm__("FUN_001fdd10");
 void sprintf() __asm__("FUN_00116248");
 /* Calls sprintf on D_L00_00179118 with help message a and b; c frames (default 0xB4). */
 void FUN_L00_00263db0(s32 a, s32 b, s32 c);
-void FUN_L00_00263db0(s32 a, s32 b, s32 c) {
-    if (c == -1)
-        c = scale_game_frames(0xB4);
+void FUN_L00_00263db0(s32 a, s32 b, s32 message_duration_frames) {
+    if (message_duration_frames == -1)
+        message_duration_frames = scale_game_frames(0xB4);
     sprintf(D_L00_00179118, get_help_message_text(a), b);
-    D_L00_0015F640 = c;
+    D_L00_0015F640 = message_duration_frames;
 }
 typedef unsigned int u128_263e30 __attribute__((mode(TI), aligned(16)));
 extern unsigned char D_L00_0015F580_263e30[] __asm__("D_L00_0015F580")
