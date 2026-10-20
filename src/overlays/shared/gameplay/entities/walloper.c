@@ -3041,7 +3041,7 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int chec
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_00250df8(unsigned char *);
 void FUN_L00_0025d1b8(unsigned char *);
-unsigned char *FUN_L00_002bfe08(int a, u128 *b, u128 *c) {
+unsigned char *FUN_L00_002bfe08(int a, u128 *b, u128 *initial_vector) {
     unsigned char *spawned_moby = create_moby(0xba);
     if (spawned_moby) {
         char *moby_vars;
@@ -3052,7 +3052,7 @@ unsigned char *FUN_L00_002bfe08(int a, u128 *b, u128 *c) {
         spawned_moby[0x20] = 0;
         spawned_moby[0xbc] = 0;
         qcopy(spawned_moby + 0x10, b);
-        qcopy(moby_vars + 0x10, c);
+        qcopy(moby_vars + 0x10, initial_vector);
         *(int *)(moby_vars + 0x60) = a;
         FUN_L00_00250df8(spawned_moby);
         FUN_L00_0025d1b8(spawned_moby);
