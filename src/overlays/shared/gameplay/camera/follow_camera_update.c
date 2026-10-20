@@ -32,8 +32,8 @@ void follow_camera_build_view(u8 *p) __asm__("FUN_L00_002e9010");
 extern u8 D_L00_00166E30[];
 void follow_camera_build_view(u8 *camera) {
     u8 *q40;
-    u8 *q;
-    u8 *q2;
+    u8 *camera_state;
+    u8 *reloaded_camera_state;
     u8 *q20;
     u8 *q130;
     u8 *tb;
@@ -44,7 +44,7 @@ void follow_camera_build_view(u8 *camera) {
     u8 *up;    /* up vector (D_L00_00166E30), set on both paths */
     f32 projected_view_length;
     f32 g2, g3, e2, h2;
-    f32 g, r, d, view_rotation_angle, t, x, h;
+    f32 g, r, d, view_rotation_angle, target_view_angle_offset, x, smoothed_view_angle_offset;
     f32 vector_scratch[4];
     f32 projected_reference_position[4];
     f32 projected_camera_position[4];
@@ -52,9 +52,9 @@ void follow_camera_build_view(u8 *camera) {
     f32 adjusted_aim_position[4];
 
     base = D_L00_00166E10_2e9010;
-    q = *(u8 **)(camera + 0x70);
-    q40 = q + 0x40;
-    q20 = q + 0x20;
+    camera_state = *(u8 **)(camera + 0x70);
+    q40 = camera_state + 0x40;
+    q20 = camera_state + 0x20;
     if (q40[0xC4] == 0xB) {
         FUN_001f9a28_2e9010(camera, D_0013F3D0_2e9010, camera + 0x30);
         side_axis = camera + 0x10;
@@ -65,11 +65,11 @@ void follow_camera_build_view(u8 *camera) {
     } else {
         up = D_L00_00166E30;
         tb = base + 0x20;
-        g = FUN_001f9ab0_2e9010(q + 0x80, tb);
+        g = FUN_001f9ab0_2e9010(camera_state + 0x80, tb);
         FUN_001f9a68_2e9010(vector_scratch, tb, g);
-        FUN_001f9a28_2e9010(projected_reference_position, q + 0x80, vector_scratch);
-        q2 = *(u8 **)(camera + 0x70);
-        q130 = q2 + 0x130;
+        FUN_001f9a28_2e9010(projected_reference_position, camera_state + 0x80, vector_scratch);
+        reloaded_camera_state = *(u8 **)(camera + 0x70);
+        q130 = reloaded_camera_state + 0x130;
         g = FUN_001f9ab0_2e9010(camera + 0x30, tb);
         FUN_001f9a68_2e9010(vector_scratch, tb, g);
         FUN_001f9a28_2e9010(projected_camera_position, camera + 0x30, vector_scratch);
@@ -82,14 +82,14 @@ void follow_camera_build_view(u8 *camera) {
         FUN_001f9ad8_2e9010(w, camera, up);
         FUN_001f9bf8_2e9010(w, w, 1.0f);
         side_axis = w;
-        *(f32 *)(q20 + 0x8) = FUN_001ebd78_2e9010(q + 0x30, *(f32 *)(q20 + 0x8), *(f32 *)(q130 + 0x30),
+        *(f32 *)(q20 + 0x8) = FUN_001ebd78_2e9010(camera_state + 0x30, *(f32 *)(q20 + 0x8), *(f32 *)(q130 + 0x30),
                                0.004f, 0.2f, 0.0f);
         view_up_axis = camera + 0x20;
-        g2 = FUN_001ebd78_2e9010(q + 0x2C, *(f32 *)(q20 + 0x4), *(f32 *)(q40 + 0xB0),
+        g2 = FUN_001ebd78_2e9010(camera_state + 0x2C, *(f32 *)(q20 + 0x4), *(f32 *)(q40 + 0xB0),
                                0.004f, 0.2f, 0.0f);
         d = *(f32 *)(q20 + 0x8) - g2;
         *(f32 *)(q20 + 0x4) = g2;
-        FUN_001f9a68_2e9010(vector_scratch, up, -FUN_001f9ab0_2e9010(q2 + 0x140, up));
+        FUN_001f9a68_2e9010(vector_scratch, up, -FUN_001f9ab0_2e9010(reloaded_camera_state + 0x140, up));
         FUN_001f9a28_2e9010(vector_scratch, vector_scratch, view_direction);
         w = (u8 *)adjusted_aim_position;
         FUN_001f9a28_2e9010(w, camera + 0x30, vector_scratch);
@@ -105,18 +105,18 @@ void follow_camera_build_view(u8 *camera) {
             }
             g3 = FUN_001f9ab0_2e9010(q130, up);
             x = FUN_001f9e90_2e9010(FUN_001f9af0_2e9010(q130), g3) / 0.6981317f;
-            t = 0.0f;
+            target_view_angle_offset = 0.0f;
             if (x < -0.1f) {
                 x = -x;
                 if (0.5f < x) {
                     x = 1.0f - x;
                 }
                 x = x + x;
-                t = x * 0.2617994f + t;
+                target_view_angle_offset = x * 0.2617994f + target_view_angle_offset;
             }
-            h = FUN_L00_001eb328_2e9010(q20 + 0x18, *(f32 *)(q20 + 0x14), t, 0.005f, 0.2f, 0.0f);
-            *(f32 *)(q20 + 0x14) = h;
-            view_rotation_angle = FUN_001fa5c8_2e9010(view_rotation_angle, h);
+            smoothed_view_angle_offset = FUN_L00_001eb328_2e9010(q20 + 0x18, *(f32 *)(q20 + 0x14), target_view_angle_offset, 0.005f, 0.2f, 0.0f);
+            *(f32 *)(q20 + 0x14) = smoothed_view_angle_offset;
+            view_rotation_angle = FUN_001fa5c8_2e9010(view_rotation_angle, smoothed_view_angle_offset);
             if (1.2217305f < view_rotation_angle) {
                 view_rotation_angle = 1.2217305f;
             } else if (view_rotation_angle < -1.2217305f) {
