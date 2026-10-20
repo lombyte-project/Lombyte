@@ -1564,23 +1564,23 @@ extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8();
 
 SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
-    SpawnedMoby *m;
+    SpawnedMoby *spawned_moby;
     s32 *pv;
 
-    m = create_moby(0x30B);
-    if (m != 0) {
-        m->b30 = 0x20;
-        m->h32 = 0xFF;
-        m->b31 = 1;
-        m->state = 0;
-        pv = m->pvars;
-        m->d38 = src->d38;
-        qcopy(&m->pos, &src->pos);
-        qcopy(&m->rot, &src->rot);
+    spawned_moby = create_moby(0x30B);
+    if (spawned_moby != 0) {
+        spawned_moby->b30 = 0x20;
+        spawned_moby->h32 = 0xFF;
+        spawned_moby->b31 = 1;
+        spawned_moby->state = 0;
+        pv = spawned_moby->pvars;
+        spawned_moby->d38 = src->d38;
+        qcopy(&spawned_moby->pos, &src->pos);
+        qcopy(&spawned_moby->rot, &src->rot);
         *pv = -1;
-        FUN_L00_00250df8(m, -1);
+        FUN_L00_00250df8(spawned_moby, -1);
     }
-    return m;
+    return spawned_moby;
 }
 
 typedef struct {
