@@ -359,7 +359,7 @@ int FUN_L01_002e6790(void *arg, int *idx) {
     s32 last;
     s32 i;
     f32 d;
-    f32 a;
+    f32 node_target_heading_difference;
     f32 best_d;
     f32 best_a;
     f32 r;
@@ -426,21 +426,21 @@ int FUN_L01_002e6790(void *arg, int *idx) {
                 }
             } else {
                 qcopy(&pt, &f->path->pts[*idx]);
-                a = fast_difference_between_rotations(fast_arc_tan(pt.f[0] - m->pos.f[0], pt.f[1] - m->pos.f[1]),
+                node_target_heading_difference = fast_difference_between_rotations(fast_arc_tan(pt.f[0] - m->pos.f[0], pt.f[1] - m->pos.f[1]),
                                                       fast_arc_tan(target.pos.f[0] - m->pos.f[0],
                                                                    target.pos.f[1] - m->pos.f[1]));
                 d = FUN_001f9b48(&m->pos, &pt);
                 if (v->stops_only == 0 || pt.f[3] == 1.0f) {
-                    if (a < 1.5707964f) {
-                        if (best_a < a) {
+                    if (node_target_heading_difference < 1.5707964f) {
+                        if (best_a < node_target_heading_difference) {
                             best = *idx;
                             best_d = d;
-                            best_a = a;
+                            best_a = node_target_heading_difference;
                         }
                     } else if ((d >= 12.0f && (d < best_d || best_d < 12.0f)) || (d < 12.0f && best_d < d)) {
                         best = *idx;
                         best_d = d;
-                        best_a = a;
+                        best_a = node_target_heading_difference;
                     }
                 }
             }
