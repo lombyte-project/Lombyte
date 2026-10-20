@@ -2307,22 +2307,22 @@ void *FUN_L00_002a9aa0(int unused, float *pos) {
 extern u8 *D_L00_001613C8 __attribute__((sda));
 void FUN_L00_002a9aa0_u(void *, OvlQuad *) __asm__("FUN_L00_002a9aa0");
 void FUN_L00_002a9b80(void *a, OvlQuad *v) {
-    OvlQuad t = *v;
-    u8 *p;
-    u8 *q;
+    OvlQuad position_copy = *v;
+    u8 *moby;
+    u8 *moby_vars;
     u8 *g;
     g = D_L00_001613C8;
     if (g == 0) {
-        FUN_L00_002a9aa0_u(a, &t);
+        FUN_L00_002a9aa0_u(a, &position_copy);
         g = D_L00_001613C8;
         if (g == 0)
             return;
     }
-    p = D_L00_001613C8;
-    q = *(u8 **)(p + 0x78);
-    if (*(s16 *)(p + 0xA6) == 0x5F3) {
-        *(OvlQuad *)(p + 0x10) = t;
-        *(s16 *)(q + 0x2E) = 1;
+    moby = D_L00_001613C8;
+    moby_vars = *(u8 **)(moby + 0x78);
+    if (*(s16 *)(moby + 0xA6) == 0x5F3) {
+        *(OvlQuad *)(moby + 0x10) = position_copy;
+        *(s16 *)(moby_vars + 0x2E) = 1;
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAE80), where it is exact; names translated to the US level program. */
