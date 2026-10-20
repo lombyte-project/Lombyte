@@ -1648,7 +1648,7 @@ void FUN_L14_003159d8(struct UpdateCam *cam) {
     char *tbl;
     char *camera_saved_state;
     float *v;
-    int *q;
+    int *camera_state_block;
     int j;
     int *w;
     int *r;
@@ -1683,11 +1683,11 @@ void FUN_L14_003159d8(struct UpdateCam *cam) {
     D_L14_001F6C80[2][i] = sum;
     camera_saved_state = cam->saved_state;
     *(int *)(camera_saved_state + 0x88) = 1;
-    q = (int *)(camera_saved_state + 0x88);
-    q[1] = 0;
-    q[2] = 0;
-    q[3] = 0;
-    q[4] = 0;
+    camera_state_block = (int *)(camera_saved_state + 0x88);
+    camera_state_block[1] = 0;
+    camera_state_block[2] = 0;
+    camera_state_block[3] = 0;
+    camera_state_block[4] = 0;
     D_L14_001624A8 = 1.0f;
     v = (float *)((char *)cam->saved_state + 0x60);
     v[0] = D_L14_001F6488_59d8[0] * 0.017453292f;
