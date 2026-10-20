@@ -329,17 +329,17 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
         entry = (char *)((int)list + entry_offset);
         visible = fast_bsphere_check(entry, 256.0f);
         if (visible != -1) {
-            int n = *(int *)(entry + 0x1c);
+            int float_pair_count = *(int *)(entry + 0x1c);
             float *source = *(float **)(entry + 0x14);
             float *destination = (float *)0x70001000;
-            if (n > 0) {
-                j = n;
+            if (float_pair_count > 0) {
+                j = float_pair_count;
                 do {
                     *destination++ = *source++ * 0.5f;
                     *destination++ = *source++ * 0.5f;
                 } while (--j != 0);
             }
-            FUN_L00_001fde98(n, ((int *)list)[(i << 3) + 4], 0x70000000,
+            FUN_L00_001fde98(float_pair_count, ((int *)list)[(i << 3) + 4], 0x70000000,
                               (void *)0x70001000, visible == 0);
         }
         i++;
