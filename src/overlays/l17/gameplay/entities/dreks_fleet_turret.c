@@ -910,7 +910,7 @@ extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
                                   void *src) __asm__("FUN_L00_00259888");
 extern int func_L00_001F2BE8_alt(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
-void FUN_L17_002dc3f8(struct Moby *m) {
+void FUN_L17_002dc3f8(struct Moby *moby) {
     enum {
         BOBBING_INITIALIZE = 0,
         BOBBING_UPDATE_AND_CHECK_CONTACT = 1
@@ -922,42 +922,42 @@ void FUN_L17_002dc3f8(struct Moby *m) {
     float scaled_particle_vector[4];
     float random_direction[4];
     int out;
-    char *data = (char *)m->pvars;
+    char *data = (char *)moby->pvars;
     char *r;
     struct Hero *g;
     float yy;
     int i;
     clear_vector(v);
-    r = find_moby_hit(m, 0x230000, 0);
-    hit_reaction(m, r, data + 0x20, 0, &out, 0, 0, 4);
+    r = find_moby_hit(moby, 0x230000, 0);
+    hit_reaction(moby, r, data + 0x20, 0, &out, 0, 0, 4);
     if (out >= 2 && r != 0 && *(short *)(*(char **)(r + 0x20) + 0xA6) != 0x343) {
-        func_L00_0025F4A8_alt(m, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f, 0, 1,
+        func_L00_0025F4A8_alt(moby, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f, 0, 1,
                               -1, 0);
-        mark_moby_for_removal_u(m);
+        mark_moby_for_removal_u(moby);
         return;
     }
-    switch (m->state) {
+    switch (moby->state) {
     case BOBBING_INITIALIZE:
         *(float *)(data + 0x60) = random_angle_radians();
         *(int *)(data + 0x64) = 0;
-        m->state = 1;
+        moby->state = 1;
         break;
     case BOBBING_UPDATE_AND_CHECK_CONTACT:
         FUN_L00_00262b00(*(float *)&D_L17_00161D2C,
-                         *(float *)&D_L17_00161D30 * DEG_TO_RAD * frame_time, m,
+                         *(float *)&D_L17_00161D30 * DEG_TO_RAD * frame_time, moby,
                          (float *)(data + 0x60), (float *)(data + 0x64));
-        func_L00_0025A8C0_alt(w, (int)m, 0x10001, 1.0f, v);
-        qcopy(pos, &m->pos);
+        func_L00_0025A8C0_alt(w, (int)moby, 0x10001, 1.0f, v);
+        qcopy(pos, &moby->pos);
         pos[2] = pos[2] + 0.75f;
         g = &hero;
-        if (((char *)g->coll_hit_moby) == m || ((char *)g->unk240) == m ||
-            func_L00_001F2BE8_alt(1.0f, pos, 0x10, m, w)) {
+        if (((char *)g->coll_hit_moby) == moby || ((char *)g->unk240) == moby ||
+            func_L00_001F2BE8_alt(1.0f, pos, 0x10, moby, w)) {
             if (D_L17_00174758 != 0 && *(short *)(D_L17_00174758 + 0xA6) != 0x343) {
-                func_L00_0025F4A8_alt(m, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f,
+                func_L00_0025F4A8_alt(moby, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f,
                                       0, 1, -1, 0);
-                m->pos.z = m->pos.z + 1.0f;
-                yy = resolve_camera_surface_height(&m->pos.x, q);
-                m->pos.z = m->pos.z - 1.0f;
+                moby->pos.z = moby->pos.z + 1.0f;
+                yy = resolve_camera_surface_height(&moby->pos.x, q);
+                moby->pos.z = moby->pos.z - 1.0f;
                 i = 0x95;
                 do {
                     *(OvlQuad *)random_direction = 0;
@@ -967,10 +967,10 @@ void FUN_L17_002dc3f8(struct Moby *m) {
                     *(OvlQuad *)scaled_particle_vector = *(OvlQuad *)random_direction;
                     normalize_vector_xyz(
                         scaled_particle_vector, scaled_particle_vector, random_float_between_alt(frame_time * 4.0f, frame_time * 8.0f));
-                    FUN_L00_0026f080(&m->pos, scaled_particle_vector, random_float_between_alt(0.05f, 0.1f) * 210000.0f,
+                    FUN_L00_0026f080(&moby->pos, scaled_particle_vector, random_float_between_alt(0.05f, 0.1f) * 210000.0f,
                                      yy);
                 } while (--i >= 0);
-                mark_moby_for_removal_u(m);
+                mark_moby_for_removal_u(moby);
             }
         }
         break;
