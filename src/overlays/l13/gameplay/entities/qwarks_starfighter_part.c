@@ -1505,16 +1505,16 @@ void FUN_L13_002f8880(char *moby) {
         STATE_RELAY_WAIT_FOR_FIRST_STATE_SET = 2
     };
     char *data = *(char **)(moby + 0x78);
-    char *m = 0;
+    char *monitored_moby = 0;
     int idx = *(int *)data;
     int found;
     int i;
     if (idx != -1) {
-        m = D_L13_0015FFD8_m + (idx << 8);
+        monitored_moby = D_L13_0015FFD8_m + (idx << 8);
     }
     switch (data[0x1C]) {
     case STATE_RELAY_INITIALIZE:
-        if (m == 0) {
+        if (monitored_moby == 0) {
             debug_print_alt_q(D_L13_001F51B0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
             mmr_q(moby);
         } else if (data[0x1D] != 0) {
@@ -1526,7 +1526,7 @@ void FUN_L13_002f8880(char *moby) {
     case STATE_RELAY_WAIT_FOR_SECOND_STATE_SET:
         found = 0;
         for (i = 0; i < 6; i++) {
-            if ((unsigned char)m[0x20] == (data + i)[0xA]) {
+            if ((unsigned char)monitored_moby[0x20] == (data + i)[0xA]) {
                 found = 1;
                 break;
             }
@@ -1550,7 +1550,7 @@ void FUN_L13_002f8880(char *moby) {
     case STATE_RELAY_WAIT_FOR_FIRST_STATE_SET:
         found = 0;
         for (i = 0; i < 6; i++) {
-            if ((unsigned char)m[0x20] == (data + i)[4]) {
+            if ((unsigned char)monitored_moby[0x20] == (data + i)[4]) {
                 found = 1;
                 break;
             }
