@@ -32,7 +32,7 @@ extern void FUN_L00_001ff290(void *, void *, void *);
 extern void *FUN_L00_002712b8(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32);
 extern void *FUN_L00_0026cbb0(void *, void *, s32, s32, s32, s32, f32);
 
-void FUN_L03_00250ae8(char *param_1, u128 *param_2, void *param_3) {
+void FUN_L03_00250ae8(char *param_1, u128 *emission_position, void *param_3) {
     struct { u128 position; u128 velocity; u128 temp; } vectors;
     s32 i;
     s32 j;
@@ -43,7 +43,7 @@ void FUN_L03_00250ae8(char *param_1, u128 *param_2, void *param_3) {
     s32 maximum;
     f32 angle;
 
-    vectors.position = *param_2;
+    vectors.position = *emission_position;
 
     for (i = 0; i < truncate_float_to_s32(24.0f); i++) {
         angle = randf_sym(0.0f, 0.1308997f);
