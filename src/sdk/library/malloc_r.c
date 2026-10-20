@@ -29,16 +29,16 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
     s32 startidx;
     mchunkptr fwd;
     mchunkptr bck;
-    mbinptr q;
+    mbinptr bin_cursor;
     u32 nb = (((long)(bytes + (4 + (16 - 1)))) < ((long)(16 + (16 - 1))))
                  ? ((16 + (16 - 1)) & (~(16 - 1)))
                  : ((bytes + (4 + (16 - 1))) & (~(16 - 1)));
     noop_core_utility(ptr);
     if (nb < (512 - 8)) {
         idx = ((unsigned long)nb) >> 3;
-        q = (mbinptr)(((u8 *)(&D_0012F788[(2 * idx) + 2])) - (2 * 4));
-        victim = q->bk;
-        if (victim != q) {
+        bin_cursor = (mbinptr)(((u8 *)(&D_0012F788[(2 * idx) + 2])) - (2 * 4));
+        victim = bin_cursor->bk;
+        if (victim != bin_cursor) {
             victim_size = victim->size & (~(1 | 0x2));
             {
                 bck = victim->bk;
@@ -170,7 +170,7 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
         }
         for (;;) {
             startidx = idx;
-            q = (bin = (mbinptr)(((u8 *)(&D_0012F788[(2 * idx) + 2])) - (2 * 4)));
+            bin_cursor = (bin = (mbinptr)(((u8 *)(&D_0012F788[(2 * idx) + 2])) - (2 * 4)));
             do {
                 for (victim = bin->bk; victim != bin; victim = victim->bk) {
                     victim_size = victim->size & (~(1 | 0x2));
@@ -221,8 +221,8 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
                     break;
                 }
                 --startidx;
-                q = (mbinptr)(((char *)q) - (2 * (sizeof(mbinptr))));
-            } while (q->fd == q);
+                bin_cursor = (mbinptr)(((char *)bin_cursor) - (2 * (sizeof(mbinptr))));
+            } while (bin_cursor->fd == bin_cursor);
             if (((block <<= 1) <=
                  ((mbinptr)(((u8 *)(&D_0012F788[(2 * 0) + 2])) - (2 * 4)))->size) &&
                 (block != 0)) {
