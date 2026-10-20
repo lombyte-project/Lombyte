@@ -2695,7 +2695,7 @@ void FUN_L00_0020a540(void) {
     G_a540 *g;
     G_a540 *h;
     P_a540 *p;
-    f32 f, random_blend_factor, k;
+    f32 pitch_target_radians, random_blend_factor, k;
     s32 v;
     s32 min_delay_frames;
 
@@ -2711,12 +2711,12 @@ void FUN_L00_0020a540(void) {
     if (G.i260 != 0 && 1.4f < G.f258 && 1.0f < G.f248) {
 
         FUN_L00_0020a1e0_a540_0020a228(frame_scale_sq * 0.015f, frame_scale_sq * 0.3f);
-        f = G.f258 * 1.5f * DEG_TO_RAD + 0.19198622f;
-        if (0.47123888f < f)
-            f = 0.47123888f;
-        if ((1.0f - G.f25c) * 35.0f * DEG_TO_RAD < f)
-            f = (1.0f - G.f25c) * 35.0f * DEG_TO_RAD;
-        P.f274 = f;
+        pitch_target_radians = G.f258 * 1.5f * DEG_TO_RAD + 0.19198622f;
+        if (0.47123888f < pitch_target_radians)
+            pitch_target_radians = 0.47123888f;
+        if ((1.0f - G.f25c) * 35.0f * DEG_TO_RAD < pitch_target_radians)
+            pitch_target_radians = (1.0f - G.f25c) * 35.0f * DEG_TO_RAD;
+        P.f274 = pitch_target_radians;
         FUN_L00_0020a1e0_a540_0020a1f8(frame_scale_sq * 0.008f, frame_scale_sq * 0.3f);
         P.f114 = P.f274 * 0.7f;
         return;
