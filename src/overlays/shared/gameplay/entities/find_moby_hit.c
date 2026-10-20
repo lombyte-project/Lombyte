@@ -72,7 +72,7 @@ void make_hit_descriptor(char *a, int b, int c, float d, void *q) {
 #include "rnc/math/fast_math.h"
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 int play_entity_sound(void *moby, void *position, int c, float d, float e, float f, int g, int h, int i) __asm__("FUN_L00_002598b0");
-int play_entity_sound(void *moby, void *position, int c, float d, float e, float f, int g, int h, int i) {
+int play_entity_sound(void *moby, void *position, int c, float sphere_radius, float e, float direction_scale, int g, int h, int i) {
     float direction[4] __attribute__((aligned(16)));
     char descriptor[0x30] __attribute__((aligned(16)));
     if (*(unsigned short *)((char *)moby + 0x34) & 0x100) {
@@ -82,14 +82,14 @@ int play_entity_sound(void *moby, void *position, int c, float d, float e, float
         direction[1] = fast_sin(*(float *)((char *)moby + 0x48));
         direction[2] = 0.0f;
     }
-    fast_vec_scale(direction, direction, f);
+    fast_vec_scale(direction, direction, direction_scale);
     direction[2] = 1.0f;
     direction[3] = 5627.9248046875f;
     make_hit_descriptor(descriptor, (int)moby, c, e, direction);
     descriptor[0x18] = g;
     descriptor[0x19] = h;
     *(unsigned short *)(descriptor + 0x1a) = *(unsigned short *)((char *)moby + 0xa6);
-    return collect_mobies_in_sphere(position, d, i, moby, descriptor);
+    return collect_mobies_in_sphere(position, sphere_radius, i, moby, descriptor);
 }
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int play_entity_sound(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002598b0");
