@@ -205,20 +205,20 @@ unsigned char *FUN_L01_0028a7a8(char *source_moby, char *pos, float *vel, char *
 
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
-void FUN_L01_0028b410(char *p) {
+void FUN_L01_0028b410(char *path_descriptor) {
     int i;
     int off;
-    char *q;
-    p[5] = 0;
-    *(int *)(p + 8) = 0;
-    *(char **)(p + 0x10) = paths[*(int *)(p + 0x14)];
-    for (i = 0; i < **(int **)(p + 0x10); i++) {
-        q = *(char **)(p + 0x10);
+    char *path_data;
+    path_descriptor[5] = 0;
+    *(int *)(path_descriptor + 8) = 0;
+    *(char **)(path_descriptor + 0x10) = paths[*(int *)(path_descriptor + 0x14)];
+    for (i = 0; i < **(int **)(path_descriptor + 0x10); i++) {
+        path_data = *(char **)(path_descriptor + 0x10);
         off = i << 4;
-        *(float *)(*(char **)(p + 0x10) + off + 0x1C) =
-            fast_vec_dist(q + (off + 0x10), q + ((((i + 1) % *(int *)q) << 4) + 0x10));
-        *(float *)(*(char **)(p + 0x10) + off + 0x18) += 0.5f;
-        *(float *)(*(char **)(p + 0x10) + off + 0x18) -= 0.5f;
+        *(float *)(*(char **)(path_descriptor + 0x10) + off + 0x1C) =
+            fast_vec_dist(path_data + (off + 0x10), path_data + ((((i + 1) % *(int *)path_data) << 4) + 0x10));
+        *(float *)(*(char **)(path_descriptor + 0x10) + off + 0x18) += 0.5f;
+        *(float *)(*(char **)(path_descriptor + 0x10) + off + 0x18) -= 0.5f;
     }
 }
 /* Returns the index of the entry whose distance to arg0 is closest to a target value. */
