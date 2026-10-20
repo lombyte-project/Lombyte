@@ -1018,17 +1018,17 @@ extern void FillTransferWords(void *, s32, s32);
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
 void FUN_L00_00299a68(void) {
-    int t;
+    int slideshow_buffer_base;
     update_audio_stream_until_idle(0);
     fade_to_black(8);
     D_L00_0015F5D8_gp = 1;
     fade_level_gp = 1.0f;
     D_L00_0015F5C4 = 7;
     FillTransferWords(&slideshow, 0, 16);
-    t = D_L00_001611CC - 0xE0000;
-    slideshow.dst = (s32 *)(D_L00_00173E00[1] + t);
-    slideshow.src = (s32 *)(D_L00_00173E00[2] + t);
-    D_L00_001611CC = t;
+    slideshow_buffer_base = D_L00_001611CC - 0xE0000;
+    slideshow.dst = (s32 *)(D_L00_00173E00[1] + slideshow_buffer_base);
+    slideshow.src = (s32 *)(D_L00_00173E00[2] + slideshow_buffer_base);
+    D_L00_001611CC = slideshow_buffer_base;
     if (D_0015ED80_gp != 0) {
         start_audio_stream_read((s32)slideshow.dst, (*(G9 *)&D_00137B80).alt[slideshow.slide].a, (*(G9 *)&D_00137B80).alt[slideshow.slide].b);
     } else {
