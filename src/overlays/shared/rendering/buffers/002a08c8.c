@@ -16,7 +16,7 @@ extern char D_L00_001E9530[];
 void FUN_L00_002a08c8(void) {
     int r;
     int buffer_used_bytes;
-    u32 *s;
+    u32 *flag_word;
     buffer_used_bytes = D_L00_001611C0_002a08c8 - D_L00_001611B8[D_L00_001611D0];
     D_L00_001611A0_002a08c8 |= 0x1F;
     r = 0;
@@ -35,10 +35,10 @@ void FUN_L00_002a08c8(void) {
         *(int *)(D_L00_001611C0_002a08c8 + 4) = 0;
         *(int *)(D_L00_001611C0_002a08c8 + 8) = 0;
         *(int *)(D_L00_001611C0_002a08c8 + 12) = 0;
-        s = FUN_00122fe0_002a08c8(1);
-        *s |= 0xC0;
+        flag_word = FUN_00122fe0_002a08c8(1);
+        *flag_word |= 0xC0;
         FUN_00118a80_002a08c8(0);
-        FUN_001232c8_002a08c8(s, D_L00_001611B8[D_L00_001611D0]);
+        FUN_001232c8_002a08c8(flag_word, D_L00_001611B8[D_L00_001611D0]);
     } else {
         D_L00_001611A0_002a08c8 = 0;
     }
