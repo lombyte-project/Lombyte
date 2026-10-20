@@ -2951,31 +2951,31 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f8e0(float *v, float s);
 
-void FUN_L13_002e9680(void *unused, char *p, int idx) {
-    char *base = p + 0xC4;
+void FUN_L13_002e9680(void *unused, char *parent_data, int idx) {
+    char *base = parent_data + 0xC4;
     int off = idx * 4;
     char **slot = (char **)(base + off);
     char *moby = *slot;
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
         float *v = (float *)(data + 0x10);
-        float t, r0, r1, r2;
+        float random_half_range, r0, r1, r2;
         cart_burst(unused, moby + 0x10, -1, 2.0f, 13.0f);
-        fast_vec_scale(v, p + 0x70, 0.95f);
+        fast_vec_scale(v, parent_data + 0x70, 0.95f);
         FUN_L00_0025f8e0(v, frame_time * 30.0f);
         moby[0x20] = 3;
         fast_vec_add(moby + 0x10, moby + 0x10, v);
-        t = frame_time;
-        t = t * 0.34906585f;
-        r0 = random_float_between_alt(-t, t);
-        t = frame_time;
+        random_half_range = frame_time;
+        random_half_range = random_half_range * 0.34906585f;
+        r0 = random_float_between_alt(-random_half_range, random_half_range);
+        random_half_range = frame_time;
         *(float *)(data + 0x30) = r0;
-        t = t * 3.1415927f;
-        r1 = random_float_between_alt(-t, t);
-        t = frame_time;
+        random_half_range = random_half_range * 3.1415927f;
+        r1 = random_float_between_alt(-random_half_range, random_half_range);
+        random_half_range = frame_time;
         *(float *)(data + 0x34) = r1;
-        t = t * 3.1415927f;
-        r2 = random_float_between_alt(-t, t);
+        random_half_range = random_half_range * 3.1415927f;
+        r2 = random_float_between_alt(-random_half_range, random_half_range);
         *(float *)(data + 0x38) = r2;
         *(long *)(moby + 0x38) = 0x40404000000000L;
         *(unsigned char *)(moby + 0xA4) = 0xFF;
