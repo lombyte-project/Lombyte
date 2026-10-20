@@ -837,14 +837,14 @@ void FUN_L10_002c9c70(struct Moby *moby) {
         LINKED_HITBOX_STATE_WAIT_FOR_TARGET_STATE_OR_TIMER = 2,
         LINKED_HITBOX_STATE_REMOVE = 3
     };
-    char *d = (char *)moby->pvars;
+    char *linked_hitbox_vars = (char *)moby->pvars;
     int differences = 0;
     struct Moby *target = 0;
-    int *slot = (int *)(d + 0x18);
+    int *slot = (int *)(linked_hitbox_vars + 0x18);
     unsigned char state;
 
-    if (*(int *)(d + 0x10) != -1) {
-        target = &D_L10_0015FFD8[*(int *)(d + 0x10)];
+    if (*(int *)(linked_hitbox_vars + 0x10) != -1) {
+        target = &D_L10_0015FFD8[*(int *)(linked_hitbox_vars + 0x10)];
     }
     if ((moby->mission == 0xff ||
          D_0014C050_2c9c70[moby->mission + (D_0015ED84 << 4)] != 0xff) &&
@@ -872,16 +872,16 @@ void FUN_L10_002c9c70(struct Moby *moby) {
     case LINKED_HITBOX_STATE_INITIALIZE:
         /* Position flags select opposite copy directions; rotation flags have priority. */
         if (target != 0) {
-            *(short *)(d + 0x14) = target->oclass;
-            *(float *)(d + 0x44) = FUN_001fa6c0_2c9c70(target->alpha);
-            if ((*(int *)(d + 8) & 0x10) != 0) {
+            *(short *)(linked_hitbox_vars + 0x14) = target->oclass;
+            *(float *)(linked_hitbox_vars + 0x44) = FUN_001fa6c0_2c9c70(target->alpha);
+            if ((*(int *)(linked_hitbox_vars + 8) & 0x10) != 0) {
                 qcopy(&moby->pos, &target->pos);
-            } else if ((*(int *)(d + 8) & 0x40) != 0) {
+            } else if ((*(int *)(linked_hitbox_vars + 8) & 0x40) != 0) {
                 qcopy(&target->pos, &moby->pos);
             }
-            if ((*(int *)(d + 8) & 0x20) != 0) {
+            if ((*(int *)(linked_hitbox_vars + 8) & 0x20) != 0) {
                 qcopy_nc(&moby->rot, &target->rot);
-            } else if ((*(int *)(d + 8) & 0x80) != 0) {
+            } else if ((*(int *)(linked_hitbox_vars + 8) & 0x80) != 0) {
                 qcopy_nc(&target->rot, &moby->rot);
             }
         } else {
@@ -905,8 +905,8 @@ void FUN_L10_002c9c70(struct Moby *moby) {
             }
         }
         {
-            float initial = *(float *)(d + 4);
-            float now = *(float *)d;
+            float initial = *(float *)(linked_hitbox_vars + 4);
+            float now = *(float *)linked_hitbox_vars;
             float scale = moby->pclass->scale;
             float size = (now < initial ? initial * scale : now * scale);
             moby->state = 1;
@@ -915,30 +915,30 @@ void FUN_L10_002c9c70(struct Moby *moby) {
         break;
     case LINKED_HITBOX_STATE_WAIT_FOR_LINKED_MOBIES:
         if (differences == 0) {
-            if (target != 0 && *(signed char *)(d + 0x16) != -1)
-                target->state = *(unsigned char *)(d + 0x16);
-            *(int *)(d + 0x40) = *(int *)(d + 0xc);
+            if (target != 0 && *(signed char *)(linked_hitbox_vars + 0x16) != -1)
+                target->state = *(unsigned char *)(linked_hitbox_vars + 0x16);
+            *(int *)(linked_hitbox_vars + 0x40) = *(int *)(linked_hitbox_vars + 0xc);
             moby->state = 2;
         }
-        FUN_L10_002c9958(moby, (HitBox *)d);
+        FUN_L10_002c9958(moby, (HitBox *)linked_hitbox_vars);
         return;
     case LINKED_HITBOX_STATE_WAIT_FOR_TARGET_STATE_OR_TIMER:
         if (target != 0) {
-            if ((*(int *)(d + 8) & 2) == 0) {
-                float now = FUN_001fa6c0_2c9c70(*(int *)(d + 0x40));
-                float initial = FUN_001fa6c0_2c9c70(*(int *)(d + 0xc));
-                target->alpha = FUN_001fa6d0_2c9c70(*(float *)(d + 0x44) * now / initial);
+            if ((*(int *)(linked_hitbox_vars + 8) & 2) == 0) {
+                float now = FUN_001fa6c0_2c9c70(*(int *)(linked_hitbox_vars + 0x40));
+                float initial = FUN_001fa6c0_2c9c70(*(int *)(linked_hitbox_vars + 0xc));
+                target->alpha = FUN_001fa6d0_2c9c70(*(float *)(linked_hitbox_vars + 0x44) * now / initial);
             }
         }
-        if ((*(int *)(d + 8) & 4) == 0 && target != 0 &&
-            *(signed char *)(d + 0x17) != -1 && target->state == *(signed char *)(d + 0x17))
+        if ((*(int *)(linked_hitbox_vars + 8) & 4) == 0 && target != 0 &&
+            *(signed char *)(linked_hitbox_vars + 0x17) != -1 && target->state == *(signed char *)(linked_hitbox_vars + 0x17))
             moby->state = 3;
-        if ((*(int *)(d + 8) & 8) == 0 && FUN_001f9740_2c9c70((int *)(d + 0x40)) != 0)
+        if ((*(int *)(linked_hitbox_vars + 8) & 8) == 0 && FUN_001f9740_2c9c70((int *)(linked_hitbox_vars + 0x40)) != 0)
             moby->state = 3;
-        FUN_L10_002c9958(moby, (HitBox *)d);
+        FUN_L10_002c9958(moby, (HitBox *)linked_hitbox_vars);
         return;
     case LINKED_HITBOX_STATE_REMOVE:
-        if (target != 0 && (*(int *)(d + 8) & 1) == 0) delete_moby(target);
+        if (target != 0 && (*(int *)(linked_hitbox_vars + 8) & 1) == 0) delete_moby(target);
         delete_moby(moby);
         break;
     case 4:
