@@ -43,6 +43,12 @@ extern void snd_flush_sound_commands() __asm__("func_0012DC80");
 void update_mode_freeze(void) __asm__("FUN_001fce28");
 
 void update_mode_freeze(void) {
+    enum {
+        VIDEO_MODE_TEST_INPUT_DELAY = 0,
+        VIDEO_MODE_TEST_AWAIT_START = 1,
+        VIDEO_MODE_TEST_PREVIEW_ACTIVE = 2,
+        VIDEO_MODE_TEST_AWAIT_TIMEOUT_ACK = 3
+    };
     s32 video_mode;
     s32 step;
     sound_update();
@@ -86,7 +92,7 @@ void update_mode_freeze(void) {
 
     case 6:
         switch (freeze.unk1C) {
-        case 0:
+        case VIDEO_MODE_TEST_INPUT_DELAY:
             if (freeze.unk4 != 0) {
                 if ((--freeze.unk4) == 0) {
                     freeze.unk1C = 1;
@@ -96,7 +102,7 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case 1:
+        case VIDEO_MODE_TEST_AWAIT_START:
             if (controller_state.pressed & PAD_TRIANGLE) {
                 game_mode = freeze.unk14;
             } else if (controller_state.pressed & PAD_CROSS) {
@@ -107,7 +113,7 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case 2:
+        case VIDEO_MODE_TEST_PREVIEW_ACTIVE:
             if ((freeze.unk20 == 0) || ((--freeze.unk20) == 0)) {
                 requested_video_mode = 1;
                 freeze.unk1C = 3;
@@ -121,7 +127,7 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case 3:
+        case VIDEO_MODE_TEST_AWAIT_TIMEOUT_ACK:
             if (controller_state.pressed & PAD_CROSS) {
                 game_mode = freeze.unk14;
             }
