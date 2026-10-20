@@ -113,13 +113,13 @@ s32 FUN_L00_002050b8(s32 a) {
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 /* Lowers hero.health.hp by one (not below 0) and calls 00234e00. */
 void hero_change_health(s32 n) __asm__("FUN_L00_002050c0");
-void hero_change_health(s32 n) {
-    if (n) {
+void hero_change_health(s32 health_decrement) {
+    if (health_decrement) {
         struct Hero *g = &hero;
         int v;
-        if (n >= 2)
-            n = 1;
-        v = g->health.hp - n;
+        if (health_decrement >= 2)
+            health_decrement = 1;
+        v = g->health.hp - health_decrement;
         g->health.hp = v;
         if (v < 0)
             g->health.hp = 0;
