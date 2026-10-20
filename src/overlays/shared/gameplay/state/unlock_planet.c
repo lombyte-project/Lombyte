@@ -314,15 +314,15 @@ extern s32 D_0013D510[] __asm__("D_0013D510");
 void FUN_L00_00262d38(s32);
 void unlock_planet(s32 id) __asm__("FUN_L00_002607d0");
 void unlock_planet(s32 id) {
-    s32 n, i;
-    n = 0;
+    s32 available_planet_count, i;
+    available_planet_count = 0;
     if (level_available[id] == 0) {
         for (i = 0; i < 20; i++) {
             if (level_available[i])
-                n++;
+                available_planet_count++;
         }
         level_available[id] = 1;
-        D_0013D510[n] = id;
+        D_0013D510[available_planet_count] = id;
         if (id != *(volatile s32 *)&current_level_index)
             FUN_L00_00262d38(id);
     }
