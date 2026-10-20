@@ -13,33 +13,33 @@ void jet_group_state(int idx, int a, int b, int c) __asm__("FUN_L13_002650a8");
 void jet_group_state(int idx, int a, int b, int c) {
     short *list = D_L13_001ABB40[idx];
     if (list) {
-        short *p = list;
+        short *group_member_entry = list;
         do {
-            int off = (*(unsigned short *)p & 0x7FFF) << 8;
-            char *m = (char *)(off + (int)moby_base);
-            if (m[0x20] >= 0) {
+            int off = (*(unsigned short *)group_member_entry & 0x7FFF) << 8;
+            char *moby = (char *)(off + (int)moby_base);
+            if (moby[0x20] >= 0) {
                 if (a != -1) {
                     if (a)
-                        *(unsigned short *)(m + 0x34) &= 0xFFFD;
+                        *(unsigned short *)(moby + 0x34) &= 0xFFFD;
                     else
-                        *(unsigned short *)(m + 0x34) |= 2;
+                        *(unsigned short *)(moby + 0x34) |= 2;
                 }
                 if (b != -1) {
                     if (b) {
-                        m[0x31] = 1;
-                        *(unsigned short *)(m + 0x34) &= 0xFFFE;
+                        moby[0x31] = 1;
+                        *(unsigned short *)(moby + 0x34) &= 0xFFFE;
                     } else {
-                        m[0x31] = 0;
-                        *(unsigned short *)(m + 0x34) |= 1;
+                        moby[0x31] = 0;
+                        *(unsigned short *)(moby + 0x34) |= 1;
                     }
                 }
                 if (c != -1) {
                     if (c)
-                        *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+                        *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
                     else
-                        *(int *)(m + 0x94) = 0;
+                        *(int *)(moby + 0x94) = 0;
                 }
             }
-        } while (*p++ >= 0);
+        } while (*group_member_entry++ >= 0);
     }
 }
