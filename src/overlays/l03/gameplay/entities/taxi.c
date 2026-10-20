@@ -523,7 +523,7 @@ void FUN_L03_002cbea8(struct Moby *mine_moby) {
         MINE_DEBRIS_SPHERICAL_VELOCITY = 3
     };
     MineBlast blast = D_L03_001E32B0;
-    MineVec tmp;
+    MineVec vector_scratch;
     MineVars *v = (MineVars *)mine_moby->pvars;
     struct Moby *target_moby;
     float dist;
@@ -550,14 +550,14 @@ void FUN_L03_002cbea8(struct Moby *mine_moby) {
         }
         break;
     case MINE_HOME_ON_TARGET:
-        mine_vec_sub(tmp, &v->target->pos, &mine_moby->pos);
-        if (mine_vec_len(tmp) < 0.25f) {
+        mine_vec_sub(vector_scratch, &v->target->pos, &mine_moby->pos);
+        if (mine_vec_len(vector_scratch) < 0.25f) {
             mine_kill(mine_moby);
             return;
         }
-        mine_set_len(tmp, tmp, frame_time * 14.0f);
-        tmp[2] += frame_time * 4.0f;
-        mine_vec_add(&mine_moby->pos, &mine_moby->pos, tmp);
+        mine_set_len(vector_scratch, vector_scratch, frame_time * 14.0f);
+        vector_scratch[2] += frame_time * 4.0f;
+        mine_vec_add(&mine_moby->pos, &mine_moby->pos, vector_scratch);
         break;
     case MINE_ARM_AND_MONITOR_PROXIMITY:
         mine_tick(&v->timer);
@@ -589,13 +589,13 @@ void FUN_L03_002cbea8(struct Moby *mine_moby) {
 
         dist = mine_dist(&mine_moby->pos, D_L03_00166EC0);
         nearby_moby_count = mine_find_mobys(&mine_moby->pos, 0x10, mine_moby, 0, 2.0f);
-        *(OvlQuad *)tmp = *(OvlQuad *)&mine_moby->pos;
-        mine_blast_mobys(mine_moby, tmp, D_L03_00178000, nearby_moby_count, 0, 0x810001, 4, 1, 3.0f, 0.25f, 1.5f);
+        *(OvlQuad *)vector_scratch = *(OvlQuad *)&mine_moby->pos;
+        mine_blast_mobys(mine_moby, vector_scratch, D_L03_00178000, nearby_moby_count, 0, 0x810001, 4, 1, 3.0f, 0.25f, 1.5f);
         cnt = mine_ftoi(dist * 15.0f);
         for (i = 0; i < cnt; i++) {
             int kind = mine_rand_below(4);
 
-            *(Vec4f *)tmp = (Vec4f){frame_time * 14.0f, frame_time * 22.0f, frame_time * 12.0f, 0.0f};
+            *(Vec4f *)vector_scratch = (Vec4f){frame_time * 14.0f, frame_time * 22.0f, frame_time * 12.0f, 0.0f};
             {
                 MineVec dir;
                 MineVec r;
@@ -606,7 +606,7 @@ void FUN_L03_002cbea8(struct Moby *mine_moby) {
                 *(OvlQuad *)r = 0;
                 r[0] = mine_rand(frame_time * -0.5f, frame_time * 0.5f);
                 r[1] = mine_rand(frame_time * -0.5f, frame_time * 0.5f);
-                r[2] = mine_rand(frame_time * 4.0f, tmp[kind]);
+                r[2] = mine_rand(frame_time * 4.0f, vector_scratch[kind]);
                 *(OvlQuad *)dir = *(OvlQuad *)r;
                 rr = mine_rand(0.0f, kind == 1 ? 0.5f : 0.25f);
                 ang = mine_rand_angle();
