@@ -229,10 +229,10 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_00250df8(void *);
 
 void FUN_L16_002e36e8(struct Moby *moby) {
-    float *d = (float *)moby->pvars;
+    float *rotation_scale_data = (float *)moby->pvars;
     if (moby->state == 0) {
-        fast_vec_normalize(&moby->rot_row1, &moby->rot_row1, d[0] * 0.25f);
-        fast_vec_normalize(&moby->rot_row2, &moby->rot_row2, d[1] * 0.25f);
+        fast_vec_normalize(&moby->rot_row1, &moby->rot_row1, rotation_scale_data[0] * 0.25f);
+        fast_vec_normalize(&moby->rot_row2, &moby->rot_row2, rotation_scale_data[1] * 0.25f);
         moby->state = 1;
         moby->flags |= 0x101;
         FUN_L00_00250df8(moby);
