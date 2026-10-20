@@ -876,16 +876,16 @@ extern V002e7318 D_L00_00173E70;
 extern s32 FUN_L00_002e4180_c(V002e7318 *, f32) __asm__("FUN_L00_002e4180");
 extern s32 coll_sphere(V002e7318 *, f32, s32, s32) __asm__("FUN_L00_001f0d60");
 extern s32 FUN_L00_002e7138_c(O002e7318 *, V002e7318 *, s32, s32) __asm__("FUN_L00_002e7138");
-s32 FUN_L00_002e7318(O002e7318 *o) {
+s32 FUN_L00_002e7318(O002e7318 *camera_moby) {
     V002e7318 pos;
-    V002e7318 tmp;
-    u8 *b = o->p70;
+    V002e7318 normalized_position_delta;
+    u8 *b = camera_moby->p70;
     X002e7318 *x = (X002e7318 *)(b + 0x1D0);
     u8 *b40 = b + 0x40;
     u8 *b130 = b + 0x130;
-    P002e7318 *p;
+    P002e7318 *active_camera_state;
     f32 lim;
-    f32 d;
+    f32 direction_alignment;
     s32 w;
     s32 i;
     s32 ha = 0;
@@ -895,9 +895,9 @@ s32 FUN_L00_002e7318(O002e7318 *o) {
 
     add_vector_xyz(&pos, b + 0x90, b130);
     x->s38 = 2;
-    p = (P002e7318 *)((O002e7318 **)g)[-4]->p70;
+    active_camera_state = (P002e7318 *)((O002e7318 **)g)[-4]->p70;
     w = x->i48;
-    lim = follow_cam_min_distance_gp + p->c * p->a * (p->b - 1.0f);
+    lim = follow_cam_min_distance_gp + active_camera_state->c * active_camera_state->a * (active_camera_state->b - 1.0f);
     i = 0;
     while (i < 3) {
         if (FUN_L00_002e4180_c(&pos, lim)) {
@@ -908,12 +908,12 @@ s32 FUN_L00_002e7318(O002e7318 *o) {
             hb = 1;
         }
         if (x->s38 != 0) {
-            subtract_vector_xyz(&tmp, &(*(V002e7318 *)&D_L00_00173E60), &pos);
-            normalize_vector_xyz(&tmp, &tmp, 1.0f);
-            d = dot_vectors_xyz(&g->v40, &tmp);
-            if (d > 0.75f)
+            subtract_vector_xyz(&normalized_position_delta, &(*(V002e7318 *)&D_L00_00173E60), &pos);
+            normalize_vector_xyz(&normalized_position_delta, &normalized_position_delta, 1.0f);
+            direction_alignment = dot_vectors_xyz(&g->v40, &normalized_position_delta);
+            if (direction_alignment > 0.75f)
                 x->s38 = 1;
-            else if (d < -0.75f)
+            else if (direction_alignment < -0.75f)
                 x->s38 = -1;
             else
                 x->s38 = 0;
@@ -921,7 +921,7 @@ s32 FUN_L00_002e7318(O002e7318 *o) {
         qcopy(&pos, &D_L00_00173E70);
         i++;
     }
-    r = FUN_L00_002e7138_c(o, &pos, ha, hb);
+    r = FUN_L00_002e7138_c(camera_moby, &pos, ha, hb);
     add_vector_xyz(&x->m, b40 + 0x50, b130);
     if (x->s38 == 2)
         x->s38 = 0;
