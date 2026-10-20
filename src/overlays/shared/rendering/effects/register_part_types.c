@@ -268,16 +268,16 @@ void FUN_L00_00268f10(Vec4 *v, int c) {
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08(unsigned char *);
-void FUN_L00_00268fe8(unsigned char *p) {
+void FUN_L00_00268fe8(unsigned char *particle) {
     int r = scale_game_frames(0x1b);
-    int k = *(short *)(p + 0xa) * *(int *)(p + 0x20) / r;
-    *(int *)(p + 4) = (*(int *)(p + 4) & 0xffffff) | (k << 24);
-    if (fast_dec_timer_s16(p + 0xa))
-        FUN_L00_00267a08(p);
+    int k = *(short *)(particle + 0xa) * *(int *)(particle + 0x20) / r;
+    *(int *)(particle + 4) = (*(int *)(particle + 4) & 0xffffff) | (k << 24);
+    if (fast_dec_timer_s16(particle + 0xa))
+        FUN_L00_00267a08(particle);
     else {
-        int a = scale_game_frames(0x1b);
+        int lifetime_frames = scale_game_frames(0x1b);
         int b = scale_game_frames(0x1b);
-        p[2] = D_L00_001B2084[(a - *(short *)(p + 0xa)) * 9 / b];
+        particle[2] = D_L00_001B2084[(lifetime_frames - *(short *)(particle + 0xa)) * 9 / b];
     }
 }
 
