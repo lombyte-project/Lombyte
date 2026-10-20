@@ -1913,9 +1913,9 @@ char *FUN_L05_00303f80(char *self, int idx) {
             int i = *(unsigned short *)list & 0x7FFF;
             if (D_L05_00160098_m_03f80[i].flags & 0x1000) {
                 if (D_L05_00160098_m_03f80[i].state < 0x7F) {
-                    float d = func_001F9D10_03f80(D_L05_00160098_m_03f80[i].pos, self + 0x10);
-                    if (d < best) {
-                        best = d;
+                    float candidate_distance = func_001F9D10_03f80(D_L05_00160098_m_03f80[i].pos, self + 0x10);
+                    if (candidate_distance < best) {
+                        best = candidate_distance;
                         res = *(char **)&D_L05_00160098_03f80 + (i << 8);
                     }
                 }
