@@ -345,14 +345,14 @@ int FUN_001fa6d0_263b70(float) __asm__("FUN_001fa6d0");
 P_263b70 *FUN_L00_0026d000_263b70(void *, int, void *, float, float, float, float,
                                   int) __asm__("FUN_L00_0026d000");
 void draw_trail(void *p0, void *p1, void *vel, float a, float b) __asm__("FUN_L00_00263b70");
-void draw_trail(void *first_spawn_position, void *second_spawn_position, void *vel, float a, float b) {
+void draw_trail(void *first_spawn_position, void *second_spawn_position, void *vel, float first_spawn_particle_value, float b) {
     P_263b70 *part;
     T_263b70 *tail;
     int i, j, alternating_spawn_value;
     for (i = 0; i < 2; i++) {
         int random_magnitude = FUN_00213260_263b70(0x10);
         part = FUN_L00_0026d000_263b70(first_spawn_position, FUN_00213260_263b70(2) == 0 ? random_magnitude : -random_magnitude, vel, 0.1f, 1.0f,
-                                       0.9f, a, 0x7F204080);
+                                       0.9f, first_spawn_particle_value, 0x7F204080);
         if (part) {
             tail = &part->tail;
             part->hA = FUN_001f96f8_263b70(0x1E);
