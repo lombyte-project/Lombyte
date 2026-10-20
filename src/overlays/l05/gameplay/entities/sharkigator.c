@@ -168,7 +168,7 @@ void FUN_L05_00307480(char *moby, int animation_index, int frame_index, int blen
     char *data;
     char *child;
     float ratio;
-    float f;
+    float child_frame_index;
     float max;
     int idx;
     blend_moby_animation(moby, animation_index, frame_index, blend_frames);
@@ -177,15 +177,15 @@ void FUN_L05_00307480(char *moby, int animation_index, int frame_index, int blen
     if (child != 0) {
         ratio = *(float *)(child + 0x5C) / *(float *)(moby + 0x5C);
         idx = FUN_L05_00307470(animation_index);
-        f = (float)frame_index * ratio;
+        child_frame_index = (float)frame_index * ratio;
         max = (float)*(unsigned char *)(*(char **)(*(char **)(*(char **)(data + 0x268) + 0x24) -
                                                    (-(idx * 4)) + 0x48) +
                                         0x10);
-        if (max < f)
-            f = max;
-        else if (f < 0.0f)
-            f = 0.0f;
-        blend_moby_animation(*(char **)(data + 0x268), idx, (int)f, blend_frames);
+        if (max < child_frame_index)
+            child_frame_index = max;
+        else if (child_frame_index < 0.0f)
+            child_frame_index = 0.0f;
+        blend_moby_animation(*(char **)(data + 0x268), idx, (int)child_frame_index, blend_frames);
     }
 }
 
