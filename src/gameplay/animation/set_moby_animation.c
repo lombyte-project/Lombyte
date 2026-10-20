@@ -31,25 +31,25 @@ extern void update_moby_animation_state(void *) __asm__("func_0020C880");
    reloads it after the byte stores. */
 void set_moby_animation(MobyAnim *m, int seq, int frame) __asm__("FUN_00212ed8");
 
-void set_moby_animation(MobyAnim *m, int seq, int frame) {
-    int frame_count = m->pClass->seqs[seq]->nframes;
+void set_moby_animation(MobyAnim *moby, int seq, int frame) {
+    int frame_count = moby->pClass->seqs[seq]->nframes;
 
-    m->seq = seq;
+    moby->seq = seq;
     if (frame >= frame_count) {
         frame = frame_count - 1;
     }
-    m->frame = frame;
-    m->nextFrame = frame + 1;
-    if (m->nextFrame > m->pClass->seqs[seq]->nframes - 1) {
-        m->nextFrame = m->pClass->seqs[seq]->nframes - 1;
+    moby->frame = frame;
+    moby->nextFrame = frame + 1;
+    if (moby->nextFrame > moby->pClass->seqs[seq]->nframes - 1) {
+        moby->nextFrame = moby->pClass->seqs[seq]->nframes - 1;
     }
-    m->prevSeq = seq;
-    if (m->nextFrame >= m->pClass->seqs[seq]->nframes) {
-        m->nextFrame = 0;
+    moby->prevSeq = seq;
+    if (moby->nextFrame >= moby->pClass->seqs[seq]->nframes) {
+        moby->nextFrame = 0;
     }
-    update_moby_animation_state(m);
-    m->unk5C = *m->frameData;
-    m->unk70 &= ~2;
+    update_moby_animation_state(moby);
+    moby->unk5C = *moby->frameData;
+    moby->unk70 &= ~2;
 }
 
 extern __typeof__(set_moby_animation) func_00212ED8 __attribute__((alias("FUN_00212ed8")));
