@@ -20,31 +20,31 @@
 void unpack_spr_descriptor(void *arg0) __asm__("FUN_001238a0");
 
 void unpack_spr_descriptor(void *descriptor) {
-    char *p = (char *)((unsigned int)descriptor | 0x20000000);
+    char *scratchpad_descriptor = (char *)((unsigned int)descriptor | 0x20000000);
     unsigned char *src;
-    char *d;
+    char *destination;
     int i;
 
-    if (*(int *)(p + 0x0) != 0) {
-        d = *(char **)(p + 0x8);
+    if (*(int *)(scratchpad_descriptor + 0x0) != 0) {
+        destination = *(char **)(scratchpad_descriptor + 0x8);
         i = 0;
-        if (i < *(int *)(p + 0x0)) {
-            src = (unsigned char *)(p + 0x10);
+        if (i < *(int *)(scratchpad_descriptor + 0x0)) {
+            src = (unsigned char *)(scratchpad_descriptor + 0x10);
             do {
-                *d++ = src[i];
+                *destination++ = src[i];
                 i++;
-            } while (i < *(int *)(p + 0x0));
+            } while (i < *(int *)(scratchpad_descriptor + 0x0));
         }
     }
-    if (*(int *)(p + 0x4) != 0) {
-        d = *(char **)(p + 0xC);
+    if (*(int *)(scratchpad_descriptor + 0x4) != 0) {
+        destination = *(char **)(scratchpad_descriptor + 0xC);
         i = 0;
-        if (i < *(int *)(p + 0x4)) {
-            src = (unsigned char *)(p + 0x50);
+        if (i < *(int *)(scratchpad_descriptor + 0x4)) {
+            src = (unsigned char *)(scratchpad_descriptor + 0x50);
             do {
-                *d++ = src[i];
+                *destination++ = src[i];
                 i++;
-            } while (i < *(int *)(p + 0x4));
+            } while (i < *(int *)(scratchpad_descriptor + 0x4));
         }
     }
 }
