@@ -275,7 +275,7 @@ void FUN_L00_00235ea0(e) HudElem *e;
 extern void FUN_L00_0023aaa8(void *);
 
 void FUN_L00_00236128(HudElem *hud_element) {
-    unsigned char *c = hud_element->cnt;
+    unsigned char *hud_counters = hud_element->cnt;
     int v;
     int cap;
 
@@ -297,19 +297,19 @@ void FUN_L00_00236128(HudElem *hud_element) {
         }
     }
     if (hud_element->unk7C >= scale_game_frames(5)) {
-        if (c[0] < scale_game_frames(8)) {
-            c[0]++;
-        } else if (c[1] < scale_game_frames(8)) {
-            c[1]++;
+        if (hud_counters[0] < scale_game_frames(8)) {
+            hud_counters[0]++;
+        } else if (hud_counters[1] < scale_game_frames(8)) {
+            hud_counters[1]++;
         }
     } else {
-        if (c[1] != 0 || c[0] != 0) {
+        if (hud_counters[1] != 0 || hud_counters[0] != 0) {
             hud_element->unk6C = 1;
         }
-        if (c[1] != 0) {
-            c[1]--;
-        } else if (c[0] != 0) {
-            c[0]--;
+        if (hud_counters[1] != 0) {
+            hud_counters[1]--;
+        } else if (hud_counters[0] != 0) {
+            hud_counters[0]--;
         }
     }
     FUN_L00_0023aaa8((char *)hud_element + 0x40);
