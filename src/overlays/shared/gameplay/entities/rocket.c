@@ -142,62 +142,62 @@ extern void sfx_cc2e8(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern void kill_cc2e8(void *) __asm__("FUN_0020c828");
 
 void rocket_update(char *m) __asm__("FUN_L10_002cc2e8");
-void rocket_update(char *m) {
+void rocket_update(char *rocket) {
     enum {
         ROCKET_STATE_FLYING = 1,
         ROCKET_STATE_BURST = 2
     };
-    Shot_cc2e8 *d = *(Shot_cc2e8 **)(m + 0x78);
+    Shot_cc2e8 *shot_data = *(Shot_cc2e8 **)(rocket + 0x78);
     float pos0[4] __attribute__((aligned(16)));
     float c[4] __attribute__((aligned(16)));
     float diff[4] __attribute__((aligned(16)));
     float hv[4] __attribute__((aligned(16)));
     float tp[4] __attribute__((aligned(16)));
     float aim[4] __attribute__((aligned(16)));
-    float speed, a, b, s, r1, r2, t, yaw, pitch, dist;
-    char *p;
+    float speed, a, b, discriminant_sqrt, r1, r2, intercept_time, yaw, pitch, dist;
+    char *rocket_position;
     unsigned char *g;
     char *tg;
-    float h;
+    float ground_aim_height;
     char *tb;
 
-    switch ((unsigned char)m[0x20]) {
+    switch ((unsigned char)rocket[0x20]) {
     case ROCKET_STATE_FLYING:
-        qcopy(pos0, m + 0x10);
-        if (d->target == 0 || (unsigned char)d->target[0x20] == 0xFE ||
-            (unsigned char)d->target[0x20] == 0xFD)
-            m[0x20] = 2;
-        p = m + 0x10;
+        qcopy(pos0, rocket + 0x10);
+        if (shot_data->target == 0 || (unsigned char)shot_data->target[0x20] == 0xFE ||
+            (unsigned char)shot_data->target[0x20] == 0xFD)
+            rocket[0x20] = 2;
+        rocket_position = rocket + 0x10;
         g = D_0013F350_cc2e8;
-        if ((unsigned char)(g[0x20A4] - 1) < 2 && (tg = d->target) == *(char **)(g + 0x2080)) {
-            speed = vlen_cc2e8(d);
+        if ((unsigned char)(g[0x20A4] - 1) < 2 && (tg = shot_data->target) == *(char **)(g + 0x2080)) {
+            speed = vlen_cc2e8(shot_data);
             qcopy(tp, tg + 0x10);
-            h = ground_cc2e8(tp, 0, 0.5f) + 0.2f;
+            ground_aim_height = ground_cc2e8(tp, 0, 0.5f) + 0.2f;
             *(Q_cc2e8 *)hv = *(Q_cc2e8 *)(g + 0x100);
             hv[2] = 0.0f;
-            tp[2] = h;
+            tp[2] = ground_aim_height;
             if (g[0x20A4] == 2)
-                tp[2] = h + 2.0f;
-            vsub_cc2e8(diff, tp, p);
+                tp[2] = ground_aim_height + 2.0f;
+            vsub_cc2e8(diff, tp, rocket_position);
             a = speed * speed - lensq_cc2e8(hv);
             b = (hv[0] * diff[0] + hv[1] * diff[1] + hv[2] * diff[2]) * -2.0f;
-            s = sqrt_cc2e8(b * b - a * 4.0f * -lensq_cc2e8(diff));
-            r1 = (-b + s) / (a + a);
-            r2 = (-b - s) / (a + a);
+            discriminant_sqrt = sqrt_cc2e8(b * b - a * 4.0f * -lensq_cc2e8(diff));
+            r1 = (-b + discriminant_sqrt) / (a + a);
+            r2 = (-b - discriminant_sqrt) / (a + a);
             if (r1 > 0.0f && r2 > 0.0f) {
                 if (r1 > r2)
-                    t = r1;
+                    intercept_time = r1;
                 else
-                    t = r2;
+                    intercept_time = r2;
             } else if (r1 > 0.0f) {
-                t = r1;
+                intercept_time = r1;
             } else {
-                t = -1.0f;
+                intercept_time = -1.0f;
                 if (r2 > 0.0f)
-                    t = r2;
+                    intercept_time = r2;
             }
-            if (t > 0.0f) {
-                vscale_cc2e8(aim, hv, t);
+            if (intercept_time > 0.0f) {
+                vscale_cc2e8(aim, hv, intercept_time);
                 vadd_cc2e8(aim, aim, diff);
                 yaw = atan2_cc2e8(aim[0], aim[1]);
                 pitch = -atan2_cc2e8(vlenxy_cc2e8(aim), aim[2]);
@@ -205,50 +205,50 @@ void rocket_update(char *m) {
                 yaw = atan2_cc2e8(diff[0], diff[1]);
                 pitch = -atan2_cc2e8(vlenxy_cc2e8(diff), diff[2]);
             }
-            ((Rot_cc2e8 *)m)->rz = turn_cc2e8(((Rot_cc2e8 *)m)->rz, yaw, frame_time_sq * 6.2831855f,
+            ((Rot_cc2e8 *)rocket)->rz = turn_cc2e8(((Rot_cc2e8 *)rocket)->rz, yaw, frame_time_sq * 6.2831855f,
                                               frame_time_sq * 3.1415927f, frame_time * 6.2831855f,
-                                              &d->yawSpeed);
-            ((Rot_cc2e8 *)m)->ry = turn_cc2e8(((Rot_cc2e8 *)m)->ry, pitch, frame_time_sq * 6.2831855f,
+                                              &shot_data->yawSpeed);
+            ((Rot_cc2e8 *)rocket)->ry = turn_cc2e8(((Rot_cc2e8 *)rocket)->ry, pitch, frame_time_sq * 6.2831855f,
                                               frame_time_sq * 3.1415927f, frame_time * 6.2831855f,
-                                              &d->pitchSpeed);
-            ((Rot_cc2e8 *)m)->rx = addrot_cc2e8(((Rot_cc2e8 *)m)->rx, frame_time * 6.2831855f);
-            setvel_cc2e8(speed, ((Rot_cc2e8 *)m)->rz, -((Rot_cc2e8 *)m)->ry, d);
+                                              &shot_data->pitchSpeed);
+            ((Rot_cc2e8 *)rocket)->rx = addrot_cc2e8(((Rot_cc2e8 *)rocket)->rx, frame_time * 6.2831855f);
+            setvel_cc2e8(speed, ((Rot_cc2e8 *)rocket)->rz, -((Rot_cc2e8 *)rocket)->ry, shot_data);
         }
         vclear_cc2e8(c);
-        spark_cc2e8(p, c, 0x6F00AFFF, 0xFF, frames_cc2e8(randint_cc2e8(15, 22)), 0x28,
+        spark_cc2e8(rocket_position, c, 0x6F00AFFF, 0xFF, frames_cc2e8(randint_cc2e8(15, 22)), 0x28,
                     randint_cc2e8(20, 35), 1);
-        spark_cc2e8(p, c, 0x1FFFFFFF, 0x4F4F4F, frames_cc2e8(randint_cc2e8(30, 60)), 0x28,
+        spark_cc2e8(rocket_position, c, 0x1FFFFFFF, 0x4F4F4F, frames_cc2e8(randint_cc2e8(30, 60)), 0x28,
                     randint_cc2e8(50, 75), 0);
-        dist = vdist_cc2e8(p, &hero.motion.pos);
-        vadd_cc2e8(p, p, d);
-        if (d->warned == 0 && d->passed != 0 && d->dist < dist && dist < 5.0f) {
-            sound_cc2e8(0, 0, m);
-            d->warned = 1;
+        dist = vdist_cc2e8(rocket_position, &hero.motion.pos);
+        vadd_cc2e8(rocket_position, rocket_position, shot_data);
+        if (shot_data->warned == 0 && shot_data->passed != 0 && shot_data->dist < dist && dist < 5.0f) {
+            sound_cc2e8(0, 0, rocket);
+            shot_data->warned = 1;
         }
-        if (dist < d->dist)
-            d->passed = 1;
-        d->dist = dist;
-        if (hit_cc2e8(p, pos0, 0x10, d->owner, 0)) {
+        if (dist < shot_data->dist)
+            shot_data->passed = 1;
+        shot_data->dist = dist;
+        if (hit_cc2e8(rocket_position, pos0, 0x10, shot_data->owner, 0)) {
             tb = ground_hit;
-            if (*(int *)(tb + 0x18) != d->owner) {
+            if (*(int *)(tb + 0x18) != shot_data->owner) {
                 if (*(int *)(tb + 0x18) != 0) {
-                    vdir_cc2e8(diff, d, 1.0f);
-                    d->vel[2] = 1.0f;
-                    damage_cc2e8(1.0f, *(int *)(tb + 0x18), m, 0x10003, tb + 0x20, diff);
+                    vdir_cc2e8(diff, shot_data, 1.0f);
+                    shot_data->vel[2] = 1.0f;
+                    damage_cc2e8(1.0f, *(int *)(tb + 0x18), rocket, 0x10003, tb + 0x20, diff);
                 }
-                m[0x20] = 2;
+                rocket[0x20] = 2;
             }
         }
-        if (expired_cc2e8(&d->timer))
-            m[0x20] = 2;
+        if (expired_cc2e8(&shot_data->timer))
+            rocket[0x20] = 2;
         break;
     case ROCKET_STATE_BURST:
         if (current_level_index != 10)
-            burst_cc2e8(m, m + 0x10, -1, 0.25f, 13.0f);
+            burst_cc2e8(rocket, rocket + 0x10, -1, 0.25f, 13.0f);
         else
-            burst_cc2e8(m, m + 0x10, -1, 0.25f, 0.0f);
-        sfx_cc2e8(0, 0, m, 0x99);
-        kill_cc2e8(m);
+            burst_cc2e8(rocket, rocket + 0x10, -1, 0.25f, 0.0f);
+        sfx_cc2e8(0, 0, rocket, 0x99);
+        kill_cc2e8(rocket);
         break;
     }
 }
