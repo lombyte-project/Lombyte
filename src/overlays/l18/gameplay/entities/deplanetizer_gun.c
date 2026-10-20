@@ -1200,8 +1200,8 @@ extern float D_L18_00162620 __attribute__((sda));
 extern float D_L18_00162624 __attribute__((sda));
 extern float D_L18_00162628 __attribute__((sda));
 /* Sentry update: spins and tints the moby, takes hits (knockback, then a fall), and follows its path toward the hero. */
-void FUN_L18_002fc100(struct Moby *m) {
-    SentryVars_c100 *d = (SentryVars_c100 *)m->pvars;
+void FUN_L18_002fc100(struct Moby *moby) {
+    SentryVars_c100 *sentry_vars = (SentryVars_c100 *)moby->pvars;
     union { u128 q; float f[4]; } v;
     int hit;
     float dmg;
@@ -1211,83 +1211,83 @@ void FUN_L18_002fc100(struct Moby *m) {
     int a;                      /* the reaction kind, later the path */
     int b;                      /* the reaction flags, later the path's slot in the table */
 
-    if (m->state == 0 || m->state == 8) {
+    if (moby->state == 0 || moby->state == 8) {
         return;
     }
-    if (m->state != 7 && game_frame != D_L18_00162604) {
+    if (moby->state != 7 && game_frame != D_L18_00162604) {
         D_L18_00162604 = game_frame;
-        enqueue_callback_list_1(FUN_L18_002fca98, m);
+        enqueue_callback_list_1(FUN_L18_002fca98, moby);
     }
     speed = D_L18_00162614;
-    if (m->state == 4 || m->state == 5) {
+    if (moby->state == 4 || moby->state == 5) {
         speed = D_L18_00162618;
     }
-    d->spin = fast_add_rotations_c100(d->spin, speed * DEG_TO_RAD * frame_time);
-    m->glow_color = tween_color_c100(D_L18_0016260C, D_L18_00162610,
-                                fast_sin_c100(d->spin) * 0.5f + 0.5f);
-    if (m->pos.z < 100.0f && m->state != 7) {
-        m->state = 6;
+    sentry_vars->spin = fast_add_rotations_c100(sentry_vars->spin, speed * DEG_TO_RAD * frame_time);
+    moby->glow_color = tween_color_c100(D_L18_0016260C, D_L18_00162610,
+                                fast_sin_c100(sentry_vars->spin) * 0.5f + 0.5f);
+    if (moby->pos.z < 100.0f && moby->state != 7) {
+        moby->state = 6;
     }
-    m->scale = m->pclass->scale * D_L18_001625FC;
+    moby->scale = moby->pclass->scale * D_L18_001625FC;
     if (hero.state.current == 0x72 || D_L18_0015F5C4 == 2) {
-        if (m->state != 7) {
-            m->state = 8;
-            if (m->prev_seq != 0) {
-                blend_moby_animation_c100(m, 0, 0, scale_game_frames_c100(10));
+        if (moby->state != 7) {
+            moby->state = 8;
+            if (moby->prev_seq != 0) {
+                blend_moby_animation_c100(moby, 0, 0, scale_game_frames_c100(10));
             }
-            m->collision = 0;
-            m->flags = (m->flags | 0x41) & ~0x1000;
+            moby->collision = 0;
+            moby->flags = (moby->flags | 0x41) & ~0x1000;
             return;
         }
     }
     dmg = 0.0f;
-    coll = find_moby_hit_c100(m, 0x330000, 0);
-    hit_reaction_c100(m, coll, &d->health, 0, &hit, &dmg, 0, 4);
-    if (hit != 1 && m->state != 6 && dmg != 0.0f) {
-        d->health -= dmg;
-        if (d->health <= 0.0f) {
+    coll = find_moby_hit_c100(moby, 0x330000, 0);
+    hit_reaction_c100(moby, coll, &sentry_vars->health, 0, &hit, &dmg, 0, 4);
+    if (hit != 1 && moby->state != 6 && dmg != 0.0f) {
+        sentry_vars->health -= dmg;
+        if (sentry_vars->health <= 0.0f) {
             if (random_integer_below_c100(2) != 0) {
-                m->state = 6;
+                moby->state = 6;
             } else {
                 b = 0x200;
-                d->unk90 = b;
-                d->unk98 = 0.5f;
-                d->unk80 = D_L18_0016261C * frame_time_sq;
-                d->unk84 = D_L18_00162620 * frame_time_sq;
-                d->unk88 = D_L18_00162624 * frame_time;
-                d->unk8C = D_L18_00162628 * frame_time;
+                sentry_vars->unk90 = b;
+                sentry_vars->unk98 = 0.5f;
+                sentry_vars->unk80 = D_L18_0016261C * frame_time_sq;
+                sentry_vars->unk84 = D_L18_00162620 * frame_time_sq;
+                sentry_vars->unk88 = D_L18_00162624 * frame_time;
+                sentry_vars->unk8C = D_L18_00162628 * frame_time;
                 a = 0x29;
-                d->unk94 = a;
-                d->unkAD = 0;
-                d->unkBC = frame_time + frame_time;
-                m->flags &= ~0x1000;
+                sentry_vars->unk94 = a;
+                sentry_vars->unkAD = 0;
+                sentry_vars->unkBC = frame_time + frame_time;
+                moby->flags &= ~0x1000;
                 v.q = *(u128 *)(coll + 0x10);
-                knockback_c100(&v, &angle, &d->unk88, &d->unk8C);
-                start_fall_c100(m, d->fall, 3, 1, 0, angle);
-                d->unkC0 = 7.5f;
-                d->unkC4 = 15.0f;
-                m->state = 5;
-                m->collision = 0;
-                d->anim_flags = 0x78;
-                anim_reset_c100(m, d->anim);
+                knockback_c100(&v, &angle, &sentry_vars->unk88, &sentry_vars->unk8C);
+                start_fall_c100(moby, sentry_vars->fall, 3, 1, 0, angle);
+                sentry_vars->unkC0 = 7.5f;
+                sentry_vars->unkC4 = 15.0f;
+                moby->state = 5;
+                moby->collision = 0;
+                sentry_vars->anim_flags = 0x78;
+                anim_reset_c100(moby, sentry_vars->anim);
             }
         }
     }
-    m->hit_slot = 0xFF;
-    anim_update_c100(m, d->anim);
-    b = (int)&D_L18_001B0EB0[d->path];
+    moby->hit_slot = 0xFF;
+    anim_update_c100(moby, sentry_vars->anim);
+    b = (int)&D_L18_001B0EB0[sentry_vars->path];
     a = *(int *)b;
-    FUN_L00_0025ff38_c100(512.0f, m, &d->target, 0, 0, (int *)(a + 0x10), *(int *)a);
-    if (d->target_mode == 2) {
+    FUN_L00_0025ff38_c100(512.0f, moby, &sentry_vars->target, 0, 0, (int *)(a + 0x10), *(int *)a);
+    if (sentry_vars->target_mode == 2) {
         if (hero.state.control_mode == 0xF) {
             int *list = (int *)hero.unk560;
-            qcopy(&d->target, (char *)list + *list * 16);
+            qcopy(&sentry_vars->target, (char *)list + *list * 16);
         } else {
-            qcopy(&d->target, &hero.motion.pos);
+            qcopy(&sentry_vars->target, &hero.motion.pos);
         }
     }
-    if (d->target_moby == 0) {
-        d->target_moby = hero.moby;
+    if (sentry_vars->target_moby == 0) {
+        sentry_vars->target_moby = hero.moby;
     }
 }
 #include "eetypes.h"
