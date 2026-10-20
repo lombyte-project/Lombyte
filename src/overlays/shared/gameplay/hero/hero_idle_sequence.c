@@ -2478,7 +2478,7 @@ void FUN_L00_00209ec8(void) {
     char *g;
     char *base;
     float lateral_angle, r, planar_scale, alpha_fraction, theta, phi;
-    int t, alpha, col, life, n1, n2, k;
+    int frame_count, alpha, col, life, n1, n2, k;
     OvlQuad *pt;
     g = D_0013F7EE;
     if (fast_dec_timer(g)) {
@@ -2495,8 +2495,8 @@ void FUN_L00_00209ec8(void) {
     }
     if (!fast_dec_timer(g - 2))
         return;
-    t = FUN_001f96f8_209ec8(0x28);
-    alpha_fraction = (float)(t - *(int *)(g - 0x306)) / (float)FUN_001f96f8_209ec8(0x28);
+    frame_count = FUN_001f96f8_209ec8(0x28);
+    alpha_fraction = (float)(frame_count - *(int *)(g - 0x306)) / (float)FUN_001f96f8_209ec8(0x28);
     if (1.0f < alpha_fraction)
         alpha_fraction = 1.0f;
     if (alpha_fraction < 0.0f)
@@ -2517,10 +2517,10 @@ void FUN_L00_00209ec8(void) {
         build_spherical_offset(pt, r, theta, phi);
         FUN_L00_00269958(v, pt, col, 0x70F0, life, n1, n2, 1);
     }
-    t = random_int_between(FUN_001f96f8_209ec8(3), FUN_001f96f8_209ec8(7));
+    frame_count = random_int_between(FUN_001f96f8_209ec8(3), FUN_001f96f8_209ec8(7));
     {
         struct Hero *b2 = &hero_data;
-        b2->unk49C = t;
+        b2->unk49C = frame_count;
     }
 }
 typedef struct {
