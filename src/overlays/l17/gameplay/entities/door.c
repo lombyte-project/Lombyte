@@ -1743,8 +1743,8 @@ void fighter_jet_update(ShipMoby *moby) {
             qcopy_nc(v->home_rot, moby->rot);
             qcopy_nc(v->home_pos, moby->pos);
             {
-                int n = v->i104 + 0x28;
-                hp_bar_clut = D_L17_0015F420 + (D_L17_0016DA80 + n)->idx * 16;
+                int hp_bar_level_entry_index = v->i104 + 0x28;
+                hp_bar_clut = D_L17_0015F420 + (D_L17_0016DA80 + hp_bar_level_entry_index)->idx * 16;
             }
             if (hp_bar_saved == 0) {
                 *(ShipBlock400 *)D_L17_001D9B68_ed = *(ShipBlock400 *)hp_bar_clut;
