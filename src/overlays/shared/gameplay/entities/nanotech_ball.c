@@ -1266,14 +1266,14 @@ void FUN_L00_002da660(void) {
     D_0013F350_002da660.i207C = 0;
     D_0013F350_002da660.i2078 = 0;
     for (i = 0; i < (item_text_variant.b9 == 0 ? 5 : 10); i++) {
-        u8 *o;
+        u8 *suction_record;
         s32 k;
         if (D_0013F350_002da660.slot[i] == 0)
             continue;
-        o = FUN_L00_002db890_002da660(D_0013F350_002da660.slot[i]);
-        if (o == 0 || (k = *(s16 *)(o + 0x68)) < 3 || k >= 5 || *(s16 *)(o + 0x6A) == -1) {
-            u8 *m = D_0013F350_002da660.slot[i];
-            FUN_001e93b0_002da660(D_L00_001E9FE8, *(s16 *)(m + 0xB2), *(s16 *)(m + 0xA6));
+        suction_record = FUN_L00_002db890_002da660(D_0013F350_002da660.slot[i]);
+        if (suction_record == 0 || (k = *(s16 *)(suction_record + 0x68)) < 3 || k >= 5 || *(s16 *)(suction_record + 0x6A) == -1) {
+            u8 *slot_moby = D_0013F350_002da660.slot[i];
+            FUN_001e93b0_002da660(D_L00_001E9FE8, *(s16 *)(slot_moby + 0xB2), *(s16 *)(slot_moby + 0xA6));
             D_0013F350_002da660.slot[i] = 0;
         } else if (k == 3) {
             D_0013F350_002da660.i207C++;
