@@ -310,10 +310,10 @@ void FUN_L06_00309348(unsigned char *moby) {
         break;
     case MOBY_CONDITIONAL_CAMERA_TARGET_UPDATE:
         if (D_L06_0015F5C4 == 2) {
-            char *p = D_L06_0016CFE0;
-            if (*(int *)(p + 0x30) == 5) {
-                if (scale_game_frames(0x7F) >= *(int *)(p + 0x34)) {
-                    cutscene_set_camera_target(*(int *)(p + 0x180));
+            char *camera_target_update_data = D_L06_0016CFE0;
+            if (*(int *)(camera_target_update_data + 0x30) == 5) {
+                if (scale_game_frames(0x7F) >= *(int *)(camera_target_update_data + 0x34)) {
+                    cutscene_set_camera_target(*(int *)(camera_target_update_data + 0x180));
                 }
             }
         }
