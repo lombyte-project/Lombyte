@@ -2310,14 +2310,14 @@ void FUN_L13_0030bdf0(struct Moby *moby) {
     }
 }
 /* Records the classes of the tracked mobys, then removes this moby once too few of them are left. */
-void FUN_L13_0030be60(struct Moby *m) {
-    int *d = (int *)m->pvars;
-    if (m->state == 0) {
-        int *ids = d + 4;
-        int *cls = d + 12;
+void FUN_L13_0030be60(struct Moby *moby) {
+    int *moby_vars = (int *)moby->pvars;
+    if (moby->state == 0) {
+        int *ids = moby_vars + 4;
+        int *cls = moby_vars + 12;
         char *base;
         int i;
-        m->state = 1;
+        moby->state = 1;
         base = (char *)D_L13_0015FFD8_m;
         for (i = 0; i < 8; i++) {
             unsigned char *o = (unsigned char *)(base + (ids[i] << 8));
@@ -2326,29 +2326,29 @@ void FUN_L13_0030be60(struct Moby *m) {
             else
                 cls[i] = -1;
         }
-        if (d[0] == 0)
-            m->state = 2;
-    } else if (m->state == 1) {
-        int *ids = d + 4;
-        int *cls = d + 12;
+        if (moby_vars[0] == 0)
+            moby->state = 2;
+    } else if (moby->state == 1) {
+        int *ids = moby_vars + 4;
+        int *cls = moby_vars + 12;
         char *base = (char *)D_L13_0015FFD8_m;
-        int n = 0;
+        int valid_tracked_moby_count = 0;
         int i;
         for (i = 0; i < 8; i++) {
             int id = ids[i];
-            int c;
+            int saved_moby_class;
             unsigned char *o;
-            if (id != -1 && (c = cls[i]) != -1) {
+            if (id != -1 && (saved_moby_class = cls[i]) != -1) {
                 o = (unsigned char *)(base + (id << 8));
-                if (o != 0 && *(short *)(o + 0xA6) == c && o[0x20] != 0xFE && o[0x20] != 0xFD) {
-                    n++;
+                if (o != 0 && *(short *)(o + 0xA6) == saved_moby_class && o[0x20] != 0xFE && o[0x20] != 0xFD) {
+                    valid_tracked_moby_count++;
                     continue;
                 }
             }
             cls[i] = -1;
         }
-        if (n < d[0])
-            mark_moby_for_removal(m);
+        if (valid_tracked_moby_count < moby_vars[0])
+            mark_moby_for_removal(moby);
     }
 }
 
