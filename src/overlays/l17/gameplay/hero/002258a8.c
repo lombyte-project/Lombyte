@@ -156,6 +156,7 @@ void FUN_L17_002258a8(void) {
         HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW = 27,
         HERO_STATE_LEDGE_JUMP = 28,
         HERO_STATE_LOOK_RELEASE_WAIT = 30,
+        HERO_STATE_GRAPPLE_EQUIPPED_WAIT = 36,
         HERO_STATE_GRIND_JUMP = 41,
         HERO_STATE_GRIND_RAIL_TRANSFER = 42,
         HERO_STATE_GRIND_ATTACK = 43,
@@ -1217,7 +1218,7 @@ void FUN_L17_002258a8(void) {
                         hero_set_state(HERO_STATE_FALL, 1);
                     }
                     break;
-                case 36:
+                case HERO_STATE_GRAPPLE_EQUIPPED_WAIT:
                     if (hero.items[0].item_id != 0xC) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
