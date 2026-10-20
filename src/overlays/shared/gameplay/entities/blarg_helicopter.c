@@ -1998,36 +1998,36 @@ extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
  * above the target, and stays there.
  */
 void garage_door_update(struct Moby *m) __asm__("FUN_L03_002dca30");
-void garage_door_update(struct Moby *m)
+void garage_door_update(struct Moby *door_moby)
 {
     enum {
         GARAGE_DOOR_WAITING_FOR_COLLECTION = 0,
         GARAGE_DOOR_RISING = 1,
         GARAGE_DOOR_RAISED = 2
     };
-    Vec4 *target = (Vec4 *)m->pvars;
+    Vec4 *target = (Vec4 *)door_moby->pvars;
     s16 idx;
     u16 id;
 
-    switch (m->state) {
+    switch (door_moby->state) {
     case GARAGE_DOOR_WAITING_FOR_COLLECTION:
         /* one quadword copy (lq/sq); qcopy() schedules differently */
-        target->q = ((Vec4 *)&m->pos)->q;
-        id = m->save_id;
+        target->q = ((Vec4 *)&door_moby->pos)->q;
+        id = door_moby->save_id;
         idx = id;
         if (D_L03_001BB330.collected[idx] == 0) {
             if (!((D_0014C190_257218[current_level_index_gp][idx >> 5] >> (id & 0x1F)) & 1))
                 return;
         }
-        m->state = 1;
+        door_moby->state = 1;
         return;
     case GARAGE_DOOR_RISING:
-        m->pos.z += frame_time;
-        if (target->f[2] + 4.0f <= m->pos.z)
-            m->state = 2;
+        door_moby->pos.z += frame_time;
+        if (target->f[2] + 4.0f <= door_moby->pos.z)
+            door_moby->state = 2;
         return;
     case GARAGE_DOOR_RAISED:
-        m->pos.z = target->f[2] + 4.0f;
+        door_moby->pos.z = target->f[2] + 4.0f;
         return;
     }
 }
