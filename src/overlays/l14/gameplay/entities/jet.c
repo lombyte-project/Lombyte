@@ -577,7 +577,7 @@ void FUN_L14_002eb388(struct Moby *m, int i, void *dir);
 extern f32 D_L14_00161C08 __attribute__((sda));
 extern s32 D_L14_00161C04 __attribute__((sda));
 void FUN_L14_002eaf88(struct Moby *m) {
-    L14WindVars *d = (L14WindVars *)m->pvars;
+    L14WindVars *wind_vars = (L14WindVars *)m->pvars;
     float dir[4];
     char *pos;
     struct Hero *h;
@@ -585,27 +585,27 @@ void FUN_L14_002eaf88(struct Moby *m) {
 
     if (m->state == 0) {
         m->state = 1;
-        if (d->clip_push < 0) {
+        if (wind_vars->clip_push < 0) {
             wind_print(D_L14_001FC980, m->save_id);
             wind_remove(m);
             return;
         }
-        if (d->point < 0) {
+        if (wind_vars->point < 0) {
             wind_print(D_L14_001FC9E0, m->save_id);
             wind_remove(m);
             return;
         }
-        if (d->clip_area < 0) {
+        if (wind_vars->clip_area < 0) {
             wind_print(D_L14_001FCA38, m->save_id);
             wind_remove(m);
             return;
         }
-        d->pushing = 0;
-        d->f14 = 2.0f * wind_length(D_L14_001600EC_w + (d->point << 7));
-        d->f18 = wind_length(D_L14_001600EC_w + (d->point << 7) + 0x10);
-        d->f1C = wind_length(D_L14_001600EC_w + (d->point << 7) + 0x20);
-        d->period_timer = wind_frames(d->period);
-        d->period_inv = 1.0f / wind_itof(d->period_timer);
+        wind_vars->pushing = 0;
+        wind_vars->f14 = 2.0f * wind_length(D_L14_001600EC_w + (wind_vars->point << 7));
+        wind_vars->f18 = wind_length(D_L14_001600EC_w + (wind_vars->point << 7) + 0x10);
+        wind_vars->f1C = wind_length(D_L14_001600EC_w + (wind_vars->point << 7) + 0x20);
+        wind_vars->period_timer = wind_frames(wind_vars->period);
+        wind_vars->period_inv = 1.0f / wind_itof(wind_vars->period_timer);
         dir[0] = wind_cos(m->rot.z);
         dir[1] = wind_sin(m->rot.z);
         dir[2] = 0.0f;
@@ -614,7 +614,7 @@ void FUN_L14_002eaf88(struct Moby *m) {
         }
     }
     pos = (char *)&hero.motion.pos;
-    if (wind_inside(pos, d->clip_area) != 0) {
+    if (wind_inside(pos, wind_vars->clip_area) != 0) {
         D_L14_00162230.v = wind_cos(m->rot.z) * (D_L14_00161C08 * D_0015ED6C_w);
         D_L14_00162234.v = wind_sin(m->rot.z) * (D_L14_00161C08 * D_0015ED6C_w);
         D_L14_00162238 = 0;
@@ -628,38 +628,38 @@ void FUN_L14_002eaf88(struct Moby *m) {
         FUN_L14_002eb568(m);
         h = (struct Hero *)(pos - 0x80);
         if (h->unk308 == 0 && h->unk2284 != 13 && (h->unk12E2 != 0 || h->frames_off_ground.s != 0) &&
-            wind_inside(pos, d->clip_push) != 0) {
+            wind_inside(pos, wind_vars->clip_push) != 0) {
             float t;
             float k;
-            wind_tick(&d->period_timer);
-            t = wind_itof(d->period_timer) * d->period_inv;
-            d->pushing = 1;
+            wind_tick(&wind_vars->period_timer);
+            t = wind_itof(wind_vars->period_timer) * wind_vars->period_inv;
+            wind_vars->pushing = 1;
             k = D_0015ED6C_w;
             t = 1.0f - t;
-            t = t * (d->push * k);
+            t = t * (wind_vars->push * k);
             dir[0] = wind_cos(m->rot.z) * t;
             dir[1] = wind_sin(m->rot.z) * t;
             dir[2] = 0.0f;
             wind_add(pos + 0x70, pos + 0x70, dir);
-            d->push_timer = wind_frames(D_L14_00161C04);
-            d->push_inv = 1.0f / wind_itof(d->push_timer);
+            wind_vars->push_timer = wind_frames(D_L14_00161C04);
+            wind_vars->push_inv = 1.0f / wind_itof(wind_vars->push_timer);
             return;
         }
     }
-    if (d->pushing != 0 && d->push_timer != 0) {
+    if (wind_vars->pushing != 0 && wind_vars->push_timer != 0) {
         float t;
-        if (wind_tick(&d->push_timer) != 0) {
-            d->pushing = 0;
-            d->period_timer = wind_frames(d->period);
-            d->period_inv = 1.0f / wind_itof(d->period_timer);
+        if (wind_tick(&wind_vars->push_timer) != 0) {
+            wind_vars->pushing = 0;
+            wind_vars->period_timer = wind_frames(wind_vars->period);
+            wind_vars->period_inv = 1.0f / wind_itof(wind_vars->period_timer);
         }
         if (hero.unk308 != 0 || hero.unk12E2 == 0) {
-            if (d->push_timer > wind_frames(15)) {
-                d->push_timer = wind_frames(15);
-                d->push_inv = 1.0f / (float)d->push_timer;
+            if (wind_vars->push_timer > wind_frames(15)) {
+                wind_vars->push_timer = wind_frames(15);
+                wind_vars->push_inv = 1.0f / (float)wind_vars->push_timer;
             }
         }
-        t = (d->push * D_0015ED6C_w - 0.0f) * (wind_itof(d->push_timer) * d->push_inv) + 0.0f;
+        t = (wind_vars->push * D_0015ED6C_w - 0.0f) * (wind_itof(wind_vars->push_timer) * wind_vars->push_inv) + 0.0f;
         dir[0] = wind_cos(m->rot.z) * t;
         dir[1] = wind_sin(m->rot.z) * t;
         dir[2] = 0.0f;
