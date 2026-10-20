@@ -3241,11 +3241,11 @@ typedef union {
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
 void FUN_L18_002f7220(struct Moby *source, char *dest, L18Vector *from, L18Vector *to) {
-    L18Vector a, b;
-    a.quad = from->quad;
+    L18Vector from_position, b;
+    from_position.quad = from->quad;
     b.quad = to->quad;
     *(float *)(dest + 0x68) =
-        fast_subtract_rotations(fast_arc_tan(b.f[0] - a.f[0], b.f[1] - a.f[1]), source->rot.z);
+        fast_subtract_rotations(fast_arc_tan(b.f[0] - from_position.f[0], b.f[1] - from_position.f[1]), source->rot.z);
 }
 extern char *D_L18_0015EF50;
 extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
