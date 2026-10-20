@@ -977,7 +977,7 @@ void turret_update(struct Moby *moby) {
     };
     Vec4 seat;
     Vec4 offset;
-    Vec4 tmp;
+    Vec4 work_vector;
     Vec4 shot;
     Vec4 muzzle;
     Vec4 dir;
@@ -1035,8 +1035,8 @@ void turret_update(struct Moby *moby) {
     switch (moby->state) {
     case TURRET_STATE_INITIALIZE:
         attach_manipulator(moby, 0, vars);
-        tmp.q = *(u128 *)&moby->pos;
-        FUN_L09_002efda8(moby, &tmp);
+        work_vector.q = *(u128 *)&moby->pos;
+        FUN_L09_002efda8(moby, &work_vector);
         moby->state = 4;
         vars->rest_z = moby->pos.z;
         vars->pitch = 0.0f;
@@ -1056,17 +1056,17 @@ void turret_update(struct Moby *moby) {
                     fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y),
                     moby->rot.z), 1.5707964f) * 0.01f) * 0.9f;
             moby->rot.z = fast_add_rotations(moby->rot.z, vars->yaw_speed);
-            transform_vector_by_basis(&tmp, D_L09_00161CC0, &moby->rot_row0);
-            add_vector_xyz(&tmp, &tmp, &seat);
+            transform_vector_by_basis(&work_vector, D_L09_00161CC0, &moby->rot_row0);
+            add_vector_xyz(&work_vector, &work_vector, &seat);
             if (vars->beam == -1) {
                 vars->beam_frames = 0;
-                vars->beam = FUN_L00_0023e738(&tmp, 0.4f, 0.0f, 4.0f, 4.0f, 4.0f);
+                vars->beam = FUN_L00_0023e738(&work_vector, 0.4f, 0.0f, 4.0f, 4.0f, 4.0f);
                 allocate_voice_for_target_entry(1, 0, moby);
             } else {
                 beam = &D_L09_00180440[vars->beam];
-                beam->pos[0] = tmp.f[0];
-                beam->pos[1] = tmp.f[1];
-                beam->pos[2] = tmp.f[2];
+                beam->pos[0] = work_vector.f[0];
+                beam->pos[1] = work_vector.f[1];
+                beam->pos[2] = work_vector.f[2];
                 beam_frame_count = ++vars->beam_frames;
                 if (beam_frame_count > 40 || !(beam_frame_count & 4)) {
                     beam->size = 4.0f;
@@ -1098,18 +1098,18 @@ void turret_update(struct Moby *moby) {
         } else {
             moby->pos.z = vars->rest_z;
         }
-        tmp.f[0] = hero.stick_x;
+        work_vector.f[0] = hero.stick_x;
         stick_y = -hero.stick_y;
         if (!D_0015EDDC) {
             stick_y = hero.stick_y;
         }
-        tmp.f[1] = stick_y;
-        len = vector_length_xy(&tmp);
+        work_vector.f[1] = stick_y;
+        len = vector_length_xy(&work_vector);
         if (len > 1.0f) {
-            divide_vector_xyz(&tmp, &tmp, len);
+            divide_vector_xyz(&work_vector, &work_vector, len);
         }
-        vars->yaw_speed += frame_time_sq * 3.1415927f * -tmp.f[0];
-        vars->pitch_speed += frame_time_sq * 0.7853982f * -tmp.f[1];
+        vars->yaw_speed += frame_time_sq * 3.1415927f * -work_vector.f[0];
+        vars->pitch_speed += frame_time_sq * 0.7853982f * -work_vector.f[1];
         moby->rot.z = fast_add_rotations(moby->rot.z, vars->yaw_speed);
         vars->pitch = fast_add_rotations(vars->pitch, vars->pitch_speed);
         if (vars->pitch < -0.5235988f) {
@@ -1187,10 +1187,10 @@ void turret_update(struct Moby *moby) {
             FUN_L00_00250df8(moby);
             moby->flags |= 4;
             FUN_L08_00313ba8();
-            moby_point_position(moby, 0, &tmp);
+            moby_point_position(moby, 0, &work_vector);
             build_spherical_offset(&shot, D_L09_00161CB0, fast_add_rotations(1.5707964f, moby->rot.z), vars->pitch);
             shot.f[2] += D_L09_00161CB4;
-            add_vector_xyz(&muzzle, &tmp, &shot);
+            add_vector_xyz(&muzzle, &work_vector, &shot);
             FUN_L00_002ea9d8(&muzzle);
             dir.f[0] = 0.0f;
             dir.f[1] = -vars->pitch;
