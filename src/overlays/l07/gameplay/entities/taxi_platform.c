@@ -601,7 +601,7 @@ void FUN_L07_002cdb28(struct Moby *moby) {
     };
     char *data = (char *)moby->pvars;
     char *path;
-    float orig[4], delta[4], tmp[4];
+    float orig[4], delta[4], path_segment_offset[4];
     if (D_L07_0015FC88[moby->mission] != 0xFF) {
         moby->collision = 0;
         moby->flags |= 0x41;
@@ -686,7 +686,7 @@ void FUN_L07_002cdb28(struct Moby *moby) {
         } else {
             int i;
             float f20, t;
-            char *q;
+            char *segment_start_position;
             if (!voice_is_playing(moby, *(int *)(data + 0xC4))) {
                 *(int *)(data + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
             }
@@ -727,10 +727,10 @@ void FUN_L07_002cdb28(struct Moby *moby) {
             if (i == *(int *)path - 1) {
                 qcopy(&moby->pos, path + 0x10 + i * 16);
             } else {
-                q = path + 0x10 + i * 16;
-                subtract_vector_xyz(tmp, path + 0x20 + i * 16, q);
-                scale_vector_xyz(tmp, tmp, f20);
-                add_vector_xyz(&moby->pos, tmp, q);
+                segment_start_position = path + 0x10 + i * 16;
+                subtract_vector_xyz(path_segment_offset, path + 0x20 + i * 16, segment_start_position);
+                scale_vector_xyz(path_segment_offset, path_segment_offset, f20);
+                add_vector_xyz(&moby->pos, path_segment_offset, segment_start_position);
             }
             *(float *)(data + 0xBC) = moby->pos.z - orig[2];
         }
