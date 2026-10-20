@@ -54,12 +54,12 @@ void FUN_L00_00269290(char *particle) {
             *(short *)(particle + 0xA) = particle_data->h14;
         }
     } else {
-        int c;
+        int packed_rgb;
         f4bc0_269290(v, particle + 0x24);
         add_269290(particle + 0x10, particle + 0x10, v);
-        c = particle_data->wC & 0xFFFFFF;
+        packed_rgb = particle_data->wC & 0xFFFFFF;
         *(int *)(particle + 4) =
-            lerpc_269290(c, particle_data->wC, i2f_269290(*(short *)(particle + 0xA)) / i2f_269290(particle_data->h14));
+            lerpc_269290(packed_rgb, particle_data->wC, i2f_269290(*(short *)(particle + 0xA)) / i2f_269290(particle_data->h14));
         *(float *)(particle + 0xC) = (float)(particle_data->h18 * 1000);
         if (f9770_269290(particle + 0xA)) {
             f7a08_269290(particle);
