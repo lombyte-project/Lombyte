@@ -436,7 +436,7 @@ extern void FUN_00125180_2291d0(void *, void *) __asm__("FUN_00125180");
 extern s32 D_L06_001745DC __attribute__((section(".data")));
 extern char D_0013F3D0[] __attribute__((section(".data")));
 void FUN_L06_002291d0(int force) {
-    V_2291d0 a, d1, b, d2;
+    V_2291d0 primary_vector_origin, primary_vector_endpoint, b, secondary_vector_endpoint;
     char *src;
     P_2291d0 *g;
     f32 off, k, secondary_vector_scale, ang, negative_horizontal_dot;
@@ -456,33 +456,33 @@ void FUN_L06_002291d0(int force) {
         k = 0.27000001072883606f;
     }
     src = D_0013F3D0;
-    qcopy(&a, src);
-    a.f[2] += off;
+    qcopy(&primary_vector_origin, src);
+    primary_vector_origin.f[2] += off;
     qcopy(&b, src);
     b.f[2] += off * 0.3f;
     if (force || FUN_001f9b20_2291d0(src + 0x60) < 0.01f) {
         g = (P_2291d0 *)(src - 0x80);
         secondary_vector_scale = 1.4f;
-        d1.f[0] = FUN_001f9dc8_2291d0(g->f98) * k;
-        d1.f[1] = FUN_001f9de0_2291d0(g->f98) * k;
-        *(s32 *)&d1.f[2] = 0;
-        d2.f[0] = FUN_001f9dc8_2291d0(g->f98) * k * secondary_vector_scale;
-        d2.f[1] = FUN_001f9de0_2291d0(g->f98) * k * secondary_vector_scale;
-        *(s32 *)&d2.f[2] = 0;
+        primary_vector_endpoint.f[0] = FUN_001f9dc8_2291d0(g->f98) * k;
+        primary_vector_endpoint.f[1] = FUN_001f9de0_2291d0(g->f98) * k;
+        *(s32 *)&primary_vector_endpoint.f[2] = 0;
+        secondary_vector_endpoint.f[0] = FUN_001f9dc8_2291d0(g->f98) * k * secondary_vector_scale;
+        secondary_vector_endpoint.f[1] = FUN_001f9de0_2291d0(g->f98) * k * secondary_vector_scale;
+        *(s32 *)&secondary_vector_endpoint.f[2] = 0;
     } else {
-        qcopy(&d1, src + 0x60);
-        *(s32 *)&d1.f[2] = 0;
-        FUN_001f9a68_2291d0(&d1, &d1, k / FUN_001f9b20_2291d0(&d1));
-        qcopy(&d2, &d1);
-        FUN_001f9a68_2291d0(&d2, &d2, 1.4f);
+        qcopy(&primary_vector_endpoint, src + 0x60);
+        *(s32 *)&primary_vector_endpoint.f[2] = 0;
+        FUN_001f9a68_2291d0(&primary_vector_endpoint, &primary_vector_endpoint, k / FUN_001f9b20_2291d0(&primary_vector_endpoint));
+        qcopy(&secondary_vector_endpoint, &primary_vector_endpoint);
+        FUN_001f9a68_2291d0(&secondary_vector_endpoint, &secondary_vector_endpoint, 1.4f);
     }
-    FUN_001f9a10_2291d0(&d1, &d1, &a);
-    FUN_001f9a10_2291d0(&d2, &d2, &b);
+    FUN_001f9a10_2291d0(&primary_vector_endpoint, &primary_vector_endpoint, &primary_vector_origin);
+    FUN_001f9a10_2291d0(&secondary_vector_endpoint, &secondary_vector_endpoint, &b);
     r = -1;
-    if (FUN_001efa68_2291d0(&b, &d2, 4, P.p2080, 0) && D_L06_001745DC > 0)
+    if (FUN_001efa68_2291d0(&b, &secondary_vector_endpoint, 4, P.p2080, 0) && D_L06_001745DC > 0)
         r = FUN_001f0b58_2291d0();
     ang = 0.0f;
-    if (FUN_001efa68_2291d0(&a, &d1, 4, P.p2080, 0) && X.i1C > 0)
+    if (FUN_001efa68_2291d0(&primary_vector_origin, &primary_vector_endpoint, 4, P.p2080, 0) && X.i1C > 0)
         ang = FUN_001f9e90_2291d0(X.v40.f[2], FUN_001f9b20_2291d0(&X.v40));
     if (0.8726646304130554f <= ang || r == 8 || r == 12) {
         P.i240 = X.i18;
