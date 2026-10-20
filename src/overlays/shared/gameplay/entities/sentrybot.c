@@ -3471,30 +3471,30 @@ extern int D_L15_001ABE40_q[] __asm__("D_L15_001ABE40") __attribute__((section("
 extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
 extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
 
-void FUN_L15_002cbac0(char *m, int a) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L15_002cbac0(char *moby, int duration_frames) {
+    char *moby_data = *(char **)(moby + 0x78);
     int flag;
-    short *p;
-    if (a == -1) {
+    short *group_moby_entry;
+    if (duration_frames == -1) {
         *(int *)&D_L15_00161ABC_gp = 0;
-        a = 0;
+        duration_frames = 0;
     }
-    flag = a != 0;
-    if (((unsigned char *)m)[0x21] == 0xFF) {
-        *(int *)(d + 0x18) = scale_game_frames_q(a);
-        *(int *)(d + 8) = flag;
+    flag = duration_frames != 0;
+    if (((unsigned char *)moby)[0x21] == 0xFF) {
+        *(int *)(moby_data + 0x18) = scale_game_frames_q(duration_frames);
+        *(int *)(moby_data + 8) = flag;
         return;
     }
-    p = (short *)D_L15_001ABE40_q[((unsigned char *)m)[0x21]];
-    if (p) {
+    group_moby_entry = (short *)D_L15_001ABE40_q[((unsigned char *)moby)[0x21]];
+    if (group_moby_entry) {
         do {
-            char *o = (char *)(((*(unsigned short *)p & 0x7FFF) << 8) + D_L15_0015FFD8_m);
-            if (*(short *)(o + 0xA6) == 0x198) {
-                char *e = *(char **)(o + 0x78);
-                *(int *)(e + 8) = flag;
-                *(int *)(e + 0x18) = scale_game_frames_q(a);
+            char *listed_moby = (char *)(((*(unsigned short *)group_moby_entry & 0x7FFF) << 8) + D_L15_0015FFD8_m);
+            if (*(short *)(listed_moby + 0xA6) == 0x198) {
+                char *listed_moby_data = *(char **)(listed_moby + 0x78);
+                *(int *)(listed_moby_data + 8) = flag;
+                *(int *)(listed_moby_data + 0x18) = scale_game_frames_q(duration_frames);
             }
-        } while (*p++ >= 0);
+        } while (*group_moby_entry++ >= 0);
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCF30), where it is exact; names translated to the US level program. */
