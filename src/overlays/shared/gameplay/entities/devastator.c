@@ -496,16 +496,16 @@ int FUN_001f9740_2b3458(int *) __asm__("FUN_001f9740");
 void FUN_0020c828_2b3458(void *) __asm__("FUN_0020c828");
 extern int D_L00_00161478 __attribute__((sda));
 extern int D_L00_00161480 __attribute__((sda));
-void FUN_L00_002b3458(unsigned char *m) {
+void FUN_L00_002b3458(unsigned char *source_moby) {
     enum {
         STATE_INITIALIZE = 0,
         STATE_ACTIVE = 1
     };
-    V_2b3458 *v = *(V_2b3458 **)(m + 0x78);
+    V_2b3458 *v = *(V_2b3458 **)(source_moby + 0x78);
     int r, i;
-    switch (m[0x20]) {
+    switch (source_moby[0x20]) {
     case STATE_INITIALIZE:
-        m[0x20] = 1;
+        source_moby[0x20] = 1;
         v->w4 = D_L00_00161478;
         v->w8 = 3;
         v->p[0] = D_L00_0015FFD8 + (v->idx[0] << 8);
@@ -514,13 +514,13 @@ void FUN_L00_002b3458(unsigned char *m) {
         v->p[3] = D_L00_0015FFD8 + (v->idx[3] << 8);
         break;
     case STATE_ACTIVE:
-        r = FUN_L00_0025a420_2b3458(m, 0x10000, 0);
+        r = FUN_L00_0025a420_2b3458(source_moby, 0x10000, 0);
         FUN_001f9740_2b3458(&v->wC);
         if (r && v->wC == 0) {
-            m[0xA4] = 0xFF;
+            source_moby[0xA4] = 0xFF;
             v->wC = D_L00_00161480;
             if (--v->w8 <= 0) {
-                FUN_0020c828_2b3458(m);
+                FUN_0020c828_2b3458(source_moby);
                 return;
             }
         }
@@ -529,7 +529,7 @@ void FUN_L00_002b3458(unsigned char *m) {
         unsigned char *selected_object;
         v->p[i][0x20] = 0x51;
         selected_object = v->p[i];
-        qcopy(selected_object + 0x10, m + 0x10);
+        qcopy(selected_object + 0x10, source_moby + 0x10);
         selected_object[0xA4] = 0xFF;
         return;
     }
