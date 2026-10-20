@@ -1128,7 +1128,7 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
     float v40[4] __attribute__((aligned(16)));
     char *g;
     int w6;
-    float yaw_cosine, yaw_sine, r, t, u;
+    float yaw_cosine, yaw_sine, r, collision_tilt_angle, u;
 
     float one = 1.0f;
     float k;
@@ -1160,8 +1160,8 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
                 v40[2] = v30[2];
                 v40[1] = v30[1] * yaw_cosine - v30[0] * yaw_sine;
                 r = seg_sqrt(v40[0] * v40[0] + v40[2] * v40[2]);
-                t = FUN_001f9e90_u(r, v40[1]);
-                *(float *)(moby + 0x40) = FUN_L00_00200510(*(float *)(moby + 0x40), -t, k);
+                collision_tilt_angle = FUN_001f9e90_u(r, v40[1]);
+                *(float *)(moby + 0x40) = FUN_L00_00200510(*(float *)(moby + 0x40), -collision_tilt_angle, k);
                 u = FUN_001f9e90_u(v40[2], v40[0]);
                 *(float *)(moby + 0x44) = FUN_L00_00200510(*(float *)(moby + 0x44), u, k);
                 allocate_voice_for_target_entry(1, 0, (int)moby);
@@ -1194,8 +1194,8 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
                 v40[2] = v30[2];
                 v40[1] = v30[1] * yaw_cosine - v30[0] * yaw_sine;
                 r = seg_sqrt(v40[0] * v40[0] + v40[2] * v40[2]);
-                t = FUN_001f9e90_u(r, v40[1]);
-                *(float *)(moby + 0x40) = FUN_L00_00200510(*(float *)(moby + 0x40), -t, k);
+                collision_tilt_angle = FUN_001f9e90_u(r, v40[1]);
+                *(float *)(moby + 0x40) = FUN_L00_00200510(*(float *)(moby + 0x40), -collision_tilt_angle, k);
                 u = FUN_001f9e90_u(v40[2], v40[0]);
                 *(float *)(moby + 0x44) = FUN_L00_00200510(*(float *)(moby + 0x44), u, k);
                 allocate_voice_for_target_entry(1, 0, (int)moby);
