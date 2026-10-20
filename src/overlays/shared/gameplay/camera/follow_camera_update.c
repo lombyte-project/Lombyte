@@ -357,17 +357,17 @@ void FUN_L00_002e9bb0();
 void follow_camera_approach() __asm__("FUN_L00_002e5e38");
 void follow_camera_update(u8 *m) __asm__("FUN_L00_002e9c28");
 extern f32 D_L00_0015EF44_gp __asm__("D_L00_0015EF44") __attribute__((sda));
-void follow_camera_update(u8 *m) {
-    u8 *p = *(u8 **)(m + 0x70) + 0x1D0;
+void follow_camera_update(u8 *camera_moby) {
+    u8 *p = *(u8 **)(camera_moby + 0x70) + 0x1D0;
     D_L00_0015EF44_gp = D_L00_00161DB0[opt_cam_yaw_rate];
     FUN_L00_002e46b8();
-    follow_camera_apply_overrides(m);
-    noop_main_callback(m);
-    follow_camera_springs(m);
-    noop_main_callback(m, p);
-    FUN_L00_002e9bb0(m);
-    noop_main_callback(m);
-    follow_camera_approach(m);
+    follow_camera_apply_overrides(camera_moby);
+    noop_main_callback(camera_moby);
+    follow_camera_springs(camera_moby);
+    noop_main_callback(camera_moby, p);
+    FUN_L00_002e9bb0(camera_moby);
+    noop_main_callback(camera_moby);
+    follow_camera_approach(camera_moby);
 }
 extern unsigned char D_0015EDB3_002e9cc0 __asm__("D_0015EDB3");
 extern void FUN_001f9bf8_002e9cc0(void *, void *, float) __asm__("FUN_001f9bf8");
