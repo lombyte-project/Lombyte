@@ -2798,16 +2798,16 @@ extern f32 D_L00_001614C4 __attribute__((sda));
 extern u32 D_L00_001614C0 __attribute__((sda));
 void FUN_L00_002b7568(u8 *m) {
     Q_2b7568 quad;
-    V_2b7568 m90;
+    V_2b7568 quad_basis_direction;
     V_2b7568 up;
     V_2b7568 side;
     V_2b7568 pos;
     V_2b7568 corner;
     V_2b7568 dir;
-    V_2b7568 p;
+    V_2b7568 distance_offset;
     E_2b7568 *e;
     s32 i, j;
-    f32 t, sz;
+    f32 fade_factor, sz;
     u32 col;
     quad.tex = tex_2b7568(8);
     quad.unk88 = 0x8000000048L;
@@ -2825,26 +2825,26 @@ void FUN_L00_002b7568(u8 *m) {
     for (i = 0; i < 10; i++) {
         if (D_L00_001DB440_2b7568[i].on == 0)
             continue;
-        scale_2b7568(&p, &dir, D_L00_001DB440_2b7568[i].len);
-        add_2b7568(&pos, D_L00_001614E0_2b7568, &p);
-        qcopy(&m90, &dir);
+        scale_2b7568(&distance_offset, &dir, D_L00_001DB440_2b7568[i].len);
+        add_2b7568(&pos, D_L00_001614E0_2b7568, &distance_offset);
+        qcopy(&quad_basis_direction, &dir);
         scale_2b7568(&side, &D_0013F5E0_2b7568, -1.0f);
-        cross_2b7568(&up, &m90, &side);
+        cross_2b7568(&up, &quad_basis_direction, &side);
         setlen_2b7568(&up, &up, 1.0f);
-        cross_2b7568(&side, &up, &m90);
-        t = itof_2b7568(D_L00_001DB440_2b7568[i].alpha) * D_L00_001614DC;
-        if (1.0f < t)
-            t = 1.0f;
-        sz = D_L00_001614C8 + (D_L00_001614C4 - D_L00_001614C8) * t;
+        cross_2b7568(&side, &up, &quad_basis_direction);
+        fade_factor = itof_2b7568(D_L00_001DB440_2b7568[i].alpha) * D_L00_001614DC;
+        if (1.0f < fade_factor)
+            fade_factor = 1.0f;
+        sz = D_L00_001614C8 + (D_L00_001614C4 - D_L00_001614C8) * fade_factor;
         col = (D_L00_001614C0 & 0xFFFFFF) |
-              (ftoi_2b7568((itof_2b7568(D_L00_001614BC_2b7568) - 0.0f) * t + 0.0f) << 24);
+              (ftoi_2b7568((itof_2b7568(D_L00_001614BC_2b7568) - 0.0f) * fade_factor + 0.0f) << 24);
         quad.color[3] = col;
         quad.color[2] = col;
         quad.color[1] = col;
         quad.color[0] = col;
         for (j = 0; j < 4; j++) {
             scale_2b7568(&corner, &D_L00_001DB400[j], sz);
-            tf_2b7568(&quad.corner[j], &corner, &m90);
+            tf_2b7568(&quad.corner[j], &corner, &quad_basis_direction);
         }
         draw_2b7568(&quad, 0, 0);
     }
