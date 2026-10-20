@@ -72,11 +72,11 @@ void drek_fight_missile_update(struct Moby *moby) {
     }
     switch (moby->state) {
     case DREK_MISSILE_INITIALIZE: {
-        float a = D_0015ED6C_a[1];
+        float wander_acceleration_scale = D_0015ED6C_a[1];
         float b = frame_time;
-        *(float *)(missile_vars + 0x158) = a * 10.0f;
+        *(float *)(missile_vars + 0x158) = wander_acceleration_scale * 10.0f;
         *(float *)(missile_vars + 0x154) = b * 12.566371f;
-        *(float *)(missile_vars + 0x150) = a * 3.1415927f;
+        *(float *)(missile_vars + 0x150) = wander_acceleration_scale * 3.1415927f;
         *(float *)(missile_vars + 0x15C) = b * 10.0f;
         *(float *)(missile_vars + 0x168) = random_angle_radians();
         moby->draw_dist = 0xFF;
