@@ -23,7 +23,7 @@ typedef struct {
 extern Rec D_L06_0017A240[];
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
-int FUN_L06_0021d0a0(int a) {
+int FUN_L06_0021d0a0(int allow_item_help) {
     struct Hero *g = &hero;
     switch (g->vehicle_mode) {
     case 1:
@@ -36,7 +36,7 @@ int FUN_L06_0021d0a0(int a) {
         if (g2->health.hp == 1) {
             return 0x54;
         }
-        if (a == 0) {
+        if (allow_item_help == 0) {
             return 0;
         }
         if (g2->unk20A8 == 0) {
