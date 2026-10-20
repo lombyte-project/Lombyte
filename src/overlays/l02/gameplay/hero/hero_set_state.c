@@ -95,6 +95,9 @@ int hero_set_state(int a, int b) {
         HERO_STATE_DEATH_FALL = 0x77,
         HERO_STATE_DYING_ALT = 0x80
     };
+    enum {
+        HERO_STATE_ITEM_RELEASE_FALL = 0x2D
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -561,7 +564,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x2D: {
+    case HERO_STATE_ITEM_RELEASE_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 7;
