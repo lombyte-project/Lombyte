@@ -717,44 +717,44 @@ extern float advance_accelerated_scalar(float *, float *, float, float, float, f
 #define MOBY(p) ((struct Moby *)(p))
 
 void FUN_L11_0031a438(char *moby) {
-    char *d = (char *)MOBY(moby)->pvars;
-    int i = *(int *)(d + 0x64);
-    char *table = *(char **)(path_table + *(int *)(d + 0x60) * 4);
+    char *moby_vars = (char *)MOBY(moby)->pvars;
+    int i = *(int *)(moby_vars + 0x64);
+    char *table = *(char **)(path_table + *(int *)(moby_vars + 0x60) * 4);
     int count;
     float matrix[16];
-    float a[4], b[4], c[4];
+    float current_path_point[4], b[4], lookahead_path_point[4];
     float point[4], turn[4], direction[4];
     float angle_a, angle_b, slope_a, slope_b;
     float distance;
     float speed;
 
-    qcopy(a, table + i * 16 + 0x10);
+    qcopy(current_path_point, table + i * 16 + 0x10);
     count = *(int *)table;
     qcopy(b, table + (i + 1) % count * 16 + 0x10);
-    qcopy(c, table + (i + 2) % count * 16 + 0x10);
+    qcopy(lookahead_path_point, table + (i + 2) % count * 16 + 0x10);
     clear_u64_value(turn);
-    angle_a = fast_atan2(a[0] - b[0], a[1] - b[1]);
-    angle_b = fast_atan2(b[0] - c[0], b[1] - c[1]);
-    slope_a = fast_atan2(vector_distance_xy(a, b), b[2] - a[2]);
-    slope_b = fast_atan2(vector_distance_xy(b, c), c[2] - b[2]);
-    turn[1] = fast_add_rotations(fast_subtract_rotations(slope_b, slope_a) * *(float *)(d + 0x68), slope_a);
-    turn[2] = fast_add_rotations(fast_subtract_rotations(angle_b, angle_a) * *(float *)(d + 0x68), angle_a);
+    angle_a = fast_atan2(current_path_point[0] - b[0], current_path_point[1] - b[1]);
+    angle_b = fast_atan2(b[0] - lookahead_path_point[0], b[1] - lookahead_path_point[1]);
+    slope_a = fast_atan2(vector_distance_xy(current_path_point, b), b[2] - current_path_point[2]);
+    slope_b = fast_atan2(vector_distance_xy(b, lookahead_path_point), lookahead_path_point[2] - b[2]);
+    turn[1] = fast_add_rotations(fast_subtract_rotations(slope_b, slope_a) * *(float *)(moby_vars + 0x68), slope_a);
+    turn[2] = fast_add_rotations(fast_subtract_rotations(angle_b, angle_a) * *(float *)(moby_vars + 0x68), angle_a);
     qcopy(&MOBY(moby)->rot, turn);
-    if (*(float *)(d + 0x6C) > 0.0f) {
+    if (*(float *)(moby_vars + 0x6C) > 0.0f) {
         MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, 3.14159f);
         MOBY(moby)->rot.y = -MOBY(moby)->rot.y;
     }
-    interpolate_vector_xyz(point, a, b, *(float *)(d + 0x68));
+    interpolate_vector_xyz(point, current_path_point, b, *(float *)(moby_vars + 0x68));
     rotation_matrix_from_euler(matrix, turn);
-    normalize_vector_xyz(direction, matrix + 4, *(float *)(d + 0x78) * fast_sin(*(float *)(d + 0x70)));
+    normalize_vector_xyz(direction, matrix + 4, *(float *)(moby_vars + 0x78) * fast_sin(*(float *)(moby_vars + 0x70)));
     add_vector_xyz(point, point, direction);
-    normalize_vector_xyz(direction, matrix + 8, *(float *)(d + 0x78) * fast_cos(*(float *)(d + 0x70)));
+    normalize_vector_xyz(direction, matrix + 8, *(float *)(moby_vars + 0x78) * fast_cos(*(float *)(moby_vars + 0x70)));
     add_vector_xyz(point, point, direction);
     speed = 0.0f;
     distance = vector_distance_xyz(&MOBY(moby)->pos, point);
-    advance_accelerated_scalar(&speed, (float *)(d + 0x80), distance, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f);
+    advance_accelerated_scalar(&speed, (float *)(moby_vars + 0x80), distance, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f);
     subtract_vector_xyz(direction, point, &MOBY(moby)->pos);
-    normalize_vector_xyz(direction, direction, *(float *)(d + 0x80));
+    normalize_vector_xyz(direction, direction, *(float *)(moby_vars + 0x80));
     add_vector_xyz(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);
 }
 
