@@ -1224,14 +1224,14 @@ void FUN_L02_002e0cd8(char *moby) {
     int i;
     if (level_game_mode == 2 && big_head_cheat_enabled != 0) {
         for (i = 0; i < talk_camera.count; i++) {
-            char *e = talk_camera.mobys[i];
-            if (*(short *)(e + 0xA6) == *(short *)(moby + 0xA6)) {
-                unsigned char *s = D_L02_0017CA40;
-                if (s[1] == 0) {
-                    attach_manipulator(e, 0, s);
-                    *(float *)(s + 0x20) = 2.75f;
-                    *(float *)(s + 0x24) = 2.75f;
-                    *(float *)(s + 0x28) = 2.75f;
+            char *candidate_moby = talk_camera.mobys[i];
+            if (*(short *)(candidate_moby + 0xA6) == *(short *)(moby + 0xA6)) {
+                unsigned char *manipulator = D_L02_0017CA40;
+                if (manipulator[1] == 0) {
+                    attach_manipulator(candidate_moby, 0, manipulator);
+                    *(float *)(manipulator + 0x20) = 2.75f;
+                    *(float *)(manipulator + 0x24) = 2.75f;
+                    *(float *)(manipulator + 0x28) = 2.75f;
                 }
             }
         }
