@@ -384,8 +384,8 @@ int FUN_L00_0020d4d0(int arg) {
     return 0;
 }
 /* True when hero_slot_item_id(a) is 5, 6 or 7. */
-s32 FUN_L00_0020d518(int a) {
-    return (u32)(FUN_L00_0020d498_u(a) - 5) < 3;
+s32 FUN_L00_0020d518(int slot_index) {
+    return (u32)(FUN_L00_0020d498_u(slot_index) - 5) < 3;
 }
 int FUN_L00_0020d498_0020d540() __asm__("FUN_L00_0020d498");
 /* True when hero_slot_item_id returns 0x1C or 0x1D. */
