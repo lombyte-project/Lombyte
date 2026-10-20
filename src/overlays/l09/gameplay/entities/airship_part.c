@@ -241,16 +241,16 @@ void FUN_L09_002c26c8(struct Moby *moby) {
         if (moby->pos.z < 25.0f) {
             int i;
             for (i = 0; i < D_L09_00161368; i++) {
-                float a = FUN_00213308_2c26c8();
+                float effect_direction_angle = FUN_00213308_2c26c8();
                 qcopy(buf.m[1], ((f32 *)&moby->pos));
                 buf.m[1][0] += FUN_002132a8_2c26c8(-3.0f, 3.0f);
                 buf.m[1][1] += FUN_002132a8_2c26c8(-3.0f, 3.0f);
                 vec[2] = D_L09_00161374 * frame_time;
-                vec[0] += FUN_001f9dc8_2c26c8(a) * D_L09_0016137C;
-                vec[1] += FUN_001f9de0_2c26c8(a) * D_L09_0016137C;
+                vec[0] += FUN_001f9dc8_2c26c8(effect_direction_angle) * D_L09_0016137C;
+                vec[1] += FUN_001f9de0_2c26c8(effect_direction_angle) * D_L09_0016137C;
                 buf.m[0][2] = D_L09_00161378 * frame_time;
-                buf.m[0][0] += FUN_001f9dc8_2c26c8(a) * D_L09_00161380;
-                buf.m[0][1] += FUN_001f9de0_2c26c8(a) * D_L09_00161380;
+                buf.m[0][0] += FUN_001f9dc8_2c26c8(effect_direction_angle) * D_L09_00161380;
+                buf.m[0][1] += FUN_001f9de0_2c26c8(effect_direction_angle) * D_L09_00161380;
                 vec[3] = D_L09_00161390;
                 buf.m[0][3] = D_L09_00161394;
                 FUN_00218888_2c26c8(buf.m[1], vec, buf.m[0], D_L09_0016136C, D_L09_00161370,
