@@ -399,26 +399,26 @@ int scale_game_frames(int) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void FUN_L00_00250df8(unsigned char *);
 unsigned char *FUN_L00_002c6f88(unsigned char *src, float f) {
-    unsigned char *m = create_moby(0xd1);
-    if (m) {
-        char *q = *(char **)(m + 0x78);
-        *(float *)(q + 4) = f;
-        *(unsigned char **)q = src;
-        m[0x30] = 0xff;
-        *(short *)(m + 0x32) = 0xff;
-        m[0x31] = 1;
-        set_moby_color(m, 0x80, 0x80, 0x80);
-        moby_point_position(src, 0, m + 0x10);
-        *(u128 *)(m + 0xc0) = *(u128 *)(src + 0xc0);
-        *(u128 *)(m + 0xd0) = *(u128 *)(src + 0xd0);
-        *(u128 *)(m + 0xe0) = *(u128 *)(src + 0xe0);
-        if (m[0x53])
-            blend_moby_animation(m, 0, 0, scale_game_frames(10));
-        FUN_L00_00250df8(m);
-        m[0x20] = 0;
-        *(unsigned short *)(m + 0x34) |= 4;
+    unsigned char *spawned_moby = create_moby(0xd1);
+    if (spawned_moby) {
+        char *moby_vars = *(char **)(spawned_moby + 0x78);
+        *(float *)(moby_vars + 4) = f;
+        *(unsigned char **)moby_vars = src;
+        spawned_moby[0x30] = 0xff;
+        *(short *)(spawned_moby + 0x32) = 0xff;
+        spawned_moby[0x31] = 1;
+        set_moby_color(spawned_moby, 0x80, 0x80, 0x80);
+        moby_point_position(src, 0, spawned_moby + 0x10);
+        *(u128 *)(spawned_moby + 0xc0) = *(u128 *)(src + 0xc0);
+        *(u128 *)(spawned_moby + 0xd0) = *(u128 *)(src + 0xd0);
+        *(u128 *)(spawned_moby + 0xe0) = *(u128 *)(src + 0xe0);
+        if (spawned_moby[0x53])
+            blend_moby_animation(spawned_moby, 0, 0, scale_game_frames(10));
+        FUN_L00_00250df8(spawned_moby);
+        spawned_moby[0x20] = 0;
+        *(unsigned short *)(spawned_moby + 0x34) |= 4;
     }
-    return m;
+    return spawned_moby;
 }
 int FUN_001f96f8_2c7070(int) __asm__("FUN_001f96f8");
 void FUN_00212f90_2c7070(void *, int, int, int) __asm__("FUN_00212f90");
