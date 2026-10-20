@@ -721,7 +721,7 @@ void FUN_L16_002d3dc0(char *moby, void *owner, void *position, char *vector) {
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void FUN_L16_002d3de0(struct Moby *moby, int arg) {
-    char *d = (char *)moby->pvars;
+    char *commando_data = (char *)moby->pvars;
     if (moby->state == 10) {
         moby->state = 1;
         if (moby->prev_seq != 1) {
@@ -731,10 +731,10 @@ void FUN_L16_002d3de0(struct Moby *moby, int arg) {
         moby->flags &= 0xFFFE;
         moby->collision = moby->pclass->collision;
         moby->flags |= 0x1000;
-        *(short *)(d + 0x2DC) = arg;
-        *(float *)(d + 0x2BC) = moby->pos.z;
-        qcopy(d + 0x2C0, &moby->pos);
-        *(float *)(d + 0x2D4) = frame_time * 5.0f;
+        *(short *)(commando_data + 0x2DC) = arg;
+        *(float *)(commando_data + 0x2BC) = moby->pos.z;
+        qcopy(commando_data + 0x2C0, &moby->pos);
+        *(float *)(commando_data + 0x2D4) = frame_time * 5.0f;
     }
 }
 /* steers the moby's vector toward the target and returns the distance */
