@@ -365,7 +365,7 @@ void FUN_L11_002d1030(void *mp) {
         RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END = 13
     };
     struct Moby *moby = mp;
-    char *d = (char *)moby->pvars;
+    char *pvars = (char *)moby->pvars;
     float ang;
     float f0;
     float f1;
@@ -386,56 +386,56 @@ void FUN_L11_002d1030(void *mp) {
     case RESORT_OWNER_MOVE_TO_GATE_TARGET:
     case RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET:
     {
-        char *m48 = (char *)moby + 0x48;
-        ang = fast_arc_tan(*(float *)(d + 0x120) - *(float *)((char *)moby + 0x10),
-                           *(float *)(d + 0x124) - *(float *)((char *)moby + 0x14));
-        approach_angle((float *)(m48), ang, (float *)(d + 0x150), D_0015ED70 * 12.566371f,
+        char *yaw_ptr = (char *)moby + 0x48;
+        ang = fast_arc_tan(*(float *)(pvars + 0x120) - *(float *)((char *)moby + 0x10),
+                           *(float *)(pvars + 0x124) - *(float *)((char *)moby + 0x14));
+        approach_angle((float *)(yaw_ptr), ang, (float *)(pvars + 0x150), D_0015ED70 * 12.566371f,
                          D_0015ED70 * 25.132742f, D_0015ED6C * 12.566371f);
-        *(float *)(d + 0x130) = fast_cos(*(float *)(m48)) * *(float *)(d + 0x154);
-        f0 = fast_sin(*(float *)(m48));
-        f1 = *(float *)(d + 0x148);
+        *(float *)(pvars + 0x130) = fast_cos(*(float *)(yaw_ptr)) * *(float *)(pvars + 0x154);
+        f0 = fast_sin(*(float *)(yaw_ptr));
+        f1 = *(float *)(pvars + 0x148);
         f2 = D_0015ED70 * 20.0f;
-        f3 = *(float *)(d + 0x154);
-        *(float *)(d + 0x134) = f0 * f3;
+        f3 = *(float *)(pvars + 0x154);
+        *(float *)(pvars + 0x134) = f0 * f3;
         f1 = f1 - f2;
-        *(float *)(d + 0x138) = f1;
+        *(float *)(pvars + 0x138) = f1;
         if (0.0f < f1) {
-            *(float *)(d + 0x138) = 0.0f;
+            *(float *)(pvars + 0x138) = 0.0f;
             /* Fakematch: storing the speed back is a no-op that reload
              * deletes, but it keeps f3 live into this branch, so the
              * first scheduling pass hoists the 0x154 load and the
              * allocator gives it $f4 as in retail. */
-            *(float *)(d + 0x154) = f3;
+            *(float *)(pvars + 0x154) = f3;
         }
         break;
     }
     case RESORT_OWNER_JUMP_TO_TARGET:
         if (FUN_00214cc8(moby, 9.0f)) {
-            fast_vec_sub(d + 0x130, d + 0x120, (char *)moby + 0x10);
+            fast_vec_sub(pvars + 0x130, pvars + 0x120, (char *)moby + 0x10);
             f0 = (float)scale_game_frames(0x3C);
-            fast_vec_scale(d + 0x130, d + 0x130, 1.0f / f0);
-            f0 = vector_length_xy(d + 0x130);
-            *(float *)(d + 0x138) = FUN_L00_0025abf0((char *)moby + 0x10, d + 0x120, f0, 0, -(D_0015ED70 * 10.8f));
+            fast_vec_scale(pvars + 0x130, pvars + 0x130, 1.0f / f0);
+            f0 = vector_length_xy(pvars + 0x130);
+            *(float *)(pvars + 0x138) = FUN_L00_0025abf0((char *)moby + 0x10, pvars + 0x120, f0, 0, -(D_0015ED70 * 10.8f));
             *(float *)((char *)moby + 0x58) = 0.6666667f;
         }
-        f0 = fast_vec_length(d + 0x130);
+        f0 = fast_vec_length(pvars + 0x130);
         if (0.0f < f0)
-            *(float *)(d + 0x138) = *(float *)(d + 0x138) - D_0015ED70 * 10.8f;
+            *(float *)(pvars + 0x138) = *(float *)(pvars + 0x138) - D_0015ED70 * 10.8f;
         if (FUN_00214cc8(moby, 29.0f)) {
-            clear_u64_value(d + 0x130);
+            clear_u64_value(pvars + 0x130);
             *(float *)((char *)moby + 0x58) = 1.0f;
         }
         break;
     case RESORT_OWNER_WAIT_AT_GATE:
     {
-        int *tbl = (int *)(d + 0xF0);
-        unsigned int idx = 0U < *(unsigned int *)(d + 0x158);
-        char *o;
+        int *tbl = (int *)(pvars + 0xF0);
+        unsigned int idx = 0U < *(unsigned int *)(pvars + 0x158);
+        char *gate_moby;
         tbl += idx;
-        o = (char *)D_L11_0015FFD8;
-        o += *tbl << 8;
-        FUN_L00_002604f0(moby, o, &D_L11_001613E0, &D_L11_001613F0, (char *)moby + 0x10, (char *)moby + 0x40);
-        if (FUN_L11_0030a480((struct Moby *)o) == 0)
+        gate_moby = (char *)D_L11_0015FFD8;
+        gate_moby += *tbl << 8;
+        FUN_L00_002604f0(moby, gate_moby, &D_L11_001613E0, &D_L11_001613F0, (char *)moby + 0x10, (char *)moby + 0x40);
+        if (FUN_L11_0030a480((struct Moby *)gate_moby) == 0)
             break;
     }
         if (moby->prev_seq != 5)
@@ -446,7 +446,7 @@ void FUN_L11_002d1030(void *mp) {
             break;
         if (D_L11_0016D260[13] != scale_game_frames(0x7D0))
             break;
-        FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (*(int *)(d + 0x104) << 8)));
+        FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (*(int *)(pvars + 0x104) << 8)));
         break;
     default:
         break;
