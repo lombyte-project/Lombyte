@@ -102,8 +102,8 @@ void f22ca50_28e9c8(void) __asm__("FUN_0022ca50");
 int f122298_28e9c8(int) __asm__("FUN_00122298");
 int f215b10_28e9c8(void) __asm__("FUN_00215b10");
 void FUN_L00_0028e9c8(int a) {
-    O_28e9c8 *o;
-    int t, n, m, m2, u;
+    O_28e9c8 *moby;
+    int secondary_track_index, n, m, m2, u;
     D_0013E030_28e9c8.x24 = -1;
     D_L00_0015F5D8 = 1;
     D_0013E030_28e9c8.x20 = a;
@@ -123,39 +123,39 @@ void FUN_L00_0028e9c8(int a) {
     D_001413F5_28e9c8 = 1;
     f232fe8_28e9c8();
     D_0013E030_28e9c8.x0->flags |= 1;
-    for (o = D_L00_0015FFDC_28e9c8; o->st != 0xFF; o++) {
-        if (!(o->st & 0x80) && (o->type == 0x4A || o->type == 0xCB))
-            o->flags |= 0x80;
+    for (moby = D_L00_0015FFDC_28e9c8; moby->st != 0xFF; moby++) {
+        if (!(moby->st & 0x80) && (moby->type == 0x4A || moby->type == 0xCB))
+            moby->flags |= 0x80;
     }
     if (a == 0) {
         n = D_0013E030_28e9c8.x26;
         m = n + 1;
-        t = n + 6;
+        secondary_track_index = n + 6;
         if (current_level_index == 10 && n == 1 && D_0013D4C6_28e9c8 == 0) {
             m = 0;
-            t = 11;
+            secondary_track_index = 11;
         } else if (current_level_index == 14 && D_0013E030_28e9c8.x26 == 2) {
             m = 8;
-            t = 14;
+            secondary_track_index = 14;
         }
         FUN_L00_00245610(m, fr_28e9c8(6));
     } else {
         int k, r;
         n = D_0013E030_28e9c8.x26;
         k = D_0013E030_28e9c8.x2c;
-        t = n + 3;
+        secondary_track_index = n + 3;
         if (k)
-            t = n;
+            secondary_track_index = n;
         m2 = n + 5;
         if (current_level_index == 10 && n == 1 && D_0013D4C6_28e9c8 == 0) {
-            t = 10;
+            secondary_track_index = 10;
             if (k)
-                t = 9;
+                secondary_track_index = 9;
             m2 = 4;
         } else if (current_level_index == 14 && D_0013E030_28e9c8.x26 == 2) {
-            t = 13;
+            secondary_track_index = 13;
             if (D_0013E030_28e9c8.x2c)
-                t = 12;
+                secondary_track_index = 12;
             m2 = 9;
         }
         r = 0;
@@ -163,7 +163,7 @@ void FUN_L00_0028e9c8(int a) {
             r = fr_28e9c8(6);
         FUN_L00_00245610(m2, r);
     }
-    music_stream_state.queued_secondary_track = t + 40000;
+    music_stream_state.queued_secondary_track = secondary_track_index + 40000;
     f2049f0_28e9c8(0);
     while (music_stream_state.secondary.state != 3) {
         f22ca50_28e9c8();
