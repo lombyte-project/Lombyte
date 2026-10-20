@@ -1000,13 +1000,13 @@ extern int *D_L00_00177F00[];
 extern void FUN_L00_002336e8(float *dst, float *src, float h);
 extern void FUN_L00_002a7e20(void *, int);
 
-void FUN_L00_00217368(int a, int entry_count) {
+void FUN_L00_00217368(int voice_target, int entry_count) {
     if (entry_count != 0) {
-        char *d = D_0013E533 + 0xE1D;
+        char *hero_base = D_0013E533 + 0xE1D;
         int i;
-        if (*(int *)(d + 0xA64) == 0) {
-            allocate_voice_for_target_entry(1, 0, a);
-            *(int *)(d + 0xA64) = 1;
+        if (*(int *)(hero_base + 0xA64) == 0) {
+            allocate_voice_for_target_entry(1, 0, voice_target);
+            *(int *)(hero_base + 0xA64) = 1;
         }
         for (i = 0; i < entry_count; i++) {
             int *m = D_L00_00177F00[i];
