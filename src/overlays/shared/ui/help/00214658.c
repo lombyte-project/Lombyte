@@ -1042,7 +1042,7 @@ void FUN_L00_00217450(void) {
     int i;
     char *position_source;
     char *g;
-    int a, b;
+    int random_integer_4_to_7, b;
     float vector_magnitude, ang, elevation_angle, r;
 
     scaled_frame_count = FUN_001f96f8_217450(0x28);
@@ -1050,7 +1050,7 @@ void FUN_L00_00217450(void) {
     g = position_source - 0x80;
     i = 9;
     do {
-        a = truncate_float_to_s32(random_float_between(4200.0f, 7350.0f) / 1000.0f);
+        random_integer_4_to_7 = truncate_float_to_s32(random_float_between(4200.0f, 7350.0f) / 1000.0f);
         b = truncate_float_to_s32(random_float_between(21000.0f, 31500.002f) / 1000.0f);
         vector_magnitude = random_float_between(frame_time * 0.15f, frame_time * 0.7f);
         qcopy(pos, position_source);
@@ -1064,7 +1064,7 @@ void FUN_L00_00217450(void) {
         FUN_00214db0_217450(&out, vector_magnitude, ang, elevation_angle);
         pos[0].f[0] += FUN_001f9dc8_217450(ang) * r;
         pos[0].f[1] += FUN_001f9de0_217450(ang) * r;
-        FUN_L00_00269958(pos, &out, 0x7000C0F0, 0x70F0, scaled_frame_count, a, b, 1);
+        FUN_L00_00269958(pos, &out, 0x7000C0F0, 0x70F0, scaled_frame_count, random_integer_4_to_7, b, 1);
     } while (i >= 0);
     if (!ang) {
     }
