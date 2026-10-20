@@ -2359,6 +2359,7 @@ void blarg_trooper_update(struct Moby *moby) {
         BLARG_TROOPER_HIT_REACTION_RECOIL_RECOVERY = 6,
         BLARG_TROOPER_HIT_REACTION_NO_ADDITIONAL_RESPONSE = 7,
         BLARG_TROOPER_HIT_REACTION_NO_ADDITIONAL_REACTION = 8,
+        BLARG_TROOPER_HIT_REACTION_CONTINUE_WITHOUT_RESPONSE = 9,
         BLARG_TROOPER_HIT_REACTION_IGNORED = 11
     };
     struct {
@@ -2535,7 +2536,7 @@ void blarg_trooper_update(struct Moby *moby) {
             break;
         case BLARG_TROOPER_HIT_REACTION_NO_ADDITIONAL_RESPONSE:
         case BLARG_TROOPER_HIT_REACTION_NO_ADDITIONAL_REACTION:
-        case 9:
+        case BLARG_TROOPER_HIT_REACTION_CONTINUE_WITHOUT_RESPONSE:
         case 10:
         case BLARG_TROOPER_HIT_REACTION_IGNORED:
             break;
