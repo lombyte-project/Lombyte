@@ -10,15 +10,15 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void handle_camera_collision_with_hero(struct UpdateCam *cam) __asm__("FUN_001ebe68");
 
 void handle_camera_collision_with_hero(struct UpdateCam *cam) {
-    struct CamColl *c = &cam_coll_state;
+    struct CamColl *collision_state = &cam_coll_state;
 
     if (cam->unk86 == 0) {
-        if (c->moby == 0) {
-            c->moby = noop_callback_l((u8 *)c - 0x50);
+        if (collision_state->moby == 0) {
+            collision_state->moby = noop_callback_l((u8 *)collision_state - 0x50);
         }
-    } else if (c->moby != 0) {
-        mark_moby_for_removal(c->moby);
-        c->moby = 0;
+    } else if (collision_state->moby != 0) {
+        mark_moby_for_removal(collision_state->moby);
+        collision_state->moby = 0;
     }
 }
 
