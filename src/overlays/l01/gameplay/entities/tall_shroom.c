@@ -450,9 +450,9 @@ void FUN_L01_0030c190(struct Moby *moby) {
     FxVec b;
     FxVec c;
     FxVec d;
-    struct Moby *m;
-    char *e;
-    FxSpark *s;
+    struct Moby *cutscene_moby;
+    char *splash;
+    FxSpark *spark;
     f32 ang;
     f32 r;
     s32 i;
@@ -485,10 +485,10 @@ void FUN_L01_0030c190(struct Moby *moby) {
                 if (fx_cutscene.frame >= scale_game_frames(472) && fx_cutscene.frame <= scale_game_frames(537) &&
                     fx_cutscene.slot[0] != 0) {
                     moby_point_position(fx_cutscene.slot[0], 1, &a);
-                    e = spawn_splash(random_float_between(0.5f, 2.0f), random_integer_below(2) ? 2.0f : -2.0f, &a, &D_L01_0015F580,
+                    splash = spawn_splash(random_float_between(0.5f, 2.0f), random_integer_below(2) ? 2.0f : -2.0f, &a, &D_L01_0015F580,
                                         &a.f[2]);
-                    if (e != 0) {
-                        *(s16 *)(e + 0xA) = scale_game_frames(60);
+                    if (splash != 0) {
+                        *(s16 *)(splash + 0xA) = scale_game_frames(60);
                     }
                 }
                 if (fx_cutscene.scene == 1 && fx_cutscene.frame == scale_game_frames(472) && fx_cutscene.slot[0] != 0) {
@@ -512,29 +512,29 @@ void FUN_L01_0030c190(struct Moby *moby) {
                 }
             }
             if (fx_cutscene.scene == 4) {
-                m = fx_cutscene.slot[4];
-                if (m != 0 && m->oclass == 0x213) {
-                    enqueue_callback_list_1(render_environment_mapped_object, m);
+                cutscene_moby = fx_cutscene.slot[4];
+                if (cutscene_moby != 0 && cutscene_moby->oclass == 0x213) {
+                    enqueue_callback_list_1(render_environment_mapped_object, cutscene_moby);
                     if (fx_cutscene.frame >= scale_game_frames(850) && fx_cutscene.frame <= scale_game_frames(1160)) {
                         color = 0x7F204080;
                         for (node = 1; node < 7; node++) {
-                            moby_point_position(m, node, &a);
+                            moby_point_position(cutscene_moby, node, &a);
                             for (j = 0; j < 2; j++) {
                                 spread = random_integer_below(16);
-                                s = spawn_spark(&a, 0.1f, 1.0f, 0.9f, random_integer_below(2) == 0 ? spread : -spread,
+                                spark = spawn_spark(&a, 0.1f, 1.0f, 0.9f, random_integer_below(2) == 0 ? spread : -spread,
                                                    &D_L01_0015F580, 200000.0f, color);
-                                if (s != 0) {
-                                    FxSparkTail *t = &s->tail;
+                                if (spark != 0) {
+                                    FxSparkTail *spark_tail = &spark->tail;
 
                                     if (fx_cutscene.frame >= scale_game_frames(1100)) {
-                                        s->unkA = scale_game_frames(30);
+                                        spark->unkA = scale_game_frames(30);
                                     } else {
-                                        s->unkA = scale_game_frames(6);
+                                        spark->unkA = scale_game_frames(6);
                                     }
-                                    s->unk9 = truncate_float_to_s32(4.0f) + 0x40;
-                                    t->unk4 = 2;
-                                    t->unkA = color >> 24;
-                                    t->unkB = s->unkA;
+                                    spark->unk9 = truncate_float_to_s32(4.0f) + 0x40;
+                                    spark_tail->unk4 = 2;
+                                    spark_tail->unkA = color >> 24;
+                                    spark_tail->unkB = spark->unkA;
                                 }
                             }
                         }
@@ -542,10 +542,10 @@ void FUN_L01_0030c190(struct Moby *moby) {
                 }
             }
             if (fx_cutscene.scene == 5 && fx_cutscene.frame < scale_game_frames(120)) {
-                m = fx_cutscene.slot[2];
-                if (m != 0) {
+                cutscene_moby = fx_cutscene.slot[2];
+                if (cutscene_moby != 0) {
                     a.q = 0;
-                    moby_point_position(m, 5, &b);
+                    moby_point_position(cutscene_moby, 5, &b);
                     if (fx_cutscene.frame >= 2) {
                         subtract_vector_xyz(&a, &b, &fx_prev_pos);
                         qcopy(&fx_prev_pos, &b);
@@ -554,14 +554,14 @@ void FUN_L01_0030c190(struct Moby *moby) {
                     }
                     if (fx_cutscene.frame == scale_game_frames(118)) {
                         clear_vector(&c);
-                        spawn_explosion(m, &c, &b, 0.0f, 0.0f, 3, 200, 200, 5.0f, 2.5f, 9.0f, 1.0f, -1, 60.0f, 0, 60, -1, 0);
+                        spawn_explosion(cutscene_moby, &c, &b, 0.0f, 0.0f, 3, 200, 200, 5.0f, 2.5f, 9.0f, 1.0f, -1, 60.0f, 0, 60, -1, 0);
                         qcopy(&d, &b);
                         d.f[2] = d.f[2] - 1.0f;
-                        spawn_explosion(m, &c, &d, 0.0f, 0.0f, 300, 2, 2, 1.0f, 0.5f, 9.0f, 1.0f, -1, 60.0f, 0, 0, -1, 0);
+                        spawn_explosion(cutscene_moby, &c, &d, 0.0f, 0.0f, 300, 2, 2, 1.0f, 0.5f, 9.0f, 1.0f, -1, 60.0f, 0, 0, -1, 0);
                     }
-                    enqueue_callback_list_1(render_environment_mapped_object, m);
-                    moby_point_position(m, 1, &c);
-                    moby_point_position(m, 2, &d);
+                    enqueue_callback_list_1(render_environment_mapped_object, cutscene_moby);
+                    moby_point_position(cutscene_moby, 1, &c);
+                    moby_point_position(cutscene_moby, 2, &d);
                     subtract_vector_xyz(&c, &c, &a);
                     subtract_vector_xyz(&d, &d, &a);
                     scale_vector_xyz(&a, &a, 0.25f);
