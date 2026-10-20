@@ -1809,10 +1809,10 @@ void FUN_L15_0029d6c0(M_29E8A0 *missile_moby) {
         float tp[4];
         float ip[4];
         if (D_L15_0015F30C != 0 && target_moby != 0) {
-            float f = fast_vec_dist(D_L15_001673C0, target_moby->pos) / 50.0f;
+            float scaled_target_distance = fast_vec_dist(D_L15_001673C0, target_moby->pos) / 50.0f;
             qcopy(delta, target_moby->pos);
             delta[2] = delta[2] + missile_data->zoff;
-            suck_draw_reticle(missile_moby, 0xFF0FFFFF, absolute_float(0.5f - f * 0.35f), 0.0f, delta, 0xD, -1, 90.0f, 4);
+            suck_draw_reticle(missile_moby, 0xFF0FFFFF, absolute_float(0.5f - scaled_target_distance * 0.35f), 0.0f, delta, 0xD, -1, 90.0f, 4);
         }
         if (target_moby != 0 && missile_data->timer < scale_game_frames(0x96) - scale_game_frames(0) && target_moby->state >= 0) {
             float intercept_time = 0.0f;
@@ -1820,7 +1820,7 @@ void FUN_L15_0029d6c0(M_29E8A0 *missile_moby) {
             tp[2] = tp[2] + missile_data->zoff;
             subtract_vector_xyz_c2(delta, tp, missile_moby->pos);
             if (missile_data->f38 != 0) {
-                float a, b, c, r1, r2, discriminant_sqrt;
+                float a, b, c, intercept_time_plus_root, intercept_time_minus_root, discriminant_sqrt;
                 subtract_vector_xyz_c2(dv, tp, missile_data->v);
                 FUN_L00_001ff2c0(ip, dv, up);
                 qcopy(missile_data->v, tp);
@@ -1829,15 +1829,15 @@ void FUN_L15_0029d6c0(M_29E8A0 *missile_moby) {
                 a = missile_data->speed * missile_data->speed - c;
                 c = -FUN_L00_001ff430(delta);
                 discriminant_sqrt = square_root_scalar(b * b - a * 4.0f * c);
-                r1 = (-b + discriminant_sqrt) / (a + a);
-                r2 = (-b - discriminant_sqrt) / (a + a);
-                if (r1 > 0.0f && r2 > 0.0f) {
-                    if (r2 < r1) intercept_time = r1;
-                    else intercept_time = r2;
-                } else if (r1 > 0.0f) {
-                    intercept_time = r1;
-                } else if (r2 > 0.0f) {
-                    intercept_time = r2;
+                intercept_time_plus_root = (-b + discriminant_sqrt) / (a + a);
+                intercept_time_minus_root = (-b - discriminant_sqrt) / (a + a);
+                if (intercept_time_plus_root > 0.0f && intercept_time_minus_root > 0.0f) {
+                    if (intercept_time_minus_root < intercept_time_plus_root) intercept_time = intercept_time_plus_root;
+                    else intercept_time = intercept_time_minus_root;
+                } else if (intercept_time_plus_root > 0.0f) {
+                    intercept_time = intercept_time_plus_root;
+                } else if (intercept_time_minus_root > 0.0f) {
+                    intercept_time = intercept_time_minus_root;
                 } else {
                     intercept_time = -1.0f;
                 }
@@ -2020,17 +2020,17 @@ void FUN_L15_0029d6c0(M_29E8A0 *missile_moby) {
             clamp_vector_length(burst_position_or_velocity, burst_position_or_velocity, D_0015ED6C * 10.0f);
             FUN_L00_002af450((char *)missile_moby->pos, (char *)burst_position_or_velocity, FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x5A)), 0, 0);
             {
-                int n;
+                int burst_effect_pair_count;
                 float under;
                 if (dist < 6.0f) {
-                    n = truncate_float_to_s32_c4(dist) / 2;
+                    burst_effect_pair_count = truncate_float_to_s32_c4(dist) / 2;
                 } else {
-                    n = 3;
+                    burst_effect_pair_count = 3;
                 }
                 under = 0.0f;
                 if (dist < 7.0f) under = 7.0f - dist;
                 i = 0;
-                while (i < n) {
+                while (i < burst_effect_pair_count) {
                     float sz = random_float_between(8.0f, 10.0f) * D_0015ED6C - under * D_0015ED6C;
                     Cols_29E8A0 c1 = D_L15_001E2660;
                     Cols_29E8A0 c2 = D_L15_001E2678;
