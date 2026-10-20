@@ -2321,13 +2321,13 @@ extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void draw_geometry_quad(void *, void *, int);
 
-void FUN_L16_002e84e8(struct Moby *m) {
+void FUN_L16_002e84e8(struct Moby *elevator_moby) {
     L16RingPacket packet;
     L16RingMatrix matrix;
-    char *d = (char *)m->pvars;
-    int bound_index = (*(int *)((char *)d + 0xA0)) << 7;
+    char *elevator_data = (char *)elevator_moby->pvars;
+    int bound_index = (*(int *)((char *)elevator_data + 0xA0)) << 7;
     char *entry = (char *)(bound_index + (int)D_L16_001600FC);
-    float translation = (*(float *)((char *)d + 0xB8));
+    float translation = (*(float *)((char *)elevator_data + 0xB8));
     float lower = (*(float *)((char *)entry + 0x38));
     float half = (*(float *)((char *)entry + 0x28));
     float upper = lower + half + translation;
@@ -2342,9 +2342,9 @@ void FUN_L16_002e84e8(struct Moby *m) {
     lower += translation;
     color =
         fast_tween_color(D_L16_00161EDC, D_L16_00161EE0,
-                     absolute_float((*(float *)((char *)d + 0xB0))) / (D_L16_00161EB8_gp * frame_time));
-    copy_matrix_rotation(&matrix, &m->rot_row0);
-    qcopy(matrix.position, &m->pos);
+                     absolute_float((*(float *)((char *)elevator_data + 0xB0))) / (D_L16_00161EB8_gp * frame_time));
+    copy_matrix_rotation(&matrix, &elevator_moby->rot_row0);
+    qcopy(matrix.position, &elevator_moby->pos);
     matrix.position[2] = lower;
     matrix.position[3] = 1.0f;
     packet.texture = get_effect_texture(14);
@@ -2400,7 +2400,7 @@ void FUN_L16_002e84e8(struct Moby *m) {
                 packet.color[0] = color;
                 draw_geometry_quad(&packet, transform, 0);
             }
-            matrix.position[2] += (*(float *)((char *)d + 0xBC));
+            matrix.position[2] += (*(float *)((char *)elevator_data + 0xBC));
         } while (matrix.position[2] < upper);
     }
 }
