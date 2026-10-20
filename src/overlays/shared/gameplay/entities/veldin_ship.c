@@ -3396,25 +3396,25 @@ void FUN_001f4600_c(void *, P *) __asm__("FUN_001f4600");
 void FUN_L00_002d73e8(P *);
 
 void particle_spawner_smoke_fire_update(P *p) __asm__("FUN_L00_002d6f28");
-void particle_spawner_smoke_fire_update(P *p) {
+void particle_spawner_smoke_fire_update(P *spawner) {
     enum {
         PARTICLE_SPAWNER_INITIALIZE = 0,
         PARTICLE_SPAWNER_ACTIVE = 1
     };
-    Q *q = p->q;
+    Q *q = spawner->q;
     u8 *tbl;
     V v, a, b;
     float g, f;
-    int i, j, s, e, col, r;
+    int i, j, particle_start, e, col, r;
     E *ent;
     E2 *sub;
 
-    switch (p->state) {
+    switch (spawner->state) {
     case PARTICLE_SPAWNER_INITIALIZE:
-        p->state = 1;
-        p->b30 = 0xFF;
+        spawner->state = 1;
+        spawner->b30 = 0xFF;
         if (q->idx == -1) {
-            FUN_0020c828_c(p);
+            FUN_0020c828_c(spawner);
             return;
         }
         q->f48 = fast_vec_length(&D_L00_001600EC[q->idx].v1);
@@ -3426,13 +3426,13 @@ void particle_spawner_smoke_fire_update(P *p) {
         else
             q->f44 = 3.0f;
         q->f50 = fast_vec_length(&D_L00_001600EC[q->idx].v2) * 0.5f;
-        s = q->start = FUN_L00_002a4dc8(q->count + q->extra);
-        e = s + q->count;
-        for (i = s; i < e; i++) {
+        particle_start = q->start = FUN_L00_002a4dc8(q->count + q->extra);
+        e = particle_start + q->count;
+        for (i = particle_start; i < e; i++) {
             r = FUN_00213260_c(2);
             D_L00_001CB7E0[i].w = 1.0f;
             D_L00_001D2860[i] = r;
-            FUN_L00_002d7bf0(p, i);
+            FUN_L00_002d7bf0(spawner, i);
             D_L00_001D5740[i] = 0;
         }
         j = e;
@@ -3441,7 +3441,7 @@ void particle_spawner_smoke_fire_update(P *p) {
             r = FUN_00213260_c(2);
             D_L00_001CB7E0[i].w = 1.0f;
             D_L00_001D2860[i] = r;
-            FUN_L00_002d7d58_c(p, i);
+            FUN_L00_002d7d58_c(spawner, i);
         }
         D_L00_001600EC[q->idx].w = 1.0f;
         q->col = q->c2 << 16 | q->c1 << 8 | q->c0;
@@ -3453,7 +3453,7 @@ void particle_spawner_smoke_fire_update(P *p) {
         v.w = 10.0f;
         if (fast_bsphere_check(&v, D_L00_001619E0) < 0)
             return;
-        if (q->flag42 && vector_distance(&D_L00_00166DC0, &p->pos) < 128.0f) {
+        if (q->flag42 && vector_distance(&D_L00_00166DC0, &spawner->pos) < 128.0f) {
             for (e = 0; e < D_L00_001619BC; e++) {
                 a.x = FUN_L00_00257c48(0.0f, 1.0f);
                 a.y = FUN_L00_00257c48(0.0f, 1.0f);
@@ -3479,7 +3479,7 @@ void particle_spawner_smoke_fire_update(P *p) {
                 }
             }
         }
-        FUN_001f4600_c(FUN_L00_002d73e8, p);
+        FUN_001f4600_c(FUN_L00_002d73e8, spawner);
         return;
     }
 }
