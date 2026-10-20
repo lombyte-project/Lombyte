@@ -918,7 +918,7 @@ void FUN_L17_002dc3f8(struct Moby *moby) {
     float v[4];
     float w[12];
     float pos[4];
-    float q[4];
+    float surface_query_scratch[4];
     float scaled_particle_vector[4];
     float random_direction[4];
     int out;
@@ -956,7 +956,7 @@ void FUN_L17_002dc3f8(struct Moby *moby) {
                 func_L00_0025F4A8_alt(moby, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f,
                                       0, 1, -1, 0);
                 moby->pos.z = moby->pos.z + 1.0f;
-                yy = resolve_camera_surface_height(&moby->pos.x, q);
+                yy = resolve_camera_surface_height(&moby->pos.x, surface_query_scratch);
                 moby->pos.z = moby->pos.z - 1.0f;
                 i = 0x95;
                 do {
