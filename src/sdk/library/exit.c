@@ -40,11 +40,11 @@ extern void JumpToRfuStatus(int code);
 
 void exit(int code) {
     struct _atexit *atexit_block;
-    int n;
+    int callback_index;
 
     for (atexit_block = D_0012F76C->_atexit; atexit_block != 0; atexit_block = atexit_block->_next)
-        for (n = atexit_block->_ind; --n >= 0;)
-            (*atexit_block->_fns[n])();
+        for (callback_index = atexit_block->_ind; --callback_index >= 0;)
+            (*atexit_block->_fns[callback_index])();
 
     if (D_0012F76C->__cleanup != 0)
         (*D_0012F76C->__cleanup)(D_0012F76C);
