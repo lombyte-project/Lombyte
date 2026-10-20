@@ -16,9 +16,9 @@ typedef struct {
 extern Grid_270248 D_L07_00184270;
 extern int FUN_L00_00249d80(int);
 
-void FUN_L07_00270248(int x, int y0, int w, int h) {
+void FUN_L07_00270248(int x, int y0, int w, int height) {
     int y = y0;
-    for (; y < y0 + h; y++) {
+    for (; y < y0 + height; y++) {
         int rowbase = (y >> 5) << 4;
         int i;
         for (i = x; i < x + w; i++) {
