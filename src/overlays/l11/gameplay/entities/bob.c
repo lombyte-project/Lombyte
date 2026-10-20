@@ -1057,7 +1057,7 @@ typedef struct {
 
 
 /* Guard head update: in its watching states it turns its body and head toward the hero. */
-void FUN_L11_002d27b0(WM11 *m) {
+void FUN_L11_002d27b0(WM11 *moby) {
     enum {
         RESORT_OWNER_INITIALIZE = 0,
         RESORT_OWNER_CHECK_INITIAL_DIALOGUE = 1,
@@ -1070,13 +1070,13 @@ void FUN_L11_002d27b0(WM11 *m) {
         RESORT_OWNER_CHECK_POST_PATH_DIALOGUE = 14
     };
     WS11 scratch;
-    WD11b *d = (WD11b *)m->data;
+    WD11b *moby_vars = (WD11b *)moby->data;
     float rate;
     float head_rate;
     int tracking;
     rate = 0.02f;
     head_rate = 0.3f;
-    switch (m->state) {
+    switch (moby->state) {
     case RESORT_OWNER_INITIALIZE:
     case RESORT_OWNER_CHECK_INITIAL_DIALOGUE:
     case RESORT_OWNER_INITIAL_DIALOGUE:
@@ -1097,10 +1097,10 @@ void FUN_L11_002d27b0(WM11 *m) {
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, m->position);
+        qcopy(scratch.eye, moby->position);
         scratch.eye[2] += 1.0f;
         fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), m->yaw);
+        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), moby->yaw);
         pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.2217305f)
             yaw = 1.2217305f;
@@ -1110,14 +1110,14 @@ void FUN_L11_002d27b0(WM11 *m) {
             pitch = 0.2617994f;
         else if (pitch < -0.5235988f)
             pitch = -0.5235988f;
-        d->pitch = pitch;
-        d->yaw = yaw * 0.7f;
-        d->head_yaw = yaw * 0.3f;
+        moby_vars->pitch = pitch;
+        moby_vars->yaw = yaw * 0.7f;
+        moby_vars->head_yaw = yaw * 0.3f;
     }
     if (big_head_cheat_enabled)
-        d->height = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+        moby_vars->height = 2.75f;
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_vars->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_vars->head, 1);
 }
 /* Pokitaru sentry pvars (class of fred_pokitaru_update). */
 struct PokSentryVars {
