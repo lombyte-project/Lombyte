@@ -2366,12 +2366,12 @@ s32 hero_check_damage(s32 arg) {
         VEHICLE_MODE_CLANK = 1,
         VEHICLE_MODE_GIANT_CLANK = 2
     };
-    u8 *m;
+    u8 *hero_moby;
     T_210ce8 *tbl;
     u8 *mob;
     s32 flag;
     s32 id;
-    f32 a, b, e;
+    f32 horizontal_knockback_strength, b, e;
     V_210ce8 v;
 
     if (hero.state.control_mode == 0x14) {
@@ -2390,12 +2390,12 @@ s32 hero_check_damage(s32 arg) {
         return 0;
     }
     hero.unk2280 = 0;
-    m = ((u8 *)hero.moby);
-    if (m[0xA4] == 0xFF) {
+    hero_moby = ((u8 *)hero.moby);
+    if (hero_moby[0xA4] == 0xFF) {
         return 0;
     }
-    tbl = &moby_hits[m[0xA4]];
-    if (tbl->p34 != m) {
+    tbl = &moby_hits[hero_moby[0xA4]];
+    if (tbl->p34 != hero_moby) {
         return 0;
     }
     if (hero.vehicle_mode == 2) {
@@ -2483,13 +2483,13 @@ s32 hero_check_damage(s32 arg) {
             hero_set_state(HERO_STATE_HURT, 1);
         }
         e = D_0015ED6C_210ce8;
-        a = e * 5.7f;
+        horizontal_knockback_strength = e * 5.7f;
         b = e * 2.4f;
         if (hero.unk12E7 != 0) {
-            a = 0.0f;
+            horizontal_knockback_strength = 0.0f;
             b = e * 1.7f;
         }
-        FUN_L00_00210c80_210ce8(&v, flag, a, b);
+        FUN_L00_00210c80_210ce8(&v, flag, horizontal_knockback_strength, b);
         if (flag != 0 && tbl->b28 == 4) {
             v.f[2] += v.f[2];
         }
