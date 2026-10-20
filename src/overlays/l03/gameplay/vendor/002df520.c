@@ -294,31 +294,31 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 /* places the camera behind the hero and rebuilds its orientation axes */
-void FUN_L03_002eb7e0(char *m) {
-    char *d = *(char **)(m + 0x70);
-    float *a = (float *)(d + 0xB0);
-    float *b = (float *)(d + 0xF0);
-    float *c = (float *)(d + 0x100);
+void FUN_L03_002eb7e0(char *camera) {
+    char *camera_data = *(char **)(camera + 0x70);
+    float *a = (float *)(camera_data + 0xB0);
+    float *b = (float *)(camera_data + 0xF0);
+    float *camera_look_direction = (float *)(camera_data + 0x100);
     float back[4];
     float side[4];
     float pos[4];
     float look[4];
     float dir[4];
 
-    normalize_vector_xyz(side, &hero.gravity_dir, -*(float *)(d + 0xE0));
-    normalize_vector_xyz(back, b, -*(float *)(d + 0xD0));
+    normalize_vector_xyz(side, &hero.gravity_dir, -*(float *)(camera_data + 0xE0));
+    normalize_vector_xyz(back, b, -*(float *)(camera_data + 0xD0));
     add_vector_xyz(pos, &hero.motion.pos, side);
-    add_vector_xyz(m + 0x30, pos, back);
+    add_vector_xyz(camera + 0x30, pos, back);
     normalize_vector_xyz(look, &hero.gravity_dir, -a[5]);
     add_vector_xyz(look, &hero.motion.pos, look);
-    subtract_vector_xyz(dir, look, m + 0x30);
-    normalize_vector_xyz(c, dir, 1.0f);
-    normalize_vector_xyz(m, c, 1.0f);
-    normalize_vector_xyz(m + 0x40, m, 1.0f);
-    qcopy(m, m + 0x40);
-    cross_vectors_xyz(m + 0x10, m, &hero.gravity_dir);
-    normalize_vector_xyz(m + 0x10, m + 0x10, -1.0f);
-    cross_vectors_xyz(m + 0x20, m + 0x10, m);
+    subtract_vector_xyz(dir, look, camera + 0x30);
+    normalize_vector_xyz(camera_look_direction, dir, 1.0f);
+    normalize_vector_xyz(camera, camera_look_direction, 1.0f);
+    normalize_vector_xyz(camera + 0x40, camera, 1.0f);
+    qcopy(camera, camera + 0x40);
+    cross_vectors_xyz(camera + 0x10, camera, &hero.gravity_dir);
+    normalize_vector_xyz(camera + 0x10, camera + 0x10, -1.0f);
+    cross_vectors_xyz(camera + 0x20, camera + 0x10, camera);
 }
 #include "sda.h"
 extern void clear_u64_value_eb978(void *) __asm__("FUN_001f99f8");
