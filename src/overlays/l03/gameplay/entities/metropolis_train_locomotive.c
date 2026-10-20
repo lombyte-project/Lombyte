@@ -934,35 +934,35 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 
 void metropolis_train_carriage_update(struct Moby *moby) __asm__("FUN_L03_002953f8");
 void metropolis_train_carriage_update(struct Moby *moby) {
-    float a[4];
+    float position_delta[4];
     float v[4];
     char *data;
-    char *p;
-    char *q;
-    char *d1;
-    char *d0;
+    char *current_position;
+    char *current_rotation;
+    char *previous_rotation;
+    char *previous_position;
     data = (char *)moby->pvars;
     if ((moby->flags & 2) == 0) {
-        p = &moby->pos;
-        d0 = data + 0xA0;
-        d1 = data + 0xB0;
-        q = &moby->rot;
+        current_position = &moby->pos;
+        previous_position = data + 0xA0;
+        previous_rotation = data + 0xB0;
+        current_rotation = &moby->rot;
         if (moby->state == 0) {
             *(int *)(data + 0x60) = 0;
             *(short *)(data + 0x64) = 0;
             data[0x68] = 4;
             *(short *)(data + 0x7E) = 0xD;
             moby_point_position(moby, 0, v);
-            *(float *)(data + 0xC4) = FUN_001f9b48(p, v);
-            qcopy(d0, p);
-            qcopy(d1, q);
+            *(float *)(data + 0xC4) = FUN_001f9b48(current_position, v);
+            qcopy(previous_position, current_position);
+            qcopy(previous_rotation, current_rotation);
             *(int *)(data + 0x5C) = 3;
             moby->update_dist = moby->draw_dist = 0xFF;
         }
-        subtract_vector_xyz(a, p, d0);
-        update_entity_matrix(data + 0x20, a, d1, q);
-        qcopy(d0, p);
-        qcopy(d1, q);
+        subtract_vector_xyz(position_delta, current_position, previous_position);
+        update_entity_matrix(data + 0x20, position_delta, previous_rotation, current_rotation);
+        qcopy(previous_position, current_position);
+        qcopy(previous_rotation, current_rotation);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DB88), where it is exact; names translated to the US level program. */
