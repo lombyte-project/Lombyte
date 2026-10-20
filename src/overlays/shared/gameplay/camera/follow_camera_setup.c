@@ -151,7 +151,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     A_2e6000 *player_camera_state;
     A_2e6000 *x;
     f32 v[4];
-    f32 f, sum;
+    f32 rotation_or_blend_value, sum;
     s32 flag = 0;
     s32 nearby_moby_count, i;
     s16 k;
@@ -160,9 +160,9 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
 
     camera_override_state = (S220_2e6000 *)((u8 *)camera_moby->m + 0x220);
     if (hero.unk2284 == 0xD && camera_override_state->i10 != 0x14D) {
-        f = fast_add_rotations(hero.unk4E4, 3.14159265f);
-        v[0] = fast_cos(f);
-        v[1] = fast_sin(f);
+        rotation_or_blend_value = fast_add_rotations(hero.unk4E4, 3.14159265f);
+        v[0] = fast_cos(rotation_or_blend_value);
+        v[1] = fast_sin(rotation_or_blend_value);
         v[2] = 0.0f;
         FUN_L00_002e8918(v, 0.20943952f, v[2]);
         follow_camera_start_slide();
@@ -225,8 +225,8 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
             x = &player_camera[0];
             x->i260++;
             if (scale_game_frames(400) < x->i260) x->i260 = scale_game_frames(400);
-            f = convert_integer_to_float(x->i260) / convert_integer_to_float(scale_game_frames(400));
-            FUN_L00_002e8970(x->p25C + 0x10, f * 0.20943952f, 0.0f);
+            rotation_or_blend_value = convert_integer_to_float(x->i260) / convert_integer_to_float(scale_game_frames(400));
+            FUN_L00_002e8970(x->p25C + 0x10, rotation_or_blend_value * 0.20943952f, 0.0f);
         }
     }
     camera_override_state->i10 = 0;
@@ -277,15 +277,15 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         follow_camera_start_slide();
         k = ++m->h16;
         if (scale_game_frames(0x1E) < k) m->h16 = scale_game_frames(0x1E);
-        f = convert_integer_to_float(m->h16) / convert_integer_to_float(scale_game_frames(0x1E));
-        follow_camera_set_lateral_spring((D_L00_00161D88 - 0.015f) * f + 0.015f, 0.2f);
+        rotation_or_blend_value = convert_integer_to_float(m->h16) / convert_integer_to_float(scale_game_frames(0x1E));
+        follow_camera_set_lateral_spring((D_L00_00161D88 - 0.015f) * rotation_or_blend_value + 0.015f, 0.2f);
         D_L00_0015EF40 = 0.0f;
     } else if (m->h14 != 0) {
         fast_dec_timer_s16(&m->h14);
-        f = convert_integer_to_float(m->h14) / convert_integer_to_float(scale_game_frames(0x2D));
-        f *= -0.75f;
-        f += 0.75f;
-        D_L00_0015EF40 = f;
+        rotation_or_blend_value = convert_integer_to_float(m->h14) / convert_integer_to_float(scale_game_frames(0x2D));
+        rotation_or_blend_value *= -0.75f;
+        rotation_or_blend_value += 0.75f;
+        D_L00_0015EF40 = rotation_or_blend_value;
         m->h16 = 0;
     } else {
         m->h16 = 0;
