@@ -940,18 +940,18 @@ extern int D_L15_001ABE40[];
 extern int D_L15_0015FFD8;
 
 int FUN_L15_002ebfb0(int idx) {
-    unsigned short *p = (unsigned short *)D_L15_001ABE40[idx];
-    int n = 0;
+    unsigned short *moby_index_entry = (unsigned short *)D_L15_001ABE40[idx];
+    int missing_or_dying_count = 0;
     int base;
-    if (p == 0)
+    if (moby_index_entry == 0)
         return 0;
     base = D_L15_0015FFD8;
     do {
-        unsigned char *moby = (unsigned char *)(base + ((p[0] & 0x7FFF) << 8));
+        unsigned char *moby = (unsigned char *)(base + ((moby_index_entry[0] & 0x7FFF) << 8));
         if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD)
-            n++;
-    } while ((short)*p++ >= 0);
-    return n;
+            missing_or_dying_count++;
+    } while ((short)*moby_index_entry++ >= 0);
+    return missing_or_dying_count;
 }
 typedef struct {
     u8 pad[0x454];
