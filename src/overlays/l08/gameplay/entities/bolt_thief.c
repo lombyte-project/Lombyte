@@ -1188,7 +1188,7 @@ typedef struct {
 
 void FUN_L08_002e1d70(struct Moby *moby) {
     TargetBoardVars *vars = (TargetBoardVars *)moby->pvars;
-    struct Moby *m;
+    struct Moby *child_moby;
     s32 i;
     s32 pjoint;
 
@@ -1205,9 +1205,9 @@ void FUN_L08_002e1d70(struct Moby *moby) {
     vars->slots[1].anchor = moby;
     vars->slots[1].joint = 0;
     vars->slots[1].pjoint = pjoint;
-    m = FUN_L08_002e1c98((char *)moby, 0x1C2, 0, 4);
-    vars->slots[2].moby = m;
-    m->flags |= 0x8000;
+    child_moby = FUN_L08_002e1c98((char *)moby, 0x1C2, 0, 4);
+    vars->slots[2].moby = child_moby;
+    child_moby->flags |= 0x8000;
     vars->slots[2].anchor = moby;
     vars->slots[2].joint = 0;
     vars->slots[2].pjoint = 4;
