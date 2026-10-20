@@ -394,15 +394,15 @@ extern char D_0013E533[];
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L01_0030d260(void *unused, float *p) {
-    float a[4];
+void FUN_L01_0030d260(void *unused, float *destination_position) {
+    float normalized_offset[4];
     float b[4];
     char *g = D_0013E533 + 0xE1D;
-    fast_vec_normalize(a, *(char **)(g + 0x2080) + 0xD0, 1.1f);
+    fast_vec_normalize(normalized_offset, *(char **)(g + 0x2080) + 0xD0, 1.1f);
     fast_vec_normalize(b, *(char **)(g + 0x2080) + 0xE0, 1.0f);
-    fast_vec_add(p, a, b);
-    fast_vec_add(p, p, g + 0x80);
-    p[2] = p[2] + 1.0f;
+    fast_vec_add(destination_position, normalized_offset, b);
+    fast_vec_add(destination_position, destination_position, g + 0x80);
+    destination_position[2] = destination_position[2] + 1.0f;
 }
 #include "qcopy.h"
 #include "rnc/overlay/collision.h"
