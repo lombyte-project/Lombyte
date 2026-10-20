@@ -129,23 +129,23 @@ extern char *D_L05_001B0930[];
 extern int FUN_L00_0025d7a0(char *, int, int, int);
 
 void FUN_L05_00307358(char *moby) {
-    char *d = *(char **)(moby + 0x78);
-    char *cur = *(char **)(d + 0x244);
+    char *moby_data = *(char **)(moby + 0x78);
+    char *cur = *(char **)(moby_data + 0x244);
     int idx;
     int off;
-    if (cur != D_L05_001B0930[*(int *)(d + 0x220)]) {
-        if (*(float *)(d + 0x24C) <= 0.0f) {
-            idx = *(short *)(d + 0x258);
+    if (cur != D_L05_001B0930[*(int *)(moby_data + 0x220)]) {
+        if (*(float *)(moby_data + 0x24C) <= 0.0f) {
+            idx = *(short *)(moby_data + 0x258);
             off = idx * 16;
             if (*(float *)(cur + off + 0x1C) == 1.0f) {
                 while (*(float *)(cur + off + 0x1C) != 2.0f) {
                     idx = FUN_L00_0025d7a0(cur, idx, 1, 1);
-                    cur = *(char **)(d + 0x244);
+                    cur = *(char **)(moby_data + 0x244);
                     off = idx * 16;
                 }
-                *(int *)(d + 0x27C) = idx;
-                qcopy(d + 0x210, *(char **)(d + 0x244) + idx * 16 + 0x10);
-                *(int *)(d + 0x26C) = 1;
+                *(int *)(moby_data + 0x27C) = idx;
+                qcopy(moby_data + 0x210, *(char **)(moby_data + 0x244) + idx * 16 + 0x10);
+                *(int *)(moby_data + 0x26C) = 1;
             }
         }
     }
