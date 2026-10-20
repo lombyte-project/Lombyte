@@ -110,25 +110,25 @@ extern u8 *D_L01_001B25E0[];
 
 Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) __asm__("FUN_L01_00287b00");
 Particle *pool_bubble(u128 *pos, u128 *vel, f32 scale) {
-    Particle *p;
+    Particle *particle;
     s32 gray_channel;
     u32 col;
 
-    p = create_part(0x38);
-    if (p != 0) {
-        qcopy(&p->pos, pos);
+    particle = create_part(0x38);
+    if (particle != 0) {
+        qcopy(&particle->pos, pos);
         gray_channel = random_integer_below(0x10) * 2 + 0x60;
         col = (gray_channel << 8) | 0x40000000;
-        p->color = (gray_channel << 16) | col | gray_channel;
-        p->alpha = truncate_float_to_s32(4.0f) + 0x20;
-        p->kind = 0x48;
-        p->active = 0;
-        p->tex = *D_L01_001B25E0[0];
-        p->scale = scale;
-        qcopy(&p->m.pos, vel);
-        p->spin = random_integer_below(0x100);
+        particle->color = (gray_channel << 16) | col | gray_channel;
+        particle->alpha = truncate_float_to_s32(4.0f) + 0x20;
+        particle->kind = 0x48;
+        particle->active = 0;
+        particle->tex = *D_L01_001B25E0[0];
+        particle->scale = scale;
+        qcopy(&particle->m.pos, vel);
+        particle->spin = random_integer_below(0x100);
     }
-    return p;
+    return particle;
 }
 extern u8 *D_L01_001B25E4[];
 void *create_part(s32) __asm__("FUN_L00_002678b8");
