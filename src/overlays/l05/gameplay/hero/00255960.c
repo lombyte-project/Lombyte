@@ -145,6 +145,7 @@ void FUN_L05_00255960(void) {
         HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET = 27,
         HERO_STATE_LEDGE_JUMP = 28,
         HERO_STATE_JUMP_ENABLED_RESPAWN_WAIT = 104,
+        HERO_STATE_ANIMATION_END_RESPAWN_WAIT = 106,
         HERO_STATE_BELOW_LEVEL_RESPAWN_WAIT = 119,
         HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT = 123,
         HERO_STATE_FATAL_HURT_RESPAWN_WAIT = 124,
@@ -464,7 +465,7 @@ void FUN_L05_00255960(void) {
                 case 71:
                 case 87:
                 case 98:
-                case 106:
+                case HERO_STATE_ANIMATION_END_RESPAWN_WAIT:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
