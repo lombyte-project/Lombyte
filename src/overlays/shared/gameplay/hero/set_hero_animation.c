@@ -491,9 +491,9 @@ void FUN_L00_002325e0(int bank, int seq) {
 }
 /* Sets the word at 0xAB0 of hero to -1 and clears the one at 0xAB8. */
 void FUN_L00_00232628(void) {
-    struct Hero *p = &hero;
-    p->unkAB0 = -1;
-    p->unkAB8 = 0;
+    struct Hero *hero_base = &hero;
+    hero_base->unkAB0 = -1;
+    hero_base->unkAB8 = 0;
 }
 #define NOT_SDA
 
