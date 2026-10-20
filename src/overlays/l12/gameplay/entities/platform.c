@@ -2262,15 +2262,15 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
 void FUN_L12_002e8608(struct Moby *moby, float *pos) {
     char *data = (char *)moby->pvars;
-    float a = fast_arc_tan(pos[0] - moby->pos.x, pos[1] - moby->pos.y);
-    float d = fast_subtract_rotations(a, moby->rot.z);
-    if (d > 1.2217305f) {
-        d = 1.2217305f;
-    } else if (d < -1.2217305f) {
-        d = -1.2217305f;
+    float target_yaw = fast_arc_tan(pos[0] - moby->pos.x, pos[1] - moby->pos.y);
+    float yaw_offset = fast_subtract_rotations(target_yaw, moby->rot.z);
+    if (yaw_offset > 1.2217305f) {
+        yaw_offset = 1.2217305f;
+    } else if (yaw_offset < -1.2217305f) {
+        yaw_offset = -1.2217305f;
     }
-    *(float *)(data + 0x188) = d * 0.35f;
-    *(float *)(data + 0x208) = d * 0.8f;
+    *(float *)(data + 0x188) = yaw_offset * 0.35f;
+    *(float *)(data + 0x208) = yaw_offset * 0.8f;
 }
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
