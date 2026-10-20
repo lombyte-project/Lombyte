@@ -14,22 +14,22 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L03_00260130(int a, int *b, int *c, float *d, int e) {
-    unsigned char *p = create_part(0x31);
-    if (p != 0) {
-        float *q;
-        *(int *)(p + 0x4) = 0x7FFFFFFF;
-        *(int *)(p + 0xC) = 0xFFFFFFF;
-        p[0x9] = func_001FA898_r(2.0f) + 0x70;
-        p[0x3] = 0x44;
-        q = (float *)(p + 0x30);
-        p[0x1] = 2;
-        qcopy(p + 0x10, c);
-        qcopy(p + 0x20, b);
-        q[0] = d[0];
-        q[1] = d[1];
-        q[2] = d[2];
-        *(int *)(q + 3) = a;
-        *(short *)(p + 0xA) = e;
+void FUN_L03_00260130(int a, int *b, int *c, float *source_floats, int e) {
+    unsigned char *created_part = create_part(0x31);
+    if (created_part != 0) {
+        float *destination_floats;
+        *(int *)(created_part + 0x4) = 0x7FFFFFFF;
+        *(int *)(created_part + 0xC) = 0xFFFFFFF;
+        created_part[0x9] = func_001FA898_r(2.0f) + 0x70;
+        created_part[0x3] = 0x44;
+        destination_floats = (float *)(created_part + 0x30);
+        created_part[0x1] = 2;
+        qcopy(created_part + 0x10, c);
+        qcopy(created_part + 0x20, b);
+        destination_floats[0] = source_floats[0];
+        destination_floats[1] = source_floats[1];
+        destination_floats[2] = source_floats[2];
+        *(int *)(destination_floats + 3) = a;
+        *(short *)(created_part + 0xA) = e;
     }
 }
