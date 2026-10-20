@@ -2181,7 +2181,7 @@ void water_current_update(Moby *self)
     Vec4 ahead;
     Vec4 dir;
     Vec4 pull;
-    f32 t;
+    f32 path_segment_index;
     s32 seg;
     s32 at_end;
     f32 dist;
@@ -2210,8 +2210,8 @@ void water_current_update(Moby *self)
         && hero.state.prev != 0x12) {
         return;
     }
-    FUN_L00_0025df68(path, &hero.motion.pos, &nearest, &t, &seg, 0, 999.0f, 5.0f, 0.0f);
-    at_end = sample_path(path, &ahead, &t, &seg, 0, 2.0f);
+    FUN_L00_0025df68(path, &hero.motion.pos, &nearest, &path_segment_index, &seg, 0, 999.0f, 5.0f, 0.0f);
+    at_end = sample_path(path, &ahead, &path_segment_index, &seg, 0, 2.0f);
     dist = vector_distance(&hero.motion.pos, &nearest);
     if (v->radius < dist) {
         return;
