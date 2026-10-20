@@ -73,7 +73,7 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
     SysBit bs;
     PssHdr hdr;
     SysBit *b;
-    PssHdr *h;
+    PssHdr *pss_header;
     sceMpegCbDataStr cb;
     sceMpegCallback cbfunc = 0;
     void *cbdata = 0;
@@ -85,7 +85,7 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
     int headerpos;
 
     cont = 1;
-    h = &hdr;
+    pss_header = &hdr;
     sys = mp->sys;
     tbl = sys->tbl;
     _sysbitInit(&bs, start, bufstart, bufsize);
@@ -106,35 +106,35 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
     }
     for (;;) {
         if (SignExtendPackedValue(b, 32) == 0x1BA) {
-            _pack_header(b, &h->pack);
+            _pack_header(b, &pss_header->pack);
         }
         while (SignExtendPackedValue(b, 24) == 1 && SignExtendPackedValue(b, 32) != 0x1BA &&
                SignExtendPackedValue(b, 32) != 0x1B9 && b->pos < size * 8 && cont) {
-            _PES_packet(sys, b, &h->pes);
+            _PES_packet(sys, b, &pss_header->pes);
             if (b->pos > size * 8) {
                 continue;
             }
             for (i = 0; i < sys->n; i++) {
-                if (tbl[i].id == (h->pes.id & tbl[i].mask)) {
-                    headerpos = h->pes.header;
+                if (tbl[i].id == (pss_header->pes.id & tbl[i].mask)) {
+                    headerpos = pss_header->pes.header;
                     cb.type = 6;
                     cb.header = GetSysbitPointer(b, headerpos);
-                    cb.data = GetSysbitPointer(b, h->pes.data);
-                    cb.len = h->pes.datalen;
-                    cb.pts = h->pes.pts;
-                    cb.dts = h->pes.dts;
+                    cb.data = GetSysbitPointer(b, pss_header->pes.data);
+                    cb.len = pss_header->pes.datalen;
+                    cb.pts = pss_header->pes.pts;
+                    cb.dts = pss_header->pes.dts;
                     cont = tbl[i].func(mp, &cb, tbl[i].data);
                     break;
                 }
             }
             if (i == sys->n && cbfunc != 0) {
-                headerpos = h->pes.header;
+                headerpos = pss_header->pes.header;
                 cb.type = 6;
                 cb.header = GetSysbitPointer(b, headerpos);
-                cb.data = GetSysbitPointer(b, h->pes.data);
-                cb.len = h->pes.datalen;
-                cb.pts = h->pes.pts;
-                cb.dts = h->pes.dts;
+                cb.data = GetSysbitPointer(b, pss_header->pes.data);
+                cb.len = pss_header->pes.datalen;
+                cb.pts = pss_header->pes.pts;
+                cb.dts = pss_header->pes.dts;
                 cont = cbfunc(mp, &cb, cbdata);
             }
             if (cont) {
