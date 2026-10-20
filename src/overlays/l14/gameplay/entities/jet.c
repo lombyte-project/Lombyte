@@ -752,7 +752,7 @@ void FUN_L14_002eb810(struct Moby *m);
 extern int D_L14_00161C10 __attribute__((sda));
 extern int D_L14_00161C2C __attribute__((sda));
 void FUN_L14_002eb568(struct Moby *m) {
-    Spk_k *d = (Spk_k *)m->pvars;
+    Spk_k *spark_vars = (Spk_k *)m->pvars;
     float dir[4];
     float clip[4];
     float work[4];
@@ -768,41 +768,41 @@ void FUN_L14_002eb568(struct Moby *m) {
     dir[2] = 0.0f;
     qcopy(clip, &hero.motion.pos);
     clip[2] += 1.0f;
-    in_clip = spark_inside_clip_volume(clip, d->i504);
+    in_clip = spark_inside_clip_volume(clip, spark_vars->i504);
     i = 0;
-    pos = d->pos[0];
-    shade = d->n3E0;
+    pos = spark_vars->pos[0];
+    shade = spark_vars->n3E0;
     do {
-        if (tick_spark_timer(&d->n320[i]) != 0) {
+        if (tick_spark_timer(&spark_vars->n320[i]) != 0) {
             if (in_clip == 0 || i < 24) {
                 FUN_L14_002eb388(m, i, dir);
             }
         } else {
             opacity = D_L14_00161C10;
-            if (d->n380[i] - D_L14_00161C2C < d->n320[i]) {
-                first = spark_integer_to_float(d->n380[i] - d->n320[i]);
+            if (spark_vars->n380[i] - D_L14_00161C2C < spark_vars->n320[i]) {
+                first = spark_integer_to_float(spark_vars->n380[i] - spark_vars->n320[i]);
                 first = first / spark_integer_to_float(D_L14_00161C2C);
             } else {
-                first = spark_integer_to_float(d->n320[i]);
-                first = first / spark_integer_to_float(d->n380[i] - D_L14_00161C2C);
+                first = spark_integer_to_float(spark_vars->n320[i]);
+                first = first / spark_integer_to_float(spark_vars->n380[i] - D_L14_00161C2C);
             }
             {
-                int s = spark_float_to_integer(((float)opacity - 0.0f) * first + 0.0f);
-                *shade = s;
+                int spark_alpha = spark_float_to_integer(((float)opacity - 0.0f) * first + 0.0f);
+                *shade = spark_alpha;
                 /* Fakematch: storing the shade again is a no-op that reload's cse drops; the
                  * extra uses rank `shade` above `m` for register allocation as in retail. */
-                if (s != 0) {
-                    *shade = s;
+                if (spark_alpha != 0) {
+                    *shade = spark_alpha;
                 }
             }
-            spark_scale_vector(work, dir, d->f440[i]);
+            spark_scale_vector(work, dir, spark_vars->f440[i]);
             spark_add_vector(pos, pos, work);
             if (in_clip != 0 &&
                 spark_absolute_float(pos[0] - D_L14_00167380_spark.x) < 8.0f &&
                 spark_absolute_float(pos[1] - D_L14_00167380_spark.y) < 8.0f &&
                 spark_angle_difference(m->rot.z, D_L14_00167380_spark.yaw) > 2.3561945f) {
-                if (d->n320[i] > spark_scale_frames(20)) {
-                    d->n320[i] = spark_scale_frames(20);
+                if (spark_vars->n320[i] > spark_scale_frames(20)) {
+                    spark_vars->n320[i] = spark_scale_frames(20);
                 }
             }
         }
