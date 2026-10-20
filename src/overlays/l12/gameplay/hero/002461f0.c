@@ -127,6 +127,7 @@ void FUN_L12_002461f0(void) {
         HERO_STATE_LOOK_RELEASE_WAIT = 30,
         HERO_STATE_ITEM_MOBY_FRAME_EXIT_WAIT = 32,
         HERO_STATE_JUMP_CANCEL_FRAME_EXIT_WAIT = 35,
+        HERO_STATE_ITEM_RELEASE_SPEED_RESTORE_WAIT = 38,
         HERO_STATE_ITEM_ANIMATION_RELEASE_GATE = 46,
         HERO_STATE_ITEM_BUTTON_RELEASE_SEQUENCE_EXIT_WAIT = 48,
         HERO_STATE_CIRCLE_RELEASE_WAIT = 89,
@@ -1142,7 +1143,7 @@ void FUN_L12_002461f0(void) {
                     hero.unk944 = frame_time_sq * 42.0f;
                     hero.unk940 = frame_time_sq * 29.0f;
                     break;
-                case 38:
+                case HERO_STATE_ITEM_RELEASE_SPEED_RESTORE_WAIT:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
