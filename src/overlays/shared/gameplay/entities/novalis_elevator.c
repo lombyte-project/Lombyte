@@ -2654,17 +2654,17 @@ extern char *FUN_L00_002db890(char *);
 extern int FUN_L00_002dbc30(char *, int, int, float);
 extern void FUN_0022da68(int, int, char *);
 
-int FUN_L01_002f1d18(char *m, int a, int b, float f) {
-    char *h = FUN_L00_002db890(m);
-    int r = FUN_L00_002dbc30(m, a, b, f);
+int FUN_L01_002f1d18(char *moby, int a, int b, float f) {
+    char *h = FUN_L00_002db890(moby);
+    int r = FUN_L00_002dbc30(moby, a, b, f);
     if (r != 0) {
-        m[0x20] = 7;
-    } else if ((unsigned char)m[0x20] == 7) {
-        m[0x20] = 1;
+        moby[0x20] = 7;
+    } else if ((unsigned char)moby[0x20] == 7) {
+        moby[0x20] = 1;
     }
     if (h != 0) {
         if (*(short *)(h + 0x68) == 6) {
-            FUN_0022da68(2, 0, m);
+            FUN_0022da68(2, 0, moby);
         }
     }
     return r;
