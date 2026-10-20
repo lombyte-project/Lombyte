@@ -20,7 +20,7 @@ extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 #define TF(o) (D_L00_0017A680.f[(o) / 4])
 
 void FUN_L00_00215340(void) {
-    f32 v, nv, k, a, s, ang;
+    f32 v, nv, k, run_pose_magnitude, motion_correction_scale, ang;
     f32 w, nw;
     f32 b, c1, c2, c3;
     f32 x;
@@ -58,9 +58,9 @@ void FUN_L00_00215340(void) {
             w = w * absolute_float(w) * 1.25f;
             TF(0x118) = w;
             TF(0x278) = w;
-            a = absolute_float(w);
+            run_pose_magnitude = absolute_float(w);
             nw = -w;
-            TF(0x274) = a * 0.25f;
+            TF(0x274) = run_pose_magnitude * 0.25f;
             TF(0x958) = nw * 0.35f;
             TF(0xA08) = nw * 0.3f;
             TF(0xAB8) = nw * 0.3f;
@@ -97,9 +97,9 @@ void FUN_L00_00215340(void) {
         if (hero.state.current == 0x81) {
             if (frame_time * 0.5f < hero.motion.unk164) {
                 ang = fast_subtract_rotations(fast_arc_tan(hero.motion.displacement.f[0], hero.motion.displacement.f[1]), hero.motion.rot.f[2]);
-                s = hero.motion.unk164 * 3.0f;
-                TF(0x60) = -fast_sin(ang) * s;
-                TF(0x64) = fast_cos(ang) * s;
+                motion_correction_scale = hero.motion.unk164 * 3.0f;
+                TF(0x60) = -fast_sin(ang) * motion_correction_scale;
+                TF(0x64) = fast_cos(ang) * motion_correction_scale;
                 if (0.43633232f < TF(0x60)) TF(0x60) = 0.43633232f;
                 else if (TF(0x60) < -0.43633232f) TF(0x60) = -0.43633232f;
                 if (0.43633232f < TF(0x64)) TF(0x64) = 0.43633232f;
