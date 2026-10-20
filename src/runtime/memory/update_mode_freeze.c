@@ -52,6 +52,9 @@ void update_mode_freeze(void) {
     enum {
         FREEZE_MODE_VIDEO_MODE_TEST = 6
     };
+    enum {
+        FREEZE_CHOICE_AWAIT_INPUT = 1
+    };
     s32 video_mode;
     s32 step;
     sound_update();
@@ -172,7 +175,7 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case 1:
+        case FREEZE_CHOICE_AWAIT_INPUT:
             if (controller_state.pressed & PAD_CROSS) {
                 freeze.unk1C = 2;
             } else if (controller_state.pressed & (PAD_CIRCLE | PAD_START)) {
