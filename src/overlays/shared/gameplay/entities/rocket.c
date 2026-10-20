@@ -23,19 +23,19 @@ extern float func_001F9B88_298940(float) __asm__("FUN_001f99c0");
 extern unsigned char *func_L00_00273E08_298940(void *, int, unsigned char, int, int, int, int,
                                                float) __asm__("FUN_L00_00272f68");
 extern int func_001FA898_298940(float) __asm__("FUN_001fa6d0");
-void FUN_L10_00298940(char *m) {
-    L10SpriteData_298940 *sprite_data = *(L10SpriteData_298940 **)(m + 0x78);
+void FUN_L10_00298940(char *moby) {
+    L10SpriteData_298940 *sprite_data = *(L10SpriteData_298940 **)(moby + 0x78);
     float d[4] __attribute__((aligned(16)));
     float e[4] __attribute__((aligned(16)));
     int i, col;
     float f;
 
-    *(float *)(m + 0x18) += 0.5f;
-    func_001F9BF0_298940(d, D_L10_00167240, m + 0x10);
+    *(float *)(moby + 0x18) += 0.5f;
+    func_001F9BF0_298940(d, D_L10_00167240, moby + 0x10);
     func_L00_001FF4B0_298940(d, d, -0.3f);
     func_L00_001FF4B0_298940(e, d, 0.1f);
-    func_001F9BD8_298940(d, d, m + 0x10);
-    *(float *)(m + 0x18) -= 0.5f;
+    func_001F9BD8_298940(d, d, moby + 0x10);
+    *(float *)(moby + 0x18) -= 0.5f;
     for (i = 0; i < 4; i++) {
         float phase_sum = sprite_data->a[i] + sprite_data->b[i];
         sprite_data->a[i] = phase_sum;
