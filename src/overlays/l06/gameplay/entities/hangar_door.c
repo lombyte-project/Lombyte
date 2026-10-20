@@ -3229,44 +3229,44 @@ extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_0021
 extern void FUN_L00_00261d78(f32, s32, void *, void *);
 
 /* Circles its centre point on the side away from the hero (at most 45 degrees per step), faces its focus moby, moves while the hero is within 16 units and snaps to the ground. */
-void FUN_L06_002fbc88(struct Moby *m) {
-    CirclerVars *v = (CirclerVars *)m->pvars;
+void FUN_L06_002fbc88(struct Moby *moby) {
+    CirclerVars *v = (CirclerVars *)moby->pvars;
     struct Moby *focus = v->focus;
     Vec4f goal, step;
     f32 hero_ang;
     f32 self_ang;
-    f32 d;
+    f32 orbit_angle_radians;
 
     hero_ang = angle_atan2(hero.motion.pos.f[0] - v->center.x, hero.motion.pos.f[1] - v->center.y);
-    self_ang = angle_atan2(m->pos.x - v->center.x, m->pos.y - v->center.y);
-    d = fast_subtract_rotations(fast_add_rotations(hero_ang, 3.14159f), self_ang);
-    if (d > 0.7853982f)
-        d = 0.7853982f;
-    else if (d < -0.7853982f)
-        d = -0.7853982f;
-    d = fast_add_rotations(d, self_ang);
-    goal.x = fast_cos(d) * v->radius;
-    goal.y = fast_sin(d) * v->radius;
+    self_ang = angle_atan2(moby->pos.x - v->center.x, moby->pos.y - v->center.y);
+    orbit_angle_radians = fast_subtract_rotations(fast_add_rotations(hero_ang, 3.14159f), self_ang);
+    if (orbit_angle_radians > 0.7853982f)
+        orbit_angle_radians = 0.7853982f;
+    else if (orbit_angle_radians < -0.7853982f)
+        orbit_angle_radians = -0.7853982f;
+    orbit_angle_radians = fast_add_rotations(orbit_angle_radians, self_ang);
+    goal.x = fast_cos(orbit_angle_radians) * v->radius;
+    goal.y = fast_sin(orbit_angle_radians) * v->radius;
     goal.z = 0.0f;
     add_vector_xyz(&goal, &goal, &v->center);
-    approach_angle(&m->rot.z, angle_atan2(focus->pos.x - m->pos.x, focus->pos.y - m->pos.y),
+    approach_angle(&moby->rot.z, angle_atan2(focus->pos.x - moby->pos.x, focus->pos.y - moby->pos.y),
                            &v->yaw_vel, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                            frame_time * 3.1415927f);
-    if (circler_dist(&m->pos, &goal) > 1.0f && vector_distance(&m->pos, &hero.motion.pos) < 16.0f)
+    if (circler_dist(&moby->pos, &goal) > 1.0f && vector_distance(&moby->pos, &hero.motion.pos) < 16.0f)
         approach_value(&v->speed, D_L06_00161EF8 * frame_time, D_L06_00161EFC * frame_time_sq);
     else
         approach_value(&v->speed, 0.0f, D_L06_00161EFC * frame_time_sq);
     if (v->speed == 0.0f) {
-        if (m->prev_seq != 1)
-            blend_moby_animation(m, 1, 0, scale_game_frames(20));
-    } else if (m->prev_seq != 0) {
-        blend_moby_animation(m, 0, 0, scale_game_frames(20));
+        if (moby->prev_seq != 1)
+            blend_moby_animation(moby, 1, 0, scale_game_frames(20));
+    } else if (moby->prev_seq != 0) {
+        blend_moby_animation(moby, 0, 0, scale_game_frames(20));
     }
-    subtract_vector_xyz(&step, &goal, &m->pos);
+    subtract_vector_xyz(&step, &goal, &moby->pos);
     step.z = 0.0f;
     normalize_vector_xyz(&step, &step, v->speed);
-    add_vector_xyz(&m->pos, &m->pos, &step);
-    FUN_L00_00261d78(1.0f, v->ground, &m->pos, &m->pos);
+    add_vector_xyz(&moby->pos, &moby->pos, &step);
+    FUN_L00_00261d78(1.0f, v->ground, &moby->pos, &moby->pos);
 }
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
