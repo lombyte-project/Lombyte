@@ -30,7 +30,7 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void door_update(struct Moby *m) __asm__("FUN_L17_002e87d8");
-void door_update(struct Moby *m) {
+void door_update(struct Moby *door_moby) {
     enum {
         DOOR_STATE_INITIALIZE = 0,
         DOOR_STATE_WAIT_AT_ORIGIN = 1,
@@ -38,173 +38,173 @@ void door_update(struct Moby *m) {
         DOOR_STATE_WAIT_DISPLACED = 4,
         DOOR_STATE_RETURN_TO_ORIGIN = 5
     };
-    char *d = (char *)m->pvars;
+    char *door_vars = (char *)door_moby->pvars;
     float v[4];
-    float tmp[4];
+    float updated_position[4];
     float ang;
     float k;
     float k2;
     float f;
     int idx;
 
-    if ((*(int *)(d + ((0x18)))) == -1 || (*(int *)(d + ((0x1C)))) == -1) {
-        mark_moby_for_removal(m);
+    if ((*(int *)(door_vars + ((0x18)))) == -1 || (*(int *)(door_vars + ((0x1C)))) == -1) {
+        mark_moby_for_removal(door_moby);
         return;
     }
     if (D_L17_0015F5C4 == 2)
         return;
-    switch (m->state) {
+    switch (door_moby->state) {
     case DOOR_STATE_INITIALIZE:
-        if ((m->oclass) == 0x550 || (m->oclass) == 0x551 ||
-            (m->oclass) == 0x553 || (m->oclass) == 0x557 ||
-            (m->oclass) == 0x55D) {
-            m->command = 1;
+        if ((door_moby->oclass) == 0x550 || (door_moby->oclass) == 0x551 ||
+            (door_moby->oclass) == 0x553 || (door_moby->oclass) == 0x557 ||
+            (door_moby->oclass) == 0x55D) {
+            door_moby->command = 1;
         }
-        *(OvlQuad *)d = *(OvlQuad *)&m->pos;
-        m->state = 1;
+        *(OvlQuad *)door_vars = *(OvlQuad *)&door_moby->pos;
+        door_moby->state = 1;
         break;
     case DOOR_STATE_MOVE_AWAY_FROM_ORIGIN:
-        if (m->pclass->sound_defs != 0 &&
-            voice_is_playing(m, (*(int *)(d + ((0x20))))) == 0) {
-            (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
+        if (door_moby->pclass->sound_defs != 0 &&
+            voice_is_playing(door_moby, (*(int *)(door_vars + ((0x20))))) == 0) {
+            (*(int *)(door_vars + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)door_moby);
         }
         k = frame_time * 3.0f;
-        f = (*(float *)(d + ((0x14))));
-        if (m->command == 0)
+        f = (*(float *)(door_vars + ((0x14))));
+        if (door_moby->command == 0)
             k = -k;
-        (*(float *)(d + ((0x14)))) = f + k;
-        if ((m->oclass) == 0x55C || (m->oclass) == 0x55D ||
-            (m->oclass) == 0x557 || (m->oclass) == 0x559) {
-            ang = fast_add_rotations(1.5707964f, m->rot.z);
-            v[0] = fast_cos(ang) * (*(float *)(d + ((0x14))));
-            v[1] = fast_sin(ang) * (*(float *)(d + ((0x14))));
+        (*(float *)(door_vars + ((0x14)))) = f + k;
+        if ((door_moby->oclass) == 0x55C || (door_moby->oclass) == 0x55D ||
+            (door_moby->oclass) == 0x557 || (door_moby->oclass) == 0x559) {
+            ang = fast_add_rotations(1.5707964f, door_moby->rot.z);
+            v[0] = fast_cos(ang) * (*(float *)(door_vars + ((0x14))));
+            v[1] = fast_sin(ang) * (*(float *)(door_vars + ((0x14))));
             v[2] = 0.0f;
         } else {
-            v[0] = fast_cos(m->rot.z) * (*(float *)(d + ((0x14))));
-            v[1] = fast_sin(m->rot.z) * (*(float *)(d + ((0x14))));
+            v[0] = fast_cos(door_moby->rot.z) * (*(float *)(door_vars + ((0x14))));
+            v[1] = fast_sin(door_moby->rot.z) * (*(float *)(door_vars + ((0x14))));
             v[2] = 0.0f;
         }
-        add_vector_xyz(tmp, d, v);
-        *(OvlQuad *)&m->pos = *(OvlQuad *)tmp;
-        if (absolute_float_c((*(float *)(d + ((0x14))))) > 2.0f) {
-            idx = (*(int *)(d + ((0x20))));
+        add_vector_xyz(updated_position, door_vars, v);
+        *(OvlQuad *)&door_moby->pos = *(OvlQuad *)updated_position;
+        if (absolute_float_c((*(float *)(door_vars + ((0x14))))) > 2.0f) {
+            idx = (*(int *)(door_vars + ((0x20))));
             if (idx != -1) {
                 char *e = (char *)D_0013E633 - 0xE80 + idx * 0x70;
-                if (*(char **)(e + 0x88) == m) {
+                if (*(char **)(e + 0x88) == door_moby) {
                     if (*(unsigned char *)(e + 0x74) != 0)
                         release_voice_slot(idx);
                 }
             }
-            (*(int *)(d + ((0x20)))) = -1;
-            m->state = 4;
+            (*(int *)(door_vars + ((0x20)))) = -1;
+            door_moby->state = 4;
         }
         break;
     case DOOR_STATE_WAIT_AT_ORIGIN:
-        (*(float *)(d + ((0x14)))) = 0.0f;
-        idx = (*(int *)(d + ((0x20))));
+        (*(float *)(door_vars + ((0x14)))) = 0.0f;
+        idx = (*(int *)(door_vars + ((0x20))));
         if (idx != -1) {
             char *e = (char *)D_0013E633 - 0xE80 + idx * 0x70;
-            if (*(char **)(e + 0x88) == m) {
+            if (*(char **)(e + 0x88) == door_moby) {
                 if (*(unsigned char *)(e + 0x74) != 0)
                     release_voice_slot(idx);
             }
         }
-        (*(int *)(d + ((0x20)))) = -1;
-        if (absolute_float_c(m->rot.x) < 0.7853982f ||
+        (*(int *)(door_vars + ((0x20)))) = -1;
+        if (absolute_float_c(door_moby->rot.x) < 0.7853982f ||
             hero.unk308 != 0) {
-            if (is_point_inside_clip_volume(&hero.motion.pos, (*(int *)(d + ((0x18))))) == 0) {
-                if ((*(int *)(d + ((0x10)))) == -1)
+            if (is_point_inside_clip_volume(&hero.motion.pos, (*(int *)(door_vars + ((0x18))))) == 0) {
+                if ((*(int *)(door_vars + ((0x10)))) == -1)
                     break;
-                if (is_point_inside_clip_volume(D_L17_0015FFD8 + (*(int *)(d + ((0x10)))) * 0x100 +
+                if (is_point_inside_clip_volume(D_L17_0015FFD8 + (*(int *)(door_vars + ((0x10)))) * 0x100 +
                                                     0x10,
-                                                (*(int *)(d + ((0x18))))) == 0)
+                                                (*(int *)(door_vars + ((0x18))))) == 0)
                     break;
             }
-            if (m->pclass->sound_defs != 0 &&
-                voice_is_playing(m, (*(int *)(d + ((0x20))))) == 0) {
-                (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
+            if (door_moby->pclass->sound_defs != 0 &&
+                voice_is_playing(door_moby, (*(int *)(door_vars + ((0x20))))) == 0) {
+                (*(int *)(door_vars + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)door_moby);
             }
-            m->state = 2;
+            door_moby->state = 2;
         }
         break;
     case 3:
         break;
     case DOOR_STATE_WAIT_DISPLACED:
-        idx = (*(int *)(d + ((0x20))));
+        idx = (*(int *)(door_vars + ((0x20))));
         if (idx != -1) {
             char *e = (char *)D_0013E633 - 0xE80 + idx * 0x70;
-            if (*(char **)(e + 0x88) == m) {
+            if (*(char **)(e + 0x88) == door_moby) {
                 if (*(unsigned char *)(e + 0x74) != 0)
                     release_voice_slot(idx);
             }
         }
-        (*(int *)(d + ((0x20)))) = -1;
-        if (is_point_inside_clip_volume(&hero.motion.pos, (*(int *)(d + ((0x1C))))))
+        (*(int *)(door_vars + ((0x20)))) = -1;
+        if (is_point_inside_clip_volume(&hero.motion.pos, (*(int *)(door_vars + ((0x1C))))))
             break;
-        if (is_point_inside_clip_volume(D_L17_001676C0, (*(int *)(d + ((0x1C))))))
+        if (is_point_inside_clip_volume(D_L17_001676C0, (*(int *)(door_vars + ((0x1C))))))
             break;
-        if ((*(int *)(d + ((0x10)))) != -1 &&
-            is_point_inside_clip_volume(D_L17_0015FFD8 + (*(int *)(d + ((0x10)))) * 0x100 + 0x10,
-                                        (*(int *)(d + ((0x18))))))
+        if ((*(int *)(door_vars + ((0x10)))) != -1 &&
+            is_point_inside_clip_volume(D_L17_0015FFD8 + (*(int *)(door_vars + ((0x10)))) * 0x100 + 0x10,
+                                        (*(int *)(door_vars + ((0x18))))))
             break;
-        if (m->pclass->sound_defs != 0 &&
-            voice_is_playing(m, (*(int *)(d + ((0x20))))) == 0) {
-            (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
+        if (door_moby->pclass->sound_defs != 0 &&
+            voice_is_playing(door_moby, (*(int *)(door_vars + ((0x20))))) == 0) {
+            (*(int *)(door_vars + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)door_moby);
         }
-        m->state = 5;
+        door_moby->state = 5;
         break;
     case DOOR_STATE_RETURN_TO_ORIGIN:
-        if (m->pclass->sound_defs != 0 &&
-            voice_is_playing(m, (*(int *)(d + ((0x20))))) == 0) {
-            (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
+        if (door_moby->pclass->sound_defs != 0 &&
+            voice_is_playing(door_moby, (*(int *)(door_vars + ((0x20))))) == 0) {
+            (*(int *)(door_vars + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)door_moby);
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, (*(int *)(d + ((0x18))))) ||
-            is_point_inside_clip_volume(D_L17_001676C0, (*(int *)(d + ((0x18))))) ||
-            ((*(int *)(d + ((0x10)))) != -1 &&
-             is_point_inside_clip_volume(D_L17_0015FFD8 + (*(int *)(d + ((0x10)))) * 0x100 + 0x10,
-                                         (*(int *)(d + ((0x18))))))) {
-            m->state = 2;
+        if (is_point_inside_clip_volume(&hero.motion.pos, (*(int *)(door_vars + ((0x18))))) ||
+            is_point_inside_clip_volume(D_L17_001676C0, (*(int *)(door_vars + ((0x18))))) ||
+            ((*(int *)(door_vars + ((0x10)))) != -1 &&
+             is_point_inside_clip_volume(D_L17_0015FFD8 + (*(int *)(door_vars + ((0x10)))) * 0x100 + 0x10,
+                                         (*(int *)(door_vars + ((0x18))))))) {
+            door_moby->state = 2;
             break;
         }
-        f = absolute_float_c((*(float *)(d + ((0x14)))));
+        f = absolute_float_c((*(float *)(door_vars + ((0x14)))));
         k2 = frame_time * 3.0f;
         if (f > k2) {
-            float g = (*(float *)(d + ((0x14))));
+            float g = (*(float *)(door_vars + ((0x14))));
             float r;
-            if (m->command == 0) {
-                float n = -k2;
-                r = g - n;
+            if (door_moby->command == 0) {
+                float negative_return_step = -k2;
+                r = g - negative_return_step;
             } else {
                 r = g - k2;
             }
-            (*(float *)(d + ((0x14)))) = r;
+            (*(float *)(door_vars + ((0x14)))) = r;
         } else {
-            (*(float *)(d + ((0x14)))) = 0.0f;
+            (*(float *)(door_vars + ((0x14)))) = 0.0f;
         }
-        if ((m->oclass) == 0x55C || (m->oclass) == 0x55D ||
-            (m->oclass) == 0x557 || (m->oclass) == 0x559) {
-            ang = fast_add_rotations(1.5707964f, m->rot.z);
-            v[0] = fast_cos(ang) * (*(float *)(d + ((0x14))));
-            v[1] = fast_sin(ang) * (*(float *)(d + ((0x14))));
+        if ((door_moby->oclass) == 0x55C || (door_moby->oclass) == 0x55D ||
+            (door_moby->oclass) == 0x557 || (door_moby->oclass) == 0x559) {
+            ang = fast_add_rotations(1.5707964f, door_moby->rot.z);
+            v[0] = fast_cos(ang) * (*(float *)(door_vars + ((0x14))));
+            v[1] = fast_sin(ang) * (*(float *)(door_vars + ((0x14))));
             v[2] = 0.0f;
         } else {
-            v[0] = fast_cos(m->rot.z) * (*(float *)(d + ((0x14))));
-            v[1] = fast_sin(m->rot.z) * (*(float *)(d + ((0x14))));
+            v[0] = fast_cos(door_moby->rot.z) * (*(float *)(door_vars + ((0x14))));
+            v[1] = fast_sin(door_moby->rot.z) * (*(float *)(door_vars + ((0x14))));
             v[2] = 0.0f;
         }
-        add_vector_xyz(tmp, d, v);
-        *(OvlQuad *)&m->pos = *(OvlQuad *)tmp;
-        if ((*(float *)(d + ((0x14)))) == 0.0f) {
-            idx = (*(int *)(d + ((0x20))));
+        add_vector_xyz(updated_position, door_vars, v);
+        *(OvlQuad *)&door_moby->pos = *(OvlQuad *)updated_position;
+        if ((*(float *)(door_vars + ((0x14)))) == 0.0f) {
+            idx = (*(int *)(door_vars + ((0x20))));
             if (idx != -1) {
                 char *e = (char *)D_0013E633 - 0xE80 + idx * 0x70;
-                if (*(char **)(e + 0x88) == m) {
+                if (*(char **)(e + 0x88) == door_moby) {
                     if (*(unsigned char *)(e + 0x74) != 0)
                         release_voice_slot(idx);
                 }
             }
-            (*(int *)(d + ((0x20)))) = -1;
-            m->state = 1;
+            (*(int *)(door_vars + ((0x20)))) = -1;
+            door_moby->state = 1;
         }
         break;
     }
