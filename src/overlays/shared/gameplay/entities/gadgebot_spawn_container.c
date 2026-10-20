@@ -3241,49 +3241,49 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void energy_sphere_update(struct Moby *m) __asm__("FUN_L06_002f7ab8");
-void energy_sphere_update(struct Moby *m) {
+void energy_sphere_update(struct Moby *sphere_moby) {
     enum {
         ENERGY_SPHERE_INITIALIZE = 0,
         ENERGY_SPHERE_UPDATE_ROTATION = 1
     };
-    char *d = (char *)m->pvars;
-    if (find_moby_hit(m, 0x330000, 0) != 0) {
+    char *sphere_vars = (char *)sphere_moby->pvars;
+    if (find_moby_hit(sphere_moby, 0x330000, 0) != 0) {
         int idx;
-        FUN_L06_002f7c68_c(m);
-        allocate_voice_for_target_entry(1, 0, (int)m);
-        idx = *(int *)(d + 0x60);
+        FUN_L06_002f7c68_c(sphere_moby);
+        allocate_voice_for_target_entry(1, 0, (int)sphere_moby);
+        idx = *(int *)(sphere_vars + 0x60);
         if (idx != -1) {
-            char *e = D_0013E550 + idx * 0x70;
-            if (*(char **)(e + 0x88) == m && *(unsigned char *)(e + 0x74) != 0) {
+            char *voice_slot = D_0013E550 + idx * 0x70;
+            if (*(char **)(voice_slot + 0x88) == sphere_moby && *(unsigned char *)(voice_slot + 0x74) != 0) {
                 release_voice_slot(idx);
             }
         }
-        *(int *)(d + 0x60) = -1;
-        mark_moby_for_removal_u(m);
+        *(int *)(sphere_vars + 0x60) = -1;
+        mark_moby_for_removal_u(sphere_moby);
         return;
     }
-    switch (m->state) {
+    switch (sphere_moby->state) {
     case ENERGY_SPHERE_INITIALIZE:
-        set_moby_color(m, 0x80, 0x80, 0x80);
-        m->scale = m->pclass->scale * D_L06_00161E80;
-        *(char **)d = d + 0x20;
-        m->state = 1;
-        m->flags |= 0x20;
-        *(int *)(d + 0x60) = -1;
+        set_moby_color(sphere_moby, 0x80, 0x80, 0x80);
+        sphere_moby->scale = sphere_moby->pclass->scale * D_L06_00161E80;
+        *(char **)sphere_vars = sphere_vars + 0x20;
+        sphere_moby->state = 1;
+        sphere_moby->flags |= 0x20;
+        *(int *)(sphere_vars + 0x60) = -1;
     case ENERGY_SPHERE_UPDATE_ROTATION: {
         float rotation_delta_x = D_L06_00161E74 * DEG_TO_RAD * D_0015ED6C;
         float rotation_delta_y, rotation_delta_z;
-        float x = fast_add_rotations(m->rot.x, rotation_delta_x);
+        float x = fast_add_rotations(sphere_moby->rot.x, rotation_delta_x);
         rotation_delta_y = D_L06_00161E78 * DEG_TO_RAD * D_0015ED6C;
-        m->rot.x = x;
-        x = fast_add_rotations(m->rot.y, rotation_delta_y);
+        sphere_moby->rot.x = x;
+        x = fast_add_rotations(sphere_moby->rot.y, rotation_delta_y);
         rotation_delta_z = D_L06_00161E7C * DEG_TO_RAD * D_0015ED6C;
-        m->rot.y = x;
-        m->rot.z = fast_add_rotations(m->rot.z, rotation_delta_z);
+        sphere_moby->rot.y = x;
+        sphere_moby->rot.z = fast_add_rotations(sphere_moby->rot.z, rotation_delta_z);
     }
     }
-    if (voice_is_playing(m, *(int *)(d + 0x60)) == 0) {
-        *(int *)(d + 0x60) = allocate_voice_for_target_entry(0, 4, (int)m);
+    if (voice_is_playing(sphere_moby, *(int *)(sphere_vars + 0x60)) == 0) {
+        *(int *)(sphere_vars + 0x60) = allocate_voice_for_target_entry(0, 4, (int)sphere_moby);
     }
 }
 #include "sda.h"
