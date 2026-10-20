@@ -30,10 +30,10 @@ void update_camera(void) __asm__("FUN_001edaa8");
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 void update_camera(void) {
-    char *c;
+    char *preview_camera_state;
     char *target;
     char *v;
-    float m[16];
+    float rotation_matrix[16];
 
     if (game_mode_macro == 5) {
         if (text_screen_active[0] != 0) {
@@ -42,33 +42,33 @@ void update_camera(void) {
         *(short *)cam_trans_state = 0;
         cam_trans_state[2] = 0;
     }
-    c = preview_camera;
-    (*(int *)(c + 0x398))++;
+    preview_camera_state = preview_camera;
+    (*(int *)(preview_camera_state + 0x398))++;
     advance_timed_camera_control();
     refresh_camera_control_flags();
     update_camera_tracking_state();
     update_all_cameras();
-    target = *(char **)(c + 0x180);
-    if ((unsigned short)(*(unsigned short *)(c + 0x270) - 1) < 2) {
-        start_camera_blend(*(void **)(c + 0x184));
+    target = *(char **)(preview_camera_state + 0x180);
+    if ((unsigned short)(*(unsigned short *)(preview_camera_state + 0x270) - 1) < 2) {
+        start_camera_blend(*(void **)(preview_camera_state + 0x184));
     }
-    if (*(short *)(c + 0x270) == 3) {
+    if (*(short *)(preview_camera_state + 0x270) == 3) {
         update_camera_blend(target);
     } else {
         char *st = occl_cam_state;
         if (*(int *)(st + 0x14) != 0) {
             goto frozen;
         }
-        qcopy(c + 0x140, target + 0x30);
-        qcopy(c + 0x350, target);
-        qcopy(c + 0x360, target + 0x10);
-        qcopy(c + 0x370, target + 0x20);
+        qcopy(preview_camera_state + 0x140, target + 0x30);
+        qcopy(preview_camera_state + 0x350, target);
+        qcopy(preview_camera_state + 0x360, target + 0x10);
+        qcopy(preview_camera_state + 0x370, target + 0x20);
     }
     {
         char *st = occl_cam_state;
         if (*(int *)(st + 0x14) == 0) {
-            copy_matrix_rotation(m, camera_rows);
-            matrix_to_euler(m, camera_rows - 0x200);
+            copy_matrix_rotation(rotation_matrix, camera_rows);
+            matrix_to_euler(rotation_matrix, camera_rows - 0x200);
         }
     }
 frozen:
