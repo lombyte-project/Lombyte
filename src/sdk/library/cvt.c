@@ -39,7 +39,7 @@ static s8 *cvt(struct _reent *data, f64 value, s32 ndigits, s32 flags, s8 *sign,
                s32 *length) {
     s32 mode, dsgn;
     s8 *digits, *bp, *rve;
-    double_union tmp;
+    double_union value_bits;
 
     if (ch == 'f') {
         mode = 3;
@@ -49,8 +49,8 @@ static s8 *cvt(struct _reent *data, f64 value, s32 ndigits, s32 flags, s8 *sign,
         }
         mode = 2;
     }
-    tmp.d = value;
-    if (word0(tmp) & Sign_bit) {
+    value_bits.d = value;
+    if (word0(value_bits) & Sign_bit) {
         value = -value;
         *sign = '-';
     } else {
