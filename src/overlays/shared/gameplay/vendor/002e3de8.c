@@ -132,7 +132,7 @@ extern void fast_draw_quad_real(void *, void *, int);
     ((unsigned long)(a) | ((unsigned long)(b) << 2) | ((unsigned long)(k) << 4) | \
      ((unsigned long)(d) << 6) | ((unsigned long)(fix) << 32))
 
-void FUN_L10_002e91b8(unsigned char *m) {
+void FUN_L10_002e91b8(unsigned char *moby) {
     TrailQuad first, second;
     float transform[12] __attribute__((aligned(16)));
     float position[4] __attribute__((aligned(16)));
@@ -142,9 +142,9 @@ void FUN_L10_002e91b8(unsigned char *m) {
     QuadCorner *first_src, *second_src;
     TrailQuad *second_quad;
 
-    scale = *(float **)(m + 0x78);
-    copy_matrix_rotation(transform, m + 0xC0);
-    qcopy(position, m + 0x10);
+    scale = *(float **)(moby + 0x78);
+    copy_matrix_rotation(transform, moby + 0xC0);
+    qcopy(position, moby + 0x10);
     position[3] = 1.0f;
     first.tex = get_effect_texture(0x2C);
     first.unk80 = 0xFF9000000260L;
@@ -209,13 +209,13 @@ void FUN_L10_002e91b8(unsigned char *m) {
         fast_draw_quad_real(&first, transform, 0);
         fast_draw_quad_real(second_quad, transform, 0);
         {
-            float *q = (float *)second_quad;
-            float *p = (float *)&first;
+            float *second_corner_cursor = (float *)second_quad;
+            float *first_corner_cursor = (float *)&first;
             for (i = 0; i < 4; i++) {
-                p[1] += 0.1f;
-                q[1] += 0.1f;
-                p += 4;
-                q += 4;
+                first_corner_cursor[1] += 0.1f;
+                second_corner_cursor[1] += 0.1f;
+                first_corner_cursor += 4;
+                second_corner_cursor += 4;
             }
         }
     }
