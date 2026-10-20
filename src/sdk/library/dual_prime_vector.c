@@ -5,9 +5,9 @@ typedef struct {
     s32 topFieldFirst;
 } MpegDec;
 
-void _dualPrimeVector(MpegDec *d, s32 DMV[][2], s32 *dmvector, s32 mvx, s32 mvy) {
-    if (d->pictStruct == 3) {
-        if (d->topFieldFirst) {
+void _dualPrimeVector(MpegDec *decoder_state, s32 DMV[][2], s32 *dmvector, s32 mvx, s32 mvy) {
+    if (decoder_state->pictStruct == 3) {
+        if (decoder_state->topFieldFirst) {
             DMV[0][0] = ((mvx + (mvx > 0)) >> 1) + dmvector[0];
             DMV[0][1] = ((mvy + (mvy > 0)) >> 1) + dmvector[1] - 1;
             DMV[1][0] = ((3 * mvx + (mvx > 0)) >> 1) + dmvector[0];
@@ -21,7 +21,7 @@ void _dualPrimeVector(MpegDec *d, s32 DMV[][2], s32 *dmvector, s32 mvx, s32 mvy)
     } else {
         DMV[0][0] = ((mvx + (mvx > 0)) >> 1) + dmvector[0];
         DMV[0][1] = ((mvy + (mvy > 0)) >> 1) + dmvector[1];
-        if (d->pictStruct == 1) {
+        if (decoder_state->pictStruct == 1) {
             DMV[0][1]--;
         } else {
             DMV[0][1]++;
