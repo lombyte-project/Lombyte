@@ -274,33 +274,33 @@ void FUN_L07_003131b0(char *moby) {
 void *FUN_L07_00313350(void *unused, void *dp, void *op) {
     char *data = dp;
     int *out = op;
-    int n = 0;
+    int output_count = 0;
     int a = *(int *)(data + 0x170);
     int b, c, d, e, f;
     if (a != -1)
-        out[n++] = a;
+        out[output_count++] = a;
     b = *(int *)(data + 0x174);
     if (b != -1)
-        out[n++] = b;
+        out[output_count++] = b;
     c = *(int *)(data + 0x178);
     if (c != -1)
-        out[n++] = c;
+        out[output_count++] = c;
     if ((((unsigned char)data[0x19C] ^ 1) & 1)) {
         d = *(int *)(data + 0x17C);
         if (d != -1)
-            out[n++] = d;
+            out[output_count++] = d;
     }
     if (!((unsigned char)data[0x19C] & 2)) {
         e = *(int *)(data + 0x180);
         if (e != -1)
-            out[n++] = e;
+            out[output_count++] = e;
     }
     if (!((unsigned char)data[0x19C] & 4)) {
         f = *(int *)(data + 0x184);
         if (f != -1)
-            out[n++] = f;
+            out[output_count++] = f;
     }
-    return (void *)n;
+    return (void *)output_count;
 }
 extern char *hit_lookup_13420(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_test_13420(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
