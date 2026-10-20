@@ -42,16 +42,16 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Once hit hard enough: bursts into 200 smoke puffs and 40 debris chunks, then removes itself. */
 void rock_formation_update(struct Moby *m) __asm__("FUN_L01_002f9810");
-void rock_formation_update(struct Moby *m) {
+void rock_formation_update(struct Moby *rock_formation_moby) {
     DebrisHit *hit;
     s32 i;
     s32 j;
     f32 s;
 
-    hit = trooper_find_hit(m, 0x10000, 0);
-    m->hit_slot = 0xFF;
+    hit = trooper_find_hit(rock_formation_moby, 0x10000, 0);
+    rock_formation_moby->hit_slot = 0xFF;
     if (hit != NULL && hit->force > 0.0f) {
-        FUN_0022da68(0, 0x10, m);
+        FUN_0022da68(0, 0x10, rock_formation_moby);
         for (i = 0; i < 200; i++) {
             /* A block of its own: retail reuses these stack slots in the next loop. */
             {
@@ -66,14 +66,14 @@ void rock_formation_update(struct Moby *m) {
                 off.q = 0;
                 vel.q = pos.q;
                 s = random_float_between(-1.0f, 1.0f);
-                s *= fast_cos(m->rot.z);
+                s *= fast_cos(rock_formation_moby->rot.z);
                 off.f[0] = s;
                 s = random_float_between(-0.3f, 0.3f);
-                s *= fast_sin(m->rot.z);
+                s *= fast_sin(rock_formation_moby->rot.z);
                 off.f[1] = s;
                 off.f[2] = random_float_between(0.0f, 2.0f);
                 pos.q = off.q;
-                fast_vec_add(&pos, &pos, &m->pos);
+                fast_vec_add(&pos, &pos, &rock_formation_moby->pos);
                 fast_vec_normalize(&vel, &vel, random_float_between(0.5f, 1.5f) * frame_time);
                 s = random_float_between(0.5f, 1.0f) * 210000.0f;
                 FUN_L00_0026ced0(&pos, &vel, 0x5F787878, 0x181818, s, scale_game_frames(FUN_L00_00257b90(30, 90)));
@@ -93,20 +93,20 @@ void rock_formation_update(struct Moby *m) {
             off.q = 0;
             vel.q = pos.q;
             s = random_float_between(-1.2f, 1.2f);
-            s *= fast_cos(m->rot.z);
+            s *= fast_cos(rock_formation_moby->rot.z);
             off.f[0] = s;
             s = random_float_between(-0.4f, 0.4f);
-            s *= fast_sin(m->rot.z);
+            s *= fast_sin(rock_formation_moby->rot.z);
             off.f[1] = s;
             off.f[2] = random_float_between(0.5f, 2.0f);
             pos.q = off.q;
-            fast_vec_add(&pos, &pos, &m->pos);
+            fast_vec_add(&pos, &pos, &rock_formation_moby->pos);
             fast_vec_normalize(&vel, &vel, random_float_between(1.0f, 5.0f) * frame_time);
             spawn_debris_chunk(&pos, &vel, colors.c[random_integer_below(3)], random_float_between(0.04f, 0.09f),
                                FUN_L00_00257b90(60, 180), 1.0f, 1.0f, 0.75f, 0);
         }
-        FUN_L00_00257470(m, 0, -1);
-        mark_moby_for_removal(m);
+        FUN_L00_00257470(rock_formation_moby, 0, -1);
+        mark_moby_for_removal(rock_formation_moby);
     }
 }
 typedef struct {
