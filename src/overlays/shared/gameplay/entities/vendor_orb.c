@@ -2671,12 +2671,12 @@ extern char *D_L00_00166E00_002e8970 __asm__("D_L00_00166E00") __attribute__((se
 void FUN_L00_002e88c8_002e8970(char *, char *, float) __asm__("FUN_L00_002e88c8");
 /* Stores x at +0x1BC of D_L00_00166E00+0x70 and calls FUN_L00_002e88c8 with a and y. */
 void FUN_L00_002e8970(char *a, float x, float y);
-void FUN_L00_002e8970(char *a, float x, float y) {
-    char *b = a;
-    char *p = D_L00_00166E00_002e8970;
-    if (*(short *)(p + 0x86) == 0) {
-        *(float *)(*(char **)(p + 0x70) + 0x1bc) = x;
-        FUN_L00_002e88c8_002e8970(p, b, y);
+void FUN_L00_002e8970(char *target_position, float x, float y) {
+    char *b = target_position;
+    char *current_camera = D_L00_00166E00_002e8970;
+    if (*(short *)(current_camera + 0x86) == 0) {
+        *(float *)(*(char **)(current_camera + 0x70) + 0x1bc) = x;
+        FUN_L00_002e88c8_002e8970(current_camera, b, y);
     }
 }
 
