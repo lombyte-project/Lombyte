@@ -1646,15 +1646,15 @@ extern int D_L15_0015F5C4;
 extern struct L15MissionState mission_2edb20 __asm__("D_L15_0016CE60");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
-void FUN_L15_002edb20(struct Moby *m) {
+void FUN_L15_002edb20(struct Moby *moby) {
     enum {
         INITIALIZE_UPDATE_DISTANCE = 0,
         DISPATCH_MODE_SELECTED_SLOT = 1
     };
-    switch (m->state) {
+    switch (moby->state) {
     case INITIALIZE_UPDATE_DISTANCE:
-        m->update_dist = 0xFF;
-        m->state = 1;
+        moby->update_dist = 0xFF;
+        moby->state = 1;
         break;
     case DISPATCH_MODE_SELECTED_SLOT:
         if (D_L15_0015F5C4 == 2) {
