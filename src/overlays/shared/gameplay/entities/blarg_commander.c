@@ -58,44 +58,44 @@ typedef struct {
     f32 unk74;          /* 0x74: -1 on launch */
 } LobbedVars;
 
-void FUN_L12_00308708(void *unused, struct Moby *m) {
-    LobbedVars *d = (LobbedVars *)m->pvars;
+void FUN_L12_00308708(void *unused, struct Moby *moby) {
+    LobbedVars *lobbed_vars = (LobbedVars *)moby->pvars;
     float dir[4];
     float ang;
     float rise_sqrt_term, frame_rise_sqrt_term;
-    float a;
+    float frame_scaled_rise;
     float g;
 
     if (random_integer_below(3) == 0) {
-        allocate_voice_for_target_entry(1, 0x20, m);
+        allocate_voice_for_target_entry(1, 0x20, moby);
     }
-    d->unk48 = 0.7f;
-    d->timer = truncate_float_to_s32(716.8f);
-    d->unk6C = 0.0f;
-    m->update_dist = 0xFF;
-    m->flags &= ~6;
-    ang = fast_add_rotations(m->rot.z, 3.1415927f);
+    lobbed_vars->unk48 = 0.7f;
+    lobbed_vars->timer = truncate_float_to_s32(716.8f);
+    lobbed_vars->unk6C = 0.0f;
+    moby->update_dist = 0xFF;
+    moby->flags &= ~6;
+    ang = fast_add_rotations(moby->rot.z, 3.1415927f);
     dir[0] = fast_cos(ang);
     dir[1] = fast_sin(ang);
     dir[2] = 1.0f;
     dir[3] = 5627.925f;
     g = frame_time_sq;
-    d->rise = g * 40.0f;
-    d->fall = g * 100.0f;
-    rise_sqrt_term = fast_sqrt(d->rise * 4.0f);
+    lobbed_vars->rise = g * 40.0f;
+    lobbed_vars->fall = g * 100.0f;
+    rise_sqrt_term = fast_sqrt(lobbed_vars->rise * 4.0f);
     frame_rise_sqrt_term = fast_sqrt(frame_time_sq * 40.0f * 4.0f);
-    a = frame_time_sq * 40.0f;
-    d->launch_speed = 3.0f / ((rise_sqrt_term + rise_sqrt_term) / a) + frame_time_sq * 100.0f * 0.5f * ((frame_rise_sqrt_term + frame_rise_sqrt_term) / a);
-    d->unk3C = fast_sqrt(a * 4.0f);
-    d->unk5D = 0;
-    d->unk44 = 1;
-    trooper_knockback_arc(dir, &ang, &d->launch_speed, &d->unk3C);
-    trooper_start_knockback(ang, m, &d->arc, 1, 5, 2);
-    d->unk6C = frame_time + frame_time;
-    d->unk70 = -1.0f;
-    d->unk74 = -1.0f;
-    m->flags &= ~0x1000;
-    blend_moby_animation(m, 1, 0, 0);
+    frame_scaled_rise = frame_time_sq * 40.0f;
+    lobbed_vars->launch_speed = 3.0f / ((rise_sqrt_term + rise_sqrt_term) / frame_scaled_rise) + frame_time_sq * 100.0f * 0.5f * ((frame_rise_sqrt_term + frame_rise_sqrt_term) / frame_scaled_rise);
+    lobbed_vars->unk3C = fast_sqrt(frame_scaled_rise * 4.0f);
+    lobbed_vars->unk5D = 0;
+    lobbed_vars->unk44 = 1;
+    trooper_knockback_arc(dir, &ang, &lobbed_vars->launch_speed, &lobbed_vars->unk3C);
+    trooper_start_knockback(ang, moby, &lobbed_vars->arc, 1, 5, 2);
+    lobbed_vars->unk6C = frame_time + frame_time;
+    lobbed_vars->unk70 = -1.0f;
+    lobbed_vars->unk74 = -1.0f;
+    moby->flags &= ~0x1000;
+    blend_moby_animation(moby, 1, 0, 0);
 }
 #include "sda.h"
 
