@@ -28,13 +28,13 @@ extern char D_L00_001BD3B0[] __attribute__((section(".data")));
 extern char D_L00_001BCDB0[] __attribute__((section(".data")));
 extern char D_L00_00173EC0[] __attribute__((section(".data")));
 void FUN_L00_0023d028(void) {
-    int t;
+    int texture_allocation_base;
     FUN_00215420_23d028();
     FUN_002335a0_23d028();
     FUN_002015d8_23d028();
-    t = gs_texture_allocation_base;
-    gs_texture_allocation_cursor = t;
-    D_0015EE78_gp = t;
+    texture_allocation_base = gs_texture_allocation_base;
+    gs_texture_allocation_cursor = texture_allocation_base;
+    D_0015EE78_gp = texture_allocation_base;
     FUN_001f97e8_23d028(D_L00_00173EC0, 0x87654321, 0x10);
     FUN_001f97e8_23d028(D_L00_00197BC0_lui, -1, 0x800);
     FUN_001f97e8_23d028(D_L00_0019A980, -1, 0xE00);
