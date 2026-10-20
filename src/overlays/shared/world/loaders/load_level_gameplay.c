@@ -551,7 +551,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     clear_blocks_16(D_L00_001AB7E0, 0x60);
     {
         int *p = (int *)((char *)hdr + hdr->f0);
-        int *c;
+        int *ship_spawn_settings;
 
         D_L00_0016CA40.f23C = *p++;
         D_L00_0016CA40.f240 = *p++;
@@ -560,16 +560,16 @@ char *load_level_gameplay(int skip_gameplay_read) {
         *(unsigned char *)&D_L00_0015F445 = *p++;
         *(unsigned char *)&D_L00_0015F446 = *p++;
         ship = (float *)(p + 5);
-        c = p + 9;
+        ship_spawn_settings = p + 9;
         D_L00_0015F448 = *(float *)p;
         D_L00_0015F44C = *(float *)(p + 1);
         D_L00_0015F450 = *(float *)(p + 2);
         D_L00_0015F454 = *(float *)(p + 3);
         D_L00_0015F638 = *(float *)(p + 4);
         p += 12;
-        D_0013E030.f30 = c[0];
-        D_0013E030.f34 = c[1];
-        D_0013E030.f38 = c[2];
+        D_0013E030.f30 = ship_spawn_settings[0];
+        D_0013E030.f34 = ship_spawn_settings[1];
+        D_0013E030.f38 = ship_spawn_settings[2];
     }
     update_fog();
     D_L00_00160F80 = 512000.0f;
@@ -785,12 +785,12 @@ char *load_level_gameplay(int skip_gameplay_read) {
             inst->f1B = 0;
             inst->f1E = 0xFFFF;
             if (D_L00_001BC030[cls]->f1C != 0) {
-                float d;
+                float shrub_class_lower_bound;
 
                 inst->f17 = truncate_float_to_s32(*D_L00_001BC030[cls]->f1C);
-                d = convert_integer_to_float(inst->f17) + 24.0f;
-                if (inst->f10 < d) {
-                    inst->f10 = d;
+                shrub_class_lower_bound = convert_integer_to_float(inst->f17) + 24.0f;
+                if (inst->f10 < shrub_class_lower_bound) {
+                    inst->f10 = shrub_class_lower_bound;
                 }
             }
             qcopy(mtx, p + 0x10);
