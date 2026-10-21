@@ -33,12 +33,12 @@ void update_camera_underwater_flag(void) {
     while (i < 6 && collision_line(probe_start, probe_end, 0x12, 0, 0) != 0) {
         if (collision_hit_material() == 0) {
             float submersion_height_threshold = resolve_camera_surface_height(D_00194120, 0) + 0.04f;
-            char *c2 = preview_camera;
+            char *preview_camera_state = preview_camera;
 
-            if (*(float *)(c2 + 0x148) < submersion_height_threshold) {
-                *(int *)(c2 + 0x394) = 1;
+            if (*(float *)(preview_camera_state + 0x148) < submersion_height_threshold) {
+                *(int *)(preview_camera_state + 0x394) = 1;
             } else {
-                *(int *)(c2 + 0x394) = 0;
+                *(int *)(preview_camera_state + 0x394) = 0;
             }
             return;
         }
