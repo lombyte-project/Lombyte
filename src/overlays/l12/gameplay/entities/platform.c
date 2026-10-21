@@ -1020,7 +1020,7 @@ extern f32 D_L12_001618D4 __attribute__((sda));
    itself, and takes hits (dying, or staggering back). */
 void FUN_L12_002e3528(struct Moby *moby) {
     AnklebiterVars_e3528 *vars = (AnklebiterVars_e3528 *)moby->pvars;
-    Vec4 v;
+    Vec4 help_direction_or_hit_position;
     s32 hit;
     f32 dmg;
     f32 angle;
@@ -1042,10 +1042,10 @@ void FUN_L12_002e3528(struct Moby *moby) {
         s16 updated_call_timer = ++vars->call_timer;
         if (scale_game_frames_e3528(0x3C) * 15 < updated_call_timer && moby->visible == 0 && moby->group < 0xFF &&
             FUN_L01_0026e008(moby->group, -1) >= 4 && random_integer_below_e3528(0x45) == 0) {
-            v.f[0] = fast_cos_e3528(fast_add_rotations_e3528(moby->rot.z, 3.1415927f));
-            v.f[1] = fast_sin_e3528(fast_add_rotations_e3528(moby->rot.z, 3.1415927f));
-            v.f[2] = 0.0f;
-            call_for_help_e3528(moby, D_001413D0_e3528, 0x10000, &moby->pos, v.f, 1.0f);
+            help_direction_or_hit_position.f[0] = fast_cos_e3528(fast_add_rotations_e3528(moby->rot.z, 3.1415927f));
+            help_direction_or_hit_position.f[1] = fast_sin_e3528(fast_add_rotations_e3528(moby->rot.z, 3.1415927f));
+            help_direction_or_hit_position.f[2] = 0.0f;
+            call_for_help_e3528(moby, D_001413D0_e3528, 0x10000, &moby->pos, help_direction_or_hit_position.f, 1.0f);
         }
     }
     coll = find_hit_e3528(moby, 0x330000, 0);
@@ -1070,8 +1070,8 @@ void FUN_L12_002e3528(struct Moby *moby) {
                 moby->flags &= ~0x1000;
                 vars->unk138 = D_0015ED6C_e3528 * 8.0f;
                 vars->unk13C = D_0015ED6C_e3528 * 10.0f;
-                v.q = coll->pos.q;
-                knockback_e3528(&v, &angle, &vars->unk138, &vars->unk13C);
+                help_direction_or_hit_position.q = coll->pos.q;
+                knockback_e3528(&help_direction_or_hit_position, &angle, &vars->unk138, &vars->unk13C);
                 start_fall_e3528(moby, vars->fall, 6, 1, 0, angle);
                 vars->unk170 = 11.0f;
                 vars->unk174 = 18.0f;
@@ -1079,8 +1079,8 @@ void FUN_L12_002e3528(struct Moby *moby) {
                 vars->unk117 = 0x78;
                 anim_reset_e3528(moby, vars->anim);
             } else {
-                v.q = coll->pos.q;
-                knockback_e3528(&v, &unused, &vars->unk138, &vars->unk13C);
+                help_direction_or_hit_position.q = coll->pos.q;
+                knockback_e3528(&help_direction_or_hit_position, &unused, &vars->unk138, &vars->unk13C);
                 start_fall_e3528(moby, vars->fall, 0xE, 1, 0, unused);
                 vars->unk174 = vars->unk170 = -1.0f;
                 moby->state = 7;
