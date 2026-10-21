@@ -1584,11 +1584,11 @@ typedef struct {
 extern G_00208038 D_0013F350_00208038 __asm__("D_0013F350");
 void FUN_L00_00207d00_00208038(void) __asm__("FUN_L00_00207d00");
 /* Appends v, b, x and y to the list in ((char *)&hero) and calls FUN_L00_00207d00. */
-void FUN_L00_00208038(u128 *v, int b, float x, float y) {
+void FUN_L00_00208038(u128 *glow_position, int b, float x, float y) {
     G_00208038 *g = &D_0013F350_00208038;
     short n = g->n;
     u128 *pos = g->pos;
-    qcopy(&pos[n], v);
+    qcopy(&pos[n], glow_position);
     g->b[n] = b;
     g->x[g->n] = x;
     g->y[g->n] = y;
