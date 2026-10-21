@@ -237,9 +237,9 @@ void FUN_L00_00205538(void) {
     for (i = 0; i < 31; i++) {
         Ent *manipulator_record = &D_L00_0017A680_c[i];
         if (manipulator_record->active != 0) {
-            s32 r = FUN_L00_00205110_c(manipulator_record->type);
-            if (r != 0)
-                detach_manipulator(r, manipulator_record);
+            s32 manipulator_moby = FUN_L00_00205110_c(manipulator_record->type);
+            if (manipulator_moby != 0)
+                detach_manipulator(manipulator_moby, manipulator_record);
         }
         clear_u64_value(D_L00_0017A680_c[i].m40);
         clear_u64_value(b);
