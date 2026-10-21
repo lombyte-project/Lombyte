@@ -1997,13 +1997,13 @@ extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 void FUN_L01_003094f0(char *moby) {
     Quad_30a8c8 quad;
     float rotation_matrix[12];
-    float pos[4];
+    float moby_position_snapshot[4];
     char *moby_data;
     float ring_half_height;
     int i, j, nj;
     moby_data = *(char **)(moby + 0x78);
     copy_matrix_rotation(rotation_matrix, moby + 0xC0);
-    qcopy(pos, moby + 0x10);
+    qcopy(moby_position_snapshot, moby + 0x10);
     quad.g[1] = get_effect_texture(D_L01_00161FC8);
     quad.g[3] = (long)D_L01_00161FB8 | ((long)D_L01_00161FBC << 2) | ((long)D_L01_00161FC0 << 4) | ((long)D_L01_00161FC4 << 6) | (0x8000L << 24);
     quad.g[2] = 0xFF9000000260UL;
