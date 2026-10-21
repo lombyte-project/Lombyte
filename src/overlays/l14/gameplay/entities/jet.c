@@ -195,7 +195,7 @@ void FUN_L14_002df510(struct Moby *ribbon_moby, void *path, int outer_alpha, int
     Q_DF510 layer_quads[2];
     V_DF510 w[2];
     V_DF510 heading_vector;
-    V_DF510 mat[4];
+    V_DF510 quad_to_world[4];
     V_DF510 wm[4];
     V_DF510 world_path_points[2];
     char *moby_vars = (char *)ribbon_moby->pvars;
@@ -241,13 +241,13 @@ void FUN_L14_002df510(struct Moby *ribbon_moby, void *path, int outer_alpha, int
     heading_vector.x = fast_cos_df510(ribbon_moby->rot.z);
     heading_vector.y = fast_sin_df510(ribbon_moby->rot.z);
     heading_vector.z = 0.0f;
-    qcopy(&mat[0], &heading_vector);
-    subtract_vector_xyz_c2(&mat[1], D_L14_001674C0, &ribbon_moby->pos);
-    scale_vector_xyz(&mat[1], &mat[1], 1.0f);
-    cross_vectors_xyz(&mat[2], &mat[1], &mat[0]);
-    normalize_vector_xyz(&mat[2], &mat[2], 1.0f);
-    cross_vectors_xyz(&mat[0], &mat[2], &mat[1]);
-    qcopy(&mat[3], &ribbon_moby->pos);
+    qcopy(&quad_to_world[0], &heading_vector);
+    subtract_vector_xyz_c2(&quad_to_world[1], D_L14_001674C0, &ribbon_moby->pos);
+    scale_vector_xyz(&quad_to_world[1], &quad_to_world[1], 1.0f);
+    cross_vectors_xyz(&quad_to_world[2], &quad_to_world[1], &quad_to_world[0]);
+    normalize_vector_xyz(&quad_to_world[2], &quad_to_world[2], 1.0f);
+    cross_vectors_xyz(&quad_to_world[0], &quad_to_world[2], &quad_to_world[1]);
+    qcopy(&quad_to_world[3], &ribbon_moby->pos);
     euler_matrix_df510(&wm[0], &ribbon_moby->rot);
     qcopy(&wm[3], &ribbon_moby->pos);
     qcopy(&layer_quads[0].v[0], &w[0]);
@@ -256,17 +256,17 @@ void FUN_L14_002df510(struct Moby *ribbon_moby, void *path, int outer_alpha, int
     scale_vector_xyz(&layer_quads[1].v[1], &layer_quads[1].v[0], -1.0f);
     transform_vector(&world_path_points[0], &pts[0], &wm[0]);
     transform_vector(&world_path_points[1], &pts[1], &wm[0]);
-    subtract_vector_xyz_c2(&mat[0], &world_path_points[1], &world_path_points[0]);
-    normalize_vector_xyz(&mat[0], &mat[0], 1.0f);
-    subtract_vector_xyz_c2(&mat[1], D_L14_001674C0, &world_path_points[0]);
-    cross_vectors_xyz(&mat[2], &mat[1], &mat[0]);
-    normalize_vector_xyz(&mat[2], &mat[2], 1.0f);
-    cross_vectors_xyz(&mat[1], &mat[0], &mat[2]);
-    qcopy(&mat[3], &world_path_points[0]);
-    transform_vector(&layer_quads[0].v[0], &layer_quads[0].v[0], &mat[0]);
-    transform_vector(&layer_quads[0].v[1], &layer_quads[0].v[1], &mat[0]);
-    transform_vector(&layer_quads[1].v[0], &layer_quads[1].v[0], &mat[0]);
-    transform_vector(&layer_quads[1].v[1], &layer_quads[1].v[1], &mat[0]);
+    subtract_vector_xyz_c2(&quad_to_world[0], &world_path_points[1], &world_path_points[0]);
+    normalize_vector_xyz(&quad_to_world[0], &quad_to_world[0], 1.0f);
+    subtract_vector_xyz_c2(&quad_to_world[1], D_L14_001674C0, &world_path_points[0]);
+    cross_vectors_xyz(&quad_to_world[2], &quad_to_world[1], &quad_to_world[0]);
+    normalize_vector_xyz(&quad_to_world[2], &quad_to_world[2], 1.0f);
+    cross_vectors_xyz(&quad_to_world[1], &quad_to_world[0], &quad_to_world[2]);
+    qcopy(&quad_to_world[3], &world_path_points[0]);
+    transform_vector(&layer_quads[0].v[0], &layer_quads[0].v[0], &quad_to_world[0]);
+    transform_vector(&layer_quads[0].v[1], &layer_quads[0].v[1], &quad_to_world[0]);
+    transform_vector(&layer_quads[1].v[0], &layer_quads[1].v[0], &quad_to_world[0]);
+    transform_vector(&layer_quads[1].v[1], &layer_quads[1].v[1], &quad_to_world[0]);
     for (i = 1; i < point_count; i++) {
         float outer_half_width;
         qcopy(&layer_quads[0].v[2], &w[0]);
@@ -274,22 +274,22 @@ void FUN_L14_002df510(struct Moby *ribbon_moby, void *path, int outer_alpha, int
         qcopy(&layer_quads[1].v[2], &w[1]);
         scale_vector_xyz(&layer_quads[1].v[3], &layer_quads[1].v[2], -1.0f);
         if (i == point_count - 1) {
-            transform_vector(&mat[3], &pts[i], &wm[0]);
+            transform_vector(&quad_to_world[3], &pts[i], &wm[0]);
         } else {
             transform_vector(&world_path_points[0], &pts[i], &wm[0]);
             transform_vector(&world_path_points[1], &pts[i + 1], &wm[0]);
-            subtract_vector_xyz_c2(&mat[0], &world_path_points[1], &world_path_points[0]);
-            normalize_vector_xyz(&mat[0], &mat[0], 1.0f);
-            subtract_vector_xyz_c2(&mat[1], D_L14_001674C0, &world_path_points[0]);
-            cross_vectors_xyz(&mat[2], &mat[1], &mat[0]);
-            normalize_vector_xyz(&mat[2], &mat[2], 1.0f);
-            cross_vectors_xyz(&mat[1], &mat[0], &mat[2]);
-            qcopy(&mat[3], &world_path_points[0]);
+            subtract_vector_xyz_c2(&quad_to_world[0], &world_path_points[1], &world_path_points[0]);
+            normalize_vector_xyz(&quad_to_world[0], &quad_to_world[0], 1.0f);
+            subtract_vector_xyz_c2(&quad_to_world[1], D_L14_001674C0, &world_path_points[0]);
+            cross_vectors_xyz(&quad_to_world[2], &quad_to_world[1], &quad_to_world[0]);
+            normalize_vector_xyz(&quad_to_world[2], &quad_to_world[2], 1.0f);
+            cross_vectors_xyz(&quad_to_world[1], &quad_to_world[0], &quad_to_world[2]);
+            qcopy(&quad_to_world[3], &world_path_points[0]);
         }
-        transform_vector(&layer_quads[0].v[2], &layer_quads[0].v[2], &mat[0]);
-        transform_vector(&layer_quads[0].v[3], &layer_quads[0].v[3], &mat[0]);
-        transform_vector(&layer_quads[1].v[2], &layer_quads[1].v[2], &mat[0]);
-        transform_vector(&layer_quads[1].v[3], &layer_quads[1].v[3], &mat[0]);
+        transform_vector(&layer_quads[0].v[2], &layer_quads[0].v[2], &quad_to_world[0]);
+        transform_vector(&layer_quads[0].v[3], &layer_quads[0].v[3], &quad_to_world[0]);
+        transform_vector(&layer_quads[1].v[2], &layer_quads[1].v[2], &quad_to_world[0]);
+        transform_vector(&layer_quads[1].v[3], &layer_quads[1].v[3], &quad_to_world[0]);
         if (i == 1 && inner_alpha == 0x10) {
             int c0 = layer_quads[0].col[0];
             int c1 = layer_quads[1].col[0];
