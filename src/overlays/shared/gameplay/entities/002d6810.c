@@ -954,26 +954,26 @@ extern void draw_2d8e48(void *, void *, int) __asm__("FUN_001f7d30");
 
 void FUN_L15_002d8e48(void *mv) {
     Q2d8e48 quad;
-    V2d8e48 mat[4];
-    V2d8e48 *pos;
+    V2d8e48 quad_transform[4];
+    V2d8e48 *bolt_start_position;
     unsigned int c;
     float quad_scale;
     int i;
-    pos = *(V2d8e48 **)((char *)mv + 0x78);
+    bolt_start_position = *(V2d8e48 **)((char *)mv + 0x78);
     quad.tex = tex_2d8e48(0xB);
-    pos = (V2d8e48 *)((char *)pos + 0xF0);
+    bolt_start_position = (V2d8e48 *)((char *)bolt_start_position + 0xF0);
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
-    vsub_2d8e48(&mat[3], &D_L15_001673C0, pos);
-    vscl_2d8e48(&mat[3], &mat[3], 0.3f);
-    vadd_2d8e48(&mat[3], &mat[3], pos);
-    mat[3].f[3] = 1.0f;
-    vsub_2d8e48(&mat[0], &D_L15_001673C0, &mat[3]);
-    vscl_2d8e48(&mat[0], &mat[0], 1.0f);
-    fast_vec_cross(&mat[1], &mat[0], (V2d8e48 *)&hero.gravity_dir);
-    vscl_2d8e48(&mat[1], &mat[1], -1.0f);
-    fast_vec_cross(&mat[2], &mat[1], &mat[0]);
+    vsub_2d8e48(&quad_transform[3], &D_L15_001673C0, bolt_start_position);
+    vscl_2d8e48(&quad_transform[3], &quad_transform[3], 0.3f);
+    vadd_2d8e48(&quad_transform[3], &quad_transform[3], bolt_start_position);
+    quad_transform[3].f[3] = 1.0f;
+    vsub_2d8e48(&quad_transform[0], &D_L15_001673C0, &quad_transform[3]);
+    vscl_2d8e48(&quad_transform[0], &quad_transform[0], 1.0f);
+    fast_vec_cross(&quad_transform[1], &quad_transform[0], (V2d8e48 *)&hero.gravity_dir);
+    vscl_2d8e48(&quad_transform[1], &quad_transform[1], -1.0f);
+    fast_vec_cross(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
     c = D_L15_00161CAC;
     quad.color[3] = c;
     quad.color[2] = c;
@@ -982,7 +982,7 @@ void FUN_L15_002d8e48(void *mv) {
     quad_scale = D_L15_00161CB4 + rnd_2d8e48(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
         fast_vec_scale(quad_scale, &quad.corner[i], &D_L15_001D36F0[i]);
-        xform_2d8e48(&quad.corner[i], &quad.corner[i], &mat[0]);
+        xform_2d8e48(&quad.corner[i], &quad.corner[i], &quad_transform[0]);
         quad.uv[i].u = D_L15_001D3730[i].u;
         quad.uv[i].v = D_L15_001D3730[i].v;
     }
@@ -995,7 +995,7 @@ void FUN_L15_002d8e48(void *mv) {
     quad_scale = D_L15_00161CB8 + rnd_2d8e48(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
         fast_vec_scale(quad_scale, &quad.corner[i], &D_L15_001D36F0[i]);
-        xform_2d8e48(&quad.corner[i], &quad.corner[i], &mat[0]);
+        xform_2d8e48(&quad.corner[i], &quad.corner[i], &quad_transform[0]);
         quad.uv[i].u = D_L15_001D3730[i].u;
         quad.uv[i].v = D_L15_001D3730[i].v;
     }
