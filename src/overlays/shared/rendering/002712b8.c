@@ -1015,7 +1015,7 @@ void FUN_L00_00273448(P_273448 *particle) {
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 extern unsigned char *D_L00_001B2178 __attribute__((section(".data")));
-unsigned char *FUN_L00_00273708(void *position, int b, int particle_mode) {
+unsigned char *FUN_L00_00273708(void *position, int alpha_fade_divisor, int particle_mode) {
     unsigned char *particle = p27fe00_alloc(0x3E);
     if (particle != 0) {
         unsigned char *particle_data = particle + 0x20;
@@ -1030,8 +1030,8 @@ unsigned char *FUN_L00_00273708(void *position, int b, int particle_mode) {
         if (particle_mode >= 2)
             particle_mode = 0;
         particle[2] = D_L00_001B2178[particle_mode];
-        *(short *)(particle + 0x20) = truncate_float_to_s32(127.0f / convert_integer_to_float(b));
-        *(short *)(particle + 0xA) = b;
+        *(short *)(particle + 0x20) = truncate_float_to_s32(127.0f / convert_integer_to_float(alpha_fade_divisor));
+        *(short *)(particle + 0xA) = alpha_fade_divisor;
     }
     return particle;
 }
