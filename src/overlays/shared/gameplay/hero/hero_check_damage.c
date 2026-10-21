@@ -3056,9 +3056,9 @@ extern void FUN_00125180_212318(void *, void *) __asm__("FUN_00125180");
 extern s32 D_L00_00173E5C __attribute__((section(".data")));
 void FUN_L00_00212318(int force) {
     V_212318 primary_probe_start, primary_probe_offset_or_end, b, secondary_probe_offset_or_end;
-    char *src;
+    char *hero_position_base;
     struct Hero *g;
-    f32 primary_probe_height_offset, k, secondary_probe_length_scale, ang, inward_velocity_component;
+    f32 primary_probe_height_offset, k, secondary_probe_length_scale, primary_hit_normal_angle, inward_velocity_component;
     int r;
 
     if (hero.unk308 != 0)
@@ -3077,13 +3077,13 @@ void FUN_L00_00212318(int force) {
         primary_probe_height_offset = 1.5f;
         k = 5.0f;
     }
-    src = D_0013F3D0_212318;
-    qcopy(&primary_probe_start, src);
+    hero_position_base = D_0013F3D0_212318;
+    qcopy(&primary_probe_start, hero_position_base);
     primary_probe_start.f[2] += primary_probe_height_offset;
-    qcopy(&b, src);
+    qcopy(&b, hero_position_base);
     b.f[2] += primary_probe_height_offset * 0.3f;
-    if (force || FUN_001f9b20_212318(src + 0x60) < 0.01f) {
-        g = (struct Hero *)(src - 0x80);
+    if (force || FUN_001f9b20_212318(hero_position_base + 0x60) < 0.01f) {
+        g = (struct Hero *)(hero_position_base - 0x80);
         secondary_probe_length_scale = 1.4f;
         primary_probe_offset_or_end.f[0] = FUN_001f9dc8_212318(g->motion.rot.f[2]) * k;
         primary_probe_offset_or_end.f[1] = FUN_001f9de0_212318(g->motion.rot.f[2]) * k;
@@ -3092,7 +3092,7 @@ void FUN_L00_00212318(int force) {
         secondary_probe_offset_or_end.f[1] = FUN_001f9de0_212318(g->motion.rot.f[2]) * k * secondary_probe_length_scale;
         *(s32 *)&secondary_probe_offset_or_end.f[2] = 0;
     } else {
-        qcopy(&primary_probe_offset_or_end, src + 0x60);
+        qcopy(&primary_probe_offset_or_end, hero_position_base + 0x60);
         *(s32 *)&primary_probe_offset_or_end.f[2] = 0;
         FUN_001f9a68_212318(&primary_probe_offset_or_end, &primary_probe_offset_or_end, k / FUN_001f9b20_212318(&primary_probe_offset_or_end));
         qcopy(&secondary_probe_offset_or_end, &primary_probe_offset_or_end);
@@ -3103,10 +3103,10 @@ void FUN_L00_00212318(int force) {
     r = -1;
     if (FUN_001efa68_212318(&b, &secondary_probe_offset_or_end, 4, hero.moby, 0) && D_L00_00173E5C > 0)
         r = FUN_001f0b58_212318();
-    ang = 0.0f;
+    primary_hit_normal_angle = 0.0f;
     if (FUN_001efa68_212318(&primary_probe_start, &primary_probe_offset_or_end, 4, hero.moby, 0) && X.i1C > 0)
-        ang = FUN_001f9e90_212318(X.v40.f[2], FUN_001f9b20_212318(&X.v40));
-    if (0.8726646304130554f <= ang || r == 8 || r == 12) {
+        primary_hit_normal_angle = FUN_001f9e90_212318(X.v40.f[2], FUN_001f9b20_212318(&X.v40));
+    if (0.8726646304130554f <= primary_hit_normal_angle || r == 8 || r == 12) {
         hero.unk240 = X.i18;
         *(s32 *)&X.v40.f[2] = 0;
         FUN_00125180_212318(&X.v40, &X.v40);
