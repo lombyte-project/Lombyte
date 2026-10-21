@@ -2423,7 +2423,7 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
     W4_2838 target;
     W4_2838 diff;
     float horizontal_steering_input;
-    float b;
+    float vertical_steering_input;
     float ka;
     float kb;
     float x, y;
@@ -2491,16 +2491,16 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
         ka = D_L11_001620A4;
         kb = D_L11_001620B4;
         horizontal_steering_input = x;
-        b = y;
+        vertical_steering_input = y;
         if (controller_state.held & PAD_L3) {
             horizontal_steering_input = x / D_L11_00162018 * D_L11_00162020;
-            b = y / D_L11_00162014 * D_L11_0016201C;
+            vertical_steering_input = y / D_L11_00162014 * D_L11_0016201C;
             ka = D_L11_001620A8;
             kb = D_L11_001620B8;
         }
-        FUN_L11_00313f60(ship_moby, &horizontal_steering_input, &b);
+        FUN_L11_00313f60(ship_moby, &horizontal_steering_input, &vertical_steering_input);
         vendor_spring(&ship_vars->f6C, &ship_vars->f90, horizontal_steering_input, D_L11_0016209C, D_L11_001620A0, ka);
-        vendor_spring(&ship_vars->f70, &ship_vars->f94, b, D_L11_001620AC, D_L11_001620B0, kb);
+        vendor_spring(&ship_vars->f70, &ship_vars->f94, vertical_steering_input, D_L11_001620AC, D_L11_001620B0, kb);
         FUN_L00_0025bc98(&ship_vars->f30, &ship_vars->f98, 0, ship_vars->f6C * D_L11_0016207C, D_L11_001620BC,
                          D_L11_001620C0, D_L11_001620C4);
         ship_vars->f34 = fast_sub_rot_2838(ship_vars->f34, ship_vars->f70 * D_L11_00162014);
