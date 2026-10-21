@@ -931,7 +931,7 @@ struct L11TiltVars {
    his side, and a tilt past D_L11_00161F84 degrees knocks him into hero state 6. */
 void seesaw_platform_update(struct Moby *m) __asm__("FUN_L11_0030eb90");
 void seesaw_platform_update(struct Moby *platform) {
-    Vec4f v;
+    Vec4f platform_translation_delta;
     Vec4f rot;
     float matrix[16] __attribute__((aligned(16)));
     Vec4f diff;
@@ -940,7 +940,7 @@ void seesaw_platform_update(struct Moby *platform) {
     float change;
     float scaled;
 
-    scale_vector_xyz(&v, &platform->pos, -1.0f);
+    scale_vector_xyz(&platform_translation_delta, &platform->pos, -1.0f);
     qcopy(&rot, &platform->rot);
     platform_vars->unk5C = 1;
     spin = platform_vars->spin;
@@ -968,8 +968,8 @@ void seesaw_platform_update(struct Moby *platform) {
         }
     }
     platform->rot.y = fast_add_rotations(platform->rot.y, platform_vars->spin);
-    add_vector_xyz(&v, &v, &platform->pos);
-    update_entity_matrix(platform_vars->unk20, &v, &rot, &platform->rot);
+    add_vector_xyz(&platform_translation_delta, &platform_translation_delta, &platform->pos);
+    update_entity_matrix(platform_vars->unk20, &platform_translation_delta, &rot, &platform->rot);
 }
 /* Waits for its linked moby, then either hands off to a cutscene or turns toward its target. */
 extern char *D_L11_0015FFD8_t __asm__("D_L11_0015FFD8");
