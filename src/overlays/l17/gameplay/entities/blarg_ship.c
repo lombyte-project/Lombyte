@@ -462,9 +462,9 @@ void FUN_L17_002f3848(struct Moby *moby) {
     float vector_sum[4];
     int i;
     if (*(int *)(moby_pvars + 0x4C) != -1) {
-        struct Hero *g = &hero;
-        if (g->state.current != 0x32 || ((char *)g->ship_moby) == 0 ||
-            *(short *)(((char *)g->ship_moby) + 0xA6) != 0x563) {
+        struct Hero *hero_data = &hero;
+        if (hero_data->state.current != 0x32 || ((char *)hero_data->ship_moby) == 0 ||
+            *(short *)(((char *)hero_data->ship_moby) + 0xA6) != 0x563) {
             if (is_point_inside_clip_volume_u(&hero.motion.pos, *(int *)(moby_pvars + 0x4C))) {
                 D_L17_0015F638 = 150.0f;
                 goto done;
