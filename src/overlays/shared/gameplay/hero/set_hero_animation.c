@@ -1219,24 +1219,24 @@ void FUN_001f9d20_00233d30(void *, void *, void *) __asm__("FUN_001f9d20");
 f32 FUN_001f9b20_00233d30(void *) __asm__("FUN_001f9b20");
 f32 FUN_001f9e90_00233d30(f32, f32) __asm__("FUN_001f9e90");
 /* Returns 001f9e90 of v (or v in the 0x40 hero frame), chosen by hero byte 0x20B3. */
-f32 FUN_L00_00233d30(f32 *v) {
+f32 FUN_L00_00233d30(f32 *input_vector) {
     enum {
         GRAVITY_MODE_WORLD_Z = 0,
         GRAVITY_MODE_VECTOR_AXIS = 1,
         GRAVITY_MODE_DIRECTION_AXIS = 2
     };
-    struct Hero *b = &hero;
+    struct Hero *hero_base = &hero;
     V00233d30 gravity_frame_vector;
     f32 xy_length, z;
-    switch (b->unk20B3) {
+    switch (hero_base->unk20B3) {
     case GRAVITY_MODE_WORLD_Z:
-        xy_length = FUN_001f9b20_00233d30(v);
-        z = v[2];
+        xy_length = FUN_001f9b20_00233d30(input_vector);
+        z = input_vector[2];
         goto call;
     case GRAVITY_MODE_VECTOR_AXIS:
     case GRAVITY_MODE_DIRECTION_AXIS:
-        qcopy(&gravity_frame_vector, v);
-        FUN_001f9d20_00233d30(&gravity_frame_vector, &gravity_frame_vector, &b->unk40);
+        qcopy(&gravity_frame_vector, input_vector);
+        FUN_001f9d20_00233d30(&gravity_frame_vector, &gravity_frame_vector, &hero_base->unk40);
         xy_length = FUN_001f9b20_00233d30(&gravity_frame_vector);
         z = gravity_frame_vector.f[2];
     call:
