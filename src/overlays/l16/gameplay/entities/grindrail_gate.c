@@ -944,7 +944,7 @@ void FUN_L16_002e5258(struct Moby *trigger_moby) {
     char *command_timer = (char *)trigger_moby->pvars;
     char *bounds_check_position;
     float pos[16];
-    float mat[4];
+    float bounds_check_offset_from_trigger[4];
     float glow_cycle_phase;
     int period = scale_game_frames_q(30);
     glow_cycle_phase = convert_integer_to_float_q(D_L16_0015F5CC % period) / convert_integer_to_float_q(period);
@@ -959,12 +959,12 @@ void FUN_L16_002e5258(struct Moby *trigger_moby) {
         bounds_check_position = D_0013F3D0;
         if (FUN_001f9b48_q(&trigger_moby->pos, bounds_check_position) < 16.0f) {
             FUN_001fa2d8_q(pos, &trigger_moby->rot_row0);
-            subtract_vector_xyz_q(mat, bounds_check_position, &trigger_moby->pos);
-            mat[3] = 0.0f;
-            FUN_001f9d20_q(mat, mat, pos);
-            if (D_L16_001D9768[0] < mat[0] && mat[0] < D_L16_001D9768[1] &&
-                D_L16_001D9768[2] < mat[1] && mat[1] < D_L16_001D9768[3] &&
-                D_L16_001D9768[4] < mat[2] && mat[2] < D_L16_001D9768[5]) {
+            subtract_vector_xyz_q(bounds_check_offset_from_trigger, bounds_check_position, &trigger_moby->pos);
+            bounds_check_offset_from_trigger[3] = 0.0f;
+            FUN_001f9d20_q(bounds_check_offset_from_trigger, bounds_check_offset_from_trigger, pos);
+            if (D_L16_001D9768[0] < bounds_check_offset_from_trigger[0] && bounds_check_offset_from_trigger[0] < D_L16_001D9768[1] &&
+                D_L16_001D9768[2] < bounds_check_offset_from_trigger[1] && bounds_check_offset_from_trigger[1] < D_L16_001D9768[3] &&
+                D_L16_001D9768[4] < bounds_check_offset_from_trigger[2] && bounds_check_offset_from_trigger[2] < D_L16_001D9768[5]) {
                 func_0022ED80_66C0_q(1, 0, trigger_moby);
                 trigger_moby->command = 1;
                 trigger_moby->state = 2;
