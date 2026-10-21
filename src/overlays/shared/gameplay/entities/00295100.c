@@ -1692,7 +1692,7 @@ void FUN_L00_0029b4d8(int vendor_event) {
         VENDOR_ITEM_PURCHASE = 2,
         VENDOR_AMMO_PURCHASE = 3
     };
-    char *b;
+    char *vendor_state_base;
     unsigned char *auxiliary_moby;
     int auxiliary_moby_state;
     int moby_state;
@@ -1700,20 +1700,20 @@ void FUN_L00_0029b4d8(int vendor_event) {
     int ready_variant_index;
     if (D_L00_00161188 == 0)
         return;
-    b = D_L00_001CA4C0;
-    auxiliary_moby = *(unsigned char **)(b + 0x24);
+    vendor_state_base = D_L00_001CA4C0;
+    auxiliary_moby = *(unsigned char **)(vendor_state_base + 0x24);
     switch (vendor_event) {
     case VENDOR_SELECTION_CHANGED:
         auxiliary_moby_state = auxiliary_moby[0x20];
         if (auxiliary_moby_state == 2 || auxiliary_moby_state == 0) {
             if (random_integer_below(4) == 0) {
-                if (*(int *)(b + 0x30) + scale_game_frames(0x168) < D_L00_0015F3F8) {
-                    *(int *)(b + 0x30) = D_L00_0015F3F8;
+                if (*(int *)(vendor_state_base + 0x30) + scale_game_frames(0x168) < D_L00_0015F3F8) {
+                    *(int *)(vendor_state_base + 0x30) = D_L00_0015F3F8;
                     selection_variant_index = random_integer_below(2);
-                    *(int *)(b + 0x3C) = selection_variant_index;
+                    *(int *)(vendor_state_base + 0x3C) = selection_variant_index;
                     D_L00_00161190 = 1;
                     D_L00_00161194 = 0;
-                    *(int *)(D_001516EC) = (selection_variant_index * 3 + 2) * 6 + *(int *)(b + 0x38) + 10000;
+                    *(int *)(D_001516EC) = (selection_variant_index * 3 + 2) * 6 + *(int *)(vendor_state_base + 0x38) + 10000;
                     auxiliary_moby[0x20] = 0xB;
                 }
             }
@@ -1721,10 +1721,10 @@ void FUN_L00_0029b4d8(int vendor_event) {
         break;
     case VENDOR_AUXILIARY_MOBY_READY:
         ready_variant_index = random_integer_below(2);
-        *(int *)(b + 0x3C) = ready_variant_index;
+        *(int *)(vendor_state_base + 0x3C) = ready_variant_index;
         D_L00_00161190 = vendor_event;
         D_L00_00161194 = 0;
-        *(int *)(D_001516EC) = ready_variant_index * 0x12 + *(int *)(b + 0x38) + 10000;
+        *(int *)(D_001516EC) = ready_variant_index * 0x12 + *(int *)(vendor_state_base + 0x38) + 10000;
         if (auxiliary_moby[0x53] != vendor_event)
             blend_moby_animation(auxiliary_moby, 1, 0, 10);
         auxiliary_moby[0x20] = 10;
