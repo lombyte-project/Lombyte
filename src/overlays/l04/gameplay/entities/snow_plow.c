@@ -22,9 +22,9 @@ extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L0
 
 void FUN_L04_002d3580(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
-    float v[4];
-    fast_vec_sub(v, moby + 0x10, moby_vars + 0xA0);
-    update_entity_matrix(moby_vars + 0x60, v, moby + 0x40, moby + 0x40);
+    float position_delta[4];
+    fast_vec_sub(position_delta, moby + 0x10, moby_vars + 0xA0);
+    update_entity_matrix(moby_vars + 0x60, position_delta, moby + 0x40, moby + 0x40);
     qcopy(moby_vars + 0xA0, moby + 0x10);
     if (*(unsigned char *)(moby + 0x20) == 0) {
         *(int *)(moby_vars + 0x20) = 0;
