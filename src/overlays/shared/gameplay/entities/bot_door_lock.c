@@ -189,7 +189,7 @@ void bot_door_lock_update(char *moby) {
     };
     float *data = *(float **)(moby + 0x78);
     int *idata = (int *)data;
-    float pos[4];
+    float number_anchor_position[4];
     float offset[3];
     float result[4];
     float angle;
@@ -210,8 +210,8 @@ void bot_door_lock_update(char *moby) {
         data[9] = D_L06_001622EC;
         return;
     case BOT_DOOR_LOCK_STATE_ACTIVE:
-        *(OvlQuad *)pos = *(OvlQuad *)(moby + 0x10);
-        pos[2] += 2.75f;
+        *(OvlQuad *)number_anchor_position = *(OvlQuad *)(moby + 0x10);
+        number_anchor_position[2] += 2.75f;
         if (FUN_001f9b48(D_L06_00167540, moby + 0x10) < 32.0f) {
             data[9] += frame_time + frame_time;
             if (D_L06_001622EC < data[9]) data[9] = D_L06_001622EC;
@@ -222,13 +222,13 @@ void bot_door_lock_update(char *moby) {
         if (0.0f < data[9]) {
             enqueue_callback_list_1((int)FUN_L06_00307578, (int)moby);
             data[6] = fast_add_rotations(data[6], (360.0f / D_L06_001622E0) * 0.017453292f * frame_time);
-            pos[2] += D_L06_001622DC * fast_cos(data[6]);
+            number_anchor_position[2] += D_L06_001622DC * fast_cos(data[6]);
             value = truncate_float_to_s32(D_L06_001622E8 * fast_cos(data[10]));
             color_channels = (value / 2 + 120) * 0x100 | 0x20000000U;
             color = (value / 3 + 13) * 0x10000 | color_channels | (value + 150U);
             if (D_001413F4 == 1) {
                 if (idata[5] < 10) {
-                    draw_number(pos, moby, idata[5] + 2, color, 0x7f, 4, 0xff, 0.5f);
+                    draw_number(number_anchor_position, moby, idata[5] + 2, color, 0x7f, 4, 0xff, 0.5f);
                 } else {
                     if (D_0015EDB4) {
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
@@ -236,14 +236,14 @@ void bot_door_lock_update(char *moby) {
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
                         offset[1] = fast_sin(angle) * 0.15f;
                         offset[2] = 0.0f;
-                        add_vectors(result, offset, pos);
+                        add_vectors(result, offset, number_anchor_position);
                         draw_number(offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
                         offset[0] = fast_cos(angle) * -0.4f;
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
                         offset[1] = fast_sin(angle) * -0.4f;
                         offset[2] = 0.0f;
-                        add_vectors(result, offset, pos);
+                        add_vectors(result, offset, number_anchor_position);
                         draw_number(offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                     } else {
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
@@ -251,14 +251,14 @@ void bot_door_lock_update(char *moby) {
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
                         offset[1] = fast_sin(angle) * -0.4f;
                         offset[2] = 0.0f;
-                        add_vectors(result, offset, pos);
+                        add_vectors(result, offset, number_anchor_position);
                         draw_number(offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
                         offset[0] = fast_cos(angle) * 0.15f;
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
                         offset[1] = fast_sin(angle) * 0.15f;
                         offset[2] = 0.0f;
-                        add_vectors(result, offset, pos);
+                        add_vectors(result, offset, number_anchor_position);
                         draw_number(offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                     }
                 }
