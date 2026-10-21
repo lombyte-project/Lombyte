@@ -424,7 +424,7 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 
-char *FUN_L09_002ea528(struct Moby *owner, float *vec) {
+char *FUN_L09_002ea528(struct Moby *owner, float *inherited_velocity) {
     char *moby = func_0020D348_m(random_integer_below(4) + 0x107);
     if (moby != 0) {
         char *spawned_moby_vars = *(char **)(moby + 0x78);
@@ -437,7 +437,7 @@ char *FUN_L09_002ea528(struct Moby *owner, float *vec) {
         dv = spawned_moby_vars + 0x20;
         add_vector_xyz(dv, spawned_moby_vars, owner_vars);
         normalize_vector_xyz(spawned_moby_vars, spawned_moby_vars, frame_time * 50.0f);
-        add_vector_xyz(spawned_moby_vars, spawned_moby_vars, vec);
+        add_vector_xyz(spawned_moby_vars, spawned_moby_vars, inherited_velocity);
         scale_vector_xyz(spawned_moby_vars, spawned_moby_vars, frame_scale * -0.7f + 1.0f);
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
