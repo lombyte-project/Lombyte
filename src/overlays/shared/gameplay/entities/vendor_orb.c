@@ -2591,7 +2591,7 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float blend_update_
     char *blend_output_block = camera_state + 0x1A8;
     char *reference_direction = camera_state + 0x130;
     float dot;
-    float len;
+    float planar_input_length_or_length_product;
     float planar_separation_angle;
     float sign;
     float angle_delta = 0.0f;
@@ -2603,16 +2603,16 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float blend_update_
     FUN_001f9a68_c4(axis_projection, axis, fast_vec_dot(reference_direction, axis));
     FUN_001f9a28(planar_reference_direction, (float *)reference_direction, axis_projection);
     dot = fast_vec_dot(planar_input_direction, planar_reference_direction);
-    len = fast_vec_length(planar_input_direction);
-    if (len == angle_delta) {
+    planar_input_length_or_length_product = fast_vec_length(planar_input_direction);
+    if (planar_input_length_or_length_product == angle_delta) {
         return angle_delta;
     }
     z2 = 0.0f;
-    len = len * fast_vec_length(planar_reference_direction);
-    if (len == angle_delta) {
+    planar_input_length_or_length_product = planar_input_length_or_length_product * fast_vec_length(planar_reference_direction);
+    if (planar_input_length_or_length_product == angle_delta) {
         return angle_delta;
     }
-    planar_separation_angle = 1.5707964f - fast_arc_sin(dot / len);
+    planar_separation_angle = 1.5707964f - fast_arc_sin(dot / planar_input_length_or_length_product);
     sign = -1.0f;
     fast_vec_cross(input_cross_axis, planar_input_direction, axis);
     if (fast_vec_dot(input_cross_axis, planar_reference_direction) >= 0.0f) {
