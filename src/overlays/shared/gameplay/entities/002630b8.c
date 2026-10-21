@@ -47,14 +47,14 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
     *pitch = -fast_arc_tan(vector_length_xy(dp), dp->f[2]);
 
     for (candidate_moby = D_L00_0015FFE4; candidate_moby != 0; candidate_moby = candidate_moby->next) {
-        MobyBound *b;
+        MobyBound *aim_bounds;
         f32 t_yaw, t_pitch, dist, ang;
         if ((s8)candidate_moby->state < 0)
             continue;
         qcopy(&target, &candidate_moby->pos);
-        b = suck_get_aim_height(candidate_moby);
-        if (b)
-            target.f[2] += b->height;
+        aim_bounds = suck_get_aim_height(candidate_moby);
+        if (aim_bounds)
+            target.f[2] += aim_bounds->height;
         else
             target.f[2] += 0.5f;
         if (!(candidate_moby->flags & 0x1000) || !candidate_moby || !candidate_moby->pclass || candidate_moby->pclass->type != 5)
@@ -77,8 +77,8 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
         add_vector_xyz(&probe, &probe, pp);
         ang = fast_arc_sin(fast_vec_dist(&probe, &target) / (dist + dist));
         ang = ang + ang;
-        if (max_angle < ang && b) {
-            f32 radius = convert_integer_to_float(b->size << 3) * 0.125f;
+        if (max_angle < ang && aim_bounds) {
+            f32 radius = convert_integer_to_float(aim_bounds->size << 3) * 0.125f;
             f32 shrink = fast_arc_sin(radius / dist);
             if (radius < dist)
                 ang -= shrink;
@@ -88,8 +88,8 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
             best_dist = dist;
             *pitch = -t_pitch;
             *yaw = t_yaw;
-            if (b)
-                *height = b->height;
+            if (aim_bounds)
+                *height = aim_bounds->height;
             else
                 *height = 0.5f;
         }
