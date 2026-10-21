@@ -900,15 +900,15 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void FUN_L06_002e9aa8(char *moby) {
     float collision_line_end[4];
-    float b[4];
+    float collision_line_start[4];
     float axis_offset[4];
-    qcopy(b, moby + 0x10);
+    qcopy(collision_line_start, moby + 0x10);
     fast_vec_normalize(axis_offset, moby + 0xE0, 1.0f);
-    fast_vec_add(b, b, axis_offset);
+    fast_vec_add(collision_line_start, collision_line_start, axis_offset);
     qcopy(collision_line_end, moby + 0x10);
     fast_vec_normalize(axis_offset, moby + 0xE0, -1.0f);
     fast_vec_add(collision_line_end, collision_line_end, axis_offset);
-    collision_line(b, collision_line_end, 2, 0, 0);
+    collision_line(collision_line_start, collision_line_end, 2, 0, 0);
 }
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void FUN_L00_00261d78(float, int, void *, void *);
