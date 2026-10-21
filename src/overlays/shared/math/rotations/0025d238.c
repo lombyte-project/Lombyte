@@ -753,11 +753,11 @@ extern Shake0025f090 D_L00_00166C80;
 /* Explosion burst at `pos`: three random-coloured particles, two tinted particles on `owner`, a camera shake when the
    spot is in view, the owner's sound unless it is dying, and a light flash of intensity `flash` (13 if negative). */
 void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) __asm__("FUN_L00_0025f090");
-void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) {
-    Vy10 vel;
+void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float flash) {
+    Vy10 particle_velocity;
     int i;
     float sp, big;
-    clear_u64_value(&vel);
+    clear_u64_value(&particle_velocity);
     for (i = 2; i >= 0; i--) {
         S6y10 first_particle_color_palette;
         S6y10 second_particle_color_palette;
@@ -765,17 +765,17 @@ void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) {
         big = scale * 400000.0f;
         first_particle_color_palette = D_L00_001E9030;
         second_particle_color_palette = D_L00_001E9048;
-        FUN_L00_0026a9f0(pos, &vel, first_particle_color_palette.v[random_integer_below(6)], second_particle_color_palette.v[random_integer_below(6)],
+        FUN_L00_0026a9f0(burst_position, &particle_velocity, first_particle_color_palette.v[random_integer_below(6)], second_particle_color_palette.v[random_integer_below(6)],
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
     if (owner != 0) {
-        spawn_glow_particle(owner, pos, &vel, scale * 4.0f, scale_game_frames_c(0x14), 0x7F, 0x40, 0, 0x30);
-        spawn_glow_particle(owner, pos, &vel, scale * 3.0f, scale_game_frames_c(0x1D), 0x60, 0x20, 0, 0x20);
+        spawn_glow_particle(owner, burst_position, &particle_velocity, scale * 4.0f, scale_game_frames_c(0x14), 0x7F, 0x40, 0, 0x30);
+        spawn_glow_particle(owner, burst_position, &particle_velocity, scale * 3.0f, scale_game_frames_c(0x1D), 0x60, 0x20, 0, 0x20);
     }
     {
         Vy10 at;
-        *(u128 *)&at = *pos;
+        *(u128 *)&at = *burst_position;
         at.w = 2.0f;
         if (fast_bsphere_check(&at, 10.0f) != -1) {
             D_L00_00166C80.scale = scale * 0.1f;
@@ -795,7 +795,7 @@ void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) {
             D_L00_001B02F0[10] = 13.0f;
             D_L00_001B02F0[8] = 13.0f;
         }
-        mine_camera_blast(D_L00_001B02F0, pos, 0, 0);
+        mine_camera_blast(D_L00_001B02F0, burst_position, 0, 0);
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260460), where it is exact; names translated to the US level program. */
