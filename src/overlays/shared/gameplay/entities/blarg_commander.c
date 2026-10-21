@@ -64,7 +64,7 @@ void FUN_L12_00308708(void *unused, struct Moby *moby) {
     float ang;
     float rise_sqrt_term, frame_rise_sqrt_term;
     float frame_scaled_rise;
-    float g;
+    float frame_time_squared;
 
     if (random_integer_below(3) == 0) {
         allocate_voice_for_target_entry(1, 0x20, moby);
@@ -79,9 +79,9 @@ void FUN_L12_00308708(void *unused, struct Moby *moby) {
     dir[1] = fast_sin(ang);
     dir[2] = 1.0f;
     dir[3] = 5627.925f;
-    g = frame_time_sq;
-    lobbed_vars->rise = g * 40.0f;
-    lobbed_vars->fall = g * 100.0f;
+    frame_time_squared = frame_time_sq;
+    lobbed_vars->rise = frame_time_squared * 40.0f;
+    lobbed_vars->fall = frame_time_squared * 100.0f;
     rise_sqrt_term = fast_sqrt(lobbed_vars->rise * 4.0f);
     frame_rise_sqrt_term = fast_sqrt(frame_time_sq * 40.0f * 4.0f);
     frame_scaled_rise = frame_time_sq * 40.0f;
