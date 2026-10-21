@@ -90,7 +90,7 @@ void update_world_object_animation(void *unused_arg) {
     int k;
     int idx;
     int id;
-    int off;
+    int part_record_offset;
     int endp;
     int pc;
 
@@ -113,8 +113,8 @@ void update_world_object_animation(void *unused_arg) {
     }
 
     for (i = 0; i < D_0018CB20_t.num_parts; i++) {
-        off = *cp++;
-        sp = (int *)((unsigned char *)rec + off);
+        part_record_offset = *cp++;
+        sp = (int *)((unsigned char *)rec + part_record_offset);
         id = sp[0];
         sp = (int *)((unsigned char *)sp + 0xC);
         endp = (int)rec + sp[0];
