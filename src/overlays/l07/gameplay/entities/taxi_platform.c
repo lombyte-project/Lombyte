@@ -166,19 +166,19 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L07_0030e1f8(unsigned char *moby) {
     char *moby_data = *(char **)(moby + 0x78);
-    float r;
+    float radius_progress;
     char *affected_moby;
     *(float *)(moby_data + 8) = *(float *)(moby_data + 8) + *(float *)(moby_data + 0xC);
     *(float *)(moby + 0x2C) = *(float *)(moby_data + 8);
-    r = (*(float *)(moby_data + 8) - *(float *)moby_data) / (*(float *)(moby_data + 4) - *(float *)moby_data);
-    if (r < 0.2f) {
-        moby[0x23] = func_001FA898_r(r * 5.0f * 127.0f);
-    } else if (r > 0.8f) {
-        moby[0x23] = func_001FA898_r((1.0f - r) * 5.0f * 127.0f);
+    radius_progress = (*(float *)(moby_data + 8) - *(float *)moby_data) / (*(float *)(moby_data + 4) - *(float *)moby_data);
+    if (radius_progress < 0.2f) {
+        moby[0x23] = func_001FA898_r(radius_progress * 5.0f * 127.0f);
+    } else if (radius_progress > 0.8f) {
+        moby[0x23] = func_001FA898_r((1.0f - radius_progress) * 5.0f * 127.0f);
     } else {
         moby[0x23] = 0x80;
     }
-    if (r >= 1.0f) {
+    if (radius_progress >= 1.0f) {
         delete_moby(moby);
         return;
     }
