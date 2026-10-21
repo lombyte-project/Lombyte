@@ -1515,11 +1515,11 @@ void FUN_L15_0029a570(void *object, int flag) {
 extern void FUN_L00_00263618(void *, int, float, float);
 
 void FUN_L15_0029aba8(char *moby) {
-    int v = (*(int *)(moby + 0x90) & 0xFFFFFF) | 0x30000000;
+    int effect_color = (*(int *)(moby + 0x90) & 0xFFFFFF) | 0x30000000;
     char *effect_position = *(char **)(moby + 0x78) + 0x2A0;
     int i;
     for (i = 2; i >= 0; i--) {
-        FUN_L00_00263618(effect_position, v, 0.2f, 0.08f);
+        FUN_L00_00263618(effect_position, effect_color, 0.2f, 0.08f);
         effect_position += 0x10;
     }
 }
