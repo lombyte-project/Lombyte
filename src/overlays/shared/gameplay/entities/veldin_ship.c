@@ -3728,7 +3728,7 @@ void set_moby_color(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
 float random_angle_radians(void) __asm__("FUN_00213308");
 void FUN_L00_00250df8(unsigned char *);
 unsigned char *FUN_L00_002d7e90(u128 *v, float s);
-unsigned char *FUN_L00_002d7e90(u128 *v, float scale_multiplier) {
+unsigned char *FUN_L00_002d7e90(u128 *spawn_position, float scale_multiplier) {
     unsigned char *spawned_moby = create_moby(0x307);
     if (spawned_moby) {
         FUN_L00_0025d1b8(spawned_moby);
@@ -3736,7 +3736,7 @@ unsigned char *FUN_L00_002d7e90(u128 *v, float scale_multiplier) {
         spawned_moby[0x30] = 0xff;
         *(short *)(spawned_moby + 0x32) = 0x40;
         *(float *)(spawned_moby + 0x2c) *= scale_multiplier;
-        qcopy(spawned_moby + 0x10, v);
+        qcopy(spawned_moby + 0x10, spawn_position);
         *(float *)(spawned_moby + 0x48) = random_angle_radians();
         FUN_L00_00250df8(spawned_moby);
     }
