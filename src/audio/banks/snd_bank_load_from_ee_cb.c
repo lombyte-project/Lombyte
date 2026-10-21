@@ -20,7 +20,7 @@ extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, voi
 // HI16/LO16 pair instead of a gp-relative reference.
 void snd_bank_load_from_ee_cb(s32 cmd, s32 arg, s64 data) __asm__("FUN_0012e088");
 
-void snd_bank_load_from_ee_cb(s32 cmd, s32 arg, s64 data) {
+void snd_bank_load_from_ee_cb(s32 cmd, s32 callback_address, s64 data) {
     snd_cd_load_error = 0;
     if (snd_cd_callback_pending != 0) {
         printf(snd_bank_load_from_ee_progress_string);
@@ -32,7 +32,7 @@ void snd_bank_load_from_ee_cb(s32 cmd, s32 arg, s64 data) {
     }
     snd_cd_bank_load_request[0] = cmd;
     snd_cd_callback_arg = 0xFFFFFFFF;
-    snd_cd_callback_fn = arg;
+    snd_cd_callback_fn = callback_address;
     snd_cd_callback_data = data;
     while (SceSifCheckStatRpc(D_0015EBE8) != 0) {
         printf(snd_non_idle_error_string);
