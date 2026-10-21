@@ -1915,7 +1915,7 @@ f32 FUN_001f99c8_208b60(f32, f32) __asm__("FUN_001f99c8");
 extern V_208b60 D_L00_001AEB90;
 extern T_208b60 D_L00_0017C300[];
 void FUN_L00_00208b60(void) {
-    V_208b60 v, w, x;
+    V_208b60 v, collision_probe_start, x;
     f32 k, rotation_step, planar_angle, planar_cosine, planar_sine, probe_reference_z, hi, lo, sc;
     T_208b60 *t;
     V_208b60 *pw, *px;
@@ -1964,7 +1964,7 @@ void FUN_L00_00208b60(void) {
     }
     hi = probe_reference_z;
     lo = hi;
-    pw = &w;
+    pw = &collision_probe_start;
     px = &x;
     t = D_L00_0017C300;
     for (i = 3; i >= 0; i--, t++) {
@@ -1973,10 +1973,10 @@ void FUN_L00_00208b60(void) {
         m = G.m2080;
         sc = m->fC * 0.0009765625f;
         FUN_001f9a68_208b60(pw, m, 0.0009765625f);
-        w.f[0] += planar_cosine * t->x * sc;
-        w.f[1] += planar_sine * t->y * sc;
-        w.f[2] += t->z * sc;
-        normalize_vector_xyz(px, &v, ((w.f[2] - probe_reference_z) + 0.5f) / -v.f[2]);
+        collision_probe_start.f[0] += planar_cosine * t->x * sc;
+        collision_probe_start.f[1] += planar_sine * t->y * sc;
+        collision_probe_start.f[2] += t->z * sc;
+        normalize_vector_xyz(px, &v, ((collision_probe_start.f[2] - probe_reference_z) + 0.5f) / -v.f[2]);
         FUN_001f9a10_208b60(px, pw, px);
         if (collision_line(pw, px, 0x22, 0, 0)) {
             lo = FUN_001f99d0_208b60(lo, u->hit_z);
