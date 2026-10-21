@@ -8,12 +8,12 @@ float fast_cos(float) __asm__("FUN_001f9dc8");
 float fast_sin(float) __asm__("FUN_001f9de0");
 void random_vector(float *out, float lo, float hi) __asm__("FUN_L00_00257d78");
 void random_vector(float *out, float lo, float hi) {
-    float r = random_float_between(out, lo, hi);
+    float radial_scale = random_float_between(out, lo, hi);
     float azimuth_angle = random_angle_radians();
-    float b = random_angle_radians();
-    out[0] = fast_cos(azimuth_angle) * fast_sin(b) * r;
-    out[1] = fast_sin(azimuth_angle) * fast_sin(b) * r;
-    out[2] = fast_cos(b) * r;
+    float polar_angle = random_angle_radians();
+    out[0] = fast_cos(azimuth_angle) * fast_sin(polar_angle) * radial_scale;
+    out[1] = fast_sin(azimuth_angle) * fast_sin(polar_angle) * radial_scale;
+    out[2] = fast_cos(polar_angle) * radial_scale;
 }
 #define NOT_SDA
 
