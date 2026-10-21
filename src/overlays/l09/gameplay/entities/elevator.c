@@ -984,7 +984,7 @@ void turret_update(struct Moby *moby) {
     Vec4 rnd;
     TurretVars *vars;
     TurretBeam *beam;
-    float len;
+    float stick_magnitude;
     float stick_y;
     int beam_frame_count;
     int i;
@@ -1104,9 +1104,9 @@ void turret_update(struct Moby *moby) {
             stick_y = hero.stick_y;
         }
         work_vector.f[1] = stick_y;
-        len = vector_length_xy(&work_vector);
-        if (len > 1.0f) {
-            divide_vector_xyz(&work_vector, &work_vector, len);
+        stick_magnitude = vector_length_xy(&work_vector);
+        if (stick_magnitude > 1.0f) {
+            divide_vector_xyz(&work_vector, &work_vector, stick_magnitude);
         }
         vars->yaw_speed += frame_time_sq * 3.1415927f * -work_vector.f[0];
         vars->pitch_speed += frame_time_sq * 0.7853982f * -work_vector.f[1];
