@@ -751,7 +751,7 @@ void FUN_L00_002e1df0(SlotMoby *slot_controller) {
     s32 i;
     s32 j;
     s32 dispatched_slot_count;
-    s32 st;
+    s32 slot_state;
 
     switch (slot_controller->state) {
     case SLOT_CONTROLLER_STATE_INITIALIZE:
@@ -765,11 +765,11 @@ void FUN_L00_002e1df0(SlotMoby *slot_controller) {
     case SLOT_CONTROLLER_STATE_PROCESS_SLOTS:
         dispatched_slot_count = 0;
         for (i = 0; i < 3; i++) {
-            st = D_L00_00161BF8[i];
-            if (st == 1) {
-            } else if (st == 4) {
+            slot_state = D_L00_00161BF8[i];
+            if (slot_state == 1) {
+            } else if (slot_state == 4) {
                 FUN_L00_002e20f8(i);
-            } else if (st != 0) {
+            } else if (slot_state != 0) {
                 dispatched_slot_count++;
                 FUN_L00_002e2250(D_L00_00161C88[i], i);
                 D_L00_00161BF8[i] = 4;
