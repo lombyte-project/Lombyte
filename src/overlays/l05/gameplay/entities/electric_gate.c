@@ -276,9 +276,9 @@ void FUN_L05_0030e1f8(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float hero_offset_from_volume_origin[4];
     float hero_position_in_volume_space[4];
-    char *g = (char *)&hero.motion.pos;
-    if (is_point_inside_clip_volume(g, *(int *)(data + 0x28))) {
-        *(float *)(g + 0x270) = 500.0f;
+    char *hero_position = (char *)&hero.motion.pos;
+    if (is_point_inside_clip_volume(hero_position, *(int *)(data + 0x28))) {
+        *(float *)(hero_position + 0x270) = 500.0f;
     }
     switch (((unsigned char *)moby)[0x20]) {
     case FOG_ZONE_INITIALIZE:
@@ -346,10 +346,10 @@ void FUN_L05_0030e1f8(char *moby) {
         }
         break;
     }
-    g = (char *)&hero.motion.pos;
-    if (is_point_inside_clip_volume(g, *(int *)(data + 0x38))) {
+    hero_position = (char *)&hero.motion.pos;
+    if (is_point_inside_clip_volume(hero_position, *(int *)(data + 0x38))) {
         int c;
-        subtract_vector_xyz(hero_offset_from_volume_origin, g, D_L05_001600EC + *(int *)(data + 0x38) * 128 + 0x30);
+        subtract_vector_xyz(hero_offset_from_volume_origin, hero_position, D_L05_001600EC + *(int *)(data + 0x38) * 128 + 0x30);
         hero_offset_from_volume_origin[3] = 0.0f;
         transform_vector_by_basis(hero_position_in_volume_space, hero_offset_from_volume_origin, D_L05_001600EC + *(int *)(data + 0x38) * 128 + 0x40);
         c = fast_tween_color(*(int *)(data + 0x30), *(int *)(data + 0x34), (hero_position_in_volume_space[0] + 1.0f) * 0.5f);
