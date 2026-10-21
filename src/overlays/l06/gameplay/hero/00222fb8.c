@@ -280,12 +280,12 @@ extern void FUN_L00_002118c8(int, float);
 
 void FUN_L06_00228b40(void) {
     char *x;
-    float cur;
+    float target_speed;
     FUN_L00_002118c8(0, 1.0f);
     x = D_0013E533 + 0xE1D;
-    cur = *(float *)(x + 0x190);
-    if (0.0f < cur) {
-        if (cur < D_L06_0017C538[3]) {
+    target_speed = *(float *)(x + 0x190);
+    if (0.0f < target_speed) {
+        if (target_speed < D_L06_0017C538[3]) {
             *(float *)(x + 0x190) = D_L06_0017C538[2] * frame_time;
         } else {
             *(float *)(x + 0x190) = D_L06_0017C538[6] * frame_time;
