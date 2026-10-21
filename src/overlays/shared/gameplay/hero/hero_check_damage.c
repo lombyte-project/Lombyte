@@ -1686,12 +1686,12 @@ typedef struct {
     void (*fn)(void);
 } O;
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-void FUN_L00_0020fca8(int i, int v) {
+void FUN_L00_0020fca8(int i, int respawn_threshold) {
     struct Hero *slot_owner; /* hero shifted by i slots, so items[0] is slot i */
     {
         struct Hero *pre_removal_slot_owner = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
         O *item_moby;
-        pre_removal_slot_owner->items[0].unk14 = v;
+        pre_removal_slot_owner->items[0].unk14 = respawn_threshold;
         if (pre_removal_slot_owner->items[0].state != 3) {
             item_moby = (O *)pre_removal_slot_owner->items[0].moby;
             pre_removal_slot_owner->items[0].state = 3;
