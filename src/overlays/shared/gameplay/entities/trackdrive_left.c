@@ -1187,8 +1187,8 @@ void swingshot_versatarget_update(char *moby) {
             }
         }
         {
-            struct Hero *g2 = &hero;
-            if (g2->state.current != 0x2C)
+            struct Hero *hero_reference = &hero;
+            if (hero_reference->state.current != 0x2C)
                 func_L02_002FBC00_c(moby);
         }
         break;
