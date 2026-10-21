@@ -3463,7 +3463,7 @@ extern int FUN_001f96f8_e5(int) __asm__("FUN_001f96f8");
 extern void FUN_0022da68_e5(int, int, char *) __asm__("FUN_0022da68");
 
 unsigned char *FUN_L13_002ea540(struct Moby *firing_moby, unsigned char *starfighter_data) {
-    float v[4];
+    float muzzle_position[4];
     struct {
         int a;
         float b;
@@ -3471,29 +3471,29 @@ unsigned char *FUN_L13_002ea540(struct Moby *firing_moby, unsigned char *starfig
     } s;
     int muzzle_joint_index;
     float projectile_speed;
-    unsigned char *r;
+    unsigned char *spawned_rocket_moby;
     struct Hero *g;
     muzzle_joint_index = (starfighter_data[0xFC] & 1) ? 0x12 : 0x10;
     if (firing_moby->command != 6 || (FUN_001160d8_e5() & 1)) {
         starfighter_data[0xFC] ^= 1;
     }
-    FUN_L00_0024f7c8_e5(firing_moby, muzzle_joint_index, v);
+    FUN_L00_0024f7c8_e5(firing_moby, muzzle_joint_index, muzzle_position);
     s.a = 0;
     if (firing_moby->state != 5) {
-        FUN_L13_002ea400_c(v, &s.b, &s.c, D_0015ED6C_e5 * 17.0f);
+        FUN_L13_002ea400_c(muzzle_position, &s.b, &s.c, D_0015ED6C_e5 * 17.0f);
     } else {
-        FUN_L13_002ea400_c(v, &s.b, &s.c, -1.0f);
+        FUN_L13_002ea400_c(muzzle_position, &s.b, &s.c, -1.0f);
     }
     g = &hero;
     projectile_speed = D_0015ED6C_e5 * 18.0f + *(float *)(starfighter_data + 0xAC);
     s.c = firing_moby->rot.z;
     s.b = 0.43633232f;
-    r = FUN_L13_002c13b0_e5(firing_moby, (char *)v, ((char *)g->ship_moby), (char *)&s,
+    spawned_rocket_moby = FUN_L13_002c13b0_e5(firing_moby, (char *)muzzle_position, ((char *)g->ship_moby), (char *)&s,
                          projectile_speed, FUN_001f96f8_e5(300), D_0015ED6C_e5 * 18.0f);
-    if (r != 0) {
+    if (spawned_rocket_moby != 0) {
         FUN_0022da68_e5(2, 0, firing_moby);
     }
-    return r;
+    return spawned_rocket_moby;
 }
 /* computes a velocity vector for a moby from the camera/player and spawns a projectile */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EBAF0), where it is exact; names translated to the US level program. */
