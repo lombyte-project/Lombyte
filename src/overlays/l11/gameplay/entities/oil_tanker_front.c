@@ -1589,7 +1589,7 @@ void FUN_L11_0031ab08(struct Moby *bubble_moby) {
         BUBBLE_SHRINK_TO_REMOVAL = 2
     };
     char *bubble_vars = (char *)bubble_moby->pvars;
-    float v[4];
+    float randomized_effect_vector[4];
     float len;
     float rate;
     char *spawned_effect;
@@ -1620,9 +1620,9 @@ void FUN_L11_0031ab08(struct Moby *bubble_moby) {
         rate = bubble_moby->pclass->scale / (float)scale_game_frames(0x3C);
         if ((level_frame & 3) == 0) {
             FUN_L11_0031ae68((struct Moby *)bubble_moby, *(float **)(bubble_vars + 0x24), 0, 1);
-            random_vector(v, 0.0f, D_0015ED6C_n[1]);
-            v[2] = absolute_float(v[2]);
-            spawned_effect = func_L00_0026FF20_p(&bubble_moby->pos, v, *(float *)&D_L11_00162414,
+            random_vector(randomized_effect_vector, 0.0f, D_0015ED6C_n[1]);
+            randomized_effect_vector[2] = absolute_float(randomized_effect_vector[2]);
+            spawned_effect = func_L00_0026FF20_p(&bubble_moby->pos, randomized_effect_vector, *(float *)&D_L11_00162414,
                                     **(float **)(bubble_vars + 0x24));
             if (spawned_effect != 0) {
                 *(int *)(spawned_effect + 4) = fast_tween_color(*(int *)&D_L11_00162418, *(int *)&D_L11_0016241C,
