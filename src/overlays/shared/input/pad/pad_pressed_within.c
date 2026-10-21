@@ -36,15 +36,15 @@ extern int FUN_L00_00266d60_u(int, int, int *) __asm__("FUN_L00_00266d60");
 extern s32 SubtractIntegerWithClamp(s32);
 
 /* True when both lookups succeed and the clamped difference of their values is below d. */
-int FUN_L00_00266e00(int first_button_mask, int b, int lookback_frames, int press_difference_limit) {
-    int v[2];
-    int r = 0;
-    if (FUN_L00_00266d60_u(first_button_mask, lookback_frames, &v[0])) {
-        if (FUN_L00_00266d60_u(b, lookback_frames, &v[1])) {
-            r = SubtractIntegerWithClamp(v[0] - v[1]) < press_difference_limit;
+int FUN_L00_00266e00(int first_button_mask, int second_button_mask, int lookback_frames, int press_difference_limit) {
+    int press_ages_frames[2];
+    int presses_within_limit = 0;
+    if (FUN_L00_00266d60_u(first_button_mask, lookback_frames, &press_ages_frames[0])) {
+        if (FUN_L00_00266d60_u(second_button_mask, lookback_frames, &press_ages_frames[1])) {
+            presses_within_limit = SubtractIntegerWithClamp(press_ages_frames[0] - press_ages_frames[1]) < press_difference_limit;
         }
     }
-    return r;
+    return presses_within_limit;
 }
 typedef struct {
     char pad[0x18E];
