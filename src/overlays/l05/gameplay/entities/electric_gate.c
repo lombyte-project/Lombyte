@@ -1220,7 +1220,7 @@ void elevator_with_button_update(struct Moby *moby) {
     Vec4 eye;
     Vec4 look;
     f32 scale;
-    f32 accel;
+    f32 progress_speed_limit;
     f32 max_speed;
     f32 target;
     s32 level;
@@ -1258,14 +1258,14 @@ void elevator_with_button_update(struct Moby *moby) {
             FUN_L00_002ea9d8(&eye);
             FUN_L00_002eaa30(&look);
             scale = 1.0f / (vars->top - vars->bottom);
-            accel = frame_time * (moby->command ? 6.0f : 16.0f) * scale;
+            progress_speed_limit = frame_time * (moby->command ? 6.0f : 16.0f) * scale;
             max_speed = frame_time_sq * (moby->command ? 6.0f : 16.0f) * scale;
         } else {
-            accel = frame_time;
+            progress_speed_limit = frame_time;
             max_speed = frame_time_sq;
         }
         target = moby->state == 2 ? 1.0f : 0.0f;
-        approach_with_speed(&vars->progress, &vars->speed, target, max_speed, max_speed, accel);
+        approach_with_speed(&vars->progress, &vars->speed, target, max_speed, max_speed, progress_speed_limit);
         moby->pos.z = (vars->top - vars->bottom) * vars->progress + vars->bottom;
         moby->rot.z = fast_subtract_rotations(D_L05_001600EC_l[vars->pose].rot.z, vars->base_yaw) * vars->progress;
         moby->rot.z = fast_add_rotations(moby->rot.z, vars->base_yaw);
