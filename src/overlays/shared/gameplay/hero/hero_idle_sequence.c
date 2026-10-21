@@ -116,12 +116,12 @@ void hero_change_health(s32 n) __asm__("FUN_L00_002050c0");
 void hero_change_health(s32 health_decrement) {
     if (health_decrement) {
         struct Hero *g = &hero;
-        int v;
+        int health_after_subtraction;
         if (health_decrement >= 2)
             health_decrement = 1;
-        v = g->health.hp - health_decrement;
-        g->health.hp = v;
-        if (v < 0)
+        health_after_subtraction = g->health.hp - health_decrement;
+        g->health.hp = health_after_subtraction;
+        if (health_after_subtraction < 0)
             g->health.hp = 0;
         show_health_hud();
     }
