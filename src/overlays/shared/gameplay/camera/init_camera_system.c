@@ -181,33 +181,33 @@ void init_camera_system(void) __asm__("FUN_L00_001ed280");
 void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
 extern f32 D_L00_0015EF40_gp __asm__("D_L00_0015EF40") __attribute__((sda));
 void setup_level_cameras(void) {
-    char *g = (char *)&D_L00_00166C80;
-    char *g1;
+    char *camera_system_state = (char *)&D_L00_00166C80;
+    char *camera_system_state_alias;
     char *q;
     char *normalized_hero_vector;
     struct Hero *base;
     int i;
     int k;
 
-    *(int *)(g + 0x394) = 0;
-    *(int *)(g + 0x398) = 0;
+    *(int *)(camera_system_state + 0x394) = 0;
+    *(int *)(camera_system_state + 0x398) = 0;
     D_L00_0015EF40_gp = 0.75f;
     D_L00_0015EF4C = 0;
     for (k = 0; k < 48; k++) {
         D_L00_00167150[k].s8E = 0;
         D_L00_00169890[k] = 0;
     }
-    g1 = (char *)&D_L00_00166C80;
+    camera_system_state_alias = (char *)&D_L00_00166C80;
     base = &hero;
-    q = g1 + 0x190;
-    normalized_hero_vector = g1 + 0x1B0;
-    *(int *)(g1 + 0x184) = 0;
-    *(short *)(g1 + 0x270) = 0;
+    q = camera_system_state_alias + 0x190;
+    normalized_hero_vector = camera_system_state_alias + 0x1B0;
+    *(int *)(camera_system_state_alias + 0x184) = 0;
+    *(short *)(camera_system_state_alias + 0x270) = 0;
     normalize_vector_xyz(normalized_hero_vector, (char *)(((int)base->moby) + 0xE0), 1.0f);
-    qcopy(g1 + 0x1C0, normalized_hero_vector);
-    qcopy(g1 + 0x1D0, normalized_hero_vector);
-    clear_vector(g1 + 0x1E0);
-    qcopy(g1 + 0x1F0, &base->motion.pos);
+    qcopy(camera_system_state_alias + 0x1C0, normalized_hero_vector);
+    qcopy(camera_system_state_alias + 0x1D0, normalized_hero_vector);
+    clear_vector(camera_system_state_alias + 0x1E0);
+    qcopy(camera_system_state_alias + 0x1F0, &base->motion.pos);
     {
         float hero_rotation_z = base->motion.rot.f[2];
         float hero_position_z = base->motion.pos.f[2];
