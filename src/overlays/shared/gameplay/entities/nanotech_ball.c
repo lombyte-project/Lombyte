@@ -3331,7 +3331,7 @@ void red_orb_update(char *moby) {
     char *orb_data = *(char **)(moby + 0x78);
     unsigned char state = moby[0x20];
     float pulse_phase_or_sine;
-    int c, hi, r, g, b, packed_color_without_red;
+    int tweened_color, hi, r, g, b, packed_color_without_red;
     switch (state) {
     case RED_ORB_STATE_INITIALIZE_PHASE:
         *(float *)orb_data = *(float *)orb_data * DEG_TO_RAD;
@@ -3342,10 +3342,10 @@ void red_orb_update(char *moby) {
                                D_L00_00161B98 * DEG_TO_RAD * frame_time);
         *(float *)orb_data = pulse_phase_or_sine;
         pulse_phase_or_sine = fast_sin(pulse_phase_or_sine);
-        c = fast_tween_color(D_L00_00161B90, D_L00_00161B94, pulse_phase_or_sine * 0.5f + 0.5f);
-        b = (c >> 16) & 0xFF;
-        g = (c >> 8) & 0xFF;
-        r = c & 0xFF;
+        tweened_color = fast_tween_color(D_L00_00161B90, D_L00_00161B94, pulse_phase_or_sine * 0.5f + 0.5f);
+        b = (tweened_color >> 16) & 0xFF;
+        g = (tweened_color >> 8) & 0xFF;
+        r = tweened_color & 0xFF;
         hi = 0x38;
         if (current_level_index == 0 || current_level_index == 0x12)
             hi = 0x20;
@@ -3353,7 +3353,7 @@ void red_orb_update(char *moby) {
         packed_color_without_red |= g << 8;
         *(int *)(orb_data + 4) = packed_color_without_red | r;
         FUN_L00_002df4a8_u(moby);
-        set_moby_color(moby, c & 0xFF, (c >> 16) & 0xFF, (unsigned)c >> 24);
+        set_moby_color(moby, tweened_color & 0xFF, (tweened_color >> 16) & 0xFF, (unsigned)tweened_color >> 24);
         break;
     }
 }
