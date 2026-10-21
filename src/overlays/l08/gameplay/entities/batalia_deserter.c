@@ -781,12 +781,12 @@ float *D_L08_001623D8[2] = {D_L08_001EFB20, D_L08_001EFC40};
 void FUN_L08_00308f68(int x) {
     int i;
     int *element_counts = D_L08_001623C8;
-    float **b = D_L08_001623D8;
+    float **float_pair_tables = D_L08_001623D8;
     float **float_triplet_tables = D_L08_001623D0;
     int **element_word_tables = D_L08_001623E8;
 
     for (i = 0; i < 2; i++) {
-        FUN_L08_00258090(D_L08_001F8560, b[i], element_counts[i], &D_L08_00162408[x]);
+        FUN_L08_00258090(D_L08_001F8560, float_pair_tables[i], element_counts[i], &D_L08_00162408[x]);
         FUN_L00_001fde98(element_counts[i], float_triplet_tables[i], element_word_tables[i], D_L08_001F8560, 1);
     }
 }
