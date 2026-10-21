@@ -733,7 +733,7 @@ int FUN_L00_0025b440(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
     };
     float motion_displacement[4];
     float prediction_time;
-    float g;
+    float ground_height;
 
     switch (arc_motion_state->state) {
     case CHECK_ARC_ENTRY_GATES:
@@ -765,9 +765,9 @@ int FUN_L00_0025b440(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
     case DESCEND_TO_GROUND:
         moving_object->z += arc_motion_state->f10;
         arc_motion_state->f10 -= arc_motion_state->f1C;
-        g = FUN_00213508_25b440(moving_object->pos, 0, 0.5f);
-        if (moving_object->z <= g) {
-            moving_object->z = g;
+        ground_height = FUN_00213508_25b440(moving_object->pos, 0, 0.5f);
+        if (moving_object->z <= ground_height) {
+            moving_object->z = ground_height;
             arc_motion_state->state = 3;
         } else {
             motion_displacement[0] = FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
