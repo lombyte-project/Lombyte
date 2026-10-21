@@ -1113,7 +1113,7 @@ void FUN_L03_002d43c8(struct Moby *rocket_moby) {
     Vec4 old;
     Vec4 side;
     Vec4 back;
-    Vec4 cam;
+    Vec4 trail_vector_offset;
     RocketTarget target;
     Vec4 trail;
     RocketHit hit;
@@ -1131,9 +1131,9 @@ void FUN_L03_002d43c8(struct Moby *rocket_moby) {
         FUN_L03_0024e830(rocket_moby, &target, range);
         qcopy(&old, pos);
         add_vector_xyz(pos, pos, rocket_vars);
-        cam.q = D_0013F490_v.q;
-        cam.f[2] *= D_L03_00161B28;
-        FUN_L00_001ff290(&trail, pos, &cam);
+        trail_vector_offset.q = D_0013F490_v.q;
+        trail_vector_offset.f[2] *= D_L03_00161B28;
+        FUN_L00_001ff290(&trail, pos, &trail_vector_offset);
         rocket_moby->rot.z = rocket_vars->heading;
         rocket_moby->rot.x = fast_add_rotations(rocket_moby->rot.x, frame_time * 6.2831855f);
         side.f[0] = fast_cos(rocket_vars->heading) * rocket_vars->speed * -0.5f;
@@ -1141,7 +1141,7 @@ void FUN_L03_002d43c8(struct Moby *rocket_moby) {
         side.f[2] = 0.0f;
         add_vector_xyz(&trail, &side, rocket_vars);
         side.q = trail.q;
-        add_vector_xyz(&trail, &side, &cam);
+        add_vector_xyz(&trail, &side, &trail_vector_offset);
         side.q = trail.q;
         normalize_vector_xyz(&back, rocket_vars, -0.2f);
         FUN_L00_001ff290(&trail, &back, pos);
