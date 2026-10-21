@@ -144,19 +144,19 @@ extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 extern float FUN_001f99c0(float);
 
 void FUN_L00_00271748(unsigned char *particle) {
-    unsigned char *v = particle + 0x20;
+    unsigned char *particle_data = particle + 0x20;
     float z;
-    fast_vec_add(particle + 0x10, particle + 0x10, v);
+    fast_vec_add(particle + 0x10, particle + 0x10, particle_data);
     if (*(float *)(particle + 0x10) < 2.0f || 1021.0f < *(float *)(particle + 0x10) ||
         *(float *)(particle + 0x14) < 2.0f || 1021.0f < *(float *)(particle + 0x14) ||
         (z = *(float *)(particle + 0x18)) < 2.0f || 1021.0f < z) {
         free_effect_particle(particle);
         return;
     }
-    *(float *)(particle + 0xC) += *(float *)(v + 0x10);
+    *(float *)(particle + 0xC) += *(float *)(particle_data + 0x10);
     particle[8]++;
-    if (*(float **)(v + 0x14) && FUN_001f99c0(z - **(float **)(v + 0x14)) < 0.2f) {
-        *(float *)(particle + 0x18) = **(float **)(v + 0x14) + 0.02f;
+    if (*(float **)(particle_data + 0x14) && FUN_001f99c0(z - **(float **)(particle_data + 0x14)) < 0.2f) {
+        *(float *)(particle + 0x18) = **(float **)(particle_data + 0x14) + 0.02f;
     }
     if (--*(short *)(particle + 0xA) == 0) {
         *(unsigned short *)(particle + 0xA) = 4;
