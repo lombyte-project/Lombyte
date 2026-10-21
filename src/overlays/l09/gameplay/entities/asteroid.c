@@ -708,7 +708,7 @@ void FUN_L09_002eaea8(Moby *falling_rock) {
     float position_or_movement_step[4];
     float offset_position[4];
     Data_2EC188 *moby_vars = (*(Data_2EC188 **)&falling_rock->pvars);
-    float len;
+    float reference_position_distance;
     float updated_rotation_x;
 
     subtract_vector_xyz(movement_step, moby_vars->target, moby_vars->pos);
@@ -716,11 +716,11 @@ void FUN_L09_002eaea8(Moby *falling_rock) {
     normalize_vector_xyz(movement_step, movement_step, moby_vars->f54);
     add_vector_xyz(moby_vars->pos, moby_vars->pos, movement_step);
     subtract_vector_xyz(((f32 *)&falling_rock->pos), moby_vars->pos, D_L09_00166F40);
-    len = vector_length_xyz(((f32 *)&falling_rock->pos));
-    if (len > 100.0f && moby_vars->pos[2] > 27.0f) {
+    reference_position_distance = vector_length_xyz(((f32 *)&falling_rock->pos));
+    if (reference_position_distance > 100.0f && moby_vars->pos[2] > 27.0f) {
         normalize_vector_xyz(((f32 *)&falling_rock->pos), ((f32 *)&falling_rock->pos), 100.0f);
         add_vector_xyz(((f32 *)&falling_rock->pos), ((f32 *)&falling_rock->pos), D_L09_00166F40);
-        falling_rock->scale = moby_vars->f50 * (100.0f / len);
+        falling_rock->scale = moby_vars->f50 * (100.0f / reference_position_distance);
     } else {
         qcopy(((f32 *)&falling_rock->pos), moby_vars->pos);
         falling_rock->scale = moby_vars->f50;
@@ -743,7 +743,7 @@ void FUN_L09_002eaea8(Moby *falling_rock) {
                 int i;
                 int h;
                 extra = 0.0f;
-                if (len < 7.0f) extra = 7.0f - len;
+                if (reference_position_distance < 7.0f) extra = 7.0f - reference_position_distance;
                 scale_vector_xyz_c(scaled_movement_step, movement_step, 0.1f);
                 for (i = 7; i >= 0; i--) {
                     float s;
@@ -809,7 +809,7 @@ void FUN_L09_002eaea8(Moby *falling_rock) {
                 int i;
                 int h;
                 extra = 0.0f;
-                if (len < 7.0f) extra = 7.0f - len;
+                if (reference_position_distance < 7.0f) extra = 7.0f - reference_position_distance;
                 scale_vector_xyz_c(position_or_movement_step, movement_step, 0.5f);
                 for (i = 0; i < 8; i++) {
                     float s;
@@ -876,7 +876,7 @@ void FUN_L09_002eaea8(Moby *falling_rock) {
             float extra;
             int k;
             extra = 0.0f;
-            if (len < 7.0f) extra = 7.0f - len;
+            if (reference_position_distance < 7.0f) extra = 7.0f - reference_position_distance;
             scale_vector_xyz_c(position_or_movement_step, movement_step, 0.25f);
             for (k = 0; k < 3; k++) {
                 float s;
