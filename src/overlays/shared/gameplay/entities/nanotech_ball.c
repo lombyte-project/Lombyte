@@ -3189,7 +3189,7 @@ extern void subtract_vector_xyz(void *, void *, void *);
 void normalize_vector_xyz(void *, void *, f32);
 
 void FUN_L00_002df048(int callback_context) {
-    VQ segment_offset, b, marker_offset;
+    VQ segment_offset, segment_position, marker_offset;
     int i;
     float len;
     char *p;
@@ -3205,8 +3205,8 @@ void FUN_L00_002df048(int callback_context) {
                                 D_L00_001E5F40 + D_L00_001E4C80[i].idx * 16);
             len = vector_length_xyz(segment_offset);
             scale_vector_xyz(segment_offset, segment_offset, D_L00_001E4C80[i].f / len);
-            add_vector_xyz(b, D_L00_001E5F40 + D_L00_001E4C80[i].idx * 16, segment_offset);
-            subtract_vector_xyz(marker_offset, p + 0x10, b);
+            add_vector_xyz(segment_position, D_L00_001E5F40 + D_L00_001E4C80[i].idx * 16, segment_offset);
+            subtract_vector_xyz(marker_offset, p + 0x10, segment_position);
             normalize_vector_xyz(marker_offset, marker_offset, 0.03f);
             scale_vector_xyz(segment_offset, segment_offset, 0.1f / len);
             add_vector_xyz(p + 0x30, marker_offset, segment_offset);
