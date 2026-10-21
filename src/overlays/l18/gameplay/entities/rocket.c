@@ -1654,21 +1654,21 @@ void FUN_L18_002d88b8(struct Moby *moby) {
     float spark_vector_offset[4];
     int spark_count;
     float spawn_radius;
-    float ang;
+    float spawn_angle;
     int i0, i1, i2, i3, i4;
-    char *mat = &moby->rot_row0;
+    char *moby_rotation_basis = &moby->rot_row0;
     int i;
 
     spark_count = random_integer_below(5) + 5;
     spawn_radius = random_float_between(1.0f, 2.5f);
-    ang = random_angle_radians();
-    spark_spawn_position[0] = fast_cos(ang) * spawn_radius;
-    spark_spawn_position[1] = fast_sin(ang) * spawn_radius;
+    spawn_angle = random_angle_radians();
+    spark_spawn_position[0] = fast_cos(spawn_angle) * spawn_radius;
+    spark_spawn_position[1] = fast_sin(spawn_angle) * spawn_radius;
     spark_spawn_position[2] = 0.0f;
-    transform_vector_by_basis(spark_spawn_position, spark_spawn_position, mat);
+    transform_vector_by_basis(spark_spawn_position, spark_spawn_position, moby_rotation_basis);
     add_vector_xyz(spark_spawn_position, spark_spawn_position, &moby->pos);
     set_vector_unit_z(world_emission_direction);
-    transform_vector_by_basis(world_emission_direction, world_emission_direction, mat);
+    transform_vector_by_basis(world_emission_direction, world_emission_direction, moby_rotation_basis);
     for (i = 0; i < spark_count; i++) {
         FUN_L00_00257d78(spark_vector_offset, 0.0f, (*(float *)&(D_L18_00161A78)) * frame_time);
         normalize_vector_xyz(first_spark_vector, world_emission_direction,
