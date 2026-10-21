@@ -3315,7 +3315,7 @@ void FUN_L03_002c9ca0(Moby2C8398 *moby) {
     int best;
     float best_ang;
     float best_dist;
-    float ang;
+    float node_target_heading_difference;
 
     moby_data = moby->data;
     best = 0;
@@ -3329,21 +3329,21 @@ void FUN_L03_002c9ca0(Moby2C8398 *moby) {
     do {
         if (pf->idx != seg) {
             qcopy(pt, pf->path + 0x10 + pf->idx * 0x10);
-            ang = fast_arc_tan(pt[0] - moby->pos[0], pt[1] - moby->pos[1]);
-            ang = fast_difference_between_rotations(
-                ang, fast_arc_tan(target.pos[0] - moby->pos[0], target.pos[1] - moby->pos[1]));
+            node_target_heading_difference = fast_arc_tan(pt[0] - moby->pos[0], pt[1] - moby->pos[1]);
+            node_target_heading_difference = fast_difference_between_rotations(
+                node_target_heading_difference, fast_arc_tan(target.pos[0] - moby->pos[0], target.pos[1] - moby->pos[1]));
             dist = FUN_001f9b48(&target, pt);
-            if (ang < 1.5707964f) {
-                if (best_ang < ang) {
+            if (node_target_heading_difference < 1.5707964f) {
+                if (best_ang < node_target_heading_difference) {
                     best = pf->idx;
                     best_dist = dist;
-                    best_ang = ang;
+                    best_ang = node_target_heading_difference;
                 }
             } else if ((dist >= 16.0f && (dist < best_dist || best_dist < 16.0f)) ||
                        (dist < 16.0f && best_dist < dist)) {
                 best = pf->idx;
                 best_dist = dist;
-                best_ang = ang;
+                best_ang = node_target_heading_difference;
             }
         }
     } while ((pf->idx = (pf->idx + *(int *)pf->path + pf->step) % *(int *)pf->path) != 0);
