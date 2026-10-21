@@ -2954,21 +2954,21 @@ int FUN_L18_002f6878_c(char *moby, float arg, void *x) __asm__("FUN_L18_002f6878
 
 extern short D_L18_0016237C __attribute__((sda));
 void FUN_L18_002f6960(struct Moby *moby) {
-    float v[4];
+    float follow_target_position[4];
     char *moby_vars = (char *)moby->pvars;
-    char *b = (char *)&hero.motion.pos;
+    char *hero_position_bytes = (char *)&hero.motion.pos;
     float follow_speed_limit;
     float lo, hi;
-    subtract_vector_xyz(v, b, D_L18_001600EC + (*(int *)(moby_vars + 0x344) << 7) + 0x30);
-    v[2] = 0.0f;
-    if (*(int *)(b + 0x200C) == 0xF) {
-        FUN_L00_0025f730(v, *(float *)&D_L18_0016237C);
+    subtract_vector_xyz(follow_target_position, hero_position_bytes, D_L18_001600EC + (*(int *)(moby_vars + 0x344) << 7) + 0x30);
+    follow_target_position[2] = 0.0f;
+    if (*(int *)(hero_position_bytes + 0x200C) == 0xF) {
+        FUN_L00_0025f730(follow_target_position, *(float *)&D_L18_0016237C);
     } else {
-        FUN_L00_0025f730(v, *(float *)&D_L18_00162378_gp);
+        FUN_L00_0025f730(follow_target_position, *(float *)&D_L18_00162378_gp);
     }
-    add_vector_xyz(v, v, D_L18_001600EC + (*(int *)(moby_vars + 0x344) << 7) + 0x30);
+    add_vector_xyz(follow_target_position, follow_target_position, D_L18_001600EC + (*(int *)(moby_vars + 0x344) << 7) + 0x30);
     follow_speed_limit = hero.motion.speed_xy;
-    follow_speed_limit += (vector_distance(&moby->pos, v) - *(float *)&D_L18_001623DC) / *(float *)&D_L18_001623DC *
+    follow_speed_limit += (vector_distance(&moby->pos, follow_target_position) - *(float *)&D_L18_001623DC) / *(float *)&D_L18_001623DC *
          (freeze_stats_score_ref_b * 4.75f);
     hi = freeze_stats_score_ref_b * 20.0f;
     lo = freeze_stats_score_ref_b * 4.75f;
@@ -2977,7 +2977,7 @@ void FUN_L18_002f6960(struct Moby *moby) {
     } else if (follow_speed_limit < lo) {
         follow_speed_limit = lo;
     }
-    FUN_L18_002f6878_c(moby, follow_speed_limit, v);
+    FUN_L18_002f6878_c(moby, follow_speed_limit, follow_target_position);
 }
 /* Pvars of the boss while it circles its arena node. */
 typedef struct {
