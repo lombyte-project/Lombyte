@@ -20,7 +20,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_c13(void *, int, int, int) __asm__("FUN_00212f90");
 
 unsigned char *FUN_L13_002c13b0(char *src, char *pos, char *target, char *vec, int arg, float scale,
-                                float f2) {
+                                float max_speed) {
     unsigned char *moby = (unsigned char *)create_moby_c13(0x52);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
@@ -36,7 +36,7 @@ unsigned char *FUN_L13_002c13b0(char *src, char *pos, char *target, char *vec, i
             float *sp = &scale;
             *(float *)(data + 0x2C) = *sp;
         }
-        *(float *)(data + 0x38) = f2;
+        *(float *)(data + 0x38) = max_speed;
         *(int *)(data + 0x28) = arg;
         *(int *)(data + 0x30) = 0;
         *(int *)(data + 0x34) = 0;
