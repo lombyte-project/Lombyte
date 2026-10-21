@@ -481,7 +481,7 @@ char *FUN_L09_002ea778(void) {
         char *moby_vars = *(char **)(moby + 0x78);
         float radius = random_float_between_c(0.0f, 250.0f);
         float angle_radians = random_float_between_c(-3.1415927f, 3.1415927f);
-        float len;
+        float reference_position_distance;
         target_position[0] = fast_cos(angle_radians) * radius;
         target_position[1] = fast_sin(angle_radians) * radius;
         target_position[0] += 256.0f;
@@ -507,11 +507,11 @@ char *FUN_L09_002ea778(void) {
         *(float *)moby_vars += random_float_between_c(-100.0f, 100.0f);
         *(float *)(moby_vars + 4) += random_float_between_c(-100.0f, 100.0f);
         subtract_vector_xyz(pos, moby_vars, D_L09_00166F40);
-        len = vector_length_xyz(pos);
-        if (100.0f < len) {
+        reference_position_distance = vector_length_xyz(pos);
+        if (100.0f < reference_position_distance) {
             normalize_vector_xyz(pos, pos, 100.0f);
             add_vector_xyz(pos, pos, D_L09_00166F40);
-            *(float *)(moby + 0x2C) = *(float *)(moby_vars + 0x50) * (100.0f / len);
+            *(float *)(moby + 0x2C) = *(float *)(moby_vars + 0x50) * (100.0f / reference_position_distance);
         } else {
             qcopy(pos, moby_vars);
             *(float *)(moby + 0x2C) = *(float *)(moby_vars + 0x50);
