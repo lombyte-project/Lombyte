@@ -23,13 +23,13 @@ extern int D_L00_0017E518 __attribute__((section(".data")));
 extern int D_L00_0017E51C __attribute__((section(".data")));
 extern int D_L00_0017E520 __attribute__((section(".data")));
 void FUN_L00_00234fd0(int mode) {
-    G_234fd0 *g = &D_L00_0017E4D8_234fd0;
+    G_234fd0 *decompression_slot_state = &D_L00_0017E4D8_234fd0;
     int decompression_destination = D_L00_001B9CF0.unk104;
     void *compressed_data_buffer = (void *)D_L00_001B9CF0.unk10;
     {
         int slot_1_size;
-        if ((slot_1_size = g->t->sz[1])) {
-            FUN_00232f20_234fd0(compressed_data_buffer, g->t->p[1], 0, D_L00_0017E510 / 16, 0);
+        if ((slot_1_size = decompression_slot_state->t->sz[1])) {
+            FUN_00232f20_234fd0(compressed_data_buffer, decompression_slot_state->t->p[1], 0, D_L00_0017E510 / 16, 0);
             FUN_L00_0024d8d0_234fd0(compressed_data_buffer, decompression_destination);
             FUN_001fefc0_234fd0(0, decompression_destination);
             decompression_destination += slot_1_size;
@@ -37,8 +37,8 @@ void FUN_L00_00234fd0(int mode) {
     }
     {
         int slot_3_size;
-        if ((slot_3_size = g->t->sz[3])) {
-            FUN_00232f20_234fd0(compressed_data_buffer, g->t->p[3], 0, D_L00_0017E518 / 16, 0);
+        if ((slot_3_size = decompression_slot_state->t->sz[3])) {
+            FUN_00232f20_234fd0(compressed_data_buffer, decompression_slot_state->t->p[3], 0, D_L00_0017E518 / 16, 0);
             FUN_L00_0024d8d0_234fd0(compressed_data_buffer, decompression_destination);
             FUN_001fefc0_234fd0(2, decompression_destination);
             decompression_destination += slot_3_size;
@@ -47,8 +47,8 @@ void FUN_L00_00234fd0(int mode) {
     if (mode == 0 || mode == 2) {
         {
             int slot_4_size;
-            if ((slot_4_size = g->t->sz[4])) {
-                FUN_00232f20_234fd0(compressed_data_buffer, g->t->p[4], 0, D_L00_0017E51C / 16, 0);
+            if ((slot_4_size = decompression_slot_state->t->sz[4])) {
+                FUN_00232f20_234fd0(compressed_data_buffer, decompression_slot_state->t->p[4], 0, D_L00_0017E51C / 16, 0);
                 FUN_L00_0024d8d0_234fd0(compressed_data_buffer, decompression_destination);
                 FUN_001fefc0_234fd0(3, decompression_destination);
                 decompression_destination += slot_4_size;
