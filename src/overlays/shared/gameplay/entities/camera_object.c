@@ -2632,9 +2632,9 @@ int FUN_L00_002aa2a8(char *trajectory_state, char *moby, int mode) {
         qcopy(B, trajectory_state);
         {
             short xs = *(short *)(trajectory_state + 0x34);
-            int c50 = *(int *)(owner_moby_vars + 0x50);
+            int owner_prediction_stop_signal = *(int *)(owner_moby_vars + 0x50);
             x = xs;
-            if (c50 != 0) *(short *)(trajectory_state + 0x36) = 1;
+            if (owner_prediction_stop_signal != 0) *(short *)(trajectory_state + 0x36) = 1;
         }
     }
     {
