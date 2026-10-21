@@ -21,7 +21,7 @@ s32 memcard_prepare_data(struct SaveHeader *out, s32 slot,
 s32 memcard_prepare_data(struct SaveHeader *out, s32 slot, struct SaveBlock *blk) {
     u8 *write_cursor;
     s32 total;
-    u8 *src;
+    u8 *slot_payload_source;
 
     total = 0;
     write_cursor = (u8 *)(out + 1);
@@ -30,12 +30,12 @@ s32 memcard_prepare_data(struct SaveHeader *out, s32 slot, struct SaveBlock *blk
         s32 mask = -4;
 
         do {
-            src = block->base + slot * block->size;
+            slot_payload_source = block->base + slot * block->size;
             total += 8;
             ((s32 *)write_cursor)[0] = block->id;
             ((s32 *)write_cursor)[1] = block->size;
             write_cursor += 8;
-            copy_memory_aligned(write_cursor, src, block->size);
+            copy_memory_aligned(write_cursor, slot_payload_source, block->size);
             write_cursor += block->size;
             total += block->size;
             write_cursor = (u8 *)(((s32)write_cursor + 3) & mask);
