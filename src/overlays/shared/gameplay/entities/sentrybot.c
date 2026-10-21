@@ -1124,8 +1124,8 @@ int FUN_L15_00299dd8(char *moby) {
 extern int D_L15_0015FFD8;
 extern int D_L15_001ABE40[];
 
-int FUN_L15_00299ff8(void *arg) {
-    unsigned char *moby = arg;
+int FUN_L15_00299ff8(void *input_moby) {
+    unsigned char *moby = input_moby;
     unsigned short *group_moby_entry;
     char *moby_data;
     if (moby[0x21] == 0xFF)
