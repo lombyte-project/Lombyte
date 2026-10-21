@@ -2673,7 +2673,7 @@ extern u8 D_0014C050[][16] __attribute__((section(".data")));
 /* Kills a live moby: marks it in the level's spawn tables, starts its death sound and
  * clears its key out of the shared key table. */
 void FUN_L00_002d5830(struct Moby *moby) {
-    KeyVars *v = (KeyVars *)moby->pvars;
+    KeyVars *key_vars = (KeyVars *)moby->pvars;
     s32 i;
     if (moby->state != 1) {
         return;
@@ -2686,12 +2686,12 @@ void FUN_L00_002d5830(struct Moby *moby) {
     moby->command = 1;
     moby->glow_color = 0x80208020;
     allocate_voice_for_target_entry(0, 0, moby);
-    if (v->table == -1) {
+    if (key_vars->table == -1) {
         return;
     }
-    for (i = 0; i < ((KeyRow *)D_L00_001B04B0_2d0538[v->table])[0].count; i++) {
-        KeyRow *row = &((KeyRow *)D_L00_001B04B0_2d0538[v->table])[i];
-        if (row[1].key == v->key) {
+    for (i = 0; i < ((KeyRow *)D_L00_001B04B0_2d0538[key_vars->table])[0].count; i++) {
+        KeyRow *row = &((KeyRow *)D_L00_001B04B0_2d0538[key_vars->table])[i];
+        if (row[1].key == key_vars->key) {
             row[1].key = 0;
         }
     }
