@@ -21,7 +21,7 @@ void FUN_L00_002a0f18(int dst, int draw_buffer_byte_address, int size) {
 }
 extern int D_L00_001611C0_002a0fc8 __asm__("D_L00_001611C0");
 void FUN_00122330_002a0fc8(int, short, int, int, int, int, int, int) __asm__("FUN_00122330");
-void FUN_L00_002a0fc8(int dst, int src, int size) {
+void FUN_L00_002a0fc8(int dst, int draw_buffer_byte_address, int size) {
     int left = (size + 0x3FFF) & ~0x3FFF;
     int transfer_byte_offset = 0;
     while (left > 0) {
@@ -31,7 +31,7 @@ void FUN_L00_002a0fc8(int dst, int src, int size) {
         *(int *)(D_L00_001611C0_002a0fc8 + 12) = 0x50000006;
         D_L00_001611C0_002a0fc8 += 0x10;
         left -= 0x4000;
-        FUN_00122330_002a0fc8(D_L00_001611C0_002a0fc8, (src + transfer_byte_offset) >> 8, 1, 0, 0, 0, 0x40, 0x40);
+        FUN_00122330_002a0fc8(D_L00_001611C0_002a0fc8, (draw_buffer_byte_address + transfer_byte_offset) >> 8, 1, 0, 0, 0, 0x40, 0x40);
         D_L00_001611C0_002a0fc8 += 0x60;
         *(int *)D_L00_001611C0_002a0fc8 = 0x30000400;
         *(int *)(D_L00_001611C0_002a0fc8 + 4) = dst + transfer_byte_offset;
