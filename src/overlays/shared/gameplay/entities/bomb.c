@@ -504,7 +504,7 @@ struct Moby *FUN_L00_002c9348(State *source_state) {
     struct Moby *previous_slot_moby;
     void *source_record;
     Opt *color_options;
-    f32 g;
+    f32 ground_height_pitch_and_variant_scratch;
     f32 yaw_cosine_scratch;
     f32 sn;
 
@@ -528,9 +528,9 @@ struct Moby *FUN_L00_002c9348(State *source_state) {
         qcopy(&spawned_moby->pos, &source_state->pos);
         clear_u64_value(&spawned_moby->rot);
         spawned_moby->rot.z = fast_arc_tan(spawned_moby->pos.x - hero.motion.pos.f[0], spawned_moby->pos.y - hero.motion.pos.f[1]);
-        g = probe_ground_height(&spawned_moby->pos, 0, 0.5f);
-        if (spawned_moby->pos.z <= g) {
-            spawned_moby->pos.z = g;
+        ground_height_pitch_and_variant_scratch = probe_ground_height(&spawned_moby->pos, 0, 0.5f);
+        if (spawned_moby->pos.z <= ground_height_pitch_and_variant_scratch) {
+            spawned_moby->pos.z = ground_height_pitch_and_variant_scratch;
             spawned_moby->pos.z = D_L00_00173E40.f28;
             qcopy(&loc.v, (u8 *)&D_L00_00173E40 + 0x40);
             yaw_cosine_scratch = fast_cos(spawned_moby->rot.z);
@@ -540,8 +540,8 @@ struct Moby *FUN_L00_002c9348(State *source_state) {
             sn = fast_sin(spawned_moby->rot.z);
             loc.t2 = loc.v.f[1] * yaw_cosine_scratch - loc.v.f[0] * sn;
             loc.t3 = loc.v.f[2];
-            g = fast_arc_tan(square_root(loc.t1 * loc.t1 + loc.t3 * loc.t3), loc.t2);
-            spawned_moby->rot.x = -g;
+            ground_height_pitch_and_variant_scratch = fast_arc_tan(square_root(loc.t1 * loc.t1 + loc.t3 * loc.t3), loc.t2);
+            spawned_moby->rot.x = -ground_height_pitch_and_variant_scratch;
             spawned_moby->rot.y = fast_arc_tan(loc.t3, loc.t1);
         }
         spawned_moby->collision = ((Part *)spawned_moby->pclass)->unk10;
@@ -549,9 +549,9 @@ struct Moby *FUN_L00_002c9348(State *source_state) {
         spawned_moby->state = 1;
         moby_vars->unk66 = 0;
         moby_vars->unk64 = FUN_L00_00257b90(scale_game_frames(0x78), scale_game_frames(0x12C));
-        g = convert_integer_to_float(D_0013E520[0x15]);
+        ground_height_pitch_and_variant_scratch = convert_integer_to_float(D_0013E520[0x15]);
         moby_vars->unk70 = -1;
-        moby_vars->unk78 = g * 3.0f + 1.0f;
+        moby_vars->unk78 = ground_height_pitch_and_variant_scratch * 3.0f + 1.0f;
         moby_vars->unk74 = D_0013E520[0x15];
         spawned_moby->command = moby_vars->unk74;
         FUN_L00_00257470(source_state, 0, -1);
