@@ -1026,7 +1026,7 @@ extern int FUN_001fa6d0_26bb70(float) __asm__("FUN_001fa6d0");
 extern int FUN_001160d8_26bb70(void) __asm__("FUN_001160d8");
 
 extern unsigned char *D_L00_001B20BC __attribute__((section(".data")));
-unsigned char *FUN_L00_0026bb70(void *spawn_position, void *b, int initial_color, int final_color, float initial_size, int lifetime, int secondary_spawn_enabled, int g,
+unsigned char *FUN_L00_0026bb70(void *spawn_position, void *initial_velocity, int initial_color, int final_color, float initial_size, int lifetime, int secondary_spawn_enabled, int g,
                                 int blend_mode) {
     unsigned char *particle;
     unsigned char *particle_data;
@@ -1058,7 +1058,7 @@ unsigned char *FUN_L00_0026bb70(void *spawn_position, void *b, int initial_color
         *(int *)(particle_data + 0x10) = initial_color;
         *(int *)(particle_data + 0x14) = final_color;
         *(s16 *)(particle_data + 0x1A) = secondary_spawn_enabled;
-        qcopy(particle_data, b);
+        qcopy(particle_data, initial_velocity);
     }
     return particle;
 }
