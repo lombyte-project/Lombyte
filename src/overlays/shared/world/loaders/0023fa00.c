@@ -54,7 +54,7 @@ char *FUN_L00_0023fa00(char *bank, s32 *header) {
     s32 second_offset;
     s32 last_offset;
     char *first;
-    char *src;
+    char *bulk_copy_destination;
     char *upload_pixels;
     char *base;
     s32 index;
@@ -69,19 +69,19 @@ char *FUN_L00_0023fa00(char *bank, s32 *header) {
     do {
         if (i == 0) {
             sceGsSetDefLoadImage_23fa00(image, (vram_base_23fa00[1] + header[0x2B]) >> 8, 1, 0x13, 0, 0, 0x40, 0x40);
-            src = bank + first_offset;
+            bulk_copy_destination = bank + first_offset;
             upload_pixels = first + 0x14430;
         } else if (i == 1) {
             sceGsSetDefLoadImage_23fa00(image, (vram_base_23fa00[1] + header[0x2C]) >> 8, 1, 0x13, 0, 0, 0x20, 0x20);
-            src = bank + first_offset;
+            bulk_copy_destination = bank + first_offset;
             upload_pixels = first + 0x15430;
         } else if (i == 2) {
             sceGsSetDefLoadImage_23fa00(image, (vram_base_23fa00[1] + header[0x2D]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
             upload_pixels = first + 0x30;
-            src = bank + first_offset;
+            bulk_copy_destination = bank + first_offset;
         } else {
             sceGsSetDefLoadImage_23fa00(image, (vram_base_23fa00[1] + header[0x2E]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
-            src = bank + first_offset;
+            bulk_copy_destination = bank + first_offset;
             upload_pixels = bank + last_offset + 0x30;
         }
         FlushCache_23fa00(0);
@@ -90,7 +90,7 @@ char *FUN_L00_0023fa00(char *bank, s32 *header) {
         wait_for_graphics_pipeline_idle_23fa00(0, 0);
     } while (i < 4);
     base = bank;
-    bank = src;
+    bank = bulk_copy_destination;
     first_record_fields.h[0] = header[0x2D] >> 8;
     index = texture_count_macro;
     first_record_fields.h[1] = header[0x2B] >> 8;
