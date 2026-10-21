@@ -98,7 +98,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_002694f8(char *particle) {
     char *particle_data = particle + 0x20;
-    float v[4];
+    float position_scratch[4];
     float reference_distance, reference_angle_delta;
     int collision_check_counter, remaining_lifetime, k;
     float *g;
@@ -139,17 +139,17 @@ after:
     if (absolute_float(reference_angle_delta) > 1.0471976f) {
         if ((*(int *)(particle_data + 0x18))++ >= 6)
             goto kill;
-        v[0] = fast_cos(
+        position_scratch[0] = fast_cos(
                    fast_add_rotations(*(float *)(B + 0x158), reference_angle_delta > 0.0f ? -1.0471976f : 1.0471976f)) *
                reference_distance;
-        v[1] = fast_sin(
+        position_scratch[1] = fast_sin(
                    fast_add_rotations(*(float *)(B + 0x158), reference_angle_delta > 0.0f ? -1.0471976f : 1.0471976f)) *
                reference_distance;
-        v[2] = *(float *)(particle + 0x18) - *(float *)(B + 0x148);
-        fast_vec_add(pos, v, reference_position);
-        qcopy(v, pos);
-        v[2] = v[2] + 32.0f;
-        if (func_L00_001EFFF0(pos, v, 0x12, 0, 0))
+        position_scratch[2] = *(float *)(particle + 0x18) - *(float *)(B + 0x148);
+        fast_vec_add(pos, position_scratch, reference_position);
+        qcopy(position_scratch, pos);
+        position_scratch[2] = position_scratch[2] + 32.0f;
+        if (func_L00_001EFFF0(pos, position_scratch, 0x12, 0, 0))
             goto kill;
     }
     if ((D_L00_0015F5CC & 3) == 0)
