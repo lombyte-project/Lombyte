@@ -1019,11 +1019,11 @@ void FUN_L14_002add48(char *moby) {
     char *d = *(char **)(moby + 0x78);
     float src[4][4];
     Pk_2add48 pk;
-    float mat[4][4];
+    float beam_quad_transform[4][4];
     float quad_translation_offset[4];
-    float dir[4];
+    float beam_offset_direction[4];
     float beam_to_camera_vector[4];
-    float rot[4];
+    float camera_facing_angles[4];
     float rm[3][4];
     float size;
     float step;
@@ -1045,17 +1045,17 @@ void FUN_L14_002add48(char *moby) {
     pk.c = 0x0000FF9000000260ULL;
     pk.d = 0x8000000048ULL;
     pk.a = 0;
-    qcopy(dir, src[0]);
-    qcopy(mat[3], src[3]);
-    mat[3][3] = 1.0f;
-    sub_b(beam_to_camera_vector, D_L14_001674C0_b, mat[3]);
-    rot[2] = atan2_b(beam_to_camera_vector[0], beam_to_camera_vector[1]);
-    rot[1] = -atan2_b(lenxy_b(beam_to_camera_vector), beam_to_camera_vector[2]);
-    rot[0] = 0.0f;
-    rotmat_b(rm, rot);
-    qcopy(mat[0], rm[0]);
-    qcopy(mat[1], rm[1]);
-    qcopy(mat[2], rm[2]);
+    qcopy(beam_offset_direction, src[0]);
+    qcopy(beam_quad_transform[3], src[3]);
+    beam_quad_transform[3][3] = 1.0f;
+    sub_b(beam_to_camera_vector, D_L14_001674C0_b, beam_quad_transform[3]);
+    camera_facing_angles[2] = atan2_b(beam_to_camera_vector[0], beam_to_camera_vector[1]);
+    camera_facing_angles[1] = -atan2_b(lenxy_b(beam_to_camera_vector), beam_to_camera_vector[2]);
+    camera_facing_angles[0] = 0.0f;
+    rotmat_b(rm, camera_facing_angles);
+    qcopy(beam_quad_transform[0], rm[0]);
+    qcopy(beam_quad_transform[1], rm[1]);
+    qcopy(beam_quad_transform[2], rm[2]);
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
     pk.uv[3] = 1.0f;
@@ -1077,14 +1077,14 @@ void FUN_L14_002add48(char *moby) {
         pk.col[2] = col;
         pk.col[1] = col;
         pk.col[0] = col;
-        scale_b(quad_translation_offset, dir, step);
+        scale_b(quad_translation_offset, beam_offset_direction, step);
         for (j = 0; j < 4; j++) {
             scale_b(pk.m[j], D_L14_001D8600[j], size);
-            xform_b(pk.m[j], pk.m[j], mat);
+            xform_b(pk.m[j], pk.m[j], beam_quad_transform);
             add_b(pk.m[j], pk.m[j], quad_translation_offset);
         }
         draw_b(&pk, 0, 0);
-        scale_b(quad_translation_offset, dir, step * -2.0f);
+        scale_b(quad_translation_offset, beam_offset_direction, step * -2.0f);
         for (j = 0; j < 4; j++) {
             add_b(pk.m[j], pk.m[j], quad_translation_offset);
         }
