@@ -141,8 +141,8 @@ extern int D_L16_0015FFD8_d __asm__("D_L16_0015FFD8");
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // For each listed moby of class 0x21D: sets its state bytes and clears bit 0 of its flags.
-void FUN_L16_002ceca8(int idx) {
-    short *group_entry = (short *)D_L16_001ABCC0_u[idx];
+void FUN_L16_002ceca8(int moby_group_index) {
+    short *group_entry = (short *)D_L16_001ABCC0_u[moby_group_index];
     if (group_entry != 0) {
         do {
             char *moby;
