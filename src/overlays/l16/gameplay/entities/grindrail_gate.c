@@ -1945,28 +1945,28 @@ int D_L16_00161E9C = 0x801000;
 extern float D_L16_00161EA0 __attribute__((sda));
 extern float D_L16_00161EA4 __attribute__((sda));
 extern float D_L16_00161EA8 __attribute__((sda));
-void FUN_L16_002e7a30(unsigned char *source_moby, void *v) {
+void FUN_L16_002e7a30(unsigned char *source_moby, void *previous_position) {
     float input[4];
     float offset[4];
     float out[4];
     float velocity[4];
-    float random_offset_angle, b, size, r, final_size;
-    *(OvlQuad *)input = *(OvlQuad *)v;
+    float random_offset_angle, second_random_offset_angle, size, movement_distance, final_size;
+    *(OvlQuad *)input = *(OvlQuad *)previous_position;
     if ((unsigned char)source_moby[0x31] == 0)
         return;
     if ((D_L16_0015F5CC & 1) != (((int)source_moby >> 8) & 1))
         return;
     if (!(FUN_001f9b48(source_moby + 0x10, D_L16_001671C0) < 75.0f))
         return;
-    r = FUN_001f9b48(source_moby + 0x10, input);
-    scale_vector_xyz(out, source_moby + 0xC0, D_L16_00161EA0 * r);
+    movement_distance = FUN_001f9b48(source_moby + 0x10, input);
+    scale_vector_xyz(out, source_moby + 0xC0, D_L16_00161EA0 * movement_distance);
     size = D_L16_00161EA4;
     size *= frame_time;
     normalize_vector_xyz(offset, source_moby + 0xC0, -0.5f);
     add_vector_xyz(offset, offset, source_moby + 0x10);
     random_offset_angle = random_angle_radians();
-    b = random_angle_radians();
-    build_spherical_offset_u(velocity, size, random_offset_angle, b);
+    second_random_offset_angle = random_angle_radians();
+    build_spherical_offset_u(velocity, size, random_offset_angle, second_random_offset_angle);
     add_vector_xyz(velocity, velocity, out);
     final_size = D_L16_00161EA8;
     final_size *= 210000.0f;
