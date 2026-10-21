@@ -2788,9 +2788,9 @@ extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 
 void FUN_L08_002de528(char *moby, int transform_index, int spawn_count, int flag) {
-    float vec[4];
-    float vec2[4];
-    float vec3[4];
+    float spawn_position[4];
+    float local_rotation_offset[4];
+    float launch_velocity[4];
     char *data = *(char **)(moby + 0x78);
     int i;
 
@@ -2814,17 +2814,17 @@ void FUN_L08_002de528(char *moby, int transform_index, int spawn_count, int flag
             *(float *)(spawned_moby + 0x40) = random_angle_radians_c3();
             *(float *)(spawned_moby + 0x44) = random_angle_radians_c3();
             *(float *)(spawned_moby + 0x48) = random_angle_radians_c3();
-            vec[0] = random_float_between_c3(-1.0f, 1.0f);
-            vec[1] = random_float_between_c3(-1.0f, 1.0f);
-            vec[2] = random_float_between_c3(-1.0f, 1.0f);
-            vec[3] = 1.0f;
-            transform_vector(vec, vec, D_L08_001600EC + (transform_index << 7));
-            qcopy(spawned_moby + 0x10, vec);
-            clear_u64_value(vec2);
-            subtract_vector_xyz(vec3, vec, moby + 0x10);
-            set_vector_length_xy(vec3, vec3, random_float_between_c3(D_0015ED6C_lui * 12.0f, D_0015ED6C_lui * 15.0f));
-            vec3[2] = random_float_between_c3(D_0015ED6C_lui * 6.0f, D_0015ED6C_lui * 18.0f);
-            FUN_L05_00318648(spawned_moby, (int)moby, vec3, vec2, func_001FA898_r(random_float_between_c3(60.0f, 90.0f)));
+            spawn_position[0] = random_float_between_c3(-1.0f, 1.0f);
+            spawn_position[1] = random_float_between_c3(-1.0f, 1.0f);
+            spawn_position[2] = random_float_between_c3(-1.0f, 1.0f);
+            spawn_position[3] = 1.0f;
+            transform_vector(spawn_position, spawn_position, D_L08_001600EC + (transform_index << 7));
+            qcopy(spawned_moby + 0x10, spawn_position);
+            clear_u64_value(local_rotation_offset);
+            subtract_vector_xyz(launch_velocity, spawn_position, moby + 0x10);
+            set_vector_length_xy(launch_velocity, launch_velocity, random_float_between_c3(D_0015ED6C_lui * 12.0f, D_0015ED6C_lui * 15.0f));
+            launch_velocity[2] = random_float_between_c3(D_0015ED6C_lui * 6.0f, D_0015ED6C_lui * 18.0f);
+            FUN_L05_00318648(spawned_moby, (int)moby, launch_velocity, local_rotation_offset, func_001FA898_r(random_float_between_c3(60.0f, 90.0f)));
         }
     }
 }
