@@ -43,7 +43,7 @@ void draw_lens_flare(void) {
     f32 scr[4];
     f32 ctr[4];
     f32 screen_center_delta[4];
-    f32 off[4];
+    f32 sprite_center_offset[4];
     f32 at[4];
     f32 dist;
     f32 fade;
@@ -76,10 +76,10 @@ void draw_lens_flare(void) {
     for (i = 0; i < 16; i++) {
         tex = get_effect_texture(effect_ribbon.tex[i] + 6);
         size = (i != 0) ? 0x20 : 0x40;
-        off[0] = screen_center_delta[0] * effect_ribbon.dist[i];
-        off[1] = screen_center_delta[1] * effect_ribbon.dist[i];
-        at[0] = ctr[0] + off[0];
-        at[1] = ctr[1] + off[1];
+        sprite_center_offset[0] = screen_center_delta[0] * effect_ribbon.dist[i];
+        sprite_center_offset[1] = screen_center_delta[1] * effect_ribbon.dist[i];
+        at[0] = ctr[0] + sprite_center_offset[0];
+        at[1] = ctr[1] + sprite_center_offset[1];
         fade = dist - 5.0f;
         if (fade > 1.0f) {
             fade = 1.0f;
