@@ -969,11 +969,11 @@ void FUN_L00_002bbbc8(void *, s32, s32, s32, f32, f32, f32);
 void FUN_L00_002bc1a0(void *);
 void FUN_L00_002bbb00(void *moby) {
     s32 i;
-    s32 r;
+    s32 arc_alpha;
     for (i = 0; i < 10; i++) {
         if (D_L00_001DBEC0[i] != 0) {
-            r = truncate_float_to_s32(convert_integer_to_float(D_L00_001DBED8[i]) * D_L00_00161660_f[29]);
-            FUN_L00_002bbbc8(&D_L00_001DBBA0[i], r, r, 5, D_L00_00161690, D_L00_00161694, 0.2f);
+            arc_alpha = truncate_float_to_s32(convert_integer_to_float(D_L00_001DBED8[i]) * D_L00_00161660_f[29]);
+            FUN_L00_002bbbc8(&D_L00_001DBBA0[i], arc_alpha, arc_alpha, 5, D_L00_00161690, D_L00_00161694, 0.2f);
         }
     }
     FUN_L00_002bc1a0(moby);
