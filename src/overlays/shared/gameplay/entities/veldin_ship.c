@@ -3673,7 +3673,7 @@ u8 D_L14_001D3410[1200] = {0};
 /* Resets particle i of the emitter: random direction, random speeds from
  * the emitter's ranges, and a start delay staggered by index. */
 void FUN_L00_002d7bf0(P *spawner, int i) {
-    char *v = (char *)spawner->q;
+    char *spawner_vars = (char *)spawner->q;
     V *particle_position;
     int emitter_particle_index;
     float sampled_x = FUN_L00_00257c48(0.0f, 1.0f);
@@ -3681,13 +3681,13 @@ void FUN_L00_002d7bf0(P *spawner, int i) {
     particle_position->x = sampled_x;
     particle_position->y = FUN_L00_00257c48(0.0f, 1.0f);
     particle_position->z = FUN_L00_00257c48(0.0f, 1.0f);
-    D_L00_001D02E0[i] = random_float_between(*(float *)(v + 0x10), *(float *)(v + 0x14));
-    D_L00_001D15A0[i] = random_float_between(*(float *)(v + 0x18), *(float *)(v + 0x1C));
+    D_L00_001D02E0[i] = random_float_between(*(float *)(spawner_vars + 0x10), *(float *)(spawner_vars + 0x14));
+    D_L00_001D15A0[i] = random_float_between(*(float *)(spawner_vars + 0x18), *(float *)(spawner_vars + 0x1C));
     D_L00_001D31C0[i] = 0.0f;
-    D_L00_001D4480[i] = random_float_between(*(float *)(v + 0x8), *(float *)(v + 0xC));
+    D_L00_001D4480[i] = random_float_between(*(float *)(spawner_vars + 0x8), *(float *)(spawner_vars + 0xC));
     D_L00_001D5740[i] = D_L00_00161380_2d7bf0;
     D_L00_001D60A0[i] = 0;
-    emitter_particle_index = i - *(s16 *)v;
+    emitter_particle_index = i - *(s16 *)spawner_vars;
     D_L00_001D6A00[i] = (emitter_particle_index + 1) * D_L00_0016137C;
     D_L00_001D2D10[i] = 0;
 }
