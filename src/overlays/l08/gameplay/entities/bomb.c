@@ -1425,7 +1425,7 @@ extern char *FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
  * to size1, then bursts a spark shower at each end. */
 void FUN_L08_002da3f0(struct Moby *moby, void *from, void *to, int count, f32 size0, f32 size1) {
     Vec4 step;
-    Vec4 pos;
+    Vec4 puff_spawn_position;
     Vec4 vel;
     f32 grow;
     f32 size;
@@ -1441,8 +1441,8 @@ void FUN_L08_002da3f0(struct Moby *moby, void *from, void *to, int count, f32 si
     vel.f[3] = 1.0f;
     vel.f[2] = 0.01f;
     for (i = 0; i < count; i++) {
-        scale_vector_xyz(&pos, &step, convert_integer_to_float(i));
-        add_vector_xyz(&pos, from, &pos);
+        scale_vector_xyz(&puff_spawn_position, &step, convert_integer_to_float(i));
+        add_vector_xyz(&puff_spawn_position, from, &puff_spawn_position);
         vel.f[0] = randf_sym(0.0f, 0.005f);
         vel.f[1] = randf_sym(0.0f, 0.005f);
         vel.f[2] = random_float_between(D_L08_00161998 * 0.1f, D_L08_00161998);
@@ -1450,7 +1450,7 @@ void FUN_L08_002da3f0(struct Moby *moby, void *from, void *to, int count, f32 si
         grey = FUN_L00_00257b90(0x30, 0x7F);
         grey |= (grey << 16) | (grey << 8);
         size = random_float_between(1.0f, 1.02f);
-        puff = FUN_L00_0026d000(&pos, D_L08_001619A0, 1.0f, size, FUN_L00_00257b90(-2, 2), &vel,
+        puff = FUN_L00_0026d000(&puff_spawn_position, D_L08_001619A0, 1.0f, size, FUN_L00_00257b90(-2, 2), &vel,
                                 grow + size0 * 210000.0f, (alpha << 24) | grey);
         if (puff) {
             tail = puff + 0x20;
