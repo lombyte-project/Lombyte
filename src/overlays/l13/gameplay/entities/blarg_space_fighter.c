@@ -178,8 +178,8 @@ void FUN_L13_002c1528(Moby_2C27B0 *rocket_moby) {
         add_vector_xyz(&scratch_vector, &scratch_vector, &rocket_moby->pos);
         particle = FUN_L00_002712b8(&scratch_vector, (float *)&particle_initial_velocity, scale_game_frames_alt(0x3C), 0x7F, 0x606060, 3, 80000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
         if (particle != 0) {
-            Tex_2C27B0 *tex = &D_L13_001B2380;
-            particle[2] = *tex->p5C;
+            Tex_2C27B0 *trail_particle_header_source = &D_L13_001B2380;
+            particle[2] = *trail_particle_header_source->p5C;
             particle[3] = 0x44;
         }
         *(Q_2C27B0 *)&particle_direction_scratch = 0;
