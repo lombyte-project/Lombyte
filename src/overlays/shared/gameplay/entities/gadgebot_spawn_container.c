@@ -1033,7 +1033,7 @@ extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) _
    of a push along dir, and spawns D_L06_00161C1C sparks with random sizes, colours and lifetimes. */
 void FUN_L06_002ea198(struct Moby *moby, Vec4 *spark_push_direction) {
     Vec4 pos;
-    Vec4 vel;
+    Vec4 burst_spark_velocity;
     Vec4 accel;
     int i;
     int j;
@@ -1052,11 +1052,11 @@ void FUN_L06_002ea198(struct Moby *moby, Vec4 *spark_push_direction) {
         angle = random_angle_radians();
         speed = random_float_between(D_L06_00161C2C, D_L06_00161C30);
         rise = random_float_between(D_L06_00161C34, D_L06_00161C38);
-        scale_vector_xyz(&vel, spark_push_direction, random_float_between(0.0f, D_L06_00161C64) * frame_time);
-        vel.f[0] += fast_cos(angle) * (speed * frame_time);
-        vel.f[1] += fast_sin(angle) * (speed * frame_time);
-        vel.f[2] += rise * frame_time;
-        qcopy(&accel, &vel);
+        scale_vector_xyz(&burst_spark_velocity, spark_push_direction, random_float_between(0.0f, D_L06_00161C64) * frame_time);
+        burst_spark_velocity.f[0] += fast_cos(angle) * (speed * frame_time);
+        burst_spark_velocity.f[1] += fast_sin(angle) * (speed * frame_time);
+        burst_spark_velocity.f[2] += rise * frame_time;
+        qcopy(&accel, &burst_spark_velocity);
         accel.f[2] -= D_L06_00161C3C * frame_time_sq * (float)scale_game_frames(D_L06_00161C5C);
         for (j = 0; j < D_L06_00161C1C; j++) {
             float size = random_float_between(0.5f, 1.5f);
@@ -1065,7 +1065,7 @@ void FUN_L06_002ea198(struct Moby *moby, Vec4 *spark_push_direction) {
             int life;
             int fade;
             float third_frame_count_base;
-            vel.f[3] = size * D_L06_00161C40;
+            burst_spark_velocity.f[3] = size * D_L06_00161C40;
             accel.f[3] = size * D_L06_00161C44;
             FUN_L00_0025f8e0(&pos, D_L06_00161C24);
             FUN_L00_0025f8e0(&accel, D_L06_00161C28 * frame_time);
@@ -1074,7 +1074,7 @@ void FUN_L06_002ea198(struct Moby *moby, Vec4 *spark_push_direction) {
             life = scale_game_frames(D_L06_00161C58);
             fade = scale_game_frames(D_L06_00161C5C);
             third_frame_count_base = (float)D_L06_00161C60;
-            spawn_spark(&pos, &vel, &accel, color0, color1, life, fade,
+            spawn_spark(&pos, &burst_spark_velocity, &accel, color0, color1, life, fade,
                         truncate_float_to_s32(scale_time(random_float_between(third_frame_count_base * 0.5f, third_frame_count_base * 2.5f))), -1);
         }
     }
