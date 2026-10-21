@@ -743,8 +743,8 @@ void FUN_L06_002348d0(void) {
             history_index_base = hero.unk21B0 - i;
             {
                 s32 history_sample_index = (history_index_base + 0x1F) % 32;
-                s32 b = (history_index_base + 0x1E) % 32;
-                FUN_001f9a28_2348d0(&history_delta, &hero.unk1B00[history_sample_index], &hero.unk1B00[b]);
+                s32 adjacent_history_sample_index = (history_index_base + 0x1E) % 32;
+                FUN_001f9a28_2348d0(&history_delta, &hero.unk1B00[history_sample_index], &hero.unk1B00[adjacent_history_sample_index]);
             }
             FUN_001f9a10_2348d0(&sum, &sum, &history_delta);
         }
