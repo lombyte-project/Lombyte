@@ -528,8 +528,8 @@ void FUN_L15_00215e58(void) {
             sample_index_base = hero.unk21B0 - i;
             {
                 s32 wrapped_sample_index = (sample_index_base + 0x1F) % 32;
-                s32 b = (sample_index_base + 0x1E) % 32;
-                FUN_001f9a28_215e58(&d, &hero.unk1B00[wrapped_sample_index], &hero.unk1B00[b]);
+                s32 previous_sample_index = (sample_index_base + 0x1E) % 32;
+                FUN_001f9a28_215e58(&d, &hero.unk1B00[wrapped_sample_index], &hero.unk1B00[previous_sample_index]);
             }
             FUN_001f9a10_215e58(&sum, &sum, &d);
         }
