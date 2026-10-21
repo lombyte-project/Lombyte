@@ -21,15 +21,15 @@ s32 video_dec_flush(struct VideoDec *vd) {
     s32 destination_a_len;
     u32 destination_b;
     s32 destination_b_len;
-    s32 r;
+    s32 copied_bytes;
 
     video_dec_begin_put(vd, &destination_a, &destination_a_len, &destination_b, &destination_b_len);
     if (destination_a_len + destination_b_len < 4) {
         return 0;
     }
-    r = cpy2area((destination_a & 0x0FFFFFFF) | 0x20000000, destination_a_len, (destination_b & 0x0FFFFFFF) | 0x20000000,
+    copied_bytes = cpy2area((destination_a & 0x0FFFFFFF) | 0x20000000, destination_a_len, (destination_b & 0x0FFFFFFF) | 0x20000000,
                                  destination_b_len, &code, 4, 0, 0);
-    video_dec_end_put(decoder_state + 0xD9048, r);
+    video_dec_end_put(decoder_state + 0xD9048, copied_bytes);
     vi_buf_flush(&vd->vi_buf);
     if (vd->state == 0) {
         vd->state = 2;
