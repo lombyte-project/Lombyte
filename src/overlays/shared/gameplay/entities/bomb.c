@@ -1552,7 +1552,7 @@ void FUN_L00_0025d1b8_2cbf68(void *) __asm__("FUN_L00_0025d1b8");
 
 extern int D_L00_001618A4 __attribute__((sda));
 extern float D_L00_001618A0 __attribute__((sda));
-unsigned char *FUN_L00_002cbf68(int unused, void *pos, float *vel) {
+unsigned char *FUN_L00_002cbf68(int unused, void *spawn_position, float *initial_velocity) {
     unsigned char *spawned_moby = FUN_0020c4f8_2cbf68(0x1AC);
     if (spawned_moby) {
         unsigned char *moby_vars;
@@ -1564,11 +1564,11 @@ unsigned char *FUN_L00_002cbf68(int unused, void *pos, float *vel) {
         moby_vars = *(unsigned char **)(spawned_moby + 0x78);
         spawned_moby[0x20] = 0;
         spawned_moby[0xBC] = 0;
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(spawned_moby + 0x10, spawn_position);
         *(float *)(spawned_moby + 0x18) += rndf_2cbf68(0.2f, 0.7f);
-        *(float *)(spawned_moby + 0x10) += vel[0] * 3.0f;
-        *(float *)(spawned_moby + 0x14) += vel[1] * 3.0f;
-        qcopy(moby_vars, vel);
+        *(float *)(spawned_moby + 0x10) += initial_velocity[0] * 3.0f;
+        *(float *)(spawned_moby + 0x14) += initial_velocity[1] * 3.0f;
+        qcopy(moby_vars, initial_velocity);
         *(float *)(spawned_moby + 0x44) = rnd_2cbf68(0.17453292f, 0.5235988f);
         *(float *)(spawned_moby + 0x40) = rndf_2cbf68(0.17453292f, 0.7853982f);
         {
