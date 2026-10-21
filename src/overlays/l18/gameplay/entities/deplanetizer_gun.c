@@ -383,7 +383,7 @@ float D_L18_001DFB90[4][4] = {
 };
 void FUN_L18_002f9780(void) {
     Pk_9780 pk;
-    float mat[4][4];
+    float quad_transform[4][4];
     float up[4];
     int i;
     int color;
@@ -407,18 +407,18 @@ void FUN_L18_002f9780(void) {
     pk.a = 0;
     gs_9780(0x4A, 0);
     gs_9780(0x47, 0x51001);
-    rot_9780(mat[3], &D_L18_00162550, D_L18_001679D0);
+    rot_9780(quad_transform[3], &D_L18_00162550, D_L18_001679D0);
     target = D_L18_001679D0;
     target -= 0x210;
-    add_9780(mat[3], mat[3], target);
-    sub_9780(mat[0], mat[3], target);
-    norm_9780(mat[0], mat[0], 1.0f);
+    add_9780(quad_transform[3], quad_transform[3], target);
+    sub_9780(quad_transform[0], quad_transform[3], target);
+    norm_9780(quad_transform[0], quad_transform[0], 1.0f);
     *(u128_9780 *)up = 0;
     up[2] = 1.0f;
     up[3] = 1.0f;
-    cross_9780(mat[1], mat[0], up);
-    norm_9780(mat[1], mat[1], 1.0f);
-    cross_9780(mat[2], mat[1], mat[0]);
+    cross_9780(quad_transform[1], quad_transform[0], up);
+    norm_9780(quad_transform[1], quad_transform[1], 1.0f);
+    cross_9780(quad_transform[2], quad_transform[1], quad_transform[0]);
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
     pk.uv[2] = 0.0f;
@@ -434,7 +434,7 @@ void FUN_L18_002f9780(void) {
     pk.col[0] = color;
     for (i = 0; i < 4; i++) {
         scale_9780(pk.m[i], D_L18_001DFB90[i], D_L18_00162520);
-        xform_9780(pk.m[i], pk.m[i], mat);
+        xform_9780(pk.m[i], pk.m[i], quad_transform);
     }
     draw_9780(&pk, 0, 0);
     color = D_L18_001624FC;
@@ -444,12 +444,12 @@ void FUN_L18_002f9780(void) {
     pk.col[0] = color;
     for (i = 0; i < 4; i++) {
         scale_9780(pk.m[i], D_L18_001DFB90[i], D_L18_00162520 * 0.75f);
-        xform_9780(pk.m[i], pk.m[i], mat);
+        xform_9780(pk.m[i], pk.m[i], quad_transform);
     }
     draw_9780(&pk, 0, 0);
     for (i = 0; i < 4; i++) {
         scale_9780(pk.m[i], D_L18_001DFB90[i], D_L18_00162520 * 0.5f);
-        xform_9780(pk.m[i], pk.m[i], mat);
+        xform_9780(pk.m[i], pk.m[i], quad_transform);
     }
     draw_9780(&pk, 0, 0);
 }
