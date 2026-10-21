@@ -35,25 +35,25 @@ int FUN_L00_0023a7a8(char *hud_element) {
     int x4;
     int y = 0x12;
     int x, frame_alpha, alpha, w, text_color, tex, c1, wd, displayed_numerator;
-    float hud_fade_factor, f20;
+    float hud_fade_factor, text_color_blend_factor;
     if (pal_mode)
         y = 0xA;
     x = *(int *)(hud_element + 0x50);
     if (*(unsigned char *)(hud_element + 0x70) == 0)
         return *(int *)(hud_element + 0x58);
     {
-        f20 = convert_integer_to_float(*(unsigned char *)(hud_element + 0x70));
-        hud_fade_factor = f20 / convert_integer_to_float(*(int *)&D_L00_0015F91C_gp);
+        text_color_blend_factor = convert_integer_to_float(*(unsigned char *)(hud_element + 0x70));
+        hud_fade_factor = text_color_blend_factor / convert_integer_to_float(*(int *)&D_L00_0015F91C_gp);
         if (hud_fade_factor > 1.0f)
             hud_fade_factor = 1.0f;
         else if (hud_fade_factor < 0.0f)
             hud_fade_factor = 0.0f;
-        f20 = convert_integer_to_float(*(unsigned char *)(fade_control_bytes + 1));
-        f20 = f20 / convert_integer_to_float(*(int *)&D_L00_0015F920_gp);
-        if (f20 > 1.0f)
-            f20 = 1.0f;
-        else if (f20 < 0.0f)
-            f20 = 0.0f;
+        text_color_blend_factor = convert_integer_to_float(*(unsigned char *)(fade_control_bytes + 1));
+        text_color_blend_factor = text_color_blend_factor / convert_integer_to_float(*(int *)&D_L00_0015F920_gp);
+        if (text_color_blend_factor > 1.0f)
+            text_color_blend_factor = 1.0f;
+        else if (text_color_blend_factor < 0.0f)
+            text_color_blend_factor = 0.0f;
         alpha = truncate_float_to_s32(hud_fade_factor * 128.0f);
         frame_alpha = truncate_float_to_s32((float)alpha * 0.7f);
         if (*(int *)(hud_element + 8) < 100)
@@ -73,10 +73,10 @@ int FUN_L00_0023a7a8(char *hud_element) {
         displayed_numerator = *(int *)(hud_element + 0x74);
         sprintf_alt(buf, D_L00_0015F7C8, displayed_numerator, *(int *)(hud_element + 8));
         if (displayed_numerator != 0)
-            text_color = fast_tween_color(*(int *)&D_L00_0015F92C, *(int *)&D_L00_0015F930, f20);
+            text_color = fast_tween_color(*(int *)&D_L00_0015F92C, *(int *)&D_L00_0015F930, text_color_blend_factor);
         else
-            text_color = fast_tween_color(*(int *)&D_L00_0015F934, *(int *)&D_L00_0015F938, f20);
-        c1 = fast_tween_color(0, 0x80000000, f20);
+            text_color = fast_tween_color(*(int *)&D_L00_0015F934, *(int *)&D_L00_0015F938, text_color_blend_factor);
+        c1 = fast_tween_color(0, 0x80000000, text_color_blend_factor);
         {
             int tx = x + *(int *)&D_L00_0015F93C + w;
             font_print_right(tx + 1, y + *(int *)&D_L00_0015F940 + 1, c1, buf, -1);
