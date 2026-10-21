@@ -489,8 +489,8 @@ int FUN_L00_00222158(void) {
     float bestd, target_score, max_target_distance, target_angle_limit, target_elevation_angle_limit, x;
     int k;
     int out;
-    float v[4];
-    float w[4];
+    float collision_start[4];
+    float collision_end[4];
 
     g0 = (char *)((char *)&D_0013F350);
     if (*(int *)(g0 + 0x208C) == 0xD) {
@@ -544,14 +544,14 @@ int FUN_L00_00222158(void) {
         char *bd;
         g2 = (char *)((char *)&D_0013F350);
         *(char **)(g2 + 0x964) = best;
-        qcopy(v, g2 + 0x80);
-        v[2] += 0.5f;
-        qcopy(w, best + 0x10);
+        qcopy(collision_start, g2 + 0x80);
+        collision_start[2] += 0.5f;
+        qcopy(collision_end, best + 0x10);
         bd = *(char **)(best + 0x78);
         *(int *)(g2 + 0x978) = *(int *)(bd + 8);
         *(float *)(g2 + 0x980) = *(float *)(bd + 4);
         *(float *)(g2 + 0x984) = bestd;
-        if (FUN_001efa68(v, w, 2, 0, 0) == 0) {
+        if (FUN_001efa68(collision_start, collision_end, 2, 0, 0) == 0) {
             *(int *)(g2 + 0x968) = 1;
         }
     }
