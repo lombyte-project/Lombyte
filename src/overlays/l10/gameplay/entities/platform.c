@@ -1128,7 +1128,7 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
     float v40[4] __attribute__((aligned(16)));
     char *collision_result;
     int hit_moby_address;
-    float yaw_cosine, yaw_sine, r, collision_tilt_angle, collision_rotation_y_target;
+    float yaw_cosine, yaw_sine, collision_xz_length_or_ground_height, collision_tilt_angle, collision_rotation_y_target;
 
     float one = 1.0f;
     float k;
@@ -1159,8 +1159,8 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
                 yaw_sine = fast_sin(*(float *)(moby + 0x48));
                 v40[2] = v30[2];
                 v40[1] = v30[1] * yaw_cosine - v30[0] * yaw_sine;
-                r = seg_sqrt(v40[0] * v40[0] + v40[2] * v40[2]);
-                collision_tilt_angle = FUN_001f9e90_u(r, v40[1]);
+                collision_xz_length_or_ground_height = seg_sqrt(v40[0] * v40[0] + v40[2] * v40[2]);
+                collision_tilt_angle = FUN_001f9e90_u(collision_xz_length_or_ground_height, v40[1]);
                 *(float *)(moby + 0x40) = FUN_L00_00200510(*(float *)(moby + 0x40), -collision_tilt_angle, k);
                 collision_rotation_y_target = FUN_001f9e90_u(v40[2], v40[0]);
                 *(float *)(moby + 0x44) = FUN_L00_00200510(*(float *)(moby + 0x44), collision_rotation_y_target, k);
@@ -1175,8 +1175,8 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
             scale_vector_xyz_c(motion_data, motion_data, 0.5f);
             normalize_vector_xyz(v20, collision_result + 0x40, one);
             if (0.707f < dot_vectors_xyz(v20, v10)) {
-                r = probe_ground_height(moby + 0x10, 0, 0.5f);
-                if (*(float *)(moby + 0x18) < r) *(float *)(moby + 0x18) = r;
+                collision_xz_length_or_ground_height = probe_ground_height(moby + 0x10, 0, 0.5f);
+                if (*(float *)(moby + 0x18) < collision_xz_length_or_ground_height) *(float *)(moby + 0x18) = collision_xz_length_or_ground_height;
                 if (*(float *)(motion_data + 0x8) < 0.0f) *(float *)(motion_data + 0x8) = *(float *)(motion_data + 0x8) * -0.4f;
                 if (vector_length_xyz(motion_data) < D_0015ED6C) {
                     clear_u64_value((float *)motion_data);
@@ -1193,8 +1193,8 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
                 yaw_sine = fast_sin(*(float *)(moby + 0x48));
                 v40[2] = v30[2];
                 v40[1] = v30[1] * yaw_cosine - v30[0] * yaw_sine;
-                r = seg_sqrt(v40[0] * v40[0] + v40[2] * v40[2]);
-                collision_tilt_angle = FUN_001f9e90_u(r, v40[1]);
+                collision_xz_length_or_ground_height = seg_sqrt(v40[0] * v40[0] + v40[2] * v40[2]);
+                collision_tilt_angle = FUN_001f9e90_u(collision_xz_length_or_ground_height, v40[1]);
                 *(float *)(moby + 0x40) = FUN_L00_00200510(*(float *)(moby + 0x40), -collision_tilt_angle, k);
                 collision_rotation_y_target = FUN_001f9e90_u(v40[2], v40[0]);
                 *(float *)(moby + 0x44) = FUN_L00_00200510(*(float *)(moby + 0x44), collision_rotation_y_target, k);
