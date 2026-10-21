@@ -3019,7 +3019,7 @@ extern void FUN_001f9a10_002121c0(void *, void *, void *) __asm__("FUN_001f9a10"
 
 void FUN_L00_002121c0(void) {
     struct Hero *g = &hero;
-    V_2121c0_002121c0 v;
+    V_2121c0_002121c0 horizontal_velocity_correction;
     float inward_velocity_component, x;
     if (g->air_frames.s == 0)
         return;
@@ -3033,13 +3033,13 @@ void FUN_L00_002121c0(void) {
         return;
     if (!(0.87266463f <= FUN_001f9e90_002121c0(g->unk200.f[2], FUN_001f9b20_002121c0(&g->unk200))))
         return;
-    qcopy(&v, &g->unk200);
-    v.f[2] = 0.0f;
-    FUN_00125180_002121c0(&v, &v);
-    inward_velocity_component = -g->motion.velocity.f[0] * v.f[0] - g->motion.velocity.f[1] * v.f[1];
+    qcopy(&horizontal_velocity_correction, &g->unk200);
+    horizontal_velocity_correction.f[2] = 0.0f;
+    FUN_00125180_002121c0(&horizontal_velocity_correction, &horizontal_velocity_correction);
+    inward_velocity_component = -g->motion.velocity.f[0] * horizontal_velocity_correction.f[0] - g->motion.velocity.f[1] * horizontal_velocity_correction.f[1];
     if (0.0f < inward_velocity_component) {
-        FUN_001f9a68_002121c0(&v, &v, inward_velocity_component);
-        FUN_001f9a10_002121c0(&g->motion.velocity, &g->motion.velocity, &v);
+        FUN_001f9a68_002121c0(&horizontal_velocity_correction, &horizontal_velocity_correction, inward_velocity_component);
+        FUN_001f9a10_002121c0(&g->motion.velocity, &g->motion.velocity, &horizontal_velocity_correction);
         x = frame_time_sq * 54.0f;
         g->motion.velocity.f[2] -= x + x;
     }
