@@ -2504,12 +2504,12 @@ void FUN_L00_002bec00(char *source_state) {
 
 /* Copies fields from ((char *)&hero) at 0x1F20..0x1F40 into the moby. */
 void FUN_L00_002bec48(char *destination_state) {
-    struct Hero *g = &hero;
-    *(float *)(destination_state + 0x50) = g->unk1F20;
-    *(float *)(destination_state + 0x54) = g->unk1F24;
-    *(float *)(destination_state + 0x58) = g->unk1F28;
-    *(char *)(destination_state + 0x68) = g->unk1F3F;
-    *(float *)(destination_state + 0x44) = g->unk1F40;
+    struct Hero *hero_state = &hero;
+    *(float *)(destination_state + 0x50) = hero_state->unk1F20;
+    *(float *)(destination_state + 0x54) = hero_state->unk1F24;
+    *(float *)(destination_state + 0x58) = hero_state->unk1F28;
+    *(char *)(destination_state + 0x68) = hero_state->unk1F3F;
+    *(float *)(destination_state + 0x44) = hero_state->unk1F40;
 }
 #include "eetypes.h"
 #include "qcopy.h"
