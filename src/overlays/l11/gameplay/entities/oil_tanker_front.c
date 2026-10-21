@@ -1000,7 +1000,7 @@ void energy_sphere_update(unsigned char *moby) {
         ENERGY_SPHERE_MOVE_AND_DETONATE = 2
     };
     char *data = *(char **)(moby + 0x78);
-    float v[4];
+    float previous_position[4];
     float *vp;
     FUN_L11_00319028_c((char *)moby);
     switch (moby[0x20]) {
@@ -1009,9 +1009,9 @@ void energy_sphere_update(unsigned char *moby) {
             float *scale_approach_pointer = *(float **)(moby + 0x24);
             float scale_approach_frames = (float)scale_game_frames(0x14);
             float target_scale = scale_approach_pointer[9];
-            float b = (*(float **)(moby + 0x24))[9] / scale_approach_frames;
+            float scale_approach_step = (*(float **)(moby + 0x24))[9] / scale_approach_frames;
             scale_approach_pointer = (float *)(data + 0x1C);
-            approach_value((float *)(moby + 0x2C), target_scale, b);
+            approach_value((float *)(moby + 0x2C), target_scale, scale_approach_step);
             approach_value(scale_approach_pointer, *(float *)&D_L11_00162388,
                            *(float *)&D_L11_00162388 / (float)scale_game_frames(0x14));
         }
@@ -1022,7 +1022,7 @@ void energy_sphere_update(unsigned char *moby) {
     case ENERGY_SPHERE_MOVE_AND_DETONATE: {
         char *pos = (char *)moby + 0x10;
         FUN_L11_003191c0_c((char *)moby);
-        vp = v;
+        vp = previous_position;
         qcopy(vp, pos);
         add_vector_xyz(pos, pos, data);
         if (func_001F9908_i(data + 0x20) || collision_line(vp, (char *)moby + 0x10, 0, moby, 0) ||
