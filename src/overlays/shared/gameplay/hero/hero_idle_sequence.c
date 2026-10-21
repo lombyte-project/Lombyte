@@ -897,7 +897,7 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void FUN_L00_00206c08(void) {
     s32 *slot;
     s32 i;
-    s32 off;
+    s32 expected_owner_byte_offset;
     s32 voice;
     struct Moby *moby;
     s32 active;
@@ -907,9 +907,9 @@ void FUN_L00_00206c08(void) {
     hero_state = &hero;
     mobys = hero_state->unk2238;
     slot = &hero_state->unk2218;
-    off = 0;
+    expected_owner_byte_offset = 0;
     for (i = 7; i >= 0; i--) {
-        moby = *(struct Moby **)(off + (s32)mobys);
+        moby = *(struct Moby **)(expected_owner_byte_offset + (s32)mobys);
         voice = *slot;
         if (moby != 0) {
             if (voice == -1 || voice_pool.voices[voice].owner != (VoiceMoby *)moby) {
@@ -931,7 +931,7 @@ void FUN_L00_00206c08(void) {
         /* Fakematch: the empty block makes retail step slot before off. */
         do {
         } while (0);
-        off += 4;
+        expected_owner_byte_offset += 4;
     }
     i = 0;
 }
