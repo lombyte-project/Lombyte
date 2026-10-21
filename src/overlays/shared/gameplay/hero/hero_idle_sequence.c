@@ -2833,23 +2833,23 @@ void FUN_L00_0020a228(float a, float b);
 void FUN_L00_0020a210(float a, float b);
 
 void FUN_L00_0020ac98(void) {
-    char *g1 = (char *)hero_pos - 0x80;
-    char *g2, *g3, *g4, *g5, *g6;
+    char *hero_control_mode_owner = (char *)hero_pos - 0x80;
+    char *hero_animation_owner, *candidate_reference_hero_state, *target_selection_owner, *target_aim_owner, *aim_limit_hero_state;
     int i;
     char *candidate_moby;
     char *best;
     float bestPri, bestDist;
-    float v[8];
+    float aim_position_scratch[8];
     char *secondary_position;
     char *info, *info2, *manipulator_table, *selected_moby;
     float yaw_delta, pitch, s;
-    int mode = *(int *)(g1 + 0x208C);
+    int mode = *(int *)(hero_control_mode_owner + 0x208C);
     if (mode != 1 && mode != 4 && mode != 2 && mode != 7 && mode != 0) {
-        *(int *)(g1 + 0x2274) = 0;
+        *(int *)(hero_control_mode_owner + 0x2274) = 0;
         return;
     }
-    g2 = (char *)hero_pos - 0x80;
-    if (*(unsigned char *)(*(int *)(g2 + 0x2080) + 0x53) == 0x54)
+    hero_animation_owner = (char *)hero_pos - 0x80;
+    if (*(unsigned char *)(*(int *)(hero_animation_owner + 0x2080) + 0x53) == 0x54)
         return;
     if (D_L00_0015F6B0 % 7 == 0) {
         bestDist = 100000000.0f;
@@ -2862,19 +2862,19 @@ void FUN_L00_0020ac98(void) {
                 candidate_distance = vector_distance(hero_pos + 0x0, candidate_moby + 0x10);
                 if ((float)*(unsigned char *)(info + 0x38) < candidate_distance)
                     continue;
-                g3 = (char *)hero_pos - 0x80;
+                candidate_reference_hero_state = (char *)hero_pos - 0x80;
                 candidate_yaw_difference = fast_difference_between_rotations(
-                    FUN_001f9e90_c(*(float *)(candidate_moby + 0x10) - *(float *)(g3 + 0x80),
-                                   *(float *)(candidate_moby + 0x14) - *(float *)(g3 + 0x84)),
-                    *(float *)(g3 + 0x98));
+                    FUN_001f9e90_c(*(float *)(candidate_moby + 0x10) - *(float *)(candidate_reference_hero_state + 0x80),
+                                   *(float *)(candidate_moby + 0x14) - *(float *)(candidate_reference_hero_state + 0x84)),
+                    *(float *)(candidate_reference_hero_state + 0x98));
                 if (1.91986215f < candidate_yaw_difference)
                     continue;
                 if (1.04719758f <
                     absolute_float(FUN_001f9e90_c(vector_distance(candidate_moby + 0x10, hero_pos + 0x0),
-                                                 *(float *)(g3 + 0x88) - *(float *)(candidate_moby + 0x18))))
+                                                 *(float *)(candidate_reference_hero_state + 0x88) - *(float *)(candidate_moby + 0x18))))
                     continue;
                 sc = candidate_yaw_difference * candidate_distance + candidate_distance;
-                if ((int)candidate_moby == *(int *)(g3 + 0x2274)) {
+                if ((int)candidate_moby == *(int *)(candidate_reference_hero_state + 0x2274)) {
                     sc -= 1.5f;
                     if (sc < 0.0f)
                         sc = 0.0f;
@@ -2891,28 +2891,28 @@ void FUN_L00_0020ac98(void) {
                 }
             }
         }
-        g4 = (char *)hero_pos - 0x80;
-        *(char **)(g4 + 0x2274) = best;
+        target_selection_owner = (char *)hero_pos - 0x80;
+        *(char **)(target_selection_owner + 0x2274) = best;
     }
-    g5 = (char *)hero_pos - 0x80;
-    if (*(int *)(g5 + 0x2274) == 0)
+    target_aim_owner = (char *)hero_pos - 0x80;
+    if (*(int *)(target_aim_owner + 0x2274) == 0)
         return;
-    FUN_L00_00233660(v, 0.0f, 0.0f, 1.2f);
-    secondary_position = (char *)&v[4];
-    qcopy(secondary_position, *(char **)(g5 + 0x2274) + 0x10);
-    v[6] += 0.5f;
-    if (FUN_001efa68_ac98(v, secondary_position, 2, 0, 0))
-        *(int *)(g5 + 0x2274) = 0;
-    selected_moby = *(char **)(g5 + 0x2274);
+    FUN_L00_00233660(aim_position_scratch, 0.0f, 0.0f, 1.2f);
+    secondary_position = (char *)&aim_position_scratch[4];
+    qcopy(secondary_position, *(char **)(target_aim_owner + 0x2274) + 0x10);
+    aim_position_scratch[6] += 0.5f;
+    if (FUN_001efa68_ac98(aim_position_scratch, secondary_position, 2, 0, 0))
+        *(int *)(target_aim_owner + 0x2274) = 0;
+    selected_moby = *(char **)(target_aim_owner + 0x2274);
     if (selected_moby == 0)
         return;
-    qcopy(v, selected_moby + 0x10);
+    qcopy(aim_position_scratch, selected_moby + 0x10);
     info2 = (char *)suck_get_aim_height(selected_moby);
     if (info2 != 0)
-        v[2] += (float)*(unsigned char *)(info2 + 0x3A) * 0.125f;
-    FUN_L00_00233660(&v[4], 0.3f, 0.0f, 0.85f);
-    yaw_delta = fast_subtract_rotations(FUN_001f9e90_c(v[0] - v[4], v[1] - v[5]), *(float *)(g5 + 0x98));
-    pitch = FUN_001f9e90_c(vector_distance(v, secondary_position), v[6] - v[2]);
+        aim_position_scratch[2] += (float)*(unsigned char *)(info2 + 0x3A) * 0.125f;
+    FUN_L00_00233660(&aim_position_scratch[4], 0.3f, 0.0f, 0.85f);
+    yaw_delta = fast_subtract_rotations(FUN_001f9e90_c(aim_position_scratch[0] - aim_position_scratch[4], aim_position_scratch[1] - aim_position_scratch[5]), *(float *)(target_aim_owner + 0x98));
+    pitch = FUN_001f9e90_c(vector_distance(aim_position_scratch, secondary_position), aim_position_scratch[6] - aim_position_scratch[2]);
     if (yaw_delta > 1.02974427f)
         yaw_delta = 1.02974427f;
     else if (yaw_delta < -1.02974427f)
@@ -2921,8 +2921,8 @@ void FUN_L00_0020ac98(void) {
         pitch = 0.610865235f;
     if (pitch < -0.436332315f)
         pitch = -0.436332315f;
-    g6 = (char *)hero_pos - 0x80;
-    if (scale_game_frames(0x4D) - scale_game_frames(0x32) < *(int *)(g6 + 0x1C0)) {
+    aim_limit_hero_state = (char *)hero_pos - 0x80;
+    if (scale_game_frames(0x4D) - scale_game_frames(0x32) < *(int *)(aim_limit_hero_state + 0x1C0)) {
         if (yaw_delta > 0.296705961f)
             yaw_delta = 0.296705961f;
         else if (yaw_delta < -0.296705961f)
