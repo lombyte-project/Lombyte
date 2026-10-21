@@ -29,15 +29,15 @@ void update_all_point_lights(void) {
     *(float *)(lighting_presets_base + 0x358) = -0.5f;
     *(int *)(lighting_presets_base + 0x35C) = 0;
     for (i = 0; i < 8; i++) {
-        char *src = point_lights + i * 0x20;
-        char *dst = point_light_data + i * 0x30;
+        char *point_light_definition = point_lights + i * 0x20;
+        char *point_light_slot = point_light_data + i * 0x30;
 
-        if (*(int *)(dst + 0x10) != 0 && FUN_001f9b48(src + 0x10, dst + 0x20) > 8.0f) {
-            qcopy(dst + 0x20, src + 0x10);
-            if (*(int *)(dst + 0x10) == 1) {
+        if (*(int *)(point_light_slot + 0x10) != 0 && FUN_001f9b48(point_light_definition + 0x10, point_light_slot + 0x20) > 8.0f) {
+            qcopy(point_light_slot + 0x20, point_light_definition + 0x10);
+            if (*(int *)(point_light_slot + 0x10) == 1) {
                 create_point_light(i);
-                *(int *)(dst + 0x10) = 2;
-            } else if (*(int *)(dst + 0x10) == 2) {
+                *(int *)(point_light_slot + 0x10) = 2;
+            } else if (*(int *)(point_light_slot + 0x10) == 2) {
                 refresh_point_light(i);
             }
         }
