@@ -1038,16 +1038,16 @@ void FUN_L17_002f59a8(void) {
 /* Computes a per-vertex 2D sphere-map texture coordinate from position and normal arrays. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7C78), where it is exact; names translated to the US level program. */
 
-void FUN_L17_002f6138(int vertex_count, char *nrm, char *pos, int unused, float *out) {
+void FUN_L17_002f6138(int vertex_count, char *nrm, char *vertex_positions, int unused, float *out) {
     float normalized_position_delta[4];
     float vertex_position[4];
     float reflection_mapping_vector[4];
     float normalized_normal[4];
     int i;
     for (i = 0; i < vertex_count; i++) {
-        float *position_element = (float *)(i * 12 + (int)pos);
+        float *position_element = (float *)(i * 12 + (int)vertex_positions);
         float *normal_element;
-        float len;
+        float sphere_map_denominator;
         vertex_position[3] = 1.0f;
         vertex_position[0] = position_element[0];
         vertex_position[1] = position_element[1];
@@ -1064,8 +1064,8 @@ void FUN_L17_002f6138(int vertex_count, char *nrm, char *pos, int unused, float 
         fast_vec_sub(reflection_mapping_vector, normalized_position_delta, reflection_mapping_vector);
         fast_vec_normalize(reflection_mapping_vector, reflection_mapping_vector, 1.0f);
         reflection_mapping_vector[2] += 1.0f;
-        len = fast_vec_length(reflection_mapping_vector) * 2.0f;
-        out[i * 2] = (reflection_mapping_vector[0] / len + 0.5f) * 4.0f;
-        out[i * 2 + 1] = (reflection_mapping_vector[1] / len + 0.5f) * 4.0f;
+        sphere_map_denominator = fast_vec_length(reflection_mapping_vector) * 2.0f;
+        out[i * 2] = (reflection_mapping_vector[0] / sphere_map_denominator + 0.5f) * 4.0f;
+        out[i * 2 + 1] = (reflection_mapping_vector[1] / sphere_map_denominator + 0.5f) * 4.0f;
     }
 }
