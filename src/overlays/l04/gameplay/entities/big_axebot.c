@@ -2998,8 +2998,8 @@ void eudora_bridge_update(struct Moby *moby) {
     SwitchFollowerVars *switch_follower_vars = (SwitchFollowerVars *)moby->pvars;
     f32 last = moby->anim_time;
     struct Moby *other;
-    f32 *pos;
-    f32 cur;
+    f32 *linked_switch_travel;
+    f32 sampled_switch_travel;
 
     if (switch_follower_vars == NULL) {
         delete_moby(moby);
@@ -3029,11 +3029,11 @@ void eudora_bridge_update(struct Moby *moby) {
         other = (struct Moby *)(moby_array + (switch_follower_vars->link << 8));
         if (other->oclass != 0x118)
             break;
-        pos = (f32 *)other->pvars;
-        cur = *pos;
-        moby->anim_time = cur;
-        if (cur != last) {
-            if (*pos == 1.0f || *pos == 0.0f) {
+        linked_switch_travel = (f32 *)other->pvars;
+        sampled_switch_travel = *linked_switch_travel;
+        moby->anim_time = sampled_switch_travel;
+        if (sampled_switch_travel != last) {
+            if (*linked_switch_travel == 1.0f || *linked_switch_travel == 0.0f) {
                 if (voice_is_playing(moby, switch_follower_vars->voice)) {
                     s32 h = switch_follower_vars->voice;
                     if (h != -1) {
@@ -3044,7 +3044,7 @@ void eudora_bridge_update(struct Moby *moby) {
                     switch_follower_vars->voice = -1;
                 }
                 play_moby_voice(1, 0, moby);
-                if (moby->oclass == 0x41C && *pos == 1.0f) {
+                if (moby->oclass == 0x41C && *linked_switch_travel == 1.0f) {
                     moby->oclass = 0x1B0;
                     moby->class_slot = D_L04_00197D40[0x1B0];
                     moby->pclass = D_L04_00197480[moby->class_slot];
