@@ -2173,7 +2173,7 @@ extern void FUN_L12_002e86d0(struct Moby *);
    classes (dying, or staggering back). */
 void FUN_L12_002e81e0(struct Moby *moby) {
     BlargTrooperVars_e81e0 *vars = (BlargTrooperVars_e81e0 *)moby->pvars;
-    Vec4 v;
+    Vec4 help_direction_or_hit_position;
     s32 hit;
     f32 dmg;
     f32 angle;
@@ -2200,10 +2200,10 @@ void FUN_L12_002e81e0(struct Moby *moby) {
             if (vars->groups[3] != -1)
                 count += count_group_e81e0(vars->groups[3], 2);
             if (count >= 9 && random_integer_below_e81e0(0x27) == 0) {
-                v.f[0] = fast_cos_e81e0(fast_add_rotations_e81e0(moby->rot.z, 3.1415927f));
-                v.f[1] = fast_sin_e81e0(fast_add_rotations_e81e0(moby->rot.z, 3.1415927f));
-                v.f[2] = 0.0f;
-                call_for_help_e81e0(moby, D_001413D0_e81e0, 0x10000, &moby->pos, v.f, 1.0f);
+                help_direction_or_hit_position.f[0] = fast_cos_e81e0(fast_add_rotations_e81e0(moby->rot.z, 3.1415927f));
+                help_direction_or_hit_position.f[1] = fast_sin_e81e0(fast_add_rotations_e81e0(moby->rot.z, 3.1415927f));
+                help_direction_or_hit_position.f[2] = 0.0f;
+                call_for_help_e81e0(moby, D_001413D0_e81e0, 0x10000, &moby->pos, help_direction_or_hit_position.f, 1.0f);
             }
         }
     }
@@ -2230,8 +2230,8 @@ void FUN_L12_002e81e0(struct Moby *moby) {
             moby->flags &= ~0x1000;
             vars->unk88 = D_0015ED6C_e81e0 * 12.0f;
             vars->unk8C = D_0015ED6C_e81e0 * 9.0f;
-            v.q = coll->pos.q;
-            knockback_e81e0(&v, &angle, &vars->unk88, &vars->unk8C);
+            help_direction_or_hit_position.q = coll->pos.q;
+            knockback_e81e0(&help_direction_or_hit_position, &angle, &vars->unk88, &vars->unk8C);
             start_fall_e81e0(moby, vars->fall, 9, 1, 0, angle);
             vars->unkC0 = 10.0f;
             vars->unkC4 = 19.0f;
@@ -2241,8 +2241,8 @@ void FUN_L12_002e81e0(struct Moby *moby) {
         } else {
             vars->unk88 = D_0015ED6C_e81e0 * 4.7f;
             vars->unk8C = D_0015ED6C_e81e0 * 7.7f;
-            v.q = coll->pos.q;
-            knockback_e81e0(&v, &unused, &vars->unk88, &vars->unk8C);
+            help_direction_or_hit_position.q = coll->pos.q;
+            knockback_e81e0(&help_direction_or_hit_position, &unused, &vars->unk88, &vars->unk8C);
             start_fall_e81e0(moby, vars->fall, 6, 1, 0, unused);
             vars->unkC0 = 4.0f;
             vars->unkC4 = 8.0f;
