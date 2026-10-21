@@ -1481,7 +1481,7 @@ extern float FUN_001fa6c0_274948(int) __asm__("FUN_001fa6c0");
 
 extern unsigned char *D_L00_001B2194 __attribute__((section(".data")));
 unsigned char *FUN_L00_00274948(u128 *a, u128 *b, int c, int d);
-unsigned char *FUN_L00_00274948(u128 *position, u128 *b, int initial_alpha, int moby_reference) {
+unsigned char *FUN_L00_00274948(u128 *position, u128 *initial_velocity, int initial_alpha, int moby_reference) {
     unsigned char *particle = p27fe00_alloc(0x45);
     if (particle) {
         unsigned char *particle_data;
@@ -1503,7 +1503,7 @@ unsigned char *FUN_L00_00274948(u128 *position, u128 *b, int initial_alpha, int 
         *(int *)(particle_data + 0x18) = 0x7F7F7F;
         *(s16 *)(particle_data + 0x16) = 0;
         *(float *)(particle_data + 0x10) = inverse_lifetime_frames;
-        qcopy(particle_data, b);
+        qcopy(particle_data, initial_velocity);
         *(int *)(particle + 4) = (initial_alpha << 24) | 0x7F7F7F;
     }
     return particle;
