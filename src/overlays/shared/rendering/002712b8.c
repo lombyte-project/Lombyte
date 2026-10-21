@@ -1821,16 +1821,16 @@ void FUN_L00_00275510(char *particle) {
     char *particle_data = particle + 0x20;
     char *appearance_parameters = *(char **)(particle_data + 0x1C);
     float local_velocity[3];
-    float u[3];
-    float w[3];
+    float local_offset[3];
+    float transformed_offset[3];
     char *parent_moby;
     float velocity_decay_factor;
-    float r;
+    float interpolated_size;
     int k;
     k = *(int *)(appearance_parameters + 0xC) - *(short *)(particle + 0xA);
-    r = convert_integer_to_float(*(short *)(appearance_parameters + 8) * k / *(int *)(appearance_parameters + 0xC) + *(short *)(appearance_parameters + 0xA));
+    interpolated_size = convert_integer_to_float(*(short *)(appearance_parameters + 8) * k / *(int *)(appearance_parameters + 0xC) + *(short *)(appearance_parameters + 0xA));
     velocity_decay_factor = frame_scale * -0.01999998f + 1.0f;
-    *(float *)(particle + 0xC) = r * 1000.0f;
+    *(float *)(particle + 0xC) = interpolated_size * 1000.0f;
     local_velocity[0] = *(float *)(particle + 0x20);
     local_velocity[1] = *(float *)(particle_data + 4);
     local_velocity[2] = *(float *)(particle_data + 8);
@@ -1840,15 +1840,15 @@ void FUN_L00_00275510(char *particle) {
     *(float *)(particle_data + 8) = local_velocity[2];
     parent_moby = *(char **)(particle_data + 0xC);
     if (parent_moby != 0 && (unsigned char)parent_moby[0x20] != 0xFE && (unsigned char)parent_moby[0x20] != 0xFD) {
-        u[0] = *(float *)(particle_data + 0x10);
-        u[1] = *(float *)(particle_data + 0x14);
-        u[2] = *(float *)(particle_data + 0x18);
-        add_vector_xyz(u, u, local_velocity);
-        *(float *)(particle_data + 0x10) = u[0];
-        *(float *)(particle_data + 0x14) = u[1];
-        *(float *)(particle_data + 0x18) = u[2];
-        transform_vector_by_basis(w, u, *(char **)(particle_data + 0xC) + 0xC0);
-        add_vector_xyz(particle + 0x10, *(char **)(particle_data + 0xC) + 0x10, w);
+        local_offset[0] = *(float *)(particle_data + 0x10);
+        local_offset[1] = *(float *)(particle_data + 0x14);
+        local_offset[2] = *(float *)(particle_data + 0x18);
+        add_vector_xyz(local_offset, local_offset, local_velocity);
+        *(float *)(particle_data + 0x10) = local_offset[0];
+        *(float *)(particle_data + 0x14) = local_offset[1];
+        *(float *)(particle_data + 0x18) = local_offset[2];
+        transform_vector_by_basis(transformed_offset, local_offset, *(char **)(particle_data + 0xC) + 0xC0);
+        add_vector_xyz(particle + 0x10, *(char **)(particle_data + 0xC) + 0x10, transformed_offset);
     } else {
         free_effect_particle(particle);
         return;
