@@ -14,9 +14,9 @@ void FUN_L02_00220b80(void) {
     x = D_0013E533 + 0xE1D;
     if (*(int *)(x + 0x2084) == 0x3F) {
         float two = frame_time + frame_time;
-        float v = frame_time * 3.5f * *(float *)(x + 0x190);
-        *(float *)(x + 0x190) = v;
-        if (v < two) {
+        float frame_scaled_value = frame_time * 3.5f * *(float *)(x + 0x190);
+        *(float *)(x + 0x190) = frame_scaled_value;
+        if (frame_scaled_value < two) {
             *(float *)(x + 0x190) = two;
         }
     } else if (0.0f < *(float *)(x + 0x190)) {
