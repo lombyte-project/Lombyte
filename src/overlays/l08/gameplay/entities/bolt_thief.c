@@ -2694,17 +2694,17 @@ void FUN_L08_002e88d8(char *parent_moby) {
     char **sq;
     int weighted_hit_score = 0;
     int idx = 0;
-    int r = -1;
+    int hit_sound_id = -1;
     int i;
     for (i = 0; i < 13; i++, part_entry_cursor += 4) {
         if (*part_entry_cursor != 0) {
             if (find_moby_hit(*part_entry_cursor, 0x10000, 0) != 0) {
                 if (i < 3) {
-                    if (weighted_hit_score <= 0) { weighted_hit_score = 1; r = 1; }
+                    if (weighted_hit_score <= 0) { weighted_hit_score = 1; hit_sound_id = 1; }
                 } else if (i < 5) {
-                    if (weighted_hit_score < 2) { weighted_hit_score = 2; r = 1; }
+                    if (weighted_hit_score < 2) { weighted_hit_score = 2; hit_sound_id = 1; }
                 } else {
-                    if (weighted_hit_score < 4) { weighted_hit_score += 4; idx = i; r = 2; }
+                    if (weighted_hit_score < 4) { weighted_hit_score += 4; idx = i; hit_sound_id = 2; }
                 }
                 ((unsigned char *)*part_entry_cursor)[0xA4] = 0xFF;
             }
@@ -2714,24 +2714,24 @@ void FUN_L08_002e88d8(char *parent_moby) {
     if (*(short *)(data + 0x13C) >= 8) {
         *(short *)(data + 0x13C) = *(short *)(data + 0x13C) % 8;
         if (idx != 0) {
-            int o1 = idx * 16;
-            char **selected_part_entry = (char **)(base + o1);
+            int selected_part_byte_offset = idx * 16;
+            char **selected_part_entry = (char **)(base + selected_part_byte_offset);
             char *selected_part_moby = *selected_part_entry;
             char *d2;
             d2 = *(char **)(selected_part_moby + 0x78);
             cart_burst(parent_moby, selected_part_moby + 0x10, -1, 2.0f, 13.0f);
-            subtract_vector_xyz(d2, *selected_part_entry + 0x10, *(char **)(o1 + data + 0x64) + 0x10);
+            subtract_vector_xyz(d2, *selected_part_entry + 0x10, *(char **)(selected_part_byte_offset + data + 0x64) + 0x10);
             normalize_vector_xyz(d2, d2, D_0015ED6C * 10.0f);
             (*selected_part_entry)[0x20] = 1;
             *selected_part_entry = 0;
             return;
         } else {
             int random_search_start = truncate_float_to_s32_c(random_float_between_c(0.0f, 23.0f));
-                        char *b2 = base;
+                        char *part_table_base = base;
             for (i = 0; i < 8; i++) {
                 int k = (i + random_search_start) % 8 + 5;
                 int off = k * 16;
-                base = b2 + off; sq = (char **)base;
+                base = part_table_base + off; sq = (char **)base;
                 if (*sq != 0) {
                     char *d2 = *(char **)(*sq + 0x78);
                     cart_burst(parent_moby, *sq + 0x10, -1, 2.0f, 13.0f);
@@ -2745,7 +2745,7 @@ void FUN_L08_002e88d8(char *parent_moby) {
             parent_moby[0x20] = 0x63;
         }
     }
-    if (r >= 0) func_0022ED80_2E9CB0(r, 0, (int)parent_moby);
+    if (hit_sound_id >= 0) func_0022ED80_2E9CB0(hit_sound_id, 0, (int)parent_moby);
 }
 /* Flying gunship: cruises one path and fires at its target, or circles a second path and fires at random. */
 
