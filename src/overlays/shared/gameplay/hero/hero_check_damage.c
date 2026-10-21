@@ -1921,11 +1921,11 @@ void hero_switch_item(int i) {
     if (i == 2) {
         struct Hero *g = &hero;
         struct Hero *h;
-        struct Hero *h2;
+        struct Hero *hero_state;
         if (g->state.control_mode == 0x11 || g->state.current == 0x76 || g->state.current == 0x6A || g->state.current == 0x82 ||
             g->unk22CB != 0) {
             if (((int *)(D_00141660))[i] != 6 ||
-                (h2 = &hero, *(int *)((char *)h2 + i * 0x50 + 0x10B8) == 0)) {
+                (hero_state = &hero, *(int *)((char *)hero_state + i * 0x50 + 0x10B8) == 0)) {
                 h = &hero;
                 if (*(int *)((char *)h + i * 0x50 + 0x10B8) != 6 && h->selected_item[i] != 6 &&
                     D_0013D4C0[6] != 0) {
@@ -1972,18 +1972,18 @@ void hero_switch_item(int i) {
         if (*restore_item_request != 0) {
             int *r;
             int *rb;
-            int w;
+            int restored_item_id;
             *restore_item_request = 0;
             rb = g->saved_item;
             r = rb + i;
-            w = *r;
-            if (w != 0 && w != *(int *)((char *)g + i * 0x50 + 0x10B8)) {
-                if (w == 0x26) {
-                    w = 0;
+            restored_item_id = *r;
+            if (restored_item_id != 0 && restored_item_id != *(int *)((char *)g + i * 0x50 + 0x10B8)) {
+                if (restored_item_id == 0x26) {
+                    restored_item_id = 0;
                 }
                 *r = 0;
-                ((int *)(D_00141660))[i] = w;
-                g->selected_item[i] = w;
+                ((int *)(D_00141660))[i] = restored_item_id;
+                g->selected_item[i] = restored_item_id;
                 if (i == 0) {
                     item_defs[g->selected_item[0]].unk20 = 0x20;
                 }
