@@ -1305,31 +1305,31 @@ unsigned char *FUN_L00_002743a8(int k, u128 *pos, int lifetime_frames, float x, 
                                 float *vec) {
     unsigned char *particle = FUN_L00_002678b8(0x43);
     if (particle) {
-        unsigned char *v = particle + 0x20;
+        unsigned char *particle_data = particle + 0x20;
         qcopy(particle + 0x10, pos);
-        *(int *)(v + 0xC) = k;
-        *(float *)(v + 0x10) = x;
-        *(float *)(v + 0x14) = y;
+        *(int *)(particle_data + 0xC) = k;
+        *(float *)(particle_data + 0x10) = x;
+        *(float *)(particle_data + 0x14) = y;
         *(int *)(particle + 4) = col | 0x409B9B00;
         particle[9] = FUN_001fa6d0(4.0f) + 0x40;
         particle[1] = 0;
         particle[3] = 0x48;
         *(float *)(particle + 0xc) = 52500.0f;
         particle[8] = FUN_00213260(0xFF);
-        *(short *)(v + 0x1C) = mode;
-        *(short *)(v + 0x18) = 0;
+        *(short *)(particle_data + 0x1C) = mode;
+        *(short *)(particle_data + 0x18) = 0;
         if (mode == 0) {
             particle[2] = D_L00_001B218C[0];
         } else {
             particle[2] = D_L00_001B218C[1];
         }
         if (mode == 0) {
-            *(short *)(v + 0x1A) = FUN_001fa6d0(127.0f / convert_integer_to_float(lifetime_frames));
+            *(short *)(particle_data + 0x1A) = FUN_001fa6d0(127.0f / convert_integer_to_float(lifetime_frames));
         }
         if (vec) {
-            *(float *)(v + 0) = vec[0];
-            *(float *)(v + 4) = vec[1];
-            *(float *)(v + 8) = vec[2];
+            *(float *)(particle_data + 0) = vec[0];
+            *(float *)(particle_data + 4) = vec[1];
+            *(float *)(particle_data + 8) = vec[2];
         }
         *(short *)(particle + 0xA) = lifetime_frames;
     }
