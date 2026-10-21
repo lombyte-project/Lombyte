@@ -1648,33 +1648,33 @@ void FUN_L05_00303390(Moby *moby) {
     float ang;
     float ang2;
     Wing_3047E8 *moby_data;
-    Hit_3047E8 *r;
+    Hit_3047E8 *hit_record;
     int res;
     int k;
 
     moby_data = *(struct Wing_3047E8 **)&moby->pvars;
     func_001F9908_3047E8(&moby_data->f2D4);
     dmg = 0.0f;
-    r = func_L00_0025B478_3047E8(moby, 0x330000, 0);
-    if (r != 0) {
+    hit_record = func_L00_0025B478_3047E8(moby, 0x330000, 0);
+    if (hit_record != 0) {
         qcopy(working_vector, ((float *)&moby->pos));
         working_vector[2] = working_vector[2] + 0.5f;
-        if (r->who != 0) {
-            if (r->who->oclass == 0x47) {
+        if (hit_record->who != 0) {
+            if (hit_record->who->oclass == 0x47) {
                 qcopy(hit_test_endpoint, D_0013F420);
-            } else if ((*(struct Moby **)&r->who->pclass != 0 && *(short *)((u8 *)((struct Moby *)r->who->pclass) + 0x46) == 5) || r->who->oclass == 0xBA) {
+            } else if ((*(struct Moby **)&hit_record->who->pclass != 0 && *(short *)((u8 *)((struct Moby *)hit_record->who->pclass) + 0x46) == 5) || hit_record->who->oclass == 0xBA) {
                 qcopy(hit_test_endpoint, working_vector);
             } else {
-                qcopy(hit_test_endpoint, ((float *)&r->who->pos));
+                qcopy(hit_test_endpoint, ((float *)&hit_record->who->pos));
             }
         } else {
-            qcopy(hit_test_endpoint, r->at);
+            qcopy(hit_test_endpoint, hit_record->at);
         }
         if (func_001F9D10_3047E8(working_vector, hit_test_endpoint) < 24.0f && collision_line(working_vector, hit_test_endpoint, 2, moby, 0) != 0) {
-            r = 0;
+            hit_record = 0;
         }
     }
-    res = update_collision_l08(moby, r, &moby_data->hp, 0, &cnt, &dmg, 0, 4);
+    res = update_collision_l08(moby, hit_record, &moby_data->hp, 0, &cnt, &dmg, 0, 4);
     if (cnt != 1 && moby->state != 14) {
         moby_data->hp = moby_data->hp - dmg;
         if (moby_data->hp <= 0.0f) {
@@ -1704,8 +1704,8 @@ void FUN_L05_00303390(Moby *moby) {
             moby_data->f88 = D_L05_00161A88 * D_0015ED6C;
             moby_data->f8C = D_L05_00161A8C * D_0015ED6C;
             moby_data->fC4 = 10.0f;
-            ang = angle_atan2(moby->pos.x - r->who->pos.x, moby->pos.y - r->who->pos.y);
-            *(u128_3047E8 *)working_vector = r->dir;
+            ang = angle_atan2(moby->pos.x - hit_record->who->pos.x, moby->pos.y - hit_record->who->pos.y);
+            *(u128_3047E8 *)working_vector = hit_record->dir;
             trooper_knockback_arc(working_vector, &ang, &moby_data->f88, &moby_data->f8C);
             trooper_start_knockback(moby, moby_data->f70, ang, 5, 1, 0);
             moby->state = 11;
@@ -1719,13 +1719,13 @@ void FUN_L05_00303390(Moby *moby) {
             moby_data->f8C = D_L05_00161A94 * D_0015ED6C;
             moby_data->fC0 = 5.5f;
             moby_data->fC4 = 11.0f;
-            ang2 = angle_atan2(moby->pos.x - r->who->pos.x, moby->pos.y - r->who->pos.y);
-            *(u128_3047E8 *)working_vector = r->dir;
+            ang2 = angle_atan2(moby->pos.x - hit_record->who->pos.x, moby->pos.y - hit_record->who->pos.y);
+            *(u128_3047E8 *)working_vector = hit_record->dir;
             trooper_knockback_arc(working_vector, &ang2, &moby_data->f88, &moby_data->f8C);
             trooper_start_knockback(moby, moby_data->f70, ang2, 6, 1, 0);
             moby->state = 14;
             moby_data->b67 = 0xF0;
-            if (r->who != 0 && *(struct Moby **)&r->who->pclass != 0 && *(short *)((u8 *)((struct Moby *)r->who->pclass) + 0x46) == 5) {
+            if (hit_record->who != 0 && *(struct Moby **)&hit_record->who->pclass != 0 && *(short *)((u8 *)((struct Moby *)hit_record->who->pclass) + 0x46) == 5) {
                 stop_animation_l08(moby, 0x800, -1);
             } else {
                 stop_animation_l08(moby, 0, -1);
