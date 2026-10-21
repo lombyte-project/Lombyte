@@ -45,11 +45,11 @@ void FUN_L14_002b3318(char *moby) {
 // Clears two flag bits, sets another, and copies a word from the moby's linked record.
 void FUN_L14_002b3330(char *moby) {
     unsigned short *field = (unsigned short *)(moby + 0x34);
-    int v;
+    int linked_record_value;
     *field &= 0xFFBE;
-    v = *(int *)(*(char **)(moby + 0x24) + 0x10);
+    linked_record_value = *(int *)(*(char **)(moby + 0x24) + 0x10);
     *field |= 0x1000;
-    *(int *)(moby + 0x94) = v;
+    *(int *)(moby + 0x94) = linked_record_value;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B45A8), where it is exact; names translated to the US level program. */
