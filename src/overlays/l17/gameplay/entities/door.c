@@ -3216,13 +3216,13 @@ void FUN_L17_002f04d0(struct Moby *moby) {
     for (i = 0; i < 2; i++) {
         for (uv_strip_index = 0; uv_strip_index < 2; uv_strip_index++) {
             for (uv_vertex_index = 0; uv_vertex_index < D_L17_00162210[uv_strip_index]; uv_vertex_index++) {
-                T4 tbl = D_L17_00162268;
+                T4 uv_scroll_factors = D_L17_00162268;
                 *(float *)(uv_vertex_index * 8 + D_L17_00162220[uv_strip_index]) =
                     *(float *)(uv_vertex_index * 8 + D_L17_00162238[uv_strip_index]) +
-                    FUN_L00_00200260(scale * tbl.p[i].v[0], 1.0f);
+                    FUN_L00_00200260(scale * uv_scroll_factors.p[i].v[0], 1.0f);
                 *(float *)(uv_vertex_index * 8 + D_L17_00162220[uv_strip_index] + 4) =
                     *(float *)(uv_vertex_index * 8 + D_L17_00162238[uv_strip_index] + 4) +
-                    FUN_L00_00200260(scale * tbl.p[i].v[1], 1.0f);
+                    FUN_L00_00200260(scale * uv_scroll_factors.p[i].v[1], 1.0f);
             }
         }
         font_queue_vu_state();
