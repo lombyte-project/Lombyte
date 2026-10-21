@@ -1025,39 +1025,39 @@ void FUN_L01_00232978(int flag) {
     float slope_probe_end[4];
     float material_probe_start[4];
     float material_probe_end[4];
-    struct Hero *g = &hero;
+    struct Hero *hero_ptr = &hero;
     float probe_height_offset, slope_probe_distance, hit_normal_elevation;
     int k, x;
     struct Hero *material_probe_hero, *slope_probe_hero, *slide_hero;
     char *slope_hit, *slide_hit;
     float *slide_normal;
 
-    if (g->unk308 != 0) {
+    if (hero_ptr->unk308 != 0) {
         return;
     }
-    if (gravity_length_xy((float *)(&g->motion.velocity)) < frame_time * 0.1f) {
+    if (gravity_length_xy((float *)(&hero_ptr->motion.velocity)) < frame_time * 0.1f) {
         return;
     }
     probe_height_offset = 0.37f;
     slope_probe_distance = 0.5f;
-    x = g->state.control_mode;
+    x = hero_ptr->state.control_mode;
     if (x >= 0x11 && x <= 0x12) {
         probe_height_offset = 0.0f;
         slope_probe_distance = 0.7f;
     }
-    qcopy(slope_probe_start, &g->motion.pos);
+    qcopy(slope_probe_start, &hero_ptr->motion.pos);
     slope_probe_start[2] += probe_height_offset;
-    qcopy(material_probe_start, &g->motion.pos);
+    qcopy(material_probe_start, &hero_ptr->motion.pos);
     material_probe_start[2] += probe_height_offset * 0.3f;
-    if (flag != 0 || vector_length_xy(&g->motion.velocity) < 0.01f) {
-        slope_probe_end[0] = fast_cos(g->motion.rot.f[2]) * slope_probe_distance;
-        slope_probe_end[1] = fast_sin(g->motion.rot.f[2]) * slope_probe_distance;
+    if (flag != 0 || vector_length_xy(&hero_ptr->motion.velocity) < 0.01f) {
+        slope_probe_end[0] = fast_cos(hero_ptr->motion.rot.f[2]) * slope_probe_distance;
+        slope_probe_end[1] = fast_sin(hero_ptr->motion.rot.f[2]) * slope_probe_distance;
         slope_probe_end[2] = 0.0f;
-        material_probe_end[0] = fast_cos(g->motion.rot.f[2]) * slope_probe_distance * 1.4f;
-        material_probe_end[1] = fast_sin(g->motion.rot.f[2]) * slope_probe_distance * 1.4f;
+        material_probe_end[0] = fast_cos(hero_ptr->motion.rot.f[2]) * slope_probe_distance * 1.4f;
+        material_probe_end[1] = fast_sin(hero_ptr->motion.rot.f[2]) * slope_probe_distance * 1.4f;
         material_probe_end[2] = 0.0f;
     } else {
-        qcopy(slope_probe_end, &g->motion.velocity);
+        qcopy(slope_probe_end, &hero_ptr->motion.velocity);
         slope_probe_end[2] = 0.0f;
         fast_vec_scale(slope_probe_end, slope_probe_end, slope_probe_distance / vector_length_xy(slope_probe_end));
         qcopy(material_probe_end, slope_probe_end);
