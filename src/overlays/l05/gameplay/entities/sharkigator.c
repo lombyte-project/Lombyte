@@ -418,7 +418,7 @@ extern char D_L05_0015F580_macro[] __asm__("D_L05_0015F580") __attribute__((sect
 
 /* When the timer runs out, spawns two effects beside the moby, one to each side, and restarts the timer. */
 void FUN_L05_002d1e30(char *moby) {
-    V2d1e30 v;
+    V2d1e30 spawn_position;
     char *data;
     char *spawned_effect;
     float opposite_heading;
@@ -432,11 +432,11 @@ void FUN_L05_002d1e30(char *moby) {
     for (i = 0; i < 2; i++) {
         opposite_heading = addrot_2d1e30(*(float *)(moby + 0x48), 3.14159274f);
         addrot_2d1e30(opposite_heading, rand_2d1e30(-0.785398006f, 0.785398006f));
-        fast_vec_scale(v, moby + 0xD0, rand_2d1e30(-0.5f, 0.5f));
-        vadd_2d1e30(v, v, moby + 0x10);
-        v[2] = D_L05_001612E8 + 0.05f;
+        fast_vec_scale(spawn_position, moby + 0xD0, rand_2d1e30(-0.5f, 0.5f));
+        vadd_2d1e30(spawn_position, spawn_position, moby + 0x10);
+        spawn_position[2] = D_L05_001612E8 + 0.05f;
         spawn_height_ptr = &D_L05_001612E8;
-        spawned_effect = spawn_2d1e30(v, D_L05_0015F580_macro, spawn_height_ptr, rand_2d1e30(0.7f, 1.0f), i == 0 ? 2.0f : -2.0f);
+        spawned_effect = spawn_2d1e30(spawn_position, D_L05_0015F580_macro, spawn_height_ptr, rand_2d1e30(0.7f, 1.0f), i == 0 ? 2.0f : -2.0f);
         if (spawned_effect != 0) {
             *(short *)(spawned_effect + 0xA) = frames_2d1e30(15);
         }
