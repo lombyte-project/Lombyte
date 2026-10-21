@@ -2938,13 +2938,13 @@ extern void FUN_L00_00258830(int, int, float, float, float, int);
 int FUN_L17_002efd48(struct Moby *moby, float *target, float speed) {
     char *data;
     float *yaw = &moby->rot.z;
-    float ang;
+    float target_yaw;
     float turn;
     float movement_delta[3];
     data = (char *)moby->pvars;
-    ang = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
+    target_yaw = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
     turn = frame_time_sq * 12.566371f;
-    approach_angle(yaw, (float *)(data + 0x1DC), ang, turn, turn, frame_time * 7.3303828f);
+    approach_angle(yaw, (float *)(data + 0x1DC), target_yaw, turn, turn, frame_time * 7.3303828f);
     approach_value((float *)(data + 0x1D8), speed, frame_time_sq * 13.0f);
     movement_delta[0] = fast_cos(moby->rot.z) * *(float *)(data + 0x1D8);
     movement_delta[1] = fast_sin(moby->rot.z) * *(float *)(data + 0x1D8);
