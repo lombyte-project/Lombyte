@@ -185,7 +185,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern short D_L06_00161ED8 __attribute__((sda));
 float FUN_L06_002f96f8(char *self) {
     char *owner = *(char **)(*(char **)(self + 0x78) + 0x160);
-    float hi, lo, ang, dist, v[3];
+    float hi, lo, owner_to_self_angle_radians, owner_to_self_distance, v[3];
     short *moby_index_cursor;
     if ((unsigned char)self[0x21] == 0xFF) {
         return fast_arc_tan(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
@@ -193,11 +193,11 @@ float FUN_L06_002f96f8(char *self) {
     }
     lo = -(*(float *)&D_L06_00161ED8 * DEG_TO_RAD);
     hi = *(float *)&D_L06_00161ED8 * DEG_TO_RAD;
-    ang = fast_arc_tan(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
+    owner_to_self_angle_radians = fast_arc_tan(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
                        *(float *)(self + 0x14) - *(float *)(owner + 0x14));
-    dist = FUN_001f9b48(owner + 0x10, self + 0x10);
-    v[0] = fast_cos(ang) * 2.0f;
-    v[1] = fast_sin(ang) * 2.0f;
+    owner_to_self_distance = FUN_001f9b48(owner + 0x10, self + 0x10);
+    v[0] = fast_cos(owner_to_self_angle_radians) * 2.0f;
+    v[1] = fast_sin(owner_to_self_angle_radians) * 2.0f;
     v[2] = 0.0f;
     fast_vec_add(v, v, D_0013E533 + 0xE9D);
     moby_index_cursor = D_L06_001ABFC0_p[(unsigned char)self[0x21]];
@@ -205,13 +205,13 @@ float FUN_L06_002f96f8(char *self) {
         return 0.0f;
     }
     do {
-        int idx = *(unsigned short *)moby_index_cursor & 0x7FFF;
-        char *listed_moby = (char *)(idx * 256 + (int)D_L06_0015FFD8);
-        if ((unsigned char)listed_moby[0x20] == 8 || FUN_001f9b48(listed_moby + 0x10, owner + 0x10) < dist) {
+        int listed_moby_index = *(unsigned short *)moby_index_cursor & 0x7FFF;
+        char *listed_moby = (char *)(listed_moby_index * 256 + (int)D_L06_0015FFD8);
+        if ((unsigned char)listed_moby[0x20] == 8 || FUN_001f9b48(listed_moby + 0x10, owner + 0x10) < owner_to_self_distance) {
             float d = fast_arc_tan(
-                *(float *)(D_L06_0015FFD8 + idx * 256 + 0x10) - *(float *)(owner + 0x10),
-                *(float *)(D_L06_0015FFD8 + idx * 256 + 0x14) - *(float *)(owner + 0x14));
-            float listed_moby_angle_offset_radians = fast_subtract_rotations(d, ang);
+                *(float *)(D_L06_0015FFD8 + listed_moby_index * 256 + 0x10) - *(float *)(owner + 0x10),
+                *(float *)(D_L06_0015FFD8 + listed_moby_index * 256 + 0x14) - *(float *)(owner + 0x14));
+            float listed_moby_angle_offset_radians = fast_subtract_rotations(d, owner_to_self_angle_radians);
             if (listed_moby_angle_offset_radians > 0.0f && listed_moby_angle_offset_radians < hi) {
                 hi = listed_moby_angle_offset_radians;
             } else if (listed_moby_angle_offset_radians < 0.0f && listed_moby_angle_offset_radians > lo) {
@@ -219,7 +219,7 @@ float FUN_L06_002f96f8(char *self) {
             }
         }
     } while (*moby_index_cursor++ >= 0);
-    return fast_add_rotations(fast_add_rotations(lo, fast_difference_between_rotations(hi, lo) * 0.5f), ang);
+    return fast_add_rotations(fast_add_rotations(lo, fast_difference_between_rotations(hi, lo) * 0.5f), owner_to_self_angle_radians);
 }
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
