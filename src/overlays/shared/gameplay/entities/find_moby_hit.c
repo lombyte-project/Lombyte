@@ -130,14 +130,14 @@ extern G_259a88 D_L00_00173E40_259a88 __asm__("D_L00_00173E40") __attribute__((s
 extern T_259a88 D_L00_00178100_259a88[] __asm__("D_L00_00178100") __attribute__((section(".data")));
 void FUN_001f99f8_259a88(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00259a88(unsigned char *m, L_259a88 *src);
-void FUN_L00_00259a88(unsigned char *owner_moby, L_259a88 *src) {
+void FUN_L00_00259a88(unsigned char *owner_moby, L_259a88 *hit_descriptor) {
     L_259a88 hit_descriptor_copy;
     int i = D_L00_00173E40_259a88.idx;
     T_259a88 *hit_record;
-    ((u128_259a88 *)&hit_descriptor_copy)[0] = ((u128_259a88 *)src)[0];
-    ((u128_259a88 *)&hit_descriptor_copy)[1] = ((u128_259a88 *)src)[1];
-    ((u128_259a88 *)&hit_descriptor_copy)[2] = ((u128_259a88 *)src)[2];
-    src = &hit_descriptor_copy;
+    ((u128_259a88 *)&hit_descriptor_copy)[0] = ((u128_259a88 *)hit_descriptor)[0];
+    ((u128_259a88 *)&hit_descriptor_copy)[1] = ((u128_259a88 *)hit_descriptor)[1];
+    ((u128_259a88 *)&hit_descriptor_copy)[2] = ((u128_259a88 *)hit_descriptor)[2];
+    hit_descriptor = &hit_descriptor_copy;
     if (owner_moby[0xA4] != 0xFF) {
         T_259a88 *existing_hit = &D_L00_00178100_259a88[owner_moby[0xA4]];
         if (existing_hit->owner == owner_moby && hit_descriptor_copy.f < existing_hit->f)
@@ -145,14 +145,14 @@ void FUN_L00_00259a88(unsigned char *owner_moby, L_259a88 *src) {
     }
     hit_record = &D_L00_00178100_259a88[i];
     FUN_001f99f8_259a88(hit_record);
-    qcopy(&D_L00_00178100_259a88[i].b, &src->v);
-    hit_record->x = src->x;
-    hit_record->y = src->y;
-    hit_record->b0 = src->b0;
-    hit_record->b1 = src->b1;
-    hit_record->s = src->s;
-    hit_record->f = src->f;
-    hit_record->flag = src->flag;
+    qcopy(&D_L00_00178100_259a88[i].b, &hit_descriptor->v);
+    hit_record->x = hit_descriptor->x;
+    hit_record->y = hit_descriptor->y;
+    hit_record->b0 = hit_descriptor->b0;
+    hit_record->b1 = hit_descriptor->b1;
+    hit_record->s = hit_descriptor->s;
+    hit_record->f = hit_descriptor->f;
+    hit_record->flag = hit_descriptor->flag;
     hit_record->owner = owner_moby;
     hit_record->z = 0;
     owner_moby[0xA4] = i;
