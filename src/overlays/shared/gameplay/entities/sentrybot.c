@@ -931,21 +931,21 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-int FUN_L15_00299880(unsigned char *moby, char *moby_data, int next_state, int b, float angle) {
+int FUN_L15_00299880(unsigned char *moby, char *moby_data, int next_state, int next_animation, float angle) {
     float heading_delta = -fast_subtract_rotations(*(float *)(moby + 0x48), angle);
-    float v;
+    float stored_heading_delta;
     int ret = 1;
     *(int *)(moby_data + 0x144) = 0;
     *(float *)(moby_data + 0x170) = *(float *)(moby + 0x48);
     *(float *)(moby_data + 0x174) = angle;
     *(float *)(moby_data + 0x178) = heading_delta;
     moby_data[0x15C] = next_state;
-    moby_data[0x15D] = b;
+    moby_data[0x15D] = next_animation;
     if (heading_delta > 2.0943952f || heading_delta < -2.0943952f) {
         moby[0x20] = 8;
-        v = *(float *)(moby_data + 0x178);
-        if (v > 0.0f) {
-            *(float *)(moby_data + 0x178) = v + -6.2831855f;
+        stored_heading_delta = *(float *)(moby_data + 0x178);
+        if (stored_heading_delta > 0.0f) {
+            *(float *)(moby_data + 0x178) = stored_heading_delta + -6.2831855f;
         }
         if (moby[0x53] != 0xC) {
             blend_moby_animation_c(moby, 0xC, 0, scale_game_frames(10));
@@ -965,8 +965,8 @@ int FUN_L15_00299880(unsigned char *moby, char *moby_data, int next_state, int b
 
     } else {
         moby[0x20] = next_state;
-        if (moby[0x53] != b) {
-            blend_moby_animation_c(moby, b, 0, scale_game_frames(10));
+        if (moby[0x53] != next_animation) {
+            blend_moby_animation_c(moby, next_animation, 0, scale_game_frames(10));
         }
         ret = 0;
     }
