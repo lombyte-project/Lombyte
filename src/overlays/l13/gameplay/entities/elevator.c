@@ -238,7 +238,7 @@ void elevator_update(struct Moby *moby) {
     float delta[4];
     float rot[4];
     float camera_position_scratch[4];
-    float b[4];
+    float camera_pose_scratch[4];
     float blended_camera_rotation[4];
 
     scale_vector_xyz(delta, &moby->pos, -1.0f);
@@ -256,14 +256,14 @@ void elevator_update(struct Moby *moby) {
         if (vars->blend < 1.0f) {
             float t = (1.0f - vars->blend) / (1.0f - old);
             char *base;
-            FUN_L13_002b4060(moby, b, blended_camera_rotation);
-            subtract_vector_xyz(camera_position_scratch, D_L13_001670C0_2b39e0, b);
+            FUN_L13_002b4060(moby, camera_pose_scratch, blended_camera_rotation);
+            subtract_vector_xyz(camera_position_scratch, D_L13_001670C0_2b39e0, camera_pose_scratch);
             base = D_L13_001670C0_2b39e0 - 0x140;
             scale_vector_xyz(camera_position_scratch, camera_position_scratch, t);
-            add_vector_xyz(b, b, camera_position_scratch);
+            add_vector_xyz(camera_pose_scratch, camera_pose_scratch, camera_position_scratch);
             blended_camera_rotation[1] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x154), blended_camera_rotation[1]) * t, blended_camera_rotation[1]);
             blended_camera_rotation[2] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x158), blended_camera_rotation[2]) * t, blended_camera_rotation[2]);
-            FUN_L00_002ea9d8(b);
+            FUN_L00_002ea9d8(camera_pose_scratch);
             FUN_L00_002eaa30(blended_camera_rotation);
         } else {
             u8 s = moby->command;
@@ -279,9 +279,9 @@ void elevator_update(struct Moby *moby) {
             vars->voice = allocate_voice_2b39e0(0, 4, moby);
         }
         if (moby->command != 0) {
-            FUN_L13_002b4060(moby, camera_position_scratch, b);
+            FUN_L13_002b4060(moby, camera_position_scratch, camera_pose_scratch);
             FUN_L00_002ea9d8(camera_position_scratch);
-            FUN_L00_002eaa30(b);
+            FUN_L00_002eaa30(camera_pose_scratch);
         }
         if (moby->state == 2) {
             target = vars->top;
