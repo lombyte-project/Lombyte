@@ -2978,7 +2978,7 @@ void FUN_L02_002df0b0(struct Moby *moby) {
     char *transport_pod_vars = (char *)moby->pvars;
     char *rail_a = *(char **)(transport_pod_vars + 0x84);
     float k, k2;
-    float r;
+    float rail_a_rotation_z;
     qcopy(rail_a + 0x10, &moby->pos);
     qcopy(*(char **)(transport_pod_vars + 0x88) + 0x10, &moby->pos);
     k = *(float *)&D_L02_00161C3C;
@@ -2986,11 +2986,11 @@ void FUN_L02_002df0b0(struct Moby *moby) {
     *(int *)(transport_pod_vars + 0x8C) = 0;
     *(float *)(*(char **)(transport_pod_vars + 0x88) + 0x18) = moby->pos.z + *(float *)(transport_pod_vars + 0x98);
     *(int *)(transport_pod_vars + 0x90) = 0;
-    r = fast_add_rotations(moby->rot.z,
+    rail_a_rotation_z = fast_add_rotations(moby->rot.z,
                      (*(float *)(*(char **)(transport_pod_vars + 0x84) + 0x18) - moby->pos.z) * k *
                          DEG_TO_RAD);
     k2 = *(float *)&D_L02_00161C3C;
-    *(float *)(*(char **)(transport_pod_vars + 0x84) + 0x48) = r;
+    *(float *)(*(char **)(transport_pod_vars + 0x84) + 0x48) = rail_a_rotation_z;
     *(float *)(*(char **)(transport_pod_vars + 0x88) + 0x48) = fast_add_rotations(
         moby->rot.z,
         (*(float *)(*(char **)(transport_pod_vars + 0x88) + 0x18) - moby->pos.z) * k2 * DEG_TO_RAD);
