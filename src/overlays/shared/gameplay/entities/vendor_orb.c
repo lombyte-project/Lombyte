@@ -391,12 +391,12 @@ void FUN_L00_002e01b0(char *moby) {
     char *moby_data = *(char **)(moby + 0x78);
     struct Hero *g;
     int countdown_lower_bound;
-    float r;
+    float normalization_scale;
     if (FUN_001f9740_2e01b0(moby_data + 4) == 0)
         return;
     add_vector_xyz_cf(moby, 0, &effect_position);
-    r = -FUN_002132a8_2e01b0(D_0015ED6C_2e01b0, D_0015ED6C_2e01b0 * 3.0f);
-    fast_vec_normalize(&v, moby + 0xD0, r);
+    normalization_scale = -FUN_002132a8_2e01b0(D_0015ED6C_2e01b0, D_0015ED6C_2e01b0 * 3.0f);
+    fast_vec_normalize(&v, moby + 0xD0, normalization_scale);
     g = &hero;
     v.x += g->motion.displacement.f[0] * 0.8f;
     v.y += g->motion.displacement.f[1] * 0.8f;
