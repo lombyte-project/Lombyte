@@ -1523,7 +1523,7 @@ void FUN_L00_00207d40(void) {
     int st;
     int glow_color;
     int mode;
-    V_207d40 *v;
+    V_207d40 *glow_position_cursor;
 
     mode = D_L00_0015F5C4;
     if (mode == 2 || mode == 6) {
@@ -1535,10 +1535,10 @@ void FUN_L00_00207d40(void) {
     if (st == 3) {
         int j;
         glow_color = P.i22E4;
-        v = P.v1D50;
+        glow_position_cursor = P.v1D50;
         for (j = 2; j >= 0; j--) {
-            FUN_L00_00263618_207d40(v, glow_color, 0.2f, 0.08f);
-            v++;
+            FUN_L00_00263618_207d40(glow_position_cursor, glow_color, 0.2f, 0.08f);
+            glow_position_cursor++;
         }
         return;
     }
