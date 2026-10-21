@@ -425,8 +425,8 @@ extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001
 extern short D_L18_00162230 __attribute__((sda));
 void FUN_L18_002f0848(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    int off;
-    int cur;
+    int trail_slot_byte_offset;
+    int current_game_frame;
     int old;
     if ((game_frame & 3) == 0) {
         *(unsigned short *)(data + 0x166) = (*(unsigned short *)(data + 0x166) + 1) & 0xF;
@@ -434,13 +434,13 @@ void FUN_L18_002f0848(struct Moby *moby) {
             *(unsigned short *)(data + 0x164) = *(unsigned short *)(data + 0x164) + 1;
         }
     }
-    off = *(short *)(data + 0x166) << 4;
-    qcopy((char *)(off + (int)data) + 0x10, &moby->pos);
-    cur = game_frame;
+    trail_slot_byte_offset = *(short *)(data + 0x166) << 4;
+    qcopy((char *)(trail_slot_byte_offset + (int)data) + 0x10, &moby->pos);
+    current_game_frame = game_frame;
     old = *(int *)&D_L18_00162230;
-    *(float *)(data + off + 0x1C) = 1.0f;
-    if (cur != old) {
-        *(int *)&D_L18_00162230 = cur;
+    *(float *)(data + trail_slot_byte_offset + 0x1C) = 1.0f;
+    if (current_game_frame != old) {
+        *(int *)&D_L18_00162230 = current_game_frame;
         enqueue_callback_list_1_alt(FUN_L18_002f0390, moby);
         enqueue_callback_list_1_alt(FUN_L18_002f06c0, moby);
     }
