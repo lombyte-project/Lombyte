@@ -388,17 +388,17 @@ void FUN_L03_002ebb00(void *arg) {
     char *camera = arg;
     char *camera_data = *(char **)(camera + 0x70);
     char *camera_offset_params = camera_data + 0xD0;
-    char *b = camera_data + 0xF0;
+    char *camera_back_direction_data = camera_data + 0xF0;
     struct Hero *g = &hero;
     float camera_back_offset[4];
     float gravity_offset[4];
     float camera_position[4];
     struct Hero *hero_ptr;
     if (g->unk2284 != 0x50 || g->state.current == 0x11) {
-        *(float *)(b + 0x34) = g->motion.pos.f[2];
+        *(float *)(camera_back_direction_data + 0x34) = g->motion.pos.f[2];
     }
     func_L00_001FF4B0_ebb00(gravity_offset, &hero.gravity_dir, -*(float *)(camera_offset_params + 0x10));
-    func_L00_001FF4B0_ebb00(camera_back_offset, b, -*(float *)camera_offset_params);
+    func_L00_001FF4B0_ebb00(camera_back_offset, camera_back_direction_data, -*(float *)camera_offset_params);
     hero_ptr = &hero;
     *(float *)camera_data =
         func_001EC120_ebb00(camera_data + 0x10, *(float *)camera_data, hero_ptr->motion.pos.f[0], *(float *)(camera_data + 0x20),
@@ -407,7 +407,7 @@ void FUN_L03_002ebb00(void *arg) {
         func_001EC120_ebb00(camera_data + 0x14, *(float *)(camera_data + 4), hero_ptr->motion.pos.f[1], *(float *)(camera_data + 0x20),
                             *(float *)(camera_data + 0x24), *(float *)(camera_data + 0x28));
     *(float *)(camera_data + 8) =
-        func_001EC120_ebb00(camera_data + 0x18, *(float *)(camera_data + 8), *(float *)(b + 0x34), *(float *)(camera_data + 0x20),
+        func_001EC120_ebb00(camera_data + 0x18, *(float *)(camera_data + 8), *(float *)(camera_back_direction_data + 0x34), *(float *)(camera_data + 0x20),
                             *(float *)(camera_data + 0x24), *(float *)(camera_data + 0x28));
     func_001F9BD8_ebb00(camera_position, camera_data, gravity_offset);
     func_001F9BD8_ebb00(camera_position, camera_position, camera_back_offset);
