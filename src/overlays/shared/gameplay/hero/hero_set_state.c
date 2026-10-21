@@ -280,7 +280,7 @@ extern unsigned char D_0013E533[];
 void FUN_L00_00221b68(void) {
     char *hero_check_base = (char *)D_0013E533 + 0xE1D;
     char *hero_base;
-    char *r;
+    char *hero_timer_base;
     float distance_error;
     float xy_distance;
     float lim;
@@ -293,8 +293,8 @@ void FUN_L00_00221b68(void) {
         s = *(int *)(hero_check_base + 0x208C);
         if (s == 0 || s == 2 || s == 4 || s == 10 || s == 1) {
             s = scale_game_frames(5);
-            r = (char *)D_0013E533 + 0xE1D;
-            *(short *)(r + 0x1EA) = s;
+            hero_timer_base = (char *)D_0013E533 + 0xE1D;
+            *(short *)(hero_timer_base + 0x1EA) = s;
         }
     }
     hero_base = (char *)D_0013E533 + 0xE1D;
