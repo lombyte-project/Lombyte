@@ -2562,20 +2562,20 @@ extern struct Moby *D_L14_0015FFD8_12f0 __asm__("D_L14_0015FFD8");
 struct Moby *FUN_L14_002f12f0(struct Moby *moby, int tag) {
     u16 *group_entry_cursor;
     struct Moby *pool;
-    int idx;
+    int group_moby_index;
 
     if (moby->group < D_L14_0015FFF4 && (group_entry_cursor = D_L14_001ABF40[moby->group]) != 0) {
         pool = D_L14_0015FFD8_12f0;
         do {
-            idx = *group_entry_cursor & 0x7FFF;
-            if (((struct TaggedVars *)pool[idx].pvars)->tag == tag) {
+            group_moby_index = *group_entry_cursor & 0x7FFF;
+            if (((struct TaggedVars *)pool[group_moby_index].pvars)->tag == tag) {
                 goto found;
             }
         } while ((s16)*group_entry_cursor++ >= 0);
     }
     return 0;
 found:
-    return &D_L14_0015FFD8_12f0[idx];
+    return &D_L14_0015FFD8_12f0[group_moby_index];
 }
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
