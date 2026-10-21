@@ -870,8 +870,8 @@ void FUN_001f9bf8_2eac18(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_2eac18(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_002eac18(int mode);
 void FUN_L00_002eac18(int mode) {
-    char *g = D_L00_00166C80_2eac18;
-    char *current_follow_camera = *(char **)(g + 0x180);
+    char *camera_globals = D_L00_00166C80_2eac18;
+    char *current_follow_camera = *(char **)(camera_globals + 0x180);
     FUN_L00_001eb448_2eac18();
     if (mode == 0) {
         float v0[4] __attribute__((aligned(16)));
@@ -885,19 +885,19 @@ void FUN_L00_002eac18(int mode) {
         FUN_001f9bf8_2eac18(v0, &m[8], 1.2f);
         FUN_001f9a10_2eac18(camera_position, hero_rotation - 0x10, v0);
         FUN_001f9a10_2eac18(camera_position, camera_position, v1);
-        *(short *)(*(char **)(g + 0x180) + 0x8A) = 1;
+        *(short *)(*(char **)(camera_globals + 0x180) + 0x8A) = 1;
     } else if (mode == 2) {
-        *(char *)(g + 0x273) = 0;
+        *(char *)(camera_globals + 0x273) = 0;
         *(short *)(current_follow_camera + 0x7E) = 2;
-        *(float *)(g + 0x294) = 0.018f;
-        *(float *)(g + 0x288) = 0.018f;
+        *(float *)(camera_globals + 0x294) = 0.018f;
+        *(float *)(camera_globals + 0x288) = 0.018f;
     } else if (mode == 1) {
         *(short *)(current_follow_camera + 0x7E) = 3;
     } else if (mode == 4) {
-        *(char *)(g + 0x273) = 0;
+        *(char *)(camera_globals + 0x273) = 0;
         *(short *)(current_follow_camera + 0x7E) = 5;
-        *(float *)(g + 0x294) = 0.018f;
-        *(float *)(g + 0x288) = 0.018f;
+        *(float *)(camera_globals + 0x294) = 0.018f;
+        *(float *)(camera_globals + 0x288) = 0.018f;
     }
 }
 #define NOT_SDA
