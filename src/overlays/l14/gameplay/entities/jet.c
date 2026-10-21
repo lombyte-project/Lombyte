@@ -959,7 +959,7 @@ void FUN_L14_002ec810(struct Moby *moby) {
     int i;
     float glow_pulse_sine;
     int glow_red_intensity;
-    int g;
+    int glow_green_blue_intensity;
 
     switch (moby->state) {
     case MINE_STATE_INITIALIZE:
@@ -1014,8 +1014,8 @@ void FUN_L14_002ec810(struct Moby *moby) {
         mine_vars->phase = mine_add_rot(mine_vars->phase, D_L14_00161C48);
         glow_pulse_sine = mine_sin(mine_vars->phase);
         glow_red_intensity = mine_ftoi(glow_pulse_sine * 48.0f) + 0xCF;
-        g = mine_ftoi(glow_pulse_sine * 32.0f) + 0x30;
-        moby->glow_color = g << 16 | (0xFF000000 | g << 8) | glow_red_intensity;
+        glow_green_blue_intensity = mine_ftoi(glow_pulse_sine * 32.0f) + 0x30;
+        moby->glow_color = glow_green_blue_intensity << 16 | (0xFF000000 | glow_green_blue_intensity << 8) | glow_red_intensity;
         break;
     }
 }
