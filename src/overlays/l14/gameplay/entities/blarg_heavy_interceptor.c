@@ -2675,15 +2675,15 @@ extern void steer_5730(char *moby, float *vel, float target, float k, float d,
                        float max) __asm__("FUN_L00_00258278");
 
 extern int FUN_L00_0025d808_5730() __asm__("FUN_L00_0025d808");
-int FUN_L14_002b5730(struct Moby *moby, char *path, int segment_index_address, int segment_distance_address, float *v, float *vel, float f12,
+int FUN_L14_002b5730(struct Moby *moby, char *path, int segment_index_address, int segment_distance_address, float *position_easing_velocity, float *vel, float f12,
                      float f13, float f14, float f15, float f16, float f17, float f18) {
     float path_target_position[3];
-    int r = FUN_L00_0025d808_5730(path, path_target_position, segment_index_address, segment_distance_address, 0);
-    FUN_L00_0025b8c0_5730(&moby->pos.x, v, path_target_position[0], f13, f14, f15);
-    FUN_L00_0025b8c0_5730(&moby->pos.y, v + 1, path_target_position[1], f13, f14, f15);
-    FUN_L00_0025b8c0_5730(&moby->pos.z, v + 2, path_target_position[2], f13, f14, f15);
-    steer_5730(moby, vel, atan_5730(v[0], v[1]), f16, f17, f18);
-    return r != 0;
+    int path_sample_result = FUN_L00_0025d808_5730(path, path_target_position, segment_index_address, segment_distance_address, 0);
+    FUN_L00_0025b8c0_5730(&moby->pos.x, position_easing_velocity, path_target_position[0], f13, f14, f15);
+    FUN_L00_0025b8c0_5730(&moby->pos.y, position_easing_velocity + 1, path_target_position[1], f13, f14, f15);
+    FUN_L00_0025b8c0_5730(&moby->pos.z, position_easing_velocity + 2, path_target_position[2], f13, f14, f15);
+    steer_5730(moby, vel, atan_5730(position_easing_velocity[0], position_easing_velocity[1]), f16, f17, f18);
+    return path_sample_result != 0;
 }
 /* eases a moby's position and heading toward targets while in states 4-6 or 8 */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6AA0), where it is exact; names translated to the US level program. */
