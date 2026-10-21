@@ -2228,7 +2228,7 @@ void FUN_L13_0030bb70(struct Moby *moby) {
     char *pth;
     char *target_moby;
     float nearest_path_position[4];
-    int idx;
+    int nearest_segment_index;
     float nearest_segment_progress;
     int i;
     if (moby->state == 0) {
@@ -2258,9 +2258,9 @@ void FUN_L13_0030bb70(struct Moby *moby) {
             return;
         pth = D_L13_001B07B0[moby_vars[1]];
         if (moby->state == 1) {
-            FUN_L00_0025df68(pth, target_moby + 0x10, nearest_path_position, &idx, &nearest_segment_progress, 0, 100.0f, 1.0f, 0.0f);
-            if (idx > moby_vars[2] || nearest_segment_progress > ((float *)moby_vars)[3] || moby_vars[4] < 0x1E) {
-                moby_vars[2] = idx;
+            FUN_L00_0025df68(pth, target_moby + 0x10, nearest_path_position, &nearest_segment_index, &nearest_segment_progress, 0, 100.0f, 1.0f, 0.0f);
+            if (nearest_segment_index > moby_vars[2] || nearest_segment_progress > ((float *)moby_vars)[3] || moby_vars[4] < 0x1E) {
+                moby_vars[2] = nearest_segment_index;
                 ((float *)moby_vars)[3] = nearest_segment_progress;
                 qcopy(&moby->pos, nearest_path_position);
             } else {
