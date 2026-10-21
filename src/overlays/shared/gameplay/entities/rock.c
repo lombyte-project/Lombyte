@@ -1502,49 +1502,49 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L01_00308550(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
-    float dir[4];
-    float pos[4];
+    float glow_particle_position[4];
+    float glow_origin_position[4];
     float step[4];
     float scale = 1.0f;
     int i;
-    float *ang;
+    float *ring_rotations;
     float *spd;
     int *tm;
     float *sz;
     if (((unsigned char *)moby)[0x20] == 1) {
-        scale_vector_xyz(pos, moby, 0.0009765625f);
+        scale_vector_xyz(glow_origin_position, moby, 0.0009765625f);
     } else {
-        moby_point_position(moby, 0, pos);
+        moby_point_position(moby, 0, glow_origin_position);
         scale = (160.0f - func_0020D830_m(moby)) / 160.0f * 16.0f;
         if (1.0f < scale)
             scale = 1.0f;
     }
-    subtract_vector_xyz(dir, D_L01_00167240, pos);
-    normalize_vector_xyz(dir, dir, -0.3f);
-    normalize_vector_xyz(step, dir, 0.1f);
-    add_vector_xyz(dir, dir, pos);
-    ang = (float *)(moby_vars + 0x20);
+    subtract_vector_xyz(glow_particle_position, D_L01_00167240, glow_origin_position);
+    normalize_vector_xyz(glow_particle_position, glow_particle_position, -0.3f);
+    normalize_vector_xyz(step, glow_particle_position, 0.1f);
+    add_vector_xyz(glow_particle_position, glow_particle_position, glow_origin_position);
+    ring_rotations = (float *)(moby_vars + 0x20);
     spd = (float *)(moby_vars + 0x30);
     tm = (int *)(moby_vars + 0x40);
     sz = (float *)(moby_vars + 0x50);
     for (i = 0; i < 4; i++) {
-        float unwrapped_angle = ang[i] + spd[i];
+        float unwrapped_angle = ring_rotations[i] + spd[i];
         float pulse_progress;
         int packed_color;
-        ang[i] = unwrapped_angle;
+        ring_rotations[i] = unwrapped_angle;
         if (255.0f <= unwrapped_angle) {
-            ang[i] = unwrapped_angle - 255.0f;
+            ring_rotations[i] = unwrapped_angle - 255.0f;
         } else if (unwrapped_angle <= 0.0f) {
-            ang[i] = unwrapped_angle + 255.0f;
+            ring_rotations[i] = unwrapped_angle + 255.0f;
         }
         if (fast_dec_timer((int *)(moby_vars + 0x40) + i)) {
             tm[i] = scale_game_frames(0xFF);
         }
         pulse_progress = convert_integer_to_float(scale_game_frames(0xFF) - tm[i]) / (float)scale_game_frames(0xFF);
         packed_color = fast_tween_color(D_L01_00161F3C, D_L01_00161F40, absolute_float(0.5f - pulse_progress));
-        FUN_L00_00272f68(dir, packed_color, func_001FA898_r(ang[i]), D_L01_00161F4C, D_L01_00161F48, 2, 0,
+        FUN_L00_00272f68(glow_particle_position, packed_color, func_001FA898_r(ring_rotations[i]), D_L01_00161F4C, D_L01_00161F48, 2, 0,
                          sz[i] * scale);
-        add_vector_xyz(dir, dir, step);
+        add_vector_xyz(glow_particle_position, glow_particle_position, step);
     }
 }
 typedef struct {
