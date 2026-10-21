@@ -2339,9 +2339,9 @@ void FUN_L07_0030e720(struct Moby *moby, LaunchParams *knockback_state, Vec4f *k
     trooper_start_knockback(knockback_angle, moby, knockback_state, 12, 1, 0);
 }
 
-void FUN_L07_0030e858(struct Moby *moby, LaunchParams *knockback_state, Vec4f *dir) {
+void FUN_L07_0030e858(struct Moby *moby, LaunchParams *knockback_state, Vec4f *knockback_direction) {
     Vec4f knockback_direction_copy;
-    f32 ang;
+    f32 knockback_angle;
 
     knockback_state->gravity = frame_time_sq * 29.400002f;
     knockback_state->unk14 = 0.0005f;
@@ -2358,9 +2358,9 @@ void FUN_L07_0030e858(struct Moby *moby, LaunchParams *knockback_state, Vec4f *d
     knockback_state->unk50 = 8.0f;
     knockback_state->unk54 = 19.0f;
     knockback_state->unk3D = 0;
-    *(u128 *)&knockback_direction_copy = *(u128 *)dir;
-    trooper_knockback_arc(&knockback_direction_copy, &ang, &knockback_state->unk18, &knockback_state->unk1C);
-    trooper_start_knockback(ang, moby, knockback_state, 6, 1, 0);
+    *(u128 *)&knockback_direction_copy = *(u128 *)knockback_direction;
+    trooper_knockback_arc(&knockback_direction_copy, &knockback_angle, &knockback_state->unk18, &knockback_state->unk1C);
+    trooper_start_knockback(knockback_angle, moby, knockback_state, 6, 1, 0);
 }
 
 #define NOT_SDA
