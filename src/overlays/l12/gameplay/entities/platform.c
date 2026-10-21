@@ -358,7 +358,7 @@ extern int D_L12_001618C0 __attribute__((sda));
 int D_L12_001618C4 = 0xa0f0e8e0;
 int D_L12_001618C8 = 0x20f0e8e0;
 int D_L12_001618CC = 0x10017;
-void FUN_L12_002e19a8(void *pos) {
+void FUN_L12_002e19a8(void *spark_scatter_origin) {
     float base_position[4];
     float spark_position[4];
     float vertical_spark_vector[4];
@@ -366,7 +366,7 @@ void FUN_L12_002e19a8(void *pos) {
     float radial_angle_radians;
     int i;
     int frame_count, second_frame_count, third_frame_count;
-    *(OvlQuad *)base_position = *(OvlQuad *)pos;
+    *(OvlQuad *)base_position = *(OvlQuad *)spark_scatter_origin;
     i = 0x1A;
     do {
         radial_angle_radians = random_angle_radians();
