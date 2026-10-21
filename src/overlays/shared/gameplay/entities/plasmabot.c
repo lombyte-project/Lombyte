@@ -817,10 +817,10 @@ void FUN_L14_002b2928(char *moby) {
         u64 t[4];
     } pk;
     Vec4_2b2928 quad_transform[4];
-    Vec4_2b2928 w;
+    Vec4_2b2928 position_offset;
     char *pp;
     char *nozzle_position;
-    char *r;
+    char *beam_start_position;
     int i;
     int j;
     int alpha;
@@ -857,7 +857,7 @@ void FUN_L14_002b2928(char *moby) {
     qcopy(&quad_transform[3], data + 0x200);
     pp = data + 0x220;
     subtract_vector_xyz_c3(&quad_transform[0], ((char *)&D_L14_001674C0), &quad_transform[3]);
-    r = data + 0x210;
+    beam_start_position = data + 0x210;
     nozzle_position = data + 0x1F0;
     fast_vec_normalize(&quad_transform[0], &quad_transform[0], 1.0f);
     cross_vectors_xyz(&quad_transform[1], &quad_transform[0], D_0013F5E0);
@@ -879,8 +879,8 @@ void FUN_L14_002b2928(char *moby) {
     cross_vectors_xyz(&quad_transform[1], &quad_transform[0], D_0013F5E0);
     fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);
     cross_vectors_xyz(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
-    fast_vec_scale_c(&w, &quad_transform[0], D_L14_001614AC_lui);
-    add_vector_xyz_c2(&quad_transform[3], &quad_transform[3], &w);
+    fast_vec_scale_c(&position_offset, &quad_transform[0], D_L14_001614AC_lui);
+    add_vector_xyz_c2(&quad_transform[3], &quad_transform[3], &position_offset);
     pk.c[3] = 0x4020FF20;
     pk.c[2] = 0x4020FF20;
     pk.c[1] = 0x4020FF20;
@@ -892,14 +892,14 @@ void FUN_L14_002b2928(char *moby) {
     }
     fast_draw_quad_real(&pk, 0, 0);
 
-    qcopy(&quad_transform[3], r);
+    qcopy(&quad_transform[3], beam_start_position);
     subtract_vector_xyz_c3(&quad_transform[0], ((char *)&D_L14_001674C0), &quad_transform[3]);
     fast_vec_normalize(&quad_transform[0], &quad_transform[0], 1.0f);
     cross_vectors_xyz(&quad_transform[1], &quad_transform[0], D_0013F5E0);
     fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);
     cross_vectors_xyz(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
-    fast_vec_scale_c(&w, &quad_transform[0], D_L14_001614BC_lui);
-    add_vector_xyz_c2(&quad_transform[3], &quad_transform[3], &w);
+    fast_vec_scale_c(&position_offset, &quad_transform[0], D_L14_001614BC_lui);
+    add_vector_xyz_c2(&quad_transform[3], &quad_transform[3], &position_offset);
     pk.c[3] = (alpha << 24) | 0xFF2020;
     pk.c[2] = (alpha << 24) | 0xFF2020;
     pk.c[1] = (alpha << 24) | 0xFF2020;
@@ -916,8 +916,8 @@ void FUN_L14_002b2928(char *moby) {
     cross_vectors_xyz(&quad_transform[1], &quad_transform[0], D_0013F5E0);
     fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);
     cross_vectors_xyz(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
-    fast_vec_scale_c(&w, &quad_transform[0], D_L14_001614BC_lui);
-    add_vector_xyz_c2(&quad_transform[3], &quad_transform[3], &w);
+    fast_vec_scale_c(&position_offset, &quad_transform[0], D_L14_001614BC_lui);
+    add_vector_xyz_c2(&quad_transform[3], &quad_transform[3], &position_offset);
     pk.c[3] = (alpha << 24) | 0xFF2020;
     pk.c[2] = (alpha << 24) | 0xFF2020;
     pk.c[1] = (alpha << 24) | 0xFF2020;
