@@ -4,7 +4,7 @@ extern void draw_rect_overlay(s32, s32, s32, s32, u64) __asm__("func_001F52A0");
 
 void draw_ui_frame(s32 x, s32 y, s32 w, s32 h, s32 color) __asm__("FUN_001f5f18");
 
-void draw_ui_frame(s32 x, s32 y, s32 w, s32 right_x, s32 color) {
+void draw_ui_frame(s32 x, s32 y, s32 left_x, s32 right_x, s32 color) {
     s32 fill;
     s32 x_in;
     s32 x_out;
@@ -17,17 +17,17 @@ void draw_ui_frame(s32 x, s32 y, s32 w, s32 right_x, s32 color) {
 
     fill = (color << 24) | 0x40404;
     x_in = x + 1;
-    w_out = w - 2;
-    draw_rect_overlay(x, y, w, right_x, fill);
+    w_out = left_x - 2;
+    draw_rect_overlay(x, y, left_x, right_x, fill);
     x_out = x + 2;
     y_in = y - 1;
-    w_top = w - 3;
-    draw_rect_overlay(x_in, y_in, w_out, w, fill);
+    w_top = left_x - 3;
+    draw_rect_overlay(x_in, y_in, w_out, left_x, fill);
     y_out = y - 2;
     draw_rect_overlay(x_out, y_out, w_top, w_out, fill);
     x += 4;
     y -= 4;
-    draw_rect_overlay(x, y, w - 4, w_top, fill);
+    draw_rect_overlay(x, y, left_x - 4, w_top, fill);
     h_off = right_x + 2;
     h_top = right_x + 3;
     draw_rect_overlay(x_in, y_in, right_x, h_off, fill);
