@@ -106,13 +106,13 @@ extern char *D_L00_001611C0_23bac0 __asm__("D_L00_001611C0");
 extern int D_0013E500_23bac0[] __asm__("D_0013E500");
 extern G_23bac0 D_L00_0017E4D8_23bac0 __asm__("D_L00_0017E4D8") __attribute__((section(".data")));
 extern u64_23bac0 FUN_001ffa10_23bac0(int) __asm__("FUN_001ffa10");
-void FUN_L00_0023bac0(int id, int x, int y, int w, int draw_height, int alpha) {
+void FUN_L00_0023bac0(int id, int x, int y, int draw_width, int draw_height, int alpha) {
     u64_23bac0 *packet_words;
     int *coordinate_offsets;
     G_23bac0 *g = &D_L00_0017E4D8_23bac0;
-    R_23bac0 *r = &g->rec[g->tab[id].k];
-    int ww = 1 << r->lw;
-    int hh = 1 << r->lh;
+    R_23bac0 *image_page = &g->rec[g->tab[id].k];
+    int ww = 1 << image_page->lw;
+    int hh = 1 << image_page->lh;
     *(int *)(D_L00_001611C0_23bac0 + 0) = 0x10000007;
     *(int *)(D_L00_001611C0_23bac0 + 4) = 0;
     *(int *)(D_L00_001611C0_23bac0 + 8) = 0;
@@ -129,14 +129,14 @@ void FUN_L00_0023bac0(int id, int x, int y, int w, int draw_height, int alpha) {
     packet_words[6] = (u64_23bac0)(((x << 4) + coordinate_offsets[4] - 8) | (((u64_23bac0)((y << 4) + coordinate_offsets[5] - 8)) << 16)) |
            ((u64_23bac0)g->zc << 32);
     packet_words[7] = (hh << 20) + (ww << 4);
-    packet_words[8] = (u64_23bac0)((((x + w) << 4) + coordinate_offsets[4] - 8) | (((u64_23bac0)((y << 4) + coordinate_offsets[5] - 8)) << 16)) |
+    packet_words[8] = (u64_23bac0)((((x + draw_width) << 4) + coordinate_offsets[4] - 8) | (((u64_23bac0)((y << 4) + coordinate_offsets[5] - 8)) << 16)) |
            ((u64_23bac0)g->zc << 32);
     packet_words[9] = 0;
     packet_words[10] =
         (u64_23bac0)(((x << 4) + coordinate_offsets[4] - 8) | (((u64_23bac0)(((y + draw_height) << 4) + coordinate_offsets[5] - 8)) << 16)) |
         ((u64_23bac0)g->zc << 32);
     packet_words[11] = hh << 20;
-    packet_words[12] = (u64_23bac0)((((x + w) << 4) + coordinate_offsets[4] - 8) |
+    packet_words[12] = (u64_23bac0)((((x + draw_width) << 4) + coordinate_offsets[4] - 8) |
                          (((u64_23bac0)(((y + draw_height) << 4) + coordinate_offsets[5] - 8)) << 16)) |
             ((u64_23bac0)g->zc << 32);
     packet_words[13] = 0;
