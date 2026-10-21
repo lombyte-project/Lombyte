@@ -12,16 +12,16 @@ s32 is_value_within_interpolated_window(struct InterpolatedAnim *anim, f32 value
 s32 is_value_within_interpolated_window(struct InterpolatedAnim *anim, f32 value) {
     f32 interp_value;
     f32 window;
-    f32 diff;
+    f32 rounded_value_overshoot;
     s32 result;
 
     interp_value = compute_interpolated_record_value();
-    diff = round_float_to_decimal_places(4, interp_value - value);
+    rounded_value_overshoot = round_float_to_decimal_places(4, interp_value - value);
     window = round_float_to_decimal_places(4, anim->unk58 * anim->unk5C);
     result = 0;
     if (value <= interp_value) {
         result = 1;
-        if (!(diff < window)) {
+        if (!(rounded_value_overshoot < window)) {
             result = 0;
         }
     }
