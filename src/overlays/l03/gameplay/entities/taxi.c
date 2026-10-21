@@ -1503,32 +1503,32 @@ extern float D_L03_00161BC0;
 void FUN_L03_002db020(struct Moby *path_moby) {
     float old[4];
     float movement_scratch[4];
-    float b[4];
-    char *v;
+    float segment_offset[4];
+    char *path_moby_vars;
     char *path;
     int i;
     float t;
 
     *(OvlQuad *)old = *(OvlQuad *)&path_moby->pos;
-    v = (char *)path_moby->pvars;
-    *(float *)(v + 0x64) += D_L03_00161BC0;
-    movement_scratch[0] = cos_2db020(path_moby->rot.z) * *(float *)(v + 0x64);
-    movement_scratch[1] = sin_2db020(path_moby->rot.z) * *(float *)(v + 0x64);
+    path_moby_vars = (char *)path_moby->pvars;
+    *(float *)(path_moby_vars + 0x64) += D_L03_00161BC0;
+    movement_scratch[0] = cos_2db020(path_moby->rot.z) * *(float *)(path_moby_vars + 0x64);
+    movement_scratch[1] = sin_2db020(path_moby->rot.z) * *(float *)(path_moby_vars + 0x64);
     *(int *)&movement_scratch[2] = 0;
-    vadd_2db020(movement_scratch, movement_scratch, *(char **)(v + 0x60) + 0x10);
-    i = ftoi_2db020(*(float *)(v + 0x64) / *(float *)(*(char **)(v + 0x60) + 0x1C));
+    vadd_2db020(movement_scratch, movement_scratch, *(char **)(path_moby_vars + 0x60) + 0x10);
+    i = ftoi_2db020(*(float *)(path_moby_vars + 0x64) / *(float *)(*(char **)(path_moby_vars + 0x60) + 0x1C));
     t = itof_2db020(i);
-    path = *(char **)(v + 0x60);
-    t = (*(float *)(v + 0x64) - t * *(float *)(path + 0x1C)) / *(float *)(path + 0x1C);
+    path = *(char **)(path_moby_vars + 0x60);
+    t = (*(float *)(path_moby_vars + 0x64) - t * *(float *)(path + 0x1C)) / *(float *)(path + 0x1C);
     if (i >= *(int *)path - 2) {
         kill_2db020(path_moby);
         return;
     }
-    vsub_2db020(b, ((float (*)[4])path)[i + 2], ((float (*)[4])path)[i + 1]);
-    vscale_2db020(b, b, t);
-    vadd_2db020(&path_moby->pos, b, (*(float (**)[4])(v + 0x60))[i + 1]);
+    vsub_2db020(segment_offset, ((float (*)[4])path)[i + 2], ((float (*)[4])path)[i + 1]);
+    vscale_2db020(segment_offset, segment_offset, t);
+    vadd_2db020(&path_moby->pos, segment_offset, (*(float (**)[4])(path_moby_vars + 0x60))[i + 1]);
     vsub_2db020(movement_scratch, &path_moby->pos, old);
-    update_entity_matrix(v + 0x20, movement_scratch, &path_moby->rot, &path_moby->rot);
+    update_entity_matrix(path_moby_vars + 0x20, movement_scratch, &path_moby->rot, &path_moby->rot);
 }
 
 extern void FUN_L00_0025d1b8(struct Moby *);
