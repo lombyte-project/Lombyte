@@ -1166,7 +1166,7 @@ void FUN_L00_002b3628(struct Moby *beam_moby) {
     Vec4A_2b3628 res[4];
     Vec4A_2b3628 idm[4];
     Vec4A_2b3628 billboard_view_direction;
-    Vec4A_2b3628 b;
+    Vec4A_2b3628 billboard_side_axis;
     Vec4A_2b3628 billboard_up_axis;
     Vec4A_2b3628 billboard_origin;
     Vec4A_2b3628 ribbon_vertex_position;
@@ -1238,9 +1238,9 @@ void FUN_L00_002b3628(struct Moby *beam_moby) {
     add_vector_xyz_2b3628(&billboard_origin, &billboard_origin, &mtx[3]);
     subtract_vector_xyz_2b3628(&billboard_view_direction, D_L00_00166DC0_2b3628, &billboard_origin);
     normalize_vector_xyz_2b3628(&billboard_view_direction, &billboard_view_direction, 1.0f);
-    fast_vec_cross_2b3628(&b, &billboard_view_direction, &hero.gravity_dir);
-    normalize_vector_xyz_2b3628(&b, &b, -1.0f);
-    fast_vec_cross_2b3628(&billboard_up_axis, &b, &billboard_view_direction);
+    fast_vec_cross_2b3628(&billboard_side_axis, &billboard_view_direction, &hero.gravity_dir);
+    normalize_vector_xyz_2b3628(&billboard_side_axis, &billboard_side_axis, -1.0f);
+    fast_vec_cross_2b3628(&billboard_up_axis, &billboard_side_axis, &billboard_view_direction);
     pk.col[0] = pk.col[1] = pk.col[2] = pk.col[3] = 0x7F2020FF;
     for (i = 0; i < 4; i++) {
         scale_vector_xyz_2b3628(pk.pos[i], D_L00_001DA9E0[i], 0.1f);
