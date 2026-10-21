@@ -985,7 +985,7 @@ void FUN_L02_002fb9c8(char *moby) {
     float angle;
     float heading;
     float amount;
-    float vec[3];
+    float heading_vector[3];
 
     if (*(int *)(data + 0x50) != 0) {
         *(short *)(data + 0x20) = 0;
@@ -1139,10 +1139,10 @@ void FUN_L02_002fb9c8(char *moby) {
         if (FUN_L02_002fb788(moby, *(float *)(data + 0x30), *(float *)(data + 0x2c)) != 0) {
             hit = 1;
             if ((unsigned short)(*(short *)(data + 0x3c) - 4) < 2) {
-                vec[0] = fast_cos(*(float *)(data + 0x40));
-                vec[1] = fast_sin(*(float *)(data + 0x40));
-                vec[2] = 0.0f;
-                FUN_L00_002e8918(amount, 0.0f, vec);
+                heading_vector[0] = fast_cos(*(float *)(data + 0x40));
+                heading_vector[1] = fast_sin(*(float *)(data + 0x40));
+                heading_vector[2] = 0.0f;
+                FUN_L00_002e8918(amount, 0.0f, heading_vector);
             } else if (*(short *)(data + 0x3c) == 3) {
                 float speed;
                 if (*(short *)(data + 0x20) < scale_game_frames(90))
@@ -1183,8 +1183,8 @@ void FUN_L02_002fb9c8(char *moby) {
         FUN_L00_002e8450(0, 5.84f, 0.003f);
         if (*(short *)(data + 0x3c) == 4) {
             float angle;
-            fast_vec_sub(vec, target + 0x10, &hero.motion.pos);
-            angle = fast_arc_tan(vec[0], vec[1]);
+            fast_vec_sub(heading_vector, target + 0x10, &hero.motion.pos);
+            angle = fast_arc_tan(heading_vector[0], heading_vector[1]);
             if (hit && fast_difference_between_rotations(angle, *(float *)(data + 0x40)) > 1.9198622f) {
                 if (*(float *)(data + 0x34) != 0.0f)
                     FUN_L00_002e8450(0, *(float *)(data + 0x34) + 3.36f, 0.003f);
