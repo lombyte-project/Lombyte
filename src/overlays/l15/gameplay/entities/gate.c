@@ -1776,7 +1776,7 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 int FUN_L00_0025fcb8(char *a, char *o, float best);
 extern void func_L00_00260D30_t(void *, float *, float) __asm__("FUN_L00_0025fcb8");
 
-float FUN_L15_002cf110(void *m_, void *out, float r) {
+float FUN_L15_002cf110(void *m_, void *out, float target_search_range) {
     char *moby = m_;
     float steering_offset[4];
     float tgt[4];
@@ -1786,7 +1786,7 @@ float FUN_L15_002cf110(void *m_, void *out, float r) {
     int clear = 1;
     float k;
     char *other_moby;
-    func_L00_00260D30_t(moby, tgt, r);
+    func_L00_00260D30_t(moby, tgt, target_search_range);
     dist = vector_distance(moby + 0x10, tgt);
     clear_u64_value(out);
     for (other_moby = D_L15_0015FFE4; other_moby != 0; other_moby = *(char **)(other_moby + 0x28)) {
