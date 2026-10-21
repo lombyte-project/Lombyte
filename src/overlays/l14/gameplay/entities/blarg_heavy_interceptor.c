@@ -2973,7 +2973,7 @@ void FUN_L14_002bac78(struct Moby *moby) {
     float bright;
     u8 *puff_particle;
     u8 *puff_tail;
-    float *l;
+    float *light_record;
     float range = 3.0f;
     float green = 0.8f;
     float blue = 0.2f;
@@ -3045,12 +3045,12 @@ void FUN_L14_002bac78(struct Moby *moby) {
     if (*(short *)(debris_vars + 0x12) == -1) {
         *(short *)(debris_vars + 0x12) = FUN_L00_0023e738(at, range, 0.0f, bright, green, blue);
     } else {
-        l = (float *)(D_L14_001809C0 + *(short *)(debris_vars + 0x12) * 32);
-        qcopy(l + 4, at);
-        l[7] = range;
-        l[0] = bright;
-        l[1] = green;
-        l[2] = blue;
+        light_record = (float *)(D_L14_001809C0 + *(short *)(debris_vars + 0x12) * 32);
+        qcopy(light_record + 4, at);
+        light_record[7] = range;
+        light_record[0] = bright;
+        light_record[1] = green;
+        light_record[2] = blue;
     }
 }
 
