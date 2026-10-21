@@ -2375,11 +2375,11 @@ void FUN_L00_00209a40(int iteration_count, int mode) {
     V_209a40 randomized_displacement;
     int i;
     struct Hero *hero_state;
-    V_209a40 *src;
+    V_209a40 *hero_displacement_source;
 
     for (i = 0; i < iteration_count; i++) {
         hero_state = &hero;
-        src = (V_209a40 *)&hero_state->motion.displacement;
+        hero_displacement_source = (V_209a40 *)&hero_state->motion.displacement;
         if (mode == 0) {
             pos[0] = hero_state->motion.pos.f[0] + FUN_002132a8_209a40(-0.1f, 0.1f);
             pos[1] = hero_state->motion.pos.f[1] + FUN_002132a8_209a40(-0.1f, 0.1f);
@@ -2397,7 +2397,7 @@ void FUN_L00_00209a40(int iteration_count, int mode) {
                 FUN_L00_0024f7c8_209a40(hero_state->moby, 0x16, pos);
             }
         }
-        qcopy(&randomized_displacement, src);
+        qcopy(&randomized_displacement, hero_displacement_source);
         if (hero_state->state.current == 0x34) {
             scale_vector_xyz(&randomized_displacement, &randomized_displacement, 1.15f);
         } else {
