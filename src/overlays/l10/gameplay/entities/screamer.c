@@ -3456,7 +3456,7 @@ void gate_2_update(GateMoby_2EAD50 *moby)
         GATE_STATE_OPEN = 3
     };
     GateVars_2EAD50 *vars = moby->vars;
-    float v[3];
+    float opening_offset[3];
     Vec_2EAD50 out;
     unsigned char st = moby->state;
 
@@ -3467,10 +3467,10 @@ void gate_2_update(GateMoby_2EAD50 *moby)
         if (D_001413F4[0] != 0 ||
             D_L10_001BB9C0_2EAD50.collected[(short)moby->uid] != 0 ||
             ((*(int *)(D_0014C190_c + ((((short)moby->uid >> 5) * 4) + (current_level_index << 8))) >> (moby->uid & 0x1F)) & 1) != 0) {
-            v[0] = func_001F9F90_2EAD50(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f;
-            v[1] = func_001F9FA8_2EAD50(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f;
-            v[2] = 0.0f;
-            func_001F9BD8_2EAD50(&out, &vars->home, v);
+            opening_offset[0] = func_001F9F90_2EAD50(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f;
+            opening_offset[1] = func_001F9FA8_2EAD50(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f;
+            opening_offset[2] = 0.0f;
+            func_001F9BD8_2EAD50(&out, &vars->home, opening_offset);
             moby->state = 3;
             moby->pos = out;
         } else {
@@ -3505,14 +3505,14 @@ void gate_2_update(GateMoby_2EAD50 *moby)
         break;
     }
     case GATE_STATE_OPENING:
-        v[0] = func_001F9F90_2EAD50(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f *
+        opening_offset[0] = func_001F9F90_2EAD50(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f *
                func_001FA888_2EAD50(func_001F9878_2EAD50(FUN_L04_001f1978(90.0f)) - vars->timer) /
                FUN_L04_001f1978(90.0f);
-        v[1] = func_001F9FA8_2EAD50(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f *
+        opening_offset[1] = func_001F9FA8_2EAD50(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f *
                func_001FA888_2EAD50(func_001F9878_2EAD50(FUN_L04_001f1978(90.0f)) - vars->timer) /
                FUN_L04_001f1978(90.0f);
-        v[2] = 0.0f;
-        func_001F9BD8_2EAD50(&out, &vars->home, v);
+        opening_offset[2] = 0.0f;
+        func_001F9BD8_2EAD50(&out, &vars->home, opening_offset);
         moby->pos = out;
         if (func_001F9908_2EAD50(&vars->timer)) {
             moby->state = 3;
