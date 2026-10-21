@@ -3188,9 +3188,9 @@ void FUN_L00_002b8438(char *moby) {
         }
         if (*(unsigned char *)entry == 0xC && entry[1] >= 0) {
             float hit_sphere_radius = *(float *)(entry + 0xC) / 210000.0f * 0.5f;
-            char *src = entry + 0x20;
+            char *entry_direction_vector = entry + 0x20;
             int sub_type;
-            set_vector_length_xy(hit_direction_vector, src, 1.0f);
+            set_vector_length_xy(hit_direction_vector, entry_direction_vector, 1.0f);
             hit_direction_vector[2] = 1.0f;
             hit_direction_vector[3] = 5627.9248046875f;
             make_hit_descriptor(hit_descriptor, (int)moby, 0x10000, hit_direction_vector, convert_integer_to_float_c(item_variant_bytes[0x10]) + 1.0f);
@@ -3206,7 +3206,7 @@ void FUN_L00_002b8438(char *moby) {
                     int c2;
                     int c3;
                     int c4;
-                    qcopy(qv, src);
+                    qcopy(qv, entry_direction_vector);
                     FUN_L00_00257d78(spark_random_vector, 0.0f, *(float *)&D_L00_00161538 * D_0015ED6C_c2);
                     *(float *)(qv + 0xC) = *(float *)&D_L00_0016153C;
                     spark_random_vector[2] = D_0015ED6C_c2 * 4.0f;
