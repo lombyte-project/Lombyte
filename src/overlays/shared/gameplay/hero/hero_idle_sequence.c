@@ -19,13 +19,13 @@ extern void dismiss_help(void) __asm__("FUN_001fdc08");
 /* Once (flag 0x38): starts a 0x3C-frame timer, dismisses help, sets the first word to 8 if 0. */
 void jet_camera_mode(void) __asm__("FUN_L00_00203b18");
 void jet_camera_mode(void) {
-    char *g = D_L00_00179410;
-    if (*(short *)(g + 0x38) == 0) {
-        *(short *)(g + 0x38) = 1;
-        *(int *)(g + 0x3C) = scale_game_frames(0x3C);
+    char *jet_camera_state = D_L00_00179410;
+    if (*(short *)(jet_camera_state + 0x38) == 0) {
+        *(short *)(jet_camera_state + 0x38) = 1;
+        *(int *)(jet_camera_state + 0x3C) = scale_game_frames(0x3C);
         dismiss_help();
-        if (*(int *)g == 0)
-            *(int *)g = 8;
+        if (*(int *)jet_camera_state == 0)
+            *(int *)jet_camera_state = 8;
     }
 }
 extern char D_L00_00179448[];
