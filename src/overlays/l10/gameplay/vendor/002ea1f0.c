@@ -34,11 +34,11 @@ void FUN_L10_002ea1f0(char *moby) {
   case EFFECT_MODE_CACHE_GROUND_HEIGHT:
    if(*(int *)(effect_pvars+4)!=-1) {
     char *tab=D_L10_001B0930[*(int *)(effect_pvars+4)];
-    char *pos=tab+0x10;
+    char *path_point_position=tab+0x10;
     int point_count=*(int *)tab;
     if(point_count>32)point_count=32;
     if(point_count>0) {int count=point_count;float *height=(float *)(tab+0x1C);
-    do {*height=probe_ground_height(pos,0,0.5f);pos+=0x10;height+=4;}while(--count);}
+    do {*height=probe_ground_height(path_point_position,0,0.5f);path_point_position+=0x10;height+=4;}while(--count);}
    }else *(float *)(effect_pvars+0x88)=probe_ground_height(moby+0x10,0,0.5f);
    moby[0x20]=2;break;
   case EFFECT_MODE_TIMED_PARTICLES:moby[0x20]=3;break;
@@ -49,8 +49,8 @@ void FUN_L10_002ea1f0(char *moby) {
   else {
    char *tab=D_L10_001B0930[*(int *)(effect_pvars+4)];int point_count=*(int *)tab;
    if(point_count>32)point_count=32;
-   if(point_count>0) {short *burst=(short *)(effect_pvars+0x48);short *timer=(short *)(effect_pvars+8);char *pos=tab+0x10;int count=point_count;
-   do {FUN_L10_002ea4e8_c(pos,timer,burst);timer++;++burst;--count;pos+=0x10;}while(count);}
+   if(point_count>0) {short *burst=(short *)(effect_pvars+0x48);short *timer=(short *)(effect_pvars+8);char *path_point_position=tab+0x10;int count=point_count;
+   do {FUN_L10_002ea4e8_c(path_point_position,timer,burst);timer++;++burst;--count;path_point_position+=0x10;}while(count);}
   }
   break;
  case EFFECT_STATE_UPDATE_WITH_GROUND_HEIGHT:
@@ -58,8 +58,8 @@ void FUN_L10_002ea1f0(char *moby) {
   else {
    char *tab=D_L10_001B0930[*(int *)(effect_pvars+4)];int point_count=*(int *)tab;
    if(point_count>32)point_count=32;
-   if(point_count>0) {float *height=(float *)(tab+0x1C);short *burst=(short *)(effect_pvars+0x48);short *timer=(short *)(effect_pvars+8);char *pos=tab+0x10;int count=point_count;
-   do {func_L10_002EBDC8_a01(*height,pos,timer,burst);height+=4;++burst;++timer;--count;pos+=0x10;}while(count);}
+   if(point_count>0) {float *height=(float *)(tab+0x1C);short *burst=(short *)(effect_pvars+0x48);short *timer=(short *)(effect_pvars+8);char *path_point_position=tab+0x10;int count=point_count;
+   do {func_L10_002EBDC8_a01(*height,path_point_position,timer,burst);height+=4;++burst;++timer;--count;path_point_position+=0x10;}while(count);}
   }
   break;
  case EFFECT_STATE_EMIT_TIMED_PARTICLES:
@@ -67,8 +67,8 @@ void FUN_L10_002ea1f0(char *moby) {
   else {
    char *tab=D_L10_001B0930[*(int *)(effect_pvars+4)];int point_count=*(int *)tab;
    if(point_count>32)point_count=32;
-   if(point_count>0) {short *timer=(short *)(effect_pvars+8);char *pos=tab+0x10;int count=point_count;
-   do {FUN_L10_002ea7b0_c(pos,timer);++timer;--count;pos+=0x10;}while(count);}
+   if(point_count>0) {short *timer=(short *)(effect_pvars+8);char *path_point_position=tab+0x10;int count=point_count;
+   do {FUN_L10_002ea7b0_c(path_point_position,timer);++timer;--count;path_point_position+=0x10;}while(count);}
   }
   break;
  }
