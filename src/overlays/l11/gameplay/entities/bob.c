@@ -1792,7 +1792,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         int *tab_ac;
         int *path;
         int n;
-        int w;
+        int part_angle_index;
 
         moby->draw_dist = 0xFF;
         if (moby->prev_seq != 1) {
@@ -1810,8 +1810,8 @@ void pokitaru_boat_update(struct Moby *moby) {
         qcopy(&moby->pos, (char *)path + 0x10);
         pv->seg_d4 = 1;
         moby->state = 1;
-        for (w = 0; w < 4; w++) {
-            pv->wobble_f0[w] = FUN_00213308_309ac0();
+        for (part_angle_index = 0; part_angle_index < 4; part_angle_index++) {
+            pv->wobble_f0[part_angle_index] = FUN_00213308_309ac0();
         }
         pv->slot_c8 = -1;
         pv->slot_cc = -1;
