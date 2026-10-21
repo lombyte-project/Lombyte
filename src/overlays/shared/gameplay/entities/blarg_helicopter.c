@@ -1361,7 +1361,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L03_002ce238(char *helicopter_moby) {
-    int st;
+    int hit_reaction_status;
     float fv;
     int hit_reaction_result;
     char *helicopter_data;
@@ -1370,8 +1370,8 @@ void FUN_L03_002ce238(char *helicopter_moby) {
     helicopter_data = *(char **)(helicopter_moby + 0x78);
     fv = 0.0f;
     hit_record = find_moby_hit(helicopter_moby, 0x330000, 0);
-    hit_reaction_result = hit_reaction(helicopter_moby, hit_record, helicopter_data + 0x20, 0, &st, &fv, 0, 4);
-    if (st != 1 && *(unsigned char *)(helicopter_moby + 0x20) != 5) {
+    hit_reaction_result = hit_reaction(helicopter_moby, hit_record, helicopter_data + 0x20, 0, &hit_reaction_status, &fv, 0, 4);
+    if (hit_reaction_status != 1 && *(unsigned char *)(helicopter_moby + 0x20) != 5) {
         float remaining_health = *(float *)(helicopter_data + 0x20) - fv;
         *(float *)(helicopter_data + 0x20) = remaining_health;
         if (hit_reaction_result == 1 || remaining_health <= 0.0f) {
