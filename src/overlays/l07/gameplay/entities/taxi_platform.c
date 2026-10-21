@@ -2251,8 +2251,8 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
 extern char *D_L07_00173ED0[];
 void FUN_L07_0030e458(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
-    float prev[4];
-    qcopy(prev, &moby->pos);
+    float previous_position[4];
+    qcopy(previous_position, &moby->pos);
     add_vector_xyz(&moby->pos, &moby->pos, moby_data);
     {
         float gravity_step = frame_time_sq * 9.8f;
@@ -2266,7 +2266,7 @@ void FUN_L07_0030e458(struct Moby *moby) {
     if (D_L07_0015F5CC % 3 == 0) {
         FUN_L07_0029b8d8(moby, 0, 400000.0f, 5.0f);
     }
-    if (FUN_001efa68(prev, &moby->pos, 0, *(int *)(moby_data + 0x10), 0) != 0 ||
+    if (FUN_001efa68(previous_position, &moby->pos, 0, *(int *)(moby_data + 0x10), 0) != 0 ||
         func_L00_001F10E0_f(0.1f, &moby->pos, 0, *(int *)(moby_data + 0x10)) != 0) {
         char *class_filter_moby = D_L07_00173ED0[2];
         if (class_filter_moby == 0 || (*(short *)(class_filter_moby + 0xA6) != 0x415 && *(short *)(class_filter_moby + 0xA6) != 0x419 &&
