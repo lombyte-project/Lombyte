@@ -1426,7 +1426,7 @@ extern char *FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
 void FUN_L08_002da3f0(struct Moby *moby, void *from, void *to, int count, f32 size0, f32 size1) {
     Vec4 step;
     Vec4 puff_spawn_position;
-    Vec4 vel;
+    Vec4 effect_initial_velocity;
     f32 grow;
     f32 size;
     unsigned char *puff;
@@ -1437,20 +1437,20 @@ void FUN_L08_002da3f0(struct Moby *moby, void *from, void *to, int count, f32 si
     subtract_vector_xyz(&step, to, from);
     scale_vector_xyz(&step, &step, 1.0f / (f32)count);
     grow = (size1 - size0) / (f32)count;
-    vel.q = 0;
-    vel.f[3] = 1.0f;
-    vel.f[2] = 0.01f;
+    effect_initial_velocity.q = 0;
+    effect_initial_velocity.f[3] = 1.0f;
+    effect_initial_velocity.f[2] = 0.01f;
     for (i = 0; i < count; i++) {
         scale_vector_xyz(&puff_spawn_position, &step, convert_integer_to_float(i));
         add_vector_xyz(&puff_spawn_position, from, &puff_spawn_position);
-        vel.f[0] = randf_sym(0.0f, 0.005f);
-        vel.f[1] = randf_sym(0.0f, 0.005f);
-        vel.f[2] = random_float_between(D_L08_00161998 * 0.1f, D_L08_00161998);
+        effect_initial_velocity.f[0] = randf_sym(0.0f, 0.005f);
+        effect_initial_velocity.f[1] = randf_sym(0.0f, 0.005f);
+        effect_initial_velocity.f[2] = random_float_between(D_L08_00161998 * 0.1f, D_L08_00161998);
         alpha = FUN_L00_00257b90(0x30, 0x70);
         grey = FUN_L00_00257b90(0x30, 0x7F);
         grey |= (grey << 16) | (grey << 8);
         size = random_float_between(1.0f, 1.02f);
-        puff = FUN_L00_0026d000(&puff_spawn_position, D_L08_001619A0, 1.0f, size, FUN_L00_00257b90(-2, 2), &vel,
+        puff = FUN_L00_0026d000(&puff_spawn_position, D_L08_001619A0, 1.0f, size, FUN_L00_00257b90(-2, 2), &effect_initial_velocity,
                                 grow + size0 * 210000.0f, (alpha << 24) | grey);
         if (puff) {
             tail = puff + 0x20;
@@ -1466,17 +1466,17 @@ void FUN_L08_002da3f0(struct Moby *moby, void *from, void *to, int count, f32 si
             tail[0xB] = D_L08_001619A8;
         }
     }
-    vel.f[0] = fast_cos(random_angle_radians()) * 0.05f;
-    vel.f[1] = fast_sin(random_angle_radians()) * 0.05f;
-    vel.f[2] = 0.0f;
-    vel.f[2] = random_float_between(0.01f, 0.03f);
-    FUN_L00_0026cbb0(from, &vel, 0x4F007FFF, 0x1FFFFFFF,
+    effect_initial_velocity.f[0] = fast_cos(random_angle_radians()) * 0.05f;
+    effect_initial_velocity.f[1] = fast_sin(random_angle_radians()) * 0.05f;
+    effect_initial_velocity.f[2] = 0.0f;
+    effect_initial_velocity.f[2] = random_float_between(0.01f, 0.03f);
+    FUN_L00_0026cbb0(from, &effect_initial_velocity, 0x4F007FFF, 0x1FFFFFFF,
                      FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1, 10000.0f);
-    vel.f[0] = fast_cos(random_angle_radians()) * 0.05f;
-    vel.f[1] = fast_sin(random_angle_radians()) * 0.05f;
-    vel.f[2] = 0.0f;
-    vel.f[2] = random_float_between(0.01f, 0.03f);
-    FUN_L00_0026cbb0(to, &vel, 0x4F007FFF, 0x1FFFFFFF,
+    effect_initial_velocity.f[0] = fast_cos(random_angle_radians()) * 0.05f;
+    effect_initial_velocity.f[1] = fast_sin(random_angle_radians()) * 0.05f;
+    effect_initial_velocity.f[2] = 0.0f;
+    effect_initial_velocity.f[2] = random_float_between(0.01f, 0.03f);
+    FUN_L00_0026cbb0(to, &effect_initial_velocity, 0x4F007FFF, 0x1FFFFFFF,
                      FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1, 20000.0f);
 }
 /* Picks the best candidate moby from the moby's list by heading and distance.
