@@ -27,16 +27,16 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L18_002fcd00(struct Moby *arg) {
+void FUN_L18_002fcd00(struct Moby *moby) {
     unsigned short flags;
-    arg->state = 0x8;
-    if (arg->prev_seq != 0) {
-        blend_moby_animation(arg, 0, 0, scale_ticks(10));
+    moby->state = 0x8;
+    if (moby->prev_seq != 0) {
+        blend_moby_animation(moby, 0, 0, scale_ticks(10));
     }
-    flags = arg->flags;
-    arg->visible = 0;
+    flags = moby->flags;
+    moby->visible = 0;
     flags |= 1;
-    arg->collision = 0;
+    moby->collision = 0;
     flags &= 0xEFFF;
-    arg->flags = flags;
+    moby->flags = flags;
 }
