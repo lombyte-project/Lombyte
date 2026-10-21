@@ -2231,7 +2231,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
     }
     case BOLT_PICKUP_FLY_TO_HERO_AND_CREDIT_BOLTS: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
-        float dist;
+        float collection_target_distance;
         float fade_range;
 
         if (vars->u78.p == 0) {
@@ -2247,7 +2247,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
             direction[0] = cosine * direction[0] + sine * direction[1];
             direction[1] = cosine * direction[1] - sine * direction[0];
         }
-        dist = fast_vec_dist(point, &moby->pos);
+        collection_target_distance = fast_vec_dist(point, &moby->pos);
         fast_vec_normalize_c2(vars->velocity, vars->velocity, vars->u70.f);
         add_vector_xyz(&moby->pos, &moby->pos, vars->velocity);
         fast_vec_normalize_c2(direction, direction, vars->f74);
@@ -2265,11 +2265,11 @@ void FUN_L08_002e3870(struct Moby *moby) {
             FUN_L00_0025f730_c(scratch + 4, D_L08_00161C8C_gp * frame_time_sq);
             add_vector_xyz(vars->velocity, vars->velocity, scratch + 4);
         }
-        if (dist < vars->f74) {
-            vars->f74 = dist;
+        if (collection_target_distance < vars->f74) {
+            vars->f74 = collection_target_distance;
         }
         fade_range = vars->f74 * (float)scale_game_frames_c(20);
-        if (dist < fade_range) {
+        if (collection_target_distance < fade_range) {
             if (fast_vec_dist(point, &moby->pos) > 0.52f) {
                 if (D_L08_00161CC0 != 0) {
                     moby->alpha = (fast_vec_dist(point, &moby->pos) + fade_range) * 128.0f / (fade_range + fade_range);
