@@ -1585,15 +1585,15 @@ extern G_00208038 D_0013F350_00208038 __asm__("D_0013F350");
 void FUN_L00_00207d00_00208038(void) __asm__("FUN_L00_00207d00");
 /* Appends v, b, x and y to the list in ((char *)&hero) and calls FUN_L00_00207d00. */
 void FUN_L00_00208038(u128 *glow_position, int b, float x, float y) {
-    G_00208038 *g = &D_0013F350_00208038;
-    short n = g->n;
-    u128 *pos = g->pos;
+    G_00208038 *hero_glow_queue_owner = &D_0013F350_00208038;
+    short n = hero_glow_queue_owner->n;
+    u128 *pos = hero_glow_queue_owner->pos;
     qcopy(&pos[n], glow_position);
-    g->b[n] = b;
-    g->x[g->n] = x;
-    g->y[g->n] = y;
+    hero_glow_queue_owner->b[n] = b;
+    hero_glow_queue_owner->x[hero_glow_queue_owner->n] = x;
+    hero_glow_queue_owner->y[hero_glow_queue_owner->n] = y;
     FUN_L00_00207d00_00208038();
-    g->n++;
+    hero_glow_queue_owner->n++;
 }
 #include "rnc/gameplay/entities/moby.h"
 
