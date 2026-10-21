@@ -46,10 +46,10 @@ void FUN_L00_002039a0(void) {
     if (*(int *)(D_L00_00179410) != 0) {
         int help_entry_value = *(int *)((char *)(*(int *)(D_L00_00179410 + 0x20) << 4) + (int)D_L00_0015F660 + 8);
         if (help_entry_value != -1) {
-            char *g = (char *)D_0014161B + 0x100B5;
-            if (help_entry_value == *(short *)(g + 0x54) - 0x7530) {
-                if ((unsigned)(*(unsigned short *)(g + 0x5A) - 6) >= 2)
-                    *(short *)(g + 0x5A) = 5;
+            char *music_state_ptr = (char *)D_0014161B + 0x100B5;
+            if (help_entry_value == *(short *)(music_state_ptr + 0x54) - 0x7530) {
+                if ((unsigned)(*(unsigned short *)(music_state_ptr + 0x5A) - 6) >= 2)
+                    *(short *)(music_state_ptr + 0x5A) = 5;
             }
         }
         *(int *)(D_L00_00179410) = 0;
