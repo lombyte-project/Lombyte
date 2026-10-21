@@ -436,7 +436,7 @@ int FUN_L14_002fea80(struct Moby *moby) {
     float delta[4];
     char *data = (char *)moby->pvars;
     float path_sample_step = D_L14_00161FB8 * frame_time;
-    int r;
+    int path_sample_result;
     char *path;
     if (current_level_index == 0x10)
         path_sample_step = frame_time * 20.0f;
@@ -446,7 +446,7 @@ int FUN_L14_002fea80(struct Moby *moby) {
         path = D_L14_001B0BB0[*(int *)(data + 0xDC)];
     else
         path = D_L14_001B0BB0[*(int *)(data + 0xD8)];
-    r = sample_path(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, path_sample_step);
+    path_sample_result = sample_path(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, path_sample_step);
     vendor_spring(&moby->pos.x, (float *)(data + 0xE4), pos[0], D_L14_00161FBC,
                      D_L14_00161FC0, 0.0f);
     vendor_spring(&moby->pos.y, (float *)(data + 0xE8), pos[1], D_L14_00161FBC,
@@ -460,7 +460,7 @@ int FUN_L14_002fea80(struct Moby *moby) {
                              D_L14_00161FBC, D_L14_00161FC0, 0.0f);
         }
     }
-    return r;
+    return path_sample_result;
 }
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
