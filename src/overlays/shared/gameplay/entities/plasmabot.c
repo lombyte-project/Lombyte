@@ -1959,7 +1959,7 @@ void FUN_L14_002ff640(struct Moby *moby) {
     MobyHit_ff640 *hit;
     float glow_pulse_sine;
     int glow_red_intensity;
-    int g;
+    int glow_green_blue_intensity;
 
     switch (moby->state) {
     case FLOAT_MINE_INITIALIZE:
@@ -2025,8 +2025,8 @@ void FUN_L14_002ff640(struct Moby *moby) {
     vars->phase = add_rotations_ff640(vars->phase, D_L14_00162000);
     glow_pulse_sine = sin_ff640(vars->phase);
     glow_red_intensity = ftoi_ff640(glow_pulse_sine * 48.0f) + 0xCF;
-    g = ftoi_ff640(glow_pulse_sine * 32.0f) + 0x30;
-    moby->glow_color = g << 16 | (0xFF000000 | g << 8) | glow_red_intensity;
+    glow_green_blue_intensity = ftoi_ff640(glow_pulse_sine * 32.0f) + 0x30;
+    moby->glow_color = glow_green_blue_intensity << 16 | (0xFF000000 | glow_green_blue_intensity << 8) | glow_red_intensity;
     moby->rot.x = add_rotations_ff640(moby->rot.x, vars->spin[0]);
     moby->rot.y = add_rotations_ff640(moby->rot.y, vars->spin[1]);
     moby->rot.z = add_rotations_ff640(moby->rot.z, vars->spin[2]);
