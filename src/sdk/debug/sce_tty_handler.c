@@ -35,7 +35,7 @@ void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
     };
     Deci2Hdr *hdr;
     s32 send_result;
-    s32 off;
+    s32 receive_append_offset;
 
     switch (event) {
     case 1:
@@ -44,8 +44,8 @@ void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
             if ((u32)(tty->rlen + param) > 0x140) {
                 kprintf(D_00152710);
             }
-            off = tty->rlen;
-            param = SceDeci2ExRecv(tty->socket, tty->rbuf + off, param);
+            receive_append_offset = tty->rlen;
+            param = SceDeci2ExRecv(tty->socket, tty->rbuf + receive_append_offset, param);
             if (param < 0) {
                 kprintf(D_00152738);
             }
