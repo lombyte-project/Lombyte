@@ -9,7 +9,7 @@ void set_up_vis_gif_viewer(u64 *packet_destination, s32 draw_control_high_word, 
     u64 template_texture_state0;
     s64 template_draw_control_bits;
     u64 template_texture_state1;
-    u64 *src;
+    u64 *selected_special_material_template;
 
     template_texture_state0 = resident_material_templates[mode * 3];
     template_draw_control_bits = resident_material_templates[mode * 3 + 1];
@@ -22,16 +22,16 @@ void set_up_vis_gif_viewer(u64 *packet_destination, s32 draw_control_high_word, 
         packet_destination[0] = template_texture_state0;
         packet_destination[2] = template_texture_state1;
     } else if (mode < -1) {
-        src = special_material_template;
+        selected_special_material_template = special_material_template;
         if (mode == -3) {
-            src = alternate_special_material_template;
+            selected_special_material_template = alternate_special_material_template;
         }
         packet_destination[0] = (0x20 | ((u64)prim << 6)) | ((u64)(u32)draw_control_high_word << 32);
         packet_destination += 2;
         packet_destination[0] = 5;
         packet_destination += 2;
-        packet_destination[0] = src[0];
-        packet_destination[2] = src[2];
+        packet_destination[0] = selected_special_material_template[0];
+        packet_destination[2] = selected_special_material_template[2];
     } else {
         packet_destination[0] = (0x20 | ((u64)prim << 6)) | ((u64)(u32)draw_control_high_word << 32);
         packet_destination += 2;
