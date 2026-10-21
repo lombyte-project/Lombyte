@@ -1365,7 +1365,7 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
     f32 dir[4] __attribute__((aligned(16)));
     f32 tmp[4] __attribute__((aligned(16)));
     struct Moby *spawned_bolt;
-    BoltVars_u *v;
+    BoltVars_u *bolt_vars;
     struct Moby *root;
     u8 *color;
     float scale;
@@ -1392,8 +1392,8 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
         break;
     }
     if (0 != spawned_bolt) {
-        v = (BoltVars_u *)spawned_bolt->pvars;
-        v->counted = counted;
+        bolt_vars = (BoltVars_u *)spawned_bolt->pvars;
+        bolt_vars->counted = counted;
         /* the bolt source is the root of src's unkB8 chain */
         root = src;
         if (src != 0) {
@@ -1413,20 +1413,20 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
             set_moby_color(spawned_bolt, color[4], color[5], color[6]);
         else
             spawned_bolt->spawn_frame = src->spawn_frame;
-        v->unk6E = random_int_between(0, scale_game_frames(600));
-        v->unk6C = -1;
+        bolt_vars->unk6E = random_int_between(0, scale_game_frames(600));
+        bolt_vars->unk6C = -1;
         qcopy(&spawned_bolt->pos, pos);
-        qcopy(v->vel, vel);
+        qcopy(bolt_vars->vel, vel);
         if (random_integer_below(2))
-            v->unk55 |= 1;
-        v->unk50 = random_angle_radians();
-        v->unk58 = random_angle_radians();
-        v->start_z = spawned_bolt->pos.z;
+            bolt_vars->unk55 |= 1;
+        bolt_vars->unk50 = random_angle_radians();
+        bolt_vars->unk58 = random_angle_radians();
+        bolt_vars->start_z = spawned_bolt->pos.z;
         spin = random_float_between(0.0f, D_L00_001613A8) * 0.017453292f * D_0015ED6C;
         subtract_vector_xyz(tmp, &src->pos, &spawned_bolt->pos);
-        cross_vectors_xyz(dir, v->vel, tmp);
-        FUN_L00_001ff500(v->spin, dir, 1.0f);
-        build_quaternion_from_axis_angle(v->spin, v->spin, spin);
+        cross_vectors_xyz(dir, bolt_vars->vel, tmp);
+        FUN_L00_001ff500(bolt_vars->spin, dir, 1.0f);
+        build_quaternion_from_axis_angle(bolt_vars->spin, bolt_vars->spin, spin);
         if (flags & 2) {
             angle = 0.0f;
             if (flags & 0x10)
