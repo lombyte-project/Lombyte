@@ -3311,7 +3311,7 @@ void FUN_L06_002f7c68(char *moby) {
         float particle_scale;
         int particle_color;
         int particle_lifetime;
-        int v;
+        int random_particle_byte;
         random_vector(buf, D_L06_00161E84 * frame_time,
                          D_L06_00161E88 * frame_time);
         particle_scale = random_float_between_alt(D_L06_00161EA8, D_L06_00161EAC);
@@ -3323,8 +3323,8 @@ void FUN_L06_002f7c68(char *moby) {
                              random_float_between_alt(0.0f, 1.0f));
         }
         particle_lifetime = D_L06_00161E94;
-        v = random_integer_below(0xFF);
-        FUN_L00_002730e0(moby + 0x10, particle_scale, buf, particle_color, particle_lifetime, (unsigned char)v, 0);
+        random_particle_byte = random_integer_below(0xFF);
+        FUN_L00_002730e0(moby + 0x10, particle_scale, buf, particle_color, particle_lifetime, (unsigned char)random_particle_byte, 0);
     }
 }
 
