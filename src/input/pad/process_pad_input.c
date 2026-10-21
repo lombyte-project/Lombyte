@@ -51,7 +51,7 @@ extern float convert_integer_to_float(s32) __asm__("func_001FA6C0");
 void process_pad_input(Pad *p, u8 *buf, s32 len) __asm__("FUN_00217328");
 
 void process_pad_input(Pad *pad_state, u8 *buf, s32 len) {
-    float v[2];
+    float axis_vector[2];
     s32 i, j, k;
     s32 cur, old, ncur, nold;
     float mag, ang;
@@ -142,10 +142,10 @@ void process_pad_input(Pad *pad_state, u8 *buf, s32 len) {
         pad_state->axes[3] = 0.0f;
         pad_state->mode = 0;
     }
-    v[0] = pad_state->axes[2];
-    v[1] = pad_state->axes[3];
-    mag = vector_length_xy(v);
-    ang = fast_arc_tan(v[0], v[1]);
+    axis_vector[0] = pad_state->axes[2];
+    axis_vector[1] = pad_state->axes[3];
+    mag = vector_length_xy(axis_vector);
+    ang = fast_arc_tan(axis_vector[0], axis_vector[1]);
     pad_state->hist_mag[pad_state->idx] = mag;
     pad_state->hist_ang[pad_state->idx] = ang;
     if (mag > 0.9f) {
