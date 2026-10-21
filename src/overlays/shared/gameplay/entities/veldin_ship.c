@@ -2603,34 +2603,34 @@ void FUN_L00_00258830_2d54c8(void *, void *, int, float, float, float) __asm__("
 
 float FUN_L00_002d54c8(unsigned char *moby, float *target_position, float vel) {
     float vec[4] __attribute__((aligned(16)));
-    unsigned char *v;
-    float ang, target_distance, z, movement_yaw, lim, w;
-    v = *(unsigned char **)(moby + 0x78);
+    unsigned char *moby_vars;
+    float ang, target_distance, z, movement_yaw, lim, vertical_displacement;
+    moby_vars = *(unsigned char **)(moby + 0x78);
     ang = angle_atan2(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
     z = *(float *)(moby + 0x18);
     target_distance = distance_xyz(moby + 0x10, target_position);
     if (2.0f < target_distance)
-        ang = FUN_001fa580_2d54c8(ang, *(float *)(v + 0x1FC));
+        ang = FUN_001fa580_2d54c8(ang, *(float *)(moby_vars + 0x1FC));
     if (moby[0x52] != moby[0x53])
         return target_distance;
-    FUN_L00_0025be00_2d54c8(moby + 0x48, ang, v + 0x1F4, D_0015ED70_2d54c8 * 12.566371f,
+    FUN_L00_0025be00_2d54c8(moby + 0x48, ang, moby_vars + 0x1F4, D_0015ED70_2d54c8 * 12.566371f,
                             D_0015ED70_2d54c8 * 12.566371f, D_0015ED6C_2d54c8 * 12.566371f);
     advance_accelerated_scalar(&vel, target_distance, D_0015ED70_2d54c8 * 8.0f, D_0015ED70_2d54c8 * 12.0f,
-                        D_0015ED6C_2d54c8 * 4.0f, (float *)(v + 0x1F8));
-    if (*(float *)(v + 0x1F8) < 0.0f)
-        *(float *)(v + 0x1F8) = 0.0f;
+                        D_0015ED6C_2d54c8 * 4.0f, (float *)(moby_vars + 0x1F8));
+    if (*(float *)(moby_vars + 0x1F8) < 0.0f)
+        *(float *)(moby_vars + 0x1F8) = 0.0f;
     movement_yaw = *(float *)(moby + 0x48);
-    *(float *)(v + 0x278) = movement_yaw;
-    vec[0] = FUN_001f9dc8_2d54c8(movement_yaw) * *(float *)(v + 0x1F8);
-    vec[1] = FUN_001f9de0_2d54c8(*(float *)(v + 0x278)) * *(float *)(v + 0x1F8);
+    *(float *)(moby_vars + 0x278) = movement_yaw;
+    vec[0] = FUN_001f9dc8_2d54c8(movement_yaw) * *(float *)(moby_vars + 0x1F8);
+    vec[1] = FUN_001f9de0_2d54c8(*(float *)(moby_vars + 0x278)) * *(float *)(moby_vars + 0x1F8);
     vec[2] = 0.0f;
-    vec[2] = *(float *)(v + 0x270) - D_0015ED70_2d54c8 * 10.0f;
+    vec[2] = *(float *)(moby_vars + 0x270) - D_0015ED70_2d54c8 * 10.0f;
     FUN_L00_00258830_2d54c8(moby, vec, 0x10, 0.5f, 0.5f, 0.0f);
-    w = *(float *)(moby + 0x18) - z;
+    vertical_displacement = *(float *)(moby + 0x18) - z;
     lim = D_0015ED6C_2d54c8 * 4.0f;
-    *(float *)(v + 0x270) = w;
-    if (lim < w)
-        *(float *)(v + 0x270) = lim;
+    *(float *)(moby_vars + 0x270) = vertical_displacement;
+    if (lim < vertical_displacement)
+        *(float *)(moby_vars + 0x270) = lim;
     if (moby[0x70] & 2)
         return target_distance;
     return 37.0f;
