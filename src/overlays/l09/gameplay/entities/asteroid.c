@@ -1418,7 +1418,7 @@ struct Moby *FUN_L09_002ef868(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, 
     Vec4 position_copy;
     Vec4 velocity_copy;
     Vec4 *pp = &position_copy;
-    Vec4 *pv = &velocity_copy;
+    Vec4 *velocity_copy_source = &velocity_copy;
     struct Moby *spawned_moby;
     struct DebrisVars *debris_vars;
 
@@ -1436,7 +1436,7 @@ struct Moby *FUN_L09_002ef868(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, 
         spawned_moby->rot.y = random_angle_radians();
         spawned_moby->rot.z = random_angle_radians();
         qcopy(&spawned_moby->pos, pp);
-        qcopy(&debris_vars->vel, pv);
+        qcopy(&debris_vars->vel, velocity_copy_source);
         spawned_moby->scale = spawned_moby->pclass->scale * scale;
         debris_vars->spin = random_float_between(-(frame_time * 9.075712f), frame_time * 9.075712f);
         debris_vars->tumble = random_float_between(-(frame_time * 6.2831855f), frame_time * 6.2831855f);
