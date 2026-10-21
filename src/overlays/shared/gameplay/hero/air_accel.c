@@ -760,31 +760,31 @@ extern int cutscene_mode __asm__("D_L01_0015F5C4");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L01_00231450(void) {
-    char *g;
+    char *hero_state_base;
     char *previous_active_moby;
     char *moby_to_remove;
     char *restored_moby;
     FUN_L00_00205538();
-    g = (char *)D_0013E533 + 0xE1D;
-    previous_active_moby = *(char **)(g + 0xA84);
-    g[0x20A4] = 0;
+    hero_state_base = (char *)D_0013E533 + 0xE1D;
+    previous_active_moby = *(char **)(hero_state_base + 0xA84);
+    hero_state_base[0x20A4] = 0;
     if (previous_active_moby != 0) {
         *(unsigned short *)(previous_active_moby + 0x34) &= 0xFFF9;
     }
-    *(int *)(g + 0xA84) = 0;
-    moby_to_remove = *(char **)(g + 0xA8C);
+    *(int *)(hero_state_base + 0xA84) = 0;
+    moby_to_remove = *(char **)(hero_state_base + 0xA8C);
     if (moby_to_remove != 0) {
         mark_moby_for_removal(moby_to_remove);
-        *(int *)(g + 0xA8C) = 0;
+        *(int *)(hero_state_base + 0xA8C) = 0;
     }
     FUN_L00_00206c08();
-    restored_moby = *(char **)(g + 0xA88);
-    *(char **)(g + 0x2080) = restored_moby;
-    qcopy(restored_moby + 0x10, g + 0x80);
+    restored_moby = *(char **)(hero_state_base + 0xA88);
+    *(char **)(hero_state_base + 0x2080) = restored_moby;
+    qcopy(restored_moby + 0x10, hero_state_base + 0x80);
     *(int *)(restored_moby + 0x98) = 0;
-    *(float *)(g + 0xA94) = 1.0f;
+    *(float *)(hero_state_base + 0xA94) = 1.0f;
     FUN_L00_00232628();
-    if (*(int *)(g + 0x2084) == 0x64) {
+    if (*(int *)(hero_state_base + 0x2084) == 0x64) {
         if (cutscene_mode == 2)
             return;
         if (cutscene_mode == 6)
