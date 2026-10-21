@@ -2117,7 +2117,7 @@ void FUN_L05_00318a68(char *moby) {
         MOBY_CHECK_HERO_VOLUME = 1
     };
     int state = *(unsigned char *)(moby + 0x20);
-    int *v = *(int **)(moby + 0x78);
+    int *clip_volume_index_ptr = *(int **)(moby + 0x78);
     char *hero_position;
 
     switch (state) {
@@ -2129,7 +2129,7 @@ void FUN_L05_00318a68(char *moby) {
         break;
     case MOBY_CHECK_HERO_VOLUME:
         hero_position = (char *)&hero.motion.pos;
-        if (find_318a68(hero_position, *v) != 0) {
+        if (find_318a68(hero_position, *clip_volume_index_ptr) != 0) {
             D_L05_001612D8_318a68[1] = state;
             qcopy(D_L05_001612E0_gp, hero_position);
             *(short *)(hero_position + 0x15E) = 5;
