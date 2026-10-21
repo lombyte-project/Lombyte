@@ -2801,9 +2801,9 @@ void FUN_L00_002b7568(u8 *source_moby) {
     V_2b7568 quad_basis_direction;
     V_2b7568 up;
     V_2b7568 side;
-    V_2b7568 pos;
+    V_2b7568 quad_origin;
     V_2b7568 corner;
-    V_2b7568 dir;
+    V_2b7568 quad_offset_direction;
     V_2b7568 distance_offset;
     E_2b7568 *e;
     s32 i, j;
@@ -2821,13 +2821,13 @@ void FUN_L00_002b7568(u8 *source_moby) {
     quad.uv[2].v = 0.0f;
     quad.uv[3].u = 1.0f;
     quad.uv[3].v = 1.0f;
-    setlen_2b7568(&dir, source_moby + 0xD0, -1.0f);
+    setlen_2b7568(&quad_offset_direction, source_moby + 0xD0, -1.0f);
     for (i = 0; i < 10; i++) {
         if (D_L00_001DB440_2b7568[i].on == 0)
             continue;
-        scale_2b7568(&distance_offset, &dir, D_L00_001DB440_2b7568[i].len);
-        add_2b7568(&pos, D_L00_001614E0_2b7568, &distance_offset);
-        qcopy(&quad_basis_direction, &dir);
+        scale_2b7568(&distance_offset, &quad_offset_direction, D_L00_001DB440_2b7568[i].len);
+        add_2b7568(&quad_origin, D_L00_001614E0_2b7568, &distance_offset);
+        qcopy(&quad_basis_direction, &quad_offset_direction);
         scale_2b7568(&side, &D_0013F5E0_2b7568, -1.0f);
         cross_2b7568(&up, &quad_basis_direction, &side);
         setlen_2b7568(&up, &up, 1.0f);
