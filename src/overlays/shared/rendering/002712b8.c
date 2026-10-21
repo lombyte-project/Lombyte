@@ -1373,7 +1373,7 @@ f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 void FUN_L00_00274518(M_274518 *particle) {
     R_274518 *r = &particle->r;
     V_274518 position_offset_scratch, secondary_position_offset, rotation_angles;
-    V_274518 mat[4];
+    V_274518 secondary_offset_rotation_matrix[4];
     u8 *spawned_particle;
     f32 k1, k2, z;
 
@@ -1426,8 +1426,8 @@ void FUN_L00_00274518(M_274518 *particle) {
     secondary_position_offset.x = 0.0f;
     clear_u64_value(&rotation_angles);
     rotation_angles.y = r->unk10;
-    rotation_matrix(mat, &rotation_angles);
-    transform_vector(&secondary_position_offset, &secondary_position_offset, mat);
+    rotation_matrix(secondary_offset_rotation_matrix, &rotation_angles);
+    transform_vector(&secondary_position_offset, &secondary_position_offset, secondary_offset_rotation_matrix);
     FUN_001f9a10_274518(&position_offset_scratch, &position_offset_scratch, &secondary_position_offset);
     FUN_001f9cf8_274518(&position_offset_scratch, &position_offset_scratch, r->iC + 0xC0);
     FUN_001f9a10_274518(particle->v10, particle->v10, &position_offset_scratch);
