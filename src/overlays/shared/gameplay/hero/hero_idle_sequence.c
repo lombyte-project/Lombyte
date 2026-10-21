@@ -483,25 +483,25 @@ s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
                            s32 b) __asm__("FUN_001ff308");
 
 void FUN_L00_00205ea8(void) {
-    struct Hero *g;
+    struct Hero *hero_state;
     if (D_0013D4D5[6] == 0) {
         *(int *)(((unsigned char *)&D_0013E533) + 0x2E65) = 0;
         return;
     }
-    g = &hero;
-    if (g->unk2044 < 20.0f && g->unk2040 != 0) {
-        g->unk2048 = 1;
+    hero_state = &hero;
+    if (hero_state->unk2044 < 20.0f && hero_state->unk2040 != 0) {
+        hero_state->unk2048 = 1;
     } else {
         struct Hero *g3 = &hero;
         g3->unk2048 = 0;
     }
     {
-        struct Hero *g2 = &hero;
-        g2->unk2044 = 100000.0f;
-        g2->unk2040 = 0;
-        if (g2->unk2048 != 0) {
+        struct Hero *animation_context_owner = &hero;
+        animation_context_owner->unk2044 = 100000.0f;
+        animation_context_owner->unk2040 = 0;
+        if (animation_context_owner->unk2048 != 0) {
             queue_animation_update(7, 0x753A, (int)FUN_L00_00235dc0, (int)FUN_L00_0023a218,
-                                   (int)FUN_L00_0023a2d0, (int)(&g2->unk2048), 1);
+                                   (int)FUN_L00_0023a2d0, (int)(&animation_context_owner->unk2048), 1);
         }
     }
 }
