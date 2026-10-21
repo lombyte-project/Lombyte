@@ -1082,7 +1082,7 @@ int FUN_001f96f8_26bca8(int) __asm__("FUN_001f96f8");
 unsigned char *FUN_L00_0026bb70_26bca8(void *, void *, int, int, float, int, int, int,
                                        int) __asm__("FUN_L00_0026bb70");
 void FUN_L00_0026bca8(unsigned char *particle) {
-    V26bca8 u, spawn_velocity, w;
+    V26bca8 updated_position_copy, spawn_velocity, random_direction;
     unsigned char *particle_data = particle + 0x20;
     unsigned char *particle_position;
     float lifetime_size_scratch, b;
@@ -1101,13 +1101,13 @@ void FUN_L00_0026bca8(unsigned char *particle) {
                                               lifetime_size_scratch / FUN_001fa6c0_26bca8(*(short *)(particle_data + 0x18)));
     FUN_001f9a10_26bca8(particle_position, particle_position, particle_data);
     *(float *)(particle_data + 8) -= D_0015ED70_26bca8 * 14.6f;
-    qcopy(&u, particle_position);
+    qcopy(&updated_position_copy, particle_position);
     if (*(short *)(particle_data + 0x1A) && (D_L00_0015F5CC_26bca8 & 1)) {
-        w.q = 0;
-        w.f[0] = FUN_002132a8_26bca8(-1.0f, 1.0f);
-        w.f[1] = FUN_002132a8_26bca8(-1.0f, 1.0f);
-        w.f[2] = FUN_002132a8_26bca8(-1.0f, 1.0f);
-        spawn_velocity.q = w.q;
+        random_direction.q = 0;
+        random_direction.f[0] = FUN_002132a8_26bca8(-1.0f, 1.0f);
+        random_direction.f[1] = FUN_002132a8_26bca8(-1.0f, 1.0f);
+        random_direction.f[2] = FUN_002132a8_26bca8(-1.0f, 1.0f);
+        spawn_velocity.q = random_direction.q;
         b = FUN_001f9af0_26bca8(particle_data);
         FUN_001f9bf8_26bca8(&spawn_velocity, &spawn_velocity, b * FUN_002132a8_26bca8(0.15f, 0.25f));
         FUN_001f9a10_26bca8(&spawn_velocity, &spawn_velocity, particle_data);
