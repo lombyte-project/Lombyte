@@ -1196,49 +1196,49 @@ extern void FUN_L00_002da1e0_c(M_da360 *) __asm__("FUN_L00_002da1e0");
 extern void FUN_L00_002df1e0_c(M_da360 *) __asm__("FUN_L00_002df1e0");
 void FUN_L00_002da360(u8 *cannon_moby, void *cannon_data) {
     u8 buf[0x10] __attribute__((aligned(16)));
-    V_da360 v;
-    f32 suction_yaw, b;
+    V_da360 raised_candidate_position;
+    f32 suction_yaw, suction_pitch;
     M_da360 *candidate_moby;
-    R *r;
+    R *suction_record;
     f32 distance_xy, thr, target_pitch_or_angle_difference;
     s32 stored_moby_count;
 
-    FUN_L00_002da250_c(cannon_moby, &suction_yaw, &b, buf);
+    FUN_L00_002da250_c(cannon_moby, &suction_yaw, &suction_pitch, buf);
     FUN_L00_002ddf60(cannon_moby, buf);
     for (candidate_moby = D_L00_0015FFE4; candidate_moby != 0; candidate_moby = candidate_moby->next) {
         if (candidate_moby->a6 != 0 && (candidate_moby->f34 & 0x1000) &&
             *(void **)*(u8 **)(candidate_moby->p24 + 0x2c) != (void *)FUN_L00_002db848) {
-            r = FUN_L00_002db890_c(candidate_moby);
-            if (r != 0 && r->h68 < 6) {
+            suction_record = FUN_L00_002db890_c(candidate_moby);
+            if (suction_record != 0 && suction_record->h68 < 6) {
                 distance_xy = vector_distance_xy(cannon_moby + 0x10, &candidate_moby->pos);
                 if (distance_xy < 15.0f && !FUN_L00_002d9f78_c() &&
                     ((stored_moby_count = G2->i2078), G1->b9 == 0 ? stored_moby_count < 5 : stored_moby_count < 10)) {
-                    if (r->h68 < 3) {
+                    if (suction_record->h68 < 3) {
                         thr = 0.043864909559488297f;
                         if (distance_xy < 3.0f)
                             thr = 3.68587064743042f;
-                        r->h6a = -1;
-                        qcopy(&v, &candidate_moby->pos);
-                        v.z += 0.4f;
+                        suction_record->h6a = -1;
+                        qcopy(&raised_candidate_position, &candidate_moby->pos);
+                        raised_candidate_position.z += 0.4f;
                         target_pitch_or_angle_difference = fast_difference_between_rotations(
-                            suction_yaw, fast_arc_tan(v.x - *(f32 *)(cannon_moby + 0x10), v.y - *(f32 *)(cannon_moby + 0x14)));
+                            suction_yaw, fast_arc_tan(raised_candidate_position.x - *(f32 *)(cannon_moby + 0x10), raised_candidate_position.y - *(f32 *)(cannon_moby + 0x14)));
                         if (target_pitch_or_angle_difference * target_pitch_or_angle_difference < thr) {
-                            target_pitch_or_angle_difference = fast_arc_tan(distance_xy, v.z - *(f32 *)(cannon_moby + 0x18));
-                            target_pitch_or_angle_difference = fast_difference_between_rotations(b, target_pitch_or_angle_difference);
+                            target_pitch_or_angle_difference = fast_arc_tan(distance_xy, raised_candidate_position.z - *(f32 *)(cannon_moby + 0x18));
+                            target_pitch_or_angle_difference = fast_difference_between_rotations(suction_pitch, target_pitch_or_angle_difference);
                             if (target_pitch_or_angle_difference * target_pitch_or_angle_difference < thr) {
-                                if (!FUN_001efa68_c(buf, &v, 2, candidate_moby, 0))
+                                if (!FUN_001efa68_c(buf, &raised_candidate_position, 2, candidate_moby, 0))
                                     goto hit;
-                                if (r->h68 > 0)
+                                if (suction_record->h68 > 0)
                                     FUN_L00_002da1e0_c(candidate_moby);
-                            } else if (r->h68 > 0)
+                            } else if (suction_record->h68 > 0)
                                 FUN_L00_002da1e0_c(candidate_moby);
-                        } else if (r->h68 > 0)
+                        } else if (suction_record->h68 > 0)
                             FUN_L00_002da1e0_c(candidate_moby);
-                    } else if (r->h68 < 4) {
+                    } else if (suction_record->h68 < 4) {
                     hit:
-                        FUN_L00_002da058(cannon_moby, cannon_data, candidate_moby, r, buf);
+                        FUN_L00_002da058(cannon_moby, cannon_data, candidate_moby, suction_record, buf);
                     }
-                } else if (r->h68 != 0)
+                } else if (suction_record->h68 != 0)
                     FUN_L00_002da1e0_c(candidate_moby);
             }
         } else {
