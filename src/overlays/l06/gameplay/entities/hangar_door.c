@@ -211,11 +211,11 @@ float FUN_L06_002f96f8(char *self) {
             float d = fast_arc_tan(
                 *(float *)(D_L06_0015FFD8 + idx * 256 + 0x10) - *(float *)(owner + 0x10),
                 *(float *)(D_L06_0015FFD8 + idx * 256 + 0x14) - *(float *)(owner + 0x14));
-            float r = fast_subtract_rotations(d, ang);
-            if (r > 0.0f && r < hi) {
-                hi = r;
-            } else if (r < 0.0f && r > lo) {
-                lo = r;
+            float listed_moby_angle_offset_radians = fast_subtract_rotations(d, ang);
+            if (listed_moby_angle_offset_radians > 0.0f && listed_moby_angle_offset_radians < hi) {
+                hi = listed_moby_angle_offset_radians;
+            } else if (listed_moby_angle_offset_radians < 0.0f && listed_moby_angle_offset_radians > lo) {
+                lo = listed_moby_angle_offset_radians;
             }
         }
     } while (*moby_index_cursor++ >= 0);
