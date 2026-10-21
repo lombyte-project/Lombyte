@@ -623,8 +623,8 @@ void FUN_L00_00238b80(Obj *hud_element) {
     if (counters[0] == 0) {
         {
             int selection_state_snapshot = hud_element->w78;
-            int b = hud_element->w74;
-            D_L00_0015FA9C = b;
+            int selected_slot_snapshot = hud_element->w74;
+            D_L00_0015FA9C = selected_slot_snapshot;
             D_L00_0015FA98 = selection_state_snapshot;
         }
         remove_hud_item(hud_element->w64);
