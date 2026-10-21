@@ -797,30 +797,30 @@ void FUN_001f99f8_002332d0(void *) __asm__("FUN_001f99f8");
 float FUN_001f9e90_002332d0(float, float) __asm__("FUN_001f9e90");
 float FUN_L00_002332d0(void) {
     float m[16] __attribute__((aligned(16)));
-    Vec4_2332d0 v, z_rotation_angles, y_rotation_angles, w;
+    Vec4_2332d0 heading_direction, z_rotation_angles, y_rotation_angles, y_alignment_reference_vector;
     struct Hero *P;
-    v.f[0] = FUN_001f9dc8_002332d0(0.0f);
-    v.f[1] = FUN_001f9de0_002332d0(0.0f);
-    v.f[2] = 0.0f;
+    heading_direction.f[0] = FUN_001f9dc8_002332d0(0.0f);
+    heading_direction.f[1] = FUN_001f9de0_002332d0(0.0f);
+    heading_direction.f[2] = 0.0f;
     FUN_001fa050_002332d0(m, &hero.motion.rot);
     P = &hero;
-    FUN_001f9d20_002332d0(&v, &v, m);
+    FUN_001f9d20_002332d0(&heading_direction, &heading_direction, m);
     if (P->unk270.f[0] != 0.0f || P->unk270.f[1] != 0.0f) {
-        w.q = P->unk270.q;
+        y_alignment_reference_vector.q = P->unk270.q;
         FUN_001f99f8_002332d0(&z_rotation_angles);
         FUN_001f99f8_002332d0(&y_rotation_angles);
         z_rotation_angles.f[2] = -FUN_001f9e90_002332d0(P->unk270.f[0], P->unk270.f[1]);
         FUN_001fa050_002332d0(m, &z_rotation_angles);
-        FUN_001f9d20_002332d0(&v, &v, m);
-        FUN_001f9d20_002332d0(&w, &w, m);
-        y_rotation_angles.f[1] = -FUN_001f9e90_002332d0(w.f[2], w.f[0]);
+        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, m);
+        FUN_001f9d20_002332d0(&y_alignment_reference_vector, &y_alignment_reference_vector, m);
+        y_rotation_angles.f[1] = -FUN_001f9e90_002332d0(y_alignment_reference_vector.f[2], y_alignment_reference_vector.f[0]);
         FUN_001fa050_002332d0(m, &y_rotation_angles);
-        FUN_001f9d20_002332d0(&v, &v, m);
+        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, m);
         z_rotation_angles.f[2] = -z_rotation_angles.f[2];
         FUN_001fa050_002332d0(m, &z_rotation_angles);
-        FUN_001f9d20_002332d0(&v, &v, m);
+        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, m);
     }
-    return FUN_001f9e90_002332d0(v.f[0], v.f[1]);
+    return FUN_001f9e90_002332d0(heading_direction.f[0], heading_direction.f[1]);
 }
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
