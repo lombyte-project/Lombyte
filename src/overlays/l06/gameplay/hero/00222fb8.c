@@ -1879,7 +1879,7 @@ void FUN_L06_0022e020(void) {
         s32 flag;
         s32 near;
         s32 t;
-        s32 idx;
+        s32 grind_heading_point_index;
         f32 r;
         if (hero.state.current != 0x29 && hero.state.current != 0x2A && hero.state.current != 0x42) {
             FUN_L00_00216e48(0, (struct MobyView *)hero.moby, 0);
@@ -2015,10 +2015,10 @@ void FUN_L06_0022e020(void) {
                 AN.f1C8 = fast_add_rotations(0.7330383f, hero.unk5D0 / 1.7f);
             }
         }
-        idx = FUN_L00_0025d7a0((void *)hero.unk560, hero.unk564, hero.unk578, hero.unk584);
-        FUN_001f9a28_c(&vector_or_descriptor_scratch, (Vec4 *)hero.unk560 + (idx + 1), &vector_or_hit_descriptor_scratch);
+        grind_heading_point_index = FUN_L00_0025d7a0((void *)hero.unk560, hero.unk564, hero.unk578, hero.unk584);
+        FUN_001f9a28_c(&vector_or_descriptor_scratch, (Vec4 *)hero.unk560 + (grind_heading_point_index + 1), &vector_or_hit_descriptor_scratch);
         if (fast_vec_length(&vector_or_descriptor_scratch) < 0.001f) {
-            if (hero.unk564 == idx) {
+            if (hero.unk564 == grind_heading_point_index) {
                 hero.unk570 = scale_game_frames(1);
                 break;
             }
@@ -2038,13 +2038,13 @@ void FUN_L06_0022e020(void) {
                 }
             }
             if (hero.unk590 != 0 && hero.unk5A4 <= scale_game_frames(48)) {
-                f32 u;
+                f32 previous_rail_blend_fraction;
                 FUN_001f9a28_c(&vector_or_descriptor_scratch, &vector_or_hit_descriptor_scratch, &v10);
                 hero.unk5A4++;
                 fast_vec_scale(&vector_or_descriptor_scratch, &vector_or_descriptor_scratch, (f32)hero.unk5A4 / (f32)scale_game_frames(48));
-                u = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
+                previous_rail_blend_fraction = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
                 FUN_001f9a28_c(&position_or_delta_scratch, &vector_or_hit_descriptor_scratch, &v10);
-                fast_vec_scale(&position_or_delta_scratch, &position_or_delta_scratch, u);
+                fast_vec_scale(&position_or_delta_scratch, &position_or_delta_scratch, previous_rail_blend_fraction);
                 hero.motion.pos.f[2] += vector_or_descriptor_scratch.f[2] - position_or_delta_scratch.f[2];
                 add_vector_xyz(&position_or_delta_scratch, &v10, &vector_or_descriptor_scratch);
                 FUN_001f9a28_c(&vector_or_descriptor_scratch, &position_or_delta_scratch, &hero.motion.pos);
@@ -2076,7 +2076,7 @@ void FUN_L06_0022e020(void) {
                 hero_integrate_velocity();
             }
         } else {
-            f32 lim = D_0015ED6C_c * 12.0f;
+            f32 grind_base_speed_target = D_0015ED6C_c * 12.0f;
             f32 tt;
             f32 e;
             f32 sp;
@@ -2106,7 +2106,7 @@ void FUN_L06_0022e020(void) {
                 }
             }
             FUN_L00_0025bc98(&hero.unk5D0, tt, &hero.unk5D4, 0, frame_scale_sq * 0.015f, frame_scale_sq * 0.3f, 0.0f);
-            approach_value(&hero.unk5B0, lim, frame_time_sq * 15.0f);
+            approach_value(&hero.unk5B0, grind_base_speed_target, frame_time_sq * 15.0f);
             si = hero.unk564;
             sf = hero.unk568;
             qcopy(&vector_or_descriptor_scratch, &hero.motion.pos);
