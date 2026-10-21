@@ -767,10 +767,10 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *moby_data, float *fp) {
         HIT_REACTION_NO_HIT = 11
     };
     if (moby->state != 3) {
-        int cnt;
-        float vec[4];
+        int hit_processing_status;
+        float hit_position_offset[4];
         char *hit_record = find_moby_hit(moby, 0x330000, 0);
-        switch (hit_reaction(moby, hit_record, fp, 0, &cnt, 0, 0, 4)) {
+        switch (hit_reaction(moby, hit_record, fp, 0, &hit_processing_status, 0, 0, 4)) {
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_REMOVE:
             *fp = 0;
@@ -787,7 +787,7 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *moby_data, float *fp) {
         case HIT_REACTION_NO_HIT:
             break;
         }
-        if (cnt >= 2) {
+        if (hit_processing_status >= 2) {
             if (*fp <= *(float *)(hit_record + 0x2C)) {
                 *fp = 0;
                 moby->flags &= 0xEFFF;
@@ -799,10 +799,10 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *moby_data, float *fp) {
                 moby_data[0x67] = 0xFA;
                 *(short *)(moby_data + 0x26) = scale_game_frames(0x3C);
                 trooper_anim_update(moby, (short *)(moby_data + 0x60));
-                normalize_vector_xyz(vec, hit_record + 0x10, 0.1f);
-                add_vector_xyz(&moby->pos, &moby->pos, vec);
-                random_vector(vec, -0.1f, 0.1f);
-                add_vector_xyz(&moby->pos, &moby->pos, vec);
+                normalize_vector_xyz(hit_position_offset, hit_record + 0x10, 0.1f);
+                add_vector_xyz(&moby->pos, &moby->pos, hit_position_offset);
+                random_vector(hit_position_offset, -0.1f, 0.1f);
+                add_vector_xyz(&moby->pos, &moby->pos, hit_position_offset);
             }
             moby->hit_slot = 0xFF;
         } else {
