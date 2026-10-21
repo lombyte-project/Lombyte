@@ -140,7 +140,7 @@ void FUN_L00_0028e9c8(int audio_selection_mode) {
         }
         FUN_L00_00245610(audio_stream_table_index, fr_28e9c8(6));
     } else {
-        int k, r;
+        int k, fade_frame_count;
         base_audio_selection_index = D_0013E030_28e9c8.x26;
         k = D_0013E030_28e9c8.x2c;
         secondary_track_index = base_audio_selection_index + 3;
@@ -158,10 +158,10 @@ void FUN_L00_0028e9c8(int audio_selection_mode) {
                 secondary_track_index = 12;
             alternate_audio_stream_table_index = 9;
         }
-        r = 0;
+        fade_frame_count = 0;
         if (!D_0013E030_28e9c8.x2c)
-            r = fr_28e9c8(6);
-        FUN_L00_00245610(alternate_audio_stream_table_index, r);
+            fade_frame_count = fr_28e9c8(6);
+        FUN_L00_00245610(alternate_audio_stream_table_index, fade_frame_count);
     }
     music_stream_state.queued_secondary_track = secondary_track_index + 40000;
     f2049f0_28e9c8(0);
