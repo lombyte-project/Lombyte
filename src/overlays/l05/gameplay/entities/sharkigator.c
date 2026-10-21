@@ -3408,13 +3408,13 @@ void water_update(struct Moby *moby) {
         FUN_L05_0030d5c0((char *)moby);
         water = moby->pos.z;
         {
-            Vec4 v;
+            Vec4 rise_checkpoint_position;
 
-            v.q = 0;
-            v.f[0] = 211.0f;
-            v.f[1] = 338.0f;
-            v.f[2] = 25.0f;
-            if (distance_xyz_30ca80(v.f, &hero.motion.pos) < 6.0f) {
+            rise_checkpoint_position.q = 0;
+            rise_checkpoint_position.f[0] = 211.0f;
+            rise_checkpoint_position.f[1] = 338.0f;
+            rise_checkpoint_position.f[2] = 25.0f;
+            if (distance_xyz_30ca80(rise_checkpoint_position.f, &hero.motion.pos) < 6.0f) {
                 if (rise_checkpoint_hit == 0) {
                     rise_checkpoint_hit = 1;
                     if (moby->pos.z > rise_checkpoint) {
