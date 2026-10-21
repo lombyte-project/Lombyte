@@ -1831,7 +1831,7 @@ void blarg_trooper_update(struct Moby *moby) {
         BLARG_TROOPER_DEATH_FALL = 9
     };
     TargetReport54_2E2EF0 work;
-    Vec4 v;
+    Vec4 query_position_or_projectile_origin;
     Vec4 delta;
     char *data = (char *)moby->pvars;
     struct Moby *target;
@@ -1920,9 +1920,9 @@ hide:
             if ((TROOPER_I(0x25c) == -1 || !is_point_inside_clip_volume(&target->pos, TROOPER_I(0x25c))) && moby->command == 0) break;
         }
         if (moby->flags & 1) {
-            qcopy(v.f, &moby->pos);
-            v.f[2] += 0.5f;
-            if (coll_line_fix_72(&v, D_L12_00167240, 2, moby, 0)) {
+            qcopy(query_position_or_projectile_origin.f, &moby->pos);
+            query_position_or_projectile_origin.f[2] += 0.5f;
+            if (coll_line_fix_72(&query_position_or_projectile_origin, D_L12_00167240, 2, moby, 0)) {
                 moby->flags &= 0xffbe;
                 if (TROOPER_CHILD) TROOPER_CHILD->flags &= 0xffbe;
             } else {
@@ -1956,10 +1956,10 @@ hide:
         float angle;
         if (TROOPER_B(0x268) == 1) {
             int hit;
-            qcopy(v.f, &moby->pos);
-            v.f[0] += fast_cos_e81e0(moby->rot.z);
-            v.f[1] += fast_sin_e81e0(moby->rot.z);
-            hit = query_mobys_72(&v, 0, moby, 0, 1.5f);
+            qcopy(query_position_or_projectile_origin.f, &moby->pos);
+            query_position_or_projectile_origin.f[0] += fast_cos_e81e0(moby->rot.z);
+            query_position_or_projectile_origin.f[1] += fast_sin_e81e0(moby->rot.z);
+            hit = query_mobys_72(&query_position_or_projectile_origin, 0, moby, 0, 1.5f);
             if (hit) {
                 qcopy(delta.f, ((char *)&D_L12_0015F580));
                 if (hit > 0) {
@@ -2006,8 +2006,8 @@ hide:
         FUN_L12_002e8608(moby, (float *)&target->pos);
         FUN_L12_002e87b0((char *)moby);
         if (TROOPER_CHILD && is_value_within_interpolated_window(moby, 0.0f)) {
-            moby_point_position(TROOPER_CHILD, 0, &v);
-            subtract_8808(&delta, work.v20, &v);
+            moby_point_position(TROOPER_CHILD, 0, &query_position_or_projectile_origin);
+            subtract_8808(&delta, work.v20, &query_position_or_projectile_origin);
             angle = fast_arc_tan(delta.f[0], delta.f[1]);
             other = fast_add_rotations_e81e0(moby->rot.z, TROOPER_F(0x208));
             angle = 0.2268928f < angle_difference_8808(angle, other) ? other : angle;
@@ -2016,7 +2016,7 @@ hide:
             build_spherical_offset(&delta, D_0015ED6C * 15.0f, angle, value);
             allocate_voice_for_target_entry(0, 0, (int)moby);
             count = truncate_float_to_s32(18.0f / (D_0015ED6C * 15.0f));
-            FUN_L04_002aee30(moby, &v, &delta, count);
+            FUN_L04_002aee30(moby, &query_position_or_projectile_origin, &delta, count);
         }
         if (moby->anim_flags & 2) {
             if (moby->prev_seq != 5 && moby->seq == moby->prev_seq)
