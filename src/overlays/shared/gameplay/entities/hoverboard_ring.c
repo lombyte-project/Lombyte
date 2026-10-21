@@ -610,7 +610,7 @@ void FUN_L05_003298d8(Camera *cam) {
     CameraFocus *focus = &orbit->focus;
     f32 *spring = orbit->goal;
     f32 dot;
-    f32 len;
+    f32 angle_normalization_length;
     f32 initial_yaw;
     f32 pitch;
     f32 tilt;
@@ -627,11 +627,11 @@ void FUN_L05_003298d8(Camera *cam) {
         normalize_vector_xyz(&along, &up, dot);
         subtract_vector_xyz(&flat, &rel, &along);
         dot = fast_vec_dot(&fwd, &flat);
-        len = vector_length_xyz(&flat);
-        if (len == 0.0f) {
-            len = 0.0001f;
+        angle_normalization_length = vector_length_xyz(&flat);
+        if (angle_normalization_length == 0.0f) {
+            angle_normalization_length = 0.0001f;
         }
-        initial_yaw = 1.5707964f - fast_arc_sin(dot / len);
+        initial_yaw = 1.5707964f - fast_arc_sin(dot / angle_normalization_length);
         normalize_vector_xyz(&unit, &flat, 1.0f);
         if (fast_vec_dot(&side, &unit) < 0.0f) {
             initial_yaw = -initial_yaw;
@@ -639,11 +639,11 @@ void FUN_L05_003298d8(Camera *cam) {
         cam->yaw = initial_yaw;
         rotate_about_axis(&yaw_rotated_forward, &fwd, &up, initial_yaw);
         dot = fast_vec_dot(&yaw_rotated_forward, &rel);
-        len = vector_length_xyz(&rel);
-        if (len == 0.0f) {
-            len = 0.0001f;
+        angle_normalization_length = vector_length_xyz(&rel);
+        if (angle_normalization_length == 0.0f) {
+            angle_normalization_length = 0.0001f;
         }
-        tilt = 1.5707964f - fast_arc_sin(dot / len);
+        tilt = 1.5707964f - fast_arc_sin(dot / angle_normalization_length);
         normalize_vector_xyz(&unit, &rel, 1.0f);
         pitch = -tilt;
         if (fast_vec_dot(&up, &unit) < 0.0f) {
