@@ -1085,9 +1085,9 @@ extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 void FUN_L00_002acbf0(M_2acbf0_002acbf0 *moby) {
     Q_2acbf0_002acbf0 quad;
-    V_2acbf0_002acbf0 mat[4];
+    V_2acbf0_002acbf0 quad_transform[4];
     V_2acbf0_002acbf0 mz[4];
-    V_2acbf0_002acbf0 rot;
+    V_2acbf0_002acbf0 quad_alignment_angles;
     V_2acbf0_002acbf0 rz;
     PV_2acbf0_002acbf0 *pv = moby->pv;
     s32 i;
@@ -1099,10 +1099,10 @@ void FUN_L00_002acbf0(M_2acbf0_002acbf0 *moby) {
     for (i = 0; i < 2; i++) {
         odd = i & 1;
         polar_angle = atan2_2acbf0(seg_sqrt(pv->f20 * pv->f20 + pv->f28 * pv->f28), pv->f24);
-        rot.f[0] = appr_2acbf0(-polar_angle, 1.57079637f);
-        rot.f[1] = atan2_2acbf0(pv->f28, pv->f20);
-        rot.f[2] = 0.0f;
-        rot.f[3] = 0.0f;
+        quad_alignment_angles.f[0] = appr_2acbf0(-polar_angle, 1.57079637f);
+        quad_alignment_angles.f[1] = atan2_2acbf0(pv->f28, pv->f20);
+        quad_alignment_angles.f[2] = 0.0f;
+        quad_alignment_angles.f[3] = 0.0f;
         rz.f[0] = 0.0f;
         rotation_angle_numerator = FUN_001fa6c0_002acbf0(D_L00_0015F5CC_002acbf0 % FUN_001f96f8_002acbf0(180));
         {
@@ -1118,9 +1118,9 @@ void FUN_L00_002acbf0(M_2acbf0_002acbf0 *moby) {
         rz.f[2] = 0.0f;
         rz.f[3] = 0.0f;
         rotation_matrix(mz, &rz);
-        rotation_matrix(mat, &rot);
-        mmul_2acbf0(mat, mat, mz);
-        qcopy(&mat[3], &pv->pos);
+        rotation_matrix(quad_transform, &quad_alignment_angles);
+        mmul_2acbf0(quad_transform, quad_transform, mz);
+        qcopy(&quad_transform[3], &pv->pos);
         quad.color[0] = 0x80808080;
         quad.color[1] = 0x80808080;
         quad.color[2] = 0x80808080;
@@ -1153,7 +1153,7 @@ void FUN_L00_002acbf0(M_2acbf0_002acbf0 *moby) {
         quad.uv[5] = 0.0f;
         quad.uv[6] = 1.0f;
         quad.uv[7] = 0.0f;
-        draw_geometry_quad(&quad, mat, 1);
+        draw_geometry_quad(&quad, quad_transform, 1);
     }
 }
 typedef unsigned int u128_2ace70 __attribute__((mode(TI), aligned(16)));
