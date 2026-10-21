@@ -26,11 +26,11 @@ int update_menu_icon_list(char *menu) {
     }
     {
         if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
-            struct MenuSystem *g = &menu_system;
-            struct MenuPage *t = g->current->back;
+            struct MenuSystem *menu_system_state = &menu_system;
+            struct MenuPage *t = menu_system_state->current->back;
             if (t != 0) {
-                g->next = t;
-            } else if (g->close_locked == 0) {
+                menu_system_state->next = t;
+            } else if (menu_system_state->close_locked == 0) {
                 return -1;
             }
         }
