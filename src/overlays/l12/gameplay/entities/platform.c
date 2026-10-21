@@ -2783,7 +2783,7 @@ int FUN_L12_002eaf68(struct Moby *moby, int idx) {
     char *path = D_L12_001B0930_f[idx];
     char *moby_vars = (char *)moby->pvars;
     float sum = 0.0f;
-    float v[20]; /* target record from the finder; also the step vector */
+    float target_record_or_node_offset[20]; /* target record from the finder; also the step vector */
     int i;
     float target_heading;
     for (i = *(int *)(moby_vars + 0xB4); i < *(int *)path - 1; i++)
@@ -2794,16 +2794,16 @@ int FUN_L12_002eaf68(struct Moby *moby, int idx) {
         ((M_af68 *)moby)->rz = turn_f((float *)(moby_vars + 0x88), ((M_af68 *)moby)->rz, target_heading, 0.004f, 0.3f, D_0015ED6C_f * 0.7853982f);
         appr_f(moby_vars + 0x94, D_0015ED6C_f * 10.0f, D_0015ED70_f * 7.0f);
     } else {
-        ahead_f(moby, v, 48.0f);
-        target_heading = atan_f(v[0] - moby->pos.x, v[1] - moby->pos.y);
+        ahead_f(moby, target_record_or_node_offset, 48.0f);
+        target_heading = atan_f(target_record_or_node_offset[0] - moby->pos.x, target_record_or_node_offset[1] - moby->pos.y);
         ((M_af68 *)moby)->rz = turn_f((float *)(moby_vars + 0x88), ((M_af68 *)moby)->rz, target_heading, 0.004f, 0.3f, D_0015ED6C_f * 0.7853982f);
         appr_f(moby_vars + 0x94, 0.0f, D_0015ED70_f * 9.0f);
         sum = *(float *)(moby_vars + 0x94);
         if (sum == 0.0f)
             return 1;
     }
-    sub_f(v, &((N_af68 *)path)[*(int *)(moby_vars + 0xB4) + 1], &moby->pos);
-    norm_f(moby_vars + 0x70, v, *(float *)(moby_vars + 0x94));
+    sub_f(target_record_or_node_offset, &((N_af68 *)path)[*(int *)(moby_vars + 0xB4) + 1], &moby->pos);
+    norm_f(moby_vars + 0x70, target_record_or_node_offset, *(float *)(moby_vars + 0x94));
     add_f(&moby->pos, &moby->pos, moby_vars + 0x70);
     if (dist_f(&moby->pos, &((N_af68 *)path)[*(int *)(moby_vars + 0xB4) + 1]) < 2.0f) {
         (*(int *)(moby_vars + 0xB4))++;
