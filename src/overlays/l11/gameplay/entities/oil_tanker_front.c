@@ -1548,9 +1548,9 @@ void FUN_L11_0031aa80(struct Moby *moby) {
     if (data[0] == -1) {
         mark_moby_for_removal(moby);
     } else if (data[1] != -1 && FUN_L01_0026e008(data[1], -1) == 0) {
-        unsigned char *g = D_0013D408;
-        if (g[0x13] == 0) {
-            g[0x13] = 1;
+        unsigned char *dialogue_latch_base = D_0013D408;
+        if (dialogue_latch_base[0x13] == 0) {
+            dialogue_latch_base[0x13] = 1;
             allocate_voice_for_bank_entry_alt(1, 0, 0);
             queue_dialogue_message(0x53d6, -1);
         }
