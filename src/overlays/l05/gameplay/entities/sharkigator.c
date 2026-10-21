@@ -1020,7 +1020,7 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 
 void FUN_L05_002db238(void *moby, void *dir) {
     float spark_position[4];
-    float v[4];
+    float first_spark_vector[4];
     float second_spark_vector[4];
     char *pos = (char *)moby + 0x10;
     int i, j;
@@ -1032,24 +1032,24 @@ void FUN_L05_002db238(void *moby, void *dir) {
         ang = random_angle_radians_c();
         sp = random_float_between_c(1.0f, 8.0f);
         up = random_float_between_c(2.0f, 6.0f);
-        scale_vector_xyz(v, dir, random_float_between_c(0.0f, 1.0f));
-        v[0] += fast_cos_c2(ang) * (sp * frame_time);
-        v[1] += fast_sin_c2(ang) * (sp * frame_time);
-        v[2] += up * frame_time;
-        qcopy(second_spark_vector, v);
+        scale_vector_xyz(first_spark_vector, dir, random_float_between_c(0.0f, 1.0f));
+        first_spark_vector[0] += fast_cos_c2(ang) * (sp * frame_time);
+        first_spark_vector[1] += fast_sin_c2(ang) * (sp * frame_time);
+        first_spark_vector[2] += up * frame_time;
+        qcopy(second_spark_vector, first_spark_vector);
         second_spark_vector[2] -= frame_time_sq * 20.0f * (float)scale_game_frames(0x1E);
         for (j = 0; j < 10; j++) {
-            float r = random_float_between_c(0.5f, 1.5f);
+            float spark_vector_w_scale = random_float_between_c(0.5f, 1.5f);
             int c1, c2, spark_frame_count, second_spark_frame_count;
-            v[3] = r * 0.125f;
-            second_spark_vector[3] = r * 0.065f;
+            first_spark_vector[3] = spark_vector_w_scale * 0.125f;
+            second_spark_vector[3] = spark_vector_w_scale * 0.065f;
             FUN_L00_0025f8e0(spark_position, 0.2f);
             FUN_L00_0025f8e0(second_spark_vector, frame_time * 0.5f);
             c1 = fast_tween_color(0x8000EEEE, 0x8000FF90, random_float_between_c(0.0f, 1.0f));
             c2 = fast_tween_color(0xFFEE, 0xFFEE, random_float_between_c(0.0f, 1.0f));
             spark_frame_count = scale_game_frames(10);
             second_spark_frame_count = scale_game_frames(0x1E);
-            spawn_spark(spark_position, v, second_spark_vector, c1, c2, spark_frame_count, second_spark_frame_count, func_001FA898_r(multiply_global_factor_ed64(random_float_between_c(5.0f, 25.0f))), -1);
+            spawn_spark(spark_position, first_spark_vector, second_spark_vector, c1, c2, spark_frame_count, second_spark_frame_count, func_001FA898_r(multiply_global_factor_ed64(random_float_between_c(5.0f, 25.0f))), -1);
         }
     }
 }
