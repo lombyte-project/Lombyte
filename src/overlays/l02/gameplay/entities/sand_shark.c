@@ -3135,36 +3135,36 @@ void rocket_launcher_update(struct Moby *moby) {
         ROCKET_LAUNCHER_TURN_AND_FIRE = 1,
         ROCKET_LAUNCHER_WAIT_FOR_POST_SHOT_ANIMATION = 2
     };
-    SwivelTurretVars *v = (SwivelTurretVars *)moby->pvars;
+    SwivelTurretVars *rocket_launcher_vars = (SwivelTurretVars *)moby->pvars;
     Vec4f dir, muzzle;
     f32 glow_blend_fraction;
 
     FUN_L02_002df730(moby);
     switch (moby->state) {
     case ROCKET_LAUNCHER_WAIT_BETWEEN_SHOTS:
-        if (turret_count_down(&v->wait_timer)) {
-            v->target_yaw = turret_rand_range(0.0f, 3.14159f);
+        if (turret_count_down(&rocket_launcher_vars->wait_timer)) {
+            rocket_launcher_vars->target_yaw = turret_rand_range(0.0f, 3.14159f);
             moby->state = 1;
             turret_play_sound(4, 0, moby);
         }
         break;
     case ROCKET_LAUNCHER_TURN_AND_FIRE:
-        turret_approach_angle(&moby->rot.z, v->target_yaw, &v->yaw_vel,
+        turret_approach_angle(&moby->rot.z, rocket_launcher_vars->target_yaw, &rocket_launcher_vars->yaw_vel,
                               D_L02_00161C70 * DEG_TO_RAD * frame_time_sq_macro,
                               D_L02_00161C70 * DEG_TO_RAD * frame_time_sq_macro,
                               D_L02_00161C74 * DEG_TO_RAD * D_0015ED6C);
-        if (!turret_sound_playing(moby, v->voice))
-            v->voice = turret_play_sound(2, 4, moby);
-        if (turret_angle_diff(moby->rot.z, v->target_yaw) < DEG_TO_RAD && v->yaw_vel == 0.0f) {
-            s32 turning_voice_index = v->voice;
+        if (!turret_sound_playing(moby, rocket_launcher_vars->voice))
+            rocket_launcher_vars->voice = turret_play_sound(2, 4, moby);
+        if (turret_angle_diff(moby->rot.z, rocket_launcher_vars->target_yaw) < DEG_TO_RAD && rocket_launcher_vars->yaw_vel == 0.0f) {
+            s32 turning_voice_index = rocket_launcher_vars->voice;
             if (turning_voice_index != -1) {
                 TurretVoiceSlot *voice_slot = (TurretVoiceSlot *)(D_0013E550 + turning_voice_index * 0x70);
                 if (voice_slot->owner == moby && voice_slot->active)
                     turret_release_voice(turning_voice_index);
             }
-            v->voice = -1;
+            rocket_launcher_vars->voice = -1;
             turret_play_sound(3, 0, moby);
-            v->recoil = D_L02_00161C84;
+            rocket_launcher_vars->recoil = D_L02_00161C84;
             moby->state = 2;
             if (moby->prev_seq != 1)
                 turret_blend_anim(moby, 1, 0, 1);
@@ -3187,7 +3187,7 @@ void rocket_launcher_update(struct Moby *moby) {
             if (moby->prev_seq != 0)
                 turret_blend_anim(moby, 0, 0, 1);
             moby->state = 0;
-            v->wait_timer = turret_float_to_int(turret_scale_time(turret_rand_range(60.0f, 180.0f)));
+            rocket_launcher_vars->wait_timer = turret_float_to_int(turret_scale_time(turret_rand_range(60.0f, 180.0f)));
         }
         break;
     }
