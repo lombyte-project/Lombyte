@@ -3036,12 +3036,12 @@ void floating_platform_update(unsigned char *moby) {
         FLOATING_PLATFORM_UPDATE_ROCKING = 1
     };
     char *data = *(char **)(moby + 0x78);
-    float v[4];
-    float w[4];
+    float previous_position[4];
+    float previous_rotation[4];
     float position_delta[4];
     char *position;
     char *current_rotation;
-    float *r;
+    float *previous_rotation_ptr;
     float k;
     float rotation_y_phase;
     switch (moby[0x20]) {
@@ -3059,10 +3059,10 @@ void floating_platform_update(unsigned char *moby) {
                 (float)D_L05_00161CE4, (float)D_L05_00161CE8)));
         }
         position = (char *)moby + 0x10;
-        qcopy(v, position);
-        r = w;
+        qcopy(previous_position, position);
+        previous_rotation_ptr = previous_rotation;
         current_rotation = (char *)moby + 0x40;
-        qcopy(r, current_rotation);
+        qcopy(previous_rotation_ptr, current_rotation);
         rotation_y_phase = fast_add_rotations(*(float *)(data + 0x60),
                                D_L05_00161CD4 * DEG_TO_RAD * frame_time);
         k = D_L05_00161CD8 * DEG_TO_RAD * frame_time;
@@ -3072,8 +3072,8 @@ void floating_platform_update(unsigned char *moby) {
             D_L05_00161CDC * DEG_TO_RAD * fast_sin(*(float *)(data + 0x60));
         *(float *)(moby + 0x40) =
             D_L05_00161CE0 * DEG_TO_RAD * fast_sin(*(float *)(data + 0x6C));
-        subtract_vector_xyz(position_delta, position, v);
-        update_entity_matrix(data + 0x20, position_delta, r, current_rotation);
+        subtract_vector_xyz(position_delta, position, previous_position);
+        update_entity_matrix(data + 0x20, position_delta, previous_rotation_ptr, current_rotation);
         break;
     }
 }
