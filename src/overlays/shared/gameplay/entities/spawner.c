@@ -123,21 +123,21 @@ void FUN_L09_00307d68(struct Moby *projectile_moby)
     CollisionProbe_307d68 pr;
     OvlVec4 push;
     OvlVec4 r;
-    ShotVars_307ba8 *v = (ShotVars_307ba8 *)projectile_moby->pvars;
+    ShotVars_307ba8 *projectile_vars = (ShotVars_307ba8 *)projectile_moby->pvars;
     CollisionProbe_307d68 *probe;
     f32 distance_to_hero;
     s32 i;
 
     distance_to_hero = distance_307d68(&projectile_moby->pos, &D_0013F3D0_307d68);
     qcopy(&old, &projectile_moby->pos);
-    add_vector_xyz_307d68(&projectile_moby->pos, &projectile_moby->pos, &v->vel);
-    if (v->unk28 == 0 && v->unk24 != 0 && v->dist < distance_to_hero && distance_to_hero < 3.0f) {
+    add_vector_xyz_307d68(&projectile_moby->pos, &projectile_moby->pos, &projectile_vars->vel);
+    if (projectile_vars->unk28 == 0 && projectile_vars->unk24 != 0 && projectile_vars->dist < distance_to_hero && distance_to_hero < 3.0f) {
         allocate_voice_307d68(0, 0, projectile_moby);
-        v->unk28 = 1;
+        projectile_vars->unk28 = 1;
     }
-    if (distance_to_hero < v->dist)
-        v->unk24 = 1;
-    v->dist = distance_to_hero;
+    if (distance_to_hero < projectile_vars->dist)
+        projectile_vars->unk24 = 1;
+    projectile_vars->dist = distance_to_hero;
     if (projectile_moby->pos.x < 2.0f || 1021.0f < projectile_moby->pos.x || projectile_moby->pos.y < 2.0f || 1021.0f < projectile_moby->pos.y
         || projectile_moby->pos.z < 2.0f || 1021.0f < projectile_moby->pos.z
         || 255.0f < FUN_001f9b80_307d68(&projectile_moby->pos, &D_L09_00166F40_307d68)) {
@@ -151,7 +151,7 @@ void FUN_L09_00307d68(struct Moby *projectile_moby)
         pr.radius = 3.0f;
         pr.self = projectile_moby;
         pr.unk20 = 1;
-        qcopy(&pr.dir, &v->vel);
+        qcopy(&pr.dir, &projectile_vars->vel);
         subtract_vector_xyz_307d68(&pr.dir, &projectile_moby->pos, &D_0013F3D0_307d68);
         FUN_001f9c48_307d68(&pr.dir, &pr.dir, 1.0f);
         probe = &pr;
@@ -161,14 +161,14 @@ void FUN_L09_00307d68(struct Moby *projectile_moby)
         pr.unk19 = 3;
         pr.oclass = projectile_moby->oclass;
     }
-    if (tick_countdown_16_307d68(&v->life) && projectile_moby->command == 0) {
+    if (tick_countdown_16_307d68(&projectile_vars->life) && projectile_moby->command == 0) {
         projectile_moby->command = 1;
-        v->life = v->life_max / 4;
-    } else if (v->life <= 0 && projectile_moby->command != 0) {
+        projectile_vars->life = projectile_vars->life_max / 4;
+    } else if (projectile_vars->life <= 0 && projectile_moby->command != 0) {
         mark_moby_for_removal_307d68(projectile_moby);
         return;
     }
-    if (collision_line_307d68(&old, &projectile_moby->pos, 0, v->owner, probe) == 0)
+    if (collision_line_307d68(&old, &projectile_moby->pos, 0, projectile_vars->owner, probe) == 0)
         return;
 
     qcopy(&projectile_moby->pos, &D_L09_00173FE0);
@@ -179,7 +179,7 @@ void FUN_L09_00307d68(struct Moby *projectile_moby)
             r.f[1] = random_float_between_307d68(-1.0f, 1.0f);
             r.f[2] = random_float_between_307d68(-1.0f, 1.0f);
             push.q = r.q;
-            FUN_L00_001ff660_307d68(&r, v, D_L09_00174000);
+            FUN_L00_001ff660_307d68(&r, projectile_vars, D_L09_00174000);
             normalize_vector_xyz_307d68(&push, &push, vector_length_xyz_307d68(&r) * 0.5f);
             add_vector_xyz_307d68(&push, &r, &push);
             normalize_vector_xyz_307d68(&push, &push, random_float_between_307d68(frame_time * 3.0f, frame_time * 6.0f));
@@ -187,7 +187,7 @@ void FUN_L09_00307d68(struct Moby *projectile_moby)
                                     random_int_between_307d68(scale_game_frames_307d68(10), scale_game_frames_307d68(15)), 60000.0f);
         }
     }
-    FUN_L00_0025e450_307d68(projectile_moby, v, 0, 0.0f, 0.0f, 4, 3, 6, 1.1f, 0.6f, 1.0f, -1, 0.9f, 0.0f, 0, 1, -1, 0);
+    FUN_L00_0025e450_307d68(projectile_moby, projectile_vars, 0, 0.0f, 0.0f, 4, 3, 6, 1.1f, 0.6f, 1.0f, -1, 0.9f, 0.0f, 0, 1, -1, 0);
     FUN_L00_001f2868_307d68(1.1f, &projectile_moby->pos, 0x10, projectile_moby, probe);
     mark_moby_for_removal_307d68(projectile_moby);
 }
