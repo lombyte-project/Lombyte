@@ -2960,31 +2960,31 @@ extern void func_00215C00(void *, float, float, float) __asm__("FUN_00214db0");
 
 void set_planar_vel(float radians) __asm__("FUN_L00_002120d8");
 void set_planar_vel(float radians) {
-    struct Hero *g = &hero;
+    struct Hero *hero_state = &hero;
     float y;
     float ground_speed;
     float out[4];
 
-    y = g->motion.rot.f[2];
+    y = hero_state->motion.rot.f[2];
     if (radians <= 3.14159274f) {
         y = radians;
     }
-    ground_speed = g->ground_speed;
+    ground_speed = hero_state->ground_speed;
 
-    if (g->unk20B3 != 0) {
+    if (hero_state->unk20B3 != 0) {
         float matrix[16];
-        float vec[4];
+        float velocity_vector[4];
 
-        vec[0] = fast_cos(0.0f) * ground_speed;
-        vec[1] = fast_sin(0.0f) * ground_speed;
-        vec[2] = 0.0f;
+        velocity_vector[0] = fast_cos(0.0f) * ground_speed;
+        velocity_vector[1] = fast_sin(0.0f) * ground_speed;
+        velocity_vector[2] = 0.0f;
 
-        rotation_matrix(matrix, ((char *)g->moby) + 0x40);
-        transform_vector(vec, vec, matrix);
+        rotation_matrix(matrix, ((char *)hero_state->moby) + 0x40);
+        transform_vector(velocity_vector, velocity_vector, matrix);
 
-        qcopy(out, vec);
+        qcopy(out, velocity_vector);
     } else {
-        func_00215C00(out, ground_speed, y, g->ground_pitch.f);
+        func_00215C00(out, ground_speed, y, hero_state->ground_pitch.f);
     }
 
     qcopy(&hero.motion.velocity, out);
