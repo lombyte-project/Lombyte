@@ -8,7 +8,7 @@ extern s32 snd_stream_safe_check_cd_idle() __asm__("func_0012ED30");
 void music_stop(void) __asm__("FUN_00215ee8");
 
 void music_stop(void) {
-    s32 cur;
+    s32 requested_track;
 
     if (music_stream_state.primary.handle == 0xFFFFFFFF) {
         do {
@@ -30,12 +30,12 @@ void music_stop(void) {
 
     } while (snd_flush_sound_commands() != 0);
     snd_stream_safe_check_cd_idle(1);
-    cur = music_stream_state.requested_track;
+    requested_track = music_stream_state.requested_track;
     music_stream_state.primary.state = 0;
     music_stream_state.primary.flags = 0;
     music_stream_state.primary.handle = 0;
-    if (cur != -1) {
-        music_stream_state.primary.track = cur;
+    if (requested_track != -1) {
+        music_stream_state.primary.track = requested_track;
     }
     music_stream_state.secondary.state = 0;
     music_stream_state.secondary.flags = 0;
