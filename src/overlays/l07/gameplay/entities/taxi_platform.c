@@ -1216,7 +1216,7 @@ extern char D_L07_00173F00[];
 
 /* Bolt update: flies on, sparks out at the end of its range, bursts on impact, removes it out of bounds. */
 void FUN_L07_0030b6a8(struct Moby *moby) {
-    BoltVars *v = (BoltVars *)moby->pvars;
+    BoltVars *bolt_vars = (BoltVars *)moby->pvars;
     Vec4 old;
     Vec4 dir;
     Vec4 spark;
@@ -1225,9 +1225,9 @@ void FUN_L07_0030b6a8(struct Moby *moby) {
     int j;
 
     qcopy(&old, &moby->pos);
-    add_vector_xyz(&moby->pos, &moby->pos, &v->vel);
-    pass = v->solid == 0;
-    if (vector_distance(&moby->pos, &v->origin) > 30.0f) {
+    add_vector_xyz(&moby->pos, &moby->pos, &bolt_vars->vel);
+    pass = bolt_vars->solid == 0;
+    if (vector_distance(&moby->pos, &bolt_vars->origin) > 30.0f) {
         if (moby->visible != 0) {
             for (i = 0; i < 3; i++) {
                 spark.q = 0;
@@ -1246,7 +1246,7 @@ void FUN_L07_0030b6a8(struct Moby *moby) {
         return;
     }
     if ((moby->visible != 0 || vector_distance(&moby->pos, &hero.motion.pos) < 30.0f) &&
-        collision_line(&old, &moby->pos, pass, v->ignore, v) != 0) {
+        collision_line(&old, &moby->pos, pass, bolt_vars->ignore, bolt_vars) != 0) {
         qcopy(&moby->pos, &D_L07_00173EE0);
         if (moby->visible != 0) {
             for (j = 0; j < 5; j++) {
@@ -1255,7 +1255,7 @@ void FUN_L07_0030b6a8(struct Moby *moby) {
                 spark.f[1] = random_float_between(-1.0f, 1.0f);
                 spark.f[2] = random_float_between(-1.0f, 1.0f);
                 dir.q = spark.q;
-                FUN_L00_001ff660(&spark, &v->vel, D_L07_00173F00);
+                FUN_L00_001ff660(&spark, &bolt_vars->vel, D_L07_00173F00);
                 normalize_vector_xyz(&dir, &dir, vector_length_xyz(&spark) * 0.5f);
                 add_vector_xyz(&dir, &spark, &dir);
                 normalize_vector_xyz(&dir, &dir,
