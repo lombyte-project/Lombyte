@@ -284,8 +284,8 @@ void FUN_L00_00221b68(void) {
     char *hero_timer_base;
     float distance_error;
     float xy_distance;
-    float lim;
-    float ang;
+    float xy_distance_threshold;
+    float spring_projection_yaw;
     int s;
 
     if (*(unsigned char *)(hero_check_base + 0x257) != 0 && *(float *)(hero_check_base + 0x2DC) > 0.0f &&
@@ -301,18 +301,18 @@ void FUN_L00_00221b68(void) {
     hero_base = (char *)D_0013E533 + 0xE1D;
     if (*(short *)(hero_base + 0x1EA) != 0) {
         xy_distance = vector_distance_xy(hero_base + 0x80, hero_base + 0x210);
-        lim = *(float *)(hero_base + 0x234) * 0.9f;
-        if (xy_distance < lim) {
-            ang = fast_arc_tan(*(float *)(hero_base + 0x80) - *(float *)(hero_base + 0x210),
+        xy_distance_threshold = *(float *)(hero_base + 0x234) * 0.9f;
+        if (xy_distance < xy_distance_threshold) {
+            spring_projection_yaw = fast_arc_tan(*(float *)(hero_base + 0x80) - *(float *)(hero_base + 0x210),
                                *(float *)(hero_base + 0x84) - *(float *)(hero_base + 0x214));
             if (xy_distance < *(float *)(hero_base + 0x234) * 0.05f) {
-                ang = *(float *)(hero_base + 0x98);
+                spring_projection_yaw = *(float *)(hero_base + 0x98);
             }
-            distance_error = xy_distance - lim;
+            distance_error = xy_distance - xy_distance_threshold;
             vendor_spring(&distance_error, (float *)(hero_base + 0x244), 0.0f, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f,
                              frame_time * 2.8f);
-            *(float *)(hero_base + 0xF0) = fast_cos(ang) * *(float *)(hero_base + 0x244);
-            *(float *)(hero_base + 0xF4) = fast_sin(ang) * *(float *)(hero_base + 0x244);
+            *(float *)(hero_base + 0xF0) = fast_cos(spring_projection_yaw) * *(float *)(hero_base + 0x244);
+            *(float *)(hero_base + 0xF4) = fast_sin(spring_projection_yaw) * *(float *)(hero_base + 0x244);
             *(float *)(hero_base + 0xF8) = 0.0f;
         }
     } else {
