@@ -247,7 +247,7 @@ extern void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void FUN_L00_00289330(void) {
-    SkyRotVec rot;
+    SkyRotVec sky_shell_rotation_radians;
 
     *(short *)(D_L00_0016051C + 4) = 0;
     sky_draw_shell(0);
@@ -258,9 +258,9 @@ void FUN_L00_00289330(void) {
     sky_sprite_proc();
     vu1_add_g_sregister(0x42, 0x8000000044L);
     sky_draw_shell(2);
-    qzero(&rot);
-    rot.f[2] = (f32)(*(volatile int *)&D_L00_0015F5CC & 0x7FFF) * 1.9174760e-4f - 3.1415927f;
-    fun_001fa070(D_L00_001BD7E0, &rot);
+    qzero(&sky_shell_rotation_radians);
+    sky_shell_rotation_radians.f[2] = (f32)(*(volatile int *)&D_L00_0015F5CC & 0x7FFF) * 1.9174760e-4f - 3.1415927f;
+    fun_001fa070(D_L00_001BD7E0, &sky_shell_rotation_radians);
     sky_draw_shell(3);
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(4);
