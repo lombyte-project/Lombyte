@@ -2661,9 +2661,9 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             break;
         }
         {
-            int off = pf->idx * 0x10;
-            if (FUN_001f9770_cf(FUN_L00_002628d8_cf(*(float *)(pf->path + off + 0x10) - m->pos[0],
-                                                    *(float *)(pf->path + off + 0x14) - m->pos[1]),
+            int path_node_byte_offset = pf->idx * 0x10;
+            if (FUN_001f9770_cf(FUN_L00_002628d8_cf(*(float *)(pf->path + path_node_byte_offset + 0x10) - m->pos[0],
+                                                    *(float *)(pf->path + path_node_byte_offset + 0x14) - m->pos[1]),
                                 (unsigned char *)m, (char *)&tgt)) {
                 break;
             }
