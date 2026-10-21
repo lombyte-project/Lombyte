@@ -108,13 +108,13 @@ float FUN_002132a8_2715e8(float, float) __asm__("FUN_002132a8");
 float fast_cos(float) __asm__("FUN_001f9dc8");
 float fast_sin(float) __asm__("FUN_001f9de0");
 extern unsigned char *D_L00_001B2134 __attribute__((section(".data")));
-unsigned char *FUN_L00_002715e8(void *pos, int x, int color, float size, float size_increment) {
+unsigned char *FUN_L00_002715e8(void *initial_position, int x, int color, float size, float size_increment) {
     unsigned char *particle = p27fe00_alloc(0x2D);
     if (particle) {
         unsigned char *particle_data;
         float drift_angle_radians, horizontal_drift_speed;
         int resolved_color;
-        qcopy(particle + 0x10, pos);
+        qcopy(particle + 0x10, initial_position);
         if (color == -1) {
             resolved_color = ((FUN_00213260_2715e8(6) + 0x14) << 24) | 0x808080;
         } else {
