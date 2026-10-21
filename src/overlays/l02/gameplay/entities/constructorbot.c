@@ -39,7 +39,7 @@ void FUN_L02_002ebf20(struct Moby *moby) {
         SHARD_STATE_REMOVE = 0,
         SHARD_STATE_ACTIVE = 1
     };
-    ShardVars *v = (ShardVars *)moby->pvars;
+    ShardVars *shard_vars = (ShardVars *)moby->pvars;
     Vec4f trail_position, back, half, jit;
     u8 *particle;
     s32 i;
@@ -53,12 +53,12 @@ void FUN_L02_002ebf20(struct Moby *moby) {
     default:
         return;
     }
-    vec_add(&moby->pos, &moby->pos, &v->vel);
-    approach_value(&v->vel.z, 0.0f, D_L02_00161F58 * frame_time_sq);
-    moby->rot.y = 1.5707964f - angle_atan2(vec_len_xy(&v->vel), v->vel.z);
+    vec_add(&moby->pos, &moby->pos, &shard_vars->vel);
+    approach_value(&shard_vars->vel.z, 0.0f, D_L02_00161F58 * frame_time_sq);
+    moby->rot.y = 1.5707964f - angle_atan2(vec_len_xy(&shard_vars->vel), shard_vars->vel.z);
     qcopy(&trail_position, &moby->pos);
-    vec_scale(&half, &v->vel, 0.5f);
-    vec_scale(&back, &v->vel, -0.1f);
+    vec_scale(&half, &shard_vars->vel, 0.5f);
+    vec_scale(&back, &shard_vars->vel, -0.1f);
     for (i = 1; i >= 0; i--) {
         s32 particle_frame_count = scale_frames(float_to_int(rand_range(20.0f, 60.0f)));
         particle = spawn_particle(&trail_position, &back, particle_frame_count, D_L02_00161F5C >> 24, D_L02_00161F5C & 0xFFFFFF, 3,
@@ -76,10 +76,10 @@ void FUN_L02_002ebf20(struct Moby *moby) {
     if (particle)
         particle[9] = float_to_int(4.0f) - 0x80;
     if (moby->visible == 0)
-        count_down(&v->timer);
+        count_down(&shard_vars->timer);
     else
-        v->timer = scale_frames(60);
-    if (v->timer == 0)
+        shard_vars->timer = scale_frames(60);
+    if (shard_vars->timer == 0)
         mark_moby_for_removal(moby);
 }
 #include "qcopy.h"
