@@ -382,7 +382,7 @@ void FUN_L05_0030e508(char *moby) {
     float pos;
     float speed;
     char *pose_entry;
-    float len;
+    float remaining_slide_distance;
     float reach;
 
     switch (*(u8 *)(moby + 0x20)) {
@@ -418,9 +418,9 @@ void FUN_L05_0030e508(char *moby) {
         }
         add_vector_xyz(v, pose_entry + 0x30, v);
         subtract_vector_xyz(v, v, moby + 0x10);
-        len = vector_length_xyz(v);
+        remaining_slide_distance = vector_length_xyz(v);
         speed = vector_length_xyz(data);
-        advance_accelerated_scalar(len, frame_time_sq * 20.0f, frame_time_sq * 30.0f,
+        advance_accelerated_scalar(remaining_slide_distance, frame_time_sq * 20.0f, frame_time_sq * 30.0f,
                                    frame_time * 10.0f, &pos, &speed);
         fast_vec_normalize(data, v, speed);
         add_vector_xyz(moby + 0x10, moby + 0x10, data);
