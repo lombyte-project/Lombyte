@@ -351,7 +351,7 @@ void FUN_L10_002dfc38(struct Moby *moby) {
     float transformed_offset[4];
     int hit_processing_status;
     int target_selection_status;
-    float ang;
+    float knockback_angle;
 
     if (data->f38 != 0) {
         data->f184 = truncate_float_2DFC38(scale_time_2DFC38(random_float_between_2DFC38(180.0f, 240.0f)));
@@ -378,9 +378,9 @@ void FUN_L10_002dfc38(struct Moby *moby) {
                 data->f84 = 9;
                 data->f78 = D_0015ED6C * 7.0f;
                 data->f7C = D_0015ED6C * 10.0f;
-                if (hit_record->f30 & 1) ang = angle_atan2(hit_record->f10[0], hit_record->f10[1]);
-                else ang = angle_atan2(moby->pos.x - hit_record->x, moby->pos.y - hit_record->y);
-                trooper_start_knockback(moby, data->f60, ang, 5, 1, 0);
+                if (hit_record->f30 & 1) knockback_angle = angle_atan2(hit_record->f10[0], hit_record->f10[1]);
+                else knockback_angle = angle_atan2(moby->pos.x - hit_record->x, moby->pos.y - hit_record->y);
+                trooper_start_knockback(moby, data->f60, knockback_angle, 5, 1, 0);
                 data->f117 = 0x78;
                 trooper_anim_update(moby, data->f110);
                 func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
