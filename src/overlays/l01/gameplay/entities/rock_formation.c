@@ -1847,7 +1847,7 @@ void beehive_update(SpawnerMoby *beehive_moby) {
         BEEHIVE_INITIALIZE = 0,
         BEEHIVE_TRY_SPAWN_CLONE = 1
     };
-    SpawnerVars *v = beehive_moby->pvars;
+    SpawnerVars *beehive_vars = beehive_moby->pvars;
     SpawnerMoby *spawned_clone;
     CloneAiVars *nv;
     f32 k;
@@ -1857,16 +1857,16 @@ void beehive_update(SpawnerMoby *beehive_moby) {
         beehive_moby->state = 1;
         break;
     case BEEHIVE_TRY_SPAWN_CLONE:
-        if (v->src_id < 0) {
+        if (beehive_vars->src_id < 0) {
             break;
         }
-        if (FUN_L01_0026e008(v->src_id, 0xC) != 0) {
+        if (FUN_L01_0026e008(beehive_vars->src_id, 0xC) != 0) {
             break;
         }
-        if (v->count >= D_L01_00161E90) {
+        if (beehive_vars->count >= D_L01_00161E90) {
             break;
         }
-        v->count++;
+        beehive_vars->count++;
         spawned_clone = (SpawnerMoby *)FUN_L01_00302328((ClonedMoby *)beehive_moby);
         if (spawned_clone != 0) {
             nv = spawned_clone->pvars;
