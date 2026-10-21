@@ -350,12 +350,12 @@ void FUN_L17_002f32f0(struct Moby *moby) {
     int j;
     OvlQuad *vb;
     float *pu;
-    float *pv;
+    float *quad_vertex_v_coordinates;
     vu1_add_g_sregister_c(0x47, 0x513F1);
     vb = &vv[2];
     pos = data + 0x10;
     pu = &pkt.uv[0];
-    pv = &pkt.uv[1];
+    quad_vertex_v_coordinates = &pkt.uv[1];
     D_L17_0016D3E4 = 8192000.0f;
     *(float *)(data + 0x14) = -8000.0f;
     for (i = 0; i < 2; i++) {
@@ -393,7 +393,7 @@ void FUN_L17_002f32f0(struct Moby *moby) {
         *(long *)&pkt.q[2] = get_effect_texture_alt(D_L17_001DE088[i]);
         for (j = 0; j < 4; j++) {
             pu[j * 2] = D_L17_001E6FA0[j * 2] + D_L17_001DE0A0[i];
-            pv[j * 2] = D_L17_001E6FA0[j * 2 + 1];
+            quad_vertex_v_coordinates[j * 2] = D_L17_001E6FA0[j * 2 + 1];
         }
         D_L17_001DE0A0[i] += D_L17_001623C0[i] * frame_delta_time;
         draw_geometry_quad(&pkt, 0, 0);
