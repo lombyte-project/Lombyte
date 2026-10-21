@@ -638,7 +638,7 @@ extern char D_0013F3D0[];
 void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
     char *data = *(char **)(moby + 0x78);
     char *g = (char *)((char *)((char *)&hero));
-    float v[4];
+    float target_up_vector[4];
     float up[4];
     float direction_scratch[4];
     float ax[4];
@@ -657,13 +657,13 @@ void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
         *(char *)(moby + 0xBC) = 1;
         if (absolute_float(*(float *)(hero_data + 0x80) - *(float *)(moby + 0x10)) < 0.1f &&
             absolute_float(*(float *)(hero_data + 0x84) - *(float *)(moby + 0x14)) < 0.1f) {
-            qcopy(v, up);
+            qcopy(target_up_vector, up);
         } else {
             subtract_vector_xyz(direction_scratch, (char *)((char *)&D_0013F3D0), moby + 0x10);
             direction_scratch[2] = direction_scratch[2] + D_L14_00161B04;
             len = vector_length_xyz(direction_scratch);
             if (len == 0.0f) {
-                qcopy(v, up);
+                qcopy(target_up_vector, up);
             } else {
                 dt = dot_vectors_xyz(up, direction_scratch);
                 ang = 1.5707963705f - fast_arc_sin(dt / len);
@@ -672,19 +672,19 @@ void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
                     ang = lim;
                 }
                 cross_vectors_xyz(ax, direction_scratch, up);
-                build_look_at_matrix(v, up, ax, ang);
-                normalize_vector_xyz(v, v, 1.0f);
+                build_look_at_matrix(target_up_vector, up, ax, ang);
+                normalize_vector_xyz(target_up_vector, target_up_vector, 1.0f);
             }
         }
     } else {
-        qcopy(v, up);
+        qcopy(target_up_vector, up);
         *(char *)(moby + 0xBC) = 0;
     }
 
     if (fast_dec_timer(data + 0x70)) {
-        if (0.1f < absolute_float(*(float *)(moby + 0xE0) - v[0]) ||
-            0.1f < absolute_float(*(float *)(moby + 0xE4) - v[1]) ||
-            0.1f < absolute_float(*(float *)(moby + 0xE8) - v[2])) {
+        if (0.1f < absolute_float(*(float *)(moby + 0xE0) - target_up_vector[0]) ||
+            0.1f < absolute_float(*(float *)(moby + 0xE4) - target_up_vector[1]) ||
+            0.1f < absolute_float(*(float *)(moby + 0xE8) - target_up_vector[2])) {
             *(int *)(data + 0x70) = scale_game_frames_alt(60);
             *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + 2.0f;
             allocate_voice_slot(*(void **)(*(char **)(moby + 0x24) + 0x28), 8, (int)moby, (int)(moby + 0x10), 0x400);
@@ -692,9 +692,9 @@ void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
         }
     }
 
-    vendor_spring((float *)(moby + 0xE0), (float *)(data + 0x60), v[0], 0.005f, 0.2f, 0.0f);
-    vendor_spring((float *)(moby + 0xE4), (float *)(data + 0x64), v[1], 0.005f, 0.2f, 0.0f);
-    vendor_spring((float *)(moby + 0xE8), (float *)(data + 0x68), v[2], 0.005f, 0.2f, 0.0f);
+    vendor_spring((float *)(moby + 0xE0), (float *)(data + 0x60), target_up_vector[0], 0.005f, 0.2f, 0.0f);
+    vendor_spring((float *)(moby + 0xE4), (float *)(data + 0x64), target_up_vector[1], 0.005f, 0.2f, 0.0f);
+    vendor_spring((float *)(moby + 0xE8), (float *)(data + 0x68), target_up_vector[2], 0.005f, 0.2f, 0.0f);
 
     normalize_vector_xyz(moby + 0xE0, moby + 0xE0, 1.0f);
     *(u128_s07 *)direction_scratch = 0;
