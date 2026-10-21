@@ -2886,7 +2886,7 @@ void FUN_L17_002efa48(void *moby_v, int arg) {
     int x;
     float y;
     float ang;
-    int r;
+    int line_query_clear;
     float yaw;
     float ang2;
 
@@ -2934,10 +2934,10 @@ void FUN_L17_002efa48(void *moby_v, int arg) {
         yaw = fast_difference_between_rotations(moby->f48, ang2);
         qcopy(position_buffer, moby->pos);
         position_buffer[2] += 1.0f;
-        r = coll_line_fix(position_buffer, (&hero.motion.unkD0), 2, 0, 0) == 0;
-        moby_vars->b1E4 = r;
+        line_query_clear = coll_line_fix(position_buffer, (&hero.motion.unkD0), 2, 0, 0) == 0;
+        moby_vars->b1E4 = line_query_clear;
         if (yaw < 1.0471976f) {
-            moby_vars->b1E4 = r << 1;
+            moby_vars->b1E4 = line_query_clear << 1;
         }
     }
 }
