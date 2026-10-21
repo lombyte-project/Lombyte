@@ -7667,10 +7667,10 @@ void red_button_update(struct Moby *moby) {
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 /* Moves the moby from state 1 to 2 and gives it a voice. */
-void FUN_L06_003047b8(char *arg) {
-    if ((unsigned char)arg[0x20] == 1) {
-        arg[0x20] = 2;
-        allocate_voice_for_target_entry(0, 0, arg);
+void FUN_L06_003047b8(char *moby) {
+    if ((unsigned char)moby[0x20] == 1) {
+        moby[0x20] = 2;
+        allocate_voice_for_target_entry(0, 0, moby);
     }
 }
 s32 FUN_L06_003047f8(const u8 *moby) {
