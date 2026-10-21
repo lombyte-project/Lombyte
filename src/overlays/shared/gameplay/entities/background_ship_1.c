@@ -48,7 +48,7 @@ void FUN_L02_002ec3f0(char *moby) {
     int i;
     char *data;
     char *joint_position_out;
-    int v;
+    int current_global_value;
     int r, g, b, packed_color;
     int *cached_global_value_ptr;
 
@@ -61,7 +61,7 @@ void FUN_L02_002ec3f0(char *moby) {
         moby_point_position(moby, i + 3, joint_position_out);
         joint_position_out += 0x10;
     }
-    v = D_L02_0015F5CC;
+    current_global_value = D_L02_0015F5CC;
     r = *(unsigned char *)(moby + 0x92);
     g = *(unsigned char *)(moby + 0x91);
     b = *(unsigned char *)(moby + 0x90);
@@ -69,10 +69,10 @@ void FUN_L02_002ec3f0(char *moby) {
     packed_color |= g << 8;
     packed_color |= b;
     *(int *)(data + 0xB0) = packed_color;
-    if (v != 0) {
+    if (current_global_value != 0) {
         cached_global_value_ptr = *(int **)(data + 0xB4);
-        if (v != *cached_global_value_ptr) {
-            *cached_global_value_ptr = v;
+        if (current_global_value != *cached_global_value_ptr) {
+            *cached_global_value_ptr = current_global_value;
             enqueue_callback_list_1(FUN_L02_002ec308, moby);
         }
     }
