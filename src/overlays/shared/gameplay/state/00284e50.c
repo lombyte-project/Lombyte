@@ -105,12 +105,12 @@ void FUN_L00_00285008(void) {
     *(int *)((char *)hero.moby + 0x3C) = *(int *)(s + 0x34);
     *(int *)((char *)hero.moby + 0x80) = *(int *)(s + 0x38);
     {
-        int v = D_0013E550[0x6B] | 7;
+        int updated_state_flags = D_0013E550[0x6B] | 7;
         *(int *)(D_0013E550 + 0x64) = *(int *)(s + 0x3C);
         D_0013E550[0x68] = s[0x40];
         D_0013E550[0x69] = s[0x41];
         D_0013E550[0x6A] = s[0x42];
-        D_0013E550[0x6B] = v;
+        D_0013E550[0x6B] = updated_state_flags;
         D_00151708 = *(unsigned short *)(s + 0xC54);
     }
     if (*(int *)(s + 0x44) != 0 && *(int *)(s + 0x44) != 3) {
