@@ -3031,27 +3031,27 @@ void spiderbot_update(unsigned char *moby) {
         break;
     }
     case SPIDERBOT_ARC_OSCILLATION: {
-        float b1;
-        float b2;
+        float previous_arc_angle;
+        float current_arc_angle;
         *(u128_2A8090 *)C = 0;
         C[2] = -*(float *)(moby_data + 0x24);
         *(u128_2A8090 *)D = 0;
         *(u128_2A8090 *)B = *(u128_2A8090 *)C;
-        b1 = fast_add_rotations_c2(fast_normalize_angle(fast_cos_c4(*(float *)(moby_data + 0x28)) * 1.5707964f),
+        previous_arc_angle = fast_add_rotations_c2(fast_normalize_angle(fast_cos_c4(*(float *)(moby_data + 0x28)) * 1.5707964f),
                            *(int *)(moby_data + 0x20) == 4 ? 1.5707964f : 0.0f);
         *(float *)(moby_data + 0x28) = fast_add_rotations_c2(*(float *)(moby_data + 0x28),
             360.0f / (*(float *)(moby_data + 0x24) * 6.2831855f / *(float *)(moby_data + 0x30)) * 0.017453292f * D_0015ED6C);
-        b2 = fast_add_rotations_c2(fast_normalize_angle(fast_cos_c4(*(float *)(moby_data + 0x28)) * 1.5707964f),
+        current_arc_angle = fast_add_rotations_c2(fast_normalize_angle(fast_cos_c4(*(float *)(moby_data + 0x28)) * 1.5707964f),
                            *(int *)(moby_data + 0x20) == 4 ? 1.5707964f : 0.0f);
-        *(float *)(moby + 0x58) = *(float *)(moby_data + 0x24) * fast_subtract_rotations(b2, b1) / (D_0015ED6C * 1.5f);
+        *(float *)(moby + 0x58) = *(float *)(moby_data + 0x24) * fast_subtract_rotations(current_arc_angle, previous_arc_angle) / (D_0015ED6C * 1.5f);
         C[0] = fast_cos_c4(*(float *)(moby_data + 0x2C));
         C[1] = fast_sin_c4(*(float *)(moby_data + 0x2C));
         C[2] = 0.0f;
-        build_look_at_matrix(A, B, C, b2);
+        build_look_at_matrix(A, B, C, current_arc_angle);
         add_vector_xyz(T, moby_data, A);
         *(u128_2A8090 *)(moby + 0x10) = *(u128_2A8090 *)T;
         D[2] = fast_add_rotations_c2(*(float *)(moby_data + 0x2C), 1.5707964f);
-        D[1] = fast_add_rotations_c2(-b2, 0.0f);
+        D[1] = fast_add_rotations_c2(-current_arc_angle, 0.0f);
         euler_rotation_matrix(M, D);
         copy_matrix3x4(moby + 0xC0, M);
         normalize_vector_triplet(moby + 0xC0);
@@ -3059,13 +3059,13 @@ void spiderbot_update(unsigned char *moby) {
         break;
     }
     case SPIDERBOT_LINEAR_OSCILLATION: {
-        float w;
+        float previous_linear_displacement;
         float x;
-        w = fast_cos_c4(*(float *)(moby_data + 0x28)) * *(float *)(moby_data + 0x24);
+        previous_linear_displacement = fast_cos_c4(*(float *)(moby_data + 0x28)) * *(float *)(moby_data + 0x24);
         *(float *)(moby_data + 0x28) = fast_add_rotations_c2(*(float *)(moby_data + 0x28),
             360.0f / (*(float *)(moby_data + 0x24) * 6.2831855f / *(float *)(moby_data + 0x30)) * 0.017453292f * D_0015ED6C);
         x = fast_cos_c4(*(float *)(moby_data + 0x28)) * *(float *)(moby_data + 0x24);
-        *(float *)(moby + 0x58) = (x - w) / (D_0015ED6C * 1.5f);
+        *(float *)(moby + 0x58) = (x - previous_linear_displacement) / (D_0015ED6C * 1.5f);
         build_spherical_offset(A, x, *(int *)(moby_data + 0x20) != 2 ? *(float *)(moby + 0x48) : 0.0f,
                       *(int *)(moby_data + 0x20) == 2 ? 1.5707964f : 0.0f);
         add_vector_xyz(B, moby_data, A);
