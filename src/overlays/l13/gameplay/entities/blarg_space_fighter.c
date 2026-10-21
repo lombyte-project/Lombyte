@@ -849,20 +849,20 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_001f9b48(void *, void *);
 float absolute_float(float input) __asm__("func_001F99C0");
 
-int FUN_L13_002c3ac8(char *pt, int *tbl, int start, float ref) {
+int FUN_L13_002c3ac8(char *pt, int *path_point_table, int start, float ref) {
     int best = start;
     int i = 0;
     float bestd = 1e11f;
-    while (i < *tbl / 2) {
-        int j = (start + i) % *tbl;
-        float candidate_distance = FUN_001f9b48(tbl + 4 + j * 4, pt);
+    while (i < *path_point_table / 2) {
+        int j = (start + i) % *path_point_table;
+        float candidate_distance = FUN_001f9b48(path_point_table + 4 + j * 4, pt);
         float candidate_score = absolute_float(candidate_distance - ref) + convert_integer_to_float(i) * 0.4f;
         if (candidate_score < bestd + convert_integer_to_float(i) * 0.1f) {
             bestd = candidate_distance;
             best = j;
         }
-        j = (*tbl + start - i) % *tbl;
-        candidate_distance = FUN_001f9b48(tbl + 4 + j * 4, pt);
+        j = (*path_point_table + start - i) % *path_point_table;
+        candidate_distance = FUN_001f9b48(path_point_table + 4 + j * 4, pt);
         candidate_score = absolute_float(candidate_distance - ref) + convert_integer_to_float(i) * 0.4f;
         if (candidate_score < bestd) {
             bestd = candidate_distance;
