@@ -2554,22 +2554,22 @@ void FUN_L18_002e9e70(struct Moby *moby) {
         float ground_position[4];
         float *position = &moby->pos.x;
         float *arc_endpoint_position = moby_vars + 4;
-        float lim = D_L18_00161EE0 * frame_time;
-        float len;
+        float movement_step_length = D_L18_00161EE0 * frame_time;
+        float target_distance;
         subtract_vector_xyz(target_displacement, moby_vars, position);
-        len = vector_length_xyz(target_displacement);
+        target_distance = vector_length_xyz(target_displacement);
         FUN_L18_002ea598_c(moby);
         FUN_L00_00257d78(arc_endpoint_position, D_L18_00161ED8 * moby_vars[9], D_L18_00161ED8 * moby_vars[9]);
         add_vector_xyz(arc_endpoint_position, arc_endpoint_position, position);
         FUN_L18_002eacd8(moby);
         FUN_L18_002eaea0_u(moby);
         enqueue_callback_list_1((void (*)(void))FUN_L15_002d8710, moby);
-        if (len < lim) {
+        if (target_distance < movement_step_length) {
             spawn_explosion_burst(moby);
             mark_moby_for_removal_c2(moby);
             return;
         }
-        normalize_vector_xyz(target_displacement, target_displacement, lim);
+        normalize_vector_xyz(target_displacement, target_displacement, movement_step_length);
         add_vector_xyz(position, position, target_displacement);
         qcopy(ground_position, position);
         ground_position[2] = probe_ground_height_c(ground_position, 0, 0.5f);
