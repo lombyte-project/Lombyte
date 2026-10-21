@@ -1095,7 +1095,7 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
     s32 found;
     s32 i;
     s32 j;
-    PoolVec v;
+    PoolVec drip_position_or_bubble_vector;
     PoolVec bubble_position;
     s32 k;
     f32 bubble_path_fraction;
@@ -1213,31 +1213,31 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
         if (found == 0 || found == 6) {
             pool_drip_timer--;
             if (pool_drip_timer <= 0) {
-                qcopy(&v, &pool_drips[random_integer_below(5)]);
-                v.x = v.x + random_float_between(-0.15f, 0.15f);
-                v.y = v.y + random_float_between(-0.15f, 0.15f);
-                pool_drip(&v, 0.2f);
+                qcopy(&drip_position_or_bubble_vector, &pool_drips[random_integer_below(5)]);
+                drip_position_or_bubble_vector.x = drip_position_or_bubble_vector.x + random_float_between(-0.15f, 0.15f);
+                drip_position_or_bubble_vector.y = drip_position_or_bubble_vector.y + random_float_between(-0.15f, 0.15f);
+                pool_drip(&drip_position_or_bubble_vector, 0.2f);
                 pool_drip_timer = random_int_between(300, 1200);
             }
         }
         if (found == 5) {
             bubble_path_fraction = pool_wave[level_frame_count % 20] / 20.0f;
-            v.x = 0.02f;
-            v.y = 0.0f;
-            v.z = 0.0f;
+            drip_position_or_bubble_vector.x = 0.02f;
+            drip_position_or_bubble_vector.y = 0.0f;
+            drip_position_or_bubble_vector.z = 0.0f;
             bubble_position.x = random_float_between(-0.6f, 0.6f) + 177.0f;
             bubble_position.y = bubble_path_fraction * -11.0f + 176.0f + random_float_between(-0.1f, 0.1f);
             bubble_position.z = 39.0f;
-            pool_bubbles(&bubble_position, &v, 1.0f, random_float_between(0.4f, 0.5f));
-            v.x = 0.0f;
-            v.y = 0.0f;
-            v.z = 0.0f;
-            for (bubble_path_fraction = v.x; bubble_path_fraction < 1.0f; bubble_path_fraction += 0.05f) {
+            pool_bubbles(&bubble_position, &drip_position_or_bubble_vector, 1.0f, random_float_between(0.4f, 0.5f));
+            drip_position_or_bubble_vector.x = 0.0f;
+            drip_position_or_bubble_vector.y = 0.0f;
+            drip_position_or_bubble_vector.z = 0.0f;
+            for (bubble_path_fraction = drip_position_or_bubble_vector.x; bubble_path_fraction < 1.0f; bubble_path_fraction += 0.05f) {
                 if (random_integer_below(32) == 0) {
                     bubble_position.x = random_float_between(-0.6f, 0.6f) + 178.0f;
                     bubble_position.y = bubble_path_fraction * -11.0f + 176.0f + random_float_between(-0.1f, 0.1f);
                     bubble_position.z = random_float_between(-0.2f, 0.0f) + 39.0f;
-                    pool_bubble(&bubble_position, &v, random_float_between(4.0f, 10.0f));
+                    pool_bubble(&bubble_position, &drip_position_or_bubble_vector, random_float_between(4.0f, 10.0f));
                 }
             }
         }
