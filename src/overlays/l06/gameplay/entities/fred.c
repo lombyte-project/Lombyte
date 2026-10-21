@@ -6646,26 +6646,26 @@ void FUN_L06_00302400(struct Moby *moby, s32 kind) {
         VOICE_KIND_CHATTER = 1,
         VOICE_KIND_LEAVING = 2
     };
-    struct TauntVoiceVars *v = (struct TauntVoiceVars *)moby->pvars;
+    struct TauntVoiceVars *voice_vars = (struct TauntVoiceVars *)moby->pvars;
     s32 id = -1;
     s32 lang;
-    s32 r;
+    s32 chatter_index;
     s32 i;
 
     switch (kind) {
     case VOICE_KIND_GREETING:
         lang = game_language;
         if (lang != 0) lang--;
-        id = v->greet[lang];
+        id = voice_vars->greet[lang];
         break;
     case VOICE_KIND_CHATTER:
-        r = FUN_00213260(3);
+        chatter_index = FUN_00213260(3);
         for (i = 0; i < 4; i++) {
-            if (D_L06_001620B8[r] == 0) {
-                D_L06_001620B8[r] = 1;
+            if (D_L06_001620B8[chatter_index] == 0) {
+                D_L06_001620B8[chatter_index] = 1;
                 break;
             }
-            r = (r + 1) % 3;
+            chatter_index = (chatter_index + 1) % 3;
             if (i == 2) {
                 D_L06_001620B8[0] = 0;
                 D_L06_001620BC = 0;
@@ -6674,12 +6674,12 @@ void FUN_L06_00302400(struct Moby *moby, s32 kind) {
         }
         lang = game_language;
         if (lang != 0) lang--;
-        id = v->chatter[r][lang];
+        id = voice_vars->chatter[chatter_index][lang];
         break;
     case VOICE_KIND_LEAVING:
         lang = game_language;
         if (lang != 0) lang--;
-        id = v->leave[lang];
+        id = voice_vars->leave[lang];
         break;
     }
     if (id != -1) {
