@@ -1825,17 +1825,17 @@ extern f32 FUN_L05_00304058_u(s32, void *, void *, f32) __asm__("FUN_L05_0030405
    when it drifts off the path. */
 void FUN_L05_00303b08(struct Moby *moby, s32 node, f32 side) {
     PathWalkerVars *walker_vars = (PathWalkerVars *)moby->pvars;
-    Vec4f dir, out, goal;
+    Vec4f facing_direction, out, goal;
     f32 offset_heading;
-    f32 dist;
+    f32 distance_to_goal;
 
     if ((((s32)moby >> 8) & 3) == (frame_number & 3)) {
         if (follow_path(&walker_vars->path, 1, walker_vars->path_pos, &moby->pos, node, &walker_vars->goal, D_L05_00161A98_gp * 0.4f) == 0)
             walker_vars->mode = 2;
     }
     qcopy(&goal, &walker_vars->goal);
-    dist = vector_distance(&moby->pos, &goal);
-    if (dist > 5.0f && side != 0.0f && FUN_L05_00303e50((char *)moby, (float *)&goal, D_L05_00161A98_gp * 0.4f)) {
+    distance_to_goal = vector_distance(&moby->pos, &goal);
+    if (distance_to_goal > 5.0f && side != 0.0f && FUN_L05_00303e50((char *)moby, (float *)&goal, D_L05_00161A98_gp * 0.4f)) {
         offset_heading = fast_add_rotations(fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y), side);
         approach_angle(&moby->rot.z, offset_heading, &walker_vars->yaw_vel, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f,
                        frame_time * 25.132742f);
@@ -1843,14 +1843,14 @@ void FUN_L05_00303b08(struct Moby *moby, s32 node, f32 side) {
         approach_angle(&moby->rot.z, fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y), &walker_vars->yaw_vel,
                        frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 25.132742f);
     }
-    if (angle_diff(moby->rot.z, fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y)) < 1.5707964f && dist > 3.0f)
+    if (angle_diff(moby->rot.z, fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y)) < 1.5707964f && distance_to_goal > 3.0f)
         approach_value(&walker_vars->speed, frame_time * 6.0f, frame_time_sq * 6.0f);
     else
         approach_value(&walker_vars->speed, frame_time, frame_time_sq * 6.0f);
-    dir.x = fast_cos(moby->rot.z) * 2.0f;
-    dir.y = fast_sin(moby->rot.z) * 2.0f;
-    dir.z = 0.0f;
-    FUN_L00_00258b50(moby, walker_vars->move, &dir, &out, 1.0f);
+    facing_direction.x = fast_cos(moby->rot.z) * 2.0f;
+    facing_direction.y = fast_sin(moby->rot.z) * 2.0f;
+    facing_direction.z = 0.0f;
+    FUN_L00_00258b50(moby, walker_vars->move, &facing_direction, &out, 1.0f);
     if (walker_vars->stuck_timer == 0) {
         if (FUN_L05_00304058_u(walker_vars->path, &moby->pos, &moby->pos, D_L05_00161A98_gp * 0.4f) > 2.0f)
             walker_vars->stuck_timer = scale_game_frames(5);
