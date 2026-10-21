@@ -1778,7 +1778,7 @@ extern void FUN_L00_0024eed8(void *, int, void *, float, float);
 extern int FUN_L00_0020d568(void);
 
 void FUN_L00_00208820(void) {
-    OvlQuad v[1];
+    OvlQuad position_scratch[1];
     float minimum_top_gap, second_position_offset, top_gap;
     unsigned char *hero_moby;
 
@@ -1795,24 +1795,24 @@ void FUN_L00_00208820(void) {
     ff090_208820(((unsigned char *)hero.moby) + 0xC0, &hero, 0x30);
     upd_a(((unsigned char *)hero.moby));
     if (hero.unk1CC == 0 && *(int *)(((unsigned char *)hero.moby) + 0x94) != 0) {
-        qcopy(v, &hero.motion.pos);
+        qcopy(position_scratch, &hero.motion.pos);
         minimum_top_gap = 0.05f;
-        FUN_L00_002336e8(v, v, hero.unk224);
+        FUN_L00_002336e8(position_scratch, position_scratch, hero.unk224);
         top_gap = hero.capsule_top - hero.unk224;
         if (top_gap < minimum_top_gap)
             top_gap = minimum_top_gap;
-        FUN_L00_0024eed8(((unsigned char *)hero.moby), 0, v, hero.unk234, top_gap);
+        FUN_L00_0024eed8(((unsigned char *)hero.moby), 0, position_scratch, hero.unk234, top_gap);
         second_position_offset = hero.unk234 + minimum_top_gap;
         if (hero.state.control_mode == 4)
             second_position_offset += 0.15f;
         if (FUN_L00_0020d568())
             second_position_offset = hero.unk224;
-        qcopy(v, &hero.motion.pos);
-        FUN_L00_002336e8(v, v, second_position_offset);
+        qcopy(position_scratch, &hero.motion.pos);
+        FUN_L00_002336e8(position_scratch, position_scratch, second_position_offset);
         top_gap = hero.capsule_top - second_position_offset;
         if (top_gap < minimum_top_gap)
             top_gap = minimum_top_gap;
-        FUN_L00_0024eed8(((unsigned char *)hero.moby), 1, v, hero.unk234, top_gap);
+        FUN_L00_0024eed8(((unsigned char *)hero.moby), 1, position_scratch, hero.unk234, top_gap);
     }
     hero_moby = ((unsigned char *)hero.moby);
     if (*(short *)(hero_moby + 0xA6) == 0) {
