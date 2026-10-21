@@ -32,16 +32,16 @@ void hoverboard_ring_update(char *moby) {
         moby[0x20] = 1;
         break;
     case HOVERBOARD_RING_STATE_ACTIVE: {
-        float v[4];
+        float bounding_sphere[4];
         int i;
-        qcopy(v, moby + 0x10);
-        v[3] = 8.0f;
-        if (fast_bsphere_check((char *)v, 128.0f) != -1) {
+        qcopy(bounding_sphere, moby + 0x10);
+        bounding_sphere[3] = 8.0f;
+        if (fast_bsphere_check((char *)bounding_sphere, 128.0f) != -1) {
             if (hero.state.control_mode == 0x16) {
                 for (i = 0; i < 3; i++) {
                     float first_random_angle = random_angle_radians();
-                    float b = random_angle_radians();
-                    FUN_L00_002743a8(first_random_angle, b, (int)moby, D_L05_0015F580, scale_game_frames(0x28), 1,
+                    float second_random_angle = random_angle_radians();
+                    FUN_L00_002743a8(first_random_angle, second_random_angle, (int)moby, D_L05_0015F580, scale_game_frames(0x28), 1,
                                      0x7F, 0);
                 }
             }
