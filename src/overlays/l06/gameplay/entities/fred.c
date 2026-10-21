@@ -6069,8 +6069,8 @@ void FUN_L06_00300df0(char *moby) {
             *(float *)(moby + 0x18) = *(float *)(data + 0xC);
         } else {
             float bobbing_cycle_fraction = convert_integer_to_float(GB_FRAME_gp % 600) / 600.0f;
-            float g = fast_sin(bobbing_cycle_fraction * 6.28318f);
-            *(float *)(moby + 0x18) = *(float *)(data + 0xC) + D_L06_00162090 * g;
+            float bobbing_sine_factor = fast_sin(bobbing_cycle_fraction * 6.28318f);
+            *(float *)(moby + 0x18) = *(float *)(data + 0xC) + D_L06_00162090 * bobbing_sine_factor;
         }
         break;
     case UPDATE_LINEAR_AND_ANGULAR_MOTION:
