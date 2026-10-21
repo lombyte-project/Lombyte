@@ -1208,34 +1208,34 @@ extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 unsigned long get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
 
 void FUN_L14_002b3a20(char *m) {
-    float pos[4];
+    float glow_position[4];
     Pk_2af4a0 pk;
     float camera_displacement[4];
     float position_offset[4];
-    float len;
+    float camera_to_glow_distance;
     u32 col;
     int j;
-    qcopy(pos, m + 0x10);
-    pos[2] += 0.01f;
-    pos[3] = 1.0f;
+    qcopy(glow_position, m + 0x10);
+    glow_position[2] += 0.01f;
+    glow_position[3] = 1.0f;
     pk.b = get_effect_texture_alt(0xB);
     pk.c = 0x0000FF9000000260ULL;
     pk.d = 0x8000000048ULL;
     pk.a = 0;
     vu1_add_g_sregister(0x4A, 0);
     vu1_add_g_sregister(0x47, 0x51001);
-    subtract_vector_xyz(camera_displacement, ((char *)&D_L14_001674C0), pos);
-    len = vector_length_xyz(camera_displacement);
-    if (0.0f < len) {
+    subtract_vector_xyz(camera_displacement, ((char *)&D_L14_001674C0), glow_position);
+    camera_to_glow_distance = vector_length_xyz(camera_displacement);
+    if (0.0f < camera_to_glow_distance) {
         float position_offset_distance = D_L14_001614FC;
-        float unclamped_offset_distance = len - D_L14_00161500;
+        float unclamped_offset_distance = camera_to_glow_distance - D_L14_00161500;
         if (unclamped_offset_distance < position_offset_distance) {
             position_offset_distance = unclamped_offset_distance;
             if (unclamped_offset_distance < 0.0f)
                 position_offset_distance = 0.0f;
         }
         normalize_vector_xyz(position_offset, camera_displacement, position_offset_distance);
-        add_vector_xyz(pos, pos, position_offset);
+        add_vector_xyz(glow_position, glow_position, position_offset);
     }
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
@@ -1252,7 +1252,7 @@ void FUN_L14_002b3a20(char *m) {
     pk.col[0] = col;
     for (j = 0; j < 4; j++) {
         scale_vector_xyz(pk.m[j], D_L14_001D8890[j], D_L14_001614F8);
-        add_vector_xyz(pk.m[j], pk.m[j], pos);
+        add_vector_xyz(pk.m[j], pk.m[j], glow_position);
     }
     draw_geometry_quad(&pk, 0, 0);
 }
