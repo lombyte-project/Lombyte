@@ -2200,13 +2200,13 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
     }
 }
 f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
-void FUN_L00_002e55b8(void *mm, void *vv, void *tt, f32 stiffness, f32 b, f32 limit) {
+void FUN_L00_002e55b8(void *mm, void *vv, void *tt, f32 stiffness, f32 damping, f32 limit) {
     u8 *camera_state = *(u8 **)((u8 *)mm + 0x70);
-    f32 *v = vv;
+    f32 *current_values = vv;
     f32 *target_values = tt;
-    v[0] = cam_interp_values(camera_state + 0xE0, v[0], target_values[0], stiffness, b, limit);
-    v[1] = cam_interp_values(camera_state + 0xE4, v[1], target_values[1], stiffness, b, limit);
-    v[2] = cam_interp_values(camera_state + 0xE8, v[2], target_values[2], stiffness, b, limit);
+    current_values[0] = cam_interp_values(camera_state + 0xE0, current_values[0], target_values[0], stiffness, damping, limit);
+    current_values[1] = cam_interp_values(camera_state + 0xE4, current_values[1], target_values[1], stiffness, damping, limit);
+    current_values[2] = cam_interp_values(camera_state + 0xE8, current_values[2], target_values[2], stiffness, damping, limit);
 }
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 FUN_L00_002e5678(void *mm, void *input_offset, void *out_target_position, s32 k) {
