@@ -30,7 +30,7 @@ void _sequenceExtension(SeqExtContext *ctx) {
     u32 bits;
     u32 bits2;
     s32 bit_rate_extension;
-    s32 b;
+    s32 chroma_format;
     s32 vertical_size_extension;
     s32 horizontal_size_extension;
     s32 profile_and_level_indication;
@@ -39,11 +39,11 @@ void _sequenceExtension(SeqExtContext *ctx) {
     _ipuSetMPEG1(0);
     bits = _nextBit(ctx, 0x1C);
     bit_rate_extension = (bits >> 1) & 0xFFF;
-    b = (bits >> 17) & 0x3;
+    chroma_format = (bits >> 17) & 0x3;
     vertical_size_extension = (bits >> 13) & 0x3;
     horizontal_size_extension = (bits >> 15) & 0x3;
-    ctx->unk140 = b;
-    if (b != 1) {
+    ctx->unk140 = chroma_format;
+    if (chroma_format != 1) {
         _Error(ctx, D_00153B00);
     }
     ctx->unk13C = (bits >> 19) & 0x1;
