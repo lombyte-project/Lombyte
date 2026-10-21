@@ -805,8 +805,8 @@ void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) {
 void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash);
 void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
     Vy10 zero_vec;
-    S6y10 c0;
-    S6y10 c1;
+    S6y10 first_particle_color_palette;
+    S6y10 second_particle_color_palette;
     int rgb[3];
     int i;
     float k5, sp, big, first_glow_scale, second_glow_scale;
@@ -815,9 +815,9 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
     for (i = 2; i >= 0; i--) {
         sp = random_float_between_c(8.0f, 10.0f) * frame_time;
         big = scale * k5;
-        c0 = D_L00_001E9030;
-        c1 = D_L00_001E9048;
-        FUN_L00_0026a9f0(pos, &zero_vec, FUN_L00_0025c0e8(c0.v[random_integer_below(6)], 1), FUN_L00_0025c0e8(c1.v[random_integer_below(6)], 1),
+        first_particle_color_palette = D_L00_001E9030;
+        second_particle_color_palette = D_L00_001E9048;
+        FUN_L00_0026a9f0(pos, &zero_vec, FUN_L00_0025c0e8(first_particle_color_palette.v[random_integer_below(6)], 1), FUN_L00_0025c0e8(second_particle_color_palette.v[random_integer_below(6)], 1),
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
