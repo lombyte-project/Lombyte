@@ -23,30 +23,30 @@ struct sceGsDrawEnv1 {
 
 extern s16 sceGszbufaddr(s16 psm, s16 w, s16 h);
 
-s32 sceGsSetDefDrawEnv(struct sceGsDrawEnv1 *draw, s16 psm, s16 w, s16 height, s16 ztest, s16 zpsm) {
+s32 sceGsSetDefDrawEnv(struct sceGsDrawEnv1 *draw, s16 psm, s16 width, s16 height, s16 ztest, s16 zpsm) {
     s16 fbw;
     s16 zbp;
     long ofx;
     long ofy;
 
-    fbw = ((w + 63) >> 6) & 0x3F;
+    fbw = ((width + 63) >> 6) & 0x3F;
     draw->frame1addr = 0x4C;
     draw->frame1 = ((unsigned long)fbw << 16) | ((unsigned long)(psm & 0xF) << 24);
     draw->zbuf1addr = 0x4E;
     if (ztest == 0) {
-        zbp = sceGszbufaddr(psm, w, height);
+        zbp = sceGszbufaddr(psm, width, height);
         draw->zbuf1 =
             (unsigned long)zbp | ((unsigned long)(zpsm & 0xF) << 24) | ((unsigned long)1 << 32);
     } else {
-        zbp = sceGszbufaddr(psm, w, height);
+        zbp = sceGszbufaddr(psm, width, height);
         draw->zbuf1 = (unsigned long)zbp | ((unsigned long)(zpsm & 0xF) << 24);
     }
     draw->xyoffset1addr = 0x18;
-    ofx = 2048L - (w >> 1);
+    ofx = 2048L - (width >> 1);
     ofy = 2048L - (height >> 1);
     draw->xyoffset1 = ((unsigned long)(ofx << 4)) | (((unsigned long)(ofy << 4)) << 32);
     draw->scissor1addr = 0x40;
-    draw->scissor1 = ((unsigned long)(w - 1) << 16) | ((unsigned long)(height - 1) << 48);
+    draw->scissor1 = ((unsigned long)(width - 1) << 16) | ((unsigned long)(height - 1) << 48);
     draw->prmodecontaddr = 0x1A;
     draw->prmodecont |= 1;
     draw->colclampaddr = 0x46;
