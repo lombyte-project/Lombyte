@@ -1495,10 +1495,10 @@ void FUN_L18_002fca98(struct Moby *moby) {
             if (*(short *)(obj + 0xA6) == 0x772 && obj[0x20] != 0 && obj[0x20] < 6) {
                 int i;
                 int col = (*(int *)(obj + 0x90) & 0xFFFFFF) + (*(int *)&D_L18_00162654 << 24);
-                float v[4];
+                float joint_world_position[4];
                 for (i = 2; i < 5; i++) {
-                    moby_point_position(obj, i, v);
-                    FUN_L00_00263618(v, col, 0.175f, 0.08f);
+                    moby_point_position(obj, i, joint_world_position);
+                    FUN_L00_00263618(joint_world_position, col, 0.175f, 0.08f);
                 }
             }
             if (*(short *)group_moby_entry < 0)
