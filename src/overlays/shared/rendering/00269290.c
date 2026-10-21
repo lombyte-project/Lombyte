@@ -2697,16 +2697,16 @@ extern void FUN_L00_002715e8(void *, int, int, float, float);
 extern void FUN_L00_002741a0(void *, int, float, float);
 
 void FUN_L00_0026f660(char *particle) {
-    char *b = particle + 0x20;
-    int mode = *(int *)(b + 0x10);
+    char *particle_data = particle + 0x20;
+    int mode = *(int *)(particle_data + 0x10);
     V next_position;
     char *particle_position;
 
     if (mode == 0) {
-        fast_vec_add(particle + 0x10, particle + 0x10, b);
+        fast_vec_add(particle + 0x10, particle + 0x10, particle_data);
     } else if (mode == 1) {
         particle_position = particle + 0x10;
-        fast_vec_add(&next_position, particle_position, b);
+        fast_vec_add(&next_position, particle_position, particle_data);
         if (func_L00_001EFFF0(particle_position, &next_position, 2, 0, 0)) {
             if (collision_hit_material() == 0) {
                 FUN_L00_002715e8(&D_L00_00173E60, 0, -1, 0.2f, 5250.0f);
@@ -2718,7 +2718,7 @@ void FUN_L00_0026f660(char *particle) {
     } else if (mode == 3) {
         float lim;
         particle_position = particle + 0x10;
-        fast_vec_add(particle_position, particle_position, b);
+        fast_vec_add(particle_position, particle_position, particle_data);
         lim = hero.water_surface_z;
         if (*(float *)(particle + 0x18) < lim) {
             *(float *)(particle + 0x18) = lim;
@@ -2728,7 +2728,7 @@ void FUN_L00_0026f660(char *particle) {
         }
     } else {
         particle_position = particle + 0x10;
-        fast_vec_add(&next_position, particle_position, b);
+        fast_vec_add(&next_position, particle_position, particle_data);
         if (func_L00_001EFFF0(particle_position, &next_position, 2, 0, 0)) {
             if (collision_hit_material() != 0) {
                 int *collision_data = D_L00_00173E40;
@@ -2740,10 +2740,10 @@ void FUN_L00_0026f660(char *particle) {
         }
         qcopy(particle_position, &next_position);
     }
-    *(float *)(b + 8) -= *(float *)(b + 0x1C);
+    *(float *)(particle_data + 8) -= *(float *)(particle_data + 0x1C);
     *(unsigned char *)(particle + 8) += 2;
-    *(int *)(b + 0x14) -= 1;
-    if (*(int *)(b + 0x14) <= 0 || *(float *)(particle + 0x18) < *(float *)(b + 0x18)) {
+    *(int *)(particle_data + 0x14) -= 1;
+    if (*(int *)(particle_data + 0x14) <= 0 || *(float *)(particle + 0x18) < *(float *)(particle_data + 0x18)) {
         *(int *)(particle + 4) += 0xF0000000;
         if (*(int *)(particle + 4) < 0) {
             free_effect_particle(particle);
