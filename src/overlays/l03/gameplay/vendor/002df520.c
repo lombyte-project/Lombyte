@@ -303,7 +303,7 @@ void FUN_L03_002eb7e0(char *camera) {
     float side[4];
     float pos[4];
     float look[4];
-    float dir[4];
+    float camera_look_displacement[4];
 
     normalize_vector_xyz(side, &hero.gravity_dir, -*(float *)(camera_data + 0xE0));
     normalize_vector_xyz(back, camera_offset_direction, -*(float *)(camera_data + 0xD0));
@@ -311,8 +311,8 @@ void FUN_L03_002eb7e0(char *camera) {
     add_vector_xyz(camera + 0x30, pos, back);
     normalize_vector_xyz(look, &hero.gravity_dir, -camera_target_data[5]);
     add_vector_xyz(look, &hero.motion.pos, look);
-    subtract_vector_xyz(dir, look, camera + 0x30);
-    normalize_vector_xyz(camera_look_direction, dir, 1.0f);
+    subtract_vector_xyz(camera_look_displacement, look, camera + 0x30);
+    normalize_vector_xyz(camera_look_direction, camera_look_displacement, 1.0f);
     normalize_vector_xyz(camera, camera_look_direction, 1.0f);
     normalize_vector_xyz(camera + 0x40, camera, 1.0f);
     qcopy(camera, camera + 0x40);
