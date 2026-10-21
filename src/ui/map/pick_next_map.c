@@ -15,12 +15,12 @@ int pick_next_map(void) __asm__("FUN_002050e8");
 
 extern s32 *menu_level_indices __asm__("D_001601E0") MACRO_ADDR;
 int pick_next_map(void) {
-    int off = D_0013D4E1 ? 0x100 : 0;
+    int map_id_offset = D_0013D4E1 ? 0x100 : 0;
     int key;
     int i;
     int step;
 
-    key = level_map_selection.level + off;
+    key = level_map_selection.level + map_id_offset;
     if (find_map_entry_slot(key) == -1) {
         return key;
     }
@@ -35,7 +35,7 @@ int pick_next_map(void) {
         int j = i + step;
         if (j >= 0) {
             if (j < 20 && menu_level_indices[j] != 0) {
-                key = menu_level_indices[j] + off;
+                key = menu_level_indices[j] + map_id_offset;
                 if (find_map_entry_slot(key) == -1) {
                     return key;
                 }
