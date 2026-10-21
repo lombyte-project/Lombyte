@@ -1101,7 +1101,7 @@ void FUN_L14_002ece00(struct Moby *projectile_moby) {
     Vec4 target;
     L14BoltSweep sweep;
     Vec4 aim;
-    Vec4 dir;
+    Vec4 particle_launch_vector;
     Vec4 spark;
     void *ignore;
     struct Moby *hit;
@@ -1130,11 +1130,11 @@ void FUN_L14_002ece00(struct Moby *projectile_moby) {
                 spark.f[0] = bolt_random(-1.0f, 1.0f);
                 spark.f[1] = bolt_random(-1.0f, 1.0f);
                 spark.f[2] = bolt_random(-1.0f, 1.0f);
-                dir.q = spark.q;
-                bolt_normalize(&dir, &dir, bolt_length(&spark) * 0.1f);
-                bolt_add(&dir, &spark, &dir);
-                bolt_normalize(&dir, &dir, bolt_random(frame_time + frame_time, frame_time * 4.0f));
-                FUN_L07_0029a2a0(&projectile_moby->pos, &dir);
+                particle_launch_vector.q = spark.q;
+                bolt_normalize(&particle_launch_vector, &particle_launch_vector, bolt_length(&spark) * 0.1f);
+                bolt_add(&particle_launch_vector, &spark, &particle_launch_vector);
+                bolt_normalize(&particle_launch_vector, &particle_launch_vector, bolt_random(frame_time + frame_time, frame_time * 4.0f));
+                FUN_L07_0029a2a0(&projectile_moby->pos, &particle_launch_vector);
             }
         }
         bolt_remove(projectile_moby);
@@ -1156,12 +1156,12 @@ void FUN_L14_002ece00(struct Moby *projectile_moby) {
                 spark.f[0] = bolt_random(-1.0f, 1.0f);
                 spark.f[1] = bolt_random(-1.0f, 1.0f);
                 spark.f[2] = bolt_random(-1.0f, 1.0f);
-                dir.q = spark.q;
+                particle_launch_vector.q = spark.q;
                 FUN_L00_001ff660(&spark, &bolt_vars->vel, D_L14_00174580);
-                bolt_normalize(&dir, &dir, bolt_length(&spark) * 0.5f);
-                bolt_add(&dir, &spark, &dir);
-                bolt_normalize(&dir, &dir, bolt_random(frame_time * 3.0f, frame_time * 6.0f));
-                FUN_L00_0026dd20((char *)&projectile_moby->pos, (char *)&dir, 0x7F2F4F6F,
+                bolt_normalize(&particle_launch_vector, &particle_launch_vector, bolt_length(&spark) * 0.5f);
+                bolt_add(&particle_launch_vector, &spark, &particle_launch_vector);
+                bolt_normalize(&particle_launch_vector, &particle_launch_vector, bolt_random(frame_time * 3.0f, frame_time * 6.0f));
+                FUN_L00_0026dd20((char *)&projectile_moby->pos, (char *)&particle_launch_vector, 0x7F2F4F6F,
                                  FUN_L00_00257b90(bolt_frames(10), bolt_frames(15)), 30000.0f);
             }
         }
