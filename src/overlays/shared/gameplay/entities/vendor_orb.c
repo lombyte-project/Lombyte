@@ -2545,10 +2545,10 @@ typedef struct {
 } S2e8568;
 extern S2e8568 *D_L00_00166E00;
 /* Stores v through the pointer in D_L00_00166E00 while its short at 0x86 is 0. */
-void FUN_L00_002e8568(int v) {
+void FUN_L00_002e8568(int camera_state_short_value) {
     S2e8568 *current_camera = D_L00_00166E00;
     if (current_camera->f86 == 0)
-        current_camera->p->h = v;
+        current_camera->p->h = camera_state_short_value;
 }
 extern char *D_L00_00166E00_002e8590[] __asm__("D_L00_00166E00");
 /* Stores non-zero a/b at +0x11C/+0x120 of D_L00_00166E00+0x70 while its short at 0x86 is 0. */
