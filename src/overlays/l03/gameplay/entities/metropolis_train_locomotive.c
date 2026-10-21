@@ -32,7 +32,7 @@ void FUN_L03_0029d1b8(struct Moby *moby) {
         MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
     };
     char *data = (char *)moby->pvars;
-    int r;
+    int unused_local;
     float distance_to_reference;
     switch (moby->oclass) {
     case 0x33:
