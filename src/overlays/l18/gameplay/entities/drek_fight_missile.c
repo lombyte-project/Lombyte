@@ -2726,7 +2726,7 @@ void FUN_L18_002f5e80(char *moby) {
                 *(float *)(boss_data + 0x394) = *(float *)(boss_data + 0x394) + step;
             }
             if (step != 0.0f) {
-                float v;
+                float unclamped_health;
                 if (*(unsigned char *)(moby + 0x20) == 2) {
                     if (hit_record != 0 && (*(int *)(hit_record + 0x24) & 0x80000) && *(unsigned char *)(moby + 0x53) != 0xE) {
                         blend_moby_animation_5e80(moby, 0xE, 5, 1);
@@ -2735,9 +2735,9 @@ void FUN_L18_002f5e80(char *moby) {
                 if (f20 <= *(float *)(boss_data + 0x38C) && *(float *)(boss_data + 0x38C) - step < f20) {
                     crossed = 1;
                 }
-                v = *(float *)(boss_data + 0x38C) - step;
-                *(float *)(boss_data + 0x38C) = v;
-                if (v < f20) {
+                unclamped_health = *(float *)(boss_data + 0x38C) - step;
+                *(float *)(boss_data + 0x38C) = unclamped_health;
+                if (unclamped_health < f20) {
                     *(float *)(boss_data + 0x38C) = f20;
                 }
                 *(unsigned char *)(boss_data + 0x67) = 0xF0;
@@ -2837,18 +2837,18 @@ void FUN_L18_002f5e80(char *moby) {
             if (*(int *)(boss_data + 0x34C) < 2) {
                 int previous_phase_index;
                 int k;
-                int *w;
+                int *next_phase_path;
                 float ang;
                 moby[0x20] = 3;
                 previous_phase_index = *(int *)(boss_data + 0x34C);
                 k = previous_phase_index + 1;
                 *(int *)(boss_data + 0x34C) = k;
-                w = D_L18_001B0EB0[((VendorStage_5e80 *)boss_data)->f260[k]];
-                *(int **)(boss_data + 0x340) = w;
+                next_phase_path = D_L18_001B0EB0[((VendorStage_5e80 *)boss_data)->f260[k]];
+                *(int **)(boss_data + 0x340) = next_phase_path;
                 *(int *)(boss_data + 0x398) = ((VendorStage_5e80 *)boss_data)->f204[k];
                 *(int *)(boss_data + 0x348) = 1;
                 *(int *)(boss_data + 0x374) = 0;
-                qcopy(boss_data + 0x300, (char *)w + 0x10);
+                qcopy(boss_data + 0x300, (char *)next_phase_path + 0x10);
                 subtract_vector_5e80(boss_data + 0x300, boss_data + 0x300, D_L18_001600EC + (((VendorStage_5e80 *)boss_data)->f250[previous_phase_index] << 7) + 0x30);
                 scale_vector_5e80(boss_data + 0x300, boss_data + 0x300, 25.0f);
                 ((VendorStage_5e80 *)boss_data)->f300[2] = 0;
