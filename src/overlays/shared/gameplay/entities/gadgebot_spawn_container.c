@@ -960,7 +960,7 @@ extern f32 D_L06_0015F580[] __attribute__((section(".sdata")));
 /* Bursts 4 then 8 particles up from the moby, then removes the moby stored at vars+0x20C. */
 void FUN_L06_002e9f30(struct Moby *moby) {
     float origin[4];
-    float vel[4];
+    float debris_velocity[4];
     float pos[4];
     float offset[4];
     u8 *vars;
@@ -978,9 +978,9 @@ void FUN_L06_002e9f30(struct Moby *moby) {
         offset[1] = random_float_between(-0.625f, 0.625f);
         offset[2] = random_float_between(0.0f, 1.25f);
         *(u128 *)pos = *(u128 *)offset;
-        fast_vec_normalize(vel, pos, speed);
+        fast_vec_normalize(debris_velocity, pos, speed);
         fast_vec_add(pos, pos, origin);
-        spawn_crate_debris(*(void **)(vars + 0x20C), vel, pos, D_L06_0015F580, 0x165, 0, 0.3f, 0.6f);
+        spawn_crate_debris(*(void **)(vars + 0x20C), debris_velocity, pos, D_L06_0015F580, 0x165, 0, 0.3f, 0.6f);
     }
     for (j = 7; j >= 0; j--) {
         float speed = random_float_between(1.0f, 4.0f) * frame_time;
@@ -989,9 +989,9 @@ void FUN_L06_002e9f30(struct Moby *moby) {
         offset[1] = random_float_between(-0.625f, 0.625f);
         offset[2] = random_float_between(0.0f, 1.25f);
         *(u128 *)pos = *(u128 *)offset;
-        fast_vec_normalize(vel, pos, speed);
+        fast_vec_normalize(debris_velocity, pos, speed);
         fast_vec_add(pos, pos, origin);
-        spawn_crate_debris(*(void **)(vars + 0x20C), vel, pos, D_L06_0015F580,
+        spawn_crate_debris(*(void **)(vars + 0x20C), debris_velocity, pos, D_L06_0015F580,
                          random_integer_below(2) + 0x166, 0, 0.5f, 0.7f);
     }
     mark_moby_for_removal(*(void **)(vars + 0x20C));
