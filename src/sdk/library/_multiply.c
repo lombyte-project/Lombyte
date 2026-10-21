@@ -91,7 +91,7 @@ typedef u32 __ULong;
 #define Storeinc(a, b, c) (((u16 *)a)[1] = (u16)b, ((u16 *)a)[0] = (u16)c, a++)
 extern _Bigint *_Balloc(struct _reent *, s32);
 
-_Bigint *_multiply(struct _reent *ptr, _Bigint *multiplicand, _Bigint *multiplier) {
+_Bigint *_multiply(struct _reent *reent_context, _Bigint *multiplicand, _Bigint *multiplier) {
     _Bigint *product;
     s32 k, wa, wb, wc;
     __ULong carry, y, z;
@@ -109,7 +109,7 @@ _Bigint *_multiply(struct _reent *ptr, _Bigint *multiplicand, _Bigint *multiplie
     wc = wa + wb;
     if (wc > multiplicand->_maxwds)
         k++;
-    product = _Balloc(ptr, k);
+    product = _Balloc(reent_context, k);
     for (x = product->_x, xa = x + wc; x < xa; x++)
         *x = 0;
     xa = multiplicand->_x;
