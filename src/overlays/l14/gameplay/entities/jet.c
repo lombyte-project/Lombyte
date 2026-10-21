@@ -588,7 +588,7 @@ extern f32 D_L14_00161C08 __attribute__((sda));
 extern s32 D_L14_00161C04 __attribute__((sda));
 void FUN_L14_002eaf88(struct Moby *wind_control_moby) {
     L14WindVars *wind_vars = (L14WindVars *)wind_control_moby->pvars;
-    float dir[4];
+    float wind_direction_or_push_delta[4];
     char *pos;
     struct Hero *hero_base;
     int i;
@@ -616,11 +616,11 @@ void FUN_L14_002eaf88(struct Moby *wind_control_moby) {
         wind_vars->f1C = wind_length(D_L14_001600EC_w + (wind_vars->point << 7) + 0x20);
         wind_vars->period_timer = wind_frames(wind_vars->period);
         wind_vars->period_inv = 1.0f / wind_itof(wind_vars->period_timer);
-        dir[0] = wind_cos(wind_control_moby->rot.z);
-        dir[1] = wind_sin(wind_control_moby->rot.z);
-        dir[2] = 0.0f;
+        wind_direction_or_push_delta[0] = wind_cos(wind_control_moby->rot.z);
+        wind_direction_or_push_delta[1] = wind_sin(wind_control_moby->rot.z);
+        wind_direction_or_push_delta[2] = 0.0f;
         for (i = 0; i < 48; i++) {
-            FUN_L14_002eb388(wind_control_moby, i, dir);
+            FUN_L14_002eb388(wind_control_moby, i, wind_direction_or_push_delta);
         }
     }
     pos = (char *)&hero.motion.pos;
@@ -647,10 +647,10 @@ void FUN_L14_002eaf88(struct Moby *wind_control_moby) {
             k = D_0015ED6C_w;
             t = 1.0f - t;
             t = t * (wind_vars->push * k);
-            dir[0] = wind_cos(wind_control_moby->rot.z) * t;
-            dir[1] = wind_sin(wind_control_moby->rot.z) * t;
-            dir[2] = 0.0f;
-            wind_add(pos + 0x70, pos + 0x70, dir);
+            wind_direction_or_push_delta[0] = wind_cos(wind_control_moby->rot.z) * t;
+            wind_direction_or_push_delta[1] = wind_sin(wind_control_moby->rot.z) * t;
+            wind_direction_or_push_delta[2] = 0.0f;
+            wind_add(pos + 0x70, pos + 0x70, wind_direction_or_push_delta);
             wind_vars->push_timer = wind_frames(D_L14_00161C04);
             wind_vars->push_inv = 1.0f / wind_itof(wind_vars->push_timer);
             return;
@@ -670,10 +670,10 @@ void FUN_L14_002eaf88(struct Moby *wind_control_moby) {
             }
         }
         t = (wind_vars->push * D_0015ED6C_w - 0.0f) * (wind_itof(wind_vars->push_timer) * wind_vars->push_inv) + 0.0f;
-        dir[0] = wind_cos(wind_control_moby->rot.z) * t;
-        dir[1] = wind_sin(wind_control_moby->rot.z) * t;
-        dir[2] = 0.0f;
-        wind_add(&hero.motion.platform_delta, &hero.motion.platform_delta, dir);
+        wind_direction_or_push_delta[0] = wind_cos(wind_control_moby->rot.z) * t;
+        wind_direction_or_push_delta[1] = wind_sin(wind_control_moby->rot.z) * t;
+        wind_direction_or_push_delta[2] = 0.0f;
+        wind_add(&hero.motion.platform_delta, &hero.motion.platform_delta, wind_direction_or_push_delta);
     }
 }
 /* Starts one spark: places it at a random spot around the emitter, picks its speed and its life. */
