@@ -1204,7 +1204,7 @@ extern float D_L14_00161CCC;
 void FUN_L14_002ed280(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     int idx[5];
-    float v[4];
+    float visibility_test_point[4];
     int st;
     if (MOBY(moby)->state == 0) {
         if (current_level_index == 0xE) hero.unk22D8 = 1;
@@ -1237,10 +1237,10 @@ void FUN_L14_002ed280(struct Moby *moby) {
         int i;
         int visible_point_count = 0;
         for (i = 0; i < path[0] && visible_point_count < 5; i++) {
-            qcopy(v, (char *)path + i * 16 + 0x10);
-            v[2] += *(float *)&D_L14_00161C64;
-            v[3] = *(float *)&D_L14_00161C60;
-            if (fast_bsphere_check(v, 255.0f) > 0) {
+            qcopy(visibility_test_point, (char *)path + i * 16 + 0x10);
+            visibility_test_point[2] += *(float *)&D_L14_00161C64;
+            visibility_test_point[3] = *(float *)&D_L14_00161C60;
+            if (fast_bsphere_check(visibility_test_point, 255.0f) > 0) {
                 idx[visible_point_count++] = i;
             }
         }
