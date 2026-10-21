@@ -28,7 +28,7 @@ void FUN_L03_002cc828(unsigned char *arg) {
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D44C8), where it is exact; names translated to the US level program. */
 
-void FUN_L03_002d3100(void *arg, int mode) {
+void FUN_L03_002d3100(void *taxi_moby, int mode) {
     if (mode == 1) {
         try_set_help_message(8, 0xBC9);
     } else {
