@@ -4,12 +4,12 @@ void get_occlusion_grid_from_pair(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 ar
                                   f32 fparg0) __asm__("FUN_001f2768");
 
 void get_occlusion_grid_from_pair(s32 first_grid_x, s32 first_grid_y, s32 first_grid_z, s32 second_grid_x, s32 second_grid_y, s32 second_grid_z,
-                                  f32 fparg0) {
+                                  f32 grid_axis_fraction) {
     s32 var_4_25;
     s32 var_5_26;
     s32 var_6_28;
 
-    if (fparg0 < 0.5f) {
+    if (grid_axis_fraction < 0.5f) {
         if (parse_occlusion_grid() == 0) {
             var_4_25 = second_grid_x;
             var_5_26 = second_grid_y;
