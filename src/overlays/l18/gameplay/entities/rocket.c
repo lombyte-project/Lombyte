@@ -1445,16 +1445,16 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
 extern char D_0013E550[];
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
-void FUN_L18_002d7fd0(struct Moby *arg) {
-    int *data = (int *)arg->pvars;
-    if (arg->state == 2) {
-        int idx;
-        arg->state = 3;
-        idx = data[0x70 / 4];
-        if (idx != -1) {
-            unsigned char *voice_slot_entry = (unsigned char *)D_0013E550 + idx * 0x70;
-            if (*(unsigned char **)(voice_slot_entry + 0x88) == arg && voice_slot_entry[0x74]) {
-                release_voice_slot(idx);
+void FUN_L18_002d7fd0(struct Moby *moby) {
+    int *data = (int *)moby->pvars;
+    if (moby->state == 2) {
+        int voice_slot_index;
+        moby->state = 3;
+        voice_slot_index = data[0x70 / 4];
+        if (voice_slot_index != -1) {
+            unsigned char *voice_slot_entry = (unsigned char *)D_0013E550 + voice_slot_index * 0x70;
+            if (*(unsigned char **)(voice_slot_entry + 0x88) == moby && voice_slot_entry[0x74]) {
+                release_voice_slot(voice_slot_index);
             }
         }
         data[0x70 / 4] = -1;
