@@ -271,7 +271,7 @@ extern void FUN_L00_00250df8(void *);
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-char *FUN_L13_003061c8(float speed, float *pos, float *dir, void *source_moby) {
+char *FUN_L13_003061c8(float speed, float *spawn_position, float *dir, void *source_moby) {
     char *moby;
     char *moby_vars;
     float direction_length_xy;
@@ -285,8 +285,8 @@ char *FUN_L13_003061c8(float speed, float *pos, float *dir, void *source_moby) {
         direction_length_xy = vector_length_xy(dir);
         *(float *)(moby + 0x44) = -fast_arc_tan(direction_length_xy, dir[2]);
         *(float *)(moby + 0x48) = fast_arc_tan(dir[0], dir[1]);
-        qcopy(moby + 0x10, pos);
-        qcopy(moby_vars + 0x10, pos);
+        qcopy(moby + 0x10, spawn_position);
+        qcopy(moby_vars + 0x10, spawn_position);
         qcopy(moby_vars, dir);
         blend_moby_animation(moby, 1, 0, scale_game_frames(5));
         *(short *)(moby + 0x34) = 0x208;
