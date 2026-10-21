@@ -14,19 +14,19 @@ extern char *D_L01_001DD580[] __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 int FUN_L01_00274b78(char *a, char *o, float best);
 int FUN_L01_00274b78(char *source_entity, char *target_out, float best) {
-    struct Hero *g = &hero_lui;
+    struct Hero *hero = &hero_lui;
     char *selected_entity;
     char *candidate_entity;
-    int res;
+    int selection_status;
     int i;
     int j;
     float candidate_metric;
 
-    selected_entity = ((char *)g->moby);
-    res = 0;
-    if (g->state.control_mode == 0x18 || g->state.current == 0x72) {
+    selected_entity = ((char *)hero->moby);
+    selection_status = 0;
+    if (hero->state.control_mode == 0x18 || hero->state.current == 0x72) {
         selected_entity = 0;
-        res = 2;
+        selection_status = 2;
     }
     for (i = 1; i <= D_L01_001B0CB0[0]; i++) {
         candidate_entity = ents + (D_L01_001B0CB0[i] << 8);
@@ -44,7 +44,7 @@ int FUN_L01_00274b78(char *source_entity, char *target_out, float best) {
         if (candidate_metric < best) {
             selected_entity = candidate_entity;
             best = candidate_metric;
-            res = 1;
+            selection_status = 1;
         }
     }
     for (j = 0; j < 20; j++) {
@@ -63,17 +63,17 @@ int FUN_L01_00274b78(char *source_entity, char *target_out, float best) {
         if (candidate_metric < best) {
             selected_entity = candidate_entity;
             best = candidate_metric;
-            res = 1;
+            selection_status = 1;
         }
     }
     if (selected_entity != 0) {
         *(char **)(target_out + 0x40) = selected_entity;
         qcopy(target_out, selected_entity + 0x10);
         qcopy(target_out + 0x10, selected_entity + 0x40);
-        g = &hero_lui;
-        if (selected_entity == ((char *)g->moby)) {
-            qcopy(target_out + 0x20, &g->motion.unkC0);
-            qcopy(target_out + 0x30, &g->motion.unkD0);
+        hero = &hero_lui;
+        if (selected_entity == ((char *)hero->moby)) {
+            qcopy(target_out + 0x20, &hero->motion.unkC0);
+            qcopy(target_out + 0x30, &hero->motion.unkD0);
         } else {
             qcopy(target_out + 0x30, target_out);
             *(float *)(target_out + 0x38) += 0.6f;
@@ -86,6 +86,6 @@ int FUN_L01_00274b78(char *source_entity, char *target_out, float best) {
         qzero(target_out + 0x30);
         qzero(target_out + 0x20);
     }
-    *(int *)(target_out + 0x44) = res;
-    return res;
+    *(int *)(target_out + 0x44) = selection_status;
+    return selection_status;
 }
