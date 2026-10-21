@@ -19,7 +19,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 
 int FUN_L00_0025fa38(void *point, int i) {
     Vp point_offset;
-    Vp b;
+    Vp transformed_point_offset;
     char *volume_entry;
     if (i < 0) {
         return 0;
@@ -27,9 +27,9 @@ int FUN_L00_0025fa38(void *point, int i) {
     volume_entry = D_L00_001600FC + i * 128;
     subtract_vector_xyz(&point_offset, point, volume_entry + 0x30);
     point_offset.w = 0;
-    transform_vector_by_basis(&b, &point_offset, volume_entry + 0x40);
-    if (vector_length_xy(&b) < 1.0f) {
-        if (-1.0f <= b.z && b.z <= 1.0f) {
+    transform_vector_by_basis(&transformed_point_offset, &point_offset, volume_entry + 0x40);
+    if (vector_length_xy(&transformed_point_offset) < 1.0f) {
+        if (-1.0f <= transformed_point_offset.z && transformed_point_offset.z <= 1.0f) {
             return 1;
         }
     }
