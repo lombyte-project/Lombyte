@@ -2909,23 +2909,23 @@ extern float advance_accelerated_scalar(float, float, float, float, float *,
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-int FUN_L18_002f6878(char *moby, float arg, void *x) {
+int FUN_L18_002f6878(char *moby, float movement_speed_limit, void *x) {
     char *data = *(char **)(moby + 0x78);
     char *boss_position = data + 0x3C0;
     float planar_displacement[4];
     float distance_progress[4];
     float initialization_zero = 0.0f;
-    float len;
+    float planar_target_distance;
     float acceleration_and_braking_step;
     distance_progress[0] = initialization_zero;
     fast_vec_sub(planar_displacement, x, boss_position);
     planar_displacement[2] = initialization_zero;
-    len = fast_vec_length(planar_displacement);
+    planar_target_distance = fast_vec_length(planar_displacement);
     acceleration_and_braking_step = D_0015ED6C_e[1] * 10.0f;
-    advance_accelerated_scalar(len, acceleration_and_braking_step, acceleration_and_braking_step, arg, distance_progress, (float *)(data + 0x374));
+    advance_accelerated_scalar(planar_target_distance, acceleration_and_braking_step, acceleration_and_braking_step, movement_speed_limit, distance_progress, (float *)(data + 0x374));
     fast_vec_normalize(planar_displacement, planar_displacement, *(float *)(data + 0x374));
     fast_vec_add(boss_position, boss_position, planar_displacement);
-    if (len < 0.1f) {
+    if (planar_target_distance < 0.1f) {
         if (*(float *)(data + 0x374) < 0.1f) {
             return 1;
         }
