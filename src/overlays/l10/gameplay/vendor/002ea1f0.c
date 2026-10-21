@@ -318,14 +318,14 @@ void FUN_L10_002eacd8(struct Moby *moby) {
         if (D_L10_0015F5C4_vendor == 2) {
             if (D_L10_0016CCE0.mode == 3 || D_L10_0016CCE0.mode == 5 || D_L10_0016CCE0.mode == 6 ||
                 D_L10_0016CCE0.mode == 7) {
-                int v = D_L10_0016CCE0.mode;
+                int level_mode = D_L10_0016CCE0.mode;
                 int i;
                 i = 0;
-                if (v == 3)
+                if (level_mode == 3)
                     i = 1;
-                else if (v == 5 || v == 6)
+                else if (level_mode == 5 || level_mode == 6)
                     i = 2;
-                else if (v == 7)
+                else if (level_mode == 7)
                     i = 3;
                 cutscene_set_camera_target(D_L10_0016CCE0.slot[i]);
             }
