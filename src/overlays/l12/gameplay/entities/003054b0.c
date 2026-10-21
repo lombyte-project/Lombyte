@@ -420,7 +420,7 @@ void FUN_L12_003064e8(char *moby) {
     for (i = 0, off = 0; i < 18; i++, off += 4) {
         int saved_moby_index = D_L12_001FB688[i];
         char *obj;
-        float f1;
+        float position_or_vertical_step;
         if (saved_moby_index == 0) {
             continue;
         }
@@ -433,8 +433,8 @@ void FUN_L12_003064e8(char *moby) {
             obj = (char *)(D_L12_0015FFD8_gp + (saved_moby_index << 8));
         }
         if (i == last) {
-            f1 = D_L12_00161F40;
-            if (f1 == -1.0f) {
+            position_or_vertical_step = D_L12_00161F40;
+            if (position_or_vertical_step == -1.0f) {
                 qcopy((char *)&D_L12_00161F40, obj + 0x10);
                 qcopy((char *)&D_L12_00161F50, obj + 0x40);
             }
@@ -442,20 +442,20 @@ void FUN_L12_003064e8(char *moby) {
             qcopy((char *)&D_L12_00161F70, obj + 0x40);
             qcopy(obj + 0x10, (char *)&D_L12_00161F40);
             qcopy(obj + 0x40, (char *)&D_L12_00161F50);
-            f1 = *(float *)(obj + 0x18);
+            position_or_vertical_step = *(float *)(obj + 0x18);
         } else {
-            f1 = *(float *)(obj + 0x18);
+            position_or_vertical_step = *(float *)(obj + 0x18);
         }
-        if (f1 < 20.0f) {
+        if (position_or_vertical_step < 20.0f) {
             if (i == last) {
                 return;
             }
             mark_moby_for_removal_c(obj);
             D_L12_001FB688[i] = -1;
         }
-        f1 = *(float *)(data + 0x338 + i * 16) - *(float *)(data + off + 0x570);
-        *(float *)(data + 0x338 + i * 16) = f1;
-        *(float *)(obj + 0x18) = *(float *)(obj + 0x18) + f1;
+        position_or_vertical_step = *(float *)(data + 0x338 + i * 16) - *(float *)(data + off + 0x570);
+        *(float *)(data + 0x338 + i * 16) = position_or_vertical_step;
+        *(float *)(obj + 0x18) = *(float *)(obj + 0x18) + position_or_vertical_step;
         if (*(short *)(obj + 0xA6) == 0x500) {
             *(float *)(obj + 0x40) = fast_add_rotations_c4(*(float *)(obj + 0x40), D_0015ED6C * 0.34906584f);
             FUN_L00_0025bc98(obj + 0x44, 1.5707964f, data + 0x454 + i * 16, 0, 0.00200000009f, 0.3f, 0.0f);
