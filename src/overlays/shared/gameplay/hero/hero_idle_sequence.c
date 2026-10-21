@@ -1109,9 +1109,9 @@ void FUN_L00_00257024(int);
 void FUN_L00_002076a8(void);
 void FUN_L00_00208b60_u(void) __asm__("FUN_L00_00208b60");
 void FUN_L00_002070d0(void) {
-    struct Hero *g = &hero;
-    if (g->motion.pos.f[0] < 2.0f || g->motion.pos.f[1] < 2.0f ||
-        1022.0f < g->motion.pos.f[0] || 1022.0f < g->motion.pos.f[1]) {
+    struct Hero *hero_state = &hero;
+    if (hero_state->motion.pos.f[0] < 2.0f || hero_state->motion.pos.f[1] < 2.0f ||
+        1022.0f < hero_state->motion.pos.f[0] || 1022.0f < hero_state->motion.pos.f[1]) {
         fade_to_black(scale_game_frames(0x10));
         {
             struct Hero *g2 = &hero;
@@ -1119,9 +1119,9 @@ void FUN_L00_002070d0(void) {
         }
         return;
     }
-    g->unk1EB2 = 0;
-    g->unk1EB0 = 0;
-    if (g->vehicle_mode) {
+    hero_state->unk1EB2 = 0;
+    hero_state->unk1EB0 = 0;
+    if (hero_state->vehicle_mode) {
         FUN_L00_002062b0();
         return;
     }
@@ -1132,7 +1132,7 @@ void FUN_L00_002070d0(void) {
     find_grind_rail();
     FUN_L00_0020d330();
     hero_update_transitions();
-    if (g->vehicle_mode)
+    if (hero_state->vehicle_mode)
         return;
     FUN_L00_00216f10();
     FUN_L00_0020b1d8_u();
@@ -1154,9 +1154,9 @@ void FUN_L00_002070d0(void) {
     FUN_L00_00205ea8();
     FUN_L00_00206080();
     FUN_L00_00206e00_u();
-    noop_main_callback((int)g->moby);
-    if (g->state.control_mode != 0x16 && g->state.current != 0x32)
-        FUN_L00_002484e0(&g->motion.pos);
+    noop_main_callback((int)hero_state->moby);
+    if (hero_state->state.control_mode != 0x16 && hero_state->state.current != 0x32)
+        FUN_L00_002484e0(&hero_state->motion.pos);
     {
         struct Hero *g2 = &hero;
         FUN_L00_00257024((int)g2->moby);
