@@ -31,7 +31,7 @@ long load_texture_file(char *texture_file_data) {
     int tbp;
     int addr;
     long reg;
-    long tex0;
+    long texture_register_bits;
     long *pt;
 
     texture_desc.clut = texture_file_data + 0x20;
@@ -49,9 +49,9 @@ long load_texture_file(char *texture_file_data) {
         texture_buffer_width = 0;
     }
     texture_buffer_width = 1 << texture_buffer_width;
-    tex0 = (long)tbp | ((long)texture_buffer_width << 14) | ((long)0x13 << 20) | ((long)texture_desc.tw << 26);
-    pt = &tex0;
-    tex0 = *pt | ((long)texture_desc.th << 30) | ((long)1 << 34) | ((long)cbp << 37);
+    texture_register_bits = (long)tbp | ((long)texture_buffer_width << 14) | ((long)0x13 << 20) | ((long)texture_desc.tw << 26);
+    pt = &texture_register_bits;
+    texture_register_bits = *pt | ((long)texture_desc.th << 30) | ((long)1 << 34) | ((long)cbp << 37);
     reg = *pt | ((long)4 << 61);
     if (pending_texture_upload_count_macro < TEXTURE_UPLOAD_MAX) {
         pending_texture_uploads[pending_texture_upload_count_macro].clut_data = (int)texture_desc.clut;
