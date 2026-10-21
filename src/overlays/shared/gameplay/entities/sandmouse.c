@@ -1950,14 +1950,14 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern void transform_vector_by_basis(void *, void *, void *);
 
 void FUN_L01_0031a128(int *moby) {
-    float v[8];
+    float hero_offset_vectors[8];
     int *music_trigger_data = (int *)moby[2];
     if (((unsigned *)music_trigger_data)[3] != 0xFFFFFFFF) {
-        subtract_vector_xyz(v, &hero.motion.pos, (char *)moby + 0x40);
-        v[3] = 0;
-        transform_vector_by_basis(v + 4, v, (char *)moby + 0x50);
-        if (absolute_float(v[4]) <= 1.0f && absolute_float(v[5]) <= 1.0f &&
-            absolute_float(v[6]) <= 1.0f) {
+        subtract_vector_xyz(hero_offset_vectors, &hero.motion.pos, (char *)moby + 0x40);
+        hero_offset_vectors[3] = 0;
+        transform_vector_by_basis(hero_offset_vectors + 4, hero_offset_vectors, (char *)moby + 0x50);
+        if (absolute_float(hero_offset_vectors[4]) <= 1.0f && absolute_float(hero_offset_vectors[5]) <= 1.0f &&
+            absolute_float(hero_offset_vectors[6]) <= 1.0f) {
             music_trigger_data[2] = 1;
             return;
         }
@@ -1967,7 +1967,7 @@ void FUN_L01_0031a128(int *moby) {
                 music_trigger_halfwords[7] = music_trigger_halfwords[6];
             if (music_trigger_halfwords[6] == -1)
                 music_trigger_halfwords[6] = music_trigger_halfwords[7];
-            if (v[4] > 0) {
+            if (hero_offset_vectors[4] > 0) {
                 jet_game_state(music_trigger_data[1], music_trigger_halfwords[7]);
             } else {
                 jet_game_state(music_trigger_data[0], music_trigger_halfwords[6]);
