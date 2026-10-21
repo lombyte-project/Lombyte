@@ -3018,14 +3018,14 @@ void FUN_L17_002f00a0(struct Moby *moby) {
     float accel = 0.02f;
     float speed = 0.3f;
     float aim_origin[4];
-    float v[4];
+    float aim_delta[4];
     float yaw;
     float pitch;
     qcopy(aim_origin, &moby->pos);
     aim_origin[2] += 0.5f;
-    subtract_vector_xyz(v, (&hero.motion.unkD0), aim_origin);
-    yaw = fast_subtract_rotations(fast_arc_tan(v[0], v[1]), moby->rot.z);
-    pitch = -fast_arc_tan(vector_length_xy(v), v[2]);
+    subtract_vector_xyz(aim_delta, (&hero.motion.unkD0), aim_origin);
+    yaw = fast_subtract_rotations(fast_arc_tan(aim_delta[0], aim_delta[1]), moby->rot.z);
+    pitch = -fast_arc_tan(vector_length_xy(aim_delta), aim_delta[2]);
     if (yaw > 1.0471976f) {
         yaw = 1.0471976f;
     } else if (yaw < -1.0471976f) {
