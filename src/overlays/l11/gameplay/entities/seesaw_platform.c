@@ -1510,7 +1510,7 @@ void psytcopus_update(struct Moby *psytcopus) {
         PSYTCOPUS_STATE_KNOCKBACK = 7,
         PSYTCOPUS_STATE_DEATH_KNOCKBACK = 8
     };
-    struct PokiPathVars *pv = (struct PokiPathVars *)psytcopus->pvars;
+    struct PokiPathVars *psytcopus_vars = (struct PokiPathVars *)psytcopus->pvars;
     struct Moby *target;
     Vec4f projectile_vector_scratch;
     float angle;
@@ -1518,27 +1518,27 @@ void psytcopus_update(struct Moby *psytcopus) {
     int knockback_result_flags;
 
     FUN_L11_00310698(psytcopus);
-    target = pv->target;
-    FUN_L00_00263ac8_0180(psytcopus, 0, pv->unk1E0, 2.5f);
+    target = psytcopus_vars->target;
+    FUN_L00_00263ac8_0180(psytcopus, 0, psytcopus_vars->unk1E0, 2.5f);
     if (psytcopus->visible != 0 && distance_0180(&psytcopus->pos, D_L11_001677C0) < 28.0f) {
         FUN_L00_0025a120_p(psytcopus);
         psytcopus->shadow_range = 0x16;
     }
     switch (psytcopus->state) {
     case PSYTCOPUS_STATE_INITIALIZE:
-        pv->unk24 = 3;
-        pv->health = 3.0f;
-        pv->unk28 = 2;
-        pv->unk2A = 6;
-        pv->unk58 = random_int_0180(8.0f);
-        pv->unk5A = random_int_0180(8.0f);
+        psytcopus_vars->unk24 = 3;
+        psytcopus_vars->health = 3.0f;
+        psytcopus_vars->unk28 = 2;
+        psytcopus_vars->unk2A = 6;
+        psytcopus_vars->unk58 = random_int_0180(8.0f);
+        psytcopus_vars->unk5A = random_int_0180(8.0f);
         psytcopus->state = 3;
         if (psytcopus->prev_seq != 0) {
             blend_0180(psytcopus, 0, 0, frames_0180(10));
         }
-        if (pv->unk130 != 0) {
+        if (psytcopus_vars->unk130 != 0) {
             psytcopus->state = 1;
-            qcopy(&psytcopus->pos, (char *)D_L11_001B0EB0[pv->unk134] + 0x10);
+            qcopy(&psytcopus->pos, (char *)D_L11_001B0EB0[psytcopus_vars->unk134] + 0x10);
             break;
         }
         psytcopus->state = 3;
@@ -1550,10 +1550,10 @@ void psytcopus_update(struct Moby *psytcopus) {
         {
         float *yaw = &psytcopus->rot.z;
         angle = atan2_0180(D_001413D0->pos.x - psytcopus->pos.x, D_001413D0->pos.y - psytcopus->pos.y);
-        approach_angle(yaw, angle, &pv->unk14C, frame_time_sq * 6.2831855f,
+        approach_angle(yaw, angle, &psytcopus_vars->unk14C, frame_time_sq * 6.2831855f,
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
         }
-        if (pv->unk114 != 2) {
+        if (psytcopus_vars->unk114 != 2) {
             psytcopus->state = 4;
             if (psytcopus->prev_seq != 2) {
                 blend_0180(psytcopus, 2, 0, frames_0180(10));
@@ -1564,14 +1564,14 @@ void psytcopus_update(struct Moby *psytcopus) {
         {
         float *yaw = &psytcopus->rot.z;
         angle = atan2_0180(target->pos.x - psytcopus->pos.x, target->pos.y - psytcopus->pos.y);
-        approach_angle(yaw, angle, &pv->unk14C, frame_time_sq * 6.2831855f,
+        approach_angle(yaw, angle, &psytcopus_vars->unk14C, frame_time_sq * 6.2831855f,
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
         }
         if (in_window_0180(psytcopus, 15.0f) != 0) {
             normalize_0180(&projectile_vector_scratch, &psytcopus->rot_row0, D_L11_00161FC8);
             add_0180(&projectile_vector_scratch, &projectile_vector_scratch, &psytcopus->pos);
             projectile_vector_scratch.z += D_L11_00161FCC;
-            pv->unk160 = FUN_L11_00318d10_p(psytcopus, &projectile_vector_scratch, 5);
+            psytcopus_vars->unk160 = FUN_L11_00318d10_p(psytcopus, &projectile_vector_scratch, 5);
             break;
         }
         if (psytcopus->anim_flags & 2) {
@@ -1585,13 +1585,13 @@ void psytcopus_update(struct Moby *psytcopus) {
         {
         float *yaw = &psytcopus->rot.z;
         angle = atan2_0180(target->pos.x - psytcopus->pos.x, target->pos.y - psytcopus->pos.y);
-        approach_angle(yaw, angle, &pv->unk14C, frame_time_sq * 6.2831855f,
+        approach_angle(yaw, angle, &psytcopus_vars->unk14C, frame_time_sq * 6.2831855f,
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
         }
-        if (pv->unk160 != 0 && in_window_0180(psytcopus, 33.0f) != 0) {
+        if (psytcopus_vars->unk160 != 0 && in_window_0180(psytcopus, 33.0f) != 0) {
             normalize_0180(&projectile_vector_scratch, &psytcopus->rot_row0, frame_time * 30.0f);
-            FUN_L11_00318e98_p(pv->unk160, &projectile_vector_scratch);
-            pv->unk160 = 0;
+            FUN_L11_00318e98_p(psytcopus_vars->unk160, &projectile_vector_scratch);
+            psytcopus_vars->unk160 = 0;
         }
         if (psytcopus->anim_flags & 2) {
             psytcopus->state = 6;
@@ -1609,9 +1609,9 @@ void psytcopus_update(struct Moby *psytcopus) {
         }
         break;
     case PSYTCOPUS_STATE_KNOCKBACK:
-        knockback_result_flags = FUN_L00_0025c698_p(psytcopus, pv->unk70);
+        knockback_result_flags = FUN_L00_0025c698_p(psytcopus, psytcopus_vars->unk70);
         if (knockback_result_flags & 0x41) {
-            path = D_L11_001B0EB0[pv->unk13C];
+            path = D_L11_001B0EB0[psytcopus_vars->unk13C];
             if (FUN_L00_00259740_p(&psytcopus->pos, path + 4, *path) != 0) {
                 psytcopus->state = 3;
                 if (psytcopus->prev_seq != 0) {
@@ -1628,7 +1628,7 @@ void psytcopus_update(struct Moby *psytcopus) {
         }
         break;
     case PSYTCOPUS_STATE_DEATH_KNOCKBACK:
-        if (FUN_L00_0025c698_p(psytcopus, pv->unk70) & 0x160) {
+        if (FUN_L00_0025c698_p(psytcopus, psytcopus_vars->unk70) & 0x160) {
             FUN_L00_0025f3e8_p(psytcopus, &psytcopus->pos, -1, 1.0f, 10.0f);
             FUN_L00_00257470_p(psytcopus, 0, -1);
             remove_0180(psytcopus);
