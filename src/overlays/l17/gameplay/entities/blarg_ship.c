@@ -58,7 +58,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
     int i;
     int j;
     int found;
-    int tgt;
+    int pending_help_clip_volume_index;
     int checked_moby_index;
     char *checked_moby;
     int *moby_indices;
@@ -136,7 +136,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         moby->state = 1;
         break;
     case CAMERA_BOX_WATCHER_MONITOR:
-        tgt = -1;
+        pending_help_clip_volume_index = -1;
         checked_moby_index = -1;
         found = 0;
         for (i = 0; i < 1; i++) {
@@ -144,7 +144,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
             if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(pvars + clip_volume_entry_byte_offset))) {
                 found = 1;
                 if (*(int *)(pvars + 0x30) != *(int *)(pvars + clip_volume_entry_byte_offset)) {
-                    tgt = *(int *)(pvars + clip_volume_entry_byte_offset);
+                    pending_help_clip_volume_index = *(int *)(pvars + clip_volume_entry_byte_offset);
                     moby_indices = (int *)(pvars + 0x10);
                     checked_moby_index = moby_indices[i];
                 }
@@ -170,7 +170,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
             if (*(unsigned char *)(checked_moby + 0x20) == 3)
                 goto skip1;
         }
-        if (*(int *)(pvars + 0xC) > *(int *)(pvars + 0x38) && tgt != -1 &&
+        if (*(int *)(pvars + 0xC) > *(int *)(pvars + 0x38) && pending_help_clip_volume_index != -1 &&
             ((unsigned int)hero.state.control_mode < 2 ||
              hero.state.control_mode == 9) &&
             D_L17_00179D10[0] == 0 && D_L17_00179D10[9] == -1 && D_0013D4DF != 0) {
@@ -178,7 +178,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
             if (*(int *)(((char *)&D_00141D54)) >= 0) {
                 help_request(0x3A9A, 0x7D);
             }
-            *(int *)(pvars + 0x30) = tgt;
+            *(int *)(pvars + 0x30) = pending_help_clip_volume_index;
             *(int *)(pvars + 0xC) = 0;
         }
     skip1:
@@ -190,7 +190,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
                 help_request(0x3A9D, 0x82);
             }
         }
-        tgt = -1;
+        pending_help_clip_volume_index = -1;
         found = 0;
         for (i = 0; i < 3; i++) {
             clip_volume_entry_byte_offset = i * 4;
@@ -198,7 +198,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
             if (is_point_inside_clip_volume(&hero.motion.pos, *clip_volume_index_ptr)) {
                 found = 1;
                 if (*(int *)(pvars + 0x30) != *clip_volume_index_ptr) {
-                    tgt = *clip_volume_index_ptr;
+                    pending_help_clip_volume_index = *clip_volume_index_ptr;
                 }
                 break;
             }
@@ -207,10 +207,10 @@ void FUN_L17_002f26d0(struct Moby *moby) {
             *(int *)(pvars + 0x2C) = 0;
             *(int *)(pvars + 0x30) = -1;
         }
-        if (scale_game_frames(0xE10) < *(int *)(pvars + 0x2C) && tgt != -1 && FUN_L00_0020d568() &&
+        if (scale_game_frames(0xE10) < *(int *)(pvars + 0x2C) && pending_help_clip_volume_index != -1 && FUN_L00_0020d568() &&
             D_L17_00179D10[0] == 0 && D_L17_00179D10[9] == -1 && D_0013D408_b[0xBC] != 0) {
             help_request(0x4E2E, 0x78);
-            *(int *)(pvars + 0x30) = tgt;
+            *(int *)(pvars + 0x30) = pending_help_clip_volume_index;
             *(int *)(pvars + 0x2C) = 0;
         }
         if (*(int *)(pvars + 0x58) != 0xFF &&
