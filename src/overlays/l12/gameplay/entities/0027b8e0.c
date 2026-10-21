@@ -64,12 +64,12 @@ void FUN_L12_0027b9c0(struct Moby *parent, unsigned char *child, int mode) {
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027CA68), where it is exact; names translated to the US level program. */
 
-void FUN_L12_0027ba70(int idx) {
+void FUN_L12_0027ba70(int point_data_index) {
     char *point_data;
     int i;
-    if (idx == -1)
+    if (point_data_index == -1)
         return;
-    point_data = D_L12_001B0930[idx];
+    point_data = D_L12_001B0930[point_data_index];
     for (i = 0; i < *(int *)point_data - 1; i++) {
         int point_byte_offset = i * 16;
         *(float *)(point_data + point_byte_offset + 0x1C) =
