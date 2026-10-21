@@ -1136,7 +1136,7 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 
 void FUN_L03_0029cff0(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
-    float v[4];
+    float position_delta[4];
     float ang = (float)*(short *)(moby_data + 0x132) * DEG_TO_RAD;
     float yaw_step, x, y, z, w;
     fast_subtract_rotations(moby->rot.z, ang);
@@ -1146,8 +1146,8 @@ void FUN_L03_0029cff0(struct Moby *moby) {
     y = fast_subtract_rotations(x, moby->rot.z);
     yaw_step = y * (1.0f / *(float *)(moby_data + 0x120) * frame_scale);
     moby->rot.z = fast_add_rotations(yaw_step, moby->rot.z);
-    subtract_vector_xyz(v, moby_data + 0xD0, moby_data + 0xE0);
-    z = fast_arc_tan(vector_length_xy(v), v[2]);
+    subtract_vector_xyz(position_delta, moby_data + 0xD0, moby_data + 0xE0);
+    z = fast_arc_tan(vector_length_xy(position_delta), position_delta[2]);
     moby->rot.y =
         spring_turn((float *)(moby_data + 0x11C), moby->rot.y, -z,
                          *(float *)(moby_data + 0x118) * 10.0f * DEG_TO_RAD * frame_time_sq,
