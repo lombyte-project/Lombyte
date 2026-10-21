@@ -1058,14 +1058,14 @@ extern f32 D_L08_00161FA8 __attribute__((sda));
 
 void FUN_L08_002f5830(char *moby) {
     f32 spark_motion_primary[4], spark_motion_secondary[4], spark_position[4], spark_motion_offset[4], spark_rotation_matrix[16];
-    char *v;
+    char *spark_data;
     s32 spark_frame_count, spark_second_frame_count, spark_third_frame_count;
 
-    v = *(char **)(moby + 0x78);
-    if (fast_dec_timer((int *)(v + 0x3C)) == 0)
+    spark_data = *(char **)(moby + 0x78);
+    if (fast_dec_timer((int *)(spark_data + 0x3C)) == 0)
         return;
-    if (*(s32 *)(v + 0x38) != 0) {
-        *(s32 *)(v + 0x3C) = D_L08_00161F98;
+    if (*(s32 *)(spark_data + 0x38) != 0) {
+        *(s32 *)(spark_data + 0x3C) = D_L08_00161F98;
         euler_rotation_matrix(spark_rotation_matrix, moby + 0x40);
         qcopy(spark_position, moby + 0x10);
         spark_position[0] += random_float_between(-0.05f, 0.05f);
@@ -1093,7 +1093,7 @@ void FUN_L08_002f5830(char *moby) {
             multiply_global_factor_ed64(random_float_between((f32)D_L08_00161F94, (f32)D_L08_00161F94 * 1.2f)));
         spawn_spark(spark_position, spark_motion_primary, spark_motion_secondary, D_L08_00161F74, D_L08_00161F78, spark_frame_count, spark_second_frame_count, spark_third_frame_count, -1);
     } else {
-        *(s32 *)(v + 0x3C) = *(s32 *)(v + 0x14);
+        *(s32 *)(spark_data + 0x3C) = *(s32 *)(spark_data + 0x14);
         euler_rotation_matrix(spark_rotation_matrix, moby + 0x40);
         qcopy(spark_position, moby + 0x10);
         spark_position[0] += random_float_between(-0.05f, 0.05f);
@@ -1101,29 +1101,29 @@ void FUN_L08_002f5830(char *moby) {
         spark_position[2] += random_float_between(-0.05f, 0.05f);
         random_float_between(-0.17453292f, 0.17453292f);
         fast_vec_normalize(spark_motion_primary, spark_rotation_matrix,
-                     random_float_between(*(f32 *)(v + 0x18), *(f32 *)(v + 0x18) * 1.2f) *
+                     random_float_between(*(f32 *)(spark_data + 0x18), *(f32 *)(spark_data + 0x18) * 1.2f) *
                          frame_time);
         fast_vec_normalize(spark_motion_offset, spark_rotation_matrix + 4,
-                     random_float_between(-*(f32 *)(v + 0x30), *(f32 *)(v + 0x30)) * frame_time);
+                     random_float_between(-*(f32 *)(spark_data + 0x30), *(f32 *)(spark_data + 0x30)) * frame_time);
         fast_vec_add(spark_motion_primary, spark_motion_primary, spark_motion_offset);
-        spark_motion_primary[2] += random_float_between(*(f32 *)(v + 0x1C), *(f32 *)(v + 0x1C) * 1.2f) * frame_time;
+        spark_motion_primary[2] += random_float_between(*(f32 *)(spark_data + 0x1C), *(f32 *)(spark_data + 0x1C) * 1.2f) * frame_time;
         qcopy(spark_motion_secondary, spark_motion_primary);
         fast_vec_normalize(spark_motion_secondary, spark_rotation_matrix,
-                     random_float_between(*(f32 *)(v + 0x20), *(f32 *)(v + 0x20) * 1.5f) *
+                     random_float_between(*(f32 *)(spark_data + 0x20), *(f32 *)(spark_data + 0x20) * 1.5f) *
                          frame_time);
         fast_vec_normalize(spark_motion_offset, spark_rotation_matrix + 4,
-                     random_float_between(-*(f32 *)(v + 0x34), *(f32 *)(v + 0x34)) * frame_time);
+                     random_float_between(-*(f32 *)(spark_data + 0x34), *(f32 *)(spark_data + 0x34)) * frame_time);
         fast_vec_add(spark_motion_secondary, spark_motion_secondary, spark_motion_offset);
-        spark_motion_secondary[2] += random_float_between(*(f32 *)(v + 0x24), *(f32 *)(v + 0x24) * 1.5f) * frame_time;
-        spark_motion_primary[3] = *(f32 *)(v + 0x28);
-        spark_motion_secondary[3] = *(f32 *)(v + 0x2C);
+        spark_motion_secondary[2] += random_float_between(*(f32 *)(spark_data + 0x24), *(f32 *)(spark_data + 0x24) * 1.5f) * frame_time;
+        spark_motion_primary[3] = *(f32 *)(spark_data + 0x28);
+        spark_motion_secondary[3] = *(f32 *)(spark_data + 0x2C);
         spark_frame_count = truncate_float_to_s32(multiply_global_factor_ed64(
-            random_float_between((f32) * (s32 *)(v + 0x08), (f32) * (s32 *)(v + 0x08) * 1.2f)));
+            random_float_between((f32) * (s32 *)(spark_data + 0x08), (f32) * (s32 *)(spark_data + 0x08) * 1.2f)));
         spark_second_frame_count = truncate_float_to_s32(multiply_global_factor_ed64(
-            random_float_between((f32) * (s32 *)(v + 0x0C), (f32) * (s32 *)(v + 0x0C) * 1.2f)));
+            random_float_between((f32) * (s32 *)(spark_data + 0x0C), (f32) * (s32 *)(spark_data + 0x0C) * 1.2f)));
         spark_third_frame_count = truncate_float_to_s32(multiply_global_factor_ed64(
-            random_float_between((f32) * (s32 *)(v + 0x10), (f32) * (s32 *)(v + 0x10) * 1.2f)));
-        spawn_spark(spark_position, spark_motion_primary, spark_motion_secondary, *(s32 *)(v + 0x00), *(s32 *)(v + 0x04), spark_frame_count, spark_second_frame_count, spark_third_frame_count, -1);
+            random_float_between((f32) * (s32 *)(spark_data + 0x10), (f32) * (s32 *)(spark_data + 0x10) * 1.2f)));
+        spawn_spark(spark_position, spark_motion_primary, spark_motion_secondary, *(s32 *)(spark_data + 0x00), *(s32 *)(spark_data + 0x04), spark_frame_count, spark_second_frame_count, spark_third_frame_count, -1);
     }
 }
 /* Paratrooper: initializes its path and steering, patrols, attacks its target,
