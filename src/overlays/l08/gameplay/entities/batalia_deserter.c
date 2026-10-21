@@ -736,7 +736,7 @@ extern void FUN_L08_0027fe00(float *, float *, int, float);
 void FUN_L08_00308c90(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float effect_position[4];
-    float b[12];
+    float rotation_basis[12];
     float effect_direction[4];
     int i;
     for (i = 0; i < *(int *)(data + 0x14); i++) {
@@ -744,8 +744,8 @@ void FUN_L08_00308c90(struct Moby *moby) {
         effect_position[1] = random_float_between_alt(-*(float *)(data + 4), *(float *)(data + 4));
         effect_position[2] = 0;
         effect_position[3] = 1.0f;
-        euler_rotation_basis(b, &moby->rot);
-        transform_vector_by_basis(effect_position, effect_position, b);
+        euler_rotation_basis(rotation_basis, &moby->rot);
+        transform_vector_by_basis(effect_position, effect_position, rotation_basis);
         fast_vec_add(effect_position, effect_position, &moby->pos);
         effect_direction[0] = 0;
         effect_direction[1] = random_float_between_alt(*(float *)(data + 0x18) * frame_time,
