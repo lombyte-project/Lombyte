@@ -961,11 +961,11 @@ extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8
 void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 void veldin_ship_update(M2d1e80 *m) __asm__("FUN_L00_002d1e80");
 void veldin_ship_update(M2d1e80 *moby) {
-    s32 *v = moby->vars;
+    s32 *ship_vars = moby->vars;
     if (moby->state == 0) {
         moby->state = 1;
         moby->bc = 1;
-        v[0x10] = 0;
+        ship_vars[0x10] = 0;
     }
     if (D_L00_0015F5C4 == 2 && (D_L00_0016C890[0] < 3 || D_L00_0016C890[0] == 4)) {
         moby->vis = 0;
@@ -974,7 +974,7 @@ void veldin_ship_update(M2d1e80 *moby) {
         moby->vis = 1;
         moby->flags &= 0xFFFE;
     }
-    build_moby_bone_transform(moby, 0, v);
+    build_moby_bone_transform(moby, 0, ship_vars);
     if (moby->vis)
         enqueue_callback_list_1(veldin_ship_draw, moby);
 }
