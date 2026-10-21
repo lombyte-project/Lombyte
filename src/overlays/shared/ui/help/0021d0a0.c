@@ -438,7 +438,7 @@ extern s32 D_L06_001745DC __attribute__((section(".data")));
 extern char D_0013F3D0[] __attribute__((section(".data")));
 void FUN_L06_002291d0(int force) {
     V_2291d0 primary_vector_origin, primary_vector_endpoint, b, secondary_vector_endpoint;
-    char *src;
+    char *vector_origin_base;
     P_2291d0 *g;
     f32 primary_origin_z_offset, k, secondary_vector_scale, ang, negative_horizontal_dot;
     int r;
@@ -456,13 +456,13 @@ void FUN_L06_002291d0(int force) {
         primary_origin_z_offset = 0.35f;
         k = 0.27000001072883606f;
     }
-    src = D_0013F3D0;
-    qcopy(&primary_vector_origin, src);
+    vector_origin_base = D_0013F3D0;
+    qcopy(&primary_vector_origin, vector_origin_base);
     primary_vector_origin.f[2] += primary_origin_z_offset;
-    qcopy(&b, src);
+    qcopy(&b, vector_origin_base);
     b.f[2] += primary_origin_z_offset * 0.3f;
-    if (force || FUN_001f9b20_2291d0(src + 0x60) < 0.01f) {
-        g = (P_2291d0 *)(src - 0x80);
+    if (force || FUN_001f9b20_2291d0(vector_origin_base + 0x60) < 0.01f) {
+        g = (P_2291d0 *)(vector_origin_base - 0x80);
         secondary_vector_scale = 1.4f;
         primary_vector_endpoint.f[0] = FUN_001f9dc8_2291d0(g->f98) * k;
         primary_vector_endpoint.f[1] = FUN_001f9de0_2291d0(g->f98) * k;
@@ -471,7 +471,7 @@ void FUN_L06_002291d0(int force) {
         secondary_vector_endpoint.f[1] = FUN_001f9de0_2291d0(g->f98) * k * secondary_vector_scale;
         *(s32 *)&secondary_vector_endpoint.f[2] = 0;
     } else {
-        qcopy(&primary_vector_endpoint, src + 0x60);
+        qcopy(&primary_vector_endpoint, vector_origin_base + 0x60);
         *(s32 *)&primary_vector_endpoint.f[2] = 0;
         FUN_001f9a68_2291d0(&primary_vector_endpoint, &primary_vector_endpoint, k / FUN_001f9b20_2291d0(&primary_vector_endpoint));
         qcopy(&secondary_vector_endpoint, &primary_vector_endpoint);
