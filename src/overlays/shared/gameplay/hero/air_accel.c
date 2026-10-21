@@ -1031,11 +1031,11 @@ void FUN_L01_00232978(int flag) {
     float material_probe_start[4];
     float material_probe_end[4];
     struct Hero *g = &hero;
-    float f2, f21, f20;
+    float probe_height_offset, slope_probe_distance, hit_normal_elevation;
     int k, x;
     struct Hero *h1, *h2, *h3;
-    char *w, *w3;
-    float *u;
+    char *slope_hit, *slide_hit;
+    float *slide_normal;
 
     if (g->unk308 != 0) {
         return;
@@ -1043,28 +1043,28 @@ void FUN_L01_00232978(int flag) {
     if (gravity_length_xy((float *)(&g->motion.velocity)) < frame_time * 0.1f) {
         return;
     }
-    f2 = 0.37f;
-    f21 = 0.5f;
+    probe_height_offset = 0.37f;
+    slope_probe_distance = 0.5f;
     x = g->state.control_mode;
     if (x >= 0x11 && x <= 0x12) {
-        f2 = 0.0f;
-        f21 = 0.7f;
+        probe_height_offset = 0.0f;
+        slope_probe_distance = 0.7f;
     }
     qcopy(slope_probe_start, &g->motion.pos);
-    slope_probe_start[2] += f2;
+    slope_probe_start[2] += probe_height_offset;
     qcopy(material_probe_start, &g->motion.pos);
-    material_probe_start[2] += f2 * 0.3f;
+    material_probe_start[2] += probe_height_offset * 0.3f;
     if (flag != 0 || vector_length_xy(&g->motion.velocity) < 0.01f) {
-        slope_probe_end[0] = fast_cos(g->motion.rot.f[2]) * f21;
-        slope_probe_end[1] = fast_sin(g->motion.rot.f[2]) * f21;
+        slope_probe_end[0] = fast_cos(g->motion.rot.f[2]) * slope_probe_distance;
+        slope_probe_end[1] = fast_sin(g->motion.rot.f[2]) * slope_probe_distance;
         slope_probe_end[2] = 0.0f;
-        material_probe_end[0] = fast_cos(g->motion.rot.f[2]) * f21 * 1.4f;
-        material_probe_end[1] = fast_sin(g->motion.rot.f[2]) * f21 * 1.4f;
+        material_probe_end[0] = fast_cos(g->motion.rot.f[2]) * slope_probe_distance * 1.4f;
+        material_probe_end[1] = fast_sin(g->motion.rot.f[2]) * slope_probe_distance * 1.4f;
         material_probe_end[2] = 0.0f;
     } else {
         qcopy(slope_probe_end, &g->motion.velocity);
         slope_probe_end[2] = 0.0f;
-        fast_vec_scale(slope_probe_end, slope_probe_end, f21 / vector_length_xy(slope_probe_end));
+        fast_vec_scale(slope_probe_end, slope_probe_end, slope_probe_distance / vector_length_xy(slope_probe_end));
         qcopy(material_probe_end, slope_probe_end);
         fast_vec_scale(material_probe_end, material_probe_end, 1.4f);
     }
@@ -1077,27 +1077,27 @@ void FUN_L01_00232978(int flag) {
             k = collision_hit_material();
         }
     }
-    f20 = 0.0f;
+    hit_normal_elevation = 0.0f;
     h2 = &hero;
     if (FUN_001efa68(slope_probe_start, slope_probe_end, 4, (int)h2->moby, 0) != 0) {
-        w = D_L01_001742C0_d;
-        if (*(int *)(w + 0x1C) > 0) {
-            f20 = fast_arc_tan(*(float *)(w + 0x48), vector_length_xy(w + 0x40));
+        slope_hit = D_L01_001742C0_d;
+        if (*(int *)(slope_hit + 0x1C) > 0) {
+            hit_normal_elevation = fast_arc_tan(*(float *)(slope_hit + 0x48), vector_length_xy(slope_hit + 0x40));
         }
     }
-    if (f20 >= 0.87266463f || k == 8 || k == 12) {
+    if (hit_normal_elevation >= 0.87266463f || k == 8 || k == 12) {
         h3 = &hero;
-        w3 = D_L01_001742C0_d;
-        u = (float *)(w3 + 0x40);
-        *(int *)(w3 + 0x48) = 0;
-        h3->unk240 = *(int *)(w3 + 0x18);
-        sceVu0Normalize(u, u);
+        slide_hit = D_L01_001742C0_d;
+        slide_normal = (float *)(slide_hit + 0x40);
+        *(int *)(slide_hit + 0x48) = 0;
+        h3->unk240 = *(int *)(slide_hit + 0x18);
+        sceVu0Normalize(slide_normal, slide_normal);
         {
-            float c = -h3->motion.velocity.f[0] * *(float *)(w3 + 0x40) -
-                      h3->motion.velocity.f[1] * *(float *)(w3 + 0x44);
+            float c = -h3->motion.velocity.f[0] * *(float *)(slide_hit + 0x40) -
+                      h3->motion.velocity.f[1] * *(float *)(slide_hit + 0x44);
             if (c > 0.0f) {
-                fast_vec_scale(u, u, c);
-                add_vector_xyz(&h3->motion.velocity, &h3->motion.velocity, u);
+                fast_vec_scale(slide_normal, slide_normal, c);
+                add_vector_xyz(&h3->motion.velocity, &h3->motion.velocity, slide_normal);
             }
         }
     }
