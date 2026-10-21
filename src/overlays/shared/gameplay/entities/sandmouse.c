@@ -1686,16 +1686,16 @@ extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 
 void FUN_L01_00315de0(Camera *cam) {
     CameraPresetRow *rows = D_L01_0015EF50;
-    Camera *src = D_L01_00167284;
+    Camera *source_camera = D_L01_00167284;
     CameraPreset *camera_preset = rows[cam->preset].preset;
     OvlVec4 at, delta, to_camera;
     s32 seg;
     f32 path_fraction;
 
-    qcopy((char *)cam + 0x30, (char *)src + 0x30);
-    qcopy(cam, src);
-    qcopy((char *)cam + 0x10, (char *)src + 0x10);
-    qcopy((char *)cam + 0x20, (char *)src + 0x20);
+    qcopy((char *)cam + 0x30, (char *)source_camera + 0x30);
+    qcopy(cam, source_camera);
+    qcopy((char *)cam + 0x10, (char *)source_camera + 0x10);
+    qcopy((char *)cam + 0x20, (char *)source_camera + 0x20);
     qcopy((char *)cam + 0x40, cam);
 
     if (camera_preset->track_path >= 0) {
