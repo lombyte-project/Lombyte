@@ -563,9 +563,9 @@ struct Moby *FUN_L09_002eaa50(struct Moby *owner) {
     PebbleVars *ovars;
     PebbleVars *vars;
     PebblePath *path;
-    f32 r;
+    f32 lateral_scatter_distance;
     Vec4 path_displacement;
-    Vec4 b;
+    Vec4 path_scatter_vector;
 
     spawned_moby = create_moby_2eaa50(random_integer_below_2eaa50(4) + 0x107);
     if (spawned_moby != 0) {
@@ -588,23 +588,23 @@ struct Moby *FUN_L09_002eaa50(struct Moby *owner) {
         vars->spin_y = random_float_2eaa50(-0.0052359877f, 0.0052359877f);
         if (vars->path >= 0) {
             path = D_L09_001B0630_2eaa50[vars->path];
-            r = random_float_2eaa50(-30.0f, 30.0f);
+            lateral_scatter_distance = random_float_2eaa50(-30.0f, 30.0f);
             subtract_vector_xyz(&path_displacement, &path->pts[path->count - 1], &path->pts[path->count - 2]);
-            subtract_vector_xyz(&b, &path->pts[1], &path->pts[0]);
-            cross_vectors_xyz(&b, &b, &path_displacement);
-            b.f[2] = 0.0f;
-            normalize_vector_xyz(vars, &b, r);
+            subtract_vector_xyz(&path_scatter_vector, &path->pts[1], &path->pts[0]);
+            cross_vectors_xyz(&path_scatter_vector, &path_scatter_vector, &path_displacement);
+            path_scatter_vector.f[2] = 0.0f;
+            normalize_vector_xyz(vars, &path_scatter_vector, lateral_scatter_distance);
             subtract_vector_xyz(&path_displacement, &path->pts[path->count - 1], &path->pts[0]);
-            cross_vectors_xyz(&b, &b, &path_displacement);
-            normalize_vector_xyz(&b, &b, random_float_2eaa50(0.0f, 5.0f));
-            add_vector_xyz(vars, vars, &b);
+            cross_vectors_xyz(&path_scatter_vector, &path_scatter_vector, &path_displacement);
+            normalize_vector_xyz(&path_scatter_vector, &path_scatter_vector, random_float_2eaa50(0.0f, 5.0f));
+            add_vector_xyz(vars, vars, &path_scatter_vector);
             qcopy(&vars->start, &path->pts[0]);
             qcopy(&vars->offset, &ovars->offset);
             add_vector_xyz(&spawned_moby->pos, &path->pts[0], vars);
             add_vector_xyz(&spawned_moby->pos, &spawned_moby->pos, D_L09_00166F40_2eaa50);
             subtract_vector_xyz(&spawned_moby->pos, &spawned_moby->pos, &vars->offset);
-            vars->speed = r / 20.0f + 10.0f;
-            spawned_moby->scale *= r / 100.0f + 1.0f;
+            vars->speed = lateral_scatter_distance / 20.0f + 10.0f;
+            spawned_moby->scale *= lateral_scatter_distance / 100.0f + 1.0f;
             vars->speed *= D_0015ED6C_2eaa50;
         }
         upd_a(spawned_moby);
