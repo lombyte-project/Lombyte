@@ -40,7 +40,7 @@ void sky_particles_init(s32 randomized_count, s32 orbiting_count) {
     s32 i;
     E_288ec0 *particle;
     f32 x, y;
-    s32 color_channel_offset, u, packed_color;
+    s32 color_channel_offset, color_high_byte_offset, packed_color;
     D_L00_0016051C_288ec0->n = randomized_count + orbiting_count;
     for (i = 0; i < D_L00_0016051C_288ec0->n; i++) {
         particle = &D_L00_0016051C_288ec0->list[i];
@@ -65,15 +65,15 @@ void sky_particles_init(s32 randomized_count, s32 orbiting_count) {
             particle->f14 = fast_sin(x) * fast_sin(y) * 50.0f;
             particle->f18 = fast_cos(y) * fast_cos(y) * 36.0f + 16.0f;
             color_channel_offset = random_integer_below(0x18);
-            u = random_integer_below(0x20) << 24;
+            color_high_byte_offset = random_integer_below(0x20) << 24;
             if ((rand() >> 16) & 1) {
                 packed_color = color_channel_offset << 16;
                 packed_color += 0x30505050;
-                packed_color = u - -packed_color;
+                packed_color = color_high_byte_offset - -packed_color;
             } else {
                 packed_color = color_channel_offset << 8;
                 packed_color += 0x30505050;
-                packed_color = u - -packed_color;
+                packed_color = color_high_byte_offset - -packed_color;
                 packed_color |= color_channel_offset;
             }
             *(u32 *)&particle->hC = packed_color;
