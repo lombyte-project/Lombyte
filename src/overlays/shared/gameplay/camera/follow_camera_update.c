@@ -163,9 +163,9 @@ extern float D_L00_00161D14 __attribute__((sda));
 extern float D_L00_00161D18 __attribute__((sda));
 void follow_camera_pull_back(char *camera_object, float *x, float *y) {
     C_2e9518 *C = &D_166E10_2e9518;
-    char *v = *(char **)(camera_object + 0x70);
-    S_2e9518 *pull_back_state = (S_2e9518 *)(v + 0x220);
-    char *reference_orbit_state = v + 0x130;
+    char *camera_state = *(char **)(camera_object + 0x70);
+    S_2e9518 *pull_back_state = (S_2e9518 *)(camera_state + 0x220);
+    char *reference_orbit_state = camera_state + 0x130;
     float k, pull_back_target, interpolated_pull_back_value;
 
     if (pull_back_state->h6 == 0) {
