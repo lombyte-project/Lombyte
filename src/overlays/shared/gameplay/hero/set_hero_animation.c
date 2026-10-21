@@ -1738,17 +1738,17 @@ float probe_ground_height(Vec4_00234d40 *, int, float) __asm__("FUN_00213508");
 float absolute_float(float) __asm__("FUN_001f99c0");
 void FUN_L00_00233ee8_00234d40(void *, float, int) __asm__("FUN_L00_00233ee8");
 void FUN_L00_00234d40(void) {
-    Vec4_00234d40 v;
+    Vec4_00234d40 candidate_ground_position;
     struct Hero *g = &hero;
     Vec4_00234d40 *pos = (Vec4_00234d40 *)&g->motion.pos;
-    FUN_001f9a68_00234d40(&v, g->unk0, -0.75f);
-    FUN_001f9a10_00234d40(&v, &v, pos);
-    v.z += 0.5f;
-    v.z = probe_ground_height(&v, 0, 0.5f);
-    if (absolute_float(g->motion.pos.f[2] - v.z) > 0.3f)
+    FUN_001f9a68_00234d40(&candidate_ground_position, g->unk0, -0.75f);
+    FUN_001f9a10_00234d40(&candidate_ground_position, &candidate_ground_position, pos);
+    candidate_ground_position.z += 0.5f;
+    candidate_ground_position.z = probe_ground_height(&candidate_ground_position, 0, 0.5f);
+    if (absolute_float(g->motion.pos.f[2] - candidate_ground_position.z) > 0.3f)
         return;
     FUN_L00_00233ee8_00234d40(pos, g->motion.rot.f[2], 1);
-    qcopy(pos, &v);
+    qcopy(pos, &candidate_ground_position);
 }
 void FUN_L00_002395b0();
 void FUN_L00_00239630();
