@@ -1209,8 +1209,8 @@ void FUN_L14_002ae260(struct Moby *m) {
     char *d = (char *)m->pvars;
     float pos[4];
     Pk_2af4a0 pk;
-    float v[4];
-    float w[4];
+    float glow_to_camera_vector[4];
+    float camera_pull_offset[4];
     float len;
     u32 col;
     int j;
@@ -1223,8 +1223,8 @@ void FUN_L14_002ae260(struct Moby *m) {
     pk.a = 0;
     vu1_add_g_sregister(0x4A, 0);
     vu1_add_g_sregister(0x47, 0x51001);
-    subtract_vector_xyz(v, D_L14_001674C0_d, pos);
-    len = vector_length_xyz(v);
+    subtract_vector_xyz(glow_to_camera_vector, D_L14_001674C0_d, pos);
+    len = vector_length_xyz(glow_to_camera_vector);
     if (0.0f < len) {
         float camera_pull_distance = *(float *)(d + 0x218);
         float camera_distance_margin = len - *(float *)&D_L14_0016147C;
@@ -1233,8 +1233,8 @@ void FUN_L14_002ae260(struct Moby *m) {
             if (camera_distance_margin < 0.0f)
                 camera_pull_distance = 0.0f;
         }
-        normalize_vector_xyz(w, v, camera_pull_distance);
-        add_vector_xyz(pos, pos, w);
+        normalize_vector_xyz(camera_pull_offset, glow_to_camera_vector, camera_pull_distance);
+        add_vector_xyz(pos, pos, camera_pull_offset);
     }
     pk.uv[2] = 0.0f;
     pk.uv[0] = 1.0f;
