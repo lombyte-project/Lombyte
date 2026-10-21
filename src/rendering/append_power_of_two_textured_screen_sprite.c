@@ -34,7 +34,7 @@ void append_power_of_two_textured_screen_sprite(u64 tex0, s32 screen_x, s32 scre
                                                 s32 texture_v,
                                                 s32 alpha) __asm__("FUN_00200468");
 
-void append_power_of_two_textured_screen_sprite(u64 tex0, s32 screen_x, s32 screen_y,
+void append_power_of_two_textured_screen_sprite(u64 texture_register_value, s32 screen_x, s32 screen_y,
                                                 s32 texture_width_log2, s32 texture_height_log2,
                                                 s32 screen_width, s32 screen_height, s32 texture_u,
                                                 s32 texture_v, s32 alpha) {
@@ -52,7 +52,7 @@ void append_power_of_two_textured_screen_sprite(u64 tex0, s32 screen_x, s32 scre
     render_packet_cursor.p = (struct SpritePacket *)packet_words;
     tag->gif_tag = 0x7400000000008001;
     packet_words[1] = 0x5353106;
-    packet_words[2] = tex0;
+    packet_words[2] = texture_register_value;
     packet_words[4] = ((s64)alpha << 24) | 0x7F7F7F;
     packet_words[3] = 0x156;
     packet_words[5] = packed_first_uv;
