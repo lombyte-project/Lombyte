@@ -1347,43 +1347,43 @@ extern void FUN_L01_002feb28(void);
 extern int enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 
 /* On first use, lowers and ripples the layers' vertices; every frame, pulses their glow and queues FUN_L01_002feb28. */
-void FUN_L01_002feb58(void *arg) {
+void FUN_L01_002feb58(void *callback_argument) {
     s32 i;
     s32 g;
     s32 j;
     s32 k;
     s32 ripple_layer_index;
     s32 vertex_pair_start_index;
-    Vec4 *v;
-    Vec4 *w;
+    Vec4 *lowered_vertex;
+    Vec4 *ripple_vertex_pair;
     f32 glow_factor;
 
     if (D_L01_00161CE0 == 0) {
         D_L01_00161CE0 = 1;
         for (i = 0; i < 4; i++) {
-            v = (D_L01_001FBC80 + i)->verts;
+            lowered_vertex = (D_L01_001FBC80 + i)->verts;
             for (j = 0; j < (D_L01_001FBC80 + i)->count; j++) {
-                v->f[3] = v->f[2] = v->f[2] - 0.45f;
-                v++;
+                lowered_vertex->f[3] = lowered_vertex->f[2] = lowered_vertex->f[2] - 0.45f;
+                lowered_vertex++;
             }
         }
         k = 1;
         for (ripple_layer_index = 0; ripple_layer_index < 4; ripple_layer_index++) {
             k--;
-            w = (D_L01_001FBC80 + ripple_layer_index)->verts;
+            ripple_vertex_pair = (D_L01_001FBC80 + ripple_layer_index)->verts;
             for (vertex_pair_start_index = 0; vertex_pair_start_index < (D_L01_001FBC80 + ripple_layer_index)->count; vertex_pair_start_index += 2) {
                 if (k & 1) {
-                    w[0].f[2] += 0.05f;
-                    w[0].f[3] -= 0.05f;
-                    w[1].f[2] -= 0.05f;
-                    w[1].f[3] += 0.05f;
+                    ripple_vertex_pair[0].f[2] += 0.05f;
+                    ripple_vertex_pair[0].f[3] -= 0.05f;
+                    ripple_vertex_pair[1].f[2] -= 0.05f;
+                    ripple_vertex_pair[1].f[3] += 0.05f;
                 } else {
-                    w[0].f[2] -= 0.05f;
-                    w[0].f[3] += 0.05f;
-                    w[1].f[2] += 0.05f;
-                    w[1].f[3] -= 0.05f;
+                    ripple_vertex_pair[0].f[2] -= 0.05f;
+                    ripple_vertex_pair[0].f[3] += 0.05f;
+                    ripple_vertex_pair[1].f[2] += 0.05f;
+                    ripple_vertex_pair[1].f[3] -= 0.05f;
                 }
-                w += 2;
+                ripple_vertex_pair += 2;
                 k++;
             }
         }
@@ -1393,7 +1393,7 @@ void FUN_L01_002feb58(void *arg) {
     for (g = 3; g >= 0; g--) {
         D_L01_001FBC80[g].glow = glow_factor;
     }
-    enqueue_callback_list_1(FUN_L01_002feb28, arg);
+    enqueue_callback_list_1(FUN_L01_002feb28, callback_argument);
 }
 typedef struct {
     Vec4 home;
