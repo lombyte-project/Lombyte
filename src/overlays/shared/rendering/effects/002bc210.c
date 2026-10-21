@@ -23,13 +23,13 @@ extern void FUN_L01_0021fa98(int, int, int, int, int, int);
 extern void FUN_L12_002667fc(int, int, int, int);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-void FUN_L12_002bc210(void *list_, int count, int tex0, int tex1) {
+void FUN_L12_002bc210(void *list_, int count, int context_one_texture_state, int context_two_texture_state) {
     char *list = list_;
     int i;
     int *sp;
     int sphere_check_result;
-    vu1_add_g_sregister(6, tex0);
-    vu1_add_g_sregister(7, tex1);
+    vu1_add_g_sregister(6, context_one_texture_state);
+    vu1_add_g_sregister(7, context_two_texture_state);
     D_L12_001611C0.p[0] = 0x30000009;
     D_L12_001611C0.p[1] = (int)D_L12_001CB7A0;
     D_L12_001611C0.p[2] = 0;
