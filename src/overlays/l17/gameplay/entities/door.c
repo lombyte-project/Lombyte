@@ -2345,14 +2345,14 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 void FUN_L17_002eea70(struct Moby *moby) {
     char *state = (char *)moby->pvars;
     if (hero.unk308 && hero.ground_moby == moby) {
-        char *vec = *(char **)(D_L17_001B0DB0 + *(int *)(state + 0x80) * 4) + 0x10;
+        char *world_path_point = *(char **)(D_L17_001B0DB0 + *(int *)(state + 0x80) * 4) + 0x10;
         char *point = &moby->rot_row0;
         int i;
         for (i = 10; i >= 0; i--) {
-            transform_vector_by_basis(vec, D_L17_001D9F70 + (10 - i) * 0x10, point);
-            add_vector_xyz(vec, vec, &moby->pos);
-            *(float *)(vec + 0xC) = 1.0f;
-            vec += 0x10;
+            transform_vector_by_basis(world_path_point, D_L17_001D9F70 + (10 - i) * 0x10, point);
+            add_vector_xyz(world_path_point, world_path_point, &moby->pos);
+            *(float *)(world_path_point + 0xC) = 1.0f;
+            world_path_point += 0x10;
         }
         hero.unk22DA = *(unsigned short *)(state + 0x80);
     }
