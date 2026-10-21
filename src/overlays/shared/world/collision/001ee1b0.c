@@ -79,7 +79,7 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
     V_1ee318 endpoint_test_vector;
     V_1ee318 volume_delta;
     V_1ee318 l;
-    int r;
+    int is_inside_cylinder;
 
     query_point.q = pt->q;
     pt = &query_point;
@@ -98,14 +98,14 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
         unsigned char *e;
         e = D_L00_001600FC_1ee318;
         e += vol[5] << 7;
-        r = 0;
+        is_inside_cylinder = 0;
         FUN_001f9a28_1ee318(&volume_delta, pt, e + 0x30);
         volume_delta.i[3] = 0;
         FUN_001f9cf8_1ee318(&l, &volume_delta, e + 0x40);
         if (FUN_001f9b20_1ee318(&l) < 1.0f && -1.0f <= l.f[2] && l.f[2] <= 1.0f) {
-            r = 1;
+            is_inside_cylinder = 1;
         }
-        return r;
+        return is_inside_cylinder;
     }
     case VOLUME_TYPE_SPHERE: {
         unsigned char *e;
