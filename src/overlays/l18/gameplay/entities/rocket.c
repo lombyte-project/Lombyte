@@ -1218,8 +1218,8 @@ void thruster_pack_lock_green_update(char *moby) {
                 moby_vars->f24 = 0;
             }
             {
-                struct Hero *b = &hero;
-                if (b->air_frames.s == 0 && b->state.current == 0x22) {
+                struct Hero *hero_ptr = &hero;
+                if (hero_ptr->air_frames.s == 0 && hero_ptr->state.current == 0x22) {
                     allocate_voice_for_target_entry(0, 0, (int)moby);
                     moby_vars->f24 = 0;
                 }
