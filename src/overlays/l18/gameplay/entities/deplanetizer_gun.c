@@ -1308,7 +1308,7 @@ extern void FUN_L00_00261d78(float, void *, void *, void *);
 float FUN_L18_002fc4e0(char *self, float *src) {
     QVec target_position;
     float v[4];
-    float b[4];
+    float movement_distance_scratch[4];
     float z = 0.0f;
     float movement_clearance = 0.5f;
     char *moby_vars = *(char **)(self + 0x78);
@@ -1321,9 +1321,9 @@ float FUN_L18_002fc4e0(char *self, float *src) {
         approach_angle((float *)(self + 0x48), (float *)(moby_vars + 0x1E8), d, frame_time_sq * 6.2831855f,
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
     }
-    b[0] = z;
+    movement_distance_scratch[0] = z;
     dist = vector_distance_xy((float *)(self + 0x10), target_position.v);
-    advance_accelerated_scalar(b, (float *)(moby_vars + 0x1F0), dist, frame_time_sq * 6.0f, frame_time_sq * 6.0f,
+    advance_accelerated_scalar(movement_distance_scratch, (float *)(moby_vars + 0x1F0), dist, frame_time_sq * 6.0f, frame_time_sq * 6.0f,
                                frame_time * 5.0f);
     v[0] = fast_cos(*(float *)(self + 0x48)) * *(float *)(moby_vars + 0x1F0);
     v[1] = fast_sin(*(float *)(self + 0x48)) * *(float *)(moby_vars + 0x1F0);
