@@ -838,14 +838,14 @@ extern unsigned char D_0013D4DC[];
 int FUN_L00_00233440(void) {
     struct Hero *base = &hero;
     int state = base->state.current;
-    int r = base->unk308;
+    int return_value = base->unk308;
 
     if (state == 0x3F || state == 0x71 || state == 0x70 ||
         (base->unk12E7 != 0 && D_0013D4DC[0] != 0 && state == 0 &&
          base->air_frames.s < scale_ticks(4))) {
-        r = 1;
+        return_value = 1;
     }
-    return r;
+    return return_value;
 }
 typedef struct {
     f32 v[4];
