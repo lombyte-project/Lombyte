@@ -505,7 +505,7 @@ void hero_update_transitions(void) {
                 case 71:
                 case 87:
                 case 98:
-                case HERO_STATE_DROWNING:
+                case HERO_STATE_DROWN:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
@@ -1312,7 +1312,7 @@ void hero_update_transitions(void) {
                 case HERO_STATE_GRIND_JUMP:
                 case HERO_STATE_GRIND_RAIL_TRANSFER:
                 case HERO_STATE_GRIND_ATTACK:
-                case HERO_STATE_GRIND_OBSTACLE_HOP:
+                case HERO_STATE_GRIND_COLLISION_RECOVERY:
                     if (hero.state.current == 0x42) {
                         hero.unk5BE = 0;
                     } else {
@@ -1687,8 +1687,8 @@ void hero_update_transitions(void) {
                         }
                     }
                     break;
-                case HERO_STATE_LEDGE_SHIMMY_YAW_PLUS_90:
-                case HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90: {
+                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);
@@ -1854,7 +1854,7 @@ void hero_update_transitions(void) {
                         hero_set_state(0x74, 1);
                     }
                     break;
-                case HERO_STATE_FALL_TO_RESPAWN:
+                case HERO_STATE_FATAL_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||
@@ -2004,7 +2004,7 @@ void hero_update_transitions(void) {
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
                 case 18:
-                case HERO_STATE_LEDGE_HANG_JUMP:
+                case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case 105:
                     if (hero.unk4AE != 0) {

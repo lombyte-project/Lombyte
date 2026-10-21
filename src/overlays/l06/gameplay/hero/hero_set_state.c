@@ -171,7 +171,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_IDLE_RESET_MOTION: {
+    case HERO_STATE_AT_TARGET_POSE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -206,7 +206,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x45, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case HERO_STATE_DYING_LIMIT_MOTION: {
+    case HERO_STATE_DYING_SPEED_LIMITED: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
@@ -382,7 +382,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_STOP_GRAVITY_XY: {
+    case HERO_STATE_BRAKE_AT_TARGET_POSITION: {
         struct Hero *p = &hero;
         char *v = (char *)&p->motion.unk110;
         p->state.control_mode = 1;
@@ -1711,7 +1711,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_GRIND_HURT: {
+    case HERO_STATE_GRIND_COLLISION_RECOVERY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unk2284 = 0;

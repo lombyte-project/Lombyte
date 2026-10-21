@@ -651,7 +651,7 @@ void FUN_L11_00253a18(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT_CONDITIONAL_IDLE_RESET:
+                case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -664,7 +664,7 @@ void FUN_L11_00253a18(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case HERO_STATE_ITEM_ANIMATION_BUTTON_HOLD_CHECK: {
+                case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT: {
                     int mask = hero.items[0].button_mask;
                     if (hero.moby->seq == 0x2E && hero.anim_frame > 28.0f) {
                         if (controller_state.held & mask) {
@@ -727,7 +727,7 @@ void FUN_L11_00253a18(void) {
                         }
                     }
                     break;
-                case HERO_STATE_ANIMATION_COMPLETION_TO_IDLE:
+                case HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE:
                 case HERO_STATE_WALL_BONK:
                     if (hero.unkA98 & 2) {
                         hero_set_state(HERO_STATE_IDLE, 1);
@@ -880,7 +880,7 @@ void FUN_L11_00253a18(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case HERO_STATE_TARGET_POSE_ANIMATION_WAIT:
+                case HERO_STATE_BRAKE_AT_TARGET_POSITION:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
@@ -1016,7 +1016,7 @@ void FUN_L11_00253a18(void) {
                     hero.unk944 = frame_time_sq * 42.0f;
                     hero.unk940 = frame_time_sq * 29.0f;
                     break;
-                case HERO_STATE_ITEM_BUTTON_RELEASE_TO_IDLE_OR_FALL:
+                case HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -1031,7 +1031,7 @@ void FUN_L11_00253a18(void) {
                     hero_set_state(HERO_STATE_FALL, 1);
                     hero.unk2284 = 0;
                     break;
-                case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT_WITH_MINIMUM_DURATION:
+                case HERO_STATE_GRAPPLE_SWING_ENTRY:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -1287,7 +1287,7 @@ void FUN_L11_00253a18(void) {
                         hero_set_state(0x18, 1);
                     }
                     break;
-                case HERO_STATE_LOW_ALTITUDE_RESPAWN:
+                case HERO_STATE_FATAL_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||
@@ -1813,7 +1813,7 @@ void FUN_L11_00253a18(void) {
                     }
                     hero_set_state(0x53, 1);
                     break;
-                case HERO_STATE_CIRCLE_RELEASE_WAIT:
+                case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT:
                     if (hero.state_timer > scale_game_frames(0x2D) && !(controller_state.held & 0x20)) {
                         hero_set_state(0x53, 0);
                         set_hero_animation(0, 0, scale_game_frames(0x14));
@@ -1886,7 +1886,7 @@ void FUN_L11_00253a18(void) {
                         hero_set_state(0x53, 0);
                     }
                     break;
-                case HERO_STATE_LOOK_BUTTON_RELEASE_TO_IDLE:
+                case HERO_STATE_LOOK_RELEASE_WAIT:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
@@ -1915,7 +1915,7 @@ void FUN_L11_00253a18(void) {
                     }
                     D_L11_0016D180 = 0;
                     break;
-                case HERO_STATE_ITEM_ANIMATION_RECOVERY_TO_IDLE:
+                case HERO_STATE_HELD_ITEM_ATTACK:
                     if (hero.items[0].moby != 0 && hero.unkA9C == 0 && hero.anim_frame > 20.0f) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }

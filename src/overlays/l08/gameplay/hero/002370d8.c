@@ -468,7 +468,7 @@ void FUN_L08_002370d8(void) {
                 case 71:
                 case 87:
                 case 98:
-                case HERO_STATE_WATER_DEATH:
+                case HERO_STATE_DROWN:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
@@ -665,7 +665,7 @@ void FUN_L08_002370d8(void) {
                         }
                     }
                     break;
-                case HERO_STATE_ITEM_BUTTON_HOLD:
+                case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -687,7 +687,7 @@ void FUN_L08_002370d8(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case HERO_STATE_ITEM_BUTTON_HOLD_ENTRY: {
+                case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT: {
                     int mask = hero.items[0].button_mask;
                     if (((unsigned char *)hero.moby)[0x52] == 0x2E && hero.anim_frame > 28.0f) {
                         if (controller_state.held & mask) {
@@ -894,7 +894,7 @@ void FUN_L08_002370d8(void) {
                         }
                     }
                     break;
-                case HERO_STATE_APPROACH_TARGET:
+                case HERO_STATE_APPROACH_TARGET_POSE:
                     if (vector_distance(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
@@ -910,12 +910,12 @@ void FUN_L08_002370d8(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case HERO_STATE_VEHICLE_TARGET_ARRIVAL:
+                case HERO_STATE_BRAKE_AT_TARGET_POSITION:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case HERO_STATE_TARGET_ARRIVAL:
+                case HERO_STATE_AT_TARGET_POSE:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -1535,8 +1535,8 @@ void FUN_L08_002370d8(void) {
                         }
                     }
                     break;
-                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_OFFSET:
-                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET: {
+                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);

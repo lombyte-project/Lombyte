@@ -2494,7 +2494,7 @@ void FUN_L17_00214760(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, 0.004f);
         break;
     }
-    case HERO_STATE_MOVE_TO_TARGET_POSITION: {
+    case HERO_STATE_APPROACH_TARGET_POSE: {
         f32 l;
         f32 k;
         subtract_vector_xyz(&scratch_vector, &hero.unk1640, &hero.motion.pos);

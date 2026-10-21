@@ -474,9 +474,9 @@ void FUN_L16_002270c8(void) {
                     break;
                 case HERO_STATE_DYING:
                 case 71:
-                case HERO_STATE_L16_DYING_ALT:
+                case HERO_STATE_VEHICLE_MODE_3_DYING:
                 case 98:
-                case HERO_STATE_WATER_DEATH:
+                case HERO_STATE_DROWN:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
@@ -918,7 +918,7 @@ void FUN_L16_002270c8(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case HERO_STATE_TARGET_POSE_ANIMATION_WAIT:
+                case HERO_STATE_BRAKE_AT_TARGET_POSITION:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
@@ -1706,7 +1706,7 @@ void FUN_L16_002270c8(void) {
                         hero_set_state(HERO_STATE_GRIND, 1);
                     }
                     break;
-                case HERO_STATE_DEATH_FALL:
+                case HERO_STATE_FATAL_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||
@@ -2388,7 +2388,7 @@ void FUN_L16_002270c8(void) {
                         FUN_L00_00216f90(v0, v1, 0x6B, 1);
                     }
                     break;
-                case HERO_STATE_L16_TRANSITION_IDLE_ALT:
+                case HERO_STATE_VEHICLE_MODE_3_IDLE:
                     if (hero.unkA98 & 2) {
                         if (((unsigned char *)hero.moby)[0x53] != 0) {
                             set_hero_animation(0, 0, scale_game_frames(0xC));
@@ -2422,7 +2422,7 @@ void FUN_L16_002270c8(void) {
                         hero_set_state(0x54, 1);
                     }
                     break;
-                case HERO_STATE_SLIP_ALT:
+                case HERO_STATE_VEHICLE_MODE_3_SLIP:
                     if (scale_game_frames(0x12C) < hero.state_timer) {
                         hero_respawn();
                     }
@@ -2435,13 +2435,13 @@ void FUN_L16_002270c8(void) {
                     }
                     hero_set_state(0x53, 1);
                     break;
-                case HERO_STATE_CIRCLE_HOLD_ALT:
+                case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT:
                     if (hero.state_timer > scale_game_frames(0x2D) && !(controller_state.held & 0x20)) {
                         hero_set_state(0x53, 0);
                         set_hero_animation(0, 0, scale_game_frames(0x14));
                     }
                     break;
-                case HERO_STATE_L16_TRANSITION_FALL_ALT:
+                case HERO_STATE_VEHICLE_MODE_3_FALL:
                     if (hero.air_frames.s != 0) {
                         break;
                     }
@@ -2465,7 +2465,7 @@ void FUN_L16_002270c8(void) {
                     hero.anim_speed = 0.35f;
                     hero.unk1C4 = scale_game_frames(0x14);
                     break;
-                case HERO_STATE_RUN_ALT:
+                case HERO_STATE_VEHICLE_MODE_3_RUN:
                     hero.anim_speed = hero.motion.speed_xy * 54.0f;
                     if (!(hero.air_frames.s < scale_game_frames(5))) {
                         if (hero.ground_distance > 0.8f || hero.ground_slope.f > 0.87266463f) {
@@ -2490,7 +2490,7 @@ void FUN_L16_002270c8(void) {
                         hero_set_state(0x53, 1);
                     }
                     break;
-                case HERO_STATE_L16_HURT_ALT:
+                case HERO_STATE_VEHICLE_MODE_3_HURT:
                     if (!(hero.state_timer < scale_game_frames(0x20)) && hero.air_frames.s != 0 &&
                         hero.ground_distance > 1.0f) {
                         hero_set_state(0x55, 1);
@@ -2508,7 +2508,7 @@ void FUN_L16_002270c8(void) {
                         hero_set_state(0x53, 0);
                     }
                     break;
-                case HERO_STATE_LOOK_ALT:
+                case HERO_STATE_LOOK_RELEASE_WAIT:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {

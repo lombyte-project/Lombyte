@@ -292,7 +292,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x3C, 0, (float)t);
         break;
     }
-    case HERO_STATE_WATER_SURFACE_IDLE: {
+    case HERO_STATE_WATER_SURFACE_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x12;
         p->unk20A7 = 1;
@@ -636,7 +636,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_TARGET_POSE_STOP: {
+    case HERO_STATE_BRAKE_AT_TARGET_POSITION: {
         struct Hero *p = &hero;
         char *v = (char *)&p->motion.unk110;
         p->state.control_mode = 1;
@@ -895,7 +895,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x21, 0, (float)scale_game_frames(6));
         break;
     }
-    case HERO_STATE_LEDGE_SHIMMY_YAW_PLUS_90: {
+    case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
@@ -904,7 +904,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x24, 0, (float)scale_game_frames(6));
         break;
     }
-    case HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90: {
+    case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
@@ -1404,7 +1404,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_ENTER_ATTACK_COMBO:
+    case HERO_STATE_WRENCH_COMBO:
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
     case 0x20:
@@ -1495,7 +1495,7 @@ int hero_set_state(int a, int b) {
             FUN_L00_00214ed8(11.0f, 0.87266463f, -1.0f);
             break;
         }
-        case HERO_STATE_ENTER_ATTACK_COMBO: {
+        case HERO_STATE_WRENCH_COMBO: {
             char *h = ((char *)&item_usage);
             struct Hero *q;
             T2C_231228 *e;
@@ -1750,7 +1750,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_GRIND_OBSTACLE_HOP: {
+    case HERO_STATE_GRIND_COLLISION_RECOVERY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unk2284 = 0;

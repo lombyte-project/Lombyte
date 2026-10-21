@@ -1037,7 +1037,7 @@ void FUN_L01_002370b8(void) {
         FUN_L01_00232978(0);
         FUN_L00_00216e48_cf();
         break;
-    case HERO_STATE_DECELERATE_SAVED_MOTION_AND_DESCEND:
+    case HERO_STATE_DROWN:
     case 0x82: {
         float len;
 
@@ -1436,7 +1436,7 @@ void FUN_L01_002370b8(void) {
         }
         FUN_L00_00217118(3.7f, 0.0f);
     } break;
-    case HERO_STATE_DECELERATE_ALONG_SAVED_YAW:
+    case HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE:
     case HERO_STATE_WALL_BONK:
         fast_cos_cf(&hero.ground_speed, 0.0f, frame_time_sq * 24.0f);
         hero.motion.velocity.f[0] = FUN_L00_0020a1e0_cf(hero.unkA68) * hero.ground_speed;
@@ -1715,7 +1715,7 @@ void FUN_L01_002370b8(void) {
             D_L01_0017AB00[1].f60[0] = lean * 3.5f;
         }
         break;
-    case HERO_STATE_MOVE_TOWARD_PROBE_POSITION:
+    case HERO_STATE_LEDGE_HANG_ENTRY:
     case 0x19:
         hero.motion.move_yaw = build_spherical_offset_cf(hero.unk4E4, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 6.2831855f);
@@ -1724,8 +1724,8 @@ void FUN_L01_002370b8(void) {
         FUN_L00_0025f730(hero.motion.velocity.f, frame_time * 4.0f);
         fast_cos_cf(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);
         break;
-    case HERO_STATE_MOVE_VIA_POSITIVE_LATERAL_PROBE:
-    case HERO_STATE_MOVE_VIA_NEGATIVE_LATERAL_PROBE: {
+    case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+    case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
         float original_probe_yaw;
         float offset_probe_yaw;
 
@@ -2083,7 +2083,7 @@ void FUN_L01_002370b8(void) {
         set_vector_length_xy(hero.motion.velocity.f, hero.motion.velocity.f, len);
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, 0.004f);
     } break;
-    case HERO_STATE_MOVE_TO_TARGET_POSITION: {
+    case HERO_STATE_APPROACH_TARGET_POSE: {
         float len;
         float k;
 
@@ -2154,7 +2154,7 @@ void FUN_L01_002370b8(void) {
         }
     } break;
     case HERO_STATE_FIDGET:
-    case HERO_STATE_CLEAR_MOVEMENT_VELOCITY:
+    case HERO_STATE_AT_TARGET_POSE:
         clear_vector(hero.motion.velocity.f);
         break;
     case 0x53:
@@ -2174,13 +2174,13 @@ void FUN_L01_002370b8(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
         break;
-    case HERO_STATE_DOWNHILL_SLIDE:
+    case HERO_STATE_VEHICLE_MODE_3_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         air_accel(frame_time_sq * 25.0f);
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.unk120.f, frame_time_sq * 18.0f);
         break;
-    case HERO_STATE_FALL_WITH_LIMITED_DESCENT:
+    case HERO_STATE_VEHICLE_MODE_3_FALL:
         stick_target(frame_time * 1.5f, 0);
         if (hero.unk1C4 == 0) {
             FUN_L01_00234b40();
@@ -2190,7 +2190,7 @@ void FUN_L01_002370b8(void) {
             hero.motion.velocity.f[2] = frame_time * -15.0f;
         }
         break;
-    case HERO_STATE_MOVE_WITH_MINIMUM_TARGET_SPEED: {
+    case HERO_STATE_VEHICLE_MODE_3_RUN: {
         float d;
         float k;
         float t;
@@ -2221,7 +2221,7 @@ void FUN_L01_002370b8(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
-    case HERO_STATE_DAMP_PLANAR_VELOCITY: {
+    case HERO_STATE_VEHICLE_MODE_3_HURT: {
         float len;
 
         vel = hero.motion.velocity.f;

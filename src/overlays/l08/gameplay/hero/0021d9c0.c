@@ -1048,7 +1048,7 @@ void FUN_L08_002284e0(void) {
         }
         break;
     }
-    case HERO_STATE_TARGET_RADIUS_CONSTRAINT: {
+    case HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS: {
         approach_value(&hero.unk97C, hero.unk980, frame_time * 10.0f);
         qcopy(&hero.motion.velocity, &hero.motion.displacement);
         fast_vec_scale(&hero.motion.velocity, &hero.motion.velocity, 0.9f);
@@ -1062,7 +1062,7 @@ void FUN_L08_002284e0(void) {
         subtract_vector_xyz(&hero.motion.velocity, &vector_and_hit_descriptor_scratch, &hero.motion.pos);
         break;
     }
-    case HERO_STATE_SPRING_RADIUS_CONSTRAINT: {
+    case HERO_STATE_GRAPPLE_SWING_ENTRY: {
         f32 vz;
         s32 above;
         if ((hero.unkA98 & 2) && moby->b53 == 0x34) {
@@ -2400,7 +2400,7 @@ void FUN_L08_002284e0(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, 0.004f);
         break;
     }
-    case HERO_STATE_MOVE_TO_POSITION: {
+    case HERO_STATE_APPROACH_TARGET_POSE: {
         f32 l;
         f32 k;
         subtract_vector_xyz(&vector_and_attack_descriptor_scratch, &hero.unk1640, &hero.motion.pos);
@@ -2454,7 +2454,7 @@ void FUN_L08_002284e0(void) {
         }
         break;
     }
-    case HERO_STATE_BRAKE_TO_POSITION:
+    case HERO_STATE_BRAKE_AT_TARGET_POSITION:
         subtract_vector_xyz(&vector_and_attack_descriptor_scratch, &hero.unk1640, &hero.motion.pos);
         if (fast_vec_dot(&vector_and_attack_descriptor_scratch, &hero.motion.unk150) < 0.0f) {
             clear_u64_value(&hero.motion.unk150);

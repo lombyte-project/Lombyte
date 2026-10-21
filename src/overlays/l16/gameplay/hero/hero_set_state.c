@@ -185,7 +185,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_L16_STATE_ENTRY_IDLE_ALT: {
+    case HERO_STATE_AT_TARGET_POSE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -806,7 +806,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_GRAVITY_ALIGNED_STOP: {
+    case HERO_STATE_BRAKE_AT_TARGET_POSITION: {
         struct Hero *p = &hero;
         char *v = (char *)&p->motion.unk110;
         p->state.control_mode = 1;
@@ -962,7 +962,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_L16_STATE_ENTRY_FALL_ALT: {
+    case HERO_STATE_ITEM_RELEASE_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 7;
@@ -1128,7 +1128,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_LAND_ALT: {
+    case HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT: {
         struct Hero *p = &hero;
         int animation_timing_value = -2;
         p->state.control_mode = 1;
@@ -1172,7 +1172,7 @@ int hero_set_state(int a, int b) {
     case 0x12:
     case 0x1C:
     case HERO_STATE_GRIND_JUMP:
-    case HERO_STATE_GRIND_JUMP_ALT:
+    case HERO_STATE_GRIND_RAIL_TRANSFER:
     case 0x3C:
     case 0x49:
     case 0x4C:
@@ -1857,7 +1857,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_VEHICLE_FALL_ALT: {
+    case HERO_STATE_VEHICLE_MODE_3_SLIP: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -1877,7 +1877,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(6, 0, (float)scale_game_frames(7));
         break;
     }
-    case HERO_STATE_VEHICLE_GROUND_MOVE: {
+    case HERO_STATE_VEHICLE_MODE_3_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -1920,7 +1920,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_GRIND_HURT: {
+    case HERO_STATE_GRIND_COLLISION_RECOVERY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unk2284 = 0;

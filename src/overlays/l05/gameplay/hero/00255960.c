@@ -452,7 +452,7 @@ void FUN_L05_00255960(void) {
                 case 71:
                 case 87:
                 case 98:
-                case HERO_STATE_ANIMATION_END_RESPAWN_WAIT:
+                case HERO_STATE_DROWN:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
@@ -460,7 +460,7 @@ void FUN_L05_00255960(void) {
                         return;
                     }
                     break;
-                case HERO_STATE_TIMED_RESPAWN_WAIT:
+                case HERO_STATE_SINK:
                     if (hero.state_timer > scale_game_frames(0xDC)) {
                         hero_respawn();
                         return;
@@ -611,7 +611,7 @@ void FUN_L05_00255960(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case HERO_STATE_ANIMATION_END_IDLE_WAIT:
+                case HERO_STATE_ANIMATION_WAIT_TO_IDLE:
                     if (hero.unkA98 & 2) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -911,7 +911,7 @@ void FUN_L05_00255960(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case HERO_STATE_JUMP_ENABLED_RESPAWN_WAIT:
+                case HERO_STATE_WAIT_FOR_JUMP_OR_RESPAWN:
                     if (hero.unk1660 < 2) {
                         if (scale_game_frames(0xF) + hero.unk1660 * scale_game_frames(0x19) <
                             hero.state_timer) {
@@ -933,7 +933,7 @@ void FUN_L05_00255960(void) {
                         return;
                     }
                     break;
-                case HERO_STATE_FATAL_HURT_RESPAWN_WAIT:
+                case HERO_STATE_DEATH_DESCENT:
                     if (hero.unk2F4 - 1.2f > hero.motion.pos.f[2] ||
                         hero.state_timer > scale_game_frames(0x64)) {
                         hero_respawn();
@@ -1195,8 +1195,8 @@ void FUN_L05_00255960(void) {
                         }
                     }
                     break;
-                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_OFFSET:
-                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_OFFSET: {
+                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);
@@ -1354,7 +1354,7 @@ void FUN_L05_00255960(void) {
                         hero_set_state(0x18, 1);
                     }
                     break;
-                case HERO_STATE_BELOW_LEVEL_RESPAWN_WAIT:
+                case HERO_STATE_FATAL_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||

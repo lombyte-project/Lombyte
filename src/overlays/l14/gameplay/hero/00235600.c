@@ -528,7 +528,7 @@ void FUN_L14_00235600(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case HERO_STATE_ITEM_RELEASE_WAIT_ANIMATION_DEPENDENT_EXIT:
+                case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -541,7 +541,7 @@ void FUN_L14_00235600(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case HERO_STATE_ITEM_ANIMATION_RELEASE_GATE: {
+                case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT: {
                     int mask = hero.items[0].button_mask;
                     if (((unsigned char *)hero.moby)[0x52] == 0x2E && hero.anim_frame > 28.0f) {
                         if (controller_state.held & mask) {
@@ -792,12 +792,12 @@ void FUN_L14_00235600(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case HERO_STATE_TARGET_POSE_APPROACH_ANIMATION_WAIT:
+                case HERO_STATE_BRAKE_AT_TARGET_POSITION:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case HERO_STATE_TARGET_POSE_REACHED:
+                case HERO_STATE_AT_TARGET_POSE:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -1037,7 +1037,7 @@ void FUN_L14_00235600(void) {
                 case HERO_STATE_GRIND_JUMP:
                 case HERO_STATE_GRIND_RAIL_TRANSFER:
                 case HERO_STATE_GRIND_ATTACK:
-                case HERO_STATE_GRIND_OBSTACLE_RECOVERY:
+                case HERO_STATE_GRIND_COLLISION_RECOVERY:
                     if (hero.state.current == 0x42) {
                         hero.unk5BE = 0;
                     } else {
@@ -1560,7 +1560,7 @@ void FUN_L14_00235600(void) {
                         hero_set_state(HERO_STATE_GRIND, 1);
                     }
                     break;
-                case HERO_STATE_DEATH_FALL:
+                case HERO_STATE_FATAL_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||

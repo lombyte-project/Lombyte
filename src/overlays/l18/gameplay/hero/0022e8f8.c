@@ -479,7 +479,7 @@ void FUN_L18_0022e8f8(void) {
                 case 71:
                 case 87:
                 case 98:
-                case HERO_STATE_DROWNING_DEATH:
+                case HERO_STATE_DROWN:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
@@ -690,7 +690,7 @@ void FUN_L18_0022e8f8(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT_ANIMATION_EXIT:
+                case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -910,7 +910,7 @@ void FUN_L18_0022e8f8(void) {
                         }
                     }
                     break;
-                case HERO_STATE_APPROACH_TARGET:
+                case HERO_STATE_APPROACH_TARGET_POSE:
                     if (vector_distance(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
@@ -926,12 +926,12 @@ void FUN_L18_0022e8f8(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case HERO_STATE_TARGET_APPROACH_ANIMATION_WAIT:
+                case HERO_STATE_BRAKE_AT_TARGET_POSITION:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case HERO_STATE_TARGET_ARRIVAL:
+                case HERO_STATE_AT_TARGET_POSE:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -1573,8 +1573,8 @@ void FUN_L18_0022e8f8(void) {
                         }
                     }
                     break;
-                case HERO_STATE_LEDGE_SHIMMY_CCW:
-                case HERO_STATE_LEDGE_SHIMMY_CW: {
+                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);
@@ -1736,7 +1736,7 @@ void FUN_L18_0022e8f8(void) {
                         hero_set_state(HERO_STATE_GRIND, 1);
                     }
                     break;
-                case HERO_STATE_DEATH_FALL:
+                case HERO_STATE_FATAL_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||

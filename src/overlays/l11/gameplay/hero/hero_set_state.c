@@ -163,7 +163,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_IDLE_CLEAR_MOTION_VECTOR: {
+    case HERO_STATE_AT_TARGET_POSE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -225,7 +225,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x74, 0, (float)scale_game_frames(0xB));
         break;
     }
-    case HERO_STATE_UNDERWATER_ENTRY: {
+    case HERO_STATE_SWIM: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x11;
         p->unk2284 = 0xB;
@@ -432,7 +432,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x5F, 0, (float)scale_game_frames(0xA));
         break;
     }
-    case HERO_STATE_L11_DYING_CLEAR_HEALTH: {
+    case HERO_STATE_DYING_ZERO_HEALTH: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk20A7 = 1;
@@ -621,7 +621,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_STOP_GRAVITY_XY: {
+    case HERO_STATE_BRAKE_AT_TARGET_POSITION: {
         struct Hero *p = &hero;
         char *v = (char *)&p->motion.unk110;
         p->state.control_mode = 1;
@@ -777,7 +777,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_FALL_CLEAR_MOTION_VECTOR: {
+    case HERO_STATE_ITEM_RELEASE_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 7;
@@ -1520,7 +1520,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_VEHICLE_FALL_PRESERVE_GRAVITY: {
+    case HERO_STATE_VEHICLE_MODE_3_SLIP: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -1583,7 +1583,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_HURT_UPWARD_LAUNCH: {
+    case HERO_STATE_GRIND_COLLISION_RECOVERY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unk2284 = 0;

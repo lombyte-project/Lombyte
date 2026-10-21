@@ -527,7 +527,7 @@ void FUN_L06_0023b440(void) {
                         }
                     }
                     break;
-                case HERO_STATE_ITEM_BUTTON_HOLD:
+                case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -744,12 +744,12 @@ void FUN_L06_0023b440(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case HERO_STATE_TARGET_POSE_APPROACH_TRANSITION:
+                case HERO_STATE_BRAKE_AT_TARGET_POSITION:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case HERO_STATE_TARGET_POSE_REACHED:
+                case HERO_STATE_AT_TARGET_POSE:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -1316,8 +1316,8 @@ void FUN_L06_0023b440(void) {
                         }
                     }
                     break;
-                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW_SIDE:
-                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW_SIDE: {
+                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);
@@ -1479,7 +1479,7 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(HERO_STATE_GRIND, 1);
                     }
                     break;
-                case HERO_STATE_DEATH_FALL:
+                case HERO_STATE_FATAL_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||

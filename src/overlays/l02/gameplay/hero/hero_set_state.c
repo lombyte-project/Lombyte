@@ -160,7 +160,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_IDLE_AT_TARGET: {
+    case HERO_STATE_AT_TARGET_POSE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -195,7 +195,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x45, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case HERO_STATE_L02_DYING_ALT: {
+    case HERO_STATE_DYING_SPEED_LIMITED: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
@@ -341,7 +341,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_MOVE_TO_TARGET: {
+    case HERO_STATE_APPROACH_TARGET_POSE: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -389,7 +389,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_STOP_AT_TARGET: {
+    case HERO_STATE_BRAKE_AT_TARGET_POSITION: {
         struct Hero *p = &hero;
         char *v = (char *)&p->motion.unk110;
         p->state.control_mode = 1;
@@ -625,7 +625,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_FALL:
-    case HERO_STATE_DEATH_FALL: {
+    case HERO_STATE_FATAL_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -1049,7 +1049,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
-    case HERO_STATE_ITEM_ATTACK:
+    case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
     case 0x51: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
@@ -1191,7 +1191,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case HERO_STATE_ITEM_ATTACK: {
+        case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL: {
             struct Hero *q;
             if (b)
                 set_hero_animation(0x2C, 7, (float)scale_game_frames(9));
@@ -1207,7 +1207,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_WRENCH_COMBO_ALT: {
+    case HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->unkA64 = 0;
@@ -1407,7 +1407,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_L02_HURT_ALT: {
+    case HERO_STATE_GRIND_COLLISION_RECOVERY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unk2284 = 0;
@@ -1433,7 +1433,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(FUN_L01_00226f10(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case HERO_STATE_LOOK_ALT: {
+    case HERO_STATE_LOOK_RELEASE_WAIT: {
         struct Hero *p = &hero;
         p->unk2284 = 0x51;
         p->state.control_mode = 0;
@@ -2192,7 +2192,7 @@ void FUN_L02_00230988(void) {
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
                 case 98:
                 case 106:
-                case HERO_STATE_L02_DYING_ALT:
+                case HERO_STATE_DYING_SPEED_LIMITED:
                 case 130:
                     if (hero.unkA98 & 2) {
                         hero_respawn();
@@ -2451,7 +2451,7 @@ void FUN_L02_00230988(void) {
                         break;
                     }
                     break;
-                case HERO_STATE_MOVE_TO_TARGET:
+                case HERO_STATE_APPROACH_TARGET_POSE:
                     if (vector_distance(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
@@ -2467,12 +2467,12 @@ void FUN_L02_00230988(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case HERO_STATE_STOP_AT_TARGET:
+                case HERO_STATE_BRAKE_AT_TARGET_POSITION:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case HERO_STATE_IDLE_AT_TARGET:
+                case HERO_STATE_AT_TARGET_POSE:
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -2539,7 +2539,7 @@ void FUN_L02_00230988(void) {
                         }
                     }
                     break;
-                case HERO_STATE_WRENCH_COMBO_ALT:
+                case HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT:
                     if (hero.anim_frame > (float)D_L02_0017C2A8_rec[hero.attack_record].f18) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -2687,7 +2687,7 @@ void FUN_L02_00230988(void) {
                     hero_set_state(HERO_STATE_FALL, 1);
                     hero.unk2284 = 0;
                     break;
-                case HERO_STATE_ITEM_HOLD:
+                case HERO_STATE_GRAPPLE_SWING_ENTRY:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -2945,7 +2945,7 @@ void FUN_L02_00230988(void) {
                         hero_set_state(0x18, 1);
                     }
                     break;
-                case HERO_STATE_DEATH_FALL:
+                case HERO_STATE_FATAL_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 &&
@@ -3551,7 +3551,7 @@ void FUN_L02_00230988(void) {
                         hero_set_state(0x53, 0);
                     }
                     break;
-                case HERO_STATE_LOOK_ALT:
+                case HERO_STATE_LOOK_RELEASE_WAIT:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
@@ -3586,7 +3586,7 @@ void FUN_L02_00230988(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case HERO_STATE_ITEM_ATTACK:
+                case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
                     if (19.0f < hero.anim_frame &&
                         pad_pressed_within(0x40, scale_game_frames(0xB), 0)) {
                         if (controller_state.held & 0xA) {

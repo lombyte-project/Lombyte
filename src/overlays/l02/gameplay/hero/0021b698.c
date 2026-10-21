@@ -2158,7 +2158,7 @@ void FUN_L02_00225c20(void) {
         set_vector_length_xy(hero.motion.velocity.f, hero.motion.velocity.f, len);
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, 0.004f);
     } break;
-    case HERO_STATE_MOVE_TO_TARGET_POSITION: {
+    case HERO_STATE_APPROACH_TARGET_POSE: {
         float len;
         float k;
 
@@ -2232,13 +2232,13 @@ void FUN_L02_00225c20(void) {
     case 0x67:
         clear_vector(hero.motion.velocity.f);
         break;
-    case HERO_STATE_SINK_BELOW_SURFACE: {
+    case HERO_STATE_WAIT_FOR_JUMP_OR_RESPAWN: {
         clear_vector(hero.motion.velocity.f);
         hero.motion.velocity.f[2] = -((hero.unk1660 + 1) * 0.5f < hero.unk2F4 - hero.motion.pos.f[2]
                                   ? frame_time * 0.25f
                                   : frame_time);
     } break;
-    case HERO_STATE_SINK_STRAIGHT_DOWN:
+    case HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT:
         clear_vector(hero.motion.velocity.f);
         hero.motion.velocity.f[2] = -frame_time;
         break;

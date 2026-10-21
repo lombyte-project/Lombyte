@@ -2269,7 +2269,7 @@ void FUN_L18_0021eac8(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, 0.004f);
         break;
     }
-    case HERO_STATE_APPROACH_TARGET_POSITION: {
+    case HERO_STATE_APPROACH_TARGET_POSE: {
         f32 l;
         f32 k;
         subtract_vector_xyz(&general_vector_or_hit_descriptor_scratch, &hero.unk1640, &hero.motion.pos);

@@ -1065,7 +1065,7 @@ void FUN_L11_00246b70(void) {
         subtract_vector_xyz(&hero.motion.velocity, &vector_and_hit_descriptor_scratch, &hero.motion.pos);
         break;
     }
-    case HERO_STATE_CONSTRAIN_TO_SPRING_RADIUS: {
+    case HERO_STATE_GRAPPLE_SWING_ENTRY: {
         f32 vz;
         s32 above;
         if ((hero.unkA98 & 2) && moby->b53 == 0x34) {
@@ -2005,7 +2005,7 @@ void FUN_L11_00246b70(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, 0.004f);
         break;
     }
-    case HERO_STATE_MOVE_TO_TARGET_POSITION: {
+    case HERO_STATE_APPROACH_TARGET_POSE: {
         f32 l;
         f32 k;
         subtract_vector_xyz(&vector_and_hit_descriptor_head_scratch, &hero.unk1640, &hero.motion.pos);
@@ -2095,7 +2095,7 @@ void FUN_L11_00246b70(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case HERO_STATE_MOVE_DOWNHILL:
+    case HERO_STATE_VEHICLE_MODE_3_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         air_accel(frame_time_sq * 25.0f);

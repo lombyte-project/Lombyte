@@ -454,7 +454,7 @@ void FUN_L15_0021d040(void) {
                 case 71:
                 case 87:
                 case 98:
-                case HERO_STATE_WAIT_FOR_ANIMATION_THEN_RESPAWN:
+                case HERO_STATE_DROWN:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
@@ -645,7 +645,7 @@ void FUN_L15_0021d040(void) {
                         }
                     }
                     break;
-                case HERO_STATE_WAIT_FOR_ITEM_BUTTON_RELEASE:
+                case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -883,7 +883,7 @@ void FUN_L15_0021d040(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case HERO_STATE_TARGET_POSE_ANIMATION_WAIT:
+                case HERO_STATE_BRAKE_AT_TARGET_POSITION:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
@@ -911,7 +911,7 @@ void FUN_L15_0021d040(void) {
                         return;
                     }
                     break;
-                case HERO_STATE_WAIT_FOR_RESPAWN_HEIGHT_OR_TIMEOUT:
+                case HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT:
                     if (hero.unk2F4 - 1.2f > hero.motion.pos.f[2] ||
                         hero.state_timer > scale_game_frames(0x96)) {
                         hero_respawn();
@@ -1173,8 +1173,8 @@ void FUN_L15_0021d040(void) {
                         }
                     }
                     break;
-                case HERO_STATE_LEDGE_SHIMMY_YAW_PLUS_90:
-                case HERO_STATE_LEDGE_SHIMMY_YAW_MINUS_90: {
+                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);
@@ -1332,7 +1332,7 @@ void FUN_L15_0021d040(void) {
                         hero_set_state(0x18, 1);
                     }
                     break;
-                case HERO_STATE_FALL_TO_RESPAWN:
+                case HERO_STATE_FATAL_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||
@@ -2089,7 +2089,7 @@ void FUN_L15_0021d040(void) {
                     }
                     hero_set_state(0x53, 1);
                     break;
-                case HERO_STATE_WAIT_FOR_CIRCLE_RELEASE_AFTER_DELAY:
+                case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT:
                     if (hero.state_timer > scale_game_frames(0x2D) && !(controller_state.held & 0x20)) {
                         hero_set_state(0x53, 0);
                         set_hero_animation(0, 0, scale_game_frames(0x14));

@@ -493,7 +493,7 @@ void FUN_L17_002258a8(void) {
                 case 71:
                 case 87:
                 case 98:
-                case HERO_STATE_UNDERWATER_DEATH:
+                case HERO_STATE_DROWN:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
@@ -999,7 +999,7 @@ void FUN_L17_002258a8(void) {
                     }
                     FUN_L00_00228c18();
                     break;
-                case HERO_STATE_TARGET_POSE_ANIMATION_WAIT:
+                case HERO_STATE_BRAKE_AT_TARGET_POSITION:
                     if (hero.unkA98 & 2) {
                         hero_set_state(0x65, 1);
                     }
@@ -1197,7 +1197,7 @@ void FUN_L17_002258a8(void) {
                         hero_set_state(HERO_STATE_FALL, 1);
                     }
                     break;
-                case HERO_STATE_GRAPPLE_EQUIPPED_WAIT:
+                case HERO_STATE_GRAPPLE_TARGET_ENTRY:
                     if (hero.items[0].item_id != 0xC) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -1300,7 +1300,7 @@ void FUN_L17_002258a8(void) {
                 case HERO_STATE_GRIND_JUMP:
                 case HERO_STATE_GRIND_RAIL_TRANSFER:
                 case HERO_STATE_GRIND_ATTACK:
-                case HERO_STATE_GRIND_OBSTACLE_JUMP:
+                case HERO_STATE_GRIND_COLLISION_RECOVERY:
                     if (hero.state.current == 0x42) {
                         hero.unk5BE = 0;
                     } else {
@@ -1842,7 +1842,7 @@ void FUN_L17_002258a8(void) {
                         hero_set_state(0x74, 1);
                     }
                     break;
-                case HERO_STATE_DEATH_FALL:
+                case HERO_STATE_FATAL_FALL:
                     if ((current_level_index == 3 && 5.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 6 && 50.0f > hero.motion.pos.f[2]) ||
                         (current_level_index == 0x10 && (77.0f > hero.motion.pos.f[2] ||
@@ -2786,7 +2786,7 @@ void FUN_L17_002258a8(void) {
                     }
                     hero_set_state(0x53, 1);
                     break;
-                case HERO_STATE_CIRCLE_RELEASE_WAIT:
+                case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT:
                     if (hero.state_timer > scale_game_frames(0x2D) && !(controller_state.held & 0x20)) {
                         hero_set_state(0x53, 0);
                         set_hero_animation(0, 0, scale_game_frames(0x14));

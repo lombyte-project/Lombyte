@@ -2396,7 +2396,7 @@ void FUN_L12_00238900(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, 0.004f);
         break;
     }
-    case HERO_STATE_MOVE_TO_STORED_TARGET: {
+    case HERO_STATE_APPROACH_TARGET_POSE: {
         f32 l;
         f32 k;
         subtract_vector_xyz(&geometry_and_hit_descriptor_scratch, &hero.unk1640, &hero.motion.pos);
@@ -2450,7 +2450,7 @@ void FUN_L12_00238900(void) {
         }
         break;
     }
-    case HERO_STATE_STORED_TARGET_BRAKING:
+    case HERO_STATE_BRAKE_AT_TARGET_POSITION:
         subtract_vector_xyz(&geometry_and_hit_descriptor_scratch, &hero.unk1640, &hero.motion.pos);
         if (fast_vec_dot(&geometry_and_hit_descriptor_scratch, &hero.motion.unk150) < 0.0f) {
             clear_u64_value(&hero.motion.unk150);
@@ -2486,7 +2486,7 @@ void FUN_L12_00238900(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case HERO_STATE_DOWNHILL_MOVEMENT:
+    case HERO_STATE_VEHICLE_MODE_3_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         FUN_L00_00213e68(frame_time_sq * 25.0f);
