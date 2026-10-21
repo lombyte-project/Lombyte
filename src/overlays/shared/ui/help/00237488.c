@@ -1051,18 +1051,18 @@ extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_002325e0(int bank, int seq);
 
 void FUN_L05_00253850(void) {
-    struct Hero *g = &hero;
+    struct Hero *hero_ptr = &hero;
     int pad;
-    g->unk888 =
-        truncate_float_to_s32(FUN_L00_00232b90(60.0f, g->unk860, -1.0f));
-    if (g->unk88D != 0 && ((pad = *(int *)(D_0013CAE0)) & 0xF) != 0) {
-        g->unk88F = 0;
+    hero_ptr->unk888 =
+        truncate_float_to_s32(FUN_L00_00232b90(60.0f, hero_ptr->unk860, -1.0f));
+    if (hero_ptr->unk88D != 0 && ((pad = *(int *)(D_0013CAE0)) & 0xF) != 0) {
+        hero_ptr->unk88F = 0;
         if (pad & 8)
-            g->unk88F = 1;
+            hero_ptr->unk88F = 1;
         else if (pad & 1)
-            g->unk88F = 2;
+            hero_ptr->unk88F = 2;
         else if (pad & 2)
-            g->unk88F = 3;
+            hero_ptr->unk88F = 3;
         {
             struct Hero *h = &hero;
             int a = h->unk88F + 0x69;
