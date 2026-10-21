@@ -452,16 +452,16 @@ extern int follow_path(void *, void *, int, float, void *, void *, void *) __asm
 extern int FUN_L01_0028b510(void *, void *, float);
 extern void *FUN_L07_00313350_u(void *, void *, void *) __asm__("FUN_L07_00313350");
 
-void FUN_L07_00313988(char *moby, char *moby_vars, void *b, void *out_position) {
-    float v[8];
-    void *r = FUN_L07_00313350_u(moby, moby_vars, v);
-    if (follow_path(v, r, *(int *)(moby_vars + 0x188), 0.0f, moby + 0x10, b, out_position))
+void FUN_L07_00313988(char *moby, char *moby_vars, void *target_position, void *out_position) {
+    float navigation_ids[8];
+    void *navigation_id_count = FUN_L07_00313350_u(moby, moby_vars, navigation_ids);
+    if (follow_path(navigation_ids, navigation_id_count, *(int *)(moby_vars + 0x188), 0.0f, moby + 0x10, target_position, out_position))
         return;
     {
-        int i = FUN_L01_0028b510(b, D_L07_001B0530[*(int *)(moby_vars + 0x290)], 0.0f);
+        int i = FUN_L01_0028b510(target_position, D_L07_001B0530[*(int *)(moby_vars + 0x290)], 0.0f);
         int j = FUN_L01_0028b510(D_L07_001B0530[*(int *)(moby_vars + 0x290)] + (i * 16 + 0x10),
                                  D_L07_001B0530[*(int *)(moby_vars + 0x188)], 0.0f);
-        if (follow_path(v, r, *(int *)(moby_vars + 0x188), 0.0f, moby + 0x10,
+        if (follow_path(navigation_ids, navigation_id_count, *(int *)(moby_vars + 0x188), 0.0f, moby + 0x10,
                              D_L07_001B0530[*(int *)(moby_vars + 0x188)] + (j * 16 + 0x10), out_position))
             return;
         i = FUN_L01_0028b510(moby + 0x10, D_L07_001B0530[*(int *)(moby_vars + 0x188)], 0.0f);
