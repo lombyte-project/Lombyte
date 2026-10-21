@@ -72,9 +72,9 @@ void FUN_L14_002df138(u8 *moby) {
     f32 *moby_vars = *(f32 **)(moby + 0x78);
     f32 step;
     f32 ripple_point_index;
-    f32 b;
+    f32 ripple_height;
     f32 point_fraction_or_sweep_angle;
-    f32 u;
+    f32 sweep_height_amplitude;
     f32 sweep_point_index;
     s32 i;
     s32 j;
@@ -91,13 +91,13 @@ void FUN_L14_002df138(u8 *moby) {
     for (i = 0; i < 5; i++) {
         point_fraction_or_sweep_angle = integer_to_float_l14(i) / integer_to_float_l14(10);
         if (i == 0) {
-            b = 0.0f;
+            ripple_height = 0.0f;
         } else {
             ripple_point_index = (f32)i;
-            b = fast_sin(normalize_angle(moby_vars[0x1E0 / 4] + (ripple_point_index * step))) * 0.1f;
-            b += spread_l14(0.0f, 0.2f);
+            ripple_height = fast_sin(normalize_angle(moby_vars[0x1E0 / 4] + (ripple_point_index * step))) * 0.1f;
+            ripple_height += spread_l14(0.0f, 0.2f);
         }
-        moby_vars[(i * 4) + 2] = b;
+        moby_vars[(i * 4) + 2] = ripple_height;
         moby_vars[(i * 4) + 1] = 0.0f;
         moby_vars[(i * 4) + 0] = (moby_vars[0x1F0 / 4] * ((f32)i)) + 1.6f;
         moby_vars[(i * 4) + 3] = 1.0f;
@@ -123,8 +123,8 @@ void FUN_L14_002df138(u8 *moby) {
         sweep_point_index = (f32)i;
         moby_vars[(i * 4) + (0xA8 / 4)] = 0.0f;
         point_fraction_or_sweep_angle = normalize_angle(moby_vars[0x1E4 / 4] + (sweep_point_index * 0.99483764f));
-        u = fast_sin(normalize_angle(moby_vars[0x1E8 / 4] + (sweep_point_index * 0.20944f))) * 0.75f;
-        moby_vars[(i * 4) + (0xA8 / 4)] += (u * fast_sin(point_fraction_or_sweep_angle)) + spread_l14(0.0f, 0.2f);
+        sweep_height_amplitude = fast_sin(normalize_angle(moby_vars[0x1E8 / 4] + (sweep_point_index * 0.20944f))) * 0.75f;
+        moby_vars[(i * 4) + (0xA8 / 4)] += (sweep_height_amplitude * fast_sin(point_fraction_or_sweep_angle)) + spread_l14(0.0f, 0.2f);
         moby_vars[(i * 4) + (0xA4 / 4)] = fast_cos(point_fraction_or_sweep_angle) * 0.5f;
         moby_vars[(i * 4) + (0xA0 / 4)] = sweep_point_index * 0.39f;
         moby_vars[(i * 4) + (0xAC / 4)] = 1.0f;
