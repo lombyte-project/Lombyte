@@ -584,11 +584,11 @@ void advance_moby_animation(void *) __asm__("FUN_0020d580");
 void FUN_L00_00250df8(void *);
 void FUN_L00_002061f0(void) {
     M4_2061f0 bone_transform;
-    struct Hero *g = &hero;
-    char *destination_moby = ((char *)g->unkA88);
+    struct Hero *hero_state = &hero;
+    char *destination_moby = ((char *)hero_state->unkA88);
     char *hero_moby;
     destination_moby[0x7F] = 0;
-    hero_moby = ((char *)g->moby);
+    hero_moby = ((char *)hero_state->moby);
     if ((*(unsigned short *)(hero_moby + 0x34) ^ 1) & 1) {
         build_moby_bone_transform(hero_moby, 5, bone_transform);
         qcopy(destination_moby + 0x10, &bone_transform[12]);
