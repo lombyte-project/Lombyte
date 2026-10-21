@@ -948,7 +948,7 @@ void FUN_L14_002ec810(struct Moby *moby) {
     L14MineHit *hit;
     int i;
     float glow_pulse_sine;
-    int r;
+    int glow_red_intensity;
     int g;
 
     switch (moby->state) {
@@ -1003,9 +1003,9 @@ void FUN_L14_002ec810(struct Moby *moby) {
         moby->rot.z = mine_add_rot(moby->rot.z, mine_vars->spin[2]);
         mine_vars->phase = mine_add_rot(mine_vars->phase, D_L14_00161C48);
         glow_pulse_sine = mine_sin(mine_vars->phase);
-        r = mine_ftoi(glow_pulse_sine * 48.0f) + 0xCF;
+        glow_red_intensity = mine_ftoi(glow_pulse_sine * 48.0f) + 0xCF;
         g = mine_ftoi(glow_pulse_sine * 32.0f) + 0x30;
-        moby->glow_color = g << 16 | (0xFF000000 | g << 8) | r;
+        moby->glow_color = g << 16 | (0xFF000000 | g << 8) | glow_red_intensity;
         break;
     }
 }
