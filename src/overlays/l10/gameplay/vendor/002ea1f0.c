@@ -259,7 +259,7 @@ void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
     float vel[4];
     float acc[4];
     float frame_count_scale;
-    int frame_count, b, second_frame_count, c1;
+    int frame_count, third_frame_count, second_frame_count, c1;
     if (*burst >= 0) {
         if (fast_dec_timer_s16(burst)) {
             *burst = -func_001FA898_r(random_float_between((float)*(int *)&D_L10_00162044, (float)*(int *)&D_L10_00162048));
@@ -276,7 +276,7 @@ void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
     if (!fast_dec_timer_s16(timer)) return;
     frame_count_scale = random_float_between(1.0f - *(float *)&D_L10_00162020, *(float *)&D_L10_00162020 + 1.0f);
     frame_count = func_001FA898_r((float)*(int *)&D_L10_00162018 * frame_count_scale);
-    b = func_001FA898_r((float)*(int *)&D_L10_0016201C * frame_count_scale);
+    third_frame_count = func_001FA898_r((float)*(int *)&D_L10_0016201C * frame_count_scale);
     second_frame_count = func_001FA898_r(square_root((height + height) / (*(float *)&D_L10_00162000 * frame_time_sq)) * *(float *)&D_L10_00162050 * frame_count_scale);
     clear_u64_value(vel);
     random_vector(acc, 0.0f, *(float *)&D_L10_00162004 * frame_time);
@@ -284,7 +284,7 @@ void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
     vel[3] = random_float_between(*(float *)&D_L10_00162008, *(float *)&D_L10_0016200C);
     acc[3] = random_float_between(*(float *)&D_L10_00162010, *(float *)&D_L10_00162014);
     c1 = fast_tween_color(D_L10_00162024, D_L10_00162028, random_float_between(0.0f, 1.0f));
-    spawn_spark(pos, vel, acc, c1, fast_tween_color(D_L10_0016202C, D_L10_00162030, random_float_between(0.0f, 1.0f)), frame_count, second_frame_count, b, D_L10_0016204C);
+    spawn_spark(pos, vel, acc, c1, fast_tween_color(D_L10_0016202C, D_L10_00162030, random_float_between(0.0f, 1.0f)), frame_count, second_frame_count, third_frame_count, D_L10_0016204C);
     *timer = func_001FA898_r(random_float_between((float)*(int *)&D_L10_00162034, (float)*(int *)&D_L10_00162038));
 }
 #define NOT_SDA
