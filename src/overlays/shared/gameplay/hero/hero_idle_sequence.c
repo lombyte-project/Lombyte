@@ -3085,12 +3085,12 @@ void FUN_L00_0020b5b8(void) {
     qcopy(&position_scratch, &g->motion.pos);
     prediction_frames = scale_game_frames(0x14);
     {
-        f32 st = (f32)prediction_frames;
-        vertical_acceleration_times_frames = g->unk4A0 * st;
-        b = g->motion.velocity.f[2] * st;
-        projected_x_displacement = g->motion.displacement.f[0] * st;
-        projected_y_displacement = g->motion.displacement.f[1] * st;
-        position_scratch.f[2] = position_scratch.f[2] + b - vertical_acceleration_times_frames * st * 0.5f;
+        f32 prediction_interval_frames = (f32)prediction_frames;
+        vertical_acceleration_times_frames = g->unk4A0 * prediction_interval_frames;
+        b = g->motion.velocity.f[2] * prediction_interval_frames;
+        projected_x_displacement = g->motion.displacement.f[0] * prediction_interval_frames;
+        projected_y_displacement = g->motion.displacement.f[1] * prediction_interval_frames;
+        position_scratch.f[2] = position_scratch.f[2] + b - vertical_acceleration_times_frames * prediction_interval_frames * 0.5f;
     }
     position_scratch.f[0] = position_scratch.f[0] + projected_x_displacement;
     position_scratch.f[1] = position_scratch.f[1] + projected_y_displacement;
