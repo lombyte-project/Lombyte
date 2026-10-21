@@ -948,9 +948,9 @@ int FUN_L00_001efc70_217118(void *, void *, int, void *, int) __asm__("FUN_L00_0
 float FUN_L00_00233d30_217118(void *) __asm__("FUN_L00_00233d30");
 void FUN_L00_00213de8_217118(float) __asm__("FUN_L00_00213de8");
 
-void FUN_L00_00217118(float velocity_scale, float b) {
+void FUN_L00_00217118(float velocity_scale, float planar_length_threshold) {
     OvlQuad collision_query_position[1];
-    OvlQuad u[1];
+    OvlQuad collision_query_second_position[1];
     unsigned char *P = (&hero.motion.velocity);
     unsigned char *G;
     unsigned char *Q;
@@ -969,13 +969,13 @@ void FUN_L00_00217118(float velocity_scale, float b) {
         velocity_scale = 2.0f;
     Q += 0xE0;
     FUN_001f9a68_217118(collision_query_position, velocity_scale, Q);
-    if (0.0f < b && gravity_length_xy(collision_query_position) < b) {
+    if (0.0f < planar_length_threshold && gravity_length_xy(collision_query_position) < planar_length_threshold) {
         FUN_L00_00233ba0_217118(collision_query_position, collision_query_position, 0.0f);
-        FUN_L00_00233708_217118(collision_query_position, collision_query_position, b);
+        FUN_L00_00233708_217118(collision_query_position, collision_query_position, planar_length_threshold);
     }
     gravity_set_z(collision_query_position, collision_query_position, 0.0f);
     FUN_001f9a10_217118(collision_query_position, collision_query_position, (&hero.motion.pos));
-    qcopy(u, collision_query_position);
+    qcopy(collision_query_second_position, collision_query_position);
     FUN_L00_00233810_217118(collision_query_position, collision_query_position, 0.3f);
     P = ((char *)&hero);
     k = -0.2f;
@@ -983,9 +983,9 @@ void FUN_L00_00217118(float velocity_scale, float b) {
         k = -0.35f;
     if (P[0x20A4] == 2)
         k = -0.7f;
-    FUN_L00_00233810_217118(u, u, k);
+    FUN_L00_00233810_217118(collision_query_second_position, collision_query_second_position, k);
     r = 1.0f;
-    if (FUN_L00_001efc70_217118(collision_query_position, u, 4, *(void **)(P + 0x2080), 0)) {
+    if (FUN_L00_001efc70_217118(collision_query_position, collision_query_second_position, 4, *(void **)(P + 0x2080), 0)) {
         collision_hit_data = coll_hit;
         if (*(int *)(collision_hit_data + 0x1C) > 0 && FUN_L00_00233d30_217118(collision_hit_data + 0x40) <= 0.87266463f)
             r = 0.0f;
