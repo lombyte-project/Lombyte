@@ -109,7 +109,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern u8 *D_L01_001B25E0[];
 
 Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) __asm__("FUN_L01_00287b00");
-Particle *pool_bubble(u128 *pos, u128 *vel, f32 scale) {
+Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
     Particle *particle;
     s32 gray_channel;
     u32 col;
@@ -125,7 +125,7 @@ Particle *pool_bubble(u128 *pos, u128 *vel, f32 scale) {
         particle->active = 0;
         particle->tex = *D_L01_001B25E0[0];
         particle->scale = scale;
-        qcopy(&particle->m.pos, vel);
+        qcopy(&particle->m.pos, motion_position_source);
         particle->spin = random_integer_below(0x100);
     }
     return particle;
