@@ -505,7 +505,7 @@ struct Moby *FUN_L00_002c9348(State *source_state) {
     void *source_record;
     Opt *color_options;
     f32 g;
-    f32 c1;
+    f32 yaw_cosine_scratch;
     f32 sn;
 
     spawned_moby = (struct Moby *)create_moby(0x10E);
@@ -533,12 +533,12 @@ struct Moby *FUN_L00_002c9348(State *source_state) {
             spawned_moby->pos.z = g;
             spawned_moby->pos.z = D_L00_00173E40.f28;
             qcopy(&loc.v, (u8 *)&D_L00_00173E40 + 0x40);
-            c1 = fast_cos(spawned_moby->rot.z);
+            yaw_cosine_scratch = fast_cos(spawned_moby->rot.z);
             sn = fast_sin(spawned_moby->rot.z);
-            loc.t1 = loc.v.f[0] * c1 + loc.v.f[1] * sn;
-            c1 = fast_cos(spawned_moby->rot.z);
+            loc.t1 = loc.v.f[0] * yaw_cosine_scratch + loc.v.f[1] * sn;
+            yaw_cosine_scratch = fast_cos(spawned_moby->rot.z);
             sn = fast_sin(spawned_moby->rot.z);
-            loc.t2 = loc.v.f[1] * c1 - loc.v.f[0] * sn;
+            loc.t2 = loc.v.f[1] * yaw_cosine_scratch - loc.v.f[0] * sn;
             loc.t3 = loc.v.f[2];
             g = fast_arc_tan(square_root(loc.t1 * loc.t1 + loc.t3 * loc.t3), loc.t2);
             spawned_moby->rot.x = -g;
@@ -561,13 +561,13 @@ struct Moby *FUN_L00_002c9348(State *source_state) {
         } else {
             mark_moby_for_removal(source_state);
         }
-        c1 = 0.0f;
-        FUN_L00_00269b70(&spawned_moby->pos, 0x7F, 0x7F, 0x7F, scale_game_frames(0xF), 1000000.0f, c1);
+        yaw_cosine_scratch = 0.0f;
+        FUN_L00_00269b70(&spawned_moby->pos, 0x7F, 0x7F, 0x7F, scale_game_frames(0xF), 1000000.0f, yaw_cosine_scratch);
         fill_transfer_words(moby_vars, 0, 0x20);
         previous_slot_moby = D_L00_001DD100[D_L00_00161854];
         if (previous_slot_moby != NULL && previous_slot_moby->oclass == 0x10E && previous_slot_moby->state != 0xFE && previous_slot_moby->state != 0xFD) {
             if (previous_slot_moby->state == 5) {
-                moby_vars->unk78 = c1;
+                moby_vars->unk78 = yaw_cosine_scratch;
                 spawned_moby->flags &= ~0x20;
             } else if (!moby_vars->unk74) {
                 moby_vars->unk14 = (void *)&D_L00_001DD150[D_L00_00161854];
