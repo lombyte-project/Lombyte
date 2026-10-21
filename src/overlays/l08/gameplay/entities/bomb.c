@@ -2867,9 +2867,9 @@ void FUN_L08_002de848(char *moby) {
             return;
         }
         {
-            float l0 = distance_xyz((char *)path + 0x10, (char *)path + 0x20);
+            float first_path_segment_length = distance_xyz((char *)path + 0x10, (char *)path + 0x20);
             distance_xyz((char *)path + 0x10, (char *)path + (*path << 4));
-            *(float *)(moby_vars + 8) = D_L08_00161A44 * D_0015ED6C / l0;
+            *(float *)(moby_vars + 8) = D_L08_00161A44 * D_0015ED6C / first_path_segment_length;
             *(float *)(moby_vars + 4) = *(float *)(moby_vars + 4) * (float)*path;
             *(float *)(moby_vars + 0xC) = randf_sym(0.0f, 5.0f);
         }
@@ -2891,11 +2891,11 @@ void FUN_L08_002de848(char *moby) {
         float c15 = 15.0f;
         float c10 = 10.0f;
         float dd;
-        float g;
+        float falling_rotation_step;
         char *falling_velocity = moby_vars + 0x10;
-        g = D_0015ED6C * 7.3303828f;
+        falling_rotation_step = D_0015ED6C * 7.3303828f;
         *(float *)(moby_vars + 0x18) = *(float *)(moby_vars + 0x18) - D_0015ED70 * c15;
-        dd = fast_add_rotations(*(float *)(moby + 0x40), g);
+        dd = fast_add_rotations(*(float *)(moby + 0x40), falling_rotation_step);
         *(float *)(moby + 0x40) = *(float *)(moby + 0x40) + dd;
         *(float *)(moby + 0x44) = -fast_arc_tan(vector_length_xy(falling_velocity), *(float *)(moby_vars + 0x18));
         add_vector_xyz(pos, pos, falling_velocity);
