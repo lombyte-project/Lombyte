@@ -329,7 +329,7 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
 
 void FUN_L13_002c2048(Moby_2C27B0 *moby) {
     char *moby_data = (char *)moby->data;
-    V4_2C27B0 vec;
+    V4_2C27B0 steering_and_collision_vector;
     float hitpos[12];
     V4_2C27B0 *pos;
     V4_2C27B0 *velocity;
@@ -355,16 +355,16 @@ void FUN_L13_002c2048(Moby_2C27B0 *moby) {
         if (factor > 1.0f) factor = 1.0f;
         magnitude = D_0015ED6C * 1.5f;
         factor *= magnitude;
-        subtract_vector_xyz(&vec, &hero_state->veh->pos, pos);
-        normalize_vector_xyz(&vec, &vec, factor);
-        add_vector_xyz(velocity, velocity, &vec);
+        subtract_vector_xyz(&steering_and_collision_vector, &hero_state->veh->pos, pos);
+        normalize_vector_xyz(&steering_and_collision_vector, &steering_and_collision_vector, factor);
+        add_vector_xyz(velocity, velocity, &steering_and_collision_vector);
     }
     if (*(int *)(moby_data + 0x70) < scale_game_frames_alt(0x168) - 9) {
         add_vector_xyz(pos, pos, velocity);
         scale_vector_xyz(velocity, velocity, 0.945f);
     } else {
-        subtract_vector_xyz(&vec, pos, &(*(Moby_2C27B0 **)(moby_data + 0x74))->pos);
-        normalize_vector_xyz(&vec, &vec, D_0015ED6C * 20.0f);
+        subtract_vector_xyz(&steering_and_collision_vector, pos, &(*(Moby_2C27B0 **)(moby_data + 0x74))->pos);
+        normalize_vector_xyz(&steering_and_collision_vector, &steering_and_collision_vector, D_0015ED6C * 20.0f);
         add_vector_xyz(pos, pos, velocity);
     }
     if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f ||
@@ -376,10 +376,10 @@ void FUN_L13_002c2048(Moby_2C27B0 *moby) {
     if (target != 0 && target->state != 0xFE && target->state != 0xFD &&
         distance_xyz(pos, &target->pos) > 8.0f) {
         FUN_L00_00259888(16.0f, &hitpos, moby, 0x30000, velocity);
-        qcopy(&vec, pos);
-        vec.z += 0.75f;
-        flags = collect_mobies_in_sphere(1.7f, &vec, 0x10, moby, &hitpos);
-        flags = flags | FUN_L00_001f0d60_2048(&vec, 1.7f, 4, moby);
+        qcopy(&steering_and_collision_vector, pos);
+        steering_and_collision_vector.z += 0.75f;
+        flags = collect_mobies_in_sphere(1.7f, &steering_and_collision_vector, 0x10, moby, &hitpos);
+        flags = flags | FUN_L00_001f0d60_2048(&steering_and_collision_vector, 1.7f, 4, moby);
         hit = (Moby_2C27B0 *)FUN_L00_0025a420(moby, -1, 0);
         if (hit != 0) {
             float health = *(float *)(moby_data + 0x20) - *(float *)((char *)hit + 0x2C);
