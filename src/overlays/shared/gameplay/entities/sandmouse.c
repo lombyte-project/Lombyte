@@ -1292,7 +1292,7 @@ void FUN_L01_00314e98(Camera *cam) {
     CameraView *view;
     CameraTrack *track;
     CameraBlend *blend;
-    CameraPath *preset_path, *b, *look_path, *target_path;
+    CameraPath *preset_path, *track_path, *look_path, *target_path;
     s32 i, j, k, segment_count, prev;
 
     focus = &cam->orbit->focus;
@@ -1336,13 +1336,13 @@ void FUN_L01_00314e98(Camera *cam) {
     blend->unkC = 0;
     blend->unk10 = 1;
     if (preset->kind == 2 && preset->ready == 0) {
-        b = D_L01_001B0930[preset->track_path];
+        track_path = D_L01_001B0930[preset->track_path];
         target_path = D_L01_0015F70C[preset->target].path;
         preset_path = D_L01_001B0930[preset->path];
         look_path = D_L01_001B0930[preset->look_path];
         preset->ready = 1;
         for (i = 0; i < preset_path->count; i++) {
-            FUN_L00_0025df68(b, &preset_path->pts[i], &at, &seg, &path_fraction_or_length, 0, 20.0f, 5.0f, 0.0f);
+            FUN_L00_0025df68(track_path, &preset_path->pts[i], &at, &seg, &path_fraction_or_length, 0, 20.0f, 5.0f, 0.0f);
             preset_path->pts[i].f[0] = preset_path->pts[i].f[3];
             preset_path->pts[i].f[3] = seg;
         }
@@ -1351,11 +1351,11 @@ void FUN_L01_00314e98(Camera *cam) {
             j = truncate_float_to_s32(preset_path->pts[prev].f[3]);
             segment_count = truncate_float_to_s32(preset_path->pts[i].f[3]) - j;
             if (segment_count < 0) {
-                segment_count += b->count;
+                segment_count += track_path->count;
             }
             path_fraction_or_length = 0.0f;
             for (k = 0; k < segment_count; k++) {
-                path_fraction_or_length += b->pts[(j + i) % b->count].f[3];
+                path_fraction_or_length += track_path->pts[(j + i) % track_path->count].f[3];
             }
             preset_path->pts[i].f[1] = path_fraction_or_length;
             prev = i;
