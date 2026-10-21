@@ -182,7 +182,7 @@ void FUN_L04_002af058(struct Moby *moby)
     Vec4 old;
     CollisionProbe pr;
     Vec4 push;
-    Vec4 r;
+    Vec4 random_vector;
     ShotVars *v = (ShotVars *)moby->pvars;
     CollisionProbe *probe;
     f32 range;
@@ -242,14 +242,14 @@ void FUN_L04_002af058(struct Moby *moby)
     qcopy(&moby->pos, &D_L04_00173FE0);
     if (moby->command == 0) {
         for (i = 0; i < 5; i++) {
-            r.q = 0;
-            r.f[0] = random_float_between(-1.0f, 1.0f);
-            r.f[1] = random_float_between(-1.0f, 1.0f);
-            r.f[2] = random_float_between(-1.0f, 1.0f);
-            push.q = r.q;
-            FUN_L00_001ff660(&r, v, D_L04_00174000);
-            normalize_vector_xyz(&push, &push, vector_length_xyz(&r) * 0.5f);
-            add_vector_xyz(&push, &r, &push);
+            random_vector.q = 0;
+            random_vector.f[0] = random_float_between(-1.0f, 1.0f);
+            random_vector.f[1] = random_float_between(-1.0f, 1.0f);
+            random_vector.f[2] = random_float_between(-1.0f, 1.0f);
+            push.q = random_vector.q;
+            FUN_L00_001ff660(&random_vector, v, D_L04_00174000);
+            normalize_vector_xyz(&push, &push, vector_length_xyz(&random_vector) * 0.5f);
+            add_vector_xyz(&push, &random_vector, &push);
             normalize_vector_xyz(&push, &push, random_float_between(frame_time_macro * 3.0f, frame_time_macro * 6.0f));
             FUN_L00_0026dd20(&moby->pos, &push, 0x7F2F4F6F,
                              random_int_between(scale_game_frames(10), scale_game_frames(15)), 30000.0f);
