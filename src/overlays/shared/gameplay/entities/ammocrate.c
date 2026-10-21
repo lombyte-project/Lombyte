@@ -13,10 +13,10 @@
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
-float FUN_L13_002ba088(int flag, int squaring_loop_limit, float x, float b, float end_value, float lo, float hi) {
+float FUN_L13_002ba088(int flag, int squaring_loop_limit, float x, float start_value, float end_value, float lo, float hi) {
     float end_value_weight;
-    float u;
-    float r = 0.0f;
+    float start_value_weight;
+    float interpolated_value = 0.0f;
     int i;
     if (x > lo) {
         end_value_weight = (x - lo) / (hi - lo);
@@ -29,16 +29,16 @@ float FUN_L13_002ba088(int flag, int squaring_loop_limit, float x, float b, floa
         for (i = 1; i < squaring_loop_limit; i++) {
             end_value_weight = end_value_weight * end_value_weight;
         }
-        u = 1.0f - end_value_weight;
+        start_value_weight = 1.0f - end_value_weight;
         if (flag != 0) {
-            r = fast_add_rotations(b, fast_subtract_rotations(end_value, b) * end_value_weight);
+            interpolated_value = fast_add_rotations(start_value, fast_subtract_rotations(end_value, start_value) * end_value_weight);
         } else {
-            r = b * u + end_value * end_value_weight;
+            interpolated_value = start_value * start_value_weight + end_value * end_value_weight;
         }
     } else {
-        r = b;
+        interpolated_value = start_value;
     }
-    return r;
+    return interpolated_value;
 }
 #include "qcopy.h"
 
