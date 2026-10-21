@@ -4,7 +4,7 @@ extern s32 sceSifCallRpc(void *, u32, u32, void *, s32, void *, s32, void (*)(vo
 s32 stash_receive_data(u8 *dst, u32 slot, s32 offset_qwords,
                        s32 qword_count, u32 rpc_mode) __asm__("FUN_00232f20");
 
-s32 stash_receive_data(u8 *dst, u32 slot, s32 offset_qwords,
+s32 stash_receive_data(u8 *receive_destination, u32 slot, s32 offset_qwords,
                        s32 qword_count, u32 rpc_mode) {
     s32 chunk_qwords;
     s32 request[4];
@@ -23,10 +23,10 @@ s32 stash_receive_data(u8 *dst, u32 slot, s32 offset_qwords,
         chunk_qwords = qword_count > STASH_MAX_FETCH_QWORDS
                            ? STASH_MAX_FETCH_QWORDS : qword_count;
         sceSifCallRpc(stash_rpc_client_address, STASH_RPC_FETCH, rpc_mode,
-                      request, STASH_QWORD_BYTES, dst,
+                      request, STASH_QWORD_BYTES, receive_destination,
                       chunk_qwords * STASH_QWORD_BYTES, 0, 0);
         qword_count -= chunk_qwords;
-        dst += chunk_qwords * STASH_QWORD_BYTES;
+        receive_destination += chunk_qwords * STASH_QWORD_BYTES;
         request[0] += chunk_qwords * STASH_QWORD_BYTES;
     }
     return 0;
