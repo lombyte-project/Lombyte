@@ -1040,16 +1040,16 @@ void FUN_L05_002db238(void *moby, void *dir) {
         second_spark_vector[2] -= frame_time_sq * 20.0f * (float)scale_game_frames(0x1E);
         for (j = 0; j < 10; j++) {
             float spark_vector_w_scale = random_float_between_c(0.5f, 1.5f);
-            int c1, c2, spark_frame_count, second_spark_frame_count;
+            int first_spark_color, second_spark_color, spark_frame_count, second_spark_frame_count;
             first_spark_vector[3] = spark_vector_w_scale * 0.125f;
             second_spark_vector[3] = spark_vector_w_scale * 0.065f;
             FUN_L00_0025f8e0(spark_position, 0.2f);
             FUN_L00_0025f8e0(second_spark_vector, frame_time * 0.5f);
-            c1 = fast_tween_color(0x8000EEEE, 0x8000FF90, random_float_between_c(0.0f, 1.0f));
-            c2 = fast_tween_color(0xFFEE, 0xFFEE, random_float_between_c(0.0f, 1.0f));
+            first_spark_color = fast_tween_color(0x8000EEEE, 0x8000FF90, random_float_between_c(0.0f, 1.0f));
+            second_spark_color = fast_tween_color(0xFFEE, 0xFFEE, random_float_between_c(0.0f, 1.0f));
             spark_frame_count = scale_game_frames(10);
             second_spark_frame_count = scale_game_frames(0x1E);
-            spawn_spark(spark_position, first_spark_vector, second_spark_vector, c1, c2, spark_frame_count, second_spark_frame_count, func_001FA898_r(multiply_global_factor_ed64(random_float_between_c(5.0f, 25.0f))), -1);
+            spawn_spark(spark_position, first_spark_vector, second_spark_vector, first_spark_color, second_spark_color, spark_frame_count, second_spark_frame_count, func_001FA898_r(multiply_global_factor_ed64(random_float_between_c(5.0f, 25.0f))), -1);
         }
     }
 }
