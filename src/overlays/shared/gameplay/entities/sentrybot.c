@@ -2228,7 +2228,7 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
         EXPANDING_BLAST = 1
     };
     float random_effect_vector[4];
-    float v[4];
+    float effect_vector_scratch[4];
     float temporary_position[4];
     Data29FF90 *moby_data = moby->data;
 
@@ -2251,17 +2251,17 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
                 int r;
                 int rc;
 
-                *(u128_29FF90 *)v = 0;
-                v[0] = random_float_between(-1.0f, 1.0f);
-                v[1] = random_float_between(-1.0f, 1.0f);
-                v[2] = random_float_between(-1.0f, 1.0f);
-                *(u128_29FF90 *)random_effect_vector = *(u128_29FF90 *)v;
+                *(u128_29FF90 *)effect_vector_scratch = 0;
+                effect_vector_scratch[0] = random_float_between(-1.0f, 1.0f);
+                effect_vector_scratch[1] = random_float_between(-1.0f, 1.0f);
+                effect_vector_scratch[2] = random_float_between(-1.0f, 1.0f);
+                *(u128_29FF90 *)random_effect_vector = *(u128_29FF90 *)effect_vector_scratch;
                 g = random_int_between(0x4F, 0xAF);
                 r = random_int_between(0x4F, 0xFF);
                 rc = r > 0xFF ? 0xFF : r;
                 if (g > 0xFF) g = 0xFF;
                 normalize_vector_xyz_c(random_effect_vector, random_effect_vector, random_float_between(20.0f, 40.0f));
-                FUN_L00_001ff290(v, random_effect_vector, moby->pos);
+                FUN_L00_001ff290(effect_vector_scratch, random_effect_vector, moby->pos);
                 FUN_L15_0025e2c0((0x7F << 24) | (rc << 16) | (g << 8) | 0x4F, random_effect_vector, (char *)moby);
             }
             if (moby_data->f10 < 0x32) {
@@ -2347,9 +2347,9 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
                 Part29FF90 *p;
 
                 random_spherical_offset(random_effect_vector, r * D_0015ED6C, r * 2.0f * D_0015ED6C);
-                random_spherical_offset(v, 0.0f, r * 0.5f);
-                FUN_L00_001ff290(temporary_position, v, moby->pos);
-                p = (Part29FF90 *)FUN_L00_00274948(v, random_effect_vector, 0x7F, moby);
+                random_spherical_offset(effect_vector_scratch, 0.0f, r * 0.5f);
+                FUN_L00_001ff290(temporary_position, effect_vector_scratch, moby->pos);
+                p = (Part29FF90 *)FUN_L00_00274948(effect_vector_scratch, random_effect_vector, 0x7F, moby);
                 if (p != 0) {
                     p->fC = random_float_between(6000.0f, 32000.0f) * r * 0.4f;
                 }
