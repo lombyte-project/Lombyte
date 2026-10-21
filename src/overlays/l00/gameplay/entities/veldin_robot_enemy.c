@@ -834,7 +834,7 @@ void FUN_L00_002e3800(FlockMoby *moby) {
     s32 random_magnitude;
     s32 i;
     s32 phase;
-    s32 idx;
+    s32 phase_effect_moby_index;
     FlockTail *tail;
 
     switch (moby->state) {
@@ -847,13 +847,13 @@ void FUN_L00_002e3800(FlockMoby *moby) {
              scale_game_frames_s32(0x618) <= D_L00_0016C860.level) ||
             (D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 3)) {
             phase = D_L00_0016C860.phase;
-            idx = -1;
+            phase_effect_moby_index = -1;
             if (phase == 2) {
-                idx = 3;
+                phase_effect_moby_index = 3;
             } else if (phase == 3) {
-                idx = 2;
+                phase_effect_moby_index = 2;
             }
-            cutscene_set_camera_target(D_L00_0016C860.mobys[idx]);
+            cutscene_set_camera_target(D_L00_0016C860.mobys[phase_effect_moby_index]);
         }
         if (D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 4) {
             src = D_L00_0016C860.mobys[3];
