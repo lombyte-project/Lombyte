@@ -1557,7 +1557,7 @@ void FUN_L00_00274a70(u8 *particle) {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L00_001B2198 __attribute__((section(".data")));
 
-unsigned char *FUN_L00_00274cf8(void *position, int idx, float ang) {
+unsigned char *FUN_L00_00274cf8(void *position, int particle_texture_index, float initial_rotation_radians) {
     unsigned char *particle = p27fe00_alloc(0x46);
     if (particle != 0) {
         qcopy(particle + 0x10, position);
@@ -1565,8 +1565,8 @@ unsigned char *FUN_L00_00274cf8(void *position, int idx, float ang) {
         particle[9] = truncate_float_to_s32(2.0f) + 0x20;
         particle[3] = 0x44;
         particle[1] = 1;
-        particle[2] = D_L00_001B2198[idx];
-        particle[8] = truncate_float_to_s32(ang * 128.0f / 3.14159274f) - 0x20;
+        particle[2] = D_L00_001B2198[particle_texture_index];
+        particle[8] = truncate_float_to_s32(initial_rotation_radians * 128.0f / 3.14159274f) - 0x20;
         *(float *)(particle + 0xC) = 147000.0f;
         *(short *)(particle + 0xA) = scale_game_frames(0x78);
     }
