@@ -1047,8 +1047,8 @@ extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void FUN_L00_001ed580(void *, void *, void *);
 
-void FUN_L00_002eb278(void *arg) {
-    char *camera_object = arg;
+void FUN_L00_002eb278(void *camera) {
+    char *camera_object = camera;
     float rotation_matrix[16];
     char *orbit_origin = *(char **)(camera_object + 0x70) + 0xB0;
     FUN_L00_001ed580(camera_object + 0x30, camera_object + 0x50, orbit_origin);
