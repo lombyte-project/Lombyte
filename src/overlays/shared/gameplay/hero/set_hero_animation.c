@@ -1634,10 +1634,10 @@ void FUN_L00_00234b38(void *a) {
     }
     level_index = current_level_index;
     if (level_index == 2 || level_index == 9 || level_index == 11 || level_index == 13) {
-        B_00234b38 *b = &D_L00_0016C860_00234b38;
+        B_00234b38 *moby_collection_base = &D_L00_0016C860_00234b38;
         s32 i;
-        for (i = 0; i < b->n; i++) {
-            u8 *e = b->e[i];
+        for (i = 0; i < moby_collection_base->n; i++) {
+            u8 *e = moby_collection_base->e[i];
             if (e != 0) {
                 s16 object_type_id = *(s16 *)(e + 0xA6);
                 if (object_type_id == 0x1B1 || object_type_id == 0x50A || object_type_id == 0x509) {
