@@ -1022,7 +1022,7 @@ void FUN_L14_002add48(char *moby) {
     float mat[4][4];
     float quad_translation_offset[4];
     float dir[4];
-    float v[4];
+    float beam_to_camera_vector[4];
     float rot[4];
     float rm[3][4];
     float size;
@@ -1048,9 +1048,9 @@ void FUN_L14_002add48(char *moby) {
     qcopy(dir, src[0]);
     qcopy(mat[3], src[3]);
     mat[3][3] = 1.0f;
-    sub_b(v, D_L14_001674C0_b, mat[3]);
-    rot[2] = atan2_b(v[0], v[1]);
-    rot[1] = -atan2_b(lenxy_b(v), v[2]);
+    sub_b(beam_to_camera_vector, D_L14_001674C0_b, mat[3]);
+    rot[2] = atan2_b(beam_to_camera_vector[0], beam_to_camera_vector[1]);
+    rot[1] = -atan2_b(lenxy_b(beam_to_camera_vector), beam_to_camera_vector[2]);
     rot[0] = 0.0f;
     rotmat_b(rm, rot);
     qcopy(mat[0], rm[0]);
