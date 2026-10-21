@@ -16,14 +16,14 @@ extern int FUN_00213260_2712b8(int) __asm__("FUN_00213260");
 extern unsigned char *D_L00_001B2130 __attribute__((section(".data")));
 unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int s, int a, int col, int n, float x,
                                 float y, float z, float w, float pw);
-unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *initial_velocity, int lifetime_frames, int initial_alpha, int col, int unscaled_increment, float x,
+unsigned char *FUN_L00_002712b8(OvlQuad *initial_position, float *initial_velocity, int lifetime_frames, int initial_alpha, int col, int unscaled_increment, float x,
                                 float y, float z, float w, float pw) {
     unsigned char *particle = p27fe00_alloc(0x2C);
     if (particle) {
         unsigned char *particle_data;
         float time_scale;
         float frame_scaled_increment;
-        qcopy(particle + 0x10, pos);
+        qcopy(particle + 0x10, initial_position);
         *(int *)(particle + 4) = (initial_alpha << 24) | col;
         *(float *)(particle + 0x1C) = pw;
         particle_data = particle + 0x20;
