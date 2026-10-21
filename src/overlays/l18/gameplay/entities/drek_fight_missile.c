@@ -3744,27 +3744,27 @@ void rocket_tank_update(M1454 *moby) {
         tank_data->f134 = fast_add_rotations(tank_data->f134, frame_time * 6.2831855f);
         if (is_value_within_interpolated_window((char *)moby, 4.0f) ||
             is_value_within_interpolated_window((char *)moby, 10.0f)) {
-            float v[4];
-            float w[4];
+            float firing_vector[4];
+            float projectile_spawn_position[4];
             float firing_vector_scale;
             if (compute_interpolated_record_value(moby) < 7.0f) {
-                moby_point_position(moby, 1, w);
+                moby_point_position(moby, 1, projectile_spawn_position);
                 firing_vector_scale = *(float *)&D_L18_0016247C_gp;
             } else {
-                moby_point_position(moby, 2, w);
+                moby_point_position(moby, 2, projectile_spawn_position);
                 firing_vector_scale = *(float *)&D_L18_0016247C;
             }
             firing_vector_scale *= frame_time;
-            v[0] = fast_cos(tank_data->f110) * (fast_cos(tank_data->f118) * firing_vector_scale);
-            v[1] = fast_sin(tank_data->f110) * (fast_cos(tank_data->f118) * firing_vector_scale);
-            v[2] = 0;
-            v[2] = -fast_sin(tank_data->f118) * firing_vector_scale;
+            firing_vector[0] = fast_cos(tank_data->f110) * (fast_cos(tank_data->f118) * firing_vector_scale);
+            firing_vector[1] = fast_sin(tank_data->f110) * (fast_cos(tank_data->f118) * firing_vector_scale);
+            firing_vector[2] = 0;
+            firing_vector[2] = -fast_sin(tank_data->f118) * firing_vector_scale;
             allocate_voice_for_target_entry(0, 0, (int)moby);
-            FUN_L03_00250ae8(moby, w, 0);
+            FUN_L03_00250ae8(moby, projectile_spawn_position, 0);
             if (vector_distance((char *)moby + 0x10, &hero.motion.pos) > 10.0f) {
-                FUN_L18_002a75f0((char *)moby, w, v, 0);
+                FUN_L18_002a75f0((char *)moby, projectile_spawn_position, firing_vector, 0);
             } else {
-                FUN_L18_002a75f0((char *)moby, w, v, 1);
+                FUN_L18_002a75f0((char *)moby, projectile_spawn_position, firing_vector, 1);
             }
         }
         if (*(int *)((char *)tank_data + 0xB4) == 2) {
