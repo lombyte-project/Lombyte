@@ -2338,15 +2338,15 @@ void FUN_L00_002a9be0(void) {
     if (tracked_moby != 0) {
         if (*(short *)(tracked_moby + 0xA6) == 0x5F3) {
             char *data;
-            int idx;
+            int point_light_slot_index;
             if (*(unsigned char *)(tracked_moby + 0x20) != 0)
                 return;
             data = *(char **)(tracked_moby + 0x78);
             D_L00_0015F320 = 0;
             D_L00_0015F330 = 0;
-            idx = *(short *)(data + 0x2C);
-            if (idx != -1)
-                FUN_L00_0023e838(idx);
+            point_light_slot_index = *(short *)(data + 0x2C);
+            if (point_light_slot_index != -1)
+                FUN_L00_0023e838(point_light_slot_index);
             mark_moby_for_removal(*(char **)&D_L00_001613C8_d);
         }
         *(int *)&D_L00_001613C8_d = 0;
