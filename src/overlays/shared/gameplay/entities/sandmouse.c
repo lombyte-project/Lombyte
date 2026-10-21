@@ -508,7 +508,7 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
     V4_w22c target_aim_position;
     V4_w22c spawn_offset;
     char *target_moby;
-    float target_yaw, target_pitch, initial_yaw, initial_pitch, target_bearing_yaw, dist;
+    float target_yaw, target_pitch, initial_yaw, initial_pitch, target_bearing_yaw, spawn_to_target_distance;
 
     if (fast_dec_timer_s16(state + 0x54) == 0)
         return;
@@ -535,11 +535,11 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
                     fast_vec_normalize(&spawn_offset, &spawn_offset, D_L01_00162090);
                     fast_vec_add(&spawn_position, &spawn_position, &spawn_offset);
                     target_yaw = fast_arc_tan(target_aim_position.f[0] - spawn_position.f[0], target_aim_position.f[1] - spawn_position.f[1]);
-                    dist = vector_distance(&spawn_position, &target_aim_position);
-                    target_pitch = -fast_arc_tan(dist, target_aim_position.f[2] - spawn_position.f[2]);
+                    spawn_to_target_distance = vector_distance(&spawn_position, &target_aim_position);
+                    target_pitch = -fast_arc_tan(spawn_to_target_distance, target_aim_position.f[2] - spawn_position.f[2]);
                     initial_yaw = fast_arc_tan(target_aim_position.f[0] - spawn_position.f[0], target_aim_position.f[1] - spawn_position.f[1]);
-                    dist = vector_distance(&spawn_position, &target_aim_position);
-                    initial_pitch = -fast_arc_tan(dist, target_aim_position.f[2] - spawn_position.f[2]);
+                    spawn_to_target_distance = vector_distance(&spawn_position, &target_aim_position);
+                    initial_pitch = -fast_arc_tan(spawn_to_target_distance, target_aim_position.f[2] - spawn_position.f[2]);
                     FUN_L01_0030c898_c(moby, &spawn_position, target_yaw, target_pitch, initial_yaw, initial_pitch);
                     allocate_voice_for_target_entry(0, 0, (struct VoiceTarget *)moby);
                     *(short *)(state + 0x54) = scale_game_frames(D_L01_00162080_i);
