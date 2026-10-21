@@ -7,8 +7,8 @@ extern int D_L01_001B0930[];
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Expands a bit mask through a table of per-bit masks until it meets another mask.
-int FUN_L01_00276c40(int idx, int from_mask, int mask) {
-    char *path_data = D_L01_001B0930[idx];
+int FUN_L01_00276c40(int path_index, int from_mask, int mask) {
+    char *path_data = D_L01_001B0930[path_index];
     int i;
     int j;
     int expanded_mask;
