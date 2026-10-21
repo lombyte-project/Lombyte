@@ -1511,8 +1511,8 @@ void pipe_update(struct Moby *moby) {
     char *hit = find_moby_hit(moby, 0x10000, 0);
     moby->hit_slot = 0xFF;
     if (hit != 0 && 0.0f < *(float *)(hit + 0x2C)) {
-        float v[4];
-        float w[4];
+        float particle_position[4];
+        float particle_velocity[4];
         int random_countdown = random_integer_below(*(int *)(pipe_vars + 4) - *(int *)pipe_vars + 1) + *(int *)pipe_vars;
         int k;
         if (random_countdown > 0) {
@@ -1522,24 +1522,24 @@ void pipe_update(struct Moby *moby) {
         }
         allocate_voice_for_target_entry(0, 0, (int)moby);
         for (k = 0x95; k >= 0;) {
-            float velocity_component_or_size, b;
-            *(OvlQuad *)v = 0;
-            v[0] = -0.2f;
-            v[2] = 1.2f;
+            float velocity_component_or_size, horizontal_speed_sample;
+            *(OvlQuad *)particle_position = 0;
+            particle_position[0] = -0.2f;
+            particle_position[2] = 1.2f;
             k--;
-            add_vector_xyz(v, v, &moby->pos);
+            add_vector_xyz(particle_position, particle_position, &moby->pos);
             velocity_component_or_size = fast_cos(random_angle_radians());
-            b = random_float_between(1.5f, 3.0f);
-            velocity_component_or_size = velocity_component_or_size * (b * frame_time);
-            w[0] = velocity_component_or_size;
+            horizontal_speed_sample = random_float_between(1.5f, 3.0f);
+            velocity_component_or_size = velocity_component_or_size * (horizontal_speed_sample * frame_time);
+            particle_velocity[0] = velocity_component_or_size;
             velocity_component_or_size = fast_sin(random_angle_radians());
-            b = random_float_between(1.5f, 3.0f);
-            velocity_component_or_size = velocity_component_or_size * (b * frame_time);
-            w[1] = velocity_component_or_size;
-            w[2] = 0;
-            w[2] = random_float_between(w[2], 3.0f) * frame_time;
+            horizontal_speed_sample = random_float_between(1.5f, 3.0f);
+            velocity_component_or_size = velocity_component_or_size * (horizontal_speed_sample * frame_time);
+            particle_velocity[1] = velocity_component_or_size;
+            particle_velocity[2] = 0;
+            particle_velocity[2] = random_float_between(particle_velocity[2], 3.0f) * frame_time;
             velocity_component_or_size = random_float_between(125000.0f, 175000.0f);
-            FUN_L00_0026ced0(v, w, 0x207F7F7F, 0x272727, velocity_component_or_size,
+            FUN_L00_0026ced0(particle_position, particle_velocity, 0x207F7F7F, 0x272727, velocity_component_or_size,
                              scale_game_frames(FUN_L00_00257b90(0x2D, 0x3C)));
         }
         FUN_L01_002ffa90_c(moby);
