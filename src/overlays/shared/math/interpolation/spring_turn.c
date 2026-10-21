@@ -590,7 +590,7 @@ extern unsigned short *D_L00_001AB840[];
 
 /* Iterator over the mobies of target's group: finds the next one whose
  * visibility matches the two flags; 0 when found, -1 at the end. */
-int FUN_L00_002592b8(char **out, char *target, int include_sign_bit_set_entries, int b) {
+int FUN_L00_002592b8(char **out, char *target, int include_sign_bit_set_entries, int require_sign_bit_set_entries) {
     int entry_sign_bit_set;
 
     *out = 0;
@@ -622,7 +622,7 @@ int FUN_L00_002592b8(char **out, char *target, int include_sign_bit_set_entries,
         D_L00_00160114 = D_L00_0015FFD8 + (D_L00_00160110 << 8);
         *out = D_L00_00160114;
         entry_sign_bit_set = *(signed char *)(D_L00_00160114 + 0x20) < 0;
-        if ((include_sign_bit_set_entries == 0 && b == 0 && entry_sign_bit_set == 0) || (include_sign_bit_set_entries != 0 && (b == 0 || entry_sign_bit_set != 0))) {
+        if ((include_sign_bit_set_entries == 0 && require_sign_bit_set_entries == 0 && entry_sign_bit_set == 0) || (include_sign_bit_set_entries != 0 && (require_sign_bit_set_entries == 0 || entry_sign_bit_set != 0))) {
             return 0;
         }
     } while ((short)*D_L00_0016010C >= 0);
