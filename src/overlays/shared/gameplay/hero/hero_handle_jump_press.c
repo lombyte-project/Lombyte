@@ -258,12 +258,12 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
 s32 FUN_L00_00229a98(void) {
-    struct Hero *b = &hero;
+    struct Hero *hero_ptr = &hero;
     s32 id, k;
-    if (b->unk20A8 == 0 || b->unk20AA == 0 || b->unk22C8 != 0)
+    if (hero_ptr->unk20A8 == 0 || hero_ptr->unk20AA == 0 || hero_ptr->unk22C8 != 0)
         return 0;
     id = hero_slot_item_id(0);
-    if (id != b->unk2298) {
+    if (id != hero_ptr->unk2298) {
         FUN_L00_0020e698();
         return 0;
     }
@@ -271,8 +271,8 @@ s32 FUN_L00_00229a98(void) {
     if (hero_set_state(HERO_STATE_IDLE, 0) == 0)
         return 0;
     set_hero_animation(k, 0, (f32)scale_game_frames(0xB));
-    if (((s32)b->unkD08[0]) != 0)
-        b->unkD14 = 1;
-    b->unk2294 = k;
+    if (((s32)hero_ptr->unkD08[0]) != 0)
+        hero_ptr->unkD14 = 1;
+    hero_ptr->unk2294 = k;
     return 1;
 }
