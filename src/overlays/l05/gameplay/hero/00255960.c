@@ -196,11 +196,11 @@ void FUN_L05_00255960(void) {
                 } else {
                     int base = D_0015ED8C;
                     int next = base;
-                    int cur = hero.items[0].item_id;
-                    if (cur == 8) {
+                    int equipped_item_id = hero.items[0].item_id;
+                    if (equipped_item_id == 8) {
                         next = D_00141660;
                     }
-                    if (next != 0 && cur != base) {
+                    if (next != 0 && equipped_item_id != base) {
                         if (usage_stats.stat[31].count < 0xFFFF) {
                             usage_stats.stat[31].count++;
                         }
@@ -1197,21 +1197,21 @@ void FUN_L05_00255960(void) {
                     break;
                 case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
                 case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
-                    float ang;
+                    float shimmy_yaw_offset;
 
                     qcopy(v0, hero.motion.pos.f);
-                    ang = 1.5707964f;
+                    shimmy_yaw_offset = 1.5707964f;
                     if (hero.state.current == 0x1B) {
-                        ang = -1.5707964f;
+                        shimmy_yaw_offset = -1.5707964f;
                     }
-                    v0[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], ang)) * 0.3f;
-                    v0[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], ang)) * 0.3f;
+                    v0[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) * 0.3f;
+                    v0[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) * 0.3f;
                     sp34 = hero.motion.rot.f[2];
                     stick_target(0, 1.0f);
                     if (hero.unk229C < 0.5f ||
                         0.7853982f <
                             fast_difference_between_rotations(
-                                hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], ang)) ||
+                                hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) ||
                         FUN_L01_0022d838(v0, &sp34) == 0) {
                         if (hero.unkA98 & 2) {
                             hero_set_state(0x19, 1);
@@ -1585,8 +1585,8 @@ void FUN_L05_00255960(void) {
                                (hero.state.current == HERO_STATE_PACK_JUMP || hero.state.current == HERO_STATE_PACK_LONG_JUMP) &&
                                hero.wall_probe_distance < 0.9f && hero.wall_hit != 0) {
                         if (vector_length_xyz(hero.motion.velocity.f) > frame_time * 7.0f) {
-                            float len = vector_length_xyz(hero.motion.displacement.f);
-                            if (len < vector_length_xyz(hero.motion.velocity.f) * 0.5f &&
+                            float displacement_length = vector_length_xyz(hero.motion.displacement.f);
+                            if (displacement_length < vector_length_xyz(hero.motion.velocity.f) * 0.5f &&
                                 hero.unk4E8 == 0 && hero.ground_distance < 2.0f) {
                                 hero_set_state(HERO_STATE_WALL_BONK, 1);
                                 break;
@@ -1865,12 +1865,12 @@ void FUN_L05_00255960(void) {
                         }
                         hero.unk8B2 = (hero.unk8B2 + 1) % 32;
                         for (i = 0; i < scale_game_frames(0x1E); i++) {
-                            int idx = (hero.unk8B2 - i + 0x20) % 32;
-                            if (hero.unk8B0 - 1 < idx) {
-                                idx = hero.unk8B0 - 1;
+                            int ground_distance_history_index = (hero.unk8B2 - i + 0x20) % 32;
+                            if (hero.unk8B0 - 1 < ground_distance_history_index) {
+                                ground_distance_history_index = hero.unk8B0 - 1;
                             }
-                            if (top < hero.unk7D0[idx]) {
-                                top = hero.unk7D0[idx];
+                            if (top < hero.unk7D0[ground_distance_history_index]) {
+                                top = hero.unk7D0[ground_distance_history_index];
                             }
                         }
                         qcopy_nc(v0, hero.motion.unk110.f);
