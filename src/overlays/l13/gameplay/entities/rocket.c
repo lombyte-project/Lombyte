@@ -2397,7 +2397,7 @@ void FUN_L13_0030c060(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *owner = *(char **)(data + 0x60);
     char *hit_record;
-    char buf[0x30];
+    char forwarded_hit_descriptor[0x30];
     if (owner == 0 || *(short *)(owner + 0xA6) != *(int *)(data + 0x64) ||
         (unsigned char)owner[0x20] == 0xFE || (unsigned char)owner[0x20] == 0xFD) {
         mark_moby_for_removal_u(moby);
@@ -2405,15 +2405,15 @@ void FUN_L13_0030c060(struct Moby *moby) {
     }
     hit_record = find_moby_hit(moby, -1, 0);
     if (hit_record != 0) {
-        qcopy(buf, hit_record + 0x10);
-        *(int *)(buf + 0x10) = *(int *)(hit_record + 0x20);
-        *(int *)(buf + 0x14) = *(int *)(hit_record + 0x24);
-        buf[0x18] = hit_record[0x28];
-        buf[0x19] = hit_record[0x29];
-        *(short *)(buf + 0x1A) = *(short *)(hit_record + 0x2A);
-        *(float *)(buf + 0x1C) = *(float *)(hit_record + 0x2C);
-        *(int *)(buf + 0x20) = *(int *)(hit_record + 0x30);
-        FUN_L00_00259a88(*(void **)(data + 0x60), buf);
+        qcopy(forwarded_hit_descriptor, hit_record + 0x10);
+        *(int *)(forwarded_hit_descriptor + 0x10) = *(int *)(hit_record + 0x20);
+        *(int *)(forwarded_hit_descriptor + 0x14) = *(int *)(hit_record + 0x24);
+        forwarded_hit_descriptor[0x18] = hit_record[0x28];
+        forwarded_hit_descriptor[0x19] = hit_record[0x29];
+        *(short *)(forwarded_hit_descriptor + 0x1A) = *(short *)(hit_record + 0x2A);
+        *(float *)(forwarded_hit_descriptor + 0x1C) = *(float *)(hit_record + 0x2C);
+        *(int *)(forwarded_hit_descriptor + 0x20) = *(int *)(hit_record + 0x30);
+        FUN_L00_00259a88(*(void **)(data + 0x60), forwarded_hit_descriptor);
     }
     moby->hit_slot = 0xFF;
 }
