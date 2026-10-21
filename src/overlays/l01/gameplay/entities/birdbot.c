@@ -154,7 +154,7 @@ void FUN_L01_002bd100(EmitterMoby *self) {
     Emitter *emitter_vars;
     EmitVec out;
     EmitVec position_scratch;
-    EmitVec off;
+    EmitVec emission_position_offset;
     union {
         struct {
             EmitMtx m;
@@ -181,14 +181,14 @@ void FUN_L01_002bd100(EmitterMoby *self) {
         emitter_vars->timer = emitter_vars->delay;
         for (i = 0; i < emitter_vars->count; i++) {
             position_scratch.q = self->pos.q;
-            off.f[0] = random_float_between(-emitter_vars->spread[0], emitter_vars->spread[0]);
-            off.f[1] = random_float_between(-emitter_vars->spread[1], emitter_vars->spread[2]);
-            off.f[2] = random_float_between(-emitter_vars->spread[2], emitter_vars->spread[2]);
+            emission_position_offset.f[0] = random_float_between(-emitter_vars->spread[0], emitter_vars->spread[0]);
+            emission_position_offset.f[1] = random_float_between(-emitter_vars->spread[1], emitter_vars->spread[2]);
+            emission_position_offset.f[2] = random_float_between(-emitter_vars->spread[2], emitter_vars->spread[2]);
             if (emitter_vars->flags & 0x2000) {
                 euler_rotation_matrix(&u.rot.m, self->rot);
-                transform_vector(&off, &off, &u.rot.m);
+                transform_vector(&emission_position_offset, &emission_position_offset, &u.rot.m);
             }
-            fast_vec_add(&position_scratch, &position_scratch, &off);
+            fast_vec_add(&position_scratch, &position_scratch, &emission_position_offset);
             if (emitter_vars->flags & 0x1000) {
                 u.rot.ang.f[0] =
                     random_float_between(-emitter_vars->vel_range[0], emitter_vars->vel_range[0]) * 3.1415927f / 180.0f;
