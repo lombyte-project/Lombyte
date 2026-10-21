@@ -360,7 +360,7 @@ extern void mine_camera_blast(void *, void *, s32, s32) __asm__("FUN_L00_002d383
 void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 light)
 {
     BurstVec burst_position;
-    BurstVec vel;
+    BurstVec particle_base_velocity;
     BurstPalette inner;
     BurstPalette outer;
     BurstPalette *inner_p;
@@ -372,14 +372,14 @@ void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 
     /* pos and inner are used through pointers, as in retail */
     pos_p = &burst_position;
     burst_position.q = *where;
-    clear_vector(&vel);
+    clear_vector(&particle_base_velocity);
     inner_p = &inner;
     for (i = 2; i >= 0; i--) {
         speed = random_float_between(8.0f, 10.0f) * frame_time;
         size = scale * 400000.0f;
         inner = D_L01_0020B4F0;
         outer = D_L01_0020B508;
-        FUN_L00_0026a9f0(pos_p, &vel,
+        FUN_L00_0026a9f0(pos_p, &particle_base_velocity,
                          inner_p->c[random_integer_below(6)], outer.c[random_integer_below(6)],
                          size,
                          random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)),
@@ -388,8 +388,8 @@ void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 
     }
 
     if (moby != 0) {
-        spawn_glow_particle(moby, pos_p, &vel, scale + scale, scale_game_frames(0x14), 0x7F, 0, 0x40, 0x30);
-        spawn_glow_particle(moby, pos_p, &vel, scale * 1.5f, scale_game_frames(0x1D), 0x20, 0, 0x20, 0);
+        spawn_glow_particle(moby, pos_p, &particle_base_velocity, scale + scale, scale_game_frames(0x14), 0x7F, 0, 0x40, 0x30);
+        spawn_glow_particle(moby, pos_p, &particle_base_velocity, scale * 1.5f, scale_game_frames(0x1D), 0x20, 0, 0x20, 0);
         if (moby->state != 0xFE) {
             if (moby->state != 0xFD && sound != -1) {
                 FUN_0022da68(sound, 0, moby);
