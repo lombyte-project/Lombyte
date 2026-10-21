@@ -3733,14 +3733,14 @@ void FUN_L00_002b4198(void *moby) {
     O_4198 *beam_moby = (O_4198 *)moby;
     V_4198 *v = beam_moby->v;
     s32 flag = 0;
-    s32 st;
+    s32 hero_state;
     s32 lim;
 
     if (hero.items[3].item_id == 3) {
         if (beam_moby->state == 1 || beam_moby->state == 3) {
-            st = hero.state.current;
-            if ((u32)(st - 0xB) < 4 ||
-                (st == 0x1C && ((u8 *)((void *)hero.moby))[0x52] == ((u8 *)((void *)hero.moby))[0x53] &&
+            hero_state = hero.state.current;
+            if ((u32)(hero_state - 0xB) < 4 ||
+                (hero_state == 0x1C && ((u8 *)((void *)hero.moby))[0x52] == ((u8 *)((void *)hero.moby))[0x53] &&
                  hero.anim_frame >= 6.0f && hero.anim_frame <= 16.0f)) {
                 if (!hero.unk41E)
                     flag = 1;
