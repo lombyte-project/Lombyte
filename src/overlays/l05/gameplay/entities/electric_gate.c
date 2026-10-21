@@ -37,12 +37,12 @@ typedef struct {
 extern Ent D_L05_001D6880[];
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L05_0030d6a0(int arg) {
+void FUN_L05_0030d6a0(int selected_entry_index) {
     int i;
     Ent *entry_table = D_L05_001D6880;
     for (i = 0; i < 48; i++) {
-        if (arg != i) {
-            Ent *selected_entry = &entry_table[arg];
+        if (selected_entry_index != i) {
+            Ent *selected_entry = &entry_table[selected_entry_index];
             float x = selected_entry->x - entry_table[i].x;
             float y = selected_entry->y - entry_table[i].y;
             if (absolute_float(x) < 0.1f) {
