@@ -1,7 +1,7 @@
 #include "types.h"
 extern u8 D_001531D0[];
 extern s32 scePrintf();
-s32 sceGsExecLoadImage(u8 *lp, u8 *src) {
+s32 sceGsExecLoadImage(u8 *lp, u8 *image_payload) {
     u32 count;
 
     count = 0;
@@ -25,10 +25,10 @@ s32 sceGsExecLoadImage(u8 *lp, u8 *src) {
         }
     }
     *(volatile u32 *)0x1000A020 = (s32)(*(u64 *)(lp + 0x50) & 0x7FFF);
-    if (((u32)src & 0x70000000) == 0x70000000) {
-        *(volatile u32 *)0x1000A010 = ((u32)src & 0x0FFFFFFF) | 0x80000000;
+    if (((u32)image_payload & 0x70000000) == 0x70000000) {
+        *(volatile u32 *)0x1000A010 = ((u32)image_payload & 0x0FFFFFFF) | 0x80000000;
     } else {
-        *(volatile u32 *)0x1000A010 = (u32)src & 0x0FFFFFFF;
+        *(volatile u32 *)0x1000A010 = (u32)image_payload & 0x0FFFFFFF;
     }
     *(volatile u32 *)0x1000A000 = 0x101;
     return 0;
