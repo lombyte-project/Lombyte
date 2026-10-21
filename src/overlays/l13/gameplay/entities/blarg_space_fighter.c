@@ -2794,12 +2794,12 @@ void FUN_L13_002e8d28(struct Moby *parent_moby, char *attachment_data) {
 
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L13_002e9018(struct Moby *moby, char *moby_data, float target_yaw, float b) {
+void FUN_L13_002e9018(struct Moby *moby, char *moby_data, float target_yaw, float target_pitch) {
     float absolute_roll;
     FUN_L00_00258278(moby, (float *)(moby_data + 0xA8), target_yaw, frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f,
                      frame_time * 6.2831855f);
     moby->rot.y =
-        spring_turn((float *)(moby_data + 0xA4), moby->rot.y, b, frame_time_sq * 3.1415927f,
+        spring_turn((float *)(moby_data + 0xA4), moby->rot.y, target_pitch, frame_time_sq * 3.1415927f,
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
     absolute_roll = absolute_float(moby->rot.x);
     moby->rot.x += -*(float *)(moby_data + 0xA8) * ((1.5707964f - absolute_roll) / 1.5707964f) * 0.5f;
