@@ -1718,22 +1718,22 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L15_002c6900(struct Moby *moby) {
-    int st;
+    int hit_reaction_status;
     float fv;
-    int res;
+    int hit_reaction_code;
     char *helicopter_vars;
     char *hit_record;
     float hit_away_heading, relative_hit_heading, recoil_rotation_y, recoil_rotation_x;
     helicopter_vars = (char *)moby->pvars;
     fv = 0.0f;
     hit_record = find_moby_hit(moby, 0x330000, 0);
-    res = hit_reaction(moby, hit_record, helicopter_vars + 0x20, 0, &st, &fv, 0, 4);
-    if (st != 1 && moby->state != 7 && moby->state != 0x40) {
+    hit_reaction_code = hit_reaction(moby, hit_record, helicopter_vars + 0x20, 0, &hit_reaction_status, &fv, 0, 4);
+    if (hit_reaction_status != 1 && moby->state != 7 && moby->state != 0x40) {
         float remaining_health = *(float *)(helicopter_vars + 0x20) - fv;
         *(float *)(helicopter_vars + 0x20) = remaining_health;
-        if (res == 1 || remaining_health <= 0.0f) {
+        if (hit_reaction_code == 1 || remaining_health <= 0.0f) {
             moby->state = 7;
-        } else if (res != 0xB) {
+        } else if (hit_reaction_code != 0xB) {
             *(unsigned char *)(helicopter_vars + 0x67) = 0xB4;
             trooper_anim_update(moby, (short *)(helicopter_vars + 0x60));
             if (*(float *)(hit_record + 0x1C) == 5627.925f && moby->state != 6) {
