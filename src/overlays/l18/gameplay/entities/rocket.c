@@ -2118,19 +2118,19 @@ extern float D_L18_00161CCC __attribute__((sda));
 extern float D_L18_00161CD4 __attribute__((sda));
 void FUN_L18_002dc4b8(char *moby) {
     Q_dc4b8 quad[4];
-    V_dc4b8 mat[4];
-    V_dc4b8 rot[3];
-    V_dc4b8 ang;
+    V_dc4b8 quad_draw_transform[4];
+    V_dc4b8 ring_segment_rotation_basis[3];
+    V_dc4b8 ring_segment_rotation_angles;
     float *moby_vars;
     int i, j, k;
     int layer_color;
     float layer_phase, r, countdown_ticks_float, color_fade_weight, gi;
 
     moby_vars = *(float **)(moby + 0x78);
-    unit_matrix_dc4b8(mat);
-    qcopy(&mat[3], moby + 0x10);
-    mat[3].f[2] = mat[3].f[2] + D_L18_00161CC4;
-    mat[3].f[3] = 1.0f;
+    unit_matrix_dc4b8(quad_draw_transform);
+    qcopy(&quad_draw_transform[3], moby + 0x10);
+    quad_draw_transform[3].f[2] = quad_draw_transform[3].f[2] + D_L18_00161CC4;
+    quad_draw_transform[3].f[3] = 1.0f;
     for (i = 0; i < 4; i++) {
         quad[i].tex = get_effect_texture_dc4b8(14);
         gi = D_L18_00161CCC * (float)i;
@@ -2166,15 +2166,15 @@ void FUN_L18_002dc4b8(char *moby) {
             quad[i].color[j] = layer_color;
         }
     }
-    clear_vector_dc4b8(&ang);
-    ang.f[2] = D_L18_00161CC0 * 0.017453292f;
-    euler_basis_dc4b8(&rot[0], &ang);
+    clear_vector_dc4b8(&ring_segment_rotation_angles);
+    ring_segment_rotation_angles.f[2] = D_L18_00161CC0 * 0.017453292f;
+    euler_basis_dc4b8(&ring_segment_rotation_basis[0], &ring_segment_rotation_angles);
     for (k = 0; (float)k < 360.0f / D_L18_00161CC0; k++) {
-        draw_quad_dc4b8(&quad[0], mat, 0);
-        draw_quad_dc4b8(&quad[1], mat, 0);
-        draw_quad_dc4b8(&quad[2], mat, 0);
-        draw_quad_dc4b8(&quad[3], mat, 0);
-        matrix_mul_dc4b8(mat, mat, &rot[0]);
+        draw_quad_dc4b8(&quad[0], quad_draw_transform, 0);
+        draw_quad_dc4b8(&quad[1], quad_draw_transform, 0);
+        draw_quad_dc4b8(&quad[2], quad_draw_transform, 0);
+        draw_quad_dc4b8(&quad[3], quad_draw_transform, 0);
+        matrix_mul_dc4b8(quad_draw_transform, quad_draw_transform, &ring_segment_rotation_basis[0]);
     }
 }
 /* UpdateMoby state machine for the vendor moby (state at +0x20). */
