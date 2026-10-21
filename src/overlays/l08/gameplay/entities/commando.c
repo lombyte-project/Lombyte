@@ -417,8 +417,8 @@ void FUN_L08_002f1548(struct Moby *moby) {
         DRAW_ELEMENTS_UPDATE = 1
     };
     int i;
-    float v[4];
-    float w[4];
+    float culling_sphere[4];
+    float distance_vector[4];
     float distance;
 
     switch (moby->state) {
@@ -446,17 +446,17 @@ void FUN_L08_002f1548(struct Moby *moby) {
         }
         break;
     case DRAW_ELEMENTS_UPDATE:
-        v[0] = *(float *)&D_L08_00161DC0;
-        v[1] = D_L08_00161DC4;
-        v[2] = D_L08_00161DC8;
-        v[3] = D_L08_00161DCC;
-        if (fast_bsphere_check((char *)v, 1000.0f) >= 0) {
-            w[0] = *(float *)&D_L08_00161DC0;
-            w[1] = D_L08_00161DC4;
-            w[2] = D_L08_00161DC8;
-            w[3] = 1.0f;
-            subtract_vector_xyz(w, D_L08_001675C0, w);
-            distance = vector_length_xyz(w);
+        culling_sphere[0] = *(float *)&D_L08_00161DC0;
+        culling_sphere[1] = D_L08_00161DC4;
+        culling_sphere[2] = D_L08_00161DC8;
+        culling_sphere[3] = D_L08_00161DCC;
+        if (fast_bsphere_check((char *)culling_sphere, 1000.0f) >= 0) {
+            distance_vector[0] = *(float *)&D_L08_00161DC0;
+            distance_vector[1] = D_L08_00161DC4;
+            distance_vector[2] = D_L08_00161DC8;
+            distance_vector[3] = 1.0f;
+            subtract_vector_xyz(distance_vector, D_L08_001675C0, distance_vector);
+            distance = vector_length_xyz(distance_vector);
             if (distance <= 84.0f) {
                 FUN_L08_002f12a0(0);
                 FUN_L08_002f1158(D_L08_001E8350, 0.52f, 0.62f, 0.06f, (void *)&D_L08_00161E28);
