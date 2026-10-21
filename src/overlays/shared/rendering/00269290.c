@@ -472,7 +472,7 @@ unsigned char *FUN_L00_002678b8_0026a4c8(int) __asm__("FUN_L00_002678b8");
 int FUN_001fa6d0_0026a4c8(float) __asm__("FUN_001fa6d0");
 float FUN_001fa6c0_0026a4c8(int) __asm__("FUN_001fa6c0");
 void FUN_L00_0026a4c8(u128 *a, u128 *b, int c, int d, int n, float f);
-void FUN_L00_0026a4c8(u128 *spawn_position, u128 *b, int initial_color, int final_color, int lifetime, float particle_scalar_change) {
+void FUN_L00_0026a4c8(u128 *spawn_position, u128 *initial_velocity, int initial_color, int final_color, int lifetime, float particle_scalar_change) {
     if (lifetime) {
         unsigned char *particle = FUN_L00_002678b8_0026a4c8(8);
         if (particle) {
@@ -486,7 +486,7 @@ void FUN_L00_0026a4c8(u128 *spawn_position, u128 *b, int initial_color, int fina
             *(int *)(particle + 0xc) = 0;
             particle[8] = 0;
             particle[2] = *D_L00_001B20A0_0026a4c8;
-            qcopy(particle_data, b);
+            qcopy(particle_data, initial_velocity);
             *(short *)(particle + 0xa) = lifetime;
             particle_data[6] = lifetime;
             *(float *)&particle_data[7] = particle_scalar_change / FUN_001fa6c0_0026a4c8(lifetime);
