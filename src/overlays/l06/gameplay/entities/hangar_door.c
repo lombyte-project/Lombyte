@@ -3317,8 +3317,8 @@ void FUN_L06_002fbfb0(char *moby) {
     };
     char *data = *(char **)(moby + 0x78);
     char *child;
-    float v[4];
-    float parent_distance, b;
+    float position_offset[4];
+    float parent_distance, child_distance;
     float phase_a, phase_b;
     float target_delta;
     float target_a, target_b, target_rot_a, target_rot_b;
@@ -3348,10 +3348,10 @@ void FUN_L06_002fbfb0(char *moby) {
             moby[0x20] = 2;
             return;
         }
-        fast_vec_normalize(v, data + 0x30, D_L06_00161F1C);
-        fast_vec_add(moby + 0x10, data + 0x10, v);
-        fast_vec_normalize(v, data + 0x30, -D_L06_00161F20);
-        fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, v);
+        fast_vec_normalize(position_offset, data + 0x30, D_L06_00161F1C);
+        fast_vec_add(moby + 0x10, data + 0x10, position_offset);
+        fast_vec_normalize(position_offset, data + 0x30, -D_L06_00161F20);
+        fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, position_offset);
         FUN_L00_00250df8(*(char **)(data + 0x40));
         moby[0x20] = 5;
         return;
@@ -3371,15 +3371,15 @@ void FUN_L06_002fbfb0(char *moby) {
         target_delta = FUN_001f9b48(moby + 0x10, data + 0x10);
         child = *(char **)(data + 0x40);
         parent_distance = target_delta;
-        b = FUN_001f9b48(child + 0x10, data + 0x10);
+        child_distance = FUN_001f9b48(child + 0x10, data + 0x10);
         FUN_00213f38(&parent_distance, &((float *)data)[2], D_L06_00161F1C, frame_time_sq * 10.0f, frame_time_sq * 20.0f, frame_time * 5.0f);
-        FUN_00213f38(&b, &((float *)data)[0x11], D_L06_00161F20, frame_time_sq * 10.0f, frame_time_sq * 20.0f, frame_time * 5.0f);
-        fast_vec_normalize(v, data + 0x30, parent_distance);
-        fast_vec_add(moby + 0x10, data + 0x10, v);
-        fast_vec_normalize(v, data + 0x30, -b);
-        fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, v);
+        FUN_00213f38(&child_distance, &((float *)data)[0x11], D_L06_00161F20, frame_time_sq * 10.0f, frame_time_sq * 20.0f, frame_time * 5.0f);
+        fast_vec_normalize(position_offset, data + 0x30, parent_distance);
+        fast_vec_add(moby + 0x10, data + 0x10, position_offset);
+        fast_vec_normalize(position_offset, data + 0x30, -child_distance);
+        fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, position_offset);
         FUN_L00_00250df8(*(char **)(data + 0x40));
-        if (absolute_float(parent_distance - D_L06_00161F1C) < 0.01f && absolute_float(b - D_L06_00161F20) < 0.01f) moby[0x20] = 5;
+        if (absolute_float(parent_distance - D_L06_00161F1C) < 0.01f && absolute_float(child_distance - D_L06_00161F20) < 0.01f) moby[0x20] = 5;
         return;
     case ANIMATE_PAIR_WITH_TIMED_PHASES:
         target_delta = FUN_001f9b48(moby + 0x10, data + 0x10);
@@ -3437,10 +3437,10 @@ void FUN_L06_002fbfb0(char *moby) {
         FUN_00213f38(&phase_b, &((float *)data)[0x11], target_b, acceleration * frame_time_sq, max_speed * frame_time_sq, damping * frame_time);
         FUN_00213f38((float *)(moby + 0x44), &((float *)data)[3], target_rot_a, rotation_acceleration * DEG_TO_RAD * frame_time_sq, rotation_speed * DEG_TO_RAD * frame_time_sq, rotation_damping * DEG_TO_RAD * frame_time);
         FUN_00213f38((float *)(*(char **)(data + 0x40) + 0x44), &((float *)data)[0x12], target_rot_b, rotation_acceleration * DEG_TO_RAD * frame_time_sq, rotation_speed * DEG_TO_RAD * frame_time_sq, rotation_damping * DEG_TO_RAD * frame_time);
-        fast_vec_normalize(v, data + 0x30, phase_a);
-        fast_vec_add(moby + 0x10, data + 0x10, v);
-        fast_vec_normalize(v, data + 0x30, -phase_b);
-        fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, v);
+        fast_vec_normalize(position_offset, data + 0x30, phase_a);
+        fast_vec_add(moby + 0x10, data + 0x10, position_offset);
+        fast_vec_normalize(position_offset, data + 0x30, -phase_b);
+        fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, position_offset);
         FUN_L00_00250df8(*(char **)(data + 0x40));
         if (!fast_dec_timer(data + 0x4c)) return;
         moby[0xbc] = next_phase;
