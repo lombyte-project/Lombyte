@@ -2288,20 +2288,20 @@ void FUN_L00_00209638(int seed, int limit);
 void FUN_L00_00209638(int seed, int limit) {
     float planar_effect_vector[4];
     float pos[4];
-    float ang;
+    float planar_effect_angle_radians;
     int i;
     struct Hero *hero_state;
 
     if (limit < ++hero.unk908) {
         for (i = 0; i < 2; i++) {
             if (i == 0) {
-                ang = FUN_001fa580_209638(hero.motion.rot.f[2], 0.785398f);
+                planar_effect_angle_radians = FUN_001fa580_209638(hero.motion.rot.f[2], 0.785398f);
             } else {
-                ang = FUN_001fa5c8_209638(hero.motion.rot.f[2], 0.785398f);
+                planar_effect_angle_radians = FUN_001fa5c8_209638(hero.motion.rot.f[2], 0.785398f);
             }
             hero_state = &hero;
-            planar_effect_vector[0] = fast_cos(ang) * (D_0015ED6C * 0.6f);
-            planar_effect_vector[1] = fast_sin(ang) * (D_0015ED6C * 0.6f);
+            planar_effect_vector[0] = fast_cos(planar_effect_angle_radians) * (D_0015ED6C * 0.6f);
+            planar_effect_vector[1] = fast_sin(planar_effect_angle_radians) * (D_0015ED6C * 0.6f);
             planar_effect_vector[2] = 0.0f;
             pos[0] = hero_state->motion.pos.f[0] + planar_effect_vector[0] * 18.0f;
             pos[1] = hero_state->motion.pos.f[1] + planar_effect_vector[1] * 18.0f;
