@@ -1538,7 +1538,7 @@ extern void clear_2db198(void *) __asm__("FUN_001f99f8");
  * units along it, facing the path's last point. */
 struct Moby *FUN_L03_002db198(struct RailPath *path, float dist) {
     struct Moby *spawned_moby = func_0020D348_m(0x382);
-    u8 *v;
+    u8 *moby_vars;
     u8 *move;
     Vec4 *end;
 
@@ -1547,17 +1547,17 @@ struct Moby *FUN_L03_002db198(struct RailPath *path, float dist) {
         spawned_moby->draw_dist = 0x40;
         spawned_moby->visible = 1;
         spawned_moby->state = 0;
-        v = spawned_moby->pvars;
+        moby_vars = spawned_moby->pvars;
         spawned_moby->flags |= 0x20;
         FUN_L00_0025d1b8(spawned_moby);
         qcopy(&spawned_moby->pos, &path->pts[0]);
         clear_2db198(&spawned_moby->rot);
         end = (Vec4 *)((u8 *)path + (path->count - 1) * 16) + 1;
         spawned_moby->rot.z = fast_arc_tan(end->f[0] - spawned_moby->pos.x, end->f[1] - spawned_moby->pos.y);
-        move = v + 0x20;
-        *(float *)(v + 0x64) = dist;
-        *(struct RailPath **)(v + 0x60) = path;
-        *(u8 **)(v + 0x8) = move;
+        move = moby_vars + 0x20;
+        *(float *)(moby_vars + 0x64) = dist;
+        *(struct RailPath **)(moby_vars + 0x60) = path;
+        *(u8 **)(moby_vars + 0x8) = move;
         FUN_L00_00250df8(spawned_moby);
     }
     return spawned_moby;
