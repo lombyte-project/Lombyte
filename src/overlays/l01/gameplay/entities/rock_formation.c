@@ -965,19 +965,19 @@ void bridge_half_update(PendulumMoby *self) {
         BRIDGE_HALF_WAIT_FOR_TRIGGER = 1,
         BRIDGE_HALF_REDUCE_SWING_TO_ZERO = 2
     };
-    PendulumVars *v;
+    PendulumVars *pendulum_vars;
     PendVec4 arm;
     PendVec4 swing_offset;
     s32 voice_slot_index;
     u8 *voice;
 
-    v = self->vars;
+    pendulum_vars = self->vars;
     switch (self->state) {
     case BRIDGE_HALF_INITIALIZE:
-        qcopy(&v->pivot, &self->pos);
-        v->swing = 1.0f;
+        qcopy(&pendulum_vars->pivot, &self->pos);
+        pendulum_vars->swing = 1.0f;
         self->state = 1;
-        v->sound = -1;
+        pendulum_vars->sound = -1;
         break;
     case BRIDGE_HALF_WAIT_FOR_TRIGGER:
         if (self->trigger == 2 || D_0014C050[self->id + current_level_index * 16] == 0xFF) {
@@ -986,29 +986,29 @@ void bridge_half_update(PendulumMoby *self) {
         }
         break;
     case BRIDGE_HALF_REDUCE_SWING_TO_ZERO:
-        v->swing -= frame_time * 0.5f;
-        if (v->swing < 0.0f) {
-            v->swing = 0.0f;
+        pendulum_vars->swing -= frame_time * 0.5f;
+        if (pendulum_vars->swing < 0.0f) {
+            pendulum_vars->swing = 0.0f;
         }
-        if (v->swing == 0.0f) {
-            voice_slot_index = v->sound;
+        if (pendulum_vars->swing == 0.0f) {
+            voice_slot_index = pendulum_vars->sound;
             if (voice_slot_index != -1) {
                 voice = D_0013E550 + voice_slot_index * 0x70;
                 if (*(void **)(voice + 0x88) == self && voice[0x74] != 0) {
                     release_voice_slot(voice_slot_index);
                 }
             }
-            v->sound = -1;
+            pendulum_vars->sound = -1;
             self->state = 1;
-        } else if (!voice_is_playing(self, v->sound)) {
-            v->sound = FUN_0022da68(0, 4, self);
+        } else if (!voice_is_playing(self, pendulum_vars->sound)) {
+            pendulum_vars->sound = FUN_0022da68(0, 4, self);
         }
         break;
     }
-    self->rot_x = v->swing * 0.62831855f;
+    self->rot_x = pendulum_vars->swing * 0.62831855f;
     arm.q = 0;
     arm.f[2] = -11.0f;
-    fast_vec_add(&arm, &arm, &v->pivot);
+    fast_vec_add(&arm, &arm, &pendulum_vars->pivot);
     swing_offset.f[0] = fast_cos(self->rot_z) * 11.0f * fast_sin(self->rot_x);
     swing_offset.f[1] = fast_sin(self->rot_z) * 11.0f * fast_sin(self->rot_x);
     swing_offset.f[2] = fast_cos(self->rot_x) * 11.0f;
