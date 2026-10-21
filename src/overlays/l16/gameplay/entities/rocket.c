@@ -1675,13 +1675,13 @@ extern float approach_angle(float *, float *, float, float, float, float) __asm_
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-int FUN_L16_002ced20(char *moby, void *vec, float angle) {
+int FUN_L16_002ced20(char *moby, void *target_position, float angle) {
     float a[4] __attribute__((aligned(16)));
     float b[4] __attribute__((aligned(16)));
     float speed;
     float dist;
     char *data = *(char **)(moby + 0x78);
-    *(OvlQuad *)a = *(OvlQuad *)vec;
+    *(OvlQuad *)a = *(OvlQuad *)target_position;
     approach_angle((float *)(moby + 0x48), (float *)(data + 0x100), angle,
                      frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, D_0015ED6C * 25.132742f);
     speed = 0.0f;
