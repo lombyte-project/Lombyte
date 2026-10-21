@@ -634,7 +634,7 @@ extern float D_L06_00161FD4 __attribute__((sda));
 extern int D_L06_00161FD8 __attribute__((sda));
 void FUN_L06_002ff100(char *moby) {
     char *vars = *(char **)(moby + 0x78);
-    float v[4];
+    float point_offset[4];
     int i;
     probe_ground_height(moby + 0x10, 0, 0.5f);
     normalize_vector_xyz(vars + 0x220, D_L06_00174600_d, 1.0f);
@@ -643,10 +643,10 @@ void FUN_L06_002ff100(char *moby) {
     for (i = 0; i < 16; i++) {
         float angle_offset = convert_integer_to_float(i) * 0.0625f - 0.5f;
         angle_offset = angle_offset * (D_L06_00161FD4 * 0.017453292f);
-        v[0] = fast_cos(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
-        v[1] = fast_sin_c(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
-        v[2] = 0.15f;
-        add_vector_xyz((float *)(vars + 0x230 + i * 16), (float *)(vars + 0x210), v);
+        point_offset[0] = fast_cos(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
+        point_offset[1] = fast_sin_c(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
+        point_offset[2] = 0.15f;
+        add_vector_xyz((float *)(vars + 0x230 + i * 16), (float *)(vars + 0x210), point_offset);
         if (i == 0 || i == 15) {
             float *w = (float *)(vars + 0x23C + i * 16);
             *w = *w = 0.0f;
