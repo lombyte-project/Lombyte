@@ -42,8 +42,8 @@ void FUN_L01_0027e900(s32 id, u128 *pos, s32 life, u8 kind, u8 tex, u8 mode, f32
                       f32 w, f32 alpha, f32 r, f32 g, f32 b, f32 size) {
     Spark *spark;
     SparkBody *spark_body;
-    u128 v = *pos;
-    u128 *pv = &v;
+    u128 position_snapshot = *pos;
+    u128 *pv = &position_snapshot;
 
     if (id == 0) {
         return;
