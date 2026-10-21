@@ -60,8 +60,8 @@ typedef struct {
 
 void FUN_L12_00308708(void *unused, struct Moby *moby) {
     LobbedVars *lobbed_vars = (LobbedVars *)moby->pvars;
-    float dir[4];
-    float ang;
+    float knockback_input_vector[4];
+    float knockback_heading;
     float rise_sqrt_term, frame_rise_sqrt_term;
     float frame_scaled_rise;
     float frame_time_squared;
@@ -74,11 +74,11 @@ void FUN_L12_00308708(void *unused, struct Moby *moby) {
     lobbed_vars->unk6C = 0.0f;
     moby->update_dist = 0xFF;
     moby->flags &= ~6;
-    ang = fast_add_rotations(moby->rot.z, 3.1415927f);
-    dir[0] = fast_cos(ang);
-    dir[1] = fast_sin(ang);
-    dir[2] = 1.0f;
-    dir[3] = 5627.925f;
+    knockback_heading = fast_add_rotations(moby->rot.z, 3.1415927f);
+    knockback_input_vector[0] = fast_cos(knockback_heading);
+    knockback_input_vector[1] = fast_sin(knockback_heading);
+    knockback_input_vector[2] = 1.0f;
+    knockback_input_vector[3] = 5627.925f;
     frame_time_squared = frame_time_sq;
     lobbed_vars->rise = frame_time_squared * 40.0f;
     lobbed_vars->fall = frame_time_squared * 100.0f;
@@ -89,8 +89,8 @@ void FUN_L12_00308708(void *unused, struct Moby *moby) {
     lobbed_vars->unk3C = fast_sqrt(frame_scaled_rise * 4.0f);
     lobbed_vars->unk5D = 0;
     lobbed_vars->unk44 = 1;
-    trooper_knockback_arc(dir, &ang, &lobbed_vars->launch_speed, &lobbed_vars->unk3C);
-    trooper_start_knockback(ang, moby, &lobbed_vars->arc, 1, 5, 2);
+    trooper_knockback_arc(knockback_input_vector, &knockback_heading, &lobbed_vars->launch_speed, &lobbed_vars->unk3C);
+    trooper_start_knockback(knockback_heading, moby, &lobbed_vars->arc, 1, 5, 2);
     lobbed_vars->unk6C = frame_time + frame_time;
     lobbed_vars->unk70 = -1.0f;
     lobbed_vars->unk74 = -1.0f;
