@@ -885,14 +885,14 @@ void FUN_L13_002c3988_c(char *moby, char *d, float p2, float p3) __asm__("FUN_L1
 
 int FUN_L13_002c3c88(struct Moby *moby, char *moby_data, int aim) {
     char *path = D_L13_001B07B0[*(int *)(moby_data + 0xA0)];
-    float distance_from_previous_node, seg, diff, steering_blend_factor;
+    float distance_from_previous_node, seg, segment_distance_shortfall, steering_blend_factor;
     int wrapped = 0;
     float target_node_steering_vector[4];
     distance_from_previous_node = FUN_001f9b48(path + (*(short *)(moby_data + 0xB6) * 16 + 0x10), &moby->pos);
     seg = FUN_001f9b48(path + (*(short *)(moby_data + 0xB6) * 16 + 0x10),
                        path + (*(short *)(moby_data + 0xB4) * 16 + 0x10));
-    diff = seg - distance_from_previous_node;
-    if ((0.0f <= diff && diff < *(float *)(moby_data + 0xCC)) || seg < *(float *)(moby_data + 0xCC)) {
+    segment_distance_shortfall = seg - distance_from_previous_node;
+    if ((0.0f <= segment_distance_shortfall && segment_distance_shortfall < *(float *)(moby_data + 0xCC)) || seg < *(float *)(moby_data + 0xCC)) {
         *(short *)(moby_data + 0xB6) = *(unsigned short *)(moby_data + 0xB4);
         *(short *)(moby_data + 0xB4) = *(unsigned short *)(moby_data + 0xB4) + ((signed char *)moby_data)[0xD0];
         if (*(short *)(moby_data + 0xB4) >= *(int *)path) {
@@ -919,12 +919,12 @@ int FUN_L13_002c3c88(struct Moby *moby, char *moby_data, int aim) {
     normalize_vector_xyz(moby_data + 0x70, moby_data + 0x70, *(float *)(moby_data + 0xCC));
     add_vector_xyz(&moby->pos, &moby->pos, moby_data + 0x70);
     if (aim != 0) {
-        struct Hero *g = &hero;
-        float yaw = fast_arc_tan(g->motion.pos.f[0] - moby->pos.x,
-                                 g->motion.pos.f[1] - moby->pos.y);
+        struct Hero *hero_state = &hero;
+        float yaw = fast_arc_tan(hero_state->motion.pos.f[0] - moby->pos.x,
+                                 hero_state->motion.pos.f[1] - moby->pos.y);
         FUN_L13_002c3988_c(moby, moby_data, yaw,
-                           -fast_arc_tan(vector_distance(&moby->pos, &g->motion.pos),
-                                         g->motion.pos.f[2] - moby->pos.z));
+                           -fast_arc_tan(vector_distance(&moby->pos, &hero_state->motion.pos),
+                                         hero_state->motion.pos.f[2] - moby->pos.z));
     }
     return wrapped;
 }
