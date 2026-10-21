@@ -103,10 +103,10 @@ extern unsigned char *D_L00_0015FCA8;
 extern float D_L00_0015FCA0;
 extern float D_L00_0015FCA4;
 float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
-float ground_height_at(Vec4 *v) {
+float ground_height_at(Vec4 *position) {
     Vec4 sample_position;
     int iy, ix;
-    sample_position.q = v->q;
+    sample_position.q = position->q;
     iy = sample_position.f[1];
     ix = sample_position.f[0];
     return (D_L00_0015FCA4 - D_L00_0015FCA0) *
