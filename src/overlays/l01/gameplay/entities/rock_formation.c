@@ -1660,11 +1660,11 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
 OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
     OrbMoby *spawned_moby;
-    OrbVars *pv;
+    OrbVars *spawned_moby_vars;
 
     spawned_moby = create_moby(0x313);
     if (spawned_moby != 0) {
-        pv = spawned_moby->pvars;
+        spawned_moby_vars = spawned_moby->pvars;
         FUN_L00_0025d1b8(spawned_moby);
         spawned_moby->w40 = 0;
         spawned_moby->h32 = 0x40;
@@ -1672,11 +1672,11 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
         spawned_moby->scale = spawned_moby->scale * scale;
         spawned_moby->rotz = random_angle_radians();
         qcopy(&spawned_moby->pos, pos);
-        qzero(pv);
-        pv->f8 = -frame_time;
-        pv->timer = 0x78;
-        pv->f10 = frame_time_sq * 15.0f;
-        pv->spin = random_float_between(0.0031415929f, 0.062831856f);
+        qzero(spawned_moby_vars);
+        spawned_moby_vars->f8 = -frame_time;
+        spawned_moby_vars->timer = 0x78;
+        spawned_moby_vars->f10 = frame_time_sq * 15.0f;
+        spawned_moby_vars->spin = random_float_between(0.0031415929f, 0.062831856f);
         FUN_L00_00250df8(spawned_moby);
     }
     return spawned_moby;
