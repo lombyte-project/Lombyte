@@ -26,11 +26,11 @@ extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
  * 65 degrees and the ledge edge is found within 2.4 units along it.
  * Constants live in locals because retail loads each one once.
  */
-int FUN_L00_0020c758(Vec4 *pos, f32 *dir)
+int FUN_L00_0020c758(Vec4 *pos, f32 *facing_yaw)
 {
     Vec4 probe, top, low, wall, edge;
     f32 drop, fwd, up, reach, min_height;
-    f32 ang, wall_yaw, wall_normal_offset, step, top_margin, max_slope, one, five, half, inc, limit;
+    f32 ledge_top_yaw, wall_yaw, wall_normal_offset, step, top_margin, max_slope, one, five, half, inc, limit;
     int found, hit, i, j, material;
 
     if (hero.unk308 == 2)
@@ -81,7 +81,7 @@ int FUN_L00_0020c758(Vec4 *pos, f32 *dir)
         return 0;
 
     qcopy(&top, &coll_hit.point);
-    ang = atan2_f(top.f[0] - pos->f[0], top.f[1] - pos->f[1]);
+    ledge_top_yaw = atan2_f(top.f[0] - pos->f[0], top.f[1] - pos->f[1]);
     if (top.f[2] - hero.ground_z.f < min_height)
         return 0;
 
@@ -92,7 +92,7 @@ int FUN_L00_0020c758(Vec4 *pos, f32 *dir)
     for (j = 0; j < 5; j++) {
         qcopy(&low, pos);
         qcopy(&wall, &top);
-        circle_offset(&wall, ang, hero.unk234);
+        circle_offset(&wall, ledge_top_yaw, hero.unk234);
         wall.f[2] += drop * (one - j / five);
         low.f[2] = wall.f[2];
         if (collision_line(&low, &wall, 2, 0, 0)) {
@@ -104,7 +104,7 @@ int FUN_L00_0020c758(Vec4 *pos, f32 *dir)
     if (!hit)
         return 0;
 
-    if (fast_difference_between_rotations(*dir, fast_add_rotations(wall_yaw, 3.14159274f)) < 1.13446403f) {
+    if (fast_difference_between_rotations(*facing_yaw, fast_add_rotations(wall_yaw, 3.14159274f)) < 1.13446403f) {
         /* walk along the wall normal until the top ends */
         limit = 2.4f;
         inc = 0.07f;
@@ -129,7 +129,7 @@ int FUN_L00_0020c758(Vec4 *pos, f32 *dir)
             edge.f[2] = top.f[2];
             edge.f[0] += fast_cos(wall_yaw) * wall_normal_offset;
             edge.f[1] += fast_sin(wall_yaw) * wall_normal_offset;
-            if (0.52359879f < fast_difference_between_rotations(fast_add_rotations(wall_yaw, 3.14159274f), *dir))
+            if (0.52359879f < fast_difference_between_rotations(fast_add_rotations(wall_yaw, 3.14159274f), *facing_yaw))
                 return 0;
             return 1;
         } while (wall_normal_offset < limit);
