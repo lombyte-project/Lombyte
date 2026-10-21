@@ -48,7 +48,7 @@ extern void FUN_L00_00250df8(void *);
 extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
 void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
-unsigned char *FUN_L07_0030b538(void *pos, float *dir, int collision_ignore_moby, int solid_collision) {
+unsigned char *FUN_L07_0030b538(void *spawn_position, float *initial_velocity, int collision_ignore_moby, int solid_collision) {
     unsigned char *spawned_moby = func_0020D348_m(0x370);
     if (spawned_moby) {
         char *moby_data;
@@ -58,11 +58,11 @@ unsigned char *FUN_L07_0030b538(void *pos, float *dir, int collision_ignore_moby
         spawned_moby[0x31] = 1;
         *(int *)(spawned_moby + 0x40) = 0;
         moby_data = *(char **)(spawned_moby + 0x78);
-        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(dir), dir[2]);
-        *(float *)(spawned_moby + 0x48) = fast_arc_tan(dir[0], dir[1]);
-        qcopy(spawned_moby + 0x10, pos);
-        qcopy(moby_data + 0x40, pos);
-        qcopy(moby_data + 0x30, dir);
+        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(initial_velocity), initial_velocity[2]);
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(initial_velocity[0], initial_velocity[1]);
+        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(moby_data + 0x40, spawn_position);
+        qcopy(moby_data + 0x30, initial_velocity);
         qcopy(V, moby_data + 0x30);
         V[2] = 0.0f;
         set_vector_length_xy(V, V, 1.0f);
