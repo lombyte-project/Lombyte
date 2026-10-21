@@ -3636,10 +3636,10 @@ extern int pad_pressed_within(int, void *, void *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_00266e00(int, void *, void *, int);
 
 int FUN_L00_00228b78(void *jump_press_window_frames, int suppress_normal_jump) {
-    s32 buf;
+    s32 jump_press_age_frames;
     int len;
 
-    if (!pad_pressed_within(0x40, jump_press_window_frames, &buf))
+    if (!pad_pressed_within(0x40, jump_press_window_frames, &jump_press_age_frames))
         return 0;
 
     len = FUN_L00_00221d98();
