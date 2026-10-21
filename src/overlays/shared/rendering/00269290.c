@@ -1421,7 +1421,7 @@ void FUN_L00_00267a08_26c860(void *) __asm__("FUN_L00_00267a08");
 s32 FUN_001fa6d0_26c860(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_0026c860(M_26c860 *particle) {
     R_26c860 *r = &particle->r;
-    V_26c860 reference_position, position_offset_scratch, b;
+    V_26c860 reference_position, position_offset_scratch, transformed_position_offset;
     M3_26c860 mat;
     if (r->f10 != 0.0f) {
         f32 zero = 0.0f;
@@ -1432,8 +1432,8 @@ void FUN_L00_0026c860(M_26c860 *particle) {
         position_offset_scratch.z = FUN_001f9dc8_26c860(r->f14) * r->f10;
         position_offset_scratch.x = zero;
         position_offset_scratch.w = zero;
-        FUN_001f9d20_26c860(&b, &position_offset_scratch, &mat);
-        FUN_001f9a28_26c860(&particle->v10, &particle->v10, &b);
+        FUN_001f9d20_26c860(&transformed_position_offset, &position_offset_scratch, &mat);
+        FUN_001f9a28_26c860(&particle->v10, &particle->v10, &transformed_position_offset);
         r->f1C += D_0015ED60_26c860 * 0.06001f;
         FUN_L00_0024f7c8_26c860(r->p18, 0, &reference_position);
         FUN_001f9a28_26c860(&position_offset_scratch, &reference_position, &particle->v10);
@@ -1445,8 +1445,8 @@ void FUN_L00_0026c860(M_26c860 *particle) {
         position_offset_scratch.z = FUN_001f9dc8_26c860(r->f14) * r->f10;
         position_offset_scratch.x = zero;
         position_offset_scratch.w = zero;
-        FUN_001f9d20_26c860(&b, &position_offset_scratch, &mat);
-        FUN_001f9a10_26c860(&particle->v10, &particle->v10, &b);
+        FUN_001f9d20_26c860(&transformed_position_offset, &position_offset_scratch, &mat);
+        FUN_001f9a10_26c860(&particle->v10, &particle->v10, &transformed_position_offset);
         if (zero < FUN_L00_0025c230_26c860(&reference_position, r->p18 + 0xC0, &particle->v10, 1)) {
             FUN_L00_00267a08_26c860(particle);
             return;
