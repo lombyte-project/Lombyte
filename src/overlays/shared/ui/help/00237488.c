@@ -18,16 +18,16 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
 void FUN_L05_00237488(float *out, float *smoothed_values, float step) {
     char *g = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
-    float v[2];
-    v[0] = -*(float *)(g + 0x1D20);
-    v[1] = *(float *)(g + 0x1D24);
-    approach_value(smoothed_values + 2, v[0], step);
+    float target_values[2];
+    target_values[0] = -*(float *)(g + 0x1D20);
+    target_values[1] = *(float *)(g + 0x1D24);
+    approach_value(smoothed_values + 2, target_values[0], step);
     if (smoothed_values[2] > 1.0f)
         smoothed_values[2] = 1.0f;
     if (smoothed_values[2] < -1.0f)
         smoothed_values[2] = -1.0f;
     out[0] = smoothed_values[2];
-    approach_value(smoothed_values + 1, v[1], step);
+    approach_value(smoothed_values + 1, target_values[1], step);
     if (smoothed_values[1] > 1.0f)
         smoothed_values[1] = 1.0f;
     if (smoothed_values[1] < -1.0f)
