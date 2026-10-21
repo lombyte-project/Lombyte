@@ -1634,13 +1634,13 @@ void FUN_L10_002d8d30(char *moby) {
         if (*(int *)(spark_vars + 0xC) == -1) {
             *(int *)(spark_vars + 0xC) = FUN_L00_0023e738(pos, 3.0f, 0.0f, 1.0f, 1.0f, 0.5f);
         } else {
-            char *l = D_L10_00180740 + *(int *)(spark_vars + 0xC) * 32;
-            qcopy(l + 0x10, pos);
-            *(float *)(l + 0) = 1.0f;
-            *(float *)(l + 0x1C) = 3.0f;
-            *(float *)(l + 4) = 1.0f;
-            *(float *)(l + 8) = 0.5f;
-            *(int *)(l + 0xC) = 0;
+            char *light_parameter_entry = D_L10_00180740 + *(int *)(spark_vars + 0xC) * 32;
+            qcopy(light_parameter_entry + 0x10, pos);
+            *(float *)(light_parameter_entry + 0) = 1.0f;
+            *(float *)(light_parameter_entry + 0x1C) = 3.0f;
+            *(float *)(light_parameter_entry + 4) = 1.0f;
+            *(float *)(light_parameter_entry + 8) = 0.5f;
+            *(int *)(light_parameter_entry + 0xC) = 0;
         }
         if (random_integer_below(2) != 0)
             return;
