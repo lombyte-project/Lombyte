@@ -468,15 +468,15 @@ extern int FUN_L00_0025e3b8_u(void *) __asm__("FUN_L00_0025e3b8");
 
 /* False for null; true for a moby outside FUN_L00_0025e3b8's range or of class 0x1F6. */
 int FUN_L00_0025e368(char *moby) {
-    int r;
+    int predicate_result;
     if (moby == 0) {
-        r = 0;
+        predicate_result = 0;
     } else if (FUN_L00_0025e3b8_u(moby) == 0) {
-        r = 1;
+        predicate_result = 1;
     } else {
-        r = *(short *)(moby + 0xA6) == 0x1F6;
+        predicate_result = *(short *)(moby + 0xA6) == 0x1F6;
     }
-    return r;
+    return predicate_result;
 }
 /* True for a moby of one of eight listed classes. */
 s32 FUN_L00_0025e3f8(void *moby) {
