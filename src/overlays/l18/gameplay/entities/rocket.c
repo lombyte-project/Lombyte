@@ -35,18 +35,18 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L18_002d6280(struct Moby *arg) {
+void FUN_L18_002d6280(struct Moby *moby) {
     unsigned short flags;
-    arg->state = 5;
-    if (arg->prev_seq != 0) {
-        blend_moby_animation(arg, 0, 0, scale_ticks(10));
+    moby->state = 5;
+    if (moby->prev_seq != 0) {
+        blend_moby_animation(moby, 0, 0, scale_ticks(10));
     }
-    flags = arg->flags;
-    arg->visible = 0;
+    flags = moby->flags;
+    moby->visible = 0;
     flags |= 1;
-    arg->collision = 0;
+    moby->collision = 0;
     flags &= 0xEFFF;
-    arg->flags = flags;
+    moby->flags = flags;
 }
 extern int D_L18_001AC240_u[] __asm__("D_L18_001AC240");
 extern short D_L18_0015FFD8_d __asm__("D_L18_0015FFD8");
