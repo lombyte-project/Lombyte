@@ -1040,7 +1040,7 @@ extern char D_L01_00174340_h[] __asm__("D_L01_001742C0");
 extern float *func_L00_0025D390_t(void *) __asm__("FUN_002141f8");
 extern int func_L00_001EFFF0_t(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
-void *FUN_L01_002e32a8(void *moby, void *from, void *ang, float yawMax, float pitchMax, float range, float near,
+void *FUN_L01_002e32a8(void *moby, void *from, void *reference_rotation, float yawMax, float pitchMax, float range, float near,
                         float nearYaw, float nearPitch) {
     float tp[4];
     char *best = 0;
@@ -1050,26 +1050,26 @@ void *FUN_L01_002e32a8(void *moby, void *from, void *ang, float yawMax, float pi
         char *hs = D_L01_00174340_h;
         struct Hero *pl = &hero;
         float *hp;
-        int cls;
-        float dist, score, pitch_error_squared;
+        int candidate_class;
+        float candidate_distance, score, pitch_error_squared;
         if (*(short *)(candidate_moby + 0x32) == 0) continue;
         hp = func_L00_0025D390_t(candidate_moby);
         if (!(*(unsigned short *)(candidate_moby + 0x34) & 0x1000) || candidate_moby == 0 || *(char **)(candidate_moby + 0x24) == 0) continue;
-        cls = *(short *)(*(char **)(candidate_moby + 0x24) + 0x46);
-        if (cls != 5 || hp == 0 || !(0.0f < *hp)) continue;
-        dist = distance_xyz(from, candidate_moby + 0x10);
-        if (!(dist < range)) continue;
+        candidate_class = *(short *)(*(char **)(candidate_moby + 0x24) + 0x46);
+        if (candidate_class != 5 || hp == 0 || !(0.0f < *hp)) continue;
+        candidate_distance = distance_xyz(from, candidate_moby + 0x10);
+        if (!(candidate_distance < range)) continue;
         qcopy(tp, candidate_moby + 0x10);
         tp[2] += 0.4f;
-        score = fast_difference_between_rotations_c(((float *)ang)[2], fast_arc_tan(tp[0] - ((float *)from)[0], tp[1] - ((float *)from)[1]));
+        score = fast_difference_between_rotations_c(((float *)reference_rotation)[2], fast_arc_tan(tp[0] - ((float *)from)[0], tp[1] - ((float *)from)[1]));
         score = score * score;
         if (!(score < yawMax * yawMax)) {
-            if (!(dist < near) || !(score < nearYaw * nearYaw)) continue;
+            if (!(candidate_distance < near) || !(score < nearYaw * nearYaw)) continue;
         }
-        pitch_error_squared = fast_difference_between_rotations_c(((float *)ang)[1], fast_arc_tan(dist, tp[2] - ((float *)from)[2]));
+        pitch_error_squared = fast_difference_between_rotations_c(((float *)reference_rotation)[1], fast_arc_tan(candidate_distance, tp[2] - ((float *)from)[2]));
         pitch_error_squared = pitch_error_squared * pitch_error_squared;
         if (!(pitch_error_squared < pitchMax * pitchMax)) {
-            if (!(dist < near) || !(pitch_error_squared < nearPitch * nearPitch)) continue;
+            if (!(candidate_distance < near) || !(pitch_error_squared < nearPitch * nearPitch)) continue;
         }
         score *= pitch_error_squared;
         score *= square_root(distance_xyz(from, tp));
@@ -1077,7 +1077,7 @@ void *FUN_L01_002e32a8(void *moby, void *from, void *ang, float yawMax, float pi
         if (func_L00_001EFFF0_t(from, tp, 0, moby, 0)) {
             char *hit = *(char **)(hs + 0x18);
             if (hit == 0 || hit == ((char *)pl->moby) || hit == 0 || *(char **)(hit + 0x24) == 0
-                || *(short *)(*(char **)(hit + 0x24) + 0x46) != cls) {
+                || *(short *)(*(char **)(hit + 0x24) + 0x46) != candidate_class) {
                 continue;
             }
         }
