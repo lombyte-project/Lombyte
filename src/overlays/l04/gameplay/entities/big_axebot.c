@@ -1627,7 +1627,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     }
     FUN_L00_001fefc8(&data->f14D);
     if (moby->state != 8 && moby->state != 0) {
-        int tmp;
+        int unused_hit_reaction_output;
         float dmg;
         Hit_35F0 *hit;
         int r;
@@ -1635,7 +1635,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
 
         dmg = 0.0f;
         hit = func_L00_0025B478_2C35F0(moby, 0x210000, 0);
-        r = hit_reaction(moby, hit, &data->hp, 0, &tmp, &dmg, 0, 4);
+        r = hit_reaction(moby, hit, &data->hp, 0, &unused_hit_reaction_output, &dmg, 0, 4);
         if (hit != 0 && moby->state != 0 && data->f14D == 0) {
             if (hit->att != 0) {
                 struct Hero *h = &hero;
