@@ -2265,7 +2265,7 @@ extern int D_L00_0015F324;
 extern int D_L00_0015F334;
 extern long D_L00_0015F328;
 extern long D_L00_0015F338;
-void *FUN_L00_002a9aa0(int unused, float *pos) {
+void *FUN_L00_002a9aa0(int unused, float *spawn_position) {
     char *spawned_moby = func_0020D348_m_q(0x5F3);
     if (spawned_moby != 0 && *(int *)&D_L00_001613C8_q == 0) {
         char *moby_vars;
@@ -2274,7 +2274,7 @@ void *FUN_L00_002a9aa0(int unused, float *pos) {
         *(short *)(spawned_moby + 0x32) = 0xFF;
         spawned_moby[0x31] = 1;
         moby_vars = *(char **)(spawned_moby + 0x78);
-        *(OvlQuad *)(spawned_moby + 0x10) = *(OvlQuad *)pos;
+        *(OvlQuad *)(spawned_moby + 0x10) = *(OvlQuad *)spawn_position;
         D_L00_0015F324 = 0xFF;
         D_L00_0015F334 = 0xFFFFFF;
         D_L00_0015F338 = 0x1F00000042L;
@@ -2283,7 +2283,7 @@ void *FUN_L00_002a9aa0(int unused, float *pos) {
         D_L00_0015F320 = 0;
         D_L00_0015F330 = 0;
         *(int *)(moby_vars + 0x10) = 0;
-        *(short *)(moby_vars + 0x2C) = FUN_L00_0023e5e0_q(pos, 0.0f, 0.0f, 0);
+        *(short *)(moby_vars + 0x2C) = FUN_L00_0023e5e0_q(spawn_position, 0.0f, 0.0f, 0);
     }
     return spawned_moby;
 }
