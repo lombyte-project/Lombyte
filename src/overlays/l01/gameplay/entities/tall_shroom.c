@@ -649,7 +649,7 @@ void FUN_L01_0030ef18(s32 vertex_count, f32 (*normals)[3], f32 (*verts)[3], s32 
     EnvVec refl;
     EnvVec nrm;
     s32 i;
-    f32 len;
+    f32 uv_projection_denominator;
 
     for (i = 0; i < vertex_count; i++) {
         pos.w = 1.0f;
@@ -667,9 +667,9 @@ void FUN_L01_0030ef18(s32 vertex_count, f32 (*normals)[3], f32 (*verts)[3], s32 
         fast_vec_sub(&refl, &eye, &refl);
         fast_vec_normalize(&refl, &refl, 1.0f);
         refl.z += 1.0f;
-        len = fast_vec_length(&refl) * 2.0f;
-        uv[i][0] = (refl.x / len + 0.5f) * 2.0f + D_L01_00162110[0];
-        uv[i][1] = (refl.y / len + 0.5f) * 2.0f + D_L01_00162110[1];
+        uv_projection_denominator = fast_vec_length(&refl) * 2.0f;
+        uv[i][0] = (refl.x / uv_projection_denominator + 0.5f) * 2.0f + D_L01_00162110[0];
+        uv[i][1] = (refl.y / uv_projection_denominator + 0.5f) * 2.0f + D_L01_00162110[1];
     }
 }
 extern s32 D_L01_00202EA0[];
