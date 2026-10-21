@@ -31,9 +31,9 @@ void FUN_L17_002ea418(unsigned char red, unsigned char green, unsigned char blue
 extern int FUN_L00_002dbe20(void *);
 
 int FUN_L17_002f0040(struct Moby *moby) {
-    int r = FUN_L00_002dbe20(moby);
+    int helper_result = FUN_L00_002dbe20(moby);
     moby->state = 0xc;
-    return r;
+    return helper_result;
 }
 extern void FUN_L17_002f0448(struct Moby *m);
 
