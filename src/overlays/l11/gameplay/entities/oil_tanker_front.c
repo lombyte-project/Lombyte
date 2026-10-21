@@ -1744,7 +1744,7 @@ void FUN_L11_0031b098(struct Moby *source_moby) {
     float randomized_velocity[4];
     float vertical_spark_vector[4];
     char *moby_vars;
-    int c0, c1, c2, c3, c4;
+    int initial_spark_color, second_spark_color, spark_frame_count, second_spark_frame_count, third_spark_frame_count;
     moby_vars = (char *)source_moby->pvars;
     random_vector(randomized_velocity, 0.0f, *(float *)&D_L11_00162428 * D_0015ED6C_n[1]);
     add_vector_xyz(randomized_velocity, randomized_velocity, moby_vars);
@@ -1753,17 +1753,17 @@ void FUN_L11_0031b098(struct Moby *source_moby) {
             D_0015ED6C_n[1];
     randomized_velocity[3] = *(float *)&D_L11_00162434;
     vertical_spark_vector[3] = *(float *)&D_L11_00162438;
-    c0 = fast_tween_color(*(int *)&D_L11_0016243C, *(int *)&D_L11_00162440,
+    initial_spark_color = fast_tween_color(*(int *)&D_L11_0016243C, *(int *)&D_L11_00162440,
                       random_float_between_alt(0.0f, 1.0f));
-    c1 = fast_tween_color(*(int *)&D_L11_00162444, *(int *)&D_L11_00162448,
+    second_spark_color = fast_tween_color(*(int *)&D_L11_00162444, *(int *)&D_L11_00162448,
                       random_float_between_alt(0.0f, 1.0f));
-    c2 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
+    spark_frame_count = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
         (float)*(int *)&D_L11_0016244C * 0.8f, (float)*(int *)&D_L11_0016244C * 1.2f)));
-    c3 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
+    second_spark_frame_count = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
         (float)*(int *)&D_L11_00162450 * 0.8f, (float)*(int *)&D_L11_00162450 * 1.2f)));
-    c4 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
+    third_spark_frame_count = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
         (float)*(int *)&D_L11_00162454 * 0.8f, (float)*(int *)&D_L11_00162454 * 1.2f)));
-    spawn_spark(&source_moby->pos, randomized_velocity, vertical_spark_vector, c0, c1, c2, c3, c4, -1);
+    spawn_spark(&source_moby->pos, randomized_velocity, vertical_spark_vector, initial_spark_color, second_spark_color, spark_frame_count, second_spark_frame_count, third_spark_frame_count, -1);
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031ED48), where it is exact; names translated to the US level program. */
 
