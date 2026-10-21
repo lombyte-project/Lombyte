@@ -1133,19 +1133,19 @@ extern char D_L00_0015F858[] __attribute__((section(".data")));
 extern char D_L00_0015F860[] __attribute__((section(".data")));
 int FUN_L00_00239df8(HudElem *hud_element)
 {
-    char buf[16];
+    char bolt_display_text[16];
     s16 *frame;
     u8 *fade;
     int apostrophe;
-    int off;
+    int panel_open_counter_offset;
     int panel_x, cap_x, icon_x;
     int y, x, digits, alpha, bolt_count_quotient, slide, color, shadow, sx, sy, i, dx, dy;
     f32 open, text;
 
     frame = hud_element->unk80;
     /* the byte offset kept in a local is load-bearing (retail tests m + off) */
-    off = 0x70;
-    if (camera_secondary_mode == 50 || ((u8 *)hud_element)[off] == 0)
+    panel_open_counter_offset = 0x70;
+    if (camera_secondary_mode == 50 || ((u8 *)hud_element)[panel_open_counter_offset] == 0)
         return hud_element->w;
 
     fade = hud_element->cnt;
@@ -1183,21 +1183,21 @@ int FUN_L00_00239df8(HudElem *hud_element)
     /* the count, shadow first */
     color = fast_tween_color(bolt_text_color_clear, bolt_text_color_opaque, text);
     shadow = fast_tween_color(0, 0x80000000, text);
-    sprintf_alt(buf, bolt_count_format, current_bolt_count);
-    font_print_right(x + D_L00_0015F834 + 1, y + D_L00_0015F838 + 1, shadow, buf, -1);
-    font_print_right(x + D_L00_0015F834, y + D_L00_0015F838, color, buf, -1);
+    sprintf_alt(bolt_display_text, bolt_count_format, current_bolt_count);
+    font_print_right(x + D_L00_0015F834 + 1, y + D_L00_0015F838 + 1, shadow, bolt_display_text, -1);
+    font_print_right(x + D_L00_0015F834, y + D_L00_0015F838, color, bolt_display_text, -1);
 
     /* thousands separators */
     if (game_language != 3)
         apostrophe = game_language != 5;
-    sprintf_alt(buf, apostrophe ? D_L00_0015F858 : D_L00_0015F860);
+    sprintf_alt(bolt_display_text, apostrophe ? D_L00_0015F858 : D_L00_0015F860);
     dy = apostrophe ? D_L00_0015F840 : D_L00_0015F848;
     dx = apostrophe ? D_L00_0015F83C : D_L00_0015F844;
     for (i = 3; i < digits; i += 3) {
         sx = x + dx;
         sy = y + dy;
-        font_print_right(sx - digit_width * i + 2, sy + 2, shadow, buf, -1);
-        font_print_right(sx - digit_width * i, sy, color, buf, -1);
+        font_print_right(sx - digit_width * i + 2, sy + 2, shadow, bolt_display_text, -1);
+        font_print_right(sx - digit_width * i, sy, color, bolt_display_text, -1);
     }
     return hud_element->w;
 }
