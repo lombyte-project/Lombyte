@@ -22,10 +22,10 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L03_002de370(char *moby) {
-    float v[4];
+    float unused_vector_add_argument[4];
     char *moby_data = *(char **)(moby + 0x78);
     *(float *)(moby_data + 8) = *(float *)(moby_data + 8) - frame_time_sq * 9.8f;
-    FUN_L00_001ff290(v, moby + 0x10, moby_data);
+    FUN_L00_001ff290(unused_vector_add_argument, moby + 0x10, moby_data);
     *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(moby_data + 0x10));
     *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(moby + 0x44), *(float *)(moby_data + 0x14));
     *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *(float *)(moby_data + 0x18));
