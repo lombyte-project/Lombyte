@@ -260,17 +260,17 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void FUN_L00_00205600(void) {
-    struct Hero *g = &hero;
-    if (g->rand_timer.fired == 0) {
-        if (g->rand_timer.range == 0) {
-            g->rand_timer.deadline = D_L00_0015F5CC + scale_game_frames(30);
-        } else if (D_L00_0015F5CC > g->rand_timer.deadline) {
+    struct Hero *hero_random_timer_owner = &hero;
+    if (hero_random_timer_owner->rand_timer.fired == 0) {
+        if (hero_random_timer_owner->rand_timer.range == 0) {
+            hero_random_timer_owner->rand_timer.deadline = D_L00_0015F5CC + scale_game_frames(30);
+        } else if (D_L00_0015F5CC > hero_random_timer_owner->rand_timer.deadline) {
             int base_delay_frames, first_random_delay_frames;
-            g->rand_timer.fired = 1;
+            hero_random_timer_owner->rand_timer.fired = 1;
             base_delay_frames = scale_game_frames(20);
-            first_random_delay_frames = random_integer_below(g->rand_timer.range);
-            g->rand_timer.deadline =
-                D_L00_0015F5CC + base_delay_frames + first_random_delay_frames + random_integer_below(g->rand_timer.range);
+            first_random_delay_frames = random_integer_below(hero_random_timer_owner->rand_timer.range);
+            hero_random_timer_owner->rand_timer.deadline =
+                D_L00_0015F5CC + base_delay_frames + first_random_delay_frames + random_integer_below(hero_random_timer_owner->rand_timer.range);
         }
     }
 }
