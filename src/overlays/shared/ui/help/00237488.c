@@ -1816,15 +1816,15 @@ extern char D_L05_0017C068[];
 #include "rnc/data_labels.h"
 
 void FUN_L05_0025b538(void) {
-    char *g = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
-    int path_owner_moby = *(int *)(g + 0x86C);
+    char *hero_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
+    int path_owner_moby = *(int *)(hero_base + 0x86C);
 
-    *(int *)(g + 0x2278) = 0;
-    *(int *)(g + 0x227C) = 0;
+    *(int *)(hero_base + 0x2278) = 0;
+    *(int *)(hero_base + 0x227C) = 0;
     if (path_owner_moby != 0) {
-        if ((unsigned)(*(int *)(g + 0x208C) - 0x15) < 2) {
-            *(int *)(g + 0x2278) = path_owner_moby;
-            *(int *)(g + 0x227C) = (int)D_L05_0017C068;
+        if ((unsigned)(*(int *)(hero_base + 0x208C) - 0x15) < 2) {
+            *(int *)(hero_base + 0x2278) = path_owner_moby;
+            *(int *)(hero_base + 0x227C) = (int)D_L05_0017C068;
         }
     }
 }
