@@ -2206,7 +2206,7 @@ extern short D_L11_0016205C __attribute__((sda));
 int D_L11_00162060 = 4;
 void FUN_L11_003125a8(struct Moby *moby, char *obj, float aim_azimuth, float aim_elevation) {
     char shot_direction[16];
-    char b[16];
+    char projectile_spawn_position[16];
     char muzzle_forward_offset[16];
     char reticle_world_position[16];
 
@@ -2215,9 +2215,9 @@ void FUN_L11_003125a8(struct Moby *moby, char *obj, float aim_azimuth, float aim
     fast_vec_add(shot_direction, shot_direction, obj);
     if (FUN_001f9740_c(obj + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
         fast_vec_normalize(muzzle_forward_offset, shot_direction, 2.2f);
-        moby_point_position(moby, 3 + (obj[0x61] & 1), b);
-        fast_vec_add(b, b, muzzle_forward_offset);
-        FUN_L11_00308848(moby, shot_direction, b, 200.0f, -1.0f);
+        moby_point_position(moby, 3 + (obj[0x61] & 1), projectile_spawn_position);
+        fast_vec_add(projectile_spawn_position, projectile_spawn_position, muzzle_forward_offset);
+        FUN_L11_00308848(moby, shot_direction, projectile_spawn_position, 200.0f, -1.0f);
         *(int *)(obj + 0x80) = D_L11_00162060;
         obj[0x61] ^= 1;
         FUN_0022da68_c(3, 0, (int)moby);
