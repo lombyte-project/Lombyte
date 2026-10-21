@@ -301,11 +301,11 @@ void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 #include "qcopy.h"
 void update_entity_matrix(char *out, OvlQuad *pos, void *m1, void *m2) __asm__("FUN_L00_00260738");
 void update_entity_matrix(char *out, OvlQuad *pos, void *previous_rotation, void *current_rotation) {
-    M4 transposed_previous_rotation_matrix, b, relative_rotation_matrix;
+    M4 transposed_previous_rotation_matrix, current_rotation_matrix, relative_rotation_matrix;
     euler_rotation_matrix(transposed_previous_rotation_matrix, previous_rotation);
     transpose_rotation_matrix(transposed_previous_rotation_matrix, transposed_previous_rotation_matrix);
-    euler_rotation_matrix(b, current_rotation);
-    multiply_matrix(relative_rotation_matrix, transposed_previous_rotation_matrix, b);
+    euler_rotation_matrix(current_rotation_matrix, current_rotation);
+    multiply_matrix(relative_rotation_matrix, transposed_previous_rotation_matrix, current_rotation_matrix);
     matrix_to_euler(relative_rotation_matrix, out);
     qcopy(out + 0x10, pos);
 }
