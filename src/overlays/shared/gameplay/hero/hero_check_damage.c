@@ -2834,10 +2834,10 @@ void FUN_L00_00211be8(void) {
             hero.target_speed = D_L00_0017BDB8[6] * frame_time;
     }
     if (hero.state.current == 0x73) {
-        float v = hero.target_speed * 0.8f;
+        float reduced_target_speed = hero.target_speed * 0.8f;
         float minimum_target_speed = frame_time * 2.5f;
-        hero.target_speed = v;
-        if (v < minimum_target_speed)
+        hero.target_speed = reduced_target_speed;
+        if (reduced_target_speed < minimum_target_speed)
             hero.target_speed = minimum_target_speed;
     }
 }
