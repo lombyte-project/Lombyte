@@ -750,8 +750,8 @@ void FUN_L14_002dee28(struct Moby *moby) {
     };
     char *data = (char *)moby->pvars;
     struct Hero *x;
-    float v[4];
-    float w[4];
+    float forward_point[4];
+    float bounding_sphere[4];
     int idx;
     switch (moby->state) {
     case MOBY_STATE_INITIALIZE:
@@ -782,13 +782,13 @@ void FUN_L14_002dee28(struct Moby *moby) {
             *(int *)(data + 0x204) = trooper_play_sound(6, 4, (int)moby, 0xD3);
         }
         FUN_L14_002dfc58(moby);
-        v[0] = fast_cos(moby->rot.z) * 3.125f;
-        v[1] = fast_sin(moby->rot.z) * 3.125f;
-        v[2] = 0.0f;
-        add_vector_xyz(v, &moby->pos, v);
-        qcopy(w, v);
-        w[3] = 4.5f;
-        if (fast_bsphere_check((char *)w, 64.0f) >= 0) {
+        forward_point[0] = fast_cos(moby->rot.z) * 3.125f;
+        forward_point[1] = fast_sin(moby->rot.z) * 3.125f;
+        forward_point[2] = 0.0f;
+        add_vector_xyz(forward_point, &moby->pos, forward_point);
+        qcopy(bounding_sphere, forward_point);
+        bounding_sphere[3] = 4.5f;
+        if (fast_bsphere_check((char *)bounding_sphere, 64.0f) >= 0) {
             FUN_L14_002df138(moby);
         }
         return;
