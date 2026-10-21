@@ -63,11 +63,11 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void FUN_L00_00260a88(void *, int, int, int, int);
 
 void FUN_L01_002787a0(char *moby) {
-    int r = 0;
+    int bolt_spawn_flags = 0;
     if (vector_distance(moby + 0x10, D_0013E533 + 0xE9D) < 7.0f) {
-        r = 2;
+        bolt_spawn_flags = 2;
     }
-    FUN_L00_00260a88(moby, 4, 7, r, -1);
+    FUN_L00_00260a88(moby, 4, 7, bolt_spawn_flags, -1);
 }
 #include "qcopy.h"
 
