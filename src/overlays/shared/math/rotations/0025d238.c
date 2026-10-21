@@ -299,16 +299,16 @@ float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_star
     OvlQuad query_point_copy[1];
     OvlQuad g[1];
     float *output_component, *fa, *fb;
-    float planar_distance, negative_query_direction_dot, u;
+    float planar_distance, negative_query_direction_dot, segment_length_or_start_direction_dot;
     int i;
     if (r > 0.0f && fabs_25dcd8(((float *)query_point)[2] - ((float *)segment_start)[2]) < r &&
         fabs_25dcd8(((float *)query_point)[2] - ((float *)b)[2]) < r) {
         planar_distance = FUN_L00_0025db00_c(out, query_point, segment_start, b);
         r = dist_25dcd8(segment_start, out);
-        u = dist_25dcd8(segment_start, b);
+        segment_length_or_start_direction_dot = dist_25dcd8(segment_start, b);
         segment_workspace[0] = *segment_start;
         segment_workspace[1] = *b;
-        b6b8_25dcd8(out, &segment_workspace[0], &segment_workspace[1], r / u);
+        b6b8_25dcd8(out, &segment_workspace[0], &segment_workspace[1], r / segment_length_or_start_direction_dot);
         return planar_distance;
     }
     vsub_25dcd8(segment_workspace, b, segment_start);
@@ -316,8 +316,8 @@ float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_star
     vscl_25dcd8(segment_workspace, segment_workspace, 1.0f);
     qcopy(direction_copy, segment_workspace);
     negative_query_direction_dot = -dot_25dcd8(query_point, segment_workspace);
-    u = dot_25dcd8(&segment_workspace[1], direction_copy);
-    scale_vector_xyz(out, segment_workspace, -(negative_query_direction_dot + u) / dot_25dcd8(segment_workspace, direction_copy));
+    segment_length_or_start_direction_dot = dot_25dcd8(&segment_workspace[1], direction_copy);
+    scale_vector_xyz(out, segment_workspace, -(negative_query_direction_dot + segment_length_or_start_direction_dot) / dot_25dcd8(segment_workspace, direction_copy));
     vadd_25dcd8(out, out, &segment_workspace[1]);
     i = 0;
     fb = (float *)b;
