@@ -2588,7 +2588,7 @@ extern int probe_world_sphere(void *, float, int, void *, void *) __asm__("FUN_L
  * velocity; a hit on the target bounces it back up and switches to the next state. */
 void FUN_L07_0030f308(char *moby, char *obj, int state, int anim, int seq, int frame, int next, int id,
                       float lo, float hi, float len, float scale, float radius) {
-    float v[4];
+    float hit_direction[4];
     float hit_descriptor[12];
     float probe_center[4];
     float interpolated_record_value;
@@ -2608,9 +2608,9 @@ void FUN_L07_0030f308(char *moby, char *obj, int state, int anim, int seq, int f
         return;
     }
     vel = obj + 0xD0;
-    fast_vec_normalize(v, vel, len);
-    v[2] = 1.0f;
-    make_hit_descriptor((char *)hit_descriptor, (int)moby, 1, v, scale);
+    fast_vec_normalize(hit_direction, vel, len);
+    hit_direction[2] = 1.0f;
+    make_hit_descriptor((char *)hit_descriptor, (int)moby, 1, hit_direction, scale);
     moby_point_position(moby, 0, probe_center);
     if (probe_world_sphere(probe_center, radius, 0x21, moby, hit_descriptor) == 0) {
         return;
