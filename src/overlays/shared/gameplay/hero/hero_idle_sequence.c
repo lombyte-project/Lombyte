@@ -1832,7 +1832,7 @@ extern void FUN_L00_0024eed8_00208a10(void *, int, void *, float,
                                       float) __asm__("FUN_L00_0024eed8");
 
 void FUN_L00_00208a10(void) {
-    u128 v;
+    u128 position_scratch;
     float second_position_offset;
     unsigned char *hero_moby;
     if (hero.unk20A5) {
@@ -1848,14 +1848,14 @@ void FUN_L00_00208a10(void) {
     FUN_001f9838_00208a10(hero_moby + 0xC0, &hero, 0x30);
     upd_a(((unsigned char *)hero.moby));
     if (hero.unk1CC == 0 && *(int *)(((unsigned char *)hero.moby) + 0x94) != 0) {
-        qcopy(&v, &hero.motion.pos);
-        FUN_L00_002336e8_00208a10(&v, &v, hero.unk224);
-        FUN_L00_0024eed8_00208a10(((unsigned char *)hero.moby), 0, &v, hero.unk234,
+        qcopy(&position_scratch, &hero.motion.pos);
+        FUN_L00_002336e8_00208a10(&position_scratch, &position_scratch, hero.unk224);
+        FUN_L00_0024eed8_00208a10(((unsigned char *)hero.moby), 0, &position_scratch, hero.unk234,
                                   hero.capsule_top - hero.unk224);
         second_position_offset = hero.unk234 + 0.05f;
-        qcopy(&v, &hero.motion.pos);
-        FUN_L00_002336e8_00208a10(&v, &v, second_position_offset);
-        FUN_L00_0024eed8_00208a10(((unsigned char *)hero.moby), 1, &v, hero.unk234,
+        qcopy(&position_scratch, &hero.motion.pos);
+        FUN_L00_002336e8_00208a10(&position_scratch, &position_scratch, second_position_offset);
+        FUN_L00_0024eed8_00208a10(((unsigned char *)hero.moby), 1, &position_scratch, hero.unk234,
                                   hero.capsule_top - second_position_offset);
     }
 }
