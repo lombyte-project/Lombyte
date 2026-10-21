@@ -1606,7 +1606,7 @@ extern void FUN_L00_0026ced0_u(void *, void *, u32, u32, f32, s32) __asm__("FUN_
 void FUN_L01_002ffb28(SmokeMoby *self) {
     SmokeVars *smoke_vars;
     Vec4 pos;
-    Vec4 vel;
+    Vec4 particle_velocity;
     Vec4 local_velocity;
     f32 size;
     s32 i;
@@ -1622,11 +1622,11 @@ void FUN_L01_002ffb28(SmokeMoby *self) {
         pos.f[2] = 1.2f;
         local_velocity.f[0] = random_float_between(0.8f, 1.2f) * (frame_time * 3.0f);
         local_velocity.f[2] = random_float_between(0.8f, 1.2f) * (frame_time + frame_time);
-        vel.q = local_velocity.q;
-        transform_vector_by_basis(&vel, &vel, self->mtx);
+        particle_velocity.q = local_velocity.q;
+        transform_vector_by_basis(&particle_velocity, &particle_velocity, self->mtx);
         fast_vec_add(&pos, &pos, &self->pos);
         size = random_float_between(125000.0f, 175000.0f);
-        FUN_L00_0026ced0_u(&pos, &vel, 0x207F7F7F, 0x272727, size,
+        FUN_L00_0026ced0_u(&pos, &particle_velocity, 0x207F7F7F, 0x272727, size,
                            scale_game_frames(FUN_L00_00257b90(0x2D, 0x3C)));
     }
 }
