@@ -95,10 +95,10 @@ int camera_activation_check_priority(void *candidate_camera, void *other) {
         }
         {
             CamRec20 *rec = &D_0015EF90[*(short *)(candidate_camera_bytes + 0x84)];
-            int g = *(int *)((char *)rec->unk1C + 0x24);
+            int secondary_descriptor_index = *(int *)((char *)rec->unk1C + 0x24);
 
-            if (g < 0 ||
-                (base->unk560 == D_0015EF40[g].unk10 && base->unk570 == 0)) {
+            if (secondary_descriptor_index < 0 ||
+                (base->unk560 == D_0015EF40[secondary_descriptor_index].unk10 && base->unk570 == 0)) {
                 return 1;
             }
         }
