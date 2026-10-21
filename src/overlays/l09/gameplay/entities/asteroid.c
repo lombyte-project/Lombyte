@@ -477,7 +477,7 @@ char *FUN_L09_002ea778(void) {
     float target_position[4];
     char *moby = func_0020D348_m(random_integer_below_c(4) + 0x107);
     if (moby != 0) {
-        char *pos = moby + 0x10;
+        char *spawned_moby_position = moby + 0x10;
         char *moby_vars = *(char **)(moby + 0x78);
         float radius = random_float_between_c(0.0f, 250.0f);
         float angle_radians = random_float_between_c(-3.1415927f, 3.1415927f);
@@ -490,8 +490,8 @@ char *FUN_L09_002ea778(void) {
         *(float *)(moby + 0x10) = 1000.0f;
         *(float *)(moby + 0x14) = 500.0f;
         *(float *)(moby + 0x18) = random_float_between_c(200.0f, 250.0f);
-        add_vector_xyz(pos, pos, target_position);
-        qcopy(moby_vars, pos);
+        add_vector_xyz(spawned_moby_position, spawned_moby_position, target_position);
+        qcopy(moby_vars, spawned_moby_position);
         *(float *)(moby + 0x2C) *= random_float_between_c(0.5f, 1.0f);
         *(float *)(moby_vars + 0x40) = random_float_between_c(-0.015707964f, 0.015707964f);
         *(float *)(moby_vars + 0x44) = random_float_between_c(-0.015707964f, 0.015707964f);
@@ -506,14 +506,14 @@ char *FUN_L09_002ea778(void) {
         *(float *)(moby_vars + 0x50) = *(float *)(moby + 0x2C);
         *(float *)moby_vars += random_float_between_c(-100.0f, 100.0f);
         *(float *)(moby_vars + 4) += random_float_between_c(-100.0f, 100.0f);
-        subtract_vector_xyz(pos, moby_vars, D_L09_00166F40);
-        reference_position_distance = vector_length_xyz(pos);
+        subtract_vector_xyz(spawned_moby_position, moby_vars, D_L09_00166F40);
+        reference_position_distance = vector_length_xyz(spawned_moby_position);
         if (100.0f < reference_position_distance) {
-            normalize_vector_xyz(pos, pos, 100.0f);
-            add_vector_xyz(pos, pos, D_L09_00166F40);
+            normalize_vector_xyz(spawned_moby_position, spawned_moby_position, 100.0f);
+            add_vector_xyz(spawned_moby_position, spawned_moby_position, D_L09_00166F40);
             *(float *)(moby + 0x2C) = *(float *)(moby_vars + 0x50) * (100.0f / reference_position_distance);
         } else {
-            qcopy(pos, moby_vars);
+            qcopy(spawned_moby_position, moby_vars);
             *(float *)(moby + 0x2C) = *(float *)(moby_vars + 0x50);
         }
         *(int *)(moby_vars + 0x58) = -1;
