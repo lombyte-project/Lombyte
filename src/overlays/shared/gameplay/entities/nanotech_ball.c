@@ -230,14 +230,14 @@ extern float D_L00_00161A74 __attribute__((sda));
 extern float D_L00_00161A78 __attribute__((sda));
 void FUN_L00_002d8418(char *moby) {
     Vec4_002d8418 to_camera;
-    Vec4_002d8418 r;
+    Vec4_002d8418 scaled_gravity_vector;
     Vec4_002d8418 effect_vector;
     char *pos = moby + 0x10;
     fast_vec_sub(&to_camera, g_debug_camera, pos);
-    fast_vec_scale(&r, &hero.gravity_dir,
+    fast_vec_scale(&scaled_gravity_vector, &hero.gravity_dir,
                           FUN_002132a8_002d8418(D_L00_00161A60 * frame_time,
                                                 D_L00_00161A64 * frame_time));
-    FUN_00214890_002d8418(&effect_vector, &r, &to_camera, FUN_00213308_002d8418());
+    FUN_00214890_002d8418(&effect_vector, &scaled_gravity_vector, &to_camera, FUN_00213308_002d8418());
     FUN_L00_002730e0_002d8418(pos, &effect_vector, D_L00_00161A6C, D_L00_00161A68,
                               FUN_00213260_002d8418(0xFF) & 0xFF, 1, D_L00_00161A74);
     FUN_L00_002730e0_002d8418(pos, &effect_vector, D_L00_00161A70, D_L00_00161A68,
