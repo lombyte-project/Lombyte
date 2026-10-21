@@ -62,18 +62,18 @@ extern void FUN_L05_002db238_u(void *, void *) __asm__("FUN_L05_002db238");
 void FUN_L05_002daf58(unsigned char *moby) {
     char *hit_record = find_moby_hit(moby, 0x330000, 0);
     if (hit_record != 0) {
-        char *b = D_0013E533 + 0xF1D;
+        char *base_spark_vector = D_0013E533 + 0xF1D;
         char *hit_owner;
         moby[0x20] = 2;
         moby[0x31] = 0;
         *(int *)(moby + 0x94) = 0;
         *(unsigned short *)(moby + 0x34) |= 1;
-        FUN_L05_002db238_u(moby, b);
+        FUN_L05_002db238_u(moby, base_spark_vector);
         allocate_voice_for_target_entry(0, 0, (int)moby);
         hit_owner = *(char **)(hit_record + 0x20);
         if (hit_owner != 0 && *(short *)(hit_owner + 0xA6) == 0) {
             int scaled_frame_increment = scale_game_frames(0x3C);
-            char *y = b - 0x100;
+            char *y = base_spark_vector - 0x100;
             *(int *)(y + 0x8C4) += scaled_frame_increment;
         }
         moby[0xA4] = 0xFF;
