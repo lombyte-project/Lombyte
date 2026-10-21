@@ -774,38 +774,38 @@ void FUN_L03_002d3198(struct Moby *taxi_moby) {
         TAXI_WAIT_FOR_HERO_TO_MOVE_AWAY = 6,
         TAXI_FOLLOW_ONWARD_PATH = 7
     };
-    struct RailTaxiVars *v = (struct RailTaxiVars *)taxi_moby->pvars;
+    struct RailTaxiVars *taxi_vars = (struct RailTaxiVars *)taxi_moby->pvars;
     Vec4 oldPos, oldRot, move;
     struct RailPath *route_path;
     s32 i;
-    s32 r;
+    s32 route_index;
 
     FUN_L00_00266858(taxi_moby, FUN_L03_002d30d8((u8 *)taxi_moby));
     if (D_L03_00161B04 != 0) {
-        for (i = 0; i < D_L03_001B05B0[v->out[0]]->count; i++) {
-            draw_number(&D_L03_001B05B0[v->out[0]]->pts[i], taxi_moby, 4, 0x800000FF, 0x7F, 2, 0xFF, 0.333f);
+        for (i = 0; i < D_L03_001B05B0[taxi_vars->out[0]]->count; i++) {
+            draw_number(&D_L03_001B05B0[taxi_vars->out[0]]->pts[i], taxi_moby, 4, 0x800000FF, 0x7F, 2, 0xFF, 0.333f);
         }
-        for (i = 0; i < D_L03_001B05B0[v->back[0]]->count; i++) {
-            draw_number(&D_L03_001B05B0[v->back[0]]->pts[i], taxi_moby, 4, 0x8000FF00, 0x7F, 2, 0xFF, 0.333f);
+        for (i = 0; i < D_L03_001B05B0[taxi_vars->back[0]]->count; i++) {
+            draw_number(&D_L03_001B05B0[taxi_vars->back[0]]->pts[i], taxi_moby, 4, 0x8000FF00, 0x7F, 2, 0xFF, 0.333f);
         }
-        for (i = 0; i < D_L03_001B05B0[v->onward[0]]->count; i++) {
-            draw_number(&D_L03_001B05B0[v->onward[0]]->pts[i], taxi_moby, 4, 0x80FF0000, 0x7F, 2, 0xFF, 0.333f);
+        for (i = 0; i < D_L03_001B05B0[taxi_vars->onward[0]]->count; i++) {
+            draw_number(&D_L03_001B05B0[taxi_vars->onward[0]]->pts[i], taxi_moby, 4, 0x80FF0000, 0x7F, 2, 0xFF, 0.333f);
         }
     }
     qcopy(&oldPos, &taxi_moby->pos);
     qcopy(&oldRot, &taxi_moby->rot);
     switch (taxi_moby->state) {
     case TAXI_INITIALIZE:
-        if (v->out[0] != -1) {
-            qcopy_nc(&taxi_moby->pos, &D_L03_001B05B0[v->out[0]]->pts[0]);
-            taxi_moby->rot.z = taxi_atan2(D_L03_001B05B0[v->out[0]]->pts[1].f[0] - taxi_moby->pos.x, D_L03_001B05B0[v->out[0]]->pts[1].f[1] - taxi_moby->pos.y);
-        } else if (v->back[0] != -1) {
-            qcopy_nc(&taxi_moby->pos, &D_L03_001B05B0[v->back[0]]->pts[0]);
-            taxi_moby->rot.z = taxi_atan2(D_L03_001B05B0[v->back[0]]->pts[1].f[0] - taxi_moby->pos.x, D_L03_001B05B0[v->back[0]]->pts[1].f[1] - taxi_moby->pos.y);
+        if (taxi_vars->out[0] != -1) {
+            qcopy_nc(&taxi_moby->pos, &D_L03_001B05B0[taxi_vars->out[0]]->pts[0]);
+            taxi_moby->rot.z = taxi_atan2(D_L03_001B05B0[taxi_vars->out[0]]->pts[1].f[0] - taxi_moby->pos.x, D_L03_001B05B0[taxi_vars->out[0]]->pts[1].f[1] - taxi_moby->pos.y);
+        } else if (taxi_vars->back[0] != -1) {
+            qcopy_nc(&taxi_moby->pos, &D_L03_001B05B0[taxi_vars->back[0]]->pts[0]);
+            taxi_moby->rot.z = taxi_atan2(D_L03_001B05B0[taxi_vars->back[0]]->pts[1].f[0] - taxi_moby->pos.x, D_L03_001B05B0[taxi_vars->back[0]]->pts[1].f[1] - taxi_moby->pos.y);
         }
         taxi_moby->draw_dist = 0;
         taxi_moby->update_dist = 0xFF;
-        v->route = -1;
+        taxi_vars->route = -1;
         taxi_moby->state = 1;
         taxi_moby->collision = 0;
         if (D_L03_001BB330.collected[(s16)taxi_moby->save_id] != 0 ||
@@ -815,49 +815,49 @@ void FUN_L03_002d3198(struct Moby *taxi_moby) {
         }
         break;
     case TAXI_WAIT_FOR_ROUTE_TRIGGER:
-        if (v->active == 0) {
+        if (taxi_vars->active == 0) {
             break;
         }
-        for (r = 0; r < 5; r++) {
-            if ((v->volume[r] != -1 || v->route == r) &&
-                (is_point_inside_clip_volume(&hero.motion.pos, v->volume[r]) || v->route == r)) {
+        for (route_index = 0; route_index < 5; route_index++) {
+            if ((taxi_vars->volume[route_index] != -1 || taxi_vars->route == route_index) &&
+                (is_point_inside_clip_volume(&hero.motion.pos, taxi_vars->volume[route_index]) || taxi_vars->route == route_index)) {
                 taxi_moby->collision = taxi_moby->pclass->collision;
-                if (v->out[r] != -1) {
-                    route_path = D_L03_001B05B0[v->out[r]];
+                if (taxi_vars->out[route_index] != -1) {
+                    route_path = D_L03_001B05B0[taxi_vars->out[route_index]];
                     qcopy(&taxi_moby->pos, &route_path->pts[0]);
                     taxi_moby->rot.z = taxi_atan2(route_path->pts[1].f[0] - taxi_moby->pos.x, route_path->pts[1].f[1] - taxi_moby->pos.y);
-                } else if (v->back[r] != -1) {
-                    route_path = D_L03_001B05B0[v->back[r]];
+                } else if (taxi_vars->back[route_index] != -1) {
+                    route_path = D_L03_001B05B0[taxi_vars->back[route_index]];
                     qcopy(&taxi_moby->pos, &route_path->pts[0]);
                     taxi_moby->rot.z = taxi_atan2(route_path->pts[1].f[0] - taxi_moby->pos.x, route_path->pts[1].f[1] - taxi_moby->pos.y);
                 }
-                taxi_moby->command = r;
+                taxi_moby->command = route_index;
                 taxi_moby->state = 2;
                 taxi_moby->draw_dist = 0x80;
-                v->idx = 1;
-                v->speed = D_L03_00161B08 * frame_time;
-                v->route = -1;
+                taxi_vars->idx = 1;
+                taxi_vars->speed = D_L03_00161B08 * frame_time;
+                taxi_vars->route = -1;
                 break;
             }
         }
         break;
     case TAXI_FOLLOW_OUTBOUND_PATH:
-        if (v->out[taxi_moby->command] == -1 || FUN_L03_002d3918(taxi_moby, v->out[taxi_moby->command], &v->snd)) {
+        if (taxi_vars->out[taxi_moby->command] == -1 || FUN_L03_002d3918(taxi_moby, taxi_vars->out[taxi_moby->command], &taxi_vars->snd)) {
             taxi_moby->state = 3;
-            v->unkE4 = -1;
+            taxi_vars->unkE4 = -1;
         }
         break;
     case TAXI_WAIT_FOR_RETURN_REQUEST:
-        taxi_approach_angle(&taxi_moby->rot.y, 0.0f, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
+        taxi_approach_angle(&taxi_moby->rot.y, 0.0f, &taxi_vars->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
                             D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
-        taxi_approach_angle(&taxi_moby->rot.x, 0.0f, &v->roll_vel, D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
+        taxi_approach_angle(&taxi_moby->rot.x, 0.0f, &taxi_vars->roll_vel, D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
                             D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
         if (hero.ground_moby == taxi_moby && hero.air_frames.s == 0) {
-            FUN_L03_002d3100(taxi_moby, v->help[taxi_moby->command]);
+            FUN_L03_002d3100(taxi_moby, taxi_vars->help[taxi_moby->command]);
             if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
                 FUN_L00_00233ee8(&taxi_moby->pos, taxi_moby->rot.z, 0);
                 taxi_moby->state = 4;
-                v->idx = 1;
+                taxi_vars->idx = 1;
             }
         }
         break;
@@ -871,24 +871,24 @@ void FUN_L03_002d3198(struct Moby *taxi_moby) {
             hero.unk1F2 = 4;
             hero.unk1F4 = 4;
         }
-        if (FUN_L03_002d3918(taxi_moby, v->back[taxi_moby->command], &v->snd)) {
+        if (FUN_L03_002d3918(taxi_moby, taxi_vars->back[taxi_moby->command], &taxi_vars->snd)) {
             taxi_moby->state = 6;
         }
         break;
     case TAXI_WAIT_FOR_HERO_TO_MOVE_AWAY:
-        taxi_approach_angle(&taxi_moby->rot.y, 0.0f, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
+        taxi_approach_angle(&taxi_moby->rot.y, 0.0f, &taxi_vars->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
                             D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
-        taxi_approach_angle(&taxi_moby->rot.x, 0.0f, &v->roll_vel, D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
+        taxi_approach_angle(&taxi_moby->rot.x, 0.0f, &taxi_vars->roll_vel, D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
                             D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
-        if (v->onward[taxi_moby->command] != -1 && taxi_dist(&taxi_moby->pos, &hero.motion.pos) > 15.0f) {
+        if (taxi_vars->onward[taxi_moby->command] != -1 && taxi_dist(&taxi_moby->pos, &hero.motion.pos) > 15.0f) {
             taxi_moby->state = 7;
-            v->idx = 1;
-        } else if (v->onward[taxi_moby->command] == -1 && taxi_dist2(&taxi_moby->pos, &hero.motion.pos) > 5.0f) {
+            taxi_vars->idx = 1;
+        } else if (taxi_vars->onward[taxi_moby->command] == -1 && taxi_dist2(&taxi_moby->pos, &hero.motion.pos) > 5.0f) {
             taxi_moby->state = 1;
         }
         break;
     case TAXI_FOLLOW_ONWARD_PATH:
-        if (FUN_L03_002d3918(taxi_moby, v->onward[taxi_moby->command], &v->snd)) {
+        if (FUN_L03_002d3918(taxi_moby, taxi_vars->onward[taxi_moby->command], &taxi_vars->snd)) {
             taxi_moby->draw_dist = 0;
             taxi_moby->state = 1;
             taxi_moby->collision = 0;
@@ -897,7 +897,7 @@ void FUN_L03_002d3198(struct Moby *taxi_moby) {
     }
     FUN_L03_002d3c40(taxi_moby);
     taxi_vec_sub(&move, &taxi_moby->pos, &oldPos);
-    update_entity_matrix(v->coll, &move, &oldRot, &taxi_moby->rot);
+    update_entity_matrix(taxi_vars->coll, &move, &oldRot, &taxi_moby->rot);
 }
 
 /* Pvars of a moby flying along a rail path. */
