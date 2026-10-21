@@ -2426,7 +2426,7 @@ extern void FUN_L00_0026f548(Vec4 *, Vec4 *, s32, s32);
 void FUN_L00_00209ca8(s32 puffs, s32 debris, s32 flash) {
     Vec4 effect_vector;
     Vec4 start;
-    f32 ang;
+    f32 debris_planar_angle_radians;
     f32 speed;
     s32 color;
     s32 life;
@@ -2445,10 +2445,10 @@ void FUN_L00_00209ca8(s32 puffs, s32 debris, s32 flash) {
         FUN_L00_002715e8(&effect_vector, &hero.water_surface_z, -1, random_float_between(0.3f, 0.6f), 5250.0f);
     }
     for (i = 0; i < debris; i++) {
-        ang = random_angle_radians();
+        debris_planar_angle_radians = random_angle_radians();
         speed = random_float_between(D_0015ED6C * 0.0f, D_0015ED6C * 3.0f);
-        effect_vector.f[0] = fast_cos(ang) * speed;
-        effect_vector.f[1] = fast_sin(ang) * speed;
+        effect_vector.f[0] = fast_cos(debris_planar_angle_radians) * speed;
+        effect_vector.f[1] = fast_sin(debris_planar_angle_radians) * speed;
         effect_vector.f[2] = random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 8.0f);
         start.f[0] = hero.motion.pos.f[0] + effect_vector.f[0] * 8.0f;
         start.f[1] = hero.motion.pos.f[1] + effect_vector.f[0] * 8.0f;
