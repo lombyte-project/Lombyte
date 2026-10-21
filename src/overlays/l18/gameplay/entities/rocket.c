@@ -835,12 +835,12 @@ extern f32 D_L18_00161994_q __asm__("D_L18_00161994") __attribute__((sda));
 extern void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
 void blend_moby_animation_q(MobyAnim_q *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-char *FUN_L18_002d5cf8(float horizontal_speed, int a0, int idx, float *launch_position, float *target_position, int detonation_countdown) {
-    float v[4];
+char *FUN_L18_002d5cf8(float horizontal_speed, int a0, int moby_list_index, float *launch_position, float *target_position, int detonation_countdown) {
+    float adjusted_target_position[4];
     float r;
     float g;
     char *found = 0;
-    short *moby_list_entry = (short *)D_L18_001AC240_q[idx];
+    short *moby_list_entry = (short *)D_L18_001AC240_q[moby_list_index];
     char *moby;
     char *data;
     char *d2;
@@ -880,17 +880,17 @@ char *FUN_L18_002d5cf8(float horizontal_speed, int a0, int idx, float *launch_po
         *(int *)(moby + 0x40) = 0;
         *(float *)(moby + 0x44) = -r;
         target_position[2] = target_position[2] + 0.75f;
-        subtract_vector_xyz(v, target_position, launch_position);
-        trooper_scale(v, v, vector_length_xy(v) - *(float *)&D_L18_00161994_q);
-        add_vector_xyz(v, v, launch_position);
+        subtract_vector_xyz(adjusted_target_position, target_position, launch_position);
+        trooper_scale(adjusted_target_position, adjusted_target_position, vector_length_xy(adjusted_target_position) - *(float *)&D_L18_00161994_q);
+        add_vector_xyz(adjusted_target_position, adjusted_target_position, launch_position);
         data = *(char **)(moby + 0x78);
-        qcopy(data + 0x170, v);
-        subtract_vector_xyz(data + 0x180, v, launch_position);
+        qcopy(data + 0x170, adjusted_target_position);
+        subtract_vector_xyz(data + 0x180, adjusted_target_position, launch_position);
         *(int *)(data + 0x188) = 0;
         normalize_vector_xyz(data + 0x180, data + 0x180, horizontal_speed);
         g = D_0015EE70 * 10.0f;
         *(short *)(data + 0xC8) = 0;
-        *(float *)(data + 0x188) = FUN_L00_0025abf0_q(launch_position, v, 0, horizontal_speed, -g);
+        *(float *)(data + 0x188) = FUN_L00_0025abf0_q(launch_position, adjusted_target_position, 0, horizontal_speed, -g);
         *(float *)(moby + 0x48) =
             angle_atan2(*(float *)(data + 0x180), *(float *)(data + 0x184));
         *(int *)(data + 0x194) = detonation_countdown;
