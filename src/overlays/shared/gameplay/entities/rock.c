@@ -1856,10 +1856,10 @@ void teleporter_update(struct Moby *moby) {
         } else {
             char *destination_moby = D_L01_0015FFD8 + (*(int *)data << 8);
             char *td = *(char **)(destination_moby + 0x78);
-            float v[4];
-            qcopy(v, destination_moby + 0x10);
-            v[2] += 0.2f;
-            FUN_L00_00216f90(v, destination_moby + 0x40, 0, 1);
+            float destination_position[4];
+            qcopy(destination_position, destination_moby + 0x10);
+            destination_position[2] += 0.2f;
+            FUN_L00_00216f90(destination_position, destination_moby + 0x40, 0, 1);
             hero.unk20A5 = 1;
             if (*(int *)(data + 0x40) != -1 && *(int *)(data + 0x44) != -1) {
                 jet_game_state(*(int *)(data + 0x40), *(int *)(data + 0x44));
