@@ -1061,10 +1061,10 @@ extern G_2db508 D_0013F350_a __asm__("D_0013F350");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern void blend_moby_animation_alt(void *, int, int, int) __asm__("FUN_00212f90");
 
-int FUN_L00_002da058(u8 *cannon_moby, void *cannon_data, void *m_, void *r_, void *buf) {
+int FUN_L00_002da058(u8 *cannon_moby, void *cannon_data, void *m_, void *r_, void *suction_origin) {
     char *candidate_moby = (char *)m_;
-    char *r = (char *)r_;
-    int ret = 0;
+    char *suction_record = (char *)r_;
+    int suction_callback_result = 0;
     int (*fn)(void *, void *, void *) =
         **(int (***)(void *, void *, void *))(*(char **)(candidate_moby + 0x24) + 0x2C);
     char *x;
@@ -1072,24 +1072,24 @@ int FUN_L00_002da058(u8 *cannon_moby, void *cannon_data, void *m_, void *r_, voi
     int occupied_slot_count;
     int i;
     if (fn != 0) {
-        ret = fn(candidate_moby, buf, cannon_moby);
-        if (ret == 2 && *(short *)(r + 0x68) != 3) {
+        suction_callback_result = fn(candidate_moby, suction_origin, cannon_moby);
+        if (suction_callback_result == 2 && *(short *)(suction_record + 0x68) != 3) {
 
             occupied_slot_count = D_0013F350_a.i2078 + D_0013F350_a.i207C;
             if (D_0013E529 == 0 ? occupied_slot_count < 5 : occupied_slot_count < 10) {
-                x = *(char **)(r + 0x70);
+                x = *(char **)(suction_record + 0x70);
                 if (((unsigned char *)candidate_moby)[0x53] != (unsigned char)x[3]) {
                     blend_moby_animation_alt(candidate_moby, (unsigned char)x[3], 0, scale_game_frames_alt(10));
                 }
-                *(short *)(r + 0x68) = 3;
-                *(int *)(r + 0x6C) = 0;
+                *(short *)(suction_record + 0x68) = 3;
+                *(int *)(suction_record + 0x6C) = 0;
                 *(float *)(candidate_moby + 0x58) = 1.0f;
-                *(float *)(r + 0x64) = vector_distance_xy(candidate_moby + 0x10, buf);
+                *(float *)(suction_record + 0x64) = vector_distance_xy(candidate_moby + 0x10, suction_origin);
                 for (i = 0; i < (D_0013E529 == 0 ? 5 : 10); i++) {
                     G_2db508 *gg = &D_0013F350;
                     if (D_001413A0[i] == 0) {
                         D_001413A0[i] = candidate_moby;
-                        *(short *)(r + 0x6A) = i;
+                        *(short *)(suction_record + 0x6A) = i;
                         gg->i207C++;
                         break;
                     }
@@ -1097,7 +1097,7 @@ int FUN_L00_002da058(u8 *cannon_moby, void *cannon_data, void *m_, void *r_, voi
             }
         }
     }
-    return ret;
+    return suction_callback_result;
 }
 #define NOT_SDA
 
