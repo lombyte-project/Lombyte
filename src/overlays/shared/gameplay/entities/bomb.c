@@ -1058,9 +1058,9 @@ extern int FUN_L00_002dbe20(void *);
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 5. */
 int FUN_L00_002caf10(char *moby) {
-    int r = FUN_L00_002dbe20(moby);
+    int helper_result = FUN_L00_002dbe20(moby);
     moby[0x20] = 5;
-    return r;
+    return helper_result;
 }
 /* Returns the word at +0x14 of the moby data, or 0 when either pointer is null. */
 s32 FUN_L00_002caf40(s32 moby_address) {
