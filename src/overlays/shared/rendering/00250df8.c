@@ -127,10 +127,10 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
         }
     }
     if ((signed char)moby[0xB1] >= 0) {
-        int n1 = *(short *)(moby + 0xB6);
-        amount_delta = n1 - D_0014D590_257470[D_0015ED84_257470b][moby[0xB1]][1];
+        int delta_base_amount = *(short *)(moby + 0xB6);
+        amount_delta = delta_base_amount - D_0014D590_257470[D_0015ED84_257470b][moby[0xB1]][1];
         {
-            int x = (n1 + 1) / 2 < amount_delta ? amount_delta : 0;
+            int x = (delta_base_amount + 1) / 2 < amount_delta ? amount_delta : 0;
             if (x) {
                 amt = x;
             }
