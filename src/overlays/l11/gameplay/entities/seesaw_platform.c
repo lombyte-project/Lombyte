@@ -648,14 +648,14 @@ void FUN_L11_0030e088(struct Moby *water_tile_moby) {
         WATER_TILE_STATE_APPROACH_UPPER_HEIGHT = 2,
         WATER_TILE_STATE_APPROACH_LOWER_HEIGHT = 3
     };
-    int *pv = (int *)water_tile_moby->pvars;
+    int *water_tile_vars = (int *)water_tile_moby->pvars;
     int i;
     float tile_query_has_result;
 
     switch (water_tile_moby->state) {
     case WATER_TILE_STATE_INITIALIZE:
         water_tile_moby->update_dist = 0xFF;
-        pv[1] = D_L11_00161F64;
+        water_tile_vars[1] = D_L11_00161F64;
         D_L11_00161F64 = D_L11_00161F64 + 1;
         if (D_L11_00161F64 >= 0x80) {
             print_e088(D_L11_0021B4C0);
@@ -663,31 +663,31 @@ void FUN_L11_0030e088(struct Moby *water_tile_moby) {
         water_tile_moby->update_dist = 0xFF;
         water_tile_moby->flags |= 1;
         water_tile_moby->scale = water_tile_moby->pclass->scale + water_tile_moby->pclass->scale;
-        if (pv[1] == 0) {
-            Light_e088 *l;
+        if (water_tile_vars[1] == 0) {
+            Light_e088 *water_tile_light;
             float light_direction_angle;
             for (i = 19; i >= 0; i--) {
                 D_L11_001DA880[i].unk1E = 0;
             }
             pool_init_tiles(D_L11_001DA880, 20);
             pool_set_scale(1.0f);
-            l = &D_L11_001CB280;
-            l->unk0 = 16.0f;
-            l->unk4 = 16.0f;
-            l->unk8 = -8.0f;
-            l->unkC = -8.0f;
-            l->unk10 = 1.0f;
-            l->unk14 = 1.0f;
-            l->unk18 = 0.9f;
-            l->unk20 = 0.1f;
+            water_tile_light = &D_L11_001CB280;
+            water_tile_light->unk0 = 16.0f;
+            water_tile_light->unk4 = 16.0f;
+            water_tile_light->unk8 = -8.0f;
+            water_tile_light->unkC = -8.0f;
+            water_tile_light->unk10 = 1.0f;
+            water_tile_light->unk14 = 1.0f;
+            water_tile_light->unk18 = 0.9f;
+            water_tile_light->unk20 = 0.1f;
             light_direction_angle = fast_arc_tan(D_L11_001808C0[4], D_L11_001808C0[5]);
-            l->unk30 = fast_cos(light_direction_angle) * 0.57735f;
-            l->unk34 = fast_sin(light_direction_angle) * 0.57735f;
-            l->unk38 = -0.57735f;
-            l->unk28 = 0x38;
-            l->unk2C = 0x39;
-            l->unk3C = 0x1C;
-            l->unk3D = 0x40;
+            water_tile_light->unk30 = fast_cos(light_direction_angle) * 0.57735f;
+            water_tile_light->unk34 = fast_sin(light_direction_angle) * 0.57735f;
+            water_tile_light->unk38 = -0.57735f;
+            water_tile_light->unk28 = 0x38;
+            water_tile_light->unk2C = 0x39;
+            water_tile_light->unk3C = 0x1C;
+            water_tile_light->unk3D = 0x40;
             D_L11_001612D0 = D_L11_001DA880;
             D_L11_001612D4 = D_L11_001DA740;
             D_L11_001612D8 = 20;
@@ -696,68 +696,68 @@ void FUN_L11_0030e088(struct Moby *water_tile_moby) {
             D_L11_00161214 = 48.0f;
             D_L11_00161208 = 0;
         }
-        D_L11_001DA880[pv[1]].x = water_tile_moby->pos.x;
-        D_L11_001DA880[pv[1]].y = water_tile_moby->pos.y;
-        D_L11_001DA880[pv[1]].z = water_tile_moby->pos.z;
-        D_L11_001DA880[pv[1]].unk14 = 0x38;
-        D_L11_001DA880[pv[1]].unk18 = 0x39;
-        D_L11_001DA880[pv[1]].unk1C = 0x1C;
-        D_L11_001DA880[pv[1]].unk1D = 0x44;
-        D_L11_001DA880[pv[1]].unk1E = 0xFFFF;
-        pool_bind_tile(&D_L11_001DA880[pv[1]], D_L11_001DA740 + pv[1] * 16);
+        D_L11_001DA880[water_tile_vars[1]].x = water_tile_moby->pos.x;
+        D_L11_001DA880[water_tile_vars[1]].y = water_tile_moby->pos.y;
+        D_L11_001DA880[water_tile_vars[1]].z = water_tile_moby->pos.z;
+        D_L11_001DA880[water_tile_vars[1]].unk14 = 0x38;
+        D_L11_001DA880[water_tile_vars[1]].unk18 = 0x39;
+        D_L11_001DA880[water_tile_vars[1]].unk1C = 0x1C;
+        D_L11_001DA880[water_tile_vars[1]].unk1D = 0x44;
+        D_L11_001DA880[water_tile_vars[1]].unk1E = 0xFFFF;
+        pool_bind_tile(&D_L11_001DA880[water_tile_vars[1]], D_L11_001DA740 + water_tile_vars[1] * 16);
         water_tile_moby->state = 1;
         break;
     case WATER_TILE_STATE_FIND_NEIGHBORS:
         D_L11_00161F64 = 0;
-        FUN_L11_0030e730(pv[1]);
+        FUN_L11_0030e730(water_tile_vars[1]);
         water_tile_moby->state = 2;
         break;
     case WATER_TILE_STATE_APPROACH_LOWER_HEIGHT:
         if (water_tile_moby->command & 4) {
-            pv[2] = 1;
+            water_tile_vars[2] = 1;
             FUN_L01_0026e0e0(water_tile_moby->group, 2);
         }
         water_tile_moby->command = 1;
-        if (pv[2] != 0) {
-            approach_e088(&water_tile_moby->pos.z, pv, 132.36f, frame_time_sq * 4.0f, frame_time_sq * 4.0f, frame_time * 4.0f);
+        if (water_tile_vars[2] != 0) {
+            approach_e088(&water_tile_moby->pos.z, water_tile_vars, 132.36f, frame_time_sq * 4.0f, frame_time_sq * 4.0f, frame_time * 4.0f);
             FUN_L11_0030e690(water_tile_moby);
         }
         if (random_below_e088(200) == 0) {
-            float x = D_L11_001DA880[pv[1]].x + rand_range_e088(-4.0f, 4.0f);
+            float x = D_L11_001DA880[water_tile_vars[1]].x + rand_range_e088(-4.0f, 4.0f);
             float y = rand_range_e088(-4.0f, 4.0f);
-            Ent *t = &D_L11_001DA880[pv[1]];
+            Ent *t = &D_L11_001DA880[water_tile_vars[1]];
             pool_splash(x, t->y + y, 1.0f, -0.03f, t, 1, 1);
         }
         break;
     case WATER_TILE_STATE_APPROACH_UPPER_HEIGHT:
         if (water_tile_moby->command & 8) {
-            pv[2] = 1;
+            water_tile_vars[2] = 1;
             FUN_L01_0026e0e0(water_tile_moby->group, 3);
         }
         water_tile_moby->command = 2;
-        if (pv[2] != 0) {
-            approach_e088(&water_tile_moby->pos.z, pv, 137.0f, frame_time_sq * 4.0f, frame_time_sq * 4.0f, frame_time * 4.0f);
+        if (water_tile_vars[2] != 0) {
+            approach_e088(&water_tile_moby->pos.z, water_tile_vars, 137.0f, frame_time_sq * 4.0f, frame_time_sq * 4.0f, frame_time * 4.0f);
             FUN_L11_0030e690(water_tile_moby);
         }
         if (random_below_e088(200) == 0) {
-            float x = D_L11_001DA880[pv[1]].x + rand_range_e088(-4.0f, 4.0f);
+            float x = D_L11_001DA880[water_tile_vars[1]].x + rand_range_e088(-4.0f, 4.0f);
             float y = rand_range_e088(-4.0f, 4.0f);
-            Ent *t = &D_L11_001DA880[pv[1]];
+            Ent *t = &D_L11_001DA880[water_tile_vars[1]];
             pool_splash(x, t->y + y, 1.0f, -0.03f, t, 1, 1);
         }
         break;
     }
-    if (pv[1] >= 0) {
+    if (water_tile_vars[1] >= 0) {
         tile_query_has_result = 0.0f;
         if (FUN_L01_00275690(64.0f, water_tile_moby) != -1) {
             tile_query_has_result = 1.0f;
         }
         if (tile_query_has_result == 0.0f) {
-            D_L11_001DA880[pv[1]].unk1E = 0;
+            D_L11_001DA880[water_tile_vars[1]].unk1E = 0;
         } else {
-            D_L11_001DA880[pv[1]].unk1E = 0xFFFF;
+            D_L11_001DA880[water_tile_vars[1]].unk1E = 0xFFFF;
         }
-        if (pv[1] == 0) {
+        if (water_tile_vars[1] == 0) {
             pool_flush(D_L11_001DA880, 20);
             enqueue_e088(FUN_L11_0030e708, water_tile_moby);
         }
