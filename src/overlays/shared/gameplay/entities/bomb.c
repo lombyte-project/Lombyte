@@ -1035,9 +1035,9 @@ extern char *FUN_L00_002db890(char *);
 extern int FUN_L00_002dbc30(char *, int, int, float);
 extern int allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 
-int FUN_L00_002cae60(char *moby, int a, int b, float target_height_offset) {
+int FUN_L00_002cae60(char *moby, int a, int target_moby, float target_height_offset) {
     char *class_callback_data = FUN_L00_002db890(moby);
-    int r = FUN_L00_002dbc30(moby, a, b, target_height_offset);
+    int r = FUN_L00_002dbc30(moby, a, target_moby, target_height_offset);
     if (r != 0) {
         moby[0x20] = 5;
     } else if ((unsigned char)moby[0x20] == 5) {
