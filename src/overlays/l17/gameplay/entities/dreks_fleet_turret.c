@@ -670,7 +670,7 @@ void FUN_L17_002d77f0(char *moby) {
         RING_ROTATE_AND_DRAW = 1
     };
     OvlQuad moby_to_hero_vector[1];
-    OvlQuad sp10[1];
+    OvlQuad hero_facing_unit_axis[1];
     struct Blk blk;
     OvlQuad normalized_moby_rotation_basis[3];
     OvlQuad moby_rotation_matrix[4];
@@ -704,9 +704,9 @@ void FUN_L17_002d77f0(char *moby) {
         }
         subtract_vector_xyz(moby_to_hero_vector, &hero.motion.pos, (moby + 0x10));
         if (dot_vectors_xyz(moby_to_hero_vector, (moby + 0xC0)) > 0.0f) {
-            normalize_vector_xyz(sp10, (moby + 0xC0), 1.0f);
+            normalize_vector_xyz(hero_facing_unit_axis, (moby + 0xC0), 1.0f);
         } else {
-            normalize_vector_xyz(sp10, (moby + 0xC0), -1.0f);
+            normalize_vector_xyz(hero_facing_unit_axis, (moby + 0xC0), -1.0f);
         }
         {
             int i;
