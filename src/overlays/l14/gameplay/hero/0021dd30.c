@@ -30,15 +30,15 @@ void FUN_L14_0021dd30(void) {
     struct Hero *hero_ptr;
     struct Hero *g = &hero;
     int keep = g->unk12ED;
-    int st = g->ground_type;
+    int saved_ground_type = g->ground_type;
     fast_mem_zero16(&g->ground_type, 0x10);
     g->unk12ED = keep;
     g->ground_type = -1;
     g->unk20A9 = 0;
     g->unk308 = 0;
-    if (st == -1)
+    if (saved_ground_type == -1)
         return;
-    if (st == 2) {
+    if (saved_ground_type == 2) {
         if (g->frames_off_ground.s == 0 || g->ground_distance < 0.3f) {
             g->unk12E7 = 1;
             if (g->vehicle_mode == 0) {
@@ -60,31 +60,31 @@ void FUN_L14_0021dd30(void) {
             }
         }
     }
-    if (st == 0xB) {
+    if (saved_ground_type == 0xB) {
         struct Hero *q = &hero;
         q->selector_11 = 1;
     }
-    if (st == 2) {
+    if (saved_ground_type == 2) {
         struct Hero *q = &hero;
         q->unk12E7 = 1;
     }
-    if (st == 7) {
+    if (saved_ground_type == 7) {
         struct Hero *q = &hero;
         q->unk12E2 = 1;
     }
-    if (st == 0xD) {
+    if (saved_ground_type == 0xD) {
         struct Hero *q = &hero;
         q->selector_13 = 1;
     }
-    if (st == 8) {
+    if (saved_ground_type == 8) {
         struct Hero *q = &hero;
         q->on_slip_ground = 1;
     }
-    if (st == 9) {
+    if (saved_ground_type == 9) {
         struct Hero *q = &hero;
         q->unk12EE = 1;
     }
-    if (st == 0xC) {
+    if (saved_ground_type == 0xC) {
         struct Hero *q = &hero;
         q->on_slip_ground = 1;
     }
