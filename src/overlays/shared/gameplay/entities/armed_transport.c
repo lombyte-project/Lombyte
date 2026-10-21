@@ -617,8 +617,8 @@ typedef struct {
     char pad2[0x43];
 } M_5cd0;
 
-int FUN_L16_002e5cd0(int idx) {
-    unsigned short *moby_index_entry = (unsigned short *)D_L16_001ABCC0_5cd0[idx];
+int FUN_L16_002e5cd0(int moby_list_index) {
+    unsigned short *moby_index_entry = (unsigned short *)D_L16_001ABCC0_5cd0[moby_list_index];
     if (moby_index_entry == 0) {
         return 0;
     }
