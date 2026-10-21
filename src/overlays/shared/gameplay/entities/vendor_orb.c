@@ -2299,7 +2299,7 @@ extern void follow_cam_turn_towards(f32 amount, f32 rate) __asm__("FUN_L00_002e8
    the eye behind the hero, pulled in where collision lines hit. */
 void follow_camera_springs(void *cam) __asm__("FUN_L00_002e5830");
 void follow_camera_springs(void *camera_moby) {
-    f32 velocity[4], hero_pos[4], focus[4], up[4], lateral[4], look[4], base[4], probe[4], left[4], diff[4], mid[4];
+    f32 velocity[4], hero_pos[4], focus[4], up[4], lateral[4], look[4], base[4], probe[4], left[4], collision_resolution_delta[4], mid[4];
     u8 *view = camera_view;
     FollowCamState *camera_state = FOLLOW_CAM_STATE((struct UpdateCam *)camera_moby);
     FollowCamTail *camera_tail = &camera_state->tail;
@@ -2361,24 +2361,24 @@ void follow_camera_springs(void *camera_moby) {
     if (collision_line(base, probe, camera_collision_mask, (s32)hero.moby, 0)) {
         qcopy(probe, collision_hit_point);
     }
-    subtract_vector_xyz(diff, probe, left);
-    if (vector_length_xyz(diff) < len + len) {
+    subtract_vector_xyz(collision_resolution_delta, probe, left);
+    if (vector_length_xyz(collision_resolution_delta) < len + len) {
         add_vector_xyz(mid, left, probe);
         scale_vector_xyz(mid, mid, 0.5f);
         qcopy(follow_block->eye, mid);
-        subtract_vector_xyz(diff, mid, follow_block);
-        follow_cam_turn_towards(dot_vectors_xyz(diff, view + 0x20), 0.003f);
+        subtract_vector_xyz(collision_resolution_delta, mid, follow_block);
+        follow_cam_turn_towards(dot_vectors_xyz(collision_resolution_delta, view + 0x20), 0.003f);
     } else {
         f32 reach;
-        subtract_vector_xyz(diff, left, follow_block);
-        back = vector_length_xyz(diff);
+        subtract_vector_xyz(collision_resolution_delta, left, follow_block);
+        back = vector_length_xyz(collision_resolution_delta);
         reach = camera_tail->distance;
         if (back <= reach + len) {
             scale_vector_xyz(mid, view + 0x20, len);
             subtract_vector_xyz(mid, left, mid);
             qcopy(follow_block->eye, mid);
-            subtract_vector_xyz(diff, mid, follow_block);
-            follow_cam_turn_towards(dot_vectors_xyz(diff, view + 0x20), 0.003f);
+            subtract_vector_xyz(collision_resolution_delta, mid, follow_block);
+            follow_cam_turn_towards(dot_vectors_xyz(collision_resolution_delta, view + 0x20), 0.003f);
         } else {
             len = dot_vectors_xyz(follow_block, view + 0x30);
             if (dot_vectors_xyz(probe, view + 0x30) < len) {
