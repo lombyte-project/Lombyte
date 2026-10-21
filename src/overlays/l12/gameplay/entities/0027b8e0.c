@@ -25,9 +25,9 @@ int FUN_L12_0027b8e0(char *moby, float *point_position, float x, float y, float 
     if (!(0.0f < z))
         return 1;
     {
-        float r = fast_arc_tan(point_position[0] - *(float *)(moby + 0x10), point_position[1] - *(float *)(moby + 0x14));
-        r = fast_difference_between_rotations(*(float *)(moby + 0x48), r);
-        if (r > z)
+        float heading_test_angle = fast_arc_tan(point_position[0] - *(float *)(moby + 0x10), point_position[1] - *(float *)(moby + 0x14));
+        heading_test_angle = fast_difference_between_rotations(*(float *)(moby + 0x48), heading_test_angle);
+        if (heading_test_angle > z)
             return 0;
     }
     return 1;
