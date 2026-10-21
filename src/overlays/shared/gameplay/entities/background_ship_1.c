@@ -911,15 +911,15 @@ int FUN_L02_002fb788(char *moby, float residual_angle_limit_degrees, float b) {
     float den;
 
     char *moby_record_table = D_L02_0015EF50;
-    char *src;
+    char *target_moby;
 
     data = *(char **)(moby_record_table + *(short *)(moby + 0x84) * 32 + 0x1C);
-    src = *(char **)(data + 0x48);
+    target_moby = *(char **)(data + 0x48);
     if (residual_angle_limit_degrees == 0.0f && b == 0.0f) {
         return 1;
     }
     g = D_L02_00167280;
-    fast_vec_sub(target_displacement, src + 0x10, *(char **)(g + 0x180) + 0x30);
+    fast_vec_sub(target_displacement, target_moby + 0x10, *(char **)(g + 0x180) + 0x30);
     dot1 = fast_vec_dot(target_displacement, (shared_axis_data + 0x30));
     fast_vec_scale(scaled_axis_vector, (shared_axis_data + 0x30), dot1);
     fast_vec_sub(target_axis_residual, target_displacement, scaled_axis_vector);
