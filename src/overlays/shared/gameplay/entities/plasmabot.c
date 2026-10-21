@@ -1116,13 +1116,13 @@ float FUN_L14_002b35d8(char *moby, int flag, float target_angle) {
     if (turn > 1.2217304706573486f) turn = 1.2217304706573486f;
     else if (turn < -1.2217304706573486f) turn = -1.2217304706573486f;
     {
-        float w = frame_time_sq * 12.566370964050293f;
-        func_L00_0025CE58_2B4828((float *)(state + 0x268), turn, (float *)(state + 0x26C), w, w, frame_time * 6.2831854820251465f);
+        float yaw_easing_coefficient = frame_time_sq * 12.566370964050293f;
+        func_L00_0025CE58_2B4828((float *)(state + 0x268), turn, (float *)(state + 0x26C), yaw_easing_coefficient, yaw_easing_coefficient, frame_time * 6.2831854820251465f);
     }
     FUN_L00_001fff28(state + 0x170, 2, *(float *)(state + 0x268));
     if (flag) {
         float owner_aim_position[4];
-        float b[4];
+        float owner_aim_offset[4];
         float pitch_quaternion[4];
         float *bp;
         float *cp;
@@ -1131,10 +1131,10 @@ float FUN_L14_002b35d8(char *moby, int flag, float target_angle) {
         qcopy(owner_aim_position, owner + 0x10);
         g = &hero;
         if (((char *)g->moby) == owner) owner_aim_position[2] = owner_aim_position[2] - g->ground_distance;
-        bp = b;
+        bp = owner_aim_offset;
         subtract_vector_xyz_c2(bp, owner_aim_position, moby + 0x10);
-        b[2] = b[2] + 1.5f;
-        target_pitch_angle = -fast_arc_tan(vector_length_xy(bp), b[2]);
+        owner_aim_offset[2] = owner_aim_offset[2] + 1.5f;
+        target_pitch_angle = -fast_arc_tan(vector_length_xy(bp), owner_aim_offset[2]);
         func_L00_0025CE58_2B4828((float *)(state + 0x280), target_pitch_angle, (float *)(state + 0x284), frame_time_sq * 12.566370964050293f, frame_time_sq * 12.566370964050293f, frame_time * 6.2831854820251465f);
         cp = pitch_quaternion;
         FUN_L00_001fff28(cp, 1, *(float *)(state + 0x280));
