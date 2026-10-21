@@ -1178,9 +1178,9 @@ void extermibot_update(unsigned char *moby) {
         *(float *)(moby_data + 0xD8) = 2.0f;
         {
         int quantized_movement_scale = truncate_float_to_s32_c4(movement_scale * 409.6f);
-        float e6 = D_0015ED6C * 6.0f;
+        float initial_movement_speed = D_0015ED6C * 6.0f;
         *(int *)(moby_data + 0xD0) = quantized_movement_scale;
-        *(float *)(moby_data + 0xF4) = e6;
+        *(float *)(moby_data + 0xF4) = initial_movement_speed;
         }
         }
         *(float *)(moby_data + 0x2D8) = random_angle_radians_c4();
