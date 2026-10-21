@@ -2027,14 +2027,14 @@ extern void FUN_L00_0023a7a8_2ba78(void) __asm__("FUN_L00_0023a7a8");
 #define CUR_TB (D_L00_001C40B0[CUR_ITEM.fD0])
 void FUN_L00_0029ba78(void) {
     u128 lv;
-    s32 st;
+    s32 purchase_state;
     s32 purchase_cost, k, last_row_index;
 
-    st = vendor_menu.f5c;
-    if (st == 0) {
+    purchase_state = vendor_menu.f5c;
+    if (purchase_state == 0) {
         return;
     }
-    if (st == 1) {
+    if (purchase_state == 1) {
         D_L00_00161E34 = 1;
         D_L00_00161E0C = 0;
         FUN_0020c5f0_2ba78(&vendor_menu.f20[4], 0x471);
@@ -2072,7 +2072,7 @@ void FUN_L00_0029ba78(void) {
         vendor_menu.f5c = 2;
         return;
     }
-    if (st == 2) {
+    if (purchase_state == 2) {
         if (D_L00_00161E10 == 1) {
             if (pad_state.held_unmasked & 0x8000) {
                 D_L00_00161E28++;
@@ -2096,11 +2096,11 @@ void FUN_L00_0029ba78(void) {
             if ((pad_state.pressed_unmasked & 0x2000) ||
                 (D_L00_00161E2C >= 0x10 && (D_L00_00161E2C & 0x7) == 0) || D_L00_00161E2C >= 0x30) {
                 if ((vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8) > 0) {
-                    s32 cnt = D_0015ED98 / (vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8);
+                    s32 max_ammo_purchase_quantity = D_0015ED98 / (vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8);
                     s32 i = CUR_ITEM.fD0;
                     s32 left = D_L00_001C40B0[i].hE - weapon_ammo_counts[i];
-                    if (left < cnt) cnt = left;
-                    if (D_L00_00161E34 < cnt) {
+                    if (left < max_ammo_purchase_quantity) max_ammo_purchase_quantity = left;
+                    if (D_L00_00161E34 < max_ammo_purchase_quantity) {
                         D_L00_00161E34++;
                         if ((D_L00_00161E2C & 0x3) == 0 || D_L00_00161E2C < 0x10) {
                             FUN_0022da68_2ba78(1, 0, vendor_menu.f1c);
@@ -2134,7 +2134,7 @@ void FUN_L00_0029ba78(void) {
         FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
         return;
     }
-    if (st == 3) {
+    if (purchase_state == 3) {
         advance_moby_animation(&vendor_menu.f20[4]);
         if (!vendor_menu.f20[4].b53 && (vendor_menu.f20[4].b70 & 2)) {
             vendor_menu.f20[4].f58 = -1.0f;
@@ -2143,7 +2143,7 @@ void FUN_L00_0029ba78(void) {
         FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
         return;
     }
-    if (st != 4) {
+    if (purchase_state != 4) {
         return;
     }
     advance_moby_animation(&vendor_menu.f20[4]);
