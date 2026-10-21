@@ -2539,9 +2539,9 @@ void FUN_L18_002e9e70(struct Moby *moby) {
     };
     float *moby_vars = (float *)moby->pvars;
     float updated_rotation_angle = fast_add_rotations_c(moby_vars[0xB], D_L18_00161ED0 * DEG_TO_RAD * frame_time);
-    float u = D_L18_00161ED4 * DEG_TO_RAD * frame_time;
+    float second_rotation_angle_step = D_L18_00161ED4 * DEG_TO_RAD * frame_time;
     moby_vars[0xB] = updated_rotation_angle;
-    moby_vars[0xC] = fast_add_rotations_c(moby_vars[0xC], u);
+    moby_vars[0xC] = fast_add_rotations_c(moby_vars[0xC], second_rotation_angle_step);
     switch (MOBY(moby)->state) {
     case STATE_TIMED_REMOVAL_WAIT:
         if (fast_dec_timer((int *)(moby_vars + 10))) {
