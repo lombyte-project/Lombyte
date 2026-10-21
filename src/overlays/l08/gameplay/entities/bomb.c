@@ -1810,16 +1810,16 @@ void blarg_bombthrower_update(struct Moby *moby) {
         }
         break;
     case BOMBTHROWER_STATE_WAIT_TO_THROW: {
-        float dist = vector_distance_xy_alt(&moby->pos, &target->pos);
+        float target_distance_xy = vector_distance_xy_alt(&moby->pos, &target->pos);
         func_L00_002592B0_x(fast_arc_tan_c2(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                             moby, vars->blk12C, 0.02f, 0.3f, 0.2f);
-        if (dist < 20.0f && 8.0f < dist && tick_countdown_32_alt(&vars->i128) != 0) {
+        if (target_distance_xy < 20.0f && 8.0f < target_distance_xy && tick_countdown_32_alt(&vars->i128) != 0) {
             Cam_DBF68 *cam = (Cam_DBF68 *)camera_state_bytes;
             if (fast_difference_between_rotations_c3(cam->f158, fast_arc_tan_c2(moby->pos.x - cam->x, moby->pos.y - cam->y)) < 0.55850536f) {
                 goto attack;
             }
         }
-        if (vars->i38 == 0 || !(0.5f < dist)) {
+        if (vars->i38 == 0 || !(0.5f < target_distance_xy)) {
             break;
         }
     attack:
