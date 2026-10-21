@@ -2015,8 +2015,8 @@ int FUN_L11_0030a830(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC10), where it is exact; names translated to the US level program. */
 
-void FUN_L11_0030a840(unsigned char *arg) {
-    *(int *)(*(int *)(arg + 0x78) + 0xB8) = 1;
+void FUN_L11_0030a840(unsigned char *gate_moby) {
+    *(int *)(*(int *)(gate_moby + 0x78) + 0xB8) = 1;
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC20), where it is exact; names translated to the US level program. */
 
