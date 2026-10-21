@@ -114,7 +114,7 @@ void FUN_L05_0031c8e0(struct Moby *moby) {
     struct MineVars_c8e0 *vars = (struct MineVars_c8e0 *)moby->pvars;
     Vec4 tip;
     Vec4 debris_velocity;
-    Vec4 dir;
+    Vec4 effect_motion;
     Vec4 start;
     f32 distance;
     f32 fade;
@@ -193,22 +193,22 @@ void FUN_L05_0031c8e0(struct Moby *moby) {
         }
         yaw = random_angle_c8e0();
         pitch = random_float_between_c8e0(0.34906584f, 1.5358897f);
-        build_spherical_offset_c8e0(&dir, random_float_between_c8e0(0.05f, 0.1f) * frame_scale, yaw, pitch);
+        build_spherical_offset_c8e0(&effect_motion, random_float_between_c8e0(0.05f, 0.1f) * frame_scale, yaw, pitch);
         qcopy(&start, &tip);
         start.f[0] += random_float_c8e0(0.0f, 0.15f);
         start.f[1] += random_float_c8e0(0.0f, 0.15f);
         start.f[2] += random_float_c8e0(0.0f, 0.15f);
         frames = scale_game_frames_c8e0(0x3C);
-        spawn_trail_c8e0(&start, frames, size * 0.1f, size, vars->color | 0x7F000000, 0, sign, &dir, 0.003f);
+        spawn_trail_c8e0(&start, frames, size * 0.1f, size, vars->color | 0x7F000000, 0, sign, &effect_motion, 0.003f);
         sign = -sign;
         frames = scale_game_frames_c8e0(0x3C);
-        spawn_trail_c8e0(&start, frames, size * 0.07f, size * 0.7f, 0x7F7F7F7F, 1, sign, &dir, 0.003f);
-        dir.f[1] = 0.0f;
-        dir.f[0] = 0.0f;
-        dir.f[2] = random_float_between_c8e0(0.01f, 0.05f) * frame_scale;
+        spawn_trail_c8e0(&start, frames, size * 0.07f, size * 0.7f, 0x7F7F7F7F, 1, sign, &effect_motion, 0.003f);
+        effect_motion.f[1] = 0.0f;
+        effect_motion.f[0] = 0.0f;
+        effect_motion.f[2] = random_float_between_c8e0(0.01f, 0.05f) * frame_scale;
         speed = random_float_between_c8e0(60000.0f, 200000.0f);
         turn = random_integer_below_c8e0(2);
-        spark = spawn_spark_c8e0(&tip, 0.3f, 1.0f, 1.02f, random_integer_below_c8e0(2) ? -turn : turn, &dir, speed, 0x407F7F7F);
+        spark = spawn_spark_c8e0(&tip, 0.3f, 1.0f, 1.02f, random_integer_below_c8e0(2) ? -turn : turn, &effect_motion, speed, 0x407F7F7F);
         if (spark != 0) {
             spark->life = scale_game_frames_c8e0(random_int_between_c8e0(0x5A, 0x78));
             draw = &spark->draw;
