@@ -1365,18 +1365,18 @@ int FUN_L18_002fc668(int group, void *from, void *to, float speed) {
         moby = &table[*group_moby_entry & 0x7FFF];
         if (moby->oclass == 0x772) {
             if (moby->state == 8) {
-                LaunchedMobyVars *v = (LaunchedMobyVars *)moby->pvars;
+                LaunchedMobyVars *launched_moby_vars = (LaunchedMobyVars *)moby->pvars;
                 moby->flags &= ~0x41;
                 moby->collision = moby->pclass->collision;
                 moby->flags |= 0x1000;
                 qcopy(&moby->pos, from);
                 moby->state = 1;
-                v->unk1F4 = 1.0f;
-                fast_vec_sub(v->velocity, to, from);
-                v->velocity[2] = 0.0f;
-                fast_vec_normalize(v->velocity, v->velocity, speed);
-                v->velocity[2] = FUN_L00_0025abf0(from, to, speed, -(frame_time_sq * 10.0f), 0);
-                v->spin = randf_sym(15.0f, 45.0f) * 0.017453292f;
+                launched_moby_vars->unk1F4 = 1.0f;
+                fast_vec_sub(launched_moby_vars->velocity, to, from);
+                launched_moby_vars->velocity[2] = 0.0f;
+                fast_vec_normalize(launched_moby_vars->velocity, launched_moby_vars->velocity, speed);
+                launched_moby_vars->velocity[2] = FUN_L00_0025abf0(from, to, speed, -(frame_time_sq * 10.0f), 0);
+                launched_moby_vars->spin = randf_sym(15.0f, 45.0f) * 0.017453292f;
                 return 1;
             }
         }
