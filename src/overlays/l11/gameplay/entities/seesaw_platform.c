@@ -934,7 +934,7 @@ void seesaw_platform_update(struct Moby *platform) {
     Vec4f platform_translation_delta;
     Vec4f rot;
     float matrix[16] __attribute__((aligned(16)));
-    Vec4f diff;
+    Vec4f hero_local_offset;
     struct L11TiltVars *platform_vars = (struct L11TiltVars *)platform->pvars;
     float spin;
     float change;
@@ -948,10 +948,10 @@ void seesaw_platform_update(struct Moby *platform) {
     platform_vars->spin = spin + D_L11_00161F7C * 0.017453292f * frame_time_sq * (D_L11_00161F6C * platform->rot.y);
     platform_vars->spin = platform_vars->spin + D_L11_00161F80 * 0.017453292f * frame_time_sq * (D_L11_00161F70 * spin);
     if (hero.ground_moby == platform && hero.air_frames.s == 0) {
-        subtract_vector_xyz(&diff, &hero.motion.pos, &platform->pos);
+        subtract_vector_xyz(&hero_local_offset, &hero.motion.pos, &platform->pos);
         transpose_rotation_matrix(matrix, &platform->rot_row0);
-        transform_vector(&diff, &diff, matrix);
-        scaled = D_L11_00161F68 * diff.x;
+        transform_vector(&hero_local_offset, &hero_local_offset, matrix);
+        scaled = D_L11_00161F68 * hero_local_offset.x;
         change = D_L11_00161F78 * 0.017453292f * frame_time_sq * scaled;
         if (platform_vars->spin * change < 0.0f && platform->rot.y * change < 0.0f) {
             change += change;
