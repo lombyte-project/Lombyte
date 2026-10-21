@@ -2553,14 +2553,14 @@ void FUN_L00_002e8568(int camera_state_short_value) {
 extern char *D_L00_00166E00_002e8590[] __asm__("D_L00_00166E00");
 /* Stores non-zero a/b at +0x11C/+0x120 of D_L00_00166E00+0x70 while its short at 0x86 is 0. */
 void follow_camera_set_lateral_spring(float a, float b) __asm__("FUN_L00_002e8590");
-void follow_camera_set_lateral_spring(float lateral_spring_value, float b) {
+void follow_camera_set_lateral_spring(float lateral_spring_value, float lateral_spring_companion_value) {
     char *current_camera = D_L00_00166E00_002e8590[0];
     if (*(short *)(current_camera + 0x86) == 0) {
         char *attach_state = *(char **)(current_camera + 0x70) + 0x40;
         if (lateral_spring_value != 0.0f)
             *(float *)(attach_state + 0xDC) = lateral_spring_value;
-        if (b != 0.0f)
-            *(float *)(attach_state + 0xE0) = b;
+        if (lateral_spring_companion_value != 0.0f)
+            *(float *)(attach_state + 0xE0) = lateral_spring_companion_value;
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E9AD0), where it is exact; names translated to the US level program. */
