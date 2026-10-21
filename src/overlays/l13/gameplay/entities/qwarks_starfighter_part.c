@@ -1122,12 +1122,12 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_L00_00250df8(void *);
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L13_002ecd10(char *src, int attachment_joint_index, int id) {
+char *FUN_L13_002ecd10(char *parent_moby, int attachment_joint_index, int id) {
     char *moby = create_moby(id);
     if (moby != 0) {
         char *data;
-        float f = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)(src + 0x2C) /
-                  *(float *)(*(char **)(src + 0x24) + 0x24);
+        float f = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)(parent_moby + 0x2C) /
+                  *(float *)(*(char **)(parent_moby + 0x24) + 0x24);
         data = *(char **)(moby + 0x78);
         *(unsigned char *)(moby + 0x30) = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
@@ -1135,13 +1135,13 @@ char *FUN_L13_002ecd10(char *src, int attachment_joint_index, int id) {
         moby[0x20] = 0;
         *(float *)(moby + 0x2C) = f;
         *(int *)(data + 0x44) = attachment_joint_index;
-        moby_point_position(src, attachment_joint_index, moby + 0x10);
-        *(char **)(data + 0x3C) = src;
+        moby_point_position(parent_moby, attachment_joint_index, moby + 0x10);
+        *(char **)(data + 0x3C) = parent_moby;
         FUN_L00_00250df8(moby);
-        qcopy(moby + 0x40, src + 0x40);
-        *(OvlQuad *)(moby + 0xC0) = *(OvlQuad *)(src + 0xC0);
-        *(OvlQuad *)(moby + 0xD0) = *(OvlQuad *)(src + 0xD0);
-        *(OvlQuad *)(moby + 0xE0) = *(OvlQuad *)(src + 0xE0);
+        qcopy(moby + 0x40, parent_moby + 0x40);
+        *(OvlQuad *)(moby + 0xC0) = *(OvlQuad *)(parent_moby + 0xC0);
+        *(OvlQuad *)(moby + 0xD0) = *(OvlQuad *)(parent_moby + 0xD0);
+        *(OvlQuad *)(moby + 0xE0) = *(OvlQuad *)(parent_moby + 0xE0);
         *(int *)(data + 0x40) = scale_game_frames(0x258);
         FUN_L00_00250df8(moby);
     }
