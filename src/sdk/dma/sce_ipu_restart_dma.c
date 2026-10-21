@@ -15,14 +15,14 @@ void sceIpuRestartDMA(struct IpuContext *ctx) {
     u32 bits;
     u32 magic;
     u32 count;
-    s32 src;
-    s32 dst;
+    s32 input_dma_quadword_count;
+    s32 input_dma_address;
 
     bits = (u32)ctx->unk1C;
     magic = bits & 0x7F;
     count = ((bits >> 16) & 3) + ((bits >> 8) & 0xF);
-    dst = ctx->unk0 - count * 0x10;
-    src = ctx->unk8 + count;
+    input_dma_address = ctx->unk0 - count * 0x10;
+    input_dma_quadword_count = ctx->unk8 + count;
     if (ctx->unk10 != 0) {
         if (ctx->unk14 != 0) {
             *(volatile u32 *)0x1000B010 = ctx->unk10;
@@ -35,11 +35,11 @@ void sceIpuRestartDMA(struct IpuContext *ctx) {
     *(volatile u32 *)0x10002000 = magic;
     while (*(volatile s32 *)0x10002010 < 0) {
     }
-    if (dst != 0) {
-        if (src != 0) {
-            *(volatile u32 *)0x1000B410 = dst;
+    if (input_dma_address != 0) {
+        if (input_dma_quadword_count != 0) {
+            *(volatile u32 *)0x1000B410 = input_dma_address;
             *(volatile u32 *)0x1000B430 = ctx->unk4;
-            *(volatile u32 *)0x1000B420 = src;
+            *(volatile u32 *)0x1000B420 = input_dma_quadword_count;
             SetD4Chcr(ctx->unkC | 0x100);
         }
     }
