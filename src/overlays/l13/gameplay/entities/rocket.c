@@ -271,7 +271,7 @@ extern void FUN_L00_00250df8(void *);
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-char *FUN_L13_003061c8(float speed, float *pos, float *dir, void *arg) {
+char *FUN_L13_003061c8(float speed, float *pos, float *dir, void *source_moby) {
     char *moby;
     char *moby_vars;
     float direction_length_xy;
@@ -291,7 +291,7 @@ char *FUN_L13_003061c8(float speed, float *pos, float *dir, void *arg) {
         blend_moby_animation(moby, 1, 0, scale_game_frames(5));
         *(short *)(moby + 0x34) = 0x208;
         *(int *)(moby_vars + 0x24) = 1;
-        *(void **)(moby_vars + 0x20) = arg;
+        *(void **)(moby_vars + 0x20) = source_moby;
         *(float *)(moby_vars + 0x28) = speed;
         moby[0x23] = 0x10;
         *(int *)(moby_vars + 0x2C) = func_001FA898_r(speed / fast_vec_length(moby_vars) + 1.0f);
