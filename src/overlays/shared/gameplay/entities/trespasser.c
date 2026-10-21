@@ -327,7 +327,7 @@ void FUN_L00_002c5dc8(char *moby) {
     Vars_2c5dc8 *v;
     unsigned int col;
     float half = 0.05f;
-    float len, distance_along_span, step, x, amplitude_envelope, amp, wob;
+    float span_length, distance_along_span, step, x, amplitude_envelope, amp, wob;
     if (moby == 0)
         return;
     v = *(Vars_2c5dc8 **)(moby + 0x78);
@@ -355,7 +355,7 @@ void FUN_L00_002c5dc8(char *moby) {
     qcopy(&segment_center, &b);
     sub_2c5dc8(&segment_direction, &attachment_position, &b);
     distance_along_span = 0.0f;
-    len = len_2c5dc8(&segment_direction);
+    span_length = len_2c5dc8(&segment_direction);
     qcopy(&wobble_vector_scratch, &segment_direction);
     wobble_vector_scratch.f[2] -= 0.1f;
     cross_2c5dc8(&f, &segment_direction, &wobble_vector_scratch);
@@ -365,13 +365,13 @@ void FUN_L00_002c5dc8(char *moby) {
     segment_quad.corner[0].f[2] -= half;
     segment_quad.corner[2].f[2] += half;
     wob = f9dc8_2c5dc8(fa610_2c5dc8(v->x18));
-    while (distance_along_span < len) {
+    while (distance_along_span < span_length) {
         step = 0.2f;
-        if (len - distance_along_span < step)
-            step = len - distance_along_span;
+        if (span_length - distance_along_span < step)
+            step = span_length - distance_along_span;
         distance_along_span += step;
         x = distance_along_span * 3.1415927f;
-        amplitude_envelope = f9de0_2c5dc8(x / len);
+        amplitude_envelope = f9de0_2c5dc8(x / span_length);
         amp = f9de0_2c5dc8(fa610_2c5dc8(x / v->x1c)) * amplitude_envelope * wob * v->x20;
         scale_2c5dc8(&segment_direction, &segment_direction, step);
         add_2c5dc8(&segment_center, &segment_center, &segment_direction);
