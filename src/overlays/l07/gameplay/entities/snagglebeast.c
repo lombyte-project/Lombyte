@@ -508,21 +508,21 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int FUN_L00_002583f0(void *, struct Moby *, int, float, float);
 
 int FUN_L07_00313af0(struct Moby *chaser_moby, struct ChaserVars *chaser_vars, Vec4 *goal, int mode, float range) {
-    float v[4];
+    float position_delta[4];
     char *path;
     struct Moby *target_moby;
-    int r;
+    int navigation_result;
     float dist;
 
     dist = vector_distance(&chaser_moby->pos, goal);
-    r = 4;
+    navigation_result = 4;
     path = D_L07_001B0530[chaser_vars->path];
     if (range < dist) {
-        r = FUN_L00_00259028(chaser_moby, chaser_vars->nav, mode, chaser_vars->navOut);
-        if (r == 2) {
-            subtract_vector_xyz(v, path + (FUN_L01_0028b510(&chaser_moby->pos, path, 0.0f) * 16 + 0x10), &chaser_moby->pos);
-            clamp_vector_length(v, v, chaser_vars->pullSpeed);
-            add_vector_xyz(&chaser_moby->pos, &chaser_moby->pos, v);
+        navigation_result = FUN_L00_00259028(chaser_moby, chaser_vars->nav, mode, chaser_vars->navOut);
+        if (navigation_result == 2) {
+            subtract_vector_xyz(position_delta, path + (FUN_L01_0028b510(&chaser_moby->pos, path, 0.0f) * 16 + 0x10), &chaser_moby->pos);
+            clamp_vector_length(position_delta, position_delta, chaser_vars->pullSpeed);
+            add_vector_xyz(&chaser_moby->pos, &chaser_moby->pos, position_delta);
         }
     } else {
         FUN_L00_00258278(chaser_moby, fast_arc_tan(hero.motion.pos.f[0] - chaser_moby->pos.x, hero.motion.pos.f[1] - chaser_moby->pos.y),
@@ -532,15 +532,15 @@ int FUN_L07_00313af0(struct Moby *chaser_moby, struct ChaserVars *chaser_vars, V
         target_moby = D_L07_00173EC0.moby;
         if (target_moby != 0 && D_L07_00173EC0.count > 0 && target_moby->oclass == 0x42D && target_moby->command == 0) {
             if (((struct ChaserTargetVars *)target_moby->pvars)->sticky) {
-                subtract_vector_xyz(v, &target_moby->pos, &chaser_moby->pos);
-                *(s32 *)&v[2] = 0;
-                scale_vector_xyz(v, v, 0.5f);
-                add_vector_xyz(&chaser_moby->pos, &chaser_moby->pos, v);
+                subtract_vector_xyz(position_delta, &target_moby->pos, &chaser_moby->pos);
+                *(s32 *)&position_delta[2] = 0;
+                scale_vector_xyz(position_delta, position_delta, 0.5f);
+                add_vector_xyz(&chaser_moby->pos, &chaser_moby->pos, position_delta);
             }
             D_L07_00173EC0.moby->command = 1;
         }
     }
-    return r;
+    return navigation_result;
 }
 /* eases the chaser speed up with the gap to its target */
 struct ChaserSpeed { u8 pad0[0x80]; f32 base; u8 pad84[0x10]; f32 rate; u8 pad98[0x124]; f32 rate2; };
