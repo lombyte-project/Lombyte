@@ -136,17 +136,17 @@ void FUN_L00_00268f10_002634f8(Vec4_2634f8 *, int) __asm__("FUN_L00_00268f10");
 void FUN_L00_002634f8(Vec4_2634f8 *v) {
     Vec4_2634f8 ground_probe_start, u, position_delta;
     float k, f;
-    S166C80_2634f8 *b;
+    S166C80_2634f8 *position_owner;
     k = (D_L00_0015FCA4_002634f8 - D_L00_0015FCA0_002634f8) * 0.00390625f;
     ground_probe_start.q = v->q;
     f = FUN_L00_00263468_002634f8(&ground_probe_start) + k;
-    b = &D_L00_00166C80_002634f8;
+    position_owner = &D_L00_00166C80_002634f8;
     ground_probe_start.f[2] = f;
-    if (f < b->pos.f[2] + 5.0f) {
+    if (f < position_owner->pos.f[2] + 5.0f) {
         u.q = ground_probe_start.q;
         u.f[2] = u.f[2] - (k + k);
         if (FUN_001efa68_002634f8(&ground_probe_start, &u, 0x12, 0, 0)) {
-            FUN_001f9a28_002634f8(&position_delta, &D_L00_00173E60_002634f8, &b->pos);
+            FUN_001f9a28_002634f8(&position_delta, &D_L00_00173E60_002634f8, &position_owner->pos);
             FUN_L00_00268f10_002634f8(
                 &D_L00_00173E60_002634f8,
                 (u8)(int)(FUN_001f9b20_002634f8(&position_delta) / 60.0f * 191.0f + 64.0f));
