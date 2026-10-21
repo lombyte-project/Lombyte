@@ -105,7 +105,7 @@ void FUN_L09_002c26c8(struct Moby *moby) {
         AIRSHIP_PART_STATE_FALLING_AFTER_DAMPING = 5
     };
     float vec[4];
-    Buf_2c26c8 buf;
+    Buf_2c26c8 transform_and_effect_scratch;
     float rotm[4][4];
     float nearest_parent_distance;
     int joint;
@@ -146,8 +146,8 @@ void FUN_L09_002c26c8(struct Moby *moby) {
         }
         joint = 0;
         joint_offset_scale = moby->scale * 0.0009765625f;
-        FUN_00210850_2c26c8(moby, 1, &joint, buf.m);
-        FUN_001f9a68_2c26c8(part_vars->off, buf.m[3], joint_offset_scale);
+        FUN_00210850_2c26c8(moby, 1, &joint, transform_and_effect_scratch.m);
+        FUN_001f9a68_2c26c8(part_vars->off, transform_and_effect_scratch.m[3], joint_offset_scale);
         moby->state = 1;
         break;
     }
@@ -162,8 +162,8 @@ void FUN_L09_002c26c8(struct Moby *moby) {
             qcopy(((f32 *)&moby->rot), ((f32 *)&p->rot));
             FUN_001fa050_2c26c8(rotm, ((f32 *)&p->rot));
             FUN_001f9d20_2c26c8(vec, part_vars->off, rotm);
-            FUN_L00_0024f7c8_2c26c8(part_vars->parent, 0, buf.m[0]);
-            FUN_001f9a28_2c26c8(((f32 *)&moby->pos), buf.m[0], vec);
+            FUN_L00_0024f7c8_2c26c8(part_vars->parent, 0, transform_and_effect_scratch.m[0]);
+            FUN_001f9a28_2c26c8(((f32 *)&moby->pos), transform_and_effect_scratch.m[0], vec);
         }
         if (part_vars->parent != 0) {
             moby->flags &= ~1;
@@ -204,13 +204,13 @@ void FUN_L09_002c26c8(struct Moby *moby) {
         FUN_L00_0024f7c8_2c26c8(moby, 0, vec);
         FUN_001f9a28_2c26c8(part_vars->vel, ((f32 *)&moby->pos), vec);
         FUN_001f9a68_2c26c8(part_vars->vel, part_vars->vel, D_L09_001613A8 * frame_time / 20.0f);
-        FUN_001f9a28_2c26c8(buf.m[0], vec, &hero.motion.pos);
+        FUN_001f9a28_2c26c8(transform_and_effect_scratch.m[0], vec, &hero.motion.pos);
         if (moby->oclass >= 0x4A1 && moby->oclass <= 0x4A2) {
-            FUN_001f9bf8_2c26c8(buf.m[0], buf.m[0], D_L09_001613B8 * frame_time);
+            FUN_001f9bf8_2c26c8(transform_and_effect_scratch.m[0], transform_and_effect_scratch.m[0], D_L09_001613B8 * frame_time);
         } else {
-            FUN_001f9bf8_2c26c8(buf.m[0], buf.m[0], D_L09_001613AC * frame_time);
+            FUN_001f9bf8_2c26c8(transform_and_effect_scratch.m[0], transform_and_effect_scratch.m[0], D_L09_001613AC * frame_time);
         }
-        FUN_001f9a10_2c26c8(part_vars->vel, part_vars->vel, buf.m[0]);
+        FUN_001f9a10_2c26c8(part_vars->vel, part_vars->vel, transform_and_effect_scratch.m[0]);
         part_vars->vel[2] = 0.0f;
         part_vars->f20 = FUN_002132a8_2c26c8(-(D_L09_001613B0 * 0.017453292f * frame_time), D_L09_001613B0 * 0.017453292f * frame_time);
         part_vars->f24 = FUN_002132a8_2c26c8(-(D_L09_001613B4 * 0.017453292f * frame_time), D_L09_001613B4 * 0.017453292f * frame_time);
@@ -235,25 +235,25 @@ void FUN_L09_002c26c8(struct Moby *moby) {
         }
         if (FUN_00213260_2c26c8(3) == 0) {
             FUN_001f99f8_2c26c8(vec);
-            buf.pair = D_L09_001613D0;
-            FUN_L00_0026a9f0_2c26c8(((f32 *)&moby->pos), vec, 0x2F3F3F7F, buf.pair.v[FUN_00213260_2c26c8(2)], FUN_L00_00257b90_2c26c8(FUN_001f96f8_2c26c8(0xF), FUN_001f96f8_2c26c8(0x14)), FUN_L00_00257b90_2c26c8(FUN_001f96f8_2c26c8(0x19), FUN_001f96f8_2c26c8(0x1E)), 0, 0, 400000.0f, FUN_002132a8_2c26c8(8.0f, 16.0f) * frame_time);
+            transform_and_effect_scratch.pair = D_L09_001613D0;
+            FUN_L00_0026a9f0_2c26c8(((f32 *)&moby->pos), vec, 0x2F3F3F7F, transform_and_effect_scratch.pair.v[FUN_00213260_2c26c8(2)], FUN_L00_00257b90_2c26c8(FUN_001f96f8_2c26c8(0xF), FUN_001f96f8_2c26c8(0x14)), FUN_L00_00257b90_2c26c8(FUN_001f96f8_2c26c8(0x19), FUN_001f96f8_2c26c8(0x1E)), 0, 0, 400000.0f, FUN_002132a8_2c26c8(8.0f, 16.0f) * frame_time);
         }
         if (moby->pos.z < 25.0f) {
             int i;
             for (i = 0; i < D_L09_00161368; i++) {
                 float effect_direction_angle = FUN_00213308_2c26c8();
-                qcopy(buf.m[1], ((f32 *)&moby->pos));
-                buf.m[1][0] += FUN_002132a8_2c26c8(-3.0f, 3.0f);
-                buf.m[1][1] += FUN_002132a8_2c26c8(-3.0f, 3.0f);
+                qcopy(transform_and_effect_scratch.m[1], ((f32 *)&moby->pos));
+                transform_and_effect_scratch.m[1][0] += FUN_002132a8_2c26c8(-3.0f, 3.0f);
+                transform_and_effect_scratch.m[1][1] += FUN_002132a8_2c26c8(-3.0f, 3.0f);
                 vec[2] = D_L09_00161374 * frame_time;
                 vec[0] += FUN_001f9dc8_2c26c8(effect_direction_angle) * D_L09_0016137C;
                 vec[1] += FUN_001f9de0_2c26c8(effect_direction_angle) * D_L09_0016137C;
-                buf.m[0][2] = D_L09_00161378 * frame_time;
-                buf.m[0][0] += FUN_001f9dc8_2c26c8(effect_direction_angle) * D_L09_00161380;
-                buf.m[0][1] += FUN_001f9de0_2c26c8(effect_direction_angle) * D_L09_00161380;
+                transform_and_effect_scratch.m[0][2] = D_L09_00161378 * frame_time;
+                transform_and_effect_scratch.m[0][0] += FUN_001f9dc8_2c26c8(effect_direction_angle) * D_L09_00161380;
+                transform_and_effect_scratch.m[0][1] += FUN_001f9de0_2c26c8(effect_direction_angle) * D_L09_00161380;
                 vec[3] = D_L09_00161390;
-                buf.m[0][3] = D_L09_00161394;
-                FUN_00218888_2c26c8(buf.m[1], vec, buf.m[0], D_L09_0016136C, D_L09_00161370,
+                transform_and_effect_scratch.m[0][3] = D_L09_00161394;
+                FUN_00218888_2c26c8(transform_and_effect_scratch.m[1], vec, transform_and_effect_scratch.m[0], D_L09_0016136C, D_L09_00161370,
                     truncate_float_to_s32_r(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_00161384, D_L09_00161384 * 2))),
                     truncate_float_to_s32_r(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_00161388, D_L09_00161388 * 2))),
                     truncate_float_to_s32_r(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_0016138C, D_L09_0016138C * 2))),
