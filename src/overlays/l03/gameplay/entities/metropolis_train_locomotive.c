@@ -1307,7 +1307,7 @@ void red_ship_1_update(char *moby) {
     char *pm;
     char *cur;
     char *cur0;
-    char *pos0;
+    char *moby_position;
     char *path_node_base;
     char *group_member_data;
     int *path;
@@ -1387,18 +1387,18 @@ void red_ship_1_update(char *moby) {
             moby[0x20] = 2;
             break;
         }
-        pos0 = moby + 0x10;
+        moby_position = moby + 0x10;
         data[0x131] = ((moby - D_L03_0015FFD8_29dba8) >> 8) / 2 % 7;
         FUN_L01_0028b410(pm);
         if (((unsigned char *)pm)[5] == 0) {
             if (*(int *)pm <= 0) {
-                initial_path_node_index = FUN_L01_0028b510(pos0, *(void **)(pm + 0x10), 0.0f);
+                initial_path_node_index = FUN_L01_0028b510(moby_position, *(void **)(pm + 0x10), 0.0f);
                 *(int *)pm = initial_path_node_index;
                 if (pm[4] >= 0 ? initial_path_node_index == **(int **)(pm + 0x10) - 1 : initial_path_node_index == 0) {
                     *(int *)pm = 0;
                 }
             }
-            *(float *)(pm + 0xC) = FUN_001f9b48(pos0, *(char **)(pm + 0x10) + (*(int *)pm * 0x10 + 0x10));
+            *(float *)(pm + 0xC) = FUN_001f9b48(moby_position, *(char **)(pm + 0x10) + (*(int *)pm * 0x10 + 0x10));
             path_node_base = *(char **)(pm + 0x10) + *(int *)pm * 0x10;
             *(float *)(pm + 0x18) = fast_arc_tan(*(float *)(path_node_base + 0x10) - *(float *)(moby + 0x10),
                                                  *(float *)(path_node_base + 0x14) - *(float *)(moby + 0x14));
@@ -1418,7 +1418,7 @@ void red_ship_1_update(char *moby) {
         *(float *)(data + 0x114) = 0.0f;
         *(float *)(data + 0x11C) = 0.0f;
         *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(data + 0xE0);
-        FUN_L03_0029c8a8(moby, pos0);
+        FUN_L03_0029c8a8(moby, moby_position);
         data[0x131] = 7;
         initial_speed_oscillation_phase = *(float *)(data + 0x13C);
         if (initial_speed_oscillation_phase > 6.2831855f) {
