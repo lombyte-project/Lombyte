@@ -124,7 +124,7 @@ void FUN_L00_0029fcd0(void *moby) {
     OvlQuad inset_offset[1];
     OvlQuad quad_corners[4];
     OvlQuad pad[5];
-    OvlQuad bounds_first_corner, b;
+    OvlQuad bounds_first_corner, bounds_opposite_corner;
     int x, y, w, h;
     float len;
     ids = D_L00_00161178;
@@ -145,8 +145,8 @@ void FUN_L00_0029fcd0(void *moby) {
     FUN_001f9a10_29fcd0(&quad_corners[2], base, second_edge);
     FUN_001f9a10_29fcd0(&quad_corners[3], &quad_corners[2], first_edge);
     bounds_first_corner = quad_corners[0];
-    b = quad_corners[3];
-    FUN_00237a78_29fcd0(&bounds_first_corner, &b, &x, &y, &w, &h);
+    bounds_opposite_corner = quad_corners[3];
+    FUN_00237a78_29fcd0(&bounds_first_corner, &bounds_opposite_corner, &x, &y, &w, &h);
     FUN_00239690_29fcd0(9, 7, 1.0f);
     FUN_001fb740_29fcd0(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
