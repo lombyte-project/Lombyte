@@ -749,22 +749,22 @@ void FUN_L18_002d5918(struct Moby *moby) {
             blend_moby_animation_alt(moby, 2, 0, scale_game_frames_i(12));
         }
         if (moby->visible) {
-            char buf[0x50];
+            char target_search_output[0x50];
             float previous_position[4];
-            int target_search_result = FUN_L00_0025fcb8((char *)moby, buf, 6.0f);
+            int target_search_result = FUN_L00_0025fcb8((char *)moby, target_search_output, 6.0f);
             char *hit;
 
             char *vel;
             if (target_search_result == 2)
                 return;
-            hit = *(char **)(buf + 0x40);
+            hit = *(char **)(target_search_output + 0x40);
             if (hit == 0)
                 return;
             if (vector_distance(&moby->pos, hit + 0x10) < 6.0f) {
                 float lim2 = *(float *)&D_L18_00161A6C * 3.0f;
                 float lim = frame_time_sq * 6.0f;
                 qcopy(previous_position, &moby->pos);
-                subtract_vector_xyz(v, *(char **)(buf + 0x40) + 0x10, &moby->pos);
+                subtract_vector_xyz(v, *(char **)(target_search_output + 0x40) + 0x10, &moby->pos);
                 v[2] = -(D_0015EE70 * 10.0f);
                 if (lim < vector_length_xy(v)) {
                     set_vector_length_xy(v, v, lim);
@@ -781,8 +781,8 @@ void FUN_L18_002d5918(struct Moby *moby) {
                 } else if (*(float *)(data + 0x48) < -lim2) {
                     *(float *)(data + 0x48) = -lim2;
                 }
-                if (*(char **)(buf + 0x40) != (char *)D_001413D0[0]) {
-                    if (FUN_001f9b48(*(char **)(buf + 0x40) + 0x10, &moby->pos) < 2.0f) {
+                if (*(char **)(target_search_output + 0x40) != (char *)D_001413D0[0]) {
+                    if (FUN_001f9b48(*(char **)(target_search_output + 0x40) + 0x10, &moby->pos) < 2.0f) {
                         *(int *)(data + 0x19C) = 1;
                     }
                 }
