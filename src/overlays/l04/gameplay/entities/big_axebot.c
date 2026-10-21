@@ -63,11 +63,11 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
 void FUN_L04_002ba470(char *moby) {
-    float w[4];
+    float explosion_position[4];
     float v[4];
     clear_u64_value(v);
-    moby_point_position(moby, 6, w);
-    spawn_explosion(moby, v, w, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, -1, 1.5f, 15.0f, 1, 1,
+    moby_point_position(moby, 6, explosion_position);
+    spawn_explosion(moby, v, explosion_position, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, -1, 1.5f, 15.0f, 1, 1,
                      -1, 0);
 }
 /* Check that a moby's spot is clear of the other mobys of class 0x154. */
