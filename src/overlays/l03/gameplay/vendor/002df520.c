@@ -453,9 +453,9 @@ void FUN_L03_002ebc58(void *arg) {
 
 /* Returns -1 while the game is in one of two blocking states, else 0. */
 int FUN_L03_002ebd70(void) {
-    struct Hero *g = &hero;
+    struct Hero *hero_ptr = &hero;
 
-    if ((g->unk2284 == 0x50 && g->state.current != 0x11) || g->state.current == 6) {
+    if ((hero_ptr->unk2284 == 0x50 && hero_ptr->state.current != 0x11) || hero_ptr->state.current == 6) {
         return -1;
     }
     return 0;
