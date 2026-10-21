@@ -1946,8 +1946,8 @@ int FUN_L16_002cf738(void *mv) {
 extern int *D_L16_001ABCC0_c3[] __asm__("D_L16_001ABCC0");
 void FUN_L16_002cf850(char *moby, char *partner);
 
-void FUN_L16_002cf7a8(struct Moby *arg) {
-    short *group_entry = (short *)D_L16_001ABCC0_c3[arg->group];
+void FUN_L16_002cf7a8(struct Moby *moby) {
+    short *group_entry = (short *)D_L16_001ABCC0_c3[moby->group];
     if (group_entry) {
         do {
             char *group_moby = D_L16_0015FFD8 + ((*(unsigned short *)group_entry & 0x7FFF) << 8);
