@@ -787,8 +787,8 @@ int FUN_L00_0025b440(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
 }
 /* Linear interpolation: a + (b - a) * t. */
 f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t);
-f32 FUN_L00_0025b6a8(f32 start_value, f32 b, f32 interpolation_factor) {
-    return start_value + (b - start_value) * interpolation_factor;
+f32 FUN_L00_0025b6a8(f32 start_value, f32 end_value, f32 interpolation_factor) {
+    return start_value + (end_value - start_value) * interpolation_factor;
 }
 #include "rnc/math/vector.h"
 
