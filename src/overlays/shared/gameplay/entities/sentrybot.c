@@ -1775,7 +1775,7 @@ extern char D_0013F490[];
 extern char D_0013F350[];
 
 void FUN_L15_0029d6c0(M_29E8A0 *missile_moby) {
-    Tbl_29E8A0 tbl;
+    Tbl_29E8A0 camera_blast_parameters;
     float effect_bias_velocity[4];
     float previous_position[4];
     float burst_drift_velocity[4];
@@ -1792,7 +1792,7 @@ void FUN_L15_0029d6c0(M_29E8A0 *missile_moby) {
     float pitch;
     int k;
 
-    tbl = D_L15_001E2610;
+    camera_blast_parameters = D_L15_001E2610;
     owner = 0;
     *(u128_29E8A0 *)burst_rotation_axis = 0;
     burst_rotation_axis[2] = D_0015ED6C * 8.0f;
@@ -2090,7 +2090,7 @@ void FUN_L15_0029d6c0(M_29E8A0 *missile_moby) {
                 *(int *)(cam2 + 0x168) = sh;
             }
             allocate_voice_for_target_entry(0, 0, (int)missile_moby);
-            mine_camera_blast(&tbl, missile_moby->pos, 0, 0);
+            mine_camera_blast(&camera_blast_parameters, missile_moby->pos, 0, 0);
             mine_spawn_drops(missile_moby, D_L15_001B0D70);
             mark_moby_for_removal_c3(missile_moby);
             }
