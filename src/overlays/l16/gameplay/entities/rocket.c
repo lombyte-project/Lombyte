@@ -597,10 +597,10 @@ void FUN_L16_002c3d38(struct Moby *moby) {
         moby->command = 0;
         break;
     case ROCKET_STATE_WAIT_FOR_TRIGGER: {
-        struct Hero *g = &hero;
-        if (g->state.control_mode != 15)
+        struct Hero *player = &hero;
+        if (player->state.control_mode != 15)
             break;
-        if (is_point_inside_clip_volume(&g->motion.unkD0, *(int *)data)) {
+        if (is_point_inside_clip_volume(&player->motion.unkD0, *(int *)data)) {
             moby->state = 2;
             *(short *)(data + 0x16) = 0;
         }
