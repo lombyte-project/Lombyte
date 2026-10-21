@@ -78,7 +78,7 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
     V_1ee318 query_point;
     V_1ee318 endpoint_test_vector;
     V_1ee318 volume_delta;
-    V_1ee318 l;
+    V_1ee318 transformed_test_vector;
     int is_inside_cylinder;
 
     query_point.q = pt->q;
@@ -90,9 +90,9 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
         e += vol[5] << 7;
         FUN_001f9a28_1ee318(&volume_delta, pt, e + 0x30);
         volume_delta.i[3] = 0;
-        FUN_001f9cf8_1ee318(&l, &volume_delta, e + 0x40);
-        return -1.0f <= l.f[0] && l.f[0] <= 1.0f && -1.0f <= l.f[1] && l.f[1] <= 1.0f &&
-               -1.0f <= l.f[2] && l.f[2] <= 1.0f;
+        FUN_001f9cf8_1ee318(&transformed_test_vector, &volume_delta, e + 0x40);
+        return -1.0f <= transformed_test_vector.f[0] && transformed_test_vector.f[0] <= 1.0f && -1.0f <= transformed_test_vector.f[1] && transformed_test_vector.f[1] <= 1.0f &&
+               -1.0f <= transformed_test_vector.f[2] && transformed_test_vector.f[2] <= 1.0f;
     }
     case VOLUME_TYPE_CYLINDER: {
         unsigned char *e;
@@ -101,8 +101,8 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
         is_inside_cylinder = 0;
         FUN_001f9a28_1ee318(&volume_delta, pt, e + 0x30);
         volume_delta.i[3] = 0;
-        FUN_001f9cf8_1ee318(&l, &volume_delta, e + 0x40);
-        if (FUN_001f9b20_1ee318(&l) < 1.0f && -1.0f <= l.f[2] && l.f[2] <= 1.0f) {
+        FUN_001f9cf8_1ee318(&transformed_test_vector, &volume_delta, e + 0x40);
+        if (FUN_001f9b20_1ee318(&transformed_test_vector) < 1.0f && -1.0f <= transformed_test_vector.f[2] && transformed_test_vector.f[2] <= 1.0f) {
             is_inside_cylinder = 1;
         }
         return is_inside_cylinder;
@@ -121,17 +121,17 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
         e = D_L00_001600E4 + vol[5] * 0x90;
         FUN_001f9a28_1ee318(&volume_delta, pt, e + 0x30);
         volume_delta.i[3] = 0;
-        FUN_001f9cf8_1ee318(&l, &volume_delta, e + 0x40);
-        if (FUN_001f9b20_1ee318(&l) < 1.0f && -1.0f <= l.f[2] && l.f[2] <= 1.0f) {
+        FUN_001f9cf8_1ee318(&transformed_test_vector, &volume_delta, e + 0x40);
+        if (FUN_001f9b20_1ee318(&transformed_test_vector) < 1.0f && -1.0f <= transformed_test_vector.f[2] && transformed_test_vector.f[2] <= 1.0f) {
             return 1;
         }
         endpoint_test_vector.i[0] = 0;
         endpoint_test_vector.i[1] = 0;
         endpoint_test_vector.f[2] = 1.0f;
         endpoint_test_vector.f[3] = 1.0f;
-        FUN_001f9cf8_1ee318(&l, &endpoint_test_vector, e);
-        FUN_001f9a10_1ee318(&l, &l, e + 0x30);
-        FUN_001f9a28_1ee318(&endpoint_test_vector, pt, &l);
+        FUN_001f9cf8_1ee318(&transformed_test_vector, &endpoint_test_vector, e);
+        FUN_001f9a10_1ee318(&transformed_test_vector, &transformed_test_vector, e + 0x30);
+        FUN_001f9a28_1ee318(&endpoint_test_vector, pt, &transformed_test_vector);
         if (FUN_001f9af0_1ee318(&endpoint_test_vector) < *(float *)(e + 0x80)) {
             return 1;
         }
@@ -139,9 +139,9 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
         endpoint_test_vector.f[2] = -1.0f;
         endpoint_test_vector.i[0] = 0;
         endpoint_test_vector.i[1] = 0;
-        FUN_001f9cf8_1ee318(&l, &endpoint_test_vector, e);
-        FUN_001f9a10_1ee318(&l, &l, e + 0x30);
-        FUN_001f9a28_1ee318(&endpoint_test_vector, pt, &l);
+        FUN_001f9cf8_1ee318(&transformed_test_vector, &endpoint_test_vector, e);
+        FUN_001f9a10_1ee318(&transformed_test_vector, &transformed_test_vector, e + 0x30);
+        FUN_001f9a28_1ee318(&endpoint_test_vector, pt, &transformed_test_vector);
         if (FUN_001f9af0_1ee318(&endpoint_test_vector) < *(float *)(e + 0x80)) {
             return 1;
         }
