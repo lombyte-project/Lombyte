@@ -166,7 +166,7 @@ void transition_load_wad(void)
   s32 i;
   s32 j;
   s32 k;
-  s32 cnt;
+  s32 sound_entry_count_or_moby_class_slot;
   s32 v;
   s32 *out;
   int new_var;
@@ -301,18 +301,18 @@ void transition_load_wad(void)
   D_0018CB20.x5C = (D_001940C0.x1C += 0x40000);
   D_001940C0.x1C += 0x40000;
   snd = (WadSound *) (data + hdr->x80);
-  cnt = 0;
+  sound_entry_count_or_moby_class_slot = 0;
   if (snd->size != 0)
   {
     out = D_0018CB20.x60;
     do
     {
-      cnt++;
+      sound_entry_count_or_moby_class_slot++;
       *out = ((s32) (data + hdr->x80)) + (snd->offset + k_800);
       snd++;
       out++;
     }
-    while ((cnt < 0x46) && (snd->size != 0));
+    while ((sound_entry_count_or_moby_class_slot < 0x46) && (snd->size != 0));
   }
   parse_space_scene_chunk(0);
   help_msg_data = D_001940C0.x1C;
@@ -339,11 +339,11 @@ void transition_load_wad(void)
   }
 
   QueueDmaTransfer(0);
-  cnt = (new_var = resident_class_slot_by_id[0x472]);
-  if (cnt >= 0)
+  sound_entry_count_or_moby_class_slot = (new_var = resident_class_slot_by_id[0x472]);
+  if (sound_entry_count_or_moby_class_slot >= 0)
   {
-    ((MobyClass *)moby_class_resources[cnt])->x28 = boot_sound_defs_b;
-    ((MobyClass *)moby_class_resources[cnt])->xD = 5;
+    ((MobyClass *)moby_class_resources[sound_entry_count_or_moby_class_slot])->x28 = boot_sound_defs_b;
+    ((MobyClass *)moby_class_resources[sound_entry_count_or_moby_class_slot])->xD = 5;
   }
 }
 
