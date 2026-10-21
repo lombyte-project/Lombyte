@@ -2520,12 +2520,12 @@ extern char *D_L00_00166E00_c3 __asm__("D_L00_00166E00") __attribute__((section(
 extern char *D_L00_00168FC0 __attribute__((section(".data")));
 /* Sets a flag and floats +0xF4/+0xF8 of D_L00_00166E00+0x70; add offsets a by 00168FC0+0xF0. */
 void follow_camera_set_offset_scale(int add, float a, float b) __asm__("FUN_L00_002e84f0");
-void follow_camera_set_offset_scale(int add, float offset_scale, float b) {
+void follow_camera_set_offset_scale(int add, float offset_scale, float offset_scale_companion_value) {
     char *current_camera = D_L00_00166E00_c3;
     if (*(short *)(current_camera + 0x86) == 0) {
         char *attach_state = *(char **)(current_camera + 0x70) + 0x40;
         *(short *)(attach_state + 0xDA) = 1;
-        *(float *)(attach_state + 0xB8) = b;
+        *(float *)(attach_state + 0xB8) = offset_scale_companion_value;
         if (add) {
             *(float *)(attach_state + 0xB4) = *(float *)(D_L00_00168FC0 + 0xF0) + offset_scale;
         } else {
