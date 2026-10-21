@@ -3267,7 +3267,7 @@ void crane_arm_update(unsigned char *moby) {
         CRANE_ARM_ANIM_BASE_TO_DELAY_B = 5,
         CRANE_ARM_ANIM_RETURN_TO_BASE_B = 6
     };
-    float dist = vector_distance(moby + 0x10, &hero.motion.pos);
+    float hero_distance = vector_distance(moby + 0x10, &hero.motion.pos);
     switch (moby[0x20]) {
     case CRANE_ARM_INITIALIZE:
         if (moby[0x53] != 0)
@@ -3276,9 +3276,9 @@ void crane_arm_update(unsigned char *moby) {
         moby[0xBC] = random_integer_below(scale_game_frames(0xB4));
         break;
     case CRANE_ARM_WAIT_DELAY:
-        if (moby[0x52] == 0 && dist < 9.0f && moby[0xBC] < 2)
+        if (moby[0x52] == 0 && hero_distance < 9.0f && moby[0xBC] < 2)
             moby[0xBC] = 2;
-        if (dist < 12.0f && moby[0x52] == moby[0x53] && moby[0x52] != 0)
+        if (hero_distance < 12.0f && moby[0x52] == moby[0x53] && moby[0x52] != 0)
             moby[0xBC] = 0;
         if (FUN_L00_001fefc8(moby + 0xBC)) {
             switch (moby[0x52]) {
