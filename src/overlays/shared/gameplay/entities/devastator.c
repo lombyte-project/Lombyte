@@ -1434,7 +1434,7 @@ extern void FUN_001f9a10_2b46a8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int FUN_001efa68_2b46a8(void *, void *, int, int, int) __asm__("FUN_001efa68");
 
 unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitch) {
-    V_2b46a8 src;
+    V_2b46a8 aim_origin_position;
     V_2b46a8 tp;
     V_2b46a8 aim_probe_position;
     unsigned char *candidate_moby;
@@ -1451,8 +1451,8 @@ unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitc
     struct Hero *g;
 
     best = 0;
-    src.q = from->q;
-    from = &src;
+    aim_origin_position.q = from->q;
+    from = &aim_origin_position;
     bestd = 20.0f;
     for (candidate_moby = D_L00_0015FFE4_2b46a8; candidate_moby != 0; candidate_moby = *(unsigned char **)(candidate_moby + 0x28)) {
         if ((signed char)candidate_moby[0x20] < 0) {
