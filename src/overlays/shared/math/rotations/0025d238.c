@@ -538,18 +538,18 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
     Q_25e450 vb;
     Q_25e450 effect_vector_work;
     float dist;
-    float f3;
+    float effect_reduction_metric;
     float proximity_speed_reduction;
     int cnt4;
     int i;
 
     *(u128_25e450 *)&effect_vector_work = 0;
     effect_vector_work.f[2] = frame_time_macro * 8.0f * fF;
-    f3 = D_L00_0015F5D4_macro + D_L00_0015F5D0_macro;
+    effect_reduction_metric = D_L00_0015F5D4_macro + D_L00_0015F5D0_macro;
     *(u128_25e450 *)&vb = *(u128_25e450 *)&effect_vector_work;
     if (effect_reduction_level == -1) {
         effect_reduction_level = 0;
-        if (1.7f < f3) effect_reduction_level = 1;
+        if (1.7f < effect_reduction_metric) effect_reduction_level = 1;
     }
     if (pos == 0) {
         if (owner_moby == 0) return;
