@@ -364,8 +364,8 @@ extern void FUN_L00_00250df8(void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-char *FUN_L09_002c2500(struct Moby *src, char *pos, int cls) {
-    char *spawned_moby = func_0020D348_m(cls);
+char *FUN_L09_002c2500(struct Moby *rotation_source_moby, char *pos, int spawned_moby_class) {
+    char *spawned_moby = func_0020D348_m(spawned_moby_class);
     if (spawned_moby) {
         OvlQuad point_position;
         OvlQuad position_offset;
@@ -378,16 +378,16 @@ char *FUN_L09_002c2500(struct Moby *src, char *pos, int cls) {
         spawned_moby[0x20] = 1;
         qcopy(spawned_position, pos);
         qcopy(spawned_vars + 0x10, pos);
-        *(char **)(spawned_vars + 0x2C) = src;
+        *(char **)(spawned_vars + 0x2C) = rotation_source_moby;
         FUN_L00_00250df8(spawned_moby);
         moby_point_position(spawned_moby, 0, &point_position);
         subtract_vector_xyz(&position_offset, pos, &point_position);
-        transform_vector_by_basis(&position_offset, &position_offset, &src->rot_row0);
+        transform_vector_by_basis(&position_offset, &position_offset, &rotation_source_moby->rot_row0);
         add_vector_xyz(spawned_position, pos, &position_offset);
-        qcopy(spawned_moby + 0x40, &src->rot);
-        *(OvlQuad *)(spawned_moby + 0xC0) = *(OvlQuad *)&src->rot_row0;
-        *(OvlQuad *)(spawned_moby + 0xD0) = *(OvlQuad *)&src->rot_row1;
-        *(OvlQuad *)(spawned_moby + 0xE0) = *(OvlQuad *)&src->rot_row2;
+        qcopy(spawned_moby + 0x40, &rotation_source_moby->rot);
+        *(OvlQuad *)(spawned_moby + 0xC0) = *(OvlQuad *)&rotation_source_moby->rot_row0;
+        *(OvlQuad *)(spawned_moby + 0xD0) = *(OvlQuad *)&rotation_source_moby->rot_row1;
+        *(OvlQuad *)(spawned_moby + 0xE0) = *(OvlQuad *)&rotation_source_moby->rot_row2;
         FUN_L00_00250df8(spawned_moby);
     }
     return spawned_moby;
