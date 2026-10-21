@@ -2118,7 +2118,7 @@ unsigned char *spawn_crate_debris(unsigned char *owner, void *vel, void *pos, vo
                                 int n, float lo, float hi) __asm__("FUN_L00_002af8b0");
 extern float g48_2afa48 __asm__("D_L00_00161448") __attribute__((sda));
 extern float g4c_2afa48 __asm__("D_L00_0016144C") __attribute__((sda));
-unsigned char *spawn_crate_debris(unsigned char *owner, void *initial_velocity, void *pos, void *initial_rotation, int type,
+unsigned char *spawn_crate_debris(unsigned char *owner, void *initial_velocity, void *spawn_position, void *initial_rotation, int type,
                                 int initial_bounce_count, float lo, float hi) {
     unsigned char *debris_moby = FUN_0020c4f8_2af8b0(type);
     if (debris_moby) {
@@ -2133,7 +2133,7 @@ unsigned char *spawn_crate_debris(unsigned char *owner, void *initial_velocity, 
         *(float *)(debris_moby + 0x40) = FUN_00213308_2af8b0();
         *(float *)(debris_moby + 0x44) = FUN_00213308_2af8b0();
         *(float *)(debris_moby + 0x48) = FUN_00213308_2af8b0();
-        qcopy(debris_moby + 0x10, pos);
+        qcopy(debris_moby + 0x10, spawn_position);
         qcopy(debris_moby + 0x40, initial_rotation);
         qcopy(debris_data->p10, initial_velocity);
         debris_data->f4 = *(float *)(debris_moby + 0x18);
