@@ -1742,9 +1742,9 @@ void FUN_L01_002ffdc0(struct Moby *moby) {
             }
             for (i = 0; i < 16; i++) {
                 float particle_angle = random_angle_radians();
-                float r = random_float_between(frame_time * 0.0f, frame_time * 3.0f);
-                particle_vel[0] = fast_cos(particle_angle) * r;
-                particle_vel[1] = fast_sin(particle_angle) * r;
+                float horizontal_velocity_magnitude = random_float_between(frame_time * 0.0f, frame_time * 3.0f);
+                particle_vel[0] = fast_cos(particle_angle) * horizontal_velocity_magnitude;
+                particle_vel[1] = fast_sin(particle_angle) * horizontal_velocity_magnitude;
                 particle_vel[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
                 {
                     int lifetime = FUN_L00_00257b90(0x5A, 0x78);
