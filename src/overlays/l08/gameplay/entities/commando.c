@@ -603,7 +603,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-float FUN_L08_002f5d98(float x, char *arg) {
+float FUN_L08_002f5d98(float x, char *sample_ring_data) {
     float sample_position = x * 8.0f;
     int i = func_001FA898_r(sample_position);
     float fr = sample_position - convert_integer_to_float(i);
@@ -612,7 +612,7 @@ float FUN_L08_002f5d98(float x, char *arg) {
     i = i % 8;
     j = i + 1;
     j = j % 8;
-    samples_base = arg + 0x90;
+    samples_base = sample_ring_data + 0x90;
     return *(float *)(samples_base - (-(i * 4))) * (1.0f - fr) + *(float *)(samples_base - (-(j * 4))) * fr;
 }
 #ifndef NON_MATCHING
