@@ -2130,18 +2130,18 @@ extern void add_vector_xyz(u8 *, u8 *, u8 *) __asm__("FUN_001f9a10");
  * program. */
 void FUN_L14_002ef630(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
-    u8 *src = D_L14_001E03B0;
-    u8 *dst = D_L14_001B0BB0_u[*(s32 *)(data + 0x114)] + 0x10;
+    u8 *local_path_point_cursor = D_L14_001E03B0;
+    u8 *world_path_point_cursor = D_L14_001B0BB0_u[*(s32 *)(data + 0x114)] + 0x10;
     s32 i = 10;
     f32 one = 1.0f;
     struct Hero *x;
     do {
-        transform_vector_by_basis(dst, src, moby + 0xC0);
-        src += 0x10;
+        transform_vector_by_basis(world_path_point_cursor, local_path_point_cursor, moby + 0xC0);
+        local_path_point_cursor += 0x10;
         i--;
-        add_vector_xyz(dst, dst, moby + 0x10);
-        *(f32 *)(dst + 0xC) = one;
-        dst += 0x10;
+        add_vector_xyz(world_path_point_cursor, world_path_point_cursor, moby + 0x10);
+        *(f32 *)(world_path_point_cursor + 0xC) = one;
+        world_path_point_cursor += 0x10;
     } while (i >= 0);
     x = &hero;
     x->unk22DA = *(u16 *)(data + 0x114);
