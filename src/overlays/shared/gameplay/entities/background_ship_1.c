@@ -901,7 +901,7 @@ int FUN_L02_002fb788(char *moby, float residual_angle_limit_degrees, float b) {
     float target_axis_residual[4];
     float r[4];
     char *data;
-    char *vec = D_L02_00167410;
+    char *shared_axis_data = D_L02_00167410;
     char *g;
     float dot1;
     float dot2;
@@ -910,22 +910,22 @@ int FUN_L02_002fb788(char *moby, float residual_angle_limit_degrees, float b) {
     float dot3;
     float den;
 
-    char *tbl = D_L02_0015EF50;
+    char *moby_record_table = D_L02_0015EF50;
     char *src;
 
-    data = *(char **)(tbl + *(short *)(moby + 0x84) * 32 + 0x1C);
+    data = *(char **)(moby_record_table + *(short *)(moby + 0x84) * 32 + 0x1C);
     src = *(char **)(data + 0x48);
     if (residual_angle_limit_degrees == 0.0f && b == 0.0f) {
         return 1;
     }
     g = D_L02_00167280;
     fast_vec_sub(target_displacement, src + 0x10, *(char **)(g + 0x180) + 0x30);
-    dot1 = fast_vec_dot(target_displacement, (vec + 0x30));
-    fast_vec_scale(scaled_axis_vector, (vec + 0x30), dot1);
+    dot1 = fast_vec_dot(target_displacement, (shared_axis_data + 0x30));
+    fast_vec_scale(scaled_axis_vector, (shared_axis_data + 0x30), dot1);
     fast_vec_sub(target_axis_residual, target_displacement, scaled_axis_vector);
     lenq = fast_vec_length(target_axis_residual);
-    dot2 = fast_vec_dot(*(char **)(g + 0x180), (vec + 0x30));
-    fast_vec_scale(scaled_axis_vector, (vec + 0x30), dot2);
+    dot2 = fast_vec_dot(*(char **)(g + 0x180), (shared_axis_data + 0x30));
+    fast_vec_scale(scaled_axis_vector, (shared_axis_data + 0x30), dot2);
     fast_vec_sub(r, *(char **)(g + 0x180), scaled_axis_vector);
     lenr = fast_vec_length(r);
     if (b != 0.0f) {
