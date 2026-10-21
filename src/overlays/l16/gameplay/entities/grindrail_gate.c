@@ -942,7 +942,7 @@ void FUN_L16_002e5258(struct Moby *trigger_moby) {
         GRINDRAIL_TRIGGER_WAIT_FOR_COMMAND_TIMEOUT = 2
     };
     char *command_timer = (char *)trigger_moby->pvars;
-    char *g;
+    char *bounds_check_position;
     float pos[16];
     float mat[4];
     float glow_cycle_phase;
@@ -956,10 +956,10 @@ void FUN_L16_002e5258(struct Moby *trigger_moby) {
         trigger_moby->update_dist = 0xFF;
         break;
     case GRINDRAIL_TRIGGER_CHECK_LOCAL_BOUNDS:
-        g = D_0013F3D0;
-        if (FUN_001f9b48_q(&trigger_moby->pos, g) < 16.0f) {
+        bounds_check_position = D_0013F3D0;
+        if (FUN_001f9b48_q(&trigger_moby->pos, bounds_check_position) < 16.0f) {
             FUN_001fa2d8_q(pos, &trigger_moby->rot_row0);
-            subtract_vector_xyz_q(mat, g, &trigger_moby->pos);
+            subtract_vector_xyz_q(mat, bounds_check_position, &trigger_moby->pos);
             mat[3] = 0.0f;
             FUN_001f9d20_q(mat, mat, pos);
             if (D_L16_001D9768[0] < mat[0] && mat[0] < D_L16_001D9768[1] &&
