@@ -1639,9 +1639,9 @@ extern void normalize_59d8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void cross_59d8(void *, void *, void *) __asm__("FUN_001f9ad8");
 
 void FUN_L14_003159d8(struct UpdateCam *cam) {
-    float ang[4];
+    float camera_placement_parameters[4];
     float pad[4]; /* unused; keeps the frame layout */
-    float dir[4];
+    float hero_look_direction[4];
     float up[4];
     char *rec = *(char **)(D_L14_0015EF50_59d8 + cam->descriptor_index * 32 + 0x1C);
     char *path;
@@ -1702,14 +1702,14 @@ void FUN_L14_003159d8(struct UpdateCam *cam) {
     camera_parameter_state_block[3] = 0;
     camera_parameter_state_block[4] = 0;
     hero_heading_radians = atan2_59d8(hero.moby->rot_row1.x, hero.moby->rot_row1.y);
-    ang[1] = camera_parameters[1];
-    ang[0] = hero_heading_radians;
-    ang[2] = camera_parameters[2];
-    FUN_L00_001ed580(&cam->pos, ang, &hero.motion);
-    sub_59d8(dir, &hero.motion, &cam->pos);
+    camera_placement_parameters[1] = camera_parameters[1];
+    camera_placement_parameters[0] = hero_heading_radians;
+    camera_placement_parameters[2] = camera_parameters[2];
+    FUN_L00_001ed580(&cam->pos, camera_placement_parameters, &hero.motion);
+    sub_59d8(hero_look_direction, &hero.motion, &cam->pos);
     scale_59d8(up, &hero.gravity_dir, -1.5f);
-    add_59d8(dir, dir, up);
-    normalize_59d8(&cam->m0, dir, 1.0f);
+    add_59d8(hero_look_direction, hero_look_direction, up);
+    normalize_59d8(&cam->m0, hero_look_direction, 1.0f);
     cross_59d8(&cam->m1, &cam->m0, up);
     normalize_59d8(&cam->m1, &cam->m1, 1.0f);
     cross_59d8(&cam->m2, &cam->m1, &cam->m0);
