@@ -107,7 +107,7 @@ void camera_run_setup_to_new_cam(struct Moby *cam) __asm__("FUN_001ebec8");
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 void init_camera_system(void) {
     char *g = (char *)&D_L00_00166C80_c;
-    float *camera_vector_snapshot, *camera_record_vector_destination, *vector_copy_source, *u;
+    float *camera_vector_snapshot, *camera_record_vector_destination, *vector_copy_source, *vector_copy_destination;
     char *current_camera_record;
     if (*(char **)(g + 0x180) != 0) {
         *(short *)(*(char **)(g + 0x180) + 0x8E) = 0;
@@ -129,10 +129,10 @@ void init_camera_system(void) {
     camera_record_vector_destination[1] = camera_vector_snapshot[1];
     camera_record_vector_destination[2] = camera_vector_snapshot[2];
     vector_copy_source = (float *)(D_0013E533 + 0xE9D);
-    u = (float *)(g + 0x190);
-    u[0] = vector_copy_source[0];
-    u[1] = vector_copy_source[1];
-    u[2] = vector_copy_source[2];
+    vector_copy_destination = (float *)(g + 0x190);
+    vector_copy_destination[0] = vector_copy_source[0];
+    vector_copy_destination[1] = vector_copy_source[1];
+    vector_copy_destination[2] = vector_copy_source[2];
 }
 
 #define NOT_SDA
