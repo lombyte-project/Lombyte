@@ -2996,7 +2996,7 @@ void FUN_L18_002eaea0(void *moby) {
     float scale;
     int i;
     int k;
-    float f20;
+    float rotation_angle_or_particle_scale;
     int r;
 
     *(float *)&D_L18_00162008 = fast_add_rotations(*(float *)&D_L18_00162008, *(float *)&D_L18_0016200C);
@@ -3102,18 +3102,18 @@ void FUN_L18_002eaea0(void *moby) {
             D_L18_001620B8[k] = scale_game_frames_alt(D_L18_001620C8[k]);
             D_L18_001620C0[k] = 0;
             scale = FUN_L00_00257c48(0.52359879f, 1.04719758f);
-            f20 = random_float_between_c(-1.04719758f, 0.17453292f);
+            rotation_angle_or_particle_scale = random_float_between_c(-1.04719758f, 0.17453292f);
             scale_vector_xyz_c(&scratch_vectors[5], &scratch_vectors[0], side_arc_scale);
-            build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[6], f20);
+            build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[6], rotation_angle_or_particle_scale);
             build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[7], scale);
             qcopy(&D_L18_001DA160[k].p[0], &scratch_vectors[8]);
             add_vector_xyz(&D_L18_001DA160[k].p[1], &scratch_vectors[8], &scratch_vectors[5]);
             side_arc_scale = 1.0f;
             for (j = 2; j < 5; j++) {
                 subtract_vector_xyz(&scratch_vectors[9], &D_L18_001DA150[k].p[j - 1], D_L18_001677C0_c);
-                f20 = random_float_between_c(0.17453292f, 0.959931076f) * side_arc_scale;
+                rotation_angle_or_particle_scale = random_float_between_c(0.17453292f, 0.959931076f) * side_arc_scale;
                 side_arc_scale = -side_arc_scale;
-                build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[9], f20);
+                build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[9], rotation_angle_or_particle_scale);
                 add_vector_xyz((D_L18_001DA160[k].p + j), &D_L18_001DA150[k].p[j - 1], &scratch_vectors[5]);
             }
         } else {
@@ -3144,20 +3144,20 @@ void FUN_L18_002eaea0(void *moby) {
         }
     }
     scale = FUN_L00_00257c48(0.52359879f, 1.04719758f);
-    f20 = random_float_between_c(-0.52359879f, 1.04719758f);
+    rotation_angle_or_particle_scale = random_float_between_c(-0.52359879f, 1.04719758f);
     scale_vector_xyz_c(&scratch_vectors[5], &scratch_vectors[0], *(float *)&D_L18_00162084 * frame_scale_macro);
-    build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[6], f20);
+    build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[6], rotation_angle_or_particle_scale);
     build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[7], scale);
     r = random_int_between(1, 8);
     if (random_integer_below(2)) r = -r;
-    f20 = random_float_between_c(0.2f, 0.6f);
-    spawn_ec290((char *)moby + 0x10, scale_game_frames_alt(15), f20 * 0.3f, f20, *(int *)&D_L18_00162054_c | 0x7F000000, 0, r, &scratch_vectors[5], 0.0f);
+    rotation_angle_or_particle_scale = random_float_between_c(0.2f, 0.6f);
+    spawn_ec290((char *)moby + 0x10, scale_game_frames_alt(15), rotation_angle_or_particle_scale * 0.3f, rotation_angle_or_particle_scale, *(int *)&D_L18_00162054_c | 0x7F000000, 0, r, &scratch_vectors[5], 0.0f);
     r = -r;
-    spawn_ec290((char *)moby + 0x10, scale_game_frames_alt(15), f20 * 0.15f, f20 * 0.5f, 0x307F7F7F, 0, r, &scratch_vectors[5], 0.0f);
+    spawn_ec290((char *)moby + 0x10, scale_game_frames_alt(15), rotation_angle_or_particle_scale * 0.15f, rotation_angle_or_particle_scale * 0.5f, 0x307F7F7F, 0, r, &scratch_vectors[5], 0.0f);
     r = random_int_between(1, 8);
     if (random_integer_below(2)) r = -r;
-    f20 = random_float_between_c(0.15f, 3.0f);
-    spawn_ec290(data + 0x10, scale_game_frames_alt(12), f20 * 0.1f, f20, *(int *)&D_L18_00162054_c | 0x7F000000, 0, r, &D_L18_0015F580, 0.0f);
+    rotation_angle_or_particle_scale = random_float_between_c(0.15f, 3.0f);
+    spawn_ec290(data + 0x10, scale_game_frames_alt(12), rotation_angle_or_particle_scale * 0.1f, rotation_angle_or_particle_scale, *(int *)&D_L18_00162054_c | 0x7F000000, 0, r, &D_L18_0015F580, 0.0f);
 }
 typedef struct {
     float f[4];
