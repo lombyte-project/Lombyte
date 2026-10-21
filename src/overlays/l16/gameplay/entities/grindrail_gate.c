@@ -826,7 +826,7 @@ void FUN_L16_002e4a58(struct Moby *moby) {
     };
     char *taxi_data = (char *)moby->pvars;
     char *selected_path;
-    float inv, frame_scaled_travel_step, frame_time_squared_travel_factor, r;
+    float inv, frame_scaled_travel_step, frame_time_squared_travel_factor, first_path_segment_length;
     switch (*(short *)(taxi_data + 0xAC)) {
     case TAXI_DEPART_FROM_FIRST_STOP:
         *(char **)(taxi_data + 0xA4) = D_L16_001B0930[*(int *)(taxi_data + 0x90)];
@@ -842,10 +842,10 @@ void FUN_L16_002e4a58(struct Moby *moby) {
         break;
     }
     selected_path = *(char **)(taxi_data + 0xA4);
-    r = FUN_001f9b48(selected_path + 0x10, selected_path + 0x20);
+    first_path_segment_length = FUN_001f9b48(selected_path + 0x10, selected_path + 0x20);
     frame_scaled_travel_step = frame_time * 20.0f;
     frame_time_squared_travel_factor = frame_time_sq * 5.0f;
-    inv = 1.0f / (r * (float)**(int **)(taxi_data + 0xA4));
+    inv = 1.0f / (first_path_segment_length * (float)**(int **)(taxi_data + 0xA4));
     *(int *)(taxi_data + 0xB4) = 0;
     *(int *)(taxi_data + 0xB0) = 0;
     *(float *)(taxi_data + 0xC4) = frame_scaled_travel_step * inv;
