@@ -593,7 +593,7 @@ int FUN_001f96f8_20da68(int) __asm__("FUN_001f96f8");
 void FUN_L00_0024f3e0_20da68(char *, char *, int, int, int, int) __asm__("FUN_L00_0024f3e0");
 void FUN_L00_0024f190_20da68(char *, char *) __asm__("FUN_L00_0024f190");
 void FUN_L00_0020da68(void) {
-    int on, anim, r, hero_animation_id;
+    int on, anim, slot_zero_item_id, hero_animation_id;
     float spd, t;
     unsigned char *animation_selector_data;
     char *animation_object;
@@ -634,8 +634,8 @@ void FUN_L00_0020da68(void) {
         if (1.0f < spd)
             spd = 1.0f;
     }
-    r = FUN_L00_0020d498_20da68(0);
-    if ((unsigned)(r - 0xF) < 2 || r == 0x13) {
+    slot_zero_item_id = FUN_L00_0020d498_20da68(0);
+    if ((unsigned)(slot_zero_item_id - 0xF) < 2 || slot_zero_item_id == 0x13) {
         if (hero.unk20A8) {
             spd = 0.8f;
             on = 1;
