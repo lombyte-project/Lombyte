@@ -38,8 +38,8 @@ void FUN_L02_002a4058(char *value_target, int val, float scale) {
 
 extern void FUN_L02_002a4058_u(char *arg, int val) __asm__("FUN_L02_002a4058");
 
-void FUN_L02_002a40d0(char *arg) {
-    FUN_L02_002a4058_u(arg, 0x80);
+void FUN_L02_002a40d0(char *value_target) {
+    FUN_L02_002a4058_u(value_target, 0x80);
 }
 #include "qcopy.h"
 
