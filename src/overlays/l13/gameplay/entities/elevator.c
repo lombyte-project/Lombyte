@@ -2153,21 +2153,21 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_position, void *radar_rotation, float f0, float f1, float f2, char *cur, char *g) {
+int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_position, void *radar_rotation, float f0, float f1, float f2, char *current_target_moby, char *excluded_target_moby) {
     float v[4];
     float mat[16];
     float u[4];
     int sx, sy, tx, ty;
     char *candidate_moby;
-    char *ret;
+    char *selected_target_moby;
     int best;
     int *scr;
     int dx, dy, target_selection_radius, screen_distance_squared;
-    float ang, dist, yaw_error, k, angular_error_magnitude, arrow_pulse_phase;
+    float ang, source_to_candidate_distance, yaw_error, k, angular_error_magnitude, arrow_pulse_phase;
     char *tab;
 
     candidate_moby = D_L13_0015FFE4;
-    ret = 0;
+    selected_target_moby = 0;
     best = 0x7FFFFFFF;
     *(int *)(moby_vars + 0xE8) = 0;
     while (candidate_moby != 0) {
@@ -2188,16 +2188,16 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
             ty -= sy;
             target_selection_radius = func_001FA898_r(seg_sqrt(convert_integer_to_float(tx * tx + ty * ty))) + 0x1C;
             if (dx < target_selection_radius && dy < target_selection_radius) {
-                if (cur != 0) {
-                    if (candidate_moby == cur) {
+                if (current_target_moby != 0) {
+                    if (candidate_moby == current_target_moby) {
                         best = 0;
-                        ret = candidate_moby;
+                        selected_target_moby = candidate_moby;
                     }
-                } else if (candidate_moby != g) {
+                } else if (candidate_moby != excluded_target_moby) {
                     screen_distance_squared = dx * dx + dy * dy;
                     if (screen_distance_squared < best) {
                         best = screen_distance_squared;
-                        ret = candidate_moby;
+                        selected_target_moby = candidate_moby;
                     }
                 }
             }
@@ -2252,7 +2252,7 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
                     ang = fast_add_rotations(fast_arc_tan(u[0], u[1]), 1.5707964f);
                     u[0] += 256.0f;
                     u[1] += 208.0f;
-                    dist = distance_xyz((char *)source_moby + 0x10, np);
+                    source_to_candidate_distance = distance_xyz((char *)source_moby + 0x10, np);
                     yaw_error = absolute_float(fast_subtract_rotations(fast_arc_tan(*(float *)(candidate_moby + 0x10) - *(float *)((char *)source_moby + 0x10),
                                                                       *(float *)(candidate_moby + 0x14) - *(float *)((char *)source_moby + 0x14)),
                                                     *(float *)(moby_vars + 0x38)));
@@ -2277,7 +2277,7 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
                             FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
                         }
                     } else {
-                        FUN_L13_002b7d50(&D_L13_001613C8, 3, 0xFFFFF3, (arrow_alpha << 24) | 0x8000, u[0], u[1], 240.0f / dist + 1.5f, ang);
+                        FUN_L13_002b7d50(&D_L13_001613C8, 3, 0xFFFFF3, (arrow_alpha << 24) | 0x8000, u[0], u[1], 240.0f / source_to_candidate_distance + 1.5f, ang);
                     }
                 }
                 FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 0, 0x75808080, *(int *)(moby_vars + 0x104));
@@ -2324,7 +2324,7 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
         }
         candidate_moby = *(char **)(candidate_moby + 0x28);
     }
-    return (int)ret;
+    return (int)selected_target_moby;
 }
 #include "qcopy.h"
 
