@@ -998,21 +998,21 @@ int FUN_L00_002d8980(char *moby) {
 }
 /* False in modes 0, 1, 5, 12, and in modes 2 and 4 unless the state is 0x3C. */
 int FUN_L00_002d9f78(void) {
-    int r = 1;
+    int suction_blocked = 1;
     switch (hero.state.control_mode) {
     case 0:
     case 1:
     case 5:
     case 12:
-        r = 0;
+        suction_blocked = 0;
         break;
     case 2:
     case 4:
         if (hero.state.current != 0x3C)
-            r = 0;
+            suction_blocked = 0;
         break;
     }
-    return r;
+    return suction_blocked;
 }
 #define NOT_SDA
 
