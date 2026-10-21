@@ -562,12 +562,12 @@ extern void vu_euler_rotation_basis(void *, void *);
 extern void func_L00_0025D5B0_2eb140(void *, void *, int, int, int,
                                      float) __asm__("FUN_L00_0025c558");
 
-int FUN_L06_002e9d10(void *m_, void *pos) {
+int FUN_L06_002e9d10(void *m_, void *activation_position) {
     char *moby = (char *)m_;
     char *moby_data = *(char **)(moby + 0x78);
     float doubled_frame_time, scaled_frame_time_squared;
     if (((unsigned char *)moby)[0x20] == 0xF) {
-        qcopy(moby + 0x10, pos);
+        qcopy(moby + 0x10, activation_position);
         *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
         *(unsigned short *)(moby + 0x34) = (*(unsigned short *)(moby + 0x34) & 0xFFBE) | 0x1000;
         moby[0x20] = 6;
