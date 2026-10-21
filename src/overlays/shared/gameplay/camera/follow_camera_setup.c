@@ -32,7 +32,7 @@ extern float D_L00_00161D04 __attribute__((sda));
 extern float D_L00_00161D08 __attribute__((sda));
 void follow_camera_approach(unsigned char *moby)
 {
-    unsigned char *init, *cam, *defaults, *orbit, *target, *default_target, *default_orbit, *reset;
+    unsigned char *init, *camera_state, *defaults, *orbit, *target, *default_target, *default_orbit, *reset;
     CamSpring_2e5e38 *spring_reset;
     init = *(unsigned char **)(moby + 0x70) + 0x1A8;
     *(float *)(init + 0x14) = D_L00_0015EF44_macro;
@@ -40,16 +40,16 @@ void follow_camera_approach(unsigned char *moby)
     *(int *)(init + 0x20) = 0;
     *(int *)(init + 0x10) = 0;
     *(int *)(init + 0x24) = 0;
-    cam = *(unsigned char **)(moby + 0x70);
+    camera_state = *(unsigned char **)(moby + 0x70);
     defaults = D_L00_00168FC0_2e5e38;
-    orbit = cam + 0x130;
-    target = cam + 0x40;
+    orbit = camera_state + 0x130;
+    target = camera_state + 0x40;
     default_orbit = defaults + 0x130;
     default_target = defaults + 0x40;
     if (*(short *)(orbit + 0x3C)) {
-        *(float *)(orbit + 0x2C) = cam_interp_values(cam + 0x174, *(float *)(orbit + 0x2C), *(float *)(orbit + 0x40), *(float *)(orbit + 0x48), D_L00_00161D04, *(float *)(init + 0x1C));
+        *(float *)(orbit + 0x2C) = cam_interp_values(camera_state + 0x174, *(float *)(orbit + 0x2C), *(float *)(orbit + 0x40), *(float *)(orbit + 0x48), D_L00_00161D04, *(float *)(init + 0x1C));
     } else {
-        *(float *)(orbit + 0x2C) = cam_interp_values(cam + 0x174, *(float *)(orbit + 0x2C), *(float *)(default_orbit + 0x2C), *(float *)(orbit + 0x48), D_L00_00161D04, *(float *)(init + 0x1C));
+        *(float *)(orbit + 0x2C) = cam_interp_values(camera_state + 0x174, *(float *)(orbit + 0x2C), *(float *)(default_orbit + 0x2C), *(float *)(orbit + 0x48), D_L00_00161D04, *(float *)(init + 0x1C));
     }
     if (*(short *)(orbit + 0x3E)) {
         *(float *)(orbit + 0x30) = cam_interp_values(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(orbit + 0x4C), *(float *)(orbit + 0x54), D_L00_00161D08, 0.0f);
