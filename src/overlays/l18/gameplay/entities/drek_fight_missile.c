@@ -212,25 +212,25 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 
 extern short D_L18_0016222C __attribute__((sda));
-int FUN_L18_002f0120(char *moby, float *vec) {
-    float buf[4];
+int FUN_L18_002f0120(char *moby, float *wander_target_position) {
+    float target_displacement[4];
     float redirected_target_position[4];
     char *missile_vars = *(char **)(moby + 0x78);
     char *linked_moby;
     float yaw;
 
-    fast_vec_sub(buf, vec, moby + 0x10);
-    yaw = fast_add_rotations(fast_arc_tan(buf[0], buf[1]), *(float *)(missile_vars + 0x148));
+    fast_vec_sub(target_displacement, wander_target_position, moby + 0x10);
+    yaw = fast_add_rotations(fast_arc_tan(target_displacement[0], target_displacement[1]), *(float *)(missile_vars + 0x148));
     approach_angle((float *)(moby + 0x48), (float *)(missile_vars + 0x140), yaw, *(float *)(missile_vars + 0x150),
                      *(float *)(missile_vars + 0x150), *(float *)(missile_vars + 0x154));
     *(float *)(moby + 0x10) +=
         fast_cos(*(float *)(moby + 0x48)) * (*(float *)&D_L18_00162214_gp * frame_time);
     *(float *)(moby + 0x14) +=
         fast_sin(*(float *)(moby + 0x48)) * (*(float *)&D_L18_00162214_gp * frame_time);
-    FUN_00213f38_c((float *)(moby + 0x18), (float *)(missile_vars + 0x144), vec[2], *(float *)(missile_vars + 0x158),
+    FUN_00213f38_c((float *)(moby + 0x18), (float *)(missile_vars + 0x144), wander_target_position[2], *(float *)(missile_vars + 0x158),
                    *(float *)(missile_vars + 0x158), *(float *)(missile_vars + 0x15C));
     *(float *)(moby + 0x44) = *(float *)&D_L18_0016222C * *(float *)(missile_vars + 0x144);
-    if (fast_vec_length(buf) < 2.0f) {
+    if (fast_vec_length(target_displacement) < 2.0f) {
         return 1;
     }
     if (tick_countdown_32((int *)(missile_vars + 0x160))) {
@@ -244,8 +244,8 @@ int FUN_L18_002f0120(char *moby, float *vec) {
         }
         set_vector_length_xy(redirected_target_position, redirected_target_position, random_float_between_alt(15.0f, 20.0f));
         fast_vec_add(redirected_target_position, redirected_target_position, *(char **)(missile_vars + 0x16C) + 0x10);
-        redirected_target_position[2] = vec[2];
-        qcopy(vec, redirected_target_position);
+        redirected_target_position[2] = wander_target_position[2];
+        qcopy(wander_target_position, redirected_target_position);
     }
     return 0;
 }
