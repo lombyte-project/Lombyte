@@ -2851,7 +2851,7 @@ BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 k
     Vec4 direction_copy;
     Vec4 target_position_copy;
     BeamMoby *created_moby;
-    BeamVars *v;
+    BeamVars *beam_vars;
     Vec4 *pp;
     Vec4 *pd;
     Vec4 *pc;
@@ -2864,8 +2864,8 @@ BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 k
     target_position_copy.q = *color;
     created_moby = create_moby(0x2AE);
     if (created_moby != NULL) {
-        v = created_moby->vars;
-        v->owner = owner;
+        beam_vars = created_moby->vars;
+        beam_vars->owner = owner;
         created_moby->w40 = 0;
         created_moby->b30 = 0xFF;
         created_moby->h32 = 0xFF;
@@ -2874,10 +2874,10 @@ BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 k
         created_moby->rot_x = -fast_arc_tan(vector_length_xy(pd), pd->f[2]);
         created_moby->rot_z = fast_arc_tan(direction_copy.f[0], pd->f[1]);
         qcopy(&created_moby->pos, pp);
-        qcopy(&v->dir, pd);
-        qcopy(&v->color, pc);
-        v->kind = kind;
-        v->len = fast_vec_length(pd);
+        qcopy(&beam_vars->dir, pd);
+        qcopy(&beam_vars->color, pc);
+        beam_vars->kind = kind;
+        beam_vars->len = fast_vec_length(pd);
         FUN_L00_0026daa0(created_moby, 0x2F4F7F7F, scale_game_frames(0x78), -1, 420000.0f);
         FUN_L00_0026daa0(created_moby, 0x4F6F7F7F, scale_game_frames(0x78), -1, 210000.0f);
         allocate_voice_for_target_entry(0, 0, created_moby);
