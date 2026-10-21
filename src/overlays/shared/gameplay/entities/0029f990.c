@@ -37,19 +37,19 @@ void FUN_L00_0029f990(char *vertex_batch) {
     float B[4];
     float C[4];
     float P[3][4];
-    int idx[3];
+    int vertex_indices[3];
     float E[4];
     QuadPkt quad_packet;
-    float g[4];
+    float projected_bounds[4];
     float edge_length;
     int i;
     float one = 1.0f;
     float uvv = 0.984375f;
     for (i = 1; i < 6; i++) {
-        idx[0] = i * 4;
-        idx[1] = i * 4 + 1;
-        idx[2] = i * 4 + 2;
-        transform_scaled_vertex_batch(vertex_batch, 3, idx, (char *)P);
+        vertex_indices[0] = i * 4;
+        vertex_indices[1] = i * 4 + 1;
+        vertex_indices[2] = i * 4 + 2;
+        transform_scaled_vertex_batch(vertex_batch, 3, vertex_indices, (char *)P);
         qcopy(C, P[0]);
         subtract_vector_xyz(A, P[1], P[0]);
         subtract_vector_xyz(B, P[2], P[0]);
@@ -63,7 +63,7 @@ void FUN_L00_0029f990(char *vertex_batch) {
         normalize_vector_xyz(B, B, edge_length - D_L00_001CA318[i][3] * 2.0f);
         add_vector_xyz(E, C, A);
         add_vector_xyz(E, E, B);
-        project_graphics_bounds_float(C, E, &g[0], &g[1], &g[2], &g[3]);
+        project_graphics_bounds_float(C, E, &projected_bounds[0], &projected_bounds[1], &projected_bounds[2], &projected_bounds[3]);
         qcopy(quad_packet.v[0], C);
         add_vector_xyz(quad_packet.v[1], C, A);
         add_vector_xyz(quad_packet.v[2], C, B);
