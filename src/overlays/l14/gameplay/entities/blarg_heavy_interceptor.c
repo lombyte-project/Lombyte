@@ -2886,7 +2886,7 @@ extern void add_x(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 
 void FUN_L14_002b5dd8(struct Moby *moby) {
-    float off[4];
+    float exhaust_position_offset[4];
     float pos[4];
     int i;
     int j;
@@ -2895,8 +2895,8 @@ void FUN_L14_002b5dd8(struct Moby *moby) {
     float size;
     if (moby->state < 2 || moby->state == 9)
         return;
-    scale_x(off, &moby->rot_row0, -1.25f);
-    add_x(pos, &moby->pos, off);
+    scale_x(exhaust_position_offset, &moby->rot_row0, -1.25f);
+    add_x(pos, &moby->pos, exhaust_position_offset);
     for (i = 0; i < 2; i++) {
         PuffParticle *part;
         PuffParticleTail *tail;
@@ -2911,8 +2911,8 @@ void FUN_L14_002b5dd8(struct Moby *moby) {
             tail->bB = part->life;
         }
     }
-    scale_x(off, &moby->rot_row0, -1.0f);
-    add_x(pos, &moby->pos, off);
+    scale_x(exhaust_position_offset, &moby->rot_row0, -1.0f);
+    add_x(pos, &moby->pos, exhaust_position_offset);
     signed_puff_value = 0x10;
     life = frames_x(2);
     size = 100000.0f;
