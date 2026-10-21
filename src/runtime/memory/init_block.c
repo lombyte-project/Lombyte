@@ -11,12 +11,12 @@ int init_block_fn(int value) __asm__("func_00119568");
 
 int init_block_fn(int value) {
     struct InitBlock *base;
-    int *ptr;
+    int *ring_storage_start;
     base = &InitBlockData;
-    ptr = (int *)((char *)base + 16);
+    ring_storage_start = (int *)((char *)base + 16);
     base->input = value;
     base->zero = 0;
-    base->second = ptr;
-    base->first = ptr;
+    base->second = ring_storage_start;
+    base->first = ring_storage_start;
     return (int)base;
 }
