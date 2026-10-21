@@ -21,7 +21,7 @@ extern void copy_memory_aligned(int, void *, unsigned short) __asm__("FUN_001f98
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void jet_reset_camera(OvlQuad *a, OvlQuad *b) __asm__("FUN_L00_00284e50");
-void jet_reset_camera(OvlQuad *saved_position, OvlQuad *b) {
+void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
     unsigned char *src;
     int i;
     char *saved_state;
@@ -30,24 +30,24 @@ void jet_reset_camera(OvlQuad *saved_position, OvlQuad *b) {
     char *g;
     int lvl;
     signed char saved_value_override;
-    int v;
+    int source_byte;
 
     copy_memory_aligned((int)&D_L00_001BB280, &D_L00_001BA620, 0x404);
     lvl = current_level_index;
     for (src = D_L00_001BA620.f, i = 0; i < 0x7FF; i++, src++) {
-        v = *src;
-        if ((unsigned char)v == 0)
+        source_byte = *src;
+        if ((unsigned char)source_byte == 0)
             continue;
-        if ((unsigned char)v != 1 && D_0014C050[lvl][(unsigned char)v - 2] != 0xFF)
+        if ((unsigned char)source_byte != 1 && D_0014C050[lvl][(unsigned char)source_byte - 2] != 0xFF)
             continue;
-        D_L00_001BB280.f[i] = v;
+        D_L00_001BB280.f[i] = source_byte;
         D_0014C190_257218[lvl][i >> 5] |= 1 << (i & 0x1F);
         D_L00_001BA4D0[i >> 5] |= 1 << (i & 0x1F);
     }
     saved_state = D_L00_001BB230;
     *(int *)D_L00_001BB230 = 1;
     qcopy(saved_state + 0x10, saved_position);
-    qcopy(saved_state + 0x20, b);
+    qcopy(saved_state + 0x20, saved_rotation);
     hero_state = &hero;
     saved_value_source = D_001516D0;
     g = D_0013E550;
