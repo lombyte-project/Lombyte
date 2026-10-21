@@ -33,11 +33,11 @@ extern char *FUN_L00_001eb1f8(int);
 
 void FUN_L00_002eaa30(char *src);
 void FUN_L00_002eaa30(char *src) {
-    char *g = D_L00_00166E00;
+    char *current_camera_record = D_L00_00166E00;
     char *camera_record;
-    if (*(short *)(g + 0x86) != 5)
+    if (*(short *)(current_camera_record + 0x86) != 5)
         camera_record = FUN_L00_001eb1f8(5);
     else
-        camera_record = g;
+        camera_record = current_camera_record;
     qcopy(*(char **)(camera_record + 0x70) + 0x90, src);
 }
