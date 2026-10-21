@@ -696,7 +696,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 extern char *func_0020D348_m_2C59A0(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L03_002c45d8(char *owner, float *pos, float *dir, short ang, int arg) {
+char *FUN_L03_002c45d8(char *owner, float *pos, float *dir, short ang, int spawn_options) {
     char *spawned_moby;
     char *moby_pvars;
     spawned_moby = func_0020D348_m_2C59A0(0x221);
@@ -715,7 +715,7 @@ char *FUN_L03_002c45d8(char *owner, float *pos, float *dir, short ang, int arg) 
         spawned_moby[0x31] = 1;
         spawned_moby[0x20] = 0;
         *(float *)(spawned_moby + 0x2C) = *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) * 0.001f;
-        *(int *)(moby_pvars + 0x1C) = arg;
+        *(int *)(moby_pvars + 0x1C) = spawn_options;
         *(int *)(moby_pvars + 0x20) = 0;
         FUN_L00_00250df8(spawned_moby);
     }
