@@ -243,7 +243,7 @@ u8 D_L15_00180C40[8][1024] = {0};
 u8 D_L16_00180AC0[8][1024] = {0};
 u8 D_L17_00180F40[8][1024] = {0};
 u8 D_L18_00181040[8][1024] = {0};
-int FUN_L00_0023e5e0(u128 *v, float radius, float b, int col) {
+int FUN_L00_0023e5e0(u128 *position, float radius, float b, int col) {
     int i;
     T_0023e5e0 *slot_state;
     P_0023e5e0 *parameter_entry;
@@ -256,7 +256,7 @@ int FUN_L00_0023e5e0(u128 *v, float radius, float b, int col) {
         return -1;
     slot_state = &D_L00_001804C0_0023e5e0[i];
     parameter_entry = &D_L00_001802C0_0023e5e0[i];
-    qcopy(&parameter_entry->pos, v);
+    qcopy(&parameter_entry->pos, position);
     parameter_entry->pos.f[3] = radius;
     parameter_entry->x = FUN_001fa6c0_0023e5e0(col & 0xFF) * 0.0078125f;
     parameter_entry->y = FUN_001fa6c0_0023e5e0((col >> 8) & 0xFF) * 0.0078125f;
