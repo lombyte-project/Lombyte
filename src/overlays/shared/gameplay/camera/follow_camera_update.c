@@ -972,21 +972,21 @@ void FUN_L00_002eae20(void *camera) {
             qcopy(camera_object + 0x30, target_position);
             qcopy(camera_object + 0x40, camera_state + 0x90);
         } else {
-            float t, x, y, diff, z;
+            float t, x, y, transition_azimuth_delta, z;
             t = (float)(*(int *)(transition_state + 4) - *(int *)(camera_state + 0xE0)) /
                 convert_integer_to_float(*(int *)(transition_state + 4));
             FUN_L00_001ed630(camera_state + 0xE8, target_position, &hero.motion.pos);
             x = fast_subtract_rotations(F(transition_state, 8), F(transition_state, 0x1C));
             y = fast_subtract_rotations(F(target_position, 0x18), D_L00_00166DD8);
             if ((x > 0.34906584f && y < -0.34906584f) || (x < -0.34906584f && y > 0.34906584f)) {
-                diff = F(transition_state, 8) - F(transition_state, 0x1C);
+                transition_azimuth_delta = F(transition_state, 8) - F(transition_state, 0x1C);
                 z = 0;
-                if (diff < z && y > z) {
-                    diff = -diff;
-                } else if (diff > z && y < z) {
-                    diff = -diff;
+                if (transition_azimuth_delta < z && y > z) {
+                    transition_azimuth_delta = -transition_azimuth_delta;
+                } else if (transition_azimuth_delta > z && y < z) {
+                    transition_azimuth_delta = -transition_azimuth_delta;
                 }
-                F(transition_state, 0x1C) += cosine_interpolate_alt(0, diff, t);
+                F(transition_state, 0x1C) += cosine_interpolate_alt(0, transition_azimuth_delta, t);
             } else {
                 F(transition_state, 0x1C) = FUN_L00_00257ef0(F(transition_state, 0x1C), F(transition_state, 8), t);
             }
