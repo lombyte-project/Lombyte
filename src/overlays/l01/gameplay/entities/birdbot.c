@@ -3400,12 +3400,12 @@ extern void *mine_debris(void *, void *, u32, u32, f32, s32, u32) __asm__("FUN_L
 void FUN_L01_002f8c58(SteamMoby *steam_moby) {
     SteamVars *steam_vars;
     SteamColors colors;
-    SteamVec vel;
+    SteamVec particle_initial_velocity;
     SteamVec pos;
     SteamVec puff;
     SteamParticle *debris_particle;
     f32 spawn_radius_or_vertical_velocity_increment;
-    f32 ang;
+    f32 spawn_offset_angle_radians;
     f32 size;
     s32 life;
     s32 i;
@@ -3424,15 +3424,15 @@ void FUN_L01_002f8c58(SteamMoby *steam_moby) {
         pos.q = 0;
         pos.f[0] = random_float_between(frame_time_macro * -0.5f, frame_time_macro * 0.5f);
         pos.f[1] = random_float_between(frame_time_macro * -0.5f, frame_time_macro * 0.5f);
-        vel.q = pos.q;
+        particle_initial_velocity.q = pos.q;
         spawn_radius_or_vertical_velocity_increment = random_float_between(0.0f, 0.25f);
-        ang = random_angle_radians();
-        pos.f[0] = fast_cos(ang) * spawn_radius_or_vertical_velocity_increment;
-        pos.f[1] = fast_sin(ang) * spawn_radius_or_vertical_velocity_increment;
+        spawn_offset_angle_radians = random_angle_radians();
+        pos.f[0] = fast_cos(spawn_offset_angle_radians) * spawn_radius_or_vertical_velocity_increment;
+        pos.f[1] = fast_sin(spawn_offset_angle_radians) * spawn_radius_or_vertical_velocity_increment;
         pos.f[2] = 0.0f;
         fast_vec_add(&pos, &pos, &steam_moby->pos);
         pos.f[2] += steam_vars->height;
-        spawn_debris_chunk(&pos, &vel, colors.c[random_integer_below(3)],
+        spawn_debris_chunk(&pos, &particle_initial_velocity, colors.c[random_integer_below(3)],
                          random_int_between(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
     }
     for (i = 0; i < 2; i++) {
@@ -3441,20 +3441,20 @@ void FUN_L01_002f8c58(SteamMoby *steam_moby) {
         puff.f[0] = random_float_between(frame_time_macro * -0.5f, frame_time_macro * 0.5f);
         puff.f[1] = random_float_between(frame_time_macro * -0.5f, frame_time_macro * 0.5f);
         puff.f[2] = random_float_between(frame_time_macro * 0.0f, frame_time_macro * 3.0f);
-        vel.q = puff.q;
+        particle_initial_velocity.q = puff.q;
         spawn_radius_or_vertical_velocity_increment = random_float_between(0.0f, 0.25f);
-        ang = random_angle_radians();
-        puff.f[0] = fast_cos(ang) * spawn_radius_or_vertical_velocity_increment;
-        puff.f[1] = fast_sin(ang) * spawn_radius_or_vertical_velocity_increment;
+        spawn_offset_angle_radians = random_angle_radians();
+        puff.f[0] = fast_cos(spawn_offset_angle_radians) * spawn_radius_or_vertical_velocity_increment;
+        puff.f[1] = fast_sin(spawn_offset_angle_radians) * spawn_radius_or_vertical_velocity_increment;
         puff.f[2] = 0.0f;
         fast_vec_add(&puff, &puff, &steam_moby->pos);
         spawn_radius_or_vertical_velocity_increment *= frame_time_macro;
         spawn_radius_or_vertical_velocity_increment *= 8.0f;
         puff.f[2] += steam_vars->height;
-        vel.f[2] += spawn_radius_or_vertical_velocity_increment;
+        particle_initial_velocity.f[2] += spawn_radius_or_vertical_velocity_increment;
         size = random_float_between(70000.0f, 140000.0f);
         life = scale_game_frames(0xB4);
-        debris_particle = mine_debris(&puff, &vel, 0x0F081020, 0x00081020, size, life,
+        debris_particle = mine_debris(&puff, &particle_initial_velocity, 0x0F081020, 0x00081020, size, life,
                              colors.c[random_integer_below(3)]);
         if (debris_particle != 0) {
             debris_particle->floor_z = steam_moby->pos.f[2] - 0.5f;
