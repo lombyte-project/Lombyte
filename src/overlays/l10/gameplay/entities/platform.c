@@ -1128,7 +1128,7 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
     float v40[4] __attribute__((aligned(16)));
     char *g;
     int hit_moby_address;
-    float yaw_cosine, yaw_sine, r, collision_tilt_angle, u;
+    float yaw_cosine, yaw_sine, r, collision_tilt_angle, collision_rotation_y_target;
 
     float one = 1.0f;
     float k;
@@ -1162,8 +1162,8 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
                 r = seg_sqrt(v40[0] * v40[0] + v40[2] * v40[2]);
                 collision_tilt_angle = FUN_001f9e90_u(r, v40[1]);
                 *(float *)(moby + 0x40) = FUN_L00_00200510(*(float *)(moby + 0x40), -collision_tilt_angle, k);
-                u = FUN_001f9e90_u(v40[2], v40[0]);
-                *(float *)(moby + 0x44) = FUN_L00_00200510(*(float *)(moby + 0x44), u, k);
+                collision_rotation_y_target = FUN_001f9e90_u(v40[2], v40[0]);
+                *(float *)(moby + 0x44) = FUN_L00_00200510(*(float *)(moby + 0x44), collision_rotation_y_target, k);
                 allocate_voice_for_target_entry(1, 0, (int)moby);
             return 1;
         }
@@ -1196,8 +1196,8 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
                 r = seg_sqrt(v40[0] * v40[0] + v40[2] * v40[2]);
                 collision_tilt_angle = FUN_001f9e90_u(r, v40[1]);
                 *(float *)(moby + 0x40) = FUN_L00_00200510(*(float *)(moby + 0x40), -collision_tilt_angle, k);
-                u = FUN_001f9e90_u(v40[2], v40[0]);
-                *(float *)(moby + 0x44) = FUN_L00_00200510(*(float *)(moby + 0x44), u, k);
+                collision_rotation_y_target = FUN_001f9e90_u(v40[2], v40[0]);
+                *(float *)(moby + 0x44) = FUN_L00_00200510(*(float *)(moby + 0x44), collision_rotation_y_target, k);
                 allocate_voice_for_target_entry(1, 0, (int)moby);
             return 2;
         }
