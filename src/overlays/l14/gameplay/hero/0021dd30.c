@@ -122,14 +122,14 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 #define G hero
 
 extern OvlMobyEntry40 D_L14_00178800[];
-s32 FUN_L14_00222aa8(s32 arg) {
+s32 FUN_L14_00222aa8(s32 apply_hit_reaction) {
     u8 *hero_moby_bytes;
-    OvlMobyEntry40 *tbl;
+    OvlMobyEntry40 *hero_hit_entry;
     u8 *mob;
     s32 flag;
     s32 id;
-    f32 horizontal_knockback_scale, b, knockback_scale;
-    OvlVec4 v;
+    f32 horizontal_knockback_scale, vertical_knockback_scale, knockback_scale;
+    OvlVec4 knockback_impulse;
 
     if (G.state.control_mode == 0x14) {
         return 0;
@@ -151,36 +151,36 @@ s32 FUN_L14_00222aa8(s32 arg) {
     if (hero_moby_bytes[0xA4] == 0xFF) {
         return 0;
     }
-    tbl = &D_L14_00178800[hero_moby_bytes[0xA4]];
-    if (tbl->owner != hero_moby_bytes) {
+    hero_hit_entry = &D_L14_00178800[hero_moby_bytes[0xA4]];
+    if (hero_hit_entry->owner != hero_moby_bytes) {
         return 0;
     }
-    if ((tbl->unk24 ^ 1) & 1) {
+    if ((hero_hit_entry->unk24 ^ 1) & 1) {
         return 0;
     }
     D_0013DF88[current_level_index]++;
-    G.unk2280 = (struct Moby *)tbl->target;
+    G.unk2280 = (struct Moby *)hero_hit_entry->target;
     D_0015EEA8++;
     if (G.state.control_mode == 0xF) {
         G.unk5BE = 1;
         return 0;
     }
-    if (arg == 0) {
+    if (apply_hit_reaction == 0) {
         return 1;
     }
     FUN_L00_00206c08_8();
     flag = 0;
-    if (tbl->flags & 1) {
-        qcopy(&v, &tbl->pos);
-        if (*(f32 *)((u8 *)tbl + 0x1C) == 5627.9248046875f) {
+    if (hero_hit_entry->flags & 1) {
+        qcopy(&knockback_impulse, &hero_hit_entry->pos);
+        if (*(f32 *)((u8 *)hero_hit_entry + 0x1C) == 5627.9248046875f) {
             flag = 1;
         }
-    } else if (tbl->target != 0) {
-        FUN_001f9a28_8(&v, (u8 *)&G + 0x80, tbl->target + 0x10);
+    } else if (hero_hit_entry->target != 0) {
+        FUN_001f9a28_8(&knockback_impulse, (u8 *)&G + 0x80, hero_hit_entry->target + 0x10);
     } else {
-        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
-        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
-        v.i[2] = 0;
+        knockback_impulse.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
+        knockback_impulse.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
+        knockback_impulse.i[2] = 0;
     }
     switch (G.vehicle_mode) {
     case HERO_VEHICLE_MODE_ON_FOOT:
@@ -199,23 +199,23 @@ s32 FUN_L14_00222aa8(s32 arg) {
         hero_set_state(HERO_STATE_HURT, 1);
         knockback_scale = D_0015ED6C_8;
         horizontal_knockback_scale = knockback_scale * 5.7f;
-        b = knockback_scale * 2.4f;
+        vertical_knockback_scale = knockback_scale * 2.4f;
         if (G.unk12E7 != 0) {
             horizontal_knockback_scale = 0.0f;
-            b = knockback_scale * 1.7f;
+            vertical_knockback_scale = knockback_scale * 1.7f;
         }
-        FUN_L00_00210c80_8(&v, flag, horizontal_knockback_scale, b);
-        if (flag != 0 && tbl->unk28 == 4) {
-            v.f[2] += v.f[2];
+        FUN_L00_00210c80_8(&knockback_impulse, flag, horizontal_knockback_scale, vertical_knockback_scale);
+        if (flag != 0 && hero_hit_entry->unk28 == 4) {
+            knockback_impulse.f[2] += knockback_impulse.f[2];
         }
         break;
     case 3:
         hero_set_state(0x56, 1);
-        FUN_L00_00210c80_8(&v, flag, D_0015ED6C_8 * 5.0f, D_0015ED6C_8 * 2.4f);
+        FUN_L00_00210c80_8(&knockback_impulse, flag, D_0015ED6C_8 * 5.0f, D_0015ED6C_8 * 2.4f);
         break;
     }
-    FUN_001f9a10_8(&hero.motion.velocity, &hero.motion.velocity, &v);
-    FUN_001f9a10_8(&hero.motion.displacement, &hero.motion.displacement, &v);
+    FUN_001f9a10_8(&hero.motion.velocity, &hero.motion.velocity, &knockback_impulse);
+    FUN_001f9a10_8(&hero.motion.displacement, &hero.motion.displacement, &knockback_impulse);
     return 1;
 }
 #include "qcopy.h"
