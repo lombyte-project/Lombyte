@@ -152,7 +152,7 @@ typedef struct { int n; int pad[3]; Pt_0025E860 pt[1]; } Spline_0025E860;
 
 // Moves DIST along a spline from segment *IDX at offset *T, updates both, and writes the point reached to OUT; 1 when an end was passed.
 int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *idx, float *segment_offset, int loop, float dist) {
-    float v[4];
+    float segment_delta[4];
     int ret = 0;
     int dir = 1;
     int i;
@@ -213,9 +213,9 @@ int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *idx, float *segment
     if (j >= path->n) {
         j %= path->n;
     }
-    vec_sub_25d808(v, &path->pt[j], &path->pt[i]);
-    vec_scale_25d808(v, v, *segment_offset);
-    vec_add_25d808(out, out, v);
+    vec_sub_25d808(segment_delta, &path->pt[j], &path->pt[i]);
+    vec_scale_25d808(segment_delta, segment_delta, *segment_offset);
+    vec_add_25d808(out, out, segment_delta);
     return ret;
 }
 
