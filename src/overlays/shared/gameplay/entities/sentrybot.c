@@ -1078,7 +1078,7 @@ int FUN_L15_00299dd8(char *moby) {
     int best = 0;
     float bd;
     float line_start[4];
-    float b[4];
+    float candidate_line_endpoint[4];
     short *group_moby_entry;
     int idx = *(int *)(moby_data + 0x17C);
     if (idx == -1)
@@ -1101,10 +1101,10 @@ int FUN_L15_00299dd8(char *moby) {
             if (st == 7 || st == 0xF)
                 *(short *)(moby_data + 0x194) = 1;
             if (*(short *)(moby_data + 0x194) != 0 || f < 1.2217305f) {
-                qcopy(b, (char *)((id << 8) + D_L15_0015FFD8_m) + 0x10);
+                qcopy(candidate_line_endpoint, (char *)((id << 8) + D_L15_0015FFD8_m) + 0x10);
                 line_start[2] += 1.0f;
-                if (collision_line(line_start, b, 2, 0, 0) == 0) {
-                    float dist = FUN_001f9b48(line_start, b);
+                if (collision_line(line_start, candidate_line_endpoint, 2, 0, 0) == 0) {
+                    float dist = FUN_001f9b48(line_start, candidate_line_endpoint);
                     if (best == 0 || dist < bd) {
                         bd = dist;
                         best = D_L15_0015FFD8_m + (id << 8);
