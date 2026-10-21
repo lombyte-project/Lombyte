@@ -1064,8 +1064,8 @@ extern float FUN_001f9ab0_2e7a30(void *, void *) __asm__("FUN_001f9ab0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 int FUN_L00_002e7a30(unsigned char *camera_moby) {
-    OvlQuad dir[1];
-    V_2e7a30 pos;
+    OvlQuad initial_orbit_vector[1];
+    V_2e7a30 probe_position;
     V_2e7a30 ndir;
     V_2e7a30 step;
     V_2e7a30 save;
@@ -1073,7 +1073,7 @@ int FUN_L00_002e7a30(unsigned char *camera_moby) {
     unsigned char *base;
     unsigned char *orbit;
     unsigned char *camera_collision_state;
-    struct Hero *g;
+    struct Hero *hero_state;
     unsigned char *target;
     int i;
     int found;
@@ -1086,39 +1086,39 @@ int FUN_L00_002e7a30(unsigned char *camera_moby) {
     target = base + 0x40;
     orbit = base + 0x130;
     camera_collision_state = base + 0x1D0;
-    qcopy(dir, orbit);
+    qcopy(initial_orbit_vector, orbit);
     dist = 0.0f;
-    qcopy(pos, base + 0x90);
+    qcopy(probe_position, base + 0x90);
     spd = follow_cam_min_distance_gp;
-    FUN_001f9bf8_2e7a30(ndir, dir, 1.0f);
+    FUN_001f9bf8_2e7a30(ndir, initial_orbit_vector, 1.0f);
     for (i = 0; i < truncate_float_to_s32(*(float *)(camera_collision_state + 0x40) - 1.0f); i++) {
-        if (i > 0 && FUN_L00_002e4290_2e7a30(pos) == 0) {
-            g = &hero_data;
-            if (FUN_L00_001f0d60_2e7a30(pos, D_L00_0015EF5C, ((int)g->moby), spd) &&
-                FUN_L00_002e79c8_2e7a30(camera_moby, i, pos, spd) == 0) {
+        if (i > 0 && FUN_L00_002e4290_2e7a30(probe_position) == 0) {
+            hero_state = &hero_data;
+            if (FUN_L00_001f0d60_2e7a30(probe_position, D_L00_0015EF5C, ((int)hero_state->moby), spd) &&
+                FUN_L00_002e79c8_2e7a30(camera_moby, i, probe_position, spd) == 0) {
                 qcopy(step, D_L00_00173E60_2e7a30);
-                qcopy(save, pos);
-                if (FUN_L00_002e7618_2e7a30(camera_moby, pos, i, dist, spd)) {
+                qcopy(save, probe_position);
+                if (FUN_L00_002e7618_2e7a30(camera_moby, probe_position, i, dist, spd)) {
                     found = 1;
-                    if (g->vehicle_mode != 2 && absolute_float(D_0013CA40_2e7a30) > 0.05f) {
+                    if (hero_state->vehicle_mode != 2 && absolute_float(D_0013CA40_2e7a30) > 0.05f) {
                         subtract_vector_xyz(position_delta, step, save);
                         FUN_001f9bf8_2e7a30(position_delta, position_delta, 1.0f);
                         if (absolute_float(FUN_001f9ab0_2e7a30(D_L00_00166E40_2e7a30, position_delta)) <
                             0.75f) {
-                            float lim;
+                            float minimum_orbit_distance;
                             float cf;
                             int collision_hold_frames = scale_game_frames(0x884);
                             float retraction_increment = D_L00_00161CB8 * frame_scale;
-                            lim = D_L00_00161CC8_gp;
+                            minimum_orbit_distance = D_L00_00161CC8_gp;
                             *(short *)(camera_collision_state + 0x34) = collision_hold_frames;
                             *(float *)(camera_collision_state + 0x30) += retraction_increment;
                             cf = *(float *)(orbit + 0x2C);
-                            if (cf - *(float *)(camera_collision_state + 0x30) < lim) {
-                                *(float *)(camera_collision_state + 0x30) = cf - lim;
+                            if (cf - *(float *)(camera_collision_state + 0x30) < minimum_orbit_distance) {
+                                *(float *)(camera_collision_state + 0x30) = cf - minimum_orbit_distance;
                             }
                         }
                     }
-                    subtract_vector_xyz(position_delta, pos, target + 0x50);
+                    subtract_vector_xyz(position_delta, probe_position, target + 0x50);
                     FUN_001f9bf8_2e7a30(orbit, position_delta, *(float *)(orbit + 0x2C) - *(float *)(camera_collision_state + 0x30));
                     FUN_001f9bf8_2e7a30(ndir, orbit, 1.0f);
                 }
@@ -1131,7 +1131,7 @@ int FUN_L00_002e7a30(unsigned char *camera_moby) {
         spd += *(float *)(camera_collision_state + 0x44) * *(float *)(camera_collision_state + 0x3C);
         dist += spd;
         scale_vector_xyz(step, ndir, spd * orbit_distance_ratio);
-        add_vector_xyz(pos, pos, step);
+        add_vector_xyz(probe_position, probe_position, step);
     }
     return found;
 }
