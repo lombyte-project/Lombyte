@@ -1022,7 +1022,7 @@ extern void FUN_L00_00250df8(void *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L14_002eccf0(void *spawn_position, float *b, int collision_ignore_moby, int collision_mode) {
+char *FUN_L14_002eccf0(void *spawn_position, float *launch_vector, int collision_ignore_moby, int collision_mode) {
     char *projectile_moby = func_0020D348_m(0x2A9);
     if (projectile_moby) {
         char *data;
@@ -1031,11 +1031,11 @@ char *FUN_L14_002eccf0(void *spawn_position, float *b, int collision_ignore_moby
         *(short *)(projectile_moby + 0x32) = 0x7F;
         projectile_moby[0x31] = 1;
         data = *(char **)(projectile_moby + 0x78);
-        *(float *)(projectile_moby + 0x44) = -fast_arc_tan(vector_length_xy(b), b[2]);
-        *(float *)(projectile_moby + 0x48) = fast_arc_tan(b[0], b[1]);
+        *(float *)(projectile_moby + 0x44) = -fast_arc_tan(vector_length_xy(launch_vector), launch_vector[2]);
+        *(float *)(projectile_moby + 0x48) = fast_arc_tan(launch_vector[0], launch_vector[1]);
         qcopy(projectile_moby + 0x10, spawn_position);
         qcopy(data + 0x10, spawn_position);
-        qcopy(data, b);
+        qcopy(data, launch_vector);
         blend_moby_animation(projectile_moby, 1, 0, scale_game_frames(5));
         *(short *)(projectile_moby + 0x34) = 0x208;
         *(int *)(data + 0x20) = collision_ignore_moby;
