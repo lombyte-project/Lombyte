@@ -2417,7 +2417,7 @@ void FUN_L15_002a2488(char *moby) {
     float fb;
     float g;
     float yaw_sine;
-    float r;
+    float reference_distance_xy;
     float yaw;
     float target_z;
     float fd;
@@ -2493,8 +2493,8 @@ s3:
         va[2] = D_0015ED6C * 3.0f;
     }
     FUN_L00_00258830((int)moby, (int)va, 0.25f, 0.25f, 0.0f, 0);
-    r = FUN_001f9b80((float *)((char *)((char *)&D_0013F420)), (float *)(moby + 0x10));
-    if (r < 0.5f || tick_countdown_32_alt(data + 0x68)) {
+    reference_distance_xy = FUN_001f9b80((float *)((char *)((char *)&D_0013F420)), (float *)(moby + 0x10));
+    if (reference_distance_xy < 0.5f || tick_countdown_32_alt(data + 0x68)) {
         ((unsigned char *)moby)[0x20] = 4;
         return;
     }
