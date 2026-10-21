@@ -378,16 +378,16 @@ extern int FUN_001fa6e0(int, int, float);
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 void FUN_L00_00271fc0(char *particle) {
-    char *v;
+    char *particle_data;
     float interpolation_factor;
     if (fast_dec_timer_s16(particle + 0xA)) {
         free_effect_particle(particle);
     } else {
-        v = particle + 0x20;
-        interpolation_factor = convert_integer_to_float(*(short *)(particle + 0xA)) * *(float *)(v + 0x10);
-        *(int *)(particle + 4) = FUN_001fa6e0(*(int *)(v + 0xC), *(int *)(v + 8), interpolation_factor);
+        particle_data = particle + 0x20;
+        interpolation_factor = convert_integer_to_float(*(short *)(particle + 0xA)) * *(float *)(particle_data + 0x10);
+        *(int *)(particle + 4) = FUN_001fa6e0(*(int *)(particle_data + 0xC), *(int *)(particle_data + 8), interpolation_factor);
         *(float *)(particle + 0xC) =
-            ((*(float *)(particle + 0x20) - *(float *)(v + 4)) * interpolation_factor + *(float *)(v + 4)) * 210000.0f;
+            ((*(float *)(particle + 0x20) - *(float *)(particle_data + 4)) * interpolation_factor + *(float *)(particle_data + 4)) * 210000.0f;
     }
 }
 int FUN_00213260_272060(int) __asm__("FUN_00213260");
