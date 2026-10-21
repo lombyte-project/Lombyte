@@ -13,11 +13,11 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 void update_resident_packed_direction(void) __asm__("FUN_0020cfd0");
 
 void update_resident_packed_direction(void) {
-    f32 v[4];
+    f32 angle_source_vector[4];
     f32 angle;
 
-    FUN_0020d510(D_001413D0[0], v);
-    angle = fast_arc_tan(v[0], v[1]);
+    FUN_0020d510(D_001413D0[0], angle_source_vector);
+    angle = fast_arc_tan(angle_source_vector[0], angle_source_vector[1]);
     D_001CAA80.x = fast_cos(angle) * 0.14f;
     D_001CAA80.y = fast_sin(angle) * 0.14f;
     D_001CAA80.z = -0.99f;
