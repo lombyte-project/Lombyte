@@ -19,8 +19,8 @@ extern int FUN_L00_0025ff38(char *, char *, float, int, int, int *, int);
 
 void FUN_L14_002b3268(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    int *tbl = D_L14_001B0BB0[*(int *)(data + 0x244)];
-    if (FUN_L00_0025ff38(moby, data + 0xD0, *(float *)(data + 0x234), 0, 0, tbl + 4, *tbl) != 2) {
+    int *target_filter_record = D_L14_001B0BB0[*(int *)(data + 0x244)];
+    if (FUN_L00_0025ff38(moby, data + 0xD0, *(float *)(data + 0x234), 0, 0, target_filter_record + 4, *target_filter_record) != 2) {
         if (*(float *)(data + 0x234) < vector_distance(moby + 0x10, data + 0xD0)) {
             *(int *)(data + 0x114) = 2;
         }
