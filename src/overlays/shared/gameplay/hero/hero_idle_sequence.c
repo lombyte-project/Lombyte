@@ -2696,7 +2696,7 @@ void FUN_L00_0020a540(void) {
     G_a540 *h;
     P_a540 *p;
     f32 pitch_target_radians, random_blend_factor, k;
-    s32 v;
+    s32 hero_animation_sequence_index;
     s32 min_delay_frames;
 
     if (D_0015EDB3 != 0 && G.i1184 != 0) {
@@ -2723,12 +2723,12 @@ void FUN_L00_0020a540(void) {
     }
     if (G.i2084 != 0)
         return;
-    v = *(u8 *)((char *)G.p2080 + 0x53);
-    if ((u8)v >= 3 && (u8)v != 0x3A)
+    hero_animation_sequence_index = *(u8 *)((char *)G.p2080 + 0x53);
+    if ((u8)hero_animation_sequence_index >= 3 && (u8)hero_animation_sequence_index != 0x3A)
         return;
     if (G.p2274 != 0)
         return;
-    if ((u32)(v - 1) < 2) {
+    if ((u32)(hero_animation_sequence_index - 1) < 2) {
         min_delay_frames = scale_game_frames(40);
         G.i1010 = FUN_L00_00257b90_a540(min_delay_frames, scale_game_frames(70));
     }
