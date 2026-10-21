@@ -522,7 +522,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
         PILOTS_HELMET_SAVE_AND_REMOVE = 3
     };
     P_2e03a0_2e03a0 *p = moby->p;
-    char *g;
+    char *hero_data;
     E_2e03a0_2e03a0 *e;
     u32 k;
     s32 n;
@@ -543,10 +543,10 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
         break;
     case PILOTS_HELMET_WAIT_FOR_HERO_PROXIMITY:
         FUN_L00_002e0788_2e03a0(moby);
-        g = (char *)&hero.motion.pos;
-        if (vector_distance((char *)moby + 0x10, g) < 3.0f) {
-            g -= 0x80;
-            if (FUN_001f99c0_2e03a0(moby->z - *(f32 *)(g + 0x88)) < 2.0f && *(s32 *)(g + 0x22A8)) {
+        hero_data = (char *)&hero.motion.pos;
+        if (vector_distance((char *)moby + 0x10, hero_data) < 3.0f) {
+            hero_data -= 0x80;
+            if (FUN_001f99c0_2e03a0(moby->z - *(f32 *)(hero_data + 0x88)) < 2.0f && *(s32 *)(hero_data + 0x22A8)) {
                 moby->fl |= 0x41;
                 if (p->fa_2e03a0 != -1)
                     start_scene(p->fa_2e03a0);
