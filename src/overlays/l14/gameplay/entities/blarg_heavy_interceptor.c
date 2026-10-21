@@ -1132,7 +1132,7 @@ void FUN_L14_002ae0a8(struct Moby *m) {
     float mat[4][4];
     float glow_position_offset[4];
     Pk_2ae0a8 pk;
-    float v[4];
+    float glow_to_camera_vector[4];
     float rot[4];
     u32 col;
     int i;
@@ -1145,9 +1145,9 @@ void FUN_L14_002ae0a8(struct Moby *m) {
     pk.d = 0x8000000048ULL;
     pk.a = 0;
     sreg_e(0x47, 0x51001);
-    sub_e(v, D_L14_001674C0_e, mat[3]);
-    rot[2] = atan2_e(v[0], v[1]);
-    rot[1] = -atan2_e(lenxy_e(v), v[2]);
+    sub_e(glow_to_camera_vector, D_L14_001674C0_e, mat[3]);
+    rot[2] = atan2_e(glow_to_camera_vector[0], glow_to_camera_vector[1]);
+    rot[1] = -atan2_e(lenxy_e(glow_to_camera_vector), glow_to_camera_vector[2]);
     rot[0] = 0.0f;
     rotmat_e(mat, rot);
     pk.uv[0] = 1.0f;
