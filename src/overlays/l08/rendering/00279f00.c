@@ -92,7 +92,7 @@ extern int p27fe00_trunc(float) __asm__("FUN_001fa6d0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern unsigned char *D_L08_001B29B4 __attribute__((section(".data")));
 
-void FUN_L08_0027fe00(u128 *spawn_position, u128 *dir, int life, float scale) {
+void FUN_L08_0027fe00(u128 *spawn_position, u128 *initial_motion_vector, int life, float scale) {
     unsigned char *effect;
     unsigned char *effect_data;
     effect = p27fe00_alloc(0x4D);
@@ -107,7 +107,7 @@ void FUN_L08_0027fe00(u128 *spawn_position, u128 *dir, int life, float scale) {
         effect[8] = 0xA0;
         *(float *)(effect + 0xC) = scale * 210000.0f;
         *(short *)(effect + 0xA) = scale_game_frames(life);
-        *(u128 *)effect_data = *dir;
+        *(u128 *)effect_data = *initial_motion_vector;
         *(float *)(effect_data + 0xC) = convert_integer_to_float(*(short *)(effect + 0xA));
     }
 }
