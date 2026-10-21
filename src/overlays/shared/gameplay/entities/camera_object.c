@@ -2623,7 +2623,7 @@ extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 
 int FUN_L00_002aa2a8(char *trajectory_state, char *moby, int mode) {
-    float w[4];
+    float trajectory_position[4];
     float B[4];
     float C[4];
     float box[4];
@@ -2635,11 +2635,11 @@ int FUN_L00_002aa2a8(char *trajectory_state, char *moby, int mode) {
     if (D_L00_0015F5C4_c != 0) return 0;
     qcopy(C, moby + 0x10);
     if (*(unsigned char *)(moby + 0x20) == 0) {
-        w[0] = fast_cos(fast_add_rotations_c(-0.36196801f, fast_arc_tan(*(float *)(base + 0x670), *(float *)(base + 0x674)))) * 0.859039f;
-        w[1] = fast_sin(fast_add_rotations_c(-0.36196801f, fast_arc_tan(*(float *)(base + 0x670), *(float *)(base + 0x674)))) * 0.859039f;
-        *(int *)&w[2] = 0;
-        add_vector_xyz(w, w, base + 0x80);
-        w[2] = w[2] + 0.49082f;
+        trajectory_position[0] = fast_cos(fast_add_rotations_c(-0.36196801f, fast_arc_tan(*(float *)(base + 0x670), *(float *)(base + 0x674)))) * 0.859039f;
+        trajectory_position[1] = fast_sin(fast_add_rotations_c(-0.36196801f, fast_arc_tan(*(float *)(base + 0x670), *(float *)(base + 0x674)))) * 0.859039f;
+        *(int *)&trajectory_position[2] = 0;
+        add_vector_xyz(trajectory_position, trajectory_position, base + 0x80);
+        trajectory_position[2] = trajectory_position[2] + 0.49082f;
         qcopy(B, trajectory_state);
         if (*(int *)(base + 0x2FC) != 0 && FUN_L00_002603d0_u((void *)*(int *)(base + 0x2FC)) != 0 && mode != 0) {
             add_vector_xyz(B, B, base + 0x100);
@@ -2647,7 +2647,7 @@ int FUN_L00_002aa2a8(char *trajectory_state, char *moby, int mode) {
         x = scale_game_frames_alt(0x78);
     } else {
         owner_moby_vars = *(char **)(*(char **)(trajectory_state + 0x30) + 0x78);
-        qcopy(w, moby + 0x10);
+        qcopy(trajectory_position, moby + 0x10);
         qcopy(B, trajectory_state);
         {
             short xs = *(short *)(trajectory_state + 0x34);
@@ -2658,23 +2658,23 @@ int FUN_L00_002aa2a8(char *trajectory_state, char *moby, int mode) {
     }
     {
         char *base2 = D_0013F350;
-        char *b2 = *(char **)(base2 + 0x2080);
-        *(u128 *)box = *(u128 *)(b2 + 0x10);
-        box[2] = w[2];
-        if (FUN_001efa68(box, w, 0x10, (int)b2, 0) != 0) {
+        char *hero_moby = *(char **)(base2 + 0x2080);
+        *(u128 *)box = *(u128 *)(hero_moby + 0x10);
+        box[2] = trajectory_position[2];
+        if (FUN_001efa68(box, trajectory_position, 0x10, (int)hero_moby, 0) != 0) {
             if (collision_hit_material() != 0 && D_L00_00173E40_u[7] > 0) {
                 qcopy(trajectory_state + 0x10, (char *)D_L00_00173E40_u + 0x20);
             }
         }
     }
     while (fast_dec_timer(&x) == 0) {
-        qcopy(C, w);
+        qcopy(C, trajectory_position);
         i = 9;
         do {
-            add_vector_xyz(w, w, B);
+            add_vector_xyz(trajectory_position, trajectory_position, B);
             B[2] = B[2] - frame_time_sq * 9.8f;
         } while (--i >= 0);
-        if (FUN_001efa68(C, w, 0x12, (int)moby, 0) == 0) continue;
+        if (FUN_001efa68(C, trajectory_position, 0x12, (int)moby, 0) == 0) continue;
         if (collision_hit_material() == 0 && 0.0f < B[2]) continue;
         if (D_L00_00173E40_u[7] > 0) {
             qcopy(trajectory_state + 0x10, (char *)D_L00_00173E40_u + 0x20);
