@@ -131,7 +131,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     struct Moby *target;
     s32 *route;
     Vec4 position_or_movement_vector;
-    Vec4 b;
+    Vec4 movement_input_or_output_or_melee_origin;
     Vec4 movement_output_or_hit_vector_or_path_point;
     ShotInfo shot;
     s32 near;
@@ -228,10 +228,10 @@ void blarg_space_commando_update(struct Moby *moby) {
             if (dist > 2.0f) {
                 dist = 2.0f;
             }
-            b.f[0] = fast_cos(moby->rot.z) * dist;
-            b.f[1] = fast_sin(moby->rot.z) * dist;
-            b.f[2] = 0.0f;
-            FUN_L00_00258b50(moby, &vars->ctl, &b, &movement_output_or_hit_vector_or_path_point, 1.0f);
+            movement_input_or_output_or_melee_origin.f[0] = fast_cos(moby->rot.z) * dist;
+            movement_input_or_output_or_melee_origin.f[1] = fast_sin(moby->rot.z) * dist;
+            movement_input_or_output_or_melee_origin.f[2] = 0.0f;
+            FUN_L00_00258b50(moby, &vars->ctl, &movement_input_or_output_or_melee_origin, &movement_output_or_hit_vector_or_path_point, 1.0f);
         }
         break;
     case BLARG_COMMANDO_STATE_RANGED_ATTACK_WINDUP:
@@ -289,8 +289,8 @@ void blarg_space_commando_update(struct Moby *moby) {
                          &vars->turn_speed, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                          frame_time * 3.1415927f);
         moby_point_position(moby, 0, &position_or_movement_vector);
-        qcopy(&b, &moby->pos);
-        b.f[2] += 0.3f;
+        qcopy(&movement_input_or_output_or_melee_origin, &moby->pos);
+        movement_input_or_output_or_melee_origin.f[2] += 0.3f;
         cur_frame = compute_interpolated_record_value(moby);
         if (hero.vehicle_mode == 1 && cur_frame < 9.0f) {
             moby->anim_speed = D_L06_00161FCC;
@@ -304,7 +304,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             shot.unk18 = 0;
             shot.unk19 = 1;
             shot.oclass = moby->oclass;
-            sweep_hit_segment(&position_or_movement_vector, &b, &vars->unk200, &b, moby, &shot, 5);
+            sweep_hit_segment(&position_or_movement_vector, &movement_input_or_output_or_melee_origin, &vars->unk200, &movement_input_or_output_or_melee_origin, moby, &shot, 5);
         }
         qcopy(&vars->unk200, &position_or_movement_vector);
         if (moby->anim_flags & 2) {
@@ -330,7 +330,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         position_or_movement_vector.f[0] = 2.0f * fast_cos(moby->rot.z);
         position_or_movement_vector.f[1] = 2.0f * fast_sin(moby->rot.z);
         position_or_movement_vector.f[2] = 0.0f;
-        FUN_L00_00258b50(moby, &vars->ctl, &position_or_movement_vector, &b, 1.0f);
+        FUN_L00_00258b50(moby, &vars->ctl, &position_or_movement_vector, &movement_input_or_output_or_melee_origin, 1.0f);
         FUN_L00_00261d78(vars->path, &moby->pos, &moby->pos, 0.75f);
         if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, &movement_output_or_hit_vector_or_path_point) != 0 &&
             FUN_001f9b48(&moby->pos, &movement_output_or_hit_vector_or_path_point) < 0.8f) {
@@ -352,8 +352,8 @@ void blarg_space_commando_update(struct Moby *moby) {
         break;
     case BLARG_COMMANDO_STATE_CHASE_MELEE_ATTACK:
         moby_point_position(moby, 0, &position_or_movement_vector);
-        qcopy(&b, &moby->pos);
-        b.f[2] += 1.5f;
+        qcopy(&movement_input_or_output_or_melee_origin, &moby->pos);
+        movement_input_or_output_or_melee_origin.f[2] += 1.5f;
         frame = compute_interpolated_record_value(moby);
         if (frame >= 9.0f && frame <= 15.0f) {
             movement_output_or_hit_vector_or_path_point.f[0] = fast_cos(moby->rot.z);
@@ -364,7 +364,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             shot.unk18 = 0;
             shot.unk19 = 1;
             shot.oclass = moby->oclass;
-            sweep_hit_segment(&position_or_movement_vector, &b, &vars->unk200, &b, moby, &shot, 5);
+            sweep_hit_segment(&position_or_movement_vector, &movement_input_or_output_or_melee_origin, &vars->unk200, &movement_input_or_output_or_melee_origin, moby, &shot, 5);
         }
         qcopy(&vars->unk200, &position_or_movement_vector);
         if (moby->anim_flags & 2) {
@@ -383,7 +383,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         if (fast_difference_between_rotations(
                 moby->rot.z, fast_arc_tan(vars->home.f[0] - moby->pos.x, vars->home.f[1] - moby->pos.y)) <
             0.7853982f) {
-            FUN_L00_00258b50(moby, &vars->ctl, &position_or_movement_vector, &b, 1.0f);
+            FUN_L00_00258b50(moby, &vars->ctl, &position_or_movement_vector, &movement_input_or_output_or_melee_origin, 1.0f);
             FUN_L00_00261d78(vars->path, &moby->pos, &moby->pos, 0.75f);
         }
         if (FUN_001f9b48(&vars->home, &moby->pos) < 1.0f) {
