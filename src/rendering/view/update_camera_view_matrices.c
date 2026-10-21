@@ -29,7 +29,7 @@ void update_camera_view_matrices(void) {
     u8 *x;
     f32 *xf;
     f32 homogeneous_offset_x;
-    f32 b;
+    f32 homogeneous_offset_y;
     f32 homogeneous_offset_z;
 
     if (camera_position_publication_suppressed[0] == 0) {
@@ -64,19 +64,19 @@ void update_camera_view_matrices(void) {
     multiply_matrix(&g->f[0x40 / 4], x, g);
     multiply_matrix(&g->f[0x80 / 4], x + 0x40, g);
     homogeneous_offset_x = xf[0x1A0 / 4];
-    b = xf[0x1A4 / 4];
+    homogeneous_offset_y = xf[0x1A4 / 4];
     homogeneous_offset_z = xf[0x1A8 / 4];
     g->f[0x80 / 4] += g->f[0x8C / 4] * homogeneous_offset_x;
-    g->f[0x84 / 4] += g->f[0x8C / 4] * b;
+    g->f[0x84 / 4] += g->f[0x8C / 4] * homogeneous_offset_y;
     g->f[0x88 / 4] += g->f[0x8C / 4] * homogeneous_offset_z;
     g->f[0x90 / 4] += g->f[0x9C / 4] * homogeneous_offset_x;
-    g->f[0x94 / 4] += g->f[0x9C / 4] * b;
+    g->f[0x94 / 4] += g->f[0x9C / 4] * homogeneous_offset_y;
     g->f[0x98 / 4] += g->f[0x9C / 4] * homogeneous_offset_z;
     g->f[0xA0 / 4] += g->f[0xAC / 4] * homogeneous_offset_x;
-    g->f[0xA4 / 4] += g->f[0xAC / 4] * b;
+    g->f[0xA4 / 4] += g->f[0xAC / 4] * homogeneous_offset_y;
     g->f[0xA8 / 4] += g->f[0xAC / 4] * homogeneous_offset_z;
     g->f[0xB0 / 4] += g->f[0xBC / 4] * homogeneous_offset_x;
-    g->f[0xB4 / 4] += g->f[0xBC / 4] * b;
+    g->f[0xB4 / 4] += g->f[0xBC / 4] * homogeneous_offset_y;
     g->f[0xB8 / 4] += g->f[0xBC / 4] * homogeneous_offset_z;
     multiply_matrix(&g->f[0xC0 / 4], x + 0x80, g);
     scale_vector(&g->f[0x100 / 4], x + 0x80, xf[0x1C0 / 4]);
