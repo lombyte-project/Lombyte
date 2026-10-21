@@ -444,7 +444,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
     Vec4 rot;
     Vec4 delta;
     Vec4 base;
-    Vec4 off;
+    Vec4 rotated_rider_offset;
     f32 mat[16];
     struct Moby *rider;
     f32 len;
@@ -499,8 +499,8 @@ void shuttle_update(struct Moby *shuttle_moby) {
         else
             qcopy(&base, &shuttle_moby->pos);
         euler_rotation_matrix(mat, &shuttle_moby->rot);
-        lift_xform(&off, shuttle_vars->offset, mat);
-        lift_add(&rider->pos, &base, &off);
+        lift_xform(&rotated_rider_offset, shuttle_vars->offset, mat);
+        lift_add(&rider->pos, &base, &rotated_rider_offset);
     }
     if (shuttle_vars->sound == -1 || (voice_is_playing(shuttle_moby, shuttle_vars->sound) == 0 && shuttle_vars->sound == -1))
         shuttle_vars->sound = lift_sound(0, 4, shuttle_moby);
