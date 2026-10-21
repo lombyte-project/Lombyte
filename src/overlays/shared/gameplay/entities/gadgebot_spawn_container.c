@@ -3309,22 +3309,22 @@ void FUN_L06_002f7c68(char *moby) {
     int i;
     for (i = 0x27; i >= 0; i--) {
         float particle_scale;
-        int r;
+        int particle_color;
         int particle_lifetime;
         int v;
         random_vector(buf, D_L06_00161E84 * frame_time,
                          D_L06_00161E88 * frame_time);
         particle_scale = random_float_between_alt(D_L06_00161EA8, D_L06_00161EAC);
         if (random_integer_below(2) != 0) {
-            r = fast_tween_color(D_L06_00161E98, D_L06_00161E9C,
+            particle_color = fast_tween_color(D_L06_00161E98, D_L06_00161E9C,
                              random_float_between_alt(0.0f, 1.0f));
         } else {
-            r = fast_tween_color(D_L06_00161EA0, D_L06_00161EA4,
+            particle_color = fast_tween_color(D_L06_00161EA0, D_L06_00161EA4,
                              random_float_between_alt(0.0f, 1.0f));
         }
         particle_lifetime = D_L06_00161E94;
         v = random_integer_below(0xFF);
-        FUN_L00_002730e0(moby + 0x10, particle_scale, buf, r, particle_lifetime, (unsigned char)v, 0);
+        FUN_L00_002730e0(moby + 0x10, particle_scale, buf, particle_color, particle_lifetime, (unsigned char)v, 0);
     }
 }
 
