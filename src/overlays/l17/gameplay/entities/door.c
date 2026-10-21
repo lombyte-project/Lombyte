@@ -895,8 +895,8 @@ extern int func_001F6F40_c_001f6b88(int, int, long, void *, int) __asm__("FUN_00
 void FUN_L17_002eb9a8(struct Moby *moby) {
     char *ship_vars = (char *)moby->pvars;
     char *screen_dimensions;
-    int sp10;
-    int sp14;
+    int locked_target_screen_x;
+    int locked_target_screen_y;
     long tex;
     int i;
     unsigned char ammo_capacity;
@@ -910,7 +910,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     int hp_bar_fill_threshold;
     int lo;
     int hi;
-    int idx;
+    int hp_bar_clut_index;
     float lock_fade_ratio;
     float k;
     float lock_marker_fade_factor;
@@ -927,7 +927,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     vu1_add_g_sregister(0x42, 0x8000000048L);
     FUN_L17_002eb768((int)moby, ship_vars);
     if (*(int *)(ship_vars + 0x88) != 0) {
-        FUN_L11_00311210(*(char **)(ship_vars + 0x88) + 0x10, &sp10, &sp14, 0);
+        FUN_L11_00311210(*(char **)(ship_vars + 0x88) + 0x10, &locked_target_screen_x, &locked_target_screen_y, 0);
         if (*(int *)(ship_vars + 0x8C) > lock_hold_frames) {
             lock_fade_ratio = convert_integer_to_float(*(int *)(ship_vars + 0x8C) - lock_hold_frames);
             lock_fade_ratio = lock_fade_ratio / convert_integer_to_float(lock_fade_frames);
@@ -936,7 +936,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
             if (lock_marker_fade_factor > 1.0f)
                 lock_marker_fade_factor = 1.0f;
             lock_marker_fade_byte = func_001FA898_r(lock_marker_fade_factor * 96.0f);
-            func_L17_002EBF08_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), k,
+            func_L17_002EBF08_f(convert_integer_to_float(locked_target_screen_x), convert_integer_to_float(locked_target_screen_y), k,
                                 normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 30.0f), 0,
                                 0xFF, 0, lock_marker_fade_byte);
             *(int *)(ship_vars + 0xEC) = 0;
@@ -944,7 +944,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
             lock_marker_blink_value = 0xFF;
             if ((*(int *)(ship_vars + 0x8C) / scale_game_frames(0x14)) & 1)
                 lock_marker_blink_value = 0;
-            func_L17_002EBF08_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), 1.0f,
+            func_L17_002EBF08_f(convert_integer_to_float(locked_target_screen_x), convert_integer_to_float(locked_target_screen_y), 1.0f,
                                 0.0f, 0xFF, lock_marker_blink_value, 0, 0x60);
             *(int *)(ship_vars + 0xEC) = *(int *)(ship_vars + 0x88);
         }
@@ -993,11 +993,11 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     lo = *(int *)(ship_vars + 0xF4) <= hp_bar_fill_threshold ? *(int *)(ship_vars + 0xF4) : hp_bar_fill_threshold;
     hi = *(int *)(ship_vars + 0xF4) < hp_bar_fill_threshold ? hp_bar_fill_threshold : *(int *)(ship_vars + 0xF4);
     for (j = lo; j <= hi; j++) {
-        idx = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
+        hp_bar_clut_index = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
         if (j < hp_bar_fill_threshold) {
-            (*(int **)&D_L17_00162180)[idx] = D_L17_001D9B68[idx];
+            (*(int **)&D_L17_00162180)[hp_bar_clut_index] = D_L17_001D9B68[hp_bar_clut_index];
         } else {
-            (*(int **)&D_L17_00162180)[idx] = 0x80000000;
+            (*(int **)&D_L17_00162180)[hp_bar_clut_index] = 0x80000000;
         }
     }
     *(int *)(ship_vars + 0xF4) = hp_bar_fill_threshold;
