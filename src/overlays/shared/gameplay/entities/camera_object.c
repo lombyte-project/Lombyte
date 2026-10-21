@@ -1635,8 +1635,8 @@ extern int fr_2a7e20(int) __asm__("FUN_001f96f8");
 extern void emit_2a7e20(float *, int, int, int, int, void *, float, float,
                         float) __asm__("FUN_L00_00272060");
 
-void FUN_L00_002a7e20(float *pos, int emission_pair_count) {
-    OvlQuad dir[1];
+void FUN_L00_002a7e20(float *sparkle_spawn_position, int emission_pair_count) {
+    OvlQuad sparkle_initial_velocity[1];
     OvlQuad old[1];
     int i;
     for (i = 0; i < emission_pair_count; i++) {
@@ -1647,14 +1647,14 @@ void FUN_L00_002a7e20(float *pos, int emission_pair_count) {
             k--;
         azimuth_angle = rnda_2a7e20();
         elevation_angle = rndf_2a7e20(0.34906584f, 1.53588974f);
-        build_spherical_offset(dir, rndf_2a7e20(0.05f, 0.1f), azimuth_angle, elevation_angle);
-        qcopy(old, pos);
-        pos[0] += spread_k(0.0f, 0.15f);
-        pos[1] += spread_k(0.0f, 0.15f);
-        pos[2] += spread_k(0.0f, 0.15f);
-        emit_2a7e20(pos, fr_2a7e20(0x1E), 0x7F207F7F, 0, k, dir, base_sparkle_size * 0.1f, base_sparkle_size, 0.003f);
+        build_spherical_offset(sparkle_initial_velocity, rndf_2a7e20(0.05f, 0.1f), azimuth_angle, elevation_angle);
+        qcopy(old, sparkle_spawn_position);
+        sparkle_spawn_position[0] += spread_k(0.0f, 0.15f);
+        sparkle_spawn_position[1] += spread_k(0.0f, 0.15f);
+        sparkle_spawn_position[2] += spread_k(0.0f, 0.15f);
+        emit_2a7e20(sparkle_spawn_position, fr_2a7e20(0x1E), 0x7F207F7F, 0, k, sparkle_initial_velocity, base_sparkle_size * 0.1f, base_sparkle_size, 0.003f);
         k = -k;
-        emit_2a7e20(pos, fr_2a7e20(0x1E), 0x7F7F7F7F, 1, k, dir, base_sparkle_size * 0.07f, base_sparkle_size * 0.7f, 0.003f);
+        emit_2a7e20(sparkle_spawn_position, fr_2a7e20(0x1E), 0x7F7F7F7F, 1, k, sparkle_initial_velocity, base_sparkle_size * 0.07f, base_sparkle_size * 0.7f, 0.003f);
     }
 }
 typedef union {
