@@ -1915,11 +1915,11 @@ s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 void FUN_L00_00275860(O00275860 *particle) {
     V00275860 velocity_xyz;
-    f32 w, k;
+    f32 lifetime_scale_divisor, k;
     velocity_xyz.q = particle->vel.q;
-    w = velocity_xyz.f[3];
+    lifetime_scale_divisor = velocity_xyz.f[3];
     velocity_xyz.f[3] = 0.0f;
-    k = convert_integer_to_float(particle->h) / w;
+    k = convert_integer_to_float(particle->h) / lifetime_scale_divisor;
     particle->col = (FUN_001fa6d0(k * 38.0f) << 24) | 0x808080;
     particle->a = FUN_001fa6d0(k * 33.0f);
     fast_vec_add(&particle->pos, &particle->pos, &velocity_xyz);
