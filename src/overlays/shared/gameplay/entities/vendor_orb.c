@@ -1,5 +1,6 @@
 /* Shared moby classes: vendor_orb, hydrodisplacer, pilots_helmet, pterodactyl, red_plant, robot_arm. */
 #include "types.h"
+#include "rnc/gameplay/camera/camera_modes.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -1025,7 +1026,6 @@ void FUN_L00_002e2250(int unused, int beam) {
 /* Scrolls and draws the two panes of each active slot (3 slots). */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E3FA0), where it is exact; names translated to the US level program. */
 
-
 extern Pane_2e3fa0 D_L00_001E6E40[];
 extern float D_L00_00161C78_f[] __asm__("D_L00_00161C78") __attribute__((section(".sdata")));
 extern int D_L00_00161BF8_c2[] __asm__("D_L00_00161BF8") __attribute__((section(".sdata")));
@@ -1220,7 +1220,6 @@ typedef struct {
     u64 r80;
     u64 r88;
 } Q_e3388;
-
 
 extern T_e3388 D_L00_001E6D50_e3388[] __asm__("D_L00_001E6D50");
 extern f32 D_L00_001E6E10_e3388[][4] __asm__("D_L00_001E6E10");
@@ -2052,17 +2051,6 @@ extern short D_L00_00161D0C __attribute__((sda));
 extern short D_L00_00161D10 __attribute__((sda));
 extern short D_L00_00161D80 __attribute__((sda));
 void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
-    enum {
-        CAM_ATTACH_GROUND_AWARE_FOCUS_VELOCITY = 2,
-        CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY = 3,
-        CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY = 4,
-        CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION = 5,
-        CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY = 6,
-        CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY = 7,
-        CAM_ATTACH_HOLD_FOCUS_VELOCITY = 8,
-        CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY = 9,
-        CAM_ATTACH_CONTINUE_BLEND_PROJECTED_HERO_FOCUS_VELOCITY = 10
-    };
     float cam[4];
     float target_position_or_up_offset[4];
     char *camera_state;
@@ -2210,15 +2198,6 @@ void FUN_L00_002e55b8(void *mm, void *vv, void *tt, f32 stiffness, f32 damping, 
 }
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 FUN_L00_002e5678(void *mm, void *input_offset, void *out_target_position, s32 k) {
-    enum {
-        CAM_ATTACH_HERO_POSITION_BASE = 1,
-        CAM_ATTACH_STORED_FOCUS_POSITION_BASE = 2,
-        CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY = 3,
-        CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY = 4,
-        CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION = 5,
-        CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY = 6,
-        CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY = 7
-    };
     u8 *camera = mm;
     s32 attach_mode_return_flag = 1;
     u8 *stored_focus_position = *(u8 **)(camera + 0x70) + 0x40;

@@ -1,5 +1,6 @@
 /* Ported from rac1-decomp (src/game/camera.c, func_001EC5B8). */
 #include "sda.h"
+#include "rnc/gameplay/camera/camera_modes.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/data_labels.h"
 typedef struct {
@@ -29,13 +30,6 @@ extern CamPrioHook D_001E8C00[];
 int camera_activation_check_priority(void *cur, void *other) __asm__("FUN_001ec210");
 
 int camera_activation_check_priority(void *candidate_camera, void *other) {
-    enum {
-        CAMERA_ACTIVATION_BY_PRIORITY = 0,
-        CAMERA_ACTIVATION_HANDOFF_GATED_PRIORITY = 1,
-        CAMERA_ACTIVATION_REQUIRE_HANDOFF_PRIORITY = 2,
-        CAMERA_ACTIVATION_IN_CLIP_VOLUME = 4,
-        CAMERA_ACTIVATION_MATCH_LISTENER_GROUP = 7
-    };
     enum {
         CAMERA_COMPARE_ACCEPT = 1
     };
