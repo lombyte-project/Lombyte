@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/rendering/pixel_format.h"
 #include "rnc/sdk/libgraph.h"
 #include "eetypes.h"
 #include "sda.h"
@@ -37,12 +38,6 @@ extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
 s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) __asm__("FUN_00202270");
 
 s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) {
-    enum {
-        PIXEL_FORMAT_32_BIT = 0,
-        PIXEL_FORMAT_16_BIT = 2,
-        PIXEL_FORMAT_8_BIT = 0x13,
-        PIXEL_FORMAT_4_BIT = 0x14
-    };
     MipTextureUpload upload;
     sceGsLoadImage load_image;
     s32 mip_index;

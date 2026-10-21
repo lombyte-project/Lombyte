@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/rendering/pixel_format.h"
 #include "rnc/sdk/libgraph.h"
 #include "eetypes.h"
 #include "kernel.h"
@@ -8,21 +9,6 @@ s32 sceGsSetDefLoadImage(sceGsLoadImage *image, s16 destination_base,
                          s16 destination_width, s16 pixel_format,
                          s16 destination_x, s16 destination_y,
                          s16 width, s16 height) {
-    enum {
-        PIXEL_FORMAT_32_BIT = 0,
-        PIXEL_FORMAT_24_BIT = 1,
-        PIXEL_FORMAT_16_BIT = 2,
-        PIXEL_FORMAT_16_BIT_ALTERNATE = 10,
-        PIXEL_FORMAT_8_BIT = 0x13,
-        PIXEL_FORMAT_4_BIT = 0x14,
-        PIXEL_FORMAT_8_BIT_ALTERNATE = 0x1b,
-        PIXEL_FORMAT_4_BIT_ALTERNATE = 0x24,
-        PIXEL_FORMAT_4_BIT_ALTERNATE_2 = 0x2c,
-        PIXEL_FORMAT_32_BIT_ALTERNATE = 0x30,
-        PIXEL_FORMAT_24_BIT_ALTERNATE = 0x31,
-        PIXEL_FORMAT_16_BIT_ALTERNATE_2 = 0x32,
-        PIXEL_FORMAT_16_BIT_ALTERNATE_3 = 0x3a
-    };
     s32 size = 0;
 
     switch (pixel_format) {
