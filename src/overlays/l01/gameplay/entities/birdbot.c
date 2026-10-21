@@ -3234,7 +3234,7 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
 }
 f32 FUN_001f99c0(f32);
 
-f32 FUN_L01_002f81c8(f32 *pos, f32 *vel, f32 target, f32 accel, f32 damp, f32 range) {
+f32 FUN_L01_002f81c8(f32 *pos, f32 *vel, f32 target, f32 velocity_adjustment_scale, f32 damp, f32 range) {
     f32 velocity_adjustment;
     f32 f;
 
@@ -3246,7 +3246,7 @@ f32 FUN_L01_002f81c8(f32 *pos, f32 *vel, f32 target, f32 accel, f32 damp, f32 ra
     if (range < velocity_adjustment) {
         velocity_adjustment = range;
     }
-    velocity_adjustment = velocity_adjustment * accel / range;
+    velocity_adjustment = velocity_adjustment * velocity_adjustment_scale / range;
     if (target < *pos) {
         *vel = *vel - velocity_adjustment;
     } else {
