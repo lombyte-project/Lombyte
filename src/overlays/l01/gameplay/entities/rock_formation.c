@@ -1890,11 +1890,11 @@ void beehive_update(SpawnerMoby *beehive_moby) {
 
 ClonedMoby *FUN_L01_00302328(ClonedMoby *src) {
     ClonedMoby *destination_moby;
-    ClonedVars *v;
+    ClonedVars *destination_moby_vars;
 
     destination_moby = 0;
     FUN_L00_002591d0(&destination_moby, *(s32 *)src->pvars, 0, 0);
-    v = destination_moby->pvars;
+    destination_moby_vars = destination_moby->pvars;
     destination_moby->b30 = 0x80;
     destination_moby->h32 = 0x80;
     destination_moby->d38 = src->d38;
@@ -1907,10 +1907,10 @@ ClonedMoby *FUN_L01_00302328(ClonedMoby *src) {
         qcopy(&transform_destination->pos, &src->pos);
         qcopy(&transform_destination->rot, &src->rot);
     }
-    v->f20 = 3.0f;
-    v->f250 = 1.0f;
-    v->w170 = truncate_float_to_s32(819.2f);
-    v->f224 = 30.0f;
+    destination_moby_vars->f20 = 3.0f;
+    destination_moby_vars->f250 = 1.0f;
+    destination_moby_vars->w170 = truncate_float_to_s32(819.2f);
+    destination_moby_vars->f224 = 30.0f;
     FUN_L00_00250df8(destination_moby);
     return destination_moby;
 }
