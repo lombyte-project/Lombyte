@@ -2741,7 +2741,7 @@ void stick_target(float scale, int mode) {
     V_2118c8 stick_vector;
     V_2118c8 q;
     float x;
-    float len;
+    float stick_magnitude;
     float y;
 
     stick_vector.f[1] = hero.stick_y;
@@ -2754,9 +2754,9 @@ void stick_target(float scale, int mode) {
             stick_vector.f[1] = 0.0f;
         }
     }
-    len = FUN_001f9b20_2118c8(&stick_vector);
-    if (len > 1.0f) {
-        FUN_L00_001ff378_2118c8(&stick_vector, &stick_vector, len);
+    stick_magnitude = FUN_001f9b20_2118c8(&stick_vector);
+    if (stick_magnitude > 1.0f) {
+        FUN_L00_001ff378_2118c8(&stick_vector, &stick_vector, stick_magnitude);
     }
     if (stick_vector.f[0] == 0.0f && stick_vector.f[1] == 0.0f) {
         hero.target_speed = 0.0f;
