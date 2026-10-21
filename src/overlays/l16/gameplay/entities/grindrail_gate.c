@@ -2991,14 +2991,14 @@ void FUN_L16_002ea128(unsigned char *moby) {
                 sphere->z = (maxz + minz) * 0.5f;
             }
             for (j = 0; j < D_L16_00162008[i]; j++) {
-                float dist;
+                float vertex_to_center_distance;
                 out = (float *)(D_L16_001E5390 + i);
                 vertex_position[0] = ((float **)D_L16_00162018)[i][j * 3 + 0];
                 vertex_position[1] = ((float **)D_L16_00162018)[i][j * 3 + 1];
                 vertex_position[2] = ((float **)D_L16_00162018)[i][j * 3 + 2];
-                dist = FUN_001f9b48(vertex_position, out);
-                if (dist > out[3])
-                    out[3] = dist;
+                vertex_to_center_distance = FUN_001f9b48(vertex_position, out);
+                if (vertex_to_center_distance > out[3])
+                    out[3] = vertex_to_center_distance;
             }
         }
         moby[0x20] = 1;
