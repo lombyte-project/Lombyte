@@ -27,7 +27,7 @@ void FUN_L12_002bc210(void *list_, int count, int tex0, int tex1) {
     char *list = list_;
     int i;
     int *sp;
-    int idx;
+    int sphere_check_result;
     vu1_add_g_sregister(6, tex0);
     vu1_add_g_sregister(7, tex1);
     D_L12_001611C0.p[0] = 0x30000009;
@@ -42,12 +42,12 @@ void FUN_L12_002bc210(void *list_, int count, int tex0, int tex1) {
     }
     if (count > 0) {
         for (i = count; i != 0; i--) {
-            idx = fast_bsphere_check(list, 256.0f);
-            if (idx != -1) {
+            sphere_check_result = fast_bsphere_check(list, 256.0f);
+            if (sphere_check_result != -1) {
                 FUN_L12_002667fc(*(int *)(list + 0x1C), *(int *)(list + 0x10),
                                  *(int *)(list + 0x18), 0x70001000);
                 FUN_L01_0021fa98(*(int *)(list + 0x1C), *(int *)(list + 0x10), 0x70000000,
-                                 *(int *)(list + 0x14), 0x70001000, idx == 0);
+                                 *(int *)(list + 0x14), 0x70001000, sphere_check_result == 0);
             }
             list += 0x20;
         }
