@@ -1000,14 +1000,14 @@ void robo_shack_sign_update(struct Moby *m) __asm__("FUN_L03_002d3e58");
 void robo_shack_sign_update(struct Moby *sign_moby) {
     Vec4 move;
     Vec4 oldRot;
-    struct SpinnerVars *v;
+    struct SpinnerVars *sign_vars;
     move.q = 0;
     oldRot.q = *(u128 *)&sign_moby->rot;
-    v = (struct SpinnerVars *)sign_moby->pvars;
+    sign_vars = (struct SpinnerVars *)sign_moby->pvars;
     sign_moby->draw_dist = 0xFF;
     sign_moby->update_dist = 0xFF;
     sign_moby->rot.z = fast_add_rotations(sign_moby->rot.z, frame_time * 0.47996554f);
-    update_entity_matrix(v->coll, &move, &oldRot, &sign_moby->rot);
+    update_entity_matrix(sign_vars->coll, &move, &oldRot, &sign_moby->rot);
 }
 
 #define NOT_SDA
