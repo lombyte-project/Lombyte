@@ -584,14 +584,14 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void scale_vector_xyz(void *, void *, float);
 extern void transform_vector_by_basis(void *, void *, void *);
 
-void FUN_L18_002d5488(void *mobyp, void *vec) {
+void FUN_L18_002d5488(void *mobyp, void *movement_step) {
     char *moby = mobyp;
     float effect_vector[4];
     float effect_spawn_position[4];
     QU world_effect_direction;
     unsigned char *particle;
     FUN_L00_00257d78(effect_vector, frame_time * 0.1f, frame_time * 0.2f);
-    scale_vector_xyz(effect_spawn_position, vec, random_float_between(0.0f, 1.0f));
+    scale_vector_xyz(effect_spawn_position, movement_step, random_float_between(0.0f, 1.0f));
     add_vector_xyz(effect_spawn_position, effect_spawn_position, moby + 0x10);
     particle = FUN_L00_002712b8(effect_spawn_position, effect_vector, scale_game_frames(0x14), 0x7F, 0x606060, 3, 40000.0f, 1000.0f,
                          1.0f, -0.0002f, 0.0f);
