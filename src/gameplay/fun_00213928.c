@@ -62,7 +62,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s3
         SUBSTATE_GATED_AUXILIARY_FLAG_HIT_STATE = 5,
         SUBSTATE_GATED_COOLDOWN_DAMAGE_CLEARING_HIT_STATE = 7
     };
-    V_25a478 v;
+    V_25a478 hit_blend_vector;
     V_25a478 combined_hit_vector;
     s32 hit_response_index;
     s32 kind;
@@ -106,12 +106,12 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s3
         kind = hit_record->kind;
         hit_record->u.s.f1C = 5627.9248f;
         if (kind == 0x47) {
-            v.f[0] = fast_cos(fast_arc_tan(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
-            v.f[1] = fast_sin(fast_arc_tan(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
-            v.f[2] = 1.0f;
-            fast_vec_normalize(&v, &v, fast_vec_length(pv) * 0.7f);
+            hit_blend_vector.f[0] = fast_cos(fast_arc_tan(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
+            hit_blend_vector.f[1] = fast_sin(fast_arc_tan(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
+            hit_blend_vector.f[2] = 1.0f;
+            fast_vec_normalize(&hit_blend_vector, &hit_blend_vector, fast_vec_length(pv) * 0.7f);
             fast_vec_scale(pv, pv, 0.3f);
-            add_vector_xyz(&combined_hit_vector, pv, &v);
+            add_vector_xyz(&combined_hit_vector, pv, &hit_blend_vector);
             pv->q = combined_hit_vector.q;
             set_vector_length_xy(pv, pv, 1.0f);
         }
