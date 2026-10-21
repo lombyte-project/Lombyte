@@ -545,12 +545,12 @@ void FUN_L11_00319670(char *moby) {
     float second_trail_offset[4];
     int current_frame;
     if ((level_frame & 3) == 0) {
-        int cnt;
-        float lim = *(float *)&D_L11_001623F0_d;
-        cnt = *(int *)(trail_data + 0x2C0);
+        int trail_segment_count;
+        float trail_segment_limit = *(float *)&D_L11_001623F0_d;
+        trail_segment_count = *(int *)(trail_data + 0x2C0);
         *(int *)(trail_data + 0x2C4) = (*(int *)(trail_data + 0x2C4) + 1) % 16;
-        if ((float)cnt < lim) {
-            *(int *)(trail_data + 0x2C0) = cnt + 1;
+        if ((float)trail_segment_count < trail_segment_limit) {
+            *(int *)(trail_data + 0x2C0) = trail_segment_count + 1;
         }
     }
     *(OvlQuad *)first_trail_offset = 0;
