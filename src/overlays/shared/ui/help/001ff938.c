@@ -264,7 +264,7 @@ void FUN_L15_00209450(void) {
         hero.unk22C = 0.7f;
         hero.unk230 = 0.45f;
         break;
-    case 2:
+    case HERO_VEHICLE_MODE_GIANT_CLANK:
         hero.unk228 = 5.25f;
         hero.unk22C = 4.45f;
         hero.unk230 = 3.75f;
