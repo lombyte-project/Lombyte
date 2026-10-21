@@ -3141,23 +3141,23 @@ void FUN_001f9bf8_002126b8(Vec4_002126b8 *, void *, float) __asm__("FUN_001f9bf8
 void FUN_001f9a10_002126b8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_0025d238_002126b8(Vec4_002126b8 *, void *) __asm__("FUN_L00_0025d238");
 void hero_get_collision_ray_endpoints(Vec4_002126b8 *, Vec4_002126b8 *, int, float, float) __asm__("FUN_L00_002126b8");
-void hero_get_collision_ray_endpoints(Vec4_002126b8 *ray_start, Vec4_002126b8 *b, int mode, float fa, float fb) {
+void hero_get_collision_ray_endpoints(Vec4_002126b8 *ray_start, Vec4_002126b8 *ray_end, int mode, float fa, float fb) {
     Vec4_002126b8 ray_scratch_vectors[2];
     if (mode) {
         char *up = (char *)&hero.gravity_dir;
         char *base = up - 0x210;
         FUN_001f9bf8_002126b8(&ray_scratch_vectors[0], up, -fb);
-        FUN_001f9a10_002126b8(b, base, &ray_scratch_vectors[0]);
+        FUN_001f9a10_002126b8(ray_end, base, &ray_scratch_vectors[0]);
         FUN_001f9bf8_002126b8(&ray_scratch_vectors[0], up, -fa);
         FUN_001f9a10_002126b8(ray_start, base, &ray_scratch_vectors[0]);
         *(u128_002126b8 *)&ray_scratch_vectors[1] = *(u128_002126b8 *)ray_start;
-        FUN_L00_0025d238_002126b8(&ray_scratch_vectors[1], b);
+        FUN_L00_0025d238_002126b8(&ray_scratch_vectors[1], ray_end);
     } else {
         qcopy(&ray_scratch_vectors[0], &hero.motion.pos);
-        qcopy(b, &ray_scratch_vectors[0]);
-        b->z += fb;
-        if (b->z < 0.0f)
-            b->z = 0.0f;
+        qcopy(ray_end, &ray_scratch_vectors[0]);
+        ray_end->z += fb;
+        if (ray_end->z < 0.0f)
+            ray_end->z = 0.0f;
         qcopy(ray_start, &ray_scratch_vectors[0]);
         ray_start->z += fa;
     }
