@@ -1660,7 +1660,7 @@ void FUN_L11_00310698(struct Moby *psytcopus) {
     float angle2;
     char *info;
     s32 *path;
-    u32 r;
+    u32 hit_reaction;
     float source_to_psytcopus_heading;
 
     FUN_001f9740_p(&pv->unk158);
@@ -1673,11 +1673,11 @@ void FUN_L11_00310698(struct Moby *psytcopus) {
     }
     damage = 0.0f;
     info = hit_info_0698(psytcopus, 0x330000, 0);
-    r = take_hit_0698(psytcopus, info, &pv->health, 0, &hits, &damage, 0, 4);
+    hit_reaction = take_hit_0698(psytcopus, info, &pv->health, 0, &hits, &damage, 0, 4);
     if (hits != 1 && psytcopus->state != 8) {
         pv->health -= damage;
         if (pv->health <= 0.0f) {
-            r = 1;
+            hit_reaction = 1;
         }
         pv->unk90 = random_int_0180(512.0f);
         pv->unk98 = 0.5f;
@@ -1685,7 +1685,7 @@ void FUN_L11_00310698(struct Moby *psytcopus) {
         pv->unk84 = 0.0005f;
         pv->unk94 = 9;
         pv->unkAD = 0;
-        switch (r) {
+        switch (hit_reaction) {
         case HIT_REACTION_NONE:
         case HIT_REACTION_NO_RESPONSE:
             break;
