@@ -669,7 +669,7 @@ extern void set_path_2cc888(void *, void *, int, int, int, float) __asm__("FUN_L
  * owned by parent p. */
 char *FUN_L03_002cc888(char *parent_moby, void *pos, float *dir) {
     char *spawned_moby = create_moby_2cc888(0x273);
-    char *v;
+    char *spawned_moby_vars;
     float frame_scale_squared;
 
     if (spawned_moby == 0) {
@@ -680,24 +680,24 @@ char *FUN_L03_002cc888(char *parent_moby, void *pos, float *dir) {
     spawned_moby[0x31] = 1;
     *(long long *)(spawned_moby + 0x38) = *(long long *)(parent_moby + 0x38);
     qcopy(spawned_moby + 0x10, pos);
-    v = *(char **)(spawned_moby + 0x78);
+    spawned_moby_vars = *(char **)(spawned_moby + 0x78);
     frame_scale_squared = frame_scale_sq;
-    *(float *)(v + 0x10) = frame_scale_squared * 0.008f;
-    *(float *)(v + 0x14) = frame_scale_squared * 0.0005f;
-    *(float *)(v + 0x18) = vlen_2cc888(dir);
-    *(float *)(v + 0x1C) = dir[2];
-    *(int *)(v + 0x20) = 0x400;
-    *(float *)(v + 0x28) = 1.0f;
-    *(float *)(v + 0x30) = 0.75f;
-    *(float *)(v + 0x34) = 0.5f;
-    *(float *)(v + 0x38) = 0.65f;
-    *(float *)(v + 0x48) = 0.2f;
-    *(float *)(v + 0x4C) = 0.01f;
-    v[0x3D] = 0;
-    *(int *)(v + 0x24) = 1;
-    set_path_2cc888(spawned_moby, v, 0, 1, 0, atan2_2cc888(dir[0], dir[1]));
-    *(char **)(v + 0x68) = parent_moby;
-    *(int *)(v + 0x6C) = 0;
+    *(float *)(spawned_moby_vars + 0x10) = frame_scale_squared * 0.008f;
+    *(float *)(spawned_moby_vars + 0x14) = frame_scale_squared * 0.0005f;
+    *(float *)(spawned_moby_vars + 0x18) = vlen_2cc888(dir);
+    *(float *)(spawned_moby_vars + 0x1C) = dir[2];
+    *(int *)(spawned_moby_vars + 0x20) = 0x400;
+    *(float *)(spawned_moby_vars + 0x28) = 1.0f;
+    *(float *)(spawned_moby_vars + 0x30) = 0.75f;
+    *(float *)(spawned_moby_vars + 0x34) = 0.5f;
+    *(float *)(spawned_moby_vars + 0x38) = 0.65f;
+    *(float *)(spawned_moby_vars + 0x48) = 0.2f;
+    *(float *)(spawned_moby_vars + 0x4C) = 0.01f;
+    spawned_moby_vars[0x3D] = 0;
+    *(int *)(spawned_moby_vars + 0x24) = 1;
+    set_path_2cc888(spawned_moby, spawned_moby_vars, 0, 1, 0, atan2_2cc888(dir[0], dir[1]));
+    *(char **)(spawned_moby_vars + 0x68) = parent_moby;
+    *(int *)(spawned_moby_vars + 0x6C) = 0;
     spawned_moby[0x20] = 1;
     return spawned_moby;
 }
