@@ -2557,7 +2557,7 @@ extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) _
 
 void FUN_L01_002ef770(unsigned char *moby, f32 *mode) {
     char *data = (char *)MOBY(moby)->pvars;
-    f32 pos[4], origin[4], velocity[4];
+    f32 spawn_position[4], origin[4], velocity[4];
     u128 *dest;
     f32 *origin_copy;
     u128 *source;
@@ -2567,12 +2567,12 @@ void FUN_L01_002ef770(unsigned char *moby, f32 *mode) {
     i = 0;
     if (D_L01_001619EC > 0) {
       source = (u128 *)(moby + 0x10);
-      dest = (u128 *)pos;
+      dest = (u128 *)spawn_position;
       origin_copy = origin;
       do {
         qcopy_nc(dest, source);
         FUN_L00_0025f8e0(dest, D_L01_001619F4 * *(f32 *)(data + 0x250));
-        pos[2] += 1.0f;
+        spawn_position[2] += 1.0f;
         angle = random_angle_radians();
         radius = random_float_between_alt(D_L01_00161A00, D_L01_00161A04);
         lateral = random_float_between_alt(D_L01_00161A08, D_L01_00161A0C);
@@ -2592,14 +2592,14 @@ void FUN_L01_002ef770(unsigned char *moby, f32 *mode) {
             scale = random_float_between_alt(0.5f, 1.5f);
             origin[3] = scale * D_L01_00161A14;
             velocity[3] = scale * D_L01_00161A18;
-            FUN_L00_0025f8e0(pos, D_L01_001619F8);
+            FUN_L00_0025f8e0(spawn_position, D_L01_001619F8);
             FUN_L00_0025f8e0(velocity, D_L01_001619FC * frame_time_gp);
             lower = fast_tween_color(random_float_between_alt(0.0f, 1.0f), D_L01_00161A1C, D_L01_00161A24);
             upper = fast_tween_color(random_float_between_alt(0.0f, 1.0f), D_L01_00161A20, D_L01_00161A28);
             first = scale_game_frames(D_L01_00161A2C);
             second = scale_game_frames(D_L01_00161A30);
             duration = truncate_float_to_s32(FUN_00220e20(random_float_between_alt((f32)D_L01_00161A34 * 0.5f, (f32)D_L01_00161A34 * 2.5f)));
-            spawn_spark(pos, origin_copy, velocity, lower, upper, first, second, duration, -1);
+            spawn_spark(spawn_position, origin_copy, velocity, lower, upper, first, second, duration, -1);
         }
         i = next;
       } while (i < D_L01_001619EC);
