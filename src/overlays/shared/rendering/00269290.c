@@ -981,9 +981,9 @@ void FUN_L00_0026b910(Part_26b910 *particle) {
             particle->hA = FUN_001f96f8_0026b910(30);
             particle->w4 = particle_data->w14 | 0x7F000000;
         } else {
-            int r = FUN_001f96f8_0026b910(10);
+            int fade_in_duration = FUN_001f96f8_0026b910(10);
             float k = 96.0f / (float)FUN_001f96f8_0026b910(10);
-            particle->w4 = ((FUN_001fa6d0_0026b910((float)(r - particle->hA) * k) + 0x20) << 24) | particle_data->w14;
+            particle->w4 = ((FUN_001fa6d0_0026b910((float)(fade_in_duration - particle->hA) * k) + 0x20) << 24) | particle_data->w14;
         }
     } else {
         if (FUN_001f9770_0026b910(&particle->hA)) {
