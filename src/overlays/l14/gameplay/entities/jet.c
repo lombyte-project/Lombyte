@@ -2522,7 +2522,7 @@ extern float FUN_001f9b48(void *, void *);
 void FUN_L14_002f1140(struct Moby *moby) {
     char *taxi_vars = (char *)moby->pvars;
     char *selected_path;
-    float inv, travel_step_limit, b, first_segment_length;
+    float inv, travel_step_limit, travel_acceleration_step, first_segment_length;
     switch (*(short *)(taxi_vars + 0xB4)) {
     case TAXI_STOP_RETURN_HUB:
         *(char **)(taxi_vars + 0xAC) = D_L14_001B0BB0_c2[*(int *)(taxi_vars + 0x94)];
@@ -2546,12 +2546,12 @@ void FUN_L14_002f1140(struct Moby *moby) {
     selected_path = *(char **)(taxi_vars + 0xAC);
     first_segment_length = FUN_001f9b48(selected_path + 0x10, selected_path + 0x20);
     travel_step_limit = D_0015ED6C_u * 5.0f;
-    b = frame_time_sq * 2.5f;
+    travel_acceleration_step = frame_time_sq * 2.5f;
     inv = 1.0f / (first_segment_length * (float)**(int **)(taxi_vars + 0xAC));
     *(int *)(taxi_vars + 0xC4) = 0;
     *(int *)(taxi_vars + 0xC0) = 0;
     *(float *)(taxi_vars + 0xD4) = travel_step_limit * inv;
-    *(float *)(taxi_vars + 0xD8) = b * inv;
+    *(float *)(taxi_vars + 0xD8) = travel_acceleration_step * inv;
 }
 /* Finds the moby in this moby's group list whose vars tag at 0xB4 matches, or returns null. */
 struct TaggedVars {
