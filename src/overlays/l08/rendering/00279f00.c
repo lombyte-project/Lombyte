@@ -61,13 +61,13 @@ extern unsigned char *D_L08_001B292C __attribute__((section(".data")));
 extern unsigned char *FUN_L00_002678b8(int);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-unsigned char *FUN_L08_0027b450(int owner, void *pos, void *vec, short ticks, unsigned char r,
+unsigned char *FUN_L08_0027b450(int owner, void *spawn_position, void *vec, short ticks, unsigned char r,
                                 unsigned char g, unsigned char b, unsigned char a, float size) {
     unsigned char *effect = FUN_L00_002678b8(0x2B);
     unsigned char *effect_data;
     if (effect != 0) {
         effect_data = effect + 0x20;
-        qcopy(effect + 0x10, pos);
+        qcopy(effect + 0x10, spawn_position);
         qcopy(effect_data, vec);
         effect_data[0x14] = r;
         effect_data[0x15] = g;
