@@ -3,13 +3,13 @@
 
 extern sceGsGParam *GetCoreDataTable(void);
 
-s16 sceGszbufaddr(s16 psm, s16 w, s16 height_pixels) {
+s16 sceGszbufaddr(s16 psm, s16 width_pixels, s16 height_pixels) {
     sceGsGParam *gp;
     s32 fw;
     s32 fh;
 
     gp = GetCoreDataTable();
-    fw = (w + 63) / 64;
+    fw = (width_pixels + 63) / 64;
     if (psm & 2) {
         fh = (height_pixels + 63) / 64;
     } else {
