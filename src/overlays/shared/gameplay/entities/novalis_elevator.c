@@ -440,21 +440,21 @@ extern void FUN_L00_0026c6e8(char *, char *);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void FUN_L01_002c72c8(void) {
-    float v[4];
+    float offset_vector[4];
     float spawn_position[4];
     float base_angle, b;
     int i;
-    fast_vec_sub(v, D_L01_00167240, D_L01_001742E0);
-    base_angle = -fast_arc_tan(vector_length_xy(v), v[2]);
-    fast_arc_tan(v[0], v[1]);
+    fast_vec_sub(offset_vector, D_L01_00167240, D_L01_001742E0);
+    base_angle = -fast_arc_tan(vector_length_xy(offset_vector), offset_vector[2]);
+    fast_arc_tan(offset_vector[0], offset_vector[1]);
     for (i = 19; i >= 0; i--) {
         float x, y;
         x = fast_add_rotations(randf_sym(0.0f, 3.1415927f), base_angle);
         y = fast_add_rotations(randf_sym(0.0f, 3.1415927f), base_angle);
-        build_spherical_offset(v, 0.2f, y, x);
-        fast_vec_scale(spawn_position, v, random_float_between_alt(1.0f, 3.0f));
+        build_spherical_offset(offset_vector, 0.2f, y, x);
+        fast_vec_scale(spawn_position, offset_vector, random_float_between_alt(1.0f, 3.0f));
         fast_vec_add(spawn_position, spawn_position, D_L01_001742E0);
-        FUN_L00_0026c6e8((char *)spawn_position, (char *)v);
+        FUN_L00_0026c6e8((char *)spawn_position, (char *)offset_vector);
     }
     for (i = 9; i >= 0; i--) {
         float x, y;
@@ -463,8 +463,8 @@ void FUN_L01_002c72c8(void) {
         spawn_position[2] = D_L01_001742C0[10] + randf_sym(0.0f, 0.1f);
         x = fast_add_rotations(randf_sym(0.0f, 3.1415927f), base_angle);
         y = fast_add_rotations(randf_sym(0.0f, 3.1415927f), base_angle);
-        build_spherical_offset(v, 0.05f, y, x);
-        FUN_L00_0026cbb0(spawn_position, v, 0x4F007FFF, 0x1FFFFFFF,
+        build_spherical_offset(offset_vector, 0.05f, y, x);
+        FUN_L00_0026cbb0(spawn_position, offset_vector, 0x4F007FFF, 0x1FFFFFFF,
                          FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1, 20000.0f);
     }
 }
