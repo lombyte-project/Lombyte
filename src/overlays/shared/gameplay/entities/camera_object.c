@@ -2671,12 +2671,12 @@ int FUN_L00_002aa2a8(char *trajectory_state, char *moby, int mode) {
             enqueue_callback_list_1_alt(FUN_L00_002a9c50_c, moby);
         }
         {
-            char *g = (char *)&D_L00_00166DC0;
+            char *camera_position = (char *)&D_L00_00166DC0;
             char *hit_position = trajectory_state + 0x10;
             *(u128 *)(trajectory_state + 0x20) = *(u128 *)D_L00_00173E80;
-            subtract_vector_xyz(C, hit_position, g);
+            subtract_vector_xyz(C, hit_position, camera_position);
             scale_vector_xyz_c(C, C, 0.95f);
-            add_vector_xyz(hit_position, C, g);
+            add_vector_xyz(hit_position, C, camera_position);
         }
         return 1;
     }
