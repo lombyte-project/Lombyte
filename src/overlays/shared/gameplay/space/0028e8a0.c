@@ -103,7 +103,7 @@ int f122298_28e9c8(int) __asm__("FUN_00122298");
 int f215b10_28e9c8(void) __asm__("FUN_00215b10");
 void FUN_L00_0028e9c8(int audio_selection_mode) {
     O_28e9c8 *moby;
-    int secondary_track_index, base_audio_selection_index, audio_stream_table_index, alternate_audio_stream_table_index, u;
+    int secondary_track_index, base_audio_selection_index, audio_stream_table_index, alternate_audio_stream_table_index, shared_table_offset;
     D_0013E030_28e9c8.x24 = -1;
     D_L00_0015F5D8 = 1;
     D_0013E030_28e9c8.x20 = audio_selection_mode;
@@ -112,12 +112,12 @@ void FUN_L00_0028e9c8(int audio_selection_mode) {
     memset_28e9c8(D_L00_0017C340, 0, 0x40);
     memset_28e9c8(D_L00_0017C380, 0, 0x40);
     f2335a0_28e9c8();
-    u = D_L00_001611CC - 0x60000;
-    D_L00_0016C860_28e9c8.x58 = D_L00_00173E00_28e9c8.x4 + u;
-    D_L00_0016C860_28e9c8.x5c = D_L00_00173E00_28e9c8.x8 + u;
+    shared_table_offset = D_L00_001611CC - 0x60000;
+    D_L00_0016C860_28e9c8.x58 = D_L00_00173E00_28e9c8.x4 + shared_table_offset;
+    D_L00_0016C860_28e9c8.x5c = D_L00_00173E00_28e9c8.x8 + shared_table_offset;
     fade_level = 1.0f;
     D_L00_0015F5C4 = 6;
-    D_L00_001611CC = u;
+    D_L00_001611CC = shared_table_offset;
     D_L00_0015F400 = 0;
     hero_set_state(100, 2);
     D_001413F5_28e9c8 = 1;
