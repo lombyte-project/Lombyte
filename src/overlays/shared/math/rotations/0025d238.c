@@ -480,9 +480,9 @@ int FUN_L00_0025e368(char *moby) {
 }
 /* True for a moby of one of eight listed classes. */
 s32 FUN_L00_0025e3f8(void *moby) {
-    s16 v = *(s16 *)((char *)moby + 0xA6);
-    if (v == 0xE2 || v == 0xCC || v == 0xDE || v == 0x3EE || v == 0xD6 || v == 0xE1 || v == 0xD5 ||
-        v == 0xDF) {
+    s16 moby_class_id = *(s16 *)((char *)moby + 0xA6);
+    if (moby_class_id == 0xE2 || moby_class_id == 0xCC || moby_class_id == 0xDE || moby_class_id == 0x3EE || moby_class_id == 0xD6 || moby_class_id == 0xE1 || moby_class_id == 0xD5 ||
+        moby_class_id == 0xDF) {
         return 1;
     }
     return 0;
