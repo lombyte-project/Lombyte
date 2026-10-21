@@ -612,13 +612,13 @@ typedef struct {
 
 extern float D_L18_0016196C __attribute__((sda));
 
-void FUN_L18_002d5610(void *moby_object, void *src) {
+void FUN_L18_002d5610(void *moby_object, void *movement_step) {
     char *moby = moby_object;
     float movement_step_copy[4];
     float *qp = movement_step_copy;
     int flags;
     float flag_selected_effect_scalar, flag_selected_effect_argument, effect_scale, hit_radius, e;
-    *(OvlQuad *)qp = *(OvlQuad *)src;
+    *(OvlQuad *)qp = *(OvlQuad *)movement_step;
     flags = *(int *)(*(char **)(moby + 0x78) + 0x38);
     effect_scale = (flags & 1) ? 2.0f : 0.75f;
     flag_selected_effect_scalar = (flags & 1) ? 4.0f : 2.0f;
