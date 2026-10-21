@@ -2541,34 +2541,34 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_L16_002e8b98(int point_count, Vec3f *direction_vectors, Vec3f *point_positions, int unused, float *out) {
     int i;
     float relative_direction[4];
-    float v[4];
+    float point_position[4];
     float reflection_projection_scratch[4];
-    float w[4];
+    float reflection_direction_scratch[4];
 
     for (i = 0; i < point_count; i++) {
         float direction_dot_product;
-        float len;
+        float projection_denominator;
 
-        v[3] = 1.0f;
-        v[0] = point_positions[i].x;
-        v[1] = point_positions[i].y;
-        v[2] = point_positions[i].z;
-        fast_vec_sub(relative_direction, v, D_L16_001671C0);
+        point_position[3] = 1.0f;
+        point_position[0] = point_positions[i].x;
+        point_position[1] = point_positions[i].y;
+        point_position[2] = point_positions[i].z;
+        fast_vec_sub(relative_direction, point_position, D_L16_001671C0);
         fast_vec_normalize(relative_direction, relative_direction, 1.0f);
-        w[3] = 1.0f;
-        w[0] = direction_vectors[i].x;
-        w[1] = direction_vectors[i].y;
-        w[2] = direction_vectors[i].z;
-        fast_vec_normalize(w, w, 1.0f);
-        direction_dot_product = fast_vec_dot(w, relative_direction);
-        fast_vec_scale(reflection_projection_scratch, w, direction_dot_product + direction_dot_product);
+        reflection_direction_scratch[3] = 1.0f;
+        reflection_direction_scratch[0] = direction_vectors[i].x;
+        reflection_direction_scratch[1] = direction_vectors[i].y;
+        reflection_direction_scratch[2] = direction_vectors[i].z;
+        fast_vec_normalize(reflection_direction_scratch, reflection_direction_scratch, 1.0f);
+        direction_dot_product = fast_vec_dot(reflection_direction_scratch, relative_direction);
+        fast_vec_scale(reflection_projection_scratch, reflection_direction_scratch, direction_dot_product + direction_dot_product);
         fast_vec_sub(reflection_projection_scratch, relative_direction, reflection_projection_scratch);
         fast_vec_normalize(reflection_projection_scratch, reflection_projection_scratch, 1.0f);
         reflection_projection_scratch[2] = reflection_projection_scratch[2] + 1.0f;
-        len = fast_vec_length(reflection_projection_scratch);
-        len = len + len;
-        out[i * 2] = (reflection_projection_scratch[0] / len + 0.5f) * 2.0f;
-        out[i * 2 + 1] = (reflection_projection_scratch[1] / len + 0.5f) * 2.0f;
+        projection_denominator = fast_vec_length(reflection_projection_scratch);
+        projection_denominator = projection_denominator + projection_denominator;
+        out[i * 2] = (reflection_projection_scratch[0] / projection_denominator + 0.5f) * 2.0f;
+        out[i * 2 + 1] = (reflection_projection_scratch[1] / projection_denominator + 0.5f) * 2.0f;
     }
 }
 /* Sets up the draw state, then draws the three entries of the level's table. */
