@@ -23,7 +23,7 @@ s32 _ipuVdec(MpegDec *decoder, s32 tbl) {
     s32 i;
     s32 j;
     u32 cmd;
-    s64 r;
+    s64 command_result;
     s64 top;
     u32 bp;
 
@@ -38,13 +38,13 @@ s32 _ipuVdec(MpegDec *decoder, s32 tbl) {
     cmd = (tbl << 26) | 0x30000000;
     *(volatile u32 *)IPU_CMD = cmd;
     decoder->unk818 = IpuCommandTable[(s32)cmd >> 28];
-    r = *IPU_CMD;
-    while (r < 0) {
+    command_result = *IPU_CMD;
+    while (command_result < 0) {
         if (i++ > 5000) {
             _dispatchMpegCbNodata(decoder->cbData);
             i = 0;
         }
-        r = *IPU_CMD;
+        command_result = *IPU_CMD;
     }
     bp = *IPU_BP;
     top = *IPU_TOP;
@@ -54,6 +54,6 @@ s32 _ipuVdec(MpegDec *decoder, s32 tbl) {
     } else {
         decoder->unk83C = 32;
     }
-    decoder->unk11C = (s32)r == 0;
-    return (s16)r;
+    decoder->unk11C = (s32)command_result == 0;
+    return (s16)command_result;
 }
