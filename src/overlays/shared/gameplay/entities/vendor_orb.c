@@ -614,7 +614,7 @@ void FUN_L00_002e0788(unsigned char *moby) {
     float *a;
     int *t;
     int i, j, c;
-    float pre_wrap_sum, g;
+    float pre_wrap_sum, color_cycle_progress;
     j = 0;
     moby += 0x10;
     fast_vec_sub(sprite_position_and_step, D_L00_00166DC0, moby);
@@ -635,9 +635,9 @@ void FUN_L00_002e0788(unsigned char *moby) {
             moby_data->t[j] = ticks_2e0788(0xff);
         }
         t++;
-        g = i2f_2e0788(ticks_2e0788(0xff) - moby_data->t[j]);
-        g = g / (float)ticks_2e0788(0xff);
-        c = fast_tween_color(0x4040FFFF, 0x1040FFFF, f99c0_2e0788(0.5f - g));
+        color_cycle_progress = i2f_2e0788(ticks_2e0788(0xff) - moby_data->t[j]);
+        color_cycle_progress = color_cycle_progress / (float)ticks_2e0788(0xff);
+        c = fast_tween_color(0x4040FFFF, 0x1040FFFF, f99c0_2e0788(0.5f - color_cycle_progress));
         spr_2e0788(sprite_position_and_step, c, f2i_2e0788(*a++), 0x35, 1, 2, 0, moby_data->c[j]);
         j++;
         fast_vec_add(sprite_position_and_step, sprite_position_and_step, &sprite_position_and_step[1]);
