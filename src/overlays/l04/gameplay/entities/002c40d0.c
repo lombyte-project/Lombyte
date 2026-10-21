@@ -49,7 +49,7 @@ extern void FUN_L00_00250df8(void *);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 /* Creates a class 0x23A moby at pos, copying a few fields from src. */
-void *FUN_L04_002d34d8(char *src, char *pos) {
+void *FUN_L04_002d34d8(char *source_moby, char *pos) {
     char saved_position[16];
     char *saved_position_ptr = saved_position;
     char *created_moby;
@@ -57,12 +57,12 @@ void *FUN_L04_002d34d8(char *src, char *pos) {
     created_moby = (char *)func_0020D348_m(0x23a);
     if (created_moby != 0) {
         *(unsigned char *)(created_moby + 0x30) = 0xFF;
-        *(unsigned short *)(created_moby + 0x32) = *(unsigned short *)(src + 0x32);
+        *(unsigned short *)(created_moby + 0x32) = *(unsigned short *)(source_moby + 0x32);
         created_moby[0x31] = 1;
         *(int *)(created_moby + 0x40) = 0;
         *(int *)(created_moby + 0x44) = 0;
-        *(float *)(created_moby + 0x48) = *(float *)(src + 0x48);
-        *(unsigned long *)(created_moby + 0x38) = *(unsigned long *)(src + 0x38);
+        *(float *)(created_moby + 0x48) = *(float *)(source_moby + 0x48);
+        *(unsigned long *)(created_moby + 0x38) = *(unsigned long *)(source_moby + 0x38);
         qcopy(created_moby + 0x10, saved_position_ptr);
         FUN_L00_00250df8(created_moby);
     }
