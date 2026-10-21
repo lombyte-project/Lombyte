@@ -527,13 +527,13 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 void FUN_L08_002d3d78(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float movement_length = vector_length_xyz((float *)(data + 0x40)) - frame_time_sq * 6.0f;
-    float lim = frame_time * 3.0f;
+    float movement_length_limit = frame_time * 3.0f;
     float target_height;
     float vertical_step;
     float probe_position_or_correction[4];
     float *velocity_ptr;
-    if (lim < movement_length) {
-        movement_length = lim;
+    if (movement_length_limit < movement_length) {
+        movement_length = movement_length_limit;
     } else if (movement_length < 0.0f) {
         movement_length = 0.0f;
     }
@@ -546,13 +546,13 @@ void FUN_L08_002d3d78(char *moby) {
         target_height += *(float *)(data + 0x200);
     vertical_step = target_height - *(float *)(moby + 0x18);
     {
-        float l2 = frame_time * 3.0f;
-        if (l2 < vertical_step) {
-            vertical_step = l2;
+        float vertical_step_limit = frame_time * 3.0f;
+        if (vertical_step_limit < vertical_step) {
+            vertical_step = vertical_step_limit;
         } else {
-            l2 = -l2;
-            if (vertical_step < l2)
-                vertical_step = l2;
+            vertical_step_limit = -vertical_step_limit;
+            if (vertical_step < vertical_step_limit)
+                vertical_step = vertical_step_limit;
         }
     }
     *(float *)(data + 0x48) = vertical_step;
