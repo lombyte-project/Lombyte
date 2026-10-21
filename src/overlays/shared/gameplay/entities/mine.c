@@ -2059,7 +2059,7 @@ int tick_2af5b8(void *) __asm__("FUN_001f9770");
 void debris_update(unsigned char *m) __asm__("FUN_L00_002af5b8");
 extern C_2af5b8 D_L00_00161438 __attribute__((section(".data")));
 void debris_update(unsigned char *debris_moby) {
-    W_2af5b8 *w = *(W_2af5b8 **)(debris_moby + 0x78);
+    W_2af5b8 *debris_data = *(W_2af5b8 **)(debris_moby + 0x78);
     C_2af5b8 c;
     V_2af5b8 v;
     V_2af5b8 random_direction;
@@ -2084,19 +2084,19 @@ void debris_update(unsigned char *debris_moby) {
             }
         }
     }
-    *(float *)(debris_moby + 0x40) = app_2af5b8(*(float *)(debris_moby + 0x40), w->x10);
-    *(float *)(debris_moby + 0x44) = app_2af5b8(*(float *)(debris_moby + 0x44), w->x14);
-    add_2af5b8(debris_moby + 0x10, debris_moby + 0x10, w);
-    w->x8 -= D_0015ED70_2af5b8 * 14.6f;
+    *(float *)(debris_moby + 0x40) = app_2af5b8(*(float *)(debris_moby + 0x40), debris_data->x10);
+    *(float *)(debris_moby + 0x44) = app_2af5b8(*(float *)(debris_moby + 0x44), debris_data->x14);
+    add_2af5b8(debris_moby + 0x10, debris_moby + 0x10, debris_data);
+    debris_data->x8 -= D_0015ED70_2af5b8 * 14.6f;
     if (*(float *)(debris_moby + 0x10) < 0.0f || *(float *)(debris_moby + 0x14) < 0.0f || *(float *)(debris_moby + 0x18) < 0.0f) {
         kill_2af5b8(debris_moby);
         return;
     }
-    if (w->x18 < w->x1a / 4) {
-        f = itof_2af5b8(w->x18);
-        *(float *)(debris_moby + 0x2C) = w->x1c * f / itof_2af5b8(w->x1a / 4);
+    if (debris_data->x18 < debris_data->x1a / 4) {
+        f = itof_2af5b8(debris_data->x18);
+        *(float *)(debris_moby + 0x2C) = debris_data->x1c * f / itof_2af5b8(debris_data->x1a / 4);
     }
-    if (tick_2af5b8(&w->x18))
+    if (tick_2af5b8(&debris_data->x18))
         kill_2af5b8(debris_moby);
 }
 extern float D_0015ED6C_2af8b0 __asm__("D_0015ED6C");
