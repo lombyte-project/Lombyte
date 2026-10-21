@@ -578,7 +578,7 @@ void FUN_L14_00305b18(struct Moby *morphoray_moby) {
     float *a;
     int *t;
     int i, j, c, k;
-    float unwrapped_particle_value, g;
+    float unwrapped_particle_value, elapsed_timer_fraction;
     j = 0;
     effect_data->z += 0.1f;
     subtract_vector_xyz(particle_position_and_step, D_L14_001674C0, effect_data);
@@ -600,9 +600,9 @@ void FUN_L14_00305b18(struct Moby *morphoray_moby) {
             effect_data->t[j] = scale_game_frames(255);
         }
         t++;
-        g = convert_integer_to_float(scale_game_frames(255) - effect_data->t[j]);
-        g = g / (float)scale_game_frames(255);
-        c = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - g));
+        elapsed_timer_fraction = convert_integer_to_float(scale_game_frames(255) - effect_data->t[j]);
+        elapsed_timer_fraction = elapsed_timer_fraction / (float)scale_game_frames(255);
+        c = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - elapsed_timer_fraction));
         k = func_001FA898_r(*a++);
         FUN_L00_00272f68(effect_data->c[j], particle_position_and_step, c, k, 0x35, 1, 2, 0);
         j++;
