@@ -2332,7 +2332,7 @@ void homing_mine_update(struct Moby *moby) {
     f32 *health;
     char sight[0x50];
     char *hit;
-    Vec4 dir;
+    Vec4 chase_step;
     u8 contact[0x30];
     Vec4 probe;
     Vec4 push;
@@ -2357,8 +2357,8 @@ void homing_mine_update(struct Moby *moby) {
     hit_test_19040(moby, hit, health, 0, &touching, 0, 0, 4);
     if (touching >= 2 && hit != NULL && (*(struct Moby **)(hit + 0x20))->oclass != 0x456 &&
         (*(struct Moby **)(hit + 0x20))->oclass != 0x365 && (*(struct Moby **)(hit + 0x20))->oclass != 0x367) {
-        clear_u64_value(dir.f);
-        spawn_explosion(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
+        clear_u64_value(chase_step.f);
+        spawn_explosion(moby, &chase_step, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
         FUN_L00_00257470(moby, 0, -1);
         mark_moby_for_removal(moby);
         return;
@@ -2412,21 +2412,21 @@ void homing_mine_update(struct Moby *moby) {
             moby->pos.z -= frame_scale * 0.1f;
             if (tick_countdown_32_alt(&vars->bob_timer)) moby->command = 0;
         }
-        subtract_vector_xyz(&dir, sight, &moby->pos);
-        normalize_vector_xyz(&dir, &dir, vars->speed);
-        add_vector_xyz(&moby->pos, &moby->pos, &dir);
+        subtract_vector_xyz(&chase_step, sight, &moby->pos);
+        normalize_vector_xyz(&chase_step, &chase_step, vars->speed);
+        add_vector_xyz(&moby->pos, &moby->pos, &chase_step);
         if (FUN_001f9b48(&moby->pos, &vars->home) > 64.0f) {
             mark_moby_for_removal(moby);
             return;
         }
-        make_hit_descriptor_19040(contact, moby, 0x10001, 1.0f, &dir);
+        make_hit_descriptor_19040(contact, moby, 0x10001, 1.0f, &chase_step);
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.75f;
         if (probe_world_sphere(0.75f, &probe, 0x10, moby, contact) &&
             debris_target != NULL && debris_target->oclass != 0x363 &&
             debris_target->oclass != 0x456 && debris_target->oclass != 0x458 &&
             debris_target->oclass != 0x365 && debris_target->oclass != 0x367) {
-            spawn_explosion(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
+            spawn_explosion(moby, &chase_step, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
             mark_moby_for_removal(moby);
             return;
         }
@@ -2437,7 +2437,7 @@ void homing_mine_update(struct Moby *moby) {
             add_vector_xyz(&moby->pos, &moby->pos, &push);
         }
         if (!tick_countdown_32_alt(&vars->timeout)) break;
-        spawn_explosion(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
+        spawn_explosion(moby, &chase_step, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
         mark_moby_for_removal(moby);
         return;
     case 4:
