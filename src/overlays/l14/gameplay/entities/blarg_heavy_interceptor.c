@@ -1129,27 +1129,27 @@ extern float D_L14_00161474 __attribute__((sda));
 extern float D_L14_00161478 __attribute__((sda));
 void FUN_L14_002ae0a8(struct Moby *m) {
     char *d = (char *)m->pvars;
-    float mat[4][4];
+    float glow_quad_transform[4][4];
     float glow_position_offset[4];
     Pk_2ae0a8 pk;
     float glow_to_camera_vector[4];
-    float rot[4];
+    float camera_facing_angles[4];
     u32 col;
     int i;
-    qcopy(mat[3], d + 0xD0);
-    mat[3][3] = 1.0f;
+    qcopy(glow_quad_transform[3], d + 0xD0);
+    glow_quad_transform[3][3] = 1.0f;
     scale_e(glow_position_offset, d + 0xA0, D_L14_00161478);
-    add_e(mat[3], mat[3], glow_position_offset);
+    add_e(glow_quad_transform[3], glow_quad_transform[3], glow_position_offset);
     pk.b = tex_e(0xB);
     pk.c = 0x0000FF9000000260ULL;
     pk.d = 0x8000000048ULL;
     pk.a = 0;
     sreg_e(0x47, 0x51001);
-    sub_e(glow_to_camera_vector, D_L14_001674C0_e, mat[3]);
-    rot[2] = atan2_e(glow_to_camera_vector[0], glow_to_camera_vector[1]);
-    rot[1] = -atan2_e(lenxy_e(glow_to_camera_vector), glow_to_camera_vector[2]);
-    rot[0] = 0.0f;
-    rotmat_e(mat, rot);
+    sub_e(glow_to_camera_vector, D_L14_001674C0_e, glow_quad_transform[3]);
+    camera_facing_angles[2] = atan2_e(glow_to_camera_vector[0], glow_to_camera_vector[1]);
+    camera_facing_angles[1] = -atan2_e(lenxy_e(glow_to_camera_vector), glow_to_camera_vector[2]);
+    camera_facing_angles[0] = 0.0f;
+    rotmat_e(glow_quad_transform, camera_facing_angles);
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
     pk.uv[2] = 0.0f;
@@ -1173,7 +1173,7 @@ void FUN_L14_002ae0a8(struct Moby *m) {
     }
     for (i = 0; i < 4; i++) {
         scale_e(pk.m[i], D_L14_001D8600[i], D_L14_00161474);
-        xform_e(pk.m[i], pk.m[i], mat);
+        xform_e(pk.m[i], pk.m[i], glow_quad_transform);
     }
     draw_e(&pk, 0, 0);
 }
