@@ -325,18 +325,18 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 /* Spawn point for the moby: its slot's stored position and rotation, or, with no slot, a point beside it on the side facing the hero. */
-void FUN_L02_002d8910(float *pos, float *rot, char *moby) {
+void FUN_L02_002d8910(float *pos, float *camera_rotation_output, char *moby) {
     V2d8910 midpoint_position;
     float left;
     float right;
     float pick;
     float to;
     float dl;
-    int idx;
+    int camera_transform_index;
     char *base;
 
-    idx = *(int *)(*(char **)(moby + 0x78) + 0xE8);
-    if (idx == -1) {
+    camera_transform_index = *(int *)(*(char **)(moby + 0x78) + 0xE8);
+    if (camera_transform_index == -1) {
         left = addrot_2d8910(*(float *)(moby + 0x48), 1.57079637f);
         right = addrot_2d8910(*(float *)(moby + 0x48), -1.57079637f);
         to = atan2_2d8910(D_L02_00167280_2d8910.x - *(float *)(moby + 0x10),
@@ -349,13 +349,13 @@ void FUN_L02_002d8910(float *pos, float *rot, char *moby) {
         pos[0] += cos_2d8910(pick) * 2.0f;
         pos[1] += sin_2d8910(pick) * 2.0f;
         pos[2] += 1.0f;
-        rot[0] = 0;
-        rot[1] = 0;
-        rot[2] = addrot_2d8910(pick, 3.14159274f);
+        camera_rotation_output[0] = 0;
+        camera_rotation_output[1] = 0;
+        camera_rotation_output[2] = addrot_2d8910(pick, 3.14159274f);
     } else {
         base = D_L02_001600EC_2d8910;
-        qcopy(pos, base + idx * 128 + 0x30);
-        qcopy(rot, base + idx * 128 + 0x70);
+        qcopy(pos, base + camera_transform_index * 128 + 0x30);
+        qcopy(camera_rotation_output, base + camera_transform_index * 128 + 0x70);
     }
 }
 
