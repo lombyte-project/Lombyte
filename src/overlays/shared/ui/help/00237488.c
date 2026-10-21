@@ -262,18 +262,18 @@ void FUN_L05_0023dc88(int i) {
         if (*restore_item_flag != 0) {
             int *r;
             int *rb;
-            int w;
+            int restored_item_id;
             *restore_item_flag = 0;
             rb = g->saved_item;
             r = rb + i;
-            w = *r;
-            if (w != 0 && w != *(int *)((char *)g + i * 0x50 + 0x10B8)) {
-                if (w == 0x26) {
-                    w = 0;
+            restored_item_id = *r;
+            if (restored_item_id != 0 && restored_item_id != *(int *)((char *)g + i * 0x50 + 0x10B8)) {
+                if (restored_item_id == 0x26) {
+                    restored_item_id = 0;
                 }
                 *r = 0;
-                ((int *)(D_00141660))[i] = w;
-                g->selected_item[i] = w;
+                ((int *)(D_00141660))[i] = restored_item_id;
+                g->selected_item[i] = restored_item_id;
                 if (i == 0) {
                     D_L05_00179F20[g->selected_item[0]].unk20 = 0x20;
                 }
