@@ -1019,7 +1019,7 @@ extern short D_L17_0016206C __attribute__((sda));
 int D_L17_00162070 = 4;
 void FUN_L17_002ec000(char *moby, char *obj, float aim_azimuth, float aim_elevation) {
     char aim_direction[16];
-    char b[16];
+    char projectile_spawn_position[16];
     char projectile_spawn_offset[16];
     char aim_world_position[16];
     build_spherical_offset(aim_direction, *(float *)&D_L17_0016206C * *(float *)&D_L17_001620A0_gp, aim_azimuth, aim_elevation);
@@ -1027,9 +1027,9 @@ void FUN_L17_002ec000(char *moby, char *obj, float aim_azimuth, float aim_elevat
     if (fast_dec_timer(obj + 0x80) && (*(int *)(D_0013A4E0_u + 0x2610) & 0x84)) {
         allocate_voice_for_target_entry(3, 0, (int)moby);
         fast_vec_normalize(projectile_spawn_offset, aim_direction, 2.2f);
-        moby_point_position(moby, 3 + (obj[0x61] & 1), b);
-        fast_vec_add(b, b, projectile_spawn_offset);
-        FUN_L11_00308848(moby, aim_direction, b, 200.0f, -1.0f);
+        moby_point_position(moby, 3 + (obj[0x61] & 1), projectile_spawn_position);
+        fast_vec_add(projectile_spawn_position, projectile_spawn_position, projectile_spawn_offset);
+        FUN_L11_00308848(moby, aim_direction, projectile_spawn_position, 200.0f, -1.0f);
         *(int *)(obj + 0x80) = D_L17_00162070;
         obj[0x61] ^= 1;
     }
