@@ -253,7 +253,7 @@ void FUN_L01_0030bfa8(char *moby) {
 extern char *func_0020D348_m(int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
-char *FUN_L01_0030c898(char *owner, char *pos, float target_yaw, float b, float initial_yaw, float initial_pitch) {
+char *FUN_L01_0030c898(char *owner, char *pos, float target_yaw, float target_pitch, float initial_yaw, float initial_pitch) {
     OvlQuad spawn_position_copy;
     char *cp = (char *)&spawn_position_copy;
     char *spawned_moby;
@@ -272,7 +272,7 @@ char *FUN_L01_0030c898(char *owner, char *pos, float target_yaw, float b, float 
         *(int *)(spawned_moby + 0x40) = 0;
         qcopy(spawned_moby + 0x10, cp);
         *(float *)(moby_vars + 8) = target_yaw;
-        *(float *)(moby_vars + 0xC) = b;
+        *(float *)(moby_vars + 0xC) = target_pitch;
         *(int *)moby_vars = 0;
         *(int *)(moby_vars + 4) = 0;
         lifetime_frames = scale_game_frames(0x23);
