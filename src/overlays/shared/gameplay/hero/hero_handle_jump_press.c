@@ -99,11 +99,11 @@ void FUN_L00_002325e0_002293a8(s32, s32) __asm__("FUN_L00_002325e0");
 void FUN_L00_0025f730_002293a8(void *, f32) __asm__("FUN_L00_0025f730");
 s32 FUN_L00_00205000_002293a8(s32) __asm__("FUN_L00_00205000");
 void FUN_L00_002293a8(void) {
-    u8 *b, *hero_run_base, *hero_stop_idle_base;
+    u8 *hero_byte_base, *hero_run_base, *hero_stop_idle_base;
     s32 animation_frames_or_id;
-    b = D_0013F350_002293a8;
-    *(s32 *)(b + 0x2284) = 0;
-    if (b[0x12E2] != 0 && frame_time * 0.5f < *(f32 *)(b + 0x164)) {
+    hero_byte_base = D_0013F350_002293a8;
+    *(s32 *)(hero_byte_base + 0x2284) = 0;
+    if (hero_byte_base[0x12E2] != 0 && frame_time * 0.5f < *(f32 *)(hero_byte_base + 0x164)) {
         hero_set_state(0x2F, 1);
         return;
     }
