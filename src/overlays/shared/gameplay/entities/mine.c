@@ -2384,10 +2384,10 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
     s32 candidate_aim_record_address;
     s32 i;
     s32 flag;
-    f32 best, yaw, pitch, dist, ang, z, angh, angv;
+    f32 best, yaw, pitch, candidate_aim_distance, ang, z, angh, angv;
     char *spos;
     char *opos;
-    struct Hero *g;
+    struct Hero *hero_context;
 
     i = 0;
     best = 10000.0f;
@@ -2396,7 +2396,7 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
     candidate_moby = active_mobies[i];
     if (candidate_moby == 0)
         return;
-    g = &hero;
+    hero_context = &hero;
     while (candidate_moby != 0) {
         if (*(s8 *)(candidate_moby + 0x20) < 0)
             goto next;
@@ -2432,26 +2432,26 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
             goto next;
         angh = fast_arc_tan(candidate_aim_position.f[0] - *(f32 *)(self + 0x10), candidate_aim_position.f[1] - *(f32 *)(self + 0x14));
         angv = fast_arc_tan(vector_distance(spos, &candidate_aim_position), candidate_aim_position.f[2] - *(f32 *)(self + 0x18));
-        dist = FUN_001f9b48(spos, &candidate_aim_position);
-        if (dist < 2.5f) {
-            char *cam = *(char **)&g->moby;
+        candidate_aim_distance = FUN_001f9b48(spos, &candidate_aim_position);
+        if (candidate_aim_distance < 2.5f) {
+            char *hero_moby = *(char **)&hero_context->moby;
             if (fast_difference_between_rotations(
-                    *(f32 *)(cam + 0x48), fast_arc_tan(*(f32 *)(candidate_moby + 0x10) - g->motion.pos.f[0],
-                                                       *(f32 *)(candidate_moby + 0x14) - g->motion.pos.f[1])) < 1.0471976f) {
+                    *(f32 *)(hero_moby + 0x48), fast_arc_tan(*(f32 *)(candidate_moby + 0x10) - hero_context->motion.pos.f[0],
+                                                       *(f32 *)(candidate_moby + 0x14) - hero_context->motion.pos.f[1])) < 1.0471976f) {
                 if (FUN_001f99c0(angv) < 0.7853982f)
                     return;
             }
         }
-        if (best < dist)
+        if (best < candidate_aim_distance)
             goto next;
         ang = convert_integer_to_float(D_0013E520_u.bB) * 0.6981317f;
-        FUN_00214db0(&lv, dist, yaw, pitch + g->ground_pitch.f * 0.5f);
+        FUN_00214db0(&lv, candidate_aim_distance, yaw, pitch + hero_context->ground_pitch.f * 0.5f);
         fast_vec_add(&lv, &lv, spos);
-        z = fast_arc_sin(FUN_001f9b48(&lv, &candidate_aim_position) / (dist + dist));
+        z = fast_arc_sin(FUN_001f9b48(&lv, &candidate_aim_position) / (candidate_aim_distance + candidate_aim_distance));
         ang = ang + 1.5707964f;
         if (ang < z + z && candidate_aim_record_address != 0) {
             ang = convert_integer_to_float(*(u8 *)(candidate_aim_record_address + 0xA) << 3) * 0.125f;
-            fast_arc_sin(ang / dist);
+            fast_arc_sin(ang / candidate_aim_distance);
         }
         flag = 1;
         if (FUN_001efa68_u(D_L00_00166DC0, &candidate_aim_position, 6, self, 0) != 0) {
@@ -2459,7 +2459,7 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
             if (hit == 0 || hit != (s32)candidate_moby)
                 flag = 0;
         } else {
-            best = dist;
+            best = candidate_aim_distance;
             pitch = -angv;
             yaw = angh;
             if (FUN_L00_0025f878(candidate_moby) != 0)
