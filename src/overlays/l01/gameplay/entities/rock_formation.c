@@ -1349,7 +1349,7 @@ extern int enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600
 /* On first use, lowers and ripples the layers' vertices; every frame, pulses their glow and queues FUN_L01_002feb28. */
 void FUN_L01_002feb58(void *callback_argument) {
     s32 i;
-    s32 g;
+    s32 glow_layer_index;
     s32 j;
     s32 k;
     s32 ripple_layer_index;
@@ -1390,8 +1390,8 @@ void FUN_L01_002feb58(void *callback_argument) {
     }
     glow_factor = fast_sin((convert_integer_to_float(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
     glow_factor = glow_factor * 0.5f + 0.5f;
-    for (g = 3; g >= 0; g--) {
-        D_L01_001FBC80[g].glow = glow_factor;
+    for (glow_layer_index = 3; glow_layer_index >= 0; glow_layer_index--) {
+        D_L01_001FBC80[glow_layer_index].glow = glow_factor;
     }
     enqueue_callback_list_1(FUN_L01_002feb28, callback_argument);
 }
