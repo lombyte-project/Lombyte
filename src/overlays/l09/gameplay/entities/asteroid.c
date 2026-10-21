@@ -1344,21 +1344,21 @@ void FUN_L09_002ef430(struct Moby *moby) {
     float old[4];
     float spark_velocity[4];
     float random_spark_vector[4];
-    float *vel = (float *)moby->pvars;
+    float *debris_vars = (float *)moby->pvars;
     float *pos = (float *)&moby->pos;
     int i;
 
     qcopy(old, pos);
-    add_vector_xyz(pos, pos, vel);
+    add_vector_xyz(pos, pos, debris_vars);
     if (moby->pos.x < 0.0f || moby->pos.y < 0.0f || moby->pos.z < 0.0f ||
         vector_distance(pos, D_L09_00166F40_2ef430) > 64.0f) {
         mark_moby_for_removal_2ef430(moby);
         return;
     }
-    moby->rot.z = fast_add_rotations_2ef430(moby->rot.z, vel[4]);
-    moby->rot.y = fast_add_rotations_2ef430(moby->rot.y, vel[5]);
-    vel[2] -= D_0015ED70_2ef430 * 9.8f;
-    if (fast_dec_timer((int *)(vel + 7))) {
+    moby->rot.z = fast_add_rotations_2ef430(moby->rot.z, debris_vars[4]);
+    moby->rot.y = fast_add_rotations_2ef430(moby->rot.y, debris_vars[5]);
+    debris_vars[2] -= D_0015ED70_2ef430 * 9.8f;
+    if (fast_dec_timer((int *)(debris_vars + 7))) {
         for (i = 0; i < 2; i++) {
             *(OvlQuad *)random_spark_vector = 0;
             random_spark_vector[0] = random_float_2ef430(-1.0f, 1.0f);
@@ -1376,10 +1376,10 @@ void FUN_L09_002ef430(struct Moby *moby) {
         return;
     }
     if (collision_line(old, pos, 2, moby, 0)) {
-        reflect_2ef430(vel, vel, D_L09_00174000);
-        scale_vector_xyz(vel, vel, random_float_2ef430(0.45f, 0.75f));
-        if (vector_length_xyz(vel) < D_0015ED70_2ef430 * 10.0f) {
-            clear_u64_value(vel);
+        reflect_2ef430(debris_vars, debris_vars, D_L09_00174000);
+        scale_vector_xyz(debris_vars, debris_vars, random_float_2ef430(0.45f, 0.75f));
+        if (vector_length_xyz(debris_vars) < D_0015ED70_2ef430 * 10.0f) {
+            clear_u64_value(debris_vars);
         }
         normalize_vector_xyz(D_L09_00174000, D_L09_00174000, 0.05f);
         add_vector_xyz(pos, D_L09_00174000 - 0x20, D_L09_00174000);
