@@ -1584,7 +1584,7 @@ void peckbot_update(Mob577 *self) {
     f32 hitA4;
     f32 angle;
     f32 knockback_travel_time;
-    Mob577Vars *v;
+    Mob577Vars *peckbot_vars;
     Mob577Hit *hit;
     MobyNode *candidate_moby;
     void *target_moby;
@@ -1608,8 +1608,8 @@ void peckbot_update(Mob577 *self) {
     f32 g13;
     f32 ang;
 
-    v = self->vars;
-    FUN_L00_00263ac8(self, 0, v->x230, 1.5f);
+    peckbot_vars = self->vars;
+    FUN_L00_00263ac8(self, 0, peckbot_vars->x230, 1.5f);
     if (cutscene_mode == 2) {
         self->id = 0;
         self->flags |= 0x41;
@@ -1617,25 +1617,25 @@ void peckbot_update(Mob577 *self) {
     }
     self->id = self->ref->id;
     self->flags &= ~0x41;
-    FUN_L00_0025fcb8(self, &target, v->range + 4.0f);
+    FUN_L00_0025fcb8(self, &target, peckbot_vars->range + 4.0f);
     target_moby = target.p40;
     qcopy(&oldpos, &self->pos);
-    if (v->x38 != 0) {
-        v->x214 = scale_game_frames(0xF0);
+    if (peckbot_vars->x38 != 0) {
+        peckbot_vars->x214 = scale_game_frames(0xF0);
     }
-    v->x38 = 0;
-    fast_dec_timer_s16(&v->x208);
-    if (fast_dec_timer_s16(&v->x214) != 0) {
-        v->range = 12.0f;
+    peckbot_vars->x38 = 0;
+    fast_dec_timer_s16(&peckbot_vars->x208);
+    if (fast_dec_timer_s16(&peckbot_vars->x214) != 0) {
+        peckbot_vars->range = 12.0f;
     } else {
-        v->range = 24.0f;
+        peckbot_vars->range = 24.0f;
     }
     hitA4 = 0.0f;
     hit = find_moby_hit(self, 0x330000, 0);
-    hit_reaction(self, hit, &v->health, 0, &hitA0, &hitA4, 0, 4);
-    fast_dec_timer_s16(&v->flee_timer);
-    if (v->flee_timer < scale_game_frames(0x2D) && hit != NULL && self->state != 0x63) {
-        if ((hit->cls->oclass == 0xB0 || hit->cls->oclass == 0xB1) && v->flee_timer != 0) {
+    hit_reaction(self, hit, &peckbot_vars->health, 0, &hitA0, &hitA4, 0, 4);
+    fast_dec_timer_s16(&peckbot_vars->flee_timer);
+    if (peckbot_vars->flee_timer < scale_game_frames(0x2D) && hit != NULL && self->state != 0x63) {
+        if ((hit->cls->oclass == 0xB0 || hit->cls->oclass == 0xB1) && peckbot_vars->flee_timer != 0) {
             hit->dmg = 0.0f;
         }
         if (self->group != 0xFF) {
@@ -1644,45 +1644,45 @@ void peckbot_update(Mob577 *self) {
         if (hit->dmg != 0.0f) {
             angle = FUN_L00_001ff8b0_cf(self->pos.f[0] - target.pos.f[0],
                                         self->pos.f[1] - target.pos.f[1]);
-            hp = v->health - hit->dmg;
-            v->x130 = 0.008f;
-            v->x134 = 0.0005f;
-            v->x138 = D_L01_00161A64 * frame_time;
-            v->x13C = D_L01_00161A60 * frame_time;
-            v->x144 = 9;
-            v->health = hp;
-            v->x15D = 0;
+            hp = peckbot_vars->health - hit->dmg;
+            peckbot_vars->x130 = 0.008f;
+            peckbot_vars->x134 = 0.0005f;
+            peckbot_vars->x138 = D_L01_00161A64 * frame_time;
+            peckbot_vars->x13C = D_L01_00161A60 * frame_time;
+            peckbot_vars->x144 = 9;
+            peckbot_vars->health = hp;
+            peckbot_vars->x15D = 0;
             if (hp <= 0.0f) {
                 self->flags &= ~0x1000;
-                v->x13C = v->x138 = frame_time * 11.0f;
+                peckbot_vars->x13C = peckbot_vars->x138 = frame_time * 11.0f;
                 vector_scratch.q = hit->pos;
-                trooper_knockback_arc(&vector_scratch, &angle, &v->x138, &v->x13C);
-                trooper_start_knockback(self, v->knock, 7, 1, 0, angle);
-                v->x170 = 11.0f;
-                v->x174 = 18.0f;
+                trooper_knockback_arc(&vector_scratch, &angle, &peckbot_vars->x138, &peckbot_vars->x13C);
+                trooper_start_knockback(self, peckbot_vars->knock, 7, 1, 0, angle);
+                peckbot_vars->x170 = 11.0f;
+                peckbot_vars->x174 = 18.0f;
                 self->state = 0x63;
-                v->x117 = 0x78;
-                trooper_anim_update(self, v->fx110);
+                peckbot_vars->x117 = 0x78;
+                trooper_anim_update(self, peckbot_vars->fx110);
                 FUN_L00_00257470(self, 0, -1);
             } else {
                 vector_scratch.q = hit->pos;
-                trooper_knockback_arc(&vector_scratch, &angle, &v->x138, &v->x13C);
-                trooper_start_knockback(self, v->knock, 6, 1, 0, angle);
-                v->x170 = 5.0f;
-                v->x174 = 10.0f;
+                trooper_knockback_arc(&vector_scratch, &angle, &peckbot_vars->x138, &peckbot_vars->x13C);
+                trooper_start_knockback(self, peckbot_vars->knock, 6, 1, 0, angle);
+                peckbot_vars->x170 = 5.0f;
+                peckbot_vars->x174 = 10.0f;
                 self->state = 6;
-                v->x117 = 0xFA;
-                v->flee_timer = scale_game_frames(0x3C);
-                trooper_anim_update(self, v->fx110);
+                peckbot_vars->x117 = 0xFA;
+                peckbot_vars->flee_timer = scale_game_frames(0x3C);
+                trooper_anim_update(self, peckbot_vars->fx110);
             }
         }
     }
     self->xA4 = 0xFF;
     switch (self->state) {
     case PECKBOT_STATE_INITIALIZE:
-        qcopy(&v->home, &self->pos);
-        v->x29 = 0;
-        if (v->x20A != 0) {
+        qcopy(&peckbot_vars->home, &self->pos);
+        peckbot_vars->x29 = 0;
+        if (peckbot_vars->x20A != 0) {
             self->state = 1;
             SET_ANIM(self, 4, 0, 0);
         } else {
@@ -1690,119 +1690,119 @@ void peckbot_update(Mob577 *self) {
             self->pos.f[2] = self->pos.f[2] + 6.0f;
             SET_ANIM(self, 0, 0, 0);
         }
-        v->x214 = 0;
-        v->x208 = 0;
-        v->health = 1.0f;
-        v->x24 = 1;
-        v->x58 = 8;
-        v->x5A = 4;
-        FUN_L01_0026d930(&v->x180);
-        v->x180 = 0x38D;
-        v->x18C = 2.0f;
-        v->x188 = 2.0f;
-        v->x1A4 = v->speed * frame_time;
+        peckbot_vars->x214 = 0;
+        peckbot_vars->x208 = 0;
+        peckbot_vars->health = 1.0f;
+        peckbot_vars->x24 = 1;
+        peckbot_vars->x58 = 8;
+        peckbot_vars->x5A = 4;
+        FUN_L01_0026d930(&peckbot_vars->x180);
+        peckbot_vars->x180 = 0x38D;
+        peckbot_vars->x18C = 2.0f;
+        peckbot_vars->x188 = 2.0f;
+        peckbot_vars->x1A4 = peckbot_vars->speed * frame_time;
         if (FUN_001160d8() & 1) {
             self->flags |= 0x8000;
         }
-        v->xD0 = &D_L01_00161A70;
+        peckbot_vars->xD0 = &D_L01_00161A70;
         break;
     case PECKBOT_STATE_AIRBORNE_IDLE:
         fast_vec_sub(&vector_scratch, &target.pos, &self->pos);
-        if (tick_countdown_32(&v->x228) != 0 && fast_vec_length(&vector_scratch) < v->range + 4.0f &&
+        if (tick_countdown_32(&peckbot_vars->x228) != 0 && fast_vec_length(&vector_scratch) < peckbot_vars->range + 4.0f &&
             FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
             random_integer_below(0x13) == 0) {
             self->state = 17;
-        } else if (v->x228 == 0 && self->hit == 1 && random_integer_below(0x13) == 0) {
+        } else if (peckbot_vars->x228 == 0 && self->hit == 1 && random_integer_below(0x13) == 0) {
             if (random_integer_below(0x100) & 1) {
-                v->turn_deg = -v->turn_deg;
+                peckbot_vars->turn_deg = -peckbot_vars->turn_deg;
             }
-            v->turn_off = v->turn_deg * DEG_TO_RAD;
-            v->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
+            peckbot_vars->turn_off = peckbot_vars->turn_deg * DEG_TO_RAD;
+            peckbot_vars->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
             self->state = 17;
-            clear_u64_value(&v->vel);
+            clear_u64_value(&peckbot_vars->vel);
             self->hit = 0;
-        } else if (tick_countdown_32(&v->idle_timer) != 0) {
-            v->idle_timer = scale_game_frames(0x78);
+        } else if (tick_countdown_32(&peckbot_vars->idle_timer) != 0) {
+            peckbot_vars->idle_timer = scale_game_frames(0x78);
             rad = random_float_between(0.0f, 3.0f);
             dir = random_angle_radians();
             position_scratch.f[0] = fast_cos(dir) * rad;
             position_scratch.f[1] = fast_sin(dir) * rad;
             position_scratch.f[2] = 0.0f;
             position_scratch.f[2] = random_float_between(5.0f, 7.0f);
-            fast_vec_add(&v->dest, &position_scratch, &v->home);
+            fast_vec_add(&peckbot_vars->dest, &position_scratch, &peckbot_vars->home);
             self->state = 15;
         }
         break;
     case PECKBOT_STATE_MOVE_TO_DESTINATION:
-        ang = FUN_L00_001ff8b0_cf(v->dest.f[0] - self->pos.f[0], v->dest.f[1] - self->pos.f[1]);
-        FUN_L00_00258278(self, v->turn, ang, 0.05f, 0.3f, 0.2f);
-        fast_vec_sub(&v->vel, &v->dest, &self->pos);
-        FUN_L00_0025f730(&v->vel, frame_time * 4.0f);
-        fast_vec_add(&vector_scratch, &v->vel, &self->pos);
+        ang = FUN_L00_001ff8b0_cf(peckbot_vars->dest.f[0] - self->pos.f[0], peckbot_vars->dest.f[1] - self->pos.f[1]);
+        FUN_L00_00258278(self, peckbot_vars->turn, ang, 0.05f, 0.3f, 0.2f);
+        fast_vec_sub(&peckbot_vars->vel, &peckbot_vars->dest, &self->pos);
+        FUN_L00_0025f730(&peckbot_vars->vel, frame_time * 4.0f);
+        fast_vec_add(&vector_scratch, &peckbot_vars->vel, &self->pos);
         if (coll_sphere(&vector_scratch, 0, self, 0.4f) != 0) {
-            clear_u64_value(&v->vel);
+            clear_u64_value(&peckbot_vars->vel);
             self->state = 14;
         } else {
             qcopy(&self->pos, &vector_scratch);
         }
-        if (fast_vec_length(&v->vel) == 0.0f) {
+        if (fast_vec_length(&peckbot_vars->vel) == 0.0f) {
             self->state = 14;
         }
         break;
     case PECKBOT_STATE_DESCEND:
         g17 = FUN_00213508(&self->pos, 0, 0.5f);
-        approach_value(&v->vel.f[2], -(frame_time * 8.0f), frame_time_sq * 10.8f);
-        self->pos.f[2] = self->pos.f[2] + v->vel.f[2];
+        approach_value(&peckbot_vars->vel.f[2], -(frame_time * 8.0f), frame_time_sq * 10.8f);
+        self->pos.f[2] = self->pos.f[2] + peckbot_vars->vel.f[2];
         if (self->anim != 1 && self->pos.f[2] - g17 <= frame_time * 8.0f * FUN_L04_001f1978(45.0f)) {
             SET_ANIM(self, 1, 0, scale_game_frames(5));
         }
         if (self->pos.f[2] <= g17) {
             self->pos.f[2] = g17;
             if (random_integer_below(0x100) & 1) {
-                v->turn_deg = -v->turn_deg;
+                peckbot_vars->turn_deg = -peckbot_vars->turn_deg;
             }
-            v->turn_off = v->turn_deg * DEG_TO_RAD;
-            v->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
+            peckbot_vars->turn_off = peckbot_vars->turn_deg * DEG_TO_RAD;
+            peckbot_vars->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
             self->state = 3;
-            clear_u64_value(&v->vel);
+            clear_u64_value(&peckbot_vars->vel);
             SET_ANIM(self, 2, 0, scale_game_frames(3));
         }
         break;
     case PECKBOT_STATE_ASCEND:
         g16 = FUN_00213508(&self->pos, 0, 0.5f);
-        approach_value(&v->vel.f[2], frame_time * 8.0f, frame_time_sq * 10.8f);
-        self->pos.f[2] += v->vel.f[2];
+        approach_value(&peckbot_vars->vel.f[2], frame_time * 8.0f, frame_time_sq * 10.8f);
+        self->pos.f[2] += peckbot_vars->vel.f[2];
         if (g16 + 6.0f <= self->pos.f[2]) {
             self->pos.f[2] = g16 + 6.0f;
             self->state = 14;
-            v->x228 = scale_game_frames(0xB4);
-            clear_u64_value(&v->vel);
+            peckbot_vars->x228 = scale_game_frames(0xB4);
+            clear_u64_value(&peckbot_vars->vel);
         }
         break;
     case PECKBOT_STATE_GROUNDED_IDLE:
         fast_vec_sub(&vector_scratch, &target.pos, &self->pos);
-        if (fast_vec_length(&vector_scratch) < v->range + 4.0f &&
+        if (fast_vec_length(&vector_scratch) < peckbot_vars->range + 4.0f &&
             FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
             random_integer_below(0x13) == 0) {
             self->state = 2;
             SET_ANIM(self, 5, 0, scale_game_frames(3));
         } else if (self->hit == 1 && random_integer_below(0x13) == 0) {
             if (random_integer_below(0x100) & 1) {
-                v->turn_deg = -v->turn_deg;
+                peckbot_vars->turn_deg = -peckbot_vars->turn_deg;
             }
-            v->turn_off = v->turn_deg * DEG_TO_RAD;
-            v->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
+            peckbot_vars->turn_off = peckbot_vars->turn_deg * DEG_TO_RAD;
+            peckbot_vars->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
             self->state = 3;
             SET_ANIM(self, 2, 0, scale_game_frames(3));
             self->hit = 0;
-        } else if (fast_vec_length(&vector_scratch) > v->range + 6.0f && v->x20A == 0) {
+        } else if (fast_vec_length(&vector_scratch) > peckbot_vars->range + 6.0f && peckbot_vars->x20A == 0) {
             self->state = 16;
             SET_ANIM(self, 0, 0, scale_game_frames(3));
         }
         break;
     case PECKBOT_STATE_WAIT_FOR_CLOSE_TARGET:
         fast_vec_sub(&vector_scratch, &target.pos, &self->pos);
-        if (fast_vec_length(&vector_scratch) < v->range - 4.0f &&
+        if (fast_vec_length(&vector_scratch) < peckbot_vars->range - 4.0f &&
             FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
             random_integer_below(0x13) == 0) {
             self->state = 2;
@@ -1811,36 +1811,36 @@ void peckbot_update(Mob577 *self) {
         }
         break;
     case PECKBOT_STATE_FACE_HOME_AND_WAIT:
-        ang = FUN_L00_001ff8b0_cf(v->home.f[0] - self->pos.f[0], v->home.f[1] - self->pos.f[1]);
-        FUN_L00_00258278(self, v->turn, ang, 0.05f, 0.3f, 0.2f);
-        fast_vec_sub(&vector_scratch, &target.pos, &v->home);
-        if ((fast_vec_length(&vector_scratch) < v->range &&
-             FUN_001f99c0(v->home.f[2] - target.pos.f[2]) < 8.0f) ||
+        ang = FUN_L00_001ff8b0_cf(peckbot_vars->home.f[0] - self->pos.f[0], peckbot_vars->home.f[1] - self->pos.f[1]);
+        FUN_L00_00258278(self, peckbot_vars->turn, ang, 0.05f, 0.3f, 0.2f);
+        fast_vec_sub(&vector_scratch, &target.pos, &peckbot_vars->home);
+        if ((fast_vec_length(&vector_scratch) < peckbot_vars->range &&
+             FUN_001f99c0(peckbot_vars->home.f[2] - target.pos.f[2]) < 8.0f) ||
             self->hit == 2) {
             if (self->group != 0xFF) {
                 FUN_L01_0026e090(self->group, 2);
             }
             SET_ANIM(self, 6, 0, scale_game_frames(3));
-            v->x134 = 0.0f;
-            v->x130 = D_L01_00161A6C;
-            v->x138 = D_L01_00161A68 * frame_time;
-            v->x13C = FUN_L00_0025abf0(&self->pos, &v->home, &knockback_travel_time, v->x138, -D_L01_00161A6C);
-            v->x144 = 13;
-            v->x15D = 0;
-            trooper_start_knockback(self, v->knock, 6, 1, 0, self->rot.f[2]);
-            v->x170 = 5.0f;
-            v->x174 = 10.0f;
+            peckbot_vars->x134 = 0.0f;
+            peckbot_vars->x130 = D_L01_00161A6C;
+            peckbot_vars->x138 = D_L01_00161A68 * frame_time;
+            peckbot_vars->x13C = FUN_L00_0025abf0(&self->pos, &peckbot_vars->home, &knockback_travel_time, peckbot_vars->x138, -D_L01_00161A6C);
+            peckbot_vars->x144 = 13;
+            peckbot_vars->x15D = 0;
+            trooper_start_knockback(self, peckbot_vars->knock, 6, 1, 0, self->rot.f[2]);
+            peckbot_vars->x170 = 5.0f;
+            peckbot_vars->x174 = 10.0f;
             self->state = 11;
         }
         break;
     case PECKBOT_STATE_HOME_TRIGGERED_KNOCKBACK:
-        if (mine_fall(self, v->knock) & 1) {
+        if (mine_fall(self, peckbot_vars->knock) & 1) {
             self->state = 3;
             if (random_integer_below(0x100) & 1) {
-                v->turn_deg = -v->turn_deg;
+                peckbot_vars->turn_deg = -peckbot_vars->turn_deg;
             }
-            v->turn_off = v->turn_deg * DEG_TO_RAD;
-            v->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
+            peckbot_vars->turn_off = peckbot_vars->turn_deg * DEG_TO_RAD;
+            peckbot_vars->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
             SET_ANIM(self, 2, 8, scale_game_frames(3));
             return;
         } else if (self->pos.f[2] < 5.0f) {
@@ -1852,32 +1852,32 @@ void peckbot_update(Mob577 *self) {
     case PECKBOT_STATE_FACE_AWAY_FROM_TARGET:
         ang =
             FUN_L00_001ff8b0_cf(self->pos.f[0] - target.pos.f[0], self->pos.f[1] - target.pos.f[1]);
-        FUN_L00_00258278(self, v->turn, ang, 0.02f, 0.3f, 0.1f);
+        FUN_L00_00258278(self, peckbot_vars->turn, ang, 0.02f, 0.3f, 0.1f);
         fast_vec_sub(&vector_scratch, &target.pos, &self->pos);
-        if (fast_vec_length(&vector_scratch) < v->range &&
+        if (fast_vec_length(&vector_scratch) < peckbot_vars->range &&
             FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
             random_integer_below(0x13) == 0) {
             if (self->group != 0xFF) {
                 FUN_L01_0026e090(self->group, 1);
             }
             if (random_integer_below(0x100) & 1) {
-                v->turn_deg = -v->turn_deg;
+                peckbot_vars->turn_deg = -peckbot_vars->turn_deg;
             }
-            v->turn_off = v->turn_deg * DEG_TO_RAD;
-            v->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
+            peckbot_vars->turn_off = peckbot_vars->turn_deg * DEG_TO_RAD;
+            peckbot_vars->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
             self->state = 3;
             SET_ANIM(self, 2, 0, scale_game_frames(3));
             self->hit = 0;
         } else if (self->hit == 1 && random_integer_below(0x13) == 0) {
             if (random_integer_below(0x100) & 1) {
-                v->turn_deg = -v->turn_deg;
+                peckbot_vars->turn_deg = -peckbot_vars->turn_deg;
             }
-            v->turn_off = v->turn_deg * DEG_TO_RAD;
-            v->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
+            peckbot_vars->turn_off = peckbot_vars->turn_deg * DEG_TO_RAD;
+            peckbot_vars->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
             self->state = 3;
             SET_ANIM(self, 2, 0, scale_game_frames(3));
             self->hit = 0;
-        } else if (fast_vec_length(&vector_scratch) > v->range + 6.0f && v->x20A == 0) {
+        } else if (fast_vec_length(&vector_scratch) > peckbot_vars->range + 6.0f && peckbot_vars->x20A == 0) {
             self->state = 16;
             SET_ANIM(self, 0, 0, scale_game_frames(3));
         }
@@ -1888,23 +1888,23 @@ void peckbot_update(Mob577 *self) {
     case PECKBOT_STATE_CHASE_TARGET:
         chase_target_height_distance_ratio = FUN_001f99c0(self->pos.f[2] - target.pos.f[2]);
         chase_target_height_distance_ratio = chase_target_height_distance_ratio / vector_distance(&self->pos, &target.pos);
-        if (v->path != -1) {
-            FUN_L01_0028b5e0(self, D_L01_001B0930[v->path], &target.pos, &position_scratch);
+        if (peckbot_vars->path != -1) {
+            FUN_L01_0028b5e0(self, D_L01_001B0930[peckbot_vars->path], &target.pos, &position_scratch);
         } else {
             qcopy(&position_scratch, &target.pos);
         }
         ang =
-            FUN_L00_001ff8b0_cf(position_scratch.f[0] - self->pos.f[0], position_scratch.f[1] - self->pos.f[1]) + v->turn_off;
-        FUN_L00_00258278(self, v->turn, ang, 0.05f, 0.3f, 0.2f);
+            FUN_L00_001ff8b0_cf(position_scratch.f[0] - self->pos.f[0], position_scratch.f[1] - self->pos.f[1]) + peckbot_vars->turn_off;
+        FUN_L00_00258278(self, peckbot_vars->turn, ang, 0.05f, 0.3f, 0.2f);
         vector_scratch.f[0] = fast_cos(self->rot.f[2]) * 2.0f;
         vector_scratch.f[1] = fast_sin(self->rot.f[2]) * 2.0f;
         vector_scratch.f[2] = 0.0f;
-        res = FUN_L00_00258b50(self, &v->x180, &vector_scratch, &position_scratch, 1.0f);
-        if (tick_countdown_32(&v->turn_timer) != 0) {
-            v->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
-            v->turn_off = -v->turn_off;
+        res = FUN_L00_00258b50(self, &peckbot_vars->x180, &vector_scratch, &position_scratch, 1.0f);
+        if (tick_countdown_32(&peckbot_vars->turn_timer) != 0) {
+            peckbot_vars->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
+            peckbot_vars->turn_off = -peckbot_vars->turn_off;
         }
-        fast_vec_sub(&home_to_target, &target.pos, &v->home);
+        fast_vec_sub(&home_to_target, &target.pos, &peckbot_vars->home);
         if (vector_distance(&self->pos, &target.pos) < 1.5f && !(res & 2)) {
             self->state = 4;
             SET_ANIM(self, 3, 0, scale_game_frames(3));
@@ -1913,7 +1913,7 @@ void peckbot_update(Mob577 *self) {
             self->pos.f[1] = oldpos.f[1];
             self->state = 12;
             SET_ANIM(self, 5, 0, scale_game_frames(3));
-        } else if (fast_vec_length(&home_to_target) < v->range + 4.0f &&
+        } else if (fast_vec_length(&home_to_target) < peckbot_vars->range + 4.0f &&
                    FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f) {
             if (self->group != 0xFF) {
                 FUN_L01_0026e090(self->group, 1);
@@ -1931,7 +1931,7 @@ void peckbot_update(Mob577 *self) {
     case PECKBOT_STATE_ATTACK_TARGET:
         ang =
             FUN_L00_001ff8b0_cf(target.pos.f[0] - self->pos.f[0], target.pos.f[1] - self->pos.f[1]);
-        FUN_L00_00258278(self, v->turn, ang, 0.05f, 0.3f, 0.2f);
+        FUN_L00_00258278(self, peckbot_vars->turn, ang, 0.05f, 0.3f, 0.2f);
         if (self->anim_next == self->anim && FUN_0020c9e0(self) == 13.0f &&
             FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 0.5f &&
             vector_distance(&self->pos, &target.pos) < 2.0f &&
@@ -1952,31 +1952,31 @@ void peckbot_update(Mob577 *self) {
             SET_ANIM(self, 2, 0, scale_game_frames(3));
         }
         g4 = FUN_00213508(&self->pos, 0, 0.5f);
-        v->x198 = v->x198 - frame_time_sq * 9.8f;
-        self->pos.f[2] = self->pos.f[2] + v->x198;
+        peckbot_vars->x198 = peckbot_vars->x198 - frame_time_sq * 9.8f;
+        self->pos.f[2] = self->pos.f[2] + peckbot_vars->x198;
         if (self->pos.f[2] < g4) {
-            v->x198 = 0.0f;
+            peckbot_vars->x198 = 0.0f;
             self->pos.f[2] = g4;
         }
         break;
     case PECKBOT_STATE_RETURN_HOME:
-        if (v->path != -1) {
-            FUN_L01_0028b5e0(self, D_L01_001B0930[v->path], &v->home, &position_scratch);
+        if (peckbot_vars->path != -1) {
+            FUN_L01_0028b5e0(self, D_L01_001B0930[peckbot_vars->path], &peckbot_vars->home, &position_scratch);
         } else {
-            qcopy(&position_scratch, &v->home);
+            qcopy(&position_scratch, &peckbot_vars->home);
         }
         ang = FUN_L00_001ff8b0_cf(position_scratch.f[0] - self->pos.f[0], position_scratch.f[1] - self->pos.f[1]);
-        FUN_L00_00258278(self, v->turn, ang, 0.02f, 0.3f, 0.1f);
+        FUN_L00_00258278(self, peckbot_vars->turn, ang, 0.02f, 0.3f, 0.1f);
         vector_scratch.f[0] = fast_cos(self->rot.f[2]) * 2.0f;
         vector_scratch.f[1] = fast_sin(self->rot.f[2]) * 2.0f;
         vector_scratch.f[2] = 0.0f;
-        res = FUN_L00_00258b50(self, &v->x180, &vector_scratch, &position_scratch, 1.0f);
-        if (vector_distance(&self->pos, &v->home) < 2.0f) {
+        res = FUN_L00_00258b50(self, &peckbot_vars->x180, &vector_scratch, &position_scratch, 1.0f);
+        if (vector_distance(&self->pos, &peckbot_vars->home) < 2.0f) {
             self->state = 1;
             SET_ANIM(self, 4, 0, scale_game_frames(3));
         }
-        fast_vec_sub(&home_to_target, &target.pos, &v->home);
-        if (fast_vec_length(&home_to_target) < v->range) {
+        fast_vec_sub(&home_to_target, &target.pos, &peckbot_vars->home);
+        if (fast_vec_length(&home_to_target) < peckbot_vars->range) {
             if (self->group != 0xFF) {
                 FUN_L01_0026e090(self->group, 1);
             }
@@ -1999,7 +1999,7 @@ void peckbot_update(Mob577 *self) {
         self->hit = 0;
         break;
     case PECKBOT_STATE_NONFATAL_KNOCKBACK:
-        if (mine_fall(self, v->knock) & 1) {
+        if (mine_fall(self, peckbot_vars->knock) & 1) {
             self->state = 3;
             SET_ANIM(self, 2, 0, scale_game_frames(3));
             return;
@@ -2010,16 +2010,16 @@ void peckbot_update(Mob577 *self) {
         }
         break;
     case 7:
-        if (FUN_L00_002dc9f0(self, v->knock) != 0) {
+        if (FUN_L00_002dc9f0(self, peckbot_vars->knock) != 0) {
             self->state = 14;
-            v->x228 = scale_game_frames(0xB4);
+            peckbot_vars->x228 = scale_game_frames(0xB4);
             SET_ANIM(self, 0, 0, 0);
-            v->xC8 = 0;
+            peckbot_vars->xC8 = 0;
         }
         break;
     case PECKBOT_STATE_FATAL_KNOCKBACK:
         self->flags &= ~0x1000;
-        if (mine_fall(self, v->knock) & 0x140) {
+        if (mine_fall(self, peckbot_vars->knock) & 0x140) {
             clear_u64_value(&vector_scratch);
             frame_count_or_animation_id = scale_game_frames(1) * 60.0f;
             if (FUN_L01_002efbf8(D_L01_00161A80, 3, frame_count_or_animation_id) >= 0) {
@@ -2047,25 +2047,25 @@ void peckbot_update(Mob577 *self) {
     case PECKBOT_STATE_RECOVER_FROM_BLOCKED_MOVEMENT:
         recovery_target_height_distance_ratio = FUN_001f99c0(self->pos.f[2] - target.pos.f[2]);
         recovery_target_height_distance_ratio = recovery_target_height_distance_ratio / vector_distance(&self->pos, &target.pos);
-        if (v->path != -1) {
-            FUN_L01_0028b5e0(self, D_L01_001B0930[v->path], &v->home, &position_scratch);
+        if (peckbot_vars->path != -1) {
+            FUN_L01_0028b5e0(self, D_L01_001B0930[peckbot_vars->path], &peckbot_vars->home, &position_scratch);
         } else {
-            qcopy(&position_scratch, &v->home);
+            qcopy(&position_scratch, &peckbot_vars->home);
         }
         ang = FUN_L00_001ff8b0_cf(position_scratch.f[0] - self->pos.f[0], position_scratch.f[1] - self->pos.f[1]);
-        FUN_L00_00258278(self, v->turn, ang, 0.05f, 0.3f, 0.2f);
+        FUN_L00_00258278(self, peckbot_vars->turn, ang, 0.05f, 0.3f, 0.2f);
         vector_scratch.f[0] = fast_cos(self->rot.f[2]) * 2.0f;
         vector_scratch.f[1] = fast_sin(self->rot.f[2]) * 2.0f;
         vector_scratch.f[2] = 0.0f;
-        res12 = FUN_L00_00258b50(self, &v->x180, &vector_scratch, &position_scratch, 1.0f);
-        fast_vec_sub(&home_to_target, &target.pos, &v->home);
+        res12 = FUN_L00_00258b50(self, &peckbot_vars->x180, &vector_scratch, &position_scratch, 1.0f);
+        fast_vec_sub(&home_to_target, &target.pos, &peckbot_vars->home);
         if (vector_distance(&self->pos, &target.pos) < 1.5f && recovery_target_height_distance_ratio <= 1.0f) {
             self->state = 4;
             SET_ANIM(self, 3, 0, scale_game_frames(3));
         } else if (recovery_target_height_distance_ratio <= 1.0f && !(res12 & 2)) {
             self->state = 5;
             SET_ANIM(self, 2, 0, scale_game_frames(3));
-        } else if (vector_distance(&self->pos, &target.pos) > v->range + 6.0f) {
+        } else if (vector_distance(&self->pos, &target.pos) > peckbot_vars->range + 6.0f) {
             self->state = 16;
             SET_ANIM(self, 0, 0, scale_game_frames(3));
         } else if (self->anim_flags & 2) {
@@ -2084,8 +2084,8 @@ void peckbot_update(Mob577 *self) {
         if (self->anim_next != 2) {
             SET_ANIM(self, 2, 0, scale_game_frames(3));
         }
-        vector_scratch.f[0] = fast_cos(self->rot.f[2]) * (v->speed * frame_time);
-        vector_scratch.f[1] = fast_sin(self->rot.f[2]) * (v->speed * frame_time);
+        vector_scratch.f[0] = fast_cos(self->rot.f[2]) * (peckbot_vars->speed * frame_time);
+        vector_scratch.f[1] = fast_sin(self->rot.f[2]) * (peckbot_vars->speed * frame_time);
         vector_scratch.f[2] = 0.0f;
         fast_vec_add(&position_scratch, &self->pos, &vector_scratch);
         for (candidate_moby = D_L01_0015FFE4; candidate_moby != NULL; candidate_moby = candidate_moby->next) {
@@ -2112,21 +2112,21 @@ void peckbot_update(Mob577 *self) {
         }
         qcopy(&self->pos, &position_scratch);
         g13 = FUN_00213508(&self->pos, 0, 0.5f);
-        v->x198 = v->x198 - frame_time_sq * 9.8f;
-        self->pos.f[2] = self->pos.f[2] + v->x198;
+        peckbot_vars->x198 = peckbot_vars->x198 - frame_time_sq * 9.8f;
+        self->pos.f[2] = self->pos.f[2] + peckbot_vars->x198;
         if (self->pos.f[2] < g13) {
-            v->x198 = 0.0f;
+            peckbot_vars->x198 = 0.0f;
             self->pos.f[2] = g13;
         }
-        if (v->leader == NULL ||
-            vector_distance(&self->pos, &v->leader->pos) > convert_integer_to_float(v->x216)) {
+        if (peckbot_vars->leader == NULL ||
+            vector_distance(&self->pos, &peckbot_vars->leader->pos) > convert_integer_to_float(peckbot_vars->x216)) {
             self->state = 5;
             SET_ANIM(self, 2, 0, scale_game_frames(3));
         }
         self->hit = 0;
         break;
     }
-    trooper_anim_finish(self, v->fx110);
+    trooper_anim_finish(self, peckbot_vars->fx110);
     FUN_L00_0025a120(self);
 }
 typedef struct Moby {
