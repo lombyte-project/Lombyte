@@ -850,7 +850,7 @@ float D_L14_001DFD40[4][4] = {
 void FUN_L14_002eb810(struct Moby *m) {
     Spk_k *d = (Spk_k *)m->pvars;
     Pk_m pk;
-    float mat[4][4];
+    float spark_quad_to_world[4][4];
     float up[4];
     u32 col;
     int i;
@@ -876,18 +876,18 @@ void FUN_L14_002eb810(struct Moby *m) {
             pk.col[2] = col;
             pk.col[1] = col;
             pk.col[0] = col;
-            qcopy(mat[3], d->pos[i]);
+            qcopy(spark_quad_to_world[3], d->pos[i]);
             *(u128_m *)up = 0;
             up[2] = 1.0f;
             up[3] = 1.0f;
-            sub_m(mat[0], d->pos[i], D_L14_001674C0_m);
-            norm_m(mat[0], mat[0], 1.0f);
-            cross_m(mat[1], mat[0], up);
-            norm_m(mat[1], mat[1], 1.0f);
-            cross_m(mat[2], mat[1], mat[0]);
+            sub_m(spark_quad_to_world[0], d->pos[i], D_L14_001674C0_m);
+            norm_m(spark_quad_to_world[0], spark_quad_to_world[0], 1.0f);
+            cross_m(spark_quad_to_world[1], spark_quad_to_world[0], up);
+            norm_m(spark_quad_to_world[1], spark_quad_to_world[1], 1.0f);
+            cross_m(spark_quad_to_world[2], spark_quad_to_world[1], spark_quad_to_world[0]);
             for (k = 0; k < 4; k++) {
                 scale_m(pk.m[k], D_L14_001DFD40[k], ((Spk_k *)((char *)d + (i << 4)))->pos[0][3]);
-                xform_m(pk.m[k], pk.m[k], mat);
+                xform_m(pk.m[k], pk.m[k], spark_quad_to_world);
             }
             draw_m(&pk, 0, 0);
         }
