@@ -2252,7 +2252,7 @@ void asteroid_update(struct Moby *moby) {
 /* runs one step of a moby's timed state and reports whether the timer ran out */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E56C8), where it is exact; names translated to the US level program. */
 
-int FUN_L13_002e4300(struct Moby *moby, char *arg, float *health) {
+int FUN_L13_002e4300(struct Moby *moby, char *moby_data, float *health) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
@@ -2267,11 +2267,11 @@ int FUN_L13_002e4300(struct Moby *moby, char *arg, float *health) {
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
     };
-    char *r = find_moby_hit(moby, 0x330000, 0);
+    char *hit_record = find_moby_hit(moby, 0x330000, 0);
     int hit_processing_status;
     int result = 0;
     char *color_animation_state;
-    switch (hit_reaction(moby, r, health, 0, &hit_processing_status, 0, 0, 4)) {
+    switch (hit_reaction(moby, hit_record, health, 0, &hit_processing_status, 0, 0, 4)) {
     case HIT_REACTION_NONE:
         break;
     case HIT_REACTION_LETHAL:
@@ -2291,21 +2291,21 @@ int FUN_L13_002e4300(struct Moby *moby, char *arg, float *health) {
     case HIT_REACTION_NO_HIT:
         break;
     }
-    color_animation_state = arg + 0x60;
+    color_animation_state = moby_data + 0x60;
     if (hit_processing_status >= 2) {
-        float lim = *(float *)(r + 0x2C);
+        float damage_amount = *(float *)(hit_record + 0x2C);
         unsigned short fl;
-        if (*health <= lim) {
+        if (*health <= damage_amount) {
             *(int *)health = 0;
             fl = moby->flags;
             moby->flags = fl & 0xEFFF;
-            *(unsigned char *)(arg + 0x67) = 0x78;
+            *(unsigned char *)(moby_data + 0x67) = 0x78;
             trooper_anim_update(moby, (short *)color_animation_state);
             result = 1;
         } else {
-            *health = *health - lim;
-            *(unsigned char *)(arg + 0x67) = 0xFA;
-            *(short *)(arg + 0x26) = scale_game_frames(0x3C);
+            *health = *health - damage_amount;
+            *(unsigned char *)(moby_data + 0x67) = 0xFA;
+            *(short *)(moby_data + 0x26) = scale_game_frames(0x3C);
             trooper_anim_update(moby, (short *)color_animation_state);
         }
     }
