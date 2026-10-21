@@ -3307,12 +3307,12 @@ void FUN_L14_002fcbb0(struct Moby *moby) {
         break;
     case TRAM_STATE_WAIT_FOR_UNLOCK: {
         int lvl = current_level_index * 16;
-        u8 v = visited52[moby_vars->item[0] + lvl];
-        if (v == 0xFF) {
-            u8 w = visited52[moby_vars->item[1] + lvl];
-            if (w == v) {
+        u8 first_item_status = visited52[moby_vars->item[0] + lvl];
+        if (first_item_status == 0xFF) {
+            u8 second_item_status = visited52[moby_vars->item[1] + lvl];
+            if (second_item_status == first_item_status) {
                 u8 x = visited52[moby_vars->item[2] + lvl];
-                if (x == w && hero.frames_off_ground.s == 0 && hero.ground_moby == 0 &&
+                if (x == second_item_status && hero.frames_off_ground.s == 0 && hero.ground_moby == 0 &&
                     tram_inside(&hero.motion.pos, moby_vars->clip) != 0) {
                     struct Moby *carrier = &D_L14_0015FFD8_t[moby_vars->carrier];
                     struct Moby *rider = &D_L14_0015FFD8_t[((int *)carrier->pvars)[1]];
