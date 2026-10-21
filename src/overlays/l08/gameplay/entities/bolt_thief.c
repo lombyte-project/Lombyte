@@ -2528,8 +2528,8 @@ void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
         MOBY_CLASS_FIVE_BOLT_PICKUP = 0x3DC,
         MOBY_CLASS_TEN_BOLT_PICKUP = 0x3DD
     };
-    float r[16];
-    float b[16];
+    float output_rotation_matrix[16];
+    float base_rotation_matrix[16];
     float up[4];
     float side[4];
     float fwd[4];
@@ -2556,31 +2556,31 @@ void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
         sz = D_L08_00161C7C * D_L08_00161CB4;
         break;
     }
-    euler_rotation_matrix(b, (float *)(data + 0x10));
-    normalize_vector_xyz(u, b, -fast_sin(*(float *)(data + 0x60)));
-    normalize_vector_xyz(v, b + 4, fast_cos(*(float *)(data + 0x60)));
+    euler_rotation_matrix(base_rotation_matrix, (float *)(data + 0x10));
+    normalize_vector_xyz(u, base_rotation_matrix, -fast_sin(*(float *)(data + 0x60)));
+    normalize_vector_xyz(v, base_rotation_matrix + 4, fast_cos(*(float *)(data + 0x60)));
     add_vector_xyz(dir, u, v);
     basis_tilt_radians = sx * DEG_TO_RAD;
     normalize_vector_xyz(u, dir, fast_cos(basis_tilt_radians));
-    normalize_vector_xyz(v, b + 8, fast_sin(basis_tilt_radians));
+    normalize_vector_xyz(v, base_rotation_matrix + 8, fast_sin(basis_tilt_radians));
     add_vector_xyz(up, u, v);
-    normalize_vector_xyz(u, b, -fast_cos(*(float *)(data + 0x60)));
-    normalize_vector_xyz(v, b + 4, -fast_sin(*(float *)(data + 0x60)));
+    normalize_vector_xyz(u, base_rotation_matrix, -fast_cos(*(float *)(data + 0x60)));
+    normalize_vector_xyz(v, base_rotation_matrix + 4, -fast_sin(*(float *)(data + 0x60)));
     add_vector_xyz(fwd, u, v);
     cross_vectors_xyz(side, up, fwd);
     normalize_vector_xyz(u, side, fast_cos(*(float *)(data + 0x64)));
     normalize_vector_xyz(v, fwd, fast_sin(*(float *)(data + 0x64)));
-    add_vector_xyz(r, u, v);
+    add_vector_xyz(output_rotation_matrix, u, v);
     normalize_vector_xyz(u, side, -fast_sin(*(float *)(data + 0x64)));
     normalize_vector_xyz(v, fwd, fast_cos(*(float *)(data + 0x64)));
-    add_vector_xyz(r + 4, u, v);
-    qcopy(r + 8, up);
-    r[11] = 0.0f;
-    clear_u64_value(r + 12);
-    r[15] = 1.0f;
-    matrix_to_euler(r, rot);
+    add_vector_xyz(output_rotation_matrix + 4, u, v);
+    qcopy(output_rotation_matrix + 8, up);
+    output_rotation_matrix[11] = 0.0f;
+    clear_u64_value(output_rotation_matrix + 12);
+    output_rotation_matrix[15] = 1.0f;
+    matrix_to_euler(output_rotation_matrix, rot);
     rot[3] = 0.0f;
-    normalize_vector_xyz(u, b + 8, sy);
+    normalize_vector_xyz(u, base_rotation_matrix + 8, sy);
     add_vector_xyz(out, data, u);
     normalize_vector_xyz(v, dir, sz);
     add_vector_xyz(out, out, v);
