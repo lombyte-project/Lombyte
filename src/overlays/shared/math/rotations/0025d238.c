@@ -13,20 +13,20 @@ void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_0025d238(V0025d238 *src, V0025d238 *v) {
+void FUN_L00_0025d238(V0025d238 *src, V0025d238 *inout_vector) {
     V0025d238 source_copy, scaled_delta;
     f32 *pv, *source_component, *delta_component;
-    V0025d238 *source_copy_ptr = &source_copy, *b = &scaled_delta;
+    V0025d238 *source_copy_ptr = &source_copy, *scaled_delta_ptr = &scaled_delta;
     s32 i;
     source_copy.q = src->q;
     source_component = source_copy.f;
-    pv = v->f;
+    pv = inout_vector->f;
     delta_component = scaled_delta.f;
     for (i = 2; i >= 0; i--) {
         if (*pv < 0.0f) {
-            subtract_vector_xyz(b, v, source_copy_ptr);
-            fast_vec_scale(b, b, absolute_float((*source_component - 0.1f) / *delta_component));
-            add_vector_xyz(v, source_copy_ptr, b);
+            subtract_vector_xyz(scaled_delta_ptr, inout_vector, source_copy_ptr);
+            fast_vec_scale(scaled_delta_ptr, scaled_delta_ptr, absolute_float((*source_component - 0.1f) / *delta_component));
+            add_vector_xyz(inout_vector, source_copy_ptr, scaled_delta_ptr);
         }
         pv++;
         delta_component++;
