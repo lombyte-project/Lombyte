@@ -25,9 +25,9 @@ extern int FUN_L00_002dbe20(void *);
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 0xE. */
 int FUN_L01_002efb98(char *moby) {
-    int r = FUN_L00_002dbe20(moby);
+    int helper_result = FUN_L00_002dbe20(moby);
     moby[0x20] = 0xe;
-    return r;
+    return helper_result;
 }
 typedef struct {
     char pad[0x78];
