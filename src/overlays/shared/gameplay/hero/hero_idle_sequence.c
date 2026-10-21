@@ -233,7 +233,7 @@ void FUN_L00_00205538(void) {
     s32 i;
     char *tbl = (char *)D_L00_0017A680_c;
     char *record_reset_destination = tbl + 0x90;
-    char *b = tbl + 0x60;
+    char *record_reset_cursor = tbl + 0x60;
     for (i = 0; i < 31; i++) {
         Ent *manipulator_record = &D_L00_0017A680_c[i];
         if (manipulator_record->active != 0) {
@@ -242,8 +242,8 @@ void FUN_L00_00205538(void) {
                 detach_manipulator(manipulator_moby, manipulator_record);
         }
         clear_u64_value(D_L00_0017A680_c[i].m40);
-        clear_u64_value(b);
-        b += sizeof(Ent);
+        clear_u64_value(record_reset_cursor);
+        record_reset_cursor += sizeof(Ent);
         clear_u64_value(record_reset_destination);
         record_reset_destination += sizeof(Ent);
         manipulator_record->scale = 1.0f;
