@@ -2543,25 +2543,25 @@ extern void FUN_L11_00311210(void *, void *, void *, int);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 
-void FUN_L13_002b9df8(struct Moby *moby, char *obj, float azimuth_angle, float elevation_angle) {
+void FUN_L13_002b9df8(struct Moby *moby, char *flight_data, float azimuth_angle, float elevation_angle) {
     char aim_vector[16];
     char projectile_spawn_position[16];
     char muzzle_offset[16];
     char aim_world_position[16];
     build_spherical_offset(aim_vector, frame_time * 400.0f, azimuth_angle, elevation_angle);
-    fast_vec_add(aim_vector, aim_vector, obj);
-    if (fast_dec_timer(obj + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
+    fast_vec_add(aim_vector, aim_vector, flight_data);
+    if (fast_dec_timer(flight_data + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
         allocate_voice_for_target_entry(3, 0, (int)moby);
         fast_vec_normalize(muzzle_offset, aim_vector, 2.2f);
-        moby_point_position(moby, 3 + (obj[0x61] & 1), projectile_spawn_position);
+        moby_point_position(moby, 3 + (flight_data[0x61] & 1), projectile_spawn_position);
         fast_vec_add(projectile_spawn_position, projectile_spawn_position, muzzle_offset);
         FUN_L11_00308848(moby, aim_vector, projectile_spawn_position, 200.0f, -1.0f);
-        *(int *)(obj + 0x80) = scale_game_frames(4);
-        obj[0x61] ^= 1;
+        *(int *)(flight_data + 0x80) = scale_game_frames(4);
+        flight_data[0x61] ^= 1;
     }
     fast_vec_normalize(aim_vector, aim_vector, 23.0f);
     fast_vec_add(aim_world_position, aim_vector, &moby->pos);
-    FUN_L11_00311210(aim_world_position, obj + 0xE0, obj + 0xE4, 0);
+    FUN_L11_00311210(aim_world_position, flight_data + 0xE0, flight_data + 0xE4, 0);
 }
 /* Fires a timed burst from a moby while a pad button is held and ammo remains. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB1C8), where it is exact; names translated to the US level program. */
