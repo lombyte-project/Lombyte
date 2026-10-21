@@ -312,7 +312,7 @@ void FUN_L00_00289cb8(void) {
     s32 color_channel_offset;
     s32 color_high_byte_offset;
     f32 azimuth_radians;
-    f32 b;
+    f32 polar_angle_radians;
 
     D_L00_0016051C_c3->h4 = 0;
     set_identity_matrix(D_L00_001BD7E0_lui);
@@ -354,10 +354,10 @@ void FUN_L00_00289cb8(void) {
                 init_particle->f8 = random_angle_radians();
                 init_particle->f1C = convert_integer_to_float(random_integer_below(0x30) + 0x20) * 0.00390625f;
                 azimuth_radians = random_angle_radians();
-                b = random_angle_radians();
-                init_particle->f10 = fast_cos(azimuth_radians) * fast_sin(b) * 50.0f;
-                init_particle->f14 = fast_sin(azimuth_radians) * fast_sin(b) * 50.0f;
-                init_particle->f18 = fast_cos(b) * 50.0f;
+                polar_angle_radians = random_angle_radians();
+                init_particle->f10 = fast_cos(azimuth_radians) * fast_sin(polar_angle_radians) * 50.0f;
+                init_particle->f14 = fast_sin(azimuth_radians) * fast_sin(polar_angle_radians) * 50.0f;
+                init_particle->f18 = fast_cos(polar_angle_radians) * 50.0f;
                 color_channel_offset = random_integer_below(0x18) + 8;
                 color_high_byte_offset = random_integer_below(0x20) << 24;
                 if ((rand() >> 16) & 1) {
@@ -381,10 +381,10 @@ void FUN_L00_00289cb8(void) {
             update_particle->u.h.h0++;
             update_state->h.h2++;
             azimuth_radians = convert_integer_to_float((update_particle->u.h.h0 & 0xFFF) - 0x800) * 0.0015339808f;
-            b = convert_integer_to_float((update_state->h.h2 & 0xFFF) - 0x800) * 0.0015339808f;
-            update_particle->f10 = fast_cos(azimuth_radians) * fast_sin(b) * 50.0f;
-            update_particle->f14 = fast_sin(azimuth_radians) * fast_sin(b) * 50.0f;
-            update_particle->f18 = fast_cos(b) * 50.0f;
+            polar_angle_radians = convert_integer_to_float((update_state->h.h2 & 0xFFF) - 0x800) * 0.0015339808f;
+            update_particle->f10 = fast_cos(azimuth_radians) * fast_sin(polar_angle_radians) * 50.0f;
+            update_particle->f14 = fast_sin(azimuth_radians) * fast_sin(polar_angle_radians) * 50.0f;
+            update_particle->f18 = fast_cos(polar_angle_radians) * 50.0f;
             update_particle->col &= 0xFFFFFF;
             if (((u16)update_particle->u.h.h0 & 0x3F) < 8) {
                 update_particle->col |= 0x70000000;
