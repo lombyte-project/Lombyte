@@ -411,9 +411,9 @@ void FUN_L12_002ed280(struct Moby *moby) {
                 }
                 {
                     int help_threshold_step_frames = scale_game_frames_c(0x1C20);
-                    int b = scale_game_frames_c(0x708);
+                    int help_threshold_base_frames = scale_game_frames_c(0x708);
                     char *k = D_00141968_h;
-                    if (*(unsigned short *)(k + 0x370) * help_threshold_step_frames + b < moby_vars[1]) {
+                    if (*(unsigned short *)(k + 0x370) * help_threshold_step_frames + help_threshold_base_frames < moby_vars[1]) {
                         help_request(0x2EE4, 0x6E);
                     }
                 }
