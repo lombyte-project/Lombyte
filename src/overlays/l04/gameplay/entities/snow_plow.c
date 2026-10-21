@@ -547,7 +547,7 @@ extern void remove_moby_2ce060(void *) __asm__("FUN_0020c828");
 /* Marks the moby for removal; the unused buffer is kept for its frame. */
 void transport_ship_update(void *moby) __asm__("FUN_L04_002ce060");
 void transport_ship_update(void *moby) {
-    char buf[0x50];
+    char unused_frame_padding[0x50];
 
     remove_moby_2ce060(moby);
 }
