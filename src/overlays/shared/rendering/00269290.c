@@ -2202,7 +2202,7 @@ extern void vscl_26e3a8(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void vadd_26e3a8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_0026e3a8(P_26e3a8 *particle) {
     E_26e3a8 *e;
-    f32 lim;
+    f32 alpha_reversal_threshold;
     f32 a[4] __attribute__((aligned(16)));
     f32 v[4] __attribute__((aligned(16)));
     if (particle == 0) {
@@ -2235,12 +2235,12 @@ void FUN_L00_0026e3a8(P_26e3a8 *particle) {
         f32 x;
         if (particle->fC <= 159600.0f) {
             x = e->f4;
-            lim = 0.3f;
+            alpha_reversal_threshold = 0.3f;
         } else {
             x = e->f4;
-            lim = 0.15f;
+            alpha_reversal_threshold = 0.15f;
         }
-        if (!(lim < x)) {
+        if (!(alpha_reversal_threshold < x)) {
             if (x < 0.0f) {
             kill:
                 kill_26e3a8(particle);
