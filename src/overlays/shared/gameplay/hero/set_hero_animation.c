@@ -481,9 +481,9 @@ void FUN_L00_002325a0(int animation_id, int frame_index) {
 void FUN_L00_002325e0(int bank, int seq) {
     if (bank >= 0) {
         struct Hero *base = &hero;
-        AnimState *obj = ((AnimState *)base->moby);
+        AnimState *hero_moby = ((AnimState *)base->moby);
 
-        if (seq < obj->model->banks[obj->bank[1]]->count) {
+        if (seq < hero_moby->model->banks[hero_moby->bank[1]]->count) {
             base->unkAB0 = bank;
             base->unkAB4 = seq;
         }
