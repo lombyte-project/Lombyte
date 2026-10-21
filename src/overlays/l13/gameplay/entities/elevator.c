@@ -389,9 +389,9 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void FUN_L13_002b4060(struct Moby *moby, float *v, float *w);
-void FUN_L13_002b4060(struct Moby *moby, float *v, float *w) {
+void FUN_L13_002b4060(struct Moby *moby, float *camera_position, float *camera_rotation) {
     float ang = moby->rot.z;
-    float r = 2.5f;
+    float horizontal_offset_radius = 2.5f;
     float z = 1.5f;
     unsigned char *x;
     if ((moby->command >= 2 && (moby->command & 1)) || (moby->state >= 2 && (moby->state & 1))) {
@@ -400,17 +400,17 @@ void FUN_L13_002b4060(struct Moby *moby, float *v, float *w) {
         ang = fast_add_rotations(ang, 1.5707964f);
     }
     if (moby->oclass == 0x15) {
-        r = 2.0f;
+        horizontal_offset_radius = 2.0f;
         z = 1.2f;
     }
-    v[0] = fast_cos(ang) * r;
-    v[1] = fast_sin(ang) * r;
-    v[2] = z;
-    fast_vec_add(v, v, &moby->pos);
-    clear_u64_value(w);
+    camera_position[0] = fast_cos(ang) * horizontal_offset_radius;
+    camera_position[1] = fast_sin(ang) * horizontal_offset_radius;
+    camera_position[2] = z;
+    fast_vec_add(camera_position, camera_position, &moby->pos);
+    clear_u64_value(camera_rotation);
     x = D_0013E533 + 0xE1D;
-    w[2] = fast_arc_tan(*(float *)(x + 0xD0) - v[0], *(float *)(x + 0xD4) - v[1]);
-    *(int *)(w + 1) = 0;
+    camera_rotation[2] = fast_arc_tan(*(float *)(x + 0xD0) - camera_position[0], *(float *)(x + 0xD4) - camera_position[1]);
+    *(int *)(camera_rotation + 1) = 0;
 }
 /* Ported from rac1-decomp src/overlays/l13_gemlik/vendor_002B2020.c (func_L13_002B5368) */
 
