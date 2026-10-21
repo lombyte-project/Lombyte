@@ -1722,12 +1722,12 @@ void FUN_L15_002c6900(struct Moby *moby) {
     float fv;
     int res;
     char *helicopter_vars;
-    char *r;
-    float hit_away_heading, b, recoil_rotation_y, recoil_rotation_x;
+    char *hit_record;
+    float hit_away_heading, relative_hit_heading, recoil_rotation_y, recoil_rotation_x;
     helicopter_vars = (char *)moby->pvars;
     fv = 0.0f;
-    r = find_moby_hit(moby, 0x330000, 0);
-    res = hit_reaction(moby, r, helicopter_vars + 0x20, 0, &st, &fv, 0, 4);
+    hit_record = find_moby_hit(moby, 0x330000, 0);
+    res = hit_reaction(moby, hit_record, helicopter_vars + 0x20, 0, &st, &fv, 0, 4);
     if (st != 1 && moby->state != 7 && moby->state != 0x40) {
         float remaining_health = *(float *)(helicopter_vars + 0x20) - fv;
         *(float *)(helicopter_vars + 0x20) = remaining_health;
@@ -1736,12 +1736,12 @@ void FUN_L15_002c6900(struct Moby *moby) {
         } else if (res != 0xB) {
             *(unsigned char *)(helicopter_vars + 0x67) = 0xB4;
             trooper_anim_update(moby, (short *)(helicopter_vars + 0x60));
-            if (*(float *)(r + 0x1C) == 5627.925f && moby->state != 6) {
-                hit_away_heading = fast_arc_tan(moby->pos.x - *(float *)(r + 0),
-                                 moby->pos.y - *(float *)(r + 4));
-                b = fast_subtract_rotations(hit_away_heading, moby->rot.z);
-                recoil_rotation_y = fast_cos(b) * 0.08726646f;
-                recoil_rotation_x = fast_sin(b) * -0.34906584f;
+            if (*(float *)(hit_record + 0x1C) == 5627.925f && moby->state != 6) {
+                hit_away_heading = fast_arc_tan(moby->pos.x - *(float *)(hit_record + 0),
+                                 moby->pos.y - *(float *)(hit_record + 4));
+                relative_hit_heading = fast_subtract_rotations(hit_away_heading, moby->rot.z);
+                recoil_rotation_y = fast_cos(relative_hit_heading) * 0.08726646f;
+                recoil_rotation_x = fast_sin(relative_hit_heading) * -0.34906584f;
                 if (absolute_float(moby->rot.x) < absolute_float(recoil_rotation_x)) {
                     moby->rot.x = recoil_rotation_x;
                     *(float *)(helicopter_vars + 0x174) = 0.0f;
