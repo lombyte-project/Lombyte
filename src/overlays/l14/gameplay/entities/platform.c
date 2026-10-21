@@ -637,7 +637,7 @@ extern char D_0013F3D0[];
 /* The caller passes two floats in f12/f13; this routine never reads them. */
 void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
     char *data = *(char **)(moby + 0x78);
-    char *g = (char *)((char *)((char *)&hero));
+    char *hero_state = (char *)((char *)((char *)&hero));
     float target_up_vector[4];
     float up[4];
     float direction_scratch[4];
@@ -651,8 +651,8 @@ void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
     up[2] = 1.0f;
     up[3] = 1.0f;
 
-    if ((*(char **)(g + 0x2FC) == moby && *(short *)(g + 0x30E) == 0) ||
-        (*(char **)(g + 0x4F8) == moby && *(int *)(g + 0x208C) == 3)) {
+    if ((*(char **)(hero_state + 0x2FC) == moby && *(short *)(hero_state + 0x30E) == 0) ||
+        (*(char **)(hero_state + 0x4F8) == moby && *(int *)(hero_state + 0x208C) == 3)) {
         char *hero_data = (char *)((char *)((char *)&hero));
         *(char *)(moby + 0xBC) = 1;
         if (absolute_float(*(float *)(hero_data + 0x80) - *(float *)(moby + 0x10)) < 0.1f &&
