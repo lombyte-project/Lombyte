@@ -1614,8 +1614,8 @@ void FUN_L13_002ce688(unsigned char *source_moby, void *effect_position, int emi
     int debris_variant_index;
     int glow_frame_count;
     float len;
-    float f21;
-    float r;
+    float emission_distance_shortfall;
+    float random_emission_base;
     float yv;
     unsigned char *emission_table_bytes;
     int *pa;
@@ -1668,17 +1668,17 @@ void FUN_L13_002ce688(unsigned char *source_moby, void *effect_position, int emi
     clear_u64_value(vC);
     len = vector_length_xyz(vD);
     extra_emission_count = (len < 8.0f) ? func_001FA898_s(len) + 2 : 10;
-    f21 = (len < 7.0f) ? 7.0f - len : 0.0f;
+    emission_distance_shortfall = (len < 7.0f) ? 7.0f - len : 0.0f;
     if (extra_emission_count > 0) {
         emission_table_bytes = vG.b;
         j = extra_emission_count;
         do {
-            r = random_float_between(8.0f, 10.0f);
+            random_emission_base = random_float_between(8.0f, 10.0f);
             j--;
             *(Blk24 *)vG.b = *(Blk24 *)&D_L13_001F4950;
-            yv = r * D_0015ED6C;
+            yv = random_emission_base * D_0015ED6C;
             *(Blk24 *)vH.b = *(Blk24 *)&D_L13_001F4968;
-            yv = yv - f21 * D_0015ED6C;
+            yv = yv - emission_distance_shortfall * D_0015ED6C;
             ra = random_integer_below_c(6);
             pa = (int *)(emission_table_bytes + ra * 4);
             rb = random_integer_below_c(6);
