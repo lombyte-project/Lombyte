@@ -104,12 +104,12 @@ void FUN_L00_002694f8(char *particle) {
     float *g;
     char *reference_position;
     char *B;
-    char *pos;
+    char *particle_position;
     collision_check_counter = *(int *)(particle_data + 0x1C);
     if (collision_check_counter >= 3) {
         remaining_lifetime = *(short *)(particle + 0xA);
-        pos = particle + 0x10;
-        if (remaining_lifetime > func_001F9850(0x78) && coll_sphere(7.99f, pos, 0x12, 0)) {
+        particle_position = particle + 0x10;
+        if (remaining_lifetime > func_001F9850(0x78) && coll_sphere(7.99f, particle_position, 0x12, 0)) {
             *(int *)(particle_data + 0x14) = 1;
             *(short *)(particle + 0xA) = func_001F9850(0x78);
             *(int *)(particle_data + 0x1C) = -1;
@@ -117,7 +117,7 @@ void FUN_L00_002694f8(char *particle) {
             *(int *)(particle_data + 0x1C) = 0;
         }
     } else {
-        pos = particle + 0x10;
+        particle_position = particle + 0x10;
         if (collision_check_counter < 0)
             goto after;
         *(int *)(particle_data + 0x1C) = collision_check_counter + 1;
@@ -127,12 +127,12 @@ void FUN_L00_002694f8(char *particle) {
         *(float *)particle_data = fast_cos(g[1]) * g[5] / 2.5f;
         *(float *)(particle_data + 4) = fast_sin(g[1]) * g[5] / 2.5f;
         *(int *)(particle_data + 8) = 0;
-        fast_vec_add(pos, pos, particle_data);
+        fast_vec_add(particle_position, particle_position, particle_data);
     }
 after:
     reference_position = D_L00_00166DC0;
     B = reference_position - 0x140;
-    reference_distance = fast_vec_dist(pos, reference_position);
+    reference_distance = fast_vec_dist(particle_position, reference_position);
     reference_angle_delta = fast_subtract_rotations(fast_arc_tan(*(float *)(particle + 0x10) - *(float *)(B + 0x140),
                                              *(float *)(particle + 0x14) - *(float *)(B + 0x144)),
                                 *(float *)(B + 0x158));
@@ -146,10 +146,10 @@ after:
                    fast_add_rotations(*(float *)(B + 0x158), reference_angle_delta > 0.0f ? -1.0471976f : 1.0471976f)) *
                reference_distance;
         position_scratch[2] = *(float *)(particle + 0x18) - *(float *)(B + 0x148);
-        fast_vec_add(pos, position_scratch, reference_position);
-        qcopy(position_scratch, pos);
+        fast_vec_add(particle_position, position_scratch, reference_position);
+        qcopy(position_scratch, particle_position);
         position_scratch[2] = position_scratch[2] + 32.0f;
-        if (func_L00_001EFFF0(pos, position_scratch, 0x12, 0, 0))
+        if (func_L00_001EFFF0(particle_position, position_scratch, 0x12, 0, 0))
             goto kill;
     }
     if ((D_L00_0015F5CC & 3) == 0)
