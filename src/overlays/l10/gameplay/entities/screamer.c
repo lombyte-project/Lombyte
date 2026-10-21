@@ -3449,9 +3449,9 @@ void gate_2_update(GateMoby_2EAD50 *moby)
     GateVars_2EAD50 *vars = moby->vars;
     float opening_offset[3];
     Vec_2EAD50 out;
-    unsigned char st = moby->state;
+    unsigned char entry_gate_state = moby->state;
 
-    switch (st) {
+    switch (entry_gate_state) {
     case GATE_STATE_INITIALIZE:
         moby->f30 = 0xFF;
         vars->home = moby->pos;
@@ -3485,8 +3485,8 @@ void gate_2_update(GateMoby_2EAD50 *moby)
             if (vars->door > 0) {
                 (*(GateMoby_2EAD50 * *)&D_L10_0015FFD8_gp)[vars->door].flags &= 0xFFFD;
             }
-            *(int *)(bits + ((((short)moby->uid >> 5) * 4) + (current_level_index << 8))) |= st << (moby->uid & 0x1F);
-            D_L10_001BA950[(short)moby->uid >> 5] |= st << (moby->uid & 0x1F);
+            *(int *)(bits + ((((short)moby->uid >> 5) * 4) + (current_level_index << 8))) |= entry_gate_state << (moby->uid & 0x1F);
+            D_L10_001BA950[(short)moby->uid >> 5] |= entry_gate_state << (moby->uid & 0x1F);
             if (vars->sound > 0) {
                 func_L10_002F6E10_2EAD50(vars->sound);
             }
