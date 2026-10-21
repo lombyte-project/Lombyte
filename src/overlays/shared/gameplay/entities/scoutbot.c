@@ -803,7 +803,7 @@ void FUN_L08_002e8210(char *moby) {
     float velocity[4] __attribute__((aligned(16)));
     float offset[4] __attribute__((aligned(16)));
     float angle, magnitude, length, radius, spread;
-    int i, particle_frame_count, b, particle_third_frame_count;
+    int i, particle_frame_count, particle_second_frame_count, particle_third_frame_count;
     int *timer_ptr;
     char *target;
 
@@ -833,12 +833,12 @@ void FUN_L08_002e8210(char *moby) {
         i++;
         particle_frame_count = truncate_float_to_s32_002e8210(scale_game_frames_002e8210(random_float_between_002e8210(
             (float)D_L08_00161D08_gp, (float)D_L08_00161D08_gp * 1.2f)));
-        b = truncate_float_to_s32_002e8210(scale_game_frames_002e8210(random_float_between_002e8210(
+        particle_second_frame_count = truncate_float_to_s32_002e8210(scale_game_frames_002e8210(random_float_between_002e8210(
             (float)D_L08_00161D0C_gp, (float)D_L08_00161D0C_gp * 1.2f)));
         particle_third_frame_count = truncate_float_to_s32_002e8210(scale_game_frames_002e8210(random_float_between_002e8210(
             (float)D_L08_00161D10_gp, (float)D_L08_00161D10_gp * 1.5f)));
         spawn_particle_002e8210(position, velocity, offset, D_L08_00161CE8,
-                               D_L08_00161CEC, particle_frame_count, b, particle_third_frame_count, -1);
+                               D_L08_00161CEC, particle_frame_count, particle_second_frame_count, particle_third_frame_count, -1);
     }
     *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40),
         D_L08_00161CE4 * 0.017453292f * frame_time * (float)*(int *)(data + 0x1c));
