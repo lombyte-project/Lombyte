@@ -419,7 +419,7 @@ void FUN_L13_002e6c08(Moby *rocket) {
     V4_2E8040 old;
     V4_2E8040 hitpos;
     V4_2E8040 effect_scratch_vector;
-    V4_2E8040 vel;
+    V4_2E8040 particle_velocity;
     V4_2E8040 dir;
     unsigned char *spawned_effect;
     float trail_segment_fraction;
@@ -430,18 +430,18 @@ void FUN_L13_002e6c08(Moby *rocket) {
     dir.x = func_002140F8_2E8040(-1.0f, 1.0f);
     dir.y = func_002140F8_2E8040(-1.0f, 1.0f);
     dir.z = func_002140F8_2E8040(-1.0f, 1.0f);
-    *(Q_2E8040 *)&vel = *(Q_2E8040 *)&dir;
-    func_L00_001FF4B0_2E8040(&vel, &vel, func_002140F8_2E8040(0.1f, 0.2f) * D_0015ED6C);
+    *(Q_2E8040 *)&particle_velocity = *(Q_2E8040 *)&dir;
+    func_L00_001FF4B0_2E8040(&particle_velocity, &particle_velocity, func_002140F8_2E8040(0.1f, 0.2f) * D_0015ED6C);
     func_L00_001FF4B0_2E8040(&effect_scratch_vector, rocket_data, -func_002140F8_2E8040(D_0015ED6C * 0.1f, D_0015ED6C));
-    func_001F9BD8_2E8040(&vel, &vel, &effect_scratch_vector);
-    spawned_effect = spawn_particle(&*(V4_2E8040 *)&rocket->pos, (float *)&vel, func_001F9850_2E8040(6), 0x7F, 0xB0B0B0, 3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
+    func_001F9BD8_2E8040(&particle_velocity, &particle_velocity, &effect_scratch_vector);
+    spawned_effect = spawn_particle(&*(V4_2E8040 *)&rocket->pos, (float *)&particle_velocity, func_001F9850_2E8040(6), 0x7F, 0xB0B0B0, 3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
     if (spawned_effect != 0) {
         spawned_effect[3] = 0x48;
     }
     for (trail_segment_fraction = 0.0f; trail_segment_fraction < 1.0f; trail_segment_fraction += 0.33333334f) {
         func_L00_001FF4B0_2E8040(&effect_scratch_vector, rocket_data, func_002140F8_2E8040(trail_segment_fraction, trail_segment_fraction + 0.33333334f) * rocket_data->speed);
         func_001F9BD8_2E8040(&effect_scratch_vector, &effect_scratch_vector, &*(V4_2E8040 *)&rocket->pos);
-        spawned_effect = spawn_particle(&effect_scratch_vector, (float *)&vel, func_001F9850_2E8040(0x3C), 0x7F, 0x606060, 3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
+        spawned_effect = spawn_particle(&effect_scratch_vector, (float *)&particle_velocity, func_001F9850_2E8040(0x3C), 0x7F, 0x606060, 3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
         if (spawned_effect != 0) {
             Tex_2E8040 *tex = &D_L13_001B2680_2E8040;
             spawned_effect[2] = *tex->p5C;
