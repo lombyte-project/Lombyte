@@ -1056,7 +1056,7 @@ extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
-float gravity_length_xy(float *v) {
+float gravity_length_xy(float *input_vector) {
     enum {
         GRAVITY_MODE_WORLD_Z = 0,
         GRAVITY_MODE_VECTOR_AXIS = 1,
@@ -1069,12 +1069,12 @@ float gravity_length_xy(float *v) {
 
     switch (base->unk20B3) {
     case GRAVITY_MODE_WORLD_Z:
-        return vector_length_xy(v);
+        return vector_length_xy(input_vector);
     case GRAVITY_MODE_VECTOR_AXIS:
     case GRAVITY_MODE_DIRECTION_AXIS:
         euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
         transpose_rotation_matrix(inv, m);
-        transform_vector(out, v, inv);
+        transform_vector(out, input_vector, inv);
         return vector_length_xy(out);
     }
     return 0.0f;
