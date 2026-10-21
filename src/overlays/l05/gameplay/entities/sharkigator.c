@@ -3092,7 +3092,7 @@ void box_update(char *moby)
     char *moby_data = *(char **)(moby + 0x78);
     float previous_position[4];
     float previous_rotation[4];
-    float r[4];
+    float position_delta[4];
     switch (*(u8 *)(moby + 0x20)) {
     case BOX_INITIALIZE:
         *(int *)(moby_data + 0x5C) = 1;
@@ -3105,8 +3105,8 @@ void box_update(char *moby)
         qcopy(previous_position, moby + 0x10);
         qcopy(previous_rotation, moby + 0x40);
         FUN_L00_002604f0(moby, D_L05_0015FFD8_c + (*(int *)(moby_data + 0x80) << 8), moby_data + 0x60, moby_data + 0x70, moby + 0x10, moby + 0x40);
-        fast_vec_sub(r, moby + 0x10, previous_position);
-        FUN_L00_00260738_c(moby_data + 0x20, r, previous_rotation, moby + 0x40);
+        fast_vec_sub(position_delta, moby + 0x10, previous_position);
+        FUN_L00_00260738_c(moby_data + 0x20, position_delta, previous_rotation, moby + 0x40);
         break;
     }
 }
