@@ -2010,8 +2010,8 @@ void FUN_L11_0030a500(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC00), where it is exact; names translated to the US level program. */
 
-int FUN_L11_0030a830(struct Moby *arg) {
-    return arg->state == 5;
+int FUN_L11_0030a830(struct Moby *moby) {
+    return moby->state == 5;
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC10), where it is exact; names translated to the US level program. */
 
