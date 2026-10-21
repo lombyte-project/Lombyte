@@ -1819,7 +1819,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             crab_data->f78 = crab_data->f78 - crab_data->f80;
             FUN_L00_001ff290(fall_motion_scratch, m->pos, crab_data->v70);
             if (m->pos[2] < probe_ground_height(m->pos, 0, 0.5f)) {
-                int q;
+                int knockback_collision_radius_fixed;
                 float x;
                 r = collision_hit_material();
                 if (r == 0 || r == 1 || r == 3) {
@@ -1829,10 +1829,10 @@ void toxic_crab_update(Moby2E30F8 *m) {
                 }
                 m->s34 &= 0xEFFF;
                 m->state = 0xB;
-                q = truncate_float_to_s32(768.0f);
+                knockback_collision_radius_fixed = truncate_float_to_s32(768.0f);
                 x = D_L10_00161E28 * frame_time_sq;
                 crab_data->bAD = 0;
-                crab_data->i90 = q;
+                crab_data->i90 = knockback_collision_radius_fixed;
                 crab_data->f98 = 0.75f;
                 crab_data->i94 = 9;
                 crab_data->f80 = x;
