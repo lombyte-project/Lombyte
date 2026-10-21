@@ -8,11 +8,11 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 void emit_textured_rectangle(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s32 vh, u64 rgba, u64 tex) __asm__("FUN_001f5808");
 
-void emit_textured_rectangle(f32 x, f32 y, f32 screen_width, f32 h, s32 u, s32 v, s32 uw, s32 vh, u64 rgba, u64 texture_packet_word) {
+void emit_textured_rectangle(f32 x, f32 y, f32 screen_width, f32 screen_height, s32 u, s32 v, s32 uw, s32 vh, u64 rgba, u64 texture_packet_word) {
     s32 x0 = truncate_float_to_s32(x * 16.0f) + screen_extent.left - 8;
     s32 x1 = truncate_float_to_s32((x + screen_width) * 16.0f) + screen_extent.left - 8;
     s32 y0 = truncate_float_to_s32(y * 16.0f) + screen_extent.top - 8;
-    s32 y1 = truncate_float_to_s32((y + h) * 16.0f) + screen_extent.top - 8;
+    s32 y1 = truncate_float_to_s32((y + screen_height) * 16.0f) + screen_extent.top - 8;
     s32 u1_fixed;
     s32 u0_fixed;
     s32 vb;
