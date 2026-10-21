@@ -2530,18 +2530,18 @@ float FUN_L00_002bec80(Vec4_2bec80 *probe_position, void *probing_moby) {
     enum {
         COLLISION_MATERIAL_WATER = 0
     };
-    Vec4_2bec80 lower_probe_point, b;
+    Vec4_2bec80 lower_probe_point, upper_probe_point;
     float f, unclamped_lower_z;
     qcopy(&lower_probe_point, probe_position);
-    qcopy(&b, probe_position);
+    qcopy(&upper_probe_point, probe_position);
     unclamped_lower_z = lower_probe_point.f[2] - 5.0f;
     if (unclamped_lower_z < 0.1f)
         f = 0.1f;
     else
         f = unclamped_lower_z;
     lower_probe_point.f[2] = f;
-    b.f[2] = f + 6.0f;
-    if (FUN_001efa68_002bec80(&b, &lower_probe_point, 6, probing_moby, 0)) {
+    upper_probe_point.f[2] = f + 6.0f;
+    if (FUN_001efa68_002bec80(&upper_probe_point, &lower_probe_point, 6, probing_moby, 0)) {
         char *hit_moby = (*(S173E40_2bec80 *)D_L00_00173E40).o18;
         if (hit_moby && *(char **)(hit_moby + 0x24) && *(short *)(*(char **)(hit_moby + 0x24) + 0x46) == 5) {
             return (*(S173E40_2bec80 *)D_L00_00173E40).f28;
