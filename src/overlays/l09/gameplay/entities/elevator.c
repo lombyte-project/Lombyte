@@ -325,7 +325,7 @@ void refueling_station_update(struct Moby *moby) {
         REFUELING_STATION_STATE_EXPLODE = 3
     };
     char *station_vars = (char *)moby->pvars;
-    float v[4];
+    float explosion_offset[4];
     unsigned char *removal_check_base;
     FUN_L09_00303b30(moby, station_vars, station_vars + 0x20);
     switch (moby->state) {
@@ -378,8 +378,8 @@ void refueling_station_update(struct Moby *moby) {
         }
         break;
     case REFUELING_STATION_STATE_EXPLODE:
-        subtract_vector_xyz_c(v, D_L09_00166F40, &moby->pos);
-        spawn_explosion(moby, v, 0, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, 2.0f, 0,
+        subtract_vector_xyz_c(explosion_offset, D_L09_00166F40, &moby->pos);
+        spawn_explosion(moby, explosion_offset, 0, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, 2.0f, 0,
                               40.0f, 0, 1, -1, 0);
         mark_moby_for_removal(moby);
         break;
