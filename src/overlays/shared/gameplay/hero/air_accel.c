@@ -23,7 +23,7 @@ extern unsigned char D_0013E533[];
 
 int FUN_L01_00226f10(int item_lookup_enabled) {
     char *g = (char *)D_0013E533 + 0xE1D;
-    char *r;
+    char *item_record;
     int item_id;
     if (*(unsigned char *)(g + 0x20A4) == 3)
         return 0;
@@ -38,8 +38,8 @@ int FUN_L01_00226f10(int item_lookup_enabled) {
     if (*(short *)(g + 0x22C8) != 0)
         return 0;
     item_id = hero_slot_item_id(0);
-    r = D_L01_00179F40 - (-(item_id * 0x4C));
-    return *(int *)(r + 0x24);
+    item_record = D_L01_00179F40 - (-(item_id * 0x4C));
+    return *(int *)(item_record + 0x24);
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002283E0), where it is exact; names translated to the US level program. */
 
