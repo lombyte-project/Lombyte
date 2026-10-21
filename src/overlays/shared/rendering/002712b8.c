@@ -1071,13 +1071,13 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char *D_L00_001B2180[];
 extern unsigned char D_0013F3D0_c[] __asm__("D_0013F3D0");
 
-unsigned char *FUN_L00_002738e8(void *pos, void *vel, float scale, int life, float floor_z, int col, float gravity, int secondary_color, int big) {
+unsigned char *FUN_L00_002738e8(void *initial_position, void *initial_velocity, float scale, int life, float floor_z, int col, float gravity, int secondary_color, int big) {
     unsigned char *particle = p27fe00_alloc(0x40);
     unsigned char *particle_data;
     if (particle != 0) {
         particle_data = particle + 0x20;
-        qcopy(particle + 0x10, pos);
-        if (vector_distance(D_0013F3D0_c, pos) < 80.0f) {
+        qcopy(particle + 0x10, initial_position);
+        if (vector_distance(D_0013F3D0_c, initial_position) < 80.0f) {
             particle[9] = truncate_float_to_s32(1.0f) + 0x30;
         } else {
             particle[9] = truncate_float_to_s32(1.0f) + 0x20;
@@ -1089,7 +1089,7 @@ unsigned char *FUN_L00_002738e8(void *pos, void *vel, float scale, int life, flo
         *(float *)(particle + 0xC) = scale * 210000.0f;
         particle[8] = (int)random_float_between(0.0f, 255.0f);
         *(short *)(particle + 0xA) = life;
-        qcopy(particle_data, vel);
+        qcopy(particle_data, initial_velocity);
         *(float *)(particle_data + 0x10) = floor_z;
         *(float *)(particle_data + 0x14) = gravity;
         *(int *)(particle_data + 0x18) = secondary_color;
