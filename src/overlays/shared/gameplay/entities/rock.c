@@ -1564,46 +1564,46 @@ extern u8 *D_L01_001600EC;
 
 void FUN_L01_003087e0(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    V4_3087e0 v;
+    V4_3087e0 output_position;
     V4_3087e0 output_rotation;
     V4_3087e0 start_rotation;
-    V4_3087e0 b;
+    V4_3087e0 end_rotation;
     f32 record_value;
-    f32 f22;
+    f32 interpolation_factor;
 
     if (*(unsigned char *)(moby + 0x52) == 1) {
         record_value = compute_interpolated_record_value(moby);
     } else {
         record_value = 170.0f;
     }
-    f22 = record_value / 170.0f;
+    interpolation_factor = record_value / 170.0f;
     if (*(s32 *)(data + 4) == -1 || *(s32 *)(data + 8) == -1) {
         f32 ang;
         f32 five = 5.0f;
         struct Hero *g = &hero;
-        ang = FUN_001fa580_c(f22 * 0.6981316804885864f - 0.3490658402442932f, g->motion.rot.f[2]);
-        v.x = fast_cos(ang) * five;
-        v.y = fast_sin(ang) * five;
-        v.z = 0.0f;
-        add_vector_xyz(&v.x, &v.x, (f32 *)(&g->motion.pos));
-        v.z += 1.0f;
+        ang = FUN_001fa580_c(interpolation_factor * 0.6981316804885864f - 0.3490658402442932f, g->motion.rot.f[2]);
+        output_position.x = fast_cos(ang) * five;
+        output_position.y = fast_sin(ang) * five;
+        output_position.z = 0.0f;
+        add_vector_xyz(&output_position.x, &output_position.x, (f32 *)(&g->motion.pos));
+        output_position.z += 1.0f;
         clear_u64_value(&output_rotation.x);
         output_rotation.z = FUN_001fa580_c(ang, 3.141590118408203f);
-        output_rotation.y = f22 * -0.17000000178813934f;
+        output_rotation.y = interpolation_factor * -0.17000000178813934f;
     } else {
-        lerp_vector(&v.x, D_L01_001600EC + *(s32 *)(data + 4) * 128 + 0x30,
-                     D_L01_001600EC + *(s32 *)(data + 8) * 128 + 0x30, f22);
+        lerp_vector(&output_position.x, D_L01_001600EC + *(s32 *)(data + 4) * 128 + 0x30,
+                     D_L01_001600EC + *(s32 *)(data + 8) * 128 + 0x30, interpolation_factor);
         {
             u8 *base = D_L01_001600EC;
 
             qcopy(&start_rotation, base + *(s32 *)(data + 4) * 128 + 0x70);
-            qcopy(&b, base + *(s32 *)(data + 8) * 128 + 0x70);
+            qcopy(&end_rotation, base + *(s32 *)(data + 8) * 128 + 0x70);
         }
-        output_rotation.z = FUN_001fa580_c(fast_subtract_rotations(b.z, start_rotation.z) * f22, start_rotation.z);
-        output_rotation.y = FUN_001fa580_c(fast_subtract_rotations(b.y, start_rotation.y) * f22, start_rotation.y);
-        output_rotation.x = FUN_001fa580_c(fast_subtract_rotations(b.x, start_rotation.x) * f22, start_rotation.x);
+        output_rotation.z = FUN_001fa580_c(fast_subtract_rotations(end_rotation.z, start_rotation.z) * interpolation_factor, start_rotation.z);
+        output_rotation.y = FUN_001fa580_c(fast_subtract_rotations(end_rotation.y, start_rotation.y) * interpolation_factor, start_rotation.y);
+        output_rotation.x = FUN_001fa580_c(fast_subtract_rotations(end_rotation.x, start_rotation.x) * interpolation_factor, start_rotation.x);
     }
-    FUN_L00_002ea9d8(&v.x);
+    FUN_L00_002ea9d8(&output_position.x);
     FUN_L00_002eaa30(&output_rotation.x);
 }
 #include "sda.h"
