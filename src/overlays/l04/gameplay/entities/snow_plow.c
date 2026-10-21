@@ -620,10 +620,10 @@ extern void clear_vector(void *) __asm__("FUN_001f99f8");
 
 void FUN_L04_002d1608(void *moby) {
     char pos[16];
-    char vec[16];
-    clear_vector(vec);
+    char zero_vector[16];
+    clear_vector(zero_vector);
     moby_point_position(moby, 12, pos);
-    func_L00_0025F4A8_alt(moby, vec, pos, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, 1.0f, -1, 15.0f,
+    func_L00_0025F4A8_alt(moby, zero_vector, pos, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, 1.0f, -1, 15.0f,
                           1, 1, -1, 0);
 }
 
