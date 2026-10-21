@@ -59,7 +59,7 @@ void FUN_L01_002aea70(char *vendor_moby, int lvl) {
     struct MusicStreamState *music_state;
     struct MusicStreamState *qq;
     int adjusted_address_base;
-    int r;
+    int level_table_pair_index;
     snd_pause_all_sounds_in_group(0x1D);
     music_pause(0);
     snd_flush_sound_commands_alt();
@@ -87,7 +87,7 @@ void FUN_L01_002aea70(char *vendor_moby, int lvl) {
     calculate_dma_transfer_address();
     adjusted_address_base = D_L01_001611CC + (int)0xFFFC0000;
     *(int *)(relocated_address_block + 0x58) = D_L01_00174280[1] + adjusted_address_base;
-    r = D_L01_001CA4A0[lvl];
+    level_table_pair_index = D_L01_001CA4A0[lvl];
     *(int *)(relocated_address_block + 0x5C) = D_L01_00174280[2] + adjusted_address_base;
     D_L01_0015F3FC = 1.0f;
     D_L01_001611CC = adjusted_address_base;
@@ -95,7 +95,7 @@ void FUN_L01_002aea70(char *vendor_moby, int lvl) {
     FUN_L00_0020fca8(0, 0);
     g->pending_item[0] = lvl;
     select_world_object_resource_tables(D_L01_00179F40[lvl].f10, -1);
-    FUN_L00_002454c8(r);
+    FUN_L00_002454c8(level_table_pair_index);
     music_state = &music_stream_state;
     music_state->queued_secondary_track = 0x2734;
     parse_space_scene_chunk(0);
