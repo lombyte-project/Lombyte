@@ -842,7 +842,7 @@ extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 void FUN_L00_00239630(HudElem *hud_element) {
     unsigned char *visibility_counters = hud_element->cnt;
     HudCounter *animation_counters;
-    HudCounter *g;
+    HudCounter *health_icon_animation_counters;
     int unclamped_target_value;
     int max;
 
@@ -866,14 +866,14 @@ void FUN_L00_00239630(HudElem *hud_element) {
         if (animation_counters->unk2 >= 0x1000) {
             animation_counters->unk2 = 0xFFF;
         }
-        g = animation_counters;
-        if (g->unk2 < 0x7FF) {
-            if (g->unk4 < 0) {
-                g->unk6 = 1;
+        health_icon_animation_counters = animation_counters;
+        if (health_icon_animation_counters->unk2 < 0x7FF) {
+            if (health_icon_animation_counters->unk4 < 0) {
+                health_icon_animation_counters->unk6 = 1;
             }
         }
-        if (g->unk2 < 0) {
-            g->unk2 = 0;
+        if (health_icon_animation_counters->unk2 < 0) {
+            health_icon_animation_counters->unk2 = 0;
         }
         if (hud_element->unk78 > hud_element->unk08) {
             hud_element->unk78 = hud_element->unk08;
