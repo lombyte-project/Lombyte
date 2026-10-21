@@ -861,10 +861,10 @@ unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *vel, int color, u8 life, u8
         qcopy(particle_data, vel);
         *(int *)(particle_data + 7) = mode;
         if (mode == 1) {
-            struct Hero *g = &hero;
-            particle_data[4] = *(float *)(particle + 0x10) - g->motion.pos.f[0];
-            particle_data[5] = *(float *)(particle + 0x14) - g->motion.pos.f[1];
-            particle_data[6] = *(float *)(particle + 0x18) - g->motion.pos.f[2];
+            struct Hero *hero_reference = &hero;
+            particle_data[4] = *(float *)(particle + 0x10) - hero_reference->motion.pos.f[0];
+            particle_data[5] = *(float *)(particle + 0x14) - hero_reference->motion.pos.f[1];
+            particle_data[6] = *(float *)(particle + 0x18) - hero_reference->motion.pos.f[2];
         }
         *(int *)(particle + 4) = color;
         particle[9] = FUN_001fa6d0_2730e0(1.0f) + 0x20;
