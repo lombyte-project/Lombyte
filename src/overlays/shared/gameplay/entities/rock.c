@@ -662,7 +662,7 @@ void FUN_L01_002fb5b0(char *moby) {
     };
     char *trigger_vars = *(char **)(moby + 0x78);
     float saved_camera_position[4];
-    float b[4];
+    float saved_camera_rotation[4];
     func_L01_002FC890_m(moby);
     switch (((unsigned char *)moby)[0x20]) {
     case CUTSCENE_TRIGGER_INITIALIZE:
@@ -697,7 +697,7 @@ void FUN_L01_002fb5b0(char *moby) {
             ((unsigned char *)moby)[0xBC] != 1)
             break;
         qcopy(saved_camera_position, D_L01_001672C0_c);
-        qcopy(b, D_L01_001672C0_c + 0x10);
+        qcopy(saved_camera_rotation, D_L01_001672C0_c + 0x10);
         if (*(int *)(trigger_vars + 0x28) == -1) {
             FUN_L00_00216f90(g, g + 0x10, 0x72, 1);
         } else {
@@ -705,7 +705,7 @@ void FUN_L01_002fb5b0(char *moby) {
             FUN_L00_00216f90(o + 0x30, o + 0x70, 0x72, 1);
         }
         if (*(int *)(trigger_vars + 0x30) != 0) {
-            jet_mount(saved_camera_position, b, 2, *(int *)(trigger_vars + 0x34), 0);
+            jet_mount(saved_camera_position, saved_camera_rotation, 2, *(int *)(trigger_vars + 0x34), 0);
         } else {
             char *o = D_L01_001600EC_q + *(int *)(trigger_vars + 0x24) * 128;
             jet_mount(o + 0x30, o + 0x70, 0, 0, 0);
