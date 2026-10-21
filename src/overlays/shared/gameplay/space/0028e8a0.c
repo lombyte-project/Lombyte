@@ -179,10 +179,10 @@ void FUN_L00_002039a0(void);
 void FUN_L00_0028e9c8(int);
 /* Sets D_L00_0015F5D8, keeps +0x22A8 >= 1, calls 00216050, sound_update, 002039a0, 0028e9c8. */
 void FUN_L00_0028ecd8(void) {
-    struct Hero *g = &hero;
+    struct Hero *hero_state = &hero;
     struct MusicStreamState *music_state;
-    if (g->health.hp <= 0)
-        g->health.hp = 1;
+    if (hero_state->health.hp <= 0)
+        hero_state->health.hp = 1;
     D_L00_0015F5D8 = 1;
     music_pause(0);
     music_state = &music_stream_state;
