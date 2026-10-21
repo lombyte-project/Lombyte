@@ -180,7 +180,7 @@ extern char D_L04_00174040_2939E8[] __asm__("D_L04_00173FC0");
 int FUN_L04_00292828(StMoby_2939E8 *moby, Steer_2939E8 *steer_state)
 {
     float push[4];
-    float dir[4];
+    float tilt_direction[4];
     int excessive_tilt_flags = 0;
     int pinned = 0;
     int bit = 1;
@@ -234,12 +234,12 @@ int FUN_L04_00292828(StMoby_2939E8 *moby, Steer_2939E8 *steer_state)
             }
         }
         if (push[0] != 0.0f || push[1] != 0.0f || push[2] != 0.0f) {
-            dir[0] = func_001F9F90_2939E8(moby->rotz);
-            dir[1] = func_001F9FA8_2939E8(moby->rotz);
-            dir[2] = 0.0f;
-            cross_vectors_xyz(dir, dir, push);
-            cross_vectors_xyz(dir, dir, push);
-            steer_state->tilt = angle_atan2(vector_length_xy(dir), dir[2]);
+            tilt_direction[0] = func_001F9F90_2939E8(moby->rotz);
+            tilt_direction[1] = func_001F9FA8_2939E8(moby->rotz);
+            tilt_direction[2] = 0.0f;
+            cross_vectors_xyz(tilt_direction, tilt_direction, push);
+            cross_vectors_xyz(tilt_direction, tilt_direction, push);
+            steer_state->tilt = angle_atan2(vector_length_xy(tilt_direction), tilt_direction[2]);
         } else {
             steer_state->tilt = 0.0f;
         }
