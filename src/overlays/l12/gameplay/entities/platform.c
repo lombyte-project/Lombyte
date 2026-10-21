@@ -2827,14 +2827,14 @@ float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L12_002eb220(struct Moby *moby) {
     int st;
     float fv;
-    int res;
+    int hit_reaction_code;
     char *vars;
     char *hit_record;
     float hit_to_moby_angle, hit_yaw_offset, knockback_rotation_y, knockback_rotation_x;
     vars = (char *)moby->pvars;
     fv = 0.0f;
     hit_record = find_moby_hit(moby, 0x330000, 0);
-    res = hit_reaction(moby, hit_record, vars + 0x20, 0, &st, &fv, 0, 4);
+    hit_reaction_code = hit_reaction(moby, hit_record, vars + 0x20, 0, &st, &fv, 0, 4);
     if (st != 1 && moby->state != 6 &&
         *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0xB8 &&
         *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x199) {
@@ -2843,10 +2843,10 @@ void FUN_L12_002eb220(struct Moby *moby) {
             fv = 10.0f;
         remaining_health = *(float *)(vars + 0x20) - fv;
         *(float *)(vars + 0x20) = remaining_health;
-        if (res == 1 || remaining_health <= 0.0f) {
+        if (hit_reaction_code == 1 || remaining_health <= 0.0f) {
             allocate_voice_for_target_entry(2, 0, (int)moby);
             moby->state = 6;
-        } else if (res != 0xB) {
+        } else if (hit_reaction_code != 0xB) {
             *(unsigned char *)(vars + 0x67) = 0xB4;
             trooper_anim_update(moby, (short *)(vars + 0x60));
             if (*(float *)(hit_record + 0x1C) == 5627.925f && moby->state != 5) {
