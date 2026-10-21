@@ -3233,7 +3233,7 @@ void FUN_L14_002fcbb0(struct Moby *moby) {
         TRAM_STATE_WAIT_FOR_RESPAWN = 3
     };
     L14TramVars *moby_vars = (L14TramVars *)moby->pvars;
-    Vec4 b;
+    Vec4 rider_view_target_or_carrier_offset;
     Vec4 carrier_position;
 
     if (moby->state == 0) {
@@ -3315,14 +3315,14 @@ void FUN_L14_002fcbb0(struct Moby *moby) {
                     struct Moby *carrier = &D_L14_0015FFD8_t[moby_vars->carrier];
                     struct Moby *rider = &D_L14_0015FFD8_t[((int *)carrier->pvars)[1]];
                     float pitch;
-                    qcopy(&b, &rider->pos);
-                    b.f[2] += 4.0f;
+                    qcopy(&rider_view_target_or_carrier_offset, &rider->pos);
+                    rider_view_target_or_carrier_offset.f[2] += 4.0f;
                     pitch = tram_angle_diff(D_L14_00167380_v.pitch,
-                                            -tram_atan2(tram_distance(D_L14_00167380_v.pos, &b), b.f[2] - D_L14_00167380_v.pos[2]));
+                                            -tram_atan2(tram_distance(D_L14_00167380_v.pos, &rider_view_target_or_carrier_offset), rider_view_target_or_carrier_offset.f[2] - D_L14_00167380_v.pos[2]));
                     if (tram_angle_diff(D_L14_00167380_v.yaw, tram_atan2(rider->pos.x - D_L14_00167380_v.pos[0],
                                                                          rider->pos.y - D_L14_00167380_v.pos[1])) < 0.4886922f &&
                         pitch < 0.34906584f &&
-                        tram_coll_line(D_L14_00167380_v.pos, &b, 0x12, rider, 0) == 0) {
+                        tram_coll_line(D_L14_00167380_v.pos, &rider_view_target_or_carrier_offset, 0x12, rider, 0) == 0) {
                         D_0014C190_257218[current_level_index][(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
                         D_L14_001BABD0[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
                         moby->flags &= 0xFFBE;
@@ -3346,8 +3346,8 @@ void FUN_L14_002fcbb0(struct Moby *moby) {
             if (moby_vars->stage == 0 && moby_vars->segment >= 0x38)
                 moby_vars->stage = 1;
             tram_scale(&carrier_position, &moby->rot_row0, 0.21f);
-            tram_scale(&b, &moby->rot_row2, -1.24f);
-            tram_add(&carrier_position, &carrier_position, &b);
+            tram_scale(&rider_view_target_or_carrier_offset, &moby->rot_row2, -1.24f);
+            tram_add(&carrier_position, &carrier_position, &rider_view_target_or_carrier_offset);
             tram_add(&carrier_position, &moby->pos, &carrier_position);
             c = &D_L14_0015FFD8_t[moby_vars->carrier];
             qcopy(&c->pos, &carrier_position);
