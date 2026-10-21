@@ -1749,10 +1749,10 @@ void FUN_L18_002db460(struct Moby *moby) {
         STATE_EXPANDING_RING = 2,
         STATE_REMOVE = 3
     };
-    float v[4];
+    float first_spark_vector[4];
     float second_spark_vector[4];
     float spark_vector_offset[4];
-    float w[4];
+    float spark_spawn_position[4];
     float *moby_vars = (float *)moby->pvars;
     int i;
     int i0, i1, i2, i3, i4;
@@ -1767,13 +1767,13 @@ void FUN_L18_002db460(struct Moby *moby) {
         i = 0;
         for (; i < D_L18_00161C40; i++) {
             cc = spark_vector_offset;
-            scale_vector_xyz(v, moby_vars, D_L18_00161C08);
+            scale_vector_xyz(first_spark_vector, moby_vars, D_L18_00161C08);
             FUN_L00_00257d78(cc, 0.0f, D_L18_00161C0C * frame_time);
-            add_vector_xyz(v, cc, v);
-            FUN_L00_00257d78(w, 0.0f, 0.5f);
-            add_vector_xyz(w, w, &moby->pos);
+            add_vector_xyz(first_spark_vector, cc, first_spark_vector);
+            FUN_L00_00257d78(spark_spawn_position, 0.0f, 0.5f);
+            add_vector_xyz(spark_spawn_position, spark_spawn_position, &moby->pos);
             clear_vector(second_spark_vector);
-            v[3] = random_float_between(D_L18_00161C20, D_L18_00161C24);
+            first_spark_vector[3] = random_float_between(D_L18_00161C20, D_L18_00161C24);
             second_spark_vector[3] = random_float_between(D_L18_00161C28, D_L18_00161C2C);
             i0 = FUN_001fa6e0(D_L18_00161C30, D_L18_00161C34,
                               random_float_between(0.0f, 1.0f));
@@ -1790,7 +1790,7 @@ void FUN_L18_002db460(struct Moby *moby) {
                 (random_float_between(-D_L18_00161C1C, D_L18_00161C1C) +
                  1.0f)));
             second_spark_vector[2] = second_spark_vector[2] - D_L18_00161C04 * frame_time_sq * (float)i3;
-            spawn_spark(w, v, second_spark_vector, i0, i1, i2, i3, i4, D_L18_00161C44);
+            spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, i0, i1, i2, i3, i4, D_L18_00161C44);
         }
         moby_vars[12] = fast_add_rotations(moby_vars[12], frame_time * 18.849556f);
         {
