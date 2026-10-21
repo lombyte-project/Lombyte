@@ -1656,11 +1656,11 @@ void FUN_L05_00254608(void) {
 
 
 int FUN_L05_002551b8(void) {
-    unsigned char b = hero.unk8CE; // selected help mode
-    int r = 0x7F;
-    if (b == 0)
-        r = 0x55;
-    return r;
+    unsigned char animation_variant_selector = hero.unk8CE; // selected help mode
+    int animation_id = 0x7F;
+    if (animation_variant_selector == 0)
+        animation_id = 0x55;
+    return animation_id;
 }
 int FUN_L05_002551d0(void) {
     struct Hero *hero_ptr = &hero;
