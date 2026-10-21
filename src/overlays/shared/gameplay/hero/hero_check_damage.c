@@ -3395,7 +3395,7 @@ extern float func_L00_0025C918_2136A8(float *p, float t, float *v, float u1, flo
 
 void FUN_L00_00212ff0(void) {
     struct Hero *globals = &hero;
-    float v[4];
+    float ground_position_correction[4];
     if (globals->unk20B3 != 0) {
         float velocity_dot = dot_vectors_xyz(&globals->motion.velocity, &globals->unk270);
         float ground_dist;
@@ -3407,15 +3407,15 @@ void FUN_L00_00212ff0(void) {
             qcopy(&globals->motion.pos, &globals->ground_point);
             return;
         }
-        subtract_vector_xyz(v, &globals->ground_point, &globals->motion.pos);
-        len = vector_length_xyz(v);
+        subtract_vector_xyz(ground_position_correction, &globals->ground_point, &globals->motion.pos);
+        len = vector_length_xyz(ground_position_correction);
         if (len < frame_scale * 0.21f) {
             if (frame_scale * 0.05f < len) len = frame_scale * 0.05f;
         } else {
             len = len * 0.5f;
         }
-        normalize_vector_xyz(v, v, len);
-        add_vector_xyz(&hero.motion.pos, &hero.motion.pos, v);
+        normalize_vector_xyz(ground_position_correction, ground_position_correction, len);
+        add_vector_xyz(&hero.motion.pos, &hero.motion.pos, ground_position_correction);
     } else {
         if (globals->air_frames.s == 0 && globals->motion.pos.f[2] < globals->ground_z.f) {
             float x = absolute_float(globals->motion.pos.f[2] - globals->ground_z.f);
