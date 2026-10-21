@@ -120,7 +120,7 @@ extern void FUN_L09_0021e560_u(int, int) __asm__("FUN_L09_0021e560");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 extern int *D_L09_001611B8[] __attribute__((section(".sdata")));
-void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1) {
+void FUN_L09_0021e8c0(char *list, int count, float unused, long first_texture_index, long second_texture_index) {
     int i;
     int j;
     int strip_vertex_index;
@@ -128,7 +128,7 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
     int idx;
     float first_scroll_offset;
     float second_scroll_offset;
-    FUN_L09_0021e560_u(tex0, tex1);
+    FUN_L09_0021e560_u(first_texture_index, second_texture_index);
     D_L09_001611B8[2][0] = 0x30000009;
     D_L09_001611B8[2][1] = (int)D_L09_0016EAA0;
     D_L09_001611B8[2][2] = 0;
@@ -148,17 +148,17 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
             continue;
         for (j = 0; j < *(int *)(strip_entry + 0x1C); j++) {
             int strip_vertex_count;
-            float *src;
+            float *strip_source_pairs;
             float *first_scroll_destination = (float *)0x70001000;
             float *second_scroll_destination = (float *)0x70002000;
             strip_vertex_count = ((Strip *)strip_entry)->idx[j + 1] - ((Strip *)strip_entry)->idx[j];
-            src = (float *)(*(int *)(strip_entry + 0x14) + ((Strip *)strip_entry)->idx[j] * 8);
+            strip_source_pairs = (float *)(*(int *)(strip_entry + 0x14) + ((Strip *)strip_entry)->idx[j] * 8);
             for (strip_vertex_index = 0; strip_vertex_index < strip_vertex_count; strip_vertex_index++) {
-                float first_source_component = *src++;
+                float first_source_component = *strip_source_pairs++;
                 *second_scroll_destination++ = first_source_component;
                 *first_scroll_destination++ = first_source_component;
-                *first_scroll_destination++ = *src + first_scroll_offset;
-                *second_scroll_destination++ = *src++ + second_scroll_offset;
+                *first_scroll_destination++ = *strip_source_pairs + first_scroll_offset;
+                *second_scroll_destination++ = *strip_source_pairs++ + second_scroll_offset;
             }
             FUN_L01_0021fa98(strip_vertex_count, *(int *)(strip_entry + 0x10) + ((Strip *)strip_entry)->idx[j] * 12, 0x70000000,
                              0x70001000, 0x70002000, idx == 0);
