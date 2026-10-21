@@ -92,7 +92,7 @@ int FUN_L00_0025fcb8(char *query_moby, char *target_output, float best) {
 extern int FUN_00214720_25ff38(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_00259740_25ff38(void *, void *, int) __asm__("FUN_L00_00259740");
 int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, int nv);
-int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *list, int exclusion_list_bound, float *v, int nv) {
+int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *list, int exclusion_list_bound, float *target_region_vertices, int nv) {
     struct Hero *hero_data = &hero_lui;
     char *selected_moby;
     char *indexed_candidate;
@@ -117,8 +117,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
                 break;
             }
         }
-    } else if (v != 0 && nv > 0) {
-        if (FUN_L00_00259740_25ff38(&hero_lui.motion.pos, v, nv) == 0) {
+    } else if (target_region_vertices != 0 && nv > 0) {
+        if (FUN_L00_00259740_25ff38(&hero_lui.motion.pos, target_region_vertices, nv) == 0) {
             selected_moby = 0;
             target_selection_status = 2;
         }
@@ -141,8 +141,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
                     break;
                 }
             }
-        } else if (v != 0 && nv > 0) {
-            if (FUN_L00_00259740_25ff38(indexed_candidate + 0x10, v, nv) == 0) ok = 0;
+        } else if (target_region_vertices != 0 && nv > 0) {
+            if (FUN_L00_00259740_25ff38(indexed_candidate + 0x10, target_region_vertices, nv) == 0) ok = 0;
         }
         if (ok) {
             selected_moby = indexed_candidate;
@@ -168,8 +168,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
                     break;
                 }
             }
-        } else if (v != 0 && nv > 0) {
-            if (FUN_L00_00259740_25ff38(listed_candidate + 0x10, v, nv) == 0) ok = 0;
+        } else if (target_region_vertices != 0 && nv > 0) {
+            if (FUN_L00_00259740_25ff38(listed_candidate + 0x10, target_region_vertices, nv) == 0) ok = 0;
         }
         if (ok) {
             selected_moby = listed_candidate;
