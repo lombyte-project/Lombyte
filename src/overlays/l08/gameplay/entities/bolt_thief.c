@@ -116,8 +116,8 @@ void FUN_L08_002e8788(char *moby) {
     char *anchor_joint_cursor = data + 0xBC;
     int i = 0;
     char *child_moby;
-    char *c2;
-    char *c3;
+    char *muzzle_anchor_moby;
+    char *muzzle_part_moby;
     *(char **)(data + 0x60) = moby;
     *(int *)(data + 0x64) = 0;
     *(int *)(data + 0x68) = 0;
@@ -132,13 +132,13 @@ void FUN_L08_002e8788(char *moby) {
     *(char **)(data + 0x74) = moby;
     *(int *)(data + 0x78) = 0;
     *(float *)(child_moby + 0x2C) = *(float *)(*(char **)(child_moby + 0x24) + 0x24) * 0.75f;
-    c2 = FUN_L08_002e1c98_c(moby, 0x1BA, 1, 1);
-    *(char **)(data + 0x80) = c2;
+    muzzle_anchor_moby = FUN_L08_002e1c98_c(moby, 0x1BA, 1, 1);
+    *(char **)(data + 0x80) = muzzle_anchor_moby;
     *(char **)(data + 0x84) = moby;
     *(int *)(data + 0x88) = 1;
     *(int *)(data + 0x8C) = 1;
-    c3 = FUN_L08_002e1c98_c(c2, 0x1B9, 0, 0);
-    *(char **)(data + 0xA0) = c3;
+    muzzle_part_moby = FUN_L08_002e1c98_c(muzzle_anchor_moby, 0x1B9, 0, 0);
+    *(char **)(data + 0xA0) = muzzle_part_moby;
     *(char **)(data + 0xA4) = *(char **)(data + 0x80);
     *(int *)(data + 0xA8) = 0;
     *(int *)(data + 0xAC) = 0;
