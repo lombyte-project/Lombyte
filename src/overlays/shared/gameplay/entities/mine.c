@@ -1769,12 +1769,12 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
             }
             if (bomb_moby->bBC != 0) {
                 float s = FUN_001fa6c0_2adb30((unsigned char)D_E910.p0[0xA]) + 1.0f;
-                float dist;
+                float camera_distance;
                 Vec_2adb30 v;
                 int i;
                 FUN_001f9a68_2adb30(&blast_velocity, &blast_velocity, s);
                 FUN_001f9a28_2adb30(&delta, g_debug_camera, &bomb_moby->pos);
-                dist = FUN_001f9af0_2adb30(&delta);
+                camera_distance = FUN_001f9af0_2adb30(&delta);
                 if (d->h68 < FUN_001f96f8_2adb30(0x14)) {
                     int n;
                     n = probe_world_sphere(&bomb_moby->pos, 0x10, bomb_moby, 0, s * 0.5f);
@@ -1831,20 +1831,20 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     t.f[1] = FUN_002132a8_2adb30(-1.0f, 1.0f);
                     t.f[2] = FUN_002132a8_2adb30(-1.0f, 1.0f);
                     v.q = t.q;
-                    delta.f[2] += dist * 0.5f;
-                    FUN_001f9bf8_2adb30(&v, &v, dist / 5.0f * D_0015ED6C_2adb30);
-                    FUN_001f9bf8_2adb30(&delta, &delta, dist * 2.0f * D_0015ED6C_2adb30);
+                    delta.f[2] += camera_distance * 0.5f;
+                    FUN_001f9bf8_2adb30(&v, &v, camera_distance / 5.0f * D_0015ED6C_2adb30);
+                    FUN_001f9bf8_2adb30(&delta, &delta, camera_distance * 2.0f * D_0015ED6C_2adb30);
                     FUN_001f9a10_2adb30(&v, &v, &delta);
                     FUN_001f9c90_2adb30(&v, &v, D_0015ED6C_2adb30 * 10.0f);
                     FUN_L00_002af450_2adb30((char *)&bomb_moby->pos, (char *)&v, FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x3C), FUN_001f96f8_2adb30(0x5A)), 1, (unsigned char)D_E910.p0[0xA]);
-                    if (dist < 6.0f) {
-                        cnt = FUN_001fa6d0_2adb30(dist) + 1;
+                    if (camera_distance < 6.0f) {
+                        cnt = FUN_001fa6d0_2adb30(camera_distance) + 1;
                     } else {
                         cnt = 4;
                     }
                     g = 0.0f;
-                    if (dist < 7.0f) {
-                        g = 7.0f - dist;
+                    if (camera_distance < 7.0f) {
+                        g = 7.0f - camera_distance;
                     }
                     for (i = 0; i < cnt; i++) {
                         float spd = s * FUN_002132a8_2adb30(8.0f, 10.0f) * D_0015ED6C_2adb30 - g * D_0015ED6C_2adb30;
@@ -1858,7 +1858,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                                           FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x19), FUN_001f96f8_2adb30(0x1E)),
                                           0, 0, spd);
                     }
-                    if (dist > 9.0f) {
+                    if (camera_distance > 9.0f) {
                         int r;
                         int gg;
                         int bb;
@@ -1966,7 +1966,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                         }
                     }
                 }
-                player_camera.f160 = dist < 20.0f ? 0.4f - dist * 0.0175f : 0.4f - 20.0f * 0.0175f;
+                player_camera.f160 = camera_distance < 20.0f ? 0.4f - camera_distance * 0.0175f : 0.4f - 20.0f * 0.0175f;
                 player_camera.i168 = FUN_001f96f8_2adb30(0x19);
                 distance_xyz(&bomb_moby->pos, D_G910.pos);
                 mine_camera_blast((char *)&rec, (char *)&bomb_moby->pos, 0, 0);
