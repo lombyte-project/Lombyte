@@ -395,7 +395,7 @@ int FUN_001fa6d0_272060(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L00_001B2154 __attribute__((section(".data")));
 unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x,
                                 float y, float z);
-unsigned char *FUN_L00_00272060(void *pos, int lifetime_frames, int color, int mode, int b, float *v, float x,
+unsigned char *FUN_L00_00272060(void *pos, int lifetime_frames, int color, int mode, int rotation_increment, float *initial_velocity, float x,
                                 float y, float z) {
     unsigned char *particle = p27fe00_alloc(0x35);
     if (particle) {
@@ -419,14 +419,14 @@ unsigned char *FUN_L00_00272060(void *pos, int lifetime_frames, int color, int m
         *(float *)(particle_data + 0) = *(float *)(particle + 0xC);
         *(float *)(particle_data + 4) = y * 210000.0f;
         *(short *)(particle_data + 8) = lifetime_frames;
-        particle_data[0xA] = b;
+        particle_data[0xA] = rotation_increment;
         particle_data[0xB] = color >> 24;
         *(float *)(particle_data + 0x18) = z;
         {
             float *particle_velocity = (float *)(particle_data + 0xC);
-            particle_velocity[0] = v[0];
-            particle_velocity[1] = v[1];
-            particle_velocity[2] = v[2];
+            particle_velocity[0] = initial_velocity[0];
+            particle_velocity[1] = initial_velocity[1];
+            particle_velocity[2] = initial_velocity[2];
         }
     }
     return particle;
