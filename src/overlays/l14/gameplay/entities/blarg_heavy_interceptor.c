@@ -1330,17 +1330,17 @@ extern int FUN_L00_0025d808_2af918(int *tab, float *out, int *a, float *b, int c
 
 void FUN_L14_002ae6d8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    float v[4];
+    float path_target_position[4];
     float save = *(float *)(data + 0x1CC);
     int save2 = *(int *)(data + 0x84);
-    int r = FUN_L00_0025d808_2af918(D_L14_001B0BB0[*(int *)(data + 0x78)], v, (int *)(data + 0x84),
+    int r = FUN_L00_0025d808_2af918(D_L14_001B0BB0[*(int *)(data + 0x78)], path_target_position, (int *)(data + 0x84),
                                      (float *)(data + 0x1CC), *(short *)(data + 0x8A),
                                      *(float *)(data + 0x168));
-    FUN_L00_0025b8c0_c((float *)(data + 0x170), (float *)(data + 0x180), v[0],
+    FUN_L00_0025b8c0_c((float *)(data + 0x170), (float *)(data + 0x180), path_target_position[0],
                        *(float *)&D_L14_001613A0_d, *(float *)&D_L14_001613A4_d, 0.0f);
-    FUN_L00_0025b8c0_c((float *)(data + 0x174), (float *)(data + 0x184), v[1],
+    FUN_L00_0025b8c0_c((float *)(data + 0x174), (float *)(data + 0x184), path_target_position[1],
                        *(float *)&D_L14_001613A0_d, *(float *)&D_L14_001613A4_d, 0.0f);
-    FUN_L00_0025b8c0_c((float *)(data + 0x178), (float *)(data + 0x188), v[2],
+    FUN_L00_0025b8c0_c((float *)(data + 0x178), (float *)(data + 0x188), path_target_position[2],
                        *(float *)&D_L14_001613A0_d, *(float *)&D_L14_001613A4_d, 0.0f);
     if (*(short *)(data + 0x8A) == 0) {
         if (r != 0) {
