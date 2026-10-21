@@ -2140,7 +2140,7 @@ void FUN_L10_002e3ef0(void *mv) {
     float B;
     float fx;
     D_2E52B0 *moby_data = (D_2E52B0 *)moby->pvars;
-    Hit_2E52B0 *r;
+    Hit_2E52B0 *hit_record;
     Moby *hit_moby;
     int hit_response_code;
 
@@ -2158,18 +2158,18 @@ void FUN_L10_002e3ef0(void *mv) {
     func_001F9908_2E52B0(&moby_data->f1AC);
     A = 1;
     B = 0.0f;
-    r = func_L00_0025B478_2E52B0(moby, 0xB30000, 0);
-    hit_response_code = update_collision_l08(moby, r, &moby_data->f20, 0, &A, &B, 0, 4);
+    hit_record = func_L00_0025B478_2E52B0(moby, 0xB30000, 0);
+    hit_response_code = update_collision_l08(moby, hit_record, &moby_data->f20, 0, &A, &B, 0, 4);
     func_001F9938_2E52B0(&moby_data->h26);
     if ((unsigned int)A >= 2 && moby->state != 0xB && moby->state != 0xC) {
-        if (current_level_index == 10 && r != 0 && r->f20 != 0 && r->f20->oclass == 0x31A) {
+        if (current_level_index == 10 && hit_record != 0 && hit_record->f20 != 0 && hit_record->f20->oclass == 0x31A) {
             if (moby_data->f1AC != 0 && ((Flags_2E52B0 *)D_0013D50F_2E52B0)->b11 == 0) {
                 ((Flags_2E52B0 *)D_0013D50F_2E52B0)->b11 = 1;
                 func_0022EE28_2E52B0(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
             }
         }
-        if (moby_data->h26 != 0 && r->b28 == 0) {
+        if (moby_data->h26 != 0 && hit_record->b28 == 0) {
             hit_response_code = 11;
             if (B < 3.0f) B = 0.0f;
         }
@@ -2178,18 +2178,18 @@ void FUN_L10_002e3ef0(void *mv) {
                 && ((Hero *)(((char *)&hero)))->state_timer < func_001F9850_2E52B0(30))) {
             if (2.0f < B) B = 2.0f;
         }
-        if (r->h2A == moby->oclass) {
+        if (hit_record->h2A == moby->oclass) {
             B = 0.0f;
             hit_response_code = 11;
         }
         if ((unsigned int)(moby->prev_seq - 6) < 2) {
             if (((Hero *)(((char *)&hero)))->vehicle_mode == 1
-                && r->f20 == ((Hero *)(((char *)&hero)))->moby) {
+                && hit_record->f20 == ((Hero *)(((char *)&hero)))->moby) {
                 B = 0.0f;
                 hit_response_code = 11;
             }
         }
-        if (r->h2A == 0x47) {
+        if (hit_record->h2A == 0x47) {
             *(u128_2E52B0 *)&vA = *(u128_2E52B0 *)(((char *)&hero) + 0x80);
             *(u128_2E52B0 *)&vB = *(u128_2E52B0 *)((V_2E52B0 *)&moby->pos);
             vA.z += 1.0f;
@@ -2198,11 +2198,11 @@ void FUN_L10_002e3ef0(void *mv) {
                 hit_response_code = 11;
                 B = 0.0f;
             }
-        } else if ((hit_moby = r->f20) != 0 && hit_moby->oclass != 0x359) {
+        } else if ((hit_moby = hit_record->f20) != 0 && hit_moby->oclass != 0x359) {
             *(u128_2E52B0 *)&vA = *(u128_2E52B0 *)((V_2E52B0 *)&hit_moby->pos);
             *(u128_2E52B0 *)&vB = *(u128_2E52B0 *)((V_2E52B0 *)&moby->pos);
             vB.z += 1.0f;
-            if (r->f20->oclass == 0xBA || r->f20->oclass == 0) vA.z += 0.25f;
+            if (hit_record->f20->oclass == 0xBA || hit_record->f20->oclass == 0) vA.z += 0.25f;
             if (collision_line(&vA, &vB, 0x12, moby, 0) != 0) {
                 func_001F9BF0_2E52B0(&dst, &vB, &vA);
                 *(u128_2E52B0 *)&W = *(u128_2E52B0 *)&dst;
@@ -2221,7 +2221,7 @@ void FUN_L10_002e3ef0(void *mv) {
         moby_data->f98 = 0.75f;
         moby_data->f94 = 9;
         moby_data->bAD = 0;
-        fx = func_L00_001FF860_2E52B0(r->pos.x, r->pos.y);
+        fx = func_L00_001FF860_2E52B0(hit_record->pos.x, hit_record->pos.y);
         switch (hit_response_code) {
         case KNOCKBACK_HIT_RESPONSE:
         case FIXED_STRENGTH_KNOCKBACK_HIT_RESPONSE:
@@ -2235,7 +2235,7 @@ void FUN_L10_002e3ef0(void *mv) {
             trooper_set_knockback(moby_data->a70, 0.5f, 0.5f);
             moby_data->fC0 = 8.0f;
             moby_data->fC4 = 10.0f;
-            *(u128_2E52B0 *)&vA = *(u128_2E52B0 *)&r->pos;
+            *(u128_2E52B0 *)&vA = *(u128_2E52B0 *)&hit_record->pos;
             func_L00_0025BBA0_2E52B0(&vA, &fx, &moby_data->f88, &moby_data->f8C);
             func_L00_0025D5B0_2E52B0(moby, moby_data->a70, 9, 1, 0, fx);
             moby_data->b67 = 0xFA;
@@ -2251,9 +2251,9 @@ void FUN_L10_002e3ef0(void *mv) {
             trooper_set_knockback(moby_data->a70, knockback_strength, 0.5f);
             moby_data->fC0 = 3.5f;
             moby_data->fC4 = 7.0f;
-            *(u128_2E52B0 *)&vA = *(u128_2E52B0 *)&r->pos;
+            *(u128_2E52B0 *)&vA = *(u128_2E52B0 *)&hit_record->pos;
             func_L00_0025BBA0_2E52B0(&vA, &fx, &moby_data->f88, &moby_data->f8C);
-            func_L00_0025D5B0_2E52B0(moby, moby_data->a70, 9, 1, 0, func_L00_001FF860_2E52B0(r->pos.x, r->pos.y));
+            func_L00_0025D5B0_2E52B0(moby, moby_data->a70, 9, 1, 0, func_L00_001FF860_2E52B0(hit_record->pos.x, hit_record->pos.y));
             moby_data->b67 = 0xFA;
             func_L00_0025E4B0_2E52B0(moby, moby_data->a60);
             break;
