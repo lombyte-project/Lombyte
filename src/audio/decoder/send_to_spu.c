@@ -8,12 +8,12 @@ extern void snd_update_movie_adpcm(s32, s32) __asm__("FUN_0012f148");
 
 void send_to_spu(struct AudioDec *dec, s32 src, s32 size, s32 arg3) __asm__("FUN_0023af18");
 
-void send_to_spu(struct AudioDec *dec, s32 src, s32 size, s32 staging_byte_offset) {
+void send_to_spu(struct AudioDec *dec, s32 adpcm_source_address, s32 size, s32 staging_byte_offset) {
     u32 descriptor[4];
     s32 dma_id;
 
     FlushCache(0);
-    descriptor[0] = src;
+    descriptor[0] = adpcm_source_address;
     descriptor[1] = dec->iopBuff;
     descriptor[2] = size;
     descriptor[3] = 0;
