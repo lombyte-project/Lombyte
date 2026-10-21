@@ -269,15 +269,15 @@ void FUN_L06_00309240(int idx) {
     short *moby_index_entry;
     char *moby;
     char *data;
-    float v[4];
+    float position_test_vector[4];
     if (D_L06_001ABFC0[idx] != 0) {
         moby_index_entry = D_L06_001ABFC0[idx];
         do {
             moby = D_L06_0015FFD8 + ((*(unsigned short *)moby_index_entry & 0x7FFF) << 8);
             if (*(short *)(moby + 0xA6) == 0x5E8 && (unsigned char)moby[0x20] == 1) {
-                qcopy(v, moby + 0x10);
-                v[3] = 0.25f;
-                if (fast_bsphere_check((char *)v, 64.0f) >= 0) {
+                qcopy(position_test_vector, moby + 0x10);
+                position_test_vector[3] = 0.25f;
+                if (fast_bsphere_check((char *)position_test_vector, 64.0f) >= 0) {
                     data = *(char **)(moby + 0x78);
                     moby[0x20] = 2;
                     *(int *)(data + 0x28) =
