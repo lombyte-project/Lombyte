@@ -812,12 +812,12 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 extern OvlMobyEntry40 D_L01_00178580[];
 s32 FUN_L01_00231580(s32 arg) {
     u8 *hero_moby;
-    OvlMobyEntry40 *tbl;
+    OvlMobyEntry40 *hero_moby_entry;
     u8 *mob;
     s32 flag;
     s32 id;
-    f32 horizontal_scale, b, cached_frame_time;
-    OvlVec4 v;
+    f32 horizontal_scale, vertical_amount, cached_frame_time;
+    OvlVec4 motion_delta;
 
     if (G.state.control_mode == 0x14) {
         return 0;
@@ -839,32 +839,32 @@ s32 FUN_L01_00231580(s32 arg) {
     if (hero_moby[0xA4] == 0xFF) {
         return 0;
     }
-    tbl = &D_L01_00178580[hero_moby[0xA4]];
-    if (tbl->owner != hero_moby) {
+    hero_moby_entry = &D_L01_00178580[hero_moby[0xA4]];
+    if (hero_moby_entry->owner != hero_moby) {
         return 0;
     }
-    if ((tbl->unk24 ^ 1) & 1) {
+    if ((hero_moby_entry->unk24 ^ 1) & 1) {
         return 0;
     }
     D_0013DF88[current_level_index]++;
-    G.unk2280 = (struct Moby *)tbl->target;
+    G.unk2280 = (struct Moby *)hero_moby_entry->target;
     D_0015EEA8++;
     if (arg == 0) {
         return 1;
     }
     FUN_L00_00206c08_8();
     flag = 0;
-    if (tbl->flags & 1) {
-        qcopy(&v, &tbl->pos);
-        if (*(f32 *)((u8 *)tbl + 0x1C) == 5627.9248046875f) {
+    if (hero_moby_entry->flags & 1) {
+        qcopy(&motion_delta, &hero_moby_entry->pos);
+        if (*(f32 *)((u8 *)hero_moby_entry + 0x1C) == 5627.9248046875f) {
             flag = 1;
         }
-    } else if (tbl->target != 0) {
-        FUN_001f9a28_8(&v, (u8 *)&G + 0x80, tbl->target + 0x10);
+    } else if (hero_moby_entry->target != 0) {
+        FUN_001f9a28_8(&motion_delta, (u8 *)&G + 0x80, hero_moby_entry->target + 0x10);
     } else {
-        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
-        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
-        v.i[2] = 0;
+        motion_delta.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
+        motion_delta.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
+        motion_delta.i[2] = 0;
     }
     switch (G.vehicle_mode) {
     case HERO_VEHICLE_MODE_ON_FOOT:
@@ -915,23 +915,23 @@ s32 FUN_L01_00231580(s32 arg) {
         }
         cached_frame_time = frame_time;
         horizontal_scale = cached_frame_time * 5.7f;
-        b = cached_frame_time * 2.4f;
+        vertical_amount = cached_frame_time * 2.4f;
         if (G.unk12E7 != 0) {
             horizontal_scale = 0.0f;
-            b = cached_frame_time * 1.7f;
+            vertical_amount = cached_frame_time * 1.7f;
         }
-        FUN_L00_00210c80_8(&v, flag, horizontal_scale, b);
-        if (flag != 0 && tbl->unk28 == 4) {
-            v.f[2] += v.f[2];
+        FUN_L00_00210c80_8(&motion_delta, flag, horizontal_scale, vertical_amount);
+        if (flag != 0 && hero_moby_entry->unk28 == 4) {
+            motion_delta.f[2] += motion_delta.f[2];
         }
         break;
     case 3:
         hero_set_state(0x56, 1);
-        FUN_L00_00210c80_8(&v, flag, frame_time * 5.0f, frame_time * 2.4f);
+        FUN_L00_00210c80_8(&motion_delta, flag, frame_time * 5.0f, frame_time * 2.4f);
         break;
     }
-    FUN_001f9a10_8(&hero.motion.velocity, &hero.motion.velocity, &v);
-    FUN_001f9a10_8(&hero.motion.displacement, &hero.motion.displacement, &v);
+    FUN_001f9a10_8(&hero.motion.velocity, &hero.motion.velocity, &motion_delta);
+    FUN_001f9a10_8(&hero.motion.displacement, &hero.motion.displacement, &motion_delta);
     return 1;
 }
 /* Adapted from the exact FUN_L17_0020e1c0 (src/overlays/l17/ui/help/002020a8.c) /
