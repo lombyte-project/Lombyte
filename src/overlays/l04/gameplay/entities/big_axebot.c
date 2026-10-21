@@ -2191,7 +2191,7 @@ extern f32 D_L04_001618B4 __attribute__((sda));
 extern f32 D_L04_001618BC __attribute__((sda));
 
 /* Lays a trail of smoke puffs from FROM to TO with a burst at each end. */
-void FUN_L04_002c41e0(void *owner, void *from, void *to, int count, float from_puff_scale, float b) {
+void FUN_L04_002c41e0(void *owner, void *from, void *to, int count, float from_puff_scale, float to_puff_scale) {
     Vec4 step;
     Vec4 at;
     Vec4 vel;
@@ -2206,7 +2206,7 @@ void FUN_L04_002c41e0(void *owner, void *from, void *to, int count, float from_p
 
     subtract_vector_xyz_c(&step, to, from);
     scale_vector_xyz(&step, &step, 1.0f / (float)count);
-    grow = (b - from_puff_scale) / (float)count;
+    grow = (to_puff_scale - from_puff_scale) / (float)count;
     vel.q = 0;
     vel.f[3] = 1.0f;
     vel.f[2] = 0.01f;
