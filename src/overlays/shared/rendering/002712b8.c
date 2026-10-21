@@ -173,13 +173,13 @@ extern int p2718d0_rnd(int) __asm__("FUN_00213260");
 extern int p2718d0_trunc(float) __asm__("FUN_001fa6d0");
 extern float p2718d0_rndf(float, float) __asm__("FUN_002132a8");
 unsigned char *spawn_splash(u128 *pos, u128 *dir, int w, float scale, float speed) __asm__("FUN_L00_002718d0");
-unsigned char *spawn_splash(u128 *pos, u128 *initial_velocity, int surface_height_reference, float scale, float speed) {
+unsigned char *spawn_splash(u128 *initial_position, u128 *initial_velocity, int surface_height_reference, float scale, float speed) {
     unsigned char *particle;
     unsigned char *particle_data;
     float initial_rotation;
     particle = p27fe00_alloc(0x2e);
     if (particle != 0) {
-        qcopy(particle + 0x10, pos);
+        qcopy(particle + 0x10, initial_position);
         particle_data = particle + 0x20;
         *(int *)(particle + 4) = ((p2718d0_rnd(10) + 0x26) << 24) | 0x808080;
         particle[9] = p2718d0_trunc(2.0f) + 0x20;
