@@ -50,7 +50,7 @@ void FUN_L01_002f6328(struct Moby *rail_moby) {
     RailPath *best_path;
     Vec4 best_pt;
     Vec4 pt;
-    Vec4 dir;
+    Vec4 rail_step_delta;
     Vec4 pull;
     s32 seg;
     f32 candidate_fraction;
@@ -58,7 +58,7 @@ void FUN_L01_002f6328(struct Moby *rail_moby) {
     f32 best_t;
     f32 drag;
     f32 best;
-    f32 dist;
+    f32 candidate_path_distance;
     f32 left;
     f32 rate;
     s32 i, j, k, remaining_segment_index, end;
@@ -85,11 +85,11 @@ void FUN_L01_002f6328(struct Moby *rail_moby) {
     for (k = 0; k < rail_vars->count; k++) {
         path = D_L01_001B0930[rail_vars->paths[k]];
         FUN_L00_0025df68(path, &hero.motion.pos, &pt, &seg, &candidate_fraction, 0, 999.0f, 5.0f, 0.0f);
-        dist = vector_distance(&hero.motion.pos, &pt);
-        if (dist < best) {
+        candidate_path_distance = vector_distance(&hero.motion.pos, &pt);
+        if (candidate_path_distance < best) {
             best_path = path;
             qcopy(&best_pt, &pt);
-            best = dist;
+            best = candidate_path_distance;
             best_seg = seg;
             best_t = candidate_fraction;
         }
@@ -117,17 +117,17 @@ void FUN_L01_002f6328(struct Moby *rail_moby) {
         }
     }
     if (end == 0) {
-        fast_vec_sub(&dir, &pt, &best_pt);
-        hero.unk9D4 = fast_arc_tan(vector_length_xy(&dir), dir.f[2]);
-        hero.unk9D0 = fast_arc_tan(dir.f[0], dir.f[1]);
-        dir.i[2] = 0;
+        fast_vec_sub(&rail_step_delta, &pt, &best_pt);
+        hero.unk9D4 = fast_arc_tan(vector_length_xy(&rail_step_delta), rail_step_delta.f[2]);
+        hero.unk9D0 = fast_arc_tan(rail_step_delta.f[0], rail_step_delta.f[1]);
+        rail_step_delta.i[2] = 0;
         if (hero.unk9DC < rail_vars->speed) {
             approach_value(&hero.unk9DC, rail_vars->speed, frame_time_sq * 6.0f);
         } else {
             approach_value(&hero.unk9DC, rail_vars->speed, frame_time_sq * 6.0f);
         }
-        if (0.001f < fast_vec_length(&dir)) {
-            fast_vec_normalize(&hero.motion.platform_delta, &dir, hero.unk9DC);
+        if (0.001f < fast_vec_length(&rail_step_delta)) {
+            fast_vec_normalize(&hero.motion.platform_delta, &rail_step_delta, hero.unk9DC);
         }
         fast_vec_sub(&pull, &best_pt, &hero.motion.pos);
         rate = frame_time * 5.0f;
@@ -135,11 +135,11 @@ void FUN_L01_002f6328(struct Moby *rail_moby) {
         drag = -vector_length_xy(&pull);
         vendor_spring(&drag, 0.0f, &hero.unk9E0, frame_scale_sq * 0.008f, frame_scale_sq * 0.3f, rate);
         {
-            f32 len = fast_vec_length(&pull);
-            if (len < hero.unk9E0) {
-                hero.unk9E0 = len;
+            f32 horizontal_pull_distance = fast_vec_length(&pull);
+            if (horizontal_pull_distance < hero.unk9E0) {
+                hero.unk9E0 = horizontal_pull_distance;
             }
-            if (hero.unk9E0 < len) {
+            if (hero.unk9E0 < horizontal_pull_distance) {
                 fast_vec_normalize(&pull, &pull, hero.unk9E0);
             }
         }
