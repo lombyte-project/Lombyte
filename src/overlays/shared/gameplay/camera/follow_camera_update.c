@@ -758,10 +758,10 @@ extern float FUN_001f9df8_2ea810(float) __asm__("FUN_001f9df8");
 #define Q D_L00_00166C80_2ea810
 
 void FUN_L00_002ea810(A_2ea810 *arg) {
-    float b0[4];
-    float b1[4];
-    float b2[4];
-    float *v;
+    float scaled_axis_scratch[4];
+    float camera_vector_residual[4];
+    float hero_vector_residual[4];
+    float *comparison_axis;
     float len;
     float dot_product_or_asin_result;
 
@@ -775,18 +775,18 @@ void FUN_L00_002ea810(A_2ea810 *arg) {
         Q.f288 = 0.018f;
         return;
     }
-    v = Q.v1C0;
-    dot_product_or_asin_result = FUN_001f9ab0_2ea810(v, arg);
-    FUN_001f9a68_2ea810(b0, v, dot_product_or_asin_result);
-    FUN_001f9a28_2ea810(b1, arg, b0);
-    dot_product_or_asin_result = FUN_001f9ab0_2ea810(v, ((char *)hero.moby) + 0xC0);
-    FUN_001f9a68_2ea810(b0, v, dot_product_or_asin_result);
-    FUN_001f9a28_2ea810(b2, ((char *)hero.moby) + 0xC0, b0);
-    len = FUN_001f9af0_2ea810(b2);
+    comparison_axis = Q.v1C0;
+    dot_product_or_asin_result = FUN_001f9ab0_2ea810(comparison_axis, arg);
+    FUN_001f9a68_2ea810(scaled_axis_scratch, comparison_axis, dot_product_or_asin_result);
+    FUN_001f9a28_2ea810(camera_vector_residual, arg, scaled_axis_scratch);
+    dot_product_or_asin_result = FUN_001f9ab0_2ea810(comparison_axis, ((char *)hero.moby) + 0xC0);
+    FUN_001f9a68_2ea810(scaled_axis_scratch, comparison_axis, dot_product_or_asin_result);
+    FUN_001f9a28_2ea810(hero_vector_residual, ((char *)hero.moby) + 0xC0, scaled_axis_scratch);
+    len = FUN_001f9af0_2ea810(hero_vector_residual);
     if (len != 0.0f) {
-        len *= FUN_001f9af0_2ea810(b1);
+        len *= FUN_001f9af0_2ea810(camera_vector_residual);
         if (len != 0.0f) {
-            dot_product_or_asin_result = FUN_001f9df8_2ea810(FUN_001f9ab0_2ea810(b2, b1) / len);
+            dot_product_or_asin_result = FUN_001f9df8_2ea810(FUN_001f9ab0_2ea810(hero_vector_residual, camera_vector_residual) / len);
             if (1.5707964f - dot_product_or_asin_result >= 1.3962634f) {
                 Q.s270 = 0;
                 arg->s7E = 4;
