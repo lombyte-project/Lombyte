@@ -1723,12 +1723,12 @@ void pokitaru_boat_update(struct Moby *moby) {
         POKITARU_BOAT_RISE_ABOVE_PATH = 4,
         POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO = 5
     };
-    struct PokPv_309ac0 *pv = (struct PokPv_309ac0 *)moby->pvars;
+    struct PokPv_309ac0 *boat_vars = (struct PokPv_309ac0 *)moby->pvars;
     float start_pos[4];
     float start_rot[4];
     float delta[4];
     float target[4];
-    float diff[4];
+    float path_movement[4];
     float spare_a[4];
     float spare_b[4];
     float point_offset_from_boat[4];
@@ -1736,7 +1736,7 @@ void pokitaru_boat_update(struct Moby *moby) {
     qcopy(start_pos, &moby->pos);
     qcopy(start_rot, &moby->rot);
     if (moby->state != 0) {
-        moby->pos.z = pv->height_e4;
+        moby->pos.z = boat_vars->height_e4;
     }
     FUN_L11_0030a500(moby);
 
@@ -1752,33 +1752,33 @@ void pokitaru_boat_update(struct Moby *moby) {
         if (moby->prev_seq != 1) {
             blend_moby_animation_309378((MobyAnim_309378 *)moby, 1, 0, 1);
         }
-        tab_a8 = D_L11_001B0EB0[pv->idx_a8];
-        tab_ac = D_L11_001B0EB0[pv->idx_ac];
+        tab_a8 = D_L11_001B0EB0[boat_vars->idx_a8];
+        tab_ac = D_L11_001B0EB0[boat_vars->idx_ac];
         FUN_001fa2d8_309ac0(target, &moby->rot_row0);
         for (n = 0; n < tab_a8[0]; n++) {
             subtract_vector_xyz(point_offset_from_boat, (char *)tab_a8 + 0x10 + n * 16, &moby->pos);
             FUN_001f9d20_309ac0((char *)tab_ac + 0x10 + n * 16, point_offset_from_boat, target);
         }
-        path = D_L11_001B0EB0[pv->path_a0];
-        pv->path_c4 = path;
+        path = D_L11_001B0EB0[boat_vars->path_a0];
+        boat_vars->path_c4 = path;
         qcopy(&moby->pos, (char *)path + 0x10);
-        pv->seg_d4 = 1;
+        boat_vars->seg_d4 = 1;
         moby->state = 1;
         for (part_angle_index = 0; part_angle_index < 4; part_angle_index++) {
-            pv->wobble_f0[part_angle_index] = FUN_00213308_309ac0();
+            boat_vars->wobble_f0[part_angle_index] = FUN_00213308_309ac0();
         }
-        pv->slot_c8 = -1;
-        pv->slot_cc = -1;
-        pv->flags |= 1;
+        boat_vars->slot_c8 = -1;
+        boat_vars->slot_cc = -1;
+        boat_vars->flags |= 1;
         break;
     }
     case POKITARU_BOAT_WAIT_FOR_ACTIVATION:
-        if (pv->flag_b8 != 0) {
-            int *path = D_L11_001B0EB0[pv->path_a0];
+        if (boat_vars->flag_b8 != 0) {
+            int *path = D_L11_001B0EB0[boat_vars->path_a0];
             int n;
             float *last;
 
-            pv->path_c4 = path;
+            boat_vars->path_c4 = path;
             n = path[0];
             qcopy(&moby->pos, (char *)path + n * 16 - 16);
             last = (float *)((char *)path + (n - 1) * 16);
@@ -1791,79 +1791,79 @@ void pokitaru_boat_update(struct Moby *moby) {
         int *tab_ac;
         int i;
 
-        qcopy(target, (char *)pv->path_c4 + 0x10 + pv->seg_d4 * 16);
+        qcopy(target, (char *)boat_vars->path_c4 + 0x10 + boat_vars->seg_d4 * 16);
         if (D_0013F64C_309ac0 == moby) {
-            if (!check_slot_309ac0(moby, pv->slot_cc)) {
-                pv->slot_cc = allocate_voice_2518(1, 4, moby);
+            if (!check_slot_309ac0(moby, boat_vars->slot_cc)) {
+                boat_vars->slot_cc = allocate_voice_2518(1, 4, moby);
             }
-            if (check_slot_309ac0(moby, pv->slot_c8)) {
-                if (pv->slot_c8 != -1) {
-                    unsigned char *ent = D_0013E550_309ac0 + pv->slot_c8 * 0x70;
+            if (check_slot_309ac0(moby, boat_vars->slot_c8)) {
+                if (boat_vars->slot_c8 != -1) {
+                    unsigned char *ent = D_0013E550_309ac0 + boat_vars->slot_c8 * 0x70;
                     if (*(void **)(ent + 0x88) == moby && ent[0x74] != 0) {
-                        release_slot_309ac0(pv->slot_c8);
+                        release_slot_309ac0(boat_vars->slot_c8);
                     }
                 }
-                pv->slot_c8 = -1;
+                boat_vars->slot_c8 = -1;
             }
-            approach_value_2518(&pv->approach_d0, D_L11_00161DD4 * frame_time, frame_time_sq * 6.0f);
+            approach_value_2518(&boat_vars->approach_d0, D_L11_00161DD4 * frame_time, frame_time_sq * 6.0f);
         } else {
-            if (!check_slot_309ac0(moby, pv->slot_c8)) {
-                pv->slot_c8 = allocate_voice_2518(0, 4, moby);
+            if (!check_slot_309ac0(moby, boat_vars->slot_c8)) {
+                boat_vars->slot_c8 = allocate_voice_2518(0, 4, moby);
             }
-            if (check_slot_309ac0(moby, pv->slot_cc)) {
-                if (pv->slot_cc != -1) {
-                    unsigned char *ent = D_0013E550_309ac0 + pv->slot_cc * 0x70;
+            if (check_slot_309ac0(moby, boat_vars->slot_cc)) {
+                if (boat_vars->slot_cc != -1) {
+                    unsigned char *ent = D_0013E550_309ac0 + boat_vars->slot_cc * 0x70;
                     if (*(void **)(ent + 0x88) == moby && ent[0x74] != 0) {
-                        release_slot_309ac0(pv->slot_cc);
+                        release_slot_309ac0(boat_vars->slot_cc);
                     }
                 }
-                pv->slot_cc = -1;
+                boat_vars->slot_cc = -1;
             }
-            approach_value_2518(&pv->approach_d0, 0.0f, frame_time_sq * 6.0f);
+            approach_value_2518(&boat_vars->approach_d0, 0.0f, frame_time_sq * 6.0f);
         }
-        subtract_vector_xyz(diff, target, &moby->pos);
-        scale_vec_309ac0(diff, pv->approach_d0);
-        add_vector_xyz(&moby->pos, &moby->pos, diff);
-        if (pv->seg_d4 < pv->path_c4[0] - 1) {
+        subtract_vector_xyz(path_movement, target, &moby->pos);
+        scale_vec_309ac0(path_movement, boat_vars->approach_d0);
+        add_vector_xyz(&moby->pos, &moby->pos, path_movement);
+        if (boat_vars->seg_d4 < boat_vars->path_c4[0] - 1) {
             if (distance_xyz(&moby->pos, target) < D_L11_00161DD4 * frame_time) {
                 float *pt;
-                pv->seg_d4 += 1;
-                pt = (float *)((char *)pv->path_c4 + pv->seg_d4 * 16);
+                boat_vars->seg_d4 += 1;
+                pt = (float *)((char *)boat_vars->path_c4 + boat_vars->seg_d4 * 16);
                 if (pt[7] == 37.0f) {
-                    pv->flag_c0 = 1;
+                    boat_vars->flag_c0 = 1;
                 }
             }
-        } else if (vector_length_xy(diff) < 0.001f) {
-            if (check_slot_309ac0(moby, pv->slot_cc)) {
-                if (pv->slot_cc != -1) {
-                    unsigned char *ent = D_0013E550_309ac0 + pv->slot_cc * 0x70;
+        } else if (vector_length_xy(path_movement) < 0.001f) {
+            if (check_slot_309ac0(moby, boat_vars->slot_cc)) {
+                if (boat_vars->slot_cc != -1) {
+                    unsigned char *ent = D_0013E550_309ac0 + boat_vars->slot_cc * 0x70;
                     if (*(void **)(ent + 0x88) == moby && ent[0x74] != 0) {
-                        release_slot_309ac0(pv->slot_cc);
+                        release_slot_309ac0(boat_vars->slot_cc);
                     }
                 }
-                pv->slot_cc = -1;
+                boat_vars->slot_cc = -1;
             }
-            if (check_slot_309ac0(moby, pv->slot_c8)) {
-                if (pv->slot_c8 != -1) {
-                    unsigned char *ent = D_0013E550_309ac0 + pv->slot_c8 * 0x70;
+            if (check_slot_309ac0(moby, boat_vars->slot_c8)) {
+                if (boat_vars->slot_c8 != -1) {
+                    unsigned char *ent = D_0013E550_309ac0 + boat_vars->slot_c8 * 0x70;
                     if (*(void **)(ent + 0x88) == moby && ent[0x74] != 0) {
-                        release_slot_309ac0(pv->slot_c8);
+                        release_slot_309ac0(boat_vars->slot_c8);
                     }
                 }
-                pv->slot_c8 = -1;
+                boat_vars->slot_c8 = -1;
             }
             moby->state = 3;
         }
-        approach_angle(&moby->rot.z, fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y), pv->vel_d8,
+        approach_angle(&moby->rot.z, fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y), boat_vars->vel_d8,
                          D_L11_00161DD8 * 0.017453292f * frame_time_sq,
                          D_L11_00161DD8 * 0.017453292f * frame_time_sq,
                          D_L11_00161DDC * 0.017453292f * frame_time);
-        if (pv->flag_c0 != 0) {
+        if (boat_vars->flag_c0 != 0) {
             FUN_L00_002e8450_309ac0(0, D_L11_00161DEC, 0.003f);
             FUN_L00_002e84b8_309ac0(D_L11_00161DF0, 0.003f);
         }
-        tab_a8 = D_L11_001B0EB0[pv->idx_a8];
-        tab_ac = D_L11_001B0EB0[pv->idx_ac];
+        tab_a8 = D_L11_001B0EB0[boat_vars->idx_a8];
+        tab_ac = D_L11_001B0EB0[boat_vars->idx_ac];
         for (i = 0; i < tab_a8[0]; i++) {
             FUN_001f9cf8_309ac0((char *)tab_a8 + 0x10 + i * 16, (char *)tab_ac + 0x10 + i * 16, &moby->rot_row0);
             add_vector_xyz((char *)tab_a8 + 0x10 + i * 16, (char *)tab_a8 + 0x10 + i * 16, &moby->pos);
@@ -1872,8 +1872,8 @@ void pokitaru_boat_update(struct Moby *moby) {
     }
     case POKITARU_BOAT_WAIT_FOR_GROUP_CLEAR:
         if (FUN_L11_0030a850(moby) != 0) {
-            if (pv->flag_b0 != 0) {
-                pv->approach_d0 = 0.0f;
+            if (boat_vars->flag_b0 != 0) {
+                boat_vars->approach_d0 = 0.0f;
                 moby->state = 4;
             } else {
                 moby->state = 5;
@@ -1881,19 +1881,19 @@ void pokitaru_boat_update(struct Moby *moby) {
         }
         break;
     case POKITARU_BOAT_RISE_ABOVE_PATH:
-        qcopy(target, (char *)pv->path_c4 + 0x10 + pv->seg_d4 * 16);
-        advance_309ac0(&moby->pos.z, &pv->approach_d0, target[2] + 6.0f, frame_time_sq, frame_time_sq, frame_time);
+        qcopy(target, (char *)boat_vars->path_c4 + 0x10 + boat_vars->seg_d4 * 16);
+        advance_309ac0(&moby->pos.z, &boat_vars->approach_d0, target[2] + 6.0f, frame_time_sq, frame_time_sq, frame_time);
         if (target[2] + 5.9f <= moby->pos.z) {
             moby->state = 5;
         }
         break;
     case POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO:
-        qcopy(target, (char *)pv->path_c4 + 0x10 + pv->seg_d4 * 16);
-        if (pv->flag_b0 != 0) {
+        qcopy(target, (char *)boat_vars->path_c4 + 0x10 + boat_vars->seg_d4 * 16);
+        if (boat_vars->flag_b0 != 0) {
             if (D_0013F3D8_lui < moby->pos.z) {
-                advance_309ac0(&moby->pos.z, &pv->approach_d0, target[2] + 1.0f, frame_time_sq, frame_time_sq, frame_time);
+                advance_309ac0(&moby->pos.z, &boat_vars->approach_d0, target[2] + 1.0f, frame_time_sq, frame_time_sq, frame_time);
             } else {
-                advance_309ac0(&moby->pos.z, &pv->approach_d0, target[2] + 8.0f, frame_time_sq, frame_time_sq, frame_time);
+                advance_309ac0(&moby->pos.z, &boat_vars->approach_d0, target[2] + 8.0f, frame_time_sq, frame_time_sq, frame_time);
             }
         }
         break;
@@ -1906,14 +1906,14 @@ void pokitaru_boat_update(struct Moby *moby) {
         float tilt_b = ft * 0.61086524f;
         float amp;
 
-        pv->height_e4 = moby->pos.z;
-        pv->angle_e0 = fast_add_rotations(pv->angle_e0, spin);
+        boat_vars->height_e4 = moby->pos.z;
+        boat_vars->angle_e0 = fast_add_rotations(boat_vars->angle_e0, spin);
         amp = 0.13f;
-        moby->pos.z = moby->pos.z + sin_309ac0(pv->angle_e0) * amp;
-        FUN_L00_00262b80_309ac0(moby, &pv->spr_e8, &pv->spr_ec, 0.0418879017f, tilt_a, tilt_b);
+        moby->pos.z = moby->pos.z + sin_309ac0(boat_vars->angle_e0) * amp;
+        FUN_L00_00262b80_309ac0(moby, &boat_vars->spr_e8, &boat_vars->spr_ec, 0.0418879017f, tilt_a, tilt_b);
     }
     subtract_vector_xyz(delta, &moby->pos, start_pos);
-    FUN_L00_00260738_309ac0(pv->ctl60, delta, start_rot, &moby->rot);
+    FUN_L00_00260738_309ac0(boat_vars->ctl60, delta, start_rot, &moby->rot);
 }
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
