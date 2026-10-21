@@ -505,23 +505,23 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12);
-void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int random_default_override, int fragment_mode, float *initial_velocity,
+void *FUN_L00_00263fd8(char *source_moby, int fragment_class, float *pos, void *fragment_euler_rotation, int random_default_override, int fragment_mode, float *initial_velocity,
                        float *random_vector_override, float scale, float *class_vector_override) {
-    char *fragment_moby = (char *)func_0020D348_m(cls);
+    char *fragment_moby = (char *)func_0020D348_m(fragment_class);
     char *fragment_pvars;
     float vector_scratch[4];
     float source_class_ratio, horizontal_velocity_angle, k, k2;
 
     if (fragment_moby != 0) {
-        source_class_ratio = *(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24);
+        source_class_ratio = *(float *)(source_moby + 0x2C) / *(float *)(*(char **)(source_moby + 0x24) + 0x24);
         *(float *)(fragment_moby + 0x2C) = *(float *)(*(char **)(fragment_moby + 0x24) + 0x24) * source_class_ratio;
         fragment_moby[0x31] = 1;
         *(unsigned short *)(fragment_moby + 0x34) |= 0x100;
         fragment_pvars = *(char **)(fragment_moby + 0x78);
-        *(long *)(fragment_moby + 0x38) = *(long *)(src + 0x38);
+        *(long *)(fragment_moby + 0x38) = *(long *)(source_moby + 0x38);
         fragment_moby[0x20] = 1;
         qcopy(fragment_moby + 0x10, pos);
-        euler_rotation_basis(fragment_moby + 0xC0, mat);
+        euler_rotation_basis(fragment_moby + 0xC0, fragment_euler_rotation);
         *(unsigned char *)(fragment_moby + 0x30) = 0xFF;
         *(short *)(fragment_moby + 0x32) = 0x80;
         *(int *)(fragment_moby + 0x94) = 0;
