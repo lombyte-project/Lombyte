@@ -351,17 +351,17 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void *func_001153FC_c(void *, int, unsigned int) __asm__("FUN_001153fc");
 
-void FUN_L01_0028b8c8(void *out, int *l, int idx, float tangent_tension, float tangent_bias) {
+void FUN_L01_0028b8c8(void *out, int *path_descriptor, int node_index_offset, float tangent_tension, float tangent_bias) {
     void *neighboring_points[3];
     float weighted_incoming_delta[4];
     float weighted_outgoing_delta[4];
     float blended_delta[4];
-    float incoming_segment_distance, outgoing_segment_distance, delta_length_limit, len;
+    float incoming_segment_distance, outgoing_segment_distance, delta_length_limit, blended_delta_length;
     float wa, wb;
     func_001153FC_c(neighboring_points, 0, 12);
-    neighboring_points[0] = FUN_L01_0028b7b0(l, *l + idx - 1);
-    neighboring_points[1] = FUN_L01_0028b7b0(l, *l + idx);
-    neighboring_points[2] = FUN_L01_0028b7b0(l, *l + idx + 1);
+    neighboring_points[0] = FUN_L01_0028b7b0(path_descriptor, *path_descriptor + node_index_offset - 1);
+    neighboring_points[1] = FUN_L01_0028b7b0(path_descriptor, *path_descriptor + node_index_offset);
+    neighboring_points[2] = FUN_L01_0028b7b0(path_descriptor, *path_descriptor + node_index_offset + 1);
     {
         wb = (1.0f - tangent_tension) * (tangent_bias + 1.0f) * 0.5f;
         wa = (1.0f - tangent_tension) * (1.0f - tangent_bias) * 0.5f;
@@ -378,8 +378,8 @@ void FUN_L01_0028b8c8(void *out, int *l, int idx, float tangent_tension, float t
     scale_vector_xyz(weighted_outgoing_delta, weighted_outgoing_delta, wa);
     add_vector_xyz(blended_delta, weighted_incoming_delta, weighted_outgoing_delta);
     delta_length_limit = delta_length_limit * 1.1f;
-    len = vector_length_xyz(blended_delta);
-    if (delta_length_limit < len) {
+    blended_delta_length = vector_length_xyz(blended_delta);
+    if (delta_length_limit < blended_delta_length) {
         normalize_vector_xyz(out, blended_delta, delta_length_limit);
     } else {
         *(OvlQuad *)out = *(OvlQuad *)blended_delta;
