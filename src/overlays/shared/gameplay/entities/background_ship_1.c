@@ -1002,12 +1002,12 @@ void FUN_L02_002fb9c8(char *moby) {
         }
         {
             char *first_group_target;
-            char *u;
-            int b;
+            char *group_target_candidate;
+            int moby_table_base;
             {
                 int e = *group;
-                b = D_L02_0015FFD8;
-                first_group_target = (char *)(b + ((e & 0x7fff) << 8));
+                moby_table_base = D_L02_0015FFD8;
+                first_group_target = (char *)(moby_table_base + ((e & 0x7fff) << 8));
                 id = e;
             }
             if (*(signed char *)(first_group_target + 0x20) < 0) {
@@ -1020,12 +1020,12 @@ void FUN_L02_002fb9c8(char *moby) {
                     group++;
                     {
                         int e = *group;
-                        b = D_L02_0015FFD8;
-                        u = (char *)(b + ((e & 0x7fff) << 8));
+                        moby_table_base = D_L02_0015FFD8;
+                        group_target_candidate = (char *)(moby_table_base + ((e & 0x7fff) << 8));
                         id = e;
                     }
-                } while (*(signed char *)(u + 0x20) < 0);
-                target = u;
+                } while (*(signed char *)(group_target_candidate + 0x20) < 0);
+                target = group_target_candidate;
             } else {
                 target = first_group_target;
             }
