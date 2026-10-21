@@ -1475,7 +1475,7 @@ extern void *FUN_L00_002678b8_c(int) __asm__("FUN_L00_002678b8");
 
 extern unsigned char *D_L00_001B20D4 __attribute__((section(".data")));
 char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
-char *FUN_L00_0026cbb0(void *pos, void *dir, int initial_color, int final_color, int lifetime, int k, float initial_particle_scalar) {
+char *FUN_L00_0026cbb0(void *spawn_position, void *initial_velocity, int initial_color, int final_color, int lifetime, int k, float initial_particle_scalar) {
     char *particle;
     char *particle_data;
     int initial_header_byte;
@@ -1483,7 +1483,7 @@ char *FUN_L00_0026cbb0(void *pos, void *dir, int initial_color, int final_color,
         return 0;
     particle = FUN_L00_002678b8_c(0x15);
     if (particle) {
-        qcopy(particle + 0x10, pos);
+        qcopy(particle + 0x10, spawn_position);
         *(int *)(particle + 4) = initial_color;
         initial_header_byte = truncate_float_to_s32(4.0f) - 0x60;
         particle[1] = 0;
@@ -1499,7 +1499,7 @@ char *FUN_L00_0026cbb0(void *pos, void *dir, int initial_color, int final_color,
         *(int *)(particle_data + 0x10) = initial_color;
         *(int *)(particle_data + 0x14) = final_color;
         *(short *)(particle_data + 0x1A) = k;
-        qcopy(particle_data, dir);
+        qcopy(particle_data, initial_velocity);
     }
     return particle;
 }
