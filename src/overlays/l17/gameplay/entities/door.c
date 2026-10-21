@@ -2871,10 +2871,10 @@ void FUN_L17_002efa48(void *moby_v, int clip_volume_suppressed) {
     float position_buffer[4];
     int x;
     float y;
-    float ang;
+    float knockback_heading;
     int line_query_clear;
     float yaw;
-    float ang2;
+    float target_heading;
 
     moby_vars = moby->data;
     if (moby->state == 0) {
@@ -2899,11 +2899,11 @@ void FUN_L17_002efa48(void *moby_v, int clip_volume_suppressed) {
         moby_vars->f170 = -1.0f;
         moby_vars->f174 = -1.0f;
         *(OvlQuad *)position_buffer = *(OvlQuad *)hit_record->pos;
-        trooper_knockback_arc(position_buffer, &ang, &moby_vars->f138, &moby_vars->f13C);
+        trooper_knockback_arc(position_buffer, &knockback_heading, &moby_vars->f138, &moby_vars->f13C);
         if (hit_record != 0 && hit_record->moby != 0 && hit_record->moby->hA6 == 0x63) {
-            ang = fast_arc_tan(moby_vars->f1F0 - moby->pos[0], moby_vars->f1F4 - moby->pos[1]);
+            knockback_heading = fast_arc_tan(moby_vars->f1F0 - moby->pos[0], moby_vars->f1F4 - moby->pos[1]);
         }
-        trooper_start_knockback(ang, moby, moby_vars->v120, 0xB, 1, 0);
+        trooper_start_knockback(knockback_heading, moby, moby_vars->v120, 0xB, 1, 0);
         moby->state = 15;
         moby_vars->b117 = 0xF0;
         trooper_anim_update(moby, moby_vars->h110);
@@ -2916,8 +2916,8 @@ void FUN_L17_002efa48(void *moby_v, int clip_volume_suppressed) {
         return;
     }
     if (FUN_001f9b48(moby->pos, moby_vars->v1B0) < 64.0f) {
-        ang2 = fast_arc_tan(moby_vars->v180[0] - moby->pos[0], moby_vars->v180[1] - moby->pos[1]);
-        yaw = fast_difference_between_rotations(moby->f48, ang2);
+        target_heading = fast_arc_tan(moby_vars->v180[0] - moby->pos[0], moby_vars->v180[1] - moby->pos[1]);
+        yaw = fast_difference_between_rotations(moby->f48, target_heading);
         qcopy(position_buffer, moby->pos);
         position_buffer[2] += 1.0f;
         line_query_clear = coll_line_fix(position_buffer, (&hero.motion.unkD0), 2, 0, 0) == 0;
