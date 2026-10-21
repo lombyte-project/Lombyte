@@ -421,7 +421,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-char *FUN_L17_002e94d8(struct Moby *src, char *pos, float *target_position, float movement_speed) {
+char *FUN_L17_002e94d8(struct Moby *source_moby, char *spawn_position, float *target_position, float movement_speed) {
     char *spawned_moby = func_0020D348_m(0x558);
     if (spawned_moby != 0) {
         char *spawned_vars;
@@ -431,13 +431,13 @@ char *FUN_L17_002e94d8(struct Moby *src, char *pos, float *target_position, floa
         *(short *)(spawned_moby + 0x32) = 0xFF;
         spawned_moby[0x31] = 1;
         spawned_moby[0x20] = 0;
-        *(long *)(spawned_moby + 0x38) = src->spawn_frame;
-        qcopy(spawned_position, pos);
+        *(long *)(spawned_moby + 0x38) = source_moby->spawn_frame;
+        qcopy(spawned_position, spawn_position);
         spawned_vars = *(char **)(spawned_moby + 0x78);
         *(float *)(spawned_vars + 0x40) = movement_speed;
         qcopy(spawned_vars + 0x10, target_position);
         *(int *)(spawned_vars + 0x38) = scale_game_frames(0x258);
-        *(char **)(spawned_vars + 0x3C) = src;
+        *(char **)(spawned_vars + 0x3C) = source_moby;
         fast_vec_sub(target_delta, spawned_vars + 0x10, spawned_position);
         fast_vec_normalize(spawned_vars, target_delta, *(float *)(spawned_vars + 0x40));
         *(float *)(spawned_moby + 0x48) =
