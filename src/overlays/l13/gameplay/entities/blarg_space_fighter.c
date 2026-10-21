@@ -449,7 +449,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
     float scratch_vector[4], shot_direction_vector[4], z[4];
     float distance_or_target_yaw;
     float *moby_yaw;
-    float *pos;
+    float *moby_position;
     int index;
     FUN_L13_002c2d30(moby);
     target = *(unsigned char **)(moby_data + 0xB0);
@@ -483,13 +483,13 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         break;
     case MOVE_TO_TABLE_POINT:
         index = *(int *)(moby_data + 0xD4) * 128;
-        pos = (float *)(moby + 0x10);
+        moby_position = (float *)(moby + 0x10);
         z[0] = 0.0f;
-        distance_or_target_yaw = distance_xyz(pos, D_L13_001600EC + index + 0x30);
-        subtract_vector_xyz(scratch_vector, D_L13_001600EC + *(int *)(moby_data + 0xD4) * 128 + 0x30, pos);
+        distance_or_target_yaw = distance_xyz(moby_position, D_L13_001600EC + index + 0x30);
+        subtract_vector_xyz(scratch_vector, D_L13_001600EC + *(int *)(moby_data + 0xD4) * 128 + 0x30, moby_position);
         advance_accelerated_scalar(distance_or_target_yaw, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f, z, (float *)(moby_data + 0xF0));
         normalize_vector_xyz(scratch_vector, scratch_vector, *(float *)(moby_data + 0xF0));
-        add_vector_xyz(pos, pos, scratch_vector);
+        add_vector_xyz(moby_position, moby_position, scratch_vector);
         if (distance_or_target_yaw < 0.1f && *(float *)(moby_data + 0xF0) < 0.01f) {
             if (moby[0x53] != 0) blend_moby_animation_c13(moby, 0, 0, 10);
             moby[0xBC] = 0;
