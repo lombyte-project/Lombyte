@@ -553,7 +553,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         VENDOR_ZERO_AUXILIARY_SCALE = 3
     };
     Q_2a57a8 *q = vendor_moby->q;
-    s32 i, interaction_allowed, b, help_message_succeeded;
+    s32 i, interaction_allowed, help_message_allowed, help_message_succeeded;
     u8 *v;
     f32 hero_distance, z;
 
@@ -614,7 +614,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         }
         enqueue_callback_list_1(FUN_L00_002a5040_2a57a8, vendor_moby);
         interaction_allowed = 1;
-        b = 1;
+        help_message_allowed = 1;
         FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, D_L00_0016139C);
         FUN_L00_001fff28_2a57a8((u8 *)q + 0x60, 2, D_L00_001613A0);
         D_L00_0016139C = FUN_001fa580_2a57a8(D_L00_0016139C, 0.01f);
@@ -623,30 +623,30 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         upd_a(q->mC);
         if (hero_data.state.control_mode != 0 && hero_data.state.current != 3 && hero_data.state.control_mode != 1) {
             interaction_allowed = 0;
-            b = 0;
+            help_message_allowed = 0;
         }
         if (hero_data.state.current == 0x1D || hero_data.state.current == 0x32) {
             interaction_allowed = 0;
-            b = 0;
+            help_message_allowed = 0;
         }
         if (hero_data.vehicle_mode) {
             interaction_allowed = 0;
-            b = 0;
+            help_message_allowed = 0;
         }
         if (vendor_moby->b52 != 1)
             interaction_allowed = 0;
         if (hero_distance > 4.0f || z > 2.0f) {
             interaction_allowed = 0;
-            b = 0;
+            help_message_allowed = 0;
         }
         if (FUN_001fa688_2a57a8(hero_data.motion.rot.f[2], angle_atan2(vendor_moby->f10 - hero_data.motion.pos.f[0],
                                                                    vendor_moby->f14 - hero_data.motion.pos.f[1])) >
             1.5707964f) {
             interaction_allowed = 0;
-            b = 0;
+            help_message_allowed = 0;
         }
         help_message_succeeded = 0;
-        if (b)
+        if (help_message_allowed)
             help_message_succeeded = try_set_help_message(1, 0x53E3) != 0;
         if ((D_0013CAE4_2a57a8 & 0x10) && interaction_allowed && help_message_succeeded) {
             FUN_L00_0029a6b0_2a57a8(vendor_moby);
