@@ -265,7 +265,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     Data_2E9358 *data = moby->data;
     char *follow_context = 0;
     unsigned char state;
-    int ret;
+    int blast_candidate_count;
     Res_2E9358 *hit_result;
 
     previous_position.q = moby->pos;
@@ -328,9 +328,9 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     if (moby->bBC != 0) {
         func_L00_0025F4A8_2E9358(moby, data, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, -1, 7.0f, 0, 1, -1, 0);
         trooper_play_sound(0, 0, moby, 0x79);
-        ret = probe_world_sphere(&moby->pos, 0x10, moby, 0, 2.0f);
+        blast_candidate_count = probe_world_sphere(&moby->pos, 0x10, moby, 0, 2.0f);
         temporary_vector.q = moby->pos;
-        mine_blast_mobys(moby, &temporary_vector, D_L15_00178500, ret, 0, 0x830001, 2, 1, 1.0f, 1.0f, 1.0f);
+        mine_blast_mobys(moby, &temporary_vector, D_L15_00178500, blast_candidate_count, 0, 0x830001, 2, 1, 1.0f, 1.0f, 1.0f);
         mark_moby_for_removal(moby);
     }
 }
