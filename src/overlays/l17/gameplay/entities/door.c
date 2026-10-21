@@ -1047,7 +1047,7 @@ extern short D_L17_00162074 __attribute__((sda));
 int D_L17_00162078 = 30;
 void FUN_L17_002ec150(char *moby, char *obj) {
     char projectile_spawn_position[16];
-    char b[16];
+    char projectile_spawn_offset[16];
     if (fast_dec_timer(obj + 0x84) && (*(int *)(D_0013A4E0_u + 0x2610) & 0x28)) {
         if (hero.ship_ammo != 0) {
             char *pos = moby + 0x40;
@@ -1056,8 +1056,8 @@ void FUN_L17_002ec150(char *moby, char *obj) {
             unsigned short t = (*(unsigned short *)(obj + 0x6A) + 1) & 3;
             *(unsigned short *)(obj + 0x6A) = t;
             moby_point_position(moby, t + 7, projectile_spawn_position);
-            fast_vec_normalize(b, obj, 0.3f);
-            fast_vec_add(projectile_spawn_position, projectile_spawn_position, b);
+            fast_vec_normalize(projectile_spawn_offset, obj, 0.3f);
+            fast_vec_add(projectile_spawn_position, projectile_spawn_position, projectile_spawn_offset);
             projectile_scale = *(float *)&D_L17_00162074 * *(float *)&D_L17_001620A0_gp;
             scaled_frame_count = scale_game_frames(300);
             if (FUN_L13_002e6a58(moby, projectile_spawn_position, *(int *)(obj + 0xEC), pos, projectile_scale, scaled_frame_count)) {
