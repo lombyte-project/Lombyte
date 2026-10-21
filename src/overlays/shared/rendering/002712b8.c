@@ -498,7 +498,7 @@ void FUN_L00_00272438(unsigned char *particle) {
     volatile u128_272438 old;
     volatile u128_272438 position_copy;
     float x, y;
-    int r;
+    int sphere_probe_result;
     old = *pos;
     particle_data->unk4 += particle_data->unk8;
     FUN_L00_00262360_272438(particle_data->i0, &x, &y, pos, particle_data->unk4, particle_data->fc);
@@ -511,9 +511,9 @@ void FUN_L00_00272438(unsigned char *particle) {
         *(int *)(particle + 4) = FUN_L00_0025bfe0_272438(
             0.7f, 0.7f, 0.7f, remaining_lifetime_frames * 0.08f / ((float)FUN_001f96f8_272438(0x1E) * 0.25f));
     }
-    r = probe_world_sphere(0.15f, pos, 0x10, particle_data->p14, 0);
+    sphere_probe_result = probe_world_sphere(0.15f, pos, 0x10, particle_data->p14, 0);
     position_copy = *pos;
-    FUN_L00_0025a9f8_272438(particle_data->p14, (void *)&position_copy, D_L00_00177F00_272438, r, 0, 0x810001, 2, 1, 2.0f,
+    FUN_L00_0025a9f8_272438(particle_data->p14, (void *)&position_copy, D_L00_00177F00_272438, sphere_probe_result, 0, 0x810001, 2, 1, 2.0f,
                             1.0f, 1.0f);
 }
 typedef struct {
