@@ -3094,25 +3094,25 @@ void FUN_L00_00203908_2b8230(int, int) __asm__("FUN_L00_00203908");
 
 extern unsigned short D_00141BD8 __attribute__((section(".data")));
 void FUN_L00_002b8230(unsigned char *pyrocitor_moby) {
-    unsigned char *v = *(unsigned char **)(pyrocitor_moby + 0x78);
+    unsigned char *pyrocitor_vars = *(unsigned char **)(pyrocitor_moby + 0x78);
     struct UsageStats *P;
     unsigned char *voice;
     int voice_slot_or_time_stat, firing_frame_count;
     if (pyrocitor_moby[0x53] == 2) {
         pyrocitor_moby[0x20] = 4;
-        if (*(void **)v)
-            FUN_0020c828_2b8230(*(void **)v);
-        if (*(short *)(v + 0x44) != -1) {
-            FUN_L00_0023e838_2b8230(*(short *)(v + 0x44));
-            *(short *)(v + 0x44) = -1;
+        if (*(void **)pyrocitor_vars)
+            FUN_0020c828_2b8230(*(void **)pyrocitor_vars);
+        if (*(short *)(pyrocitor_vars + 0x44) != -1) {
+            FUN_L00_0023e838_2b8230(*(short *)(pyrocitor_vars + 0x44));
+            *(short *)(pyrocitor_vars + 0x44) = -1;
         }
-        voice_slot_or_time_stat = *(short *)(v + 0x4A);
+        voice_slot_or_time_stat = *(short *)(pyrocitor_vars + 0x4A);
         if (voice_slot_or_time_stat != -1) {
             voice = D_0013E550_2b8230 + voice_slot_or_time_stat * 0x70;
             if (*(unsigned char **)(voice + 0x88) == pyrocitor_moby && voice[0x74])
                 FUN_0022d798_2b8230(voice_slot_or_time_stat);
         }
-        *(short *)(v + 0x4A) = -1;
+        *(short *)(pyrocitor_vars + 0x4A) = -1;
         return;
     }
     if (D_00141BD8)
@@ -3121,10 +3121,10 @@ void FUN_L00_002b8230(unsigned char *pyrocitor_moby) {
     if (P->stat[10].count)
         return;
     if (pyrocitor_moby[0x20] == 3) {
-        (*(unsigned short *)(v + 0x50))++;
+        (*(unsigned short *)(pyrocitor_vars + 0x50))++;
         return;
     }
-    firing_frame_count = *(short *)(v + 0x50);
+    firing_frame_count = *(short *)(pyrocitor_vars + 0x50);
     if (firing_frame_count == 0)
         return;
     if (FUN_001f96f8_2b8230(0x78) < firing_frame_count) {
@@ -3134,10 +3134,10 @@ void FUN_L00_002b8230(unsigned char *pyrocitor_moby) {
         if (P->stat[10].unk2 < voice_slot_or_time_stat)
             P->stat[10].unk2 = FUN_001f96f8_2b8230(D_0015EEA4) / 600;
         P->stat[10].level_mask = P->stat[10].level_mask | (1 << D_0015ED84_2b8230) | 0x80000000;
-    } else if (*(short *)(v + 0x50) < FUN_001f96f8_2b8230(0x1E)) {
+    } else if (*(short *)(pyrocitor_vars + 0x50) < FUN_001f96f8_2b8230(0x1E)) {
         hero.unk20B4++;
     }
-    *(short *)(v + 0x50) = 0;
+    *(short *)(pyrocitor_vars + 0x50) = 0;
     if (hero.unk20B4 >= 3)
         FUN_L00_00203908_2b8230(0x4E24, 0x4E);
 }
