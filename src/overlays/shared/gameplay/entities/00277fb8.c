@@ -77,16 +77,16 @@ void FUN_L01_002787a0(char *moby) {
 extern char *func_0020D348_m(int);
 extern void FUN_L00_00250df8(void *);
 
-void FUN_L01_00278e20(struct Moby *src, int oClass) {
+void FUN_L01_00278e20(struct Moby *placement_source_moby, int oClass) {
     char *destination_moby = func_0020D348_m(oClass);
     if (destination_moby != 0) {
         *(short *)(destination_moby + 0x32) = 0xFF;
         destination_moby[0x31] = 1;
         *(float *)(destination_moby + 0x2C) = *(float *)(destination_moby + 0x2C) *
-                               (src->scale / src->pclass->scale);
-        qcopy(destination_moby + 0x10, &src->pos);
-        qcopy(destination_moby + 0x40, &src->rot);
-        *(long *)(destination_moby + 0x38) = src->spawn_frame;
+                               (placement_source_moby->scale / placement_source_moby->pclass->scale);
+        qcopy(destination_moby + 0x10, &placement_source_moby->pos);
+        qcopy(destination_moby + 0x40, &placement_source_moby->rot);
+        *(long *)(destination_moby + 0x38) = placement_source_moby->spawn_frame;
         destination_moby[0x30] = 0;
         *(short *)(destination_moby + 0x34) = 0;
         FUN_L00_00250df8(destination_moby);
