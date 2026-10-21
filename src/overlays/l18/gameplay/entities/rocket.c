@@ -1991,18 +1991,18 @@ extern void FUN_L18_002dc0c8_u(char *moby, void *a1, void *a2) __asm__("FUN_L18_
 
 void FUN_L18_002dbe80(struct Moby *moby) {
     char hit[0x30];
-    float v[4];
+    float hit_direction_vector[4];
     float segment_start[4];
-    float b[4];
+    float segment_end[4];
     char *moby_vars = (char *)moby->pvars;
     float segment_start_angle, segment_end_angle, step;
     int i;
 
-    fast_vec_sub(v, &hero.motion.pos, &moby->pos);
-    v[2] = 0.0f;
-    fast_vec_normalize(v, v, frame_time * 4.0f);
-    v[2] = frame_time * 4.0f;
-    make_hit_descriptor(hit, (int)moby, 0x10001, v, 3.0f);
+    fast_vec_sub(hit_direction_vector, &hero.motion.pos, &moby->pos);
+    hit_direction_vector[2] = 0.0f;
+    fast_vec_normalize(hit_direction_vector, hit_direction_vector, frame_time * 4.0f);
+    hit_direction_vector[2] = frame_time * 4.0f;
+    make_hit_descriptor(hit, (int)moby, 0x10001, hit_direction_vector, 3.0f);
     step = 1.0f / convert_integer_to_float(0x40) * 6.28318f;
     segment_start_angle = -3.14159f;
     segment_end_angle = fast_add_rotations(segment_start_angle, step);
@@ -2010,16 +2010,16 @@ void FUN_L18_002dbe80(struct Moby *moby) {
         segment_start[0] = fast_cos(segment_start_angle) * *(float *)(moby_vars + 0x24);
         segment_start[1] = fast_sin(segment_start_angle) * *(float *)(moby_vars + 0x24);
         segment_start[2] = 0.0f;
-        b[0] = fast_cos(segment_end_angle) * *(float *)(moby_vars + 0x24);
-        b[1] = fast_sin(segment_end_angle) * *(float *)(moby_vars + 0x24);
-        b[2] = 0.0f;
+        segment_end[0] = fast_cos(segment_end_angle) * *(float *)(moby_vars + 0x24);
+        segment_end[1] = fast_sin(segment_end_angle) * *(float *)(moby_vars + 0x24);
+        segment_end[2] = 0.0f;
         fast_vec_add(segment_start, segment_start, &moby->pos);
         segment_start[2] += 0.5f;
-        fast_vec_add(b, b, &moby->pos);
-        b[2] += 0.5f;
-        collision_line(segment_start, b, 1, *(void **)(moby_vars + 0x34), hit);
+        fast_vec_add(segment_end, segment_end, &moby->pos);
+        segment_end[2] += 0.5f;
+        collision_line(segment_start, segment_end, 1, *(void **)(moby_vars + 0x34), hit);
         if (*(float *)(moby_vars + 0x24) < 3.0f) {
-            FUN_L18_002dc0c8_u(moby, segment_start, b);
+            FUN_L18_002dc0c8_u(moby, segment_start, segment_end);
         }
         segment_start_angle = fast_add_rotations(segment_start_angle, step);
         segment_end_angle = fast_add_rotations(segment_end_angle, step);
