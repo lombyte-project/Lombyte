@@ -939,7 +939,7 @@ extern void release_voice(s32) __asm__("FUN_0022d798");
 /* Moves m along rail path `path`, easing speed toward the end and banking into turns;
    keeps the travel sound playing and releases it on arrival. Returns 1 at the last point. */
 s32 FUN_L03_002d3918(struct Moby *rail_moby, s32 path, s32 *snd) {
-    RailFlyerVars *v = (RailFlyerVars *)rail_moby->pvars;
+    RailFlyerVars *rail_flyer_vars = (RailFlyerVars *)rail_moby->pvars;
     struct RailPath **pp = &D_L03_001B05B0[path];
     Vec4f tgt, movement_delta;
     f32 acc;
@@ -950,29 +950,29 @@ s32 FUN_L03_002d3918(struct Moby *rail_moby, s32 path, s32 *snd) {
 
     done = 0;
     acc = 0.0f;
-    qcopy(&tgt, &(*pp)->pts[v->idx]);
+    qcopy(&tgt, &(*pp)->pts[rail_flyer_vars->idx]);
     vec_sub(&movement_delta, &tgt, &rail_moby->pos);
     if (vec_len(&movement_delta) < D_L03_00161B08 * frame_time * 2.0f) {
-        v->idx++;
-        done = v->idx == (*pp)->count;
+        rail_flyer_vars->idx++;
+        done = rail_flyer_vars->idx == (*pp)->count;
     }
     dist = vec_dist(&rail_moby->pos, &(*pp)->pts[(*pp)->count - 1]);
     approach_speed(&acc, dist,
                    D_L03_00161B0C * frame_time_sq_macro, D_L03_00161B0C * frame_time_sq_macro,
-                   D_L03_00161B08 * frame_time, &v->speed);
-    vec_set_len(&movement_delta, &movement_delta, v->speed);
+                   D_L03_00161B08 * frame_time, &rail_flyer_vars->speed);
+    vec_set_len(&movement_delta, &movement_delta, rail_flyer_vars->speed);
     vec_add(&rail_moby->pos, &movement_delta, &rail_moby->pos);
     ang = -angle_atan2(vec_len_xy(&movement_delta), movement_delta.z);
     if (ang > 0.2617994f)
         ang = 0.2617994f;
     else if (ang < -0.2617994f)
         ang = -0.2617994f;
-    approach_angle(&rail_moby->rot.y, ang, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
+    approach_angle(&rail_moby->rot.y, ang, &rail_flyer_vars->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
                    D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
-    approach_angle(&rail_moby->rot.z, angle_atan2(tgt.x - rail_moby->pos.x, tgt.y - rail_moby->pos.y), &v->yaw_vel,
+    approach_angle(&rail_moby->rot.z, angle_atan2(tgt.x - rail_moby->pos.x, tgt.y - rail_moby->pos.y), &rail_flyer_vars->yaw_vel,
                    D_L03_00161B14 * DEG_TO_RAD * frame_time_sq_macro,
                    D_L03_00161B14 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
-    approach_angle(&rail_moby->rot.x, v->yaw_vel * v->speed * D_L03_00161B1C, &v->roll_vel,
+    approach_angle(&rail_moby->rot.x, rail_flyer_vars->yaw_vel * rail_flyer_vars->speed * D_L03_00161B1C, &rail_flyer_vars->roll_vel,
                    D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
                    D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
     sound_voice = *snd;
