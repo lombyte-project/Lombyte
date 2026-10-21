@@ -2485,43 +2485,43 @@ void FUN_L00_00267a08_26ee48(void *) __asm__("FUN_L00_00267a08");
 int FUN_L00_0025bfe0_26ee48(float, float, float, float) __asm__("FUN_L00_0025bfe0");
 int FUN_001fa6d0_26ee48(float) __asm__("FUN_001fa6d0");
 void FUN_L00_0026ee48(unsigned char *particle) {
-    B_26ee48 *b;
+    B_26ee48 *particle_data;
     unsigned char *o;
     if (particle == 0)
         return;
-    b = (B_26ee48 *)(particle + 0x20);
-    o = b->o;
+    particle_data = (B_26ee48 *)(particle + 0x20);
+    o = particle_data->o;
     if (o == 0 || (o[0x20] & 0xF0) == 0xF0)
         goto kill;
     qcopy(particle + 0x10, o + 0x10);
-    b->f4 += b->f8;
-    if (b->f4 < 0.0f) {
+    particle_data->f4 += particle_data->f8;
+    if (particle_data->f4 < 0.0f) {
     kill:
         FUN_L00_00267a08_26ee48(particle);
         return;
     }
-    if (0.6f < b->f4) {
-        b->f8 = -b->f8;
-        b->f4 += b->f8;
+    if (0.6f < particle_data->f4) {
+        particle_data->f8 = -particle_data->f8;
+        particle_data->f4 += particle_data->f8;
     }
-    b->f10 += D_0015ED60_26ee48 * -0.0174f;
-    if (b->f10 < 0.0f)
-        b->f10 = 0.0f;
-    b->f14 += D_0015ED60_26ee48 * -0.01446f;
-    if (b->f14 < 0.0f)
-        b->f14 = 0.0f;
-    b->f18 += D_0015ED60_26ee48 * -0.0015f;
-    if (b->f18 < 0.0f)
-        b->f18 = 0.0f;
+    particle_data->f10 += D_0015ED60_26ee48 * -0.0174f;
+    if (particle_data->f10 < 0.0f)
+        particle_data->f10 = 0.0f;
+    particle_data->f14 += D_0015ED60_26ee48 * -0.01446f;
+    if (particle_data->f14 < 0.0f)
+        particle_data->f14 = 0.0f;
+    particle_data->f18 += D_0015ED60_26ee48 * -0.0015f;
+    if (particle_data->f18 < 0.0f)
+        particle_data->f18 = 0.0f;
     {
-        int packed_color = FUN_L00_0025bfe0_26ee48(b->f10, b->f14, b->f18, b->f4);
+        int packed_color = FUN_L00_0025bfe0_26ee48(particle_data->f10, particle_data->f14, particle_data->f18, particle_data->f4);
         float phase_increment = D_0015ED60_26ee48 * 0.0011f;
         *(int *)(particle + 4) = packed_color;
-        b->fC += phase_increment;
+        particle_data->fC += phase_increment;
     }
-    if (1.0f < b->fC)
-        b->fC -= 1.0f;
-    particle[8] = FUN_001fa6d0_26ee48(b->fC * 255.0f);
+    if (1.0f < particle_data->fC)
+        particle_data->fC -= 1.0f;
+    particle[8] = FUN_001fa6d0_26ee48(particle_data->fC * 255.0f);
     *(float *)(particle + 0xC) =
         *(float *)(*(unsigned char **)(particle + 0x20) + 0x2C) * 100000.0f * 30.0f + 50000.0f;
 }
