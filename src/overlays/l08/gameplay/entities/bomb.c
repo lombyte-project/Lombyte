@@ -336,8 +336,8 @@ void FUN_L08_002d23f0(char *moby) {
     bomb_vars = *(char **)(moby + 0x78);
     if (*(unsigned char *)(moby + 0x20) != 0x37) {
         if (coll_sphere(0.5f, moby + 0x10, 0x11, moby)) {
-            int g = D_L08_001746D8_2B94B0i;
-            if (g != 0 && (g != *(int *)(bomb_vars + 0x30) || *(int *)(bomb_vars + 0x24) != 0)) {
+            int sphere_hit_moby = D_L08_001746D8_2B94B0i;
+            if (sphere_hit_moby != 0 && (sphere_hit_moby != *(int *)(bomb_vars + 0x30) || *(int *)(bomb_vars + 0x24) != 0)) {
                 if (!(*(unsigned char *)(moby + 0xBC) & 2)) *(unsigned char *)(moby + 0x20) = 0x62; else *(unsigned char *)(moby + 0x20) = 0x63;
                 qcopy((moby + 0x10), ((char *)D_L08_00174660));
                 FUN_L00_001ff660_c(bomb_vars + 0x10, bomb_vars + 0x10, ((char *)D_L08_00174660) + 0x20);
@@ -380,8 +380,8 @@ void FUN_L08_002d23f0(char *moby) {
         c.r.x.f = 1.0f;
         qcopy(c.r.x.v, bomb_vars + 0x10);
         if (collision_line(c.r.start, c.r.end, 0, moby, 0)) {
-            char *tbl = (char *)&D_L08_00174640;
-            int v = *(int *)(tbl + 0x18);
+            char *collision_result = (char *)&D_L08_00174640;
+            int v = *(int *)(collision_result + 0x18);
             if (v != 0) {
                 if (v != *(int *)(bomb_vars + 0x30) || *(int *)(bomb_vars + 0x24) != 0) {
                     if (!(*(unsigned char *)(moby + 0xBC) & 2)) *(unsigned char *)(moby + 0x20) = 0x62; else *(unsigned char *)(moby + 0x20) = 0x63;
@@ -392,14 +392,14 @@ void FUN_L08_002d23f0(char *moby) {
                         fast_vec_normalize(v, v, D_0015ED6C + D_0015ED6C);
                     }
                 }
-            } else if (*(int *)(tbl + 0x1C) > 0) {
+            } else if (*(int *)(collision_result + 0x1C) > 0) {
                 if (*(unsigned char *)(moby + 0xBC) & 1) {
                     float k;
                     allocate_voice_for_target_entry(1, 0, moby);
-                    qcopy((moby + 0x10), tbl + 0x20);
+                    qcopy((moby + 0x10), collision_result + 0x20);
                     *(float *)(moby + 0x18) += collision_z_offset;
-                    FUN_L00_001ff660_c((bomb_vars + 0x10), (bomb_vars + 0x10), tbl + 0x40);
-                    cross_vectors_xyz(&table_or_bounce_scratch, (bomb_vars + 0x10), tbl + 0x40);
+                    FUN_L00_001ff660_c((bomb_vars + 0x10), (bomb_vars + 0x10), collision_result + 0x40);
+                    cross_vectors_xyz(&table_or_bounce_scratch, (bomb_vars + 0x10), collision_result + 0x40);
                     k = D_0015ED6C * 1.5f;
                     fast_vec_normalize(&table_or_bounce_scratch, &table_or_bounce_scratch, random_float_between_c5(-k, k));
                     add_vector_xyz((bomb_vars + 0x10), (bomb_vars + 0x10), &table_or_bounce_scratch);
@@ -416,8 +416,8 @@ void FUN_L08_002d23f0(char *moby) {
                     }
                 } else {
                     *(unsigned char *)(moby + 0x20) = 0x62;
-                    qcopy((moby + 0x10), tbl + 0x20);
-                    FUN_L00_001ff660_c((bomb_vars + 0x10), (bomb_vars + 0x10), tbl + 0x40);
+                    qcopy((moby + 0x10), collision_result + 0x20);
+                    FUN_L00_001ff660_c((bomb_vars + 0x10), (bomb_vars + 0x10), collision_result + 0x40);
                     fast_vec_normalize((bomb_vars + 0x10), (bomb_vars + 0x10), D_0015ED6C + D_0015ED6C);
                 }
             }
