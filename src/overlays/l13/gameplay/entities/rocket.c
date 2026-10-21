@@ -368,11 +368,11 @@ void FUN_L13_00306300(struct Moby *moby) {
         *(int *)(data + 0x2C) = 5;
         *(float *)(data + 0xC) = 31337.6015625f;
         for (i = 0; i < 6; i++) {
-            unsigned char *b = (unsigned char *)((char *)((char *)&hero));
-            ent = ((char **)(b + 0x2020))[i];
+            unsigned char *hero_base = (unsigned char *)((char *)((char *)&hero));
+            ent = ((char **)(hero_base + 0x2020))[i];
             if (ent != 0) {
-                int f2 = flags | 1;
-                make_hit_descriptor(work.hit, moby, f2, 1.0f, &work.velocity);
+                int hit_mask = flags | 1;
+                make_hit_descriptor(work.hit, moby, hit_mask, 1.0f, &work.velocity);
                 work.hit[0x18] = 1;
                 *(unsigned short *)(work.hit + 0x1A) = *(unsigned short *)((char *)moby + 0xA6);
                 work.hit[0x19] = 1;
@@ -383,7 +383,7 @@ void FUN_L13_00306300(struct Moby *moby) {
                     D_L13_00178400[(unsigned char)ent[0xA4]].b28 = 1;
                     D_L13_00178400[(unsigned char)ent[0xA4]].b29 = 1;
                     D_L13_00178400[(unsigned char)ent[0xA4]].s2A = *(unsigned short *)((char *)moby + 0xA6);
-                    { struct L13Ent00178480 *t = &D_L13_00178400[(unsigned char)ent[0xA4]]; t->i24 = f2; }
+                    { struct L13Ent00178480 *t = &D_L13_00178400[(unsigned char)ent[0xA4]]; t->i24 = hit_mask; }
                 }
                 break;
             }
