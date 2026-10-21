@@ -433,8 +433,8 @@ extern void sample_path(int a, char *pos, char *b, char *c, int d, float f) __as
 extern float D_L14_00161A30 __attribute__((sda));
 void FUN_L14_002d7198(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    int idx = *(int *)(data + 0x60);
-    sample_path(*(int *)((idx << 5) + D_L14_0015F70C + 0x10), &moby->pos, data + 0x64,
+    int path_index = *(int *)(data + 0x60);
+    sample_path(*(int *)((path_index << 5) + D_L14_0015F70C + 0x10), &moby->pos, data + 0x64,
                      data + 0x68, 0, D_L14_00161A30 * frame_time);
 }
 /* Draws the racer's two glow quads, at its lamp (0xE0) and its tail (0x200), turned to face the camera. */
