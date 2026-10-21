@@ -1348,7 +1348,7 @@ void barrier_update(Moby *moby) __asm__("FUN_L09_003082d8");
 void barrier_update(Moby *moby)
 {
     BarrierData_309688 *data = (*(BarrierData_309688 **)&moby->pvars);
-    float origin[4], center[4], piece_pos[4], vel[4], push[4];
+    float origin[4], center[4], piece_pos[4], piece_velocity[4], push[4];
     Hit_309688 *hit;
     int has_next;
     int count;
@@ -1386,25 +1386,25 @@ void barrier_update(Moby *moby)
     if (0.85f < D_L09_0015F5D0 || 0.85f < D_L09_0015F5D4) count = 30;
     angle = -3.1415927f;
     for (i = 0; i < count; i++) {
-        *(u128 *)vel = 0;
-        vel[0] = func_002140F8_309688(-0.4f, 0.4f);
-        vel[1] = func_002140F8_309688(-0.6f, 0.6f);
-        vel[2] = func_002140F8_309688(-0.4f, 0.4f);
-        *(u128 *)piece_pos = *(u128 *)vel;
+        *(u128 *)piece_velocity = 0;
+        piece_velocity[0] = func_002140F8_309688(-0.4f, 0.4f);
+        piece_velocity[1] = func_002140F8_309688(-0.6f, 0.6f);
+        piece_velocity[2] = func_002140F8_309688(-0.4f, 0.4f);
+        *(u128 *)piece_pos = *(u128 *)piece_velocity;
         scale = func_002140F8_309688(0.3f, 2.6f);
         piece_pos[0] = piece_pos[0] + scale * func_001F9F90_309688(angle);
         scale = scale * func_001F9FA8_309688(angle);
         piece_pos[2] = piece_pos[2] + scale;
         func_001F9EC0_309688(piece_pos, piece_pos, ((f32 *)&moby->rot_row0));
         fast_vec_add(piece_pos, piece_pos, center);
-        fast_vec_sub(vel, piece_pos, origin);
-        scale = func_001F9B88_309688(6.0f - fast_vec_length(vel)) / 6.0f;
+        fast_vec_sub(piece_velocity, piece_pos, origin);
+        scale = func_001F9B88_309688(6.0f - fast_vec_length(piece_velocity)) / 6.0f;
         func_L00_001FF4B0_309688(push, hit->pos, scale * scale * 8.0f);
-        fast_vec_add(vel, vel, push);
-        func_L00_001FF4B0_309688(vel, vel, scale * (func_002140F8_309688(5.0f, 8.0f) * frame_time));
+        fast_vec_add(piece_velocity, piece_velocity, push);
+        func_L00_001FF4B0_309688(piece_velocity, piece_velocity, scale * (func_002140F8_309688(5.0f, 8.0f) * frame_time));
         if (moby->oclass == 0x508) {
             int odd = i & 1;
-            func_L09_002F0BB8_309688(moby, piece_pos, vel, odd, func_002140F8_309688(1.0f, 1.3f));
+            func_L09_002F0BB8_309688(moby, piece_pos, piece_velocity, odd, func_002140F8_309688(1.0f, 1.3f));
         }
         if (i % 3 == 0) {
             func_L00_00260108_309688(moby, piece_pos, -1, func_002140F8_309688(0.3f, 0.6f), 0.0f);
