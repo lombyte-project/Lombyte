@@ -1308,7 +1308,7 @@ void helga_update(struct Moby *helga_moby) {
     struct Moby *reward_moby;
     u8 group;
     s32 *flag;
-    Vec4 *g;
+    Vec4 *hero_position;
     struct Hero *hero_state;
     float scratch_target[4];
     float eye[4];
@@ -1434,13 +1434,13 @@ void helga_update(struct Moby *helga_moby) {
     head_rate = 0.3f;
     tracking = 0;
     if (helga_moby->prev_seq == 0) {
-        g = &hero.motion.pos;
+        hero_position = &hero.motion.pos;
         tracking = 1;
-        if (taxi_dist2(&helga_moby->pos, g) < 8.0f &&
-            (hero_state = (struct Hero *)((u8 *)g - 0x80),
+        if (taxi_dist2(&helga_moby->pos, hero_position) < 8.0f &&
+            (hero_state = (struct Hero *)((u8 *)hero_position - 0x80),
              fast_difference_between_rotations(helga_moby->rot.z, taxi_atan2(hero_state->motion.unkD0.f[0] - helga_moby->pos.x, hero_state->motion.unkD0.f[1] - helga_moby->pos.y))) <
                 1.5707964f) {
-            if (vec_len((u8 *)g + 0x80) > 0.01f) {
+            if (vec_len((u8 *)hero_position + 0x80) > 0.01f) {
                 helga_vars->watch_timer = scale_game_frames(120);
             } else {
                 fast_dec_timer(&helga_vars->watch_timer);
