@@ -541,8 +541,8 @@ extern void FUN_L11_003192c8_c(void) __asm__("FUN_L11_003192c8");
 
 void FUN_L11_00319670(char *moby) {
     char *trail_data = *(char **)(moby + 0x78);
-    float v[4];
-    float w[4];
+    float first_trail_offset[4];
+    float second_trail_offset[4];
     int current_frame;
     if ((level_frame & 3) == 0) {
         int cnt;
@@ -553,19 +553,19 @@ void FUN_L11_00319670(char *moby) {
             *(int *)(trail_data + 0x2C0) = cnt + 1;
         }
     }
-    *(OvlQuad *)v = 0;
-    v[1] = 0.7f;
-    v[0] = -1.2f;
-    v[2] = 0.3f;
-    transform_vector_by_basis(v, v, moby + 0xC0);
-    add_vector_xyz(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0xC0), v, moby + 0x10);
+    *(OvlQuad *)first_trail_offset = 0;
+    first_trail_offset[1] = 0.7f;
+    first_trail_offset[0] = -1.2f;
+    first_trail_offset[2] = 0.3f;
+    transform_vector_by_basis(first_trail_offset, first_trail_offset, moby + 0xC0);
+    add_vector_xyz(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0xC0), first_trail_offset, moby + 0x10);
     *(float *)(trail_data + (*(int *)(trail_data + 0x2C4) << 4) + 0xCC) = 1.0f;
-    *(OvlQuad *)w = 0;
-    w[0] = -1.2f;
-    w[1] = -0.7f;
-    w[2] = 0.3f;
-    transform_vector_by_basis(w, w, moby + 0xC0);
-    add_vector_xyz(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0x1C0), w, moby + 0x10);
+    *(OvlQuad *)second_trail_offset = 0;
+    second_trail_offset[0] = -1.2f;
+    second_trail_offset[1] = -0.7f;
+    second_trail_offset[2] = 0.3f;
+    transform_vector_by_basis(second_trail_offset, second_trail_offset, moby + 0xC0);
+    add_vector_xyz(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0x1C0), second_trail_offset, moby + 0x10);
     current_frame = level_frame;
     *(float *)(trail_data + (*(int *)(trail_data + 0x2C4) << 4) + 0x1CC) = 1.0f;
     if (current_frame != 0) {
