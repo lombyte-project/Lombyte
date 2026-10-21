@@ -1418,8 +1418,8 @@ void FUN_L13_002f3778(struct Moby *moby) {
     moby->update_dist = 0xFF;
     data = (char *)moby->pvars;
     if (D_L13_00179710[0] == 0 && D_L13_00179710[9] == -1) {
-        unsigned int v = *(unsigned int *)(&hero.state.control_mode);
-        if ((v < 2 || v == 9) ? D_L13_0015F5C4 == 0 : 0) {
+        unsigned int hero_control_mode = *(unsigned int *)(&hero.state.control_mode);
+        if ((hero_control_mode < 2 || hero_control_mode == 9) ? D_L13_0015F5C4 == 0 : 0) {
             int idx = *(int *)(data + 4);
             char *linked_moby;
             if (idx != -1) {
