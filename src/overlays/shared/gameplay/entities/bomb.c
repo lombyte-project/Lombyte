@@ -1613,23 +1613,23 @@ int FUN_001f96f8_2cc210(int) __asm__("FUN_001f96f8");
 int FUN_L00_001fefc8_2cc210(void *) __asm__("FUN_L00_001fefc8");
 extern float D_L00_001618A8 __attribute__((sda));
 void FUN_L00_002cc210(unsigned char *updated_moby) {
-    float *v = *(float **)(updated_moby + 0x78);
+    float *moby_vars = *(float **)(updated_moby + 0x78);
     float sc;
-    FUN_001f9a10_2cc210(updated_moby + 0x10, updated_moby + 0x10, v);
-    v[2] -= D_0015ED70_lui * 15.0f;
+    FUN_001f9a10_2cc210(updated_moby + 0x10, updated_moby + 0x10, moby_vars);
+    moby_vars[2] -= D_0015ED70_lui * 15.0f;
     sc = D_L00_001618A8;
-    v[0] *= sc;
-    v[1] *= sc;
-    if (v[2] < v[8])
-        v[2] = v[8];
-    *(float *)(updated_moby + 0x48) = FUN_001fa580_2cc210(*(float *)(updated_moby + 0x48), v[10]);
-    *(float *)(updated_moby + 0x40) = FUN_001fa580_2cc210(*(float *)(updated_moby + 0x40), v[11] * (float)((int *)v)[9]);
+    moby_vars[0] *= sc;
+    moby_vars[1] *= sc;
+    if (moby_vars[2] < moby_vars[8])
+        moby_vars[2] = moby_vars[8];
+    *(float *)(updated_moby + 0x48) = FUN_001fa580_2cc210(*(float *)(updated_moby + 0x48), moby_vars[10]);
+    *(float *)(updated_moby + 0x40) = FUN_001fa580_2cc210(*(float *)(updated_moby + 0x40), moby_vars[11] * (float)((int *)moby_vars)[9]);
     if (0.7853982f < FUN_001f99c0_2cc210(*(float *)(updated_moby + 0x40))) {
-        ((int *)v)[9] = -((int *)v)[9];
+        ((int *)moby_vars)[9] = -((int *)moby_vars)[9];
     }
-    if (FUN_001f9740_2cc210(&v[7]) != 0 || updated_moby[0x31] == 0) {
+    if (FUN_001f9740_2cc210(&moby_vars[7]) != 0 || updated_moby[0x31] == 0) {
         FUN_0020c828_2cc210(updated_moby);
-    } else if (((int *)v)[7] < FUN_001f96f8_2cc210(0x1E) && FUN_L00_001fefc8_2cc210(updated_moby + 0x23)) {
+    } else if (((int *)moby_vars)[7] < FUN_001f96f8_2cc210(0x1E) && FUN_L00_001fefc8_2cc210(updated_moby + 0x23)) {
         FUN_0020c828_2cc210(updated_moby);
     }
 }
