@@ -3583,7 +3583,7 @@ typedef struct {
 extern int FUN_L00_002133a8_002137a8(int index) __asm__("FUN_L00_002133a8");
 
 void FUN_L00_002137a8(void) {
-    Quad *dst = (Quad *)&hero.motion.pos;
+    Quad *hero_position = (Quad *)&hero.motion.pos;
     Quad *table = (Quad *)hero.unk1B00;
     int i;
 
@@ -3598,7 +3598,7 @@ void FUN_L00_002137a8(void) {
             base->unk21B4--;
             base->unk21B0 = (base->unk21B0 + 31) % 32;
         }
-        qcopy(dst, &table[base->unk21B0]);
+        qcopy(hero_position, &table[base->unk21B0]);
     }
 }
 #include "rnc/gameplay/state/usage_stats.h"
