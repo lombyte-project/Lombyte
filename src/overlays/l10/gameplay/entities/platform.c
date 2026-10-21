@@ -187,7 +187,7 @@ void FUN_L10_00295c20(struct Moby *moby) {
     };
     char *platform_vars = (char *)moby->pvars;
     float prev[4];
-    float v[4];
+    float position_delta[4];
     *(OvlQuad *)prev = *(OvlQuad *)&moby->pos;
     if (FUN_L01_00277fb8(moby)) moby->state = 2;
     fast_dec_timer((int *)(platform_vars + 0xBC));
@@ -201,9 +201,9 @@ void FUN_L10_00295c20(struct Moby *moby) {
         *(float *)(platform_vars + 0xA8) = random_angle_radians();
         *(float *)(platform_vars + 0xB4) = random_angle_radians();
         {
-            float r = random_angle_radians();
+            float initial_second_rotation_phase = random_angle_radians();
             float bobbing_phase_jitter_limit = frame_time * 0.13962634f;
-            *(float *)(platform_vars + 0xB8) = r;
+            *(float *)(platform_vars + 0xB8) = initial_second_rotation_phase;
             *(float *)(platform_vars + 0xB0) = frame_time * 1.5707964f + randf_sym(0.0f, bobbing_phase_jitter_limit);
         }
         moby->state = 1;
@@ -248,8 +248,8 @@ void FUN_L10_00295c20(struct Moby *moby) {
         break;
     }
     }
-    subtract_vector_xyz(v, &moby->pos, prev);
-    update_entity_matrix(platform_vars + 0x60, v, &moby->rot, &moby->rot);
+    subtract_vector_xyz(position_delta, &moby->pos, prev);
+    update_entity_matrix(platform_vars + 0x60, position_delta, &moby->rot, &moby->rot);
 }
 /* Spinning pickup: waits until the hero is close and level with it, then plays the scene, saves and goes away. */
 extern char *D_L10_0015FFD8_p __asm__("D_L10_0015FFD8");
