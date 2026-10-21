@@ -15,26 +15,26 @@ void downsample_map_coverage(u8 *out) __asm__("FUN_00208030");
 
 void downsample_map_coverage(u8 *out) {
     s32 acc[128];
-    struct Table16 tbl;
-    u8 *src;
-    u8 *dst;
+    struct Table16 nibble_contributions;
+    u8 *packed_map_cursor;
+    u8 *coverage_mask_cursor;
     s32 i;
     s32 j;
     s32 k;
     s32 packed_column_start;
     u32 packed_source_byte;
 
-    dst = out;
-    src = D_001A00FC[0];
-    tbl = D_001E8080;
+    coverage_mask_cursor = out;
+    packed_map_cursor = D_001A00FC[0];
+    nibble_contributions = D_001E8080;
     for (i = 0; i < 0x200; i++) {
         if ((i & 3) == 0) {
             fill_transfer_words(acc, 0, 0x200);
         }
         for (j = 0; j < 128; j += 2) {
-            packed_source_byte = *src++;
-            acc[j] += tbl.v[packed_source_byte & 0xF];
-            acc[j + 1] += tbl.v[packed_source_byte >> 4];
+            packed_source_byte = *packed_map_cursor++;
+            acc[j] += nibble_contributions.v[packed_source_byte & 0xF];
+            acc[j + 1] += nibble_contributions.v[packed_source_byte >> 4];
         }
         if (i % 4 == 3) {
             for (k = 0; k < 128; k++) {
@@ -45,7 +45,7 @@ void downsample_map_coverage(u8 *out) {
                 }
             }
             for (packed_column_start = 0; packed_column_start < 128; packed_column_start += 8) {
-                *dst++ = acc[packed_column_start] | acc[packed_column_start + 1] | acc[packed_column_start + 2] | acc[packed_column_start + 3] | acc[packed_column_start + 4] | acc[packed_column_start + 5] |
+                *coverage_mask_cursor++ = acc[packed_column_start] | acc[packed_column_start + 1] | acc[packed_column_start + 2] | acc[packed_column_start + 3] | acc[packed_column_start + 4] | acc[packed_column_start + 5] |
                          acc[packed_column_start + 6] | acc[packed_column_start + 7];
             }
         }
