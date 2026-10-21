@@ -3050,7 +3050,7 @@ void FUN_L00_0026ff10(Moby_26ff10 *particle) {
     S_26ff10 collision_parameters;
     f32 collision_offset[4];
     PV_26ff10 *pv;
-    Moby_26ff10 *r;
+    Moby_26ff10 *spawned_particle;
     u8 *tab;
     u8 fl;
     s32 fm;
@@ -3078,10 +3078,10 @@ void FUN_L00_0026ff10(Moby_26ff10 *particle) {
         v0u.f[0] = v0u.f[0] + FUN_002132a8_26ff10(-particle->pv.x * sc, particle->pv.x * sc);
         v0u.f[1] = v0u.f[1] + FUN_002132a8_26ff10(-pv->y * sc, pv->y * sc);
         v0u.f[2] = v0u.f[2] + FUN_002132a8_26ff10(-pv->z * sc, zero);
-        r = FUN_L00_0026fd28_26ff10(v1u.f, v0u.f, 0x88, pv->f1C);
-        if (r != 0) {
-            r->h0A = FUN_001f96f8_26ff10(2);
-            r->f0C = particle->f0C;
+        spawned_particle = FUN_L00_0026fd28_26ff10(v1u.f, v0u.f, 0x88, pv->f1C);
+        if (spawned_particle != 0) {
+            spawned_particle->h0A = FUN_001f96f8_26ff10(2);
+            spawned_particle->f0C = particle->f0C;
         }
         FUN_001f9a68_26ff10(pv, pv, FUN_002132a8_26ff10(lo, hi));
         particle->pv.x = particle->pv.x + FUN_002132a8_26ff10(-particle->pv.x * sc, particle->pv.x * sc);
