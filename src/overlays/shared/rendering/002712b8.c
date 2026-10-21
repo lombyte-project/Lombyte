@@ -1071,30 +1071,30 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char *D_L00_001B2180[];
 extern unsigned char D_0013F3D0_c[] __asm__("D_0013F3D0");
 
-unsigned char *FUN_L00_002738e8(void *pos, void *vel, float scale, int life, float f1, int col, float f2, int secondary_color, int big) {
-    unsigned char *r = p27fe00_alloc(0x40);
-    unsigned char *u;
-    if (r != 0) {
-        u = r + 0x20;
-        qcopy(r + 0x10, pos);
+unsigned char *FUN_L00_002738e8(void *pos, void *vel, float scale, int life, float floor_z, int col, float gravity, int secondary_color, int big) {
+    unsigned char *particle = p27fe00_alloc(0x40);
+    unsigned char *particle_data;
+    if (particle != 0) {
+        particle_data = particle + 0x20;
+        qcopy(particle + 0x10, pos);
         if (vector_distance(D_0013F3D0_c, pos) < 80.0f) {
-            r[9] = truncate_float_to_s32(1.0f) + 0x30;
+            particle[9] = truncate_float_to_s32(1.0f) + 0x30;
         } else {
-            r[9] = truncate_float_to_s32(1.0f) + 0x20;
+            particle[9] = truncate_float_to_s32(1.0f) + 0x20;
         }
-        r[3] = big ? 0x48 : 0x44;
-        r[1] = 0;
-        r[2] = D_L00_001B2180[0][1];
-        *(int *)(r + 4) = col;
-        *(float *)(r + 0xC) = scale * 210000.0f;
-        r[8] = (int)random_float_between(0.0f, 255.0f);
-        *(short *)(r + 0xA) = life;
-        qcopy(u, vel);
-        *(float *)(u + 0x10) = f1;
-        *(float *)(u + 0x14) = f2;
-        *(int *)(u + 0x18) = secondary_color;
+        particle[3] = big ? 0x48 : 0x44;
+        particle[1] = 0;
+        particle[2] = D_L00_001B2180[0][1];
+        *(int *)(particle + 4) = col;
+        *(float *)(particle + 0xC) = scale * 210000.0f;
+        particle[8] = (int)random_float_between(0.0f, 255.0f);
+        *(short *)(particle + 0xA) = life;
+        qcopy(particle_data, vel);
+        *(float *)(particle_data + 0x10) = floor_z;
+        *(float *)(particle_data + 0x14) = gravity;
+        *(int *)(particle_data + 0x18) = secondary_color;
     }
-    return r;
+    return particle;
 }
 /* Falling ember: drifts under gravity until it reaches its floor height, then bursts into
    smoke and, on level 10, a glow and a spark. */
