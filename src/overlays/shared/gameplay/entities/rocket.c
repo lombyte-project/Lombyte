@@ -154,7 +154,7 @@ void rocket_update(char *rocket) {
     float hv[4] __attribute__((aligned(16)));
     float tp[4] __attribute__((aligned(16)));
     float aim[4] __attribute__((aligned(16)));
-    float speed, intercept_time_squared_coefficient, b, discriminant_sqrt, intercept_time_plus_root, intercept_time_minus_root, intercept_time, yaw, pitch, dist;
+    float speed, intercept_time_squared_coefficient, intercept_time_linear_coefficient, discriminant_sqrt, intercept_time_plus_root, intercept_time_minus_root, intercept_time, yaw, pitch, dist;
     char *rocket_position;
     unsigned char *g;
     char *tg;
@@ -180,10 +180,10 @@ void rocket_update(char *rocket) {
                 tp[2] = ground_aim_height + 2.0f;
             vsub_cc2e8(diff, tp, rocket_position);
             intercept_time_squared_coefficient = speed * speed - lensq_cc2e8(hv);
-            b = (hv[0] * diff[0] + hv[1] * diff[1] + hv[2] * diff[2]) * -2.0f;
-            discriminant_sqrt = sqrt_cc2e8(b * b - intercept_time_squared_coefficient * 4.0f * -lensq_cc2e8(diff));
-            intercept_time_plus_root = (-b + discriminant_sqrt) / (intercept_time_squared_coefficient + intercept_time_squared_coefficient);
-            intercept_time_minus_root = (-b - discriminant_sqrt) / (intercept_time_squared_coefficient + intercept_time_squared_coefficient);
+            intercept_time_linear_coefficient = (hv[0] * diff[0] + hv[1] * diff[1] + hv[2] * diff[2]) * -2.0f;
+            discriminant_sqrt = sqrt_cc2e8(intercept_time_linear_coefficient * intercept_time_linear_coefficient - intercept_time_squared_coefficient * 4.0f * -lensq_cc2e8(diff));
+            intercept_time_plus_root = (-intercept_time_linear_coefficient + discriminant_sqrt) / (intercept_time_squared_coefficient + intercept_time_squared_coefficient);
+            intercept_time_minus_root = (-intercept_time_linear_coefficient - discriminant_sqrt) / (intercept_time_squared_coefficient + intercept_time_squared_coefficient);
             if (intercept_time_plus_root > 0.0f && intercept_time_minus_root > 0.0f) {
                 if (intercept_time_plus_root > intercept_time_minus_root)
                     intercept_time = intercept_time_plus_root;
