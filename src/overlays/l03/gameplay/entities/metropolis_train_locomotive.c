@@ -1349,7 +1349,7 @@ void red_ship_1_update(char *moby) {
     int flag;
     int found;
     int advanced_path_node_index;
-    int r;
+    int initial_path_node_index;
     int idx;
     unsigned char *voice_slot_entry;
     float initial_speed_oscillation_phase;
@@ -1427,9 +1427,9 @@ void red_ship_1_update(char *moby) {
         FUN_L01_0028b410(pm);
         if (((unsigned char *)pm)[5] == 0) {
             if (*(int *)pm <= 0) {
-                r = FUN_L01_0028b510(pos0, *(void **)(pm + 0x10), 0.0f);
-                *(int *)pm = r;
-                if (pm[4] >= 0 ? r == **(int **)(pm + 0x10) - 1 : r == 0) {
+                initial_path_node_index = FUN_L01_0028b510(pos0, *(void **)(pm + 0x10), 0.0f);
+                *(int *)pm = initial_path_node_index;
+                if (pm[4] >= 0 ? initial_path_node_index == **(int **)(pm + 0x10) - 1 : initial_path_node_index == 0) {
                     *(int *)pm = 0;
                 }
             }
