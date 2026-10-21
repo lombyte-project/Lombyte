@@ -392,10 +392,10 @@ extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
 
 void FUN_L06_0030bef8(char *src, int duration_updates, int start_color, int end_color) {
-    OvlQuad v;
-    char *vp = (char *)&v;
+    OvlQuad position_copy;
+    char *vp = (char *)&position_copy;
     unsigned char *effect_moby;
-    v = *(OvlQuad *)src;
+    position_copy = *(OvlQuad *)src;
     effect_moby = (unsigned char *)mk_b(0x76A);
     if (effect_moby) {
         char *effect_data = *(char **)(effect_moby + 0x78);
