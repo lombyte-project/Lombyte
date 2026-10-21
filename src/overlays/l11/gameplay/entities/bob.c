@@ -367,7 +367,7 @@ void FUN_L11_002d1030(void *mp) {
     struct Moby *moby = mp;
     char *pvars = (char *)moby->pvars;
     float ang;
-    float f0;
+    float motion_scalar;
     float vertical_motion;
     float vertical_motion_decrement;
     float horizontal_speed;
@@ -392,11 +392,11 @@ void FUN_L11_002d1030(void *mp) {
         approach_angle((float *)(yaw_ptr), ang, (float *)(pvars + 0x150), D_0015ED70 * 12.566371f,
                          D_0015ED70 * 25.132742f, D_0015ED6C * 12.566371f);
         *(float *)(pvars + 0x130) = fast_cos(*(float *)(yaw_ptr)) * *(float *)(pvars + 0x154);
-        f0 = fast_sin(*(float *)(yaw_ptr));
+        motion_scalar = fast_sin(*(float *)(yaw_ptr));
         vertical_motion = *(float *)(pvars + 0x148);
         vertical_motion_decrement = D_0015ED70 * 20.0f;
         horizontal_speed = *(float *)(pvars + 0x154);
-        *(float *)(pvars + 0x134) = f0 * horizontal_speed;
+        *(float *)(pvars + 0x134) = motion_scalar * horizontal_speed;
         vertical_motion = vertical_motion - vertical_motion_decrement;
         *(float *)(pvars + 0x138) = vertical_motion;
         if (0.0f < vertical_motion) {
@@ -412,14 +412,14 @@ void FUN_L11_002d1030(void *mp) {
     case RESORT_OWNER_JUMP_TO_TARGET:
         if (FUN_00214cc8(moby, 9.0f)) {
             fast_vec_sub(pvars + 0x130, pvars + 0x120, (char *)moby + 0x10);
-            f0 = (float)scale_game_frames(0x3C);
-            fast_vec_scale(pvars + 0x130, pvars + 0x130, 1.0f / f0);
-            f0 = vector_length_xy(pvars + 0x130);
-            *(float *)(pvars + 0x138) = FUN_L00_0025abf0((char *)moby + 0x10, pvars + 0x120, f0, 0, -(D_0015ED70 * 10.8f));
+            motion_scalar = (float)scale_game_frames(0x3C);
+            fast_vec_scale(pvars + 0x130, pvars + 0x130, 1.0f / motion_scalar);
+            motion_scalar = vector_length_xy(pvars + 0x130);
+            *(float *)(pvars + 0x138) = FUN_L00_0025abf0((char *)moby + 0x10, pvars + 0x120, motion_scalar, 0, -(D_0015ED70 * 10.8f));
             *(float *)((char *)moby + 0x58) = 0.6666667f;
         }
-        f0 = fast_vec_length(pvars + 0x130);
-        if (0.0f < f0)
+        motion_scalar = fast_vec_length(pvars + 0x130);
+        if (0.0f < motion_scalar)
             *(float *)(pvars + 0x138) = *(float *)(pvars + 0x138) - D_0015ED70 * 10.8f;
         if (FUN_00214cc8(moby, 29.0f)) {
             clear_u64_value(pvars + 0x130);
