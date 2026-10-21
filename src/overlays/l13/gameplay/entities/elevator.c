@@ -2545,7 +2545,7 @@ extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 
 void FUN_L13_002b9df8(struct Moby *moby, char *obj, float azimuth_angle, float elevation_angle) {
     char aim_vector[16];
-    char b[16];
+    char projectile_spawn_position[16];
     char muzzle_offset[16];
     char aim_world_position[16];
     build_spherical_offset(aim_vector, frame_time * 400.0f, azimuth_angle, elevation_angle);
@@ -2553,9 +2553,9 @@ void FUN_L13_002b9df8(struct Moby *moby, char *obj, float azimuth_angle, float e
     if (fast_dec_timer(obj + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
         allocate_voice_for_target_entry(3, 0, (int)moby);
         fast_vec_normalize(muzzle_offset, aim_vector, 2.2f);
-        moby_point_position(moby, 3 + (obj[0x61] & 1), b);
-        fast_vec_add(b, b, muzzle_offset);
-        FUN_L11_00308848(moby, aim_vector, b, 200.0f, -1.0f);
+        moby_point_position(moby, 3 + (obj[0x61] & 1), projectile_spawn_position);
+        fast_vec_add(projectile_spawn_position, projectile_spawn_position, muzzle_offset);
+        FUN_L11_00308848(moby, aim_vector, projectile_spawn_position, 200.0f, -1.0f);
         *(int *)(obj + 0x80) = scale_game_frames(4);
         obj[0x61] ^= 1;
     }
