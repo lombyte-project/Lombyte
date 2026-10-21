@@ -85,20 +85,20 @@ extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 
-void FUN_L08_002e4db8(struct Moby *moby, float *v) {
+void FUN_L08_002e4db8(struct Moby *moby, float *direction_vector) {
     float direction_basis_matrix[16];
     float reconstructed_rotation_matrix[16];
-    float r[4];
+    float first_basis_vector[4];
     float second_basis_vector[4];
     char *pvars_cursor = (char *)moby->pvars;
-    r[1] = v[2];
-    r[2] = v[0];
-    r[0] = -v[1];
-    fast_vec_cross(r, v, r);
-    fast_vec_cross(second_basis_vector, r, v);
-    qcopy(direction_basis_matrix, r);
+    first_basis_vector[1] = direction_vector[2];
+    first_basis_vector[2] = direction_vector[0];
+    first_basis_vector[0] = -direction_vector[1];
+    fast_vec_cross(first_basis_vector, direction_vector, first_basis_vector);
+    fast_vec_cross(second_basis_vector, first_basis_vector, direction_vector);
+    qcopy(direction_basis_matrix, first_basis_vector);
     qcopy(direction_basis_matrix + 4, second_basis_vector);
-    qcopy(direction_basis_matrix + 8, v);
+    qcopy(direction_basis_matrix + 8, direction_vector);
     clear_u64_value(direction_basis_matrix + 12);
     pvars_cursor += 0x10;
     direction_basis_matrix[15] = 1.0f;
