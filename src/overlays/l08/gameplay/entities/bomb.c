@@ -2129,10 +2129,10 @@ void FUN_L08_002dc180(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *pl = (char *)&hero.motion.pos;
     Route_2dd4f8 *route = D_L08_001B0FB0_r[*(int *)(data + 0x88)];
-    Route_2dd4f8 *b = D_L08_001B0FB0_r[*(int *)(data + 0x80)];
+    Route_2dd4f8 *configured_path = D_L08_001B0FB0_r[*(int *)(data + 0x80)];
     Route_2dd4f8 *alternate_path = D_L08_001B0FB0_r[*(int *)(data + 0x84)];
     float best_candidate_distance = distance_xyz(pl, (char *)route + (route->count << 4));
-    float configured_path_start_distance = distance_xyz(pl, b->e[0]);
+    float configured_path_start_distance = distance_xyz(pl, configured_path->e[0]);
     float alternate_path_start_distance = distance_xyz(pl, alternate_path->e[0]);
     int sel = 0;
     float y;
@@ -2153,7 +2153,7 @@ void FUN_L08_002dc180(struct Moby *moby) {
     case SHUTTLE_SELECT_ROUTE_END: {
         int route_point_count = route->count;
         unsigned char *visited_table;
-        int f94, f98;
+        int configured_path_entry_is_ff, alternate_path_entry_is_ff;
         int fr;
         qcopy(data + 0x60, (char *)((route_point_count << 4) + (int)route));
         y = fast_arc_tan(*(float *)((char *)route + ((route_point_count - 2) << 4) + 0x10) - *(float *)(data + 0x60),
@@ -2163,12 +2163,12 @@ void FUN_L08_002dc180(struct Moby *moby) {
         *(float *)(data + 0x78) = y;
         *(float *)(data + 0xE4) = 1.0f;
         *(int *)(data + 0x104) = 0;
-        f94 = visited_table[*(int *)(data + 0x94) + fr] == 0xFF;
-        f98 = visited_table[*(int *)(data + 0x98) + fr] == 0xFF;
-        if (f98) {
+        configured_path_entry_is_ff = visited_table[*(int *)(data + 0x94) + fr] == 0xFF;
+        alternate_path_entry_is_ff = visited_table[*(int *)(data + 0x98) + fr] == 0xFF;
+        if (alternate_path_entry_is_ff) {
             *(Route_2dd4f8 **)(data + 0x120) = alternate_path;
-        } else if (f94) {
-            *(Route_2dd4f8 **)(data + 0x120) = b;
+        } else if (configured_path_entry_is_ff) {
+            *(Route_2dd4f8 **)(data + 0x120) = configured_path;
         } else if (32.0f < vector_distance(&moby->pos, pl) || D_L08_0015F5CC < 5) {
             moby->visible = 0;
             moby->flags |= 1;
@@ -2178,9 +2178,9 @@ void FUN_L08_002dc180(struct Moby *moby) {
         return;
     }
     case SHUTTLE_SELECT_CONFIGURED_PATH_START:
-        qcopy(data + 0x60, b->e[0]);
-        y = fast_arc_tan(b->e[1][0] - *(float *)(data + 0x60), b->e[1][1] - *(float *)(data + 0x64));
-        *(Route_2dd4f8 **)(data + 0x120) = b;
+        qcopy(data + 0x60, configured_path->e[0]);
+        y = fast_arc_tan(configured_path->e[1][0] - *(float *)(data + 0x60), configured_path->e[1][1] - *(float *)(data + 0x64));
+        *(Route_2dd4f8 **)(data + 0x120) = configured_path;
         break;
     case SHUTTLE_SELECT_ROUTE_START:
         qcopy(data + 0x60, route->e[0]);
