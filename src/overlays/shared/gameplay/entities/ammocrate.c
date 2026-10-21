@@ -296,7 +296,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void build_spherical_offset_u(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-unsigned char *FUN_L13_002e6a58(char *src, char *spawn_position, char *target, char *initial_rotation, int lifetime_frames,
+unsigned char *FUN_L13_002e6a58(char *firing_moby, char *spawn_position, char *target, char *initial_rotation, int lifetime_frames,
                                 float scale) {
     unsigned char *moby = func_0020D348_m(0x127);
     if (moby != 0) {
@@ -305,7 +305,7 @@ unsigned char *FUN_L13_002e6a58(char *src, char *spawn_position, char *target, c
         *(short *)(moby + 0x32) = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(char **)(data + 0x20) = src;
+        *(char **)(data + 0x20) = firing_moby;
         *(char **)(data + 0x24) = target;
         qcopy(moby + 0x10, spawn_position);
         qcopy(moby + 0x40, initial_rotation);
@@ -331,7 +331,7 @@ unsigned char *FUN_L13_002e6a58(char *src, char *spawn_position, char *target, c
         }
         *(float *)(moby + 0x2C) =
             *(float *)(*(char **)(moby + 0x24) + 0x24) *
-            (*(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24));
+            (*(float *)(firing_moby + 0x2C) / *(float *)(*(char **)(firing_moby + 0x24) + 0x24));
         FUN_L00_00250df8(moby);
         FUN_L00_0026daa0((char *)moby, 0x60808080, lifetime_frames, 0, 500000.0f);
     }
