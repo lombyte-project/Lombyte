@@ -14,19 +14,19 @@ extern char *D_L03_001D1680[] __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 int FUN_L03_0024e830(char *a, char *o, float best);
 int FUN_L03_0024e830(char *source_moby, char *target_output, float best) {
-    struct Hero *g = &hero_lui;
+    struct Hero *hero = &hero_lui;
     char *selected_moby;
     char *candidate_moby;
-    int res;
+    int target_selection_status;
     int i;
     int j;
     float candidate_comparison_value;
 
-    selected_moby = ((char *)g->moby);
-    res = 0;
-    if (g->state.control_mode == 0x18 || g->state.current == 0x72) {
+    selected_moby = ((char *)hero->moby);
+    target_selection_status = 0;
+    if (hero->state.control_mode == 0x18 || hero->state.current == 0x72) {
         selected_moby = 0;
-        res = 2;
+        target_selection_status = 2;
     }
     for (i = 1; i <= D_L03_001B0930[0]; i++) {
         candidate_moby = D_L03_0015FFD8 + (D_L03_001B0930[i] << 8);
@@ -44,7 +44,7 @@ int FUN_L03_0024e830(char *source_moby, char *target_output, float best) {
         if (candidate_comparison_value < best) {
             selected_moby = candidate_moby;
             best = candidate_comparison_value;
-            res = 1;
+            target_selection_status = 1;
         }
     }
     for (j = 0; j < 20; j++) {
@@ -63,17 +63,17 @@ int FUN_L03_0024e830(char *source_moby, char *target_output, float best) {
         if (candidate_comparison_value < best) {
             selected_moby = candidate_moby;
             best = candidate_comparison_value;
-            res = 1;
+            target_selection_status = 1;
         }
     }
     if (selected_moby != 0) {
         *(char **)(target_output + 0x40) = selected_moby;
         qcopy(target_output, selected_moby + 0x10);
         qcopy(target_output + 0x10, selected_moby + 0x40);
-        g = &hero_lui;
-        if (selected_moby == ((char *)g->moby)) {
-            qcopy(target_output + 0x20, &g->motion.unkC0);
-            qcopy(target_output + 0x30, &g->motion.unkD0);
+        hero = &hero_lui;
+        if (selected_moby == ((char *)hero->moby)) {
+            qcopy(target_output + 0x20, &hero->motion.unkC0);
+            qcopy(target_output + 0x30, &hero->motion.unkD0);
         } else {
             qcopy(target_output + 0x30, target_output);
             *(float *)(target_output + 0x38) += 0.6f;
@@ -86,6 +86,6 @@ int FUN_L03_0024e830(char *source_moby, char *target_output, float best) {
         qzero(target_output + 0x30);
         qzero(target_output + 0x20);
     }
-    *(int *)(target_output + 0x44) = res;
-    return res;
+    *(int *)(target_output + 0x44) = target_selection_status;
+    return target_selection_status;
 }
