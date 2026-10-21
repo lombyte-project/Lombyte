@@ -924,11 +924,11 @@ void gold_weapon_case_update(struct Moby *moby) {
         GOLD_WEAPON_CASE_IDLE = 3,
         GOLD_WEAPON_CASE_WAIT_FOR_CUTSCENE_END = 4
     };
-    SaleVars_2e1ac0 *v = (SaleVars_2e1ac0 *)moby->pvars;
+    SaleVars_2e1ac0 *sale_vars = (SaleVars_2e1ac0 *)moby->pvars;
     s32 item;
     ItemPrice_2e1ac0 *price;
 
-    if (v != 0 && v->slot != -1 && ((v->slot ^ 1) & 1) && alternate_animation_sequence_gp == 0) {
+    if (sale_vars != 0 && sale_vars->slot != -1 && ((sale_vars->slot ^ 1) & 1) && alternate_animation_sequence_gp == 0) {
         FUN_0020c828_2e1ac0(moby);
         return;
     }
@@ -936,20 +936,20 @@ void gold_weapon_case_update(struct Moby *moby) {
     case GOLD_WEAPON_CASE_INITIALIZE:
         if (moby->oclass != 0x130) {
             moby->state = 2;
-        } else if (D_0013E520_2e1ac0[D_L01_001DEB10[v->slot]] != 0 ||
-                   FUN_L00_002668a0_2e1ac0(moby, v) == -1) {
+        } else if (D_0013E520_2e1ac0[D_L01_001DEB10[sale_vars->slot]] != 0 ||
+                   FUN_L00_002668a0_2e1ac0(moby, sale_vars) == -1) {
             moby->state = 3;
         } else {
             moby->state = 1;
         }
         break;
     case GOLD_WEAPON_CASE_PROCESS_SALE:
-        v->radius = 1.9f;
-        FUN_L00_00266448_2e1ac0(moby, v);
-        if (v->result == 2) {
-            D_0013E520_2e1ac0[D_L01_001DEB10[v->slot]] = 1;
+        sale_vars->radius = 1.9f;
+        FUN_L00_00266448_2e1ac0(moby, sale_vars);
+        if (sale_vars->result == 2) {
+            D_0013E520_2e1ac0[D_L01_001DEB10[sale_vars->slot]] = 1;
             moby->state = 4;
-            item = D_L01_001DEB10[v->slot];
+            item = D_L01_001DEB10[sale_vars->slot];
             price = &D_L01_001C4530[item];
             current_bolt_count -= price->bolts;
             FUN_L01_002aea70_2e1ac0(moby, item, price);
@@ -964,7 +964,7 @@ void gold_weapon_case_update(struct Moby *moby) {
         }
         break;
     case GOLD_WEAPON_CASE_REMOVE_WHEN_PURCHASED:
-        if (D_0013E520_2e1ac0[D_L01_001DEB10[v->slot]] != 0) {
+        if (D_0013E520_2e1ac0[D_L01_001DEB10[sale_vars->slot]] != 0) {
             FUN_0020c828_2e1ac0(moby);
         }
         break;
