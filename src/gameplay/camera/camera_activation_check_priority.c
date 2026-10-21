@@ -28,7 +28,7 @@ extern CamPrioHook D_001E8C00[];
    g < 0 exit so its `$v0 = 1` is not hoisted above the load. */
 int camera_activation_check_priority(void *cur, void *other) __asm__("FUN_001ec210");
 
-int camera_activation_check_priority(void *cur, void *other) {
+int camera_activation_check_priority(void *candidate_camera, void *other) {
     enum {
         CAMERA_ACTIVATION_BY_PRIORITY = 0,
         CAMERA_ACTIVATION_HANDOFF_GATED_PRIORITY = 1,
@@ -39,7 +39,7 @@ int camera_activation_check_priority(void *cur, void *other) {
     enum {
         CAMERA_COMPARE_ACCEPT = 1
     };
-    char *candidate_camera_bytes = (char *)cur;
+    char *candidate_camera_bytes = (char *)candidate_camera;
     char *current_camera_bytes = (char *)other;
     unsigned char *state = (unsigned char *)(candidate_camera_bytes + 0x74);
 
@@ -49,7 +49,7 @@ int camera_activation_check_priority(void *cur, void *other) {
     {
         int (*fn)(void *, void *) = D_001E8C00[*(short *)(candidate_camera_bytes + 0x8C)].fn_04;
         if (fn != 0) {
-            switch (fn(cur, other)) {
+            switch (fn(candidate_camera, other)) {
             case -1:
                 return 0;
             case CAMERA_COMPARE_ACCEPT:
