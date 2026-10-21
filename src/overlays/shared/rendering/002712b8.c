@@ -1867,12 +1867,12 @@ extern int FUN_L00_00259430_002756f0(void *, int) __asm__("FUN_L00_00259430");
 
 void FUN_L00_002756f0(unsigned char *particle) {
     unsigned char *particle_data = particle + 0x20;
-    float l, horizontal_velocity_scale, x;
+    float horizontal_speed, horizontal_velocity_scale, x;
     particle[8] += particle_data[0x12];
     FUN_001f9a10_002756f0(particle + 0x10, particle + 0x10, particle_data);
     *(float *)(particle_data + 8) -= frame_scale_sq * 0.003f;
-    l = vector_length_xy(particle_data);
-    horizontal_velocity_scale = ((l * 0.97f - 1.0f) * frame_scale + 1.0f) / l;
+    horizontal_speed = vector_length_xy(particle_data);
+    horizontal_velocity_scale = ((horizontal_speed * 0.97f - 1.0f) * frame_scale + 1.0f) / horizontal_speed;
     *(float *)(particle + 0x20) *= horizontal_velocity_scale;
     *(float *)(particle_data + 4) *= horizontal_velocity_scale;
     if (!fast_dec_timer(particle + 0xA)) {
