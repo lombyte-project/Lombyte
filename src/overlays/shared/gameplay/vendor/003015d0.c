@@ -66,7 +66,7 @@ void FUN_L14_003015d0(unsigned char *moby) {
     D1224 *beam_vars = *(D1224 **)(moby + 0x78);
     float v[4] __attribute__((aligned(16)));
     int beam_state;
-    int arg;
+    int phase_duration_frames;
     if (moby[0x20] != 0) {
         qcopy(v, moby + 0x10);
         v[3] = beam_vars->f624;
@@ -106,11 +106,11 @@ void FUN_L14_003015d0(unsigned char *moby) {
         if (fast_dec_timer_s16(&beam_vars->s10) != 0) {
             if (beam_vars->s6 != 0) {
                 moby[0x20] = 2;
-                arg = beam_vars->s6;
+                phase_duration_frames = beam_vars->s6;
             } else {
-                arg = beam_vars->s4;
+                phase_duration_frames = beam_vars->s4;
             }
-            beam_vars->s10 = scale_game_frames(arg);
+            beam_vars->s10 = scale_game_frames(phase_duration_frames);
         } else if (beam_vars->s12 == 0) {
             FUN_L14_003017f8((char *)moby);
         }
