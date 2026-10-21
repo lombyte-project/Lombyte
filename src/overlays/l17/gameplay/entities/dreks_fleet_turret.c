@@ -424,8 +424,8 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
                 turret_moby->state = 2;
             }
         } else if (g->state.current == 0x32) {
-            char *v = ((char *)g->ship_moby);
-            if (v != 0 && *(short *)(v + 0xA6) == 0x563) {
+            char *hero_ship_moby = ((char *)g->ship_moby);
+            if (hero_ship_moby != 0 && *(short *)(hero_ship_moby + 0xA6) == 0x563) {
                 if (vector_distance(&turret_moby->pos, &g->motion.pos) < 254.0f) {
                     turret_moby->state = 3;
                 }
