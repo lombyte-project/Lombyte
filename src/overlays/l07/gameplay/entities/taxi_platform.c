@@ -2258,9 +2258,9 @@ void FUN_L07_0030e458(struct Moby *moby) {
     add_vector_xyz(&moby->pos, &moby->pos, moby_data);
     {
         float g = frame_time_sq * 9.8f;
-        float r = frame_time * 6.2831855f;
+        float rotation_z_step = frame_time * 6.2831855f;
         *(float *)(moby_data + 8) -= g;
-        moby->rot.z += r;
+        moby->rot.z += rotation_z_step;
     }
     if (moby->scale < moby->pclass->scale * 2.8f) {
         moby->scale *= 1.2f;
