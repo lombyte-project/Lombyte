@@ -672,8 +672,8 @@ void FUN_L17_002d77f0(char *moby) {
     OvlQuad moby_to_hero_vector[1];
     OvlQuad sp10[1];
     struct Blk blk;
-    OvlQuad mat1[3];
-    OvlQuad mat2[4];
+    OvlQuad normalized_moby_rotation_basis[3];
+    OvlQuad moby_rotation_matrix[4];
     OvlQuad spC0[1];
     OvlQuad spD0[1];
     OvlQuad spE0[1];
@@ -682,7 +682,7 @@ void FUN_L17_002d77f0(char *moby) {
     int j;
     int k;
     float *ring_vars;
-    float len;
+    float particle_direction_length;
     float base_elevation_angle;
     float elevation_angle_offset;
     float f20;
@@ -719,9 +719,9 @@ void FUN_L17_002d77f0(char *moby) {
             blk.fC = 5627.9248046875f;
             blk.c19 = 1;
             blk.h1A = *(unsigned short *)(moby + 0xA6);
-            vu_euler_rotation_basis(mat1, moby + 0x40);
-            normalize_vector_triplet(mat1);
-            copy_matrix_rotation(mat2, mat1);
+            vu_euler_rotation_basis(normalized_moby_rotation_basis, moby + 0x40);
+            normalize_vector_triplet(normalized_moby_rotation_basis);
+            copy_matrix_rotation(moby_rotation_matrix, normalized_moby_rotation_basis);
             i = 0;
             do {
                 j = 0;
@@ -736,7 +736,7 @@ void FUN_L17_002d77f0(char *moby) {
                             fast_add_rotations(base_elevation_angle,
                                                wrap_angle(convert_integer_to_float(i) * 2.0943952f)),
                             elevation_angle_offset));
-                    transform_vector(spC0, spC0, mat2);
+                    transform_vector(spC0, spC0, moby_rotation_matrix);
                     FUN_L00_001ff290(spD0, spC0, (moby + 0x10));
                     if (FUN_001f9b48((moby + 0x10), &hero.motion.pos) < 30.0f) {
                         collision_line((moby + 0x10), spC0, 9, moby, &blk);
@@ -759,7 +759,7 @@ void FUN_L17_002d77f0(char *moby) {
                                 subtract_vector_xyz(sp100, spC0, (moby + 0x10));
                                 spF0[0] = sp100[0];
                                 scale_vector_xyz(spF0, spF0, f20);
-                                len = vector_length_xyz(spF0);
+                                particle_direction_length = vector_length_xyz(spF0);
                                 if (f20 < 0.0f)
                                     spE0[0] = spC0[0];
                                 else
@@ -771,7 +771,7 @@ void FUN_L17_002d77f0(char *moby) {
                                 f20 *= 10.0f;
                                 normalize_vector_xyz(
                                     spF0, spF0,
-                                    random_float_between(f20, len / convert_integer_to_float(particle_lifetime * 4)));
+                                    random_float_between(f20, particle_direction_length / convert_integer_to_float(particle_lifetime * 4)));
                                 FUN_L00_002730e0((float *)spE0, (char *)spF0,
                                                  *(int *)&D_L17_00161B94, particle_lifetime & 0xFF,
                                                  random_integer_below(0xFF) & 0xFF, 0,
