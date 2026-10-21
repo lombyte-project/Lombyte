@@ -565,7 +565,7 @@ extern void func_L00_0025D5B0_2eb140(void *, void *, int, int, int,
 int FUN_L06_002e9d10(void *m_, void *pos) {
     char *moby = (char *)m_;
     char *moby_data = *(char **)(moby + 0x78);
-    float doubled_frame_time, g;
+    float doubled_frame_time, scaled_frame_time_squared;
     if (((unsigned char *)moby)[0x20] == 0xF) {
         qcopy(moby + 0x10, pos);
         *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
@@ -574,9 +574,9 @@ int FUN_L06_002e9d10(void *m_, void *pos) {
         clear_u64_value(moby + 0x40);
         *(float *)(moby + 0x48) = random_angle_radians();
         vu_euler_rotation_basis(moby + 0xC0, moby + 0x40);
-        g = frame_time_sq * 20.0f;
+        scaled_frame_time_squared = frame_time_sq * 20.0f;
         doubled_frame_time = frame_time + frame_time;
-        *(float *)(moby_data + 0x130) = g;
+        *(float *)(moby_data + 0x130) = scaled_frame_time_squared;
         *(int *)(moby_data + 0x134) = 0;
         *(float *)(moby_data + 0x138) = doubled_frame_time;
         *(float *)(moby_data + 0x13C) = doubled_frame_time;
