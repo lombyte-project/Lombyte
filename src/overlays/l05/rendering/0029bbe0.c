@@ -9,11 +9,11 @@ extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 unsigned char *D_L05_001B25C0 __attribute__((section(".data"))) = 0;
 
-unsigned char *FUN_L05_0029bbe0(float unscaled_particle_scalar, void *pos, void *vel, int life, int size, int color) {
+unsigned char *FUN_L05_0029bbe0(float unscaled_particle_scalar, void *initial_position_source, void *initial_velocity_source, int life, int size, int color) {
     unsigned char *allocated_object = FUN_L00_002678b8(0x30);
     if (allocated_object != 0) {
         unsigned char *velocity_block;
-        qcopy(allocated_object + 0x10, pos);
+        qcopy(allocated_object + 0x10, initial_position_source);
         velocity_block = allocated_object + 0x20;
         *(int *)(allocated_object + 4) = color & 0xffffff;
         allocated_object[9] = truncate_float_to_s32(2.0f) + 0x10;
@@ -22,7 +22,7 @@ unsigned char *FUN_L05_0029bbe0(float unscaled_particle_scalar, void *pos, void 
         allocated_object[2] = *D_L05_001B25C0;
         *(float *)(allocated_object + 0xc) = unscaled_particle_scalar * 210000.0f;
         allocated_object[8] = random_integer_below(0x100);
-        qcopy(velocity_block, vel);
+        qcopy(velocity_block, initial_velocity_source);
         *(float *)(velocity_block + 0x10) = 2.0f / convert_integer_to_float(life);
         *(short *)(allocated_object + 0xa) = life;
         *(volatile int *)(velocity_block + 0x18) = color;
