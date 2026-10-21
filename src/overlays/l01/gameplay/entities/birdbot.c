@@ -3711,62 +3711,62 @@ void piston_platform_update(LiftMoby *piston_platform) {
         PISTON_PLATFORM_MODE_WAIT_BEFORE_ADD_TRAVEL = 1,
         PISTON_PLATFORM_MODE_MOVING = 2
     };
-    LiftVars *v;
+    LiftVars *piston_platform_vars;
     u128 old;
     u128 delta;
     u128 *dp;
 
-    v = piston_platform->pvars;
+    piston_platform_vars = piston_platform->pvars;
     qcopy(&old, &piston_platform->pos);
-    fast_dec_timer_s16(&v->timer);
+    fast_dec_timer_s16(&piston_platform_vars->timer);
     if (piston_platform->state == 0) {
-        v->x28 = 4;
-        v->x3e = 0xD;
-        v->x20 = 0;
-        v->x24 = 0;
-        v->home_z = ((f32 *)&piston_platform->pos)[2];
-        piston_platform->mode = v->home_mode;
-        v->timer = scale_game_frames(0x78);
+        piston_platform_vars->x28 = 4;
+        piston_platform_vars->x3e = 0xD;
+        piston_platform_vars->x20 = 0;
+        piston_platform_vars->x24 = 0;
+        piston_platform_vars->home_z = ((f32 *)&piston_platform->pos)[2];
+        piston_platform->mode = piston_platform_vars->home_mode;
+        piston_platform_vars->timer = scale_game_frames(0x78);
         piston_platform->state = 1;
         piston_platform->b30 = 0xFF;
         piston_platform->h32 = 0xFF;
-        v->xb4 = -1;
+        piston_platform_vars->xb4 = -1;
     }
     switch (piston_platform->mode) {
     case PISTON_PLATFORM_MODE_WAIT_BEFORE_SUBTRACT_TRAVEL:
-        if (v->timer == 0) {
+        if (piston_platform_vars->timer == 0) {
             piston_platform->mode = 2;
-            v->speed =
-                v->travel / convert_integer_to_float(scale_game_frames(truncate_float_to_s32_u(v->period * 60.0f)));
-            v->timer = scale_game_frames(truncate_float_to_s32_u(v->period * 60.0f));
+            piston_platform_vars->speed =
+                piston_platform_vars->travel / convert_integer_to_float(scale_game_frames(truncate_float_to_s32_u(piston_platform_vars->period * 60.0f)));
+            piston_platform_vars->timer = scale_game_frames(truncate_float_to_s32_u(piston_platform_vars->period * 60.0f));
             allocate_voice_for_target_entry(0, 0, piston_platform);
         }
         break;
     case PISTON_PLATFORM_MODE_WAIT_BEFORE_ADD_TRAVEL:
-        if (v->timer == 0) {
+        if (piston_platform_vars->timer == 0) {
             piston_platform->mode = 2;
-            v->speed = -(v->travel /
-                         convert_integer_to_float(scale_game_frames(truncate_float_to_s32_u(v->period * 60.0f))));
-            v->timer = scale_game_frames(truncate_float_to_s32_u(v->period * 60.0f));
+            piston_platform_vars->speed = -(piston_platform_vars->travel /
+                         convert_integer_to_float(scale_game_frames(truncate_float_to_s32_u(piston_platform_vars->period * 60.0f))));
+            piston_platform_vars->timer = scale_game_frames(truncate_float_to_s32_u(piston_platform_vars->period * 60.0f));
             allocate_voice_for_target_entry(1, 0, piston_platform);
         }
         break;
     case PISTON_PLATFORM_MODE_MOVING:
-        ((f32 *)&piston_platform->pos)[2] -= v->speed;
-        if (v->timer == 0) {
-            if (v->speed < 0.0f) {
+        ((f32 *)&piston_platform->pos)[2] -= piston_platform_vars->speed;
+        if (piston_platform_vars->timer == 0) {
+            if (piston_platform_vars->speed < 0.0f) {
                 piston_platform->mode = 0;
             } else {
                 piston_platform->mode = 1;
             }
-            if (piston_platform->mode == v->home_mode) {
-                ((f32 *)&piston_platform->pos)[2] = v->home_z;
+            if (piston_platform->mode == piston_platform_vars->home_mode) {
+                ((f32 *)&piston_platform->pos)[2] = piston_platform_vars->home_z;
             }
-            v->timer = scale_game_frames(0x78);
+            piston_platform_vars->timer = scale_game_frames(0x78);
         }
         break;
     }
     dp = &delta;
     fast_vec_sub(dp, &piston_platform->pos, &old);
-    update_entity_matrix(v->x60, dp, piston_platform->x40, piston_platform->x40);
+    update_entity_matrix(piston_platform_vars->x60, dp, piston_platform->x40, piston_platform->x40);
 }
