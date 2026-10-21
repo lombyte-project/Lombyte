@@ -1943,7 +1943,7 @@ char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int remaining_split_co
     char *moby = func_0020D348_m(0x584);
     if (moby != 0) {
         char *moby_data;
-        float r;
+        float spin_increment;
         ((unsigned char *)moby)[0x30] = 0xFF;
         moby_data = *(char **)(moby + 0x78);
         *(unsigned short *)(moby + 0x32) = *(unsigned short *)(owner + 0x32);
@@ -1959,28 +1959,28 @@ char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int remaining_split_co
         *(short *)(moby_data + 0x4C) = scale_game_frames(0x1E);
         *(short *)(moby_data + 0x4E) = remaining_split_count;
         *(int *)(moby + 0x94) = 0;
-        r = random_float_between_alt(-30.0f, 30.0f) * DEG_TO_RAD * frame_time;
+        spin_increment = random_float_between_alt(-30.0f, 30.0f) * DEG_TO_RAD * frame_time;
         switch (rand() % 3) {
         case SPIN_AXIS_X:
-            *(float *)(moby_data + 0x30) = r;
+            *(float *)(moby_data + 0x30) = spin_increment;
             break;
         case SPIN_AXIS_Y:
-            *(float *)(moby_data + 0x34) = r;
+            *(float *)(moby_data + 0x34) = spin_increment;
             break;
         case SPIN_AXIS_Z:
-            *(float *)(moby_data + 0x38) = r;
+            *(float *)(moby_data + 0x38) = spin_increment;
             break;
         }
-        r = random_float_between_alt(-180.0f, 180.0f) * DEG_TO_RAD * frame_time;
+        spin_increment = random_float_between_alt(-180.0f, 180.0f) * DEG_TO_RAD * frame_time;
         switch (rand() % 3) {
         case SPIN_AXIS_X:
-            *(float *)(moby_data + 0x30) = r;
+            *(float *)(moby_data + 0x30) = spin_increment;
             break;
         case SPIN_AXIS_Y:
-            *(float *)(moby_data + 0x34) = r;
+            *(float *)(moby_data + 0x34) = spin_increment;
             break;
         case SPIN_AXIS_Z:
-            *(float *)(moby_data + 0x38) = r;
+            *(float *)(moby_data + 0x38) = spin_increment;
             break;
         }
         *(float *)(moby + 0x40) = random_angle_radians();
