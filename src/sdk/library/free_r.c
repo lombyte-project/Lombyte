@@ -96,11 +96,11 @@ extern u64 D_0012FB90[]; /* trim_threshold */
         }                                                                                          \
     }
 
-void _free_r(struct _reent *ptr, void *mem) {
+void _free_r(struct _reent *reent_context, void *mem) {
     struct malloc_chunk *free_chunk;
     u32 hd;
     u32 sz;
-    s32 idx;
+    s32 free_bin_index;
     struct malloc_chunk *next;
     u32 nextsz;
     u32 prevsz;
@@ -111,7 +111,7 @@ void _free_r(struct _reent *ptr, void *mem) {
     if (mem == 0)
         return;
 
-    noop_core_utility(ptr);
+    noop_core_utility(reent_context);
 
     free_chunk = mem2chunk(mem);
     hd = free_chunk->size;
@@ -133,8 +133,8 @@ void _free_r(struct _reent *ptr, void *mem) {
         set_head(free_chunk, sz | PREV_INUSE);
         top = free_chunk;
         if ((unsigned long)(sz) >= (unsigned long)trim_threshold)
-            _malloc_trim_r(ptr, top_pad);
-        noop_core_utility_secondary(ptr);
+            _malloc_trim_r(reent_context, top_pad);
+        noop_core_utility_secondary(reent_context);
         return;
     }
 
@@ -166,7 +166,7 @@ void _free_r(struct _reent *ptr, void *mem) {
     set_head(free_chunk, sz | PREV_INUSE);
     set_foot(free_chunk, sz);
     if (!islr)
-        frontlink(free_chunk, sz, idx, bck, fwd);
+        frontlink(free_chunk, sz, free_bin_index, bck, fwd);
 
-    noop_core_utility_secondary(ptr);
+    noop_core_utility_secondary(reent_context);
 }
