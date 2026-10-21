@@ -1806,7 +1806,7 @@ extern s32 FUN_0022da68(s32, s32, struct Moby *);
 /* Floor plate: lit and opening its door while a moby (other than class 0x3EF) rests on it, dark and closing it otherwise. */
 void button_update(struct Moby *m) __asm__("FUN_L10_002d92b8");
 void button_update(struct Moby *moby) {
-    FloorPlateVars *v = (FloorPlateVars *)moby->pvars;
+    FloorPlateVars *plate_vars = (FloorPlateVars *)moby->pvars;
     s32 pressed = 0;
     struct Moby *door;
     struct Moby *other;
@@ -1814,11 +1814,11 @@ void button_update(struct Moby *moby) {
     f32 ground_height;
     s32 nearby_moby_count;
 
-    if (v->door == -1) {
+    if (plate_vars->door == -1) {
         FUN_L00_002502f0_u(moby, 8, 8, 8);
         return;
     }
-    door = &D_L10_0015FFD8[v->door];
+    door = &D_L10_0015FFD8[plate_vars->door];
     nearby_moby_count = collect_mobies_in_sphere(&moby->pos, 1.0f, 0, moby, NULL);
     if (nearby_moby_count != 0) {
         for (i = 0; i < nearby_moby_count; i++) {
@@ -1831,32 +1831,32 @@ void button_update(struct Moby *moby) {
             }
         }
     }
-    FUN_001f9740(&v->sound_timer);
+    FUN_001f9740(&plate_vars->sound_timer);
     if (D_0014C050[current_level_index][moby->mission] == 0xFF) {
         pressed = 1;
     }
-    if (pressed || v->held != 0) {
-        if (pressed && v->link != -1) {
-            ((FloorPlateVars *)D_L10_0015FFD8[v->link].pvars)->held = 1;
+    if (pressed || plate_vars->held != 0) {
+        if (pressed && plate_vars->link != -1) {
+            ((FloorPlateVars *)D_L10_0015FFD8[plate_vars->link].pvars)->held = 1;
         } else {
-            v->held = 0;
+            plate_vars->held = 0;
         }
         if (door->state == 1 || door->state == 2) {
             door->state = 3;
-            if (v->sound_timer == 0) {
+            if (plate_vars->sound_timer == 0) {
                 FUN_0022da68(0, 0, door);
                 FUN_0022da68(0, 0, moby);
-                v->sound_timer = scale_game_frames(30);
+                plate_vars->sound_timer = scale_game_frames(30);
             }
         }
         FUN_L00_002502f0_u(moby, 0x7F, 0x7F, 0x7F);
     } else {
         if (door->state == 4) {
             door->state = 1;
-            if (v->sound_timer == 0) {
+            if (plate_vars->sound_timer == 0) {
                 FUN_0022da68(1, 0, door);
                 FUN_0022da68(0, 0, moby);
-                v->sound_timer = scale_game_frames(30);
+                plate_vars->sound_timer = scale_game_frames(30);
             }
         }
         FUN_L00_002502f0_u(moby, 8, 8, 8);
