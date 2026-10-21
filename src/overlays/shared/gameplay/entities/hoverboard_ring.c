@@ -918,11 +918,11 @@ extern void FUN_L05_003296e0(Camera *);
 
 extern char *D_L05_00167204 __attribute__((section(".data")));
 void FUN_L05_0032a6e0(char *out) {
-    char *src = D_L05_00167204;
-    qcopy(out + 0x30, src + 0x30);
-    qcopy(out, src);
-    qcopy(out + 0x10, src + 0x10);
-    qcopy(out + 0x20, src + 0x20);
+    char *source_camera_transform = D_L05_00167204;
+    qcopy(out + 0x30, source_camera_transform + 0x30);
+    qcopy(out, source_camera_transform);
+    qcopy(out + 0x10, source_camera_transform + 0x10);
+    qcopy(out + 0x20, source_camera_transform + 0x20);
     extract_matrix_rotation_quaternion(out + 0x40, out);
     FUN_L05_003296e0((Camera *)out);
 }
