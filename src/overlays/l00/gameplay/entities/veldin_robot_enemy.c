@@ -831,7 +831,7 @@ void FUN_L00_002e3800(FlockMoby *moby) {
     void *src;
     FlockPart *part;
     s32 color;
-    s32 v;
+    s32 random_magnitude;
     s32 i;
     s32 phase;
     s32 idx;
@@ -863,8 +863,8 @@ void FUN_L00_002e3800(FlockMoby *moby) {
                 draw_trail(pos, pos, D_L00_0015F580, 120000.0f, 50000.0f);
                 for (i = 0; i < 10; i++) {
                     color = (random_int_between(0x40, 0x80) << 24) | 0x787878;
-                    v = random_int_between(0, 4);
-                    part = FUN_L00_0026d000(pos, random_integer_below(2) == 0 ? v : -v,
+                    random_magnitude = random_int_between(0, 4);
+                    part = FUN_L00_0026d000(pos, random_integer_below(2) == 0 ? random_magnitude : -random_magnitude,
                                             D_L00_0015F580, color, 0.75f, 1.0f, 1.03f, 120000.0f);
                     if (part != 0) {
                         part->unk3 = 0x44;
