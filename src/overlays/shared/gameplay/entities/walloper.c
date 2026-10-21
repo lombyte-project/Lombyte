@@ -2367,7 +2367,7 @@ extern int D_L00_001617B8 __attribute__((sda));
 void FUN_L00_002be890(void *mv) {
     char *moby_bytes = mv;
     Q_2be890 quad;
-    V_2be890 mat[4];
+    V_2be890 camera_facing_transform[4];
     V_2be890 scaled_corner;
     V_2be890 offset_vector;
     int c;
@@ -2390,15 +2390,15 @@ void FUN_L00_002be890(void *mv) {
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
     FUN_001f9bf8_2be890(&offset_vector, moby_bytes + 0xD0, D_L00_001617B4);
-    FUN_001f9a10_2be890(&mat[3], &D_L00_001DBF60_2be890, &offset_vector);
-    FUN_001f9a28_2be890(&offset_vector, &(*(V_2be890 *)g_debug_camera), &mat[3]);
-    FUN_001f9bf8_2be890(&mat[0], &offset_vector, 1.0f);
-    FUN_001f9ad8_2be890(&mat[1], &mat[0], &(*(V_2be890 *)D_0013F5E0));
-    FUN_001f9bf8_2be890(&mat[1], &mat[1], -1.0f);
-    FUN_001f9ad8_2be890(&mat[2], &mat[1], &mat[0]);
+    FUN_001f9a10_2be890(&camera_facing_transform[3], &D_L00_001DBF60_2be890, &offset_vector);
+    FUN_001f9a28_2be890(&offset_vector, &(*(V_2be890 *)g_debug_camera), &camera_facing_transform[3]);
+    FUN_001f9bf8_2be890(&camera_facing_transform[0], &offset_vector, 1.0f);
+    FUN_001f9ad8_2be890(&camera_facing_transform[1], &camera_facing_transform[0], &(*(V_2be890 *)D_0013F5E0));
+    FUN_001f9bf8_2be890(&camera_facing_transform[1], &camera_facing_transform[1], -1.0f);
+    FUN_001f9ad8_2be890(&camera_facing_transform[2], &camera_facing_transform[1], &camera_facing_transform[0]);
     for (i = 3; i >= 0; i--) {
         FUN_001f9a68_2be890(D_L00_001617AC, &scaled_corner, &D_L00_001DBF20[3 - i]);
-        FUN_001f9d20_2be890(&quad.corner[3 - i], &scaled_corner, &mat[0]);
+        FUN_001f9d20_2be890(&quad.corner[3 - i], &scaled_corner, &camera_facing_transform[0]);
     }
     FUN_001f7d30_2be890(&quad, 0, 0);
     quad.color[3] = -1;
@@ -2407,7 +2407,7 @@ void FUN_L00_002be890(void *mv) {
     quad.color[0] = -1;
     for (j = 3; j >= 0; j--) {
         FUN_001f9a68_2be890(D_L00_001617B0, &scaled_corner, &D_L00_001DBF20[3 - j]);
-        FUN_001f9d20_2be890(&quad.corner[3 - j], &scaled_corner, &mat[0]);
+        FUN_001f9d20_2be890(&quad.corner[3 - j], &scaled_corner, &camera_facing_transform[0]);
     }
     FUN_001f7d30_2be890(&quad, 0, 0);
 }
