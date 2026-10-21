@@ -1208,7 +1208,7 @@ extern s32 D_L01_0015F30C __attribute__((sda));
 /* While the camera is in mode 0x1D, counts the frames the class 0xAC moby spends outside every zone.
  * Entering a zone resets the count; past a random threshold FUN_L00_002b5b20 runs on that moby. */
 void FUN_L01_00302648(struct Moby *moby) {
-    ZoneVars_302648 *v = (ZoneVars_302648 *)moby->pvars;
+    ZoneVars_302648 *zone_vars = (ZoneVars_302648 *)moby->pvars;
     struct Moby *target_moby = 0;
     struct Moby *candidate_moby;
     s32 i;
@@ -1216,7 +1216,7 @@ void FUN_L01_00302648(struct Moby *moby) {
 
     moby->update_dist = 0xFF;
     if (D_001413D4_302648[0] != 0x1D) {
-        v->count = 0;
+        zone_vars->count = 0;
         return;
     }
     for (candidate_moby = D_L01_0015FFE4_302648; candidate_moby != 0; candidate_moby = candidate_moby->next) {
@@ -1226,28 +1226,28 @@ void FUN_L01_00302648(struct Moby *moby) {
         }
     }
     if (target_moby == 0 || target_moby->oclass != 0xAC) {
-        v->count = 0;
+        zone_vars->count = 0;
         return;
     }
-    v->count++;
+    zone_vars->count++;
     for (i = 0; i < 20; i++) {
-        if (v->zones[i].path != -1 && target_moby->pos.z > v->zones[i].zmin && target_moby->pos.z < v->zones[i].zmax) {
-            path = D_L01_001B0930_302648[v->zones[i].path];
+        if (zone_vars->zones[i].path != -1 && target_moby->pos.z > zone_vars->zones[i].zmin && target_moby->pos.z < zone_vars->zones[i].zmax) {
+            path = D_L01_001B0930_302648[zone_vars->zones[i].path];
             if (absolute_float_cf(&target_moby->pos, path + 4, path[0])) {
-                v->count = 0;
+                zone_vars->count = 0;
                 break;
             }
         }
-        if (FUN_00214720_302648(&target_moby->pos, v->zones[i].volume)) {
-            v->count = 0;
+        if (FUN_00214720_302648(&target_moby->pos, zone_vars->zones[i].volume)) {
+            zone_vars->count = 0;
             break;
         }
     }
-    if (v->count > 0) {
+    if (zone_vars->count > 0) {
         if (D_L01_0015F30C) {
             FUN_001f4600_302648(FUN_L01_00302438_302648, moby);
         }
-        if (scale_game_frames(90) < v->count) {
+        if (scale_game_frames(90) < zone_vars->count) {
             FUN_L00_002b5b20_302648(target_moby, target_moby->pvars);
         }
     }
