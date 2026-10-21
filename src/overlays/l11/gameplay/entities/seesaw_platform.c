@@ -989,7 +989,7 @@ void FUN_L11_0030f2a8(struct Moby *turning_moby) {
     int entry_state = turning_moby->state;
     float *private_data = (float *)turning_moby->pvars;
     float target_angle;
-    float r;
+    float turn_acceleration_step;
     switch (entry_state) {
     case LINKED_TURN_STATE_INITIALIZE:
         turning_moby->update_dist = 0xFF;
@@ -1010,8 +1010,8 @@ void FUN_L11_0030f2a8(struct Moby *turning_moby) {
         break;
     case LINKED_TURN_STATE_ROTATE_TO_TARGET:
         target_angle = FUN_001fa580_t(private_data[2], 1.0471976f);
-        r = frame_time_sq * 0.34906584f;
-        if (approach_angle(&turning_moby->rot.z, target_angle, private_data + 1, r, r, frame_time * 0.7853982f) == 0.0f) {
+        turn_acceleration_step = frame_time_sq * 0.34906584f;
+        if (approach_angle(&turning_moby->rot.z, target_angle, private_data + 1, turn_acceleration_step, turn_acceleration_step, frame_time * 0.7853982f) == 0.0f) {
             turning_moby->state = 3;
         }
         break;
