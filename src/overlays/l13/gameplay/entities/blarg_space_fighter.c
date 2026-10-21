@@ -3412,14 +3412,14 @@ void FUN_L13_002e9a48(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
 extern float FUN_001f9b48(void *, void *);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-void FUN_L13_002ea330(char *predicted_target_position, char *b, float projectile_speed) {
+void FUN_L13_002ea330(char *predicted_target_position, char *projectile_origin_position, float projectile_speed) {
     char *base = D_0013E533 + 0xE1D;
     char *vehicle_data = *(char **)(*(char **)(base + 0x15F0) + 0x78);
     float y =
         fast_add_rotations(*(float *)(*(char **)(base + 0x15F0) + 0x48), *(float *)(vehicle_data + 0x90));
     float x =
         fast_add_rotations(*(float *)(*(char **)(base + 0x15F0) + 0x44), *(float *)(vehicle_data + 0x94));
-    float dist = FUN_001f9b48(b, *(char **)(base + 0x15F0) + 0x10);
+    float dist = FUN_001f9b48(projectile_origin_position, *(char **)(base + 0x15F0) + 0x10);
     float k = *(float *)(vehicle_data + 0x64);
     build_spherical_offset(predicted_target_position, dist / (k + projectile_speed) * k, y, -x);
     fast_vec_add(predicted_target_position, predicted_target_position, *(char **)(base + 0x15F0) + 0x10);
