@@ -954,7 +954,7 @@ extern void vscl_273448(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void vadd_273448(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00273448(P_273448 *particle) {
     E_273448 *e;
-    f32 lim;
+    f32 alpha_reversal_threshold;
     f32 a[4] __attribute__((aligned(16)));
     f32 v[4] __attribute__((aligned(16)));
     if (particle == 0) {
@@ -987,12 +987,12 @@ void FUN_L00_00273448(P_273448 *particle) {
         f32 x;
         if (particle->unkC <= 159600.0f) {
             x = e->unk4;
-            lim = 0.3f;
+            alpha_reversal_threshold = 0.3f;
         } else {
             x = e->unk4;
-            lim = 0.15f;
+            alpha_reversal_threshold = 0.15f;
         }
-        if (!(lim < x)) {
+        if (!(alpha_reversal_threshold < x)) {
             if (x < 0.0f) {
             kill:
                 free_effect_particle(particle);
