@@ -2076,7 +2076,7 @@ void FUN_L13_002b89f8(char *radar_rotation, char *from, char *moby, int icon, lo
     float radar_rotation_matrix[16];
     float delta[4];
     float radar_offset[4];
-    float len;
+    float radar_distance;
     int x, y;
     IconEC5D0 *icon_definition;
 
@@ -2088,14 +2088,14 @@ void FUN_L13_002b89f8(char *radar_rotation, char *from, char *moby, int icon, lo
     delta[2] = 0.0f;
     transform_vector(radar_offset, delta, radar_rotation_matrix);
     scale_vector_xyz(radar_offset, radar_offset, 0.0714285746f);
-    len = vector_length_xyz(radar_offset);
+    radar_distance = vector_length_xyz(radar_offset);
     x = func_001FA898_r(radar_offset[0]);
     y = func_001FA898_r(-radar_offset[1]);
-    if (len < 46.0f) {
-        if (len > 38.0f) {
+    if (radar_distance < 46.0f) {
+        if (radar_distance > 38.0f) {
             float distance_weighted_alpha;
-            len = 46.0f - len;
-            distance_weighted_alpha = convert_integer_to_float(((unsigned long)color >> 24) & 0xFF) * len;
+            radar_distance = 46.0f - radar_distance;
+            distance_weighted_alpha = convert_integer_to_float(((unsigned long)color >> 24) & 0xFF) * radar_distance;
             color &= 0xFFFFFF;
             color = (func_001FA898_r(distance_weighted_alpha * 0.125f) << 24) | color;
         }
