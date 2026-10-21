@@ -277,12 +277,12 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 void FUN_L00_00271c88(char *particle) {
-    char *v = particle + 0x20;
-    particle[8] += v[0x1C];
-    fast_vec_add(particle + 0x10, particle + 0x10, v);
+    char *particle_data = particle + 0x20;
+    particle[8] += particle_data[0x1C];
+    fast_vec_add(particle + 0x10, particle + 0x10, particle_data);
     *(int *)(particle + 4) = FUN_001fa6e0(
-        *(int *)(v + 0x18), *(int *)(v + 0x14),
-        absolute_float(convert_integer_to_float(*(short *)(particle + 0xA)) * *(float *)(v + 0x10) - 1.0f));
+        *(int *)(particle_data + 0x18), *(int *)(particle_data + 0x14),
+        absolute_float(convert_integer_to_float(*(short *)(particle + 0xA)) * *(float *)(particle_data + 0x10) - 1.0f));
     if (fast_dec_timer_s16(particle + 0xA)) {
         free_effect_particle(particle);
     }
