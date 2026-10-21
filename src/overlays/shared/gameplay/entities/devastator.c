@@ -2122,15 +2122,15 @@ void FUN_L00_002b5d00(char *source_moby, int flag) {
             i = count;
             do {
                 int *pa, *pb;
-                int particle_frame_count, b;
+                int particle_frame_count, particle_random_frame_value;
                 sc = random_float_between_alt(8.0f, 10.0f) * frame_time - extra * frame_time;
                 A = D_L00_001E9A58;
                 B = D_L00_001E9A70;
                 pa = A.v + random_integer_below(6);
                 pb = B.v + random_integer_below(6);
                 particle_frame_count = FUN_L00_00257b90(scale_game_frames(15), scale_game_frames(20));
-                b = FUN_L00_00257b90(scale_game_frames(25), scale_game_frames(30));
-                FUN_L00_0026a9f0(source_moby + 0x10, particle_velocity, *pa, *pb, particle_frame_count, b, 0, 0, 400000.0f, sc);
+                particle_random_frame_value = FUN_L00_00257b90(scale_game_frames(25), scale_game_frames(30));
+                FUN_L00_0026a9f0(source_moby + 0x10, particle_velocity, *pa, *pb, particle_frame_count, particle_random_frame_value, 0, 0, 400000.0f, sc);
             } while (--i);
         }
         if (D_L00_0015F5D0 < 0.95f) {
