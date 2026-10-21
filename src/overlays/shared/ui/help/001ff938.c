@@ -223,9 +223,9 @@ void FUN_L15_00208ca8(void) {
     void *moby_to_remove;
     char *restored_hero_moby;
     if (base[0x20A4] == 2) {
-        int v = *(short *)(base + 0x1634);
-        if (v != -1) {
-            set_animation_parameter(v, 0);
+        int animation_parameter_value = *(short *)(base + 0x1634);
+        if (animation_parameter_value != -1) {
+            set_animation_parameter(animation_parameter_value, 0);
             *(short *)(base + 0x1634) = -1;
         }
     }
