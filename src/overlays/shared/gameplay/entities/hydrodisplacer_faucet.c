@@ -988,9 +988,9 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 
 void FUN_L05_003198e8(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    int idx = *(int *)(data + 0xDC);
-    if (idx != -1) {
-        char *vector_table_entry = D_L05_001B0930[idx];
+    int vector_table_index = *(int *)(data + 0xDC);
+    if (vector_table_index != -1) {
+        char *vector_table_entry = D_L05_001B0930[vector_table_index];
         if (*(int *)vector_table_entry == 7) {
             int i;
             struct Hero *g;
