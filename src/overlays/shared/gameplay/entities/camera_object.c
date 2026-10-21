@@ -2527,7 +2527,7 @@ s32 FUN_L00_002603d0_2aa008(void *) __asm__("FUN_L00_002603d0");
 s32 FUN_001f96f8_2aa008(s32) __asm__("FUN_001f96f8");
 s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 void FUN_L00_001ff660_2aa008(void *, void *, void *) __asm__("FUN_L00_001ff660");
-void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *base_motion_vector) {
+void FUN_L00_002aa008(V_2aa008 *requested_position, N_2aa008 *self, void *base_motion_vector) {
     V_2aa008 random_offset;
     V_2aa008 vector_scratch;
     V_2aa008 collision_position_offset;
@@ -2571,10 +2571,10 @@ void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *base_motion_vector) {
     }
     if (count >= 8)
         ((D_2aa008 *)best->p78)->i5C = -1;
-    qcopy(&self->v10, pos);
+    qcopy(&self->v10, requested_position);
     vector_scratch.q = ((Q_2aa008 *)hero.moby)->v10.q;
-    vector_scratch.f[2] = pos->f[2];
-    if (collision_line(&vector_scratch, pos, 0, hero.moby, 0)) {
+    vector_scratch.f[2] = requested_position->f[2];
+    if (collision_line(&vector_scratch, requested_position, 0, hero.moby, 0)) {
         k = D_L00_00173E60_2aa008;
         qcopy(&self->v10, &k[0]);
         FUN_001f9bf8_2aa008(&collision_position_offset, &k[2], frame_time_sq * 9.7f);
