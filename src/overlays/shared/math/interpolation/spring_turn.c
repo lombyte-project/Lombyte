@@ -89,7 +89,7 @@ float spring_turn(float *turn_step, float current_angle, float target_angle, flo
 extern float FUN_001f99c0(float);
 
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
-void FUN_L00_00258278(unsigned char *moby, float *ptr, float target_heading, float spring_strength, float damping_factor, float limit) {
+void FUN_L00_00258278(unsigned char *moby, float *turn_step, float target_heading, float spring_strength, float damping_factor, float limit) {
     float wrapped_heading_delta = fast_subtract_rotations(target_heading, *(float *)(moby + 0x48));
     float k = wrapped_heading_delta / 0.15707964f;
     float unclamped_turn_step;
@@ -97,21 +97,21 @@ void FUN_L00_00258278(unsigned char *moby, float *ptr, float target_heading, flo
         k = 1.0f;
     else if (k < -1.0f)
         k = -1.0f;
-    unclamped_turn_step = *ptr + (spring_strength * k - damping_factor * (*ptr));
-    *ptr = unclamped_turn_step;
+    unclamped_turn_step = *turn_step + (spring_strength * k - damping_factor * (*turn_step));
+    *turn_step = unclamped_turn_step;
     if (limit != 0.0f) {
         if (limit < unclamped_turn_step) {
-            *ptr = limit;
+            *turn_step = limit;
         } else if (unclamped_turn_step < -limit) {
-            *ptr = -limit;
+            *turn_step = -limit;
         }
     }
-    if (FUN_001f99c0(wrapped_heading_delta) < *ptr) {
-        *ptr = FUN_001f99c0(wrapped_heading_delta);
-    } else if (*ptr < -FUN_001f99c0(wrapped_heading_delta)) {
-        *ptr = -FUN_001f99c0(wrapped_heading_delta);
+    if (FUN_001f99c0(wrapped_heading_delta) < *turn_step) {
+        *turn_step = FUN_001f99c0(wrapped_heading_delta);
+    } else if (*turn_step < -FUN_001f99c0(wrapped_heading_delta)) {
+        *turn_step = -FUN_001f99c0(wrapped_heading_delta);
     }
-    *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *ptr);
+    *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *turn_step);
 }
 #include "eetypes.h"
 #include "qcopy.h"
