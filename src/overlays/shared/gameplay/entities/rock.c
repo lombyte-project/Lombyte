@@ -986,15 +986,15 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
     head_rate = 0.3f;
     tracking = 0;
     if (plumber_moby->animation == 0) {
-        char *g = (char *)&hero.motion.pos;
+        char *hero_position = (char *)&hero.motion.pos;
         L01Player *hero_aim_view;
         tracking = 1;
-        if (vector_distance(plumber_moby->position, g) < 8.0f &&
-            (hero_aim_view = (L01Player *)(g - 0x80),
+        if (vector_distance(plumber_moby->position, hero_position) < 8.0f &&
+            (hero_aim_view = (L01Player *)(hero_position - 0x80),
              fast_difference_between_rotations(
                  plumber_moby->yaw, fast_arc_tan(hero_aim_view->aim[0] - plumber_moby->position[0], hero_aim_view->aim[1] - plumber_moby->position[1]))) <
                 1.5707964f) {
-            if (fast_vec_length(g + 0x80) > 0.01f)
+            if (fast_vec_length(hero_position + 0x80) > 0.01f)
                 plumber_vars->moving_timer = scale_game_frames(120);
             else
                 tick_countdown_32(&plumber_vars->moving_timer);
