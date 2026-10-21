@@ -1117,7 +1117,7 @@ void FUN_L03_002d43c8(struct Moby *rocket_moby) {
     RocketTarget target;
     Vec4 trail;
     RocketHit hit;
-    RocketVars *v = (RocketVars *)rocket_moby->pvars;
+    RocketVars *rocket_vars = (RocketVars *)rocket_moby->pvars;
     Vec4f *pos;
     u8 state = rocket_moby->state;
     void **level;
@@ -1127,23 +1127,23 @@ void FUN_L03_002d43c8(struct Moby *rocket_moby) {
     switch (state) {
     case ROCKET_FLY:
         pos = &rocket_moby->pos;
-        range = convert_integer_to_float(v->timer * 2) * v->speed;
+        range = convert_integer_to_float(rocket_vars->timer * 2) * rocket_vars->speed;
         FUN_L03_0024e830(rocket_moby, &target, range);
         qcopy(&old, pos);
-        add_vector_xyz(pos, pos, v);
+        add_vector_xyz(pos, pos, rocket_vars);
         cam.q = D_0013F490_v.q;
         cam.f[2] *= D_L03_00161B28;
         FUN_L00_001ff290(&trail, pos, &cam);
-        rocket_moby->rot.z = v->heading;
+        rocket_moby->rot.z = rocket_vars->heading;
         rocket_moby->rot.x = fast_add_rotations(rocket_moby->rot.x, frame_time * 6.2831855f);
-        side.f[0] = fast_cos(v->heading) * v->speed * -0.5f;
-        side.f[1] = fast_sin(v->heading) * v->speed * -0.5f;
+        side.f[0] = fast_cos(rocket_vars->heading) * rocket_vars->speed * -0.5f;
+        side.f[1] = fast_sin(rocket_vars->heading) * rocket_vars->speed * -0.5f;
         side.f[2] = 0.0f;
-        add_vector_xyz(&trail, &side, v);
+        add_vector_xyz(&trail, &side, rocket_vars);
         side.q = trail.q;
         add_vector_xyz(&trail, &side, &cam);
         side.q = trail.q;
-        normalize_vector_xyz(&back, v, -0.2f);
+        normalize_vector_xyz(&back, rocket_vars, -0.2f);
         FUN_L00_001ff290(&trail, &back, pos);
         FUN_L00_00269958(&back, &side, 0x6F00AFFF, 0xFF, scale_game_frames(FUN_L00_00257b90(0xF, 0x16)), 0x28,
                          FUN_L00_00257b90(0x14, 0x23), 1);
@@ -1151,17 +1151,17 @@ void FUN_L03_002d43c8(struct Moby *rocket_moby) {
                          0x28, FUN_L00_00257b90(0x32, 0x4B), 0);
         if (target.found != 0) {
             pitch = -fast_arc_tan(vector_distance(pos, &target.pos), target.pos.f[2] - rocket_moby->pos.z);
-            rocket_moby->rot.y = spring_turn(&v->turn_vel, rocket_moby->rot.y, pitch, frame_time_sq_macro * 0.7853982f,
+            rocket_moby->rot.y = spring_turn(&rocket_vars->turn_vel, rocket_moby->rot.y, pitch, frame_time_sq_macro * 0.7853982f,
                                         frame_time_sq_macro * 3.1415927f, frame_time * 0.5235988f);
-            rocket_moby->pos.z += fast_sin(-rocket_moby->rot.y) * v->speed;
+            rocket_moby->pos.z += fast_sin(-rocket_moby->rot.y) * rocket_vars->speed;
         }
-        if (collision_line(pos, &old, 0, v->ignore, 0) != 0 ||
-            coll_sphere(0.2f, pos, 0, v->ignore) != 0) {
+        if (collision_line(pos, &old, 0, rocket_vars->ignore, 0) != 0 ||
+            coll_sphere(0.2f, pos, 0, rocket_vars->ignore) != 0) {
             level = (void **)&D_L03_00173F40;
             if (level[6] != NULL) {
-                make_hit_descriptor(&hit, rocket_moby, 0x10001, 1.0f, v);
-                hit.dir.f[0] = fast_cos(v->heading);
-                hit.dir.f[1] = fast_sin(v->heading);
+                make_hit_descriptor(&hit, rocket_moby, 0x10001, 1.0f, rocket_vars);
+                hit.dir.f[0] = fast_cos(rocket_vars->heading);
+                hit.dir.f[1] = fast_sin(rocket_vars->heading);
                 hit.dir.f[2] = 1.0f;
                 hit.dir.f[3] = 5627.925f;
                 hit.kind = state;
@@ -1171,7 +1171,7 @@ void FUN_L03_002d43c8(struct Moby *rocket_moby) {
             }
             rocket_moby->state = 2;
         }
-        if (fast_dec_timer(&v->timer) != 0) {
+        if (fast_dec_timer(&rocket_vars->timer) != 0) {
             rocket_moby->state = 2;
         }
         break;
