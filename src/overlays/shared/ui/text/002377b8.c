@@ -809,8 +809,8 @@ int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00235c80();
 /* Sets 0x7C, 0x58/0x5C = 64, 0x48 = 32, calls 00235c80 and links D_L00_0015FAB0. */
 void FUN_L00_002395b0(char *hud_element) {
-    int r = scale_game_frames(0xB4);
-    *(int *)(hud_element + 0x7C) = r + 30;
+    int scaled_duration_frames = scale_game_frames(0xB4);
+    *(int *)(hud_element + 0x7C) = scaled_duration_frames + 30;
     *(int *)(hud_element + 0x58) = 64;
     *(int *)(hud_element + 0x5C) = 64;
     *(short *)(hud_element + 0x48) = 32;
