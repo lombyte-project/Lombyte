@@ -283,7 +283,7 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L14_00301de8(char *moby) {
     char *vars = *(char **)(moby + 0x78);
-    char *dst, *src;
+    char *beam_point, *src;
     u8 *indices;
     int i, j, k, copy_i, next_i;
     float fraction;
@@ -292,10 +292,10 @@ void FUN_L14_00301de8(char *moby) {
         *(s16 *)(vars + 0x12) = *(u16 *)(vars + 0x12) - 1;
         indices = (u8 *)(vars + 0x18);
         src = vars + 0x260;
-        dst = vars + 0x60;
+        beam_point = vars + 0x60;
         for (j = 22; j >= 0; j--) {
-            add_vector_xyz(dst, dst, src);
-            dst += 0x10;
+            add_vector_xyz(beam_point, beam_point, src);
+            beam_point += 0x10;
             src += 0x10;
         }
         i = 0;
