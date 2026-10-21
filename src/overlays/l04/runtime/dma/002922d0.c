@@ -181,7 +181,7 @@ int FUN_L04_00292828(StMoby_2939E8 *moby, Steer_2939E8 *steer_state)
 {
     float push[4];
     float dir[4];
-    int ret = 0;
+    int excessive_tilt_flags = 0;
     int pinned = 0;
     int bit = 1;
     int j;
@@ -244,7 +244,7 @@ int FUN_L04_00292828(StMoby_2939E8 *moby, Steer_2939E8 *steer_state)
             steer_state->tilt = 0.0f;
         }
         if (0.785398f < absolute_float(steer_state->tilt)) {
-            ret = 2;
+            excessive_tilt_flags = 2;
         }
         if (steer_state->kind == 0xD && 0.0f < steer_state->ground && (steer_state->mask & 0xF) == 0) {
             xy_abs_sum_or_tilt = -angle_atan2(steer_state->f8C[1], steer_state->ground - moby->pos.z);
@@ -278,7 +278,7 @@ int FUN_L04_00292828(StMoby_2939E8 *moby, Steer_2939E8 *steer_state)
         point_to_shift->z += dz;
     }
     moby->pos.z = moby->pos.z + dz;
-    return ret;
+    return excessive_tilt_flags;
 }
 extern void get_joint_matrix_2d48(struct Moby *, int, float *) __asm__("FUN_0020cca8");
 extern float atan2_2d48(float, float) __asm__("FUN_001f9e90");
