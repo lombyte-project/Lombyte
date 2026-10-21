@@ -685,7 +685,7 @@ void FUN_L00_002c97e0(Moby *chicken_moby) {
     };
     Vec4A next_pos;
     Vec4A ahead;
-    Vec4A vec;
+    Vec4A motion_and_normal_scratch;
     Vec4A point;
     ChickenVars *vars;
     struct Hero *player;
@@ -770,16 +770,16 @@ void FUN_L00_002c97e0(Moby *chicken_moby) {
                 fast_vec_add(&point, &point, &next_pos);
                 radius = random_float_between(frame_time * 0.1f, frame_time) * size;
                 angle = random_angle_radians();
-                build_spherical_offset(&vec, radius, angle, random_angle_radians());
-                FUN_L00_0026ced0(&point, &vec, 0x3F7F7F7F, 0x2F2F2F, size * 150000.0f, random_int_between(scale_game_frames(0x1E), scale_game_frames(0x39)));
+                build_spherical_offset(&motion_and_normal_scratch, radius, angle, random_angle_radians());
+                FUN_L00_0026ced0(&point, &motion_and_normal_scratch, 0x3F7F7F7F, 0x2F2F2F, size * 150000.0f, random_int_between(scale_game_frames(0x1E), scale_game_frames(0x39)));
             }
         } else {
             *(u128 *)&point = 0;
             point.x = frame_scale * 0.5f;
             point.z = frame_scale * 0.7f;
             point.y = frame_scale * 0.5f;
-            *(u128 *)&vec = *(u128 *)&point;
-            spawn_explosion((char *)chicken_moby, &vec, 0, 0.0f, 2.0f, 0, 0, 0, 4.0f, 3.0f, 9.0f, 1.0f, -1, 12.0f, 1, 1, -1, (unsigned char)vars->gold);
+            *(u128 *)&motion_and_normal_scratch = *(u128 *)&point;
+            spawn_explosion((char *)chicken_moby, &motion_and_normal_scratch, 0, 0.0f, 2.0f, 0, 0, 0, 4.0f, 3.0f, 9.0f, 1.0f, -1, 12.0f, 1, 1, -1, (unsigned char)vars->gold);
             count = FUN_L00_001f2868(&chicken_moby->pos, 3.0f, 0x10, chicken_moby, 0);
             *(u128 *)&point = *(u128 *)&chicken_moby->pos;
             FUN_L00_0025a9f8(chicken_moby, &point, D_L00_00177F00, count, 0, 0x830000, 2, 1, 1.0f, 1.0f, 1.0f);
@@ -799,9 +799,9 @@ void FUN_L00_002c97e0(Moby *chicken_moby) {
             point.z += feather_height * size;
             fast_vec_add(&point, &point, &next_pos);
             angle = random_float_between(feather_speed_min * frame_time, feather_speed_max * frame_time);
-            build_spherical_offset(&vec, angle, random_angle_radians(), feather_pitch_deg * 0.017453292f);
-            vec.z = random_float_between(3.5f, 5.5f) * frame_time;
-            FUN_L00_002cbf68((int)chicken_moby, &point, &vec.x);
+            build_spherical_offset(&motion_and_normal_scratch, angle, random_angle_radians(), feather_pitch_deg * 0.017453292f);
+            motion_and_normal_scratch.z = random_float_between(3.5f, 5.5f) * frame_time;
+            FUN_L00_002cbf68((int)chicken_moby, &point, &motion_and_normal_scratch.x);
         }
         allocate_voice_for_target_entry(1, 0, (char *)chicken_moby);
         if (vars->expire_timer >= 0) {
@@ -951,10 +951,10 @@ void FUN_L00_002c97e0(Moby *chicken_moby) {
             build_spherical_offset(spawn_point, radius, angle, random_angle_radians());
             point.z += feather_height * size;
             fast_vec_add(spawn_point, spawn_point, &next_pos);
-            spawn_velocity = &vec;
+            spawn_velocity = &motion_and_normal_scratch;
             angle = random_float_between(feather_speed_min * frame_time, feather_speed_max * frame_time);
             build_spherical_offset(spawn_velocity, angle, random_angle_radians(), feather_pitch_deg * 0.017453292f);
-            vec.z = random_float_between(3.5f, 5.5f) * frame_time;
+            motion_and_normal_scratch.z = random_float_between(3.5f, 5.5f) * frame_time;
             FUN_L00_002cbf68((int)chicken_moby, spawn_point, &spawn_velocity->x);
         }
         return;
@@ -962,13 +962,13 @@ void FUN_L00_002c97e0(Moby *chicken_moby) {
     if (path_clear == 0) {
         float len;
         float max;
-        fast_vec_sub(&vec, &next_pos, &chicken_moby->pos);
-        len = fast_vec_length(&vec);
+        fast_vec_sub(&motion_and_normal_scratch, &next_pos, &chicken_moby->pos);
+        len = fast_vec_length(&motion_and_normal_scratch);
         max = frame_time * size;
         if (max < len) {
-            fast_vec_normalize(&vec, &vec, max);
+            fast_vec_normalize(&motion_and_normal_scratch, &motion_and_normal_scratch, max);
         }
-        fast_vec_add(&next_pos, &chicken_moby->pos, &vec);
+        fast_vec_add(&next_pos, &chicken_moby->pos, &motion_and_normal_scratch);
         if (absolute_float(FUN_L00_00259710(&next_pos) - chicken_moby->pos.z) <= frame_time * size) {
             qcopy(&chicken_moby->pos, &next_pos);
         }
@@ -991,10 +991,10 @@ void FUN_L00_002c97e0(Moby *chicken_moby) {
         float pitch;
         float roll;
         chicken_moby->pos.z = coll_hit.point.f[2];
-        qcopy(&vec, &coll_hit.normal_x);
-        point.x = vec.x * fast_cos(chicken_moby->rot.z) + vec.y * fast_sin(chicken_moby->rot.z);
-        point.y = vec.y * fast_cos(chicken_moby->rot.z) - vec.x * fast_sin(chicken_moby->rot.z);
-        point.z = vec.z;
+        qcopy(&motion_and_normal_scratch, &coll_hit.normal_x);
+        point.x = motion_and_normal_scratch.x * fast_cos(chicken_moby->rot.z) + motion_and_normal_scratch.y * fast_sin(chicken_moby->rot.z);
+        point.y = motion_and_normal_scratch.y * fast_cos(chicken_moby->rot.z) - motion_and_normal_scratch.x * fast_sin(chicken_moby->rot.z);
+        point.z = motion_and_normal_scratch.z;
         pitch = -fast_arc_tan(square_root(point.x * point.x + point.z * point.z), point.y);
         roll = fast_arc_tan(point.z, point.x);
         chicken_moby->rot.x = fast_add_rotations(chicken_moby->rot.x, fast_subtract_rotations(pitch, chicken_moby->rot.x) * (frame_time * 6.2831855f));
