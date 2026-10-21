@@ -95,11 +95,11 @@ void FUN_L05_002f4f60(int index, int trigger_arg, int inside) {
 extern int *D_L05_001ABCC0[];
 extern void FUN_L05_002f4f60(int, int, int);
 
-void FUN_L05_002f5190(int unused_trigger_moby, int b, int i, int inside) {
+void FUN_L05_002f5190(int unused_trigger_moby, int trigger_vars_arg, int i, int inside) {
     unsigned short *moby_index_entry = (unsigned short *)D_L05_001ABCC0[i];
     if (moby_index_entry != 0) {
         do {
-            FUN_L05_002f4f60(*moby_index_entry & 0x7FFF, b, inside);
+            FUN_L05_002f4f60(*moby_index_entry & 0x7FFF, trigger_vars_arg, inside);
         } while (*(short *)moby_index_entry++ >= 0);
     }
 }
