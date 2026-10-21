@@ -25,7 +25,7 @@ void FUN_L16_002097a0(void) {
     struct Hero *g = &hero;
     int keep = g->unk12ED;
     int st = g->ground_type;
-    int v;
+    int level_index;
     fast_mem_zero16(&g->ground_type, 0x10);
     g->unk12ED = keep;
     g->ground_type = -1;
@@ -59,11 +59,11 @@ void FUN_L16_002097a0(void) {
             struct Hero *flag = &hero;
             flag->base_condition = 1;
         }
-        v = current_level_index;
+        level_index = current_level_index;
     } else {
-        v = current_level_index;
+        level_index = current_level_index;
     }
-    if (v == 0xD) {
+    if (level_index == 0xD) {
         struct Hero *q = &hero;
         if (q->state.current != 0x7B) {
             if (coll_sphere(q->unk234 + 0.03f, &q->motion.unkD0, 2, 0)) {
