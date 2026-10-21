@@ -235,7 +235,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L08_002d22e0(int arg, char *pos, char *vec) {
+char *FUN_L08_002d22e0(int arg, char *pos, char *initial_velocity) {
     char *spawned_moby = func_0020D348_m(0xF8);
     if (spawned_moby != 0) {
         char *bomb_vars = *(char **)(spawned_moby + 0x78);
@@ -248,9 +248,9 @@ char *FUN_L08_002d22e0(int arg, char *pos, char *vec) {
         *(float *)(bomb_vars + 0x2C) = 1.0f;
         *(int *)(bomb_vars + 0x24) = 0;
         qcopy(spawned_moby + 0x10, pos);
-        qcopy(bomb_vars + 0x10, vec);
+        qcopy(bomb_vars + 0x10, initial_velocity);
         *(float *)(spawned_moby + 0x40) = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD;
-        *(float *)(spawned_moby + 0x48) = fast_arc_tan(*(float *)vec, *(float *)(vec + 4)) + 1.5707964f;
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(*(float *)initial_velocity, *(float *)(initial_velocity + 4)) + 1.5707964f;
         FUN_L00_00250df8(spawned_moby);
     }
     return spawned_moby;
