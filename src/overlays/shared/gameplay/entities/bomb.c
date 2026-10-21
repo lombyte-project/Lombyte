@@ -3114,7 +3114,7 @@ void crate_update(struct Moby *moby) {
 
     case CRATE_STATE_BROKEN:
         if (moby->oclass == 0x1F9 && pv->unkCA <= scale_game_frames(20)) {
-            f32 r;
+            f32 burst_radius_scale;
 
             burst.moby = moby;
             burst.unk1C = 2.0f;
@@ -3122,11 +3122,11 @@ void crate_update(struct Moby *moby) {
             burst.unk20 = 0;
             normalize_vector_xyz(&at, &moby->rot_row2, 0.5f);
             add_vector_xyz(&at, &at, &moby->pos);
-            r = convert_integer_to_float(pv->unkCA) / multiply_global_factor_ed64(20.0f);
+            burst_radius_scale = convert_integer_to_float(pv->unkCA) / multiply_global_factor_ed64(20.0f);
             burst.unk14 = 1;
-            collect_mobies_in_sphere(r + r, &at, 0x10, moby, &burst);
+            collect_mobies_in_sphere(burst_radius_scale + burst_radius_scale, &at, 0x10, moby, &burst);
             burst.unk14 = 0x30000;
-            collect_mobies_in_sphere(r * 3.0f, &at, 0x10, D_001413D0, &burst);
+            collect_mobies_in_sphere(burst_radius_scale * 3.0f, &at, 0x10, D_001413D0, &burst);
             pv->unkCA++;
             break;
         }
