@@ -148,7 +148,7 @@ void FUN_L13_002c1528(Moby_2C27B0 *rocket_moby) {
     V4_2C27B0 old;
     V4_2C27B0 hitpos;
     V4_2C27B0 scratch_vector;
-    V4_2C27B0 vel;
+    V4_2C27B0 particle_initial_velocity;
     V4_2C27B0 dir;
     Hit_2C27B0 *hit;
     float trail_segment_start_fraction;
@@ -167,16 +167,16 @@ void FUN_L13_002c1528(Moby_2C27B0 *rocket_moby) {
     dir.x = random_float_between(-1.0f, 1.0f);
     dir.y = random_float_between(-1.0f, 1.0f);
     dir.z = random_float_between(-1.0f, 1.0f);
-    *(Q_2C27B0 *)&vel = *(Q_2C27B0 *)&dir;
-    normalize_vector_xyz(&vel, &vel, random_float_between(0.1f, 0.2f) * D_0015ED6C);
+    *(Q_2C27B0 *)&particle_initial_velocity = *(Q_2C27B0 *)&dir;
+    normalize_vector_xyz(&particle_initial_velocity, &particle_initial_velocity, random_float_between(0.1f, 0.2f) * D_0015ED6C);
     normalize_vector_xyz(&scratch_vector, rocket_data, -random_float_between(D_0015ED6C * 0.1f, D_0015ED6C));
-    add_vector_xyz(&vel, &vel, &scratch_vector);
-    FUN_L00_002712b8(&rocket_moby->pos, (float *)&vel, scale_game_frames_alt(6), 0x7F, 0xB0B0B0, 3, 80000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
+    add_vector_xyz(&particle_initial_velocity, &particle_initial_velocity, &scratch_vector);
+    FUN_L00_002712b8(&rocket_moby->pos, (float *)&particle_initial_velocity, scale_game_frames_alt(6), 0x7F, 0xB0B0B0, 3, 80000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
     for (trail_segment_start_fraction = 0.0f; trail_segment_start_fraction < 1.0f; trail_segment_start_fraction += 0.33333334f) {
         unsigned char *particle;
         normalize_vector_xyz(&scratch_vector, rocket_data, random_float_between(trail_segment_start_fraction, trail_segment_start_fraction + 0.33333334f) * rocket_data->speed);
         add_vector_xyz(&scratch_vector, &scratch_vector, &rocket_moby->pos);
-        particle = FUN_L00_002712b8(&scratch_vector, (float *)&vel, scale_game_frames_alt(0x3C), 0x7F, 0x606060, 3, 80000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
+        particle = FUN_L00_002712b8(&scratch_vector, (float *)&particle_initial_velocity, scale_game_frames_alt(0x3C), 0x7F, 0x606060, 3, 80000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
         if (particle != 0) {
             Tex_2C27B0 *tex = &D_L13_001B2380;
             particle[2] = *tex->p5C;
