@@ -447,7 +447,7 @@ void FUN_L01_0030c190(struct Moby *moby) {
         CUTSCENE_FX_STATE_UPDATE = 1
     };
     FxVec a;
-    FxVec b;
+    FxVec debris_vector_or_effect_position;
     FxVec c;
     FxVec secondary_effect_position;
     struct Moby *cutscene_moby;
@@ -503,11 +503,11 @@ void FUN_L01_0030c190(struct Moby *moby) {
                     for (i = 0; i < 16; i++) {
                         debris_horizontal_angle_radians = random_angle_radians();
                         debris_horizontal_magnitude = random_float_between(frame_time * 0.0f, frame_time * 3.0f);
-                        b.f[0] = fast_cos(debris_horizontal_angle_radians) * debris_horizontal_magnitude;
-                        b.f[1] = fast_sin(debris_horizontal_angle_radians) * debris_horizontal_magnitude;
-                        b.f[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
+                        debris_vector_or_effect_position.f[0] = fast_cos(debris_horizontal_angle_radians) * debris_horizontal_magnitude;
+                        debris_vector_or_effect_position.f[1] = fast_sin(debris_horizontal_angle_radians) * debris_horizontal_magnitude;
+                        debris_vector_or_effect_position.f[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
                         debris_spawn_random_value = random_int_between(90, 120);
-                        spawn_debris_chunk(&a, &b, random_integer_below(2), debris_spawn_random_value);
+                        spawn_debris_chunk(&a, &debris_vector_or_effect_position, random_integer_below(2), debris_spawn_random_value);
                     }
                 }
             }
@@ -545,17 +545,17 @@ void FUN_L01_0030c190(struct Moby *moby) {
                 cutscene_moby = fx_cutscene.slot[2];
                 if (cutscene_moby != 0) {
                     a.q = 0;
-                    moby_point_position(cutscene_moby, 5, &b);
+                    moby_point_position(cutscene_moby, 5, &debris_vector_or_effect_position);
                     if (fx_cutscene.frame >= 2) {
-                        subtract_vector_xyz(&a, &b, &fx_prev_pos);
-                        qcopy(&fx_prev_pos, &b);
+                        subtract_vector_xyz(&a, &debris_vector_or_effect_position, &fx_prev_pos);
+                        qcopy(&fx_prev_pos, &debris_vector_or_effect_position);
                     } else {
-                        qcopy(&fx_prev_pos, &b);
+                        qcopy(&fx_prev_pos, &debris_vector_or_effect_position);
                     }
                     if (fx_cutscene.frame == scale_game_frames(118)) {
                         clear_vector(&c);
-                        spawn_explosion(cutscene_moby, &c, &b, 0.0f, 0.0f, 3, 200, 200, 5.0f, 2.5f, 9.0f, 1.0f, -1, 60.0f, 0, 60, -1, 0);
-                        qcopy(&secondary_effect_position, &b);
+                        spawn_explosion(cutscene_moby, &c, &debris_vector_or_effect_position, 0.0f, 0.0f, 3, 200, 200, 5.0f, 2.5f, 9.0f, 1.0f, -1, 60.0f, 0, 60, -1, 0);
+                        qcopy(&secondary_effect_position, &debris_vector_or_effect_position);
                         secondary_effect_position.f[2] = secondary_effect_position.f[2] - 1.0f;
                         spawn_explosion(cutscene_moby, &c, &secondary_effect_position, 0.0f, 0.0f, 300, 2, 2, 1.0f, 0.5f, 9.0f, 1.0f, -1, 60.0f, 0, 0, -1, 0);
                     }
