@@ -1884,7 +1884,7 @@ float FUN_L11_00311a88(void *moby_v, void *o_v) {
     char *target_moby = o_v;
     char *data = *(char **)(moby + 0x78);
     if (*(unsigned char *)(target_moby + 0x31) != 0) {
-        char v[16];
+        char target_projection_point[16];
         int ax, ay, cx, cy;
         int dx, dy, reticle_axis_limit;
         FUN_L11_00311210(target_moby + 0x10, &ax, &ay, 0);
@@ -1894,10 +1894,10 @@ float FUN_L11_00311a88(void *moby_v, void *o_v) {
             dx = -dx;
         if (dy < 0)
             dy = -dy;
-        qcopy(v, D_L11_001679E0);
-        scale_vector_xyz(v, D_L11_001679E0, *(float *)(target_moby + 0xC) / 1280.0f);
-        add_vector_xyz(v, v, target_moby + 0x10);
-        FUN_L11_00311210(v, &cx, &cy, 0);
+        qcopy(target_projection_point, D_L11_001679E0);
+        scale_vector_xyz(target_projection_point, D_L11_001679E0, *(float *)(target_moby + 0xC) / 1280.0f);
+        add_vector_xyz(target_projection_point, target_projection_point, target_moby + 0x10);
+        FUN_L11_00311210(target_projection_point, &cx, &cy, 0);
         cx = cx - ax;
         cy = cy - ay;
         reticle_axis_limit = func_001FA898_r(square_root(convert_integer_to_float(cx * cx + cy * cy))) + 0x1C;
