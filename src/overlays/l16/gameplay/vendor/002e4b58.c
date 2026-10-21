@@ -151,13 +151,13 @@ void FUN_L16_002e4f30(struct Moby *moby) {
         char *table_entry = D_L16_001B0930[table_entry_index];
         if (*(int *)table_entry == 7) {
             int i;
-            struct Hero *g;
+            struct Hero *hero_state;
             for (i = 0; i < 7; i++) {
                 transform_vector_by_basis(table_entry + 0x10 + i * 16, D_L16_001D96E0 + i * 16, &moby->rot_row0);
                 add_vector_xyz(table_entry + 0x10 + i * 16, table_entry + 0x10 + i * 16, &moby->pos);
             }
-            g = &hero;
-            *(unsigned short *)&g->unk22DA = *(unsigned short *)(data + 0xa0);
+            hero_state = &hero;
+            *(unsigned short *)&hero_state->unk22DA = *(unsigned short *)(data + 0xa0);
         }
     }
 }
