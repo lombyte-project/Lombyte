@@ -1022,25 +1022,25 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 
 extern short D_L17_0016206C __attribute__((sda));
 int D_L17_00162070 = 4;
-void FUN_L17_002ec000(char *moby, char *obj, float aim_azimuth, float aim_elevation) {
+void FUN_L17_002ec000(char *moby, char *ship_vars, float aim_azimuth, float aim_elevation) {
     char aim_direction[16];
     char projectile_spawn_position[16];
     char projectile_spawn_offset[16];
     char aim_world_position[16];
     build_spherical_offset(aim_direction, *(float *)&D_L17_0016206C * *(float *)&D_L17_001620A0_gp, aim_azimuth, aim_elevation);
-    fast_vec_add(aim_direction, aim_direction, obj);
-    if (fast_dec_timer(obj + 0x80) && (*(int *)(D_0013A4E0_u + 0x2610) & 0x84)) {
+    fast_vec_add(aim_direction, aim_direction, ship_vars);
+    if (fast_dec_timer(ship_vars + 0x80) && (*(int *)(D_0013A4E0_u + 0x2610) & 0x84)) {
         allocate_voice_for_target_entry(3, 0, (int)moby);
         fast_vec_normalize(projectile_spawn_offset, aim_direction, 2.2f);
-        moby_point_position(moby, 3 + (obj[0x61] & 1), projectile_spawn_position);
+        moby_point_position(moby, 3 + (ship_vars[0x61] & 1), projectile_spawn_position);
         fast_vec_add(projectile_spawn_position, projectile_spawn_position, projectile_spawn_offset);
         FUN_L11_00308848(moby, aim_direction, projectile_spawn_position, 200.0f, -1.0f);
-        *(int *)(obj + 0x80) = D_L17_00162070;
-        obj[0x61] ^= 1;
+        *(int *)(ship_vars + 0x80) = D_L17_00162070;
+        ship_vars[0x61] ^= 1;
     }
     fast_vec_normalize(aim_direction, aim_direction, 23.0f);
     fast_vec_add(aim_world_position, aim_direction, moby + 0x10);
-    FUN_L11_00311210(aim_world_position, obj + 0xE0, obj + 0xE4, 0);
+    FUN_L11_00311210(aim_world_position, ship_vars + 0xE0, ship_vars + 0xE4, 0);
 }
 /* Fires a projectile from the moby when the trigger is ready and the player presses a button. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EDC40), where it is exact; names translated to the US level program. */
