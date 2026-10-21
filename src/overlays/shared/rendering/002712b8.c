@@ -1280,10 +1280,10 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 void FUN_L00_00274308(char *particle) {
-    char *v = particle + 0x20;
+    char *particle_data = particle + 0x20;
     int decremented_fade_timer;
-    fast_vec_add(particle + 0x10, particle + 0x10, v);
-    *(float *)(particle + 0xC) += *(float *)(v + 0x10);
+    fast_vec_add(particle + 0x10, particle + 0x10, particle_data);
+    *(float *)(particle + 0xC) += *(float *)(particle_data + 0x10);
     particle[8] += 1;
     decremented_fade_timer = *(unsigned short *)(particle + 0xA) - 1;
     *(unsigned short *)(particle + 0xA) = decremented_fade_timer;
