@@ -651,7 +651,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     CamB_2E8210 *b;
     Cam_2E8210 *camera_state;
     Cam_2E8210 *e;
-    CamE_2E8210 *f;
+    CamE_2E8210 *camera_height_state;
     Cam_2E8210 *camera_state_base;
     CamG_2E8210 *g;
     char *q1;
@@ -707,12 +707,12 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
 
     e = camera_moby->cam;
     e->e.h0 = 0;
-    f = &e->e;
-    f->i10 = 0;
-    f->iC = 0;
-    f->h2 = 0;
-    f->i14 = 0;
-    f->i18 = 0;
+    camera_height_state = &e->e;
+    camera_height_state->i10 = 0;
+    camera_height_state->iC = 0;
+    camera_height_state->h2 = 0;
+    camera_height_state->i14 = 0;
+    camera_height_state->i18 = 0;
 
     q1 = (char *)camera_moby->cam;
     ((Cam_2E8210 *)q1)->p190.i0 = 0;
@@ -772,7 +772,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
         if (D_L00_00166F04_2E8210->h86 == 7 && D_0013F450_2E8210.h30C == 0) {
             e->e.h0 = 0;
         } else {
-            f->h0 = scale_game_frames(D_L00_00161D24_gp);
+            camera_height_state->h0 = scale_game_frames(D_L00_00161D24_gp);
         }
     } else {
         func_L00_002E58E0_2E8210(camera_moby);
@@ -789,8 +789,8 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     if (orbit_distance_shortfall < -0.1f) {
         g->h3A = 1;
     }
-    f->f8 = b->f30;
-    f->f4 = a->fB0;
+    camera_height_state->f8 = b->f30;
+    camera_height_state->f4 = a->fB0;
     camera_moby->h7E = 0;
 }
 typedef struct {
