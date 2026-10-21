@@ -884,14 +884,14 @@ void FUN_L16_002d41f8(void *moby) {
         int remaining = count;
         do {
             float sample;
-            int *first_choice, *b, duration1, duration2;
+            int *first_choice, *second_choice, duration1, duration2;
             remaining--;
             sample = random_float_between_alt(8.0f, 10.0f);
             first = D_L16_001E8300;
             second = D_L16_001E8318;
             delay = sample * frame_time - range * frame_time;
             first_choice = &first.values[random_integer_below(6)];
-            b = &second.values[random_integer_below(6)];
+            second_choice = &second.values[random_integer_below(6)];
             {
                 int lo = scale_game_frames(15), hi = scale_game_frames(20);
                 duration1 = random_int_between(lo, hi);
@@ -900,7 +900,7 @@ void FUN_L16_002d41f8(void *moby) {
                 int lo = scale_game_frames(25), hi = scale_game_frames(30);
                 duration2 = random_int_between(lo, hi);
             }
-            FUN_L00_0026a9f0(origin, movement, *first_choice, *b, duration1, duration2, 0, 0, 400000.0f,
+            FUN_L00_0026a9f0(origin, movement, *first_choice, *second_choice, duration1, duration2, 0, 0, 400000.0f,
                              delay);
         } while (remaining != 0);
     }
