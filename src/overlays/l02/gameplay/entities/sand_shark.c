@@ -97,8 +97,8 @@ extern unsigned char *FUN_L00_0026d000(void *pos, float r, float lo, float hi, i
 /* Emits n dust puffs evenly spaced along the segment from a to b. */
 void FUN_L02_002d3a50(void *moby, void *segment_start, void *b, int puff_count, float sa, float sb) {
     float step[4];
-    float pos[4];
-    float vel[4];
+    float dust_puff_position[4];
+    float dust_puff_velocity[4];
     int i;
     int r, g, color;
     int spin;
@@ -109,22 +109,22 @@ void FUN_L02_002d3a50(void *moby, void *segment_start, void *b, int puff_count, 
 
     fast_vec_sub(step, b, segment_start);
     fast_vec_scale(step, step, 1.0f / (float)puff_count);
-    *(OvlQuad *)vel = (OvlQuad)0;
-    vel[2] = 0.01f;
-    vel[3] = 1.0f;
+    *(OvlQuad *)dust_puff_velocity = (OvlQuad)0;
+    dust_puff_velocity[2] = 0.01f;
+    dust_puff_velocity[3] = 1.0f;
     size_delta_per_puff = (sb - sa) / (float)puff_count;
     for (i = 0; i < puff_count; i++) {
-        fast_vec_scale(pos, step, convert_integer_to_float(i));
-        fast_vec_add(pos, segment_start, pos);
+        fast_vec_scale(dust_puff_position, step, convert_integer_to_float(i));
+        fast_vec_add(dust_puff_position, segment_start, dust_puff_position);
         r = random_int_between(0x40, 0x70);
         g = random_int_between(0x40, 0x7F);
         color = g | (g << 16 | g << 8);
         scale = random_float_between_alt(1.0f, 1.02f);
         spin = random_int_between(-2, 2);
-        vel[0] = randf_sym(0.0f, 0.0025f);
-        vel[1] = randf_sym(0.0f, 0.0025f);
-        vel[2] = random_float_between_alt(D_L02_001619D4 * 0.1f, D_L02_001619D4);
-        dust_puff = FUN_L00_0026d000(pos, D_L02_001619DC, 1.0f, scale, spin, vel, size_delta_per_puff + sa * 210000.0f, r << 24 | color);
+        dust_puff_velocity[0] = randf_sym(0.0f, 0.0025f);
+        dust_puff_velocity[1] = randf_sym(0.0f, 0.0025f);
+        dust_puff_velocity[2] = random_float_between_alt(D_L02_001619D4 * 0.1f, D_L02_001619D4);
+        dust_puff = FUN_L00_0026d000(dust_puff_position, D_L02_001619DC, 1.0f, scale, spin, dust_puff_velocity, size_delta_per_puff + sa * 210000.0f, r << 24 | color);
         if (dust_puff) {
             dust_puff_extension = dust_puff + 0x20;
             if (random_integer_below(2)) {
