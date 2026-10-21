@@ -1032,13 +1032,13 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
     float vel[4];
     float *vp;
     float pos[4];
-    float v[4];
+    float particle_velocity[4];
     char *data;
     int i;
     int j;
     int k;
     float azimuth_angle;
-    float b;
+    float elevation_angle;
     int color;
     int color2;
 
@@ -1055,10 +1055,10 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
             for (i = 0; i < 2; i++) {
                 moby_point_position(moby, i, pos);
                 azimuth_angle = random_angle_radians();
-                b = random_angle_radians();
-                build_spherical_offset(v, frame_time * 0.15f, azimuth_angle, b);
-                add_vector_xyz(v, v, vp);
-                FUN_L00_0026ced0(pos, v, 0x8040C0F0, 0x808080, scale_game_frames(20), 84000.0f);
+                elevation_angle = random_angle_radians();
+                build_spherical_offset(particle_velocity, frame_time * 0.15f, azimuth_angle, elevation_angle);
+                add_vector_xyz(particle_velocity, particle_velocity, vp);
+                FUN_L00_0026ced0(pos, particle_velocity, 0x8040C0F0, 0x808080, scale_game_frames(20), 84000.0f);
             }
         }
         break;
@@ -1072,10 +1072,10 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
                 for (j = 0; j < 10; j++) {
                     moby_point_position(moby, 0, pos);
                     azimuth_angle = random_angle_radians();
-                    b = random_angle_radians();
-                    build_spherical_offset(v, frame_time * 0.6f, azimuth_angle, b);
-                    add_vector_xyz(v, v, vp);
-                    FUN_L00_0026ced0(pos, v, 0x80808080, 0x808080, scale_game_frames(35), 105000.0f);
+                    elevation_angle = random_angle_radians();
+                    build_spherical_offset(particle_velocity, frame_time * 0.6f, azimuth_angle, elevation_angle);
+                    add_vector_xyz(particle_velocity, particle_velocity, vp);
+                    FUN_L00_0026ced0(pos, particle_velocity, 0x80808080, 0x808080, scale_game_frames(35), 105000.0f);
                 }
             }
             data[0x12E] = random_int_between(scale_game_frames(7), scale_game_frames(20));
@@ -1088,10 +1088,10 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
                 for (k = 0; k < 15; k++) {
                     moby_point_position(moby, 0, pos);
                     azimuth_angle = random_angle_radians();
-                    b = random_angle_radians();
-                    build_spherical_offset(v, frame_time * 1.2f, azimuth_angle, b);
-                    add_vector_xyz(v, v, vp);
-                    FUN_L00_0026ced0(pos, v, 0x80808080, 0x808080, scale_game_frames(45), 168000.0f);
+                    elevation_angle = random_angle_radians();
+                    build_spherical_offset(particle_velocity, frame_time * 1.2f, azimuth_angle, elevation_angle);
+                    add_vector_xyz(particle_velocity, particle_velocity, vp);
+                    FUN_L00_0026ced0(pos, particle_velocity, 0x80808080, 0x808080, scale_game_frames(45), 168000.0f);
                 }
             }
             data[0x12E] = random_int_between(scale_game_frames(7), scale_game_frames(20));
