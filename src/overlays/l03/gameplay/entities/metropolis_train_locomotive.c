@@ -1987,21 +1987,21 @@ extern short D_L03_0015FFD8_u __asm__("D_L03_0015FFD8");
 float absolute_float(float input) __asm__("func_001F99C0");
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-int FUN_L03_002c6e18(float ang, struct Moby *moby, struct Moby *target) {
+int FUN_L03_002c6e18(float desired_heading, struct Moby *moby, struct Moby *target) {
     char *data = (char *)moby->pvars;
-    int idx;
+    int linked_moby_index;
     float heading_delta;
-    unsigned char st;
+    unsigned char previous_state;
     if (*(int *)&target->rot != 0) {
-        idx = *(int *)(data + 0x264);
-        if (idx != -1) {
-            char *linked_moby = (char *)(idx << 8) + (int)*(char **)&D_L03_0015FFD8_u;
+        linked_moby_index = *(int *)(data + 0x264);
+        if (linked_moby_index != -1) {
+            char *linked_moby = (char *)(linked_moby_index << 8) + (int)*(char **)&D_L03_0015FFD8_u;
             if (*(short *)(linked_moby + 0xA6) == 0x336) {
                 if ((unsigned char)linked_moby[0xBC] != 4)
                     return 0;
             }
         }
-        heading_delta = fast_subtract_rotations(ang, moby->rot.z);
+        heading_delta = fast_subtract_rotations(desired_heading, moby->rot.z);
         if (absolute_float(heading_delta) >= 0.7853982f && *(unsigned char *)(data + 0x263) == 0 &&
             moby->prev_seq != 1) {
             goto go;
@@ -2015,10 +2015,10 @@ int FUN_L03_002c6e18(float ang, struct Moby *moby, struct Moby *target) {
                 } else {
                     blend_moby_animation_u(moby, 9, 0, scale_game_frames(10));
                 }
-                *(float *)(data + 0x28C) = ang;
-                st = moby->state;
+                *(float *)(data + 0x28C) = desired_heading;
+                previous_state = moby->state;
                 moby->state = 0xC;
-                moby->command = st;
+                moby->command = previous_state;
                 return 1;
             }
         }
