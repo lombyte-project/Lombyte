@@ -1041,7 +1041,7 @@ void FUN_L17_002f59a8(void) {
 void FUN_L17_002f6138(int vertex_count, char *nrm, char *pos, int unused, float *out) {
     float normalized_position_delta[4];
     float vertex_position[4];
-    float r[4];
+    float reflection_mapping_vector[4];
     float normalized_normal[4];
     int i;
     for (i = 0; i < vertex_count; i++) {
@@ -1060,12 +1060,12 @@ void FUN_L17_002f6138(int vertex_count, char *nrm, char *pos, int unused, float 
         normalized_normal[1] = normal_element[1];
         normalized_normal[2] = normal_element[2];
         fast_vec_normalize(normalized_normal, normalized_normal, 1.0f);
-        fast_vec_scale(r, normalized_normal, fast_vec_dot(normalized_normal, normalized_position_delta) * 2.0f);
-        fast_vec_sub(r, normalized_position_delta, r);
-        fast_vec_normalize(r, r, 1.0f);
-        r[2] += 1.0f;
-        len = fast_vec_length(r) * 2.0f;
-        out[i * 2] = (r[0] / len + 0.5f) * 4.0f;
-        out[i * 2 + 1] = (r[1] / len + 0.5f) * 4.0f;
+        fast_vec_scale(reflection_mapping_vector, normalized_normal, fast_vec_dot(normalized_normal, normalized_position_delta) * 2.0f);
+        fast_vec_sub(reflection_mapping_vector, normalized_position_delta, reflection_mapping_vector);
+        fast_vec_normalize(reflection_mapping_vector, reflection_mapping_vector, 1.0f);
+        reflection_mapping_vector[2] += 1.0f;
+        len = fast_vec_length(reflection_mapping_vector) * 2.0f;
+        out[i * 2] = (reflection_mapping_vector[0] / len + 0.5f) * 4.0f;
+        out[i * 2 + 1] = (reflection_mapping_vector[1] / len + 0.5f) * 4.0f;
     }
 }
