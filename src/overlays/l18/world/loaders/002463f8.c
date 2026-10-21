@@ -457,7 +457,7 @@ extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) 
 
 /* Draws the level timer as "H:MM:SS.t" text with a pulsing colour. */
 void FUN_L18_002d8098(struct Moby *moby) {
-    char buf[8];
+    char timer_text[8];
     char *data = (char *)moby->pvars;
     float color_blend_factor;
     int col;
@@ -472,15 +472,15 @@ void FUN_L18_002d8098(struct Moby *moby) {
         color_blend_factor = 0.0f;
     }
     col = fast_tween_color(timer_color_dim, timer_color_bright, color_blend_factor);
-    buf[0] = 0x30;
-    buf[1] = *(int *)(data + 0x6c) / scale_ticks(0xE10) + 0x30;
-    buf[2] = 0x3A;
-    buf[3] = *(int *)(data + 0x6c) % scale_ticks(0xE10) / scale_ticks(0x258) + 0x30;
-    buf[4] = *(int *)(data + 0x6c) % scale_ticks(0x258) / scale_ticks(0x3C) + 0x30;
-    buf[5] = 0x3A;
-    buf[6] = *(int *)(data + 0x6c) % scale_ticks(0x3C) / scale_ticks(6) + 0x30;
-    buf[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
-    font_print_center_large_001f6c20(timer_text_x, timer_text_y, col, (int)buf, 8);
+    timer_text[0] = 0x30;
+    timer_text[1] = *(int *)(data + 0x6c) / scale_ticks(0xE10) + 0x30;
+    timer_text[2] = 0x3A;
+    timer_text[3] = *(int *)(data + 0x6c) % scale_ticks(0xE10) / scale_ticks(0x258) + 0x30;
+    timer_text[4] = *(int *)(data + 0x6c) % scale_ticks(0x258) / scale_ticks(0x3C) + 0x30;
+    timer_text[5] = 0x3A;
+    timer_text[6] = *(int *)(data + 0x6c) % scale_ticks(0x3C) / scale_ticks(6) + 0x30;
+    timer_text[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
+    font_print_center_large_001f6c20(timer_text_x, timer_text_y, col, (int)timer_text, 8);
 }
 
 extern void FUN_L02_002a4058_u(char *arg, int val) __asm__("FUN_L01_0026e0e0");
