@@ -1437,26 +1437,26 @@ void FUN_L04_002d6f68(char *moby) {
     int *path_data = D_L04_001B0630[moby_vars[2]];
     char *base = D_L04_0015FFD0[2];
     int source_moby_byte_offset = moby_vars[0] * 256;
-    float *src = *(float **)(base + source_moby_byte_offset + 0x78);
-    char *dst = base + moby_vars[1] * 256;
+    float *source_moby_vars = *(float **)(base + source_moby_byte_offset + 0x78);
+    char *destination_moby = base + moby_vars[1] * 256;
     float weighted_first_point[4];
     float weighted_second_point[4];
     float path_interpolation_factor, g;
-    int idx;
+    int first_point_index;
     int second_point_index = 1;
     float one = 1.0f;
 
     path_interpolation_factor = convert_integer_to_float(path_data[0] - 1);
-    g = (one - src[0]) * path_interpolation_factor;
+    g = (one - source_moby_vars[0]) * path_interpolation_factor;
     path_interpolation_factor = FUN_L00_00200260(g, one);
-    idx = func_001FA898_r(g);
+    first_point_index = func_001FA898_r(g);
     if (path_interpolation_factor == 0.0f)
         second_point_index = 0;
-    second_point_index += idx;
-    scale_vector_xyz(weighted_first_point, (char *)path_data + (idx * 16 + 0x10), one - path_interpolation_factor);
+    second_point_index += first_point_index;
+    scale_vector_xyz(weighted_first_point, (char *)path_data + (first_point_index * 16 + 0x10), one - path_interpolation_factor);
     scale_vector_xyz(weighted_second_point, (char *)path_data + (second_point_index * 16 + 0x10), path_interpolation_factor);
     add_vector_xyz(moby + 0x10, weighted_first_point, weighted_second_point);
-    qcopy(dst + 0x10, moby + 0x10);
+    qcopy(destination_moby + 0x10, moby + 0x10);
 }
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");
