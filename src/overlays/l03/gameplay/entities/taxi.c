@@ -379,7 +379,7 @@ void FUN_L03_002ca808(struct Moby *damaged_moby) {
     Vec4 at;
     s32 hit;
     f32 dmg;
-    f32 ang;
+    f32 knockback_arc_angle;
     s32 damage_response;
 
     dmg = 0.0f;
@@ -388,11 +388,11 @@ void FUN_L03_002ca808(struct Moby *damaged_moby) {
     if (hit != 1 && damaged_moby->state != 5) {
         if (hit_record->source != NULL) {
             if (hit_record->source != hero.items[0].moby)
-                ang = trooper_atan2(damaged_moby->pos.x - hit_record->source->pos.x, damaged_moby->pos.y - hit_record->source->pos.y);
+                knockback_arc_angle = trooper_atan2(damaged_moby->pos.x - hit_record->source->pos.x, damaged_moby->pos.y - hit_record->source->pos.y);
             else
-                ang = trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]);
+                knockback_arc_angle = trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]);
         } else {
-            ang = trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]);
+            knockback_arc_angle = trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]);
         }
         trooper_vars->health -= dmg;
         if (trooper_vars->health <= 0.0f)
@@ -405,7 +405,7 @@ void FUN_L03_002ca808(struct Moby *damaged_moby) {
             trooper_vars->kb_landed = 0;
             trooper_vars->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
-            trooper_knockback_arc(&at, &ang, &trooper_vars->kb_lift, &trooper_vars->kb_gravity);
+            trooper_knockback_arc(&at, &knockback_arc_angle, &trooper_vars->kb_lift, &trooper_vars->kb_gravity);
             trooper_start_knockback(trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]),
                                     damaged_moby, trooper_vars->knockback, 3, 1, 0);
             trooper_vars->kb_min = 5.0f;
@@ -419,7 +419,7 @@ void FUN_L03_002ca808(struct Moby *damaged_moby) {
             trooper_vars->kb_landed = 0;
             trooper_vars->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
-            trooper_knockback_arc(&at, &ang, &trooper_vars->kb_lift, &trooper_vars->kb_gravity);
+            trooper_knockback_arc(&at, &knockback_arc_angle, &trooper_vars->kb_lift, &trooper_vars->kb_gravity);
             trooper_start_knockback(trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]),
                                     damaged_moby, trooper_vars->knockback, 4, 1, 0);
             trooper_vars->kb_min = 7.5f;
@@ -432,7 +432,7 @@ void FUN_L03_002ca808(struct Moby *damaged_moby) {
             trooper_vars->kb_landed = 0;
             trooper_vars->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
-            trooper_knockback_arc(&at, &ang, &trooper_vars->kb_lift, &trooper_vars->kb_gravity);
+            trooper_knockback_arc(&at, &knockback_arc_angle, &trooper_vars->kb_lift, &trooper_vars->kb_gravity);
             trooper_start_knockback(trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]),
                                     damaged_moby, trooper_vars->knockback, 5, 1, 0);
             trooper_vars->kb_min = 8.0f;
