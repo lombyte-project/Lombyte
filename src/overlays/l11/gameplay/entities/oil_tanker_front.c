@@ -1096,11 +1096,11 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A308), where it is exact; names translated to the US level program. */
 
 void FUN_L11_00318e98(struct Moby *moby, void *src) {
-    char *dst;
+    char *moby_vars;
     moby->state = 2;
-    dst = (char *)moby->pvars;
-    qcopy(dst, src);
-    *(int *)(dst + 0x20) = scale_ticks(0x3C);
+    moby_vars = (char *)moby->pvars;
+    qcopy(moby_vars, src);
+    *(int *)(moby_vars + 0x20) = scale_ticks(0x3C);
 }
 /* Builds a few direction vectors from a moby's axes and calls the 0x219780 spawner. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A348), where it is exact; names translated to the US level program. */
