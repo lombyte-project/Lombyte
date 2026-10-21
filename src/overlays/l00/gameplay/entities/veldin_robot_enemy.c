@@ -487,7 +487,7 @@ void FUN_L00_002e1678(ElectroidMoby *moby) {
     ElectroidHit *coll;
     Path *path;
     ElectroidMoby *candidate_target;
-    ElectroidVec v;
+    ElectroidVec hit_position;
     struct Hero *g;
     s32 hit;
     f32 dmg;
@@ -522,8 +522,8 @@ void FUN_L00_002e1678(ElectroidMoby *moby) {
         if (vars->health <= 0.0f) {
             vars->unk94 = 0x29;
             moby->flags &= ~0x1000;
-            v.q = coll->pos.q;
-            trooper_knockback_arc(&v, &angle, &vars->unk88, &vars->unk8C);
+            hit_position.q = coll->pos.q;
+            trooper_knockback_arc(&hit_position, &angle, &vars->unk88, &vars->unk8C);
             trooper_start_knockback(moby, vars->unk70, 0xB, 1, 0, angle);
             vars->unkC0 = 7.0f;
             vars->unkC4 = 16.0f;
@@ -535,8 +535,8 @@ void FUN_L00_002e1678(ElectroidMoby *moby) {
         } else {
             vars->unk88 = D_L00_00161BDC * frame_time * 0.35f;
             vars->unk8C = D_L00_00161BE0 * frame_time * 0.5f;
-            v.q = coll->pos.q;
-            trooper_knockback_arc(&v, &unused, &vars->unk88, &vars->unk8C);
+            hit_position.q = coll->pos.q;
+            trooper_knockback_arc(&hit_position, &unused, &vars->unk88, &vars->unk8C);
             trooper_start_knockback(moby, vars->unk70, 8, 1, 0, fast_arc_tan(coll->pos.f[0], coll->pos.f[1]));
             vars->unkC4 = vars->unkC0 = -1.0f;
             moby->state = 7;
