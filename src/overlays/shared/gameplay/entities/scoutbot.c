@@ -944,21 +944,21 @@ void FUN_L08_002f0f68(int **tabs, int table_count, int *counts, int flat, float 
     for (i = 0; i < table_count; i++) {
         for (j = 0; j < counts[i]; j++) {
             int packed_rgba = tabs[i][j];
-            int c0 = packed_rgba & 0xFF;
-            int c1 = (packed_rgba & 0xFF00) >> 8;
-            int c2 = ((unsigned)packed_rgba >> 16) & 0xFF;
-            int c3 = (unsigned)packed_rgba >> 24;
+            int red_channel = packed_rgba & 0xFF;
+            int green_channel = (packed_rgba & 0xFF00) >> 8;
+            int blue_channel = ((unsigned)packed_rgba >> 16) & 0xFF;
+            int alpha_channel = (unsigned)packed_rgba >> 24;
             float fr, fg, fb, fa;
             if (flat == 0) {
-                fr = r * convert_integer_to_float(c0);
-                fg = g * convert_integer_to_float(c1);
-                fb = b * convert_integer_to_float(c2);
-                fa = alpha_scale * convert_integer_to_float(c3);
+                fr = r * convert_integer_to_float(red_channel);
+                fg = g * convert_integer_to_float(green_channel);
+                fb = b * convert_integer_to_float(blue_channel);
+                fa = alpha_scale * convert_integer_to_float(alpha_channel);
             } else {
                 fr = r * 255.0f;
                 fg = g * 255.0f;
                 fb = b * 255.0f;
-                fa = alpha_scale * convert_integer_to_float(c3);
+                fa = alpha_scale * convert_integer_to_float(alpha_channel);
             }
             tabs[i][j] = (func_001FA898_r(fa) << 24) + (func_001FA898_r(fb) << 16) +
                          (func_001FA898_r(fg) << 8) + func_001FA898_r(fr);
