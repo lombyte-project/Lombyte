@@ -3870,7 +3870,7 @@ void FUN_L18_002f8050(void *mv) {
         }
     }
     if (*(int *)(tank_data + 0xB4) != 2) {
-        float aim_yaw, b;
+        float aim_yaw, aim_pitch;
         subtract_vector_xyz(v, tank_data + 0x70, moby_bytes + 0x10);
         v[2] = v[2] - 3.0f;
         if (vector_length_xyz(v) > *(float *)(tank_data + 0x130)) {
@@ -3878,16 +3878,16 @@ void FUN_L18_002f8050(void *mv) {
         }
         aim_yaw = fast_sin(*(float *)(tank_data + 0x134)) * 0.08726646f;
         aim_yaw = fast_add_rotations(fast_arc_tan(v[0], v[1]), aim_yaw);
-        b = -fast_arc_tan(vector_length_xy(v), v[2]);
-        if (b > 0.34906584f) {
-            b = 0.34906584f;
-        } else if (b < -0.7853982f) {
-            b = -0.7853982f;
+        aim_pitch = -fast_arc_tan(vector_length_xy(v), v[2]);
+        if (aim_pitch > 0.34906584f) {
+            aim_pitch = 0.34906584f;
+        } else if (aim_pitch < -0.7853982f) {
+            aim_pitch = -0.7853982f;
         }
         approach_angle((float *)(tank_data + 0x110), (float *)(tank_data + 0x114), aim_yaw,
                          D_0015ED6C_e[1] * 12.566371f, D_0015ED6C_e[1] * 12.566371f,
                          frame_time * 9.424778f);
-        approach_angle((float *)(tank_data + 0x118), (float *)(tank_data + 0x11C), b,
+        approach_angle((float *)(tank_data + 0x118), (float *)(tank_data + 0x11C), aim_pitch,
                          D_0015ED6C_e[1] * 12.566371f, D_0015ED6C_e[1] * 12.566371f,
                          frame_time * 9.424778f);
     } else {
