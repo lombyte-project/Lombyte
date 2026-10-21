@@ -1925,7 +1925,7 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
     TalkerHit *hit;
     u8 type;
     char *warp_record;
-    OvlVec4 vel;
+    OvlVec4 particle_velocity;
     OvlVec4 pos;
     float unused_vector_scratch[4];
 
@@ -1951,8 +1951,8 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         }
         pos.q = *(OvlQuad *)&robot_qwark_moby->pos;
         pos.f[2] += 1.0f;
-        vel.q = 0;
-        talker_spawn_debris(robot_qwark_moby, &vel, &pos, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
+        particle_velocity.q = 0;
+        talker_spawn_debris(robot_qwark_moby, &particle_velocity, &pos, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
         robot_qwark_moby->state = type;
         set_moby_animation(robot_qwark_moby, 1, 0);
         D_0014C190_257218[current_level_index][(s16)robot_qwark_moby->save_id >> 5] |= 1 << (robot_qwark_moby->save_id & 0x1F);
@@ -1990,15 +1990,15 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         }
         break;
     case ROBOT_QWARK_BROKEN_SPARKING:
-        vel.f[0] = talker_cos(talker_rand_angle()) * (talker_rand_range(0.0f, 0.25f) * frame_time);
-        vel.f[1] = talker_sin(talker_rand_angle()) * (talker_rand_range(0.0f, 0.25f) * frame_time);
-        vel.f[2] = 0.0f;
+        particle_velocity.f[0] = talker_cos(talker_rand_angle()) * (talker_rand_range(0.0f, 0.25f) * frame_time);
+        particle_velocity.f[1] = talker_sin(talker_rand_angle()) * (talker_rand_range(0.0f, 0.25f) * frame_time);
+        particle_velocity.f[2] = 0.0f;
         pos.f[0] = talker_cos(talker_rand_angle()) * talker_rand_range(0.0f, 0.5f) * talker_rand_range(0.0f, 1.0f);
         pos.f[1] = talker_sin(talker_rand_angle()) * talker_rand_range(0.0f, 0.5f) * talker_rand_range(0.0f, 1.0f);
         pos.f[2] = 0.0f;
         FUN_L00_001ff290(unused_vector_scratch, &pos, &robot_qwark_moby->pos);
         if (talker_rand_below(3) == 0) {
-            FUN_L00_0026ced0(&pos, &vel, 0x20202020, 0x7F7F7F, scale_game_frames(FUN_L00_00257b90(0x3C, 0x78)),
+            FUN_L00_0026ced0(&pos, &particle_velocity, 0x20202020, 0x7F7F7F, scale_game_frames(FUN_L00_00257b90(0x3C, 0x78)),
                              157500.0f);
         }
         break;
