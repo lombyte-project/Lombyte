@@ -252,12 +252,12 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 void FUN_L00_00271be8(char *particle) {
-    char *v = particle + 0x20;
+    char *particle_data = particle + 0x20;
     int faded_color;
-    fast_vec_scale(v, v, 0.975f);
-    fast_vec_add(particle + 0x10, particle + 0x10, v);
+    fast_vec_scale(particle_data, particle_data, 0.975f);
+    fast_vec_add(particle + 0x10, particle + 0x10, particle_data);
     *(float *)(particle + 0xC) += 14700.0f;
-    particle[8] += v[0x10];
+    particle[8] += particle_data[0x10];
     faded_color = *(int *)(particle + 4) + 0xFE000000;
     *(int *)(particle + 4) = faded_color;
     if (faded_color < 0) {
