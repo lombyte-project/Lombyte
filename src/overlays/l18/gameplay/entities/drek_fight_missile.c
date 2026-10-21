@@ -1064,7 +1064,7 @@ void FUN_L18_002f2620(struct Moby *moby) {
     int colors[4];
     float uv[4][2];
     unsigned long pkt[4];
-    float mat[4][4];
+    float height_offset_transform[4][4];
     char *data = (char *)moby->pvars;
     int i;
     int j;
@@ -1076,8 +1076,8 @@ void FUN_L18_002f2620(struct Moby *moby) {
     pkt[3] |= (long)(*(int *)&D_L18_00162320) << 32;
     pkt[2] = 0xFF9000000260;
     pkt[0] = 0;
-    set_identity_matrix(mat);
-    mat[3][2] = moby->pos.z - *(float *)data;
+    set_identity_matrix(height_offset_transform);
+    height_offset_transform[3][2] = moby->pos.z - *(float *)data;
     colors[3] = (*(int *)&D_L18_00162328);
     colors[2] = (*(int *)&D_L18_00162328);
     colors[1] = (*(int *)&D_L18_00162328);
@@ -1091,7 +1091,7 @@ void FUN_L18_002f2620(struct Moby *moby) {
             uv[j][0] = D_L18_001DA7A0[uv_index][0] + ofs;
             uv[j][1] = D_L18_001DA7A0[uv_index][1];
         }
-        fast_draw_quad_real(quad_positions, mat, 0);
+        fast_draw_quad_real(quad_positions, height_offset_transform, 0);
     }
 }
 typedef float FVec4_l18[4] __attribute__((aligned(16)));
