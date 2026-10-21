@@ -1055,7 +1055,7 @@ void FUN_L17_002ec150(char *moby, char *ship_vars) {
     char projectile_spawn_offset[16];
     if (fast_dec_timer(ship_vars + 0x84) && (*(int *)(D_0013A4E0_u + 0x2610) & 0x28)) {
         if (hero.ship_ammo != 0) {
-            char *pos = moby + 0x40;
+            char *projectile_initial_rotation = moby + 0x40;
             float projectile_scale;
             int scaled_frame_count;
             unsigned short t = (*(unsigned short *)(ship_vars + 0x6A) + 1) & 3;
@@ -1065,7 +1065,7 @@ void FUN_L17_002ec150(char *moby, char *ship_vars) {
             fast_vec_add(projectile_spawn_position, projectile_spawn_position, projectile_spawn_offset);
             projectile_scale = *(float *)&D_L17_00162074 * *(float *)&D_L17_001620A0_gp;
             scaled_frame_count = scale_game_frames(300);
-            if (FUN_L13_002e6a58(moby, projectile_spawn_position, *(int *)(ship_vars + 0xEC), pos, projectile_scale, scaled_frame_count)) {
+            if (FUN_L13_002e6a58(moby, projectile_spawn_position, *(int *)(ship_vars + 0xEC), projectile_initial_rotation, projectile_scale, scaled_frame_count)) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
                 hero.ship_ammo -= 1;
                 *(int *)(ship_vars + 0x84) = D_L17_00162078;
