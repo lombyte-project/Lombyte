@@ -26,7 +26,7 @@ void FUN_L00_00221310(void) {
     Vec4 probe;
     f32 base;
     f32 dist;
-    f32 off;
+    f32 probe_local_x_offset;
     s32 hit;
 
     if (hero.unk20AD == 0) {
@@ -68,8 +68,8 @@ void FUN_L00_00221310(void) {
                cse2 turns 1.1f and 0.0f into copies of the registers that
                already hold them (base is known to be the 0.0f just stored),
                which gives retail's two mov.s before the loop. */
-            for (off = -0.4f; off < 0.5f; off += 0.1f) {
-                FUN_L00_00233660(&probe, off + 1.1f, 0.0f, 0.0f);
+            for (probe_local_x_offset = -0.4f; probe_local_x_offset < 0.5f; probe_local_x_offset += 0.1f) {
+                FUN_L00_00233660(&probe, probe_local_x_offset + 1.1f, 0.0f, 0.0f);
                 if (!coll_sphere(hero.unk234, &probe, 2, 0)) {
                     hero.unk260 = 1;
                     if (hit == 0) {
@@ -77,7 +77,7 @@ void FUN_L00_00221310(void) {
                     } else {
                         hero.unk258 = dist;
                     }
-                    hero.unk25C = hero.unk234 + off;
+                    hero.unk25C = hero.unk234 + probe_local_x_offset;
                     if (hero.unk25C < 0.0f) {
                         hero.unk25C = 0.0f;
                     }
