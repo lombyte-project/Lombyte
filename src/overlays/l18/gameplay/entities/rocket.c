@@ -2713,7 +2713,7 @@ void FUN_L18_002ea598(struct Moby *moby) {
     float second_spark_vector[4];
     float scaled_target_direction[4];
     int i;
-    int c1, c2, spark_frame_count, second_spark_frame_count, third_spark_frame_count;
+    int initial_spark_color, second_spark_color, spark_frame_count, second_spark_frame_count, third_spark_frame_count;
     float speed_min, speed_max, sink_min, sink_max;
     fast_vec_sub(scaled_target_direction, (void *)moby->pvars, &moby->pos);
     fast_vec_normalize(scaled_target_direction, scaled_target_direction, frame_time * 60.0f);
@@ -2737,11 +2737,11 @@ void FUN_L18_002ea598(struct Moby *moby) {
                                           (*(float *)&(D_L18_00161F38)));
         fast_vec_scale(spark_spawn_position, scaled_target_direction, random_float_between(0.0f, 1.0f));
         fast_vec_add(spark_spawn_position, spark_spawn_position, &moby->pos);
-        c1 = FUN_001fa6e0((*(int *)&(D_L18_00161F1C)), (*(int *)&(D_L18_00161F20)),
+        initial_spark_color = FUN_001fa6e0((*(int *)&(D_L18_00161F1C)), (*(int *)&(D_L18_00161F20)),
                           random_float_between(0.0f, 1.0f));
-        c2 = FUN_001fa6e0((*(int *)&(D_L18_00161F24)), (*(int *)&(D_L18_00161F28)),
+        second_spark_color = FUN_001fa6e0((*(int *)&(D_L18_00161F24)), (*(int *)&(D_L18_00161F28)),
                           random_float_between(0.0f, 1.0f));
-        spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, c1, c2, spark_frame_count, second_spark_frame_count, third_spark_frame_count, (*(int *)&(D_L18_00161F68)));
+        spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, initial_spark_color, second_spark_color, spark_frame_count, second_spark_frame_count, third_spark_frame_count, (*(int *)&(D_L18_00161F68)));
     }
 }
 extern void FUN_L06_0030bef8(void *, int, int, int);
