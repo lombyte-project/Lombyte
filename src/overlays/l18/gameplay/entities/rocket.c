@@ -754,32 +754,32 @@ void FUN_L18_002d5918(struct Moby *moby) {
             int target_search_result = FUN_L00_0025fcb8((char *)moby, target_search_output, 6.0f);
             char *hit;
 
-            char *vel;
+            char *movement_step;
             if (target_search_result == 2)
                 return;
             hit = *(char **)(target_search_output + 0x40);
             if (hit == 0)
                 return;
             if (vector_distance(&moby->pos, hit + 0x10) < 6.0f) {
-                float lim2 = *(float *)&D_L18_00161A6C * 3.0f;
-                float lim = frame_time_sq * 6.0f;
+                float movement_step_limit = *(float *)&D_L18_00161A6C * 3.0f;
+                float horizontal_steering_increment_limit = frame_time_sq * 6.0f;
                 qcopy(previous_position, &moby->pos);
                 subtract_vector_xyz(v, *(char **)(target_search_output + 0x40) + 0x10, &moby->pos);
                 v[2] = -(D_0015EE70 * 10.0f);
-                if (lim < vector_length_xy(v)) {
-                    set_vector_length_xy(v, v, lim);
+                if (horizontal_steering_increment_limit < vector_length_xy(v)) {
+                    set_vector_length_xy(v, v, horizontal_steering_increment_limit);
                 }
-                vel = data + 0x40;
-                add_vector_xyz(vel, vel, v);
-                if (lim2 < vector_length_xy(vel)) {
-                    set_vector_length_xy(vel, vel, lim2);
+                movement_step = data + 0x40;
+                add_vector_xyz(movement_step, movement_step, v);
+                if (movement_step_limit < vector_length_xy(movement_step)) {
+                    set_vector_length_xy(movement_step, movement_step, movement_step_limit);
                 }
-                FUN_L00_00258830((int)moby, (int)vel, 0.0f, 0.5f, 0.0f, 0);
-                subtract_vector_xyz(vel, &moby->pos, previous_position);
+                FUN_L00_00258830((int)moby, (int)movement_step, 0.0f, 0.5f, 0.0f, 0);
+                subtract_vector_xyz(movement_step, &moby->pos, previous_position);
                 if (0.0f < *(float *)(data + 0x48)) {
                     *(float *)(data + 0x48) = 0.0f;
-                } else if (*(float *)(data + 0x48) < -lim2) {
-                    *(float *)(data + 0x48) = -lim2;
+                } else if (*(float *)(data + 0x48) < -movement_step_limit) {
+                    *(float *)(data + 0x48) = -movement_step_limit;
                 }
                 if (*(char **)(target_search_output + 0x40) != (char *)D_001413D0[0]) {
                     if (FUN_001f9b48(*(char **)(target_search_output + 0x40) + 0x10, &moby->pos) < 2.0f) {
