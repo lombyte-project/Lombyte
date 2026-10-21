@@ -791,9 +791,9 @@ void FUN_L16_002e4900(void *moby_v) {
     }
     {
         if (D_0013D5C8_b_e4900[0x21] != 0 || *(short *)(data + 0xAC) == 2) {
-            int v = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            int model_collision = *(int *)(*(char **)(moby + 0x24) + 0x10);
             moby[0x31] = 1;
-            *(int *)(moby + 0x94) = v;
+            *(int *)(moby + 0x94) = model_collision;
             *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) & 0xFFFE;
             moby[0x20] = 1;
         } else {
