@@ -2686,12 +2686,12 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 
 /* Length from vector_length_xy on hero.stick_x, capped at 1. */
 float FUN_L00_00211830(void) {
-    float len = vector_length_xy(&hero.stick_x);
+    float stick_magnitude = vector_length_xy(&hero.stick_x);
 
-    if (1.0f < len) {
-        len = 1.0f;
+    if (1.0f < stick_magnitude) {
+        stick_magnitude = 1.0f;
     }
-    return len;
+    return stick_magnitude;
 }
 #define NOT_SDA
 
