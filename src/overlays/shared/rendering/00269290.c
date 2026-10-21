@@ -2948,7 +2948,7 @@ extern f32 rang_26fd28(void) __asm__("FUN_00213308");
 extern f32 rfb_26fd28(f32, f32) __asm__("FUN_002132a8");
 extern s32 rnd_26fd28(void) __asm__("FUN_001160d8");
 extern u8 *tex_26fd28 __asm__("D_L00_001B20B0") __attribute__((section(".data")));
-P_26fd28 *FUN_L00_0026fd28(u128 *pos, u128 *vel, u8 initial_flags, s32 collision_context) {
+P_26fd28 *FUN_L00_0026fd28(u128 *pos, u128 *initial_velocity, u8 initial_flags, s32 collision_context) {
     P_26fd28 *particle;
     E_26fd28 *e;
     f32 initial_rotation_phase;
@@ -2957,7 +2957,7 @@ P_26fd28 *FUN_L00_0026fd28(u128 *pos, u128 *vel, u8 initial_flags, s32 collision
     if (particle != 0) {
         e = &particle->e;
         qcopy(&particle->pos, pos);
-        qcopy(e, vel);
+        qcopy(e, initial_velocity);
         particle->w4 = FUN_L00_0025bfe0(0.7f, 0.7f, 0.7f, 0.08f);
         particle->b9 = trunc_26fd28(4.0f) + 0x40;
         particle->b1 = 0;
