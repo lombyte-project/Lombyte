@@ -3068,13 +3068,13 @@ int FUN_L00_002bfec8(unsigned char *moby) {
     enum {
         COLLISION_MATERIAL_WATER = 0
     };
-    Vec4 lower_probe_point, b;
+    Vec4 lower_probe_point, upper_probe_point;
     int r = moby[0x20];
     qcopy(&lower_probe_point, moby + 0x10);
-    qcopy(&b, moby + 0x10);
+    qcopy(&upper_probe_point, moby + 0x10);
     lower_probe_point.f[2] -= 0.3f;
-    b.f[2] += 1.0f;
-    if (FUN_001efa68(&b, &lower_probe_point, 6, moby, 0)) {
+    upper_probe_point.f[2] += 1.0f;
+    if (FUN_001efa68(&upper_probe_point, &lower_probe_point, 6, moby, 0)) {
         char *hit_moby = D_L00_00173E58;
         if (hit_moby && *(char **)(hit_moby + 0x24) && *(short *)(*(char **)(hit_moby + 0x24) + 0x46) == 5) {
             r = 11;
