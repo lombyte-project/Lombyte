@@ -2036,7 +2036,7 @@ void FUN_L11_00311d50(struct Moby *moby) {
     u8 pips;
     s32 rx;
     s32 ry;
-    s64 tex;
+    s64 reticle_texture_tex0;
     f32 remaining_lock_fade_fraction;
     f32 grow;
     f32 fade;
@@ -2093,14 +2093,14 @@ void FUN_L11_00311d50(struct Moby *moby) {
 
     rx = vars->reticle_x;
     ry = vars->reticle_y;
-    tex = get_effect_texture(0x11);
-    append_rotated_sprite_quad(rx, ry, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, tex, 0xFFFFF3,
+    reticle_texture_tex0 = get_effect_texture(0x11);
+    append_rotated_sprite_quad(rx, ry, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, reticle_texture_tex0, 0xFFFFF3,
                                0xFF20FF20, 0, 0, 0.5f, 0.5f);
-    tex = get_effect_texture(0x12);
-    append_rotated_sprite_quad(rx, ry, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, tex, 0xFFFFF3,
+    reticle_texture_tex0 = get_effect_texture(0x12);
+    append_rotated_sprite_quad(rx, ry, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, reticle_texture_tex0, 0xFFFFF3,
                                0xFF20FF20, 0, 0, 0.5f, 0.5f);
-    tex = get_effect_texture(8);
-    append_rotated_sprite_quad(rx, ry, 10.0f, 10.0f, 0.0f, 0x1F, 0x1F, tex, 0xFFFFF3,
+    reticle_texture_tex0 = get_effect_texture(8);
+    append_rotated_sprite_quad(rx, ry, 10.0f, 10.0f, 0.0f, 0x1F, 0x1F, reticle_texture_tex0, 0xFFFFF3,
                                0xFF20FF20, 0, 0, 0.5f, 0.5f);
 
     FUN_L11_00311c80(moby, (char *)vars);
