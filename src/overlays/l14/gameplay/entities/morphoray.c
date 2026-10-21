@@ -1602,12 +1602,12 @@ void FUN_L14_00315290(struct UpdateCam *path_camera) {
 #endif
 extern int func_L10_002F6E38_15920(void *) __asm__("FUN_L10_002f5a78");
 extern char *D_L14_0015F050_15920 __asm__("D_L14_0015EF50");
-int FUN_L14_00315920(char *camera, char *b) {
+int FUN_L14_00315920(char *camera, char *control_mode_gate_object) {
     char *rec = *(char **)(D_L14_0015F050_15920 + *(short *)(camera + 0x84) * 32 + 0x1C);
     int required_control_mode, required_hero_state;
     if (*(unsigned char *)(rec + 0x38) != 0)
         return -1;
-    if (b != 0 && *(short *)(b + 0x7E) == 0) {
+    if (control_mode_gate_object != 0 && *(short *)(control_mode_gate_object + 0x7E) == 0) {
         if (hero.state.control_mode != 15)
             return 0;
     }
