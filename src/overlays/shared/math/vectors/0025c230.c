@@ -79,19 +79,19 @@ void FUN_L00_0025c398(void *source_object, void *base_vector, void *point_source
         float y = random_angle_radians();
         float z = random_angle_radians();
         unsigned char *flag = D_0013E520;
-        int randomized_frame_count, b;
+        int randomized_frame_count, randomized_record_value;
 
         build_spherical_offset(randomized_vector, frame_time * 1.8f, y, z);
         add_vector_xyz(randomized_vector, randomized_vector, base_vector);
         randomized_vector[2] += frame_time * 0.9f;
         if (flag[0x10]) {
             randomized_frame_count = scale_game_frames(random_int_between(20, 35));
-            b = random_int_between(40, 60);
-            FUN_L00_00269958(&buf[i], randomized_vector, 0x7000FFA0, 0xFF00, randomized_frame_count, 30, b, 1);
+            randomized_record_value = random_int_between(40, 60);
+            FUN_L00_00269958(&buf[i], randomized_vector, 0x7000FFA0, 0xFF00, randomized_frame_count, 30, randomized_record_value, 1);
         } else {
             randomized_frame_count = scale_game_frames(random_int_between(20, 35));
-            b = random_int_between(40, 60);
-            FUN_L00_00269958(&buf[i], randomized_vector, 0x7000A0FF, 0xFF, randomized_frame_count, 30, b, 1);
+            randomized_record_value = random_int_between(40, 60);
+            FUN_L00_00269958(&buf[i], randomized_vector, 0x7000A0FF, 0xFF, randomized_frame_count, 30, randomized_record_value, 1);
         }
     }
 }
