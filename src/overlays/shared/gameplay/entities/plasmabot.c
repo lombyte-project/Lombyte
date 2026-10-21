@@ -732,18 +732,18 @@ void FUN_L14_002b2600(struct Moby *moby)
     Vec4 dx;
     Vec4 dy;
     Vec4 dz;
-    ShipVars *pv;
+    ShipVars *effect_positions;
     Particle *particle;
     ParticleFade *fade;
     s32 i;
     f32 inverse_lifetime_frames;
 
-    pv = (ShipVars *)moby->pvars;
+    effect_positions = (ShipVars *)moby->pvars;
     enqueue_callback_list_1(FUN_L14_002b3a20_c, moby);
     moby_point_position(moby, 1, &pos);
     fast_vec_sub(&dir, &pos, &D_L14_001674C0);
     fast_vec_normalize(&dir, &dir, -0.5f);
-    fast_vec_add(&pv->exhaust, &pos, &dir);
+    fast_vec_add(&effect_positions->exhaust, &pos, &dir);
     FUN_00213358(&vel, 0.005f, 0.03f);
     particle = FUN_L00_00274948(&pos, &vel, 0x7F, moby);
     if (particle != NULL) {
@@ -766,19 +766,19 @@ void FUN_L14_002b2600(struct Moby *moby)
         fade->color = 0x7F7F7F;
         fade->scale = inverse_lifetime_frames;
     }
-    moby_point_position(moby, 6, &pv->joint6);
+    moby_point_position(moby, 6, &effect_positions->joint6);
     build_moby_bone_transform(moby, 7, mat);
     fast_vec_scale(&dx, &mat[0], D_L14_001614A8);
-    fast_vec_add(&pv->nozzle, &mat[3], &dx);
+    fast_vec_add(&effect_positions->nozzle, &mat[3], &dx);
     build_moby_bone_transform(moby, 2, mat);
     fast_vec_scale(&dx, &mat[0], D_L14_001614B0);
     fast_vec_scale(&dy, &mat[1], D_L14_001614B4);
     fast_vec_scale(&dz, &mat[2], D_L14_001614B8);
-    fast_vec_add(&pv->beam_start, &mat[3], &dx);
-    fast_vec_add(&pv->beam_start, &pv->beam_start, &dy);
-    fast_vec_add(&pv->beam_start, &pv->beam_start, &dz);
+    fast_vec_add(&effect_positions->beam_start, &mat[3], &dx);
+    fast_vec_add(&effect_positions->beam_start, &effect_positions->beam_start, &dy);
+    fast_vec_add(&effect_positions->beam_start, &effect_positions->beam_start, &dz);
     fast_vec_scale(&dy, &dy, -2.0f);
-    fast_vec_add(&pv->beam_end, &pv->beam_start, &dy);
+    fast_vec_add(&effect_positions->beam_end, &effect_positions->beam_start, &dy);
     enqueue_callback_list_1(FUN_L14_002b2928_u, moby);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B3B78), where it is exact; names translated to the US level program. */
