@@ -679,7 +679,7 @@ void FUN_L16_002c44f0(struct Moby *moby, void *new_position) {
     float pos[4];
     float vel[4];
     float out[4];
-    float effect_position_angle, b, radius, speed;
+    float effect_position_angle, random_effect_angle, radius, speed;
     int i;
     char *moby_data;
     *(OvlQuad *)origin = *(OvlQuad *)new_position;
@@ -697,14 +697,14 @@ void FUN_L16_002c44f0(struct Moby *moby, void *new_position) {
             radius = random_float_between_alt_q(D_L16_001618F8,
                                                 D_L16_001618FC);
             effect_position_angle = random_angle_radians_q();
-            b = random_angle_radians_q();
-            func_00215C00_57_q(radius, effect_position_angle, b, effectPosition);
+            random_effect_angle = random_angle_radians_q();
+            func_00215C00_57_q(radius, effect_position_angle, random_effect_angle, effectPosition);
             out[2] += D_L16_001618F4;
             add_vector_xyz_q(effectPosition, effectPosition, &moby->pos);
             speed = random_float_between_alt_q(D_L16_001618EC * D_0015ED6C,
                                                D_L16_001618F0 * D_0015ED6C);
-            b = random_angle_radians_q();
-            func_00215C00_57_q(speed, b, D_L16_001618E8 * DEG_TO_RAD,
+            random_effect_angle = random_angle_radians_q();
+            func_00215C00_57_q(speed, random_effect_angle, D_L16_001618E8 * DEG_TO_RAD,
                                effectVelocity);
             speed = random_float_between_alt_q(3.5f, 5.5f);
             vel[2] = speed * D_0015ED6C;
