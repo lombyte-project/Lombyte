@@ -276,12 +276,12 @@ void *FUN_L07_00313350(void *unused, void *dp, void *op) {
     int *out = op;
     int output_count = 0;
     int output_candidate_0 = *(int *)(data + 0x170);
-    int b, output_candidate_2, output_candidate_3, output_candidate_4, output_candidate_5;
+    int output_candidate_1, output_candidate_2, output_candidate_3, output_candidate_4, output_candidate_5;
     if (output_candidate_0 != -1)
         out[output_count++] = output_candidate_0;
-    b = *(int *)(data + 0x174);
-    if (b != -1)
-        out[output_count++] = b;
+    output_candidate_1 = *(int *)(data + 0x174);
+    if (output_candidate_1 != -1)
+        out[output_count++] = output_candidate_1;
     output_candidate_2 = *(int *)(data + 0x178);
     if (output_candidate_2 != -1)
         out[output_count++] = output_candidate_2;
