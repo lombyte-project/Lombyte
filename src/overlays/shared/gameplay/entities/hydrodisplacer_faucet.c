@@ -234,7 +234,7 @@ void FUN_L05_002f81b8(void *mv) {
     char *moby = mv;
     struct Hero *base = &hero;
     char *data = *(char **)(moby + 0x78);
-    int r;
+    int pulse_color;
     float pulse_phase;
     if (((char *)base->ground_moby) == moby) {
         approach_value((float *)(data + 0x1C), 1.0f, frame_time + frame_time);
@@ -253,11 +253,11 @@ void FUN_L05_002f81b8(void *mv) {
         pulse_phase = fast_add_rotations(*(float *)(data + 0x18), frame_time * 6.2831855f);
         *(float *)(data + 0x18) = pulse_phase;
         if (((unsigned char *)moby)[0xBC] == 1) {
-            r = fast_tween_color(*(int *)&D_L05_001618C4, *(int *)&D_L05_001618C8, (fast_sin(pulse_phase) + 1.0f) * 0.5f);
+            pulse_color = fast_tween_color(*(int *)&D_L05_001618C4, *(int *)&D_L05_001618C8, (fast_sin(pulse_phase) + 1.0f) * 0.5f);
         } else {
-            r = fast_tween_color(*(int *)&D_L05_001618CC, *(int *)&D_L05_001618D0, (fast_sin(pulse_phase) + 1.0f) * 0.5f);
+            pulse_color = fast_tween_color(*(int *)&D_L05_001618CC, *(int *)&D_L05_001618D0, (fast_sin(pulse_phase) + 1.0f) * 0.5f);
         }
-        *(int *)(moby + 0x90) = fast_tween_color(*(int *)&D_L05_001618C0, r, *(float *)(data + 0x1C));
+        *(int *)(moby + 0x90) = fast_tween_color(*(int *)&D_L05_001618C0, pulse_color, *(float *)(data + 0x1C));
     } else {
         *(int *)(moby + 0x90) = *(int *)&D_L05_001618C0;
     }
