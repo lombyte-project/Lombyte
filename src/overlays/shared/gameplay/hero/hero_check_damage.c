@@ -2911,13 +2911,13 @@ extern int FUN_L00_0020d498_211f38(int) __asm__("FUN_L00_0020d498");
 extern void FUN_L00_00211e30_211f38(int, float, float, float) __asm__("FUN_L00_00211e30");
 
 void FUN_L00_00211f38(void) {
-    struct Hero *g = &hero;
-    float stick_turn_scale, frame_scaled_turn_coefficient, b, scaled_turn_amount;
-    stick_turn_scale = (g->unk229C + 1.0f) * 0.5f;
+    struct Hero *hero_state = &hero;
+    float stick_turn_scale, frame_scaled_turn_coefficient, frame_scaled_secondary_turn_coefficient, scaled_turn_amount;
+    stick_turn_scale = (hero_state->unk229C + 1.0f) * 0.5f;
     frame_scaled_turn_coefficient = frame_scale_sq * 0.019f * stick_turn_scale;
-    b = frame_scale_sq * 0.1f;
+    frame_scaled_secondary_turn_coefficient = frame_scale_sq * 0.1f;
     scaled_turn_amount = D_0015ED6C_211f38 * 9.948377f * stick_turn_scale;
-    if (g->unk3BE) {
+    if (hero_state->unk3BE) {
         frame_scaled_turn_coefficient *= 1.1f;
         scaled_turn_amount *= 1.2f;
     }
@@ -2925,14 +2925,14 @@ void FUN_L00_00211f38(void) {
     case 15:
     case 16:
     case 21:
-        if (g->unk20A8) {
+        if (hero_state->unk20A8) {
             frame_scaled_turn_coefficient = frame_scale_sq * 0.003f;
-            b = frame_scale_sq * 0.04f;
+            frame_scaled_secondary_turn_coefficient = frame_scale_sq * 0.04f;
             scaled_turn_amount = D_0015ED6C_211f38 * 4.3633232f;
         }
         break;
     }
-    FUN_L00_00211e30_211f38(0, frame_scaled_turn_coefficient, b, scaled_turn_amount);
+    FUN_L00_00211e30_211f38(0, frame_scaled_turn_coefficient, frame_scaled_secondary_turn_coefficient, scaled_turn_amount);
 }
 void FUN_00213ed8_00212088(f32 *, f32, f32) __asm__("FUN_00213ed8");
 /* Approaches field b toward a, at rate x while below it and y otherwise. */
