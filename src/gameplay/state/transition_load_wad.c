@@ -170,7 +170,7 @@ void transition_load_wad(void)
   s32 v;
   s32 *out;
   int new_var;
-  WadTex *tex;
+  WadTex *texture_definition_entries;
   s32 new_var4;
   WadClass20 *render_class_entry;
   u8 *new_var3;
@@ -211,45 +211,45 @@ void transition_load_wad(void)
   special_material_template[0] = (special_texture_state_base_bits | u) | (((s64) (-1)) << 63);
   special_material_template[1] = 0xFFA0000000E0;
   special_material_template[2] = 0x0040000400004000;
-  tex = (WadTex *) (((u8 *) hdr) + hdr->x34);
+  texture_definition_entries = (WadTex *) (((u8 *) hdr) + hdr->x34);
   if ((D_00160E94 = hdr->n30) > 0)
   {
     do
     {
-      tfrag_texture_size_table[i] = (((s32) base) + tex[i].offset) + (log2dim(tex[i].x4) << 28);
+      tfrag_texture_size_table[i] = (((s32) base) + texture_definition_entries[i].offset) + (log2dim(texture_definition_entries[i].x4) << 28);
       i++;
     }
     while (i < D_00160E94);
   }
   k = 0;
-  tex = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x3C));
+  texture_definition_entries = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x3C));
   if ((D_0015FF08 = hdr->n38) > 0)
   {
     do
     {
-      D_001B5980[k] = (((s32) base) + tex[k].offset) + (log2dim(tex[k].x4) << 28);
+      D_001B5980[k] = (((s32) base) + texture_definition_entries[k].offset) + (log2dim(texture_definition_entries[k].x4) << 28);
       k++;
     }
     while (k < D_0015FF08);
   }
   k = 0;
-  tex = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x44));
+  texture_definition_entries = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x44));
   if ((D_00160F64 = hdr->n40) > 0)
   {
     do
     {
-      D_001E2600[k] = (((s32) base) + tex[k].offset) + (log2dim(tex[k].x4) << 28);
+      D_001E2600[k] = (((s32) base) + texture_definition_entries[k].offset) + (log2dim(texture_definition_entries[k].x4) << 28);
       k++;
     }
     while (k < D_00160F64);
   }
   k = 0;
-  tex = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x4C));
+  texture_definition_entries = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x4C));
   if ((D_001603EC = hdr->n48) > 0)
   {
     do
     {
-      D_001D84B0[k] = (((s32) base) + tex[k].offset) + (log2dim(tex[k].x4) << 28);
+      D_001D84B0[k] = (((s32) base) + texture_definition_entries[k].offset) + (log2dim(texture_definition_entries[k].x4) << 28);
       k++;
     }
     while (k < D_001603EC);
