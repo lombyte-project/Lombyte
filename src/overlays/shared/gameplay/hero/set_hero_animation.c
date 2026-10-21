@@ -1189,17 +1189,17 @@ float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
     int step_count;
     int k;
     float step_count_float;
-    float r;
+    float predicted_z;
 
     switch (hero.unk20B3) {
     case GRAVITY_MODE_WORLD_Z:
         step_count = truncate_float_to_s32(vel[2] / step);
         step_count_float = convert_integer_to_float(step_count);
-        r = pos[2] + vel[2] * step_count_float - convert_integer_to_float((step_count * step_count + step_count) >> 1) * step;
+        predicted_z = pos[2] + vel[2] * step_count_float - convert_integer_to_float((step_count * step_count + step_count) >> 1) * step;
         if (steps != 0) {
             *steps = step_count;
         }
-        return r;
+        return predicted_z;
     case GRAVITY_MODE_VECTOR_AXIS:
     case GRAVITY_MODE_DIRECTION_AXIS:
         k = truncate_float_to_s32(FUN_L00_00233a78_c(vel) / step);
