@@ -225,8 +225,8 @@ extern short D_L00_00161CF4 __attribute__((sda));
 extern short D_L00_00161CF8 __attribute__((sda));
 extern short D_L00_00161CFC __attribute__((sda));
 extern short D_L00_00161D00 __attribute__((sda));
-void follow_camera_orbit(int arg) {
-    char *camera_object = (char *)arg;
+void follow_camera_orbit(int camera_moby) {
+    char *camera_object = (char *)camera_moby;
     char *camera_state = *(char **)(camera_object + 0x70);
     float reference_up_projection[4];
     float projected_reference_offset[4];
@@ -238,7 +238,7 @@ void follow_camera_orbit(int arg) {
     float orbit_base_position[4];
     float forward_clamp_axis[4];
     float tb[4];
-    float x, bc, dot_product, reference_up_component, y, current_up_component, orbit_angle_scratch, i, yaw_rotation_sign, len;
+    float x, bc, dot_product, reference_up_component, y, current_up_component, orbit_angle_scratch, i, yaw_rotation_sign, current_orbit_length;
     char *base = D_L00_00166E10;
     char *up = base + 0x20;
     char *base2;
@@ -279,9 +279,9 @@ void follow_camera_orbit(int arg) {
     fast_vec_scale(scaled_up_offset, up, *(float *)(reference_orbit_offset + 0x30));
     add_vector_xyz(orbit_base_position, scaled_up_offset, camera_state + 0xA0);
     dot_product = fast_vec_dot(current_orbit_offset, fw);
-    len = fast_vec_length(current_orbit_offset);
-    if (len != 0.0f) {
-        x = 1.5707964f - fast_arc_sin(dot_product / len);
+    current_orbit_length = fast_vec_length(current_orbit_offset);
+    if (current_orbit_length != 0.0f) {
+        x = 1.5707964f - fast_arc_sin(dot_product / current_orbit_length);
         if (absolute_float(x) < 0.2617994f) {
             fast_vec_cross(forward_clamp_axis, current_orbit_offset, fw);
             build_look_at_matrix(current_orbit_offset, current_orbit_offset, forward_clamp_axis,
