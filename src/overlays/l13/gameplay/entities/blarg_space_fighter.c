@@ -3411,9 +3411,9 @@ void FUN_L13_002ea330(char *predicted_target_position, char *projectile_origin_p
         fast_add_rotations(*(float *)(*(char **)(base + 0x15F0) + 0x48), *(float *)(vehicle_data + 0x90));
     float x =
         fast_add_rotations(*(float *)(*(char **)(base + 0x15F0) + 0x44), *(float *)(vehicle_data + 0x94));
-    float dist = FUN_001f9b48(projectile_origin_position, *(char **)(base + 0x15F0) + 0x10);
+    float projectile_origin_to_vehicle_distance = FUN_001f9b48(projectile_origin_position, *(char **)(base + 0x15F0) + 0x10);
     float k = *(float *)(vehicle_data + 0x64);
-    build_spherical_offset(predicted_target_position, dist / (k + projectile_speed) * k, y, -x);
+    build_spherical_offset(predicted_target_position, projectile_origin_to_vehicle_distance / (k + projectile_speed) * k, y, -x);
     fast_vec_add(predicted_target_position, predicted_target_position, *(char **)(base + 0x15F0) + 0x10);
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EB838), where it is exact; names translated to the US level program. */
