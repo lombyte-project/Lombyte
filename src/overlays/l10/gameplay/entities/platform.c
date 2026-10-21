@@ -2286,7 +2286,7 @@ extern int FUN_001fa6d0_dd(float) __asm__("FUN_001fa6d0");
 extern float FUN_002132a8_dd(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0026daa0_dd(unsigned char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 
-unsigned char *FUN_L10_002dd270(int source_moby, void *pos, int path_address, float x, float y, float z) {
+unsigned char *FUN_L10_002dd270(int source_moby, void *initial_position, int path_address, float x, float y, float z) {
     unsigned char *effect_moby = FUN_0020c4f8_dd(0x442);
     int *effect_data;
     float lifetime_frames;
@@ -2297,7 +2297,7 @@ unsigned char *FUN_L10_002dd270(int source_moby, void *pos, int path_address, fl
         effect_moby[0x23] = 0x40;
         effect_moby[0x20] = 0;
         effect_data = *(int **)(effect_moby + 0x78);
-        *(OvlQuad *)(effect_moby + 0x10) = *(OvlQuad *)pos;
+        *(OvlQuad *)(effect_moby + 0x10) = *(OvlQuad *)initial_position;
         glow_n(effect_moby, 0x7F, 0x40, 0);
         lifetime_frames = 10.0f / (D_0015ED6C_dd * 5.0f);
         effect_data[0] = path_address;
