@@ -23,7 +23,7 @@ extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 void start_camera_blend(void *arg) __asm__("FUN_001ec8a0");
 
 void start_camera_blend(void *source_camera_transform) {
-    char *src = source_camera_transform;
+    char *blend_source_transform = source_camera_transform;
     char *r = cam_trans_state;
     char orbit_reference_direction[16];
     char orbit_yaw_side_direction[16];
@@ -33,11 +33,11 @@ void start_camera_blend(void *source_camera_transform) {
     if (*(short *)r == 1) {
         sub = r[3];
         if (sub == 0) {
-            qcopy(r + 0x50, src + 0x30);
-            extract_matrix_rotation_quaternion(r + 0x60, src);
+            qcopy(r + 0x50, blend_source_transform + 0x30);
+            extract_matrix_rotation_quaternion(r + 0x60, blend_source_transform);
         } else if (sub == 2) {
-            qcopy(r + 0xC0, src + 0x30);
-            extract_matrix_rotation_quaternion(r + 0xD0, src);
+            qcopy(r + 0xC0, blend_source_transform + 0x30);
+            extract_matrix_rotation_quaternion(r + 0xD0, blend_source_transform);
             capture_camera_orientation();
         } else {
             struct Hero *g = &hero;
@@ -45,9 +45,9 @@ void start_camera_blend(void *source_camera_transform) {
             fast_vec_normalize(orbit_reference_direction, (char *)g->moby + 0xC0, 1.0f);
             fast_vec_normalize(orbit_yaw_side_direction, (char *)g->moby + 0xD0, 1.0f);
             fast_vec_normalize(orbit_axis, (char *)g->moby + 0xE0, 1.0f);
-            compute_camera_angles((float *)(r + 0x70), src + 0x30, *(char **)(r - 0xF0) + 0x30,
+            compute_camera_angles((float *)(r + 0x70), blend_source_transform + 0x30, *(char **)(r - 0xF0) + 0x30,
                                   orbit_reference_direction, orbit_yaw_side_direction, orbit_axis);
-            extract_matrix_rotation_quaternion(r + 0xB0, src);
+            extract_matrix_rotation_quaternion(r + 0xB0, blend_source_transform);
             qcopy(r + 0xD0, r + 0xB0);
         }
     } else {
