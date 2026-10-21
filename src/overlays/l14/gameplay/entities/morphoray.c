@@ -1475,7 +1475,7 @@ extern void cross_5290(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern s32 tick_countdown_16_5290(s16 *) __asm__("FUN_001f9770");
 
 void FUN_L14_00315290(struct UpdateCam *cam) {
-    float dir[4];
+    float initial_look_direction_or_previous_position[4];
     float t[4];
     float u[4];
     float v[4];
@@ -1506,19 +1506,19 @@ void FUN_L14_00315290(struct UpdateCam *cam) {
             t[3] = 0.0f;
             transform_vector_by_basis(t, t, D_L14_001676D0);
             add_5290(u, &o->pos, t);
-            sub_5290(dir, u, &cam->pos);
+            sub_5290(initial_look_direction_or_previous_position, u, &cam->pos);
         } else {
-            sub_5290(dir, pb + 0x10, &cam->pos);
+            sub_5290(initial_look_direction_or_previous_position, pb + 0x10, &cam->pos);
         }
         scale_5290(t, D_0013F5E0_5290, -1.0f);
-        normalize_5290(&cam->m0, dir, 1.0f);
+        normalize_5290(&cam->m0, initial_look_direction_or_previous_position, 1.0f);
         cross_5290(&cam->m1, &cam->m0, t);
         normalize_5290(&cam->m1, &cam->m1, 1.0f);
         cross_5290(&cam->m2, &cam->m1, &cam->m0);
         return;
     }
     path = D_L14_001B0BB0_5290[*(int *)(rec + 0x20)];
-    qcopy(dir, &cam->pos);
+    qcopy(initial_look_direction_or_previous_position, &cam->pos);
     done = path_step_5290(path, &cam->pos.x, &camera_run->seg, &camera_run->t, 0, *(float *)(rec + 0x3C) * frame_time);
     if (camera_run->timer != 0 && tick_countdown_16_5290(&camera_run->timer) != 0)
         done = 1;
@@ -1570,7 +1570,7 @@ void FUN_L14_00315290(struct UpdateCam *cam) {
             update_view_context();
         }
     }
-    camera_run->dist += FUN_001f9b48_5290(dir, &cam->pos);
+    camera_run->dist += FUN_001f9b48_5290(initial_look_direction_or_previous_position, &cam->pos);
     if (*(int *)(rec + 0x28) >= 0) {
         struct Moby *o = (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(rec + 0x28) * 256);
         float *ofs = (float *)(rec + 0x2C);
