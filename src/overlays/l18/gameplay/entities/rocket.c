@@ -2204,7 +2204,7 @@ void FUN_L18_002df608(struct Moby *moby) {
         STATE_POST_TRANSITION_RAMP_DOWN = 5
     };
     char *data = (char *)moby->pvars;
-    float v[12];
+    float transition_scratch_vectors[12];
     switch (moby->state) {
     case STATE_INITIALIZE:
         moby->state = 1;
@@ -2220,9 +2220,9 @@ void FUN_L18_002df608(struct Moby *moby) {
             }
             if (1.0f <= t) {
                 D_L18_0015F404 = 1;
-                clear_u64_value(v);
-                v[2] = *(float *)(data + 0x4C);
-                FUN_L00_00216f90_q(data + 0x40, v, 0x72, 1);
+                clear_u64_value(transition_scratch_vectors);
+                transition_scratch_vectors[2] = *(float *)(data + 0x4C);
+                FUN_L00_00216f90_q(data + 0x40, transition_scratch_vectors, 0x72, 1);
                 FUN_L00_002eaaa0_q(data, data + 0x20, 1, 0, 0);
                 if (*(int *)(data + 0x78) == 1) {
                     give_reward(0x4650, 0x85);
@@ -2240,31 +2240,31 @@ void FUN_L18_002df608(struct Moby *moby) {
                            *(float *)(data + 0x68), *(float *)(data + 0x68),
                            *(float *)(data + 0x70));
         }
-        lerp_vector(v, data, data + 0x10, *(float *)(data + 0x60));
-        clear_u64_value(v + 4);
-        v[5] = fast_subtract_rotations(*(float *)(data + 0x34), *(float *)(data + 0x24)) *
+        lerp_vector(transition_scratch_vectors, data, data + 0x10, *(float *)(data + 0x60));
+        clear_u64_value(transition_scratch_vectors + 4);
+        transition_scratch_vectors[5] = fast_subtract_rotations(*(float *)(data + 0x34), *(float *)(data + 0x24)) *
                *(float *)(data + 0x60);
-        v[5] = FUN_001fa580_q(*(float *)(data + 0x24), v[5]);
-        v[6] = fast_subtract_rotations(*(float *)(data + 0x38), *(float *)(data + 0x28)) *
+        transition_scratch_vectors[5] = FUN_001fa580_q(*(float *)(data + 0x24), transition_scratch_vectors[5]);
+        transition_scratch_vectors[6] = fast_subtract_rotations(*(float *)(data + 0x38), *(float *)(data + 0x28)) *
                *(float *)(data + 0x60);
-        v[6] = FUN_001fa580_q(*(float *)(data + 0x28), v[6]);
-        FUN_L00_002ea9d8_q(v);
-        FUN_L00_002ea9d8_q_002eaa30(v + 4);
+        transition_scratch_vectors[6] = FUN_001fa580_q(*(float *)(data + 0x28), transition_scratch_vectors[6]);
+        FUN_L00_002ea9d8_q(transition_scratch_vectors);
+        FUN_L00_002ea9d8_q_002eaa30(transition_scratch_vectors + 4);
         approach_value((float *)(data + 0x6C), 0.0f, (*(float *)&D_L18_00161A6C) * 4.0f);
         {
             float transition_progress = *(float *)(data + 0x60);
             D_L18_0015F3FC_d = *(float *)(data + 0x6C);
             if (1.0f <= transition_progress) {
                 D_L18_0015F404 = 0;
-                clear_u64_value(v + 8);
-                v[10] = *(float *)(data + 0x4C);
-                FUN_L00_00216f90_q(data + 0x40, v + 8, 0, 0);
+                clear_u64_value(transition_scratch_vectors + 8);
+                transition_scratch_vectors[10] = *(float *)(data + 0x4C);
+                FUN_L00_00216f90_q(data + 0x40, transition_scratch_vectors + 8, 0, 0);
                 FUN_L00_002eac18_q(2);
                 moby->state = 5;
             } else if (*(int *)(D_001413D4_q) != 0x72) {
-                clear_u64_value(v + 8);
-                v[10] = *(float *)(data + 0x4C);
-                FUN_L00_00216f90_q(data + 0x40, v + 8, 0x72, 1);
+                clear_u64_value(transition_scratch_vectors + 8);
+                transition_scratch_vectors[10] = *(float *)(data + 0x4C);
+                FUN_L00_00216f90_q(data + 0x40, transition_scratch_vectors + 8, 0x72, 1);
                 return;
             }
         }
@@ -2275,16 +2275,16 @@ void FUN_L18_002df608(struct Moby *moby) {
                            *(float *)(data + 0x68), *(float *)(data + 0x68),
                            *(float *)(data + 0x70));
         }
-        lerp_vector(v, data, data + 0x10, *(float *)(data + 0x60));
-        clear_u64_value(v + 4);
-        v[5] = fast_subtract_rotations(*(float *)(data + 0x34), *(float *)(data + 0x24)) *
+        lerp_vector(transition_scratch_vectors, data, data + 0x10, *(float *)(data + 0x60));
+        clear_u64_value(transition_scratch_vectors + 4);
+        transition_scratch_vectors[5] = fast_subtract_rotations(*(float *)(data + 0x34), *(float *)(data + 0x24)) *
                *(float *)(data + 0x60);
-        v[5] = FUN_001fa580_q(*(float *)(data + 0x24), v[5]);
-        v[6] = fast_subtract_rotations(*(float *)(data + 0x38), *(float *)(data + 0x28)) *
+        transition_scratch_vectors[5] = FUN_001fa580_q(*(float *)(data + 0x24), transition_scratch_vectors[5]);
+        transition_scratch_vectors[6] = fast_subtract_rotations(*(float *)(data + 0x38), *(float *)(data + 0x28)) *
                *(float *)(data + 0x60);
-        v[6] = FUN_001fa580_q(*(float *)(data + 0x28), v[6]);
-        FUN_L00_002ea9d8_q(v);
-        FUN_L00_002ea9d8_q_002eaa30(v + 4);
+        transition_scratch_vectors[6] = FUN_001fa580_q(*(float *)(data + 0x28), transition_scratch_vectors[6]);
+        FUN_L00_002ea9d8_q(transition_scratch_vectors);
+        FUN_L00_002ea9d8_q_002eaa30(transition_scratch_vectors + 4);
         if (1.0f <= *(float *)(data + 0x60) ||
             (0.2f < *(float *)(data + 0x60) && D_L18_00179E10[0] == 0 &&
              D_L18_00179E10[9] == -1)) {
@@ -2295,16 +2295,16 @@ void FUN_L18_002df608(struct Moby *moby) {
             if (1.0f <= t) {
                 D_L18_0015F404 = 0;
                 *(float *)(data + 0x60) = 1.0f;
-                clear_u64_value(v + 8);
-                v[10] = *(float *)(data + 0x4C);
-                FUN_L00_00216f90_q(data + 0x40, v + 8, 0, 0);
+                clear_u64_value(transition_scratch_vectors + 8);
+                transition_scratch_vectors[10] = *(float *)(data + 0x4C);
+                FUN_L00_00216f90_q(data + 0x40, transition_scratch_vectors + 8, 0, 0);
                 FUN_L00_002eac18_q(3);
                 moby->state = 5;
             }
         } else if (*(int *)(D_001413D4_q) != 0x72) {
-            clear_u64_value(v + 8);
-            v[10] = *(float *)(data + 0x4C);
-            FUN_L00_00216f90_q(data + 0x40, v + 8, 0x72, 1);
+            clear_u64_value(transition_scratch_vectors + 8);
+            transition_scratch_vectors[10] = *(float *)(data + 0x4C);
+            FUN_L00_00216f90_q(data + 0x40, transition_scratch_vectors + 8, 0x72, 1);
             return;
         } else {
             approach_value((float *)(data + 0x6C), 0.0f, (*(float *)&D_L18_00161A6C) * 4.0f);
