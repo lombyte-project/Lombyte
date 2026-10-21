@@ -2995,13 +2995,13 @@ void eudora_bridge_update(struct Moby *moby) {
         EUDORA_BRIDGE_STATE_FOLLOW_LINKED_SWITCH = 1,
         EUDORA_BRIDGE_STATE_RELEASE_MOVEMENT_VOICE = 2
     };
-    SwitchFollowerVars *v = (SwitchFollowerVars *)moby->pvars;
+    SwitchFollowerVars *switch_follower_vars = (SwitchFollowerVars *)moby->pvars;
     f32 last = moby->anim_time;
     struct Moby *other;
     f32 *pos;
     f32 cur;
 
-    if (v == NULL) {
+    if (switch_follower_vars == NULL) {
         delete_moby(moby);
         return;
     }
@@ -3010,7 +3010,7 @@ void eudora_bridge_update(struct Moby *moby) {
         blend_anim(moby, 1, 0, scale_game_frames(300));
         moby->state = 1;
         moby->anim_speed = 0;
-        v->voice = -1;
+        switch_follower_vars->voice = -1;
         if (moby->oclass == 0x1B0) {
             moby->oclass = 0x41C;
             moby->class_slot = D_L04_00197D40[0x41C];
@@ -3024,9 +3024,9 @@ void eudora_bridge_update(struct Moby *moby) {
         }
         break;
     case EUDORA_BRIDGE_STATE_FOLLOW_LINKED_SWITCH:
-        if (v->link == -1)
+        if (switch_follower_vars->link == -1)
             break;
-        other = (struct Moby *)(moby_array + (v->link << 8));
+        other = (struct Moby *)(moby_array + (switch_follower_vars->link << 8));
         if (other->oclass != 0x118)
             break;
         pos = (f32 *)other->pvars;
@@ -3034,14 +3034,14 @@ void eudora_bridge_update(struct Moby *moby) {
         moby->anim_time = cur;
         if (cur != last) {
             if (*pos == 1.0f || *pos == 0.0f) {
-                if (voice_is_playing(moby, v->voice)) {
-                    s32 h = v->voice;
+                if (voice_is_playing(moby, switch_follower_vars->voice)) {
+                    s32 h = switch_follower_vars->voice;
                     if (h != -1) {
                         char *e = (char *)D_0013E550_u + h * 0x70;
                         if (*(struct Moby **)(e + 0x88) == moby && *(u8 *)(e + 0x74) != 0)
                             release_voice_slot(h);
                     }
-                    v->voice = -1;
+                    switch_follower_vars->voice = -1;
                 }
                 play_moby_voice(1, 0, moby);
                 if (moby->oclass == 0x41C && *pos == 1.0f) {
@@ -3056,30 +3056,30 @@ void eudora_bridge_update(struct Moby *moby) {
                     refresh_moby_spatial_bounds_from_basis(moby);
                     moby->state = 2;
                 }
-            } else if (!voice_is_playing(moby, v->voice)) {
-                v->voice = play_moby_voice(0, 4, moby);
+            } else if (!voice_is_playing(moby, switch_follower_vars->voice)) {
+                switch_follower_vars->voice = play_moby_voice(0, 4, moby);
             }
         } else {
-            if (voice_is_playing(moby, v->voice)) {
-                s32 h = v->voice;
+            if (voice_is_playing(moby, switch_follower_vars->voice)) {
+                s32 h = switch_follower_vars->voice;
                 if (h != -1) {
                     char *e = (char *)D_0013E550_u + h * 0x70;
                     if (*(struct Moby **)(e + 0x88) == moby && *(u8 *)(e + 0x74) != 0)
                         release_voice_slot(h);
                 }
-                v->voice = -1;
+                switch_follower_vars->voice = -1;
             }
         }
         break;
     case EUDORA_BRIDGE_STATE_RELEASE_MOVEMENT_VOICE:
-        if (voice_is_playing(moby, v->voice)) {
-            s32 h = v->voice;
+        if (voice_is_playing(moby, switch_follower_vars->voice)) {
+            s32 h = switch_follower_vars->voice;
             if (h != -1) {
                 char *e = (char *)D_0013E550_u + h * 0x70;
                 if (*(struct Moby **)(e + 0x88) == moby && *(u8 *)(e + 0x74) != 0)
                     release_voice_slot(h);
             }
-            v->voice = -1;
+            switch_follower_vars->voice = -1;
         }
         break;
     }
