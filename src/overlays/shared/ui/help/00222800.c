@@ -25,13 +25,13 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 #define G hero
 
 extern OvlMobyEntry40 D_L08_00178900[];
-s32 FUN_L08_00222800(s32 arg) {
+s32 FUN_L08_00222800(s32 apply_response) {
     u8 *hero_moby;
     OvlMobyEntry40 *hero_moby_entry;
     u8 *mob;
     s32 flag;
     s32 id;
-    f32 xy_response_scale, b, frame_time_scale;
+    f32 xy_response_scale, z_response_amount, frame_time_scale;
     OvlVec4 response_vector;
 
     if (G.state.control_mode == 0x14) {
@@ -68,7 +68,7 @@ s32 FUN_L08_00222800(s32 arg) {
         G.unk5BE = 1;
         return 0;
     }
-    if (arg == 0) {
+    if (apply_response == 0) {
         return 1;
     }
     FUN_L00_00206c08_8();
@@ -134,12 +134,12 @@ s32 FUN_L08_00222800(s32 arg) {
         }
         frame_time_scale = frame_time;
         xy_response_scale = frame_time_scale * 5.7f;
-        b = frame_time_scale * 2.4f;
+        z_response_amount = frame_time_scale * 2.4f;
         if (G.unk12E7 != 0) {
             xy_response_scale = 0.0f;
-            b = frame_time_scale * 1.7f;
+            z_response_amount = frame_time_scale * 1.7f;
         }
-        FUN_L00_00210c80_8(&response_vector, flag, xy_response_scale, b);
+        FUN_L00_00210c80_8(&response_vector, flag, xy_response_scale, z_response_amount);
         if (flag != 0 && hero_moby_entry->unk28 == 4) {
             response_vector.f[2] += response_vector.f[2];
         }
