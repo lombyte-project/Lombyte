@@ -199,7 +199,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, float f1, float f2) {
+char *FUN_L12_002ecce8(char *initial_velocity, char *pos, int owner, int seed, float yaw, float f1, float f2) {
     struct Moby *moby = (struct Moby *)func_0020D348_m(0x199);
     if (moby != 0) {
         char *data;
@@ -210,13 +210,13 @@ char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, floa
         moby->visible = 1;
         moby->state = 1;
         qcopy(&moby->pos, pos);
-        qcopy(data, src);
+        qcopy(data, initial_velocity);
         moby->rot.z = fast_arc_tan(*(float *)data, *(float *)(data + 4));
         moby->rot.y = -fast_arc_tan(vector_length_xy(data), *(float *)(data + 8));
         scaled_frames = scale_game_frames(seed);
         *(int *)(data + 0x10) = owner;
         *(float *)(data + 0x18) = f2;
-        *(float *)(data + 0x1C) = f0;
+        *(float *)(data + 0x1C) = yaw;
         *(float *)(data + 0x24) = f1;
         *(int *)(data + 0x28) = 0;
         *(int *)(data + 0x14) = scaled_frames;
