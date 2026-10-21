@@ -3814,9 +3814,9 @@ void FUN_L18_002f8050(void *mv) {
     int r;
     float dist;
     float v[4];
-    int res;
-    hit_reaction(moby_bytes, find_moby_hit(moby_bytes, 0x330000, 0), tank_data + 0x20, 0, &res, &dist, 0, 4);
-    if (res != 1 && moby_bytes[0x20] != 0) {
+    int hit_reaction_status;
+    hit_reaction(moby_bytes, find_moby_hit(moby_bytes, 0x330000, 0), tank_data + 0x20, 0, &hit_reaction_status, &dist, 0, 4);
+    if (hit_reaction_status != 1 && moby_bytes[0x20] != 0) {
         float remaining_health = *(float *)(tank_data + 0x20) - dist;
         *(float *)(tank_data + 0x20) = remaining_health;
         if (remaining_health > 0.0f) {
