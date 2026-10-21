@@ -1328,7 +1328,7 @@ void FUN_L15_0029a570(void *object, int flag) {
     float fall_angle;
     float speed;
     int amount;
-    float pos[4];
+    float hit_vector_or_sight_line_origin[4];
     int *path;
     int group;
     unsigned char seen;
@@ -1392,10 +1392,10 @@ void FUN_L15_0029a570(void *object, int flag) {
             {
                 float heading = fast_arc_tan(*(float *)(moby + 0x10) - *(float *)(*(char **)(hit + 0x20) + 0x10),
                                               *(float *)(moby + 0x14) - *(float *)(*(char **)(hit + 0x20) + 0x14));
-                *(u128 *)pos = *(u128 *)(hit + 0x10);
+                *(u128 *)hit_vector_or_sight_line_origin = *(u128 *)(hit + 0x10);
                 angle = heading;
             }
-            trooper_knockback_arc(pos, &angle, data + 0x88, data + 0x8C);
+            trooper_knockback_arc(hit_vector_or_sight_line_origin, &angle, data + 0x88, data + 0x8C);
             trooper_start_knockback(moby, data + 0x70, 7, 1, 0, angle);
             moby[0x20] = 0x15;
             moby[0xBC] = 2;
@@ -1428,10 +1428,10 @@ void FUN_L15_0029a570(void *object, int flag) {
             {
                 float heading = fast_arc_tan(*(float *)(moby + 0x10) - *(float *)(*(char **)(hit + 0x20) + 0x10),
                                               *(float *)(moby + 0x14) - *(float *)(*(char **)(hit + 0x20) + 0x14));
-                *(u128 *)pos = *(u128 *)(hit + 0x10);
+                *(u128 *)hit_vector_or_sight_line_origin = *(u128 *)(hit + 0x10);
                 fall_angle = heading;
             }
-            trooper_knockback_arc(pos, &fall_angle, data + 0x88, data + 0x8C);
+            trooper_knockback_arc(hit_vector_or_sight_line_origin, &fall_angle, data + 0x88, data + 0x8C);
             trooper_start_knockback(moby, data + 0x70, 8, 1, 0, fall_angle);
             moby[0x20] = 0x17;
             moby[0xBC] = 2;
@@ -1455,11 +1455,11 @@ void FUN_L15_0029a570(void *object, int flag) {
     update_float_countdown(data + 0x130);
     if (FUN_001f9b48(moby + 0x10, D_0013F420) < 64.0f) {
         group = 0;
-        qcopy(pos, moby + 0x10);
-        pos[2] += 1.0f;
+        qcopy(hit_vector_or_sight_line_origin, moby + 0x10);
+        hit_vector_or_sight_line_origin[2] += 1.0f;
         if (*(int *)(data + 0x12C) != -1)
             group = D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8);
-        data[0x15A] = collision_line(pos, D_0013F420, 2, (void *)group, 0) == 0;
+        data[0x15A] = collision_line(hit_vector_or_sight_line_origin, D_0013F420, 2, (void *)group, 0) == 0;
     } else {
         data[0x15A] = 0;
     }
