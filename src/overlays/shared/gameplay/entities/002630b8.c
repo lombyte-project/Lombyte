@@ -510,11 +510,11 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int random_def
     char *fragment_moby = (char *)func_0020D348_m(cls);
     char *fragment_pvars;
     float vector_scratch[4];
-    float r, f21, k, k2;
+    float source_class_ratio, horizontal_velocity_angle, k, k2;
 
     if (fragment_moby != 0) {
-        r = *(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24);
-        *(float *)(fragment_moby + 0x2C) = *(float *)(*(char **)(fragment_moby + 0x24) + 0x24) * r;
+        source_class_ratio = *(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24);
+        *(float *)(fragment_moby + 0x2C) = *(float *)(*(char **)(fragment_moby + 0x24) + 0x24) * source_class_ratio;
         fragment_moby[0x31] = 1;
         *(unsigned short *)(fragment_moby + 0x34) |= 0x100;
         fragment_pvars = *(char **)(fragment_moby + 0x78);
@@ -536,10 +536,10 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int random_def
         else
             *(float *)(fragment_pvars + 0x38) = scale;
         if (fast_vec_length(initial_velocity) == 0.0f) {
-            f21 = random_angle_radians();
+            horizontal_velocity_angle = random_angle_radians();
             k = random_float_between_alt(2.0f, 4.0f) * frame_time;
-            vector_scratch[0] = fast_cos(f21) * k;
-            vector_scratch[1] = fast_sin(f21) * k;
+            vector_scratch[0] = fast_cos(horizontal_velocity_angle) * k;
+            vector_scratch[1] = fast_sin(horizontal_velocity_angle) * k;
             vector_scratch[2] = 0.0f;
             vector_scratch[2] = random_float_between_alt(5.0f, 8.0f) * frame_time;
             qcopy(fragment_pvars, vector_scratch);
