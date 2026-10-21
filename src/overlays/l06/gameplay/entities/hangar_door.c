@@ -29,8 +29,8 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 /* 0x002d9e78, 100 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
-void FUN_L06_002d9e78(int idx) {
-    short *moby_index_cursor = D_L06_001ABFC0[idx];
+void FUN_L06_002d9e78(int moby_list_index) {
+    short *moby_index_cursor = D_L06_001ABFC0[moby_list_index];
     if (moby_index_cursor != 0) {
         do {
             char *moby = (char *)(((*moby_index_cursor & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
