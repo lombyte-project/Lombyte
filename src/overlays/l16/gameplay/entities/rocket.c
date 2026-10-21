@@ -677,7 +677,7 @@ extern float D_L16_001618FC __attribute__((sda));
 void FUN_L16_002c44f0(struct Moby *moby, void *new_position) {
     float origin[4];
     float pos[4];
-    float vel[4];
+    float effect_velocity[4];
     float out[4];
     float effect_position_angle, random_effect_angle, radius, speed;
     int i;
@@ -691,7 +691,7 @@ void FUN_L16_002c44f0(struct Moby *moby, void *new_position) {
     origin[2] += 0.3f;
     if (FUN_L00_001f0d60_q(0.2f, pos, 0, moby)) {
         float *effectPosition = out;
-        float *effectVelocity = vel;
+        float *effectVelocity = effect_velocity;
         i = 3;
         do {
             radius = random_float_between_alt_q(D_L16_001618F8,
@@ -707,7 +707,7 @@ void FUN_L16_002c44f0(struct Moby *moby, void *new_position) {
             func_00215C00_57_q(speed, random_effect_angle, D_L16_001618E8 * DEG_TO_RAD,
                                effectVelocity);
             speed = random_float_between_alt_q(3.5f, 5.5f);
-            vel[2] = speed * D_0015ED6C;
+            effect_velocity[2] = speed * D_0015ED6C;
             FUN_L00_002cbf68_q(moby, effectPosition, effectVelocity);
         } while (--i >= 0);
         func_0022ED80_57_q(1, 0, moby);
