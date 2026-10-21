@@ -3483,13 +3483,13 @@ void FUN_L00_0020bed0(void) {
 
     edge = 0;
     for (j = 0; j < 5; j++) {
-        float len;
+        float edge_probe_extension_distance;
 
         qcopy(edge_start, ((Hero *)D_0013F450_20C568)->motion.pos.f);
         qcopy(edge_end, ledge);
-        len = ((Hero *)D_0013F450_20C568)->unk234 * 2.0f;
-        edge_end[0] += func_001F9F90_20C568(ledge_yaw) * len;
-        edge_end[1] += func_001F9FA8_20C568(ledge_yaw) * len;
+        edge_probe_extension_distance = ((Hero *)D_0013F450_20C568)->unk234 * 2.0f;
+        edge_end[0] += func_001F9F90_20C568(ledge_yaw) * edge_probe_extension_distance;
+        edge_end[1] += func_001F9FA8_20C568(ledge_yaw) * edge_probe_extension_distance;
         edge_end[2] += down * (1.0f - (float)j / 5.0f);
         edge_start[2] = edge_end[2];
         if (func_L00_001EFFF0_20C568(edge_start, edge_end, 2, 0, 0)) {
