@@ -2183,12 +2183,12 @@ s32 FUN_001f96f8_2ed950(s32) __asm__("FUN_001f96f8");
 void release_voice_slot(s32) __asm__("FUN_0022d798");
 void FUN_L00_002ed950(u8 *sound_emitter) {
     S_2ed950 *playback_state = *(S_2ed950 **)(sound_emitter + 8);
-    f32 reference_distance, r;
+    f32 reference_distance, playback_radius;
     if (playback_state->id < 0)
         return;
     reference_distance = distance_xyz(D_L00_00166DC0_2ed950, sound_emitter + 0x40);
-    r = *(f32 *)(sound_emitter + 0xC);
-    if (reference_distance < r) {
+    playback_radius = *(f32 *)(sound_emitter + 0xC);
+    if (reference_distance < playback_radius) {
         E_2ed950 *e = ENT_2ed950(playback_state->snd);
         s32 fl = 0;
         s32 four = 4;
@@ -2202,7 +2202,7 @@ void FUN_L00_002ed950(u8 *sound_emitter) {
         if (playback_state->w8 > 0) {
             playback_state->wC = FUN_001f96f8_2ed950(playback_state->w4 + FUN_00213260_2ed950(playback_state->w8 - playback_state->w4)) * 60.0f;
         }
-    } else if (r + 1.0f < reference_distance) {
+    } else if (playback_radius + 1.0f < reference_distance) {
         s32 voice_slot_index = playback_state->snd;
         if (voice_slot_index != -1) {
             E_2ed950 *e = ENT_2ed950(voice_slot_index);
