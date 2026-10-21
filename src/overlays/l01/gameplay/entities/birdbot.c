@@ -731,7 +731,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
     float dmg;
     float ang;
     int flag;
-    int res;
+    int path_reposition_requested;
     float frame;
     PeHit *hit;
     int kind;
@@ -739,7 +739,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
     float target_search_radius;
 
     flag = 0;
-    res = 0;
+    path_reposition_requested = 0;
     birdbot_vars = birdbot_moby->vars;
     idx = birdbot_vars->main.idx;
     frame = compute_interpolated_record_value(birdbot_moby);
@@ -752,7 +752,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         birdbot_vars->w1C8--;
     }
     if (birdbot_moby->state != 0) {
-        res = FUN_L01_002e6790(birdbot_moby, &idx);
+        path_reposition_requested = FUN_L01_002e6790(birdbot_moby, &idx);
     }
     target_search_radius = flag ? birdbot_vars->f1A0 * 2.0f : birdbot_vars->f1A0;
     FUN_L00_0025fcb8(birdbot_moby, &tgt, target_search_radius);
@@ -929,7 +929,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         d = vector_distance(&birdbot_moby->pos, &tgt);
         if ((flag ? d < birdbot_vars->f1A0 * 2.0f : d < birdbot_vars->f1A0) &&
             absolute_float(birdbot_moby->pos.f[2] - tgt.pos.f[2]) < 2.0f && birdbot_moby->b31 != 0 &&
-            (!flag || res == 0) && birdbot_vars->w190 == 0 &&
+            (!flag || path_reposition_requested == 0) && birdbot_vars->w190 == 0 &&
             fast_difference_between_rotations(birdbot_moby->rot.f[2], FUN_001f9e90_cf(tgt.pos.f[0] - birdbot_moby->pos.f[0],
                                                       tgt.pos.f[1] - birdbot_moby->pos.f[1])) < 0.08726646f) {
             moby_point_position(birdbot_moby, 0, &va);
@@ -948,7 +948,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
             }
         } else if (flag || (vector_distance(&birdbot_moby->pos, &tgt) < 4.0f &&
                             absolute_float(birdbot_moby->pos.f[2] - tgt.pos.f[2]) < 6.0f)) {
-            if (res != 0 && FUN_001f9b48(&birdbot_moby->pos, (PeVec *)c->path + (idx + 1)) > 0.25f) {
+            if (path_reposition_requested != 0 && FUN_001f9b48(&birdbot_moby->pos, (PeVec *)c->path + (idx + 1)) > 0.25f) {
                 if (birdbot_vars->h1AC == 0 || c->idx < c->path->count - 1) {
                     int i;
                     float f;
@@ -1128,7 +1128,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
             birdbot_moby->f58 = 1.0f;
             if ((flag || (vector_distance(&birdbot_moby->pos, &tgt) < 8.0f &&
                           absolute_float(birdbot_moby->pos.f[2] - tgt.pos.f[2]) < 6.0f)) &&
-                res != 0 && FUN_001f9b48(&birdbot_moby->pos, (PeVec *)birdbot_vars->main.path + (idx + 1)) > 0.25f) {
+                path_reposition_requested != 0 && FUN_001f9b48(&birdbot_moby->pos, (PeVec *)birdbot_vars->main.path + (idx + 1)) > 0.25f) {
                 birdbot_vars->main.idx = idx;
                 if (birdbot_moby->b53 != 8) {
                     blend_moby_animation_cf(birdbot_moby, 8, 0, scale_game_frames(10));
@@ -1141,7 +1141,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
                 d = vector_distance(&birdbot_moby->pos, &tgt);
                 if ((flag ? d < birdbot_vars->f1A0 * 2.0f : d < birdbot_vars->f1A0) &&
                     absolute_float(birdbot_moby->pos.f[2] - tgt.pos.f[2]) < 2.0f && birdbot_moby->b31 != 0 &&
-                    (!flag || res == 0) && birdbot_vars->w190 == 0 &&
+                    (!flag || path_reposition_requested == 0) && birdbot_vars->w190 == 0 &&
                     fast_difference_between_rotations(birdbot_moby->rot.f[2], FUN_001f9e90_cf(tgt.pos.f[0] - birdbot_moby->pos.f[0],
                                                               tgt.pos.f[1] - birdbot_moby->pos.f[1])) <
                         0.08726646f) {
