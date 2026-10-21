@@ -272,15 +272,15 @@ extern float advance_accelerated_scalar(float *, float *, float, float, float,
 extern int FUN_L00_00258ad0(int a, int b, int g, int e, float c, float d);
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L07_0030f0f8(char *moby, char *b, float f12, float f13, float f14) {
-    float v[4];
+void FUN_L07_0030f0f8(char *moby, char *moby_data, float acceleration_step, float braking_step, float maximum_speed) {
+    float position_work[4];
     char *velocity;
-    if (**(float **)(b + 0x12C) - 0.3f < *(float *)(moby + 0x18)) {
-        *(float *)(b + 0xD8) -= frame_time * 9.8f;
+    if (**(float **)(moby_data + 0x12C) - 0.3f < *(float *)(moby + 0x18)) {
+        *(float *)(moby_data + 0xD8) -= frame_time * 9.8f;
     }
-    qcopy(v, moby + 0x10);
-    advance_accelerated_scalar(v + 2, (float *)(b + 0xD8), *(float *)(b + 0x138), f12, f13, f14);
-    velocity = b + 0xD0;
+    qcopy(position_work, moby + 0x10);
+    advance_accelerated_scalar(position_work + 2, (float *)(moby_data + 0xD8), *(float *)(moby_data + 0x138), acceleration_step, braking_step, maximum_speed);
+    velocity = moby_data + 0xD0;
     if (FUN_L00_00258ad0((int)moby, (int)velocity, 0x400, 0x10, 1.0f, 0.0f)) {
         fast_vec_scale(velocity, velocity, 0.5f);
     }
