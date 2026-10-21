@@ -1381,11 +1381,11 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern short D_L05_00161EC0 __attribute__((sda));
 extern short D_L05_00161EC4 __attribute__((sda));
 extern short D_L05_00161EC8 __attribute__((sda));
-void FUN_L05_00315ee0(char *lift_moby, char *b, char *camera_rotation) {
+void FUN_L05_00315ee0(char *lift_moby, char *camera_position, char *camera_rotation) {
     float pitch_degrees;
-    fast_vec_normalize(b, lift_moby + 0xC0, *(float *)&D_L05_00161EC8);
-    fast_vec_add(b, b, lift_moby + 0x10);
-    *(float *)(b + 8) = *(float *)(b + 8) + *(float *)&D_L05_00161EC0;
+    fast_vec_normalize(camera_position, lift_moby + 0xC0, *(float *)&D_L05_00161EC8);
+    fast_vec_add(camera_position, camera_position, lift_moby + 0x10);
+    *(float *)(camera_position + 8) = *(float *)(camera_position + 8) + *(float *)&D_L05_00161EC0;
     clear_u64_value(camera_rotation);
     pitch_degrees = *(float *)&D_L05_00161EC4;
     *(float *)(camera_rotation + 8) = *(float *)(lift_moby + 0x48);
