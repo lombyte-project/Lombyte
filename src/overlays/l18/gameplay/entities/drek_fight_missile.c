@@ -3128,8 +3128,8 @@ extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8");
 /* 0x002f6fa8, 124 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
-void FUN_L18_002f6fa8(int unused, int idx) {
-    short *group_entry = D_L18_001AC240_u[idx];
+void FUN_L18_002f6fa8(int unused, int group_index) {
+    short *group_entry = D_L18_001AC240_u[group_index];
     if (group_entry != 0) {
         do {
             unsigned char *group_moby = D_L18_0015FFD8_d + ((*(unsigned short *)group_entry & 0x7FFF) << 8);
