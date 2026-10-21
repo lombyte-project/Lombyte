@@ -33,7 +33,7 @@ void mode_freeze_init(u32 mode, s32 freeze_context) {
         FREEZE_PUSH_HELP_HISTORY = 5,
         FREEZE_VIDEO_MODE_CHANGE = 6
     };
-    struct FreezeModeState *st;
+    struct FreezeModeState *freeze_state;
 
     if (game_mode != 3) {
         snd_pause_all_sounds_in_group(0x1D);
@@ -45,15 +45,15 @@ void mode_freeze_init(u32 mode, s32 freeze_context) {
     freeze.unk0 = mode;
     switch (mode) {
     case FREEZE_CONTROL_MODE_16_PAUSE:
-        st = &freeze;
-        st->unk8 = (s32)get_help_message_text(0x4F6E);
-        st->unkC = (s32)get_help_message_text(0x5248);
-        st->unk10 = (s32)get_help_message_text(0x5249);
-        st->unk4 = 0;
-        st->unk1C = 0;
-        st->unk20 = 0;
-        st->unk24 = 0;
-        st->unk28 = 0;
+        freeze_state = &freeze;
+        freeze_state->unk8 = (s32)get_help_message_text(0x4F6E);
+        freeze_state->unkC = (s32)get_help_message_text(0x5248);
+        freeze_state->unk10 = (s32)get_help_message_text(0x5249);
+        freeze_state->unk4 = 0;
+        freeze_state->unk1C = 0;
+        freeze_state->unk20 = 0;
+        freeze_state->unk24 = 0;
+        freeze_state->unk28 = 0;
         break;
     case 2:
         freeze.unk8 = (s32)get_help_message_text(0x524A);
@@ -62,11 +62,11 @@ void mode_freeze_init(u32 mode, s32 freeze_context) {
         break;
     case FREEZE_HERO_STATE_32_PAUSE:
     case FREEZE_VEHICLE_PAUSE:
-        st = &freeze;
-        st->unk8 = (s32)get_help_message_text(0x5229);
-        st->unkC = (s32)get_help_message_text(0x4EE0);
-        st->unk10 = (s32)get_help_message_text(0x524A);
-        st->unk4 = 0;
+        freeze_state = &freeze;
+        freeze_state->unk8 = (s32)get_help_message_text(0x5229);
+        freeze_state->unkC = (s32)get_help_message_text(0x4EE0);
+        freeze_state->unk10 = (s32)get_help_message_text(0x524A);
+        freeze_state->unk4 = 0;
         break;
     case FREEZE_PUSH_HELP_HISTORY:
         push_help_history(0x4E2B);
