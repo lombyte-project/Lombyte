@@ -1127,7 +1127,7 @@ extern int FUN_00213260_26bed0(int) __asm__("FUN_00213260");
 
 extern unsigned char *D_L00_001B20C0 __attribute__((section(".data")));
 unsigned char *mine_debris(void *a, void *b, int c, int d, float f, int n, int k) __asm__("FUN_L00_0026bed0");
-unsigned char *mine_debris(void *spawn_position, void *b, int initial_color, int final_color, float initial_size, int lifetime, int k) {
+unsigned char *mine_debris(void *spawn_position, void *initial_velocity, int initial_color, int final_color, float initial_size, int lifetime, int k) {
     unsigned char *particle;
     unsigned char *particle_data;
     if (lifetime == 0) {
@@ -1159,7 +1159,7 @@ unsigned char *mine_debris(void *spawn_position, void *b, int initial_color, int
         *(int *)(particle_data + 0x10) = initial_color;
         *(int *)(particle_data + 0x14) = final_color;
         *(s16 *)(particle_data + 0x1A) = k;
-        qcopy(particle_data, b);
+        qcopy(particle_data, initial_velocity);
         *(float *)(particle_data + 0xC) = ((float *)spawn_position)[2] - 0.5f;
     }
     return particle;
