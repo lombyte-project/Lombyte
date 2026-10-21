@@ -46,7 +46,7 @@ void poll_pad_device_state(struct PAD *pad_state) {
         PAD_BUTTON_PROFILE_TOO_LARGE = 2
     };
     s32 v;
-    s32 r;
+    s32 pad_device_state;
     s32 byte_count;
     s32 i;
     u8 buf[0x40];
@@ -56,9 +56,9 @@ void poll_pad_device_state(struct PAD *pad_state) {
     pad_state->unk1B0 = 0;
     pad_state->unk1AC = pad_state->unk348;
     pad_state->unk1BC = v;
-    r = scePad2GetState(pad_state->socket);
-    pad_state->unk19C = r;
-    if (r == 1) {
+    pad_device_state = scePad2GetState(pad_state->socket);
+    pad_state->unk19C = pad_device_state;
+    if (pad_device_state == 1) {
         switch (pad_state->unk198) {
         case PAD_PROFILE_INITIALIZATION: {
             byte_count = scePad2GetButtonProfile(pad_state->socket, buf);
