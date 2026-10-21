@@ -947,18 +947,18 @@ extern s32 tick_countdown_2b2ed8(s32 *) __asm__("FUN_001f9740");
 
 extern f32 D_L14_001614C4 __attribute__((sda));
 void FUN_L14_002b2ed8(struct Moby *moby) {
-    DelayVars_2b2ed8 *pv = (DelayVars_2b2ed8 *)moby->pvars;
+    DelayVars_2b2ed8 *delay_state = (DelayVars_2b2ed8 *)moby->pvars;
 
-    if (pv->restart != 0) {
-        pv->delay = truncate_float_to_s32_2b2ed8(
+    if (delay_state->restart != 0) {
+        delay_state->delay = truncate_float_to_s32_2b2ed8(
             FUN_001f96b0_2b2ed8(random_float_between_2b2ed8(180.0f, 240.0f)));
-        pv->restart = 0;
+        delay_state->restart = 0;
     }
-    tick_countdown_2b2ed8(&pv->delay);
-    if (pv->delay != 0) {
-        pv->unk234 = D_L14_001614C4 + 6.0f;
+    tick_countdown_2b2ed8(&delay_state->delay);
+    if (delay_state->delay != 0) {
+        delay_state->unk234 = D_L14_001614C4 + 6.0f;
     } else {
-        pv->unk234 = D_L14_001614C4;
+        delay_state->unk234 = D_L14_001614C4;
     }
 }
 
