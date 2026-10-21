@@ -1650,8 +1650,8 @@ void FUN_L14_003159d8(struct UpdateCam *cam) {
     float *camera_parameters;
     int *camera_state_block;
     int j;
-    int *w;
-    int *r;
+    int *camera_parameter_state_block;
+    int *camera_key_default_cursor;
     float sum;
     float hero_heading_radians;
     int i;
@@ -1695,12 +1695,12 @@ void FUN_L14_003159d8(struct UpdateCam *cam) {
     camera_parameters[2] = D_L14_001F6488_59d8[2];
     camera_parameters[3] = D_L14_001F6488_59d8[3] * 0.017453292f;
     camera_parameters[4] = D_L14_001F6488_59d8[4] * 0.017453292f;
-    w = (int *)((char *)cam->saved_state + 0x74);
-    *w = 0;
-    w[1] = 0;
-    w[2] = 0;
-    w[3] = 0;
-    w[4] = 0;
+    camera_parameter_state_block = (int *)((char *)cam->saved_state + 0x74);
+    *camera_parameter_state_block = 0;
+    camera_parameter_state_block[1] = 0;
+    camera_parameter_state_block[2] = 0;
+    camera_parameter_state_block[3] = 0;
+    camera_parameter_state_block[4] = 0;
     hero_heading_radians = atan2_59d8(hero.moby->rot_row1.x, hero.moby->rot_row1.y);
     ang[1] = camera_parameters[1];
     ang[0] = hero_heading_radians;
@@ -1714,15 +1714,15 @@ void FUN_L14_003159d8(struct UpdateCam *cam) {
     normalize_59d8(&cam->m1, &cam->m1, 1.0f);
     cross_59d8(&cam->m2, &cam->m1, &cam->m0);
     /* give every key without a duration (+0x44) the default 10000 */
-    r = (int *)&D_L14_001F6488_59d8[0x11];
+    camera_key_default_cursor = (int *)&D_L14_001F6488_59d8[0x11];
     for (j = 38; j >= 0; j--) {
-        if (*r == 0)
+        if (*camera_key_default_cursor == 0)
             goto fix;
     next:
-        r += 12;
+        camera_key_default_cursor += 12;
         continue;
     fix:
-        *r = 10000;
+        *camera_key_default_cursor = 10000;
         goto next;
     }
 }
