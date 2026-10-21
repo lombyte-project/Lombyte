@@ -236,7 +236,7 @@ extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 /* Picks slot w74 from the stick angle (or steps it with the 0x1000-0x8000 pad bits), counts hold frames in b71/b70, records the slot's entry when released, and closes when b70 runs out. */
 void FUN_L00_00237ba0(Obj *hud_element) {
-    float x, y, mag, ang, a, slot_position, r;
+    float x, y, mag, ang, a, slot_position, previous_slot_angle;
     int old, slot_step, stick_slot_index, k, id;
     u8 *counters = &hud_element->b70;
 
@@ -263,8 +263,8 @@ void FUN_L00_00237ba0(Obj *hud_element) {
         if (mag > 0.9f) {
             a = ang + 3.1415927f + 3.1415927f + 1.5707964f + 3.1415927f / (float)D_L00_0015FA90;
             slot_position = a * ((float)D_L00_0015FA90 / 6.2831855f);
-            r = (float)old * 6.2831855f / convert_integer_to_float(D_L00_0015FA90) - 3.1415927f;
-            if (old == -1 || fast_difference_between_rotations(r, fast_subtract_rotations(ang, 1.5707964f)) > 0.58904862f) {
+            previous_slot_angle = (float)old * 6.2831855f / convert_integer_to_float(D_L00_0015FA90) - 3.1415927f;
+            if (old == -1 || fast_difference_between_rotations(previous_slot_angle, fast_subtract_rotations(ang, 1.5707964f)) > 0.58904862f) {
                 stick_slot_index = (int)slot_position % D_L00_0015FA90;
                 if (((stick_slot_index ^ 1) & 1)) {
                     float fr = slot_position - (float)FUN_001fa6d0(slot_position);
@@ -278,13 +278,13 @@ void FUN_L00_00237ba0(Obj *hud_element) {
                 if (D_L00_0015F784 > 0.0f) slot_step = 1;
             }
         } else if (D_0013C940.w1D8 == 0 && (D_0013C940.w1C4 & 0xF000)) {
-            int w;
-            w = old;
-            if (D_0013C940.w1C4 & 0x1000) { int slot_lookup; if (w == -1) slot_lookup = D_L00_0017DC20; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][w].unk10; w = slot_lookup; }
-            if (D_0013C940.w1C4 & 0x4000) { int slot_lookup; if (w == -1) slot_lookup = D_L00_0017DC24; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][w].unk14; w = slot_lookup; }
-            if (D_0013C940.w1C4 & 0x8000) { int slot_lookup; if (w == -1) slot_lookup = D_L00_0017DC18; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][w].unk8; w = slot_lookup; }
-            if (D_0013C940.w1C4 & 0x2000) { int slot_lookup; if (w == -1) slot_lookup = D_L00_0017DC1C; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][w].unkC; w = slot_lookup; }
-            hud_element->w74 = w;
+            int pad_slot_index;
+            pad_slot_index = old;
+            if (D_0013C940.w1C4 & 0x1000) { int slot_lookup; if (pad_slot_index == -1) slot_lookup = D_L00_0017DC20; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk10; pad_slot_index = slot_lookup; }
+            if (D_0013C940.w1C4 & 0x4000) { int slot_lookup; if (pad_slot_index == -1) slot_lookup = D_L00_0017DC24; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk14; pad_slot_index = slot_lookup; }
+            if (D_0013C940.w1C4 & 0x8000) { int slot_lookup; if (pad_slot_index == -1) slot_lookup = D_L00_0017DC18; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk8; pad_slot_index = slot_lookup; }
+            if (D_0013C940.w1C4 & 0x2000) { int slot_lookup; if (pad_slot_index == -1) slot_lookup = D_L00_0017DC1C; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unkC; pad_slot_index = slot_lookup; }
+            hud_element->w74 = pad_slot_index;
         }
         {
             Ent *slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C];
@@ -318,8 +318,8 @@ void FUN_L00_00237ba0(Obj *hud_element) {
     if (counters[0] == 0) {
         {
             int a = hud_element->w78;
-            int b = hud_element->w74;
-            D_L00_0015FA9C = b;
+            int selected_slot_snapshot = hud_element->w74;
+            D_L00_0015FA9C = selected_slot_snapshot;
             D_L00_0015FA98 = a;
         }
         remove_hud_item(hud_element->w64);
