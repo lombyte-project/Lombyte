@@ -37,7 +37,7 @@ extern s32 __sseek(void *, s32, s32);
 void __smakebuf(RncFile *fp) {
     u32 size, couldbetty;
     void *allocated_buffer;
-    struct RncStatBuffer st;
+    struct RncStatBuffer file_status;
 
     if (fp->_flags & 2) {
         fp->_bf._base = fp->_p = fp->_nbuf;
@@ -45,14 +45,14 @@ void __smakebuf(RncFile *fp) {
         return;
     }
     if ((s16)fp->_file < 0 ||
-        reentrant_syscall_with_two_arguments(fp->_data, (s16)fp->_file, &st) < 0) {
+        reentrant_syscall_with_two_arguments(fp->_data, (s16)fp->_file, &file_status) < 0) {
         couldbetty = 0;
         size = 0x400;
         fp->_flags |= 0x800;
     } else {
-        couldbetty = (st.st_mode & 0xF000) == 0x2000;
+        couldbetty = (file_status.st_mode & 0xF000) == 0x2000;
         size = 0x400;
-        if ((st.st_mode & 0xF000) == 0x8000 && fp->_seek == __sseek) {
+        if ((file_status.st_mode & 0xF000) == 0x8000 && fp->_seek == __sseek) {
             fp->_flags |= 0x400;
             fp->_blksize = 1024;
         } else {
