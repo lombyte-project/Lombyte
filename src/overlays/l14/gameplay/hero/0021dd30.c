@@ -29,23 +29,23 @@ float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L14_0021dd30(void) {
     struct Hero *hero_ptr;
-    struct Hero *g = &hero;
-    int keep = g->unk12ED;
-    int saved_ground_type = g->ground_type;
-    fast_mem_zero16(&g->ground_type, 0x10);
-    g->unk12ED = keep;
-    g->ground_type = -1;
-    g->unk20A9 = 0;
-    g->unk308 = 0;
+    struct Hero *hero_data = &hero;
+    int keep = hero_data->unk12ED;
+    int saved_ground_type = hero_data->ground_type;
+    fast_mem_zero16(&hero_data->ground_type, 0x10);
+    hero_data->unk12ED = keep;
+    hero_data->ground_type = -1;
+    hero_data->unk20A9 = 0;
+    hero_data->unk308 = 0;
     if (saved_ground_type == -1)
         return;
     if (saved_ground_type == 2) {
-        if (g->frames_off_ground.s == 0 || g->ground_distance < 0.3f) {
-            g->unk12E7 = 1;
-            if (g->vehicle_mode == 0) {
-                char *item_moby_bytes = ((char *)g->items[1].moby);
+        if (hero_data->frames_off_ground.s == 0 || hero_data->ground_distance < 0.3f) {
+            hero_data->unk12E7 = 1;
+            if (hero_data->vehicle_mode == 0) {
+                char *item_moby_bytes = ((char *)hero_data->items[1].moby);
                 if (item_moby_bytes != 0 && *(short *)(item_moby_bytes + 0xA6) == 0xAD) {
-                    g->unk308 = 1;
+                    hero_data->unk308 = 1;
                 }
             }
         }
