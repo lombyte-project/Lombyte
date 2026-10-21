@@ -1671,14 +1671,14 @@ void FUN_L15_002edb20(struct Moby *moby) {
         if (D_L15_0015F5C4 == 2) {
             if (mission_2edb20.mode == 1 || mission_2edb20.mode == 2 || mission_2edb20.mode == 3 ||
                 mission_2edb20.mode == 4 || mission_2edb20.mode == 6) {
-                int v = mission_2edb20.mode;
+                int mission_mode = mission_2edb20.mode;
                 int i;
                 i = 0;
-                if (v == 1)
+                if (mission_mode == 1)
                     i = 4;
-                else if (v == 2 || v == 3 || v == 4)
+                else if (mission_mode == 2 || mission_mode == 3 || mission_mode == 4)
                     i = 2;
-                else if (v == 6)
+                else if (mission_mode == 6)
                     i = 1;
                 cutscene_set_camera_target(mission_2edb20.slot[i]);
             }
