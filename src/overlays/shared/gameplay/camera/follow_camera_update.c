@@ -1764,7 +1764,7 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
    distance, height, offset scale and springs, and swings it around the
    descriptor's yaw over `timer`. */
 void volume_camera_swing(struct UpdateCam *cam) __asm__("FUN_L00_002ec988");
-void volume_camera_swing(struct UpdateCam *cam) {
+void volume_camera_swing(struct UpdateCam *swing_camera_record) {
     CameraVec dir;
     SwingCameraParams *params;
     struct UpdateCam *rec;
@@ -1780,17 +1780,17 @@ void volume_camera_swing(struct UpdateCam *cam) {
     f32 swing;
     f32 lateral_spring_blend_fraction;
 
-    params = camera_descriptors[cam->descriptor_index].params;
+    params = camera_descriptors[swing_camera_record->descriptor_index].params;
     if (params->type == 8 && FOLLOW_CAM_STATE(current_follow_cam)->tail.mode == 0) {
         return;
     }
     if (params->type == 6 && FOLLOW_CAM_STATE(current_follow_cam)->tail.mode != 0) {
         return;
     }
-    if (volume_camera_swing_active(cam) == 0) {
+    if (volume_camera_swing_active(swing_camera_record) == 0) {
         goto stop;
     }
-    if (fun_l00_002e83c0(cam) <= 0) {
+    if (fun_l00_002e83c0(swing_camera_record) <= 0) {
         if (params->timer != 0) {
             params->done = 1;
         }
@@ -1798,7 +1798,7 @@ void volume_camera_swing(struct UpdateCam *cam) {
         return;
     }
     if (params->check_yaw != 0
-        && fast_difference_between_rotations(camera_descriptors[cam->descriptor_index].yaw, D_L00_00166DD8) >= 1.3962634f) {
+        && fast_difference_between_rotations(camera_descriptors[swing_camera_record->descriptor_index].yaw, D_L00_00166DD8) >= 1.3962634f) {
         goto stop;
     }
     if (params->l_buttons_end != 0 && params->type == 5 && (pad_held & (PAD_L2 | PAD_L1))) {
@@ -1807,7 +1807,7 @@ stop:
             params->done = 1;
         }
         params->timer = 0;
-        fun_l00_002e8388(cam);
+        fun_l00_002e8388(swing_camera_record);
         return;
     }
     if (params->timer == 0) {
@@ -1898,8 +1898,8 @@ stop:
             params->timer = scale_game_frames(200);
         }
     }
-    dir[0] = fast_cos(camera_descriptors[cam->descriptor_index].yaw);
-    dir[1] = fast_sin(camera_descriptors[cam->descriptor_index].yaw);
+    dir[0] = fast_cos(camera_descriptors[swing_camera_record->descriptor_index].yaw);
+    dir[1] = fast_sin(camera_descriptors[swing_camera_record->descriptor_index].yaw);
     *(s32 *)&dir[2] = 0;
     swing = params->swing * 0.017453292f * (params->timer / total);
     if ((params->type != 1 && params->type != 7 && params->type != 9) || at_end == 0) {
