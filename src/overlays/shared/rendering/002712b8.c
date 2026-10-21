@@ -632,12 +632,12 @@ void FUN_001f9a10_002728e8(void *, void *, void *) __asm__("FUN_001f9a10");
 int FUN_001fa6d0_002728e8(float) __asm__("FUN_001fa6d0");
 void FUN_L00_00267a08_002728e8(unsigned char *) __asm__("FUN_L00_00267a08");
 void FUN_L00_002728e8(unsigned char *particle) {
-    float *v = (float *)(particle + 0x20);
-    FUN_001f9a10_002728e8(particle + 0x10, particle + 0x10, v);
+    float *particle_data = (float *)(particle + 0x20);
+    FUN_001f9a10_002728e8(particle + 0x10, particle + 0x10, particle_data);
     *(float *)(particle + 0xc) += 5880.0f;
-    v[5] *= 0.98f;
-    v[4] += v[5];
-    particle[8] = FUN_001fa6d0_002728e8(v[4]);
+    particle_data[5] *= 0.98f;
+    particle_data[4] += particle_data[5];
+    particle[8] = FUN_001fa6d0_002728e8(particle_data[4]);
     if (--*(short *)(particle + 0xa) <= 0)
         FUN_L00_00267a08_002728e8(particle);
     if (*(short *)(particle + 0xa) > 0x40)
