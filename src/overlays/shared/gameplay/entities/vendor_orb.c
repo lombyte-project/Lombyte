@@ -2632,9 +2632,9 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
 void FUN_001f9a28_c2(void *, void *, void *) __asm__("FUN_001f9a28");
 /* Passes b minus the vector at +0x40 of p's object, with x, to FUN_L00_002e86b0. */
 float FUN_L00_002e88c8(char *camera, void *target_position, f32 x) {
-    float buf[4];
-    FUN_001f9a28_c2(buf, target_position, *(char **)(camera + 0x70) + 0x40);
-    return FUN_L00_002e86b0(camera, buf, x);
+    float focus_to_target_direction[4];
+    FUN_001f9a28_c2(focus_to_target_direction, target_position, *(char **)(camera + 0x70) + 0x40);
+    return FUN_L00_002e86b0(camera, focus_to_target_direction, x);
 }
 extern char *D_L00_00166E00_002e8918 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 void FUN_L00_002e86b0_002e8918(char *, char *, float) __asm__("FUN_L00_002e86b0");
