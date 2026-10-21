@@ -2040,24 +2040,24 @@ void FUN_L00_00275aa0(char *particle) {
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
 void FUN_L00_00275d68(unsigned char *particle) {
-    float *v = (float *)(particle + 0x20);
+    float *particle_motion_data = (float *)(particle + 0x20);
     int color_without_alpha;
     float t;
-    if (*(int *)(v + 7)) {
-        v[0] += v[4];
-        v[1] += v[5];
-        v[2] += v[6];
-        fast_vec_add(particle + 0x10, (char *)*(int *)(v + 7) + 0x10, v);
+    if (*(int *)(particle_motion_data + 7)) {
+        particle_motion_data[0] += particle_motion_data[4];
+        particle_motion_data[1] += particle_motion_data[5];
+        particle_motion_data[2] += particle_motion_data[6];
+        fast_vec_add(particle + 0x10, (char *)*(int *)(particle_motion_data + 7) + 0x10, particle_motion_data);
     } else {
-        ((float *)(particle + 0x10))[0] += v[4];
-        ((float *)(particle + 0x10))[1] += v[5];
-        ((float *)(particle + 0x10))[2] += v[6];
+        ((float *)(particle + 0x10))[0] += particle_motion_data[4];
+        ((float *)(particle + 0x10))[1] += particle_motion_data[5];
+        ((float *)(particle + 0x10))[2] += particle_motion_data[6];
     }
     if (fast_dec_timer_s16(particle + 0xA)) {
         free_effect_particle(particle);
         return;
     }
-    if (*(int *)(v + 7)) {
+    if (*(int *)(particle_motion_data + 7)) {
         color_without_alpha = *(int *)(particle + 4) & 0xFFFFFF;
         *(int *)(particle + 4) =
             FUN_001fa6e0(color_without_alpha, *(int *)(particle + 4),
