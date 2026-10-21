@@ -1004,13 +1004,13 @@ extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 
 void FUN_L00_0020e698(void);
 void FUN_L00_0020e698(void) {
-    struct Hero *g = &hero;
-    if (g->unk20A8 != 0) {
-        if (g->unkD08[0] != 0) {
-            g->unkD14 = 1;
-        } else if (g->state.current == 0) {
-            unsigned char *hero_moby = (unsigned char *)g->moby;
-            if (hero_moby[0x53] == g->unk2294) {
+    struct Hero *hero_state = &hero;
+    if (hero_state->unk20A8 != 0) {
+        if (hero_state->unkD08[0] != 0) {
+            hero_state->unkD14 = 1;
+        } else if (hero_state->state.current == 0) {
+            unsigned char *hero_moby = (unsigned char *)hero_state->moby;
+            if (hero_moby[0x53] == hero_state->unk2294) {
                 int idle_animation_id = hero_idle_sequence(0);
                 set_hero_animation(idle_animation_id, 0, -2.0f);
             }
