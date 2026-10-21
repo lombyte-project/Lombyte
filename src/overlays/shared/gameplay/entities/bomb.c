@@ -1988,11 +1988,11 @@ extern void FUN_L00_0025e450_2ccee0(void *, void *, void *, float, float, int, i
                                     int) __asm__("FUN_L00_0025e450");
 extern void FUN_0020c828_2ccee0(void *) __asm__("FUN_0020c828");
 
-unsigned char *FUN_L00_002ccee0(int owner_moby, V_2ccee0 *pos, unsigned char *tgt, float target_height_offset, float yaw,
+unsigned char *FUN_L00_002ccee0(int owner_moby, V_2ccee0 *spawn_position, unsigned char *target_moby, float target_height_offset, float yaw,
                                 float pitch) {
     V_2ccee0 forward_step;
     V_2ccee0 collision_start;
-    V_2ccee0 dir;
+    V_2ccee0 explosion_direction;
     V_2ccee0 z;
     unsigned char *spawned_moby;
     unsigned char *rocket_vars;
@@ -2011,20 +2011,20 @@ unsigned char *FUN_L00_002ccee0(int owner_moby, V_2ccee0 *pos, unsigned char *tg
         *(float *)(spawned_moby + 0x44) = pitch;
         spawned_moby[0x20] = 0;
         *(int *)(rocket_vars + 0x20) = owner_moby;
-        qcopy(spawned_moby + 0x10, pos);
-        qcopy(rocket_vars + 0x10, pos);
+        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(rocket_vars + 0x10, spawn_position);
         *(int *)(rocket_vars + 0x34) = 0;
         *(int *)(rocket_vars + 0x38) = 0;
         *(int *)(rocket_vars + 0x30) = 0;
-        *(unsigned char **)(rocket_vars + 0x28) = tgt;
+        *(unsigned char **)(rocket_vars + 0x28) = target_moby;
         *(float *)(spawned_moby + 0x2C) = *(float *)(*(unsigned char **)(spawned_moby + 0x24) + 0x24) * 0.25f;
-        if (tgt != 0) {
-            *(int *)(rocket_vars + 0x58) = *(short *)(tgt + 0xA6);
-            target_aim_data = FUN_002141f8_2ccee0(tgt);
+        if (target_moby != 0) {
+            *(int *)(rocket_vars + 0x58) = *(short *)(target_moby + 0xA6);
+            target_aim_data = FUN_002141f8_2ccee0(target_moby);
             if (target_aim_data != 0) {
                 *(unsigned short *)(target_aim_data + 0x1E) |= 0x80;
             }
-            qcopy(rocket_vars, tgt + 0x10);
+            qcopy(rocket_vars, target_moby + 0x10);
             *(float *)(rocket_vars + 0x2C) = target_height_offset;
             *(float *)(rocket_vars + 8) += target_height_offset;
         }
@@ -2045,17 +2045,17 @@ unsigned char *FUN_L00_002ccee0(int owner_moby, V_2ccee0 *pos, unsigned char *tg
         z.q = 0;
         z.f[2] = D_0015ED6C_lui * 8.0f;
         collision_ignore_moby = D_001413D0_2ccee0;
-        dir.q = z.q;
+        explosion_direction.q = z.q;
         collision_start.q = ((V_2ccee0 *)(collision_ignore_moby + 0x10))->q;
-        collision_start.f[2] = pos->f[2];
-        if (FUN_001efa68_2ccee0(&collision_start, pos, 0, collision_ignore_moby, 0)) {
+        collision_start.f[2] = spawn_position->f[2];
+        if (FUN_001efa68_2ccee0(&collision_start, spawn_position, 0, collision_ignore_moby, 0)) {
             spawned_moby[0xBC] = 2;
             qcopy(spawned_moby + 0x10, D_L00_00173E60_2ccee0);
             FUN_00214db0_2ccee0(&forward_step, *(float *)(rocket_vars + 0x30), *(float *)(spawned_moby + 0x48),
                                 -*(float *)(spawned_moby + 0x44));
-            FUN_L00_001ff660_2ccee0(&dir, &forward_step, D_L00_00173E60_2ccee0 + 0x20);
-            FUN_001f9bf8_2ccee0(&dir, &dir, D_0015ED6C_lui + D_0015ED6C_lui);
-            FUN_L00_0025e450_2ccee0(spawned_moby, &dir, 0, 0.0f, 0.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0,
+            FUN_L00_001ff660_2ccee0(&explosion_direction, &forward_step, D_L00_00173E60_2ccee0 + 0x20);
+            FUN_001f9bf8_2ccee0(&explosion_direction, &explosion_direction, D_0015ED6C_lui + D_0015ED6C_lui);
+            FUN_L00_0025e450_2ccee0(spawned_moby, &explosion_direction, 0, 0.0f, 0.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0,
                                     15.0f, 1, 1, -1, 0);
             FUN_0020c828_2ccee0(spawned_moby);
             return 0;
