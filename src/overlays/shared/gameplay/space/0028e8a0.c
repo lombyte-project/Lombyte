@@ -278,7 +278,7 @@ void FUN_L00_0028e9c8_eed0(s32) __asm__("FUN_L00_0028e9c8");
 extern u8 D_0013DD43 __attribute__((section(".data")));
 extern u8 D_0013D3F0[];
 void FUN_L00_0028eed0(void) {
-    int level_index, u;
+    int level_index, shared_table_offset;
     D_0013E030_eed0.x2c = 1;
     if (D_0013E030_eed0.x2a != 0)
         D_0013E030_eed0.x2a = 0;
@@ -304,10 +304,10 @@ in:
     fade_level = 1.0f;
     D_0013E030_eed0.x20 = 0;
     FUN_002335a0_eed0();
-    u = D_L00_001611CC - 0x60000;
-    D_L00_0016C860_eed0.x58 = D_L00_00173E00_eed0.x4 + u;
-    D_L00_0016C860_eed0.x5c = D_L00_00173E00_eed0.x8_c + u;
-    D_L00_001611CC = u;
+    shared_table_offset = D_L00_001611CC - 0x60000;
+    D_L00_0016C860_eed0.x58 = D_L00_00173E00_eed0.x4 + shared_table_offset;
+    D_L00_0016C860_eed0.x5c = D_L00_00173E00_eed0.x8_c + shared_table_offset;
+    D_L00_001611CC = shared_table_offset;
     FUN_L00_0028e9c8_eed0(8);
 }
 typedef struct {
