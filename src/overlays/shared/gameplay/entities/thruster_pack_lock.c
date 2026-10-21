@@ -202,7 +202,7 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     unsigned long green_bits;
     unsigned long blue_bits;
     unsigned long alpha_bits;
-    unsigned long tex0;
+    unsigned long texture_packet_value;
     int depth;
     unsigned long packed_depth;
     unsigned long gif_tag;
@@ -221,7 +221,7 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     green_bits = green & 0xFF;
     blue_bits = blue & 0xFF;
     alpha_bits = alpha & 0xFF;
-    tex0 = texture;
+    texture_packet_value = texture;
     depth = z_and_fog;
 
     center[0] = x;
@@ -260,7 +260,7 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     D_L11_001611C0 = (int)packet;
     *(unsigned long *)(tag + 0x10) = gif_tag;
     packet[1] = gif_regs;
-    packet[2] = tex0;
+    packet[2] = texture_packet_value;
     packet[3] = prim;
     packet[4] = rgba;
     packet[5] = tex_size;
