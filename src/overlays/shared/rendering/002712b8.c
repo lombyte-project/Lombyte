@@ -1195,14 +1195,14 @@ int FUN_L00_0025bfe0_273ee0(float, float, float, float) __asm__("FUN_L00_0025bfe
 void FUN_L00_00273ee0(unsigned char *particle) {
     u128 out[1];
     float *particle_data;
-    unsigned char *b;
+    unsigned char *particle_position;
     if (!particle)
         return;
     particle_data = (float *)(particle + 0x20);
-    b = particle + 0x10;
+    particle_position = particle + 0x10;
     particle_data[7] += frame_scale * 0.0f;
     *(float *)(particle + 0xC) += frame_scale * -100.0f;
-    FUN_001f9a10_273ee0(out, b, particle_data);
+    FUN_001f9a10_273ee0(out, particle_position, particle_data);
     if (*(float *)(particle + 0x20) != 0.0f || particle_data[1] != 0.0f || particle_data[2] != 0.0f) {
         if (collision_line(particle + 0x10, out, 2, particle, 0)) {
             *(u128 *)(particle + 0x10) = ((u128 *)&D_L00_00173E60)[0];
