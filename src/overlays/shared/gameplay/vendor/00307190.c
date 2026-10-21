@@ -20,7 +20,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5);
-char *FUN_L08_00307190(char *pos, char *dir, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) {
+char *FUN_L08_00307190(char *initial_velocity, char *spawn_position, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) {
     char *spawned_moby = func_0020D348_m(0x50C);
     if (spawned_moby != 0) {
         char *moby_data;
@@ -29,8 +29,8 @@ char *FUN_L08_00307190(char *pos, char *dir, int collision_ignore_moby, int trac
         moby_data = *(char **)(spawned_moby + 0x78);
         spawned_moby[0x31] = 1;
         spawned_moby[0x20] = 1;
-        qcopy(spawned_moby + 0x10, dir);
-        qcopy(moby_data, pos);
+        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(moby_data, initial_velocity);
         *(int *)(moby_data + 0x18) = scale_game_frames(lifetime_frames);
         *(int *)(moby_data + 0x10) = collision_ignore_moby;
         *(int *)(moby_data + 0x14) = tracked_moby;
