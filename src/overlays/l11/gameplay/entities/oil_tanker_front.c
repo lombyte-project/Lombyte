@@ -397,7 +397,7 @@ void FUN_L11_00316320(struct Moby *moby) {
     case GATE_INITIALIZE_DOORS: {
         struct Moby *door_moby;
         struct Moby *door_rotation_target;
-        u8 *pv;
+        u8 *door_vars;
         moby->scale *= 2.0f;
         gate_vars->left = spawn_moby_class(0x4DF);
         gate_vars->left->draw_dist = 0x40;
@@ -411,9 +411,9 @@ void FUN_L11_00316320(struct Moby *moby) {
         qcopy(&door_rotation_target->rot, &moby->rot);
         door_rotation_target->rot.x = -(D_L11_0016230C * 0.017453292f);
         gate_vars->left->rot.y = D_L11_00162310 * 0.017453292f;
-        pv = gate_vars->left->pvars;
-        *(u8 **)(pv + 8) = pv + 0x20;
-        *(u32 *)(pv + 0x5C) |= 1;
+        door_vars = gate_vars->left->pvars;
+        *(u8 **)(door_vars + 8) = door_vars + 0x20;
+        *(u32 *)(door_vars + 0x5C) |= 1;
         gate_vars->right = spawn_moby_class(0x4DF);
         gate_vars->right->draw_dist = 0x40;
         gate_vars->right->visible = 1;
@@ -426,9 +426,9 @@ void FUN_L11_00316320(struct Moby *moby) {
         qcopy(&door_rotation_target->rot, &moby->rot);
         door_rotation_target->rot.x = D_L11_0016230C * 0.017453292f;
         gate_vars->right->rot.y = D_L11_00162310 * 0.017453292f;
-        pv = gate_vars->right->pvars;
-        *(u8 **)(pv + 8) = pv + 0x20;
-        *(u32 *)(pv + 0x5C) |= 1;
+        door_vars = gate_vars->right->pvars;
+        *(u8 **)(door_vars + 8) = door_vars + 0x20;
+        *(u32 *)(door_vars + 0x5C) |= 1;
         moby->state = 1;
         break;
     }
