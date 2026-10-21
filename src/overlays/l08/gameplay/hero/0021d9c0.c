@@ -24,18 +24,18 @@ float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L08_0021d9c0(void) {
     struct Hero *hero_ptr = &hero;
-    int v;
+    int saved_ground_type;
     int x;
     unsigned char saved = hero_ptr->unk12ED;
-    v = hero_ptr->ground_type;
+    saved_ground_type = hero_ptr->ground_type;
     fast_mem_zero16(&hero_ptr->ground_type, 0x10);
     hero_ptr->unk12ED = saved;
     hero_ptr->ground_type = -1;
     hero_ptr->unk20A9 = 0;
     hero_ptr->unk308 = 0;
-    if (v == -1)
+    if (saved_ground_type == -1)
         return;
-    if (v == 2) {
+    if (saved_ground_type == 2) {
         if (hero_ptr->frames_off_ground.s == 0 || hero_ptr->ground_distance < 0.3f) {
             hero_ptr->unk12E7 = 1;
             if (hero_ptr->vehicle_mode == 0) {
@@ -45,13 +45,13 @@ void FUN_L08_0021d9c0(void) {
             }
         }
     }
-    if (v == 0xE) {
+    if (saved_ground_type == 0xE) {
         struct Hero *q = &hero;
         q->base_condition = 1;
         q->unk22A4 = 0.2f;
         q->water_surface_z = q->ground_z.f + 0.2f;
     }
-    if (v == 0) {
+    if (saved_ground_type == 0) {
         struct Hero *q = &hero;
         q->unk22A4 = q->water_surface_z - q->ground_z.f;
         if (q->unk22A4 < 0.85f) {
@@ -72,31 +72,31 @@ void FUN_L08_0021d9c0(void) {
             }
         }
     }
-    if (v == 0xB) {
+    if (saved_ground_type == 0xB) {
         struct Hero *q = &hero;
         *(char *)&q->selector_11 = 1;
     }
-    if (v == 2) {
+    if (saved_ground_type == 2) {
         struct Hero *q = &hero;
         *(char *)&q->unk12E7 = 1;
     }
-    if (v == 4) {
+    if (saved_ground_type == 4) {
         struct Hero *q = &hero;
         *(char *)&q->unk12E3 = 1;
     }
-    if (v == 0xD) {
+    if (saved_ground_type == 0xD) {
         struct Hero *q = &hero;
         *(char *)&q->selector_13 = 1;
     }
-    if (v == 8) {
+    if (saved_ground_type == 8) {
         struct Hero *q = &hero;
         *(char *)&q->on_slip_ground = 1;
     }
-    if (v == 9) {
+    if (saved_ground_type == 9) {
         struct Hero *q = &hero;
         *(char *)&q->unk12EE = 1;
     }
-    if (v == 0xC) {
+    if (saved_ground_type == 0xC) {
         struct Hero *q = &hero;
         *(char *)&q->on_slip_ground = 1;
     }
@@ -110,13 +110,13 @@ void FUN_L08_0021d9c0(void) {
             }
         }
         {
-            struct Hero *r = &hero;
-            if (r->selector_13 != 0) {
-                if (r->state.current == 0x7F)
+            struct Hero *sink_check_hero_ptr = &hero;
+            if (sink_check_hero_ptr->selector_13 != 0) {
+                if (sink_check_hero_ptr->state.current == 0x7F)
                     return;
-                if (absolute_float(r->water_surface_z - (r->motion.pos.f[2] + 0.25f)) < 1.0f) {
-                    if (r->water_surface_z - r->motion.pos.f[2] > 0.0f) {
-                        if (r->motion.displacement.f[2] < 0.0f) {
+                if (absolute_float(sink_check_hero_ptr->water_surface_z - (sink_check_hero_ptr->motion.pos.f[2] + 0.25f)) < 1.0f) {
+                    if (sink_check_hero_ptr->water_surface_z - sink_check_hero_ptr->motion.pos.f[2] > 0.0f) {
+                        if (sink_check_hero_ptr->motion.displacement.f[2] < 0.0f) {
                             FUN_L00_0020b930();
                             hero_set_state(HERO_STATE_SINK, 1);
                         }
