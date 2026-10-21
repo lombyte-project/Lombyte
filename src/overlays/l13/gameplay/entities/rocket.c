@@ -1942,8 +1942,8 @@ extern char *FUN_L00_002db890(char *);
 extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern short *D_L13_001ABB40[];
 
-int FUN_L13_0030ae68(int idx, int arg) {
-    short *moby_id_list = D_L13_001ABB40[idx];
+int FUN_L13_0030ae68(int moby_list_index, int excluded_moby_state) {
+    short *moby_id_list = D_L13_001ABB40[moby_list_index];
     short *moby_id_cursor;
     int count = 0;
     if (moby_id_list == 0)
@@ -1955,8 +1955,8 @@ int FUN_L13_0030ae68(int idx, int arg) {
         if (moby[0x20] >= 0) {
             char *moby_callback_record = FUN_L00_002db890(moby);
             if (moby_callback_record == 0 || *(short *)(moby_callback_record + 0x68) < 4) {
-                if (arg == -1 ||
-                    *(unsigned char *)((char *)(id << 8) + (int)D_L13_0015FFD8_m + 0x20) != arg) {
+                if (excluded_moby_state == -1 ||
+                    *(unsigned char *)((char *)(id << 8) + (int)D_L13_0015FFD8_m + 0x20) != excluded_moby_state) {
                     count++;
                 }
             }
