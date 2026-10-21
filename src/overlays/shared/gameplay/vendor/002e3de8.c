@@ -293,8 +293,8 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern struct { char pad0[0x184]; char *source; } D_L10_00167100;
 extern VendorView_5f18 D_L10_0016CEC0;
 
-void FUN_L10_002f5b58(struct UpdateCam *cam) {
-    char *rec = *(char **)(D_L10_0015EF50 + cam->descriptor_index * 32 + 0x1C);
+void FUN_L10_002f5b58(struct UpdateCam *path_camera) {
+    char *rec = *(char **)(D_L10_0015EF50 + path_camera->descriptor_index * 32 + 0x1C);
     VendorCamRun_5f18 *run;
     VendorCamStops_5f18 *stops;
     f32 *fov;
@@ -302,7 +302,7 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
     char *saved;
 
     rec[0x38] = 1;
-    run = (VendorCamRun_5f18 *)((char *)cam->saved_state + 0x40);
+    run = (VendorCamRun_5f18 *)((char *)path_camera->saved_state + 0x40);
     run->seg = 0;
     run->t = 0.0f;
     run->path_length = 0.0f;
@@ -310,7 +310,7 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
     run->dist = 0.0f;
     run->started = 0;
     run->timer = scale_game_frames(*(s16 *)(rec + 0x3A));
-    stops = (VendorCamStops_5f18 *)((char *)cam->saved_state + 0x58);
+    stops = (VendorCamStops_5f18 *)((char *)path_camera->saved_state + 0x58);
     fov = stops->fov;
     {
         int k;
@@ -319,9 +319,9 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
             stops->seg[k] = -1;
         }
     }
-    pos = &cam->pos;
-    m1 = (Vec4f *)&cam->m1;
-    m2 = (Vec4f *)&cam->m2;
+    pos = &path_camera->pos;
+    m1 = (Vec4f *)&path_camera->m1;
+    m2 = (Vec4f *)&path_camera->m2;
     stops->fov_end = angle_atan2(1.0f, D_L10_0016CEC0.tan_half_fov) * 2.0f;
     if (*(int *)(rec + 0x20) >= 0) {
         char *path = D_L10_001B0930_5a78[*(int *)(rec + 0x20)];
@@ -370,18 +370,18 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
                 run->look_path_length += length;
         }
     }
-    saved = (char *)cam->saved_state;
+    saved = (char *)path_camera->saved_state;
     *(f32 *)(saved + 0x00) = 0.03f;
     *(f32 *)(saved + 0x04) = 0.2f;
     clear_u64_value(saved + 0x10);
-    saved = (char *)cam->saved_state;
+    saved = (char *)path_camera->saved_state;
     *(f32 *)(saved + 0x20) = 0.03f;
     *(f32 *)(saved + 0x24) = 0.2f;
     clear_u64_value(saved + 0x30);
     {
         char *source = D_L10_00167100.source;
         qcopy(pos, source + 0x30);
-        qcopy(cam, source);
+        qcopy(path_camera, source);
         qcopy(m1, source + 0x10);
         qcopy(m2, source + 0x20);
     }
