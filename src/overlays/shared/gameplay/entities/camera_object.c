@@ -1737,7 +1737,7 @@ extern int FUN_L00_002c5be8(void *);
 void FUN_L00_002a82c0(unsigned char *wrench_moby) {
     N_2a82c0 *scanned_moby = D_L00_0015FFE4;
     struct Hero *g;
-    int r;
+    int moby_processing_result;
     if (scanned_moby == 0)
         return;
     g = &hero;
@@ -1748,14 +1748,14 @@ void FUN_L00_002a82c0(unsigned char *wrench_moby) {
             return;
         if (scanned_moby && scanned_moby->info && *(short *)(scanned_moby->info + 0x46) == 0x13) {
             if (FUN_001f9b48((char *)scanned_moby + 0x10, wrench_moby + 0x10) < 2.7f) {
-                r = FUN_L00_002a7210(scanned_moby, ((void *)g->moby),
+                moby_processing_result = FUN_L00_002a7210(scanned_moby, ((void *)g->moby),
                                      random_float_between(-30.0f, 30.0f) * DEG_TO_RAD, 0.0f);
                 goto check;
             }
         } else if (FUN_L00_0025e3f8(scanned_moby) && FUN_001f9b48((char *)scanned_moby + 0x10, wrench_moby + 0x10) < 2.7f) {
-            r = FUN_L00_002c5be8(scanned_moby);
+            moby_processing_result = FUN_L00_002c5be8(scanned_moby);
         check:
-            if (r)
+            if (moby_processing_result)
                 return;
         }
         scanned_moby = scanned_moby->next;
