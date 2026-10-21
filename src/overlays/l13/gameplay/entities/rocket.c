@@ -17,7 +17,7 @@ extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L13_003058a8(struct Moby *src, short cls) {
+char *FUN_L13_003058a8(struct Moby *src, short joint_index) {
     char *moby = create_moby(0x4D1);
     char *moby_vars;
     char *pos;
@@ -28,10 +28,10 @@ char *FUN_L13_003058a8(struct Moby *src, short cls) {
         *(short *)(moby + 0x32) = 0x7F;
         moby[0x20] = 1;
         *(char **)(moby_vars + 0x20) = src;
-        *(short *)(moby_vars + 0x26) = cls;
+        *(short *)(moby_vars + 0x26) = joint_index;
         *(short *)(moby_vars + 0x24) = 1;
         pos = moby + 0x10;
-        moby_point_position(src, cls, pos);
+        moby_point_position(src, joint_index, pos);
         qcopy(moby + 0x40, &src->rot);
         *(OvlQuad *)(moby + 0xC0) = *(OvlQuad *)&src->rot_row0;
         *(OvlQuad *)(moby + 0xD0) = *(OvlQuad *)&src->rot_row1;
