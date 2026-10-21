@@ -1133,7 +1133,7 @@ extern float FUN_L00_00233a78_c(void *) __asm__("FUN_L00_00233a78");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
-float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
+float FUN_L00_00233c30(float *initial_position, float *initial_velocity, int *steps, float step) {
     int step_count;
     int k;
     float step_count_float;
@@ -1141,20 +1141,20 @@ float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
 
     switch (hero.unk20B3) {
     case HERO_GRAVITY_WORLD_DOWN:
-        step_count = truncate_float_to_s32(vel[2] / step);
+        step_count = truncate_float_to_s32(initial_velocity[2] / step);
         step_count_float = convert_integer_to_float(step_count);
-        predicted_z = pos[2] + vel[2] * step_count_float - convert_integer_to_float((step_count * step_count + step_count) >> 1) * step;
+        predicted_z = initial_position[2] + initial_velocity[2] * step_count_float - convert_integer_to_float((step_count * step_count + step_count) >> 1) * step;
         if (steps != 0) {
             *steps = step_count;
         }
         return predicted_z;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        k = truncate_float_to_s32(FUN_L00_00233a78_c(vel) / step);
+        k = truncate_float_to_s32(FUN_L00_00233a78_c(initial_velocity) / step);
         if (steps != 0) {
             *steps = k;
         }
-        return pos[2] + vel[2] * 0.5f;
+        return initial_position[2] + initial_velocity[2] * 0.5f;
     }
     return 0.0f;
 }
