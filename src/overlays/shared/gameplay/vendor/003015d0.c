@@ -591,7 +591,7 @@ void FUN_L14_003039e0(unsigned char *moby) {
     int i;
     int j;
     int started_slot_count;
-    int st;
+    int slot_state;
 
     switch (moby[0x20]) {
     case SLOT_UPDATE_STATE_INITIALIZE:
@@ -605,15 +605,15 @@ void FUN_L14_003039e0(unsigned char *moby) {
     case SLOT_UPDATE_STATE_PROCESS_SLOTS:
         started_slot_count = 0;
         for (i = 0; i < 3; i++) {
-            st = D_L14_00162148[i];
-            if (st == 1) {
+            slot_state = D_L14_00162148[i];
+            if (slot_state == 1) {
                 if (((signed char *)D_L14_001621D8[i])[0x20] < 0) {
                     D_L14_00162148[i] = 0;
                     D_L14_001621D8[i] = 0;
                 }
-            } else if (st == 4) {
+            } else if (slot_state == 4) {
                 FUN_L00_002e20f8(i);
-            } else if (st != 0) {
+            } else if (slot_state != 0) {
                 started_slot_count++;
                 FUN_L00_002e2250(D_L14_001621D8[i], i);
                 D_L14_00162148[i] = 4;
