@@ -878,7 +878,7 @@ typedef unsigned long long u64_t;
         (dst) += (u64_t)q_;                                                                        \
     }
 
-void FUN_L02_002da938(void *unused, f32 angle, f32 b, f32 end_distance, s32 color) {
+void FUN_L02_002da938(void *unused, f32 angle, f32 start_distance, f32 end_distance, s32 color) {
     u64_t packed_vertices[4];
     s32 vertex_colors[4];
     s32 vertex_uvs[4];
@@ -899,8 +899,8 @@ void FUN_L02_002da938(void *unused, f32 angle, f32 b, f32 end_distance, s32 colo
     vertex_uvs[2] = (s32)(D_L02_00161AF4 + off);
     vertex_uvs[3] = (s32)(D_L02_00161AF8 + off);
 
-    f25 = fast_sin(angle) * b;
-    f24 = fast_cos(angle) * b;
+    f25 = fast_sin(angle) * start_distance;
+    f24 = fast_cos(angle) * start_distance;
     f28 = fast_sin(angle) * end_distance;
     f27 = fast_cos(angle) * end_distance;
     trig_value = fast_cos(angle);
@@ -942,8 +942,8 @@ void FUN_L02_002da938(void *unused, f32 angle, f32 b, f32 end_distance, s32 colo
     vertex_uvs[2] = (s32)D_L02_00161B04;
     vertex_uvs[3] = (s32)D_L02_00161B08;
 
-    f25 = fast_sin(angle) * b;
-    f24 = fast_cos(angle) * b;
+    f25 = fast_sin(angle) * start_distance;
+    f24 = fast_cos(angle) * start_distance;
     f28 = fast_sin(angle) * end_distance;
     f27 = fast_cos(angle) * end_distance;
     trig_value = fast_cos(angle);
