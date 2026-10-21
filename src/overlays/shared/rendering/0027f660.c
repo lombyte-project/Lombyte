@@ -20,7 +20,7 @@ extern unsigned char *FUN_L00_002678b8(int);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L01_001B250C __attribute__((section(".data")));
-void FUN_L01_0027f660(char *spawn_position, char *vel) {
+void FUN_L01_0027f660(char *spawn_position, char *initial_particle_velocity) {
     unsigned char *particle = FUN_L00_002678b8(10);
     if (particle != 0) {
         char *particle_data = (char *)particle + 0x20;
@@ -37,7 +37,7 @@ void FUN_L01_0027f660(char *spawn_position, char *vel) {
         *(float *)(particle_data + 0x18) = 0.225f;
         *(float *)(particle_data + 0x1C) = 1.0f;
         *(short *)(particle + 0xA) = scale_game_frames(0x57);
-        qcopy(particle_data, vel);
+        qcopy(particle_data, initial_particle_velocity);
     }
 }
 #ifndef NOT_SDA
