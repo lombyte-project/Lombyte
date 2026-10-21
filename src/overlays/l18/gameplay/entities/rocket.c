@@ -1924,7 +1924,7 @@ extern float D_L18_00161C7C __attribute__((sda));
 void FUN_L18_002dba20(M_dba20 *moby) {
     Q_dba20 quad_packets[4];
     V_dba20 draw_matrix[4];
-    V_dba20 rot[3];
+    V_dba20 segment_rotation_basis[3];
     V_dba20 rv;
     D_dba20 *moby_vars = moby->data;
     int j, k, ring_segment_index;
@@ -1936,7 +1936,7 @@ void FUN_L18_002dba20(M_dba20 *moby) {
     draw_matrix[3].f[3] = 1.0f;
     for (j = 0; j < 4; j++) {
         float fj;
-        float layer_phase, ang, rad;
+        float layer_phase, color_fade_weight, rad;
         quad_packets[j].tex = get_effect_texture_dba20(0xE);
         quad_packets[j].unk70 = 0;
         quad_packets[j].unk80 = 0xFF9000000260L;
@@ -1945,16 +1945,16 @@ void FUN_L18_002dba20(M_dba20 *moby) {
         rad = moby_vars->f24 + D_L18_00161C70 * (float)j;
         layer_phase = layer_phase - (float)truncate_dba20(layer_phase);
         col = tween_color_dba20(D_L18_00161C5C, D_L18_00161C60, layer_phase);
-        ang = layer_phase * D_L18_00161C78;
-        if (ang > 1.0f) ang = 1.0f;
-        col = tween_color_dba20(col & 0xFFFFFF, col, ang);
-        ang = (moby_vars->f28 - moby_vars->f24) / (moby_vars->f20 * scale_time_dba20(D_L18_00161C7C));
-        if (ang > 1.0f) {
-            ang = 1.0f;
-        } else if (ang < 0.0f) {
-            ang = 0.0f;
+        color_fade_weight = layer_phase * D_L18_00161C78;
+        if (color_fade_weight > 1.0f) color_fade_weight = 1.0f;
+        col = tween_color_dba20(col & 0xFFFFFF, col, color_fade_weight);
+        color_fade_weight = (moby_vars->f28 - moby_vars->f24) / (moby_vars->f20 * scale_time_dba20(D_L18_00161C7C));
+        if (color_fade_weight > 1.0f) {
+            color_fade_weight = 1.0f;
+        } else if (color_fade_weight < 0.0f) {
+            color_fade_weight = 0.0f;
         }
-        col = tween_color_dba20(col & 0xFFFFFF, col, ang);
+        col = tween_color_dba20(col & 0xFFFFFF, col, color_fade_weight);
         fj = (float)j;
         for (k = 0; k < 4; k++) {
             float corner_angle;
@@ -1975,13 +1975,13 @@ void FUN_L18_002dba20(M_dba20 *moby) {
     }
     clear_vector_dba20(&rv);
     rv.f[2] = D_L18_00161C64 * 0.017453292f;
-    euler_basis_dba20(rot, &rv);
+    euler_basis_dba20(segment_rotation_basis, &rv);
     for (ring_segment_index = 0; (float)ring_segment_index < 360.0f / D_L18_00161C64; ring_segment_index++) {
         draw_quad_dba20(&quad_packets[0], draw_matrix, 0);
         draw_quad_dba20(&quad_packets[1], draw_matrix, 0);
         draw_quad_dba20(&quad_packets[2], draw_matrix, 0);
         draw_quad_dba20(&quad_packets[3], draw_matrix, 0);
-        matrix_mul_dba20(draw_matrix, draw_matrix, rot);
+        matrix_mul_dba20(draw_matrix, draw_matrix, segment_rotation_basis);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD270), where it is exact; names translated to the US level program. */
