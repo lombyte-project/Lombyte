@@ -444,10 +444,10 @@ void FUN_L11_0030d800(struct Moby *grid_controller) {
         D_L11_0015F3FC = 1.0f - absolute_float_d800(grid_controller_vars->fade);
         if (old < 0.0f && 0.0f <= grid_controller_vars->fade) {
             struct Moby *link = (struct Moby *)(D_L11_0015FFD8_d800 + (grid_controller_vars->link << 8));
-            char *cam;
+            char *source_pose_point;
             FUN_L00_00216f90(&link->pos, &link->rot, 0x72, 1);
-            cam = (char *)(D_L11_001600EC_d800 + (grid_controller_vars->from << 7));
-            jet_mount(cam + 0x30, cam + 0x70, 1, 0, 0);
+            source_pose_point = (char *)(D_L11_001600EC_d800 + (grid_controller_vars->from << 7));
+            jet_mount(source_pose_point + 0x30, source_pose_point + 0x70, 1, 0, 0);
         } else if (1.0f <= grid_controller_vars->fade) {
             grid_controller->state = 3;
         }
