@@ -268,15 +268,15 @@ void aa_blur_pass(void) __asm__("FUN_001fb680");
 extern void aa_blur_pass_00233b68(void) __asm__("FUN_00233b68");
 
 void FUN_L02_002a46e0(void) {
-    char *b;
+    char *camera_state;
     long *g;
     int *packet_base;
     vu1_add_vif_code(0x13000000);
-    b = D_L02_0016D040;
-    *(float *)(b + 0x218) = D_L02_001612F8;
-    *(float *)(b + 0x21C) = D_L02_001612FC;
-    *(float *)(b + 0x228) = D_L02_00161300;
-    *(float *)(b + 0x22C) = D_L02_00161304;
+    camera_state = D_L02_0016D040;
+    *(float *)(camera_state + 0x218) = D_L02_001612F8;
+    *(float *)(camera_state + 0x21C) = D_L02_001612FC;
+    *(float *)(camera_state + 0x228) = D_L02_00161300;
+    *(float *)(camera_state + 0x22C) = D_L02_00161304;
     update_view_context();
     update_camera_view_matrices();
     (*(int *volatile *)&D_L02_001611C0)[0] = 0x10000002;
@@ -288,8 +288,8 @@ void FUN_L02_002a46e0(void) {
     g = (long *)(packet_base + 4);
     g[0] = 0x1000000000008001L;
     g[1] = 0xE;
-    g[2] = (long)*(int *)(b + 0x230) | ((long)*(int *)(b + 0x234) << 8) |
-           ((long)*(int *)(b + 0x238) << 16);
+    g[2] = (long)*(int *)(camera_state + 0x230) | ((long)*(int *)(camera_state + 0x234) << 8) |
+           ((long)*(int *)(camera_state + 0x238) << 16);
     g[3] = 0x3D;
     D_L02_001611C0 = packet_base + 12;
     aa_blur_pass_00233b68();
