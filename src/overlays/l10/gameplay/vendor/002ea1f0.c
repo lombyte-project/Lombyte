@@ -190,7 +190,7 @@ void FUN_L10_002ea7b0(void *pos, short *timer) {
     float vel[4];
     float acc[4];
     float frame_count_scale;
-    int frame_count, b, third_frame_count, c1;
+    int frame_count, second_frame_count, third_frame_count, c1;
     if (32.0f < fast_vec_dist(D_L10_00167240, pos))
         return;
     qcopy(visibility_sphere, pos);
@@ -208,12 +208,12 @@ void FUN_L10_002ea7b0(void *pos, short *timer) {
     acc[3] = random_float_between(D_L10_00161FD0, D_L10_00161FD4);
     frame_count_scale = random_float_between(1.0f - D_L10_00161FE4, D_L10_00161FE4 + 1.0f);
     frame_count = func_001FA898_r((float)D_L10_00161FD8 * frame_count_scale);
-    b = func_001FA898_r((float)D_L10_00161FDC * frame_count_scale);
+    second_frame_count = func_001FA898_r((float)D_L10_00161FDC * frame_count_scale);
     third_frame_count = func_001FA898_r((float)D_L10_00161FE0 * frame_count_scale);
     c1 = fast_tween_color(D_L10_00161FE8, D_L10_00161FEC, random_float_between(0.0f, 1.0f));
     spawn_spark(pos, vel, acc, c1,
                  fast_tween_color(D_L10_00161FF0, D_L10_00161FF4, random_float_between(0.0f, 1.0f)), frame_count,
-                 b, third_frame_count, -1);
+                 second_frame_count, third_frame_count, -1);
     *timer = func_001FA898_r(random_float_between((float)D_L10_00161FF8, (float)D_L10_00161FFC));
 }
 
