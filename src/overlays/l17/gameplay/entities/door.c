@@ -793,7 +793,7 @@ extern int FUN_L17_002eace8_u(int, char *, char *, char *, float, float, float, 
 
 extern char D_L17_001676D0_lui[] __asm__("D_L17_001676D0") __attribute__((section(".data")));
 void FUN_L17_002eb768(int ship_moby, char *ship_vars) {
-    char *g = 0;
+    char *excluded_target = 0;
     char *pad;
     char *locked_target;
     char *candidate_target;
@@ -817,7 +817,7 @@ void FUN_L17_002eb768(int ship_moby, char *ship_vars) {
     pad = (char *)D_0013C940_u;
     if (W(pad, 0x1B4) & 0x2000) {
     take:
-        g = P(ship_vars, 0x88);
+        excluded_target = P(ship_vars, 0x88);
     }
     W(ship_vars, 0xEC) = 0;
     W(ship_vars, 0x128) = -1;
@@ -825,7 +825,7 @@ void FUN_L17_002eb768(int ship_moby, char *ship_vars) {
 skip:
     qcopy(radar_rotation, D_L17_001676D0_lui);
     candidate_target = (char *)FUN_L17_002eace8_u(ship_moby, ship_vars, D_L17_001676D0_lui - 0x10, (char *)radar_rotation, 0.19634955f, 0.19634955f,
-                                   255.0f, P(ship_vars, 0x88), g);
+                                   255.0f, P(ship_vars, 0x88), excluded_target);
     if ((candidate_target != P(ship_vars, 0x88) && W(ship_vars, 0x8C) >= 0x1F5) || FLAG == 0) {
         W(ship_vars, 0xEC) = 0;
         W(ship_vars, 0x128) = -1;
