@@ -3918,7 +3918,7 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 void FUN_L18_002f8658(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     float path_target_position[4];
-    float v[4];
+    float movement_step[4];
     float ang, target_movement_step, z, sc;
     char *attached_moby;
     qcopy(path_target_position, (char *)D_L18_001B0EB0[*(int *)(moby_vars + 0x100)] + *(int *)(moby_vars + 0x120) * 16 + 0x10);
@@ -3931,8 +3931,8 @@ void FUN_L18_002f8658(struct Moby *moby) {
     }
     approach_value((float *)(moby_vars + 0x12C), target_movement_step, D_0015ED6C_e[1]);
     z = 0.0f;
-    normalize_vector_xyz(v, &moby->rot_row0, *(float *)(moby_vars + 0x12C));
-    FUN_L00_00258830((int)moby, (int)v, 0.5f, 0.5f, z, 0);
+    normalize_vector_xyz(movement_step, &moby->rot_row0, *(float *)(moby_vars + 0x12C));
+    FUN_L00_00258830((int)moby, (int)movement_step, 0.5f, 0.5f, z, 0);
     if (FUN_001f9b48(&moby->pos, path_target_position) < 1.0f) {
         int k = random_integer_below_c(*D_L18_001B0EB0[*(int *)(moby_vars + 0x100)] - 1) + 1;
         *(int *)(moby_vars + 0x120) = (*(int *)(moby_vars + 0x120) + k) % *D_L18_001B0EB0[*(int *)(moby_vars + 0x100)];
