@@ -1436,7 +1436,7 @@ extern int FUN_001efa68_2b46a8(void *, void *, int, int, int) __asm__("FUN_001ef
 unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitch) {
     V_2b46a8 src;
     V_2b46a8 tp;
-    V_2b46a8 w;
+    V_2b46a8 aim_probe_position;
     unsigned char *candidate_moby;
     unsigned char *r;
     unsigned char *best;
@@ -1476,9 +1476,9 @@ unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitc
             continue;
         }
         g = &hero;
-        FUN_00214db0_2b46a8(&w, candidate_distance, *yaw, *pitch + g->ground_pitch.f * 0.5f);
-        FUN_001f9a10_2b46a8(&w, &w, from);
-        aim_angle_error = FUN_001f9df8_2b46a8(FUN_001f9b48_2b46a8(&w, &tp) / (candidate_distance + candidate_distance));
+        FUN_00214db0_2b46a8(&aim_probe_position, candidate_distance, *yaw, *pitch + g->ground_pitch.f * 0.5f);
+        FUN_001f9a10_2b46a8(&aim_probe_position, &aim_probe_position, from);
+        aim_angle_error = FUN_001f9df8_2b46a8(FUN_001f9b48_2b46a8(&aim_probe_position, &tp) / (candidate_distance + candidate_distance));
         aim_angle_error = aim_angle_error + aim_angle_error;
         if (0.15707964f < aim_angle_error) {
             r = FUN_002141f8_2b46a8(candidate_moby);
