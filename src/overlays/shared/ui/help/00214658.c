@@ -584,7 +584,7 @@ void FUN_L00_002165b8(void) {
         HERO_TILT_USE_NEGATED_REFERENCE_VECTOR = 2
     };
     struct Hero *g = &hero;
-    float v[2];
+    float tilt_targets[2];
     int effective_tilt_mode, st, k;
     effective_tilt_mode = g->unk20B3;
     if (g->unk1F8) {
@@ -603,11 +603,11 @@ void FUN_L00_002165b8(void) {
         if (st == 0x77 || st == 0x31 || st == 0x2D || st == 0x2C) {
             return;
         }
-        v[0] = 0.0f;
-        v[1] = 0.0f;
-        FUN_L00_0025bc98_2165b8(&g->motion.rot, &g->motion.unkA0, 0, -v[0], frame_scale_sq * 0.015f,
+        tilt_targets[0] = 0.0f;
+        tilt_targets[1] = 0.0f;
+        FUN_L00_0025bc98_2165b8(&g->motion.rot, &g->motion.unkA0, 0, -tilt_targets[0], frame_scale_sq * 0.015f,
                                 frame_scale_sq * 0.3f, frame_time * 5.2359877f);
-        FUN_L00_0025bc98_2165b8(&g->motion.rot.f[1], &g->motion.unkA0.f[1], 0, -v[1], frame_scale_sq * 0.015f,
+        FUN_L00_0025bc98_2165b8(&g->motion.rot.f[1], &g->motion.unkA0.f[1], 0, -tilt_targets[1], frame_scale_sq * 0.015f,
                                 frame_scale_sq * 0.3f, frame_time * 5.2359877f);
         break;
     case HERO_TILT_APPLY_REFERENCE_ORIENTATION:
