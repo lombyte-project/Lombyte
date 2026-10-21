@@ -2248,11 +2248,11 @@ extern void FUN_L00_002defe0(int arg0);
 
 void FUN_L07_00318e98(int target_entry) {
     float segment_offset[4];
-    float b[4];
+    float interpolated_segment_position[4];
     float particle_offset[4];
     RopeParticle *e;
     char *particle;
-    float len;
+    float segment_length;
     int off;
     int i;
     char *base;
@@ -2268,12 +2268,12 @@ void FUN_L07_00318e98(int target_entry) {
             rope_particles[i].particle = 0;
             subtract_vector_xyz(segment_offset, (char *)rope_previous_points + rope_particles[i].segment * 16,
                                 (char *)rope_points + rope_particles[i].segment * 16);
-            len = vector_length_xyz(segment_offset);
-            scale_vector_xyz(segment_offset, segment_offset, rope_particles[i].distance / len);
-            add_vector_xyz(b, (char *)rope_points + rope_particles[i].segment * 16, segment_offset);
-            subtract_vector_xyz(particle_offset, particle + 0x10, b);
+            segment_length = vector_length_xyz(segment_offset);
+            scale_vector_xyz(segment_offset, segment_offset, rope_particles[i].distance / segment_length);
+            add_vector_xyz(interpolated_segment_position, (char *)rope_points + rope_particles[i].segment * 16, segment_offset);
+            subtract_vector_xyz(particle_offset, particle + 0x10, interpolated_segment_position);
             normalize_vector_xyz(particle_offset, particle_offset, 0.03f);
-            scale_vector_xyz(segment_offset, segment_offset, 0.1f / len);
+            scale_vector_xyz(segment_offset, segment_offset, 0.1f / segment_length);
             add_vector_xyz(particle + 0x30, particle_offset, segment_offset);
             *(short *)(particle + 0xA) = 0x46;
         }
