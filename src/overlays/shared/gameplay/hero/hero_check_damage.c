@@ -1,5 +1,6 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
+#include "rnc/gameplay/hero_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -436,7 +437,6 @@ s32 FUN_L00_0020d5b8(u8 *moby_bytes, s32 animation_id) {
  * The case groups are written 33, then 22..., then 0/1/3: gcc emits the blocks
  * in source order, and retail lays them out in exactly that order.
  */
-
 
 int FUN_L00_0020d5d0(int mode, float *out) __asm__("FUN_L00_0020d5d0");
 
@@ -1782,7 +1782,6 @@ s32 FUN_L00_0020fe30(void) {
 /* Applies the wrench/item selection for slot i: resolves pending, queued and requested items and refreshes the slot when it changes. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210558), where it is exact; names translated to the US level program. */
 
-
 typedef struct {
     char pad[0x20];
     int unk20;
@@ -2205,10 +2204,6 @@ void FUN_L00_00257024_210a08(char *) __asm__("FUN_L00_00257024");
 void FUN_L00_00207a58_210a08(void) __asm__("FUN_L00_00207a58");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_00210a08(int mode, int requested_state, char *vehicle_moby) {
-    enum {
-        VEHICLE_MODE_CLANK = 1,
-        VEHICLE_MODE_GIANT_CLANK = 2
-    };
     struct Hero *g;
     FUN_L00_0020e698_210a08();
     g = &hero;
@@ -2234,11 +2229,11 @@ void FUN_L00_00210a08(int mode, int requested_state, char *vehicle_moby) {
     FUN_L00_00207a58_210a08();
     g->unk22CC = requested_state;
     switch (mode) {
-    case VEHICLE_MODE_CLANK:
+    case HERO_VEHICLE_MODE_CLANK:
         g->health.unk22B0 = *(unsigned short *)&g->health.hp;
         g->health.hp = g->health.unk22AC;
         break;
-    case VEHICLE_MODE_GIANT_CLANK:
+    case HERO_VEHICLE_MODE_GIANT_CLANK:
         g->unk1630 = 200;
         break;
     }
@@ -2361,11 +2356,6 @@ void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 s32 hero_check_damage(s32 arg) __asm__("FUN_L00_00210ce8");
 extern T_210ce8 moby_hits[] __asm__("D_L00_00178100");
 s32 hero_check_damage(s32 arg) {
-    enum {
-        HERO_VEHICLE_MODE_NONE = 0,
-        VEHICLE_MODE_CLANK = 1,
-        VEHICLE_MODE_GIANT_CLANK = 2
-    };
     u8 *hero_moby;
     T_210ce8 *tbl;
     u8 *mob;
@@ -2436,7 +2426,7 @@ s32 hero_check_damage(s32 arg) {
         v.i[2] = 0;
     }
     switch (hero.vehicle_mode) {
-    case HERO_VEHICLE_MODE_NONE:
+    case HERO_VEHICLE_MODE_ON_FOOT:
         mob = ((u8 *)hero.unk2280);
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
@@ -2494,11 +2484,11 @@ s32 hero_check_damage(s32 arg) {
             v.f[2] += v.f[2];
         }
         break;
-    case VEHICLE_MODE_CLANK:
+    case HERO_VEHICLE_MODE_CLANK:
         hero_set_state(0x46, 1);
         FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 5.0f, D_0015ED6C_210ce8 * 3.0f);
         break;
-    case VEHICLE_MODE_GIANT_CLANK:
+    case HERO_VEHICLE_MODE_GIANT_CLANK:
         if ((tbl->i24 & 4) || hero.unk1630 <= 0) {
             hero_set_state(0x5D, 1);
             FUN_L00_002a9be0_210ce8();
@@ -2568,23 +2558,18 @@ f32 FUN_001f9b80_211380(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_211380(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_211380(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void FUN_L00_00211380(void) {
-    enum {
-        HERO_VEHICLE_MODE_NONE = 0,
-        VEHICLE_MODE_CLANK = 1,
-        VEHICLE_MODE_GIANT_CLANK = 2
-    };
     switch (hero.vehicle_mode) {
-    case HERO_VEHICLE_MODE_NONE:
+    case HERO_VEHICLE_MODE_ON_FOOT:
         hero.unk228 = 0.8f;
         hero.unk22C = 0.7f;
         hero.unk230 = 0.45f;
         break;
-    case VEHICLE_MODE_CLANK:
+    case HERO_VEHICLE_MODE_CLANK:
         hero.unk228 = 0.59999996f;
         hero.unk22C = 0.45000002f;
         hero.unk230 = 0.3f;
         break;
-    case VEHICLE_MODE_GIANT_CLANK:
+    case HERO_VEHICLE_MODE_GIANT_CLANK:
         hero.unk228 = 5.25f;
         hero.unk22C = 4.45f;
         hero.unk230 = 3.75f;
@@ -2715,7 +2700,6 @@ float FUN_L00_00211830(void) {
 /* Whether T lies in the window that ends at D_0013F450 + 0xAA8 and is
    +0xAAC long (T before the end, within that length of it). */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211F28), where it is exact; names translated to the US level program. */
-
 
 /* True when t is before the time at hero.anim_frame by at most the span hero.unkAAC. */
 int FUN_L00_00211870(float animation_frame_threshold) {
@@ -3194,11 +3178,6 @@ extern CollisionHit HH __asm__("D_L00_00173E40") __attribute__((section(".data")
 #define HF(o) (*(f32 *)(D_L00_00173E40 + (o)))
 
 void FUN_L00_002127b8(void) {
-    enum {
-        GRAVITY_MODE_WORLD_DOWN = 0,
-        GRAVITY_MODE_NEGATIVE_GROUND_NORMAL = 1,
-        GRAVITY_MODE_TOWARD_REFERENCE_POINT = 2
-    };
     V collision_ray_end, ground_ray_start, ground_offset_or_angles, side_ray_start, unused_side_probe_point, side_hit_angles, side_hit_normal;
     f32 f;
     s32 r;
@@ -3317,14 +3296,14 @@ tail:
 d1:
     FUN_001f99f8_c(&hero.gravity_dir);
     switch (hero.unk20B3) {
-    case GRAVITY_MODE_WORLD_DOWN:
+    case HERO_GRAVITY_WORLD_DOWN:
         hero.gravity_dir.f[2] = -1.0f;
         break;
-    case GRAVITY_MODE_NEGATIVE_GROUND_NORMAL:
+    case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
         qcopy(&hero.gravity_dir, &hero.unk270);
         FUN_001f9a68_c(&hero.gravity_dir, &hero.gravity_dir, -1.0f);
         break;
-    case GRAVITY_MODE_TOWARD_REFERENCE_POINT:
+    case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         fast_vec_sub(&hero.gravity_dir, &hero.motion.unkB0, &hero.motion.pos);
         FUN_001f9bf8_c(&hero.gravity_dir, &hero.gravity_dir, 1.0f);
         break;
@@ -3638,7 +3617,6 @@ void FUN_L00_002137a8(void) {
  *   motion.unk16C  slope: vertical / horizontal change, clamped to +-0.5
  */
 
-
 /* The FUN_L00_00233xxx helpers work in the hero's gravity frame (hero byte
    0x20B3: 0 = world z up, otherwise the frame of the hero's moby). */
 extern void FUN_L00_00233f80(s32, void *, void *);
@@ -3827,11 +3805,6 @@ static inline struct Hero *hero_ptr(void) { return &hero; }
 
 /* Steers the velocity's xy toward the move yaw at the target speed. */
 void FUN_L00_00213e68(f32 step) {
-    enum {
-        GRAVITY_MODE_WORLD_DOWN = 0,
-        GRAVITY_MODE_NEGATIVE_GROUND_NORMAL = 1,
-        GRAVITY_MODE_TOWARD_REFERENCE_POINT = 2
-    };
     struct Hero *player = &hero;
     f32 delta[4];
     Vec4 impulse;
@@ -3840,7 +3813,7 @@ void FUN_L00_00213e68(f32 step) {
     Vec4 *velocity;
 
     switch (player->unk20B3) {
-    case GRAVITY_MODE_WORLD_DOWN:
+    case HERO_GRAVITY_WORLD_DOWN:
         yaw = player->motion.move_yaw;
         speed = player->target_speed;
         if (player->state.control_mode == 4) {
@@ -3903,8 +3876,8 @@ void FUN_L00_00213e68(f32 step) {
             owner->ground_speed = owner->motion.unk168 - ratio;
         }
         break;
-    case GRAVITY_MODE_NEGATIVE_GROUND_NORMAL:
-    case GRAVITY_MODE_TOWARD_REFERENCE_POINT: {
+    case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
+    case HERO_GRAVITY_TOWARD_REFERENCE_POINT: {
         Vec4 *current_velocity = &hero_velocity;
 
         planar_speed = gravity_length_xy(current_velocity);
@@ -3921,11 +3894,6 @@ void air_accel(f32 step) __asm__("FUN_L01_00234358");
 
 /* Same steering as FUN_L00_00213e68, without the copy into motion.unk130. */
 void air_accel(f32 step) {
-    enum {
-        GRAVITY_MODE_WORLD_DOWN = 0,
-        GRAVITY_MODE_NEGATIVE_GROUND_NORMAL = 1,
-        GRAVITY_MODE_TOWARD_REFERENCE_POINT = 2
-    };
     struct Hero *player = &hero;
     f32 delta[4];
     Vec4 impulse;
@@ -3934,7 +3902,7 @@ void air_accel(f32 step) {
     Vec4 *velocity;
 
     switch (player->unk20B3) {
-    case GRAVITY_MODE_WORLD_DOWN:
+    case HERO_GRAVITY_WORLD_DOWN:
         yaw = player->motion.move_yaw;
         speed = player->target_speed;
         if (player->state.control_mode == 4) {
@@ -3996,8 +3964,8 @@ void air_accel(f32 step) {
             owner->ground_speed = owner->motion.unk168 - ratio;
         }
         break;
-    case GRAVITY_MODE_NEGATIVE_GROUND_NORMAL:
-    case GRAVITY_MODE_TOWARD_REFERENCE_POINT: {
+    case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
+    case HERO_GRAVITY_TOWARD_REFERENCE_POINT: {
         Vec4 *current_velocity = &hero_velocity;
 
         planar_speed = gravity_length_xy(current_velocity);

@@ -1,5 +1,6 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
+#include "rnc/gameplay/hero_state.h"
 #include "rnc/ui/vendor/vendor_item_info.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -324,7 +325,6 @@ typedef struct {
     int id[2];
 } AnimState;
 
-
 void FUN_L00_00232320(void) {
     struct Hero *base = &hero;
     AnimState *obj = ((AnimState *)base->unk2278);
@@ -532,11 +532,6 @@ extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
 extern s32 FUN_L00_002595a0_32b90(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 
 f32 FUN_L00_00232b90(f32 prediction_frames, f32 gravity_acceleration, f32 target_height) {
-    enum {
-        GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1,
-        GRAVITY_MODE_DIRECTION_AXIS = 2
-    };
     f32 trajectory_endpoint[4];
     V4_32b90 v;
     V4_32b90 trajectory_work_vector;
@@ -545,7 +540,7 @@ f32 FUN_L00_00232b90(f32 prediction_frames, f32 gravity_acceleration, f32 target
     f32 x, y, z;
 
     switch (hero.unk20B3) {
-    case GRAVITY_MODE_WORLD_Z:
+    case HERO_GRAVITY_WORLD_DOWN:
         if (target_height < 0.0f) {
             FUN_001f9a68_32b90(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
             trajectory_endpoint[2] -= ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * gravity_acceleration;
@@ -567,7 +562,7 @@ f32 FUN_L00_00232b90(f32 prediction_frames, f32 gravity_acceleration, f32 target
             }
         }
         break;
-    case GRAVITY_MODE_VECTOR_AXIS:
+    case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
         qcopy(&v, &hero.unk270);
         FUN_001f9bf8_32b90(&v, &v, gravity_acceleration);
         FUN_001f9a68_32b90(&v, &v, -1.0f);
@@ -588,7 +583,7 @@ f32 FUN_L00_00232b90(f32 prediction_frames, f32 gravity_acceleration, f32 target
             }
         }
         break;
-    case GRAVITY_MODE_DIRECTION_AXIS:
+    case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         trajectory_work_vector.f[2] = 100.0f;
         trajectory_work_vector.f[1] = 100.0f;
         trajectory_work_vector.f[0] = 100.0f;
@@ -745,7 +740,6 @@ void FUN_L00_002330d0(void) {
    and, when present, +0x1620. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233A90), where it is exact; names translated to the US level program. */
 
-
 void FUN_L00_00233210(void) {
     struct Hero *base = &hero;
     char *optional_hero_flag_target;
@@ -763,7 +757,6 @@ void FUN_L00_00233210(void) {
 /* Clears what func_L00_00233A90 sets: bit 0 of the flags (0x34) of the
    objects at hero +0x2080 and, when present, +0x1620. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233AC8), where it is exact; names translated to the US level program. */
-
 
 void FUN_L00_00233248(void) {
     struct Hero *base = &hero;
@@ -854,22 +847,17 @@ void FUN_001f9bf8_002334d0(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_002334d0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_002334d0(f32 *out, f32 *in, f32 k);
 void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
-    enum {
-        GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1,
-        GRAVITY_MODE_DIRECTION_AXIS = 2
-    };
     struct Hero *hero_base = &hero;
     V002334d0 offset_vector;
     switch (hero_base->unk20B3) {
-    case GRAVITY_MODE_WORLD_Z:
+    case HERO_GRAVITY_WORLD_DOWN:
         out[2] = in[2] - k;
         break;
-    case GRAVITY_MODE_VECTOR_AXIS:
+    case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
         FUN_001f9bf8_002334d0(&offset_vector, &hero_base->unk270, -k);
         FUN_001f9a10_002334d0(out, in, &offset_vector);
         break;
-    case GRAVITY_MODE_DIRECTION_AXIS:
+    case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         if (hero_base->state.current == 0x3E && hero_base->air_frames.s == 0) {
             FUN_001f9bf8_002334d0(&offset_vector, &hero_base->unk270, -k);
         } else {
@@ -949,22 +937,17 @@ void FUN_001f9d20_00233708(Vec4_00233708 *, Vec4_00233708 *,
 void FUN_001f9a10_00233708(Vec4_00233708 *, Vec4_00233708 *,
                            Vec4_00233708 *) __asm__("FUN_001f9a10");
 void FUN_L00_00233708(Vec4_00233708 *out, Vec4_00233708 *in, float offset_scale) {
-    enum {
-        GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1,
-        GRAVITY_MODE_DIRECTION_AXIS = 2
-    };
     struct Hero *g = &hero;
     Mtx_00233708 moby_rotation_matrix;
     Vec4_00233708 offset_vector;
     switch (g->unk20B3) {
-    case GRAVITY_MODE_WORLD_Z:
+    case HERO_GRAVITY_WORLD_DOWN:
         *(u128_00233708 *)out = *(u128_00233708 *)in;
         out->x += FUN_001f9dc8_00233708(*(float *)(((char *)g->moby) + 0x48)) * offset_scale;
         out->y += FUN_001f9de0_00233708(*(float *)(((char *)g->moby) + 0x48)) * offset_scale;
         break;
-    case GRAVITY_MODE_VECTOR_AXIS:
-    case GRAVITY_MODE_DIRECTION_AXIS:
+    case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
+    case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         offset_vector.x = FUN_001f9dc8_00233708(0.0f) * offset_scale;
         offset_vector.y = FUN_001f9de0_00233708(0.0f) * offset_scale;
         offset_vector.z = 0.0f;
@@ -987,21 +970,16 @@ void FUN_001f9d20_00233810(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_00233810(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00233810(f32 *out, f32 *in, f32 z);
 void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
-    enum {
-        GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1,
-        GRAVITY_MODE_DIRECTION_AXIS = 2
-    };
     struct Hero *hero_base = &hero;
     M00233810 moby_rotation_matrix;
     V00233810 offset_vector;
     switch (hero_base->unk20B3) {
-    case GRAVITY_MODE_WORLD_Z:
+    case HERO_GRAVITY_WORLD_DOWN:
         qcopy(out, in);
         out[2] += z;
         break;
-    case GRAVITY_MODE_VECTOR_AXIS:
-    case GRAVITY_MODE_DIRECTION_AXIS:
+    case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
+    case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         FUN_001f99f8_00233810(&offset_vector);
         offset_vector.v[2] = z;
         FUN_001fa050_00233810(&moby_rotation_matrix, ((u8 *)hero_base->moby) + 0x40);
@@ -1020,25 +998,20 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void gravity_flatten(float *dst, float *src) __asm__("FUN_L00_002338d0");
 void gravity_flatten(float *dst, float *src) {
-    enum {
-        GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1,
-        GRAVITY_MODE_DIRECTION_AXIS = 2
-    };
     struct Hero *base = &hero;
     float n[4] __attribute__((aligned(16)));
 
     switch (base->unk20B3) {
-    case GRAVITY_MODE_WORLD_Z:
+    case HERO_GRAVITY_WORLD_DOWN:
         qcopy(dst, src);
         dst[2] = 0.0f;
         break;
-    case GRAVITY_MODE_VECTOR_AXIS:
+    case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
         fast_vec_normalize(n, &base->unk270, 1.0f);
         scale_vector_xyz(n, n, dot_vectors_xyz(n, src));
         subtract_vector_xyz(dst, src, n);
         break;
-    case GRAVITY_MODE_DIRECTION_AXIS:
+    case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         scale_vector_xyz(n, &base->gravity_dir, dot_vectors_xyz(&base->gravity_dir, src));
         subtract_vector_xyz(dst, src, n);
         break;
@@ -1057,21 +1030,16 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 float gravity_length_xy(float *input_vector) {
-    enum {
-        GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1,
-        GRAVITY_MODE_DIRECTION_AXIS = 2
-    };
     struct Hero *base = &hero;
     float m[16] __attribute__((aligned(16)));
     float inv[16] __attribute__((aligned(16)));
     float out[4] __attribute__((aligned(16)));
 
     switch (base->unk20B3) {
-    case GRAVITY_MODE_WORLD_Z:
+    case HERO_GRAVITY_WORLD_DOWN:
         return vector_length_xy(input_vector);
-    case GRAVITY_MODE_VECTOR_AXIS:
-    case GRAVITY_MODE_DIRECTION_AXIS:
+    case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
+    case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
         transpose_rotation_matrix(inv, m);
         transform_vector(out, input_vector, inv);
@@ -1091,20 +1059,15 @@ extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
 float gravity_z(float *v) __asm__("FUN_L00_00233a78");
 float gravity_z(float *input_vector) {
-    enum {
-        GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1,
-        GRAVITY_MODE_DIRECTION_AXIS = 2
-    };
     struct Hero *base = &hero;
     float m[16] __attribute__((aligned(16)));
     float axis[4] __attribute__((aligned(16)));
 
     switch (base->unk20B3) {
-    case GRAVITY_MODE_WORLD_Z:
+    case HERO_GRAVITY_WORLD_DOWN:
         return input_vector[2];
-    case GRAVITY_MODE_VECTOR_AXIS:
-    case GRAVITY_MODE_DIRECTION_AXIS:
+    case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
+    case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         clear_u64_value(axis);
         axis[2] = 1.0f;
         euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
@@ -1117,19 +1080,14 @@ void FUN_001f9d20_00233b20(void *, void *, void *) __asm__("FUN_001f9d20");
 /* Copies in to out with z, transformed by the two hero matrices in modes 1 and 2. */
 void gravity_set_z(f32 *out, f32 *in, f32 z) __asm__("FUN_L00_00233b20");
 void gravity_set_z(f32 *out, f32 *in, f32 z) {
-    enum {
-        GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1,
-        GRAVITY_MODE_DIRECTION_AXIS = 2
-    };
     struct Hero *hero_base = &hero;
     switch (hero_base->unk20B3) {
-    case GRAVITY_MODE_WORLD_Z:
+    case HERO_GRAVITY_WORLD_DOWN:
         qcopy(out, in);
         out[2] = z;
         break;
-    case GRAVITY_MODE_VECTOR_AXIS:
-    case GRAVITY_MODE_DIRECTION_AXIS:
+    case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
+    case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         FUN_001f9d20_00233b20(out, in, hero_base->unk40);
         out[2] = z;
         FUN_001f9d20_00233b20(out, out, hero_base->unk0);
@@ -1150,19 +1108,14 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
 
 void FUN_L00_00233ba0(float *dst, float *src, float z) {
-    enum {
-        GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1,
-        GRAVITY_MODE_DIRECTION_AXIS = 2
-    };
     struct Hero *base = &hero;
 
     switch (base->unk20B3) {
-    case GRAVITY_MODE_WORLD_Z:
+    case HERO_GRAVITY_WORLD_DOWN:
         set_vector_length_xy(dst, src, z);
         break;
-    case GRAVITY_MODE_VECTOR_AXIS:
-    case GRAVITY_MODE_DIRECTION_AXIS:
+    case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
+    case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         transform_vector(dst, src, base->unk40);
         set_vector_length_xy(dst, dst, z);
         transform_vector(dst, dst, base->unk0);
@@ -1181,18 +1134,13 @@ extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
-    enum {
-        GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1,
-        GRAVITY_MODE_DIRECTION_AXIS = 2
-    };
     int step_count;
     int k;
     float step_count_float;
     float predicted_z;
 
     switch (hero.unk20B3) {
-    case GRAVITY_MODE_WORLD_Z:
+    case HERO_GRAVITY_WORLD_DOWN:
         step_count = truncate_float_to_s32(vel[2] / step);
         step_count_float = convert_integer_to_float(step_count);
         predicted_z = pos[2] + vel[2] * step_count_float - convert_integer_to_float((step_count * step_count + step_count) >> 1) * step;
@@ -1200,8 +1148,8 @@ float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
             *steps = step_count;
         }
         return predicted_z;
-    case GRAVITY_MODE_VECTOR_AXIS:
-    case GRAVITY_MODE_DIRECTION_AXIS:
+    case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
+    case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         k = truncate_float_to_s32(FUN_L00_00233a78_c(vel) / step);
         if (steps != 0) {
             *steps = k;
@@ -1220,21 +1168,16 @@ f32 FUN_001f9b20_00233d30(void *) __asm__("FUN_001f9b20");
 f32 FUN_001f9e90_00233d30(f32, f32) __asm__("FUN_001f9e90");
 /* Returns 001f9e90 of v (or v in the 0x40 hero frame), chosen by hero byte 0x20B3. */
 f32 FUN_L00_00233d30(f32 *input_vector) {
-    enum {
-        GRAVITY_MODE_WORLD_Z = 0,
-        GRAVITY_MODE_VECTOR_AXIS = 1,
-        GRAVITY_MODE_DIRECTION_AXIS = 2
-    };
     struct Hero *hero_base = &hero;
     V00233d30 gravity_frame_vector;
     f32 xy_length, z;
     switch (hero_base->unk20B3) {
-    case GRAVITY_MODE_WORLD_Z:
+    case HERO_GRAVITY_WORLD_DOWN:
         xy_length = FUN_001f9b20_00233d30(input_vector);
         z = input_vector[2];
         goto call;
-    case GRAVITY_MODE_VECTOR_AXIS:
-    case GRAVITY_MODE_DIRECTION_AXIS:
+    case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
+    case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         qcopy(&gravity_frame_vector, input_vector);
         FUN_001f9d20_00233d30(&gravity_frame_vector, &gravity_frame_vector, &hero_base->unk40);
         xy_length = FUN_001f9b20_00233d30(&gravity_frame_vector);

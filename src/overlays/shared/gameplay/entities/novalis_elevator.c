@@ -1,5 +1,7 @@
 /* Shared moby classes: novalis_elevator, bolt_crank, gold_weapon_case, sand_mouse, large_amoeboid, sandmouse_house. */
 #include "types.h"
+#include "rnc/gameplay/hero_state.h"
+
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -10,6 +12,15 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/overlay/level_labels.h"
 
+/* Bolt-crank Moby.state, including the callback-only state. */
+enum BoltCrankState {
+    BOLT_CRANK_INIT = 0x0,
+    BOLT_CRANK_IDLE = 0x1,
+    BOLT_CRANK_CALLBACK_ONLY = 0x2,
+    BOLT_CRANK_TURNING = 0x3,
+    BOLT_CRANK_LOWERING = 0x4,
+    BOLT_CRANK_DONE = 0x5
+};
 
 void FUN_L01_002b8c08(f32 *pos) {
     volatile f32 *dst = (volatile f32 *)0x70002000;
@@ -576,16 +587,6 @@ typedef struct {
     f32 rest_height;       /* 0x3C */
 } BoltCrankVars;
 
-enum {
-    BOLT_CRANK_INIT = 0,
-    BOLT_CRANK_IDLE = 1,
-    BOLT_CRANK_TURNING = 3,
-    BOLT_CRANK_LOWERING = 4,
-    BOLT_CRANK_DONE = 5
-};
-
-#define HERO_STATE_CRANK 0x3B
-
 extern char *D_L01_001600EC;
 extern char D_L01_001BAAA0[];
 extern f32 D_L01_00167258_lui __asm__("D_L01_00167258") __attribute__((section(".data")));
@@ -619,9 +620,6 @@ extern void FUN_L01_00316e88(f32, f32);
 /* Turned by the hero (state 0x3B) until progress reaches 1, then lowered and saved as done. */
 void bolt_crank_update(struct Moby *moby) __asm__("FUN_L01_002e0c68");
 void bolt_crank_update(struct Moby *moby) {
-    enum {
-        BOLT_CRANK_CALLBACK_ONLY = 2
-    };
     BoltCrankVars *crank = (BoltCrankVars *)moby->pvars;
     float matrix[16];
     float stick[4], step[4], facing[4];
@@ -1091,7 +1089,6 @@ void *FUN_L01_002e32a8(void *moby, void *from, void *ang, float yawMax, float pi
 #include "qcopy.h"
 #include "qzero.h"
 #include "rnc/overlay/quad.h"
-
 
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -2874,7 +2871,6 @@ in_range:
 /* Builds two scaled offset vectors from the moby's matrix and adds them to out. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DA60), where it is exact; names translated to the US level program. */
 
-
 extern void FUN_001f9d20_q(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_001fa050_q(float *, float *) __asm__("FUN_001fa050");
 extern void add_vector_xyz_q(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2978,12 +2974,10 @@ typedef struct {
     QVec unk80;
 } ChildVars;
 
-
 typedef struct {
     u8 pad0[0x28];
     u16 kind;
 } HitInfo;
-
 
 extern s32 D_L01_00161B00;
 extern char D_L01_0020B3E0[];
@@ -3035,7 +3029,6 @@ extern void FUN_L00_0025e450(struct Moby *, QVec *, QVec *, f32, f32, s32, s32, 
                              s32, f32, s32, s32, s32, s32);
 
 void gunship_follow_path(struct Moby *m) __asm__("FUN_L01_002f5168");
-
 
 void gunship_follow_path(struct Moby *m) {
     QVec d20;

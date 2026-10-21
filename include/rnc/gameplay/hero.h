@@ -3,31 +3,7 @@
 
 #include "types.h"
 #include "rnc/math/vector.h"
-
-/* hero.state.current values (hero_set_state). */
-#define HERO_STATE_IDLE           0x00
-#define HERO_STATE_LOOK           0x01 /* L1/L2 held */
-#define HERO_STATE_RUN            0x02
-#define HERO_STATE_STOP           0x03
-#define HERO_STATE_CROUCH         0x04
-#define HERO_STATE_FALL           0x06
-#define HERO_STATE_JUMP           0x07
-#define HERO_STATE_LAND           0x08
-#define HERO_STATE_RUN_JUMP       0x09
-#define HERO_STATE_PACK_JUMP      0x0A
-#define HERO_STATE_HIGH_JUMP      0x0B
-#define HERO_STATE_PACK_LONG_JUMP 0x10
-#define HERO_STATE_WRENCH_COMBO   0x13
-#define HERO_STATE_WRENCH_SLAM    0x14
-#define HERO_STATE_CROUCH_SWING   0x15
-#define HERO_STATE_HURT           0x16
-#define HERO_STATE_GRIND          0x28
-#define HERO_STATE_DYING          0x3D
-#define HERO_STATE_FIDGET         0x40
-#define HERO_STATE_FIDGET_ALT     0x41
-#define HERO_STATE_SLIP           0x79
-#define HERO_STATE_WALL_BONK      0x7A
-#define HERO_STATE_SINK           0x7F
+#include "rnc/gameplay/hero_state.h"
 
 struct Moby;
 
