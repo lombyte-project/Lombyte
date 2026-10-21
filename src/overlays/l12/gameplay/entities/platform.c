@@ -1195,16 +1195,16 @@ void FUN_L12_002e3e28(struct Moby *moby, float *out, int on) {
     float reference_offset[4];
     float inverse_yaw_matrix[4];
     float pad[12];
-    float g;
+    float offset_scale_divisor;
     if (on) {
         fast_vec_sub(reference_offset, D_0013E533 + 0xE9D, &moby->pos);
         clear_u64_value(inverse_yaw_angles);
         inverse_yaw_angles[2] = -moby->rot.z;
         euler_rotation_matrix(inverse_yaw_matrix, inverse_yaw_angles);
         transform_vector(reference_offset, reference_offset, inverse_yaw_matrix);
-        g = D_L12_00161914;
-        out[1] = reference_offset[0] / g;
-        out[0] = -reference_offset[1] / g;
+        offset_scale_divisor = D_L12_00161914;
+        out[1] = reference_offset[0] / offset_scale_divisor;
+        out[0] = -reference_offset[1] / offset_scale_divisor;
     } else {
         out[0] = 0;
         out[1] = 0;
