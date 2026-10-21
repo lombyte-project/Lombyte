@@ -761,9 +761,9 @@ void FUN_L02_002fa770(void) {
     S *effect_state = &D_L02_00167600;
     effect_state->c = 10000.0f;
     if (effect_state->b == 0) {
-        float v = effect_state->d - *(float *)&D_L02_0016238C_gp;
-        effect_state->d = v;
-        if (v < 0.0f) {
+        float decremented_duration = effect_state->d - *(float *)&D_L02_0016238C_gp;
+        effect_state->d = decremented_duration;
+        if (decremented_duration < 0.0f) {
             effect_state->d = 0.0f;
         }
     } else {
