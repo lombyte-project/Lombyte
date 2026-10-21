@@ -31,8 +31,8 @@ void FUN_L03_002de370(char *moby) {
     *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *(float *)(moby_data + 0x18));
     {
         float remaining_timer_value = convert_integer_to_float(*(int *)(moby_data + 0x24));
-        float b = convert_integer_to_float(*(int *)(moby_data + 0x20));
-        moby[0x23] = func_001FA898_r(remaining_timer_value * 255.0f / b);
+        float timer_scale_denominator = convert_integer_to_float(*(int *)(moby_data + 0x20));
+        moby[0x23] = func_001FA898_r(remaining_timer_value * 255.0f / timer_scale_denominator);
     }
     if (fast_dec_timer((int *)(moby_data + 0x24)) != 0) {
         mark_moby_for_removal(moby);
