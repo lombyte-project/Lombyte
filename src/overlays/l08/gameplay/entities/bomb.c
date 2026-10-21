@@ -1210,7 +1210,7 @@ void FUN_L08_002d5d08(char *moby) {
         LINKED_CLASS_THIRD_LOWEST_X_LAUNCH_OFFSET = 10
     };
     float position_or_velocity_scratch[4];
-    float b[4];
+    float launch_offset[4];
     float launch_velocity_or_offset[4];
     char *moby_vars = *(char **)(moby + 0x78);
     short *list = D_L08_001AC040[((Blk_7010 *)D_L08_0015FFD8 + *(int *)(moby_vars + 0x144))->group];
@@ -1239,12 +1239,12 @@ void FUN_L08_002d5d08(char *moby) {
             transform_vector(position_or_velocity_scratch, position_or_velocity_scratch, D_L08_001600EC + (*(int *)(moby_vars + 0x148) << 7));
             qcopy(spawned_debris_moby + 0x10, position_or_velocity_scratch);
             ang = random_float_between_c4(-0.2617994f, 0.2617994f);
-            clear_u64_value(b);
+            clear_u64_value(launch_offset);
             launch_velocity_or_offset[0] = fast_cos_c3(ang) * (D_0015ED6C_lui * 15.0f);
             launch_velocity_or_offset[1] = fast_sin(ang) * (D_0015ED6C_lui * 15.0f);
             launch_velocity_or_offset[2] = 0.0f;
             launch_velocity_or_offset[2] = random_float_between_c4(D_0015ED6C_lui * 8.0f, D_0015ED6C_lui * 12.0f);
-            FUN_L05_00318648(spawned_debris_moby, (int)moby, launch_velocity_or_offset, b, func_001FA898_2D6C58(random_float_between_c4(60.0f, 90.0f)));
+            FUN_L05_00318648(spawned_debris_moby, (int)moby, launch_velocity_or_offset, launch_offset, func_001FA898_2D6C58(random_float_between_c4(60.0f, 90.0f)));
         }
     }
     while (1) {
@@ -1261,44 +1261,44 @@ void FUN_L08_002d5d08(char *moby) {
                 switch ((short)(*(unsigned short *)(other + 0xA6) - 0x24C)) {
                 case LINKED_CLASS_SECOND_HIGHEST_Y_LAUNCH_OFFSET:
                     *(u128_7010 *)launch_velocity_or_offset = 0; launch_velocity_or_offset[0] = 1.629f; launch_velocity_or_offset[1] = -1.341f; launch_velocity_or_offset[2] = 11.48f;
-                    qcopy(b, launch_velocity_or_offset); break;
+                    qcopy(launch_offset, launch_velocity_or_offset); break;
                 case LINKED_CLASS_FOURTH_LOWEST_X_LAUNCH_OFFSET:
                     *(u128_7010 *)launch_velocity_or_offset = 0; launch_velocity_or_offset[0] = 1.299f; launch_velocity_or_offset[1] = -5.558f; launch_velocity_or_offset[2] = 11.48f;
-                    qcopy(b, launch_velocity_or_offset); break;
+                    qcopy(launch_offset, launch_velocity_or_offset); break;
                 case LINKED_CLASS_SECOND_LOWEST_X_LAUNCH_OFFSET:
                     *(u128_7010 *)launch_velocity_or_offset = 0; launch_velocity_or_offset[0] = 0.629f; launch_velocity_or_offset[1] = -2.527f; launch_velocity_or_offset[2] = 3.409f;
-                    qcopy(b, launch_velocity_or_offset); break;
+                    qcopy(launch_offset, launch_velocity_or_offset); break;
                 case LINKED_CLASS_LOWEST_X_LAUNCH_OFFSET:
                     *(u128_7010 *)launch_velocity_or_offset = 0; launch_velocity_or_offset[0] = 0.019f; launch_velocity_or_offset[1] = -6.19f; launch_velocity_or_offset[2] = 3.409f;
-                    qcopy(b, launch_velocity_or_offset); break;
+                    qcopy(launch_offset, launch_velocity_or_offset); break;
                 case LINKED_CLASS_THIRD_HIGHEST_X_LAUNCH_OFFSET:
                     *(u128_7010 *)launch_velocity_or_offset = 0; launch_velocity_or_offset[0] = 3.196f; launch_velocity_or_offset[1] = -2.105f; launch_velocity_or_offset[2] = 7.784f;
-                    qcopy(b, launch_velocity_or_offset); break;
+                    qcopy(launch_offset, launch_velocity_or_offset); break;
                 case LINKED_CLASS_LOWEST_Z_LAUNCH_OFFSET:
                     *(u128_7010 *)launch_velocity_or_offset = 0; launch_velocity_or_offset[0] = 2.11f; launch_velocity_or_offset[1] = -3.013f; launch_velocity_or_offset[2] = 2.625f;
-                    qcopy(b, launch_velocity_or_offset); break;
+                    qcopy(launch_offset, launch_velocity_or_offset); break;
                 case LINKED_CLASS_HIGHEST_X_LAUNCH_OFFSET:
                     *(u128_7010 *)launch_velocity_or_offset = 0; launch_velocity_or_offset[0] = 4.33f; launch_velocity_or_offset[1] = -6.449f; launch_velocity_or_offset[2] = 7.397f;
-                    qcopy(b, launch_velocity_or_offset); break;
+                    qcopy(launch_offset, launch_velocity_or_offset); break;
                 case LINKED_CLASS_LOWEST_Y_LAUNCH_OFFSET:
                     *(u128_7010 *)launch_velocity_or_offset = 0; launch_velocity_or_offset[0] = 3.286f; launch_velocity_or_offset[1] = -6.925f; launch_velocity_or_offset[2] = 2.96f;
-                    qcopy(b, launch_velocity_or_offset); break;
+                    qcopy(launch_offset, launch_velocity_or_offset); break;
                 case LINKED_CLASS_HIGHEST_Z_LAUNCH_OFFSET:
                     *(u128_7010 *)launch_velocity_or_offset = 0; launch_velocity_or_offset[0] = 1.539f; launch_velocity_or_offset[1] = -1.071f; launch_velocity_or_offset[2] = 13.144f;
-                    qcopy(b, launch_velocity_or_offset); break;
+                    qcopy(launch_offset, launch_velocity_or_offset); break;
                 case LINKED_CLASS_FOURTH_HIGHEST_Y_LAUNCH_OFFSET:
                     *(u128_7010 *)launch_velocity_or_offset = 0; launch_velocity_or_offset[0] = 1.596f; launch_velocity_or_offset[1] = -2.512f; launch_velocity_or_offset[2] = 8.359f;
-                    qcopy(b, launch_velocity_or_offset); break;
+                    qcopy(launch_offset, launch_velocity_or_offset); break;
                 case LINKED_CLASS_THIRD_LOWEST_X_LAUNCH_OFFSET:
                     *(u128_7010 *)launch_velocity_or_offset = 0; launch_velocity_or_offset[0] = 0.885f; launch_velocity_or_offset[1] = -5.824f; launch_velocity_or_offset[2] = 8.224f;
-                    qcopy(b, launch_velocity_or_offset); break;
+                    qcopy(launch_offset, launch_velocity_or_offset); break;
                 }
                 if (fast_difference_between_rotations_c2(fast_arc_tan_c(position_or_velocity_scratch[0], position_or_velocity_scratch[1]),
                                   fast_arc_tan_c(D_L08_00167480.x - *(float *)(moby + 0x10),
                                                     D_L08_00167480.y - *(float *)(moby + 0x14))) < 0.2617994f) {
-                    FUN_L05_00318648(other, (int)moby, position_or_velocity_scratch, b, func_001FA898_2D6C58(random_float_between_c4(10.0f, 20.0f)));
+                    FUN_L05_00318648(other, (int)moby, position_or_velocity_scratch, launch_offset, func_001FA898_2D6C58(random_float_between_c4(10.0f, 20.0f)));
                 } else {
-                    FUN_L05_00318648(other, (int)moby, position_or_velocity_scratch, b, func_001FA898_2D6C58(random_float_between_c4(30.0f, 45.0f)));
+                    FUN_L05_00318648(other, (int)moby, position_or_velocity_scratch, launch_offset, func_001FA898_2D6C58(random_float_between_c4(30.0f, 45.0f)));
                 }
             } else if ((short)cls == 0x1D8) {
                 clear_u64_value(position_or_velocity_scratch);
