@@ -285,8 +285,8 @@ extern f32 FUN_001f99c0_215b68(f32) __asm__("FUN_001f99c0");
 #define X D_L00_0017A680_215b68
 
 void FUN_L00_00215b68(void) {
-    f32 t, r, negated_scaled_input, v, clamp_bound, u, unclamped_negated_value, b, unclamped_magnitude;
-    s32 st;
+    f32 t, clamped_speed_ratio, negated_scaled_input, v, clamp_bound, u, unclamped_negated_value, b, unclamped_magnitude;
+    s32 control_mode;
 
     if (hero.state.current == 0x44) {
         t = hero.motion.unk188 * 0.5f;
@@ -295,15 +295,15 @@ void FUN_L00_00215b68(void) {
         else if (t < -0.7f)
             t = -0.7f;
         t = t * FUN_001f99c0_215b68(t) * 1.25f;
-        r = hero.motion.unk164 / (frame_time * 3.0f);
+        clamped_speed_ratio = hero.motion.unk164 / (frame_time * 3.0f);
         negated_scaled_input = -t;
         X.f1240 = negated_scaled_input * 0.3f;
-        if (1.0f < r)
-            r = 1.0f;
-        if (r < 0.0f)
-            r = 0.0f;
+        if (1.0f < clamped_speed_ratio)
+            clamped_speed_ratio = 1.0f;
+        if (clamped_speed_ratio < 0.0f)
+            clamped_speed_ratio = 0.0f;
         X.f10E8 = t;
-        X.f1240 = X.f1240 * r;
+        X.f1240 = X.f1240 * clamped_speed_ratio;
         X.f10E0 = negated_scaled_input * 0.35f;
         X.f1198 = t * 1.35f;
         X.f1194 = FUN_001f99c0_215b68(t) * 0.25f;
@@ -341,8 +341,8 @@ void FUN_L00_00215b68(void) {
         X.f1190 = FUN_001f99c0_215b68(t) * 0.16f;
         return;
     }
-    st = hero.state.control_mode;
-    if (st == 2 || st == 4) {
+    control_mode = hero.state.control_mode;
+    if (control_mode == 2 || control_mode == 4) {
         u = hero.motion.unk188;
         if (1.4f < u)
             u = 1.4f;
