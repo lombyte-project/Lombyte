@@ -2417,7 +2417,7 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
     W4_2838 old;
     W4_2838 vel;
     UQ_2838 up;
-    W4_2838 dir;
+    W4_2838 ship_movement_vector;
     W4_2838 side;
     W4_2838 ang;
     W4_2838 target;
@@ -2470,11 +2470,11 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
         } else {
             float hi = D_L11_00161FF4_gp * D_L11_00162090_gp;
             float step = D_L11_00161FEC * D_L11_00162090_gp;
-            float cur = ship_vars->speed;
-            if (cur < hi - step) {
-                ship_vars->speed = cur + step;
-            } else if (hi < cur) {
-                ship_vars->speed = cur + (hi - cur) * D_L11_00162000;
+            float current_speed = ship_vars->speed;
+            if (current_speed < hi - step) {
+                ship_vars->speed = current_speed + step;
+            } else if (hi < current_speed) {
+                ship_vars->speed = current_speed + (hi - current_speed) * D_L11_00162000;
             } else {
                 ship_vars->speed = hi;
             }
@@ -2512,10 +2512,10 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
         ship_vars->f38 = fast_sub_rot_2838(ship_vars->f38, ship_vars->f6C * D_L11_00162018);
     }
 
-    build_spherical_offset(dir, ship_vars->speed, ship_vars->f38, -ship_vars->f34);
-    fast_vec_normalize(ship_vars->v10, dir, 1.0f);
+    build_spherical_offset(ship_movement_vector, ship_vars->speed, ship_vars->f38, -ship_vars->f34);
+    fast_vec_normalize(ship_vars->v10, ship_movement_vector, 1.0f);
     qcopy(old, &ship_moby->pos);
-    fast_vec_add(&ship_moby->pos, &ship_moby->pos, dir);
+    fast_vec_add(&ship_moby->pos, &ship_moby->pos, ship_movement_vector);
     {
         float lo = D_L11_00161FF4_gp;
         float range = D_L11_00161FF8 - lo;
@@ -2530,7 +2530,7 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
     {
         T2_2838 tbl;
         T2_2838 wr;
-        float mat[12];
+        float ship_rotation_basis[12];
         wr.e[0].q = 0;
         wr.e[1].q = 0;
         wr.e[0].v[0] =
@@ -2551,8 +2551,8 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
         diff[1] = ship_vars->fB8;
         diff[2] = ship_vars->fBC;
         diff[3] = 0.0f;
-        euler_basis_2838(mat, &ship_vars->f30);
-        transform_by_basis_2838(target, diff, mat);
+        euler_basis_2838(ship_rotation_basis, &ship_vars->f30);
+        transform_by_basis_2838(target, diff, ship_rotation_basis);
         fast_vec_add(wr.e[0].v, &ship_moby->pos, target);
         FUN_L00_002ea9d8(wr.e[0].v);
         wr.e[1].v[0] = fast_add_rot_2838(ship_vars->f30 * D_L11_00162038, ship_vars->f6C * D_L11_00162034);
@@ -2598,13 +2598,13 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
             hc = *(short *)(*(char **)(collision_result + 0x18) + 0xA6);
             if (hc != 0 && hc != 0x192 && hc != 0x4C2 && hc != 0x4C3) {
                 qcopy(&ship_moby->pos, collision_result + 0x30);
-                FUN_L00_001ff660(dir, dir, collision_result + 0x40);
+                FUN_L00_001ff660(ship_movement_vector, ship_movement_vector, collision_result + 0x40);
                 ship_vars->f38 = fast_add_rot_2838(
                     ship_vars->f38,
-                    fast_sub_rot_2838(atan2_2838(dir[0], dir[1]), ship_vars->f38) * D_L11_00162008);
+                    fast_sub_rot_2838(atan2_2838(ship_movement_vector[0], ship_movement_vector[1]), ship_vars->f38) * D_L11_00162008);
                 collision_adjusted_pitch = fast_add_rot_2838(
                     ship_vars->f34,
-                    fast_sub_rot_2838(-atan2_2838(vector_length_xy_2838(dir), dir[2]), ship_vars->f34) *
+                    fast_sub_rot_2838(-atan2_2838(vector_length_xy_2838(ship_movement_vector), ship_movement_vector[2]), ship_vars->f34) *
                         D_L11_0016200C);
                 k = ship_vars->speed * D_L11_0016204C;
                 ship_vars->f34 = collision_adjusted_pitch;
@@ -2614,7 +2614,7 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
                     if (hero.ship_hp < 0.0f) {
                         subtract_vector_2838(side, collision_result + 0x50, collision_result + 0x60);
                         fast_vec_normalize(side, side, 1.0f);
-                        FUN_L00_001ff660(vel, dir, collision_result + 0x40);
+                        FUN_L00_001ff660(vel, ship_movement_vector, collision_result + 0x40);
                         fast_vec_normalize(vel, vel, frame_time + frame_time);
                         fast_vec_normalize(up.v, collision_result + 0x40, 1.0f);
                         spawn_explosion(ship_moby, vel, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f,
