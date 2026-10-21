@@ -1168,7 +1168,7 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
     float push[4];
     char *data;
     char *hit;
-    int idx;
+    int voice_slot_index;
     unsigned char *voice_slot_entry;
 
     data = *(char **)(moby + 0x78);
@@ -1246,11 +1246,11 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
         } else {
             *(int *)(moby + 0x94) = 0;
             *(unsigned short *)(moby + 0x34) |= 0x41;
-            idx = *(int *)(data + 0x150);
-            if (idx != -1) {
-                voice_slot_entry = (unsigned char *)D_0013E550_29d2e0 + idx * 0x70;
+            voice_slot_index = *(int *)(data + 0x150);
+            if (voice_slot_index != -1) {
+                voice_slot_entry = (unsigned char *)D_0013E550_29d2e0 + voice_slot_index * 0x70;
                 if (*(char **)(voice_slot_entry + 0x88) == moby && voice_slot_entry[0x74]) {
-                    release_voice_slot(idx);
+                    release_voice_slot(voice_slot_index);
                 }
             }
             *(int *)(data + 0x150) = -1;
