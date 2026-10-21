@@ -1307,7 +1307,7 @@ extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern u8 *FUN_L00_0026d000(V4 *, f32, f32, f32, f32, s32, V4 *, u32);
 
 void FUN_L00_002b3c50(X *x) {
-    V4 l0;
+    V4 effect_input_and_position_offset;
     V4 emission_position;
     V4 previous_position_delta;
     V4 trail_sample_position;
@@ -1321,18 +1321,18 @@ void FUN_L00_002b3c50(X *x) {
     u8 *spawned_effect;
 
     trail_state = x->f78;
-    l0.f[0] = fast_cos(random_angle_radians()) * 0.05f;
-    l0.f[1] = fast_sin(random_angle_radians()) * 0.05f;
-    l0.f[2] = 0.0f;
-    l0.f[2] = -random_float_between(0.01f, 0.03f);
-    FUN_001f9cf8(&l0, &l0, &x->vC0);
+    effect_input_and_position_offset.f[0] = fast_cos(random_angle_radians()) * 0.05f;
+    effect_input_and_position_offset.f[1] = fast_sin(random_angle_radians()) * 0.05f;
+    effect_input_and_position_offset.f[2] = 0.0f;
+    effect_input_and_position_offset.f[2] = -random_float_between(0.01f, 0.03f);
+    FUN_001f9cf8(&effect_input_and_position_offset, &effect_input_and_position_offset, &x->vC0);
     qcopy(&emission_position, &x->v10);
     if (hero.state.current == 0x81) {
         if (D_L00_0015F5CC % 3 == 0) {
-            FUN_L00_0026cbb0(&emission_position, &l0, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
+            FUN_L00_0026cbb0(&emission_position, &effect_input_and_position_offset, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
         }
     } else {
-        FUN_L00_0026cbb0(&emission_position, &l0, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
+        FUN_L00_0026cbb0(&emission_position, &effect_input_and_position_offset, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
     }
     if (trail_state->f0C) {
         trail_sample_spacing = fast_vec_dist(&trail_state->v10, &emission_position) * 0.5f;
@@ -1340,35 +1340,35 @@ void FUN_L00_002b3c50(X *x) {
         for (i = 1; i < 2; i++) {
             fast_vec_normalize(&trail_sample_position, &previous_position_delta, trail_sample_spacing * (f32)i);
             FUN_001f9a10_c(&trail_sample_position, &emission_position, &trail_sample_position);
-            FUN_L00_0026cbb0(&trail_sample_position, &l0, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
+            FUN_L00_0026cbb0(&trail_sample_position, &effect_input_and_position_offset, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
         }
     }
     trail_state->f00 = random_integer_below(FUN_001f96f8_c2(10));
     effect_random_upper_bound = 1.075f;
     col = 0x808080;
-    l0.f[0] = 0.0f;
-    l0.f[1] = 0.0f;
-    l0.f[2] = -0.3f;
-    l0.f[3] = 1.0f;
-    FUN_001f9cf8(&l0, &l0, &x->vC0);
-    FUN_001f9a10_c(&emission_position, &x->v10, &l0);
-    l0.f[3] = 1.0f;
-    l0.f[2] = -0.075f;
-    l0.f[0] = 0.0f;
-    l0.f[1] = 0.0f;
-    FUN_001f9cf8(&l0, &l0, &x->vC0);
-    l0.f[2] = 0.025f;
+    effect_input_and_position_offset.f[0] = 0.0f;
+    effect_input_and_position_offset.f[1] = 0.0f;
+    effect_input_and_position_offset.f[2] = -0.3f;
+    effect_input_and_position_offset.f[3] = 1.0f;
+    FUN_001f9cf8(&effect_input_and_position_offset, &effect_input_and_position_offset, &x->vC0);
+    FUN_001f9a10_c(&emission_position, &x->v10, &effect_input_and_position_offset);
+    effect_input_and_position_offset.f[3] = 1.0f;
+    effect_input_and_position_offset.f[2] = -0.075f;
+    effect_input_and_position_offset.f[0] = 0.0f;
+    effect_input_and_position_offset.f[1] = 0.0f;
+    FUN_001f9cf8(&effect_input_and_position_offset, &effect_input_and_position_offset, &x->vC0);
+    effect_input_and_position_offset.f[2] = 0.025f;
     if (hero.state.current == HERO_STATE_LAND) {
         col = 0xA0A0A0;
         effect_random_upper_bound = 1.0165f;
-        l0.f[2] -= D_0015ED6C_c * 5.0f;
+        effect_input_and_position_offset.f[2] -= D_0015ED6C_c * 5.0f;
     }
     if (hero.state.current == 0x81) {
         col = 0xA0A0A0;
         effect_random_upper_bound = 1.037f;
-        l0.f[2] -= D_0015ED6C_c * 3.0f;
+        effect_input_and_position_offset.f[2] -= D_0015ED6C_c * 3.0f;
     }
-    spawned_effect = FUN_L00_0026d000(&emission_position, 0.05f, 1.01f, effect_random_upper_bound, 30000.0f, 6, &l0, col);
+    spawned_effect = FUN_L00_0026d000(&emission_position, 0.05f, 1.01f, effect_random_upper_bound, 30000.0f, 6, &effect_input_and_position_offset, col);
     if (spawned_effect)
         spawned_effect[3] = 0x44;
     if (trail_state->f0C) {
@@ -1383,7 +1383,7 @@ void FUN_L00_002b3c50(X *x) {
         for (i = 1; i < trail_sample_limit; i++) {
             fast_vec_normalize(&trail_sample_position, &previous_position_delta, trail_sample_spacing * (f32)i);
             FUN_001f9a10_c(&trail_sample_position, &emission_position, &trail_sample_position);
-            spawned_effect = FUN_L00_0026d000(&trail_sample_position, 0.05f, 1.01f, effect_random_upper_bound, 30000.0f, 6, &l0, col);
+            spawned_effect = FUN_L00_0026d000(&trail_sample_position, 0.05f, 1.01f, effect_random_upper_bound, 30000.0f, 6, &effect_input_and_position_offset, col);
             if (spawned_effect)
                 spawned_effect[3] = 0x44;
         }
