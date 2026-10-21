@@ -332,9 +332,9 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
 /* Sets the float at 0x58 on the moby and on the linked moby at data+0x424, if any. */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB6D8), where it is exact; names translated to the US level program. */
 
-void FUN_L04_002ba448(char *arg, float animation_speed) {
-    char *data = *(char **)(arg + 0x78);
-    *(float *)(arg + 0x58) = animation_speed;
+void FUN_L04_002ba448(char *moby, float animation_speed) {
+    char *data = *(char **)(moby + 0x78);
+    *(float *)(moby + 0x58) = animation_speed;
     if (*(char **)(data + 0x424) != 0) {
         *(float *)(*(char **)(data + 0x424) + 0x58) = animation_speed;
     }
