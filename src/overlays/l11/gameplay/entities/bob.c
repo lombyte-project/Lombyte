@@ -368,9 +368,9 @@ void FUN_L11_002d1030(void *mp) {
     char *pvars = (char *)moby->pvars;
     float ang;
     float f0;
-    float f1;
-    float f2;
-    float f3;
+    float vertical_motion;
+    float vertical_motion_decrement;
+    float horizontal_speed;
 
     switch (moby->state) {
     case RESORT_OWNER_INITIALIZE:
@@ -393,19 +393,19 @@ void FUN_L11_002d1030(void *mp) {
                          D_0015ED70 * 25.132742f, D_0015ED6C * 12.566371f);
         *(float *)(pvars + 0x130) = fast_cos(*(float *)(yaw_ptr)) * *(float *)(pvars + 0x154);
         f0 = fast_sin(*(float *)(yaw_ptr));
-        f1 = *(float *)(pvars + 0x148);
-        f2 = D_0015ED70 * 20.0f;
-        f3 = *(float *)(pvars + 0x154);
-        *(float *)(pvars + 0x134) = f0 * f3;
-        f1 = f1 - f2;
-        *(float *)(pvars + 0x138) = f1;
-        if (0.0f < f1) {
+        vertical_motion = *(float *)(pvars + 0x148);
+        vertical_motion_decrement = D_0015ED70 * 20.0f;
+        horizontal_speed = *(float *)(pvars + 0x154);
+        *(float *)(pvars + 0x134) = f0 * horizontal_speed;
+        vertical_motion = vertical_motion - vertical_motion_decrement;
+        *(float *)(pvars + 0x138) = vertical_motion;
+        if (0.0f < vertical_motion) {
             *(float *)(pvars + 0x138) = 0.0f;
             /* Fakematch: storing the speed back is a no-op that reload
              * deletes, but it keeps f3 live into this branch, so the
              * first scheduling pass hoists the 0x154 load and the
              * allocator gives it $f4 as in retail. */
-            *(float *)(pvars + 0x154) = f3;
+            *(float *)(pvars + 0x154) = horizontal_speed;
         }
         break;
     }
