@@ -533,7 +533,7 @@ extern float D_L18_0016250C __attribute__((sda));
 extern int D_L18_00162510 __attribute__((sda));
 void FUN_L18_002f9c20(struct Moby *m) {
     Pk_9c20 pk;
-    float mat[4][4];
+    float quad_transform[4][4];
     float up[4];
     int c;
     int second_quad_color;
@@ -550,16 +550,16 @@ void FUN_L18_002f9c20(struct Moby *m) {
     pk.a = 0;
     gs_9c20(0x4A, 0);
     gs_9c20(0x47, 0x51001);
-    rot_9c20(mat[3], &D_L18_00162560, &m->rot_row0);
-    add_9c20(mat[3], mat[3], &m->pos);
-    sub_9c20(mat[0], mat[3], D_L18_001677C0_9c20);
-    norm_9c20(mat[0], mat[0], 1.0f);
+    rot_9c20(quad_transform[3], &D_L18_00162560, &m->rot_row0);
+    add_9c20(quad_transform[3], quad_transform[3], &m->pos);
+    sub_9c20(quad_transform[0], quad_transform[3], D_L18_001677C0_9c20);
+    norm_9c20(quad_transform[0], quad_transform[0], 1.0f);
     *(u128_9c20 *)up = 0;
     up[2] = 1.0f;
     up[3] = 1.0f;
-    cross_9c20(mat[1], mat[0], up);
-    norm_9c20(mat[1], mat[1], 1.0f);
-    cross_9c20(mat[2], mat[1], mat[0]);
+    cross_9c20(quad_transform[1], quad_transform[0], up);
+    norm_9c20(quad_transform[1], quad_transform[1], 1.0f);
+    cross_9c20(quad_transform[2], quad_transform[1], quad_transform[0]);
     c = D_L18_00162504 | (D_L18_00162524 << 24);
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
@@ -575,7 +575,7 @@ void FUN_L18_002f9c20(struct Moby *m) {
     pk.col[0] = c;
     for (i = 0; i < 4; i++) {
         scale_9c20(pk.m[i], D_L18_001DFB90[i], D_L18_00162508);
-        xform_9c20(pk.m[i], pk.m[i], mat);
+        xform_9c20(pk.m[i], pk.m[i], quad_transform);
     }
     draw_9c20(&pk, 0, 0);
     second_quad_color = D_L18_00162510 | (D_L18_00162524 << 24);
@@ -585,7 +585,7 @@ void FUN_L18_002f9c20(struct Moby *m) {
     pk.col[0] = second_quad_color;
     for (i = 0; i < 4; i++) {
         scale_9c20(pk.m[i], D_L18_001DFB90[i], D_L18_0016250C);
-        xform_9c20(pk.m[i], pk.m[i], mat);
+        xform_9c20(pk.m[i], pk.m[i], quad_transform);
     }
     draw_9c20(&pk, 0, 0);
 }
