@@ -3306,9 +3306,9 @@ void water_lily_update(HoverMoby *water_lily) {
     HoverVec tgt;
     HoverVec step;
     HoverVec vector_scratch;
-    f32 ang;
+    f32 hero_separation_angle;
     f32 dz;
-    f32 lim;
+    f32 max_vertical_step;
 
     old.q = water_lily->pos.q;
     v = water_lily->pvars;
@@ -3328,10 +3328,10 @@ void water_lily_update(HoverMoby *water_lily) {
                        D_L01_00161BF4, 3.0f);
         if (vector_distance(&water_lily->pos, &hero.motion.pos) < D_L01_00161BF8) {
             if (FUN_001f99c0(water_lily->pos.v.z - hero.motion.pos.f[2]) < 0.7f) {
-                ang = fast_arc_tan(water_lily->pos.v.x - hero.motion.pos.f[0],
+                hero_separation_angle = fast_arc_tan(water_lily->pos.v.x - hero.motion.pos.f[0],
                                    water_lily->pos.v.y - hero.motion.pos.f[1]);
-                water_lily->pos.v.x = fast_cos(ang) * D_L01_00161BF8;
-                water_lily->pos.v.y = fast_sin(ang) * D_L01_00161BF8;
+                water_lily->pos.v.x = fast_cos(hero_separation_angle) * D_L01_00161BF8;
+                water_lily->pos.v.y = fast_sin(hero_separation_angle) * D_L01_00161BF8;
                 water_lily->pos.v.x += hero.motion.pos.f[0];
                 water_lily->pos.v.y += hero.motion.pos.f[1];
             }
@@ -3348,11 +3348,11 @@ void water_lily_update(HoverMoby *water_lily) {
             water_lily->pos.q = vector_scratch.q;
         }
         dz = resolve_camera_surface_height(&water_lily->pos, 0) - water_lily->pos.v.z;
-        lim = frame_time_macro * 3.0f;
-        if (dz > lim) {
-            dz = lim;
-        } else if (dz < -lim) {
-            dz = -lim;
+        max_vertical_step = frame_time_macro * 3.0f;
+        if (dz > max_vertical_step) {
+            dz = max_vertical_step;
+        } else if (dz < -max_vertical_step) {
+            dz = -max_vertical_step;
         }
         water_lily->pos.v.z += dz;
         break;
