@@ -481,7 +481,7 @@ void morphoray_update(struct Moby *moby) {
     };
     u8 *moby_bytes = (u8 *)moby;
     u8 *morphoray_pvars = (u8 *)moby->pvars;
-    f32 v[4];
+    f32 position_offset[4];
     u8 state = moby->state;
 
     switch (state) {
@@ -501,8 +501,8 @@ void morphoray_update(struct Moby *moby) {
     case MORPHORAY_WAIT_FOR_HERO:
         *(f32 *)(moby_bytes + 0x48) = fast_add_rotations(*(f32 *)(moby_bytes + 0x48), D_L14_001621EC);
         qcopy(moby_bytes + 0x10, morphoray_pvars);
-        scale_vector_xyz(v, moby_bytes + 0xd0, D_L14_001621F0);
-        add_vector_xyz(moby_bytes + 0x10, moby_bytes + 0x10, v);
+        scale_vector_xyz(position_offset, moby_bytes + 0xd0, D_L14_001621F0);
+        add_vector_xyz(moby_bytes + 0x10, moby_bytes + 0x10, position_offset);
         FUN_L14_00305b18(moby);
         if (D_L14_0015F5CC % 10 != 0)
             return;
