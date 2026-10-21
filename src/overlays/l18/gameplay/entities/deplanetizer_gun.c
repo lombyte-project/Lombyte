@@ -596,7 +596,7 @@ extern float D_L18_0016251C __attribute__((sda));
 extern float D_L18_001DFBD0[4][4];
 void FUN_L18_002f9eb8(struct Moby *m) {
     Pk_9c20 pk;
-    float mat[4][4];
+    float quad_transform[4][4];
     float up[4];
     Vec4 vertices[4];
     int i = 0;
@@ -608,16 +608,16 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     pk.a = 0;
     gs_9c20(0x4A, 0);
     gs_9c20(0x47, 0x51001);
-    rot_9c20(mat[3], &D_L18_00162560, &m->rot_row0);
-    add_9c20(mat[3], mat[3], &m->pos);
+    rot_9c20(quad_transform[3], &D_L18_00162560, &m->rot_row0);
+    add_9c20(quad_transform[3], quad_transform[3], &m->pos);
     *(u128_9c20 *)up = 0;
     up[2] = -1.0f;
     up[3] = 1.0f;
-    rot_9c20(mat[0], up, &m->rot_row0);
-    sub_9c20(mat[1], mat[3], D_L18_001677C0_9c20);
-    cross_9c20(mat[2], mat[1], mat[0]);
-    norm_9c20(mat[2], mat[2], 1.0f);
-    cross_9c20(mat[1], mat[0], mat[2]);
+    rot_9c20(quad_transform[0], up, &m->rot_row0);
+    sub_9c20(quad_transform[1], quad_transform[3], D_L18_001677C0_9c20);
+    cross_9c20(quad_transform[2], quad_transform[1], quad_transform[0]);
+    norm_9c20(quad_transform[2], quad_transform[2], 1.0f);
+    cross_9c20(quad_transform[1], quad_transform[0], quad_transform[2]);
 
     color = D_L18_00162504 | 0xFF000000;
     pk.uv[0] = 1.0f;
@@ -643,7 +643,7 @@ void FUN_L18_002f9eb8(struct Moby *m) {
         i++;
     } while (i < 4);
     for (i = 0; i < 4; i++) {
-        xform_9c20(pk.m[i], &vertices[i], mat);
+        xform_9c20(pk.m[i], &vertices[i], quad_transform);
     }
     draw_9c20(&pk, 0, 0);
 
@@ -661,7 +661,7 @@ void FUN_L18_002f9eb8(struct Moby *m) {
         i++;
     } while (i < 4);
     for (i = 0; i < 4; i++) {
-        xform_9c20(pk.m[i], &vertices[i], mat);
+        xform_9c20(pk.m[i], &vertices[i], quad_transform);
     }
     draw_9c20(&pk, 0, 0);
 
@@ -679,7 +679,7 @@ void FUN_L18_002f9eb8(struct Moby *m) {
         i++;
     } while (i < 4);
     for (i = 0; i < 4; i++) {
-        xform_9c20(pk.m[i], &vertices[i], mat);
+        xform_9c20(pk.m[i], &vertices[i], quad_transform);
     }
     draw_9c20(&pk, 0, 0);
 }
