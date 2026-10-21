@@ -1931,7 +1931,7 @@ extern int FUN_00213260_275910(int) __asm__("FUN_00213260");
 extern unsigned char *FUN_002141f8_275910(int) __asm__("FUN_002141f8");
 
 extern unsigned char *D_L00_001B21B8 __attribute__((section(".data")));
-unsigned char *FUN_L00_00275910(OvlQuad *pos, int lifetime_frames, int col, int mode, int b, float *vec, int lookup_object_reference,
+unsigned char *FUN_L00_00275910(OvlQuad *pos, int lifetime_frames, int col, int mode, int rotation_increment, float *initial_velocity, int lookup_object_reference,
                                 float x, float y) {
     unsigned char *particle = p27fe00_alloc(0x4E);
     if (particle) {
@@ -1955,7 +1955,7 @@ unsigned char *FUN_L00_00275910(OvlQuad *pos, int lifetime_frames, int col, int 
         *(float *)(particle_data + 0) = *(float *)(particle + 0xC);
         *(float *)(particle_data + 4) = y * 210000.0f;
         *(short *)(particle_data + 8) = lifetime_frames;
-        particle_data[0xA] = b;
+        particle_data[0xA] = rotation_increment;
         particle_data[0xB] = col >> 24;
         *(int *)(particle_data + 0x18) = lookup_object_reference;
         *(float *)(particle_data + 0x1C) = 0;
@@ -1965,9 +1965,9 @@ unsigned char *FUN_L00_00275910(OvlQuad *pos, int lifetime_frames, int col, int 
                 *(float *)(particle_data + 0x1C) = *(float *)(lookup_result + 0x10);
         }
         particle_velocity = (float *)(particle_data + 0xC);
-        particle_velocity[0] = vec[0];
-        particle_velocity[1] = vec[1];
-        particle_velocity[2] = vec[2];
+        particle_velocity[0] = initial_velocity[0];
+        particle_velocity[1] = initial_velocity[1];
+        particle_velocity[2] = initial_velocity[2];
     }
     return particle;
 }
