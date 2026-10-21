@@ -172,9 +172,9 @@ void transition_load_wad(void)
   int new_var;
   WadTex *tex;
   s32 new_var4;
-  WadClass20 *c20;
+  WadClass20 *render_class_entry;
   u8 *new_var3;
-  WadClass30 *c30;
+  WadClass30 *shrub_class_entry;
   WadSound *snd;
   TextEntry *te;
   WadTex *new_var2;
@@ -256,28 +256,28 @@ void transition_load_wad(void)
   }
   initialize_tfrag_render_data(data + hdr->x10, ((u8 *) hdr) + hdr->x34);
   relocate_sky_definition(data + hdr->x14);
-  c20 = (WadClass20 *) (((u8 *) hdr) + hdr->x1C);
+  render_class_entry = (WadClass20 *) (((u8 *) hdr) + hdr->x1C);
   D_0015FF00 = 0;
   registered_object_render_class_count = 0;
   registered_shrub_render_class_count = 0;
   for (k = 0; k < hdr->n18; k++)
   {
-    register_moby_class((c20->offset != 0) ? (data + c20->offset) : (0), ((u8 *) hdr) + hdr->x3C, c20->x10, c20->x4);
-    c20++;
+    register_moby_class((render_class_entry->offset != 0) ? (data + render_class_entry->offset) : (0), ((u8 *) hdr) + hdr->x3C, render_class_entry->x10, render_class_entry->x4);
+    render_class_entry++;
   }
 
-  c20 = (WadClass20 *) (((u8 *) hdr) + hdr->x24);
+  render_class_entry = (WadClass20 *) (((u8 *) hdr) + hdr->x24);
   for (k = 0; k < hdr->n20; k++)
   {
-    register_object_render_class(data + c20->offset, ((u8 *) hdr) + hdr->x44, c20->x10, c20->x4);
-    c20++;
+    register_object_render_class(data + render_class_entry->offset, ((u8 *) hdr) + hdr->x44, render_class_entry->x10, render_class_entry->x4);
+    render_class_entry++;
   }
 
-  c30 = (WadClass30 *) (((u8 *) hdr) + hdr->x2C);
+  shrub_class_entry = (WadClass30 *) (((u8 *) hdr) + hdr->x2C);
   for (k = 0; k < hdr->n28; k++)
   {
-    register_shrub_render_class(data + c30->offset, ((u8 *) hdr) + hdr->x4C, c30->x10, c30->x20, c30->x4);
-    c30++;
+    register_shrub_render_class(data + shrub_class_entry->offset, ((u8 *) hdr) + hdr->x4C, shrub_class_entry->x10, shrub_class_entry->x20, shrub_class_entry->x4);
+    shrub_class_entry++;
   }
 
   level_texture_payload_address = (s32) (data + hdr->x68);
