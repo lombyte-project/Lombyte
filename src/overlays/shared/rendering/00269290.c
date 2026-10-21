@@ -553,7 +553,7 @@ void FUN_001f9a10_0026a880(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a68_0026a880(void *, void *, float) __asm__("FUN_001f9a68");
 void FUN_L00_0026a880(unsigned char *particle) {
     float *particle_data = (float *)(particle + 0x20);
-    int blue_byte, b;
+    int blue_byte, alpha_byte;
     float dt;
     particle_data[7] += D_0015ED60_0026a880 * -0.04f;
     if (particle_data[7] <= 0.0f || FUN_001f9770_0026a880(particle + 0xa)) {
@@ -565,8 +565,8 @@ void FUN_L00_0026a880(unsigned char *particle) {
     if (particle_data[6] < 0.225f)
         particle_data[6] += dt * 0.0484f;
     blue_byte = FUN_001fa6d0_0026a880(particle_data[6] * 255.0f) & 0xFF;
-    b = FUN_001fa6d0_0026a880(particle_data[7] * 255.0f);
-    *(int *)(particle + 4) = *(unsigned short *)(particle + 4) | (blue_byte << 16) | (b << 24);
+    alpha_byte = FUN_001fa6d0_0026a880(particle_data[7] * 255.0f);
+    *(int *)(particle + 4) = *(unsigned short *)(particle + 4) | (blue_byte << 16) | (alpha_byte << 24);
     FUN_001f9a10_0026a880(particle + 0x10, particle + 0x10, particle_data);
     FUN_001f9a68_0026a880(particle_data, particle_data, D_0015ED60_0026a880 * -0.100000024f + 1.0f);
     particle[8]--;
