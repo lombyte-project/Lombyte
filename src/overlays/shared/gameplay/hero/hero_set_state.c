@@ -3067,8 +3067,8 @@ float absolute_float(float input) __asm__("FUN_001f99c0");
 int FUN_L00_002279b0(void) {
     struct Hero *hero_ptr = &hero;
     struct Hero *hero_depth_check_ptr;
-    struct Hero *u;
-    int r;
+    struct Hero *hero_collision_check_ptr;
+    int water_surface_entry_pending;
     float ray_start[4];
     float ray_end[4];
     float surface_height_tolerance;
@@ -3076,13 +3076,13 @@ int FUN_L00_002279b0(void) {
     if (hero_ptr->state.current == 0x6A) {
         return 0;
     }
-    r = 0;
+    water_surface_entry_pending = 0;
     if (hero_ptr->base_condition != 0) {
         if (hero_ptr->state.control_mode == 0x11) {
             if (hero_ptr->state.step != 1) {
                 if (0.0f < hero_ptr->motion.displacement.f[2]) {
                     if (hero_ptr->water_surface_z - 0.4f < hero_ptr->motion.pos.f[2]) {
-                        r = 1;
+                        water_surface_entry_pending = 1;
                     }
                 }
             }
@@ -3094,14 +3094,14 @@ int FUN_L00_002279b0(void) {
             if (absolute_float(hero_ptr->water_surface_z - (hero_ptr->motion.pos.f[2] + 0.45f)) < surface_height_tolerance) {
                 if (hero_ptr->state.control_mode != 4 || hero_ptr->unk41E != 0) {
                     if (0.8f < hero_ptr->unk22A4 && hero_ptr->motion.displacement.f[2] < 0.0f) {
-                        r = 1;
+                        water_surface_entry_pending = 1;
                     }
                 }
             }
             hero_depth_check_ptr = &hero;
             if (hero_depth_check_ptr->motion.pos.f[2] < hero_depth_check_ptr->water_surface_z - 0.8f) {
                 if (hero_depth_check_ptr->state.control_mode != 4 || hero_depth_check_ptr->unk41E != 0) {
-                    r = 1;
+                    water_surface_entry_pending = 1;
                 }
             }
         }
@@ -3114,36 +3114,36 @@ int FUN_L00_002279b0(void) {
     if (hero_ptr->state.current == 0x12) {
         if (hero_ptr->unk41E != 0) {
             if (hero_ptr->motion.pos.f[2] < hero_ptr->water_surface_z - 0.7f) {
-                r = 1;
+                water_surface_entry_pending = 1;
             }
         }
     }
-    u = &hero;
-    if (u->state.control_mode - 0x11 >= 2u && u->state.control_mode != 7 &&
-        u->state.control_mode != 0x14 && u->state.current != 0x12 &&
+    hero_collision_check_ptr = &hero;
+    if (hero_collision_check_ptr->state.control_mode - 0x11 >= 2u && hero_collision_check_ptr->state.control_mode != 7 &&
+        hero_collision_check_ptr->state.control_mode != 0x14 && hero_collision_check_ptr->state.current != 0x12 &&
         (D_L00_0015F5CC & 0xF) == 0) {
         scale = 4.0f;
         if ((D_L00_0015F5CC & 0x3F) == 0) {
             scale = 16.0f;
         }
         hero_get_collision_ray_endpoints(ray_start, ray_end, 0, scale, 1.3f);
-        if (collision_line(ray_start, ray_end, 2, u->moby, 0) != 0) {
+        if (collision_line(ray_start, ray_end, 2, hero_collision_check_ptr->moby, 0) != 0) {
             int hit_material = collision_hit_material();
-            u->ground_type = hit_material;
+            hero_collision_check_ptr->ground_type = hit_material;
             if ((short)hit_material == 0) {
                 ray_start[2] = D_L00_00173E68 - 0.01f;
-                if (collision_line(ray_start, ray_end, 2, u->moby, 0) == 0) {
+                if (collision_line(ray_start, ray_end, 2, hero_collision_check_ptr->moby, 0) == 0) {
                     hero_set_state(0x34, 1);
                     return 1;
                 }
             }
         }
     }
-    if (r != 0) {
+    if (water_surface_entry_pending != 0) {
         hero_set_state(0x37, 1);
         FUN_L00_00216de8(3, 0);
     }
-    return r;
+    return water_surface_entry_pending;
 }
 typedef struct {
     u8 p0[0x88];
