@@ -1950,7 +1950,7 @@ extern float D_L00_0016149C __attribute__((sda));
 unsigned char *FUN_L00_002b58d8(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) {
     unsigned char *spawned_moby = FUN_0020c4f8_2b58d8(0xAC);
     if (spawned_moby) {
-        unsigned char *v = *(unsigned char **)(spawned_moby + 0x78);
+        unsigned char *spawned_moby_vars = *(unsigned char **)(spawned_moby + 0x78);
         struct Hero *G = &hero;
         V_2b58d8 collision_start;
         G->unk1FE0 = spawned_moby;
@@ -1961,37 +1961,37 @@ unsigned char *FUN_L00_002b58d8(unsigned char *source_moby, V_2b58d8 *pos, float
         spawned_moby[0x20] = 1;
         *(float *)(spawned_moby + 0x48) = fa;
         *(float *)(spawned_moby + 0x44) = fb;
-        *(unsigned char **)(v + 0x24) = G->unk1F60;
-        *(unsigned char **)(v + 0x28) = G->unk1FA0;
-        *(unsigned char **)(v + 0x0) = source_moby;
+        *(unsigned char **)(spawned_moby_vars + 0x24) = G->unk1F60;
+        *(unsigned char **)(spawned_moby_vars + 0x28) = G->unk1FA0;
+        *(unsigned char **)(spawned_moby_vars + 0x0) = source_moby;
         qcopy(spawned_moby + 0x10, pos);
-        *(int *)(v + 0x8) = 0;
-        *(int *)(v + 0xC) = 0;
+        *(int *)(spawned_moby_vars + 0x8) = 0;
+        *(int *)(spawned_moby_vars + 0xC) = 0;
         if ((void *)G->ground_moby && FUN_L00_002603d0_2b58d8((void *)G->ground_moby))
-            *(float *)(v + 0x4) = FUN_001f9af0_2b58d8(&G->motion.displacement);
+            *(float *)(spawned_moby_vars + 0x4) = FUN_001f9af0_2b58d8(&G->motion.displacement);
         else
-            *(int *)(v + 0x4) = 0;
-        *(int *)(v + 0x10) = FUN_001f96f8_2b58d8(0xBB8);
-        *(int *)(v + 0x18) = 0;
-        *(int *)(v + 0x1C) = 0;
-        *(int *)(v + 0x14) = 0;
-        *(float *)(v + 0x44) = 0.4f;
+            *(int *)(spawned_moby_vars + 0x4) = 0;
+        *(int *)(spawned_moby_vars + 0x10) = FUN_001f96f8_2b58d8(0xBB8);
+        *(int *)(spawned_moby_vars + 0x18) = 0;
+        *(int *)(spawned_moby_vars + 0x1C) = 0;
+        *(int *)(spawned_moby_vars + 0x14) = 0;
+        *(float *)(spawned_moby_vars + 0x44) = 0.4f;
         FUN_L00_002b56d0_2b58d8(spawned_moby);
         FUN_L00_00250df8_2b58d8(spawned_moby);
-        *(int *)(v + 0x14) = FUN_L00_002eb930_2b58d8(spawned_moby);
+        *(int *)(spawned_moby_vars + 0x14) = FUN_L00_002eb930_2b58d8(spawned_moby);
         hero_set_state(0x1D, 1);
-        FUN_001f97e8_2b58d8(*(void **)(v + 0x24), 0, 0x40);
-        FUN_001f97e8_2b58d8(*(void **)(v + 0x28), 0, 0x40);
-        FUN_0020cb10_2b58d8(spawned_moby, 0, *(void **)(v + 0x24));
-        FUN_0020cb10_2b58d8(spawned_moby, 1, *(void **)(v + 0x28));
+        FUN_001f97e8_2b58d8(*(void **)(spawned_moby_vars + 0x24), 0, 0x40);
+        FUN_001f97e8_2b58d8(*(void **)(spawned_moby_vars + 0x28), 0, 0x40);
+        FUN_0020cb10_2b58d8(spawned_moby, 0, *(void **)(spawned_moby_vars + 0x24));
+        FUN_0020cb10_2b58d8(spawned_moby, 1, *(void **)(spawned_moby_vars + 0x28));
         {
             int r = FUN_L00_002bb360_2b58d8(spawned_moby);
             float k = D_L00_0016149C * D_0015ED6C_2b58d8;
-            *(int *)(v + 0x20) = r;
-            *(float *)(v + 0x48) = k;
+            *(int *)(spawned_moby_vars + 0x20) = r;
+            *(float *)(spawned_moby_vars + 0x48) = k;
         }
         FUN_L00_0025d1b8_2b58d8(spawned_moby);
-        *(int *)(v + 0x2C) = FUN_0022da68_2b58d8(0, 4, spawned_moby);
+        *(int *)(spawned_moby_vars + 0x2C) = FUN_0022da68_2b58d8(0, 4, spawned_moby);
         collision_start.q = *(OvlQuad *)(source_moby + 0x10);
         collision_start.f[2] = pos->f[2];
         if (FUN_001efa68_2b58d8(&collision_start, pos, 0, ({
