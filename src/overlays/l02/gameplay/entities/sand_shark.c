@@ -61,11 +61,11 @@ extern void FUN_L02_002a40f0(void *);
 
 void FUN_L02_002a4818(int a, int b, int c, int d, float x, float y, float z, float w, int e, int f,
                       int g);
-void FUN_L02_002a4818(int fog_red, int b, int fog_blue, int ticks_per_frame, float x, float y, float z, float w, int frame_table_start_index, int frame_count,
+void FUN_L02_002a4818(int fog_red, int fog_green, int fog_blue, int ticks_per_frame, float x, float y, float z, float w, int frame_table_start_index, int frame_count,
                       int g) {
     char scratch[0x40];
     scratch[0x30] = fog_red;
-    scratch[0x31] = b;
+    scratch[0x31] = fog_green;
     scratch[0x32] = fog_blue;
     *(float *)(scratch + 0x20) = x;
     *(float *)(scratch + 0x24) = y;
