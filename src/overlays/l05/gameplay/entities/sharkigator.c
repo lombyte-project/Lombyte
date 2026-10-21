@@ -60,8 +60,8 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 extern void FUN_L05_002db238_u(void *, void *) __asm__("FUN_L05_002db238");
 
 void FUN_L05_002daf58(unsigned char *moby) {
-    char *r = find_moby_hit(moby, 0x330000, 0);
-    if (r != 0) {
+    char *hit_record = find_moby_hit(moby, 0x330000, 0);
+    if (hit_record != 0) {
         char *b = D_0013E533 + 0xF1D;
         char *hit_owner;
         moby[0x20] = 2;
@@ -70,11 +70,11 @@ void FUN_L05_002daf58(unsigned char *moby) {
         *(unsigned short *)(moby + 0x34) |= 1;
         FUN_L05_002db238_u(moby, b);
         allocate_voice_for_target_entry(0, 0, (int)moby);
-        hit_owner = *(char **)(r + 0x20);
+        hit_owner = *(char **)(hit_record + 0x20);
         if (hit_owner != 0 && *(short *)(hit_owner + 0xA6) == 0) {
-            int v = scale_game_frames(0x3C);
+            int scaled_frame_increment = scale_game_frames(0x3C);
             char *y = b - 0x100;
-            *(int *)(y + 0x8C4) += v;
+            *(int *)(y + 0x8C4) += scaled_frame_increment;
         }
         moby[0xA4] = 0xFF;
     }
