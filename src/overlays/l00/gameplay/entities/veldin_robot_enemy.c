@@ -31,7 +31,7 @@ void FUN_L00_002e0988(HelpMoby *moby) {
     s32 *target_index_ptr;
     s32 i;
     HelpTarget *target_moby;
-    struct Hero *g;
+    struct Hero *hero_ptr;
 
     vars = moby->vars;
     if (moby->state == 0) {
@@ -62,13 +62,13 @@ void FUN_L00_002e0988(HelpMoby *moby) {
         }
     }
     if (D_00141968[0x8 / 2] == 0 && D_00141968[0x10 / 2] == 0) {
-        g = &hero;
+        hero_ptr = &hero;
         target_index_ptr = vars + 5;
         for (i = 0; i < 4; i++) {
             if (*target_index_ptr != -1) {
                 target_moby = (HelpTarget *)(D_L00_0015FFD8 + (*target_index_ptr << 8));
                 if (target_moby == 0 || target_moby->state == 0xFE || target_moby->state == 0xFD) {
-                    if (g->health.hp < 4) {
+                    if (hero_ptr->health.hp < 4) {
                         help_request(1, 1);
                     } else {
                         help_request(2, 2);
