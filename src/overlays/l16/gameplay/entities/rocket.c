@@ -33,7 +33,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-unsigned char *FUN_L16_002c6268(int owner, void *pos, float *dir, int fuse_frames, float gravity) {
+unsigned char *FUN_L16_002c6268(int owner, void *pos, float *initial_velocity, int fuse_frames, float gravity) {
     unsigned char *moby = (unsigned char *)func_0020D348_m(0x119);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
@@ -47,9 +47,9 @@ unsigned char *FUN_L16_002c6268(int owner, void *pos, float *dir, int fuse_frame
         *(short *)(data + 0xC) = scale_game_frames(5);
         *(short *)(data + 0xE) = scale_game_frames(0xF);
         qcopy(moby + 0x10, pos);
-        qcopy(data + 0x10, dir);
+        qcopy(data + 0x10, initial_velocity);
         *(float *)(moby + 0x40) = random_float_between_alt(-180.0f, 180.0f) * DEG_TO_RAD;
-        *(float *)(moby + 0x48) = fast_arc_tan(dir[0], dir[1]) + 1.5707964f;
+        *(float *)(moby + 0x48) = fast_arc_tan(initial_velocity[0], initial_velocity[1]) + 1.5707964f;
         FUN_L00_00250df8(moby);
     }
     return moby;
