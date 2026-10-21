@@ -3059,7 +3059,7 @@ extern f32 FUN_001fa688_20b5b8(f32, f32) __asm__("FUN_001fa688");
 extern f32 FUN_001f9b80_20b5b8(void *, void *) __asm__("FUN_001f9b80");
 
 void FUN_L00_0020b5b8(void) {
-    V4_20b5b8 v, w, z;
+    V4_20b5b8 position_scratch, collision_probe_end, z;
     struct Hero *g;
     struct Hero *hero_state;
     struct Hero *k2;
@@ -3082,7 +3082,7 @@ void FUN_L00_0020b5b8(void) {
         g->unk1B4 = 0;
         return;
     }
-    qcopy(&v, &g->motion.pos);
+    qcopy(&position_scratch, &g->motion.pos);
     prediction_frames = scale_game_frames(0x14);
     {
         f32 st = (f32)prediction_frames;
@@ -3090,11 +3090,11 @@ void FUN_L00_0020b5b8(void) {
         b = g->motion.velocity.f[2] * st;
         projected_x_displacement = g->motion.displacement.f[0] * st;
         projected_y_displacement = g->motion.displacement.f[1] * st;
-        v.f[2] = v.f[2] + b - vertical_acceleration_times_frames * st * 0.5f;
+        position_scratch.f[2] = position_scratch.f[2] + b - vertical_acceleration_times_frames * st * 0.5f;
     }
-    v.f[0] = v.f[0] + projected_x_displacement;
-    v.f[1] = v.f[1] + projected_y_displacement;
-    if (FUN_L00_0020c758_20b5b8(&v, &g->motion.rot.f[2]) != 0) {
+    position_scratch.f[0] = position_scratch.f[0] + projected_x_displacement;
+    position_scratch.f[1] = position_scratch.f[1] + projected_y_displacement;
+    if (FUN_L00_0020c758_20b5b8(&position_scratch, &g->motion.rot.f[2]) != 0) {
         g->unk1B4 = 0;
         g->unk1F0 = prediction_frames + 2;
         return;
@@ -3109,9 +3109,9 @@ void FUN_L00_0020b5b8(void) {
         }
     }
     k2 = &hero;
-    FUN_L00_002335c8_20b5b8(&v, 0.0f, 0.0f, r);
-    FUN_L00_002335c8_20b5b8(&w, k2->unk234 + 1.4f, 0.0f, r);
-    if (FUN_001efa68_20b5b8(&v, &w, 2, 0, 0) == 0) {
+    FUN_L00_002335c8_20b5b8(&position_scratch, 0.0f, 0.0f, r);
+    FUN_L00_002335c8_20b5b8(&collision_probe_end, k2->unk234 + 1.4f, 0.0f, r);
+    if (FUN_001efa68_20b5b8(&position_scratch, &collision_probe_end, 2, 0, 0) == 0) {
         return;
     }
     hit_material = collision_hit_material();
@@ -3136,7 +3136,7 @@ void FUN_L00_0020b5b8(void) {
     } else {
         max_hit_distance = 0.72f;
     }
-    f = FUN_001f9b80_20b5b8(pz - 0x20, &v);
+    f = FUN_001f9b80_20b5b8(pz - 0x20, &position_scratch);
     if (max_hit_distance < f) {
         return;
     }
