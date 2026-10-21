@@ -698,7 +698,7 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
     float velocity[4] __attribute__((aligned(16)));
     float offset[4] __attribute__((aligned(16)));
     float angle, magnitude;
-    int i, particle_frame_count, b, particle_third_frame_count;
+    int i, particle_frame_count, particle_second_frame_count, particle_third_frame_count;
     char *moby;
     char *data;
     float * volatile particle_position_ptr;
@@ -750,9 +750,9 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
                 spawn_particle_002e7eb0(moby + 0x10, velocity_ptr, D_L08_00161CF8, D_L08_00161CFC,
                     random_integer_002e7eb0(scale_game_frames_int_002e7eb0(10), scale_game_frames_int_002e7eb0(20)), 1, 20000.0f);
                 particle_frame_count = truncate_float_to_s32_002e7eb0(FUN_L08_00211a20(random_float_between_002e7eb0((float)D_L08_00161D08_gp, (float)D_L08_00161D08_gp * 1.2f)));
-                b = truncate_float_to_s32_002e7eb0(FUN_L08_00211a20(random_float_between_002e7eb0((float)D_L08_00161D0C_gp, (float)D_L08_00161D0C_gp * 1.2f)));
+                particle_second_frame_count = truncate_float_to_s32_002e7eb0(FUN_L08_00211a20(random_float_between_002e7eb0((float)D_L08_00161D0C_gp, (float)D_L08_00161D0C_gp * 1.2f)));
                 particle_third_frame_count = truncate_float_to_s32_002e7eb0(FUN_L08_00211a20(random_float_between_002e7eb0((float)D_L08_00161D10_gp, (float)D_L08_00161D10_gp * 1.5f)));
-                FUN_00218888_002e7eb0(moby + 0x10, velocity_ptr, offset_ptr, D_L08_00161CF0, D_L08_00161CF4, particle_frame_count, b, particle_third_frame_count, -1);
+                FUN_00218888_002e7eb0(moby + 0x10, velocity_ptr, offset_ptr, D_L08_00161CF0, D_L08_00161CF4, particle_frame_count, particle_second_frame_count, particle_third_frame_count, -1);
             } while ((float)i < D_L08_00161CE0);
         }
         if (current_level_index == 12)
