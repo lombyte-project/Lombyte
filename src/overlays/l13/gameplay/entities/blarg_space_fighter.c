@@ -2822,16 +2822,16 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L13_002e9018_c(void *, void *, float, float) __asm__("FUN_L13_002e9018");
 
-int FUN_L13_002e9160(struct Moby *moby, char *moby_data, int idx, int aim) {
-    char *path = D_L13_001B07B0[*(int *)(&moby_data[idx << 2] + 0xB0)];
-    float distance_from_previous_node, seg, diff, steering_blend_factor, yaw, pitch;
+int FUN_L13_002e9160(struct Moby *moby, char *moby_data, int path_slot_index, int aim) {
+    char *path = D_L13_001B07B0[*(int *)(&moby_data[path_slot_index << 2] + 0xB0)];
+    float distance_from_previous_node, seg, segment_distance_shortfall, steering_blend_factor, yaw, pitch;
     int wrapped = 0;
     float target_node_steering_vector[4];
     distance_from_previous_node = FUN_001f9b48(path + (*(short *)(moby_data + 0x9E) * 16 + 0x10), &moby->pos);
     seg = FUN_001f9b48(path + (*(short *)(moby_data + 0x9E) * 16 + 0x10),
                        path + (*(short *)(moby_data + 0x9C) * 16 + 0x10));
-    diff = seg - distance_from_previous_node;
-    if (0.0f <= diff && diff < *(float *)(moby_data + 0xAC)) {
+    segment_distance_shortfall = seg - distance_from_previous_node;
+    if (0.0f <= segment_distance_shortfall && segment_distance_shortfall < *(float *)(moby_data + 0xAC)) {
         *(short *)(moby_data + 0x9E) = *(unsigned short *)(moby_data + 0x9C);
         *(short *)(moby_data + 0x9C) = *(unsigned short *)(moby_data + 0x9C) + ((signed char *)moby_data)[0x10C];
         if (*(short *)(moby_data + 0x9C) >= *(int *)path) {
@@ -2860,11 +2860,11 @@ int FUN_L13_002e9160(struct Moby *moby, char *moby_data, int idx, int aim) {
     yaw = fast_arc_tan(target_node_steering_vector[0], target_node_steering_vector[1]);
     pitch = -fast_arc_tan(vector_length_xy(target_node_steering_vector), target_node_steering_vector[2]);
     if (moby->state == 5) {
-        struct Hero *g = &hero;
-        yaw = fast_arc_tan(g->motion.pos.f[0] - moby->pos.x,
-                           g->motion.pos.f[1] - moby->pos.y);
-        pitch = -fast_arc_tan(vector_distance(&moby->pos, &g->motion.pos),
-                              g->motion.pos.f[2] - moby->pos.z);
+        struct Hero *hero_state = &hero;
+        yaw = fast_arc_tan(hero_state->motion.pos.f[0] - moby->pos.x,
+                           hero_state->motion.pos.f[1] - moby->pos.y);
+        pitch = -fast_arc_tan(vector_distance(&moby->pos, &hero_state->motion.pos),
+                              hero_state->motion.pos.f[2] - moby->pos.z);
     }
     if (aim != 0)
         FUN_L13_002e9018_c(moby, moby_data, yaw, pitch);
