@@ -48,7 +48,7 @@ extern u32 is_vector_outside_clip(void *) __asm__("FUN_001f9958");
 extern void FUN_L01_00262388(s32, s32);
 extern char D_L01_00167240[];
 
-void FUN_L01_002b8cb0(f32 *pos, s32 index, s32 mode) {
+void FUN_L01_002b8cb0(f32 *grid_center_position, s32 index, s32 mode) {
     f32 corners[4][4];
     f32 near_clip[4];
     f32 far_clip[4];
@@ -76,23 +76,23 @@ void FUN_L01_002b8cb0(f32 *pos, s32 index, s32 mode) {
         offsets[2][1] = y_end;
         offsets[3][0] = x_end;
         offsets[3][1] = y_end;
-        x = pos[0] + pool_light[2];
-        y = pos[1] + pool_light[3];
+        x = grid_center_position[0] + pool_light[2];
+        y = grid_center_position[1] + pool_light[3];
         corners[0][0] = x + offsets[2][0];
         corners[0][1] = y + offsets[0][1];
-        corners[0][2] = pos[2];
+        corners[0][2] = grid_center_position[2];
         corners[0][3] = 1.0f;
         corners[1][0] = x + offsets[1][0];
         corners[1][1] = y + offsets[1][1];
-        corners[1][2] = pos[2];
+        corners[1][2] = grid_center_position[2];
         corners[1][3] = 1.0f;
         corners[2][0] = corners[0][0];
         corners[2][1] = y + offsets[2][1];
-        corners[2][2] = pos[2];
+        corners[2][2] = grid_center_position[2];
         corners[2][3] = 1.0f;
         corners[3][0] = corners[1][0];
         corners[3][1] = corners[2][1];
-        corners[3][2] = pos[2];
+        corners[3][2] = grid_center_position[2];
         corners[3][3] = 1.0f;
         near_bits = 0;
         far_bits = 0;
