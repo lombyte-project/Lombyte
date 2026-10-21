@@ -897,7 +897,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     char *screen_dimensions;
     int locked_target_screen_x;
     int locked_target_screen_y;
-    long tex;
+    long aim_reticle_texture;
     int i;
     unsigned char ammo_capacity;
     unsigned char lock_marker_fade_byte;
@@ -966,8 +966,8 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     }
     ex = *(int *)(ship_vars + 0xE0);
     ey = *(int *)(ship_vars + 0xE4);
-    tex = func_001F4868_l(0x11);
-    append_rotated_sprite_quad(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, tex, 0xFFFFF3, 0xFF20FF20, 0,
+    aim_reticle_texture = func_001F4868_l(0x11);
+    append_rotated_sprite_quad(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, aim_reticle_texture, 0xFFFFF3, 0xFF20FF20, 0,
                                0, 0.5f, 0.5f);
     append_rotated_sprite_quad(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, func_001F4868_l(0x12),
                                0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
