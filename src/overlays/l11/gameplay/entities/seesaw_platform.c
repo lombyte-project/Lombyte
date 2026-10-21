@@ -1512,10 +1512,10 @@ void psytcopus_update(struct Moby *psytcopus) {
     };
     struct PokiPathVars *pv = (struct PokiPathVars *)psytcopus->pvars;
     struct Moby *target;
-    Vec4f v;
+    Vec4f projectile_vector_scratch;
     float angle;
     s32 *path;
-    int r;
+    int knockback_result_flags;
 
     FUN_L11_00310698(psytcopus);
     target = pv->target;
@@ -1568,10 +1568,10 @@ void psytcopus_update(struct Moby *psytcopus) {
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
         }
         if (in_window_0180(psytcopus, 15.0f) != 0) {
-            normalize_0180(&v, &psytcopus->rot_row0, D_L11_00161FC8);
-            add_0180(&v, &v, &psytcopus->pos);
-            v.z += D_L11_00161FCC;
-            pv->unk160 = FUN_L11_00318d10_p(psytcopus, &v, 5);
+            normalize_0180(&projectile_vector_scratch, &psytcopus->rot_row0, D_L11_00161FC8);
+            add_0180(&projectile_vector_scratch, &projectile_vector_scratch, &psytcopus->pos);
+            projectile_vector_scratch.z += D_L11_00161FCC;
+            pv->unk160 = FUN_L11_00318d10_p(psytcopus, &projectile_vector_scratch, 5);
             break;
         }
         if (psytcopus->anim_flags & 2) {
@@ -1589,8 +1589,8 @@ void psytcopus_update(struct Moby *psytcopus) {
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
         }
         if (pv->unk160 != 0 && in_window_0180(psytcopus, 33.0f) != 0) {
-            normalize_0180(&v, &psytcopus->rot_row0, frame_time * 30.0f);
-            FUN_L11_00318e98_p(pv->unk160, &v);
+            normalize_0180(&projectile_vector_scratch, &psytcopus->rot_row0, frame_time * 30.0f);
+            FUN_L11_00318e98_p(pv->unk160, &projectile_vector_scratch);
             pv->unk160 = 0;
         }
         if (psytcopus->anim_flags & 2) {
@@ -1609,8 +1609,8 @@ void psytcopus_update(struct Moby *psytcopus) {
         }
         break;
     case PSYTCOPUS_STATE_KNOCKBACK:
-        r = FUN_L00_0025c698_p(psytcopus, pv->unk70);
-        if (r & 0x41) {
+        knockback_result_flags = FUN_L00_0025c698_p(psytcopus, pv->unk70);
+        if (knockback_result_flags & 0x41) {
             path = D_L11_001B0EB0[pv->unk13C];
             if (FUN_L00_00259740_p(&psytcopus->pos, path + 4, *path) != 0) {
                 psytcopus->state = 3;
@@ -1619,9 +1619,9 @@ void psytcopus_update(struct Moby *psytcopus) {
                 }
                 break;
             }
-            r = 0x100;
+            knockback_result_flags = 0x100;
         }
-        if (r & 0x120) {
+        if (knockback_result_flags & 0x120) {
             FUN_L00_00257470_p(psytcopus, 0, -1);
             FUN_L00_0025f3e8_p(psytcopus, &psytcopus->pos, -1, 0.5f, 10.0f);
             remove_0180(psytcopus);
