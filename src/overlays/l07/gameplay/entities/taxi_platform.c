@@ -2103,7 +2103,7 @@ unsigned char *FUN_L07_0030dbb0(int a, void *pos, int b, float f0, float f1, flo
     unsigned char *moby = (unsigned char *)func_0020D348_m(0x416);
     if (moby != 0) {
         char *data;
-        char *g;
+        char *distance_reference_position;
         char *distance_response_state;
         data = *(char **)(moby + 0x78);
         moby[0x30] = 0xFF;
@@ -2119,9 +2119,9 @@ unsigned char *FUN_L07_0030dbb0(int a, void *pos, int b, float f0, float f1, flo
         *(int *)(data + 0x18) = b;
         *(float *)(data + 0x1C) = f4;
         *(unsigned short *)(moby + 0x34) |= 0x200;
-        g = D_L07_00166E40;
-        distance_response_state = g - 0x140;
-        *(float *)(distance_response_state + 0x160) = 0.3f - vector_distance(moby + 0x10, g) / 100.0f;
+        distance_reference_position = D_L07_00166E40;
+        distance_response_state = distance_reference_position - 0x140;
+        *(float *)(distance_response_state + 0x160) = 0.3f - vector_distance(moby + 0x10, distance_reference_position) / 100.0f;
         *(int *)(distance_response_state + 0x168) = scale_game_frames(0x14);
         FUN_L00_00250df8(moby);
         FUN_0022da68(0, 0, (int)moby);
