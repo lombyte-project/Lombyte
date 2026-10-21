@@ -2758,41 +2758,41 @@ extern void FUN_L06_002f37d0_c(void *) __asm__("FUN_L06_002f37d0");
 
 extern int level_frame_count __asm__("D_L06_0015F5CC");
 
-void FUN_L06_002f38c8(char *obj) {
+void FUN_L06_002f38c8(char *moby) {
     char *moby_vars;
     int tint;
     int i;
-    f32 f20;
+    f32 color_pulse_multiplier;
     int r, g, b, a;
 
-    if (*(unsigned char *)(obj + 0x21) == 0xFF) {
+    if (*(unsigned char *)(moby + 0x21) == 0xFF) {
         return;
     }
-    moby_vars = *(char **)(obj + 0x78);
+    moby_vars = *(char **)(moby + 0x78);
     tint = 0x3228AAAA;
-    if (*(unsigned char *)(obj + 0x20) == 3 || *(unsigned char *)(obj + 0x20) == 6) {
+    if (*(unsigned char *)(moby + 0x20) == 3 || *(unsigned char *)(moby + 0x20) == 6) {
         tint = 0x3228AA28;
-    } else if (*(unsigned char *)(obj + 0x20) == 5 || *(unsigned char *)(obj + 0x20) == 9) {
+    } else if (*(unsigned char *)(moby + 0x20) == 5 || *(unsigned char *)(moby + 0x20) == 9) {
         tint = 0x322828AA;
-    } else if (*(unsigned char *)(obj + 0x20) == 7) {
+    } else if (*(unsigned char *)(moby + 0x20) == 7) {
         tint = 0x32AA2828;
     }
 
     *(f32 *)(moby_vars + 0x28C) = add_angle(*(f32 *)(moby_vars + 0x28C), frame_time * 2.9670596f);
-    f20 = 0.5f * FUN_001f9de0_c(*(f32 *)(moby_vars + 0x28C)) + 1.0f;
+    color_pulse_multiplier = 0.5f * FUN_001f9de0_c(*(f32 *)(moby_vars + 0x28C)) + 1.0f;
 
     r = tint & 0xFF;
     b = (tint >> 16) & 0xFF;
     g = (tint >> 8) & 0xFF;
     a = ((unsigned int)tint) >> 24;
 
-    r = truncate_float_to_s32((f32)r * f20);
+    r = truncate_float_to_s32((f32)r * color_pulse_multiplier);
     if (r >= 0x100)
         r = 0xFF;
-    g = truncate_float_to_s32((f32)g * f20);
+    g = truncate_float_to_s32((f32)g * color_pulse_multiplier);
     if (g >= 0x100)
         g = 0xFF;
-    b = truncate_float_to_s32((f32)b * f20);
+    b = truncate_float_to_s32((f32)b * color_pulse_multiplier);
     if (b >= 0x100)
         b = 0xFF;
 
@@ -2801,20 +2801,20 @@ void FUN_L06_002f38c8(char *obj) {
         packed |= b << 16;
         packed |= g << 8;
         packed |= r;
-        *(int *)(obj + 0x90) = FUN_001fa6e0_c(*(int *)(obj + 0x90), packed, 0.1f);
+        *(int *)(moby + 0x90) = FUN_001fa6e0_c(*(int *)(moby + 0x90), packed, 0.1f);
     }
 
     for (i = 0; i < 3; i++) {
-        moby_point_position(obj, i + 1, moby_vars + 0x140 + i * 0x10);
+        moby_point_position(moby, i + 1, moby_vars + 0x140 + i * 0x10);
     }
     {
         int dv = level_frame_count;
-        *(int *)(moby_vars + 0x290) = *(int *)(obj + 0x90);
+        *(int *)(moby_vars + 0x290) = *(int *)(moby + 0x90);
         if (dv != 0) {
             int *last_effect_frame_ptr = *(int **)(moby_vars + 0x294);
             if (dv != *last_effect_frame_ptr) {
                 *last_effect_frame_ptr = dv;
-                FUN_001f4600_c(FUN_L06_002f37d0_c, obj);
+                FUN_001f4600_c(FUN_L06_002f37d0_c, moby);
             }
         }
     }
