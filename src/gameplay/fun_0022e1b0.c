@@ -21,12 +21,12 @@ void FUN_L00_001fd228_28efc8(void *, void *, int) __asm__("func_001F7D30");
 extern int D_001604C0[1] __attribute__((sda));
 void FUN_0022e1b0(unsigned char *quad_source) {
     struct GeometryQuad quad;
-    QuadOffset v;
-    QuadOffset *tbl;
+    QuadOffset quad_source_translation;
+    QuadOffset *selected_quad_offsets;
     int i, j, k;
-    tbl = quad_positions;
-    if (level_render_state.content_variant == 1) tbl = quad_positions_variant1;
-    else if (level_render_state.content_variant == 2) tbl = quad_positions_variant2;
+    selected_quad_offsets = quad_positions;
+    if (level_render_state.content_variant == 1) selected_quad_offsets = quad_positions_variant1;
+    else if (level_render_state.content_variant == 2) selected_quad_offsets = quad_positions_variant2;
     quad.texture = FUN_001f44b8_28efc8(5);
     quad.texture_state = 0xFF9000000260L;
     quad.primitive = 0x8000000048L;
@@ -35,21 +35,21 @@ void FUN_0022e1b0(unsigned char *quad_source) {
         quad.texture_coordinates[j][0] = quad_uvs[j][0];
         quad.texture_coordinates[j][1] = quad_uvs[j][1];
     }
-    FUN_001f9a68_28efc8(0.0009765625f, &v, quad_source);
+    FUN_001f9a68_28efc8(0.0009765625f, &quad_source_translation, quad_source);
     for (i = 0; i < D_001604C0[level_render_state.content_variant]; i++) {
         int quad_alpha = quad_source[0xBC];
         unsigned int col;
         float quad_scale;
         if (*(short *)(quad_source + 0xB2)) quad_alpha += FUN_00213260_28efc8(*(short *)(quad_source + 0xB2));
-        quad_scale = FUN_001fa6c0_28efc8(quad_alpha) * (tbl[i].f[3] / 40.0f);
+        quad_scale = FUN_001fa6c0_28efc8(quad_alpha) * (selected_quad_offsets[i].f[3] / 40.0f);
         col = (quad_alpha << 24) | 0x2058B0;
         if (*(short *)(quad_source + 0xA6) == 0x215) col = (quad_alpha << 24) | 0x308000;
         for (k = 0; k < 4; k++) {
             quad.colors[k] = col;
             FUN_001f9a68_28efc8(quad_scale, &quad.positions[k], &quad_corners[k]);
-            FUN_001f9a10_28efc8(&quad.positions[k], &quad.positions[k], &tbl[i]);
+            FUN_001f9a10_28efc8(&quad.positions[k], &quad.positions[k], &selected_quad_offsets[i]);
             FUN_001f9cf8_28efc8(&quad.positions[k], &quad.positions[k], (char *)level_render_state.player + 0xC0);
-            FUN_001f9a10_28efc8(&quad.positions[k], &quad.positions[k], &v);
+            FUN_001f9a10_28efc8(&quad.positions[k], &quad.positions[k], &quad_source_translation);
         }
         FUN_L00_001fd228_28efc8(&quad, 0, 0);
     }
