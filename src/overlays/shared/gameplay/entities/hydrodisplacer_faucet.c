@@ -534,7 +534,7 @@ typedef struct {
 } Quad_30c220;
 
 void FUN_L05_0030c220(struct Moby *moby) {
-    Quad_30c220 quad_a, b;
+    Quad_30c220 quad_a, quad_b;
     float rotation[4];
     float position[4];
     /* Draw helper reads four consecutive vectors: side, direction, up, position. */
@@ -572,21 +572,21 @@ void FUN_L05_0030c220(struct Moby *moby) {
             ((u64)(s64)D_L05_00161CFC << 4) |
             ((u64)(s64)D_L05_00161D00 << 6) |
             0x8000000000ULL;
-    b.control[0] = 0;
-    b.control[2] = 0xff9000000260ULL;
+    quad_b.control[0] = 0;
+    quad_b.control[2] = 0xff9000000260ULL;
     quad_a.control[2] = 0xff9000000260ULL;
-    b.control[1] = texture;
+    quad_b.control[1] = texture;
     quad_a.control[1] = texture;
     quad_a.control[0] = 0;
-    b.control[3] = flags;
+    quad_b.control[3] = flags;
     quad_a.control[3] = flags;
     for (k = 0; k < 4; k++) {
         float u = D_L05_001D67B0[k][0];
         float v = D_L05_001D67B0[k][1];
         quad_a.texcoord[k][0] = u;
         quad_a.texcoord[k][1] = v;
-        b.texcoord[k][0] = u;
-        b.texcoord[k][1] = v;
+        quad_b.texcoord[k][0] = u;
+        quad_b.texcoord[k][1] = v;
     }
     for (i = 0; i < 10; i++) {
         pass = (float)i;
@@ -594,23 +594,23 @@ void FUN_L05_0030c220(struct Moby *moby) {
         do {
             vertex_a = quad_a.vertex[j];
             qcopy(vertex_a, D_L05_001D67D0[j]);
-            qcopy(b.vertex[j], D_L05_001D6810[j]);
+            qcopy(quad_b.vertex[j], D_L05_001D6810[j]);
             phase = (float)(i + (j & 1)) * 0.1f;
             sign = 1.0f;
             if (j > 1) sign = -1.0f;
-            quad_a.color[j] = b.color[j] = fast_tween_color(D_L05_00161D04, D_L05_00161D08, phase);
+            quad_a.color[j] = quad_b.color[j] = fast_tween_color(D_L05_00161D04, D_L05_00161D08, phase);
             offset_a_x = phase * 8.0f * sign;
             offset_a_z = pass * 10.0f;
             offset_b_x = phase * 6.0f * sign;
             offset_b_z = pass * 12.0f;
             vertex_a[0] += offset_a_x;
             vertex_a[2] += offset_a_z;
-            vertex_b = b.vertex[j];
+            vertex_b = quad_b.vertex[j];
             vertex_b[0] += offset_b_x;
             vertex_b[2] += offset_b_z;
         } while (++j < 4);
         draw_quad_30c220(&quad_a, matrix, 0);
-        draw_quad_30c220(&b, matrix, 0);
+        draw_quad_30c220(&quad_b, matrix, 0);
     }
 }
 #include "rnc/overlay/level_globals.h"
