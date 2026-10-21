@@ -2122,9 +2122,9 @@ unsigned char *spawn_crate_debris(unsigned char *owner, void *vel, void *pos, vo
                                 int initial_bounce_count, float lo, float hi) {
     unsigned char *debris_moby = FUN_0020c4f8_2af8b0(type);
     if (debris_moby) {
-        V_2af8b0 *v = *(V_2af8b0 **)(debris_moby + 0x78);
+        V_2af8b0 *debris_data = *(V_2af8b0 **)(debris_moby + 0x78);
         float scale_multiplier;
-        v->o = owner;
+        debris_data->o = owner;
         debris_moby[0x30] = 0xFF;
         *(short *)(debris_moby + 0x32) = 0x7E;
         debris_moby[0x31] = 1;
@@ -2135,21 +2135,21 @@ unsigned char *spawn_crate_debris(unsigned char *owner, void *vel, void *pos, vo
         *(float *)(debris_moby + 0x48) = FUN_00213308_2af8b0();
         qcopy(debris_moby + 0x10, pos);
         qcopy(debris_moby + 0x40, rot);
-        qcopy(v->p10, vel);
-        v->f4 = *(float *)(debris_moby + 0x18);
+        qcopy(debris_data->p10, vel);
+        debris_data->f4 = *(float *)(debris_moby + 0x18);
         {
             short t = FUN_001f96f8_2af8b0(0x14);
-            v->i20 = 0;
-            v->he = t;
+            debris_data->i20 = 0;
+            debris_data->he = t;
         }
-        v->f24 = FUN_L00_00257c48_2af8b0(g48_2afa48, g4c_2afa48) *
+        debris_data->f24 = FUN_L00_00257c48_2af8b0(g48_2afa48, g4c_2afa48) *
                  DEG_TO_RAD * D_0015ED6C_2af8b0;
-        v->f28 = FUN_L00_00257c48_2af8b0(g48_2afa48, g4c_2afa48) *
+        debris_data->f28 = FUN_L00_00257c48_2af8b0(g48_2afa48, g4c_2afa48) *
                  DEG_TO_RAD * D_0015ED6C_2af8b0;
         scale_multiplier = FUN_002132a8_2af8b0(lo, hi);
         *(float *)(debris_moby + 0x2C) *= scale_multiplier;
-        v->hc = initial_bounce_count;
-        v->f8 = scale_multiplier * 0.25f;
+        debris_data->hc = initial_bounce_count;
+        debris_data->f8 = scale_multiplier * 0.25f;
         FUN_L00_00250df8_2af8b0(debris_moby);
     }
     return debris_moby;
