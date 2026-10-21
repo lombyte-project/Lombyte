@@ -937,21 +937,21 @@ void FUN_001f9d20_00233708(Vec4_00233708 *, Vec4_00233708 *,
 void FUN_001f9a10_00233708(Vec4_00233708 *, Vec4_00233708 *,
                            Vec4_00233708 *) __asm__("FUN_001f9a10");
 void FUN_L00_00233708(Vec4_00233708 *out, Vec4_00233708 *in, float offset_scale) {
-    struct Hero *g = &hero;
+    struct Hero *hero_base = &hero;
     Mtx_00233708 moby_rotation_matrix;
     Vec4_00233708 offset_vector;
-    switch (g->unk20B3) {
+    switch (hero_base->unk20B3) {
     case HERO_GRAVITY_WORLD_DOWN:
         *(u128_00233708 *)out = *(u128_00233708 *)in;
-        out->x += FUN_001f9dc8_00233708(*(float *)(((char *)g->moby) + 0x48)) * offset_scale;
-        out->y += FUN_001f9de0_00233708(*(float *)(((char *)g->moby) + 0x48)) * offset_scale;
+        out->x += FUN_001f9dc8_00233708(*(float *)(((char *)hero_base->moby) + 0x48)) * offset_scale;
+        out->y += FUN_001f9de0_00233708(*(float *)(((char *)hero_base->moby) + 0x48)) * offset_scale;
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         offset_vector.x = FUN_001f9dc8_00233708(0.0f) * offset_scale;
         offset_vector.y = FUN_001f9de0_00233708(0.0f) * offset_scale;
         offset_vector.z = 0.0f;
-        FUN_001fa050_00233708(&moby_rotation_matrix, ((char *)g->moby) + 0x40);
+        FUN_001fa050_00233708(&moby_rotation_matrix, ((char *)hero_base->moby) + 0x40);
         FUN_001f9d20_00233708(&offset_vector, &offset_vector, &moby_rotation_matrix);
         FUN_001f9a10_00233708(out, in, &offset_vector);
         break;
