@@ -1248,7 +1248,7 @@ void FUN_L09_002ee110(struct Moby *moby) {
     char *moby_vars_or_random_frames = (char *)moby->pvars;
     char *hit_record = find_moby_hit(moby, 0x10000, 0);
     Vx v;
-    Vx b;
+    Vx effect_velocity_or_spawn_position;
     int i;
     if (hit_record != 0) {
         *(float *)moby_vars_or_random_frames = *(float *)moby_vars_or_random_frames - *(float *)(hit_record + 0x2C);
@@ -1269,18 +1269,18 @@ void FUN_L09_002ee110(struct Moby *moby) {
                 t.v.x = random_float_between(-1.0f, 1.0f);
                 t.v.y = random_float_between(-1.0f, 1.0f);
                 t.v.z = random_float_between(-1.0f, 1.0f);
-                *(OvlQuad *)&b = t.q;
-                normalize_vector_xyz(&b, &b,
+                *(OvlQuad *)&effect_velocity_or_spawn_position = t.q;
+                normalize_vector_xyz(&effect_velocity_or_spawn_position, &effect_velocity_or_spawn_position,
                                      vector_length_xyz(&v) * (frame_scale * -0.35000002f + 1.0f));
-                add_vector_xyz(&b, &v, &b);
-                normalize_vector_xyz(&b, &b,
+                add_vector_xyz(&effect_velocity_or_spawn_position, &v, &effect_velocity_or_spawn_position);
+                normalize_vector_xyz(&effect_velocity_or_spawn_position, &effect_velocity_or_spawn_position,
                                      random_float_between(frame_time * 3.0f, frame_time * 6.0f));
                 moby_vars_or_random_frames = (char *)FUN_L00_00257b90(scale_game_frames(5), scale_game_frames(10));
-                FUN_L00_0026dd20(pos, (char *)&b, 0x5F7F4F2F, (int)moby_vars_or_random_frames,
+                FUN_L00_0026dd20(pos, (char *)&effect_velocity_or_spawn_position, 0x5F7F4F2F, (int)moby_vars_or_random_frames,
                                  random_float_between(20000.0f, 50000.0f));
             }
-            *(OvlQuad *)&b = *(OvlQuad *)&moby->pos;
-            FUN_L09_002ee380(moby, &b, moby->rot.z);
+            *(OvlQuad *)&effect_velocity_or_spawn_position = *(OvlQuad *)&moby->pos;
+            FUN_L09_002ee380(moby, &effect_velocity_or_spawn_position, moby->rot.z);
             mark_moby_for_removal(moby);
             return;
         }
