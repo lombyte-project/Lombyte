@@ -164,9 +164,9 @@ extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28"
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern unsigned char D_L01_001B2928_b[] __asm__("D_L01_001B2628");
 
-unsigned char *FUN_L01_0028a7a8(char *source_moby, char *pos, float *vel, char *cfg, int flag) {
+unsigned char *FUN_L01_0028a7a8(char *source_moby, char *particle_spawn_position, float *initial_particle_velocity, char *cfg, int flag) {
     float transformed_spawn_offset[4];
-    float mat[16];
+    float spawn_offset_transform[16];
     unsigned char *particle = FUN_L00_002678b8(74);
     if (particle) {
         char *particle_data;
@@ -180,17 +180,17 @@ unsigned char *FUN_L01_0028a7a8(char *source_moby, char *pos, float *vel, char *
         particle[2] = **(unsigned char **)D_L01_001B2928_b;
         particle[8] = rand();
         *(int *)(particle + 0xc) = 0;
-        qcopy(particle + 0x10, pos);
-        *(float *)particle_data = vel[0];
-        *(float *)(particle_data + 4) = vel[1];
-        *(float *)(particle_data + 8) = vel[2];
-        subtract_vector_xyz_c(transformed_spawn_offset, pos, source_moby + 0x10);
-        qzero(mat);
-        qzero(mat + 4);
-        qzero(mat + 8);
-        qzero(mat + 12);
-        transpose_rotation_matrix(mat, source_moby + 0xc0);
-        transform_vector(transformed_spawn_offset, transformed_spawn_offset, mat);
+        qcopy(particle + 0x10, particle_spawn_position);
+        *(float *)particle_data = initial_particle_velocity[0];
+        *(float *)(particle_data + 4) = initial_particle_velocity[1];
+        *(float *)(particle_data + 8) = initial_particle_velocity[2];
+        subtract_vector_xyz_c(transformed_spawn_offset, particle_spawn_position, source_moby + 0x10);
+        qzero(spawn_offset_transform);
+        qzero(spawn_offset_transform + 4);
+        qzero(spawn_offset_transform + 8);
+        qzero(spawn_offset_transform + 12);
+        transpose_rotation_matrix(spawn_offset_transform, source_moby + 0xc0);
+        transform_vector(transformed_spawn_offset, transformed_spawn_offset, spawn_offset_transform);
         *(float *)(particle_data + 0x10) = transformed_spawn_offset[0];
         *(float *)(particle_data + 0x14) = transformed_spawn_offset[1];
         *(float *)(particle_data + 0x18) = transformed_spawn_offset[2];
