@@ -1658,12 +1658,12 @@ void FUN_L00_002a7e20(float *pos, int emission_pair_count) {
     for (i = 0; i < emission_pair_count; i++) {
         float base_sparkle_size = rndf_2a7e20(0.1f, 2.0f);
         int k = rndi_2a7e20(2);
-        float azimuth_angle, b;
+        float azimuth_angle, elevation_angle;
         if (k == 0)
             k--;
         azimuth_angle = rnda_2a7e20();
-        b = rndf_2a7e20(0.34906584f, 1.53588974f);
-        build_spherical_offset(dir, rndf_2a7e20(0.05f, 0.1f), azimuth_angle, b);
+        elevation_angle = rndf_2a7e20(0.34906584f, 1.53588974f);
+        build_spherical_offset(dir, rndf_2a7e20(0.05f, 0.1f), azimuth_angle, elevation_angle);
         qcopy(old, pos);
         pos[0] += spread_k(0.0f, 0.15f);
         pos[1] += spread_k(0.0f, 0.15f);
