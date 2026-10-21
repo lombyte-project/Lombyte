@@ -566,16 +566,16 @@ void FUN_L06_002feb40(char *moby) {
             bits = 0x40E00000;
             pull = *(float *)&bits;
             for (k = 0; k < 10; k++) {
-                float ang;
+                float fragment_scatter_angle;
                 qcopy(vv, moby + 0x10);
                 vv[2] = vv[2] + 2.5f;
                 vv[0] = vv[0] + FUN_L00_00257c48(lo, hi);
                 vv[1] = vv[1] + FUN_L00_00257c48(lo, hi);
                 vv[2] = vv[2] + FUN_L00_00257c48(lo, hi);
-                ang = random_angle_radians_c();
+                fragment_scatter_angle = random_angle_radians_c();
                 spd = random_float_between_c(minimum_fragment_speed, 5.7f) * D_0015ED6C;
-                fragment_velocity[0] = fast_cos(ang) * spd;
-                fragment_velocity[1] = fast_sin_c2(ang) * spd;
+                fragment_velocity[0] = fast_cos(fragment_scatter_angle) * spd;
+                fragment_velocity[1] = fast_sin_c2(fragment_scatter_angle) * spd;
                 fragment_velocity[2] = lo;
                 fragment_velocity[0] = fragment_velocity[0] + fast_cos(fast_arc_tan(*(float *)(hit_record + 0x10), *(float *)(hit_record + 0x14))) * (D_0015ED6C * pull);
                 fragment_velocity[1] = fragment_velocity[1] + fast_sin_c2(fast_arc_tan(*(float *)(hit_record + 0x10), *(float *)(hit_record + 0x14))) * (D_0015ED6C * pull);
