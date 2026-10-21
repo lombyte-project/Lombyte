@@ -2584,7 +2584,7 @@ extern int probe_world_sphere(void *, float, int, void *, void *) __asm__("FUN_L
 
 /* In the given state and animation, when the walker is within range, pushes it along its
  * velocity; a hit on the target bounces it back up and switches to the next state. */
-void FUN_L07_0030f308(char *moby, char *obj, int state, int anim, int seq, int frame, int next, int id,
+void FUN_L07_0030f308(char *moby, char *moby_data, int state, int anim, int seq, int frame, int next, int id,
                       float lo, float hi, float len, float scale, float radius) {
     float hit_direction[4];
     float hit_descriptor[12];
@@ -2605,7 +2605,7 @@ void FUN_L07_0030f308(char *moby, char *obj, int state, int anim, int seq, int f
     if (!(interpolated_record_value < hi)) {
         return;
     }
-    vel = obj + 0xD0;
+    vel = moby_data + 0xD0;
     fast_vec_normalize(hit_direction, vel, len);
     hit_direction[2] = 1.0f;
     make_hit_descriptor((char *)hit_descriptor, (int)moby, 1, hit_direction, scale);
@@ -2618,7 +2618,7 @@ void FUN_L07_0030f308(char *moby, char *obj, int state, int anim, int seq, int f
     }
     fast_vec_scale(vel, vel, -1.0f);
     /* *&obj gives obj the register retail uses */
-    *(float *)(*&obj + 0xD8) = -(frame_scale * 0.05f);
+    *(float *)(*&moby_data + 0xD8) = -(frame_scale * 0.05f);
     if (((unsigned char *)moby)[0x53] != seq) {
         blend_moby_animation(moby, seq, frame, 5);
     }
