@@ -2547,13 +2547,13 @@ extern u8 D_L00_00173E60[];
 extern void FUN_L00_002335c8(V0020a240 *, f32, f32, f32);
 extern s32 FUN_001efa68(V0020a240 *, V0020a240 *, s32, s32, s32);
 extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-s32 FUN_L00_0020a240(f32 *out, f32 probe_z_offset, f32 b) {
+s32 FUN_L00_0020a240(f32 *out, f32 probe_z_offset, f32 probe_end_radius) {
     G0020a240 *g = (G0020a240 *)&hero;
     V0020a240 probe_start;
     V0020a240 probe_end;
 
     FUN_L00_002335c8(&probe_start, g->f234 - 0.02f, 0.0f, probe_z_offset);
-    FUN_L00_002335c8(&probe_end, b, 0.0f, probe_z_offset);
+    FUN_L00_002335c8(&probe_end, probe_end_radius, 0.0f, probe_z_offset);
     if (FUN_001efa68(&probe_start, &probe_end, 2, 0, 0)) {
         if (out != 0)
             *out = vector_distance_xy(g->v80, D_L00_00173E60);
