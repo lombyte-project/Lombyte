@@ -1589,16 +1589,16 @@ extern char D_L00_00166D80_c[] __asm__("D_L00_00166C80");
 void FUN_L00_002ec6c0(char *camera_object) {
     struct Hero *b = &hero;
     char *camera_target_state = *(char **)(camera_object + 0x70) + 0xB8;
-    int v = b->state.current;
+    int hero_state = b->state.current;
     char *camera_position;
     int x, y;
-    if (v == 0x2C) {
+    if (hero_state == 0x2C) {
         camera_position = camera_object + 0x30;
         x = *(int *)(camera_target_state + 8);
         y = ((int)b->unk994);
     } else {
         camera_position = camera_object + 0x30;
-        if ((unsigned)(v - 0x24) >= 3)
+        if ((unsigned)(hero_state - 0x24) >= 3)
             goto done;
         x = *(int *)(camera_target_state + 8);
         y = ((int)b->unk964);
