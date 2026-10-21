@@ -11,13 +11,13 @@ void music_start_track(s32 track, s32 track_flags, s32 volume) __asm__("FUN_0021
 void music_start_track(s32 track, s32 track_flags, s32 volume) {
     volatile s32 *entry;
     s64 stream_location;
-    u8 *tbl;
-    s32 off;
+    u8 *disc_table_base;
+    s32 track_location_table_offset;
 
     if (music_stream_state.primary.handle == 0) {
-        tbl = (u8 *)&disc_table;
-        off = 0x2AA8;
-        entry = (s32 *)(tbl + off) + track;
+        disc_table_base = (u8 *)&disc_table;
+        track_location_table_offset = 0x2AA8;
+        entry = (s32 *)(disc_table_base + track_location_table_offset) + track;
         if (*entry != 0) {
             *(u32 *)&music_stream_state.primary.handle = 0xFFFFFFFF;
             music_stream_state.primary.state = 1;
