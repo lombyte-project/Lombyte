@@ -1728,9 +1728,9 @@ void machinegun_turret_update(char *moby) {
     float v60[4];
     float target_query_result[4];
     float m80[16];
-    float g0;
+    float signed_phase_increment;
     float phase_angle, sine_input_angle, sine_scale, target_heading;
-    int r, rem, sel, c17, animation_sequence, aiming_cuboid_index;
+    int r, rem, sel, target_missing_or_outside_waking_cuboid, animation_sequence, aiming_cuboid_index;
     char *aiming_offset_vector;
     char *aiming_base_point;
 
@@ -1825,11 +1825,11 @@ void machinegun_turret_update(char *moby) {
         return;
     case TURRET_STATE_AIM_AND_FIRE:
         if (*(short *)(data + 0x9E) != 0) {
-            g0 = -D_L14_00161514;
+            signed_phase_increment = -D_L14_00161514;
         } else {
-            g0 = D_L14_00161514;
+            signed_phase_increment = D_L14_00161514;
         }
-        phase_angle = func_001FA748_2B4E40(*(float *)(data + 0x8C), g0);
+        phase_angle = func_001FA748_2B4E40(*(float *)(data + 0x8C), signed_phase_increment);
         *(float *)(data + 0x8C) = phase_angle;
         sine_input_angle = func_001FA748_2B4E40(phase_angle, *(float *)(data + 0x84) * 0.01745329238474369f);
         aiming_cuboid_index = *(int *)(data + 0x80);
@@ -1869,8 +1869,8 @@ void machinegun_turret_update(char *moby) {
             }
         }
         r = func_L00_00260D30_2B4E40(moby, target_query_result, 34.0f);
-        c17 = (r == 2 || func_00215570_2B4E40(target_query_result, *(int *)(data + 0x90)) == 0);
-        if (c17 == 0) {
+        target_missing_or_outside_waking_cuboid = (r == 2 || func_00215570_2B4E40(target_query_result, *(int *)(data + 0x90)) == 0);
+        if (target_missing_or_outside_waking_cuboid == 0) {
             return;
         }
         if (func_001F9938_2B4E40(data + 0x74) == 0) {
