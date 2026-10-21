@@ -15,14 +15,14 @@ extern struct MapEntry D_001E8B80[];
 void assign_moby_class_data(s32 id) __asm__("FUN_00212d68");
 
 void assign_moby_class_data(s32 id) {
-    struct Obj *obj;
+    struct Obj *class_resource;
     s32 i;
 
-    obj = moby_class_resources[D_0015FF00];
+    class_resource = moby_class_resources[D_0015FF00];
     for (i = 0; D_001E8B80[i].id != -1 && D_001E8B80[i].id != id; i++) {
     }
     D_001B3580[D_0015FF00] = D_001E8B80[i].value;
-    if (obj != 0) {
+    if (class_resource != 0) {
         ((struct Obj *)moby_class_resources[D_0015FF00])->extra = D_001E8B80[i].extra;
     }
 }
