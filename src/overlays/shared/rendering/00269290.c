@@ -1254,7 +1254,7 @@ extern int FUN_001160d8_26c3d0(void) __asm__("FUN_001160d8");
 extern int FUN_001f96f8_26c3d0(int) __asm__("FUN_001f96f8");
 
 extern unsigned char *D_L00_001B20C8 __attribute__((section(".data")));
-void FUN_L00_0026c3d0(void *pos, u128 *mat) {
+void FUN_L00_0026c3d0(void *spawn_origin, u128 *spawn_offset_matrix) {
     unsigned char *particle = FUN_L00_002678b8_26c3d0(0x12);
     if (particle) {
         float *particle_data = (float *)(particle + 0x20);
@@ -1262,14 +1262,14 @@ void FUN_L00_0026c3d0(void *pos, u128 *mat) {
         float v[4] __attribute__((aligned(16)));
         u128 mt[4];
         qzero(&mt[3]);
-        mt[0] = mat[0];
-        mt[1] = mat[1];
-        mt[2] = mat[2];
+        mt[0] = spawn_offset_matrix[0];
+        mt[1] = spawn_offset_matrix[1];
+        mt[2] = spawn_offset_matrix[2];
         v[0] = FUN_002132a8_26c3d0(-0.1f, 0.1f);
         v[1] = FUN_002132a8_26c3d0(-0.3f, 0.3f);
         v[2] = FUN_002132a8_26c3d0(-0.3f, 0.3f);
         FUN_001f9d20_26c3d0(out, v, mt);
-        FUN_001f9a10_26c3d0(particle + 0x10, out, pos);
+        FUN_001f9a10_26c3d0(particle + 0x10, out, spawn_origin);
         *(int *)(particle + 4) = 0x806040;
         particle[9] = FUN_001fa6d0_26c3d0(4.0f) + 0x40;
         particle[1] = 0;
