@@ -552,26 +552,26 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 short D_L17_00162188 = 2;
-int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *cur,
-                     char *g) {
+int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *current_target,
+                     char *excluded_target) {
     float v[4];
     float w[4];
     float mat[16];
     float u[4];
     int sx, sy, tx, ty;
     char *scanned_moby;
-    char *ret;
+    char *selected_target_moby;
     int flag;
     char *near;
     int best;
     int *scr;
     float bestd;
-    int dx, dy, r, aim_screen_distance_squared;
-    float x, y, ang, dd, dist, heading_error_magnitude, k, angular_error_magnitude, arrow_pulse_phase;
+    int dx, dy, aim_selection_screen_radius, aim_screen_distance_squared;
+    float x, y, ang, dd, ship_to_arrow_target_distance, heading_error_magnitude, k, angular_error_magnitude, arrow_pulse_phase;
 
     scanned_moby = D_L17_0015FFE4;
     best = 0x7FFFFFFF;
-    ret = 0;
+    selected_target_moby = 0;
     *(int *)(ship_vars + 0xE8) = 0;
     flag = 0;
     bestd = 100000.0f;
@@ -593,17 +593,17 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
             FUN_L11_00311210(v, &tx, &ty, 0);
             tx -= sx;
             ty -= sy;
-            r = func_001FA898_r(square_root(convert_integer_to_float(tx * tx + ty * ty))) + 0x1C;
-            if (dx < r && dy < r) {
-                if (cur != 0) {
-                    if (scanned_moby == cur) {
+            aim_selection_screen_radius = func_001FA898_r(square_root(convert_integer_to_float(tx * tx + ty * ty))) + 0x1C;
+            if (dx < aim_selection_screen_radius && dy < aim_selection_screen_radius) {
+                if (current_target != 0) {
+                    if (scanned_moby == current_target) {
                         best = 0;
-                        ret = scanned_moby;
+                        selected_target_moby = scanned_moby;
                     }
-                } else if (scanned_moby != g) {
+                } else if (scanned_moby != excluded_target) {
                     aim_screen_distance_squared = dx * dx + dy * dy;
                     if (aim_screen_distance_squared < best) {
-                        ret = scanned_moby;
+                        selected_target_moby = scanned_moby;
                         best = aim_screen_distance_squared;
                     }
                 }
@@ -755,7 +755,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
         ang = fast_add_rotations(fast_arc_tan(v[0], v[1]), 1.5707964f);
         v[0] += 256.0f;
         v[1] += 208.0f;
-        dist = FUN_001f9b48(ap, np);
+        ship_to_arrow_target_distance = FUN_001f9b48(ap, np);
         heading_error_magnitude = absolute_float(
             fast_subtract_rotations(fast_arc_tan(*(float *)(near + 0x10) - *(float *)((char *)ship_moby + 0x10),
                                       *(float *)(near + 0x14) - *(float *)((char *)ship_moby + 0x14)),
@@ -769,9 +769,9 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
         *(float *)(ship_vars + 0x114) = arrow_pulse_phase;
         FUN_L13_002b7d50(&D_L17_00162188, 3, 0xFFFFF3,
                          (func_001FA898_r((fast_sin(arrow_pulse_phase) + 1.4f) * 53.0f) << 24) | 0x8000, v[0],
-                         v[1], 240.0f / dist + 1.5f, ang);
+                         v[1], 240.0f / ship_to_arrow_target_distance + 1.5f, ang);
     }
-    return (int)ret;
+    return (int)selected_target_moby;
 }
 #include "qcopy.h"
 
