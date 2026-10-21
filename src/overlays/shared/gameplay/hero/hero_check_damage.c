@@ -1011,8 +1011,8 @@ void FUN_L00_0020e698(void) {
         } else if (g->state.current == 0) {
             unsigned char *hero_moby = (unsigned char *)g->moby;
             if (hero_moby[0x53] == g->unk2294) {
-                int r = hero_idle_sequence(0);
-                set_hero_animation(r, 0, -2.0f);
+                int idle_animation_id = hero_idle_sequence(0);
+                set_hero_animation(idle_animation_id, 0, -2.0f);
             }
         }
         hero.unk20A8 = 0;
