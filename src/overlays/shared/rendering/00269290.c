@@ -592,7 +592,7 @@ void FUN_L00_0026a9f0(void *pos, void *dir, int col, int color_endpoint, int lif
     unsigned char *particle;
     unsigned char *q;
     V_26a9f0 velocity_offset;
-    V_26a9f0 v;
+    V_26a9f0 random_direction;
 
     if (0 == lifetime) {
         return;
@@ -625,11 +625,11 @@ void FUN_L00_0026a9f0(void *pos, void *dir, int col, int color_endpoint, int lif
     *(int *)(particle + 0xC) = 0;
     particle[8] = FUN_001160d8_26a9f0();
     particle[2] = *D_L00_001B20AC;
-    v.q = 0;
-    v.f[0] = FUN_002132a8_26a9f0(-1.0f, 1.0f);
-    v.f[1] = FUN_002132a8_26a9f0(-1.0f, 1.0f);
-    v.f[2] = FUN_002132a8_26a9f0(-1.0f, 1.0f);
-    velocity_offset.q = v.q;
+    random_direction.q = 0;
+    random_direction.f[0] = FUN_002132a8_26a9f0(-1.0f, 1.0f);
+    random_direction.f[1] = FUN_002132a8_26a9f0(-1.0f, 1.0f);
+    random_direction.f[2] = FUN_002132a8_26a9f0(-1.0f, 1.0f);
+    velocity_offset.q = random_direction.q;
     FUN_001f9bf8_26a9f0(&velocity_offset, &velocity_offset, y);
     FUN_001f9a10_26a9f0(q, dir, &velocity_offset);
     *(float *)(q + 0xC) = y * 0.75f;
