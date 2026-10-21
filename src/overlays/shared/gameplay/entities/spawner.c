@@ -281,14 +281,14 @@ extern void FUN_L00_0025d538_c(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
 
 void FUN_L09_0030a9e8(unsigned char *moby, char *spawner_vars) {
-    char *r;
+    char *moby_record;
     int st;
     float remaining_value;
 
-    r = FUN_L00_0025a420_c(moby, 0xC30000, 0);
-    FUN_L00_0025a478_c(moby, r, spawner_vars + 0x20, 0, &st, 0, 0, 4);
+    moby_record = FUN_L00_0025a420_c(moby, 0xC30000, 0);
+    FUN_L00_0025a478_c(moby, moby_record, spawner_vars + 0x20, 0, &st, 0, 0, 4);
     if (st >= 2) {
-        remaining_value = *(float *)(spawner_vars + 0x20) - *(float *)(r + 0x2C);
+        remaining_value = *(float *)(spawner_vars + 0x20) - *(float *)(moby_record + 0x2C);
         *(float *)(spawner_vars + 0x20) = remaining_value;
         if (0.0f < remaining_value) {
             spawner_vars[0x67] = 0x5A;
