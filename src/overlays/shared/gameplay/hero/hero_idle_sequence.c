@@ -2771,21 +2771,21 @@ extern char D_001403B0[];
 void FUN_L00_0020a9e8(void) {
     char *base = (char *)((char *)&D_0013F350_002062b0);
     int *motion_timers;
-    char *g;
+    char *hero_state_base;
     int i, j;
-    char *tbl;
+    char *motion_ease_table;
 
     if (*(int *)(base + 0x2084) != 0) return;
     if (*(unsigned char *)(*(int *)(base + 0x2080) + 0x53) != 0) return;
     motion_timers = (int *)(base + 0x1060);
-    g = base;
-    tbl = ((char *)D_L00_0017A680_c);
+    hero_state_base = base;
+    motion_ease_table = ((char *)D_L00_0017A680_c);
     for (i = 0; i < 4; i++) {
         char *motion_slot_base;
         if (tick_countdown_32_alt_c(&motion_timers[i])) {
             if (i == 0) {
                 int *first_motion_timer;
-                *(float *)(g + 0x1028) = FUN_L00_00257c48(0.17453292f, 0.5235988f);
+                *(float *)(hero_state_base + 0x1028) = FUN_L00_00257c48(0.17453292f, 0.5235988f);
                 first_motion_timer = (int *)(((char *)&D_001403B0));
                 *first_motion_timer = FUN_L00_00257b90(scale_game_frames_c(0x46), scale_game_frames_c(0x96));
             } else if (i == 1) {
@@ -2796,20 +2796,20 @@ void FUN_L00_0020a9e8(void) {
                 motion_timers[2] = FUN_L00_00257b90(scale_game_frames_c(0x28), scale_game_frames_c(0x5A));
             } else {
                 float old, nw;
-                *(float *)(g + i * 0x10 + 0x1024) = random_float_between_c(-0.08726646f, 0.5235988f);
-                old = *(float *)(g + i * 0x10 + 0x1028);
+                *(float *)(hero_state_base + i * 0x10 + 0x1024) = random_float_between_c(-0.08726646f, 0.5235988f);
+                old = *(float *)(hero_state_base + i * 0x10 + 0x1028);
                 nw = FUN_L00_00257c48(0.34906584f, 0.95993108f);
-                *(float *)(g + i * 0x10 + 0x1028) = nw;
+                *(float *)(hero_state_base + i * 0x10 + 0x1028) = nw;
                 if ((old <= 0 && nw <= 0) || (old >= 0 && nw >= 0))
-                    *(float *)(g + i * 0x10 + 0x1028) = -*(float *)(g + i * 0x10 + 0x1028);
+                    *(float *)(hero_state_base + i * 0x10 + 0x1028) = -*(float *)(hero_state_base + i * 0x10 + 0x1028);
                 motion_timers[i] = FUN_L00_00257b90(scale_game_frames_c(0x23), scale_game_frames_c(0x46));
             }
         }
-        motion_slot_base = g + i * 0x10;
+        motion_slot_base = hero_state_base + i * 0x10;
         j = i + 13;
         base = (char *)(j * 0xB0);
         {
-            char *motion_record_destination = tbl + (int)base;
+            char *motion_record_destination = motion_ease_table + (int)base;
             *(float *)(motion_record_destination + 0x68) = *(float *)(motion_slot_base + 0x1028);
             *(float *)(motion_record_destination + 0x64) = *(float *)(motion_slot_base + 0x1024);
         }
