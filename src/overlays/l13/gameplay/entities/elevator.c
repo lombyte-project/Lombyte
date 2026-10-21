@@ -2348,8 +2348,8 @@ void FUN_L13_002b95b8(int source_moby, char *moby_vars) {
     char *g = 0;
     char *pad;
     char *current_target_moby;
-    char *r;
-    float v[4];
+    char *selected_target_moby;
+    float radar_rotation_copy[4];
     if (!(D_L13_0015F5C4 >= 3 && D_L13_0015F5C4 <= 4)) {
         tick_countdown_32((int *)(moby_vars + 0x8C));
     }
@@ -2374,21 +2374,21 @@ void FUN_L13_002b95b8(int source_moby, char *moby_vars) {
     W(moby_vars, 0x124) = -1;
     W(moby_vars, 0x88) = 0;
 skip:
-    qcopy(v, D_L13_001670D0);
-    r = (char *)FUN_L13_002b8be0(source_moby, moby_vars, D_L13_001670D0 - 0x10, v, 0.19634955f, 0.19634955f, 255.0f,
+    qcopy(radar_rotation_copy, D_L13_001670D0);
+    selected_target_moby = (char *)FUN_L13_002b8be0(source_moby, moby_vars, D_L13_001670D0 - 0x10, radar_rotation_copy, 0.19634955f, 0.19634955f, 255.0f,
                                  P(moby_vars, 0x88), g);
-    if ((r != P(moby_vars, 0x88) && W(moby_vars, 0x8C) >= 0x1F5) || FLAG == 0) {
+    if ((selected_target_moby != P(moby_vars, 0x88) && W(moby_vars, 0x8C) >= 0x1F5) || FLAG == 0) {
         W(moby_vars, 0xEC) = 0;
         W(moby_vars, 0x124) = -1;
         W(moby_vars, 0x88) = 0;
     }
-    if (r != 0 && (P(moby_vars, 0x88) == 0 || (H(P(moby_vars, 0x88), 0xA6) != 0x3EB && H(r, 0xA6) == 0x3EB)) &&
+    if (selected_target_moby != 0 && (P(moby_vars, 0x88) == 0 || (H(P(moby_vars, 0x88), 0xA6) != 0x3EB && H(selected_target_moby, 0xA6) == 0x3EB)) &&
         FLAG != 0) {
-        P(moby_vars, 0x88) = r;
-        W(moby_vars, 0x124) = H(r, 0xA6);
+        P(moby_vars, 0x88) = selected_target_moby;
+        W(moby_vars, 0x124) = H(selected_target_moby, 0xA6);
         W(moby_vars, 0x8C) = W(moby_vars, 0x138);
     }
-    if (r != P(moby_vars, 0x88)) {
+    if (selected_target_moby != P(moby_vars, 0x88)) {
         W(moby_vars, 0x118) = W(moby_vars, 0x118) + 1;
         if (scale_game_frames(0x3C) < W(moby_vars, 0x118)) {
             W(moby_vars, 0xEC) = 0;
