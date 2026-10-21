@@ -666,7 +666,7 @@ u8 *create_moby(s32) __asm__("FUN_0020c4f8");
 void clear_u64_value() __asm__("FUN_001f99f8");
 void refresh_moby_spatial_bounds_from_basis() __asm__("FUN_0020e098");
 void FUN_L00_00250df8();
-u8 *FUN_L00_002bb360(u8 *src) {
+u8 *FUN_L00_002bb360(u8 *basis_source_moby) {
     u8 *spawned_moby = create_moby(0xB3);
     if (spawned_moby) {
         u8 *spawned_moby_vars = *(u8 **)(spawned_moby + 0x78);
@@ -676,11 +676,11 @@ u8 *FUN_L00_002bb360(u8 *src) {
         *(s16 *)(spawned_moby + 0x34) = 0x204;
         spawned_moby[0x23] = 0x50;
         spawned_moby[0x20] = 0;
-        *(u8 **)(spawned_moby_vars + 8) = src;
+        *(u8 **)(spawned_moby_vars + 8) = basis_source_moby;
         clear_u64_value(spawned_moby + 0x40);
-        *(OvlQuad *)(spawned_moby + 0xC0) = *(OvlQuad *)(src + 0xC0);
-        *(OvlQuad *)(spawned_moby + 0xD0) = *(OvlQuad *)(src + 0xD0);
-        *(OvlQuad *)(spawned_moby + 0xE0) = *(OvlQuad *)(src + 0xE0);
+        *(OvlQuad *)(spawned_moby + 0xC0) = *(OvlQuad *)(basis_source_moby + 0xC0);
+        *(OvlQuad *)(spawned_moby + 0xD0) = *(OvlQuad *)(basis_source_moby + 0xD0);
+        *(OvlQuad *)(spawned_moby + 0xE0) = *(OvlQuad *)(basis_source_moby + 0xE0);
         refresh_moby_spatial_bounds_from_basis(spawned_moby);
         FUN_L00_00250df8(spawned_moby);
     }
