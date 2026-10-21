@@ -2604,16 +2604,16 @@ void FUN_L00_00258830_2d54c8(void *, void *, int, float, float, float) __asm__("
 float FUN_L00_002d54c8(unsigned char *moby, float *target_position, float vel) {
     float vec[4] __attribute__((aligned(16)));
     unsigned char *moby_vars;
-    float ang, target_distance, z, movement_yaw, lim, vertical_displacement;
+    float desired_yaw, target_distance, z, movement_yaw, maximum_vertical_displacement, vertical_displacement;
     moby_vars = *(unsigned char **)(moby + 0x78);
-    ang = angle_atan2(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
+    desired_yaw = angle_atan2(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
     z = *(float *)(moby + 0x18);
     target_distance = distance_xyz(moby + 0x10, target_position);
     if (2.0f < target_distance)
-        ang = FUN_001fa580_2d54c8(ang, *(float *)(moby_vars + 0x1FC));
+        desired_yaw = FUN_001fa580_2d54c8(desired_yaw, *(float *)(moby_vars + 0x1FC));
     if (moby[0x52] != moby[0x53])
         return target_distance;
-    FUN_L00_0025be00_2d54c8(moby + 0x48, ang, moby_vars + 0x1F4, D_0015ED70_2d54c8 * 12.566371f,
+    FUN_L00_0025be00_2d54c8(moby + 0x48, desired_yaw, moby_vars + 0x1F4, D_0015ED70_2d54c8 * 12.566371f,
                             D_0015ED70_2d54c8 * 12.566371f, D_0015ED6C_2d54c8 * 12.566371f);
     advance_accelerated_scalar(&vel, target_distance, D_0015ED70_2d54c8 * 8.0f, D_0015ED70_2d54c8 * 12.0f,
                         D_0015ED6C_2d54c8 * 4.0f, (float *)(moby_vars + 0x1F8));
@@ -2627,10 +2627,10 @@ float FUN_L00_002d54c8(unsigned char *moby, float *target_position, float vel) {
     vec[2] = *(float *)(moby_vars + 0x270) - D_0015ED70_2d54c8 * 10.0f;
     FUN_L00_00258830_2d54c8(moby, vec, 0x10, 0.5f, 0.5f, 0.0f);
     vertical_displacement = *(float *)(moby + 0x18) - z;
-    lim = D_0015ED6C_2d54c8 * 4.0f;
+    maximum_vertical_displacement = D_0015ED6C_2d54c8 * 4.0f;
     *(float *)(moby_vars + 0x270) = vertical_displacement;
-    if (lim < vertical_displacement)
-        *(float *)(moby_vars + 0x270) = lim;
+    if (maximum_vertical_displacement < vertical_displacement)
+        *(float *)(moby_vars + 0x270) = maximum_vertical_displacement;
     if (moby[0x70] & 2)
         return target_distance;
     return 37.0f;
