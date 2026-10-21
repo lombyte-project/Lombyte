@@ -1938,7 +1938,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 rand();
 
-char *FUN_L13_002e1140(char *owner, char *pos, char *initial_velocity, int remaining_split_count, float scale) {
+char *FUN_L13_002e1140(char *owner, char *spawn_position, char *initial_velocity, int remaining_split_count, float scale) {
     char *moby = func_0020D348_m(0x584);
     if (moby != 0) {
         char *moby_data;
@@ -1950,7 +1950,7 @@ char *FUN_L13_002e1140(char *owner, char *pos, char *initial_velocity, int remai
         moby[0x20] = 2;
         moby[0xBC] = 0;
         moby[0x72] = 0;
-        qcopy(moby + 0x10, pos);
+        qcopy(moby + 0x10, spawn_position);
         qcopy(moby_data, initial_velocity);
         *(float *)(moby + 0x2C) = scale;
         *(char **)(moby_data + 0x48) = owner;
