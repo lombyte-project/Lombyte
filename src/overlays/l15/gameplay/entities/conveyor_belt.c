@@ -892,12 +892,12 @@ extern char *func_0020D348_c(int) __asm__("FUN_0020c4f8");
 extern void func_L00_0025E210_u(void *) __asm__("FUN_L00_0025d1b8");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 
-char *FUN_L15_002eb9e0(char *pos, char *vec) {
+char *FUN_L15_002eb9e0(char *pos, char *spawn_rotation) {
     char tmp[32] __attribute__((aligned(16)));
     char *saved_position = tmp;
     char *spawned_moby;
     *(OvlQuad *)tmp = *(OvlQuad *)pos;
-    *(OvlQuad *)(tmp + 0x10) = *(OvlQuad *)vec;
+    *(OvlQuad *)(tmp + 0x10) = *(OvlQuad *)spawn_rotation;
     spawned_moby = func_0020D348_c(0x594);
     if (spawned_moby != 0) {
         func_L00_0025E210_u(spawned_moby);
