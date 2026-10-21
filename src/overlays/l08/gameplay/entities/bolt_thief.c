@@ -2680,7 +2680,7 @@ void FUN_L08_002e88d8(char *parent_moby) {
     char **part_entry_cursor = (char **)base;
     char **sq;
     int weighted_hit_score = 0;
-    int idx = 0;
+    int selected_hit_part_index = 0;
     int hit_sound_id = -1;
     int i;
     for (i = 0; i < 13; i++, part_entry_cursor += 4) {
@@ -2691,7 +2691,7 @@ void FUN_L08_002e88d8(char *parent_moby) {
                 } else if (i < 5) {
                     if (weighted_hit_score < 2) { weighted_hit_score = 2; hit_sound_id = 1; }
                 } else {
-                    if (weighted_hit_score < 4) { weighted_hit_score += 4; idx = i; hit_sound_id = 2; }
+                    if (weighted_hit_score < 4) { weighted_hit_score += 4; selected_hit_part_index = i; hit_sound_id = 2; }
                 }
                 ((unsigned char *)*part_entry_cursor)[0xA4] = 0xFF;
             }
@@ -2700,8 +2700,8 @@ void FUN_L08_002e88d8(char *parent_moby) {
     *(unsigned short *)(data + 0x13C) += weighted_hit_score;
     if (*(short *)(data + 0x13C) >= 8) {
         *(short *)(data + 0x13C) = *(short *)(data + 0x13C) % 8;
-        if (idx != 0) {
-            int selected_part_byte_offset = idx * 16;
+        if (selected_hit_part_index != 0) {
+            int selected_part_byte_offset = selected_hit_part_index * 16;
             char **selected_part_entry = (char **)(base + selected_part_byte_offset);
             char *selected_part_moby = *selected_part_entry;
             char *d2;
@@ -2717,12 +2717,12 @@ void FUN_L08_002e88d8(char *parent_moby) {
                         char *part_table_base = base;
             for (i = 0; i < 8; i++) {
                 int k = (i + random_search_start) % 8 + 5;
-                int off = k * 16;
-                base = part_table_base + off; sq = (char **)base;
+                int fallback_part_byte_offset = k * 16;
+                base = part_table_base + fallback_part_byte_offset; sq = (char **)base;
                 if (*sq != 0) {
                     char *d2 = *(char **)(*sq + 0x78);
                     cart_burst(parent_moby, *sq + 0x10, -1, 2.0f, 13.0f);
-                    subtract_vector_xyz(d2, *sq + 0x10, *(char **)(data + off + 0x64) + 0x10);
+                    subtract_vector_xyz(d2, *sq + 0x10, *(char **)(data + fallback_part_byte_offset + 0x64) + 0x10);
                     normalize_vector_xyz(d2, d2, D_0015ED6C * 10.0f);
                     (*sq)[0x20] = 1;
                     *sq = 0;
