@@ -828,7 +828,7 @@ void woodcut_bot_update(WBMoby *m) {
     float position_snapshot[4];
     float duplicate_position_snapshot[4];
     float adiff;
-    float dist;
+    float target_distance;
     float hd;
 
     if (d->f38 != 0 || d->t3C6 != 0)
@@ -844,7 +844,7 @@ void woodcut_bot_update(WBMoby *m) {
     }
     adiff = fast_difference_between_rotations(m->rot[2],
                                               fast_arc_tan(tgt[0] - m->pos[0], tgt[1] - m->pos[1]));
-    dist = vector_distance(pos, tgt);
+    target_distance = vector_distance(pos, tgt);
     hd = compute_interpolated_record_value(m);
     qcopy(position_snapshot, pos);
     qcopy(duplicate_position_snapshot, pos);
@@ -864,18 +864,18 @@ void woodcut_bot_update(WBMoby *m) {
         d->fE0 = 0x15E;
         d->fE8 = 0.35f;
         if (p != 0 && damage != 0.0f && m->state != 0 && d->t3C4 == 0) {
-            unsigned char *src;
+            unsigned char *hit_source_moby;
             float knockback_gravity_step;
             float b;
             float default_knockback_horizontal_step;
 
-            src = *(unsigned char **)(p + 0x20);
+            hit_source_moby = *(unsigned char **)(p + 0x20);
             one = 1.0f;
-            if (src != 0) {
+            if (hit_source_moby != 0) {
                 struct Hero *h = &hero;
-                if (src != ((unsigned char *)h->items[0].moby)) {
-                    angle = fast_arc_tan(m->pos[0] - *(float *)(src + 0x10),
-                                         m->pos[1] - *(float *)(src + 0x14));
+                if (hit_source_moby != ((unsigned char *)h->items[0].moby)) {
+                    angle = fast_arc_tan(m->pos[0] - *(float *)(hit_source_moby + 0x10),
+                                         m->pos[1] - *(float *)(hit_source_moby + 0x14));
                 } else {
                     angle = fast_arc_tan(m->pos[0] - h->motion.pos.f[0],
                                          m->pos[1] - h->motion.pos.f[1]);
@@ -919,14 +919,14 @@ void woodcut_bot_update(WBMoby *m) {
             case WOODCUT_BOT_REACTION_HIT_RECOVERY_WITH_MELEE_WINDOW_GUARD:
                 d->f3C8 = -0.5235988f;
                 if (m->anim != 4 || hd < 16.0f || hd > 27.0f) {
-                    short cls;
+                    short hit_source_moby_class;
 
                     m->fBC |= 5;
                     blend_moby_animation(m, 5, 0, scale_game_frames(3));
                     FUN_L00_002a1538(d->f160);
                     m->state = 9;
-                    cls = *(short *)(*(char **)(p + 0x20) + 0xA6);
-                    if (cls == 0x131 || cls == 0xB0) {
+                    hit_source_moby_class = *(short *)(*(char **)(p + 0x20) + 0xA6);
+                    if (hit_source_moby_class == 0x131 || hit_source_moby_class == 0xB0) {
                         d->f3E4 = (2.0f / multiply_global_factor_ed64(15.0f)) * 0.5f;
                     } else {
                         d->f3E4 = 2.0f / multiply_global_factor_ed64(15.0f);
@@ -1021,7 +1021,7 @@ void woodcut_bot_update(WBMoby *m) {
         break;
     case WOODCUT_BOT_IDLE:
         if (m->f70 & 2) {
-            if (excited ? (d->f3E8 * 2.0f < dist) : (d->f3E8 < dist)) {
+            if (excited ? (d->f3E8 * 2.0f < target_distance) : (d->f3E8 < target_distance)) {
                 int anims[6];
 
                 memset(anims, 0, 0x18);
@@ -1032,10 +1032,10 @@ void woodcut_bot_update(WBMoby *m) {
             }
         }
         if (d->t3C2 == 0) {
-            if (dist < 3.0f && adiff < 1.5707964f) {
+            if (target_distance < 3.0f && adiff < 1.5707964f) {
                 blend_moby_animation(m, 4, 0, scale_game_frames(10));
                 m->state = 8;
-            } else if (excited ? (dist < d->f3E8 * 2.0f) : (dist < d->f3E8)) {
+            } else if (excited ? (target_distance < d->f3E8 * 2.0f) : (target_distance < d->f3E8)) {
                 if (m->fBC & 1) {
                     if (excited || d->f3DC == -1 ||
                         point_in_path_xy(tgt, D_L04_001B0630[d->f3DC] + 4,
@@ -1053,7 +1053,7 @@ void woodcut_bot_update(WBMoby *m) {
             }
             if (!excited) {
                 if (vector_distance(pos, d->f3B0) > 2.0f) {
-                    if (d->f3E8 < dist ||
+                    if (d->f3E8 < target_distance ||
                         (d->f3DC != -1 && point_in_path_xy(tgt, D_L04_001B0630[d->f3DC] + 4,
                                                            *D_L04_001B0630[d->f3DC]) == 0)) {
                         m->state = 6;
@@ -1109,10 +1109,10 @@ void woodcut_bot_update(WBMoby *m) {
             }
         }
         if (d->t3C2 == 0) {
-            if (dist < 3.0f && adiff < 1.5707964f) {
+            if (target_distance < 3.0f && adiff < 1.5707964f) {
                 blend_moby_animation(m, 4, 0, scale_game_frames(10));
                 m->state = 8;
-            } else if (excited ? (dist < d->f3E8 * 2.0f) : (dist < d->f3E8)) {
+            } else if (excited ? (target_distance < d->f3E8 * 2.0f) : (target_distance < d->f3E8)) {
                 if (m->fBC & 1) {
                     if (excited || d->f3DC == -1 ||
                         point_in_path_xy(tgt, D_L04_001B0630[d->f3DC] + 4,
@@ -1133,7 +1133,7 @@ void woodcut_bot_update(WBMoby *m) {
     }
     case WOODCUT_BOT_SELECT_ACTION_WHILE_EXCITED:
         if (excited) {
-            if (dist < 3.0f && adiff < 1.5707964f) {
+            if (target_distance < 3.0f && adiff < 1.5707964f) {
                 blend_moby_animation(m, 4, 0, scale_game_frames(10));
                 FUN_L00_002a1538(d->f160);
                 m->state = 8;
@@ -1158,7 +1158,7 @@ void woodcut_bot_update(WBMoby *m) {
         }
         FUN_L04_00295778(m, d->f160, frame_time * 4.0f,
                          fast_arc_tan(tgt[0] - m->pos[0], tgt[1] - m->pos[1]), frame_time_sq * 20.0f);
-        if (dist < 3.0f && adiff < 1.5707964f) {
+        if (target_distance < 3.0f && adiff < 1.5707964f) {
             blend_moby_animation(m, 4, 0, scale_game_frames(10));
             FUN_L00_002a1538(d->f160);
             m->state = 8;
@@ -1196,7 +1196,7 @@ void woodcut_bot_update(WBMoby *m) {
             m->fBC &= ~8;
             FUN_L04_00295de8(m, d->f160);
         }
-        if (dist < 3.0f && adiff < 1.5707964f) {
+        if (target_distance < 3.0f && adiff < 1.5707964f) {
             blend_moby_animation(m, 4, 0, scale_game_frames(10));
             FUN_L00_002a1538(d->f160);
             m->state = 8;
@@ -1234,7 +1234,7 @@ void woodcut_bot_update(WBMoby *m) {
         }
         break;
     case WOODCUT_BOT_STOP_MOVEMENT:
-        if (dist < 3.0f && adiff < 1.5707964f) {
+        if (target_distance < 3.0f && adiff < 1.5707964f) {
             blend_moby_animation(m, 4, 0, scale_game_frames(10));
             FUN_L00_002a1538(d->f160);
             m->state = 8;
@@ -1273,7 +1273,7 @@ void woodcut_bot_update(WBMoby *m) {
 
                     for (i = 0; i < 9; i++) {
                         struct Hero *h = &hero;
-                        float ang;
+                        float candidate_reposition_bearing;
 
                         if ((i & 1) == 0) {
                             sign = 1.0f;
@@ -1282,23 +1282,23 @@ void woodcut_bot_update(WBMoby *m) {
                         } else {
                             sign = -sign;
                         }
-                        ang = fast_add_rotations(sign * tab.v[i >> 1],
+                        candidate_reposition_bearing = fast_add_rotations(sign * tab.v[i >> 1],
                                                  fast_arc_tan(m->pos[0] - h->motion.pos.f[0],
                                                               m->pos[1] - h->motion.pos.f[1]));
-                        build_spherical_offset(v, 6.0f, ang, m->rot[1]);
+                        build_spherical_offset(v, 6.0f, candidate_reposition_bearing, m->rot[1]);
                         add_vector_xyz(v, v, pos);
                         if (point_in_path_xy(v, D_L04_001B0630[d->f3DC] + 4,
                                              *D_L04_001B0630[d->f3DC]) != 0) {
                             found = 1;
                             blend_moby_animation(m, 0x10, 0, scale_game_frames(10));
-                            d->f3D4 = ang;
+                            d->f3D4 = candidate_reposition_bearing;
                             d->f3D8 = 0.0f;
                             break;
                         }
                     }
                     if (!found) {
                         if (m->anim == 5) {
-                            if (dist < 3.0f && adiff < 1.5707964f) {
+                            if (target_distance < 3.0f && adiff < 1.5707964f) {
                                 blend_moby_animation(m, 4, 0, scale_game_frames(10));
                                 m->state = 8;
                             } else {
@@ -1316,12 +1316,12 @@ void woodcut_bot_update(WBMoby *m) {
                 float v[4];
 
                 if (hd < 28.0f && m->anim == 0x10) {
-                    float lim = frame_scale * 0.11111111f;
+                    float reposition_step_limit = frame_scale * 0.11111111f;
 
-                    if (d->f3D8 < lim) {
+                    if (d->f3D8 < reposition_step_limit) {
                         d->f3D8 = d->f3D8 + frame_time_sq * 20.0f;
                     } else {
-                        d->f3D8 = lim;
+                        d->f3D8 = reposition_step_limit;
                     }
                     build_spherical_offset(v, d->f3D8, d->f3D4, m->rot[1]);
                     add_vector_xyz(pos, pos, v);
