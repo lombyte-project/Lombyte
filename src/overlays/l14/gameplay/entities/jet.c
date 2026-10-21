@@ -445,9 +445,9 @@ void shuttle_update(struct Moby *shuttle_moby) {
     Vec4 delta;
     Vec4 base;
     Vec4 rotated_rider_offset;
-    f32 mat[16];
+    f32 shuttle_rotation_matrix[16];
     struct Moby *rider;
-    f32 len;
+    f32 horizontal_rider_correction_distance;
     f32 max;
 
     if (shuttle_moby == 0)
@@ -498,8 +498,8 @@ void shuttle_update(struct Moby *shuttle_moby) {
             FUN_L00_0024f7c8(shuttle_moby, shuttle_vars->anchor, &base);
         else
             qcopy(&base, &shuttle_moby->pos);
-        euler_rotation_matrix(mat, &shuttle_moby->rot);
-        lift_xform(&rotated_rider_offset, shuttle_vars->offset, mat);
+        euler_rotation_matrix(shuttle_rotation_matrix, &shuttle_moby->rot);
+        lift_xform(&rotated_rider_offset, shuttle_vars->offset, shuttle_rotation_matrix);
         lift_add(&rider->pos, &base, &rotated_rider_offset);
     }
     if (shuttle_vars->sound == -1 || (voice_is_playing(shuttle_moby, shuttle_vars->sound) == 0 && shuttle_vars->sound == -1))
@@ -525,11 +525,11 @@ void shuttle_update(struct Moby *shuttle_moby) {
                 qcopy(&base, &hero.motion.pos);
                 lift_sub(&delta, &rider->pos, &base);
                 delta.f[2] = 0.0f;
-                len = lift_length(&delta);
+                horizontal_rider_correction_distance = lift_length(&delta);
                 max = D_L14_00161B88 * D_0015ED6C_lift;
-                if (max < len)
-                    len = max;
-                lift_normalize(&hero.motion.platform_delta, &delta, len);
+                if (max < horizontal_rider_correction_distance)
+                    horizontal_rider_correction_distance = max;
+                lift_normalize(&hero.motion.platform_delta, &delta, horizontal_rider_correction_distance);
             }
         }
         if (shuttle_vars->riding == 0) {
