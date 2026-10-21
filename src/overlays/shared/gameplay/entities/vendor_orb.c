@@ -1581,21 +1581,21 @@ s32 FUN_001efa68_002e42c0(OvlQuad *, OvlQuad *, s32, void *,
                           s32) __asm__("FUN_001efa68");
 s32 FUN_L00_002e42c0(OvlQuad *out, s32 flag) {
     OvlQuad position_and_offset_vectors[4];
-    struct Hero *g = &hero_data;
+    struct Hero *player = &hero_data;
     u8 *camera_view = D_L00_00166E10_002e42c0;
     f32 ground_distance;
-    if (g->frames_off_ground.s == 0) {
+    if (player->frames_off_ground.s == 0) {
         FUN_L00_002e4168_002e42c0(*(s32 *)(camera_view - 0x10), out);
         return 1;
     }
     FUN_L00_002e4168_002e42c0(*(s32 *)(camera_view - 0x10), &position_and_offset_vectors[0]);
-    ground_distance = g->ground_distance;
+    ground_distance = player->ground_distance;
     if (30.0f <= ground_distance || flag == 0) {
         FUN_001f9a68_002e42c0(&position_and_offset_vectors[3], camera_view + 0x30, 0.2f);
         FUN_001f9a10_002e42c0(&position_and_offset_vectors[1], &position_and_offset_vectors[0], &position_and_offset_vectors[3]);
         FUN_001f9a68_002e42c0(&position_and_offset_vectors[3], camera_view + 0x30, -30.0f);
         FUN_001f9a10_002e42c0(&position_and_offset_vectors[2], &position_and_offset_vectors[0], &position_and_offset_vectors[3]);
-        if (FUN_001efa68_002e42c0(&position_and_offset_vectors[1], &position_and_offset_vectors[2], 0x12, g->moby, 0)) {
+        if (FUN_001efa68_002e42c0(&position_and_offset_vectors[1], &position_and_offset_vectors[2], 0x12, player->moby, 0)) {
             qcopy(out, &D_L00_00173E60_002e42c0);
             return 0;
         }
