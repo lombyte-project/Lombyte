@@ -1467,22 +1467,22 @@ void FUN_L09_002ef9b0(struct Moby *moby) {
     float old[4];
     float spark_velocity[4];
     float random_spark_vector[4];
-    float *vel = (float *)moby->pvars;
+    float *debris_vars = (float *)moby->pvars;
     float *pos = (float *)&moby->pos;
     int i;
 
     qcopy(old, pos);
-    add_vector_xyz(pos, pos, vel);
+    add_vector_xyz(pos, pos, debris_vars);
     if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f ||
         moby->pos.z < 2.0f || moby->pos.z > 1021.0f ||
         vector_distance(pos, D_L09_00166F40_2ef9b0) > 64.0f) {
         mark_moby_for_removal_2ef9b0(moby);
         return;
     }
-    moby->rot.z = fast_add_rotations_2ef9b0(moby->rot.z, vel[4]);
-    moby->rot.y = fast_add_rotations_2ef9b0(moby->rot.y, vel[5]);
-    vel[2] -= D_0015ED70_2ef9b0 * 12.74f;
-    if (fast_dec_timer((int *)(vel + 7))) {
+    moby->rot.z = fast_add_rotations_2ef9b0(moby->rot.z, debris_vars[4]);
+    moby->rot.y = fast_add_rotations_2ef9b0(moby->rot.y, debris_vars[5]);
+    debris_vars[2] -= D_0015ED70_2ef9b0 * 12.74f;
+    if (fast_dec_timer((int *)(debris_vars + 7))) {
         for (i = 0; i < 8; i++) {
             *(OvlQuad *)random_spark_vector = 0;
             random_spark_vector[0] = random_float_2ef9b0(-1.0f, 1.0f);
@@ -1501,18 +1501,18 @@ void FUN_L09_002ef9b0(struct Moby *moby) {
     }
     if (collision_line(old, pos, 2, moby, 0)) {
         if (collision_hit_material() == 1) {
-            scale_vector_xyz(vel, vel, 0.4f);
-            vel[4] *= 0.25f;
-            vel[5] *= 0.25f;
+            scale_vector_xyz(debris_vars, debris_vars, 0.4f);
+            debris_vars[4] *= 0.25f;
+            debris_vars[5] *= 0.25f;
         } else {
             moby->scale *= 0.8f;
-            reflect_2ef9b0(vel, vel, D_L09_00174000);
-            scale_vector_xyz(vel, vel, random_float_2ef9b0(0.3f, 0.1f));
-            if (vector_length_xyz(vel) < D_0015ED6C_2ef9b0 * 5.0f) {
-                *(int *)(vel + 7) = 0;
+            reflect_2ef9b0(debris_vars, debris_vars, D_L09_00174000);
+            scale_vector_xyz(debris_vars, debris_vars, random_float_2ef9b0(0.3f, 0.1f));
+            if (vector_length_xyz(debris_vars) < D_0015ED6C_2ef9b0 * 5.0f) {
+                *(int *)(debris_vars + 7) = 0;
             }
-            vel[4] = random_float_2ef9b0(0.0f, -vel[4]);
-            vel[5] = random_float_2ef9b0(0.0f, -vel[5]);
+            debris_vars[4] = random_float_2ef9b0(0.0f, -debris_vars[4]);
+            debris_vars[5] = random_float_2ef9b0(0.0f, -debris_vars[5]);
             normalize_vector_xyz(D_L09_00174000, D_L09_00174000, 0.05f);
             add_vector_xyz(pos, D_L09_00174000 - 0x20, D_L09_00174000);
         }
