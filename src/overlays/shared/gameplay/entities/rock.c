@@ -1628,7 +1628,7 @@ extern float D_L01_00161F70 __attribute__((sda));
 extern float D_L01_00161F74 __attribute__((sda));
 void FUN_L01_003089f0(char *moby) {
     float v[4];
-    float w[4];
+    float particle_velocity[4];
     float u[4];
     float frame_duration;
     int i;
@@ -1640,16 +1640,16 @@ void FUN_L01_003089f0(char *moby) {
         moby_point_position(moby, 0, v);
     }
     frame_duration = frame_time;
-    random_vector(w, D_L01_00161F54 * frame_duration, D_L01_00161F58 * frame_duration);
+    random_vector(particle_velocity, D_L01_00161F54 * frame_duration, D_L01_00161F58 * frame_duration);
     particle_lifetime = *(unsigned char *)&D_L01_00161F64;
-    FUN_L00_002730e0(v, w, D_L01_00161F68, particle_lifetime, random_integer_below_c(0xFF) & 0xFF, 0,
+    FUN_L00_002730e0(v, particle_velocity, D_L01_00161F68, particle_lifetime, random_integer_below_c(0xFF) & 0xFF, 0,
                      D_L01_00161F70);
     for (i = 2; i >= 0; i--) {
         frame_duration = frame_time;
         random_vector(u, D_L01_00161F5C * frame_duration, D_L01_00161F60 * frame_duration);
-        add_vector_xyz(w, w, u);
+        add_vector_xyz(particle_velocity, particle_velocity, u);
         c2 = *(unsigned char *)&D_L01_00161F64;
-        FUN_L00_002730e0(v, w, D_L01_00161F6C, c2, random_integer_below_c(0xFF) & 0xFF,
+        FUN_L00_002730e0(v, particle_velocity, D_L01_00161F6C, c2, random_integer_below_c(0xFF) & 0xFF,
                          0, D_L01_00161F74);
     }
 }
