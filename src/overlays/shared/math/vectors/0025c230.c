@@ -198,7 +198,7 @@ int mine_fall(char *moby, char *st) {
     float predicted_query_position[4];
     float surface_normal[4];
     float normal_response_vector[4];
-    float horizontal_motion_magnitude, f64, f68, f6c;
+    float horizontal_motion_magnitude, larger_quadratic_root, smaller_quadratic_root, f6c;
     
     Vec4 *g;
     char *collision_metadata;
@@ -277,9 +277,9 @@ int mine_fall(char *moby, char *st) {
             } else {
                 float negative_half_gravity_step = *(float *)(st + 0x10) * -0.5f;
                 f20 = 60.0f;
-                result_count = FUN_L00_002595a0(&f64, &f68, negative_half_gravity_step, *(float *)(st + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - f21);
-                if (result_count > 0 && 0.0f < f64 && f64 < f20) {
-                    f20 = f64;
+                result_count = FUN_L00_002595a0(&larger_quadratic_root, &smaller_quadratic_root, negative_half_gravity_step, *(float *)(st + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - f21);
+                if (result_count > 0 && 0.0f < larger_quadratic_root && larger_quadratic_root < f20) {
+                    f20 = larger_quadratic_root;
                 }
                 if (f20 < 0.0001f) {
                     f20 = 0.0001f;
