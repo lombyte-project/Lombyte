@@ -330,7 +330,7 @@ extern int f0d60_1ed6a8(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 
 extern int D_L00_0016C06C __attribute__((section(".data")));
 extern int D_L00_0015EF5C_gp __asm__("D_L00_0015EF5C") __attribute__((sda));
-void FUN_L00_001ed6a8(OvlQuad *pos, float r) {
+void FUN_L00_001ed6a8(OvlQuad *pos, float collision_radius) {
     OvlQuad step_delta[1];
     float v[4] __attribute__((aligned(16)));
     char *o = D_166C80_1ed6a8.o;
@@ -349,12 +349,12 @@ void FUN_L00_001ed6a8(OvlQuad *pos, float r) {
         return;
     }
     f9a28_1ed6a8(step_delta, pos, v);
-    step_count = fa6d0_1ed6a8(f9af0_1ed6a8(step_delta) / (r * 0.9f)) + 1;
+    step_count = fa6d0_1ed6a8(f9af0_1ed6a8(step_delta) / (collision_radius * 0.9f)) + 1;
     ff378_1ed6a8(step_delta, step_delta, fa6c0_1ed6a8(step_count));
     qcopy(pos, v);
     for (i = 0; i < step_count; i++) {
         f9a10_1ed6a8(pos, pos, step_delta);
-        for (j = 0; j < 6 && f0d60_1ed6a8(pos, D_L00_0015EF5C_gp, ((int)hero.moby), r); j++) {
+        for (j = 0; j < 6 && f0d60_1ed6a8(pos, D_L00_0015EF5C_gp, ((int)hero.moby), collision_radius); j++) {
             qcopy(pos, &D_173E70_1ed6a8);
             {
                 char *current_camera_record = D_166C80_1ed6a8.o;
