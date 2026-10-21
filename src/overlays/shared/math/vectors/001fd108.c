@@ -12,12 +12,12 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fde98.s", FUN_L00_001fde98);
 extern char D_L00_0016EA40_001fe990[] __asm__("D_L00_0016EA40");
 float random_angle_radians() __asm__("FUN_00213308");
 /* Fills the first free 0x20-byte glints slot with v, b and x; returns its index or -1. */
-int FUN_L00_001fe990(u128 *v, int b, float x) {
+int FUN_L00_001fe990(u128 *input_payload, int b, float x) {
     u128 input_copy;
     u128 *tp = &input_copy;
     char *slot;
     int i;
-    *tp = *v;
+    *tp = *input_payload;
     slot = D_L00_0016EA40_001fe990;
     for (i = 0; i < 16; i++, slot += 0x20) {
         if (*(short *)(slot + 0x10) <= 0) {
