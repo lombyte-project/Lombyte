@@ -3191,7 +3191,7 @@ void normalize_vector_xyz(void *, void *, f32);
 void FUN_L00_002df048(int callback_context) {
     VQ segment_offset, segment_position, marker_offset;
     int i;
-    float len;
+    float segment_length;
     char *p;
 
     *(int *)&D_L00_00161B40_gp = 1;
@@ -3203,12 +3203,12 @@ void FUN_L00_002df048(int callback_context) {
             D_L00_001E4C80[i].p = 0;
             subtract_vector_xyz(segment_offset, D_L00_001E5F30 + D_L00_001E4C80[i].idx * 16,
                                 D_L00_001E5F40 + D_L00_001E4C80[i].idx * 16);
-            len = vector_length_xyz(segment_offset);
-            scale_vector_xyz(segment_offset, segment_offset, D_L00_001E4C80[i].f / len);
+            segment_length = vector_length_xyz(segment_offset);
+            scale_vector_xyz(segment_offset, segment_offset, D_L00_001E4C80[i].f / segment_length);
             add_vector_xyz(segment_position, D_L00_001E5F40 + D_L00_001E4C80[i].idx * 16, segment_offset);
             subtract_vector_xyz(marker_offset, p + 0x10, segment_position);
             normalize_vector_xyz(marker_offset, marker_offset, 0.03f);
-            scale_vector_xyz(segment_offset, segment_offset, 0.1f / len);
+            scale_vector_xyz(segment_offset, segment_offset, 0.1f / segment_length);
             add_vector_xyz(p + 0x30, marker_offset, segment_offset);
             *(short *)(p + 0xA) = 0x46;
         }
