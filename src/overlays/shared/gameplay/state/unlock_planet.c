@@ -278,19 +278,19 @@ extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
 int FUN_L00_00260668(int x, char *o, float *a, float *c, float *b, float *d);
-int FUN_L00_00260668(int x, char *reference_object, float *input_position, float *input_rotation, float *b, float *output_rotation) {
+int FUN_L00_00260668(int x, char *reference_object, float *input_position, float *input_rotation, float *output_position, float *output_rotation) {
     float transposed_rotation_matrix[16];
-    float v[4];
-    float w[4];
+    float position_offset[4];
+    float composed_rotation_matrix[4];
     float pad[12];
     if (FUN_L00_002603d0(reference_object) == 0)
         return 0;
-    subtract_vector_xyz(v, input_position, reference_object + 0x10);
+    subtract_vector_xyz(position_offset, input_position, reference_object + 0x10);
     transpose_rotation_matrix(transposed_rotation_matrix, reference_object + 0xC0);
-    transform_vector(b, v, transposed_rotation_matrix);
-    euler_rotation_matrix(w, input_rotation);
-    multiply_matrix(w, transposed_rotation_matrix, w);
-    matrix_to_euler(w, output_rotation);
+    transform_vector(output_position, position_offset, transposed_rotation_matrix);
+    euler_rotation_matrix(composed_rotation_matrix, input_rotation);
+    multiply_matrix(composed_rotation_matrix, transposed_rotation_matrix, composed_rotation_matrix);
+    matrix_to_euler(composed_rotation_matrix, output_rotation);
     return 1;
 }
 typedef float M4[16] __attribute__((aligned(16)));
