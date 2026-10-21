@@ -64,13 +64,13 @@ void FUN_L00_002c31c0(M_2acbf0_002acbf0 *moby) {
         phase_numerator = FUN_001fa6c0_002acbf0(D_L00_0015F5CC % FUN_001f96f8_002acbf0(180));
         {
             f32 phase_divisor = i2f_2acbf0(180.0f);
-            f32 r;
+            f32 signed_phase_sine;
             phase_numerator *= 6.28318548f;
-            r = sin_2acbf0(phase_numerator / phase_divisor);
+            signed_phase_sine = sin_2acbf0(phase_numerator / phase_divisor);
             if (odd) {
-                r = -r;
+                signed_phase_sine = -signed_phase_sine;
             }
-            rz.f[1] = r;
+            rz.f[1] = signed_phase_sine;
         }
         rz.f[2] = 0.0f;
         rz.f[3] = 0.0f;
