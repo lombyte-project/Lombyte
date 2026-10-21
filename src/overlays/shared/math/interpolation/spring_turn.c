@@ -287,7 +287,7 @@ extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f
 
 int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b,
                        float c) __asm__("FUN_L00_00258830");
-int FUN_L00_00258830_c(char *moving_object, char *v, int flags, float a, float b, float ground_probe_offset) {
+int FUN_L00_00258830_c(char *moving_object, char *movement_displacement, int flags, float a, float b, float ground_probe_offset) {
     Vs original_position;
     Vs raised_position;
     Vs probe_end;
@@ -299,11 +299,11 @@ int FUN_L00_00258830_c(char *moving_object, char *v, int flags, float a, float b
     char *collision_position;
 
     qcopy(&original_position, movement_position);
-    add_vector_xyz(movement_position, movement_position, v);
-    if (b < vector_length_xyz(v)) {
+    add_vector_xyz(movement_position, movement_position, movement_displacement);
+    if (b < vector_length_xyz(movement_displacement)) {
         qcopy(&raised_position, &original_position);
         raised_position.a[2] += a;
-        normalize_vector_xyz(&scaled_displacement, v, b);
+        normalize_vector_xyz(&scaled_displacement, movement_displacement, b);
         add_vector_xyz(&probe_end, &scaled_displacement, movement_position);
         probe_end.a[2] += a;
         if (collision_line(&raised_position, &probe_end, fl, (int)moving_object, 0)) {
@@ -343,7 +343,7 @@ int FUN_L00_00258830_c(char *moving_object, char *v, int flags, float a, float b
             }
         }
     }
-    subtract_vector_xyz(v, collision_position, &original_position);
+    subtract_vector_xyz(movement_displacement, collision_position, &original_position);
     return r;
 }
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
