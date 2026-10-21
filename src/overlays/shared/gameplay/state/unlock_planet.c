@@ -355,14 +355,14 @@ void FUN_L00_00260860(int id, int flag);
 void FUN_L00_00260860(int id, int flag) {
     unsigned char *pa = &D_0013D4C0[id];
     unsigned char *pb = &items_acquired[id];
-    int idx = id + 0x25;
+    int dialogue_message_index = id + 0x25;
     int *dialogue_message_id_ptr;
     int i;
 
     if (*pa == 0) {
-        idx = id;
+        dialogue_message_index = id;
     }
-    dialogue_message_id_ptr = &D_L00_001B0340[idx];
+    dialogue_message_id_ptr = &D_L00_001B0340[dialogue_message_index];
     *pb = 1;
     if (*dialogue_message_id_ptr != -1) {
         queue_dialogue_message(*dialogue_message_id_ptr, scale_game_frames(0x12C));
