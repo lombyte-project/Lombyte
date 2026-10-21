@@ -601,7 +601,7 @@ void FUN_L01_0030d880(struct Moby *moby, struct HoverVars *hover_vars) {
         HOVER_COMMAND_FACE_GOAL = 0,
         HOVER_COMMAND_MOVE_TO_GOAL = 2
     };
-    Vec4 v;
+    Vec4 steering_correction;
     f32 reference_distance;
     f32 k;
     f32 ang;
@@ -610,7 +610,7 @@ void FUN_L01_0030d880(struct Moby *moby, struct HoverVars *hover_vars) {
     s16 stuck_frames;
     struct HoverTuning *hover_tuning;
 
-    fast_vec_sub(&v, hover_vars, &moby->pos);
+    fast_vec_sub(&steering_correction, hover_vars, &moby->pos);
     if (moby->state == 6) {
         reference_distance = vector_distance(&moby->pos, &hover_vars->unk30);
     } else {
@@ -637,15 +637,15 @@ void FUN_L01_0030d880(struct Moby *moby, struct HoverVars *hover_vars) {
                              D_L01_001620C4 * DEG_TO_RAD * frame_time_sq, D_L01_001620C8 * DEG_TO_RAD * frame_time_sq,
                              D_L01_001620CC * DEG_TO_RAD * frame_time);
         }
-        fast_vec_scale(&v, &v, frame_scale * 0.04f);
-        fast_vec_sub(&v, &v, &hover_vars->vel);
+        fast_vec_scale(&steering_correction, &steering_correction, frame_scale * 0.04f);
+        fast_vec_sub(&steering_correction, &steering_correction, &hover_vars->vel);
         if (1.3f < reference_distance) {
-            fast_vec_scale(&v, &v, frame_scale_sq * 0.13f);
+            fast_vec_scale(&steering_correction, &steering_correction, frame_scale_sq * 0.13f);
         } else {
-            fast_vec_scale(&v, &v, frame_scale_sq * 0.25f);
+            fast_vec_scale(&steering_correction, &steering_correction, frame_scale_sq * 0.25f);
         }
-        v.f[2] *= frame_scale * -0.100000024f + 1.0f;
-        fast_vec_add(&hover_vars->vel, &hover_vars->vel, &v);
+        steering_correction.f[2] *= frame_scale * -0.100000024f + 1.0f;
+        fast_vec_add(&hover_vars->vel, &hover_vars->vel, &steering_correction);
         if (moby->state == 6) {
             clamp_vector_length(&hover_vars->vel, &hover_vars->vel, frame_time * 2.7f);
         }
