@@ -1817,13 +1817,13 @@ extern char D_L05_0017C068[];
 
 void FUN_L05_0025b538(void) {
     char *g = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
-    int v = *(int *)(g + 0x86C);
+    int path_owner_moby = *(int *)(g + 0x86C);
 
     *(int *)(g + 0x2278) = 0;
     *(int *)(g + 0x227C) = 0;
-    if (v != 0) {
+    if (path_owner_moby != 0) {
         if ((unsigned)(*(int *)(g + 0x208C) - 0x15) < 2) {
-            *(int *)(g + 0x2278) = v;
+            *(int *)(g + 0x2278) = path_owner_moby;
             *(int *)(g + 0x227C) = (int)D_L05_0017C068;
         }
     }
