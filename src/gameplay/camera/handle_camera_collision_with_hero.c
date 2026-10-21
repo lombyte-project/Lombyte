@@ -9,10 +9,10 @@ extern void *noop_callback_l(void *) __asm__("func_001E9448");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void handle_camera_collision_with_hero(struct UpdateCam *cam) __asm__("FUN_001ebe68");
 
-void handle_camera_collision_with_hero(struct UpdateCam *cam) {
+void handle_camera_collision_with_hero(struct UpdateCam *selected_camera) {
     struct CamColl *collision_state = &cam_coll_state;
 
-    if (cam->unk86 == 0) {
+    if (selected_camera->unk86 == 0) {
         if (collision_state->moby == 0) {
             collision_state->moby = noop_callback_l((u8 *)collision_state - 0x50);
         }
