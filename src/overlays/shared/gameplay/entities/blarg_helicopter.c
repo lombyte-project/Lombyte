@@ -373,7 +373,7 @@ void spawner_update(struct Moby *moby) {
     Vec4A_2bef68 target_position;
     Vec4A_2bef68 spawn_position;
     Vec4A_2bef68 sampled_point_scratch;
-    int st;
+    int damage_query_status;
     Data_2C0330 *spawner_data;
     Hit_2C0330 *r;
     int *ids;
@@ -440,8 +440,8 @@ void spawner_update(struct Moby *moby) {
         room = 0;
     }
     r = (Hit_2C0330 *)FUN_L00_0025a420_2bef68(moby, 0xC30000, 0);
-    FUN_00213928_2bef68(moby, r, &spawner_data->hp, 0, &st, 0, 0, 4);
-    if (st >= 2) {
+    FUN_00213928_2bef68(moby, r, &spawner_data->hp, 0, &damage_query_status, 0, 0, 4);
+    if (damage_query_status >= 2) {
         float remaining_health = spawner_data->hp - r->f2C;
         spawner_data->hp = remaining_health;
         if (remaining_health > 0.0f) {
@@ -523,14 +523,14 @@ void spawner_update(struct Moby *moby) {
     case SPAWNER_DESTROY: {
         float z;
         float *p;
-        Vec4A_2bef68 *vel;
+        Vec4A_2bef68 *spawner_rotation;
         z = 0.0f;
         p = D_L03_0015F580_macro;
         FUN_L00_0025e450_2bef68(moby, spawner_data->f70, 0, 0.0f, 0.0f, 0x1E, 8, 0x14, 8.0f, 4.0f, 18.0f, 1.0f, 1, 15.0f, 1, 1, -1, 0);
-        vel = (Vec4A_2bef68 *)&moby->rot;
-        FUN_L00_00263fd8_2bef68(moby, 0x6C5, &moby->pos, vel, 0, 0, z, p, p, p);
-        FUN_L00_00263fd8_2bef68(moby, 0x6C6, &moby->pos, vel, 0, 0, z, p, p, p);
-        FUN_L00_00263fd8_2bef68(moby, 0x6C7, &moby->pos, vel, 0, 0, z, p, p, p);
+        spawner_rotation = (Vec4A_2bef68 *)&moby->rot;
+        FUN_L00_00263fd8_2bef68(moby, 0x6C5, &moby->pos, spawner_rotation, 0, 0, z, p, p, p);
+        FUN_L00_00263fd8_2bef68(moby, 0x6C6, &moby->pos, spawner_rotation, 0, 0, z, p, p, p);
+        FUN_L00_00263fd8_2bef68(moby, 0x6C7, &moby->pos, spawner_rotation, 0, 0, z, p, p, p);
         FUN_0020c828_2bef68(moby);
         return;
     }
@@ -540,15 +540,15 @@ void spawner_update(struct Moby *moby) {
         break;
     }
     if (spawn && cond && timerDone && room) {
-        int *u = used;
-        FUN_001153fc_2bef68(u, 0, 0x10);
+        int *used_point_flags = used;
+        FUN_001153fc_2bef68(used_point_flags, 0, 0x10);
         while (spawner_data->h8A == 0 ? spawner_data->count < spawner_data->max : spawner_data->timer == 0) {
             FUN_L00_0024f7c8_2bef68(moby, 0, &launch_origin);
             switch (spawner_data->b85) {
             case SPAWNER_TARGET_COUNT_ANGULAR_SPREAD: {
-                float ang;
+                float target_spread_angle;
                 float rad;
-                ang = FUN_L00_0025e310_2bef68(FUN_001fa6c0_2bef68(spawner_data->count) * 2.0f * 3.1415927f / FUN_001fa6c0_2bef68(spawner_data->max + 1) - 3.1415927f);
+                target_spread_angle = FUN_L00_0025e310_2bef68(FUN_001fa6c0_2bef68(spawner_data->count) * 2.0f * 3.1415927f / FUN_001fa6c0_2bef68(spawner_data->max + 1) - 3.1415927f);
                 rad = FUN_001f9b80_2bef68(&moby->pos, D_0013E533_2bef68 + 0xE9D) * 0.5f;
                 if (spawner_data->b83 & 8) {
                     rad = FUN_002132a8_2bef68(rad, 3.0f);
@@ -556,8 +556,8 @@ void spawner_update(struct Moby *moby) {
                 if (rad < 3.0f) {
                     rad = 3.0f;
                 }
-                launch_velocity.x = FUN_001f9dc8_2bef68(ang) * rad;
-                launch_velocity.y = FUN_001f9de0_2bef68(ang) * rad;
+                launch_velocity.x = FUN_001f9dc8_2bef68(target_spread_angle) * rad;
+                launch_velocity.y = FUN_001f9de0_2bef68(target_spread_angle) * rad;
                 launch_velocity.z = 0.0f;
                 FUN_001f9c90_2bef68(&launch_velocity, &launch_velocity, spawner_data->f90);
                 FUN_001f9a10_2bef68(&target_position, &launch_origin, &launch_velocity);
@@ -641,7 +641,7 @@ void spawner_update(struct Moby *moby) {
             }
             case SPAWNER_TARGET_COUNT_INDEXED_POINT: {
                 int *p = spawner_data->pts;
-                int cnt = spawner_data->count;
+                int point_selection_spawn_count = spawner_data->count;
                 int n = 0;
                 int k;
                 int c;
@@ -650,7 +650,7 @@ void spawner_update(struct Moby *moby) {
                 for (c = 0; c < 4; c++) {
                     if (p[c] != -1) n++;
                 }
-                k = cnt % n + 1;
+                k = point_selection_spawn_count % n + 1;
                 for (j = 0; j < 4; j++) {
                     if (p[j] != -1) k--;
                     if (k != 0) continue;
