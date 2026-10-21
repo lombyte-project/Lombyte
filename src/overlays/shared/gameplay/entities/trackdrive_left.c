@@ -883,21 +883,21 @@ void FUN_L02_002da938(void *unused, f32 angle, f32 start_distance, f32 end_dista
     s32 vertex_colors[4];
     s32 vertex_uvs[4];
     s32 unwrapped_uv_scroll;
-    s32 off;
+    s32 wrapped_uv_scroll_offset;
     s32 tex;
     f32 f24, f25, f26, f27, f28, f29, f30, f31;
     f32 trig_value;
 
     unwrapped_uv_scroll = truncate_float_to_s32((f32)D_L02_0015F5CC * D_L02_00161B60);
-    off = (unwrapped_uv_scroll % 512) << 16;
+    wrapped_uv_scroll_offset = (unwrapped_uv_scroll % 512) << 16;
     vertex_colors[3] = color;
     vertex_colors[2] = color;
     vertex_colors[1] = color;
     vertex_colors[0] = color;
-    vertex_uvs[0] = (s32)(D_L02_00161AEC + off);
-    vertex_uvs[1] = (s32)(D_L02_00161AF0 + off);
-    vertex_uvs[2] = (s32)(D_L02_00161AF4 + off);
-    vertex_uvs[3] = (s32)(D_L02_00161AF8 + off);
+    vertex_uvs[0] = (s32)(D_L02_00161AEC + wrapped_uv_scroll_offset);
+    vertex_uvs[1] = (s32)(D_L02_00161AF0 + wrapped_uv_scroll_offset);
+    vertex_uvs[2] = (s32)(D_L02_00161AF4 + wrapped_uv_scroll_offset);
+    vertex_uvs[3] = (s32)(D_L02_00161AF8 + wrapped_uv_scroll_offset);
 
     f25 = fast_sin(angle) * start_distance;
     f24 = fast_cos(angle) * start_distance;
