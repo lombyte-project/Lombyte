@@ -44,22 +44,22 @@ typedef struct {
 } M_4be0;
 
 extern char *D_L16_0015FFD8_gp __asm__("D_L16_0015FFD8") __attribute__((sda));
-char *FUN_L16_002e4be0(struct Moby *arg, int id) {
-    unsigned short *moby_index_entry = D_L16_001ABCC0_4be0[arg->group];
+char *FUN_L16_002e4be0(struct Moby *group_source_moby, int id) {
+    unsigned short *moby_index_entry = D_L16_001ABCC0_4be0[group_source_moby->group];
     char *pool;
-    int idx;
+    int moby_pool_index;
     if (moby_index_entry != 0) {
         pool = D_L16_0015FFD8_gp;
         do {
-            idx = *moby_index_entry & 0x7FFF;
-            if (*(short *)(((M_4be0 *)pool)[idx].data + 0xAC) == id) {
+            moby_pool_index = *moby_index_entry & 0x7FFF;
+            if (*(short *)(((M_4be0 *)pool)[moby_pool_index].data + 0xAC) == id) {
                 goto found;
             }
         } while ((short)*moby_index_entry++ >= 0);
     }
     return 0;
 found:
-    return (char *)&((M_4be0 *)D_L16_0015FFD8_gp)[idx];
+    return (char *)&((M_4be0 *)D_L16_0015FFD8_gp)[moby_pool_index];
 }
 /* Advances a moby's path: steps the path position and returns whether it has reached the end. */
 
