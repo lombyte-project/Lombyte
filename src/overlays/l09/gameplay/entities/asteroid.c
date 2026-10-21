@@ -396,21 +396,21 @@ char *FUN_L09_002c2500(struct Moby *rotation_source_moby, char *pos, int spawned
 
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
-char *FUN_L09_002c2610(void *pos, int type, float *dist) {
+char *FUN_L09_002c2610(void *search_position, int type, float *nearest_distance_out) {
     char *best = 0;
     float bestd = 100000.0f;
     char *candidate_moby;
     for (candidate_moby = D_L09_0015FFE4; candidate_moby != 0; candidate_moby = *(char **)(candidate_moby + 0x28)) {
         if (*(short *)(candidate_moby + 0xA6) == type) {
-            float candidate_distance = fast_vec_dist(pos, candidate_moby + 0x10);
+            float candidate_distance = fast_vec_dist(search_position, candidate_moby + 0x10);
             if (candidate_distance < bestd) {
                 bestd = candidate_distance;
                 best = candidate_moby;
             }
         }
     }
-    if (dist != 0) {
-        *dist = bestd;
+    if (nearest_distance_out != 0) {
+        *nearest_distance_out = bestd;
     }
     return best;
 }
