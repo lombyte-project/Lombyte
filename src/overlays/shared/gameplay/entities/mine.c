@@ -2249,7 +2249,7 @@ extern int FUN_001efa68_2afc70(void *, void *, int, void *, int) __asm__("FUN_00
 extern void FUN_L00_00250df8_2afc70(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_0025f780_2afc70(void *, void *, int) __asm__("FUN_L00_0025f780");
 
-unsigned char *FUN_L00_002afc70(unsigned char *owner, V_2afc70 *pos, unsigned char *tgt, float guidance_yaw,
+unsigned char *FUN_L00_002afc70(unsigned char *owner, V_2afc70 *spawn_position, unsigned char *target_moby, float guidance_yaw,
                                 float guidance_pitch, float target_height_offset, float initial_yaw, float initial_pitch) {
     V_2afc70 collision_start;
     unsigned char *missile_moby;
@@ -2269,17 +2269,17 @@ unsigned char *FUN_L00_002afc70(unsigned char *owner, V_2afc70 *pos, unsigned ch
         *(float *)(missile_moby + 0x44) = initial_pitch;
         missile_moby[0x20] = 0;
         *(unsigned char **)(missile_data + 0x10) = owner;
-        qcopy(missile_moby + 0x10, pos);
+        qcopy(missile_moby + 0x10, spawn_position);
         default_desired_speed = D_0015ED6C_2afc70 * 20.0f;
         *(int *)(missile_data + 0x38) = 1;
         *(float *)(missile_data + 0x48) = 70.0f;
         *(float *)(missile_data + 0x34) = default_desired_speed;
         *(int *)(missile_data + 0x24) = 0;
         *(int *)(missile_data + 0x28) = 0;
-        *(unsigned char **)(missile_data + 0x18) = tgt;
+        *(unsigned char **)(missile_data + 0x18) = target_moby;
         *(float *)(missile_data + 0x20) = default_desired_speed / 3.0f;
-        if (tgt != 0) {
-            target_aim_record = FUN_002141f8_2afc70(tgt);
+        if (target_moby != 0) {
+            target_aim_record = FUN_002141f8_2afc70(target_moby);
             if (target_aim_record != 0) {
                 *(unsigned short *)(target_aim_record + 0x1E) |= 0x80;
                 if (target_aim_record[0xB]) {
@@ -2296,8 +2296,8 @@ unsigned char *FUN_L00_002afc70(unsigned char *owner, V_2afc70 *pos, unsigned ch
         *(float *)(missile_data + 0x2C) = guidance_yaw;
         *(float *)(missile_data + 0x30) = guidance_pitch;
         *(int *)(missile_data + 0x14) = FUN_001f96f8_2afc70(300);
-        if (tgt != 0) {
-            qcopy(missile_data, tgt + 0x10);
+        if (target_moby != 0) {
+            qcopy(missile_data, target_moby + 0x10);
             *(float *)(missile_data + 0x1C) = target_height_offset;
             *(float *)(missile_data + 8) += target_height_offset;
         }
@@ -2311,8 +2311,8 @@ unsigned char *FUN_L00_002afc70(unsigned char *owner, V_2afc70 *pos, unsigned ch
             qcopy(&collision_start, &hero_pos);
             collision_start.f[2] += 0.6f;
         }
-        collision_start.f[2] = pos->f[2];
-        if (FUN_001efa68_2afc70(&collision_start, pos, 0, D_001413D0_2afc70, 0)) {
+        collision_start.f[2] = spawn_position->f[2];
+        if (FUN_001efa68_2afc70(&collision_start, spawn_position, 0, D_001413D0_2afc70, 0)) {
             missile_moby[0xBC] = 1;
             qcopy(missile_moby + 0x10, D_L00_00173E60_2afc70);
         }
