@@ -2882,7 +2882,7 @@ void skid_mcmarx_update(Moby *moby) {
             moby->state = 0;
         } else {
             float ground;
-            float diff;
+            float height_above_ground;
             float max_turn;
             float turn;
             int hit_count;
@@ -2935,10 +2935,10 @@ void skid_mcmarx_update(Moby *moby) {
                 }
             }
             ground = probe_ground_height(data->pos, 0, 0.5f);
-            diff = data->pos[2] - ground;
-            if (diff > 0.0f || data->vertical_speed > 0.0f) {
+            height_above_ground = data->pos[2] - ground;
+            if (height_above_ground > 0.0f || data->vertical_speed > 0.0f) {
                 data->vertical_speed -= frame_time_sq_macro * 21.0f;
-            } else if (absolute_float(diff) < 0.5f) {
+            } else if (absolute_float(height_above_ground) < 0.5f) {
                 data->vertical_speed = 0.0f;
                 data->pos[2] = ground;
                 data->jump_frames = 0;
@@ -2968,7 +2968,7 @@ void skid_mcmarx_update(Moby *moby) {
             } else {
                 approach_value(&data->speed, data->launch_speed, frame_time_sq_macro * 20.0f);
             }
-            if (diff < 0.2f && data->vertical_speed < 0.0f) {
+            if (height_above_ground < 0.2f && data->vertical_speed < 0.0f) {
                 data->pos[2] = ground;
                 data->jump_frames = 0;
             }
