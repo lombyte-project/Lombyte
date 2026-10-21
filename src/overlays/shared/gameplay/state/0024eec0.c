@@ -24,10 +24,10 @@ void subtract_vector_xyz(Vec4 *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector(Vec4 *, Vec4 *, Mtx *) __asm__("FUN_001f9d20");
 void fast_vec_scale(Vec4 *, Vec4 *, float) __asm__("FUN_001f9a68");
 void FUN_L00_0024eed8(char *p, int idx, void *v, float a, float b);
-void FUN_L00_0024eed8(char *moby, int idx, void *v, float unscaled_entry_w, float b) {
+void FUN_L00_0024eed8(char *moby, int table_entry_index, void *v, float unscaled_entry_w, float b) {
     Mtx transposed_rotation;
     Vec4 local_offset;
-    Ent32 *e = &(*(Tbl **)(moby + 0x94))->e[idx];
+    Ent32 *e = &(*(Tbl **)(moby + 0x94))->e[table_entry_index];
     float k = 1024.0f / *(float *)(moby + 0x2C);
     transpose_rotation_matrix(&transposed_rotation, moby + 0xC0);
     subtract_vector_xyz(&local_offset, v, moby + 0x10);
