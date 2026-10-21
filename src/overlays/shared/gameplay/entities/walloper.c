@@ -2430,19 +2430,19 @@ extern int D_L00_00173E40[];
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
 int FUN_L00_002beab0(char *moby, int b, Vx *position_override) {
-    Vx v;
+    Vx probe_position;
     float probe_scale;
     float vertical_offset;
     int r;
     probe_scale = convert_integer_to_float((unsigned char)D_0013E533[1]) * 0.5f + 1.0f;
     if (position_override != 0) {
-        qcopy(&v, position_override);
+        qcopy(&probe_position, position_override);
     } else {
-        qcopy(&v, moby + 0x10);
+        qcopy(&probe_position, moby + 0x10);
     }
     vertical_offset = probe_scale * 0.2f;
-    v.z = v.z + vertical_offset;
-    r = coll_sphere(probe_scale * 0.1999f, &v, b, moby);
+    probe_position.z = probe_position.z + vertical_offset;
+    r = coll_sphere(probe_scale * 0.1999f, &probe_position, b, moby);
     if (r != 0) {
         float *g = (float *)D_L00_00173E40;
         g[14] -= vertical_offset;
