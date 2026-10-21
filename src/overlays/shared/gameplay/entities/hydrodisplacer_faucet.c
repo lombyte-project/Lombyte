@@ -993,13 +993,13 @@ void FUN_L05_003198e8(char *moby) {
         char *vector_table_entry = D_L05_001B0930[vector_table_index];
         if (*(int *)vector_table_entry == 7) {
             int i;
-            struct Hero *g;
+            struct Hero *player_hero;
             for (i = 0; i < 7; i++) {
                 transform_vector_by_basis(vector_table_entry + 0x10 + i * 16, D_L05_00215C00 + i * 16, moby + 0xC0);
                 fast_vec_add(vector_table_entry + 0x10 + i * 16, vector_table_entry + 0x10 + i * 16, moby + 0x10);
             }
-            g = &hero;
-            *(unsigned short *)&g->unk22DA = *(unsigned short *)(data + 0xDC);
+            player_hero = &hero;
+            *(unsigned short *)&player_hero->unk22DA = *(unsigned short *)(data + 0xDC);
         }
     }
 }
