@@ -1086,7 +1086,7 @@ extern struct {
 extern char D_L14_00174580[];
 
 void FUN_L14_002ece00(struct Moby *projectile_moby) {
-    L14BoltVars *v = (L14BoltVars *)projectile_moby->pvars;
+    L14BoltVars *bolt_vars = (L14BoltVars *)projectile_moby->pvars;
     Vec4 old;
     Vec4 target;
     L14BoltSweep sweep;
@@ -1101,10 +1101,10 @@ void FUN_L14_002ece00(struct Moby *projectile_moby) {
     int j;
 
     qcopy(&old, &projectile_moby->pos);
-    bolt_add(&projectile_moby->pos, &projectile_moby->pos, &v->vel);
+    bolt_add(&projectile_moby->pos, &projectile_moby->pos, &bolt_vars->vel);
     qcopy(&target, &projectile_moby->pos);
-    ignore = v->ignore;
-    qcopy(&aim, &v->vel);
+    ignore = bolt_vars->ignore;
+    qcopy(&aim, &bolt_vars->vel);
     aim.f[2] = 0.0f;
     bolt_normalize_xy(&aim, &aim, 1.0f);
     tries = 0;
@@ -1112,8 +1112,8 @@ void FUN_L14_002ece00(struct Moby *projectile_moby) {
     FUN_L00_00259888(&sweep, projectile_moby, 0x10001, &aim, 1.0f);
     sweep.flag18 = 1;
     sweep.flag19 = 1;
-    pass = v->solid == 0;
-    if (bolt_distance(&projectile_moby->pos, &v->origin) > 30.0f) {
+    pass = bolt_vars->solid == 0;
+    if (bolt_distance(&projectile_moby->pos, &bolt_vars->origin) > 30.0f) {
         if (projectile_moby->visible != 0) {
             for (i = 0; i < 3; i++) {
                 spark.q = 0;
@@ -1147,7 +1147,7 @@ void FUN_L14_002ece00(struct Moby *projectile_moby) {
                 spark.f[1] = bolt_random(-1.0f, 1.0f);
                 spark.f[2] = bolt_random(-1.0f, 1.0f);
                 dir.q = spark.q;
-                FUN_L00_001ff660(&spark, &v->vel, D_L14_00174580);
+                FUN_L00_001ff660(&spark, &bolt_vars->vel, D_L14_00174580);
                 bolt_normalize(&dir, &dir, bolt_length(&spark) * 0.5f);
                 bolt_add(&dir, &spark, &dir);
                 bolt_normalize(&dir, &dir, bolt_random(frame_time * 3.0f, frame_time * 6.0f));
