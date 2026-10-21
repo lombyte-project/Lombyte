@@ -1002,12 +1002,12 @@ int FUN_L15_00299ae0(char *moby, float *point, float target_forward_step) {
     char *moby_data = *(char **)(moby + 0x78);
     float movement_delta[4];
     float target_heading;
-    float ang;
+    float movement_target_heading;
     target_heading = fast_arc_tan(point[0] - *(float *)(moby + 0x10), point[1] - *(float *)(moby + 0x14));
     approach_angle(fp, (float *)(moby_data + 0x138), target_heading, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f,
                      frame_time * 6.981317f);
-    ang = fast_arc_tan(point[0] - *(float *)(moby + 0x10), point[1] - *(float *)(moby + 0x14));
-    if (fast_difference_between_rotations(*(float *)(moby + 0x48), ang) < 0.7853982f) {
+    movement_target_heading = fast_arc_tan(point[0] - *(float *)(moby + 0x10), point[1] - *(float *)(moby + 0x14));
+    if (fast_difference_between_rotations(*(float *)(moby + 0x48), movement_target_heading) < 0.7853982f) {
         approach_value(moby_data + 0x134, target_forward_step, frame_time_sq * 9.0f);
     } else {
         approach_value(moby_data + 0x134, 0.0f, frame_time_sq * 9.0f);
