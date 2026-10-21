@@ -1370,7 +1370,7 @@ extern void normalize_vector_xyz(void *, void *, float);
 
 void FUN_L13_00309370(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
-    float v[4];
+    float point_offset[4];
     int i;
     probe_ground_height(&moby->pos, 0, 0.5f);
     normalize_vector_xyz(moby_vars + 0x200, D_L13_00174180, 1.0f);
@@ -1378,10 +1378,10 @@ void FUN_L13_00309370(struct Moby *moby) {
     for (i = 0; i < 16; i++) {
         float a = (convert_integer_to_float(i) * 0.0625f - 0.5f) *
                   (D_L13_00161E80 * DEG_TO_RAD);
-        v[0] = fast_cos(fast_add_rotations(a, moby->rot.z)) * 0.5f;
-        v[1] = fast_sin(fast_add_rotations(a, moby->rot.z)) * 0.5f;
-        v[2] = 0.0f;
-        add_vector_xyz(moby_vars + 0x210 + i * 16, moby_vars + 0x1F0, v);
+        point_offset[0] = fast_cos(fast_add_rotations(a, moby->rot.z)) * 0.5f;
+        point_offset[1] = fast_sin(fast_add_rotations(a, moby->rot.z)) * 0.5f;
+        point_offset[2] = 0.0f;
+        add_vector_xyz(moby_vars + 0x210 + i * 16, moby_vars + 0x1F0, point_offset);
         if (i == 0 || i == 15) {
             *(int *)(moby_vars + 0x21C + i * 16) = 0;
         } else {
