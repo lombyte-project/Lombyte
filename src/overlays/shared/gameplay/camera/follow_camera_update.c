@@ -2139,18 +2139,18 @@ run:
 /* Runs volume_camera_aim unless the camera is done. While D_L00_0015F5C4 is
    set and the hero is in the volumes, resets the camera instead. */
 s32 volume_camera_check(struct UpdateCam *cam) __asm__("FUN_L00_002ed8b0");
-s32 volume_camera_check(struct UpdateCam *cam) {
-    AimCameraParams *params = camera_descriptors[cam->descriptor_index].params;
+s32 volume_camera_check(struct UpdateCam *aim_camera_record) {
+    AimCameraParams *params = camera_descriptors[aim_camera_record->descriptor_index].params;
     if (params->done != 0)
         return 0;
     if (D_L00_0015F5C4 != 0) {
-        if (volume_camera_aim_active(cam) != 0) {
+        if (volume_camera_aim_active(aim_camera_record) != 0) {
             params->done = 0;
             params->timer = 0;
             return 0;
         }
     }
-    volume_camera_aim(cam);
+    volume_camera_aim(aim_camera_record);
     return 0;
 }
 typedef struct {
