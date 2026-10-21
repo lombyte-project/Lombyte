@@ -799,7 +799,7 @@ int hero_set_state(int a, int b) {
     }
     case HERO_STATE_FOLLOW_PATH: {
         struct Hero *p = &hero;
-        float vec[4];
+        float sampled_path_direction[4];
         float pos[4];
         int seg;
         float t;
@@ -812,10 +812,10 @@ int hero_set_state(int a, int b) {
         seg = p->unk5F4;
         t = p->unk5F8;
         sample_path(((int *)p->unk5F0), pos, &seg, &t, p->unk60C, 1.0f);
-        subtract_vector_xyz(vec, pos, &p->motion.pos);
-        if (0.001f < vector_length_xyz(vec)) {
-            normalize_vector_xyz(vec, vec, 1.0f);
-            p->unk604 = dot_vectors_xyz(&p->motion.displacement, vec);
+        subtract_vector_xyz(sampled_path_direction, pos, &p->motion.pos);
+        if (0.001f < vector_length_xyz(sampled_path_direction)) {
+            normalize_vector_xyz(sampled_path_direction, sampled_path_direction, 1.0f);
+            p->unk604 = dot_vectors_xyz(&p->motion.displacement, sampled_path_direction);
         }
         p->unk604 = p->unk604 * 0.5f;
         if (p->unk604 < 0.0f)
@@ -1353,7 +1353,7 @@ int hero_set_state(int a, int b) {
         }
         case HERO_STATE_CROUCH_SWING: {
             struct UsageStat *h = usage_stats.stat;
-            char *h2;
+            char *item_usage_base;
             struct Hero *q;
             if (h[1].count <= 0xFFFE) {
                 h[1].count = h[1].count + 1;
@@ -1363,15 +1363,15 @@ int hero_set_state(int a, int b) {
             }
             h[1].level_mask =
                 h[1].level_mask | (1 << current_level_index) | 0x80000000;
-            h2 = item_usage;
-            if (*(unsigned short *)(h2 + 0x128) <= 0xFFFE) {
-                *(unsigned short *)(h2 + 0x128) = *(unsigned short *)(h2 + 0x128) + 1;
+            item_usage_base = item_usage;
+            if (*(unsigned short *)(item_usage_base + 0x128) <= 0xFFFE) {
+                *(unsigned short *)(item_usage_base + 0x128) = *(unsigned short *)(item_usage_base + 0x128) + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h2 + 0x12A)) {
-                *(unsigned short *)(h2 + 0x12A) = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(item_usage_base + 0x12A)) {
+                *(unsigned short *)(item_usage_base + 0x12A) = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h2 + 0x12C) =
-                *(unsigned int *)(h2 + 0x12C) | (1 << current_level_index) | 0x80000000;
+            *(unsigned int *)(item_usage_base + 0x12C) =
+                *(unsigned int *)(item_usage_base + 0x12C) | (1 << current_level_index) | 0x80000000;
             q = &hero;
             q->attack_record = 3;
             q->saved_item[0] = 0;
