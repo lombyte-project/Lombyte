@@ -1102,7 +1102,7 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
  * builds its orientation matrix and starts its animation/sound. */
 void FUN_L00_00217658(void);
 void FUN_L00_00217658(void) {
-    f32 dir[4];
+    f32 aim_origin_or_euler_angles[4];
     f32 delta[4];
     f32 item_rotation_matrix[12];
     f32 cam_mat[12];
@@ -1124,8 +1124,8 @@ void FUN_L00_00217658(void) {
             tpv = (ThrowPvars_217658 *)target->pvars;
             if (tpv->unk7E) {
                 has_target = 1;
-                FUN_L00_00233660(dir, 0.5f, 0.0f, 0.5f);
-                fast_vec_sub(delta, tpv->unk50, dir);
+                FUN_L00_00233660(aim_origin_or_euler_angles, 0.5f, 0.0f, 0.5f);
+                fast_vec_sub(delta, tpv->unk50, aim_origin_or_euler_angles);
                 hero.aim_yaw = FUN_001f9e90_c2(delta[0], delta[1]);
                 hero.aim_pitch = FUN_001f9e90_c2(vector_length_xy(delta), delta[2]);
             }
@@ -1154,13 +1154,13 @@ void FUN_L00_00217658(void) {
     } else {
         build_spherical_offset(launched_item_vars->unk40, 1.0f, hero.aim_yaw, hero.aim_pitch);
     }
-    clear_u64_value_c(dir);
-    rotmat_e(item_rotation_matrix, dir);
+    clear_u64_value_c(aim_origin_or_euler_angles);
+    rotmat_e(item_rotation_matrix, aim_origin_or_euler_angles);
     if (aimed) {
-        dir[0] = player_camera[0x150 / 4];
-        dir[1] = player_camera[0x154 / 4];
-        dir[2] = player_camera[0x158 / 4];
-        rotmat_e(cam_mat, dir);
+        aim_origin_or_euler_angles[0] = player_camera[0x150 / 4];
+        aim_origin_or_euler_angles[1] = player_camera[0x154 / 4];
+        aim_origin_or_euler_angles[2] = player_camera[0x158 / 4];
+        rotmat_e(cam_mat, aim_origin_or_euler_angles);
         multiply_matrix3x3(item_rotation_matrix, cam_mat, item_rotation_matrix);
     } else {
         multiply_matrix3x3(item_rotation_matrix, &hero.moby->rot_row0, item_rotation_matrix);
