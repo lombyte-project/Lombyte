@@ -710,7 +710,7 @@ extern short D_L05_00161DC4 __attribute__((sda));
 extern short D_L05_00161DC8 __attribute__((sda));
 extern short D_L05_00161DCC __attribute__((sda));
 extern short D_L05_00161DD0 __attribute__((sda));
-void FUN_L05_0030f218(char *obj, float lower_height_bound, float upper_height_bound) {
+void FUN_L05_0030f218(char *particle_source_moby, float lower_height_bound, float upper_height_bound) {
     float v[4];
     float particle_position[4];
     float ground, x, y, spawn_height_candidate, u;
@@ -726,7 +726,7 @@ void FUN_L05_0030f218(char *obj, float lower_height_bound, float upper_height_bo
         particle_position[0] = fast_cos(y) * x;
         particle_position[1] = fast_sin(y) * x;
         particle_position[2] = fi;
-        add_vector_xyz(particle_position, obj + 0x10, particle_position);
+        add_vector_xyz(particle_position, particle_source_moby + 0x10, particle_position);
         particle_position[2] = random_float_between_alt(lower_height_bound, upper_height_bound) - ground;
         spawn_height_candidate = random_float_between_alt((lower_height_bound + upper_height_bound) * 0.5f, upper_height_bound) - ground;
         if (spawn_height_candidate < particle_position[2])
