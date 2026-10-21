@@ -1915,9 +1915,9 @@ extern void FUN_L00_002c31c0(void);
  * normal in vars and pulls the point 5% toward D_L00_00166DC0. mode 0 needs
  * a live hit moby; mode 1 starts from the hero's hand. Returns 1 on a hit.
  */
-s32 FUN_L00_002c3af8(ThrowVars *v, struct Moby *thrown_moby, s32 mode)
+s32 FUN_L00_002c3af8(ThrowVars *throw_vars, struct Moby *thrown_moby, s32 mode)
 {
-    Vec4 predicted_position, predicted_velocity, position_scratch, q, w;
+    Vec4 predicted_position, predicted_velocity, position_scratch, q, ground_probe_position;
     s32 prediction_countdown;
     s32 found = 0;
     s32 i;
@@ -1933,24 +1933,24 @@ s32 FUN_L00_002c3af8(ThrowVars *v, struct Moby *thrown_moby, s32 mode)
         predicted_position.f[2] = 0.0f;
         add_vector_xyz(&predicted_position, &predicted_position, &hero.motion.pos);
         predicted_position.f[2] += 0.39081999659538269043f;
-        qcopy(&predicted_velocity, &v->vel);
+        qcopy(&predicted_velocity, &throw_vars->vel);
         if (hero.state.control_mode == 15)
             add_vector_xyz(&predicted_velocity, &predicted_velocity, &hero.motion.displacement);
         if (hero.ground_moby && FUN_L00_002603d0((int)hero.ground_moby) && mode)
             add_vector_xyz(&predicted_velocity, &predicted_velocity, &hero.motion.displacement);
         prediction_countdown = scale_game_frames(300);
     } else {
-        u8 *holder_vars = v->holder->pvars;
+        u8 *holder_vars = throw_vars->holder->pvars;
 
         qcopy(&predicted_position, &thrown_moby->pos);
-        qcopy(&predicted_velocity, &v->vel);
+        qcopy(&predicted_velocity, &throw_vars->vel);
         {
-            s32 timer = v->timer;
+            s32 timer = throw_vars->timer;
             s32 flag = *(s32 *)(holder_vars + 0x50);
 
             prediction_countdown = timer;
             if (flag)
-                v->unk46 = 1;
+                throw_vars->unk46 = 1;
         }
     }
     predicted_velocity.f[2] -= D_0015ED6C * 0.5f;
@@ -1958,17 +1958,17 @@ s32 FUN_L00_002c3af8(ThrowVars *v, struct Moby *thrown_moby, s32 mode)
     q.f[2] = predicted_position.f[2];
     if (collision_line(&q, &predicted_position, 0x10, hero.moby, 0) && (collision_hit_material() || 0.0f < predicted_velocity.f[2])) {
         if (coll_hit.moby != 0 && coll_hit.unk1C <= 0) {
-            if (((struct Moby *)coll_hit.moby != hero.moby && (struct Moby *)coll_hit.moby != v->holder)
+            if (((struct Moby *)coll_hit.moby != hero.moby && (struct Moby *)coll_hit.moby != throw_vars->holder)
                 || prediction_countdown < scale_game_frames(300) - scale_game_frames(10)) {
-                w.q = 0;
-                w.f[2] = 0.5f;
-                qcopy(&v->landing, &((struct Moby *)coll_hit.moby)->pos);
+                ground_probe_position.q = 0;
+                ground_probe_position.f[2] = 0.5f;
+                qcopy(&throw_vars->landing, &((struct Moby *)coll_hit.moby)->pos);
                 found = 1;
-                add_vector_xyz(&w, &w, &v->landing);
-                probe_ground_height(&w, 0, 0.5f);
+                add_vector_xyz(&ground_probe_position, &ground_probe_position, &throw_vars->landing);
+                probe_ground_height(&ground_probe_position, 0, 0.5f);
             }
         } else if (coll_hit.unk1C > 0) {
-            qcopy(&v->landing, &coll_hit.point);
+            qcopy(&throw_vars->landing, &coll_hit.point);
             found = 1;
         }
     }
@@ -1983,17 +1983,17 @@ s32 FUN_L00_002c3af8(ThrowVars *v, struct Moby *thrown_moby, s32 mode)
         if (!collision_hit_material() && 0.0f < predicted_velocity.f[2])
             continue;
         if (coll_hit.moby != 0 && coll_hit.unk1C <= 0) {
-            if (((struct Moby *)coll_hit.moby == hero.moby || (struct Moby *)coll_hit.moby == v->holder)
+            if (((struct Moby *)coll_hit.moby == hero.moby || (struct Moby *)coll_hit.moby == throw_vars->holder)
                 && !(prediction_countdown < scale_game_frames(300) - scale_game_frames(10)))
                 continue;
-            w.q = 0;
-            w.f[2] = 0.5f;
-            qcopy(&v->landing, &((struct Moby *)coll_hit.moby)->pos);
-            add_vector_xyz(&w, &w, &v->landing);
-            probe_ground_height(&w, 0, 0.5f);
+            ground_probe_position.q = 0;
+            ground_probe_position.f[2] = 0.5f;
+            qcopy(&throw_vars->landing, &((struct Moby *)coll_hit.moby)->pos);
+            add_vector_xyz(&ground_probe_position, &ground_probe_position, &throw_vars->landing);
+            probe_ground_height(&ground_probe_position, 0, 0.5f);
             break;
         } else if (coll_hit.unk1C > 0) {
-            qcopy(&v->landing, &coll_hit.point);
+            qcopy(&throw_vars->landing, &coll_hit.point);
             break;
         }
     }
@@ -2007,10 +2007,10 @@ s32 FUN_L00_002c3af8(ThrowVars *v, struct Moby *thrown_moby, s32 mode)
     }
     if (mode != 2 || coll_hit.moby == 0 || !FUN_L00_002603d0(coll_hit.moby))
         FUN_001f4600(FUN_L00_002c31c0, thrown_moby);
-    v->normal.q = coll_hit_normal.q;
-    subtract_vector_xyz(&position_scratch, &v->landing, &D_L00_00166DC0);
+    throw_vars->normal.q = coll_hit_normal.q;
+    subtract_vector_xyz(&position_scratch, &throw_vars->landing, &D_L00_00166DC0);
     scale_vector_xyz(&position_scratch, &position_scratch, 0.94999998807907104492f);
-    add_vector_xyz(&v->landing, &position_scratch, &D_L00_00166DC0);
+    add_vector_xyz(&throw_vars->landing, &position_scratch, &D_L00_00166DC0);
     return 1;
 ret0:
     /* a second return 0 block, as in retail */
