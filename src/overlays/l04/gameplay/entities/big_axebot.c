@@ -1165,15 +1165,15 @@ void FUN_L04_002c1b80(struct Moby *moby) {
         CIRCULAR_SAW_ANIM_ALERT = 6,
         CIRCULAR_SAW_ANIM_ATTACK = 7
     };
-    EngineSoundVars *v = (EngineSoundVars *)moby->pvars;
+    EngineSoundVars *engine_sound_vars = (EngineSoundVars *)moby->pvars;
     f32 volume;
     f32 pitch;
 
     if (moby->state != 9) {
-        if (engine_voice_playing((long)moby, v->voice) == 0 && moby->prev_seq < 8) {
-            v->voice = engine_voice_start(0, 4, moby);
-            v->volume = engine_int_to_float(0x400);
-            v->pitch = 0;
+        if (engine_voice_playing((long)moby, engine_sound_vars->voice) == 0 && moby->prev_seq < 8) {
+            engine_sound_vars->voice = engine_voice_start(0, 4, moby);
+            engine_sound_vars->volume = engine_int_to_float(0x400);
+            engine_sound_vars->pitch = 0;
         }
         switch (moby->prev_seq) {
         case CIRCULAR_SAW_ANIM_IDLE:
@@ -1204,18 +1204,18 @@ void FUN_L04_002c1b80(struct Moby *moby) {
         }
     } else {
     release:
-        if (v->voice != -1) {
-            VoicePoolWindow *w = (VoicePoolWindow *)((u8 *)&voice_pool + v->voice * 0x70);
-            if (w->voice.owner == (VoiceMoby *)moby && w->voice.state != 0)
-                engine_voice_release(v->voice);
+        if (engine_sound_vars->voice != -1) {
+            VoicePoolWindow *voice_slot_window = (VoicePoolWindow *)((u8 *)&voice_pool + engine_sound_vars->voice * 0x70);
+            if (voice_slot_window->voice.owner == (VoiceMoby *)moby && voice_slot_window->voice.state != 0)
+                engine_voice_release(engine_sound_vars->voice);
         }
-        v->voice = -1;
+        engine_sound_vars->voice = -1;
         return;
     }
-    engine_approach(&v->volume, volume, engine_int_to_float(0x400) * frame_time * 2.0f);
-    engine_approach(&v->pitch, pitch, frame_time * 8.0f);
-    engine_voice_set_volume(v->voice, engine_float_to_int(v->volume));
-    engine_voice_set_pitch(v->voice, engine_float_to_int(v->pitch));
+    engine_approach(&engine_sound_vars->volume, volume, engine_int_to_float(0x400) * frame_time * 2.0f);
+    engine_approach(&engine_sound_vars->pitch, pitch, frame_time * 8.0f);
+    engine_voice_set_volume(engine_sound_vars->voice, engine_float_to_int(engine_sound_vars->volume));
+    engine_voice_set_pitch(engine_sound_vars->voice, engine_float_to_int(engine_sound_vars->pitch));
 }
 #include "sda.h"
 
