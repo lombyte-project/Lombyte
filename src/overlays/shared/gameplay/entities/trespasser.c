@@ -663,15 +663,15 @@ void FUN_L00_001ff660_002c82f0(void *, void *, void *) __asm__("FUN_L00_001ff660
 void FUN_L00_002c82f0(Vec4_2c82f0 *release_position, u8 *released_moby, void *initial_velocity) {
     char *q = *(char **)(released_moby + 0x78);
     S13F350_2c82f0 *P;
-    char *pos, *collision_reference_moby;
+    char *released_moby_position, *collision_reference_moby;
     Vec4_2c82f0 collision_start, collision_position_offset;
     qcopy(q, initial_velocity);
     P = &D_0013F350_002c82f0;
     if (P->w2FC && FUN_L00_002603d0_002c82f0(P->w2FC)) {
         FUN_001f9a10_002c82f0(q, q, &P->v100);
     }
-    pos = released_moby + 0x10;
-    qcopy(pos, release_position);
+    released_moby_position = released_moby + 0x10;
+    qcopy(released_moby_position, release_position);
     {
         S13F350_2c82f0 *P2 = &D_0013F350_002c82f0;
         collision_reference_moby = P2->w2080;
@@ -681,11 +681,11 @@ void FUN_L00_002c82f0(Vec4_2c82f0 *release_position, u8 *released_moby, void *in
     if (FUN_001efa68_002c82f0(&collision_start, release_position, 0, collision_reference_moby, 0)) {
         char *g = D_L00_00173E60_002c82f0;
         float x;
-        qcopy(pos, g);
+        qcopy(released_moby_position, g);
         x = D_0015ED70_002c82f0;
         g += 0x20;
         FUN_001f9bf8_002c82f0(&collision_position_offset, g, x * 9.0f - x * 0.1f);
-        FUN_001f9a10_002c82f0(pos, pos, &collision_position_offset);
+        FUN_001f9a10_002c82f0(released_moby_position, released_moby_position, &collision_position_offset);
         FUN_L00_001ff660_002c82f0(q, q, g);
         FUN_001f9a68_002c82f0(q, q, 0.6f);
     }
