@@ -15,7 +15,7 @@ void capture_camera_orientation(void) __asm__("FUN_001ec710");
 
 void capture_camera_orientation(void) {
     struct Hero *g = &hero;
-    char *r = cam_trans_state;
+    char *camera_transition_state = cam_trans_state;
     char local0[16];
     char local1[16];
     char local2[16];
@@ -24,12 +24,12 @@ void capture_camera_orientation(void) {
     fast_vec_normalize(local1, (char *)g->moby + 0xD0, 1.0f);
     fast_vec_normalize(local2, (char *)g->moby + 0xE0, 1.0f);
 
-    qcopy(r + 0x90, local0);
-    qcopy(r + 0xA0, local2);
+    qcopy(camera_transition_state + 0x90, local0);
+    qcopy(camera_transition_state + 0xA0, local2);
 
-    compute_camera_angles((float *)(r + 0x70), r + 0xC0, (char *)&g->motion.pos, local0, local1, local2);
+    compute_camera_angles((float *)(camera_transition_state + 0x70), camera_transition_state + 0xC0, (char *)&g->motion.pos, local0, local1, local2);
 
-    qcopy(r + 0xB0, r + 0xD0);
+    qcopy(camera_transition_state + 0xB0, camera_transition_state + 0xD0);
 }
 extern void fast_vec_normalize(void *dst, void *src, float len) __asm__("FUN_001f9bf8");
 
