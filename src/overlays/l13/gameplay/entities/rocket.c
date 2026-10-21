@@ -1782,7 +1782,7 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
     float delta[4];
     float rot[4];
     float mount_position_work[4];
-    float b[4];
+    float mount_transform_work[4];
     float mount_rotation[4];
 
     scale_vector_xyz(delta, &moby->pos, -1.0f);
@@ -1801,14 +1801,14 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
         if (vars->blend < 1.0f) {
             float remaining_blend_ratio = (1.0f - vars->blend) / (1.0f - old);
             char *base;
-            FUN_L13_0030ad38(moby, b, mount_rotation);
-            subtract_vector_xyz(mount_position_work, D_L13_001670C0, b);
+            FUN_L13_0030ad38(moby, mount_transform_work, mount_rotation);
+            subtract_vector_xyz(mount_position_work, D_L13_001670C0, mount_transform_work);
             base = D_L13_001670C0 - 0x140;
             scale_vector_xyz(mount_position_work, mount_position_work, remaining_blend_ratio);
-            add_vector_xyz(b, b, mount_position_work);
+            add_vector_xyz(mount_transform_work, mount_transform_work, mount_position_work);
             mount_rotation[1] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x154), mount_rotation[1]) * remaining_blend_ratio, mount_rotation[1]);
             mount_rotation[2] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x158), mount_rotation[2]) * remaining_blend_ratio, mount_rotation[2]);
-            FUN_L00_002ea9d8(b);
+            FUN_L00_002ea9d8(mount_transform_work);
             FUN_L00_002eaa30(mount_rotation);
         } else {
             u8 s = moby->command;
@@ -1823,9 +1823,9 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
         if (!voice_is_playing(moby, vars->voice))
             vars->voice = allocate_voice(0, 4, moby);
         if (moby->command != 0) {
-            FUN_L13_0030ad38(moby, mount_position_work, b);
+            FUN_L13_0030ad38(moby, mount_position_work, mount_transform_work);
             FUN_L00_002ea9d8(mount_position_work);
-            FUN_L00_002eaa30(b);
+            FUN_L00_002eaa30(mount_transform_work);
         }
         if (moby->state == 2)
             target = vars->top;
