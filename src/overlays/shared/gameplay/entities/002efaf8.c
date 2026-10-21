@@ -62,9 +62,9 @@ int FUN_L01_002f1c78(char *a) {
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 7. */
 int FUN_L01_002f1dc8(char *moby) {
-    int r = FUN_L00_002dbe20(moby);
+    int helper_result = FUN_L00_002dbe20(moby);
     moby[0x20] = 0x7;
-    return r;
+    return helper_result;
 }
 /* Returns the moby data pointer plus 0x60, or 0 when either is null. */
 s32 FUN_L01_002f1df8(T6 *moby) {
