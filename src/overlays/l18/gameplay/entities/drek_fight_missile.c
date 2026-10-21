@@ -932,7 +932,7 @@ void FUN_L18_002f2310(struct Moby *lift_moby) {
         LIFT_DRAW_38_QUAD_MESH = 2
     };
     char *lift_vars = (char *)lift_moby->pvars;
-    int v;
+    int initial_height_selector;
     switch (lift_moby->state) {
     case LIFT_INITIALIZE:
         if (D_L18_001622FC != 0) {
@@ -949,9 +949,9 @@ void FUN_L18_002f2310(struct Moby *lift_moby) {
         if (D_0013D406 != 0) {
             *(int *)(lift_vars + 8) = (*(int *)(lift_vars + 8) + 1) & 1;
         }
-        v = *(int *)(lift_vars + 8);
+        initial_height_selector = *(int *)(lift_vars + 8);
         D_L18_001622F8 = 0;
-        if (v != 0 && D_00141400 == 0) {
+        if (initial_height_selector != 0 && D_00141400 == 0) {
             lift_moby->state = 2;
             lift_moby->pos.z = *(float *)(lift_vars + 0);
         } else {
