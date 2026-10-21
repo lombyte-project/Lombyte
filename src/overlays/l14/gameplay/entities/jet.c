@@ -3524,12 +3524,12 @@ extern int *D_L14_001B0BB0[];
 
 int FUN_L14_002fd918(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
-    float v[4];
-    float w[4];
+    float path_target_position[4];
+    float path_position_delta[4];
     float yaw;
     float yaw_error_factor;
     int r;
-    r = FUN_L00_0025d808_2f05d8(D_L14_001B0BB0[*(int *)(moby_vars + 0x68)], v, moby_vars + 0x60, moby_vars + 0x64,
+    r = FUN_L00_0025d808_2f05d8(D_L14_001B0BB0[*(int *)(moby_vars + 0x68)], path_target_position, moby_vars + 0x60, moby_vars + 0x64,
                                  (unsigned int)*(int *)(moby_vars + 0x8C) >> 31,
                                  D_L14_00161F78 * D_0015ED6C_f2);
     if (*(int *)(moby_vars + 0x8C) != 0 && (r != 0 || *(short *)(D_L14_00167500 + 0x86) != 0x13)) {
@@ -3544,19 +3544,19 @@ int FUN_L14_002fd918(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return 1;
     }
-    FUN_L00_0025b8c0(&moby->pos.x, (float *)(moby_vars + 0x70), v[0], D_L14_00161F7C, D_L14_00161F80,
+    FUN_L00_0025b8c0(&moby->pos.x, (float *)(moby_vars + 0x70), path_target_position[0], D_L14_00161F7C, D_L14_00161F80,
                      0.0f);
-    FUN_L00_0025b8c0(&moby->pos.y, (float *)(moby_vars + 0x74), v[1], D_L14_00161F7C, D_L14_00161F80,
+    FUN_L00_0025b8c0(&moby->pos.y, (float *)(moby_vars + 0x74), path_target_position[1], D_L14_00161F7C, D_L14_00161F80,
                      0.0f);
-    FUN_L00_0025b8c0(&moby->pos.z, (float *)(moby_vars + 0x78), v[2], D_L14_00161F7C, D_L14_00161F80,
+    FUN_L00_0025b8c0(&moby->pos.z, (float *)(moby_vars + 0x78), path_target_position[2], D_L14_00161F7C, D_L14_00161F80,
                      0.0f);
-    subtract_vector_xyz(w, v, &moby->pos);
-    if (0.01f < absolute_float(w[0])) {
-        if (0.01f < absolute_float(w[1])) {
-            yaw = fast_arc_tan(w[0], w[1]);
+    subtract_vector_xyz(path_position_delta, path_target_position, &moby->pos);
+    if (0.01f < absolute_float(path_position_delta[0])) {
+        if (0.01f < absolute_float(path_position_delta[1])) {
+            yaw = fast_arc_tan(path_position_delta[0], path_position_delta[1]);
             yaw_error_factor = fast_subtract_rotations(moby->rot.z, yaw);
             FUN_L00_00258278(moby, (float *)(moby_vars + 0x88), yaw, D_L14_00161F7C, D_L14_00161F80, 0.0f);
-            yaw = fast_arc_tan(vector_length_xy(w), w[2]);
+            yaw = fast_arc_tan(vector_length_xy(path_position_delta), path_position_delta[2]);
             FUN_L00_0025b8c0(&moby->rot.y, (float *)(moby_vars + 0x84), -yaw, D_L14_00161F7C,
                              D_L14_00161F80, 0.0f);
             yaw_error_factor = yaw_error_factor / D_L14_00161F88;
