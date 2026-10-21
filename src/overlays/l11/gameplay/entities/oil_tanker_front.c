@@ -1020,11 +1020,11 @@ void energy_sphere_update(unsigned char *moby) {
         }
         break;
     case ENERGY_SPHERE_MOVE_AND_DETONATE: {
-        char *pos = (char *)moby + 0x10;
+        char *sphere_position = (char *)moby + 0x10;
         FUN_L11_003191c0_c((char *)moby);
         vp = previous_position;
-        qcopy(vp, pos);
-        add_vector_xyz(pos, pos, data);
+        qcopy(vp, sphere_position);
+        add_vector_xyz(sphere_position, sphere_position, data);
         if (func_001F9908_i(data + 0x20) || collision_line(vp, (char *)moby + 0x10, 0, moby, 0) ||
             collect_mobies_in_sphere(0.333f, (char *)moby + 0x10, 0, *(void **)(data + 0x24), 0)) {
             spawn_explosion(moby, data, (char *)moby + 0x10, 1.5f, 2.0f, 10, 3, 16, 4.0f, 2.0f,
