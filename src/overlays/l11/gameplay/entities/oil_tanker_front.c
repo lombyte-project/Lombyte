@@ -1876,8 +1876,8 @@ void FUN_L11_0031e2f0(struct Moby *moby) {
         EFFECT_UPDATE_AND_QUEUE_DRAW = 1
     };
     int i;
-    float v[4];
-    float w[4];
+    float effect_bounds[4];
+    float effect_to_reference_delta[4];
     float effect_distance;
     char *reference_position_base;
 
@@ -1909,20 +1909,20 @@ void FUN_L11_0031e2f0(struct Moby *moby) {
         reference_position_base = D_L11_00167680;
         if (*(float *)(reference_position_base + 0x148) < 170.0f)
             return;
-        v[0] = D_L11_001624E8;
-        v[1] = D_L11_001624EC;
-        v[2] = D_L11_001624F0;
-        v[3] = D_L11_001624F4;
-        if (fast_bsphere_check(v, 1000.0f) < 0)
+        effect_bounds[0] = D_L11_001624E8;
+        effect_bounds[1] = D_L11_001624EC;
+        effect_bounds[2] = D_L11_001624F0;
+        effect_bounds[3] = D_L11_001624F4;
+        if (fast_bsphere_check(effect_bounds, 1000.0f) < 0)
             return;
         if (!(180.0f < *(float *)(reference_position_base + 0x148)))
             return;
-        w[0] = D_L11_001624E8;
-        w[1] = D_L11_001624EC;
-        w[2] = D_L11_001624F0;
-        w[3] = 1.0f;
-        subtract_vector_xyz(w, reference_position_base + 0x140, w);
-        effect_distance = vector_length_xyz(w);
+        effect_to_reference_delta[0] = D_L11_001624E8;
+        effect_to_reference_delta[1] = D_L11_001624EC;
+        effect_to_reference_delta[2] = D_L11_001624F0;
+        effect_to_reference_delta[3] = 1.0f;
+        subtract_vector_xyz(effect_to_reference_delta, reference_position_base + 0x140, effect_to_reference_delta);
+        effect_distance = vector_length_xyz(effect_to_reference_delta);
         if (effect_distance <= 35.0f) {
             FUN_L08_002f12a0(0);
             FUN_L08_002f1158(D_L11_001FF758, 0.52f, 0.62f, 0.06f, (void *)D_L11_001625B0);
