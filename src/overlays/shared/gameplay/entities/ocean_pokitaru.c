@@ -264,7 +264,7 @@ void FUN_L11_003089d0(struct Moby *moby) {
 /* spawns a streak moby aimed along a direction with the given size and colour */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030A318), where it is exact; names translated to the US level program. */
 
-char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len, float z) {
+char *FUN_L11_00308f48(int owner, float *launch_direction, float *spawn_position, float size, float step_length, float z) {
     char *spawned_moby = func_0020D348_m(0x3F9);
     if (spawned_moby != 0) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
@@ -275,17 +275,17 @@ char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len,
         *(short *)(spawned_moby + 0x32) = truncate_float_to_s32(size);
         *(int *)(spawned_moby + 0x40) = 0;
         spawned_moby[0x31] = 1;
-        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(dir), dir[2]);
-        *(float *)(spawned_moby + 0x48) = fast_arc_tan(dir[0], dir[1]);
+        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(launch_direction), launch_direction[2]);
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(launch_direction[0], launch_direction[1]);
         *(float *)(moby_vars + 0x10) = 1.0f;
-        if (len > 0.0f) {
-            fast_vec_normalize(moby_vars, dir, len);
+        if (step_length > 0.0f) {
+            fast_vec_normalize(moby_vars, launch_direction, step_length);
         } else {
-            qcopy(moby_vars, dir);
-            len = fast_vec_length(dir);
+            qcopy(moby_vars, launch_direction);
+            step_length = fast_vec_length(launch_direction);
         }
-        qcopy(spawned_moby + 0x10, pos);
-        size_length_ratio = truncate_float_to_s32(size / len);
+        qcopy(spawned_moby + 0x10, spawn_position);
+        size_length_ratio = truncate_float_to_s32(size / step_length);
         *(int *)(moby_vars + 0x14) = size_length_ratio;
         *(float *)(moby_vars + 0x20) = z;
         *(int *)(moby_vars + 0x18) = size_length_ratio - 13;
