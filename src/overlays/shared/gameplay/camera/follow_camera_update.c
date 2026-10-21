@@ -1267,12 +1267,12 @@ void FUN_L00_001eb0b0_002eb930(void *) __asm__("FUN_L00_001eb0b0");
 extern char D_L00_001E77C0[];
 extern char D_L00_001E77D8[];
 extern char D_L00_001E77F0[];
-char *FUN_L00_002eb930(void *arg) {
+char *FUN_L00_002eb930(void *target_moby) {
     char *camera_record = FUN_L00_001eb1f8_002eb930(6);
     char *camera_state;
     D_L00_00166EF0_002eb930[0] = 0;
     FUN_001ebf10_002eb930(camera_record);
-    FUN_L00_002eb648_002eb930(camera_record, arg);
+    FUN_L00_002eb648_002eb930(camera_record, target_moby);
     camera_state = *(char **)(camera_record + 0x70);
     qcopy(camera_state + 0xB0, camera_state + 0x80);
     FUN_L00_001eb0c8_002eb930(camera_state + 0x14, D_L00_001E77C0, 0.0f);
