@@ -2882,22 +2882,22 @@ extern void cross_vectors_xyz_q(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void scale_vector_xyz_q(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 
 void FUN_L01_002f5040(char *moby, float *out) {
-    float v[4];
+    float unit_x_axis[4];
     float rotated_x_axis[4];
     float horizontal_offset[4];
     float vertical_plane_offset[4];
-    float b[4];
+    float rotated_x_axis_minus_unit_z[4];
     float rotation_matrix[16];
     char *data;
-    *(OvlQuad *)v = 0;
-    v[0] = 1.0f;
+    *(OvlQuad *)unit_x_axis = 0;
+    unit_x_axis[0] = 1.0f;
     data = *(char **)(moby + 0x78);
     if (*(float *)(data + 0x130) != 0.0f || *(float *)(data + 0x134) != 0.0f) {
         FUN_001fa050_q(rotation_matrix, (float *)(moby + 0x40));
-        FUN_001f9d20_q(rotated_x_axis, v, rotation_matrix);
-        *(OvlQuad *)b = *(OvlQuad *)rotated_x_axis;
-        b[2] = b[2] - 1.0f;
-        cross_vectors_xyz_q(horizontal_offset, rotated_x_axis, b);
+        FUN_001f9d20_q(rotated_x_axis, unit_x_axis, rotation_matrix);
+        *(OvlQuad *)rotated_x_axis_minus_unit_z = *(OvlQuad *)rotated_x_axis;
+        rotated_x_axis_minus_unit_z[2] = rotated_x_axis_minus_unit_z[2] - 1.0f;
+        cross_vectors_xyz_q(horizontal_offset, rotated_x_axis, rotated_x_axis_minus_unit_z);
         cross_vectors_xyz_q(vertical_plane_offset, rotated_x_axis, horizontal_offset);
         scale_vector_xyz_q(horizontal_offset, horizontal_offset, *(float *)(data + 0x130));
         scale_vector_xyz_q(vertical_plane_offset, vertical_plane_offset, *(float *)(data + 0x134));
