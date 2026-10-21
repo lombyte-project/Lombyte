@@ -1258,8 +1258,8 @@ extern s32 D_001413D4[];
 
 /* Maps D_001413D4[0]: 0x65/0x66 to 1, 0x67 to 2, others to 0. */
 s32 FUN_L00_00233f38(void) {
-    s32 v = D_001413D4[0];
-    switch (v) {
+    s32 current_hero_state = D_001413D4[0];
+    switch (current_hero_state) {
     case 0x65:
     case 0x66:
         return 1;
