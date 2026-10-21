@@ -566,8 +566,8 @@ struct PokKeeperVars {
 
 /* NPC that talks to the hero, then walks a chain of level path points ahead of him, opening the
    gate mobys (FUN_L11_0030a840) and moving path points as it goes. */
-void FUN_L11_002d14b0(void *arg) {
-    struct Moby *moby = arg;
+void FUN_L11_002d14b0(void *resort_owner_moby) {
+    struct Moby *moby = resort_owner_moby;
     struct PokKeeperVars *moby_vars = (struct PokKeeperVars *)moby->pvars;
     int proximity = FUN_L11_002d2460(moby);
     float v[4];
