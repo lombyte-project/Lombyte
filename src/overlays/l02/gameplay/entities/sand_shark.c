@@ -1149,7 +1149,7 @@ void FUN_L02_002d5c88(unsigned char *moby) {
     int hit;
     float dmg;
     float k;
-    float g;
+    float ground_height;
     OvlVec4 ground_probe_position;
     OvlVec4 hit_knockback_vector;
 
@@ -1201,9 +1201,9 @@ void FUN_L02_002d5c88(unsigned char *moby) {
             moby_vars->f148 = 0.5f;
             qcopy(&ground_probe_position, moby + 0x10);
             ground_probe_position.f[2] += 2.0f;
-            g = FUN_00213508(&ground_probe_position, 0, 0.5f);
-            if (*(float *)(moby + 0x18) < g) {
-                *(float *)(moby + 0x18) = g;
+            ground_height = FUN_00213508(&ground_probe_position, 0, 0.5f);
+            if (*(float *)(moby + 0x18) < ground_height) {
+                *(float *)(moby + 0x18) = ground_height;
             }
             if (moby_vars->i288 >= 0) {
                 extern int D_L02_0015FFD8_s __asm__("D_L02_0015FFD8") __attribute__((sda));
