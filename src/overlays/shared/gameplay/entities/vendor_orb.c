@@ -2218,7 +2218,7 @@ s32 FUN_L00_002e5678(void *mm, void *input_offset, void *out_target_position, s3
         follow_camera_hero_target((int)camera, t);
         fast_vec_add(out_target_position, input_offset, t);
         break;
-    case CAM_ATTACH_STORED_FOCUS_POSITION_BASE:
+    case CAM_ATTACH_GROUND_AWARE_FOCUS_VELOCITY:
     default:
         fast_vec_add(out_target_position, input_offset, stored_focus_position);
         break;

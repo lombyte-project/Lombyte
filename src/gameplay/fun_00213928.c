@@ -46,12 +46,11 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
 
 s32 fun_00213928(O_25a478 *hit_recipient_moby, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) {
     enum {
-        KIND_GATED_HIT_RESPONSE = 0,
-        FALLBACK_HIT_RESPONSE = 1,
-        DEFAULT_HIT_RESPONSE = 1,
-        AUXILIARY_FLAG_SETTING_HIT_RESPONSE = 4,
-        CONDITIONAL_DURATION_HIT_RESPONSE = 7,
-        DAMAGE_PRESERVING_COOLDOWN_RESPONSE = 11
+        KIND_GATED_HIT_RESPONSE = 0x0,
+        DEFAULT_HIT_RESPONSE = 0x1,
+        AUXILIARY_FLAG_SETTING_HIT_RESPONSE = 0x4,
+        CONDITIONAL_DURATION_HIT_RESPONSE = 0x7,
+        DAMAGE_PRESERVING_COOLDOWN_RESPONSE = 0xB
     };
     enum {
         KIND_GATED_HIT_STATE = 0,
@@ -171,7 +170,7 @@ s32 fun_00213928(O_25a478 *hit_recipient_moby, P_25a478 *hit_record, Q_25a478 *q
     } else {
         switch (hit_response_index) {
         case KIND_GATED_HIT_RESPONSE:
-        case FALLBACK_HIT_RESPONSE:
+        case DEFAULT_HIT_RESPONSE:
             if (!(flags & 0x10)) hit_response_code = 0xB;
             if (!(flags & 0x20)) *out = 1;
             goto z;
