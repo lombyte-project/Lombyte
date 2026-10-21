@@ -845,19 +845,19 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
         HIT_REACTION_NONE = 11
     };
     char *data = (char *)moby->pvars;
-    int st;
+    int hit_reaction_status;
     float damage_amount;
     int hit_reaction_result;
     damage_amount = 0.0f;
-    hit_reaction_result = hit_reaction(moby, find_moby_hit(moby, 0x330000, 0), data + 0x20, 0, &st, &damage_amount, 0, 4);
-    if (st != 1 && moby->state < 7) {
+    hit_reaction_result = hit_reaction(moby, find_moby_hit(moby, 0x330000, 0), data + 0x20, 0, &hit_reaction_status, &damage_amount, 0, 4);
+    if (hit_reaction_status != 1 && moby->state < 7) {
         float remaining_health = *(float *)(data + 0x20) - damage_amount;
         *(float *)(data + 0x20) = remaining_health;
         if (remaining_health <= 0.0f)
             hit_reaction_result = 1;
         if (moby->state == 1)
             moby->state = 2;
-        if (st == 3)
+        if (hit_reaction_status == 3)
             moby->command = 1;
         switch (hit_reaction_result) {
         case HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH:
