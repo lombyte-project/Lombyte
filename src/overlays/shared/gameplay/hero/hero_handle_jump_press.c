@@ -224,23 +224,23 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 
 int FUN_L00_00229910(void) {
-    struct Hero *g = &hero;
+    struct Hero *hero_ptr = &hero;
     V_229910_00229910 collision_line_start, collision_line_end;
     float height_delta;
-    if (g->motion.unk164 < g->unk234 / (float)FUN_001f96f8_00229910(20))
+    if (hero_ptr->motion.unk164 < hero_ptr->unk234 / (float)FUN_001f96f8_00229910(20))
         return 0;
-    if (0.52359879f < fast_difference_between_rotations(angle_atan2(g->motion.displacement.f[0],
-                                                                  g->motion.displacement.f[1]),
-                                            g->motion.rot.f[2]))
+    if (0.52359879f < fast_difference_between_rotations(angle_atan2(hero_ptr->motion.displacement.f[0],
+                                                                  hero_ptr->motion.displacement.f[1]),
+                                            hero_ptr->motion.rot.f[2]))
         return 0;
-    qcopy(&collision_line_start, &g->motion.pos);
-    collision_line_start.f[0] += fast_cos(g->motion.rot.f[2]) * g->unk234 * 0.75f;
-    collision_line_start.f[1] += fast_sin(g->motion.rot.f[2]) * g->unk234 * 0.75f;
+    qcopy(&collision_line_start, &hero_ptr->motion.pos);
+    collision_line_start.f[0] += fast_cos(hero_ptr->motion.rot.f[2]) * hero_ptr->unk234 * 0.75f;
+    collision_line_start.f[1] += fast_sin(hero_ptr->motion.rot.f[2]) * hero_ptr->unk234 * 0.75f;
     qcopy(&collision_line_end, &collision_line_start);
     collision_line_start.f[2] += 0.47f;
     collision_line_end.f[2] -= 1.0f;
-    if (collision_line(&collision_line_start, &collision_line_end, 2, ((void *)g->moby), 0)) {
-        height_delta = D_L00_00173E68_00229910 - g->motion.pos.f[2];
+    if (collision_line(&collision_line_start, &collision_line_end, 2, ((void *)hero_ptr->moby), 0)) {
+        height_delta = D_L00_00173E68_00229910 - hero_ptr->motion.pos.f[2];
         if (height_delta < 0.37f && -1.0f < height_delta)
             return 1;
     }
