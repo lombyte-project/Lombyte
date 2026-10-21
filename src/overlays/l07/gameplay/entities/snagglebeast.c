@@ -547,20 +547,20 @@ struct ChaserSpeed { u8 pad0[0x80]; f32 base; u8 pad84[0x10]; f32 rate; u8 pad98
 struct ChaserAnim { u8 pad0[0x58]; f32 speed; };
 float FUN_L07_00313d30(struct ChaserAnim *chaser_anim, struct ChaserSpeed *chaser_speed, float x, float y, float k)
 {
-    float r = frame_scale * 0.06f;
+    float eased_rate = frame_scale * 0.06f;
     if (y < x) {
-        r = x - y;
-        if (50.0f < r) r = 50.0f;
-        if (r < 0.0f) r = 0.0f;
-        r = r / 50.0f;
-        r = r * r;
-        r = r * (frame_scale * 0.1f - frame_scale * 0.06f);
-        r = r + frame_scale * 0.06f;
+        eased_rate = x - y;
+        if (50.0f < eased_rate) eased_rate = 50.0f;
+        if (eased_rate < 0.0f) eased_rate = 0.0f;
+        eased_rate = eased_rate / 50.0f;
+        eased_rate = eased_rate * eased_rate;
+        eased_rate = eased_rate * (frame_scale * 0.1f - frame_scale * 0.06f);
+        eased_rate = eased_rate + frame_scale * 0.06f;
     }
-    chaser_speed->rate2 = r;
-    chaser_speed->rate = r;
+    chaser_speed->rate2 = eased_rate;
+    chaser_speed->rate = eased_rate;
     chaser_anim->speed = chaser_speed->base / (frame_scale * 0.06f) * k;
-    return r;
+    return eased_rate;
 }
 /* latches onto a target when it is turned toward enough, then picks a turn animation */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_003151C0), where it is exact; names translated to the US level program. */
