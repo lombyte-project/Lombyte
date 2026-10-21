@@ -1853,21 +1853,21 @@ extern float D_L14_00161FD8 __attribute__((sda));
 extern int D_L14_00161FE4 __attribute__((sda));
 void FUN_L14_002feca8(unsigned char *moby) {
     float emission_position_offset[4];
-    float pos[4];
+    float particle_spawn_position[4];
     int i;
     int j;
     int signed_particle_variation;
     int life;
     float size;
     scale_y(emission_position_offset, moby + 0xC0, D_L14_00161FCC);
-    add_y(pos, moby + 0x10, emission_position_offset);
+    add_y(particle_spawn_position, moby + 0x10, emission_position_offset);
     scale_y(emission_position_offset, moby + 0xE0, D_L14_00161FD0);
-    add_y(pos, pos, emission_position_offset);
+    add_y(particle_spawn_position, particle_spawn_position, emission_position_offset);
     for (i = 0; i < 2; i++) {
         P_eca8 *part;
         T_eca8 *tail;
         signed_particle_variation = below_y(0x10);
-        part = puff_y(pos, 0.2f, 1.0f, 0.9f, below_y(2) == 0 ? signed_particle_variation : -signed_particle_variation, D_L14_0015F580_y, 100000.0f, D_L14_00161FE4);
+        part = puff_y(particle_spawn_position, 0.2f, 1.0f, 0.9f, below_y(2) == 0 ? signed_particle_variation : -signed_particle_variation, D_L14_0015F580_y, 100000.0f, D_L14_00161FE4);
         if (part) {
             tail = &part->tail;
             part->hA = frames_y(0xC);
@@ -1877,16 +1877,16 @@ void FUN_L14_002feca8(unsigned char *moby) {
         }
     }
     scale_y(emission_position_offset, moby + 0xC0, D_L14_00161FD4);
-    add_y(pos, moby + 0x10, emission_position_offset);
+    add_y(particle_spawn_position, moby + 0x10, emission_position_offset);
     scale_y(emission_position_offset, moby + 0xE0, D_L14_00161FD8);
-    add_y(pos, pos, emission_position_offset);
+    add_y(particle_spawn_position, particle_spawn_position, emission_position_offset);
     signed_particle_variation = 0x10;
     life = frames_y(2);
     size = 80000.0f;
     for (j = 0; j < 3; j++) {
         P_eca8 *part;
         T_eca8 *tail;
-        part = puff_y(pos, 0.05f, 1.0f, 1.0f, signed_particle_variation, D_L14_0015F580_y, size, 0x7FFFFFFF);
+        part = puff_y(particle_spawn_position, 0.05f, 1.0f, 1.0f, signed_particle_variation, D_L14_0015F580_y, size, 0x7FFFFFFF);
         if (part) {
             tail = &part->tail;
             part->hA = life;
