@@ -899,20 +899,20 @@ int FUN_001f9770_273298(s16 *) __asm__("FUN_001f9770");
 u32 FUN_001fa6e0_273298(u32, u32, f32) __asm__("FUN_001fa6e0");
 void FUN_001f9a10_273298(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00273298(Part_273298 *particle) {
-    V_273298 *v = (V_273298 *)((u8 *)particle + 0x20);
+    V_273298 *particle_data = (V_273298 *)((u8 *)particle + 0x20);
     float remaining_frames_minus_one;
     u32 color_without_alpha;
-    if (v->w1C == 1) {
+    if (particle_data->w1C == 1) {
         struct Hero *g = &hero;
-        particle->x = g->motion.pos.f[0] + v->x;
-        particle->y = g->motion.pos.f[1] + v->y;
-        particle->z = g->motion.pos.f[2] + v->z;
-        FUN_001f9a10_273298(&particle->x, &particle->x, v);
-        v->x = particle->x - g->motion.pos.f[0];
-        v->y = particle->y - g->motion.pos.f[1];
-        v->z = particle->z - g->motion.pos.f[2];
+        particle->x = g->motion.pos.f[0] + particle_data->x;
+        particle->y = g->motion.pos.f[1] + particle_data->y;
+        particle->z = g->motion.pos.f[2] + particle_data->z;
+        FUN_001f9a10_273298(&particle->x, &particle->x, particle_data);
+        particle_data->x = particle->x - g->motion.pos.f[0];
+        particle_data->y = particle->y - g->motion.pos.f[1];
+        particle_data->z = particle->z - g->motion.pos.f[2];
     } else {
-        FUN_001f9a10_273298(&particle->x, &particle->x, v);
+        FUN_001f9a10_273298(&particle->x, &particle->x, particle_data);
     }
     if (particle->x < 2.0f || 1021.0f < particle->x || particle->y < 2.0f || 1021.0f < particle->y || particle->z < 2.0f ||
         1021.0f < particle->z || FUN_001f9770_273298(&particle->hA)) {
