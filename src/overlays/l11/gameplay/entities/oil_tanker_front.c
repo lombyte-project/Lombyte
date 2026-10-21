@@ -1278,7 +1278,7 @@ void blarg_ship_update(struct Moby *moby) {
     float shot_velocity[4];
     float sA0[4];
     float sB0[4];
-    float c0;
+    float movement_distance_scratch;
     char *moby_vars = (char *)moby->pvars;
     float placement_angle;
     float len;
@@ -1361,7 +1361,7 @@ void blarg_ship_update(struct Moby *moby) {
     case BLARG_SHIP_INACTIVE:
         break;
     case BLARG_SHIP_MANEUVER_AND_FIRE:
-        c0 = 0.0f;
+        movement_distance_scratch = 0.0f;
         qcopy(basis_rotation_angles, D_L11_001677D0);
         basis_rotation_angles[0] = 0.0f;
         if (basis_rotation_angles[1] > 0.2617994f) {
@@ -1383,13 +1383,13 @@ void blarg_ship_update(struct Moby *moby) {
         subtract_vector_xyz(scratch_vector, target_position, &moby->pos);
         len = vector_length_xyz(scratch_vector);
         if (*(char *)&hero.ship_flags & 2) {
-            advance_accelerated_scalar(&c0, (float *)(moby_vars + 0x6C), len, frame_time_sq + frame_time_sq,
+            advance_accelerated_scalar(&movement_distance_scratch, (float *)(moby_vars + 0x6C), len, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, D_0015ED6C_n[1]);
         } else if (moby->command) {
-            advance_accelerated_scalar(&c0, (float *)(moby_vars + 0x6C), len, frame_time_sq + frame_time_sq,
+            advance_accelerated_scalar(&movement_distance_scratch, (float *)(moby_vars + 0x6C), len, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, D_0015ED6C_n[1] * 15.0f);
         } else {
-            advance_accelerated_scalar(&c0, (float *)(moby_vars + 0x6C), len, frame_time_sq + frame_time_sq,
+            advance_accelerated_scalar(&movement_distance_scratch, (float *)(moby_vars + 0x6C), len, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, D_0015ED6C_n[1] * 5.0f);
         }
         FUN_L00_0025f730(scratch_vector, *(float *)(moby_vars + 0x6C));
