@@ -140,7 +140,7 @@ Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) __asm__("FUN_
 Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) {
     Particle *particle;
     PartMotion *m;
-    f32 r;
+    f32 random_spin;
 
     particle = create_part(0x39);
     if (particle != NULL) {
@@ -154,9 +154,9 @@ Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) {
         particle->life = 0x80;
         particle->scale = scale * 210000.0f;
         qcopy(&m->pos, dir);
-        r = random_float_between(0.0f, 256.0f);
-        m->size = r;
-        particle->spin = truncate_float_to_s32(r);
+        random_spin = random_float_between(0.0f, 256.0f);
+        m->size = random_spin;
+        particle->spin = truncate_float_to_s32(random_spin);
         m->speed = speed;
     }
     return particle;
