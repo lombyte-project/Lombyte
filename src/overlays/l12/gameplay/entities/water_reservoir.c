@@ -203,7 +203,7 @@ char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, floa
     struct Moby *moby = (struct Moby *)func_0020D348_m(0x199);
     if (moby != 0) {
         char *data;
-        int r;
+        int scaled_frames;
         data = (char *)moby->pvars;
         moby->update_dist = 0xFF;
         moby->draw_dist = 0x7E;
@@ -213,13 +213,13 @@ char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, floa
         qcopy(data, src);
         moby->rot.z = fast_arc_tan(*(float *)data, *(float *)(data + 4));
         moby->rot.y = -fast_arc_tan(vector_length_xy(data), *(float *)(data + 8));
-        r = scale_game_frames(seed);
+        scaled_frames = scale_game_frames(seed);
         *(int *)(data + 0x10) = owner;
         *(float *)(data + 0x18) = f2;
         *(float *)(data + 0x1C) = f0;
         *(float *)(data + 0x24) = f1;
         *(int *)(data + 0x28) = 0;
-        *(int *)(data + 0x14) = r;
+        *(int *)(data + 0x14) = scaled_frames;
         FUN_L00_00250df8(moby);
     }
     return (char *)moby;
