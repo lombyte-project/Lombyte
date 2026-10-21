@@ -763,7 +763,7 @@ extern int D_L14_00161C10 __attribute__((sda));
 extern int D_L14_00161C2C __attribute__((sda));
 void FUN_L14_002eb568(struct Moby *wind_control_moby) {
     Spk_k *spark_vars = (Spk_k *)wind_control_moby->pvars;
-    float dir[4];
+    float spark_travel_direction[4];
     float clip[4];
     float work[4];
     float ratio;
@@ -773,9 +773,9 @@ void FUN_L14_002eb568(struct Moby *wind_control_moby) {
     int opacity;
     short *shade;
     float *pos;
-    dir[0] = fast_cos_spark(wind_control_moby->rot.z);
-    dir[1] = fast_sin_spark(wind_control_moby->rot.z);
-    dir[2] = 0.0f;
+    spark_travel_direction[0] = fast_cos_spark(wind_control_moby->rot.z);
+    spark_travel_direction[1] = fast_sin_spark(wind_control_moby->rot.z);
+    spark_travel_direction[2] = 0.0f;
     qcopy(clip, &hero.motion.pos);
     clip[2] += 1.0f;
     in_clip = spark_inside_clip_volume(clip, spark_vars->i504);
@@ -785,7 +785,7 @@ void FUN_L14_002eb568(struct Moby *wind_control_moby) {
     do {
         if (tick_spark_timer(&spark_vars->n320[i]) != 0) {
             if (in_clip == 0 || i < 24) {
-                FUN_L14_002eb388(wind_control_moby, i, dir);
+                FUN_L14_002eb388(wind_control_moby, i, spark_travel_direction);
             }
         } else {
             opacity = D_L14_00161C10;
@@ -805,7 +805,7 @@ void FUN_L14_002eb568(struct Moby *wind_control_moby) {
                     *shade = spark_alpha;
                 }
             }
-            spark_scale_vector(work, dir, spark_vars->f440[i]);
+            spark_scale_vector(work, spark_travel_direction, spark_vars->f440[i]);
             spark_add_vector(pos, pos, work);
             if (in_clip != 0 &&
                 spark_absolute_float(pos[0] - D_L14_00167380_spark.x) < 8.0f &&
