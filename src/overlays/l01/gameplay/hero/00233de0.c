@@ -516,7 +516,7 @@ void FUN_L01_002370b8(void) {
     int prevState;
     int prevAnim;
     int fast;
-    float *vel;
+    float *hero_velocity;
 
     moby = ((Moby *)hero.moby);
     prevState = hero.state.step;
@@ -1347,7 +1347,7 @@ void FUN_L01_002370b8(void) {
         r = &D_L01_0017C0A8[hero.attack_record];
         if (((Moby *)hero.unkA54) != 0 && hero.state_timer < scale_game_frames(4)) {
             float d;
-            float off;
+            float attack_kind_distance_offset;
             float range;
             float cap;
             float e;
@@ -1357,19 +1357,19 @@ void FUN_L01_002370b8(void) {
                 d = 0.0f;
             }
             if (r->kind == 0) {
-                off = 0.75f;
+                attack_kind_distance_offset = 0.75f;
                 range = 0.8f;
                 cap = 4.0f;
             } else if (r->kind == 1) {
-                off = 0.6f;
+                attack_kind_distance_offset = 0.6f;
                 range = 1.7f;
                 cap = 4.0f;
             } else {
-                off = 1.3f;
+                attack_kind_distance_offset = 1.3f;
                 range = 1.7f;
                 cap = 1.9f;
             }
-            e = d - off;
+            e = d - attack_kind_distance_offset;
             if (absolute_float(e) < range + 3.0f) {
                 float approach_speed_scale;
 
@@ -1487,10 +1487,10 @@ void FUN_L01_002370b8(void) {
         }
         if (hero.state.current == 0x20 && hero.state_timer > t0) {
             if (hero.state_timer < t1 + scale_game_frames(4)) {
-                Moby *w;
+                Moby *attack_item_moby;
 
-                w = ((Moby *)hero.items[0].moby);
-                if (w != 0) {
+                attack_item_moby = ((Moby *)hero.items[0].moby);
+                if (attack_item_moby != 0) {
                     float yaw;
 
                     vec[3][0] = FUN_L00_0020a1e0_cf(hero.motion.rot.f[2]) * 2.0f;
@@ -1501,25 +1501,25 @@ void FUN_L01_002370b8(void) {
                     ((HitC *)vec[0])->fC = 5627.925f;
                     ((HitC *)vec[0])->f18 = 0;
                     yaw = hero.motion.rot.f[2];
-                    ((HitC *)vec[0])->f1A = w->fA6;
+                    ((HitC *)vec[0])->f1A = attack_item_moby->fA6;
                     vec[4][0] = FUN_L00_0020a1e0_cf(yaw) * 0.8f;
                     vec[4][1] = FUN_L00_002121c0_cf(yaw) * 0.8f;
                     vec[4][2] = 0.55f;
                     normalize_vector_xyz_cf(vec[4], vec[4], hero.motion.pos.f);
-                    FUN_L00_00217368((int)w, collect_mobies_in_sphere(0.8f, vec[4], 0, w, vec[0]));
+                    FUN_L00_00217368((int)attack_item_moby, collect_mobies_in_sphere(0.8f, vec[4], 0, attack_item_moby, vec[0]));
                     yaw = build_spherical_offset_cf(hero.motion.rot.f[2], -0.87266463f);
                     vec[4][0] = FUN_L00_0020a1e0_cf(yaw) * 0.8f;
                     vec[4][1] = FUN_L00_002121c0_cf(yaw) * 0.8f;
                     vec[4][2] = 0.55f;
                     normalize_vector_xyz_cf(vec[4], vec[4], hero.motion.pos.f);
-                    FUN_L00_00217368((int)w,
+                    FUN_L00_00217368((int)attack_item_moby,
                                      collect_mobies_in_sphere(0.8f, vec[4], 0, ((Moby *)hero.moby), vec[0]));
                     yaw = build_spherical_offset_cf(hero.motion.rot.f[2], 0.87266463f);
                     vec[4][0] = FUN_L00_0020a1e0_cf(yaw) * 0.8f;
                     vec[4][1] = FUN_L00_002121c0_cf(yaw) * 0.8f;
                     vec[4][2] = 0.55f;
                     normalize_vector_xyz_cf(vec[4], vec[4], hero.motion.pos.f);
-                    FUN_L00_00217368((int)w, collect_mobies_in_sphere(0.8f, vec[4], 0, w, vec[0]));
+                    FUN_L00_00217368((int)attack_item_moby, collect_mobies_in_sphere(0.8f, vec[4], 0, attack_item_moby, vec[0]));
                 }
             }
         }
@@ -2224,8 +2224,8 @@ void FUN_L01_002370b8(void) {
     case HERO_STATE_VEHICLE_MODE_3_HURT: {
         float len;
 
-        vel = hero.motion.velocity.f;
-        len = FUN_L00_001ff600_cf(vel);
+        hero_velocity = hero.motion.velocity.f;
+        len = FUN_L00_001ff600_cf(hero_velocity);
         FUN_L00_00227d40_cf(
             (hero.air_frames.s != 0 ? frame_scale * -0.00999999f : frame_scale * -0.07999998f) * len +
                 len,
