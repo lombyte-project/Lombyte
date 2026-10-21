@@ -3091,9 +3091,9 @@ void crate_update(struct Moby *moby) {
         }
         break_crate(moby, moby->oclass == 0x1F9, other);
         if (crate_vars->unkC8 != 0 && other != NULL && other->hit.s.moby != NULL) {
-            s16 cls = other->hit.s.moby->oclass;
+            s16 hit_moby_class_id = other->hit.s.moby->oclass;
 
-            if (cls == 0x2CD || cls == 0x22C) {
+            if (hit_moby_class_id == 0x2CD || hit_moby_class_id == 0x22C) {
                 s16 saved = moby->unkB4;
 
                 moby->unkB4 = 0;
