@@ -41,8 +41,8 @@ int find_next_pause_page(char *page, int reverse) {
         }
     }
     if (found) {
-        struct MenuSystem *g2 = &menu_system;
-        g2->current->pending_focus = (struct MenuScreen *)page;
+        struct MenuSystem *focus_menu_system = &menu_system;
+        focus_menu_system->current->pending_focus = (struct MenuScreen *)page;
     }
     return 0;
 }
