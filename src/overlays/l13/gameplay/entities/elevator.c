@@ -609,16 +609,16 @@ void FUN_L13_002b47a0(struct Moby *moby) {
     float projectile_spawn_position[4];
     float horizontal_offset[4];
     char *data;
-    float target_distance, x, ang;
+    float target_distance, x, projectile_yaw;
     data = (char *)moby->pvars;
     if (frame_count % D_L13_0016138C == 0) {
         moby_point_position(moby, 0, projectile_spawn_position);
         target_distance = vector_distance(&moby->pos, *(char **)(data + 0x40) + 0x10);
         x = (20.0f - target_distance) / 20.0f * 5.0f + 2.5f;
-        ang = fast_add_rotations(random_float_between(-x, x) * DEG_TO_RAD,
+        projectile_yaw = fast_add_rotations(random_float_between(-x, x) * DEG_TO_RAD,
                                  moby->rot.z);
-        horizontal_offset[0] = fast_cos(ang) * (D_L13_00161388 * frame_time);
-        horizontal_offset[1] = fast_sin(ang) * (D_L13_00161388 * frame_time);
+        horizontal_offset[0] = fast_cos(projectile_yaw) * (D_L13_00161388 * frame_time);
+        horizontal_offset[1] = fast_sin(projectile_yaw) * (D_L13_00161388 * frame_time);
         horizontal_offset[2] = 0;
         fast_vec_add(projectile_spawn_position, projectile_spawn_position, horizontal_offset);
         FUN_L13_003061c8(*(float *)(data + 0x68), projectile_spawn_position, horizontal_offset, moby);
