@@ -1231,7 +1231,7 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 void FUN_L04_002c1d70(struct Moby *moby) {
-    float pos[4];
+    float explosion_position[4];
     float vec[4];
     char *data = (char *)moby->pvars;
     int engine_voice_index;
@@ -1249,8 +1249,8 @@ void FUN_L04_002c1d70(struct Moby *moby) {
     invalid_voice_index = -1;
     *(int *)(data + 0x238) = invalid_voice_index;
     FUN_L00_00257470(moby, 0, -1);
-    moby_point_position(moby, 5, pos);
-    func_L00_0025F4A8_alt(moby, vec, pos, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, 1.0f, -1,
+    moby_point_position(moby, 5, explosion_position);
+    func_L00_0025F4A8_alt(moby, vec, explosion_position, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, 1.0f, -1,
                           15.0f, 1, 1, invalid_voice_index, 0);
     FUN_0022da68(1, 0, moby);
 }
