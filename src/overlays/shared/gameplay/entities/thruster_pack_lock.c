@@ -597,10 +597,10 @@ s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_002
 void FUN_L11_0031a1c0(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
     char *info = find_moby_hit(moby, 0x330000, 0);
-    struct Hero *g;
+    struct Hero *player_hero;
     ((unsigned char *)moby)[0xA4] = 0xFF;
-    g = &hero;
-    if (g->state.current != 0x32) {
+    player_hero = &hero;
+    if (player_hero->state.current != 0x32) {
         *(unsigned short *)(moby + 0x34) &= 0xEFFF;
     } else {
         *(unsigned short *)(moby + 0x34) |= 0x1000;
