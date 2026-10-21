@@ -1841,7 +1841,7 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 extern char D_00173F60_alias[] __asm__("D_L00_00173E60");
 
 void FUN_L00_002c3888(float *pos,char *moby,void *vec) {
- float collision_start[4],b[4],rotated_normal[4];
+ float collision_start[4],collision_normal[4],rotated_normal[4];
  char *state=*(char **)(moby+0x78);
  struct Hero *camera;
  char *player;
@@ -1862,13 +1862,13 @@ void FUN_L00_002c3888(float *pos,char *moby,void *vec) {
   moby[0x20]=4;
   *(short *)(state+0x44)=scale_game_frames_c(30);
   *(float *)(moby+0x18)=D_L00_00173E40.height;
-  qcopy(b,D_L00_00173E40.vector);
+  qcopy(collision_normal,D_L00_00173E40.vector);
   { float co,si;
   co=fast_cos(*(float *)(moby+0x48)); smoothing=0.1f; si=fast_sin(*(float *)(moby+0x48));
-  rotated_normal[0]=b[0]*co+b[1]*si; }
+  rotated_normal[0]=collision_normal[0]*co+collision_normal[1]*si; }
   { float co,si;
   co=fast_cos(*(float *)(moby+0x48)); si=fast_sin(*(float *)(moby+0x48));
-  rotated_normal[1]=b[1]*co-b[0]*si; rotated_normal[2]=b[2]; }
+  rotated_normal[1]=collision_normal[1]*co-collision_normal[0]*si; rotated_normal[2]=collision_normal[2]; }
   *(float *)(state+0x4C)=-fast_arc_tan(square_root(rotated_normal[0]*rotated_normal[0]+rotated_normal[2]*rotated_normal[2]),rotated_normal[1]);
   *(float *)(state+0x50)=fast_arc_tan(rotated_normal[2],rotated_normal[0]);
   *(float *)(moby+0x40)=fast_add_rotations(*(float *)(moby+0x40),fast_subtract_rotations(*(float *)(state+0x4C),*(float *)(moby+0x40))*(frame_scale*smoothing));
