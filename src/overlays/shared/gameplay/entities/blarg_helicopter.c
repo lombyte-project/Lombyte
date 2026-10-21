@@ -81,10 +81,10 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-int FUN_L03_002beba0(int idx, float *out) {
+int FUN_L03_002beba0(int transform_index, float *out) {
     char *mat;
-    if (idx != -1) {
-        mat = D_L03_001600EC + idx * 128;
+    if (transform_index != -1) {
+        mat = D_L03_001600EC + transform_index * 128;
         out[0] = random_float_between_alt(-1.0f, 1.0f);
         out[1] = random_float_between_alt(-1.0f, 1.0f);
         out[2] = random_float_between_alt(-1.0f, 1.0f);
