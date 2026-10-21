@@ -173,7 +173,7 @@ extern VeldinLevelState D_L00_0016C860;
 void FUN_L00_0023e268(void) {
     VeldinMoby *particle_source_moby;
     VeldinMoby *mb;
-    char *src;
+    char *joint_position_source_moby;
     s32 i;
     s32 j;
     s32 k;
@@ -202,11 +202,11 @@ void FUN_L00_0023e268(void) {
     if (current_level_index == 3 && D_L00_0016C860.state == 5 &&
         scale_game_frames(900) < D_L00_0016C860.timer &&
         D_L00_0016C860.timer < scale_game_frames(1100)) {
-        src = (char *)D_L00_0016C860.unk184;
-        if (src != 0) {
+        joint_position_source_moby = (char *)D_L00_0016C860.unk184;
+        if (joint_position_source_moby != 0) {
             for (effect_spawn_attempt_index = 0; effect_spawn_attempt_index < 4; effect_spawn_attempt_index++) {
                 clear_u64_value(&spherical_offset);
-                moby_point_position(src, effect_spawn_attempt_index % 2, &joint_world_position);
+                moby_point_position(joint_position_source_moby, effect_spawn_attempt_index % 2, &joint_world_position);
                 azimuth_angle = veldin_random_angle();
                 elevation_angle = veldin_random_angle();
                 build_spherical_offset(
