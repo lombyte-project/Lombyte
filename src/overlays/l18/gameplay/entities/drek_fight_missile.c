@@ -3089,20 +3089,20 @@ unsigned char *FUN_L18_002f6e10(struct Moby *self) {
     goto start;
     for (;;) {
     start: {
-        int off = (*(unsigned short *)group_entry & 0x7FFF) << 8;
-        unsigned char *listed_moby = (unsigned char *)((int)off + (int)D_L18_0015FFD8);
+        int group_moby_byte_offset = (*(unsigned short *)group_entry & 0x7FFF) << 8;
+        unsigned char *listed_moby = (unsigned char *)((int)group_moby_byte_offset + (int)D_L18_0015FFD8);
         if (*(short *)(listed_moby + 0xA6) == 0x24B) {
             char *selection_origin = data + 0x3C0;
             unsigned char *candidate_moby;
             FUN_L18_002d8858(listed_moby);
-            candidate_moby = D_L18_0015FFD8 + off;
+            candidate_moby = D_L18_0015FFD8 + group_moby_byte_offset;
             if (vector_distance(candidate_moby + 0x10, selection_origin) < *(float *)&D_L18_00162338) {
                 unsigned char *in_range_moby;
                 int tilt_delay_frames, scaled_frame_count;
                 float dot;
 
                 subtract_vector_xyz(candidate_displacement, candidate_moby + 0x10, selection_origin);
-                in_range_moby = D_L18_0015FFD8 + off;
+                in_range_moby = D_L18_0015FFD8 + group_moby_byte_offset;
                 tilt_delay_frames = scale_game_frames(0x3C);
                 scaled_frame_count = scale_game_frames(*(int *)&D_L18_0016233C);
                 FUN_L18_002d8888(in_range_moby, tilt_delay_frames, scaled_frame_count);
