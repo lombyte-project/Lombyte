@@ -818,7 +818,7 @@ extern int frames_w(int) __asm__("FUN_001f96f8");
 int FUN_L12_002e2eb8(struct Moby *moby, float speed) {
     char *moby_vars = (char *)moby->pvars;
     float old[4] __attribute__((aligned(16)));
-    float dir[4];
+    float forward_movement_vector[4];
     float hit[4];
     float res[4] __attribute__((aligned(16)));
     float path_test_position[4];
@@ -827,10 +827,10 @@ int FUN_L12_002e2eb8(struct Moby *moby, float speed) {
     *(OvlQuad *)old = *(OvlQuad *)&moby->pos;
     FUN_L12_002e1878_w(moby);
     approach_w(moby, (float *)(moby_vars + 0x2A0), speed, 0.05f, 0.3f, 0.2f);
-    dir[0] = cos_w(moby->rot.z) * 2.0f;
-    dir[1] = sin_w(moby->rot.z) * 2.0f;
-    dir[2] = 0.0f;
-    move_result = move_w(moby, moby_vars + 0x180, dir, hit, 1.0f);
+    forward_movement_vector[0] = cos_w(moby->rot.z) * 2.0f;
+    forward_movement_vector[1] = sin_w(moby->rot.z) * 2.0f;
+    forward_movement_vector[2] = 0.0f;
+    move_result = move_w(moby, moby_vars + 0x180, forward_movement_vector, hit, 1.0f);
     if (*(int *)(moby_vars + 0x2D0) != -1) {
         sub_w(path_test_offset, old, &moby->pos);
         norm_w(path_test_offset, path_test_offset, 0.05f);
