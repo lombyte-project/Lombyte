@@ -14,12 +14,12 @@ int enter_streamed_moby_screen(char *screen_state) {
     *(int *)(screen_state + 0x34) = 0;
     if (preview_moby != 0) {
         char *moby_sidecar;
-        char *g = preview_camera;
+        char *preview_camera_state = preview_camera;
         *(char **)(screen_state + 0x44) = preview_moby;
         *(short *)(preview_moby + 0x34) = 0;
-        *(float *)(preview_moby + 0x10) = *(float *)(g + 0x140) + 2.2f;
-        *(float *)(preview_moby + 0x14) = *(float *)(g + 0x144) + 0.0f;
-        *(float *)(preview_moby + 0x18) = *(float *)(g + 0x148) + -1.6f;
+        *(float *)(preview_moby + 0x10) = *(float *)(preview_camera_state + 0x140) + 2.2f;
+        *(float *)(preview_moby + 0x14) = *(float *)(preview_camera_state + 0x144) + 0.0f;
+        *(float *)(preview_moby + 0x18) = *(float *)(preview_camera_state + 0x148) + -1.6f;
         moby_sidecar = *(char **)(preview_moby + 0x78);
         *(void **)(preview_moby + 0x74) = func_00225AB8;
         *(float *)(preview_moby + 0x48) = 3.1415927f;
