@@ -18,17 +18,17 @@ extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8");
 
 extern short D_L15_00161EC0 __attribute__((sda));
 void FUN_L15_002e46b0(struct Moby *moby) {
-    int idx = *(int *)moby->pvars;
-    if (idx != -1) {
-        char *other = (char *)(idx * 256 + *(int *)&D_L15_0015FFD8_d);
+    int linked_moby_index = *(int *)moby->pvars;
+    if (linked_moby_index != -1) {
+        char *other = (char *)(linked_moby_index * 256 + *(int *)&D_L15_0015FFD8_d);
         char *linked_moby_vars = *(char **)(other + 0x78);
-        int st = (unsigned char)other[0x20];
+        int linked_moby_state = (unsigned char)other[0x20];
         float step;
-        if (st == 2) {
+        if (linked_moby_state == 2) {
             step = *(float *)&D_L15_00161EC0 * DEG_TO_RAD * frame_time;
             if (*(int *)(linked_moby_vars + 0x10) != 0)
                 step = -step;
-        } else if (st == 4) {
+        } else if (linked_moby_state == 4) {
             step = *(float *)&D_L15_00161EC0 * DEG_TO_RAD * frame_time;
             if (*(int *)(linked_moby_vars + 0x10) == 0)
                 step = -step;
