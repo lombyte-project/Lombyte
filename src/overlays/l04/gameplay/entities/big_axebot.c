@@ -1234,16 +1234,16 @@ void FUN_L04_002c1d70(struct Moby *moby) {
     float pos[4];
     float vec[4];
     char *data = (char *)moby->pvars;
-    int idx;
+    int engine_voice_index;
     int invalid_voice_index;
 
     clear_vector(vec);
-    idx = *(int *)(data + 0x238);
-    if (idx != -1) {
-        char *voice_slot_window = (char *)D_0013E550_u + idx * 0x70;
+    engine_voice_index = *(int *)(data + 0x238);
+    if (engine_voice_index != -1) {
+        char *voice_slot_window = (char *)D_0013E550_u + engine_voice_index * 0x70;
         if (*(char **)(voice_slot_window + 0x88) == moby) {
             if (*(unsigned char *)(voice_slot_window + 0x74) != 0)
-                release_voice_slot(idx);
+                release_voice_slot(engine_voice_index);
         }
     }
     invalid_voice_index = -1;
