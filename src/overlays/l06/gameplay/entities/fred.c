@@ -5723,7 +5723,7 @@ void FUN_L06_002ffcb0(char *moby) {
         WAIT_FOR_NEARBY_HERO = 4
     };
     int *data = *(int **)(moby + 0x78);
-    float pos[4], rot[4], from[4], target[4], offset[4];
+    float camera_position[4], rot[4], from[4], target[4], offset[4];
     int base;
     int state;
     *(float *)(moby + 0x2c) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L06_00162048;
@@ -5755,12 +5755,12 @@ void FUN_L06_002ffcb0(char *moby) {
                 state = data[5];
                 state <<= 7;
                 base = (int)D_L06_001600EC_ffcb0;
-                qcopy(pos, (void *)(state + base + 0x30));
+                qcopy(camera_position, (void *)(state + base + 0x30));
                 qcopy(rot, (void *)(state + base + 0x70));
             }
-            jet_mount(pos, rot, 1, scale_frames_ffcb0(300), 0);
+            jet_mount(camera_position, rot, 1, scale_frames_ffcb0(300), 0);
             FUN_L06_00312b40(0.001f, 1.0f, 1.0f, 0.001f, 1.0f, 1.0f);
-            FUN_L06_00312a78(pos);
+            FUN_L06_00312a78(camera_position);
             FUN_L06_00312ad0(rot);
             {
                 int base;
@@ -5824,7 +5824,7 @@ void FUN_L06_002ffcb0(char *moby) {
                 state = data[5];
                 state <<= 7;
                 base = (int)D_L06_001600EC_ffcb0;
-                qcopy(pos, (void *)(state + base + 0x30));
+                qcopy(camera_position, (void *)(state + base + 0x30));
                 qcopy(from, (void *)(state + base + 0x70));
             }
             from[0] = D_L06_00162050 * 0.017453292f;
@@ -5835,9 +5835,9 @@ void FUN_L06_002ffcb0(char *moby) {
             normalize_2fd1a0(offset, D_0013F3D0 - 0x80, -2.0f);
             vec_add_ffcb0(rot, rot, offset);
             rot[2] += 0.85f;
-            lerp_vector_ffcb0(pos, pos, rot, *(float *)(data + 6));
+            lerp_vector_ffcb0(camera_position, camera_position, rot, *(float *)(data + 6));
             lerp_vector_ffcb0(from, from, target, *(float *)(data + 6));
-            FUN_L00_002ea9d8(pos);
+            FUN_L00_002ea9d8(camera_position);
             FUN_L00_002eaa30(from);
         }
         break;
