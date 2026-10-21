@@ -294,11 +294,11 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 int FUN_L07_0030f1e0(char *moby, char *obj, float target_heading, float lo, float up, float hi, float down,
                      float vmax, float vmin) {
     float speed = vector_length_xy(obj + 0xD0);
-    int r = 0;
+    int heading_below_lower_threshold = 0;
     float heading_difference = fast_difference_between_rotations(*(float *)(moby + 0x48), target_heading);
     if (heading_difference < lo) {
         speed += up;
-        r = 1;
+        heading_below_lower_threshold = 1;
     } else if (hi < heading_difference) {
         speed -= down;
     }
@@ -309,7 +309,7 @@ int FUN_L07_0030f1e0(char *moby, char *obj, float target_heading, float lo, floa
     }
     *(float *)(obj + 0xD0) = fast_cos(*(float *)(moby + 0x48)) * speed;
     *(float *)(obj + 0xD4) = fast_sin(*(float *)(moby + 0x48)) * speed;
-    return r;
+    return heading_below_lower_threshold;
 }
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
