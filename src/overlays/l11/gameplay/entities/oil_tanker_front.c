@@ -1590,7 +1590,7 @@ void FUN_L11_0031ab08(struct Moby *bubble_moby) {
     };
     char *bubble_vars = (char *)bubble_moby->pvars;
     float randomized_effect_vector[4];
-    float len;
+    float horizontal_speed;
     float rate;
     char *spawned_effect;
     if (bubble_moby->visible == 0) {
@@ -1637,9 +1637,9 @@ void FUN_L11_0031ab08(struct Moby *bubble_moby) {
         break;
     }
     add_vector_xyz(&bubble_moby->pos, &bubble_moby->pos, bubble_vars);
-    len = vector_length_xy(bubble_vars);
-    approach_value(&len, 0.0f, *(float *)&D_L11_00162408 * frame_time_sq);
-    set_vector_length_xy(bubble_vars, bubble_vars, len);
+    horizontal_speed = vector_length_xy(bubble_vars);
+    approach_value(&horizontal_speed, 0.0f, *(float *)&D_L11_00162408 * frame_time_sq);
+    set_vector_length_xy(bubble_vars, bubble_vars, horizontal_speed);
 }
 extern void *create_moby() __asm__("FUN_0020c4f8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
