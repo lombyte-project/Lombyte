@@ -634,18 +634,18 @@ void FUN_L09_002ead30(unsigned char *moby) {
         delete_moby(moby);
     } else {
         char *moby_vars;
-        float len, updated_rotation_x;
+        float reference_position_distance, updated_rotation_x;
         moby[0x23] -= 2;
         moby_vars = *(char **)(moby + 0x78);
         fast_vec_scale(moby_vars, moby_vars, frame_scale * -0.0199999809f + 1.0f);
         *(float *)(moby_vars + 8) -= frame_time_sq * 20.0f;
         fast_vec_add(moby_vars + 0x20, moby_vars + 0x20, moby_vars);
         fast_vec_sub(moby + 0x10, moby_vars + 0x20, D_L09_00166F40);
-        len = fast_vec_length(moby + 0x10);
-        if (len > 100.0f) {
+        reference_position_distance = fast_vec_length(moby + 0x10);
+        if (reference_position_distance > 100.0f) {
             fast_vec_normalize(moby + 0x10, moby + 0x10, 100.0f);
             fast_vec_add(moby + 0x10, moby + 0x10, D_L09_00166F40);
-            *(float *)(moby + 0x2C) = *(float *)(moby_vars + 0x50) * (100.0f / len);
+            *(float *)(moby + 0x2C) = *(float *)(moby_vars + 0x50) * (100.0f / reference_position_distance);
         } else {
             qcopy(moby + 0x10, moby_vars + 0x20);
             *(float *)(moby + 0x2C) = *(float *)(moby_vars + 0x50);
