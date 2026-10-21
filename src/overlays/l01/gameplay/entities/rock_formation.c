@@ -297,7 +297,7 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     u128 position_copy;
     u128 target_copy;
     BeamMoby *spawned_moby;
-    BeamVars *v;
+    BeamVars *beam_vars;
     u128 *pp;
     u128 *tp;
 
@@ -307,8 +307,8 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     target_copy = *target;
     spawned_moby = spawn_beam_moby(0x2D2);
     if (spawned_moby != 0) {
-        v = spawned_moby->pvars;
-        v->owner = owner;
+        beam_vars = spawned_moby->pvars;
+        beam_vars->owner = owner;
         spawned_moby->b30 = 0x7F;
         spawned_moby->h32 = 0x7F;
         spawned_moby->b31 = 1;
@@ -318,10 +318,10 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
         spawned_moby->ry = random_angle_radians();
         spawned_moby->rz = random_angle_radians();
         qcopy(&spawned_moby->pos, pp);
-        qcopy(&v->target, tp);
-        v->color = color;
+        qcopy(&beam_vars->target, tp);
+        beam_vars->color = color;
         FUN_L00_0026daa0(spawned_moby, 0x2F00007F, color, -1, 210000.0f);
-        FUN_L00_0026daa0(spawned_moby, 0x4F004F7F, v->color, -1, 115500.0f);
+        FUN_L00_0026daa0(spawned_moby, 0x4F004F7F, beam_vars->color, -1, 115500.0f);
         FUN_L00_00250df8(spawned_moby);
     }
     return spawned_moby;
