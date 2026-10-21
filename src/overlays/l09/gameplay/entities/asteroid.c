@@ -26,8 +26,8 @@ typedef struct {
 } TextureEntry;
 
 /* Queues the GS packet for one texture (tex0 == tex1), or builds the strip between two texture entries and queues it. */
-void FUN_L09_0021e560(int tex0, int tex1) {
-    if (tex0 == tex1) {
+void FUN_L09_0021e560(int first_texture_index, int second_texture_index) {
+    if (first_texture_index == second_texture_index) {
         int *packet;
         long *words;
 
@@ -40,16 +40,16 @@ void FUN_L09_0021e560(int tex0, int tex1) {
         words = (long *)(packet + 4);
         words[0] = 0x1000000000008001L;
         words[1] = 0xEEEEEEE;
-        words[2] = get_effect_texture(tex1);
+        words[2] = get_effect_texture(second_texture_index);
         words[3] = 6;
         PACKET_CURSOR = packet + 12;
     } else {
         int *packet;
         long *words;
-        int a_second = ((TextureEntry *)D_L09_0016D300)[tex0].second;
-        int a_first = ((TextureEntry *)D_L09_0016D300)[tex0].first;
-        int b_second = ((TextureEntry *)D_L09_0016D300)[tex1].second;
-        int b_first = ((TextureEntry *)D_L09_0016D300)[tex1].first;
+        int a_second = ((TextureEntry *)D_L09_0016D300)[first_texture_index].second;
+        int a_first = ((TextureEntry *)D_L09_0016D300)[first_texture_index].first;
+        int b_second = ((TextureEntry *)D_L09_0016D300)[second_texture_index].second;
+        int b_first = ((TextureEntry *)D_L09_0016D300)[second_texture_index].first;
 
         D_L09_00161FC0[0] = 0x0800000000000400L;
         D_L09_00161FC0[1] = 0;
