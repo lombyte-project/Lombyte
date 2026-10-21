@@ -1209,7 +1209,7 @@ void FUN_L18_002fc100(struct Moby *moby) {
     float speed;
     char *coll;
     int reaction_value_or_path_address;                      /* the reaction kind, later the path */
-    int b;                      /* the reaction flags, later the path's slot in the table */
+    int fall_setup_value_or_path_slot_address;                      /* the reaction flags, later the path's slot in the table */
 
     if (moby->state == 0 || moby->state == 8) {
         return;
@@ -1249,8 +1249,8 @@ void FUN_L18_002fc100(struct Moby *moby) {
             if (random_integer_below_c100(2) != 0) {
                 moby->state = 6;
             } else {
-                b = 0x200;
-                sentry_vars->unk90 = b;
+                fall_setup_value_or_path_slot_address = 0x200;
+                sentry_vars->unk90 = fall_setup_value_or_path_slot_address;
                 sentry_vars->unk98 = 0.5f;
                 sentry_vars->unk80 = D_L18_0016261C * frame_time_sq;
                 sentry_vars->unk84 = D_L18_00162620 * frame_time_sq;
@@ -1275,8 +1275,8 @@ void FUN_L18_002fc100(struct Moby *moby) {
     }
     moby->hit_slot = 0xFF;
     anim_update_c100(moby, sentry_vars->anim);
-    b = (int)&D_L18_001B0EB0[sentry_vars->path];
-    reaction_value_or_path_address = *(int *)b;
+    fall_setup_value_or_path_slot_address = (int)&D_L18_001B0EB0[sentry_vars->path];
+    reaction_value_or_path_address = *(int *)fall_setup_value_or_path_slot_address;
     FUN_L00_0025ff38_c100(512.0f, moby, &sentry_vars->target, 0, 0, (int *)(reaction_value_or_path_address + 0x10), *(int *)reaction_value_or_path_address);
     if (sentry_vars->target_mode == 2) {
         if (hero.state.control_mode == 0xF) {
