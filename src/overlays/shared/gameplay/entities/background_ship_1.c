@@ -1206,10 +1206,10 @@ extern char *D_L02_0015EF50;
 extern char *D_L02_00167400_c298 __asm__("D_L02_00167400") NOT_SDA;
 
 int FUN_L02_002fc298(char *moby) {
-    char *cam = *(char **)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
-    if (*(short *)(D_L02_00167400_c298 + 0x86) == 0 && *(short *)(cam + 0x20) >= 0)
+    char *moby_camera_control_data = *(char **)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    if (*(short *)(D_L02_00167400_c298 + 0x86) == 0 && *(short *)(moby_camera_control_data + 0x20) >= 0)
         FUN_L02_002fb9c8(moby);
-    *(int *)(cam + 0x50) = 0;
+    *(int *)(moby_camera_control_data + 0x50) = 0;
     return 0;
 }
 
