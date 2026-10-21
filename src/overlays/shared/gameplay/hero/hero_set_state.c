@@ -344,7 +344,7 @@ float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 int stick_direction_vs_facing(void) {
-    int r = 2;
+    int stick_direction = 2;
     float move_yaw_relative_to_facing;
     stick_target(0, 1.0f);
     {
@@ -352,12 +352,12 @@ int stick_direction_vs_facing(void) {
         move_yaw_relative_to_facing = fast_subtract_rotations(g->motion.move_yaw, g->motion.rot.f[2]);
     }
     if (fast_difference_between_rotations(move_yaw_relative_to_facing, 3.1415927f) < 0.7853982f)
-        r = 3;
+        stick_direction = 3;
     else if (fast_difference_between_rotations(move_yaw_relative_to_facing, -1.5707964f) < 0.7853982f)
-        r = 1;
+        stick_direction = 1;
     else if (fast_difference_between_rotations(move_yaw_relative_to_facing, 1.5707964f) < 0.7853982f)
-        r = 0;
-    return r;
+        stick_direction = 0;
+    return stick_direction;
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
