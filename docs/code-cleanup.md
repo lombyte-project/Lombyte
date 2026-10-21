@@ -5,8 +5,7 @@ to make that code easier to read. To decompile new code, see
 [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 For a bounded example of names, partial layouts and module boundaries, see
-[game-side voice allocation](audio-voices.md) and
-[menu stream buffers](menu-stream-buffers.md).
+[game-side voice allocation](audio-voices.md).
 
 > **The one rule:** after every change, the build must still produce exactly
 > the same bytes. Cleanup never changes what the game does.
@@ -147,6 +146,8 @@ edit fails at once.
 - A variable defined in C is removed from `config/us/symbol_addrs.txt`.
 
 ## Moving files
+
+See [menu stream buffers](menu-stream-buffers.md) for a small module example.
 
 - Folders follow the subsystem, for example `ui/menus/<screen>` or
   `gameplay/...`.
