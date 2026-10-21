@@ -97,7 +97,7 @@ void electric_gate_update(char *gate_moby) {
     int state = *(unsigned char *)(gate_moby + 0x20);
     char *base;
     char *tab;
-    char *pos;
+    char *gate_position;
     char *voice_position_base;
     char *voice_owner;
     float gate_reference_distance;
@@ -114,9 +114,9 @@ void electric_gate_update(char *gate_moby) {
             *(int *)&D_L05_00161D38 = D_L05_0015F5CC_e[2];
             enqueue_callback_list_1(FUN_L05_0030de90, gate_moby);
         }
-        pos = gate_moby + 0x10;
+        gate_position = gate_moby + 0x10;
         tab = D_L05_001671C0;
-        if (FUN_001f9b48(pos, tab) < 64.0f) {
+        if (FUN_001f9b48(gate_position, tab) < 64.0f) {
             voice_slot_index = **(int **)(data + 4);
             if (voice_slot_index >= 0) {
                 base = D_0013E550;
@@ -125,13 +125,13 @@ void electric_gate_update(char *gate_moby) {
                     if (*(short *)(voice_owner + 0xA6) == 0x346) {
                         if (voice_owner != gate_moby) {
                             if (*(unsigned char *)(voice_owner + 0x20) == state) {
-                                gate_reference_distance = FUN_001f9b48(pos, tab);
+                                gate_reference_distance = FUN_001f9b48(gate_position, tab);
                                 if (!(gate_reference_distance < FUN_001f9b48(voice_owner + 0x10, tab)))
                                     goto after;
                             }
                             voice_position_base = base + 0x90;
                             *(char **)(base + **(int **)(data + 4) * 0x70 + 0x88) = gate_moby;
-                            qcopy(**(int **)(data + 4) * 0x70 + voice_position_base, pos);
+                            qcopy(**(int **)(data + 4) * 0x70 + voice_position_base, gate_position);
                         }
                         goto after;
                     }
