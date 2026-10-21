@@ -1089,10 +1089,10 @@ void FUN_L18_002f2620(struct Moby *moby) {
         float ofs = *(float *)&D_L18_00162308_gp;
         for (j = 0; j < 4; j++) {
             int vertex_index = D_L18_001DA610[i][j][0];
-            int b = D_L18_001DA610[i][j][1];
+            int uv_index = D_L18_001DA610[i][j][1];
             qcopy(&quad_positions[j], &D_L18_001DA3C0[vertex_index]);
-            uv[j][0] = D_L18_001DA7A0[b][0] + ofs;
-            uv[j][1] = D_L18_001DA7A0[b][1];
+            uv[j][0] = D_L18_001DA7A0[uv_index][0] + ofs;
+            uv[j][1] = D_L18_001DA7A0[uv_index][1];
         }
         fast_draw_quad_real(quad_positions, mat, 0);
     }
