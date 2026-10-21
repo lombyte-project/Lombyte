@@ -1436,13 +1436,13 @@ void FUN_L18_002fc860(struct Moby *m) {
     char *d = (char *)m->pvars;
     Pk_c860 pk;
     float mat[4][4];
-    float w;
+    float horizontal_axis_scale;
     float vertical_axis_scale;
     int c;
     int i;
     float *quad_vertex;
     vertical_axis_scale = *(float *)(d + 0x1F4) + 1.0f + D_L18_0016264C;
-    w = 1.0f - *(float *)(d + 0x1F4) + D_L18_00162650;
+    horizontal_axis_scale = 1.0f - *(float *)(d + 0x1F4) + D_L18_00162650;
     qcopy(mat[3], &m->pos);
     mat[3][2] -= D_L18_00162648;
     clear_g(mat[2]);
@@ -1450,8 +1450,8 @@ void FUN_L18_002fc860(struct Moby *m) {
     sub_g(mat[0], D_L18_001677C0_g, &m->pos);
     cross_g(mat[1], mat[0], mat[2]);
     cross_g(mat[0], mat[1], mat[2]);
-    norm_g(mat[0], mat[0], w);
-    norm_g(mat[1], mat[1], w);
+    norm_g(mat[0], mat[0], horizontal_axis_scale);
+    norm_g(mat[1], mat[1], horizontal_axis_scale);
     pk.b = tex_g(D_L18_00162644);
     pk.c = 0x0000FF9000000260ULL;
     pk.a = 0;
