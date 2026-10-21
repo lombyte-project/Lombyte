@@ -29,7 +29,7 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
         MENU_STREAM_IMAGE_RELOAD_PENDING = 3
     };
     s32 flags;
-    s32 idx;
+    s32 selected_entry_index;
     s32 r;
     s32 x;
     s32 y;
@@ -40,41 +40,41 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
 
     flags = stream->data.stream.flags;
     if (flags & 1) {
-        idx = stream->data.stream.fixed_entry;
-        if (idx == -1) {
+        selected_entry_index = stream->data.stream.fixed_entry;
+        if (selected_entry_index == -1) {
             return 0;
         }
     } else if (flags & 2) {
-        idx = selected_level_index[0];
+        selected_entry_index = selected_level_index[0];
     } else if (flags & 4) {
-        idx = menu_system.current->focus->data.grid.selected_cell;
+        selected_entry_index = menu_system.current->focus->data.grid.selected_cell;
     } else if (flags & 0x100) {
-        idx = menu_system.current->focus->data.save.slot;
-        if (idx <= -1) {
-            idx = 0;
+        selected_entry_index = menu_system.current->focus->data.save.slot;
+        if (selected_entry_index <= -1) {
+            selected_entry_index = 0;
         }
-        if (idx >= 5) {
-            idx = 4;
+        if (selected_entry_index >= 5) {
+            selected_entry_index = 4;
         }
         if (memory_card_state.state < 3 && memory_card_state.pending_state < 0) {
             if (stream->data.stream.state == -1) {
                 stream->data.stream.state = 0;
             }
-            idx = memory_card_state.card[0].entries[idx].id;
+            selected_entry_index = memory_card_state.card[0].entries[selected_entry_index].id;
         } else {
             stream->data.stream.state = -1;
         }
     } else {
-        idx = menu_system.current->focus->data.list.selected;
-        if (idx <= -1) {
-            idx = 0;
+        selected_entry_index = menu_system.current->focus->data.list.selected;
+        if (selected_entry_index <= -1) {
+            selected_entry_index = 0;
         }
     }
 
     switch (stream->data.stream.state) {
     case MENU_STREAM_IMAGE_IDLE:
     case MENU_STREAM_IMAGE_READY:
-        if (idx == stream->data.stream.loaded_entry[0]) {
+        if (selected_entry_index == stream->data.stream.loaded_entry[0]) {
             break;
         }
         if (stream->data.stream.buffer[0] == 0) {
@@ -83,26 +83,26 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
         if (cd_read_active[0] != 0) {
             break;
         }
-        if (stream->data.stream.entries[idx].sector_count == 0) {
+        if (stream->data.stream.entries[selected_entry_index].sector_count == 0) {
             break;
         }
         read_destination = (u8 *)stream->data.stream.buffer[0];
         if (stream->data.stream.flags & 0x20) {
             r = get_stream_buffer_size(stream->data.stream.buffer[0]) -
-                (stream->data.stream.entries[idx].sector_count << 11);
+                (stream->data.stream.entries[selected_entry_index].sector_count << 11);
             stream->data.stream.read_offset = r;
             read_destination += r;
         }
         if (stream->data.stream.flags & 0x10) {
-            r = start_audio_stream_read(read_destination, stream->data.stream.entries[idx].sector,
-                                        stream->data.stream.entries[idx].sector_count);
+            r = start_audio_stream_read(read_destination, stream->data.stream.entries[selected_entry_index].sector,
+                                        stream->data.stream.entries[selected_entry_index].sector_count);
         } else {
-            r = start_audio_stream_read(read_destination, stream->data.stream.entries[idx].sector,
-                                        stream->data.stream.entries[idx].sector_count);
+            r = start_audio_stream_read(read_destination, stream->data.stream.entries[selected_entry_index].sector,
+                                        stream->data.stream.entries[selected_entry_index].sector_count);
         }
         if (r != 0) {
             mark_stream_buffer_read_active(stream->data.stream.buffer[0]);
-            stream->data.stream.loaded_entry[0] = idx;
+            stream->data.stream.loaded_entry[0] = selected_entry_index;
             stream->data.stream.state++;
         } else {
             stream->data.stream.state = -1;
