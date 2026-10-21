@@ -648,8 +648,8 @@ void FUN_L06_002ff100(char *moby) {
         point_offset[2] = 0.15f;
         add_vector_xyz((float *)(vars + 0x230 + i * 16), (float *)(vars + 0x210), point_offset);
         if (i == 0 || i == 15) {
-            float *w = (float *)(vars + 0x23C + i * 16);
-            *w = *w = 0.0f;
+            float *endpoint_color_blend_factor = (float *)(vars + 0x23C + i * 16);
+            *endpoint_color_blend_factor = *endpoint_color_blend_factor = 0.0f;
         } else {
             *(float *)(vars + 0x23C + i * 16) = 1.0f;
         }
