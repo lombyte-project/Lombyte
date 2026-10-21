@@ -67,14 +67,14 @@ void FUN_L08_00307298(char *fire_bolt) {
         FIRE_BOLT_STATE_BURST_AND_REMOVE = 2
     };
     char *bolt_data = *(char **)(fire_bolt + 0x78);
-    float prev[4];
+    float previous_position[4];
     float sc[4];
     float trail_spawn_position[4];
     float unused_vector_argument[4];
     char *tracked_moby;
     switch (((unsigned char *)fire_bolt)[0x20]) {
     case FIRE_BOLT_STATE_FLYING:
-        qcopy(prev, fire_bolt + 0x10);
+        qcopy(previous_position, fire_bolt + 0x10);
         tracked_moby = *(char **)(bolt_data + 0x14);
         if (tracked_moby == 0 || ((unsigned char *)tracked_moby)[0x20] == 0xFE || ((unsigned char *)tracked_moby)[0x20] == 0xFD) {
             fire_bolt[0x20] = 2;
@@ -90,7 +90,7 @@ void FUN_L08_00307298(char *fire_bolt) {
                              scale_game_frames(random_int_between(7, 0xA)), 1);
         }
         add_vector_xyz(fire_bolt + 0x10, fire_bolt + 0x10, bolt_data);
-        if (collision_line(fire_bolt + 0x10, prev, 0x10, *(int *)(bolt_data + 0x10), 0) != 0) {
+        if (collision_line(fire_bolt + 0x10, previous_position, 0x10, *(int *)(bolt_data + 0x10), 0) != 0) {
             char *collision_result = D_L08_00174640;
             if (*(int *)(collision_result + 0x18) != *(int *)(bolt_data + 0x10)) {
                 if (*(int *)(collision_result + 0x18) != 0) {
