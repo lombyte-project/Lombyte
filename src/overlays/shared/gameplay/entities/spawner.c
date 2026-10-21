@@ -122,7 +122,7 @@ void FUN_L09_00307d68(struct Moby *projectile_moby)
     OvlVec4 old;
     CollisionProbe_307d68 pr;
     OvlVec4 push;
-    OvlVec4 r;
+    OvlVec4 spark_scatter_vector;
     ShotVars_307ba8 *projectile_vars = (ShotVars_307ba8 *)projectile_moby->pvars;
     CollisionProbe_307d68 *probe;
     f32 distance_to_hero;
@@ -174,14 +174,14 @@ void FUN_L09_00307d68(struct Moby *projectile_moby)
     qcopy(&projectile_moby->pos, &D_L09_00173FE0);
     if (projectile_moby->command == 0) {
         for (i = 0; i < 5; i++) {
-            r.q = 0;
-            r.f[0] = random_float_between_307d68(-1.0f, 1.0f);
-            r.f[1] = random_float_between_307d68(-1.0f, 1.0f);
-            r.f[2] = random_float_between_307d68(-1.0f, 1.0f);
-            push.q = r.q;
-            FUN_L00_001ff660_307d68(&r, projectile_vars, D_L09_00174000);
-            normalize_vector_xyz_307d68(&push, &push, vector_length_xyz_307d68(&r) * 0.5f);
-            add_vector_xyz_307d68(&push, &r, &push);
+            spark_scatter_vector.q = 0;
+            spark_scatter_vector.f[0] = random_float_between_307d68(-1.0f, 1.0f);
+            spark_scatter_vector.f[1] = random_float_between_307d68(-1.0f, 1.0f);
+            spark_scatter_vector.f[2] = random_float_between_307d68(-1.0f, 1.0f);
+            push.q = spark_scatter_vector.q;
+            FUN_L00_001ff660_307d68(&spark_scatter_vector, projectile_vars, D_L09_00174000);
+            normalize_vector_xyz_307d68(&push, &push, vector_length_xyz_307d68(&spark_scatter_vector) * 0.5f);
+            add_vector_xyz_307d68(&push, &spark_scatter_vector, &push);
             normalize_vector_xyz_307d68(&push, &push, random_float_between_307d68(frame_time * 3.0f, frame_time * 6.0f));
             FUN_L00_0026dd20_307d68(&projectile_moby->pos, &push, 0x7F2F4F6F,
                                     random_int_between_307d68(scale_game_frames_307d68(10), scale_game_frames_307d68(15)), 60000.0f);
