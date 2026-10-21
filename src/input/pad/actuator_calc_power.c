@@ -49,16 +49,16 @@ s32 actuator_calc_power(s32 *output_power)
         L00Entry *wave_entry;
         s32 rem;
         s32 res;
-        u16 v;
+        u16 wave_countdown;
 
         if (actuator_wave[i].f00 == 0) {
             continue;
         }
         wave_entry = &actuator_wave[i];
         count++;
-        v = actuator_wave[i].f06;
-        actuator_wave[i].f06 = v - 1;
-        if ((s16)v <= 0) {
+        wave_countdown = actuator_wave[i].f06;
+        actuator_wave[i].f06 = wave_countdown - 1;
+        if ((s16)wave_countdown <= 0) {
             wave_entry->f00 = 0;
         }
         if (actuator_wave[i].f04 != 0) {
