@@ -1273,34 +1273,34 @@ typedef struct {
 /* Keeps the 33 linked parts glued to their anchors' joints and facing the moby, spins three of them (the middle
    one backwards), turns link 3 towards the hero, then updates every part. */
 void FUN_L08_002e2078(struct Moby *moby) {
-    LinkedPartsVars *v = (LinkedPartsVars *)moby->pvars;
-    PartLink *links = v->links;
+    LinkedPartsVars *linked_parts_vars = (LinkedPartsVars *)moby->pvars;
+    PartLink *links = linked_parts_vars->links;
     float part_joint_position[4];
-    float b[4];
+    float anchor_joint_position[4];
     float joint_alignment_offset[4];
     int i;
 
     for (i = 1; i < 34; i++) {
-        struct Moby *part = v->links[i].part;
+        struct Moby *part = linked_parts_vars->links[i].part;
         if (part != 0) {
             part->rot.z = moby->rot.z;
-            moby_point_position(part, v->links[i].part_joint, part_joint_position);
-            moby_point_position(v->links[i].anchor, v->links[i].anchor_joint, b);
-            fast_vec_sub(joint_alignment_offset, b, part_joint_position);
+            moby_point_position(part, linked_parts_vars->links[i].part_joint, part_joint_position);
+            moby_point_position(linked_parts_vars->links[i].anchor, linked_parts_vars->links[i].anchor_joint, anchor_joint_position);
+            fast_vec_sub(joint_alignment_offset, anchor_joint_position, part_joint_position);
             fast_vec_add(&part->pos, &part->pos, joint_alignment_offset);
         }
     }
-    if (v->links[7].part != 0) {
-        v->links[7].part->rot.x = fast_add_rotations(v->links[7].part->rot.x, D_L08_00161C3C * DEG_TO_RAD * D_0015ED6C);
+    if (linked_parts_vars->links[7].part != 0) {
+        linked_parts_vars->links[7].part->rot.x = fast_add_rotations(linked_parts_vars->links[7].part->rot.x, D_L08_00161C3C * DEG_TO_RAD * D_0015ED6C);
     }
-    if (v->links[8].part != 0) {
-        v->links[8].part->rot.x = fast_add_rotations(v->links[8].part->rot.x, -(D_L08_00161C3C * DEG_TO_RAD * D_0015ED6C));
+    if (linked_parts_vars->links[8].part != 0) {
+        linked_parts_vars->links[8].part->rot.x = fast_add_rotations(linked_parts_vars->links[8].part->rot.x, -(D_L08_00161C3C * DEG_TO_RAD * D_0015ED6C));
     }
-    if (v->links[9].part != 0) {
-        v->links[9].part->rot.x = fast_add_rotations(v->links[9].part->rot.x, D_L08_00161C3C * DEG_TO_RAD * D_0015ED6C);
+    if (linked_parts_vars->links[9].part != 0) {
+        linked_parts_vars->links[9].part->rot.x = fast_add_rotations(linked_parts_vars->links[9].part->rot.x, D_L08_00161C3C * DEG_TO_RAD * D_0015ED6C);
     }
-    if (v->links[3].part != 0) {
-        v->links[3].part->rot.z = fast_arc_tan(hero.motion.pos.f[0] - v->links[3].part->pos.x, hero.motion.pos.f[1] - v->links[3].part->pos.y);
+    if (linked_parts_vars->links[3].part != 0) {
+        linked_parts_vars->links[3].part->rot.z = fast_arc_tan(hero.motion.pos.f[0] - linked_parts_vars->links[3].part->pos.x, hero.motion.pos.f[1] - linked_parts_vars->links[3].part->pos.y);
     }
     for (i = 1; i < 34; i++) {
         if (links[i].part != 0) {
