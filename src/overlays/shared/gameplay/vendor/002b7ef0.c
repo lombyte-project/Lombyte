@@ -122,8 +122,8 @@ void FUN_L01_002b80d0(float *offset_animation_state) {
 extern void pool_splash(void *, int, int) __asm__("FUN_L00_002a3ec8");
 
 void pool_ripple(void *a, int b) __asm__("FUN_L01_002b8288");
-void pool_ripple(void *records_base, int b) {
-    pool_splash(records_base, b, 0);
+void pool_ripple(void *records_base, int record_count) {
+    pool_splash(records_base, record_count, 0);
 }
 
 f32 D_L05_001CAFE0[1] __attribute__((section(".data"))) = {0};
