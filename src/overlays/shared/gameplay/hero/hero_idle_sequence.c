@@ -2260,9 +2260,9 @@ float FUN_002132a8_00209540(float, float) __asm__("FUN_002132a8");
 void FUN_L00_002715e8_00209540(float *, V4_00209540 *, int, float,
                                float) __asm__("FUN_L00_002715e8");
 int FUN_00213260_00209540(int) __asm__("FUN_00213260");
-void FUN_L00_00209540(int counter_reset_range, int lim) {
+void FUN_L00_00209540(int counter_reset_range, int effect_spawn_counter_threshold) {
     G_00209540 *hero_state = &D_0013F350_00209540;
-    if (lim < ++hero_state->cnt) {
+    if (effect_spawn_counter_threshold < ++hero_state->cnt) {
         float spawn_position[4];
         float lo = -0.05f;
         float hi = 0.05f;
