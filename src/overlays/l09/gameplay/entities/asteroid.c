@@ -1521,11 +1521,11 @@ void FUN_L09_002ef9b0(struct Moby *moby) {
 extern char *create_moby_c(int) __asm__("FUN_0020c4f8");
 
 char *FUN_L09_002efda8(struct Moby *owner, void *position, float angle) {
-    u128_ee380 pos;
-    void *copy = &pos;
+    u128_ee380 position_copy;
+    void *copy = &position_copy;
     char *moby;
 
-    pos = *(u128_ee380 *)position;
+    position_copy = *(u128_ee380 *)position;
     moby = create_moby_c(0x144);
     if (moby != 0) {
         unsigned char state;
