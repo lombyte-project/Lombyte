@@ -471,7 +471,7 @@ void FUN_L00_002baae0(void *mv, int first_pass_alpha, int second_pass_alpha, int
     RT_2baae0 u;
     RW_2baae0 w120, second_pass_width_offset, first_pass_point_camera_offset, segment_delta, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, segment_end_camera_offset, s1A0, s1B0;
     int i, col0, col1;
-    float len, len0, l0, l1, l2;
+    float len, len0, segment_start_camera_distance, segment_end_camera_distance, l2;
     first_pass_render_attributes.q0 = tex_2baae0(D_L00_00161638);
     col0 = D_L00_001615F4 | (first_pass_alpha << 24);
     first_pass_render_attributes.q2 = 0x8000000048L;
@@ -542,18 +542,18 @@ void FUN_L00_002baae0(void *mv, int first_pass_alpha, int second_pass_alpha, int
     for (i = 0; i < point_count - 1; i++) {
         fast_vec_sub(segment_start_camera_offset, point_bytes + i * 16, g_debug_camera);
         fast_vec_sub(segment_end_camera_offset, point_bytes + i * 16 + 16, g_debug_camera);
-        l0 = fast_vec_length(segment_start_camera_offset);
-        l1 = fast_vec_length(segment_end_camera_offset);
-        if (l1 < l0) {
-            if (l1 == 0)
+        segment_start_camera_distance = fast_vec_length(segment_start_camera_offset);
+        segment_end_camera_distance = fast_vec_length(segment_end_camera_offset);
+        if (segment_end_camera_distance < segment_start_camera_distance) {
+            if (segment_end_camera_distance == 0)
                 qcopy(segment_end_camera_offset, segment_start_camera_offset);
             else
-                fast_vec_scale(l0 / l1, segment_end_camera_offset, segment_end_camera_offset);
+                fast_vec_scale(segment_start_camera_distance / segment_end_camera_distance, segment_end_camera_offset, segment_end_camera_offset);
         } else {
-            if (l0 == 0)
+            if (segment_start_camera_distance == 0)
                 qcopy(segment_start_camera_offset, segment_end_camera_offset);
             else
-                fast_vec_scale(l1 / l0, segment_start_camera_offset, segment_start_camera_offset);
+                fast_vec_scale(segment_end_camera_distance / segment_start_camera_distance, segment_start_camera_offset, segment_start_camera_offset);
         }
         fast_vec_add(adjusted_segment_start, g_debug_camera, segment_start_camera_offset);
         fast_vec_add(adjusted_segment_end, g_debug_camera, segment_end_camera_offset);
