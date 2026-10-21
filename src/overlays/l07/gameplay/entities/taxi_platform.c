@@ -1216,7 +1216,7 @@ extern char D_L07_00173F00[];
 void FUN_L07_0030b6a8(struct Moby *moby) {
     BoltVars *bolt_vars = (BoltVars *)moby->pvars;
     Vec4 old;
-    Vec4 dir;
+    Vec4 particle_motion_vector;
     Vec4 spark;
     int pass;
     int i;
@@ -1232,12 +1232,12 @@ void FUN_L07_0030b6a8(struct Moby *moby) {
                 spark.f[0] = random_float_between(-1.0f, 1.0f);
                 spark.f[1] = random_float_between(-1.0f, 1.0f);
                 spark.f[2] = random_float_between(-1.0f, 1.0f);
-                dir.q = spark.q;
-                normalize_vector_xyz(&dir, &dir, vector_length_xyz(&spark) * 0.1f);
-                add_vector_xyz(&dir, &spark, &dir);
-                normalize_vector_xyz(&dir, &dir,
+                particle_motion_vector.q = spark.q;
+                normalize_vector_xyz(&particle_motion_vector, &particle_motion_vector, vector_length_xyz(&spark) * 0.1f);
+                add_vector_xyz(&particle_motion_vector, &spark, &particle_motion_vector);
+                normalize_vector_xyz(&particle_motion_vector, &particle_motion_vector,
                                      random_float_between(frame_time + frame_time, frame_time * 4.0f));
-                FUN_L07_0029a2a0(&moby->pos, &dir);
+                FUN_L07_0029a2a0(&moby->pos, &particle_motion_vector);
             }
         }
         mark_moby_for_removal(moby);
@@ -1252,13 +1252,13 @@ void FUN_L07_0030b6a8(struct Moby *moby) {
                 spark.f[0] = random_float_between(-1.0f, 1.0f);
                 spark.f[1] = random_float_between(-1.0f, 1.0f);
                 spark.f[2] = random_float_between(-1.0f, 1.0f);
-                dir.q = spark.q;
+                particle_motion_vector.q = spark.q;
                 FUN_L00_001ff660(&spark, &bolt_vars->vel, D_L07_00173F00);
-                normalize_vector_xyz(&dir, &dir, vector_length_xyz(&spark) * 0.5f);
-                add_vector_xyz(&dir, &spark, &dir);
-                normalize_vector_xyz(&dir, &dir,
+                normalize_vector_xyz(&particle_motion_vector, &particle_motion_vector, vector_length_xyz(&spark) * 0.5f);
+                add_vector_xyz(&particle_motion_vector, &spark, &particle_motion_vector);
+                normalize_vector_xyz(&particle_motion_vector, &particle_motion_vector,
                                      random_float_between(frame_time * 3.0f, frame_time * 6.0f));
-                FUN_L00_0026dd20((char *)&moby->pos, (char *)&dir, 0x7F2F4F6F,
+                FUN_L00_0026dd20((char *)&moby->pos, (char *)&particle_motion_vector, 0x7F2F4F6F,
                                  random_int_between(scale_game_frames(10), scale_game_frames(15)),
                                  30000.0f);
             }
