@@ -104,7 +104,7 @@ void FUN_L12_003054b0(char *moby) {
     float *hp;
 
     for (i = 0; i < 5; i++) {
-        int idx;
+        int gun_entry_index;
         char *ent;
         char *gun_moby;
         Gun_306890 *md;
@@ -116,8 +116,8 @@ void FUN_L12_003054b0(char *moby) {
         float radial_scale;
 
         if (*(int *)(owner_data - -(i * 4) + 0x5D0) != -1) {
-        idx = *(int *)(owner_data - -(i * 4) + 0x5D0);
-        ent = owner_data + idx * 0x30;
+        gun_entry_index = *(int *)(owner_data - -(i * 4) + 0x5D0);
+        ent = owner_data + gun_entry_index * 0x30;
         gun_moby = (char *)(D_L12_0015FFD8_gp + (*(int *)(ent + 0x20) << 8));
         md = *(Gun_306890 **)(gun_moby + 0x78);
         qcopy(position_buffer, D_L12_00167240);
@@ -164,7 +164,7 @@ void FUN_L12_003054b0(char *moby) {
             fast_dec_timer_s16(&md->h98);
             fast_dec_timer_s16(&md->h9C);
             if (md->h98 == 0) {
-                if (fast_difference_between_rotations(*(float *)(owner_data + idx * 0x30 + 0x18), yaw) < 0.06981317f) {
+                if (fast_difference_between_rotations(*(float *)(owner_data + gun_entry_index * 0x30 + 0x18), yaw) < 0.06981317f) {
                     md->h9E = scale_game_frames(0x14);
                 }
                 if (fast_dec_timer_s16(&md->h9E) == 0) {
