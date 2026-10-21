@@ -1124,26 +1124,26 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
         pool_tiles[13].f2C = zero;
         pool_set_scale(1.0f);
         {
-            PoolLight *l;
+            PoolLight *pool_lighting;
             f32 sun_angle;
 
-            l = &pool_light;
-            l->f00 = 16.0f;
-            l->f04 = 16.0f;
-            l->f08 = -8.0f;
-            l->f0C = -8.0f;
-            l->f10 = 1.0f;
-            l->f14 = 1.0f;
-            l->f18 = 0.9f;
-            l->f20 = 0.1f;
+            pool_lighting = &pool_light;
+            pool_lighting->f00 = 16.0f;
+            pool_lighting->f04 = 16.0f;
+            pool_lighting->f08 = -8.0f;
+            pool_lighting->f0C = -8.0f;
+            pool_lighting->f10 = 1.0f;
+            pool_lighting->f14 = 1.0f;
+            pool_lighting->f18 = 0.9f;
+            pool_lighting->f20 = 0.1f;
             sun_angle = angle_atan2(pool_sun[4], pool_sun[5]);
-            l->f30 = fast_cos(sun_angle) * 0.57735f;
-            l->f34 = fast_sin(sun_angle) * 0.57735f;
-            l->f38 = -0.57735f;
-            l->i28 = 0x29;
-            l->i2C = 0x2A;
-            l->c3C = 0x1C;
-            l->c3D = 0x40;
+            pool_lighting->f30 = fast_cos(sun_angle) * 0.57735f;
+            pool_lighting->f34 = fast_sin(sun_angle) * 0.57735f;
+            pool_lighting->f38 = -0.57735f;
+            pool_lighting->i28 = 0x29;
+            pool_lighting->i2C = 0x2A;
+            pool_lighting->c3C = 0x1C;
+            pool_lighting->c3D = 0x40;
         }
         pool_draw_count = 21;
         D_L01_00161208 = zero;
