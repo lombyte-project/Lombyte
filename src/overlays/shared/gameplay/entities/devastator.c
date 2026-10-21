@@ -2288,7 +2288,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         / (D_L00_001614A0 * D_0015ED6C_2b6140 - D_L00_0016149C * D_0015ED6C_2b6140)) * D_L00_00161498));
     if (missile_vars->f10 > 0) {
         if (missile_vars->f10 < scale_game_frames_2b6140(0xBB8) - scale_game_frames_2b6140(5)) {
-            float ang;
+            float steered_pitch;
             float dx = hero.stick_x - missile_vars->f18;
             float dy = hero.stick_y - missile_vars->f1C;
             float ka = D_0015ED60_2b6140 * 0.1f;
@@ -2297,11 +2297,11 @@ void visibomb_missile_update(struct Moby *missile_moby) {
             missile_vars->f18 += dx * ka;
             missile_vars->f1C += dy * ka;
             missile_moby->rot.x += (missile_vars->f18 - missile_moby->rot.x) * kb;
-            ang = fast_subtract_rotations_2b6140(missile_moby->rot.y, missile_vars->f1C * kc);
-            missile_moby->rot.y = ang;
-            if (1.57079637f <= ang) {
+            steered_pitch = fast_subtract_rotations_2b6140(missile_moby->rot.y, missile_vars->f1C * kc);
+            missile_moby->rot.y = steered_pitch;
+            if (1.57079637f <= steered_pitch) {
                 missile_moby->rot.y = 1.56979632f;
-            } else if (ang <= -1.57079637f) {
+            } else if (steered_pitch <= -1.57079637f) {
                 missile_moby->rot.y = -1.56979632f;
             }
             missile_moby->rot.z = fast_subtract_rotations_2b6140(missile_moby->rot.z, missile_vars->f18 * (D_0015ED60_2b6140 * 0.0122718466f));
