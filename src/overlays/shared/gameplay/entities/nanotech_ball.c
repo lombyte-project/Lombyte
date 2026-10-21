@@ -1875,16 +1875,16 @@ void FUN_00212f90_002dbb20(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern u32 D_L00_00161B20[1] __attribute__((sda));
 s32 FUN_L00_002dbb20(u8 *moby, OvlQuad *position) {
     u8 *suction_record = FUN_L00_002db890_002dbb20(moby);
-    u8 *g;
+    u8 *sound_source_moby;
     if (suction_record == 0)
         return 0;
     if (moby != 0 && moby[0x20] != 0xFE && moby[0x20] != 0xFD && *(s16 *)(suction_record + 0x68) != 8) {
         qcopy(moby + 0x10, position);
         FUN_L00_002d9fd0_002dbb20(*(void **)(suction_record + 0x60), moby, D_L00_00161B20);
         FUN_0020e098_002dbb20(moby);
-        g = D_001403E0_002dbb20;
-        if (g != 0 && *(s16 *)(g + 0xA6) == 0x351) {
-            FUN_0022da68_002dbb20(5, 0, g);
+        sound_source_moby = D_001403E0_002dbb20;
+        if (sound_source_moby != 0 && *(s16 *)(sound_source_moby + 0xA6) == 0x351) {
+            FUN_0022da68_002dbb20(5, 0, sound_source_moby);
         }
         FUN_L00_00257470_002dbb20(moby, 0, -1);
         *(s16 *)(suction_record + 0x68) = 4;
