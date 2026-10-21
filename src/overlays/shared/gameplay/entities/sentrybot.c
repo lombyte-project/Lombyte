@@ -2106,14 +2106,14 @@ extern void play_entity_sound(float, char *, char *, float, float, int, int, int
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 
 void FUN_L15_0029ead0(struct Moby *moby) {
-    char *cls = moby->pclass;
+    char *moby_class = moby->pclass;
     char *state = (char *)moby->pvars;
-    float half_relative_scale = moby->scale / *(float *)(cls + 0x24) * 0.5f;
+    float half_relative_scale = moby->scale / *(float *)(moby_class + 0x24) * 0.5f;
     char *pos;
     struct Hero *globals;
     half_relative_scale = half_relative_scale + *(float *)state;
     moby->scale = half_relative_scale + half_relative_scale;
-    moby->scale = moby->scale * *(float *)(cls + 0x24);
+    moby->scale = moby->scale * *(float *)(moby_class + 0x24);
     if (*(int *)(state + 8) < scale_game_frames(0x28))
         moby->alpha = *(int *)(state + 8) * 127 / scale_game_frames(0x28);
     globals = &hero;
