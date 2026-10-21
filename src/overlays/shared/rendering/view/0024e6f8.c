@@ -20,15 +20,15 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void rotate_vector_by_quaternion(void *arg0, void *arg1, void *arg2) __asm__("FUN_00214800");
 
-void FUN_L03_0024e6f8(float rotation_scale, float *dst, float *source_vector, float *b, int flag) {
+void FUN_L03_0024e6f8(float rotation_scale, float *dst, float *source_vector, float *reference_vector, int flag) {
     float rotation_quaternion[4];
     float dot_product, l, ang;
-    fast_vec_cross(rotation_quaternion, b, source_vector);
+    fast_vec_cross(rotation_quaternion, reference_vector, source_vector);
     fast_vec_normalize(rotation_quaternion, rotation_quaternion, 1.0f);
-    dot_product = fast_vec_dot(source_vector, b);
+    dot_product = fast_vec_dot(source_vector, reference_vector);
     if (flag == 0) {
         l = fast_vec_length(source_vector);
-        l = l * fast_vec_length(b);
+        l = l * fast_vec_length(reference_vector);
         if (l == 0.0f) {
             qcopy(dst, source_vector);
             return;
