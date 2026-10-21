@@ -55,9 +55,9 @@ extern s32 FUN_001f0b58_2c8440(void) __asm__("FUN_001f0b58");
  * normal in vars and pulls the point 5% toward D_L00_00166DC0_2c8440. mode 0 needs
  * a live hit moby; mode 1 starts from the hero's hand. Returns 1 on a hit.
  */
-s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *thrown_moby, s32 mode)
+s32 FUN_L00_002c8440(ThrowVars_2c8440 *throw_vars, struct Moby *thrown_moby, s32 mode)
 {
-    Vec4 simulated_position, simulated_velocity, position_scratch, q, w;
+    Vec4 simulated_position, simulated_velocity, position_scratch, q, landing_probe_position;
     s32 prediction_timer;
     s32 found = 0;
     s32 i;
@@ -73,24 +73,24 @@ s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *thrown_moby, s32 mode)
         simulated_position.f[2] = 0.0f;
         add_vector_xyz_2c8440(&simulated_position, &simulated_position, &hero.motion.pos);
         simulated_position.f[2] += 0.39081999659538269043f;
-        qcopy(&simulated_velocity, &v->vel);
+        qcopy(&simulated_velocity, &throw_vars->vel);
         if (hero.state.control_mode == 15)
             add_vector_xyz_2c8440(&simulated_velocity, &simulated_velocity, &hero.motion.displacement);
         if (hero.ground_moby && FUN_L00_002603d0_2c8440((int)hero.ground_moby) && mode)
             add_vector_xyz_2c8440(&simulated_velocity, &simulated_velocity, &hero.motion.displacement);
         prediction_timer = scale_game_frames_2c8440(300);
     } else {
-        u8 *holder_vars = v->holder->pvars;
+        u8 *holder_vars = throw_vars->holder->pvars;
 
         qcopy(&simulated_position, &thrown_moby->pos);
-        qcopy(&simulated_velocity, &v->vel);
+        qcopy(&simulated_velocity, &throw_vars->vel);
         {
-            s32 timer = v->timer;
+            s32 timer = throw_vars->timer;
             s32 flag = *(s32 *)(holder_vars + 0x50);
 
             prediction_timer = timer;
             if (flag)
-                v->unk46 = 1;
+                throw_vars->unk46 = 1;
         }
     }
     simulated_velocity.f[2] -= D_0015ED6C * 0.5f;
@@ -98,17 +98,17 @@ s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *thrown_moby, s32 mode)
     q.f[2] = simulated_position.f[2];
     if (collision_line_2c8440(&q, &simulated_position, 0x10, hero.moby, 0) && (FUN_001f0b58_2c8440() || 0.0f < simulated_velocity.f[2])) {
         if (coll_hit.moby != 0 && coll_hit.unk1C <= 0) {
-            if (((struct Moby *)coll_hit.moby != hero.moby && (struct Moby *)coll_hit.moby != v->holder)
+            if (((struct Moby *)coll_hit.moby != hero.moby && (struct Moby *)coll_hit.moby != throw_vars->holder)
                 || prediction_timer < scale_game_frames_2c8440(300) - scale_game_frames_2c8440(10)) {
-                w.q = 0;
-                w.f[2] = 0.5f;
-                qcopy(&v->landing, &((struct Moby *)coll_hit.moby)->pos);
+                landing_probe_position.q = 0;
+                landing_probe_position.f[2] = 0.5f;
+                qcopy(&throw_vars->landing, &((struct Moby *)coll_hit.moby)->pos);
                 found = 1;
-                add_vector_xyz_2c8440(&w, &w, &v->landing);
-                FUN_00213508_2c8440(&w, 0, 0.5f);
+                add_vector_xyz_2c8440(&landing_probe_position, &landing_probe_position, &throw_vars->landing);
+                FUN_00213508_2c8440(&landing_probe_position, 0, 0.5f);
             }
         } else if (coll_hit.unk1C > 0) {
-            qcopy(&v->landing, &coll_hit.point);
+            qcopy(&throw_vars->landing, &coll_hit.point);
             found = 1;
         }
     }
@@ -123,17 +123,17 @@ s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *thrown_moby, s32 mode)
         if (!FUN_001f0b58_2c8440() && 0.0f < simulated_velocity.f[2])
             continue;
         if (coll_hit.moby != 0 && coll_hit.unk1C <= 0) {
-            if (((struct Moby *)coll_hit.moby == hero.moby || (struct Moby *)coll_hit.moby == v->holder)
+            if (((struct Moby *)coll_hit.moby == hero.moby || (struct Moby *)coll_hit.moby == throw_vars->holder)
                 && !(prediction_timer < scale_game_frames_2c8440(300) - scale_game_frames_2c8440(10)))
                 continue;
-            w.q = 0;
-            w.f[2] = 0.5f;
-            qcopy(&v->landing, &((struct Moby *)coll_hit.moby)->pos);
-            add_vector_xyz_2c8440(&w, &w, &v->landing);
-            FUN_00213508_2c8440(&w, 0, 0.5f);
+            landing_probe_position.q = 0;
+            landing_probe_position.f[2] = 0.5f;
+            qcopy(&throw_vars->landing, &((struct Moby *)coll_hit.moby)->pos);
+            add_vector_xyz_2c8440(&landing_probe_position, &landing_probe_position, &throw_vars->landing);
+            FUN_00213508_2c8440(&landing_probe_position, 0, 0.5f);
             break;
         } else if (coll_hit.unk1C > 0) {
-            qcopy(&v->landing, &coll_hit.point);
+            qcopy(&throw_vars->landing, &coll_hit.point);
             break;
         }
     }
@@ -147,10 +147,10 @@ s32 FUN_L00_002c8440(ThrowVars_2c8440 *v, struct Moby *thrown_moby, s32 mode)
     }
     if (mode != 2 || coll_hit.moby == 0 || !FUN_L00_002603d0_2c8440(coll_hit.moby))
         FUN_001f4600_2c8440(FUN_L00_002c7df8_2c8440, thrown_moby);
-    v->normal.q = coll_hit_normal_2c8440.q;
-    subtract_vector_xyz_2c8440(&position_scratch, &v->landing, &D_L00_00166DC0_2c8440);
+    throw_vars->normal.q = coll_hit_normal_2c8440.q;
+    subtract_vector_xyz_2c8440(&position_scratch, &throw_vars->landing, &D_L00_00166DC0_2c8440);
     scale_vector_xyz_2c8440(&position_scratch, &position_scratch, 0.94999998807907104492f);
-    add_vector_xyz_2c8440(&v->landing, &position_scratch, &D_L00_00166DC0_2c8440);
+    add_vector_xyz_2c8440(&throw_vars->landing, &position_scratch, &D_L00_00166DC0_2c8440);
     return 1;
 ret0:
     /* a second return 0 block, as in retail */
