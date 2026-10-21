@@ -483,7 +483,7 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_002147
 
 int FUN_L00_00222158(void);
 int FUN_L00_00222158(void) {
-    char *g0, *g, *gb, *g2, *g3;
+    char *hero_target_check_base, *hero_angle_state_base, *gb, *hero_target_output_base, *hero_target_result_base;
     char *candidate_moby;
     char *best;
     char *candidate_data;
@@ -493,13 +493,13 @@ int FUN_L00_00222158(void) {
     float collision_start[4];
     float collision_end[4];
 
-    g0 = (char *)((char *)&D_0013F350);
-    if (*(int *)(g0 + 0x208C) == 0xD) {
-        return *(int *)(g0 + 0x968);
+    hero_target_check_base = (char *)((char *)&D_0013F350);
+    if (*(int *)(hero_target_check_base + 0x208C) == 0xD) {
+        return *(int *)(hero_target_check_base + 0x968);
     }
     best = 0;
     bestd = 1e8f;
-    *(int *)(g0 + 0x968) = 0;
+    *(int *)(hero_target_check_base + 0x968) = 0;
     for (candidate_moby = D_L00_0015FFE4; candidate_moby != 0; candidate_moby = *(char **)(candidate_moby + 0x28)) {
         if (*(short *)(candidate_moby + 0xA6) != 0x2F6)
             continue;
@@ -511,8 +511,8 @@ int FUN_L00_00222158(void) {
         if (*(float *)(candidate_data + 0x20) != 0.0f &&
             *(float *)(candidate_data + 0x20) < FUN_001f9b48((char *)(&hero.motion.pos), candidate_moby + 0x10))
             continue;
-        g = (char *)((char *)&D_0013F350);
-        k = *(int *)(g + 0x2084);
+        hero_angle_state_base = (char *)((char *)&D_0013F350);
+        k = *(int *)(hero_angle_state_base + 0x2084);
         target_angle_limit = 0.5235988f;
         target_elevation_angle_limit = -1.0f;
         if (k == 1 || k == 0x1E) {
@@ -543,21 +543,21 @@ int FUN_L00_00222158(void) {
     }
     if (best != 0) {
         char *bd;
-        g2 = (char *)((char *)&D_0013F350);
-        *(char **)(g2 + 0x964) = best;
-        qcopy(collision_start, g2 + 0x80);
+        hero_target_output_base = (char *)((char *)&D_0013F350);
+        *(char **)(hero_target_output_base + 0x964) = best;
+        qcopy(collision_start, hero_target_output_base + 0x80);
         collision_start[2] += 0.5f;
         qcopy(collision_end, best + 0x10);
         bd = *(char **)(best + 0x78);
-        *(int *)(g2 + 0x978) = *(int *)(bd + 8);
-        *(float *)(g2 + 0x980) = *(float *)(bd + 4);
-        *(float *)(g2 + 0x984) = bestd;
+        *(int *)(hero_target_output_base + 0x978) = *(int *)(bd + 8);
+        *(float *)(hero_target_output_base + 0x980) = *(float *)(bd + 4);
+        *(float *)(hero_target_output_base + 0x984) = bestd;
         if (FUN_001efa68(collision_start, collision_end, 2, 0, 0) == 0) {
-            *(int *)(g2 + 0x968) = 1;
+            *(int *)(hero_target_output_base + 0x968) = 1;
         }
     }
-    g3 = (char *)((char *)&D_0013F350);
-    return *(int *)(g3 + 0x968);
+    hero_target_result_base = (char *)((char *)&D_0013F350);
+    return *(int *)(hero_target_result_base + 0x968);
 }
 
 #define NOT_SDA
