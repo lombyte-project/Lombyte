@@ -950,8 +950,8 @@ extern void FUN_L00_00258050(float *, float *, float *, float);
 f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 vel) __asm__("FUN_001ebd78");
 
-void FUN_L00_002eae20(void *arg) {
-    char *camera_object = arg;
+void FUN_L00_002eae20(void *camera) {
+    char *camera_object = camera;
     float mtx[16];
     char *camera_state = *(char **)(camera_object + 0x70);
     char *rotation_spring_state = camera_state + 0x30;
