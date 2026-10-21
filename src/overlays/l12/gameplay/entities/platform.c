@@ -3176,21 +3176,21 @@ void helicopter_update(char *moby) {
         case HELICOPTER_INITIALIZE_PATH:
             if (*(int *)(moby_vars + 0x74) != -1) {
                 char *tbl;
-                int idx;
-                int cnt;
+                int initial_node_index;
+                int last_node_index;
                 FUN_L01_0028b410(moby_vars + 0x60);
                 tbl = D_L12_001B0930[*(int *)(moby_vars + 0x74)];
                 *(char **)(moby_vars + 0x70) = tbl;
-                idx = *(int *)(moby_vars + 0xA0);
-                cnt = *(int *)tbl - 1;
-                if (cnt < idx) idx = cnt;
-                qcopy((moby + 0x10), tbl + idx * 16 + 0x10);
+                initial_node_index = *(int *)(moby_vars + 0xA0);
+                last_node_index = *(int *)tbl - 1;
+                if (last_node_index < initial_node_index) initial_node_index = last_node_index;
+                qcopy((moby + 0x10), tbl + initial_node_index * 16 + 0x10);
                 moby_vars[0x2A] = 0x10;
                 moby_vars[0x28] = 2;
                 moby_vars[0x2C] = 0x2C;
                 *(float *)(moby_vars + 0x30) = 1.4f;
                 moby_vars[0x2B] = 1;
-                *(int *)(moby_vars + 0x60) = idx;
+                *(int *)(moby_vars + 0x60) = initial_node_index;
                 moby[0x20] = 1;
                 *(short *)(moby + 0x32) = 0xAA;
                 *(unsigned short *)(moby + 0x34) |= 0x1000;
@@ -3198,16 +3198,16 @@ void helicopter_update(char *moby) {
             break;
         case HELICOPTER_FOLLOW_PATH: {
             char *path_state = moby_vars + 0x60;
-            int cur = *(int *)path_state;
+            int current_node_index = *(int *)path_state;
             char *tbl = *(char **)(path_state + 0x10);
             int step = *(char *)(path_state + 4);
             int node_count = *(int *)tbl;
-            int prev = (cur + node_count - step) % node_count;
-            int next = (cur + node_count + step) % node_count;
+            int prev = (current_node_index + node_count - step) % node_count;
+            int next = (current_node_index + node_count + step) % node_count;
             float segment_heading_delta;
             float ang;
             qcopy(A, tbl + prev * 16 + 0x10);
-            qcopy(B, tbl + cur * 16 + 0x10);
+            qcopy(B, tbl + current_node_index * 16 + 0x10);
             qcopy(C, tbl + next * 16 + 0x10);
             subtract_vector_xyz_c(A, B, A);
             subtract_vector_xyz_c(B, C, B);
