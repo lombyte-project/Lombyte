@@ -597,43 +597,43 @@ void FUN_L03_002cbea8(struct Moby *mine_moby) {
 
             *(Vec4f *)vector_scratch = (Vec4f){frame_time * 14.0f, frame_time * 22.0f, frame_time * 12.0f, 0.0f};
             {
-                MineVec dir;
+                MineVec debris_velocity;
                 MineVec debris_vector_scratch;
                 float rr;
-                float ang;
+                float debris_azimuth;
 
 
                 *(OvlQuad *)debris_vector_scratch = 0;
                 debris_vector_scratch[0] = mine_rand(frame_time * -0.5f, frame_time * 0.5f);
                 debris_vector_scratch[1] = mine_rand(frame_time * -0.5f, frame_time * 0.5f);
                 debris_vector_scratch[2] = mine_rand(frame_time * 4.0f, vector_scratch[kind]);
-                *(OvlQuad *)dir = *(OvlQuad *)debris_vector_scratch;
+                *(OvlQuad *)debris_velocity = *(OvlQuad *)debris_vector_scratch;
                 rr = mine_rand(0.0f, kind == 1 ? 0.5f : 0.25f);
-                ang = mine_rand_angle();
-                debris_vector_scratch[0] = mine_cos(ang) * rr;
-                debris_vector_scratch[1] = mine_sin(ang) * rr;
+                debris_azimuth = mine_rand_angle();
+                debris_vector_scratch[0] = mine_cos(debris_azimuth) * rr;
+                debris_vector_scratch[1] = mine_sin(debris_azimuth) * rr;
                 debris_vector_scratch[2] = 0.0f;
                 mine_vec_add(debris_vector_scratch, debris_vector_scratch, &mine_moby->pos);
                 debris_vector_scratch[2] -= rr * mine_cos(0.785398f);
-                dir[2] -= rr * frame_time * 8.0f;
+                debris_velocity[2] -= rr * frame_time * 8.0f;
                 switch (kind) {
                 case MINE_DEBRIS_FIXED_PALETTE_COLOR:
-                    mine_debris(debris_vector_scratch, dir, 0x1F101820, 0x101010, mine_rand(200000.0f, 300000.0f),
+                    mine_debris(debris_vector_scratch, debris_velocity, 0x1F101820, 0x101010, mine_rand(200000.0f, 300000.0f),
                                 mine_rand_between(mine_frames(0xB4), mine_frames(0xF0)), 0);
                     break;
                 case MINE_DEBRIS_WIDE_SPAWN_RADIUS:
-                    mine_debris(debris_vector_scratch, dir, 0x3F081020, 0x0F081020, mine_rand(50000.0f, 100000.0f), mine_frames(0xB4), 1);
+                    mine_debris(debris_vector_scratch, debris_velocity, 0x3F081020, 0x0F081020, mine_rand(50000.0f, 100000.0f), mine_frames(0xB4), 1);
                     break;
                 case MINE_DEBRIS_RANDOM_PALETTE_COLOR:
-                    mine_debris(debris_vector_scratch, dir, mine_rand_below(100) < 0x28 ? 0x5FF8F8F8 : 0x2F486078, 0x0F000020, 150000.0f,
+                    mine_debris(debris_vector_scratch, debris_velocity, mine_rand_below(100) < 0x28 ? 0x5FF8F8F8 : 0x2F486078, 0x0F000020, 150000.0f,
                                 mine_rand_between(mine_frames(0x1E), mine_frames(0x2D)), 2);
                     break;
                 case MINE_DEBRIS_SPHERICAL_VELOCITY: {
                     int c1 = mine_blend_color(0x7F000000, 0x7F182030, mine_rand(0.25f, 1.0f));
                     int c2 = mine_blend_color(0, 0x5F5F5F, mine_rand(0.5f, 1.0f));
 
-                    mine_spherical_offset(dir, mine_rand(0.0f, 1.0f) * frame_time, ang, mine_rand_angle());
-                    mine_debris(debris_vector_scratch, dir, c1, c2, mine_rand(200000.0f, 300000.0f),
+                    mine_spherical_offset(debris_velocity, mine_rand(0.0f, 1.0f) * frame_time, debris_azimuth, mine_rand_angle());
+                    mine_debris(debris_vector_scratch, debris_velocity, c1, c2, mine_rand(200000.0f, 300000.0f),
                                 mine_rand_between(mine_frames(0xF0), mine_frames(0x12C)), 3);
                     break;
                 }
