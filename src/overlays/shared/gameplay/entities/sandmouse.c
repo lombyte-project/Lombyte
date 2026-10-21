@@ -1920,11 +1920,11 @@ extern void release_voice_slot(int) __asm__("FUN_0022d798");
 void FUN_L01_0031a078(int sound_owner) {
     char *sound_data = *(char **)(sound_owner + 8);
     int voice_slot_index = *(int *)(sound_data + 4);
-    char *r;
+    char *voice_slot;
     int flag;
     qcopy(D_0013E5E0 + voice_slot_index * 0x70, D_L01_00167240);
-    r = D_0013E5E0 - 0x90 + voice_slot_index * 0x70;
-    flag = *(int *)(r + 0x8C) == sound_owner && *(unsigned char *)(r + 0x74) != 0;
+    voice_slot = D_0013E5E0 - 0x90 + voice_slot_index * 0x70;
+    flag = *(int *)(voice_slot + 0x8C) == sound_owner && *(unsigned char *)(voice_slot + 0x74) != 0;
     if (*(int *)(D_L01_00167240 + 0x254) != 0) {
         if (!flag) {
             *(int *)(sound_data + 4) = play_voice(*(int *)sound_data, 0x15, sound_owner, 0x400);
