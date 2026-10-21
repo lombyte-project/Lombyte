@@ -1089,13 +1089,13 @@ extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color
  */
 void FUN_L00_002a6b70(struct Moby *bolt)
 {
-    Vec4 vel;
+    Vec4 sparkle_initial_velocity;
     Vec4 pos;
     s32 value;
     s32 spin;
     f32 k;
     f32 size;
-    BoltSource *src;
+    BoltSource *bolt_source;
 
     switch (bolt->oclass) {
     default:
@@ -1113,9 +1113,9 @@ void FUN_L00_002a6b70(struct Moby *bolt)
         break;
     }
 
-    src = bolt->parent;
-    if (src && !(src->id & 0x80))
-        bolt_source_stats[current_level_index][src->id].bolts += value;
+    bolt_source = bolt->parent;
+    if (bolt_source && !(bolt_source->id & 0x80))
+        bolt_source_stats[current_level_index][bolt_source->id].bolts += value;
     current_bolt_count += value;
     if (bolt->pvars[0x40] || (D_L00_0015F598 && (void *)bolt < D_L00_0015FFDC_u))
         D_0015EE2C += value;
@@ -1126,16 +1126,16 @@ void FUN_L00_002a6b70(struct Moby *bolt)
                            &current_bolt_count, 9999999);
 
     /* two sparkles 10 units out along a random direction, spinning opposite ways */
-    random_vector(&vel, D_0015ED6C * k, D_0015ED6C);
-    scale_vector_xyz(&pos, &vel, 10.0f);
+    random_vector(&sparkle_initial_velocity, D_0015ED6C * k, D_0015ED6C);
+    scale_vector_xyz(&pos, &sparkle_initial_velocity, 10.0f);
     add_vector_xyz(&pos, &pos, &bolt->pos);
     spin = random_integer_below(2);
     if (spin == 0)
         spin--;
     size = random_float_between(0.4f, 0.5f);
-    FUN_L00_00272060(&pos, scale_game_frames(0x19), size * 0.2f, size, 0x7F207F7F, 0, spin, &vel, 0.0f);
+    FUN_L00_00272060(&pos, scale_game_frames(0x19), size * 0.2f, size, 0x7F207F7F, 0, spin, &sparkle_initial_velocity, 0.0f);
     spin = -spin;
-    FUN_L00_00272060(&pos, scale_game_frames(0x19), size * 0.14f, size * k, 0x7F7F7F7F, 1, spin, &vel, 0.0f);
+    FUN_L00_00272060(&pos, scale_game_frames(0x19), size * 0.14f, size * k, 0x7F7F7F7F, 1, spin, &sparkle_initial_velocity, 0.0f);
 }
 #define NOT_SDA
 
