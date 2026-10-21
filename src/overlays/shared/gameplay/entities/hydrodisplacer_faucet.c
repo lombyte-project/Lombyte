@@ -188,11 +188,11 @@ void hydrodisplacer_faucet_update(char *faucet_moby) {
         HYDRODISPLACER_FAUCET_ANIM_WAIT_FOR_LINK_FLAG_2 = 2,
         HYDRODISPLACER_FAUCET_ANIM_TRANSITION_TO_LINK_FLAG_1_WAIT = 3
     };
-    struct Hero *g = &hero;
+    struct Hero *player_hero = &hero;
     int hero_on_faucet_in_mode_13 = 0;
     int *faucet_vars = *(int **)(faucet_moby + 0x78);
-    if (((char *)g->ground_moby) == faucet_moby) {
-        hero_on_faucet_in_mode_13 = g->state.control_mode == 0x13;
+    if (((char *)player_hero->ground_moby) == faucet_moby) {
+        hero_on_faucet_in_mode_13 = player_hero->state.control_mode == 0x13;
     }
     switch ((unsigned char)faucet_moby[0x53]) {
     case HYDRODISPLACER_FAUCET_ANIM_WAIT_FOR_LINK_FLAG_1:
