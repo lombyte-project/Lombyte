@@ -2475,15 +2475,15 @@ extern char D_0013F7EE[] __attribute__((section(".data")));
 void FUN_L00_00209ec8(void) {
     OvlQuad hero_position_copy[1];
     OvlQuad w[1];
-    char *g;
+    char *hero_effect_timer_anchor;
     char *base;
     float lateral_angle, r, planar_scale, alpha_fraction, theta, phi;
     int frame_count, alpha, col, life, small_effect_sample, large_effect_sample, k;
     OvlQuad *pt;
-    g = D_0013F7EE;
-    if (fast_dec_timer(g)) {
-        qcopy(hero_position_copy, g - 0x41E);
-        base = g - 0x49E;
+    hero_effect_timer_anchor = D_0013F7EE;
+    if (fast_dec_timer(hero_effect_timer_anchor)) {
+        qcopy(hero_position_copy, hero_effect_timer_anchor - 0x41E);
+        base = hero_effect_timer_anchor - 0x49E;
         lateral_angle = FUN_001fa580_209ec8(*(float *)(base + 0x98), 1.5707963705062866f);
         planar_scale = spread_k(D_0015ED6C * 0.2f, D_0015ED6C * 0.7f);
         ((float *)w)[0] = fast_cos(lateral_angle) * planar_scale;
@@ -2493,10 +2493,10 @@ void FUN_L00_00209ec8(void) {
         FUN_L00_0026d598_209ec8(hero_position_copy, w, 0);
         *(short *)(base + 0x49E) = random_int_between(2, 3);
     }
-    if (!fast_dec_timer(g - 2))
+    if (!fast_dec_timer(hero_effect_timer_anchor - 2))
         return;
     frame_count = FUN_001f96f8_209ec8(0x28);
-    alpha_fraction = (float)(frame_count - *(int *)(g - 0x306)) / (float)FUN_001f96f8_209ec8(0x28);
+    alpha_fraction = (float)(frame_count - *(int *)(hero_effect_timer_anchor - 0x306)) / (float)FUN_001f96f8_209ec8(0x28);
     if (1.0f < alpha_fraction)
         alpha_fraction = 1.0f;
     if (alpha_fraction < 0.0f)
@@ -2511,7 +2511,7 @@ void FUN_L00_00209ec8(void) {
         small_effect_sample = FUN_001fa6d0_209ec8(FUN_002132a8_209ec8(4200.0f, 7350.0f) / 1000.0f);
         large_effect_sample = FUN_001fa6d0_209ec8(FUN_002132a8_209ec8(21000.0f, 31500.001953125f) / 1000.0f);
         r = FUN_002132a8_209ec8(D_0015ED6C * 0.15f, D_0015ED6C * 0.57f);
-        qcopy(hero_position_copy, g - 0x41E);
+        qcopy(hero_position_copy, hero_effect_timer_anchor - 0x41E);
         theta = FUN_00213308_209ec8();
         phi = FUN_00213308_209ec8();
         build_spherical_offset(pt, r, theta, phi);
