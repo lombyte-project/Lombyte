@@ -930,10 +930,10 @@ extern int D_L02_0015FFD8; /* no foreign declaration */
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L02_002d5728(char *arg) {
+void FUN_L02_002d5728(char *moby) {
     short *group_ids;
-    if (((unsigned char *)arg)[0x21] != 0xFF) {
-        group_ids = (short *)D_L02_001ABE40[((unsigned char *)arg)[0x21]];
+    if (((unsigned char *)moby)[0x21] != 0xFF) {
+        group_ids = (short *)D_L02_001ABE40[((unsigned char *)moby)[0x21]];
         do {
             char *group_moby = (char *)D_L02_0015FFD8 + ((*(unsigned short *)group_ids & 0x7FFF) << 8);
             if (*(short *)(group_moby + 0xA6) == 0x244) {
