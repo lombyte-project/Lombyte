@@ -314,7 +314,7 @@ void FUN_L00_0020d330(void) {
     Vec4_20d330 *pb;
     int i20, i24, i2C;
     float rail_query_value;
-    float query_height_above_rail, lim;
+    float query_height_above_rail, minimum_query_height_above_rail;
     P->unk5FC = 0;
     if (P->unk1E4 != 0)
         return;
@@ -327,11 +327,11 @@ void FUN_L00_0020d330(void) {
             az = rail_query_position.f[2];
             fl = D_0013CAE4_0020d330[0];
             bz = rail_point.f[2];
-            lim = -0.7f;
+            minimum_query_height_above_rail = -0.7f;
             query_height_above_rail = az - bz;
             if (fl & 0x80)
-                lim = -1.2f;
-            if (lim < query_height_above_rail && query_height_above_rail < 0.4f) {
+                minimum_query_height_above_rail = -1.2f;
+            if (minimum_query_height_above_rail < query_height_above_rail && query_height_above_rail < 0.4f) {
                 qcopy(&hero.unk5E0, pb);
                 hero.unk5F0 = (s32 *)i20;
                 hero.unk5F4 = i24;
