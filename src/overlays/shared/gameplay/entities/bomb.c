@@ -2403,11 +2403,11 @@ char *FUN_L00_002cdf28(char *search_position, int *excl) {
     char *result = 0;
     char *candidate_moby;
     float best = 1e9f;
-    float v[4];
+    float candidate_position_scratch[4];
     for (candidate_moby = (char *)D_L00_0015FFE4; candidate_moby != 0; candidate_moby = *(char **)(candidate_moby + 0x28)) {
         char *cls = *(char **)(candidate_moby + 0x24);
         int class_category = 0;
-        float dist;
+        float search_to_candidate_distance;
         char *class_callback_data;
         char *x;
         if (cls != 0)
@@ -2437,42 +2437,42 @@ char *FUN_L00_002cdf28(char *search_position, int *excl) {
             if (c != 0x350 && c != 0x31)
                 continue;
         }
-        dist = fast_vec_dist(search_position, candidate_moby + 0x10);
+        search_to_candidate_distance = fast_vec_dist(search_position, candidate_moby + 0x10);
         if (*(short *)(candidate_moby + 0xA6) == 0x4D6) {
-            normalize_vector_xyz(v, *(char **)(candidate_moby + 0x78), dist);
-            add_vector_xyz(v, v, candidate_moby + 0x10);
-            if (dist < fast_vec_dist(search_position, v))
+            normalize_vector_xyz(candidate_position_scratch, *(char **)(candidate_moby + 0x78), search_to_candidate_distance);
+            add_vector_xyz(candidate_position_scratch, candidate_position_scratch, candidate_moby + 0x10);
+            if (search_to_candidate_distance < fast_vec_dist(search_position, candidate_position_scratch))
                 continue;
         } else {
-            float lim;
+            float category_distance_limit;
             switch (class_category) {
             case 5:
-                lim = 4.0f;
+                category_distance_limit = 4.0f;
                 break;
             case 7:
-                lim = 5.3f;
+                category_distance_limit = 5.3f;
                 break;
             case 8:
-                lim = 6.0f;
+                category_distance_limit = 6.0f;
                 break;
             default:
                 goto skip;
             }
-            if (lim < dist)
+            if (category_distance_limit < search_to_candidate_distance)
                 continue;
         }
     skip:
-        if (!(dist < best))
+        if (!(search_to_candidate_distance < best))
             continue;
         class_callback_data = FUN_L00_002db890(candidate_moby);
         if (class_callback_data != 0 && *(short *)(class_callback_data + 0x68) > 0)
             continue;
         x = (char *)FUN_002141f8_c(candidate_moby);
-        qcopy(v, candidate_moby + 0x10);
+        qcopy(candidate_position_scratch, candidate_moby + 0x10);
         if (x != 0)
-            v[2] = v[2] + (*(float *)(x + 0x10) + 0.05f);
-        if (collision_line(search_position, v, 6, (int)candidate_moby, 0) == 0) {
-            best = dist;
+            candidate_position_scratch[2] = candidate_position_scratch[2] + (*(float *)(x + 0x10) + 0.05f);
+        if (collision_line(search_position, candidate_position_scratch, 6, (int)candidate_moby, 0) == 0) {
+            best = search_to_candidate_distance;
             result = candidate_moby;
         }
     }
