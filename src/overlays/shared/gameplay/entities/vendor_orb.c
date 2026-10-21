@@ -2459,26 +2459,26 @@ typedef struct {
 int FUN_L00_002e83c0(int arg1, int arg2);
 int FUN_L00_002e83c0(int candidate_object, int unused) {
     void *current_camera = D_L00_00166E00_c2;
-    C842e83c0 *cur;
+    C842e83c0 *camera_state;
     u8 x;
     u8 y;
     u32 tab;
     if (((B842e83c0 *)current_camera)->f86 != 0) {
         return -1;
     }
-    cur = (C842e83c0 *)(u32)((B2842e83c0 *)current_camera)->f70;
-    if (cur->f220 == 0) {
-        cur->f220 = candidate_object;
+    camera_state = (C842e83c0 *)(u32)((B2842e83c0 *)current_camera)->f70;
+    if (camera_state->f220 == 0) {
+        camera_state->f220 = candidate_object;
         return 1;
     }
-    if (cur->f220 == candidate_object) {
+    if (camera_state->f220 == candidate_object) {
         return 1;
     }
     tab = (u32)D_L00_0015EF50;
-    x = *(u8 *)(*(u32 *)(tab + ((O842e83c0 *)(u32)cur->f220)->f84 * 0x20 + 0x1C) + 0x1C);
+    x = *(u8 *)(*(u32 *)(tab + ((O842e83c0 *)(u32)camera_state->f220)->f84 * 0x20 + 0x1C) + 0x1C);
     y = *(u8 *)(*(u32 *)(tab + ((O842e83c0 *)(u32)candidate_object)->f84 * 0x20 + 0x1C) + 0x1C);
     if (x < y) {
-        cur->f220 = candidate_object;
+        camera_state->f220 = candidate_object;
         return 1;
     }
     return 0;
