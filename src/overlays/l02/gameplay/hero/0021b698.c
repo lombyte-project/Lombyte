@@ -328,7 +328,7 @@ void FUN_L02_002216a0(void) {
     };
     V collision_ray_end, collision_ray_start, ground_geometry_scratch, probe_ray_start, unused_probe_point, probe_surface_angles, normalized_probe_hit_normal;
     f32 f;
-    s32 r;
+    s32 collision_sound_class;
     s32 i;
     f32 probe_angle;
     u8 *hit_moby_flag_data;
@@ -361,11 +361,11 @@ void FUN_L02_002216a0(void) {
     if (collision_line(&collision_ray_start, &collision_ray_end, 2, (s32)hero.moby, 0) == 0) {
         goto tail;
     }
-    r = coll_sound_class();
-    if (r == -1) {
-        r = 3;
+    collision_sound_class = coll_sound_class();
+    if (collision_sound_class == -1) {
+        collision_sound_class = 3;
     }
-    hero.unk12ED = r;
+    hero.unk12ED = collision_sound_class;
     hero.ground_type = collision_hit_material();
     if (hero.ground_type == 0) {
         hero.water_surface_z = resolve_camera_surface_height(D_L02_00174460, (u8 *)&hero.unk280);
@@ -375,11 +375,11 @@ void FUN_L02_002216a0(void) {
         if (collision_line(&collision_ray_start, &collision_ray_end, 0x24, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
-        r = coll_sound_class();
+        collision_sound_class = coll_sound_class();
         if (current_level_index == 1 || current_level_index == 0x12) {
-            r = 3;
+            collision_sound_class = 3;
         }
-        hero.unk12ED = r;
+        hero.unk12ED = collision_sound_class;
     }
     if (hero.ground_type == 0xD) {
         hero.water_surface_z = HH.point.f[2];
