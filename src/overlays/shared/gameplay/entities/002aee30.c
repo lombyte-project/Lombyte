@@ -271,11 +271,11 @@ void FUN_L04_002af058(struct Moby *moby)
 extern void FUN_L00_00250df8(void *);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-void *FUN_L04_002ce080(char *source_moby, char *pos) {
+void *FUN_L04_002ce080(char *source_moby, char *spawn_position) {
     char position_copy[16];
     char *position_copy_ptr = position_copy;
     char *spawned_moby;
-    *(OvlQuad *)position_copy = *(OvlQuad *)pos;
+    *(OvlQuad *)position_copy = *(OvlQuad *)spawn_position;
     spawned_moby = (char *)func_0020D348_m(0x1F3);
     if (spawned_moby != 0) {
         *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
