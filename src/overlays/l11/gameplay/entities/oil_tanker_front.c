@@ -1281,7 +1281,7 @@ void blarg_ship_update(struct Moby *moby) {
     float movement_distance_scratch;
     char *moby_vars = (char *)moby->pvars;
     float placement_angle;
-    float len;
+    float distance_to_target;
     char *spawned_shot;
 
     FUN_L11_0031a1c0(moby);
@@ -1381,15 +1381,15 @@ void blarg_ship_update(struct Moby *moby) {
         normalize_vector_xyz(scratch_vector, basis_row0, 20.0f);
         add_vector_xyz(target_position, target_position, scratch_vector);
         subtract_vector_xyz(scratch_vector, target_position, &moby->pos);
-        len = vector_length_xyz(scratch_vector);
+        distance_to_target = vector_length_xyz(scratch_vector);
         if (*(char *)&hero.ship_flags & 2) {
-            advance_accelerated_scalar(&movement_distance_scratch, (float *)(moby_vars + 0x6C), len, frame_time_sq + frame_time_sq,
+            advance_accelerated_scalar(&movement_distance_scratch, (float *)(moby_vars + 0x6C), distance_to_target, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, D_0015ED6C_n[1]);
         } else if (moby->command) {
-            advance_accelerated_scalar(&movement_distance_scratch, (float *)(moby_vars + 0x6C), len, frame_time_sq + frame_time_sq,
+            advance_accelerated_scalar(&movement_distance_scratch, (float *)(moby_vars + 0x6C), distance_to_target, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, D_0015ED6C_n[1] * 15.0f);
         } else {
-            advance_accelerated_scalar(&movement_distance_scratch, (float *)(moby_vars + 0x6C), len, frame_time_sq + frame_time_sq,
+            advance_accelerated_scalar(&movement_distance_scratch, (float *)(moby_vars + 0x6C), distance_to_target, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, D_0015ED6C_n[1] * 5.0f);
         }
         FUN_L00_0025f730(scratch_vector, *(float *)(moby_vars + 0x6C));
@@ -1404,22 +1404,22 @@ void blarg_ship_update(struct Moby *moby) {
                 moby->command = 0;
             }
         } else {
-            float *tgt = (float *)(&hero.motion.pos);
+            float *hero_position = (float *)(&hero.motion.pos);
             float *yaw = &moby->rot.z;
             float *pitch = &moby->rot.y;
-            float ang;
-            subtract_vector_xyz(direction_to_hero, tgt, &moby->pos.x);
-            ang = fast_arc_tan(direction_to_hero[0], direction_to_hero[1]);
-            approach_angle(yaw, (float *)(moby_vars + 0x8C), ang, frame_time_sq * 12.566371f,
+            float steering_target_angle;
+            subtract_vector_xyz(direction_to_hero, hero_position, &moby->pos.x);
+            steering_target_angle = fast_arc_tan(direction_to_hero[0], direction_to_hero[1]);
+            approach_angle(yaw, (float *)(moby_vars + 0x8C), steering_target_angle, frame_time_sq * 12.566371f,
                              frame_time_sq * 12.566371f, D_0015ED6C_n[1] * 12.566371f);
-            ang = -fast_arc_tan(vector_length_xy(direction_to_hero), direction_to_hero[2]);
-            approach_angle(pitch, (float *)(moby_vars + 0x90), ang, frame_time_sq * 12.566371f,
+            steering_target_angle = -fast_arc_tan(vector_length_xy(direction_to_hero), direction_to_hero[2]);
+            approach_angle(pitch, (float *)(moby_vars + 0x90), steering_target_angle, frame_time_sq * 12.566371f,
                              frame_time_sq * 12.566371f, D_0015ED6C_n[1] * 12.566371f);
             if (level_frame % 10 == 0) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
                 approach_value((float *)(moby_vars + 0x94), 0.0f, 0.25f);
                 normalize_vector_xyz(sB0, hero_position_delta, *(float *)(moby_vars + 0x94));
-                add_vector_xyz(sB0, sB0, tgt);
+                add_vector_xyz(sB0, sB0, hero_position);
                 if (level_frame % 20 == 0) {
                     transform_vector_by_basis(sA0, D_L11_001F14B0, &moby->rot_row0);
                 } else {
