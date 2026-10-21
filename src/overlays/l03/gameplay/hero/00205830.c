@@ -26,11 +26,11 @@ extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32,
 
 s32 FUN_L03_00205830(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF, s32 *outKind,
                      s32 *skip, s32 *only) {
-    Vec4 pos;
+    Vec4 source_position;
     s32 gotI;
     f32 gotF;
     s32 i;
-    Vec4 *source_position_ptr = &pos;
+    Vec4 *source_position_ptr = &source_position;
 
     *(u128 *)source_position_ptr = *(u128 *)from;
     for (i = 0; i < D_L03_0015F710; i++) {
