@@ -1010,7 +1010,7 @@ extern Path_2E2B80 *D_L10_001B0C30_2E2B80[] __asm__("D_L10_001B0930");
 void FUN_L10_002e17c0(struct Moby *moby)
 {
     MobyData_2E2B80 *data = ((struct MobyData_2E2B80 *)moby->pvars);
-    float v[4];
+    float vector_scratch[4];
     float transformed_offset[4];
     int st;
     float ang;
@@ -1043,8 +1043,8 @@ void FUN_L10_002e17c0(struct Moby *moby)
                 } else {
                     ang = angle_atan2(moby->pos.x - hit_record->x, moby->pos.y - hit_record->y);
                 }
-                *(OvlQuad *)v = *(OvlQuad *)hit_record->f10;
-                trooper_knockback_arc(v, &ang, &data->f78, &data->f7C);
+                *(OvlQuad *)vector_scratch = *(OvlQuad *)hit_record->f10;
+                trooper_knockback_arc(vector_scratch, &ang, &data->f78, &data->f7C);
                 trooper_start_knockback(moby, data->f60, ang, 4, 1, 0);
                 data->f117 = 0x78;
                 trooper_anim_update(moby, data->f110);
@@ -1072,9 +1072,9 @@ void FUN_L10_002e17c0(struct Moby *moby)
         target_selection_status = ahead_f(data->f180, moby, data->fC0);
         if (target_selection_status != 2) {
             Anim_2E2B80 *bp = &D_L10_001600EC[data->f194];
-            subtract_vector_xyz(v, D_0013F3D0, bp->f30);
-            v[3] = 0.0f;
-            transform_vector_by_basis(transformed_offset, v, bp->f40);
+            subtract_vector_xyz(vector_scratch, D_0013F3D0, bp->f30);
+            vector_scratch[3] = 0.0f;
+            transform_vector_by_basis(transformed_offset, vector_scratch, bp->f40);
             if (transformed_offset[0] <= -1.0f || 1.0f <= transformed_offset[0] || transformed_offset[1] <= -1.0f || 1.0f <= transformed_offset[1] || transformed_offset[2] <= -1.0f || 1.0f <= transformed_offset[2]) {
                 data->f104 = 2;
             }
