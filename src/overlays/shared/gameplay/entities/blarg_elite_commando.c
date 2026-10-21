@@ -96,8 +96,8 @@ void rocket_update(char *rocket_moby) {
     build_spherical_offset(desired, *(float *)(rocket_data + 0x24), yaw, pitch);
     if (tick_countdown_32_alt((int *)(rocket_data + 0x20)) == 0) {
         float blend_ticks_remaining = convert_integer_to_float(*(int *)(rocket_data + 0x20));
-        float b = convert_integer_to_float(*(int *)(rocket_data + 0x30));
-        lerp_vector(blend, desired, rocket_data, blend_ticks_remaining / b);
+        float blend_duration_ticks = convert_integer_to_float(*(int *)(rocket_data + 0x30));
+        lerp_vector(blend, desired, rocket_data, blend_ticks_remaining / blend_duration_ticks);
         add_vector_xyz(next, rocket_moby + 0x10, blend);
         *(float *)(rocket_moby + 0x48) = fast_arc_tan(blend[0], blend[1]);
         *(float *)(rocket_moby + 0x44) = -fast_arc_tan(vector_length_xy(blend), blend[2]);
