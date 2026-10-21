@@ -547,13 +547,13 @@ int FUN_L00_00298de8(void) {
     float m[16] __attribute__((aligned(16)));
     OvlQuad camera_offset[1];
     char *camera_key = D_L00_0016C860_298de8.p54 + D_L00_0016C860_298de8.i38 * 32;
-    float *v = (float *)(camera_key + 0x10);
-    int r = *(unsigned char *)(camera_key + 0xC);
+    float *camera_key_values = (float *)(camera_key + 0x10);
+    int camera_key_flag = *(unsigned char *)(camera_key + 0xC);
     char *x = D_L00_0016CA40_298de8;
     char *camera_position;
     char *camera_state;
     float k;
-    float unscaled_camera_value = v[3];
+    float unscaled_camera_value = camera_key_values[3];
     *(float *)(x + 0xB0) = unscaled_camera_value;
     if (D_0015EDB0_298de8)
         *(float *)(x + 0xB0) = unscaled_camera_value * D_L00_0015F59C;
@@ -561,9 +561,9 @@ int FUN_L00_00298de8(void) {
     camera_position = D_L00_00166C80_298de8 + 0x140;
     qcopy(camera_position, camera_key);
     munit_298de8(m);
-    mrx_298de8(m, m, v[0]);
-    mry_298de8(m, m, v[1]);
-    mrz_298de8(m, m, v[2]);
+    mrx_298de8(m, m, camera_key_values[0]);
+    mry_298de8(m, m, camera_key_values[1]);
+    mrz_298de8(m, m, camera_key_values[2]);
     camera_state = D_L00_00166C80_298de8;
     *(float *)(camera_state + 0x350) = -m[8];
     *(float *)(camera_state + 0x360) = -m[0];
@@ -582,7 +582,7 @@ int FUN_L00_00298de8(void) {
         normalize_vector_xyz(camera_offset, camera_offset, k);
         subtract_vector_xyz(camera_position, camera_position, camera_offset);
     }
-    return r;
+    return camera_key_flag;
 }
 /* Moby-sized (0x100) records used by the vendor menu. */
 typedef struct {
