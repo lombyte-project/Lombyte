@@ -25,7 +25,7 @@ s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text,
     u8 *current_text_byte;
     u32 character_code;
     f32 start;
-    f32 w;
+    f32 lookahead_width;
     struct Glyph *g;
 
     cx = x;
@@ -34,14 +34,14 @@ s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text,
     font_palette_colors[0] = color;
     while (i != len && text[i] != 0 && y + height >= cy + 16) {
         j = i;
-        w = 0.0f;
+        lookahead_width = 0.0f;
         current_text_byte = &text[i];
         start = cx;
         while (j != len && text[j] != ' ' && text[j] >= 0x10) {
-            w += font[text[j]].adv;
+            lookahead_width += font[text[j]].adv;
             j++;
         }
-        if ((f32)(x + width) < start + w) {
+        if ((f32)(x + width) < start + lookahead_width) {
             if (*current_text_byte != ' ' && *current_text_byte >= 0x10) {
                 i--;
             }
