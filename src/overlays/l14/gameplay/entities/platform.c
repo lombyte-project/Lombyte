@@ -539,14 +539,14 @@ void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 void FUN_L14_002d7490(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
     float joint_position[4];
-    float v[4];
-    float w[4];
+    float glow_position_offset[4];
+    float random_particle_vector[4];
     char *particle;
     int i;
     moby_point_position(moby, 1, joint_position);
-    subtract_vector_xyz(v, joint_position, D_L14_001674C0);
-    normalize_vector_xyz(v, v, -0.5f);
-    add_vector_xyz(moby_data + 0xE0, joint_position, v);
+    subtract_vector_xyz(glow_position_offset, joint_position, D_L14_001674C0);
+    normalize_vector_xyz(glow_position_offset, glow_position_offset, -0.5f);
+    add_vector_xyz(moby_data + 0xE0, joint_position, glow_position_offset);
     if ((unsigned int)(moby->state - 3) < 3) {
         joint_position[2] += 1.0f;
         if (*(int *)(moby_data + 0xF0) == -1) {
@@ -559,8 +559,8 @@ void FUN_L14_002d7490(struct Moby *moby) {
         }
         joint_position[2] -= 1.0f;
     }
-    random_spherical_offset(w, 0.005f, 0.03f);
-    particle = FUN_L00_00274948(joint_position, w, 0x7F, moby);
+    random_spherical_offset(random_particle_vector, 0.005f, 0.03f);
+    particle = FUN_L00_00274948(joint_position, random_particle_vector, 0x7F, moby);
     if (particle != 0) {
         *(float *)(particle + 0xC) = random_float_between(6000.0f, 32000.0f);
     }
