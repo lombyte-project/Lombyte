@@ -1662,7 +1662,7 @@ extern void FUN_L00_002e4168_c2(char *, void *) __asm__("FUN_L00_002e4168");
 
 float FUN_L00_002e4580(char *camera, float target_offset_scale) {
     float hero_position[4], offset_target_position[4], angle_direction[4], axis_projection[4];
-    float r, len;
+    float reference_dot_or_signed_angle, len;
     char *g = D_L00_00166E10;
     FUN_L00_002e4168_c2(camera, hero_position);
     FUN_001f9a68_c3(offset_target_position, g + 0x20, target_offset_scale);
@@ -1671,16 +1671,16 @@ float FUN_L00_002e4580(char *camera, float target_offset_scale) {
     len = fast_vec_dot(angle_direction, camera + 0x10);
     FUN_001f9a68_c3(axis_projection, camera + 0x10, len);
     FUN_001f9a28(angle_direction, angle_direction, axis_projection);
-    r = fast_vec_dot(angle_direction, camera);
+    reference_dot_or_signed_angle = fast_vec_dot(angle_direction, camera);
     len = fast_vec_length(angle_direction);
     if (len == 0.0f) {
         return 0.0f;
     }
-    r = 1.5707964f - fast_arc_sin(r / len);
+    reference_dot_or_signed_angle = 1.5707964f - fast_arc_sin(reference_dot_or_signed_angle / len);
     if (fast_vec_dot(angle_direction, camera + 0x20) < 0.0f) {
-        r = -r;
+        reference_dot_or_signed_angle = -reference_dot_or_signed_angle;
     }
-    return r;
+    return reference_dot_or_signed_angle;
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5B68), where it is exact; names translated to the US level program. */
 
