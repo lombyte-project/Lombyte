@@ -679,7 +679,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
     case INTERCEPTOR_STATE_REJOIN_PATROL: {
         int i;
         int source_segment_index;
-        float dist;
+        float source_path_distance;
         char *seg;
         int *tab;
         float t;
@@ -688,13 +688,13 @@ void FUN_L14_002ac618(struct Moby *moby) {
         FUN_L14_002aea08_c618(moby);
         source_segment_index = *(int *)(moby_vars + 0x84);
         seg = (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0x78)];
-        dist = 0.0f;
+        source_path_distance = 0.0f;
         for (i = 0; i < source_segment_index; i++) {
-            dist += *(float *)(seg + i * 16 + 0x1C);
+            source_path_distance += *(float *)(seg + i * 16 + 0x1C);
         }
-        dist += *(float *)(moby_vars + 0x1CC);
+        source_path_distance += *(float *)(moby_vars + 0x1CC);
         tab = D_L14_001B0BB0[*(int *)(moby_vars + 0x74)];
-        t = dist / *(float *)(moby_vars + 0x16C) * *(float *)(moby_vars + 0x190);
+        t = source_path_distance / *(float *)(moby_vars + 0x16C) * *(float *)(moby_vars + 0x190);
         dir = *(s16 *)(moby_vars + 0x8A);
         path_seg = 0;
         path_t = 0.0f;
