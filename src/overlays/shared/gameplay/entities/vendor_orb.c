@@ -2602,10 +2602,10 @@ extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
-    float b0[4];
-    float b1[4];
-    float b2[4];
-    float b3[4];
+    float axis_projection[4];
+    float planar_input_direction[4];
+    float planar_reference_direction[4];
+    float input_cross_axis[4];
     char *base = D_L00_00166E10;
     char *axis = base + 0x20;
     char *camera_state = *(char **)(camera + 0x70);
@@ -2619,24 +2619,24 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
     float z2;
     float angle_blend_fraction;
 
-    FUN_001f9a68_c4(b0, axis, fast_vec_dot(input_direction, axis));
-    FUN_001f9a28(b1, input_direction, b0);
-    FUN_001f9a68_c4(b0, axis, fast_vec_dot(reference_direction, axis));
-    FUN_001f9a28(b2, (float *)reference_direction, b0);
-    dot = fast_vec_dot(b1, b2);
-    len = fast_vec_length(b1);
+    FUN_001f9a68_c4(axis_projection, axis, fast_vec_dot(input_direction, axis));
+    FUN_001f9a28(planar_input_direction, input_direction, axis_projection);
+    FUN_001f9a68_c4(axis_projection, axis, fast_vec_dot(reference_direction, axis));
+    FUN_001f9a28(planar_reference_direction, (float *)reference_direction, axis_projection);
+    dot = fast_vec_dot(planar_input_direction, planar_reference_direction);
+    len = fast_vec_length(planar_input_direction);
     if (len == r) {
         return r;
     }
     z2 = 0.0f;
-    len = len * fast_vec_length(b2);
+    len = len * fast_vec_length(planar_reference_direction);
     if (len == r) {
         return r;
     }
     ang = 1.5707964f - fast_arc_sin(dot / len);
     sign = -1.0f;
-    fast_vec_cross(b3, b1, axis);
-    if (fast_vec_dot(b3, b2) >= 0.0f) {
+    fast_vec_cross(input_cross_axis, planar_input_direction, axis);
+    if (fast_vec_dot(input_cross_axis, planar_reference_direction) >= 0.0f) {
         sign = 1.0f;
     }
     r = fast_subtract_rotations(3.1415927f, ang);
