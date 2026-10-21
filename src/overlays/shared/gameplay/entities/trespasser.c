@@ -1840,23 +1840,23 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern char D_00173F60_alias[] __asm__("D_L00_00173E60");
 
-void FUN_L00_002c3888(float *pos,char *moby,void *vec) {
+void FUN_L00_002c3888(float *release_position,char *moby,void *initial_velocity) {
  float collision_start[4],collision_normal[4],rotated_normal[4];
  char *state=*(char **)(moby+0x78);
  struct Hero *camera;
  char *player;
- qcopy(state+0x10,vec);
+ qcopy(state+0x10,initial_velocity);
  { struct Hero *view = &hero;
    if(((int)view->ground_moby) && FUN_L00_002603d0(((int)view->ground_moby))) add_vector_xyz(state+0x10,state+0x10,&view->motion.displacement);
  }
- qcopy(moby+0x10,pos);
+ qcopy(moby+0x10,release_position);
  camera = &hero;
  player=((char *)camera->moby);
- *(OvlQuad *)collision_start=*(OvlQuad *)(player+0x10); collision_start[2]=pos[2];
- subtract_vector_xyz(pos,pos,collision_start);
- normalize_vector_xyz(pos,pos,vector_length_xyz(pos)+0.2f);
- add_vector_xyz(pos,pos,collision_start);
- if(FUN_001efa68(collision_start,pos,0,((int)camera->moby),0)) {
+ *(OvlQuad *)collision_start=*(OvlQuad *)(player+0x10); collision_start[2]=release_position[2];
+ subtract_vector_xyz(release_position,release_position,collision_start);
+ normalize_vector_xyz(release_position,release_position,vector_length_xyz(release_position)+0.2f);
+ add_vector_xyz(release_position,release_position,collision_start);
+ if(FUN_001efa68(collision_start,release_position,0,((int)camera->moby),0)) {
   float smoothing;
   qcopy(moby+0x10,D_00173F60_alias); qzero(state+0x10);
   moby[0x20]=4;
