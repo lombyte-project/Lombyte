@@ -1941,7 +1941,7 @@ void FUN_L14_002b4340(struct Moby *moby) {
     };
     unsigned char *moby_vars = moby->pvars;
     int loc0;
-    float f4 = 0.0f;
+    float damage_amount = 0.0f;
     char *hit_record;
     int k;
     float remaining_health;
@@ -1953,9 +1953,9 @@ void FUN_L14_002b4340(struct Moby *moby) {
                 hit_record = 0;
         }
     }
-    k = hit_reaction(moby, hit_record, moby_vars + 0x20, 0, &loc0, &f4, 0, 4);
+    k = hit_reaction(moby, hit_record, moby_vars + 0x20, 0, &loc0, &damage_amount, 0, 4);
     if (loc0 != 1 && moby->state != 6) {
-        remaining_health = *(float *)(moby_vars + 0x20) - f4;
+        remaining_health = *(float *)(moby_vars + 0x20) - damage_amount;
         *(float *)(moby_vars + 0x20) = remaining_health;
         if (remaining_health <= 0.0f)
             k = 1;
