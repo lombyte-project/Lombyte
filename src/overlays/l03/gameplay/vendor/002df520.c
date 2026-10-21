@@ -384,18 +384,18 @@ void FUN_L03_002eb978(void *camera_instance) {
 extern void func_L00_001FF4B0_ebb00(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float func_001EC120_ebb00(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
 extern void func_001F9BD8_ebb00(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L03_002ebb00(void *arg) {
-    char *camera = arg;
+void FUN_L03_002ebb00(void *camera_instance) {
+    char *camera = camera_instance;
     char *camera_data = *(char **)(camera + 0x70);
     char *camera_offset_params = camera_data + 0xD0;
     char *camera_back_direction_data = camera_data + 0xF0;
-    struct Hero *g = &hero;
+    struct Hero *hero_for_height_update = &hero;
     float camera_back_offset[4];
     float gravity_offset[4];
     float camera_position[4];
     struct Hero *hero_ptr;
-    if (g->unk2284 != 0x50 || g->state.current == 0x11) {
-        *(float *)(camera_back_direction_data + 0x34) = g->motion.pos.f[2];
+    if (hero_for_height_update->unk2284 != 0x50 || hero_for_height_update->state.current == 0x11) {
+        *(float *)(camera_back_direction_data + 0x34) = hero_for_height_update->motion.pos.f[2];
     }
     func_L00_001FF4B0_ebb00(gravity_offset, &hero.gravity_dir, -*(float *)(camera_offset_params + 0x10));
     func_L00_001FF4B0_ebb00(camera_back_offset, camera_back_direction_data, -*(float *)camera_offset_params);
