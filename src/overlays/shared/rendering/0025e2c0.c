@@ -24,7 +24,7 @@ void FUN_L15_0025e2c0(int color, u128 *pos, char *owner) {
     unsigned char *particle;
     char *from;
     u128 *vector_scratch;
-    u128 *b;
+    u128 *step_vector;
 
     target.q = *pos;
     particle = create_part(0x1F);
@@ -32,10 +32,10 @@ void FUN_L15_0025e2c0(int color, u128 *pos, char *owner) {
         vector_scratch = &at;
         from = owner + 0x10;
         subtract_vector_xyz(vector_scratch, &target, from);
-        b = &step.q;
-        *b = *vector_scratch;
-        fast_vec_scale(b, b, 0.25f);
-        add_vector_xyz(vector_scratch, from, b);
+        step_vector = &step.q;
+        *step_vector = *vector_scratch;
+        fast_vec_scale(step_vector, step_vector, 0.25f);
+        add_vector_xyz(vector_scratch, from, step_vector);
         *(u128 *)(particle + 0x10) = *vector_scratch;
         *(u128 *)(particle + 0x20) = target.q;
         *(int *)(particle + 4) = color;
