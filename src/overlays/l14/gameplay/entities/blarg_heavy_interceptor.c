@@ -2964,7 +2964,7 @@ void FUN_L14_002bac78(struct Moby *moby) {
     float joint[4];
     float ofs[4];
     float at[4];
-    float dir[4];
+    float moby_to_joint_direction[4];
     float push[4];
     int i;
     int signed_puff_random_value;
@@ -3007,9 +3007,9 @@ void FUN_L14_002bac78(struct Moby *moby) {
     size = randf_sym(0.01f, 0.5f);
     scale_d(ofs, (char *)moby + 0xC0, size);
     add_d(at, joint, ofs);
-    sub_d(dir, joint, &moby->pos);
-    normalize_d(dir, dir, 0.05f);
-    FUN_L00_0026cbb0(at, dir, 0x4F007FFF, 0x1FFFFFFF, random_int_between(frames_d(10), frames_d(20)), 1, 40000.0f);
+    sub_d(moby_to_joint_direction, joint, &moby->pos);
+    normalize_d(moby_to_joint_direction, moby_to_joint_direction, 0.05f);
+    FUN_L00_0026cbb0(at, moby_to_joint_direction, 0x4F007FFF, 0x1FFFFFFF, random_int_between(frames_d(10), frames_d(20)), 1, 40000.0f);
     for (i = 0; i < 3; i++) {
         if (i != 2) {
             scale_d(ofs, (char *)moby + 0xC0, randf_sym(0.01f, 0.5f));
