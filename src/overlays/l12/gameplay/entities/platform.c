@@ -3202,20 +3202,20 @@ void helicopter_update(char *moby) {
             char *tbl = *(char **)(path_state + 0x10);
             int step = *(char *)(path_state + 4);
             int node_count = *(int *)tbl;
-            int prev = (current_node_index + node_count - step) % node_count;
+            int previous_node_index = (current_node_index + node_count - step) % node_count;
             int next = (current_node_index + node_count + step) % node_count;
             float segment_heading_delta;
-            float ang;
-            qcopy(A, tbl + prev * 16 + 0x10);
+            float segment_heading_delta_per_distance;
+            qcopy(A, tbl + previous_node_index * 16 + 0x10);
             qcopy(B, tbl + current_node_index * 16 + 0x10);
             qcopy(C, tbl + next * 16 + 0x10);
             subtract_vector_xyz_c(A, B, A);
             subtract_vector_xyz_c(B, C, B);
             segment_heading_delta = fast_arc_tan(A[0], A[1]);
             segment_heading_delta = fast_subtract_rotations(segment_heading_delta, fast_arc_tan(B[0], B[1]));
-            ang = segment_heading_delta / vector_length_xyz_c(A);
+            segment_heading_delta_per_distance = segment_heading_delta / vector_length_xyz_c(A);
             *(float *)(moby + 0x40) = fast_add_rotations_c(*(float *)(moby + 0x40),
-                fast_subtract_rotations(ang * D_L12_001619AC, *(float *)(moby + 0x40)) / D_L12_001619B0);
+                fast_subtract_rotations(segment_heading_delta_per_distance * D_L12_001619AC, *(float *)(moby + 0x40)) / D_L12_001619B0);
             if (distance_xyz(moby + 0x10, C) < D_L12_001619A8 * D_0015ED6C) {
                 char *path;
                 *(int *)(moby_vars + 0x60) = next;
