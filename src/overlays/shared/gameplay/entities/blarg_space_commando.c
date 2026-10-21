@@ -900,10 +900,10 @@ void FUN_L06_002ff978(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int i, next_point_index;
     for (i = 0; i < 15; i = next_point_index) {
-        float f21, f22;
+        float first_vector_angle, second_vector_angle;
         int frame_count, second_frame_count, third_frame_count;
         int spark_position[4];
-        float v[4], w[4];
+        float first_spark_vector[4], second_spark_vector[4];
         char *spark_source_point;
         int off = i * 16;
         next_point_index = i + 1;
@@ -914,33 +914,33 @@ void FUN_L06_002ff978(char *moby) {
         if (D_L06_0016203C < random_float_between(0.0f, 1.0f)) {
             continue;
         }
-        f21 = random_angle_radians();
-        f22 = random_angle_radians();
-        v[0] = fast_cos(f21) *
+        first_vector_angle = random_angle_radians();
+        second_vector_angle = random_angle_radians();
+        first_spark_vector[0] = fast_cos(first_vector_angle) *
                random_float_between(D_L06_0016202C, D_L06_00162030);
-        v[1] = fast_sin(f21) *
+        first_spark_vector[1] = fast_sin(first_vector_angle) *
                random_float_between(D_L06_0016202C, D_L06_00162030);
-        v[2] = 0;
-        w[0] = fast_cos(f22) *
+        first_spark_vector[2] = 0;
+        second_spark_vector[0] = fast_cos(second_vector_angle) *
                random_float_between(D_L06_0016202C, D_L06_00162030);
-        w[1] = fast_sin(f22) *
+        second_spark_vector[1] = fast_sin(second_vector_angle) *
                random_float_between(D_L06_0016202C, D_L06_00162030);
-        w[2] = 0;
-        v[2] = random_float_between(D_L06_00162034, D_L06_00162038);
-        w[2] = random_float_between(D_L06_00162034, D_L06_00162038);
+        second_spark_vector[2] = 0;
+        first_spark_vector[2] = random_float_between(D_L06_00162034, D_L06_00162038);
+        second_spark_vector[2] = random_float_between(D_L06_00162034, D_L06_00162038);
         frame_count = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between(D_L06_00162014, D_L06_00162018)));
         second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between(D_L06_0016201C, D_L06_00162020)));
         third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between(D_L06_00162024, D_L06_00162028)));
-        scale_vector_xyz(v, v, 1.0f / (float)frame_count);
-        v[3] = D_L06_0016200C;
-        scale_vector_xyz(w, w, 1.0f / (float)third_frame_count);
-        w[3] = D_L06_00162010;
+        scale_vector_xyz(first_spark_vector, first_spark_vector, 1.0f / (float)frame_count);
+        first_spark_vector[3] = D_L06_0016200C;
+        scale_vector_xyz(second_spark_vector, second_spark_vector, 1.0f / (float)third_frame_count);
+        second_spark_vector[3] = D_L06_00162010;
         spark_source_point = data + (off + 0x230);
         lerp_vector(spark_position, spark_source_point, spark_source_point, random_float_between(0.0f, 1.0f));
-        spawn_spark(spark_position, v, w, D_L06_00162004, D_L06_00162008, frame_count, second_frame_count, third_frame_count,
+        spawn_spark(spark_position, first_spark_vector, second_spark_vector, D_L06_00162004, D_L06_00162008, frame_count, second_frame_count, third_frame_count,
                      D_L06_00162040);
     }
 }
