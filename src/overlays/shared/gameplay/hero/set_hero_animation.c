@@ -1341,13 +1341,13 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sd
 void FUN_L00_00233f80(void) {
     Vec_234800 probed_position, unanchored_probe_rotation, attachment_motion_scratch, attachment_position_motion_scratch, probe_transform_scratch, anchored_probe_rotation, primary_attachment_position, primary_attachment_rotation, secondary_attachment_position, v90, vA0;
     float sB0, sB4;
-    float amt, ang;
+    float amt, saved_hero_yaw;
     int mode;
     Plat_234800 *plat;
 
     mode = 0;
     amt = 0.0f;
-    ang = ((Hero_234800 *)hero_233f80)->v90.z;
+    saved_hero_yaw = ((Hero_234800 *)hero_233f80)->v90.z;
     if (((Hero_234800 *)hero_233f80)->h30E == 0) {
         if (((Hero_234800 *)hero_233f80)->p2FC != 0) {
             mode = 1;
@@ -1458,14 +1458,14 @@ void FUN_L00_00233f80(void) {
                 qcopy(&((Hero_234800 *)hero_233f80)->v4D0, &vA0);
                 ((Hero_234800 *)hero_233f80)->f4E4 = f_001f9e90(primary_attachment_position.x - secondary_attachment_position.x, primary_attachment_position.y - secondary_attachment_position.y);
             } else {
-                float len;
+                float attachment_distance;
 
                 f_001f9a28(&attachment_motion_scratch, &primary_attachment_position, &((Hero_234800 *)hero_233f80)->pos);
-                len = vector_length_xyz(&attachment_motion_scratch);
-                if (len < 0.0001f) {
+                attachment_distance = vector_length_xyz(&attachment_motion_scratch);
+                if (attachment_distance < 0.0001f) {
                     f_001f99f8(&attachment_motion_scratch);
                     qcopy(&((Hero_234800 *)hero_233f80)->pos, &primary_attachment_position);
-                } else if (2.0f < len) {
+                } else if (2.0f < attachment_distance) {
                     f_001f99f8(&attachment_motion_scratch);
                     ((Hero_234800 *)hero_233f80)->i364 &= ~2;
                     ((Hero_234800 *)hero_233f80)->i364 &= ~1;
@@ -1483,7 +1483,7 @@ void FUN_L00_00233f80(void) {
         qcopy((Vec_234800 *)(hero_233f80 + 0x350), &attachment_motion_scratch);
     }
     f_001f9a10(hero_233f80 + 0xF0, hero_233f80 + 0xF0, &attachment_motion_scratch);
-    ((Hero_234800 *)hero_233f80)->fFC = fast_subtract_rotations(((Hero_234800 *)hero_233f80)->v90.z, ang);
+    ((Hero_234800 *)hero_233f80)->fFC = fast_subtract_rotations(((Hero_234800 *)hero_233f80)->v90.z, saved_hero_yaw);
 }
 #define NOT_SDA
 
