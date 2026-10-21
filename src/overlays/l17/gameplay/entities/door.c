@@ -284,11 +284,11 @@ void FUN_L17_002e8e08(struct Moby *moby) {
     float c[4];
     float lowered_hero_position[4];
     float movement_midpoint[4];
-    float w[12];
+    float hit_descriptor[12];
     char *drone_vars = (char *)moby->pvars;
     char *target_position;
     struct Hero *g;
-    struct Hero *g2;
+    struct Hero *hero_state;
     char *r;
     int step;
     int hit;
@@ -325,12 +325,12 @@ void FUN_L17_002e8e08(struct Moby *moby) {
         FUN_L17_0026fdd0_q((char *)movement_midpoint, 1, step);
         FUN_L17_0026fdd0_q((char *)a, 0, step);
         b[2] = b[2] + 0.25f;
-        func_L00_0025A8C0_alt_q((char *)w, (int)moby, 1, 6.0f, drone_vars);
-        *(short *)((char *)w + 0x1A) = moby->oclass;
+        func_L00_0025A8C0_alt_q((char *)hit_descriptor, (int)moby, 1, 6.0f, drone_vars);
+        *(short *)((char *)hit_descriptor + 0x1A) = moby->oclass;
         qcopy(&moby->pos, a);
         r = D_L17_00174740_lui;
         *(int *)(r + 0x18) = 0;
-        if (FUN_001efa68_q(b, a, 0, moby, w) != 0 ||
+        if (FUN_001efa68_q(b, a, 0, moby, hit_descriptor) != 0 ||
             FUN_L00_001f0d60_q(0.5f, &moby->pos, 0, moby) != 0) {
             hit = *(int *)(r + 0x18);
             if (hit != 0) {
@@ -351,9 +351,9 @@ void FUN_L17_002e8e08(struct Moby *moby) {
                     }
                     qcopy(&moby->pos, D_L17_00174760_lui);
                     FUN_L00_002598b0_q((int)moby, 0.75f, &moby->pos, 1, 6.0f, 0.0f, 0, 1, 0);
-                    g2 = &hero;
-                    if (g2->unk308 != 0 &&
-                        *(int *)(D_L17_00174760_lui - 8) == ((int)g2->moby)) {
+                    hero_state = &hero;
+                    if (hero_state->unk308 != 0 &&
+                        *(int *)(D_L17_00174760_lui - 8) == ((int)hero_state->moby)) {
                         unsigned char *rec = D_00141968_x_q;
                         if (*(unsigned short *)(rec + 0x458) == 0) {
                             (*(unsigned short *)(rec + 0x458))++;
