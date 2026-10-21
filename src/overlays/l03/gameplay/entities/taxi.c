@@ -374,17 +374,17 @@ void FUN_L03_002ca808(struct Moby *damaged_moby) {
         TROOPER_DAMAGE_LONG_KNOCKBACK_ALTERNATE = 5,
         TROOPER_DAMAGE_SHORT_KNOCKBACK_ALTERNATE = 6
     };
-    TrooperVars *v = (TrooperVars *)damaged_moby->pvars;
+    TrooperVars *trooper_vars = (TrooperVars *)damaged_moby->pvars;
     TrooperHit *hit_record;
     Vec4 at;
     s32 hit;
     f32 dmg;
     f32 ang;
-    s32 r;
+    s32 damage_response;
 
     dmg = 0.0f;
     hit_record = trooper_find_hit(damaged_moby, 0x330000, 0);
-    r = trooper_take_damage(damaged_moby, hit_record, &v->health, 0, &hit, &dmg, 0, 4);
+    damage_response = trooper_take_damage(damaged_moby, hit_record, &trooper_vars->health, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && damaged_moby->state != 5) {
         if (hit_record->source != NULL) {
             if (hit_record->source != hero.items[0].moby)
@@ -394,58 +394,58 @@ void FUN_L03_002ca808(struct Moby *damaged_moby) {
         } else {
             ang = trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]);
         }
-        v->health -= dmg;
-        if (v->health <= 0.0f)
-            r = 1;
-        switch (r) {
+        trooper_vars->health -= dmg;
+        if (trooper_vars->health <= 0.0f)
+            damage_response = 1;
+        switch (damage_response) {
         case TROOPER_DAMAGE_SHORT_KNOCKBACK:
         case TROOPER_DAMAGE_SHORT_KNOCKBACK_ALTERNATE:
-            v->kb_speed = D_L03_001618FC * frame_time_sq_macro;
-            trooper_set_knockback(v->knockback, D_L03_00161900, D_L03_00161904);
-            v->kb_landed = 0;
-            v->kb_frames = 9;
+            trooper_vars->kb_speed = D_L03_001618FC * frame_time_sq_macro;
+            trooper_set_knockback(trooper_vars->knockback, D_L03_00161900, D_L03_00161904);
+            trooper_vars->kb_landed = 0;
+            trooper_vars->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
-            trooper_knockback_arc(&at, &ang, &v->kb_lift, &v->kb_gravity);
+            trooper_knockback_arc(&at, &ang, &trooper_vars->kb_lift, &trooper_vars->kb_gravity);
             trooper_start_knockback(trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]),
-                                    damaged_moby, v->knockback, 3, 1, 0);
-            v->kb_min = 5.0f;
-            v->kb_max = 10.0f;
+                                    damaged_moby, trooper_vars->knockback, 3, 1, 0);
+            trooper_vars->kb_min = 5.0f;
+            trooper_vars->kb_max = 10.0f;
             damaged_moby->state = 4;
             break;
         case TROOPER_DAMAGE_LONG_KNOCKBACK:
         case TROOPER_DAMAGE_LONG_KNOCKBACK_ALTERNATE:
-            v->kb_speed = D_L03_001618FC * frame_time_sq_macro;
-            trooper_set_knockback(v->knockback, D_L03_00161900, D_L03_00161904);
-            v->kb_landed = 0;
-            v->kb_frames = 9;
+            trooper_vars->kb_speed = D_L03_001618FC * frame_time_sq_macro;
+            trooper_set_knockback(trooper_vars->knockback, D_L03_00161900, D_L03_00161904);
+            trooper_vars->kb_landed = 0;
+            trooper_vars->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
-            trooper_knockback_arc(&at, &ang, &v->kb_lift, &v->kb_gravity);
+            trooper_knockback_arc(&at, &ang, &trooper_vars->kb_lift, &trooper_vars->kb_gravity);
             trooper_start_knockback(trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]),
-                                    damaged_moby, v->knockback, 4, 1, 0);
-            v->kb_min = 7.5f;
-            v->kb_max = 15.0f;
+                                    damaged_moby, trooper_vars->knockback, 4, 1, 0);
+            trooper_vars->kb_min = 7.5f;
+            trooper_vars->kb_max = 15.0f;
             damaged_moby->state = 4;
             break;
         case TROOPER_DAMAGE_LETHAL:
-            v->kb_speed = D_L03_001618F8 * frame_time_sq_macro;
-            trooper_set_knockback(v->knockback, D_L03_00161908, D_L03_0016190C);
-            v->kb_landed = 0;
-            v->kb_frames = 9;
+            trooper_vars->kb_speed = D_L03_001618F8 * frame_time_sq_macro;
+            trooper_set_knockback(trooper_vars->knockback, D_L03_00161908, D_L03_0016190C);
+            trooper_vars->kb_landed = 0;
+            trooper_vars->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
-            trooper_knockback_arc(&at, &ang, &v->kb_lift, &v->kb_gravity);
+            trooper_knockback_arc(&at, &ang, &trooper_vars->kb_lift, &trooper_vars->kb_gravity);
             trooper_start_knockback(trooper_atan2(damaged_moby->pos.x - hero.motion.pos.f[0], damaged_moby->pos.y - hero.motion.pos.f[1]),
-                                    damaged_moby, v->knockback, 5, 1, 0);
-            v->kb_min = 8.0f;
-            v->kb_max = 15.0f;
+                                    damaged_moby, trooper_vars->knockback, 5, 1, 0);
+            trooper_vars->kb_min = 8.0f;
+            trooper_vars->kb_max = 15.0f;
             damaged_moby->flags &= 0xEFFF;
-            *((u8 *)v + 0x67) = 0xFA;
+            *((u8 *)trooper_vars + 0x67) = 0xFA;
             damaged_moby->state = 5;
             break;
         }
-        trooper_anim_update(damaged_moby, v->anim);
+        trooper_anim_update(damaged_moby, trooper_vars->anim);
     }
     damaged_moby->hit_slot = 0xFF;
-    trooper_anim_finish(damaged_moby, v->anim);
+    trooper_anim_finish(damaged_moby, trooper_vars->anim);
 }
 #include "rnc/overlay/quad.h"
 
