@@ -44,10 +44,10 @@ s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     s32 row;
     f32 fraction_x;
     f32 fraction_y;
-    f32 h00;
-    f32 h10;
-    f32 h01;
-    f32 h11;
+    f32 height_at_cell_origin;
+    f32 height_at_next_column;
+    f32 height_at_next_row;
+    f32 height_at_diagonal_corner;
     f32 first_row_height;
     f32 weight_x;
     f32 weight_y;
@@ -70,41 +70,41 @@ s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     fraction_y -= convert_integer_to_float(row) * surface_height_grid.cell_height;
     /* Divide the signed remainder after rounding the row, before choosing the sample bank. */
     weight_y = fraction_y / surface_height_grid.cell_height;
-    h00 = tile->layers[surface_height_layer].samples[row][column];
+    height_at_cell_origin = tile->layers[surface_height_layer].samples[row][column];
     if (column == 15) {
-        h10 = tile->layers[surface_height_layer].right_edge[row];
+        height_at_next_column = tile->layers[surface_height_layer].right_edge[row];
     } else {
-        h10 = tile->layers[surface_height_layer].samples[row][column + 1];
+        height_at_next_column = tile->layers[surface_height_layer].samples[row][column + 1];
     }
     if (row == 15) {
-        h01 = tile->layers[surface_height_layer].bottom_edge[column];
+        height_at_next_row = tile->layers[surface_height_layer].bottom_edge[column];
     } else {
-        h01 = tile->layers[surface_height_layer].samples[row + 1][column];
+        height_at_next_row = tile->layers[surface_height_layer].samples[row + 1][column];
     }
     if (column == 15) {
         if (row == 15) {
-            h11 = tile->layers[surface_height_layer].corner;
+            height_at_diagonal_corner = tile->layers[surface_height_layer].corner;
         } else {
-            h11 = tile->layers[surface_height_layer].right_edge[row + 1];
+            height_at_diagonal_corner = tile->layers[surface_height_layer].right_edge[row + 1];
         }
     } else if (row == 15) {
-        h11 = tile->layers[surface_height_layer].bottom_edge[column + 1];
+        height_at_diagonal_corner = tile->layers[surface_height_layer].bottom_edge[column + 1];
     } else {
-        h11 = tile->layers[surface_height_layer].samples[row + 1][column + 1];
+        height_at_diagonal_corner = tile->layers[surface_height_layer].samples[row + 1][column + 1];
     }
     if (height != NULL) {
-        first_row_height = h00 + (h10 - h00) * weight_x;
+        first_row_height = height_at_cell_origin + (height_at_next_column - height_at_cell_origin) * weight_x;
         *height = first_row_height +
-                  ((h01 + (h11 - h01) * weight_x) - first_row_height) * weight_y + tile->z;
+                  ((height_at_next_row + (height_at_diagonal_corner - height_at_next_row) * weight_x) - first_row_height) * weight_y + tile->z;
     }
     if (normal != NULL) {
         x_tangent[0] = surface_height_grid.cell_width;
         x_tangent[1] = 0.0f;
-        x_tangent[2] = h10 - h00;
+        x_tangent[2] = height_at_next_column - height_at_cell_origin;
         x_tangent[3] = 1.0f;
         y_tangent[0] = 0.0f;
         y_tangent[1] = surface_height_grid.cell_height;
-        y_tangent[2] = h01 - h00;
+        y_tangent[2] = height_at_next_row - height_at_cell_origin;
         y_tangent[3] = 1.0f;
         fast_vec_cross(normal, x_tangent, y_tangent);
         fast_vec_normalize(normal, normal, 1.0f);
