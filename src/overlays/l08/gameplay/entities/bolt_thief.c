@@ -1135,7 +1135,7 @@ void FUN_L08_002e16c0(Moby_2E2A38 *debris_moby) {
         }
         if (debris_moby->pos[2] < 15.2f) {
             for (i = 0; i < D_L08_00161C00; i++) {
-                float ang = random_angle_radians_c();
+                float particle_planar_angle = random_angle_radians_c();
                 int c1;
                 int c2;
                 int c3;
@@ -1143,11 +1143,11 @@ void FUN_L08_002e16c0(Moby_2E2A38 *debris_moby) {
                 particle_spawn_position[0] += random_float_between_c2(-3.0f, 3.0f);
                 particle_spawn_position[1] += random_float_between_c2(-3.0f, 3.0f);
                 particle_primary_vector[2] = D_L08_00161C0C * D_0015ED6C_gp;
-                particle_primary_vector[0] += fast_cos(ang) * D_L08_00161C14;
-                particle_primary_vector[1] += fast_sin(ang) * D_L08_00161C14;
+                particle_primary_vector[0] += fast_cos(particle_planar_angle) * D_L08_00161C14;
+                particle_primary_vector[1] += fast_sin(particle_planar_angle) * D_L08_00161C14;
                 particle_secondary_vector[2] = D_L08_00161C10 * D_0015ED6C_gp;
-                particle_secondary_vector[0] += fast_cos(ang) * D_L08_00161C18;
-                particle_secondary_vector[1] += fast_sin(ang) * D_L08_00161C18;
+                particle_secondary_vector[0] += fast_cos(particle_planar_angle) * D_L08_00161C18;
+                particle_secondary_vector[1] += fast_sin(particle_planar_angle) * D_L08_00161C18;
                 particle_primary_vector[3] = D_L08_00161C28;
                 particle_secondary_vector[3] = D_L08_00161C2C;
                 c1 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C1C, (float)(D_L08_00161C1C * 2))));
