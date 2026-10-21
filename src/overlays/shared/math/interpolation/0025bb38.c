@@ -71,14 +71,14 @@ extern void FUN_L00_0025bc00_25be00(float *, void *, float, float) __asm__("FUN_
 float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) __asm__("FUN_L00_0025be00");
 float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) {
     float angle_error;
-    float v;
+    float initial_angular_velocity;
     float stop;
     float target_angular_speed;
 
     angle_error = FUN_001fa5c8_25be00(target, *cur);
-    v = *vel;
-    if (v * angle_error >= 0.0f && angle_error != 0.0f) {
-        stop = v * v / accel * 0.5f;
+    initial_angular_velocity = *vel;
+    if (initial_angular_velocity * angle_error >= 0.0f && angle_error != 0.0f) {
+        stop = initial_angular_velocity * initial_angular_velocity / accel * 0.5f;
         if (FUN_001f99c0_25be00(angle_error) < stop) {
             maxv = FUN_001f99c0_25be00(angle_error);
             maxv += FUN_001f99c0_25be00(*vel);
