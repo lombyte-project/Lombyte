@@ -1476,7 +1476,7 @@ void FUN_L00_002cbcc0(u8 *shot_moby, s32 enabled)
     s32 i;
     s32 j;
     void **handle;
-    u8 *pos;
+    u8 *shot_position;
     V4 vectors[2];
     s32 lifetime;
     s32 color;
@@ -1490,7 +1490,7 @@ void FUN_L00_002cbcc0(u8 *shot_moby, s32 enabled)
             FUN_00267a08_2cbcc0(*handle);
         *handle++ = 0;
     }
-    pos = shot_moby + 0x10;
+    shot_position = shot_moby + 0x10;
 
     if (enabled != 0) {
         V4 *vector = &vectors[1];
@@ -1503,7 +1503,7 @@ void FUN_L00_002cbcc0(u8 *shot_moby, s32 enabled)
             FUN_001ff500_2cbcc0(vector, &vectors[0],
                 FUN_L00_00257be8_2cbcc0(D_0015ED6C_lui * 3.0f, D_0015ED6C_lui * 6.0f));
             lifetime = FUN_L00_00257b90_2cbcc0(FUN_001fef20_2cbcc0(10), FUN_001fef20_2cbcc0(15));
-            FUN_0026dd20_2cbcc0(pos, vector, 0x7f2f4f6f, lifetime, 35000.0f);
+            FUN_0026dd20_2cbcc0(shot_position, vector, 0x7f2f4f6f, lifetime, 35000.0f);
         }
     }
 
@@ -1517,7 +1517,7 @@ void FUN_L00_002cbcc0(u8 *shot_moby, s32 enabled)
             vectors[0].f[3] = 1.0f;
             vectors[0].f[2] = FUN_L00_00257be8_2cbcc0(0.01f, 0.025f) * D_0015ED60;
             effect = FUN_0026d000_2cbcc0(0.2f, 1.0f, 1.02f, 140000.0f,
-                pos, sign, &vectors[0], color);
+                shot_position, sign, &vectors[0], color);
             if (effect != 0) {
                 *(s16 *)(effect + 0xa) = FUN_001fef20_2cbcc0(FUN_L00_00257b90_2cbcc0(50, 80));
                 /* The direction is no longer needed; retain the effect field address. */
