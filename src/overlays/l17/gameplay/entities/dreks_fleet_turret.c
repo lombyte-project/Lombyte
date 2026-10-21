@@ -916,21 +916,21 @@ void FUN_L17_002dc3f8(struct Moby *moby) {
         BOBBING_UPDATE_AND_CHECK_CONTACT = 1
     };
     float v[4];
-    float w[12];
+    float hit_descriptor[12];
     float pos[4];
     float surface_query_scratch[4];
     float scaled_particle_vector[4];
     float random_direction[4];
     int out;
     char *data = (char *)moby->pvars;
-    char *r;
+    char *hit_record;
     struct Hero *g;
     float yy;
     int i;
     clear_vector(v);
-    r = find_moby_hit(moby, 0x230000, 0);
-    hit_reaction(moby, r, data + 0x20, 0, &out, 0, 0, 4);
-    if (out >= 2 && r != 0 && *(short *)(*(char **)(r + 0x20) + 0xA6) != 0x343) {
+    hit_record = find_moby_hit(moby, 0x230000, 0);
+    hit_reaction(moby, hit_record, data + 0x20, 0, &out, 0, 0, 4);
+    if (out >= 2 && hit_record != 0 && *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x343) {
         func_L00_0025F4A8_alt(moby, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f, 0, 1,
                               -1, 0);
         mark_moby_for_removal_u(moby);
@@ -946,12 +946,12 @@ void FUN_L17_002dc3f8(struct Moby *moby) {
         FUN_L00_00262b00(*(float *)&D_L17_00161D2C,
                          *(float *)&D_L17_00161D30 * DEG_TO_RAD * frame_time, moby,
                          (float *)(data + 0x60), (float *)(data + 0x64));
-        func_L00_0025A8C0_alt(w, (int)moby, 0x10001, 1.0f, v);
+        func_L00_0025A8C0_alt(hit_descriptor, (int)moby, 0x10001, 1.0f, v);
         qcopy(pos, &moby->pos);
         pos[2] = pos[2] + 0.75f;
         g = &hero;
         if (((char *)g->coll_hit_moby) == moby || ((char *)g->unk240) == moby ||
-            func_L00_001F2BE8_alt(1.0f, pos, 0x10, moby, w)) {
+            func_L00_001F2BE8_alt(1.0f, pos, 0x10, moby, hit_descriptor)) {
             if (D_L17_00174758 != 0 && *(short *)(D_L17_00174758 + 0xA6) != 0x343) {
                 func_L00_0025F4A8_alt(moby, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f,
                                       0, 1, -1, 0);
