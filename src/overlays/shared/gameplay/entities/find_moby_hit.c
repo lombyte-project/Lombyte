@@ -15,24 +15,24 @@ void FUN_L00_00259710(void *position) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A778), where it is exact; names translated to the US level program. */
 
 int point_in_path_xy(float *p, float *v, int n) __asm__("FUN_L00_00259740");
-int point_in_path_xy(float *test_point, float *v, int vertex_count) {
-    int r = 0;
+int point_in_path_xy(float *test_point, float *path_vertices, int vertex_count) {
+    int crossing_parity = 0;
     int i = 0;
     int k;
     for (k = 0; k < vertex_count; k++) {
-        float y1 = v[k * 4 + 1];
+        float y1 = path_vertices[k * 4 + 1];
         i++;
         if (i == vertex_count)
             i = 0;
-        if ((y1 < test_point[1] && test_point[1] <= v[i * 4 + 1]) || (v[i * 4 + 1] < test_point[1] && test_point[1] <= y1)) {
-            if (v[k * 4] +
-                    (test_point[1] - v[k * 4 + 1]) / (v[i * 4 + 1] - v[k * 4 + 1]) * (v[i * 4] - v[k * 4]) <
+        if ((y1 < test_point[1] && test_point[1] <= path_vertices[i * 4 + 1]) || (path_vertices[i * 4 + 1] < test_point[1] && test_point[1] <= y1)) {
+            if (path_vertices[k * 4] +
+                    (test_point[1] - path_vertices[k * 4 + 1]) / (path_vertices[i * 4 + 1] - path_vertices[k * 4 + 1]) * (path_vertices[i * 4] - path_vertices[k * 4]) <
                 test_point[0]) {
-                r = !r;
+                crossing_parity = !crossing_parity;
             }
         }
     }
-    return r;
+    return crossing_parity;
 }
 /* True when the pointer at a+0x94 is set and its word at +8 is non-zero. */
 int FUN_L00_00259830(char *moby) {
