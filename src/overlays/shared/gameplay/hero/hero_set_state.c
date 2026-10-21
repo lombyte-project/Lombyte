@@ -214,8 +214,8 @@ void FUN_L00_002215c8(void) {
             sample_index_base = hero.unk21B0 - i;
             {
                 s32 sample_index = (sample_index_base + 0x1F) % 32;
-                s32 b = (sample_index_base + 0x1E) % 32;
-                FUN_001f9a28_2215c8(&sample_delta, &hero.unk1B00[sample_index], &hero.unk1B00[b]);
+                s32 previous_sample_index = (sample_index_base + 0x1E) % 32;
+                FUN_001f9a28_2215c8(&sample_delta, &hero.unk1B00[sample_index], &hero.unk1B00[previous_sample_index]);
             }
             add_vector_xyz(&sum, &sum, &sample_delta);
         }
@@ -229,12 +229,12 @@ void FUN_L00_002215c8(void) {
 skip:
     FUN_L00_00221b68_2215c8();
     switch (hero.vehicle_mode) {
-    case 1:
+    case HERO_VEHICLE_MODE_CLANK:
         FUN_L00_00233660_2215c8(&hero.motion.unkD0, 0.0f, 0.0f, 0.4f);
         hero.reach_distance = 2.125f;
         hero.reach_height = 1.25f;
         break;
-    case 2:
+    case HERO_VEHICLE_MODE_GIANT_CLANK:
         FUN_L00_00233660_2215c8(&hero.motion.unkD0, 0.0f, 0.0f, 4.0f);
         hero.reach_distance = 15.0f;
         hero.reach_height = 3.0f;
