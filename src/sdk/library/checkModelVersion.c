@@ -11,18 +11,18 @@ const u8 D_00153030[] = "rom0:ROMVER";
 s32 checkModelVersion(void) {
     s32 fd;
     u32 i;
-    s8 buf[0x100];
+    s8 rom_version_string[0x100];
 
     fd = sceOpen((const char *)D_00153030, 1);
     if (fd < 0)
         return -1;
 
     for (i = 0; i < 0x100; i++) {
-        sceRead(fd, &buf[i], 1);
-        if (buf[i] == 0)
+        sceRead(fd, &rom_version_string[i], 1);
+        if (rom_version_string[i] == 0)
             break;
     }
 
     sceClose(fd);
-    return 0x1315670 < CheckStateRange((const char *)&buf[i - 9]);
+    return 0x1315670 < CheckStateRange((const char *)&rom_version_string[i - 9]);
 }
