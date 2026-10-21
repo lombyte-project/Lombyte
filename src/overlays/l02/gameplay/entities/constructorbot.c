@@ -590,11 +590,11 @@ void FUN_L02_002f8a18(int mode, int camera_argument_value) {
         VENDOR_CAMERA_MODE_CAPTURE_HERO_POSITION = 3
     };
     char *g = D_L02_00167280;
-    char *cam = *(char **)(g + 0x180);
-    char *camera_data = *(char **)(cam + 0x70);
+    char *vendor_camera = *(char **)(g + 0x180);
+    char *camera_data = *(char **)(vendor_camera + 0x70);
     char *camera_argument_pair = camera_data + 0xE0;
 
-    cam[0x88] = mode;
+    vendor_camera[0x88] = mode;
     switch (mode) {
     case VENDOR_CAMERA_MODE_CAPTURE_HERO_POSITION:
         qcopy(camera_data + 0x110, &hero.motion.pos);
