@@ -3519,7 +3519,7 @@ void FUN_L00_002d73e8(P *spawner) {
     T *volume;
     int mesh_alpha, mesh_color, end;
     Vec4 *transform;
-    int alpha, i, k, j, index, l;
+    int alpha, i, k, j, index, particle_quad_vertex_index;
     float width, height, phase, one;
     float *vertex;
     Vec4 *front;
@@ -3610,15 +3610,15 @@ void FUN_L00_002d73e8(P *spawner) {
             alpha <<= 24;
             quad.primitive = 0x8000000048L;
             one = 1.0f;
-            for (l = 0; l < 4; l++) {
-                quad.positions[l].f[0] = D_L00_001E11A0[l][0];
-                quad.positions[l].f[1] = D_L00_001E11A0[l][1] * width;
-                quad.positions[l].f[2] = D_L00_001E11A0[l][2] * height;
-                quad.positions[l].f[3] = one;
-                quad.texture_coordinates[l][0] = D_L00_001E11E0[l * 2] - D_L00_001D31C0[i];
-                quad.texture_coordinates[l][1] = D_L00_001E11E0[l * 2 + 1];
-                quad.colors[l] = alpha * D_L00_001619A0[l] | q->col;
-                transform_vector(&quad.positions[l], &quad.positions[l], transform);
+            for (particle_quad_vertex_index = 0; particle_quad_vertex_index < 4; particle_quad_vertex_index++) {
+                quad.positions[particle_quad_vertex_index].f[0] = D_L00_001E11A0[particle_quad_vertex_index][0];
+                quad.positions[particle_quad_vertex_index].f[1] = D_L00_001E11A0[particle_quad_vertex_index][1] * width;
+                quad.positions[particle_quad_vertex_index].f[2] = D_L00_001E11A0[particle_quad_vertex_index][2] * height;
+                quad.positions[particle_quad_vertex_index].f[3] = one;
+                quad.texture_coordinates[particle_quad_vertex_index][0] = D_L00_001E11E0[particle_quad_vertex_index * 2] - D_L00_001D31C0[i];
+                quad.texture_coordinates[particle_quad_vertex_index][1] = D_L00_001E11E0[particle_quad_vertex_index * 2 + 1];
+                quad.colors[particle_quad_vertex_index] = alpha * D_L00_001619A0[particle_quad_vertex_index] | q->col;
+                transform_vector(&quad.positions[particle_quad_vertex_index], &quad.positions[particle_quad_vertex_index], transform);
             }
             fast_draw_quad_real(&quad, 0, 0);
         }
