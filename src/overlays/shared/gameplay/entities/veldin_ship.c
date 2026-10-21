@@ -3704,18 +3704,18 @@ extern float D_L00_001D31C0_lui[] __asm__("D_L00_001D31C0") __attribute__((secti
 extern float D_L00_001D4480_lui[] __asm__("D_L00_001D4480") __attribute__((section(".data")));
 extern u8 D_L00_001D2D10_lui[] __asm__("D_L00_001D2D10") __attribute__((section(".data")));
 void FUN_L00_002d7d58(char *spawner, int i) {
-    char *v = *(char **)(spawner + 0x78);
-    float b;
+    char *spawner_vars = *(char **)(spawner + 0x78);
+    float base_particle_height;
     V_2d7d58 *particle_position;
     float sampled_x = spread_k(0.0f, 1.0f);
     particle_position = &D_L00_001CB7E0_2d7d58[i];
     particle_position->x = sampled_x;
     particle_position->y = spread_k(0.0f, 1.0f);
     particle_position->z = spread_k(0.0f, 1.0f);
-    b = *(float *)(v + 0x4C);
+    base_particle_height = *(float *)(spawner_vars + 0x4C);
     D_L00_001D02E0_lui[i] =
-        FUN_002132a8_2d7d58(*(float *)(v + 0x44), *(float *)(v + 0x44) + 2.0f);
-    D_L00_001D15A0_lui[i] = FUN_002132a8_2d7d58(b, b + 4.0f);
+        FUN_002132a8_2d7d58(*(float *)(spawner_vars + 0x44), *(float *)(spawner_vars + 0x44) + 2.0f);
+    D_L00_001D15A0_lui[i] = FUN_002132a8_2d7d58(base_particle_height, base_particle_height + 4.0f);
     D_L00_001D31C0_lui[i] = 0.0f;
     D_L00_001D4480_lui[i] = FUN_002132a8_2d7d58(0.003f, 0.005f);
     D_L00_001D2D10_lui[i] = 1;
