@@ -402,7 +402,7 @@ void FUN_L11_0030d800(struct Moby *grid_controller) {
         CHILD_GRID_STATE_FADE_TO_HERO_POSE = 4,
         CHILD_GRID_STATE_IDLE = 5
     };
-    GridVars_d800 *pv = (GridVars_d800 *)grid_controller->pvars;
+    GridVars_d800 *grid_controller_vars = (GridVars_d800 *)grid_controller->pvars;
     Vec4f pos;
     Vec4f rot;
     int row;
@@ -413,76 +413,76 @@ void FUN_L11_0030d800(struct Moby *grid_controller) {
     case CHILD_GRID_STATE_CREATE_CHILDREN:
         for (row = 0; row < 4; row++) {
             for (col = 0; col < 6; col++) {
-                pv->grid[row][col] = create_moby_d800(0x4B7);
-                pv->grid[row][col]->draw_dist = 0x40;
-                pv->grid[row][col]->visible = 1;
-                pv->grid[row][col]->spawn_frame = hero.moby->spawn_frame;
-                pv->grid[row][col]->flags = grid_controller->flags;
-                qcopy_nc(&pv->grid[row][col]->pos, &grid_controller->pos);
-                qcopy(&pv->grid[row][col]->rot, &grid_controller->rot);
+                grid_controller_vars->grid[row][col] = create_moby_d800(0x4B7);
+                grid_controller_vars->grid[row][col]->draw_dist = 0x40;
+                grid_controller_vars->grid[row][col]->visible = 1;
+                grid_controller_vars->grid[row][col]->spawn_frame = hero.moby->spawn_frame;
+                grid_controller_vars->grid[row][col]->flags = grid_controller->flags;
+                qcopy_nc(&grid_controller_vars->grid[row][col]->pos, &grid_controller->pos);
+                qcopy(&grid_controller_vars->grid[row][col]->rot, &grid_controller->rot);
             }
         }
-        pv->t = 0.0f;
+        grid_controller_vars->t = 0.0f;
         grid_controller->state = 1;
         break;
     case CHILD_GRID_STATE_WAIT_LINK_COMMAND: {
-        struct Moby *link = (struct Moby *)((pv->link << 8) + D_L11_0015FFD8_d800);
+        struct Moby *link = (struct Moby *)((grid_controller_vars->link << 8) + D_L11_0015FFD8_d800);
         if (link->command == 1) {
             grid_controller->state = 2;
-            pv->fade = -1.0f;
+            grid_controller_vars->fade = -1.0f;
             D_L11_00161F54 = 0;
             FUN_0022da68_d800(0, 0, grid_controller);
         } else if (link->command == 2) {
-            pv->t = 1.0f;
+            grid_controller_vars->t = 1.0f;
             grid_controller->state = 5;
         }
         break;
     }
     case CHILD_GRID_STATE_FADE_TO_POINT_POSE:
-        old = pv->fade;
-        approach_value_d800(&pv->fade, 1.0f, 1.0f / (float)scale_game_frames(20));
-        D_L11_0015F3FC = 1.0f - absolute_float_d800(pv->fade);
-        if (old < 0.0f && 0.0f <= pv->fade) {
-            struct Moby *link = (struct Moby *)(D_L11_0015FFD8_d800 + (pv->link << 8));
+        old = grid_controller_vars->fade;
+        approach_value_d800(&grid_controller_vars->fade, 1.0f, 1.0f / (float)scale_game_frames(20));
+        D_L11_0015F3FC = 1.0f - absolute_float_d800(grid_controller_vars->fade);
+        if (old < 0.0f && 0.0f <= grid_controller_vars->fade) {
+            struct Moby *link = (struct Moby *)(D_L11_0015FFD8_d800 + (grid_controller_vars->link << 8));
             char *cam;
             FUN_L00_00216f90(&link->pos, &link->rot, 0x72, 1);
-            cam = (char *)(D_L11_001600EC_d800 + (pv->from << 7));
+            cam = (char *)(D_L11_001600EC_d800 + (grid_controller_vars->from << 7));
             jet_mount(cam + 0x30, cam + 0x70, 1, 0, 0);
-        } else if (1.0f <= pv->fade) {
+        } else if (1.0f <= grid_controller_vars->fade) {
             grid_controller->state = 3;
         }
         break;
     case CHILD_GRID_STATE_BLEND_POINT_POSES:
-        pv->prev = pv->t;
-        approach_d800(&pv->t, &pv->vel, 1.0f, D_L11_00161F58 * frame_time_sq, D_L11_00161F5C * frame_time_sq,
+        grid_controller_vars->prev = grid_controller_vars->t;
+        approach_d800(&grid_controller_vars->t, &grid_controller_vars->vel, 1.0f, D_L11_00161F58 * frame_time_sq, D_L11_00161F5C * frame_time_sq,
                       D_L11_00161F60 * frame_time);
-        lerp_vector_d800(&pos, (char *)(D_L11_001600EC_d800 + (pv->from << 7)) + 0x30,
-                         (char *)(D_L11_001600EC_d800 + (pv->to << 7)) + 0x30, pv->t);
+        lerp_vector_d800(&pos, (char *)(D_L11_001600EC_d800 + (grid_controller_vars->from << 7)) + 0x30,
+                         (char *)(D_L11_001600EC_d800 + (grid_controller_vars->to << 7)) + 0x30, grid_controller_vars->t);
         clear_u64_value(&rot);
-        rot.x = sub_rot_d800(((float *)((pv->to << 7) + D_L11_001600EC_d800))[28],
-                             ((float *)((pv->from << 7) + D_L11_001600EC_d800))[28]) * pv->t;
-        rot.x = add_rot_d800(((float *)((pv->from << 7) + D_L11_001600EC_d800))[28], rot.x);
-        rot.y = sub_rot_d800(((float *)((pv->to << 7) + D_L11_001600EC_d800))[29],
-                             ((float *)((pv->from << 7) + D_L11_001600EC_d800))[29]) * pv->t;
-        rot.y = add_rot_d800(((float *)((pv->from << 7) + D_L11_001600EC_d800))[29], rot.y);
-        rot.z = sub_rot_d800(((float *)((pv->to << 7) + D_L11_001600EC_d800))[30],
-                             ((float *)((pv->from << 7) + D_L11_001600EC_d800))[30]) * pv->t;
-        rot.z = add_rot_d800(((float *)((pv->from << 7) + D_L11_001600EC_d800))[30], rot.z);
+        rot.x = sub_rot_d800(((float *)((grid_controller_vars->to << 7) + D_L11_001600EC_d800))[28],
+                             ((float *)((grid_controller_vars->from << 7) + D_L11_001600EC_d800))[28]) * grid_controller_vars->t;
+        rot.x = add_rot_d800(((float *)((grid_controller_vars->from << 7) + D_L11_001600EC_d800))[28], rot.x);
+        rot.y = sub_rot_d800(((float *)((grid_controller_vars->to << 7) + D_L11_001600EC_d800))[29],
+                             ((float *)((grid_controller_vars->from << 7) + D_L11_001600EC_d800))[29]) * grid_controller_vars->t;
+        rot.y = add_rot_d800(((float *)((grid_controller_vars->from << 7) + D_L11_001600EC_d800))[29], rot.y);
+        rot.z = sub_rot_d800(((float *)((grid_controller_vars->to << 7) + D_L11_001600EC_d800))[30],
+                             ((float *)((grid_controller_vars->from << 7) + D_L11_001600EC_d800))[30]) * grid_controller_vars->t;
+        rot.z = add_rot_d800(((float *)((grid_controller_vars->from << 7) + D_L11_001600EC_d800))[30], rot.z);
         FUN_L00_002ea9d8(&pos);
         FUN_L00_002eaa30(&rot);
-        if (1.0f <= pv->t) {
+        if (1.0f <= grid_controller_vars->t) {
             grid_controller->state = 4;
-            pv->fade = -1.0f;
+            grid_controller_vars->fade = -1.0f;
         }
         break;
     case CHILD_GRID_STATE_FADE_TO_HERO_POSE:
-        old = pv->fade;
-        approach_value_d800(&pv->fade, 1.0f, 1.0f / (float)scale_game_frames(20));
-        D_L11_0015F3FC = 1.0f - absolute_float_d800(pv->fade);
-        if (old < 0.0f && 0.0f <= pv->fade) {
+        old = grid_controller_vars->fade;
+        approach_value_d800(&grid_controller_vars->fade, 1.0f, 1.0f / (float)scale_game_frames(20));
+        D_L11_0015F3FC = 1.0f - absolute_float_d800(grid_controller_vars->fade);
+        if (old < 0.0f && 0.0f <= grid_controller_vars->fade) {
             FUN_L00_00216f90(&hero.motion.pos, &hero.motion.rot, 0, 1);
             FUN_L00_002eac18(3);
-        } else if (1.0f <= pv->fade) {
+        } else if (1.0f <= grid_controller_vars->fade) {
             grid_controller->state = 5;
         }
         break;
