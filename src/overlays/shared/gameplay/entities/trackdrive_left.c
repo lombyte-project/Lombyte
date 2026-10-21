@@ -791,10 +791,10 @@ void FUN_L02_002da6c0(int unused_texture, int unused_parameter, int sel, float a
     u32 col[4];
     int uv[4];
     float M[4][4];
-    float ang[4];
+    float arrow_rotation_angles[4];
     int x, y;
-    long v;
-    s64 tex;
+    long packed_arrow_center;
+    s64 texture_tex0;
     switch (sel) {
     case ARROW_STYLE_NEWLY_REACHED:
         uv[0] = D_L02_00161ABC;
@@ -822,16 +822,16 @@ void FUN_L02_002da6c0(int unused_texture, int unused_parameter, int sel, float a
     col[0] = D_L02_00161B9C;
     y = func_001FA898_r(fast_sin(angle) * radial_distance * 16.0f);
     x = func_001FA898_r(fast_cos(angle) * radial_distance * 16.0f);
-    v = (long)y + 0xFFFFF080000000L;
-    v -= x << 16;
-    v += 0x8000;
-    xy[3] = v;
-    xy[2] = v;
-    xy[1] = v;
-    xy[0] = v;
-    clear_vector(ang);
-    ang[2] = -angle;
-    euler_rotation_matrix(M, ang);
+    packed_arrow_center = (long)y + 0xFFFFF080000000L;
+    packed_arrow_center -= x << 16;
+    packed_arrow_center += 0x8000;
+    xy[3] = packed_arrow_center;
+    xy[2] = packed_arrow_center;
+    xy[1] = packed_arrow_center;
+    xy[0] = packed_arrow_center;
+    clear_vector(arrow_rotation_angles);
+    arrow_rotation_angles[2] = -angle;
+    euler_rotation_matrix(M, arrow_rotation_angles);
     multiply_matrix(M, M, D_L02_001D33B0);
     xy[0] += func_001FA898_r(M[0][0] * 16.0f) << 16;
     xy[0] += func_001FA898_r(M[0][1] * 16.0f);
@@ -841,9 +841,9 @@ void FUN_L02_002da6c0(int unused_texture, int unused_parameter, int sel, float a
     xy[2] += func_001FA898_r(M[2][1] * 16.0f);
     xy[3] += func_001FA898_r(M[3][0] * 16.0f) << 16;
     xy[3] += func_001FA898_r(M[3][1] * 16.0f);
-    tex = get_effect_texture(D_L02_00161B1C_gp + 0x29);
-    FUN_L02_0020bc88(xy, uv, col, tex, 1);
-    FUN_L02_0020bc88(xy, uv, col, tex, 1);
+    texture_tex0 = get_effect_texture(D_L02_00161B1C_gp + 0x29);
+    FUN_L02_0020bc88(xy, uv, col, texture_tex0, 1);
+    FUN_L02_0020bc88(xy, uv, col, texture_tex0, 1);
 }
 extern s32 D_L02_0015F5CC;
 extern f32 D_L02_00161B60 __attribute__((sda));
