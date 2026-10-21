@@ -75,11 +75,11 @@ extern void scale_7d50(void *, void *, float) __asm__("FUN_001f9a68");
 extern int D_L13_001611C0;
 extern u128_7d50 D_L13_001608E0;
 extern u128_7d50 D_L13_001608F0;
-void FUN_L13_002b7d50(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale, float ang) {
-    float mat[4][4];
-    float rot[4];
-    float w[4];
-    float v[4];
+void FUN_L13_002b7d50(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale, float z_rotation_angle) {
+    float rotation_matrix[4][4];
+    float rotation_angles[4];
+    float transformed_point[4];
+    float input_point[4];
     int payload_qword_count = (point_count + 1) / 2 + 3;
     char *t;
     unsigned long long *vertex_output;
@@ -107,22 +107,22 @@ void FUN_L13_002b7d50(short *pts, int point_count, float x0, float y0, unsigned 
         qcopy((void *)D_L13_001611C0, &D_L13_001608F0);
         *(short *)(saved_packet_cursor + 0x10) = point_count - 0x8000;
     }
-    *(u128_7d50 *)rot = 0;
-    rot[2] = ang;
+    *(u128_7d50 *)rotation_angles = 0;
+    rotation_angles[2] = z_rotation_angle;
     D_L13_001611C0 += 0x10;
     vertex_output = (unsigned long long *)D_L13_001611C0;
-    rotmat_7d50(mat, rot);
+    rotmat_7d50(rotation_matrix, rotation_angles);
     for (i = 0; i < point_count; i++) {
-        *(u128_7d50 *)v = 0;
-        v[0] = itof_7d50(pts[i * 2]);
-        v[1] = itof_7d50(pts[i * 2 + 1]);
-        *(u128_7d50 *)w = *(u128_7d50 *)v;
-        xform_7d50(w, w, mat);
-        scale_7d50(w, w, scale);
-        w[0] += x0;
-        w[1] += y0;
-        x = ftoi_7d50(w[0] * 16.0f);
-        y = ftoi_7d50(w[1] * 16.0f);
+        *(u128_7d50 *)input_point = 0;
+        input_point[0] = itof_7d50(pts[i * 2]);
+        input_point[1] = itof_7d50(pts[i * 2 + 1]);
+        *(u128_7d50 *)transformed_point = *(u128_7d50 *)input_point;
+        xform_7d50(transformed_point, transformed_point, rotation_matrix);
+        scale_7d50(transformed_point, transformed_point, scale);
+        transformed_point[0] += x0;
+        transformed_point[1] += y0;
+        x = ftoi_7d50(transformed_point[0] * 16.0f);
+        y = ftoi_7d50(transformed_point[1] * 16.0f);
         vertex_output[i] = (unsigned long long)(x + D_0013E500_7d50[4] - 8) | ((unsigned long long)(y + D_0013E500_7d50[5] - 8) << 16) | ((unsigned long long)col << 32);
     }
     D_L13_001611C0 += ((point_count + 1) / 2) * 16;
