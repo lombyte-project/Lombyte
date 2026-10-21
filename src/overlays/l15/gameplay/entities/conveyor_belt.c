@@ -2209,15 +2209,15 @@ int FUN_L15_002f8698(char *moby, float projected_angle_limit_degrees, float b) {
     float dot3;
     float den;
     char *moby_slot_table = D_L15_0015EF48[2];
-    char *src;
+    char *target_record;
 
     data = *(char **)(moby_slot_table + *(short *)(moby + 0x84) * 32 + 0x1C);
-    src = D_L15_001600EC + *(int *)(data + 0x48) * 128;
+    target_record = D_L15_001600EC + *(int *)(data + 0x48) * 128;
     if (projected_angle_limit_degrees == 0.0f && b == 0.0f) {
         return 1;
     }
     g = D_L15_00167280;
-    fast_vec_sub(target_displacement, src + 0x30, *(char **)(g + 0x180) + 0x30);
+    fast_vec_sub(target_displacement, target_record + 0x30, *(char **)(g + 0x180) + 0x30);
     dot1 = fast_vec_dot(target_displacement, (projection_axis_record + 0x30));
     fast_vec_scale(scaled_axis_vector, (projection_axis_record + 0x30), dot1);
     fast_vec_sub(target_axis_residual, target_displacement, scaled_axis_vector);
