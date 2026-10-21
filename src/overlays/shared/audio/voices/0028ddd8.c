@@ -60,9 +60,9 @@ typedef struct {
 extern E0028df38 D_0013E550[];
 /* Sets word 0x21 of voice entry i to v; returns 1. */
 s32 engine_voice_set_pitch(s32 i, s32 v) __asm__("FUN_L00_0028df38");
-s32 engine_voice_set_pitch(s32 i, s32 v) {
+s32 engine_voice_set_pitch(s32 i, s32 pitch) {
     E0028df38 *voice_entry = &D_0013E550[i];
-    voice_entry->w[0x21] = v;
+    voice_entry->w[0x21] = pitch;
     return 1;
 }
 #define NOT_SDA
