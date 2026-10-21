@@ -2754,27 +2754,27 @@ extern float FUN_001fa580_2118c8(float, float) __asm__("FUN_001fa580");
 
 void stick_target(float scale, int mode) __asm__("FUN_L00_002118c8");
 void stick_target(float scale, int mode) {
-    V_2118c8 v;
+    V_2118c8 stick_vector;
     V_2118c8 q;
     float x;
     float len;
     float y;
 
-    v.f[1] = hero.stick_y;
-    v.f[0] = hero.stick_x;
+    stick_vector.f[1] = hero.stick_y;
+    stick_vector.f[0] = hero.stick_x;
     if (mode == 1) {
-        if (FUN_001f99c0_2118c8(v.f[1]) > 0.7f && FUN_001f99c0_2118c8(v.f[0]) < 0.12f) {
-            v.f[0] = 0.0f;
+        if (FUN_001f99c0_2118c8(stick_vector.f[1]) > 0.7f && FUN_001f99c0_2118c8(stick_vector.f[0]) < 0.12f) {
+            stick_vector.f[0] = 0.0f;
         }
-        if (FUN_001f99c0_2118c8(v.f[0]) > 0.7f && FUN_001f99c0_2118c8(v.f[1]) < 0.12f) {
-            v.f[1] = 0.0f;
+        if (FUN_001f99c0_2118c8(stick_vector.f[0]) > 0.7f && FUN_001f99c0_2118c8(stick_vector.f[1]) < 0.12f) {
+            stick_vector.f[1] = 0.0f;
         }
     }
-    len = FUN_001f9b20_2118c8(&v);
+    len = FUN_001f9b20_2118c8(&stick_vector);
     if (len > 1.0f) {
-        FUN_L00_001ff378_2118c8(&v, &v, len);
+        FUN_L00_001ff378_2118c8(&stick_vector, &stick_vector, len);
     }
-    if (v.f[0] == 0.0f && v.f[1] == 0.0f) {
+    if (stick_vector.f[0] == 0.0f && stick_vector.f[1] == 0.0f) {
         hero.target_speed = 0.0f;
         if (hero.unk20B3) {
             hero.motion.move_yaw = FUN_L00_002332d0_2118c8();
@@ -2786,7 +2786,7 @@ void stick_target(float scale, int mode) {
         FUN_001f9cf8_2118c8(&hero.motion.unk170, &q, (char *)hero.moby + 0xC0);
         return;
     }
-    hero.motion.move_yaw = FUN_001f9e90_2118c8(-v.f[1], -v.f[0]);
+    hero.motion.move_yaw = FUN_001f9e90_2118c8(-stick_vector.f[1], -stick_vector.f[0]);
     if (mode == 2) {
         hero.motion.move_yaw =
             FUN_001fa6c0_2118c8(FUN_001fa6d0_2118c8((hero.motion.move_yaw + 3.1415927f) * 0.63662f + 0.5f) & 3) *
@@ -2804,16 +2804,16 @@ void stick_target(float scale, int mode) {
     } else {
         hero.motion.move_yaw = FUN_001fa580_2118c8(hero.motion.move_yaw, D_L00_00166DD8_2118c8);
     }
-    x = v.f[0];
-    y = v.f[1];
-    v.f[1] = -x;
-    v.f[0] = -y;
-    v.f[2] = v.f[3] = 0.0f;
+    x = stick_vector.f[0];
+    y = stick_vector.f[1];
+    stick_vector.f[1] = -x;
+    stick_vector.f[0] = -y;
+    stick_vector.f[2] = stick_vector.f[3] = 0.0f;
     if (D_0015EDB4_2118c8) {
-        v.f[1] = x;
+        stick_vector.f[1] = x;
     }
-    FUN_001f9cf8_2118c8(&hero.motion.unk170, &v, D_L00_00166FD0_2118c8);
-    hero.target_speed = scale * FUN_001f9b20_2118c8(&v);
+    FUN_001f9cf8_2118c8(&hero.motion.unk170, &stick_vector, D_L00_00166FD0_2118c8);
+    hero.target_speed = scale * FUN_001f9b20_2118c8(&stick_vector);
 }
 extern float D_L00_0017BDB8[];
 
