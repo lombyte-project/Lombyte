@@ -757,12 +757,12 @@ extern float FUN_001f9af0_2ea810(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9df8_2ea810(float) __asm__("FUN_001f9df8");
 #define Q D_L00_00166C80_2ea810
 
-void FUN_L00_002ea810(A_2ea810 *arg) {
+void FUN_L00_002ea810(A_2ea810 *camera_object) {
     float scaled_axis_scratch[4];
     float camera_vector_residual[4];
     float hero_vector_residual[4];
     float *comparison_axis;
-    float len;
+    float residual_length_product;
     float dot_product_or_asin_result;
 
     if (hero.unk2284 == 0x51 || hero.unk2284 == 4) {
@@ -770,32 +770,32 @@ void FUN_L00_002ea810(A_2ea810 *arg) {
     }
     if (Q.s270 == 0) {
         Q.b273 = 0;
-        arg->s7E = 2;
+        camera_object->s7E = 2;
         Q.f294 = 0.018f;
         Q.f288 = 0.018f;
         return;
     }
     comparison_axis = Q.v1C0;
-    dot_product_or_asin_result = FUN_001f9ab0_2ea810(comparison_axis, arg);
+    dot_product_or_asin_result = FUN_001f9ab0_2ea810(comparison_axis, camera_object);
     FUN_001f9a68_2ea810(scaled_axis_scratch, comparison_axis, dot_product_or_asin_result);
-    FUN_001f9a28_2ea810(camera_vector_residual, arg, scaled_axis_scratch);
+    FUN_001f9a28_2ea810(camera_vector_residual, camera_object, scaled_axis_scratch);
     dot_product_or_asin_result = FUN_001f9ab0_2ea810(comparison_axis, ((char *)hero.moby) + 0xC0);
     FUN_001f9a68_2ea810(scaled_axis_scratch, comparison_axis, dot_product_or_asin_result);
     FUN_001f9a28_2ea810(hero_vector_residual, ((char *)hero.moby) + 0xC0, scaled_axis_scratch);
-    len = FUN_001f9af0_2ea810(hero_vector_residual);
-    if (len != 0.0f) {
-        len *= FUN_001f9af0_2ea810(camera_vector_residual);
-        if (len != 0.0f) {
-            dot_product_or_asin_result = FUN_001f9df8_2ea810(FUN_001f9ab0_2ea810(hero_vector_residual, camera_vector_residual) / len);
+    residual_length_product = FUN_001f9af0_2ea810(hero_vector_residual);
+    if (residual_length_product != 0.0f) {
+        residual_length_product *= FUN_001f9af0_2ea810(camera_vector_residual);
+        if (residual_length_product != 0.0f) {
+            dot_product_or_asin_result = FUN_001f9df8_2ea810(FUN_001f9ab0_2ea810(hero_vector_residual, camera_vector_residual) / residual_length_product);
             if (1.5707964f - dot_product_or_asin_result >= 1.3962634f) {
                 Q.s270 = 0;
-                arg->s7E = 4;
+                camera_object->s7E = 4;
                 return;
             }
         }
     }
     Q.b273 = 0;
-    arg->s7E = 2;
+    camera_object->s7E = 2;
     Q.f294 = 0.018f;
     Q.f288 = 0.018f;
 }
