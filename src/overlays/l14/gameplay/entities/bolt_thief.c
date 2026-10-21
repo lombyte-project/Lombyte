@@ -113,17 +113,17 @@ void FUN_L14_002fded0(Moby_2FF358 *source_moby) {
     k = (col << 8) | 0x7F000000;
     col = col | ((col << 16) | k);
     if (func_002140B0_2FF358(3)) {
-        Part_2FF358 *g;
+        Part_2FF358 *final_puff;
 
         puff_signed_amount = func_002140B0_2FF358(4);
         k = func_002140B0_2FF358(2) == 0 ? puff_signed_amount : -puff_signed_amount;
-        g = spawn_puff(B, 0.05f, 1.0f, 1.0f, k, &D_L14_0015F580, puff_size, col);
-        if (g != 0) {
-            struct PartSub_2FF358 *f = &g->sub;
+        final_puff = spawn_puff(B, 0.05f, 1.0f, 1.0f, k, &D_L14_0015F580, puff_size, col);
+        if (final_puff != 0) {
+            struct PartSub_2FF358 *f = &final_puff->sub;
 
-            g->life = scale_game_frames(0x3C);
+            final_puff->life = scale_game_frames(0x3C);
             if (func_002140B0_2FF358(2)) {
-                g->b3 = 0x44;
+                final_puff->b3 = 0x44;
             }
             f->bA = 0x40;
             f->f4 = 2;
