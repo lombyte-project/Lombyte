@@ -1675,30 +1675,30 @@ extern s32 rndi_2a8028(s32, s32) __asm__("FUN_L00_00257b90");
 extern void spawn_burst(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
 extern void FUN_L00_002a7e20_c(void *, s32) __asm__("FUN_L00_002a7e20");
 void FUN_L00_002a8028(u8 *wrench_moby) {
-    V2a8028 v;
+    V2a8028 effect_direction_scratch;
     V2a8028 effect_spawn_position;
     f32 pitch;
     f32 randomized_direction_angle;
     s32 i;
     s32 random_frame_lower_bound;
-    subtract_vector_xyz(&v, &g_debug_camera, &D_L00_00173E60_2a8028);
-    pitch = -angle_atan2(vector_length_xy(&v), v.f[2]);
-    angle_atan2(v.f[0], v.f[1]);
+    subtract_vector_xyz(&effect_direction_scratch, &g_debug_camera, &D_L00_00173E60_2a8028);
+    pitch = -angle_atan2(vector_length_xy(&effect_direction_scratch), effect_direction_scratch.f[2]);
+    angle_atan2(effect_direction_scratch.f[0], effect_direction_scratch.f[1]);
     for (i = 19; i >= 0; i--) {
         randomized_direction_angle = ang_2a8028(rnd_2a8028(0.0f, 3.1415927f), pitch);
-        dir_2a8028(&v, 0.2f, ang_2a8028(rnd_2a8028(0.0f, 3.1415927f), pitch), randomized_direction_angle);
-        scale_vector_xyz(&effect_spawn_position, &v, rndf_2a8028(1.0f, 3.0f));
+        dir_2a8028(&effect_direction_scratch, 0.2f, ang_2a8028(rnd_2a8028(0.0f, 3.1415927f), pitch), randomized_direction_angle);
+        scale_vector_xyz(&effect_spawn_position, &effect_direction_scratch, rndf_2a8028(1.0f, 3.0f));
         add_vector_xyz(&effect_spawn_position, &effect_spawn_position, &D_L00_00173E60_2a8028);
-        FUN_L00_0026c6e8(&effect_spawn_position, &v);
+        FUN_L00_0026c6e8(&effect_spawn_position, &effect_direction_scratch);
     }
     for (i = 9; i >= 0; i--) {
         effect_spawn_position.f[0] = D_L00_00173E40_2a8028[8] + rnd_2a8028(0.0f, 0.1f);
         effect_spawn_position.f[1] = D_L00_00173E40_2a8028[9] + rnd_2a8028(0.0f, 0.1f);
         effect_spawn_position.f[2] = D_L00_00173E40_2a8028[10] + rnd_2a8028(0.0f, 0.1f);
         randomized_direction_angle = ang_2a8028(rnd_2a8028(0.0f, 3.1415927f), pitch);
-        dir_2a8028(&v, 0.05f, ang_2a8028(rnd_2a8028(0.0f, 3.1415927f), pitch), randomized_direction_angle);
+        dir_2a8028(&effect_direction_scratch, 0.05f, ang_2a8028(rnd_2a8028(0.0f, 3.1415927f), pitch), randomized_direction_angle);
         random_frame_lower_bound = fr_2a8028(10);
-        spawn_burst(&effect_spawn_position, &v, 0x4F007FFF, 0x1FFFFFFF, rndi_2a8028(random_frame_lower_bound, fr_2a8028(20)), 1, 20000.0f);
+        spawn_burst(&effect_spawn_position, &effect_direction_scratch, 0x4F007FFF, 0x1FFFFFFF, rndi_2a8028(random_frame_lower_bound, fr_2a8028(20)), 1, 20000.0f);
     }
     if (*(s16 *)(*(u8 **)(wrench_moby + 0x78) + 0x78) == 0x2B) {
         FUN_L00_002a7e20_c(&D_L00_00173E60_2a8028, 10);
