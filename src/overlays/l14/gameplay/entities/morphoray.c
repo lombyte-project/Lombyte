@@ -1285,7 +1285,7 @@ void FUN_L14_003087c0(struct Moby *moby) {
         MOBY_UPDATE_CUTSCENE_TARGET = 1
     };
     int *moby_pvars = (int *)moby->pvars;
-    unsigned v;
+    unsigned level_state_offset;
     int i;
     if (moby_pvars[0] != -1) {
         if (FUN_L01_0026e008(moby_pvars[0], -1) == 0) {
@@ -1303,10 +1303,10 @@ void FUN_L14_003087c0(struct Moby *moby) {
         break;
     case MOBY_UPDATE_CUTSCENE_TARGET:
         if (D_L14_0015F5C4 == 2) {
-            v = D_L14_0016CF60.state - 3;
-            if (v < 3) {
+            level_state_offset = D_L14_0016CF60.state - 3;
+            if (level_state_offset < 3) {
                 i = 0;
-                if (v <= D_L14_0015F5C4)
+                if (level_state_offset <= D_L14_0015F5C4)
                     i = moby->state;
                 cutscene_set_camera_target(D_L14_0016CF60.v178[i]);
             }
