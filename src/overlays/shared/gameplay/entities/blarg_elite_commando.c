@@ -25,7 +25,7 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
     if (moby != 0) {
         char *data;
         float xy_length;
-        float b;
+        float elevation_angle;
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
         moby[0x31] = 1;
@@ -40,8 +40,8 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
         *(int *)(data + 0x10) = 0;
         *(float *)(moby + 0x48) = fast_arc_tan(pos[0], pos[1]);
         xy_length = vector_length_xy(pos);
-        b = fast_arc_tan(xy_length, pos[2]);
-        *(float *)(moby + 0x44) = -b;
+        elevation_angle = fast_arc_tan(xy_length, pos[2]);
+        *(float *)(moby + 0x44) = -elevation_angle;
         moby[0x31] = 0;
         *(unsigned short *)(moby + 0x34) |= 1;
     }
