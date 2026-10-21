@@ -1328,8 +1328,8 @@ extern void vscl_233940(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern u128_233940 D_L01_001742F0[] __attribute__((section(".data")));
 s32 FUN_L01_00233940(s32 mode) {
     V_233940 old;
-    V_233940 v;
-    V_233940 w;
+    V_233940 collision_query_offset;
+    V_233940 resolved_position_delta;
     s32 mask;
     s32 i;
     u128_233940 *collision_result_position;
@@ -1338,7 +1338,7 @@ s32 FUN_L01_00233940(s32 mode) {
         return 1;
     }
     qcopy(&old, &hero.motion.pos.q);
-    vzero_233940(&v);
+    vzero_233940(&collision_query_offset);
     if (hero.unk22DA != 0) {
         f2347c0_233940();
         hero.unk22DA = 0;
@@ -1346,15 +1346,15 @@ s32 FUN_L01_00233940(s32 mode) {
     if (hero.state.control_mode != 0x11) {
         if (hero.unk20B3 != 0 || hero.unk1F8 != 0) {
             if (hero.unk20B3 == 1 || hero.unk1F8 != 0) {
-                f233810_233940(&v, &v, 0.6f);
+                f233810_233940(&collision_query_offset, &collision_query_offset, 0.6f);
             } else {
-                f2334d0_233940(&v, &v, -hero.unk224);
+                f2334d0_233940(&collision_query_offset, &collision_query_offset, -hero.unk224);
             }
         } else {
-            v.f[2] = hero.unk224;
+            collision_query_offset.f[2] = hero.unk224;
         }
     }
-    vadd_233940(&hero.motion.pos.q, &hero.motion.pos.q, &v);
+    vadd_233940(&hero.motion.pos.q, &hero.motion.pos.q, &collision_query_offset);
     mask = 0x24;
     if (hero.state.current == HERO_STATE_SINK) {
         mask = 0xD24;
@@ -1383,25 +1383,25 @@ s32 FUN_L01_00233940(s32 mode) {
         hero.wall_hit = 1;
         hero.coll_hit_moby = ((u8 **)collision_result_position)[-6];
     }
-    vsub_233940(&hero.motion.pos.q, &hero.motion.pos.q, &v);
-    vsub_233940(&w, &hero.motion.pos.q, &old);
-    query_height_or_displacement_length = vlen_233940(&w);
+    vsub_233940(&hero.motion.pos.q, &hero.motion.pos.q, &collision_query_offset);
+    vsub_233940(&resolved_position_delta, &hero.motion.pos.q, &old);
+    query_height_or_displacement_length = vlen_233940(&resolved_position_delta);
     if (hero.unk234 * 1.5f < query_height_or_displacement_length) {
         if (mode == 0xF) {
-            if (512.0f < w.f[0])
-                w.f[0] = 512.0f;
-            else if (w.f[0] < -512.0f)
-                w.f[0] = -512.0f;
-            if (512.0f < w.f[1])
-                w.f[1] = 512.0f;
-            else if (w.f[1] < -512.0f)
-                w.f[1] = -512.0f;
-            if (512.0f < w.f[2])
-                w.f[2] = 512.0f;
-            else if (w.f[2] < -512.0f)
-                w.f[2] = -512.0f;
-            vscl_233940(&w, &w, hero.unk234);
-            vadd_233940(&hero.motion.pos.q, &old, &w);
+            if (512.0f < resolved_position_delta.f[0])
+                resolved_position_delta.f[0] = 512.0f;
+            else if (resolved_position_delta.f[0] < -512.0f)
+                resolved_position_delta.f[0] = -512.0f;
+            if (512.0f < resolved_position_delta.f[1])
+                resolved_position_delta.f[1] = 512.0f;
+            else if (resolved_position_delta.f[1] < -512.0f)
+                resolved_position_delta.f[1] = -512.0f;
+            if (512.0f < resolved_position_delta.f[2])
+                resolved_position_delta.f[2] = 512.0f;
+            else if (resolved_position_delta.f[2] < -512.0f)
+                resolved_position_delta.f[2] = -512.0f;
+            vscl_233940(&resolved_position_delta, &resolved_position_delta, hero.unk234);
+            vadd_233940(&hero.motion.pos.q, &old, &resolved_position_delta);
         }
         return -1;
     }
