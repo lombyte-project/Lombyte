@@ -1311,7 +1311,7 @@ void FUN_L00_002b3c50(X *x) {
     V4 emission_position;
     V4 previous_position_delta;
     V4 trail_sample_position;
-    N *g;
+    N *trail_state;
     f32 trail_sample_spacing;
     f32 effect_random_upper_bound;
     u32 col;
@@ -1320,7 +1320,7 @@ void FUN_L00_002b3c50(X *x) {
     s32 hero_state;
     u8 *spawned_effect;
 
-    g = x->f78;
+    trail_state = x->f78;
     l0.f[0] = fast_cos(random_angle_radians()) * 0.05f;
     l0.f[1] = fast_sin(random_angle_radians()) * 0.05f;
     l0.f[2] = 0.0f;
@@ -1334,16 +1334,16 @@ void FUN_L00_002b3c50(X *x) {
     } else {
         FUN_L00_0026cbb0(&emission_position, &l0, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
     }
-    if (g->f0C) {
-        trail_sample_spacing = fast_vec_dist(&g->v10, &emission_position) * 0.5f;
-        FUN_001f9a28_c(&previous_position_delta, &g->v10, &emission_position);
+    if (trail_state->f0C) {
+        trail_sample_spacing = fast_vec_dist(&trail_state->v10, &emission_position) * 0.5f;
+        FUN_001f9a28_c(&previous_position_delta, &trail_state->v10, &emission_position);
         for (i = 1; i < 2; i++) {
             fast_vec_normalize(&trail_sample_position, &previous_position_delta, trail_sample_spacing * (f32)i);
             FUN_001f9a10_c(&trail_sample_position, &emission_position, &trail_sample_position);
             FUN_L00_0026cbb0(&trail_sample_position, &l0, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
         }
     }
-    g->f00 = random_integer_below(FUN_001f96f8_c2(10));
+    trail_state->f00 = random_integer_below(FUN_001f96f8_c2(10));
     effect_random_upper_bound = 1.075f;
     col = 0x808080;
     l0.f[0] = 0.0f;
@@ -1371,9 +1371,9 @@ void FUN_L00_002b3c50(X *x) {
     spawned_effect = FUN_L00_0026d000(&emission_position, 0.05f, 1.01f, effect_random_upper_bound, 30000.0f, 6, &l0, col);
     if (spawned_effect)
         spawned_effect[3] = 0x44;
-    if (g->f0C) {
-        trail_sample_spacing = fast_vec_dist(&g->v10, &emission_position) * 0.16667f;
-        FUN_001f9a28_c(&previous_position_delta, &g->v10, &emission_position);
+    if (trail_state->f0C) {
+        trail_sample_spacing = fast_vec_dist(&trail_state->v10, &emission_position) * 0.16667f;
+        FUN_001f9a28_c(&previous_position_delta, &trail_state->v10, &emission_position);
         hero_state = hero.state.current;
         trail_sample_limit = 4;
         if (hero_state == 8)
@@ -1388,8 +1388,8 @@ void FUN_L00_002b3c50(X *x) {
                 spawned_effect[3] = 0x44;
         }
     }
-    qcopy(&g->v10, &emission_position);
-    g->f0C = 1;
+    qcopy(&trail_state->v10, &emission_position);
+    trail_state->f0C = 1;
 }
 #define NOT_SDA
 
