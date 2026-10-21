@@ -2917,16 +2917,16 @@ int FUN_L18_002f6878(char *moby, float arg, void *x) {
     char *data = *(char **)(moby + 0x78);
     char *boss_position = data + 0x3C0;
     float planar_displacement[4];
-    float b[4];
+    float distance_progress[4];
     float v = 0.0f;
     float len;
     float acceleration_and_braking_step;
-    b[0] = v;
+    distance_progress[0] = v;
     fast_vec_sub(planar_displacement, x, boss_position);
     planar_displacement[2] = v;
     len = fast_vec_length(planar_displacement);
     acceleration_and_braking_step = D_0015ED6C_e[1] * 10.0f;
-    advance_accelerated_scalar(len, acceleration_and_braking_step, acceleration_and_braking_step, arg, b, (float *)(data + 0x374));
+    advance_accelerated_scalar(len, acceleration_and_braking_step, acceleration_and_braking_step, arg, distance_progress, (float *)(data + 0x374));
     fast_vec_normalize(planar_displacement, planar_displacement, *(float *)(data + 0x374));
     fast_vec_add(boss_position, boss_position, planar_displacement);
     if (len < 0.1f) {
