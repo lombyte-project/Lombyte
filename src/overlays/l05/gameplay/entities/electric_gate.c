@@ -1410,15 +1410,15 @@ void FUN_L05_00315f70(char *moby) {
     int i = 0;
     char *data = *(char **)(moby + 0x78);
     char *tab = D_L05_001B0930[*(int *)(data + 0x68)];
-    float ang = 0.0f;
+    float ring_point_angle = 0.0f;
     float step = 6.28318f / (float)(*(int *)tab - 1);
     for (; i < *(int *)tab; i++) {
         char *ring_point_position = tab + 0x10 + i * 16;
-        *(float *)ring_point_position = fast_cos(ang) * 3.5f;
-        *(float *)(ring_point_position + 4) = fast_sin(ang) * 3.5f;
+        *(float *)ring_point_position = fast_cos(ring_point_angle) * 3.5f;
+        *(float *)(ring_point_position + 4) = fast_sin(ring_point_angle) * 3.5f;
         *(int *)(ring_point_position + 8) = 0;
         fast_vec_add(ring_point_position, ring_point_position, moby + 0x10);
-        ang = fast_add_rotations(ang, step);
+        ring_point_angle = fast_add_rotations(ring_point_angle, step);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317538), where it is exact; names translated to the US level program. */
