@@ -16,15 +16,15 @@
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 
-void FUN_L03_002cc828(unsigned char *arg) {
-    char *item = find_moby_hit(arg, 0x130000, 0);
+void FUN_L03_002cc828(unsigned char *mine_moby) {
+    char *item = find_moby_hit(mine_moby, 0x130000, 0);
     if (item != 0) {
         char *other = *(char **)(item + 0x20);
-        if (other != 0 && *(short *)(other + 0xA6) != *(short *)(arg + 0xA6)) {
-            arg[0x20] = 4;
+        if (other != 0 && *(short *)(other + 0xA6) != *(short *)(mine_moby + 0xA6)) {
+            mine_moby[0x20] = 4;
         }
     }
-    arg[0xA4] = 0xFF;
+    mine_moby[0xA4] = 0xFF;
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D44C8), where it is exact; names translated to the US level program. */
 
