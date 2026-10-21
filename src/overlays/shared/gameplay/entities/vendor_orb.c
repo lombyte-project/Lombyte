@@ -714,12 +714,12 @@ extern s32 D_L00_00161C88[] MACRO_ADDR;
 extern void FUN_L00_0023e838(s32);
 
 void FUN_L00_002e20f8(s32 i) {
-    s32 v;
-    v = D_L00_00161C38[i];
+    s32 first_endpoint_light_index;
+    first_endpoint_light_index = D_L00_00161C38[i];
     D_L00_00161BF8[i] = 0;
     D_L00_00161C88[i] = 0;
-    if (v != -1) {
-        FUN_L00_0023e838(v);
+    if (first_endpoint_light_index != -1) {
+        FUN_L00_0023e838(first_endpoint_light_index);
         D_L00_00161C38[i] = -1;
     }
     if (D_L00_00161C48[i] != -1) {
