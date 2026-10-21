@@ -19,7 +19,7 @@ unsigned char transition_update_movie_camera(void) {
     unsigned char flag = key[0xC];
     float *keyframe_rotation_angles = (float *)(key + 0x10);
     char *active_camera_position;
-    char *cam;
+    char *camera_basis_write_base;
     float camera_rotation_matrix[16];
 
     view_tan_half_fov = 0.63f;
@@ -30,16 +30,16 @@ unsigned char transition_update_movie_camera(void) {
     SceVu0RotMatrixX(camera_rotation_matrix, camera_rotation_matrix, *(float *)(key + 0x10));
     SceVu0RotMatrixY(camera_rotation_matrix, camera_rotation_matrix, keyframe_rotation_angles[1]);
     sceVu0RotMatrixZ(camera_rotation_matrix, camera_rotation_matrix, keyframe_rotation_angles[2]);
-    cam = active_camera_position - 0x140;
-    *(float *)(cam + 0x350) = -camera_rotation_matrix[8];
-    *(float *)(cam + 0x360) = -camera_rotation_matrix[0];
-    *(float *)(cam + 0x370) = camera_rotation_matrix[4];
-    *(float *)(cam + 0x354) = -camera_rotation_matrix[9];
-    *(float *)(cam + 0x364) = -camera_rotation_matrix[1];
-    *(float *)(cam + 0x374) = camera_rotation_matrix[5];
-    *(float *)(cam + 0x358) = -camera_rotation_matrix[10];
-    *(float *)(cam + 0x368) = -camera_rotation_matrix[2];
-    *(float *)(cam + 0x378) = camera_rotation_matrix[6];
+    camera_basis_write_base = active_camera_position - 0x140;
+    *(float *)(camera_basis_write_base + 0x350) = -camera_rotation_matrix[8];
+    *(float *)(camera_basis_write_base + 0x360) = -camera_rotation_matrix[0];
+    *(float *)(camera_basis_write_base + 0x370) = camera_rotation_matrix[4];
+    *(float *)(camera_basis_write_base + 0x354) = -camera_rotation_matrix[9];
+    *(float *)(camera_basis_write_base + 0x364) = -camera_rotation_matrix[1];
+    *(float *)(camera_basis_write_base + 0x374) = camera_rotation_matrix[5];
+    *(float *)(camera_basis_write_base + 0x358) = -camera_rotation_matrix[10];
+    *(float *)(camera_basis_write_base + 0x368) = -camera_rotation_matrix[2];
+    *(float *)(camera_basis_write_base + 0x378) = camera_rotation_matrix[6];
     return flag;
 }
 
