@@ -944,7 +944,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
             hero_bytes = D_0013F350;
             if (*(int *)(hero_bytes + 0x1130) != 0) {
                 Vec4 linked_probe_start;
-                Vec4 b;
+                Vec4 hero_probe_end;
                 f32 angle_to_hero;
                 if (*(int *)(hero_bytes + 0x1158) != 5) break;
                 angle_to_hero = fast_arc_tan(*(f32 *)(hero_bytes + 0x80) - sandmouse_moby->pos.x, *(f32 *)(hero_bytes + 0x84) - sandmouse_moby->pos.y);
@@ -952,10 +952,10 @@ void sandmouse_update(Moby *sandmouse_moby) {
                     frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
                 qcopy(&linked_probe_start, &LNK(sandmouse_vars->link)->pos);
                 linked_probe_start.f[2] += 0.5f;
-                qcopy(&b, hero_bytes + 0x80);
-                b.f[2] += 0.2f;
+                qcopy(&hero_probe_end, hero_bytes + 0x80);
+                hero_probe_end.f[2] += 0.2f;
                 if (is_point_inside_clip_volume(hero_bytes + 0x80, sandmouse_vars->radius) == 0) break;
-                if (collision_line(&linked_probe_start, &b, 0, sandmouse_moby, 0)) {
+                if (collision_line(&linked_probe_start, &hero_probe_end, 0, sandmouse_moby, 0)) {
                     if (D_L01_001742D8 != *(Moby **)(hero_bytes + 0x2080)) break;
                 }
                 FUN_L01_002e30b8(sandmouse_moby, sandmouse_vars);
@@ -1002,7 +1002,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
         }
         break;
     case SANDMOUSE_STATE_MOVE_TO_GOAL: {
-        int r;
+        int movement_result_flags;
         {
             char *v = VOICE(sandmouse_vars->slot);
             if (*(Moby **)(v + 0x88) != sandmouse_moby || *(u8 *)(v + 0x74) == 0) {
@@ -1014,17 +1014,17 @@ void sandmouse_update(Moby *sandmouse_moby) {
             D_L01_001DEB38_lui.unk4 = 0.7f;
             FUN_L01_0030d260(sandmouse_moby, sandmouse_vars);
             FUN_L01_0030d880(sandmouse_moby, (struct HoverVars *)sandmouse_vars);
-            r = sandmouse_vars->stuck < 0x15;
-            r = r ? 0 : 2;
+            movement_result_flags = sandmouse_vars->stuck < 0x15;
+            movement_result_flags = movement_result_flags ? 0 : 2;
         } else {
             FUN_L01_002e30b8(sandmouse_moby, sandmouse_vars);
             ang = fast_arc_tan(sandmouse_vars->goal.f[0] - sandmouse_moby->pos.x, sandmouse_vars->goal.f[1] - sandmouse_moby->pos.y);
             FUN_L00_00258278_df40(sandmouse_moby, ang, &D_L01_001DEB38_lui.yaw_speed,
                 frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
             sandmouse_vars->vel.f[2] = 0;
-            r = FUN_L00_00259028(sandmouse_moby, &D_L01_001DEB38_lui, sandmouse_vars, &sandmouse_vars->vel);
+            movement_result_flags = FUN_L00_00259028(sandmouse_moby, &D_L01_001DEB38_lui, sandmouse_vars, &sandmouse_vars->vel);
         }
-        if ((r & 6) != 0 || fast_vec_dist(&sandmouse_moby->pos, sandmouse_vars) < 0.25f) {
+        if ((movement_result_flags & 6) != 0 || fast_vec_dist(&sandmouse_moby->pos, sandmouse_vars) < 0.25f) {
             if (sandmouse_moby->prev_seq != 2) {
                 blend_moby_animation(sandmouse_moby, 2, 0, scale_game_frames(10));
             }
