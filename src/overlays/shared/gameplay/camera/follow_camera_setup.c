@@ -881,8 +881,8 @@ s32 FUN_L00_002e7318(O002e7318 *camera_moby) {
     V002e7318 normalized_position_delta;
     u8 *b = camera_moby->p70;
     X002e7318 *x = (X002e7318 *)(b + 0x1D0);
-    u8 *b40 = b + 0x40;
-    u8 *b130 = b + 0x130;
+    u8 *camera_target_state = b + 0x40;
+    u8 *camera_orbit_state = b + 0x130;
     P002e7318 *active_camera_state;
     f32 lim;
     f32 direction_alignment;
@@ -893,7 +893,7 @@ s32 FUN_L00_002e7318(O002e7318 *camera_moby) {
     s32 r;
     G002e7318 *g = &D_L00_00166E10_c;
 
-    add_vector_xyz(&pos, b + 0x90, b130);
+    add_vector_xyz(&pos, b + 0x90, camera_orbit_state);
     x->s38 = 2;
     active_camera_state = (P002e7318 *)((O002e7318 **)g)[-4]->p70;
     w = x->i48;
@@ -922,7 +922,7 @@ s32 FUN_L00_002e7318(O002e7318 *camera_moby) {
         i++;
     }
     r = FUN_L00_002e7138_c(camera_moby, &pos, ha, hb);
-    add_vector_xyz(&x->m, b40 + 0x50, b130);
+    add_vector_xyz(&x->m, camera_target_state + 0x50, camera_orbit_state);
     if (x->s38 == 2)
         x->s38 = 0;
     return r;
