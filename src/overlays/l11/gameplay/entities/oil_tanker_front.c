@@ -1690,24 +1690,24 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern char *func_L00_00272770_p(void *, void *, void *, float, float) __asm__("FUN_L00_002718d0");
 
 void FUN_L11_0031ae68(struct Moby *source_moby, float *ground, int spark_count, int ground_effect_count) {
-    float v[4];
+    float effect_spawn_scratch[4];
     int i;
     for (i = 0; i < spark_count; i++) {
         float emission_angle = random_angle_radians();
         float horizontal_emission_scale = random_float_between(D_0015ED6C_n[1] * 0.0f, D_0015ED6C_n[1] * 6.0f);
         int k;
-        v[0] = fast_cos(emission_angle) * horizontal_emission_scale;
-        v[1] = fast_sin(emission_angle) * horizontal_emission_scale;
-        v[2] = random_float_between(D_0015ED6C_n[1] * 3.0f, D_0015ED6C_n[1] * 6.5f);
+        effect_spawn_scratch[0] = fast_cos(emission_angle) * horizontal_emission_scale;
+        effect_spawn_scratch[1] = fast_sin(emission_angle) * horizontal_emission_scale;
+        effect_spawn_scratch[2] = random_float_between(D_0015ED6C_n[1] * 3.0f, D_0015ED6C_n[1] * 6.5f);
         k = random_int_between(0x5A, 0x78);
-        FUN_L00_0026f548(&source_moby->pos, v, random_integer_below(2), k);
+        FUN_L00_0026f548(&source_moby->pos, effect_spawn_scratch, random_integer_below(2), k);
     }
     for (i = 0; i < ground_effect_count; i++) {
         char *spawned_ground_effect;
-        random_vector(v, 1.0f, 1.0f);
-        add_vector_xyz(v, v, &source_moby->pos);
-        v[2] = *ground + 0.05f;
-        spawned_ground_effect = func_L00_00272770_p(v, D_L11_0015F580, ground, random_float_between(3.0f, 6.0f),
+        random_vector(effect_spawn_scratch, 1.0f, 1.0f);
+        add_vector_xyz(effect_spawn_scratch, effect_spawn_scratch, &source_moby->pos);
+        effect_spawn_scratch[2] = *ground + 0.05f;
+        spawned_ground_effect = func_L00_00272770_p(effect_spawn_scratch, D_L11_0015F580, ground, random_float_between(3.0f, 6.0f),
                                 i == 0 ? 1.0f : -1.0f);
         if (spawned_ground_effect != 0) {
             spawned_ground_effect[9] = func_001FA898_r(4.0f) + 0x40;
