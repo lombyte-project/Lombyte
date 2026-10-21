@@ -3089,16 +3089,16 @@ extern unsigned char *func_L00_00273E08_g(void *, int, unsigned char, int, int, 
 extern void func_L00_00273F80_g(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 
 void FUN_L06_002f7628(char *moby) {
-    float pos[4];
+    float beam_sprite_position[4];
     float step[4];
     float spark_position[4];
     float spark_velocity[4];
     Beam_2f8a58 *beam = *(Beam_2f8a58 **)(moby + 0x78);
     int i;
-    subtract_vector_xyz(pos, D_L06_00167540, beam->tgt + 0x10);
-    normalize_vector_xyz(pos, pos, -0.3f);
-    normalize_vector_xyz(step, pos, 0.1f);
-    add_vector_xyz(pos, pos, beam->tgt + 0x10);
+    subtract_vector_xyz(beam_sprite_position, D_L06_00167540, beam->tgt + 0x10);
+    normalize_vector_xyz(beam_sprite_position, beam_sprite_position, -0.3f);
+    normalize_vector_xyz(step, beam_sprite_position, 0.1f);
+    add_vector_xyz(beam_sprite_position, beam_sprite_position, beam->tgt + 0x10);
     for (i = 0; i < 4; i++) {
         float timer_progress;
         int beam_sprite_color;
@@ -3113,9 +3113,9 @@ void FUN_L06_002f7628(char *moby) {
         }
         timer_progress = convert_integer_to_float(scale_game_frames(0xFF) - beam->t[i]) / (float)scale_game_frames(0xFF);
         beam_sprite_color = fast_tween_color(D_L06_00161E58, D_L06_00161E5C, absolute_float(0.5f - timer_progress));
-        func_L00_00273E08_g(pos, beam_sprite_color, func_001FA898_g(beam->ph[i]), D_L06_00161E64, D_L06_00161E60, 2, 0,
+        func_L00_00273E08_g(beam_sprite_position, beam_sprite_color, func_001FA898_g(beam->ph[i]), D_L06_00161E64, D_L06_00161E60, 2, 0,
                           beam->sz[i]);
-        add_vector_xyz(pos, pos, step);
+        add_vector_xyz(beam_sprite_position, beam_sprite_position, step);
     }
     if ((level_frame_count & 3) == 3 && ((unsigned char *)moby)[0x31] != 0) {
         float sgn = 1.0f;
