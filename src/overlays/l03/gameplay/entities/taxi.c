@@ -1028,7 +1028,7 @@ extern void FUN_L00_00250df8(void *);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 char *FUN_L03_002d4288(char *a, char *pos, struct Moby *parent, int n, float f0, float f1, float f2);
-char *FUN_L03_002d4288(char *heading_vector, char *pos, struct Moby *parent, int timer_frames, float f0, float f1, float f2) {
+char *FUN_L03_002d4288(char *heading_vector, char *pos, struct Moby *parent, int timer_frames, float initial_heading, float initial_speed, float f2) {
     char *spawned_moby = (char *)func_0020D348_m(0x341);
     char *moby_vars;
     if (spawned_moby != 0) {
@@ -1043,8 +1043,8 @@ char *FUN_L03_002d4288(char *heading_vector, char *pos, struct Moby *parent, int
         *(float *)(spawned_moby + 0x48) = fast_arc_tan(*(float *)moby_vars, *(float *)(moby_vars + 4));
         *(int *)(moby_vars + 0x14) = scale_game_frames(timer_frames);
         *(float *)(moby_vars + 0x18) = f2;
-        *(float *)(moby_vars + 0x1C) = f0;
-        *(float *)(moby_vars + 0x24) = f1;
+        *(float *)(moby_vars + 0x1C) = initial_heading;
+        *(float *)(moby_vars + 0x24) = initial_speed;
         *(char **)(moby_vars + 0x10) = parent;
         *(int *)(moby_vars + 0x28) = 0;
         *(OvlQuad *)collision_start_pos = *(OvlQuad *)&parent->pos;
