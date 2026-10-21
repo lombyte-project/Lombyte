@@ -1127,7 +1127,7 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
     float v30[4] __attribute__((aligned(16)));
     float v40[4] __attribute__((aligned(16)));
     char *g;
-    int w6;
+    int hit_moby_address;
     float yaw_cosine, yaw_sine, r, collision_tilt_angle, u;
 
     float one = 1.0f;
@@ -1139,9 +1139,9 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
     if (*(short *)(motion_data + 0x14) == 0) {
       if (collision_line(v0, moby + 0x10, 0x10, (int)moby, 0)) {
         g = D_L10_001742C0;
-        w6 = *(int *)(g + 0x18);
-        if (w6 != 0) {
-            subtract_vector_xyz(g + 0x40, moby + 0x10, (void *)(w6 + 0x10));
+        hit_moby_address = *(int *)(g + 0x18);
+        if (hit_moby_address != 0) {
+            subtract_vector_xyz(g + 0x40, moby + 0x10, (void *)(hit_moby_address + 0x10));
             qcopy(moby + 0x10, g + 0x20);
             normalize_vector_xyz(v20, g + 0x40, D_0015ED70 * 9.7f);
             add_vector_xyz(moby + 0x10, moby + 0x10, v20);
