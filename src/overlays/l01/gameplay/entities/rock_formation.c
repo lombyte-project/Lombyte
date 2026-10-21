@@ -735,7 +735,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
     Data_2FC140 *data;
     Link_2FC140 *linked_moby_data;
     int level_table_byte;
-    int cnt;
+    int inactive_or_absent_link_count;
     int flag;
     int i;
     int scene_start_gate_value;
@@ -835,7 +835,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         break;
     case AGNOGG_SHIP_WAIT_FOR_LINKED_MOBIES_INACTIVE:
         flag = 1;
-        cnt = 0;
+        inactive_or_absent_link_count = 0;
         i = 0;
         do {
             if (data->list[i] != -1 && (char *)D_L01_00160058_2FC140 + (data->list[i] << 8) != 0
@@ -844,9 +844,9 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
                 flag = 0;
                 break;
             }
-            cnt++;
+            inactive_or_absent_link_count++;
             i++;
-        } while (cnt < 3);
+        } while (inactive_or_absent_link_count < 3);
         if (flag == 0) {
             break;
         }
