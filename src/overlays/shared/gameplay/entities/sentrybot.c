@@ -3537,11 +3537,11 @@ extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001
 
 extern int D_L15_00161AC4 __attribute__((sda));
 extern short D_L15_00161AC8 __attribute__((sda));
-void FUN_L15_002cbc30(void *arg) {
+void FUN_L15_002cbc30(void *moby) {
     struct Hero *base = &hero;
     if (base->state.current == 0x65) {
         approach_value(&D_L15_00161ABC_gp, 0.0f, frame_time * 2);
-        FUN_L15_002cbac0_u(arg, 0);
+        FUN_L15_002cbac0_u(moby, 0);
     } else if (*(int *)&D_L15_00161AB8 != 0 &&
                (D_0015ED84 != 0xF || 240.0f < base->motion.pos.f[1])) {
         approach_value(&D_L15_00161ABC_gp, 1.0f, frame_time * 2);
@@ -3551,10 +3551,10 @@ void FUN_L15_002cbc30(void *arg) {
     if (*(float *)&D_L15_00161ABC_gp != 0.0f) {
         *(int *)&D_L15_00161AC0_gp = 1;
         if (voice_is_playing(*(void **)&D_L15_00161AC8, D_L15_00161AC4) == 0) {
-            D_L15_00161AC4 = allocate_voice_for_target_entry(5, 0x11, (int)arg);
-            *(void **)&D_L15_00161AC8 = arg;
+            D_L15_00161AC4 = allocate_voice_for_target_entry(5, 0x11, (int)moby);
+            *(void **)&D_L15_00161AC8 = moby;
         }
-        enqueue_callback_list_1_alt(FUN_L15_002cbd88_u, arg);
+        enqueue_callback_list_1_alt(FUN_L15_002cbd88_u, moby);
     } else {
         if (voice_is_playing(*(void **)&D_L15_00161AC8, D_L15_00161AC4) != 0) {
             release_voice_slot(D_L15_00161AC4);
