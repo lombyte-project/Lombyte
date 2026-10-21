@@ -91,32 +91,32 @@ extern int trunc_285768(float) __asm__("FUN_001fa6d0");
 /* Allocates a type 0x29 particle and fills it from the arguments; kind 0xFF
  * derives the frame from flags and picks one of two blend modes. */
 char *draw_number(float scale, void *pos, int a, int idx, int b, unsigned char flags, short h, unsigned char kind) __asm__("FUN_L01_00285768");
-char *draw_number(float scale, void *pos, int source_moby, int idx, int b, unsigned char flags, short particle_lifetime, unsigned char kind) {
-    char *r = alloc_285768(0x29);
-    if (r != 0) {
-        int *tail = (int *)(r + 0x20);
-        qcopy(r + 0x10, pos);
-        *(int *)(r + 4) = b;
+char *draw_number(float scale, void *pos, int source_moby, int idx, int particle_color, unsigned char flags, short particle_lifetime, unsigned char kind) {
+    char *particle = alloc_285768(0x29);
+    if (particle != 0) {
+        int *tail = (int *)(particle + 0x20);
+        qcopy(particle + 0x10, pos);
+        *(int *)(particle + 4) = particle_color;
         if (kind == 0xFF) {
-            r[9] = (flags >> 5) * 16 + trunc_285768(4.0f);
+            particle[9] = (flags >> 5) * 16 + trunc_285768(4.0f);
             if (flags & 1) {
-                r[3] = 0x48;
+                particle[3] = 0x48;
             } else {
-                r[3] = 0x44;
+                particle[3] = 0x44;
             }
         } else {
-            r[9] = flags;
-            r[3] = kind;
+            particle[9] = flags;
+            particle[3] = kind;
         }
-        r[1] = 0;
-        r[2] = D_L01_001B25A4[0][idx];
-        *(float *)(r + 0xC) = scale * 210000.0f;
-        *(short *)(r + 0xA) = particle_lifetime;
-        ((unsigned char *)r)[8] = 0xA0;
+        particle[1] = 0;
+        particle[2] = D_L01_001B25A4[0][idx];
+        *(float *)(particle + 0xC) = scale * 210000.0f;
+        *(short *)(particle + 0xA) = particle_lifetime;
+        ((unsigned char *)particle)[8] = 0xA0;
         /* taking the address changes register allocation to match */
         *tail = *&source_moby;
     }
-    return r;
+    return particle;
 }
 
 #ifndef NOT_SDA
