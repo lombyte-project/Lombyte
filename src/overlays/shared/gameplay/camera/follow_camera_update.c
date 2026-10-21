@@ -1549,19 +1549,19 @@ void FUN_00214890_2ec4a8(void *, void *, void *, float) __asm__("FUN_00214890");
 
 extern u8 D_L00_00166E30_lui[] __asm__("D_L00_00166E30") __attribute__((section(".data")));
 void FUN_L00_002ec4a8(unsigned char *camera_object) {
-    V_2ec4a8 v;
-    V_2ec4a8 w;
+    V_2ec4a8 raised_hero_position;
+    V_2ec4a8 target_view_direction;
     V_2ec4a8 x;
     unsigned char *g = (unsigned char *)&hero.motion.pos;
     unsigned char *camera_state = *(unsigned char **)(camera_object + 0x70);
     unsigned char *follow_block = camera_state + 0x40;
     float *view_turn_state = (float *)(camera_state + 0x30);
     float view_angle_error, k;
-    qcopy(&v, g);
-    v.f[2] += *(float *)(follow_block + 0x4C);
-    FUN_001f9a28_2ec4a8(&w, &v, camera_object + 0x30);
-    FUN_001f9bf8_2ec4a8(&w, &w, 1.0f);
-    view_angle_error = 1.5707964f - FUN_001f9df8_2ec4a8(FUN_001f9ab0_2ec4a8(&w, camera_object));
+    qcopy(&raised_hero_position, g);
+    raised_hero_position.f[2] += *(float *)(follow_block + 0x4C);
+    FUN_001f9a28_2ec4a8(&target_view_direction, &raised_hero_position, camera_object + 0x30);
+    FUN_001f9bf8_2ec4a8(&target_view_direction, &target_view_direction, 1.0f);
+    view_angle_error = 1.5707964f - FUN_001f9df8_2ec4a8(FUN_001f9ab0_2ec4a8(&target_view_direction, camera_object));
     if (*(int *)(g + 0x2004) == 0x25) {
         *(float *)(camera_state + 0x30) += 0.017f;
         if (1.0f < *(float *)(camera_state + 0x30))
@@ -1570,7 +1570,7 @@ void FUN_L00_002ec4a8(unsigned char *camera_object) {
     } else {
         k = FUN_L00_001eb328_2ec4a8(view_turn_state, 0.0f, view_angle_error, 0.02f, 0.175f, 0.0f);
     }
-    FUN_001f9ad8_2ec4a8(&x, &w, camera_object + 0x40);
+    FUN_001f9ad8_2ec4a8(&x, &target_view_direction, camera_object + 0x40);
     FUN_00214890_2ec4a8(camera_object, camera_object + 0x40, &x, k);
     FUN_001f9bf8_2ec4a8(camera_object + 0x40, camera_object, 1.0f);
     qcopy(camera_object, camera_object + 0x40);
