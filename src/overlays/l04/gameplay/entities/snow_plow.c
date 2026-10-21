@@ -1633,7 +1633,7 @@ void upper_door_update(struct Moby *moby) {
     };
     struct RiserVars *riser_vars = (struct RiserVars *)moby->pvars;
     struct Moby *trigger_moby;
-    s16 idx;
+    s16 save_id_index;
     u16 id;
 
     switch (moby->state) {
@@ -1643,8 +1643,8 @@ void upper_door_update(struct Moby *moby) {
         break;
     case UPPER_DOOR_WAIT_FOR_ACTIVATION:
         id = moby->save_id;
-        idx = id;
-        if (D_L04_001BB3B0.collected[idx] == 0 && !((D_0014C190_257218[current_level_index][idx >> 5] >> (id & 0x1F)) & 1)) {
+        save_id_index = id;
+        if (D_L04_001BB3B0.collected[save_id_index] == 0 && !((D_0014C190_257218[current_level_index][save_id_index >> 5] >> (id & 0x1F)) & 1)) {
             if (riser_vars->trigger == -1)
                 break;
             trigger_moby = (struct Moby *)((riser_vars->trigger << 8) + D_L04_0015FFD8);
