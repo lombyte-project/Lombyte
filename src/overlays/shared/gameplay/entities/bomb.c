@@ -1659,7 +1659,7 @@ extern float dist_2cc360(void *, void *) __asm__("FUN_001f9b80");
 extern float atan_2cc360(float, float) __asm__("FUN_001f9e90");
 extern float diffrot_2cc360(float, float) __asm__("FUN_001fa688");
 extern int coll_2cc360(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-M_2cc360 *FUN_L00_002cc360(float *pos, float *rot, M_2cc360 **excl, float maxYaw, float maxPitch,
+M_2cc360 *FUN_L00_002cc360(float *pos, float *aim_rotation, M_2cc360 **excl, float maxYaw, float maxPitch,
                            float maxDist) {
     M_2cc360 *best = 0;
     float bestScore = 1.0e9f;
@@ -1704,10 +1704,10 @@ M_2cc360 *FUN_L00_002cc360(float *pos, float *rot, M_2cc360 **excl, float maxYaw
             continue;
         qcopy(&aim_point, pp);
         aim_point.f[2] += info[4] + 0.1f;
-        ys = diffrot_2cc360(rot[2], atan_2cc360(aim_point.f[0] - pos[0], aim_point.f[1] - pos[1]));
+        ys = diffrot_2cc360(aim_rotation[2], atan_2cc360(aim_point.f[0] - pos[0], aim_point.f[1] - pos[1]));
         ys = ys * ys;
         if (ys < maxYaw * maxYaw) {
-            ps = diffrot_2cc360(rot[1], atan_2cc360(candidate_distance, aim_point.f[2] - pos[2]));
+            ps = diffrot_2cc360(aim_rotation[1], atan_2cc360(candidate_distance, aim_point.f[2] - pos[2]));
             ps = ps * ps;
             if (!(ps < maxPitch * maxPitch))
                 continue;
