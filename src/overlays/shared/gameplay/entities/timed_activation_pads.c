@@ -84,7 +84,7 @@ void timed_activation_pads_update(unsigned char *moby)
     float transposed_pad_rotation[16];
     int flag;
     int on;
-    int st;
+    int pad_state;
 
     if (moby == 0)
         return;
@@ -124,8 +124,8 @@ void timed_activation_pads_update(unsigned char *moby)
         }
     }
 
-    st = moby[0x20];
-    if ((unsigned int)(st - 2) < 4) {
+    pad_state = moby[0x20];
+    if ((unsigned int)(pad_state - 2) < 4) {
         if (moby[0xBC] == 1) {
             if (func_001F9908_30D370((int *)pad_data)) {
                 func_0022ED80_30D370(2, 0, (int)moby);
