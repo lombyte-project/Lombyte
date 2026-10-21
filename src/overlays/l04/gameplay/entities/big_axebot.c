@@ -1235,7 +1235,7 @@ void FUN_L04_002c1d70(struct Moby *moby) {
     float vec[4];
     char *data = (char *)moby->pvars;
     int idx;
-    int r;
+    int invalid_voice_index;
 
     clear_vector(vec);
     idx = *(int *)(data + 0x238);
@@ -1246,12 +1246,12 @@ void FUN_L04_002c1d70(struct Moby *moby) {
                 release_voice_slot(idx);
         }
     }
-    r = -1;
-    *(int *)(data + 0x238) = r;
+    invalid_voice_index = -1;
+    *(int *)(data + 0x238) = invalid_voice_index;
     FUN_L00_00257470(moby, 0, -1);
     moby_point_position(moby, 5, pos);
     func_L00_0025F4A8_alt(moby, vec, pos, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, 1.0f, -1,
-                          15.0f, 1, 1, r, 0);
+                          15.0f, 1, 1, invalid_voice_index, 0);
     FUN_0022da68(1, 0, moby);
 }
 /* Flock steering for moby m: picks its path target, pushes away from same-class mobys within 3 units,
