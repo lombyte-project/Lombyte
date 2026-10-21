@@ -531,15 +531,15 @@ void FUN_L08_002d3d78(char *moby) {
     float target_height;
     float vertical_step;
     float probe_position_or_correction[4];
-    float *v;
+    float *velocity_ptr;
     if (lim < movement_length) {
         movement_length = lim;
     } else if (movement_length < 0.0f) {
         movement_length = 0.0f;
     }
-    v = (float *)(data + 0x40);
-    normalize_vector_xyz(v, v, movement_length);
-    add_vector_xyz((float *)(moby + 0x10), (float *)(moby + 0x10), v);
+    velocity_ptr = (float *)(data + 0x40);
+    normalize_vector_xyz(velocity_ptr, velocity_ptr, movement_length);
+    add_vector_xyz((float *)(moby + 0x10), (float *)(moby + 0x10), velocity_ptr);
     *(float *)(data + 0x204) = fast_add_rotations(*(float *)(data + 0x204), *(float *)(data + 0x20C));
     target_height = *(float *)(data + 0x1C8) + *(float *)(data + 0x208) * fast_sin(*(float *)(data + 0x204));
     if (*(short *)(data + 0x216))
