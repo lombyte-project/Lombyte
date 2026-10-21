@@ -305,19 +305,19 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
 
-void FUN_L11_00311048(unsigned char red, unsigned char b, unsigned char blue, unsigned char alpha, float x,
+void FUN_L11_00311048(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
                       float y, float scale, float ang) {
     int texture;
-    float w;
+    float quad_size;
     texture = get_effect_texture(0x42);
-    w = scale * 20.0f;
-    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, texture, 0xFFFFF3, red, b, blue, alpha);
+    quad_size = scale * 20.0f;
+    FUN_L11_00310cf8(x, y, quad_size, quad_size, ang, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
     ang = fast_add_rotations(ang, 1.5707964f);
-    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, texture, 0xFFFFF3, red, b, blue, alpha);
+    FUN_L11_00310cf8(x, y, quad_size, quad_size, ang, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
     ang = fast_add_rotations(ang, 1.5707964f);
-    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, texture, 0xFFFFF3, red, b, blue, alpha);
+    FUN_L11_00310cf8(x, y, quad_size, quad_size, ang, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
     ang = fast_add_rotations(ang, 1.5707964f);
-    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, texture, 0xFFFFF3, red, b, blue, alpha);
+    FUN_L11_00310cf8(x, y, quad_size, quad_size, ang, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
 }
 /* Projects a world point to screen and stores its x and y in 1/16 units, y plus an offset. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003126D8), where it is exact; names translated to the US level program. */
