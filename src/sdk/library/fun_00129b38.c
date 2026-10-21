@@ -36,14 +36,14 @@ typedef struct Obj40 {
 int FinishMpegReferenceImage(void *object) __asm__("FUN_00129b38");
 int FinishMpegReferenceImage(void *object) {
     Obj40 *reference_image_object = (Obj40 *)object;
-    int r = 1;
+    int return_value = 1;
     if (reference_image_object->unk008 != 2) {
         int v = reference_image_object->unk118;
         reference_image_object->unk008 = 2;
         reference_image_object->unk0AC = v;
     }
-    reference_image_object->unk820 = r;
-    return r;
+    reference_image_object->unk820 = return_value;
+    return return_value;
 }
 
 extern __typeof__(FinishMpegReferenceImage) func_00129B38 __attribute__((alias("FUN_00129b38")));
