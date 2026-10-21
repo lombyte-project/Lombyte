@@ -14,12 +14,12 @@ extern void *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L07_001B21CC NOT_SDA;
-unsigned char *FUN_L07_0029a2a0(char *pos, char *particle_motion_vector) {
+unsigned char *FUN_L07_0029a2a0(char *particle_spawn_position, char *particle_motion_vector) {
     unsigned char *particle = create_part(0x33);
     if (particle != 0) {
         char *particle_vector = (char *)particle + 0x20;
         char *particle_position = (char *)particle + 0x10;
-        qcopy(particle_position, pos);
+        qcopy(particle_position, particle_spawn_position);
         qcopy(particle_vector, particle_motion_vector);
         *(int *)(particle + 4) = 0x5E806040;
         particle[9] = func_001FA898_r(4.0f) + 0x40;
