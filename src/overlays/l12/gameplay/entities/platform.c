@@ -1149,21 +1149,21 @@ extern float turn_k(float *, float, float *, int, float, float, float) __asm__("
 extern void add_k(void *, void *, void *) __asm__("FUN_001f9a10");
 
 extern float D_L12_00161918 __attribute__((sda));
-void FUN_L12_002e3c08(char *moby, float *ang, void *target, int unused, int brake) {
+void FUN_L12_002e3c08(char *moby, float *target_angles, void *target, int unused, int brake) {
     char *moby_vars = *(char **)(moby + 0x78);
     float target_offset[4];
-    float dist;
+    float target_distance;
     float speed;
     float acc;
     float lim = 1.9198622f;
     sub_k(target_offset, target, moby + 0x10);
-    dist = len_k(target_offset);
+    target_distance = len_k(target_offset);
     speed = len_k(moby_vars + 0x40);
     if (brake) {
         if (speed == 0.0f)
             speed = D_0015ED6C_k * 0.01f;
         acc = *(float *)(moby_vars + 0xD4) * D_0015ED70_k;
-        if (acc < speed * speed / (dist + dist))
+        if (acc < speed * speed / (target_distance + target_distance))
             speed -= acc;
         else if (speed < *(float *)(moby_vars + 0xD0) * D_0015ED6C_k)
             speed += acc;
@@ -1174,9 +1174,9 @@ void FUN_L12_002e3c08(char *moby, float *ang, void *target, int unused, int brak
             speed -= *(float *)(moby_vars + 0xD4) * D_0015ED70_k;
     }
     norm_k(moby_vars + 0x40, target_offset, speed);
-    appr_k(moby + 0x40, ang[0], diff_k(ang[0], *(float *)(moby + 0x40)) / D_L12_00161918);
-    appr_k(moby + 0x44, ang[1], diff_k(ang[1], *(float *)(moby + 0x44)) / D_L12_00161918);
-    turn_k((float *)(moby + 0x48), ang[2], (float *)(moby_vars + 0xF8), 0, D_0015ED64_k * 0.005f, D_0015ED64_k * 0.3f,
+    appr_k(moby + 0x40, target_angles[0], diff_k(target_angles[0], *(float *)(moby + 0x40)) / D_L12_00161918);
+    appr_k(moby + 0x44, target_angles[1], diff_k(target_angles[1], *(float *)(moby + 0x44)) / D_L12_00161918);
+    turn_k((float *)(moby + 0x48), target_angles[2], (float *)(moby_vars + 0xF8), 0, D_0015ED64_k * 0.005f, D_0015ED64_k * 0.3f,
            D_0015ED6C_k * lim);
     add_k(moby + 0x10, moby + 0x10, moby_vars + 0x40);
 }
