@@ -1580,12 +1580,12 @@ void FUN_L01_003087e0(char *moby) {
     if (*(s32 *)(data + 4) == -1 || *(s32 *)(data + 8) == -1) {
         f32 ang;
         f32 five = 5.0f;
-        struct Hero *g = &hero;
-        ang = FUN_001fa580_c(interpolation_factor * 0.6981316804885864f - 0.3490658402442932f, g->motion.rot.f[2]);
+        struct Hero *hero_ptr = &hero;
+        ang = FUN_001fa580_c(interpolation_factor * 0.6981316804885864f - 0.3490658402442932f, hero_ptr->motion.rot.f[2]);
         output_position.x = fast_cos(ang) * five;
         output_position.y = fast_sin(ang) * five;
         output_position.z = 0.0f;
-        add_vector_xyz(&output_position.x, &output_position.x, (f32 *)(&g->motion.pos));
+        add_vector_xyz(&output_position.x, &output_position.x, (f32 *)(&hero_ptr->motion.pos));
         output_position.z += 1.0f;
         clear_u64_value(&output_rotation.x);
         output_rotation.z = FUN_001fa580_c(ang, 3.141590118408203f);
