@@ -22,19 +22,19 @@ enum BoltCrankState {
     BOLT_CRANK_DONE = 0x5
 };
 
-void FUN_L01_002b8c08(f32 *pos) {
+void FUN_L01_002b8c08(f32 *grid_base_position) {
     volatile f32 *grid_position_cursor = (volatile f32 *)0x70002000;
-    f32 y = pos[1] + pool_light[3];
+    f32 y = grid_base_position[1] + pool_light[3];
     s32 i, j;
     for (i = 0; i < 17; i++) {
-        f32 x = pos[0] + pool_light[2];
+        f32 x = grid_base_position[0] + pool_light[2];
         f32 *row = (f32 *)0x70000010 + (i + 1) * 24;
         for (j = 0; j < 17; j++) {
             *grid_position_cursor = x;
             grid_position_cursor += 1;
             *grid_position_cursor = y;
             grid_position_cursor += 1;
-            *grid_position_cursor = row[j] + pos[2];
+            *grid_position_cursor = row[j] + grid_base_position[2];
             grid_position_cursor += 1;
             x += pool_light[4];
         }
