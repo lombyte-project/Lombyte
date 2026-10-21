@@ -37,7 +37,7 @@ extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
-char *FUN_L11_00308670(float *pos, float *aim, float max_yaw_error, float max_pitch_error, float maxd) {
+char *FUN_L11_00308670(float *targeting_origin, float *aim, float max_yaw_error, float max_pitch_error, float maxd) {
     char *best = 0;
     char *candidate_position;
     char *candidate_moby = D_L11_0015FFE4;
@@ -47,21 +47,21 @@ char *FUN_L11_00308670(float *pos, float *aim, float max_yaw_error, float max_pi
             *(short *)(*(char **)(candidate_moby + 0x24) + 0x46) == 5) {
             float distance_xy;
             candidate_position = candidate_moby + 0x10;
-            distance_xy = vector_distance_xy(pos, candidate_position);
+            distance_xy = vector_distance_xy(targeting_origin, candidate_position);
             if (distance_xy < maxd) {
                 float adjusted_target_position[4];
                 float ra, rb, y, score;
                 qcopy(adjusted_target_position, candidate_position);
                 adjusted_target_position[2] = adjusted_target_position[2] + 0.4f;
                 ra = fast_difference_between_rotations(
-                    aim[2], fast_arc_tan(adjusted_target_position[0] - pos[0], adjusted_target_position[1] - pos[1]));
+                    aim[2], fast_arc_tan(adjusted_target_position[0] - targeting_origin[0], adjusted_target_position[1] - targeting_origin[1]));
                 ra = ra * ra;
                 if (ra < max_yaw_error * max_yaw_error) {
-                    y = fast_difference_between_rotations(aim[1], fast_arc_tan(distance_xy, adjusted_target_position[2] - pos[2]));
+                    y = fast_difference_between_rotations(aim[1], fast_arc_tan(distance_xy, adjusted_target_position[2] - targeting_origin[2]));
                     rb = y * y;
                     if (rb < max_pitch_error * max_pitch_error) {
                         score = ra * rb * 30.0f;
-                        score = score + square_root(fast_vec_dist(pos, adjusted_target_position));
+                        score = score + square_root(fast_vec_dist(targeting_origin, adjusted_target_position));
                         if (score < bestd) {
                             bestd = score;
                             best = candidate_moby;
