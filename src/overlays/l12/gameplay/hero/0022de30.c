@@ -44,14 +44,14 @@ void FUN_L12_0022de30(void) {
         hero_for_surface_update->water_surface_z = hero_for_surface_update->ground_z.f + 0.2f;
     }
     if (state == 0) {
-        struct Hero *b = &hero;
-        struct Hero *b2;
-        float v = b->water_surface_z - b->ground_z.f;
-        b->unk22A4 = v;
-        if (v < 0.85f && 0.25f < v)
-            b->unk20A9 = 1;
-        b2 = &hero;
-        b2->base_condition = 1;
+        struct Hero *hero_for_water_height_check = &hero;
+        struct Hero *hero_for_base_condition_update;
+        float water_surface_ground_z_delta = hero_for_water_height_check->water_surface_z - hero_for_water_height_check->ground_z.f;
+        hero_for_water_height_check->unk22A4 = water_surface_ground_z_delta;
+        if (water_surface_ground_z_delta < 0.85f && 0.25f < water_surface_ground_z_delta)
+            hero_for_water_height_check->unk20A9 = 1;
+        hero_for_base_condition_update = &hero;
+        hero_for_base_condition_update->base_condition = 1;
     }
     if (state == 2) {
         struct Hero *d = &hero;
