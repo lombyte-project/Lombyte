@@ -160,29 +160,29 @@ void FUN_L00_002d81b8(unsigned char *moby) {
         z = probe_end_position.f[2];
     }
     if (hit) {
-        G_2d81b8 *g = &(*(G_2d81b8 *)D_L00_00173E40_lui);
-        if (g->o) {
-            if (FUN_L00_0025e3b8_2d81b8(g->o)) {
-                *(float *)(moby + 0x10) = moby_data->f10 = g->o->x;
-                *(float *)(moby + 0x14) = moby_data->f14 = g->o->y;
+        G_2d81b8 *collision_result = &(*(G_2d81b8 *)D_L00_00173E40_lui);
+        if (collision_result->o) {
+            if (FUN_L00_0025e3b8_2d81b8(collision_result->o)) {
+                *(float *)(moby + 0x10) = moby_data->f10 = collision_result->o->x;
+                *(float *)(moby + 0x14) = moby_data->f14 = collision_result->o->y;
                 {
-                    float t = g->f28;
+                    float t = collision_result->f28;
                     *(float *)(moby + 0x18) = t;
                     moby_data->f18 = t + 0.5f;
                 }
             } else if (moby_data->hA) {
-                *(float *)(moby + 0x10) = moby_data->f10 = g->o->x + moby_data->f70;
-                *(float *)(moby + 0x14) = moby_data->f14 = g->o->y + moby_data->f74;
+                *(float *)(moby + 0x10) = moby_data->f10 = collision_result->o->x + moby_data->f70;
+                *(float *)(moby + 0x14) = moby_data->f14 = collision_result->o->y + moby_data->f74;
                 {
-                    float t = g->o->z + moby_data->f78;
+                    float t = collision_result->o->z + moby_data->f78;
                     *(float *)(moby + 0x18) = t;
                     moby_data->f18 = t + 0.5f;
                 }
             } else {
                 moby_data->hA = 1;
-                moby_data->f70 = *(float *)(moby + 0x10) - g->o->x;
-                moby_data->f74 = *(float *)(moby + 0x14) - g->o->y;
-                moby_data->f78 = *(float *)(moby + 0x18) - g->o->z;
+                moby_data->f70 = *(float *)(moby + 0x10) - collision_result->o->x;
+                moby_data->f74 = *(float *)(moby + 0x14) - collision_result->o->y;
+                moby_data->f78 = *(float *)(moby + 0x18) - collision_result->o->z;
             }
         }
     }
