@@ -1018,12 +1018,12 @@ void FUN_L05_003150f0(struct Moby *emitter_moby) {
         EMITTER_SPRAY_PARTICLES = 2
     };
     float v[4];
-    float w[4];
+    float particle_velocity[4];
     float u[4];
     struct EmitterVars *emitter_vars = (struct EmitterVars *)emitter_moby->pvars;
     float floor;
     float lim;
-    float particle_speed, b, third_particle_speed_sample;
+    float particle_speed, second_particle_speed_sample, third_particle_speed_sample;
     float scale;
     int kind;
     int big;
@@ -1083,15 +1083,15 @@ void FUN_L05_003150f0(struct Moby *emitter_moby) {
             fast_vec_normalize(u, &emitter_moby->rot_row1, random_float_between(-D_L05_00161EB4, D_L05_00161EB4));
             add_vector_xyz(v, v, u);
             particle_speed = random_float_between(lim, D_L05_00161EA8);
-            b = random_float_between(lim, D_L05_00161EA8);
+            second_particle_speed_sample = random_float_between(lim, D_L05_00161EA8);
             third_particle_speed_sample = random_float_between(lim, D_L05_00161EA8);
-            if (particle_speed < b) {
-                particle_speed = b;
+            if (particle_speed < second_particle_speed_sample) {
+                particle_speed = second_particle_speed_sample;
             }
             if (particle_speed < third_particle_speed_sample) {
                 particle_speed = third_particle_speed_sample;
             }
-            fast_vec_normalize(w, &emitter_moby->rot_row0, particle_speed * frame_time);
+            fast_vec_normalize(particle_velocity, &emitter_moby->rot_row0, particle_speed * frame_time);
             if (big) {
                 scale = D_L05_00161EA0;
                 kind = D_L05_00161E98;
@@ -1101,7 +1101,7 @@ void FUN_L05_003150f0(struct Moby *emitter_moby) {
                 kind = D_L05_00161E9C;
                 v[2] += D_L05_00161EB4 - scale + 0.4f;
             }
-            FUN_L05_0029be70(scale * random_float_between(0.8f, 1.2f), floor, frame_time_sq * 10.0f, v, w, kind,
+            FUN_L05_0029be70(scale * random_float_between(0.8f, 1.2f), floor, frame_time_sq * 10.0f, v, particle_velocity, kind,
                              big);
             if (random_integer_below(2)) {
                 /* fall time from the emitter to the floor */
