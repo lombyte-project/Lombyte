@@ -488,7 +488,7 @@ void FUN_L00_002e1678(ElectroidMoby *moby) {
     Path *path;
     ElectroidMoby *candidate_target;
     ElectroidVec hit_position;
-    struct Hero *g;
+    struct Hero *hero_ptr;
     s32 hit;
     f32 dmg;
     f32 angle;
@@ -562,9 +562,9 @@ void FUN_L00_002e1678(ElectroidMoby *moby) {
         }
     }
     if (vars->target == 0) {
-        g = &hero;
-        vars->target = ((ElectroidMoby *)g->moby);
-        qcopy(&vars->targetPos, &g->motion.pos);
+        hero_ptr = &hero;
+        vars->target = ((ElectroidMoby *)hero_ptr->moby);
+        qcopy(&vars->targetPos, &hero_ptr->motion.pos);
     }
     if (vars->unk1BC >= 0) {
         candidate_target = (ElectroidMoby *)(D_L00_0015FFD8 + (vars->unk1BC << 8));
