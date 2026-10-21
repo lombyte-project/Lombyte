@@ -1645,8 +1645,8 @@ void snd_continue_all_sounds_in_group(int) __asm__("FUN_0012e418");
 void music_unpause(void) __asm__("FUN_00216088");
 void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 void FUN_L00_0029af80(void) {
-    Vec4 v;
-    Vec4 r;
+    Vec4 world_position;
+    Vec4 euler_rotation;
     char *g;
     D_L00_0015F5D8 = 1;
     D_L00_0015F5C4 = 0;
@@ -1654,12 +1654,12 @@ void FUN_L00_0029af80(void) {
     hero.unk20A5 = 0;
     FUN_L00_002330d0();
     g = D_L00_001CA4C0_u;
-    transform_vector_by_basis(&v, &D_L00_00161100, *(char **)(g + 0x28) + 0xC0);
-    add_vector_xyz(&v, &v, *(char **)(g + 0x28) + 0x10);
-    r.f[0] = 0.0f;
-    r.f[1] = 0.0f;
-    r.f[2] = fast_add_rotations(*(float *)(*(char **)(g + 0x28) + 0x48), -1.5707964f);
-    FUN_L00_00216f90(&v, &r, 0, 1);
+    transform_vector_by_basis(&world_position, &D_L00_00161100, *(char **)(g + 0x28) + 0xC0);
+    add_vector_xyz(&world_position, &world_position, *(char **)(g + 0x28) + 0x10);
+    euler_rotation.f[0] = 0.0f;
+    euler_rotation.f[1] = 0.0f;
+    euler_rotation.f[2] = fast_add_rotations(*(float *)(*(char **)(g + 0x28) + 0x48), -1.5707964f);
+    FUN_L00_00216f90(&world_position, &euler_rotation, 0, 1);
     update_resource_counter();
     if ((unsigned short)(D_001516D0.mode - 6) >= 2)
         D_001516D0.mode = 5;
