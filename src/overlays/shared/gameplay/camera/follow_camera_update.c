@@ -1552,17 +1552,17 @@ void FUN_L00_002ec4a8(unsigned char *camera_object) {
     V_2ec4a8 raised_hero_position;
     V_2ec4a8 target_view_direction;
     V_2ec4a8 x;
-    unsigned char *g = (unsigned char *)&hero.motion.pos;
+    unsigned char *hero_position = (unsigned char *)&hero.motion.pos;
     unsigned char *camera_state = *(unsigned char **)(camera_object + 0x70);
     unsigned char *follow_block = camera_state + 0x40;
     float *view_turn_state = (float *)(camera_state + 0x30);
     float view_angle_error, k;
-    qcopy(&raised_hero_position, g);
+    qcopy(&raised_hero_position, hero_position);
     raised_hero_position.f[2] += *(float *)(follow_block + 0x4C);
     FUN_001f9a28_2ec4a8(&target_view_direction, &raised_hero_position, camera_object + 0x30);
     FUN_001f9bf8_2ec4a8(&target_view_direction, &target_view_direction, 1.0f);
     view_angle_error = 1.5707964f - FUN_001f9df8_2ec4a8(FUN_001f9ab0_2ec4a8(&target_view_direction, camera_object));
-    if (*(int *)(g + 0x2004) == 0x25) {
+    if (*(int *)(hero_position + 0x2004) == 0x25) {
         *(float *)(camera_state + 0x30) += 0.017f;
         if (1.0f < *(float *)(camera_state + 0x30))
             *(float *)(camera_state + 0x30) = 1.0f;
