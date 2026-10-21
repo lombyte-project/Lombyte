@@ -1082,20 +1082,20 @@ extern s32 rand();
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
-char *FUN_L09_002edb60(char *src, int cls) {
-    char *moby = func_0020D348_m(cls);
+char *FUN_L09_002edb60(char *source_moby, int spawned_moby_class) {
+    char *moby = func_0020D348_m(spawned_moby_class);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        qcopy(moby + 0x10, src + 0x10);
-        qcopy(moby + 0x40, src + 0x40);
+        qcopy(moby + 0x10, source_moby + 0x10);
+        qcopy(moby + 0x40, source_moby + 0x40);
         moby[0xBC] = scale_game_frames(10);
         FUN_L00_00250df8(moby);
         FUN_L00_0025d1b8(moby);
-        *(unsigned short *)(moby + 0x34) = *(unsigned short *)(src + 0x34);
-        if (cls == 0x514) {
+        *(unsigned short *)(moby + 0x34) = *(unsigned short *)(source_moby + 0x34);
+        if (spawned_moby_class == 0x514) {
             if (rand() & 1) {
                 *(unsigned short *)(moby + 0x34) |= 0x8000;
             }
