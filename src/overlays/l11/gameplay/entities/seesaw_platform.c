@@ -1652,7 +1652,7 @@ void FUN_L11_00310698(struct Moby *psytcopus) {
         HIT_REACTION_HURT_WITHOUT_STATE_CHANGE = 10,
         HIT_REACTION_NO_RESPONSE = 11
     };
-    struct PokiPathVars *pv = (struct PokiPathVars *)psytcopus->pvars;
+    struct PokiPathVars *psytcopus_vars = (struct PokiPathVars *)psytcopus->pvars;
     Vec4f projectile_and_hit_vector_scratch;
     int hits;
     float damage;
@@ -1663,35 +1663,35 @@ void FUN_L11_00310698(struct Moby *psytcopus) {
     u32 hit_reaction;
     float source_to_psytcopus_heading;
 
-    FUN_001f9740_p(&pv->unk158);
+    FUN_001f9740_p(&psytcopus_vars->unk158);
     psytcopus->scale = psytcopus->pclass->scale * D_L11_00161F9C;
-    if (pv->unk160 != 0) {
+    if (psytcopus_vars->unk160 != 0) {
         normalize_0180(&projectile_and_hit_vector_scratch, &psytcopus->rot_row0, D_L11_00161FC8);
         add_0180(&projectile_and_hit_vector_scratch, &projectile_and_hit_vector_scratch, &psytcopus->pos);
         projectile_and_hit_vector_scratch.z += D_L11_00161FCC;
-        FUN_L11_00318e78_p(pv->unk160, &projectile_and_hit_vector_scratch);
+        FUN_L11_00318e78_p(psytcopus_vars->unk160, &projectile_and_hit_vector_scratch);
     }
     damage = 0.0f;
     info = hit_info_0698(psytcopus, 0x330000, 0);
-    hit_reaction = take_hit_0698(psytcopus, info, &pv->health, 0, &hits, &damage, 0, 4);
+    hit_reaction = take_hit_0698(psytcopus, info, &psytcopus_vars->health, 0, &hits, &damage, 0, 4);
     if (hits != 1 && psytcopus->state != 8) {
-        pv->health -= damage;
-        if (pv->health <= 0.0f) {
+        psytcopus_vars->health -= damage;
+        if (psytcopus_vars->health <= 0.0f) {
             hit_reaction = 1;
         }
-        pv->unk90 = random_int_0180(512.0f);
-        pv->unk98 = 0.5f;
-        pv->unk80 = D_L11_00161F88 * frame_time_sq;
-        pv->unk84 = 0.0005f;
-        pv->unk94 = 9;
-        pv->unkAD = 0;
+        psytcopus_vars->unk90 = random_int_0180(512.0f);
+        psytcopus_vars->unk98 = 0.5f;
+        psytcopus_vars->unk80 = D_L11_00161F88 * frame_time_sq;
+        psytcopus_vars->unk84 = 0.0005f;
+        psytcopus_vars->unk94 = 9;
+        psytcopus_vars->unkAD = 0;
         switch (hit_reaction) {
         case HIT_REACTION_NONE:
         case HIT_REACTION_NO_RESPONSE:
             break;
         case HIT_REACTION_HURT_WITHOUT_KNOCKBACK:
         case HIT_REACTION_HURT_WITHOUT_STATE_CHANGE:
-            pv->unk67 = 0xFA;
+            psytcopus_vars->unk67 = 0xFA;
             break;
         case HIT_REACTION_KNOCKBACK:
         case HIT_REACTION_KNOCKBACK_AND_CANCEL_PROJECTILE:
@@ -1699,59 +1699,59 @@ void FUN_L11_00310698(struct Moby *psytcopus) {
         case HIT_REACTION_KNOCKBACK_WITH_PROJECTILE_CANCELLATION_AND_TIMER_EXTENSION:
         case HIT_REACTION_KNOCKBACK_WITH_SOURCE_RELATIVE_HEADING:
         case HIT_REACTION_KNOCKBACK_WITH_SOURCE_RELATIVE_HEADING_AND_TIMER_EXTENSION:
-            pv->unk88 = D_L11_00161F90 * frame_time;
-            pv->unk8C = D_L11_00161F8C * frame_time;
-            pv->unkC0 = 3.0f;
-            pv->unkC4 = 6.0f;
+            psytcopus_vars->unk88 = D_L11_00161F90 * frame_time;
+            psytcopus_vars->unk8C = D_L11_00161F8C * frame_time;
+            psytcopus_vars->unkC0 = 3.0f;
+            psytcopus_vars->unkC4 = 6.0f;
             source_to_psytcopus_heading = atan2_0180(psytcopus->pos.x - (*(struct Moby **)(info + 0x20))->pos.x,
                                 psytcopus->pos.y - (*(struct Moby **)(info + 0x20))->pos.y);
             *(u128 *)&projectile_and_hit_vector_scratch = *(u128 *)(info + 0x10);
             angle1 = source_to_psytcopus_heading;
-            FUN_L00_0025ab48_p(&projectile_and_hit_vector_scratch, &angle1, &pv->unk88, &pv->unk8C);
-            FUN_L00_0025c558_p(psytcopus, pv->unk70, 5, 1, 0, angle1);
+            FUN_L00_0025ab48_p(&projectile_and_hit_vector_scratch, &angle1, &psytcopus_vars->unk88, &psytcopus_vars->unk8C);
+            FUN_L00_0025c558_p(psytcopus, psytcopus_vars->unk70, 5, 1, 0, angle1);
             psytcopus->state = 7;
-            pv->unk67 = 0x78;
-            if (pv->unk160 != 0) {
-                FUN_L00_002371e0_p(pv->unk160);
-                pv->unk160 = 0;
+            psytcopus_vars->unk67 = 0x78;
+            if (psytcopus_vars->unk160 != 0) {
+                FUN_L00_002371e0_p(psytcopus_vars->unk160);
+                psytcopus_vars->unk160 = 0;
             }
-            pv->unk158 += frames_0180(60);
+            psytcopus_vars->unk158 += frames_0180(60);
             break;
         case HIT_REACTION_DEATH:
         case HIT_REACTION_DEATH_KNOCKBACK:
             psytcopus->flags &= 0xEFFF;
-            pv->unk80 = D_L11_00161F88 * frame_time_sq;
-            pv->unk88 = D_L11_00161F98 * frame_time;
-            pv->unk8C = D_L11_00161F94 * frame_time;
-            pv->unkC0 = 4.0f;
-            pv->unkC4 = 10.0f;
+            psytcopus_vars->unk80 = D_L11_00161F88 * frame_time_sq;
+            psytcopus_vars->unk88 = D_L11_00161F98 * frame_time;
+            psytcopus_vars->unk8C = D_L11_00161F94 * frame_time;
+            psytcopus_vars->unkC0 = 4.0f;
+            psytcopus_vars->unkC4 = 10.0f;
             source_to_psytcopus_heading = atan2_0180(psytcopus->pos.x - (*(struct Moby **)(info + 0x20))->pos.x,
                                 psytcopus->pos.y - (*(struct Moby **)(info + 0x20))->pos.y);
             *(u128 *)&projectile_and_hit_vector_scratch = *(u128 *)(info + 0x10);
             angle2 = source_to_psytcopus_heading;
-            FUN_L00_0025ab48_p(&projectile_and_hit_vector_scratch, &angle2, &pv->unk88, &pv->unk8C);
-            FUN_L00_0025c558_p(psytcopus, pv->unk70, 6, 1, 0, angle2);
+            FUN_L00_0025ab48_p(&projectile_and_hit_vector_scratch, &angle2, &psytcopus_vars->unk88, &psytcopus_vars->unk8C);
+            FUN_L00_0025c558_p(psytcopus, psytcopus_vars->unk70, 6, 1, 0, angle2);
             psytcopus->state = 8;
-            pv->unk67 = 0xF0;
-            if (pv->unk160 != 0) {
-                FUN_L00_002371e0_p(pv->unk160);
-                pv->unk160 = 0;
+            psytcopus_vars->unk67 = 0xF0;
+            if (psytcopus_vars->unk160 != 0) {
+                FUN_L00_002371e0_p(psytcopus_vars->unk160);
+                psytcopus_vars->unk160 = 0;
             }
             FUN_L00_00257470_p(psytcopus, 0, -1);
             break;
         }
-        FUN_L00_0025d458_p(psytcopus, pv->unk60);
+        FUN_L00_0025d458_p(psytcopus, psytcopus_vars->unk60);
     }
     psytcopus->hit_slot = 0xFF;
-    FUN_L00_0025d538_p(psytcopus, pv->unk60);
-    pv->unk140 = 24.0f;
-    path = D_L11_001B0EB0[pv->unk13C];
-    if (FUN_L00_0025ff38_p(psytcopus, &pv->unkD0, 0, 0, path + 4, *path, pv->unk140) != 2 &&
-        (pv->unk140 < distance_0698(&psytcopus->pos, &pv->unkD0) || abs_0698(psytcopus->pos.z - pv->unkD0.z) > 3.0f)) {
-        pv->unk114 = 2;
+    FUN_L00_0025d538_p(psytcopus, psytcopus_vars->unk60);
+    psytcopus_vars->unk140 = 24.0f;
+    path = D_L11_001B0EB0[psytcopus_vars->unk13C];
+    if (FUN_L00_0025ff38_p(psytcopus, &psytcopus_vars->unkD0, 0, 0, path + 4, *path, psytcopus_vars->unk140) != 2 &&
+        (psytcopus_vars->unk140 < distance_0698(&psytcopus->pos, &psytcopus_vars->unkD0) || abs_0698(psytcopus->pos.z - psytcopus_vars->unkD0.z) > 3.0f)) {
+        psytcopus_vars->unk114 = 2;
     }
-    if (pv->target == 0) {
-        pv->target = D_001413D0;
+    if (psytcopus_vars->target == 0) {
+        psytcopus_vars->target = D_001413D0;
     }
 }
 #include "sda.h"
