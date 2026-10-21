@@ -3189,11 +3189,11 @@ int FUN_L18_002f70b8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int state = *(int *)(data + 0x350);
     int tries = 0;
-    int r;
+    int boss_action_choice_index;
     int ok;
     do {
-        r = random_integer_below(6);
-        switch (r) {
+        boss_action_choice_index = random_integer_below(6);
+        switch (boss_action_choice_index) {
         case BOSS_ACTION_CHOICE_LAUNCH_FORWARD_WITH_LATERAL_OFFSET:
             state = 0xD;
             break;
@@ -3213,7 +3213,7 @@ int FUN_L18_002f70b8(struct Moby *moby) {
             state = 0x13;
             break;
         }
-        ok = *(short *)((char *)D_L18_001DFB40 + r * 2 + *(int *)(data + 0x34C) * 12);
+        ok = *(short *)((char *)D_L18_001DFB40 + boss_action_choice_index * 2 + *(int *)(data + 0x34C) * 12);
         if (state == *(int *)(data + 0x350))
             ok = 0;
         if (state == 0x13) {
