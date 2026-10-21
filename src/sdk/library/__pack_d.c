@@ -47,25 +47,25 @@ typedef union {
     } bits;
 } FLOUnion;
 
-f64 __pack_d(FpNumber *src) {
-    FLOUnion dst;
-    u64 fraction = src->fraction;
-    s32 sign = src->sign;
+f64 __pack_d(FpNumber *unpacked_value) {
+    FLOUnion packed_value;
+    u64 fraction = unpacked_value->fraction;
+    s32 sign = unpacked_value->sign;
     s32 exp = 0;
 
-    if (src->class == 0 || src->class == 1) {
+    if (unpacked_value->class == 0 || unpacked_value->class == 1) {
         exp = 0x7FF;
         fraction |= 0x8000000000000ULL;
-    } else if ((src->class ^ 4) == 0) {
+    } else if ((unpacked_value->class ^ 4) == 0) {
         exp = 0x7FF;
         fraction = 0;
-    } else if ((src->class ^ 2) == 0) {
+    } else if ((unpacked_value->class ^ 2) == 0) {
         fraction = 0;
     } else if (fraction == 0) {
         exp = 0;
     } else {
-        if (src->normal_exp < -0x3FE) {
-            s32 shift = -0x3FE - src->normal_exp;
+        if (unpacked_value->normal_exp < -0x3FE) {
+            s32 shift = -0x3FE - unpacked_value->normal_exp;
             exp = 0;
             if (shift > 56) {
                 fraction = 0;
@@ -73,11 +73,11 @@ f64 __pack_d(FpNumber *src) {
                 fraction >>= shift;
             }
             fraction >>= 8;
-        } else if (src->normal_exp > 0x3FF) {
+        } else if (unpacked_value->normal_exp > 0x3FF) {
             exp = 0x7FF;
             fraction = 0;
         } else {
-            exp = src->normal_exp + 0x3FF;
+            exp = unpacked_value->normal_exp + 0x3FF;
             if ((fraction & 0xFF) == 0x80) {
                 if (fraction & 0x100) {
                     fraction += 0x80;
@@ -92,8 +92,8 @@ f64 __pack_d(FpNumber *src) {
             fraction >>= 8;
         }
     }
-    dst.bits.fraction = fraction;
-    dst.bits.exp = exp;
-    dst.bits.sign = sign;
-    return dst.value;
+    packed_value.bits.fraction = fraction;
+    packed_value.bits.exp = exp;
+    packed_value.bits.sign = sign;
+    return packed_value.value;
 }
