@@ -2003,7 +2003,7 @@ void FUN_L00_002502f0_2af450(void *, int, int, int) __asm__("FUN_L00_002502f0");
 float FUN_002132a8_2af450(float, float) __asm__("FUN_002132a8");
 void FUN_L00_00250df8_2af450(void *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_debris(void *pos, void *vel, int n, int flag, int g) __asm__("FUN_L00_002af450");
-unsigned char *spawn_debris(void *pos, void *vel, int lifetime_frames, int flag, int g) {
+unsigned char *spawn_debris(void *pos, void *vel, int lifetime_frames, int flag, int trail_color_mask) {
     unsigned char *debris_moby = FUN_0020c4f8_2af450(0x7A);
     if (debris_moby) {
         unsigned char *debris_data;
@@ -2026,7 +2026,7 @@ unsigned char *spawn_debris(void *pos, void *vel, int lifetime_frames, int flag,
             *(float *)(debris_moby + 0x2C) *= FUN_002132a8_2af450(0.5f, 0.75f);
         }
         *(float *)(debris_data + 0x1C) = *(float *)(debris_moby + 0x2C);
-        debris_moby[0xBC] = flag | (g << 1);
+        debris_moby[0xBC] = flag | (trail_color_mask << 1);
         FUN_L00_00250df8_2af450(debris_moby);
     }
     return debris_moby;
