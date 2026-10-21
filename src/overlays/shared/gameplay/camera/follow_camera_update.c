@@ -2241,7 +2241,7 @@ void FUN_L00_002edad8(u8 *sound_emitter) {
     V_2edad8 r;
     S_2edad8 *playback_state;
     f32 f;
-    u8 *v;
+    u8 *sound_slot_entry;
     playback_state = *(S_2edad8 **)(sound_emitter + 8);
     {
         f32 g = *(f32 *)(sound_emitter + 0xC);
@@ -2262,8 +2262,8 @@ void FUN_L00_002edad8(u8 *sound_emitter) {
     f = fabs_2edad8(transformed_reference_position_delta.f[2]);
     if (!(f <= fabs_2edad8(b.f[2]) + 1.0f))
         return;
-    v = D_0013E550_2edad8 + playback_state->h * 0x70;
-    if (*(u8 **)(v + 0x8C) == sound_emitter && v[0x74] != 0)
+    sound_slot_entry = D_0013E550_2edad8 + playback_state->h * 0x70;
+    if (*(u8 **)(sound_slot_entry + 0x8C) == sound_emitter && sound_slot_entry[0x74] != 0)
         return;
     if (tick_2edad8(&playback_state->timer) != 0) {
         playback_state->h = play_2edad8(playback_state->snd, 0, sound_emitter, 0x400);
