@@ -2663,15 +2663,15 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         phase.vectors.target.f[2]+=missile_data->target_height;
         subtract_vector_xyz(phase.collision.dir,&phase.vectors.target,(&missile_moby->pos));
         if(missile_data->track_velocity) {
-            float b,a,root,intercept_time_plus_root,intercept_time_minus_root,denominator,negative_b;
+            float intercept_linear_coefficient,a,root,intercept_time_plus_root,intercept_time_minus_root,denominator,negative_b;
             subtract_vector_xyz(&phase.vectors.relative,&phase.vectors.target,&missile_data->previous_target);
             FUN_L00_001ff2c0_c(&predicted,&phase.vectors.relative,&hero_velocity);
             qcopy(&missile_data->previous_target,&phase.vectors.target);
             a=FUN_L00_001ff430_c(&phase.vectors.relative);
-            b=(phase.vectors.relative.f[0]*phase.collision.dir[0]+phase.vectors.relative.f[1]*phase.collision.dir[1]+phase.vectors.relative.f[2]*phase.collision.dir[2])*-2.0f;
+            intercept_linear_coefficient=(phase.vectors.relative.f[0]*phase.collision.dir[0]+phase.vectors.relative.f[1]*phase.collision.dir[1]+phase.vectors.relative.f[2]*phase.collision.dir[2])*-2.0f;
             a=missile_data->speed*missile_data->speed-a;
-            root=square_root_scalar(b*b-a*4.0f*-FUN_L00_001ff430_c(phase.collision.dir));
-            negative_b=-b;
+            root=square_root_scalar(intercept_linear_coefficient*intercept_linear_coefficient-a*4.0f*-FUN_L00_001ff430_c(phase.collision.dir));
+            negative_b=-intercept_linear_coefficient;
             denominator=a+a;
             intercept_time_plus_root=(negative_b+root)/denominator;
             intercept_time_minus_root=(negative_b-root)/denominator;
