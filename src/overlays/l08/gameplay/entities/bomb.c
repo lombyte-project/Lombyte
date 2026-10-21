@@ -1492,13 +1492,13 @@ char *FUN_L08_002daa10(struct Moby *moby) {
     char *best;
     char *candidate_moby;
     float bestD, bestA;
-    int idx;
+    int candidate_moby_index;
     struct Hero *base;
     if (group_entry == 0)
         return 0;
     best = 0;
-    idx = *(unsigned short *)group_entry & 0x7FFF;
-    candidate_moby = D_L08_0015FFD8 + (idx << 8);
+    candidate_moby_index = *(unsigned short *)group_entry & 0x7FFF;
+    candidate_moby = D_L08_0015FFD8 + (candidate_moby_index << 8);
     bestA = 0.0f;
     bestD = bestA;
     for (;;) {
@@ -1526,8 +1526,8 @@ char *FUN_L08_002daa10(struct Moby *moby) {
         if (*group_entry < -1)
             return best;
         group_entry++;
-        idx = *(unsigned short *)group_entry & 0x7FFF;
-        candidate_moby = D_L08_0015FFD8 + (idx << 8);
+        candidate_moby_index = *(unsigned short *)group_entry & 0x7FFF;
+        candidate_moby = D_L08_0015FFD8 + (candidate_moby_index << 8);
     }
 }
 /* Update function of the blarg bomb thrower: hit reactions, then a state machine that walks to its bomb crate, picks up and throws bombs at the hero. */
