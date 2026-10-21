@@ -388,7 +388,7 @@ void FUN_L05_00329540(char *camera) {
     char *side = camera + 0x20;
     struct Hero *g;
     char *focus;
-    char *b;
+    char *spring;
     float target_height_offset[4];
     float look_direction[4];
     float look_target[4];
@@ -397,12 +397,12 @@ void FUN_L05_00329540(char *camera) {
     FUN_L05_00329358_c(camera);
     g = &hero;
     focus = orbit + 0x80;
-    b = orbit + 0xE0;
+    spring = orbit + 0xE0;
     normalize_vector_xyz(camera_offset, ((char *)g->moby) + 0xC0, 1.0f);
     normalize_vector_xyz(camera_offset, camera_offset, *(float *)(orbit + 0xE0));
     subtract_vector_xyz(at, focus, camera_offset);
     normalize_vector_xyz(gravity_up, &g->gravity_dir, -1.0f);
-    normalize_vector_xyz(camera_offset, gravity_up, *(float *)(b + 0x10));
+    normalize_vector_xyz(camera_offset, gravity_up, *(float *)(spring + 0x10));
     add_vector_xyz(at, at, camera_offset);
     normalize_vector_xyz(target_height_offset, gravity_up, *(float *)(focus + 0x4C));
     add_vector_xyz(look_target, target_height_offset, focus);
