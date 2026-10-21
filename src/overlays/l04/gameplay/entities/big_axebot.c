@@ -111,14 +111,14 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 extern void FUN_L04_002c46d0(void *);
 
-void FUN_L04_002c4808(char *arg) {
-    char *data = *(char **)(arg + 0x78);
+void FUN_L04_002c4808(char *moby) {
+    char *data = *(char **)(moby + 0x78);
     void *other = *(void **)(data + 0xF8);
     if (other != 0) {
         mark_moby_for_removal(other);
     }
-    FUN_L04_002c46d0(arg);
-    mark_moby_for_removal(arg);
+    FUN_L04_002c46d0(moby);
+    mark_moby_for_removal(moby);
 }
 
 /* Moves a moby along a path by a distance, stepping to the next point when it passes one. */
