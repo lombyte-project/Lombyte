@@ -463,14 +463,14 @@ extern char *D_L09_0015FFE4;
 extern float FUN_001f9b48(void *, void *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
-char *FUN_L09_003041d0(char *self, char *pos, int bone) {
+char *FUN_L09_003041d0(char *self, char *search_position, int bone) {
     char *best = 0;
     float bestd = 1000000000.0f;
     char query_position[16];
     char candidate_joint_position[16];
     char *candidate_moby;
     char *tp = query_position;
-    *(OvlQuad *)query_position = *(OvlQuad *)pos;
+    *(OvlQuad *)query_position = *(OvlQuad *)search_position;
     for (candidate_moby = D_L09_0015FFE4; candidate_moby != 0; candidate_moby = *(char **)(candidate_moby + 0x28)) {
         if (candidate_moby == self)
             continue;
