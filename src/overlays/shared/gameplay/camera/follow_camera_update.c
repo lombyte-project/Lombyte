@@ -1067,14 +1067,14 @@ void FUN_L00_001eb0c8_002eb320(void *, void *, float) __asm__("FUN_L00_001eb0c8"
 void FUN_L00_001eb0b0_002eb320(void *) __asm__("FUN_L00_001eb0b0");
 void FUN_L00_001ff250_002eb320(void *) __asm__("FUN_L00_001ff250");
 void FUN_L00_002eb278_002eb320(char *) __asm__("FUN_L00_002eb278");
-void FUN_L00_002eb320(char *camera_object, void *b, u128 *v, float x) {
+void FUN_L00_002eb320(char *camera_object, void *camera_initialization_values, u128 *initial_orbit_origin, float x) {
     char *camera_state = *(char **)(camera_object + 0x70);
     char *orbit_origin = camera_state + 0xb0;
-    qcopy(orbit_origin, v);
-    qcopy(camera_state + 0x80, v);
+    qcopy(orbit_origin, initial_orbit_origin);
+    qcopy(camera_state + 0x80, initial_orbit_origin);
     *(float *)(orbit_origin + 0x18) = x;
-    FUN_L00_001eb0c8_002eb320(camera_state + 0x14, b, x);
-    FUN_L00_001eb0c8_002eb320(camera_object + 0x50, b, 0.0f);
+    FUN_L00_001eb0c8_002eb320(camera_state + 0x14, camera_initialization_values, x);
+    FUN_L00_001eb0c8_002eb320(camera_object + 0x50, camera_initialization_values, 0.0f);
     FUN_L00_001eb0b0_002eb320(camera_state);
     FUN_L00_001ff250_002eb320(camera_state + 0x90);
     FUN_L00_002eb278_002eb320(camera_object);
