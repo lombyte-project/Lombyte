@@ -1021,7 +1021,7 @@ void grindrail_button_update(struct Moby *button_moby) {
     char *button_data = (char *)button_moby->pvars;
     char *g;
     char *base;
-    float v[4];
+    float button_offset_from_hero[4];
     float glow_blend_factor;
     switch (button_moby->state) {
     case GRINDRAIL_BUTTON_INITIALIZE_GLOW_PHASE:
@@ -1034,13 +1034,13 @@ void grindrail_button_update(struct Moby *button_moby) {
             if (vector_distance(&button_moby->pos, g) < 4.0f) {
                 base = g - 0x80;
                 if (*(int *)(base + 0x2084) == 0x28 && *(int *)(base + 0x5A8) != -1) {
-                    transform_vector_by_basis(v, &D_L16_00161DF0, &button_moby->rot_row0);
-                    fast_vec_add(v, v, &button_moby->pos);
-                    fast_vec_sub(v, v, g);
-                    transform_vector_by_basis(v, v, g - 0x40);
-                    if (absolute_float(v[1]) < 0.1f) {
-                        if ((v[0] > 0.0f && *(int *)(base + 0x5A8) == 3) ||
-                            (v[0] < 0.0f && *(int *)(base + 0x5A8) == 2)) {
+                    transform_vector_by_basis(button_offset_from_hero, &D_L16_00161DF0, &button_moby->rot_row0);
+                    fast_vec_add(button_offset_from_hero, button_offset_from_hero, &button_moby->pos);
+                    fast_vec_sub(button_offset_from_hero, button_offset_from_hero, g);
+                    transform_vector_by_basis(button_offset_from_hero, button_offset_from_hero, g - 0x40);
+                    if (absolute_float(button_offset_from_hero[1]) < 0.1f) {
+                        if ((button_offset_from_hero[0] > 0.0f && *(int *)(base + 0x5A8) == 3) ||
+                            (button_offset_from_hero[0] < 0.0f && *(int *)(base + 0x5A8) == 2)) {
                             func_L16_002E6B48_6908(button_moby);
                             func_0022ED80_6908(1, 0, button_moby);
                         }
