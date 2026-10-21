@@ -2527,7 +2527,7 @@ s32 FUN_L00_002603d0_2aa008(void *) __asm__("FUN_L00_002603d0");
 s32 FUN_001f96f8_2aa008(s32) __asm__("FUN_001f96f8");
 s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 void FUN_L00_001ff660_2aa008(void *, void *, void *) __asm__("FUN_L00_001ff660");
-void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
+void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *base_motion_vector) {
     V_2aa008 random_offset;
     V_2aa008 vector_scratch;
     V_2aa008 collision_position_offset;
@@ -2548,7 +2548,7 @@ void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
     random_offset.q = vector_scratch.q;
     FUN_001f9bf8_2aa008(&random_offset, &random_offset,
                         FUN_002132a8_2aa008(D_0015ED6C_2aa008 * 0.01f, D_0015ED6C_2aa008 * 0.1f));
-    add_vector_xyz(moby_vars, &random_offset, arg);
+    add_vector_xyz(moby_vars, &random_offset, base_motion_vector);
     P = &hero;
     if (P->ground_moby && FUN_L00_002603d0_2aa008(P->ground_moby)) {
         add_vector_xyz(moby_vars, moby_vars, &P->motion.displacement);
