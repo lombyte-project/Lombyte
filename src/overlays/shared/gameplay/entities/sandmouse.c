@@ -1890,21 +1890,21 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L01_00319f18(char *moby) {
     float hero_offset_from_box[4];
-    float b[4];
+    float hero_offset_in_box_basis[4];
     unsigned char *data = *(unsigned char **)(moby + 8);
     subtract_vector_xyz(hero_offset_from_box, &hero.motion.pos, moby + 0x40);
     hero_offset_from_box[3] = 0;
-    transform_vector_by_basis(b, hero_offset_from_box, moby + 0x50);
-    if (absolute_float(b[0]) <= 1.0f && absolute_float(b[1]) <= 1.0f && absolute_float(b[2]) <= 1.0f) {
-        float box_x_fraction = (b[0] + 1.0f) * 0.5f;
-        int v = func_001FA898_r(convert_integer_to_float(*(int *)(data + 4)) * box_x_fraction);
-        int w = *(int *)(data + 4);
-        if (!(w < v))
-            w = v;
-        FUN_L01_002a1a90((int)moby, data[0], w, data[1], data[2]);
+    transform_vector_by_basis(hero_offset_in_box_basis, hero_offset_from_box, moby + 0x50);
+    if (absolute_float(hero_offset_in_box_basis[0]) <= 1.0f && absolute_float(hero_offset_in_box_basis[1]) <= 1.0f && absolute_float(hero_offset_in_box_basis[2]) <= 1.0f) {
+        float box_x_fraction = (hero_offset_in_box_basis[0] + 1.0f) * 0.5f;
+        int scaled_state_value = func_001FA898_r(convert_integer_to_float(*(int *)(data + 4)) * box_x_fraction);
+        int clamped_state_value = *(int *)(data + 4);
+        if (!(clamped_state_value < scaled_state_value))
+            clamped_state_value = scaled_state_value;
+        FUN_L01_002a1a90((int)moby, data[0], clamped_state_value, data[1], data[2]);
         data[3] = 1;
     } else if (data[3] != 0) {
-        if (b[0] > 0.0f) {
+        if (hero_offset_in_box_basis[0] > 0.0f) {
             FUN_L01_002a1a90(0, data[0], *(int *)(data + 4), data[1], data[2]);
         } else {
             FUN_L01_002a1a90((int)moby, 0, 0, 0, 0);
