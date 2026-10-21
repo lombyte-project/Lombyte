@@ -1654,20 +1654,20 @@ typedef struct {
 extern Ent D_L07_001DCE40[];
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L07_0030cd48(int arg) {
+void FUN_L07_0030cd48(int selected_entry_index) {
     int i;
-    D_L07_001DCE40[arg].n[0] = 0xFF;
-    D_L07_001DCE40[arg].n[2] = 0xFF;
-    D_L07_001DCE40[arg].n[1] = 0xFF;
-    D_L07_001DCE40[arg].n[3] = 0xFF;
-    D_L07_001DCE40[arg].n[4] = 0xFF;
-    D_L07_001DCE40[arg].n[5] = 0xFF;
-    D_L07_001DCE40[arg].n[6] = 0xFF;
-    D_L07_001DCE40[arg].n[7] = 0xFF;
+    D_L07_001DCE40[selected_entry_index].n[0] = 0xFF;
+    D_L07_001DCE40[selected_entry_index].n[2] = 0xFF;
+    D_L07_001DCE40[selected_entry_index].n[1] = 0xFF;
+    D_L07_001DCE40[selected_entry_index].n[3] = 0xFF;
+    D_L07_001DCE40[selected_entry_index].n[4] = 0xFF;
+    D_L07_001DCE40[selected_entry_index].n[5] = 0xFF;
+    D_L07_001DCE40[selected_entry_index].n[6] = 0xFF;
+    D_L07_001DCE40[selected_entry_index].n[7] = 0xFF;
     for (i = 0; i < 36; i++) {
-        if (arg != i) {
+        if (selected_entry_index != i) {
             Ent *entry_table = D_L07_001DCE40;
-            Ent *selected_entry = &entry_table[arg];
+            Ent *selected_entry = &entry_table[selected_entry_index];
             float x = selected_entry->x - entry_table[i].x;
             float y = selected_entry->y - entry_table[i].y;
             if (absolute_float(x) < 0.1f) {
