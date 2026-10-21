@@ -3182,7 +3182,7 @@ void FUN_L14_002d5f40(struct Moby *racer_moby) {
     };
     struct L14RacerVars *racer_vars = (struct L14RacerVars *)racer_moby->pvars;
     u8 pos[16];
-    f32 vel[3];
+    f32 spawned_object_planar_velocity[3];
     unsigned char *spark;
     f32 *sv;
 
@@ -3248,11 +3248,11 @@ void FUN_L14_002d5f40(struct Moby *racer_moby) {
             spark = FUN_L14_002dea98((char *)racer_moby, (char *)pos);
             if (spark) {
                 sv = *(f32 **)(spark + 0x78);
-                vel[0] = fast_cos(racer_moby->rot.z) * (frame_scale * 0.4f);
-                vel[1] = fast_sin(racer_moby->rot.z) * (frame_scale * 0.4f);
-                vel[2] = 0.0f;
-                sv[0] = vel[0];
-                sv[1] = vel[1];
+                spawned_object_planar_velocity[0] = fast_cos(racer_moby->rot.z) * (frame_scale * 0.4f);
+                spawned_object_planar_velocity[1] = fast_sin(racer_moby->rot.z) * (frame_scale * 0.4f);
+                spawned_object_planar_velocity[2] = 0.0f;
+                sv[0] = spawned_object_planar_velocity[0];
+                sv[1] = spawned_object_planar_velocity[1];
             }
             FUN_L14_002e0170(racer_moby, &D_L14_00161A5C, 0);
             spawn_explosion(racer_moby, &racer_vars->trail, &racer_moby->pos, 0.0f, 0.0f, 5, 2, 4, 4.0f, 2.0f, 9.0f, 1, 1.0f,
