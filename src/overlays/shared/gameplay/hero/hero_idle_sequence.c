@@ -2332,9 +2332,9 @@ float FUN_00213308_209848(void) __asm__("FUN_00213308");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void FUN_L00_0026f548_209848(V_209848 *, V_209848 *, int, int) __asm__("FUN_L00_0026f548");
 int FUN_00213260_209848(int) __asm__("FUN_00213260");
-void FUN_L00_00209848(int counter_reset_range, int lim) {
+void FUN_L00_00209848(int counter_reset_range, int effect_spawn_counter_threshold) {
     struct Hero *P = &hero;
-    if (lim < ++P->unk906) {
+    if (effect_spawn_counter_threshold < ++P->unk906) {
         V_209848 spawn_position, outgoing_motion;
         float planar_angle, planar_motion_scale;
         int k;
