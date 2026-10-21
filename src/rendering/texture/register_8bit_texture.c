@@ -13,17 +13,17 @@ extern s32 pending_texture_upload_count_macro __asm__("D_0015F458") MACRO_ADDR;
 long register_8bit_texture(s32 tw, s32 th, s32 clut_data, s32 image_data, s32 cbp, s32 tbp) __asm__("FUN_00204e30");
 
 long register_8bit_texture(s32 tw, s32 th, s32 clut_data, s32 image_data, s32 cbp, s32 tbp) {
-    s32 w;
+    s32 texture_buffer_width;
     long reg;
 
-    w = tw - 6;
-    if (w < 0) {
-        w = 0;
+    texture_buffer_width = tw - 6;
+    if (texture_buffer_width < 0) {
+        texture_buffer_width = 0;
     }
-    w = 1 << w;
+    texture_buffer_width = 1 << texture_buffer_width;
     cbp >>= 8;
     tbp >>= 8;
-    reg = (long)tbp | ((long)w << 14) | ((long)0x13 << 20) | ((long)tw << 26) |
+    reg = (long)tbp | ((long)texture_buffer_width << 14) | ((long)0x13 << 20) | ((long)tw << 26) |
           ((unsigned long)1 << 34) | ((long)cbp << 37) | ((long)4 << 61) | ((long)th << 30);
     if (pending_texture_upload_count_macro < TEXTURE_UPLOAD_MAX) {
         pending_texture_uploads[pending_texture_upload_count_macro].clut_data = clut_data;
