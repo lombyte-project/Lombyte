@@ -818,17 +818,17 @@ void FUN_L00_002994f8(s32 i) {
 void FUN_L00_002995d0(s32, s32, s32);
 /* Passes movie i (the alt table while D_0015ED80 is set) and the language to FUN_L00_002995d0. */
 void FUN_L00_00299560(s32 i) {
-    s32 movie_sector, b;
+    s32 movie_sector, movie_size;
     if (i < 0)
         return;
     if (D_0015ED80) {
         movie_sector = disc_table.movies_alt[i].sector;
-        b = disc_table.movies_alt[i].size;
+        movie_size = disc_table.movies_alt[i].size;
     } else {
         movie_sector = disc_table.movies[i].sector;
-        b = disc_table.movies[i].size;
+        movie_size = disc_table.movies[i].size;
     }
-    FUN_L00_002995d0(movie_sector, b, game_language);
+    FUN_L00_002995d0(movie_sector, movie_size, game_language);
 }
 extern int D_L00_00161048_macro __asm__("D_L00_00161048") __attribute__((section(".sdata")));
 extern int D_L00_0016104C_macro __asm__("D_L00_0016104C") __attribute__((section(".sdata")));
