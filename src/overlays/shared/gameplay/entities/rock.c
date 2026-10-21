@@ -439,16 +439,16 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 a3, s32 
 struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_timer, s32 fade_out,
                               f32 scale, f32 gravity, f32 spin, f32 seconds) {
     u128 spawn_position_snapshot;
-    u128 v;
+    u128 spawn_velocity_snapshot;
     u128 *pp = &spawn_position_snapshot;
-    u128 *vp = &v;
+    u128 *vp = &spawn_velocity_snapshot;
     struct Moby *debris_moby;
     DebrisVars_2f8530 *pv;
-    f32 r;
+    f32 random_spin_magnitude;
     f32 initial_spin;
 
     spawn_position_snapshot = *(u128 *)pos;
-    v = *(u128 *)vel;
+    spawn_velocity_snapshot = *(u128 *)vel;
     debris_moby = create_moby_local(oclass);
     if (debris_moby != 0) {
         pv = (DebrisVars_2f8530 *)debris_moby->pvars;
@@ -462,12 +462,12 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
         debris_moby->rot.z = random_float_between_2f8530(-3.1415927f, 3.1415927f);
         qcopy(&debris_moby->pos, pp);
         qcopy(&pv->vel, vp);
-        r = random_float_between_2f8530(D_0015ED6C_2f8530 * 1.5707964f,
+        random_spin_magnitude = random_float_between_2f8530(D_0015ED6C_2f8530 * 1.5707964f,
                                         D_0015ED6C_2f8530 * 6.2831855f);
         if (rand_e50() & 1) {
-            initial_spin = -r * spin;
+            initial_spin = -random_spin_magnitude * spin;
         } else {
-            initial_spin = r * spin;
+            initial_spin = random_spin_magnitude * spin;
         }
         pv->unk10 = initial_timer;
         pv->unk28 = initial_timer;
