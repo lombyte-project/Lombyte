@@ -637,7 +637,7 @@ void FUN_L00_00232fe8(void) {
     struct Hero *base = &hero;
     struct Hero *tail;
     struct Hero *last;
-    char *obj;
+    char *hero_flag_target;
     int i;
 
     *(unsigned short *)(((char *)base->unkA88) + 0x34) |= 1;
@@ -650,21 +650,21 @@ void FUN_L00_00232fe8(void) {
         }
     }
     tail = &hero;
-    obj = ((char *)tail->items[3].unk0C);
-    if (obj != 0) {
-        *(unsigned short *)(obj + 0x34) |= 1;
+    hero_flag_target = ((char *)tail->items[3].unk0C);
+    if (hero_flag_target != 0) {
+        *(unsigned short *)(hero_flag_target + 0x34) |= 1;
     }
     if (tail->vehicle_mode == 1) {
-        obj = ((char *)tail->unk1624);
-        if (obj != 0) {
-            *(unsigned short *)(obj + 0x34) |= 1;
+        hero_flag_target = ((char *)tail->unk1624);
+        if (hero_flag_target != 0) {
+            *(unsigned short *)(hero_flag_target + 0x34) |= 1;
         }
     }
     last = &hero;
     if (last->items[0].item_id == 8) {
-        obj = ((char *)last->items[0].moby);
-        if (obj != 0 && D_L00_0015F5C4 == 0 && *(unsigned char *)(obj + 0x20) != 0) {
-            *(unsigned short *)(obj + 0x34) &= ~0x41;
+        hero_flag_target = ((char *)last->items[0].moby);
+        if (hero_flag_target != 0 && D_L00_0015F5C4 == 0 && *(unsigned char *)(hero_flag_target + 0x20) != 0) {
+            *(unsigned short *)(hero_flag_target + 0x34) &= ~0x41;
         }
     }
 }
