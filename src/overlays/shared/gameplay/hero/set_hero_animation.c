@@ -93,7 +93,7 @@ int FUN_L00_00231db0(int key, int *out) {
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L00_00231e78(int id, int arg, float blend_frames) {
+void FUN_L00_00231e78(int id, int frame_index, float blend_frames) {
     struct Hero *base = &hero;
     struct Hero *blk2;
     struct Hero *blk3;
@@ -116,8 +116,8 @@ void FUN_L00_00231e78(int id, int arg, float blend_frames) {
         if (*(unsigned char *)(slot3_moby + 0x53) == seq0) {
             return;
         }
-        blend_moby_animation(slot3_moby, seq0, arg, (int)blend_frames);
-        blend_moby_animation(slot3_secondary_moby, seq1, arg, (int)blend_frames);
+        blend_moby_animation(slot3_moby, seq0, frame_index, (int)blend_frames);
+        blend_moby_animation(slot3_secondary_moby, seq1, frame_index, (int)blend_frames);
         return;
     }
     blk2 = &hero;
