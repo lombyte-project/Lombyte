@@ -828,8 +828,8 @@ void FUN_L08_003097b0(struct Moby *moby) {
         MOBY_ACTIVE = 1
     };
     int i;
-    float v[4];
-    float w[4];
+    float sphere_check_input[4];
+    float position_delta[4];
     float distance;
 
     switch (moby->state) {
@@ -857,17 +857,17 @@ void FUN_L08_003097b0(struct Moby *moby) {
         }
         break;
     case MOBY_ACTIVE:
-        v[0] = *(float *)&D_L08_00162380;
-        v[1] = D_L08_00162384;
-        v[2] = D_L08_00162388;
-        v[3] = D_L08_0016238C;
-        if (fast_bsphere_check((char *)v, 1000.0f) >= 0) {
-            w[0] = *(float *)&D_L08_00162380;
-            w[1] = D_L08_00162384;
-            w[2] = D_L08_00162388;
-            w[3] = 1.0f;
-            subtract_vector_xyz(w, D_L08_001675C0, w);
-            distance = vector_length_xyz(w);
+        sphere_check_input[0] = *(float *)&D_L08_00162380;
+        sphere_check_input[1] = D_L08_00162384;
+        sphere_check_input[2] = D_L08_00162388;
+        sphere_check_input[3] = D_L08_0016238C;
+        if (fast_bsphere_check((char *)sphere_check_input, 1000.0f) >= 0) {
+            position_delta[0] = *(float *)&D_L08_00162380;
+            position_delta[1] = D_L08_00162384;
+            position_delta[2] = D_L08_00162388;
+            position_delta[3] = 1.0f;
+            subtract_vector_xyz(position_delta, D_L08_001675C0, position_delta);
+            distance = vector_length_xyz(position_delta);
             if (distance <= 84.0f) {
                 FUN_L08_002f12a0(0);
                 FUN_L08_002f1158(D_L08_001F8550, 0.52f, 0.62f, 0.06f, &D_L08_001623F0_e[8]);
