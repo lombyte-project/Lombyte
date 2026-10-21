@@ -97,7 +97,7 @@ void FUN_L00_00231e78(int id, int arg, float blend_frames) {
     struct Hero *blk2;
     struct Hero *blk3;
     char *slot3_moby;
-    char *b;
+    char *slot3_secondary_moby;
     int seq0;
     int seq1;
     int ok;
@@ -107,8 +107,8 @@ void FUN_L00_00231e78(int id, int arg, float blend_frames) {
         return;
     }
     slot3_moby = ((char *)base->items[3].moby);
-    b = ((char *)base->items[3].moby2);
-    if (slot3_moby == 0 || b == 0) {
+    slot3_secondary_moby = ((char *)base->items[3].moby2);
+    if (slot3_moby == 0 || slot3_secondary_moby == 0) {
         return;
     }
     if (FUN_L00_00231ff8(id, &seq0, &seq1) != 0 && id != 0) {
@@ -116,7 +116,7 @@ void FUN_L00_00231e78(int id, int arg, float blend_frames) {
             return;
         }
         blend_moby_animation(slot3_moby, seq0, arg, (int)blend_frames);
-        blend_moby_animation(b, seq1, arg, (int)blend_frames);
+        blend_moby_animation(slot3_secondary_moby, seq1, arg, (int)blend_frames);
         return;
     }
     blk2 = &hero;
@@ -137,8 +137,8 @@ void FUN_L00_00231e78(int id, int arg, float blend_frames) {
     if (*(unsigned char *)(slot3_moby + 0x53) != 1) {
         blend_moby_animation(slot3_moby, 1, 0, seq);
     }
-    if (*(unsigned char *)(b + 0x53) != 1) {
-        blend_moby_animation(b, 1, 0, seq);
+    if (*(unsigned char *)(slot3_secondary_moby + 0x53) != 1) {
+        blend_moby_animation(slot3_secondary_moby, 1, 0, seq);
     }
 }
 typedef struct {
