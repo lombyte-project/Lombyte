@@ -1563,7 +1563,7 @@ typedef struct {
 extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8();
 
-SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
+SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *transform_source_moby) {
     SpawnedMoby *spawned_moby;
     s32 *spawned_moby_vars;
 
@@ -1574,9 +1574,9 @@ SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
         spawned_moby->b31 = 1;
         spawned_moby->state = 0;
         spawned_moby_vars = spawned_moby->pvars;
-        spawned_moby->d38 = src->d38;
-        qcopy(&spawned_moby->pos, &src->pos);
-        qcopy(&spawned_moby->rot, &src->rot);
+        spawned_moby->d38 = transform_source_moby->d38;
+        qcopy(&spawned_moby->pos, &transform_source_moby->pos);
+        qcopy(&spawned_moby->rot, &transform_source_moby->rot);
         *spawned_moby_vars = -1;
         FUN_L00_00250df8(spawned_moby, -1);
     }
