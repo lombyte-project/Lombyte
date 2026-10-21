@@ -1966,7 +1966,7 @@ void FUN_001f9bf8_0026dbe0(V_0026dbe0 *, V_0026dbe0 *, float) __asm__("FUN_001f9
 void FUN_001f9a10_0026dbe0(void *, V_0026dbe0 *, V_0026dbe0 *) __asm__("FUN_001f9a10");
 void FUN_L00_0026dbe0(unsigned char *particle) {
     E_0026dbe0 *particle_data;
-    V_0026dbe0 source_position, b;
+    V_0026dbe0 source_position, position_offset;
     if (particle == 0)
         return;
     particle_data = (E_0026dbe0 *)(particle + 0x20);
@@ -1982,9 +1982,9 @@ void FUN_L00_0026dbe0(unsigned char *particle) {
         return;
     }
     FUN_L00_0024f7c8_0026dbe0(particle_data->o, particle_data->h6, &source_position);
-    FUN_001f9a28_0026dbe0(&b, D_L00_00166DC0_0026dbe0, &source_position);
-    FUN_001f9bf8_0026dbe0(&b, &b, 0.4f);
-    FUN_001f9a10_0026dbe0(particle + 0x10, &source_position, &b);
+    FUN_001f9a28_0026dbe0(&position_offset, D_L00_00166DC0_0026dbe0, &source_position);
+    FUN_001f9bf8_0026dbe0(&position_offset, &position_offset, 0.4f);
+    FUN_001f9a10_0026dbe0(particle + 0x10, &source_position, &position_offset);
 }
 char *FUN_L00_002678b8_0026dd20(int) __asm__("FUN_L00_002678b8");
 int FUN_001160d8_0026dd20(void) __asm__("FUN_001160d8");
