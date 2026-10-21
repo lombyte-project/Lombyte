@@ -780,8 +780,8 @@ void FUN_L16_002e4900(void *moby_v) {
     char *data = *(char **)(moby + 0x78);
     int *list = (int *)(data + 0x80);
     int i;
-    int idx;
-    char *g;
+    int selected_pose_byte_offset;
+    char *pose_table_base;
     *(short *)(data + 0xAC) = -1;
     for (i = 0; i < 3; i++) {
         if (func_001F9D10_e4900(moby + 0x10, D_L16_001601AC_slots_e4900 + (list[i] << 7) + 0x30) <
@@ -806,11 +806,11 @@ void FUN_L16_002e4900(void *moby_v) {
     {
         int *selected = list;
         selected += *(short *)(data + 0xAC);
-        idx = *selected << 7;
+        selected_pose_byte_offset = *selected << 7;
     }
-    g = D_L16_001601AC_slots_e4900;
-    qcopy(data + 0x60, (void *)(idx + (int)g + 0x30));
-    qcopy(data + 0x70, (void *)(idx + (int)g + 0x70));
+    pose_table_base = D_L16_001601AC_slots_e4900;
+    qcopy(data + 0x60, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x30));
+    qcopy(data + 0x70, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x70));
 }
 /* Pick the path for the current segment and set the travel speeds from its length. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5EC0), where it is exact; names translated to the US level program. */
