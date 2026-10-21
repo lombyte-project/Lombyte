@@ -1267,11 +1267,11 @@ extern void *FUN_L00_002dbb20(void *);
 void *FUN_L02_002d6210(struct Moby *moby) {
     void *helper_result = FUN_L00_002dbb20(moby);
     if (helper_result) {
-        int idx;
+        int spawner_moby_index;
         moby->state = 9;
-        idx = *(int *)((char *)moby->pvars + 0x288);
-        if (idx >= 0) {
-            char *spawner_vars = *(char **)(*(int *)&D_L02_0015FFD8_c + idx * 256 + 0x78);
+        spawner_moby_index = *(int *)((char *)moby->pvars + 0x288);
+        if (spawner_moby_index >= 0) {
+            char *spawner_vars = *(char **)(*(int *)&D_L02_0015FFD8_c + spawner_moby_index * 256 + 0x78);
             (*(int *)(spawner_vars + 0x14C))--;
         }
     } else if (moby->state == 9) {
