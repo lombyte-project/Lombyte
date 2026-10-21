@@ -1242,22 +1242,22 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
     char *moby;
     int collision;
     int a0s[1];
-    int res[1];
+    int selected_target[1];
     float distance, angle, elevation, headingError, limit, apparentAngle, radius, reduction;
     int i;
-    char *g;
+    char *hero_base;
     char *hero_moby;
 
     limit = D_L00_001616DC;
     a0s[0] = (int)self;
     *(VecQuad *)start = *(VecQuad *)position;
-    g = ((char *)&hero);
-    hero_moby = *(char **)(g + 0x2080);
+    hero_base = ((char *)&hero);
+    hero_moby = *(char **)(hero_base + 0x2080);
     *(VecQuad *)end = *(VecQuad *)(hero_moby + 0x10);
     position = start;
     end[2] = position[2];
     collision = collision_line((Vec4f *)end, (Vec4f *)position, 6, hero_moby, 0);
-    res[0] = 0;
+    selected_target[0] = 0;
     if (collision) {
         qcopy(position, &collision_hit_point);
         return 0;
@@ -1289,7 +1289,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
             if (fast_difference_between_rotations_c(*(float *)(moby + 0x48), toward) < 1.0471976f &&
                 absolute_float(position[2] - target[2]) < 2.0f &&
                 !collision_line((Vec4f *)position, (Vec4f *)target, 6, *(char **)(g1 + 0x2080), 0)) {
-                res[0] = (int)candidate;
+                selected_target[0] = (int)candidate;
                 *pitch = -elevation;
                 *heading = angle;
                 goto done;
@@ -1327,12 +1327,12 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
                 limit = distance;
                 if (headingError < 0.17453292f)
                     *heading = angle;
-                res[0] = (int)candidate;
+                selected_target[0] = (int)candidate;
             }
         }
     } while ((candidate = active_mobies[++i]) != 0);
 done:
-    return (char *)res[0];
+    return (char *)selected_target[0];
 }
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
