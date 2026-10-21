@@ -2503,7 +2503,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
     V_2E52B0 E;
     V_2E52B0 D;
     float desired_heading;
-    float b;
+    float aim_elevation;
 
     FUN_L00_00263ac8(2.5f, (int)ship, 2, d->a1D0);
     if (d->i140 == -1) {
@@ -2544,8 +2544,8 @@ void blarg_ship_update(Ship_5E48 *ship) {
     case BLARG_SHIP_STATE_RISE_TO_ENTRY_PATH:
         desired_heading = fast_arc_tan(tgt->pos.x - ship->pos.x, tgt->pos.y - ship->pos.y);
         FUN_L00_00258278((char *)ship, &d->f198, desired_heading, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
-        b = fast_arc_tan(vector_distance_xy_alt(&ship->pos, &tgt->pos), tgt->pos.z - ship->pos.z);
-        ship->f44 = FUN_L00_00258110_c(&d->f19C, ship->f44, -b, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
+        aim_elevation = fast_arc_tan(vector_distance_xy_alt(&ship->pos, &tgt->pos), tgt->pos.z - ship->pos.z);
+        ship->f44 = FUN_L00_00258110_c(&d->f19C, ship->f44, -aim_elevation, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
         if ((ship->b70 & 2) && ship->b53 == 1) blend_moby_animation(ship, 2, 0, scale_game_frames_c2(20));
         ship->pos.z += D_0015ED6C * 4.0f;
         if (fast_vec_dist(&ship->pos, &D_L10_001B0C30_2E52B0[d->i140]->nodes[0]) < 0.5f) {
@@ -2557,8 +2557,8 @@ void blarg_ship_update(Ship_5E48 *ship) {
         qcopy(&A, &D_L10_001B0C30_2E52B0[d->i140]->nodes[d->i158]);
         desired_heading = fast_arc_tan(A.x - ship->pos.x, A.y - ship->pos.y);
         FUN_L00_00258278((char *)ship, &d->f198, desired_heading, 0.02f, 0.3f, D_0015ED6C * 12.566371f);
-        b = fast_arc_tan(vector_distance_xy_alt(&ship->pos, &tgt->pos), tgt->pos.z - ship->pos.z);
-        ship->f44 = FUN_L00_00258110_c(&d->f19C, ship->f44, -b, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
+        aim_elevation = fast_arc_tan(vector_distance_xy_alt(&ship->pos, &tgt->pos), tgt->pos.z - ship->pos.z);
+        ship->f44 = FUN_L00_00258110_c(&d->f19C, ship->f44, -aim_elevation, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
         func_001F9BF0_2E52B0(&B, &A, &ship->pos);
         fast_vec_normalize(&d->a120, &B, D_0015ED6C * 8.0f);
         add_vector_xyz_c3(&ship->pos, &ship->pos, &d->a120);
@@ -2594,8 +2594,8 @@ void blarg_ship_update(Ship_5E48 *ship) {
         }
         desired_heading = fast_arc_tan(tgt->pos.x - ship->pos.x, tgt->pos.y - ship->pos.y);
         FUN_L00_00258278((char *)ship, &d->f198, desired_heading, 0.02f, 0.3f, D_0015ED6C * 12.566371f);
-        b = fast_arc_tan(vector_distance_xy_alt(&ship->pos, &A), A.z - ship->pos.z);
-        ship->f44 = FUN_L00_00258110_c(&d->f19C, ship->f44, -b, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
+        aim_elevation = fast_arc_tan(vector_distance_xy_alt(&ship->pos, &A), A.z - ship->pos.z);
+        ship->f44 = FUN_L00_00258110_c(&d->f19C, ship->f44, -aim_elevation, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
         if (fast_difference_between_rotations_c2(ship->f48, fast_arc_tan(tgt->pos.x - ship->pos.x, tgt->pos.y - ship->pos.y)) < 0.17453292f) {
             if (ship->b53 != 3) blend_moby_animation(ship, 3, 0, scale_game_frames_c2(6));
             ship->f58 = D_L10_00161EEC;
@@ -2652,8 +2652,8 @@ void blarg_ship_update(Ship_5E48 *ship) {
         }
         desired_heading = fast_arc_tan(tgt->pos.x - ship->pos.x, tgt->pos.y - ship->pos.y);
         FUN_L00_00258278((char *)ship, &d->f198, desired_heading, 0.02f, 0.3f, D_0015ED6C * 12.566371f);
-        b = fast_arc_tan(vector_distance_xy_alt(&ship->pos, &A), A.z - ship->pos.z);
-        ship->f44 = FUN_L00_00258110_c(&d->f19C, ship->f44, -b, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
+        aim_elevation = fast_arc_tan(vector_distance_xy_alt(&ship->pos, &A), A.z - ship->pos.z);
+        ship->f44 = FUN_L00_00258110_c(&d->f19C, ship->f44, -aim_elevation, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
         if (tick_countdown_32_alt(&d->i168)) {
             blend_moby_animation(ship, 3, 0, scale_game_frames_c2(10));
             ship->f58 = D_L10_00161EEC;
