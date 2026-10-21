@@ -128,8 +128,8 @@ void FUN_L13_002eac00(void *mobyp, void *pp) {
     char *moby = mobyp;
     char *starfighter_data = pp;
     float sv[4];
-    float f1;
-    int v;
+    float joint_to_hero_distance;
+    int voice_slot_index;
     char *voice_slot_entry;
     unsigned char c, attack_mode;
 
@@ -190,19 +190,19 @@ s3:
     if (((unsigned char *)moby)[0x20] == 5) {
         goto s308;
     }
-    v = *(int *)(starfighter_data + 0x11C);
-    if (v != -1) {
-        voice_slot_entry = ((char *)&D_0013E550) + v * 0x70;
+    voice_slot_index = *(int *)(starfighter_data + 0x11C);
+    if (voice_slot_index != -1) {
+        voice_slot_entry = ((char *)&D_0013E550) + voice_slot_index * 0x70;
         if (*(int *)(voice_slot_entry + 0x88) == (int)moby && ((unsigned char *)voice_slot_entry)[0x74]) {
-            release_voice_slot(v);
+            release_voice_slot(voice_slot_index);
         }
         *(int *)(starfighter_data + 0x11C) = -1;
     }
     moby_point_position(moby, 0x13, sv);
-    f1 = distance_xyz(sv, ((char *)&D_0013F3D0));
+    joint_to_hero_distance = distance_xyz(sv, ((char *)&D_0013F3D0));
     if (*(int *)(starfighter_data + 0x100) == 0) {
-        if (f1 < 100.0f) {
-          if (60.0f < f1) {
+        if (joint_to_hero_distance < 100.0f) {
+          if (60.0f < joint_to_hero_distance) {
             if (*(int *)(starfighter_data + 0xF8) != 0) {
                 return;
             }
