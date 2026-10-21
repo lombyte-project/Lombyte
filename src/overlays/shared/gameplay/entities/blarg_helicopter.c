@@ -1762,7 +1762,7 @@ extern void FUN_0020c828(void *);
 
 void fred_1_update(char *m) __asm__("FUN_L03_002dc310");
 void fred_1_update(char *moby) {
-    float v[12]; /* unused; sets the frame size */
+    float unused_stack_padding[12]; /* unused; sets the frame size */
     FUN_001f9b48(moby + 0x10, hero.motion.pos.f);
     rotdiff_2dc310(atan_2dc310(hero.motion.pos.f[0] - *(float *)(moby + 0x10),
                                hero.motion.pos.f[1] - *(float *)(moby + 0x14)),
