@@ -440,27 +440,27 @@ void FUN_L06_002291d0(int force) {
     V_2291d0 primary_vector_origin, primary_vector_endpoint, b, secondary_vector_endpoint;
     char *src;
     P_2291d0 *g;
-    f32 off, k, secondary_vector_scale, ang, negative_horizontal_dot;
+    f32 primary_origin_z_offset, k, secondary_vector_scale, ang, negative_horizontal_dot;
     int r;
 
     if (P.h308 != 0)
         return;
     if (FUN_L00_002339d0_2291d0(&P.vE0) < frame_time * 0.1f)
         return;
-    off = 0.3700000047683716f;
+    primary_origin_z_offset = 0.3700000047683716f;
     k = 0.5f;
     if ((u32)(P.i208C - 0x11) < 2) {
-        off = 0.0f;
+        primary_origin_z_offset = 0.0f;
         k = 0.7f;
     } else if (P.b20A4 == 1) {
-        off = 0.35f;
+        primary_origin_z_offset = 0.35f;
         k = 0.27000001072883606f;
     }
     src = D_0013F3D0;
     qcopy(&primary_vector_origin, src);
-    primary_vector_origin.f[2] += off;
+    primary_vector_origin.f[2] += primary_origin_z_offset;
     qcopy(&b, src);
-    b.f[2] += off * 0.3f;
+    b.f[2] += primary_origin_z_offset * 0.3f;
     if (force || FUN_001f9b20_2291d0(src + 0x60) < 0.01f) {
         g = (P_2291d0 *)(src - 0x80);
         secondary_vector_scale = 1.4f;
