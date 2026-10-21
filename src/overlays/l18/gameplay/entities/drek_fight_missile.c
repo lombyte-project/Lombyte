@@ -3522,12 +3522,12 @@ void FUN_L18_002f7880(struct Moby *moby) {
     FUN_L00_00263618(joint_world_position, attached_glow_color, *(float *)&D_L18_00162450_gp, *(float *)&D_L18_00162454_gp);
     if ((unsigned)(moby->prev_seq - 11) < 3) {
         int animation_glow_period_frames = scale_game_frames(*(int *)&D_L18_00162474);
-        float g = convert_integer_to_float(game_frame % animation_glow_period_frames);
+        float animation_glow_cycle_value = convert_integer_to_float(game_frame % animation_glow_period_frames);
         int animation_glow_color;
-        g = g / convert_integer_to_float(animation_glow_period_frames);
-        g = g * 6.18318f;
-        g = fast_sin(g - 3.14159f);
-        animation_glow_color = fast_tween_color(*(int *)&D_L18_0016246C, *(int *)&D_L18_00162470, g * 0.5f + 0.5f);
+        animation_glow_cycle_value = animation_glow_cycle_value / convert_integer_to_float(animation_glow_period_frames);
+        animation_glow_cycle_value = animation_glow_cycle_value * 6.18318f;
+        animation_glow_cycle_value = fast_sin(animation_glow_cycle_value - 3.14159f);
+        animation_glow_color = fast_tween_color(*(int *)&D_L18_0016246C, *(int *)&D_L18_00162470, animation_glow_cycle_value * 0.5f + 0.5f);
         moby_point_position(moby, 5, animation_glow_world_position);
         FUN_L00_00263618(animation_glow_world_position, animation_glow_color, *(float *)&D_L18_00162464, *(float *)&D_L18_00162468);
         moby_point_position(moby, 6, animation_glow_world_position);
