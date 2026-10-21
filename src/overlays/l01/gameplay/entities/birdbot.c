@@ -3398,7 +3398,7 @@ extern void spawn_debris_chunk(void *, void *, u32, s32, f32, f32, f32, f32, s32
 extern void *mine_debris(void *, void *, u32, u32, f32, s32, u32) __asm__("FUN_L00_0026bed0");
 
 void FUN_L01_002f8c58(SteamMoby *steam_moby) {
-    SteamVars *v;
+    SteamVars *steam_vars;
     SteamColors colors;
     SteamVec vel;
     SteamVec pos;
@@ -3410,16 +3410,16 @@ void FUN_L01_002f8c58(SteamMoby *steam_moby) {
     s32 life;
     s32 i;
 
-    v = steam_moby->pvars;
-    fast_dec_timer_s16(&v->puff_timer);
-    fast_dec_timer_s16(&v->burst_timer);
-    if (v->active == 0) {
+    steam_vars = steam_moby->pvars;
+    fast_dec_timer_s16(&steam_vars->puff_timer);
+    fast_dec_timer_s16(&steam_vars->burst_timer);
+    if (steam_vars->active == 0) {
         return;
     }
-    if (tick_countdown_32(v)) {
-        v->puff_timer = scale_game_frames(0x78);
+    if (tick_countdown_32(steam_vars)) {
+        steam_vars->puff_timer = scale_game_frames(0x78);
     }
-    if (v->burst_timer == 0 && random_integer_below(100) < 5) {
+    if (steam_vars->burst_timer == 0 && random_integer_below(100) < 5) {
         colors = D_L01_00161C08;
         pos.q = 0;
         pos.f[0] = random_float_between(frame_time_macro * -0.5f, frame_time_macro * 0.5f);
@@ -3431,7 +3431,7 @@ void FUN_L01_002f8c58(SteamMoby *steam_moby) {
         pos.f[1] = fast_sin(ang) * r;
         pos.f[2] = 0.0f;
         fast_vec_add(&pos, &pos, &steam_moby->pos);
-        pos.f[2] += v->height;
+        pos.f[2] += steam_vars->height;
         spawn_debris_chunk(&pos, &vel, colors.c[random_integer_below(3)],
                          random_int_between(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
     }
@@ -3450,7 +3450,7 @@ void FUN_L01_002f8c58(SteamMoby *steam_moby) {
         fast_vec_add(&puff, &puff, &steam_moby->pos);
         r *= frame_time_macro;
         r *= 8.0f;
-        puff.f[2] += v->height;
+        puff.f[2] += steam_vars->height;
         vel.f[2] += r;
         size = random_float_between(70000.0f, 140000.0f);
         life = scale_game_frames(0xB4);
