@@ -1045,7 +1045,7 @@ extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 void FUN_L00_00273800(char *particle) {
     char *particle_data = particle + 0x20;
-    int w;
+    int packed_color;
     int faded_alpha;
     if (*(short *)(particle_data + 2) == 1) {
         return;
@@ -1055,13 +1055,13 @@ void FUN_L00_00273800(char *particle) {
         *(float *)(particle + 0x14) = *(float *)(*(char **)(particle_data + 4) + 0x14) + *(float *)(particle_data + 0x14);
         *(float *)(particle + 0x18) = *(float *)(*(char **)(particle_data + 4) + 0x18) + *(float *)(particle_data + 0x18);
     }
-    w = *(int *)(particle + 4);
-    faded_alpha = w >> 24;
+    packed_color = *(int *)(particle + 4);
+    faded_alpha = packed_color >> 24;
     faded_alpha -= *(short *)(particle + 0x20);
     if (faded_alpha <= 0) {
         free_effect_particle(particle);
     } else {
-        *(int *)(particle + 4) = (w & 0xFFFFFF) | (faded_alpha << 24);
+        *(int *)(particle + 4) = (packed_color & 0xFFFFFF) | (faded_alpha << 24);
     }
 }
 /* Spawns a type-64 particle at pos moving with vel, sprite size chosen by distance to the hero. */
