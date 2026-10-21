@@ -809,7 +809,7 @@ int FUN_001fa6d0_00272f68(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L00_001B2080_lui[] __asm__("D_L00_001B2080") __attribute__((section(".data")));
 unsigned char *FUN_L00_00272f68(u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode,
                                 float f);
-unsigned char *FUN_L00_00272f68(u128 *position, int packed_color, unsigned char initial_rotation, int idx, int flag, int lifetime_frames, int mode,
+unsigned char *FUN_L00_00272f68(u128 *position, int packed_color, unsigned char initial_rotation, int particle_texture_index, int flag, int lifetime_frames, int mode,
                                 float size_scale) {
     unsigned char *particle = p27fe00_alloc(0x3B);
     if (particle) {
@@ -824,7 +824,7 @@ unsigned char *FUN_L00_00272f68(u128 *position, int packed_color, unsigned char 
         particle[8] = initial_rotation;
         particle[1] = 0;
         *(float *)(particle + 0xc) = size_scale * 210000.0f;
-        particle[2] = *D_L00_001B2080_lui[idx];
+        particle[2] = *D_L00_001B2080_lui[particle_texture_index];
         *(short *)(particle + 0xa) = lifetime_frames;
     }
     return particle;
