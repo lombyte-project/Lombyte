@@ -3027,16 +3027,16 @@ void crane_update(struct Moby *moby) {
     case CRANE_ANIM_TRANSITION_BACK_TO_RANDOM_WAIT:
     case CRANE_ANIM_TRANSITION_TO_RESTART_WAIT:
         if (moby->anim_flags & 2) {
-            int idx;
+            int voice_slot_index;
             moby->anim_time = 0;
             if (moby->prev_seq != moby->command) {
                 blend_moby_animation(moby, moby->command, 0, 0);
             }
-            idx = crane_vars[0];
-            if (idx != -1) {
-                char *voice_slot = D_0013E550 + idx * 0x70;
+            voice_slot_index = crane_vars[0];
+            if (voice_slot_index != -1) {
+                char *voice_slot = D_0013E550 + voice_slot_index * 0x70;
                 if (*(unsigned char **)(voice_slot + 0x88) == moby && ((unsigned char *)voice_slot)[0x74] != 0) {
-                    release_voice_slot(idx);
+                    release_voice_slot(voice_slot_index);
                 }
             }
             crane_vars[0] = -1;
