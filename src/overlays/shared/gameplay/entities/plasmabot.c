@@ -1547,7 +1547,7 @@ extern f32 D_L14_00161B48 __attribute__((sda));
 void FUN_L14_002dfd10(struct Moby *moby) {
     Data_dfd10 *data = (Data_dfd10 *)moby->pvars;
     Vec4 probe;
-    f32 vec[4];
+    f32 position_offset[4];
     f32 *velocity;
     void *points;
     f32 speed;
@@ -1556,17 +1556,17 @@ void FUN_L14_002dfd10(struct Moby *moby) {
         points = race_paths_dfd10[data->path].points;
         qcopy(&probe, &moby->pos);
         follow_path_dfd10(points, &moby->pos, &data->path_t, &data->path_u, 0, data->path_speed);
-        subtract_vector_xyz_dfd10(vec, &moby->pos, &probe);
-        data->offset_x = vec[0];
-        data->offset_y = vec[1];
+        subtract_vector_xyz_dfd10(position_offset, &moby->pos, &probe);
+        data->offset_x = position_offset[0];
+        data->offset_y = position_offset[1];
         FUN_L14_002e03b8(moby);
         if (tick_countdown_dfd10(&data->timer) == 0)
             return;
-        normalize_vector_xyz_dfd10(vec, vec, 0.5f);
+        normalize_vector_xyz_dfd10(position_offset, position_offset, 0.5f);
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.25f;
         FUN_L00_0028dc90_dfd10(1, 0, moby, data->owner->oclass);
-        spawn_explosion_dfd10(moby, vec, &probe, 0.0f, 0.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 1.0f, -1, 15.0f, 0, 3, -1, 0);
+        spawn_explosion_dfd10(moby, position_offset, &probe, 0.0f, 0.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 1.0f, -1, 15.0f, 0, 3, -1, 0);
         coll_sphere_dfd10(1.0f, &moby->pos, 0, (void *)D_001413D0_dfd10);
         mark_moby_for_removal_dfd10(moby);
         return;
@@ -1591,8 +1591,8 @@ void FUN_L14_002dfd10(struct Moby *moby) {
         mark_moby_for_removal_dfd10(moby);
         return;
     }
-    normalize_vector_xyz_dfd10(vec, &moby->rot_row2, 0.52f);
-    add_vector_xyz_dfd10(&probe, &moby->pos, vec);
+    normalize_vector_xyz_dfd10(position_offset, &moby->rot_row2, 0.52f);
+    add_vector_xyz_dfd10(&probe, &moby->pos, position_offset);
     if (tick_countdown_dfd10(&data->timer) != 0 || coll_sphere_dfd10(0.5f, &probe, 0, data->owner) != 0) {
         FUN_L00_0028dc90_dfd10(0, 0, moby, data->owner->oclass);
         spawn_explosion_dfd10(moby, velocity, &moby->pos, 0.0f, 0.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 1.0f, -1, 15.0f, 0, 3, -1, 0);
