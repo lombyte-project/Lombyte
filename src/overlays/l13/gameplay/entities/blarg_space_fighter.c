@@ -3464,7 +3464,7 @@ unsigned char *FUN_L13_002ea540(struct Moby *firing_moby, unsigned char *starfig
     int muzzle_joint_index;
     float projectile_speed;
     unsigned char *spawned_rocket_moby;
-    struct Hero *g;
+    struct Hero *hero_state;
     muzzle_joint_index = (starfighter_data[0xFC] & 1) ? 0x12 : 0x10;
     if (firing_moby->command != 6 || (FUN_001160d8_e5() & 1)) {
         starfighter_data[0xFC] ^= 1;
@@ -3476,11 +3476,11 @@ unsigned char *FUN_L13_002ea540(struct Moby *firing_moby, unsigned char *starfig
     } else {
         FUN_L13_002ea400_c(muzzle_position, &s.b, &s.c, -1.0f);
     }
-    g = &hero;
+    hero_state = &hero;
     projectile_speed = D_0015ED6C_e5 * 18.0f + *(float *)(starfighter_data + 0xAC);
     s.c = firing_moby->rot.z;
     s.b = 0.43633232f;
-    spawned_rocket_moby = FUN_L13_002c13b0_e5(firing_moby, (char *)muzzle_position, ((char *)g->ship_moby), (char *)&s,
+    spawned_rocket_moby = FUN_L13_002c13b0_e5(firing_moby, (char *)muzzle_position, ((char *)hero_state->ship_moby), (char *)&s,
                          projectile_speed, FUN_001f96f8_e5(300), D_0015ED6C_e5 * 18.0f);
     if (spawned_rocket_moby != 0) {
         FUN_0022da68_e5(2, 0, firing_moby);
