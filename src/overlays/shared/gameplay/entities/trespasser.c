@@ -207,10 +207,10 @@ int FUN_001f96f8_002c52a8(int) __asm__("FUN_001f96f8");
 void FUN_L00_00250df8_002c52a8(void *) __asm__("FUN_L00_00250df8");
 void FUN_L00_0025d1b8_002c52a8(void *) __asm__("FUN_L00_0025d1b8");
 unsigned char *spawn_on_path(u128 *a, int b, int c, int d) __asm__("FUN_L00_002c52a8");
-unsigned char *spawn_on_path(u128 *spawn_position, int b, int ammo_amount, int d) {
+unsigned char *spawn_on_path(u128 *spawn_position, int weapon_index, int ammo_amount, int d) {
     unsigned char *spawned_moby = 0;
     {
-        S179AC0_2c52a8 *spawn_config_entry = (S179AC0_2c52a8 *)(b * 0x4C + (u8 *)D_L00_00179AC0_002c52a8);
+        S179AC0_2c52a8 *spawn_config_entry = (S179AC0_2c52a8 *)(weapon_index * 0x4C + (u8 *)D_L00_00179AC0_002c52a8);
         if (spawn_config_entry->h3A > 0)
             spawned_moby = FUN_0020c4f8_002c52a8(spawn_config_entry->h3A);
     }
@@ -224,10 +224,10 @@ unsigned char *spawn_on_path(u128 *spawn_position, int b, int ammo_amount, int d
         spawned_moby[0xbc] = 0;
         qcopy(spawned_moby + 0x10, spawn_position);
         if (ammo_amount == -1)
-            moby_vars[0] = ((VendorItemInfo *)(b * 0x18 + (u8 *)D_L00_001C40B0))->hC;
+            moby_vars[0] = ((VendorItemInfo *)(weapon_index * 0x18 + (u8 *)D_L00_001C40B0))->hC;
         else
             moby_vars[0] = ammo_amount;
-        moby_vars[2] = b;
+        moby_vars[2] = weapon_index;
         *(float *)(moby_vars + 3) = (float)d;
         moby_vars[8] = FUN_001f96f8_002c52a8(0x10);
         *(float *)(moby_vars + 10) = *(float *)(spawned_moby + 0x18);
