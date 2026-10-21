@@ -895,14 +895,14 @@ void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag
 void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag) {
     char *position_destination = D_0013F3D0;
     char *g;
-    char *r;
+    char *rotation_destination;
     qcopy(position_destination, pos);
     g = position_destination - 0x80;
     qcopy(*(char **)(g + 0x2080) + 0x10, pos);
-    r = position_destination + 0x10;
-    qcopy(r, rot);
-    rotation_matrix(g, r);
-    FUN_001fa030_00216f90(*(char **)(g + 0x2080) + 0xC0, r);
+    rotation_destination = position_destination + 0x10;
+    qcopy(rotation_destination, rot);
+    rotation_matrix(g, rotation_destination);
+    FUN_001fa030_00216f90(*(char **)(g + 0x2080) + 0xC0, rotation_destination);
     FUN_L00_002118b0_00216f90();
     FUN_L00_00262840_00216f90(position_destination + 0x15F0);
     *(short *)(g + 0x30E) = 1;
