@@ -11,7 +11,7 @@ void _printf(const char *fmt, char *ap) {
     enum {
         FORMAT_ZERO_PAD_WIDTH = 0
     };
-    char buf[32];
+    char integer_text_buffer[32];
     char *pad;
     char *text_cursor;
     s32 mod;
@@ -44,9 +44,9 @@ void _printf(const char *fmt, char *ap) {
                     } else {
                         fmt += 1;
                     }
-                    pad = &buf[31 - zero_pad_width];
+                    pad = &integer_text_buffer[31 - zero_pad_width];
                     while (zero_pad_width > 0) {
-                        buf[31 - zero_pad_width] = '0';
+                        integer_text_buffer[31 - zero_pad_width] = '0';
                         zero_pad_width--;
                     }
                     goto again;
@@ -66,7 +66,7 @@ void _printf(const char *fmt, char *ap) {
                 } else {
                     integer_value = ARG(u32);
                 }
-                text_cursor = &buf[31];
+                text_cursor = &integer_text_buffer[31];
                 *text_cursor = 0;
                 if (integer_value == 0) {
                     *--text_cursor = '0';
@@ -91,7 +91,7 @@ void _printf(const char *fmt, char *ap) {
                 } else {
                     integer_value = ARG(u32);
                 }
-                text_cursor = &buf[31];
+                text_cursor = &integer_text_buffer[31];
                 *text_cursor = 0;
                 if (integer_value == 0) {
                     *--text_cursor = '0';
@@ -121,7 +121,7 @@ void _printf(const char *fmt, char *ap) {
                 } else {
                     integer_value = ARG(s32);
                 }
-                text_cursor = &buf[31];
+                text_cursor = &integer_text_buffer[31];
                 *text_cursor = 0;
                 if (integer_value == 0) {
                     *--text_cursor = '0';
@@ -150,7 +150,7 @@ void _printf(const char *fmt, char *ap) {
                 } else {
                     integer_value = ARG(u32);
                 }
-                text_cursor = &buf[31];
+                text_cursor = &integer_text_buffer[31];
                 *text_cursor = 0;
                 if (integer_value == 0) {
                     *--text_cursor = '0';
