@@ -2454,12 +2454,12 @@ void FUN_L16_002e8970(struct Moby *moby) {
         TARGET_STATUS_INACTIVE = 0,
         TARGET_STATUS_REPOSITION_READY = 2
     };
-    char *g = (char *)&hero.motion.pos;
+    char *hero_position = (char *)&hero.motion.pos;
     char *data = (char *)moby->pvars;
     char *target;
     int target_status;
     float pos[4];
-    if (!is_point_inside_clip_volume_u(g, *(int *)(data + 8)))
+    if (!is_point_inside_clip_volume_u(hero_position, *(int *)(data + 8)))
         return;
     target = D_L16_0015FFD8 + (*(int *)(data + 4) << 8);
     switch (moby->state) {
@@ -2468,7 +2468,7 @@ void FUN_L16_002e8970(struct Moby *moby) {
         *(int *)(data + 0xC) = scale_game_frames(random_int_between(0xB4, 0x168));
         break;
     case TARGET_CYCLE_WAIT_TO_TRIGGER:
-        if (vector_distance(g, target + 0x10) > 3.0f) {
+        if (vector_distance(hero_position, target + 0x10) > 3.0f) {
             if (FUN_L16_002e8b08(*(int *)data) != 0) {
                 if (FUN_001f9740_c(data + 0xC)) {
                     moby->state = 2;
