@@ -2943,10 +2943,10 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f8e0(float *v, float s);
 
-void FUN_L13_002e9680(void *unused, char *parent_data, int idx) {
+void FUN_L13_002e9680(void *unused, char *parent_data, int child_slot_index) {
     char *base = parent_data + 0xC4;
-    int off = idx * 4;
-    char **slot = (char **)(base + off);
+    int child_slot_byte_offset = child_slot_index * 4;
+    char **slot = (char **)(base + child_slot_byte_offset);
     char *moby = *slot;
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
