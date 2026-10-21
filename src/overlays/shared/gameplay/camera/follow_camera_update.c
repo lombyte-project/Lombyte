@@ -826,14 +826,14 @@ u8 *FUN_L00_001eb1f8_2eaaa0(s32) __asm__("FUN_L00_001eb1f8");
 void FUN_001ebf10_2eaaa0(u8 *) __asm__("FUN_001ebf10");
 void FUN_L00_001ed630_2eaaa0(void *, V_2eaaa0 *, V_2eaaa0 *) __asm__("FUN_L00_001ed630");
 void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
-void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) {
+void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 transition_duration_frames, s32 x) {
     u8 *camera_record = FUN_L00_001eb1f8_2eaaa0(5);
-    V_2eaaa0 requested_position, b, saved_camera_position, saved_camera_rotation;
+    V_2eaaa0 requested_position, requested_rotation, saved_camera_position, saved_camera_rotation;
     u8 *camera_state;
     u8 *transition_state;
     u8 *target_position;
     qcopy(&requested_position, pa);
-    qcopy(&b, pb);
+    qcopy(&requested_rotation, pb);
     qcopy(&saved_camera_position, &D_L00_00166DC0_2eaaa0[0]);
     qcopy(&saved_camera_rotation, &D_L00_00166DC0_2eaaa0[1]);
     FUN_001ebf10_2eaaa0(camera_record);
@@ -844,9 +844,9 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) {
     camera_record[0x7D] = 1;
     qcopy(camera_record + 0x30, &requested_position);
     qcopy(&D_L00_00166DC0_2eaaa0[0], &requested_position);
-    qcopy(camera_record + 0x40, &b);
+    qcopy(camera_record + 0x40, &requested_rotation);
     qcopy(target_position, &requested_position);
-    qcopy(camera_state + 0x90, &b);
+    qcopy(camera_state + 0x90, &requested_rotation);
     *(s32 *)(transition_state + 0x40) = x;
     camera_record[0x88] = mode;
     if (mode != 2) {
@@ -859,8 +859,8 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) {
         qcopy(camera_state + 0x110, &D_0013F3D0_2eaaa0);
         FUN_L00_001ed630_2eaaa0(camera_state + 0xFC, &saved_camera_position, &D_0013F3D0_2eaaa0);
     }
-    *(s32 *)(transition_state + 4) = w;
-    *(s32 *)(camera_state + 0xE0) = w;
+    *(s32 *)(transition_state + 4) = transition_duration_frames;
+    *(s32 *)(camera_state + 0xE0) = transition_duration_frames;
 }
 extern char D_L00_00166C80_2eac18[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
 void FUN_L00_001eb448_2eac18(void) __asm__("FUN_L00_001eb448");
