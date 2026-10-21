@@ -254,7 +254,7 @@ extern short D_L10_00162050 __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
+void FUN_L10_002eaa08(void *emission_position, short *timer, short *burst, float height) {
     float visibility_sphere[4];
     float vel[4];
     float acc[4];
@@ -269,7 +269,7 @@ void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
         if (++*burst != 0) return;
         *burst = func_001FA898_r(random_float_between((float)*(int *)&D_L10_0016203C, (float)*(int *)&D_L10_00162040));
     }
-    qcopy(visibility_sphere, pos);
+    qcopy(visibility_sphere, emission_position);
     visibility_sphere[3] = 3.0f;
     visibility_sphere[2] -= 4.0f;
     if (fast_bsphere_check((char *)visibility_sphere, 32.0f) == -1) return;
@@ -284,7 +284,7 @@ void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
     vel[3] = random_float_between(*(float *)&D_L10_00162008, *(float *)&D_L10_0016200C);
     acc[3] = random_float_between(*(float *)&D_L10_00162010, *(float *)&D_L10_00162014);
     initial_spark_color = fast_tween_color(D_L10_00162024, D_L10_00162028, random_float_between(0.0f, 1.0f));
-    spawn_spark(pos, vel, acc, initial_spark_color, fast_tween_color(D_L10_0016202C, D_L10_00162030, random_float_between(0.0f, 1.0f)), frame_count, second_frame_count, third_frame_count, D_L10_0016204C);
+    spawn_spark(emission_position, vel, acc, initial_spark_color, fast_tween_color(D_L10_0016202C, D_L10_00162030, random_float_between(0.0f, 1.0f)), frame_count, second_frame_count, third_frame_count, D_L10_0016204C);
     *timer = func_001FA898_r(random_float_between((float)*(int *)&D_L10_00162034, (float)*(int *)&D_L10_00162038));
 }
 #define NOT_SDA
