@@ -3576,23 +3576,23 @@ void falling_rock_update(CapMoby *falling_rock) {
     falling_rock_vars = falling_rock->pvars;
     if (falling_rock->state != 1 && !fast_dec_timer_s16(&falling_rock_vars->wait) && random_integer_below(100) < 5) {
         CapColors colors;
-        CapVec vel;
+        CapVec debris_initial_velocity;
         CapVec pos;
         f32 debris_spawn_radius;
-        f32 ang;
+        f32 debris_spawn_angle;
 
         colors = D_L01_00161C40;
         pos.q = 0;
         pos.f[0] = random_float_between(frame_time_macro * -0.5f, frame_time_macro * 0.5f);
         pos.f[1] = random_float_between(frame_time_macro * -0.5f, frame_time_macro * 0.5f);
-        vel.q = pos.q;
+        debris_initial_velocity.q = pos.q;
         debris_spawn_radius = random_float_between(2.0f, 3.0f);
-        ang = random_angle_radians();
-        pos.f[0] = fast_cos(ang) * debris_spawn_radius;
-        pos.f[1] = fast_sin(ang) * debris_spawn_radius;
+        debris_spawn_angle = random_angle_radians();
+        pos.f[0] = fast_cos(debris_spawn_angle) * debris_spawn_radius;
+        pos.f[1] = fast_sin(debris_spawn_angle) * debris_spawn_radius;
         pos.f[2] = 0.0f;
         fast_vec_add(&pos, &pos, &falling_rock_vars->home);
-        spawn_debris_chunk(&pos, &vel, colors.c[random_integer_below(3)],
+        spawn_debris_chunk(&pos, &debris_initial_velocity, colors.c[random_integer_below(3)],
                          random_int_between(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
     }
     switch (falling_rock->state) {
