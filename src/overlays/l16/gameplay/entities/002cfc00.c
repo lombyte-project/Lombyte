@@ -46,10 +46,10 @@ void FUN_L16_002cfc00(struct Moby *moby) {
             if (*(short *)(l1 + 0xA6) == 0x473) {
                 float adjusted_position[4];
                 float m[16];
-                char *pos = l1;
+                char *candidate_moby = l1;
                 qcopy(adjusted_position, data + 0x260);
                 adjusted_position[2] += 0.8f;
-                subtract_vector_xyz(displacement_vector, pos + 0x10, adjusted_position);
+                subtract_vector_xyz(displacement_vector, candidate_moby + 0x10, adjusted_position);
                 if (!(8.0f < vector_length_xyz(displacement_vector))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, l1 + 0xC0);
