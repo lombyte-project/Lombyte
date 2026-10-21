@@ -2138,7 +2138,7 @@ void magnet_elevator_update(struct Moby *moby) {
     float delta[4];
     float rot[4];
     float camera_position_offset[4];
-    float b[4];
+    float camera_position[4];
     float camera_rotation[4];
 
     scale_vector_xyz(delta, &moby->pos, -1.0f);
@@ -2173,16 +2173,16 @@ void magnet_elevator_update(struct Moby *moby) {
         if ((*(float *)((char *)(state) + (0x70))) < 1.0f) {
             float t = (1.0f - (*(float *)((char *)(state) + (0x70)))) / (1.0f - old);
             char *base;
-            FUN_L17_002ee9c0_c(moby, (char *)b, (char *)camera_rotation);
-            subtract_vector_xyz(camera_position_offset, D_L17_001676C0, b);
+            FUN_L17_002ee9c0_c(moby, (char *)camera_position, (char *)camera_rotation);
+            subtract_vector_xyz(camera_position_offset, D_L17_001676C0, camera_position);
             base = D_L17_001676C0 - 0x140;
             scale_vector_xyz(camera_position_offset, camera_position_offset, t);
-            add_vector_xyz(b, b, camera_position_offset);
+            add_vector_xyz(camera_position, camera_position, camera_position_offset);
             camera_rotation[1] = fast_add_rotations(
                 fast_subtract_rotations((*(float *)((char *)(base) + (0x154))), camera_rotation[1]) * t, camera_rotation[1]);
             camera_rotation[2] = fast_add_rotations(
                 fast_subtract_rotations((*(float *)((char *)(base) + (0x158))), camera_rotation[2]) * t, camera_rotation[2]);
-            FUN_L00_002ea9d8(b);
+            FUN_L00_002ea9d8(camera_position);
             FUN_L00_002eaa30(camera_rotation);
         } else {
             unsigned char s = B(moby, 0xBC);
