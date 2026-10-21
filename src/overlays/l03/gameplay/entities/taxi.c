@@ -667,7 +667,7 @@ extern void set_path_2cc888(void *, void *, int, int, int, float) __asm__("FUN_L
 
 /* Spawns a projectile moby (class 0x273) at pos, heading along dir,
  * owned by parent p. */
-char *FUN_L03_002cc888(char *parent_moby, void *pos, float *dir) {
+char *FUN_L03_002cc888(char *parent_moby, void *pos, float *launch_velocity) {
     char *spawned_moby = create_moby_2cc888(0x273);
     char *spawned_moby_vars;
     float frame_scale_squared;
@@ -684,8 +684,8 @@ char *FUN_L03_002cc888(char *parent_moby, void *pos, float *dir) {
     frame_scale_squared = frame_scale_sq;
     *(float *)(spawned_moby_vars + 0x10) = frame_scale_squared * 0.008f;
     *(float *)(spawned_moby_vars + 0x14) = frame_scale_squared * 0.0005f;
-    *(float *)(spawned_moby_vars + 0x18) = vlen_2cc888(dir);
-    *(float *)(spawned_moby_vars + 0x1C) = dir[2];
+    *(float *)(spawned_moby_vars + 0x18) = vlen_2cc888(launch_velocity);
+    *(float *)(spawned_moby_vars + 0x1C) = launch_velocity[2];
     *(int *)(spawned_moby_vars + 0x20) = 0x400;
     *(float *)(spawned_moby_vars + 0x28) = 1.0f;
     *(float *)(spawned_moby_vars + 0x30) = 0.75f;
@@ -695,7 +695,7 @@ char *FUN_L03_002cc888(char *parent_moby, void *pos, float *dir) {
     *(float *)(spawned_moby_vars + 0x4C) = 0.01f;
     spawned_moby_vars[0x3D] = 0;
     *(int *)(spawned_moby_vars + 0x24) = 1;
-    set_path_2cc888(spawned_moby, spawned_moby_vars, 0, 1, 0, atan2_2cc888(dir[0], dir[1]));
+    set_path_2cc888(spawned_moby, spawned_moby_vars, 0, 1, 0, atan2_2cc888(launch_velocity[0], launch_velocity[1]));
     *(char **)(spawned_moby_vars + 0x68) = parent_moby;
     *(int *)(spawned_moby_vars + 0x6C) = 0;
     spawned_moby[0x20] = 1;
