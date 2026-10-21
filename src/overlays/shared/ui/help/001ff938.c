@@ -218,7 +218,7 @@ void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
 
 void FUN_L15_00208ca8(void) {
     unsigned char *base = ((unsigned char *)&D_0013E533) + 0xE1D;
-    unsigned char *b;
+    unsigned char *hero_state_bytes;
     int flag_clear_target;
     void *moby_to_remove;
     char *restored_hero_moby;
@@ -230,26 +230,26 @@ void FUN_L15_00208ca8(void) {
         }
     }
     FUN_L00_00205538();
-    b = ((unsigned char *)&D_0013E533) + 0xE1D;
-    flag_clear_target = *(int *)(b + 0xA84);
-    b[0x20A4] = 0;
+    hero_state_bytes = ((unsigned char *)&D_0013E533) + 0xE1D;
+    flag_clear_target = *(int *)(hero_state_bytes + 0xA84);
+    hero_state_bytes[0x20A4] = 0;
     if (flag_clear_target != 0) {
         *(unsigned short *)(flag_clear_target + 0x34) &= 0xFFF9;
     }
-    moby_to_remove = *(void **)(b + 0xA8C);
-    *(int *)(b + 0xA84) = 0;
+    moby_to_remove = *(void **)(hero_state_bytes + 0xA8C);
+    *(int *)(hero_state_bytes + 0xA84) = 0;
     if (moby_to_remove != 0) {
         mark_moby_for_removal(moby_to_remove);
-        *(int *)(b + 0xA8C) = 0;
+        *(int *)(hero_state_bytes + 0xA8C) = 0;
     }
     FUN_L00_00206c08();
-    restored_hero_moby = *(char **)(b + 0xA88);
-    *(char **)(b + 0x2080) = restored_hero_moby;
-    qcopy(restored_hero_moby + 0x10, b + 0x80);
+    restored_hero_moby = *(char **)(hero_state_bytes + 0xA88);
+    *(char **)(hero_state_bytes + 0x2080) = restored_hero_moby;
+    qcopy(restored_hero_moby + 0x10, hero_state_bytes + 0x80);
     *(int *)(restored_hero_moby + 0x98) = 0;
-    *(float *)(b + 0xA94) = 1.0f;
+    *(float *)(hero_state_bytes + 0xA94) = 1.0f;
     FUN_L00_00232628();
-    if (*(int *)(b + 0x2084) != 100 || (D_L15_0015F5C4 != 2 && D_L15_0015F5C4 != 6)) {
+    if (*(int *)(hero_state_bytes + 0x2084) != 100 || (D_L15_0015F5C4 != 2 && D_L15_0015F5C4 != 6)) {
         hero_set_state(HERO_STATE_IDLE, 1);
     }
 }
