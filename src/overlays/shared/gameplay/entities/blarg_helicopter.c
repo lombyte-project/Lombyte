@@ -1365,12 +1365,12 @@ void FUN_L03_002ce238(char *helicopter_moby) {
     float fv;
     int res;
     char *helicopter_data;
-    char *r;
-    float reaction_heading_angle, b, reaction_roll_angle, reaction_pitch_angle;
+    char *hit_record;
+    float reaction_heading_angle, reaction_relative_heading_angle, reaction_roll_angle, reaction_pitch_angle;
     helicopter_data = *(char **)(helicopter_moby + 0x78);
     fv = 0.0f;
-    r = find_moby_hit(helicopter_moby, 0x330000, 0);
-    res = hit_reaction(helicopter_moby, r, helicopter_data + 0x20, 0, &st, &fv, 0, 4);
+    hit_record = find_moby_hit(helicopter_moby, 0x330000, 0);
+    res = hit_reaction(helicopter_moby, hit_record, helicopter_data + 0x20, 0, &st, &fv, 0, 4);
     if (st != 1 && *(unsigned char *)(helicopter_moby + 0x20) != 5) {
         float remaining_health = *(float *)(helicopter_data + 0x20) - fv;
         *(float *)(helicopter_data + 0x20) = remaining_health;
@@ -1379,12 +1379,12 @@ void FUN_L03_002ce238(char *helicopter_moby) {
         } else if (res != 0xB) {
             *(unsigned char *)(helicopter_data + 0x67) = 0xB4;
             trooper_anim_update(helicopter_moby, (short *)(helicopter_data + 0x60));
-            if (*(float *)(r + 0x1C) == 5627.925f && *(unsigned char *)(helicopter_moby + 0x20) != 4) {
-                reaction_heading_angle = fast_arc_tan(*(float *)(helicopter_moby + 0x10) - *(float *)(r + 0),
-                                 *(float *)(helicopter_moby + 0x14) - *(float *)(r + 4));
-                b = fast_subtract_rotations(reaction_heading_angle, *(float *)(helicopter_moby + 0x48));
-                reaction_roll_angle = fast_cos(b) * 0.08726646f;
-                reaction_pitch_angle = fast_sin(b) * -0.34906584f;
+            if (*(float *)(hit_record + 0x1C) == 5627.925f && *(unsigned char *)(helicopter_moby + 0x20) != 4) {
+                reaction_heading_angle = fast_arc_tan(*(float *)(helicopter_moby + 0x10) - *(float *)(hit_record + 0),
+                                 *(float *)(helicopter_moby + 0x14) - *(float *)(hit_record + 4));
+                reaction_relative_heading_angle = fast_subtract_rotations(reaction_heading_angle, *(float *)(helicopter_moby + 0x48));
+                reaction_roll_angle = fast_cos(reaction_relative_heading_angle) * 0.08726646f;
+                reaction_pitch_angle = fast_sin(reaction_relative_heading_angle) * -0.34906584f;
                 if (absolute_float(*(float *)(helicopter_moby + 0x40)) < absolute_float(reaction_pitch_angle)) {
                     *(float *)(helicopter_moby + 0x40) = reaction_pitch_angle;
                     *(float *)(helicopter_data + 0x218) = 0.0f;
