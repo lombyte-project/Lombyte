@@ -1272,10 +1272,10 @@ s32 use_ammo(s32 idx, s32 amount) {
 extern int weapon_ammo_counts[] __asm__("D_0013D428");
 /* Adds b to counter a, capping it at the entry's limit; returns the overflow or 0. */
 int add_ammo(int a, int b) __asm__("FUN_L00_00233e40");
-int add_ammo(int weapon_index, int b) {
+int add_ammo(int weapon_index, int ammo_amount) {
     int *ammo_count = &weapon_ammo_counts[weapon_index];
     unsigned short *vendor_item_halfwords = (unsigned short *)(((char *)D_L00_001C40B0) + weapon_index * 0x18);
-    int v = *ammo_count + b;
+    int v = *ammo_count + ammo_amount;
     unsigned short t = vendor_item_halfwords[7];
     *ammo_count = v;
     if (t != 0) {
