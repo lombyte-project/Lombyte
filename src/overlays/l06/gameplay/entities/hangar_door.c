@@ -281,10 +281,10 @@ void FUN_L06_002fb090(char *moby) {
         moby_index_cursor = moby_index_list;
         do {
             int off = (*(unsigned short *)moby_index_cursor & 0x7FFF) << 8;
-            float v[4];
-            qcopy(v, (char *)(off + (int)D_L06_0015FFD8) + 0x10);
-            v[2] = v[2] + random_float_between_alt(15.0f, 20.0f);
-            FUN_L06_002e9d10((char *)((int)D_L06_0015FFD8 + off), v);
+            float raised_position[4];
+            qcopy(raised_position, (char *)(off + (int)D_L06_0015FFD8) + 0x10);
+            raised_position[2] = raised_position[2] + random_float_between_alt(15.0f, 20.0f);
+            FUN_L06_002e9d10((char *)((int)D_L06_0015FFD8 + off), raised_position);
         } while (*moby_index_cursor++ >= 0);
     }
 }
