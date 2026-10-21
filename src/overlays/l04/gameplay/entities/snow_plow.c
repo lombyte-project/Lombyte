@@ -1086,7 +1086,7 @@ void woodcut_bot_update(WBMoby *m) {
             for (i = 0; i < 20; i++) {
                 float p[4];
                 float vel[4];
-                float off[4];
+                float upward_biased_random_direction[4];
                 float rot[4];
                 float mtx[16];
 
@@ -1094,14 +1094,14 @@ void woodcut_bot_update(WBMoby *m) {
                 rot[0] = random_float_between(-1.0f, 1.0f);
                 rot[1] = random_float_between(-1.0f, 1.0f);
                 rot[2] = random_float_between(-1.0f, 1.0f);
-                *(OvlQuad *)off = *(OvlQuad *)rot;
+                *(OvlQuad *)upward_biased_random_direction = *(OvlQuad *)rot;
                 moby_point_position(m, 0, p);
                 vel[0] = fast_cos(m->rot[2]) * -(random_float_between(5.0f, 10.0f) * frame_time);
                 vel[1] = fast_sin(m->rot[2]) * -(random_float_between(5.0f, 10.0f) * frame_time);
                 vel[2] = 0.0f;
-                normalize_vector_xyz(off, off, frame_time * 3.0f);
-                off[2] += frame_time * 3.0f;
-                FUN_L00_001ff290(mtx, vel, off);
+                normalize_vector_xyz(upward_biased_random_direction, upward_biased_random_direction, frame_time * 3.0f);
+                upward_biased_random_direction[2] += frame_time * 3.0f;
+                FUN_L00_001ff290(mtx, vel, upward_biased_random_direction);
                 rot[0] = random_angle_radians();
                 rot[1] = random_angle_radians();
                 rot[2] = random_angle_radians();
