@@ -1107,18 +1107,18 @@ void gravity_set_z(f32 *out, f32 *in, f32 z) {
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
 
-void FUN_L00_00233ba0(float *dst, float *src, float z) {
+void FUN_L00_00233ba0(float *output_vector, float *input_vector, float z) {
     struct Hero *base = &hero;
 
     switch (base->unk20B3) {
     case HERO_GRAVITY_WORLD_DOWN:
-        set_vector_length_xy(dst, src, z);
+        set_vector_length_xy(output_vector, input_vector, z);
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        transform_vector(dst, src, base->unk40);
-        set_vector_length_xy(dst, dst, z);
-        transform_vector(dst, dst, base->unk0);
+        transform_vector(output_vector, input_vector, base->unk40);
+        set_vector_length_xy(output_vector, output_vector, z);
+        transform_vector(output_vector, output_vector, base->unk0);
         break;
     }
 }
