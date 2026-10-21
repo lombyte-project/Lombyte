@@ -281,10 +281,10 @@ int FUN_L00_002c5be8(char *pickup_moby) {
         f99f8_2c5be8(pickup_vars + 4);
         {
             int event_counter_delta = D_15F5CC_2c5be8 - D_L00_00161838;
-            int r;
+            int event_gate_threshold;
             *(float *)(pickup_vars + 9) = D_0015ED6C_2c5be8 * 8.0f;
-            r = f99a8_2c5be8(event_counter_delta);
-            if (f96f8_2c5be8(10) < r) {
+            event_gate_threshold = f99a8_2c5be8(event_counter_delta);
+            if (f96f8_2c5be8(10) < event_gate_threshold) {
                 f8dc90_2c5be8(0, 0, pickup_moby, 0xD5);
                 D_L00_00161838 = D_15F5CC_2c5be8;
             }
