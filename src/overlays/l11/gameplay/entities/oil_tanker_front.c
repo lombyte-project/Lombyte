@@ -1694,10 +1694,10 @@ void FUN_L11_0031ae68(struct Moby *source_moby, float *ground, int spark_count, 
     int i;
     for (i = 0; i < spark_count; i++) {
         float emission_angle = random_angle_radians();
-        float r = random_float_between(D_0015ED6C_n[1] * 0.0f, D_0015ED6C_n[1] * 6.0f);
+        float horizontal_emission_scale = random_float_between(D_0015ED6C_n[1] * 0.0f, D_0015ED6C_n[1] * 6.0f);
         int k;
-        v[0] = fast_cos(emission_angle) * r;
-        v[1] = fast_sin(emission_angle) * r;
+        v[0] = fast_cos(emission_angle) * horizontal_emission_scale;
+        v[1] = fast_sin(emission_angle) * horizontal_emission_scale;
         v[2] = random_float_between(D_0015ED6C_n[1] * 3.0f, D_0015ED6C_n[1] * 6.5f);
         k = random_int_between(0x5A, 0x78);
         FUN_L00_0026f548(&source_moby->pos, v, random_integer_below(2), k);
