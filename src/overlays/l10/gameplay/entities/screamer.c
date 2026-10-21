@@ -2356,11 +2356,11 @@ float FUN_L10_002e4840(struct Moby *self) {
                 FUN_001f9b48(&D_L10_0015FFD0_e[2][idx].x, owner + 0x10) < dist) {
                 float d = fast_arc_tan(D_L10_0015FFD0_e[2][idx].x - *(float *)(owner + 0x10),
                                        D_L10_0015FFD0_e[2][idx].y - *(float *)(owner + 0x14));
-                float r = fast_subtract_rotations(d, ang);
-                if (r > 0.0f && r < hi) {
-                    hi = r;
-                } else if (r < 0.0f && r > lo) {
-                    lo = r;
+                float group_angle_offset = fast_subtract_rotations(d, ang);
+                if (group_angle_offset > 0.0f && group_angle_offset < hi) {
+                    hi = group_angle_offset;
+                } else if (group_angle_offset < 0.0f && group_angle_offset > lo) {
+                    lo = group_angle_offset;
                 }
             }
         } while (*group_entry++ >= 0);
