@@ -1653,7 +1653,7 @@ void FUN_L11_00310698(struct Moby *psytcopus) {
         HIT_REACTION_NO_RESPONSE = 11
     };
     struct PokiPathVars *pv = (struct PokiPathVars *)psytcopus->pvars;
-    Vec4f v;
+    Vec4f projectile_and_hit_vector_scratch;
     int hits;
     float damage;
     float angle1;
@@ -1666,10 +1666,10 @@ void FUN_L11_00310698(struct Moby *psytcopus) {
     FUN_001f9740_p(&pv->unk158);
     psytcopus->scale = psytcopus->pclass->scale * D_L11_00161F9C;
     if (pv->unk160 != 0) {
-        normalize_0180(&v, &psytcopus->rot_row0, D_L11_00161FC8);
-        add_0180(&v, &v, &psytcopus->pos);
-        v.z += D_L11_00161FCC;
-        FUN_L11_00318e78_p(pv->unk160, &v);
+        normalize_0180(&projectile_and_hit_vector_scratch, &psytcopus->rot_row0, D_L11_00161FC8);
+        add_0180(&projectile_and_hit_vector_scratch, &projectile_and_hit_vector_scratch, &psytcopus->pos);
+        projectile_and_hit_vector_scratch.z += D_L11_00161FCC;
+        FUN_L11_00318e78_p(pv->unk160, &projectile_and_hit_vector_scratch);
     }
     damage = 0.0f;
     info = hit_info_0698(psytcopus, 0x330000, 0);
@@ -1705,9 +1705,9 @@ void FUN_L11_00310698(struct Moby *psytcopus) {
             pv->unkC4 = 6.0f;
             source_to_psytcopus_heading = atan2_0180(psytcopus->pos.x - (*(struct Moby **)(info + 0x20))->pos.x,
                                 psytcopus->pos.y - (*(struct Moby **)(info + 0x20))->pos.y);
-            *(u128 *)&v = *(u128 *)(info + 0x10);
+            *(u128 *)&projectile_and_hit_vector_scratch = *(u128 *)(info + 0x10);
             angle1 = source_to_psytcopus_heading;
-            FUN_L00_0025ab48_p(&v, &angle1, &pv->unk88, &pv->unk8C);
+            FUN_L00_0025ab48_p(&projectile_and_hit_vector_scratch, &angle1, &pv->unk88, &pv->unk8C);
             FUN_L00_0025c558_p(psytcopus, pv->unk70, 5, 1, 0, angle1);
             psytcopus->state = 7;
             pv->unk67 = 0x78;
@@ -1727,9 +1727,9 @@ void FUN_L11_00310698(struct Moby *psytcopus) {
             pv->unkC4 = 10.0f;
             source_to_psytcopus_heading = atan2_0180(psytcopus->pos.x - (*(struct Moby **)(info + 0x20))->pos.x,
                                 psytcopus->pos.y - (*(struct Moby **)(info + 0x20))->pos.y);
-            *(u128 *)&v = *(u128 *)(info + 0x10);
+            *(u128 *)&projectile_and_hit_vector_scratch = *(u128 *)(info + 0x10);
             angle2 = source_to_psytcopus_heading;
-            FUN_L00_0025ab48_p(&v, &angle2, &pv->unk88, &pv->unk8C);
+            FUN_L00_0025ab48_p(&projectile_and_hit_vector_scratch, &angle2, &pv->unk88, &pv->unk8C);
             FUN_L00_0025c558_p(psytcopus, pv->unk70, 6, 1, 0, angle2);
             psytcopus->state = 8;
             pv->unk67 = 0xF0;
