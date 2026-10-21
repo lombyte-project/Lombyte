@@ -106,7 +106,7 @@ extern _Bigint *_Balloc(struct _reent *, s32);
 extern s32 _hi0bits(u32);
 extern s32 _lo0bits(u32 *);
 
-_Bigint *_d2b(struct _reent *ptr, f64 _d, s32 *binary_exponent, s32 *bits) {
+_Bigint *_d2b(struct _reent *reent_context, f64 _d, s32 *binary_exponent, s32 *bits) {
     double_union d;
     _Bigint *significand_bigint;
     s32 de, i, k;
@@ -114,7 +114,7 @@ _Bigint *_d2b(struct _reent *ptr, f64 _d, s32 *binary_exponent, s32 *bits) {
 
     d.d = _d;
     d.d = _d;
-    significand_bigint = _Balloc(ptr, 1);
+    significand_bigint = _Balloc(reent_context, 1);
     x = significand_bigint->_x;
     z = d0 & Frac_mask;
     d0 &= 0x7fffffff;
