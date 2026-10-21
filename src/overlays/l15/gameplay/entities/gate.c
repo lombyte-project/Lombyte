@@ -2525,7 +2525,7 @@ extern void FUN_0024f560(float, void *, void *) __asm__("FUN_L02_00261c80");
 extern void FUN_0024f7e0(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern float FUN_001f8bc8(void *, void *) __asm__("FUN_001f9b48");
 
-void FUN_L15_002d0fa8(void *arg) {
+void FUN_L15_002d0fa8(void *ultramech_instance) {
     enum {
         HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_DEATH = 1,
@@ -2540,7 +2540,7 @@ void FUN_L15_002d0fa8(void *arg) {
         HIT_REACTION_DAMAGE_WITHOUT_KNOCKBACK_ALTERNATE = 10,
         HIT_REACTION_NONE = 11
     };
-    UMoby *ultramech_moby = arg;
+    UMoby *ultramech_moby = ultramech_instance;
     UData *ultramech_vars = ultramech_moby->data;
     char *slot = 0;
     int kind;
