@@ -145,19 +145,19 @@ extern float frame_time_sq __asm__("D_0015ED70");
 int FUN_001efa68_2d81b8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 int FUN_L00_0025e3b8_2d81b8(void *) __asm__("FUN_L00_0025e3b8");
 void FUN_L00_002d81b8(unsigned char *moby) {
-    V_2d81b8 probe_start_position, b;
+    V_2d81b8 probe_start_position, probe_end_position;
     D_2d81b8 *moby_data = *(D_2d81b8 **)(moby + 0x78);
     int hit = 0;
     float z, f;
     qcopy(&probe_start_position, moby + 0x10);
     probe_start_position.f[2] += 0.5f;
-    qcopy(&b, &probe_start_position);
-    b.f[2] -= 1.5f;
-    if (FUN_001efa68_2d81b8(&probe_start_position, &b, 2, moby, 0)) {
+    qcopy(&probe_end_position, &probe_start_position);
+    probe_end_position.f[2] -= 1.5f;
+    if (FUN_001efa68_2d81b8(&probe_start_position, &probe_end_position, 2, moby, 0)) {
         z = D_L00_00173E68_2d81b8;
         hit = 1;
     } else {
-        z = b.f[2];
+        z = probe_end_position.f[2];
     }
     if (hit) {
         G_2d81b8 *g = &(*(G_2d81b8 *)D_L00_00173E40_lui);
