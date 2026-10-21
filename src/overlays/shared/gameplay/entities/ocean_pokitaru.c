@@ -93,7 +93,7 @@ extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_00250df8(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float travel_distance, float step_length) {
+unsigned char *FUN_L11_00308848(char *owner, float *launch_direction, float *spawn_position, float travel_distance, float step_length) {
     unsigned char *spawned_moby = func_0020D348_m(0x3F1);
     if (spawned_moby) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
@@ -103,17 +103,17 @@ unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float trave
         *(short *)(spawned_moby + 0x32) = func_001FA898_r(travel_distance);
         *(int *)(spawned_moby + 0x40) = 0;
         spawned_moby[0x31] = 1;
-        direction_length_xy = vector_length_xy(dir);
-        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(direction_length_xy, dir[2]);
-        *(float *)(spawned_moby + 0x48) = fast_arc_tan(dir[0], dir[1]);
+        direction_length_xy = vector_length_xy(launch_direction);
+        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(direction_length_xy, launch_direction[2]);
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(launch_direction[0], launch_direction[1]);
         *(float *)(moby_vars + 0x10) = 1.0f;
         if (step_length > 0.0f) {
-            fast_vec_normalize(moby_vars, dir, step_length);
+            fast_vec_normalize(moby_vars, launch_direction, step_length);
         } else {
-            qcopy(moby_vars, dir);
-            step_length = fast_vec_length(dir);
+            qcopy(moby_vars, launch_direction);
+            step_length = fast_vec_length(launch_direction);
         }
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(spawned_moby + 0x10, spawn_position);
         *(int *)(moby_vars + 0x18) = *(int *)(moby_vars + 0x14) = func_001FA898_r(travel_distance / step_length);
         *(short *)(spawned_moby + 0x34) = 0x200;
         *(float *)(spawned_moby + 0x2C) =
