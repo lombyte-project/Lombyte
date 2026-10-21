@@ -2220,20 +2220,20 @@ s32 FUN_L00_002e5678(void *mm, void *input_offset, void *out_target_position, s3
         CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY = 7
     };
     u8 *camera = mm;
-    s32 r = 1;
+    s32 attach_mode_return_flag = 1;
     u8 *stored_focus_position = *(u8 **)(camera + 0x70) + 0x40;
     f32 t[4] __attribute__((aligned(16)));
     switch (k) {
     case CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY:
     case CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY:
         fast_vec_add(out_target_position, input_offset, stored_focus_position);
-        r = 0;
+        attach_mode_return_flag = 0;
         break;
     case CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION:
     case CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY:
     case CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY:
         fast_vec_add(out_target_position, input_offset, stored_focus_position);
-        r = 0;
+        attach_mode_return_flag = 0;
         break;
     case CAM_ATTACH_HERO_POSITION_BASE:
         follow_camera_hero_target((int)camera, t);
@@ -2244,7 +2244,7 @@ s32 FUN_L00_002e5678(void *mm, void *input_offset, void *out_target_position, s3
         fast_vec_add(out_target_position, input_offset, stored_focus_position);
         break;
     }
-    return r;
+    return attach_mode_return_flag;
 }
 typedef struct {
     f32 v[4];
