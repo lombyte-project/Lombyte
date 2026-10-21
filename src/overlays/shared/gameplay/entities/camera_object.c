@@ -1766,13 +1766,13 @@ void FUN_L00_002a82c0(unsigned char *wrench_moby) {
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void FUN_001f9bf8_u(float *, float *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L00_002a8418(float *v) {
+void FUN_L00_002a8418(float *in_out_vector) {
     float k = 1.8325957f;
-    float vector_heading_angle = fast_arc_tan(v[0], v[1]);
+    float vector_heading_angle = fast_arc_tan(in_out_vector[0], in_out_vector[1]);
     float clamped_heading_difference = fast_difference_between_rotations(hero.motion.rot.f[2], vector_heading_angle);
     if (clamped_heading_difference > k)
         clamped_heading_difference = k;
-    FUN_001f9bf8_u(v, v, vector_length_xyz(v) * ((k - clamped_heading_difference) / k * 0.3f + 0.7f));
+    FUN_001f9bf8_u(in_out_vector, in_out_vector, vector_length_xyz(in_out_vector) * ((k - clamped_heading_difference) / k * 0.3f + 0.7f));
 }
 #include "rnc/gameplay/entities/moby.h"
 
