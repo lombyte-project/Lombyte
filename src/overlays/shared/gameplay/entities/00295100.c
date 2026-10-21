@@ -1502,25 +1502,25 @@ extern int D_L00_00161070 __attribute__((sda));
 void FUN_L00_0029ab70(int exit_cutscene_completed) {
     Vec4_29ab70 world_position;
     Vec4_29ab70 euler_rotation;
-    char *g = D_L00_001CA4C0_29ab70;
-    if (*(int *)(g + 0x54) != -1)
-        rel_29ab70(*(int *)(g + 0x54), 0);
-    if (*(int *)(g + 0x50) != -1)
-        rel_29ab70(*(int *)(g + 0x50), 0);
-    *(int *)(g + 0x54) = -1;
-    *(int *)(g + 0x50) = -1;
+    char *vendor_state_base = D_L00_001CA4C0_29ab70;
+    if (*(int *)(vendor_state_base + 0x54) != -1)
+        rel_29ab70(*(int *)(vendor_state_base + 0x54), 0);
+    if (*(int *)(vendor_state_base + 0x50) != -1)
+        rel_29ab70(*(int *)(vendor_state_base + 0x50), 0);
+    *(int *)(vendor_state_base + 0x54) = -1;
+    *(int *)(vendor_state_base + 0x50) = -1;
     f1ff768_29ab70();
     D_L00_0015F5D8 = 1;
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
     hero.unk20A5 = 0;
     f2330d0_29ab70();
-    if (*(int *)(g + 0x40) == 0) {
-        f1f9cf8_29ab70(&world_position, &D_L00_00161070, *(char **)(g + 0x1C) + 0xC0);
-        f1f9a10_29ab70(&world_position, &world_position, *(char **)(g + 0x1C) + 0x10);
+    if (*(int *)(vendor_state_base + 0x40) == 0) {
+        f1f9cf8_29ab70(&world_position, &D_L00_00161070, *(char **)(vendor_state_base + 0x1C) + 0xC0);
+        f1f9a10_29ab70(&world_position, &world_position, *(char **)(vendor_state_base + 0x1C) + 0x10);
         euler_rotation.x = 0.0f;
         euler_rotation.y = 0.0f;
-        euler_rotation.z = f1fa580_29ab70(*(float *)(*(char **)(g + 0x1C) + 0x48), 3.1415927f);
+        euler_rotation.z = f1fa580_29ab70(*(float *)(*(char **)(vendor_state_base + 0x1C) + 0x48), 3.1415927f);
         if (exit_cutscene_completed == 0) {
             f216f90_29ab70(&world_position, &euler_rotation, 0, 0);
             f2eac18_29ab70(2);
