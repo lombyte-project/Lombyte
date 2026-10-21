@@ -2017,7 +2017,7 @@ s32 volume_camera_aim_active(struct UpdateCam *aim_camera_record) {
    camera at the descriptor's position and fits distance, height and offset
    scale to the hero; then eases them each frame. */
 void volume_camera_aim(struct UpdateCam *cam) __asm__("FUN_L00_002ed498");
-void volume_camera_aim(struct UpdateCam *cam) {
+void volume_camera_aim(struct UpdateCam *aim_camera_record) {
     CameraVec pos;
     CameraVec to_pos;
     CameraVec gravity_offset;
@@ -2034,9 +2034,9 @@ void volume_camera_aim(struct UpdateCam *cam) {
     f32 up;
     f32 angle;
 
-    params = camera_descriptors[cam->descriptor_index].params;
-    if (volume_camera_aim_active(cam)) {
-        if (fun_l00_002e83c0(cam) <= 0) {
+    params = camera_descriptors[aim_camera_record->descriptor_index].params;
+    if (volume_camera_aim_active(aim_camera_record)) {
+        if (fun_l00_002e83c0(aim_camera_record) <= 0) {
             if (params->timer) {
                 params->done = 1;
             }
@@ -2051,14 +2051,14 @@ void volume_camera_aim(struct UpdateCam *cam) {
         params->done = 1;
     }
     params->timer = 0;
-    fun_l00_002e8388(cam);
+    fun_l00_002e8388(aim_camera_record);
     return;
 run:
     if (params->timer < 2) {
         {
-            pos[0] = camera_descriptors[cam->descriptor_index].pos[0];
-            pos[1] = camera_descriptors[cam->descriptor_index].pos[1];
-            pos[2] = camera_descriptors[cam->descriptor_index].pos[2];
+            pos[0] = camera_descriptors[aim_camera_record->descriptor_index].pos[0];
+            pos[1] = camera_descriptors[aim_camera_record->descriptor_index].pos[1];
+            pos[2] = camera_descriptors[aim_camera_record->descriptor_index].pos[2];
         }
         *(s32 *)&pos[3] = 0;
         fast_vec_sub(to_pos, pos, &hero.motion.pos);
