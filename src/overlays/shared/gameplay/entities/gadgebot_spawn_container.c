@@ -2625,11 +2625,11 @@ int FUN_L06_002f32f0(char *moby, int flag)
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F4818), where it is exact; names translated to the US level program. */
 
 void FUN_L06_002f33e8(char *moby, char *current_target, char *candidate_moby, int *out, float *best, float thresh) {
-    float dist = vector_distance(moby + 0x10, candidate_moby + 0x10);
-    if (!(thresh < dist)) {
+    float candidate_distance = vector_distance(moby + 0x10, candidate_moby + 0x10);
+    if (!(thresh < candidate_distance)) {
         float ang = fast_arc_tan(*(float *)(candidate_moby + 0x10) - *(float *)(moby + 0x10),
                                  *(float *)(candidate_moby + 0x14) - *(float *)(moby + 0x14));
-        float candidate_score = dist + fast_difference_between_rotations(*(float *)(moby + 0x48), ang) * 5.0f;
+        float candidate_score = candidate_distance + fast_difference_between_rotations(*(float *)(moby + 0x48), ang) * 5.0f;
         if (candidate_moby == current_target) {
             candidate_score -= 2.0f;
         }
