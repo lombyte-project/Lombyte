@@ -2428,7 +2428,7 @@ void FUN_L05_003193a8(char *moby) {
     };
     char *taxi_data = *(char **)(moby + 0x78);
     char *selected_path;
-    float inv, frame_scaled_travel_step, b, r;
+    float inv, frame_scaled_travel_step, frame_squared_travel_step, r;
     switch (*(short *)(taxi_data + 0xB4)) {
     case TAXI_PAIRED_ROUTE_FIRST_STOP:
         *(char **)(taxi_data + 0xAC) = D_L05_001B0930[*(int *)(taxi_data + 0x94)];
@@ -2459,12 +2459,12 @@ void FUN_L05_003193a8(char *moby) {
     selected_path = *(char **)(taxi_data + 0xAC);
     r = FUN_001f9b48(selected_path + 0x10, selected_path + 0x20);
     frame_scaled_travel_step = frame_time * 20.0f;
-    b = frame_time_sq * 5.0f;
+    frame_squared_travel_step = frame_time_sq * 5.0f;
     inv = 1.0f / (r * (float)**(int **)(taxi_data + 0xAC));
     *(int *)(taxi_data + 0xC4) = 0;
     *(int *)(taxi_data + 0xC0) = 0;
     *(float *)(taxi_data + 0xD4) = frame_scaled_travel_step * inv;
-    *(float *)(taxi_data + 0xD8) = b * inv;
+    *(float *)(taxi_data + 0xD8) = frame_squared_travel_step * inv;
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031B138), where it is exact; names translated to the US level program. */
 
