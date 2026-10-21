@@ -814,18 +814,18 @@ void FUN_L06_002f4130(char *m) {
     Vx segment_start;
     Vx segment_end;
     int i;
-    char *pos = m + 0x10;
+    char *moby_position = m + 0x10;
     int one = 1;
     char *moby_data;
     int segment_travel_step_count;
-    float segment_phase_step, segment_radius_step, cur, prev, ang, ra, rb;
+    float segment_phase_step, segment_radius_step, remaining_radius, segment_start_radius, oscillation_phase_radians, ra, rb;
     moby_data = *(char **)(m + 0x78);
     segment_travel_step_count = func_001FA898_r(*(float *)&D_L06_00161CF0 / (*(float *)&spark_speed_gp * frame_time) *
                         0.25f);
     segment_phase_step = *(float *)(moby_data + 0x80) * (float)segment_travel_step_count;
     segment_radius_step = *(float *)&D_L06_00161CF0 * 0.25f;
-    cur = *(float *)&D_L06_00161CF0;
-    ang = fast_subtract_rotations(*(float *)(moby_data + 0x7C), segment_phase_step * 4.0f);
+    remaining_radius = *(float *)&D_L06_00161CF0;
+    oscillation_phase_radians = fast_subtract_rotations(*(float *)(moby_data + 0x7C), segment_phase_step * 4.0f);
     collision_params.m = m;
     collision_params.f1C = 1.0f;
     collision_params.flags = hero.items[2].item_id != 6 ? 0x10001 : 0x10000;
@@ -837,21 +837,21 @@ void FUN_L06_002f4130(char *m) {
     collision_params.b19 = one;
     collision_params.h1A = *(unsigned short *)(m + 0xA6);
     for (i = 3; i >= 0; i--) {
-        prev = cur;
+        segment_start_radius = remaining_radius;
         ra = fast_add_rotations(*(float *)(moby_data + 0x84),
-                                *(float *)(moby_data + 0x64) * DEG_TO_RAD * fast_sin(ang));
-        cur -= segment_radius_step;
-        ang = fast_add_rotations(ang, segment_phase_step);
+                                *(float *)(moby_data + 0x64) * DEG_TO_RAD * fast_sin(oscillation_phase_radians));
+        remaining_radius -= segment_radius_step;
+        oscillation_phase_radians = fast_add_rotations(oscillation_phase_radians, segment_phase_step);
         rb = fast_add_rotations(*(float *)(moby_data + 0x84),
-                                *(float *)(moby_data + 0x64) * DEG_TO_RAD * fast_sin(ang));
-        segment_start.x = fast_cos(ra) * prev;
-        segment_start.y = fast_sin(ra) * prev;
+                                *(float *)(moby_data + 0x64) * DEG_TO_RAD * fast_sin(oscillation_phase_radians));
+        segment_start.x = fast_cos(ra) * segment_start_radius;
+        segment_start.y = fast_sin(ra) * segment_start_radius;
         segment_start.z = 0.0f;
-        segment_end.x = fast_cos(rb) * cur;
-        segment_end.y = fast_sin(rb) * cur;
+        segment_end.x = fast_cos(rb) * remaining_radius;
+        segment_end.y = fast_sin(rb) * remaining_radius;
         segment_end.z = 0.0f;
-        add_vector_xyz(&segment_start, &segment_start, pos);
-        add_vector_xyz(&segment_end, &segment_end, pos);
+        add_vector_xyz(&segment_start, &segment_start, moby_position);
+        add_vector_xyz(&segment_end, &segment_end, moby_position);
         coll_line_fix(&segment_start, &segment_end, 0, m, &collision_params);
     }
 }
