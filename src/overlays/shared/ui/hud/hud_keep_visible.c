@@ -276,17 +276,17 @@ extern void FUN_L00_0023aaa8(void *);
 
 void FUN_L00_00236128(HudElem *hud_element) {
     unsigned char *hud_counters = hud_element->cnt;
-    int v;
+    int sampled_value;
     int cap;
 
     if (hud_element->unk0C != 0) {
-        v = *hud_element->unk0C;
+        sampled_value = *hud_element->unk0C;
         cap = hud_element->unk08;
-        if (v < 0) {
-            v = 0;
+        if (sampled_value < 0) {
+            sampled_value = 0;
         }
-        hud_element->unk78 = v;
-        if (cap < v) {
+        hud_element->unk78 = sampled_value;
+        if (cap < sampled_value) {
             hud_element->unk78 = cap;
         }
     }
