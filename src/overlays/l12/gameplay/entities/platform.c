@@ -2779,8 +2779,8 @@ typedef struct { char pad[0x48]; float rz; } M_af68;
 typedef struct { float x, y, z, w; } N_af68;
 
 /* Follows a path: steers toward the current node, slows to a stop near the end, returns 1 once stopped. */
-int FUN_L12_002eaf68(struct Moby *moby, int idx) {
-    char *path = D_L12_001B0930_f[idx];
+int FUN_L12_002eaf68(struct Moby *moby, int path_index) {
+    char *path = D_L12_001B0930_f[path_index];
     char *moby_vars = (char *)moby->pvars;
     float sum = 0.0f;
     float target_record_or_node_offset[20]; /* target record from the finder; also the step vector */
