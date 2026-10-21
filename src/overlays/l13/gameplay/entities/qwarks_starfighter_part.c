@@ -1420,10 +1420,10 @@ void FUN_L13_002f3778(struct Moby *moby) {
     if (D_L13_00179710[0] == 0 && D_L13_00179710[9] == -1) {
         unsigned int hero_control_mode = *(unsigned int *)(&hero.state.control_mode);
         if ((hero_control_mode < 2 || hero_control_mode == 9) ? D_L13_0015F5C4 == 0 : 0) {
-            int idx = *(int *)(data + 4);
+            int linked_moby_index = *(int *)(data + 4);
             char *linked_moby;
-            if (idx != -1) {
-                linked_moby = D_L13_0015FFD8_m + (idx << 8);
+            if (linked_moby_index != -1) {
+                linked_moby = D_L13_0015FFD8_m + (linked_moby_index << 8);
                 if (linked_moby != 0 && *(short *)(linked_moby + 0xA6) == 0xAA) {
                     int linked_moby_state = (unsigned char)linked_moby[0x20];
                     if (linked_moby_state == 0xFE)
