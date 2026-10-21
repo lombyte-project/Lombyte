@@ -512,12 +512,12 @@ int FUN_L07_00313af0(struct Moby *chaser_moby, struct ChaserVars *chaser_vars, V
     char *path;
     struct Moby *target_moby;
     int navigation_result;
-    float dist;
+    float goal_distance;
 
-    dist = vector_distance(&chaser_moby->pos, goal);
+    goal_distance = vector_distance(&chaser_moby->pos, goal);
     navigation_result = 4;
     path = D_L07_001B0530[chaser_vars->path];
-    if (range < dist) {
+    if (range < goal_distance) {
         navigation_result = FUN_L00_00259028(chaser_moby, chaser_vars->nav, mode, chaser_vars->navOut);
         if (navigation_result == 2) {
             subtract_vector_xyz(position_delta, path + (FUN_L01_0028b510(&chaser_moby->pos, path, 0.0f) * 16 + 0x10), &chaser_moby->pos);
