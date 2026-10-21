@@ -2004,20 +2004,20 @@ int FUN_L14_002b4500(int index) {
     unsigned char *checked_moby;
     unsigned char *retracting_moby;
     unsigned char *turret_vars;
-    int st;
+    int moby_index_or_state;
     int moby_index_or_retract_frames;
     float inverse_retract_frames;
-    float g;
+    float retract_animation_speed;
     if (list_entry == 0) {
         return 0;
     }
     base = D_L14_0015FFD8_b45;
     do {
-        st = *(unsigned short *)list_entry & 0x7FFF;
-        checked_moby = base + (st << 8);
+        moby_index_or_state = *(unsigned short *)list_entry & 0x7FFF;
+        checked_moby = base + (moby_index_or_state << 8);
         if ((*(unsigned char **)(checked_moby + 0x78))[0x8B] == 0) {
-            st = checked_moby[0x20];
-            if (st != 5 && st != 1) {
+            moby_index_or_state = checked_moby[0x20];
+            if (moby_index_or_state != 5 && moby_index_or_state != 1) {
                 return 0;
             }
         }
@@ -2033,9 +2033,9 @@ int FUN_L14_002b4500(int index) {
             moby_index_or_retract_frames = FUN_001f96f8_b45(D_L14_0016150C_b45);
             *(short *)(turret_vars + 0x74) = moby_index_or_retract_frames;
             inverse_retract_frames = 1.0f / FUN_001fa6c0_b45(moby_index_or_retract_frames);
-            g = 1.0f / (*(short *)(turret_vars + 0x74) * D_L14_00161510_b45);
+            retract_animation_speed = 1.0f / (*(short *)(turret_vars + 0x74) * D_L14_00161510_b45);
             *(float *)(turret_vars + 0x78) = inverse_retract_frames;
-            *(float *)(retracting_moby + 0x58) = g;
+            *(float *)(retracting_moby + 0x58) = retract_animation_speed;
             *(float *)(turret_vars + 0x8C) = *(float *)(retracting_moby + 0x48);
             *(short *)(turret_vars + 0x88) = 0;
             turret_vars[0x8B] = 0;
