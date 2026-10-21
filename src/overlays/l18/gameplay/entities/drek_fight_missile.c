@@ -3443,18 +3443,18 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L18_002f76a0(char *moby, void *effect_position) {
     QVec emission_direction;
-    QVec b;
+    QVec position_offset;
     float offset_world_position[4];
     float scaled_emission_direction[4];
     emission_direction.q = 0;
-    b.q = 0;
+    position_offset.q = 0;
     emission_direction.v[0] = 1.0f;
     emission_direction.v[3] = 1.0f;
-    b.v[0] = 0.23f;
-    b.v[3] = 1.0f;
+    position_offset.v[0] = 0.23f;
+    position_offset.v[3] = 1.0f;
     FUN_L00_001fefc8(moby + 0xBC);
-    transform_vector_by_basis(&b, &b, moby + 0xC0);
-    add_vector_xyz(offset_world_position, moby + 0x10, &b);
+    transform_vector_by_basis(&position_offset, &position_offset, moby + 0xC0);
+    add_vector_xyz(offset_world_position, moby + 0x10, &position_offset);
     transform_vector_by_basis(&emission_direction, &emission_direction, moby + 0xC0);
     {
         int i;
