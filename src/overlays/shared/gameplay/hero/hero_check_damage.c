@@ -309,7 +309,7 @@ extern int D_0013CAE4_0020d330[] __asm__("D_0013CAE4");
 void FUN_L00_0020d2f8_0020d330(Vec4_20d330 *) __asm__("FUN_L00_0020d2f8");
 void FUN_L00_0020d330(void) {
     struct Hero *P = &hero;
-    Vec4_20d330 rail_query_position, b;
+    Vec4_20d330 rail_query_position, rail_point;
     Vec4_20d330 *pb;
     int i20, i24, i2C;
     float f28;
@@ -319,13 +319,13 @@ void FUN_L00_0020d330(void) {
         return;
     FUN_L00_0020d2f8_0020d330(&rail_query_position);
     if ((P->state.control_mode == 4 && P->unk41E == 0) || P->state.control_mode == 2) {
-        pb = &b;
+        pb = &rail_point;
         if (nearest_rail_point(&rail_query_position, &i20, pb, &i24, &f28, &i2C, 0, 0)) {
             float bz, az;
             int fl;
             az = rail_query_position.f[2];
             fl = D_0013CAE4_0020d330[0];
-            bz = b.f[2];
+            bz = rail_point.f[2];
             lim = -0.7f;
             query_height_above_rail = az - bz;
             if (fl & 0x80)
