@@ -229,10 +229,10 @@ void bridge_piece_1_update(BurstMoby *self) __asm__("FUN_L01_002f9d80");
 void bridge_piece_1_update(BurstMoby *self) {
     BurstTarget *hit_result;
     BurstColors colors;
-    BurstVec dir;
+    BurstVec debris_velocity;
     BurstVec pos;
     f32 spawn_radius;
-    f32 ang;
+    f32 spawn_angle_radians;
     s32 i;
 
     hit_result = trooper_find_hit(self, 0x830000, 0);
@@ -247,15 +247,15 @@ void bridge_piece_1_update(BurstMoby *self) {
             pos.f[0] = random_float_between(-frame_time, frame_time);
             pos.f[1] = random_float_between(-frame_time, frame_time);
             pos.f[2] = random_float_between(-frame_time, frame_time);
-            dir.q = pos.q;
+            debris_velocity.q = pos.q;
             spawn_radius = random_float_between(2.0f, 3.0f);
-            ang = random_angle_radians();
-            pos.f[0] = fast_cos(ang) * spawn_radius;
-            pos.f[1] = fast_sin(ang) * spawn_radius;
+            spawn_angle_radians = random_angle_radians();
+            pos.f[0] = fast_cos(spawn_angle_radians) * spawn_radius;
+            pos.f[1] = fast_sin(spawn_angle_radians) * spawn_radius;
             pos.f[2] = 0.0f;
-            fast_vec_normalize(&dir, &dir, random_float_between(frame_time * 5.0f, frame_time * 20.0f));
+            fast_vec_normalize(&debris_velocity, &debris_velocity, random_float_between(frame_time * 5.0f, frame_time * 20.0f));
             fast_vec_add(&pos, &pos, &self->pos);
-            FUN_L01_002f8530(&pos, &dir, colors.c[random_integer_below(3)],
+            FUN_L01_002f8530(&pos, &debris_velocity, colors.c[random_integer_below(3)],
                              FUN_L00_00257b90(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
         }
         D_0014C190_257218[D_0015ED84_e[1]][self->id >> 5] |= 1 << (self->id & 0x1F);
