@@ -1341,7 +1341,7 @@ s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_L00_0026c6e8(void *pos, void *vel);
-void FUN_L00_0026c6e8(void *pos, void *vel) {
+void FUN_L00_0026c6e8(void *spawn_position, void *initial_velocity) {
     E0026c6e8 *particle = FUN_L00_002678b8_u(0x13);
     u32 initial_packed_color;
     if (particle == 0)
@@ -1353,9 +1353,9 @@ void FUN_L00_0026c6e8(void *pos, void *vel) {
     particle->x3 = 0x48;
     particle->x1 = 3;
     particle->x2 = *D_L00_001B20CC;
-    qcopy(particle->a, pos);
-    qcopy(particle->c, vel);
-    subtract_vector_xyz(particle->b, pos, particle->c);
+    qcopy(particle->a, spawn_position);
+    qcopy(particle->c, initial_velocity);
+    subtract_vector_xyz(particle->b, spawn_position, particle->c);
     subtract_vector_xyz(particle->b, particle->b, particle->c);
     particle->a[3] = 0.09f;
     particle->b[3] = 0.5f;
