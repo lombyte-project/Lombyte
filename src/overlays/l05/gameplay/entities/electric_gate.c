@@ -817,9 +817,9 @@ extern char D_L05_001BAAA0[];
 
 void pipe_mounted_grating_update(struct Moby *moby) __asm__("FUN_L05_0030f5c8");
 void pipe_mounted_grating_update(struct Moby *moby) {
-    float vel[4];
+    float piece_initial_motion_step[4];
     float spin_vel[4];
-    float dir[4];
+    float particle_spawn_offset[4];
     float drift[4];
     float pos[4];
     struct Moby *piece;
@@ -839,9 +839,9 @@ void pipe_mounted_grating_update(struct Moby *moby) {
             qcopy(&piece->pos, &moby->pos);
             qcopy(&piece->rot, &moby->rot);
             speed = random_float_between_f5c8(5.0f, 12.0f);
-            scale_vector_f5c8(vel, &moby->rot_row0, -(speed * frame_time));
+            scale_vector_f5c8(piece_initial_motion_step, &moby->rot_row0, -(speed * frame_time));
             clear_vector_f5c8(spin_vel);
-            FUN_L05_00318648(piece, moby, vel, spin_vel, scale_game_frames_f5c8(60));
+            FUN_L05_00318648(piece, moby, piece_initial_motion_step, spin_vel, scale_game_frames_f5c8(60));
             *(int *)(vars + 0xC) = 0x200;
         }
         allocate_target_entry_f5c8(0, 0, piece);
@@ -858,13 +858,13 @@ void pipe_mounted_grating_update(struct Moby *moby) {
                     spin_vel[2] = 0.75f;
                     drift[1] = fast_sin_f5c8(angle) * 1.4f;
                     drift[2] = fast_cos_f5c8(angle) * 1.4f;
-                    *(u128 *)dir = *(u128 *)drift;
-                    transform_vector_f5c8(dir, dir, &moby->rot_row0);
+                    *(u128 *)particle_spawn_offset = *(u128 *)drift;
+                    transform_vector_f5c8(particle_spawn_offset, particle_spawn_offset, &moby->rot_row0);
                     for (j = 0; j < 10; j++) {
                         float size;
                         random_vector_f5c8(drift, frame_time * 1.5f, frame_time * 2.0f);
                         scale_vector_f5c8(pos, drift, 5.0f);
-                        add_vector_f5c8(pos, pos, dir);
+                        add_vector_f5c8(pos, pos, particle_spawn_offset);
                         add_vector_f5c8(pos, pos, &moby->pos);
                         spin = random_integer_below_f5c8(2);
                         if (spin == 0) {
@@ -885,9 +885,9 @@ void pipe_mounted_grating_update(struct Moby *moby) {
                     qcopy(&piece->rot, &moby->rot);
                     speed = random_float_between_f5c8(0.0f, 24.0f);
                     life = random_float_between_f5c8(60.0f, 120.0f);
-                    scale_vector_f5c8(vel, &moby->rot_row0, -(speed * frame_time));
+                    scale_vector_f5c8(piece_initial_motion_step, &moby->rot_row0, -(speed * frame_time));
                     clear_vector_f5c8(spin_vel);
-                    FUN_L05_00318648(piece, moby, vel, spin_vel, float_to_int_f5c8(scale_time_f5c8(life)));
+                    FUN_L05_00318648(piece, moby, piece_initial_motion_step, spin_vel, float_to_int_f5c8(scale_time_f5c8(life)));
                     *(int *)(vars + 0xC) = 0x200;
                     piece->rot.x = angle;
                     update_entity_f5c8(piece);
