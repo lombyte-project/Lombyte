@@ -979,7 +979,7 @@ int D_L02_0016195C = 0x20306058;
 int D_L02_00161960 = -1;
 
 /* Same routine as FUN_L12_002e19a8: spawns n particles around pos, fewer when D_L02_00160178 is high. */
-void FUN_L02_002d57f8(void *pos, int particle_count) {
+void FUN_L02_002d57f8(void *particle_origin, int particle_count) {
     float saved_source_position[4];
     float particle_position[4];
     float vertical_motion[4];
@@ -989,7 +989,7 @@ void FUN_L02_002d57f8(void *pos, int particle_count) {
     int i;
     int frame_count, second_frame_count, third_frame_count;
     source_position = saved_source_position;
-    *(OvlQuad *)source_position = *(OvlQuad *)pos;
+    *(OvlQuad *)source_position = *(OvlQuad *)particle_origin;
     if (D_L02_00160178 > 0x5DC) {
         particle_count = particle_count / 4;
     } else if (D_L02_00160178 > 0x400) {
