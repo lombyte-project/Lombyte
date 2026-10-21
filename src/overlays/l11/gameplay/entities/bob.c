@@ -1961,7 +1961,7 @@ void FUN_L11_0030a500(struct Moby *moby) {
     struct DataA500 *moby_vars = (struct DataA500 *)moby->pvars;
     float base[4];
     float pos[4];
-    float vel[4];
+    float initial_velocity[4];
     float speed;
     float step;
     float heading;
@@ -1999,12 +1999,12 @@ void FUN_L11_0030a500(struct Moby *moby) {
             speed = random_float_between(2.0f, 5.0f) * frame_time;
             if (moby->state == 1)
                 speed *= 0.4f;
-            vel[0] = fast_cos_a500(heading) * speed;
-            vel[1] = fast_sin_a500(heading) * speed;
-            vel[2] = 0.0f;
-            vel[2] = random_float_between(-2.0f, 2.0f) * frame_time;
+            initial_velocity[0] = fast_cos_a500(heading) * speed;
+            initial_velocity[1] = fast_sin_a500(heading) * speed;
+            initial_velocity[2] = 0.0f;
+            initial_velocity[2] = random_float_between(-2.0f, 2.0f) * frame_time;
             life = random_float_between(6300.0f, 14700.0f);
-            FUN_L00_0026f080(pos, vel, life, 222.5f);
+            FUN_L00_0026f080(pos, initial_velocity, life, 222.5f);
         }
     }
 }
