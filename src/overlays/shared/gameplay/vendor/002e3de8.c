@@ -26,7 +26,7 @@ extern short D_L10_00161E6C __attribute__((sda));
 extern short D_L10_00161E70 __attribute__((sda));
 void FUN_L10_002e3de8(char *moby) {
     float spawn_position[3];
-    int g, particle_data_value;
+    int particle_header_value, particle_data_value;
     float offset_angle_radians = random_angle_radians();
     float offset_radius = random_float_between_alt(0.0f, *(float *)&D_L10_00161E70);
     float particle_scale = random_float_between_alt(0.0f, *(float *)&D_L10_00161E60);
@@ -37,9 +37,9 @@ void FUN_L10_002e3de8(char *moby) {
     spawn_position[2] = 0.0f;
     fast_vec_add(spawn_position, spawn_position, (float *)(moby + 0x10));
     spawn_position[2] = spawn_position[2] + 0.025f;
-    g = *(int *)&D_L10_00161E58;
+    particle_header_value = *(int *)&D_L10_00161E58;
     particle_data_value = *(int *)&D_L10_00161E5C;
-    FUN_L01_00287158(spawn_position, particle_scale, random_particle_value, g, particle_data_value, random_divisor);
+    FUN_L01_00287158(spawn_position, particle_scale, random_particle_value, particle_header_value, particle_data_value, random_divisor);
 }
 
 #define NOT_SDA
