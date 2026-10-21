@@ -140,17 +140,17 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void spawn_nearby_effect(char *m, float t, int a, int b, void *pos, void *vel) __asm__("FUN_L00_00259bc8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L07_0030e0e0(char *affected_moby, char *b, char *effect_data) {
-    float v[4];
-    float w[4];
-    if (*(float *)(affected_moby + 0x18) < *(float *)(b + 0x18) + *(float *)(effect_data + 0x10) * 0.3f) {
-        float moby_distance = vector_distance(b + 0x10, affected_moby + 0x10);
+void FUN_L07_0030e0e0(char *affected_moby, char *effect_moby, char *effect_data) {
+    float hit_direction[4];
+    float radial_offset[4];
+    if (*(float *)(affected_moby + 0x18) < *(float *)(effect_moby + 0x18) + *(float *)(effect_data + 0x10) * 0.3f) {
+        float moby_distance = vector_distance(effect_moby + 0x10, affected_moby + 0x10);
         if (absolute_float(moby_distance - *(float *)(effect_data + 8)) < 0.3f) {
-            fast_vec_sub(v, affected_moby + 0x10, b + 0x10);
-            fast_vec_normalize(w, v, *(float *)(effect_data + 8) - 0.05f);
-            fast_vec_normalize(v, v, 1.0f);
-            v[2] = 1.0f;
-            spawn_nearby_effect(affected_moby, *(float *)(effect_data + 0x1c), (int)b, 0x10001, w, v);
+            fast_vec_sub(hit_direction, affected_moby + 0x10, effect_moby + 0x10);
+            fast_vec_normalize(radial_offset, hit_direction, *(float *)(effect_data + 8) - 0.05f);
+            fast_vec_normalize(hit_direction, hit_direction, 1.0f);
+            hit_direction[2] = 1.0f;
+            spawn_nearby_effect(affected_moby, *(float *)(effect_data + 0x1c), (int)effect_moby, 0x10001, radial_offset, hit_direction);
         }
     }
 }
