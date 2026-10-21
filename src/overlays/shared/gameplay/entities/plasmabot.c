@@ -1085,17 +1085,17 @@ int FUN_L14_002b3418(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int reached = sample_path(D_L14_001B0BB0[*(int *)(data + 0x240)], path_target_position, data + 0x24C, data + 0x250, 0,
                               D_L14_001614D8 * frame_time * *(float *)(data + 0x27C));
-    float ang;
+    float path_target_heading;
     float k;
     float turn_step_limit;
     qcopy(pre_spring_position, moby + 0x10);
     vendor_spring((float *)(moby + 0x10), (float *)(data + 0x254), path_target_position[0], 0.01f, 0.2f, 0.0f);
     vendor_spring((float *)(moby + 0x14), (float *)(data + 0x258), path_target_position[1], 0.01f, 0.2f, 0.0f);
     subtract_vector_xyz_c(target_offset, path_target_position, pre_spring_position);
-    ang = fast_arc_tan(target_offset[0], target_offset[1]);
+    path_target_heading = fast_arc_tan(target_offset[0], target_offset[1]);
     k = frame_time_sq * 12.566371f;
     turn_step_limit = frame_time * 6.2831855f;
-    func_L00_0025CE58_2B4668((float *)(moby + 0x48), ang, (float *)(data + 0x23C), k, k, turn_step_limit);
+    func_L00_0025CE58_2B4668((float *)(moby + 0x48), path_target_heading, (float *)(data + 0x23C), k, k, turn_step_limit);
     return reached != 0;
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4828), where it is exact; names translated to the US level program. */
