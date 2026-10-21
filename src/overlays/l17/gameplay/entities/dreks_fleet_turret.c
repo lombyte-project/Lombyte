@@ -830,7 +830,7 @@ extern void wrap_angle_alt(void *, float, float, float) __asm__("FUN_00214db0");
 
 void FUN_L17_002d7cf0(struct Moby *moby) {
     RingPrim quad_primitive;
-    float mat[16];
+    float moby_transform_matrix[16];
     float scroll;
     int pass;
     int i;
@@ -839,9 +839,9 @@ void FUN_L17_002d7cf0(struct Moby *moby) {
 
     scroll = convert_integer_to_float(D_L17_0015F5CC) * (D_L17_00161BBC * frame_time);
     scroll = FUN_L00_00200260(scroll, 1.0f);
-    euler_rotation_matrix(mat, &moby->rot.x);
-    *(OvlQuad *)&mat[12] = *(OvlQuad *)&moby->pos;
-    mat[15] = 1.0f;
+    euler_rotation_matrix(moby_transform_matrix, &moby->rot.x);
+    *(OvlQuad *)&moby_transform_matrix[12] = *(OvlQuad *)&moby->pos;
+    moby_transform_matrix[15] = 1.0f;
     quad_primitive.tex = get_effect_texture(0x28);
     quad_primitive.q80 = 0xFF9000000260L;
     quad_primitive.alpha = (long)D_L17_00161B98 | ((long)D_L17_00161B9C << 2) | ((long)D_L17_00161BA0 << 4) |
@@ -877,7 +877,7 @@ void FUN_L17_002d7cf0(struct Moby *moby) {
             quad_primitive.rgba[2] = D_L17_00161BB8;
             quad_primitive.rgba[1] = D_L17_00161BB8;
             quad_primitive.rgba[0] = D_L17_00161BB8;
-            draw_geometry_quad(&quad_primitive, mat, 0);
+            draw_geometry_quad(&quad_primitive, moby_transform_matrix, 0);
         }
     }
 }
