@@ -34,14 +34,14 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-float FUN_L04_0024c660(float *dst, float *segment_start, float *b, float *query_point) {
+float FUN_L04_0024c660(float *closest_point, float *segment_start, float *segment_end, float *query_point) {
     float segment_direction[4];
     float perpendicular_direction_xy[4];
     float query_to_start_offset[4];
     float perpendicular_offset_point_xy[4];
-    float det, t, r;
+    float det, t, clamped_segment_parameter;
 
-    subtract_vector_xyz(segment_direction, b, segment_start);
+    subtract_vector_xyz(segment_direction, segment_end, segment_start);
     subtract_vector_xyz(query_to_start_offset, segment_start, query_point);
     perpendicular_offset_point_xy[0] = segment_direction[1];
     perpendicular_offset_point_xy[1] = -segment_direction[0];
@@ -49,19 +49,19 @@ float FUN_L04_0024c660(float *dst, float *segment_start, float *b, float *query_
     subtract_vector_xyz(perpendicular_direction_xy, query_point, perpendicular_offset_point_xy);
     det = segment_direction[1] * perpendicular_direction_xy[0] - segment_direction[0] * perpendicular_direction_xy[1];
     if (absolute_float(det) < 0.0001f) {
-        qcopy(dst, segment_start);
+        qcopy(closest_point, segment_start);
         return 0.0f;
     }
     det = 1.0f / det;
     t = perpendicular_direction_xy[1] * query_to_start_offset[0] - perpendicular_direction_xy[0] * query_to_start_offset[1];
     t = t * det;
-    r = t;
-    if (r < 0.0f)
-        r = 0.0f;
-    if (1.0f < r)
-        r = 1.0f;
-    scale_vector_xyz(dst, segment_direction, r);
-    add_vector_xyz(dst, dst, segment_start);
+    clamped_segment_parameter = t;
+    if (clamped_segment_parameter < 0.0f)
+        clamped_segment_parameter = 0.0f;
+    if (1.0f < clamped_segment_parameter)
+        clamped_segment_parameter = 1.0f;
+    scale_vector_xyz(closest_point, segment_direction, clamped_segment_parameter);
+    add_vector_xyz(closest_point, closest_point, segment_start);
     return t;
 }
 #define NOT_SDA
