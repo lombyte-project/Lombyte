@@ -716,10 +716,10 @@ void FUN_L13_002b4a58(struct Moby *moby, char *moby_vars) {
     float *tm = (float *)(moby_vars + 0x20);
     char *hit_record;
     int k;
-    int r;
+    int hit_reaction_result;
     if (moby->state != 2) {
         hit_record = find_moby_hit(moby, 0x330000, 0);
-        r = hit_reaction(moby, hit_record, tm, 0, &k, 0, 0, 4);
+        hit_reaction_result = hit_reaction(moby, hit_record, tm, 0, &k, 0, 0, 4);
         if (hit_record != 0) {
             if (*(int *)(hit_record + 0x24) & 0x800000) {
                 char *hit_source_moby = *(char **)(hit_record + 0x20);
@@ -738,7 +738,7 @@ void FUN_L13_002b4a58(struct Moby *moby, char *moby_vars) {
                 }
             }
         }
-        switch (r) {
+        switch (hit_reaction_result) {
         case 1:
         case 2:
             *(int *)tm = 0;
@@ -756,18 +756,18 @@ void FUN_L13_002b4a58(struct Moby *moby, char *moby_vars) {
             break;
         }
         if (k >= 2) {
-            float f1 = *(float *)(hit_record + 0x2C);
-            float f0 = *tm;
-            if (f0 <= f1) {
+            float hit_damage = *(float *)(hit_record + 0x2C);
+            float current_health = *tm;
+            if (current_health <= hit_damage) {
                 char *x;
                 *(int *)tm = 0;
                 moby->flags &= 0xEFFF;
                 x = *(char **)(moby_vars + 0x70);
                 if (x != 0) {
                     if (*(short *)(x + 0xA6) == 0x1D) {
-                        unsigned char st = x[0x20];
-                        if (st != 0xFE) {
-                            if (st != 0xFD)
+                        unsigned char parent_turret_state = x[0x20];
+                        if (parent_turret_state != 0xFE) {
+                            if (parent_turret_state != 0xFD)
                                 x[0x20] = 4;
                         }
                     }
@@ -779,7 +779,7 @@ void FUN_L13_002b4a58(struct Moby *moby, char *moby_vars) {
                     blend_moby_animation(moby, 3, 1, 0);
                 moby->state = 2;
             } else {
-                *tm = f0 - f1;
+                *tm = current_health - hit_damage;
                 *(unsigned char *)(moby_vars + 0x67) = 0xFA;
                 *(short *)(moby_vars + 0x26) = scale_game_frames(0x3C);
                 trooper_anim_update(moby, (short *)(moby_vars + 0x60));
