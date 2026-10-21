@@ -4,39 +4,39 @@
 #include "asm.h"
 
 int walker_gait_mask(float *a, float v) __asm__("FUN_L00_002a13f0");
-int walker_gait_mask(float *gait_record, float v) {
+int walker_gait_mask(float *gait_record, float interval_value) {
     int bit = 1;
-    int r = 0;
+    int result_mask = 0;
     int i;
     float *interval_cursor = gait_record + 12;
     for (i = 0; i < 2; i++, interval_cursor++) {
         float x = interval_cursor[4], y = interval_cursor[6];
         if (x <= y) {
-            if (x <= v && v <= y)
-                r |= bit;
+            if (x <= interval_value && interval_value <= y)
+                result_mask |= bit;
         } else {
-            if (x <= v || v <= y)
-                r |= bit;
+            if (x <= interval_value || interval_value <= y)
+                result_mask |= bit;
         }
         bit <<= 1;
         x = interval_cursor[-2];
         y = interval_cursor[0];
         if (x <= y) {
-            if (x <= v && v <= y)
-                r |= bit;
+            if (x <= interval_value && interval_value <= y)
+                result_mask |= bit;
         } else {
-            if (x <= v || v <= y)
-                r |= bit;
+            if (x <= interval_value || interval_value <= y)
+                result_mask |= bit;
         }
         bit <<= 1;
     }
-    if (r == 0) {
-        if (v < gait_record[6] || gait_record[6] + 1.0f < v)
-            r |= bit;
-        if (v < gait_record[7] || gait_record[7] + 1.0f < v)
-            r |= bit << 1;
+    if (result_mask == 0) {
+        if (interval_value < gait_record[6] || gait_record[6] + 1.0f < interval_value)
+            result_mask |= bit;
+        if (interval_value < gait_record[7] || gait_record[7] + 1.0f < interval_value)
+            result_mask |= bit << 1;
     }
-    return r;
+    return result_mask;
 }
 void FUN_L00_001fff28(void *, s32, f32);
 void FUN_L00_002a1538(u8 *gait_data) {
