@@ -9,16 +9,16 @@ void save_card_state_new_card(void) {
     struct MemoryCardState *card_state;
     int initial_freeze_flags = mode_freeze_flags;
     int freeze_flags_without_bit_2 = initial_freeze_flags & ~4;
-    int g = freeze_flags_without_bit_2 & ~2;
-    mode_freeze_flags = g;
+    int freeze_flags_without_bits_1_and_2 = freeze_flags_without_bit_2 & ~2;
+    mode_freeze_flags = freeze_flags_without_bits_1_and_2;
     if (initial_freeze_flags & 0x80) {
         mode_freeze_state = 0x15;
-        mode_freeze_flags = (g ^ 0x80) | 0x40;
+        mode_freeze_flags = (freeze_flags_without_bits_1_and_2 ^ 0x80) | 0x40;
         return;
     }
     if (initial_freeze_flags & 0x100) {
         mode_freeze_state = 0x14;
-        mode_freeze_flags = (g ^ 0x100) | 0x40;
+        mode_freeze_flags = (freeze_flags_without_bits_1_and_2 ^ 0x100) | 0x40;
         return;
     }
     card_state = &memory_card_state;
