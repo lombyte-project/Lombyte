@@ -1865,7 +1865,7 @@ void FUN_L07_00317cb0(char *moby, void *anchor) {
     RopeVec up;
     RopeQuad rotation_input_vector;
     RopeQuad rotation_axis;
-    float r;
+    float initial_swing_angle;
     int i;
     int j;
     RopeQuad *pc;
@@ -1892,9 +1892,9 @@ void FUN_L07_00317cb0(char *moby, void *anchor) {
     rotation_input_vector.f[3] = 1.0f;
     rotation_axis.f[0] = 1.0f;
     rotation_axis.f[3] = 1.0f;
-    r = random_angle_radians();
-    build_look_at_matrix(D_L07_00161BA0, pc, pd, r);
-    D_L07_00161BB0 = r;
+    initial_swing_angle = random_angle_radians();
+    build_look_at_matrix(D_L07_00161BA0, pc, pd, initial_swing_angle);
+    D_L07_00161BB0 = initial_swing_angle;
     row_phase_step_gp = 0.006f;
     D_L07_00161B80 = 0;
     D_L07_00161B84 = 0;
