@@ -401,7 +401,7 @@ void FUN_L17_002f32f0(struct Moby *moby) {
     *(long *)&pkt.q[2] = get_effect_texture_alt(0x2F);
     for (k = 0; k < 5; k++) {
         float quad_side_length = D_L17_001DDFF8[k];
-        float ang = D_L17_001DE0D0[k];
+        float uv_rotation_angle = D_L17_001DE0D0[k];
         float x = *(float *)(data + 0x10) - quad_side_length * 0.5f;
         float z;
         ((float *)&pkt)[0] = x;
@@ -420,14 +420,14 @@ void FUN_L17_002f32f0(struct Moby *moby) {
         ((float *)&pkt)[10] = ((float *)&pkt)[10] + 0.0f;
         ((float *)&pkt)[12] = ((float *)&pkt)[12] + quad_side_length;
         ((float *)&pkt)[14] = ((float *)&pkt)[14] - quad_side_length;
-        pkt.uv[0] = fast_sin_c(fast_add_rotations(ang, 4.712389f)) * 0.5f + 0.5f;
-        pkt.uv[1] = fast_cos_c(fast_add_rotations(ang, 4.712389f)) * 0.5f + 0.5f;
-        pkt.uv[2] = fast_sin_c(fast_add_rotations(ang, 3.1415927f)) * 0.5f + 0.5f;
-        pkt.uv[3] = fast_cos_c(fast_add_rotations(ang, 3.1415927f)) * 0.5f + 0.5f;
-        pkt.uv[4] = fast_sin_c(ang) * 0.5f + 0.5f;
-        pkt.uv[5] = fast_cos_c(ang) * 0.5f + 0.5f;
-        pkt.uv[6] = fast_sin_c(fast_add_rotations(ang, 1.5707964f)) * 0.5f + 0.5f;
-        pkt.uv[7] = fast_cos_c(fast_add_rotations(ang, 1.5707964f)) * 0.5f + 0.5f;
+        pkt.uv[0] = fast_sin_c(fast_add_rotations(uv_rotation_angle, 4.712389f)) * 0.5f + 0.5f;
+        pkt.uv[1] = fast_cos_c(fast_add_rotations(uv_rotation_angle, 4.712389f)) * 0.5f + 0.5f;
+        pkt.uv[2] = fast_sin_c(fast_add_rotations(uv_rotation_angle, 3.1415927f)) * 0.5f + 0.5f;
+        pkt.uv[3] = fast_cos_c(fast_add_rotations(uv_rotation_angle, 3.1415927f)) * 0.5f + 0.5f;
+        pkt.uv[4] = fast_sin_c(uv_rotation_angle) * 0.5f + 0.5f;
+        pkt.uv[5] = fast_cos_c(uv_rotation_angle) * 0.5f + 0.5f;
+        pkt.uv[6] = fast_sin_c(fast_add_rotations(uv_rotation_angle, 1.5707964f)) * 0.5f + 0.5f;
+        pkt.uv[7] = fast_cos_c(fast_add_rotations(uv_rotation_angle, 1.5707964f)) * 0.5f + 0.5f;
         {
             int interpolated_vertex_color = fast_tween_color(D_L17_001DE010[k], D_L17_001DE028[k], D_L17_001DE040[k]);
             pkt.col[3] = interpolated_vertex_color;
