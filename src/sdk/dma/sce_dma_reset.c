@@ -28,7 +28,7 @@ extern s32 Memclr();
 extern s32 sceDmaPutEnv();
 
 s32 sceDmaReset(s32 enable_dma) {
-    s32 buf[5];
+    s32 dma_environment[5];
     s32 status;
     s32 i;
     u32 mask;
@@ -48,8 +48,8 @@ s32 sceDmaReset(s32 enable_dma) {
     *(volatile u32 *)0x1000E010 = 0xFF1F;
     mask = *(volatile u32 *)0x1000E010 & 0xFF1F0000;
     *(u32 *)0x1000E010 = mask;
-    Memclr(buf, 0x14);
-    sceDmaPutEnv(buf);
+    Memclr(dma_environment, 0x14);
+    sceDmaPutEnv(dma_environment);
     if (enable_dma == 1) {
         *(volatile u32 *)0x1000E000 |= 1;
     }
