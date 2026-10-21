@@ -19,10 +19,10 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 void draw_rotated_sprite(s32 w, s32 h, s64 buf, f32 x, f32 y, f32 cx, f32 cy,
                          f32 ang) __asm__("FUN_00200600");
 
-void draw_rotated_sprite(s32 texture_width, s32 texture_height, s64 texture_register_value, f32 x, f32 y, f32 cx, f32 cy, f32 ang) {
+void draw_rotated_sprite(s32 texture_width, s32 texture_height, s64 texture_register_value, f32 x, f32 y, f32 cx, f32 cy, f32 rotation_angle) {
     struct Vec4 sz;
-    struct Vec4 off;
-    struct Vec4 pos;
+    struct Vec4 rotated_half_width_offset;
+    struct Vec4 sprite_center;
     struct Vec4 p0;
     struct Vec4 p1;
     struct Vec4 uv_origin_vertex;
@@ -30,20 +30,20 @@ void draw_rotated_sprite(s32 texture_width, s32 texture_height, s64 texture_regi
     struct DmaTag *tag;
     u64 *packet_payload;
 
-    pos.x = x;
-    pos.y = y;
-    sz.x = cy * fast_sin(ang);
-    sz.y = cy * fast_cos(ang);
-    off.x = -cx * fast_cos(ang);
-    off.y = cx * fast_sin(ang);
-    add_vector_xyz(&p0, &pos, &sz);
-    subtract_vector_xyz(&p0, &p0, &off);
-    add_vector_xyz(&p1, &pos, &sz);
-    add_vector_xyz(&p1, &p1, &off);
-    subtract_vector_xyz(&uv_origin_vertex, &pos, &sz);
-    subtract_vector_xyz(&uv_origin_vertex, &uv_origin_vertex, &off);
-    subtract_vector_xyz(&p3, &pos, &sz);
-    add_vector_xyz(&p3, &p3, &off);
+    sprite_center.x = x;
+    sprite_center.y = y;
+    sz.x = cy * fast_sin(rotation_angle);
+    sz.y = cy * fast_cos(rotation_angle);
+    rotated_half_width_offset.x = -cx * fast_cos(rotation_angle);
+    rotated_half_width_offset.y = cx * fast_sin(rotation_angle);
+    add_vector_xyz(&p0, &sprite_center, &sz);
+    subtract_vector_xyz(&p0, &p0, &rotated_half_width_offset);
+    add_vector_xyz(&p1, &sprite_center, &sz);
+    add_vector_xyz(&p1, &p1, &rotated_half_width_offset);
+    subtract_vector_xyz(&uv_origin_vertex, &sprite_center, &sz);
+    subtract_vector_xyz(&uv_origin_vertex, &uv_origin_vertex, &rotated_half_width_offset);
+    subtract_vector_xyz(&p3, &sprite_center, &sz);
+    add_vector_xyz(&p3, &p3, &rotated_half_width_offset);
     render_packet_cursor.tag->tag = 0x10000007;
     render_packet_cursor.tag->addr = 0;
     render_packet_cursor.tag->vif0 = 0;
