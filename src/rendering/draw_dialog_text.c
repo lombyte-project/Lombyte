@@ -115,7 +115,7 @@ void draw_dialog_text(void) {
         MODE_FREEZE_PAIRED_FOOTER_MESSAGE = 23,
         MODE_FREEZE_FORMATTED_PAIRED_FOOTER_MESSAGE = 24
     };
-    char buf[0x200];
+    char formatted_dialog_text[0x200];
     struct TextRegion box;
 
     setup_gif_paging(0);
@@ -128,7 +128,7 @@ void draw_dialog_text(void) {
         s32 top;
         s32 mid;
         f32 alpha;
-        f32 pos;
+        f32 icon_y_subpixels;
         f32 angle;
         f32 pivot;
 
@@ -162,9 +162,9 @@ void draw_dialog_text(void) {
         vu1_add_g_sregister(0x47, 0x3004B);
         top = mid - 0x20;
         draw_hud_sprite(find_valid_animation_frame_index_alt(0x755D, 0), 0xE0, top, 0x40, 0x40, 0x80);
-        pos = (f32)(mid << 4);
+        icon_y_subpixels = (f32)(mid << 4);
         angle = (f32)(game_frame_counter % 55) * -6.2831855f / 55.0f;
-        draw_rotated_sprite(4096.0f, pos, pivot, pivot, angle, 0x40, 0x40,
+        draw_rotated_sprite(4096.0f, icon_y_subpixels, pivot, pivot, angle, 0x40, 0x40,
                             get_frame_texture(find_valid_animation_frame_index_alt(0x755D, 1)));
         break;
     }
@@ -233,8 +233,8 @@ void draw_dialog_text(void) {
             } else if (boot_level_active != 0) {
                 left = 0x524E;
                 right = 0x524B;
-                sprintf(buf, freeze_fmt_scsc, get_help_message_text(0x4FA9), 1, 1, get_help_message_text(0x4FAA));
-                text = buf;
+                sprintf(formatted_dialog_text, freeze_fmt_scsc, get_help_message_text(0x4FA9), 1, 1, get_help_message_text(0x4FAA));
+                text = formatted_dialog_text;
             } else {
                 mid = 0x4FA8;
                 text = get_help_message_text(0x4FA9);
@@ -251,8 +251,8 @@ void draw_dialog_text(void) {
         case MODE_FREEZE_FORMATTED_PAIRED_FOOTER_MESSAGE:
             left = 0x524E;
             right = 0x524B;
-            sprintf(buf, freeze_fmt_scsc, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));
-            text = buf;
+            sprintf(formatted_dialog_text, freeze_fmt_scsc, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));
+            text = formatted_dialog_text;
             break;
         case MODE_FREEZE_PAIRED_FOOTER_MESSAGE:
             left = 0x524E;
@@ -272,8 +272,8 @@ void draw_dialog_text(void) {
             break;
         case MODE_FREEZE_FORMATTED_CENTERED_FOOTER_MESSAGE:
             mid = 0x4FA8;
-            sprintf(buf, freeze_fmt_scsc, get_help_message_text(0x4FB0), 1, 1, get_help_message_text(0x4FA7));
-            text = buf;
+            sprintf(formatted_dialog_text, freeze_fmt_scsc, get_help_message_text(0x4FB0), 1, 1, get_help_message_text(0x4FA7));
+            text = formatted_dialog_text;
             break;
         }
         box = (struct TextRegion){0, screen_extent.height, 0x60, 0x1A0, 0x100, 0x68, 0, 0, 0x10, 5};
