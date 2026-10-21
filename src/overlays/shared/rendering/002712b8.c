@@ -173,10 +173,10 @@ extern int p2718d0_rnd(int) __asm__("FUN_00213260");
 extern int p2718d0_trunc(float) __asm__("FUN_001fa6d0");
 extern float p2718d0_rndf(float, float) __asm__("FUN_002132a8");
 unsigned char *spawn_splash(u128 *pos, u128 *dir, int w, float scale, float speed) __asm__("FUN_L00_002718d0");
-unsigned char *spawn_splash(u128 *pos, u128 *dir, int w, float scale, float speed) {
+unsigned char *spawn_splash(u128 *pos, u128 *dir, int surface_height_reference, float scale, float speed) {
     unsigned char *particle;
     unsigned char *particle_data;
-    float r;
+    float initial_rotation;
     particle = p27fe00_alloc(0x2e);
     if (particle != 0) {
         qcopy(particle + 0x10, pos);
@@ -189,11 +189,11 @@ unsigned char *spawn_splash(u128 *pos, u128 *dir, int w, float scale, float spee
         *(short *)(particle + 0xA) = 5;
         *(float *)(particle + 0xC) = scale * 210000.0f;
         qcopy(particle_data, dir);
-        r = p2718d0_rndf(0.0f, 256.0f);
-        *(float *)(particle_data + 0x10) = r;
-        particle[8] = p2718d0_trunc(r);
+        initial_rotation = p2718d0_rndf(0.0f, 256.0f);
+        *(float *)(particle_data + 0x10) = initial_rotation;
+        particle[8] = p2718d0_trunc(initial_rotation);
         *(float *)(particle_data + 0x14) = speed;
-        *(int *)(particle_data + 0x18) = w;
+        *(int *)(particle_data + 0x18) = surface_height_reference;
     }
     return particle;
 }
