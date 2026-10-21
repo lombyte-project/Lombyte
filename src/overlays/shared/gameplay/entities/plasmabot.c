@@ -97,8 +97,8 @@ extern void FUN_L00_001fff28(void *, int, float);
 void FUN_L14_002b37b0(char *moby, float x) {
     char *moby_vars = *(char **)(moby + 0x78);
     float target_joint_angle = -*(float *)(moby_vars + 0x268);
-    float r = fast_subtract_rotations(x, *(float *)(moby + 0x48));
-    target_joint_angle = fast_add_rotations(target_joint_angle, -r);
+    float heading_angle_delta = fast_subtract_rotations(x, *(float *)(moby + 0x48));
+    target_joint_angle = fast_add_rotations(target_joint_angle, -heading_angle_delta);
     if (target_joint_angle > 1.2217304706573486f)
         target_joint_angle = 1.2217304706573486f;
     else if (target_joint_angle < -1.2217304706573486f)
