@@ -18,8 +18,8 @@ void music_start_track_body(int track, int track_flags, int volume) __asm__("FUN
 void music_start_track_body(int track, int track_flags, int volume) {
     char *music_state_base = (char *)D_001516D0;
     char *base;
-    int *tbl;
-    unsigned int cur;
+    int *music_track_locations;
+    unsigned int active_stream_handle;
     long track_location;
     int i;
     int flags;
@@ -27,17 +27,17 @@ void music_start_track_body(int track, int track_flags, int volume) {
     if (*(short *)(music_state_base + 0x3E) == 9) {
         return;
     }
-    cur = *(unsigned int *)(music_state_base + 0x34);
-    if (cur == 0 || cur == 0xFFFFFFFF) {
+    active_stream_handle = *(unsigned int *)(music_state_base + 0x34);
+    if (active_stream_handle == 0 || active_stream_handle == 0xFFFFFFFF) {
         return;
     }
     base = (char *)&disc_table;
-    tbl = (int *)(base + 0x2AA8);
+    music_track_locations = (int *)(base + 0x2AA8);
     i = track + 1;
-    if (tbl[i] == 0) {
+    if (music_track_locations[i] == 0) {
         return;
     }
-    track_location = tbl[i];
+    track_location = music_track_locations[i];
     flags = (track_flags & 1) ? 0x24 : 0x20;
     *(short *)(music_state_base + 0x38) = track;
     *(short *)(music_state_base + 0x3C) = track_flags;
@@ -46,7 +46,7 @@ void music_start_track_body(int track, int track_flags, int volume) {
     *(int *)(music_state_base + 0x4C) = 0xBB80;
     *(short *)(music_state_base + 0x3A) = volume;
     *(short *)(music_state_base + 0x44) = 0;
-    snd_play_vag_stream_by_loc_ex_cb(track_location, 0, 0, 0, volume, 0, 1, cur, flags,
+    snd_play_vag_stream_by_loc_ex_cb(track_location, 0, 0, 0, volume, 0, 1, active_stream_handle, flags,
                                      music_primary_replace_callback,
                                      (long)(unsigned int)(music_state_base + 0x34));
 }
