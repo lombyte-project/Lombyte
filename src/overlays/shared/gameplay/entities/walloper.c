@@ -2090,7 +2090,7 @@ void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 void FUN_L00_002bdc50(void *moby) {
     Quad quad;
     OvlVec4 edge_to_corner0, edge_to_corner2, face_normal, camera_to_corner1;
-    float y, first_pass_v, b, texture_scroll_step;
+    float y, first_pass_v, second_pass_v, texture_scroll_step;
     int c, i, j, k, off, jo;
 
     D_L00_0016178C = D_L00_0016178C - D_L00_00161790 * frame_scale;
@@ -2119,7 +2119,7 @@ void FUN_L00_002bdc50(void *moby) {
     if (D_L00_00161724 >= 5.0f) D_L00_00161724 -= 5.0f;
     for (i = 2; i < 12; i++) {
         first_pass_v = D_L00_00161720;
-        b = D_L00_00161724;
+        second_pass_v = D_L00_00161724;
         for (j = 0; j < 20; j++) {
             qcopy(&quad.corner[0], &D_L00_001DC1A0[i][j]);
             qcopy(&quad.corner[1], &D_L00_001DC1A0[i][(j + 1) % 20]);
@@ -2131,7 +2131,7 @@ void FUN_L00_002bdc50(void *moby) {
             fast_vec_sub(&camera_to_corner1, &quad.corner[1], &(*(OvlVec4 *)g_debug_camera));
             if (fast_vec_dot(&face_normal, &camera_to_corner1) >= 0.0f) {
                 first_pass_v += D_L00_00161714;
-                b += D_L00_00161714;
+                second_pass_v += D_L00_00161714;
             } else {
                 if (i == 11) {
                     quad.color[0] = quad.color[1] = D_L00_00161794 & 0xFFFFFF;
@@ -2147,14 +2147,14 @@ void FUN_L00_002bdc50(void *moby) {
                 first_pass_v = first_pass_v + D_L00_00161714;
                 fast_draw_quad_real(&quad, 0, 0);
                 quad.uv[0] = y;
-                quad.uv[1] = b;
+                quad.uv[1] = second_pass_v;
                 quad.uv[2] = y;
-                quad.uv[3] = b + D_L00_00161714;
-                quad.uv[5] = b;
+                quad.uv[3] = second_pass_v + D_L00_00161714;
+                quad.uv[5] = second_pass_v;
                 quad.uv[4] = y - D_L00_00161710;
                 quad.uv[6] = y - D_L00_00161710;
-                quad.uv[7] = b + D_L00_00161714;
-                b = b + D_L00_00161714;
+                quad.uv[7] = second_pass_v + D_L00_00161714;
+                second_pass_v = second_pass_v + D_L00_00161714;
                 fast_draw_quad_real(&quad, 0, 0);
             }
         }
