@@ -149,7 +149,7 @@ void FUN_L12_002ecac0(struct Moby *moby) {
     Quad quad;
     float rotation_matrix[12];
     float pos[4];
-    float segment_start_y, b;
+    float segment_start_y, segment_end_y;
     int i, col;
     copy_matrix_rotation(rotation_matrix, &moby->rot_row0);
     qcopy(pos, &moby->pos);
@@ -170,17 +170,17 @@ void FUN_L12_002ecac0(struct Moby *moby) {
         qcopy(&quad.v[i * 4], D_L12_001F5B20 + i * 16);
     }
     for (segment_start_y = -0.4f; segment_start_y < 0.36f; segment_start_y += 0.1f) {
-        b = segment_start_y + 0.1f;
+        segment_end_y = segment_start_y + 0.1f;
         quad.v[9] = segment_start_y;
         quad.v[1] = segment_start_y;
-        quad.v[13] = b;
-        quad.v[5] = b;
+        quad.v[13] = segment_end_y;
+        quad.v[5] = segment_end_y;
         if (moby->command & 1) {
             quad.v[2] = -fast_cos(segment_start_y * *(float *)&D_L12_00161A24) + 2.0f;
-            quad.v[6] = -fast_cos(b * *(float *)&D_L12_00161A24) + 2.0f;
+            quad.v[6] = -fast_cos(segment_end_y * *(float *)&D_L12_00161A24) + 2.0f;
         } else {
             quad.v[2] = fast_cos(segment_start_y * *(float *)&D_L12_00161A24);
-            quad.v[6] = fast_cos(b * *(float *)&D_L12_00161A24);
+            quad.v[6] = fast_cos(segment_end_y * *(float *)&D_L12_00161A24);
         }
         draw_geometry_quad(&quad, rotation_matrix, 0);
     }
