@@ -2307,27 +2307,27 @@ void FUN_L00_0026e670(O_26e670_26e670 *particle) {
     P_26e670_26e670 *P = &particle->p;
 
     if ((P->h1E ^ 1) & 1) {
-        O_26e670_26e670 *l = P->link;
+        O_26e670_26e670 *linked_particle = P->link;
         P_26e670_26e670 *linked_particle_data = 0;
         f32 k = 2.0f, g;
-        if (l)
-            linked_particle_data = &l->p;
+        if (linked_particle)
+            linked_particle_data = &linked_particle->p;
         FUN_001f99f8_x(&acc);
         g = 0.15f;
-        if (P->h1C == 0 && l != 0 && !(*(long long *)&linked_particle_data->x18 & 0x1FFFF00000000LL)) {
+        if (P->h1C == 0 && linked_particle != 0 && !(*(long long *)&linked_particle_data->x18 & 0x1FFFF00000000LL)) {
             f32 kk;
             f32 c02 = 0.2f, c1 = 1.0f, c999 = 0.999f;
             do {
                 kk = k * k;
-                FUN_001f9a28_x(&next_position, &l->pos, &particle->pos);
+                FUN_001f9a28_x(&next_position, &linked_particle->pos, &particle->pos);
                 k += c1;
                 g *= c999;
                 FUN_001f9bf8_x(&next_position, &next_position, c02 / kk);
                 FUN_001f9a10_x(&acc, &acc, &next_position);
-                l = linked_particle_data->link;
-                if (l)
-                    linked_particle_data = &l->p;
-                if (!l)
+                linked_particle = linked_particle_data->link;
+                if (linked_particle)
+                    linked_particle_data = &linked_particle->p;
+                if (!linked_particle)
                     break;
             } while (!(*(long long *)&linked_particle_data->x18 & 0x1FFFF00000000LL));
         }
