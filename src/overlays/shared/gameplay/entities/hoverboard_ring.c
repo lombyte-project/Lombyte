@@ -605,13 +605,13 @@ void FUN_L05_003298d8(Camera *cam) {
     Vec4 along;
     Vec4 flat;
     Vec4 unit;
-    Vec4 rot;
+    Vec4 yaw_rotated_forward;
     CameraOrbit *orbit = cam->orbit;
     CameraFocus *focus = &orbit->focus;
     f32 *spring = orbit->goal;
     f32 dot;
     f32 len;
-    f32 ang;
+    f32 initial_yaw;
     f32 pitch;
     f32 tilt;
 
@@ -631,14 +631,14 @@ void FUN_L05_003298d8(Camera *cam) {
         if (len == 0.0f) {
             len = 0.0001f;
         }
-        ang = 1.5707964f - fast_arc_sin(dot / len);
+        initial_yaw = 1.5707964f - fast_arc_sin(dot / len);
         normalize_vector_xyz(&unit, &flat, 1.0f);
         if (fast_vec_dot(&side, &unit) < 0.0f) {
-            ang = -ang;
+            initial_yaw = -initial_yaw;
         }
-        cam->yaw = ang;
-        rotate_about_axis(&rot, &fwd, &up, ang);
-        dot = fast_vec_dot(&rot, &rel);
+        cam->yaw = initial_yaw;
+        rotate_about_axis(&yaw_rotated_forward, &fwd, &up, initial_yaw);
+        dot = fast_vec_dot(&yaw_rotated_forward, &rel);
         len = vector_length_xyz(&rel);
         if (len == 0.0f) {
             len = 0.0001f;
