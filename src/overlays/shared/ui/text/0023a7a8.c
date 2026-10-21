@@ -35,7 +35,7 @@ int FUN_L00_0023a7a8(char *hud_element) {
     int x4;
     int y = 0x12;
     int x, frame_alpha, alpha, w, text_color, tex, c1, wd, displayed_numerator;
-    float f21, f20;
+    float hud_fade_factor, f20;
     if (pal_mode)
         y = 0xA;
     x = *(int *)(hud_element + 0x50);
@@ -43,25 +43,25 @@ int FUN_L00_0023a7a8(char *hud_element) {
         return *(int *)(hud_element + 0x58);
     {
         f20 = convert_integer_to_float(*(unsigned char *)(hud_element + 0x70));
-        f21 = f20 / convert_integer_to_float(*(int *)&D_L00_0015F91C_gp);
-        if (f21 > 1.0f)
-            f21 = 1.0f;
-        else if (f21 < 0.0f)
-            f21 = 0.0f;
+        hud_fade_factor = f20 / convert_integer_to_float(*(int *)&D_L00_0015F91C_gp);
+        if (hud_fade_factor > 1.0f)
+            hud_fade_factor = 1.0f;
+        else if (hud_fade_factor < 0.0f)
+            hud_fade_factor = 0.0f;
         f20 = convert_integer_to_float(*(unsigned char *)(fade_control_bytes + 1));
         f20 = f20 / convert_integer_to_float(*(int *)&D_L00_0015F920_gp);
         if (f20 > 1.0f)
             f20 = 1.0f;
         else if (f20 < 0.0f)
             f20 = 0.0f;
-        alpha = truncate_float_to_s32(f21 * 128.0f);
+        alpha = truncate_float_to_s32(hud_fade_factor * 128.0f);
         frame_alpha = truncate_float_to_s32((float)alpha * 0.7f);
         if (*(int *)(hud_element + 8) < 100)
             w = *(int *)&D_L00_0015F924;
         else
             w = *(int *)&D_L00_0015F928;
         x4 = x + 4;
-        wd = x + truncate_float_to_s32((float)w * f21);
+        wd = x + truncate_float_to_s32((float)w * hud_fade_factor);
         draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 1), x - 0x1C, y, 0x20, 0x20,
                         frame_alpha);
         draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 0), x4, y, wd, 0x20, frame_alpha);
