@@ -247,8 +247,8 @@ void FUN_L07_0031f900(unsigned char *moby) {
         break;
     case TRAIL_STATE_UPDATE:
         if (scene_state == 2) {
-            char *g = D_L07_0016C8E0;
-            int trail_source_selector = *(int *)(g + 0x30);
+            char *trail_source_state = D_L07_0016C8E0;
+            int trail_source_selector = *(int *)(trail_source_state + 0x30);
             if (trail_source_selector == 1 || trail_source_selector == 2) {
                 float point_0_position[4], point_1_position[4], point_2_position[4], point_3_position[4], point_4_position[4], point_5_position[4], point_0_trail_velocity[4], point_1_trail_velocity[4], point_2_trail_velocity[4];
                 int trail_source_moby_index = 0;
@@ -257,7 +257,7 @@ void FUN_L07_0031f900(unsigned char *moby) {
                     trail_source_moby_index = 3;
                 if (trail_source_selector == 2)
                     trail_source_moby_index = 4;
-                trail_source_moby = *(char **)(g - (-(trail_source_moby_index * 4)) + 0x178);
+                trail_source_moby = *(char **)(trail_source_state - (-(trail_source_moby_index * 4)) + 0x178);
                 moby_point_position(trail_source_moby, 0, point_0_position);
                 moby_point_position(trail_source_moby, 3, point_3_position);
                 subtract_vector_xyz(point_0_trail_velocity, point_0_position, point_3_position);
