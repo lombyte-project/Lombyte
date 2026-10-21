@@ -1647,26 +1647,26 @@ extern void set_vector_unit_z(void *) __asm__("FUN_001f9a00");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L18_002d88b8(struct Moby *moby) {
-    float v[4];
+    float spark_spawn_position[4];
     float world_emission_direction[4];
     float first_spark_vector[4];
-    float b[4];
+    float second_spark_vector[4];
     float spark_vector_offset[4];
     int spark_count;
-    float r;
+    float spawn_radius;
     float ang;
     int i0, i1, i2, i3, i4;
     char *mat = &moby->rot_row0;
     int i;
 
     spark_count = random_integer_below(5) + 5;
-    r = random_float_between(1.0f, 2.5f);
+    spawn_radius = random_float_between(1.0f, 2.5f);
     ang = random_angle_radians();
-    v[0] = fast_cos(ang) * r;
-    v[1] = fast_sin(ang) * r;
-    v[2] = 0.0f;
-    transform_vector_by_basis(v, v, mat);
-    add_vector_xyz(v, v, &moby->pos);
+    spark_spawn_position[0] = fast_cos(ang) * spawn_radius;
+    spark_spawn_position[1] = fast_sin(ang) * spawn_radius;
+    spark_spawn_position[2] = 0.0f;
+    transform_vector_by_basis(spark_spawn_position, spark_spawn_position, mat);
+    add_vector_xyz(spark_spawn_position, spark_spawn_position, &moby->pos);
     set_vector_unit_z(world_emission_direction);
     transform_vector_by_basis(world_emission_direction, world_emission_direction, mat);
     for (i = 0; i < spark_count; i++) {
@@ -1678,16 +1678,16 @@ void FUN_L18_002d88b8(struct Moby *moby) {
                                   1.0f) *
                                  frame_time);
         add_vector_xyz(first_spark_vector, first_spark_vector, spark_vector_offset);
-        normalize_vector_xyz(b, first_spark_vector,
+        normalize_vector_xyz(second_spark_vector, first_spark_vector,
                              (*(float *)&(D_L18_00161A6C_gp)) *
                                  (random_float_between(-(*(float *)&(D_L18_00161A74)),
                                                            (*(float *)&(D_L18_00161A74))) +
                                   1.0f) *
                                  frame_time);
-        b[2] = b[2] - (*(float *)&(D_L18_00161A70)) * frame_time;
+        second_spark_vector[2] = second_spark_vector[2] - (*(float *)&(D_L18_00161A70)) * frame_time;
         first_spark_vector[3] =
             random_float_between((*(float *)&(D_L18_00161A8C)), (*(float *)&(D_L18_00161A90)));
-        b[3] =
+        second_spark_vector[3] =
             random_float_between((*(float *)&(D_L18_00161A94)), (*(float *)&(D_L18_00161A98)));
         i0 = FUN_001fa6e0((*(int *)&(D_L18_00161A9C)), (*(int *)&(D_L18_00161AA0)),
                           random_float_between(0.0f, 1.0f));
@@ -1703,7 +1703,7 @@ void FUN_L18_002d88b8(struct Moby *moby) {
                                           (random_float_between(-(*(float *)&(D_L18_00161A88)),
                                                                     (*(float *)&(D_L18_00161A88))) +
                                            1.0f)));
-        spawn_spark(v, first_spark_vector, b, i0, i1, i2, i3, i4, (*(int *)&(D_L18_00161AB4)));
+        spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, i0, i1, i2, i3, i4, (*(int *)&(D_L18_00161AB4)));
     }
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DC850), where it is exact; names translated to the US level program. */
