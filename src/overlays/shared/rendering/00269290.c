@@ -2661,26 +2661,26 @@ int FUN_001fa6d0_0026f548(float) __asm__("FUN_001fa6d0");
 float FUN_002132a8_0026f548(float, float) __asm__("FUN_002132a8");
 
 extern unsigned char *D_L00_001B210C __attribute__((section(".data")));
-void FUN_L00_0026f548(u128 *spawn_position, u128 *b, int k, int j) {
+void FUN_L00_0026f548(u128 *spawn_position, u128 *initial_velocity, int k, int j) {
     unsigned char *particle = FUN_L00_002678b8_0026f548(0x23);
     if (particle) {
-        unsigned char *v;
+        unsigned char *particle_data;
         qcopy(particle + 0x10, spawn_position);
-        v = particle + 0x20;
+        particle_data = particle + 0x20;
         *(int *)(particle + 4) = 0x80808080;
         particle[9] = FUN_001fa6d0_0026f548(2.0f) + 0x10;
         particle[1] = 0;
         particle[3] = 0x44;
         *(float *)(particle + 0xc) = FUN_002132a8_0026f548(10500.0f, 16800.0f);
         particle[2] = *D_L00_001B210C;
-        qcopy(v, b);
-        *(int *)(v + 0x14) = j;
-        *(int *)(v + 0x10) = k;
-        *(float *)(v + 0x18) = *(float *)(particle + 0x18);
+        qcopy(particle_data, initial_velocity);
+        *(int *)(particle_data + 0x14) = j;
+        *(int *)(particle_data + 0x10) = k;
+        *(float *)(particle_data + 0x18) = *(float *)(particle + 0x18);
         if (k == 2) {
-            *(int *)(v + 0x18) = 0;
+            *(int *)(particle_data + 0x18) = 0;
         }
-        *(float *)(v + 0x1c) =
+        *(float *)(particle_data + 0x1c) =
             FUN_002132a8_0026f548(D_0015ED70_0026f548 * 10.5f, D_0015ED70_0026f548 * 18.0f);
     }
 }
