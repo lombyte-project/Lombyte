@@ -207,7 +207,7 @@ void FUN_L01_00234b40(void) {
     f32 speed;
     f32 additional_planar_speed;
     f32 speed_decay_step;
-    f32 arg;
+    f32 air_acceleration;
     s32 state;
 
     state = hero.state.current;
@@ -284,7 +284,7 @@ void FUN_L01_00234b40(void) {
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, hero.unk414);
         FUN_L00_002132b8(0.7f, frame_time * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
-        arg = frame_time_sq * 20.0f;
+        air_acceleration = frame_time_sq * 20.0f;
         if (hero.target_speed < D_L01_0017C250[0] * frame_time * 0.2f) {
             if (hero.state.control_mode == 2) {
                 speed_decay_step = hero.unk944;
@@ -294,12 +294,12 @@ void FUN_L01_00234b40(void) {
                 return;
             }
             if (hero.unk30A != 0) {
-                arg = frame_time_sq * 6.0f;
+                air_acceleration = frame_time_sq * 6.0f;
             } else {
-                arg = frame_time_sq * 2.0f;
+                air_acceleration = frame_time_sq * 2.0f;
             }
         }
-        air_accel(arg);
+        air_accel(air_acceleration);
     }
 }
 
