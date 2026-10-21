@@ -1090,7 +1090,7 @@ int hero_set_state(int a, int b) {
         }
         case HERO_STATE_CROUCH_SWING: {
             struct UsageStat *h = usage_stats.stat;
-            char *h2;
+            char *item_usage_stats_base;
             struct Hero *q;
             if (h[1].count <= 0xFFFE) {
                 h[1].count = h[1].count + 1;
@@ -1100,15 +1100,15 @@ int hero_set_state(int a, int b) {
             }
             h[1].level_mask =
                 h[1].level_mask | (1 << current_level_index) | 0x80000000;
-            h2 = item_usage;
-            if (*(unsigned short *)(h2 + 0x128) <= 0xFFFE) {
-                *(unsigned short *)(h2 + 0x128) = *(unsigned short *)(h2 + 0x128) + 1;
+            item_usage_stats_base = item_usage;
+            if (*(unsigned short *)(item_usage_stats_base + 0x128) <= 0xFFFE) {
+                *(unsigned short *)(item_usage_stats_base + 0x128) = *(unsigned short *)(item_usage_stats_base + 0x128) + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h2 + 0x12A)) {
-                *(unsigned short *)(h2 + 0x12A) = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(item_usage_stats_base + 0x12A)) {
+                *(unsigned short *)(item_usage_stats_base + 0x12A) = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h2 + 0x12C) =
-                *(unsigned int *)(h2 + 0x12C) | (1 << current_level_index) | 0x80000000;
+            *(unsigned int *)(item_usage_stats_base + 0x12C) =
+                *(unsigned int *)(item_usage_stats_base + 0x12C) | (1 << current_level_index) | 0x80000000;
             q = &hero;
             q->attack_record = 3;
             q->saved_item[0] = 0;
