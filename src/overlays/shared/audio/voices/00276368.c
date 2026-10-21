@@ -357,7 +357,7 @@ void FUN_L00_00276908(void) {
     s32 i;
     s32 value;
     s32 handle;
-    void *obj;
+    void *owner_callback_object;
     void (*callback)(void *, s32);
     u8 *table;
 
@@ -367,11 +367,11 @@ void FUN_L00_00276908(void) {
         vu1_init_chain();
         if (D_L00_001B9CF0.owner != 0) {
             for (i = 0; i < 14; i++) {
-                obj = D_L00_001B9CF0.owner->objs[i];
-                if (obj != 0) {
-                    callback = *(void (**)(void *, s32))((u8 *)obj + 0xc);
+                owner_callback_object = D_L00_001B9CF0.owner->objs[i];
+                if (owner_callback_object != 0) {
+                    callback = *(void (**)(void *, s32))((u8 *)owner_callback_object + 0xc);
                     if (callback != 0) {
-                        callback(obj, 0);
+                        callback(owner_callback_object, 0);
                     }
                 }
             }
