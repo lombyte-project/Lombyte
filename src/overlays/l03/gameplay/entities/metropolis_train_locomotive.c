@@ -3165,7 +3165,7 @@ void FUN_L03_002c95a8(Moby2C8398 *moby) {
         NO_KNOCKBACK_HIT_RESPONSE = 12,
         ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE = 13
     };
-    float vec[4];
+    float hit_knockback_vector[4];
     int kind;
     float damage;
     float angle;
@@ -3217,8 +3217,8 @@ void FUN_L03_002c95a8(Moby2C8398 *moby) {
             moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
             moby_data->q.i24 = 9;
             moby_data->q.b3D = 0;
-            *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
-            trooper_knockback_arc(vec, &angle, &moby_data->q.f18, &moby_data->q.f1C);
+            *(OvlQuad *)hit_knockback_vector = *(OvlQuad *)(hit + 0x10);
+            trooper_knockback_arc(hit_knockback_vector, &angle, &moby_data->q.f18, &moby_data->q.f1C);
             if (fast_difference_between_rotations(moby->rot[2], angle) < 1.0471976f) {
                 moby->rot[2] = add_rotations_c95(angle, 3.1415927f);
             }
@@ -3241,8 +3241,8 @@ void FUN_L03_002c95a8(Moby2C8398 *moby) {
             moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
             moby_data->q.i24 = 9;
             moby_data->q.b3D = 0;
-            *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
-            trooper_knockback_arc(vec, &angle, &moby_data->q.f18, &moby_data->q.f1C);
+            *(OvlQuad *)hit_knockback_vector = *(OvlQuad *)(hit + 0x10);
+            trooper_knockback_arc(hit_knockback_vector, &angle, &moby_data->q.f18, &moby_data->q.f1C);
             trooper_start_knockback(angle, moby, (char *)moby_data + 0x70, 5, 5, 0);
             moby_data->q.f50 = 6.0f;
             moby_data->q.f54 = 13.0f;
@@ -3260,8 +3260,8 @@ void FUN_L03_002c95a8(Moby2C8398 *moby) {
             moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
             moby_data->q.i24 = 9;
             moby_data->q.b3D = 0;
-            *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
-            trooper_knockback_arc(vec, &angle, &moby_data->q.f18, &moby_data->q.f1C);
+            *(OvlQuad *)hit_knockback_vector = *(OvlQuad *)(hit + 0x10);
+            trooper_knockback_arc(hit_knockback_vector, &angle, &moby_data->q.f18, &moby_data->q.f1C);
             trooper_start_knockback(angle, moby, (char *)moby_data + 0x70, 6, 5, 2);
             moby_data->q.f50 = 5.0f;
             moby_data->q.f54 = 10.0f;
@@ -3277,8 +3277,8 @@ void FUN_L03_002c95a8(Moby2C8398 *moby) {
             moby_data->q.f1C = JUMP_SPEED(2.0f, 40.0f);
             moby_data->q.i24 = 9;
             moby_data->q.b3D = 0;
-            *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
-            trooper_knockback_arc(vec, &angle, &moby_data->q.f18, &moby_data->q.f1C);
+            *(OvlQuad *)hit_knockback_vector = *(OvlQuad *)(hit + 0x10);
+            trooper_knockback_arc(hit_knockback_vector, &angle, &moby_data->q.f18, &moby_data->q.f1C);
             trooper_start_knockback(angle, moby, (char *)moby_data + 0x70, 7, 5, 2);
             moby_data->q.f50 = 10.0f;
             moby_data->q.f54 = 20.0f;
