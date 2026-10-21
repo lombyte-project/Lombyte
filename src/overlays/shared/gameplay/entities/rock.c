@@ -1451,7 +1451,7 @@ s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void FUN_L01_00308380(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    float r;
+    float updated_rotation_z;
     float bobbing_sine;
     float k;
     moby->scale =
@@ -1464,9 +1464,9 @@ void FUN_L01_00308380(struct Moby *moby) {
             fast_add_rotations(moby->rot.x, *(float *)(data + 0x68));
         moby->rot.y =
             fast_add_rotations(moby->rot.y, *(float *)(data + 0x64));
-        r = fast_add_rotations(moby->rot.z, *(float *)(data + 0x60));
+        updated_rotation_z = fast_add_rotations(moby->rot.z, *(float *)(data + 0x60));
         k = *(float *)&D_L01_00161F2C_gp * DEG_TO_RAD * frame_time;
-        moby->rot.z = r;
+        moby->rot.z = updated_rotation_z;
         moby->rot.w = fast_add_rotations(moby->rot.w, k);
     }
     FUN_L01_00308550(moby);
