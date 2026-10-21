@@ -2688,9 +2688,9 @@ extern struct Moby *break_spawn_shard(void *, void *, s32, f32, s32, f32, f32, f
 void FUN_L07_00319f48(struct Moby *moby) {
     BreakableVars *breakable_vars = (BreakableVars *)moby->pvars;
     MobyHit *hit;
-    Vec4f ext, shard_position, vel;
+    Vec4f ext, shard_position, shard_velocity;
     f32 scale;
-    s32 cls;
+    s32 shard_class;
     s32 i;
 
     hit = find_moby_hit(moby, 0x30000, 0);
@@ -2707,14 +2707,14 @@ void FUN_L07_00319f48(struct Moby *moby) {
             shard_position.y = random_float_between(-ext.y, ext.y) * 0.5f;
             shard_position.z = random_float_between(1.5f, ext.z);
             add_vector_xyz(&shard_position, &shard_position, &moby->pos);
-            break_rand_vec(&vel, D_0015ED6C * 5.0f, D_0015ED6C * 10.0f);
-            if (vel.z < 0.0f)
-                vel.z = -vel.z;
-            if (vel.z < D_0015ED6C + D_0015ED6C)
-                vel.z = vel.z + (D_0015ED6C + D_0015ED6C);
-            cls = i % 3 + 0x2B8;
+            break_rand_vec(&shard_velocity, D_0015ED6C * 5.0f, D_0015ED6C * 10.0f);
+            if (shard_velocity.z < 0.0f)
+                shard_velocity.z = -shard_velocity.z;
+            if (shard_velocity.z < D_0015ED6C + D_0015ED6C)
+                shard_velocity.z = shard_velocity.z + (D_0015ED6C + D_0015ED6C);
+            shard_class = i % 3 + 0x2B8;
             scale = random_float_between(0.41f, 0.5f);
-            break_spawn_shard(&shard_position, &vel, cls, scale, random_int_between(0x32, 0x50), 1.0f, 1.0f,
+            break_spawn_shard(&shard_position, &shard_velocity, shard_class, scale, random_int_between(0x32, 0x50), 1.0f, 1.0f,
                               0.75f, 0);
         }
         spawn_explosion(moby, &hit->pos, hit, 3.0f, 1.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
