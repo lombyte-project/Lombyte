@@ -2369,7 +2369,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
     };
     float pos[4], delta[4], ahead[4], impact[4], spray[4], lateral[4], dust[4];
     char *hoverboard_dummy_data = *(char **)(moby + 0x78);
-    char *g;
+    char *hero_base;
     int i, nearby_moby_count, next;
     /* One mask for both collision calls. Held in a local it is one more instruction when GCSE sizes its
        expression table, and that size orders the stack slots of the cached addresses (sp+0x90..0xC4):
@@ -2461,8 +2461,8 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         }
         break;
     case HOVERBOARD_DUMMY_STATE_RACING:
-        g = ((char *)&hero);
-        if (*(int *)(g + 0x208C) != 22) {
+        hero_base = ((char *)&hero);
+        if (*(int *)(hero_base + 0x208C) != 22) {
             moby[0x20] = 0;
             break;
         }
@@ -2474,7 +2474,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             FUN_L00_00263e30(moby, 0x655, 1, 0x656, 2, 2, 0);
             FUN_L00_00263e30(moby, 0x6FA, 1, 0x6FB, 1, 1, 0);
             *(short *)(hoverboard_dummy_data + 0x2F2) = 0;
-            *(int *)(g + 0x8A8) += 250;
+            *(int *)(hero_base + 0x8A8) += 250;
             moby[0x20] = 3;
             *(int *)(moby + 0x94) = 0;
             *(unsigned short *)(moby + 0x34) |= 0x41;
@@ -2552,11 +2552,11 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             if (z < *(float *)(hoverboard_dummy_data + 0x268)) {
                 speed = D_0015ED6C * 19.0f;
             }
-            g = ((char *)&hero);
-            if (*(int *)(g + 0x894) < scale_game_frames(700)) {
+            hero_base = ((char *)&hero);
+            if (*(int *)(hero_base + 0x894) < scale_game_frames(700)) {
                 speed += D_0015ED6C * 3.0f;
             }
-            if (*(short *)(g - (-(*(int *)(hoverboard_dummy_data + 0x2CC) * 2)) + 0x7C0) < *(int *)(g + 0x8C0)) {
+            if (*(short *)(hero_base - (-(*(int *)(hoverboard_dummy_data + 0x2CC) * 2)) + 0x7C0) < *(int *)(hero_base + 0x8C0)) {
                 speed -= D_0015ED6C;
             } else {
                 speed += D_0015ED6C;
