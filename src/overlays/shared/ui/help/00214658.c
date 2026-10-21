@@ -835,7 +835,7 @@ void FUN_L00_00216e48(int voice_slot_index, int a, int b) {
 
 void FUN_L00_00216ec0_00216ec0(s32, s32, s32) __asm__("FUN_L00_00216ec0");
 
-void FUN_L00_00216ec0_00216ec0(s32 voice_entry_index, s32 b, s32 voice_allocation_argument) {
+void FUN_L00_00216ec0_00216ec0(s32 voice_entry_index, s32 voice_delay_timer, s32 voice_allocation_argument) {
     struct Hero *base;
     s16 *current_slot;
     s32 slots_examined = 0;
@@ -846,7 +846,7 @@ void FUN_L00_00216ec0_00216ec0(s32 voice_entry_index, s32 b, s32 voice_allocatio
         if (current_slot[0] == 0) {
             current_slot[0] = 1;
             current_slot[3] = voice_allocation_argument;
-            current_slot[2] = b;
+            current_slot[2] = voice_delay_timer;
             current_slot[1] = voice_entry_index;
             return;
         }
