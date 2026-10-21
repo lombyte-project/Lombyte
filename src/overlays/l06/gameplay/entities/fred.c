@@ -1,5 +1,6 @@
 /* Level 06 moby classes: fred, shuttle, red_button. */
 #include "types.h"
+
 #include "rnc/overlay/level_globals.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -7,6 +8,16 @@
 
 #include "eetypes.h"
 #include "qcopy.h"
+
+/* Shuttle route selection; independent of Moby.state. */
+enum ShuttleRoute {
+    SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP = 0x0,
+    SHUTTLE_ROUTE_SECOND_TO_INITIAL_STOP = 0x1,
+    SHUTTLE_ROUTE_FORCED_TO_INITIAL_STOP = 0x2,
+    SHUTTLE_ROUTE_INITIAL_TO_THIRD_STOP = 0x3,
+    SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP = 0x4
+};
+
 typedef struct {
     u128 v[4];
     int color[4];
@@ -6803,13 +6814,7 @@ void shuttle_update(struct Moby *moby) {
         WAIT_TO_ENTER_SHUTTLE_SAVE_FLOW = 8,
         WAIT_TO_SAVE_AND_RESUME_SHUTTLE_REQUESTS = 9
     };
-    enum {
-        SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP = 0,
-        SHUTTLE_ROUTE_SECOND_TO_INITIAL_STOP = 1,
-        SHUTTLE_ROUTE_FORCED_TO_INITIAL_STOP = 2,
-        SHUTTLE_ROUTE_INITIAL_TO_THIRD_STOP = 3,
-        SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP = 4
-    };
+
     Data_302578 *shuttle_vars = *(Data_302578 **)&moby->pvars;
     float old_pos[4];
     float old_rot[4];
@@ -7073,13 +7078,7 @@ void FUN_L06_00302fd8(char *shuttle_moby) {
         SHUTTLE_AT_SECOND_STOP = 1,
         SHUTTLE_AT_THIRD_STOP = 2
     };
-    enum {
-        SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP = 0,
-        SHUTTLE_ROUTE_SECOND_TO_INITIAL_STOP = 1,
-        SHUTTLE_ROUTE_FORCED_TO_INITIAL_STOP = 2,
-        SHUTTLE_ROUTE_INITIAL_TO_THIRD_STOP = 3,
-        SHUTTLE_ROUTE_THIRD_TO_INITIAL_STOP = 4
-    };
+
     char *shuttle_vars = *(char **)(shuttle_moby + 0x78);
     switch (*(int *)(shuttle_vars + 0xBC)) {
     case SHUTTLE_AT_INITIAL_STOP: {

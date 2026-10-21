@@ -1,5 +1,6 @@
 /* Level 18 moby classes: drek_fight_missile, drek_final_boss_robot, deplanetizer_gun, rocket_tank. */
 #include "types.h"
+
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -8,6 +9,13 @@
 #include "qcopy.h"
 #include "rnc/rendering/geometry_quad.h"
 
+/* Drek missile Moby.state shared by its update and response helpers. */
+enum DrekMissileState {
+    DREK_MISSILE_INITIALIZE = 0x0,
+    DREK_MISSILE_WANDER = 0x2,
+    DREK_MISSILE_DIVE = 0x3,
+    DREK_MISSILE_WAIT_TO_EXPLODE = 0x4
+};
 
 #define NOT_SDA
 
@@ -55,12 +63,6 @@ extern int func_0022ED80_2F0F78(int, int, int) __asm__("FUN_0022da68");
 
 void drek_fight_missile_update(struct Moby *moby) __asm__("FUN_L18_002efb88");
 void drek_fight_missile_update(struct Moby *moby) {
-    enum {
-        DREK_MISSILE_INITIALIZE = 0,
-        DREK_MISSILE_WANDER = 2,
-        DREK_MISSILE_DIVE = 3,
-        DREK_MISSILE_WAIT_TO_EXPLODE = 4
-    };
     char *missile_vars = (char *)moby->pvars;
     if (moby->state != 4) {
         moby->rot.x = fast_add_rotations(moby->rot.x,
@@ -372,11 +374,6 @@ extern int D_L18_00162264 __attribute__((sda));
 extern float D_L18_00162268 __attribute__((sda));
 extern float D_L18_0016226C __attribute__((sda));
 void FUN_L18_002f06c0(struct Moby *group_moby) {
-    enum {
-        DREK_MISSILE_WANDER = 2,
-        DREK_MISSILE_DIVE = 3,
-        DREK_MISSILE_WAIT_TO_EXPLODE = 4
-    };
     float effect_world_position[4];
     short *group_entry;
     unsigned char *missile_moby;
@@ -1242,7 +1239,6 @@ typedef struct {
     char pad46[0x132];
     char *mobs[1];
 } MobyList;
-
 
 typedef struct {
     float v[4];

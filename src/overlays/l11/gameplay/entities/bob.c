@@ -1,5 +1,6 @@
 /* Level 11 moby classes: bob, resort_owner, fred_pokitaru, teleporter, pokitaru_boat. */
 #include "types.h"
+
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -10,6 +11,35 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
+
+/* Moby.state for the resort-owner callbacks; path progression is separate. */
+enum ResortOwnerState {
+    RESORT_OWNER_INITIALIZE = 0x0,
+    RESORT_OWNER_CHECK_INITIAL_DIALOGUE = 0x1,
+    RESORT_OWNER_INITIAL_DIALOGUE = 0x2,
+    RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 0x3,
+    RESORT_OWNER_FOLLOW_HERO = 0x4,
+    RESORT_OWNER_FOLLOW_DISTANT_HERO = 0x5,
+    RESORT_OWNER_MOVE_TO_PATH_POINT = 0x6,
+    RESORT_OWNER_JUMP_TO_TARGET = 0x7,
+    RESORT_OWNER_MOVE_TO_GATE_TARGET = 0x8,
+    RESORT_OWNER_WAIT_AT_GATE = 0x9,
+    RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET = 0xA,
+    RESORT_OWNER_WAIT_TO_ADVANCE_FINAL_PATH_LEG = 0xB,
+    RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 0xC,
+    RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END = 0xD,
+    RESORT_OWNER_CHECK_POST_PATH_DIALOGUE = 0xE,
+    RESORT_OWNER_WAIT_FOR_POST_PATH_DIALOGUE_END = 0xF
+};
+
+/* Resort-owner path traversal, independent of Moby.state. */
+enum ResortOwnerPathLeg {
+    RESORT_OWNER_FIRST_PATH_LEG = 0x0,
+    RESORT_OWNER_SECOND_PATH_LEG = 0x1,
+    RESORT_OWNER_PENULTIMATE_PATH_LEG = 0x2,
+    RESORT_OWNER_FINAL_PATH_LEG = 0x3
+};
+
 #define MOBY(p) ((struct Moby *)(p))
 
 #define NOT_SDA
@@ -107,7 +137,6 @@ void FUN_L11_002cb810(struct Moby *moby) {
 #define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CCB50), where it is exact; names translated to the US level program. */
-
 
 void FUN_L11_002cb990(struct Moby *moby) {
     char *state = (char *)moby->pvars;
@@ -348,22 +377,6 @@ extern int D_L11_0016D260[];
 extern int D_L11_0015FFD8;
 
 void FUN_L11_002d1030(void *mp) {
-    enum {
-        RESORT_OWNER_INITIALIZE = 0,
-        RESORT_OWNER_CHECK_INITIAL_DIALOGUE = 1,
-        RESORT_OWNER_INITIAL_DIALOGUE = 2,
-        RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
-        RESORT_OWNER_FOLLOW_HERO = 4,
-        RESORT_OWNER_FOLLOW_DISTANT_HERO = 5,
-        RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
-        RESORT_OWNER_JUMP_TO_TARGET = 7,
-        RESORT_OWNER_MOVE_TO_GATE_TARGET = 8,
-        RESORT_OWNER_WAIT_AT_GATE = 9,
-        RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET = 10,
-        RESORT_OWNER_WAIT_TO_ADVANCE_FINAL_PATH_LEG = 11,
-        RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
-        RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END = 13
-    };
     struct Moby *moby = mp;
     char *pvars = (char *)moby->pvars;
     float ang;
@@ -462,10 +475,6 @@ extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void FUN_L00_00261d78(float, void *, void *, void *);
 
 void FUN_L11_002d1340(void *mp) {
-    enum {
-        RESORT_OWNER_PENULTIMATE_PATH_LEG = 2,
-        RESORT_OWNER_FINAL_PATH_LEG = 3
-    };
     unsigned char *moby = mp;
     char *moby_vars = *(char **)(moby + 0x78);
     float A[4];
@@ -558,30 +567,6 @@ struct PokKeeperVars {
 /* NPC that talks to the hero, then walks a chain of level path points ahead of him, opening the
    gate mobys (FUN_L11_0030a840) and moving path points as it goes. */
 void FUN_L11_002d14b0(void *arg) {
-    enum {
-        RESORT_OWNER_INITIALIZE = 0,
-        RESORT_OWNER_CHECK_INITIAL_DIALOGUE = 1,
-        RESORT_OWNER_INITIAL_DIALOGUE = 2,
-        RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
-        RESORT_OWNER_FOLLOW_HERO = 4,
-        RESORT_OWNER_FOLLOW_DISTANT_HERO = 5,
-        RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
-        RESORT_OWNER_JUMP_TO_TARGET = 7,
-        RESORT_OWNER_MOVE_TO_GATE_TARGET = 8,
-        RESORT_OWNER_WAIT_AT_GATE = 9,
-        RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET = 10,
-        RESORT_OWNER_WAIT_TO_ADVANCE_FINAL_PATH_LEG = 11,
-        RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
-        RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END = 13,
-        RESORT_OWNER_CHECK_POST_PATH_DIALOGUE = 14,
-        RESORT_OWNER_WAIT_FOR_POST_PATH_DIALOGUE_END = 15
-    };
-    enum {
-        RESORT_OWNER_FIRST_PATH_LEG = 0,
-        RESORT_OWNER_SECOND_PATH_LEG = 1,
-        RESORT_OWNER_PENULTIMATE_PATH_LEG = 2,
-        RESORT_OWNER_FINAL_PATH_LEG = 3
-    };
     struct Moby *moby = arg;
     struct PokKeeperVars *moby_vars = (struct PokKeeperVars *)moby->pvars;
     int proximity = FUN_L11_002d2460(moby);
@@ -805,20 +790,6 @@ float D_L11_00161400 = -3.0f;
 extern int D_L11_0015FFD8;
 
 void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
-    enum {
-        RESORT_OWNER_CHECK_INITIAL_DIALOGUE = 1,
-        RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
-        RESORT_OWNER_FOLLOW_HERO = 4,
-        RESORT_OWNER_FOLLOW_DISTANT_HERO = 5,
-        RESORT_OWNER_MOVE_TO_PATH_POINT = 6,
-        RESORT_OWNER_JUMP_TO_TARGET = 7,
-        RESORT_OWNER_MOVE_TO_GATE_TARGET = 8,
-        RESORT_OWNER_WAIT_AT_GATE = 9,
-        RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET = 10,
-        RESORT_OWNER_WAIT_TO_ADVANCE_FINAL_PATH_LEG = 11,
-        RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
-        RESORT_OWNER_CHECK_POST_PATH_DIALOGUE = 14
-    };
     char *moby_vars = (char *)moby->pvars;
     float gate_target_offset[4];
 
@@ -914,10 +885,6 @@ extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("FUN_L01_00276fe8");
 
 int FUN_L11_002d2340(struct Moby *moby, char *other) {
-    enum {
-        RESORT_OWNER_PENULTIMATE_PATH_LEG = 2,
-        RESORT_OWNER_FINAL_PATH_LEG = 3
-    };
     struct TgtData *moby_vars = (struct TgtData *)moby->pvars;
     int *leg_path_ids = moby_vars->a;
     int *ent = D_L11_001B0EB0[*(int *)((char *)leg_path_ids - (-(moby_vars->idx * 4)))];
@@ -1055,20 +1022,8 @@ typedef struct {
     float head_yaw;
 } WD11b;
 
-
 /* Guard head update: in its watching states it turns its body and head toward the hero. */
 void FUN_L11_002d27b0(WM11 *moby) {
-    enum {
-        RESORT_OWNER_INITIALIZE = 0,
-        RESORT_OWNER_CHECK_INITIAL_DIALOGUE = 1,
-        RESORT_OWNER_INITIAL_DIALOGUE = 2,
-        RESORT_OWNER_WAIT_TO_FOLLOW_HERO = 3,
-        RESORT_OWNER_FOLLOW_HERO = 4,
-        RESORT_OWNER_FOLLOW_DISTANT_HERO = 5,
-        RESORT_OWNER_WAIT_TO_ADVANCE_FINAL_PATH_LEG = 11,
-        RESORT_OWNER_CHECK_PATH_COMPLETION_DIALOGUE = 12,
-        RESORT_OWNER_CHECK_POST_PATH_DIALOGUE = 14
-    };
     WS11 scratch;
     WD11b *moby_vars = (WD11b *)moby->data;
     float rate;
@@ -1615,7 +1570,6 @@ typedef struct {
     char pad4[0x22DA - 0x2088];
     unsigned short index;
 } Globals;
-
 
 void FUN_L11_002f3350(struct Moby *moby) {
     enum {

@@ -1,5 +1,6 @@
 /* Level 10 moby classes: screamer, toxic_crab, blarg_ship, nanotech_upgrade_vendor, gun, gate_1, gate_2. */
 #include "types.h"
+
 #include "rnc/overlay/level_globals.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/hero.h"
@@ -11,6 +12,14 @@
 #include "rnc/math/vector.h"
 
 #include "qcopy.h"
+
+/* Gate states shared by the paired gate update callbacks. */
+enum GateState {
+    GATE_STATE_INITIALIZE = 0x0,
+    GATE_STATE_CLOSED = 0x1,
+    GATE_STATE_OPENING = 0x2,
+    GATE_STATE_OPEN = 0x3
+};
 
 /* Update function for moby class 1196 (screamer) on level 10: follows its path, turns to its target, wanders. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E0630), where it is exact; names translated to the US level program. */
@@ -453,9 +462,7 @@ void FUN_L10_002e0138(struct Moby *moby) {
 
 typedef struct Hero Hero_2e01a8;
 
-
 typedef int OvlQuad_2e01a8 __attribute__((mode(TI)));
-
 
 typedef struct Vars_2e01a8 {
     char p0[0x20];
@@ -902,7 +909,6 @@ void FUN_L10_002e01a8(Moby *moby) {
 
 /* Level 10 moby update: tracks the owner's height and fires a shot, then sets the moby's display state. */
 
-
 typedef struct Hit_2E2B80 {
     float x;
     float y;
@@ -1100,7 +1106,6 @@ void FUN_L10_002e17c0(struct Moby *moby)
 /* Stores a value into each table entry listed for this moby's index. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E3070), where it is exact; names translated to the US level program. */
 
-
 extern int D_L10_00161E00 __attribute__((sda));
 void FUN_L10_002e1cb0(struct Moby *moby) {
     short *group_entry;
@@ -1125,7 +1130,6 @@ void FUN_L10_002e1cb0(struct Moby *moby) {
 
 /* Update for the toxic crab (moby class 1202): line-of-sight test, then a 13-state walk/chase/attack/death machine. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E30F8), where it is exact; names translated to the US level program. */
-
 
 typedef struct {
     float v[4];
@@ -2002,7 +2006,6 @@ void FUN_L10_002e3a90(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E52B0), where it is exact; names translated to the US level program. */
 
 typedef struct Hero Hero;
-
 
 typedef int u128_2E52B0 __attribute__((mode(TI)));
 
@@ -3326,12 +3329,6 @@ extern int tick_countdown_e9648(int *) __asm__("FUN_001f9740");
 /* Level 10 door: swings open once the hero enters its clip volume and sets its save bit; starts open when the bit is already set. */
 void gate_1_update(struct Moby *moby) __asm__("FUN_L10_002e9648");
 void gate_1_update(struct Moby *moby) {
-    enum {
-        GATE_STATE_INITIALIZE = 0,
-        GATE_STATE_CLOSED = 1,
-        GATE_STATE_OPENING = 2,
-        GATE_STATE_OPEN = 3
-    };
     DoorVars_e9648 *vars = (DoorVars_e9648 *)moby->pvars;
     unsigned short save_id;
 
@@ -3449,12 +3446,6 @@ extern int func_001F9908_2EAD50(int *) __asm__("FUN_001f9740");
 void gate_2_update(GateMoby_2EAD50 *m) __asm__("FUN_L10_002e9990");
 void gate_2_update(GateMoby_2EAD50 *moby)
 {
-    enum {
-        GATE_STATE_INITIALIZE = 0,
-        GATE_STATE_CLOSED = 1,
-        GATE_STATE_OPENING = 2,
-        GATE_STATE_OPEN = 3
-    };
     GateVars_2EAD50 *vars = moby->vars;
     float opening_offset[3];
     Vec_2EAD50 out;

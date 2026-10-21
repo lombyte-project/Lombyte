@@ -1,5 +1,7 @@
 /* Level 17 moby classes: door, fighter_jet, magnet_elevator, robot_dog, shuttle. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby_class_id.h"
+
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -11,9 +13,32 @@
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/level_labels.h"
 
+/* Shuttle destination selection shared by its route helpers. */
+enum ShuttleStop {
+    SHUTTLE_STOP_FIRST = 0x0,
+    SHUTTLE_STOP_SECOND = 0x1
+};
+
+/* Robot-dog state byte (+0x20) shared by its update helpers. */
+enum RobotDogState {
+    ROBOT_DOG_STATE_INITIALIZE = 0x0,
+    ROBOT_DOG_STATE_WAIT_FOR_DETECTION_TRIGGER = 0x1,
+    ROBOT_DOG_STATE_SELECT_RESPONSE_ON_ANIMATION_COMPLETION = 0x2,
+    ROBOT_DOG_STATE_WAIT_FOR_IDLE_ANIMATION_COMPLETION = 0x3,
+    ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 0x4,
+    ROBOT_DOG_STATE_TRACK_TARGET_FACING = 0x5,
+    ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER = 0x6,
+    ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER_FAST_PULSE = 0x7,
+    ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 0x8,
+    ROBOT_DOG_STATE_APPROACH_TARGET = 0x9,
+    ROBOT_DOG_STATE_ATTACK_TARGET = 0xA,
+    ROBOT_DOG_STATE_RETURN_HOME = 0xB,
+    ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE = 0xC,
+    ROBOT_DOG_STATE_FALL_THEN_REMOVE = 0xF
+};
+
 /* Moves a level-17 platform moby between its stops along its heading, with a looping sound. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA2C8), where it is exact; names translated to the US level program. */
-
 
 extern char D_L17_001676C0[];
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
@@ -529,26 +554,6 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 short D_L17_00162188 = 2;
 int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *cur,
                      char *g) {
-    enum {
-        MOBY_CLASS_ORANGE_RADAR_CONTACT = 0x52,
-        MOBY_CLASS_YELLOW_RADAR_CONTACT = 0x53,
-        MOBY_CLASS_FLAG_GATED_MARKED_TARGET = 0x6F,
-        MOBY_CLASS_GRAY_RADAR_CONTACT = 0xE0,
-        MOBY_CLASS_GRAY_RADAR_QUAD_CONTACT = 0xE4,
-        MOBY_CLASS_OFFSCREEN_ARROW_TARGET = 0x15B,
-        MOBY_CLASS_UNMARKED_COUNTED_TARGET = 0x184,
-        MOBY_CLASS_EXCLUDED_FROM_RADAR = 0x185,
-        MOBY_CLASS_RADAR_RENDER_BYPASS = 0x186,
-        MOBY_CLASS_RADAR_ICON_SUPPRESSED = 0x187,
-        MOBY_CLASS_UNCOUNTED_MARKED_TARGET = 0x191,
-        MOBY_CLASS_PRIORITY_LOCK_TARGET = 0x3EB,
-        MOBY_CLASS_FLAG_GATED_SCREEN_MARKER_TARGET = 0x4BE,
-        MOBY_CLASS_STATE_GATED_MARKED_TARGET = 0x4BF,
-        MOBY_CLASS_GRAY_RADAR_ICON_TWO_CONTACT = 0x4C2,
-        MOBY_CLASS_GRAY_RADAR_BLIP_CONTACT = 0x4C4,
-        MOBY_CLASS_MARKED_COUNTED_TARGET = 0x504,
-        MOBY_CLASS_RADAR_DRAW_SUPPRESSED = 0x534
-    };
     float v[4];
     float w[4];
     float mat[16];
@@ -2321,7 +2326,6 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F04D0), where it is exact; names translated to the US level program. */
 
-
 extern char D_L17_001676C0[];
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
@@ -2359,7 +2363,6 @@ void FUN_L17_002eea70(struct Moby *moby) {
 }
 /* UpdateMoby for class 1382: hides or shows the moby by its clip volumes, then runs its state machine. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F0678), where it is exact; names translated to the US level program. */
-
 
 typedef struct {
     char pad0[0x20];
@@ -2436,22 +2439,6 @@ void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") __attribute__((section(".sdata")));
 void robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
 void robot_dog_update(unsigned char *robot_dog_moby) {
-    enum {
-        ROBOT_DOG_STATE_INITIALIZE = 0,
-        ROBOT_DOG_STATE_WAIT_FOR_DETECTION_TRIGGER = 1,
-        ROBOT_DOG_STATE_SELECT_RESPONSE_ON_ANIMATION_COMPLETION = 2,
-        ROBOT_DOG_STATE_WAIT_FOR_IDLE_ANIMATION_COMPLETION = 3,
-        ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 4,
-        ROBOT_DOG_STATE_TRACK_TARGET_FACING = 5,
-        ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER = 6,
-        ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER_FAST_PULSE = 7,
-        ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
-        ROBOT_DOG_STATE_APPROACH_TARGET = 9,
-        ROBOT_DOG_STATE_ATTACK_TARGET = 10,
-        ROBOT_DOG_STATE_RETURN_HOME = 11,
-        ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE = 12,
-        ROBOT_DOG_STATE_FALL_THEN_REMOVE = 15
-    };
     Vars1382 *robot_dog_vars;
     unsigned char *tgt;
     int clip_volume_suppressed;
@@ -2806,7 +2793,6 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
 /* Fleet turret/enemy state update: refreshes the hit reaction, fires the aim query and sets the lock flags. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1558), where it is exact; names translated to the US level program. */
 
-
 typedef struct {
     char pad0[0x20];
     float f20;
@@ -3059,18 +3045,6 @@ extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L17_002f0210(struct Moby *moby) {
-    enum {
-        ROBOT_DOG_STATE_FALL_UNTIL_LANDING = 4,
-        ROBOT_DOG_STATE_TRACK_TARGET_FACING = 5,
-        ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER = 6,
-        ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER_FAST_PULSE = 7,
-        ROBOT_DOG_STATE_TURN_TOWARD_TARGET = 8,
-        ROBOT_DOG_STATE_APPROACH_TARGET = 9,
-        ROBOT_DOG_STATE_ATTACK_TARGET = 10,
-        ROBOT_DOG_STATE_RETURN_HOME = 11,
-        ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE = 12,
-        ROBOT_DOG_STATE_FALL_THEN_REMOVE = 15
-    };
     char *data;
     int glow_pulse_period_frames;
     int alpha;
@@ -3516,7 +3490,6 @@ typedef struct {
     unsigned char collected[1];
 } LevelState;
 
-
 typedef struct {
     char pad0[0x20];
     char area[0x40];
@@ -3578,10 +3551,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         SHUTTLE_STATE_TRAVEL = 2,
         SHUTTLE_STATE_RESET_AFTER_TRAVEL = 3
     };
-    enum {
-        SHUTTLE_STOP_FIRST = 0,
-        SHUTTLE_STOP_SECOND = 1
-    };
+
     Vars1448 *v = (Vars1448 *)shuttle_moby->pvars;
     float old_pos[4];
     float old_rot[4];
@@ -3750,10 +3720,6 @@ void shuttle_update(struct Moby *shuttle_moby) {
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 void FUN_L17_002f20d8(struct Moby *moby) {
-    enum {
-        SHUTTLE_STOP_FIRST = 0,
-        SHUTTLE_STOP_SECOND = 1
-    };
     char *data = (char *)moby->pvars;
     int mode = *(int *)(data + 0x94);
     switch (mode) {

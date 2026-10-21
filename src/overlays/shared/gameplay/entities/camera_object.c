@@ -1,5 +1,6 @@
 /* Shared moby classes: camera_object, vendor, bolt, wrench. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby_class_id.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
@@ -793,18 +794,11 @@ extern void FUN_L00_002a7210_c(Bolt *, void *, f32, f32) __asm__("FUN_L00_002a72
 void bolt_update(Bolt *obj) __asm__("FUN_L00_002a5dd8");
 void bolt_update(Bolt *bolt_moby) {
     enum {
-        BOLT_INITIALIZE = 0,
-        BOLT_FALLING = 1,
-        BOLT_SETTLING = 2,
-        BOLT_IDLE = 3,
-        BOLT_MOVE_TO_HERO = 4,
-        BOLT_INITIALIZE_CLASS_ONE = 0xD,
-        BOLT_FALLING_CLASS_ONE = 0xD,
-        BOLT_INITIALIZE_CLASS_FIVE = 0xE,
-        BOLT_FALLING_CLASS_FIVE = 0xE,
-        BOLT_INITIALIZE_CLASS_TWENTY = 0xF,
-        BOLT_FALLING_CLASS_TWENTY = 0xF,
-        BOLT_INITIALIZE_CLASS_FIFTY = 0x10
+        BOLT_INITIALIZE = 0x0,
+        BOLT_FALLING = 0x1,
+        BOLT_SETTLING = 0x2,
+        BOLT_IDLE = 0x3,
+        BOLT_MOVE_TO_HERO = 0x4
     };
     BoltVars *v = bolt_moby->vars;
     Vec4 geometry_scratch;
@@ -869,16 +863,16 @@ void bolt_update(Bolt *bolt_moby) {
         v->slot_timer = FUN_L00_00257b90(0, scale_game_frames(600));
         v->slot = -1;
         switch (bolt_moby->oclass) {
-        case BOLT_INITIALIZE_CLASS_ONE:
+        case BOLT_CLASS_ONE:
             bolt_moby->scale = bolt_moby->pclass->scale * 0.65f;
             break;
-        case BOLT_INITIALIZE_CLASS_FIVE:
+        case BOLT_CLASS_FIVE:
             bolt_moby->scale = bolt_moby->pclass->scale * 0.7f;
             break;
-        case BOLT_INITIALIZE_CLASS_TWENTY:
+        case BOLT_CLASS_TWENTY:
             bolt_moby->scale = bolt_moby->pclass->scale * 0.75f;
             break;
-        case BOLT_INITIALIZE_CLASS_FIFTY:
+        case BOLT_CLASS_FIFTY:
             bolt_moby->scale = bolt_moby->pclass->scale * 0.6f;
             break;
         }
@@ -889,13 +883,13 @@ void bolt_update(Bolt *bolt_moby) {
         quaternion_to_rotation_basis(&v->spin, &rotation_scratch);
         multiply_matrix3x3(&bolt_moby->rot, &rotation_scratch, &bolt_moby->rot);
         switch (bolt_moby->oclass) {
-        case BOLT_FALLING_CLASS_ONE:
+        case BOLT_CLASS_ONE:
             hr = 0.15f;
             break;
-        case BOLT_FALLING_CLASS_FIVE:
+        case BOLT_CLASS_FIVE:
             hr = 0.23f;
             break;
-        case BOLT_FALLING_CLASS_TWENTY:
+        case BOLT_CLASS_TWENTY:
             hr = 0.23f;
             break;
         default:
@@ -1095,11 +1089,6 @@ extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color
  */
 void FUN_L00_002a6b70(struct Moby *bolt)
 {
-    enum {
-        BOLT_CLASS_FIVE = 0xE,
-        BOLT_CLASS_TWENTY = 0xF,
-        BOLT_CLASS_FIFTY = 0x10
-    };
     Vec4 vel;
     Vec4 pos;
     s32 value;
@@ -1167,11 +1156,6 @@ extern void multiply_matrix3x3(void *, void *, void *) __asm__("FUN_001fa328");
 extern void FUN_001f9bf8_u(float *, float *, float) __asm__("FUN_001f9bf8");
 
 void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
-    enum {
-        BOLT_CLASS_ONE = 13,
-        BOLT_CLASS_FIVE = 14,
-        BOLT_CLASS_TWENTY = 15
-    };
     char *data = *(char **)(moby + 0x78);
     float local_rotation_basis[12];
     float base_rotation_basis[12];
@@ -1897,7 +1881,6 @@ extern WrenchHit collision_hit __asm__("D_L00_00173E40");
 extern void draw_target_reticle(int,int,float,float,int,int,int,float,int) __asm__("FUN_L00_001edf60");
 extern int collide_sphere(void*,float,int,void*,void*) __asm__("FUN_L00_001f2868");
 
-
 extern char D_0013F350[];
 extern unsigned char D_0013E550[];
 static __inline__ WrenchHero *wrench_hero(void) { return (WrenchHero*)D_0013F350; }
@@ -2601,8 +2584,6 @@ void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AB548), where it is exact; names translated to the US level program. */
-
-
 
 extern V D_L00_00166DC0;
 extern char *FUN_L00_002603d0_u(void *) __asm__("FUN_L00_002603d0");

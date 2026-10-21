@@ -1,5 +1,6 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
+
 #include "asm.h"
 
 void probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
@@ -508,16 +509,13 @@ extern float FUN_002132a8_25aca0(float, float) __asm__("FUN_002132a8");
 extern float FUN_00213308_25aca0(void) __asm__("FUN_00213308");
 
 int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25aca0 *out, int mask) {
-    enum {
-        SHAPE_INDEXED_CENTER_SPHERE = 2,
-        SHAPE_ENDPOINT_SEGMENT_WITH_BALL_OFFSET = 4
+    enum HitShape {
+        SHAPE_INLINE_CENTER_SPHERE = 0x0,
+        SHAPE_INDEXED_CENTER_SPHERE = 0x2,
+        SHAPE_XY_DISK_WITH_Z_EXTENT = 0x3,
+        SHAPE_ENDPOINT_SEGMENT_WITH_BALL_OFFSET = 0x4
     };
-    enum {
-        SHAPE_XY_DISK_WITH_Z_EXTENT = 3
-    };
-    enum {
-        SHAPE_INLINE_CENTER_SPHERE = 0
-    };
+
     float weights[20];
     unsigned char *entries[20];
     Vec4_25aca0 first, second, third, fourth, fifth;

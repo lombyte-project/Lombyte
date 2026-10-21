@@ -1,5 +1,6 @@
 /* Level 07 moby classes: purple_ship, ocean_umbris, taxi_platform, boltcrate_possibly_for_metal_detector, bomb, water, bombomatic, sharkigator. */
 #include "types.h"
+
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -7,6 +8,14 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
+
+/* Taxi command byte (+0xBC); distinct from Moby.state (+0x20). */
+enum TaxiCommand {
+    TAXI_SHRINK_AND_RESET_TO_PATH_START = 0x0,
+    TAXI_WAIT_FOR_HERO_BOARDING = 0x1,
+    TAXI_TRAVERSE_PATH = 0x2,
+    TAXI_WAIT_FOR_HERO_TO_LEAVE = 0x3
+};
 
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
@@ -431,11 +440,6 @@ extern char D_0013E550[];
 #define F(p, o) (*(float *)((p) + (o)))
 
 void FUN_L07_002cd2b0(unsigned char *moby) {
-    enum {
-        TAXI_SHRINK_AND_RESET_TO_PATH_START = 0,
-        TAXI_WAIT_FOR_HERO_BOARDING = 1,
-        TAXI_TRAVERSE_PATH = 2
-    };
     char *data = *(char **)(moby + 0x78);
     char *path;
     float orig[4], delta[4], path_segment_offset[4];
@@ -593,12 +597,6 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E550[];
 
 void FUN_L07_002cdb28(struct Moby *moby) {
-    enum {
-        TAXI_SHRINK_AND_RESET_TO_PATH_START = 0,
-        TAXI_WAIT_FOR_HERO_BOARDING = 1,
-        TAXI_TRAVERSE_PATH = 2,
-        TAXI_WAIT_FOR_HERO_TO_LEAVE = 3
-    };
     char *data = (char *)moby->pvars;
     char *path;
     float orig[4], delta[4], path_segment_offset[4];
@@ -1033,22 +1031,22 @@ typedef struct { char pad[0x90]; int segment; int next_segment; } FollowerSegmen
 void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) __asm__("FUN_L07_0030b000");
 void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
     enum {
-        INITIALIZE_PATH_CHILDREN = 0,
-        ADVANCE_PATH_CHILDREN = 1,
-        HIT_REACTION_NO_ANIMATION_RESPONSE = 11
+        INITIALIZE_PATH_CHILDREN = 0x0,
+        ADVANCE_PATH_CHILDREN = 0x1
     };
     enum {
-        HIT_REACTION_NONE = 0,
-        BOLTCRATE_CLEAR_HEALTH_RESPONSE = 1,
-        BOLTCRATE_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2,
-        HIT_REACTION_START_KNOCKBACK = 3,
-        HIT_REACTION_KNOCKBACK_RESPONSE = 4,
-        HIT_REACTION_ALTERNATE_KNOCKBACK_RESPONSE = 5,
-        HIT_REACTION_START_HIT_KNOCKBACK_RECOVERY = 6,
-        HIT_REACTION_LAUNCH_HIT_KNOCKBACK_RECOVERY = 7,
-        HIT_REACTION_ENTER_HIT_KNOCKBACK_RECOVERY = 8,
-        HIT_REACTION_HIT_ANIMATION_RESPONSE = 9,
-        HIT_REACTION_ALTERNATE_HIT_ANIMATION_RESPONSE = 10
+        HIT_REACTION_NONE = 0x0,
+        BOLTCRATE_CLEAR_HEALTH_RESPONSE = 0x1,
+        BOLTCRATE_ALTERNATE_CLEAR_HEALTH_RESPONSE = 0x2,
+        HIT_REACTION_START_KNOCKBACK = 0x3,
+        HIT_REACTION_KNOCKBACK_RESPONSE = 0x4,
+        HIT_REACTION_ALTERNATE_KNOCKBACK_RESPONSE = 0x5,
+        HIT_REACTION_START_HIT_KNOCKBACK_RECOVERY = 0x6,
+        HIT_REACTION_LAUNCH_HIT_KNOCKBACK_RECOVERY = 0x7,
+        HIT_REACTION_ENTER_HIT_KNOCKBACK_RECOVERY = 0x8,
+        HIT_REACTION_HIT_ANIMATION_RESPONSE = 0x9,
+        HIT_REACTION_ALTERNATE_HIT_ANIMATION_RESPONSE = 0xA,
+        HIT_REACTION_NO_ANIMATION_RESPONSE = 0xB
     };
     char *data;
     char *path;
@@ -1890,23 +1888,23 @@ void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0
 void bombomatic_update(char *m) __asm__("FUN_L07_0030d4d8");
 void bombomatic_update(char *moby) {
     enum {
-        BOMBOMATIC_INITIALIZE = 0,
-        BOMBOMATIC_WAIT_TO_LAUNCH = 1,
-        BOMBOMATIC_LAUNCH_BURST = 2,
-        HIT_REACTION_NO_ANIMATION_RESPONSE = 11
+        BOMBOMATIC_INITIALIZE = 0x0,
+        BOMBOMATIC_WAIT_TO_LAUNCH = 0x1,
+        BOMBOMATIC_LAUNCH_BURST = 0x2
     };
     enum {
-        HIT_REACTION_NONE = 0,
-        BOMBOMATIC_CLEAR_HEALTH_RESPONSE = 1,
-        BOMBOMATIC_ALTERNATE_CLEAR_HEALTH_RESPONSE = 2,
-        HIT_REACTION_START_KNOCKBACK = 3,
-        HIT_REACTION_KNOCKBACK_RESPONSE = 4,
-        HIT_REACTION_ALTERNATE_KNOCKBACK_RESPONSE = 5,
-        HIT_REACTION_START_HIT_KNOCKBACK_RECOVERY = 6,
-        HIT_REACTION_LAUNCH_HIT_KNOCKBACK_RECOVERY = 7,
-        HIT_REACTION_ENTER_HIT_KNOCKBACK_RECOVERY = 8,
-        HIT_REACTION_HIT_ANIMATION_RESPONSE = 9,
-        HIT_REACTION_ALTERNATE_HIT_ANIMATION_RESPONSE = 10
+        HIT_REACTION_NONE = 0x0,
+        BOMBOMATIC_CLEAR_HEALTH_RESPONSE = 0x1,
+        BOMBOMATIC_ALTERNATE_CLEAR_HEALTH_RESPONSE = 0x2,
+        HIT_REACTION_START_KNOCKBACK = 0x3,
+        HIT_REACTION_KNOCKBACK_RESPONSE = 0x4,
+        HIT_REACTION_ALTERNATE_KNOCKBACK_RESPONSE = 0x5,
+        HIT_REACTION_START_HIT_KNOCKBACK_RECOVERY = 0x6,
+        HIT_REACTION_LAUNCH_HIT_KNOCKBACK_RECOVERY = 0x7,
+        HIT_REACTION_ENTER_HIT_KNOCKBACK_RECOVERY = 0x8,
+        HIT_REACTION_HIT_ANIMATION_RESPONSE = 0x9,
+        HIT_REACTION_ALTERNATE_HIT_ANIMATION_RESPONSE = 0xA,
+        HIT_REACTION_NO_ANIMATION_RESPONSE = 0xB
     };
     char *moby_data;
     char *hit_info;
@@ -2657,7 +2655,6 @@ found:
 /* Update function of the sharkigator (class 1059): tracks the hero, swims its path, lunges and bites. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003109D0), where it is exact; names translated to the US level program. */
 
-
 struct WalkerTarget {
     float pos[4];
     u128 q10;
@@ -3240,7 +3237,6 @@ extern char D_0013F3D0[];
 extern char D_0013F440[];
 extern float D_0013F448;
 
-
 void FUN_L07_003112c8(char *moby) {
     enum {
         PLATFORM_INITIALIZE = 0,
@@ -3604,7 +3600,6 @@ typedef struct EffData_313800 {
     float f150[3];
     float f15C;
 } EffData_313800;
-
 
 typedef struct Packet_313800 {
     float a[4];

@@ -1,5 +1,6 @@
 /* Level 03 moby classes: metropolis_train_locomotive, moving_platform_small, metropolis_train_carriage, red_ship_1, robot_dog. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby_class_id.h"
 #include "rnc/overlay/collision.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/math_consts.h"
@@ -24,13 +25,6 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
 void FUN_L03_0029d1b8(struct Moby *moby) {
-    enum {
-        MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER = 0x4B,
-        MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER = 0x73,
-        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
-        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
-        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77
-    };
     char *data = (char *)moby->pvars;
     int unused_local;
     float distance_to_reference;
@@ -109,7 +103,6 @@ int FUN_L03_002c6ca0(struct Moby *moby) {
 /* Places a train: puts the engine at `at` facing ang (offset back by its length), then lays each linked
  * car behind the previous one along ang, updating their motion deltas, and enables the coupling moby. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_00293720), where it is exact; names translated to the US level program. */
-
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -971,15 +964,6 @@ extern int D_L03_0015F5CC; /* no foreign declaration */
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 
 void FUN_L03_0029c9d0(struct Moby *moby) {
-    enum {
-        MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER = 0x4B,
-        MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER = 0x73,
-        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
-        MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x75,
-        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
-        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77,
-        MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x78
-    };
     char *data = (char *)moby->pvars;
     if (moby->state == 0) {
         *(int *)(data + 0x150) = -1;
@@ -1019,16 +1003,6 @@ char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int a3, int a
 /* Hit effects for the Kerwan train and turret classes: sparks or smoke puffs pushed along the hit velocity,
  * with countdowns in the moby data (0x12E, 0x12F) limiting how often they spawn. */
 void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
-    enum {
-        MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER = 0x4B,
-        MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER = 0x73,
-        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
-        MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x75,
-        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
-        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77,
-        MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x78,
-        MOBY_CLASS_TEN_GRAY_PARTICLE_BURST_EMITTER = 0x84
-    };
     float vel[4];
     float *vp;
     float pos[4];
@@ -1189,15 +1163,6 @@ void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
  * the class debris, starts the shake/smoke effects and arms the respawn countdown (0x14A); once that runs
  * out the moby is hidden again unless the caller keeps it, and switches its update to the car update. */
 void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
-    enum {
-        MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER = 0x73,
-        MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER = 0x74,
-        MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x75,
-        MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER = 0x76,
-        MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER = 0x77,
-        MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER = 0x78,
-        MOBY_CLASS_TEN_GRAY_PARTICLE_BURST_EMITTER = 0x84
-    };
     float spot[4];
     float vel[4];
     float push[4];
@@ -1944,7 +1909,6 @@ void robot_dog_update(char *moby) {
 /* Applies damage reaction, knockback parameters and animation state. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C7DE8), where it is exact; names translated to the US level program. */
 
-
 extern char *D_L03_0015FFD8_c __asm__("D_L03_0015FFD8");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int FUN_L03_002c6ca0_c(unsigned char *) __asm__("FUN_L03_002c6ca0");
@@ -2070,7 +2034,6 @@ int FUN_L03_002c6e18(float ang, struct Moby *moby, struct Moby *target) {
 
 /* Update for moby class 574 on Kerwan: a path-walking enemy that turns to, chases and attacks its target, jumps, falls under gravity and is replaced by debris when it dies. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8398), where it is exact; names translated to the US level program. */
-
 
 typedef struct {
     float pos[4];

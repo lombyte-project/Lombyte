@@ -1,5 +1,6 @@
 /* Level 14 moby classes: shuttle, mine, elevator, taxi, qwark_oltanis, jet, rocket. */
 #include "types.h"
+
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -9,6 +10,15 @@
 #include "qcopy.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
+
+/* Taxi stop selection shared by route helpers. */
+enum TaxiStop {
+    TAXI_STOP_RETURN_HUB = 0x0,
+    TAXI_STOP_HUB_OUTBOUND_DESTINATION = 0x1,
+    TAXI_STOP_RETURN_FEEDER_ORIGIN = 0x2,
+    TAXI_STOP_RETURN_FEEDER_DESTINATION = 0x3
+};
+
 #define MOBY(p) ((struct Moby *)(p))
 
 /* 0x002DF080, 180 bytes.  Initialises two tables of spaced vectors in the
@@ -2510,12 +2520,6 @@ extern float D_0015ED6C_u __asm__("D_0015ED6C");
 extern float FUN_001f9b48(void *, void *);
 
 void FUN_L14_002f1140(struct Moby *moby) {
-    enum {
-        TAXI_STOP_RETURN_HUB = 0,
-        TAXI_STOP_HUB_OUTBOUND_DESTINATION = 1,
-        TAXI_STOP_RETURN_FEEDER_ORIGIN = 2,
-        TAXI_STOP_RETURN_FEEDER_DESTINATION = 3
-    };
     char *taxi_vars = (char *)moby->pvars;
     char *selected_path;
     float inv, travel_step_limit, b, r;
@@ -2585,12 +2589,6 @@ found:
 #endif
 extern void func_00215F80_f13f8(int, int) __asm__("FUN_00215130");
 void FUN_L14_002f13f8(struct Moby *moby) {
-    enum {
-        TAXI_STOP_RETURN_HUB = 0,
-        TAXI_STOP_HUB_OUTBOUND_DESTINATION = 1,
-        TAXI_STOP_RETURN_FEEDER_ORIGIN = 2,
-        TAXI_STOP_RETURN_FEEDER_DESTINATION = 3
-    };
     char *data = (char *)moby->pvars;
     int v = *(short *)(data + 0xB4);
     if (moby->state == 5) {

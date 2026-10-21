@@ -1,5 +1,6 @@
 /* Shared moby classes: gadgebot_spawn_container, gadgebot_spawn_pad, frog, gadgebot, energy_sphere_holder, energy_sphere. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby_class_id.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -1177,7 +1178,6 @@ s32 FUN_L06_002ea7c8(unsigned char *moby) {
 /* Update function of the gadgebot (moby class 857): waits by its dispenser, then follows, attacks and returns to the hero along the level's paths. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F1470), where it is exact; names translated to the US level program. */
 
-
 typedef union {
     OvlQuad q;
     float f[4];
@@ -1308,7 +1308,6 @@ typedef struct {
     char p0[0x14];
     int unk14;
 } GbOwnerVars;
-
 
 typedef struct {
     char p0[0x18];
@@ -2459,13 +2458,6 @@ extern float fast_normalize_angle(f32) __asm__("FUN_001fa610");
 extern Moby *D_L06_0015FFD8;
 
 int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
-    enum {
-        MOBY_CLASS_RELOCATION_TRIGGER = 0x15F,
-        MOBY_CLASS_OFFSET_RELOCATION_TRIGGER = 0x3B1,
-        MOBY_CLASS_GADGEBOT_ABSORPTION_TRIGGER = 0x400,
-        MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND = 0x515,
-        MOBY_CLASS_GADGEBOT_ABSORPTION_TARGET = 0x516
-    };
     float candidate_position[4];
     float vB[4];
     float vA[4];
@@ -2839,7 +2831,6 @@ void FUN_L06_002f38c8(char *obj) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F6330), where it is exact; names translated to the US level program. */
 
-
 typedef struct {
     float pos[4];              /* 0x00 */
     float unk10;                 /* 0x10 */
@@ -3059,12 +3050,9 @@ void energy_sphere_holder_update(char *holder_moby) {
     }
 }
 
-
-
 /* Draws the moby's light beam: four flickering glow sprites spaced from its target toward the camera,
  * plus, every fourth frame while visible, a spark drifting up or down from the moby. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F8A58), where it is exact; names translated to the US level program. */
-
 
 typedef struct {
     float ph[4];

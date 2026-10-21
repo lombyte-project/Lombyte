@@ -1,5 +1,6 @@
 /* Level 08 moby classes: bolt_thief, shrub. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby_class_id.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
@@ -2054,10 +2055,6 @@ extern int D_L08_00174658_lui __asm__("D_L08_00174658") __attribute__((section("
 
 void FUN_L08_002e3870(struct Moby *moby) {
     enum {
-        MOBY_CLASS_FIVE_BOLT_PICKUP = 0x3DC,
-        MOBY_CLASS_TEN_BOLT_PICKUP = 0x3DD
-    };
-    enum {
         BOLT_PICKUP_INITIALIZE = 0,
         BOLT_PICKUP_WAIT_FOR_HERO = 1,
         BOLT_PICKUP_TURN_TOWARD_HERO = 2,
@@ -2065,12 +2062,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         BOLT_PICKUP_FALL_AND_BOUNCE = 4,
         BOLT_PICKUP_RETURN_TO_SURFACE = 5
     };
-    enum {
-        MOBY_CLASS_ONE_BOLT_PICKUP = 0x279
-    };
-    enum {
-        MOBY_CLASS_COLLECTED_COUNT_BOLT_BONUS_PICKUP = 0x305
-    };
+
     char *cam;
     float direction[4];
     float point[4];
@@ -2524,10 +2516,6 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
-    enum {
-        MOBY_CLASS_FIVE_BOLT_PICKUP = 0x3DC,
-        MOBY_CLASS_TEN_BOLT_PICKUP = 0x3DD
-    };
     float output_rotation_matrix[16];
     float base_rotation_matrix[16];
     float up[4];
@@ -2678,7 +2666,6 @@ void FUN_L08_002e5188(struct Moby *moby) {
     vu1_add_g_sregister_5188(0x42, 0x8000000044LL);
 }
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9CB0), where it is exact; names translated to the US level program. */
-
 
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;

@@ -1,5 +1,6 @@
 /* Level 05 moby classes: electric_gate, drain_cover, pipe_mounted_grating, elevator_with_button, ocean_rilgar, qwarks_bouncer, shady_salesman, television, taxi, qwarks_trailer. */
 #include "types.h"
+
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -8,6 +9,15 @@
 #include "qcopy.h"
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
+
+/* Taxi stop selection shared by route helpers. */
+enum TaxiStop {
+    TAXI_PAIRED_ROUTE_FIRST_STOP = 0x0,
+    TAXI_PAIRED_ROUTE_SECOND_STOP = 0x1,
+    TAXI_BRANCHING_STOP = 0x2,
+    TAXI_PRIMARY_BRANCH_STOP = 0x3,
+    TAXI_FALLBACK_BRANCH_STOP = 0x4
+};
 
 #define NOT_SDA
 
@@ -2357,13 +2367,6 @@ extern char *D_L05_001600EC_19208 __asm__("D_L05_001600EC");
 extern unsigned char D_0014C050_19208[] __asm__("D_0014C050");
 
 void FUN_L05_00319208(void *moby_v) {
-    enum {
-        TAXI_PAIRED_ROUTE_FIRST_STOP = 0,
-        TAXI_PAIRED_ROUTE_SECOND_STOP = 1,
-        TAXI_BRANCHING_STOP = 2,
-        TAXI_PRIMARY_BRANCH_STOP = 3,
-        TAXI_FALLBACK_BRANCH_STOP = 4
-    };
     char *moby = moby_v;
     char *data = *(char **)(moby + 0x78);
     int *list = (int *)(data + 0x80);
@@ -2419,13 +2422,6 @@ void FUN_L05_00319208(void *moby_v) {
 /* Picks the path for the current point (five points, point 2 chosen by the table entry) and sets the travel speeds; same source as FUN_L16_002e4a58. */
 
 void FUN_L05_003193a8(char *moby) {
-    enum {
-        TAXI_PAIRED_ROUTE_FIRST_STOP = 0,
-        TAXI_PAIRED_ROUTE_SECOND_STOP = 1,
-        TAXI_BRANCHING_STOP = 2,
-        TAXI_PRIMARY_BRANCH_STOP = 3,
-        TAXI_FALLBACK_BRANCH_STOP = 4
-    };
     char *taxi_data = *(char **)(moby + 0x78);
     char *selected_path;
     float inv, frame_scaled_travel_step, frame_squared_travel_step, r;

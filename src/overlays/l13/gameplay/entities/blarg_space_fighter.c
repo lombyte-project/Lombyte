@@ -1,5 +1,6 @@
 /* Level 13 moby classes: rocket, mine, blarg_space_fighter, forcefield_tower, asteroid. */
 #include "types.h"
+
 #include "qzero.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -12,6 +13,13 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
+
+/* Rotation-axis selection shared by the asteroid update helpers. */
+enum AsteroidSpinAxis {
+    SPIN_AXIS_X = 0x0,
+    SPIN_AXIS_Y = 0x1,
+    SPIN_AXIS_Z = 0x2
+};
 
 extern char *create_moby_c13(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8(void *);
@@ -419,21 +427,19 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 
 void FUN_L13_002c25b8(unsigned char *moby) {
     enum {
-        UPDATE_INITIALIZE = 0,
-        TRACK_TARGET_BEFORE_ATTACK = 2,
-        FIRE_ALTERNATING_SHOTS = 3,
-        UPDATE_ATTACK_SEQUENCE = 4,
-        WAIT_TO_MOVE_TO_TABLE_POINT = 5,
-        MOVE_TO_TABLE_POINT = 6,
-        EMIT_EFFECT_AND_REMOVE = 8
-    };
-    enum {
-        WAIT_TO_RESUME_ATTACK_SEQUENCE = 7
+        UPDATE_INITIALIZE = 0x0,
+        TRACK_TARGET_BEFORE_ATTACK = 0x2,
+        UPDATE_ATTACK_SEQUENCE = 0x4,
+        WAIT_TO_MOVE_TO_TABLE_POINT = 0x5,
+        MOVE_TO_TABLE_POINT = 0x6,
+        WAIT_TO_RESUME_ATTACK_SEQUENCE = 7,
+        EMIT_EFFECT_AND_REMOVE = 0x8
     };
     enum {
         START_ATTACK_ANIMATION_SEQUENCE = 0,
         WAIT_FOR_ATTACK_START_ANIMATION = 1,
         WAIT_TO_BEGIN_ALTERNATING_FIRE = 2,
+        FIRE_ALTERNATING_SHOTS = 0x3,
         WAIT_TO_ADVANCE_ATTACK_EXIT_SEQUENCE = 4,
         SELECT_ATTACK_RESTART_OR_EXIT = 5,
         WAIT_TO_COMPLETE_ATTACK_EXIT_SEQUENCE = 6
@@ -1137,7 +1143,6 @@ typedef struct Hero_2C56B0 { char pad0[0x15F0]; Moby_2C56B0 *veh; char pad15F4[0
 
 typedef struct Snd_2C56B0 { char pad0[0x74]; unsigned char b74; char pad75[0x13]; void *f88; } Snd_2C56B0;
 
-
 extern char *D_L13_0015FFD8;
 extern char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len, float z);
 extern char D_L13_001F4700[];
@@ -1817,7 +1822,6 @@ extern char *FUN_L13_0030bfb0(char *, void *, float);
 extern void set_voice_position(int, void *) __asm__("FUN_L13_002982e8");
 extern int D_0014C190[];
 
-
 /* Indexed by data[0x74 / 4]; state 1 clears the entry and removal sets it. */
 extern int linked_state_flags[] __asm__("D_L13_001847A8");
 
@@ -1935,11 +1939,6 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 rand();
 
 char *FUN_L13_002e1140(char *owner, char *pos, char *initial_velocity, int remaining_split_count, float scale) {
-    enum {
-        SPIN_AXIS_X = 0,
-        SPIN_AXIS_Y = 1,
-        SPIN_AXIS_Z = 2
-    };
     char *moby = func_0020D348_m(0x584);
     if (moby != 0) {
         char *moby_data;
@@ -2103,11 +2102,6 @@ extern char *moby_base_1638 __asm__("D_L13_0015FFD8");
 /* Blob update: waits on its home point, jumps out at the hero when the ship comes near, splits when it hits something, and respawns. */
 void asteroid_update(struct Moby *moby) __asm__("FUN_L13_002e1638");
 void asteroid_update(struct Moby *moby) {
-    enum {
-        SPIN_AXIS_X = 0,
-        SPIN_AXIS_Y = 1,
-        SPIN_AXIS_Z = 2
-    };
     enum {
         ASTEROID_INITIALIZE = 0,
         ASTEROID_WAIT_TO_LAUNCH = 1,
@@ -2331,7 +2325,6 @@ char D_L13_001F4D90[] = "moby:%d(%d) opened at %d\n";
 char D_L13_001F4DB0[] = "moby:%d(%d) failed at %d\n";
 extern char D_L13_001F4DD0[];
 extern int frame_count __asm__("D_L13_0015F5CC");
-
 
 typedef struct {
     u8 pad0[0x20];
@@ -2674,7 +2667,6 @@ void FUN_L13_002e8920(struct Moby *source_moby, char *emission_gate_data) {
     }
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9F90), where it is exact; names translated to the US level program. */
-
 
 extern int frame_count __asm__("D_L13_0015F5CC");
 extern int D_L13_001D3538[];
