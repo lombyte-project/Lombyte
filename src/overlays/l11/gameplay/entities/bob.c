@@ -441,12 +441,12 @@ void FUN_L11_002d1030(void *mp) {
         break;
     case RESORT_OWNER_WAIT_AT_GATE:
     {
-        int *tbl = (int *)(pvars + 0xF0);
-        unsigned int idx = 0U < *(unsigned int *)(pvars + 0x158);
+        int *gate_moby_index_ptr = (int *)(pvars + 0xF0);
+        unsigned int gate_slot_index = 0U < *(unsigned int *)(pvars + 0x158);
         char *gate_moby;
-        tbl += idx;
+        gate_moby_index_ptr += gate_slot_index;
         gate_moby = (char *)D_L11_0015FFD8;
-        gate_moby += *tbl << 8;
+        gate_moby += *gate_moby_index_ptr << 8;
         FUN_L00_002604f0(moby, gate_moby, &D_L11_001613E0, &D_L11_001613F0, (char *)moby + 0x10, (char *)moby + 0x40);
         if (FUN_L11_0030a480((struct Moby *)gate_moby) == 0)
             break;
