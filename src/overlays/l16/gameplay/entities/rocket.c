@@ -301,10 +301,10 @@ void test_dummy_door_update(struct Moby *moby) {
         *(float *)data = moby->pos.z;
         break;
     case TEST_DUMMY_DOOR_STATE_UPDATE_HEIGHT: {
-        int r = fast_dec_timer((int *)(data + 8));
+        int timer_result = fast_dec_timer((int *)(data + 8));
         float target_height;
-        if (r != 0) {
-            if (r == 2) {
+        if (timer_result != 0) {
+            if (timer_result == 2) {
                 if (SubtractIntegerWithClamp(D_L16_00161A88 - D_L16_0015F5CC) >= 4) {
                     D_L16_00161A88 = D_L16_0015F5CC;
                     allocate_voice_for_target_entry(1, 0, moby);
