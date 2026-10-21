@@ -19,7 +19,7 @@ extern void _dispatchMpegCbNodata(void *cb);
 #define IPU_BP   ((volatile u32 *)0x10002020)
 #define IPU_TOP  ((u64 *)0x10002030)
 
-s32 _ipuVdec(MpegDec *decoder, s32 tbl) {
+s32 _ipuVdec(MpegDec *decoder, s32 vlc_table_selector) {
     s32 i;
     s32 j;
     u32 cmd;
@@ -35,7 +35,7 @@ s32 _ipuVdec(MpegDec *decoder, s32 tbl) {
             j = 0;
         }
     }
-    cmd = (tbl << 26) | 0x30000000;
+    cmd = (vlc_table_selector << 26) | 0x30000000;
     *(volatile u32 *)IPU_CMD = cmd;
     decoder->unk818 = IpuCommandTable[(s32)cmd >> 28];
     command_result = *IPU_CMD;
