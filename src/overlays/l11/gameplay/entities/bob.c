@@ -921,28 +921,28 @@ int FUN_L11_002d2340(struct Moby *moby, char *other) {
     struct TgtData *moby_vars = (struct TgtData *)moby->pvars;
     int *leg_path_ids = moby_vars->a;
     int *ent = D_L11_001B0EB0[*(int *)((char *)leg_path_ids - (-(moby_vars->idx * 4)))];
-    int buf[8];
+    int path_ids[8];
     int path_id_count;
     if (point_in_path_xy(other, ent + 4, *ent) == 0)
         return 0;
-    buf[0] = *(int *)((char *)leg_path_ids - (-(moby_vars->idx * 4)));
+    path_ids[0] = *(int *)((char *)leg_path_ids - (-(moby_vars->idx * 4)));
     path_id_count = 1;
     switch (moby_vars->idx) {
     case RESORT_OWNER_PENULTIMATE_PATH_LEG:
         path_id_count = 4;
-        buf[1] = moby_vars->c[0];
-        buf[2] = moby_vars->c[1];
-        buf[3] = moby_vars->c[2];
+        path_ids[1] = moby_vars->c[0];
+        path_ids[2] = moby_vars->c[1];
+        path_ids[3] = moby_vars->c[2];
         break;
     case RESORT_OWNER_FINAL_PATH_LEG:
         path_id_count = 3;
-        buf[1] = moby_vars->c[0];
-        buf[2] = moby_vars->c[1];
+        path_ids[1] = moby_vars->c[0];
+        path_ids[2] = moby_vars->c[1];
         break;
     default:
         break;
     }
-    return follow_path(buf, path_id_count, moby_vars->b[moby_vars->idx], &moby->pos, other, moby_vars->e, 0.2f) != 0;
+    return follow_path(path_ids, path_id_count, moby_vars->b[moby_vars->idx], &moby->pos, other, moby_vars->e, 0.2f) != 0;
 }
 extern int D_L11_0015FFD8;
 extern int FUN_L11_00316128(char *);
