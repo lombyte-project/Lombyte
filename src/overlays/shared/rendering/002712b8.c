@@ -659,7 +659,7 @@ unsigned char *FUN_L00_002729c8(void *pos, unsigned char particle_mode, unsigned
     unsigned char *particle = p27fe00_alloc(0x3A);
     if (particle) {
         unsigned char *particle_data;
-        float r, azimuth_angle, u;
+        float r, azimuth_angle, elevation_angle;
         int k;
         int mode;
         qcopy(particle + 0x10, pos);
@@ -688,8 +688,8 @@ unsigned char *FUN_L00_002729c8(void *pos, unsigned char particle_mode, unsigned
         case PARTICLE_MODE_EMITTED_PARTICLE:
             r = FUN_002132a8_2729c8(3.0f, 9.0f) * y * frame_time;
             azimuth_angle = random_angle_radians();
-            u = FUN_002132a8_2729c8(1.3439035f, 1.7976891f);
-            build_spherical_offset(particle_data, r, azimuth_angle, u);
+            elevation_angle = FUN_002132a8_2729c8(1.3439035f, 1.7976891f);
+            build_spherical_offset(particle_data, r, azimuth_angle, elevation_angle);
             *(float *)(particle + 0xC) = 42000.0f;
             k = (rand_e50() & 0x1F) + 0x10;
             particle_data[0x16] = k;
