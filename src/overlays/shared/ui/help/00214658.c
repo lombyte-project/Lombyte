@@ -542,18 +542,18 @@ extern void FUN_L00_00216130_2163f0(void *, void *, float, float, float,
 void FUN_L00_002163f0(void) {
     V_2163f0 working_matrix[4];
     V_2163f0 reference_vector;
-    V_2163f0 b;
+    V_2163f0 original_position_offset;
     V_2163f0 transformed_position_offset;
     float pitch_smoothing_parameter;
 
     reference_vector.q = 0;
-    b.q = 0;
+    original_position_offset.q = 0;
     transformed_position_offset.q = 0;
     reference_vector.f[2] = 1.0f;
-    b.f[2] = 0.8f;
+    original_position_offset.f[2] = 0.8f;
     transformed_position_offset.f[2] = 0.8f;
     pitch_smoothing_parameter = frame_scale_sq * 0.3f;
-    FUN_001f9d20_2163f0(&b, &b, &P);
+    FUN_001f9d20_2163f0(&original_position_offset, &original_position_offset, &P);
     reference_vector.q = P.v270.q;
     if (P.b20B3 == 2) {
         FUN_001f9a68_2163f0(&reference_vector, &P.v290, -1.0f);
@@ -570,7 +570,7 @@ void FUN_L00_002163f0(void) {
     if (P.b20B3 == 1 && P.s30E != 0) {
         FUN_001f9d20_2163f0(&transformed_position_offset, &transformed_position_offset, working_matrix);
         subtract_vector_xyz(&P.v80, &P.v80, &transformed_position_offset);
-        FUN_001f9a10_2163f0(&P.v80, &P.v80, &b);
+        FUN_001f9a10_2163f0(&P.v80, &P.v80, &original_position_offset);
     }
 }
 extern float FUN_L00_0025bc98_2165b8(void *, void *, int, float, float, float,
