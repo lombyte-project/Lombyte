@@ -513,7 +513,7 @@ extern float probe_ground_height(float *, int, float) __asm__("FUN_00213508");
 extern void FUN_L00_00274cf8_205f60(float *, int, float) __asm__("FUN_L00_00274cf8");
 
 void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int enable_record_dispatch) {
-    float v[4];
+    float ground_adjusted_position[4];
     if (enable_record_dispatch) {
         struct Hero *g = &hero;
         int item_moby_is_type_ad = 0;
@@ -526,11 +526,11 @@ void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int enab
         struct Hero *g = &hero;
         if (g->unk12ED == 0 && ((int)g->ground_moby) == 0) {
             float k = 0.15f;
-            add_vector_xyz_cf(((int)g->moby), joint_index_offset + 0x16, v);
-            v[0] += fast_cos(g->motion.rot.f[2]) * k;
-            v[1] += fast_sin(g->motion.rot.f[2]) * k;
-            v[2] = probe_ground_height(v, 0, 0.5f) + 0.04f;
-            FUN_L00_00274cf8_205f60(v, joint_index_offset == 0, g->motion.rot.f[2]);
+            add_vector_xyz_cf(((int)g->moby), joint_index_offset + 0x16, ground_adjusted_position);
+            ground_adjusted_position[0] += fast_cos(g->motion.rot.f[2]) * k;
+            ground_adjusted_position[1] += fast_sin(g->motion.rot.f[2]) * k;
+            ground_adjusted_position[2] = probe_ground_height(ground_adjusted_position, 0, 0.5f) + 0.04f;
+            FUN_L00_00274cf8_205f60(ground_adjusted_position, joint_index_offset == 0, g->motion.rot.f[2]);
         }
     }
 }
