@@ -1737,7 +1737,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *moby_data, float *health
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
     };
-    char *src;
+    char *hit_record;
     int hit;
     float position[4];
     float velocity[4];
@@ -1745,13 +1745,13 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *moby_data, float *health
     VoicePoolWindow *record;
 
     if (moby->state != 2) {
-        src = find_moby_hit(moby, 0x330000, 0);
-        if (src != 0) {
-            DebugPrint(D_L13_001f4980, moby->oclass, fptodp(*(float *)(src + 0x2c)));
-            DebugPrint(D_L13_001f49a8, *(int *)(src + 0x38), fptodp(*(float *)(src + 0)),
-                       fptodp(*(float *)(src + 4)), fptodp(*(float *)(src + 8)));
+        hit_record = find_moby_hit(moby, 0x330000, 0);
+        if (hit_record != 0) {
+            DebugPrint(D_L13_001f4980, moby->oclass, fptodp(*(float *)(hit_record + 0x2c)));
+            DebugPrint(D_L13_001f49a8, *(int *)(hit_record + 0x38), fptodp(*(float *)(hit_record + 0)),
+                       fptodp(*(float *)(hit_record + 4)), fptodp(*(float *)(hit_record + 8)));
         }
-        switch (FUN_00213928(moby, src, health, 0, &hit, 0, 0, 4)) {
+        switch (FUN_00213928(moby, hit_record, health, 0, &hit, 0, 0, 4)) {
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_REMOVE:
             *health = 0.0f;
@@ -1769,12 +1769,12 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *moby_data, float *health
             break;
         }
         if (hit >= 2) {
-            if (src == 0) {
+            if (hit_record == 0) {
                 goto mark;
             }
-            if (*(char **)(src + 0x20) != 0 &&
-                moby->pos.z + 8.7f < *(float *)(*(char **)(src + 0x20) + 0x18)) {
-                if (*health <= *(float *)(src + 0x2c)) {
+            if (*(char **)(hit_record + 0x20) != 0 &&
+                moby->pos.z + 8.7f < *(float *)(*(char **)(hit_record + 0x20) + 0x18)) {
+                if (*health <= *(float *)(hit_record + 0x2c)) {
                     *(OvlQuad *)velocity = 0;
                     velocity[2] = frame_time * 8.0f;
                     *health = 0.0f;
@@ -1801,7 +1801,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *moby_data, float *health
                     *(int *)(moby_data + 0x70) = -1;
                     moby->state = 2;
                 } else {
-                    *health -= *(float *)(src + 0x2c);
+                    *health -= *(float *)(hit_record + 0x2c);
                     moby_data[0x67] = 0xfa;
                     *(short *)(moby_data + 0x26) = scale_game_frames(0x3c);
                     trooper_anim_update(moby, (short *)(moby_data + 0x60));
