@@ -2364,8 +2364,8 @@ void block_cave_update(struct Moby *m) __asm__("FUN_L10_002dd650");
 void block_cave_update(struct Moby *moby) {
     int i;
     char *table_entry;
-    float w[16];
-    float v[4];
+    float transposed_rotation_matrix[16];
+    float relative_position[4];
     unsigned short id = moby->save_id;
     if (D_L10_001BB6B0.collected[(short)id] != 0 ||
         (*(int *)(D_0014C190 + (((short)id >> 5) * 4 + (D_0015ED84_m << 8))) >> (id & 0x1F)) & 1) {
@@ -2379,10 +2379,10 @@ void block_cave_update(struct Moby *moby) {
             if (*(int *)(table_entry + 0x24) & 0x20000) {
                 char *other_moby = *(char **)(table_entry + 0x20);
                 if (*(short *)(other_moby + 0xA6) == 0xAC || *(short *)(other_moby + 0xA6) == 0x99) {
-                    subtract_vector_xyz(v, &moby->pos, other_moby + 0x10);
-                    transpose_rotation_matrix(w, &moby->rot_row0);
-                    transform_vector(v, v, w);
-                    if (v[0] > 0.25f) {
+                    subtract_vector_xyz(relative_position, &moby->pos, other_moby + 0x10);
+                    transpose_rotation_matrix(transposed_rotation_matrix, &moby->rot_row0);
+                    transform_vector(relative_position, relative_position, transposed_rotation_matrix);
+                    if (relative_position[0] > 0.25f) {
                         *(int *)(D_0014C190 + (((short)moby->save_id >> 5) * 4 +
                                                (D_0015ED84_m << 8))) |=
                             1 << (moby->save_id & 0x1F);
