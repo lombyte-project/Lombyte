@@ -537,37 +537,37 @@ extern f32 dist2_2c7320(void *, void *) __asm__("FUN_001f9b80");
 extern f32 cos_2c7320(f32) __asm__("FUN_001f9dc8");
 extern f32 sin_2c7320(f32) __asm__("FUN_001f9de0");
 extern f32 fn_2c7320(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025abf0");
-void FUN_L00_002c7320(V2c7320 *pos, V2c7320 *tgt, f32 *out, f32 speed, f32 unused, f32 range) {
+void FUN_L00_002c7320(V2c7320 *origin_position, V2c7320 *target_position, f32 *out, f32 speed, f32 unused, f32 range) {
     V2c7320 effective_target_position;
     V2c7320 u;
-    f32 ang;
+    f32 launch_heading;
     f32 horizontal_speed;
     f32 k;
     f32 v;
     struct Hero *P;
-    if (range < dist_2c7320(pos, tgt)) {
-        sub_2c7320(&effective_target_position, tgt, pos);
+    if (range < dist_2c7320(origin_position, target_position)) {
+        sub_2c7320(&effective_target_position, target_position, origin_position);
         scale_2c7320(&effective_target_position, &effective_target_position, range - 0.01f);
-        add_2c7320(&effective_target_position, &effective_target_position, pos);
+        add_2c7320(&effective_target_position, &effective_target_position, origin_position);
     } else {
-        effective_target_position.q = tgt->q;
+        effective_target_position.q = target_position->q;
     }
-    ang = atan_2c7320(effective_target_position.f[0] - pos->f[0], effective_target_position.f[1] - pos->f[1]);
+    launch_heading = atan_2c7320(effective_target_position.f[0] - origin_position->f[0], effective_target_position.f[1] - origin_position->f[1]);
     P = &hero;
-    if (adiff_2c7320(P->motion.rot.f[2], ang) > 0.87266463f || dist2_2c7320(pos, &effective_target_position) < 1.5f) {
-        ang = P->motion.rot.f[2];
-        u.f[0] = cos_2c7320(ang) * 1.5f;
+    if (adiff_2c7320(P->motion.rot.f[2], launch_heading) > 0.87266463f || dist2_2c7320(origin_position, &effective_target_position) < 1.5f) {
+        launch_heading = P->motion.rot.f[2];
+        u.f[0] = cos_2c7320(launch_heading) * 1.5f;
         u.f[1] = sin_2c7320(P->motion.rot.f[2]) * 1.5f;
         u.i[2] = 0;
-        add_2c7320(&u, &u, pos);
+        add_2c7320(&u, &u, origin_position);
         effective_target_position.f[0] = u.f[0];
         effective_target_position.f[1] = u.f[1];
     }
     horizontal_speed = D_0015ED6C_2c7320 * 8.5f;
-    out[0] = cos_2c7320(ang) * horizontal_speed;
-    out[1] = sin_2c7320(ang) * horizontal_speed;
+    out[0] = cos_2c7320(launch_heading) * horizontal_speed;
+    out[1] = sin_2c7320(launch_heading) * horizontal_speed;
     *(s32 *)&out[2] = 0;
-    out[2] = fn_2c7320(pos, &effective_target_position, horizontal_speed, -speed, 0);
+    out[2] = fn_2c7320(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
     if (D_0013CAE0_2c7320[0] & 5) {
         k = 3.5f / horizontal_speed;
     } else {
