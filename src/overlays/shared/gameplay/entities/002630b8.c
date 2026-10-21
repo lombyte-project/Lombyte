@@ -35,20 +35,20 @@ int collision_line(void *, Vec4 *, int, void *, int) __asm__("FUN_001efa68");
    writes yaw/pitch toward it and its aim height, returns the moby or 0. */
 struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw, f32 *pitch,
                               f32 *height, f32 max_angle) {
-    Vec4 pos, dir, target, probe;
-    Vec4 *pp = &pos, *dp = &dir;
+    Vec4 pos, shot_direction, target, probe;
+    Vec4 *pp = &pos, *dp = &shot_direction;
     struct Moby *best = 0;
     f32 best_dist = 10000.0f;
     struct Moby *candidate_moby;
 
     pos.q = pos_in->q;
-    dir.q = dir_in->q;
+    shot_direction.q = dir_in->q;
     *yaw = fast_arc_tan(dp->f[0], dp->f[1]);
     *pitch = -fast_arc_tan(vector_length_xy(dp), dp->f[2]);
 
     for (candidate_moby = D_L00_0015FFE4; candidate_moby != 0; candidate_moby = candidate_moby->next) {
         MobyBound *aim_bounds;
-        f32 t_yaw, t_pitch, dist, ang;
+        f32 t_yaw, t_pitch, target_distance, aim_angle_error;
         if ((s8)candidate_moby->state < 0)
             continue;
         qcopy(&target, &candidate_moby->pos);
@@ -61,8 +61,8 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
             continue;
         t_yaw = fast_arc_tan(target.f[0] - pp->f[0], target.f[1] - pp->f[1]);
         t_pitch = fast_arc_tan(vector_distance_xy(pp, &target), target.f[2] - pp->f[2]);
-        dist = fast_vec_dist(pp, &target);
-        if (dist < 7.5f &&
+        target_distance = fast_vec_dist(pp, &target);
+        if (target_distance < 7.5f &&
             fast_difference_between_rotations(hero.moby->rot.z,
                          fast_arc_tan(candidate_moby->pos.x - hero.motion.pos.f[0],
                                       candidate_moby->pos.y - hero.motion.pos.f[1])) < 1.0471976f &&
@@ -71,21 +71,21 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
             *yaw = t_yaw;
             return candidate_moby;
         }
-        if (best_dist < dist)
+        if (best_dist < target_distance)
             continue;
-        build_spherical_offset(&probe, dist, *yaw, *pitch + hero.ground_pitch.f * 0.5f);
+        build_spherical_offset(&probe, target_distance, *yaw, *pitch + hero.ground_pitch.f * 0.5f);
         add_vector_xyz(&probe, &probe, pp);
-        ang = fast_arc_sin(fast_vec_dist(&probe, &target) / (dist + dist));
-        ang = ang + ang;
-        if (max_angle < ang && aim_bounds) {
+        aim_angle_error = fast_arc_sin(fast_vec_dist(&probe, &target) / (target_distance + target_distance));
+        aim_angle_error = aim_angle_error + aim_angle_error;
+        if (max_angle < aim_angle_error && aim_bounds) {
             f32 radius = convert_integer_to_float(aim_bounds->size << 3) * 0.125f;
-            f32 shrink = fast_arc_sin(radius / dist);
-            if (radius < dist)
-                ang -= shrink;
+            f32 shrink = fast_arc_sin(radius / target_distance);
+            if (radius < target_distance)
+                aim_angle_error -= shrink;
         }
-        if (ang < max_angle && !collision_line(D_L00_00166DC0, &target, 6, ignore, 0)) {
+        if (aim_angle_error < max_angle && !collision_line(D_L00_00166DC0, &target, 6, ignore, 0)) {
             best = candidate_moby;
-            best_dist = dist;
+            best_dist = target_distance;
             *pitch = -t_pitch;
             *yaw = t_yaw;
             if (aim_bounds)
