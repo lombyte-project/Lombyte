@@ -43,7 +43,7 @@ void FUN_L01_0027e900(s32 id, u128 *pos, s32 life, u8 kind, u8 tex, u8 mode, f32
     Spark *spark;
     SparkBody *spark_body;
     u128 position_snapshot = *pos;
-    u128 *pv = &position_snapshot;
+    u128 *position_copy_source = &position_snapshot;
 
     if (id == 0) {
         return;
@@ -53,7 +53,7 @@ void FUN_L01_0027e900(s32 id, u128 *pos, s32 life, u8 kind, u8 tex, u8 mode, f32
         return;
     }
     spark_body = &spark->body;
-    qcopy(&spark->pos, pv);
+    qcopy(&spark->pos, position_copy_source);
     if (mode == 0xFF) {
         spark->b9 = (kind >> 5) * 16 + truncate_float_to_s32(4.0f);
         if (kind & 1) {
