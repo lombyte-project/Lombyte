@@ -1343,12 +1343,12 @@ void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_L00_0026c6e8(void *pos, void *vel);
 void FUN_L00_0026c6e8(void *pos, void *vel) {
     E0026c6e8 *particle = FUN_L00_002678b8_u(0x13);
-    u32 v;
+    u32 initial_packed_color;
     if (particle == 0)
         return;
-    v = (random_integer_below(6) * 6 + 0x40) | 0x78404000;
-    particle->x4 = v;
-    particle->xc = v;
+    initial_packed_color = (random_integer_below(6) * 6 + 0x40) | 0x78404000;
+    particle->x4 = initial_packed_color;
+    particle->xc = initial_packed_color;
     particle->x9 = truncate_float_to_s32(2.0f) + 0x20;
     particle->x3 = 0x48;
     particle->x1 = 3;
