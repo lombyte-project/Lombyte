@@ -376,8 +376,8 @@ int hero_slot_item_id(int i) {
 extern int FUN_L00_0020d498_u(int) __asm__("FUN_L00_0020d498");
 
 /* True when hero_slot_item_id(arg) is 0x11, 10, 0x14 or 0x19. */
-int FUN_L00_0020d4d0(int arg) {
-    int item_id = FUN_L00_0020d498_u(arg);
+int FUN_L00_0020d4d0(int slot_index) {
+    int item_id = FUN_L00_0020d498_u(slot_index);
 
     if (item_id == 0x11 || item_id == 10 || item_id == 0x14 || item_id == 0x19) {
         return 1;
