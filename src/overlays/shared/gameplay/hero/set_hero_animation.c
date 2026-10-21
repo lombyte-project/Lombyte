@@ -1514,7 +1514,7 @@ void FUN_L00_001fff28_234808(void *, s32, f32) __asm__("FUN_L00_001fff28");
 void FUN_L00_00234808(void) {
     char *slot4_moby, *slot4_secondary_moby, *slot5_moby;
     f32 k;
-    s32 a, b;
+    s32 a, slot4_secondary_target_color;
     f32 t;
     slot4_moby = (char *)hero.items[4].moby;
     if (slot4_moby) {
@@ -1530,10 +1530,10 @@ void FUN_L00_00234808(void) {
         if (X != 2) {
             f32 v;
             hero.unk22EC = v = FUN_001fa580_234808(hero.unk22EC, DD * 2.9670596f);
-            b = 0x1EE628;
+            slot4_secondary_target_color = 0x1EE628;
             if (0.0f < v && v < 1.9198622f)
-                b = 0x1E1ED2;
-            *(s32 *)(slot4_secondary_moby + 0x90) = fast_tween_color(*(s32 *)(slot4_secondary_moby + 0x90), b, 0.07f);
+                slot4_secondary_target_color = 0x1E1ED2;
+            *(s32 *)(slot4_secondary_moby + 0x90) = fast_tween_color(*(s32 *)(slot4_secondary_moby + 0x90), slot4_secondary_target_color, 0.07f);
         } else {
             f32 v;
             hero.unk22EC = v = FUN_001fa580_234808(hero.unk22EC, DD * 1.5707964f);
