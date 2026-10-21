@@ -2576,7 +2576,7 @@ void FUN_L00_0020a318(void) {
     char *hit_ease_table;
     char *hero_position;
     char *g2;
-    float f12, f13, distance_based_ease_value, state_frame_scale_squared, frame_scale_squared;
+    float probe_z_offset, probe_end_radius, distance_based_ease_value, state_frame_scale_squared, frame_scale_squared;
     *(short *)(g + 0x22C8) = 0;
     if (*(unsigned char *)(g + 0x20AB) == 0)
         return;
@@ -2589,13 +2589,13 @@ void FUN_L00_0020a318(void) {
         *(float *)(state_ease_table + 0x6D4) = state_frame_scale_squared * 0.05f;
         *(float *)(state_ease_table + 0x6D8) = state_frame_scale_squared * 0.3f;
     }
-    f13 = 1.29999995f;
+    probe_end_radius = 1.29999995f;
     if (*(short *)(g + 0x22C8) != 0)
-        f13 = 1.5999999f;
-    f12 = 0.569999993f;
+        probe_end_radius = 1.5999999f;
+    probe_z_offset = 0.569999993f;
     if (*(unsigned char *)(g + 0x20A8) != 0)
-        f12 = 0.699999988f;
-    if (FUN_L00_0020a240_u(0, f12, f13) == 0)
+        probe_z_offset = 0.699999988f;
+    if (FUN_L00_0020a240_u(0, probe_z_offset, probe_end_radius) == 0)
         return;
     if (*(unsigned char *)(g + 0x20A8) != 0) {
         if (D_L00_00173E58_d != 0) {
