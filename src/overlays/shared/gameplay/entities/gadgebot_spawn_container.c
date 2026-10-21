@@ -1157,14 +1157,14 @@ extern s32 FUN_L00_002dbe20(void *);
 
 s32 FUN_L06_002ea7c8(unsigned char *moby) {
     u8 previous_state;
-    s32 r;
-    r = FUN_L00_002dbe20(moby);
+    s32 helper_result;
+    helper_result = FUN_L00_002dbe20(moby);
     previous_state = moby[0x20];
     if (previous_state != 0x10) {
         moby[0xBC] = previous_state;
         moby[0x20] = 0x10;
     }
-    return r;
+    return helper_result;
 }
 
 #define NOT_SDA
