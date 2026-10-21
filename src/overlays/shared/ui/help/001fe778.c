@@ -104,7 +104,7 @@ void FUN_L15_0020a7a0(void) {
     u8 *aim_height_data;
 
     s32 k;
-    f32 g;
+    f32 ground_ray_endpoint_offset;
 
     hero.unk270.f[2] = 1.0f;
     hero.air_frames.s++;
@@ -123,11 +123,11 @@ void FUN_L15_0020a7a0(void) {
     k = 0;
     if (hero.unk20B3)
         k = 1;
-    g = hero.unk234 * 2.2f;
+    ground_ray_endpoint_offset = hero.unk234 * 2.2f;
     if (hero.state.control_mode == 2) {
-        g = hero.unk234 * 2.9f;
+        ground_ray_endpoint_offset = hero.unk234 * 2.9f;
     }
-    hero_get_collision_ray_endpoints(&ground_ray_endpoint, &shared_ray_endpoint, k, g, -48.0f);
+    hero_get_collision_ray_endpoints(&ground_ray_endpoint, &shared_ray_endpoint, k, ground_ray_endpoint_offset, -48.0f);
     if (FUN_001efa68_c(&ground_ray_endpoint, &shared_ray_endpoint, 2, (s32)hero.moby, 0) == 0) {
         goto tail;
     }
