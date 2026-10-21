@@ -23,7 +23,7 @@ extern int FUN_001f96f8_2e89b0(int) __asm__("FUN_001f96f8");
 void follow_camera_read_stick(char *o, float *a, float *b) __asm__("FUN_L00_002e89b0");
 void follow_camera_read_stick(char *camera_object, float *turn_input_out, float *pitch_input_out) {
     S_2e89b0 *turn_pitch_state = (S_2e89b0 *)(*(char **)(camera_object + 0x70) + 0x1A8);
-    struct UsageStats *g;
+    struct UsageStats *usage_stats_state;
 
     if (turn_pitch_state->flags & 1) {
         *turn_input_out = 0.0f;
@@ -41,18 +41,18 @@ void follow_camera_read_stick(char *camera_object, float *turn_input_out, float 
         }
     } else {
         turn_pitch_state->f14 = D_L00_0015EF44;
-        g = &usage_stats;
-        if (g->stat[8].count < 3) {
+        usage_stats_state = &usage_stats;
+        if (usage_stats_state->stat[8].count < 3) {
             D_L00_00161D8C++;
             if (D_L00_00161D90 == 0 && FUN_001f96f8_2e89b0(0x3C) < D_L00_00161D8C) {
-                if (g->stat[8].count <= 0xFFFE) {
-                    g->stat[8].count++;
+                if (usage_stats_state->stat[8].count <= 0xFFFE) {
+                    usage_stats_state->stat[8].count++;
                 }
-                if (FUN_001f96f8_2e89b0(D_0015EEA4) / 600 > g->stat[8].unk2) {
-                    g->stat[8].unk2 = FUN_001f96f8_2e89b0(D_0015EEA4) / 600;
+                if (FUN_001f96f8_2e89b0(D_0015EEA4) / 600 > usage_stats_state->stat[8].unk2) {
+                    usage_stats_state->stat[8].unk2 = FUN_001f96f8_2e89b0(D_0015EEA4) / 600;
                 }
                 D_L00_00161D90 = 1;
-                g->stat[8].level_mask = g->stat[8].level_mask | (1 << current_level_index) | 0x80000000;
+                usage_stats_state->stat[8].level_mask = usage_stats_state->stat[8].level_mask | (1 << current_level_index) | 0x80000000;
             }
         }
     }
