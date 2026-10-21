@@ -1246,12 +1246,12 @@ extern void normalize_vector_xyz(void *, void *, float);
 
 void FUN_L09_002ee110(struct Moby *moby) {
     char *moby_vars_or_random_frames = (char *)moby->pvars;
-    char *r = find_moby_hit(moby, 0x10000, 0);
+    char *hit_record = find_moby_hit(moby, 0x10000, 0);
     Vx v;
     Vx b;
     int i;
-    if (r != 0) {
-        *(float *)moby_vars_or_random_frames = *(float *)moby_vars_or_random_frames - *(float *)(r + 0x2C);
+    if (hit_record != 0) {
+        *(float *)moby_vars_or_random_frames = *(float *)moby_vars_or_random_frames - *(float *)(hit_record + 0x2C);
         if (0.0f < *(float *)moby_vars_or_random_frames) {
             moby_vars_or_random_frames[0x47] = 0x46;
             trooper_anim_update(moby, (short *)(moby_vars_or_random_frames + 0x40));
