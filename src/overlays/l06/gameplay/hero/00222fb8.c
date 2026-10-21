@@ -21,26 +21,26 @@ extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L06_00222fb8(void) {
-    struct Hero *g = &hero;
+    struct Hero *hero_state = &hero;
     struct Hero *g1;
     struct Hero *g2;
     struct Hero *g3;
-    int saved_ground_sound_class = g->unk12ED;
-    int previous_ground_type = g->ground_type;
-    fast_mem_zero16(&g->ground_type, 0x10);
-    g->unk12ED = saved_ground_sound_class;
-    g->ground_type = -1;
-    g->unk20A9 = 0;
-    g->unk308 = 0;
+    int saved_ground_sound_class = hero_state->unk12ED;
+    int previous_ground_type = hero_state->ground_type;
+    fast_mem_zero16(&hero_state->ground_type, 0x10);
+    hero_state->unk12ED = saved_ground_sound_class;
+    hero_state->ground_type = -1;
+    hero_state->unk20A9 = 0;
+    hero_state->unk308 = 0;
     if (previous_ground_type == -1)
         return;
     if (previous_ground_type == 2) {
-        if (g->frames_off_ground.s == 0 || g->ground_distance < 0.3f) {
-            g->unk12E7 = 1;
-            if (g->vehicle_mode == 0) {
-                char *item_slot_1_moby = ((char *)g->items[1].moby);
+        if (hero_state->frames_off_ground.s == 0 || hero_state->ground_distance < 0.3f) {
+            hero_state->unk12E7 = 1;
+            if (hero_state->vehicle_mode == 0) {
+                char *item_slot_1_moby = ((char *)hero_state->items[1].moby);
                 if (item_slot_1_moby != 0 && *(short *)(item_slot_1_moby + 0xA6) == 0xAD)
-                    g->unk308 = 1;
+                    hero_state->unk308 = 1;
             }
         }
     }
