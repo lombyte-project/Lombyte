@@ -6822,7 +6822,7 @@ void shuttle_update(struct Moby *moby) {
     float b[4];
     float rot[4];
     float a[4];
-    int idx;
+    int route_index;
     int busy;
     int now;
 
@@ -6941,9 +6941,9 @@ void shuttle_update(struct Moby *moby) {
             }
             fade_to_black_302578(scale_game_frames_302578(10));
             shuttle_vars->fB0 = 0;
-            idx = shuttle_vars->side;
-            qcopy(a, ((char **)D_L06_001B0C30_302578)[shuttle_vars->a[idx]] + 0x10);
-            qcopy(b, ((char **)D_L06_001B0C30_302578)[shuttle_vars->b[idx]] + 0x10);
+            route_index = shuttle_vars->side;
+            qcopy(a, ((char **)D_L06_001B0C30_302578)[shuttle_vars->a[route_index]] + 0x10);
+            qcopy(b, ((char **)D_L06_001B0C30_302578)[shuttle_vars->b[route_index]] + 0x10);
             clear_vector_302578(rot);
             rot[2] = angle_atan2_302578(b[0] - a[0], b[1] - a[1]);
             rot[1] = -angle_atan2_302578(vector_distance_302578(a, b), b[2] - a[2]);
