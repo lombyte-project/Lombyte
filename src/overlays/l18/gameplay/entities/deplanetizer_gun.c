@@ -1076,8 +1076,8 @@ void gadgebot_update(unsigned char *moby) {
         if (target_distance < 1.5f) {
             moby[0x20] = 4;
             if (moby[0x53] != 2) {
-                int v = (int)D_L18_00162600;
-                blend_moby_animation(moby, 2, v, scale_game_frames(5));
+                int animation_frame_index = (int)D_L18_00162600;
+                blend_moby_animation(moby, 2, animation_frame_index, scale_game_frames(5));
             }
         }
         break;
