@@ -1016,24 +1016,24 @@ s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 extern unsigned char *D_L00_001B2178 __attribute__((section(".data")));
 unsigned char *FUN_L00_00273708(void *position, int b, int particle_mode) {
-    unsigned char *r = p27fe00_alloc(0x3E);
-    if (r != 0) {
-        unsigned char *v = r + 0x20;
-        qcopy(r + 0x10, position);
-        *(int *)(r + 4) = 0x7F7F4040;
-        r[9] = truncate_float_to_s32(4.0f) + 0x40;
-        r[1] = 0;
-        r[3] = 0x48;
-        *(float *)(r + 0xC) = 30000.0f;
-        r[8] = random_integer_below(0xFF);
-        *(short *)(v + 2) = particle_mode;
+    unsigned char *particle = p27fe00_alloc(0x3E);
+    if (particle != 0) {
+        unsigned char *particle_data = particle + 0x20;
+        qcopy(particle + 0x10, position);
+        *(int *)(particle + 4) = 0x7F7F4040;
+        particle[9] = truncate_float_to_s32(4.0f) + 0x40;
+        particle[1] = 0;
+        particle[3] = 0x48;
+        *(float *)(particle + 0xC) = 30000.0f;
+        particle[8] = random_integer_below(0xFF);
+        *(short *)(particle_data + 2) = particle_mode;
         if (particle_mode >= 2)
             particle_mode = 0;
-        r[2] = D_L00_001B2178[particle_mode];
-        *(short *)(r + 0x20) = truncate_float_to_s32(127.0f / convert_integer_to_float(b));
-        *(short *)(r + 0xA) = b;
+        particle[2] = D_L00_001B2178[particle_mode];
+        *(short *)(particle + 0x20) = truncate_float_to_s32(127.0f / convert_integer_to_float(b));
+        *(short *)(particle + 0xA) = b;
     }
-    return r;
+    return particle;
 }
 #define NOT_SDA
 
