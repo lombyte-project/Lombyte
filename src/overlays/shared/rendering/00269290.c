@@ -3309,19 +3309,19 @@ void FUN_L00_00270948(M_270948 *particle) {
     C_270948 collision_parameters;
     E_270948 *e = &particle->e;
     M_270948 *spawned_particle;
-    f32 r, nr, alpha_factor, s;
+    f32 position_jitter_extent, nr, alpha_factor, s;
     s32 hit;
     u8 fl;
 
     if (particle->hA != 0 && FUN_001f9770_c(&particle->hA)) {
         e->b18 |= 0x88;
-        r = particle->fC / 900000.0f;
+        position_jitter_extent = particle->fC / 900000.0f;
         particle->fC *= 0.8f;
-        nr = -r;
+        nr = -position_jitter_extent;
         FUN_001f9a68_c(&v, e, random_float_between(0.5f, 0.7f));
-        position_scratch.f[0] = particle->pos.f[0] + random_float_between(nr, r);
-        position_scratch.f[1] = particle->pos.f[1] + random_float_between(nr, r);
-        position_scratch.f[2] = particle->pos.f[2] + random_float_between(nr, r);
+        position_scratch.f[0] = particle->pos.f[0] + random_float_between(nr, position_jitter_extent);
+        position_scratch.f[1] = particle->pos.f[1] + random_float_between(nr, position_jitter_extent);
+        position_scratch.f[2] = particle->pos.f[2] + random_float_between(nr, position_jitter_extent);
         v.f[0] += random_float_between(-e->v.f[0] * 0.2f, e->v.f[0] * 0.2f);
         v.f[1] += random_float_between(-e->v.f[1] * 0.2f, e->v.f[1] * 0.2f);
         v.f[2] += random_float_between(-e->v.f[2] * 0.2f, 0.0f);
@@ -3334,9 +3334,9 @@ void FUN_L00_00270948(M_270948 *particle) {
         e->v.f[0] += random_float_between(-e->v.f[0] * 0.2f, e->v.f[0] * 0.2f);
         e->v.f[1] += random_float_between(-e->v.f[1] * 0.2f, e->v.f[1] * 0.2f);
         e->v.f[2] += random_float_between(-e->v.f[2] * 0.2f, 0.0f);
-        particle->pos.f[0] += random_float_between(nr, r);
-        particle->pos.f[1] += random_float_between(nr, r);
-        particle->pos.f[2] += random_float_between(nr, r);
+        particle->pos.f[0] += random_float_between(nr, position_jitter_extent);
+        particle->pos.f[1] += random_float_between(nr, position_jitter_extent);
+        particle->pos.f[2] += random_float_between(nr, position_jitter_extent);
     }
     particle->b2 = D_L00_001B20B0_c[0][(particle->hA + e->h16 + (particle->b2 - D_L00_001B20B0_c[0][0])) & 7];
     fast_vec_add(&v, &particle->pos, e);
