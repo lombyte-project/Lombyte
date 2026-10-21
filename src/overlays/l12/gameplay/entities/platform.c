@@ -359,26 +359,26 @@ int D_L12_001618C4 = 0xa0f0e8e0;
 int D_L12_001618C8 = 0x20f0e8e0;
 int D_L12_001618CC = 0x10017;
 void FUN_L12_002e19a8(void *pos) {
-    float v[4];
-    float w[4];
+    float base_position[4];
+    float spark_position[4];
     float vertical_spark_vector[4];
     float radial_spark_vector[4];
-    float r;
+    float radial_angle_radians;
     int i;
-    int frame_count, b, third_frame_count;
-    *(OvlQuad *)v = *(OvlQuad *)pos;
+    int frame_count, second_frame_count, third_frame_count;
+    *(OvlQuad *)base_position = *(OvlQuad *)pos;
     i = 0x1A;
     do {
-        r = random_angle_radians();
-        qcopy(w, v);
-        w[2] = w[2] + random_float_between_alt(-0.25f, -0.75f);
-        w[0] = w[0] + random_float_between_alt(-0.25f, 0.25f);
-        w[1] = w[1] + random_float_between_alt(-0.25f, 0.25f);
+        radial_angle_radians = random_angle_radians();
+        qcopy(spark_position, base_position);
+        spark_position[2] = spark_position[2] + random_float_between_alt(-0.25f, -0.75f);
+        spark_position[0] = spark_position[0] + random_float_between_alt(-0.25f, 0.25f);
+        spark_position[1] = spark_position[1] + random_float_between_alt(-0.25f, 0.25f);
         clear_u64_value(vertical_spark_vector);
-        radial_spark_vector[0] = fast_cos(r) * (random_float_between_alt(D_L12_00161898,
+        radial_spark_vector[0] = fast_cos(radial_angle_radians) * (random_float_between_alt(D_L12_00161898,
                                                         D_L12_0016189C) *
                                frame_time);
-        radial_spark_vector[1] = fast_sin(r) * (random_float_between_alt(D_L12_00161898,
+        radial_spark_vector[1] = fast_sin(radial_angle_radians) * (random_float_between_alt(D_L12_00161898,
                                                         D_L12_0016189C) *
                                frame_time);
         *(int *)&radial_spark_vector[2] = 0;
@@ -390,11 +390,11 @@ void FUN_L12_002e19a8(void *pos) {
         radial_spark_vector[3] = D_L12_001618A4;
         frame_count = func_001FA898_r(random_float_between_alt((float)D_L12_001618AC,
                                                      (float)D_L12_001618B0));
-        b = func_001FA898_r(random_float_between_alt((float)D_L12_001618B4,
+        second_frame_count = func_001FA898_r(random_float_between_alt((float)D_L12_001618B4,
                                                      (float)D_L12_001618B8));
         third_frame_count = func_001FA898_r(random_float_between_alt((float)D_L12_001618BC,
                                                      (float)D_L12_001618C0));
-        spawn_spark(w, vertical_spark_vector, radial_spark_vector, D_L12_001618C4, D_L12_001618C8, frame_count, b, third_frame_count,
+        spawn_spark(spark_position, vertical_spark_vector, radial_spark_vector, D_L12_001618C4, D_L12_001618C8, frame_count, second_frame_count, third_frame_count,
                      D_L12_001618CC);
     } while (--i >= 0);
 }
