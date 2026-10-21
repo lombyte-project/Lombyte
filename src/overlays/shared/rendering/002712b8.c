@@ -1452,23 +1452,23 @@ void FUN_L00_00274818(char *particle) {
     S_274818 *attachment_data = (S_274818 *)(particle + 0x30);
     char *o = attachment_data->o;
     u128 attachment_vector_scratch[4];
-    u128 b;
+    u128 attachment_offset;
     float one, randomized_primary_position_w, save, x;
-    char *v;
+    char *attachment_position;
     if (o == 0 || *(s16 *)(o + 0xA6) != attachment_data->h6 || (u8)o[0x20] == 0xFE || (u8)o[0x20] == 0xFD) {
         free_effect_particle(particle);
         return;
     }
-    v = particle + 0x10;
+    attachment_position = particle + 0x10;
     one = 1.0f;
     randomized_primary_position_w = attachment_data->unk8 * FUN_002132a8_274818(0.05f, one);
     save = *(float *)(particle + 0x2C);
-    FUN_L00_0024f7c8_274818(attachment_data->o, attachment_data->b4, v);
+    FUN_L00_0024f7c8_274818(attachment_data->o, attachment_data->b4, attachment_position);
     FUN_0020cca8_274818(attachment_data->o, attachment_data->b4, attachment_vector_scratch);
     x = FUN_001fa6c0_274818(attachment_data->b5);
     x = FUN_002132a8_274818(-x, x);
-    normalize_vector_xyz(&b, attachment_vector_scratch, (x / 100.0f - one) * attachment_data->unkC);
-    FUN_001f9a10_274818(particle + 0x20, v, &b);
+    normalize_vector_xyz(&attachment_offset, attachment_vector_scratch, (x / 100.0f - one) * attachment_data->unkC);
+    FUN_001f9a10_274818(particle + 0x20, attachment_position, &attachment_offset);
     *(float *)(particle + 0x1C) = randomized_primary_position_w;
     *(float *)(particle + 0x2C) = save;
 }
