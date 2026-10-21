@@ -1960,8 +1960,8 @@ stop:
 /* Runs volume_camera_swing unless its type is blocked right now (by
    D_001413F4, D_001413DC, or the hero being off the ground). */
 s32 volume_camera_swing_check(struct UpdateCam *cam) __asm__("FUN_L00_002ed230");
-s32 volume_camera_swing_check(struct UpdateCam *cam) {
-    SwingCameraParams *params = camera_descriptors[cam->descriptor_index].params;
+s32 volume_camera_swing_check(struct UpdateCam *swing_camera_record) {
+    SwingCameraParams *params = camera_descriptors[swing_camera_record->descriptor_index].params;
     if (params->l_buttons_end == 1 && params->done != 0)
         return 0;
     if (params->type == 11 && D_001413F4 != 2)
@@ -1979,7 +1979,7 @@ s32 volume_camera_swing_check(struct UpdateCam *cam) {
         params->timer = 0;
         return 0;
     }
-    volume_camera_swing(cam);
+    volume_camera_swing(swing_camera_record);
     return 0;
 }
 
