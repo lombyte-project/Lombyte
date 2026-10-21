@@ -1283,8 +1283,8 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L16_002e6208(void *arg) {
-    L16PursuitMoby *chomper_moby = arg;
+void FUN_L16_002e6208(void *chomper_instance) {
+    L16PursuitMoby *chomper_moby = chomper_instance;
     L16PursuitData *pursuit_data = chomper_moby->data;
     char *hit;
     int reaction_kind_or_path_address;                      /* the reaction kind, later the path */
