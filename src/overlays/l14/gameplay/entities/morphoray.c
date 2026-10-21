@@ -24,18 +24,18 @@ extern u8 *D_L14_00167500 __attribute__((section(".data")));
  * sub-record reached through +0x70 with the caller's argument and two float
  * constants, and set both floats on the record itself. */
 void FUN_L14_003135b8(u8 *flying_car_moby) {
-    u8 *g = D_L14_00167500;
+    u8 *link_source_record = D_L14_00167500;
     u8 *linked_subrecord;
     u8 *linked_record;
 
-    if (*(s16 *)(g + 0x86) != 7) {
+    if (*(s16 *)(link_source_record + 0x86) != 7) {
         return;
     }
-    linked_subrecord = *(u8 **)(g + 0x70) + 0x40;
+    linked_subrecord = *(u8 **)(link_source_record + 0x70) + 0x40;
     *(s32 *)(linked_subrecord + 0x40) = 1;
     *(s32 *)(linked_subrecord + 0x44) = (s32)flying_car_moby;
     *(f32 *)(linked_subrecord + 0x4C) = 2.0f;
-    linked_record = *(u8 **)(g + 0x70);
+    linked_record = *(u8 **)(link_source_record + 0x70);
     *(f32 *)(linked_record + 0xA0) = 7.0f;
     *(f32 *)(linked_record + 0xB0) = 2.0f;
 }
