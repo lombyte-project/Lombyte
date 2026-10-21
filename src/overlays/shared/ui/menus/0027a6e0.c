@@ -29,7 +29,7 @@ s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__
 
 void FUN_L00_002831c0(void) {
     char *pad = (char *)((char *)&D_0013C940);
-    int lim0, lim;
+    int lim0, candidate_index_limit;
     int va, vb, vc;
     int pressed, direction, count, j, code, index, matched;
     if ((*(long *)(pad + 0x1C0) & 0xF) == 6) {
@@ -50,8 +50,8 @@ void FUN_L00_002831c0(void) {
         index = 2;
         /* Fakematch: the bound read back through memory stays a register compare */
         lim0 = 0x93;
-        lim = *(int *)&lim0;
-        for (; index < lim; index++) {
+        candidate_index_limit = *(int *)&lim0;
+        for (; index < candidate_index_limit; index++) {
             matched = 1;
             for (j = 0; j < 20; j++) {
                 if (D_L00_001BA4A8[j] != D_L00_001B9BA0[(j * index + index) & 0xff]) {
