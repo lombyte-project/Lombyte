@@ -828,7 +828,7 @@ void blarg_gunner_update(struct Moby *moby) {
     };
     unsigned char *moby_vars = moby->pvars;
     float explosion_offset[4];
-    float b[4];
+    float explosion_spawn_position[4];
     switch (moby->state) {
     case BLARG_GUNNER_STATE_INITIALIZE:
         moby_vars[0x29] = 1;
@@ -862,8 +862,8 @@ void blarg_gunner_update(struct Moby *moby) {
     case BLARG_GUNNER_STATE_DESTROY:
         if (moby->anim_flags & 2) {
             subtract_vector_xyz(explosion_offset, D_L13_001670C0, &moby->pos);
-            moby_point_position(moby, 0, b);
-            spawn_explosion(moby, explosion_offset, b, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, -1, 2.0f,
+            moby_point_position(moby, 0, explosion_spawn_position);
+            spawn_explosion(moby, explosion_offset, explosion_spawn_position, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, -1, 2.0f,
                              40.0f, 0, 1, -1, 0);
             mark_moby_for_removal(moby);
         }
