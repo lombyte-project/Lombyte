@@ -126,7 +126,7 @@ extern void FUN_L05_002f5190_2f5200(struct Moby *, TriggerVars_2f5200 *, s32, s3
 extern void FUN_L05_002f4f60_2f5200(s32, TriggerVars_2f5200 *, s32) __asm__("FUN_L05_002f4f60");
 
 void FUN_L05_002f5200(struct Moby *trigger_moby) {
-    TriggerVars_2f5200 *v = (TriggerVars_2f5200 *)trigger_moby->pvars;
+    TriggerVars_2f5200 *trigger_vars = (TriggerVars_2f5200 *)trigger_moby->pvars;
     Vec4 target;
     s32 inside;
     s32 i;
@@ -134,21 +134,21 @@ void FUN_L05_002f5200(struct Moby *trigger_moby) {
 
     trigger_moby->update_dist = 0xFF;
     inside = 0;
-    if (v->use_alt_target != 0) {
+    if (trigger_vars->use_alt_target != 0) {
         qcopy(&target, &D_L05_001671C0_2f5200);
     } else {
         qcopy(&target, &hero.motion.pos);
     }
-    if (0.0f < v->radius && distance_xyz(&trigger_moby->pos, &target) < v->radius) {
+    if (0.0f < trigger_vars->radius && distance_xyz(&trigger_moby->pos, &target) < trigger_vars->radius) {
         inside = 1;
     }
-    if (!inside && v->path != -1) {
-        path = D_L05_001B0930_2f5200[v->path];
+    if (!inside && trigger_vars->path != -1) {
+        path = D_L05_001B0930_2f5200[trigger_vars->path];
         inside = absolute_float_cf(&target, path + 4, path[0]) != 0;
     }
     if (!inside) {
         for (i = 0; i < 6; i++) {
-            if (v->volumes[i] != -1 && is_point_inside_clip_volume(&target, v->volumes[i])) {
+            if (trigger_vars->volumes[i] != -1 && is_point_inside_clip_volume(&target, trigger_vars->volumes[i])) {
                 inside = 1;
                 break;
             }
@@ -162,13 +162,13 @@ void FUN_L05_002f5200(struct Moby *trigger_moby) {
         }
         trigger_moby->state = trigger_moby->command + 1;
         for (i = 0; i < 12; i++) {
-            if (v->on_lists[i] != -1) {
-                FUN_L05_002f5190_2f5200(trigger_moby, v, v->on_lists[i], inside);
+            if (trigger_vars->on_lists[i] != -1) {
+                FUN_L05_002f5190_2f5200(trigger_moby, trigger_vars, trigger_vars->on_lists[i], inside);
             }
         }
         for (i = 0; i < 11; i++) {
-            if (v->on_mobys[i] != -1) {
-                FUN_L05_002f4f60_2f5200(v->on_mobys[i], v, inside);
+            if (trigger_vars->on_mobys[i] != -1) {
+                FUN_L05_002f4f60_2f5200(trigger_vars->on_mobys[i], trigger_vars, inside);
             }
         }
     }
