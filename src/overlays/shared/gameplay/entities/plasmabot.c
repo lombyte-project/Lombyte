@@ -1624,7 +1624,7 @@ unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
     unsigned char *pos;
     if (spawned_moby != 0) {
         char *spawned_vars = *(char **)(spawned_moby + 0x78);
-        float vec[8];
+        float launch_vector_scratch[8];
         pos = spawned_moby + 0x10;
         qcopy(pos, owner + 0x10);
         *(float *)(spawned_moby + 0x48) = *(float *)(owner + 0x48);
@@ -1645,18 +1645,18 @@ unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
             fields[3] = index;
             fields[4] = 0;
             create_effect_2e0170(*(void **)(path + index * 0x20 + 0x10),
-                pos, vec, fields + 4, fields + 5, 0, 20.0f, 5.0f, *(float *)(spawned_vars + 0x14));
+                pos, launch_vector_scratch, fields + 4, fields + 5, 0, 20.0f, 5.0f, *(float *)(spawned_vars + 0x14));
         } else {
             float angle;
             *(int *)(spawned_vars + 4) = scale_game_frames_2e0170(200);
-            subtract_vector_2e0170(vec, pos, &hero.motion.pos);
-            vec[2] = 0.0f;
-            normalize_vector_2e0170(vec, vec,
+            subtract_vector_2e0170(launch_vector_scratch, pos, &hero.motion.pos);
+            launch_vector_scratch[2] = 0.0f;
+            normalize_vector_2e0170(launch_vector_scratch, launch_vector_scratch,
                 random_scaled_2e0170(D_L14_00161B30 * D_0015ED60,
                                        D_L14_00161B34 * D_0015ED60));
-            cross_vectors_2e0170(vec + 4, &hero.gravity_dir, vec);
+            cross_vectors_2e0170(launch_vector_scratch + 4, &hero.gravity_dir, launch_vector_scratch);
             angle = random_angle_2e0170(0.5759586691856384f, 1.3962633609771729f);
-            build_look_at_2e0170(spawned_vars + 0x30, vec, &hero.gravity_dir, angle);
+            build_look_at_2e0170(spawned_vars + 0x30, launch_vector_scratch, &hero.gravity_dir, angle);
             *(float *)(spawned_vars + 0x38) = random_scaled_2e0170(D_L14_00161B38 * D_0015ED60,
                 D_L14_00161B3C * D_0015ED60);
             *(float *)(spawned_vars + 0x20) = random_angle_2e0170(0.0f, 0.008726646f);
