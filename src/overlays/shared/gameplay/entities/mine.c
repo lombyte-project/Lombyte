@@ -3028,7 +3028,7 @@ extern V_2b1af0 D_0013F9B0;
 void FUN_L00_002b1de0(unsigned char *source_object) {
     V_2b1af0 particle_velocity;
     V_2b1af0 emission_offset;
-    V_2b1af0 b;
+    V_2b1af0 emission_position;
     V_2b1af0 scaled_global_vector;
     int i;
     int j;
@@ -3040,7 +3040,7 @@ void FUN_L00_002b1de0(unsigned char *source_object) {
     emission_offset.f[1] = -1.2f;
     emission_offset.f[3] = 1.0f;
     transform_vector_by_basis(&emission_offset, &emission_offset, source_object + 0xC0);
-    add_2b1af0(&b, source_object + 0x10, &emission_offset);
+    add_2b1af0(&emission_position, source_object + 0x10, &emission_offset);
     for (i = 0; i < count_2b1de0(24.0f); i++) {
         angle = rnd_2b1af0(0.0f, 0.1308997f);
         build_look_at_matrix(&particle_velocity, &D_0013F9B0, (char *)&D_0013F9B0 - 0x20,
@@ -3056,7 +3056,7 @@ void FUN_L00_002b1de0(unsigned char *source_object) {
         {
             int low = fr_2b1af0(30);
             int high = fr_2b1af0(90);
-            spawn_particle(&b, &particle_velocity, rndi_2b1af0(low, high), 30, 0xFFFFFF, signed_random_particle_argument,
+            spawn_particle(&emission_position, &particle_velocity, rndi_2b1af0(low, high), 30, 0xFFFFFF, signed_random_particle_argument,
                          60000.0f, 3000.0f, 0.85f, -0.001f, 0.0f);
         }
     }
@@ -3068,7 +3068,7 @@ void FUN_L00_002b1de0(unsigned char *source_object) {
         {
             int low = fr_2b1af0(20);
             int high = fr_2b1af0(60);
-            spawn_burst(&b, &particle_velocity, 0x4F007FFF, 0x1FFFFFFF,
+            spawn_burst(&emission_position, &particle_velocity, 0x4F007FFF, 0x1FFFFFFF,
                          rndi_2b1af0(low, high), 1, 10000.0f);
         }
     }
