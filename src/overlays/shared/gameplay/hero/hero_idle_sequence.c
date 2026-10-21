@@ -539,13 +539,13 @@ extern int FUN_L00_00211870_206080(float) __asm__("FUN_L00_00211870");
 extern void FUN_L00_00205f60_206080(int, char *, int) __asm__("FUN_L00_00205f60");
 
 void FUN_L00_00206080(void) {
-    struct Hero *g = &hero;
+    struct Hero *hero_state = &hero;
     int k;
-    if (g->state.current == 2 && g->state_timer < FUN_001f96f8_206080(0xF)) {
+    if (hero_state->state.current == 2 && hero_state->state_timer < FUN_001f96f8_206080(0xF)) {
         return;
     }
-    k = g->unk12ED;
-    if (g->state.current == 2 && g->state_timer == FUN_001f96f8_206080(0x16)) {
+    k = hero_state->unk12ED;
+    if (hero_state->state.current == 2 && hero_state->state_timer == FUN_001f96f8_206080(0x16)) {
         FUN_L00_00205f60_206080(k, 0, 1);
     }
     switch (((unsigned char *)hero.moby)[0x53]) {
