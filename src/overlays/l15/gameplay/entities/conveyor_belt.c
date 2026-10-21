@@ -939,8 +939,8 @@ void FUN_L15_002ebf28(int idx, int show) {
 extern int D_L15_001ABE40[];
 extern int D_L15_0015FFD8;
 
-int FUN_L15_002ebfb0(int idx) {
-    unsigned short *moby_index_entry = (unsigned short *)D_L15_001ABE40[idx];
+int FUN_L15_002ebfb0(int moby_list_index) {
+    unsigned short *moby_index_entry = (unsigned short *)D_L15_001ABE40[moby_list_index];
     int missing_or_dying_count = 0;
     int base;
     if (moby_index_entry == 0)
