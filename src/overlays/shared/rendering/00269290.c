@@ -727,15 +727,15 @@ void FUN_L00_0026ac78(char *particle) {
                 particle_data[0x19] = (particle_data[0x19] & 0xFD) | 4;
                 fast_vec_normalize(particle_data, particle_data, *(float *)(particle_data + 0xC) * random_float_between_alt(1.6f, 2.0f));
             } else {
-                int r;
+                int fade_lifetime;
                 *(int *)(particle_data + 0x10) = *(int *)(particle_data + 0x14);
                 *(int *)(particle_data + 0x14) = ((unsigned char)particle[3] == 0x48) ? 0 : 0xF2F3F3F;
                 particle_data[0x19] |= 1;
-                r = FUN_L00_00257b90((unsigned char)particle_data[0x1B] * 2, (unsigned char)particle_data[0x1B] * 3);
+                fade_lifetime = FUN_L00_00257b90((unsigned char)particle_data[0x1B] * 2, (unsigned char)particle_data[0x1B] * 3);
                 if (particle_data[0x19] & 8)
-                    r *= 5;
-                particle_data[0x1B] = r;
-                *(short *)(particle + 0xA) = (unsigned char)r;
+                    fade_lifetime *= 5;
+                particle_data[0x1B] = fade_lifetime;
+                *(short *)(particle + 0xA) = (unsigned char)fade_lifetime;
             }
         }
     } else {
