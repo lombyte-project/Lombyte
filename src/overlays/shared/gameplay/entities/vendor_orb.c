@@ -1745,11 +1745,11 @@ float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 void follow_camera_hero_target(int, void *) __asm__("FUN_L00_002e4168");
 void FUN_L00_002e48a0(void *out) {
     V4 offset_target_position, hero_position;
-    char *g = D_L00_00166E10;
-    vcopy_2e48a0(offset_target_position, g + 0x20);
-    follow_camera_hero_target(*(int *)(g - 0x10), hero_position);
+    char *camera_view = D_L00_00166E10;
+    vcopy_2e48a0(offset_target_position, camera_view + 0x20);
+    follow_camera_hero_target(*(int *)(camera_view - 0x10), hero_position);
     fast_vec_add(offset_target_position, offset_target_position, hero_position);
-    fast_vec_scale(out, g + 0x30, fast_vec_dot(g + 0x30, offset_target_position));
+    fast_vec_scale(out, camera_view + 0x30, fast_vec_dot(camera_view + 0x30, offset_target_position));
 }
 /* camera attach mode transitions: picks the next state from the player's state and arms its timers */
 /* Migrated from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5DE0). */
