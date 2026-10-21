@@ -111,7 +111,7 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
     float vel[4];
     float acc[4];
     float frame_count_scale;
-    int frame_count, second_frame_count, third_frame_count, c1;
+    int frame_count, second_frame_count, third_frame_count, initial_spark_color;
     if (*burst < 0) {
         if (++*burst != 0)
             return;
@@ -140,8 +140,8 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
     frame_count = func_001FA898_r((float)D_L10_00161F84 * frame_count_scale);
     second_frame_count = func_001FA898_r((float)D_L10_00161F88 * frame_count_scale);
     third_frame_count = func_001FA898_r((float)D_L10_00161F8C * frame_count_scale);
-    c1 = fast_tween_color(D_L10_00161F94, D_L10_00161F98, random_float_between(0.0f, 1.0f));
-    spawn_spark(pos, vel, acc, c1,
+    initial_spark_color = fast_tween_color(D_L10_00161F94, D_L10_00161F98, random_float_between(0.0f, 1.0f));
+    spawn_spark(pos, vel, acc, initial_spark_color,
                  fast_tween_color(D_L10_00161F9C, D_L10_00161FA0, random_float_between(0.0f, 1.0f)), frame_count,
                  second_frame_count, third_frame_count, -1);
     *timer = func_001FA898_r(random_float_between((float)D_L10_00161FA4, (float)D_L10_00161FA8));
