@@ -772,11 +772,11 @@ void FUN_L15_0020ed50(void) {
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, (struct MobyView *)hero.moby, 0x13);
         } else {
-            s32 idx = hero.unk222C;
-            if (idx != -1) {
-                struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + idx * 0x70);
+            s32 voice_slot_index = hero.unk222C;
+            if (voice_slot_index != -1) {
+                struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + voice_slot_index * 0x70);
                 if (e->pm88 == (struct MobyView *)hero.moby && e->b74 != 0) {
-                    release_voice_slot(idx);
+                    release_voice_slot(voice_slot_index);
                 }
             }
             hero.unk222C = -1;
