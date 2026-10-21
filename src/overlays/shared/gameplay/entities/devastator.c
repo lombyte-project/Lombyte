@@ -111,12 +111,12 @@ void devastator_update(struct Moby *devastator_moby) {
     Devastator_2b2100 *data = (Devastator_2b2100 *)devastator_moby->pvars;
     struct Moby *best;
     struct Moby *candidate_moby;
-    AimInfo_2b2100 *r;
+    AimInfo_2b2100 *aim_info;
     UsageStat_2b2100 *stats;
     Hit_2b2100 *hit;
     float height, limit, yaw, pitch, yaw0, pitch0;
     float size;
-    float muzzle_light_color_x, b, muzzle_light_color_z;
+    float muzzle_light_color_x, muzzle_light_color_y, muzzle_light_color_z;
     int i;
 
     FUN_L00_002b1af0_2b2100(devastator_moby);
@@ -197,8 +197,8 @@ void devastator_update(struct Moby *devastator_moby) {
                 while (candidate_moby) {
                     if ((*(signed char *)&candidate_moby->state) >= 0) {
                         qcopy(&point, &candidate_moby->pos);
-                        r = get_moby_aim_info_2b2100(candidate_moby);
-                        if (r) point.f.z += r->height;
+                        aim_info = get_moby_aim_info_2b2100(candidate_moby);
+                        if (aim_info) point.f.z += aim_info->height;
                         else point.f.z += 0.5f;
                         if ((candidate_moby->flags & 0x1000) && candidate_moby && ((Class_2b2100 *)candidate_moby->pclass) && ((Class_2b2100 *)candidate_moby->pclass)->category == 5) {
                             float tyaw, tpitch, distance, spread, off;
@@ -223,8 +223,8 @@ void devastator_update(struct Moby *devastator_moby) {
                                 off = approximate_arcsine_2b2100(distance_xyz_2b2100(&probe, &point) / (distance + distance));
                                 off = off + off;
                                 if (spread + 0.17453292f < off) {
-                                    if (r) {
-                                        float radius = convert_integer_to_float_2b2100(r->radius) * 0.125f;
+                                    if (aim_info) {
+                                        float radius = convert_integer_to_float_2b2100(aim_info->radius) * 0.125f;
                                         if (radius < distance) {
                                             off -= approximate_arcsine_2b2100(radius / distance);
                                             if (off < 0.0f) off = 0.0f;
@@ -240,7 +240,7 @@ void devastator_update(struct Moby *devastator_moby) {
                                         if (!FUN_L00_0025f878_2b2100(best)) {
                                             height = 0.5f;
                                             data->target = best;
-                                            if (r) height = r->height;
+                                            if (aim_info) height = aim_info->height;
                                         }
                                     }
                                 }
@@ -262,20 +262,20 @@ void devastator_update(struct Moby *devastator_moby) {
             if (hero.unk22C8 == 1 && hero.state.current != 30) {
                 pitch = D_L00_0017ACF4_lui;
                 yaw = devastator_moby->rot.z;
-                r = get_moby_aim_info_2b2100(data->target);
-                if (r) height = r->height;
+                aim_info = get_moby_aim_info_2b2100(data->target);
+                if (aim_info) height = aim_info->height;
                 FUN_L00_002afc70_2b2100(devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
             } else if (limit < 2.0f) {
-                r = get_moby_aim_info_2b2100(data->target);
-                if (r) height = r->height;
+                aim_info = get_moby_aim_info_2b2100(data->target);
+                if (aim_info) height = aim_info->height;
                 FUN_L00_002afc70_2b2100(devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
             } else {
                 if (!data->target) {
                     if (best) {
                         limit = FUN_L00_002aff50_2b2100(6);
                         qcopy(&point, &best->pos);
-                        r = get_moby_aim_info_2b2100(best);
-                        if (r) point.f.z += r->height;
+                        aim_info = get_moby_aim_info_2b2100(best);
+                        if (aim_info) point.f.z += aim_info->height;
                         else point.f.z += 0.5f;
                         pitch0 -= hero.ground_pitch.f * 0.5f;
                         build_spherical_offset_2b2100(&probe, limit, yaw0, pitch0);
@@ -302,11 +302,11 @@ void devastator_update(struct Moby *devastator_moby) {
     if (devastator_moby->seq != 2 && data->glow > 0) {
         if (data->glow > scale_game_frames_2b2100(10)) {
             muzzle_light_color_x = convert_integer_to_float_2b2100(scale_game_frames_2b2100(5) + scale_game_frames_2b2100(10) - data->glow) / (float)scale_game_frames_2b2100(5);
-            b = convert_integer_to_float_2b2100(scale_game_frames_2b2100(5) + scale_game_frames_2b2100(10) - data->glow) * 0.8f / (float)scale_game_frames_2b2100(5);
+            muzzle_light_color_y = convert_integer_to_float_2b2100(scale_game_frames_2b2100(5) + scale_game_frames_2b2100(10) - data->glow) * 0.8f / (float)scale_game_frames_2b2100(5);
             muzzle_light_color_z = convert_integer_to_float_2b2100(scale_game_frames_2b2100(5) + scale_game_frames_2b2100(10) - data->glow) * 0.5f / (float)scale_game_frames_2b2100(5);
         } else {
             muzzle_light_color_x = convert_integer_to_float_2b2100(data->glow) / (float)scale_game_frames_2b2100(10);
-            b = convert_integer_to_float_2b2100(data->glow) * 0.8f / (float)scale_game_frames_2b2100(10);
+            muzzle_light_color_y = convert_integer_to_float_2b2100(data->glow) * 0.8f / (float)scale_game_frames_2b2100(10);
             muzzle_light_color_z = convert_integer_to_float_2b2100(data->glow) * 0.5f / (float)scale_game_frames_2b2100(10);
         }
         FUN_L00_0024f7c8_2b2100(devastator_moby, 0, &velocity);
@@ -314,13 +314,13 @@ void devastator_update(struct Moby *devastator_moby) {
         velocity.f.y += fast_sin_2b2100(atan2_fast_2b2100(hero.unk670, hero.unk674));
         velocity.f.z += 0.3f;
         if (data->light == -1) {
-            data->light = FUN_L00_0023e738_2b2100(&velocity, 7.0f, 0.0f, muzzle_light_color_x, b, muzzle_light_color_z);
+            data->light = FUN_L00_0023e738_2b2100(&velocity, 7.0f, 0.0f, muzzle_light_color_x, muzzle_light_color_y, muzzle_light_color_z);
         } else {
             Light_2b2100 *muzzle_light = &lights_2b2100[data->light];
             qcopy(&muzzle_light->pos, &velocity);
             muzzle_light->pos.f.w = 7.0f;
             muzzle_light->x = muzzle_light_color_x;
-            muzzle_light->y = b;
+            muzzle_light->y = muzzle_light_color_y;
             muzzle_light->z = muzzle_light_color_z;
         }
         FUN_001f9770_2b2100(&data->glow);
