@@ -2188,7 +2188,7 @@ extern const float frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 
 void FUN_L01_002eec68(char *moby) {
     V_2F0040 v;
-    V_2F0040 w;
+    V_2F0040 line_test_endpoint;
     int flag;
     float amount;
     float first_spawn_angle;
@@ -2205,7 +2205,7 @@ void FUN_L01_002eec68(char *moby) {
     int candidate_list_index;
     char *hit_record_moby_for_class_check;
     char *x2;
-    char *b;
+    char *path_search_position;
     int c258;
     int c260;
     float f20;
@@ -2227,21 +2227,21 @@ void FUN_L01_002eec68(char *moby) {
         if (hit_record_moby != 0) {
             short cls = *(short *)(hit_record_moby + 0xA6);
             if (cls == 0x47) {
-                qcopy(&w, ((char *)D_0013F420));
-                wp = &w.q;
+                qcopy(&line_test_endpoint, ((char *)D_0013F420));
+                wp = &line_test_endpoint.q;
             } else {
                 x = *(char **)(hit_record_moby + 0x24);
                 if ((x != 0 && *(short *)(x + 0x46) == 5) || cls == 0xBA) {
-                    qcopy(&w, &v);
-                    wp = &w.q;
+                    qcopy(&line_test_endpoint, &v);
+                    wp = &line_test_endpoint.q;
                 } else {
-                    qcopy(&w, hit_record_moby + 0x10);
-                    wp = &w.q;
+                    qcopy(&line_test_endpoint, hit_record_moby + 0x10);
+                    wp = &line_test_endpoint.q;
                 }
             }
         } else {
-            qcopy(&w, hit_record);
-            wp = &w.q;
+            qcopy(&line_test_endpoint, hit_record);
+            wp = &line_test_endpoint.q;
         }
         if (fast_vec_dist(&v, wp) < 24.0f) {
             if (func_L00_001EFFF0_t(&v, wp, 2, moby, 0) != 0) {
@@ -2342,9 +2342,9 @@ void FUN_L01_002eec68(char *moby) {
     c260 = *(int *)(moby_vars + 0x260);
     if (c260 <= 0 || *(unsigned char *)((c260 << 8) + (*(int *)&D_L01_0015FFD8) + 0xBC) != 0) {
         search_path = D_L01_001B0930[*(int *)(moby_vars + 0x24C)];
-        b = moby_vars + 0x1C0;
-        if (FUN_L00_0025ff38(*(float *)(moby_vars + 0x228), moby, b, 0, 0, search_path + 0x10, *(int *)search_path) != 2) {
-            if (*(float *)(moby_vars + 0x228) < vector_distance_xy_alt(moby_vars + 0x210, b)
+        path_search_position = moby_vars + 0x1C0;
+        if (FUN_L00_0025ff38(*(float *)(moby_vars + 0x228), moby, path_search_position, 0, 0, search_path + 0x10, *(int *)search_path) != 2) {
+            if (*(float *)(moby_vars + 0x228) < vector_distance_xy_alt(moby_vars + 0x210, path_search_position)
                 || 3.0f < absolute_float(*(float *)(moby + 0x18) - *(float *)(moby_vars + 0x1C8))) {
                 *(int *)(moby_vars + 0x204) = 2;
             }
