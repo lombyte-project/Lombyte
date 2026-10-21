@@ -15,13 +15,13 @@ void format_menu_item_text(s32 idx, u8 *dst) __asm__("FUN_00208280");
 /* Builds the label of map icon idx (update_map_icons): its help text with
    "%b" replaced by the name of item label_item. */
 
-void format_menu_item_text(s32 idx, u8 *dst) {
-    u8 buf[0x10];
+void format_menu_item_text(s32 map_icon_index, u8 *dst) {
+    u8 replacement_text[0x10];
     u8 *src;
     u8 *replacement_cursor;
 
-    src = get_help_message_text(level_map_selection.icons[idx].label_text_id);
-    replacement_cursor = buf;
+    src = get_help_message_text(level_map_selection.icons[map_icon_index].label_text_id);
+    replacement_cursor = replacement_text;
     if (src == 0) {
         return;
     }
@@ -34,9 +34,9 @@ void format_menu_item_text(s32 idx, u8 *dst) {
     }
     src++;
     if (*src == 'b') {
-        sprintf((char *)buf, D_0015FDA0, D_001DFFB0[level_map_selection.icons[idx].label_item].name);
+        sprintf((char *)replacement_text, D_0015FDA0, D_001DFFB0[level_map_selection.icons[map_icon_index].label_item].name);
     } else {
-        sprintf((char *)buf, D_0015FDA8);
+        sprintf((char *)replacement_text, D_0015FDA8);
     }
     src++;
     while (*replacement_cursor != '\0') {
