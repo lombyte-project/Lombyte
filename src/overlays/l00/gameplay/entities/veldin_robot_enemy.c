@@ -619,7 +619,7 @@ void FUN_L00_002e1aa8(SparkMoby *moby) {
     SparkPart *particle;
     SparkTail *particle_tail;
     f32 *pos;
-    f32 vel[4];
+    f32 particle_initial_velocity[4];
     s32 i;
     s32 life;
 
@@ -627,8 +627,8 @@ void FUN_L00_002e1aa8(SparkMoby *moby) {
     pos = vars->pos;
     moby_point_position(moby, 1, pos);
     vars->pos[2] -= 0.333f;
-    random_spherical_offset(vel, 0.005f, 0.03f);
-    particle = FUN_L00_00274948(pos, vel, 0x7F, moby);
+    random_spherical_offset(particle_initial_velocity, 0.005f, 0.03f);
+    particle = FUN_L00_00274948(pos, particle_initial_velocity, 0x7F, moby);
     if (particle != 0) {
         particle->unkC = random_float_between(6000.0f, 32000.0f);
     }
