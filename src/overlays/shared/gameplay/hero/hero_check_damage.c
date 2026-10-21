@@ -550,7 +550,7 @@ float FUN_L00_0020d6b0(char *target_moby, float yaw, float range, float ylim, fl
 extern char *active_mobies[] __asm__("D_L00_001ABA00") __attribute__((section(".data")));
 float *FUN_002141f8_20d8f8(char *) __asm__("FUN_002141f8");
 float FUN_L00_0020d6b0(char *, float, float, float, float, int *);
-char *FUN_L00_0020d8f8(float range_limit, float b, float angular_error_limit, float elevation_angle_limit) {
+char *FUN_L00_0020d8f8(float range_limit, float reference_yaw, float angular_error_limit, float elevation_angle_limit) {
     char *best = 0;
     float bd = 1.0e8f;
     int i = 0;
@@ -559,7 +559,7 @@ char *FUN_L00_0020d8f8(float range_limit, float b, float angular_error_limit, fl
         float *candidate_eligibility_value = FUN_002141f8_20d8f8(candidate_moby);
         if (candidate_eligibility_value != 0 && *candidate_eligibility_value != 0.0f && (*(unsigned short *)(candidate_moby + 0x34) & 0x1000)) {
             int out;
-            float dist = FUN_L00_0020d6b0(candidate_moby, b, range_limit, angular_error_limit, elevation_angle_limit, &out);
+            float dist = FUN_L00_0020d6b0(candidate_moby, reference_yaw, range_limit, angular_error_limit, elevation_angle_limit, &out);
             if (out == 0 && dist < bd) {
                 bd = dist;
                 best = candidate_moby;
