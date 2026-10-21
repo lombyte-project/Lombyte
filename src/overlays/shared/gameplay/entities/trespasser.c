@@ -43,7 +43,7 @@ extern float FUN_001f9de0_2c1928(float) __asm__("FUN_001f9de0");
 void FUN_L00_002c1928(float *origin_position, OvlQuad *target_position, float *out, float gravity, float min_horizontal_distance, float max_range) {
     OvlQuad effective_target_position[1];
     float half = gravity * max_range * 0.5f;
-    float effective_horizontal_distance, dz, ang, launch_component_speed_squared, launch_component_speed;
+    float effective_horizontal_distance, dz, launch_heading, launch_component_speed_squared, launch_component_speed;
 
     if (max_range < FUN_001f9b48_2c1928(origin_position, target_position)) {
         FUN_001f9a28_2c1928(effective_target_position, target_position, origin_position);
@@ -54,7 +54,7 @@ void FUN_L00_002c1928(float *origin_position, OvlQuad *target_position, float *o
     }
     effective_horizontal_distance = FUN_001f9b80_2c1928(origin_position, effective_target_position);
     dz = ((float *)effective_target_position)[2] - origin_position[2];
-    ang = FUN_001f9e90_2c1928(((float *)effective_target_position)[0] - origin_position[0], ((float *)effective_target_position)[1] - origin_position[1]);
+    launch_heading = FUN_001f9e90_2c1928(((float *)effective_target_position)[0] - origin_position[0], ((float *)effective_target_position)[1] - origin_position[1]);
     if (effective_horizontal_distance < min_horizontal_distance)
         effective_horizontal_distance = min_horizontal_distance;
     if (effective_horizontal_distance <= dz)
@@ -63,8 +63,8 @@ void FUN_L00_002c1928(float *origin_position, OvlQuad *target_position, float *o
     if (half < launch_component_speed_squared)
         launch_component_speed_squared = half;
     launch_component_speed = FUN_001f9988_2c1928(launch_component_speed_squared);
-    out[0] = FUN_001f9dc8_2c1928(ang) * launch_component_speed;
-    out[1] = FUN_001f9de0_2c1928(ang) * launch_component_speed;
+    out[0] = FUN_001f9dc8_2c1928(launch_heading) * launch_component_speed;
+    out[1] = FUN_001f9de0_2c1928(launch_heading) * launch_component_speed;
     out[2] = launch_component_speed;
 }
 #include "qcopy.h"
