@@ -10,10 +10,10 @@ void prepare_debug_profiler_render(void) __asm__("FUN_001f4248");
 
 void prepare_debug_profiler_render(void) {
     if (space_load_in_progress == 0) {
-        s32 v;
+        s32 draw_mask;
         append_gif_transfer_packet();
-        v = 0x7F;
-        draw_enable_mask = v;
+        draw_mask = 0x7F;
+        draw_enable_mask = draw_mask;
         draw_debug_profiler();
     }
 }
