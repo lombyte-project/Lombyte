@@ -2550,14 +2550,14 @@ void FUN_L18_002e9e70(struct Moby *moby) {
         }
         break;
     case STATE_TRAVEL_TO_TARGET: {
-        float buf[4];
-        float buf2[4];
+        float target_displacement[4];
+        float ground_position[4];
         float *position = &moby->pos.x;
         float *arc_endpoint_position = moby_vars + 4;
         float lim = D_L18_00161EE0 * frame_time;
         float len;
-        subtract_vector_xyz(buf, moby_vars, position);
-        len = vector_length_xyz(buf);
+        subtract_vector_xyz(target_displacement, moby_vars, position);
+        len = vector_length_xyz(target_displacement);
         FUN_L18_002ea598_c(moby);
         FUN_L00_00257d78(arc_endpoint_position, D_L18_00161ED8 * moby_vars[9], D_L18_00161ED8 * moby_vars[9]);
         add_vector_xyz(arc_endpoint_position, arc_endpoint_position, position);
@@ -2569,12 +2569,12 @@ void FUN_L18_002e9e70(struct Moby *moby) {
             mark_moby_for_removal_c2(moby);
             return;
         }
-        normalize_vector_xyz(buf, buf, lim);
-        add_vector_xyz(position, position, buf);
-        qcopy(buf2, position);
-        buf2[2] = probe_ground_height_c(buf2, 0, 0.5f);
+        normalize_vector_xyz(target_displacement, target_displacement, lim);
+        add_vector_xyz(position, position, target_displacement);
+        qcopy(ground_position, position);
+        ground_position[2] = probe_ground_height_c(ground_position, 0, 0.5f);
         spark_s(*(int *)(moby_vars + 8), position, 2.0f, 0x10001, 5.0f, 1.0f, 0, 1, 0);
-        spark_s(*(int *)(moby_vars + 8), buf2, 2.0f, 0x10001, 5.0f, 1.0f, 0, 1, 0);
+        spark_s(*(int *)(moby_vars + 8), ground_position, 2.0f, 0x10001, 5.0f, 1.0f, 0, 1, 0);
         if (fast_dec_timer((int *)(moby_vars + 13))) {
             approach_value_alt(moby_vars + 9, 0.0f, 0.2f);
             if (moby_vars[9] == 0.0f) {
