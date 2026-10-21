@@ -1126,11 +1126,11 @@ float FUN_L14_002b35d8(char *moby, int flag, float target_angle) {
         float pitch_quaternion[4];
         float *bp;
         float *cp;
-        struct Hero *g;
+        struct Hero *hero_state;
         float target_pitch_angle;
         qcopy(owner_aim_position, owner + 0x10);
-        g = &hero;
-        if (((char *)g->moby) == owner) owner_aim_position[2] = owner_aim_position[2] - g->ground_distance;
+        hero_state = &hero;
+        if (((char *)hero_state->moby) == owner) owner_aim_position[2] = owner_aim_position[2] - hero_state->ground_distance;
         bp = owner_aim_offset;
         subtract_vector_xyz_c2(bp, owner_aim_position, moby + 0x10);
         owner_aim_offset[2] = owner_aim_offset[2] + 1.5f;
