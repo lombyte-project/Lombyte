@@ -583,31 +583,31 @@ void FUN_L00_002165b8(void) {
         HERO_TILT_APPLY_REFERENCE_ORIENTATION = 1,
         HERO_TILT_USE_NEGATED_REFERENCE_VECTOR = 2
     };
-    struct Hero *g = &hero;
+    struct Hero *hero_state = &hero;
     float tilt_targets[2];
-    int effective_tilt_mode, st, k;
-    effective_tilt_mode = g->unk20B3;
-    if (g->unk1F8) {
+    int effective_tilt_mode, current_hero_state, k;
+    effective_tilt_mode = hero_state->unk20B3;
+    if (hero_state->unk1F8) {
         effective_tilt_mode = 1;
     }
     switch (effective_tilt_mode) {
     case HERO_TILT_RETURN_TO_ZERO:
-        st = g->state.current;
-        if ((u32)(st - 0x25) < 2) {
+        current_hero_state = hero_state->state.current;
+        if ((u32)(current_hero_state - 0x25) < 2) {
             return;
         }
-        k = g->state.control_mode;
+        k = hero_state->state.control_mode;
         if (k == 0x11 || k == 0x15 || k == 0x16) {
             return;
         }
-        if (st == 0x77 || st == 0x31 || st == 0x2D || st == 0x2C) {
+        if (current_hero_state == 0x77 || current_hero_state == 0x31 || current_hero_state == 0x2D || current_hero_state == 0x2C) {
             return;
         }
         tilt_targets[0] = 0.0f;
         tilt_targets[1] = 0.0f;
-        FUN_L00_0025bc98_2165b8(&g->motion.rot, &g->motion.unkA0, 0, -tilt_targets[0], frame_scale_sq * 0.015f,
+        FUN_L00_0025bc98_2165b8(&hero_state->motion.rot, &hero_state->motion.unkA0, 0, -tilt_targets[0], frame_scale_sq * 0.015f,
                                 frame_scale_sq * 0.3f, frame_time * 5.2359877f);
-        FUN_L00_0025bc98_2165b8(&g->motion.rot.f[1], &g->motion.unkA0.f[1], 0, -tilt_targets[1], frame_scale_sq * 0.015f,
+        FUN_L00_0025bc98_2165b8(&hero_state->motion.rot.f[1], &hero_state->motion.unkA0.f[1], 0, -tilt_targets[1], frame_scale_sq * 0.015f,
                                 frame_scale_sq * 0.3f, frame_time * 5.2359877f);
         break;
     case HERO_TILT_APPLY_REFERENCE_ORIENTATION:
