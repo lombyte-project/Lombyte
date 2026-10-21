@@ -66,7 +66,7 @@ float FUN_001fa5c8_00258110(float, float) __asm__("FUN_001fa5c8");
 float FUN_001f99c0_00258110(float) __asm__("FUN_001f99c0");
 float FUN_001fa580_00258110(float, float) __asm__("FUN_001fa580");
 float spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_00258110");
-float spring_turn(float *turn_step, float current_angle, float target_angle, float spring_strength, float damping_factor, float lim) {
+float spring_turn(float *turn_step, float current_angle, float target_angle, float spring_strength, float damping_factor, float max_turn_step) {
     float angle_delta = FUN_001fa5c8_00258110(target_angle, current_angle);
     float k = angle_delta / 0.15707964f;
     if (k > 1.0f)
@@ -74,11 +74,11 @@ float spring_turn(float *turn_step, float current_angle, float target_angle, flo
     else if (k < -1.0f)
         k = -1.0f;
     *turn_step = *turn_step + (spring_strength * k - damping_factor * *turn_step);
-    if (lim != 0.0f) {
-        if (*turn_step > lim)
-            *turn_step = lim;
-        else if (*turn_step < -lim)
-            *turn_step = -lim;
+    if (max_turn_step != 0.0f) {
+        if (*turn_step > max_turn_step)
+            *turn_step = max_turn_step;
+        else if (*turn_step < -max_turn_step)
+            *turn_step = -max_turn_step;
     }
     if (*turn_step > FUN_001f99c0_00258110(angle_delta))
         *turn_step = FUN_001f99c0_00258110(angle_delta);
