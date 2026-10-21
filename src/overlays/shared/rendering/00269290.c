@@ -2021,10 +2021,10 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 void FUN_L00_0026de00(char *particle) {
-    char *b = particle + 0x20;
-    fast_vec_add(particle + 0x10, particle + 0x10, b);
+    char *particle_data = particle + 0x20;
+    fast_vec_add(particle + 0x10, particle + 0x10, particle_data);
     *(unsigned *)(particle + 4) = (*(unsigned *)(particle + 4) & 0xFFFFFF) +
-                           (((*(int *)(b + 0x18) * *(int *)(b + 0x10)) / *(int *)(b + 0x14)) << 24);
+                           (((*(int *)(particle_data + 0x18) * *(int *)(particle_data + 0x10)) / *(int *)(particle_data + 0x14)) << 24);
     if (fast_dec_timer(particle + 0x30))
         free_effect_particle(particle);
 }
