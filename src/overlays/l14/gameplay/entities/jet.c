@@ -2522,7 +2522,7 @@ extern float FUN_001f9b48(void *, void *);
 void FUN_L14_002f1140(struct Moby *moby) {
     char *taxi_vars = (char *)moby->pvars;
     char *selected_path;
-    float inv, travel_step_limit, b, r;
+    float inv, travel_step_limit, b, first_segment_length;
     switch (*(short *)(taxi_vars + 0xB4)) {
     case TAXI_STOP_RETURN_HUB:
         *(char **)(taxi_vars + 0xAC) = D_L14_001B0BB0_c2[*(int *)(taxi_vars + 0x94)];
@@ -2544,10 +2544,10 @@ void FUN_L14_002f1140(struct Moby *moby) {
         break;
     }
     selected_path = *(char **)(taxi_vars + 0xAC);
-    r = FUN_001f9b48(selected_path + 0x10, selected_path + 0x20);
+    first_segment_length = FUN_001f9b48(selected_path + 0x10, selected_path + 0x20);
     travel_step_limit = D_0015ED6C_u * 5.0f;
     b = frame_time_sq * 2.5f;
-    inv = 1.0f / (r * (float)**(int **)(taxi_vars + 0xAC));
+    inv = 1.0f / (first_segment_length * (float)**(int **)(taxi_vars + 0xAC));
     *(int *)(taxi_vars + 0xC4) = 0;
     *(int *)(taxi_vars + 0xC0) = 0;
     *(float *)(taxi_vars + 0xD4) = travel_step_limit * inv;
