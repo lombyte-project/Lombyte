@@ -810,12 +810,12 @@ void bolt_update(Bolt *bolt_moby) {
     s32 hit;
     f32 sc;
     f32 hr;
-    f32 ang;
+    f32 settling_inclination_limit;
     f32 k;
     f32 velocity_decay_step;
     f32 u;
     f32 settling_hop_phase;
-    f32 dist;
+    f32 hero_distance;
     f32 x;
     f32 rotation_blend_step;
     s32 flag;
@@ -918,11 +918,11 @@ void bolt_update(Bolt *bolt_moby) {
             FUN_L00_002a7210_c(bolt_moby, hero.moby, 0.0f, 0.0f);
             return;
         }
-        ang = 0.7853982f;
-        if (!(fast_arc_tan(geometry_scratch.f[2], vector_length_xy(&geometry_scratch)) < ang)) {
+        settling_inclination_limit = 0.7853982f;
+        if (!(fast_arc_tan(geometry_scratch.f[2], vector_length_xy(&geometry_scratch)) < settling_inclination_limit)) {
             return;
         }
-        if (!(fast_arc_tan(D_L00_00173E40.normal_z, vector_length_xy(&D_L00_00173E40.normal_x)) < ang)) {
+        if (!(fast_arc_tan(D_L00_00173E40.normal_z, vector_length_xy(&D_L00_00173E40.normal_x)) < settling_inclination_limit)) {
             return;
         }
         bolt_moby->state = 2;
@@ -955,12 +955,12 @@ void bolt_update(Bolt *bolt_moby) {
         v->hop_frames = v->hop_left = FUN_001fa6d0(multiply_global_factor_ed64(FUN_002132a8(10.0f, 20.0f)));
         return;
     case BOLT_IDLE:
-        dist = vector_distance(&bolt_moby->pos, &hero.motion.pos);
-        if (dist < hero.reach_distance && FUN_001f99c0(bolt_moby->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
+        hero_distance = vector_distance(&bolt_moby->pos, &hero.motion.pos);
+        if (hero_distance < hero.reach_distance && FUN_001f99c0(bolt_moby->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
             FUN_L00_002a7210_c(bolt_moby, hero.moby, 0.0f, 0.0f);
             return;
         }
-        if ((u8 *)bolt_moby > D_L00_0015FFDC && D_L00_0015FFBC < 200 && 48.0f < dist && bolt_moby->unk31 == 0) {
+        if ((u8 *)bolt_moby > D_L00_0015FFDC && D_L00_0015FFBC < 200 && 48.0f < hero_distance && bolt_moby->unk31 == 0) {
             FUN_0020c828(bolt_moby);
             return;
         }
