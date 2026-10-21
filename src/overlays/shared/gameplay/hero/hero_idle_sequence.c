@@ -1396,9 +1396,9 @@ extern void FUN_L00_00262b80(int, char *, char *, float, float, float);
 
 void FUN_L00_002079e8(void);
 void FUN_L00_002079e8(void) {
-    struct Hero *g = &hero;
-    if (g->state.current == 0x7F) {
-        FUN_L00_00262b80(((int)g->moby), &g->unk6B0, &g->unk6B4, 0.1745329201221466f,
+    struct Hero *hero_state = &hero;
+    if (hero_state->state.current == 0x7F) {
+        FUN_L00_00262b80(((int)hero_state->moby), &hero_state->unk6B0, &hero_state->unk6B4, 0.1745329201221466f,
                          frame_time * 1.5707963705062866f, frame_time * 2.094395160675049f);
     }
 }
