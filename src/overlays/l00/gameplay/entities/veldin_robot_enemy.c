@@ -827,8 +827,8 @@ void FUN_L00_002e3800(FlockMoby *moby) {
         FLOCK_EFFECT_STATE_INITIALIZE = 0,
         FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS = 1
     };
-    f32 pos[4];
-    void *src;
+    f32 effect_spawn_position[4];
+    void *effect_source_moby;
     FlockPart *part;
     s32 color;
     s32 random_magnitude;
@@ -856,15 +856,15 @@ void FUN_L00_002e3800(FlockMoby *moby) {
             cutscene_set_camera_target(D_L00_0016C860.mobys[phase_effect_moby_index]);
         }
         if (D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 4) {
-            src = D_L00_0016C860.mobys[3];
-            if (src != 0 && scale_game_frames_s32(150) <= D_L00_0016C860.level &&
+            effect_source_moby = D_L00_0016C860.mobys[3];
+            if (effect_source_moby != 0 && scale_game_frames_s32(150) <= D_L00_0016C860.level &&
                 D_L00_0016C860.level <= scale_game_frames_s32(220)) {
-                moby_point_position(src, 0, pos);
-                draw_trail(pos, pos, D_L00_0015F580, 120000.0f, 50000.0f);
+                moby_point_position(effect_source_moby, 0, effect_spawn_position);
+                draw_trail(effect_spawn_position, effect_spawn_position, D_L00_0015F580, 120000.0f, 50000.0f);
                 for (i = 0; i < 10; i++) {
                     color = (random_int_between(0x40, 0x80) << 24) | 0x787878;
                     random_magnitude = random_int_between(0, 4);
-                    part = FUN_L00_0026d000(pos, random_integer_below(2) == 0 ? random_magnitude : -random_magnitude,
+                    part = FUN_L00_0026d000(effect_spawn_position, random_integer_below(2) == 0 ? random_magnitude : -random_magnitude,
                                             D_L00_0015F580, color, 0.75f, 1.0f, 1.03f, 120000.0f);
                     if (part != 0) {
                         part->unk3 = 0x44;
