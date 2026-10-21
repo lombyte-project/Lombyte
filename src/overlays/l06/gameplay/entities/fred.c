@@ -7986,7 +7986,7 @@ extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 void FUN_L06_00305170(char *moby) {
     float rotation_scale_matrix[16];
-    float b[16];
+    float scale_matrix[16];
     float mat[5][16];
     int shared_helper_arguments[10];
     char *data;
@@ -7999,8 +7999,8 @@ void FUN_L06_00305170(char *moby) {
     int j;
     data = *(char **)(moby + 0x78);
     euler_rotation_matrix(rotation_scale_matrix, (float *)(moby + 0x40));
-    set_scale_matrix(b, *(float *)&D_L06_00162208_gp);
-    multiply_matrix(rotation_scale_matrix, rotation_scale_matrix, b);
+    set_scale_matrix(scale_matrix, *(float *)&D_L06_00162208_gp);
+    multiply_matrix(rotation_scale_matrix, rotation_scale_matrix, scale_matrix);
     vu1_add_g_sregister(6, get_effect_texture(0xE));
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(8, 0);
