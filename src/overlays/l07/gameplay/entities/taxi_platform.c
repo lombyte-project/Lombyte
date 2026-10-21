@@ -685,7 +685,7 @@ void FUN_L07_002cdb28(struct Moby *moby) {
             *(int *)(data + 0xC4) = -1;
         } else {
             int i;
-            float f20, t;
+            float segment_fraction_work_value, t;
             char *segment_start_position;
             if (!voice_is_playing(moby, *(int *)(data + 0xC4))) {
                 *(int *)(data + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
@@ -718,18 +718,18 @@ void FUN_L07_002cdb28(struct Moby *moby) {
                 }
                 *(int *)(data + 0xC4) = -1;
             }
-            f20 = convert_integer_to_float(*(int *)path - 1);
-            i = func_001FA898_r(f20 * *(float *)(data + 0xA4));
-            f20 = convert_integer_to_float(*(int *)path - 1);
+            segment_fraction_work_value = convert_integer_to_float(*(int *)path - 1);
+            i = func_001FA898_r(segment_fraction_work_value * *(float *)(data + 0xA4));
+            segment_fraction_work_value = convert_integer_to_float(*(int *)path - 1);
             t = convert_integer_to_float(i);
-            f20 *= *(float *)(data + 0xA4);
-            f20 -= t;
+            segment_fraction_work_value *= *(float *)(data + 0xA4);
+            segment_fraction_work_value -= t;
             if (i == *(int *)path - 1) {
                 qcopy(&moby->pos, path + 0x10 + i * 16);
             } else {
                 segment_start_position = path + 0x10 + i * 16;
                 subtract_vector_xyz(path_segment_offset, path + 0x20 + i * 16, segment_start_position);
-                scale_vector_xyz(path_segment_offset, path_segment_offset, f20);
+                scale_vector_xyz(path_segment_offset, path_segment_offset, segment_fraction_work_value);
                 add_vector_xyz(&moby->pos, path_segment_offset, segment_start_position);
             }
             *(float *)(data + 0xBC) = moby->pos.z - orig[2];
