@@ -28,7 +28,7 @@ void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src, s32 co
     s32 size;
     s32 i;
     s32 start_page;
-    s32 b;
+    s32 start_offset;
     s32 end_page;
     s32 end_extent;
     s32 *relocation_cursor;
@@ -38,22 +38,22 @@ void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src, s32 co
     offset = hdr->data_offset;
     size = hdr->data_size;
     for (i = 0; i < relocation_count; i = i + 1, relocation_cursor = relocation_cursor + 1) {
-        s32 v;
-        v = *relocation_cursor;
-        if (v == 0) {
+        s32 relocation_word;
+        relocation_word = *relocation_cursor;
+        if (relocation_word == 0) {
             D_001CDF80[i] = (s32)D_001CE180;
         } else {
-            D_001CDF80[i] = v - (offset - (s32)D_001CE180);
+            D_001CDF80[i] = relocation_word - (offset - (s32)D_001CE180);
         }
     }
     copy_memory_aligned(D_001CE180, (u8 *)hdr + offset, size);
     D_001600C0 = 0;
     while (D_001600C0 < count) {
         start_page = base + *src++;
-        b = *src++;
+        start_offset = *src++;
         end_page = base + *src++;
         end_extent = *src++;
-        D_001CD980[D_001600C0].tex0 = (start_page << 4) + b;
+        D_001CD980[D_001600C0].tex0 = (start_page << 4) + start_offset;
         D_001CD980[D_001600C0].tex1 = (end_page << 4) + log2dim(end_extent);
         D_001600C0 = D_001600C0 + 1;
     }
