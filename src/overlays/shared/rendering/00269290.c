@@ -1773,7 +1773,7 @@ extern float FUN_002132a8_26d598(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f96f8_26d598(int) __asm__("FUN_001f96f8");
 
 extern unsigned char *D_L00_001B20E4 __attribute__((section(".data")));
-void FUN_L00_0026d598(void *spawn_position, void *b, int flag) {
+void FUN_L00_0026d598(void *spawn_position, void *initial_velocity, int flag) {
     unsigned char *particle = FUN_L00_002678b8_26d598(0x19);
     if (particle) {
         float *particle_data = (float *)(particle + 0x20);
@@ -1798,7 +1798,7 @@ void FUN_L00_0026d598(void *spawn_position, void *b, int flag) {
         particle[2] = *D_L00_001B20E4;
         particle_data[7] = 0.6f;
         *(s16 *)(particle + 0xA) = FUN_001f96f8_26d598(0x50);
-        qcopy(particle_data, b);
+        qcopy(particle_data, initial_velocity);
     }
 }
 typedef struct {
