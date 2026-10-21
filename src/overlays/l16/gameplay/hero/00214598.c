@@ -2223,13 +2223,13 @@ void FUN_L16_00214598(void) {
                 }
             }
             if (hero.unk590 != 0 && hero.unk5A4 <= scale_game_frames(48)) {
-                f32 u;
+                f32 previous_path_blend_fraction;
                 subtract_vector_xyz(&auxiliary_vector_scratch, &primary_vector_scratch, &v10);
                 hero.unk5A4++;
                 fast_vec_scale(&auxiliary_vector_scratch, &auxiliary_vector_scratch, (f32)hero.unk5A4 / (f32)scale_game_frames(48));
-                u = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
+                previous_path_blend_fraction = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
                 subtract_vector_xyz(&vector_scratch, &primary_vector_scratch, &v10);
-                fast_vec_scale(&vector_scratch, &vector_scratch, u);
+                fast_vec_scale(&vector_scratch, &vector_scratch, previous_path_blend_fraction);
                 hero.motion.pos.f[2] += auxiliary_vector_scratch.f[2] - vector_scratch.f[2];
                 add_vector_xyz(&vector_scratch, &v10, &auxiliary_vector_scratch);
                 subtract_vector_xyz(&auxiliary_vector_scratch, &vector_scratch, &hero.motion.pos);
