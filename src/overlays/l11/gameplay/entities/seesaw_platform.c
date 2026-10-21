@@ -2706,7 +2706,7 @@ void jet_fighter_update(struct Moby *moby) {
     };
     ShipVars_2838 *ship_vars;
     ShipHit_3290 *hit;
-    W4_2838 dir;
+    W4_2838 ship_velocity_scratch;
     char *voice_entry;
     int idx;
     int frames_since_help_timestamp;
@@ -2724,19 +2724,19 @@ void jet_fighter_update(struct Moby *moby) {
                     g->ship_hp -= hit->damage;
                     if (hit->flags & 1) {
                         k = hit->damage * D_L11_00162078;
-                        build_spherical_offset(dir, ship_vars->speed, ship_vars->f38, -ship_vars->f34);
+                        build_spherical_offset(ship_velocity_scratch, ship_vars->speed, ship_vars->f38, -ship_vars->f34);
                         fast_vec_add(&moby->pos, &moby->pos, hit->push);
-                        FUN_L00_001ff660(dir, dir, hit->push);
+                        FUN_L00_001ff660(ship_velocity_scratch, ship_velocity_scratch, hit->push);
                         ship_vars->f38 = fast_add_rot_2838(
                             ship_vars->f38,
-                            fast_sub_rot_2838(atan2_2838(dir[0], dir[1]), ship_vars->f38) * D_L11_00162008 * k);
+                            fast_sub_rot_2838(atan2_2838(ship_velocity_scratch[0], ship_velocity_scratch[1]), ship_vars->f38) * D_L11_00162008 * k);
                         ship_vars->f34 = fast_add_rot_2838(
                             ship_vars->f34,
-                            fast_sub_rot_2838(atan2_2838(vector_length_xy_2838(dir), dir[2]), ship_vars->f34) *
+                            fast_sub_rot_2838(atan2_2838(vector_length_xy_2838(ship_velocity_scratch), ship_velocity_scratch[2]), ship_vars->f34) *
                                 D_L11_0016200C * k);
                     }
                 } else {
-                    build_spherical_offset(dir, ship_vars->speed, ship_vars->f38, -ship_vars->f34);
+                    build_spherical_offset(ship_velocity_scratch, ship_vars->speed, ship_vars->f38, -ship_vars->f34);
                     g->ship_hp = 0.0f;
                     moby->state = 7;
                     ship_vars->s62 = 0xB4;
@@ -2745,7 +2745,7 @@ void jet_fighter_update(struct Moby *moby) {
                     FUN_L11_0024db50(0, 1);
                     g->ship_moby = 0;
                     g->ship_oclass = -1;
-                    spawn_explosion(moby, dir, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, -1,
+                    spawn_explosion(moby, ship_velocity_scratch, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, -1,
                                      15.0f, 1, 1, -1, 0);
                 }
             }
