@@ -1208,18 +1208,18 @@ void FUN_L05_00253b48(void) {
         while (third != 0) {
 
             if (*(s16 *)(third + 0xA6) == 0x1D6 && FUN_L00_001fefc8_c(third + 0xBC) != 0 && FUN_001f9b48(&hero.motion.unkD0, third + 0x10) < 1.5f) {
-                struct Hero *g = &hero;
+                struct Hero *hero_ptr = &hero;
                 third[0xBC] = scale_game_frames(300);
-                if (*(s32 *)((u8 *)g + 0x10B8) != 0x24) {
-                    *(s32 *)((u8 *)g + 0x20B8) = 0x24;
-                    g->unk20AC = 0;
+                if (*(s32 *)((u8 *)hero_ptr + 0x10B8) != 0x24) {
+                    *(s32 *)((u8 *)hero_ptr + 0x20B8) = 0x24;
+                    hero_ptr->unk20AC = 0;
                     FUN_L05_0023dc88(0);
-                    g->unk20AC = 1;
+                    hero_ptr->unk20AC = 1;
                 }
-                g->unk8CE++;
-                if (g->unk8CE > 3)
-                    g->unk8CE = 3;
-                *(s32 *)((u8 *)g + 0x20B8) = 0x24;
+                hero_ptr->unk8CE++;
+                if (hero_ptr->unk8CE > 3)
+                    hero_ptr->unk8CE = 3;
+                *(s32 *)((u8 *)hero_ptr + 0x20B8) = 0x24;
                 weapon_ammo_counts[36]++;
             }
             FUN_L00_002592b8((void **)&third, third, 0, 0);
