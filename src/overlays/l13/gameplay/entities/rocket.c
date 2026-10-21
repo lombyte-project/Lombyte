@@ -20,7 +20,7 @@ extern void FUN_L00_00250df8(void *);
 char *FUN_L13_003058a8(struct Moby *source_moby, short joint_index) {
     char *moby = create_moby(0x4D1);
     char *moby_vars;
-    char *pos;
+    char *spawned_moby_position;
     if (moby != 0) {
         moby_vars = *(char **)(moby + 0x78);
         moby[0x31] = 1;
@@ -30,13 +30,13 @@ char *FUN_L13_003058a8(struct Moby *source_moby, short joint_index) {
         *(char **)(moby_vars + 0x20) = source_moby;
         *(short *)(moby_vars + 0x26) = joint_index;
         *(short *)(moby_vars + 0x24) = 1;
-        pos = moby + 0x10;
-        moby_point_position(source_moby, joint_index, pos);
+        spawned_moby_position = moby + 0x10;
+        moby_point_position(source_moby, joint_index, spawned_moby_position);
         qcopy(moby + 0x40, &source_moby->rot);
         *(OvlQuad *)(moby + 0xC0) = *(OvlQuad *)&source_moby->rot_row0;
         *(OvlQuad *)(moby + 0xD0) = *(OvlQuad *)&source_moby->rot_row1;
         *(OvlQuad *)(moby + 0xE0) = *(OvlQuad *)&source_moby->rot_row2;
-        qcopy(moby_vars + 0x10, pos);
+        qcopy(moby_vars + 0x10, spawned_moby_position);
         *(int *)(moby + 0x94) = 0;
         FUN_L00_00250df8(moby);
     }
