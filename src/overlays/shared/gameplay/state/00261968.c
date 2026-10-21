@@ -600,9 +600,9 @@ void FUN_L00_00262b00(float x, float y, char *moby, float *phase_angle, float *p
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 
 /* Sets o[16] and o[17] from r and the sines/cosines of the two angles, then advances the angles by l1 and l2. */
-void FUN_L00_00262b80(float *moby, float *first_phase_angle, float *second_phase_angle, float r, float first_phase_increment, float second_phase_increment) {
-    moby[0x10] = r * fast_sin(*first_phase_angle) * fast_sin(*second_phase_angle);
-    moby[0x11] = r * fast_sin(*first_phase_angle) * fast_cos(*second_phase_angle);
+void FUN_L00_00262b80(float *moby, float *first_phase_angle, float *second_phase_angle, float oscillation_amplitude, float first_phase_increment, float second_phase_increment) {
+    moby[0x10] = oscillation_amplitude * fast_sin(*first_phase_angle) * fast_sin(*second_phase_angle);
+    moby[0x11] = oscillation_amplitude * fast_sin(*first_phase_angle) * fast_cos(*second_phase_angle);
     *first_phase_angle = fast_add_rotations(*first_phase_angle, first_phase_increment);
     *second_phase_angle = fast_add_rotations(*second_phase_angle, second_phase_increment);
 }
