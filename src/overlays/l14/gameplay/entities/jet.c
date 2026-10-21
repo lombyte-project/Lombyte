@@ -1696,7 +1696,7 @@ extern short D_L14_00161CB0 __attribute__((sda));
 void FUN_L14_002ee6b0(float *pos, int spawn_pair_count) {
     float initial_velocity[4];
     float saved_position[4];
-    float particle_scale, f21, f20;
+    float particle_scale, velocity_horizontal_angle, velocity_vertical_angle;
     int random_sign, r0, i, id;
     unsigned char *particle;
     if (spawn_pair_count > 0) {
@@ -1705,9 +1705,9 @@ void FUN_L14_002ee6b0(float *pos, int spawn_pair_count) {
         particle_scale = random_float_between_c(*(float *)&D_L14_00161CAC, *(float *)&D_L14_00161CB0);
         random_sign = random_integer_below(2);
         if (random_sign == 0) random_sign--;
-        f21 = random_angle_radians();
-        f20 = random_float_between_c(0.34906584f, 1.5358897f);
-        build_spherical_offset_c(initial_velocity, random_float_between_c(*(float *)&D_L14_00161CA0, *(float *)&D_L14_00161CA4), f21, f20);
+        velocity_horizontal_angle = random_angle_radians();
+        velocity_vertical_angle = random_float_between_c(0.34906584f, 1.5358897f);
+        build_spherical_offset_c(initial_velocity, random_float_between_c(*(float *)&D_L14_00161CA0, *(float *)&D_L14_00161CA4), velocity_horizontal_angle, velocity_vertical_angle);
         qcopy(saved_position, pos);
         pos[0] += FUN_L00_00257c48(0.0f, 0.15f);
         pos[1] += FUN_L00_00257c48(0.0f, 0.15f);
