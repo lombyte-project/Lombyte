@@ -3378,7 +3378,7 @@ void FUN_L00_00212ff0(void) {
     if (globals->unk20B3 != 0) {
         float velocity_dot = dot_vectors_xyz(&globals->motion.velocity, &globals->unk270);
         float ground_dist;
-        float len;
+        float ground_correction_length;
         if (globals->air_frames.s != 0) return;
         ground_dist = globals->ground_distance;
         if (!(ground_dist < 0.0f)) return;
@@ -3387,13 +3387,13 @@ void FUN_L00_00212ff0(void) {
             return;
         }
         subtract_vector_xyz(ground_position_correction, &globals->ground_point, &globals->motion.pos);
-        len = vector_length_xyz(ground_position_correction);
-        if (len < frame_scale * 0.21f) {
-            if (frame_scale * 0.05f < len) len = frame_scale * 0.05f;
+        ground_correction_length = vector_length_xyz(ground_position_correction);
+        if (ground_correction_length < frame_scale * 0.21f) {
+            if (frame_scale * 0.05f < ground_correction_length) ground_correction_length = frame_scale * 0.05f;
         } else {
-            len = len * 0.5f;
+            ground_correction_length = ground_correction_length * 0.5f;
         }
-        normalize_vector_xyz(ground_position_correction, ground_position_correction, len);
+        normalize_vector_xyz(ground_position_correction, ground_position_correction, ground_correction_length);
         add_vector_xyz(&hero.motion.pos, &hero.motion.pos, ground_position_correction);
     } else {
         if (globals->air_frames.s == 0 && globals->motion.pos.f[2] < globals->ground_z.f) {
@@ -3416,9 +3416,9 @@ void FUN_L00_00212ff0(void) {
                 char *position_z_ptr;
                 if (displacement_z < 0.0f) {
                     float displacement_reverted_z = globals->motion.pos.f[2] - displacement_z;
-                    float lim = globals->ground_z.f;
+                    float ground_z_limit = globals->ground_z.f;
                     globals->motion.pos.f[2] = displacement_reverted_z;
-                    if (lim < displacement_reverted_z) globals->motion.pos.f[2] = lim;
+                    if (ground_z_limit < displacement_reverted_z) globals->motion.pos.f[2] = ground_z_limit;
                 }
                 position_z_ptr = D_0013E533_lui + 0xEA5;
                 func_L00_0025C918_2136A8((float *)position_z_ptr, *(float *)(position_z_ptr + 0x250), (float *)(position_z_ptr + 0x27C), frame_scale_sq * 0.057f, frame_scale_sq * 0.3f, D_0015ED6C_c + D_0015ED6C_c);
