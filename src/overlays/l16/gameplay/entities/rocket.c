@@ -906,7 +906,7 @@ void conveyor_belt_update(struct Moby *moby) {
         CONVEYOR_BELT_STATE_APPROACH_NEGATED_SPEED = 2
     };
     char *conveyor_data = (char *)moby->pvars;
-    float vec[4];
+    float conveyor_motion_vector[4];
     float target;
     int one = 1;
     switch (moby->state) {
@@ -925,8 +925,8 @@ void conveyor_belt_update(struct Moby *moby) {
         target = -(D_L16_0016198C * D_0015ED6C);
         if (*(float *)(conveyor_data + 0x6C) != target) {
             approach_value((float *)(conveyor_data + 0x6C), target, D_0015ED70_c * 12.0f);
-            normalize_vector_xyz(vec, &moby->rot_row0, *(float *)(conveyor_data + 0x6C));
-            FUN_L16_002c9c38_c(moby->group, vec);
+            normalize_vector_xyz(conveyor_motion_vector, &moby->rot_row0, *(float *)(conveyor_data + 0x6C));
+            FUN_L16_002c9c38_c(moby->group, conveyor_motion_vector);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(conveyor_data + 0x68)))
             moby->state = one;
@@ -936,8 +936,8 @@ void conveyor_belt_update(struct Moby *moby) {
         target = D_L16_0016198C * D_0015ED6C;
         if (*(float *)(conveyor_data + 0x6C) != target) {
             approach_value((float *)(conveyor_data + 0x6C), target, D_0015ED70_c * 12.0f);
-            normalize_vector_xyz(vec, &moby->rot_row0, *(float *)(conveyor_data + 0x6C));
-            FUN_L16_002c9c38_c(moby->group, vec);
+            normalize_vector_xyz(conveyor_motion_vector, &moby->rot_row0, *(float *)(conveyor_data + 0x6C));
+            FUN_L16_002c9c38_c(moby->group, conveyor_motion_vector);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(conveyor_data + 0x64)))
             moby->state = 2;
