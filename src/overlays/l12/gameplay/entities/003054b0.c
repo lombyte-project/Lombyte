@@ -109,10 +109,10 @@ void FUN_L12_003054b0(char *moby) {
         char *gun_moby;
         Gun_306890 *md;
         float yaw;
-        float dist;
+        float owner_to_hero_distance_xy;
         float dz;
         int flag;
-        float ang;
+        float particle_xy_angle;
         float radial_scale;
 
         if (*(int *)(owner_data - -(i * 4) + 0x5D0) != -1) {
@@ -150,14 +150,14 @@ void FUN_L12_003054b0(char *moby) {
         }
         flag = 0;
         hp = (float *)(((char *)&hero) + 0x80);
-        dist = vector_distance_xy_alt(moby + 0x10, hp);
+        owner_to_hero_distance_xy = vector_distance_xy_alt(moby + 0x10, hp);
         dz = func_001F9B88_304310(hp[2] - *(float *)(moby + 0x18));
         if (scale_game_frames(0x4B0) < D_L12_00161F34) {
-            if (dist < 80.0f && dz < 4.0f) {
+            if (owner_to_hero_distance_xy < 80.0f && dz < 4.0f) {
                 flag = 1;
             }
         }
-        if (dist > 90.0f || dz > 7.0f) {
+        if (owner_to_hero_distance_xy > 90.0f || dz > 7.0f) {
             D_L12_00161F34 = 0;
         }
         if ((D_L12_00161F00_gp != 0 || flag) && md->f80 > 0.0f) {
@@ -290,14 +290,14 @@ void FUN_L12_003054b0(char *moby) {
                         int c;
                         qcopy(position_buffer, gun_moby + 0x10);
                         position_buffer[2] += random_float_between_c(0.1f, 0.5f);
-                        ang = random_angle_radians();
+                        particle_xy_angle = random_angle_radians();
                         radial_scale = random_float_between_c(0.1f, 0.8f);
-                        position_buffer[0] += fast_cos(ang) * radial_scale;
-                        position_buffer[1] += fast_sin(ang) * radial_scale;
+                        position_buffer[0] += fast_cos(particle_xy_angle) * radial_scale;
+                        position_buffer[1] += fast_sin(particle_xy_angle) * radial_scale;
                         c = FUN_L00_00257b90(scale_game_frames(0x5A), scale_game_frames(0xB4));
                         radial_scale = random_float_between_c(D_0015ED6C_gp * 0.7f, D_0015ED6C_gp * 1.5f);
-                        scratch_vector[0] = fast_cos(ang) * radial_scale;
-                        scratch_vector[1] = fast_sin(ang) * radial_scale;
+                        scratch_vector[0] = fast_cos(particle_xy_angle) * radial_scale;
+                        scratch_vector[1] = fast_sin(particle_xy_angle) * radial_scale;
                         scratch_vector[2] = 0.0f;
                         scratch_vector[2] = random_float_between_c(D_0015ED6C_gp, D_0015ED6C_gp * 5.5f);
                         FUN_L00_0026ced0(position_buffer, scratch_vector, 0x500A1414, 0xA0A0A, 420000.0f, c);
@@ -319,14 +319,14 @@ void FUN_L12_003054b0(char *moby) {
                 int c;
                 qcopy(position_buffer, gun_moby + 0x10);
                 position_buffer[2] += 0.7f;
-                ang = random_angle_radians();
+                particle_xy_angle = random_angle_radians();
                 radial_scale = random_float_between_c(0.1f, 0.4f);
-                position_buffer[0] += fast_cos(ang) * radial_scale;
-                position_buffer[1] += fast_sin(ang) * radial_scale;
+                position_buffer[0] += fast_cos(particle_xy_angle) * radial_scale;
+                position_buffer[1] += fast_sin(particle_xy_angle) * radial_scale;
                 c = FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x37));
                 radial_scale = random_float_between_c(D_0015ED6C_gp * 0.5f, D_0015ED6C_gp * 3.0f);
-                scratch_vector[0] = fast_cos(ang) * radial_scale;
-                scratch_vector[1] = fast_sin(ang) * radial_scale;
+                scratch_vector[0] = fast_cos(particle_xy_angle) * radial_scale;
+                scratch_vector[1] = fast_sin(particle_xy_angle) * radial_scale;
                 scratch_vector[2] = 0.0f;
                 scratch_vector[2] = random_float_between_c(D_0015ED6C_gp * 7.0f, D_0015ED6C_gp * 17.0f) * func_001FA888_3055F8(lvl) * 1.5f
                         / func_001FA888_3055F8(5);
@@ -335,14 +335,14 @@ void FUN_L12_003054b0(char *moby) {
             for (j = 0; j < 3; j++) {
                 int c;
                 qcopy(position_buffer, gun_moby + 0x10);
-                ang = random_angle_radians();
+                particle_xy_angle = random_angle_radians();
                 radial_scale = random_float_between_c(0.1f, 0.8f);
-                position_buffer[0] += fast_cos(ang) * radial_scale;
-                position_buffer[1] += fast_sin(ang) * radial_scale;
+                position_buffer[0] += fast_cos(particle_xy_angle) * radial_scale;
+                position_buffer[1] += fast_sin(particle_xy_angle) * radial_scale;
                 c = FUN_L00_00257b90(scale_game_frames(0x28), scale_game_frames(0x46));
                 radial_scale = random_float_between_c(D_0015ED6C_gp * 0.1f, D_0015ED6C_gp * 0.4f);
-                scratch_vector[0] = fast_cos(ang) * radial_scale;
-                scratch_vector[1] = fast_sin(ang) * radial_scale;
+                scratch_vector[0] = fast_cos(particle_xy_angle) * radial_scale;
+                scratch_vector[1] = fast_sin(particle_xy_angle) * radial_scale;
                 scratch_vector[2] = 0.0f;
                 scratch_vector[2] = random_float_between_c(D_0015ED6C_gp * 2.4f, D_0015ED6C_gp * 5.5f);
                 FUN_L00_0026ced0(position_buffer, scratch_vector, 0x460A1414, 0xA0A0A, 504000.03f, c);
