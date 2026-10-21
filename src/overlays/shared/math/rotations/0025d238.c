@@ -917,10 +917,10 @@ M25f878 *FUN_L00_0025f878(s32 id) {
 }
 f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 /* Adds a random offset in [-r, r] to each of v[0..2]. */
-void FUN_L00_0025f8e0(f32 *v, f32 r) {
-    v[0] += random_float_between(-r, r);
-    v[1] += random_float_between(-r, r);
-    v[2] += random_float_between(-r, r);
+void FUN_L00_0025f8e0(f32 *inout_vector, f32 random_offset_bound) {
+    inout_vector[0] += random_float_between(-random_offset_bound, random_offset_bound);
+    inout_vector[1] += random_float_between(-random_offset_bound, random_offset_bound);
+    inout_vector[2] += random_float_between(-random_offset_bound, random_offset_bound);
 }
 extern u8 *D_L00_0015FFD8_c __asm__("D_L00_0015FFD8");
 extern u8 *D_L00_0015FFE0 __attribute__((sda));
