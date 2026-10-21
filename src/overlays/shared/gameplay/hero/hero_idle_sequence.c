@@ -2263,15 +2263,15 @@ int FUN_00213260_00209540(int) __asm__("FUN_00213260");
 void FUN_L00_00209540(int counter_reset_range, int lim) {
     G_00209540 *g = &D_0013F350_00209540;
     if (lim < ++g->cnt) {
-        float v[4];
+        float spawn_position[4];
         float lo = -0.05f;
         float hi = 0.05f;
-        v[0] = g->x + FUN_002132a8_00209540(lo, hi);
-        v[1] = g->y + FUN_002132a8_00209540(lo, hi);
-        v[2] = g->pos.x;
+        spawn_position[0] = g->x + FUN_002132a8_00209540(lo, hi);
+        spawn_position[1] = g->y + FUN_002132a8_00209540(lo, hi);
+        spawn_position[2] = g->pos.x;
         {
             float random_effect_scale = FUN_002132a8_00209540(0.4f, 0.6f);
-            FUN_L00_002715e8_00209540(v, &g->pos, -1, random_effect_scale, 5250.0f);
+            FUN_L00_002715e8_00209540(spawn_position, &g->pos, -1, random_effect_scale, 5250.0f);
         }
         g->cnt = FUN_00213260_00209540(counter_reset_range);
     }
