@@ -344,9 +344,9 @@ void novalis_elevator_update(unsigned char *moby) {
         break;
     case NOVALIS_ELEVATOR_TRAVERSE_PATH:
         if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
-            struct Hero *g = &hero;
-            g->unk1F2 = 4;
-            g->unk1F4 = 4;
+            struct Hero *player = &hero;
+            player->unk1F2 = 4;
+            player->unk1F4 = 4;
         }
         if (*(short *)(data + 0xBA) != 0 ||
             (F(data, 0xBC) < 0.0f &&
