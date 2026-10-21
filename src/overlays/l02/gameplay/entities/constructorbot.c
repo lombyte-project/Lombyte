@@ -584,7 +584,7 @@ void FUN_L02_002ef020(struct Moby *moby) {
 extern void FUN_L00_001ed630(void *, void *, void *);
 
 /* Sets the vendor camera mode; mode 3 also aims it from the hero's position. */
-void FUN_L02_002f8a18(int mode, int arg) {
+void FUN_L02_002f8a18(int mode, int camera_argument_value) {
     enum {
         VENDOR_CAMERA_MODE_SET_ARGUMENT_PAIR = 2,
         VENDOR_CAMERA_MODE_CAPTURE_HERO_POSITION = 3
@@ -600,8 +600,8 @@ void FUN_L02_002f8a18(int mode, int arg) {
         qcopy(camera_data + 0x110, &hero.motion.pos);
         FUN_L00_001ed630(camera_data + 0xFC, g + 0x140, &hero.motion.pos);
     case VENDOR_CAMERA_MODE_SET_ARGUMENT_PAIR:
-        *(int *)(camera_argument_pair + 4) = arg;
-        *(int *)(camera_data + 0xE0) = arg;
+        *(int *)(camera_argument_pair + 4) = camera_argument_value;
+        *(int *)(camera_data + 0xE0) = camera_argument_value;
         break;
     }
 }
