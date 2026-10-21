@@ -34,7 +34,7 @@ void _sequenceExtension(SeqExtContext *ctx) {
     s32 vertical_size_extension;
     s32 horizontal_size_extension;
     s32 profile_and_level_indication;
-    s32 g;
+    s32 vbv_buffer_size_extension;
     ctx->unk848 = 1;
     _ipuSetMPEG1(0);
     bits = _nextBit(ctx, 0x1C);
@@ -49,12 +49,12 @@ void _sequenceExtension(SeqExtContext *ctx) {
     ctx->unk13C = (bits >> 19) & 0x1;
     profile_and_level_indication = bits >> 20;
     bits2 = _nextBit(ctx, 0x10);
-    g = bits2 >> 8;
+    vbv_buffer_size_extension = bits2 >> 8;
     if (((profile_and_level_indication != 0x48) && (profile_and_level_indication != 0x58)) && (profile_and_level_indication != 0x44)) {
         _Error(ctx, D_00153B28);
     }
     ctx->unk124 = (horizontal_size_extension << 12) | (ctx->unk124 & 0xFFF);
     ctx->unk128 = (vertical_size_extension << 12) | (ctx->unk128 & 0xFFF);
     ctx->unk134 += bit_rate_extension << 18;
-    ctx->unk138 = ctx->unk138 + (g << 10);
+    ctx->unk138 = ctx->unk138 + (vbv_buffer_size_extension << 10);
 }
