@@ -903,14 +903,14 @@ void FUN_L00_00273298(Part_273298 *particle) {
     float remaining_frames_minus_one;
     u32 color_without_alpha;
     if (particle_data->w1C == 1) {
-        struct Hero *g = &hero;
-        particle->x = g->motion.pos.f[0] + particle_data->x;
-        particle->y = g->motion.pos.f[1] + particle_data->y;
-        particle->z = g->motion.pos.f[2] + particle_data->z;
+        struct Hero *hero_reference = &hero;
+        particle->x = hero_reference->motion.pos.f[0] + particle_data->x;
+        particle->y = hero_reference->motion.pos.f[1] + particle_data->y;
+        particle->z = hero_reference->motion.pos.f[2] + particle_data->z;
         FUN_001f9a10_273298(&particle->x, &particle->x, particle_data);
-        particle_data->x = particle->x - g->motion.pos.f[0];
-        particle_data->y = particle->y - g->motion.pos.f[1];
-        particle_data->z = particle->z - g->motion.pos.f[2];
+        particle_data->x = particle->x - hero_reference->motion.pos.f[0];
+        particle_data->y = particle->y - hero_reference->motion.pos.f[1];
+        particle_data->z = particle->z - hero_reference->motion.pos.f[2];
     } else {
         FUN_001f9a10_273298(&particle->x, &particle->x, particle_data);
     }
