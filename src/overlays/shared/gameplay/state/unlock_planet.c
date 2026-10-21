@@ -368,24 +368,24 @@ void FUN_L00_00260860(int id, int flag) {
         queue_dialogue_message(*dialogue_message_id_ptr, scale_game_frames(0x12C));
     }
     if (*pa == 0) {
-        VendorItemInfo *r;
+        VendorItemInfo *vendor_item_info_ptr;
         *pa = 1;
-        r = &D_L00_001C40B0[id];
+        vendor_item_info_ptr = &D_L00_001C40B0[id];
         *pb = 1;
-        if (r->h8 != 0) {
+        if (vendor_item_info_ptr->h8 != 0) {
             int *ammo_count_ptr = &weapon_ammo_counts[id];
-            int v = r->h12;
-            if (v < *ammo_count_ptr) {
-                v = *ammo_count_ptr;
+            int updated_ammo_count = vendor_item_info_ptr->h12;
+            if (updated_ammo_count < *ammo_count_ptr) {
+                updated_ammo_count = *ammo_count_ptr;
             }
-            *ammo_count_ptr = v;
+            *ammo_count_ptr = updated_ammo_count;
         }
         for (i = 0; i < 20; i++) {
             if (id != 0 && D_L00_001C3E98[i] == id) {
                 int j;
                 for (j = 0;; j++) {
-                    unsigned char b = D_0015EDD0_257218[j];
-                    if ((b & 0x3F) == id || b == 0xFF) {
+                    unsigned char packed_item_entry = D_0015EDD0_257218[j];
+                    if ((packed_item_entry & 0x3F) == id || packed_item_entry == 0xFF) {
                         D_0015EDD0_257218[j] = id | 0x40;
                         break;
                     }
