@@ -680,7 +680,7 @@ void FUN_L01_002fb5b0(char *moby) {
         }
         break;
     case CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER: {
-        char *g;
+        char *hero_position;
         if (D_L01_001BB9C0_s.collected[(short)*(unsigned short *)(moby + 0xB2)] != 0) {
             moby[0x20] = 1;
             break;
@@ -692,14 +692,14 @@ void FUN_L01_002fb5b0(char *moby) {
             moby[0x20] = 1;
             break;
         }
-        g = (char *)&hero.motion.pos;
-        if (is_point_inside_clip_volume(g, *(int *)(trigger_vars + 0x20)) == 0 &&
+        hero_position = (char *)&hero.motion.pos;
+        if (is_point_inside_clip_volume(hero_position, *(int *)(trigger_vars + 0x20)) == 0 &&
             ((unsigned char *)moby)[0xBC] != 1)
             break;
         qcopy(saved_camera_position, D_L01_001672C0_c);
         qcopy(saved_camera_rotation, D_L01_001672C0_c + 0x10);
         if (*(int *)(trigger_vars + 0x28) == -1) {
-            FUN_L00_00216f90(g, g + 0x10, 0x72, 1);
+            FUN_L00_00216f90(hero_position, hero_position + 0x10, 0x72, 1);
         } else {
             char *o = D_L01_001600EC_q + *(int *)(trigger_vars + 0x28) * 128;
             FUN_L00_00216f90(o + 0x30, o + 0x70, 0x72, 1);
