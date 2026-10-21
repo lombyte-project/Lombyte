@@ -127,10 +127,10 @@ void background_ship_1_update(char *moby) {
     };
     char *moby_data;
     char *path;
-    int r;
+    int hit_record;
     int flag = 0;
     float tv[4];
-    float f70;
+    float first_path_segment_length;
     float path_travel_distance;
     float x;
     int first_effect_frame_count;
@@ -138,7 +138,7 @@ void background_ship_1_update(char *moby) {
     int third_effect_frame_count;
     moby_data = *(char **)(moby + 0x78);
     path = D_L02_001B0AB0[*(int *)(moby_data + 0x60)];
-    r = (int)find_moby_hit(moby, 0x10000, 0);
+    hit_record = (int)find_moby_hit(moby, 0x10000, 0);
     switch (*(unsigned char *)(moby + 0x20)) {
     case BACKGROUND_SHIP_1_INITIALIZE: {
         int invalid_index;
@@ -155,9 +155,9 @@ void background_ship_1_update(char *moby) {
             delete_moby(moby);
             return;
         }
-        f70 = distance_xyz(D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x10, D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x20);
+        first_path_segment_length = distance_xyz(D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x10, D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x20);
         *(unsigned char *)(moby_data + 0x2C) = 0x28;
-        *(float *)(moby_data + 0x70) = f70;
+        *(float *)(moby_data + 0x70) = first_path_segment_length;
         *(unsigned char *)(moby_data + 0x2B) = 1;
         qcopy(moby + 0x10, D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x10);
         *(float *)(moby_data + 0x68) = random_angle_radians();
@@ -192,7 +192,7 @@ void background_ship_1_update(char *moby) {
         if (*(unsigned char *)(moby + 0x31) != 0) {
             FUN_L02_002eca30_c(moby, tv);
         }
-        if (r != 0 && 0.0f < *(float *)(r + 0x2C)) {
+        if (hit_record != 0 && 0.0f < *(float *)(hit_record + 0x2C)) {
             flag = 1;
         }
         if (flag) {
