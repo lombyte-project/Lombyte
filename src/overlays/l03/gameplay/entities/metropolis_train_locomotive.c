@@ -3309,7 +3309,7 @@ void FUN_L03_002c9ca0(Moby2C8398 *moby) {
     float near[4];
     float pt[4];
     int seg;
-    float dist;
+    float path_fraction_or_node_target_distance;
     Data2C8398 *moby_data;
     PathF2C8398 *pf;
     int best;
@@ -3324,7 +3324,7 @@ void FUN_L03_002c9ca0(Moby2C8398 *moby) {
     best_dist = best_ang;
     FUN_L03_0024e830((char *)moby, (char *)&target, moby_data->f270);
     seg = pf->idx;
-    FUN_L00_0025df68(pf->path, moby->pos, near, &seg, &dist, 0, 999.0f, 5.0f, 0.0f);
+    FUN_L00_0025df68(pf->path, moby->pos, near, &seg, &path_fraction_or_node_target_distance, 0, 999.0f, 5.0f, 0.0f);
     pf->idx = 0;
     do {
         if (pf->idx != seg) {
@@ -3332,17 +3332,17 @@ void FUN_L03_002c9ca0(Moby2C8398 *moby) {
             node_target_heading_difference = fast_arc_tan(pt[0] - moby->pos[0], pt[1] - moby->pos[1]);
             node_target_heading_difference = fast_difference_between_rotations(
                 node_target_heading_difference, fast_arc_tan(target.pos[0] - moby->pos[0], target.pos[1] - moby->pos[1]));
-            dist = FUN_001f9b48(&target, pt);
+            path_fraction_or_node_target_distance = FUN_001f9b48(&target, pt);
             if (node_target_heading_difference < 1.5707964f) {
                 if (best_ang < node_target_heading_difference) {
                     best = pf->idx;
-                    best_dist = dist;
+                    best_dist = path_fraction_or_node_target_distance;
                     best_ang = node_target_heading_difference;
                 }
-            } else if ((dist >= 16.0f && (dist < best_dist || best_dist < 16.0f)) ||
-                       (dist < 16.0f && best_dist < dist)) {
+            } else if ((path_fraction_or_node_target_distance >= 16.0f && (path_fraction_or_node_target_distance < best_dist || best_dist < 16.0f)) ||
+                       (path_fraction_or_node_target_distance < 16.0f && best_dist < path_fraction_or_node_target_distance)) {
                 best = pf->idx;
-                best_dist = dist;
+                best_dist = path_fraction_or_node_target_distance;
                 best_ang = node_target_heading_difference;
             }
         }
