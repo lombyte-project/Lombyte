@@ -209,11 +209,11 @@ void FUN_L06_0023b440(void) {
                 } else {
                     int base = D_0015ED8C;
                     int next = base;
-                    int cur = hero.items[0].item_id;
-                    if (cur == 8) {
+                    int equipped_item_id = hero.items[0].item_id;
+                    if (equipped_item_id == 8) {
                         next = D_00141660;
                     }
-                    if (next != 0 && cur != base) {
+                    if (next != 0 && equipped_item_id != base) {
                         if (usage_stats.stat[31].count < 0xFFFF) {
                             usage_stats.stat[31].count++;
                         }
@@ -1715,8 +1715,8 @@ void FUN_L06_0023b440(void) {
                                (hero.state.current == HERO_STATE_PACK_JUMP || hero.state.current == HERO_STATE_PACK_LONG_JUMP) &&
                                hero.wall_probe_distance < 0.9f && hero.wall_hit != 0) {
                         if (vector_length_xyz(hero.motion.velocity.f) > frame_time * 7.0f) {
-                            float len = vector_length_xyz(hero.motion.displacement.f);
-                            if (len < vector_length_xyz(hero.motion.velocity.f) * 0.5f &&
+                            float displacement_length = vector_length_xyz(hero.motion.displacement.f);
+                            if (displacement_length < vector_length_xyz(hero.motion.velocity.f) * 0.5f &&
                                 hero.unk4E8 == 0 && hero.ground_distance < 2.0f) {
                                 hero_set_state(HERO_STATE_WALL_BONK, 1);
                                 break;
