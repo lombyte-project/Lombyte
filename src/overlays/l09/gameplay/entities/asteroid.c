@@ -445,9 +445,9 @@ char *FUN_L09_002ea528(struct Moby *owner, float *vec) {
         *(int *)(spawned_moby_vars + 0x4C) = 2;
         moby[0x23] = 0x7F;
         {
-            float v = owner->scale * random_float_between(0.125f, 0.25f);
-            *(float *)(moby + 0x2C) = v;
-            *(float *)(spawned_moby_vars + 0x50) = v;
+            float spawned_scale = owner->scale * random_float_between(0.125f, 0.25f);
+            *(float *)(moby + 0x2C) = spawned_scale;
+            *(float *)(spawned_moby_vars + 0x50) = spawned_scale;
         }
         *(float *)(spawned_moby_vars + 0x40) = random_float_between(-0.05235988f, 0.05235988f);
         *(float *)(spawned_moby_vars + 0x44) = random_float_between(-0.05235988f, 0.05235988f);
