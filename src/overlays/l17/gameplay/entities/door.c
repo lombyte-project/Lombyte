@@ -2258,7 +2258,7 @@ void magnet_elevator_update(struct Moby *moby) {
     case MAGNET_ELEVATOR_STATE_WAIT_AT_FIRST_STOP:
     case MAGNET_ELEVATOR_STATE_WAIT_AT_SECOND_STOP: {
         int i;
-        char *g;
+        char *hero_state;
         (*(float *)((char *)(state) + (0x78))) =
             fast_add_rotations((*(float *)((char *)(state) + (0x78))), frame_time * 6.2831855f);
         i = func_001FA898_r((fast_sin_c2((*(float *)((char *)(state) + (0x78)))) * 4.0f - 3.0f) *
@@ -2272,10 +2272,10 @@ void magnet_elevator_update(struct Moby *moby) {
             int t = (i << 8) | 0x80000000;
             W(moby, 0x90) = (i << 16) | t | i;
         }
-        g = (char *)((char *)&D_0013F350_c2);
-        if (H(g, 0x308) != 0 || W(state, 0x7C) == 0) {
-            if (P(g, 0x2FC) == moby && H(g, 0x30E) == 0 &&
-                vector_distance(g + 0x80, &moby->pos) < 0.5f) {
+        hero_state = (char *)((char *)&D_0013F350_c2);
+        if (H(hero_state, 0x308) != 0 || W(state, 0x7C) == 0) {
+            if (P(hero_state, 0x2FC) == moby && H(hero_state, 0x30E) == 0 &&
+                vector_distance(hero_state + 0x80, &moby->pos) < 0.5f) {
                 allocate_voice_for_target_entry_u(1, 0, (int)moby);
                 if (B(moby, 0x20) == 7) {
                     B(moby, 0x20) = 2;
