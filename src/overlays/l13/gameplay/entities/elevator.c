@@ -2568,26 +2568,26 @@ void FUN_L13_002b9df8(struct Moby *moby, char *obj, float azimuth_angle, float e
 
 extern int FUN_L13_002e6a58(void *, void *, float, int, void *, int);
 
-void FUN_L13_002b9f58(struct Moby *moby, char *obj) {
-    if (fast_dec_timer(obj + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
-        unsigned char *u = D_0013E533 + 0xE1D;
-        if (u[0x15F6] != 0) {
+void FUN_L13_002b9f58(struct Moby *moby, char *flight_data) {
+    if (fast_dec_timer(flight_data + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
+        unsigned char *player_ammo_state = D_0013E533 + 0xE1D;
+        if (player_ammo_state[0x15F6] != 0) {
             char projectile_spawn_position[16];
-            char b[16];
+            char projectile_spawn_offset[16];
             float projectile_scale;
             int projectile_frame_count;
             char *pos = &moby->rot;
-            short t = (*(unsigned short *)(obj + 0x6A) + 1) & 3;
-            *(short *)(obj + 0x6A) = t;
+            short t = (*(unsigned short *)(flight_data + 0x6A) + 1) & 3;
+            *(short *)(flight_data + 0x6A) = t;
             moby_point_position(moby, t + 7, projectile_spawn_position);
-            fast_vec_normalize(b, obj, 0.3f);
-            fast_vec_add(projectile_spawn_position, projectile_spawn_position, b);
+            fast_vec_normalize(projectile_spawn_offset, flight_data, 0.3f);
+            fast_vec_add(projectile_spawn_position, projectile_spawn_position, projectile_spawn_offset);
             projectile_scale = frame_time * 100.0f;
             projectile_frame_count = scale_game_frames(300);
-            if (FUN_L13_002e6a58(moby, projectile_spawn_position, projectile_scale, *(int *)(obj + 0xEC), pos, projectile_frame_count) != 0) {
+            if (FUN_L13_002e6a58(moby, projectile_spawn_position, projectile_scale, *(int *)(flight_data + 0xEC), pos, projectile_frame_count) != 0) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
-                u[0x15F6]--;
-                *(int *)(obj + 0x84) = scale_game_frames(30);
+                player_ammo_state[0x15F6]--;
+                *(int *)(flight_data + 0x84) = scale_game_frames(30);
             }
         }
     }
