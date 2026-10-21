@@ -2448,10 +2448,10 @@ extern char *D_L01_0015FFD8;
 extern char *D_L01_0015FFD8;
 
 /* Nearest live entity of type 0x26F in list idx within 120 units of self, or 0. */
-char *FUN_L01_002ef478(char *self, int idx) {
-    short *list = D_L01_001ABCC0[idx];
+char *FUN_L01_002ef478(char *self, int candidate_list_index) {
+    short *list = D_L01_001ABCC0[candidate_list_index];
     float best = 120.0f;
-    char *res = 0;
+    char *nearest_entity = 0;
     if (list == 0) {
         return 0;
     }
@@ -2463,13 +2463,13 @@ char *FUN_L01_002ef478(char *self, int idx) {
                     float candidate_distance = dist_2ef478((*(Ent_2ef478 * *)&D_L01_0015FFD8)[i].pos, self + 0x10);
                     if (candidate_distance < best) {
                         best = candidate_distance;
-                        res = D_L01_0015FFD8 + (i << 8);
+                        nearest_entity = D_L01_0015FFD8 + (i << 8);
                     }
                 }
             }
         }
         if (*list++ < 0) {
-            return res;
+            return nearest_entity;
         }
     }
 }
