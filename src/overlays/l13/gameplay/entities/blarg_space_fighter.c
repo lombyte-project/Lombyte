@@ -628,7 +628,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
         HIT_REACTION_NO_HIT = 11
     };
     unsigned char *moby_data;
-    char *r;
+    char *hit_record;
     int st;
     int flag;
     int target_selection_status;
@@ -674,10 +674,10 @@ void FUN_L13_002c2d30(unsigned char *moby) {
     }
     *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L13_00161490;
     damage_amount = 0.0f;
-    r = FUN_L00_0025a420(moby, 0x330000, 0);
-    st = FUN_L13_002c2d30_collision(moby, r, moby_data + 0x20, 0, &flag, &damage_amount, 0, 4);
-    if (r != 0) {
-        char *hit_moby = *(char **)(r + 0x20);
+    hit_record = FUN_L00_0025a420(moby, 0x330000, 0);
+    st = FUN_L13_002c2d30_collision(moby, hit_record, moby_data + 0x20, 0, &flag, &damage_amount, 0, 4);
+    if (hit_record != 0) {
+        char *hit_moby = *(char **)(hit_record + 0x20);
         if (hit_moby != 0 && *(short *)(hit_moby + 0xA6) == 0x4D1) {
             flag = 1;
             damage_amount = 0.0f;
