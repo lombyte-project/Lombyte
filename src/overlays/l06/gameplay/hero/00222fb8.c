@@ -233,7 +233,7 @@ void FUN_L06_00228360(void) {
         hero.unk22C = 0.7f;
         hero.unk230 = 0.45f;
         break;
-    case 1:
+    case HERO_VEHICLE_MODE_CLANK:
         hero.unk228 = 0.59999996f;
         hero.unk22C = 0.45000002f;
         hero.unk230 = 0.3f;
@@ -257,10 +257,10 @@ void FUN_L06_00228360(void) {
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
         FUN_001f9b80_209450(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
         f32 *smoothing_state = D_0013F570;
-        struct Hero *b = (struct Hero *)((u8 *)smoothing_state - 0x220);
-        approach_value_209450(b->unk228, frame_scale * 0.02f, smoothing_state);
-        approach_value_209450(b->unk22C, frame_scale * 0.02f, smoothing_state + 1);
-        FUN_L00_0025b8c0_209450(smoothing_state + 5, smoothing_state + 6, b->unk230, frame_scale_sq * 0.02f,
+        struct Hero *hero_base = (struct Hero *)((u8 *)smoothing_state - 0x220);
+        approach_value_209450(hero_base->unk228, frame_scale * 0.02f, smoothing_state);
+        approach_value_209450(hero_base->unk22C, frame_scale * 0.02f, smoothing_state + 1);
+        FUN_L00_0025b8c0_209450(smoothing_state + 5, smoothing_state + 6, hero_base->unk230, frame_scale_sq * 0.02f,
                                 frame_scale_sq * 0.3f, D_0015ED6C_209450 * 4.0f);
     }
 }
