@@ -1927,42 +1927,42 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     wz = allocate_voice_for_target_entry_cf(&v);
                     if (gz != wz && gz - wz < 1.2f) {
                         Vec_2adb30 v2;
-                        Vec_2adb30 w;
+                        Vec_2adb30 particle_work_vector;
                         int i;
                         int j;
                         for (i = 0; i < 100; i++) {
                             float r;
                             float ang;
-                            w.q = 0;
-                            w.f[0] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * -0.75f, D_0015ED6C_2adb30 * 0.75f);
-                            w.f[1] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * -0.75f, D_0015ED6C_2adb30 * 0.75f);
-                            w.f[2] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * 4.0f, D_0015ED6C_2adb30 * 14.0f);
-                            v2.q = w.q;
+                            particle_work_vector.q = 0;
+                            particle_work_vector.f[0] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * -0.75f, D_0015ED6C_2adb30 * 0.75f);
+                            particle_work_vector.f[1] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * -0.75f, D_0015ED6C_2adb30 * 0.75f);
+                            particle_work_vector.f[2] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * 4.0f, D_0015ED6C_2adb30 * 14.0f);
+                            v2.q = particle_work_vector.q;
                             r = FUN_002132a8_2adb30(0.0f, 0.35f);
                             ang = FUN_00213308_2adb30();
-                            w.f[0] = FUN_001f9dc8_2adb30(ang) * r;
-                            w.f[1] = FUN_001f9de0_2adb30(ang) * r;
-                            w.f[2] = 0.0f;
-                            FUN_001f9a10_2adb30(&w, &w, &bomb_moby->pos);
-                            w.f[2] = gz + 0.5f;
+                            particle_work_vector.f[0] = FUN_001f9dc8_2adb30(ang) * r;
+                            particle_work_vector.f[1] = FUN_001f9de0_2adb30(ang) * r;
+                            particle_work_vector.f[2] = 0.0f;
+                            FUN_001f9a10_2adb30(&particle_work_vector, &particle_work_vector, &bomb_moby->pos);
+                            particle_work_vector.f[2] = gz + 0.5f;
                             v2.f[2] -= r * D_0015ED6C_2adb30 * 8.0f;
-                            FUN_L00_002738e8_2adb30(&w, &v2, delay, FUN_002132a8_2adb30(0.25f, 1.0f), gz, frame_time_sq_macro * 20.0f, (0x16 << 24) | (cb << 16) | (cg << 8) | cr, (cb << 16) | (cg << 8) | cr, 1);
+                            FUN_L00_002738e8_2adb30(&particle_work_vector, &v2, delay, FUN_002132a8_2adb30(0.25f, 1.0f), gz, frame_time_sq_macro * 20.0f, (0x16 << 24) | (cb << 16) | (cg << 8) | cr, (cb << 16) | (cg << 8) | cr, 1);
                         }
                         for (j = 0; j < 20; j++) {
                             int c0 = mine_blend_color(0x7F << 24, (0x7F << 24) | (cb << 16) | (cg << 8) | cr, FUN_002132a8_2adb30(0.25f, 1.0f));
                             int c1 = mine_blend_color(0, ((cb / 2) << 16) | ((cg / 2) << 8) | (cr / 2), FUN_002132a8_2adb30(0.5f, 1.0f));
                             float sz;
                             int life;
-                            w.f[0] = FUN_002132a8_2adb30(-3.0f, 3.0f);
-                            w.f[1] = FUN_002132a8_2adb30(-3.0f, 3.0f);
-                            w.f[2] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * 4.0f, D_0015ED6C_2adb30 * 14.0f);
-                            FUN_001f9bf8_2adb30(&w, &w, FUN_002132a8_2adb30(1.5f, 3.0f) * D_0015ED6C_2adb30);
-                            w.f[2] = FUN_002132a8_2adb30(3.0f, 6.0f) * D_0015ED6C_2adb30;
+                            particle_work_vector.f[0] = FUN_002132a8_2adb30(-3.0f, 3.0f);
+                            particle_work_vector.f[1] = FUN_002132a8_2adb30(-3.0f, 3.0f);
+                            particle_work_vector.f[2] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * 4.0f, D_0015ED6C_2adb30 * 14.0f);
+                            FUN_001f9bf8_2adb30(&particle_work_vector, &particle_work_vector, FUN_002132a8_2adb30(1.5f, 3.0f) * D_0015ED6C_2adb30);
+                            particle_work_vector.f[2] = FUN_002132a8_2adb30(3.0f, 6.0f) * D_0015ED6C_2adb30;
                             v2.q = bomb_moby->pos.q;
                             v2.f[2] = gz;
                             sz = FUN_002132a8_2adb30(31500.002f, 52500.0f);
                             life = FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x5A), FUN_001f96f8_2adb30(0x96));
-                            FUN_L00_0026bb70_2adb30(&v2, &w, c0, c1, sz, life, 1, D_L00_001B2080_2adb30[11][0], -1);
+                            FUN_L00_0026bb70_2adb30(&v2, &particle_work_vector, c0, c1, sz, life, 1, D_L00_001B2080_2adb30[11][0], -1);
                         }
                     }
                 }
