@@ -513,7 +513,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     LevelHeader *hdr;
     char *mem;
     float *ship;
-    short *idx = D_L00_001AC780; /* moby index by file order; a pointer local, so its address is formed at each use */
+    short *moby_index_remap = D_L00_001AC780; /* moby index by file order; a pointer local, so its address is formed at each use */
     int level_or_group_scratch; /* scratch int: the level number in the moby loop, a group's offset and end flag in the group loop */
 
     hdr = D_L00_00173E00.f4;
@@ -767,16 +767,16 @@ char *load_level_gameplay(int skip_gameplay_read) {
         for (i = 0; i < D_L00_00160490; i++) {
             ShrubInst *inst = D_L00_00160494 + i;
             ShrubMatrix *mtx = D_L00_0016049C + i;
-            int cls = D_L00_001BC1B0[*(int *)p];
+            int shrub_class_index = D_L00_001BC1B0[*(int *)p];
             float scale;
 
-            inst->f1A = cls;
-            if (cls != last) {
-                last = cls;
-                D_L00_001BC030[cls]->f18 = inst;
-                D_L00_001BC030[cls]->f16 = 0;
+            inst->f1A = shrub_class_index;
+            if (shrub_class_index != last) {
+                last = shrub_class_index;
+                D_L00_001BC030[shrub_class_index]->f18 = inst;
+                D_L00_001BC030[shrub_class_index]->f16 = 0;
             }
-            D_L00_001BC030[cls]->f16++;
+            D_L00_001BC030[shrub_class_index]->f16++;
             inst->f18 = i;
             inst->f10 = *(float *)(p + 4);
             if (inst->f10 < 16.0f) {
@@ -784,10 +784,10 @@ char *load_level_gameplay(int skip_gameplay_read) {
             }
             inst->f1B = 0;
             inst->f1E = 0xFFFF;
-            if (D_L00_001BC030[cls]->f1C != 0) {
+            if (D_L00_001BC030[shrub_class_index]->f1C != 0) {
                 float shrub_class_lower_bound;
 
-                inst->f17 = truncate_float_to_s32(*D_L00_001BC030[cls]->f1C);
+                inst->f17 = truncate_float_to_s32(*D_L00_001BC030[shrub_class_index]->f1C);
                 shrub_class_lower_bound = convert_integer_to_float(inst->f17) + 24.0f;
                 if (inst->f10 < shrub_class_lower_bound) {
                     inst->f10 = shrub_class_lower_bound;
@@ -798,7 +798,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             qcopy(mtx->m2, p + 0x30);
             qcopy(mtx->m3, p + 0x40);
             p += 0x50;
-            mtx->f3C = D_L00_001BC030[cls]->f20;
+            mtx->f3C = D_L00_001BC030[shrub_class_index]->f20;
             {
                 float a = (vector_length_xyz(mtx) + vector_length_xyz(mtx->m1)) * 0.5f;
                 float b = vector_length_xyz(mtx->m2);
@@ -829,10 +829,10 @@ char *load_level_gameplay(int skip_gameplay_read) {
             }
             inst->f1C = *(unsigned short *)p;
             p += 0x10;
-            transform_vector_by_basis(inst, D_L00_001BC030[cls], mtx);
+            transform_vector_by_basis(inst, D_L00_001BC030[shrub_class_index], mtx);
             scale = vector_length_xyz(mtx);
             scale = max_float(scale, vector_length_xyz(mtx->m1));
-            inst->fC = D_L00_001BC030[cls]->fC * max_float(scale, vector_length_xyz(mtx->m2));
+            inst->fC = D_L00_001BC030[shrub_class_index]->fC * max_float(scale, vector_length_xyz(mtx->m2));
             scale_vector(inst, inst, mtx->f3C);
             add_vector_xyz(inst, inst, mtx->m3);
         }
@@ -1003,7 +1003,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 }
             }
             if (skip) {
-                idx[i] = -1;
+                moby_index_remap[i] = -1;
             } else {
                 MobyInst *m;
                 int a;
@@ -1015,7 +1015,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 int upd;
 
                 {
-                    short *slot = idx + i;
+                    short *slot = moby_index_remap + i;
                     *slot = count;
                 }
                 m = D_L00_0015FFD8 + count;
@@ -1163,7 +1163,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 int *r = (int *)(x + off);
 
                 if (*r >= 0) {
-                    *r = idx[*r];
+                    *r = moby_index_remap[*r];
                 }
             }
             q += 2;
@@ -1209,11 +1209,11 @@ char *load_level_gameplay(int skip_gameplay_read) {
             if (level_or_group_scratch >= 0) {
                 int g = (int)(base + level_or_group_scratch);
                 unsigned short *src;
-                short *dst;
+                short *group_write_cursor;
 
                 D_L00_001AB840[i] = g;
                 src = (unsigned short *)g;
-                dst = (short *)src;
+                group_write_cursor = (short *)src;
                 D_L00_0015FFF4 = i + 1;
                 do {
                     int id = *src;
@@ -1221,15 +1221,15 @@ char *load_level_gameplay(int skip_gameplay_read) {
 
                     level_or_group_scratch = *(short *)src;
                     g = (id & 0x7FFF) << 1; /* the entry's slot in the moby index, in two steps */
-                    g += (int)idx;
+                    g += (int)moby_index_remap;
                     level_or_group_scratch &= 0x8000;
                     t = *(short *)g;
                     if (t >= 0) {
-                        *dst++ = t;
+                        *group_write_cursor++ = t;
                     }
                     if (level_or_group_scratch) {
-                        if (D_L00_001AB840[i] < (int)dst) {
-                            dst[-1] |= 0x8000;
+                        if (D_L00_001AB840[i] < (int)group_write_cursor) {
+                            group_write_cursor[-1] |= 0x8000;
                         } else {
                             D_L00_001AB840[i] = 0;
                         }
