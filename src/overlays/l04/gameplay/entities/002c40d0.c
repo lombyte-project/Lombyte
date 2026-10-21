@@ -33,11 +33,11 @@ typedef struct {
 } T6;
 /* Returns the moby data pointer plus 0x180, or 0 when either is null. */
 s32 FUN_L04_002c41b0(T6 *data_owner) {
-    s32 v;
+    s32 data_base;
     if (data_owner != 0) {
-        v = data_owner->f;
-        if (v != 0) {
-            return v + 0x180;
+        data_base = data_owner->f;
+        if (data_base != 0) {
+            return data_base + 0x180;
         }
         return 0;
     }
