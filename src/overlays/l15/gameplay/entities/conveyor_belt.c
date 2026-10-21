@@ -30,8 +30,8 @@ void conveyor_belt_update(struct Moby *moby) {
         unsigned char state = moby->state;
         switch (state) {
         case CONVEYOR_BELT_INITIALIZE: {
-            char *vec = data + 0x40;
-            clear_u64_value(vec);
+            char *frame_offset = data + 0x40;
+            clear_u64_value(frame_offset);
             *(int *)(data + 0x9C) |= 4;
             moby->state = 3;
             break;
