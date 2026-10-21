@@ -180,7 +180,7 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 extern float D_L18_00161CA0 __attribute__((sda));
 void FUN_L18_002dc260(struct Moby *moby) {
-    char buf[0x30];
+    char hit_descriptor[0x30];
     float hit_direction_vector[4];
     float *moby_vars = (float *)moby->pvars;
     char *tgt;
@@ -198,8 +198,8 @@ void FUN_L18_002dc260(struct Moby *moby) {
         hit_direction_vector[2] = 0.0f;
         fast_vec_normalize(hit_direction_vector, hit_direction_vector, frame_time * 4.0f);
         hit_direction_vector[2] = frame_time * 4.0f;
-        make_hit_descriptor(buf, (int)moby, 0x10001, hit_direction_vector, 1.0f);
-        FUN_L00_00259a88(*(int *)(tgt + 0x2000), buf);
+        make_hit_descriptor(hit_descriptor, (int)moby, 0x10001, hit_direction_vector, 1.0f);
+        FUN_L00_00259a88(*(int *)(tgt + 0x2000), hit_descriptor);
     }
     flag = game_frame & 4;
     moby_vars[1] = moby_vars[1] + D_L18_00161CA0 * frame_time;
