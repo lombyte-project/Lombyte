@@ -579,16 +579,16 @@ void FUN_L08_002d3d78(char *moby) {
 extern void *FUN_L00_002dbe20(void *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void *FUN_L08_002d4050(char *arg) {
-    void *result = FUN_L00_002dbe20(arg);
-    char *obj = *(char **)(arg + 0x78);
-    arg[0x20] = 3;
-    *(float *)(obj + 0x200) = 4.0f;
-    *(float *)(obj + 0x208) = 0.5f;
-    if ((unsigned char)arg[0x53] != 2) {
-        blend_moby_animation(arg, 2, 0, 3);
+void *FUN_L08_002d4050(char *moby) {
+    void *result = FUN_L00_002dbe20(moby);
+    char *scoutbot_data = *(char **)(moby + 0x78);
+    moby[0x20] = 3;
+    *(float *)(scoutbot_data + 0x200) = 4.0f;
+    *(float *)(scoutbot_data + 0x208) = 0.5f;
+    if ((unsigned char)moby[0x53] != 2) {
+        blend_moby_animation(moby, 2, 0, 3);
     }
-    *(short *)(obj + 0xC8) = 0;
+    *(short *)(scoutbot_data + 0xC8) = 0;
     return result;
 }
 typedef struct {
