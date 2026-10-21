@@ -1036,7 +1036,7 @@ extern void FUN_L00_00269958(void *, void *, int, int, int, int, int,
                                     int);
 
 void FUN_L00_00217450(void) {
-    V_217450 pos[1];
+    V_217450 randomized_position[1];
     V_217450 out;
     int scaled_frame_count;
     int i;
@@ -1053,18 +1053,18 @@ void FUN_L00_00217450(void) {
         random_integer_4_to_7 = truncate_float_to_s32(random_float_between(4200.0f, 7350.0f) / 1000.0f);
         b = truncate_float_to_s32(random_float_between(21000.0f, 31500.002f) / 1000.0f);
         vector_magnitude = random_float_between(frame_time * 0.15f, frame_time * 0.7f);
-        qcopy(pos, position_source);
+        qcopy(randomized_position, position_source);
         if (current_level_index != 6) {
-            pos[0].f[2] = *(float *)(g + 0x2F4);
+            randomized_position[0].f[2] = *(float *)(g + 0x2F4);
         }
         i--;
         azimuth_angle = random_angle_radians();
         elevation_angle = random_float_between(0.34906584f, 1.3962634f);
         r = random_float_between(0.05f, *(float *)(g + 0x234) + 0.2f);
         FUN_00214db0_217450(&out, vector_magnitude, azimuth_angle, elevation_angle);
-        pos[0].f[0] += FUN_001f9dc8_217450(azimuth_angle) * r;
-        pos[0].f[1] += FUN_001f9de0_217450(azimuth_angle) * r;
-        FUN_L00_00269958(pos, &out, 0x7000C0F0, 0x70F0, scaled_frame_count, random_integer_4_to_7, b, 1);
+        randomized_position[0].f[0] += FUN_001f9dc8_217450(azimuth_angle) * r;
+        randomized_position[0].f[1] += FUN_001f9de0_217450(azimuth_angle) * r;
+        FUN_L00_00269958(randomized_position, &out, 0x7000C0F0, 0x70F0, scaled_frame_count, random_integer_4_to_7, b, 1);
     } while (i >= 0);
     if (!azimuth_angle) {
     }
