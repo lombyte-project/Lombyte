@@ -183,7 +183,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         MINE_LAYER_KNOCKBACK_AND_RECOVER = 4,
         MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION = 5
     };
-    TrooperVars *v = (TrooperVars *)mine_layer_moby->pvars;
+    TrooperVars *mine_layer_vars = (TrooperVars *)mine_layer_moby->pvars;
     TrooperPatrol *pt;
     struct RailPath *path;
     float sight;
@@ -198,34 +198,34 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
 
     FUN_L03_0024e830(mine_layer_moby, &target, 100.0f);
     sight = 14.0f;
-    FUN_L00_00263ac8(mine_layer_moby, 0, v->unk160, 4.5f);
+    FUN_L00_00263ac8(mine_layer_moby, 0, mine_layer_vars->unk160, 4.5f);
     FUN_L03_002ca808(mine_layer_moby);
-    if (v->alerted) {
-        v->alerted = 0;
-        v->alert_timer = trooper_frames(240);
+    if (mine_layer_vars->alerted) {
+        mine_layer_vars->alerted = 0;
+        mine_layer_vars->alert_timer = trooper_frames(240);
     }
-    if (!trooper_tick(&v->alert_timer)) {
+    if (!trooper_tick(&mine_layer_vars->alert_timer)) {
         sight = 28.0f;
     }
     switch (mine_layer_moby->state) {
     case MINE_LAYER_INITIALIZE:
-        FUN_L01_0026d930(v->walk);
-        v->unk10C = frame_time_sq * 6.2831855f;
-        v->unk114 = frame_time * 6.2831855f;
-        v->unk110 = frame_time_sq * 18.849556f;
-        v->unkF4 = frame_time * 5.0f;
-        v->unk58 = 8;
-        v->unk5A = 8;
-        v->unkDC = 2.0f;
-        v->unkD8 = 2.0f;
-        v->health = 2.0f;
-        v->unk24 = 2;
-        v->unk28 = 1;
-        v->unk29 = 0;
-        path = D_L03_001B05B0[v->patrol.path_index];
-        v->patrol.path = path;
+        FUN_L01_0026d930(mine_layer_vars->walk);
+        mine_layer_vars->unk10C = frame_time_sq * 6.2831855f;
+        mine_layer_vars->unk114 = frame_time * 6.2831855f;
+        mine_layer_vars->unk110 = frame_time_sq * 18.849556f;
+        mine_layer_vars->unkF4 = frame_time * 5.0f;
+        mine_layer_vars->unk58 = 8;
+        mine_layer_vars->unk5A = 8;
+        mine_layer_vars->unkDC = 2.0f;
+        mine_layer_vars->unkD8 = 2.0f;
+        mine_layer_vars->health = 2.0f;
+        mine_layer_vars->unk24 = 2;
+        mine_layer_vars->unk28 = 1;
+        mine_layer_vars->unk29 = 0;
+        path = D_L03_001B05B0[mine_layer_vars->patrol.path_index];
+        mine_layer_vars->patrol.path = path;
         qcopy(&mine_layer_moby->pos, &path->pts[0]);
-        v->patrol.idx = 1;
+        mine_layer_vars->patrol.idx = 1;
         mine_layer_moby->scale *= D_L03_00161920;
         mine_layer_moby->state = 1;
         if (mine_layer_moby->prev_seq != 0) {
@@ -234,7 +234,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         break;
     case MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE:
         FUN_L00_00258278(trooper_atan2_9eb8(target.aim.f[0] - mine_layer_moby->pos.x, target.aim.f[1] - mine_layer_moby->pos.y), 0.01f, 0.3f, 0.1f, mine_layer_moby,
-                         v->turn);
+                         mine_layer_vars->turn);
         if (trooper_dist(&mine_layer_moby->pos, &target.aim) < sight && trooper_fabs(target.aim.f[2] - mine_layer_moby->pos.z) < 4.0f) {
             mine_layer_moby->state = 2;
             if (mine_layer_moby->prev_seq != 1) {
@@ -245,40 +245,40 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
     case MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL:
         if (mine_layer_moby->anim_flags & 2) {
             mine_layer_moby->state = 3;
-            v->patrol_timer = trooper_frames(120);
+            mine_layer_vars->patrol_timer = trooper_frames(120);
             if (mine_layer_moby->prev_seq != 2) {
                 trooper_blend_anim(mine_layer_moby, 2, 0, trooper_frames(10));
             }
             mine_layer_moby->anim_speed = D_L03_0016191C;
-            v->fire_timer = trooper_frames(120);
+            mine_layer_vars->fire_timer = trooper_frames(120);
         }
         break;
     case MINE_LAYER_PATROL_AND_FIRE:
-        pt = &v->patrol;
+        pt = &mine_layer_vars->patrol;
         patrol_point_index = pt->idx;
-        FUN_L00_00259028(mine_layer_moby, v->walk, &pt->path->pts[patrol_point_index], v->effect);
+        FUN_L00_00259028(mine_layer_moby, mine_layer_vars->walk, &pt->path->pts[patrol_point_index], mine_layer_vars->effect);
         mine_layer_moby->anim_speed = D_L03_0016191C;
-        trooper_tick16(&v->patrol_timer);
+        trooper_tick16(&mine_layer_vars->patrol_timer);
         if (trooper_dist2(&mine_layer_moby->pos, &pt->path->pts[patrol_point_index]) < 1.0f) {
-            if (v->patrol_timer == 0 && trooper_dist(&mine_layer_moby->pos, &target.aim) > 25.0f) {
+            if (mine_layer_vars->patrol_timer == 0 && trooper_dist(&mine_layer_moby->pos, &target.aim) > 25.0f) {
                 mine_layer_moby->state = 1;
                 if (mine_layer_moby->prev_seq != 0) {
                     trooper_blend_anim(mine_layer_moby, 0, 0, trooper_frames(10));
                 }
             } else {
                 patrol_point_index = (pt->idx + pt->path->count + pt->dir) % pt->path->count;
-                if (v->patrol_timer == 0) {
+                if (mine_layer_vars->patrol_timer == 0) {
                     scale = trooper_dist(&target.aim, &pt->path->pts[patrol_point_index]);
                     if (scale < trooper_dist(&mine_layer_moby->pos, &pt->path->pts[patrol_point_index])) {
                         pt->dir *= -1;
-                        v->patrol_timer = trooper_frames(120);
+                        mine_layer_vars->patrol_timer = trooper_frames(120);
                     }
                 }
                 pt->idx = (pt->idx + pt->path->count + pt->dir) % pt->path->count;
             }
         }
-        if (trooper_tick16(&v->fire_timer)) {
-            v->fire_timer = trooper_frames(D_L03_00161918);
+        if (trooper_tick16(&mine_layer_vars->fire_timer)) {
+            mine_layer_vars->fire_timer = trooper_frames(D_L03_00161918);
             qcopy(muzzle, &mine_layer_moby->pos);
             muzzle[2] += 2.0f;
             trooper_play_sound(1, 0, mine_layer_moby, 0x273);
@@ -297,7 +297,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         }
         break;
     case MINE_LAYER_KNOCKBACK_AND_RECOVER:
-        if (mine_fall(mine_layer_moby, v->knockback) & 0x60) {
+        if (mine_fall(mine_layer_moby, mine_layer_vars->knockback) & 0x60) {
             if (mine_layer_moby->prev_seq != 0) {
                 trooper_blend_anim(mine_layer_moby, 0, 0, trooper_frames(10));
             }
@@ -305,17 +305,17 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         } else if (mine_layer_moby->pos.z < 5.0f) {
             qcopy(muzzle, &mine_layer_moby->pos);
             muzzle[2] += 0.5f;
-            spawn_explosion(mine_layer_moby, v->effect, muzzle, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            spawn_explosion(mine_layer_moby, mine_layer_vars->effect, muzzle, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             FUN_L00_00257470(mine_layer_moby, 0, -1);
             trooper_kill(mine_layer_moby);
             return;
         }
         break;
     case MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION:
-        if ((mine_fall(mine_layer_moby, v->knockback) & 0x60) || mine_layer_moby->pos.z < 5.0f) {
+        if ((mine_fall(mine_layer_moby, mine_layer_vars->knockback) & 0x60) || mine_layer_moby->pos.z < 5.0f) {
             qcopy(muzzle, &mine_layer_moby->pos);
             muzzle[2] += 0.5f;
-            spawn_explosion(mine_layer_moby, v->effect, muzzle, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            spawn_explosion(mine_layer_moby, mine_layer_vars->effect, muzzle, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             FUN_L00_00257470(mine_layer_moby, 0, -1);
             trooper_kill(mine_layer_moby);
             return;
@@ -323,17 +323,17 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         break;
     }
     if (mine_layer_moby->state < 4) {
-        v->fall_speed += frame_time_sq * 9.8f;
-        mine_layer_moby->pos.z -= v->fall_speed - 2.0f;
+        mine_layer_vars->fall_speed += frame_time_sq * 9.8f;
+        mine_layer_moby->pos.z -= mine_layer_vars->fall_speed - 2.0f;
         ground = probe_ground_height(&mine_layer_moby->pos, 0, 0.5f);
         mine_layer_moby->pos.z -= 2.0f;
         if (mine_layer_moby->pos.z < ground) {
             mine_layer_moby->pos.z = ground;
-            v->fall_speed = 0.0f;
+            mine_layer_vars->fall_speed = 0.0f;
         } else if (mine_layer_moby->pos.z < 5.0f) {
             qcopy(muzzle, &mine_layer_moby->pos);
             muzzle[2] += 0.5f;
-            spawn_explosion(mine_layer_moby, v->effect, muzzle, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            spawn_explosion(mine_layer_moby, mine_layer_vars->effect, muzzle, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             FUN_L00_00257470(mine_layer_moby, 0, -1);
             trooper_kill(mine_layer_moby);
             return;
