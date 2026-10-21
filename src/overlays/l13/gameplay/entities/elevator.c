@@ -672,28 +672,28 @@ extern void FUN_L00_0025d1b8(struct Moby *moby);
 /* spawns a class 0x24 child that copies its parent's position and scale */
 struct Moby *FUN_L13_002b4958(struct Moby *parent) {
     struct Moby *child_moby;
-    Vars *v;
+    Vars *child_vars;
 
     child_moby = create_moby(0x24);
     if (child_moby != 0) {
-        v = (Vars *)child_moby->pvars;
-        v->parent = parent;
-        v->unk0 = &v->unk20;
-        v->unkC = v->unk60;
+        child_vars = (Vars *)child_moby->pvars;
+        child_vars->parent = parent;
+        child_vars->unk0 = &child_vars->unk20;
+        child_vars->unkC = child_vars->unk60;
         child_moby->update_dist = parent->update_dist;
-        child_moby->draw_dist = v->parent->draw_dist;
+        child_moby->draw_dist = child_vars->parent->draw_dist;
         child_moby->visible = 1;
         child_moby->flags |= 0x20;
         child_moby->state = 0;
         child_moby->command = 0;
-        qcopy(&child_moby->pos, &v->parent->pos);
+        qcopy(&child_moby->pos, &child_vars->parent->pos);
         child_moby->scale = child_moby->pclass->scale * parent->scale / parent->pclass->scale;
-        v->unk20 = 1.0f;
-        v->unk24 = 1;
-        v->unk29 = 1;
-        v->unk2A = 3;
-        v->unk28 = 0;
-        v->unk30 = 0.9f;
+        child_vars->unk20 = 1.0f;
+        child_vars->unk24 = 1;
+        child_vars->unk29 = 1;
+        child_vars->unk2A = 3;
+        child_vars->unk28 = 0;
+        child_vars->unk30 = 0.9f;
         FUN_L00_00250df8(child_moby);
         FUN_L00_0025d1b8(child_moby);
     }
