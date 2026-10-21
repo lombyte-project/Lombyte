@@ -1649,7 +1649,7 @@ extern void FUN_L00_00267a08_26d1b0(void *) __asm__("FUN_L00_00267a08");
 
 void FUN_L00_0026d1b0(unsigned char *particle) {
     unsigned char *particle_data = particle + 0x20;
-    float r;
+    float alpha_fade_scratch;
     int phase_duration;
     int x;
 
@@ -1670,16 +1670,16 @@ void FUN_L00_0026d1b0(unsigned char *particle) {
     } else if (*(int *)(particle_data + 4) == 2) {
         if (FUN_001f9770_26d1b0(particle + 0xA))
             goto kill;
-        r = FUN_001fa6c0_26d1b0(particle_data[0xB]);
-        x = FUN_001fa6d0_26d1b0((float)particle_data[0xA] * ((float)*(short *)(particle + 0xA) / r) + 0.0f);
+        alpha_fade_scratch = FUN_001fa6c0_26d1b0(particle_data[0xB]);
+        x = FUN_001fa6d0_26d1b0((float)particle_data[0xA] * ((float)*(short *)(particle + 0xA) / alpha_fade_scratch) + 0.0f);
         *(int *)(particle + 4) = (x << 24) | (*(int *)particle_data & 0xFFFFFF);
     } else if (*(int *)(particle_data + 4) == 3) {
         FUN_001f9770_26d1b0(particle + 0xA);
-        r = FUN_001fa6c0_26d1b0(particle_data[0xB] - *(short *)(particle + 0xA));
-        r = r / FUN_001fa6c0_26d1b0(FUN_001f96f8_26d1b0(0x1E));
-        if (1.0f < r)
-            r = 1.0f;
-        x = FUN_001fa6d0_26d1b0((float)particle_data[0xA] * r + 0.0f);
+        alpha_fade_scratch = FUN_001fa6c0_26d1b0(particle_data[0xB] - *(short *)(particle + 0xA));
+        alpha_fade_scratch = alpha_fade_scratch / FUN_001fa6c0_26d1b0(FUN_001f96f8_26d1b0(0x1E));
+        if (1.0f < alpha_fade_scratch)
+            alpha_fade_scratch = 1.0f;
+        x = FUN_001fa6d0_26d1b0((float)particle_data[0xA] * alpha_fade_scratch + 0.0f);
         *(int *)(particle + 4) = (x << 24) | (*(int *)particle_data & 0xFFFFFF);
         if (particle_data[0xB] - *(short *)(particle + 0xA) >= FUN_001f96f8_26d1b0(0x1E)) {
             phase_duration = FUN_001f96f8_26d1b0(0x1E);
