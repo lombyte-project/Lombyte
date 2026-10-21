@@ -435,14 +435,14 @@ void FUN_L03_002ebc58(void *arg) {
     char *camera_data = *(char **)(camera + 0x70);
     float *camera_target_data = (float *)(camera_data + 0xB0);
     float look_direction[4];
-    float b[4];
+    float look_point[4];
     float look_offset[4];
-    qcopy(b, camera_data);
+    qcopy(look_point, camera_data);
     camera_target_data[2] = cam_interp_values(camera_data + 0xBC, camera_target_data[2], hero.motion.pos.f[2],
                              *(float *)&D_L03_00161E70, *(float *)&D_L03_00161E74, 0.0f);
     normalize_vector_xyz(look_offset, D_L03_00166F40, camera_target_data[5]);
-    add_vector_xyz(b, look_offset, b);
-    subtract_vector_xyz(look_direction, b, camera + 0x30);
+    add_vector_xyz(look_point, look_offset, look_point);
+    subtract_vector_xyz(look_direction, look_point, camera + 0x30);
     normalize_vector_xyz(camera, look_direction, 1.0f);
     qcopy(camera + 0x40, camera);
     cross_vectors_xyz(camera + 0x10, camera, D_L03_00166F40 - 0x10);
