@@ -543,8 +543,8 @@ void FUN_L00_00238b18(char *hud_element) {
 }
 
 void FUN_L00_00238b80(Obj *hud_element) {
-    float x, y, len, ang;
-    int old, cur, slot_count, next_slot_index;
+    float x, y, input_magnitude, selection_angle;
+    int old, pad_slot_index, slot_count, next_slot_index;
     u8 *counters = &hud_element->b70;
 
     hud_element->w7C = scale_game_frames(0xB4);
@@ -552,57 +552,57 @@ void FUN_L00_00238b80(Obj *hud_element) {
     D_0013C940.w1CC = 2;
     x = D_0013C940.unk148;
     y = D_0013C940.unk14C;
-    len = square_root(x * x + y * y);
-    if (len != 0.0f) {
-        x /= len;
-        y /= len;
+    input_magnitude = square_root(x * x + y * y);
+    if (input_magnitude != 0.0f) {
+        x /= input_magnitude;
+        y /= input_magnitude;
     }
-    ang = fast_arc_tan(x, y);
+    selection_angle = fast_arc_tan(x, y);
     if ((hud_element->w78 >> 24) == 0 && D_L00_0017E504 != 0) {
-        if ((D_0013C940.w1C4 & 0xF000) || len < 0.5f || --hud_element->w78 == -1) {
+        if ((D_0013C940.w1C4 & 0xF000) || input_magnitude < 0.5f || --hud_element->w78 == -1) {
             hud_element->w74 = -1;
             hud_element->w78 = 0x10000FF;
         }
     }
     old = hud_element->w74;
     if (*((s8 *)hud_element + 0x7B) == 1) {
-        if (0.9f < len) {
+        if (0.9f < input_magnitude) {
             slot_count = D_L00_0015FA90;
-            hud_element->w74 = (int)((ang + 3.1415927f + 3.1415927f + 1.5707964f + 3.1415927f / (float)slot_count) *
+            hud_element->w74 = (int)((selection_angle + 3.1415927f + 3.1415927f + 1.5707964f + 3.1415927f / (float)slot_count) *
                            ((float)slot_count / 6.2831855f)) %
                      slot_count;
         }
         if (D_0013C940.w1C4 & 0xF000) {
-            cur = hud_element->w74;
+            pad_slot_index = hud_element->w74;
             if (D_0013C940.w1C4 & 0x1000) {
-                if (cur == -1)
+                if (pad_slot_index == -1)
                     next_slot_index = D_L00_0017DC40;
                 else
-                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][cur].unk10;
-                cur = next_slot_index;
+                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk10;
+                pad_slot_index = next_slot_index;
             }
             if (D_0013C940.w1C4 & 0x4000) {
-                if (cur == -1)
+                if (pad_slot_index == -1)
                     next_slot_index = D_L00_0017DC44;
                 else
-                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][cur].unk14;
-                cur = next_slot_index;
+                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk14;
+                pad_slot_index = next_slot_index;
             }
             if (D_0013C940.w1C4 & 0x8000) {
-                if (cur == -1)
+                if (pad_slot_index == -1)
                     next_slot_index = D_L00_0017DC38;
                 else
-                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][cur].unk8;
-                cur = next_slot_index;
+                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk8;
+                pad_slot_index = next_slot_index;
             }
             if (D_0013C940.w1C4 & 0x2000) {
-                if (cur == -1)
+                if (pad_slot_index == -1)
                     next_slot_index = D_L00_0017DC3C;
                 else
-                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][cur].unkC;
-                cur = next_slot_index;
+                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unkC;
+                pad_slot_index = next_slot_index;
             }
-            hud_element->w74 = cur;
+            hud_element->w74 = pad_slot_index;
         }
     }
     if (hud_element->w74 != old) {
