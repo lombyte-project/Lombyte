@@ -1558,8 +1558,8 @@ fail:
 }
 int FUN_L00_001ee1b0(OvlQuad *, float);
 /* True when FUN_L00_001ee1b0 returns non-zero for a copy of v and 0. */
-int FUN_L00_002e4290(OvlQuad *v) {
-    OvlQuad input_copy = *v;
+int FUN_L00_002e4290(OvlQuad *input_quad) {
+    OvlQuad input_copy = *input_quad;
     return FUN_L00_001ee1b0(&input_copy, 0.0f) != 0;
 }
 typedef struct {
