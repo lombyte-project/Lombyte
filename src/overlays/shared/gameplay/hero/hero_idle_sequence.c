@@ -231,9 +231,9 @@ s32 FUN_L00_00205110_c(s32) __asm__("FUN_L00_00205110");
 
 void FUN_L00_00205538(void) {
     s32 i;
-    char *tbl = (char *)D_L00_0017A680_c;
-    char *record_reset_destination = tbl + 0x90;
-    char *record_reset_cursor = tbl + 0x60;
+    char *manipulator_records_base = (char *)D_L00_0017A680_c;
+    char *record_reset_destination = manipulator_records_base + 0x90;
+    char *record_reset_cursor = manipulator_records_base + 0x60;
     for (i = 0; i < 31; i++) {
         Ent *manipulator_record = &D_L00_0017A680_c[i];
         if (manipulator_record->active != 0) {
