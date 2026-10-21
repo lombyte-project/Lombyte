@@ -82,8 +82,8 @@ void FUN_L17_002f26d0(struct Moby *moby) {
     }
     case CLIP_VOLUME_SEQUENCE_MONITOR_FOLLOWUP: {
         struct Hero *h = &hero;
-        int v = h->state.current;
-        if (v == 0x76 || v == 0x32) {
+        int hero_current_state = h->state.current;
+        if (hero_current_state == 0x76 || hero_current_state == 0x32) {
             *(int *)(pvars + 0x6C) = 0;
         } else if (is_point_inside_clip_volume(&h->motion.pos, *(int *)(pvars + 0x64)) ||
                    is_point_inside_clip_volume(&h->motion.pos, *(int *)(pvars + 0x68))) {
@@ -184,9 +184,9 @@ void FUN_L17_002f26d0(struct Moby *moby) {
     skip1:
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(pvars + 0x20)) && D_L17_00179D10[0] == 0 &&
             D_L17_00179D10[9] == -1 && D_0013D408_b[0xBC] == 0) {
-            int w = *(int *)(((char *)&D_00141D7C));
+            int help_gate_flags = *(int *)(((char *)&D_00141D7C));
             mask = 1 << D_0015ED80_e[1];
-            if (!(w & mask)) {
+            if (!(help_gate_flags & mask)) {
                 help_request(0x3A9D, 0x82);
             }
         }
