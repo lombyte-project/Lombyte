@@ -25,21 +25,21 @@ extern short D_L10_00161E68 __attribute__((sda));
 extern short D_L10_00161E6C __attribute__((sda));
 extern short D_L10_00161E70 __attribute__((sda));
 void FUN_L10_002e3de8(char *moby) {
-    float v[3];
+    float spawn_position[3];
     int g, particle_data_value;
     float offset_angle_radians = random_angle_radians();
-    float b = random_float_between_alt(0.0f, *(float *)&D_L10_00161E70);
+    float offset_radius = random_float_between_alt(0.0f, *(float *)&D_L10_00161E70);
     float particle_scale = random_float_between_alt(0.0f, *(float *)&D_L10_00161E60);
     float random_particle_value = random_float_between_alt(*(float *)&D_L10_00161E60, *(float *)&D_L10_00161E64);
     int random_divisor = random_int_between(*(int *)&D_L10_00161E68, *(int *)&D_L10_00161E6C);
-    v[0] = fast_cos(offset_angle_radians) * b;
-    v[1] = fast_sin(offset_angle_radians) * b;
-    v[2] = 0.0f;
-    fast_vec_add(v, v, (float *)(moby + 0x10));
-    v[2] = v[2] + 0.025f;
+    spawn_position[0] = fast_cos(offset_angle_radians) * offset_radius;
+    spawn_position[1] = fast_sin(offset_angle_radians) * offset_radius;
+    spawn_position[2] = 0.0f;
+    fast_vec_add(spawn_position, spawn_position, (float *)(moby + 0x10));
+    spawn_position[2] = spawn_position[2] + 0.025f;
     g = *(int *)&D_L10_00161E58;
     particle_data_value = *(int *)&D_L10_00161E5C;
-    FUN_L01_00287158(v, particle_scale, random_particle_value, g, particle_data_value, random_divisor);
+    FUN_L01_00287158(spawn_position, particle_scale, random_particle_value, g, particle_data_value, random_divisor);
 }
 
 #define NOT_SDA
