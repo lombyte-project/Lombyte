@@ -1590,9 +1590,9 @@ s32 FUN_001f96f8_002a7c70(s32) __asm__("FUN_001f96f8");
 void FUN_00212f90_002a7c70(void *, s32, s32, s32) __asm__("FUN_00212f90");
 void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 void FUN_L00_002a7c70(O_002a7c70 *wrench_moby) {
-    struct Hero *g = &hero_data2;
-    if (g->state.current == 0x3B) {
-        u8 hero_current_animation = ((O_002a7c70 *)g->moby)->b53;
+    struct Hero *hero_context = &hero_data2;
+    if (hero_context->state.current == 0x3B) {
+        u8 hero_current_animation = ((O_002a7c70 *)hero_context->moby)->b53;
         s32 k = 0xB;
         if (hero_current_animation == 0x40)
             k = 0x13;
@@ -1601,16 +1601,16 @@ void FUN_L00_002a7c70(O_002a7c70 *wrench_moby) {
         if (k == 0x12 || k == 0x13) {
             wrench_moby->b52 = k;
             wrench_moby->b53 = k;
-            wrench_moby->f54 = ((O_002a7c70 *)g->moby)->f54;
-            wrench_moby->b50 = ((O_002a7c70 *)g->moby)->b50;
-            wrench_moby->b51 = ((O_002a7c70 *)g->moby)->b51;
-            if (((O_002a7c70 *)g->moby)->b52 != ((O_002a7c70 *)g->moby)->b53)
+            wrench_moby->f54 = ((O_002a7c70 *)hero_context->moby)->f54;
+            wrench_moby->b50 = ((O_002a7c70 *)hero_context->moby)->b50;
+            wrench_moby->b51 = ((O_002a7c70 *)hero_context->moby)->b51;
+            if (((O_002a7c70 *)hero_context->moby)->b52 != ((O_002a7c70 *)hero_context->moby)->b53)
                 wrench_moby->b50 = wrench_moby->b51;
             update_moby_animation_state(wrench_moby);
         } else {
             FUN_00212f90_002a7c70(wrench_moby, k, 0, FUN_001f96f8_002a7c70(7));
         }
-    } else if (g->state.prev == 0x3B && g->state_timer == 1) {
+    } else if (hero_context->state.prev == 0x3B && hero_context->state_timer == 1) {
         FUN_00212f90_002a7c70(wrench_moby, 1, 0, FUN_001f96f8_002a7c70(0x11));
     }
 }
