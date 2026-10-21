@@ -2336,7 +2336,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float D_L10_00161E48 __attribute__((sda));
 float FUN_L10_002e4840(struct Moby *self) {
     char *owner = *(char **)(self->pvars + 0x160);
-    float hi, lo, ang, dist, v[3];
+    float hi, lo, owner_to_self_angle, owner_to_self_distance, v[3];
     short *group_entry;
     if (self->group == 0xFF) {
         return fast_arc_tan(self->pos.x - *(float *)(owner + 0x10),
@@ -2344,22 +2344,22 @@ float FUN_L10_002e4840(struct Moby *self) {
     }
     lo = -(D_L10_00161E48 * DEG_TO_RAD);
     hi = D_L10_00161E48 * DEG_TO_RAD;
-    ang = fast_arc_tan(self->pos.x - *(float *)(owner + 0x10),
+    owner_to_self_angle = fast_arc_tan(self->pos.x - *(float *)(owner + 0x10),
                        self->pos.y - *(float *)(owner + 0x14));
-    dist = FUN_001f9b48(owner + 0x10, &self->pos);
-    v[0] = fast_cos(ang) * 2.0f;
-    v[1] = fast_sin(ang) * 2.0f;
+    owner_to_self_distance = FUN_001f9b48(owner + 0x10, &self->pos);
+    v[0] = fast_cos(owner_to_self_angle) * 2.0f;
+    v[1] = fast_sin(owner_to_self_angle) * 2.0f;
     v[2] = 0.0f;
     fast_vec_add(v, v, ((unsigned char *)&D_0013E533) + 0xE9D);
     group_entry = D_L10_001ABCC0[self->group];
     if (group_entry != 0) {
         do {
-            int idx = *(unsigned short *)group_entry & 0x7FFF;
-            if (D_L10_0015FFD0_e[2][idx].state == 5 ||
-                FUN_001f9b48(&D_L10_0015FFD0_e[2][idx].x, owner + 0x10) < dist) {
-                float d = fast_arc_tan(D_L10_0015FFD0_e[2][idx].x - *(float *)(owner + 0x10),
-                                       D_L10_0015FFD0_e[2][idx].y - *(float *)(owner + 0x14));
-                float group_angle_offset = fast_subtract_rotations(d, ang);
+            int listed_entity_index = *(unsigned short *)group_entry & 0x7FFF;
+            if (D_L10_0015FFD0_e[2][listed_entity_index].state == 5 ||
+                FUN_001f9b48(&D_L10_0015FFD0_e[2][listed_entity_index].x, owner + 0x10) < owner_to_self_distance) {
+                float d = fast_arc_tan(D_L10_0015FFD0_e[2][listed_entity_index].x - *(float *)(owner + 0x10),
+                                       D_L10_0015FFD0_e[2][listed_entity_index].y - *(float *)(owner + 0x14));
+                float group_angle_offset = fast_subtract_rotations(d, owner_to_self_angle);
                 if (group_angle_offset > 0.0f && group_angle_offset < hi) {
                     hi = group_angle_offset;
                 } else if (group_angle_offset < 0.0f && group_angle_offset > lo) {
@@ -2369,7 +2369,7 @@ float FUN_L10_002e4840(struct Moby *self) {
         } while (*group_entry++ >= 0);
     }
     return fast_add_rotations(
-        fast_add_rotations(lo, fast_difference_between_rotations(hi, lo) * 0.5f), ang);
+        fast_add_rotations(lo, fast_difference_between_rotations(hi, lo) * 0.5f), owner_to_self_angle);
 }
 /* Update for the blarg ship (moby class 1229): rise, follow its path, hover and fire at the target, fly off or explode. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E5E48), where it is exact; names translated to the US level program. */
