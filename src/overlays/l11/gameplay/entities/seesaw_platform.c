@@ -1945,7 +1945,7 @@ extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 
 void FUN_L11_00311c80(void *self, char *moby) {
     float v[4] __attribute__((aligned(16)));
-    float *src;
+    float *reference_rotation_source;
     unsigned char *current_target;
     void *selected_target;
     if (hero.ship_ammo == 0) {
@@ -1958,9 +1958,9 @@ void FUN_L11_00311c80(void *self, char *moby) {
             else if (current_target[0x20] == 0xFD)
                 *(void **)(moby + 0x88) = 0;
         }
-        src = D_L11_001677D0;
-        qcopy(v, src);
-        selected_target = FUN_L11_00311948(self, moby, src - 4, v, 0.19634955f, 0.19634955f, 255.0f, *(void **)(moby + 0x88), 0);
+        reference_rotation_source = D_L11_001677D0;
+        qcopy(v, reference_rotation_source);
+        selected_target = FUN_L11_00311948(self, moby, reference_rotation_source - 4, v, 0.19634955f, 0.19634955f, 255.0f, *(void **)(moby + 0x88), 0);
         if (selected_target != *(void **)(moby + 0x88)) {
             int initial_lock_timer_frames = lock_hold_frames + lock_fade_frames;
             *(void **)(moby + 0x88) = selected_target;
