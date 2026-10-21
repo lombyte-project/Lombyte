@@ -210,7 +210,7 @@ void FUN_L08_00307cf0(Moby *moby) {
     V_3091B0 pt;
     V_3091B0 dv;
     V_3091B0 base;
-    V_3091B0 off;
+    V_3091B0 origin_delta_or_spawn_vector;
     V_3091B0 par;
     int flag;
     int big;
@@ -272,7 +272,7 @@ void FUN_L08_00307cf0(Moby *moby) {
             ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f154);
         base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344;
         if (pass_attempt_count > 0) {
-            V_3091B0 *po = &off;
+            V_3091B0 *po = &origin_delta_or_spawn_vector;
             remaining_pass_attempts = pass_attempt_count;
             do {
                 float origin_distance_xy;
@@ -329,13 +329,13 @@ void FUN_L08_00307cf0(Moby *moby) {
             do {
                 float u;
                 float t;
-                off.x = D_L08_00162360[0] + func_002140F8_3091B0(negative_spread, spread);
+                origin_delta_or_spawn_vector.x = D_L08_00162360[0] + func_002140F8_3091B0(negative_spread, spread);
                 u = func_002140F8_3091B0(negative_spread, spread);
                 t = hi * frame_time;
-                *(int *)&off.w = 0;
+                *(int *)&origin_delta_or_spawn_vector.w = 0;
                 *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
-                off.y = D_L08_00162364 + u;
-                off.z = -t;
+                origin_delta_or_spawn_vector.y = D_L08_00162364 + u;
+                origin_delta_or_spawn_vector.z = -t;
                 w = func_001F9F90_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
                 w = w * func_002140F8_3091B0(0.0f, 8.0f);
                 pt.x += w;
@@ -350,8 +350,8 @@ void FUN_L08_00307cf0(Moby *moby) {
                     } else {
                         w = ground_height;
                     }
-                    if (flag == 0) func_L08_00273A80_3091B0(&pt, 0, w, &off);
-                    if (flag == 1) func_L08_002803B8_3091B0(&pt, 0, w, &off);
+                    if (flag == 0) func_L08_00273A80_3091B0(&pt, 0, w, &origin_delta_or_spawn_vector);
+                    if (flag == 1) func_L08_002803B8_3091B0(&pt, 0, w, &origin_delta_or_spawn_vector);
                 }
             } while (--remaining_pass_attempts != 0);
         }
