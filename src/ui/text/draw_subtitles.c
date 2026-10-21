@@ -50,17 +50,17 @@ void draw_subtitles(void) {
         }
         {
             short win[16];
-            short w, measured_text_height;
+            short measured_text_width, measured_text_height;
             int hw, hh;
 
             font_set_window(win, 0xC8, 0x208, 0x28, 0x1D8, 0x100, screen_extent.height - 0x38, 0x12,
                                 7);
             font_print_window_regular(win, 0x80B0B0B0, D_0018CB20.subs + subtitle->text[idx], -1);
             win[5] = screen_extent.height - 0x3C;
-            w = win[6];
+            measured_text_width = win[6];
             measured_text_height = win[7];
             hh = (measured_text_height >> 1) + 5;
-            hw = (w >> 1) + 10;
+            hw = (measured_text_width >> 1) + 10;
             if (win[5] + hh > screen_extent.height - 0x14) {
                 win[5] = screen_extent.height - 0x14 - hh;
             }
