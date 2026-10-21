@@ -1782,10 +1782,10 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_0030B5E8.c: func_L09_0030B5E8), where it is exact; names translated to the US level program. */
 
-void FUN_L09_0030a238(float *dst, float current_angle, float target_angle, float scale) {
+void FUN_L09_0030a238(float *output_angle, float current_angle, float target_angle, float scale) {
     float scaled_angle_delta = fast_subtract_rotations(target_angle, current_angle) * scale;
-    *dst = scaled_angle_delta;
-    *dst = fast_add_rotations(scaled_angle_delta, current_angle);
+    *output_angle = scaled_angle_delta;
+    *output_angle = fast_add_rotations(scaled_angle_delta, current_angle);
 }
 typedef struct {
     s32 count;
