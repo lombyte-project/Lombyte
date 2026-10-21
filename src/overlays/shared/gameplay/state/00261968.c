@@ -499,11 +499,11 @@ void FUN_L00_00262608(S_262608 *history_state, int dec) {
         for (i = 0; i < history_state->n; i++) {
             unsigned char *history_moby = (unsigned char *)*(int *)((char *)&history_state->w[i] + 0x10);
             if (history_moby) {
-                int v = history_moby[0x23];
-                int a = v;
-                if (dec < v)
-                    v = dec;
-                a -= v;
+                int decrement_amount = history_moby[0x23];
+                int a = decrement_amount;
+                if (dec < decrement_amount)
+                    decrement_amount = dec;
+                a -= decrement_amount;
                 history_moby[0x23] = a;
                 if ((unsigned char)a)
                     done = 0;
