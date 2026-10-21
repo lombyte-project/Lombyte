@@ -14,13 +14,13 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 /* Returns component d of c - a transformed by the matrix transpose_rotation_matrix builds from b. */
-float FUN_L00_0025c230(void *subtrahend_vector, void *b, void *minuend_vector, int component_index) {
+float FUN_L00_0025c230(void *subtrahend_vector, void *rotation_matrix_source, void *minuend_vector, int component_index) {
     float delta[4], transformed_delta[4], transposed_rotation_matrix[16];
-    float *w = transformed_delta;
+    float *transformed_delta_ptr = transformed_delta;
     subtract_vector_xyz(delta, minuend_vector, subtrahend_vector);
-    transpose_rotation_matrix(transposed_rotation_matrix, b);
-    transform_vector(w, delta, transposed_rotation_matrix);
-    return w[component_index];
+    transpose_rotation_matrix(transposed_rotation_matrix, rotation_matrix_source);
+    transform_vector(transformed_delta_ptr, delta, transposed_rotation_matrix);
+    return transformed_delta_ptr[component_index];
 }
 #define NOT_SDA
 
