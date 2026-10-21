@@ -1218,15 +1218,15 @@ int add_ammo(int a, int b) __asm__("FUN_L00_00233e40");
 int add_ammo(int weapon_index, int ammo_amount) {
     int *ammo_count = &weapon_ammo_counts[weapon_index];
     unsigned short *vendor_item_halfwords = (unsigned short *)(((char *)D_L00_001C40B0) + weapon_index * 0x18);
-    int v = *ammo_count + ammo_amount;
+    int ammo_total_or_excess = *ammo_count + ammo_amount;
     unsigned short t = vendor_item_halfwords[7];
-    *ammo_count = v;
+    *ammo_count = ammo_total_or_excess;
     if (t != 0) {
         t = vendor_item_halfwords[7];
-        v = v - t;
-        if (v > 0) {
+        ammo_total_or_excess = ammo_total_or_excess - t;
+        if (ammo_total_or_excess > 0) {
             *ammo_count = t;
-            return v;
+            return ammo_total_or_excess;
         }
     }
     return 0;
