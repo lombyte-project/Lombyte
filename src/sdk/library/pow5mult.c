@@ -96,28 +96,28 @@ extern _Bigint *_multiply(struct _reent *, _Bigint *, _Bigint *);
 extern _Bigint *_multadd(struct _reent *, _Bigint *, s32, s32);
 extern void InsertLinkObject(struct _reent *, _Bigint *);
 
-_Bigint *_pow5mult(struct _reent *ptr, _Bigint *accumulator, s32 k) {
+_Bigint *_pow5mult(struct _reent *bigint_context, _Bigint *accumulator, s32 k) {
     _Bigint *product, *cached_power_of_five, *next_power_of_five;
     s32 i;
 
     if (i = k & 3)
-        accumulator = _multadd(ptr, accumulator, D_001523B8[i - 1], 0);
+        accumulator = _multadd(bigint_context, accumulator, D_001523B8[i - 1], 0);
     if (!(k >>= 2))
         return accumulator;
-    if (!(cached_power_of_five = ptr->_p5s)) {
-        cached_power_of_five = ptr->_p5s = initialize_object_resource(ptr, 625);
+    if (!(cached_power_of_five = bigint_context->_p5s)) {
+        cached_power_of_five = bigint_context->_p5s = initialize_object_resource(bigint_context, 625);
         cached_power_of_five->_next = 0;
     }
     for (;;) {
         if (k & 1) {
-            product = _multiply(ptr, accumulator, cached_power_of_five);
-            InsertLinkObject(ptr, accumulator);
+            product = _multiply(bigint_context, accumulator, cached_power_of_five);
+            InsertLinkObject(bigint_context, accumulator);
             accumulator = product;
         }
         if (!(k >>= 1))
             break;
         if (!(next_power_of_five = cached_power_of_five->_next)) {
-            next_power_of_five = cached_power_of_five->_next = _multiply(ptr, cached_power_of_five, cached_power_of_five);
+            next_power_of_five = cached_power_of_five->_next = _multiply(bigint_context, cached_power_of_five, cached_power_of_five);
             next_power_of_five->_next = 0;
         }
         cached_power_of_five = next_power_of_five;
