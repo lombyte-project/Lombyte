@@ -38,7 +38,7 @@ struct Moby *FUN_L09_00307ba8(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life)
     OvlVec4 *pp = &position_copy;
     OvlVec4 *vp = &velocity_copy;
     struct Moby *spawned_moby;
-    ShotVars_307ba8 *pv;
+    ShotVars_307ba8 *projectile_vars;
     f32 spin_limit;
     s32 trail;
 
@@ -46,8 +46,8 @@ struct Moby *FUN_L09_00307ba8(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life)
     velocity_copy.q = vel->q;
     spawned_moby = create_moby_307ba8(0x4EA);
     if (spawned_moby != 0) {
-        pv = (ShotVars_307ba8 *)spawned_moby->pvars;
-        pv->owner = owner;
+        projectile_vars = (ShotVars_307ba8 *)spawned_moby->pvars;
+        projectile_vars->owner = owner;
         spawned_moby->rot.x = 0.0f;
         spawned_moby->scale *= 4.0f;
         spawned_moby->update_dist = 0xFF;
@@ -56,15 +56,15 @@ struct Moby *FUN_L09_00307ba8(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life)
         spawned_moby->rot.y = -atan2_307ba8(vector_length_xy_307ba8(vp), vp->f[2]);
         spawned_moby->rot.z = atan2_307ba8(velocity_copy.f[0], vp->f[1]);
         qcopy(&spawned_moby->pos, pp);
-        qcopy(&pv->vel, vp);
+        qcopy(&projectile_vars->vel, vp);
         spin_limit = frame_time * 1.5707964f;
-        pv->spin = random_float_between_307ba8(-spin_limit, spin_limit);
-        pv->unk14 = 0;
-        pv->life = life;
-        pv->life_max = life;
-        pv->dist = distance_307ba8((OvlVec4 *)&spawned_moby->pos, &D_0013F3D0_307ba8);
-        pv->unk24 = 0;
-        pv->unk28 = 0;
+        projectile_vars->spin = random_float_between_307ba8(-spin_limit, spin_limit);
+        projectile_vars->unk14 = 0;
+        projectile_vars->life = life;
+        projectile_vars->life_max = life;
+        projectile_vars->dist = distance_307ba8((OvlVec4 *)&spawned_moby->pos, &D_0013F3D0_307ba8);
+        projectile_vars->unk24 = 0;
+        projectile_vars->unk28 = 0;
         trail = life * 5 / 4;
         spawned_moby->flags |= 0x200;
         spawned_moby->alpha = 0x40;
