@@ -1366,7 +1366,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void FUN_L08_002da0f0(struct Moby *moby) {
     Vec4 pos;
     Vec4 spray_velocity_or_splash_position;
-    char *r;
+    char *water_entry_moby;
     int i;
     int spray_random_value;
     float sc, sp;
@@ -1388,9 +1388,9 @@ void FUN_L08_002da0f0(struct Moby *moby) {
     }
     qcopy(&pos, &hero.motion.pos);
     pos.f[2] = D_L08_001D7060[2];
-    r = FUN_L00_002d7e90(&pos, 3.0f);
-    if (r)
-        r[0x23] = 0x70;
+    water_entry_moby = FUN_L00_002d7e90(&pos, 3.0f);
+    if (water_entry_moby)
+        water_entry_moby[0x23] = 0x70;
     for (i = 0; i < 16; i++) {
         float ang = random_angle_radians();
         float k = random_float_between(frame_time * 0.0f, frame_time * 3.0f);
