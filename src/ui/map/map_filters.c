@@ -361,7 +361,7 @@ block_7:
 
 s32 map_filter_l07_7(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) __asm__("func_002073B8");
 
-s32 map_filter_l07_7(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) {
+s32 map_filter_l07_7(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 reveal_test_value) {
     s32 var_4_15;
 
     var_4_15 = 0;
@@ -371,7 +371,7 @@ s32 map_filter_l07_7(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) {
     if (var_4_15 != 0) {
         return 0;
     }
-    if (fparg2 < 71.5f) {
+    if (reveal_test_value < 71.5f) {
         return 0;
     }
     if (point_is_clockwise(px, py, 0x131, 0xE2, 0xC6, 0x93) != 0) {
