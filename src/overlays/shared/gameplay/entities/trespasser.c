@@ -1143,9 +1143,9 @@ void FUN_L00_002c1778(void *mv) {
         trespasser_moby[0x20] = 1;
         break;
     case TRESPASSER_WAIT_FOR_HERO_PROXIMITY: {
-        float r = FUN_001fa580_2c1778(*(float *)(trespasser_moby + 0x48), D_L00_00161830);
+        float updated_z_rotation = FUN_001fa580_2c1778(*(float *)(trespasser_moby + 0x48), D_L00_00161830);
         int proximity_check_counter = D_L00_0015F5CC_2c1778[0];
-        *(float *)(trespasser_moby + 0x48) = r;
+        *(float *)(trespasser_moby + 0x48) = updated_z_rotation;
         if (proximity_check_counter % 10 == 0) {
             P = &hero;
             if (P->health.hp) {
