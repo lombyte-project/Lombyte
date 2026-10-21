@@ -19,7 +19,7 @@ extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L07_001B2164 __attribute__((section(".data")));
-void FUN_L07_0029c4e8(void *pos, void *pos2) {
+void FUN_L07_0029c4e8(void *pos, void *particle_payload_source) {
     unsigned char *particle = create_part(0x41);
     if (particle) {
         float *particle_payload = (float *)(particle + 0x20);
@@ -36,7 +36,7 @@ void FUN_L07_0029c4e8(void *pos, void *pos2) {
         particle_payload[6] = 1.0f;
         particle_payload[7] = 0.6f;
         *(short *)(particle + 0xA) = scale_game_frames(0x50);
-        qcopy(particle_payload, pos2);
+        qcopy(particle_payload, particle_payload_source);
     }
 }
 #include "rnc/math/vector.h"
