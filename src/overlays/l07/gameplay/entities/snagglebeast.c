@@ -245,19 +245,19 @@ extern void FUN_L07_00312e70(char *, float, int, float, int);
 
 /* Rope draw: moves the two end points along the rope direction, draws three strands, then casts a ray between the ends. */
 void FUN_L07_003131b0(char *moby) {
-    RopeQuad v;
+    RopeQuad rope_offset;
     char blk[0x30];
     RopeVec rope_direction;
     char *data;
     float one;
 
     data = *(char **)(moby + 0x78);
-    qzero(&v);
+    qzero(&rope_offset);
     one = 1.0f;
-    normalize_vector_xyz(&v, data + 0x130, *(float *)(data + 0x16C) * 0.8f);
-    add_vector_xyz(data + 0x140, &v, data + 0x110);
-    normalize_vector_xyz(&v, &v, *(float *)(data + 0x16C));
-    add_vector_xyz(data + 0x120, &v, data + 0x110);
+    normalize_vector_xyz(&rope_offset, data + 0x130, *(float *)(data + 0x16C) * 0.8f);
+    add_vector_xyz(data + 0x140, &rope_offset, data + 0x110);
+    normalize_vector_xyz(&rope_offset, &rope_offset, *(float *)(data + 0x16C));
+    add_vector_xyz(data + 0x120, &rope_offset, data + 0x110);
     FUN_L07_00312e70(moby, one, 0, one, 0x20000080);
     FUN_L07_00312e70(moby, 0.7f, 10, 2.0f, 0x28008080);
     FUN_L07_00312e70(moby, 0.4f, 20, 3.0f, 0x30B0FFFF);
