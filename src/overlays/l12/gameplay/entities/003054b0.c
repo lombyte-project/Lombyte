@@ -100,7 +100,7 @@ void FUN_L12_003054b0(char *moby) {
     float scratch_vector[4];
     float aim_target_position[4];
     float particle_random_vector[4];
-    float *pv1;
+    float *gun_position_copy_destination;
     float *hp;
 
     for (i = 0; i < 5; i++) {
@@ -121,9 +121,9 @@ void FUN_L12_003054b0(char *moby) {
         gun_moby = (char *)(D_L12_0015FFD8_gp + (*(int *)(ent + 0x20) << 8));
         md = *(Gun_306890 **)(gun_moby + 0x78);
         qcopy(position_buffer, D_L12_00167240);
-        pv1 = scratch_vector;
+        gun_position_copy_destination = scratch_vector;
         position_buffer[2] -= 0.7f;
-        qcopy_nc(pv1, gun_moby + 0x10);
+        qcopy_nc(gun_position_copy_destination, gun_moby + 0x10);
         scratch_vector[2] += 1.5f;
         md->f60 = fast_arc_tan(vector_distance_xy_alt(scratch_vector, position_buffer), position_buffer[2] - scratch_vector[2]);
         update_joint_animation(gun_moby, (char *)md, 0, D_0015ED64 * 0.008f, D_0015ED64 * 0.3f);
