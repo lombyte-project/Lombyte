@@ -1416,14 +1416,14 @@ extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 /* spawns a debris moby of class 0x140 + kind at pos with velocity vel and a random spin */
 struct Moby *FUN_L09_002ef868(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, f32 scale) {
     Vec4 position_copy;
-    Vec4 v;
+    Vec4 velocity_copy;
     Vec4 *pp = &position_copy;
-    Vec4 *pv = &v;
+    Vec4 *pv = &velocity_copy;
     struct Moby *spawned_moby;
     struct DebrisVars *debris_vars;
 
     position_copy.q = pos->q;
-    v.q = vel->q;
+    velocity_copy.q = vel->q;
     spawned_moby = create_moby(kind + 0x140);
     if (spawned_moby != 0) {
         debris_vars = (struct DebrisVars *)spawned_moby->pvars;
