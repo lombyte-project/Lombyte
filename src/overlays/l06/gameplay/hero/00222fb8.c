@@ -604,7 +604,7 @@ void FUN_L06_0022b438(void) {
     f32 speed;
     f32 speed_component_or_yaw_delta;
     f32 speed_decay_step;
-    f32 arg;
+    f32 velocity_adjustment_step;
     s32 state;
 
     state = hero.state.current;
@@ -699,7 +699,7 @@ void FUN_L06_0022b438(void) {
         }
         FUN_L00_002132b8_2b438(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
-        arg = ED70 * 20.0f;
+        velocity_adjustment_step = ED70 * 20.0f;
         if (hero.target_speed < D_L06_0017C550[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
                 speed_decay_step = hero.unk944;
@@ -709,12 +709,12 @@ void FUN_L06_0022b438(void) {
                 return;
             }
             if (hero.unk30A != 0) {
-                arg = ED70 * 6.0f;
+                velocity_adjustment_step = ED70 * 6.0f;
             } else {
-                arg = ED70 * 2.0f;
+                velocity_adjustment_step = ED70 * 2.0f;
             }
         }
-        FUN_L01_00234358_2b438(arg);
+        FUN_L01_00234358_2b438(velocity_adjustment_step);
     }
 }
 #include "rnc/math/vector.h"
