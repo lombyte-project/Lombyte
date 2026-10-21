@@ -358,16 +358,16 @@ extern f32 randf_sym(f32 lo, f32 hi) __asm__("FUN_L00_00257c48");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
-DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
+DebrisMoby *FUN_L01_0030be70(DebrisMoby *parent_moby, void *dir, f32 scale) {
     DebrisMoby *spawned_moby;
     DebrisVars *debris_vars;
 
     spawned_moby = create_moby(0x5E6);
     if (spawned_moby != NULL) {
         debris_vars = spawned_moby->vars;
-        debris_vars->parent = src;
-        qcopy(&spawned_moby->pos, &src->pos);
-        spawned_moby->rot = src->rot;
+        debris_vars->parent = parent_moby;
+        qcopy(&spawned_moby->pos, &parent_moby->pos);
+        spawned_moby->rot = parent_moby->rot;
         spawned_moby->state = 0;
         spawned_moby->b30 = 0xFF;
         spawned_moby->h32 = 0xFF;
