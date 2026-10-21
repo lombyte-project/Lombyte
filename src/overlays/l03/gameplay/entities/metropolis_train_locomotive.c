@@ -1003,9 +1003,9 @@ char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int a3, int a
 /* Hit effects for the Kerwan train and turret classes: sparks or smoke puffs pushed along the hit velocity,
  * with countdowns in the moby data (0x12E, 0x12F) limiting how often they spawn. */
 void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
-    float vel[4];
+    float emitter_motion_delta[4];
     float *vp;
-    float pos[4];
+    float joint_world_position[4];
     float particle_velocity[4];
     char *data;
     int i;
@@ -1017,7 +1017,7 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
     int color2;
 
     data = *(char **)(moby + 0x78);
-    vp = vel;
+    vp = emitter_motion_delta;
     *(OvlQuad *)vp = *(OvlQuad *)vel_in;
     if (*(unsigned short *)(moby + 0x34) & 1) {
         return;
@@ -1027,12 +1027,12 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
         if (quiet == 0) {
             scale_vector_xyz(vp, vp, 0.35f);
             for (i = 0; i < 2; i++) {
-                moby_point_position(moby, i, pos);
+                moby_point_position(moby, i, joint_world_position);
                 azimuth_angle = random_angle_radians();
                 elevation_angle = random_angle_radians();
                 build_spherical_offset(particle_velocity, frame_time * 0.15f, azimuth_angle, elevation_angle);
                 add_vector_xyz(particle_velocity, particle_velocity, vp);
-                FUN_L00_0026ced0(pos, particle_velocity, 0x8040C0F0, 0x808080, scale_game_frames(20), 84000.0f);
+                FUN_L00_0026ced0(joint_world_position, particle_velocity, 0x8040C0F0, 0x808080, scale_game_frames(20), 84000.0f);
             }
         }
         break;
@@ -1044,12 +1044,12 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
             if (fast_vec_length(vp) < frame_time * 40.0f && FUN_001f9b48(moby + 0x10, D_L03_00166EC0) < 75.0f) {
                 scale_vector_xyz(vp, vp, 0.7f);
                 for (j = 0; j < 10; j++) {
-                    moby_point_position(moby, 0, pos);
+                    moby_point_position(moby, 0, joint_world_position);
                     azimuth_angle = random_angle_radians();
                     elevation_angle = random_angle_radians();
                     build_spherical_offset(particle_velocity, frame_time * 0.6f, azimuth_angle, elevation_angle);
                     add_vector_xyz(particle_velocity, particle_velocity, vp);
-                    FUN_L00_0026ced0(pos, particle_velocity, 0x80808080, 0x808080, scale_game_frames(35), 105000.0f);
+                    FUN_L00_0026ced0(joint_world_position, particle_velocity, 0x80808080, 0x808080, scale_game_frames(35), 105000.0f);
                 }
             }
             data[0x12E] = random_int_between(scale_game_frames(7), scale_game_frames(20));
@@ -1060,12 +1060,12 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
             if (fast_vec_length(vp) < frame_time * 40.0f && FUN_001f9b48(moby + 0x10, D_L03_00166EC0) < 90.0f) {
                 scale_vector_xyz(vp, vp, 0.5f);
                 for (k = 0; k < 15; k++) {
-                    moby_point_position(moby, 0, pos);
+                    moby_point_position(moby, 0, joint_world_position);
                     azimuth_angle = random_angle_radians();
                     elevation_angle = random_angle_radians();
                     build_spherical_offset(particle_velocity, frame_time * 1.2f, azimuth_angle, elevation_angle);
                     add_vector_xyz(particle_velocity, particle_velocity, vp);
-                    FUN_L00_0026ced0(pos, particle_velocity, 0x80808080, 0x808080, scale_game_frames(45), 168000.0f);
+                    FUN_L00_0026ced0(joint_world_position, particle_velocity, 0x80808080, 0x808080, scale_game_frames(45), 168000.0f);
                 }
             }
             data[0x12E] = random_int_between(scale_game_frames(7), scale_game_frames(20));
