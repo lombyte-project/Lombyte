@@ -742,7 +742,7 @@ extern s32 D_L00_00161BF8[] MACRO_ADDR;
 extern s32 D_L00_00161C88[] MACRO_ADDR;
 void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
 s32 FUN_L00_002e2190(s32 id, void *src, void *v);
-s32 FUN_L00_002e2190(s32 id, void *src, void *endpoint_position) {
+s32 FUN_L00_002e2190(s32 id, void *beam_origin_transform, void *endpoint_position) {
     s32 i;
     for (i = 0; i < 3; i++) {
         if (id == D_L00_00161C88[i]) {
@@ -750,7 +750,7 @@ s32 FUN_L00_002e2190(s32 id, void *src, void *endpoint_position) {
                 D_L00_00161BF8[i] = 2;
             else if (D_L00_00161BF8[i] == 4)
                 D_L00_00161BF8[i] = 3;
-            fast_mem_copy(&D_L00_001E6D20[i], src, 0x40);
+            fast_mem_copy(&D_L00_001E6D20[i], beam_origin_transform, 0x40);
             qcopy(&D_L00_001E6DE0[i], endpoint_position);
             return 1;
         }
