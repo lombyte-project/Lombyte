@@ -62,7 +62,7 @@ extern void FUN_L02_002a40f0(void *);
 void FUN_L02_002a4818(int a, int b, int c, int d, float x, float y, float z, float w, int e, int f,
                       int g);
 void FUN_L02_002a4818(int fog_red, int fog_green, int fog_blue, int ticks_per_frame, float x, float y, float z, float w, int frame_table_start_index, int frame_count,
-                      int g) {
+                      int frame_packet_address) {
     char scratch[0x40];
     scratch[0x30] = fog_red;
     scratch[0x31] = fog_green;
@@ -75,7 +75,7 @@ void FUN_L02_002a4818(int fog_red, int fog_green, int fog_blue, int ticks_per_fr
     scratch[0x3E] = frame_count;
     scratch[0x33] = ticks_per_frame;
     ((unsigned char *)scratch)[0x3F] = 0x80;
-    *(int *)(scratch + 0x1C) = g;
+    *(int *)(scratch + 0x1C) = frame_packet_address;
     FUN_L02_002a40f0(scratch);
     FUN_L02_002101b8(D_L02_001CB400, 0x70002800, 0xF8);
 }
