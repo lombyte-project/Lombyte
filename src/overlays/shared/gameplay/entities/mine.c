@@ -1029,11 +1029,11 @@ extern void FUN_0020c828_2acad8(void *) __asm__("FUN_0020c828");
 
 void FUN_L00_002acad8(M_2acad8 *particle_moby) {
     V_2acad8 *v = particle_moby->v;
-    float elapsed_lifetime_frames, b;
+    float elapsed_lifetime_frames, total_lifetime_frames;
     int n;
     elapsed_lifetime_frames = FUN_001fa6c0_2acad8(v->n - v->h1c);
-    b = FUN_001fa6c0_2acad8(v->n);
-    particle_moby->f2c = elapsed_lifetime_frames * v->f18 / b;
+    total_lifetime_frames = FUN_001fa6c0_2acad8(v->n);
+    particle_moby->f2c = elapsed_lifetime_frames * v->f18 / total_lifetime_frames;
     particle_moby->r[0] = FUN_001fa580_2acad8(particle_moby->r[0], D_0015ED6C_2acad8 * 3.1415927f);
     particle_moby->r[1] = FUN_001fa580_2acad8(particle_moby->r[1], D_0015ED6C_2acad8 * 3.1415927f);
     particle_moby->r[2] = FUN_001fa580_2acad8(particle_moby->r[2], D_0015ED6C_2acad8 * 3.1415927f);
