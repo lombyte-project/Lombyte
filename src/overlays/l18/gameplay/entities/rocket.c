@@ -3187,7 +3187,7 @@ extern void draw_ec130(void *, void *, int) __asm__("FUN_001f7d30");
 
 void FUN_L18_002ec130(void *mv) {
     Qec130 quad;
-    Vec130 mat[4];
+    Vec130 quad_transform[4];
     Vec130 *pos;
     unsigned int c;
     float corner_scale;
@@ -3198,15 +3198,15 @@ void FUN_L18_002ec130(void *mv) {
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
-    subtract_vector_xyz(&mat[3], &D_L18_001677C0, pos);
-    vscl_ec130(&mat[3], &mat[3], 0.3f);
-    add_vector_xyz(&mat[3], &mat[3], pos);
-    mat[3].f[3] = 1.0f;
-    subtract_vector_xyz(&mat[0], &D_L18_001677C0, &mat[3]);
-    vscl_ec130(&mat[0], &mat[0], 1.0f);
-    cross_vectors_xyz(&mat[1], &mat[0], (Vec130 *)&hero.gravity_dir);
-    vscl_ec130(&mat[1], &mat[1], -1.0f);
-    cross_vectors_xyz(&mat[2], &mat[1], &mat[0]);
+    subtract_vector_xyz(&quad_transform[3], &D_L18_001677C0, pos);
+    vscl_ec130(&quad_transform[3], &quad_transform[3], 0.3f);
+    add_vector_xyz(&quad_transform[3], &quad_transform[3], pos);
+    quad_transform[3].f[3] = 1.0f;
+    subtract_vector_xyz(&quad_transform[0], &D_L18_001677C0, &quad_transform[3]);
+    vscl_ec130(&quad_transform[0], &quad_transform[0], 1.0f);
+    cross_vectors_xyz(&quad_transform[1], &quad_transform[0], (Vec130 *)&hero.gravity_dir);
+    vscl_ec130(&quad_transform[1], &quad_transform[1], -1.0f);
+    cross_vectors_xyz(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
     c = D_L18_001620A0;
     quad.color[3] = c;
     quad.color[2] = c;
@@ -3215,7 +3215,7 @@ void FUN_L18_002ec130(void *mv) {
     corner_scale = D_L18_001620A8 + spread_k(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
         vmul_ec130(corner_scale, &quad.corner[i], &D_L18_001D9CA0[i]);
-        transform_vector(&quad.corner[i], &quad.corner[i], &mat[0]);
+        transform_vector(&quad.corner[i], &quad.corner[i], &quad_transform[0]);
         quad.uv[i].u = D_L18_001D9CE0[i].u;
         quad.uv[i].v = D_L18_001D9CE0[i].v;
     }
@@ -3228,7 +3228,7 @@ void FUN_L18_002ec130(void *mv) {
     corner_scale = D_L18_001620AC + spread_k(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
         vmul_ec130(corner_scale, &quad.corner[i], &D_L18_001D9CA0[i]);
-        transform_vector(&quad.corner[i], &quad.corner[i], &mat[0]);
+        transform_vector(&quad.corner[i], &quad.corner[i], &quad_transform[0]);
         quad.uv[i].u = D_L18_001D9CE0[i].u;
         quad.uv[i].v = D_L18_001D9CE0[i].v;
     }
