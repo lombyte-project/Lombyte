@@ -2050,20 +2050,20 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 void FUN_L17_002edf10(char *moby, float *horizontal_steering_input, float *vertical_steering_input) {
     char *ship_vars = *(char **)(moby + 0x78);
     float v[4];
-    float zz, dist, horizontal_boundary_radius, hi, lo, inward_heading, upper_height_limit, k, horizontal_boundary_blend_factor, heading_error;
+    float zz, predicted_horizontal_distance_from_boundary_center, horizontal_boundary_radius, hi, lo, inward_heading, upper_height_limit, k, horizontal_boundary_blend_factor, heading_error;
     scale_vector_xyz(v, ship_vars + 0x10, *(float *)(ship_vars + 0x64) * (float)scale_game_frames(0x3C));
     add_vector_xyz(v, v, moby + 0x10);
     zz = v[2];
     subtract_vector_xyz(v, v, (*(int *)(ship_vars + 0x12C) << 7) + D_L17_001600EC + 0x30);
-    dist = vector_length_xy(v);
+    predicted_horizontal_distance_from_boundary_center = vector_length_xy(v);
     horizontal_boundary_radius = vector_length_xy((*(int *)(ship_vars + 0x12C) << 7) + D_L17_001600EC);
     hi = *(float *)(D_L17_001600EC_t[*(int *)(ship_vars + 0x12C)] + 0x28);
     lo = *(float *)(D_L17_001600EC_t[*(int *)(ship_vars + 0x12C)] + 0x38);
     upper_height_limit = hi + lo;
     k = -hi + lo;
     inward_heading = fast_add_rotations(fast_arc_tan(v[0], v[1]), 3.141590118408203f);
-    if (horizontal_boundary_radius - 10.0f < dist) {
-        horizontal_boundary_blend_factor = (dist - horizontal_boundary_radius + 10.0f) / 10.0f;
+    if (horizontal_boundary_radius - 10.0f < predicted_horizontal_distance_from_boundary_center) {
+        horizontal_boundary_blend_factor = (predicted_horizontal_distance_from_boundary_center - horizontal_boundary_radius + 10.0f) / 10.0f;
         heading_error = fast_subtract_rotations(inward_heading, *(float *)(ship_vars + 0x38));
         if (horizontal_boundary_blend_factor > 1.0f)
             horizontal_boundary_blend_factor = 1.0f;
