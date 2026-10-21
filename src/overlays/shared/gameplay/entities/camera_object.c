@@ -2470,17 +2470,17 @@ unsigned char *spawn_mine(int owner, OvlQuad *pos) __asm__("FUN_L00_002a9ed0");
 unsigned char *spawn_mine(int owner, OvlQuad *pos) {
     unsigned char *mine_moby = create_moby(0x4A);
     if (mine_moby) {
-        unsigned char *v = *(unsigned char **)(mine_moby + 0x78);
+        unsigned char *mine_vars = *(unsigned char **)(mine_moby + 0x78);
         mine_moby[0x30] = 0xFF;
         *(short *)(mine_moby + 0x32) = 0x7F;
         mine_moby[0x31] = 1;
         *(float *)(mine_moby + 0x2C) = *(float *)(mine_moby + 0x2C) * 0.5f;
         mine_moby[0x20] = 0;
-        *(int *)(v + 0x30) = owner;
-        *(short *)(v + 0x36) = 0;
-        *(int *)(v + 0x78) = 0;
+        *(int *)(mine_vars + 0x30) = owner;
+        *(short *)(mine_vars + 0x36) = 0;
+        *(int *)(mine_vars + 0x78) = 0;
         qcopy(mine_moby + 0x10, pos);
-        clear_u64_value(v);
+        clear_u64_value(mine_vars);
         {
             float a =
                 FUN_002132a8_2a9ed0(D_0015ED6C_2a9ed0 * 1.0471976f, D_0015ED6C_2a9ed0 * 3.1415927f);
@@ -2488,18 +2488,18 @@ unsigned char *spawn_mine(int owner, OvlQuad *pos) {
             float b;
             int x;
             float z;
-            *(float *)(v + 0x38) = a;
+            *(float *)(mine_vars + 0x38) = a;
             b = FUN_002132a8_2a9ed0(frame_rate_scale * 1.0471976f, frame_rate_scale * 3.1415927f);
             x = D_L00_0015F5CC_2a9ed0;
             z = 0.0f;
-            *(float *)(v + 0x3C) = b;
-            *(float *)(v + 0x64) = z;
-            *(float *)(v + 0x60) = z;
-            *(float *)(v + 0x70) = z;
-            *(float *)(v + 0x6C) = z;
-            *(int *)(v + 0x5C) = x;
-            *(int *)(v + 0x74) = 0;
-            *(int *)(v + 0x68) = -1;
+            *(float *)(mine_vars + 0x3C) = b;
+            *(float *)(mine_vars + 0x64) = z;
+            *(float *)(mine_vars + 0x60) = z;
+            *(float *)(mine_vars + 0x70) = z;
+            *(float *)(mine_vars + 0x6C) = z;
+            *(int *)(mine_vars + 0x5C) = x;
+            *(int *)(mine_vars + 0x74) = 0;
+            *(int *)(mine_vars + 0x68) = -1;
             *(int *)(mine_moby + 0x94) = 0;
         }
         FUN_L00_00250df8_2a9ed0(mine_moby);
