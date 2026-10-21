@@ -935,7 +935,7 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 void metropolis_train_carriage_update(struct Moby *moby) __asm__("FUN_L03_002953f8");
 void metropolis_train_carriage_update(struct Moby *moby) {
     float position_delta[4];
-    float v[4];
+    float joint_zero_world_position[4];
     char *data;
     char *current_position;
     char *current_rotation;
@@ -952,8 +952,8 @@ void metropolis_train_carriage_update(struct Moby *moby) {
             *(short *)(data + 0x64) = 0;
             data[0x68] = 4;
             *(short *)(data + 0x7E) = 0xD;
-            moby_point_position(moby, 0, v);
-            *(float *)(data + 0xC4) = FUN_001f9b48(current_position, v);
+            moby_point_position(moby, 0, joint_zero_world_position);
+            *(float *)(data + 0xC4) = FUN_001f9b48(current_position, joint_zero_world_position);
             qcopy(previous_position, current_position);
             qcopy(previous_rotation, current_rotation);
             *(int *)(data + 0x5C) = 3;
