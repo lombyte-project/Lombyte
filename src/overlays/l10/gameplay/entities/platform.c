@@ -1598,10 +1598,10 @@ void FUN_L10_002d8d30(char *moby) {
     };
     char *spark_vars = *(char **)(moby + 0x78);
     int *path;
-    float pos[4];
+    float spark_path_position[4];
     int seg;
     float frac;
-    float len;
+    float first_path_segment_length;
     if (*(int *)spark_vars == -1) {
         func_001E9730_2da0f0(D_L10_001DD120, *(short *)(moby + 0xB2));
         delete_moby(moby);
@@ -1628,14 +1628,14 @@ void FUN_L10_002d8d30(char *moby) {
         }
         break;
     case SPARK_STATE_TRAVERSE_PATH:
-        len = distance_xyz((char *)path + 0x10, (char *)path + 0x20);
+        first_path_segment_length = distance_xyz((char *)path + 0x10, (char *)path + 0x20);
         *(float *)(spark_vars + 4) += frame_time * 5.0f;
-        func_L00_002633D8_f(*(float *)(spark_vars + 4), len, path, &seg, &frac, pos);
+        func_L00_002633D8_f(*(float *)(spark_vars + 4), first_path_segment_length, path, &seg, &frac, spark_path_position);
         if (*(int *)(spark_vars + 0xC) == -1) {
-            *(int *)(spark_vars + 0xC) = FUN_L00_0023e738(pos, 3.0f, 0.0f, 1.0f, 1.0f, 0.5f);
+            *(int *)(spark_vars + 0xC) = FUN_L00_0023e738(spark_path_position, 3.0f, 0.0f, 1.0f, 1.0f, 0.5f);
         } else {
             char *light_parameter_entry = D_L10_00180740 + *(int *)(spark_vars + 0xC) * 32;
-            qcopy(light_parameter_entry + 0x10, pos);
+            qcopy(light_parameter_entry + 0x10, spark_path_position);
             *(float *)(light_parameter_entry + 0) = 1.0f;
             *(float *)(light_parameter_entry + 0x1C) = 3.0f;
             *(float *)(light_parameter_entry + 4) = 1.0f;
@@ -1645,16 +1645,16 @@ void FUN_L10_002d8d30(char *moby) {
         if (random_integer_below(2) != 0)
             return;
         if (D_L10_0015F5CC & 1) {
-            FUN_L10_002dd270(moby, pos, path, *(float *)(spark_vars + 4), frame_time * 5.0f, len);
+            FUN_L10_002dd270(moby, spark_path_position, path, *(float *)(spark_vars + 4), frame_time * 5.0f, first_path_segment_length);
         }
         if (voice_is_playing(moby, *(int *)(spark_vars + 0x10)) == 0) {
             int voice_slot_index = trooper_play_sound(0, 0xC, moby, 0x442);
             *(int *)(spark_vars + 0x10) = voice_slot_index;
             if (voice_slot_index != -1) {
-                *(OvlQuad *)(((char *)&voice_positions) + voice_slot_index * 0x70) = *(OvlQuad *)pos;
+                *(OvlQuad *)(((char *)&voice_positions) + voice_slot_index * 0x70) = *(OvlQuad *)spark_path_position;
             }
         } else {
-            *(OvlQuad *)(((char *)&voice_positions) + *(int *)(spark_vars + 0x10) * 0x70) = *(OvlQuad *)pos;
+            *(OvlQuad *)(((char *)&voice_positions) + *(int *)(spark_vars + 0x10) * 0x70) = *(OvlQuad *)spark_path_position;
         }
         if (seg == *path - 1) {
             moby[0x20] = 0;
