@@ -1303,8 +1303,8 @@ s32 get_ammo(s32 idx) {
 }
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 /* Stores v, f and n in hero; calls 002223f8(0x65, 1) unless state is 0x65..0x67. */
-void FUN_L00_00233ee8(void *v, float f, int state_entry_option) {
-    qcopy(&hero.unk1640, v);
+void FUN_L00_00233ee8(void *source_position, float f, int state_entry_option) {
+    qcopy(&hero.unk1640, source_position);
     hero.unk1640.f[3] = f;
     hero.unk1650 = state_entry_option;
     if ((unsigned)(hero.state.current - 0x65) >= 3) {
