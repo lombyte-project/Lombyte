@@ -3528,11 +3528,11 @@ int FUN_L14_002fd918(struct Moby *moby) {
     float path_position_delta[4];
     float yaw;
     float yaw_error_factor;
-    int r;
-    r = FUN_L00_0025d808_2f05d8(D_L14_001B0BB0[*(int *)(moby_vars + 0x68)], path_target_position, moby_vars + 0x60, moby_vars + 0x64,
+    int path_boundary_reached;
+    path_boundary_reached = FUN_L00_0025d808_2f05d8(D_L14_001B0BB0[*(int *)(moby_vars + 0x68)], path_target_position, moby_vars + 0x60, moby_vars + 0x64,
                                  (unsigned int)*(int *)(moby_vars + 0x8C) >> 31,
                                  D_L14_00161F78 * D_0015ED6C_f2);
-    if (*(int *)(moby_vars + 0x8C) != 0 && (r != 0 || *(short *)(D_L14_00167500 + 0x86) != 0x13)) {
+    if (*(int *)(moby_vars + 0x8C) != 0 && (path_boundary_reached != 0 || *(short *)(D_L14_00167500 + 0x86) != 0x13)) {
         FUN_L13_00316f48(*(int *)(moby_vars + 0x90));
         if (*(int *)(moby_vars + 0x6C) != -1) {
             char *voice_entry = D_0013E550 + *(int *)(moby_vars + 0x6C) * 0x70;
