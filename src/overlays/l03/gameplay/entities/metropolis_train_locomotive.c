@@ -2026,7 +2026,7 @@ void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm_
 int FUN_L03_002c6e18(float ang, struct Moby *moby, struct Moby *target) {
     char *data = (char *)moby->pvars;
     int idx;
-    float f20;
+    float heading_delta;
     unsigned char st;
     if (*(int *)&target->rot != 0) {
         idx = *(int *)(data + 0x264);
@@ -2037,15 +2037,15 @@ int FUN_L03_002c6e18(float ang, struct Moby *moby, struct Moby *target) {
                     return 0;
             }
         }
-        f20 = fast_subtract_rotations(ang, moby->rot.z);
-        if (absolute_float(f20) >= 0.7853982f && *(unsigned char *)(data + 0x263) == 0 &&
+        heading_delta = fast_subtract_rotations(ang, moby->rot.z);
+        if (absolute_float(heading_delta) >= 0.7853982f && *(unsigned char *)(data + 0x263) == 0 &&
             moby->prev_seq != 1) {
             goto go;
         }
-        if (absolute_float(f20) > 1.5707964f) {
+        if (absolute_float(heading_delta) > 1.5707964f) {
         go:
             if (vector_distance(&moby->pos, target) < 20.0f) {
-                if (absolute_float(f20) > 1.1780972f) {
+                if (absolute_float(heading_delta) > 1.1780972f) {
                     blend_moby_animation_u(moby, 1, 0, scale_game_frames(10));
                     moby->anim_speed = 1.0f;
                 } else {
