@@ -353,22 +353,22 @@ typedef struct {
  * program. */
 void FUN_L14_002dfc58(u8 *moby) {
     u8 *base = (u8 *)&hero.motion.pos;
-    Level14Req r;
+    Level14Req hit_request;
     u8 *hero_base;
     if (is_point_inside_clip_volume(base, *(s32 *)(*(u8 **)(moby + 0x78) + 0x200)) != 0) {
-        r.flags = 0x200001;
-        r.range = 100.0f;
-        r.one = 1;
-        r.moby = moby;
-        clear_u64_value(&r);
-        r.v[2] = 1.0f;
-        r.v[3] = 5627.925f;
-        r.a = 5;
-        r.b = 4;
-        r.c = *(u16 *)(moby + 0xA6);
+        hit_request.flags = 0x200001;
+        hit_request.range = 100.0f;
+        hit_request.one = 1;
+        hit_request.moby = moby;
+        clear_u64_value(&hit_request);
+        hit_request.v[2] = 1.0f;
+        hit_request.v[3] = 5627.925f;
+        hit_request.a = 5;
+        hit_request.b = 4;
+        hit_request.c = *(u16 *)(moby + 0xA6);
         hero_base = base - 0x80;
         *(s32 *)(hero_base + 0x22A8) = 0;
-        FUN_L00_00259a88(*(s32 *)(hero_base + 0x2080), &r);
+        FUN_L00_00259a88(*(s32 *)(hero_base + 0x2080), &hit_request);
     }
 }
 /* pvars of the lift that carries a rider moby and pushes the hero off its edge */
