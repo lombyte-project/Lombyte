@@ -847,7 +847,7 @@ typedef struct {
 int FUN_001fa6d0_2730e0(float) __asm__("FUN_001fa6d0");
 unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *vel, int color, u8 life, u8 b, int mode,
                                 float scale);
-unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *vel, int color, u8 life, u8 b, int mode,
+unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *vel, int color, u8 life, u8 initial_rotation, int mode,
                                 float scale) {
     unsigned char *particle;
     float *particle_data;
@@ -869,7 +869,7 @@ unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *vel, int color, u8 life, u8
         *(int *)(particle + 4) = color;
         particle[9] = FUN_001fa6d0_2730e0(1.0f) + 0x20;
         particle[3] = 0x48;
-        particle[8] = b;
+        particle[8] = initial_rotation;
         particle[1] = 0;
         *(float *)(particle + 0xC) = scale * 210000.0f;
         particle[2] = *D_L00_001B2154;
