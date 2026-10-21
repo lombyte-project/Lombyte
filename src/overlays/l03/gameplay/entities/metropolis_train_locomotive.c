@@ -1656,7 +1656,7 @@ void robot_dog_update(char *moby) {
     int *path;
     char *activation_path;
     char *partner_moby;
-    int idx;
+    int partner_moby_index;
     float target_distance;
     float initialization_multiplier_or_desired_heading;
 
@@ -1731,8 +1731,8 @@ void robot_dog_update(char *moby) {
         break;
     case ROBOT_DOG_WAIT_FOR_PARTNER_RELEASE:
         if (random_integer_below(14) == 0) {
-            idx = data->i248;
-            if (idx == -1 || (partner_moby = D_L03_0015FFD8_c5bb8 + (idx << 8)) == 0 || ((unsigned char *)partner_moby)[0x20] == 0xFE ||
+            partner_moby_index = data->i248;
+            if (partner_moby_index == -1 || (partner_moby = D_L03_0015FFD8_c5bb8 + (partner_moby_index << 8)) == 0 || ((unsigned char *)partner_moby)[0x20] == 0xFE ||
                 ((unsigned char *)partner_moby)[0x20] == 0xFD || FUN_L03_002c6ca0((struct Moby *)partner_moby)) {
                 data->i23C = scale_game_frames((int)random_float_between(30.0f, 90.0f));
                 moby[0x20] = 4;
@@ -1799,8 +1799,8 @@ void robot_dog_update(char *moby) {
             }
         }
         if (random_integer_below(14) == 0) {
-            idx = data->i248;
-            if (idx == -1 || (partner_moby = D_L03_0015FFD8_c5bb8 + (idx << 8)) == 0 || ((unsigned char *)partner_moby)[0x20] == 0xFE ||
+            partner_moby_index = data->i248;
+            if (partner_moby_index == -1 || (partner_moby = D_L03_0015FFD8_c5bb8 + (partner_moby_index << 8)) == 0 || ((unsigned char *)partner_moby)[0x20] == 0xFE ||
                 ((unsigned char *)partner_moby)[0x20] == 0xFD || FUN_L03_002c6ca0((struct Moby *)partner_moby)) {
                 data->i270 = -1;
                 data->i23C = scale_game_frames((int)random_float_between(30.0f, 90.0f));
