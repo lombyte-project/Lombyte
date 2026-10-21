@@ -108,11 +108,11 @@ float FUN_002132a8_2715e8(float, float) __asm__("FUN_002132a8");
 float fast_cos(float) __asm__("FUN_001f9dc8");
 float fast_sin(float) __asm__("FUN_001f9de0");
 extern unsigned char *D_L00_001B2134 __attribute__((section(".data")));
-unsigned char *FUN_L00_002715e8(void *pos, int x, int color, float size, float w) {
+unsigned char *FUN_L00_002715e8(void *pos, int x, int color, float size, float size_increment) {
     unsigned char *particle = p27fe00_alloc(0x2D);
     if (particle) {
         unsigned char *particle_data;
-        float drift_angle_radians, r;
+        float drift_angle_radians, horizontal_drift_speed;
         int resolved_color;
         qcopy(particle + 0x10, pos);
         if (color == -1) {
@@ -130,11 +130,11 @@ unsigned char *FUN_L00_002715e8(void *pos, int x, int color, float size, float w
         *(short *)(particle + 0xA) = 4;
         *(float *)(particle + 0xC) = size * 210000.0f;
         drift_angle_radians = random_angle_radians();
-        r = FUN_002132a8_2715e8(0.0015f, 0.0025f);
-        *(float *)(particle_data + 0) = fast_cos(drift_angle_radians) * r;
-        *(float *)(particle_data + 4) = fast_sin(drift_angle_radians) * r;
+        horizontal_drift_speed = FUN_002132a8_2715e8(0.0015f, 0.0025f);
+        *(float *)(particle_data + 0) = fast_cos(drift_angle_radians) * horizontal_drift_speed;
+        *(float *)(particle_data + 4) = fast_sin(drift_angle_radians) * horizontal_drift_speed;
         *(int *)(particle_data + 0x14) = x;
-        *(float *)(particle_data + 0x10) = w;
+        *(float *)(particle_data + 0x10) = size_increment;
         *(int *)(particle_data + 8) = 0;
     }
     return particle;
