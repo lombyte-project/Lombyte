@@ -105,7 +105,7 @@ void FUN_L00_00245c28(void) {
         LEVEL_MODE_TIMED_BUFFER_SEQUENCE = 7
     };
     int i;
-    int v;
+    int saved_level_mode;
     int quit;
     int full;
     int one;
@@ -173,8 +173,8 @@ void FUN_L00_00245c28(void) {
         append_palette_transfer_packet();
         put_draw_buffer_large();
         snd_flush_sound_commands();
-        v = D_L00_0015F5C4;
-        switch (v) {
+        saved_level_mode = D_L00_0015F5C4;
+        switch (saved_level_mode) {
         case -1:
             register_audio_stream_callback();
             FUN_L00_001f4598();
@@ -219,7 +219,7 @@ void FUN_L00_00245c28(void) {
             FUN_L00_001f8f78();
             break;
         }
-        if (D_L00_0015F5C4 != v) {
+        if (D_L00_0015F5C4 != saved_level_mode) {
             level_timer = 0;
         } else {
             level_timer = level_timer + 1;
