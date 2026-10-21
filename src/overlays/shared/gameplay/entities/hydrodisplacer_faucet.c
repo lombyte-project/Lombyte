@@ -12,7 +12,7 @@
 extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float D_0015EE6C_d4168 __asm__("D_0015ED6C");
-char *FUN_L05_002d4168(int owner, char *pos, int arg, float initial_rotation_z, float initial_rotation_y) {
+char *FUN_L05_002d4168(int owner, char *initial_position, int arg, float initial_rotation_z, float initial_rotation_y) {
     char *moby = (char *)create_moby(0x5C3);
     if (moby != 0) {
         char *moby_vars = *(char **)(moby + 0x78);
@@ -23,7 +23,7 @@ char *FUN_L05_002d4168(int owner, char *pos, int arg, float initial_rotation_z, 
         *(float *)(moby + 0x44) = initial_rotation_y;
         moby[0x20] = 0;
         *(int *)moby_vars = owner;
-        qcopy(moby + 0x10, pos);
+        qcopy(moby + 0x10, initial_position);
         *(float *)(moby_vars + 0x10) = D_0015EE6C_d4168 * 30.0f * 0.7f;
         *(int *)(moby_vars + 8) = arg;
         *(int *)(moby_vars + 0x14) = 0;
