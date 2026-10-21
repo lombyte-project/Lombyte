@@ -631,12 +631,12 @@ void big_axebot_update(M_B7B0 *moby) {
         int tmp;
         float dmg;
         Hit_B7B0 *hit;
-        int r;
+        int hit_reaction_result;
         float ang2;
 
         dmg = 0.0f;
         hit = (Hit_B7B0 *)find_moby_hit(moby, 0x210000, 0);
-        r = hit_reaction(moby, hit, &data->hp, 0, &tmp, &dmg, 0, 4);
+        hit_reaction_result = hit_reaction(moby, hit, &data->hp, 0, &tmp, &dmg, 0, 4);
         if (hit != 0 && dmg != 0.0f && moby->state != 0) {
             if (hit->att != 0) {
                 struct Hero *h = &hero;
@@ -657,9 +657,9 @@ void big_axebot_update(M_B7B0 *moby) {
             data->fFD = 0;
             data->hp -= dmg;
             if (data->hp <= 0.0f) {
-                r = 1;
+                hit_reaction_result = 1;
             }
-            if (data->f404 != 0 && r != 1) {
+            if (data->f404 != 0 && hit_reaction_result != 1) {
                 if (data->f448 <= 0) {
                     data->f408 = -0.5235988f;
                 }
@@ -667,7 +667,7 @@ void big_axebot_update(M_B7B0 *moby) {
                 data->fB7 = 0x78;
                 trooper_anim_update(moby, (short *)data->fB0);
             } else {
-                switch (r) {
+                switch (hit_reaction_result) {
                 case BIG_AXEBOT_HIT_REACTION_NONE:
                     break;
                 case BIG_AXEBOT_HIT_REACTION_CONDITIONAL_HIT_RECOVERY:
