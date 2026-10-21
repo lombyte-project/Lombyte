@@ -587,7 +587,7 @@ void FUN_001f9a10_26a9f0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern unsigned char *D_L00_001B20AC __attribute__((section(".data")));
 void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int b18, int b19,
                       float x, float y);
-void FUN_L00_0026a9f0(void *pos, void *dir, int col, int color_endpoint, int lifetime, int b1A, int b18, int b19,
+void FUN_L00_0026a9f0(void *pos, void *dir, int col, int color_endpoint, int lifetime, int b1A, int spawn_generation, int behavior_flags,
                       float x, float y) {
     unsigned char *particle;
     unsigned char *q;
@@ -639,8 +639,8 @@ void FUN_L00_0026a9f0(void *pos, void *dir, int col, int color_endpoint, int lif
     *(float *)(q + 0x1C) = x;
     *(int *)(q + 0x10) = col;
     *(int *)(q + 0x14) = color_endpoint;
-    q[0x1A] = b18;
-    q[0x19] = b19;
+    q[0x1A] = spawn_generation;
+    q[0x19] = behavior_flags;
 }
 /* Per-tick update of a particle type 11: moves, drags, fades and kills it. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026BB18), where it is exact; names translated to the US level program. */
