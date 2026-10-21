@@ -12,11 +12,11 @@ typedef struct {
 extern S_266d60 D_0013C940_266d60 __asm__("D_0013C940");
 u32 pad_pressed_within(u32 mask, s32 n, s32 *out) __asm__("FUN_L00_00266d60");
 u32 pad_pressed_within(u32 mask, s32 n, s32 *out) {
-    s32 lim = D_0013C940_266d60.n;
+    s32 history_search_limit = D_0013C940_266d60.n;
     s32 i;
-    if (lim >= n)
-        lim = n;
-    for (i = 1; i < lim + 1; i++) {
+    if (history_search_limit >= n)
+        history_search_limit = n;
+    for (i = 1; i < history_search_limit + 1; i++) {
         s32 k = (D_0013C940_266d60.h - i + 30) % 30;
         if (D_0013C940_266d60.t[k] & mask) {
             if (out)
