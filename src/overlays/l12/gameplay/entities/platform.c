@@ -3102,7 +3102,7 @@ s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_002
 void FUN_L12_002ebca8(struct Moby *moby, int flag) {
     char *moby_vars = (char *)moby->pvars;
     float explosion_position[4];
-    float b[4];
+    float explosion_vector[4];
     unsigned char *help_message_state;
     if (find_moby_hit(moby, 0xA30000, 0) != 0) {
         if (hero.state.current != 0x32) {
@@ -3117,10 +3117,10 @@ void FUN_L12_002ebca8(struct Moby *moby, int flag) {
             }
         }
         qcopy(explosion_position, &moby->pos);
-        clear_vector(b);
+        clear_vector(explosion_vector);
         FUN_L00_00260a88(moby, 0x1F, 0x4A, 2, -1);
         *(int *)(moby_vars + 0xA4) = scale_game_frames(500);
-        spawn_explosion(moby, b, explosion_position, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, -1, 3.0f, 15.0f, 1,
+        spawn_explosion(moby, explosion_vector, explosion_position, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, -1, 3.0f, 15.0f, 1,
                          1, -1, 0);
     }
     moby->hit_slot = 0xFF;
