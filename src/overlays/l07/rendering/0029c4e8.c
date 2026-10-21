@@ -55,7 +55,7 @@ extern f32 seg_fabs(f32) __asm__("FUN_001f99c0");
    from the surface (0 when within 1% of the radius). */
 f32 FUN_L07_0029e6d8(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *a, Vec4f *b, f32 radius) {
     Vec4f w, dir, line_projection_point, lower_segment_point, upper_segment_point;
-    f32 line_projection_t, lower_segment_t, upper_segment_t, intersection_t_offset, dd, dist, e1, e2, eps;
+    f32 line_projection_t, lower_segment_t, upper_segment_t, intersection_t_offset, dd, dist, lower_surface_error, upper_surface_error, eps;
     Vec4f *upper_segment_point_ptr;
 
     seg_vec_sub(&w, a, center);
@@ -80,22 +80,22 @@ f32 FUN_L07_0029e6d8(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *a, Vec4f *b, 
             upper_segment_t = 1.0f;
         seg_vec_scale(&lower_segment_point, &dir, lower_segment_t);
         seg_vec_add(&lower_segment_point, &lower_segment_point, a);
-        e1 = seg_fabs(seg_dist(&lower_segment_point, center) - radius);
+        lower_surface_error = seg_fabs(seg_dist(&lower_segment_point, center) - radius);
         eps = radius * 0.01f;
-        if (e1 < eps)
-            e1 = 0.0f;
+        if (lower_surface_error < eps)
+            lower_surface_error = 0.0f;
         upper_segment_point_ptr = &upper_segment_point;
         seg_vec_scale(upper_segment_point_ptr, &dir, upper_segment_t);
         seg_vec_add(upper_segment_point_ptr, upper_segment_point_ptr, a);
-        e2 = seg_fabs(seg_dist(upper_segment_point_ptr, center) - radius);
-        if (e2 < eps)
-            e2 = 0.0f;
-        if (e1 < e2 || (e1 == e2 && seg_dist(&lower_segment_point, ref) < seg_dist(upper_segment_point_ptr, ref))) {
+        upper_surface_error = seg_fabs(seg_dist(upper_segment_point_ptr, center) - radius);
+        if (upper_surface_error < eps)
+            upper_surface_error = 0.0f;
+        if (lower_surface_error < upper_surface_error || (lower_surface_error == upper_surface_error && seg_dist(&lower_segment_point, ref) < seg_dist(upper_segment_point_ptr, ref))) {
             qcopy(out, &lower_segment_point);
-            dist = e1;
+            dist = lower_surface_error;
         } else {
             qcopy(out, upper_segment_point_ptr);
-            dist = e2;
+            dist = upper_surface_error;
         }
     } else {
     if (line_projection_t < 0.0f) {
