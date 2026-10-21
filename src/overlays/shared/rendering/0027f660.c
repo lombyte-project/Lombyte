@@ -131,7 +131,7 @@ extern unsigned char *D_L01_001B25D0 __attribute__((section(".data")));
 unsigned char *FUN_L01_00287158(void *spawn_position, int b, int particle_data_value, int particle_lifetime, float particle_scale, float g) {
     unsigned char *r = func_00218928_87158(0x34);
     if (r != 0) {
-        char *v = (char *)r + 0x20;
+        char *particle_data = (char *)r + 0x20;
         qcopy(r + 0x10, spawn_position);
         *(float *)(r + 0x18) += 0.05f;
         *(int *)(r + 4) = b;
@@ -142,11 +142,11 @@ unsigned char *FUN_L01_00287158(void *spawn_position, int b, int particle_data_v
         *(short *)(r + 0xA) = particle_lifetime;
         *(float *)(r + 0xC) = particle_scale * 210000.0f;
         r[8] = func_002140B0_87158(0xFF);
-        *(int *)(v + 8) = b;
-        *(int *)(v + 0xC) = particle_data_value;
-        *(float *)v = particle_scale;
-        *(float *)(v + 4) = g;
-        *(float *)(v + 0x10) = 1.0f / func_001FA888_87158(particle_lifetime);
+        *(int *)(particle_data + 8) = b;
+        *(int *)(particle_data + 0xC) = particle_data_value;
+        *(float *)particle_data = particle_scale;
+        *(float *)(particle_data + 4) = g;
+        *(float *)(particle_data + 0x10) = 1.0f / func_001FA888_87158(particle_lifetime);
     }
     return r;
 }
