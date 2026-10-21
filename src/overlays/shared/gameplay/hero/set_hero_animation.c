@@ -893,11 +893,11 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 
-void FUN_L00_002335c8(float *out, float r, float angle, float z) {
+void FUN_L00_002335c8(float *out, float radius, float angle, float z) {
     struct Hero *base;
 
-    out[0] = fast_cos(angle) * r;
-    out[1] = fast_sin(angle) * r;
+    out[0] = fast_cos(angle) * radius;
+    out[1] = fast_sin(angle) * radius;
     base = &hero;
     out[2] = z;
     transform_vector(out, out, base->unk0);
