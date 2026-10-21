@@ -1620,17 +1620,17 @@ void FUN_L00_002080b0(void) {
         ITEM_RED_BLUE_GLOW = 19,
         ITEM_BRIGHT_GRAY_PULSE_GLOW = 20
     };
-    Vec4_2080b0 v;
+    Vec4_2080b0 glow_sprite_position;
     struct Moby *item_moby;
     int i;
     int glow_channel_sample, g;
 
     if (hero.items[2].item_id == 5) {
-        struct Moby *w = hero.items[2].moby;
-        if (w != 0 && ((w->flags ^ 1) & 1)) {
+        struct Moby *glow_source_moby = hero.items[2].moby;
+        if (glow_source_moby != 0 && ((glow_source_moby->flags ^ 1) & 1)) {
             for (i = 0; i < 2; i++) {
-                moby_point_position_2080b0(w, i, &v);
-                queue_glow_sprite_2080b0(&v, 0x301EAA1E, 0.057f, 0.15f);
+                moby_point_position_2080b0(glow_source_moby, i, &glow_sprite_position);
+                queue_glow_sprite_2080b0(&glow_sprite_position, 0x301EAA1E, 0.057f, 0.15f);
             }
         }
     }
@@ -1652,12 +1652,12 @@ void FUN_L00_002080b0(void) {
         hero.items[0].glow_phase = f;
         if (0.0f < f && f < 2.26892805f) c5 = 0x280A0A0A;
         item_moby->glow_color = fast_tween_color_2080b0(item_moby->glow_color, c5, 0.07f);
-        v.q = 0;
-        v.f[0] = 0.0173452497f;
-        v.f[1] = -0.0391772911f;
-        v.f[2] = 0.0962345004f;
-        transform_vector_by_basis_2080b0(&v, &v, &item_moby->rot_row0);
-        add_vector_xyz_2080b0(&v, &v, &item_moby->pos);
+        glow_sprite_position.q = 0;
+        glow_sprite_position.f[0] = 0.0173452497f;
+        glow_sprite_position.f[1] = -0.0391772911f;
+        glow_sprite_position.f[2] = 0.0962345004f;
+        transform_vector_by_basis_2080b0(&glow_sprite_position, &glow_sprite_position, &item_moby->rot_row0);
+        add_vector_xyz_2080b0(&glow_sprite_position, &glow_sprite_position, &item_moby->pos);
         glow_channel_sample = (*(unsigned char *)&item_moby->glow_color);
         g = ((unsigned char *)&item_moby->glow_color)[1];
         fr = (float)glow_channel_sample;
@@ -1669,7 +1669,7 @@ void FUN_L00_002080b0(void) {
         g <<= 8;
         col |= g;
         col |= x1;
-        queue_glow_sprite_2080b0(&v, col, 0.15f, 0.1f);
+        queue_glow_sprite_2080b0(&glow_sprite_position, col, 0.15f, 0.1f);
         break;
     }
     case ITEM_SINE_RED_GREEN_GLOW:
@@ -1697,8 +1697,8 @@ void FUN_L00_002080b0(void) {
             sprite_alpha = hero.items[0].unk20 - scale_game_frames_2080b0(50);
             if (sprite_alpha > 32) sprite_alpha = 32;
             col = (sprite_alpha << 24) | bs | gs | r;
-            moby_point_position_2080b0(item_moby, 1, &v);
-            queue_glow_sprite_2080b0(&v, col, 0.15f, 0.04f);
+            moby_point_position_2080b0(item_moby, 1, &glow_sprite_position);
+            queue_glow_sprite_2080b0(&glow_sprite_position, col, 0.15f, 0.04f);
         }
         break;
     case ITEM_RED_BLUE_GLOW: {
@@ -1733,12 +1733,12 @@ void FUN_L00_002080b0(void) {
         hero.items[0].glow_phase = f;
         if (0.0f < f && f < 2.44346094f) c5 = 0xA0A0A;
         item_moby->glow_color = fast_tween_color_2080b0(item_moby->glow_color, c5, 0.07f);
-        v.q = 0;
-        v.f[0] = 0.0171042103f;
-        v.f[1] = -0.0939194188f;
-        v.f[2] = 0.140954122f;
-        transform_vector_by_basis_2080b0(&v, &v, &item_moby->rot_row0);
-        add_vector_xyz_2080b0(&v, &v, &item_moby->pos);
+        glow_sprite_position.q = 0;
+        glow_sprite_position.f[0] = 0.0171042103f;
+        glow_sprite_position.f[1] = -0.0939194188f;
+        glow_sprite_position.f[2] = 0.140954122f;
+        transform_vector_by_basis_2080b0(&glow_sprite_position, &glow_sprite_position, &item_moby->rot_row0);
+        add_vector_xyz_2080b0(&glow_sprite_position, &glow_sprite_position, &item_moby->pos);
         glow_channel_sample = (*(unsigned char *)&item_moby->glow_color);
         g = ((unsigned char *)&item_moby->glow_color)[1];
         fr = (float)glow_channel_sample;
@@ -1750,7 +1750,7 @@ void FUN_L00_002080b0(void) {
         g <<= 8;
         col |= g;
         col |= x1;
-        queue_glow_sprite_2080b0(&v, col, 0.17f, 0.1f);
+        queue_glow_sprite_2080b0(&glow_sprite_position, col, 0.17f, 0.1f);
         break;
     }
     case ITEM_RED_GREEN_GLOW: {
@@ -1760,8 +1760,8 @@ void FUN_L00_002080b0(void) {
         hero.items[0].glow_phase = f;
         if (0.0f < f && f < 2.09439516f) c5 = 0x281414D2;
         item_moby->glow_color = fast_tween_color_2080b0(item_moby->glow_color, c5, frame_scale * 0.05f);
-        moby_point_position_2080b0(item_moby, 0, &v);
-        queue_glow_sprite_2080b0(&v, item_moby->glow_color, 0.1f, 0.03f);
+        moby_point_position_2080b0(item_moby, 0, &glow_sprite_position);
+        queue_glow_sprite_2080b0(&glow_sprite_position, item_moby->glow_color, 0.1f, 0.03f);
         break;
     }
     }
