@@ -559,9 +559,9 @@ char *FUN_L00_0020d8f8(float range_limit, float reference_yaw, float angular_err
         float *candidate_eligibility_value = FUN_002141f8_20d8f8(candidate_moby);
         if (candidate_eligibility_value != 0 && *candidate_eligibility_value != 0.0f && (*(unsigned short *)(candidate_moby + 0x34) & 0x1000)) {
             int out;
-            float dist = FUN_L00_0020d6b0(candidate_moby, reference_yaw, range_limit, angular_error_limit, elevation_angle_limit, &out);
-            if (out == 0 && dist < bd) {
-                bd = dist;
+            float candidate_score = FUN_L00_0020d6b0(candidate_moby, reference_yaw, range_limit, angular_error_limit, elevation_angle_limit, &out);
+            if (out == 0 && candidate_score < bd) {
+                bd = candidate_score;
                 best = candidate_moby;
             }
         }
