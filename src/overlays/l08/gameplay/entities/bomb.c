@@ -2254,7 +2254,7 @@ void FUN_L08_002dc7f0(struct Moby *moby) {
 /* Spawns a moby of class 0x1A9 at a position, with a random spin and a heading from a vector. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DDC18), where it is exact; names translated to the US level program. */
 
-char *FUN_L08_002dc8a0(char *src, char *pos, char *vec) {
+char *FUN_L08_002dc8a0(char *src, char *pos, char *initial_velocity) {
     char *moby = func_0020D348_m(0x1A9);
     char *data;
     if (moby) {
@@ -2268,9 +2268,9 @@ char *FUN_L08_002dc8a0(char *src, char *pos, char *vec) {
         *(float *)(data + 0x1C) = 1.0f;
         *(int *)(data + 0x14) = 0;
         qcopy(moby + 0x10, pos);
-        qcopy(data, vec);
+        qcopy(data, initial_velocity);
         *(float *)(moby + 0x40) = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD;
-        *(float *)(moby + 0x48) = fast_arc_tan(*(float *)vec, *(float *)(vec + 4)) + 1.5707964f;
+        *(float *)(moby + 0x48) = fast_arc_tan(*(float *)initial_velocity, *(float *)(initial_velocity + 4)) + 1.5707964f;
         FUN_L00_00250df8(moby);
     }
     return moby;
