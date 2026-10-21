@@ -327,17 +327,17 @@ typedef struct {
 
 void FUN_L00_00232320(void) {
     struct Hero *base = &hero;
-    AnimState *obj = ((AnimState *)base->unk2278);
+    AnimState *animation_sync_target = ((AnimState *)base->unk2278);
 
-    if (obj == 0) {
+    if (animation_sync_target == 0) {
         return;
     }
-    obj->f5C = base->unkA94;
-    obj->f54 = *(float *)(((char *)base->moby) + 0x54);
-    obj->seq[0] = *(unsigned char *)(((char *)base->moby) + 0x51);
-    obj->seq[1] = *(unsigned char *)(((char *)base->moby) + 0x51);
-    obj->id[0] = obj->model->banks[obj->bank[0]]->ids[obj->seq[0]];
-    obj->id[1] = obj->model->banks[obj->bank[1]]->ids[obj->seq[1]];
+    animation_sync_target->f5C = base->unkA94;
+    animation_sync_target->f54 = *(float *)(((char *)base->moby) + 0x54);
+    animation_sync_target->seq[0] = *(unsigned char *)(((char *)base->moby) + 0x51);
+    animation_sync_target->seq[1] = *(unsigned char *)(((char *)base->moby) + 0x51);
+    animation_sync_target->id[0] = animation_sync_target->model->banks[animation_sync_target->bank[0]]->ids[animation_sync_target->seq[0]];
+    animation_sync_target->id[1] = animation_sync_target->model->banks[animation_sync_target->bank[1]]->ids[animation_sync_target->seq[1]];
 }
 #include "qcopy.h"
 
