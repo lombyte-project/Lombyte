@@ -2303,7 +2303,7 @@ void FUN_L00_001ff660_x(void *, void *, void *) __asm__("FUN_L00_001ff660");
 void FUN_L00_00267a08_x(O_26e670_26e670 *) __asm__("FUN_L00_00267a08");
 
 void FUN_L00_0026e670(O_26e670_26e670 *particle) {
-    V_26e670_26e670 next_position, u, acc, w;
+    V_26e670_26e670 next_position, position_displacement, acc, projected_next_position;
     P_26e670_26e670 *P = &particle->p;
 
     if ((P->h1E ^ 1) & 1) {
@@ -2363,21 +2363,21 @@ void FUN_L00_0026e670(O_26e670_26e670 *particle) {
         FUN_001f9a28_x(&acc, &P->tgt->pos, &D_L00_00166DC0_26e670);
         FUN_001f9d20_x(&acc, &acc, (u8 *)&D_L00_00166DC0_26e670 - 0x80);
         FUN_001f9a68_x(&acc, &acc, 1.0f / acc.f[3]);
-        FUN_001f9a28_x(&w, &next_position, &D_L00_00166DC0_26e670);
-        FUN_001f9d20_x(&w, &w, (u8 *)&D_L00_00166DC0_26e670 - 0x80);
-        FUN_001f9a68_x(&w, &w, 1.0f / w.f[3]);
-        FUN_001f9a28_x(&acc, &acc, &w);
+        FUN_001f9a28_x(&projected_next_position, &next_position, &D_L00_00166DC0_26e670);
+        FUN_001f9d20_x(&projected_next_position, &projected_next_position, (u8 *)&D_L00_00166DC0_26e670 - 0x80);
+        FUN_001f9a68_x(&projected_next_position, &projected_next_position, 1.0f / projected_next_position.f[3]);
+        FUN_001f9a28_x(&acc, &acc, &projected_next_position);
         particle->b08 = FUN_001fa6d0_x(FUN_001f9e90_x(acc.f[0], acc.f[1]) * 128.0f / 3.1415927f) - 0x20;
         if (P->h1C) {
             FUN_L00_001ff660_x(P, P, &D_L00_00173E80_26e670);
             FUN_001f9a68_x(P, P, 0.95f);
         } else {
-            FUN_001f9a28_x(&u, &next_position, &particle->pos);
-            FUN_001f9a10_x(P, P, &u);
+            FUN_001f9a28_x(&position_displacement, &next_position, &particle->pos);
+            FUN_001f9a10_x(P, P, &position_displacement);
             FUN_001f9a68_x(P, P, 0.5f);
         }
-        FUN_001f9a28_x(&u, &next_position, &particle->pos);
-        FUN_001f9a10_x(P, P, &u);
+        FUN_001f9a28_x(&position_displacement, &next_position, &particle->pos);
+        FUN_001f9a10_x(P, P, &position_displacement);
         FUN_001f9a68_x(P, P, 0.5f);
     }
     qcopy(&particle->pos, &next_position);
