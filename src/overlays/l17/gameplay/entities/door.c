@@ -3001,7 +3001,7 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 
 void FUN_L17_002f00a0(struct Moby *moby) {
     AimData_1BB0 *moby_vars = (AimData_1BB0 *)moby->pvars;
-    float accel = 0.02f;
+    float aim_joint_smoothing_factor = 0.02f;
     float speed = 0.3f;
     float aim_origin[4];
     float aim_delta[4];
@@ -3024,7 +3024,7 @@ void FUN_L17_002f00a0(struct Moby *moby) {
     }
     moby_vars->part.pitch = pitch;
     moby_vars->part.yaw = yaw;
-    update_joint_animation(moby, (char *)&moby_vars->part, 0, accel * frame_scale_sq, speed * frame_scale_sq);
+    update_joint_animation(moby, (char *)&moby_vars->part, 0, aim_joint_smoothing_factor * frame_scale_sq, speed * frame_scale_sq);
 }
 
 #define NOT_SDA
