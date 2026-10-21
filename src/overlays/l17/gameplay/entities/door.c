@@ -3422,7 +3422,7 @@ void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 void FUN_L17_002f10c8(struct Moby *moby) {
     unsigned int i = 0;
-    unsigned int off = 0;
+    unsigned int output_vertex_byte_offset = 0;
     RingVars *data = (RingVars *)moby->pvars;
     unsigned int uv_vertex_index;
     int j;
@@ -3457,11 +3457,11 @@ void FUN_L17_002f10c8(struct Moby *moby) {
         float w = wrap_angle(radial_phase_input * 6.2831855f / D_L17_00162380);
         float z = fast_sin(fast_add_rotations(w, data->angle));
         output_vertex[0] = template_vertex[0] + moby->pos.x;
-        *(float *)((char *)D_L17_001DDBA0 + 4 + off) = template_vertex[1] + moby->pos.y;
+        *(float *)((char *)D_L17_001DDBA0 + 4 + output_vertex_byte_offset) = template_vertex[1] + moby->pos.y;
         output_vertex[2] = template_vertex[2] + moby->pos.z + D_L17_00162388 * z;
         D_L17_001DDF28[i] = color;
         i++;
-        off += 12;
+        output_vertex_byte_offset += 12;
         output_vertex += 3;
     } while (i < 45);
     for (j = 0; j < 2; j++) {
