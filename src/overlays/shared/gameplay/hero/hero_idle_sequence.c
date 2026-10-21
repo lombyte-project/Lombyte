@@ -1042,14 +1042,14 @@ void FUN_L00_00206e00(void) {
     input_history[*(int *)(history_owner + 0x21D4)] = input_token;
     *(int *)(history_owner + 0x21D4) += 1;
     for (i = 0; i < 12; i++) {
-        char *g2 = (char *)&hero;
-        unsigned char *b = (unsigned char *)g2 + 0x21C4;
+        char *hero_history_owner = (char *)&hero;
+        unsigned char *b = (unsigned char *)hero_history_owner + 0x21C4;
         int sequence_length = 0;
         int j;
         int k;
         while (D_L00_00179700[sequence_length + i * 16] != 0) sequence_length++;
         if (sequence_length == 0) continue;
-        k = *(int *)(g2 + 0x21D4) - sequence_length;
+        k = *(int *)(hero_history_owner + 0x21D4) - sequence_length;
         if (k < 0) k += 16;
         for (j = 0; j < sequence_length; j++) {
             if (*(unsigned char *)(k + (int)b) != D_L00_00179700[j + i * 16]) {
