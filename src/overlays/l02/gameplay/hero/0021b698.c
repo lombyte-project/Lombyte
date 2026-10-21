@@ -151,14 +151,14 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 #define G hero
 
 extern OvlMobyEntry40 D_L02_00178700[];
-s32 FUN_L02_0021ff70(s32 arg) {
+s32 FUN_L02_0021ff70(s32 apply_hurt_response) {
     u8 *hero_moby;
     OvlMobyEntry40 *tbl;
     u8 *mob;
     s32 flag;
     s32 id;
-    f32 planar_impulse_scale, b, cached_frame_time;
-    OvlVec4 v;
+    f32 planar_impulse_scale, vertical_impulse_scale, cached_frame_time;
+    OvlVec4 hurt_impulse;
 
     if (G.state.control_mode == 0x14) {
         return 0;
@@ -190,22 +190,22 @@ s32 FUN_L02_0021ff70(s32 arg) {
     D_0013DF88[D_0015ED84_8]++;
     G.unk2280 = (struct Moby *)tbl->target;
     D_0015EEA8++;
-    if (arg == 0) {
+    if (apply_hurt_response == 0) {
         return 1;
     }
     FUN_L00_00206c08_8();
     flag = 0;
     if (tbl->flags & 1) {
-        qcopy(&v, &tbl->pos);
+        qcopy(&hurt_impulse, &tbl->pos);
         if (*(f32 *)((u8 *)tbl + 0x1C) == 5627.9248046875f) {
             flag = 1;
         }
     } else if (tbl->target != 0) {
-        FUN_001f9a28_8(&v, (u8 *)&G + 0x80, tbl->target + 0x10);
+        FUN_001f9a28_8(&hurt_impulse, (u8 *)&G + 0x80, tbl->target + 0x10);
     } else {
-        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
-        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
-        v.i[2] = 0;
+        hurt_impulse.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
+        hurt_impulse.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
+        hurt_impulse.i[2] = 0;
     }
     switch (G.vehicle_mode) {
     case HERO_VEHICLE_MODE_ON_FOOT:
@@ -224,23 +224,23 @@ s32 FUN_L02_0021ff70(s32 arg) {
         hero_set_state(HERO_STATE_HURT, 1);
         cached_frame_time = frame_time;
         planar_impulse_scale = cached_frame_time * 5.7f;
-        b = cached_frame_time * 2.4f;
+        vertical_impulse_scale = cached_frame_time * 2.4f;
         if (G.unk12E7 != 0) {
             planar_impulse_scale = 0.0f;
-            b = cached_frame_time * 1.7f;
+            vertical_impulse_scale = cached_frame_time * 1.7f;
         }
-        FUN_L00_00210c80_8(&v, flag, planar_impulse_scale, b);
+        FUN_L00_00210c80_8(&hurt_impulse, flag, planar_impulse_scale, vertical_impulse_scale);
         if (flag != 0 && tbl->unk28 == 4) {
-            v.f[2] += v.f[2];
+            hurt_impulse.f[2] += hurt_impulse.f[2];
         }
         break;
     case 3:
         hero_set_state(0x56, 1);
-        FUN_L00_00210c80_8(&v, flag, frame_time * 5.0f, frame_time * 2.4f);
+        FUN_L00_00210c80_8(&hurt_impulse, flag, frame_time * 5.0f, frame_time * 2.4f);
         break;
     }
-    FUN_001f9a10_8(&hero.motion.velocity, &hero.motion.velocity, &v);
-    FUN_001f9a10_8(&hero.motion.displacement, &hero.motion.displacement, &v);
+    FUN_001f9a10_8(&hero.motion.velocity, &hero.motion.velocity, &hurt_impulse);
+    FUN_001f9a10_8(&hero.motion.displacement, &hero.motion.displacement, &hurt_impulse);
     return 1;
 }
 #include "qcopy.h"
