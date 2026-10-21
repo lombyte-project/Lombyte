@@ -430,7 +430,7 @@ char *FUN_L09_002ea528(struct Moby *owner, float *inherited_velocity) {
         char *spawned_moby_vars = *(char **)(moby + 0x78);
         char *owner_vars = (char *)owner->pvars;
         char *dv;
-        float len;
+        float reference_position_distance;
         *(float *)spawned_moby_vars = random_float_between(-2.0f, 2.0f);
         *(float *)(spawned_moby_vars + 4) = random_float_between(-2.0f, 2.0f);
         *(float *)(spawned_moby_vars + 8) = random_float_between(-2.0f, 2.0f);
@@ -452,11 +452,11 @@ char *FUN_L09_002ea528(struct Moby *owner, float *inherited_velocity) {
         *(float *)(spawned_moby_vars + 0x40) = random_float_between(-0.05235988f, 0.05235988f);
         *(float *)(spawned_moby_vars + 0x44) = random_float_between(-0.05235988f, 0.05235988f);
         subtract_vector_xyz(moby + 0x10, dv, D_L09_00166F40);
-        len = vector_length_xyz(moby + 0x10);
-        if (100.0f < len) {
+        reference_position_distance = vector_length_xyz(moby + 0x10);
+        if (100.0f < reference_position_distance) {
             normalize_vector_xyz(moby + 0x10, moby + 0x10, 100.0f);
             add_vector_xyz(moby + 0x10, moby + 0x10, D_L09_00166F40);
-            *(float *)(moby + 0x2C) = *(float *)(spawned_moby_vars + 0x50) * (100.0f / len);
+            *(float *)(moby + 0x2C) = *(float *)(spawned_moby_vars + 0x50) * (100.0f / reference_position_distance);
         } else {
             qcopy(moby + 0x10, dv);
             *(float *)(moby + 0x2C) = *(float *)(spawned_moby_vars + 0x50);
