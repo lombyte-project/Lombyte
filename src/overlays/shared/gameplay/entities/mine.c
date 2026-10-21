@@ -970,7 +970,7 @@ void FUN_L00_00250df8_2ac910(void *) __asm__("FUN_L00_00250df8");
 /* Spawns a particle moby with a random rotation, owned by `owner`, at `pos` with velocity `vel`, tinted red/green/blue
    and living `lifetime` frames; returns the new moby or NULL. */
 unsigned char *spawn_glow_particle(void *owner, void *pos, void *vel, int lifetime, int red, int green, int blue, int alpha, float scale) __asm__("FUN_L00_002ac910");
-unsigned char *spawn_glow_particle(void *owner, void *pos, void *vel, int lifetime, int red, int green, int blue, int alpha, float scale) {
+unsigned char *spawn_glow_particle(void *owner, void *spawn_position, void *initial_velocity, int lifetime, int red, int green, int blue, int alpha, float scale) {
     unsigned char *moby;
     red &= 0xFF; green &= 0xFF; blue &= 0xFF; alpha &= 0xFF;
     moby = FUN_0020c4f8_2ac910(0x70);
@@ -992,8 +992,8 @@ unsigned char *spawn_glow_particle(void *owner, void *pos, void *vel, int lifeti
         data->f18 = *(float *)(moby + 0x2C) * scale;
         *(int *)(moby + 0x2C) = 0;
         data->o = owner;
-        qcopy(moby + 0x10, pos);
-        qcopy(data, vel);
+        qcopy(moby + 0x10, spawn_position);
+        qcopy(data, initial_velocity);
         qcopy(moby + 0x40, &rot_copy);
         data->n = lifetime;
         data->h1c = *(unsigned short *)&data->n - FUN_001f96f8_2ac910(4);
