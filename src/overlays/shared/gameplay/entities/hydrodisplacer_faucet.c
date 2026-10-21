@@ -297,14 +297,14 @@ void hoverboard_update(unsigned char *moby) {
     float delta[4], position[4], effect_position[4], offset[4], second_position[4];
     float angle, distance_scale, delta_length;
     int state = (u8)moby[0x20];
-    struct Hero *g;
+    struct Hero *player_hero;
 
     switch (state) {
     case HOVERBOARD_STATE_WAIT_FOR_PLAYER_APPROACH: {
-        char *pos = D_0013F3D0;
+        char *player_position = D_0013F3D0;
         struct Hero *player;
-        if (distance_xyz(pos, moby + 0x10) < 5.5f && frame_number_gp > 3 &&
-            (player = (struct Hero *)(pos - 0x80))->state.control_mode != 0x15 &&
+        if (distance_xyz(player_position, moby + 0x10) < 5.5f && frame_number_gp > 3 &&
+            (player = (struct Hero *)(player_position - 0x80))->state.control_mode != 0x15 &&
             player->state.control_mode != 0x16) {
             player->unk86C = moby;
             FUN_L05_0024cee8(0x6b, 1);
@@ -319,7 +319,7 @@ void hoverboard_update(unsigned char *moby) {
     case HOVERBOARD_STATE_WAIT_FOR_CONTROL_MODE_EXIT:
         if (*(int *)(data + 0x50) == 0 && alternate_item_available[0] != 0 &&
             D_00141938 == 0 && D_L05_0015F6A8 != 0 &&
-            (g = &hero, scale_game_frames(0x4b0) < g->unk19C) &&
+            (player_hero = &hero, scale_game_frames(0x4b0) < player_hero->unk19C) &&
             D_00141C60 == 0) {
             play_sound(0x138f, 0x5f);
         }
