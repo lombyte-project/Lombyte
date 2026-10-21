@@ -1620,15 +1620,15 @@ void follow_camera_reset(char *o) __asm__("FUN_L00_002e4430");
 void follow_camera_reset(char *camera) {
     V4_2e4430 target_position, target_up_projection, b;
     char *g = D_L00_00166E10_002e4430;
-    char *g30 = g + 0x30;
+    char *camera_up_axis = g + 0x30;
     char *camera_state = *(char **)(camera + 0x70);
     char *attach_state, *r;
     FUN_L00_002e42c0_002e4430(target_position, 0);
     attach_state = camera_state + 0x40;
     r = camera_state + 0x130;
     {
-        float x = fast_vec_dot(target_position, g30);
-        FUN_001f9a68_002e4430(target_up_projection, g30, x);
+        float x = fast_vec_dot(target_position, camera_up_axis);
+        FUN_001f9a68_002e4430(target_up_projection, camera_up_axis, x);
     }
     FUN_001f9a28_002e4430(attach_state, target_position, target_up_projection);
     qcopy(camera_state + 0x50, target_up_projection);
