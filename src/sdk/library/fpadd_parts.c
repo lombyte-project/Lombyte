@@ -88,13 +88,13 @@ FpNumber *_fpadd_parts(FpNumber *left_operand, FpNumber *right_operand, FpNumber
     b_fraction = right_operand->fraction;
 
     {
-        s32 diff;
+        s32 exponent_difference;
 
-        diff = a_normal_exp - b_normal_exp;
-        if (diff < 0) {
-            diff = -diff;
+        exponent_difference = a_normal_exp - b_normal_exp;
+        if (exponent_difference < 0) {
+            exponent_difference = -exponent_difference;
         }
-        if (diff < 64) {
+        if (exponent_difference < 64) {
             while (a_normal_exp > b_normal_exp) {
                 b_normal_exp++;
                 LSHIFT(b_fraction);
