@@ -1684,13 +1684,13 @@ void FUN_L01_002eda00(char *moby) {
         BURST_AND_REMOVE = 2
     };
     char *moby_vars = *(char **)(moby + 0x78);
-    float prev[4];
+    float previous_position[4];
     float z[4];
     Hit_2eedd8 hit_descriptor;
     float gz;
     switch (((unsigned char *)moby)[0x20]) {
     case MOVE_UNTIL_COLLISION_OR_TIMEOUT:
-        qcopy(prev, moby + 0x10);
+        qcopy(previous_position, moby + 0x10);
         add_vector_xyz(moby + 0x10, moby + 0x10, moby_vars);
         *(float *)(moby + 0x48) = fast_arc_tan(*(float *)(moby_vars + 0), *(float *)(moby_vars + 4));
         clear_vector(z);
@@ -1709,7 +1709,7 @@ void FUN_L01_002eda00(char *moby) {
         } else {
             *(float *)(moby_vars + 8) -= frame_time_sq * 10.8f;
         }
-        if (collision_line(moby + 0x10, prev, 0, *(int *)(moby_vars + 0x10), 0) != 0) {
+        if (collision_line(moby + 0x10, previous_position, 0, *(int *)(moby_vars + 0x10), 0) != 0) {
             char *collision_result = D_L01_00174340_c;
             if (*(int *)(collision_result + 0x18) != 0) {
                 make_hit_descriptor(&hit_descriptor, moby, 0x10001, 1.0f, moby_vars);
