@@ -1289,10 +1289,10 @@ void green_mushroom_update(SparkMoby *mushroom_moby) {
     SparkHit *hit;
     s32 flag;
     s32 i;
-    f32 ang;
+    f32 fragment_placement_angle;
     f32 scale_ratio;
     SparkVec fragment_spawn_position;
-    SparkVec rot;
+    SparkVec fragment_rotation;
 
     flag = 0;
     hit = trooper_find_hit(mushroom_moby, 0x10000, 0);
@@ -1313,15 +1313,15 @@ void green_mushroom_update(SparkMoby *mushroom_moby) {
         FUN_L01_002787a0(mushroom_moby);
         scale_ratio = mushroom_moby->scale / mushroom_moby->pclass->radius;
         for (i = 0; i < 4; i++) {
-            ang = (f32)i * 1.5707964f;
-            clear_u64_value(&rot);
-            rot.z = fast_add_rotations(ang, 0.87266463f);
-            fragment_spawn_position.x = fast_cos(ang) * -0.57f * scale_ratio;
-            fragment_spawn_position.y = fast_sin(ang) * -0.57f * scale_ratio;
+            fragment_placement_angle = (f32)i * 1.5707964f;
+            clear_u64_value(&fragment_rotation);
+            fragment_rotation.z = fast_add_rotations(fragment_placement_angle, 0.87266463f);
+            fragment_spawn_position.x = fast_cos(fragment_placement_angle) * -0.57f * scale_ratio;
+            fragment_spawn_position.y = fast_sin(fragment_placement_angle) * -0.57f * scale_ratio;
             fragment_spawn_position.z = 0.0f;
             fast_vec_add(&fragment_spawn_position, &fragment_spawn_position, &mushroom_moby->pos);
             fragment_spawn_position.z += scale_ratio * 1.2f;
-            FUN_L00_00263fd8(mushroom_moby, 0x719, &fragment_spawn_position, &rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f,
+            FUN_L00_00263fd8(mushroom_moby, 0x719, &fragment_spawn_position, &fragment_rotation, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f,
                              &D_L01_0015F580);
         }
         FUN_L01_00278e20(mushroom_moby, 0x718);
