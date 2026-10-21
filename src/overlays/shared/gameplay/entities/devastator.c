@@ -2719,15 +2719,15 @@ void FUN_L00_002b7398(void *arg) {
     E8690 *effect_slot;
     unsigned short av;
     int i;
-    int r;
+    int effect_lifetime_frames;
     if (D_L00_001614CC != 0) {
         for (i = 9; i >= 0; i--)
             D_L00_001DB440[i].c = 0;
         D_L00_001614CC = 0;
         D_L00_001614D0 = 0;
-        r = f_to_int(D_L00_001614B4 / (D_L00_001614B8 * frame_time));
-        D_L00_001614D8 = r;
-        D_L00_001614DC = 1.0f / convert_integer_to_float(r);
+        effect_lifetime_frames = f_to_int(D_L00_001614B4 / (D_L00_001614B8 * frame_time));
+        D_L00_001614D8 = effect_lifetime_frames;
+        D_L00_001614DC = 1.0f / convert_integer_to_float(effect_lifetime_frames);
     }
     if (D_L00_001614D4 == 0) {
         if (tick_countdown_32(&D_L00_001614D0) != 0) {
