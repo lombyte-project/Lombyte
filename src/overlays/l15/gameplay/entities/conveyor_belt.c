@@ -915,8 +915,8 @@ char *FUN_L15_002eb9e0(char *pos, char *vec) {
 extern int D_L15_001ABE40[];
 extern int D_L15_0015FFD8;
 
-void FUN_L15_002ebf28(int idx, int show) {
-    short *moby_index_entry = (short *)D_L15_001ABE40[idx];
+void FUN_L15_002ebf28(int moby_list_index, int show) {
+    short *moby_index_entry = (short *)D_L15_001ABE40[moby_list_index];
     if (moby_index_entry == 0)
         return;
     while (1) {
