@@ -2349,11 +2349,11 @@ void fighter_jet_update(char *moby) {
         *(float *)(data + 0x174) = *(float *)(data + 0xFC);
     }
     {
-        float dist = distance_xyz(moby + 0x10, D_L01_00167240);
+        float camera_distance = distance_xyz(moby + 0x10, D_L01_00167240);
         float min_scale = *(float *)&D_L01_00161AF4;
         float near_dist = *(float *)&D_L01_00161AFC;
         float slope = -((1.0f - min_scale) / (*(float *)&D_L01_00161AF8 - near_dist));
-        speed_scale = slope * dist + (1.0f - slope * near_dist);
+        speed_scale = slope * camera_distance + (1.0f - slope * near_dist);
         if (1.0f < speed_scale) speed_scale = 1.0f;
         if (speed_scale < min_scale) speed_scale = min_scale;
     }
