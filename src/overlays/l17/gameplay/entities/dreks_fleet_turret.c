@@ -684,7 +684,7 @@ void FUN_L17_002d77f0(char *moby) {
     float *ring_vars;
     float len;
     float g;
-    float f21;
+    float elevation_angle_offset;
     float f20;
     int particle_lifetime;
     char *w;
@@ -726,7 +726,7 @@ void FUN_L17_002d77f0(char *moby) {
             do {
                 j = 0;
                 do {
-                    f21 = wrap_angle(*(float *)&D_L17_00161B80_gp * DEG_TO_RAD *
+                    elevation_angle_offset = wrap_angle(*(float *)&D_L17_00161B80_gp * DEG_TO_RAD *
                                      convert_integer_to_float(j) * 0.5f) -
                           *(float *)&D_L17_00161B80_gp * DEG_TO_RAD;
                     g = *(float *)&D_L17_00161B7C * DEG_TO_RAD;
@@ -735,7 +735,7 @@ void FUN_L17_002d77f0(char *moby) {
                         fast_add_rotations(
                             fast_add_rotations(g,
                                                wrap_angle(convert_integer_to_float(i) * 2.0943952f)),
-                            f21));
+                            elevation_angle_offset));
                     transform_vector(spC0, spC0, mat2);
                     FUN_L00_001ff290(spD0, spC0, (moby + 0x10));
                     if (FUN_001f9b48((moby + 0x10), &hero.motion.pos) < 30.0f) {
