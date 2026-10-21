@@ -120,7 +120,7 @@ void FUN_L00_00235ad8(HudElem *hud_element, int *x, int *y, int slide_index, int
 void FUN_L00_00235c80(HudElem *hud_element) {
     int *value = hud_element->unk0C;
     int digits;
-    int v, flags, width;
+    int decimal_quotient, flags, width;
     if (value && !((int)value & 3)) {
         hud_element->unk78 = *value;
         if (hud_element->unk08 < hud_element->unk78)
@@ -130,12 +130,12 @@ void FUN_L00_00235c80(HudElem *hud_element) {
         hud_element->unk78 = 99999;
         hud_element->unk74 = 99999;
     }
-    v = hud_element->unk08;
+    decimal_quotient = hud_element->unk08;
     digits = 0;
     flags = hud_element->flags;
     width = hud_element->h;
-    while (v >= 10) {
-        v /= 10;
+    while (decimal_quotient >= 10) {
+        decimal_quotient /= 10;
         digits++;
     }
     if (!(flags & 3) && (flags & 12)) {
