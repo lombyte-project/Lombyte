@@ -915,7 +915,7 @@ int FUN_001f96f8_26b790(int) __asm__("FUN_001f96f8");
 int FUN_00213260_26b790(int) __asm__("FUN_00213260");
 float FUN_002132a8_26b790(float, float) __asm__("FUN_002132a8");
 extern unsigned char *D_L00_001B20B4 __attribute__((section(".data")));
-unsigned char *FUN_L00_0026b790(void *pos, int spd, int color, float j, float lo, float hi, float w,
+unsigned char *FUN_L00_0026b790(void *pos, int spd, int color, float j, float lo, float hi, float vertical_position_step,
                                 float size) {
     unsigned char *particle = FUN_L00_002678b8_26b790(0xD);
     if (particle) {
@@ -941,7 +941,7 @@ unsigned char *FUN_L00_0026b790(void *pos, int spd, int color, float j, float lo
         }
         *(int *)(particle_data + 0x14) = color & 0xFFFFFF;
         *(float *)(particle_data + 0xC) = FUN_002132a8_26b790(lo, hi);
-        *(float *)(particle_data + 0x10) = w;
+        *(float *)(particle_data + 0x10) = vertical_position_step;
     }
     return particle;
 }
