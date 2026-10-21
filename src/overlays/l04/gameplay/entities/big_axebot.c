@@ -1728,12 +1728,12 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         }
     }
     if (moby->state != 0 && data->f2E != 1) {
-        int idx = data->f238;
-        if (idx != -1) {
-            char *e = (char *)((char *)&D_0013E550) + idx * 0x70;
+        int engine_voice_index = data->f238;
+        if (engine_voice_index != -1) {
+            char *e = (char *)((char *)&D_0013E550) + engine_voice_index * 0x70;
             if (*(M_35F0 **)(e + 0x88) == moby) {
                 if (*(unsigned char *)(e + 0x74) != 0) {
-                    release_voice_slot(idx);
+                    release_voice_slot(engine_voice_index);
                 }
             }
         }
@@ -2051,7 +2051,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         V4_35F0 np;
         float ang = fast_arc_tan(dest[0] - moby->pos[0], dest[1] - moby->pos[1]);
         int anim = moby->f53;
-        I4_35F0 tbl = D_L04_001618A0;
+        I4_35F0 movement_animation_by_direction = D_L04_001618A0;
         int moved;
         {
             if (vector_distance(moby->pos, dest) >= frame_time * 3.0f * 2.0f) {
@@ -2065,7 +2065,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                         wrap_angle(wrap_angle(convert_integer_to_float(data->f14C) * 1.5707964f)),
                         rel) > 1.7453293f) {
                     data->f14C = truncate_float_to_s32(biased_relative_yaw * 1.999f / 3.1415927f);
-                    anim = tbl.v[data->f14C];
+                    anim = movement_animation_by_direction.v[data->f14C];
                 }
                 dir = wrap_angle(convert_integer_to_float(data->f14C) * 1.5707964f);
                 v[0] = fast_cos(fast_add_rotations(moby->rot, dir)) * (frame_time * 3.0f);
