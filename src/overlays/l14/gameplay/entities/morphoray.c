@@ -1191,8 +1191,8 @@ int FUN_L14_00307620(struct Moby *moby) {
         }
         idx = *(int *)(flying_car_data + 0x7C);
         if (idx != -1) {
-            VoicePoolWindow *w = (VoicePoolWindow *)((u8 *)&voice_pool + idx * 0x70);
-            if (w->voice.owner == (VoiceMoby *)moby && w->voice.state != 0)
+            VoicePoolWindow *voice_entry = (VoicePoolWindow *)((u8 *)&voice_pool + idx * 0x70);
+            if (voice_entry->voice.owner == (VoiceMoby *)moby && voice_entry->voice.state != 0)
                 release_voice_slot(idx);
         }
         *(int *)(flying_car_data + 0x7C) = -1;
