@@ -975,14 +975,14 @@ unsigned char *spawn_glow_particle(void *owner, void *pos, void *vel, int lifeti
     red &= 0xFF; green &= 0xFF; blue &= 0xFF; alpha &= 0xFF;
     moby = FUN_0020c4f8_2ac910(0x70);
     if (moby) {
-        Q_2ac910 rot_copy, rot;
+        Q_2ac910 rot_copy, random_initial_rotation;
         V_2ac910 *data = *(V_2ac910 **)(moby + 0x78);
         float elapsed;
-        rot.q = 0;
-        rot.f[0] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
-        rot.f[1] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
-        rot.f[2] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
-        rot_copy.q = rot.q;
+        random_initial_rotation.q = 0;
+        random_initial_rotation.f[0] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
+        random_initial_rotation.f[1] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
+        random_initial_rotation.f[2] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
+        rot_copy.q = random_initial_rotation.q;
         moby[0x20] = 0;
         moby[0x23] = alpha;
         moby[0x30] = 0xFF;
