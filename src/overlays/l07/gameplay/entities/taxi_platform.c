@@ -3445,16 +3445,16 @@ void FUN_L07_00311bc8(char *moby) {
         LEAF_ACCELERATED_FALL = 3
     };
     char *moby_data;
-    float prev[4];
-    float v[4];
+    float previous_position[4];
+    float position_delta[4];
     float tilt_descent_work_value;
-    float g;
+    float gravity_step;
     if (moby == 0)
         return;
     moby_data = *(char **)(moby + 0x78);
     if (moby_data == 0)
         return;
-    qcopy(prev, moby + 0x10);
+    qcopy(previous_position, moby + 0x10);
     switch (((unsigned char *)moby)[0x20]) {
     case LEAF_INITIALIZE:
         *(int *)(moby_data + 0x20) = 0;
@@ -3497,9 +3497,9 @@ void FUN_L07_00311bc8(char *moby) {
         tilt_descent_work_value = (1.3962634f - *(float *)(moby + 0x40)) * 0.05f;
         *(float *)(moby + 0x40) += tilt_descent_work_value;
         tilt_descent_work_value = fast_sin(tilt_descent_work_value);
-        g = frame_time_sq * 9.8f;
+        gravity_step = frame_time_sq * 9.8f;
         *(float *)(moby + 0x18) -= tilt_descent_work_value + tilt_descent_work_value;
-        *(float *)(moby_data + 0xA4) += g;
+        *(float *)(moby_data + 0xA4) += gravity_step;
         *(float *)(moby + 0x18) -= *(float *)(moby_data + 0xA4);
         if (*(float *)(moby + 0x18) < 2.0f) {
             mark_moby_for_removal_c(moby);
@@ -3509,8 +3509,8 @@ void FUN_L07_00311bc8(char *moby) {
     case 4:
         break;
     }
-    subtract_vector_xyz(v, moby + 0x10, prev);
-    update_entity_matrix(moby_data + 0x60, v, moby + 0x40, moby + 0x40);
+    subtract_vector_xyz(position_delta, moby + 0x10, previous_position);
+    update_entity_matrix(moby_data + 0x60, position_delta, moby + 0x40, moby + 0x40);
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313298), where it is exact; names translated to the US level program. */
 
