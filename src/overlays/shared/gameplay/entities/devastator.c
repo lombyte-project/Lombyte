@@ -1995,8 +1995,8 @@ unsigned char *FUN_L00_002b58d8(unsigned char *source_moby, V_2b58d8 *pos, float
         collision_start.q = *(OvlQuad *)(source_moby + 0x10);
         collision_start.f[2] = pos->f[2];
         if (FUN_001efa68_2b58d8(&collision_start, pos, 0, ({
-                struct Hero *g2 = &hero;
-                (void *)g2->moby;
+                struct Hero *collision_ignored_hero = &hero;
+                (void *)collision_ignored_hero->moby;
             }),
                                 0)) {
             spawned_moby[0xBC] = 1;
