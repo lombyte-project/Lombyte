@@ -467,7 +467,7 @@ char *FUN_L09_003041d0(char *self, char *pos, int bone) {
     char *best = 0;
     float bestd = 1000000000.0f;
     char query_position[16];
-    char vec[16];
+    char candidate_joint_position[16];
     char *candidate_moby;
     char *tp = query_position;
     *(OvlQuad *)query_position = *(OvlQuad *)pos;
@@ -480,8 +480,8 @@ char *FUN_L09_003041d0(char *self, char *pos, int bone) {
                 *(short *)(candidate_moby + 0xA6) == 0x4A0) {
                 float candidate_distance;
                 if (bone != -1) {
-                    moby_point_position(candidate_moby, bone, vec);
-                    candidate_distance = FUN_001f9b48(tp, vec);
+                    moby_point_position(candidate_moby, bone, candidate_joint_position);
+                    candidate_distance = FUN_001f9b48(tp, candidate_joint_position);
                 } else {
                     candidate_distance = FUN_001f9b48(tp, candidate_moby + 0x10);
                 }
