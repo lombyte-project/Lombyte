@@ -2579,8 +2579,8 @@ typedef struct {
 
 /* Patrol step: advances the moby's path node until the next node is ahead and far enough, switching between the base path and its branches. */
 /* Same routine as FUN_L16_002cf9f8, with this level's data layout. */
-void FUN_L05_00306e10(char *obj) {
-    L16PatrolMoby *moby = (L16PatrolMoby *)obj;
+void FUN_L05_00306e10(char *patrol_moby) {
+    L16PatrolMoby *moby = (L16PatrolMoby *)patrol_moby;
     L05PatrolData *patrol_data = moby->data;
     float target[4];
     float heading, distance;
