@@ -286,13 +286,13 @@ char *FUN_L18_002ea0f0(void *owner, void *vector, int value) {
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB558), where it is exact; names translated to the US level program. */
 
-void FUN_L18_002ea168(struct Moby *arg, void *src, void *position, int active, float speed) {
-    char *data = (char *)arg->pvars;
-    qcopy(&arg->pos, src);
+void FUN_L18_002ea168(struct Moby *moby, void *src, void *position, int active, float speed) {
+    char *data = (char *)moby->pvars;
+    qcopy(&moby->pos, src);
     *(int *)(data + 0x28) = scale_ticks(5);
     *(float *)(data + 0x24) = speed;
-    if (active && arg->state == 0) {
-        arg->state = 1;
+    if (active && moby->state == 0) {
+        moby->state = 1;
         *(int *)(data + 0x28) = 0;
         qcopy(data, position);
     }
