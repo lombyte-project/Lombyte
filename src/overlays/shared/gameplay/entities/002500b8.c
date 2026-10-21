@@ -78,8 +78,8 @@ void FUN_L00_002500b8(char *object) {
 
 /* Clears slot idx of this level's 16-entry table to 0xFF. */
 void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
-void jet_clear_persistent(int idx) {
-    if (idx != 0xFF) {
-        visited52[idx + current_level_index * 16] = 0xFF;
+void jet_clear_persistent(int persistent_slot_index) {
+    if (persistent_slot_index != 0xFF) {
+        visited52[persistent_slot_index + current_level_index * 16] = 0xFF;
     }
 }
