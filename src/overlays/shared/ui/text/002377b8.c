@@ -1208,9 +1208,9 @@ s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void FUN_L00_0023a218(u8 *hud_element) {
     u8 *visibility_counters = hud_element + 0x70;
     if (D_00141398) {
-        s32 r = scale_game_frames(10);
+        s32 scaled_duration_frames = scale_game_frames(10);
         s32 lim = D_L00_0015F7F0_gp;
-        *(s32 *)(hud_element + 0x7C) = r;
+        *(s32 *)(hud_element + 0x7C) = scaled_duration_frames;
         if (hud_element[0x70] < lim) {
             hud_element[0x70]++;
         } else if (visibility_counters[1] < lim) {
