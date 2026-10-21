@@ -149,7 +149,7 @@ void FUN_L13_002c1528(Moby_2C27B0 *rocket_moby) {
     V4_2C27B0 hitpos;
     V4_2C27B0 scratch_vector;
     V4_2C27B0 particle_initial_velocity;
-    V4_2C27B0 dir;
+    V4_2C27B0 particle_direction_scratch;
     Hit_2C27B0 *hit;
     float trail_segment_start_fraction;
     float yaw;
@@ -163,11 +163,11 @@ void FUN_L13_002c1528(Moby_2C27B0 *rocket_moby) {
         mark_moby_for_removal(rocket_moby);
         return;
     }
-    *(Q_2C27B0 *)&dir = 0;
-    dir.x = random_float_between(-1.0f, 1.0f);
-    dir.y = random_float_between(-1.0f, 1.0f);
-    dir.z = random_float_between(-1.0f, 1.0f);
-    *(Q_2C27B0 *)&particle_initial_velocity = *(Q_2C27B0 *)&dir;
+    *(Q_2C27B0 *)&particle_direction_scratch = 0;
+    particle_direction_scratch.x = random_float_between(-1.0f, 1.0f);
+    particle_direction_scratch.y = random_float_between(-1.0f, 1.0f);
+    particle_direction_scratch.z = random_float_between(-1.0f, 1.0f);
+    *(Q_2C27B0 *)&particle_initial_velocity = *(Q_2C27B0 *)&particle_direction_scratch;
     normalize_vector_xyz(&particle_initial_velocity, &particle_initial_velocity, random_float_between(0.1f, 0.2f) * D_0015ED6C);
     normalize_vector_xyz(&scratch_vector, rocket_data, -random_float_between(D_0015ED6C * 0.1f, D_0015ED6C));
     add_vector_xyz(&particle_initial_velocity, &particle_initial_velocity, &scratch_vector);
@@ -182,11 +182,11 @@ void FUN_L13_002c1528(Moby_2C27B0 *rocket_moby) {
             particle[2] = *tex->p5C;
             particle[3] = 0x44;
         }
-        *(Q_2C27B0 *)&dir = 0;
-        dir.z = 0.02f;
-        transform_vector_by_basis(&dir, &dir, &rocket_moby->mat);
-        build_look_at_matrix(&dir, &dir, &rocket_moby->mat, random_angle_radians_c());
-        FUN_L00_0026cbb0(&scratch_vector, &dir, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames_alt(5), 1, 40000.0f);
+        *(Q_2C27B0 *)&particle_direction_scratch = 0;
+        particle_direction_scratch.z = 0.02f;
+        transform_vector_by_basis(&particle_direction_scratch, &particle_direction_scratch, &rocket_moby->mat);
+        build_look_at_matrix(&particle_direction_scratch, &particle_direction_scratch, &rocket_moby->mat, random_angle_radians_c());
+        FUN_L00_0026cbb0(&scratch_vector, &particle_direction_scratch, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames_alt(5), 1, 40000.0f);
     }
     if (rocket_data->target != 0 && rocket_data->target->state != 0xFE && rocket_data->target->state != 0xFD
         && distance_xyz(&rocket_data->tpos, &rocket_data->target->pos) < 3.0f) {
