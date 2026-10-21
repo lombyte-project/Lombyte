@@ -555,8 +555,8 @@ extern char *D_L00_0015FFD8_2591d0 __asm__("D_L00_0015FFD8");
 int FUN_L00_002592b8_c(char **, char *) __asm__("FUN_L00_002592b8");
 /* Looks up table entry idx and makes it current; the flag test reads the
  * current entry back, as the original did. */
-int FUN_L00_002591d0(char **out, int idx, int include_sign_bit_set_entries, int b) {
-    unsigned short *v;
+int FUN_L00_002591d0(char **out, int idx, int include_sign_bit_set_entries, int require_sign_bit_set_entries) {
+    unsigned short *entry_index_list;
     char *entry_address;
     int entry_sign_bit_set;
     int entry_index;
@@ -566,18 +566,18 @@ int FUN_L00_002591d0(char **out, int idx, int include_sign_bit_set_entries, int 
     }
     *out = 0;
     D_L00_00160114 = 0;
-    v = D_L00_001AB840_2591d0[idx];
-    D_L00_0016010C_2591d0 = v;
-    if (v == 0) return -1;
-    entry_index = *v & 0x7FFF;
+    entry_index_list = D_L00_001AB840_2591d0[idx];
+    D_L00_0016010C_2591d0 = entry_index_list;
+    if (entry_index_list == 0) return -1;
+    entry_index = *entry_index_list & 0x7FFF;
     D_L00_00160110 = entry_index;
     entry_address = D_L00_0015FFD8_2591d0 + (entry_index << 8);
     D_L00_00160114 = entry_address;
     *out = entry_address;
     entry_sign_bit_set = (unsigned)(*(char *volatile *)&D_L00_00160114)[0x20] >> 31;
     if (!include_sign_bit_set_entries) {
-        if (b || entry_sign_bit_set) return FUN_L00_002592b8_c(out, D_L00_00160114);
-    } else if (b && !entry_sign_bit_set) return FUN_L00_002592b8_c(out, D_L00_00160114);
+        if (require_sign_bit_set_entries || entry_sign_bit_set) return FUN_L00_002592b8_c(out, D_L00_00160114);
+    } else if (require_sign_bit_set_entries && !entry_sign_bit_set) return FUN_L00_002592b8_c(out, D_L00_00160114);
     return 0;
 }
 
