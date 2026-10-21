@@ -2064,7 +2064,7 @@ s32 FUN_001fa6d0_26de90(f32) __asm__("FUN_001fa6d0");
 s32 FUN_001f96f8_26de90(s32) __asm__("FUN_001f96f8");
 void FUN_001f9cf8_26de90(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern u8 *D_L00_001B20F0 __attribute__((section(".data")));
-void FUN_L00_0026de90(void *pos, void *dir, f32 size) {
+void FUN_L00_0026de90(void *spawn_origin, void *optional_spawn_basis, f32 size) {
     M_26de90 *particle;
     V_26de90 transformed_spawn_offset, spawn_offset, local_velocity;
     X_26de90 x;
@@ -2076,12 +2076,12 @@ void FUN_L00_0026de90(void *pos, void *dir, f32 size) {
         spawn_offset.f[0] = FUN_002132a8_26de90(-0.03f, 0.03f);
         spawn_offset.f[1] = FUN_002132a8_26de90(-0.03f, 0.03f);
         spawn_offset.f[2] = 0.0f;
-        if (dir) {
-            FUN_001fa298_26de90(&x, dir);
+        if (optional_spawn_basis) {
+            FUN_001fa298_26de90(&x, optional_spawn_basis);
             FUN_001f9d20_26de90(&transformed_spawn_offset, &spawn_offset, &x);
-            FUN_001f9a10_26de90(&particle->v10, &transformed_spawn_offset, pos);
+            FUN_001f9a10_26de90(&particle->v10, &transformed_spawn_offset, spawn_origin);
         } else {
-            FUN_001f9a10_26de90(&particle->v10, &spawn_offset, pos);
+            FUN_001f9a10_26de90(&particle->v10, &spawn_offset, spawn_origin);
         }
         particle->v10.f[2] -= 0.05f;
         r = FUN_001160d8_26de90() % 0x60;
@@ -2103,10 +2103,10 @@ void FUN_L00_0026de90(void *pos, void *dir, f32 size) {
         particle->hA = FUN_001f96f8_26de90(0xFC);
         q->qC = 1.0f;
         qzero(&local_velocity);
-        if (dir) {
+        if (optional_spawn_basis) {
             local_velocity.f[0] = size;
             local_velocity.f[2] = -0.0025f;
-            FUN_001f9cf8_26de90(&q->v30, &local_velocity, dir);
+            FUN_001f9cf8_26de90(&q->v30, &local_velocity, optional_spawn_basis);
         } else {
             q->v30.f[0] = FUN_002132a8_26de90(-size, size);
             q->v30.f[1] = FUN_002132a8_26de90(-size, size);
