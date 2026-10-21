@@ -7986,7 +7986,7 @@ extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 void FUN_L06_00305170(char *moby) {
     float rotation_scale_matrix[16];
     float scale_matrix[16];
-    float mat[5][16];
+    float copy_transform_matrices[5][16];
     int shared_helper_arguments[10];
     char *data;
     float *transform_matrix_base;
@@ -8007,9 +8007,9 @@ void FUN_L06_00305170(char *moby) {
                                   ((long)D_L06_001621C8 << 4) |
                                   ((long)D_L06_001621CC << 6) | 0x8000000000L);
     font_queue_vu_state();
-    transform_matrix_base = mat[0];
+    transform_matrix_base = copy_transform_matrices[0];
     sp = shared_helper_arguments;
-    pp = mat[0] + 12;
+    pp = copy_transform_matrices[0] + 12;
     tp = D_L06_001FE890;
     mp = transform_matrix_base;
     for (i = 0; i < 4; i++) {
