@@ -331,7 +331,7 @@ void FUN_L08_002d23f0(char *moby) {
     char *bomb_vars;
     int st;
     int two;
-    float f20;
+    float collision_z_offset;
 
     bomb_vars = *(char **)(moby + 0x78);
     if (*(unsigned char *)(moby + 0x20) != 0x37) {
@@ -368,12 +368,12 @@ void FUN_L08_002d23f0(char *moby) {
             FUN_L00_00269958_c((moby + 0x10), normalized_direction, *selected_table_entry, 0x4FFF, scale_game_frames_c(0x2D), 0x32, 0x78, 1);
         }
         qcopy(c.r.start, moby + 0x10);
-        f20 = 0.16f;
-        c.r.start[2] -= f20;
+        collision_z_offset = 0.16f;
+        c.r.start[2] -= collision_z_offset;
         add_vector_xyz((moby + 0x10), (moby + 0x10), (bomb_vars + 0x10));
         *(float *)(bomb_vars + 0x18) -= D_L08_00161860 * D_0015ED70_gp;
         qcopy(c.r.end, moby + 0x10);
-        c.r.end[2] -= f20;
+        c.r.end[2] -= collision_z_offset;
         c.r.x.moby = moby;
         c.r.x.flags = 0x810000;
         c.r.x.st = st;
@@ -397,7 +397,7 @@ void FUN_L08_002d23f0(char *moby) {
                     float k;
                     allocate_voice_for_target_entry(1, 0, moby);
                     qcopy((moby + 0x10), tbl + 0x20);
-                    *(float *)(moby + 0x18) += f20;
+                    *(float *)(moby + 0x18) += collision_z_offset;
                     FUN_L00_001ff660_c((bomb_vars + 0x10), (bomb_vars + 0x10), tbl + 0x40);
                     cross_vectors_xyz(&table_or_bounce_scratch, (bomb_vars + 0x10), tbl + 0x40);
                     k = D_0015ED6C * 1.5f;
