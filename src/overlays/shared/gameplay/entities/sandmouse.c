@@ -504,17 +504,17 @@ typedef union {
 
 extern s32 cutscene_mode_gp __asm__("D_L01_0015F5C4") __attribute__((sda));
 void FUN_L01_0030d5f0(char *moby, char *state) {
-    V4_w22c v;
+    V4_w22c spawn_position;
     V4_w22c target_aim_position;
     V4_w22c spawn_offset;
     char *target_moby;
-    float target_yaw, b, initial_yaw, initial_pitch, target_bearing_yaw, dist;
+    float target_yaw, target_pitch, initial_yaw, initial_pitch, target_bearing_yaw, dist;
 
     if (fast_dec_timer_s16(state + 0x54) == 0)
         return;
-    moby_point_position(moby, (state[0x56] & 1) + 1, &v);
+    moby_point_position(moby, (state[0x56] & 1) + 1, &spawn_position);
     state[0x56] = state[0x56] ^ 1;
-    target_moby = FUN_L01_0030d308(moby, &v, moby + 0x40, D_L01_00162088 * DEG_TO_RAD,
+    target_moby = FUN_L01_0030d308(moby, &spawn_position, moby + 0x40, D_L01_00162088 * DEG_TO_RAD,
                          D_L01_0016208C * DEG_TO_RAD, D_L01_00162084, 2.0f, 3.1415927f,
                          3.1415927f);
     if (target_moby != 0) {
@@ -524,23 +524,23 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
                              *(float *)(target_moby + 0x14) - *(float *)(moby + 0x14));
             if (fast_difference_between_rotations(*(float *)(moby + 0x48), target_bearing_yaw) < 0.5235988f) {
                 if (cutscene_mode_gp != 2) {
-                    char *r;
+                    char *target_aim_height_data;
                     qcopy(&target_aim_position, target_moby + 0x10);
-                    r = suck_get_aim_height(target_moby);
-                    if (r != 0)
-                        target_aim_position.f[2] = target_aim_position.f[2] + *(float *)(r + 0x10);
+                    target_aim_height_data = suck_get_aim_height(target_moby);
+                    if (target_aim_height_data != 0)
+                        target_aim_position.f[2] = target_aim_position.f[2] + *(float *)(target_aim_height_data + 0x10);
                     else
                         target_aim_position.f[2] = target_aim_position.f[2] + D_L01_00162094;
-                    fast_vec_sub(&spawn_offset, &target_aim_position, &v);
+                    fast_vec_sub(&spawn_offset, &target_aim_position, &spawn_position);
                     fast_vec_normalize(&spawn_offset, &spawn_offset, D_L01_00162090);
-                    fast_vec_add(&v, &v, &spawn_offset);
-                    target_yaw = fast_arc_tan(target_aim_position.f[0] - v.f[0], target_aim_position.f[1] - v.f[1]);
-                    dist = vector_distance(&v, &target_aim_position);
-                    b = -fast_arc_tan(dist, target_aim_position.f[2] - v.f[2]);
-                    initial_yaw = fast_arc_tan(target_aim_position.f[0] - v.f[0], target_aim_position.f[1] - v.f[1]);
-                    dist = vector_distance(&v, &target_aim_position);
-                    initial_pitch = -fast_arc_tan(dist, target_aim_position.f[2] - v.f[2]);
-                    FUN_L01_0030c898_c(moby, &v, target_yaw, b, initial_yaw, initial_pitch);
+                    fast_vec_add(&spawn_position, &spawn_position, &spawn_offset);
+                    target_yaw = fast_arc_tan(target_aim_position.f[0] - spawn_position.f[0], target_aim_position.f[1] - spawn_position.f[1]);
+                    dist = vector_distance(&spawn_position, &target_aim_position);
+                    target_pitch = -fast_arc_tan(dist, target_aim_position.f[2] - spawn_position.f[2]);
+                    initial_yaw = fast_arc_tan(target_aim_position.f[0] - spawn_position.f[0], target_aim_position.f[1] - spawn_position.f[1]);
+                    dist = vector_distance(&spawn_position, &target_aim_position);
+                    initial_pitch = -fast_arc_tan(dist, target_aim_position.f[2] - spawn_position.f[2]);
+                    FUN_L01_0030c898_c(moby, &spawn_position, target_yaw, target_pitch, initial_yaw, initial_pitch);
                     allocate_voice_for_target_entry(0, 0, (struct VoiceTarget *)moby);
                     *(short *)(state + 0x54) = scale_game_frames(D_L01_00162080_i);
                     *(int *)(state + 0x5C) = *(int *)(state + 0x5C) + 1;
