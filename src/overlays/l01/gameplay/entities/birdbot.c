@@ -2614,7 +2614,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
     CarrierVars *v;
     CarrierCamVars *cv;
     PePath *carrier_path;
-    CarrierMoby *tbl;
+    CarrierMoby *level_moby_array;
     CarrierRiderVars *rv;
     CarrierOffsets offs;
     s32 i;
@@ -2715,9 +2715,9 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
     }
     for (j = 0; j < 8; j++) {
         if (v->riders[j] != -1) {
-            tbl = D_L01_0015FFD8_m;
-            tbl[v->riders[j]].flags &= ~6;
-            clear_vector(&tbl[v->riders[j]].rot);
+            level_moby_array = D_L01_0015FFD8_m;
+            level_moby_array[v->riders[j]].flags &= ~6;
+            clear_vector(&level_moby_array[v->riders[j]].rot);
             D_L01_0015FFD8_m[v->riders[j]].rot.z = FUN_001f9e90_cf(hero.motion.pos.f[0] - carrier_moby->pos.x, hero.motion.pos.f[1] - carrier_moby->pos.y);
             switch (D_L01_0015FFD8_m[v->riders[j]].oclass) {
             case 0x154:
