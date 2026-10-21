@@ -1110,7 +1110,7 @@ void FUN_L00_00217658(void) {
     struct Moby *target;
     struct Moby *item;
     ThrowPvars_217658 *tpv;
-    ThrowPvars_217658 *pv;
+    ThrowPvars_217658 *launched_item_vars;
     s32 aimed;
     s32 has_target;
     s32 state;
@@ -1144,15 +1144,15 @@ void FUN_L00_00217658(void) {
         FUN_L00_00216de8_c(0x1B, 0);
     }
     item->state = 10;
-    pv = (ThrowPvars_217658 *)item->pvars;
+    launched_item_vars = (ThrowPvars_217658 *)item->pvars;
     if (hero.wall_probe_distance < 1.2f && 0.6632251f < hero.unk250 && !hero.unk254) {
-        pv->unk76 = 1;
+        launched_item_vars->unk76 = 1;
     }
-    clear_u64_value_c(pv->unk40);
+    clear_u64_value_c(launched_item_vars->unk40);
     if (!aimed) {
-        FUN_L00_00233708(pv->unk40, pv->unk40, 1.0f);
+        FUN_L00_00233708(launched_item_vars->unk40, launched_item_vars->unk40, 1.0f);
     } else {
-        build_spherical_offset(pv->unk40, 1.0f, hero.aim_yaw, hero.aim_pitch);
+        build_spherical_offset(launched_item_vars->unk40, 1.0f, hero.aim_yaw, hero.aim_pitch);
     }
     clear_u64_value_c(dir);
     rotmat_e(mat, dir);
@@ -1167,8 +1167,8 @@ void FUN_L00_00217658(void) {
     }
     copy_matrix_rotation(out_mat, mat);
     matrix_to_euler(out_mat, &item->rot);
-    pv->unk64 = 0;
-    pv->unk60 = frame_time * 23.0f;
+    launched_item_vars->unk64 = 0;
+    launched_item_vars->unk60 = frame_time * 23.0f;
     FUN_L00_00262500(item, hero.unk17B0);
     FUN_L00_00262528(hero.unk17B0, 0x30, 3);
     FUN_L00_00262528(hero.unk17B0, 0x17, 5);
