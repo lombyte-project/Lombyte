@@ -2019,7 +2019,7 @@ extern int func_001FA898_s(float) __asm__("FUN_001fa6d0");
 extern void func_L00_0025F4A8_s(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
 void FUN_L13_002e1348(struct Moby *moby, char *blob_data, float scale_ratio) {
-    float v[4];
+    float split_velocity[4];
     float split_spawn_position[4];
     float nearby_effect_scale = scale_ratio * 7.0f;
     float b;
@@ -2037,13 +2037,13 @@ void FUN_L13_002e1348(struct Moby *moby, char *blob_data, float scale_ratio) {
     if (*(short *)(blob_data + 0x4E) > 0) {
         for (i = 0; i < FUN_L00_00257b90(1, 2); i++) {
             float part = moby->scale * random_float_between(0.25f, 0.75f);
-            random_vector(v, frame_time * 5.0f, frame_time * 10.0f);
+            random_vector(split_velocity, frame_time * 5.0f, frame_time * 10.0f);
             scale_vector_xyz(blob_data, blob_data, 0.75f);
-            add_vector_xyz(v, v, blob_data);
-            normalize_vector_xyz(split_spawn_position, v, 0.5f);
+            add_vector_xyz(split_velocity, split_velocity, blob_data);
+            normalize_vector_xyz(split_spawn_position, split_velocity, 0.5f);
             add_vector_xyz(split_spawn_position, split_spawn_position, &moby->pos);
-            add_vector_xyz(split_spawn_position, split_spawn_position, v);
-            FUN_L13_002e1140(moby, (char *)split_spawn_position, (char *)v, *(short *)(blob_data + 0x4E) - 1, part);
+            add_vector_xyz(split_spawn_position, split_spawn_position, split_velocity);
+            FUN_L13_002e1140(moby, (char *)split_spawn_position, (char *)split_velocity, *(short *)(blob_data + 0x4E) - 1, part);
             moby->scale -= part;
             if (--*(short *)(blob_data + 0x4E) == 0) break;
             if (moby->scale / moby->pclass->scale <= 0.2f) break;
