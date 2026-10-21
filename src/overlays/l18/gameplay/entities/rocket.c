@@ -2041,15 +2041,15 @@ extern int D_L18_00161C8C __attribute__((sda));
 extern int D_L18_00161C90 __attribute__((sda));
 extern float D_L18_00161C98 __attribute__((sda));
 void FUN_L18_002dc0c8(struct Moby *moby, void *segment_start, void *segment_end) {
-    float buf[4];
+    float segment_bounding_sphere[4];
     float particle_spawn_position[4];
     float particle_velocity[4];
     char *moby_vars = (char *)moby->pvars;
     int col;
 
-    lerp_vector(buf, segment_start, segment_end, 0.5f);
-    buf[3] = FUN_001f9b48(segment_start, segment_end) * 0.5f;
-    if (fast_bsphere_check((char *)buf, D_L18_00161BF4) == -1) {
+    lerp_vector(segment_bounding_sphere, segment_start, segment_end, 0.5f);
+    segment_bounding_sphere[3] = FUN_001f9b48(segment_start, segment_end) * 0.5f;
+    if (fast_bsphere_check((char *)segment_bounding_sphere, D_L18_00161BF4) == -1) {
         return;
     }
     if (random_float_between(0.0f, 1.0f) < D_L18_00161C98) {
