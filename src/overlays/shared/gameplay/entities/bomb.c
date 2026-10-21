@@ -1317,7 +1317,7 @@ void FUN_L00_002cb418(Moby *shot_moby) {
     float yaw;
     float pitch;
     float speed;
-    float len;
+    float spark_direction_length;
     int i;
     int j;
     int left;
@@ -1453,11 +1453,11 @@ void FUN_L00_002cb418(Moby *shot_moby) {
     }
     cross_vectors_xyz_2cb418(&b, &step, D_L00_00166FF0_2cb418);
     rotate_vector_2cb418(&b, &b, &step, random_float_2cb418(0.0f, 3.1415927f));
-    len = vector_length_xyz_2cb418(&b);
-    if (len == 0.0f) {
+    spark_direction_length = vector_length_xyz_2cb418(&b);
+    if (spark_direction_length == 0.0f) {
         return;
     }
-    scale_vector_xyz_2cb418(&spark_velocity, &b, random_float_between_2cb418(D_0015ED6C_lui * 0.5f, D_0015ED6C_lui + D_0015ED6C_lui) / len);
+    scale_vector_xyz_2cb418(&spark_velocity, &b, random_float_between_2cb418(D_0015ED6C_lui * 0.5f, D_0015ED6C_lui + D_0015ED6C_lui) / spark_direction_length);
     spawn_spark_2cb418((Vec4A *)&shot_moby->pos, &spark_velocity, 0x7F2F4F6F, random_int_between_2cb418(scale_game_frames_2cb418(10), scale_game_frames_2cb418(15)), 30000.0f);
 }
 extern void FUN_00267a08_2cbcc0(void *) __asm__("FUN_L00_00267a08");
