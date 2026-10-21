@@ -185,12 +185,12 @@ void FUN_L00_0023e008(void *moby) {
     for (i = 3; i >= 0; i--) {
         float particle_size_scale = rndf_23e008(0.15f, 0.5f);
         int k = rndi_23e008(2);
-        float azimuth_angle, b;
+        float azimuth_angle, elevation_angle;
         if (k == 0)
             k--;
         azimuth_angle = rnda_23e008();
-        b = rndf_23e008(0.34906584f, 1.53588974f);
-        dir_23e008(dir, rndf_23e008(0.05f, 0.2f) * frame_scale, azimuth_angle, b);
+        elevation_angle = rndf_23e008(0.34906584f, 1.53588974f);
+        dir_23e008(dir, rndf_23e008(0.05f, 0.2f) * frame_scale, azimuth_angle, elevation_angle);
         qcopy(old, pos);
         pos[0] += rnd_23e008(0.0f, 0.15f);
         pos[1] += rnd_23e008(0.0f, 0.15f);
