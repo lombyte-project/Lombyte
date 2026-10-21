@@ -2044,8 +2044,8 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 
 void FUN_L00_002b5ba0(unsigned char *source_moby, unsigned char *attachment_state) {
-    M_2b5ba0 combined_rotation, b, source_rotation;
-    V_2b5ba0 k, r;
+    M_2b5ba0 combined_rotation, attachment_rotation, source_rotation;
+    V_2b5ba0 k, rotated_attachment_offset;
     unsigned char *attached_moby = *(unsigned char **)(attachment_state + 0x20);
     unsigned char *attached_moby_vars;
     if (attached_moby == 0)
@@ -2059,12 +2059,12 @@ void FUN_L00_002b5ba0(unsigned char *source_moby, unsigned char *attachment_stat
         *(float *)(attached_moby_vars + 0xC) = *(float *)(attached_moby_vars + 0xC) + D_0015ED60_gp * 0.05f;
     }
     *(float *)(*(unsigned char **)(attachment_state + 0x20) + 0x48) = frame_scale * -1.5707964f;
-    euler_rotation_matrix(&b, *(unsigned char **)(attachment_state + 0x20) + 0x40);
+    euler_rotation_matrix(&attachment_rotation, *(unsigned char **)(attachment_state + 0x20) + 0x40);
     copy_matrix_rotation(&source_rotation, source_moby + 0xC0);
-    multiply_matrix(&combined_rotation, &source_rotation, &b);
+    multiply_matrix(&combined_rotation, &source_rotation, &attachment_rotation);
     copy_matrix3x4(*(unsigned char **)(attachment_state + 0x20) + 0xC0, &combined_rotation);
-    transform_vector(&r, &k, &combined_rotation);
-    fast_vec_add(*(unsigned char **)(attachment_state + 0x20) + 0x10, &r, source_moby + 0x10);
+    transform_vector(&rotated_attachment_offset, &k, &combined_rotation);
+    fast_vec_add(*(unsigned char **)(attachment_state + 0x20) + 0x10, &rotated_attachment_offset, source_moby + 0x10);
     refresh_moby_spatial_bounds_from_basis(*(unsigned char **)(attachment_state + 0x20));
 }
 /* spawns a burst of sparks and glow flashes at a moby, scaled by its distance from the origin marker */
