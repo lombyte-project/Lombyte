@@ -1338,7 +1338,7 @@ extern void FUN_L00_001ff500(void *, void *, float);
  * toward D_001413D0 (& 0x10 with a random angle). When no moby is free the
  * value goes straight into the bolt count.
  */
-struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags, int value, int counted)
+struct Moby *FUN_L00_002a7438(struct Moby *bolt_source, void *pos, void *vel, int flags, int value, int counted)
 {
     enum {
         BOLT_VALUE_ONE = 1,
@@ -1379,8 +1379,8 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
         bolt_vars = (BoltVars_u *)spawned_bolt->pvars;
         bolt_vars->counted = counted;
         /* the bolt source is the root of src's unkB8 chain */
-        root = src;
-        if (src != 0) {
+        root = bolt_source;
+        if (bolt_source != 0) {
             while (root->parent != 0)
                 root = root->parent;
         }
@@ -1393,10 +1393,10 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
         spawned_bolt->state = 1;
         spawned_bolt->scale = spawned_bolt->pclass->scale * scale;
         euler_rotation_basis(&spawned_bolt->rot_row0, &spawned_bolt->rot);
-        if ((src->flags & 0x20) && (color = *(u8 **)(src->pvars + 0xC)) != 0)
+        if ((bolt_source->flags & 0x20) && (color = *(u8 **)(bolt_source->pvars + 0xC)) != 0)
             set_moby_color(spawned_bolt, color[4], color[5], color[6]);
         else
-            spawned_bolt->spawn_frame = src->spawn_frame;
+            spawned_bolt->spawn_frame = bolt_source->spawn_frame;
         bolt_vars->unk6E = random_int_between(0, scale_game_frames(600));
         bolt_vars->unk6C = -1;
         qcopy(&spawned_bolt->pos, pos);
@@ -1407,7 +1407,7 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
         bolt_vars->unk58 = random_angle_radians();
         bolt_vars->start_z = spawned_bolt->pos.z;
         spin = random_float_between(0.0f, D_L00_001613A8) * 0.017453292f * D_0015ED6C;
-        subtract_vector_xyz(tmp, &src->pos, &spawned_bolt->pos);
+        subtract_vector_xyz(tmp, &bolt_source->pos, &spawned_bolt->pos);
         cross_vectors_xyz(dir, bolt_vars->vel, tmp);
         FUN_L00_001ff500(bolt_vars->spin, dir, 1.0f);
         build_quaternion_from_axis_angle(bolt_vars->spin, bolt_vars->spin, spin);
