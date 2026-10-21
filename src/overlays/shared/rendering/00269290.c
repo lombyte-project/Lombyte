@@ -587,7 +587,7 @@ void FUN_001f9a10_26a9f0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern unsigned char *D_L00_001B20AC __attribute__((section(".data")));
 void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int b18, int b19,
                       float x, float y);
-void FUN_L00_0026a9f0(void *pos, void *dir, int col, int color_endpoint, int lifetime, int b1A, int spawn_generation, int behavior_flags,
+void FUN_L00_0026a9f0(void *spawn_position, void *base_velocity, int col, int color_endpoint, int lifetime, int b1A, int spawn_generation, int behavior_flags,
                       float x, float y) {
     unsigned char *particle;
     unsigned char *q;
@@ -616,7 +616,7 @@ void FUN_L00_0026a9f0(void *pos, void *dir, int col, int color_endpoint, int lif
     if (particle == 0) {
         return;
     }
-    qcopy(particle + 0x10, pos);
+    qcopy(particle + 0x10, spawn_position);
     *(int *)(particle + 4) = col;
     particle[9] = FUN_001fa6d0_26a9f0(4.0f) - 0x60;
     particle[3] = (FUN_00213260_26a9f0(100) < 0x14) ? 0x44 : 0x48;
@@ -631,7 +631,7 @@ void FUN_L00_0026a9f0(void *pos, void *dir, int col, int color_endpoint, int lif
     random_direction.f[2] = FUN_002132a8_26a9f0(-1.0f, 1.0f);
     velocity_offset.q = random_direction.q;
     FUN_001f9bf8_26a9f0(&velocity_offset, &velocity_offset, y);
-    FUN_001f9a10_26a9f0(q, dir, &velocity_offset);
+    FUN_001f9a10_26a9f0(q, base_velocity, &velocity_offset);
     *(float *)(q + 0xC) = y * 0.75f;
     *(short *)(particle + 0xA) = lifetime;
     q[0x1B] = lifetime;
