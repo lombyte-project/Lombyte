@@ -1085,16 +1085,16 @@ void FUN_L00_0026bca8(unsigned char *particle) {
     V26bca8 updated_position_copy, spawn_velocity, random_direction;
     unsigned char *particle_data = particle + 0x20;
     unsigned char *particle_position;
-    float lifetime_size_scratch, b;
+    float lifetime_size_scratch, initial_lifetime_or_speed_scratch;
     if (FUN_001f9770_26bca8(particle + 0xA)) {
         FUN_L00_00267a08_26bca8(particle);
         return;
     }
     particle_position = particle + 0x10;
     lifetime_size_scratch = FUN_001fa6c0_26bca8(*(short *)(particle + 0xA));
-    b = FUN_001fa6c0_26bca8(*(short *)(particle_data + 0x18));
+    initial_lifetime_or_speed_scratch = FUN_001fa6c0_26bca8(*(short *)(particle_data + 0x18));
     lifetime_size_scratch *= *(float *)(particle_data + 0x1C);
-    lifetime_size_scratch /= b;
+    lifetime_size_scratch /= initial_lifetime_or_speed_scratch;
     *(float *)(particle + 0xC) = lifetime_size_scratch;
     lifetime_size_scratch = FUN_001fa6c0_26bca8(*(short *)(particle + 0xA));
     *(int *)(particle + 4) = FUN_L00_002371e0_26bca8(*(int *)(particle_data + 0x14), *(int *)(particle_data + 0x10),
@@ -1108,8 +1108,8 @@ void FUN_L00_0026bca8(unsigned char *particle) {
         random_direction.f[1] = FUN_002132a8_26bca8(-1.0f, 1.0f);
         random_direction.f[2] = FUN_002132a8_26bca8(-1.0f, 1.0f);
         spawn_velocity.q = random_direction.q;
-        b = FUN_001f9af0_26bca8(particle_data);
-        FUN_001f9bf8_26bca8(&spawn_velocity, &spawn_velocity, b * FUN_002132a8_26bca8(0.15f, 0.25f));
+        initial_lifetime_or_speed_scratch = FUN_001f9af0_26bca8(particle_data);
+        FUN_001f9bf8_26bca8(&spawn_velocity, &spawn_velocity, initial_lifetime_or_speed_scratch * FUN_002132a8_26bca8(0.15f, 0.25f));
         FUN_001f9a10_26bca8(&spawn_velocity, &spawn_velocity, particle_data);
         FUN_001f9a68_26bca8(&spawn_velocity, &spawn_velocity, FUN_002132a8_26bca8(0.75f, 0.95f));
         FUN_L00_0026bb70_26bca8(particle_position, &spawn_velocity, *(int *)(particle + 4), *(int *)(particle_data + 0x14),
