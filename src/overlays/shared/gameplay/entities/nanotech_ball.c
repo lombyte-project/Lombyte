@@ -1127,25 +1127,25 @@ typedef struct {
 } __attribute__((aligned(16))) V_002da250;
 void FUN_L00_0024f7c8_002da250(void *, s32, f32 *) __asm__("FUN_L00_0024f7c8");
 void FUN_001f9cf8_002da250(V_002da250 *, V_002da250 *, void *) __asm__("FUN_001f9cf8");
-void FUN_L00_002da250(u8 *cannon_moby, f32 *b, f32 *out_suction_pitch, f32 *out_suction_origin) {
+void FUN_L00_002da250(u8 *cannon_moby, f32 *out_suction_yaw, f32 *out_suction_pitch, f32 *out_suction_origin) {
     FUN_L00_0024f7c8_002da250(cannon_moby, 0, out_suction_origin);
     if (hero_data.state.current == 1 || hero_data.state.current == 0x1E) {
-        V_002da250 v;
+        V_002da250 suction_origin_offset;
         C_002da250 *cam = &(*(C_002da250 *)D_L00_00166C80);
-        v.y = 0;
-        v.x = 1.2f;
-        *b = cam->f158;
-        v.z = 0;
+        suction_origin_offset.y = 0;
+        suction_origin_offset.x = 1.2f;
+        *out_suction_yaw = cam->f158;
+        suction_origin_offset.z = 0;
         *out_suction_pitch = -cam->f154;
-        FUN_001f9cf8_002da250(&v, &v, cam->m350);
-        out_suction_origin[2] = v.z + *(f32 *)(cannon_moby + 0x18);
-        out_suction_origin[0] = v.x + hero_data.motion.pos.f[0];
-        out_suction_origin[1] = v.y + hero_data.motion.pos.f[1];
+        FUN_001f9cf8_002da250(&suction_origin_offset, &suction_origin_offset, cam->m350);
+        out_suction_origin[2] = suction_origin_offset.z + *(f32 *)(cannon_moby + 0x18);
+        out_suction_origin[0] = suction_origin_offset.x + hero_data.motion.pos.f[0];
+        out_suction_origin[1] = suction_origin_offset.y + hero_data.motion.pos.f[1];
     } else if (hero_data.unk22C8 == 1) {
-        *b = hero_data.unk688;
+        *out_suction_yaw = hero_data.unk688;
         *out_suction_pitch = *(f32 *)(cannon_moby + 0x44);
     } else {
-        *b = hero_data.unk688;
+        *out_suction_yaw = hero_data.unk688;
         *out_suction_pitch = hero_data.unk684;
     }
 }
