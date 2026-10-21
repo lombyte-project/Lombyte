@@ -377,12 +377,12 @@ void FUN_L05_0030e508(char *moby) {
 
     switch (*(u8 *)(moby + 0x20)) {
     case MOBY_PLACE_AT_POSE_OFFSET: {
-        char *e0;
+        char *initial_pose_entry;
 
-        e0 = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
-        qcopy(moby + 0x10, e0 + 0x30);
-        *(float *)(moby + 0x48) = *(float *)(e0 + 0x78);
-        fast_vec_normalize(v, e0 + 0x10, *(float *)(data + 0x18));
+        initial_pose_entry = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
+        qcopy(moby + 0x10, initial_pose_entry + 0x30);
+        *(float *)(moby + 0x48) = *(float *)(initial_pose_entry + 0x78);
+        fast_vec_normalize(v, initial_pose_entry + 0x10, *(float *)(data + 0x18));
         if (*(int *)(data + 0x1C) != 0) {
             fast_vec_scale(v, v, -1.0f);
             *(u16 *)(moby + 0x34) |= 0x8000;
