@@ -311,16 +311,16 @@ typedef struct {
     int *f10;
 } T_28b828;
 
-int FUN_L01_0028b828(T_28b828 *path, int b) {
+int FUN_L01_0028b828(T_28b828 *path, int node_index) {
     int last_index;
     last_index = (path->f4 < 0) ? 0 : (*path->f10 - 1);
-    if (b < 0) {
-        return last_index + b;
+    if (node_index < 0) {
+        return last_index + node_index;
     }
-    if (last_index < b) {
-        return b % (last_index + 1);
+    if (last_index < node_index) {
+        return node_index % (last_index + 1);
     }
-    return b;
+    return node_index;
 }
 /* 0x0028b878, 76 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
