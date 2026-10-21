@@ -510,7 +510,7 @@ void FUN_L05_002d6f48(unsigned char *moby);
 /* Per-frame glow: updates three parts, pulses the colour, and queues a redraw
  * once per frame. */
 void FUN_L05_002d7020(char *moby) {
-    char *v;
+    char *moby_data;
     int i;
     int interpolated_glow_color;
     int current_frame;
@@ -518,18 +518,18 @@ void FUN_L05_002d7020(char *moby) {
     int *last_queued_frame_ptr;
 
     if (*(unsigned char *)(moby + 0x21) != 0xFF && *(unsigned char *)(moby + 0x31) != 0) {
-        v = *(char **)(moby + 0x78);
+        moby_data = *(char **)(moby + 0x78);
         for (i = 0; i < 3; i++) {
-            moby_point_position(moby, i, v + 0x330 + i * 16);
+            moby_point_position(moby, i, moby_data + 0x330 + i * 16);
         }
-        *(float *)(v + 0x368) = rot_2d7020(*(float *)(v + 0x368), frame_time * 1.9198622f);
-        interpolated_glow_color = lerp_2d7020(sin_2d7020(*(float *)(v + 0x368)) * 0.5f + 0.5f, 0x1E1EB4, 0x1EB41E);
+        *(float *)(moby_data + 0x368) = rot_2d7020(*(float *)(moby_data + 0x368), frame_time * 1.9198622f);
+        interpolated_glow_color = lerp_2d7020(sin_2d7020(*(float *)(moby_data + 0x368)) * 0.5f + 0.5f, 0x1E1EB4, 0x1EB41E);
         current_frame = frame_number;
         *(int *)(moby + 0x90) = interpolated_glow_color;
         k = (interpolated_glow_color & 0xFF0000) | 0x30000000;
-        *(int *)(v + 0x360) = k | (interpolated_glow_color & 0xFF00) | (interpolated_glow_color & 0xFF);
+        *(int *)(moby_data + 0x360) = k | (interpolated_glow_color & 0xFF00) | (interpolated_glow_color & 0xFF);
         if (current_frame != 0) {
-            last_queued_frame_ptr = *(int **)(v + 0x364);
+            last_queued_frame_ptr = *(int **)(moby_data + 0x364);
             if (current_frame != *last_queued_frame_ptr) {
                 *last_queued_frame_ptr = current_frame;
                 queue_2d7020(FUN_L05_002d6f48, moby);
