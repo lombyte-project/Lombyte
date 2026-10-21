@@ -960,12 +960,12 @@ void FUN_L00_002c97e0(Moby *chicken_moby) {
         return;
     }
     if (path_clear == 0) {
-        float len;
+        float movement_distance;
         float max;
         fast_vec_sub(&motion_and_normal_scratch, &next_pos, &chicken_moby->pos);
-        len = fast_vec_length(&motion_and_normal_scratch);
+        movement_distance = fast_vec_length(&motion_and_normal_scratch);
         max = frame_time * size;
-        if (max < len) {
+        if (max < movement_distance) {
             fast_vec_normalize(&motion_and_normal_scratch, &motion_and_normal_scratch, max);
         }
         fast_vec_add(&next_pos, &chicken_moby->pos, &motion_and_normal_scratch);
