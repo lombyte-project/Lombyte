@@ -16,7 +16,7 @@ extern void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw,
 s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text, s32 len, u64 extra,
                        struct Glyph *font) __asm__("FUN_001f6cb8");
 
-s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text, s32 len, u64 extra,
+s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text, s32 text_byte_limit, u64 extra,
                        struct Glyph *font) {
     s32 i;
     s32 j;
@@ -32,12 +32,12 @@ s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text,
     cy = y;
     i = 0;
     font_palette_colors[0] = color;
-    while (i != len && text[i] != 0 && y + height >= cy + 16) {
+    while (i != text_byte_limit && text[i] != 0 && y + height >= cy + 16) {
         j = i;
         lookahead_width = 0.0f;
         current_text_byte = &text[i];
         start = cx;
-        while (j != len && text[j] != ' ' && text[j] >= 0x10) {
+        while (j != text_byte_limit && text[j] != ' ' && text[j] >= 0x10) {
             lookahead_width += font[text[j]].adv;
             j++;
         }
