@@ -1235,14 +1235,14 @@ extern s32 D_00140408_c __asm__("D_00140408") __attribute__((section(".data")));
 
 /* 1 if entry idx of D_L00_001C40B0 has no limit at 0xE, else weapon_ammo_counts[idx]; -1: D_00140408. */
 s32 get_ammo(s32 idx) __asm__("FUN_L00_00233e98");
-s32 get_ammo(s32 idx) {
+s32 get_ammo(s32 weapon_index) {
     u8 *vendor_item_entry;
-    if (idx == -1)
-        idx = D_00140408_c;
-    vendor_item_entry = ((u8 *)D_L00_001C40B0) + idx * 0x18;
+    if (weapon_index == -1)
+        weapon_index = D_00140408_c;
+    vendor_item_entry = ((u8 *)D_L00_001C40B0) + weapon_index * 0x18;
     if (*(u16 *)(vendor_item_entry + 0xE) == 0)
         return 1;
-    return weapon_ammo_counts[idx];
+    return weapon_ammo_counts[weapon_index];
 }
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 /* Stores v, f and n in hero; calls 002223f8(0x65, 1) unless state is 0x65..0x67. */
