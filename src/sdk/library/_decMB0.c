@@ -24,10 +24,10 @@ extern void _waitIpuIdle();
 extern void receiveDataFromIPU();
 int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dct_type_out, struct MpegMbState *motion_vector_state,
             int *motion_field_select, int differential_motion_vector) {
-    int *sp20;
-    int *sp24;
-    u32 g1;
-    u32 g2;
+    int *dct_type_output;
+    int *motion_field_select_output;
+    u32 intra_quantiser_command_bits;
+    u32 dc_reset_command_base;
     int var_19_84;
     int temp_2_32;
     int temp_3_210;
@@ -45,8 +45,8 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
     int var_2_172;
     int var_2_213;
     *((int *)0x10002010) = ((*((int *)0x10002010)) & 0xF8FFFFFF) | (decoder->picture_coding_type << 0x18);
-    sp20 = dct_type_out;
-    sp24 = motion_field_select;
+    dct_type_output = dct_type_out;
+    motion_field_select_output = motion_field_select;
     temp_2_32 = _ipuVdec(decoder, 1);
     *mb_type = temp_2_32;
     if (temp_2_32 == 0) {
@@ -83,13 +83,13 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
     } else {
         var_2_103 = 0;
     }
-    *sp20 = var_2_103;
+    *dct_type_output = var_2_103;
     if ((*mb_type) & 0x10) {
         decoder->quantiser_scale_code = _nextBit(decoder, 5);
     }
     if (((*mb_type) & 8) || (((*mb_type) & 1) && (decoder->concealment_motion_vectors != 0))) {
         if (decoder->unk848 != 0) {
-            _motionVectors(decoder, motion_vector_state, differential_motion_vector, sp24, 0, var_19_84, var_20_86, decoder->f_code_forward_h - 1,
+            _motionVectors(decoder, motion_vector_state, differential_motion_vector, motion_field_select_output, 0, var_19_84, var_20_86, decoder->f_code_forward_h - 1,
                            decoder->f_code_forward_v - 1, motion_flag, var_23_95);
         } else {
             temp_7_163 = decoder->unk158 - 1;
@@ -100,7 +100,7 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
     if (decoder->unk11C == 0) {
         if ((*mb_type) & 4) {
             if (decoder->unk848 != 0) {
-                _motionVectors(decoder, motion_vector_state, differential_motion_vector, sp24, 1, var_19_84, var_20_86, decoder->f_code_backward_h - 1,
+                _motionVectors(decoder, motion_vector_state, differential_motion_vector, motion_field_select_output, 1, var_19_84, var_20_86, decoder->f_code_backward_h - 1,
                                decoder->f_code_backward_v - 1, 0, var_23_95);
             } else {
                 temp_7_200 = decoder->unk160 - 1;
@@ -121,9 +121,9 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
                 receiveDataFromIPU(
                     decoder->mb_buf[decoder->mb_buf_index].ipu_out, 0x300);
                 _waitIpuIdle(decoder);
-                g1 = (((*mb_type) & 1) << 0x1B) | (decoder->quantiser_scale_code << 0x10);
-                g2 = ((decoder->dc_reset) << 0x1A) | 0x20000000;
-                _sendIpuCommand(decoder, (g1 | g2) | ((*sp20) << 0x19));
+                intra_quantiser_command_bits = (((*mb_type) & 1) << 0x1B) | (decoder->quantiser_scale_code << 0x10);
+                dc_reset_command_base = ((decoder->dc_reset) << 0x1A) | 0x20000000;
+                _sendIpuCommand(decoder, (intra_quantiser_command_bits | dc_reset_command_base) | ((*dct_type_output) << 0x19));
             } else {
                 decoder->mb_buf[decoder->mb_buf_index].unk13C = 1;
             }
@@ -155,7 +155,7 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
                         *motion_type = temp_4_287;
                     } else {
                         *motion_type = 1;
-                        *sp24 = decoder->picture_structure == 2;
+                        *motion_field_select_output = decoder->picture_structure == 2;
                     }
                     var_2_172 = 1;
                 }
