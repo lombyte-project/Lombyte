@@ -807,38 +807,38 @@ float absolute_float(float) __asm__("FUN_001f99c0");
 short FUN_001f96f8_2e7138(int) __asm__("FUN_001f96f8");
 
 extern float D_L00_00161CB8 __attribute__((sda));
-int FUN_L00_002e7138(unsigned char *camera_moby, void *b, int skip_previous_length_clamp, int sphere_collision_found) {
+int FUN_L00_002e7138(unsigned char *camera_moby, void *candidate_camera_position, int skip_previous_length_clamp, int sphere_collision_found) {
     unsigned char *camera_state = *(unsigned char **)(camera_moby + 0x70);
     unsigned char *A = camera_state + 0x130;
     unsigned char *B = camera_state + 0x1D0;
     unsigned char *C = camera_state + 0x40;
-    float len, dist, k;
+    float previous_orbit_length, adjusted_orbit_length, k;
     G_2e7138 *G;
-    len = FUN_001f9af0_2e7138(A);
-    subtract_vector_xyz(A, b, camera_state + 0x90);
+    previous_orbit_length = FUN_001f9af0_2e7138(A);
+    subtract_vector_xyz(A, candidate_camera_position, camera_state + 0x90);
     if (*(short *)(B + 0x38)) {
         FUN_L00_001ff500_2e7138(A, A, *(float *)(A + 0x2C) - *(float *)(B + 0x30));
         return sphere_collision_found;
     }
-    dist = FUN_001f9af0_2e7138(A);
+    adjusted_orbit_length = FUN_001f9af0_2e7138(A);
     if (hero.vehicle_mode != 2 && absolute_float(D_0013CA40_2e7138) > 0.05f && sphere_collision_found) {
-        dist -= D_L00_00161CB8 * frame_scale;
+        adjusted_orbit_length -= D_L00_00161CB8 * frame_scale;
         *(short *)(B + 0x34) = FUN_001f96f8_2e7138(0x884);
     }
     k = D_L00_00161CC8_gp;
-    if (!skip_previous_length_clamp && hero.state.control_mode != 2 && len < dist) {
-        scale_vector_xyz(A, A, len / dist);
-        *(float *)(B + 0x30) = *(float *)(A + 0x2C) - len;
+    if (!skip_previous_length_clamp && hero.state.control_mode != 2 && previous_orbit_length < adjusted_orbit_length) {
+        scale_vector_xyz(A, A, previous_orbit_length / adjusted_orbit_length);
+        *(float *)(B + 0x30) = *(float *)(A + 0x2C) - previous_orbit_length;
         return sphere_collision_found;
     }
-    if (dist < k) {
-        if (dist <= 1e-4f)
+    if (adjusted_orbit_length < k) {
+        if (adjusted_orbit_length <= 1e-4f)
             FUN_L00_001ff500_2e7138(A, *(unsigned char **)(C + 0xC0) + 0xC0, -k);
         else
-            scale_vector_xyz(A, A, k / dist);
-        dist = D_L00_00161CC8_gp;
+            scale_vector_xyz(A, A, k / adjusted_orbit_length);
+        adjusted_orbit_length = D_L00_00161CC8_gp;
     }
-    *(float *)(B + 0x30) = *(float *)(A + 0x2C) - dist;
+    *(float *)(B + 0x30) = *(float *)(A + 0x2C) - adjusted_orbit_length;
     return 1;
 }
 typedef unsigned int Q002e7318 __attribute__((mode(TI)));
