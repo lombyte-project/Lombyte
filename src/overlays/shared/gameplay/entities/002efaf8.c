@@ -68,11 +68,11 @@ int FUN_L01_002f1dc8(char *moby) {
 }
 /* Returns the moby data pointer plus 0x60, or 0 when either is null. */
 s32 FUN_L01_002f1df8(T6 *moby) {
-    s32 v;
+    s32 moby_data_address;
     if (moby != 0) {
-        v = moby->f;
-        if (v != 0) {
-            return v + 0x60;
+        moby_data_address = moby->f;
+        if (moby_data_address != 0) {
+            return moby_data_address + 0x60;
         }
         return 0;
     }
