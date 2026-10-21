@@ -132,18 +132,18 @@ unsigned int FUN_L00_0025bfe0(float r, float g, float b, float high_byte_compone
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D0E0), where it is exact; names translated to the US level program. */
 
 /* Swaps a/b, b/c and c/a as bits 1, 2 and 4 of mask select. */
-void FUN_L00_0025c088(int *red_channel, int *b, int *blue_channel, int mask) {
+void FUN_L00_0025c088(int *red_channel, int *green_channel, int *blue_channel, int mask) {
     int x, y;
     if (mask & 1) {
-        x = *b;
+        x = *green_channel;
         y = *red_channel;
         *red_channel = x;
-        *b = y;
+        *green_channel = y;
     }
     if (mask & 2) {
         x = *blue_channel;
-        y = *b;
-        *b = x;
+        y = *green_channel;
+        *green_channel = x;
         *blue_channel = y;
     }
     if (mask & 4) {
