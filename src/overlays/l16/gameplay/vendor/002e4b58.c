@@ -146,9 +146,9 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 
 void FUN_L16_002e4f30(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    int idx = *(int *)(data + 0xa0);
-    if (idx != -1) {
-        char *table_entry = D_L16_001B0930[idx];
+    int table_entry_index = *(int *)(data + 0xa0);
+    if (table_entry_index != -1) {
+        char *table_entry = D_L16_001B0930[table_entry_index];
         if (*(int *)table_entry == 7) {
             int i;
             struct Hero *g;
