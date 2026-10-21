@@ -25,11 +25,11 @@ void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__(
 void FUN_L00_00231d08(void) {
     struct Hero *base = &hero;
     char *slot3_moby = ((char *)base->items[3].moby);
-    char *b = ((char *)base->items[3].moby2);
+    char *slot3_secondary_moby = ((char *)base->items[3].moby2);
     int buf[2];
     int seq;
 
-    if (slot3_moby == 0 || b == 0) {
+    if (slot3_moby == 0 || slot3_secondary_moby == 0) {
         return;
     }
     if (*(unsigned char *)(slot3_moby + 0x53) != 1) {
@@ -41,7 +41,7 @@ void FUN_L00_00231d08(void) {
     seq = buf[0];
     blend_moby_animation(slot3_moby, seq, 0, scale_game_frames(7));
     seq = buf[1];
-    blend_moby_animation(b, seq, 0, scale_game_frames(7));
+    blend_moby_animation(slot3_secondary_moby, seq, 0, scale_game_frames(7));
 }
 
 #define NOT_SDA
