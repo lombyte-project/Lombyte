@@ -1633,7 +1633,7 @@ void FUN_L01_003089f0(char *moby) {
     float frame_duration;
     int i;
     int particle_lifetime;
-    int c2;
+    int loop_particle_lifetime;
     if (*(unsigned char *)(moby + 0x20) == 1) {
         scale_vector_xyz(v, moby, 0.0009765625f);
     } else {
@@ -1648,8 +1648,8 @@ void FUN_L01_003089f0(char *moby) {
         frame_duration = frame_time;
         random_vector(u, D_L01_00161F5C * frame_duration, D_L01_00161F60 * frame_duration);
         add_vector_xyz(particle_velocity, particle_velocity, u);
-        c2 = *(unsigned char *)&D_L01_00161F64;
-        FUN_L00_002730e0(v, particle_velocity, D_L01_00161F6C, c2, random_integer_below_c(0xFF) & 0xFF,
+        loop_particle_lifetime = *(unsigned char *)&D_L01_00161F64;
+        FUN_L00_002730e0(v, particle_velocity, D_L01_00161F6C, loop_particle_lifetime, random_integer_below_c(0xFF) & 0xFF,
                          0, D_L01_00161F74);
     }
 }
