@@ -1280,11 +1280,11 @@ extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32,
 
 /* Resets the camera's orbit, focus, spring, view and track from fixed values; for a kind 2 preset it
    also prepares its two paths once, measuring each point against the path it follows. */
-void FUN_L01_00314e98(Camera *cam) {
+void FUN_L01_00314e98(Camera *destination_camera) {
     Vec4 at;
     s32 seg;
     f32 path_fraction_or_length;
-    CameraPreset *preset = D_L01_0015EF50[cam->preset].preset;
+    CameraPreset *preset = D_L01_0015EF50[destination_camera->preset].preset;
     CameraControl *control;
     CameraFocus *focus;
     CameraSpring *spring;
@@ -1295,19 +1295,19 @@ void FUN_L01_00314e98(Camera *cam) {
     CameraPath *preset_path, *track_path, *look_path, *target_path;
     s32 i, j, k, segment_count, previous_path_node_index;
 
-    focus = &cam->orbit->focus;
+    focus = &destination_camera->orbit->focus;
     focus->dist = 1.5f;
     focus->state = 0;
     if (preset->kind == 3) {
         focus->dist = 0.5f;
     }
-    control = &cam->control;
+    control = &destination_camera->control;
     focus->max_angle = 0.20943952f;
-    spring = &cam->orbit->spring;
+    spring = &destination_camera->orbit->spring;
     spring->dist = 6.0f;
     spring->unk4 = 0.5f;
     spring->height = 2.0f;
-    orbit = cam->orbit;
+    orbit = destination_camera->orbit;
     orbit->unk10 = 0.01f;
     orbit->unk14 = 0.175f;
     orbit->unk18 = 0;
@@ -1315,13 +1315,13 @@ void FUN_L01_00314e98(Camera *cam) {
     orbit->unk20 = 0.0005f;
     orbit->unk24 = 0;
     clear_u64_value(orbit);
-    view = &cam->orbit->view;
+    view = &destination_camera->orbit->view;
     view->unk20 = 0.01f;
     view->unk24 = 0.3f;
     view->unk28 = 0.2f;
     view->unk2C = 0;
     clear_u64_value(view);
-    track = &cam->orbit->track;
+    track = &destination_camera->orbit->track;
     clear_u64_value(track);
     clear_u64_value(&track->accel);
     track->unk40 = 3.0f;
@@ -1329,7 +1329,7 @@ void FUN_L01_00314e98(Camera *cam) {
     track->unk34 = 0.1f;
     track->unk38 = 0.2f;
     track->unk3C = 0;
-    blend = &cam->orbit->blend;
+    blend = &destination_camera->orbit->blend;
     blend->unk0 = 0;
     blend->unk4 = 0;
     blend->unk8 = 0;
