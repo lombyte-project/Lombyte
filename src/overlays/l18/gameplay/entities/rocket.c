@@ -947,18 +947,18 @@ extern int FUN_L00_002db8f8(void *);
 
 int FUN_L18_002d6108(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
-    int r = FUN_L00_002db8f8(moby);
-    if (r != 0) {
+    int state_pause_result = FUN_L00_002db8f8(moby);
+    if (state_pause_result != 0) {
         unsigned char current_state = moby->state;
         if ((unsigned)(current_state - 3) < 2) {
-            r = 2;
+            state_pause_result = 2;
             if (current_state != 4) {
                 moby->command = current_state;
                 moby->state = 4;
             }
         } else {
             *(short *)(moby_vars + 0xC8) = 0;
-            r = 0;
+            state_pause_result = 0;
         }
     } else {
         long t = moby->state;
@@ -966,7 +966,7 @@ int FUN_L18_002d6108(struct Moby *moby) {
             moby->state = moby->command;
         }
     }
-    return r;
+    return state_pause_result;
 }
 /* A path and the points along it (the count, then the points from 0x10) */
 typedef struct {
