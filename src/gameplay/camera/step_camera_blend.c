@@ -23,40 +23,40 @@ int step_camera_blend(void *to_blend, void *cam_blend) __asm__("FUN_001ecaf8");
 extern f32 frame_scale __asm__("D_0015ED60") MACRO_ADDR;
 int step_camera_blend(void *to_blend, void *cam_blend) {
     float *to = to_blend;
-    float *cam = cam_blend;
+    float *camera_blend_state = cam_blend;
     float target_rotation_quaternion[4];
     float blended_rotation_matrix[16];
     char *camera_publication_state;
     float eased_blend_factor;
-    float *rot;
+    float *blended_rotation_quaternion;
 
-    if (cam[3] == 1.0f && cam[0] == 1.0f) {
+    if (camera_blend_state[3] == 1.0f && camera_blend_state[0] == 1.0f) {
         return 1;
     }
-    eased_blend_factor = cosine_interpolate(0.0f, 1.0f, cam[3]);
-    add_vector_xyz(cam + 12, D_0013F490, cam + 12);
+    eased_blend_factor = cosine_interpolate(0.0f, 1.0f, camera_blend_state[3]);
+    add_vector_xyz(camera_blend_state + 12, D_0013F490, camera_blend_state + 12);
     camera_publication_state = occl_cam_state;
-    cam[16] = cam[12] + (to[12] - cam[12]) * eased_blend_factor;
-    cam[17] = cam[13] + (to[13] - cam[13]) * eased_blend_factor;
-    cam[18] = cam[14] + (to[14] - cam[14]) * eased_blend_factor;
+    camera_blend_state[16] = camera_blend_state[12] + (to[12] - camera_blend_state[12]) * eased_blend_factor;
+    camera_blend_state[17] = camera_blend_state[13] + (to[13] - camera_blend_state[13]) * eased_blend_factor;
+    camera_blend_state[18] = camera_blend_state[14] + (to[14] - camera_blend_state[14]) * eased_blend_factor;
     if (*(int *)(camera_publication_state + 0x14) == 0) {
-        qcopy(D_00187080, cam + 16);
+        qcopy(D_00187080, camera_blend_state + 16);
     }
     extract_matrix_rotation_quaternion(target_rotation_quaternion, to);
-    rot = cam + 20;
-    eased_blend_factor = cosine_interpolate(0.0f, 1.0f, cam[0]);
-    quaternion_nlerp(rot, cam + 8, target_rotation_quaternion, eased_blend_factor);
-    quaternion_to_matrix(rot, blended_rotation_matrix);
+    blended_rotation_quaternion = camera_blend_state + 20;
+    eased_blend_factor = cosine_interpolate(0.0f, 1.0f, camera_blend_state[0]);
+    quaternion_nlerp(blended_rotation_quaternion, camera_blend_state + 8, target_rotation_quaternion, eased_blend_factor);
+    quaternion_to_matrix(blended_rotation_quaternion, blended_rotation_matrix);
     if (*(int *)(camera_publication_state + 0x14) == 0) {
         copy_matrix3x4(camera_rows, blended_rotation_matrix);
     }
-    cam[3] += cam[4] * frame_scale;
-    if (1.0f < cam[3]) {
-        cam[3] = 1.0f;
+    camera_blend_state[3] += camera_blend_state[4] * frame_scale;
+    if (1.0f < camera_blend_state[3]) {
+        camera_blend_state[3] = 1.0f;
     }
-    cam[0] += cam[1] * frame_scale;
-    if (1.0f < cam[0]) {
-        cam[0] = 1.0f;
+    camera_blend_state[0] += camera_blend_state[1] * frame_scale;
+    if (1.0f < camera_blend_state[0]) {
+        camera_blend_state[0] = 1.0f;
     }
     return 0;
 }
