@@ -311,7 +311,7 @@ extern OvlQuad D_0013F3D0_30c9a8 __asm__("D_0013F3D0");
 extern OvlQuad D_L01_001742E0;
 void FUN_L01_0030c9a8(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
-    f32 *pos;
+    f32 *moby_position;
     OvlVec4 old_pos;
     OvlVec4 offset;
     DropProbe_30c9a8 probe;
@@ -329,7 +329,7 @@ void FUN_L01_0030c9a8(char *moby) {
         desired_yaw = *(f32 *)(moby + 0x48);
         desired_pitch = *(f32 *)(moby + 0x44);
     }
-    pos = (f32 *)(moby + 0x10);
+    moby_position = (f32 *)(moby + 0x10);
     desired_yaw = spring_turn((f32 *)moby_vars, *(f32 *)(moby + 0x48), desired_yaw,
                                             frame_time_sq * 4.712389f,
                                             frame_time_sq * 3.1415927f,
@@ -346,13 +346,13 @@ void FUN_L01_0030c9a8(char *moby) {
         build_spherical_offset_30c9a8(offset.f, pitch_max,
                                        *(f32 *)(moby + 0x48), -pitch_result);
     }
-    qcopy(&old_pos, pos);
-    fast_vec_add(pos, pos, &offset);
+    qcopy(&old_pos, moby_position);
+    fast_vec_add(moby_position, moby_position, &offset);
     if (*(f32 *)(moby + 0x10) < 2.0f || *(f32 *)(moby + 0x10) > 1021.0f ||
         *(f32 *)(moby + 0x14) < 2.0f || *(f32 *)(moby + 0x14) > 1021.0f ||
         *(f32 *)(moby + 0x18) < 2.0f || *(f32 *)(moby + 0x18) > 1021.0f ||
         *(f32 *)(moby + 0x10) < 0.0f || *(f32 *)(moby + 0x14) < 0.0f || *(f32 *)(moby + 0x18) < 0.0f ||
-        distance_xyz_30c9a8(pos, D_L01_00167240_30c9a8) > 64.0f) {
+        distance_xyz_30c9a8(moby_position, D_L01_00167240_30c9a8) > 64.0f) {
         mark_moby_for_removal_30c9a8(moby);
         return;
     }
@@ -360,7 +360,7 @@ void FUN_L01_0030c9a8(char *moby) {
     probe.flags = 0x10001;
     probe.scale = 0.5f;
     probe.count = 1;
-    fast_vec_sub(&probe.dir, pos, &D_0013F3D0_30c9a8);
+    fast_vec_sub(&probe.dir, moby_position, &D_0013F3D0_30c9a8);
     scale_vector_xyz_30c9a8(&probe.dir, &probe.dir, 1.0f);
     ((f32 *)&probe.dir)[2] = 1.0f;
     ((f32 *)&probe.dir)[3] = 5627.9248f;
@@ -372,14 +372,14 @@ void FUN_L01_0030c9a8(char *moby) {
         return;
     }
     {
-        if (!collision_line_30c9a8(&old_pos, pos, 0, *(void **)(moby_vars + 0x10), &probe))
+        if (!collision_line_30c9a8(&old_pos, moby_position, 0, *(void **)(moby_vars + 0x10), &probe))
             return;
         if (!collision_hit_material()) {
             if (*(s16 *)(moby_vars + 0x14) > scale_game_frames(3))
                 *(s16 *)(moby_vars + 0x14) = scale_game_frames(3);
             return;
         }
-        qcopy(pos, &D_L01_001742E0);
+        qcopy(moby_position, &D_L01_001742E0);
     }
     mark_moby_for_removal_30c9a8(moby);
 }
