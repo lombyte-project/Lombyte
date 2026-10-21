@@ -1131,7 +1131,7 @@ void FUN_L00_00273a68(struct EmberParticle *ember_particle) {
     struct EmberMotion *m = &ember_particle->m;
     Vec4 emitted_position;
     s32 cr, cg, cb;
-    s32 emitted_lifetime_frames, c1, c2;
+    s32 emitted_lifetime_frames, debris_initial_color, debris_secondary_color;
     f32 f;
 
     if (fast_dec_timer_s16(&ember_particle->life))
@@ -1170,9 +1170,9 @@ void FUN_L00_00273a68(struct EmberParticle *ember_particle) {
                              0.05f, 10500.0f);
         }
         if (!random_integer_below(9)) {
-            c1 = FUN_L00_002371e0(0x7F000000, 0x7F000000 | (cb << 16) | (cg << 8) | cr,
+            debris_initial_color = FUN_L00_002371e0(0x7F000000, 0x7F000000 | (cb << 16) | (cg << 8) | cr,
                                   random_float_between(0.25f, 1.0f));
-            c2 = FUN_L00_002371e0(0, 0x5F00, random_float_between(0.5f, 1.0f));
+            debris_secondary_color = FUN_L00_002371e0(0, 0x5F00, random_float_between(0.5f, 1.0f));
             m->vel.f[0] = random_float_between(-1.0f, 1.0f);
             m->vel.f[1] = random_float_between(-1.0f, 1.0f);
             m->vel.f[2] = 0.0f;
@@ -1182,7 +1182,7 @@ void FUN_L00_00273a68(struct EmberParticle *ember_particle) {
             emitted_position.f[2] -= 1.5f;
             f = random_float_between(420000.0f, 630000.0f);
             emitted_lifetime_frames = FUN_L00_00257b90(scale_game_frames(0x5A), scale_game_frames(0x96));
-            mine_debris(&emitted_position, &m->vel, c1, c2, f, emitted_lifetime_frames, 3);
+            mine_debris(&emitted_position, &m->vel, debris_initial_color, debris_secondary_color, f, emitted_lifetime_frames, 3);
         }
     }
     free_effect_particle(ember_particle);
