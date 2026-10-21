@@ -24,7 +24,7 @@ void upload_texture_images(s32 base, s32 count, struct TextureImage *p) __asm__(
 void upload_texture_images(s32 base, s32 count, struct TextureImage *texture_image) {
     sceGsLoadImage img;
     s32 i;
-    s32 dst;
+    s32 pixel_data_source;
     s32 height;
     s32 width;
     s32 destination_width_blocks;
@@ -40,7 +40,7 @@ void upload_texture_images(s32 base, s32 count, struct TextureImage *texture_ima
         one = 1;
         while (i != 0) {
             size = texture_image->size;
-            dst = base + texture_image->data_offset;
+            pixel_data_source = base + texture_image->data_offset;
             vram = gs_texture_allocation_cursor;
             width = (u16)size;
             height = size >> 16;
@@ -63,7 +63,7 @@ void upload_texture_images(s32 base, s32 count, struct TextureImage *texture_ima
             i--;
             FlushCache(0);
             texture_image++;
-            sceGsExecLoadImage(&img, dst);
+            sceGsExecLoadImage(&img, pixel_data_source);
             wait_for_graphics_pipeline_idle(0, 0);
         }
     }
