@@ -17,20 +17,20 @@ void prepare_save_game(int save_data, int slot) __asm__("FUN_002269c0");
 
 extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
 void prepare_save_game(int save_data, int slot) {
-    struct MemoryCardState *b = &memory_card_state;
+    struct MemoryCardState *card_state = &memory_card_state;
     int saving = 1;
     sceCdReadClock(D_0015EE98);
     sceScfGetLocalTimefromRTC(D_0015EE98);
     copy_level_object_positions();
     save_map_coverage(D_00141EC0 + (current_level_index << 11));
     memcard_make_whole_save((char *)save_data);
-    b->unkF4 = saving;
-    b->buf = (void *)save_data;
-    b->card[0].save_index = slot;
-    b->active_card = 0;
-    if (b->pending_state < 0) {
-        b->pending_card = 0;
-        b->pending_state = 0x13;
+    card_state->unkF4 = saving;
+    card_state->buf = (void *)save_data;
+    card_state->card[0].save_index = slot;
+    card_state->active_card = 0;
+    if (card_state->pending_state < 0) {
+        card_state->pending_card = 0;
+        card_state->pending_state = 0x13;
     }
 }
 
