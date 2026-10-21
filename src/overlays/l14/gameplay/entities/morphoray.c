@@ -774,11 +774,11 @@ void FUN_L14_00305d28(Moby_3071B0 *moby) {
     }
     }
 }
-void FUN_L14_003061d8(void *arg) {
+void FUN_L14_003061d8(void *updated_moby) {
     enum {
         MOBY_PVARS_INITIALIZE = 0
     };
-    char *moby = arg;
+    char *moby = updated_moby;
     char *moby_pvars;
     switch ((unsigned char)moby[0x20]) {
     case MOBY_PVARS_INITIALIZE:
