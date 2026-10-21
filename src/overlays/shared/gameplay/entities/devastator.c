@@ -3187,7 +3187,7 @@ void FUN_L00_002b8438(char *moby) {
             continue;
         }
         if (*(unsigned char *)entry == 0xC && entry[1] >= 0) {
-            float f20 = *(float *)(entry + 0xC) / 210000.0f * 0.5f;
+            float hit_sphere_radius = *(float *)(entry + 0xC) / 210000.0f * 0.5f;
             char *src = entry + 0x20;
             int sub_type;
             set_vector_length_xy(vec, src, 1.0f);
@@ -3197,7 +3197,7 @@ void FUN_L00_002b8438(char *moby) {
             *(unsigned char *)(buf + 0x18) = 5;
             *(unsigned char *)(buf + 0x19) = 1;
             *(unsigned short *)(buf + 0x1A) = *(unsigned short *)(moby + 0xA6);
-            collect_mobies_in_sphere((entry + 0x10), f20, 0, moby, buf);
+            collect_mobies_in_sphere((entry + 0x10), hit_sphere_radius, 0, moby, buf);
             sub_type = *(short *)(entry + 0xA);
             if (sub_type == 10) {
                 int j;
@@ -3217,7 +3217,7 @@ void FUN_L00_002b8438(char *moby) {
                     FUN_L00_0025c0e8(c2, item_variant_bytes[0x10]);
                     c3 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&D_L00_00161554, (float)*(int *)&D_L00_00161558)));
                     c4 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&D_L00_00161554, (float)*(int *)&D_L00_00161558)));
-                    FUN_L00_00257d78(spark_position, 0.0f, f20 + f20);
+                    FUN_L00_00257d78(spark_position, 0.0f, hit_sphere_radius + hit_sphere_radius);
                     add_vector_xyz(spark_position, spark_position, (entry + 0x10));
                     spawn_spark(spark_position, qv, spark_random_vector, c1, c2, 0xA, c3, c4, *(int *)&D_L00_0016152C);
                 }
