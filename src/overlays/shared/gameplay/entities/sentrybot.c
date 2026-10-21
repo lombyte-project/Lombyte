@@ -1217,29 +1217,29 @@ extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28"
 void FUN_L15_0029a2a8(void *mv) {
     char *moby = mv;
     char *moby_data = *(char **)(moby + 0x78);
-    float tgt[4];
-    float pos[4];
-    float dir[4];
+    float target_position[4];
+    float aim_origin[4];
+    float target_displacement[4];
     float k1 = 0.02f;
     float k2 = 0.3f;
     float yaw, pitch;
     int have = 0;
     if (*(short *)(moby_data + 0x194) != 0 && *(char **)(moby_data + 0x190) != 0) {
-        qcopy(tgt, *(char **)(moby_data + 0x190) + 0x10);
+        qcopy(target_position, *(char **)(moby_data + 0x190) + 0x10);
         have = 1;
     } else if (*(short *)(moby_data + 0x19C) != 0 && *(char **)(moby_data + 0x198) != 0) {
-        qcopy(tgt, *(char **)(moby_data + 0x198) + 0x10);
+        qcopy(target_position, *(char **)(moby_data + 0x198) + 0x10);
         have = 1;
     } else if (((unsigned char *)moby_data)[0x19F] != 0) {
-        qcopy(tgt, moby_data + 0x100);
+        qcopy(target_position, moby_data + 0x100);
         have = 1;
     }
     if (have) {
-        qcopy(pos, moby + 0x10);
-        pos[2] += 1.0f;
-        subtract_vector_xyz_c(dir, tgt, pos);
-        yaw = fast_subtract_rotations(fast_arc_tan(dir[0], dir[1]), *(float *)(moby + 0x48));
-        pitch = -fast_arc_tan(vector_length_xy_c(dir), dir[2]);
+        qcopy(aim_origin, moby + 0x10);
+        aim_origin[2] += 1.0f;
+        subtract_vector_xyz_c(target_displacement, target_position, aim_origin);
+        yaw = fast_subtract_rotations(fast_arc_tan(target_displacement[0], target_displacement[1]), *(float *)(moby + 0x48));
+        pitch = -fast_arc_tan(vector_length_xy_c(target_displacement), target_displacement[2]);
         if ((unsigned int)(((unsigned char *)moby)[0x20] - 0x10) < 2) {
             if (1.5707964f < yaw)
                 yaw = 1.5707964f;
