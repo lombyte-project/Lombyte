@@ -238,7 +238,7 @@ void follow_camera_orbit(int arg) {
     float orbit_base_position[4];
     float forward_clamp_axis[4];
     float tb[4];
-    float x, bc, dot_product, e1, y, current_up_component, r, i, yaw_rotation_sign, len;
+    float x, bc, dot_product, reference_up_component, y, current_up_component, r, i, yaw_rotation_sign, len;
     char *base = D_L00_00166E10;
     char *up = base + 0x20;
     char *base2;
@@ -252,13 +252,13 @@ void follow_camera_orbit(int arg) {
     bc = fast_vec_length(current_orbit_offset);
     FUN_L00_002e9518_c(camera_object, &tb[0], &tb[1]);
     bc = cam_interp_values(camera_state + 0x158, bc, x, tb[0], tb[1], 0.0f);
-    e1 = fast_vec_dot(reference_orbit_offset, up);
-    y = fast_arc_sin(e1 / x);
+    reference_up_component = fast_vec_dot(reference_orbit_offset, up);
+    y = fast_arc_sin(reference_up_component / x);
     current_up_component = fast_vec_dot(current_orbit_offset, up);
     r = fast_arc_sin(current_up_component / bc);
     i = rope_spring_turn(camera_state + 0x154, r, y, *(float *)&D_L00_00161CFC, *(float *)&D_L00_00161D00,
                          0.0f);
-    fast_vec_scale(reference_up_projection, up, e1);
+    fast_vec_scale(reference_up_projection, up, reference_up_component);
     subtract_vector_xyz(projected_reference_offset, reference_orbit_offset, reference_up_projection);
     fast_vec_scale(current_up_projection, up, current_up_component);
     subtract_vector_xyz(projected_current_offset, current_orbit_offset, current_up_projection);
