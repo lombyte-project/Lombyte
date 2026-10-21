@@ -2836,11 +2836,11 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68(void *, void *, float);
 
-void FUN_L00_002bf810(char *start_vector, char *b, int step_count) {
+void FUN_L00_002bf810(char *start_vector, char *end_vector, int step_count) {
     float step_vector[4];
     float accumulated_vector[4];
     int i;
-    fast_vec_sub(step_vector, b, start_vector);
+    fast_vec_sub(step_vector, end_vector, start_vector);
     FUN_001f9a68(step_vector, step_vector, 1.0f / convert_integer_to_float(step_count));
     qcopy(accumulated_vector, start_vector);
     for (i = 0; i < step_count; i++) {
