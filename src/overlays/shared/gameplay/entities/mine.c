@@ -2378,7 +2378,7 @@ extern s32 FUN_002141f8_u(char *) __asm__("FUN_002141f8");
 extern s32 FUN_L00_0025f878(char *);
 
 void FUN_L00_002affa8(char *self, O *out, char *skip) {
-    VU v;
+    VU candidate_aim_position;
     VU lv;
     char *candidate_moby;
     s32 candidate_aim_record_address;
@@ -2402,10 +2402,10 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
             goto next;
         if (candidate_moby == skip)
             goto next;
-        qcopy(&v, candidate_moby + 0x10);
+        qcopy(&candidate_aim_position, candidate_moby + 0x10);
         spos = self + 0x10;
         opos = candidate_moby + 0x10;
-        if (40.0f < FUN_001f9b48(&v, spos))
+        if (40.0f < FUN_001f9b48(&candidate_aim_position, spos))
             goto next;
         candidate_aim_record_address = FUN_002141f8_u(candidate_moby);
         if (candidate_aim_record_address == 0)
@@ -2416,23 +2416,23 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
             goto np;
         {
             f32 pf = *(f32 *)(candidate_aim_record_address + 0x10);
-            z = v.f[2] + pf;
+            z = candidate_aim_position.f[2] + pf;
         }
         goto zset;
     np:
         candidate_aim_record_address = 0;
-        z = v.f[2] + 0.5f;
+        z = candidate_aim_position.f[2] + 0.5f;
     zset:
-        v.f[2] = z;
+        candidate_aim_position.f[2] = z;
         if (candidate_moby == 0)
             goto next;
         if (*(char **)(candidate_moby + 0x24) == 0)
             goto next;
         if (*(s16 *)(*(char **)(candidate_moby + 0x24) + 0x46) != 5)
             goto next;
-        angh = fast_arc_tan(v.f[0] - *(f32 *)(self + 0x10), v.f[1] - *(f32 *)(self + 0x14));
-        angv = fast_arc_tan(vector_distance(spos, &v), v.f[2] - *(f32 *)(self + 0x18));
-        dist = FUN_001f9b48(spos, &v);
+        angh = fast_arc_tan(candidate_aim_position.f[0] - *(f32 *)(self + 0x10), candidate_aim_position.f[1] - *(f32 *)(self + 0x14));
+        angv = fast_arc_tan(vector_distance(spos, &candidate_aim_position), candidate_aim_position.f[2] - *(f32 *)(self + 0x18));
+        dist = FUN_001f9b48(spos, &candidate_aim_position);
         if (dist < 2.5f) {
             char *cam = *(char **)&g->moby;
             if (fast_difference_between_rotations(
@@ -2447,14 +2447,14 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         ang = convert_integer_to_float(D_0013E520_u.bB) * 0.6981317f;
         FUN_00214db0(&lv, dist, yaw, pitch + g->ground_pitch.f * 0.5f);
         fast_vec_add(&lv, &lv, spos);
-        z = fast_arc_sin(FUN_001f9b48(&lv, &v) / (dist + dist));
+        z = fast_arc_sin(FUN_001f9b48(&lv, &candidate_aim_position) / (dist + dist));
         ang = ang + 1.5707964f;
         if (ang < z + z && candidate_aim_record_address != 0) {
             ang = convert_integer_to_float(*(u8 *)(candidate_aim_record_address + 0xA) << 3) * 0.125f;
             fast_arc_sin(ang / dist);
         }
         flag = 1;
-        if (FUN_001efa68_u(D_L00_00166DC0, &v, 6, self, 0) != 0) {
+        if (FUN_001efa68_u(D_L00_00166DC0, &candidate_aim_position, 6, self, 0) != 0) {
             s32 hit = D_L00_00173E40[6];
             if (hit == 0 || hit != (s32)candidate_moby)
                 flag = 0;
