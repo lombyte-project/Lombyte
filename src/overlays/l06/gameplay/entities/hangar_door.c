@@ -728,9 +728,9 @@ extern float spark_dir __asm__("D_L06_00161CF4") __attribute__((sda));
 extern float spark_vel __asm__("D_L06_00161CF8") __attribute__((sda));
 extern float spark_drift __asm__("D_L06_00161D18") __attribute__((sda));
 void FUN_L06_002f3d70(char *vent_moby) {
-    Vec4 mat[4];
+    Vec4 vent_rotation_matrix[4];
     Vec4 at;
-    Vec4 dir;
+    Vec4 spark_emission_step;
     Vec4 drift;
     Vec4 offset;
     Vec4 vel;
@@ -751,12 +751,12 @@ void FUN_L06_002f3d70(char *vent_moby) {
         return;
     }
     qcopy(&at, pos);
-    rotation_matrix(mat, vent_moby + 0x40);
-    clear_u64_value(&dir);
-    dir.f[0] = spark_speed_gp * frame_time;
-    transform_vector(&dir, &dir, mat);
-    dir.f[3] = spark_dir;
-    scale_vector_xyz(&drift, &dir, spark_drift_scale);
+    rotation_matrix(vent_rotation_matrix, vent_moby + 0x40);
+    clear_u64_value(&spark_emission_step);
+    spark_emission_step.f[0] = spark_speed_gp * frame_time;
+    transform_vector(&spark_emission_step, &spark_emission_step, vent_rotation_matrix);
+    spark_emission_step.f[3] = spark_dir;
+    scale_vector_xyz(&drift, &spark_emission_step, spark_drift_scale);
     drift.f[2] = spark_drift * frame_time;
     vel.f[3] = spark_vel;
 
@@ -768,19 +768,19 @@ void FUN_L06_002f3d70(char *vent_moby) {
     if (fade < sampled_frame_count) fade = sampled_frame_count;
     frames = truncate_float_to_s32(scale_game_frames(spark_frames));
 
-    scale_vector_xyz(&offset, &dir, random_float_between(0.0f, 1.0f));
+    scale_vector_xyz(&offset, &spark_emission_step, random_float_between(0.0f, 1.0f));
     add_vector_xyz(&at, pos, &offset);
     random_vector(&vel, 0.0f, spark_spread * frame_time);
     add_vector_xyz(&vel, &vel, &drift);
-    spawn_spark(&at, &dir, &vel, spark_color0, spark_color1, life, fade, frames, 0x30);
+    spawn_spark(&at, &spark_emission_step, &vel, spark_color0, spark_color1, life, fade, frames, 0x30);
 
     life = truncate_float_to_s32(scale_time(random_float_between(spark_life_min, spark_life_max)));
     fade = truncate_float_to_s32(scale_time(random_float_between(spark_fade_min, spark_fade_max)));
-    scale_vector_xyz(&offset, &dir, random_float_between(0.0f, 1.0f));
+    scale_vector_xyz(&offset, &spark_emission_step, random_float_between(0.0f, 1.0f));
     add_vector_xyz(&at, pos, &offset);
     random_vector(&vel, 0.0f, spark_spread * frame_time);
     add_vector_xyz(&vel, &vel, &drift);
-    spawn_spark(&at, &dir, &vel, spark_color0, spark_color1, life, fade, frames, 0x30);
+    spawn_spark(&at, &spark_emission_step, &vel, spark_color0, spark_color1, life, fade, frames, 0x30);
 }
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F5560), where it is exact; names translated to the US level program. */
 
