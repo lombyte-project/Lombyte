@@ -1770,8 +1770,8 @@ typedef struct {
 } Vars85b8;
 
 /* Hit reaction: takes damage, flinches or dies (knocked away from the hero), then retargets. */
-void FUN_L02_002d85b8(void *arg) {
-    char *moby = arg;
+void FUN_L02_002d85b8(void *owner_moby) {
+    char *moby = owner_moby;
     Vars85b8 *moby_vars = *(Vars85b8 **)(moby + 0x78);
     char *hit_record;
     char *current_target;
