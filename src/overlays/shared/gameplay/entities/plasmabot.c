@@ -1016,16 +1016,16 @@ void FUN_L14_002b2f60(char *moby) {
         {
             char *reaction_motion_state = state + 0x60;
             int stagger_duration_frames;
-            float frame_duration, g, k;
+            float frame_duration, stagger_motion_z, k;
             FUN_L00_002e2040(moby);
             moby[0x20] = 0xA;
             stagger_duration_frames = scale_game_frames(0x3C);
             frame_duration = frame_time;
-            g = D_L14_001614C8 * frame_duration;
+            stagger_motion_z = D_L14_001614C8 * frame_duration;
             k = frame_duration * 8.0f;
             *(short *)(state + 0x26) = stagger_duration_frames;
             *(float *)(state + 0x78) = k;
-            *(float *)(state + 0x7C) = g;
+            *(float *)(state + 0x7C) = stagger_motion_z;
             *(float *)(state + 0xB0) = 11.0f;
             *(float *)(state + 0xB4) = 29.0f;
             func_L00_0025D5B0_i(moby, reaction_motion_state, fast_arc_tan(*(float *)(hit_info + 0x10), *(float *)(hit_info + 0x14)), 7, 1, 0);
