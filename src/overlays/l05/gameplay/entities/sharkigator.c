@@ -470,13 +470,13 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L05_002d1fd8(int unused, char *position) {
     float v[4];
-    char *r;
+    char *spawned_object;
     int i;
     char *base;
     int random_spawn_value;
-    r = FUN_L00_002d7e90(position, 3.0f);
-    if (r)
-        r[0x23] = 0x70;
+    spawned_object = FUN_L00_002d7e90(position, 3.0f);
+    if (spawned_object)
+        spawned_object[0x23] = 0x70;
     for (base = (char *)&D_L05_001612E8, i = 15; i >= 0; i--) {
         float ang = random_angle_radians();
         float k = random_float_between(frame_time * 0.0f, frame_time * 3.0f);
