@@ -3136,7 +3136,7 @@ void rocket_launcher_update(struct Moby *moby) {
         ROCKET_LAUNCHER_WAIT_FOR_POST_SHOT_ANIMATION = 2
     };
     SwivelTurretVars *rocket_launcher_vars = (SwivelTurretVars *)moby->pvars;
-    Vec4f dir, muzzle;
+    Vec4f projectile_velocity, muzzle;
     f32 glow_blend_fraction;
 
     FUN_L02_002df730(moby);
@@ -3169,12 +3169,12 @@ void rocket_launcher_update(struct Moby *moby) {
             if (moby->prev_seq != 1)
                 turret_blend_anim(moby, 1, 0, 1);
             turret_joint_pos(moby, 1, &muzzle);
-            turret_joint_pos(moby, 0, &dir);
-            turret_vec_sub(&dir, &muzzle, &dir);
-            turret_vec_set_len(&dir, &dir, D_L02_00161C6C * D_0015ED6C);
-            turret_spawn_debris(moby, &dir, &muzzle, 0.0f, 0.0f, 0, 6, 0x20, 7.0f, 4.0f, 1.0f, 3.0f, -1, 30.0f,
+            turret_joint_pos(moby, 0, &projectile_velocity);
+            turret_vec_sub(&projectile_velocity, &muzzle, &projectile_velocity);
+            turret_vec_set_len(&projectile_velocity, &projectile_velocity, D_L02_00161C6C * D_0015ED6C);
+            turret_spawn_debris(moby, &projectile_velocity, &muzzle, 0.0f, 0.0f, 0, 6, 0x20, 7.0f, 4.0f, 1.0f, 3.0f, -1, 30.0f,
                                 0, 1, -1, 0);
-            FUN_L02_002ec228((char *)moby, &muzzle, (float *)&dir);
+            FUN_L02_002ec228((char *)moby, &muzzle, (float *)&projectile_velocity);
         }
         break;
     case ROCKET_LAUNCHER_WAIT_FOR_POST_SHOT_ANIMATION:
