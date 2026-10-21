@@ -209,35 +209,35 @@ void setup_level_cameras(void) {
     clear_vector(g1 + 0x1E0);
     qcopy(g1 + 0x1F0, &base->motion.pos);
     {
-        float f0 = base->motion.rot.f[2];
-        float f1 = base->motion.pos.f[2];
+        float hero_rotation_z = base->motion.rot.f[2];
+        float hero_position_z = base->motion.pos.f[2];
         *(int *)(q + 0xC4) = 0;
         *(int *)(q + 0xCC) = 0;
         *(int *)(q + 0xC0) = 0;
         *(int *)(q + 0xC8) = 0;
         *(int *)(q + 0xD0) = 0;
-        *(float *)(q + 0xBC) = f0;
-        *(float *)(q + 0xB8) = f0;
-        *(float *)(q + 0xB4) = f0;
-        *(float *)(q + 0xB0) = f0;
+        *(float *)(q + 0xBC) = hero_rotation_z;
+        *(float *)(q + 0xB8) = hero_rotation_z;
+        *(float *)(q + 0xB4) = hero_rotation_z;
+        *(float *)(q + 0xB0) = hero_rotation_z;
         *(int *)(q + 0xD4) = 0;
         *(int *)(q + 0xDC) = 0;
-        *(float *)(q + 0xAC) = f0;
-        *(float *)(q + 0xD8) = f1;
+        *(float *)(q + 0xAC) = hero_rotation_z;
+        *(float *)(q + 0xD8) = hero_position_z;
     }
     i = 0;
     if (D_L00_0015EF54 > 0) {
         do {
             char *level_camera_entry;
-            char *r;
+            char *level_camera_data;
             Elem *el;
             int camera_id;
             level_camera_entry = (char *)(i * 32);
             level_camera_entry = D_L00_0015EF50 + (int)level_camera_entry;
-            r = *(char **)(level_camera_entry + 0x1C);
+            level_camera_data = *(char **)(level_camera_entry + 0x1C);
             el = &D_L00_00167150[i];
             el->s84 = i;
-            *(Elem **)(r + 4) = el;
+            *(Elem **)(level_camera_data + 4) = el;
             el->s8E = 0;
             el->c89 = 0;
             el->s8A = 0;
@@ -246,8 +246,8 @@ void setup_level_cameras(void) {
             el->c7D = 0;
             el->s7E = 0;
             el->f78 = -1.0f;
-            el->c7C = r[0x1C];
-            el->i74 = (unsigned char)r[0x1F];
+            el->c7C = level_camera_data[0x1C];
+            el->i74 = (unsigned char)level_camera_data[0x1F];
             camera_id = *(unsigned short *)(level_camera_entry + 0xC);
             D_L00_00169890[i] = 1;
             el->s86 = camera_id;
