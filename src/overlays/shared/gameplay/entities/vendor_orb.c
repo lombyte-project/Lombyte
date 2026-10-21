@@ -1661,21 +1661,21 @@ extern void FUN_L00_002e4168_c2(char *, void *) __asm__("FUN_L00_002e4168");
 
 float FUN_L00_002e4580(char *camera, float target_offset_scale) {
     float hero_position[4], offset_target_position[4], angle_direction[4], axis_projection[4];
-    float reference_dot_or_signed_angle, len;
-    char *g = D_L00_00166E10;
+    float reference_dot_or_signed_angle, axis_dot_or_direction_length;
+    char *camera_view = D_L00_00166E10;
     FUN_L00_002e4168_c2(camera, hero_position);
-    FUN_001f9a68_c3(offset_target_position, g + 0x20, target_offset_scale);
+    FUN_001f9a68_c3(offset_target_position, camera_view + 0x20, target_offset_scale);
     FUN_001f9a10_c2(offset_target_position, offset_target_position, hero_position);
     FUN_001f9a28(angle_direction, offset_target_position, (float *)(camera + 0x30));
-    len = fast_vec_dot(angle_direction, camera + 0x10);
-    FUN_001f9a68_c3(axis_projection, camera + 0x10, len);
+    axis_dot_or_direction_length = fast_vec_dot(angle_direction, camera + 0x10);
+    FUN_001f9a68_c3(axis_projection, camera + 0x10, axis_dot_or_direction_length);
     FUN_001f9a28(angle_direction, angle_direction, axis_projection);
     reference_dot_or_signed_angle = fast_vec_dot(angle_direction, camera);
-    len = fast_vec_length(angle_direction);
-    if (len == 0.0f) {
+    axis_dot_or_direction_length = fast_vec_length(angle_direction);
+    if (axis_dot_or_direction_length == 0.0f) {
         return 0.0f;
     }
-    reference_dot_or_signed_angle = 1.5707964f - fast_arc_sin(reference_dot_or_signed_angle / len);
+    reference_dot_or_signed_angle = 1.5707964f - fast_arc_sin(reference_dot_or_signed_angle / axis_dot_or_direction_length);
     if (fast_vec_dot(angle_direction, camera + 0x20) < 0.0f) {
         reference_dot_or_signed_angle = -reference_dot_or_signed_angle;
     }
