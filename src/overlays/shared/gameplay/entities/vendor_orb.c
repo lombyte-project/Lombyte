@@ -2615,7 +2615,7 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
     float len;
     float ang;
     float sign;
-    float r = 0.0f;
+    float angle_delta = 0.0f;
     float z2;
     float angle_blend_fraction;
 
@@ -2625,13 +2625,13 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
     FUN_001f9a28(planar_reference_direction, (float *)reference_direction, axis_projection);
     dot = fast_vec_dot(planar_input_direction, planar_reference_direction);
     len = fast_vec_length(planar_input_direction);
-    if (len == r) {
-        return r;
+    if (len == angle_delta) {
+        return angle_delta;
     }
     z2 = 0.0f;
     len = len * fast_vec_length(planar_reference_direction);
-    if (len == r) {
-        return r;
+    if (len == angle_delta) {
+        return angle_delta;
     }
     ang = 1.5707964f - fast_arc_sin(dot / len);
     sign = -1.0f;
@@ -2639,16 +2639,16 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
     if (fast_vec_dot(input_cross_axis, planar_reference_direction) >= 0.0f) {
         sign = 1.0f;
     }
-    r = fast_subtract_rotations(3.1415927f, ang);
-    if (lim != z2 && lim < absolute_float(r)) {
-        return r;
+    angle_delta = fast_subtract_rotations(3.1415927f, ang);
+    if (lim != z2 && lim < absolute_float(angle_delta)) {
+        return angle_delta;
     }
-    angle_blend_fraction = r / 1.5707964f;
+    angle_blend_fraction = angle_delta / 1.5707964f;
     if (angle_blend_fraction > 1.0f) {
         angle_blend_fraction = 1.0f;
     }
     *(float *)(blend_output_block + 0x1C) = cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, angle_blend_fraction) * sign;
-    return r;
+    return angle_delta;
 }
 void FUN_001f9a28_c2(void *, void *, void *) __asm__("FUN_001f9a28");
 /* Passes b minus the vector at +0x40 of p's object, with x, to FUN_L00_002e86b0. */
