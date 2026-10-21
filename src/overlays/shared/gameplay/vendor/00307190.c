@@ -69,7 +69,7 @@ void FUN_L08_00307298(char *fire_bolt) {
     char *bolt_data = *(char **)(fire_bolt + 0x78);
     float prev[4];
     float sc[4];
-    float off[4];
+    float trail_spawn_position[4];
     float unused_vector_argument[4];
     char *tracked_moby;
     switch (((unsigned char *)fire_bolt)[0x20]) {
@@ -83,10 +83,10 @@ void FUN_L08_00307298(char *fire_bolt) {
             int trail_frame_count;
             float trail_velocity_scale = random_float_between_alt(0.95f, 0.985f);
             scale_vector_xyz(sc, bolt_data, trail_velocity_scale);
-            normalize_vector_xyz(off, bolt_data, -0.1f);
-            FUN_L00_001ff290(unused_vector_argument, off, fire_bolt + 0x10);
+            normalize_vector_xyz(trail_spawn_position, bolt_data, -0.1f);
+            FUN_L00_001ff290(unused_vector_argument, trail_spawn_position, fire_bolt + 0x10);
             trail_frame_count = scale_game_frames(random_int_between(0xF, 0x14));
-            FUN_L00_00269958(off, sc, 0x6F00AFFF, 0xFF, trail_frame_count, 0x28,
+            FUN_L00_00269958(trail_spawn_position, sc, 0x6F00AFFF, 0xFF, trail_frame_count, 0x28,
                              scale_game_frames(random_int_between(7, 0xA)), 1);
         }
         add_vector_xyz(fire_bolt + 0x10, fire_bolt + 0x10, bolt_data);
