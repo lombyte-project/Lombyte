@@ -9,19 +9,19 @@ extern void FUN_L11_00310cf8(float, float, float, float, float, int, int, int, i
                              int);
 
 /* Draws four quads a quarter turn apart; same routine as FUN_L11_00311048 with this level's texture. */
-void FUN_L17_002ea418(unsigned char red, unsigned char b, unsigned char blue, unsigned char alpha, float x,
+void FUN_L17_002ea418(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
                       float y, float scale, float ang) {
     int texture_handle;
-    float w;
+    float quad_size;
     texture_handle = get_effect_texture(0x2E);
-    w = scale * 20.0f;
-    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, b, blue, alpha);
+    quad_size = scale * 20.0f;
+    FUN_L11_00310cf8(x, y, quad_size, quad_size, ang, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, green, blue, alpha);
     ang = fast_add_rotations(ang, 1.5707964f);
-    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, b, blue, alpha);
+    FUN_L11_00310cf8(x, y, quad_size, quad_size, ang, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, green, blue, alpha);
     ang = fast_add_rotations(ang, 1.5707964f);
-    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, b, blue, alpha);
+    FUN_L11_00310cf8(x, y, quad_size, quad_size, ang, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, green, blue, alpha);
     ang = fast_add_rotations(ang, 1.5707964f);
-    FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, b, blue, alpha);
+    FUN_L11_00310cf8(x, y, quad_size, quad_size, ang, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, green, blue, alpha);
 }
 
 #include "eetypes.h"
