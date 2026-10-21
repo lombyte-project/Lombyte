@@ -167,7 +167,7 @@ void FUN_L00_002a4cd8(unsigned char *state_object) {
         UPDATE_WRAPPED_VALUE = 1
     };
     float one;
-    int r;
+    int scaled_frame_count;
     switch (state_object[0x20]) {
     case INITIALIZE_FRAME_TIMING:
         D_L00_00161390 = 0;
@@ -175,12 +175,12 @@ void FUN_L00_002a4cd8(unsigned char *state_object) {
         state_object[0x30] = 0xFF;
         one = 1.0f;
         D_L00_0016137C_gp = scale_game_frames(D_L00_00161368);
-        r = scale_game_frames(D_L00_0016136C);
-        D_L00_00161380 = r;
-        D_L00_00161384_gp = one / convert_integer_to_float(r);
-        r = scale_game_frames(D_L00_00161370);
-        D_L00_00161388 = r;
-        D_L00_0016138C_gp = one / (float)r;
+        scaled_frame_count = scale_game_frames(D_L00_0016136C);
+        D_L00_00161380 = scaled_frame_count;
+        D_L00_00161384_gp = one / convert_integer_to_float(scaled_frame_count);
+        scaled_frame_count = scale_game_frames(D_L00_00161370);
+        D_L00_00161388 = scaled_frame_count;
+        D_L00_0016138C_gp = one / (float)scaled_frame_count;
         break;
     case UPDATE_WRAPPED_VALUE:
         D_L00_00161374_gp -= D_L00_00161378 * frame_scale;
