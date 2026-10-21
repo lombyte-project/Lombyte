@@ -836,21 +836,21 @@ float FUN_L00_0025b750(float start_angle, float target_angle, float blend_fracti
 
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L00_0025b798(float *ptr, float rate, float error_gain, float damping_coefficient, float limit) {
-    float unclamped_velocity = *ptr + (error_gain * rate - damping_coefficient * (*ptr));
+void FUN_L00_0025b798(float *velocity, float rate, float error_gain, float damping_coefficient, float limit) {
+    float unclamped_velocity = *velocity + (error_gain * rate - damping_coefficient * (*velocity));
 
-    *ptr = unclamped_velocity;
+    *velocity = unclamped_velocity;
     if (0.0f < limit) {
         if (limit < unclamped_velocity) {
-            *ptr = limit;
+            *velocity = limit;
         } else if (unclamped_velocity < -limit) {
-            *ptr = -limit;
+            *velocity = -limit;
         }
     }
-    if (absolute_float(rate) < *ptr) {
-        *ptr = absolute_float(rate);
-    } else if (*ptr < -absolute_float(rate)) {
-        *ptr = -absolute_float(rate);
+    if (absolute_float(rate) < *velocity) {
+        *velocity = absolute_float(rate);
+    } else if (*velocity < -absolute_float(rate)) {
+        *velocity = -absolute_float(rate);
     }
 }
 
