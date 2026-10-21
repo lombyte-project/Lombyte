@@ -2090,9 +2090,9 @@ void FUN_L16_002e7e00(struct Moby *moby) {
         break;
     case JOINT_TRAIL_EMIT:
         if (D_L16_0015F5C4 == 2) {
-            char *g = D_L16_0016CC60;
-            if (*(int *)(g + 0x30) == 0) {
-                char *joint_source_moby = *(char **)(g + 0x184);
+            char *trail_source_context = D_L16_0016CC60;
+            if (*(int *)(trail_source_context + 0x30) == 0) {
+                char *joint_source_moby = *(char **)(trail_source_context + 0x184);
                 moby_point_position(joint_source_moby, 6, joint_6_position);
                 moby_point_position(joint_source_moby, 4, joint_4_position);
                 subtract_vector_xyz(joint_6_trail_velocity, joint_6_position, joint_4_position);
