@@ -3057,7 +3057,7 @@ void FUN_L00_0026ff10(Moby_26ff10 *particle) {
     s64 hit;
     s32 k, mode, kk2, t;
     void *aux, *col, *pa, *pb;
-    f32 f, g, alpha_factor;
+    f32 f, rotation_direction_sign, alpha_factor;
 
     pv = &particle->pv;
     if (particle->h0A != 0 && FUN_001f9770_26ff10(&particle->h0A) != 0) {
@@ -3179,15 +3179,15 @@ void FUN_L00_0026ff10(Moby_26ff10 *particle) {
         pv->y = pv->y * 0.95f;
     }
     fm = pv->f18;
-    g = -1.0f;
+    rotation_direction_sign = -1.0f;
     if (fm & 1)
-        g = 1.0f;
+        rotation_direction_sign = 1.0f;
     if (fm & 8) {
         pv->z = pv->z + frame_scale_sq * 0.008f;
         f = FUN_001fa6c0_26ff10(pv->f16);
-        pv->t = pv->t + g * (D_0015ED60_26ff10 * -0.01f) / f;
+        pv->t = pv->t + rotation_direction_sign * (D_0015ED60_26ff10 * -0.01f) / f;
     } else {
-        pv->t = pv->t + g * (D_0015ED60_26ff10 * -0.01f);
+        pv->t = pv->t + rotation_direction_sign * (D_0015ED60_26ff10 * -0.01f);
     }
     if (1.0f < pv->t)
         pv->t = pv->t - 1.0f;
