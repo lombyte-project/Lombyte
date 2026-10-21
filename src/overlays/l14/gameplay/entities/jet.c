@@ -1213,9 +1213,9 @@ extern float D_L14_00161CD8;
 extern float D_L14_00161CCC;
 void FUN_L14_002ed280(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
-    int idx[5];
+    int visible_path_point_indices[5];
     float visibility_test_point[4];
-    int st;
+    int moby_state;
     if (MOBY(moby)->state == 0) {
         if (current_level_index == 0xE) hero.unk22D8 = 1;
         MOBY(moby)->state = 1;
@@ -1223,20 +1223,20 @@ void FUN_L14_002ed280(struct Moby *moby) {
         *(int *)&D_L14_00161C58 = 0;
         *(int *)&D_L14_00161C50 = 0;
     }
-    st = MOBY(moby)->state;
-    if (st == 1) {
+    moby_state = MOBY(moby)->state;
+    if (moby_state == 1) {
         unsigned char *scene_start_guard_base;
         if (D_L14_0015F5C4 != 0) return;
         scene_start_guard_base = (unsigned char *)D_0013D24D + 0x13B;
         if (scene_start_guard_base[0x68] != 0) return;
         start_scene(0);
-        scene_start_guard_base[0x68] = st;
+        scene_start_guard_base[0x68] = moby_state;
         MOBY(moby)->state = 2;
         FUN_L00_0028e990();
         return;
     }
-    if (st == 2) {
-        if (D_L14_0015F5C4 == st) return;
+    if (moby_state == 2) {
+        if (D_L14_0015F5C4 == moby_state) return;
         MOBY(moby)->state = 3;
         FUN_L01_002a2480();
         return;
@@ -1251,12 +1251,12 @@ void FUN_L14_002ed280(struct Moby *moby) {
             visibility_test_point[2] += *(float *)&D_L14_00161C64;
             visibility_test_point[3] = *(float *)&D_L14_00161C60;
             if (fast_bsphere_check(visibility_test_point, 255.0f) > 0) {
-                idx[visible_point_count++] = i;
+                visible_path_point_indices[visible_point_count++] = i;
             }
         }
         if (visible_point_count > 0) {
             int k = random_integer_below(visible_point_count);
-            qcopy(D_L14_00161CC0, (char *)path + idx[k] * 16 + 0x10);
+            qcopy(D_L14_00161CC0, (char *)path + visible_path_point_indices[k] * 16 + 0x10);
             D_L14_00161CCC = 1.0f;
             qcopy(D_L14_00161CD0, D_L14_00161CC0);
             D_L14_00161CD8 = *(float *)&D_L14_00161C5C;
