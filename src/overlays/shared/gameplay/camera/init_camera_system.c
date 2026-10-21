@@ -106,30 +106,30 @@ void camera_run_setup_to_new_cam(struct Moby *cam) __asm__("FUN_001ebec8");
 
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 void init_camera_system(void) {
-    char *g = (char *)&D_L00_00166C80_c;
+    char *camera_system_state = (char *)&D_L00_00166C80_c;
     float *camera_vector_snapshot, *camera_record_vector_destination, *vector_copy_source, *vector_copy_destination;
     char *current_camera_record;
-    if (*(char **)(g + 0x180) != 0) {
-        *(short *)(*(char **)(g + 0x180) + 0x8E) = 0;
-        *(*(char **)(g + 0x180) + 0x7D) = 0;
-        *(short *)(*(char **)(g + 0x180) + 0x7E) = 0;
+    if (*(char **)(camera_system_state + 0x180) != 0) {
+        *(short *)(*(char **)(camera_system_state + 0x180) + 0x8E) = 0;
+        *(*(char **)(camera_system_state + 0x180) + 0x7D) = 0;
+        *(short *)(*(char **)(camera_system_state + 0x180) + 0x7E) = 0;
     }
-    *(char **)(g + 0x180) = FUN_L00_001eb1f8_u(0);
-    *(short *)(*(char **)(g + 0x180) + 0x8E) = 1;
-    *(char **)(*(char **)(g + 0x180) + 0x70) = D_L00_00169110;
-    *(short *)(g + 0x270) = 0;
+    *(char **)(camera_system_state + 0x180) = FUN_L00_001eb1f8_u(0);
+    *(short *)(*(char **)(camera_system_state + 0x180) + 0x8E) = 1;
+    *(char **)(*(char **)(camera_system_state + 0x180) + 0x70) = D_L00_00169110;
+    *(short *)(camera_system_state + 0x270) = 0;
     update_camera_tracking_state();
-    camera_run_setup_to_new_cam(*(char **)(g + 0x180));
+    camera_run_setup_to_new_cam(*(char **)(camera_system_state + 0x180));
     backup_current_cam();
-    current_camera_record = *(char **)(g + 0x180);
-    camera_vector_snapshot = (float *)(g + 0x140);
+    current_camera_record = *(char **)(camera_system_state + 0x180);
+    camera_vector_snapshot = (float *)(camera_system_state + 0x140);
     qcopy(camera_vector_snapshot, current_camera_record + 0x30);
     camera_record_vector_destination = (float *)(current_camera_record + 0x64);
     camera_record_vector_destination[0] = camera_vector_snapshot[0];
     camera_record_vector_destination[1] = camera_vector_snapshot[1];
     camera_record_vector_destination[2] = camera_vector_snapshot[2];
     vector_copy_source = (float *)(D_0013E533 + 0xE9D);
-    vector_copy_destination = (float *)(g + 0x190);
+    vector_copy_destination = (float *)(camera_system_state + 0x190);
     vector_copy_destination[0] = vector_copy_source[0];
     vector_copy_destination[1] = vector_copy_source[1];
     vector_copy_destination[2] = vector_copy_source[2];
