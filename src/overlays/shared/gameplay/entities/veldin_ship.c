@@ -2973,7 +2973,7 @@ void infobot_update(struct Moby *moby)
     f32 range;
     f32 distance;
     f32 end;
-    f32 accel;
+    f32 path_speed_step;
     f32 speed;
     f32 heading;
     f32 tilt_y;
@@ -3101,17 +3101,17 @@ void infobot_update(struct Moby *moby)
         FUN_L00_0025df68(path, pos, &point, &segment, &fraction, 0, 999.0f, 5.0f, 0.0f);
         end = convert_integer_to_float(segment) * path->pts[0].v.w + fraction + 2.0f;
         distance = FUN_001f9b48(pos, &path->pts[path->count - 1]);
-        accel = D_0015ED70 * 16.0f;
+        path_speed_step = D_0015ED70 * 16.0f;
         speed = infobot->speed;
-        if (distance <= speed * speed / (accel + accel)) {
-            infobot->speed = speed - accel;
-            if (speed - accel < 0.0f) {
+        if (distance <= speed * speed / (path_speed_step + path_speed_step)) {
+            infobot->speed = speed - path_speed_step;
+            if (speed - path_speed_step < 0.0f) {
                 infobot->speed = 0.0f;
             }
         } else {
             max_speed = D_0015ED6C * 16.0f;
-            infobot->speed = speed + accel;
-            if (max_speed < speed + accel) {
+            infobot->speed = speed + path_speed_step;
+            if (max_speed < speed + path_speed_step) {
                 infobot->speed = max_speed;
             }
         }
