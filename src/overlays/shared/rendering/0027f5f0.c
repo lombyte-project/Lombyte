@@ -18,10 +18,10 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L08_001B29A4 __attribute__((section(".data")));
 void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float velocity_w_override) {
-    float v[4];
+    float saved_velocity[4];
     unsigned char *particle;
-    float *vp = v;
-    *(OvlQuad *)v = *(OvlQuad *)vel;
+    float *vp = saved_velocity;
+    *(OvlQuad *)saved_velocity = *(OvlQuad *)vel;
     particle = create_part(0x49);
     if (particle != 0) {
         float particle_scalar_factor = 0.0f;
