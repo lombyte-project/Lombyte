@@ -1403,11 +1403,11 @@ void FUN_L05_00315f70(char *moby) {
     float ang = 0.0f;
     float step = 6.28318f / (float)(*(int *)tab - 1);
     for (; i < *(int *)tab; i++) {
-        char *v = tab + 0x10 + i * 16;
-        *(float *)v = fast_cos(ang) * 3.5f;
-        *(float *)(v + 4) = fast_sin(ang) * 3.5f;
-        *(int *)(v + 8) = 0;
-        fast_vec_add(v, v, moby + 0x10);
+        char *ring_point_position = tab + 0x10 + i * 16;
+        *(float *)ring_point_position = fast_cos(ang) * 3.5f;
+        *(float *)(ring_point_position + 4) = fast_sin(ang) * 3.5f;
+        *(int *)(ring_point_position + 8) = 0;
+        fast_vec_add(ring_point_position, ring_point_position, moby + 0x10);
         ang = fast_add_rotations(ang, step);
     }
 }
