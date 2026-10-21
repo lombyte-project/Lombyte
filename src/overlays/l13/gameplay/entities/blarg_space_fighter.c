@@ -821,16 +821,16 @@ float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L13_002c3988(struct Moby *moby, char *moby_data, float target_yaw, float target_pitch) {
     float roll_attenuation_factor;
-    float v;
+    float unclamped_roll;
     FUN_L00_00258278(moby, (float *)(moby_data + 0x88), target_yaw, frame_time_sq * 25.132742f,
                      frame_time_sq * 6.2831855f, frame_time * 25.132742f);
     moby->rot.y =
         spring_turn((float *)(moby_data + 0x84), moby->rot.y, target_pitch, frame_time_sq * 25.132742f,
                          frame_time_sq * 6.2831855f, frame_time * 25.132742f);
     roll_attenuation_factor = (1.5707964f - absolute_float(moby->rot.x)) / 1.5707964f;
-    v = moby->rot.x + -*(float *)(moby_data + 0x88) * roll_attenuation_factor;
-    moby->rot.x = v;
-    if (1.5707964f < v)
+    unclamped_roll = moby->rot.x + -*(float *)(moby_data + 0x88) * roll_attenuation_factor;
+    moby->rot.x = unclamped_roll;
+    if (1.5707964f < unclamped_roll)
         moby->rot.x = 1.5707964f;
     if (moby->rot.x < -1.5707964f)
         moby->rot.x = -1.5707964f;
