@@ -3753,21 +3753,21 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 /* Removes the moby at &hero.unk1614 and clears flags 0x41 on those at 0x1180/0x1184. */
 void FUN_L00_00228fa8(void) {
-    struct Hero *g = &hero;
+    struct Hero *hero_state = &hero;
     void *moby_to_remove;
     void *item_moby;
     void *secondary_item_moby;
 
-    moby_to_remove = ((void *)g->unk1614);
+    moby_to_remove = ((void *)hero_state->unk1614);
     if (moby_to_remove != 0) {
         mark_moby_for_removal(moby_to_remove);
-        g->unk1614 = 0;
+        hero_state->unk1614 = 0;
     }
-    item_moby = ((void *)g->items[3].moby);
+    item_moby = ((void *)hero_state->items[3].moby);
     if (item_moby != 0) {
         *(unsigned short *)((char *)item_moby + 0x34) &= 0xFFBE;
     }
-    secondary_item_moby = ((void *)g->items[3].moby2);
+    secondary_item_moby = ((void *)hero_state->items[3].moby2);
     if (secondary_item_moby != 0) {
         *(unsigned short *)((char *)secondary_item_moby + 0x34) &= 0xFFBE;
     }
