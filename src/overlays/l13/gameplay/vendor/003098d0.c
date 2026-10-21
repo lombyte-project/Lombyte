@@ -52,7 +52,7 @@ void FUN_L13_003098d0(struct Moby *moby) {
     s32 i;
     s32 j;
     s32 off;
-    f32 *v;
+    f32 *corner_position;
     u64 regs;
 
     vu1_add_g_sregister(0x47, 0x5380B);
@@ -76,17 +76,17 @@ void FUN_L13_003098d0(struct Moby *moby) {
         D_L13_001D9B70[1][1] = D_L13_001D9B70[3][1];
         D_L13_001D9B70[3][1] = random_float_between_alt(0.0f, 0.2f);
         for (j = 0; j < 4; j++) {
-            v = pk[0].pos[j];
+            corner_position = pk[0].pos[j];
             off = (i + j / 2) * 16;
             /* &data[...] (not data + off + ...) keeps retail's off + data add. */
-            qcopy(v, &data[off + 0x210]);
+            qcopy(corner_position, &data[off + 0x210]);
             /* The colour call in both arms: retail merges the two calls and
                leaves the address add in each arm. */
             if (j & 1) {
-                vector_subtract(corner_inset_offset, v, data + 0x1F0);
+                vector_subtract(corner_inset_offset, corner_position, data + 0x1F0);
                 normalize_vector_xyz(corner_inset_offset, corner_inset_offset, 0.5f);
-                vector_subtract(v, v, corner_inset_offset);
-                v[2] -= 0.125f;
+                vector_subtract(corner_position, corner_position, corner_inset_offset);
+                corner_position[2] -= 0.125f;
                 pk[0].col[j] = fast_tween_color(*(f32 *)(data + off + 0x21C), D_L13_00161EA8,
                                                 D_L13_00161EAC);
             } else {
@@ -100,9 +100,9 @@ void FUN_L13_003098d0(struct Moby *moby) {
         }
         draw_quad_packet(pk, mat, 0);
         for (j = 0; j < 4; j++) {
-            v = pk[0].pos[j];
+            corner_position = pk[0].pos[j];
             if (j & 1) {
-                v[2] += 0.25f;
+                corner_position[2] += 0.25f;
             }
         }
         i++;
