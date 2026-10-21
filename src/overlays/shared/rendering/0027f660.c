@@ -207,18 +207,18 @@ extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
 void FUN_L01_0028b410(char *path_descriptor) {
     int i;
-    int off;
+    int path_node_byte_offset;
     char *path_data;
     path_descriptor[5] = 0;
     *(int *)(path_descriptor + 8) = 0;
     *(char **)(path_descriptor + 0x10) = paths[*(int *)(path_descriptor + 0x14)];
     for (i = 0; i < **(int **)(path_descriptor + 0x10); i++) {
         path_data = *(char **)(path_descriptor + 0x10);
-        off = i << 4;
-        *(float *)(*(char **)(path_descriptor + 0x10) + off + 0x1C) =
-            fast_vec_dist(path_data + (off + 0x10), path_data + ((((i + 1) % *(int *)path_data) << 4) + 0x10));
-        *(float *)(*(char **)(path_descriptor + 0x10) + off + 0x18) += 0.5f;
-        *(float *)(*(char **)(path_descriptor + 0x10) + off + 0x18) -= 0.5f;
+        path_node_byte_offset = i << 4;
+        *(float *)(*(char **)(path_descriptor + 0x10) + path_node_byte_offset + 0x1C) =
+            fast_vec_dist(path_data + (path_node_byte_offset + 0x10), path_data + ((((i + 1) % *(int *)path_data) << 4) + 0x10));
+        *(float *)(*(char **)(path_descriptor + 0x10) + path_node_byte_offset + 0x18) += 0.5f;
+        *(float *)(*(char **)(path_descriptor + 0x10) + path_node_byte_offset + 0x18) -= 0.5f;
     }
 }
 /* Returns the index of the entry whose distance to arg0 is closest to a target value. */
