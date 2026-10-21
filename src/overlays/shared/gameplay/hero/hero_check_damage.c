@@ -2252,50 +2252,50 @@ extern void FUN_L00_00232628_210b30(void) __asm__("FUN_L00_00232628");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 
 void FUN_L00_00210b30(void) {
-    struct Hero *g = &hero;
+    struct Hero *hero_state = &hero;
     unsigned char *vehicle_moby;
-    if (g->vehicle_mode == 1) {
-        g->health.unk22AC = g->health.hp;
-        g->health.hp = g->health.unk22B0;
-        if (g->unk1620) {
-            FUN_0020c828_210b30(g->unk1620);
-            g->unk1620 = 0;
+    if (hero_state->vehicle_mode == 1) {
+        hero_state->health.unk22AC = hero_state->health.hp;
+        hero_state->health.hp = hero_state->health.unk22B0;
+        if (hero_state->unk1620) {
+            FUN_0020c828_210b30(hero_state->unk1620);
+            hero_state->unk1620 = 0;
         }
-        if (g->unk1624) {
-            FUN_0020c828_210b30(g->unk1624);
-            g->unk1624 = 0;
+        if (hero_state->unk1624) {
+            FUN_0020c828_210b30(hero_state->unk1624);
+            hero_state->unk1624 = 0;
         }
     }
     {
-        struct Hero *g2 = &hero;
-        if (g2->vehicle_mode == 2 && g2->unk1634 != -1) {
-            set_animation_parameter(g2->unk1634, 0);
-            g2->unk1634 = -1;
+        struct Hero *vehicle_animation_owner = &hero;
+        if (vehicle_animation_owner->vehicle_mode == 2 && vehicle_animation_owner->unk1634 != -1) {
+            set_animation_parameter(vehicle_animation_owner->unk1634, 0);
+            vehicle_animation_owner->unk1634 = -1;
         }
         FUN_L00_00205538_210b30();
     }
     {
-        struct Hero *g3 = &hero;
-        g3->vehicle_mode = 0;
-        vehicle_moby = g3->unkA84;
+        struct Hero *vehicle_exit_owner = &hero;
+        vehicle_exit_owner->vehicle_mode = 0;
+        vehicle_moby = vehicle_exit_owner->unkA84;
         if (vehicle_moby) {
             *(u16 *)(vehicle_moby + 0x34) &= ~6;
         }
-        g3->unkA84 = 0;
-        if (g3->unkA8C) {
-            FUN_0020c828_210b30(g3->unkA8C);
-            g3->unkA8C = 0;
+        vehicle_exit_owner->unkA84 = 0;
+        if (vehicle_exit_owner->unkA8C) {
+            FUN_0020c828_210b30(vehicle_exit_owner->unkA8C);
+            vehicle_exit_owner->unkA8C = 0;
         }
         FUN_L00_00206c08_210b30();
         {
-            unsigned char *restored_hero_moby = g3->unkA88;
-            g3->moby = (struct Moby *)restored_hero_moby;
-            qcopy(restored_hero_moby + 0x10, &g3->motion.pos);
+            unsigned char *restored_hero_moby = vehicle_exit_owner->unkA88;
+            vehicle_exit_owner->moby = (struct Moby *)restored_hero_moby;
+            qcopy(restored_hero_moby + 0x10, &vehicle_exit_owner->motion.pos);
             *(int *)(restored_hero_moby + 0x98) = 0;
         }
-        g3->unkA94 = 1.0f;
+        vehicle_exit_owner->unkA94 = 1.0f;
         FUN_L00_00232628_210b30();
-        if (g3->state.current != 100 ||
+        if (vehicle_exit_owner->state.current != 100 ||
             (D_L00_0015F5C4 != 2 && D_L00_0015F5C4 != 6)) {
             hero_set_state(HERO_STATE_IDLE, 1);
         }
