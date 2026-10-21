@@ -1679,19 +1679,19 @@ int FUN_L16_002ced20(char *moby, void *target_position, float angle) {
     float a[4] __attribute__((aligned(16)));
     float b[4] __attribute__((aligned(16)));
     float speed;
-    float dist;
+    float distance_to_target;
     char *data = *(char **)(moby + 0x78);
     *(OvlQuad *)a = *(OvlQuad *)target_position;
     approach_angle((float *)(moby + 0x48), (float *)(data + 0x100), angle,
                      frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, D_0015ED6C * 25.132742f);
     speed = 0.0f;
     subtract_vector_xyz(b, a, moby + 0x10);
-    dist = vector_length_xyz(b);
-    advance_accelerated_scalar(dist, frame_time_sq * 12.0f, frame_time_sq * 12.0f, D_0015ED6C * 6.0f,
+    distance_to_target = vector_length_xyz(b);
+    advance_accelerated_scalar(distance_to_target, frame_time_sq * 12.0f, frame_time_sq * 12.0f, D_0015ED6C * 6.0f,
                                &speed, (float *)(data + 0xFC));
     normalize_vector_xyz(b, b, *(float *)(data + 0xFC));
     add_vector_xyz(moby + 0x10, moby + 0x10, b);
-    if (dist < 0.05f) {
+    if (distance_to_target < 0.05f) {
         if (*(float *)(data + 0xFC) < 0.005f)
             return 1;
         else
