@@ -418,8 +418,8 @@ void FUN_L16_002e2fa0(void *arg) {
     if (point_count >= 2)
     {
         Path2fa0 *heading_source = (Path2fa0 *)((char *)path + (point_count - 2) * 16);
-        Path2fa0 *b = (Path2fa0 *)((char *)path + (point_count - 1) * 16);
-        b->pts[0].heading = heading_source->pts[0].heading;
+        Path2fa0 *heading_destination = (Path2fa0 *)((char *)path + (point_count - 1) * 16);
+        heading_destination->pts[0].heading = heading_source->pts[0].heading;
     }
 }
 #define NOT_SDA
