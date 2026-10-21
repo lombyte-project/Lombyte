@@ -579,7 +579,7 @@ void FUN_L15_0021ab60(void) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         hero_set_state(HERO_STATE_IDLE, 1);
         break;
-    case 2:
+    case HERO_VEHICLE_MODE_GIANT_CLANK:
         hero_set_state(0x5A, 1);
         break;
     case 3:
