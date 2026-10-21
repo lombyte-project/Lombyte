@@ -1555,49 +1555,49 @@ extern float D_L00_001618A0 __attribute__((sda));
 unsigned char *FUN_L00_002cbf68(int unused, void *pos, float *vel) {
     unsigned char *spawned_moby = FUN_0020c4f8_2cbf68(0x1AC);
     if (spawned_moby) {
-        unsigned char *v;
-        int lifetime_lower_bound, b;
+        unsigned char *moby_vars;
+        int lifetime_lower_bound, lifetime_upper_bound;
         spawned_moby[0x30] = 0x40;
         *(unsigned short *)(spawned_moby + 0x34) |= 0x1000;
         *(short *)(spawned_moby + 0x32) = 0x20;
         spawned_moby[0x31] = 1;
-        v = *(unsigned char **)(spawned_moby + 0x78);
+        moby_vars = *(unsigned char **)(spawned_moby + 0x78);
         spawned_moby[0x20] = 0;
         spawned_moby[0xBC] = 0;
         qcopy(spawned_moby + 0x10, pos);
         *(float *)(spawned_moby + 0x18) += rndf_2cbf68(0.2f, 0.7f);
         *(float *)(spawned_moby + 0x10) += vel[0] * 3.0f;
         *(float *)(spawned_moby + 0x14) += vel[1] * 3.0f;
-        qcopy(v, vel);
+        qcopy(moby_vars, vel);
         *(float *)(spawned_moby + 0x44) = rnd_2cbf68(0.17453292f, 0.5235988f);
         *(float *)(spawned_moby + 0x40) = rndf_2cbf68(0.17453292f, 0.7853982f);
         {
             float x_rotation_step = rndf_2cbf68(200.0f, 370.0f) * DEG_TO_RAD * D_0015ED6C_lui;
-            *(int *)(v + 0x24) = -1;
-            *(float *)(v + 0x2C) = x_rotation_step;
+            *(int *)(moby_vars + 0x24) = -1;
+            *(float *)(moby_vars + 0x2C) = x_rotation_step;
         }
         if (FUN_001160d8_2cbf68() & 1) {
-            *(int *)(v + 0x24) = 1;
+            *(int *)(moby_vars + 0x24) = 1;
             *(float *)(spawned_moby + 0x44) = -*(float *)(spawned_moby + 0x44);
         }
         *(float *)(spawned_moby + 0x48) = rnda_2cbf68();
-        *(float *)(v + 0x28) = -(rndf_2cbf68(200.0f, 550.0f) * DEG_TO_RAD * D_0015ED6C_lui);
-        *(float *)(v + 0x10) = rnda_2cbf68();
+        *(float *)(moby_vars + 0x28) = -(rndf_2cbf68(200.0f, 550.0f) * DEG_TO_RAD * D_0015ED6C_lui);
+        *(float *)(moby_vars + 0x10) = rnda_2cbf68();
         {
             float r = rnda_2cbf68();
             float base_lifetime = (float)D_L00_001618A4;
-            *(float *)(v + 0x14) = r;
+            *(float *)(moby_vars + 0x14) = r;
             lifetime_lower_bound = rf_2cbf68(base_lifetime * 0.7f);
         }
-        b = rf_2cbf68((float)D_L00_001618A4 * 1.2f);
-        *(int *)(v + 0x1C) = fr_2cbf68(rndi_2cbf68(lifetime_lower_bound, b));
+        lifetime_upper_bound = rf_2cbf68((float)D_L00_001618A4 * 1.2f);
+        *(int *)(moby_vars + 0x1C) = fr_2cbf68(rndi_2cbf68(lifetime_lower_bound, lifetime_upper_bound));
         {
             float k = D_L00_001618A0;
             *(float *)(spawned_moby + 0x2C) *= k;
         }
         if (D_0013E535_2cbf68)
             *(float *)(spawned_moby + 0x2C) *= 2.0f;
-        *(float *)(v + 0x20) = rndf_2cbf68(-1.2f, -0.4f) * D_0015ED6C_lui;
+        *(float *)(moby_vars + 0x20) = rndf_2cbf68(-1.2f, -0.4f) * D_0015ED6C_lui;
         FUN_L00_00250df8_2cbf68(spawned_moby);
         FUN_L00_0025d1b8_2cbf68(spawned_moby);
     }
