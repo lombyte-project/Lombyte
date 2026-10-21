@@ -1178,7 +1178,7 @@ void FUN_L01_002e3830(struct Moby *moby, char *movement_state) {
         HOVER_MOVE_TOWARD_GOAL = 2
     };
     Vec4 velocity_adjustment;
-    f32 reference_distance, ang, len, ground, near;
+    f32 reference_distance, direction_yaw, movement_magnitude, ground, near;
     s32 hit;
     s16 blocked_frames;
     struct Moby *target;
@@ -1192,8 +1192,8 @@ void FUN_L01_002e3830(struct Moby *moby, char *movement_state) {
 
     switch (moby->command) {
     case HOVER_FACE_GOAL_AND_WAIT:
-        ang = fast_arc_tan(*(f32 *)(movement_state + 0) - moby->pos.x, *(f32 *)(movement_state + 4) - moby->pos.y);
-        FUN_L00_00258278(moby, ang, &D_L01_001DEB4C, frame_time_sq * 11.519173f,
+        direction_yaw = fast_arc_tan(*(f32 *)(movement_state + 0) - moby->pos.x, *(f32 *)(movement_state + 4) - moby->pos.y);
+        FUN_L00_00258278(moby, direction_yaw, &D_L01_001DEB4C, frame_time_sq * 11.519173f,
                          frame_time_sq * 3.1415927f, frame_time * 11.519173f);
         if (moby->anim_flags & 2) {
             moby->anim_speed = 1.0f;
@@ -1217,12 +1217,12 @@ void FUN_L01_002e3830(struct Moby *moby, char *movement_state) {
 
     target = *(struct Moby **)(movement_state + 0x68);
     if (target == 0) {
-        ang = fast_arc_tan(*(f32 *)(movement_state + 0) - moby->pos.x, *(f32 *)(movement_state + 4) - moby->pos.y);
-        FUN_L00_00258278(moby, ang, &D_L01_001DEB4C, frame_time_sq * 11.519173f,
+        direction_yaw = fast_arc_tan(*(f32 *)(movement_state + 0) - moby->pos.x, *(f32 *)(movement_state + 4) - moby->pos.y);
+        FUN_L00_00258278(moby, direction_yaw, &D_L01_001DEB4C, frame_time_sq * 11.519173f,
                          frame_time_sq * 3.1415927f, frame_time * 11.519173f);
     } else {
-        ang = fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
-        FUN_L00_00258278(moby, ang, &D_L01_001DEB4C,
+        direction_yaw = fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
+        FUN_L00_00258278(moby, direction_yaw, &D_L01_001DEB4C,
                          D_L01_00161944 * DEG_TO_RAD * frame_time_sq,
                          D_L01_00161948 * DEG_TO_RAD * frame_time_sq,
                          D_L01_0016194C * DEG_TO_RAD * frame_time);
@@ -1240,9 +1240,9 @@ void FUN_L01_002e3830(struct Moby *moby, char *movement_state) {
         clamp_vector_length(((f32 *)(movement_state + 0x10)), ((f32 *)(movement_state + 0x10)), frame_time * 2.7f);
     hit = FUN_L00_00258ad0(moby, ((f32 *)(movement_state + 0x10)), D_L01_001DEB38.count, 0,
                             1.0f, D_L01_001DEB38.spread);
-    len = fast_vec_length(((f32 *)(movement_state + 0x10)));
+    movement_magnitude = fast_vec_length(((f32 *)(movement_state + 0x10)));
     if (hit != 0) {
-        if (len < 0.005f) {
+        if (movement_magnitude < 0.005f) {
             blocked_frames = ++*(s16 *)(movement_state + 0x4a);
             if (scale_game_frames(20) < blocked_frames && moby->visible == 0) {
                 qcopy(&moby->pos, movement_state);
@@ -1251,7 +1251,7 @@ void FUN_L01_002e3830(struct Moby *moby, char *movement_state) {
         }
         ground = probe_ground_height(&moby->pos, 0, 0.5f);
         if ((hit & 2) || moby->pos.z - ground < D_L01_00161920) {
-            if (len < 0.005f) {
+            if (movement_magnitude < 0.005f) {
                 if (moby->prev_seq >= 3 && moby->prev_seq != random_integer_3830() % 3) {
                     int seq = random_integer_3830() % 3;
                     blend_moby_animation_3830(moby, seq, 0, scale_game_frames(10));
@@ -1278,9 +1278,9 @@ void FUN_L01_002e3830(struct Moby *moby, char *movement_state) {
 collision_done:
     if (moby->state == 6 || !(reference_distance < 1.1f)) return;
     near = 1.1f - reference_distance;
-    ang = fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y);
-    ((f32 *)(movement_state + 0x10))[0] -= near * fast_cos(ang) * (frame_scale_sq * 0.1f);
-    ((f32 *)(movement_state + 0x10))[1] -= near * fast_sin(ang) * (frame_scale_sq * 0.1f);
+    direction_yaw = fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y);
+    ((f32 *)(movement_state + 0x10))[0] -= near * fast_cos(direction_yaw) * (frame_scale_sq * 0.1f);
+    ((f32 *)(movement_state + 0x10))[1] -= near * fast_sin(direction_yaw) * (frame_scale_sq * 0.1f);
     return;
 inactive:
     moby->command = 0;
