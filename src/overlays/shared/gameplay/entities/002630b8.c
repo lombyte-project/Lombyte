@@ -547,8 +547,8 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int random_def
             qcopy(fragment_pvars, initial_velocity);
         }
         if (fast_vec_length(random_vector_override) == 0.0f) {
-            float g = D_0015ED6C_s[0];
-            random_vector(vector_scratch, g * 3.1415927f, g * 6.2831855f);
+            float random_vector_magnitude_scale = D_0015ED6C_s[0];
+            random_vector(vector_scratch, random_vector_magnitude_scale * 3.1415927f, random_vector_magnitude_scale * 6.2831855f);
             qcopy(fragment_pvars + 0x10, vector_scratch);
         } else {
             qcopy(fragment_pvars + 0x10, random_vector_override);
