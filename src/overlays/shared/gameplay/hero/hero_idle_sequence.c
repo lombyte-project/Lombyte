@@ -45,16 +45,16 @@ extern void FUN_L00_00232628(void);
 /* Resets hero fields 0x220..0x234, 0x22CB, 0x2084 and 0xA94, then calls 00232628 and 002223f8. */
 extern unsigned char D_0014161B[];
 void FUN_L00_00204f80(void) {
-    struct Hero *g = &hero;
-    g->capsule_top = 0.8f;
-    g->unk234 = 0.45f;
-    g->unk228 = 0.8f;
-    g->unk224 = 0.7f;
-    g->unk22C = 0.7f;
-    g->unk22CB = 0;
-    g->state.current = 0;
+    struct Hero *hero_state = &hero;
+    hero_state->capsule_top = 0.8f;
+    hero_state->unk234 = 0.45f;
+    hero_state->unk228 = 0.8f;
+    hero_state->unk224 = 0.7f;
+    hero_state->unk22C = 0.7f;
+    hero_state->unk22CB = 0;
+    hero_state->state.current = 0;
     *(int *)(D_0014161B + 0x4D) = 0;
-    g->unkA94 = 1.0f;
+    hero_state->unkA94 = 1.0f;
     FUN_L00_00232628();
     hero_set_state(HERO_STATE_IDLE, 1);
 }
