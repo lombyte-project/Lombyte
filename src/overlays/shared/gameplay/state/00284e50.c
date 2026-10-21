@@ -23,7 +23,7 @@ extern void copy_memory_aligned(int, void *, unsigned short) __asm__("FUN_001f98
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void jet_reset_camera(OvlQuad *a, OvlQuad *b) __asm__("FUN_L00_00284e50");
 void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
-    unsigned char *src;
+    unsigned char *save_candidate_cursor;
     int i;
     char *saved_state;
     struct Hero *hero_state;
@@ -35,8 +35,8 @@ void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
 
     copy_memory_aligned((int)&D_L00_001BB280, &D_L00_001BA620, 0x404);
     lvl = current_level_index;
-    for (src = D_L00_001BA620.f, i = 0; i < 0x7FF; i++, src++) {
-        source_byte = *src;
+    for (save_candidate_cursor = D_L00_001BA620.f, i = 0; i < 0x7FF; i++, save_candidate_cursor++) {
+        source_byte = *save_candidate_cursor;
         if ((unsigned char)source_byte == 0)
             continue;
         if ((unsigned char)source_byte != 1 && D_0014C050[lvl][(unsigned char)source_byte - 2] != 0xFF)
