@@ -1490,14 +1490,14 @@ void FUN_L18_002fca98(struct Moby *moby) {
     unsigned short *group_moby_entry = D_L18_001AC240_c[moby->group];
     if (group_moby_entry != 0) {
         while (1) {
-            unsigned char *obj = D_L18_0015FFD8 + ((group_moby_entry[0] & 0x7FFF) << 8);
+            unsigned char *group_moby = D_L18_0015FFD8 + ((group_moby_entry[0] & 0x7FFF) << 8);
             unsigned short *next = group_moby_entry + 1;
-            if (*(short *)(obj + 0xA6) == 0x772 && obj[0x20] != 0 && obj[0x20] < 6) {
+            if (*(short *)(group_moby + 0xA6) == 0x772 && group_moby[0x20] != 0 && group_moby[0x20] < 6) {
                 int i;
-                int col = (*(int *)(obj + 0x90) & 0xFFFFFF) + (*(int *)&D_L18_00162654 << 24);
+                int col = (*(int *)(group_moby + 0x90) & 0xFFFFFF) + (*(int *)&D_L18_00162654 << 24);
                 float joint_world_position[4];
                 for (i = 2; i < 5; i++) {
-                    moby_point_position(obj, i, joint_world_position);
+                    moby_point_position(group_moby, i, joint_world_position);
                     FUN_L00_00263618(joint_world_position, col, 0.175f, 0.08f);
                 }
             }
