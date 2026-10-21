@@ -2204,7 +2204,7 @@ void FUN_L01_002eec68(char *moby) {
     char *x2;
     char *path_search_position;
     int c258;
-    int c260;
+    int path_search_gate_moby_index;
     float size_multiplier;
     float rate;
     float fixed_scale;
@@ -2336,8 +2336,8 @@ void FUN_L01_002eec68(char *moby) {
     } else {
         *(float *)(moby_vars + 0x228) = *(float *)(moby_vars + 0x224) + 20.0f;
     }
-    c260 = *(int *)(moby_vars + 0x260);
-    if (c260 <= 0 || *(unsigned char *)((c260 << 8) + (*(int *)&D_L01_0015FFD8) + 0xBC) != 0) {
+    path_search_gate_moby_index = *(int *)(moby_vars + 0x260);
+    if (path_search_gate_moby_index <= 0 || *(unsigned char *)((path_search_gate_moby_index << 8) + (*(int *)&D_L01_0015FFD8) + 0xBC) != 0) {
         search_path = D_L01_001B0930[*(int *)(moby_vars + 0x24C)];
         path_search_position = moby_vars + 0x1C0;
         if (FUN_L00_0025ff38(*(float *)(moby_vars + 0x228), moby, path_search_position, 0, 0, search_path + 0x10, *(int *)search_path) != 2) {
