@@ -202,7 +202,7 @@ void FUN_L07_0030e1f8(unsigned char *moby) {
 
 extern char *FUN_L00_0026daa0(char *src, int col, int w, int v, float x);
 
-char *FUN_L07_0030e370(char *pos, char *initial_velocity, int spawning_moby) {
+char *FUN_L07_0030e370(char *spawn_position, char *initial_velocity, int spawning_moby) {
     char *spawned_moby = func_0020D348_m(0x419);
     if (spawned_moby != 0) {
         char *data;
@@ -212,7 +212,7 @@ char *FUN_L07_0030e370(char *pos, char *initial_velocity, int spawning_moby) {
         *(float *)(spawned_moby + 0x40) = random_angle_radians();
         *(float *)(spawned_moby + 0x44) = random_angle_radians();
         *(float *)(spawned_moby + 0x48) = random_angle_radians();
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(spawned_moby + 0x10, spawn_position);
         qcopy(data, initial_velocity);
         *(int *)(data + 0x10) = spawning_moby;
         spawned_moby[0x23] = 0x30;
