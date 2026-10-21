@@ -61,40 +61,40 @@ extern void FUN_L00_001ff290_271450(void *, void *, void *) __asm__("FUN_L00_001
 extern void FUN_001f9a68_271450(void *, void *, float) __asm__("FUN_001f9a68");
 
 void FUN_L00_00271450(unsigned char *particle) {
-    float v[4];
+    float particle_velocity[4];
     OvlQuad scaled_platform_carry[1];
     OvlQuad gravity_velocity_delta[1];
     unsigned char *particle_data;
-    unsigned char *r;
+    unsigned char *particle_position;
     float initial_alpha;
-    int w;
+    int faded_color;
 
     if (fast_dec_timer(particle + 0xA)) {
         free_effect_particle(particle);
     } else {
         particle_data = particle + 0x20;
-        r = particle + 0x10;
+        particle_position = particle + 0x10;
         initial_alpha = FUN_001fa6c0_271450(*(short *)(particle_data + 0x1E));
-        w = FUN_001fa6d0_271450(
+        faded_color = FUN_001fa6d0_271450(
             initial_alpha * ((float)*(short *)(particle + 0xA) / FUN_001fa6c0_271450(*(short *)(particle_data + 0x1C))));
-        w = (w << 24) | (particle_data[0x13] << 16);
-        w |= particle_data[0x12] << 8;
-        w |= particle_data[0x11];
-        *(int *)(particle + 4) = w;
-        v[0] = *(float *)(particle + 0x20);
-        v[1] = *(float *)(particle_data + 4);
-        v[2] = *(float *)(particle_data + 8);
-        *(int *)&v[3] = 0;
-        FUN_001f9a10_271450(r, r, v);
+        faded_color = (faded_color << 24) | (particle_data[0x13] << 16);
+        faded_color |= particle_data[0x12] << 8;
+        faded_color |= particle_data[0x11];
+        *(int *)(particle + 4) = faded_color;
+        particle_velocity[0] = *(float *)(particle + 0x20);
+        particle_velocity[1] = *(float *)(particle_data + 4);
+        particle_velocity[2] = *(float *)(particle_data + 8);
+        *(int *)&particle_velocity[3] = 0;
+        FUN_001f9a10_271450(particle_position, particle_position, particle_velocity);
         scaled_platform_carry[0] = *(OvlQuad *)(&hero.motion.platform_carry);
         FUN_L00_001ff318_271450(gravity_velocity_delta, scaled_platform_carry, *(float *)(particle + 0x1C));
-        FUN_L00_001ff290_271450(gravity_velocity_delta, r, scaled_platform_carry);
+        FUN_L00_001ff290_271450(gravity_velocity_delta, particle_position, scaled_platform_carry);
         FUN_001f9a68_271450(gravity_velocity_delta, &hero.gravity_dir, *(float *)(particle_data + 0xC));
-        FUN_001f9a10_271450(v, v, gravity_velocity_delta);
-        FUN_001f9a68_271450(v, v, *(float *)(particle_data + 0x18));
-        *(float *)(particle + 0x20) = v[0];
-        *(float *)(particle_data + 4) = v[1];
-        *(float *)(particle_data + 8) = v[2];
+        FUN_001f9a10_271450(particle_velocity, particle_velocity, gravity_velocity_delta);
+        FUN_001f9a68_271450(particle_velocity, particle_velocity, *(float *)(particle_data + 0x18));
+        *(float *)(particle + 0x20) = particle_velocity[0];
+        *(float *)(particle_data + 4) = particle_velocity[1];
+        *(float *)(particle_data + 8) = particle_velocity[2];
         particle[8] += particle_data[0x10];
         *(float *)(particle + 0xC) += *(float *)(particle_data + 0x14);
     }
