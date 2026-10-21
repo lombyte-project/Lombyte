@@ -547,7 +547,7 @@ void FUN_L02_002ed420(char *moby, void *previous_position) {
 
     fast_vec_sub(position_delta, moby + 0x10, previous_position);
     for (i = 0; i < 2; i++) {
-        int first_spark_color, b, frame_count, second_frame_count, third_frame_count;
+        int first_spark_color, second_spark_color, frame_count, second_frame_count, third_frame_count;
         char *spark_part;
 
         moby_point_position(moby, i, emission_position);
@@ -559,7 +559,7 @@ void FUN_L02_002ed420(char *moby, void *previous_position) {
         second_spark_vector[3] = random_float_between(*(float *)&D_L02_00161FFC, *(float *)&D_L02_00162000);
         first_spark_color = fast_tween_color(*(int *)&D_L02_00162004, *(int *)&D_L02_00162008,
                          random_float_between(0.0f, 1.0f));
-        b = fast_tween_color(*(int *)&D_L02_0016200C, *(int *)&D_L02_00162010,
+        second_spark_color = fast_tween_color(*(int *)&D_L02_0016200C, *(int *)&D_L02_00162010,
                          random_float_between(0.0f, 1.0f));
         frame_count = func_001FA898_r(multiply_global_factor_ed64(
             (float)*(int *)&D_L02_00161FE4 * random_float_between(0.0f, 1.0f) + 1.0f));
@@ -571,7 +571,7 @@ void FUN_L02_002ed420(char *moby, void *previous_position) {
             (float)*(int *)&D_L02_00161FEC *
             (random_float_between(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) +
              1.0f)));
-        spark_part = spawn_spark(emission_position, first_spark_vector, second_spark_vector, first_spark_color, b, frame_count, second_frame_count, third_frame_count, -1);
+        spark_part = spawn_spark(emission_position, first_spark_vector, second_spark_vector, first_spark_color, second_spark_color, frame_count, second_frame_count, third_frame_count, -1);
         if (spark_part != 0) {
             spark_part[9] = func_001FA898_r(8.0f) + 0x60;
         }
