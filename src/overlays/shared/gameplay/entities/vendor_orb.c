@@ -2486,12 +2486,12 @@ int FUN_L00_002e83c0(int candidate_object, int unused) {
 extern u8 *vd_2e8450 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 /* Sets a flag and floats a/b at +0x130 of D_L00_00166E00+0x70; f also stores a at +0x58. */
 void follow_camera_set_distance(s32 f, f32 a, f32 b) __asm__("FUN_L00_002e8450");
-void follow_camera_set_distance(s32 copy_distance_to_secondary_slot, f32 distance, f32 b) {
+void follow_camera_set_distance(s32 copy_distance_to_secondary_slot, f32 distance, f32 distance_override_companion_value) {
     u8 *current_camera = vd_2e8450;
     if (*(s16 *)(current_camera + 0x86) == 0) {
         u8 *camera_distance_state = *(u8 **)(current_camera + 0x70) + 0x130;
         *(s16 *)(camera_distance_state + 0x3C) = 1;
-        *(f32 *)(camera_distance_state + 0x48) = b;
+        *(f32 *)(camera_distance_state + 0x48) = distance_override_companion_value;
         *(f32 *)(camera_distance_state + 0x40) = distance;
         if (copy_distance_to_secondary_slot)
             *(f32 *)(camera_distance_state + 0x58) = distance;
