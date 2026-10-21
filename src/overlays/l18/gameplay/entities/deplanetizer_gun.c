@@ -536,7 +536,7 @@ void FUN_L18_002f9c20(struct Moby *m) {
     float mat[4][4];
     float up[4];
     int c;
-    int c2;
+    int second_quad_color;
     int i;
     if (D_L18_0016D260_9c20.n == frames_9c20(D_L18_001624BC + 1)) {
         D_L18_00162568 = -45.0f;
@@ -578,11 +578,11 @@ void FUN_L18_002f9c20(struct Moby *m) {
         xform_9c20(pk.m[i], pk.m[i], mat);
     }
     draw_9c20(&pk, 0, 0);
-    c2 = D_L18_00162510 | (D_L18_00162524 << 24);
-    pk.col[3] = c2;
-    pk.col[2] = c2;
-    pk.col[1] = c2;
-    pk.col[0] = c2;
+    second_quad_color = D_L18_00162510 | (D_L18_00162524 << 24);
+    pk.col[3] = second_quad_color;
+    pk.col[2] = second_quad_color;
+    pk.col[1] = second_quad_color;
+    pk.col[0] = second_quad_color;
     for (i = 0; i < 4; i++) {
         scale_9c20(pk.m[i], D_L18_001DFB90[i], D_L18_0016250C);
         xform_9c20(pk.m[i], pk.m[i], mat);
