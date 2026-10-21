@@ -1626,7 +1626,7 @@ s32 FUN_001f9770_274e48(void *) __asm__("FUN_001f9770");
 void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 void FUN_L00_00274e48(M_274e48 *particle) {
     R_274e48 *r = &particle->r;
-    V_274e48 u, motion_vector_scratch, b;
+    V_274e48 applied_motion_delta, motion_vector_scratch, final_phase_motion_vector;
     f32 d, k;
     s32 color_without_alpha;
     if (D_L00_0015F5CC & 1)
@@ -1650,8 +1650,8 @@ void FUN_L00_00274e48(M_274e48 *particle) {
     particle->i4 = FUN_001fa6e0_274e48(r->i8, r->iC, d);
     if (r->h10) {
         *(volatile s32 *)0x10000000 = 0;
-        load_display_text_resource_entry(&u, r);
-        FUN_001f9a10_274e48(&particle->v10, &particle->v10, &u);
+        load_display_text_resource_entry(&applied_motion_delta, r);
+        FUN_001f9a10_274e48(&particle->v10, &particle->v10, &applied_motion_delta);
         d = convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h10);
         particle->i4 = FUN_001fa6e0_274e48(particle->i4 & 0xFFFFFF, particle->i4, 1.0f - d);
         if (FUN_001f9770_274e48(&particle->hA)) {
@@ -1660,16 +1660,16 @@ void FUN_L00_00274e48(M_274e48 *particle) {
         }
     } else if (r->h12) {
         load_display_text_resource_entry(&motion_vector_scratch, r);
-        load_display_text_resource_entry(&b, (u8 *)r + 4);
-        lerp_vector(&u, &b, &motion_vector_scratch, convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h12));
-        FUN_001f9a10_274e48(&particle->v10, &particle->v10, &u);
+        load_display_text_resource_entry(&final_phase_motion_vector, (u8 *)r + 4);
+        lerp_vector(&applied_motion_delta, &final_phase_motion_vector, &motion_vector_scratch, convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h12));
+        FUN_001f9a10_274e48(&particle->v10, &particle->v10, &applied_motion_delta);
         if (FUN_001f9770_274e48(&particle->hA)) {
             r->h12 = 0;
             particle->hA = r->h14;
         }
     } else {
-        load_display_text_resource_entry(&u, (u8 *)r + 4);
-        FUN_001f9a10_274e48(&particle->v10, &particle->v10, &u);
+        load_display_text_resource_entry(&applied_motion_delta, (u8 *)r + 4);
+        FUN_001f9a10_274e48(&particle->v10, &particle->v10, &applied_motion_delta);
         color_without_alpha = particle->i4 & 0xFFFFFF;
         particle->i4 =
             FUN_001fa6e0_274e48(color_without_alpha, particle->i4, convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h14));
