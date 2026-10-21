@@ -1245,7 +1245,7 @@ extern void FUN_L00_001fb470(s32, s32, s32, char *, s32);
 
 /* Draws the short counter panel, its spinning icon, and a pulsing label. */
 s32 FUN_L00_0023a2d0(Hud *hud_element) {
-    char buf[16];
+    char formatted_label_text[16];
     u8 *visibility_counters;
     s32 x, y, panel_right, panel_left, slide, alpha, text_alpha;
     s32 color, shadow, period, text_x, text_y;
@@ -1288,7 +1288,7 @@ s32 FUN_L00_0023a2d0(Hud *hud_element) {
     draw_hud_sprite(get_icon_frame(0x7580, 1), panel_left - 32, y, 32, 32, alpha);
     draw_hud_icon(hud_element, get_icon_frame(0x754f, D_L00_0015F5CC % 60 >> 1), x - 32, y, 0, text_alpha);
 
-    sprintf_alt(buf, D_L00_0015F918);
+    sprintf_alt(formatted_label_text, D_L00_0015F918);
     text_x = x + D_L00_0015F904;
     text_y = y + D_L00_0015F908;
     period = scale_game_frames(D_L00_0015F914);
@@ -1299,8 +1299,8 @@ s32 FUN_L00_0023a2d0(Hud *hud_element) {
     scaled_text = pulse * text;
     shadow = fast_tween_color(0, 0x80000000, scaled_text);
     color = fast_tween_color(D_L00_0015F90C, D_L00_0015F910, scaled_text);
-    FUN_L00_001fb470(text_x + 1, text_y + 1, shadow, buf, -1);
-    FUN_L00_001fb470(text_x, text_y, color, buf, -1);
+    FUN_L00_001fb470(text_x + 1, text_y + 1, shadow, formatted_label_text, -1);
+    FUN_L00_001fb470(text_x, text_y, color, formatted_label_text, -1);
 out:
     return hud_element->ret;
 }
