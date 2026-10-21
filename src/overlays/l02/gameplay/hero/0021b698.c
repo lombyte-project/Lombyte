@@ -801,7 +801,7 @@ void FUN_L02_00225c20(void) {
     int prevState;
     int prevAnim;
     int fast;
-    float *vel;
+    float *hero_velocity;
     float slideAngle;
 
     moby = ((Moby *)hero.moby);
@@ -974,12 +974,12 @@ void FUN_L02_00225c20(void) {
                 ((Moby *)hero.unk6A4)->f23 = 0x80;
             }
             {
-                Moby *dst = ((Moby *)hero.unk6A4);
-                Moby *src = ((Moby *)hero.moby);
+                Moby *sink_follow_moby = ((Moby *)hero.unk6A4);
+                Moby *hero_moby = ((Moby *)hero.moby);
 
-                qcopy(dst->f10, src->f10);
-                qcopy(dst->f40, src->f40);
-                allocate_voice_for_target_entry_cf(dst);
+                qcopy(sink_follow_moby->f10, hero_moby->f10);
+                qcopy(sink_follow_moby->f40, hero_moby->f40);
+                allocate_voice_for_target_entry_cf(sink_follow_moby);
             }
         }
         hero.motion.velocity.f[2] = 0.0f;
@@ -1184,13 +1184,13 @@ void FUN_L02_00225c20(void) {
             speed_limit_data = ((Moby *)hero.unk994)->f78;
             if (speed_limit_data != 0) {
                 float len;
-                float cur;
+                float current_velocity_magnitude;
                 float lim;
 
-                cur = vector_length_xyz(hero.motion.velocity.f);
+                current_velocity_magnitude = vector_length_xyz(hero.motion.velocity.f);
                 lim = *(float *)(speed_limit_data + 0xC);
-                len = cur;
-                if (lim < cur) {
+                len = current_velocity_magnitude;
+                if (lim < current_velocity_magnitude) {
                     approach_value(&len, lim, frame_time_sq * 15.0f);
                     normalize_vector_xyz(hero.motion.velocity.f, hero.motion.velocity.f, len);
                 }
@@ -1603,10 +1603,10 @@ void FUN_L02_00225c20(void) {
         }
         if (hero.state.current == 0x20 && hero.state_timer > t0) {
             if (hero.state_timer < t1 + scale_game_frames(4)) {
-                Moby *w;
+                Moby *slot_zero_item_moby;
 
-                w = ((Moby *)hero.items[0].moby);
-                if (w != 0) {
+                slot_zero_item_moby = ((Moby *)hero.items[0].moby);
+                if (slot_zero_item_moby != 0) {
                     float yaw;
 
                     vec[3][0] = fast_cos(hero.motion.rot.f[2]) * 2.0f;
@@ -1617,25 +1617,25 @@ void FUN_L02_00225c20(void) {
                     ((HitC *)vec[0])->fC = 5627.925f;
                     ((HitC *)vec[0])->f18 = 0;
                     yaw = hero.motion.rot.f[2];
-                    ((HitC *)vec[0])->f1A = w->fA6;
+                    ((HitC *)vec[0])->f1A = slot_zero_item_moby->fA6;
                     vec[4][0] = fast_cos(yaw) * 0.8f;
                     vec[4][1] = fast_sin(yaw) * 0.8f;
                     vec[4][2] = 0.55f;
                     add_vector_xyz(vec[4], vec[4], hero.motion.pos.f);
-                    FUN_L00_00217368((int)w, collect_mobies_in_sphere(0.8f, vec[4], 0, w, vec[0]));
+                    FUN_L00_00217368((int)slot_zero_item_moby, collect_mobies_in_sphere(0.8f, vec[4], 0, slot_zero_item_moby, vec[0]));
                     yaw = FUN_001f9b80_cf(hero.motion.rot.f[2], -0.87266463f);
                     vec[4][0] = fast_cos(yaw) * 0.8f;
                     vec[4][1] = fast_sin(yaw) * 0.8f;
                     vec[4][2] = 0.55f;
                     add_vector_xyz(vec[4], vec[4], hero.motion.pos.f);
-                    FUN_L00_00217368((int)w,
+                    FUN_L00_00217368((int)slot_zero_item_moby,
                                      collect_mobies_in_sphere(0.8f, vec[4], 0, ((Moby *)hero.moby), vec[0]));
                     yaw = FUN_001f9b80_cf(hero.motion.rot.f[2], 0.87266463f);
                     vec[4][0] = fast_cos(yaw) * 0.8f;
                     vec[4][1] = fast_sin(yaw) * 0.8f;
                     vec[4][2] = 0.55f;
                     add_vector_xyz(vec[4], vec[4], hero.motion.pos.f);
-                    FUN_L00_00217368((int)w, collect_mobies_in_sphere(0.8f, vec[4], 0, w, vec[0]));
+                    FUN_L00_00217368((int)slot_zero_item_moby, collect_mobies_in_sphere(0.8f, vec[4], 0, slot_zero_item_moby, vec[0]));
                 }
             }
         }
@@ -2309,8 +2309,8 @@ void FUN_L02_00225c20(void) {
     case HERO_STATE_VEHICLE_MODE_3_HURT: {
         float len;
 
-        vel = hero.motion.velocity.f;
-        len = FUN_L00_001ff600_cf(vel);
+        hero_velocity = hero.motion.velocity.f;
+        len = FUN_L00_001ff600_cf(hero_velocity);
         FUN_L00_00227d40_cf(
             (hero.air_frames.s != 0 ? frame_scale * -0.00999999f : frame_scale * -0.07999998f) * len +
                 len,
