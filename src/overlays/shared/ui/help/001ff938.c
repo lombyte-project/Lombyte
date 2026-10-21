@@ -345,27 +345,27 @@ void FUN_L15_0020a328(int force) {
     V_20a328 offset_position, primary_endpoint, b, secondary_endpoint;
     char *src;
     P_20a328 *g;
-    f32 off, k, secondary_offset_scale, ang, negative_xy_dot_product;
+    f32 position_z_offset, k, secondary_offset_scale, ang, negative_xy_dot_product;
     int r;
 
     if (P.h308 != 0)
         return;
     if (FUN_L00_002339d0_20a328(&P.vE0) < frame_time * 0.1f)
         return;
-    off = 0.3700000047683716f;
+    position_z_offset = 0.3700000047683716f;
     k = 0.5f;
     if ((u32)(P.i208C - 0x11) < 2) {
-        off = 0.0f;
+        position_z_offset = 0.0f;
         k = 0.7f;
     } else if (P.b20A4 == 2) {
-        off = 1.5f;
+        position_z_offset = 1.5f;
         k = 5.0f;
     }
     src = D_0013F3D0;
     qcopy(&offset_position, src);
-    offset_position.f[2] += off;
+    offset_position.f[2] += position_z_offset;
     qcopy(&b, src);
-    b.f[2] += off * 0.3f;
+    b.f[2] += position_z_offset * 0.3f;
     if (force || FUN_001f9b20_20a328(src + 0x60) < 0.01f) {
         g = (P_20a328 *)(src - 0x80);
         secondary_offset_scale = 1.4f;
