@@ -18,9 +18,9 @@ s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) __asm__("F
 
 s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) {
     void *first_destination;
-    s32 len0;
+    s32 first_destination_byte_count;
     void *second_destination;
-    s32 len1;
+    s32 second_destination_byte_count;
     u8 *ps;
     u8 *end;
     s32 len;
@@ -39,8 +39,8 @@ s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) {
         first_source_byte_count = len;
     }
     rest = len - first_source_byte_count;
-    audio_dec_begin_put(D_0016120C + 0xD9100, &first_destination, &len0, &second_destination, &len1);
-    copied_byte_count = cpy2area(first_destination, len0, second_destination, len1, ps, first_source_byte_count, ab, rest);
+    audio_dec_begin_put(D_0016120C + 0xD9100, &first_destination, &first_destination_byte_count, &second_destination, &second_destination_byte_count);
+    copied_byte_count = cpy2area(first_destination, first_destination_byte_count, second_destination, second_destination_byte_count, ps, first_source_byte_count, ab, rest);
     audio_dec_end_put(D_0016120C + 0xD9100, copied_byte_count);
     return copied_byte_count > 0;
 }
