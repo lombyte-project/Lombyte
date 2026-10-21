@@ -379,7 +379,7 @@ extern int D_L11_0015FFD8;
 void FUN_L11_002d1030(void *mp) {
     struct Moby *moby = mp;
     char *pvars = (char *)moby->pvars;
-    float ang;
+    float target_yaw;
     float motion_scalar;
     float vertical_motion;
     float vertical_motion_decrement;
@@ -400,9 +400,9 @@ void FUN_L11_002d1030(void *mp) {
     case RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET:
     {
         char *yaw_ptr = (char *)moby + 0x48;
-        ang = fast_arc_tan(*(float *)(pvars + 0x120) - *(float *)((char *)moby + 0x10),
+        target_yaw = fast_arc_tan(*(float *)(pvars + 0x120) - *(float *)((char *)moby + 0x10),
                            *(float *)(pvars + 0x124) - *(float *)((char *)moby + 0x14));
-        approach_angle((float *)(yaw_ptr), ang, (float *)(pvars + 0x150), D_0015ED70 * 12.566371f,
+        approach_angle((float *)(yaw_ptr), target_yaw, (float *)(pvars + 0x150), D_0015ED70 * 12.566371f,
                          D_0015ED70 * 25.132742f, D_0015ED6C * 12.566371f);
         *(float *)(pvars + 0x130) = fast_cos(*(float *)(yaw_ptr)) * *(float *)(pvars + 0x154);
         motion_scalar = fast_sin(*(float *)(yaw_ptr));
