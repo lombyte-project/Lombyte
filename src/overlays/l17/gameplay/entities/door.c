@@ -2454,32 +2454,32 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
     };
     Vars1382 *robot_dog_vars;
     unsigned char *tgt;
-    int r;
+    int clip_volume_suppressed;
     int a;
-    int b;
+    int secondary_clip_volume_id;
     float heading_vector[4];
     float pos[4];
 
-    r = 0;
+    clip_volume_suppressed = 0;
     robot_dog_vars = *(Vars1382 **)(robot_dog_moby + 0x78);
     if (robot_dog_moby[0x20] != 12) {
         a = robot_dog_vars->c2B0;
         if (a != -1) {
-            r = is_point_inside_clip_volume(D_L17_001676C0, a) == 0;
-            b = robot_dog_vars->c2B4;
-            if (b != -1) {
-                r &= is_point_inside_clip_volume(D_L17_001676C0, b) == 0;
+            clip_volume_suppressed = is_point_inside_clip_volume(D_L17_001676C0, a) == 0;
+            secondary_clip_volume_id = robot_dog_vars->c2B4;
+            if (secondary_clip_volume_id != -1) {
+                clip_volume_suppressed &= is_point_inside_clip_volume(D_L17_001676C0, secondary_clip_volume_id) == 0;
             }
         } else if (robot_dog_vars->c2B8 != -1) {
-            r = is_point_inside_clip_volume(D_L17_001676C0, a);
-            b = robot_dog_vars->c2BC;
-            if (b != -1) {
-                r |= is_point_inside_clip_volume(D_L17_001676C0, b);
+            clip_volume_suppressed = is_point_inside_clip_volume(D_L17_001676C0, a);
+            secondary_clip_volume_id = robot_dog_vars->c2BC;
+            if (secondary_clip_volume_id != -1) {
+                clip_volume_suppressed |= is_point_inside_clip_volume(D_L17_001676C0, secondary_clip_volume_id);
             }
         }
     }
-    FUN_L17_002efa48(robot_dog_moby, r);
-    if (r != 0 && robot_dog_moby[0x20] != 15) {
+    FUN_L17_002efa48(robot_dog_moby, clip_volume_suppressed);
+    if (clip_volume_suppressed != 0 && robot_dog_moby[0x20] != 15) {
         robot_dog_moby[0x31] = 0;
         *(unsigned short *)(robot_dog_moby + 0x34) |= 1;
         return;
@@ -2733,7 +2733,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
         float far;
         float k1;
         float k2;
-        float v;
+        float frame_scaled_speed;
         FUN_L17_002efd48_c((char *)robot_dog_moby, (float *)&robot_dog_vars->home, frame_time * 5.0f);
         *(float *)(robot_dog_moby + 0x58) = 1.35f;
         dist = vector_distance(robot_dog_moby + 0x10, &robot_dog_vars->home);
@@ -2748,8 +2748,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             far = vector_distance(robot_dog_moby + 0x10, robot_dog_vars->v180);
             k1 = multiply_global_factor_ed64(40.0f);
             k2 = multiply_global_factor_ed64(10.0f);
-            v = robot_dog_vars->speed * frame_time;
-            if (far < v * k1 * 0.5f + v * k2 + 1.5f) {
+            frame_scaled_speed = robot_dog_vars->speed * frame_time;
+            if (far < frame_scaled_speed * k1 * 0.5f + frame_scaled_speed * k2 + 1.5f) {
                 if (point_in_path_xy((&hero.motion.pos), ((int **)D_L17_001B0DB0)[robot_dog_vars->path] + 4,
                                      ((int **)D_L17_001B0DB0)[robot_dog_vars->path][0]) != 0) {
                     robot_dog_moby[0x20] = 10;
