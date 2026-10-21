@@ -1032,13 +1032,13 @@ extern int D_L15_001ABE40[];
 
 int FUN_L15_00299ca0(void *mm) {
     char *moby = mm;
-    int idx = *(int *)(*(char **)(moby + 0x78) + 0x128);
+    int linked_moby_index = *(int *)(*(char **)(moby + 0x78) + 0x128);
     char *linked_moby;
     float linked_moby_distance_xy;
     short *group_moby_entry;
-    if (idx == -1)
+    if (linked_moby_index == -1)
         return 0;
-    linked_moby = (char *)D_L15_0015FFD8_m + (idx << 8);
+    linked_moby = (char *)D_L15_0015FFD8_m + (linked_moby_index << 8);
     if (*(int *)(*(char **)(linked_moby + 0x78) + 8) != 0)
         return 0;
     if (((unsigned char *)moby)[0x21] == 0xFF)
