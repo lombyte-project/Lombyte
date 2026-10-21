@@ -3595,9 +3595,9 @@ void rocket_update(struct Moby *moby) {
         ROCKET_STATE_FLY_TO_POINT = 2
     };
     FlyerVars *vars = (FlyerVars *)moby->pvars;
-    Vec4f diff;
+    Vec4f destination_delta;
     OvlVec4 step;
-    f32 dist;
+    f32 distance_to_destination;
     f32 speed;
     char *slot;
     struct Moby *target;
@@ -3617,11 +3617,11 @@ void rocket_update(struct Moby *moby) {
     case ROCKET_STATE_IDLE:
         return;
     case ROCKET_STATE_FLY_TO_POINT:
-        fast_vec_sub(&diff, D_L14_001600EC + vars->point * 0x80 + 0x30, &moby->pos);
-        dist = fast_vec_length(&diff);
+        fast_vec_sub(&destination_delta, D_L14_001600EC + vars->point * 0x80 + 0x30, &moby->pos);
+        distance_to_destination = fast_vec_length(&destination_delta);
         fast_dec_timer(&vars->timer);
         speed = D_L14_00161FA8 * frame_time;
-        if (dist < speed || dist <= 0.0f) {
+        if (distance_to_destination < speed || distance_to_destination <= 0.0f) {
             if (vars->sound != -1) {
                 slot = D_0013E550 + vars->sound * 0x70;
                 if (*(struct Moby **)(slot + 0x88) == moby && ((u8 *)slot)[0x74] != 0) {
@@ -3642,8 +3642,8 @@ void rocket_update(struct Moby *moby) {
             return;
         }
         moby->rot.x = fast_add_rotations(moby->rot.x, 2.0f * DEG_TO_RAD);
-        moby->rot.y = FUN_L00_0025b750(moby->rot.y, -fast_arc_tan(vector_length_xy(&diff), diff.z), D_L14_00161FAC);
-        moby->rot.z = FUN_L00_0025b750(moby->rot.z, fast_arc_tan(diff.x, diff.y), D_L14_00161FAC);
+        moby->rot.y = FUN_L00_0025b750(moby->rot.y, -fast_arc_tan(vector_length_xy(&destination_delta), destination_delta.z), D_L14_00161FAC);
+        moby->rot.z = FUN_L00_0025b750(moby->rot.z, fast_arc_tan(destination_delta.x, destination_delta.y), D_L14_00161FAC);
         fast_vec_scale(&step, &moby->rot_row0, speed);
         add_vector_xyz((u8 *)&moby->pos, (u8 *)&moby->pos, (u8 *)&step);
         FUN_L14_002fded0(moby);
