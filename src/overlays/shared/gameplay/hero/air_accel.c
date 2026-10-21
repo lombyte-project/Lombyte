@@ -1520,8 +1520,8 @@ void FUN_L01_0023c710(void) {
             sample_index_base = hero.unk21B0 - i;
             {
                 s32 sample_index = (sample_index_base + 0x1F) % 32;
-                s32 b = (sample_index_base + 0x1E) % 32;
-                FUN_001f9a28_23c710(&sample_delta, &hero.unk1B00[sample_index], &hero.unk1B00[b]);
+                s32 subtrahend_sample_index = (sample_index_base + 0x1E) % 32;
+                FUN_001f9a28_23c710(&sample_delta, &hero.unk1B00[sample_index], &hero.unk1B00[subtrahend_sample_index]);
             }
             FUN_001f9a10_23c710(&sum, &sum, &sample_delta);
         }
