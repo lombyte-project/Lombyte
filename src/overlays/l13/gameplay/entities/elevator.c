@@ -500,7 +500,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
     Data_2B5368 *data = turret_moby->data;
     Moby_2B5368 *target_moby;
     Moby_2B5368 *gun;
-    float r;
+    float target_yaw_scratch;
 
     FUN_L13_002b48d8_2b0e80(turret_moby);
     target_moby = data->target;
@@ -518,8 +518,8 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         turret_moby->state = 1;
         break;
     case BLARG_TURRET_STATE_WAIT_FOR_TARGET:
-        r = fast_difference_between_rotations(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
-        if (r < 1.5707964f && vector_distance(&turret_moby->pos, &target_moby->pos) < 20.0f
+        target_yaw_scratch = fast_difference_between_rotations(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
+        if (target_yaw_scratch < 1.5707964f && vector_distance(&turret_moby->pos, &target_moby->pos) < 20.0f
             && (data->volume == -1 || is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) != 0)) {
             data->f68 = 8.0f;
             if (turret_moby->b53 != 1) {
@@ -539,8 +539,8 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         }
         break;
     case BLARG_TURRET_STATE_TRACK_TARGET:
-        r = fast_difference_between_rotations(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
-        if (r >= 1.5707964f || vector_distance(&turret_moby->pos, &target_moby->pos) > 22.0f
+        target_yaw_scratch = fast_difference_between_rotations(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
+        if (target_yaw_scratch >= 1.5707964f || vector_distance(&turret_moby->pos, &target_moby->pos) > 22.0f
             || (data->volume != -1 && is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) == 0)) {
             if (turret_moby->b53 != 0) {
                 FUN_00212f90_2b0e80(turret_moby, 0, 0, random_int_between(7, 13));
@@ -549,15 +549,15 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         } else {
             float lim;
             approach_value(&data->f68, 20.0f, frame_time * 6.0f);
-            r = FUN_001fa5c8_2b0e80(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
+            target_yaw_scratch = FUN_001fa5c8_2b0e80(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
             lim = data->f6C * 0.017453292f;
-            if (lim < r) {
-                r = lim;
-            } else if (r < -lim) {
-                r = -lim;
+            if (lim < target_yaw_scratch) {
+                target_yaw_scratch = lim;
+            } else if (target_yaw_scratch < -lim) {
+                target_yaw_scratch = -lim;
             }
-            r = FUN_001fa580_2b0e80(r, data->f54);
-            approach_angle(&turret_moby->rot.z, r, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, frame_time * 12.566371f);
+            target_yaw_scratch = FUN_001fa580_2b0e80(target_yaw_scratch, data->f54);
+            approach_angle(&turret_moby->rot.z, target_yaw_scratch, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, frame_time * 12.566371f);
             FUN_L13_002b47a0_2b0e80(turret_moby);
             if (data->gun == 0 || data->gun->cls_id != 0x24 || (unsigned char)data->gun->state == 0xFE
                 || (unsigned char)data->gun->state == 0xFD || (unsigned char)data->gun->state == 2) {
