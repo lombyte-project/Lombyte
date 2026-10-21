@@ -640,13 +640,13 @@ void white_flower_update(char *moby) {
         WHITE_FLOWER_REMOVE = 2
     };
     int hit = 0;
-    char *r = find_moby_hit(moby, 0x10000, 0);
+    char *hit_record = find_moby_hit(moby, 0x10000, 0);
     switch (*(unsigned char *)(moby + 0x20)) {
     case WHITE_FLOWER_INITIALIZE:
         moby[0x20] = 1;
         break;
     case WHITE_FLOWER_WAIT_FOR_HIT:
-        if (r != 0 && *(float *)(r + 0x2C) > 0.0f)
+        if (hit_record != 0 && *(float *)(hit_record + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
             moby[0x20] = 2;
