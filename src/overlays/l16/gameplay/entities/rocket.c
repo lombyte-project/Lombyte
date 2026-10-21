@@ -259,20 +259,20 @@ extern int FUN_L00_0025d7a0(char *, int, int, int);
 void FUN_L16_002cff48(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     if (*(float *)(data + 0x2C8) <= 0.0f) {
-        int idx = *(short *)(data + 0x2F4);
+        int path_node_index = *(short *)(data + 0x2F4);
         char *tab = *(char **)(data + 0x2C0);
-        int off = idx * 16;
-        if (*(float *)(tab + off + 0x1C) == 1.0f) {
+        int path_node_byte_offset = path_node_index * 16;
+        if (*(float *)(tab + path_node_byte_offset + 0x1C) == 1.0f) {
             while (1) {
                 char *t;
-                if (*(float *)(tab + off + 0x1C) == 2.0f)
+                if (*(float *)(tab + path_node_byte_offset + 0x1C) == 2.0f)
                     break;
-                idx = FUN_L00_0025d7a0(tab, idx, 1, 1);
+                path_node_index = FUN_L00_0025d7a0(tab, path_node_index, 1, 1);
                 tab = *(char **)(data + 0x2C0);
-                off = idx * 16;
+                path_node_byte_offset = path_node_index * 16;
             }
-            *(short *)(data + 0x2F0) = idx;
-            qcopy(data + 0x270, *(char **)(data + 0x2C0) + (short)idx * 16 + 0x10);
+            *(short *)(data + 0x2F0) = path_node_index;
+            qcopy(data + 0x270, *(char **)(data + 0x2C0) + (short)path_node_index * 16 + 0x10);
             *(int *)(data + 0x2E4) = 1;
         }
     }
