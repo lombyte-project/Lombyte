@@ -3552,7 +3552,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         SHUTTLE_STATE_RESET_AFTER_TRAVEL = 3
     };
 
-    Vars1448 *v = (Vars1448 *)shuttle_moby->pvars;
+    Vars1448 *shuttle_vars = (Vars1448 *)shuttle_moby->pvars;
     float old_pos[4];
     float old_rot[4];
     float delta[4];
@@ -3560,7 +3560,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
     float rot[4];
     float a[4];
     int alternate_stop_index;
-    int idx;
+    int route_index;
     char *p;
     struct Hero *pl;
 
@@ -3574,9 +3574,9 @@ void shuttle_update(struct Moby *shuttle_moby) {
                       (((short)shuttle_moby->save_id >> 5) * 4 + (current_level_index << 8))) >>
              (shuttle_moby->save_id & 0x1F)) &
                 1) {
-            v->sel = 0;
-            v->dir = 0;
-            v->side = 0;
+            shuttle_vars->sel = 0;
+            shuttle_vars->dir = 0;
+            shuttle_vars->side = 0;
         }
         shuttle_moby->update_dist = 0xFF;
         shuttle_moby->draw_dist = 0x80;
@@ -3587,50 +3587,50 @@ void shuttle_update(struct Moby *shuttle_moby) {
         }
         {
             int base = (int)D_L17_001600EC;
-            v->sel = 1;
-            v->side = 1;
-            v->dir = 1;
-            *(OvlQuad *)&shuttle_moby->pos = *(OvlQuad *)((v->cam[1] << 7) + base + 0x30);
-            *(OvlQuad *)&shuttle_moby->rot = *(OvlQuad *)((v->cam[1] << 7) + base + 0x70);
+            shuttle_vars->sel = 1;
+            shuttle_vars->side = 1;
+            shuttle_vars->dir = 1;
+            *(OvlQuad *)&shuttle_moby->pos = *(OvlQuad *)((shuttle_vars->cam[1] << 7) + base + 0x30);
+            *(OvlQuad *)&shuttle_moby->rot = *(OvlQuad *)((shuttle_vars->cam[1] << 7) + base + 0x70);
         }
         break;
     case SHUTTLE_STATE_WAIT_FOR_ACTIVATION:
-        if (shuttle_moby->prev_seq == 2 && (shuttle_moby->anim_flags & 2) && v->sfx == 0) {
+        if (shuttle_moby->prev_seq == 2 && (shuttle_moby->anim_flags & 2) && shuttle_vars->sfx == 0) {
             allocate_voice_for_target_entry(1, 0, (int)shuttle_moby);
-            v->sfx = 0;
+            shuttle_vars->sfx = 0;
         }
         pl = &hero;
         if (((unsigned char *)pl->ground_moby) == shuttle_moby && pl->air_frames.s == 0) {
             FUN_L17_002f20d8(shuttle_moby);
             if ((*(int *)(((char *)&D_0013CAE4)) & 0x10) && D_L17_0015F594 == 10) {
-                int s = v->dir;
+                int s = shuttle_vars->dir;
                 if (s >= 0) {
-                    v->go = 1;
+                    shuttle_vars->go = 1;
                     switch (s) {
                     case SHUTTLE_STOP_FIRST: {
                         float x = *(float *)&D_L17_001623AC;
                         float y = *(float *)&D_L17_001623A8;
-                        v->sel = 1;
-                        v->f9C = x;
-                        v->fA0 = y;
-                        v->side = 0;
+                        shuttle_vars->sel = 1;
+                        shuttle_vars->f9C = x;
+                        shuttle_vars->fA0 = y;
+                        shuttle_vars->side = 0;
                         break;
                     }
                     case SHUTTLE_STOP_SECOND: {
                         float x = *(float *)&D_L17_001623A8;
                         float y = *(float *)&D_L17_001623AC;
-                        v->side = s;
-                        v->f9C = x;
-                        v->fA0 = y;
-                        v->sel = 0;
+                        shuttle_vars->side = s;
+                        shuttle_vars->f9C = x;
+                        shuttle_vars->fA0 = y;
+                        shuttle_vars->sel = 0;
                         break;
                     }
                     }
                 }
             }
         }
-        if (v->go != 0) {
-            v->go = 0;
+        if (shuttle_vars->go != 0) {
+            shuttle_vars->go = 0;
             FUN_L00_002644e0(10);
             shuttle_moby->state = 2;
             allocate_voice_for_target_entry(2, 0, (int)shuttle_moby);
@@ -3638,10 +3638,10 @@ void shuttle_update(struct Moby *shuttle_moby) {
                 blend_moby_animation(shuttle_moby, 0, 0, 0);
             }
             fade_to_black(scale_game_frames(10));
-            v->w88 = 0;
-            idx = v->side;
-            qcopy(a, ((char **)D_L17_001B0DB0)[v->a[idx]] + 0x10);
-            qcopy(b, ((char **)D_L17_001B0DB0)[v->b[idx]] + 0x10);
+            shuttle_vars->w88 = 0;
+            route_index = shuttle_vars->side;
+            qcopy(a, ((char **)D_L17_001B0DB0)[shuttle_vars->a[route_index]] + 0x10);
+            qcopy(b, ((char **)D_L17_001B0DB0)[shuttle_vars->b[route_index]] + 0x10);
             clear_vector(rot);
             rot[2] = fast_arc_tan(b[0] - a[0], b[1] - a[1]);
             rot[1] = -fast_arc_tan(vector_distance(a, b), b[2] - a[2]);
@@ -3649,8 +3649,8 @@ void shuttle_update(struct Moby *shuttle_moby) {
             FUN_L02_002f8aa0(0.001f, 1.0f, 1.0f, 0.001f, 1.0f, 1.0f);
             FUN_L00_002ea9d8(a);
             FUN_L00_002eaa30(rot);
-            FUN_L00_00216f90(D_L17_001600EC + (v->cut << 7) + 0x30,
-                             D_L17_001600EC + (v->cut << 7) + 0x70, 0x72, 0);
+            FUN_L00_00216f90(D_L17_001600EC + (shuttle_vars->cut << 7) + 0x30,
+                             D_L17_001600EC + (shuttle_vars->cut << 7) + 0x70, 0x72, 0);
         } else if (D_L17_001BBB30.collected[(short)shuttle_moby->save_id] != 0 ||
                    (*(int *)(((char *)&D_0014C190) +
                              (((short)shuttle_moby->save_id >> 5) * 4 +
@@ -3658,17 +3658,17 @@ void shuttle_update(struct Moby *shuttle_moby) {
                     (shuttle_moby->save_id & 0x1F)) &
                        1) {
             float d =
-                vector_distance((&hero.motion.pos), D_L17_001600EC + (v->cam[v->sel] << 7) + 0x30);
+                vector_distance((&hero.motion.pos), D_L17_001600EC + (shuttle_vars->cam[shuttle_vars->sel] << 7) + 0x30);
             if (vector_distance((&hero.motion.pos),
-                             D_L17_001600EC + (v->cam[v->sel ^ 1] << 7) + 0x30) < d) {
+                             D_L17_001600EC + (shuttle_vars->cam[shuttle_vars->sel ^ 1] << 7) + 0x30) < d) {
                 int base;
                 int ofs;
-                alternate_stop_index = v->sel ^ 1;
-                v->dir ^= 1;
-                v->side ^= 1;
-                v->sel = alternate_stop_index;
+                alternate_stop_index = shuttle_vars->sel ^ 1;
+                shuttle_vars->dir ^= 1;
+                shuttle_vars->side ^= 1;
+                shuttle_vars->sel = alternate_stop_index;
                 base = (int)D_L17_001600EC;
-                ofs = v->cam[alternate_stop_index] << 7;
+                ofs = shuttle_vars->cam[alternate_stop_index] << 7;
                 qcopy(&shuttle_moby->pos, (char *)(ofs + base + 0x30));
                 qcopy(&shuttle_moby->rot, (char *)(ofs + base + 0x70));
                 vu_euler_rotation_basis(&shuttle_moby->rot_row0, &shuttle_moby->rot);
@@ -3677,12 +3677,12 @@ void shuttle_update(struct Moby *shuttle_moby) {
         }
         break;
     case SHUTTLE_STATE_TRAVEL:
-        if (FUN_L17_002f2180(shuttle_moby, v->side)) {
+        if (FUN_L17_002f2180(shuttle_moby, shuttle_vars->side)) {
             int ofs;
             int base;
             shuttle_moby->state = 3;
-            v->wA4 = 0;
-            ofs = v->cam[v->sel] << 7;
+            shuttle_vars->wA4 = 0;
+            ofs = shuttle_vars->cam[shuttle_vars->sel] << 7;
             base = (int)D_L17_001600EC;
             qcopy(&shuttle_moby->pos, (char *)(ofs + base + 0x30));
             qcopy(&shuttle_moby->rot, (char *)(ofs + base + 0x70));
@@ -3709,11 +3709,11 @@ void shuttle_update(struct Moby *shuttle_moby) {
             blend_moby_animation(shuttle_moby, 2, 0, scale_game_frames(30));
         }
         allocate_voice_for_target_entry(0, 0, (int)shuttle_moby);
-        v->sfx = 1;
+        shuttle_vars->sfx = 1;
         break;
     }
     subtract_vector_xyz(delta, &shuttle_moby->pos, old_pos);
-    update_entity_matrix(v->area, delta, old_rot, &shuttle_moby->rot);
+    update_entity_matrix(shuttle_vars->area, delta, old_rot, &shuttle_moby->rot);
 }
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F3C18), where it is exact; names translated to the US level program. */
 
