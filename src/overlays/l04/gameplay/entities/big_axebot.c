@@ -45,10 +45,10 @@ void FUN_L04_002a5a08(struct Moby *moby) {
 
 void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
-void FUN_L04_002ba3e0(char *arg, void *new_seq, void *frame_index, void *blend_frames) {
-    char *data = *(char **)(arg + 0x78);
+void FUN_L04_002ba3e0(char *moby, void *new_seq, void *frame_index, void *blend_frames) {
+    char *data = *(char **)(moby + 0x78);
     void *other;
-    blend_moby_animation_u(arg, new_seq, frame_index, blend_frames);
+    blend_moby_animation_u(moby, new_seq, frame_index, blend_frames);
     other = *(void **)(data + 0x424);
     if (other != 0) {
         blend_moby_animation_u(other, new_seq, frame_index, blend_frames);
