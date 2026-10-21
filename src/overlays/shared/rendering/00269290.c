@@ -2606,7 +2606,7 @@ s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void FUN_L00_0026f280(char *particle) {
     char *particle_data = particle + 0x20;
-    float v[3];
+    float motion_vector_scratch[3];
     char *q;
     float offset_angle, k;
     if (fast_dec_timer_s16(particle + 0xA)) {
@@ -2628,32 +2628,32 @@ void FUN_L00_0026f280(char *particle) {
         }
     }
     if (*(short *)(particle + 0xA) < scale_game_frames(0xE)) {
-        int r = *(unsigned char *)(particle + 7);
-        *(int *)(particle + 4) = ((r * *(short *)(particle + 0xA) / scale_game_frames(0xE)) << 24) |
+        int alpha_before_fade = *(unsigned char *)(particle + 7);
+        *(int *)(particle + 4) = ((alpha_before_fade * *(short *)(particle + 0xA) / scale_game_frames(0xE)) << 24) |
                           (*(int *)(particle + 4) & 0xFFFFFF);
     }
     *(float *)(particle + 0xC) += D_0015ED60_c * 840.00006f;
     if (*(float *)(particle_data + 0xC) < *(float *)(particle + 0xC))
         *(float *)(particle + 0xC) = *(float *)(particle_data + 0xC);
-    v[0] = *(float *)(particle_data + 0);
-    v[1] = *(float *)(particle_data + 4);
-    v[2] = *(float *)(particle_data + 8);
+    motion_vector_scratch[0] = *(float *)(particle_data + 0);
+    motion_vector_scratch[1] = *(float *)(particle_data + 4);
+    motion_vector_scratch[2] = *(float *)(particle_data + 8);
     {
-        float len = vector_length_xy(v);
-        set_vector_length_xy(v, v, D_0015ED60_c * -0.029999971f * len + len);
+        float horizontal_speed = vector_length_xy(motion_vector_scratch);
+        set_vector_length_xy(motion_vector_scratch, motion_vector_scratch, D_0015ED60_c * -0.029999971f * horizontal_speed + horizontal_speed);
     }
-    fast_vec_add(particle + 0x10, particle + 0x10, v);
-    approach_value(v + 2, frame_time * 1.3f, frame_time_sq * 5.0f);
-    *(float *)(particle_data + 0) = v[0];
-    *(float *)(particle_data + 4) = v[1];
-    *(float *)(particle_data + 8) = v[2];
+    fast_vec_add(particle + 0x10, particle + 0x10, motion_vector_scratch);
+    approach_value(motion_vector_scratch + 2, frame_time * 1.3f, frame_time_sq * 5.0f);
+    *(float *)(particle_data + 0) = motion_vector_scratch[0];
+    *(float *)(particle_data + 4) = motion_vector_scratch[1];
+    *(float *)(particle_data + 8) = motion_vector_scratch[2];
     *(float *)(particle_data + 0x14) = fast_add_rotations(*(float *)(particle_data + 0x14), *(float *)(particle_data + 0x18));
     offset_angle = fast_add_rotations(D_L00_00166DD8_d, 1.5707964f);
     k = fast_sin(*(float *)(particle_data + 0x14)) * *(float *)(particle_data + 0x1C);
-    v[0] = fast_cos(offset_angle) * k;
-    v[1] = fast_sin(offset_angle) * k;
-    v[2] = 0;
-    fast_vec_add(particle + 0x10, particle + 0x10, v);
+    motion_vector_scratch[0] = fast_cos(offset_angle) * k;
+    motion_vector_scratch[1] = fast_sin(offset_angle) * k;
+    motion_vector_scratch[2] = 0;
+    fast_vec_add(particle + 0x10, particle + 0x10, motion_vector_scratch);
 }
 extern float D_0015ED70_0026f548 __asm__("D_0015ED70");
 unsigned char *FUN_L00_002678b8_0026f548(int) __asm__("FUN_L00_002678b8");
