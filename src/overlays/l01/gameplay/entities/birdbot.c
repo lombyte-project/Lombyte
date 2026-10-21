@@ -151,7 +151,7 @@ extern void FUN_L01_0027e900(void *, void *, f32, f32, f32, f32, f32, f32, f32, 
                              u8, u8);
 
 void FUN_L01_002bd100(EmitterMoby *self) {
-    Emitter *v;
+    Emitter *emitter_vars;
     EmitVec out;
     EmitVec position_scratch;
     EmitVec off;
@@ -168,7 +168,7 @@ void FUN_L01_002bd100(EmitterMoby *self) {
     f32 size;
     s32 i;
 
-    v = self->vars;
+    emitter_vars = self->vars;
     if (current_level_index == 1) {
         position_scratch.q = self->pos.q;
         position_scratch.f[3] = 20.0f;
@@ -176,55 +176,55 @@ void FUN_L01_002bd100(EmitterMoby *self) {
             return;
         }
     }
-    v->owner = self;
-    if (v->timer <= 0) {
-        v->timer = v->delay;
-        for (i = 0; i < v->count; i++) {
+    emitter_vars->owner = self;
+    if (emitter_vars->timer <= 0) {
+        emitter_vars->timer = emitter_vars->delay;
+        for (i = 0; i < emitter_vars->count; i++) {
             position_scratch.q = self->pos.q;
-            off.f[0] = random_float_between(-v->spread[0], v->spread[0]);
-            off.f[1] = random_float_between(-v->spread[1], v->spread[2]);
-            off.f[2] = random_float_between(-v->spread[2], v->spread[2]);
-            if (v->flags & 0x2000) {
+            off.f[0] = random_float_between(-emitter_vars->spread[0], emitter_vars->spread[0]);
+            off.f[1] = random_float_between(-emitter_vars->spread[1], emitter_vars->spread[2]);
+            off.f[2] = random_float_between(-emitter_vars->spread[2], emitter_vars->spread[2]);
+            if (emitter_vars->flags & 0x2000) {
                 euler_rotation_matrix(&u.rot.m, self->rot);
                 transform_vector(&off, &off, &u.rot.m);
             }
             fast_vec_add(&position_scratch, &position_scratch, &off);
-            if (v->flags & 0x1000) {
+            if (emitter_vars->flags & 0x1000) {
                 u.rot.ang.f[0] =
-                    random_float_between(-v->vel_range[0], v->vel_range[0]) * 3.1415927f / 180.0f;
+                    random_float_between(-emitter_vars->vel_range[0], emitter_vars->vel_range[0]) * 3.1415927f / 180.0f;
                 u.rot.ang.f[1] =
-                    random_float_between(-v->vel_range[1], v->vel_range[1]) * 3.1415927f / 180.0f;
+                    random_float_between(-emitter_vars->vel_range[1], emitter_vars->vel_range[1]) * 3.1415927f / 180.0f;
                 u.rot.ang.f[2] =
-                    random_float_between(-v->vel_range[2], v->vel_range[2]) * 3.1415927f / 180.0f;
-                if (v->flags & 0x4000) {
+                    random_float_between(-emitter_vars->vel_range[2], emitter_vars->vel_range[2]) * 3.1415927f / 180.0f;
+                if (emitter_vars->flags & 0x4000) {
                     u.rot.ang.f[0] = fast_add_rotations(u.rot.ang.f[0], self->rot[0]);
                     u.rot.ang.f[1] = fast_add_rotations(u.rot.ang.f[0], self->rot[1]);
                     u.rot.ang.f[2] = fast_add_rotations(u.rot.ang.f[0], self->rot[2]);
                 }
                 euler_rotation_matrix(&u.rot.m, &u.rot.ang);
-                transform_vector(&out, &v->vel, &u.rot.m);
-                size = random_float_between(v->size_min, v->size_max);
-                FUN_L01_0027e900(v, &position_scratch, out.f[0], out.f[1], out.f[2], size,
-                                 random_float_between(v->life_min, v->life_max), v->fade[0],
-                                 v->fade[1], v->fade[2], v->fade[3], v->tex, v->blend, v->alpha,
+                transform_vector(&out, &emitter_vars->vel, &u.rot.m);
+                size = random_float_between(emitter_vars->size_min, emitter_vars->size_max);
+                FUN_L01_0027e900(emitter_vars, &position_scratch, out.f[0], out.f[1], out.f[2], size,
+                                 random_float_between(emitter_vars->life_min, emitter_vars->life_max), emitter_vars->fade[0],
+                                 emitter_vars->fade[1], emitter_vars->fade[2], emitter_vars->fade[3], emitter_vars->tex, emitter_vars->blend, emitter_vars->alpha,
                                  0xFF);
             } else {
-                u.lin.vel.f[0] = random_float_between(v->vel.f[0], v->vel_range[0]) * frame_scale;
-                u.lin.vel.f[1] = random_float_between(v->vel.f[1], v->vel_range[1]) * frame_scale;
-                u.lin.vel.f[2] = random_float_between(v->vel.f[2], v->vel_range[2]) * frame_scale;
-                if (v->flags & 0x4000) {
+                u.lin.vel.f[0] = random_float_between(emitter_vars->vel.f[0], emitter_vars->vel_range[0]) * frame_scale;
+                u.lin.vel.f[1] = random_float_between(emitter_vars->vel.f[1], emitter_vars->vel_range[1]) * frame_scale;
+                u.lin.vel.f[2] = random_float_between(emitter_vars->vel.f[2], emitter_vars->vel_range[2]) * frame_scale;
+                if (emitter_vars->flags & 0x4000) {
                     euler_rotation_matrix(&u.lin.m, self->rot);
                     transform_vector(&u.lin.vel, &u.lin.vel, &u.lin.m);
                 }
-                size = random_float_between(v->size_min, v->size_max);
-                FUN_L01_0027e900(v, &position_scratch, u.lin.vel.f[0], u.lin.vel.f[1], u.lin.vel.f[2], size,
-                                 random_float_between(v->life_min, v->life_max), v->fade[0],
-                                 v->fade[1], v->fade[2], v->fade[3], v->tex, v->blend, v->alpha,
+                size = random_float_between(emitter_vars->size_min, emitter_vars->size_max);
+                FUN_L01_0027e900(emitter_vars, &position_scratch, u.lin.vel.f[0], u.lin.vel.f[1], u.lin.vel.f[2], size,
+                                 random_float_between(emitter_vars->life_min, emitter_vars->life_max), emitter_vars->fade[0],
+                                 emitter_vars->fade[1], emitter_vars->fade[2], emitter_vars->fade[3], emitter_vars->tex, emitter_vars->blend, emitter_vars->alpha,
                                  0xFF);
             }
         }
     } else {
-        v->timer--;
+        emitter_vars->timer--;
     }
 }
 #include "eetypes.h"
