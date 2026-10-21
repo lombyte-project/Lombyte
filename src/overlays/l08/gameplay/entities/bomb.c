@@ -1503,24 +1503,24 @@ char *FUN_L08_002daa10(struct Moby *moby) {
     bestD = bestA;
     for (;;) {
         if (*(short *)(candidate_moby + 0xA6) != 0x14D && *(unsigned char *)(candidate_moby + 0xBC) == 0) {
-            float ang, candidate_distance, candidate_heading;
+            float candidate_hero_heading_difference, candidate_distance, candidate_heading;
             candidate_heading = fast_arc_tan(*(float *)(candidate_moby + 0x10) - moby->pos.x,
                              *(float *)(candidate_moby + 0x14) - moby->pos.y);
             base = &hero;
-            ang = fast_difference_between_rotations(
+            candidate_hero_heading_difference = fast_difference_between_rotations(
                 candidate_heading, fast_arc_tan(base->motion.pos.f[0] - moby->pos.x,
                                 base->motion.pos.f[1] - moby->pos.y));
             candidate_distance = FUN_001f9b48(&moby->pos, candidate_moby + 0x10);
-            if (ang < 1.5707964f) {
-                if (bestA < ang) {
+            if (candidate_hero_heading_difference < 1.5707964f) {
+                if (bestA < candidate_hero_heading_difference) {
                     best = candidate_moby;
                     bestD = candidate_distance;
-                    bestA = ang;
+                    bestA = candidate_hero_heading_difference;
                 }
             } else if ((candidate_distance >= 16.0f && (candidate_distance < bestD || bestD < 16.0f)) || (candidate_distance < 16.0f && bestD < candidate_distance)) {
                 best = candidate_moby;
                 bestD = candidate_distance;
-                bestA = ang;
+                bestA = candidate_hero_heading_difference;
             }
         }
         if (*group_entry < -1)
