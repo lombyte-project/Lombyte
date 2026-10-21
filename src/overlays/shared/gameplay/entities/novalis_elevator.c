@@ -2187,7 +2187,7 @@ extern const float D_L01_001619A4_gp __asm__("D_L01_001619A4") __attribute__((sd
 extern const float frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 
 void FUN_L01_002eec68(char *moby) {
-    V_2F0040 v;
+    V_2F0040 scratch_vector;
     V_2F0040 line_test_endpoint;
     int flag;
     float amount;
@@ -2208,7 +2208,7 @@ void FUN_L01_002eec68(char *moby) {
     char *path_search_position;
     int c258;
     int c260;
-    float f20;
+    float size_multiplier;
     float rate;
     float fixed_scale;
     float f24;
@@ -2221,8 +2221,8 @@ void FUN_L01_002eec68(char *moby) {
     moby_vars = *(char **)(moby + 0x78);
     hit_record = FUN_L00_0025a420(moby, 0x330000, 0);
     if (hit_record != 0) {
-        qcopy(&v, moby + 0x10);
-        v.f[2] = v.f[2] + 0.5f;
+        qcopy(&scratch_vector, moby + 0x10);
+        scratch_vector.f[2] = scratch_vector.f[2] + 0.5f;
         hit_record_moby = *(char **)(hit_record + 0x20);
         if (hit_record_moby != 0) {
             short cls = *(short *)(hit_record_moby + 0xA6);
@@ -2232,7 +2232,7 @@ void FUN_L01_002eec68(char *moby) {
             } else {
                 x = *(char **)(hit_record_moby + 0x24);
                 if ((x != 0 && *(short *)(x + 0x46) == 5) || cls == 0xBA) {
-                    qcopy(&line_test_endpoint, &v);
+                    qcopy(&line_test_endpoint, &scratch_vector);
                     wp = &line_test_endpoint.q;
                 } else {
                     qcopy(&line_test_endpoint, hit_record_moby + 0x10);
@@ -2243,15 +2243,15 @@ void FUN_L01_002eec68(char *moby) {
             qcopy(&line_test_endpoint, hit_record);
             wp = &line_test_endpoint.q;
         }
-        if (fast_vec_dist(&v, wp) < 24.0f) {
-            if (func_L00_001EFFF0_t(&v, wp, 2, moby, 0) != 0) {
+        if (fast_vec_dist(&scratch_vector, wp) < 24.0f) {
+            if (func_L00_001EFFF0_t(&scratch_vector, wp, 2, moby, 0) != 0) {
                 hit_record = 0;
             }
         }
     }
     fun_00213928(moby, hit_record, moby_vars + 0x20, 0, &flag, &amount, 0, 4);
     if (flag != 1 && amount != 0.0f && *(unsigned char *)(moby + 0x20) != 0xB && *(unsigned char *)(moby + 0x20) != 0xA && *(unsigned char *)(moby + 0x20) != 8) {
-        f20 = 0.8f;
+        size_multiplier = 0.8f;
         allocate_voice_for_target_entry(0, 0, moby);
         f24 = 1.0f;
         fixed_scale = 1024.0f;
@@ -2260,8 +2260,8 @@ void FUN_L01_002eec68(char *moby) {
         moby_vars[0x9D] = 0;
         *(float *)(moby_vars + 0x70) = rate;
         *(int *)(moby_vars + 0x84) = 8;
-        *(int *)(moby_vars + 0x80) = truncate_float_to_s32_c(*(float *)(moby_vars + 0x250) * f20 * fixed_scale);
-        *(float *)(moby_vars + 0x88) = *(float *)(moby_vars + 0x250) * f20;
+        *(int *)(moby_vars + 0x80) = truncate_float_to_s32_c(*(float *)(moby_vars + 0x250) * size_multiplier * fixed_scale);
+        *(float *)(moby_vars + 0x88) = *(float *)(moby_vars + 0x250) * size_multiplier;
         FUN_L01_002ef770((unsigned char *)moby, (float *)(hit_record + 0x10));
         if (0.0f < *(float *)(moby_vars + 0x20)) {
             spawned = FUN_L01_002ef350(moby);
@@ -2270,17 +2270,17 @@ void FUN_L01_002eec68(char *moby) {
                 q[0x9D] = 3;
                 *(float *)(q + 0x70) = rate;
                 *(int *)(q + 0x84) = 8;
-                *(int *)(q + 0x80) = truncate_float_to_s32_c(*(float *)(moby_vars + 0x250) * f20 * fixed_scale);
+                *(int *)(q + 0x80) = truncate_float_to_s32_c(*(float *)(moby_vars + 0x250) * size_multiplier * fixed_scale);
                 k = frame_time_macro;
                 seven = 7.0f;
-                *(float *)(q + 0x88) = *(float *)(moby_vars + 0x250) * f20;
+                *(float *)(q + 0x88) = *(float *)(moby_vars + 0x250) * size_multiplier;
                 *(float *)(q + 0x78) = D_L01_001619A0_gp * k;
                 *(float *)(q + 0x7C) = D_L01_001619A4_gp * k;
                 *(int *)(q + 0x84) = *(int *)(q + 0x84) | 4;
                 *(float *)(q + 0xB0) = seven;
                 *(float *)(q + 0xB4) = 13.0f;
-                v.q = *(u128_2F0040 *)(hit_record + 0x10);
-                trooper_knockback_arc(&v, &first_spawn_angle, q + 0x78, q + 0x7C);
+                scratch_vector.q = *(u128_2F0040 *)(hit_record + 0x10);
+                trooper_knockback_arc(&scratch_vector, &first_spawn_angle, q + 0x78, q + 0x7C);
                 first_spawn_angle = fast_subtract_rotations(first_spawn_angle, 0.7853982f);
                 trooper_start_knockback(spawned, q + 0x60, first_spawn_angle, 4, 8, 0);
                 spawned[0x20] = 8;
@@ -2292,17 +2292,17 @@ void FUN_L01_002eec68(char *moby) {
                 *(float *)(q + 0x70) = rate;
                 q[0x9D] = 3;
                 *(int *)(q + 0x84) = 8;
-                *(int *)(q + 0x80) = truncate_float_to_s32_c(*(float *)(moby_vars + 0x250) * f20 * fixed_scale);
+                *(int *)(q + 0x80) = truncate_float_to_s32_c(*(float *)(moby_vars + 0x250) * size_multiplier * fixed_scale);
                 k = frame_time_macro;
                 seven = 7.0f;
-                *(float *)(q + 0x88) = *(float *)(moby_vars + 0x250) * f20;
+                *(float *)(q + 0x88) = *(float *)(moby_vars + 0x250) * size_multiplier;
                 *(float *)(q + 0x78) = D_L01_001619A0_gp * k;
                 *(float *)(q + 0x7C) = D_L01_001619A4_gp * k;
                 *(int *)(q + 0x84) = *(int *)(q + 0x84) | 4;
                 *(float *)(q + 0xB0) = seven;
                 *(float *)(q + 0xB4) = 13.0f;
-                v.q = *(u128_2F0040 *)(hit_record + 0x10);
-                trooper_knockback_arc(&v, &second_spawn_angle, q + 0x78, q + 0x7C);
+                scratch_vector.q = *(u128_2F0040 *)(hit_record + 0x10);
+                trooper_knockback_arc(&scratch_vector, &second_spawn_angle, q + 0x78, q + 0x7C);
                 second_spawn_angle = fast_add_rotations_c(second_spawn_angle, 0.7853982f);
                 trooper_start_knockback(spawned, q + 0x60, second_spawn_angle, 4, 8, 0);
                 spawned[0x20] = 8;
@@ -2325,8 +2325,8 @@ void FUN_L01_002eec68(char *moby) {
     c258 = *(int *)(moby_vars + 0x258);
     if (c258 != 0 && *(unsigned char *)(moby + 0x20) != 0
         && *(float *)(moby + 0x18) < *(float *)(c258 * 0x1190 + D_L01_001612D0 + 8)) {
-        clear_u64_value_c(&v);
-        FUN_L01_002ef770((unsigned char *)moby, (float *)&v);
+        clear_u64_value_c(&scratch_vector);
+        FUN_L01_002ef770((unsigned char *)moby, (float *)&scratch_vector);
         mark_moby_for_removal_c(moby);
         return;
     }
