@@ -573,7 +573,7 @@ extern int func_001F9908_r(int *arg0) __asm__("FUN_001f9740");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L14_00305b18(struct Moby *morphoray_moby) {
-    float v[8];
+    float particle_position_and_step[8];
     FxData14 *effect_data = (FxData14 *)morphoray_moby->pvars;
     float *a;
     int *t;
@@ -581,12 +581,12 @@ void FUN_L14_00305b18(struct Moby *morphoray_moby) {
     float unwrapped_particle_value, g;
     j = 0;
     effect_data->z += 0.1f;
-    subtract_vector_xyz(v, D_L14_001674C0, effect_data);
+    subtract_vector_xyz(particle_position_and_step, D_L14_001674C0, effect_data);
     t = effect_data->t;
     a = effect_data->a;
-    normalize_vector_xyz(v, v, -0.3f);
-    normalize_vector_xyz(&v[4], v, 0.1f);
-    add_vector_xyz(v, v, effect_data);
+    normalize_vector_xyz(particle_position_and_step, particle_position_and_step, -0.3f);
+    normalize_vector_xyz(&particle_position_and_step[4], particle_position_and_step, 0.1f);
+    add_vector_xyz(particle_position_and_step, particle_position_and_step, effect_data);
     effect_data->z -= 0.1f;
     for (i = 3; i >= 0; i--) {
         unwrapped_particle_value = *a + effect_data->b[j];
@@ -604,9 +604,9 @@ void FUN_L14_00305b18(struct Moby *morphoray_moby) {
         g = g / (float)scale_game_frames(255);
         c = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - g));
         k = func_001FA898_r(*a++);
-        FUN_L00_00272f68(effect_data->c[j], v, c, k, 0x35, 1, 2, 0);
+        FUN_L00_00272f68(effect_data->c[j], particle_position_and_step, c, k, 0x35, 1, 2, 0);
         j++;
-        add_vector_xyz(v, v, &v[4]);
+        add_vector_xyz(particle_position_and_step, particle_position_and_step, &particle_position_and_step[4]);
     }
 }
 /* Update function
