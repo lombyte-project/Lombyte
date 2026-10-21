@@ -319,7 +319,7 @@ void FUN_L14_002b17d8(char *moby) {
     char *data;
     char *owner;
     int state;
-    float mat[4][4];
+    float bone_transform_scratch[4][4];
     float direction[4];
     float end[4];
     LineInfo info;
@@ -590,15 +590,15 @@ void FUN_L14_002b17d8(char *moby) {
         }
         FUN_L14_002b35d8_c(moby, flag, angle);
         FUN_L14_002b37b0_c(moby, ang);
-        build_moby_bone_transform_c(moby, 0, mat);
-        qcopy(direction, mat[1]);
+        build_moby_bone_transform_c(moby, 0, bone_transform_scratch);
+        qcopy(direction, bone_transform_scratch[1]);
         if (flag == 0) {
             direction[2] = 0.0f;
         }
         fast_vec_normalize(direction, direction, D_L14_001614E4_gp);
-        add_vector_xyz_c3(end, mat[3], direction);
+        add_vector_xyz_c3(end, bone_transform_scratch[3], direction);
         fast_vec_normalize(direction, direction, D_L14_001614F4_gp);
-        add_vector_xyz_c3(mat[3], mat[3], direction);
+        add_vector_xyz_c3(bone_transform_scratch[3], bone_transform_scratch[3], direction);
         info.moby = moby;
         info.flags = 0x10001;
         info.count = 1;
@@ -610,10 +610,10 @@ void FUN_L14_002b17d8(char *moby) {
         info.enabled = 1;
         info.oclass = *(unsigned short *)(moby + 0xA6);
         info.mode = 0;
-        if (coll_line_fix(mat[3], end, 0, moby, &info) != 0) {
+        if (coll_line_fix(bone_transform_scratch[3], end, 0, moby, &info) != 0) {
             qcopy(end, D_L14_00174560);
         }
-        FUN_L00_002e2190(moby, mat, end);
+        FUN_L00_002e2190(moby, bone_transform_scratch, end);
         if (fast_dec_timer_s16(data + 0x262) != 0) {
             blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             ((unsigned char *)moby)[0x20] = 7;
@@ -644,8 +644,8 @@ void FUN_L14_002b17d8(char *moby) {
     case PLASMABOT_FALL_THEN_EXPLODE: {
         if ((mine_fall(moby, data + 0x60) & 0x160) == 0) return;
         FUN_L00_002e2040(moby);
-        FUN_L00_0024f7c8(moby, 2, mat);
-        FUN_L14_002dea98_c(moby, (char *)mat);
+        FUN_L00_0024f7c8(moby, 2, bone_transform_scratch);
+        FUN_L14_002dea98_c(moby, (char *)bone_transform_scratch);
         call_F4A8(moby, data + 0x40, moby + 0x10, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
         if (((unsigned char *)D_001413F4)[0] == 2) {
             FUN_L00_00257470(moby, 0x200, -1);
@@ -655,8 +655,8 @@ void FUN_L14_002b17d8(char *moby) {
         { call_D678(moby); return; }
     }
     case PLASMABOT_SPAWN_DEBRIS_AND_REMOVE: {
-        FUN_L00_0024f7c8(moby, 2, mat);
-        FUN_L14_002dea98_c(moby, (char *)mat);
+        FUN_L00_0024f7c8(moby, 2, bone_transform_scratch);
+        FUN_L14_002dea98_c(moby, (char *)bone_transform_scratch);
         status = 0;
         ((void (*)(char *, int *, int))FUN_L14_002e0170_c)(moby, &status, 1);
         FUN_L00_002e2040(moby);
