@@ -1018,23 +1018,23 @@ extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_0025f8e0(float *v, float s);
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L05_002db238(void *moby, void *dir) {
+void FUN_L05_002db238(void *moby, void *base_spark_vector) {
     float spark_position[4];
     float first_spark_vector[4];
     float second_spark_vector[4];
-    char *pos = (char *)moby + 0x10;
+    char *moby_position_ptr = (char *)moby + 0x10;
     int i, j;
     for (i = 0; i < 20; i++) {
-        float ang, sp, up;
-        qcopy(spark_position, pos);
+        float spark_xy_spread_heading, sp, up;
+        qcopy(spark_position, moby_position_ptr);
         FUN_L00_0025f8e0(spark_position, 0.25f);
         spark_position[2] += 1.0f;
-        ang = random_angle_radians_c();
+        spark_xy_spread_heading = random_angle_radians_c();
         sp = random_float_between_c(1.0f, 8.0f);
         up = random_float_between_c(2.0f, 6.0f);
-        scale_vector_xyz(first_spark_vector, dir, random_float_between_c(0.0f, 1.0f));
-        first_spark_vector[0] += fast_cos_c2(ang) * (sp * frame_time);
-        first_spark_vector[1] += fast_sin_c2(ang) * (sp * frame_time);
+        scale_vector_xyz(first_spark_vector, base_spark_vector, random_float_between_c(0.0f, 1.0f));
+        first_spark_vector[0] += fast_cos_c2(spark_xy_spread_heading) * (sp * frame_time);
+        first_spark_vector[1] += fast_sin_c2(spark_xy_spread_heading) * (sp * frame_time);
         first_spark_vector[2] += up * frame_time;
         qcopy(second_spark_vector, first_spark_vector);
         second_spark_vector[2] -= frame_time_sq * 20.0f * (float)scale_game_frames(0x1E);
