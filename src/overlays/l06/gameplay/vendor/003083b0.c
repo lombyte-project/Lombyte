@@ -265,13 +265,13 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short *D_L06_001ABFC0[];
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L06_00309240(int idx) {
+void FUN_L06_00309240(int moby_list_index) {
     short *moby_index_entry;
     char *moby;
     char *data;
     float position_test_vector[4];
-    if (D_L06_001ABFC0[idx] != 0) {
-        moby_index_entry = D_L06_001ABFC0[idx];
+    if (D_L06_001ABFC0[moby_list_index] != 0) {
+        moby_index_entry = D_L06_001ABFC0[moby_list_index];
         do {
             moby = D_L06_0015FFD8 + ((*(unsigned short *)moby_index_entry & 0x7FFF) << 8);
             if (*(short *)(moby + 0xA6) == 0x5E8 && (unsigned char)moby[0x20] == 1) {
