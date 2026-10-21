@@ -19,7 +19,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 void draw_rotated_sprite(s32 w, s32 h, s64 buf, f32 x, f32 y, f32 cx, f32 cy,
                          f32 ang) __asm__("FUN_00200600");
 
-void draw_rotated_sprite(s32 w, s32 texture_height, s64 buf, f32 x, f32 y, f32 cx, f32 cy, f32 ang) {
+void draw_rotated_sprite(s32 texture_width, s32 texture_height, s64 texture_register_value, f32 x, f32 y, f32 cx, f32 cy, f32 ang) {
     struct Vec4 sz;
     struct Vec4 off;
     struct Vec4 pos;
@@ -53,13 +53,13 @@ void draw_rotated_sprite(s32 w, s32 texture_height, s64 buf, f32 x, f32 y, f32 c
     render_packet_cursor.tag = tag + 1;
     packet_payload[0] = 0xB400000000008001;
     packet_payload[1] = 0x53535353106;
-    packet_payload[2] = buf;
+    packet_payload[2] = texture_register_value;
     packet_payload[3] = 0x154;
     packet_payload[4] = 0x807F7F7F;
-    packet_payload[5] = w << 4;
+    packet_payload[5] = texture_width << 4;
     packet_payload[6] = (((s32)p0.x + screen_extent.left) - 8) | ((u64)(((s32)p0.y + screen_extent.top) - 8) << 16) |
            ((u64)hud_state.z << 32);
-    packet_payload[7] = (texture_height << 20) + (w << 4);
+    packet_payload[7] = (texture_height << 20) + (texture_width << 4);
     packet_payload[8] = (((s32)p1.x + screen_extent.left) - 8) | ((u64)(((s32)p1.y + screen_extent.top) - 8) << 16) |
            ((u64)hud_state.z << 32);
     packet_payload[9] = 0;
