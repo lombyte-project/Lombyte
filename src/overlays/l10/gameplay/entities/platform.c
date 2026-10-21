@@ -227,11 +227,11 @@ void FUN_L10_00295c20(struct Moby *moby) {
     }
     case PLATFORM_STATE_RETURN_TO_ORIGINAL_HEIGHT: {
         float vz = *(float *)(platform_vars + 0xA4);
-        float g = frame_time_sq;
+        float return_acceleration = frame_time_sq;
         float dist, sq, twice_return_acceleration;
-        if (vz < 0.0f || (twice_return_acceleration = g + g, dist = *(float *)(platform_vars + 0xA0) - moby->pos.z, sq = vz * vz,
+        if (vz < 0.0f || (twice_return_acceleration = return_acceleration + return_acceleration, dist = *(float *)(platform_vars + 0xA0) - moby->pos.z, sq = vz * vz,
                           sq / (twice_return_acceleration + twice_return_acceleration) < dist)) {
-            float a = vz + g;
+            float a = vz + return_acceleration;
             float mx = frame_time + frame_time;
             *(float *)(platform_vars + 0xA4) = a;
             if (mx < a) *(float *)(platform_vars + 0xA4) = mx;
