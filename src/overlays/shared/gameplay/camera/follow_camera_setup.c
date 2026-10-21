@@ -968,16 +968,16 @@ int FUN_L00_002e7618(O002e7530 *camera_moby, V002e7530 *out, int step, float dis
     V002e7530 *orbit;
     u8 *range;
     u8 *m;
-    u8 *g;
+    u8 *active_camera_state;
     float lim, measure, radius;
     int found;
 
     m = camera_moby->m;
-    g = *(u8 **)(current_follow_cam + 0x70);
+    active_camera_state = *(u8 **)(current_follow_cam + 0x70);
     orbit = (V002e7530 *)(m + 0x130);
     range = m + 0x1d0;
     found = 0;
-    lim = follow_cam_min_distance_gp + *(float *)(g + 0x214) * *(float *)(g + 0x20c) * (*(float *)(g + 0x210) - 1.0f);
+    lim = follow_cam_min_distance_gp + *(float *)(active_camera_state + 0x214) * *(float *)(active_camera_state + 0x20c) * (*(float *)(active_camera_state + 0x210) - 1.0f);
     clear_u64_value_2e7618(&delta);
     qcopy(&start, out);
     qcopy(&hit, &D_L00_00173E60);
