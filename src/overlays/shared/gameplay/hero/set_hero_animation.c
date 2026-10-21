@@ -533,7 +533,7 @@ extern s32 FUN_L00_002595a0_32b90(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_
 
 f32 FUN_L00_00232b90(f32 prediction_frames, f32 gravity_acceleration, f32 target_height) {
     f32 trajectory_endpoint[4];
-    V4_32b90 v;
+    V4_32b90 collision_start_or_gravity_vector;
     V4_32b90 trajectory_work_vector;
     V4_32b90 hero_position_copy;
     f32 trajectory_solver_outputs[6];
@@ -545,10 +545,10 @@ f32 FUN_L00_00232b90(f32 prediction_frames, f32 gravity_acceleration, f32 target
             FUN_001f9a68_32b90(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
             trajectory_endpoint[2] -= ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * gravity_acceleration;
             FUN_001f9a10_32b90(trajectory_endpoint, trajectory_endpoint, &hero.motion.pos);
-            v.q = hero.motion.pos.q;
-            FUN_L00_0025d238_32b90(&v, trajectory_endpoint);
-            qcopy(&v, &hero.motion.pos);
-            if (collision_line(&v, trajectory_endpoint, 0x24, 0, 0) != 0) {
+            collision_start_or_gravity_vector.q = hero.motion.pos.q;
+            FUN_L00_0025d238_32b90(&collision_start_or_gravity_vector, trajectory_endpoint);
+            qcopy(&collision_start_or_gravity_vector, &hero.motion.pos);
+            if (collision_line(&collision_start_or_gravity_vector, trajectory_endpoint, 0x24, 0, 0) != 0) {
                 if (FUN_L00_00233d30_32b90((f32 *)coll_hit_normal) <= 0.87266463f) {
                     target_height = *(f32 *)(coll_hit_normal - 0x18);
                 }
@@ -563,11 +563,11 @@ f32 FUN_L00_00232b90(f32 prediction_frames, f32 gravity_acceleration, f32 target
         }
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
-        qcopy(&v, &hero.unk270);
-        FUN_001f9bf8_32b90(&v, &v, gravity_acceleration);
-        FUN_001f9a68_32b90(&v, &v, -1.0f);
+        qcopy(&collision_start_or_gravity_vector, &hero.unk270);
+        FUN_001f9bf8_32b90(&collision_start_or_gravity_vector, &collision_start_or_gravity_vector, gravity_acceleration);
+        FUN_001f9a68_32b90(&collision_start_or_gravity_vector, &collision_start_or_gravity_vector, -1.0f);
         FUN_001f9a68_32b90(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
-        FUN_001f9a68_32b90(&trajectory_work_vector, &v, ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * gravity_acceleration);
+        FUN_001f9a68_32b90(&trajectory_work_vector, &collision_start_or_gravity_vector, ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * gravity_acceleration);
         FUN_001f9a10_32b90(trajectory_endpoint, &trajectory_work_vector, trajectory_endpoint);
         FUN_001f9a10_32b90(trajectory_endpoint, &hero.motion.pos, trajectory_endpoint);
         hero_position_copy.q = hero.motion.pos.q;
@@ -587,11 +587,11 @@ f32 FUN_L00_00232b90(f32 prediction_frames, f32 gravity_acceleration, f32 target
         trajectory_work_vector.f[2] = 100.0f;
         trajectory_work_vector.f[1] = 100.0f;
         trajectory_work_vector.f[0] = 100.0f;
-        FUN_001f9a28_32b90(&v, &hero.motion.pos, &trajectory_work_vector);
-        FUN_001f9bf8_32b90(&v, &v, gravity_acceleration);
-        FUN_001f9a68_32b90(&v, &v, -1.0f);
+        FUN_001f9a28_32b90(&collision_start_or_gravity_vector, &hero.motion.pos, &trajectory_work_vector);
+        FUN_001f9bf8_32b90(&collision_start_or_gravity_vector, &collision_start_or_gravity_vector, gravity_acceleration);
+        FUN_001f9a68_32b90(&collision_start_or_gravity_vector, &collision_start_or_gravity_vector, -1.0f);
         FUN_001f9a68_32b90(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
-        FUN_001f9a68_32b90(&trajectory_work_vector, &v, ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * gravity_acceleration);
+        FUN_001f9a68_32b90(&trajectory_work_vector, &collision_start_or_gravity_vector, ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * gravity_acceleration);
         FUN_001f9a10_32b90(trajectory_endpoint, &trajectory_work_vector, trajectory_endpoint);
         FUN_001f9a10_32b90(trajectory_endpoint, &hero.motion.pos, trajectory_endpoint);
         hero_position_copy.q = hero.motion.pos.q;
