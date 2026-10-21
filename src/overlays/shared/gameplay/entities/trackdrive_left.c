@@ -679,22 +679,22 @@ extern float func_001FA790_d92f0(float, float) __asm__("FUN_001fa5c8");
 extern float D_0015EE6C_d92f0 __asm__("D_0015ED6C");
 void FUN_L02_002d92f0(char *moby) {
     float position_delta[4];
-    char *g;
+    char *hero_position;
     float f;
-    float lim;
+    float max_yaw_step;
     struct Hero *hero_ptr;
     func_L00_00250800_d92f0(moby, 0, position_delta);
-    g = (char *)&hero.motion.pos;
-    fast_vec_sub(position_delta, position_delta, g);
+    hero_position = (char *)&hero.motion.pos;
+    fast_vec_sub(position_delta, position_delta, hero_position);
     func_L00_002607A8_d92f0(position_delta, D_0015EE6C_d92f0 * 4.0f);
-    func_001F9BD8_d92f0(g, g, position_delta);
+    func_001F9BD8_d92f0(hero_position, hero_position, position_delta);
     f = func_001FA748_d92f0(*(float *)(moby + 0x48), 3.14159f);
-    f = func_001FA790_d92f0(f, *(float *)(g + 0x18));
-    lim = D_0015EE6C_d92f0 * 6.2831855f;
-    if (lim < f) {
-        f = lim;
-    } else if (f < -lim) {
-        f = -lim;
+    f = func_001FA790_d92f0(f, *(float *)(hero_position + 0x18));
+    max_yaw_step = D_0015EE6C_d92f0 * 6.2831855f;
+    if (max_yaw_step < f) {
+        f = max_yaw_step;
+    } else if (f < -max_yaw_step) {
+        f = -max_yaw_step;
     }
     hero_ptr = &hero;
     hero_ptr->motion.rot.f[2] = func_001FA748_d92f0(f, hero_ptr->motion.rot.f[2]);
