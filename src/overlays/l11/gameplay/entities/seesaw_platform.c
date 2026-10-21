@@ -3027,31 +3027,31 @@ extern char (*D_L17_001600EC_t)[128] __asm__("D_L11_001600EC") __attribute__((se
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L11_00313f60(struct Moby *moby, float *horizontal_steering_input, float *b) {
+void FUN_L11_00313f60(struct Moby *moby, float *horizontal_steering_input, float *vertical_steering_input) {
     char *ship_vars = (char *)moby->pvars;
-    float v[4];
-    float zz, dist, boundary_radius, hi, lo, boundary_center_heading, upper_altitude_limit, k, r, heading_difference;
-    scale_vector_xyz(v, ship_vars + 0x10, *(float *)(ship_vars + 0x64) * (float)scale_game_frames(0x3C));
-    add_vector_xyz(v, v, &moby->pos);
-    zz = v[2];
-    subtract_vector_xyz(v, v, (*(int *)(ship_vars + 0x104) << 7) + D_L11_001600EC + 0x30);
-    dist = vector_length_xy(v);
+    float predicted_position_scratch[4];
+    float zz, dist, boundary_radius, hi, lo, boundary_center_heading, upper_altitude_limit, k, radial_steering_blend_weight, heading_difference;
+    scale_vector_xyz(predicted_position_scratch, ship_vars + 0x10, *(float *)(ship_vars + 0x64) * (float)scale_game_frames(0x3C));
+    add_vector_xyz(predicted_position_scratch, predicted_position_scratch, &moby->pos);
+    zz = predicted_position_scratch[2];
+    subtract_vector_xyz(predicted_position_scratch, predicted_position_scratch, (*(int *)(ship_vars + 0x104) << 7) + D_L11_001600EC + 0x30);
+    dist = vector_length_xy(predicted_position_scratch);
     boundary_radius = vector_length_xy((*(int *)(ship_vars + 0x104) << 7) + D_L11_001600EC);
     hi = *(float *)(D_L17_001600EC_t[*(int *)(ship_vars + 0x104)] + 0x28);
     lo = *(float *)(D_L17_001600EC_t[*(int *)(ship_vars + 0x104)] + 0x38);
     upper_altitude_limit = hi + lo;
-    boundary_center_heading = fast_add_rotations(fast_arc_tan(v[0], v[1]), 3.141590118408203f);
+    boundary_center_heading = fast_add_rotations(fast_arc_tan(predicted_position_scratch[0], predicted_position_scratch[1]), 3.141590118408203f);
     if (boundary_radius - 10.0f < dist) {
-        r = (dist - boundary_radius + 10.0f) / 10.0f;
+        radial_steering_blend_weight = (dist - boundary_radius + 10.0f) / 10.0f;
         heading_difference = fast_subtract_rotations(boundary_center_heading, *(float *)(ship_vars + 0x38));
-        if (r > 1.0f)
-            r = 1.0f;
-        else if (r < 0.0f)
-            r = 0.0f;
+        if (radial_steering_blend_weight > 1.0f)
+            radial_steering_blend_weight = 1.0f;
+        else if (radial_steering_blend_weight < 0.0f)
+            radial_steering_blend_weight = 0.0f;
         if (heading_difference > 0.0f) {
-            *horizontal_steering_input = (-1.0f - *horizontal_steering_input) * r + *horizontal_steering_input;
+            *horizontal_steering_input = (-1.0f - *horizontal_steering_input) * radial_steering_blend_weight + *horizontal_steering_input;
         } else {
-            *horizontal_steering_input = (1.0f - *horizontal_steering_input) * r + *horizontal_steering_input;
+            *horizontal_steering_input = (1.0f - *horizontal_steering_input) * radial_steering_blend_weight + *horizontal_steering_input;
         }
         hero.ship_flags |= 2;
     }
@@ -3068,7 +3068,7 @@ void FUN_L11_00313f60(struct Moby *moby, float *horizontal_steering_input, float
         else if (w < 0.0f)
             w = 0.0f;
         q = q * w;
-        *b = (-1.0f - *b) * q + *b;
+        *vertical_steering_input = (-1.0f - *vertical_steering_input) * q + *vertical_steering_input;
         hero.ship_flags |= 2;
     } else if (zz < 260.0f) {
         float q, w;
@@ -3083,7 +3083,7 @@ void FUN_L11_00313f60(struct Moby *moby, float *horizontal_steering_input, float
         else if (w < 0.0f)
             w = 0.0f;
         q = q * w;
-        *b = (1.0f - *b) * q + *b;
+        *vertical_steering_input = (1.0f - *vertical_steering_input) * q + *vertical_steering_input;
         hero.ship_flags |= 2;
     }
 }
