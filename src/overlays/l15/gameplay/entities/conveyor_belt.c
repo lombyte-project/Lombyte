@@ -809,7 +809,7 @@ int D_L15_00162184 = 150;
 int D_L15_00162188 = 0x3800ffff;
 int D_L15_0016218C = 0x38800000;
 void FUN_L15_002eb6b8(void) {
-    char buf[0x50];
+    char formatted_message_text[0x50];
     int flag = 0;
     int val = 0;
     char *message_timing_state = D_L15_0016CE60;
@@ -820,7 +820,7 @@ void FUN_L15_002eb6b8(void) {
         if (scale_game_frames(0xB5) < *(int *)(message_timing_state + 0x34)) {
             if (*(int *)(message_timing_state + 0x34) < scale_game_frames(0x104)) {
                 flag = 1;
-                sprintf(buf, D_L15_00162190, msg_string(0x526A));
+                sprintf(formatted_message_text, D_L15_00162190, msg_string(0x526A));
                 val = (*(int *)(message_timing_state + 0x34) - scale_game_frames(0xB5)) >> 2;
             }
         }
@@ -828,7 +828,7 @@ void FUN_L15_002eb6b8(void) {
         if (scale_game_frames(0x1C2) < *(int *)(second_message_timing_state + 0x34)) {
             if (*(int *)(second_message_timing_state + 0x34) < scale_game_frames(0x280)) {
                 flag = 1;
-                sprintf(buf, D_L15_00162190, msg_string(0x526B));
+                sprintf(formatted_message_text, D_L15_00162190, msg_string(0x526B));
                 val = (*(int *)(second_message_timing_state + 0x34) - scale_game_frames(0x1C2)) >> 2;
             }
         }
@@ -836,7 +836,7 @@ void FUN_L15_002eb6b8(void) {
         if (scale_game_frames(0x2EE) < *(int *)(third_message_timing_state + 0x34)) {
             if (*(int *)(third_message_timing_state + 0x34) < scale_game_frames(0x3A2)) {
                 flag = 1;
-                sprintf(buf, D_L15_00162190, msg_string(0x526C));
+                sprintf(formatted_message_text, D_L15_00162190, msg_string(0x526C));
                 val = (*(int *)(third_message_timing_state + 0x34) - scale_game_frames(0x2EE)) >> 2;
             }
         }
@@ -844,14 +844,14 @@ void FUN_L15_002eb6b8(void) {
         if (scale_game_frames(0x8FC) < *(int *)(message_timing_state + 0x34)) {
             if (*(int *)(message_timing_state + 0x34) < scale_game_frames(0x960)) {
                 flag = 1;
-                sprintf(buf, D_L15_00162190, msg_string(0x526E));
+                sprintf(formatted_message_text, D_L15_00162190, msg_string(0x526E));
                 val = (*(int *)(message_timing_state + 0x34) - scale_game_frames(0x8FC)) >> 2;
             }
         }
     }
     if (flag == 0)
         return;
-    print_character_count = strlen_alt(buf);
+    print_character_count = strlen_alt(formatted_message_text);
     if (val < print_character_count) {
         print_character_count = val;
     } else if (print_character_count < val) {
@@ -860,9 +860,9 @@ void FUN_L15_002eb6b8(void) {
     }
     FUN_L00_001fb470((void *)(D_L15_00162180 + 1),
                      (void *)(D_L15_00162184 + 1), (void *)D_L15_0016218C,
-                     buf, (void *)print_character_count);
+                     formatted_message_text, (void *)print_character_count);
     FUN_L00_001fb470((void *)D_L15_00162180, (void *)D_L15_00162184,
-                     (void *)D_L15_00162188, buf, (void *)print_character_count);
+                     (void *)D_L15_00162188, formatted_message_text, (void *)print_character_count);
 }
 /* Per-frame update: when the counter check is zero, builds a vector and calls the movement helper. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECD18), where it is exact; names translated to the US level program. */
