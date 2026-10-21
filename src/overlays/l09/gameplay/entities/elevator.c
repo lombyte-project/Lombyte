@@ -980,7 +980,7 @@ void turret_update(struct Moby *moby) {
     Vec4 work_vector;
     Vec4 shot;
     Vec4 muzzle;
-    Vec4 dir;
+    Vec4 firing_vector_or_camera_rotation;
     Vec4 rnd;
     TurretVars *vars;
     TurretBeam *beam;
@@ -1141,11 +1141,11 @@ void turret_update(struct Moby *moby) {
                         rnd.f[0] = random_float_between(-1.0f, 1.0f);
                         rnd.f[1] = random_float_between(-1.0f, 1.0f);
                         rnd.f[2] = random_float_between(-1.0f, 1.0f);
-                        dir.q = rnd.q;
-                        normalize_vector_xyz(&dir, &dir, fast_vec_length(&shot) * (frame_scale * (0.65f - 1.0f) + 1.0f));
-                        add_vector_xyz(&dir, &shot, &dir);
-                        normalize_vector_xyz(&dir, &dir, random_float_between(frame_time * 3.0f, frame_time * 6.0f));
-                        FUN_L00_0026dd20(&muzzle, &dir, 0x5F2F4F6F, random_int_between(scale_game_frames(5), scale_game_frames(10)), 50000.0f);
+                        firing_vector_or_camera_rotation.q = rnd.q;
+                        normalize_vector_xyz(&firing_vector_or_camera_rotation, &firing_vector_or_camera_rotation, fast_vec_length(&shot) * (frame_scale * (0.65f - 1.0f) + 1.0f));
+                        add_vector_xyz(&firing_vector_or_camera_rotation, &shot, &firing_vector_or_camera_rotation);
+                        normalize_vector_xyz(&firing_vector_or_camera_rotation, &firing_vector_or_camera_rotation, random_float_between(frame_time * 3.0f, frame_time * 6.0f));
+                        FUN_L00_0026dd20(&muzzle, &firing_vector_or_camera_rotation, 0x5F2F4F6F, random_int_between(scale_game_frames(5), scale_game_frames(10)), 50000.0f);
                     }
                     normalize_vector_xyz(&shot, &shot, frame_time * 0.5f);
                     FUN_L00_0026dd20(&muzzle, &shot, 0x2F4F7F7F, random_int_between(scale_game_frames(4), scale_game_frames(7)), 500000.0f);
@@ -1168,11 +1168,11 @@ void turret_update(struct Moby *moby) {
                         rnd.f[0] = random_float_between(-1.0f, 1.0f);
                         rnd.f[1] = random_float_between(-1.0f, 1.0f);
                         rnd.f[2] = random_float_between(-1.0f, 1.0f);
-                        dir.q = rnd.q;
-                        normalize_vector_xyz(&dir, &dir, fast_vec_length(&shot) * (frame_scale * (0.65f - 1.0f) + 1.0f));
-                        add_vector_xyz(&dir, &shot, &dir);
-                        normalize_vector_xyz(&dir, &dir, random_float_between(frame_time * 3.0f, frame_time * 6.0f));
-                        FUN_L00_0026dd20(&muzzle, &dir, 0x5F2F4F6F, random_int_between(scale_game_frames(5), scale_game_frames(10)), 50000.0f);
+                        firing_vector_or_camera_rotation.q = rnd.q;
+                        normalize_vector_xyz(&firing_vector_or_camera_rotation, &firing_vector_or_camera_rotation, fast_vec_length(&shot) * (frame_scale * (0.65f - 1.0f) + 1.0f));
+                        add_vector_xyz(&firing_vector_or_camera_rotation, &shot, &firing_vector_or_camera_rotation);
+                        normalize_vector_xyz(&firing_vector_or_camera_rotation, &firing_vector_or_camera_rotation, random_float_between(frame_time * 3.0f, frame_time * 6.0f));
+                        FUN_L00_0026dd20(&muzzle, &firing_vector_or_camera_rotation, 0x5F2F4F6F, random_int_between(scale_game_frames(5), scale_game_frames(10)), 50000.0f);
                     }
                     normalize_vector_xyz(&shot, &shot, frame_time * 0.5f);
                     FUN_L00_0026dd20(&muzzle, &shot, 0x2F4F7F7F, random_int_between(scale_game_frames(4), scale_game_frames(7)), 500000.0f);
@@ -1192,10 +1192,10 @@ void turret_update(struct Moby *moby) {
             shot.f[2] += D_L09_00161CB4;
             add_vector_xyz(&muzzle, &work_vector, &shot);
             FUN_L00_002ea9d8(&muzzle);
-            dir.f[0] = 0.0f;
-            dir.f[1] = -vars->pitch;
-            dir.f[2] = fast_add_rotations(1.5707964f, moby->rot.z);
-            FUN_L00_002eaa30(&dir);
+            firing_vector_or_camera_rotation.f[0] = 0.0f;
+            firing_vector_or_camera_rotation.f[1] = -vars->pitch;
+            firing_vector_or_camera_rotation.f[2] = fast_add_rotations(1.5707964f, moby->rot.z);
+            FUN_L00_002eaa30(&firing_vector_or_camera_rotation);
         }
         suck_draw_reticle(moby, 0xFF0F0FFF, 0, 0xD, -1, 4, 1.0f, 0.0f, 90.0f);
         break;
