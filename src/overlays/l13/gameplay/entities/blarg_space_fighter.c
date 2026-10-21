@@ -1618,7 +1618,7 @@ void FUN_L13_002ce688(unsigned char *source_moby, void *effect_position, int emi
     int extra_emission_count;
     int debris_variant_index;
     int glow_frame_count;
-    float len;
+    float emission_reference_distance;
     float emission_distance_shortfall;
     float random_emission_base;
     float yv;
@@ -1671,9 +1671,9 @@ void FUN_L13_002ce688(unsigned char *source_moby, void *effect_position, int emi
     }
     subtract_vector_xyz_c2(vD, D_L13_001670C0, pA);
     clear_u64_value(vC);
-    len = vector_length_xyz(vD);
-    extra_emission_count = (len < 8.0f) ? func_001FA898_s(len) + 2 : 10;
-    emission_distance_shortfall = (len < 7.0f) ? 7.0f - len : 0.0f;
+    emission_reference_distance = vector_length_xyz(vD);
+    extra_emission_count = (emission_reference_distance < 8.0f) ? func_001FA898_s(emission_reference_distance) + 2 : 10;
+    emission_distance_shortfall = (emission_reference_distance < 7.0f) ? 7.0f - emission_reference_distance : 0.0f;
     if (extra_emission_count > 0) {
         emission_table_bytes = vG.b;
         j = extra_emission_count;
