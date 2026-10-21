@@ -1237,7 +1237,7 @@ void FUN_001f9a10_e3388(void *, void *, void *) __asm__("FUN_001f9a10");
 void draw_geometry_quad(void *, s32, s32) __asm__("FUN_001f7d30");
 
 extern f32 D_L00_001E6CE0[4][4];
-void FUN_L00_002e3388(s32 unused, s32 idx) {
+void FUN_L00_002e3388(s32 unused, s32 beam_slot) {
     Q_e3388 geometry_quad;
     f32 a[4] __attribute__((aligned(16)));
     f32 b[4] __attribute__((aligned(16)));
@@ -1248,7 +1248,7 @@ void FUN_L00_002e3388(s32 unused, s32 idx) {
     s32 i;
     s32 j;
 
-    qcopy(d, &D_L00_001E6D50_e3388[idx]);
+    qcopy(d, &D_L00_001E6D50_e3388[beam_slot]);
     d[3] = 1.0f;
     FUN_001f9a28_e3388(a, g_debug_camera, d);
     FUN_001f9bf8_e3388(a, a, 1.0f);
@@ -1291,7 +1291,7 @@ void FUN_L00_002e3388(s32 unused, s32 idx) {
         transform_vector(geometry_quad.v[j], geometry_quad.v[j], a);
     }
     draw_geometry_quad(&geometry_quad, 0, 0);
-    qcopy(d, D_L00_001E6E10_e3388[idx]);
+    qcopy(d, D_L00_001E6E10_e3388[beam_slot]);
     FUN_001f9a28_e3388(a, g_debug_camera, d);
     FUN_001f9bf8_e3388(a, a, 1.0f);
     FUN_001f9ad8_e3388(b, a, &hero.gravity_dir);
