@@ -1371,8 +1371,8 @@ void FUN_L05_00254358(float *out, float *rot) {
     clear_u64_value(rot);
     {
         float *selected_path_record = (float *)(path + best * 16);
-        float *b = (float *)(path + (best + 1) * 16);
-        rot[2] = fast_arc_tan_c(b[4] - selected_path_record[4], b[5] - selected_path_record[5]);
+        float *heading_target_path_record = (float *)(path + (best + 1) * 16);
+        rot[2] = fast_arc_tan_c(heading_target_path_record[4] - selected_path_record[4], heading_target_path_record[5] - selected_path_record[5]);
     }
 }
 extern int D_0015ED84_lui __asm__("D_0015ED84") __attribute__((section(".sdata")));
