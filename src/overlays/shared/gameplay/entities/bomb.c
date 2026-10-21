@@ -2595,7 +2595,7 @@ extern struct Moby *func_L00_002CF3D8_2CF808(void *, void *) __asm__("FUN_L00_00
 extern void func_L00_002CF328_2CF808(void *) __asm__("FUN_L00_002cde78");
 
 void FUN_L00_002ce358(struct Moby *updated_moby) {
-    DroneVars_2CF808 *v = (DroneVars_2CF808 *)updated_moby->pvars;
+    DroneVars_2CF808 *drone_vars = (DroneVars_2CF808 *)updated_moby->pvars;
     Vec4 collision_data[1], old_pos;
     Vec4 direction, rotated;
     Vec4 target_pos, matrix[4];
@@ -2668,13 +2668,13 @@ void FUN_L00_002ce358(struct Moby *updated_moby) {
                 }
                 if (closest != 0) {
                     DroneVars_2CF808 *assigned = (DroneVars_2CF808 *)closest->pvars;
-                    char *h2;
+                    char *target_height_data;
                     assigned->target = other;
                     assigned->target_oclass = other->oclass;
-                    h2 = suck_get_aim_height(other);
+                    target_height_data = suck_get_aim_height(other);
                     qcopy(&old_pos, &other->pos);
-                    if (h2 != 0)
-                        old_pos.f[2] += *(f32 *)(h2 + 0x10);
+                    if (target_height_data != 0)
+                        old_pos.f[2] += *(f32 *)(target_height_data + 0x10);
                     qcopy(&assigned->offset, &old_pos);
                     closest->state = 3;
                     random = rand_2cc608() % 3;
@@ -2690,8 +2690,8 @@ void FUN_L00_002ce358(struct Moby *updated_moby) {
             s32 counter = ((DroneSlots_2CF808 *)&hero)->counter;
             if (next == 0)
                 next = 1;
-            v->desired_yaw = convert_integer_to_float(counter) / (f32)divisor * 6.2831855f - 3.1415927f;
-            v->pitch = (convert_integer_to_float((counter * (next / 5)) % next) / (f32)divisor * 6.2831855f - 3.1415927f) * 0.25f;
+            drone_vars->desired_yaw = convert_integer_to_float(counter) / (f32)divisor * 6.2831855f - 3.1415927f;
+            drone_vars->pitch = (convert_integer_to_float((counter * (next / 5)) % next) / (f32)divisor * 6.2831855f - 3.1415927f) * 0.25f;
         }
         {
             void *hit = func_L00_0025B478_2CF808(updated_moby, 1, 0);
@@ -2700,7 +2700,7 @@ void FUN_L00_002ce358(struct Moby *updated_moby) {
                 s32 cat = h && *(char **)(h + 0x24) ? *(s16 *)(*(char **)(h + 0x24) + 0x46) : 0;
                 if (cat > 8) goto dispatch_state;
                 if (cat >= 5) {
-                    if (hit == 0 || h == 0 || *(s16 *)(h + 0xA6) != 0x4D6 || fast_dec_timer_s16(&v->health))
+                    if (hit == 0 || h == 0 || *(s16 *)(h + 0xA6) != 0x4D6 || fast_dec_timer_s16(&drone_vars->health))
                         updated_moby->state = 4;
                 }
             }
@@ -2724,18 +2724,18 @@ state2:
         {
             f32 step = frame_scale * 0.05f;
             updated_moby->scale += (updated_moby->pclass->scale - updated_moby->scale) * step;
-            v->strength = v->strength + (1.0f - v->strength) * step;
+            drone_vars->strength = drone_vars->strength + (1.0f - drone_vars->strength) * step;
         }
-        f = fast_add_rotations(v->desired_yaw, ((DroneSlots_2CF808 *)&hero)->phase);
-        distance = fast_subtract_rotations(f, v->yaw);
-        v->yaw = fast_add_rotations(v->yaw, distance * (frame_scale * 0.05f));
-        distance = fast_subtract_rotations(v->pitch, v->elevation);
-        v->elevation = fast_add_rotations(v->elevation, distance * (frame_scale * 0.01f));
-        direction.f[0] = fast_cos(v->yaw) * v->strength;
-        direction.f[1] = fast_sin(v->yaw) * v->strength;
+        f = fast_add_rotations(drone_vars->desired_yaw, ((DroneSlots_2CF808 *)&hero)->phase);
+        distance = fast_subtract_rotations(f, drone_vars->yaw);
+        drone_vars->yaw = fast_add_rotations(drone_vars->yaw, distance * (frame_scale * 0.05f));
+        distance = fast_subtract_rotations(drone_vars->pitch, drone_vars->elevation);
+        drone_vars->elevation = fast_add_rotations(drone_vars->elevation, distance * (frame_scale * 0.01f));
+        direction.f[0] = fast_cos(drone_vars->yaw) * drone_vars->strength;
+        direction.f[1] = fast_sin(drone_vars->yaw) * drone_vars->strength;
         direction.f[2] = 0.0f;
         rotated.f[0] = 0.0f;
-        rotated.f[1] = v->elevation;
+        rotated.f[1] = drone_vars->elevation;
         rotated.f[2] = 0.0f;
         rotated.f[3] = 0.0f;
         euler_rotation_matrix(matrix, &rotated);
@@ -2743,8 +2743,8 @@ state2:
         add_vector_xyz(&target_pos, &hero.motion, (u8 *)hero.moby + 0xE0);
         target_pos.f[0] += direction.f[0];
         target_pos.f[1] += direction.f[1];
-        v->height = v->height + (target_pos.f[2] - v->height) * (frame_scale * 0.05f);
-        target_pos.f[2] = v->height + direction.f[2];
+        drone_vars->height = drone_vars->height + (target_pos.f[2] - drone_vars->height) * (frame_scale * 0.05f);
+        target_pos.f[2] = drone_vars->height + direction.f[2];
         subtract_vector_xyz_2c8440(&target_pos, &target_pos, &updated_moby->pos);
         clamp_vector_length(&target_pos, &target_pos, frame_time * 10.0f);
         if (func_L00_00259868_2CF808(0.0f, 0.18f, 0.0f, updated_moby, &target_pos, 0) & 1) {
@@ -2762,7 +2762,7 @@ state2:
             if (((struct Moby *)coll_hit.moby) && ((struct Moby *)coll_hit.moby)->state != 0xFE && ((struct Moby *)coll_hit.moby)->state != 0xFD &&
                 (category == 5 || category == 7 || category == 8)) {
                 func_L00_0025A890_2CF808(((BombHit_2CF808 *)&direction), updated_moby, 0x10000, 1.0f);
-                set_vector_length_xy(((BombHit_2CF808 *)&direction), &v->position, 1.0f);
+                set_vector_length_xy(((BombHit_2CF808 *)&direction), &drone_vars->position, 1.0f);
                 ((BombHit_2CF808 *)&direction)->direction.f[2] = 1.0f;
                 ((BombHit_2CF808 *)&direction)->direction.f[3] = 5627.925f;
                 ((BombHit_2CF808 *)&direction)->kind = 1;
@@ -2770,27 +2770,27 @@ state2:
                 ((BombHit_2CF808 *)&direction)->oclass = updated_moby->oclass;
                 func_L00_0025AAC0_2CF808((struct Moby *)coll_hit.moby, ((BombHit_2CF808 *)&direction));
                 if (category == 5) {
-                    if (coll_hit.moby && ((struct Moby *)coll_hit.moby)->oclass == 0x4D6 && (health = v->health) > 0) {
+                    if (coll_hit.moby && ((struct Moby *)coll_hit.moby)->oclass == 0x4D6 && (health = drone_vars->health) > 0) {
                         random = truncate_float_to_s32(((BombHit_2CF808 *)&direction)->amount);
                         if (random > 0)
                             random = health - truncate_float_to_s32(((BombHit_2CF808 *)&direction)->amount);
                         else
                             random = health - 1;
-                        v->health = random;
+                        drone_vars->health = random;
                     } else {
-                        func_L00_0025F4A8_2CF808(updated_moby, v, 0, 0.0f, 0.0f, 0, 1, 1, 0.4f, 0.2f, 4.0f, 1, 1.0f, 8.0f, 1, 1, -1, 0);
+                        func_L00_0025F4A8_2CF808(updated_moby, drone_vars, 0, 0.0f, 0.0f, 0, 1, 1, 0.4f, 0.2f, 4.0f, 1, 1.0f, 8.0f, 1, 1, -1, 0);
                         updated_moby->state = 4;
                     }
                 }
             }
         }
 update_rotations:
-        subtract_vector_xyz_2c8440(&v->position, &updated_moby->pos, &old_pos);
+        subtract_vector_xyz_2c8440(&drone_vars->position, &updated_moby->pos, &old_pos);
         {
             f32 yaw = fast_arc_tan(updated_moby->pos.x - old_pos.f[0], updated_moby->pos.y - old_pos.f[1]);
             f32 pitch = -fast_arc_tan(vector_distance(&old_pos, &updated_moby->pos), updated_moby->pos.z - old_pos.f[2]);
-            updated_moby->rot.z = func_L00_00259148_2CF808(updated_moby->rot.z, yaw, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f, &v->yaw_velocity);
-            updated_moby->rot.y = func_L00_00259148_2CF808(updated_moby->rot.y, pitch, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f, &v->pitch_velocity);
+            updated_moby->rot.z = func_L00_00259148_2CF808(updated_moby->rot.z, yaw, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f, &drone_vars->yaw_velocity);
+            updated_moby->rot.y = func_L00_00259148_2CF808(updated_moby->rot.y, pitch, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f, &drone_vars->pitch_velocity);
         }
         goto update_effects;
     }
@@ -2802,28 +2802,28 @@ state3:
         updated_moby->scale += (pclass->scale - updated_moby->scale) * (frame_scale * 0.05f);
         updated_moby->collision = pclass->collision;
         func_L00_002CF328_2CF808(updated_moby);
-        target = v->target;
-        if (target != 0 && target->oclass == v->target_oclass && target->state != 0xFE && target->state != 0xFD) {
+        target = drone_vars->target;
+        if (target != 0 && target->oclass == drone_vars->target_oclass && target->state != 0xFE && target->state != 0xFD) {
             char *h = suck_get_aim_height(target);
-            qcopy(&target_pos, &v->target->pos);
+            qcopy(&target_pos, &drone_vars->target->pos);
             if (h != 0)
                 target_pos.f[2] += *(f32 *)(h + 0x10);
-            subtract_vector_xyz_2c8440(&direction, &target_pos, &v->offset);
+            subtract_vector_xyz_2c8440(&direction, &target_pos, &drone_vars->offset);
             scale_vector_xyz_2c8440(&direction, &direction, 3.1f);
             add_vector_xyz(&rotated, &target_pos, &direction);
-            subtract_vector_xyz_2c8440(&v->position, &rotated, &updated_moby->pos);
-            scale_vector_xyz_2c8440(&v->position, &v->position, frame_scale * -0.8f + 1.0f);
-            add_vector_xyz(&updated_moby->pos, &updated_moby->pos, &v->position);
-            qcopy(&v->offset, &target_pos);
+            subtract_vector_xyz_2c8440(&drone_vars->position, &rotated, &updated_moby->pos);
+            scale_vector_xyz_2c8440(&drone_vars->position, &drone_vars->position, frame_scale * -0.8f + 1.0f);
+            add_vector_xyz(&updated_moby->pos, &updated_moby->pos, &drone_vars->position);
+            qcopy(&drone_vars->offset, &target_pos);
             qcopy(&collision_data[0], &updated_moby->pos);
             if (func_L00_001F10E0_2CF808(0.25f, &collision_data[0], 0, updated_moby)) {
                 struct Moby *hm = (struct Moby *)coll_hit.moby;
-                if (!hm || hm->state == 0xFE || hm->state == 0xFD || hm != v->target || hm->oclass == 0) {
+                if (!hm || hm->state == 0xFE || hm->state == 0xFD || hm != drone_vars->target || hm->oclass == 0) {
                     qcopy(&updated_moby->pos, &D_L00_00173E70);
                 } else {
                     s32 cat2 = hm->pclass ? *(u8 *)((u8 *)hm->pclass + 0x46) : 0;
                     func_L00_0025A890_2CF808(((BombHit_2CF808 *)&direction), updated_moby, 0x10000, 1.0f);
-                    set_vector_length_xy(((BombHit_2CF808 *)&direction), &v->position, 1.0f);
+                    set_vector_length_xy(((BombHit_2CF808 *)&direction), &drone_vars->position, 1.0f);
                     ((BombHit_2CF808 *)&direction)->direction.f[2] = 1.0f;
                     ((BombHit_2CF808 *)&direction)->direction.f[3] = 5627.925f;
                     ((BombHit_2CF808 *)&direction)->kind = 1;
@@ -2831,15 +2831,15 @@ state3:
                     ((BombHit_2CF808 *)&direction)->oclass = updated_moby->oclass;
                     func_L00_0025AAC0_2CF808((struct Moby *)coll_hit.moby, ((BombHit_2CF808 *)&direction));
                     if (cat2 == 5) {
-                        if (coll_hit.moby && ((struct Moby *)coll_hit.moby)->oclass == 0x4D6 && (health = v->health) > 0) {
+                        if (coll_hit.moby && ((struct Moby *)coll_hit.moby)->oclass == 0x4D6 && (health = drone_vars->health) > 0) {
                             random = truncate_float_to_s32(((BombHit_2CF808 *)&direction)->amount);
                             if (random > 0)
                                 random = health - truncate_float_to_s32(((BombHit_2CF808 *)&direction)->amount);
                             else
                                 random = health - 1;
-                            v->health = random;
+                            drone_vars->health = random;
                         } else {
-                            func_L00_0025F4A8_2CF808(updated_moby, v, 0, 0.0f, 0.0f, 0, 1, 1, 0.4f, 0.2f, 4.0f, 1, 1.0f, 8.0f, 1, 1, -1, 0);
+                            func_L00_0025F4A8_2CF808(updated_moby, drone_vars, 0, 0.0f, 0.0f, 0, 1, 1, 0.4f, 0.2f, 4.0f, 1, 1.0f, 8.0f, 1, 1, -1, 0);
                             updated_moby->state = 4;
                         }
                     }
@@ -2848,8 +2848,8 @@ state3:
         }
         else {
             updated_moby->state = 2;
-            v->target_oclass = -1;
-            v->target = 0;
+            drone_vars->target_oclass = -1;
+            drone_vars->target = 0;
         }
         updated_moby->rot.z = fast_arc_tan(updated_moby->pos.x - old_pos.f[0], updated_moby->pos.y - old_pos.f[1]);
         updated_moby->rot.y = -fast_arc_tan(vector_distance(&old_pos, &updated_moby->pos), updated_moby->pos.z - old_pos.f[2]);
@@ -2857,24 +2857,24 @@ state3:
     }
 state4:
     {
-        target = v->target;
+        target = drone_vars->target;
         if (target == 0) goto fade_clear;
-        if (target->oclass != v->target_oclass) goto fade_clear;
+        if (target->oclass != drone_vars->target_oclass) goto fade_clear;
         if (target->state == 0xFE) goto fade_clear;
         if (target->state == 0xFD) goto fade_clear;
         {
             char *h = suck_get_aim_height(target);
-            qcopy(&old_pos, &v->target->pos);
+            qcopy(&old_pos, &drone_vars->target->pos);
             if (h != 0)
                 old_pos.f[2] += *(f32 *)(h + 0x10);
-            subtract_vector_xyz_2c8440(&v->position, &old_pos, &updated_moby->pos);
-            scale_vector_xyz_2c8440(&v->position, &v->position, frame_scale * -0.8f + 1.0f);
-            clamp_vector_length(&v->position, &v->position, frame_scale * 0.9f);
-            add_vector_xyz(&updated_moby->pos, &updated_moby->pos, &v->position);
+            subtract_vector_xyz_2c8440(&drone_vars->position, &old_pos, &updated_moby->pos);
+            scale_vector_xyz_2c8440(&drone_vars->position, &drone_vars->position, frame_scale * -0.8f + 1.0f);
+            clamp_vector_length(&drone_vars->position, &drone_vars->position, frame_scale * 0.9f);
+            add_vector_xyz(&updated_moby->pos, &updated_moby->pos, &drone_vars->position);
         }
         goto fade_alpha;
 fade_clear:
-        v->target = 0;
+        drone_vars->target = 0;
 fade_alpha:
         updated_moby->alpha -= 4;
         if (updated_moby->alpha < 6)
@@ -2884,7 +2884,7 @@ fade_alpha:
 state5:
     {
         ((DroneSlots_2CF808 *)&hero)->ammo_used--;
-        ((DroneSlots_2CF808 *)&hero)->slots[v->slot] = 0;
+        ((DroneSlots_2CF808 *)&hero)->slots[drone_vars->slot] = 0;
         mark_moby_for_removal(updated_moby);
         return;
     }
