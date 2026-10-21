@@ -16,8 +16,8 @@ extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022d
 /* Moby state 9 while FUN_L00_002dbc30 reports a hit; allocates a voice when the short at 0x68 of FUN_L00_002db890(moby) is 6. */
 int FUN_L04_002c40d0(struct Moby *moby, int input_quad_address, int b, float f) {
     char *moby_callback_result = FUN_L00_002db890(moby);
-    int r = FUN_L00_002dbc30(moby, input_quad_address, b, f);
-    if (r != 0) {
+    int hit_processing_result = FUN_L00_002dbc30(moby, input_quad_address, b, f);
+    if (hit_processing_result != 0) {
         moby->state = 0x9;
     } else if ((unsigned char)moby->state == 0x9) {
         moby->state = 1;
@@ -25,7 +25,7 @@ int FUN_L04_002c40d0(struct Moby *moby, int input_quad_address, int b, float f) 
     if (*(short *)(moby_callback_result + 0x68) == 6) {
         allocate_voice_for_target_entry(1, 0, moby);
     }
-    return r;
+    return hit_processing_result;
 }
 typedef struct {
     char pad[0x78];
