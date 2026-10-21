@@ -29,12 +29,12 @@ extern s32 rand();
 /* Random float of magnitude lo..hi from rand(), negated on odd values. */
 float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 float randf_sym(float lo, float hi) {
-    int v = rand() >> 16;
+    int shifted_random_bits = rand() >> 16;
     float range = hi - lo;
-    float r = lo + (float)(v & 0xFFF) * range * 0.000244140625f;
+    float sampled_value = lo + (float)(shifted_random_bits & 0xFFF) * range * 0.000244140625f;
 
-    if (v & 1) {
-        r = -r;
+    if (shifted_random_bits & 1) {
+        sampled_value = -sampled_value;
     }
-    return r;
+    return sampled_value;
 }
