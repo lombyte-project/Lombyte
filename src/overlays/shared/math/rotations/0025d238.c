@@ -540,7 +540,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
     float dist;
     float effect_reduction_metric;
     float proximity_speed_reduction;
-    int cnt4;
+    int distance_limited_particle_pair_count;
     int i;
 
     *(u128_25e450 *)&effect_vector_work = 0;
@@ -615,15 +615,15 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
     }
     }
     if (dist < convert_integer_to_float_25e450(k8) * 2.0f) {
-        cnt4 = truncate_float_to_s32_25e450(dist) / 2;
+        distance_limited_particle_pair_count = truncate_float_to_s32_25e450(dist) / 2;
     } else {
-        cnt4 = k8;
+        distance_limited_particle_pair_count = k8;
     }
     proximity_speed_reduction = 0.0f;
     if (dist < 7.0f) proximity_speed_reduction = 7.0f - dist;
     {
     int i;
-    for (i = 0; i < cnt4; i++) {
+    for (i = 0; i < distance_limited_particle_pair_count; i++) {
         S6_25e450 c0;
         S6_25e450 c1;
         float sp;
