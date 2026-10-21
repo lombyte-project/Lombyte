@@ -510,7 +510,7 @@ extern int FUN_L00_0025e3b8_c(void *) __asm__("FUN_L00_0025e3b8");
 float FUN_L00_0020d6b0(char *target_moby, float yaw, float range, float ylim, float plim, int *out) {
     float v[4] __attribute__((aligned(16)));
     struct Hero *g;
-    float target_distance, hero_yaw_error, angular_penalty, elevation_angle_error, angular_limit_error, r;
+    float target_distance, hero_yaw_error, angular_penalty, elevation_angle_error, angular_limit_error, target_score;
 
     *out = 0;
     qcopy(v, &hero.motion.pos);
@@ -542,10 +542,10 @@ float FUN_L00_0020d6b0(char *target_moby, float yaw, float range, float ylim, fl
         *out = 1;
     if (0.0f < plim && plim < elevation_angle_error)
         *out = 1;
-    r = target_distance + angular_penalty * target_distance;
+    target_score = target_distance + angular_penalty * target_distance;
     if (FUN_L00_0025e3b8_c(target_moby))
-        r += 7.0f;
-    return r;
+        target_score += 7.0f;
+    return target_score;
 }
 extern char *active_mobies[] __asm__("D_L00_001ABA00") __attribute__((section(".data")));
 float *FUN_002141f8_20d8f8(char *) __asm__("FUN_002141f8");
