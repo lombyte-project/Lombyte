@@ -358,7 +358,7 @@ extern f32 randf_sym(f32 lo, f32 hi) __asm__("FUN_L00_00257c48");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
-DebrisMoby *FUN_L01_0030be70(DebrisMoby *parent_moby, void *dir, f32 scale) {
+DebrisMoby *FUN_L01_0030be70(DebrisMoby *parent_moby, void *debris_vector_source, f32 scale) {
     DebrisMoby *spawned_moby;
     DebrisVars *debris_vars;
 
@@ -373,7 +373,7 @@ DebrisMoby *FUN_L01_0030be70(DebrisMoby *parent_moby, void *dir, f32 scale) {
         spawned_moby->h32 = 0xFF;
         spawned_moby->b31 = 1;
         spawned_moby->scale = spawned_moby->scale * scale;
-        fast_vec_normalize(debris_vars, dir, random_float_between(0.8f, 1.2f));
+        fast_vec_normalize(debris_vars, debris_vector_source, random_float_between(0.8f, 1.2f));
         debris_vars->spin_x = randf_sym(0.0f, 0.008726646f);
         debris_vars->spin_y = randf_sym(0.05235988f, 0.13962634f);
         debris_vars->spin_z = randf_sym(0.0f, DEG_TO_RAD);
