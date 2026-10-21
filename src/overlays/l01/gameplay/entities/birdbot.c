@@ -3303,7 +3303,7 @@ void water_lily_update(HoverMoby *water_lily) {
     HoverVars *v;
     struct Hero *pl;
     HoverVec old;
-    HoverVec tgt;
+    HoverVec collision_adjusted_position;
     HoverVec step;
     HoverVec vector_scratch;
     f32 hero_separation_angle;
@@ -3312,7 +3312,7 @@ void water_lily_update(HoverMoby *water_lily) {
 
     old.q = water_lily->pos.q;
     v = water_lily->pvars;
-    tgt.q = old.q;
+    collision_adjusted_position.q = old.q;
     if (v == 0) {
         return;
     }
@@ -3336,9 +3336,9 @@ void water_lily_update(HoverMoby *water_lily) {
                 water_lily->pos.v.y += hero.motion.pos.f[1];
             }
         }
-        FUN_L00_00258490(water_lily, &tgt, &water_lily->pos, 3, 0.1f, D_L01_00161C00, 600.0f, 1.5707964f);
-        water_lily->pos.v.x = tgt.v.x;
-        water_lily->pos.v.y = tgt.v.y;
+        FUN_L00_00258490(water_lily, &collision_adjusted_position, &water_lily->pos, 3, 0.1f, D_L01_00161C00, 600.0f, 1.5707964f);
+        water_lily->pos.v.x = collision_adjusted_position.v.x;
+        water_lily->pos.v.y = collision_adjusted_position.v.y;
         water_lily->pos.v.z = old.v.z;
         if (FUN_001f9b48(&old, &water_lily->pos) > D_L01_00161BFC * frame_time_macro) {
             fast_vec_sub(&vector_scratch, &water_lily->pos, &old);
