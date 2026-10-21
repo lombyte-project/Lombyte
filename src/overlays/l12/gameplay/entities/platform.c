@@ -186,20 +186,20 @@ typedef struct {
 extern Ent D_L12_001CBF40[];
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L12_002bf770(int arg) {
+void FUN_L12_002bf770(int selected_slot_index) {
     int i;
-    D_L12_001CBF40[arg].n[0] = 0xFF;
-    D_L12_001CBF40[arg].n[2] = 0xFF;
-    D_L12_001CBF40[arg].n[1] = 0xFF;
-    D_L12_001CBF40[arg].n[3] = 0xFF;
-    D_L12_001CBF40[arg].n[4] = 0xFF;
-    D_L12_001CBF40[arg].n[5] = 0xFF;
-    D_L12_001CBF40[arg].n[6] = 0xFF;
-    D_L12_001CBF40[arg].n[7] = 0xFF;
+    D_L12_001CBF40[selected_slot_index].n[0] = 0xFF;
+    D_L12_001CBF40[selected_slot_index].n[2] = 0xFF;
+    D_L12_001CBF40[selected_slot_index].n[1] = 0xFF;
+    D_L12_001CBF40[selected_slot_index].n[3] = 0xFF;
+    D_L12_001CBF40[selected_slot_index].n[4] = 0xFF;
+    D_L12_001CBF40[selected_slot_index].n[5] = 0xFF;
+    D_L12_001CBF40[selected_slot_index].n[6] = 0xFF;
+    D_L12_001CBF40[selected_slot_index].n[7] = 0xFF;
     for (i = 0; i < 17; i++) {
-        if (arg != i) {
+        if (selected_slot_index != i) {
             Ent *slot_table = D_L12_001CBF40;
-            Ent *selected_slot = &slot_table[arg];
+            Ent *selected_slot = &slot_table[selected_slot_index];
             float x = selected_slot->x - slot_table[i].x;
             float y = selected_slot->y - slot_table[i].y;
             if (absolute_float(x) < 0.1f) {
