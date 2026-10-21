@@ -914,7 +914,7 @@ void FUN_L14_002ada18(char *moby) {
         float verts[82][3]; /* ring vertices transformed by mat */
     } f;
     u32 cols[84];
-    float v[4];
+    float ring_vertex_scratch[4];
     int i;
     int j;
 
@@ -936,14 +936,14 @@ void FUN_L14_002ada18(char *moby) {
     for (i = 0; i < D_L14_00161418; i++) {
         float *s = D_L14_001D7A60[i];
         float *o = f.verts[i];
-        v[0] = s[0];
-        v[1] = s[1];
-        v[2] = s[2];
-        v[3] = 1.0f;
-        xform_r(v, v, f.mat);
-        o[0] = v[0];
-        o[1] = v[1];
-        o[2] = v[2];
+        ring_vertex_scratch[0] = s[0];
+        ring_vertex_scratch[1] = s[1];
+        ring_vertex_scratch[2] = s[2];
+        ring_vertex_scratch[3] = 1.0f;
+        xform_r(ring_vertex_scratch, ring_vertex_scratch, f.mat);
+        o[0] = ring_vertex_scratch[0];
+        o[1] = ring_vertex_scratch[1];
+        o[2] = ring_vertex_scratch[2];
         if (*(short *)(moby_vars + 0x202) != 0) {
             cols[i] = D_L14_001D80C8[i] & 0xFF0000FF;
         }
@@ -958,14 +958,14 @@ void FUN_L14_002ada18(char *moby) {
     for (j = 0; j < D_L14_00161418; j++) {
         float *o = f.verts[j];
         float *s = D_L14_001D7A60[j];
-        v[0] = s[0];
-        v[1] = s[1];
-        v[2] = s[2];
-        v[3] = 1.0f;
-        xform_r(v, v, f.mat);
-        o[0] = v[0];
-        o[1] = v[1];
-        o[2] = v[2];
+        ring_vertex_scratch[0] = s[0];
+        ring_vertex_scratch[1] = s[1];
+        ring_vertex_scratch[2] = s[2];
+        ring_vertex_scratch[3] = 1.0f;
+        xform_r(ring_vertex_scratch, ring_vertex_scratch, f.mat);
+        o[0] = ring_vertex_scratch[0];
+        o[1] = ring_vertex_scratch[1];
+        o[2] = ring_vertex_scratch[2];
     }
     if (*(short *)(moby_vars + 0x202) != 0) {
         FUN_L00_001fde98(D_L14_00161418, f.verts, cols, D_L14_001D7E38, 1);
