@@ -126,15 +126,15 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius, float la
 
 void FUN_L07_00312dc8(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    float ang;
+    float latitude_span;
     if (*(float *)(data + 0x1C8) < 0.8f) {
-        ang = *(float *)(data + 0x1C8) * 3.0434179f / 0.8f + 0.09817477f;
-        if (ang > 3.14159274f)
-            ang = 3.14159274f;
+        latitude_span = *(float *)(data + 0x1C8) * 3.0434179f / 0.8f + 0.09817477f;
+        if (latitude_span > 3.14159274f)
+            latitude_span = 3.14159274f;
     } else {
-        ang = 3.14159274f;
+        latitude_span = 3.14159274f;
     }
-    FUN_L07_00312948(moby, 0, 1.0f, 5.8f, ang, 1.0f, *(float *)(data + 0x1C8));
+    FUN_L07_00312948(moby, 0, 1.0f, 5.8f, latitude_span, 1.0f, *(float *)(data + 0x1C8));
 }
 #include "qcopy.h"
 #include "rnc/rendering/geometry_quad.h"
