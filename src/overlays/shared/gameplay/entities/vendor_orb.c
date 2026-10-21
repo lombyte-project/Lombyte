@@ -1389,9 +1389,9 @@ int scale_game_frames(int) __asm__("FUN_001f96f8");
 void blend_moby_animation(unsigned char *, int, int, int) __asm__("FUN_00212f90");
 void red_plant_update(unsigned char *p) __asm__("FUN_L00_002e3ca8");
 void red_plant_update(unsigned char *moby) {
-    char *g = (char *)&hero.motion.pos;
-    if (FUN_001f9b48(g, moby + 0x10) < 1.0f) {
-        if (fast_vec_length(g + 0x80) > frame_time + frame_time && moby[0x53] != 1) {
+    char *hero_position = (char *)&hero.motion.pos;
+    if (FUN_001f9b48(hero_position, moby + 0x10) < 1.0f) {
+        if (fast_vec_length(hero_position + 0x80) > frame_time + frame_time && moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(6));
         }
     }
