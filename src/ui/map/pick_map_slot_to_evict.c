@@ -13,7 +13,7 @@ s32 pick_map_slot_to_evict(s32 unused_arg0, s32 unused_arg1) {
     s32 best;
     s32 i;
     s32 j;
-    s32 v;
+    s32 slot_id;
 
     max = 0;
     best = -1;
@@ -30,11 +30,11 @@ s32 pick_map_slot_to_evict(s32 unused_arg0, s32 unused_arg1) {
     }
     for (i = 0; i < 5; i++) {
         if (level_map_selection.slot[i] != 0 && i != level_map_selection.sel) {
-            v = level_map_selection.slot_id[i];
-            if (v == -1) {
+            slot_id = level_map_selection.slot_id[i];
+            if (slot_id == -1) {
                 return i;
             }
-            delta = SubtractIntegerWithClamp(find_id_in_terminated_table(v & 0xFF) - base);
+            delta = SubtractIntegerWithClamp(find_id_in_terminated_table(slot_id & 0xFF) - base);
             if (max < delta) {
                 max = delta;
                 best = i;
