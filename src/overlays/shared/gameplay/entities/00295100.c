@@ -1365,7 +1365,7 @@ extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdat
 void FUN_L00_0029a6b0(VendorMoby_29a6b0 *m);
 void FUN_L00_0029a6b0(VendorMoby_29a6b0 *vendor_moby) {
     s32 i;
-    Vec4 *v;
+    Vec4 *vector_destination_cursor;
     s32 half;
     s32 sel;
     s32 k;
@@ -1448,11 +1448,11 @@ void FUN_L00_0029a6b0(VendorMoby_29a6b0 *vendor_moby) {
         FUN_L00_002ea9d8_29a6b0(&vendor_29a6b0.eye);
         FUN_L00_002eaa30_29a6b0(&vendor_29a6b0.look);
     }
-    v = &D_L00_00180250;
-    FUN_001f9cf8_29a6b0(v, &D_L00_001610D0, vendor_29a6b0.moby + 0xC0);
-    qcopy(v - 1, &D_L00_001610E0);
-    v += 2;
-    qzero(v);
+    vector_destination_cursor = &D_L00_00180250;
+    FUN_001f9cf8_29a6b0(vector_destination_cursor, &D_L00_001610D0, vendor_29a6b0.moby + 0xC0);
+    qcopy(vector_destination_cursor - 1, &D_L00_001610E0);
+    vector_destination_cursor += 2;
+    qzero(vector_destination_cursor);
     qzero(&D_L00_00180260_29a6b0);
     for (i = 0; i < 4; i++) {
         slot = &vendor_slots_29a6b0[i];
