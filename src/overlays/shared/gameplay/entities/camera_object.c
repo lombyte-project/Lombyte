@@ -200,12 +200,12 @@ int FUN_L00_002a4dc8(int addend) {
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_00250df8(unsigned char *);
 /* Creates a class 0x3EF moby at v and runs FUN_L00_00250df8 on it. */
-unsigned char *FUN_L00_002a4de0(u128 *v) {
+unsigned char *FUN_L00_002a4de0(u128 *spawn_position) {
     unsigned char *spawned_moby = create_moby(0x3ef);
     if (spawned_moby) {
         spawned_moby[0x30] = 0xff;
         *(unsigned short *)(spawned_moby + 0x34) |= 0x41;
-        qcopy(spawned_moby + 0x10, v);
+        qcopy(spawned_moby + 0x10, spawn_position);
         FUN_L00_00250df8(spawned_moby);
     }
     return spawned_moby;
