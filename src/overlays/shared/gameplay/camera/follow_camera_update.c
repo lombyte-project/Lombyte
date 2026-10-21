@@ -1627,8 +1627,8 @@ done:
 
 /* Resets moby bytes 0x7D/0x7E unless its id at 0x86 is &hero.unk2284 or 0x2084 is 6. */
 void FUN_L00_002ec7b0(char *camera_object) {
-    struct Hero *g = &hero;
-    if (g->unk2284 != *(short *)(camera_object + 0x86) && g->state.current != 6) {
+    struct Hero *hero_data = &hero;
+    if (hero_data->unk2284 != *(short *)(camera_object + 0x86) && hero_data->state.current != 6) {
         *(char *)(camera_object + 0x7D) = 0;
         *(short *)(camera_object + 0x7E) = 3;
     }
