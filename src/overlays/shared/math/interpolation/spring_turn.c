@@ -89,27 +89,27 @@ float spring_turn(float *turn_step, float current_angle, float b, float spring_s
 extern float FUN_001f99c0(float);
 
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
-void FUN_L00_00258278(unsigned char *moby, float *ptr, float target_heading, float b, float damping_factor, float limit) {
-    float r = fast_subtract_rotations(target_heading, *(float *)(moby + 0x48));
-    float k = r / 0.15707964f;
-    float v;
+void FUN_L00_00258278(unsigned char *moby, float *ptr, float target_heading, float spring_strength, float damping_factor, float limit) {
+    float wrapped_heading_delta = fast_subtract_rotations(target_heading, *(float *)(moby + 0x48));
+    float k = wrapped_heading_delta / 0.15707964f;
+    float unclamped_turn_step;
     if (1.0f < k)
         k = 1.0f;
     else if (k < -1.0f)
         k = -1.0f;
-    v = *ptr + (b * k - damping_factor * (*ptr));
-    *ptr = v;
+    unclamped_turn_step = *ptr + (spring_strength * k - damping_factor * (*ptr));
+    *ptr = unclamped_turn_step;
     if (limit != 0.0f) {
-        if (limit < v) {
+        if (limit < unclamped_turn_step) {
             *ptr = limit;
-        } else if (v < -limit) {
+        } else if (unclamped_turn_step < -limit) {
             *ptr = -limit;
         }
     }
-    if (FUN_001f99c0(r) < *ptr) {
-        *ptr = FUN_001f99c0(r);
-    } else if (*ptr < -FUN_001f99c0(r)) {
-        *ptr = -FUN_001f99c0(r);
+    if (FUN_001f99c0(wrapped_heading_delta) < *ptr) {
+        *ptr = FUN_001f99c0(wrapped_heading_delta);
+    } else if (*ptr < -FUN_001f99c0(wrapped_heading_delta)) {
+        *ptr = -FUN_001f99c0(wrapped_heading_delta);
     }
     *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *ptr);
 }
