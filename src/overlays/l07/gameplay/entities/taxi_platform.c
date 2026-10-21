@@ -1471,7 +1471,7 @@ void water_update(Moby_30D8E8 *water_moby) {
     int j;
     int k;
     int water_record_index;
-    float ang;
+    float water_direction_xy_angle;
     float on;
 
     if (water_data == 0) {
@@ -1500,9 +1500,9 @@ void water_update(Moby_30D8E8 *water_moby) {
             cab->f14 = 1.0f;
             cab->f18 = 0.9f;
             cab->f20 = 0.1f;
-            ang = fast_arc_tan(dir->f10, dir->f14);
-            cab->f30 = fast_cos(ang) * 0.57735f;
-            cab->f34 = fast_sin(ang) * 0.57735f;
+            water_direction_xy_angle = fast_arc_tan(dir->f10, dir->f14);
+            cab->f30 = fast_cos(water_direction_xy_angle) * 0.57735f;
+            cab->f34 = fast_sin(water_direction_xy_angle) * 0.57735f;
             cab->f38 = -0.57735f;
             cab->i28 = 0x28;
             cab->i2C = 0x29;
