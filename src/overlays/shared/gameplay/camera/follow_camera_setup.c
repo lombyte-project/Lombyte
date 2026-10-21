@@ -150,7 +150,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     M_2e6000 *m;
     A_2e6000 *player_camera_state;
     A_2e6000 *x;
-    f32 v[4];
+    f32 direction_or_rotation_deltas[4];
     f32 rotation_or_blend_value, sum;
     s32 flag = 0;
     s32 nearby_moby_count, i;
@@ -161,10 +161,10 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     camera_override_state = (S220_2e6000 *)((u8 *)camera_moby->m + 0x220);
     if (hero.unk2284 == 0xD && camera_override_state->i10 != 0x14D) {
         rotation_or_blend_value = fast_add_rotations(hero.unk4E4, 3.14159265f);
-        v[0] = fast_cos(rotation_or_blend_value);
-        v[1] = fast_sin(rotation_or_blend_value);
-        v[2] = 0.0f;
-        FUN_L00_002e8918(v, 0.20943952f, v[2]);
+        direction_or_rotation_deltas[0] = fast_cos(rotation_or_blend_value);
+        direction_or_rotation_deltas[1] = fast_sin(rotation_or_blend_value);
+        direction_or_rotation_deltas[2] = 0.0f;
+        FUN_L00_002e8918(direction_or_rotation_deltas, 0.20943952f, direction_or_rotation_deltas[2]);
         follow_camera_start_slide();
     }
     if (hero.state.control_mode == 0x11) {
@@ -257,7 +257,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     {
         /* `next` is a separate variable: with a plain j++ gcc reverses the loop or gives the counter another saved register. */
         s32 j = 0, next;
-        f32 *q = v;
+        f32 *q = direction_or_rotation_deltas;
         do {
             next = j + 1;
             *q = fast_difference_between_rotations(D_L00_00166E10[j + 43], D_L00_00166E10[j + 44]);
