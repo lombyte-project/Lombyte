@@ -470,7 +470,7 @@ void fun_00216c48(F_298b18 *, void *, int) __asm__("FUN_00216c48");
 void FUN_L00_00265880(int);
 void FUN_L00_00298b18(void) {
     O_298b18 *moby;
-    float f, g;
+    float f, hero_candidate_z;
     int i;
     if ((unsigned short)(D_001516D0_298b18.x5a - 6) >= 2)
         D_001516D0_298b18.x5a = 5;
@@ -494,9 +494,9 @@ void FUN_L00_00298b18(void) {
             moby->flags &= ~0x80;
     }
     hero_set_state(HERO_STATE_IDLE, 1);
-    g = f213508_298b18(&hero.motion.pos, 0, 0.5f);
-    if (2.0f < g && absolute_float(hero.motion.pos.f[2] - g) < 4.5f)
-        hero.motion.pos.f[2] = g;
+    hero_candidate_z = f213508_298b18(&hero.motion.pos, 0, 0.5f);
+    if (2.0f < hero_candidate_z && absolute_float(hero.motion.pos.f[2] - hero_candidate_z) < 4.5f)
+        hero.motion.pos.f[2] = hero_candidate_z;
     hero.unk20A5 = 0;
     f2330d0_298b18();
     if (D_L00_0016C860_298b18.x46) {
