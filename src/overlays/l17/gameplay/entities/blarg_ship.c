@@ -935,10 +935,10 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L17_002f54d8(int vertex_count, V3 *b, V3 *vertex_positions, int unused, float *out) {
+void FUN_L17_002f54d8(int vertex_count, V3 *input_directions, V3 *vertex_positions, int unused, float *out) {
     V4 normalized_position_delta;
     V4 vertex_position;
-    V4 r;
+    V4 reflection_mapping_vector;
     V4 normalized_input_direction;
     int i;
     for (i = 0; i < vertex_count; i++) {
@@ -951,19 +951,19 @@ void FUN_L17_002f54d8(int vertex_count, V3 *b, V3 *vertex_positions, int unused,
         fast_vec_sub(&normalized_position_delta, &vertex_position, D_L17_001676C0);
         fast_vec_normalize(&normalized_position_delta, &normalized_position_delta, 1.0f);
         normalized_input_direction.w = 1.0f;
-        normalized_input_direction.v.x = b[i].x;
-        normalized_input_direction.v.y = b[i].y;
-        normalized_input_direction.v.z = b[i].z;
+        normalized_input_direction.v.x = input_directions[i].x;
+        normalized_input_direction.v.y = input_directions[i].y;
+        normalized_input_direction.v.z = input_directions[i].z;
         fast_vec_normalize(&normalized_input_direction, &normalized_input_direction, 1.0f);
         direction_dot_product = fast_vec_dot(&normalized_input_direction, &normalized_position_delta);
-        fast_vec_scale(&r, &normalized_input_direction, direction_dot_product + direction_dot_product);
-        fast_vec_sub(&r, &normalized_position_delta, &r);
-        fast_vec_normalize(&r, &r, 1.0f);
-        r.v.z = r.v.z + 1.0f;
-        len = fast_vec_length(&r);
+        fast_vec_scale(&reflection_mapping_vector, &normalized_input_direction, direction_dot_product + direction_dot_product);
+        fast_vec_sub(&reflection_mapping_vector, &normalized_position_delta, &reflection_mapping_vector);
+        fast_vec_normalize(&reflection_mapping_vector, &reflection_mapping_vector, 1.0f);
+        reflection_mapping_vector.v.z = reflection_mapping_vector.v.z + 1.0f;
+        len = fast_vec_length(&reflection_mapping_vector);
         len = len + len;
-        out[i * 2] = (r.v.x / len + 0.5f) * 4.0f;
-        out[i * 2 + 1] = (r.v.y / len + 0.5f) * 4.0f;
+        out[i * 2] = (reflection_mapping_vector.v.x / len + 0.5f) * 4.0f;
+        out[i * 2 + 1] = (reflection_mapping_vector.v.y / len + 0.5f) * 4.0f;
     }
 }
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F71D0), where it is exact; names translated to the US level program. */
