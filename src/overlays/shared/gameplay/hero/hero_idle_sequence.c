@@ -2286,7 +2286,7 @@ extern void FUN_L00_002718d0_209638(void *, void *, void *, float,
 
 void FUN_L00_00209638(int seed, int limit);
 void FUN_L00_00209638(int seed, int limit) {
-    float v[4];
+    float planar_effect_vector[4];
     float pos[4];
     float ang;
     int i;
@@ -2300,20 +2300,20 @@ void FUN_L00_00209638(int seed, int limit) {
                 ang = FUN_001fa5c8_209638(hero.motion.rot.f[2], 0.785398f);
             }
             hero_state = &hero;
-            v[0] = fast_cos(ang) * (D_0015ED6C * 0.6f);
-            v[1] = fast_sin(ang) * (D_0015ED6C * 0.6f);
-            v[2] = 0.0f;
-            pos[0] = hero_state->motion.pos.f[0] + v[0] * 18.0f;
-            pos[1] = hero_state->motion.pos.f[1] + v[1] * 18.0f;
+            planar_effect_vector[0] = fast_cos(ang) * (D_0015ED6C * 0.6f);
+            planar_effect_vector[1] = fast_sin(ang) * (D_0015ED6C * 0.6f);
+            planar_effect_vector[2] = 0.0f;
+            pos[0] = hero_state->motion.pos.f[0] + planar_effect_vector[0] * 18.0f;
+            pos[1] = hero_state->motion.pos.f[1] + planar_effect_vector[1] * 18.0f;
             pos[2] = hero_state->water_surface_z;
-            v[0] -= fast_cos(hero_state->motion.rot.f[2]) * (D_0015ED6C * 1.5f);
-            v[1] -= fast_sin(hero_state->motion.rot.f[2]) * (D_0015ED6C * 1.5f);
+            planar_effect_vector[0] -= fast_cos(hero_state->motion.rot.f[2]) * (D_0015ED6C * 1.5f);
+            planar_effect_vector[1] -= fast_sin(hero_state->motion.rot.f[2]) * (D_0015ED6C * 1.5f);
             {
-                float r = FUN_002132a8_209638(0.4f, 0.5f);
+                float random_effect_scale = FUN_002132a8_209638(0.4f, 0.5f);
                 float effect_side_value = -2.0f;
                 if (i == 0)
                     effect_side_value = 2.0f;
-                FUN_L00_002718d0_209638(pos, v, &hero_state->water_surface_z, r, effect_side_value);
+                FUN_L00_002718d0_209638(pos, planar_effect_vector, &hero_state->water_surface_z, random_effect_scale, effect_side_value);
             }
             if (seed) {
                 hero_state->unk908 = FUN_00213260_209638(seed);
