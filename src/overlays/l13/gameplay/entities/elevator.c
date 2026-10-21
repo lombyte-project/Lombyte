@@ -606,13 +606,13 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern float D_L13_00161388 __attribute__((sda));
 int D_L13_0016138C = 2;
 void FUN_L13_002b47a0(struct Moby *moby) {
-    float v[4];
+    float projectile_spawn_position[4];
     float horizontal_offset[4];
     char *data;
     float target_distance, x, ang;
     data = (char *)moby->pvars;
     if (frame_count % D_L13_0016138C == 0) {
-        moby_point_position(moby, 0, v);
+        moby_point_position(moby, 0, projectile_spawn_position);
         target_distance = vector_distance(&moby->pos, *(char **)(data + 0x40) + 0x10);
         x = (20.0f - target_distance) / 20.0f * 5.0f + 2.5f;
         ang = fast_add_rotations(random_float_between(-x, x) * DEG_TO_RAD,
@@ -620,8 +620,8 @@ void FUN_L13_002b47a0(struct Moby *moby) {
         horizontal_offset[0] = fast_cos(ang) * (D_L13_00161388 * frame_time);
         horizontal_offset[1] = fast_sin(ang) * (D_L13_00161388 * frame_time);
         horizontal_offset[2] = 0;
-        fast_vec_add(v, v, horizontal_offset);
-        FUN_L13_003061c8(*(float *)(data + 0x68), v, horizontal_offset, moby);
+        fast_vec_add(projectile_spawn_position, projectile_spawn_position, horizontal_offset);
+        FUN_L13_003061c8(*(float *)(data + 0x68), projectile_spawn_position, horizontal_offset, moby);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5A88), where it is exact; names translated to the US level program. */
