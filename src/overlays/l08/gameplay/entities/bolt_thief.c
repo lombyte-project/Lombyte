@@ -180,9 +180,9 @@ void FUN_L08_002e8ba0(struct Moby *parent_moby) {
         }
     }
     if (*(int *)(data + 0x90) != 0) {
-        char *r = *(char **)(data + 0x90);
+        char *spinning_part_moby = *(char **)(data + 0x90);
         *(float *)(*(char **)(data + 0x90) + 0x40) = fast_add_rotations(
-            *(float *)(r + 0x40),
+            *(float *)(spinning_part_moby + 0x40),
             D_L08_00161D28 * DEG_TO_RAD * D_0015ED6C);
     }
     for (i = 0; i < 12; i++) {
