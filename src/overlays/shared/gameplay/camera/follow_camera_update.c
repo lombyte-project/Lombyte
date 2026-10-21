@@ -484,7 +484,7 @@ void FUN_L00_002e9f38(u8 *camera_object) {
     V side;
     V horizontal_view_offset;
     S_9f38 *st;
-    float rotation_input_target, r, k;
+    float rotation_input_target, rotation_input_scratch, k;
     st = *(S_9f38 **)(camera_object + 0x70);
     FUN_L00_002e9cc0_c(camera_object);
     FUN_001f9bf8_c(&up, ((u8 *)hero.moby) + 0xE0, 1.0f);
@@ -497,11 +497,11 @@ void FUN_L00_002e9f38(u8 *camera_object) {
         rotation_input_target = convert_integer_to_float((D_0013C940.i1A0 >> 15) & 1);
     if (rotation_input_target == 0.0f)
         rotation_input_target = -convert_integer_to_float((D_0013C940.i1A0 >> 13) & 1);
-    r = FUN_001f99c0(st->a);
-    k = D_L00_00161DC0 + (D_L00_00161DC4 - D_L00_00161DC0) * r;
-    st->a = r = FUN_001ebd78(st->a, rotation_input_target, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->va);
-    if (r != 0.0f)
-        build_look_at_matrix(camera_object, camera_object, &up, k * r);
+    rotation_input_scratch = FUN_001f99c0(st->a);
+    k = D_L00_00161DC0 + (D_L00_00161DC4 - D_L00_00161DC0) * rotation_input_scratch;
+    st->a = rotation_input_scratch = FUN_001ebd78(st->a, rotation_input_target, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->va);
+    if (rotation_input_scratch != 0.0f)
+        build_look_at_matrix(camera_object, camera_object, &up, k * rotation_input_scratch);
     if (hero.motion.platform_carry.f[3] != 0.0f && hero.unk308 == 0)
         build_look_at_matrix(camera_object, camera_object, &up, hero.motion.platform_carry.f[3]);
     rotation_input_target = -D_0013C940.f10C;
@@ -515,8 +515,8 @@ void FUN_L00_002e9f38(u8 *camera_object) {
         rotation_input_target = 0.0f;
     if (D_0015EDDC == 0)
         rotation_input_target = -rotation_input_target;
-    r = FUN_001f99c0(st->b);
-    k = D_L00_00161DC0 + (D_L00_00161DC4 - D_L00_00161DC0) * r;
+    rotation_input_scratch = FUN_001f99c0(st->b);
+    k = D_L00_00161DC0 + (D_L00_00161DC4 - D_L00_00161DC0) * rotation_input_scratch;
     st->b = FUN_001ebd78(st->b, rotation_input_target, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->vb);
     if (st->b != 0.0f) {
         float a, prospective_pitch_angle, z;
