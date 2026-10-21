@@ -44,10 +44,10 @@ extern char D_L00_00179410[];
 void FUN_L00_002039a0(void);
 void FUN_L00_002039a0(void) {
     if (*(int *)(D_L00_00179410) != 0) {
-        int v = *(int *)((char *)(*(int *)(D_L00_00179410 + 0x20) << 4) + (int)D_L00_0015F660 + 8);
-        if (v != -1) {
+        int help_entry_value = *(int *)((char *)(*(int *)(D_L00_00179410 + 0x20) << 4) + (int)D_L00_0015F660 + 8);
+        if (help_entry_value != -1) {
             char *g = (char *)D_0014161B + 0x100B5;
-            if (v == *(short *)(g + 0x54) - 0x7530) {
+            if (help_entry_value == *(short *)(g + 0x54) - 0x7530) {
                 if ((unsigned)(*(unsigned short *)(g + 0x5A) - 6) >= 2)
                     *(short *)(g + 0x5A) = 5;
             }
