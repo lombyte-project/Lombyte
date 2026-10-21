@@ -6,12 +6,12 @@ void FUN_00122518(void *, short, int, int, int, int, int, int);
 void flush_cache(int) __asm__("FUN_00118a80");
 void FUN_001227d8(void *, int);
 void wait_for_graphics_pipeline_idle(int, int) __asm__("FUN_00120558");
-void FUN_L00_002a0f18(int dst, int src, int size) {
+void FUN_L00_002a0f18(int dst, int draw_buffer_byte_address, int size) {
     char buf[0x70] __attribute__((aligned(16)));
     int left = (size + 0x3FFF) & ~0x3FFF;
     int transfer_byte_offset = 0;
     while (left > 0) {
-        FUN_00122518(buf, (src + transfer_byte_offset) >> 8, 1, 0, 0, 0, 0x40, 0x40);
+        FUN_00122518(buf, (draw_buffer_byte_address + transfer_byte_offset) >> 8, 1, 0, 0, 0, 0x40, 0x40);
         left -= 0x4000;
         flush_cache(0);
         FUN_001227d8(buf, dst + transfer_byte_offset);
