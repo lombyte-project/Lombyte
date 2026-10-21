@@ -375,7 +375,7 @@ void spawner_update(char *moby)
     char *spawner_vars = *(char **)(moby + 0x78);
     float target[4];
     float vel[4];
-    float pos[4];
+    float spawn_position[4];
     float offset[4];
 
     FUN_L09_0030a9e8_30ab80(moby, spawner_vars);
@@ -485,17 +485,17 @@ void spawner_update(char *moby)
         }
         subtract_vector_xyz_30ab80(vel, target, moby + 0x10);
         {
-            float len = vector_length_xyz_30ab80(vel);
-            float speed = len * (frame_time_macro * 0.6f);
+            float target_distance = vector_length_xyz_30ab80(vel);
+            float speed = target_distance * (frame_time_macro * 0.6f);
             normalize_vector_xyz_30ab80(vel, vel, speed);
-            moby_point_position_30ab80(moby, 0, pos);
+            moby_point_position_30ab80(moby, 0, spawn_position);
             normalize_vector_xyz_30ab80(offset, vel, 0.05f);
             FUN_L00_0025f8e0_30ab80(offset, 0.025f);
-            add_vector_xyz_30ab80(pos, pos, offset);
-            vel[2] = FUN_L00_0025abf0_30ab80(pos, target, 0, speed, -(frame_time_sq_macro * 9.8f));
+            add_vector_xyz_30ab80(spawn_position, spawn_position, offset);
+            vel[2] = FUN_L00_0025abf0_30ab80(spawn_position, target, 0, speed, -(frame_time_sq_macro * 9.8f));
         }
         ((SpawnerVars_30ab80 *)spawner_vars)->slots[last] =
-            FUN_L09_0030b218_30ab80((int)moby, pos, vel, (unsigned char)spawner_vars[0x93], (unsigned char)last);
+            FUN_L09_0030b218_30ab80((int)moby, spawn_position, vel, (unsigned char)spawner_vars[0x93], (unsigned char)last);
         *(short *)(spawner_vars + 0x8E) = scale_game_frames_30ab80(*(short *)(spawner_vars + 0x8C));
         spawner_vars[0x91] = (char)(spawner_vars[0x91] + 1);
         }
