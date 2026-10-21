@@ -160,17 +160,17 @@ extern void FUN_L00_0025c088(int *, int *, int *, int);
 /* Splits colour c into bytes, passes the low three through 0025c088 with mask, and repacks them. */
 unsigned FUN_L00_0025c0e8(unsigned c, int mask);
 unsigned FUN_L00_0025c0e8(unsigned packed_color, int mask) {
-    int v[3];
+    int rgb_channels[3];
     unsigned preserved_high_byte;
     unsigned repacked_color;
     if (mask == 0)
         return packed_color;
-    v[0] = packed_color & 0xFF;
-    v[1] = ((int)(packed_color & 0xFF00)) >> 8;
-    v[2] = (packed_color >> 16) & 0xFF;
+    rgb_channels[0] = packed_color & 0xFF;
+    rgb_channels[1] = ((int)(packed_color & 0xFF00)) >> 8;
+    rgb_channels[2] = (packed_color >> 16) & 0xFF;
     preserved_high_byte = packed_color >> 24;
-    FUN_L00_0025c088(&v[0], &v[1], &v[2], mask);
-    repacked_color = (preserved_high_byte << 24) | (v[2] << 16);
-    repacked_color |= v[1] << 8;
-    return repacked_color | v[0];
+    FUN_L00_0025c088(&rgb_channels[0], &rgb_channels[1], &rgb_channels[2], mask);
+    repacked_color = (preserved_high_byte << 24) | (rgb_channels[2] << 16);
+    repacked_color |= rgb_channels[1] << 8;
+    return repacked_color | rgb_channels[0];
 }
