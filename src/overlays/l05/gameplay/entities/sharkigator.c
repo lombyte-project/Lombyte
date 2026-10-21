@@ -907,7 +907,7 @@ void amoeboid_update(struct Moby *moby) {
         AMOEBOID_WAIT_FOR_HERO_TO_LEAVE = 2
     };
     char *moby_data = (char *)moby->pvars;
-    float dir[4];
+    float facing_direction[4];
     FUN_L05_002daf58_c(moby);
     switch (moby->state) {
     case AMOEBOID_INITIALIZE:
@@ -935,10 +935,10 @@ void amoeboid_update(struct Moby *moby) {
                                  *(float *)(path_node_base + 0x14) - moby->pos.y);
         FUN_L00_0025be00(&moby->rot.z, (float *)(moby_data + 0xBC), yaw, frame_time_sq * 1.0471976f,
                          frame_time_sq * 1.0471976f, frame_time * 3.1415927f);
-        dir[0] = fast_cos_c(moby->rot.z);
-        dir[1] = fast_sin_c(moby->rot.z);
-        dir[2] = 0.0f;
-        FUN_L00_00258b50(moby, moby_data + 0x60, dir, moby_data + 0x40, 1.0f);
+        facing_direction[0] = fast_cos_c(moby->rot.z);
+        facing_direction[1] = fast_sin_c(moby->rot.z);
+        facing_direction[2] = 0.0f;
+        FUN_L00_00258b50(moby, moby_data + 0x60, facing_direction, moby_data + 0x40, 1.0f);
         if (func_001F9908_v(moby_data + 0xB8) != 0 ||
             vector_distance(&moby->pos, D_L05_001B0CB0_x[*(int *)(moby_data + 0xB0)] +
                                        (*(int *)(moby_data + 0xB4) * 16 + 0x10)) < 1.0f) {
