@@ -2490,7 +2490,7 @@ extern float dist_2ce1f0(void *, void *) __asm__("FUN_001f9b80");
 char *FUN_L00_002ce1f0(int previous_spawn_result, void *pos) {
     char *spawned_moby = spawn_2ce1f0(0x1DF);
     char *moby_vars;
-    struct Hero *g;
+    struct Hero *player;
 
     if (spawned_moby != 0) {
         *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
@@ -2501,14 +2501,14 @@ char *FUN_L00_002ce1f0(int previous_spawn_result, void *pos) {
         *(unsigned char *)(spawned_moby + 0xBC) = 0;
         qcopy(spawned_moby + 0x10, pos);
         *(int *)(moby_vars + 0x44) = previous_spawn_result;
-        g = &hero;
-        g->ammo_used++;
+        player = &hero;
+        player->ammo_used++;
         FUN_L00_00250df8(spawned_moby);
         FUN_L00_0025d1b8(spawned_moby);
-        *(float *)(moby_vars + 0x28) = atan2_2ce1f0(*(float *)(spawned_moby + 0x10) - g->motion.pos.f[0], *(float *)(spawned_moby + 0x14) - g->motion.pos.f[1]);
-        *(float *)(moby_vars + 0x24) = atan2_2ce1f0(dist_2ce1f0(&g->motion.pos, spawned_moby + 0x10), *(float *)(spawned_moby + 0x18) - g->motion.pos.f[2]);
-        *(float *)(moby_vars + 0x20) = dist_2ce1f0(spawned_moby + 0x10, &g->motion.pos);
-        *(float *)(moby_vars + 0x3C) = g->motion.pos.f[2];
+        *(float *)(moby_vars + 0x28) = atan2_2ce1f0(*(float *)(spawned_moby + 0x10) - player->motion.pos.f[0], *(float *)(spawned_moby + 0x14) - player->motion.pos.f[1]);
+        *(float *)(moby_vars + 0x24) = atan2_2ce1f0(dist_2ce1f0(&player->motion.pos, spawned_moby + 0x10), *(float *)(spawned_moby + 0x18) - player->motion.pos.f[2]);
+        *(float *)(moby_vars + 0x20) = dist_2ce1f0(spawned_moby + 0x10, &player->motion.pos);
+        *(float *)(moby_vars + 0x3C) = player->motion.pos.f[2];
         for (*(short *)(moby_vars + 0x54) = 0; *(short *)(moby_vars + 0x54) < 6; (*(short *)(moby_vars + 0x54))++) {
             if (hero.unk2020[*(short *)(moby_vars + 0x54)] == 0) {
                 hero.unk2020[*(short *)(moby_vars + 0x54)] = spawned_moby;
