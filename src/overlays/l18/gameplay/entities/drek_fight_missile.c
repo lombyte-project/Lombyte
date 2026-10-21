@@ -3010,7 +3010,7 @@ void FUN_L18_002f6aa0(struct Moby *moby) {
     f32 self_ang;
     f32 near, far, slow, fast;
     f32 speed;
-    f32 dist;
+    f32 hero_distance;
 
     ang = atan2_f(hero.motion.pos.f[0] - ((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center.f[0],
                   hero.motion.pos.f[1] - ((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center.f[1]);
@@ -3054,12 +3054,12 @@ void FUN_L18_002f6aa0(struct Moby *moby) {
             fast = 10.0f;
             far *= 1.5f;
         }
-        dist = vector_distance(&moby->pos, &hero.motion.pos);
-        if (far < dist)
-            dist = far;
-        else if (dist < near)
-            dist = near;
-        speed = 1.0f - (dist - near) / (far - near);
+        hero_distance = vector_distance(&moby->pos, &hero.motion.pos);
+        if (far < hero_distance)
+            hero_distance = far;
+        else if (hero_distance < near)
+            hero_distance = near;
+        speed = 1.0f - (hero_distance - near) / (far - near);
         speed = (fast - slow) * speed + slow;
     } else {
         speed = 20.0f;
