@@ -84,8 +84,8 @@ s32 draw_pause_ring(struct PauseState *pause_state) {
             append_screen_rect_packet((s32)x - 0xF, (s32)y - 0xF, (s32)x + 0xF, (s32)y + 0xF,
                                       0x40404040L, 0);
         } else {
-            s32 idx = pause_state->slots[i];
-            s32 id = get_icon_frame(iconTab[idx].id, item_text_variant[idx] ? 4 : 0);
+            s32 icon_entry_index = pause_state->slots[i];
+            s32 id = get_icon_frame(iconTab[icon_entry_index].id, item_text_variant[icon_entry_index] ? 4 : 0);
 
             draw_hud_sprite(id, (s32)x - 0x11, (s32)y - 0x11, 0x20, 0x20, 0x80);
         }
