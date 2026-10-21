@@ -246,16 +246,16 @@ void FUN_L09_00303b30(struct Moby *moby, VendorVars *vars, f32 *health) {
     enum {
         DAMAGE_RESULT_UNAVAILABLE = 0
     };
-    VendorHitSource *src;
+    VendorHitSource *damage_hit_record;
     struct Moby *link;
     s32 hit;
 
     if (moby->state != 3) {
-        src = find_moby_hit(moby, 0x330000, 0);
-        if (src != 0) {
-            debug_print(D_L09_00208F90, moby->oclass, fptodp(src->damage));
+        damage_hit_record = find_moby_hit(moby, 0x330000, 0);
+        if (damage_hit_record != 0) {
+            debug_print(D_L09_00208F90, moby->oclass, fptodp(damage_hit_record->damage));
         }
-        switch (FUN_00213928(moby, src, health, 0, &hit, 0, 0, 4)) {
+        switch (FUN_00213928(moby, damage_hit_record, health, 0, &hit, 0, 0, 4)) {
         case 1:
         case 2:
             *health = 0.0f;
@@ -273,7 +273,7 @@ void FUN_L09_00303b30(struct Moby *moby, VendorVars *vars, f32 *health) {
             break;
         }
         if (hit >= 2) {
-            if (*health <= src->damage) {
+            if (*health <= damage_hit_record->damage) {
                 *health = 0.0f;
                 moby->flags &= ~0x1000;
                 if (vars->link != -1) {
@@ -288,7 +288,7 @@ void FUN_L09_00303b30(struct Moby *moby, VendorVars *vars, f32 *health) {
                 trooper_anim_update(moby, vars->anim);
                 moby->state = 3;
             } else {
-                *health -= src->damage;
+                *health -= damage_hit_record->damage;
                 vars->anim[7] = 0xFA;
                 vars->hurt_timer = scale_game_frames(60);
                 trooper_anim_update(moby, vars->anim);
