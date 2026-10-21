@@ -2687,11 +2687,11 @@ void FUN_L06_002f3640(unsigned char *moby) {
     if (moby[0x20] != 9 && moby[0x52] != 2 && moby[0x53] != 2) {
         char *target = find_moby_hit(moby, 0x330001, 0);
         if (target != 0) {
-            Q pos;
+            Q hit_vector_copy;
             float base_angle = fast_arc_tan(*(float *)(target + 0x10), *(float *)(target + 0x14));
             char *owner = *(char **)(target + 0x20);
-            float ang;
-            ang = base_angle;
+            float knockback_angle;
+            knockback_angle = base_angle;
             if (owner != D_001413D0 && *(short *)(owner + 0xA6) != *(short *)(moby + 0xA6)) {
                 int frames_sq = scale_game_frames(0x50);
                 frames_sq *= scale_game_frames(0x50);
@@ -2699,9 +2699,9 @@ void FUN_L06_002f3640(unsigned char *moby) {
                 *(int *)(state + 0xA4) = 9;
                 *(float *)(state + 0x90) = 4.0f / (float)frames_sq;
                 trooper_set_knockback(state + 0x80, 2.0f, 0.5f);
-                pos = *(Q *)(target + 0x10);
-                trooper_knockback_arc(&pos, &ang, state + 0x98, state + 0x9C);
-                trooper_start_knockback(moby, state + 0x80, 4, 5, 2, ang);
+                hit_vector_copy = *(Q *)(target + 0x10);
+                trooper_knockback_arc(&hit_vector_copy, &knockback_angle, state + 0x98, state + 0x9C);
+                trooper_start_knockback(moby, state + 0x80, 4, 5, 2, knockback_angle);
                 {
                     float doubled_frame_time = frame_time + frame_time;
                     *(float *)(state + 0xD0) = 10.0f;
