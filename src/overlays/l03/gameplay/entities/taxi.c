@@ -1507,7 +1507,7 @@ void FUN_L03_002db020(struct Moby *path_moby) {
     char *path_moby_vars;
     char *path;
     int i;
-    float t;
+    float segment_fraction;
 
     *(OvlQuad *)old = *(OvlQuad *)&path_moby->pos;
     path_moby_vars = (char *)path_moby->pvars;
@@ -1517,15 +1517,15 @@ void FUN_L03_002db020(struct Moby *path_moby) {
     *(int *)&movement_scratch[2] = 0;
     vadd_2db020(movement_scratch, movement_scratch, *(char **)(path_moby_vars + 0x60) + 0x10);
     i = ftoi_2db020(*(float *)(path_moby_vars + 0x64) / *(float *)(*(char **)(path_moby_vars + 0x60) + 0x1C));
-    t = itof_2db020(i);
+    segment_fraction = itof_2db020(i);
     path = *(char **)(path_moby_vars + 0x60);
-    t = (*(float *)(path_moby_vars + 0x64) - t * *(float *)(path + 0x1C)) / *(float *)(path + 0x1C);
+    segment_fraction = (*(float *)(path_moby_vars + 0x64) - segment_fraction * *(float *)(path + 0x1C)) / *(float *)(path + 0x1C);
     if (i >= *(int *)path - 2) {
         kill_2db020(path_moby);
         return;
     }
     vsub_2db020(segment_offset, ((float (*)[4])path)[i + 2], ((float (*)[4])path)[i + 1]);
-    vscale_2db020(segment_offset, segment_offset, t);
+    vscale_2db020(segment_offset, segment_offset, segment_fraction);
     vadd_2db020(&path_moby->pos, segment_offset, (*(float (**)[4])(path_moby_vars + 0x60))[i + 1]);
     vsub_2db020(movement_scratch, &path_moby->pos, old);
     update_entity_matrix(path_moby_vars + 0x20, movement_scratch, &path_moby->rot, &path_moby->rot);
