@@ -210,13 +210,13 @@ void FUN_001f9a10_00259d08(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a28_00259d08(void *, void *, void *) __asm__("FUN_001f9a28");
 int FUN_001efa68_00259d08(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 int sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, int f, int n) __asm__("FUN_L00_00259d08");
-int sweep_hit_segment(void *first_endpoint_end, void *b, void *first_endpoint_start, void *second_endpoint_start, void *e, int f, int sample_count) {
+int sweep_hit_segment(void *first_endpoint_end, void *second_endpoint_end, void *first_endpoint_start, void *second_endpoint_start, void *e, int f, int sample_count) {
     V4_259d08 da, db, va, vb;
     float k, t;
     int i = 0;
     k = 1.0f / FUN_001fa6c0_00259d08(sample_count);
     FUN_001f9a28_00259d08(da, first_endpoint_end, first_endpoint_start);
-    FUN_001f9a28_00259d08(db, b, second_endpoint_start);
+    FUN_001f9a28_00259d08(db, second_endpoint_end, second_endpoint_start);
     t = k;
     for (; i < sample_count; i++) {
         FUN_001f9a68_00259d08(va, da, t);
