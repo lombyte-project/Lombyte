@@ -2505,7 +2505,7 @@ void FUN_L13_0030c3b8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     L13EffectVector old_pos, position, velocity, acceleration, second_pos;
     float angle, direction, amount;
-    int spark_frame_count, b, third_spark_frame_count;
+    int spark_frame_count, second_spark_frame_count, third_spark_frame_count;
     int i;
     qcopy(&old_pos, &moby->pos);
     if (moby->command == 1) {
@@ -2531,12 +2531,12 @@ void FUN_L13_0030c3b8(struct Moby *moby) {
                                                           D_L13_00161F28 * frame_time * 1.1f);
             spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F18,
                                                                      D_L13_00161F18 + D_L13_00161F18)));
-            b = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F1C,
+            second_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F1C,
                                                                      D_L13_00161F1C * 1.2f)));
             third_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F20,
                                                                      D_L13_00161F20 * 1.2f)));
             spawn_spark(&position, &velocity, &acceleration, D_L13_00161F08,
-                           D_L13_00161F0C, spark_frame_count, b, third_spark_frame_count, -1);
+                           D_L13_00161F0C, spark_frame_count, second_spark_frame_count, third_spark_frame_count, -1);
         } while (i < 2);
         amount = 0.017453292f;
         velocity.f[3] = D_L13_00161F64;
@@ -2564,12 +2564,12 @@ void FUN_L13_0030c3b8(struct Moby *moby) {
                                                           D_L13_00161F4C * frame_time * 1.5f);
             spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F34,
                                                                      D_L13_00161F34 + D_L13_00161F34)));
-            b = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F38,
+            second_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F38,
                                                                      D_L13_00161F38 * 1.2f)));
             third_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F3C,
                                                                      D_L13_00161F3C * 1.2f)));
             spawn_spark(&second_pos, &velocity, &acceleration, D_L13_00161F10,
-                           D_L13_00161F14, spark_frame_count, b, third_spark_frame_count, -1);
+                           D_L13_00161F14, spark_frame_count, second_spark_frame_count, third_spark_frame_count, -1);
         } while (i >= 0);
     }
     moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(data + 0x10));
