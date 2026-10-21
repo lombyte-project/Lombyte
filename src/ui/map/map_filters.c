@@ -618,12 +618,12 @@ int map_filter_l11_5(void) {
 int map_filter_l12_0(void *arg0, int arg1, float unused1, float unused2, float arg3) __asm__("func_002079D8");
 
 int map_filter_l12_0(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
-    int r = 1;
+    int reveal_allowed = 1;
 
     if (reveal_test_selector < 0x141 && !(63.5f <= reveal_test_value)) {
-        r = 0;
+        reveal_allowed = 0;
     }
-    return r;
+    return reveal_allowed;
 }
 
 /* Ported from rac1-decomp (src/game/menu.c, func_00208238). */
