@@ -59,7 +59,7 @@ extern int D_0013E500_23b6c0[] __asm__("D_0013E500");
 extern int D_L00_0017E4D8_23b6c0[] __asm__("D_L00_0017E4D8") __attribute__((section(".data")));
 extern u64 FUN_001ffa10_23b6c0(int) __asm__("FUN_001ffa10");
 
-void FUN_L00_0023b6c0(int tex, int x, int y, int w, int draw_height, int alpha) {
+void FUN_L00_0023b6c0(int tex, int x, int y, int draw_width, int draw_height, int alpha) {
     u64 *packet_words;
     int *coordinate_offsets;
     int *g;
@@ -78,8 +78,8 @@ void FUN_L00_0023b6c0(int tex, int x, int y, int w, int draw_height, int alpha) 
     coordinate_offsets = D_0013E500_23b6c0;
     g = D_L00_0017E4D8_23b6c0;
     packet_words[6] = (u64)(((x << 4) + coordinate_offsets[4] - 8) | (((u64)((y << 4) + coordinate_offsets[5] - 8)) << 16)) | ((u64)g[3] << 32);
-    packet_words[7] = (draw_height << 20) + (w << 4);
-    x += w;
+    packet_words[7] = (draw_height << 20) + (draw_width << 4);
+    x += draw_width;
     y += draw_height;
     packet_words[8] = (u64)(((x << 4) + coordinate_offsets[4] - 8) | (((u64)((y << 4) + coordinate_offsets[5] - 8)) << 16)) | ((u64)g[3] << 32);
     packet_words[9] = 0;
