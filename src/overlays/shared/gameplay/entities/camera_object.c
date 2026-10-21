@@ -49,7 +49,7 @@ void FUN_L00_002a4890(void) {
         AMBIENCE_TWO_TARGET_CYCLE = 3
     };
     struct Amb *ambience_state = &D_L00_001CB7C0;
-    float interpolation_duration, b, target_rotation, scalar_magnitude, scalar_clamp_value;
+    float interpolation_duration, target_scalar, target_rotation, scalar_magnitude, scalar_clamp_value;
     switch (ambience_state->hC) {
     case AMBIENCE_HOLD_STATE:
         break;
@@ -59,9 +59,9 @@ void FUN_L00_002a4890(void) {
             if (fast_dec_timer_s16(&ambience_state->h1E)) {
                 interpolation_duration = convert_integer_to_float(ambience_state->h1C) * random_float_between_alt(0.5f, 1.5f);
                 target_rotation = fast_add_rotations(ambience_state->f0, random_float_between_alt(-1.0471976f, 1.0471976f));
-                b = random_float_between_alt(ambience_state->f10 * 0.5f, ambience_state->f10 * 1.5f);
+                target_scalar = random_float_between_alt(ambience_state->f10 * 0.5f, ambience_state->f10 * 1.5f);
                 ambience_state->f8 = fast_subtract_rotations(target_rotation, ambience_state->f4) / interpolation_duration;
-                ambience_state->f18 = (b - ambience_state->f14) / interpolation_duration;
+                ambience_state->f18 = (target_scalar - ambience_state->f14) / interpolation_duration;
                 ambience_state->h1E = func_001FA898_r(interpolation_duration);
                 ambience_state->hE = 1;
             }
@@ -91,9 +91,9 @@ void FUN_L00_002a4890(void) {
             if (fast_dec_timer_s16(&ambience_state->h1E)) {
                 interpolation_duration = multiply_global_factor_ed64(random_float_between_alt(45.0f, 60.0f));
                 target_rotation = fast_add_rotations(ambience_state->f0, random_float_between_alt(-1.5707964f, 1.5707964f));
-                b = random_float_between_alt(ambience_state->f10 * 1.5f, ambience_state->f10 + ambience_state->f10);
+                target_scalar = random_float_between_alt(ambience_state->f10 * 1.5f, ambience_state->f10 + ambience_state->f10);
                 ambience_state->f8 = fast_subtract_rotations(target_rotation, ambience_state->f4) / interpolation_duration;
-                ambience_state->f18 = (b - ambience_state->f14) / interpolation_duration;
+                ambience_state->f18 = (target_scalar - ambience_state->f14) / interpolation_duration;
                 ambience_state->h1E = func_001FA898_r(interpolation_duration);
                 ambience_state->hE = 1;
             }
@@ -119,9 +119,9 @@ void FUN_L00_002a4890(void) {
             if (fast_dec_timer_s16(&ambience_state->h1E)) {
                 interpolation_duration = multiply_global_factor_ed64(random_float_between_alt(45.0f, 60.0f));
                 target_rotation = fast_add_rotations(ambience_state->f0, random_float_between_alt(-0.785398f, 0.785398f));
-                b = random_float_between_alt(ambience_state->f10 * 0.8f, ambience_state->f10 * 1.2f);
+                target_scalar = random_float_between_alt(ambience_state->f10 * 0.8f, ambience_state->f10 * 1.2f);
                 ambience_state->f8 = fast_subtract_rotations(target_rotation, ambience_state->f4) / interpolation_duration;
-                ambience_state->f18 = (b - ambience_state->f14) / interpolation_duration;
+                ambience_state->f18 = (target_scalar - ambience_state->f14) / interpolation_duration;
                 ambience_state->h1E = func_001FA898_r(interpolation_duration);
                 ambience_state->hE = 3;
             }
