@@ -3170,8 +3170,8 @@ void helicopter_update(char *moby) {
     float C[4];
     float E[4];
     if (moby_vars != 0) {
-        int r = func_L01_00276680_i(moby, convert_integer_to_float(*(short *)(moby + 0x32)));
-        FUN_L12_002ebca8_c(moby, r == -1);
+        int moby_query_result = func_L01_00276680_i(moby, convert_integer_to_float(*(short *)(moby + 0x32)));
+        FUN_L12_002ebca8_c(moby, moby_query_result == -1);
         switch ((unsigned char)moby[0x20]) {
         case HELICOPTER_INITIALIZE_PATH:
             if (*(int *)(moby_vars + 0x74) != -1) {
