@@ -1126,15 +1126,15 @@ void ammocrate_update(struct Moby *pickup) {
     float dist = 100000.0f;
     float mid = dist;
     int taken = 0;
-    Vec4f v;
+    Vec4f pickup_vector_scratch;
 
-    FUN_L00_0024f7c8_f728(pickup, 0, &v);
-    if (coll_sphere(0.55f, &v, 0, pickup)) {
+    FUN_L00_0024f7c8_f728(pickup, 0, &pickup_vector_scratch);
+    if (coll_sphere(0.55f, &pickup_vector_scratch, 0, pickup)) {
         struct Moby *collision_moby = D_L11_00174858;
         if (collision_moby != 0 && (collision_moby->oclass == 0x4DA || collision_moby->oclass == 0x45 || collision_moby->oclass == 0x563)) {
             taken = 1;
         } else {
-            FUN_L00_0025e450_f728(pickup, pv + 0x10, &v, 0.0f, 0.0f, 3, 2, 5, 0.0f, 0.0f, 9.0f, 1.0f, -1, 0.0f, 0, 1, -1, 0);
+            FUN_L00_0025e450_f728(pickup, pv + 0x10, &pickup_vector_scratch, 0.0f, 0.0f, 3, 2, 5, 0.0f, 0.0f, 9.0f, 1.0f, -1, 0.0f, 0, 1, -1, 0);
             pickup->state = 5;
         }
     }
@@ -1143,9 +1143,9 @@ void ammocrate_update(struct Moby *pickup) {
             (ship->oclass == 0x4DA || ship->oclass == 0x45 || ship->oclass == 0x563)) {
             dist = fast_vec_dist(&ship->pos, &pickup->pos);
             mid = vector_distance_xy(&ship->pos, &pickup->pos);
-            add_vector_f728(&v, &pickup->pos, pv);
-            scale_vector_f728(&v, &v, 0.5f);
-            mid = vector_distance_xy(&ship->pos, &v);
+            add_vector_f728(&pickup_vector_scratch, &pickup->pos, pv);
+            scale_vector_f728(&pickup_vector_scratch, &pickup_vector_scratch, 0.5f);
+            mid = vector_distance_xy(&ship->pos, &pickup_vector_scratch);
         }
         if (taken || dist < 4.0f || mid < 4.0f) {
             pickup->collision = 0;
@@ -1207,9 +1207,9 @@ void ammocrate_update(struct Moby *pickup) {
         *(float *)(pv + 0x18) -= frame_time_sq * 9.8f;
         if (dist < 40.0f && pickup->visible != 0) {
             k = k / square_root(dist);
-            subtract_vector_f728(&v, &ship->pos, &pickup->pos);
-            normalize_vector_f728(&v, &v, k);
-            add_vector_f728(pv + 0x10, pv + 0x10, &v);
+            subtract_vector_f728(&pickup_vector_scratch, &ship->pos, &pickup->pos);
+            normalize_vector_f728(&pickup_vector_scratch, &pickup_vector_scratch, k);
+            add_vector_f728(pv + 0x10, pv + 0x10, &pickup_vector_scratch);
         }
         add_vector_f728(pv, pv, pv + 0x10);
         add_vector_f728(&pickup->pos, pv, pv + 0x20);
