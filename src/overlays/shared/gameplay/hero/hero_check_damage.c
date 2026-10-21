@@ -376,9 +376,9 @@ extern int FUN_L00_0020d498_u(int) __asm__("FUN_L00_0020d498");
 
 /* True when hero_slot_item_id(arg) is 0x11, 10, 0x14 or 0x19. */
 int FUN_L00_0020d4d0(int arg) {
-    int v = FUN_L00_0020d498_u(arg);
+    int item_id = FUN_L00_0020d498_u(arg);
 
-    if (v == 0x11 || v == 10 || v == 0x14 || v == 0x19) {
+    if (item_id == 0x11 || item_id == 10 || item_id == 0x14 || item_id == 0x19) {
         return 1;
     }
     return 0;
