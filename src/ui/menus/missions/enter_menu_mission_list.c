@@ -10,12 +10,12 @@ extern void update_mission_list(struct Obj *) __asm__("FUN_0020b950");
 extern s32 collect_mission_ids(void *, s32, void *, s32) __asm__("FUN_0020bc00");
 s32 enter_menu_mission_list(struct Obj *obj) __asm__("FUN_0021c420");
 
-s32 enter_menu_mission_list(struct Obj *obj) {
+s32 enter_menu_mission_list(struct Obj *mission_list_menu) {
     s32 *slot;
 
-    update_mission_list(obj);
-    obj->handle = collect_mission_ids((void *)0x70000000, 0, (void *)0x70000100, 1);
-    slot = obj->slots;
+    update_mission_list(mission_list_menu);
+    mission_list_menu->handle = collect_mission_ids((void *)0x70000000, 0, (void *)0x70000100, 1);
+    slot = mission_list_menu->slots;
     slot += selected_level_index[0];
     if (*slot != -1) {
         D_001CF874[0] = ((s32 *)0x70000000)[*slot];
