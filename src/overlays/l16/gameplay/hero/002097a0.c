@@ -390,8 +390,8 @@ extern void vscl_2133a8(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern u128_2133a8 D_L16_00174270[] __attribute__((section(".data")));
 s32 FUN_L16_00210b60(s32 mode) {
     V_2133a8 old;
-    V_2133a8 v;
-    V_2133a8 w;
+    V_2133a8 collision_position_offset;
+    V_2133a8 resolved_position_delta;
     s32 mask;
     s32 i;
     u128_2133a8 *collision_output;
@@ -400,27 +400,27 @@ s32 FUN_L16_00210b60(s32 mode) {
         return 1;
     }
     qcopy(&old, &hero.motion.pos.q);
-    vzero_2133a8(&v);
+    vzero_2133a8(&collision_position_offset);
     if (hero.unk22DA != 0) {
         FUN_L00_002347c0();
         hero.unk22DA = 0;
     }
     if (hero.state.control_mode != 0x11) {
         if (hero.state.control_mode == 0x16) {
-            FUN_L00_00233660(&v, 0.0f, 0.0f, 0.7f);
-            vsub_2133a8(&v, &v, &hero.motion.pos.q);
+            FUN_L00_00233660(&collision_position_offset, 0.0f, 0.0f, 0.7f);
+            vsub_2133a8(&collision_position_offset, &collision_position_offset, &hero.motion.pos.q);
         } else if (hero.unk20B3 != 0 || hero.unk1F8 != 0) {
             if (hero.unk20B3 == 1 || hero.unk1F8 != 0 ||
                 (unsigned)(hero.state.control_mode - 0x15) < 2) {
-                FUN_L00_00233810(&v, &v, 0.6f);
+                FUN_L00_00233810(&collision_position_offset, &collision_position_offset, 0.6f);
             } else {
-                FUN_L00_002334d0(&v, &v, -hero.unk224);
+                FUN_L00_002334d0(&collision_position_offset, &collision_position_offset, -hero.unk224);
             }
         } else {
-            v.f[2] = hero.unk224;
+            collision_position_offset.f[2] = hero.unk224;
         }
     }
-    vadd_2133a8(&hero.motion.pos.q, &hero.motion.pos.q, &v);
+    vadd_2133a8(&hero.motion.pos.q, &hero.motion.pos.q, &collision_position_offset);
     mask = 0x24;
     if (hero.state.current == HERO_STATE_SINK) {
         mask = 0xD24;
@@ -455,25 +455,25 @@ s32 FUN_L16_00210b60(s32 mode) {
         hero.wall_hit = 1;
         hero.coll_hit_moby = ((u8 **)collision_output)[-6];
     }
-    vsub_2133a8(&hero.motion.pos.q, &hero.motion.pos.q, &v);
-    vsub_2133a8(&w, &hero.motion.pos.q, &old);
-    collision_extent_or_displacement_length = vlen_2133a8(&w);
+    vsub_2133a8(&hero.motion.pos.q, &hero.motion.pos.q, &collision_position_offset);
+    vsub_2133a8(&resolved_position_delta, &hero.motion.pos.q, &old);
+    collision_extent_or_displacement_length = vlen_2133a8(&resolved_position_delta);
     if (hero.unk234 * 1.5f < collision_extent_or_displacement_length) {
         if (mode == 0xF) {
-            if (512.0f < w.f[0])
-                w.f[0] = 512.0f;
-            else if (w.f[0] < -512.0f)
-                w.f[0] = -512.0f;
-            if (512.0f < w.f[1])
-                w.f[1] = 512.0f;
-            else if (w.f[1] < -512.0f)
-                w.f[1] = -512.0f;
-            if (512.0f < w.f[2])
-                w.f[2] = 512.0f;
-            else if (w.f[2] < -512.0f)
-                w.f[2] = -512.0f;
-            vscl_2133a8(&w, &w, hero.unk234);
-            vadd_2133a8(&hero.motion.pos.q, &old, &w);
+            if (512.0f < resolved_position_delta.f[0])
+                resolved_position_delta.f[0] = 512.0f;
+            else if (resolved_position_delta.f[0] < -512.0f)
+                resolved_position_delta.f[0] = -512.0f;
+            if (512.0f < resolved_position_delta.f[1])
+                resolved_position_delta.f[1] = 512.0f;
+            else if (resolved_position_delta.f[1] < -512.0f)
+                resolved_position_delta.f[1] = -512.0f;
+            if (512.0f < resolved_position_delta.f[2])
+                resolved_position_delta.f[2] = 512.0f;
+            else if (resolved_position_delta.f[2] < -512.0f)
+                resolved_position_delta.f[2] = -512.0f;
+            vscl_2133a8(&resolved_position_delta, &resolved_position_delta, hero.unk234);
+            vadd_2133a8(&hero.motion.pos.q, &old, &resolved_position_delta);
         }
         return -1;
     }
