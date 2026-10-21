@@ -1122,17 +1122,17 @@ void gravity_set_z(f32 *out, f32 *in, f32 z) {
         GRAVITY_MODE_VECTOR_AXIS = 1,
         GRAVITY_MODE_DIRECTION_AXIS = 2
     };
-    struct Hero *b = &hero;
-    switch (b->unk20B3) {
+    struct Hero *hero_base = &hero;
+    switch (hero_base->unk20B3) {
     case GRAVITY_MODE_WORLD_Z:
         qcopy(out, in);
         out[2] = z;
         break;
     case GRAVITY_MODE_VECTOR_AXIS:
     case GRAVITY_MODE_DIRECTION_AXIS:
-        FUN_001f9d20_00233b20(out, in, b->unk40);
+        FUN_001f9d20_00233b20(out, in, hero_base->unk40);
         out[2] = z;
-        FUN_001f9d20_00233b20(out, out, b->unk0);
+        FUN_001f9d20_00233b20(out, out, hero_base->unk0);
         break;
     }
 }
