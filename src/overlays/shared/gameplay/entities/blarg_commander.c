@@ -120,21 +120,21 @@ void blarg_commander_update(char *moby) {
     int st;
     char *moby_pvars;
     char *motion_state;
-    int r;
+    int motion_result_flags;
     MO *mo = (MO *)moby;
-    char v[16];
+    char raised_position[16];
     st = *(unsigned char *)(moby + 0x53);
     moby_pvars = *(char **)(moby + 0x78);
     if (st == 1) {
         motion_state = moby_pvars + 0x20;
-        r = mine_fall(moby, motion_state);
+        motion_result_flags = mine_fall(moby, motion_state);
         mo->vx = fast_add_rotations(mo->vx, frame_time * 4.3633232f);
         mo->vy = fast_add_rotations(mo->vy, frame_time * 4.3633232f);
         *(unsigned short *)(moby + 0x34) &= 0xEFFF;
-        if (r & 0x61) {
-            qcopy(v, moby + 0x10);
-            ((float *)v)[2] += 1.0f;
-            func_L00_0025F4A8_alt(moby, motion_state, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 0, 15.0f, 1,
+        if (motion_result_flags & 0x61) {
+            qcopy(raised_position, moby + 0x10);
+            ((float *)raised_position)[2] += 1.0f;
+            func_L00_0025F4A8_alt(moby, motion_state, raised_position, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 0, 15.0f, 1,
                                   st, -1, 0);
             mark_moby_for_removal(moby);
         } else if (*(float *)(moby + 0x18) < 5.0f) {
