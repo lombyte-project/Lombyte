@@ -21,21 +21,21 @@ extern void clear_vector(void *);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void FUN_L03_0022c728(void) {
-    char *g;
+    char *level_state;
     char *moby;
     float world_position[4];
     float spherical_offset[4];
     int i;
     if (current_level_index != 3)
         return;
-    g = D_L03_0016C960;
-    if (*(int *)(g + 0x30) != 5)
+    level_state = D_L03_0016C960;
+    if (*(int *)(level_state + 0x30) != 5)
         return;
-    if (scale_game_frames(900) >= *(int *)(g + 0x34))
+    if (scale_game_frames(900) >= *(int *)(level_state + 0x34))
         return;
-    if (*(int *)(g + 0x34) >= scale_game_frames(1100))
+    if (*(int *)(level_state + 0x34) >= scale_game_frames(1100))
         return;
-    moby = *(char **)(g + 0x184);
+    moby = *(char **)(level_state + 0x184);
     if (moby == 0)
         return;
     for (i = 0; i < 4; i++) {
