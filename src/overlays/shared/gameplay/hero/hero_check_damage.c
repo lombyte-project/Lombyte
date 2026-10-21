@@ -26,7 +26,7 @@ extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
  * 65 degrees and the ledge edge is found within 2.4 units along it.
  * Constants live in locals because retail loads each one once.
  */
-int FUN_L00_0020c758(Vec4 *pos, f32 *facing_yaw)
+int FUN_L00_0020c758(Vec4 *ledge_probe_origin, f32 *facing_yaw)
 {
     Vec4 probe, top, low, wall, edge;
     f32 drop, fwd, up, reach, min_height;
@@ -50,7 +50,7 @@ int FUN_L00_0020c758(Vec4 *pos, f32 *facing_yaw)
     }
     wall_yaw = 0.0f;
     found = 0;
-    qcopy(&probe, pos);
+    qcopy(&probe, ledge_probe_origin);
     step = 0.25f;
     i = 0;
     top_margin = 0.15f;
@@ -77,11 +77,11 @@ int FUN_L00_0020c758(Vec4 *pos, f32 *facing_yaw)
     } while (i < 4);
     if (!found)
         return 0;
-    if (pos->f[2] + up < coll_hit.point.f[2])
+    if (ledge_probe_origin->f[2] + up < coll_hit.point.f[2])
         return 0;
 
     qcopy(&top, &coll_hit.point);
-    ledge_top_yaw = atan2_f(top.f[0] - pos->f[0], top.f[1] - pos->f[1]);
+    ledge_top_yaw = atan2_f(top.f[0] - ledge_probe_origin->f[0], top.f[1] - ledge_probe_origin->f[1]);
     if (top.f[2] - hero.ground_z.f < min_height)
         return 0;
 
@@ -90,7 +90,7 @@ int FUN_L00_0020c758(Vec4 *pos, f32 *facing_yaw)
     one = 1.0f;
     hit = 0;
     for (j = 0; j < 5; j++) {
-        qcopy(&low, pos);
+        qcopy(&low, ledge_probe_origin);
         qcopy(&wall, &top);
         circle_offset(&wall, ledge_top_yaw, hero.unk234);
         wall.f[2] += drop * (one - j / five);
