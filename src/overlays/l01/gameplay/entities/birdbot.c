@@ -2178,7 +2178,7 @@ extern s32 sample_path(PePath *, void *, f32 *, s32 *, s32, f32) __asm__("FUN_L0
 void water_current_update(Moby *self) __asm__("FUN_L01_002f3120");
 void water_current_update(Moby *self)
 {
-    PathCarrierVars *v;
+    PathCarrierVars *water_current_vars;
     PePath *path;
     Vec4 nearest;
     Vec4 ahead;
@@ -2193,14 +2193,14 @@ void water_current_update(Moby *self)
     f32 cap;
     s32 i;
 
-    v = self->vars;
-    if (v == NULL || v->path == -1) {
+    water_current_vars = self->vars;
+    if (water_current_vars == NULL || water_current_vars->path == -1) {
         return;
     }
-    path = (PePath *)D_L01_001B0930_u[v->path];
-    if (v->ready == 0) {
+    path = (PePath *)D_L01_001B0930_u[water_current_vars->path];
+    if (water_current_vars->ready == 0) {
         /* store each segment's length in its start point's w */
-        v->ready = 1;
+        water_current_vars->ready = 1;
         for (i = 0; i < path->count - 1; i++) {
             path->pts[i].f[3] = FUN_001f9b48(&path->pts[i], &path->pts[i + 1]);
         }
@@ -2216,7 +2216,7 @@ void water_current_update(Moby *self)
     FUN_L00_0025df68(path, &hero.motion.pos, &nearest, &path_segment_index, &seg, 0, 999.0f, 5.0f, 0.0f);
     at_end = sample_path(path, &ahead, &path_segment_index, &seg, 0, 2.0f);
     dist = vector_distance(&hero.motion.pos, &nearest);
-    if (v->radius < dist) {
+    if (water_current_vars->radius < dist) {
         return;
     }
 
@@ -2228,16 +2228,16 @@ void water_current_update(Moby *self)
         if (at_end == 0) {
             subtract_vector_xyz(&dir, &ahead, &nearest);
             normalize_vector_xyz(&dir, &dir, frame_time_sq * 7.0f);
-            add_vector_xyz(v, v, &dir);
-            v->vel.f[2] = 0.0f;
-            if (v->max_speed < vector_length_xyz(v)) {
-                normalize_vector_xyz(v, v, v->max_speed);
+            add_vector_xyz(water_current_vars, water_current_vars, &dir);
+            water_current_vars->vel.f[2] = 0.0f;
+            if (water_current_vars->max_speed < vector_length_xyz(water_current_vars)) {
+                normalize_vector_xyz(water_current_vars, water_current_vars, water_current_vars->max_speed);
             }
-            qcopy(&hero.motion.platform_delta, v);
-            if (v->pull != 0) {
+            qcopy(&hero.motion.platform_delta, water_current_vars);
+            if (water_current_vars->pull != 0) {
                 subtract_vector_xyz(&pull, &nearest, &hero.motion.pos);
                 pull.f[2] = 0.0f;
-                limit = v->max_speed * 0.4f;
+                limit = water_current_vars->max_speed * 0.4f;
                 if (limit < vector_length_xyz(&pull)) {
                     normalize_vector_xyz(&pull, &pull, limit);
                 }
@@ -2245,9 +2245,9 @@ void water_current_update(Moby *self)
             }
         } else {
             /* past the end: slow down (factor 1 - 0.005 per frame unit) */
-            len = vector_length_xyz(v);
-            normalize_vector_xyz(v, v, frame_scale * -0.004999995231628418f * len + len);
-            qcopy(&hero.motion.platform_delta, v);
+            len = vector_length_xyz(water_current_vars);
+            normalize_vector_xyz(water_current_vars, water_current_vars, frame_scale * -0.004999995231628418f * len + len);
+            qcopy(&hero.motion.platform_delta, water_current_vars);
         }
         if (hero.state.control_mode == 0x12 && hero.state.prev == hero.state.control_mode) {
             if (hero.state_timer < scale_game_frames(3)) {
@@ -2260,9 +2260,9 @@ void water_current_update(Moby *self)
         }
     } else if ((hero.state.prev_control_mode == 0x12 || hero.state.prev2_control_mode == 0x12)
                && (u32)(hero.state.control_mode - 4) < 2) {
-        len = vector_length_xyz(v);
-        normalize_vector_xyz(v, v, frame_scale * -0.014999985694885254f * len + len);
-        qcopy(&hero.motion.platform_delta, v);
+        len = vector_length_xyz(water_current_vars);
+        normalize_vector_xyz(water_current_vars, water_current_vars, frame_scale * -0.014999985694885254f * len + len);
+        qcopy(&hero.motion.platform_delta, water_current_vars);
         if (hero.unk1D8 < scale_game_frames(0x23)) {
             hero.unk1D8 = scale_game_frames(0x23);
         }
