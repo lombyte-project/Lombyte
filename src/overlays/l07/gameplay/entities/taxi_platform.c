@@ -3516,16 +3516,16 @@ void FUN_L07_00311bc8(char *moby) {
 
 extern int FUN_L00_0023e5e0(float *, float, float, int);
 
-void FUN_L07_00311eb8(float radius, void *moby_, void *obj_, short pa, void *pos, short duration_frames, unsigned int color, int ca) {
+void FUN_L07_00311eb8(float radius, void *moby_, void *obj_, short pa, void *effect_position_override, short duration_frames, unsigned int color, int ca) {
     char *moby = moby_;
     char *light_effect_state = obj_;
     float effect_position[4];
     char *effect_slot_entry;
     int y;
-    if (pos == 0) {
+    if (effect_position_override == 0) {
         qcopy(effect_position, moby + 0x10);
     } else {
-        qcopy(effect_position, pos);
+        qcopy(effect_position, effect_position_override);
     }
     if (*(short *)(light_effect_state + 0x280) == -1) {
         if (duration_frames > 0) {
@@ -3574,8 +3574,8 @@ void FUN_L07_00311eb8(float radius, void *moby_, void *obj_, short pa, void *pos
         if (ca != -1) {
             *(int *)(light_effect_state + 0x28C) = ca;
         }
-        if (pos != 0) {
-            qcopy(effect_slot_entry + 0x10, pos);
+        if (effect_position_override != 0) {
+            qcopy(effect_slot_entry + 0x10, effect_position_override);
         }
         if (pa != -1) {
             *(short *)(light_effect_state + 0x282) = pa;
