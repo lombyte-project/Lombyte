@@ -1648,10 +1648,10 @@ void FUN_L10_002d8d30(char *moby) {
             FUN_L10_002dd270(moby, pos, path, *(float *)(spark_vars + 4), frame_time * 5.0f, len);
         }
         if (voice_is_playing(moby, *(int *)(spark_vars + 0x10)) == 0) {
-            int r = trooper_play_sound(0, 0xC, moby, 0x442);
-            *(int *)(spark_vars + 0x10) = r;
-            if (r != -1) {
-                *(OvlQuad *)(((char *)&voice_positions) + r * 0x70) = *(OvlQuad *)pos;
+            int voice_slot_index = trooper_play_sound(0, 0xC, moby, 0x442);
+            *(int *)(spark_vars + 0x10) = voice_slot_index;
+            if (voice_slot_index != -1) {
+                *(OvlQuad *)(((char *)&voice_positions) + voice_slot_index * 0x70) = *(OvlQuad *)pos;
             }
         } else {
             *(OvlQuad *)(((char *)&voice_positions) + *(int *)(spark_vars + 0x10) * 0x70) = *(OvlQuad *)pos;
