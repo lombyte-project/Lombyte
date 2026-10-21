@@ -2240,11 +2240,11 @@ void minibomber_update(Moby_2B5938 *moby) {
     Data_2B5938 *d = moby->d;
     float v[12];
     float *tgt;
-    char *buf;
+    char *manipulator_state;
     float tg;
     float blended_aim_angle;
     float n;
-    float g;
+    float bomb_gravity;
     float spd;
 
     if (moby->f70 & 2) {
@@ -2314,7 +2314,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         }
         qcopy(moby->pos, path + 1);
         subtract_vector_xyz_c(v, path + 2, moby->pos);
-        buf = d->f110;
+        manipulator_state = d->f110;
         moby->rot = fast_arc_tan(v[0], v[1]);
         d->f160 = *(float *)&D_L14_00161540;
         d->f164 = 0.0f;
@@ -2325,8 +2325,8 @@ void minibomber_update(Moby_2B5938 *moby) {
         moby->f30 = 0x80;
         moby->state = 1;
         FUN_L14_002b5c98_c((char *)moby);
-        fill_transfer_words(buf, 0, 0x40);
-        attach_manipulator_c(moby, 0, buf);
+        fill_transfer_words(manipulator_state, 0, 0x40);
+        attach_manipulator_c(moby, 0, manipulator_state);
         moby->f7F = 0x20;
         break;
     }
@@ -2477,10 +2477,10 @@ void minibomber_update(Moby_2B5938 *moby) {
             subtract_vector_xyz_c(v + 4, D_L14_001B0F30_2B5938[d->fD8] + (d->f100 + 1), v);
             v[6] = 0.0f;
             scale_vector_xyz_c(v + 4, v + 4, 1.0f / n);
-            g = D_L14_00161568 * frame_time_sq;
+            bomb_gravity = D_L14_00161568 * frame_time_sq;
             q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
-            d->f48 = -((v[2] - q[1].v[2]) + -g * (n * n) * 0.5f) / n;
-            func_L14_00302968_2B5938((int)moby, v, v + 4, g, scale_game_frames_c(D_L14_0016156C));
+            d->f48 = -((v[2] - q[1].v[2]) + -bomb_gravity * (n * n) * 0.5f) / n;
+            func_L14_00302968_2B5938((int)moby, v, v + 4, bomb_gravity, scale_game_frames_c(D_L14_0016156C));
             FUN_L14_002b5968_u((char *)moby, v, d->f104);
             d->f100++;
             if (d->f100 >= D_L14_001B0F30_2B5938[d->fD8]->n) {
