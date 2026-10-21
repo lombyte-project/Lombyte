@@ -1478,18 +1478,18 @@ char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f
 char *FUN_L00_0026cbb0(void *pos, void *dir, int initial_color, int final_color, int lifetime, int k, float initial_particle_scalar) {
     char *particle;
     char *particle_data;
-    int v;
+    int initial_header_byte;
     if (lifetime == 0)
         return 0;
     particle = FUN_L00_002678b8_c(0x15);
     if (particle) {
         qcopy(particle + 0x10, pos);
         *(int *)(particle + 4) = initial_color;
-        v = truncate_float_to_s32(4.0f) - 0x60;
+        initial_header_byte = truncate_float_to_s32(4.0f) - 0x60;
         particle[1] = 0;
         *(float *)(particle + 0xC) = initial_particle_scalar;
         particle[3] = 0x48;
-        particle[9] = v;
+        particle[9] = initial_header_byte;
         particle[8] = rand();
         particle_data = particle + 0x20;
         particle[2] = *D_L00_001B20D4;
