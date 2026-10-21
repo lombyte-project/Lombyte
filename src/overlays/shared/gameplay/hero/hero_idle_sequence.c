@@ -2809,9 +2809,9 @@ void FUN_L00_0020a9e8(void) {
         j = i + 13;
         base = (char *)(j * 0xB0);
         {
-            char *r = tbl + (int)base;
-            *(float *)(r + 0x68) = *(float *)(motion_slot_base + 0x1028);
-            *(float *)(r + 0x64) = *(float *)(motion_slot_base + 0x1024);
+            char *motion_record_destination = tbl + (int)base;
+            *(float *)(motion_record_destination + 0x68) = *(float *)(motion_slot_base + 0x1028);
+            *(float *)(motion_record_destination + 0x64) = *(float *)(motion_slot_base + 0x1024);
         }
     }
 }
