@@ -62,17 +62,17 @@ texture_ready:
     quad.primitive = 0x8000000048;
     quad.reserved.value = 0;
     {
-        f32 *src;
+        f32 *warp_uv_pair;
         f32 *dst_v;
         f32 *dst_u;
-        src = &warp_texture_coordinates[0][0];
+        warp_uv_pair = &warp_texture_coordinates[0][0];
         dst_v = &quad.texture_coordinates[0][1];
         dst_u = &quad.texture_coordinates[0][0];
         uv_vertex = 3;
         do {
-            dst_u[0] = src[0];
-            dst_v[0] = src[1];
-            src += 2;
+            dst_u[0] = warp_uv_pair[0];
+            dst_v[0] = warp_uv_pair[1];
+            warp_uv_pair += 2;
             dst_u += 2;
             dst_v += 2;
         } while (--uv_vertex >= 0);
