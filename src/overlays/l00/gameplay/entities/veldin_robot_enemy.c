@@ -692,20 +692,20 @@ extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
 void FUN_L00_002e1c78(GlowMoby *moby) {
     GlowQuad quad;
-    GlowVec mat[4];
-    GlowVec *src;
-    GlowVec *dst;
+    GlowVec quad_transform[4];
+    GlowVec *template_corner;
+    GlowVec *quad_corner;
     s32 i;
     f32 one;
 
-    qcopy(&mat[3], &moby->vars->pos);
+    qcopy(&quad_transform[3], &moby->vars->pos);
     one = 1.0f;
-    mat[3].f[3] = one;
-    subtract_vector_xyz(&mat[0], &glow_origin, &mat[3]);
-    fast_vec_normalize(&mat[0], &mat[0], one);
-    fast_vec_cross(&mat[1], &mat[0], (GlowVec *)&hero.gravity_dir);
-    fast_vec_normalize(&mat[1], &mat[1], -1.0f);
-    fast_vec_cross(&mat[2], &mat[1], &mat[0]);
+    quad_transform[3].f[3] = one;
+    subtract_vector_xyz(&quad_transform[0], &glow_origin, &quad_transform[3]);
+    fast_vec_normalize(&quad_transform[0], &quad_transform[0], one);
+    fast_vec_cross(&quad_transform[1], &quad_transform[0], (GlowVec *)&hero.gravity_dir);
+    fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);
+    fast_vec_cross(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
     quad.tex = get_effect_texture(0xB);
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
@@ -722,12 +722,12 @@ void FUN_L00_002e1c78(GlowMoby *moby) {
     quad.unk64 = 0;
     quad.unk68 = one;
     quad.unk6C = one;
-    src = D_L00_001E6CA0;
-    dst = quad.corner;
+    template_corner = D_L00_001E6CA0;
+    quad_corner = quad.corner;
     for (i = 0; i < 4; i++) {
-        fast_vec_scale(0.2f, dst++, src++);
+        fast_vec_scale(0.2f, quad_corner++, template_corner++);
     }
-    fast_draw_quad_real(&quad, mat, 0);
+    fast_draw_quad_real(&quad, quad_transform, 0);
 }
 typedef struct {
     u8 pad0[0x20];
