@@ -1008,7 +1008,7 @@ int FUN_L11_002d25e8(struct Moby *moby, float *out) {
     int i;
     int found = 0;
     float candidate_position[4];
-    float b[4];
+    float collision_start_position[4];
     float g;
     for (i = 0; i < 2; i++) {
         if (is_point_inside_clip_volume(&moby->pos, *clip_volume_index_ptr)) {
@@ -1029,10 +1029,10 @@ int FUN_L11_002d25e8(struct Moby *moby, float *out) {
                 candidate_position[2] += 5.0f;
                 g = func_L00_0025A748_f(candidate_position);
                 if (absolute_float(g - moby->pos.z) > 0.5f) {
-                    qcopy(b, pos);
-                    b[2] += 0.15f;
+                    qcopy(collision_start_position, pos);
+                    collision_start_position[2] += 0.15f;
                     candidate_position[2] = g + 0.15f;
-                    if (collision_line(b, candidate_position, 2, moby, 0)) {
+                    if (collision_line(collision_start_position, candidate_position, 2, moby, 0)) {
                         candidate_position[2] = g;
                         qcopy(out, candidate_position);
                         return 1;
