@@ -2227,8 +2227,8 @@ void taxi_update(struct Moby *moby) {
     };
     char *taxi_data = (char *)moby->pvars;
     float old_position[4], old_rotation[4], position_delta[4], rotation_or_start_position_scratch[4], interpolation_end_position[4], interpolation_start_angles[4], interpolation_end_angles[4], hero_offset[4];
-    struct Hero *g;
-    struct Hero *g2;
+    struct Hero *pickup_hero;
+    struct Hero *travel_hero;
     float z;
     char *destination_stop_moby;
     char *voice_slot;
@@ -2245,10 +2245,10 @@ void taxi_update(struct Moby *moby) {
         FUN_L05_00319208(moby);
         break;
     case TAXI_WAIT_FOR_PICKUP:
-        g = &hero;
-        if (((char *)g->ground_moby) == moby && g->air_frames.s == 0) {
+        pickup_hero = &hero;
+        if (((char *)pickup_hero->ground_moby) == moby && pickup_hero->air_frames.s == 0) {
             transpose_rotation_matrix(rotation_or_start_position_scratch, &moby->rot_row0);
-            subtract_vector_xyz(hero_offset, &g->motion.pos, &moby->pos);
+            subtract_vector_xyz(hero_offset, &pickup_hero->motion.pos, &moby->pos);
             hero_offset[3] = 0;
             FUN_001f9d20(hero_offset, hero_offset, rotation_or_start_position_scratch);
             if (absolute_float(hero_offset[1]) < 1.2f && hero_offset[0] < 1.0f && hero_offset[0] > -0.75f) {
@@ -2331,9 +2331,9 @@ void taxi_update(struct Moby *moby) {
     }
     FUN_L05_00319740(moby);
     if (moby->state >= 3 && moby->state <= 5) {
-        g2 = &hero;
-        g2->unk1F2 = 2;
-        g2->unk1F4 = 2;
+        travel_hero = &hero;
+        travel_hero->unk1F2 = 2;
+        travel_hero->unk1F4 = 2;
         FUN_L05_003198e8(moby);
         if (voice_is_playing(moby, *(short *)(taxi_data + 0xB2)) == 0) {
             *(short *)(taxi_data + 0xB2) = func_0022ED80_i(0, 4, moby);
