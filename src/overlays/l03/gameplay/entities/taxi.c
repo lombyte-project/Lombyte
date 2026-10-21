@@ -1924,7 +1924,7 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
     struct TalkerVars *dialogue_state = (struct TalkerVars *)robot_qwark_moby->pvars;
     TalkerHit *hit;
     u8 type;
-    char *w;
+    char *warp_record;
     OvlVec4 vel;
     OvlVec4 pos;
     float unused_vector_scratch[4];
@@ -1985,8 +1985,8 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         }
         robot_qwark_moby->state = 1;
         if (dialogue_state->mode == 2 && dialogue_state->warp != -1) {
-            w = D_L03_001600EC + dialogue_state->warp * 128;
-            jet_reset_camera(w + 0x30, w + 0x70);
+            warp_record = D_L03_001600EC + dialogue_state->warp * 128;
+            jet_reset_camera(warp_record + 0x30, warp_record + 0x70);
         }
         break;
     case ROBOT_QWARK_BROKEN_SPARKING:
