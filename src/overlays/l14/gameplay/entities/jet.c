@@ -941,7 +941,7 @@ void FUN_L14_002ec810(struct Moby *moby) {
         MINE_STATE_FOLLOW_PATH = 1
     };
     L14MineVars *mine_vars = (L14MineVars *)moby->pvars;
-    float v[4];
+    float path_target_position[4];
     Vec4 vel;
     s32 count;
     L14MinePath *path;
@@ -981,11 +981,11 @@ void FUN_L14_002ec810(struct Moby *moby) {
         mine_vars->phase = FUN_L00_00257c48(0.0f, 3.1415927f);
         break;
     case MINE_STATE_FOLLOW_PATH:
-        FUN_L00_0025d808_mine(D_L14_001B0BB0_mine[mine_vars->path], v, &mine_vars->segment, &mine_vars->along, 1,
+        FUN_L00_0025d808_mine(D_L14_001B0BB0_mine[mine_vars->path], path_target_position, &mine_vars->segment, &mine_vars->along, 1,
                               D_L14_00161C44 * D_0015ED6C_mine * mine_vars->dir);
-        FUN_L00_0025b8c0(&moby->pos.x, &mine_vars->vel[0], v[0], 0.02f, 0.2f, 0.0f);
-        FUN_L00_0025b8c0(&moby->pos.y, &mine_vars->vel[1], v[1], 0.02f, 0.2f, 0.0f);
-        FUN_L00_0025b8c0(&moby->pos.z, &mine_vars->vel[2], v[2], 0.02f, 0.2f, 0.0f);
+        FUN_L00_0025b8c0(&moby->pos.x, &mine_vars->vel[0], path_target_position[0], 0.02f, 0.2f, 0.0f);
+        FUN_L00_0025b8c0(&moby->pos.y, &mine_vars->vel[1], path_target_position[1], 0.02f, 0.2f, 0.0f);
+        FUN_L00_0025b8c0(&moby->pos.z, &mine_vars->vel[2], path_target_position[2], 0.02f, 0.2f, 0.0f);
         hit = mine_hit(moby, 0x230000, 0);
         fun_00213928(moby, hit, mine_vars->health, 0, &count, 0, 0, 4);
         if ((count >= 2 && hit != 0 && hit->moby->oclass != 0x283) || hero.coll_hit_moby == (u8 *)moby) {
