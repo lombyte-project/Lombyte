@@ -330,32 +330,32 @@ extern int f0d60_1ed6a8(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 
 extern int D_L00_0016C06C __attribute__((section(".data")));
 extern int D_L00_0015EF5C_gp __asm__("D_L00_0015EF5C") __attribute__((sda));
-void FUN_L00_001ed6a8(OvlQuad *pos, float collision_radius) {
+void FUN_L00_001ed6a8(OvlQuad *camera_position, float collision_radius) {
     OvlQuad step_delta[1];
     float v[4] __attribute__((aligned(16)));
     char *o = D_166C80_1ed6a8.o;
-    float *src = (float *)(o + 0x64);
+    float *camera_movement_origin = (float *)(o + 0x64);
     int step_count, i, j;
 
-    v[0] = src[0];
-    v[1] = src[1];
-    v[2] = src[2];
+    v[0] = camera_movement_origin[0];
+    v[1] = camera_movement_origin[1];
+    v[2] = camera_movement_origin[2];
     ((int *)v)[3] = 0;
     if (*(short *)(o + 0x8A) != 0) {
         if (D_L00_0016C06C == 0) {
-            qcopy(&D_166C80_1ed6a8.q, pos);
+            qcopy(&D_166C80_1ed6a8.q, camera_position);
         }
         *(short *)(o + 0x8A) = 0;
         return;
     }
-    f9a28_1ed6a8(step_delta, pos, v);
+    f9a28_1ed6a8(step_delta, camera_position, v);
     step_count = fa6d0_1ed6a8(f9af0_1ed6a8(step_delta) / (collision_radius * 0.9f)) + 1;
     ff378_1ed6a8(step_delta, step_delta, fa6c0_1ed6a8(step_count));
-    qcopy(pos, v);
+    qcopy(camera_position, v);
     for (i = 0; i < step_count; i++) {
-        f9a10_1ed6a8(pos, pos, step_delta);
-        for (j = 0; j < 6 && f0d60_1ed6a8(pos, D_L00_0015EF5C_gp, ((int)hero.moby), collision_radius); j++) {
-            qcopy(pos, &D_173E70_1ed6a8);
+        f9a10_1ed6a8(camera_position, camera_position, step_delta);
+        for (j = 0; j < 6 && f0d60_1ed6a8(camera_position, D_L00_0015EF5C_gp, ((int)hero.moby), collision_radius); j++) {
+            qcopy(camera_position, &D_173E70_1ed6a8);
             {
                 char *current_camera_record = D_166C80_1ed6a8.o;
                 if (*(unsigned char *)(current_camera_record + 0x89) == 0) {
@@ -365,6 +365,6 @@ void FUN_L00_001ed6a8(OvlQuad *pos, float collision_radius) {
         }
     }
     if (D_16C058_1ed6a8[5] == 0) {
-        qcopy(&D_166DC0_1ed6a8, pos);
+        qcopy(&D_166DC0_1ed6a8, camera_position);
     }
 }
