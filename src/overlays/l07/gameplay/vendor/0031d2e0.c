@@ -250,31 +250,31 @@ void FUN_L07_0031f900(unsigned char *moby) {
             char *g = D_L07_0016C8E0;
             int trail_source_selector = *(int *)(g + 0x30);
             if (trail_source_selector == 1 || trail_source_selector == 2) {
-                float point_0_position[4], point_1_position[4], point_2_position[4], point_3_position[4], point_4_position[4], point_5_position[4], c0[4], c1[4], c2[4];
-                int idx = 0;
+                float point_0_position[4], point_1_position[4], point_2_position[4], point_3_position[4], point_4_position[4], point_5_position[4], point_0_trail_velocity[4], point_1_trail_velocity[4], point_2_trail_velocity[4];
+                int trail_source_moby_index = 0;
                 char *trail_source_moby;
                 if (trail_source_selector == 1)
-                    idx = 3;
+                    trail_source_moby_index = 3;
                 if (trail_source_selector == 2)
-                    idx = 4;
-                trail_source_moby = *(char **)(g - (-(idx * 4)) + 0x178);
+                    trail_source_moby_index = 4;
+                trail_source_moby = *(char **)(g - (-(trail_source_moby_index * 4)) + 0x178);
                 moby_point_position(trail_source_moby, 0, point_0_position);
                 moby_point_position(trail_source_moby, 3, point_3_position);
-                subtract_vector_xyz(c0, point_0_position, point_3_position);
-                normalize_vector_xyz(c0, c0, *(float *)&D_L07_00161CD8);
-                draw_trail(point_0_position, point_0_position, c0, *(float *)&D_L07_00161CDC,
+                subtract_vector_xyz(point_0_trail_velocity, point_0_position, point_3_position);
+                normalize_vector_xyz(point_0_trail_velocity, point_0_trail_velocity, *(float *)&D_L07_00161CD8);
+                draw_trail(point_0_position, point_0_position, point_0_trail_velocity, *(float *)&D_L07_00161CDC,
                                  *(float *)&D_L07_00161CE0);
                 moby_point_position(trail_source_moby, 1, point_1_position);
                 moby_point_position(trail_source_moby, 4, point_4_position);
-                subtract_vector_xyz(c1, point_1_position, point_4_position);
-                normalize_vector_xyz(c1, c1, *(float *)&D_L07_00161CD8);
-                draw_trail(point_1_position, point_1_position, c1, *(float *)&D_L07_00161CDC,
+                subtract_vector_xyz(point_1_trail_velocity, point_1_position, point_4_position);
+                normalize_vector_xyz(point_1_trail_velocity, point_1_trail_velocity, *(float *)&D_L07_00161CD8);
+                draw_trail(point_1_position, point_1_position, point_1_trail_velocity, *(float *)&D_L07_00161CDC,
                                  *(float *)&D_L07_00161CE0);
                 moby_point_position(trail_source_moby, 2, point_2_position);
                 moby_point_position(trail_source_moby, 5, point_5_position);
-                subtract_vector_xyz(c2, point_2_position, point_5_position);
-                normalize_vector_xyz(c2, c2, *(float *)&D_L07_00161CD8);
-                draw_trail(point_2_position, point_2_position, c2, *(float *)&D_L07_00161CDC,
+                subtract_vector_xyz(point_2_trail_velocity, point_2_position, point_5_position);
+                normalize_vector_xyz(point_2_trail_velocity, point_2_trail_velocity, *(float *)&D_L07_00161CD8);
+                draw_trail(point_2_position, point_2_position, point_2_trail_velocity, *(float *)&D_L07_00161CDC,
                                  *(float *)&D_L07_00161CE0);
             }
         }
