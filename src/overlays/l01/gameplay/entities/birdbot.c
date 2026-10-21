@@ -3485,11 +3485,11 @@ void follow_camera_set_distance(s32, f32, f32) __asm__("FUN_L00_002e8450");
 void follow_camera_set_height(f32, f32) __asm__("FUN_L00_002e84b8");
 void follow_camera_set_offset_scale(s32, f32, f32) __asm__("FUN_L00_002e84f0");
 
-void FUN_L01_002f9000(Obj *obj) {
+void FUN_L01_002f9000(Obj *falling_rock_moby) {
     u8 rotated_vector[16];
     u8 *camera_record;
 
-    camera_record = D_L01_001600EC_u + obj->sub->idx * 128;
+    camera_record = D_L01_001600EC_u + falling_rock_moby->sub->idx * 128;
     build_look_at_matrix(rotated_vector, camera_record, camera_record + 0x20, D_L01_00161C28);
     FUN_L00_002e8918(rotated_vector, 0.13962634f, 0.0f);
     follow_camera_set_distance(0, D_L01_00161C2C, D_L01_00161C38);
