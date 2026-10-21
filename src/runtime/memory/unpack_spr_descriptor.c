@@ -21,7 +21,7 @@ void unpack_spr_descriptor(void *arg0) __asm__("FUN_001238a0");
 
 void unpack_spr_descriptor(void *descriptor) {
     char *scratchpad_descriptor = (char *)((unsigned int)descriptor | 0x20000000);
-    unsigned char *src;
+    unsigned char *inline_source_bytes;
     char *destination;
     int i;
 
@@ -29,9 +29,9 @@ void unpack_spr_descriptor(void *descriptor) {
         destination = *(char **)(scratchpad_descriptor + 0x8);
         i = 0;
         if (i < *(int *)(scratchpad_descriptor + 0x0)) {
-            src = (unsigned char *)(scratchpad_descriptor + 0x10);
+            inline_source_bytes = (unsigned char *)(scratchpad_descriptor + 0x10);
             do {
-                *destination++ = src[i];
+                *destination++ = inline_source_bytes[i];
                 i++;
             } while (i < *(int *)(scratchpad_descriptor + 0x0));
         }
@@ -40,9 +40,9 @@ void unpack_spr_descriptor(void *descriptor) {
         destination = *(char **)(scratchpad_descriptor + 0xC);
         i = 0;
         if (i < *(int *)(scratchpad_descriptor + 0x4)) {
-            src = (unsigned char *)(scratchpad_descriptor + 0x50);
+            inline_source_bytes = (unsigned char *)(scratchpad_descriptor + 0x50);
             do {
-                *destination++ = src[i];
+                *destination++ = inline_source_bytes[i];
                 i++;
             } while (i < *(int *)(scratchpad_descriptor + 0x4));
         }
