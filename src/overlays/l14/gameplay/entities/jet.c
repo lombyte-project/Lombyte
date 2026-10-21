@@ -142,10 +142,10 @@ void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void FUN_L14_002df458(struct Moby *ribbon_moby) {
     char *moby_vars = (char *)ribbon_moby->pvars;
-    float v = *(float *)(moby_vars + 0x1EC) - frame_scale * 0.2f;
-    *(float *)(moby_vars + 0x1EC) = v;
-    if (v <= -8.0f) {
-        *(float *)(moby_vars + 0x1EC) = v + 8.0f;
+    float updated_texture_u_offset = *(float *)(moby_vars + 0x1EC) - frame_scale * 0.2f;
+    *(float *)(moby_vars + 0x1EC) = updated_texture_u_offset;
+    if (updated_texture_u_offset <= -8.0f) {
+        *(float *)(moby_vars + 0x1EC) = updated_texture_u_offset + 8.0f;
     }
     vu1_add_g_sregister(0x47, 0x51001);
     FUN_L14_002df510(ribbon_moby, moby_vars, 0x80, 0x40, 10);
