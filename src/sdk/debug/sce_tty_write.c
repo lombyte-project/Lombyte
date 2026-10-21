@@ -34,37 +34,37 @@ s32 sceTtyWrite(s8 *text, s32 text_len) {
     s32 written_count;  /* characters consumed -> return value */
     s32 remaining; /* countdown, hits -1 after len+1 tests */
     s32 window_bytes; /* bytes resident in the payload window */
-    s8 *src; /* source cursor */
+    s8 *text_cursor; /* source cursor */
     struct Mmio *mmio;
-    u8 *dst; /* payload cursor */
+    u8 *payload_cursor; /* payload cursor */
 
     written_count = 0;
     remaining = text_len;
     window_bytes = 0;
-    src = text;
+    text_cursor = text;
     if (D_00154A50.unkC == 0) {
         DIntr();
         D_00154A50.unkC = 1;
         mmio = (struct Mmio *)((u32)D_00154A80 | 0x20000000);
         D_00154A50.unk10 = (s32)mmio;
-        dst = mmio->data;
+        payload_cursor = mmio->data;
         do {
             remaining = remaining - 1;
             if (remaining == -1) {
                 break;
             }
-            if (*src == 0xA) {
-                *dst = 0xD;
+            if (*text_cursor == 0xA) {
+                *payload_cursor = 0xD;
                 window_bytes = window_bytes + 1;
-                dst = dst + 1;
+                payload_cursor = payload_cursor + 1;
                 if (window_bytes >= 0x100) {
                     break;
                 }
             }
-            *dst = (u8)*src;
+            *payload_cursor = (u8)*text_cursor;
             window_bytes = window_bytes + 1;
-            src = src + 1;
-            dst = dst + 1;
+            text_cursor = text_cursor + 1;
+            payload_cursor = payload_cursor + 1;
             written_count = written_count + 1;
         } while (window_bytes < 0x100);
         D_00154A50.unk4 = window_bytes + 0xC;
