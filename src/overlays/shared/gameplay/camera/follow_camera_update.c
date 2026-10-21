@@ -483,9 +483,9 @@ void FUN_L00_002e9f38(u8 *camera_object) {
     V up;
     V side;
     V horizontal_view_offset;
-    S_9f38 *st;
+    S_9f38 *camera_rotation_state;
     float rotation_input_target, rotation_input_scratch, k;
-    st = *(S_9f38 **)(camera_object + 0x70);
+    camera_rotation_state = *(S_9f38 **)(camera_object + 0x70);
     FUN_L00_002e9cc0_c(camera_object);
     FUN_001f9bf8_c(&up, ((u8 *)hero.moby) + 0xE0, 1.0f);
     if (D_L00_00166C80_c.s270 == 0 && hero.unk20A5 == 0)
@@ -497,9 +497,9 @@ void FUN_L00_002e9f38(u8 *camera_object) {
         rotation_input_target = convert_integer_to_float((D_0013C940.i1A0 >> 15) & 1);
     if (rotation_input_target == 0.0f)
         rotation_input_target = -convert_integer_to_float((D_0013C940.i1A0 >> 13) & 1);
-    rotation_input_scratch = FUN_001f99c0(st->a);
+    rotation_input_scratch = FUN_001f99c0(camera_rotation_state->a);
     k = D_L00_00161DC0 + (D_L00_00161DC4 - D_L00_00161DC0) * rotation_input_scratch;
-    st->a = rotation_input_scratch = FUN_001ebd78(st->a, rotation_input_target, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->va);
+    camera_rotation_state->a = rotation_input_scratch = FUN_001ebd78(camera_rotation_state->a, rotation_input_target, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &camera_rotation_state->va);
     if (rotation_input_scratch != 0.0f)
         build_look_at_matrix(camera_object, camera_object, &up, k * rotation_input_scratch);
     if (hero.motion.platform_carry.f[3] != 0.0f && hero.unk308 == 0)
@@ -515,38 +515,38 @@ void FUN_L00_002e9f38(u8 *camera_object) {
         rotation_input_target = 0.0f;
     if (D_0015EDDC == 0)
         rotation_input_target = -rotation_input_target;
-    rotation_input_scratch = FUN_001f99c0(st->b);
+    rotation_input_scratch = FUN_001f99c0(camera_rotation_state->b);
     k = D_L00_00161DC0 + (D_L00_00161DC4 - D_L00_00161DC0) * rotation_input_scratch;
-    st->b = FUN_001ebd78(st->b, rotation_input_target, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->vb);
-    if (st->b != 0.0f) {
+    camera_rotation_state->b = FUN_001ebd78(camera_rotation_state->b, rotation_input_target, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &camera_rotation_state->vb);
+    if (camera_rotation_state->b != 0.0f) {
         float a, prospective_pitch_angle, z;
         fast_vec_cross(&side, camera_object, &up);
-        a = k * st->b;
-        prospective_pitch_angle = FUN_001f99c0(FUN_001fa580_c(st->ang, a));
-        if (1.1170107f < prospective_pitch_angle && FUN_001f99c0(st->ang) < prospective_pitch_angle)
+        a = k * camera_rotation_state->b;
+        prospective_pitch_angle = FUN_001f99c0(FUN_001fa580_c(camera_rotation_state->ang, a));
+        if (1.1170107f < prospective_pitch_angle && FUN_001f99c0(camera_rotation_state->ang) < prospective_pitch_angle)
             a += (0.0f - a) * (FUN_001fa5c8_c(prospective_pitch_angle, 1.1170107f) / 0.3490659f);
-        if (prospective_pitch_angle >= 1.1152654f && st->ang > 0.0f)
-            st->z = FUN_001ebd78(st->z, 0.5f, 0.005f, 0.2f, 0.0f, &st->vz);
+        if (prospective_pitch_angle >= 1.1152654f && camera_rotation_state->ang > 0.0f)
+            camera_rotation_state->z = FUN_001ebd78(camera_rotation_state->z, 0.5f, 0.005f, 0.2f, 0.0f, &camera_rotation_state->vz);
         else
-            st->z = FUN_001ebd78(st->z, 0.0f, 0.005f, 0.2f, 0.0f, &st->vz);
+            camera_rotation_state->z = FUN_001ebd78(camera_rotation_state->z, 0.0f, 0.005f, 0.2f, 0.0f, &camera_rotation_state->vz);
         z = 0.0f;
         horizontal_view_offset.f[0] = *(float *)(camera_object + 0);
         horizontal_view_offset.f[1] = *(float *)(camera_object + 4);
         horizontal_view_offset.f[3] = z;
         horizontal_view_offset.f[2] = z;
-        FUN_001f9bf8_c(&horizontal_view_offset, &horizontal_view_offset, st->z);
+        FUN_001f9bf8_c(&horizontal_view_offset, &horizontal_view_offset, camera_rotation_state->z);
         FUN_001f9a10_c(camera_object + 0x30, camera_object + 0x30, &horizontal_view_offset);
         if (coll_sphere(camera_object + 0x30, 0x12, ((u8 *)hero.moby), 0.3f))
-            st->z = FUN_001ebd78(st->z, z, 0.005f, 0.2f, z, &st->vz);
-        prospective_pitch_angle = FUN_001fa580_c(st->ang, a);
+            camera_rotation_state->z = FUN_001ebd78(camera_rotation_state->z, z, 0.005f, 0.2f, z, &camera_rotation_state->vz);
+        prospective_pitch_angle = FUN_001fa580_c(camera_rotation_state->ang, a);
         if (FUN_001f99c0(prospective_pitch_angle) > 1.4660766f) {
             float signed_pitch_limit = 1.4660766f;
             if (!(z < prospective_pitch_angle))
                 signed_pitch_limit = -1.4660766f;
-            a = FUN_001fa5c8_c(signed_pitch_limit, st->ang);
+            a = FUN_001fa5c8_c(signed_pitch_limit, camera_rotation_state->ang);
         }
         build_look_at_matrix(camera_object, camera_object, &side, a);
-        st->ang = FUN_001fa580_c(st->ang, a);
+        camera_rotation_state->ang = FUN_001fa580_c(camera_rotation_state->ang, a);
     }
     FUN_001f9bf8_c(camera_object, camera_object, 1.0f);
     fast_vec_cross(camera_object + 0x10, camera_object, &up);
