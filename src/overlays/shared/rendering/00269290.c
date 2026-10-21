@@ -1919,18 +1919,18 @@ void FUN_001f9a28_0026daa0(V_0026daa0 *, void *, V_0026daa0 *) __asm__("FUN_001f
 void FUN_001f9bf8_0026daa0(V_0026daa0 *, V_0026daa0 *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_0026daa0(void *, V_0026daa0 *, V_0026daa0 *) __asm__("FUN_001f9a10");
 extern unsigned char *D_L00_001B20E8 __attribute__((section(".data")));
-unsigned char *FUN_L00_0026daa0(char *src, int color, int lifetime, int source_position_selector, float initial_particle_scalar) {
+unsigned char *FUN_L00_0026daa0(char *source_moby, int color, int lifetime, int source_position_selector, float initial_particle_scalar) {
     unsigned char *particle = FUN_L00_002678b8_0026daa0(0x1A);
     if (particle) {
         E_0026daa0 *particle_data = (E_0026daa0 *)(particle + 0x20);
         V_0026daa0 source_position, position_offset;
-        particle_data->o = src;
+        particle_data->o = source_moby;
         particle_data->iC = color >> 24;
         particle_data->h6 = source_position_selector;
         particle_data->i8 = lifetime;
         particle_data->h4 = lifetime;
         if ((short)source_position_selector == -1) {
-            qcopy(particle + 0x10, src + 0x10);
+            qcopy(particle + 0x10, source_moby + 0x10);
         } else {
             FUN_L00_0024f7c8_0026daa0(particle_data->o, (short)source_position_selector, &source_position);
             FUN_001f9a28_0026daa0(&position_offset, D_L00_00166DC0_0026daa0, &source_position);
