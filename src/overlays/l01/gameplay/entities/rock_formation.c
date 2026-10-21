@@ -231,7 +231,7 @@ void bridge_piece_1_update(BurstMoby *self) {
     BurstColors colors;
     BurstVec dir;
     BurstVec pos;
-    f32 r;
+    f32 spawn_radius;
     f32 ang;
     s32 i;
 
@@ -248,10 +248,10 @@ void bridge_piece_1_update(BurstMoby *self) {
             pos.f[1] = random_float_between(-frame_time, frame_time);
             pos.f[2] = random_float_between(-frame_time, frame_time);
             dir.q = pos.q;
-            r = random_float_between(2.0f, 3.0f);
+            spawn_radius = random_float_between(2.0f, 3.0f);
             ang = random_angle_radians();
-            pos.f[0] = fast_cos(ang) * r;
-            pos.f[1] = fast_sin(ang) * r;
+            pos.f[0] = fast_cos(ang) * spawn_radius;
+            pos.f[1] = fast_sin(ang) * spawn_radius;
             pos.f[2] = 0.0f;
             fast_vec_normalize(&dir, &dir, random_float_between(frame_time * 5.0f, frame_time * 20.0f));
             fast_vec_add(&pos, &pos, &self->pos);
