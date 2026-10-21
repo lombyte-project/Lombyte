@@ -1671,7 +1671,7 @@ void blend_moby_animation_309378(MobyAnim_309378 *arg0, int arg1, int arg2,
                                  int arg3) __asm__("FUN_00212f90");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-unsigned char *FUN_L11_00309378(char *src, char *pos, char *target, char *vec, int arg,
+unsigned char *FUN_L11_00309378(char *src, char *pos, char *target, char *spawn_rotation, int arg,
                                 float scale) {
     unsigned char *moby = func_0020D348_m(0x40A);
     if (moby != 0) {
@@ -1683,7 +1683,7 @@ unsigned char *FUN_L11_00309378(char *src, char *pos, char *target, char *vec, i
         *(char **)(data + 0x20) = src;
         *(char **)(data + 0x24) = target;
         qcopy(moby + 0x10, pos);
-        qcopy(moby + 0x40, vec);
+        qcopy(moby + 0x40, spawn_rotation);
         if (target != 0) {
             char *target_aux_data;
             target_aux_data = suck_get_aim_height(target);
@@ -1695,7 +1695,7 @@ unsigned char *FUN_L11_00309378(char *src, char *pos, char *target, char *vec, i
         *(float *)(data + 0x2C) = scale;
         *(int *)(data + 0x30) = 0;
         *(int *)(data + 0x34) = 0;
-        build_spherical_offset(data, scale, *(float *)(vec + 8), -*(float *)(vec + 4));
+        build_spherical_offset(data, scale, *(float *)(spawn_rotation + 8), -*(float *)(spawn_rotation + 4));
         if (moby[0x53] != 1) {
             blend_moby_animation_309378(moby, 1, 0, 10);
         }
