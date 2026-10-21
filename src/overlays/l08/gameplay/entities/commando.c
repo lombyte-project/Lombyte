@@ -999,7 +999,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
 void FUN_L08_002f70a0(struct Moby *moby) {
     FlickerLightVars *light_vars;
     Vec4 pos;
-    f32 view, dist, fade;
+    f32 view, draw_fade_distance, fade;
     s32 hidden;
     PointLight *point_light_slot;
     Vec4f *at;
@@ -1036,18 +1036,18 @@ void FUN_L08_002f70a0(struct Moby *moby) {
     }
     moby->scale = moby->pclass->scale * (light_vars->size_x > light_vars->size_y ? light_vars->size_x : light_vars->size_y) * 0.25f;
     view = convert_integer_to_float(moby->draw_dist);
-    dist = FUN_001f9b48(at, D_L08_001675C0);
+    draw_fade_distance = FUN_001f9b48(at, D_L08_001675C0);
     fade = view - light_vars->fade_range;
     if (fade < 0.0f)
         fade = 0.0f;
-    if (view < dist) {
+    if (view < draw_fade_distance) {
         light_vars->intensity = 0.0f;
         hidden = 1;
     } else {
-        if (fade < dist) {
-            dist -= fade;
-            dist /= light_vars->fade_range;
-            fade = 1.0f - dist;
+        if (fade < draw_fade_distance) {
+            draw_fade_distance -= fade;
+            draw_fade_distance /= light_vars->fade_range;
+            fade = 1.0f - draw_fade_distance;
         } else
             fade = 1.0f;
         light_vars->intensity = fade;
