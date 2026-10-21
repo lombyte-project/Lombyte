@@ -2229,12 +2229,12 @@ char *FUN_L00_002a96f8(void *owner, void *pos, float a, float b, float c, char *
 extern char *func_0020D348_m(int);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 
-void *FUN_L00_002a99b0(int unused, void *pos, int initial_paired_value, float scale, float initial_private_scalar, float b) {
+void *FUN_L00_002a99b0(int unused, void *spawn_position, int initial_paired_value, float scale, float initial_private_scalar, float b) {
     char *spawned_moby = func_0020D348_m(0x593);
     if (spawned_moby != 0) {
         char *moby_vars;
         float doubled_scale;
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(spawned_moby + 0x10, spawn_position);
         set_moby_color(spawned_moby, 0x80, 0x80, 0x70);
         moby_vars = *(char **)(spawned_moby + 0x78);
         doubled_scale = scale + scale;
