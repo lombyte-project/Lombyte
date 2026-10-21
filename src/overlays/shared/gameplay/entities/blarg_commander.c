@@ -117,15 +117,15 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void blarg_commander_update(char *m) __asm__("FUN_L12_00308918");
 void blarg_commander_update(char *moby) {
-    int st;
+    int moby_state;
     char *moby_pvars;
     char *motion_state;
     int motion_result_flags;
     MO *mo = (MO *)moby;
     char raised_position[16];
-    st = *(unsigned char *)(moby + 0x53);
+    moby_state = *(unsigned char *)(moby + 0x53);
     moby_pvars = *(char **)(moby + 0x78);
-    if (st == 1) {
+    if (moby_state == 1) {
         motion_state = moby_pvars + 0x20;
         motion_result_flags = mine_fall(moby, motion_state);
         mo->vx = fast_add_rotations(mo->vx, frame_time * 4.3633232f);
@@ -135,7 +135,7 @@ void blarg_commander_update(char *moby) {
             qcopy(raised_position, moby + 0x10);
             ((float *)raised_position)[2] += 1.0f;
             func_L00_0025F4A8_alt(moby, motion_state, raised_position, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 0, 15.0f, 1,
-                                  st, -1, 0);
+                                  moby_state, -1, 0);
             mark_moby_for_removal(moby);
         } else if (*(float *)(moby + 0x18) < 5.0f) {
             mark_moby_for_removal(moby);
