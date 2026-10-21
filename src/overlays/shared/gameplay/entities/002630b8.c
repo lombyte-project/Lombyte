@@ -171,7 +171,7 @@ void FUN_001f9a10_00263618(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9d20_00263618(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f7d30_00263618(void *, s32, s32) __asm__("FUN_001f7d30");
 extern float D_L00_001B0470[4][4] __attribute__((section(".data")));
-void FUN_L00_00263618(float *pos, u32 col, float quad_scale, float position_offset_scale) {
+void FUN_L00_00263618(float *quad_base_position, u32 col, float quad_scale, float position_offset_scale) {
     Pk_00263618 pk;
     float up[4];
     float M[4][4];
@@ -193,7 +193,7 @@ void FUN_L00_00263618(float *pos, u32 col, float quad_scale, float position_offs
     pk.uv[5] = 0.0f;
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
-    qcopy(M[3], pos);
+    qcopy(M[3], quad_base_position);
     FUN_001f9a28_00263618(M[0], D_L00_00166DC0_00263618, M[3]);
     FUN_001f9bf8_00263618(M[0], M[0], 1.0f);
     FUN_001f9ad8_00263618(M[1], M[0], up);
