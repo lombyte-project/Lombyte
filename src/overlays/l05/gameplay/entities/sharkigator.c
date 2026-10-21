@@ -1645,11 +1645,11 @@ void FUN_L05_00303390(Moby *moby) {
     Vec_3047E8 hit_test_endpoint;
     int cnt;
     float dmg;
-    float ang;
-    float ang2;
+    float nonlethal_knockback_heading;
+    float death_knockback_heading;
     Wing_3047E8 *moby_data;
     Hit_3047E8 *hit_record;
-    int res;
+    int hit_response;
     int k;
 
     moby_data = *(struct Wing_3047E8 **)&moby->pvars;
@@ -1674,11 +1674,11 @@ void FUN_L05_00303390(Moby *moby) {
             hit_record = 0;
         }
     }
-    res = update_collision_l08(moby, hit_record, &moby_data->hp, 0, &cnt, &dmg, 0, 4);
+    hit_response = update_collision_l08(moby, hit_record, &moby_data->hp, 0, &cnt, &dmg, 0, 4);
     if (cnt != 1 && moby->state != 14) {
         moby_data->hp = moby_data->hp - dmg;
         if (moby_data->hp <= 0.0f) {
-            res = 1;
+            hit_response = 1;
         }
         k = func_001FA898_3047E8(D_L05_00161A98_gp * 409.6f);
         moby_data->f98 = D_L05_00161A98_gp * 0.4f;
@@ -1686,7 +1686,7 @@ void FUN_L05_00303390(Moby *moby) {
         moby_data->f90 = k;
         moby_data->f94 = 9;
         moby_data->bAD = 0;
-        switch (res) {
+        switch (hit_response) {
         case EXTERMIBOT_HIT_NO_RESPONSE:
         case EXTERMIBOT_HIT_NO_REACTION:
             break;
@@ -1704,10 +1704,10 @@ void FUN_L05_00303390(Moby *moby) {
             moby_data->f88 = D_L05_00161A88 * D_0015ED6C;
             moby_data->f8C = D_L05_00161A8C * D_0015ED6C;
             moby_data->fC4 = 10.0f;
-            ang = angle_atan2(moby->pos.x - hit_record->who->pos.x, moby->pos.y - hit_record->who->pos.y);
+            nonlethal_knockback_heading = angle_atan2(moby->pos.x - hit_record->who->pos.x, moby->pos.y - hit_record->who->pos.y);
             *(u128_3047E8 *)working_vector = hit_record->dir;
-            trooper_knockback_arc(working_vector, &ang, &moby_data->f88, &moby_data->f8C);
-            trooper_start_knockback(moby, moby_data->f70, ang, 5, 1, 0);
+            trooper_knockback_arc(working_vector, &nonlethal_knockback_heading, &moby_data->f88, &moby_data->f8C);
+            trooper_start_knockback(moby, moby_data->f70, nonlethal_knockback_heading, 5, 1, 0);
             moby->state = 11;
             moby_data->b67 = 0x78;
             break;
@@ -1719,10 +1719,10 @@ void FUN_L05_00303390(Moby *moby) {
             moby_data->f8C = D_L05_00161A94 * D_0015ED6C;
             moby_data->fC0 = 5.5f;
             moby_data->fC4 = 11.0f;
-            ang2 = angle_atan2(moby->pos.x - hit_record->who->pos.x, moby->pos.y - hit_record->who->pos.y);
+            death_knockback_heading = angle_atan2(moby->pos.x - hit_record->who->pos.x, moby->pos.y - hit_record->who->pos.y);
             *(u128_3047E8 *)working_vector = hit_record->dir;
-            trooper_knockback_arc(working_vector, &ang2, &moby_data->f88, &moby_data->f8C);
-            trooper_start_knockback(moby, moby_data->f70, ang2, 6, 1, 0);
+            trooper_knockback_arc(working_vector, &death_knockback_heading, &moby_data->f88, &moby_data->f8C);
+            trooper_start_knockback(moby, moby_data->f70, death_knockback_heading, 6, 1, 0);
             moby->state = 14;
             moby_data->b67 = 0xF0;
             if (hit_record->who != 0 && *(struct Moby **)&hit_record->who->pclass != 0 && *(short *)((u8 *)((struct Moby *)hit_record->who->pclass) + 0x46) == 5) {
