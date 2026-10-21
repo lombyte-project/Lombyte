@@ -706,8 +706,8 @@ typedef struct {
 } V_2bb400;
 
 void FUN_L00_002bb400(unsigned char *moby) {
-    V_2bb400 *v = *(V_2bb400 **)(moby + 0x78);
-    unsigned char *o = v->o;
+    V_2bb400 *moby_vars = *(V_2bb400 **)(moby + 0x78);
+    unsigned char *o = moby_vars->o;
     int old, unwrapped_angle, angle_delta;
     if (o[0x20] == 0 || (o[0x20] & 0xF0) == 0xF0) {
         FUN_0020c828_2bb400(moby);
@@ -715,27 +715,27 @@ void FUN_L00_002bb400(unsigned char *moby) {
     }
     if (o != 0 && (*(u16 *)(moby + 0x34) & 1) != (*(u16 *)(o + 0x34) & 1)) {
         *(u16 *)(moby + 0x34) &= ~1;
-        *(u16 *)(moby + 0x34) |= *(u16 *)(v->o + 0x34) & 1;
+        *(u16 *)(moby + 0x34) |= *(u16 *)(moby_vars->o + 0x34) & 1;
     }
     if (hero.items[0].unk20 < FUN_001f96f8_2bb400(0x19)) {
         *(u16 *)(moby + 0x34) |= 0x41;
     }
-    old = v->ang;
+    old = moby_vars->ang;
     angle_delta = -0xC0;
     unwrapped_angle = old + angle_delta;
-    v->ang = unwrapped_angle;
+    moby_vars->ang = unwrapped_angle;
     if (unwrapped_angle > 0x1000) {
         angle_delta = -0x10C0;
-        v->ang = old + angle_delta;
+        moby_vars->ang = old + angle_delta;
     } else if (unwrapped_angle < 0) {
         angle_delta = 0xF40;
-        v->ang = old + angle_delta;
+        moby_vars->ang = old + angle_delta;
     }
     FUN_L00_0024efb0_2bb400(*(void **)(moby + 0x24), 0, angle_delta);
     *(float *)(moby + 0x2C) =
-        *(float *)(*(char **)(moby + 0x24) + 0x24) * v->fC * FUN_002132a8_2bb400(0.5f, 1.0f);
+        *(float *)(*(char **)(moby + 0x24) + 0x24) * moby_vars->fC * FUN_002132a8_2bb400(0.5f, 1.0f);
     *(float *)(moby + 0x44) =
-        FUN_001fa580_2bb400(*(float *)(moby + 0x44), FUN_L00_0025e310_2bb400(v->fC));
+        FUN_001fa580_2bb400(*(float *)(moby + 0x44), FUN_L00_0025e310_2bb400(moby_vars->fC));
     FUN_0020e098_2bb400(moby);
 }
 
