@@ -313,7 +313,7 @@ void FUN_L00_0020d330(void) {
     Vec4_20d330 rail_query_position, rail_point;
     Vec4_20d330 *pb;
     int i20, i24, i2C;
-    float f28;
+    float rail_query_value;
     float query_height_above_rail, lim;
     P->unk5FC = 0;
     if (P->unk1E4 != 0)
@@ -321,7 +321,7 @@ void FUN_L00_0020d330(void) {
     FUN_L00_0020d2f8_0020d330(&rail_query_position);
     if ((P->state.control_mode == 4 && P->unk41E == 0) || P->state.control_mode == 2) {
         pb = &rail_point;
-        if (nearest_rail_point(&rail_query_position, &i20, pb, &i24, &f28, &i2C, 0, 0)) {
+        if (nearest_rail_point(&rail_query_position, &i20, pb, &i24, &rail_query_value, &i2C, 0, 0)) {
             float bz, az;
             int fl;
             az = rail_query_position.f[2];
@@ -335,7 +335,7 @@ void FUN_L00_0020d330(void) {
                 qcopy(&hero.unk5E0, pb);
                 hero.unk5F0 = (s32 *)i20;
                 hero.unk5F4 = i24;
-                hero.unk5F8 = f28;
+                hero.unk5F8 = rail_query_value;
                 hero.unk60C = i2C;
                 hero.unk5FC = 1;
             }
