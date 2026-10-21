@@ -1078,7 +1078,7 @@ extern int func_001F9850_d8058(int) __asm__("FUN_001f96f8");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 extern f32 D_L10_00161BEC_gp __asm__("D_L10_00161BEC") __attribute__((sda));
 extern float D_0015EE6C_d8058 __asm__("D_0015ED6C");
-int FUN_L10_002d8058(int owner, char *pos, char *initial_velocity) {
+int FUN_L10_002d8058(int owner, char *initial_position, char *initial_velocity) {
     char *moby = func_0020D348_d8058(0x3AA);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
@@ -1088,7 +1088,7 @@ int FUN_L10_002d8058(int owner, char *pos, char *initial_velocity) {
         moby[0x20] = 0;
         *(int *)(data + 0x10) = owner;
         *(short *)(data + 0x16) = 0;
-        qcopy(moby + 0x10, pos);
+        qcopy(moby + 0x10, initial_position);
         *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + *(float *)&D_L10_00161BEC_gp;
         qcopy(data, initial_velocity);
         ((struct Swirl_d8058 *)data)->a =
