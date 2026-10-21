@@ -17,10 +17,10 @@ extern unsigned char *D_L07_001B21CC NOT_SDA;
 unsigned char *FUN_L07_0029a2a0(char *pos, char *vec) {
     unsigned char *particle = create_part(0x33);
     if (particle != 0) {
-        char *b = (char *)particle + 0x20;
+        char *particle_vector = (char *)particle + 0x20;
         char *particle_position = (char *)particle + 0x10;
         qcopy(particle_position, pos);
-        qcopy(b, vec);
+        qcopy(particle_vector, vec);
         *(int *)(particle + 4) = 0x5E806040;
         particle[9] = func_001FA898_r(4.0f) + 0x40;
         particle[3] = 0x48;
