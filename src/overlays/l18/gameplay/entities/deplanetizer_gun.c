@@ -700,7 +700,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float,
                                  int) __asm__("FUN_L00_0026d000");
 
-void FUN_L18_002fa250(void *first_position_source, void *b, void *effect_velocity_source, float f0, float f1) {
+void FUN_L18_002fa250(void *first_position_source, void *second_position_source, void *effect_velocity_source, float f0, float f1) {
     char first_effect_position[16];
     char second_effect_position[16];
     int i;
@@ -709,7 +709,7 @@ void FUN_L18_002fa250(void *first_position_source, void *b, void *effect_velocit
     int x;
     int k2, k7f;
     qcopy(first_effect_position, first_position_source);
-    qcopy(second_effect_position, b);
+    qcopy(second_effect_position, second_position_source);
     for (i = 1; i >= 0; i--) {
         random_magnitude_or_effect = (char *)random_integer_below(16);
         random_magnitude_or_effect = func_L00_0026DEA0_c(first_effect_position, random_integer_below(2) ? -(int)random_magnitude_or_effect : (int)random_magnitude_or_effect, effect_velocity_source, 0.0f, 1.0f, 0.9f,
