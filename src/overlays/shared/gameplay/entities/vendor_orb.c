@@ -2580,7 +2580,7 @@ extern void FUN_001f9a68_c4(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
+float FUN_L00_002e86b0(char *camera, float *input_direction, float blend_update_angle_limit) {
     float axis_projection[4];
     float planar_input_direction[4];
     float planar_reference_direction[4];
@@ -2592,7 +2592,7 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
     char *reference_direction = camera_state + 0x130;
     float dot;
     float len;
-    float ang;
+    float planar_separation_angle;
     float sign;
     float angle_delta = 0.0f;
     float z2;
@@ -2612,14 +2612,14 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float lim) {
     if (len == angle_delta) {
         return angle_delta;
     }
-    ang = 1.5707964f - fast_arc_sin(dot / len);
+    planar_separation_angle = 1.5707964f - fast_arc_sin(dot / len);
     sign = -1.0f;
     fast_vec_cross(input_cross_axis, planar_input_direction, axis);
     if (fast_vec_dot(input_cross_axis, planar_reference_direction) >= 0.0f) {
         sign = 1.0f;
     }
-    angle_delta = fast_subtract_rotations(3.1415927f, ang);
-    if (lim != z2 && lim < absolute_float(angle_delta)) {
+    angle_delta = fast_subtract_rotations(3.1415927f, planar_separation_angle);
+    if (blend_update_angle_limit != z2 && blend_update_angle_limit < absolute_float(angle_delta)) {
         return angle_delta;
     }
     angle_blend_fraction = angle_delta / 1.5707964f;
