@@ -82,14 +82,14 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 int FUN_L03_002beba0(int transform_index, float *out) {
-    char *mat;
+    char *selected_transform;
     if (transform_index != -1) {
-        mat = D_L03_001600EC + transform_index * 128;
+        selected_transform = D_L03_001600EC + transform_index * 128;
         out[0] = random_float_between_alt(-1.0f, 1.0f);
         out[1] = random_float_between_alt(-1.0f, 1.0f);
         out[2] = random_float_between_alt(-1.0f, 1.0f);
-        transform_vector_by_basis(out, out, mat);
-        fast_vec_add(out, out, mat + 0x30);
+        transform_vector_by_basis(out, out, selected_transform);
+        fast_vec_add(out, out, selected_transform + 0x30);
         return 0;
     }
     return 1;
