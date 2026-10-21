@@ -3518,7 +3518,7 @@ extern int FUN_L00_0023e5e0(float *, float, float, int);
 
 void FUN_L07_00311eb8(float radius, void *moby_, void *obj_, short pa, void *pos, short duration_frames, unsigned int color, int ca) {
     char *moby = moby_;
-    char *obj = obj_;
+    char *light_effect_state = obj_;
     float effect_position[4];
     char *effect_slot_entry;
     int y;
@@ -3527,7 +3527,7 @@ void FUN_L07_00311eb8(float radius, void *moby_, void *obj_, short pa, void *pos
     } else {
         qcopy(effect_position, pos);
     }
-    if (*(short *)(obj + 0x280) == -1) {
+    if (*(short *)(light_effect_state + 0x280) == -1) {
         if (duration_frames > 0) {
             if (radius == -1.0f) {
                 radius = 15.0f;
@@ -3538,25 +3538,25 @@ void FUN_L07_00311eb8(float radius, void *moby_, void *obj_, short pa, void *pos
             if (ca == -1) {
                 ca = 0;
             }
-            *(short *)(obj + 0x280) = FUN_L00_0023e5e0(effect_position, radius, 0.0f, color);
-            *(short *)(obj + 0x284) = 0;
+            *(short *)(light_effect_state + 0x280) = FUN_L00_0023e5e0(effect_position, radius, 0.0f, color);
+            *(short *)(light_effect_state + 0x284) = 0;
         }
     }
-    if (*(short *)(obj + 0x280) != -1) {
-        effect_slot_entry = D_L07_00180340 + (*(short *)(obj + 0x280) << 5);
-        if (*(short *)(obj + 0x282) == pa && (pa == -1 || *(short *)(obj + 0x284) == 0) || *(short *)(obj + 0x282) != pa) {
+    if (*(short *)(light_effect_state + 0x280) != -1) {
+        effect_slot_entry = D_L07_00180340 + (*(short *)(light_effect_state + 0x280) << 5);
+        if (*(short *)(light_effect_state + 0x282) == pa && (pa == -1 || *(short *)(light_effect_state + 0x284) == 0) || *(short *)(light_effect_state + 0x282) != pa) {
             if (duration_frames != -1) {
-                *(short *)(obj + 0x284) = duration_frames;
-                *(short *)(obj + 0x286) = duration_frames;
+                *(short *)(light_effect_state + 0x284) = duration_frames;
+                *(short *)(light_effect_state + 0x286) = duration_frames;
             }
             if (radius != -1.0f) {
                 *(float *)(effect_slot_entry + 0x1C) = radius;
             }
         } else {
             if (duration_frames != -1) {
-                y = *(short *)(obj + 0x286) * 7 / 8;
-                if (!(y < *(short *)(obj + 0x284))) {
-                    *(short *)(obj + 0x284) = y;
+                y = *(short *)(light_effect_state + 0x286) * 7 / 8;
+                if (!(y < *(short *)(light_effect_state + 0x284))) {
+                    *(short *)(light_effect_state + 0x284) = y;
                 }
                 if (radius != -1.0f) {
                     *(float *)(effect_slot_entry + 0x1C) = radius;
@@ -3566,19 +3566,19 @@ void FUN_L07_00311eb8(float radius, void *moby_, void *obj_, short pa, void *pos
             }
         }
         if ((int)color != -1) {
-            *(int *)(obj + 0x288) = color;
+            *(int *)(light_effect_state + 0x288) = color;
             *(float *)effect_slot_entry = convert_integer_to_float(color & 0xFF) * 0.0078125f;
             *(float *)(effect_slot_entry + 4) = convert_integer_to_float(((int)color >> 8) & 0xFF) * 0.0078125f;
             *(float *)(effect_slot_entry + 8) = convert_integer_to_float(((int)color >> 16) & 0xFF) * 0.0078125f;
         }
         if (ca != -1) {
-            *(int *)(obj + 0x28C) = ca;
+            *(int *)(light_effect_state + 0x28C) = ca;
         }
         if (pos != 0) {
             qcopy(effect_slot_entry + 0x10, pos);
         }
         if (pa != -1) {
-            *(short *)(obj + 0x282) = pa;
+            *(short *)(light_effect_state + 0x282) = pa;
         }
     }
 }
