@@ -26,7 +26,7 @@ s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text,
     u32 character_code;
     f32 start;
     f32 lookahead_width;
-    struct Glyph *g;
+    struct Glyph *supplemental_glyph;
 
     cx = x;
     cy = y;
@@ -56,8 +56,8 @@ s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text,
             character_code = *current_text_byte;
             if (font[character_code].adv != 0) {
                 if ((u8)(character_code + 0x80) < 0x28) {
-                    g = (struct Glyph *)(((character_code + 0x40) << 2) + (s32)font);
-                    draw_textured_quad(cx + g->adv, cy + g->yoff, 16, 16, g->u, g->v, 16, 16, color,
+                    supplemental_glyph = (struct Glyph *)(((character_code + 0x40) << 2) + (s32)font);
+                    draw_textured_quad(cx + supplemental_glyph->adv, cy + supplemental_glyph->yoff, 16, 16, supplemental_glyph->u, supplemental_glyph->v, 16, 16, color,
                                        extra);
                 }
                 if (*current_text_byte < 0x20) {
