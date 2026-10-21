@@ -1108,8 +1108,8 @@ void FUN_L10_002e1cb0(struct Moby *moby) {
         group_entry = D_L10_001ABCC0[moby->group];
         if (group_entry != 0) {
             do {
-                int idx = *(unsigned short *)group_entry & 0x7FFF;
-                ((char *)D_L10_0015FFD0_e[2])[(idx << 8) + 0xBC] =
+                int listed_entity_index = *(unsigned short *)group_entry & 0x7FFF;
+                ((char *)D_L10_0015FFD0_e[2])[(listed_entity_index << 8) + 0xBC] =
                     scale_game_frames(D_L10_00161E00);
             } while (*group_entry++ >= 0);
         }
