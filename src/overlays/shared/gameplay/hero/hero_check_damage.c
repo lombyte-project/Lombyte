@@ -154,11 +154,11 @@ int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 int FUN_L00_0020cd08(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF, s32 *outKind,
                      s32 *skip, s32 *only)
 {
-    Vec4 pos;
+    Vec4 copied_query_position;
     s32 gotI;
     f32 gotF;
     s32 i;
-    Vec4 *query_position = &pos;
+    Vec4 *query_position = &copied_query_position;
     f32 distance_limit, height_limit, distance, height;
     struct Hero *hero_state;
 
