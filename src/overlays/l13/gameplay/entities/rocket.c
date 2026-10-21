@@ -2425,7 +2425,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L13_0030c138(void *position, void *b, int duration_frames, int effect_mode) {
+char *FUN_L13_0030c138(void *position, void *initial_velocity, int duration_frames, int effect_mode) {
     unsigned char *moby = (unsigned char *)func_0020D348_m(0x662);
     if (moby != 0) {
         char *data;
@@ -2437,7 +2437,7 @@ char *FUN_L13_0030c138(void *position, void *b, int duration_frames, int effect_
         moby[0x23] = random_int_between(0x40, 0x80);
         set_moby_color(moby, 0x20, 0x60, 0x10);
         qcopy(moby + 0x10, position);
-        qcopy(data, b);
+        qcopy(data, initial_velocity);
         rotation_x_increment = random_float_between_alt(frame_time * 6.2831855f, frame_time * 12.566371f);
         dd = frame_time;
         *(float *)(data + 0x10) = rotation_x_increment;
