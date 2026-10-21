@@ -1604,16 +1604,16 @@ extern int FUN_L00_00257b90(int lo, int hi);
 extern void FUN_L00_0026ced0_u(void *, void *, u32, u32, f32, s32) __asm__("FUN_L00_0026ced0");
 
 void FUN_L01_002ffb28(SmokeMoby *self) {
-    SmokeVars *v;
+    SmokeVars *smoke_vars;
     Vec4 pos;
     Vec4 vel;
     Vec4 local_velocity;
     f32 size;
     s32 i;
 
-    v = self->vars;
-    if (voice_is_playing(self, v->sound) == 0) {
-        v->sound = FUN_0022da68(0, 4, self);
+    smoke_vars = self->vars;
+    if (voice_is_playing(self, smoke_vars->sound) == 0) {
+        smoke_vars->sound = FUN_0022da68(0, 4, self);
     }
     for (i = 0; i < 2; i++) {
         pos.q = 0;
