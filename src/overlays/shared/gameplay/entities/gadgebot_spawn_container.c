@@ -1031,7 +1031,7 @@ extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) _
 
 /* Throws D_L06_00161C18 bursts of sparks from around the moby: each burst gets a random heading, speed and rise on top
    of a push along dir, and spawns D_L06_00161C1C sparks with random sizes, colours and lifetimes. */
-void FUN_L06_002ea198(struct Moby *moby, Vec4 *dir) {
+void FUN_L06_002ea198(struct Moby *moby, Vec4 *spark_push_direction) {
     Vec4 pos;
     Vec4 vel;
     Vec4 accel;
@@ -1042,17 +1042,17 @@ void FUN_L06_002ea198(struct Moby *moby, Vec4 *dir) {
         float angle;
         float speed;
         float rise;
-        Vec4 *dst;
+        Vec4 *spark_position_destination;
         Vec4 *origin;
         origin = &moby->pos;
-        dst = &pos;
-        qcopy_nc(dst, origin);
+        spark_position_destination = &pos;
+        qcopy_nc(spark_position_destination, origin);
         FUN_L00_0025f8e0(&pos, D_L06_00161C20);
         pos.f[2] += 0.25f;
         angle = random_angle_radians();
         speed = random_float_between(D_L06_00161C2C, D_L06_00161C30);
         rise = random_float_between(D_L06_00161C34, D_L06_00161C38);
-        scale_vector_xyz(&vel, dir, random_float_between(0.0f, D_L06_00161C64) * frame_time);
+        scale_vector_xyz(&vel, spark_push_direction, random_float_between(0.0f, D_L06_00161C64) * frame_time);
         vel.f[0] += fast_cos(angle) * (speed * frame_time);
         vel.f[1] += fast_sin(angle) * (speed * frame_time);
         vel.f[2] += rise * frame_time;
