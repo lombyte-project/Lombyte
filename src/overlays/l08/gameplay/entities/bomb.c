@@ -2209,10 +2209,10 @@ int FUN_L08_002dc648(struct Moby *moby) {
     char *shuttle_vars = (char *)moby->pvars;
     int *path;
     float path_acceleration_step = D_0015ED70 * 0.1f;
-    float b = D_0015ED6C_lui * 0.08f;
+    float path_maximum_speed = D_0015ED6C_lui * 0.08f;
     path = *(int **)(shuttle_vars + 0x120);
     advance_accelerated_scalar((float *)(shuttle_vars + 0xE4), (float *)(shuttle_vars + 0xE8), *(float *)(shuttle_vars + 0x104), path_acceleration_step,
-                                 path_acceleration_step, b);
+                                 path_acceleration_step, path_maximum_speed);
     *(float *)(shuttle_vars + 0x110) =
         fast_add_rotations(*(float *)(shuttle_vars + 0x110), *(float *)(shuttle_vars + 0xE8) * 50.0f);
     sample_camera_path(path, 0, shuttle_vars + 0x60, (float *)(shuttle_vars + 0x70), 0,
