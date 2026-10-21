@@ -20,13 +20,13 @@ void pipe_update(char *pipe_moby) {
         PIPE_REMOVE = 2
     };
     int hit = 0;
-    char *r = find_moby_hit(pipe_moby, 0x10000, 0);
+    char *hit_moby = find_moby_hit(pipe_moby, 0x10000, 0);
     switch (*(unsigned char *)(pipe_moby + 0x20)) {
     case PIPE_INITIALIZE:
         pipe_moby[0x20] = 1;
         break;
     case PIPE_WAIT_FOR_HIT:
-        if (r != 0 && *(float *)(r + 0x2C) > 0.0f)
+        if (hit_moby != 0 && *(float *)(hit_moby + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
             pipe_moby[0x20] = 2;
