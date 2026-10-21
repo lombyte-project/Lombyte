@@ -282,12 +282,12 @@ extern void FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
 
 void FUN_L09_0030a9e8(unsigned char *moby, char *spawner_vars) {
     char *moby_record;
-    int st;
+    int record_processing_status;
     float remaining_value;
 
     moby_record = FUN_L00_0025a420_c(moby, 0xC30000, 0);
-    FUN_L00_0025a478_c(moby, moby_record, spawner_vars + 0x20, 0, &st, 0, 0, 4);
-    if (st >= 2) {
+    FUN_L00_0025a478_c(moby, moby_record, spawner_vars + 0x20, 0, &record_processing_status, 0, 0, 4);
+    if (record_processing_status >= 2) {
         remaining_value = *(float *)(spawner_vars + 0x20) - *(float *)(moby_record + 0x2C);
         *(float *)(spawner_vars + 0x20) = remaining_value;
         if (0.0f < remaining_value) {
