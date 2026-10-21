@@ -18,14 +18,14 @@ int draw_prompt_box(char *arg0) __asm__("FUN_00221b50");
 
 int draw_prompt_box(char *prompt_dimensions) {
     char *text;
-    int v;
+    int prompt_text_selector;
 
     vu1_add_g_sregister(0x42, 0x44);
     vu1_add_g_sregister(0x47, 0x2004B);
     setup_gif_paging(0);
     text = D_001602E8;
-    v = menu_system.unkD4;
-    switch (v) {
+    prompt_text_selector = menu_system.unkD4;
+    switch (prompt_text_selector) {
     case 0:
     case 1:
     case 2:
