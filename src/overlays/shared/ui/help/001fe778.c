@@ -18,28 +18,28 @@ extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
 /* Same routine as FUN_L06_0021d0a0, with case 2 in place of case 1. */
 int FUN_L15_001fe778(int allow_item_lookup) {
-    struct Hero *g = &hero;
-    switch (g->vehicle_mode) {
+    struct Hero *vehicle_check_hero = &hero;
+    switch (vehicle_check_hero->vehicle_mode) {
     case 2:
         return 0;
     case 3:
         return 0;
     }
     {
-        struct Hero *g2 = &hero;
-        if (g2->health.hp == 1) {
+        struct Hero *status_check_hero = &hero;
+        if (status_check_hero->health.hp == 1) {
             return 0x54;
         }
         if (allow_item_lookup == 0) {
             return 0;
         }
-        if (g2->unk20A8 == 0) {
+        if (status_check_hero->unk20A8 == 0) {
             return 0;
         }
-        if (g2->unk20AA == 0) {
+        if (status_check_hero->unk20AA == 0) {
             return 0;
         }
-        if (g2->unk22C8 != 0) {
+        if (status_check_hero->unk22C8 != 0) {
             return 0;
         }
     }
