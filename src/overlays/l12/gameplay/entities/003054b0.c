@@ -1013,11 +1013,11 @@ void FUN_L12_003081b0(struct Moby *moby) {
         CHECK_PERSISTENT_REMOVAL = 0,
         QUEUE_DRAW_AND_MONITOR_LINKED_MOBY = 1
     };
-    int st = moby->state;
+    int moby_state_snapshot = moby->state;
     int vis;
     int *moby_data = (int *)moby->pvars;
 
-    switch (st) {
+    switch (moby_state_snapshot) {
     case CHECK_PERSISTENT_REMOVAL:
         if (moby->mission != 0xFF && visited52[moby->mission + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
