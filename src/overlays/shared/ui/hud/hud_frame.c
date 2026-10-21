@@ -26,14 +26,14 @@ void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 void hud_frame(O0023b120 *o, s32 id, s32 x, s32 y, u32 flags, s32 extra) __asm__("FUN_L00_0023b120");
 void hud_frame(O0023b120 *hud_element, s32 id, s32 x, s32 y, u32 flags, s32 extra) {
     s32 base_width, base_height, draw_width, draw_height;
-    R0023b120 *r;
+    R0023b120 *image_page;
     if (id < 0)
         return;
     x += hud_element->x;
     y += hud_element->y;
-    r = &D_L00_0017E4D8.rec[D_L00_0017E4D8.tab[id].k];
-    base_width = 1 << r->lw;
-    base_height = 1 << r->lh;
+    image_page = &D_L00_0017E4D8.rec[D_L00_0017E4D8.tab[id].k];
+    base_width = 1 << image_page->lw;
+    base_height = 1 << image_page->lh;
     draw_width = base_width;
     draw_height = base_height;
     if (flags & 1) {
