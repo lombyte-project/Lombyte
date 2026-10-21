@@ -1019,7 +1019,7 @@ void FUN_L10_002e17c0(struct Moby *moby)
     float vector_scratch[4];
     float transformed_offset[4];
     int hit_processing_status;
-    float ang;
+    float knockback_angle;
     Hit_2E2B80 *hit_record;
     int target_selection_status;
 
@@ -1045,13 +1045,13 @@ void FUN_L10_002e17c0(struct Moby *moby)
                 data->f7C = D_0015ED6C * 10.0f;
                 func_0022ED80_2E2B80(2, 0, moby);
                 if (hit_record->f30 & 1) {
-                    ang = angle_atan2(hit_record->f10[0], hit_record->f10[1]);
+                    knockback_angle = angle_atan2(hit_record->f10[0], hit_record->f10[1]);
                 } else {
-                    ang = angle_atan2(moby->pos.x - hit_record->x, moby->pos.y - hit_record->y);
+                    knockback_angle = angle_atan2(moby->pos.x - hit_record->x, moby->pos.y - hit_record->y);
                 }
                 *(OvlQuad *)vector_scratch = *(OvlQuad *)hit_record->f10;
-                trooper_knockback_arc(vector_scratch, &ang, &data->f78, &data->f7C);
-                trooper_start_knockback(moby, data->f60, ang, 4, 1, 0);
+                trooper_knockback_arc(vector_scratch, &knockback_angle, &data->f78, &data->f7C);
+                trooper_start_knockback(moby, data->f60, knockback_angle, 4, 1, 0);
                 data->f117 = 0x78;
                 trooper_anim_update(moby, data->f110);
                 func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
