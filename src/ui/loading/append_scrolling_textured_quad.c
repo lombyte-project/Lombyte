@@ -19,7 +19,7 @@ typedef union {
 void append_scrolling_textured_quad(int x, int y, int w, int h, unsigned long rgba, unsigned long tex, float u0,
                   float u1, float v0, float v1) __asm__("FUN_002316e8");
 
-void append_scrolling_textured_quad(int x, int y, int quad_width, int quad_height, unsigned long rgba, unsigned long tex, float u0,
+void append_scrolling_textured_quad(int x, int y, int quad_width, int quad_height, unsigned long rgba, unsigned long texture_register_value, float u0,
                   float u1, float texture_v_top, float texture_v_bottom) {
     int x0 = x * 16 + screen_extent.left - 8;
     int x1 = (x + quad_width) * 16 + screen_extent.left - 8;
@@ -47,7 +47,7 @@ void append_scrolling_textured_quad(int x, int y, int quad_width, int quad_heigh
     qcopy(base + 4, D_00160850);
     quad_payload = (long *)(base + 8);
     render_packet_cursor.words = base + 8;
-    quad_payload[0] = tex;
+    quad_payload[0] = texture_register_value;
     quad_payload[1] = 0x54;
     quad_payload[2] = (rgba & 0xFFFFFFFFL) | (0xFE00L << 46);
     quad_payload[3] = uv[0].bits;
