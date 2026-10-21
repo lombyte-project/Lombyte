@@ -1989,7 +1989,7 @@ int FUN_L14_002ef150(struct Moby *elevator_moby) {
     float step;
     float rotation_blend;
     float x_rotation_blend;
-    int r;
+    int path_endpoint_reached;
     if (elevator_moby->command == 0) {
         selected_path = D_L14_001B0BB0_c3[*(int *)(moby_vars + 0xA0)];
         total = *(float *)(moby_vars + 0xB4);
@@ -2000,7 +2000,7 @@ int FUN_L14_002ef150(struct Moby *elevator_moby) {
         qcopy(rot, moby_vars + 0xF0);
     }
     step = *(float *)&D_L14_00161D14 * D_0015ED6C_c;
-    r = FUN_L00_0025d808_2f05d8(selected_path, pos, moby_vars + 0xA4, moby_vars + 0xA8, 0, step * *(float *)(moby_vars + 0xAC));
+    path_endpoint_reached = FUN_L00_0025d808_2f05d8(selected_path, pos, moby_vars + 0xA4, moby_vars + 0xA8, 0, step * *(float *)(moby_vars + 0xAC));
     FUN_L00_0025b8c0(&elevator_moby->pos.x, (float *)(moby_vars + 0xC0), pos[0], 0.003f, 0.2f, 0.0f);
     FUN_L00_0025b8c0(&elevator_moby->pos.y, (float *)(moby_vars + 0xC4), pos[1], 0.003f, 0.2f, 0.0f);
     FUN_L00_0025b8c0(&elevator_moby->pos.z, (float *)(moby_vars + 0xC8), pos[2], 0.003f, 0.2f, 0.0f);
@@ -2008,7 +2008,7 @@ int FUN_L14_002ef150(struct Moby *elevator_moby) {
     rotation_blend = *(float *)(moby_vars + 0xB0) / total;
     if (1.0f < rotation_blend)
         rotation_blend = 1.0f;
-    if (r != 0)
+    if (path_endpoint_reached != 0)
         rotation_blend = 1.0f;
     if (*(float *)(moby_vars + 0xAC) < 0.0f)
         rotation_blend = 1.0f - rotation_blend;
@@ -2026,7 +2026,7 @@ int FUN_L14_002ef150(struct Moby *elevator_moby) {
     elevator_moby->rot.x = FUN_L00_0025b750(*(float *)(moby_vars + 0xD0), rot[0], x_rotation_blend);
     elevator_moby->rot.y = FUN_L00_0025b750(*(float *)(moby_vars + 0xD4), rot[1], rotation_blend);
     elevator_moby->rot.z = FUN_L00_0025b750(*(float *)(moby_vars + 0xD8), rot[2], rotation_blend);
-    if (r != 0) {
+    if (path_endpoint_reached != 0) {
         if (0.0f < *(float *)(moby_vars + 0xAC)) {
             int last_segment_index = *(int *)selected_path - 2;
             *(int *)(moby_vars + 0xA4) = last_segment_index;
