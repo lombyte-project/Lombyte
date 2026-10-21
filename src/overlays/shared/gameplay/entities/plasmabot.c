@@ -1852,17 +1852,17 @@ extern float D_L14_00161FD4 __attribute__((sda));
 extern float D_L14_00161FD8 __attribute__((sda));
 extern int D_L14_00161FE4 __attribute__((sda));
 void FUN_L14_002feca8(unsigned char *moby) {
-    float off[4];
+    float emission_position_offset[4];
     float pos[4];
     int i;
     int j;
     int signed_particle_variation;
     int life;
     float size;
-    scale_y(off, moby + 0xC0, D_L14_00161FCC);
-    add_y(pos, moby + 0x10, off);
-    scale_y(off, moby + 0xE0, D_L14_00161FD0);
-    add_y(pos, pos, off);
+    scale_y(emission_position_offset, moby + 0xC0, D_L14_00161FCC);
+    add_y(pos, moby + 0x10, emission_position_offset);
+    scale_y(emission_position_offset, moby + 0xE0, D_L14_00161FD0);
+    add_y(pos, pos, emission_position_offset);
     for (i = 0; i < 2; i++) {
         P_eca8 *part;
         T_eca8 *tail;
@@ -1876,10 +1876,10 @@ void FUN_L14_002feca8(unsigned char *moby) {
             tail->bB = part->hA;
         }
     }
-    scale_y(off, moby + 0xC0, D_L14_00161FD4);
-    add_y(pos, moby + 0x10, off);
-    scale_y(off, moby + 0xE0, D_L14_00161FD8);
-    add_y(pos, pos, off);
+    scale_y(emission_position_offset, moby + 0xC0, D_L14_00161FD4);
+    add_y(pos, moby + 0x10, emission_position_offset);
+    scale_y(emission_position_offset, moby + 0xE0, D_L14_00161FD8);
+    add_y(pos, pos, emission_position_offset);
     signed_particle_variation = 0x10;
     life = frames_y(2);
     size = 80000.0f;
