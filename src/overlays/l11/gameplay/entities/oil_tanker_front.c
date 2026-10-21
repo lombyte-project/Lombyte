@@ -263,7 +263,7 @@ extern void FUN_L00_00258b50_c(char *, char *, float *, float *, float) __asm__(
 void FUN_L11_00315f58(char *moby, float *target_position)
 {
     char *moby_vars = *(char **)(moby + 0x78);
-    float v[4];
+    float planar_heading_vector[4];
     float helper_scratch_buffer[4];
     float f;
     f = FUN_001fa580_c(FUN_001f9e90_c(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14)), *(float *)(moby_vars + 0x24C));
@@ -271,10 +271,10 @@ void FUN_L11_00315f58(char *moby, float *target_position)
     f = FUN_0020c9e0_c(moby);
     if (*(u8 *)(moby + 0x52) == *(u8 *)(moby + 0x53) && 8.0f < f && f < 22.0f) {
         *(float *)(moby_vars + 0x1A4) = D_L11_001622FC_gp * frame_time;
-        v[0] = FUN_001f9dc8_c(*(float *)(moby + 0x48)) * 2.0f;
-        v[1] = FUN_001f9de0_c(*(float *)(moby + 0x48)) * 2.0f;
-        *(int *)&v[2] = 0;
-        FUN_L00_00258b50_c(moby, moby_vars + 0x180, v, helper_scratch_buffer, 1.0f);
+        planar_heading_vector[0] = FUN_001f9dc8_c(*(float *)(moby + 0x48)) * 2.0f;
+        planar_heading_vector[1] = FUN_001f9de0_c(*(float *)(moby + 0x48)) * 2.0f;
+        *(int *)&planar_heading_vector[2] = 0;
+        FUN_L00_00258b50_c(moby, moby_vars + 0x180, planar_heading_vector, helper_scratch_buffer, 1.0f);
     }
 }
 extern short *D_L11_001AC240[];
