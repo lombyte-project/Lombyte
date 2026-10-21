@@ -414,70 +414,70 @@ extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 
 void FUN_L12_003064e8(char *moby) {
     int i;
-    int off;
+    int vertical_step_decrement_offset;
     char *data = *(char **)(moby + 0x78);
     int last = 17;
-    for (i = 0, off = 0; i < 18; i++, off += 4) {
+    for (i = 0, vertical_step_decrement_offset = 0; i < 18; i++, vertical_step_decrement_offset += 4) {
         int saved_moby_index = D_L12_001FB688[i];
-        char *obj;
+        char *slot_moby;
         float position_or_vertical_step;
         if (saved_moby_index == 0) {
             continue;
         }
         if (i == last) {
-            obj = moby;
+            slot_moby = moby;
         } else {
             if (saved_moby_index == -1) {
                 continue;
             }
-            obj = (char *)(D_L12_0015FFD8_gp + (saved_moby_index << 8));
+            slot_moby = (char *)(D_L12_0015FFD8_gp + (saved_moby_index << 8));
         }
         if (i == last) {
             position_or_vertical_step = D_L12_00161F40;
             if (position_or_vertical_step == -1.0f) {
-                qcopy((char *)&D_L12_00161F40, obj + 0x10);
-                qcopy((char *)&D_L12_00161F50, obj + 0x40);
+                qcopy((char *)&D_L12_00161F40, slot_moby + 0x10);
+                qcopy((char *)&D_L12_00161F50, slot_moby + 0x40);
             }
-            qcopy((char *)&D_L12_00161F60, obj + 0x10);
-            qcopy((char *)&D_L12_00161F70, obj + 0x40);
-            qcopy(obj + 0x10, (char *)&D_L12_00161F40);
-            qcopy(obj + 0x40, (char *)&D_L12_00161F50);
-            position_or_vertical_step = *(float *)(obj + 0x18);
+            qcopy((char *)&D_L12_00161F60, slot_moby + 0x10);
+            qcopy((char *)&D_L12_00161F70, slot_moby + 0x40);
+            qcopy(slot_moby + 0x10, (char *)&D_L12_00161F40);
+            qcopy(slot_moby + 0x40, (char *)&D_L12_00161F50);
+            position_or_vertical_step = *(float *)(slot_moby + 0x18);
         } else {
-            position_or_vertical_step = *(float *)(obj + 0x18);
+            position_or_vertical_step = *(float *)(slot_moby + 0x18);
         }
         if (position_or_vertical_step < 20.0f) {
             if (i == last) {
                 return;
             }
-            mark_moby_for_removal_c(obj);
+            mark_moby_for_removal_c(slot_moby);
             D_L12_001FB688[i] = -1;
         }
-        position_or_vertical_step = *(float *)(data + 0x338 + i * 16) - *(float *)(data + off + 0x570);
+        position_or_vertical_step = *(float *)(data + 0x338 + i * 16) - *(float *)(data + vertical_step_decrement_offset + 0x570);
         *(float *)(data + 0x338 + i * 16) = position_or_vertical_step;
-        *(float *)(obj + 0x18) = *(float *)(obj + 0x18) + position_or_vertical_step;
-        if (*(short *)(obj + 0xA6) == 0x500) {
-            *(float *)(obj + 0x40) = fast_add_rotations_c4(*(float *)(obj + 0x40), D_0015ED6C * 0.34906584f);
-            FUN_L00_0025bc98(obj + 0x44, 1.5707964f, data + 0x454 + i * 16, 0, 0.00200000009f, 0.3f, 0.0f);
-        } else if (*(short *)(obj + 0xA6) == 0x4FD) {
-            *(float *)(obj + 0x40) = fast_add_rotations_c4(*(float *)(obj + 0x40), *(float *)(data + 0x450 + i * 16));
-            FUN_L00_0025bc98(obj + 0x44, -1.5707964f, (float *)(data + 0x450 + i * 16) + 1, 0, *(float *)(data + 0x45C + i * 16), 0.3f, 0.0f);
-        } else if (*(short *)(obj + 0xA6) == 0x4FA) {
+        *(float *)(slot_moby + 0x18) = *(float *)(slot_moby + 0x18) + position_or_vertical_step;
+        if (*(short *)(slot_moby + 0xA6) == 0x500) {
+            *(float *)(slot_moby + 0x40) = fast_add_rotations_c4(*(float *)(slot_moby + 0x40), D_0015ED6C * 0.34906584f);
+            FUN_L00_0025bc98(slot_moby + 0x44, 1.5707964f, data + 0x454 + i * 16, 0, 0.00200000009f, 0.3f, 0.0f);
+        } else if (*(short *)(slot_moby + 0xA6) == 0x4FD) {
+            *(float *)(slot_moby + 0x40) = fast_add_rotations_c4(*(float *)(slot_moby + 0x40), *(float *)(data + 0x450 + i * 16));
+            FUN_L00_0025bc98(slot_moby + 0x44, -1.5707964f, (float *)(data + 0x450 + i * 16) + 1, 0, *(float *)(data + 0x45C + i * 16), 0.3f, 0.0f);
+        } else if (*(short *)(slot_moby + 0xA6) == 0x4FA) {
             float updated_rotation_angle;
-            *(float *)(obj + 0x40) = fast_add_rotations_c4(*(float *)(obj + 0x40), D_0015ED6C * -0.87266463f);
-            updated_rotation_angle = fast_add_rotations_c4(*(float *)(obj + 0x44), *(float *)(data + 0x454 + i * 16));
-            *(float *)(obj + 0x14) = *(float *)(obj + 0x14) + D_0015ED6C * -4.0f;
-            *(float *)(obj + 0x44) = updated_rotation_angle;
+            *(float *)(slot_moby + 0x40) = fast_add_rotations_c4(*(float *)(slot_moby + 0x40), D_0015ED6C * -0.87266463f);
+            updated_rotation_angle = fast_add_rotations_c4(*(float *)(slot_moby + 0x44), *(float *)(data + 0x454 + i * 16));
+            *(float *)(slot_moby + 0x14) = *(float *)(slot_moby + 0x14) + D_0015ED6C * -4.0f;
+            *(float *)(slot_moby + 0x44) = updated_rotation_angle;
         } else {
-            *(float *)(obj + 0x14) = *(float *)(obj + 0x14) + D_0015ED6C * -4.0f;
-            *(float *)(obj + 0x40) = fast_add_rotations_c4(*(float *)(obj + 0x40), *(float *)(data + 0x450 + i * 16));
-            *(float *)(obj + 0x44) = fast_add_rotations_c4(*(float *)(obj + 0x44), *(float *)(data + 0x454 + i * 16));
+            *(float *)(slot_moby + 0x14) = *(float *)(slot_moby + 0x14) + D_0015ED6C * -4.0f;
+            *(float *)(slot_moby + 0x40) = fast_add_rotations_c4(*(float *)(slot_moby + 0x40), *(float *)(data + 0x450 + i * 16));
+            *(float *)(slot_moby + 0x44) = fast_add_rotations_c4(*(float *)(slot_moby + 0x44), *(float *)(data + 0x454 + i * 16));
         }
         if (i == last) {
-            qcopy((char *)&D_L12_00161F40, obj + 0x10);
-            qcopy((char *)&D_L12_00161F50, obj + 0x40);
+            qcopy((char *)&D_L12_00161F40, slot_moby + 0x10);
+            qcopy((char *)&D_L12_00161F50, slot_moby + 0x40);
         }
-        FUN_L00_00250df8_c(obj);
+        FUN_L00_00250df8_c(slot_moby);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00307C08), where it is exact; names translated to the US level program. */
