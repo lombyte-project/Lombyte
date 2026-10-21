@@ -2166,7 +2166,7 @@ void television_update(struct Moby *moby) {
     };
     float bobbing_phase;
     char *data = (char *)moby->pvars;
-    int g;
+    int visibility_control_mode;
     moby->scale =
         moby->pclass->scale * *(float *)&D_L05_00161F08;
     switch (moby->state) {
@@ -2176,8 +2176,8 @@ void television_update(struct Moby *moby) {
         *(float *)(data + 4) = moby->pos.z;
         break;
     case TELEVISION_UPDATE_BOBBING:
-        g = D_L05_0015F5C4;
-        if (g == 2) {
+        visibility_control_mode = D_L05_0015F5C4;
+        if (visibility_control_mode == 2) {
             moby->visible = 0;
             moby->flags |= 1;
         } else {
