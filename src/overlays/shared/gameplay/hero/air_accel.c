@@ -442,7 +442,7 @@ void FUN_L01_0022d090(void)
 {
     Vec4 probe, top, low, from, head, wall, to, edge;
     f32 grab_drop, drop, fwd, up, reach, step, top_margin, max_slope, edge_offset;
-    f32 wall_yaw, launch_scale, ang, five, one, limit, inc, wall_normal_offset, half;
+    f32 wall_yaw, launch_scale, yaw_to_ledge, five, one, limit, inc, wall_normal_offset, half;
     int found, hit, i, j, material, allowed, moby_allowed, frames;
     u8 *moby_record;
     char *moby_data;
@@ -532,7 +532,7 @@ probe_next:
         hero.unk4F4 |= 1;
     else
         hero.unk4F4 &= ~1;
-    ang = atan2_f(top.f[0] - hero.motion.pos.f[0], top.f[1] - hero.motion.pos.f[1]);
+    yaw_to_ledge = atan2_f(top.f[0] - hero.motion.pos.f[0], top.f[1] - hero.motion.pos.f[1]);
     wall_yaw = hero.ground_z.f;
     max_slope = top.f[2];
     hero.unk4E0 = max_slope;
@@ -546,7 +546,7 @@ probe_next:
     for (j = 0; j < 5; j++) {
         qcopy(&wall, &hero.motion.pos);
         qcopy(&to, &top);
-        circle_offset(&to, ang, hero.unk234);
+        circle_offset(&to, yaw_to_ledge, hero.unk234);
         to.f[2] += drop * (one - (f32)j / five);
         wall.f[2] = to.f[2];
         if (collision_line(&wall, &to, 2, 0, 0)) {
