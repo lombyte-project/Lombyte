@@ -5,15 +5,15 @@ void audio_dec_start(struct AudioDec *dec) __asm__("FUN_0023acb8");
 
 void audio_dec_start(struct AudioDec *dec) {
     s32 temp_2_10;
-    s32 u18;
+    s32 channel_count;
     s32 four;
     s32 copy;
 
     temp_2_10 = dec->iopBuffSize;
     four = 0x400;
-    u18 = dec->hdr.ch;
+    channel_count = dec->hdr.ch;
     snd_start_movie_sound(dec->iopBuff, ((copy = temp_2_10) / 0x400) * four, dec->iopZero,
-                          dec->hdr.rate, u18);
+                          dec->hdr.rate, channel_count);
     dec->state = 2;
     /* Fakematch: GCC removes both stores, but the read-modify-write
        sequence gives hdr.ch retail's register. */
