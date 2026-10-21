@@ -2520,9 +2520,9 @@ tailA:
 extern int D_L15_0015FFD8;
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-int FUN_L15_002a2868(int idx, void *pos) {
-    short *group_moby_entry = (short *)D_L15_001ABE40[idx];
-    struct Hero *g = &hero;
+int FUN_L15_002a2868(int moby_group_index, void *pos) {
+    short *group_moby_entry = (short *)D_L15_001ABE40[moby_group_index];
+    struct Hero *hero_data = &hero;
     do {
         unsigned char *listed_moby = (unsigned char *)D_L15_0015FFD8 + ((*(unsigned short *)group_moby_entry & 0x7FFF) << 8);
         unsigned char state = listed_moby[0x20];
@@ -2539,8 +2539,8 @@ int FUN_L15_002a2868(int idx, void *pos) {
             *(int *)(data + 0x68) = scale_game_frames(0x3C);
             qcopy(listed_moby + 0x10, pos);
             *(float *)(listed_moby + 0x18) -= 1.0f;
-            *(float *)(listed_moby + 0x48) = fast_arc_tan(g->motion.pos.f[0] - *(float *)(listed_moby + 0x10),
-                                                g->motion.pos.f[1] - *(float *)(listed_moby + 0x14));
+            *(float *)(listed_moby + 0x48) = fast_arc_tan(hero_data->motion.pos.f[0] - *(float *)(listed_moby + 0x10),
+                                                hero_data->motion.pos.f[1] - *(float *)(listed_moby + 0x14));
             return 1;
         }
     } while (*group_moby_entry++ > -1);
