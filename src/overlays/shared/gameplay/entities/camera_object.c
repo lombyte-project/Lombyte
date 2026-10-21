@@ -1625,13 +1625,13 @@ extern void *D_L00_00173E58_002a7d90 __asm__("D_L00_00173E58") __attribute__((se
 
 /* True when the record for D_L00_00173E58 (suck_get_aim_height) has byte 9 equal to 1. */
 int FUN_L00_002a7d90(void) {
-    int r = 0;
+    int record_byte_9_is_one = 0;
     char *x = 0;
     if (D_L00_00173E58_002a7d90 != 0)
         x = FUN_002141f8_002a7d90(D_L00_00173E58_002a7d90);
     if (x != 0)
-        r = *(unsigned char *)(x + 9) == 1;
-    return r;
+        record_byte_9_is_one = *(unsigned char *)(x + 9) == 1;
+    return record_byte_9_is_one;
 }
 extern int D_L00_00173E58 __attribute__((section(".data")));
 char *FUN_L00_0025c338(int);
