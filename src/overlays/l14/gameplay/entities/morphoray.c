@@ -689,21 +689,21 @@ void FUN_L14_00305d28(Moby_3071B0 *moby) {
         HELPER_SEQUENCE_ANIMATE_OWNER = 3
     };
     Data_3071B0 *data = moby->data;
-    float vec[4];
+    float position_offset[4];
 
     switch (moby->state) {
     case HELPER_SEQUENCE_INITIALIZE: {
         int i;
         if (data->owner == 0) {
             data->owner = func_L14_003075E0_3071B0(moby);
-            func_001F9C30_3071B0(vec, moby->rot, D_L14_001621F4);
-            func_001F9BD8_3071B0(data->owner->pos, moby->pos, vec);
+            func_001F9C30_3071B0(position_offset, moby->rot, D_L14_001621F4);
+            func_001F9BD8_3071B0(data->owner->pos, moby->pos, position_offset);
         }
         for (i = 0; i < 6; i++) {
             if (data->slots.m[i] == 0) {
                 data->slots.m[i] = (Moby_3071B0 *)(D_L14_0015FFD8_c + (data->idx[i] << 8));
-                func_001F9C30_3071B0(vec, moby->rot, D_L14_001621F4);
-                func_001F9BD8_3071B0(data->slots.m[i]->pos, moby->pos, vec);
+                func_001F9C30_3071B0(position_offset, moby->rot, D_L14_001621F4);
+                func_001F9BD8_3071B0(data->slots.m[i]->pos, moby->pos, position_offset);
                 data->slots.m[i]->pos[2] = data->slots.m[i]->pos[2] + (D_L14_001621F8 * (float)i + D_L14_001621FC);
             }
         }
@@ -753,8 +753,8 @@ void FUN_L14_00305d28(Moby_3071B0 *moby) {
         remaining_timer_fraction = func_001FA888_3071B0(data->timer) * data->rate;
         owner->f44 = func_L00_0025C700_3071B0(D_L14_00162200 * 0.017453292f, 0.0f, remaining_timer_fraction);
         for (i = 0; i < 6; i++) {
-            func_001F9C30_3071B0(vec, owner->fE0, D_L14_001621F8 * (float)i + D_L14_001621FC);
-            func_001F9BD8_3071B0(slots[i]->pos, owner->pos, vec);
+            func_001F9C30_3071B0(position_offset, owner->fE0, D_L14_001621F8 * (float)i + D_L14_001621FC);
+            func_001F9BD8_3071B0(slots[i]->pos, owner->pos, position_offset);
         }
         if (data->timer == 0) {
             int j;
