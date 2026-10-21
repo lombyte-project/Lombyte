@@ -20,7 +20,7 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
-char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
+char *FUN_L16_002a09a0(char *owner, float *initial_movement_vector, char *spawn_position) {
     char *moby = func_0020D348_m(0x31);
     if (moby != 0) {
         char *data;
@@ -32,15 +32,15 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
         moby[0x20] = 0;
         *(unsigned long *)(moby + 0x38) = *(unsigned long *)(owner + 0x38);
         *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * 3.0f;
-        qcopy(moby + 0x10, vec);
+        qcopy(moby + 0x10, spawn_position);
         data = *(char **)(moby + 0x78);
-        qcopy(data, pos);
+        qcopy(data, initial_movement_vector);
         *(int *)(data + 0x14) = scale_game_frames(0xF0);
         *(char **)(data + 0x18) = owner;
         *(int *)(data + 0x10) = 0;
-        *(float *)(moby + 0x48) = fast_arc_tan(pos[0], pos[1]);
-        xy_length = vector_length_xy(pos);
-        elevation_angle = fast_arc_tan(xy_length, pos[2]);
+        *(float *)(moby + 0x48) = fast_arc_tan(initial_movement_vector[0], initial_movement_vector[1]);
+        xy_length = vector_length_xy(initial_movement_vector);
+        elevation_angle = fast_arc_tan(xy_length, initial_movement_vector[2]);
         *(float *)(moby + 0x44) = -elevation_angle;
         moby[0x31] = 0;
         *(unsigned short *)(moby + 0x34) |= 1;
