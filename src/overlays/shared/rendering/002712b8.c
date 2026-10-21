@@ -1935,7 +1935,7 @@ unsigned char *FUN_L00_00275910(OvlQuad *pos, int lifetime_frames, int col, int 
                                 float x, float y) {
     unsigned char *particle = p27fe00_alloc(0x4E);
     if (particle) {
-        float *v;
+        float *particle_velocity;
         unsigned char *particle_data = particle + 0x20;
         qcopy(particle + 0x10, pos);
         *(int *)(particle + 4) = col;
@@ -1960,14 +1960,14 @@ unsigned char *FUN_L00_00275910(OvlQuad *pos, int lifetime_frames, int col, int 
         *(int *)(particle_data + 0x18) = lookup_object_reference;
         *(float *)(particle_data + 0x1C) = 0;
         if (lookup_object_reference) {
-            unsigned char *r = FUN_002141f8_275910(lookup_object_reference);
-            if (r)
-                *(float *)(particle_data + 0x1C) = *(float *)(r + 0x10);
+            unsigned char *lookup_result = FUN_002141f8_275910(lookup_object_reference);
+            if (lookup_result)
+                *(float *)(particle_data + 0x1C) = *(float *)(lookup_result + 0x10);
         }
-        v = (float *)(particle_data + 0xC);
-        v[0] = vec[0];
-        v[1] = vec[1];
-        v[2] = vec[2];
+        particle_velocity = (float *)(particle_data + 0xC);
+        particle_velocity[0] = vec[0];
+        particle_velocity[1] = vec[1];
+        particle_velocity[2] = vec[2];
     }
     return particle;
 }
