@@ -90,13 +90,13 @@ void FUN_L08_0030bc00(struct Moby *moby) {
         MOBY_STATE_REMOVE = 2
     };
     int hit = 0;
-    char *r = find_moby_hit(moby, 0x10000, 0);
+    char *hit_result = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
     case MOBY_STATE_INITIALIZE:
         moby->state = 1;
         break;
     case MOBY_STATE_WAIT_FOR_HIT:
-        if (r != 0 && *(float *)(r + 0x2C) > 0.0f)
+        if (hit_result != 0 && *(float *)(hit_result + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
             moby->state = 2;
