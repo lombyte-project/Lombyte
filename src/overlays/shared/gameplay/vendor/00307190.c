@@ -422,23 +422,23 @@ void FUN_L08_003085f0(char *moby) {
     subtract_vector_xyz(v, D_L08_001675C0, moby + 0x10);
     v[2] = 0.0f;
     if (dot_vectors_xyz(v, v) < *(float *)(moby_data + 4) * *(float *)(moby_data + 4)) {
-        float angle_start_radians, b, r;
+        float angle_start_radians, angle_end_radians, xy_random_range;
         i = 0;
-        r = *(float *)(moby_data + 0x24) * frame_time;
+        xy_random_range = *(float *)(moby_data + 0x24) * frame_time;
         *(OvlQuad *)pos = *(OvlQuad *)(moby + 0x10);
         angle_start_radians = (*(float *)(moby_data + 0x28) - 180.0f) / 180.0f * 3.1415927f;
-        b = (*(float *)(moby_data + 0x2C) - 180.0f) / 180.0f * 3.1415927f;
+        angle_end_radians = (*(float *)(moby_data + 0x2C) - 180.0f) / 180.0f * 3.1415927f;
         for (; i < *(int *)(moby_data + 0x14); i++) {
             float ang, rad;
             *(OvlQuad *)v = *(OvlQuad *)pos;
-            ang = random_float_between_alt(angle_start_radians, b);
+            ang = random_float_between_alt(angle_start_radians, angle_end_radians);
             rad = random_float_between_alt(*(float *)(moby_data + 0xC), *(float *)(moby_data + 8));
             v[0] = v[0] + fast_cos(ang) * rad;
             v[1] = v[1] + fast_sin(ang) * rad;
             subtract_vector_xyz(w, v, D_L08_001675C0);
             if (!(vector_length_xy(w) <= *(float *)(moby_data + 0x10))) {
-                randomized_spawn_vector[0] = D_L08_00162360[0] + random_float_between_alt(-r, r);
-                randomized_spawn_vector[1] = D_L08_00162364 + random_float_between_alt(-r, r);
+                randomized_spawn_vector[0] = D_L08_00162360[0] + random_float_between_alt(-xy_random_range, xy_random_range);
+                randomized_spawn_vector[1] = D_L08_00162364 + random_float_between_alt(-xy_random_range, xy_random_range);
                 randomized_spawn_vector[2] = -(random_float_between_alt(*(float *)(moby_data + 0x18), *(float *)(moby_data + 0x1C)) *
                          frame_time);
                 randomized_spawn_vector[3] = 0.0f;
