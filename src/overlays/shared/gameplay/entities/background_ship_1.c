@@ -515,11 +515,11 @@ void background_ship_2_update(char *moby) {
             x = 0.0f;
         }
         {
-            int res;
+            int tweened_color;
             float k;
-            res = fast_tween_color(D_L02_00161FC8, D_L02_00161FCC, x);
+            tweened_color = fast_tween_color(D_L02_00161FC8, D_L02_00161FCC, x);
             k = D_L02_00161FC4 * 0.017453292f * frame_time;
-            *(int *)(moby + 0x90) = res;
+            *(int *)(moby + 0x90) = tweened_color;
             *(float *)(moby_data + 0x68) = fast_add_rotations(*(float *)(moby_data + 0x68), k);
         }
         FUN_L02_002ecd50_c(moby);
