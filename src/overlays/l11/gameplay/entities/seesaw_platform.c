@@ -3333,9 +3333,9 @@ void puffoid_update(struct Moby *moby) {
         } else if ((moby->anim_flags & 2) && random_below_4318(3) != 0 && moby->visible != 0 &&
                    distance_4318(&moby->pos, D_L11_001677C0_4318) < 32.0f) {
             float a = random_angle_4318();
-            float r = random_float_4318(1.0f, 3.0f);
-            puffoid_vars->unk260[0] = cos_4318(a) * r;
-            puffoid_vars->unk260[1] = sin_4318(a) * r;
+            float wander_radius = random_float_4318(1.0f, 3.0f);
+            puffoid_vars->unk260[0] = cos_4318(a) * wander_radius;
+            puffoid_vars->unk260[1] = sin_4318(a) * wander_radius;
             puffoid_vars->unk260[2] = 0.0f;
             add_vector_4318(puffoid_vars->unk260, puffoid_vars->unk260, puffoid_vars->home);
             moby->state = 3;
