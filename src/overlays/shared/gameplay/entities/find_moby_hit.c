@@ -449,14 +449,14 @@ typedef union {
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float vector_length_xy(void *) __asm__("FUN_001f9b20");
 void trooper_knockback_arc(OvlQuad *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
-void trooper_knockback_arc(OvlQuad *input_vector, float *ang, float *xy_scaled_value, float *z_scaled_value) {
+void trooper_knockback_arc(OvlQuad *input_vector, float *output_xy_angle, float *xy_scaled_value, float *z_scaled_value) {
     U25ab48 input_vector_copy;
     input_vector_copy.q = *input_vector;
     if (input_vector_copy.f[3] != 5627.9248046875f) {
-        *ang = fast_arc_tan(input_vector_copy.f[0], input_vector_copy.f[1]);
+        *output_xy_angle = fast_arc_tan(input_vector_copy.f[0], input_vector_copy.f[1]);
         return;
     }
-    *ang = fast_arc_tan(input_vector_copy.f[0], input_vector_copy.f[1]);
+    *output_xy_angle = fast_arc_tan(input_vector_copy.f[0], input_vector_copy.f[1]);
     *xy_scaled_value *= vector_length_xy(&input_vector_copy);
     input_vector_copy.f[3] = 0;
     *z_scaled_value *= input_vector_copy.f[2];
