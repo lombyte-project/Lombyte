@@ -782,8 +782,8 @@ extern short *D_L16_001ABCC0[];
 extern float func_001F9878_timer(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_timer(float) __asm__("FUN_001fa6d0");
 
-void FUN_L16_002d3f78(void *arg, int lower, int upper) {
-    L16GroupMoby *source_moby = arg;
+void FUN_L16_002d3f78(void *group_source_moby, int lower, int upper) {
+    L16GroupMoby *source_moby = group_source_moby;
     L16GroupTimer *timer_data;
     short *group_entry;
     if (source_moby->group == 255) {
