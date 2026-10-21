@@ -3016,17 +3016,17 @@ void FUN_L18_002eaea0(void *moby) {
     qcopy(D_L18_001D9D00[0], (char *)moby + 0x10);
     qcopy(D_L18_001D9D00[1], (char *)moby + 0x10);
     for (i = 1; i < 20; i++) {
-        float f21;
+        float primary_bolt_z_offset;
         float len;
         float len0;
         float azimuth_angle;
         float b;
-        f21 = *(float *)&D_L18_00162000
+        primary_bolt_z_offset = *(float *)&D_L18_00162000
               + (*(float *)&D_L18_00162004 - *(float *)&D_L18_00162000) * (convert_integer_to_float(i) * 0.05f);
-        f21 = f21 * fast_sin_c(normalize_angle(*(float *)&D_L18_00162008 + (float)i * *(float *)&D_L18_00161FFC));
-        f21 = f21 + FUN_L00_00257c48(*(float *)&D_L18_00162040, *(float *)&D_L18_00162044);
+        primary_bolt_z_offset = primary_bolt_z_offset * fast_sin_c(normalize_angle(*(float *)&D_L18_00162008 + (float)i * *(float *)&D_L18_00161FFC));
+        primary_bolt_z_offset = primary_bolt_z_offset + FUN_L00_00257c48(*(float *)&D_L18_00162040, *(float *)&D_L18_00162044);
         D_L18_001D9D00[0][i].f[2] = D_L18_001D9D00[0][i].f[2] - D_L18_001D9F80[i];
-        D_L18_001D9F80[i] = f21;
+        D_L18_001D9F80[i] = primary_bolt_z_offset;
         azimuth_angle = random_angle_radians_c();
         b = random_angle_radians_c();
         build_spherical_offset(&scratch_vectors[1], scale, azimuth_angle, b);
@@ -3040,23 +3040,23 @@ void FUN_L18_002eaea0(void *moby) {
             add_vector_xyz(&D_L18_001D9D00[0][i], &D_L18_001D9CF0[i], &scratch_vectors[2]);
             qcopy(&scratch_vectors[3], &scratch_vectors[2]);
         }
-        D_L18_001D9D00[0][i].f[2] = D_L18_001D9D00[0][i].f[2] + f21;
+        D_L18_001D9D00[0][i].f[2] = D_L18_001D9D00[0][i].f[2] + primary_bolt_z_offset;
         subtract_vector_xyz(&scratch_vectors[1], &D_L18_001D9D00[0][i], &D_L18_001D9CF0[i]);
         subtract_vector_xyz(&scratch_vectors[5], data + 0x10, &D_L18_001D9D00[0][i]);
         len = vector_length_xyz(&scratch_vectors[5]);
         if (len != 0.0f) {
-            float w;
+            float endpoint_direction_blend_weight;
             if (i == 19) {
-                w = 0.5f;
+                endpoint_direction_blend_weight = 0.5f;
                 scale = len;
             } else if (i >= 16) {
-                w = 0.5f;
+                endpoint_direction_blend_weight = 0.5f;
                 scale = len / convert_integer_to_float(19 - i);
             } else {
-                w = 0.1f;
+                endpoint_direction_blend_weight = 0.1f;
             }
             scale_vector_xyz_c(&scratch_vectors[5], &scratch_vectors[5], scale / len);
-            lerp_vector(&scratch_vectors[3], &scratch_vectors[3], &scratch_vectors[5], w);
+            lerp_vector(&scratch_vectors[3], &scratch_vectors[3], &scratch_vectors[5], endpoint_direction_blend_weight);
         }
         if (i < 10) {
             float g;
