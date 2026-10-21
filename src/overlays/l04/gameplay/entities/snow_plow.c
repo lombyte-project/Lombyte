@@ -1379,27 +1379,27 @@ void woodcut_bot_update(WBMoby *m) {
     }
 
     {
-        float w[16];
+        float recoil_scratch[16];
 
         trooper_anim_finish(m, d->fB0);
         if (d->f3E4 > 0.0f) {
             struct Hero *h = &hero;
 
-            w[0] = fast_cos(fast_arc_tan(m->pos[0] - h->motion.pos.f[0],
+            recoil_scratch[0] = fast_cos(fast_arc_tan(m->pos[0] - h->motion.pos.f[0],
                                          m->pos[1] - h->motion.pos.f[1])) *
                    d->f3E4;
-            w[1] = fast_sin(fast_arc_tan(m->pos[0] - h->motion.pos.f[0],
+            recoil_scratch[1] = fast_sin(fast_arc_tan(m->pos[0] - h->motion.pos.f[0],
                                          m->pos[1] - h->motion.pos.f[1])) *
                    d->f3E4;
-            w[2] = 0.0f;
-            add_vector_xyz(w, w, pos);
+            recoil_scratch[2] = 0.0f;
+            add_vector_xyz(recoil_scratch, recoil_scratch, pos);
             d->f3E4 += -2.0f / (multiply_global_factor_ed64(15.0f) * multiply_global_factor_ed64(15.0f));
-            FUN_L00_00258490(m, pos, w, 1, 0.25f, 1.0f, 0.75f, 0.87266463f);
+            FUN_L00_00258490(m, pos, recoil_scratch, 1, 0.25f, 1.0f, 0.75f, 0.87266463f);
         }
         d->f3C8 *= 0.96f;
-        FUN_L00_001fff28(w, 1, d->f3C8);
+        FUN_L00_001fff28(recoil_scratch, 1, d->f3C8);
         FUN_L00_001fff28(d->f130, 2, 0.0f);
-        multiply_quaternions(d->f130, d->f130, w);
+        multiply_quaternions(d->f130, d->f130, recoil_scratch);
         if (m->state != 9)
             d->f3C1 = m->state;
         if (m->state != 5 && m->fBC != 6) {
