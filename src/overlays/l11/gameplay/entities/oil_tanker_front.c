@@ -1466,8 +1466,8 @@ void blarg_ship_update(struct Moby *moby) {
 extern short *D_L11_001AC240[];
 extern char *D_L11_0015FFD8;
 
-short FUN_L11_0031a758(int idx) {
-    short *moby_list_entry = D_L11_001AC240[idx];
+short FUN_L11_0031a758(int moby_list_index) {
+    short *moby_list_entry = D_L11_001AC240[moby_list_index];
     short found = 0;
     short n = 0;
     char *base = D_L11_0015FFD8;
