@@ -629,7 +629,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
     };
     unsigned char *moby_data;
     char *hit_record;
-    int st;
+    int hit_reaction_code;
     int flag;
     int target_selection_status;
     float damage_amount;
@@ -675,7 +675,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
     *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L13_00161490;
     damage_amount = 0.0f;
     hit_record = FUN_L00_0025a420(moby, 0x330000, 0);
-    st = FUN_L13_002c2d30_collision(moby, hit_record, moby_data + 0x20, 0, &flag, &damage_amount, 0, 4);
+    hit_reaction_code = FUN_L13_002c2d30_collision(moby, hit_record, moby_data + 0x20, 0, &flag, &damage_amount, 0, 4);
     if (hit_record != 0) {
         char *hit_moby = *(char **)(hit_record + 0x20);
         if (hit_moby != 0 && *(short *)(hit_moby + 0xA6) == 0x4D1) {
@@ -687,11 +687,11 @@ void FUN_L13_002c2d30(unsigned char *moby) {
         *(float *)(moby_data + 0x20) = *(float *)(moby_data + 0x20) - damage_amount;
         if (moby[0x53] != 7) blend_moby_animation_c13(moby, 7, 0, 5);
         if (*(float *)(moby_data + 0x20) <= 0.0f) {
-            st = 1;
+            hit_reaction_code = 1;
         } else {
             moby[0x20] = 7;
         }
-        switch (st) {
+        switch (hit_reaction_code) {
         case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
         case HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE:
             moby_data[0x67] = 0xFA;
