@@ -25,34 +25,34 @@ extern G0023b120 D_L00_0017E4D8;
 void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 void hud_frame(O0023b120 *o, s32 id, s32 x, s32 y, u32 flags, s32 extra) __asm__("FUN_L00_0023b120");
 void hud_frame(O0023b120 *hud_element, s32 id, s32 x, s32 y, u32 flags, s32 extra) {
-    s32 w0, h0, w, draw_height;
+    s32 base_width, base_height, draw_width, draw_height;
     R0023b120 *r;
     if (id < 0)
         return;
     x += hud_element->x;
     y += hud_element->y;
     r = &D_L00_0017E4D8.rec[D_L00_0017E4D8.tab[id].k];
-    w0 = 1 << r->lw;
-    h0 = 1 << r->lh;
-    w = w0;
-    draw_height = h0;
+    base_width = 1 << r->lw;
+    base_height = 1 << r->lh;
+    draw_width = base_width;
+    draw_height = base_height;
     if (flags & 1) {
-        x -= w >> 1;
+        x -= draw_width >> 1;
         y -= draw_height >> 1;
     }
     if (flags & 2) {
-        x += w >> 2;
+        x += draw_width >> 2;
         y += draw_height >> 2;
-        w >>= 1;
+        draw_width >>= 1;
         draw_height >>= 1;
     }
     if (flags & 4) {
-        x -= w0 >> 1;
-        y -= h0 >> 1;
-        w <<= 1;
+        x -= base_width >> 1;
+        y -= base_height >> 1;
+        draw_width <<= 1;
         draw_height <<= 1;
     }
-    draw_hud_sprite(id, x, y, w, draw_height, extra);
+    draw_hud_sprite(id, x, y, draw_width, draw_height, extra);
 }
 extern char *D_L00_001611C0_23b6c0 __asm__("D_L00_001611C0");
 extern int D_0013E500_23b6c0[] __asm__("D_0013E500");
