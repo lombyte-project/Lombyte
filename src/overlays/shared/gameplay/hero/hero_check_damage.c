@@ -2204,37 +2204,37 @@ void FUN_L00_00257024_210a08(char *) __asm__("FUN_L00_00257024");
 void FUN_L00_00207a58_210a08(void) __asm__("FUN_L00_00207a58");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_00210a08(int mode, int requested_state, char *vehicle_moby) {
-    struct Hero *g;
+    struct Hero *hero_state;
     FUN_L00_0020e698_210a08();
-    g = &hero;
-    g->unk20A6 = 1;
+    hero_state = &hero;
+    hero_state->unk20A6 = 1;
     hero_update_items();
-    g->moby = (struct Moby *)g->unkA88;
-    FUN_L00_00262840_210a08(&g->trail);
-    *(int *)((char *)g->moby + 0x98) = -1;
+    hero_state->moby = (struct Moby *)hero_state->unkA88;
+    FUN_L00_00262840_210a08(&hero_state->trail);
+    *(int *)((char *)hero_state->moby + 0x98) = -1;
     FUN_L00_00232fe8_210a08();
     FUN_L00_00206c08_210a08();
     FUN_L00_00205538_210a08();
-    g->vehicle_mode = mode;
-    g->unkA84 = (u8 *)vehicle_moby;
-    g->moby = (struct Moby *)vehicle_moby;
+    hero_state->vehicle_mode = mode;
+    hero_state->unkA84 = (u8 *)vehicle_moby;
+    hero_state->moby = (struct Moby *)vehicle_moby;
     FUN_L00_00211380_210a08();
-    g->capsule_top = g->unk228;
-    g->unk224 = g->unk22C;
-    *(unsigned short *)((char *)g->moby + 0x34) |= 6;
-    g->anim_speed = 1.0f;
-    g->unkA94 = 1.0f;
+    hero_state->capsule_top = hero_state->unk228;
+    hero_state->unk224 = hero_state->unk22C;
+    *(unsigned short *)((char *)hero_state->moby + 0x34) |= 6;
+    hero_state->anim_speed = 1.0f;
+    hero_state->unkA94 = 1.0f;
     FUN_L00_00232628_210a08();
-    FUN_L00_00257024_210a08((char *)g->moby);
+    FUN_L00_00257024_210a08((char *)hero_state->moby);
     FUN_L00_00207a58_210a08();
-    g->unk22CC = requested_state;
+    hero_state->unk22CC = requested_state;
     switch (mode) {
     case HERO_VEHICLE_MODE_CLANK:
-        g->health.unk22B0 = *(unsigned short *)&g->health.hp;
-        g->health.hp = g->health.unk22AC;
+        hero_state->health.unk22B0 = *(unsigned short *)&hero_state->health.hp;
+        hero_state->health.hp = hero_state->health.unk22AC;
         break;
     case HERO_VEHICLE_MODE_GIANT_CLANK:
-        g->unk1630 = 200;
+        hero_state->unk1630 = 200;
         break;
     }
     hero_set_state(requested_state, 1);
