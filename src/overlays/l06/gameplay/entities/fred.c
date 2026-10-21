@@ -7082,12 +7082,12 @@ void FUN_L06_00302fd8(char *shuttle_moby) {
     char *shuttle_vars = *(char **)(shuttle_moby + 0x78);
     switch (*(int *)(shuttle_vars + 0xBC)) {
     case SHUTTLE_AT_INITIAL_STOP: {
-        int idx = current_level_index << 4;
-        int primary_visit_byte = *(unsigned char *)(*(int *)(shuttle_vars + 0xF8) + idx + (int)visited52);
+        int level_visit_byte_offset = current_level_index << 4;
+        int primary_visit_byte = *(unsigned char *)(*(int *)(shuttle_vars + 0xF8) + level_visit_byte_offset + (int)visited52);
         if (primary_visit_byte != 0xFF) {
             *(int *)(shuttle_vars + 0x9C) = 0;
         } else {
-            int secondary_visit_byte = *(unsigned char *)(*(int *)(shuttle_vars + 0xFC) + idx + (int)visited52);
+            int secondary_visit_byte = *(unsigned char *)(*(int *)(shuttle_vars + 0xFC) + level_visit_byte_offset + (int)visited52);
             if (secondary_visit_byte == primary_visit_byte) {
                 *(int *)(shuttle_vars + 0x9C) = 3;
             } else {
