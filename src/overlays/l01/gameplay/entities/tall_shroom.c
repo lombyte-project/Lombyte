@@ -645,18 +645,18 @@ extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 
 void FUN_L01_0030ef18(s32 vertex_count, f32 (*normals)[3], f32 (*verts)[3], s32 unused, f32 (*uv)[2]) {
     EnvVec eye;
-    EnvVec pos;
+    EnvVec vertex_position;
     EnvVec refl;
     EnvVec nrm;
     s32 i;
     f32 uv_projection_denominator;
 
     for (i = 0; i < vertex_count; i++) {
-        pos.w = 1.0f;
-        pos.x = verts[i][0];
-        pos.y = verts[i][1];
-        pos.z = verts[i][2];
-        fast_vec_sub(&eye, &pos, &D_L01_00167240);
+        vertex_position.w = 1.0f;
+        vertex_position.x = verts[i][0];
+        vertex_position.y = verts[i][1];
+        vertex_position.z = verts[i][2];
+        fast_vec_sub(&eye, &vertex_position, &D_L01_00167240);
         fast_vec_normalize(&eye, &eye, 1.0f);
         nrm.w = 1.0f;
         nrm.x = -normals[i][0];
