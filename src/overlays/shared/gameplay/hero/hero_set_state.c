@@ -25,7 +25,7 @@ void FUN_L00_00221310(void) {
     Vec4 second;
     Vec4 probe;
     f32 base;
-    f32 dist;
+    f32 line_probe_hit_distance;
     f32 probe_local_x_offset;
     s32 hit;
 
@@ -56,11 +56,11 @@ void FUN_L00_00221310(void) {
             if (second.f[2] < 0.5f) {
                 second.f[2] = 0.5f;
             }
-            dist = 20.0f;
+            line_probe_hit_distance = 20.0f;
             hit = collision_line(&first, &second, 2, hero.moby, 0);
             if (hit != 0) {
-                dist = fast_vec_dist(&first, &coll_hit.point);
-                if (!(3.0f < dist)) {
+                line_probe_hit_distance = fast_vec_dist(&first, &coll_hit.point);
+                if (!(3.0f < line_probe_hit_distance)) {
                     return;
                 }
             }
@@ -75,7 +75,7 @@ void FUN_L00_00221310(void) {
                     if (hit == 0) {
                         hero.unk258 = 20.0f;
                     } else {
-                        hero.unk258 = dist;
+                        hero.unk258 = line_probe_hit_distance;
                     }
                     hero.unk25C = hero.unk234 + probe_local_x_offset;
                     if (hero.unk25C < 0.0f) {
