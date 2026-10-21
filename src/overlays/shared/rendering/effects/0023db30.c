@@ -287,7 +287,7 @@ extern T_0023e738 D_L00_001804C0_0023e738[] __asm__("D_L00_001804C0");
 extern P_0023e738 D_L00_001802C0_0023e738[] __asm__("D_L00_001802C0");
 void FUN_001f9810_0023e738(void *, int) __asm__("FUN_001f9810");
 int FUN_L00_0023e738(u128 *v, float a, float b_0023e738, float c, float d, float e);
-int FUN_L00_0023e738(u128 *v, float position_w, float b_0023e738, float color_component_x, float color_component_y, float color_component_z) {
+int FUN_L00_0023e738(u128 *position, float position_w, float b_0023e738, float color_component_x, float color_component_y, float color_component_z) {
     int i;
     T_0023e738 *slot_state;
     P_0023e738 *parameter_entry;
@@ -300,7 +300,7 @@ int FUN_L00_0023e738(u128 *v, float position_w, float b_0023e738, float color_co
         return -1;
     slot_state = &D_L00_001804C0_0023e738[i];
     parameter_entry = &D_L00_001802C0_0023e738[i];
-    qcopy(&parameter_entry->pos, v);
+    qcopy(&parameter_entry->pos, position);
     parameter_entry->pos.f[3] = position_w;
     parameter_entry->x = color_component_x;
     parameter_entry->y = color_component_y;
