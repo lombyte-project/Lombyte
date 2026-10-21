@@ -1158,8 +1158,8 @@ typedef struct { char p[0x156]; short h156; } D_a0d0;
 void FUN_L15_0029a0d0(void *mp) {
     unsigned char *source_moby = mp;
     char *moby_data = *(char **)(source_moby + 0x78);
-    float v[4];
-    float w[4];
+    float source_line_endpoint[4];
+    float listed_line_endpoint[4];
     short *group_moby_entry;
     int off;
     char *listed_moby;
@@ -1175,15 +1175,15 @@ void FUN_L15_0029a0d0(void *mp) {
     if (group_moby_entry == 0) {
         return;
     }
-    qcopy(v, source_moby + 0x10);
-    v[2] += 1.0f;
+    qcopy(source_line_endpoint, source_moby + 0x10);
+    source_line_endpoint[2] += 1.0f;
     do {
         off = (*(unsigned short *)group_moby_entry & 0x7FFF) << 8;
         listed_moby = (char *)(off + D_L15_0015FFD8_a0);
         if (listed_moby[0x20] >= 0 && *(short *)(listed_moby + 0xA6) == 0x2C) {
-            qcopy(w, listed_moby + 0x10);
-            w[2] += 1.0f;
-            if (FUN_001efa68_a0(w, v, 2, 0, 0) == 0) {
+            qcopy(listed_line_endpoint, listed_moby + 0x10);
+            listed_line_endpoint[2] += 1.0f;
+            if (FUN_001efa68_a0(listed_line_endpoint, source_line_endpoint, 2, 0, 0) == 0) {
                 moby_data = *(char **)((char *)(off + D_L15_0015FFD8_a0) + 0x78);
                 ((D_a0d0 *)moby_data)->h156 = FUN_001f96f8_a0(300);
                 moby_data[0x15B] = 0;
