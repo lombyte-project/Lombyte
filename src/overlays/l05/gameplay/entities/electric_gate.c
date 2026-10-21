@@ -1032,7 +1032,7 @@ void FUN_L05_003150f0(struct Moby *emitter_moby) {
     float u[4];
     struct EmitterVars *emitter_vars = (struct EmitterVars *)emitter_moby->pvars;
     float floor;
-    float lim;
+    float minimum_particle_speed;
     float particle_speed, second_particle_speed_sample, third_particle_speed_sample;
     float scale;
     int kind;
@@ -1085,16 +1085,16 @@ void FUN_L05_003150f0(struct Moby *emitter_moby) {
             if (D_L05_00161EBC < random_float_between(0.0f, 100.0f)) {
                 big = 0;
             }
-            lim = D_L05_00161EAC;
+            minimum_particle_speed = D_L05_00161EAC;
             if (!big) {
-                lim = D_L05_00161EB0;
+                minimum_particle_speed = D_L05_00161EB0;
             }
             qcopy(v, &emitter_moby->pos);
             fast_vec_normalize(u, &emitter_moby->rot_row1, random_float_between(-D_L05_00161EB4, D_L05_00161EB4));
             add_vector_xyz(v, v, u);
-            particle_speed = random_float_between(lim, D_L05_00161EA8);
-            second_particle_speed_sample = random_float_between(lim, D_L05_00161EA8);
-            third_particle_speed_sample = random_float_between(lim, D_L05_00161EA8);
+            particle_speed = random_float_between(minimum_particle_speed, D_L05_00161EA8);
+            second_particle_speed_sample = random_float_between(minimum_particle_speed, D_L05_00161EA8);
+            third_particle_speed_sample = random_float_between(minimum_particle_speed, D_L05_00161EA8);
             if (particle_speed < second_particle_speed_sample) {
                 particle_speed = second_particle_speed_sample;
             }
@@ -1118,12 +1118,12 @@ void FUN_L05_003150f0(struct Moby *emitter_moby) {
                 float fall_time_frames = square_root(2.0f * (emitter_moby->pos.z - floor) / (frame_time_sq * 10.0f));
                 if (fall_time_frames < (float)emitter_vars->age) {
                     float splash_forward_distance = fall_time_frames * (frame_time * 4.0f);
-                    float ang = random_angle_radians();
+                    float splash_offset_angle = random_angle_radians();
                     float r = random_float_between(0.0f, 1.25f);
                     fast_vec_scale(v, &emitter_moby->rot_row0, splash_forward_distance);
                     add_vector_xyz(v, v, &emitter_moby->pos);
-                    v[0] += fast_cos(ang) * r;
-                    v[1] += fast_sin(ang) * r;
+                    v[0] += fast_cos(splash_offset_angle) * r;
+                    v[1] += fast_sin(splash_offset_angle) * r;
                     v[2] = floor + 0.05f;
                     spawn_splash(random_float_between(1.0f, 1.5f), random_integer_below(2) ? 2.0f : -2.0f, v,
                                      D_L05_0015F580_macro, &D_L05_001612D0[emitter_vars->floor].z);
