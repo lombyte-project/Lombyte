@@ -19,34 +19,34 @@ extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L15_002044c8(void) {
-    struct Hero *g = &hero;
-    int keep = g->unk12ED;
-    int st = g->ground_type;
+    struct Hero *hero_state = &hero;
+    int keep = hero_state->unk12ED;
+    int saved_ground_type = hero_state->ground_type;
     int collision_check_level_index;
-    fast_mem_zero16(&g->ground_type, 0x10);
-    g->unk12ED = keep;
-    g->ground_type = -1;
-    g->unk20A9 = 0;
-    g->unk308 = 0;
-    if (st == -1)
+    fast_mem_zero16(&hero_state->ground_type, 0x10);
+    hero_state->unk12ED = keep;
+    hero_state->ground_type = -1;
+    hero_state->unk20A9 = 0;
+    hero_state->unk308 = 0;
+    if (saved_ground_type == -1)
         return;
-    if (st == 2) {
-        if (g->frames_off_ground.s == 0 || g->ground_distance < 0.3f) {
-            g->unk12E7 = 1;
-            if (g->vehicle_mode == 0) {
-                char *item_slot_one_moby = ((char *)g->items[1].moby);
+    if (saved_ground_type == 2) {
+        if (hero_state->frames_off_ground.s == 0 || hero_state->ground_distance < 0.3f) {
+            hero_state->unk12E7 = 1;
+            if (hero_state->vehicle_mode == 0) {
+                char *item_slot_one_moby = ((char *)hero_state->items[1].moby);
                 if (item_slot_one_moby != 0 && *(short *)(item_slot_one_moby + 0xA6) == 0xAD)
-                    g->unk308 = 1;
+                    hero_state->unk308 = 1;
             }
         }
     }
-    if (st == 0xE) {
+    if (saved_ground_type == 0xE) {
         struct Hero *q = &hero;
         *(char *)&q->base_condition = 1;
         q->unk22A4 = 0.2f;
         q->water_surface_z = q->ground_z.f + 0.2f;
     }
-    if (st == 0) {
+    if (saved_ground_type == 0) {
         struct Hero *q = &hero;
         float water_depth = q->water_surface_z - q->ground_z.f;
         q->unk22A4 = water_depth;
@@ -60,7 +60,7 @@ void FUN_L15_002044c8(void) {
     } else {
         collision_check_level_index = current_level_index;
     }
-    if (st == 3) {
+    if (saved_ground_type == 3) {
         struct Hero *q = &hero;
         *(char *)&q->selector_3 = 1;
         collision_check_level_index = D_0015ED84_d;
@@ -76,23 +76,23 @@ void FUN_L15_002044c8(void) {
             }
         }
     }
-    if (st == 0xB) {
+    if (saved_ground_type == 0xB) {
         struct Hero *q = &hero;
         *(char *)&q->selector_11 = 1;
     }
-    if (st == 0x4) {
+    if (saved_ground_type == 0x4) {
         struct Hero *q = &hero;
         *(char *)&q->unk12E3 = 1;
     }
-    if (st == 0x8) {
+    if (saved_ground_type == 0x8) {
         struct Hero *q = &hero;
         *(char *)&q->on_slip_ground = 1;
     }
-    if (st == 0x9) {
+    if (saved_ground_type == 0x9) {
         struct Hero *q = &hero;
         *(char *)&q->unk12EE = 1;
     }
-    if (st == 0xC) {
+    if (saved_ground_type == 0xC) {
         struct Hero *q = &hero;
         *(char *)&q->on_slip_ground = 1;
     }
