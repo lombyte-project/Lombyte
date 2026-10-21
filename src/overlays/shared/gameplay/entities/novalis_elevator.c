@@ -778,10 +778,10 @@ void bolt_crank_update(struct Moby *moby) {
         facing[2] = 0.0f;
         distance = fast_vec_dot(facing, stick);
         {
-            float accel = frame_time_sq * 5.5f;
+            float max_speed_change = frame_time_sq * 5.5f;
             float change = distance - crank->speed;
-            if (accel < change) change = accel;
-            if (change < -accel) change = -accel;
+            if (max_speed_change < change) change = max_speed_change;
+            if (change < -max_speed_change) change = -max_speed_change;
             max_speed = frame_time * 3.7f;
             crank->speed = crank->speed + change;
         }
