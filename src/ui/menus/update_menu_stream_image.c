@@ -30,7 +30,7 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
     };
     s32 flags;
     s32 selected_entry_index;
-    s32 r;
+    s32 read_offset_or_start_result;
     s32 x;
     s32 y;
     u8 *read_destination;
@@ -88,19 +88,19 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
         }
         read_destination = (u8 *)stream->data.stream.buffer[0];
         if (stream->data.stream.flags & 0x20) {
-            r = get_stream_buffer_size(stream->data.stream.buffer[0]) -
+            read_offset_or_start_result = get_stream_buffer_size(stream->data.stream.buffer[0]) -
                 (stream->data.stream.entries[selected_entry_index].sector_count << 11);
-            stream->data.stream.read_offset = r;
-            read_destination += r;
+            stream->data.stream.read_offset = read_offset_or_start_result;
+            read_destination += read_offset_or_start_result;
         }
         if (stream->data.stream.flags & 0x10) {
-            r = start_audio_stream_read(read_destination, stream->data.stream.entries[selected_entry_index].sector,
+            read_offset_or_start_result = start_audio_stream_read(read_destination, stream->data.stream.entries[selected_entry_index].sector,
                                         stream->data.stream.entries[selected_entry_index].sector_count);
         } else {
-            r = start_audio_stream_read(read_destination, stream->data.stream.entries[selected_entry_index].sector,
+            read_offset_or_start_result = start_audio_stream_read(read_destination, stream->data.stream.entries[selected_entry_index].sector,
                                         stream->data.stream.entries[selected_entry_index].sector_count);
         }
-        if (r != 0) {
+        if (read_offset_or_start_result != 0) {
             mark_stream_buffer_read_active(stream->data.stream.buffer[0]);
             stream->data.stream.loaded_entry[0] = selected_entry_index;
             stream->data.stream.state++;
