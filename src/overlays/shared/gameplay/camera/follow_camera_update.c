@@ -408,17 +408,17 @@ extern void FUN_001f9ad8_2e9dd0(void *, void *, void *) __asm__("FUN_001f9ad8");
 
 void FUN_L00_002e9dd0(char *camera_object) {
     u128 hero_up_axis;
-    u128 b;
+    u128 scaled_hero_up_axis;
     struct Hero *g = &hero;
     FUN_001f9bf8_2e9dd0(&hero_up_axis, ((char *)g->moby) + 0xE0, 1.0f);
     if (g->vehicle_mode == 2) {
-        FUN_001f9a68_2e9dd0(&b, &hero_up_axis, 9.5f);
+        FUN_001f9a68_2e9dd0(&scaled_hero_up_axis, &hero_up_axis, 9.5f);
     } else if (g->vehicle_mode == 1) {
-        FUN_001f9a68_2e9dd0(&b, &hero_up_axis, 0.9f);
+        FUN_001f9a68_2e9dd0(&scaled_hero_up_axis, &hero_up_axis, 0.9f);
     } else {
-        FUN_001f9a68_2e9dd0(&b, &hero_up_axis, 1.6f);
+        FUN_001f9a68_2e9dd0(&scaled_hero_up_axis, &hero_up_axis, 1.6f);
     }
-    FUN_001f9a10_2e9dd0(camera_object + 0x30, &D_0013F3D0_2e9dd0, &b);
+    FUN_001f9a10_2e9dd0(camera_object + 0x30, &D_0013F3D0_2e9dd0, &scaled_hero_up_axis);
     {
         void *side_axis_reference = D_L00_00166E04_2e9dd0;
         qcopy(camera_object + 0x20, &hero_up_axis);
