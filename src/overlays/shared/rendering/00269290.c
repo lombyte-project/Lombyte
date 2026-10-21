@@ -1201,7 +1201,7 @@ void FUN_L00_0026c088(Part_0026CF28 *particle) {
     float saved[4];
     float grav[4] = { D_0015ED70 * 4.8f, D_0015ED70 * 24.5f, D_0015ED70 * 9.8f, -(D_0015ED70 * 0.24f) };
     Data_0026CF28 *particle_data = (Data_0026CF28 *)(particle + 1);
-    int alpha, r, k;
+    int alpha, spawn_lifetime, k;
     float reference_distance_or_spawn_size;
 
     if (particle_data->kind == 3 && D_L00_0015F5D0 > 0.95f)
@@ -1211,8 +1211,8 @@ void FUN_L00_0026c088(Part_0026CF28 *particle) {
         return;
     }
     {
-        float f20 = convert_integer_to_float_c2(particle->timer);
-        particle->col = FUN_L00_002371e0_c(particle_data->c14, particle_data->c10, f20 / convert_integer_to_float_c2(particle_data->life));
+        float remaining_lifetime_float = convert_integer_to_float_c2(particle->timer);
+        particle->col = FUN_L00_002371e0_c(particle_data->c14, particle_data->c10, remaining_lifetime_float / convert_integer_to_float_c2(particle_data->life));
         alpha = particle->col >> 24;
         reference_distance_or_spawn_size = distance_xyz(particle->pos, D_L00_00166DC0);
         if (particle->timer < scale_game_frames_alt(6))
@@ -1230,14 +1230,14 @@ void FUN_L00_0026c088(Part_0026CF28 *particle) {
         qcopy(saved, particle->pos);
         if (particle->pos[2] < particle_data->vel[3]) {
             if (k == 1) {
-                int u, w, minimum_spawn_lifetime;
-                u = FUN_L00_002371e0_c(0x7F000000, 0x7F182030, random_float_between(0.25f, 1.0f));
-                w = FUN_L00_002371e0_c(0, 0x5F5F5F, random_float_between(0.5f, 1.0f));
+                int spawn_initial_color, spawn_final_color, minimum_spawn_lifetime;
+                spawn_initial_color = FUN_L00_002371e0_c(0x7F000000, 0x7F182030, random_float_between(0.25f, 1.0f));
+                spawn_final_color = FUN_L00_002371e0_c(0, 0x5F5F5F, random_float_between(0.5f, 1.0f));
                 particle_data->vel[2] = 0;
                 reference_distance_or_spawn_size = random_float_between(200000.0f, 300000.0f);
                 minimum_spawn_lifetime = scale_game_frames_alt(0x5A);
-                r = FUN_L00_00257b90(minimum_spawn_lifetime, scale_game_frames_alt(0x96));
-                FUN_L00_0026bed0_c(particle->pos, particle_data, u, w, reference_distance_or_spawn_size, r, 3);
+                spawn_lifetime = FUN_L00_00257b90(minimum_spawn_lifetime, scale_game_frames_alt(0x96));
+                FUN_L00_0026bed0_c(particle->pos, particle_data, spawn_initial_color, spawn_final_color, reference_distance_or_spawn_size, spawn_lifetime, 3);
             }
             free_effect_particle(particle);
         } else
