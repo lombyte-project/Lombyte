@@ -921,10 +921,10 @@ void snagglebeast_update(unsigned char *moby) {
             }
         }
         if (*(int *)(data + 0x290) != -1) {
-            char *tbl = D_L07_001B0530[*(int *)(data + 0x290)];
+            char *chase_path = D_L07_001B0530[*(int *)(data + 0x290)];
             int i;
-            for (i = 0; i < *(int *)tbl; i++) {
-                ((SwarmPath *)tbl)->points[i].f[3] = FUN_001f9b48(tbl + (i * 16 + 0x10), tbl + (((i + 1) % *(int *)tbl) * 16 + 0x10));
+            for (i = 0; i < *(int *)chase_path; i++) {
+                ((SwarmPath *)chase_path)->points[i].f[3] = FUN_001f9b48(chase_path + (i * 16 + 0x10), chase_path + (((i + 1) % *(int *)chase_path) * 16 + 0x10));
             }
         }
         if (*(int *)(data + 0x188) != -1) {
@@ -1278,11 +1278,11 @@ void snagglebeast_update(unsigned char *moby) {
         break;
     }
     case SNAGGLEBEAST_TURN_TOWARD_TARGET: {
-        float diff;
+        float target_heading_delta;
         if (data[0x1F5] == 0) qcopy(data + 0xC0, ((char *)&hero) + 0x80);
-        diff = fast_subtract_rotations(fast_arc_tan(*(float *)(data + 0xC0) - *(float *)(moby + 0x10), *(float *)(data + 0xC4) - *(float *)(moby + 0x14)), *(float *)(moby + 0x48));
+        target_heading_delta = fast_subtract_rotations(fast_arc_tan(*(float *)(data + 0xC0) - *(float *)(moby + 0x10), *(float *)(data + 0xC4) - *(float *)(moby + 0x14)), *(float *)(moby + 0x48));
         if (!target_close && (moby[0x70] & 2)) {
-            if (diff < 0.0001f) {
+            if (target_heading_delta < 0.0001f) {
                 if (moby[0x53] != 3) FUN_00212f90(moby, 3, 5, random_int_between(0xA, 0xD));
             } else {
                 if (moby[0x53] != 0xE) FUN_00212f90(moby, 0xE, 5, random_int_between(0xA, 0xD));
@@ -1294,9 +1294,9 @@ void snagglebeast_update(unsigned char *moby) {
                 FUN_L00_00258278((struct Moby *)moby, fast_arc_tan(*(float *)(data + 0xC0) - *(float *)(moby + 0x10), *(float *)(data + 0xC4) - *(float *)(moby + 0x14)),
                                   (float *)(data + 0x168), frame_time_sq * 2.0943952f, frame_time_sq * 0.6981317f, frame_time * 2.0943952f);
             }
-            if (diff > 0.001f && moby[0x53] == 3) {
+            if (target_heading_delta > 0.001f && moby[0x53] == 3) {
                 FUN_00212f90(moby, 0xE, 5, random_int_between(0xA, 0xD));
-            } else if (diff < 0.001f && moby[0x53] == 0xE) {
+            } else if (target_heading_delta < 0.001f && moby[0x53] == 0xE) {
                 FUN_00212f90(moby, 3, 5, random_int_between(0xA, 0xD));
             }
         } else {
@@ -1516,9 +1516,9 @@ void snagglebeast_update(unsigned char *moby) {
                 qcopy(((char *)&hero) + 0x1D30, data + 0x110);
                 qcopy(((char *)&hero) + 0x80, data + 0x110);
                 {
-                    char *g2 = ((char *)&hero);
-                    *(float *)(g2 + 0x1D48) = fast_add_rotations(*(float *)(g2 + 0x1D48), frame_time * 25.132742f);
-                    *(float *)(g2 + 0x98) = fast_add_rotations(*(float *)(g2 + 0x1D48), frame_time * 25.132742f);
+                    char *captured_hero = ((char *)&hero);
+                    *(float *)(captured_hero + 0x1D48) = fast_add_rotations(*(float *)(captured_hero + 0x1D48), frame_time * 25.132742f);
+                    *(float *)(captured_hero + 0x98) = fast_add_rotations(*(float *)(captured_hero + 0x1D48), frame_time * 25.132742f);
                 }
                 *(float *)(data + 0x16C) = hero_distance;
                 slot = D_L07_0020C600[*(int *)(data + 0x164)][0];
@@ -1538,24 +1538,24 @@ void snagglebeast_update(unsigned char *moby) {
                     *(int *)(data + 0x1F8) = -1;
                     moby[0x20] = 1;
                 } else {
-                    int cnt = (D_L07_00179B40 + slot)->count;
+                    int ammo_transfer_count = (D_L07_00179B40 + slot)->count;
                     int rem;
                     int pos;
                     if (*(short *)(data + 0x19E) == 0) {
                         *(short *)(data + 0x19E) = ((int *)&weapon_ammo_counts)[slot] / 8;
-                        if (*(short *)(data + 0x19E) < cnt) *(short *)(data + 0x19E) = cnt;
+                        if (*(short *)(data + 0x19E) < ammo_transfer_count) *(short *)(data + 0x19E) = ammo_transfer_count;
                         *(float *)(data + 0x1AC) = random_float_between(*(float *)(data + 0x1AC) + 20.0f, *(float *)(data + 0x1AC) + 100.0f);
                     }
-                    cnt = *(short *)(data + 0x19E);
-                    if (((int *)&weapon_ammo_counts)[slot] < cnt) {
-                        cnt = ((int *)&weapon_ammo_counts)[slot];
+                    ammo_transfer_count = *(short *)(data + 0x19E);
+                    if (((int *)&weapon_ammo_counts)[slot] < ammo_transfer_count) {
+                        ammo_transfer_count = ((int *)&weapon_ammo_counts)[slot];
                         *(short *)(data + 0x19E) = 0;
                         *(int *)(data + 0x164) += 1;
                     }
-                    rem = ((int *)&weapon_ammo_counts)[slot] - cnt * 8;
+                    rem = ((int *)&weapon_ammo_counts)[slot] - ammo_transfer_count * 8;
                     pos = rem > 0;
-                    cnt = cnt + pos * rem;
-                    if (cnt > 0) {
+                    ammo_transfer_count = ammo_transfer_count + pos * rem;
+                    if (ammo_transfer_count > 0) {
                         float zv = 0.0f;
                         if (*(int *)(data + 0x18C) == -1) {
                             FUN_L00_00257d78((float *)&velocity, frame_time * 4.0f, frame_time * 10.0f);
@@ -1588,11 +1588,11 @@ void snagglebeast_update(unsigned char *moby) {
                         }
                         FUN_0022da68(0xB, 0, (int)moby);
                         {
-                            char *obj = spawn_on_path(&direction, slot, cnt, 0);
-                            if (obj != 0) {
-                                qcopy_nc(*(char **)(obj + 0x78) + 0x10, &velocity);
-                                *(float *)(*(char **)(obj + 0x78) + 0x28) = zv;
-                                ((int *)&weapon_ammo_counts)[slot] -= cnt;
+                            char *spawned_moby = spawn_on_path(&direction, slot, ammo_transfer_count, 0);
+                            if (spawned_moby != 0) {
+                                qcopy_nc(*(char **)(spawned_moby + 0x78) + 0x10, &velocity);
+                                *(float *)(*(char **)(spawned_moby + 0x78) + 0x28) = zv;
+                                ((int *)&weapon_ammo_counts)[slot] -= ammo_transfer_count;
                                 *(int *)(data + 0x160) = scale_ticks(0);
                             }
                         }
