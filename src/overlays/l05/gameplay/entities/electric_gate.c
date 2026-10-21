@@ -2368,8 +2368,8 @@ void FUN_L05_00319208(void *moby_v) {
     char *data = *(char **)(moby + 0x78);
     int *list = (int *)(data + 0x80);
     int i;
-    int idx;
-    char *g;
+    int selected_pose_byte_offset;
+    char *pose_table_base;
     *(short *)(data + 0xB4) = -1;
     for (i = 0; i < 5; i++) {
         if (func_001F9D10_19208(moby + 0x10, D_L05_001600EC_19208 + (list[i] << 7) + 0x30) < 1.0f) {
@@ -2410,11 +2410,11 @@ void FUN_L05_00319208(void *moby_v) {
     {
         int *selected = list;
         selected += *(short *)(data + 0xB4);
-        idx = *selected << 7;
+        selected_pose_byte_offset = *selected << 7;
     }
-    g = D_L05_001600EC_19208;
-    qcopy(data + 0x60, (void *)(idx + (int)g + 0x30));
-    qcopy(data + 0x70, (void *)(idx + (int)g + 0x70));
+    pose_table_base = D_L05_001600EC_19208;
+    qcopy(data + 0x60, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x30));
+    qcopy(data + 0x70, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x70));
 }
 /* Picks the path for the current point (five points, point 2 chosen by the table entry) and sets the travel speeds; same source as FUN_L16_002e4a58. */
 
