@@ -1610,7 +1610,7 @@ void FUN_L15_0029ae18(char *moby) {
     float spark_b[4];
     char *data = *(char **)(moby + 0x78);
     float noise_radius;
-    int frame_count, b, third_frame_count;
+    int frame_count, second_frame_count, third_frame_count;
     noise_radius = D_L15_00161440;
     noise_radius *= D_0015ED6C;
     scale_vector_xyz(spark_a, data, D_L15_00161448);
@@ -1625,11 +1625,11 @@ void FUN_L15_0029ae18(char *moby) {
     spark_b[3] = D_L15_00161424;
     frame_count = func_001FA898_r(multiply_global_factor_ed64(
         random_float_between_alt(D_L15_00161428, D_L15_0016142C)));
-    b = func_001FA898_r(multiply_global_factor_ed64(
+    second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
         random_float_between_alt(D_L15_00161430, D_L15_00161434)));
     third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
         random_float_between_alt(D_L15_00161438, D_L15_0016143C)));
-    spawn_spark(moby + 0x10, spark_a, spark_b, D_L15_00161418, D_L15_0016141C, frame_count, b, third_frame_count,
+    spawn_spark(moby + 0x10, spark_a, spark_b, D_L15_00161418, D_L15_0016141C, frame_count, second_frame_count, third_frame_count,
                  D_L15_00161454);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029C168), where it is exact; names translated to the US level program. */
