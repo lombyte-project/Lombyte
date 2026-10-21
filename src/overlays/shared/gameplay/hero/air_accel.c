@@ -720,7 +720,7 @@ extern void FUN_L00_00262840(char *o);
 extern void FUN_L01_00231ae0_u(void) __asm__("FUN_L01_00231ae0");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
-void FUN_L01_00231348(int vehicle_mode, int b, int new_moby) {
+void FUN_L01_00231348(int vehicle_mode, int initial_state, int new_moby) {
     char *g;
     FUN_L00_0020e698();
     g = (char *)D_0013E533 + 0xE1D;
@@ -744,12 +744,12 @@ void FUN_L01_00231348(int vehicle_mode, int b, int new_moby) {
     FUN_L00_00232628();
     FUN_L00_00257024(*(void **)(g + 0x2080));
     FUN_L00_00207a58();
-    *(short *)(g + 0x22CC) = b;
+    *(short *)(g + 0x22CC) = initial_state;
     if (vehicle_mode == 1) {
         *(unsigned short *)(g + 0x22B0) = *(unsigned short *)(g + 0x22A8);
         *(int *)(g + 0x22A8) = *(int *)(g + 0x22AC);
     }
-    hero_set_state(b, 1);
+    hero_set_state(initial_state, 1);
 }
 #include "qcopy.h"
 
