@@ -7088,8 +7088,8 @@ void FUN_L06_00302fd8(char *shuttle_moby) {
         if (primary_visit_byte != 0xFF) {
             *(int *)(shuttle_vars + 0x9C) = 0;
         } else {
-            int b = *(unsigned char *)(*(int *)(shuttle_vars + 0xFC) + idx + (int)visited52);
-            if (b == primary_visit_byte) {
+            int secondary_visit_byte = *(unsigned char *)(*(int *)(shuttle_vars + 0xFC) + idx + (int)visited52);
+            if (secondary_visit_byte == primary_visit_byte) {
                 *(int *)(shuttle_vars + 0x9C) = 3;
             } else {
                 *(int *)(shuttle_vars + 0x9C) = -1;
