@@ -902,7 +902,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     int ex;
     int ey;
     int lock_marker_blink_value;
-    int v;
+    int hp_bar_fill_threshold;
     int lo;
     int hi;
     int idx;
@@ -980,22 +980,22 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     if (hp_display_step_magnitude > 1.0f)
         hp_display_step /= hp_display_step_magnitude;
     *(float *)(ship_vars + 0xF0) += hp_display_step;
-    v = func_001FA898_r(*(float *)(ship_vars + 0xF0) * 251.0f / hero.ship_hp_max) + 2;
-    if (v > 0xFD)
-        v = 0xFD;
-    if (v < 2)
-        v = 2;
-    lo = *(int *)(ship_vars + 0xF4) <= v ? *(int *)(ship_vars + 0xF4) : v;
-    hi = *(int *)(ship_vars + 0xF4) < v ? v : *(int *)(ship_vars + 0xF4);
+    hp_bar_fill_threshold = func_001FA898_r(*(float *)(ship_vars + 0xF0) * 251.0f / hero.ship_hp_max) + 2;
+    if (hp_bar_fill_threshold > 0xFD)
+        hp_bar_fill_threshold = 0xFD;
+    if (hp_bar_fill_threshold < 2)
+        hp_bar_fill_threshold = 2;
+    lo = *(int *)(ship_vars + 0xF4) <= hp_bar_fill_threshold ? *(int *)(ship_vars + 0xF4) : hp_bar_fill_threshold;
+    hi = *(int *)(ship_vars + 0xF4) < hp_bar_fill_threshold ? hp_bar_fill_threshold : *(int *)(ship_vars + 0xF4);
     for (j = lo; j <= hi; j++) {
         idx = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
-        if (j < v) {
+        if (j < hp_bar_fill_threshold) {
             (*(int **)&D_L17_00162180)[idx] = D_L17_001D9B68[idx];
         } else {
             (*(int **)&D_L17_00162180)[idx] = 0x80000000;
         }
     }
-    *(int *)(ship_vars + 0xF4) = v;
+    *(int *)(ship_vars + 0xF4) = hp_bar_fill_threshold;
 }
 #define NOT_SDA
 
