@@ -268,7 +268,7 @@ char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len,
     char *spawned_moby = func_0020D348_m(0x3F9);
     if (spawned_moby != 0) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
-        int r;
+        int size_length_ratio;
         *(int *)(spawned_moby + 0x94) = 0;
         *(int *)(moby_vars + 0x1C) = owner;
         *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
@@ -285,10 +285,10 @@ char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len,
             len = fast_vec_length(dir);
         }
         qcopy(spawned_moby + 0x10, pos);
-        r = truncate_float_to_s32(size / len);
-        *(int *)(moby_vars + 0x14) = r;
+        size_length_ratio = truncate_float_to_s32(size / len);
+        *(int *)(moby_vars + 0x14) = size_length_ratio;
         *(float *)(moby_vars + 0x20) = z;
-        *(int *)(moby_vars + 0x18) = r - 13;
+        *(int *)(moby_vars + 0x18) = size_length_ratio - 13;
         *(short *)(spawned_moby + 0x34) = 0x200;
         FUN_L00_00250df8(spawned_moby);
     }
