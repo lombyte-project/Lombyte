@@ -220,34 +220,34 @@ void FUN_L00_0028a480(void) {
         SKY_SHELL_TENFOLD_PHASE_WIDE_WRAP_ROTATION = 2,
         SKY_SHELL_TENFOLD_PHASE_ROTATION = 3
     };
-    OvlQuad v[1];
+    OvlQuad shell_rotation[1];
     int i;
 
-    qzero(v);
+    qzero(shell_rotation);
     for (i = 0; i < *(short *)(D_L00_0016051C_28a480 + 6); i++) {
         switch (i) {
         case SKY_SHELL_DOUBLE_PHASE_ROTATION:
-            ((float *)v)[2] =
+            ((float *)shell_rotation)[2] =
                 (float)((D_L00_0015F5CC_28a480g * 2) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
-            FUN_001fa070_28a480(D_L00_001BD7E0_lui, v);
+            FUN_001fa070_28a480(D_L00_001BD7E0_lui, shell_rotation);
             break;
         case SKY_SHELL_QUINTUPLE_PHASE_ROTATION:
-            ((float *)v)[2] =
+            ((float *)shell_rotation)[2] =
                 (float)((D_L00_0015F5CC_28a480d * 5) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
-            FUN_001fa070_28a480(D_L00_001BD7E0_lui, v);
+            FUN_001fa070_28a480(D_L00_001BD7E0_lui, shell_rotation);
             break;
         case SKY_SHELL_TENFOLD_PHASE_WIDE_WRAP_ROTATION:
-            ((float *)v)[2] =
+            ((float *)shell_rotation)[2] =
                 (float)((D_L00_0015F5CC_28a480d * 10) & 0x3FFFF) * 2.39684496e-05f - 3.14159265f;
-            FUN_001fa070_28a480(D_L00_001BD7E0_lui, v);
+            FUN_001fa070_28a480(D_L00_001BD7E0_lui, shell_rotation);
             break;
         case SKY_SHELL_TENFOLD_PHASE_ROTATION:
-            ((float *)v)[2] =
+            ((float *)shell_rotation)[2] =
                 (float)((D_L00_0015F5CC_28a480g * 10) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
-            FUN_001fa070_28a480(D_L00_001BD7E0_lui, v);
+            FUN_001fa070_28a480(D_L00_001BD7E0_lui, shell_rotation);
             break;
         default:
             FUN_001f9fc8_28a480(D_L00_001BD7E0_lui);
