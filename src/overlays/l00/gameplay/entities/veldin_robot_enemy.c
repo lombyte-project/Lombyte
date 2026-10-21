@@ -363,15 +363,15 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         }
         break;
     case VELDIN_ROBOT_STATE_PROCESS_COLLISION_PROBES: {
-        f32 ang;
+        f32 desired_heading;
 
-        ang = fast_arc_tan(vars->targetPos.f[0] - moby->pos.f[0], vars->targetPos.f[1] - moby->pos.f[1]);
+        desired_heading = fast_arc_tan(vars->targetPos.f[0] - moby->pos.f[0], vars->targetPos.f[1] - moby->pos.f[1]);
         if (moby->flags & 0x8000) {
-            ang = fast_add_rotations(ang, D_L00_00161BEC);
+            desired_heading = fast_add_rotations(desired_heading, D_L00_00161BEC);
         } else {
-            ang = fast_subtract_rotations(ang, D_L00_00161BEC);
+            desired_heading = fast_subtract_rotations(desired_heading, D_L00_00161BEC);
         }
-        ELECTROID_TURN(moby, vars, ang, 1.5707964f);
+        ELECTROID_TURN(moby, vars, desired_heading, 1.5707964f);
         build_moby_bone_transform(moby, 0, mtx);
         qcopy(&delta, &moby->unkC0);
         delta.f[2] = 0.0f;
