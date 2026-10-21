@@ -642,10 +642,10 @@ void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
     float up[4];
     float direction_scratch[4];
     float ax[4];
-    float len;
+    float direction_length;
     float dt;
-    float ang;
-    float lim;
+    float tilt_angle;
+    float max_tilt_angle;
 
     *(u128_s07 *)up = 0;
     up[2] = 1.0f;
@@ -661,18 +661,18 @@ void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
         } else {
             subtract_vector_xyz(direction_scratch, (char *)((char *)&D_0013F3D0), moby + 0x10);
             direction_scratch[2] = direction_scratch[2] + D_L14_00161B04;
-            len = vector_length_xyz(direction_scratch);
-            if (len == 0.0f) {
+            direction_length = vector_length_xyz(direction_scratch);
+            if (direction_length == 0.0f) {
                 qcopy(target_up_vector, up);
             } else {
                 dt = dot_vectors_xyz(up, direction_scratch);
-                ang = 1.5707963705f - fast_arc_sin(dt / len);
-                lim = D_L14_00161B00 * 0.0174532924f;
-                if (lim < ang) {
-                    ang = lim;
+                tilt_angle = 1.5707963705f - fast_arc_sin(dt / direction_length);
+                max_tilt_angle = D_L14_00161B00 * 0.0174532924f;
+                if (max_tilt_angle < tilt_angle) {
+                    tilt_angle = max_tilt_angle;
                 }
                 cross_vectors_xyz(ax, direction_scratch, up);
-                build_look_at_matrix(target_up_vector, up, ax, ang);
+                build_look_at_matrix(target_up_vector, up, ax, tilt_angle);
                 normalize_vector_xyz(target_up_vector, target_up_vector, 1.0f);
             }
         }
