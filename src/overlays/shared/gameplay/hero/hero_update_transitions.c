@@ -164,7 +164,7 @@ void hero_update_transitions(void) {
     int prevAnim;
     float v0[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
-    int sp20;
+    int idle_fidget_index;
     int sp24;
     int path_seg;
     float path_t;
@@ -238,11 +238,11 @@ void hero_update_transitions(void) {
                 } else {
                     int base = D_0015ED8C;
                     int next = base;
-                    int cur = hero.items[0].item_id;
-                    if (cur == 8) {
+                    int equipped_item_id = hero.items[0].item_id;
+                    if (equipped_item_id == 8) {
                         next = D_00141660;
                     }
-                    if (next != 0 && cur != base) {
+                    if (next != 0 && equipped_item_id != base) {
                         if (usage_stats.stat[31].count < 0xFFFF) {
                             usage_stats.stat[31].count++;
                         }
@@ -311,11 +311,11 @@ void hero_update_transitions(void) {
                         }
                         r = FUN_L00_002050b8(moby[0x53]);
                         if (r == hero_idle_sequence(0) && flag) {
-                            if (pick_idle_fidget(&sp20)) {
+                            if (pick_idle_fidget(&idle_fidget_index)) {
                                 HeroTableEntry70 *rec;
 
-                                hero.unk2270 = sp20;
-                                rec = &idle_fidgets[sp20];
+                                hero.unk2270 = idle_fidget_index;
+                                rec = &idle_fidgets[idle_fidget_index];
                                 hero.fidget_cooldown = scale_game_frames(0x78);
                                 rec->duration_frames = multiply_global_factor_ed64(rec->duration) * 60.0f;
                                 if (rec->use_state_40 != 0) {
