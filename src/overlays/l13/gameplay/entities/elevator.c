@@ -547,14 +547,14 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
             }
             turret_moby->state = 1;
         } else {
-            float lim;
+            float yaw_offset_limit_radians;
             approach_value(&data->f68, 20.0f, frame_time * 6.0f);
             target_yaw_scratch = FUN_001fa5c8_2b0e80(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
-            lim = data->f6C * 0.017453292f;
-            if (lim < target_yaw_scratch) {
-                target_yaw_scratch = lim;
-            } else if (target_yaw_scratch < -lim) {
-                target_yaw_scratch = -lim;
+            yaw_offset_limit_radians = data->f6C * 0.017453292f;
+            if (yaw_offset_limit_radians < target_yaw_scratch) {
+                target_yaw_scratch = yaw_offset_limit_radians;
+            } else if (target_yaw_scratch < -yaw_offset_limit_radians) {
+                target_yaw_scratch = -yaw_offset_limit_radians;
             }
             target_yaw_scratch = FUN_001fa580_2b0e80(target_yaw_scratch, data->f54);
             approach_angle(&turret_moby->rot.z, target_yaw_scratch, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, frame_time * 12.566371f);
