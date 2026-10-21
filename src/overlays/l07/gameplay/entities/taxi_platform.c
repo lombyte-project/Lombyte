@@ -2396,13 +2396,13 @@ void FUN_L07_0030e998(char *moby, char *x, float *hp) {
     };
     char *info;
     int hit;
-    int r;
+    int hit_reaction_result;
     if (((unsigned char *)moby)[0x20] == 0xE)
         return;
     info = find_moby_hit(moby, 0x330000, 0);
-    r = hit_reaction(moby, info, hp, 0, &hit, 0, 0, 4);
+    hit_reaction_result = hit_reaction(moby, info, hp, 0, &hit, 0, 0, 4);
     if (((unsigned char *)moby)[0xBC] != 0) {
-        switch (r) {
+        switch (hit_reaction_result) {
         case HIT_REACTION_NONE:
             break;
         case SHARKIGATOR_CLEAR_HEALTH_RESPONSE:
