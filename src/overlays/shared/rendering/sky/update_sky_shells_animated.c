@@ -77,17 +77,17 @@ extern void FUN_001fa070_2899a8(void *, void *) __asm__("FUN_001fa070");
 void FUN_L00_002899a8_2899a8(void) __asm__("FUN_L00_002899a8");
 
 void FUN_L00_002899a8_2899a8(void) {
-    SkyRotVec_2899a8 rot;
+    SkyRotVec_2899a8 shell_rotation;
     *(short *)(D_L00_0016051C_2899a8 + 4) = 0;
     FUN_001f9fc8_2899a8(D_L00_001BD7E0);
     sky_draw_shell(0);
-    qzero(&rot);
-    rot.f[2] = (f32) * (u16 *)&D_L00_0015F5CC_2899a8 * 9.5873802e-5f - 3.1415927f;
-    FUN_001fa070_2899a8(D_L00_001BD7E0, &rot);
+    qzero(&shell_rotation);
+    shell_rotation.f[2] = (f32) * (u16 *)&D_L00_0015F5CC_2899a8 * 9.5873802e-5f - 3.1415927f;
+    FUN_001fa070_2899a8(D_L00_001BD7E0, &shell_rotation);
     sky_draw_shell(1);
-    rot.f[2] =
+    shell_rotation.f[2] =
         (f32)(*(volatile int *)&D_L00_0015F5CC_2899a8 & 0x1FFFF) * 4.7936901e-5f - 3.1415927f;
-    FUN_001fa070_2899a8(D_L00_001BD7E0, &rot);
+    FUN_001fa070_2899a8(D_L00_001BD7E0, &shell_rotation);
     sky_draw_shell(2);
 }
 /* draws sky shells with two animated rotation offsets */
