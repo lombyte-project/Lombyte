@@ -2058,7 +2058,7 @@ void FUN_L00_002dbf28(char *self, char *q) {
     I6_DD3D8 second_color_choices;
     int r0, g0, b0;
     int r1, g1, b1;
-    float variant_effect_scale, dist, near_camera_distance_deficit, sc, dt;
+    float variant_effect_scale, camera_distance, near_camera_distance_deficit, sc, dt;
     int step, i, j, k;
 
     blk = D_L00_001EA0B0;
@@ -2073,7 +2073,7 @@ void FUN_L00_002dbf28(char *self, char *q) {
     if ((&D_0013E520)->b9 == 0) step = 2;
     fast_vec_scale_c(spray_bias_vector, spray_bias_vector, variant_effect_scale);
     subtract_vector_xyz_c3(to_camera, D_L00_00166DC0, self + 0x10);
-    dist = fast_vec_length(to_camera);
+    camera_distance = fast_vec_length(to_camera);
     for (; i < 10 / step; i++) {
         *(u128_DD3D8 *)random_spray_seed = 0;
         random_spray_seed[0] = random_float_between(-1.0f, 1.0f);
@@ -2113,23 +2113,23 @@ void FUN_L00_002dbf28(char *self, char *q) {
     random_spray_seed[1] = random_float_between(-1.0f, 1.0f);
     random_spray_seed[2] = random_float_between(-1.0f, 1.0f);
     *(u128_DD3D8 *)spray_vector_or_effect_position = *(u128_DD3D8 *)random_spray_seed;
-    to_camera[2] += dist * 0.5f;
-    fast_vec_normalize_c(spray_vector_or_effect_position, spray_vector_or_effect_position, dist / 5.0f * D_0015ED6C);
-    fast_vec_normalize_c(to_camera, to_camera, (dist + dist) * D_0015ED6C);
+    to_camera[2] += camera_distance * 0.5f;
+    fast_vec_normalize_c(spray_vector_or_effect_position, spray_vector_or_effect_position, camera_distance / 5.0f * D_0015ED6C);
+    fast_vec_normalize_c(to_camera, to_camera, (camera_distance + camera_distance) * D_0015ED6C);
     add_vector_xyz(spray_vector_or_effect_position, spray_vector_or_effect_position, to_camera);
     clamp_vector_length(spray_vector_or_effect_position, spray_vector_or_effect_position, D_0015ED6C * 10.0f);
     {
         int h = scale_game_frames_c(60);
         FUN_L00_002af450(self + 0x10, (char *)spray_vector_or_effect_position, FUN_L00_00257b90_c(h, scale_game_frames_c(90)), 1, (&D_0013E520)->b9);
     }
-    if (dist < 6.0f) {
-        k = func_001FA898_r(dist) + 1;
+    if (camera_distance < 6.0f) {
+        k = func_001FA898_r(camera_distance) + 1;
     } else {
         k = 4;
     }
     near_camera_distance_deficit = 0.0f;
-    if (dist < 7.0f) {
-        near_camera_distance_deficit = 7.0f - dist;
+    if (camera_distance < 7.0f) {
+        near_camera_distance_deficit = 7.0f - camera_distance;
     }
     if (k > 0) {
         int color_effects_remaining = k;
@@ -2147,7 +2147,7 @@ void FUN_L00_002dbf28(char *self, char *q) {
             FUN_L00_0026a9f0(self + 0x10, spray_bias_vector, A, B, big, r1, r2, 0, 0, sh);
         } while (--color_effects_remaining);
     }
-    if (dist > 9.0f) {
+    if (camera_distance > 9.0f) {
         float size = variant_effect_scale * 4.0f;
         func_L00_002E0CB8_DD3D8(size, self, self + 0x10, spray_bias_vector, scale_game_frames_c(15), 0x7F, 0x7F, 0x7F, 0x20);
         r0 = 0x7F;
@@ -2180,7 +2180,7 @@ void FUN_L00_002dbf28(char *self, char *q) {
         float s = variant_effect_scale * 3.0f;
         func_L00_002E0CB8_DD3D8(s, self, self + 0x10, spray_bias_vector, scale_game_frames_c(29), r1, g1, b1, 0x20);
     }
-    (*(Cam_DD3D8 *)D_L00_00166C80).f160 = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
+    (*(Cam_DD3D8 *)D_L00_00166C80).f160 = (camera_distance < 20.0f) ? 0.4f - camera_distance * 0.0175f : 0.050000012f;
     (*(Cam_DD3D8 *)D_L00_00166C80).i168 = scale_game_frames_c(25);
     mine_camera_blast((char *)&blk, self + 0x10, 0, 0);
     if ((&D_0013E520)->b9) {
