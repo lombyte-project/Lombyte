@@ -502,7 +502,7 @@ void FUN_L00_002b3458(unsigned char *source_moby) {
         STATE_ACTIVE = 1
     };
     V_2b3458 *moby_vars = *(V_2b3458 **)(source_moby + 0x78);
-    int r, i;
+    int matching_owned_record, i;
     switch (source_moby[0x20]) {
     case STATE_INITIALIZE:
         source_moby[0x20] = 1;
@@ -514,9 +514,9 @@ void FUN_L00_002b3458(unsigned char *source_moby) {
         moby_vars->p[3] = D_L00_0015FFD8 + (moby_vars->idx[3] << 8);
         break;
     case STATE_ACTIVE:
-        r = FUN_L00_0025a420_2b3458(source_moby, 0x10000, 0);
+        matching_owned_record = FUN_L00_0025a420_2b3458(source_moby, 0x10000, 0);
         FUN_001f9740_2b3458(&moby_vars->wC);
-        if (r && moby_vars->wC == 0) {
+        if (matching_owned_record && moby_vars->wC == 0) {
             source_moby[0xA4] = 0xFF;
             moby_vars->wC = D_L00_00161480;
             if (--moby_vars->w8 <= 0) {
