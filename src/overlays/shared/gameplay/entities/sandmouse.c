@@ -693,16 +693,16 @@ extern void FUN_L01_0028a7a8(void *, void *, void *, void *, int);
 
 void FUN_L01_0030dda0(char *source_moby) {
     if (*(unsigned char *)(source_moby + 0x31) != 0) {
-        float buf[4];
+        float particle_spawn_position[4];
         float particle_velocity[4];
         float z[4];
         *(OvlQuad *)z = 0;
         z[2] = -(random_float_between_alt(1.0f, 2.0f) * frame_time);
         *(OvlQuad *)particle_velocity = *(OvlQuad *)z;
-        moby_point_position(source_moby, 0, buf);
-        FUN_L01_0028a7a8(source_moby, buf, particle_velocity, &D_L01_001620E0, 1);
-        FUN_L01_0028a7a8(source_moby, buf, particle_velocity, &D_L01_001620F0, 1);
-        FUN_L01_0028a7a8(source_moby, buf, particle_velocity, &D_L01_00162100, 1);
+        moby_point_position(source_moby, 0, particle_spawn_position);
+        FUN_L01_0028a7a8(source_moby, particle_spawn_position, particle_velocity, &D_L01_001620E0, 1);
+        FUN_L01_0028a7a8(source_moby, particle_spawn_position, particle_velocity, &D_L01_001620F0, 1);
+        FUN_L01_0028a7a8(source_moby, particle_spawn_position, particle_velocity, &D_L01_00162100, 1);
     }
 }
 #define NOT_SDA
