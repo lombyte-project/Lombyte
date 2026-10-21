@@ -1411,14 +1411,14 @@ void teleporter_update(struct Moby *moby) {
         } else {
             char *destination_moby = D_L11_0015FFD8_2518 + (*(int *)data << 8);
             char *td;
-            float v[4];
+            float destination_position[4];
             if (*(int *)(data + 4) != -1 &&
                 D_0014C050_2518[*(int *)(data + 0xC) + D_0015ED84_2518 * 16] == 0xFF)
                 destination_moby = D_L11_0015FFD8_2518 + (*(int *)(data + 4) << 8);
             td = *(char **)(destination_moby + 0x78);
-            qcopy(v, destination_moby + 0x10);
-            v[2] += 0.2f;
-            FUN_L00_00216f90_2518(v, destination_moby + 0x40, 0, 1);
+            qcopy(destination_position, destination_moby + 0x10);
+            destination_position[2] += 0.2f;
+            FUN_L00_00216f90_2518(destination_position, destination_moby + 0x40, 0, 1);
             D_001413F5_2518 = 1;
             if (*(int *)(data + 0x30) != -1 && *(int *)(data + 0x34) != -1) {
                 FUN_L01_0027a248_2518(*(int *)(data + 0x30), *(int *)(data + 0x34));
