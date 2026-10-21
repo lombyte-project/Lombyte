@@ -622,19 +622,19 @@ void FUN_L00_00233ba0(void *, void *, float);
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00216710(float x) {
-    char *g = (&hero.motion.unk150);
-    float planar_length = gravity_length_xy(g);
+    char *planar_velocity_addend = (&hero.motion.unk150);
+    float planar_length = gravity_length_xy(planar_velocity_addend);
     if (0.001f < planar_length) {
         float z = 0.0f;
         float reduced_planar_length;
-        gravity_set_z(g, g, z);
+        gravity_set_z(planar_velocity_addend, planar_velocity_addend, z);
         reduced_planar_length = planar_length - x;
         if (reduced_planar_length < z)
             reduced_planar_length = z;
-        FUN_L00_00233ba0(g, g, reduced_planar_length);
-        add_vector_xyz(g - 0x70, g - 0x70, g);
+        FUN_L00_00233ba0(planar_velocity_addend, planar_velocity_addend, reduced_planar_length);
+        add_vector_xyz(planar_velocity_addend - 0x70, planar_velocity_addend - 0x70, planar_velocity_addend);
     } else
-        clear_u64_value(g);
+        clear_u64_value(planar_velocity_addend);
 }
 typedef union {
     OvlQuad q;
