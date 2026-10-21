@@ -22,16 +22,16 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 
 int FUN_L08_002e0228(struct Moby *moby) {
     float facing_direction[4];
-    float b[4];
+    float target_direction[4];
     int *linked_targets = (int *)((char *)moby->pvars + 0x60);
     int i;
     for (i = 0; i < 8; i++) {
         if (linked_targets[i] != 0) {
             float direction_dot;
             build_spherical_offset(facing_direction, 1.0f, moby->rot.z, -moby->rot.y);
-            fast_vec_sub(b, (char *)linked_targets[i] + 0x10, D_L08_001675C0);
-            fast_vec_normalize(b, b, 1.0f);
-            direction_dot = fast_vec_dot(b, facing_direction);
+            fast_vec_sub(target_direction, (char *)linked_targets[i] + 0x10, D_L08_001675C0);
+            fast_vec_normalize(target_direction, target_direction, 1.0f);
+            direction_dot = fast_vec_dot(target_direction, facing_direction);
             if (fast_cos(0.06981317f) < direction_dot)
                 return linked_targets[i];
         }
