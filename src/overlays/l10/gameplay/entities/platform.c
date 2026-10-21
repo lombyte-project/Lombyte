@@ -186,9 +186,9 @@ void FUN_L10_00295c20(struct Moby *moby) {
         PLATFORM_STATE_RETURN_TO_ORIGINAL_HEIGHT = 3
     };
     char *platform_vars = (char *)moby->pvars;
-    float prev[4];
+    float previous_position[4];
     float position_delta[4];
-    *(OvlQuad *)prev = *(OvlQuad *)&moby->pos;
+    *(OvlQuad *)previous_position = *(OvlQuad *)&moby->pos;
     if (FUN_L01_00277fb8(moby)) moby->state = 2;
     fast_dec_timer((int *)(platform_vars + 0xBC));
     switch (moby->state) {
@@ -214,9 +214,9 @@ void FUN_L10_00295c20(struct Moby *moby) {
         break;
     case PLATFORM_STATE_SINKING_WITH_HERO: {
         float a = *(float *)(platform_vars + 0xA4) - (frame_time_sq + frame_time_sq);
-        float lim = -(frame_time + frame_time);
+        float sinking_step_lower_bound = -(frame_time + frame_time);
         *(float *)(platform_vars + 0xA4) = a;
-        if (a < lim) *(float *)(platform_vars + 0xA4) = lim;
+        if (a < sinking_step_lower_bound) *(float *)(platform_vars + 0xA4) = sinking_step_lower_bound;
         moby->pos.z += *(float *)(platform_vars + 0xA4);
         if (FUN_L01_00277fb8(moby) == 0) moby->state = 3;
         if (*(int *)(platform_vars + 0xBC) <= 0) {
@@ -228,15 +228,15 @@ void FUN_L10_00295c20(struct Moby *moby) {
     case PLATFORM_STATE_RETURN_TO_ORIGINAL_HEIGHT: {
         float vz = *(float *)(platform_vars + 0xA4);
         float return_acceleration = frame_time_sq;
-        float dist, sq, twice_return_acceleration;
-        if (vz < 0.0f || (twice_return_acceleration = return_acceleration + return_acceleration, dist = *(float *)(platform_vars + 0xA0) - moby->pos.z, sq = vz * vz,
-                          sq / (twice_return_acceleration + twice_return_acceleration) < dist)) {
+        float remaining_return_height, sq, twice_return_acceleration;
+        if (vz < 0.0f || (twice_return_acceleration = return_acceleration + return_acceleration, remaining_return_height = *(float *)(platform_vars + 0xA0) - moby->pos.z, sq = vz * vz,
+                          sq / (twice_return_acceleration + twice_return_acceleration) < remaining_return_height)) {
             float a = vz + return_acceleration;
             float mx = frame_time + frame_time;
             *(float *)(platform_vars + 0xA4) = a;
             if (mx < a) *(float *)(platform_vars + 0xA4) = mx;
-        } else if (0.0f < dist) {
-            float a = vz - sq / (dist + dist);
+        } else if (0.0f < remaining_return_height) {
+            float a = vz - sq / (remaining_return_height + remaining_return_height);
             *(float *)(platform_vars + 0xA4) = a;
             if (a < 0.0f) *(float *)(platform_vars + 0xA4) = 0.0f;
         }
@@ -248,7 +248,7 @@ void FUN_L10_00295c20(struct Moby *moby) {
         break;
     }
     }
-    subtract_vector_xyz(position_delta, &moby->pos, prev);
+    subtract_vector_xyz(position_delta, &moby->pos, previous_position);
     update_entity_matrix(platform_vars + 0x60, position_delta, &moby->rot, &moby->rot);
 }
 /* Spinning pickup: waits until the hero is close and level with it, then plays the scene, saves and goes away. */
