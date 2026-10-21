@@ -109,7 +109,7 @@ void FUN_L14_002d6570(struct Moby *group_anchor_moby) {
     float path_heading_delta[4];
     float rot[4];
     int path_segment_index;
-    float t;
+    float nearest_segment_distance;
     unsigned short *moby_index_cursor = D_L14_001ABF40_6570[group_anchor_moby->group];
     char **out;
     int i;
@@ -124,8 +124,8 @@ void FUN_L14_002d6570(struct Moby *group_anchor_moby) {
         char *path = hero.unk560;
         if (path == *(char **)(D_L14_0015F70C_6570 + *(int *)(od + 0x60) * 32 + 0x10)) {
             char *tp = D_L14_001B0BB0_6570[*(int *)(od + 0x88)];
-            t = 0.0f;
-            FUN_L00_0025df68_c(path, tp + 0x10, near, &path_segment_index, &t, 0, 20.0f, 5.0f, 0.0f);
+            nearest_segment_distance = 0.0f;
+            FUN_L00_0025df68_c(path, tp + 0x10, near, &path_segment_index, &nearest_segment_distance, 0, 20.0f, 5.0f, 0.0f);
             subtract_vector_xyz(path_heading_delta, path + (path_segment_index * 16 + 0x40), path + (path_segment_index * 16 + 0x10));
             rot[0] = 0.0f;
             rot[1] = 0.0f;
