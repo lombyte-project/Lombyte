@@ -1731,12 +1731,12 @@ extern void fun_l00_002e8918(void *, f32, f32) __asm__("FUN_L00_002e8918");
 
 /* Nonzero while the hero is in one of the swing camera's volumes. */
 s32 volume_camera_swing_active(struct UpdateCam *cam) __asm__("FUN_L00_002ec7e8");
-s32 volume_camera_swing_active(struct UpdateCam *cam) {
+s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
     SwingCameraParams *params;
     s32 forced = 0;
     u16 type;
 
-    params = camera_descriptors[cam->descriptor_index].params;
+    params = camera_descriptors[swing_camera_record->descriptor_index].params;
     if (current_follow_cam->unk86 != 0) {
         return 0;
     }
