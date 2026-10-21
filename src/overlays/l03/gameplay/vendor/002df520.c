@@ -430,8 +430,8 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 vel) __asm__("FUN_001ebd78");
 
-void FUN_L03_002ebc58(void *arg) {
-    char *camera = arg;
+void FUN_L03_002ebc58(void *camera_instance) {
+    char *camera = camera_instance;
     char *camera_data = *(char **)(camera + 0x70);
     float *camera_target_data = (float *)(camera_data + 0xB0);
     float look_direction[4];
