@@ -25,7 +25,7 @@ void emit_six_spark_effects(u8 *source_object, f32 z) {
     Vec4 pos;
     s32 i;
     s32 frame_count;
-    s32 b;
+    s32 second_frame_count;
     s32 third_frame_base_count;
 
     for (i = 0; i < 6; i++) {
@@ -39,9 +39,9 @@ void emit_six_spark_effects(u8 *source_object, f32 z) {
         transform_vector_by_basis(&pos, &pos, source_object + 0xC0);
         add_vector_xyz(&pos, &pos, source_object + 0x10);
         frame_count = scale_game_frames(4);
-        b = scale_game_frames(4);
+        second_frame_count = scale_game_frames(4);
         third_frame_base_count = scale_game_frames(4);
-        spawn_spark(&pos, &vel, &vel2, 0x24C0C0C0, 0x14C0C0C0, frame_count, b,
+        spawn_spark(&pos, &vel, &vel2, 0x24C0C0C0, 0x14C0C0C0, frame_count, second_frame_count,
                       third_frame_base_count + random_integer_below(scale_game_frames(4)), -1);
     }
 }
