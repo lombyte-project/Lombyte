@@ -980,15 +980,15 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 
 /* Spawns one fragment of the break-apart at pos, flying along vel with a
  * random spin. */
-unsigned char *FUN_L06_00300c60(char *unused_source_moby, float *pos, float *vel) {
+unsigned char *FUN_L06_00300c60(char *unused_source_moby, float *fragment_spawn_position, float *fragment_initial_velocity) {
     u128 position_copy, velocity_copy;
     u128 *pp = &position_copy;
     u128 *saved_velocity = &velocity_copy;
     unsigned char *fragment_moby;
     char *fragment_vars;
 
-    *pp = *(u128 *)pos;
-    *saved_velocity = *(u128 *)vel;
+    *pp = *(u128 *)fragment_spawn_position;
+    *saved_velocity = *(u128 *)fragment_initial_velocity;
     fragment_moby = create_moby(ftoi_300c60(random_float_between(1085.0f, 1089.0f)));
 
     if (fragment_moby != 0) {
