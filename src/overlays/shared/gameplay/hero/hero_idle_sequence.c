@@ -2126,11 +2126,11 @@ extern void FUN_L00_002090d0(float *, float, float, float);
 
 /* Calls FUN_L00_002090d0 with a vector (0, 0, 0.6) and x, y, z. */
 void FUN_L00_002091d8(float x, float y, float z) {
-    V buf;
+    V rotation_reference_vector;
 
-    clear_u64_value(buf);
-    buf[2] = 0.6f;
-    FUN_L00_002090d0(buf, x, y, z);
+    clear_u64_value(rotation_reference_vector);
+    rotation_reference_vector[2] = 0.6f;
+    FUN_L00_002090d0(rotation_reference_vector, x, y, z);
 }
 #include "sda.h"
 typedef struct {
