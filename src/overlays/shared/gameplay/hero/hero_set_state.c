@@ -349,8 +349,8 @@ int stick_direction_vs_facing(void) {
     float move_yaw_relative_to_facing;
     stick_target(0, 1.0f);
     {
-        struct Hero *g = &hero;
-        move_yaw_relative_to_facing = fast_subtract_rotations(g->motion.move_yaw, g->motion.rot.f[2]);
+        struct Hero *hero_state = &hero;
+        move_yaw_relative_to_facing = fast_subtract_rotations(hero_state->motion.move_yaw, hero_state->motion.rot.f[2]);
     }
     if (fast_difference_between_rotations(move_yaw_relative_to_facing, 3.1415927f) < 0.7853982f)
         stick_direction = 3;
