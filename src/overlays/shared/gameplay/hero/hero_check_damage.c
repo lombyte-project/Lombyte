@@ -4018,7 +4018,7 @@ void hero_integrate_velocity(void) {
     s32 no_lift;
     f32 gravity_axis_offset;
     f32 floor;
-    f32 g;
+    f32 movement_gravity_axis_velocity;
 
     if (hero.state.current == 0xE) {
         max_speed = D_0015ED6C * 7.0f;
@@ -4103,8 +4103,8 @@ tail:
     } else {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, hero.unk4A0);
         z = gravity_z(&hero.motion.velocity);
-        g = gravity_z(&hero.motion.unk110);
-        floor = g - 0.1f;
+        movement_gravity_axis_velocity = gravity_z(&hero.motion.unk110);
+        floor = movement_gravity_axis_velocity - 0.1f;
         if (z < floor) {
             z = floor;
         }
@@ -4118,7 +4118,7 @@ tail:
            a constant in a variable) folds g into the sub.s instead. */
         boost = hero.unk20AD;
         if (boost & 0x100) {
-            z = g;
+            z = movement_gravity_axis_velocity;
         }
         gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, z);
     }
