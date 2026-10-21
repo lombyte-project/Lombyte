@@ -50,22 +50,22 @@ extern int D_L03_0015EF50;
 extern void RaiseKernelTrap();
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 
-void FUN_L03_002e8628(char *cam) {
+void FUN_L03_002e8628(char *transform_state) {
     float v[4] __attribute__((aligned(16)));
     float mat[16] __attribute__((aligned(16)));
-    CamSub *camera_subrecord = &(*(CamInfo **)(cam + 0x70))->sub;
+    CamSub *camera_subrecord = &(*(CamInfo **)(transform_state + 0x70))->sub;
     CamInfo *camera_info;
     char *ent;
     int level_table_entry_index;
     char *entry_subrecord;
     camera_subrecord->x4C = 1.5f;
     camera_subrecord->x40 = 0;
-    (*(CamInfo **)(cam + 0x70))->x80 = 0;
-    camera_info = *(CamInfo **)(cam + 0x70);
+    (*(CamInfo **)(transform_state + 0x70))->x80 = 0;
+    camera_info = *(CamInfo **)(transform_state + 0x70);
     camera_info->f4 = 0.02f;
     camera_info->f8 = 0.1f;
     camera_info->fC = 0;
-    level_table_entry_index = *(short *)(cam + 0x84);
+    level_table_entry_index = *(short *)(transform_state + 0x84);
     ent = (char *)D_L03_0015EF50 + (level_table_entry_index << 5);
     entry_subrecord = *(char **)(ent + 0x1C);
     if (level_table_entry_index < 0) {
@@ -73,14 +73,14 @@ void FUN_L03_002e8628(char *cam) {
     } else {
         camera_subrecord->x4C = *(float *)(entry_subrecord + 0x18);
     }
-    qcopy(cam + 0x30, ent);
+    qcopy(transform_state + 0x30, ent);
     qcopy(v, ent + 0x10);
     euler_rotation_matrix(mat, v);
-    qcopy(cam, mat);
-    qcopy(cam + 0x10, mat + 4);
-    qcopy(cam + 0x20, mat + 8);
-    qcopy(cam + 0x40, cam);
-    *(short *)(cam + 0x7E) = 0;
+    qcopy(transform_state, mat);
+    qcopy(transform_state + 0x10, mat + 4);
+    qcopy(transform_state + 0x20, mat + 8);
+    qcopy(transform_state + 0x40, transform_state);
+    *(short *)(transform_state + 0x7E) = 0;
 }
 #include "sda.h"
 
