@@ -2541,14 +2541,14 @@ void FUN_L14_002b5290(struct Moby *hit_owner_moby) {
     };
     unsigned char *moby_vars = hit_owner_moby->pvars;
     int loc0;
-    float f4;
+    float damage_amount;
     char *hit_record;
     int k;
     float remaining_health;
     if (hit_owner_moby->state == 0 || hit_owner_moby->state == 9)
         return;
     hit_owner_moby->scale = hit_owner_moby->pclass->scale;
-    f4 = 0.0f;
+    damage_amount = 0.0f;
     hit_record = find_moby_hit(hit_owner_moby, 0x330000, 0);
     if (hit_record != 0) {
         if (*(int *)(hit_record + 0x20) != 0) {
@@ -2557,9 +2557,9 @@ void FUN_L14_002b5290(struct Moby *hit_owner_moby) {
                 hit_record = 0;
         }
     }
-    k = FUN_L00_0025a478_c(hit_owner_moby, hit_record, moby_vars + 0x20, 0, &loc0, &f4, 0, 4);
+    k = FUN_L00_0025a478_c(hit_owner_moby, hit_record, moby_vars + 0x20, 0, &loc0, &damage_amount, 0, 4);
     if (loc0 != 1 && hit_owner_moby->state != 9) {
-        remaining_health = *(float *)(moby_vars + 0x20) - f4;
+        remaining_health = *(float *)(moby_vars + 0x20) - damage_amount;
         *(float *)(moby_vars + 0x20) = remaining_health;
         if (remaining_health <= 0.0f)
             k = 1;
