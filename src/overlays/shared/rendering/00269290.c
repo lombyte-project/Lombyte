@@ -3220,7 +3220,7 @@ extern int FUN_L00_0025bfe0(float, float, float, float);
 extern unsigned char *D_L00_001B20B0 __attribute__((section(".data")));
 extern void *FUN_L00_002678b8_c2(int) __asm__("FUN_L00_002678b8");
 
-void *FUN_L00_00270758(char *spawn_position, char *b, unsigned char initial_flags, int collision_context) {
+void *FUN_L00_00270758(char *spawn_position, char *initial_velocity, unsigned char initial_flags, int collision_context) {
     char *particle = FUN_L00_002678b8_c2(0x2A);
 
     if (particle != 0) {
@@ -3229,7 +3229,7 @@ void *FUN_L00_00270758(char *spawn_position, char *b, unsigned char initial_flag
         int rnd;
 
         qcopy(particle + 0x10, spawn_position);
-        qcopy(particle_data, b);
+        qcopy(particle_data, initial_velocity);
         *(int *)(particle + 4) = FUN_L00_0025bfe0(0.7f, 0.7f, 0.7f, 0.08f);
         particle[9] = (char)(truncate_float_to_s32(4.0f) + 0x40);
         particle[1] = 0;
