@@ -1570,9 +1570,9 @@ void FUN_L14_002aee28(struct Moby *moby) {
     int i;
     int *out;
     {
-        int v = -1;
+        int unused_id_sentinel = -1;
         for (i = 19; i >= 0; i--)
-            D_L14_001D8680[i] = v;
+            D_L14_001D8680[i] = unused_id_sentinel;
     }
     i = 0;
     if (*(short *)(moby_vars + 0x20A) > 0) {
