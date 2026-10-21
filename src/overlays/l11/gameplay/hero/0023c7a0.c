@@ -51,14 +51,14 @@ void FUN_L11_0023c7a0(void) {
         hero_ptr->water_surface_z = hero_ptr->ground_z.f + 0.2f;
     }
     if (state == 0) {
-        struct Hero *b = &hero;
-        struct Hero *b2;
-        float v = b->water_surface_z - b->ground_z.f;
-        b->unk22A4 = v;
-        if (v < 0.85f && 0.25f < v)
-            b->unk20A9 = 1;
-        b2 = &hero;
-        b2->base_condition = 1;
+        struct Hero *hero_ptr = &hero;
+        struct Hero *base_condition_hero_ptr;
+        float water_surface_to_ground_z_difference = hero_ptr->water_surface_z - hero_ptr->ground_z.f;
+        hero_ptr->unk22A4 = water_surface_to_ground_z_difference;
+        if (water_surface_to_ground_z_difference < 0.85f && 0.25f < water_surface_to_ground_z_difference)
+            hero_ptr->unk20A9 = 1;
+        base_condition_hero_ptr = &hero;
+        base_condition_hero_ptr->base_condition = 1;
     }
     if (current_level_index == 0xD) {
         struct Hero *collision_hero_ptr = &hero;
