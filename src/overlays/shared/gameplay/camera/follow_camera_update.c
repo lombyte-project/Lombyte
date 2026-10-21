@@ -377,10 +377,10 @@ extern void FUN_001f9a10_002e9cc0(void *, void *, void *) __asm__("FUN_001f9a10"
 void FUN_L00_002e9cc0(char *camera_object) {
     char a[16] __attribute__((aligned(16)));
     char b[16] __attribute__((aligned(16)));
-    struct Hero *g = &hero;
+    struct Hero *hero_data = &hero;
     int vehicle_mode;
-    FUN_001f9bf8_002e9cc0(a, ((char *)g->moby) + 0xE0, 1.0f);
-    vehicle_mode = g->vehicle_mode;
+    FUN_001f9bf8_002e9cc0(a, ((char *)hero_data->moby) + 0xE0, 1.0f);
+    vehicle_mode = hero_data->vehicle_mode;
     if (vehicle_mode == 2) {
         FUN_001f9a68_002e9cc0(b, a, 9.5f);
     } else if (vehicle_mode == 1) {
