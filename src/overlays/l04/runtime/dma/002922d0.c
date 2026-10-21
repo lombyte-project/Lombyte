@@ -35,11 +35,11 @@ float FUN_L04_002922d0(float *pos) {
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293530), where it is exact; names translated to the US level program. */
 
-void FUN_L04_00292370(void *unused, char *arg) {
-    *(float *)(arg + 0x10C) = -0.19634955f;
-    *(float *)(arg + 0x110) = 1.5707964f;
-    *(float *)(arg + 0x1BC) = -1.5707964f;
-    *(float *)(arg + 0x1C0) = 0.19634955f;
+void FUN_L04_00292370(void *unused, char *movement_data) {
+    *(float *)(movement_data + 0x10C) = -0.19634955f;
+    *(float *)(movement_data + 0x110) = 1.5707964f;
+    *(float *)(movement_data + 0x1BC) = -1.5707964f;
+    *(float *)(movement_data + 0x1C0) = 0.19634955f;
 }
 extern char invalid_animation_message[] __asm__("D_L04_001DB360");
 extern char rig_size_message[] __asm__("D_L04_001DB3F0");
