@@ -1126,7 +1126,7 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
     float v20[4] __attribute__((aligned(16)));
     float v30[4] __attribute__((aligned(16)));
     float v40[4] __attribute__((aligned(16)));
-    char *g;
+    char *collision_result;
     int hit_moby_address;
     float yaw_cosine, yaw_sine, r, collision_tilt_angle, collision_rotation_y_target;
 
@@ -1138,18 +1138,18 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
     v10[2] = one;
     if (*(short *)(motion_data + 0x14) == 0) {
       if (collision_line(v0, moby + 0x10, 0x10, (int)moby, 0)) {
-        g = D_L10_001742C0;
-        hit_moby_address = *(int *)(g + 0x18);
+        collision_result = D_L10_001742C0;
+        hit_moby_address = *(int *)(collision_result + 0x18);
         if (hit_moby_address != 0) {
-            subtract_vector_xyz(g + 0x40, moby + 0x10, (void *)(hit_moby_address + 0x10));
-            qcopy(moby + 0x10, g + 0x20);
-            normalize_vector_xyz(v20, g + 0x40, D_0015ED70 * 9.7f);
+            subtract_vector_xyz(collision_result + 0x40, moby + 0x10, (void *)(hit_moby_address + 0x10));
+            qcopy(moby + 0x10, collision_result + 0x20);
+            normalize_vector_xyz(v20, collision_result + 0x40, D_0015ED70 * 9.7f);
             add_vector_xyz(moby + 0x10, moby + 0x10, v20);
-            FUN_L00_001ff660(motion_data, motion_data, g + 0x40);
+            FUN_L00_001ff660(motion_data, motion_data, collision_result + 0x40);
             scale_vector_xyz_c(motion_data, motion_data, 0.35f);
-            normalize_vector_xyz(v20, g + 0x40, one);
+            normalize_vector_xyz(v20, collision_result + 0x40, one);
             dot_vectors_xyz(v20, v10);
-            qcopy(v30, g + 0x40);
+            qcopy(v30, collision_result + 0x40);
                 k = 0.052359879f;
                 yaw_cosine = fast_cos(*(float *)(moby + 0x48));
                 yaw_sine = fast_sin(*(float *)(moby + 0x48));
@@ -1167,13 +1167,13 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
                 allocate_voice_for_target_entry(1, 0, (int)moby);
             return 1;
         }
-        if (*(int *)(g + 0x1C) > 0) {
-            qcopy(moby + 0x10, g + 0x20);
-            normalize_vector_xyz(v20, g + 0x40, D_0015ED70 * 9.7f);
+        if (*(int *)(collision_result + 0x1C) > 0) {
+            qcopy(moby + 0x10, collision_result + 0x20);
+            normalize_vector_xyz(v20, collision_result + 0x40, D_0015ED70 * 9.7f);
             add_vector_xyz(moby + 0x10, moby + 0x10, v20);
-            FUN_L00_001ff660(motion_data, motion_data, g + 0x40);
+            FUN_L00_001ff660(motion_data, motion_data, collision_result + 0x40);
             scale_vector_xyz_c(motion_data, motion_data, 0.5f);
-            normalize_vector_xyz(v20, g + 0x40, one);
+            normalize_vector_xyz(v20, collision_result + 0x40, one);
             if (0.707f < dot_vectors_xyz(v20, v10)) {
                 r = probe_ground_height(moby + 0x10, 0, 0.5f);
                 if (*(float *)(moby + 0x18) < r) *(float *)(moby + 0x18) = r;
