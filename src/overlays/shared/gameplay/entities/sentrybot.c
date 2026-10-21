@@ -2687,8 +2687,8 @@ void FUN_L15_002a2bf0(unsigned char *moby) {
         break;
     }
     case EMIT_SPARKS: {
-        int idx = *(int *)(moby_data + 0x10);
-        if ((idx != -1 && (*(struct Moby **)&D_L15_0015FFD8_d)[idx].state == 2)
+        int linked_moby_index = *(int *)(moby_data + 0x10);
+        if ((linked_moby_index != -1 && (*(struct Moby **)&D_L15_0015FFD8_d)[linked_moby_index].state == 2)
             || D_0014C050_c[(unsigned char)moby[0xB0] + (D_0015ED84 << 4)] == 0xFF) {
             func_L15_002A47B8_2A3DD0(moby);
         } else {
