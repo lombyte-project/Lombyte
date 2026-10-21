@@ -17,24 +17,24 @@ extern int hero_set_state(int, int) __asm__("FUN_L12_002400d0");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L12_0022de30(void) {
-    struct Hero *g = &hero;
+    struct Hero *hero_for_ground_flags_update = &hero;
     unsigned char saved;
     int state;
-    saved = g->unk12ED;
-    state = g->ground_type;
-    fast_mem_zero16(&g->ground_type, 0x10);
-    g->unk12ED = saved;
-    g->ground_type = -1;
-    g->unk20A9 = 0;
-    g->unk308 = 0;
+    saved = hero_for_ground_flags_update->unk12ED;
+    state = hero_for_ground_flags_update->ground_type;
+    fast_mem_zero16(&hero_for_ground_flags_update->ground_type, 0x10);
+    hero_for_ground_flags_update->unk12ED = saved;
+    hero_for_ground_flags_update->ground_type = -1;
+    hero_for_ground_flags_update->unk20A9 = 0;
+    hero_for_ground_flags_update->unk308 = 0;
     if (state == -1)
         return;
     if (state == 2) {
-        if (g->frames_off_ground.s == 0 || g->ground_distance < 0.3f) {
-            g->unk12E7 = 1;
-            if (g->vehicle_mode == 0) {
-                if ((s32)g->items[1].moby != 0 && *(short *)((s32)g->items[1].moby + 0xA6) == 0xAD)
-                    g->unk308 = 1;
+        if (hero_for_ground_flags_update->frames_off_ground.s == 0 || hero_for_ground_flags_update->ground_distance < 0.3f) {
+            hero_for_ground_flags_update->unk12E7 = 1;
+            if (hero_for_ground_flags_update->vehicle_mode == 0) {
+                if ((s32)hero_for_ground_flags_update->items[1].moby != 0 && *(short *)((s32)hero_for_ground_flags_update->items[1].moby + 0xA6) == 0xAD)
+                    hero_for_ground_flags_update->unk308 = 1;
             }
         }
     }
