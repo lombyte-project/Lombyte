@@ -944,7 +944,7 @@ s32 FUN_L03_002d3918(struct Moby *rail_moby, s32 path, s32 *snd) {
     Vec4f target_path_point, movement_delta;
     f32 acc;
     f32 target_pitch;
-    f32 dist;
+    f32 distance_to_path_end;
     s32 done;
     s32 sound_voice;
 
@@ -956,8 +956,8 @@ s32 FUN_L03_002d3918(struct Moby *rail_moby, s32 path, s32 *snd) {
         rail_flyer_vars->idx++;
         done = rail_flyer_vars->idx == (*pp)->count;
     }
-    dist = vec_dist(&rail_moby->pos, &(*pp)->pts[(*pp)->count - 1]);
-    approach_speed(&acc, dist,
+    distance_to_path_end = vec_dist(&rail_moby->pos, &(*pp)->pts[(*pp)->count - 1]);
+    approach_speed(&acc, distance_to_path_end,
                    D_L03_00161B0C * frame_time_sq_macro, D_L03_00161B0C * frame_time_sq_macro,
                    D_L03_00161B08 * frame_time, &rail_flyer_vars->speed);
     vec_set_len(&movement_delta, &movement_delta, rail_flyer_vars->speed);
