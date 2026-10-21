@@ -1779,15 +1779,15 @@ extern void func_L00_00260D30_t(void *, float *, float) __asm__("FUN_L00_0025fcb
 float FUN_L15_002cf110(void *m_, void *out, float target_search_range) {
     char *moby = m_;
     float steering_offset[4];
-    float tgt[4];
+    float target_position[4];
     float pad[4][4]; /* unused, but retail reserves the stack space */
-    float dist;
+    float target_distance;
     float wsum = 0.0f;
     int clear = 1;
     float k;
     char *other_moby;
-    func_L00_00260D30_t(moby, tgt, target_search_range);
-    dist = vector_distance(moby + 0x10, tgt);
+    func_L00_00260D30_t(moby, target_position, target_search_range);
+    target_distance = vector_distance(moby + 0x10, target_position);
     clear_u64_value(out);
     for (other_moby = D_L15_0015FFE4; other_moby != 0; other_moby = *(char **)(other_moby + 0x28)) {
         if (other_moby == moby)
@@ -1800,14 +1800,14 @@ float FUN_L15_002cf110(void *m_, void *out, float target_search_range) {
             scale_vector_xyz(steering_offset, steering_offset, 6.0f);
             add_vector_xyz(out, out, steering_offset);
         }
-        if (vector_distance(other_moby + 0x10, tgt) < dist)
+        if (vector_distance(other_moby + 0x10, target_position) < target_distance)
             clear = 0;
     }
     if (clear == 0) {
-        subtract_vector_xyz(steering_offset, moby + 0x10, tgt);
-        if (dist < 9.5f) {
+        subtract_vector_xyz(steering_offset, moby + 0x10, target_position);
+        if (target_distance < 9.5f) {
             k = 10.0f;
-        } else if (10.5f < dist) {
+        } else if (10.5f < target_distance) {
             k = -10.0f;
         } else {
             k = 0.0f;
@@ -1818,11 +1818,11 @@ float FUN_L15_002cf110(void *m_, void *out, float target_search_range) {
         scale_vector_xyz(out, out, 1.0f / wsum);
         add_vector_xyz(out, out, moby + 0x10);
     } else {
-        qcopy(out, tgt);
+        qcopy(out, target_position);
     }
     if (vector_distance(moby + 0x10, out) < 1.0f) {
         qcopy(out, moby + 0x10);
-        return fast_arc_tan(tgt[0] - *(float *)(moby + 0x10), tgt[1] - *(float *)(moby + 0x14));
+        return fast_arc_tan(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
     }
     return fast_arc_tan(((float *)out)[0] - *(float *)(moby + 0x10),
                         ((float *)out)[1] - *(float *)(moby + 0x14));
