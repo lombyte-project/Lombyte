@@ -343,7 +343,7 @@ extern s32 D_L15_0017445C __attribute__((section(".data")));
 extern char D_0013F3D0[] __attribute__((section(".data")));
 void FUN_L15_0020a328(int force) {
     V_20a328 offset_position, primary_endpoint, b, secondary_endpoint;
-    char *src;
+    char *hero_position;
     P_20a328 *g;
     f32 position_z_offset, k, secondary_offset_scale, ang, negative_xy_dot_product;
     int r;
@@ -361,13 +361,13 @@ void FUN_L15_0020a328(int force) {
         position_z_offset = 1.5f;
         k = 5.0f;
     }
-    src = D_0013F3D0;
-    qcopy(&offset_position, src);
+    hero_position = D_0013F3D0;
+    qcopy(&offset_position, hero_position);
     offset_position.f[2] += position_z_offset;
-    qcopy(&b, src);
+    qcopy(&b, hero_position);
     b.f[2] += position_z_offset * 0.3f;
-    if (force || FUN_001f9b20_20a328(src + 0x60) < 0.01f) {
-        g = (P_20a328 *)(src - 0x80);
+    if (force || FUN_001f9b20_20a328(hero_position + 0x60) < 0.01f) {
+        g = (P_20a328 *)(hero_position - 0x80);
         secondary_offset_scale = 1.4f;
         primary_endpoint.f[0] = FUN_001f9dc8_20a328(g->f98) * k;
         primary_endpoint.f[1] = FUN_001f9de0_20a328(g->f98) * k;
@@ -376,7 +376,7 @@ void FUN_L15_0020a328(int force) {
         secondary_endpoint.f[1] = FUN_001f9de0_20a328(g->f98) * k * secondary_offset_scale;
         *(s32 *)&secondary_endpoint.f[2] = 0;
     } else {
-        qcopy(&primary_endpoint, src + 0x60);
+        qcopy(&primary_endpoint, hero_position + 0x60);
         *(s32 *)&primary_endpoint.f[2] = 0;
         FUN_001f9a68_20a328(&primary_endpoint, &primary_endpoint, k / FUN_001f9b20_20a328(&primary_endpoint));
         qcopy(&secondary_endpoint, &primary_endpoint);
