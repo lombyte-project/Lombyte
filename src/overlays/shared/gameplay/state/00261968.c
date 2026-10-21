@@ -368,14 +368,14 @@ extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 /* Multiplies the 001fa050 matrices of (x, y, z) and of a+0x40, stored back by matrix_to_euler. */
 void FUN_L00_00262480(char *rotation_target, float x, float y, float z) {
     float in[3];
-    float input_rotation_matrix[16], u[16];
+    float input_rotation_matrix[16], target_rotation_matrix[16];
     in[0] = x;
     in[1] = y;
     in[2] = z;
     euler_rotation_matrix(input_rotation_matrix, in);
-    euler_rotation_matrix(u, rotation_target + 0x40);
-    multiply_matrix(u, u, input_rotation_matrix);
-    matrix_to_euler(u, rotation_target + 0x40);
+    euler_rotation_matrix(target_rotation_matrix, rotation_target + 0x40);
+    multiply_matrix(target_rotation_matrix, target_rotation_matrix, input_rotation_matrix);
+    matrix_to_euler(target_rotation_matrix, rotation_target + 0x40);
 }
 #define NOT_SDA
 
