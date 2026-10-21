@@ -1444,8 +1444,8 @@ void FUN_L00_0020f160(char *arg, u8 *entry) {
         for (k = 0; k < history_window_size; k++) {
             if (i != k) {
                 char *b = ((char *)((char *)&hero_lui));
-                int u = k - 15;
-                int rj = (*(int *)(b + 0x21B8) - u) % 16;
+                int comparison_ring_index_offset = k - 15;
+                int rj = (*(int *)(b + 0x21B8) - comparison_ring_index_offset) % 16;
                 *(float *)((char *)sums - (-(i * 4))) += FUN_L00_0020f0b8_c(
                     (float *)(((char *)((char *)&hero_lui)) + 0x12F0 + ri * 0x30),
                     (float *)(((char *)((char *)&hero_lui)) + 0x12F0 + rj * 0x30));
