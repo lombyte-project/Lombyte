@@ -2098,9 +2098,9 @@ void FUN_L00_002090d0(float *inf, float x, float y, float z) {
         Mtx_002090d0 r;
         Vec4_002090d0 e;
     } L_002090d0;
-    Vec4_002090d0 *cam = &D_0013F3E0;
+    Vec4_002090d0 *hero_rotation = &D_0013F3E0;
     *(u128_002090d0 *)&L_002090d0.p = *in;
-    FUN_001fa050_002090d0(&L_002090d0.m, cam);
+    FUN_001fa050_002090d0(&L_002090d0.m, hero_rotation);
     FUN_001f9d20_002090d0(&L_002090d0.a, &L_002090d0.p, &L_002090d0.m);
     L_002090d0.e.x = x;
     L_002090d0.e.y = y;
@@ -2109,8 +2109,8 @@ void FUN_L00_002090d0(float *inf, float x, float y, float z) {
     FUN_001fa378_002090d0(&L_002090d0.m, &L_002090d0.m, &L_002090d0.r);
     FUN_001f9d20_002090d0(&L_002090d0.b, &L_002090d0.p, &L_002090d0.m);
     FUN_001f9a28_002090d0(&L_002090d0.d, &L_002090d0.a, &L_002090d0.b);
-    FUN_001f9a10_002090d0(cam - 1, cam - 1, &L_002090d0.d);
-    FUN_00214598_002090d0(&L_002090d0.m, cam);
+    FUN_001f9a10_002090d0(hero_rotation - 1, hero_rotation - 1, &L_002090d0.d);
+    FUN_00214598_002090d0(&L_002090d0.m, hero_rotation);
 }
 #define NOT_SDA
 
