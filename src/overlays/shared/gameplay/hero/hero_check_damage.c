@@ -3058,30 +3058,30 @@ void FUN_L00_00212318(int force) {
     V_212318 primary_probe_start, primary_probe_offset_or_end, b, secondary_probe_offset_or_end;
     char *src;
     struct Hero *g;
-    f32 off, k, secondary_probe_length_scale, ang, inward_velocity_component;
+    f32 primary_probe_height_offset, k, secondary_probe_length_scale, ang, inward_velocity_component;
     int r;
 
     if (hero.unk308 != 0)
         return;
     if (FUN_L00_002339d0_212318(&hero.motion.velocity) < D_0015ED6C_212318 * 0.1f)
         return;
-    off = 0.3700000047683716f;
+    primary_probe_height_offset = 0.3700000047683716f;
     k = 0.5f;
     if ((u32)(hero.state.control_mode - 0x11) < 2) {
-        off = 0.0f;
+        primary_probe_height_offset = 0.0f;
         k = 0.7f;
     } else if (hero.vehicle_mode == 1) {
-        off = 0.35f;
+        primary_probe_height_offset = 0.35f;
         k = 0.27000001072883606f;
     } else if (hero.vehicle_mode == 2) {
-        off = 1.5f;
+        primary_probe_height_offset = 1.5f;
         k = 5.0f;
     }
     src = D_0013F3D0_212318;
     qcopy(&primary_probe_start, src);
-    primary_probe_start.f[2] += off;
+    primary_probe_start.f[2] += primary_probe_height_offset;
     qcopy(&b, src);
-    b.f[2] += off * 0.3f;
+    b.f[2] += primary_probe_height_offset * 0.3f;
     if (force || FUN_001f9b20_212318(src + 0x60) < 0.01f) {
         g = (struct Hero *)(src - 0x80);
         secondary_probe_length_scale = 1.4f;
