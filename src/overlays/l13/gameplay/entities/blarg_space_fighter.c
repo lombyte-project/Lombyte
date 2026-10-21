@@ -1224,10 +1224,10 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
             return;
         }
         {
-            int idx = fighter_data->fA0;
-            qcopy(&moby->pos, D_L13_001B07B0[idx] + 0x10);
+            int path_table_index = fighter_data->fA0;
+            qcopy(&moby->pos, D_L13_001B07B0[path_table_index] + 0x10);
             fighter_data->hB4 = 1;
-            fighter_data->hB6 = *(unsigned short *)D_L13_001B07B0[idx] - 1;
+            fighter_data->hB6 = *(unsigned short *)D_L13_001B07B0[path_table_index] - 1;
         }
         qcopy(&fighter_data->v90, path + 0x20);
         qcopy(&moby->pos, &fighter_data->v90);
