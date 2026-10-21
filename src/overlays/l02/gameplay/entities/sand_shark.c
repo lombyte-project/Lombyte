@@ -150,7 +150,7 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void FUN_L02_002d3a50(void *, void *, void *, int, float, float);
 
-void FUN_L02_002d3c98(struct Moby *moby, int segment_start_index, int b, int puff_count) {
+void FUN_L02_002d3c98(struct Moby *moby, int segment_start_index, int segment_end_index, int puff_count) {
     float va[4];
     float vb[4];
     float *pa = D_L02_001D3230[segment_start_index];
@@ -160,7 +160,7 @@ void FUN_L02_002d3c98(struct Moby *moby, int segment_start_index, int b, int puf
     fast_vec_sub(va, va, D_L02_001619C0);
     transform_vector_by_basis(va, va, &moby->rot_row0);
     fast_vec_add(va, va, &moby->pos);
-    pb = D_L02_001D3230[b];
+    pb = D_L02_001D3230[segment_end_index];
     qcopy(vb, pb);
     vb[3] = 1.0f;
     fast_vec_sub(vb, vb, D_L02_001619C0);
