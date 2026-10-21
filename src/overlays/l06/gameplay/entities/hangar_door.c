@@ -150,8 +150,8 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 /* 0x002f9698, 96 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
-void FUN_L06_002f9698(char *arg) {
-    short *table = D_L06_001ABFC0[(unsigned char)arg[0x21]];
+void FUN_L06_002f9698(char *group_source_moby) {
+    short *table = D_L06_001ABFC0[(unsigned char)group_source_moby[0x21]];
     if (table != 0) {
         short *moby_index_cursor = table;
         do {
