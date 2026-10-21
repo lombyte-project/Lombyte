@@ -1205,7 +1205,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     u8 *x;
     u8 *orbit_state;
     u8 *camera_collision_state;
-    s32 hit, cnt, any;
+    s32 hit, moby_restore_count, any;
     s32 j;
     u8 *nearby_moby;
     s32 nearby_moby_count;
@@ -1215,7 +1215,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     f32 probe_diameter;
     f32 f;
     u8 *base;
-    f32 g;
+    f32 orbit_distance;
     u8 *restored_moby;
 
     base = D_L00_00166E10_2e7d20;
@@ -1223,7 +1223,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     orbit_state = x + 0x130;
     camera_collision_state = x + 0x1D0;
     hit = 0;
-    cnt = 0;
+    moby_restore_count = 0;
     any = 0;
     probe_diameter = AF_2e7d20(0x2C) - BF_2e7d20(0x30) + 1.5f;
     if (current_level_index_macro == 0xF) {
@@ -1244,8 +1244,8 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
             }
             nearby_moby_type_id = *(s16 *)(nearby_moby + 0xA6);
             if (nearby_moby_type_id != 0x72 && nearby_moby_type_id != 0xB && nearby_moby_type_id != 0x2C && nearby_moby_type_id != 0x9A && nearby_moby_type_id != 0xFF && nearby_moby_type_id != 0x392 && nearby_moby_type_id != 0x452 && nearby_moby_type_id != 0x353) {
-                D_L00_001E75C0[cnt] = nearby_moby;
-                cnt++;
+                D_L00_001E75C0[moby_restore_count] = nearby_moby;
+                moby_restore_count++;
                 *(s32 *)(nearby_moby + 0x94) = 0;
                 goto next;
             }
@@ -1273,9 +1273,9 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     }
     hit = FUN_L00_002e7520_2e7d20(camera_moby) == 0 ? hit : 1;
     hit = FUN_L00_002e7318_2e7d20(camera_moby) == 0 ? hit : 1;
-    g = AF_2e7d20(0x2C);
-    if (g - BF_2e7d20(0x30) < D_L00_00161CD0) {
-        BF_2e7d20(0x30) = g - D_L00_00161CD0;
+    orbit_distance = AF_2e7d20(0x2C);
+    if (orbit_distance - BF_2e7d20(0x30) < D_L00_00161CD0) {
+        BF_2e7d20(0x30) = orbit_distance - D_L00_00161CD0;
         BH_2e7d20(0x34) = FUN_001f96f8_2e7d20(2000);
     }
     if (BH_2e7d20(0x3A) != 0) {
@@ -1348,9 +1348,9 @@ move:
 clear:
     BI_2e7d20(0x4C) = 0;
 fin:
-    if (cnt > 0) {
+    if (moby_restore_count > 0) {
         u8 **op = D_L00_001E75C0;
-        s32 k = cnt;
+        s32 k = moby_restore_count;
         do {
             restored_moby = *op++;
             *(s32 *)(restored_moby + 0x94) = *(s32 *)(*(u8 **)(restored_moby + 0x24) + 0x10);
