@@ -86,7 +86,7 @@ extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L07_0030ba90(char *pos, char *initial_velocity, int spawning_moby, short burst_index) {
+char *FUN_L07_0030ba90(char *spawn_position, char *initial_velocity, int spawning_moby, short burst_index) {
     char *spawned_moby = func_0020D348_m(0x372);
     char *moby_data;
     if (spawned_moby) {
@@ -99,7 +99,7 @@ char *FUN_L07_0030ba90(char *pos, char *initial_velocity, int spawning_moby, sho
         *(float *)(spawned_moby + 0x48) = random_angle_radians();
         *(float *)(moby_data + 0x18) = randf_sym(100.0f, 300.0f) * DEG_TO_RAD * frame_time;
         *(float *)(moby_data + 0x1C) = randf_sym(100.0f, 300.0f) * DEG_TO_RAD * frame_time;
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(spawned_moby + 0x10, spawn_position);
         qcopy(moby_data, initial_velocity);
         *(int *)(moby_data + 0x10) = spawning_moby;
         *(int *)(moby_data + 0x14) = burst_index;
