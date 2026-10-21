@@ -2071,12 +2071,12 @@ extern s32 D_L18_00161C9C_d __asm__("D_L18_00161C9C") __attribute__((sda));
 
 void FUN_L18_002dc458(struct Moby *moby, void *pos, float radius) {
     int *moby_vars = (int *)moby->pvars;
-    int lim;
+    int countdown_limit_frames;
     qcopy(&moby->pos, pos);
-    lim = *(int *)&D_L18_00161C9C_d;
+    countdown_limit_frames = *(int *)&D_L18_00161C9C_d;
     moby_vars[2] += 2;
     *(float *)moby_vars = radius;
-    if (scale_game_frames(lim) < moby_vars[2]) {
+    if (scale_game_frames(countdown_limit_frames) < moby_vars[2]) {
         moby_vars[2] = scale_game_frames(*(int *)&D_L18_00161C9C_d);
     }
 }
