@@ -9,8 +9,8 @@
 #include "rnc/runtime/core_state.h"
 extern s32 sceTtyInit();
 extern s32 sceTtyWrite();
-s32 write(s32 fd, s32 buf, s32 len) {
-    register s32 tty_arg = buf;
+s32 write(s32 fd, s32 source_buffer, s32 len) {
+    register s32 tty_arg = source_buffer;
     if ((u32)(fd - 1) < 2U) {
         if (CoreGlobalWord == 0) {
             if (sceTtyInit() != 0) {
