@@ -2896,7 +2896,7 @@ extern int D_L18_001620D8;
 extern int D_L18_001620DC;
 void FUN_L18_002eacd8(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
-    float v[4];
+    float arc_endpoint_displacement[4];
     float step[4];
     int i;
     int j;
@@ -2905,8 +2905,8 @@ void FUN_L18_002eacd8(struct Moby *moby) {
         D_L18_001620DC = 0;
         D_L18_001620D8 = scale_frames_q(D_L18_00162080);
         D_L18_00162054_q = 0x7F2020;
-        subtract_vector_xyz(v, moby_vars + 0x10, &moby->pos);
-        norm_q(step, v, D_L18_00161FF0 / 20.0f);
+        subtract_vector_xyz(arc_endpoint_displacement, moby_vars + 0x10, &moby->pos);
+        norm_q(step, arc_endpoint_displacement, D_L18_00161FF0 / 20.0f);
         qcopy(D_L18_001D9D00_q, &moby->pos);
         for (i = 1; i < 20; i++) {
             add_vector_xyz(D_L18_001D9D00_q[i], D_L18_001D9CF0_q[i], step);
