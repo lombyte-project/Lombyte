@@ -1546,15 +1546,15 @@ void FUN_L14_002aed50(u8 *moby) {
     if (1.0f <= *(f32 *)(data + 0x164))
         *(s32 *)(data + 0x164) = 0;
     for (i = 0; i < D_L14_00161418; i++) {
-        s32 v = D_L14_001D8210[i];
-        if (v != 0) {
-            v += step;
-            if (v > 0x90)
-                v -= 0x80;
-            D_L14_001D8210[i] = v;
-            if (v > 0x50)
-                v = 0xA0 - v;
-            D_L14_001D80C8[i] = (D_L14_001D80C8[i] & 0xFFFFFF) | (v << 24);
+        s32 light_fade_value = D_L14_001D8210[i];
+        if (light_fade_value != 0) {
+            light_fade_value += step;
+            if (light_fade_value > 0x90)
+                light_fade_value -= 0x80;
+            D_L14_001D8210[i] = light_fade_value;
+            if (light_fade_value > 0x50)
+                light_fade_value = 0xA0 - light_fade_value;
+            D_L14_001D80C8[i] = (D_L14_001D80C8[i] & 0xFFFFFF) | (light_fade_value << 24);
         }
     }
 }
