@@ -1151,7 +1151,7 @@ void FUN_L02_002d5c88(unsigned char *moby) {
     float k;
     float g;
     OvlVec4 ground_probe_position;
-    OvlVec4 v;
+    OvlVec4 hit_knockback_vector;
 
     moby_vars->i280 = moby[0x20];
     if (moby[0x20] == 0) {
@@ -1214,8 +1214,8 @@ void FUN_L02_002d5c88(unsigned char *moby) {
             }
             moby_vars->i144 |= 0x20;
             *(unsigned short *)(moby + 0x34) &= 0xEFFF;
-            v.q = *(OvlQuad *)(hit_record + 0x10);
-            trooper_knockback_arc(&v, &k, &moby_vars->f138, &moby_vars->f13C);
+            hit_knockback_vector.q = *(OvlQuad *)(hit_record + 0x10);
+            trooper_knockback_arc(&hit_knockback_vector, &k, &moby_vars->f138, &moby_vars->f13C);
             trooper_start_knockback(k, moby, moby_vars->knock, 6, 1, 0);
             moby_vars->f148 = 0.85f;
             moby_vars->f170 = 7.0f;
