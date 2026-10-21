@@ -791,7 +791,7 @@ extern void FUN_L00_002a6b70_c(Bolt *) __asm__("FUN_L00_002a6b70");
 extern void FUN_L00_002a7210_c(Bolt *, void *, f32, f32) __asm__("FUN_L00_002a7210");
 
 void bolt_update(Bolt *obj) __asm__("FUN_L00_002a5dd8");
-void bolt_update(Bolt *obj) {
+void bolt_update(Bolt *bolt_moby) {
     enum {
         BOLT_INITIALIZE = 0,
         BOLT_FALLING = 1,
@@ -806,7 +806,7 @@ void bolt_update(Bolt *obj) {
         BOLT_FALLING_CLASS_TWENTY = 0xF,
         BOLT_INITIALIZE_CLASS_FIFTY = 0x10
     };
-    BoltVars *v = obj->vars;
+    BoltVars *v = bolt_moby->vars;
     Vec4 geometry_scratch;
     Vec4 vector_scratch;
     Vec4 rotation_scratch;
@@ -828,26 +828,26 @@ void bolt_update(Bolt *obj) {
     u8 i;
 
     if (D_L00_0015F5C4 == 2) {
-        obj->unk31 = 0;
-        obj->flags |= 1;
+        bolt_moby->unk31 = 0;
+        bolt_moby->flags |= 1;
     } else {
-        obj->unk31 = 1;
-        obj->flags &= 0xFFFE;
+        bolt_moby->unk31 = 1;
+        bolt_moby->flags &= 0xFFFE;
     }
-    switch (obj->state) {
+    switch (bolt_moby->state) {
     case BOLT_INITIALIZE:
-        obj->state = 3;
-        obj->unk73 = 0x14;
-        obj->flags |= 0x100;
-        obj->unk30 = 0x20;
-        obj->unk32 = 0x20;
+        bolt_moby->state = 3;
+        bolt_moby->unk73 = 0x14;
+        bolt_moby->flags |= 0x100;
+        bolt_moby->unk30 = 0x20;
+        bolt_moby->unk32 = 0x20;
         if (FUN_00213260(2) == 0) {
             v->unk55 |= 1;
         }
-        fast_vec_normalize(&geometry_scratch, &obj->unkE0, 0.2f);
-        fast_vec_add(&geometry_scratch, &geometry_scratch, &obj->pos);
-        fast_vec_normalize(&vector_scratch, &obj->unkE0, -3.0f);
-        fast_vec_add(&vector_scratch, &vector_scratch, &obj->pos);
+        fast_vec_normalize(&geometry_scratch, &bolt_moby->unkE0, 0.2f);
+        fast_vec_add(&geometry_scratch, &geometry_scratch, &bolt_moby->pos);
+        fast_vec_normalize(&vector_scratch, &bolt_moby->unkE0, -3.0f);
+        fast_vec_add(&vector_scratch, &vector_scratch, &bolt_moby->pos);
         hit = FUN_001efa68(&geometry_scratch, &vector_scratch, 0x22, 0, 0);
         if (v->landed == 0 && hit != 0) {
             qcopy(&v->pos, &D_L00_00173E40.point);
@@ -857,38 +857,38 @@ void bolt_update(Bolt *obj) {
             if (D_L00_00173E40.moby != 0 && FUN_L00_002603d0((void *)D_L00_00173E40.moby) != 0) {
                 void *gm = (void *)D_L00_00173E40.moby;
                 v->ground_moby = gm;
-                FUN_L00_00260668(obj, gm, v, &v->rot, v, &v->rot);
+                FUN_L00_00260668(bolt_moby, gm, v, &v->rot, v, &v->rot);
             }
         } else {
-            qcopy(&v->pos, &obj->pos);
+            qcopy(&v->pos, &bolt_moby->pos);
             clear_u64_value(&v->rot);
         }
         v->unk50 = FUN_00213308();
         v->unk58 = FUN_00213308();
-        v->ground_z = obj->pos.f[2];
+        v->ground_z = bolt_moby->pos.f[2];
         v->slot_timer = FUN_L00_00257b90(0, scale_game_frames(600));
         v->slot = -1;
-        switch (obj->oclass) {
+        switch (bolt_moby->oclass) {
         case BOLT_INITIALIZE_CLASS_ONE:
-            obj->scale = obj->pclass->scale * 0.65f;
+            bolt_moby->scale = bolt_moby->pclass->scale * 0.65f;
             break;
         case BOLT_INITIALIZE_CLASS_FIVE:
-            obj->scale = obj->pclass->scale * 0.7f;
+            bolt_moby->scale = bolt_moby->pclass->scale * 0.7f;
             break;
         case BOLT_INITIALIZE_CLASS_TWENTY:
-            obj->scale = obj->pclass->scale * 0.75f;
+            bolt_moby->scale = bolt_moby->pclass->scale * 0.75f;
             break;
         case BOLT_INITIALIZE_CLASS_FIFTY:
-            obj->scale = obj->pclass->scale * 0.6f;
+            bolt_moby->scale = bolt_moby->pclass->scale * 0.6f;
             break;
         }
         break;
     case BOLT_FALLING:
         v->vel.f[2] -= frame_time_sq * 10.8f;
-        fast_vec_add(&obj->pos, &obj->pos, &v->vel);
+        fast_vec_add(&bolt_moby->pos, &bolt_moby->pos, &v->vel);
         quaternion_to_rotation_basis(&v->spin, &rotation_scratch);
-        multiply_matrix3x3(&obj->rot, &rotation_scratch, &obj->rot);
-        switch (obj->oclass) {
+        multiply_matrix3x3(&bolt_moby->rot, &rotation_scratch, &bolt_moby->rot);
+        switch (bolt_moby->oclass) {
         case BOLT_FALLING_CLASS_ONE:
             hr = 0.15f;
             break;
@@ -902,26 +902,26 @@ void bolt_update(Bolt *obj) {
             hr = 0.25f;
             break;
         }
-        if (obj->pos.f[2] < v->ground_z - 2.0f && obj->pos.f[2] < hero.motion.pos.f[2] - 2.0f) {
-            FUN_L00_002a7210_c(obj, hero.moby, FUN_002132a8(-15.0f, 15.0f) * 0.017453292f, 0.0f);
+        if (bolt_moby->pos.f[2] < v->ground_z - 2.0f && bolt_moby->pos.f[2] < hero.motion.pos.f[2] - 2.0f) {
+            FUN_L00_002a7210_c(bolt_moby, hero.moby, FUN_002132a8(-15.0f, 15.0f) * 0.017453292f, 0.0f);
             return;
         }
-        if (FUN_L00_001f0d60(&obj->pos, 0x22, obj, hr) == 0) {
+        if (FUN_L00_001f0d60(&bolt_moby->pos, 0x22, bolt_moby, hr) == 0) {
             return;
         }
         qcopy(&v->pos, &D_L00_00173E40.point);
         clear_u64_value(&v->rot);
         v->rot.f[2] = fast_arc_tan(D_L00_00173E40.normal_x, D_L00_00173E40.normal_y);
         v->rot.f[1] = fast_arc_tan(D_L00_00173E40.normal_z, vector_length_xy(&D_L00_00173E40.normal_x));
-        fast_vec_sub(&geometry_scratch, &obj->pos, &D_L00_00173E40.point);
+        fast_vec_sub(&geometry_scratch, &bolt_moby->pos, &D_L00_00173E40.point);
         FUN_L00_001ff660(&v->vel, &v->vel, &geometry_scratch);
-        if (vector_distance(&obj->pos, &hero.motion.pos) < hero.reach_distance &&
-            FUN_001f99c0(obj->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
+        if (vector_distance(&bolt_moby->pos, &hero.motion.pos) < hero.reach_distance &&
+            FUN_001f99c0(bolt_moby->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
             if (hero.health.hp == 0) {
                 return;
             }
             fast_vec_normalize(&v->vel, &v->vel, FUN_002132a8(3.0f, 7.0f) * D_0015ED6C);
-            FUN_L00_002a7210_c(obj, hero.moby, 0.0f, 0.0f);
+            FUN_L00_002a7210_c(bolt_moby, hero.moby, 0.0f, 0.0f);
             return;
         }
         ang = 0.7853982f;
@@ -931,57 +931,57 @@ void bolt_update(Bolt *obj) {
         if (!(fast_arc_tan(D_L00_00173E40.normal_z, vector_length_xy(&D_L00_00173E40.normal_x)) < ang)) {
             return;
         }
-        obj->state = 2;
+        bolt_moby->state = 2;
         v->hop_frames = v->hop_left = FUN_001fa6d0(multiply_global_factor_ed64(FUN_002132a8(30.0f, 40.0f)));
         if (D_L00_00173E40.moby != 0 && FUN_L00_002603d0((void *)D_L00_00173E40.moby) != 0) {
             void *gm = (void *)D_L00_00173E40.moby;
             v->ground_moby = gm;
-            FUN_L00_00260668(obj, gm, v, &v->rot, v, &v->rot);
+            FUN_L00_00260668(bolt_moby, gm, v, &v->rot, v, &v->rot);
         }
-        matrix_to_euler(&obj->rot, &vector_scratch);
+        matrix_to_euler(&bolt_moby->rot, &vector_scratch);
         FUN_L00_00259f50(&v->spin, &vector_scratch);
         return;
     case BOLT_SETTLING:
-        FUN_L00_002a6de8_c(obj, &vector_scratch, 0);
+        FUN_L00_002a6de8_c(bolt_moby, &vector_scratch, 0);
         k = 0.25f;
         vector_scratch.f[2] += k;
-        matrix_to_euler(&obj->rot, &geometry_scratch);
+        matrix_to_euler(&bolt_moby->rot, &geometry_scratch);
         FUN_L00_00259f50(&rotation_scratch, &geometry_scratch);
         rotation_blend_step = 1.0f / convert_integer_to_float(v->hop_left);
         settling_hop_phase = convert_integer_to_float(v->hop_left) / convert_integer_to_float(v->hop_frames);
         quaternion_nlerp(&v->spin, &v->spin, &rotation_scratch, rotation_blend_step);
-        lerp_vector(&obj->pos, &obj->pos, &vector_scratch, settling_hop_phase);
+        lerp_vector(&bolt_moby->pos, &bolt_moby->pos, &vector_scratch, settling_hop_phase);
         settling_hop_phase -= 0.5f;
-        obj->pos.f[2] += -(settling_hop_phase * settling_hop_phase - k) * ((f32)v->hop_frames * 0.025f);
-        quaternion_to_rotation_basis(&v->spin, &obj->rot);
+        bolt_moby->pos.f[2] += -(settling_hop_phase * settling_hop_phase - k) * ((f32)v->hop_frames * 0.025f);
+        quaternion_to_rotation_basis(&v->spin, &bolt_moby->rot);
         if (--v->hop_left != 0) {
             return;
         }
-        obj->state = 3;
+        bolt_moby->state = 3;
         v->hop_frames = v->hop_left = FUN_001fa6d0(multiply_global_factor_ed64(FUN_002132a8(10.0f, 20.0f)));
         return;
     case BOLT_IDLE:
-        dist = vector_distance(&obj->pos, &hero.motion.pos);
-        if (dist < hero.reach_distance && FUN_001f99c0(obj->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
-            FUN_L00_002a7210_c(obj, hero.moby, 0.0f, 0.0f);
+        dist = vector_distance(&bolt_moby->pos, &hero.motion.pos);
+        if (dist < hero.reach_distance && FUN_001f99c0(bolt_moby->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
+            FUN_L00_002a7210_c(bolt_moby, hero.moby, 0.0f, 0.0f);
             return;
         }
-        if ((u8 *)obj > D_L00_0015FFDC && D_L00_0015FFBC < 200 && 48.0f < dist && obj->unk31 == 0) {
-            FUN_0020c828(obj);
+        if ((u8 *)bolt_moby > D_L00_0015FFDC && D_L00_0015FFBC < 200 && 48.0f < dist && bolt_moby->unk31 == 0) {
+            FUN_0020c828(bolt_moby);
             return;
         }
-        if (obj->unk31 != 0 || v->ground_moby != 0) {
-        FUN_L00_002a6de8_c(obj, 0, 0);
+        if (bolt_moby->unk31 != 0 || v->ground_moby != 0) {
+        FUN_L00_002a6de8_c(bolt_moby, 0, 0);
         if (v->hop_left != 0) {
             u = convert_integer_to_float(v->hop_left) / convert_integer_to_float(v->hop_frames);
             u -= 0.5f;
-            obj->pos.f[2] += -(u * u - 0.25f) * ((f32)v->hop_frames * 0.0125f);
+            bolt_moby->pos.f[2] += -(u * u - 0.25f) * ((f32)v->hop_frames * 0.0125f);
             v->hop_left--;
         }
         if (v->slot >= 0) {
-            transform_vector_by_basis(&geometry_scratch, &D_L00_001D73D0[obj->oclass], &obj->rot);
-            fast_vec_add(&glints[v->slot], &geometry_scratch, &obj->pos);
-            if (glints[v->slot].moby != (((u8 *)obj - D_L00_0015FFD8) >> 8)) {
+            transform_vector_by_basis(&geometry_scratch, &D_L00_001D73D0[bolt_moby->oclass], &bolt_moby->rot);
+            fast_vec_add(&glints[v->slot], &geometry_scratch, &bolt_moby->pos);
+            if (glints[v->slot].moby != (((u8 *)bolt_moby - D_L00_0015FFD8) >> 8)) {
                 v->slot = -1;
             }
             return;
@@ -989,9 +989,9 @@ void bolt_update(Bolt *obj) {
         if (--v->slot_timer > 0) {
             return;
         }
-        transform_vector_by_basis(&geometry_scratch, &D_L00_001D73D0[obj->oclass], &obj->rot);
-        fast_vec_add(&geometry_scratch, &geometry_scratch, &obj->pos);
-        v->slot = FUN_L00_001fe990(&geometry_scratch, ((u8 *)obj - D_L00_0015FFD8) >> 8, 1.4f);
+        transform_vector_by_basis(&geometry_scratch, &D_L00_001D73D0[bolt_moby->oclass], &bolt_moby->rot);
+        fast_vec_add(&geometry_scratch, &geometry_scratch, &bolt_moby->pos);
+        v->slot = FUN_L00_001fe990(&geometry_scratch, ((u8 *)bolt_moby - D_L00_0015FFD8) >> 8, 1.4f);
         v->slot_timer = FUN_L00_00257b90(scale_game_frames(300), scale_game_frames(600));
         } else if (v->hop_left != 0) {
             v->hop_left--;
@@ -1000,7 +1000,7 @@ void bolt_update(Bolt *obj) {
     case BOLT_MOVE_TO_HERO:
         flag = 0;
         if (v->unk60->oclass == 0) {
-            fast_vec_sub(&geometry_scratch, &obj->pos, &hero.ground_point);
+            fast_vec_sub(&geometry_scratch, &bolt_moby->pos, &hero.ground_point);
             transform_vector(&geometry_scratch, &geometry_scratch, hero.unk40);
             if (geometry_scratch.f[2] < 0.0f) {
                 flag = 1;
@@ -1021,13 +1021,13 @@ void bolt_update(Bolt *obj) {
             x = D_0015ED6C * 8.0f;
             if (x < hero.motion.speed_xy) {
                 fast_vec_normalize(&vector_scratch, &hero.motion.displacement, (hero.motion.speed_xy - x) * 0.5f);
-                fast_vec_add(&obj->pos, &obj->pos, &vector_scratch);
+                fast_vec_add(&bolt_moby->pos, &bolt_moby->pos, &vector_scratch);
             }
         }
         quaternion_to_rotation_basis(&v->spin, &geometry_scratch);
-        multiply_matrix3x3(&obj->rot, &geometry_scratch, &obj->rot);
-        fast_vec_add(&obj->pos, &obj->pos, &v->vel);
-        fast_vec_sub(&collection_offset, &hero.motion.unkD0, &obj->pos);
+        multiply_matrix3x3(&bolt_moby->rot, &geometry_scratch, &bolt_moby->rot);
+        fast_vec_add(&bolt_moby->pos, &bolt_moby->pos, &v->vel);
+        fast_vec_sub(&collection_offset, &hero.motion.unkD0, &bolt_moby->pos);
         if (v->speed < fast_vec_length(&collection_offset)) {
             if (!(v->unk4C == 0.0f && v->unk48 == 0.0f)) {
                 transform_vector_by_basis(&collection_offset, &collection_offset, hero.unk40);
@@ -1039,17 +1039,17 @@ void bolt_update(Bolt *obj) {
                 transform_vector_by_basis(&collection_offset, &collection_offset, hero.unk0);
             }
             fast_vec_normalize(&collection_offset, &collection_offset, v->speed);
-            fast_vec_add(&obj->pos, &obj->pos, &collection_offset);
+            fast_vec_add(&bolt_moby->pos, &bolt_moby->pos, &collection_offset);
             return;
         }
-        FUN_L00_002a6b70_c(obj);
-        if ((u8 *)obj < D_L00_0015FFDC) {
-            D_L00_001BA5D0.killed[obj->unkB2] = obj->unkB0 + 2;
-            if (obj->unkB0 == 0xFF || (mission_state_macro[obj->unkB0] != 0xFF && D_0014C050[D_0015ED84][obj->unkB0] == 0xFF)) {
-                D_L00_001BB230.killed[obj->unkB2] = obj->unkB0 + 2;
+        FUN_L00_002a6b70_c(bolt_moby);
+        if ((u8 *)bolt_moby < D_L00_0015FFDC) {
+            D_L00_001BA5D0.killed[bolt_moby->unkB2] = bolt_moby->unkB0 + 2;
+            if (bolt_moby->unkB0 == 0xFF || (mission_state_macro[bolt_moby->unkB0] != 0xFF && D_0014C050[D_0015ED84][bolt_moby->unkB0] == 0xFF)) {
+                D_L00_001BB230.killed[bolt_moby->unkB2] = bolt_moby->unkB0 + 2;
             }
         }
-        FUN_0020c828(obj);
+        FUN_0020c828(bolt_moby);
         return;
     }
 }
