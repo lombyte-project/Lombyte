@@ -2829,17 +2829,17 @@ void FUN_L12_002eb220(struct Moby *moby) {
     float fv;
     int res;
     char *vars;
-    char *r;
-    float hit_to_moby_angle, b, knockback_rotation_y, knockback_rotation_x;
+    char *hit_record;
+    float hit_to_moby_angle, hit_yaw_offset, knockback_rotation_y, knockback_rotation_x;
     vars = (char *)moby->pvars;
     fv = 0.0f;
-    r = find_moby_hit(moby, 0x330000, 0);
-    res = hit_reaction(moby, r, vars + 0x20, 0, &st, &fv, 0, 4);
+    hit_record = find_moby_hit(moby, 0x330000, 0);
+    res = hit_reaction(moby, hit_record, vars + 0x20, 0, &st, &fv, 0, 4);
     if (st != 1 && moby->state != 6 &&
-        *(short *)(*(char **)(r + 0x20) + 0xA6) != 0xB8 &&
-        *(short *)(*(char **)(r + 0x20) + 0xA6) != 0x199) {
+        *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0xB8 &&
+        *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x199) {
         float remaining_health;
-        if (*(short *)(*(char **)(r + 0x20) + 0xA6) == 0x1CA)
+        if (*(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0x1CA)
             fv = 10.0f;
         remaining_health = *(float *)(vars + 0x20) - fv;
         *(float *)(vars + 0x20) = remaining_health;
@@ -2849,12 +2849,12 @@ void FUN_L12_002eb220(struct Moby *moby) {
         } else if (res != 0xB) {
             *(unsigned char *)(vars + 0x67) = 0xB4;
             trooper_anim_update(moby, (short *)(vars + 0x60));
-            if (*(float *)(r + 0x1C) == 5627.925f && moby->state != 5) {
-                hit_to_moby_angle = fast_arc_tan(moby->pos.x - *(float *)(r + 0),
-                                 moby->pos.y - *(float *)(r + 4));
-                b = fast_subtract_rotations(hit_to_moby_angle, moby->rot.z);
-                knockback_rotation_y = fast_cos(b) * 0.08726646f;
-                knockback_rotation_x = fast_sin(b) * -0.34906584f;
+            if (*(float *)(hit_record + 0x1C) == 5627.925f && moby->state != 5) {
+                hit_to_moby_angle = fast_arc_tan(moby->pos.x - *(float *)(hit_record + 0),
+                                 moby->pos.y - *(float *)(hit_record + 4));
+                hit_yaw_offset = fast_subtract_rotations(hit_to_moby_angle, moby->rot.z);
+                knockback_rotation_y = fast_cos(hit_yaw_offset) * 0.08726646f;
+                knockback_rotation_x = fast_sin(hit_yaw_offset) * -0.34906584f;
                 if (absolute_float(moby->rot.x) < absolute_float(knockback_rotation_x)) {
                     moby->rot.x = knockback_rotation_x;
                     *(float *)(vars + 0x98) = 0.0f;
