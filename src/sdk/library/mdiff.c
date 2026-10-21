@@ -94,7 +94,7 @@ typedef u32 __ULong;
 extern _Bigint *_Balloc(struct _reent *, s32);
 extern s32 Dcmp(_Bigint *, _Bigint *);
 
-_Bigint *__mdiff(struct _reent *ptr, _Bigint *left_operand, _Bigint *right_operand) {
+_Bigint *__mdiff(struct _reent *reent_context, _Bigint *left_operand, _Bigint *right_operand) {
     _Bigint *difference;
     s32 i, wa, wb;
     __Long borrow, y;
@@ -103,7 +103,7 @@ _Bigint *__mdiff(struct _reent *ptr, _Bigint *left_operand, _Bigint *right_opera
 
     i = Dcmp(left_operand, right_operand);
     if (!i) {
-        difference = _Balloc(ptr, 0);
+        difference = _Balloc(reent_context, 0);
         difference->_wds = 1;
         difference->_x[0] = 0;
         return difference;
@@ -116,7 +116,7 @@ _Bigint *__mdiff(struct _reent *ptr, _Bigint *left_operand, _Bigint *right_opera
     } else {
         i = 0;
     }
-    difference = _Balloc(ptr, left_operand->_k);
+    difference = _Balloc(reent_context, left_operand->_k);
     difference->_sign = i;
     wa = left_operand->_wds;
     xa = left_operand->_x;
