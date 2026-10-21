@@ -37,13 +37,13 @@ void FUN_L00_0024f190(void *unused, unsigned char *animation_state) {
                     }
                     {
                         float unscaled_frame_remainder = (*(float *)(animation_state + 0x24) - 1.0f) / *(float *)(animation_state + 0x2C);
-                        float g;
+                        float frame_progress_scale;
                         animation_table_byte_offset = animation_state[0x22] * 4;
                         p = animation_state[0x20] * 4;
                         *(float *)(animation_state + 0x24) = unscaled_frame_remainder;
-                        g = **(float **)(*(int *)(*(unsigned char **)(animation_state + 0x14) + animation_table_byte_offset + 0x48) + p + 0x1C);
-                        *(float *)(animation_state + 0x2C) = g;
-                        *(float *)(animation_state + 0x24) = unscaled_frame_remainder * g;
+                        frame_progress_scale = **(float **)(*(int *)(*(unsigned char **)(animation_state + 0x14) + animation_table_byte_offset + 0x48) + p + 0x1C);
+                        *(float *)(animation_state + 0x2C) = frame_progress_scale;
+                        *(float *)(animation_state + 0x24) = unscaled_frame_remainder * frame_progress_scale;
                     }
                 } while (*(float *)(animation_state + 0x24) >= 1.0f);
             }
