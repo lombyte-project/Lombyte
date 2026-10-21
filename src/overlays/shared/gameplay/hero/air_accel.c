@@ -1589,10 +1589,10 @@ void FUN_L00_002325e0_242198(s32, s32) __asm__("FUN_L00_002325e0");
 void FUN_L00_0025f730_242198(void *, f32) __asm__("FUN_L00_0025f730");
 s32 FUN_L01_00226f10_242198(s32) __asm__("FUN_L01_00226f10");
 void FUN_L01_00242198(void) {
-    struct Hero *b, *run_hero, *stop_idle_hero;
+    struct Hero *hero_ptr, *run_hero, *stop_idle_hero;
     s32 run_frames_or_idle_selector;
-    b = &hero;
-    b->unk2284 = 0;
+    hero_ptr = &hero;
+    hero_ptr->unk2284 = 0;
     FUN_L00_002118c8_242198(0, 1.0f);
     if (D_0013CAE0_242198 & 0xA) {
         hero_set_state(HERO_STATE_CROUCH, 0);
