@@ -911,7 +911,7 @@ extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 
 void FUN_L00_002ead60(char *camera_object) {
-    float v[16];
+    float rotation_matrix[16];
     char *rotation_spring_state;
     char *camera_state;
     *(int *)(*(char **)(camera_object + 0x70) + 0xC0) = 4;
@@ -927,8 +927,8 @@ void FUN_L00_002ead60(char *camera_object) {
     *(float *)(camera_state + 0x18) = 1.0f;
     *(short *)(camera_state + 0x1C) = 1;
     clear_u64_value(camera_state);
-    euler_rotation_matrix(v, camera_object + 0x40);
-    copy_matrix3x4(camera_object, v);
+    euler_rotation_matrix(rotation_matrix, camera_object + 0x40);
+    copy_matrix3x4(camera_object, rotation_matrix);
     *(short *)(camera_object + 0x7E) = 0;
 }
 #define F(p, o) (*(float *)((char *)(p) + (o)))
