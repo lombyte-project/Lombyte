@@ -1548,20 +1548,20 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         DREK_BOSS_PHASE_AFTER_MISSILE_GROUP_START = 5
     };
     BossData *boss_data = (BossData *)moby->f78;
-    BossMoby *tgt;
+    BossMoby *aim_target_moby;
     float v0[4];
     float v1[4];
     float v2[4];
     float second_rotation_angles[4];
     float node_position_and_yaw[4];
     float slow;
-    float ang;
+    float desired_yaw;
     float *aim;
     float fast;
 
     FUN_L18_002f5e18((char *)moby);
     FUN_L18_002f5e80((char *)moby);
-    tgt = boss_data->fB0;
+    aim_target_moby = boss_data->fB0;
     /* The file defines this one without parameters; retail passes the moby. */
     FUN_L18_002f2b18((char *)moby);
     {
@@ -1721,8 +1721,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         break;
     case DREK_BOSS_CIRCLE_AND_FIRE_AT_HERO:
         aim = &moby->f40[2];
-        ang = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
-        approach_angle(aim, &boss_data->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
+        desired_yaw = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
+        approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         FUN_L18_002f6aa0((struct Moby *)moby);
         if (boss_data->f38C <= 301.0f) {
@@ -1789,8 +1789,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         int hit;
 
         aim = &moby->f40[2];
-        ang = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
-        approach_angle(aim, &boss_data->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
+        desired_yaw = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
+        approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         qcopy(v0, boss_data->f340 + 4);
         hit = FUN_L18_002f6878((char *)moby, 20.0f, v0);
@@ -1848,8 +1848,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         unsigned char *firing_target_moby;
 
         aim = &moby->f40[2];
-        ang = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
-        approach_angle(aim, &boss_data->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
+        desired_yaw = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
+        approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         approach_value(&boss_data->f374, frame_time * 12.0f, D_0015ED6C_e[1] * 20.0f);
         if (boss_data->f374 != 0.0f) {
@@ -2001,8 +2001,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         break;
     case DREK_BOSS_SELECT_NEXT_ACTION:
         aim = &moby->f40[2];
-        ang = fast_arc_tan(tgt->f10[0] - moby->f10[0], tgt->f10[1] - moby->f10[1]);
-        approach_angle(aim, &boss_data->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
+        desired_yaw = fast_arc_tan(aim_target_moby->f10[0] - moby->f10[0], aim_target_moby->f10[1] - moby->f10[1]);
+        approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         FUN_L18_002f6aa0((struct Moby *)moby);
         if ((moby->f70 & 2) == 0) {
@@ -2088,8 +2088,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         break;
     case DREK_BOSS_ACTION_REPOSITION_AND_AIM:
         aim = &moby->f40[2];
-        ang = fast_arc_tan(boss_data->f320[0] - moby->f10[0], boss_data->f320[1] - moby->f10[1]);
-        approach_angle(aim, &boss_data->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
+        desired_yaw = fast_arc_tan(boss_data->f320[0] - moby->f10[0], boss_data->f320[1] - moby->f10[1]);
+        approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         moby_point_position(moby, 0x13, v0);
         *(BossTI *)v1 = *(BossTI *)boss_data->f320;
@@ -2130,7 +2130,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 moby_point_position(moby, 1, v1);
                 FUN_L18_002ea168(boss_data->f33C, v1, boss_data->f320, 0, f);
                 if (scale_game_frames(0xF) < boss_data->f354) {
-                    qcopy(boss_data->f320, tgt->f10);
+                    qcopy(boss_data->f320, aim_target_moby->f10);
                 }
             }
         }
@@ -2138,8 +2138,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         break;
     case DREK_BOSS_TARGET_GROUND_POINTS:
         aim = &moby->f40[2];
-        ang = fast_arc_tan(tgt->f10[0] - moby->f10[0], tgt->f10[1] - moby->f10[1]);
-        approach_angle(aim, &boss_data->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
+        desired_yaw = fast_arc_tan(aim_target_moby->f10[0] - moby->f10[0], aim_target_moby->f10[1] - moby->f10[1]);
+        approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         FUN_L18_002f6aa0((struct Moby *)moby);
         if (is_value_within_interpolated_window((char *)moby, 1.0f) != 0 ||
@@ -2201,8 +2201,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         break;
     case DREK_BOSS_LAUNCH_FORWARD_WITH_LATERAL_OFFSET:
         aim = &moby->f40[2];
-        ang = fast_arc_tan(tgt->f10[0] - moby->f10[0], tgt->f10[1] - moby->f10[1]);
-        approach_angle(aim, &boss_data->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
+        desired_yaw = fast_arc_tan(aim_target_moby->f10[0] - moby->f10[0], aim_target_moby->f10[1] - moby->f10[1]);
+        approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         FUN_L18_002f6aa0((struct Moby *)moby);
         if (boss_data->f354 < boss_data->f358 + boss_data->f35C) {
@@ -2225,7 +2225,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 qcopy(v1, moby->fC0);
                 normalize_vector_xyz(v2, moby->fD0, boss_data->f3BC);
                 add_vector_xyz(v1, v1, v2);
-                f = vector_distance(v0, tgt->f10) * 0.5f;
+                f = vector_distance(v0, aim_target_moby->f10) * 0.5f;
                 if (f > 30.0f) {
                     f = 30.0f;
                 } else if (f < 0.0f) {
@@ -2249,8 +2249,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         break;
     case DREK_BOSS_TARGET_RANDOM_ARENA_POINTS:
         aim = &moby->f40[2];
-        ang = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
-        approach_angle(aim, &boss_data->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
+        desired_yaw = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
+        approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         FUN_L18_002f6aa0((struct Moby *)moby);
         if (tick_countdown_32_alt(&boss_data->f354) != 0) {
@@ -2287,8 +2287,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         int n;
 
         aim = &moby->f40[2];
-        ang = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
-        approach_angle(aim, &boss_data->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
+        desired_yaw = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
+        approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         FUN_L18_002f6aa0((struct Moby *)moby);
         if ((moby->f70 & 2) != 0 && moby->f53 != 12) {
@@ -2329,8 +2329,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         int fire;
 
         aim = &moby->f40[2];
-        ang = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
-        approach_angle(aim, &boss_data->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
+        desired_yaw = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
+        approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         if (tick_countdown_32_alt(&boss_data->f354) != 0) {
             FUN_L18_002f6960((char *)moby);
@@ -2378,27 +2378,27 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     }
     case DREK_BOSS_APPROACH_AIM_NODE:
         aim = &moby->f40[2];
-        ang = fast_arc_tan(boss_data->f70[0] - moby->f10[0], boss_data->f70[1] - moby->f10[1]);
-        approach_angle(aim, &boss_data->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
+        desired_yaw = fast_arc_tan(boss_data->f70[0] - moby->f10[0], boss_data->f70[1] - moby->f10[1]);
+        approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         {
             /* Retail scales the index before it sets up the call. */
-            int off = boss_data->f3A8 * 0x80;
+            int aim_node_byte_offset = boss_data->f3A8 * 0x80;
 
-            if (FUN_L18_002f6878((char *)moby, frame_time * 12.0f, D_L18_001600EC + off + 0x30) !=
+            if (FUN_L18_002f6878((char *)moby, frame_time * 12.0f, D_L18_001600EC + aim_node_byte_offset + 0x30) !=
                 0) {
                 moby->f20 = 0xE;
                 if (moby->f53 != 7) {
                     blend_moby_animation(moby, 7, 0, scale_game_frames(0x14));
                 }
-                qcopy(boss_data->f320, tgt->f10);
+                qcopy(boss_data->f320, aim_target_moby->f10);
             }
         }
         break;
     case DREK_BOSS_APPROACH_SELECTED_MOBY:
         aim = &moby->f40[2];
-        ang = fast_arc_tan(boss_data->f330->f10[0] - moby->f10[0], boss_data->f330->f10[1] - moby->f10[1]);
-        approach_angle(aim, &boss_data->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
+        desired_yaw = fast_arc_tan(boss_data->f330->f10[0] - moby->f10[0], boss_data->f330->f10[1] - moby->f10[1]);
+        approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         FUN_L18_002d6dc0(boss_data->f330);
         if (FUN_L18_002f6878((char *)moby, frame_time * 12.0f, boss_data->f330->f10) != 0) {
@@ -2443,8 +2443,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         int n;
 
         aim = &moby->f40[2];
-        ang = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
-        approach_angle(aim, &boss_data->f370, ang, D_0015ED6C_e[1] * 6.2831855f,
+        desired_yaw = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
+        approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         FUN_L18_002f6aa0((struct Moby *)moby);
         boss_data->f358 = boss_data->f358 + 1;
