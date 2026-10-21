@@ -1377,14 +1377,14 @@ void test_dummy_update(unsigned char *moby) {
             }
         } else {
             char *position = (char *)moby + 16;
-            struct Hero *g;
+            struct Hero *player;
             subtract_vector_xyz(position_or_delta.f, path + (dummy_data->node * 16 + 16), position);
             FUN_L00_0025f730(position_or_delta.f, D_L16_001619D0 * D_0015ED6C);
             add_vector_xyz(position, position, position_or_delta.f);
             moby_point_position(moby, D_L16_001619C8_gp, position_or_direction.f);
             func_L00_0025A8E8_2cf180(moby, 0.333f, position_or_direction.f, 1, 1.0f, 1.0f, 0, 1, 0);
-            g = &hero;
-            if (D_L16_00174258 == ((char *)g->moby) && g->invulnerable_frames == 0) {
+            player = &hero;
+            if (D_L16_00174258 == ((char *)player->moby) && player->invulnerable_frames == 0) {
                 func_0022ED80_i(6, 0, moby);
             }
             if (vector_length_xyz(position_or_delta.f) < 0.0001f) {
