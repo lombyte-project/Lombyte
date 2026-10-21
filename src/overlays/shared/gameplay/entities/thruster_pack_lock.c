@@ -606,16 +606,16 @@ void FUN_L11_0031a1c0(char *moby) {
         *(unsigned short *)(moby + 0x34) |= 0x1000;
     }
     if (info != 0) {
-        char *st = (char *)D_00141968;
-        int st2;
-        int cur;
-        if (*(unsigned short *)(st + 0x157E8) < 0xFFFF) {
-            *(unsigned short *)(st + 0x157E8) += 1;
+        char *collection_stats_base = (char *)D_00141968;
+        int next_moby_state;
+        int current_moby_state;
+        if (*(unsigned short *)(collection_stats_base + 0x157E8) < 0xFFFF) {
+            *(unsigned short *)(collection_stats_base + 0x157E8) += 1;
         }
-        if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(st + 0x157EA)) {
-            *(unsigned short *)(st + 0x157EA) = scale_game_frames(D_0015EEA4) / 600;
+        if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(collection_stats_base + 0x157EA)) {
+            *(unsigned short *)(collection_stats_base + 0x157EA) = scale_game_frames(D_0015EEA4) / 600;
         }
-        *(int *)(st + 0x157EC) = *(int *)(st + 0x157EC) | (1 << current_level_index) | 0x80000000;
+        *(int *)(collection_stats_base + 0x157EC) = *(int *)(collection_stats_base + 0x157EC) | (1 << current_level_index) | 0x80000000;
         if (current_level_index == 0xB && *(char **)(info + 0x20) != 0 &&
             *(short *)(*(char **)(info + 0x20) + 0xA6) == 0xAC) {
             if (++D_0015EE00 >= 3 && D_0013D408[0x12] == 0) {
@@ -625,14 +625,14 @@ void FUN_L11_0031a1c0(char *moby) {
             }
         }
         if (*(int *)(moby_vars + 0x88) != 0) {
-            st2 = 6;
-            cur = ((unsigned char *)moby)[0x20];
+            next_moby_state = 6;
+            current_moby_state = ((unsigned char *)moby)[0x20];
         } else {
-            cur = ((unsigned char *)moby)[0x20];
-            st2 = 2;
+            current_moby_state = ((unsigned char *)moby)[0x20];
+            next_moby_state = 2;
         }
-        if (cur != st2) {
-            moby[0x20] = st2;
+        if (current_moby_state != next_moby_state) {
+            moby[0x20] = next_moby_state;
             if (((unsigned char *)moby)[0x53] != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
