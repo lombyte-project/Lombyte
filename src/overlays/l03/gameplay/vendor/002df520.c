@@ -338,7 +338,7 @@ void FUN_L03_002eb978(void *arg) {
     int i;
     float f;
     float mtx[12];
-    float v[4];
+    float camera_rotation_angles[4];
 
     target = *(char **)(camera + 0x70) + 0xB0;
     *(float *)(target + 0x14) = 1.5f;
@@ -370,11 +370,11 @@ void FUN_L03_002eb978(void *arg) {
     i = (*(s16 *)(camera + 0x84) << 5) + tbl;
     i += 0x10;
     camera_parameter_values = (float *)i;
-    v[0] = camera_parameter_values[0];
-    v[1] = camera_parameter_values[1];
-    v[2] = camera_parameter_values[2];
-    v[3] = 0.0f;
-    euler_rotation_basis(mtx, v);
+    camera_rotation_angles[0] = camera_parameter_values[0];
+    camera_rotation_angles[1] = camera_parameter_values[1];
+    camera_rotation_angles[2] = camera_parameter_values[2];
+    camera_rotation_angles[3] = 0.0f;
+    euler_rotation_basis(mtx, camera_rotation_angles);
     qcopy(ang, mtx);
     FUN_L03_002eb7e0(camera);
     *(s16 *)(camera + 0x7E) = 0;
