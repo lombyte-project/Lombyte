@@ -179,7 +179,7 @@ void FUN_L00_0023e268(void) {
     s32 k;
     s32 effect_spawn_attempt_index;
     f32 azimuth_angle;
-    f32 b;
+    f32 elevation_angle;
     s32 r;
     VeldinVec buf;
     VeldinVec v;
@@ -208,9 +208,9 @@ void FUN_L00_0023e268(void) {
                 clear_u64_value(&v);
                 moby_point_position(src, effect_spawn_attempt_index % 2, &buf);
                 azimuth_angle = veldin_random_angle();
-                b = veldin_random_angle();
+                elevation_angle = veldin_random_angle();
                 build_spherical_offset(
-                    v.f, veldin_random_range(frame_time * 0.7f, frame_time * 2.2f), azimuth_angle, b);
+                    v.f, veldin_random_range(frame_time * 0.7f, frame_time * 2.2f), azimuth_angle, elevation_angle);
                 r = scale_game_frames(0xC);
                 FUN_L00_0026ced0(&buf, &v, 0x80808080, 0x808080,
                                  random_int_between(r, scale_game_frames(0x23)), 147000.0f);
