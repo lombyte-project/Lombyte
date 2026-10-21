@@ -65,7 +65,7 @@ void init_once(void) {
     s32 lang;
     u32 aligned_memory_base;
     u32 base;
-    s32 *dst;
+    s32 *compressed_archive_buffer;
     s32 flag;
 
     reset_vif1_gif();
@@ -101,10 +101,10 @@ void init_once(void) {
     load_disc_sectors_into_global_buffer();
     aligned_memory_base = (u32)D_24135F & 0xFFFFC000;
     base = aligned_memory_base + 0x2C0000;
-    dst = (s32 *)(D_1FF8000 - (disc_table.unk12C0.size << 0xB));
-    wad_get_sectors(disc_table.unk12C0.sector, disc_table.unk12C0.size, dst);
+    compressed_archive_buffer = (s32 *)(D_1FF8000 - (disc_table.unk12C0.size << 0xB));
+    wad_get_sectors(disc_table.unk12C0.sector, disc_table.unk12C0.size, compressed_archive_buffer);
     FlushCache(0);
-    fast_decompress(dst, base);
+    fast_decompress(compressed_archive_buffer, base);
     FlushCache(0);
     load_irx_module(*(u32 *)(base + 0x70) + base, *(u32 *)(base + 0x74));
     load_irx_module(*(u32 *)(base + 0x78) + base, *(u32 *)(base + 0x7C));
