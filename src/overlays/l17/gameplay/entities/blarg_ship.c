@@ -887,14 +887,14 @@ void FUN_L17_002f5390(struct Moby *moby) {
         HIT_EFFECT_EMIT_AND_REMOVE = 2
     };
     int flag = 0;
-    char *r = find_moby_hit(moby, 0x10000, 0);
+    char *hit_result = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
     case HIT_EFFECT_INITIALIZE:
         moby->state = 1;
         break;
     case HIT_EFFECT_WAIT_FOR_HIT:
-        if (r) {
-            if (*(float *)(r + 0x2C) > 0.0f)
+        if (hit_result) {
+            if (*(float *)(hit_result + 0x2C) > 0.0f)
                 flag = 1;
         }
         if (flag)
