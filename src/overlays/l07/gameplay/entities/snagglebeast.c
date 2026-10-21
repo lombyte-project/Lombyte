@@ -570,16 +570,16 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
-int FUN_L07_00313de8(unsigned char *moby, unsigned char *obj, float *vec, int resume_animation, int use_fixed_target_position) {
-    float target_heading = fast_arc_tan(vec[0] - *(float *)(moby + 0x10), vec[1] - *(float *)(moby + 0x14));
-    if (*(float *)(obj + 0x98) < fast_difference_between_rotations(*(float *)(moby + 0x48), target_heading)) {
-        *(int *)(obj + 0x168) = 0;
+int FUN_L07_00313de8(unsigned char *moby, unsigned char *moby_vars, float *target_position, int resume_animation, int use_fixed_target_position) {
+    float target_heading = fast_arc_tan(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
+    if (*(float *)(moby_vars + 0x98) < fast_difference_between_rotations(*(float *)(moby + 0x48), target_heading)) {
+        *(int *)(moby_vars + 0x168) = 0;
         *(float *)(moby + 0x58) = 1.0f;
-        obj[0x1F4] = moby[0x20];
-        obj[0x1F6] = resume_animation;
-        obj[0x1F5] = use_fixed_target_position;
-        qcopy(obj + 0xC0, vec);
-        if (fast_arc_tan(vec[0] - *(float *)(moby + 0x10), vec[1] - *(float *)(moby + 0x14)) < 0.0f) {
+        moby_vars[0x1F4] = moby[0x20];
+        moby_vars[0x1F6] = resume_animation;
+        moby_vars[0x1F5] = use_fixed_target_position;
+        qcopy(moby_vars + 0xC0, target_position);
+        if (fast_arc_tan(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14)) < 0.0f) {
             if (moby[0x53] != 3) {
                 int r = random_int_between(0, 1);
                 blend_moby_animation(moby, 3, r, random_int_between(0xF, 0x14));
