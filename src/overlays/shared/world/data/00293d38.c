@@ -21,13 +21,13 @@ extern s32 sceSifSetDma(struct sceSifDmaData *transfer, s32 priority);
 /* SIF-DMAs size quadwords from slot base + off; -3 for a bad or empty slot, -1 past its limit. */
 int FUN_L00_00293d38(int dma_source_address, unsigned int slot, int slot_offset_quadwords, int size) {
     int req[4];
-    int lim;
+    int slot_limit_quadwords;
     if (slot >= 0x40)
         return -3;
-    lim = D_L00_001C12D8[slot].limit;
-    if (lim == 0)
+    slot_limit_quadwords = D_L00_001C12D8[slot].limit;
+    if (slot_limit_quadwords == 0)
         return -3;
-    if (lim < slot_offset_quadwords + size)
+    if (slot_limit_quadwords < slot_offset_quadwords + size)
         return -1;
     req[0] = dma_source_address;
     req[1] = (int)(D_L00_001C12D8[slot].base + slot_offset_quadwords * 16);
