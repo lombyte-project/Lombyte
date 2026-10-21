@@ -30,11 +30,11 @@ extern short D_L00_0015F938 __attribute__((sda));
 extern short D_L00_0015F93C __attribute__((sda));
 extern short D_L00_0015F940 __attribute__((sda));
 int FUN_L00_0023a7a8(char *hud_element) {
-    char buf[16];
+    char formatted_count_text[16];
     char *fade_control_bytes = hud_element + 0x70;
     int x4;
     int y = 0x12;
-    int x, frame_alpha, alpha, base_frame_width, text_color, tex, c1, wd, displayed_numerator;
+    int x, frame_alpha, alpha, base_frame_width, text_color, icon_frame_index, text_shadow_color, wd, displayed_numerator;
     float hud_fade_factor, text_color_blend_factor;
     if (pal_mode)
         y = 0xA;
@@ -67,21 +67,21 @@ int FUN_L00_0023a7a8(char *hud_element) {
         draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 0), x4, y, wd, 0x20, frame_alpha);
         draw_hud_sprite_flipped(find_valid_animation_frame_index_alt(0x7580, 1), x4 + wd, y, 0x20,
                                 0x20, frame_alpha);
-        tex = find_valid_animation_frame_index_alt(*(int *)hud_element, 3);
-        *(int *)(hud_element + 0x44) = tex;
-        hud_frame(hud_element, tex, x, y, 0, alpha);
+        icon_frame_index = find_valid_animation_frame_index_alt(*(int *)hud_element, 3);
+        *(int *)(hud_element + 0x44) = icon_frame_index;
+        hud_frame(hud_element, icon_frame_index, x, y, 0, alpha);
         displayed_numerator = *(int *)(hud_element + 0x74);
-        sprintf_alt(buf, D_L00_0015F7C8, displayed_numerator, *(int *)(hud_element + 8));
+        sprintf_alt(formatted_count_text, D_L00_0015F7C8, displayed_numerator, *(int *)(hud_element + 8));
         if (displayed_numerator != 0)
             text_color = fast_tween_color(*(int *)&D_L00_0015F92C, *(int *)&D_L00_0015F930, text_color_blend_factor);
         else
             text_color = fast_tween_color(*(int *)&D_L00_0015F934, *(int *)&D_L00_0015F938, text_color_blend_factor);
-        c1 = fast_tween_color(0, 0x80000000, text_color_blend_factor);
+        text_shadow_color = fast_tween_color(0, 0x80000000, text_color_blend_factor);
         {
             int tx = x + *(int *)&D_L00_0015F93C + base_frame_width;
-            font_print_right(tx + 1, y + *(int *)&D_L00_0015F940 + 1, c1, buf, -1);
+            font_print_right(tx + 1, y + *(int *)&D_L00_0015F940 + 1, text_shadow_color, formatted_count_text, -1);
         }
-        font_print_right(x + *(int *)&D_L00_0015F93C + base_frame_width, y + *(int *)&D_L00_0015F940, text_color, buf,
+        font_print_right(x + *(int *)&D_L00_0015F93C + base_frame_width, y + *(int *)&D_L00_0015F940, text_color, formatted_count_text,
                          -1);
     }
     return *(int *)(hud_element + 0x58);
