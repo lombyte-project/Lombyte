@@ -700,32 +700,32 @@ extern short D_L05_00161DC4 __attribute__((sda));
 extern short D_L05_00161DC8 __attribute__((sda));
 extern short D_L05_00161DCC __attribute__((sda));
 extern short D_L05_00161DD0 __attribute__((sda));
-void FUN_L05_0030f218(char *obj, float lower_height_bound, float b) {
+void FUN_L05_0030f218(char *obj, float lower_height_bound, float upper_height_bound) {
     float v[4];
-    float w[4];
+    float particle_position[4];
     float ground, x, y, spawn_height_candidate, u;
     int i, j, k, particle_size, particle_color;
     clear_vector(v);
     v[2] = *(float *)&D_L05_00161DC8 * frame_time;
     ground = v[2] * 0.75f * convert_integer_to_float(*(int *)&D_L05_00161DB8_d);
     j = 0;
-    for (i = j; (float)i < (b - lower_height_bound) / *(float *)&D_L05_00161DB4; i++) {
+    for (i = j; (float)i < (upper_height_bound - lower_height_bound) / *(float *)&D_L05_00161DB4; i++) {
         float fi = (float)j;
         x = random_float_between_alt(fi, *(float *)&D_L05_00161DD0);
         y = random_angle_radians();
-        w[0] = fast_cos(y) * x;
-        w[1] = fast_sin(y) * x;
-        w[2] = fi;
-        add_vector_xyz(w, obj + 0x10, w);
-        w[2] = random_float_between_alt(lower_height_bound, b) - ground;
-        spawn_height_candidate = random_float_between_alt((lower_height_bound + b) * 0.5f, b) - ground;
-        if (spawn_height_candidate < w[2])
-            w[2] = spawn_height_candidate;
+        particle_position[0] = fast_cos(y) * x;
+        particle_position[1] = fast_sin(y) * x;
+        particle_position[2] = fi;
+        add_vector_xyz(particle_position, obj + 0x10, particle_position);
+        particle_position[2] = random_float_between_alt(lower_height_bound, upper_height_bound) - ground;
+        spawn_height_candidate = random_float_between_alt((lower_height_bound + upper_height_bound) * 0.5f, upper_height_bound) - ground;
+        if (spawn_height_candidate < particle_position[2])
+            particle_position[2] = spawn_height_candidate;
         u = random_float_between_alt(*(float *)&D_L05_00161DBC, *(float *)&D_L05_00161DC0);
         k = scale_game_frames(*(int *)&D_L05_00161DB8_d);
         particle_size = func_001FA898_r(FUN_L00_00257c48(fi, (float)*(int *)&D_L05_00161DC4));
         particle_color = *(int *)&D_L05_00161DCC;
-        FUN_L05_0029bbe0(u, w, v, k, particle_size, particle_color);
+        FUN_L05_0029bbe0(u, particle_position, v, k, particle_size, particle_color);
     }
 }
 #define MOBY(p) ((struct Moby *)(p))
