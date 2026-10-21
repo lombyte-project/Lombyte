@@ -22,29 +22,29 @@ extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L02_0021b698(void) {
-    struct Hero *g = &hero;
-    int keep = g->unk12ED;
-    int st = g->ground_type;
+    struct Hero *hero_state = &hero;
+    int keep = hero_state->unk12ED;
+    int saved_ground_type = hero_state->ground_type;
     int sphere_probe_selector;
-    fast_mem_zero16(&g->ground_type, 0x10);
-    g->unk12ED = keep;
-    g->ground_type = -1;
-    g->unk20A9 = 0;
-    g->unk308 = 0;
-    if (st == -1)
+    fast_mem_zero16(&hero_state->ground_type, 0x10);
+    hero_state->unk12ED = keep;
+    hero_state->ground_type = -1;
+    hero_state->unk20A9 = 0;
+    hero_state->unk308 = 0;
+    if (saved_ground_type == -1)
         return;
-    if (st == 2) {
-        if (g->frames_off_ground.s == 0 || g->ground_distance < 0.3f) {
-            g->unk12E7 = 1;
-            if (g->vehicle_mode == 0) {
-                char *slot_one_moby = (char *)g->items[1].moby;
+    if (saved_ground_type == 2) {
+        if (hero_state->frames_off_ground.s == 0 || hero_state->ground_distance < 0.3f) {
+            hero_state->unk12E7 = 1;
+            if (hero_state->vehicle_mode == 0) {
+                char *slot_one_moby = (char *)hero_state->items[1].moby;
                 if (slot_one_moby != 0 && *(short *)(slot_one_moby + 0xA6) == 0xAD)
-                    g->unk308 = 1;
+                    hero_state->unk308 = 1;
             }
         }
     }
     sphere_probe_selector = D_0015ED84_c;
-    if (st == 3) {
+    if (saved_ground_type == 3) {
         struct Hero *q = &hero;
         q->selector_3 = 1;
         sphere_probe_selector = D_0015ED84_d;
@@ -60,27 +60,27 @@ void FUN_L02_0021b698(void) {
             }
         }
     }
-    if (st == 0xB) {
+    if (saved_ground_type == 0xB) {
         struct Hero *q = &hero;
         q->selector_11 = 1;
     }
-    if (st == 0x2) {
+    if (saved_ground_type == 0x2) {
         struct Hero *q = &hero;
         q->unk12E7 = 1;
     }
-    if (st == 0xD) {
+    if (saved_ground_type == 0xD) {
         struct Hero *q = &hero;
         q->selector_13 = 1;
     }
-    if (st == 0x8) {
+    if (saved_ground_type == 0x8) {
         struct Hero *q = &hero;
         q->on_slip_ground = 1;
     }
-    if (st == 0x9) {
+    if (saved_ground_type == 0x9) {
         struct Hero *q = &hero;
         q->unk12EE = 1;
     }
-    if (st == 0xC) {
+    if (saved_ground_type == 0xC) {
         struct Hero *q = &hero;
         q->on_slip_ground = 1;
     }
