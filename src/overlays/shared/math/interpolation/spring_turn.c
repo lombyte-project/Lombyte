@@ -637,13 +637,13 @@ int FUN_L00_002592b8(char **out, char *target, int include_sign_bit_set_entries,
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A468), where it is exact; names translated to the US level program. */
 
 /* Lowers the top byte of *p by b (not below 0); true once it reaches 0. */
-int FUN_L00_00259430(int *packed_countdown, int b) {
-    int w = *packed_countdown;
-    int v = (w >> 24) - b;
-    if (v < 0)
-        v = 0;
-    *packed_countdown = (w & 0xFFFFFF) | (v << 24);
-    return v == 0;
+int FUN_L00_00259430(int *packed_countdown, int decrement_amount) {
+    int original_packed_word = *packed_countdown;
+    int remaining_countdown = (original_packed_word >> 24) - decrement_amount;
+    if (remaining_countdown < 0)
+        remaining_countdown = 0;
+    *packed_countdown = (original_packed_word & 0xFFFFFF) | (remaining_countdown << 24);
+    return remaining_countdown == 0;
 }
 #define NOT_SDA
 
