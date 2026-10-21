@@ -3172,8 +3172,8 @@ extern short D_L00_0016155C __attribute__((sda));
 /* Walks the 15 entry pointers in the moby's data; for each live type-0xC entry builds a hit record and, for sub-type 10,
    spawns a burst of particles. Entries that are invalid or have sub-type < 2 are cleared. */
 void FUN_L00_002b8438(char *moby) {
-    float vec[4];
-    char buf[0x30];
+    float hit_direction_vector[4];
+    char hit_descriptor[0x30];
     char qv[16];
     float spark_random_vector[4];
     float spark_position[4];
@@ -3190,14 +3190,14 @@ void FUN_L00_002b8438(char *moby) {
             float hit_sphere_radius = *(float *)(entry + 0xC) / 210000.0f * 0.5f;
             char *src = entry + 0x20;
             int sub_type;
-            set_vector_length_xy(vec, src, 1.0f);
-            vec[2] = 1.0f;
-            vec[3] = 5627.9248046875f;
-            make_hit_descriptor(buf, (int)moby, 0x10000, vec, convert_integer_to_float_c(item_variant_bytes[0x10]) + 1.0f);
-            *(unsigned char *)(buf + 0x18) = 5;
-            *(unsigned char *)(buf + 0x19) = 1;
-            *(unsigned short *)(buf + 0x1A) = *(unsigned short *)(moby + 0xA6);
-            collect_mobies_in_sphere((entry + 0x10), hit_sphere_radius, 0, moby, buf);
+            set_vector_length_xy(hit_direction_vector, src, 1.0f);
+            hit_direction_vector[2] = 1.0f;
+            hit_direction_vector[3] = 5627.9248046875f;
+            make_hit_descriptor(hit_descriptor, (int)moby, 0x10000, hit_direction_vector, convert_integer_to_float_c(item_variant_bytes[0x10]) + 1.0f);
+            *(unsigned char *)(hit_descriptor + 0x18) = 5;
+            *(unsigned char *)(hit_descriptor + 0x19) = 1;
+            *(unsigned short *)(hit_descriptor + 0x1A) = *(unsigned short *)(moby + 0xA6);
+            collect_mobies_in_sphere((entry + 0x10), hit_sphere_radius, 0, moby, hit_descriptor);
             sub_type = *(short *)(entry + 0xA);
             if (sub_type == 10) {
                 int j;
