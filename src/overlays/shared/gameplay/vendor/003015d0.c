@@ -503,7 +503,7 @@ void FUN_L14_00302538(char *self) {
     struct Moby *beam_moby = (struct Moby *)self;
     D1224 *beam_vars = (D1224 *)beam_moby->pvars;
     VendorBeamReq req;
-    Vec4 dir, to_hero, base, end_a, end_b, from, to, off;
+    Vec4 dir, to_hero, base, end_a, end_b, from, to, beam_radius_offset;
     f32 dot, len;
 
     if (beam_vars->radius == 0.0f)
@@ -557,19 +557,19 @@ void FUN_L14_00302538(char *self) {
     }
     qcopy(&end_a, &beam_vars->end_a);
     qcopy(&end_b, &beam_vars->end_b);
-    normalize_vector_xyz(&off, &D_L14_001600EC[beam_vars->w0].axis[0], beam_vars->radius);
-    add_vector_xyz(&from, &end_a, &off);
-    add_vector_xyz(&to, &end_b, &off);
+    normalize_vector_xyz(&beam_radius_offset, &D_L14_001600EC[beam_vars->w0].axis[0], beam_vars->radius);
+    add_vector_xyz(&from, &end_a, &beam_radius_offset);
+    add_vector_xyz(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
-    subtract_vector_xyz(&from, &end_a, &off);
-    subtract_vector_xyz(&to, &end_b, &off);
+    subtract_vector_xyz(&from, &end_a, &beam_radius_offset);
+    subtract_vector_xyz(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
-    normalize_vector_xyz(&off, &D_L14_001600EC[beam_vars->w0].axis[2], beam_vars->radius);
-    add_vector_xyz(&from, &end_a, &off);
-    add_vector_xyz(&to, &end_b, &off);
+    normalize_vector_xyz(&beam_radius_offset, &D_L14_001600EC[beam_vars->w0].axis[2], beam_vars->radius);
+    add_vector_xyz(&from, &end_a, &beam_radius_offset);
+    add_vector_xyz(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
-    subtract_vector_xyz(&from, &end_a, &off);
-    subtract_vector_xyz(&to, &end_b, &off);
+    subtract_vector_xyz(&from, &end_a, &beam_radius_offset);
+    subtract_vector_xyz(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
 }
 #include "sda.h"
