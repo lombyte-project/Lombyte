@@ -617,8 +617,8 @@ extern V_2bb0b0 D_L00_001DB560[] __attribute__((section(".data")));
 extern UV_2bb0b0 D_L00_001DB5A0[] __attribute__((section(".data")));
 void FUN_L00_002bb0b0(void *mv) {
     Q_2bb0b0 quad;
-    V_2bb0b0 mat[4];
-    V_2bb0b0 *pos = *(V_2bb0b0 **)((char *)mv + 0x78);
+    V_2bb0b0 camera_facing_transform[4];
+    V_2bb0b0 *quad_anchor_position = *(V_2bb0b0 **)((char *)mv + 0x78);
     unsigned int quad_color;
     float corner_scale;
     int i;
@@ -626,15 +626,15 @@ void FUN_L00_002bb0b0(void *mv) {
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
-    vsub_2bb0b0(&mat[3], &(*(V_2bb0b0 *)g_debug_camera), pos);
-    fast_vec_normalize(&mat[3], &mat[3], 0.3f);
-    vadd_2bb0b0(&mat[3], &mat[3], pos);
-    mat[3].f[3] = 1.0f;
-    vsub_2bb0b0(&mat[0], &(*(V_2bb0b0 *)g_debug_camera), &mat[3]);
-    fast_vec_normalize(&mat[0], &mat[0], 1.0f);
-    cross_2bb0b0(&mat[1], &mat[0], &(*(V_2bb0b0 *)D_0013F5E0));
-    fast_vec_normalize(&mat[1], &mat[1], -1.0f);
-    cross_2bb0b0(&mat[2], &mat[1], &mat[0]);
+    vsub_2bb0b0(&camera_facing_transform[3], &(*(V_2bb0b0 *)g_debug_camera), quad_anchor_position);
+    fast_vec_normalize(&camera_facing_transform[3], &camera_facing_transform[3], 0.3f);
+    vadd_2bb0b0(&camera_facing_transform[3], &camera_facing_transform[3], quad_anchor_position);
+    camera_facing_transform[3].f[3] = 1.0f;
+    vsub_2bb0b0(&camera_facing_transform[0], &(*(V_2bb0b0 *)g_debug_camera), &camera_facing_transform[3]);
+    fast_vec_normalize(&camera_facing_transform[0], &camera_facing_transform[0], 1.0f);
+    cross_2bb0b0(&camera_facing_transform[1], &camera_facing_transform[0], &(*(V_2bb0b0 *)D_0013F5E0));
+    fast_vec_normalize(&camera_facing_transform[1], &camera_facing_transform[1], -1.0f);
+    cross_2bb0b0(&camera_facing_transform[2], &camera_facing_transform[1], &camera_facing_transform[0]);
     quad_color = D_L00_00161640;
     quad.color[3] = quad_color;
     quad.color[2] = quad_color;
@@ -643,7 +643,7 @@ void FUN_L00_002bb0b0(void *mv) {
     corner_scale = D_L00_00161648 + rnd_2bb0b0(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
         vmul_2bb0b0(corner_scale, &quad.corner[i], &D_L00_001DB560[i]);
-        xform_2bb0b0(&quad.corner[i], &quad.corner[i], &mat[0]);
+        xform_2bb0b0(&quad.corner[i], &quad.corner[i], &camera_facing_transform[0]);
         quad.uv[i].u = D_L00_001DB5A0[i].u;
         quad.uv[i].v = D_L00_001DB5A0[i].v;
     }
@@ -656,7 +656,7 @@ void FUN_L00_002bb0b0(void *mv) {
     corner_scale = D_L00_0016164C + rnd_2bb0b0(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
         vmul_2bb0b0(corner_scale, &quad.corner[i], &D_L00_001DB560[i]);
-        xform_2bb0b0(&quad.corner[i], &quad.corner[i], &mat[0]);
+        xform_2bb0b0(&quad.corner[i], &quad.corner[i], &camera_facing_transform[0]);
         quad.uv[i].u = D_L00_001DB5A0[i].u;
         quad.uv[i].v = D_L00_001DB5A0[i].v;
     }
