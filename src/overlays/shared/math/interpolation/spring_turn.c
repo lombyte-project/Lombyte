@@ -673,11 +673,11 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L00_00259508(void *destination, void *b, void *velocity, int frame_count, float vertical_drop_coefficient) {
+void FUN_L00_00259508(void *destination, void *base_position, void *velocity, int frame_count, float vertical_drop_coefficient) {
     float displacement[4];
     fast_vec_scale(displacement, velocity, convert_integer_to_float(frame_count));
     displacement[2] -= convert_integer_to_float((frame_count * frame_count + frame_count) >> 1) * vertical_drop_coefficient;
-    fast_vec_add(destination, b, displacement);
+    fast_vec_add(destination, base_position, displacement);
 }
 float FUN_001f99c0(float);
 float square_root(float) __asm__("FUN_001f9988");
