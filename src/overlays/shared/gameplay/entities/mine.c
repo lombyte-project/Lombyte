@@ -2249,62 +2249,62 @@ extern int FUN_001efa68_2afc70(void *, void *, int, void *, int) __asm__("FUN_00
 extern void FUN_L00_00250df8_2afc70(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_0025f780_2afc70(void *, void *, int) __asm__("FUN_L00_0025f780");
 
-unsigned char *FUN_L00_002afc70(unsigned char *owner, V_2afc70 *pos, unsigned char *tgt, float f12,
-                                float f13, float f14, float f15, float f16) {
+unsigned char *FUN_L00_002afc70(unsigned char *owner, V_2afc70 *pos, unsigned char *tgt, float guidance_yaw,
+                                float guidance_pitch, float target_height_offset, float initial_yaw, float initial_pitch) {
     V_2afc70 collision_start;
     unsigned char *missile_moby;
-    unsigned char *v;
-    unsigned char *r;
+    unsigned char *missile_data;
+    unsigned char *target_aim_record;
     float default_desired_speed;
     int turn_period;
     float x;
 
     missile_moby = FUN_0020c4f8_2afc70(0x99);
     if (missile_moby != 0) {
-        v = *(unsigned char **)(missile_moby + 0x78);
+        missile_data = *(unsigned char **)(missile_moby + 0x78);
         missile_moby[0x30] = 0xFF;
         *(short *)(missile_moby + 0x32) = 0xFF;
         missile_moby[0x31] = 1;
-        *(float *)(missile_moby + 0x48) = f15;
-        *(float *)(missile_moby + 0x44) = f16;
+        *(float *)(missile_moby + 0x48) = initial_yaw;
+        *(float *)(missile_moby + 0x44) = initial_pitch;
         missile_moby[0x20] = 0;
-        *(unsigned char **)(v + 0x10) = owner;
+        *(unsigned char **)(missile_data + 0x10) = owner;
         qcopy(missile_moby + 0x10, pos);
         default_desired_speed = D_0015ED6C_2afc70 * 20.0f;
-        *(int *)(v + 0x38) = 1;
-        *(float *)(v + 0x48) = 70.0f;
-        *(float *)(v + 0x34) = default_desired_speed;
-        *(int *)(v + 0x24) = 0;
-        *(int *)(v + 0x28) = 0;
-        *(unsigned char **)(v + 0x18) = tgt;
-        *(float *)(v + 0x20) = default_desired_speed / 3.0f;
+        *(int *)(missile_data + 0x38) = 1;
+        *(float *)(missile_data + 0x48) = 70.0f;
+        *(float *)(missile_data + 0x34) = default_desired_speed;
+        *(int *)(missile_data + 0x24) = 0;
+        *(int *)(missile_data + 0x28) = 0;
+        *(unsigned char **)(missile_data + 0x18) = tgt;
+        *(float *)(missile_data + 0x20) = default_desired_speed / 3.0f;
         if (tgt != 0) {
-            r = FUN_002141f8_2afc70(tgt);
-            if (r != 0) {
-                *(unsigned short *)(r + 0x1E) |= 0x80;
-                if (r[0xB]) {
-                    *(int *)(v + 0x38) = 0;
+            target_aim_record = FUN_002141f8_2afc70(tgt);
+            if (target_aim_record != 0) {
+                *(unsigned short *)(target_aim_record + 0x1E) |= 0x80;
+                if (target_aim_record[0xB]) {
+                    *(int *)(missile_data + 0x38) = 0;
                 }
-                if (r[0xC]) {
-                    *(float *)(v + 0x34) = (float)r[0xC] * D_0015ED6C_2afc70;
+                if (target_aim_record[0xC]) {
+                    *(float *)(missile_data + 0x34) = (float)target_aim_record[0xC] * D_0015ED6C_2afc70;
                 }
-                if (D_0015ED6C_2afc70 * 20.0f < *(float *)(v + 0x34)) {
-                    *(float *)(v + 0x48) = 140.0f;
+                if (D_0015ED6C_2afc70 * 20.0f < *(float *)(missile_data + 0x34)) {
+                    *(float *)(missile_data + 0x48) = 140.0f;
                 }
             }
         }
-        *(float *)(v + 0x2C) = f12;
-        *(float *)(v + 0x30) = f13;
-        *(int *)(v + 0x14) = FUN_001f96f8_2afc70(300);
+        *(float *)(missile_data + 0x2C) = guidance_yaw;
+        *(float *)(missile_data + 0x30) = guidance_pitch;
+        *(int *)(missile_data + 0x14) = FUN_001f96f8_2afc70(300);
         if (tgt != 0) {
-            qcopy(v, tgt + 0x10);
-            *(float *)(v + 0x1C) = f14;
-            *(float *)(v + 8) += f14;
+            qcopy(missile_data, tgt + 0x10);
+            *(float *)(missile_data + 0x1C) = target_height_offset;
+            *(float *)(missile_data + 8) += target_height_offset;
         }
         x = FUN_001f9af0_2afc70(D_0013F490_2afc70);
         turn_period = FUN_001f96f8_2afc70(D_0015ED6C_2afc70 * 0.1f < x ? 0x3C : 0xF);
-        *(short *)(v + 0x3E) = turn_period;
-        *(short *)(v + 0x3C) = turn_period;
+        *(short *)(missile_data + 0x3E) = turn_period;
+        *(short *)(missile_data + 0x3C) = turn_period;
         if (owner != 0 && owner[0x20] != 0xFE && owner[0x20] != 0xFD) {
             collision_start.q = ((V_2afc70 *)(owner + 0x10))->q;
         } else {
