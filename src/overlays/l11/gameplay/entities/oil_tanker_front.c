@@ -110,7 +110,7 @@ void FUN_L11_00315968(struct Moby *moby) {
         HIT_RESPONSE_COOLDOWN_NO_KNOCKBACK = 11
     };
     struct L11PatrolVars *patrol_vars = (struct L11PatrolVars *)moby->pvars;
-    Vec4 v;
+    Vec4 position_scratch;
     s32 out;
     float dmg;
     struct L11HitInfo *hit;
@@ -173,8 +173,8 @@ void FUN_L11_00315968(struct Moby *moby) {
                 patrol_vars->unk170 = 7.5f;
                 patrol_vars->unk174 = 11.0f;
                 yaw = fast_arc_tan(moby->pos.x - hit->moby->pos.x, moby->pos.y - hit->moby->pos.y);
-                v.q = hit->pos.q;
-                trooper_knockback_arc(&v, &yaw, &patrol_vars->unk138, &patrol_vars->unk13C);
+                position_scratch.q = hit->pos.q;
+                trooper_knockback_arc(&position_scratch, &yaw, &patrol_vars->unk138, &patrol_vars->unk13C);
                 trooper_start_knockback(moby, patrol_vars->unk120, 3, 1, 0, yaw);
                 if (moby->state < 0xC) {
                     moby->state = 9;
@@ -194,8 +194,8 @@ void FUN_L11_00315968(struct Moby *moby) {
                 patrol_vars->unk170 = 7.5f;
                 patrol_vars->unk174 = 11.0f;
                 yaw = fast_arc_tan(moby->pos.x - hit->moby->pos.x, moby->pos.y - hit->moby->pos.y);
-                v.q = hit->pos.q;
-                trooper_knockback_arc(&v, &yaw, &patrol_vars->unk138, &patrol_vars->unk13C);
+                position_scratch.q = hit->pos.q;
+                trooper_knockback_arc(&position_scratch, &yaw, &patrol_vars->unk138, &patrol_vars->unk13C);
                 trooper_start_knockback(moby, patrol_vars->unk120, 3, 1, 0, yaw);
                 if (moby->state < 0xC) {
                     moby->state = 0xB;
@@ -240,8 +240,8 @@ void FUN_L11_00315968(struct Moby *moby) {
         } else {
             goal_check_position = &moby->pos;
         }
-        qcopy(&v, goal_check_position);
-        if (vector_distance(v.f, &patrol_vars->goal.x) > patrol_vars->reach || v.f[2] - patrol_vars->goal.z > 3.0f) {
+        qcopy(&position_scratch, goal_check_position);
+        if (vector_distance(position_scratch.f, &patrol_vars->goal.x) > patrol_vars->reach || position_scratch.f[2] - patrol_vars->goal.z > 3.0f) {
             patrol_vars->unk214 = 2;
         }
     }
