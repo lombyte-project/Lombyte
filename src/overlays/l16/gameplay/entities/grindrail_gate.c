@@ -2511,8 +2511,8 @@ extern char *D_L16_0015FFD8;
 extern int FUN_L16_002c4710(void *);
 extern short *D_L16_001ABCC0[];
 
-char *FUN_L16_002e8b08(int idx) {
-    short *moby_index_entry = D_L16_001ABCC0[idx];
+char *FUN_L16_002e8b08(int moby_group_index) {
+    short *moby_index_entry = D_L16_001ABCC0[moby_group_index];
     char *moby;
     if (moby_index_entry == 0)
         return 0;
