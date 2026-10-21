@@ -89,11 +89,11 @@ extern s32 pal_mode_macro __asm__("D_0015ED80") MACRO_ADDR;
 extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 void startlevel(void) {
     LevelHeader *hdr;
-    LevelChunk *tbl;
+    LevelChunk *notice_language_chunks;
     s32 n;
     s32 i;
-    s32 cur;
-    s32 prev;
+    s32 memory_card_notice;
+    s32 previous_memory_card_notice;
     s32 frames;
     s32 code;
     s32 bank;
@@ -104,7 +104,7 @@ void startlevel(void) {
     for (i = 0; i < D_00165430 - level_bss_start; i++) {
         level_bss_start[i] = 0;
     }
-    prev = 0;
+    previous_memory_card_notice = 0;
     frames = 0;
     vu1_init_chain();
     dmac_vif1_enable();
@@ -115,15 +115,15 @@ void startlevel(void) {
     put_disp_buffer();
     PackDmaTag(0, 0, 0);
     hdr = (LevelHeader *)(((u32)D_24135F & 0xFFFFC000) + 0x2C0000);
-    while ((cur = check_memory_card()) != 0 && (frames < 11 || controller_state.pressed == 0)) {
-        if (cur != prev) {
-            if (cur == 1) {
-                tbl = hdr->intro;
+    while ((memory_card_notice = check_memory_card()) != 0 && (frames < 11 || controller_state.pressed == 0)) {
+        if (memory_card_notice != previous_memory_card_notice) {
+            if (memory_card_notice == 1) {
+                notice_language_chunks = hdr->intro;
             } else {
-                tbl = hdr->loading;
+                notice_language_chunks = hdr->loading;
             }
             FlushCache(0);
-            fast_decompress(tbl[game_language].off + (s32)hdr, hdr->code + (s32)hdr);
+            fast_decompress(notice_language_chunks[game_language].off + (s32)hdr, hdr->code + (s32)hdr);
             FlushCache(0);
             vu1_init_chain();
             PackDmaTag(0, 0, 0);
@@ -137,11 +137,11 @@ void startlevel(void) {
             vu1_sync_chain(1);
         }
         sceGsSyncV(0);
-        prev = cur;
+        previous_memory_card_notice = memory_card_notice;
         update_primary_pad_state();
         frames++;
     }
-    if (prev != 0) {
+    if (previous_memory_card_notice != 0) {
         fade_to_black(10);
     }
     decode_mode_macro = -1;
