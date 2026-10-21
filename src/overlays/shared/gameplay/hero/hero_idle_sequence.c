@@ -1520,7 +1520,7 @@ extern void FUN_00213ed8_207d40(void *, f32, f32) __asm__("FUN_00213ed8");
 void FUN_L00_00207d40(void) {
     f32 k;
     int i;
-    int st;
+    int vehicle_mode;
     int glow_color;
     int mode;
     V_207d40 *glow_position_cursor;
@@ -1531,8 +1531,8 @@ void FUN_L00_00207d40(void) {
             FUN_L00_00263618_207d40(&P.v1DD0[i], P.i1E50[i], P.f1E70[i], P.f1E90[i]);
         return;
     }
-    st = P.b20A4;
-    if (st == 3) {
+    vehicle_mode = P.b20A4;
+    if (vehicle_mode == 3) {
         int j;
         glow_color = P.i22E4;
         glow_position_cursor = P.v1D50;
@@ -1542,7 +1542,7 @@ void FUN_L00_00207d40(void) {
         }
         return;
     }
-    if (st == 0) {
+    if (vehicle_mode == 0) {
         if ((FUN_L00_0020d498_207d40(3) == 3 || FUN_L00_0020d498_207d40(3) == 2) && P.h22D8 == 0) {
             P.v1D80.f[2] += 0.015f;
             FUN_L00_00263618_207d40(&P.v1D80, 0x280000C0, 0.057f, 0.08f);
@@ -1552,13 +1552,13 @@ void FUN_L00_00207d40(void) {
             FUN_L00_00263618_207d40(&P.v1DD0[i], P.i1E50[i], P.f1E70[i], P.f1E90[i]);
         return;
     }
-    if (st == 2) {
+    if (vehicle_mode == 2) {
         P.v1D80.f[2] -= 0.07f;
         FUN_L00_00263618_207d40(&P.v1D80, 0x300000C0, 0.25f, 0.08f);
         P.v1D80.f[2] += 0.07f;
         return;
     }
-    if (st == 1) {
+    if (vehicle_mode == 1) {
         k = 0.07f;
         if (P.h22FC)
             k = 0.101500004529953f;
