@@ -1554,7 +1554,7 @@ void FUN_L14_00228cd0(void) {
         s32 flag;
         s32 near;
         s32 t;
-        s32 idx;
+        s32 path_heading_point_index;
         f32 r;
         if (hero.state.current != 0x29 && hero.state.current != 0x2A && hero.state.current != 0x42) {
             FUN_L00_00216e48(0, MV(hero.moby), 0);
@@ -1690,10 +1690,10 @@ void FUN_L14_00228cd0(void) {
                 AN.f1C8 = fast_add_rotations(0.7330383f, hero.unk5D0 / 1.7f);
             }
         }
-        idx = FUN_L00_0025d7a0((void *)hero.unk560, hero.unk564, hero.unk578, hero.unk584);
-        subtract_vector_xyz(&vector_and_hit_descriptor_scratch, (Vec4 *)hero.unk560 + (idx + 1), &vector_and_descriptor_scratch);
+        path_heading_point_index = FUN_L00_0025d7a0((void *)hero.unk560, hero.unk564, hero.unk578, hero.unk584);
+        subtract_vector_xyz(&vector_and_hit_descriptor_scratch, (Vec4 *)hero.unk560 + (path_heading_point_index + 1), &vector_and_descriptor_scratch);
         if (fast_vec_length(&vector_and_hit_descriptor_scratch) < 0.001f) {
-            if (hero.unk564 == idx) {
+            if (hero.unk564 == path_heading_point_index) {
                 hero.unk570 = scale_game_frames(1);
                 break;
             }
@@ -1713,13 +1713,13 @@ void FUN_L14_00228cd0(void) {
                 }
             }
             if (hero.unk590 != 0 && hero.unk5A4 <= scale_game_frames(48)) {
-                f32 u;
+                f32 previous_path_blend_fraction;
                 subtract_vector_xyz(&vector_and_hit_descriptor_scratch, &vector_and_descriptor_scratch, &v10);
                 hero.unk5A4++;
                 fast_vec_scale(&vector_and_hit_descriptor_scratch, &vector_and_hit_descriptor_scratch, (f32)hero.unk5A4 / (f32)scale_game_frames(48));
-                u = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
+                previous_path_blend_fraction = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
                 subtract_vector_xyz(&motion_vector_scratch, &vector_and_descriptor_scratch, &v10);
-                fast_vec_scale(&motion_vector_scratch, &motion_vector_scratch, u);
+                fast_vec_scale(&motion_vector_scratch, &motion_vector_scratch, previous_path_blend_fraction);
                 hero.motion.pos.f[2] += vector_and_hit_descriptor_scratch.f[2] - motion_vector_scratch.f[2];
                 add_vector_xyz(&motion_vector_scratch, &v10, &vector_and_hit_descriptor_scratch);
                 subtract_vector_xyz(&vector_and_hit_descriptor_scratch, &motion_vector_scratch, &hero.motion.pos);
@@ -1751,7 +1751,7 @@ void FUN_L14_00228cd0(void) {
                 hero_integrate_velocity();
             }
         } else {
-            f32 lim = frame_time * 12.0f;
+            f32 base_grind_speed_target = frame_time * 12.0f;
             f32 tt;
             f32 e;
             f32 sp;
@@ -1781,7 +1781,7 @@ void FUN_L14_00228cd0(void) {
                 }
             }
             FUN_L00_0025bc98(&hero.unk5D0, tt, &hero.unk5D4, 0, frame_scale_sq * 0.015f, frame_scale_sq * 0.3f, 0.0f);
-            approach_value(&hero.unk5B0, lim, frame_time_sq * 15.0f);
+            approach_value(&hero.unk5B0, base_grind_speed_target, frame_time_sq * 15.0f);
             si = hero.unk564;
             sf = hero.unk568;
             qcopy(&vector_and_hit_descriptor_scratch, &hero.motion.pos);
@@ -2333,11 +2333,11 @@ void FUN_L14_00228cd0(void) {
     }
     case HERO_STATE_VEHICLE_MODE_3_HURT: {
         f32 len = vector_length_xy(&hero.motion.velocity);
-        f32 l2 = len;
+        f32 planar_speed_before_damping = len;
         if (hero.air_frames.s != 0) {
-            len = frame_scale * -0.00999999f * l2 + l2;
+            len = frame_scale * -0.00999999f * planar_speed_before_damping + planar_speed_before_damping;
         } else {
-            len = frame_scale * -0.07999998f * l2 + l2;
+            len = frame_scale * -0.07999998f * planar_speed_before_damping + planar_speed_before_damping;
         }
         FUN_L00_001ff600(len, &hero.motion.velocity, &hero.motion.velocity);
         hero.motion.velocity.f[2] = 0.0f;
