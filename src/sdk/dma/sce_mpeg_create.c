@@ -17,7 +17,7 @@ s32 sceMpegCreate(void *mp, u8 *work, s32 size) {
     u8 *decoder;
     u8 *state;
     s32 rest;
-    s32 r;
+    s32 decode_workspace_address;
 
     memset(work, 0, size);
     decoder = (u8 *)((((u32)work + 3) >> 2) << 2);
@@ -61,7 +61,7 @@ s32 sceMpegCreate(void *mp, u8 *work, s32 size) {
     L(decoder, 0xF0) = -1;
     W(decoder, 0x1C) = (s32)D_0012CB30;
     W(decoder, 0x24) = (s32)D_0012CB40;
-    r = reserve_aligned_buffer_space(decoder, state, 0x600, 8);
+    decode_workspace_address = reserve_aligned_buffer_space(decoder, state, 0x600, 8);
     W(decoder, 0x48) = 0;
     W(decoder, 0xFC) = 0;
     W(decoder, 0x100) = 0;
@@ -76,7 +76,7 @@ s32 sceMpegCreate(void *mp, u8 *work, s32 size) {
     W(decoder, 0x98) = -1;
     W(decoder, 0x9C) = -1;
     W(decoder, 0x858) = (s32)mp;
-    W(decoder, 0x44) = r;
+    W(decoder, 0x44) = decode_workspace_address;
     W(decoder, 0xB0) = 1;
     _clearOnce(decoder);
     sceMpegReset(mp);
