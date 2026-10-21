@@ -1032,7 +1032,7 @@ char *FUN_L03_002d4288(char *heading_vector, char *pos, struct Moby *parent, int
     char *spawned_moby = (char *)func_0020D348_m(0x341);
     char *moby_vars;
     if (spawned_moby != 0) {
-        float v[4];
+        float collision_start_pos[4];
         *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
         *(short *)(spawned_moby + 0x32) = 0x7E;
         moby_vars = *(char **)(spawned_moby + 0x78);
@@ -1047,9 +1047,9 @@ char *FUN_L03_002d4288(char *heading_vector, char *pos, struct Moby *parent, int
         *(float *)(moby_vars + 0x24) = f1;
         *(char **)(moby_vars + 0x10) = parent;
         *(int *)(moby_vars + 0x28) = 0;
-        *(OvlQuad *)v = *(OvlQuad *)&parent->pos;
-        v[2] = *(float *)(pos + 8);
-        if (collision_line(v, pos, 2, parent, 0) != 0) {
+        *(OvlQuad *)collision_start_pos = *(OvlQuad *)&parent->pos;
+        collision_start_pos[2] = *(float *)(pos + 8);
+        if (collision_line(collision_start_pos, pos, 2, parent, 0) != 0) {
             *(int *)(moby_vars + 0x14) = 0;
             *(OvlQuad *)(spawned_moby + 0x10) = *(OvlQuad *)&coll_hit;
             *(int *)(moby_vars + 0x24) = 0;
