@@ -337,11 +337,11 @@ extern void FUN_L00_002e9aa0(int);
 
 /* Runs eight FUN_L00_002e* steps on object a in order. */
 void FUN_L00_002e9bb0(int camera_moby) {
-    float v[2];
+    float camera_stick_input[2];
     FUN_L00_002e9aa0(camera_moby);
     follow_camera_auto_turn(camera_moby);
-    follow_camera_read_stick(camera_moby, &v[0], &v[1]);
-    follow_camera_turn_and_pitch(camera_moby, v[0], v[1]);
+    follow_camera_read_stick(camera_moby, &camera_stick_input[0], &camera_stick_input[1]);
+    follow_camera_turn_and_pitch(camera_moby, camera_stick_input[0], camera_stick_input[1]);
     follow_camera_avoid_mobies(camera_moby);
     FUN_L00_002e9720_u(camera_moby);
     FUN_L00_002e8378(camera_moby);
