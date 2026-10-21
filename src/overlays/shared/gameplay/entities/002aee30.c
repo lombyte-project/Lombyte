@@ -271,7 +271,7 @@ void FUN_L04_002af058(struct Moby *moby)
 extern void FUN_L00_00250df8(void *);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-void *FUN_L04_002ce080(char *src, char *pos) {
+void *FUN_L04_002ce080(char *source_moby, char *pos) {
     char position_copy[16];
     char *position_copy_ptr = position_copy;
     char *spawned_moby;
@@ -279,12 +279,12 @@ void *FUN_L04_002ce080(char *src, char *pos) {
     spawned_moby = (char *)func_0020D348_m(0x1F3);
     if (spawned_moby != 0) {
         *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
-        *(unsigned short *)(spawned_moby + 0x32) = *(unsigned short *)(src + 0x32);
+        *(unsigned short *)(spawned_moby + 0x32) = *(unsigned short *)(source_moby + 0x32);
         spawned_moby[0x31] = 1;
         *(int *)(spawned_moby + 0x40) = 0;
         *(int *)(spawned_moby + 0x44) = 0;
-        *(float *)(spawned_moby + 0x48) = *(float *)(src + 0x48);
-        *(unsigned long *)(spawned_moby + 0x38) = *(unsigned long *)(src + 0x38);
+        *(float *)(spawned_moby + 0x48) = *(float *)(source_moby + 0x48);
+        *(unsigned long *)(spawned_moby + 0x38) = *(unsigned long *)(source_moby + 0x38);
         qcopy(spawned_moby + 0x10, position_copy_ptr);
         FUN_L00_00250df8(spawned_moby);
     }
