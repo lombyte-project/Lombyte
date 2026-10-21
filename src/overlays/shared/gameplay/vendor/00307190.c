@@ -123,11 +123,11 @@ extern int D_L08_00162374;
 
 extern short D_L08_0016234C __attribute__((sda));
 extern short D_L08_00162350 __attribute__((sda));
-void FUN_L08_00307b90(int arg) {
+void FUN_L08_00307b90(int use_reduced_xy_range_preset) {
     float xy_random_range_scale, countdown_range_start, count_interpolation_end, count_interpolation_start;
     float xy_range_reference_vector[2];
     float xy_length_ratio;
-    if (arg == 0) {
+    if (use_reduced_xy_range_preset == 0) {
         xy_random_range_scale = 5.0f;
         countdown_range_start = 2.0f;
         count_interpolation_end = 8.0f;
