@@ -20,7 +20,7 @@ void emit_six_spark_effects(u8 *m, f32 z) __asm__("FUN_0022f5b0");
 
 extern f32 frame_time __asm__("D_0015ED6C") MACRO_ADDR;
 void emit_six_spark_effects(u8 *source_object, f32 z) {
-    Vec4 vel;
+    Vec4 randomized_spark_vector;
     Vec4 vel2;
     Vec4 spark_spawn_position;
     s32 i;
@@ -29,11 +29,11 @@ void emit_six_spark_effects(u8 *source_object, f32 z) {
     s32 third_frame_base_count;
 
     for (i = 0; i < 6; i++) {
-        vel.f[0] = random_float_between(-frame_time, frame_time);
-        vel.f[1] = random_float_between(-frame_time, frame_time);
-        vel.f[2] = z + random_float_between(frame_time * -0.25f, frame_time * 0.25f);
-        vel.f[3] = 0.4f;
-        qcopy(&vel2, &vel);
+        randomized_spark_vector.f[0] = random_float_between(-frame_time, frame_time);
+        randomized_spark_vector.f[1] = random_float_between(-frame_time, frame_time);
+        randomized_spark_vector.f[2] = z + random_float_between(frame_time * -0.25f, frame_time * 0.25f);
+        randomized_spark_vector.f[3] = 0.4f;
+        qcopy(&vel2, &randomized_spark_vector);
         vel2.f[3] = 0.6f;
         qcopy(&spark_spawn_position, &D_001D9B60[level_render_state.content_variant][i]);
         transform_vector_by_basis(&spark_spawn_position, &spark_spawn_position, source_object + 0xC0);
@@ -41,7 +41,7 @@ void emit_six_spark_effects(u8 *source_object, f32 z) {
         frame_count = scale_game_frames(4);
         second_frame_count = scale_game_frames(4);
         third_frame_base_count = scale_game_frames(4);
-        spawn_spark(&spark_spawn_position, &vel, &vel2, 0x24C0C0C0, 0x14C0C0C0, frame_count, second_frame_count,
+        spawn_spark(&spark_spawn_position, &randomized_spark_vector, &vel2, 0x24C0C0C0, 0x14C0C0C0, frame_count, second_frame_count,
                       third_frame_base_count + random_integer_below(scale_game_frames(4)), -1);
     }
 }
