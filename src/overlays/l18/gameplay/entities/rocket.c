@@ -116,24 +116,24 @@ extern float D_L18_00161A48 __attribute__((sda));
 extern float D_L18_00161A4C __attribute__((sda));
 void FUN_L18_002d8710(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    float v = fast_add_rotations(moby->rot.y, *(float *)(data + 0x6C));
-    moby->rot.y = v;
+    float unclamped_rotation_y = fast_add_rotations(moby->rot.y, *(float *)(data + 0x6C));
+    moby->rot.y = unclamped_rotation_y;
     if (moby->state == 5) {
-        if (v > 0.5235988f) {
+        if (unclamped_rotation_y > 0.5235988f) {
             moby->rot.y = 0.5235988f;
-        } else if (v < -0.5235988f) {
+        } else if (unclamped_rotation_y < -0.5235988f) {
             moby->rot.y = -0.5235988f;
         }
     } else if (moby->state == 4) {
-        if (v > 0.08726646f) {
+        if (unclamped_rotation_y > 0.08726646f) {
             moby->rot.y = 0.08726646f;
-        } else if (v < -0.08726646f) {
+        } else if (unclamped_rotation_y < -0.08726646f) {
             moby->rot.y = -0.08726646f;
         }
     } else {
-        if (v > 0.034906585f) {
+        if (unclamped_rotation_y > 0.034906585f) {
             moby->rot.y = 0.034906585f;
-        } else if (v < -0.034906585f) {
+        } else if (unclamped_rotation_y < -0.034906585f) {
             moby->rot.y = -0.034906585f;
         }
     }
