@@ -236,7 +236,7 @@ extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 /* Picks slot w74 from the stick angle (or steps it with the 0x1000-0x8000 pad bits), counts hold frames in b71/b70, records the slot's entry when released, and closes when b70 runs out. */
 void FUN_L00_00237ba0(Obj *hud_element) {
-    float x, y, mag, ang, a, slot_position, previous_slot_angle;
+    float x, y, mag, stick_angle, a, slot_position, previous_slot_angle;
     int old, slot_step, stick_slot_index, k, id;
     u8 *counters = &hud_element->b70;
 
@@ -250,7 +250,7 @@ void FUN_L00_00237ba0(Obj *hud_element) {
         x /= mag;
         y /= mag;
     }
-    ang = fast_arc_tan(x, y);
+    stick_angle = fast_arc_tan(x, y);
     if ((hud_element->w78 >> 24) == 0) {
         if ((D_0013C940.w1C4 & 0xF000) || mag < 0.5f || --hud_element->w78 == -1) {
             hud_element->w74 = -1;
@@ -261,10 +261,10 @@ void FUN_L00_00237ba0(Obj *hud_element) {
     old = hud_element->w74;
     if ((hud_element->w78 >> 24) == 1 && (D_0013C940.w1C0 & 0x10)) {
         if (mag > 0.9f) {
-            a = ang + 3.1415927f + 3.1415927f + 1.5707964f + 3.1415927f / (float)D_L00_0015FA90;
+            a = stick_angle + 3.1415927f + 3.1415927f + 1.5707964f + 3.1415927f / (float)D_L00_0015FA90;
             slot_position = a * ((float)D_L00_0015FA90 / 6.2831855f);
             previous_slot_angle = (float)old * 6.2831855f / convert_integer_to_float(D_L00_0015FA90) - 3.1415927f;
-            if (old == -1 || fast_difference_between_rotations(previous_slot_angle, fast_subtract_rotations(ang, 1.5707964f)) > 0.58904862f) {
+            if (old == -1 || fast_difference_between_rotations(previous_slot_angle, fast_subtract_rotations(stick_angle, 1.5707964f)) > 0.58904862f) {
                 stick_slot_index = (int)slot_position % D_L00_0015FA90;
                 if (((stick_slot_index ^ 1) & 1)) {
                     float fr = slot_position - (float)FUN_001fa6d0(slot_position);
@@ -288,9 +288,9 @@ void FUN_L00_00237ba0(Obj *hud_element) {
         }
         {
             Ent *slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C];
-            int cur = hud_element->w74;
-            if (slot_lookup[cur].unk0 == 0 && slot_step != 0) {
-                k = (cur + slot_step) % D_L00_0015FA90;
+            int selected_slot_index = hud_element->w74;
+            if (slot_lookup[selected_slot_index].unk0 == 0 && slot_step != 0) {
+                k = (selected_slot_index + slot_step) % D_L00_0015FA90;
                 if (slot_lookup[k].unk0 != 0) hud_element->w74 = k;
             }
         }
