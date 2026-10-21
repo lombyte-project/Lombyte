@@ -22,7 +22,7 @@ extern s32 log2dim(s32) __asm__("FUN_001f97a0");
 void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src,
                              s32 count) __asm__("FUN_002026c8");
 
-void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src, s32 count) {
+void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *range_source_cursor, s32 count) {
     s32 relocation_count;
     s32 offset;
     s32 size;
@@ -49,10 +49,10 @@ void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src, s32 co
     copy_memory_aligned(D_001CE180, (u8 *)hdr + offset, size);
     D_001600C0 = 0;
     while (D_001600C0 < count) {
-        start_page = base + *src++;
-        start_offset = *src++;
-        end_page = base + *src++;
-        end_extent = *src++;
+        start_page = base + *range_source_cursor++;
+        start_offset = *range_source_cursor++;
+        end_page = base + *range_source_cursor++;
+        end_extent = *range_source_cursor++;
         D_001CD980[D_001600C0].tex0 = (start_page << 4) + start_offset;
         D_001CD980[D_001600C0].tex1 = (end_page << 4) + log2dim(end_extent);
         D_001600C0 = D_001600C0 + 1;
