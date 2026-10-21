@@ -246,30 +246,30 @@ int FUN_L07_0030ebc8(char *moby, char *data) {
 
 void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
-void FUN_L07_0030ec58(char *arg) {
+void FUN_L07_0030ec58(char *sharkigator_moby) {
     enum {
         SHARKIGATOR_LARGE_WATER_HEIGHT_GAP = 0,
         SHARKIGATOR_MEDIUM_WATER_HEIGHT_GAP = 1,
         SHARKIGATOR_SMALL_WATER_HEIGHT_GAP = 2
     };
-    switch (((unsigned char *)arg)[0xBC]) {
+    switch (((unsigned char *)sharkigator_moby)[0xBC]) {
     case SHARKIGATOR_LARGE_WATER_HEIGHT_GAP:
-        if (((unsigned char *)arg)[0x53] != 0) {
-            blend_moby_animation_u(arg, 0, 0, 10);
+        if (((unsigned char *)sharkigator_moby)[0x53] != 0) {
+            blend_moby_animation_u(sharkigator_moby, 0, 0, 10);
         }
-        arg[0x20] = 1;
+        sharkigator_moby[0x20] = 1;
         break;
     case SHARKIGATOR_MEDIUM_WATER_HEIGHT_GAP:
-        if (((unsigned char *)arg)[0x53] != 3) {
-            blend_moby_animation_u(arg, 3, 0, 10);
+        if (((unsigned char *)sharkigator_moby)[0x53] != 3) {
+            blend_moby_animation_u(sharkigator_moby, 3, 0, 10);
         }
-        arg[0x20] = 7;
+        sharkigator_moby[0x20] = 7;
         break;
     case SHARKIGATOR_SMALL_WATER_HEIGHT_GAP:
-        if (((unsigned char *)arg)[0x53] != 9) {
-            blend_moby_animation_u(arg, 9, 0, 10);
+        if (((unsigned char *)sharkigator_moby)[0x53] != 9) {
+            blend_moby_animation_u(sharkigator_moby, 9, 0, 10);
         }
-        arg[0x20] = 0xF;
+        sharkigator_moby[0x20] = 0xF;
         break;
     }
 }
