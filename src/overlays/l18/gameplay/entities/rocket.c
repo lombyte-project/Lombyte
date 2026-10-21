@@ -1461,13 +1461,13 @@ void FUN_L18_002d7fd0(struct Moby *moby) {
     }
 }
 /* Checks the moby's phase: 1 (and rearms it) when done, -1 when waiting with no timer, else 0. */
-int FUN_L18_002d8050(struct Moby *arg) {
-    int *data = (int *)arg->pvars;
-    if (arg->state == 3) {
-        arg->state = 1;
+int FUN_L18_002d8050(struct Moby *moby) {
+    int *data = (int *)moby->pvars;
+    if (moby->state == 3) {
+        moby->state = 1;
         return 1;
     }
-    if (arg->state == 2 && data[0x6C / 4] == 0) {
+    if (moby->state == 2 && data[0x6C / 4] == 0) {
         return -1;
     }
     return 0;
