@@ -12,12 +12,12 @@ extern char D_001516D0[];
 
 /* Stores v in the three entries of D_001516D0 whose flag 0x8000 is set. */
 void FUN_L00_00265880(int v);
-void FUN_L00_00265880(int v) {
-    char *b = D_001516D0;
-    if (*(short *)(b + 0x40) & 0x8000)
-        *(short *)(b + 0x42) = v;
-    if (*(short *)(b + 0x78) & 0x8000)
-        *(short *)(b + 0x7A) = v;
-    if (*(short *)(b + 0x5C) & 0x8000)
-        *(short *)(b + 0x5E) = v;
+void FUN_L00_00265880(int entry_value) {
+    char *entry_storage_base = D_001516D0;
+    if (*(short *)(entry_storage_base + 0x40) & 0x8000)
+        *(short *)(entry_storage_base + 0x42) = entry_value;
+    if (*(short *)(entry_storage_base + 0x78) & 0x8000)
+        *(short *)(entry_storage_base + 0x7A) = entry_value;
+    if (*(short *)(entry_storage_base + 0x5C) & 0x8000)
+        *(short *)(entry_storage_base + 0x5E) = entry_value;
 }
