@@ -955,29 +955,29 @@ void FUN_L00_002eae20(void *arg) {
     float mtx[16];
     char *camera_state = *(char **)(camera_object + 0x70);
     char *rotation_spring_state = camera_state + 0x30;
-    char *b = camera_state + 0x80;
+    char *target_position = camera_state + 0x80;
     char *transition_state = camera_state + 0xE0;
     int t = *(unsigned char *)(camera_object + 0x88);
     if (t == 1) {
-        qcopy(camera_object + 0x30, b);
+        qcopy(camera_object + 0x30, target_position);
         qcopy(camera_object + 0x40, camera_state + 0x90);
     } else if (t == 2) {
-        float u;
+        float transition_fraction;
         tick_countdown_32((int *)transition_state);
-        u = (float)(*(int *)(transition_state + 4) - *(int *)(camera_state + 0xE0)) / convert_integer_to_float(*(int *)(transition_state + 4));
-        FUN_L00_00257f70(camera_object + 0x30, camera_object + 0x30, b, u);
-        FUN_L00_00258050((float *)(camera_object + 0x40), (float *)(camera_object + 0x40), (float *)(camera_state + 0x90), u);
+        transition_fraction = (float)(*(int *)(transition_state + 4) - *(int *)(camera_state + 0xE0)) / convert_integer_to_float(*(int *)(transition_state + 4));
+        FUN_L00_00257f70(camera_object + 0x30, camera_object + 0x30, target_position, transition_fraction);
+        FUN_L00_00258050((float *)(camera_object + 0x40), (float *)(camera_object + 0x40), (float *)(camera_state + 0x90), transition_fraction);
     } else if (t == 3) {
         if (tick_countdown_32((int *)transition_state) != 0) {
-            qcopy(camera_object + 0x30, b);
+            qcopy(camera_object + 0x30, target_position);
             qcopy(camera_object + 0x40, camera_state + 0x90);
         } else {
             float t, x, y, diff, z;
             t = (float)(*(int *)(transition_state + 4) - *(int *)(camera_state + 0xE0)) /
                 convert_integer_to_float(*(int *)(transition_state + 4));
-            FUN_L00_001ed630(camera_state + 0xE8, b, &hero.motion.pos);
+            FUN_L00_001ed630(camera_state + 0xE8, target_position, &hero.motion.pos);
             x = fast_subtract_rotations(F(transition_state, 8), F(transition_state, 0x1C));
-            y = fast_subtract_rotations(F(b, 0x18), D_L00_00166DD8);
+            y = fast_subtract_rotations(F(target_position, 0x18), D_L00_00166DD8);
             if ((x > 0.34906584f && y < -0.34906584f) || (x < -0.34906584f && y > 0.34906584f)) {
                 diff = F(transition_state, 8) - F(transition_state, 0x1C);
                 z = 0;
@@ -995,23 +995,23 @@ void FUN_L00_002eae20(void *arg) {
             F(transition_state, 0x20) = FUN_L00_00257ef0(F(transition_state, 0x20), F(transition_state, 0xC), t);
             FUN_L00_00257f70(transition_state + 0x30, transition_state + 0x30, &hero.motion.pos, t);
             FUN_L00_001ed580(camera_object + 0x30, transition_state + 0x1C, transition_state + 0x30);
-            FUN_L00_00258050((float *)(camera_object + 0x40), (float *)(camera_object + 0x40), (float *)(b + 0x10), t);
+            FUN_L00_00258050((float *)(camera_object + 0x40), (float *)(camera_object + 0x40), (float *)(target_position + 0x10), t);
         }
     } else {
         if (*(short *)(camera_state + 0x1C) == 1) {
             F(camera_object, 0x30) =
-                cam_interp_values(camera_state, F(camera_object, 0x30), F(b, 0), F(camera_state, 0x10), F(camera_state, 0x14), F(camera_state, 0x18));
+                cam_interp_values(camera_state, F(camera_object, 0x30), F(target_position, 0), F(camera_state, 0x10), F(camera_state, 0x14), F(camera_state, 0x18));
             F(camera_object, 0x34) =
-                cam_interp_values(camera_state + 4, F(camera_object, 0x34), F(b, 4), F(camera_state, 0x10), F(camera_state, 0x14), F(camera_state, 0x18));
+                cam_interp_values(camera_state + 4, F(camera_object, 0x34), F(target_position, 4), F(camera_state, 0x10), F(camera_state, 0x14), F(camera_state, 0x18));
             F(camera_object, 0x38) =
-                cam_interp_values(camera_state + 8, F(camera_object, 0x38), F(b, 8), F(camera_state, 0x10), F(camera_state, 0x14), F(camera_state, 0x18));
+                cam_interp_values(camera_state + 8, F(camera_object, 0x38), F(target_position, 8), F(camera_state, 0x10), F(camera_state, 0x14), F(camera_state, 0x18));
         }
         if (*(short *)(rotation_spring_state + 0x2C) == 1) {
             F(camera_object, 0x40) =
-                rope_spring_turn(rotation_spring_state, F(camera_object, 0x40), F(b, 0x10), F(rotation_spring_state, 0x20), F(rotation_spring_state, 0x24), F(rotation_spring_state, 0x28));
-            F(camera_object, 0x44) = rope_spring_turn(camera_state + 0x34, F(camera_object, 0x44), F(b, 0x14), F(rotation_spring_state, 0x20), F(rotation_spring_state, 0x24),
+                rope_spring_turn(rotation_spring_state, F(camera_object, 0x40), F(target_position, 0x10), F(rotation_spring_state, 0x20), F(rotation_spring_state, 0x24), F(rotation_spring_state, 0x28));
+            F(camera_object, 0x44) = rope_spring_turn(camera_state + 0x34, F(camera_object, 0x44), F(target_position, 0x14), F(rotation_spring_state, 0x20), F(rotation_spring_state, 0x24),
                                           F(rotation_spring_state, 0x28));
-            F(camera_object, 0x48) = rope_spring_turn(camera_state + 0x38, F(camera_object, 0x48), F(b, 0x18), F(rotation_spring_state, 0x20), F(rotation_spring_state, 0x24),
+            F(camera_object, 0x48) = rope_spring_turn(camera_state + 0x38, F(camera_object, 0x48), F(target_position, 0x18), F(rotation_spring_state, 0x20), F(rotation_spring_state, 0x24),
                                           F(rotation_spring_state, 0x28));
         }
     }
