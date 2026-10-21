@@ -807,7 +807,7 @@ void FUN_L06_002ff680(char *moby) {
     f32 corner_inset_vector[4];
     s32 i;
     s32 j;
-    s32 off;
+    s32 source_point_byte_offset;
     f32 *corner_position;
     u64 regs;
 
@@ -833,9 +833,9 @@ void FUN_L06_002ff680(char *moby) {
         D_L06_001F2E90[3][1] = random_float_between(0.0f, 0.2f);
         for (j = 0; j < 4; j++) {
             corner_position = pk[0].pos[j];
-            off = (i + j / 2) * 16;
+            source_point_byte_offset = (i + j / 2) * 16;
             /* &data[...] (not data + off + ...) keeps retail's off + data add. */
-            qcopy(corner_position, &data[off + 0x230]);
+            qcopy(corner_position, &data[source_point_byte_offset + 0x230]);
             /* The colour call in both arms: retail merges the two calls and
                leaves the address add in each arm. */
             if (j & 1) {
@@ -843,10 +843,10 @@ void FUN_L06_002ff680(char *moby) {
                 normalize_vector_xyz(corner_inset_vector, corner_inset_vector, 0.5f);
                 subtract_vector_xyz(corner_position, corner_position, corner_inset_vector);
                 corner_position[2] -= 0.125f;
-                pk[0].col[j] = fast_tween_color(*(f32 *)(data + off + 0x23C), D_L06_00161FFC,
+                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x23C), D_L06_00161FFC,
                                                 D_L06_00162000);
             } else {
-                pk[0].col[j] = fast_tween_color(*(f32 *)(data + off + 0x23C), D_L06_00161FF4,
+                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x23C), D_L06_00161FF4,
                                                 D_L06_00161FF8);
             }
             pk[0].uv[j][0] = D_L06_001F2E90[j][0];
