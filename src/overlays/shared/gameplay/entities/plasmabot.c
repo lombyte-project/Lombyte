@@ -725,10 +725,10 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 /* Ship engine effects: puffs exhaust particles from joint 1 and places the nozzle and beam points from joints 7 and 2. */
 void FUN_L14_002b2600(struct Moby *moby)
 {
-    Vec4 pos;
-    Vec4 dir;
-    Vec4 vel;
-    Vec4 mat[4];
+    Vec4 particle_spawn_position;
+    Vec4 exhaust_position_offset;
+    Vec4 particle_initial_velocity;
+    Vec4 bone_transform_scratch[4];
     Vec4 dx;
     Vec4 dy;
     Vec4 dz;
@@ -740,17 +740,17 @@ void FUN_L14_002b2600(struct Moby *moby)
 
     effect_positions = (ShipVars *)moby->pvars;
     enqueue_callback_list_1(FUN_L14_002b3a20_c, moby);
-    moby_point_position(moby, 1, &pos);
-    fast_vec_sub(&dir, &pos, &D_L14_001674C0);
-    fast_vec_normalize(&dir, &dir, -0.5f);
-    fast_vec_add(&effect_positions->exhaust, &pos, &dir);
-    FUN_00213358(&vel, 0.005f, 0.03f);
-    particle = FUN_L00_00274948(&pos, &vel, 0x7F, moby);
+    moby_point_position(moby, 1, &particle_spawn_position);
+    fast_vec_sub(&exhaust_position_offset, &particle_spawn_position, &D_L14_001674C0);
+    fast_vec_normalize(&exhaust_position_offset, &exhaust_position_offset, -0.5f);
+    fast_vec_add(&effect_positions->exhaust, &particle_spawn_position, &exhaust_position_offset);
+    FUN_00213358(&particle_initial_velocity, 0.005f, 0.03f);
+    particle = FUN_L00_00274948(&particle_spawn_position, &particle_initial_velocity, 0x7F, moby);
     if (particle != NULL) {
         particle->life = FUN_002132a8(6000.0f, 32000.0f);
     }
     for (i = 0; i < 3; i++) {
-        particle = FUN_L00_00274948(&pos, D_L14_0015F580, 0x7F, moby);
+        particle = FUN_L00_00274948(&particle_spawn_position, D_L14_0015F580, 0x7F, moby);
         if (particle == NULL) {
             continue;
         }
@@ -767,14 +767,14 @@ void FUN_L14_002b2600(struct Moby *moby)
         fade->scale = inverse_lifetime_frames;
     }
     moby_point_position(moby, 6, &effect_positions->joint6);
-    build_moby_bone_transform(moby, 7, mat);
-    fast_vec_scale(&dx, &mat[0], D_L14_001614A8);
-    fast_vec_add(&effect_positions->nozzle, &mat[3], &dx);
-    build_moby_bone_transform(moby, 2, mat);
-    fast_vec_scale(&dx, &mat[0], D_L14_001614B0);
-    fast_vec_scale(&dy, &mat[1], D_L14_001614B4);
-    fast_vec_scale(&dz, &mat[2], D_L14_001614B8);
-    fast_vec_add(&effect_positions->beam_start, &mat[3], &dx);
+    build_moby_bone_transform(moby, 7, bone_transform_scratch);
+    fast_vec_scale(&dx, &bone_transform_scratch[0], D_L14_001614A8);
+    fast_vec_add(&effect_positions->nozzle, &bone_transform_scratch[3], &dx);
+    build_moby_bone_transform(moby, 2, bone_transform_scratch);
+    fast_vec_scale(&dx, &bone_transform_scratch[0], D_L14_001614B0);
+    fast_vec_scale(&dy, &bone_transform_scratch[1], D_L14_001614B4);
+    fast_vec_scale(&dz, &bone_transform_scratch[2], D_L14_001614B8);
+    fast_vec_add(&effect_positions->beam_start, &bone_transform_scratch[3], &dx);
     fast_vec_add(&effect_positions->beam_start, &effect_positions->beam_start, &dy);
     fast_vec_add(&effect_positions->beam_start, &effect_positions->beam_start, &dz);
     fast_vec_scale(&dy, &dy, -2.0f);
