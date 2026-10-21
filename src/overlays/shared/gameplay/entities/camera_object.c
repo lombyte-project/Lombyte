@@ -2375,9 +2375,9 @@ extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 void FUN_L00_002a9c50(M_2a9c50 *moby) {
     Q_2a9c50 quad;
-    V_2a9c50 mat[4];
+    V_2a9c50 quad_transform[4];
     V_2a9c50 mz[4];
-    V_2a9c50 rot;
+    V_2a9c50 direction_rotation_angles;
     PV_2a9c50 *pv = moby->pv;
     s32 i;
     s32 odd;
@@ -2388,10 +2388,10 @@ void FUN_L00_002a9c50(M_2a9c50 *moby) {
     for (i = 0; i < 2; i++) {
         odd = i & 1;
         direction_inclination = angle_atan2(seg_sqrt(pv->f20 * pv->f20 + pv->f28 * pv->f28), pv->f24);
-        rot.f[0] = appr_2a9c50(-direction_inclination, 1.57079637f);
-        rot.f[1] = angle_atan2(pv->f28, pv->f20);
-        rot.f[2] = 0.0f;
-        rot.f[3] = 0.0f;
+        direction_rotation_angles.f[0] = appr_2a9c50(-direction_inclination, 1.57079637f);
+        direction_rotation_angles.f[1] = angle_atan2(pv->f28, pv->f20);
+        direction_rotation_angles.f[2] = 0.0f;
+        direction_rotation_angles.f[3] = 0.0f;
         spin_angles_x = 0.0f;
         spin_angle_numerator = convert_integer_to_float(D_L00_0015F5CC % scale_game_frames(180));
         {
@@ -2407,9 +2407,9 @@ void FUN_L00_002a9c50(M_2a9c50 *moby) {
         spin_angles[2] = 0.0f;
         spin_angles[3] = 0.0f;
         rotation_matrix(mz, &spin_angles_x);
-        rotation_matrix(mat, &rot);
-        mmul_2a9c50(mat, mat, mz);
-        qcopy(&mat[3], &pv->pos);
+        rotation_matrix(quad_transform, &direction_rotation_angles);
+        mmul_2a9c50(quad_transform, quad_transform, mz);
+        qcopy(&quad_transform[3], &pv->pos);
         quad.color[0] = 0x80808080;
         quad.color[1] = 0x80808080;
         quad.color[2] = 0x80808080;
@@ -2442,7 +2442,7 @@ void FUN_L00_002a9c50(M_2a9c50 *moby) {
         quad.uv[5] = 0.0f;
         quad.uv[6] = 1.0f;
         quad.uv[7] = 0.0f;
-        draw_geometry_quad(&quad, mat, 1);
+        draw_geometry_quad(&quad, quad_transform, 1);
     }
 }
 extern float D_0015ED6C_2a9ed0 __asm__("D_0015ED6C");
