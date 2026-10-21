@@ -1165,7 +1165,7 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
     float B[4];
     float D[4];
     float C[4];
-    float c1, c2, c3, c4, c5;
+    float rotation_angle_step, c2, base_axis_offset_distance, rotated_axis_offset_distance, ground_collision_radius;
 
     if (*(char **)(data + 0x5C) != 0) {
         FUN_L00_002604f0((int)moby, *(char **)(data + 0x5C), (float *)data, (float *)(data + 0x10),
@@ -1176,39 +1176,39 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
     }
     switch (*(short *)(moby + 0xA6)) {
     case BOLT_CLASS_ONE:
-        c1 = 0.04f;
+        rotation_angle_step = 0.04f;
         c2 = -0.25f;
-        c3 = 0.04875f;
-        c4 = 0.325f;
-        c5 = 0.15f;
+        base_axis_offset_distance = 0.04875f;
+        rotated_axis_offset_distance = 0.325f;
+        ground_collision_radius = 0.15f;
         break;
     case BOLT_CLASS_FIVE:
-        c1 = 0.03f;
+        rotation_angle_step = 0.03f;
         c2 = -0.5f;
-        c3 = 0.0245f;
-        c4 = 0.35f;
-        c5 = 0.23f;
+        base_axis_offset_distance = 0.0245f;
+        rotated_axis_offset_distance = 0.35f;
+        ground_collision_radius = 0.23f;
         break;
     case BOLT_CLASS_TWENTY:
-        c1 = 0.025f;
+        rotation_angle_step = 0.025f;
         c2 = -0.4f;
-        c3 = 0.05625f;
-        c4 = 0.375f;
-        c5 = 0.23f;
+        base_axis_offset_distance = 0.05625f;
+        rotated_axis_offset_distance = 0.375f;
+        ground_collision_radius = 0.23f;
         break;
     default:
-        c1 = 0.0175f;
+        rotation_angle_step = 0.0175f;
         c2 = -0.35f;
-        c3 = 0.135f;
-        c4 = 0.3f;
-        c5 = 0.25f;
+        base_axis_offset_distance = 0.135f;
+        rotated_axis_offset_distance = 0.3f;
+        ground_collision_radius = 0.25f;
         break;
     }
     if (*(unsigned char *)(data + 0x55) & 1) {
-        *(float *)(data + 0x50) = fast_add_rotations(*(float *)(data + 0x50), c1);
+        *(float *)(data + 0x50) = fast_add_rotations(*(float *)(data + 0x50), rotation_angle_step);
         *(float *)(data + 0x58) = fast_add_rotations(*(float *)(data + 0x58), -0.0125f);
     } else {
-        *(float *)(data + 0x50) = fast_subtract_rotations(*(float *)(data + 0x50), c1);
+        *(float *)(data + 0x50) = fast_subtract_rotations(*(float *)(data + 0x50), rotation_angle_step);
         *(float *)(data + 0x58) = fast_subtract_rotations(*(float *)(data + 0x58), -0.0125f);
     }
     qcopy(local_rotation_angles, data + 0x50);
@@ -1216,8 +1216,8 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
     euler_rotation_basis(local_rotation_basis, local_rotation_angles);
     euler_rotation_basis(base_rotation_basis, B);
     multiply_matrix3x3(moby + 0xC0, base_rotation_basis, local_rotation_basis);
-    fast_vec_scale(moby + 0x10, &base_rotation_basis[8], c3);
-    fast_vec_scale(rotated_position_offset, moby + 0xC0, c4);
+    fast_vec_scale(moby + 0x10, &base_rotation_basis[8], base_axis_offset_distance);
+    fast_vec_scale(rotated_position_offset, moby + 0xC0, rotated_axis_offset_distance);
     fast_vec_add(moby + 0x10, moby + 0x10, rotated_position_offset);
     fast_vec_add(moby + 0x10, moby + 0x10, A);
     if (out1 != 0)
@@ -1225,15 +1225,15 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
     if (out2 != 0)
         qcopy(out2, B);
     if (*(unsigned char *)(moby + 0x20) == 3) {
-        char *obj = *(char **)(data + 0x5C);
-        if (obj != 0 && *(unsigned char *)(data + 0x57) == 0) {
+        char *ground_moby = *(char **)(data + 0x5C);
+        if (ground_moby != 0 && *(unsigned char *)(data + 0x57) == 0) {
             int should_detach_from_ground;
             char *x;
-            if ((unsigned char)obj[0x20] == 0xFE ||
+            if ((unsigned char)ground_moby[0x20] == 0xFE ||
                 (*(unsigned char **)(data + 0x5C))[0x20] == 0xFD) {
                 should_detach_from_ground = 1;
             } else {
-                should_detach_from_ground = coll_sphere(c5, moby + 0x10, 0x22, moby) == 0;
+                should_detach_from_ground = coll_sphere(ground_collision_radius, moby + 0x10, 0x22, moby) == 0;
             }
             if (should_detach_from_ground) {
                 moby[0x20] = 1;
