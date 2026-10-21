@@ -124,13 +124,13 @@ extern int *D_L16_001ABCC0_c[] __asm__("D_L16_001ABCC0");
 extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern short *D_L16_001ABFC0_2CB000[] __asm__("D_L16_001ABCC0");
 
-void FUN_L16_002c9c38(int index, void *arg) {
+void FUN_L16_002c9c38(int index, void *conveyor_motion_vector) {
     short *group_entry = D_L16_001ABFC0_2CB000[index];
     if (group_entry) {
         do {
             char *moby = D_L16_0015FFD8 + ((*(unsigned short *)group_entry & 0x7FFF) << 8);
             if (*(short *)(moby + 0xA6) == 0x1D7) {
-                update_entity_matrix(*(char **)(moby + 0x78) + 0x20, arg, moby + 0x40, moby + 0x40);
+                update_entity_matrix(*(char **)(moby + 0x78) + 0x20, conveyor_motion_vector, moby + 0x40, moby + 0x40);
             }
         } while (*group_entry++ >= 0);
     }
