@@ -17,7 +17,7 @@ extern float max_float(float, float) __asm__("FUN_001f99c8");
 void update_moby_shadow_range(char *m) __asm__("FUN_00213700");
 
 void update_moby_shadow_range(char *moby) {
-    float dir[4];
+    float shadow_probe_direction[4];
     float scaled_position[4];
     float segment_start[4];
     float segment_end[4];
@@ -26,12 +26,12 @@ void update_moby_shadow_range(char *moby) {
     float padded_upper_height;
     char *hit;
 
-    qcopy(dir, D_001CAA80);
-    set_vector_length_xy(dir, dir, 1.0f);
+    qcopy(shadow_probe_direction, D_001CAA80);
+    set_vector_length_xy(shadow_probe_direction, shadow_probe_direction, 1.0f);
     fast_vec_scale(scaled_position, moby, 0.0009765625f);
     qcopy(segment_start, scaled_position);
-    segment_start[0] -= dir[0] * *(float *)(moby + 0xC) * 0.000732421875f;
-    segment_start[1] -= dir[1] * *(float *)(moby + 0xC) * 0.000732421875f;
+    segment_start[0] -= shadow_probe_direction[0] * *(float *)(moby + 0xC) * 0.000732421875f;
+    segment_start[1] -= shadow_probe_direction[1] * *(float *)(moby + 0xC) * 0.000732421875f;
     qcopy(segment_end, segment_start);
     segment_end[2] -= 8.0f;
     if (collision_line(segment_start, segment_end, 0x22, 0, 0) != 0) {
@@ -39,10 +39,10 @@ void update_moby_shadow_range(char *moby) {
         hit = coll_output;
         first_hit_height = *(float *)(hit + 0x28);
         segment_start[2] = segment_start[2] + *(float *)(moby + 0xC) * 0.00048828125f;
-        segment_start[0] = segment_start[0] + dir[0] * *(float *)(moby + 0xC) * 0.000732421875f;
-        segment_start[1] = segment_start[1] + dir[1] * *(float *)(moby + 0xC) * 0.000732421875f;
-        fast_vec_normalize(dir, dir, (segment_start[2] - first_hit_height) / -dir[2]);
-        add_vector_xyz(segment_end, segment_start, dir);
+        segment_start[0] = segment_start[0] + shadow_probe_direction[0] * *(float *)(moby + 0xC) * 0.000732421875f;
+        segment_start[1] = segment_start[1] + shadow_probe_direction[1] * *(float *)(moby + 0xC) * 0.000732421875f;
+        fast_vec_normalize(shadow_probe_direction, shadow_probe_direction, (segment_start[2] - first_hit_height) / -shadow_probe_direction[2]);
+        add_vector_xyz(segment_end, segment_start, shadow_probe_direction);
         second_hit_height = first_hit_height;
         if (collision_line(segment_start, segment_end, 0x22, 0, 0) != 0) {
             second_hit_height = *(float *)(hit + 0x28);
