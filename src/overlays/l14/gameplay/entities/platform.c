@@ -462,16 +462,16 @@ extern void draw_g(void *, int, int) __asm__("FUN_001f7d30");
 void FUN_L14_002d71f0(struct Moby *m) {
     char *d = (char *)m->pvars;
     Pk_2d71f0 pk;
-    float mat[4][4];
+    float glow_quad_transform[4][4];
     int i;
     int j;
-    qcopy(mat[3], d + 0xE0);
-    mat[3][3] = 1.0f;
-    sub_g(mat[0], D_L14_001674C0, mat[3]);
-    normalize_g(mat[0], mat[0], 1.0f);
-    cross_g(mat[1], mat[0], &hero.gravity_dir);
-    normalize_g(mat[1], mat[1], -1.0f);
-    cross_g(mat[2], mat[1], mat[0]);
+    qcopy(glow_quad_transform[3], d + 0xE0);
+    glow_quad_transform[3][3] = 1.0f;
+    sub_g(glow_quad_transform[0], D_L14_001674C0, glow_quad_transform[3]);
+    normalize_g(glow_quad_transform[0], glow_quad_transform[0], 1.0f);
+    cross_g(glow_quad_transform[1], glow_quad_transform[0], &hero.gravity_dir);
+    normalize_g(glow_quad_transform[1], glow_quad_transform[1], -1.0f);
+    cross_g(glow_quad_transform[2], glow_quad_transform[1], glow_quad_transform[0]);
     pk.b = tex_g(0xB);
     pk.d = 0x8000000048ULL;
     pk.c = 0x0000FF9000000260ULL;
@@ -490,22 +490,22 @@ void FUN_L14_002d71f0(struct Moby *m) {
     pk.uv[7] = 1.0f;
     for (i = 0; i < 4; i++) {
         scale_g(pk.m[i], D_L14_001DE540[i], 0.4f);
-        xform_g(pk.m[i], pk.m[i], mat);
+        xform_g(pk.m[i], pk.m[i], glow_quad_transform);
     }
     draw_g(&pk, 0, 0);
-    qcopy(mat[3], d + 0x200);
-    sub_g(mat[0], D_L14_001674C0, mat[3]);
-    normalize_g(mat[0], mat[0], 1.0f);
-    cross_g(mat[1], mat[0], &hero.gravity_dir);
-    normalize_g(mat[1], mat[1], -1.0f);
-    cross_g(mat[2], mat[1], mat[0]);
+    qcopy(glow_quad_transform[3], d + 0x200);
+    sub_g(glow_quad_transform[0], D_L14_001674C0, glow_quad_transform[3]);
+    normalize_g(glow_quad_transform[0], glow_quad_transform[0], 1.0f);
+    cross_g(glow_quad_transform[1], glow_quad_transform[0], &hero.gravity_dir);
+    normalize_g(glow_quad_transform[1], glow_quad_transform[1], -1.0f);
+    cross_g(glow_quad_transform[2], glow_quad_transform[1], glow_quad_transform[0]);
     pk.col[3] = 0x202020FF;
     pk.col[2] = 0x202020FF;
     pk.col[1] = 0x202020FF;
     pk.col[0] = 0x202020FF;
     for (j = 0; j < 4; j++) {
         scale_g(pk.m[j], D_L14_001DE540[j], 0.2f);
-        xform_g(pk.m[j], pk.m[j], mat);
+        xform_g(pk.m[j], pk.m[j], glow_quad_transform);
     }
     draw_g(&pk, 0, 0);
 }
