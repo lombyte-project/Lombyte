@@ -148,11 +148,11 @@ extern void debug_print() __asm__("FUN_001e93b0");
 struct Moby *FUN_L03_002bec60(struct Moby *spawner_moby, Vec4 *at, s32 oclass)
 {
     Vec4 pos;
-    Vec4 *src;
+    Vec4 *spawn_position_source;
     Spawner *spawner_data;
     struct Moby *current_moby;
     struct Moby *spawned;
-    SpawnClass *cls;
+    SpawnClass *spawned_moby_class;
     SpawnTarget *target;
     SpawnSound *sound;
     s32 found;
@@ -160,7 +160,7 @@ struct Moby *FUN_L03_002bec60(struct Moby *spawner_moby, Vec4 *at, s32 oclass)
     s32 pooled_child_moby_index;
     u16 flags;
 
-    src = &pos;
+    spawn_position_source = &pos;
     pos.q = at->q;
     if (spawner_moby == NULL || (spawner_data = (Spawner *)spawner_moby->pvars) == NULL) {
         return NULL;
@@ -186,18 +186,18 @@ struct Moby *FUN_L03_002bec60(struct Moby *spawner_moby, Vec4 *at, s32 oclass)
         }
         spawner_data->live++;
         found = 1;
-        qcopy(&current_moby->pos, src);
+        qcopy(&current_moby->pos, spawn_position_source);
         current_moby->pos.w = 0.0f;
         current_moby->state = 0;
         current_moby->command = 0;
-        cls = (SpawnClass *)current_moby->pclass;
-        flags = cls->flags;
+        spawned_moby_class = (SpawnClass *)current_moby->pclass;
+        flags = spawned_moby_class->flags;
         current_moby->flags = flags;
-        current_moby->scale = cls->scale;
+        current_moby->scale = spawned_moby_class->scale;
         current_moby->update_dist = spawner_moby->update_dist;
         current_moby->draw_dist = spawner_moby->draw_dist;
         current_moby->visible = found;
-        if (cls->unk40 != 0) {
+        if (spawned_moby_class->unk40 != 0) {
             current_moby->flags = flags | 0x10;
         }
         if (((SpawnClass *)current_moby->pclass)->always_draw != 0) {
