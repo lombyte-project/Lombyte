@@ -812,20 +812,20 @@ extern short D_L06_00161CF0 __attribute__((sda));
 void FUN_L06_002f4130(char *m) {
     Sx collision_params;
     Vx segment_start;
-    Vx b;
+    Vx segment_end;
     int i;
     char *pos = m + 0x10;
     int one = 1;
     char *moby_data;
     int segment_travel_step_count;
-    float f25, f27, cur, prev, ang, ra, rb;
+    float segment_phase_step, segment_radius_step, cur, prev, ang, ra, rb;
     moby_data = *(char **)(m + 0x78);
     segment_travel_step_count = func_001FA898_r(*(float *)&D_L06_00161CF0 / (*(float *)&spark_speed_gp * frame_time) *
                         0.25f);
-    f25 = *(float *)(moby_data + 0x80) * (float)segment_travel_step_count;
-    f27 = *(float *)&D_L06_00161CF0 * 0.25f;
+    segment_phase_step = *(float *)(moby_data + 0x80) * (float)segment_travel_step_count;
+    segment_radius_step = *(float *)&D_L06_00161CF0 * 0.25f;
     cur = *(float *)&D_L06_00161CF0;
-    ang = fast_subtract_rotations(*(float *)(moby_data + 0x7C), f25 * 4.0f);
+    ang = fast_subtract_rotations(*(float *)(moby_data + 0x7C), segment_phase_step * 4.0f);
     collision_params.m = m;
     collision_params.f1C = 1.0f;
     collision_params.flags = hero.items[2].item_id != 6 ? 0x10001 : 0x10000;
@@ -840,19 +840,19 @@ void FUN_L06_002f4130(char *m) {
         prev = cur;
         ra = fast_add_rotations(*(float *)(moby_data + 0x84),
                                 *(float *)(moby_data + 0x64) * DEG_TO_RAD * fast_sin(ang));
-        cur -= f27;
-        ang = fast_add_rotations(ang, f25);
+        cur -= segment_radius_step;
+        ang = fast_add_rotations(ang, segment_phase_step);
         rb = fast_add_rotations(*(float *)(moby_data + 0x84),
                                 *(float *)(moby_data + 0x64) * DEG_TO_RAD * fast_sin(ang));
         segment_start.x = fast_cos(ra) * prev;
         segment_start.y = fast_sin(ra) * prev;
         segment_start.z = 0.0f;
-        b.x = fast_cos(rb) * cur;
-        b.y = fast_sin(rb) * cur;
-        b.z = 0.0f;
+        segment_end.x = fast_cos(rb) * cur;
+        segment_end.y = fast_sin(rb) * cur;
+        segment_end.z = 0.0f;
         add_vector_xyz(&segment_start, &segment_start, pos);
-        add_vector_xyz(&b, &b, pos);
-        coll_line_fix(&segment_start, &b, 0, m, &collision_params);
+        add_vector_xyz(&segment_end, &segment_end, pos);
+        coll_line_fix(&segment_start, &segment_end, 0, m, &collision_params);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F57C0), where it is exact; names translated to the US level program. */
