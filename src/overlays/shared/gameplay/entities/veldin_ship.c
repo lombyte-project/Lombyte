@@ -1872,7 +1872,7 @@ void FUN_L00_002d3a10(unsigned char *moby) {
     unsigned char *moby_position;
     void *base_position_ptr;
     void *position_offset_ptr;
-    int c0;
+    int radius_reset_this_update;
     int c1 = 0;
     int c2 = 0;
     int c3 = 0;
@@ -1880,7 +1880,7 @@ void FUN_L00_002d3a10(unsigned char *moby) {
 
     if (moby == 0) return;
     vars = *(unsigned char **)(moby + 0x78);
-    c0 = 0;
+    radius_reset_this_update = 0;
     if (vars == 0) return;
     if (moby[0x20] == 0) {
         unsigned char b1c;
@@ -1972,7 +1972,7 @@ void FUN_L00_002d3a10(unsigned char *moby) {
             if (fast_dec_timer_s16(vars + 0x7A)) {
                 *(short *)(vars + 0x7A) = scale_game_frames(*(unsigned short *)(vars + 0x72));
                 if (*(int *)(vars + 0x4C) & 4) {
-                    c0 = 1;
+                    radius_reset_this_update = 1;
                     *(float *)(vars + 0x60) = *(float *)(vars + 0x3C);
                     *(int *)(vars + 0x4C) &= 0xFFFFFFF7;
                 }
@@ -2008,7 +2008,7 @@ void FUN_L00_002d3a10(unsigned char *moby) {
                 if (*(unsigned char *)(vars + 0x6B) != 0 && FUN_L00_001fefc8(vars + 0x7F)) *(int *)(vars + 0x4C) ^= 0x2;
             }
         } else {
-            if (*(unsigned short *)(vars + 0x72) == 0 || c0 == 1) {
+            if (*(unsigned short *)(vars + 0x72) == 0 || radius_reset_this_update == 1) {
                 *(float *)(vars + 0x60) = random_float_between_c(*(float *)(vars + 0x3C), *(float *)(vars + 0x38));
             }
         }
