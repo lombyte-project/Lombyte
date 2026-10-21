@@ -53,27 +53,27 @@ typedef union {
     } bits;
 } FLOSingleUnion;
 
-void __unpack_f(FLOSingleUnion *src, FpSingle *dst) {
-    u32 fraction = src->bits.fraction;
-    s32 exp = src->bits.exp;
-    s32 sign = src->bits.sign;
-    dst->sign = sign;
+void __unpack_f(FLOSingleUnion *packed_value, FpSingle *unpacked_value) {
+    u32 fraction = packed_value->bits.fraction;
+    s32 exp = packed_value->bits.exp;
+    s32 sign = packed_value->bits.sign;
+    unpacked_value->sign = sign;
     if (exp == 0) {
-        dst->class = 2;
+        unpacked_value->class = 2;
     } else if (exp == 0xFF) {
         if (fraction == 0) {
-            dst->class = 4;
+            unpacked_value->class = 4;
         } else {
             if (fraction & 0x100000) {
-                dst->class = 1;
+                unpacked_value->class = 1;
             } else {
-                dst->class = 0;
+                unpacked_value->class = 0;
             }
-            dst->fraction = fraction;
+            unpacked_value->fraction = fraction;
         }
     } else {
-        dst->normal_exp = exp - 0x7F;
-        dst->class = 3;
-        dst->fraction = (fraction << 7) | 0x40000000;
+        unpacked_value->normal_exp = exp - 0x7F;
+        unpacked_value->class = 3;
+        unpacked_value->fraction = (fraction << 7) | 0x40000000;
     }
 }
