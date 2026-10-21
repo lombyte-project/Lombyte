@@ -3103,7 +3103,7 @@ void spiderbot_update(unsigned char *moby) {
         }
         for (i = 0; i < D_L15_00161558; i++) {
             float effect_direction_sign;
-            float len;
+            float effect_segment_length;
             int k;
             unsigned char life;
             effect_direction_sign = -1.0f;
@@ -3112,12 +3112,12 @@ void spiderbot_update(unsigned char *moby) {
             subtract_vector_xyz_c3(T2, moby_data + 0x10, moby + 0x10);
             *(u128_2A8090 *)B = *(u128_2A8090 *)T2;
             fast_vec_scale(B, B, effect_direction_sign);
-            len = fast_vec_length(B);
+            effect_segment_length = fast_vec_length(B);
             *(u128_2A8090 *)A = effect_direction_sign < 0.0f ? *(u128_2A8090 *)(moby_data + 0x10) : *(u128_2A8090 *)(moby + 0x10);
             life = k;
             fast_vec_scale(B, B, random_float_between(0.0f, 0.9f));
             FUN_L00_001ff290(T2, A, B);
-            fast_vec_normalize(B, B, random_float_between(D_0015ED6C * 10.0f, len / convert_integer_to_float_c3(k * 4)));
+            fast_vec_normalize(B, B, random_float_between(D_0015ED6C * 10.0f, effect_segment_length / convert_integer_to_float_c3(k * 4)));
             func_L00_00273F80_r(A, (char *)B, 0x604040FF, life, random_integer_below_c4(0xFF), 0, D_L15_0016155C);
         }
     }
