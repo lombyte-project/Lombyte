@@ -1545,7 +1545,7 @@ void metal_detector_update(struct Moby *moby) {
     TargetVars2d2ee8 *tv;
     Vec2d2ee8 u;
     Vec2d2ee8 v;
-    Vec2d2ee8 w;
+    Vec2d2ee8 scratch_vector;
     Mtx2d2ee8 aim_basis;
     Mtx2d2ee8 normalized_bone_transform;
     Mtx2d2ee8 transposed_bone_rotation;
@@ -1612,8 +1612,8 @@ void metal_detector_update(struct Moby *moby) {
             yaw = fast_add_rotations(yaw, hero.motion.rot.f[2]);
             pitch = fast_add_rotations(pitch, -1.5707964f);
             build_spherical_offset(v, -3.0f, yaw, pitch);
-            fast_vec_add(w, &vars->pos, v);
-            noop_main_callback(&vars->pos, w);
+            fast_vec_add(scratch_vector, &vars->pos, v);
+            noop_main_callback(&vars->pos, scratch_vector);
             fast_vec_normalize(aim_basis[D_L00_00161920], v, (f32)D_L00_0016192C);
             fast_vec_cross(aim_basis[D_L00_00161924], aim_basis[D_L00_00161920], &D_L00_00161940);
             fast_vec_normalize(aim_basis[D_L00_00161924], aim_basis[D_L00_00161924], (f32)D_L00_00161930);
@@ -1634,13 +1634,13 @@ void metal_detector_update(struct Moby *moby) {
             multiply_matrix(aim_rotation_product, transposed_bone_rotation, aim_basis);
             matrix_to_quaternion(u, aim_rotation_product);
         } else {
-            *(u128 *)w = 0;
-            FUN_L00_00259f50(u, w);
+            *(u128 *)scratch_vector = 0;
+            FUN_L00_00259f50(u, scratch_vector);
         }
         qcopy(&vars->unk30, v);
         quaternion_nlerp(D_L00_001E1170, D_L00_001E1170, u, 0.1f);
-        build_moby_bone_transform(moby, 3, w);
-        qcopy(&vars->unk30, w);
+        build_moby_bone_transform(moby, 3, scratch_vector);
+        qcopy(&vars->unk30, scratch_vector);
         if (controller_state_lui.pressed & 0x20) {
             vars->unk24 = 0;
             vars->unk28 = 0;
@@ -1664,10 +1664,10 @@ void metal_detector_update(struct Moby *moby) {
                 if (target_moby != 0 && target_moby->oclass == 0x25D && target_moby->state != 0xFE && target_moby->state != 0xFD && hero.unk2044 < 1.0f) {
                     tv = (TargetVars2d2ee8 *)target_moby->pvars;
                     while (tv->count > 0) {
-                        w[0] = random_float_between(1.0f, 10.0f) * frame_time;
-                        w[1] = random_float_between(-10.0f, 10.0f) * frame_time;
-                        w[2] = random_float_between(1.0f, 12.0f) * frame_time;
-                        transform_vector_by_basis(w, w, &hero);
+                        scratch_vector[0] = random_float_between(1.0f, 10.0f) * frame_time;
+                        scratch_vector[1] = random_float_between(-10.0f, 10.0f) * frame_time;
+                        scratch_vector[2] = random_float_between(1.0f, 12.0f) * frame_time;
+                        transform_vector_by_basis(scratch_vector, scratch_vector, &hero);
                         {
                             Vec4f *target_position = &hero.unk2040->pos;
 
@@ -1675,7 +1675,7 @@ void metal_detector_update(struct Moby *moby) {
                             FUN_L00_0025f8e0(target_position, 0.2f);
                         }
                         target_moby = hero.unk2040;
-                        FUN_L00_002a7438(target_moby, &target_moby->pos, w, 0x13, 5, 0);
+                        FUN_L00_002a7438(target_moby, &target_moby->pos, scratch_vector, 0x13, 5, 0);
                         target_moby = hero.unk2040;
                         qcopy(&target_moby->pos, &vars->pos);
                         if (tv != 0) {
