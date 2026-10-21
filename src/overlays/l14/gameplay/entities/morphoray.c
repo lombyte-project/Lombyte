@@ -1474,7 +1474,7 @@ extern void normalize_5290(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void cross_5290(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern s32 tick_countdown_16_5290(s16 *) __asm__("FUN_001f9770");
 
-void FUN_L14_00315290(struct UpdateCam *cam) {
+void FUN_L14_00315290(struct UpdateCam *path_camera) {
     float initial_look_direction_or_previous_position[4];
     float t[4];
     float u[4];
@@ -1483,8 +1483,8 @@ void FUN_L14_00315290(struct UpdateCam *cam) {
     f32 tt;
     s32 seg2;
     f32 tt2;
-    char *camera_saved_state = (char *)cam->saved_state;
-    char *rec = *(char **)(D_L14_0015EF50_5290 + cam->descriptor_index * 32 + 0x1C);
+    char *camera_saved_state = (char *)path_camera->saved_state;
+    char *rec = *(char **)(D_L14_0015EF50_5290 + path_camera->descriptor_index * 32 + 0x1C);
     VendorCamRun_5290 *camera_run = (VendorCamRun_5290 *)(camera_saved_state + 0x40);
     VendorCamStops_5290 *fov_stops = (VendorCamStops_5290 *)(camera_saved_state + 0x58);
     char *path;
@@ -1496,7 +1496,7 @@ void FUN_L14_00315290(struct UpdateCam *cam) {
         char *pb = D_L14_001B0BB0_5290[*(int *)(rec + 0x24)];
         D_L14_0015F404 = 1;
         camera_run->started = 1;
-        qcopy(&cam->pos, pa + 0x10);
+        qcopy(&path_camera->pos, pa + 0x10);
         if (*(int *)(rec + 0x28) >= 0) {
             struct Moby *o = (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(rec + 0x28) * 256);
             float *ofs = (float *)(rec + 0x2C);
@@ -1506,20 +1506,20 @@ void FUN_L14_00315290(struct UpdateCam *cam) {
             t[3] = 0.0f;
             transform_vector_by_basis(t, t, D_L14_001676D0);
             add_5290(u, &o->pos, t);
-            sub_5290(initial_look_direction_or_previous_position, u, &cam->pos);
+            sub_5290(initial_look_direction_or_previous_position, u, &path_camera->pos);
         } else {
-            sub_5290(initial_look_direction_or_previous_position, pb + 0x10, &cam->pos);
+            sub_5290(initial_look_direction_or_previous_position, pb + 0x10, &path_camera->pos);
         }
         scale_5290(t, D_0013F5E0_5290, -1.0f);
-        normalize_5290(&cam->m0, initial_look_direction_or_previous_position, 1.0f);
-        cross_5290(&cam->m1, &cam->m0, t);
-        normalize_5290(&cam->m1, &cam->m1, 1.0f);
-        cross_5290(&cam->m2, &cam->m1, &cam->m0);
+        normalize_5290(&path_camera->m0, initial_look_direction_or_previous_position, 1.0f);
+        cross_5290(&path_camera->m1, &path_camera->m0, t);
+        normalize_5290(&path_camera->m1, &path_camera->m1, 1.0f);
+        cross_5290(&path_camera->m2, &path_camera->m1, &path_camera->m0);
         return;
     }
     path = D_L14_001B0BB0_5290[*(int *)(rec + 0x20)];
-    qcopy(initial_look_direction_or_previous_position, &cam->pos);
-    done = path_step_5290(path, &cam->pos.x, &camera_run->seg, &camera_run->t, 0, *(float *)(rec + 0x3C) * frame_time);
+    qcopy(initial_look_direction_or_previous_position, &path_camera->pos);
+    done = path_step_5290(path, &path_camera->pos.x, &camera_run->seg, &camera_run->t, 0, *(float *)(rec + 0x3C) * frame_time);
     if (camera_run->timer != 0 && tick_countdown_16_5290(&camera_run->timer) != 0)
         done = 1;
     if (*(u8 *)(rec + 0x39) != 0)
@@ -1531,24 +1531,24 @@ void FUN_L14_00315290(struct UpdateCam *cam) {
         D_L14_0016D140.fB0 = fast_sin_5290(ang) / fast_cos_5290(ang);
         update_view_context();
         D_L14_001675D8 = 0.25f;
-        cam->transition_state = 4;
+        path_camera->transition_state = 4;
         D_L14_0015F404 = 0;
         mb = D_L14_0015FFD8_5290;
         FUN_L14_002d6570((struct Moby *)(mb + *(int *)(rec + 0x50) * 256));
         hp = (char *)hero.unk560;
         seg = hero.unk564;
         tt = hero.unk568;
-        path_step_5290(hp, &cam->pos.x, &seg, &tt, 0, 10.0f);
-        cam->pos.z += 2.0f;
+        path_step_5290(hp, &path_camera->pos.x, &seg, &tt, 0, 10.0f);
+        path_camera->pos.z += 2.0f;
         seg = hero.unk564;
         tt = hero.unk568;
         path_step_5290(hp, u, &seg, &tt, 0, 0.0f);
         u[2] += 1.5f;
-        sub_5290(t, u, &cam->pos);
-        normalize_5290(&cam->m0, t, 1.0f);
-        cross_5290(&cam->m1, &cam->m0, &hero.gravity_dir);
-        normalize_5290(&cam->m1, &cam->m1, -1.0f);
-        cross_5290(&cam->m2, &cam->m1, &cam->m0);
+        sub_5290(t, u, &path_camera->pos);
+        normalize_5290(&path_camera->m0, t, 1.0f);
+        cross_5290(&path_camera->m1, &path_camera->m0, &hero.gravity_dir);
+        normalize_5290(&path_camera->m1, &path_camera->m1, -1.0f);
+        cross_5290(&path_camera->m2, &path_camera->m1, &path_camera->m0);
         return;
     }
     for (i = 0; i < 7 && fov_stops->seg[i] >= 0 && fov_stops->seg[i + 1] >= 0; i++) {
@@ -1570,7 +1570,7 @@ void FUN_L14_00315290(struct UpdateCam *cam) {
             update_view_context();
         }
     }
-    camera_run->dist += FUN_001f9b48_5290(initial_look_direction_or_previous_position, &cam->pos);
+    camera_run->dist += FUN_001f9b48_5290(initial_look_direction_or_previous_position, &path_camera->pos);
     if (*(int *)(rec + 0x28) >= 0) {
         struct Moby *o = (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(rec + 0x28) * 256);
         float *ofs = (float *)(rec + 0x2C);
@@ -1580,19 +1580,19 @@ void FUN_L14_00315290(struct UpdateCam *cam) {
         u[3] = 0.0f;
         transform_vector_by_basis(u, u, D_L14_001676D0);
         add_5290(v, &o->pos, u);
-        sub_5290(t, v, &cam->pos);
+        sub_5290(t, v, &path_camera->pos);
     } else {
         char *look = D_L14_001B0BB0_5290[*(int *)(rec + 0x24)];
         seg2 = 0;
         tt2 = 0.0f;
         path_step_5290(look, u, &seg2, &tt2, 0, camera_run->dist / camera_run->len_a * camera_run->len_b);
-        sub_5290(t, u, &cam->pos);
+        sub_5290(t, u, &path_camera->pos);
     }
     scale_5290(u, D_0013F5E0_5290, -1.0f);
-    normalize_5290(&cam->m0, t, 1.0f);
-    cross_5290(&cam->m1, &cam->m0, u);
-    normalize_5290(&cam->m1, &cam->m1, 1.0f);
-    cross_5290(&cam->m2, &cam->m1, &cam->m0);
+    normalize_5290(&path_camera->m0, t, 1.0f);
+    cross_5290(&path_camera->m1, &path_camera->m0, u);
+    normalize_5290(&path_camera->m1, &path_camera->m1, 1.0f);
+    cross_5290(&path_camera->m2, &path_camera->m1, &path_camera->m0);
 }
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
