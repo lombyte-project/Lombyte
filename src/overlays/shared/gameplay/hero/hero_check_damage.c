@@ -2311,14 +2311,14 @@ extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48"
 
 /* Scales x/y by s and sets or scales z, per component or through set_vector_length_xy. */
 void hero_knockback(float *v, int each, float s, float z) __asm__("FUN_L00_00210c80");
-void hero_knockback(float *v, int each, float horizontal_knockback_strength, float z) {
+void hero_knockback(float *knockback_vector, int each, float horizontal_knockback_strength, float z) {
     if (each) {
-        v[0] *= horizontal_knockback_strength;
-        v[1] *= horizontal_knockback_strength;
-        v[2] *= z;
+        knockback_vector[0] *= horizontal_knockback_strength;
+        knockback_vector[1] *= horizontal_knockback_strength;
+        knockback_vector[2] *= z;
     } else {
-        set_vector_length_xy(v, v, horizontal_knockback_strength);
-        v[2] = z;
+        set_vector_length_xy(knockback_vector, knockback_vector, horizontal_knockback_strength);
+        knockback_vector[2] = z;
     }
 }
 
