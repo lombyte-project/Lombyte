@@ -40,11 +40,11 @@ extern void *memset(void *dst, s32 value, u32 size);
         }                                                                                          \
     } while (0)
 
-void *_calloc_r(struct _reent *ptr, u32 element_count, u32 elem_size) {
+void *_calloc_r(struct _reent *reent_context, u32 element_count, u32 elem_size) {
     u32 sz = element_count * elem_size;
     void *mem;
 
-    mem = _malloc_r(ptr, sz);
+    mem = _malloc_r(reent_context, sz);
     if (mem == 0) {
         return 0;
     } else {
