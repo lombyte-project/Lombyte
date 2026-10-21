@@ -67,7 +67,7 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
         MENU_CONDITION_COUNT_DIFFERENCE_MET = 5,
         MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET = 6
     };
-    char buf[0x100];
+    char formatted_help_text[0x100];
     Suffixes sfx;
     char num[0x20];
     MenuItem *entry;
@@ -119,12 +119,12 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
         }
         bolt_threshold = D_001DFFB0[entry->unkA].unk14;
         sprintf(num, D_00160090, bolt_threshold / 1000, sfx.s[game_language % 6], bolt_threshold % 1000);
-        sprintf(buf, SCRATCH, num);
+        sprintf(formatted_help_text, SCRATCH, num);
     } else {
-        sprintf(buf, get_help_message_text(entry->unk0));
+        sprintf(formatted_help_text, get_help_message_text(entry->unk0));
     }
     if (D_001993C0[5] != 0) {
-        copy_text_to_shared_buffer(buf);
+        copy_text_to_shared_buffer(formatted_help_text);
     } else if (D_00160070 != -1) {
         remove_hud_item(D_00160070);
         D_00160070 = -1;
