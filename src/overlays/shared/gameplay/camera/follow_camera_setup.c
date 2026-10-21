@@ -1191,9 +1191,9 @@ void FUN_L00_00259a88(s32, void *);
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 
 #define AF_2e7d20(o) (*(f32 *)(orbit_state + (o)))
-#define BF_2e7d20(o) (*(f32 *)(b + (o)))
-#define BH_2e7d20(o) (*(s16 *)(b + (o)))
-#define BI_2e7d20(o) (*(s32 *)(b + (o)))
+#define BF_2e7d20(o) (*(f32 *)(camera_collision_state + (o)))
+#define BH_2e7d20(o) (*(s16 *)(camera_collision_state + (o)))
+#define BI_2e7d20(o) (*(s32 *)(camera_collision_state + (o)))
 
 /* Follow-camera leaf, called from follow_camera_build_view. */
 void follow_camera_avoid_mobies(u8 *m) __asm__("FUN_L00_002e7d20");
@@ -1201,10 +1201,10 @@ extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((sectio
 extern s32 camera_collision_mask __asm__("D_L00_0015EF58") __attribute__((sda));
 void follow_camera_avoid_mobies(u8 *camera_moby) {
     V_2e7d20 probe_center, moby_offset_or_camera_endpoint, v20, planar_moby_direction, orbit_side_direction;
-    W_2e7d20 w;
+    W_2e7d20 hit_descriptor;
     u8 *x;
     u8 *orbit_state;
-    u8 *b;
+    u8 *camera_collision_state;
     s32 hit, cnt, any;
     s32 j;
     u8 *nearby_moby;
@@ -1221,7 +1221,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     base = D_L00_00166E10_2e7d20;
     x = *(u8 **)(camera_moby + 0x70);
     orbit_state = x + 0x130;
-    b = x + 0x1D0;
+    camera_collision_state = x + 0x1D0;
     hit = 0;
     cnt = 0;
     any = 0;
@@ -1296,11 +1296,11 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
         goto slow;
     }
 dec:
-    if (fast_dec_timer(b + 0x34)) {
+    if (fast_dec_timer(camera_collision_state + 0x34)) {
         BH_2e7d20(0x3A) = 0;
     }
     if (BH_2e7d20(0x3A) != 0) {
-        if (fast_dec_timer(b + 0x34)) {
+        if (fast_dec_timer(camera_collision_state + 0x34)) {
             BH_2e7d20(0x3A) = 0;
         }
     }
@@ -1310,7 +1310,7 @@ dec:
 slow:
     retraction_timer_or_below_hold_threshold = BH_2e7d20(0x34);
     if (FUN_001f96f8_2e7d20(2000) < retraction_timer_or_below_hold_threshold) {
-        fast_dec_timer(b + 0x34);
+        fast_dec_timer(camera_collision_state + 0x34);
     } else {
         BH_2e7d20(0x34) = FUN_001f96f8_2e7d20(2000);
     }
@@ -1334,11 +1334,11 @@ move:
         v20.i[2] = 0;
         FUN_001f9bf8_2e7d20(&v20, &v20, 1.0f);
         v20.f[3] = 5627.9248046875f;
-        make_hit_descriptor(&w, D_0013F350_2e7d20.p2080, 0x800000, &v20, 20.0f);
-        w.b18 = 3;
-        w.b19 = 3;
-        w.h1A = *(u16 *)(D_0013F350_2e7d20.p2080 + 0xA6);
-        FUN_L00_00259a88((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18, &w);
+        make_hit_descriptor(&hit_descriptor, D_0013F350_2e7d20.p2080, 0x800000, &v20, 20.0f);
+        hit_descriptor.b18 = 3;
+        hit_descriptor.b19 = 3;
+        hit_descriptor.h1A = *(u16 *)(D_0013F350_2e7d20.p2080 + 0xA6);
+        FUN_L00_00259a88((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18, &hit_descriptor);
     }
     BI_2e7d20(0x4C)++;
     if (BI_2e7d20(0x4C) >= FUN_001f96f8_2e7d20(0x1E)) {
