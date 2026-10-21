@@ -305,23 +305,23 @@ void crate_drop_bolts(u8 *crate_moby) {
     V_2d0538 trajectory_vector, adjusted_position, scratch_vector;
     s32 drop_type_or_skip_spawn;
     f32 f54, f58;
-    s32 cnt, i;
-    u8 *b, *spawned_moby, *spawned_vars;
+    s32 requested_drop_count, i;
+    u8 *crate_vars, *spawned_moby, *spawned_vars;
     s16 crate_class;
-    f32 launch_angle, r, trajectory_time;
+    f32 launch_angle, horizontal_launch_speed, trajectory_time;
 
-    b = *(u8 **)(crate_moby + 0x78);
+    crate_vars = *(u8 **)(crate_moby + 0x78);
     crate_class = *(s16 *)(crate_moby + 0xA6);
     unused_global_copy = D_L00_001E9E30;
-    drop_type_or_skip_spawn = *(s16 *)(b + 0xC6) == 0;
+    drop_type_or_skip_spawn = *(s16 *)(crate_vars + 0xC6) == 0;
     if (crate_class == 0x1F5)
         drop_type_or_skip_spawn = 0;
     if (drop_type_or_skip_spawn) {
         clear_u64_value(&trajectory_vector);
-        if (*(s32 *)(b + 0xF0)) {
+        if (*(s32 *)(crate_vars + 0xF0)) {
             if (crate_moby)
                 *(s16 *)(crate_moby + 0x36) = 0x7F80;
-            FUN_L00_00260400_2d0538(crate_moby, *(s32 *)(b + 0xF0), crate_moby + 0x10, crate_moby + 0x40, &adjusted_position, &scratch_vector);
+            FUN_L00_00260400_2d0538(crate_moby, *(s32 *)(crate_vars + 0xF0), crate_moby + 0x10, crate_moby + 0x40, &adjusted_position, &scratch_vector);
             fast_vec_sub(&trajectory_vector, &adjusted_position, crate_moby + 0x10);
         }
         if (D_0015ED84 == 0xF && absolute_float(*(f32 *)(crate_moby + 0x10) - 166.0f) < 6.0f &&
@@ -332,11 +332,11 @@ void crate_drop_bolts(u8 *crate_moby) {
             D_L00_0015F598 = save;
             return;
         }
-        mark_moby_for_removal_cf(crate_moby, 0x100, *(s32 *)(b + 0xC0));
+        mark_moby_for_removal_cf(crate_moby, 0x100, *(s32 *)(crate_vars + 0xC0));
         return;
     }
     if (crate_class != 0x1F5) {
-        switch (*(u8 *)(b + 0xCB)) {
+        switch (*(u8 *)(crate_vars + 0xCB)) {
         case CRATE_DROP_FALLBACK_ITEM:
             drop_type_or_skip_spawn = 10;
             break;
@@ -375,18 +375,18 @@ void crate_drop_bolts(u8 *crate_moby) {
             drop_type_or_skip_spawn = -1;
             break;
         }
-        cnt = FUN_L00_00257218_2d0538(crate_moby, &drop_type_or_skip_spawn);
-        for (i = 0; i < cnt; i++) {
+        requested_drop_count = FUN_L00_00257218_2d0538(crate_moby, &drop_type_or_skip_spawn);
+        for (i = 0; i < requested_drop_count; i++) {
             spawned_moby = FUN_L00_002c52a8_2d0538(crate_moby + 0x10, drop_type_or_skip_spawn, -1, 0);
             if (!spawned_moby)
                 break;
             spawned_vars = *(u8 **)(spawned_moby + 0x78);
-            *(s16 *)(spawned_vars + 4) = *(s16 *)(b + 0xC4);
+            *(s16 *)(spawned_vars + 4) = *(s16 *)(crate_vars + 0xC4);
             launch_angle = FUN_00213308_2d0538();
-            r = FUN_002132a8_2d0538(0.0f, D_L00_001618C8) * D_0015ED6C_2d0538;
-            *(f32 *)(spawned_vars + 0x10) = fast_cos(launch_angle) * r;
+            horizontal_launch_speed = FUN_002132a8_2d0538(0.0f, D_L00_001618C8) * D_0015ED6C_2d0538;
+            *(f32 *)(spawned_vars + 0x10) = fast_cos(launch_angle) * horizontal_launch_speed;
             {
-                f32 sn = fast_sin(launch_angle) * r;
+                f32 sn = fast_sin(launch_angle) * horizontal_launch_speed;
                 {
                     f32 hi = D_L00_001618D0, lo = D_L00_001618CC;
                     *(f32 *)(spawned_vars + 0x18) = 0.0f;
@@ -394,18 +394,18 @@ void crate_drop_bolts(u8 *crate_moby) {
                     *(f32 *)(spawned_vars + 0x18) = FUN_002132a8_2d0538(lo, hi) * D_0015ED6C_2d0538;
                 }
             }
-            if (*(s32 *)(b + 0xC0) >= 0) {
+            if (*(s32 *)(crate_vars + 0xC0) >= 0) {
                 s32 k = FUN_L00_002595a0_2d0538(
                     &f54, &f58, D_0015ED70 * 10.8f * -0.5f,
                     *(f32 *)(spawned_vars + 0x18) - D_0015ED70 * 10.8f * -0.5f,
                     *(f32 *)(spawned_moby + 0x18) -
-                        *(f32 *)(D_L00_001B04B0_2d0538[*(s32 *)(b + 0xC0)] + 0x18));
+                        *(f32 *)(D_L00_001B04B0_2d0538[*(s32 *)(crate_vars + 0xC0)] + 0x18));
                 trajectory_time = 120.0f;
                 if ((f32)k >= 1.0f && f54 > 0.0f && f54 < 120.0f)
                     trajectory_time = f54;
                 scale_vector_xyz(&trajectory_vector, spawned_vars + 0x10, trajectory_time);
                 add_vector_xyz(&trajectory_vector, &trajectory_vector, crate_moby + 0x10);
-                FUN_L00_00261b48(*(s32 *)(b + 0xC0), crate_moby + 0x10, &trajectory_vector, &adjusted_position);
+                FUN_L00_00261b48(*(s32 *)(crate_vars + 0xC0), crate_moby + 0x10, &trajectory_vector, &adjusted_position);
                 fast_vec_sub(&trajectory_vector, &adjusted_position, spawned_moby + 0x10);
                 trajectory_vector.f[2] = 0.0f;
                 normalize_vector_xyz(&scratch_vector, &trajectory_vector, 0.25f);
