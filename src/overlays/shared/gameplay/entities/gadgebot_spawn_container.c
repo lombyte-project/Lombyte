@@ -1091,7 +1091,7 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 
 void FUN_L06_002ea498(char *moby) {
     float spherical_offset[4];
-    float b[4];
+    float spawn_position[4];
     int i;
     for (i = 19; i >= 0; i--) {
         float azimuth_angle = random_angle_radians();
@@ -1099,12 +1099,12 @@ void FUN_L06_002ea498(char *moby) {
         int random_frame_count, u;
         build_spherical_offset(spherical_offset, frame_time * 1.8f, azimuth_angle, elevation_angle);
         spherical_offset[2] += frame_time * 0.9f;
-        random_vector(b, 0.0f, 0.5f);
-        fast_vec_add(b, b, moby + 0x10);
-        b[2] += 0.5f;
+        random_vector(spawn_position, 0.0f, 0.5f);
+        fast_vec_add(spawn_position, spawn_position, moby + 0x10);
+        spawn_position[2] += 0.5f;
         random_frame_count = scale_game_frames(random_int_between(0x14, 0x23));
         u = random_int_between(0x28, 0x3C);
-        FUN_L00_00269958(b, spherical_offset, 0x7000A0FF, 0xFF, random_frame_count, 0x1E, u, 1);
+        FUN_L00_00269958(spawn_position, spherical_offset, 0x7000A0FF, 0xFF, random_frame_count, 0x1E, u, 1);
     }
 }
 #include "rnc/gameplay/entities/moby.h"
