@@ -20,14 +20,14 @@ unsigned char *FUN_L13_00280400(char *moby, unsigned char joint_index, int b, in
     unsigned char *particle = create_part(0x44);
     if (particle != 0) {
         char *world_position;
-        int v;
+        int particle_bias;
         unsigned short moby_a6_value;
         unsigned char *attachment_data;
         *(int *)(particle + 4) = b;
         *(int *)(particle + 0xC) = c;
         world_position = (char *)particle + 0x10;
-        v = func_001FA898_r(0.4f);
-        particle[9] = (((short)*(unsigned short *)(moby + 0x32) >> 5) << 4) + v;
+        particle_bias = func_001FA898_r(0.4f);
+        particle[9] = (((short)*(unsigned short *)(moby + 0x32) >> 5) << 4) + particle_bias;
         particle[3] = 0x48;
         particle[1] = 3;
         particle[2] = *D_L13_001B2490;
