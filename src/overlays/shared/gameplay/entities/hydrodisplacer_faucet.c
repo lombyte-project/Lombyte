@@ -393,20 +393,20 @@ extern void subtract_vector_xyz(void *, void *, void *);
 
 void FUN_L05_00307010(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    struct Hero *g = &hero;
+    struct Hero *player_hero = &hero;
     float position_delta[4];
     char *l1;
     char *l2;
     char *other;
     char *od;
 
-    if (g->unk894 < scale_game_frames(0xB4)) {
+    if (player_hero->unk894 < scale_game_frames(0xB4)) {
         return;
     }
     if (!tick_countdown_32((int *)(data + 0x264))) {
         return;
     }
-    other = ((char *)g->unk86C);
+    other = ((char *)player_hero->unk86C);
     if (!other) {
         return;
     }
