@@ -1426,7 +1426,7 @@ void door_left_update(HoverMoby *door_moby) {
     };
     HoverVars *door_vars;
     Vec4 *player;
-    Vec4 off;
+    Vec4 door_translation_offset;
     f32 k;
 
     door_vars = door_moby->vars;
@@ -1477,11 +1477,11 @@ void door_left_update(HoverMoby *door_moby) {
         }
         break;
     }
-    off.f[0] = fast_cos(door_moby->rot_z) * door_vars->t * (door_moby->oclass == 0x300 ? 2.0f : -2.0f);
-    off.f[1] = fast_sin(door_moby->rot_z) * door_vars->t * (door_moby->oclass == 0x300 ? 2.0f : -2.0f);
-    off.f[2] = 0.0f;
-    door_moby->pos.f[0] = door_vars->home.f[0] + off.f[0];
-    door_moby->pos.f[1] = door_vars->home.f[1] + off.f[1];
+    door_translation_offset.f[0] = fast_cos(door_moby->rot_z) * door_vars->t * (door_moby->oclass == 0x300 ? 2.0f : -2.0f);
+    door_translation_offset.f[1] = fast_sin(door_moby->rot_z) * door_vars->t * (door_moby->oclass == 0x300 ? 2.0f : -2.0f);
+    door_translation_offset.f[2] = 0.0f;
+    door_moby->pos.f[0] = door_vars->home.f[0] + door_translation_offset.f[0];
+    door_moby->pos.f[1] = door_vars->home.f[1] + door_translation_offset.f[1];
 }
 
 #define NOT_SDA
