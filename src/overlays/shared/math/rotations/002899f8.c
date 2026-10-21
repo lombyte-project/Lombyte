@@ -8,32 +8,32 @@ typedef struct {
 } O_2899f8;
 
 O_2899f8 *FUN_L05_002899f8(O_2899f8 *a, O_2899f8 *b, O_2899f8 *c, O_2899f8 *d);
-O_2899f8 *FUN_L05_002899f8(O_2899f8 *initial_candidate, O_2899f8 *b, O_2899f8 *third_candidate, O_2899f8 *fourth_candidate) {
-    O_2899f8 *r = initial_candidate;
+O_2899f8 *FUN_L05_002899f8(O_2899f8 *initial_candidate, O_2899f8 *second_candidate, O_2899f8 *third_candidate, O_2899f8 *fourth_candidate) {
+    O_2899f8 *selected_candidate = initial_candidate;
 
-    if (r == 0) {
+    if (selected_candidate == 0) {
         goto none;
     }
-    if (b != 0 && !(r->f > b->f)) {
-        r = b;
+    if (second_candidate != 0 && !(selected_candidate->f > second_candidate->f)) {
+        selected_candidate = second_candidate;
     }
 check_c:
-    if (third_candidate != 0 && !(r->f > third_candidate->f)) {
-        r = third_candidate;
+    if (third_candidate != 0 && !(selected_candidate->f > third_candidate->f)) {
+        selected_candidate = third_candidate;
     }
 check_d:
-    if (fourth_candidate != 0 && !(r->f > fourth_candidate->f)) {
-        r = fourth_candidate;
+    if (fourth_candidate != 0 && !(selected_candidate->f > fourth_candidate->f)) {
+        selected_candidate = fourth_candidate;
     }
-    return r;
+    return selected_candidate;
 
 none:
-    if (b != 0) {
-        r = b;
+    if (second_candidate != 0) {
+        selected_candidate = second_candidate;
         goto check_c;
     }
     if (third_candidate != 0) {
-        r = third_candidate;
+        selected_candidate = third_candidate;
         goto check_d;
     }
     return fourth_candidate;
