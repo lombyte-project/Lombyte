@@ -808,7 +808,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         CONTROLLER_DELETE_SELF = 13
     };
     Class436Vars *data = (Class436Vars *)moby->pvars;
-    float v[4];
+    float linked_moby_to_hero_offset[4];
 
     switch (moby->state) {
     case CONTROLLER_WAIT_FOR_SCENE_IDLE:
@@ -925,9 +925,9 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         }
         if (data->moby_10 != -1) {
             struct Moby *e = &level_mobys[data->moby_10];
-            subtract_vector_xyz(v, &hero.motion.pos, &e->pos);
-            clamp_vector_length(v, v, 0.9f);
-            add_vector_xyz(&e->pos, &hero.motion.pos, v);
+            subtract_vector_xyz(linked_moby_to_hero_offset, &hero.motion.pos, &e->pos);
+            clamp_vector_length(linked_moby_to_hero_offset, linked_moby_to_hero_offset, 0.9f);
+            add_vector_xyz(&e->pos, &hero.motion.pos, linked_moby_to_hero_offset);
             delete_moby_m(e);
         }
         FUN_L07_00270248(0x87, 0xC, 0x56, 0x3C);
