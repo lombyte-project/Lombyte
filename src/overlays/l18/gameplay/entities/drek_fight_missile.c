@@ -3086,7 +3086,7 @@ unsigned char *FUN_L18_002f6e10(struct Moby *self) {
     short *group_entry = D_L18_001AC240_c2[*(int *)(data + 0x398)];
     unsigned char *best = 0;
     float bestd = 1024.0f;
-    float v[4];
+    float candidate_displacement[4];
     if (group_entry == 0) {
         return 0;
     }
@@ -3101,18 +3101,18 @@ unsigned char *FUN_L18_002f6e10(struct Moby *self) {
             FUN_L18_002d8858(listed_moby);
             candidate_moby = D_L18_0015FFD8 + off;
             if (vector_distance(candidate_moby + 0x10, selection_origin) < *(float *)&D_L18_00162338) {
-                unsigned char *r;
+                unsigned char *in_range_moby;
                 int tilt_delay_frames, b;
                 float dot;
 
-                subtract_vector_xyz(v, candidate_moby + 0x10, selection_origin);
-                r = D_L18_0015FFD8 + off;
+                subtract_vector_xyz(candidate_displacement, candidate_moby + 0x10, selection_origin);
+                in_range_moby = D_L18_0015FFD8 + off;
                 tilt_delay_frames = scale_game_frames(0x3C);
                 b = scale_game_frames(*(int *)&D_L18_0016233C);
-                FUN_L18_002d8888(r, tilt_delay_frames, b);
-                dot = dot_vectors_xyz(v, &self->rot_row0);
+                FUN_L18_002d8888(in_range_moby, tilt_delay_frames, b);
+                dot = dot_vectors_xyz(candidate_displacement, &self->rot_row0);
                 if (0.333f < dot) {
-                    float candidate_distance = vector_length_xyz(v);
+                    float candidate_distance = vector_length_xyz(candidate_displacement);
                     if (candidate_distance < bestd) {
                         bestd = candidate_distance;
                         best = candidate_moby;
