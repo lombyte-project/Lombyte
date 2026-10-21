@@ -836,7 +836,7 @@ void FUN_L08_002d4ca0(Moby *moby) {
     Hit_2D5FA8 *source;
     Hit_2D5FA8 *part_a_source;
     Hit_2D5FA8 *part_b_source;
-    float vec[4];
+    float burst_position_or_aim_scratch[4];
     int hit;
     float damage = 0.0f;
     int one;
@@ -883,11 +883,11 @@ void FUN_L08_002d4ca0(Moby *moby) {
         } else {
             int dead = 0x63;
             if (moby->state != dead) {
-                qcopy(vec, &moby->pos);
-                vec[2] += 3.0f;
+                qcopy(burst_position_or_aim_scratch, &moby->pos);
+                burst_position_or_aim_scratch[2] += 3.0f;
                 data->tint = 0xFA;
                 zero_2D5FA8(data->f120);
-                burst_2D5FA8(moby, data->f40, vec, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, one, -1, 0);
+                burst_2D5FA8(moby, data->f40, burst_position_or_aim_scratch, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, one, -1, 0);
                 spawn_2D5FA8(moby, 0x6C0, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
                 spawn_2D5FA8(moby, 0x6C1, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
                 spawn_2D5FA8(moby, 0x6C2, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
@@ -915,11 +915,11 @@ void FUN_L08_002d4ca0(Moby *moby) {
                         }
                     }
                 }
-                qcopy(vec, &moby->pos);
-                vec[2] += 1.0f;
+                qcopy(burst_position_or_aim_scratch, &moby->pos);
+                burst_position_or_aim_scratch[2] += 1.0f;
                 explode_2D5FA8(moby, 0, -1);
                 event_2D5FA8(2, 0, moby);
-                burst_2D5FA8(moby, data->f40, vec, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+                burst_2D5FA8(moby, data->f40, burst_position_or_aim_scratch, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
                 spawn_2D5FA8(moby, 0x6FE, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
                 spawn_2D5FA8(moby, 0x6FE, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
                 spawn_2D5FA8(moby, 0x6FF, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
@@ -942,11 +942,11 @@ void FUN_L08_002d4ca0(Moby *moby) {
     if (data->fF0 == 0) data->fF0 = *(int *)D_001413D0;
     if (data->mode != 2) {
         float yaw, distance, pitch;
-        fast_vec_sub(vec, data->target, (float *)&moby->pos);
-        vec[2] -= 3.0f;
-        yaw = angle_2D5FA8(vec[0], vec[1]);
-        distance = length_2D5FA8(vec);
-        pitch = -angle_2D5FA8(distance, vec[2]);
+        fast_vec_sub(burst_position_or_aim_scratch, data->target, (float *)&moby->pos);
+        burst_position_or_aim_scratch[2] -= 3.0f;
+        yaw = angle_2D5FA8(burst_position_or_aim_scratch[0], burst_position_or_aim_scratch[1]);
+        distance = length_2D5FA8(burst_position_or_aim_scratch);
+        pitch = -angle_2D5FA8(distance, burst_position_or_aim_scratch[2]);
         if (0.34906585f < pitch) {
             pitch = 0.34906585f;
         } else if (pitch < -0.7853982f) {
@@ -959,9 +959,9 @@ void FUN_L08_002d4ca0(Moby *moby) {
         approach_2D5FA8(&data->yaw, 0.0f, &data->yaw_speed, D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C_lui * 9.424778f);
         approach_2D5FA8(&data->pitch, 0.0f, &data->pitch_speed, D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C_lui * 9.424778f);
     }
-    rotation_2D5FA8(vec, 1, data->pitch);
+    rotation_2D5FA8(burst_position_or_aim_scratch, 1, data->pitch);
     rotation_2D5FA8(data->f110, 2, data->yaw);
-    matmul_2D5FA8(data->f110, vec, data->f110);
+    matmul_2D5FA8(data->f110, burst_position_or_aim_scratch, data->f110);
     {
         short saved_anim0 = data->anim0;
         short saved_anim2 = data->anim2;
