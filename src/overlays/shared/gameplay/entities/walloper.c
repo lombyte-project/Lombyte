@@ -669,14 +669,14 @@ void FUN_L00_00250df8();
 u8 *FUN_L00_002bb360(u8 *src) {
     u8 *spawned_moby = create_moby(0xB3);
     if (spawned_moby) {
-        u8 *v = *(u8 **)(spawned_moby + 0x78);
+        u8 *spawned_moby_vars = *(u8 **)(spawned_moby + 0x78);
         spawned_moby[0x30] = 0xFF;
         *(s16 *)(spawned_moby + 0x32) = 0xFF;
         spawned_moby[0x31] = 1;
         *(s16 *)(spawned_moby + 0x34) = 0x204;
         spawned_moby[0x23] = 0x50;
         spawned_moby[0x20] = 0;
-        *(u8 **)(v + 8) = src;
+        *(u8 **)(spawned_moby_vars + 8) = src;
         clear_u64_value(spawned_moby + 0x40);
         *(OvlQuad *)(spawned_moby + 0xC0) = *(OvlQuad *)(src + 0xC0);
         *(OvlQuad *)(spawned_moby + 0xD0) = *(OvlQuad *)(src + 0xD0);
