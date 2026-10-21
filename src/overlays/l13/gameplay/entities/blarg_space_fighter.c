@@ -2692,7 +2692,7 @@ void FUN_L13_002e8b58(struct Moby *moby) {
     int i;
     for (i = 0; D_L13_001D3538[i] != -1; i++) {
         float randomized_scale_ratio;
-        int r, k;
+        int effect_frame_count, k;
         OvlQuad *z = &zv;
         zv = 0;
         randomized_scale_ratio = moby->scale / (moby->pclass->scale * 4.0f);
@@ -2700,17 +2700,17 @@ void FUN_L13_002e8b58(struct Moby *moby) {
         moby_point_position(moby, D_L13_001D3538[i], effect_position);
         FUN_L00_0025f8e0(effect_position, randomized_scale_ratio * 1.4f);
         if (frame_count & 1) {
-            r = scale_game_frames(FUN_L00_00257b90(0x14, 0x3C));
+            effect_frame_count = scale_game_frames(FUN_L00_00257b90(0x14, 0x3C));
             k = func_001FA898_r(random_float_between_alt(450.0f, 550.0f) * randomized_scale_ratio);
-            FUN_L00_00269958(effect_position, z, 0xDF000FFF, 0xCF, r, k, -100, 1);
+            FUN_L00_00269958(effect_position, z, 0xDF000FFF, 0xCF, effect_frame_count, k, -100, 1);
         } else {
             if (moby->command != 0) {
                 if (random_integer_below(0xC) != 0)
                     continue;
             }
-            r = scale_game_frames(FUN_L00_00257b90(0x14, 0x32));
+            effect_frame_count = scale_game_frames(FUN_L00_00257b90(0x14, 0x32));
             k = func_001FA898_r(random_float_between_alt(600.0f, 800.0f) * randomized_scale_ratio);
-            FUN_L00_00269958(effect_position, z, 0x8000FFFF, 0x80, r, k, -100, 1);
+            FUN_L00_00269958(effect_position, z, 0x8000FFFF, 0x80, effect_frame_count, k, -100, 1);
         }
     }
 }
