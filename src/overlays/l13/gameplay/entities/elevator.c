@@ -2345,7 +2345,7 @@ extern void tick_countdown_32(int *arg0) __asm__("FUN_001f9740");
 #define FLAG    hero.ship_ammo
 
 void FUN_L13_002b95b8(int source_moby, char *moby_vars) {
-    char *g = 0;
+    char *excluded_target_moby = 0;
     char *pad;
     char *current_target_moby;
     char *selected_target_moby;
@@ -2368,7 +2368,7 @@ void FUN_L13_002b95b8(int source_moby, char *moby_vars) {
     pad = D_0013C940;
     if (W(pad, 0x1B4) & 0x2000) {
     take:
-        g = P(moby_vars, 0x88);
+        excluded_target_moby = P(moby_vars, 0x88);
     }
     W(moby_vars, 0xEC) = 0;
     W(moby_vars, 0x124) = -1;
@@ -2376,7 +2376,7 @@ void FUN_L13_002b95b8(int source_moby, char *moby_vars) {
 skip:
     qcopy(radar_rotation_copy, D_L13_001670D0);
     selected_target_moby = (char *)FUN_L13_002b8be0(source_moby, moby_vars, D_L13_001670D0 - 0x10, radar_rotation_copy, 0.19634955f, 0.19634955f, 255.0f,
-                                 P(moby_vars, 0x88), g);
+                                 P(moby_vars, 0x88), excluded_target_moby);
     if ((selected_target_moby != P(moby_vars, 0x88) && W(moby_vars, 0x8C) >= 0x1F5) || FLAG == 0) {
         W(moby_vars, 0xEC) = 0;
         W(moby_vars, 0x124) = -1;
