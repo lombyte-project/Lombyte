@@ -881,7 +881,7 @@ int FUN_L13_002c3c88(struct Moby *moby, char *moby_data, int aim) {
     char *path = D_L13_001B07B0[*(int *)(moby_data + 0xA0)];
     float distance_from_previous_node, seg, diff, steering_blend_factor;
     int wrapped = 0;
-    float v[4];
+    float target_node_steering_vector[4];
     distance_from_previous_node = FUN_001f9b48(path + (*(short *)(moby_data + 0xB6) * 16 + 0x10), &moby->pos);
     seg = FUN_001f9b48(path + (*(short *)(moby_data + 0xB6) * 16 + 0x10),
                        path + (*(short *)(moby_data + 0xB4) * 16 + 0x10));
@@ -906,10 +906,10 @@ int FUN_L13_002c3c88(struct Moby *moby, char *moby_data, int aim) {
     if (1.0f < steering_blend_factor)
         steering_blend_factor = 1.0f;
     scale_vector_xyz(moby_data + 0x70, moby_data + 0x70, 1.0f - steering_blend_factor);
-    subtract_vector_xyz(v, path + (*(short *)(moby_data + 0xB4) * 16 + 0x10), &moby->pos);
-    normalize_vector_xyz(v, v, *(float *)(moby_data + 0xCC));
-    scale_vector_xyz(v, v, steering_blend_factor);
-    add_vector_xyz(moby_data + 0x70, moby_data + 0x70, v);
+    subtract_vector_xyz(target_node_steering_vector, path + (*(short *)(moby_data + 0xB4) * 16 + 0x10), &moby->pos);
+    normalize_vector_xyz(target_node_steering_vector, target_node_steering_vector, *(float *)(moby_data + 0xCC));
+    scale_vector_xyz(target_node_steering_vector, target_node_steering_vector, steering_blend_factor);
+    add_vector_xyz(moby_data + 0x70, moby_data + 0x70, target_node_steering_vector);
     normalize_vector_xyz(moby_data + 0x70, moby_data + 0x70, *(float *)(moby_data + 0xCC));
     add_vector_xyz(&moby->pos, &moby->pos, moby_data + 0x70);
     if (aim != 0) {
