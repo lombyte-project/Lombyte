@@ -881,8 +881,8 @@ void FUN_L05_00319510(void *moby_v) {
 extern unsigned short *D_L05_001ABCC0_9598[] __asm__("D_L05_001ABCC0");
 extern char *D_L05_0015FFD8_9598 __asm__("D_L05_0015FFD8");
 typedef struct { char pad[0x78]; char *data; char pad2[0x84]; } M_9598;
-char *FUN_L05_00319598(unsigned char *arg, int id) {
-    unsigned short *moby_index_entry = D_L05_001ABCC0_9598[arg[0x21]];
+char *FUN_L05_00319598(unsigned char *list_owner_moby, int id) {
+    unsigned short *moby_index_entry = D_L05_001ABCC0_9598[list_owner_moby[0x21]];
     char *pool; int idx;
     if (moby_index_entry != 0) {
         pool = D_L05_0015FFD8_9598;
