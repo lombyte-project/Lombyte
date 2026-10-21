@@ -3309,7 +3309,7 @@ void FUN_L00_00270948(M_270948 *particle) {
     C_270948 collision_parameters;
     E_270948 *e = &particle->e;
     M_270948 *spawned_particle;
-    f32 position_jitter_extent, nr, alpha_factor, s;
+    f32 position_jitter_extent, nr, alpha_factor, alpha_input_or_rotation_sign;
     s32 hit;
     u8 fl;
 
@@ -3378,10 +3378,10 @@ void FUN_L00_00270948(M_270948 *particle) {
     } else {
         particle->fC += 260000.0f / (f32)(s32)(8.0f / (D_0015ED60 * 0.443f)) * D_0015ED60;
     }
-    s = FUN_001fa6c0_c(e->h14);
+    alpha_input_or_rotation_sign = FUN_001fa6c0_c(e->h14);
     {
         f32 alpha_normalization_divisor = (f32)(s32)(8.0f / (D_0015ED60 * 0.443f));
-        alpha_factor = 0.08f / alpha_normalization_divisor * D_0015ED60 * (s / alpha_normalization_divisor) + 0.08f;
+        alpha_factor = 0.08f / alpha_normalization_divisor * D_0015ED60 * (alpha_input_or_rotation_sign / alpha_normalization_divisor) + 0.08f;
     }
     if (alpha_factor < 0.0f)
         alpha_factor = 0.0f;
@@ -3397,14 +3397,14 @@ void FUN_L00_00270948(M_270948 *particle) {
     }
     {
         u8 flags = e->b18;
-        s = -1.0f;
+        alpha_input_or_rotation_sign = -1.0f;
         if (flags & 1)
-            s = 1.0f;
+            alpha_input_or_rotation_sign = 1.0f;
         if (flags & 8) {
             e->v.f[2] += frame_scale_sq * 0.008f;
-            e->x10 += s * (D_0015ED60 * -0.01f) / FUN_001fa6c0_c(e->h16);
+            e->x10 += alpha_input_or_rotation_sign * (D_0015ED60 * -0.01f) / FUN_001fa6c0_c(e->h16);
         } else {
-            e->x10 += s * (D_0015ED60 * -0.01f);
+            e->x10 += alpha_input_or_rotation_sign * (D_0015ED60 * -0.01f);
         }
     }
     if (1.0f < e->x10)
