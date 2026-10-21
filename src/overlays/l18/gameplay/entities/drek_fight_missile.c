@@ -212,7 +212,7 @@ extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern short D_L18_0016222C __attribute__((sda));
 int FUN_L18_002f0120(char *moby, float *vec) {
     float buf[4];
-    float v[4];
+    float redirected_target_position[4];
     char *missile_vars = *(char **)(moby + 0x78);
     char *linked_moby;
     float yaw;
@@ -236,14 +236,14 @@ int FUN_L18_002f0120(char *moby, float *vec) {
     }
     linked_moby = *(char **)(missile_vars + 0x16C);
     if (linked_moby) {
-        fast_vec_sub(v, moby + 0x10, linked_moby + 0x10);
-        if (!(vector_length_xy(v) < 4.5f)) {
+        fast_vec_sub(redirected_target_position, moby + 0x10, linked_moby + 0x10);
+        if (!(vector_length_xy(redirected_target_position) < 4.5f)) {
             return 0;
         }
-        set_vector_length_xy(v, v, random_float_between_alt(15.0f, 20.0f));
-        fast_vec_add(v, v, *(char **)(missile_vars + 0x16C) + 0x10);
-        v[2] = vec[2];
-        qcopy(vec, v);
+        set_vector_length_xy(redirected_target_position, redirected_target_position, random_float_between_alt(15.0f, 20.0f));
+        fast_vec_add(redirected_target_position, redirected_target_position, *(char **)(missile_vars + 0x16C) + 0x10);
+        redirected_target_position[2] = vec[2];
+        qcopy(vec, redirected_target_position);
     }
     return 0;
 }
