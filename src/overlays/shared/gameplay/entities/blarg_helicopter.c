@@ -2012,7 +2012,7 @@ void garage_door_update(struct Moby *door_moby)
         GARAGE_DOOR_RAISED = 2
     };
     Vec4 *target = (Vec4 *)door_moby->pvars;
-    s16 idx;
+    s16 save_id_index;
     u16 id;
 
     switch (door_moby->state) {
@@ -2020,9 +2020,9 @@ void garage_door_update(struct Moby *door_moby)
         /* one quadword copy (lq/sq); qcopy() schedules differently */
         target->q = ((Vec4 *)&door_moby->pos)->q;
         id = door_moby->save_id;
-        idx = id;
-        if (D_L03_001BB330.collected[idx] == 0) {
-            if (!((D_0014C190_257218[current_level_index_gp][idx >> 5] >> (id & 0x1F)) & 1))
+        save_id_index = id;
+        if (D_L03_001BB330.collected[save_id_index] == 0) {
+            if (!((D_0014C190_257218[current_level_index_gp][save_id_index >> 5] >> (id & 0x1F)) & 1))
                 return;
         }
         door_moby->state = 1;
