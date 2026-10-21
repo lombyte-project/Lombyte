@@ -669,7 +669,7 @@ void FUN_L17_002d77f0(char *moby) {
         RING_INITIALIZE = 0,
         RING_ROTATE_AND_DRAW = 1
     };
-    OvlQuad sp0[1];
+    OvlQuad moby_to_hero_vector[1];
     OvlQuad sp10[1];
     struct Blk blk;
     OvlQuad mat1[3];
@@ -683,7 +683,7 @@ void FUN_L17_002d77f0(char *moby) {
     int k;
     float *ring_vars;
     float len;
-    float g;
+    float base_elevation_angle;
     float elevation_angle_offset;
     float f20;
     int particle_lifetime;
@@ -702,8 +702,8 @@ void FUN_L17_002d77f0(char *moby) {
             enqueue_callback_list_1(FUN_L17_002d7cf0, moby);
             break;
         }
-        subtract_vector_xyz(sp0, &hero.motion.pos, (moby + 0x10));
-        if (dot_vectors_xyz(sp0, (moby + 0xC0)) > 0.0f) {
+        subtract_vector_xyz(moby_to_hero_vector, &hero.motion.pos, (moby + 0x10));
+        if (dot_vectors_xyz(moby_to_hero_vector, (moby + 0xC0)) > 0.0f) {
             normalize_vector_xyz(sp10, (moby + 0xC0), 1.0f);
         } else {
             normalize_vector_xyz(sp10, (moby + 0xC0), -1.0f);
@@ -729,11 +729,11 @@ void FUN_L17_002d77f0(char *moby) {
                     elevation_angle_offset = wrap_angle(*(float *)&D_L17_00161B80_gp * DEG_TO_RAD *
                                      convert_integer_to_float(j) * 0.5f) -
                           *(float *)&D_L17_00161B80_gp * DEG_TO_RAD;
-                    g = *(float *)&D_L17_00161B7C * DEG_TO_RAD;
+                    base_elevation_angle = *(float *)&D_L17_00161B7C * DEG_TO_RAD;
                     build_spherical_offset(
                         spC0, *(float *)&D_L17_00161B84, 1.5707964f,
                         fast_add_rotations(
-                            fast_add_rotations(g,
+                            fast_add_rotations(base_elevation_angle,
                                                wrap_angle(convert_integer_to_float(i) * 2.0943952f)),
                             elevation_angle_offset));
                     transform_vector(spC0, spC0, mat2);
