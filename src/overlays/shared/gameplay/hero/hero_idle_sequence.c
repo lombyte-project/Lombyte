@@ -1479,10 +1479,10 @@ void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 /* Once (flag at ((char *)&hero)+0x1EB2) queues FUN_L00_00207d40 with the object at +0x2080. */
 void FUN_L00_00207d00(void) {
-    struct Hero *g = &hero;
-    if (g->unk1EB2 == 0) {
-        g->unk1EB2 = 1;
-        enqueue_callback_list_1(FUN_L00_00207d40_u, ((int)g->moby));
+    struct Hero *hero_state = &hero;
+    if (hero_state->unk1EB2 == 0) {
+        hero_state->unk1EB2 = 1;
+        enqueue_callback_list_1(FUN_L00_00207d40_u, ((int)hero_state->moby));
     }
 }
 typedef struct {
