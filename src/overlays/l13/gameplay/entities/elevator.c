@@ -2162,7 +2162,7 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
     char *ret;
     int best;
     int *scr;
-    int dx, dy, r, screen_distance_squared;
+    int dx, dy, target_selection_radius, screen_distance_squared;
     float ang, dist, yaw_error, k, angular_error_magnitude, arrow_pulse_phase;
     char *tab;
 
@@ -2186,8 +2186,8 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
             FUN_L11_00311210(v, &tx, &ty, 0);
             tx -= sx;
             ty -= sy;
-            r = func_001FA898_r(seg_sqrt(convert_integer_to_float(tx * tx + ty * ty))) + 0x1C;
-            if (dx < r && dy < r) {
+            target_selection_radius = func_001FA898_r(seg_sqrt(convert_integer_to_float(tx * tx + ty * ty))) + 0x1C;
+            if (dx < target_selection_radius && dy < target_selection_radius) {
                 if (cur != 0) {
                     if (candidate_moby == cur) {
                         best = 0;
