@@ -7,7 +7,7 @@ extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 void draw_hud_sprite_rect(s32 tex, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 u1, s32 v1,
                           s32 alpha) __asm__("FUN_00200958");
 
-void draw_hud_sprite_rect(s32 tex, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 texture_v0, s32 u1, s32 texture_v1,
+void draw_hud_sprite_rect(s32 tex, s32 x0, s32 y0, s32 x1, s32 y1, s32 texture_u0, s32 texture_v0, s32 texture_u1, s32 texture_v1,
                           s32 alpha) {
     u64 *packet_words;
 
@@ -21,10 +21,10 @@ void draw_hud_sprite_rect(s32 tex, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 t
     packet_words[2] = get_frame_texture(tex);
     packet_words[3] = 0x156;
     packet_words[4] = (u64)alpha << 24 | 0x7F7F7F;
-    packet_words[5] = u0 | ((u64)texture_v0 << 16);
+    packet_words[5] = texture_u0 | ((u64)texture_v0 << 16);
     packet_words[6] = (x0 + screen_extent.left - 8) | ((u64)(y0 + screen_extent.top - 8) << 16) |
            ((u64)hud_state.z << 32);
-    packet_words[7] = u1 | ((u64)texture_v1 << 16);
+    packet_words[7] = texture_u1 | ((u64)texture_v1 << 16);
     packet_words[8] = (x1 + screen_extent.left - 8) | ((u64)(y1 + screen_extent.top - 8) << 16) |
            ((u64)hud_state.z << 32);
     packet_words[9] = 0;
