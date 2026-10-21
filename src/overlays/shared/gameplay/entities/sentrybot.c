@@ -1197,10 +1197,10 @@ void FUN_L15_0029a0d0(void *mp) {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-void FUN_L15_0029a248(char *source_moby, char *b) {
+void FUN_L15_0029a248(char *source_moby, char *recipient_moby) {
     char *recipient_moby_data;
-    if (source_moby != b) {
-        recipient_moby_data = *(char **)(b + 0x78);
+    if (source_moby != recipient_moby) {
+        recipient_moby_data = *(char **)(recipient_moby + 0x78);
         if (*(short *)(recipient_moby_data + 0x19C) == 0 || random_integer_below(0x10) == 0) {
             *(char **)(recipient_moby_data + 0x198) = source_moby;
             *(short *)(recipient_moby_data + 0x19C) = scale_game_frames(0xB4);
