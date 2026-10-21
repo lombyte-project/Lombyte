@@ -32,21 +32,21 @@ void FUN_L00_0028e180(unsigned char *moby) {
     char *proximity_state_data = *(char **)(moby + 0x78);
     float *moby_position;
     float proximity_test_position[4];
-    int v;
+    int color_pulse_intensity;
     int one;
     unsigned char *hero_position_or_scene_flags;
 
     if (moby[0x20] != 0x2A) {
         if (moby[0x31] != 0) {
             moby[0xBC] += 2;
-            v = (int)(fast_cos(convert_integer_to_float((unsigned char)moby[0xBC] - 0x80) *
+            color_pulse_intensity = (int)(fast_cos(convert_integer_to_float((unsigned char)moby[0xBC] - 0x80) *
                                0.024543693f) *
                       50.0f) +
                 0x96;
             if (*(short *)(moby + 0xA6) == 0x215) {
-                *(int *)(moby + 0x90) = (v >> 1) | (v << 8) | (v << 16);
+                *(int *)(moby + 0x90) = (color_pulse_intensity >> 1) | (color_pulse_intensity << 8) | (color_pulse_intensity << 16);
             } else {
-                *(int *)(moby + 0x90) = v | (v << 8) | (v << 16);
+                *(int *)(moby + 0x90) = color_pulse_intensity | (color_pulse_intensity << 8) | (color_pulse_intensity << 16);
             }
             enqueue_callback_list_1_alt(render_environment_mapped_object, moby);
             if (vector_distance(moby + 0x10, D_L00_00166DC0) < 32.0f) {
@@ -74,8 +74,8 @@ void FUN_L00_0028e180(unsigned char *moby) {
             *(short *)(proximity_state_data + 0xC) = 0;
         }
         if (*(short *)(proximity_state_data + 0xC) != 0) {
-            int r = try_set_help_message(2, 0x53E4) != 0;
-            if ((*(int *)(((char *)&D_0013CAE4)) & 0x10) && r) {
+            int help_message_accepted = try_set_help_message(2, 0x53E4) != 0;
+            if ((*(int *)(((char *)&D_0013CAE4)) & 0x10) && help_message_accepted) {
                 if (current_level_index == 10 && hero.vehicle_mode == 1) {
                     moby[0x20] = 0x2A;
                     *(unsigned short *)(moby + 0x34) |= 0x41;
