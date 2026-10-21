@@ -360,12 +360,12 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
 DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
     DebrisMoby *spawned_moby;
-    DebrisVars *v;
+    DebrisVars *debris_vars;
 
     spawned_moby = create_moby(0x5E6);
     if (spawned_moby != NULL) {
-        v = spawned_moby->vars;
-        v->parent = src;
+        debris_vars = spawned_moby->vars;
+        debris_vars->parent = src;
         qcopy(&spawned_moby->pos, &src->pos);
         spawned_moby->rot = src->rot;
         spawned_moby->state = 0;
@@ -373,11 +373,11 @@ DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
         spawned_moby->h32 = 0xFF;
         spawned_moby->b31 = 1;
         spawned_moby->scale = spawned_moby->scale * scale;
-        fast_vec_normalize(v, dir, random_float_between(0.8f, 1.2f));
-        v->spin_x = randf_sym(0.0f, 0.008726646f);
-        v->spin_y = randf_sym(0.05235988f, 0.13962634f);
-        v->spin_z = randf_sym(0.0f, DEG_TO_RAD);
-        v->timer = scale_game_frames(200);
+        fast_vec_normalize(debris_vars, dir, random_float_between(0.8f, 1.2f));
+        debris_vars->spin_x = randf_sym(0.0f, 0.008726646f);
+        debris_vars->spin_y = randf_sym(0.05235988f, 0.13962634f);
+        debris_vars->spin_z = randf_sym(0.0f, DEG_TO_RAD);
+        debris_vars->timer = scale_game_frames(200);
         FUN_L00_00250df8(spawned_moby);
     }
     return spawned_moby;
