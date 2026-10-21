@@ -18,7 +18,7 @@ void patch_moby_gifs(void) {
     struct GifEntry *gif_entry;
     u8 *tex;
     u32 *gif;
-    struct TexRemap *r;
+    struct TexRemap *texture_remap;
 
     for (id = moby_class_rectify; *id >= 0; id++) {
         gif_entry = ((struct MobyClass *)moby_class_resources[*id])->gifs;
@@ -27,12 +27,12 @@ void patch_moby_gifs(void) {
             tex = gif_entry->tex;
             if (*tex != 0xFF) {
                 do {
-                    r = &moby_gs_loc_stash[*tex];
-                    if (r->lo != 0) {
-                        gif[12] = (gif[12] & 0xFFFFC000) | r->lo;
+                    texture_remap = &moby_gs_loc_stash[*tex];
+                    if (texture_remap->lo != 0) {
+                        gif[12] = (gif[12] & 0xFFFFC000) | texture_remap->lo;
                     }
-                    if (r->hi != 0) {
-                        gif[16] = (gif[16] & 0xFFFFC000) | r->hi;
+                    if (texture_remap->hi != 0) {
+                        gif[16] = (gif[16] & 0xFFFFC000) | texture_remap->hi;
                     }
                     tex++;
                     gif += 16;
