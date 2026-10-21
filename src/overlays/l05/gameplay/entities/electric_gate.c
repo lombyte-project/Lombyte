@@ -2154,7 +2154,7 @@ void television_update(struct Moby *moby) {
         TELEVISION_INITIALIZE = 0,
         TELEVISION_UPDATE_BOBBING = 1
     };
-    float v;
+    float bobbing_phase;
     char *data = (char *)moby->pvars;
     int g;
     moby->scale =
@@ -2174,9 +2174,9 @@ void television_update(struct Moby *moby) {
             moby->visible = 1;
             moby->flags &= 0xFFFE;
         }
-        v = fast_add_rotations(*(float *)data, frame_time * 0.87266463f);
-        *(float *)data = v;
-        moby->pos.z = *(float *)(data + 4) + fast_sin(v);
+        bobbing_phase = fast_add_rotations(*(float *)data, frame_time * 0.87266463f);
+        *(float *)data = bobbing_phase;
+        moby->pos.z = *(float *)(data + 4) + fast_sin(bobbing_phase);
         break;
     }
 }
