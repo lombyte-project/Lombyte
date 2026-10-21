@@ -395,12 +395,12 @@ int FUN_001fa6d0_272060(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L00_001B2154 __attribute__((section(".data")));
 unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x,
                                 float y, float z);
-unsigned char *FUN_L00_00272060(void *pos, int lifetime_frames, int color, int mode, int rotation_increment, float *initial_velocity, float x,
+unsigned char *FUN_L00_00272060(void *initial_position, int lifetime_frames, int color, int mode, int rotation_increment, float *initial_velocity, float x,
                                 float y, float z) {
     unsigned char *particle = p27fe00_alloc(0x35);
     if (particle) {
         unsigned char *particle_data = particle + 0x20;
-        qcopy(particle + 0x10, pos);
+        qcopy(particle + 0x10, initial_position);
         *(float *)(particle + 0x18) += 0.05f;
         *(int *)(particle + 4) = color;
         particle[3] = 0x48;
