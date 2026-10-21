@@ -943,7 +943,7 @@ void FUN_L17_002f54d8(int vertex_count, V3 *input_directions, V3 *vertex_positio
     int i;
     for (i = 0; i < vertex_count; i++) {
         float direction_dot_product;
-        float len;
+        float sphere_map_denominator;
         vertex_position.w = 1.0f;
         vertex_position.v.x = vertex_positions[i].x;
         vertex_position.v.y = vertex_positions[i].y;
@@ -960,10 +960,10 @@ void FUN_L17_002f54d8(int vertex_count, V3 *input_directions, V3 *vertex_positio
         fast_vec_sub(&reflection_mapping_vector, &normalized_position_delta, &reflection_mapping_vector);
         fast_vec_normalize(&reflection_mapping_vector, &reflection_mapping_vector, 1.0f);
         reflection_mapping_vector.v.z = reflection_mapping_vector.v.z + 1.0f;
-        len = fast_vec_length(&reflection_mapping_vector);
-        len = len + len;
-        out[i * 2] = (reflection_mapping_vector.v.x / len + 0.5f) * 4.0f;
-        out[i * 2 + 1] = (reflection_mapping_vector.v.y / len + 0.5f) * 4.0f;
+        sphere_map_denominator = fast_vec_length(&reflection_mapping_vector);
+        sphere_map_denominator = sphere_map_denominator + sphere_map_denominator;
+        out[i * 2] = (reflection_mapping_vector.v.x / sphere_map_denominator + 0.5f) * 4.0f;
+        out[i * 2 + 1] = (reflection_mapping_vector.v.y / sphere_map_denominator + 0.5f) * 4.0f;
     }
 }
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F71D0), where it is exact; names translated to the US level program. */
