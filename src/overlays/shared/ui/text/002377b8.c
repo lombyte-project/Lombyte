@@ -943,19 +943,19 @@ s32 FUN_L00_00239810(Hud *hud_element) {
     f32 ratio_x;
     f32 ratio_y;
     s32 alpha;
-    s32 w;
+    s32 panel_alpha;
     s16 *p;
     s32 sel;
     Pt *tab;
     s32 mode;
     s32 first_panel_half_width;
-    s32 b;
+    s32 second_panel_half_width;
     s32 x0;
     s32 yy;
-    s32 h1;
-    s32 h2;
+    s32 panel_cap_frame_index;
+    s32 panel_middle_frame_index;
     s32 i;
-    s32 r;
+    s32 health_icon_frame_index;
     Pt *e;
     u8 *visibility_counters;
 
@@ -983,7 +983,7 @@ s32 FUN_L00_00239810(Hud *hud_element) {
     else if (ratio_y < 0.0f)
         ratio_y = 0.0f;
     alpha = truncate_float_to_s32(ratio_y * 128.0f);
-    w = truncate_float_to_s32((f32)D_L00_0015F820 * ratio_x);
+    panel_alpha = truncate_float_to_s32((f32)D_L00_0015F820 * ratio_x);
     p = hud_element->p;
     sel = p[0] >> 1;
     mode = hero_max_health;
@@ -994,37 +994,37 @@ s32 FUN_L00_00239810(Hud *hud_element) {
     if (mode == 8) {
         tab = D_L00_0017E478;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
-        b = truncate_float_to_s32(ratio_x * 48.0f);
+        second_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
     } else if (mode == 5) {
         tab = D_L00_0017E460;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 32.0f);
-        b = truncate_float_to_s32(ratio_x * 16.0f);
+        second_panel_half_width = truncate_float_to_s32(ratio_x * 16.0f);
     } else {
-        b = 0;
+        second_panel_half_width = 0;
         tab = (Pt *)D_L00_0015F7F8;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
     }
     yy = y + D_L00_0015F810;
-    h1 = FUN_001ff960_c(0x7580, 1);
-    h2 = FUN_001ff960_c(0x7580, 0);
-    draw_hud_sprite_flipped(h1, x + first_panel_half_width, yy, D_L00_0015F81C, D_L00_0015F81C, w);
-    FUN_001ffc30_c(h2, x - first_panel_half_width, yy, first_panel_half_width * 2, D_L00_0015F81C, w);
-    FUN_001ffc30_c(h1, x - first_panel_half_width - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, w);
-    if (b != 0) {
+    panel_cap_frame_index = FUN_001ff960_c(0x7580, 1);
+    panel_middle_frame_index = FUN_001ff960_c(0x7580, 0);
+    draw_hud_sprite_flipped(panel_cap_frame_index, x + first_panel_half_width, yy, D_L00_0015F81C, D_L00_0015F81C, panel_alpha);
+    FUN_001ffc30_c(panel_middle_frame_index, x - first_panel_half_width, yy, first_panel_half_width * 2, D_L00_0015F81C, panel_alpha);
+    FUN_001ffc30_c(panel_cap_frame_index, x - first_panel_half_width - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, panel_alpha);
+    if (second_panel_half_width != 0) {
         yy += D_L00_0015F80C;
-        draw_hud_sprite_flipped(h1, x + b, yy, D_L00_0015F81C, D_L00_0015F81C, w);
-        x0 = x - b;
-        FUN_001ffc30_c(h2, x0, yy, b * 2, D_L00_0015F81C, w);
-        FUN_001ffc30_c(h1, x0 - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, w);
+        draw_hud_sprite_flipped(panel_cap_frame_index, x + second_panel_half_width, yy, D_L00_0015F81C, D_L00_0015F81C, panel_alpha);
+        x0 = x - second_panel_half_width;
+        FUN_001ffc30_c(panel_middle_frame_index, x0, yy, second_panel_half_width * 2, D_L00_0015F81C, panel_alpha);
+        FUN_001ffc30_c(panel_cap_frame_index, x0 - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, panel_alpha);
     }
     for (i = 0; i < mode; i++) {
-        r = FUN_001ff960_c(0x7536, sel);
-        FUN_L00_0023b120_c(hud_element, r, x + tab[i].x, y + tab[i].y, 1, alpha);
+        health_icon_frame_index = FUN_001ff960_c(0x7536, sel);
+        FUN_L00_0023b120_c(hud_element, health_icon_frame_index, x + tab[i].x, y + tab[i].y, 1, alpha);
         if (sel != 0x1E) {
-            r = FUN_001ff960_c(0x7536, 0x1E);
-            FUN_L00_0023b120_c(hud_element, r, x + tab[i].x, y + tab[i].y, 1, alpha);
-            r = FUN_001ff960_c(0x7536, 0x1F);
-            FUN_001ffc30_c(r, x + tab[i].x + 0xE, y + tab[i].y - 0x11, 0x22, 0x22,
+            health_icon_frame_index = FUN_001ff960_c(0x7536, 0x1E);
+            FUN_L00_0023b120_c(hud_element, health_icon_frame_index, x + tab[i].x, y + tab[i].y, 1, alpha);
+            health_icon_frame_index = FUN_001ff960_c(0x7536, 0x1F);
+            FUN_001ffc30_c(health_icon_frame_index, x + tab[i].x + 0xE, y + tab[i].y - 0x11, 0x22, 0x22,
                            truncate_float_to_s32((f32)(p[1] >> 4) * ratio_y));
             if (cnt == i + 1)
                 sel = 0x1E;
