@@ -23,10 +23,10 @@ void random_vector(float *out, float lo, float hi) {
 
 /* Cubic interpolation through four points a..d at t. */
 float cubic_hermite_scalar(float a, float b, float c, float d, float t) __asm__("FUN_L00_00257e20");
-float cubic_hermite_scalar(float start_slope_reference_value, float start_value, float end_value, float end_slope_reference_value, float t) {
+float cubic_hermite_scalar(float start_slope_reference_value, float start_value, float end_value, float end_slope_reference_value, float interpolation_fraction) {
     float cubic_coefficient = (end_slope_reference_value - end_value) - (start_slope_reference_value - start_value);
     float quadratic_coefficient = (start_slope_reference_value - start_value) - cubic_coefficient;
-    float t_squared = t * t;
-    float t_cubed = t_squared * t;
-    return cubic_coefficient * t_cubed + quadratic_coefficient * t_squared + (end_value - start_slope_reference_value) * t + start_value;
+    float t_squared = interpolation_fraction * interpolation_fraction;
+    float t_cubed = t_squared * interpolation_fraction;
+    return cubic_coefficient * t_cubed + quadratic_coefficient * t_squared + (end_value - start_slope_reference_value) * interpolation_fraction + start_value;
 }
