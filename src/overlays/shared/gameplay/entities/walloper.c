@@ -1282,13 +1282,13 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
         distance = fast_vec_dist(position, target);
         if (distance < 2.5f) {
             float toward;
-            char *g1 = ((char *)&hero);
-            moby = *(char **)(g1 + 0x2080);
-            toward = fast_arc_tan_c(*(float *)(candidate + 0x10) - *(float *)(g1 + 0x80),
-                                   *(float *)(candidate + 0x14) - *(float *)(g1 + 0x84));
+            char *close_range_hero_base = ((char *)&hero);
+            moby = *(char **)(close_range_hero_base + 0x2080);
+            toward = fast_arc_tan_c(*(float *)(candidate + 0x10) - *(float *)(close_range_hero_base + 0x80),
+                                   *(float *)(candidate + 0x14) - *(float *)(close_range_hero_base + 0x84));
             if (fast_difference_between_rotations_c(*(float *)(moby + 0x48), toward) < 1.0471976f &&
                 absolute_float(position[2] - target[2]) < 2.0f &&
-                !collision_line((Vec4f *)position, (Vec4f *)target, 6, *(char **)(g1 + 0x2080), 0)) {
+                !collision_line((Vec4f *)position, (Vec4f *)target, 6, *(char **)(close_range_hero_base + 0x2080), 0)) {
                 selected_target[0] = (int)candidate;
                 *pitch = -elevation;
                 *heading = angle;
@@ -1298,8 +1298,8 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
         if (distance > limit)
             continue;
         {
-            char *g2 = ((char *)&hero);
-            build_spherical_offset(offset, distance, *heading, *pitch + *(float *)(g2 + 0x2E4) * 0.5f);
+            char *aim_offset_hero_base = ((char *)&hero);
+            build_spherical_offset(offset, distance, *heading, *pitch + *(float *)(aim_offset_hero_base + 0x2E4) * 0.5f);
         }
         add_vector_xyz_c4(offset, offset, position);
         apparentAngle = fast_arc_sin(fast_vec_dist(offset, target) / (distance + distance));
