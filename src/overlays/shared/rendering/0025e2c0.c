@@ -56,13 +56,13 @@ void load_display_text_resource_entry(void *arg0, s32 *arg1) __asm__("FUN_00214b
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern int *D_L15_001B2770 NOT_SDA;
-unsigned char *FUN_L15_002647f0(void *pos, float *p_vector, float *c_vector, int particle_color, int e, int particle_frame_count, int g, int h,
+unsigned char *FUN_L15_002647f0(void *particle_position, float *p_vector, float *c_vector, int particle_color, int e, int particle_frame_count, int g, int h,
                                 char *owner) {
     unsigned char *particle = create_part(0x47);
     if (particle != 0) {
         int *packed_p_vector, *packed_c_vector;
         float p_vector_scratch[4], c_vector_scratch[4];
-        qcopy(particle + 0x10, pos);
+        qcopy(particle + 0x10, particle_position);
         packed_p_vector = (int *)(particle + 0x20);
         packed_c_vector = (int *)(particle + 0x24);
         *(int *)(particle + 4) = particle_color;
