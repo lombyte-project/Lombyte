@@ -1283,28 +1283,28 @@ extern void build_quaternion_from_axis_angle(void *, void *, float) __asm__("FUN
 
 extern int D_L00_001613AC __attribute__((sda));
 extern float D_L00_001613A8 __attribute__((sda));
-int FUN_L00_002a7210(void *ov, void *tv, float attraction_yaw_angle, float b) {
+int FUN_L00_002a7210(void *ov, void *tv, float attraction_yaw_angle, float attraction_pitch_angle) {
     char *bolt_moby = ov;
     char *target_moby = tv;
     char *bolt_vars = *(char **)(bolt_moby + 0x78);
-    int r, last, now;
+    int sound_cooldown_frames, last, now;
     float k;
     float m[3][4] __attribute__((aligned(16)));
 
     if (*(unsigned char *)(bolt_moby + 0x20) == 4) {
         return 0;
     }
-    r = fr_2a7210(3);
+    sound_cooldown_frames = fr_2a7210(3);
     last = D_L00_001613AC;
     now = D_15F5CC_2a7210;
-    if (last + r < now || now < last) {
+    if (last + sound_cooldown_frames < now || now < last) {
         D_L00_001613AC = now;
         allocate_voice_for_target_entry(0, 0x20, bolt_moby);
     } else {
         if (attraction_yaw_angle == 0.0f)
             attraction_yaw_angle = rndf_2a7210(-30.0f, 30.0f) * DEG_TO_RAD;
-        if (b == 0.0f)
-            b = rndf_2a7210(0.0f, 30.0f) * DEG_TO_RAD;
+        if (attraction_pitch_angle == 0.0f)
+            attraction_pitch_angle = rndf_2a7210(0.0f, 30.0f) * DEG_TO_RAD;
     }
     if (*(unsigned char *)(bolt_moby + 0x20) == 3) {
         vu_euler_rotation_basis(m, bolt_vars + 0x10);
@@ -1312,7 +1312,7 @@ int FUN_L00_002a7210(void *ov, void *tv, float attraction_yaw_angle, float b) {
     }
     {
         *(float *)(bolt_vars + 0x4C) = attraction_yaw_angle;
-        *(float *)(bolt_vars + 0x48) = b;
+        *(float *)(bolt_vars + 0x48) = attraction_pitch_angle;
         *(int *)(bolt_vars + 0x64) = 0;
         *(char **)(bolt_vars + 0x60) = target_moby;
         subtract_vector_xyz(m[1], target_moby + 0x10, bolt_moby + 0x10);
