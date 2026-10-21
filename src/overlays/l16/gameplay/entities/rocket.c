@@ -2657,7 +2657,7 @@ void door_update(unsigned char *moby) {
     };
     char *door_data = *(char **)(moby + 0x78);
     char *pos;
-    char buf[16];
+    char position_offset[16];
     switch (moby[0x20]) {
     case DOOR_STATE_INITIALIZE:
         qcopy(door_data, moby + 0x10);
@@ -2668,8 +2668,8 @@ void door_update(unsigned char *moby) {
         qcopy(pos, door_data);
         advance_accelerated_scalar(*(float *)(door_data + 0x14), frame_time_sq * 4.0f, frame_time_sq * 4.0f,
                                    D_0015ED6C * 8.0f, (float *)(door_data + 0x18), (float *)(door_data + 0x10));
-        normalize_vector_xyz(buf, moby + 0xC0, *(float *)(door_data + 0x18));
-        add_vector_xyz(pos, pos, buf);
+        normalize_vector_xyz(position_offset, moby + 0xC0, *(float *)(door_data + 0x18));
+        add_vector_xyz(pos, pos, position_offset);
         if (*(float *)(door_data + 0x18) == *(float *)(door_data + 0x14)) {
             moby[0x20] = 2;
         }
