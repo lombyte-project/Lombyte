@@ -191,12 +191,12 @@ void FUN_L15_002007d8(void) {
                          (float *)(&base->unk6A8), (float *)(&base->unk6AC));
         position_target = ((char *)base->unk86C);
         if (position_target != 0) {
-            char *cam;
-            cam = ((char *)base->moby);
-            qcopy(position_target + 0x10, cam + 0x10);
+            char *hero_moby;
+            hero_moby = ((char *)base->moby);
+            qcopy(position_target + 0x10, hero_moby + 0x10);
             *(u128 *)position_offset = 0;
             position_offset[2] = 0.21f;
-            transform_vector_by_basis(position_offset, position_offset, cam + 0xC0);
+            transform_vector_by_basis(position_offset, position_offset, hero_moby + 0xC0);
             euler_rotation_matrix(rotation_matrix, &D_L15_0017ACC0_d);
             transform_vector(position_offset, position_offset, rotation_matrix);
             add_vector_xyz(((char *)base->unk86C) + 0x10, ((char *)base->unk86C) + 0x10, position_offset);
