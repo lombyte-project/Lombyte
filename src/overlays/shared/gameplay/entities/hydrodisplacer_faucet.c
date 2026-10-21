@@ -952,20 +952,20 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 
 void FUN_L05_00319740(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
-    float wobble_phase, wobble_result, w;
+    float wobble_phase, wobble_result, wobble_phase_step;
     qcopy(moby + 0x10, moby_vars + 0x60);
     qcopy(moby + 0x40, moby_vars + 0x70);
     wobble_phase = fast_add_rotations(*(float *)(moby_vars + 0xC8), frame_time * 2.0943951f);
     *(float *)(moby_vars + 0xC8) = wobble_phase;
     wobble_result = fast_sin(wobble_phase);
-    w = frame_time * 1.6929693f;
+    wobble_phase_step = frame_time * 1.6929693f;
     *(float *)(moby + 0x18) += wobble_result * 0.25f;
-    wobble_phase = fast_add_rotations(*(float *)(moby_vars + 0xCC), w);
+    wobble_phase = fast_add_rotations(*(float *)(moby_vars + 0xCC), wobble_phase_step);
     *(float *)(moby_vars + 0xCC) = wobble_phase;
     wobble_result = fast_add_rotations(*(float *)(moby + 0x44), fast_sin(wobble_phase) * 0.08726646f);
-    w = frame_time * 0.9250245f;
+    wobble_phase_step = frame_time * 0.9250245f;
     *(float *)(moby + 0x44) = wobble_result;
-    wobble_phase = fast_add_rotations(*(float *)(moby_vars + 0xD0), w);
+    wobble_phase = fast_add_rotations(*(float *)(moby_vars + 0xD0), wobble_phase_step);
     *(float *)(moby_vars + 0xD0) = wobble_phase;
     *(float *)(moby + 0x40) =
         fast_add_rotations(*(float *)(moby + 0x40), fast_sin(wobble_phase) * 0.08726646f);
