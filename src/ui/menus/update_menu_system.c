@@ -78,10 +78,10 @@ void update_menu_system(void) {
     if (menu_system.state == 1) {
         menu_system.timer = (menu_system.timer < 1) ? 0 : menu_system.timer - 1;
         if (menu_system.timer == 0) {
-            struct MenuPage *o8 = menu_system.next;
+            struct MenuPage *incoming_page = menu_system.next;
             menu_system.next = 0;
-            menu_system.current = o8;
-            menu_system.state = o8->state;
+            menu_system.current = incoming_page;
+            menu_system.state = incoming_page->state;
             for (i = 0; i < 14; i++) {
                 obj = menu_system.current->screens[i];
                 if (obj != 0 && obj->enter != 0) {
