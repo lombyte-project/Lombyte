@@ -1001,7 +1001,7 @@ void FUN_L08_002f70a0(struct Moby *moby) {
     Vec4 pos;
     f32 view, dist, fade;
     s32 hidden;
-    PointLight *l;
+    PointLight *point_light_slot;
     Vec4f *at;
     int i;
 
@@ -1064,10 +1064,10 @@ void FUN_L08_002f70a0(struct Moby *moby) {
                                             light_vars->intensity * convert_integer_to_float(light_vars->green) / 100.0f,
                                             light_vars->intensity * convert_integer_to_float(light_vars->blue) / 100.0f);
             } else {
-                l = &D_L08_00180AC0[light_vars->light];
-                l->red = light_vars->intensity * convert_integer_to_float(light_vars->red) / 100.0f;
-                l->green = light_vars->intensity * convert_integer_to_float(light_vars->green) / 100.0f;
-                l->blue = light_vars->intensity * convert_integer_to_float(light_vars->blue) / 100.0f;
+                point_light_slot = &D_L08_00180AC0[light_vars->light];
+                point_light_slot->red = light_vars->intensity * convert_integer_to_float(light_vars->red) / 100.0f;
+                point_light_slot->green = light_vars->intensity * convert_integer_to_float(light_vars->green) / 100.0f;
+                point_light_slot->blue = light_vars->intensity * convert_integer_to_float(light_vars->blue) / 100.0f;
             }
         }
     } else if (light_vars->light != -1) {
