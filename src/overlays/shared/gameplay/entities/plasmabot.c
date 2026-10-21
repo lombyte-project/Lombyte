@@ -1210,8 +1210,8 @@ unsigned long get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
 void FUN_L14_002b3a20(char *m) {
     float pos[4];
     Pk_2af4a0 pk;
-    float v[4];
-    float w[4];
+    float camera_displacement[4];
+    float position_offset[4];
     float len;
     u32 col;
     int j;
@@ -1224,8 +1224,8 @@ void FUN_L14_002b3a20(char *m) {
     pk.a = 0;
     vu1_add_g_sregister(0x4A, 0);
     vu1_add_g_sregister(0x47, 0x51001);
-    subtract_vector_xyz(v, ((char *)&D_L14_001674C0), pos);
-    len = vector_length_xyz(v);
+    subtract_vector_xyz(camera_displacement, ((char *)&D_L14_001674C0), pos);
+    len = vector_length_xyz(camera_displacement);
     if (0.0f < len) {
         float position_offset_distance = D_L14_001614FC;
         float unclamped_offset_distance = len - D_L14_00161500;
@@ -1234,8 +1234,8 @@ void FUN_L14_002b3a20(char *m) {
             if (unclamped_offset_distance < 0.0f)
                 position_offset_distance = 0.0f;
         }
-        normalize_vector_xyz(w, v, position_offset_distance);
-        add_vector_xyz(pos, pos, w);
+        normalize_vector_xyz(position_offset, camera_displacement, position_offset_distance);
+        add_vector_xyz(pos, pos, position_offset);
     }
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
