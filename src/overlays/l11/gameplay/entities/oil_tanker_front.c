@@ -318,8 +318,8 @@ extern int FUN_L00_002db8f8(void *);
 
 /* Grabbed check: while held, park the moby in state 0x14 (remembering its state) unless it cannot be grabbed; restore the saved state once released. */
 int FUN_L11_00316160(struct Moby *moby) {
-    int r = FUN_L00_002db8f8(moby);
-    if (r != 0) {
+    int grab_check_result = FUN_L00_002db8f8(moby);
+    if (grab_check_result != 0) {
         if (moby->state == 2 || moby->state == 4 || moby->state == 5 || moby->state == 6 ||
             moby->state == 0xE || moby->state == 0xF || moby->state == 0x10 || moby->state == 0x14) {
             if (moby->state != 0x14) {
@@ -327,12 +327,12 @@ int FUN_L11_00316160(struct Moby *moby) {
                 moby->state = 0x14;
             }
         } else {
-            r = 0;
+            grab_check_result = 0;
         }
     } else if (moby->state == 0x14) {
         moby->state = moby->command;
     }
-    return r;
+    return grab_check_result;
 }
 #define NOT_SDA
 
