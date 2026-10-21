@@ -2571,18 +2571,18 @@ extern int FUN_L00_0025e3b8(void *);
 extern void *D_L00_00173E58_d __asm__("D_L00_00173E58") __attribute__((section(".data")));
 
 void FUN_L00_0020a318(void) {
-    char *g = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
+    char *hero_state_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
     char *state_ease_table;
     char *hit_ease_table;
     char *hero_position;
-    char *g2;
+    char *hit_hero_state_base;
     float probe_z_offset, probe_end_radius, distance_based_ease_value, state_frame_scale_squared, frame_scale_squared;
-    *(short *)(g + 0x22C8) = 0;
-    if (*(unsigned char *)(g + 0x20AB) == 0)
+    *(short *)(hero_state_base + 0x22C8) = 0;
+    if (*(unsigned char *)(hero_state_base + 0x20AB) == 0)
         return;
     if (hero_slot_item_id(0) == 0x1A)
         return;
-    if (*(int *)(g + 0x2084) == 0x81) {
+    if (*(int *)(hero_state_base + 0x2084) == 0x81) {
         state_ease_table = D_L00_0017A680_d;
         state_frame_scale_squared = frame_scale_sq;
         *(float *)(state_ease_table + 0x694) = -0.349065840f;
@@ -2590,14 +2590,14 @@ void FUN_L00_0020a318(void) {
         *(float *)(state_ease_table + 0x6D8) = state_frame_scale_squared * 0.3f;
     }
     probe_end_radius = 1.29999995f;
-    if (*(short *)(g + 0x22C8) != 0)
+    if (*(short *)(hero_state_base + 0x22C8) != 0)
         probe_end_radius = 1.5999999f;
     probe_z_offset = 0.569999993f;
-    if (*(unsigned char *)(g + 0x20A8) != 0)
+    if (*(unsigned char *)(hero_state_base + 0x20A8) != 0)
         probe_z_offset = 0.699999988f;
     if (FUN_L00_0020a240_u(0, probe_z_offset, probe_end_radius) == 0)
         return;
-    if (*(unsigned char *)(g + 0x20A8) != 0) {
+    if (*(unsigned char *)(hero_state_base + 0x20A8) != 0) {
         if (D_L00_00173E58_d != 0) {
             if (FUN_L00_0025e3b8(D_L00_00173E58_d) != 0)
                 return;
@@ -2609,8 +2609,8 @@ void FUN_L00_0020a318(void) {
     *(float *)(hit_ease_table + 0x6D8) = frame_scale_squared * 0.3f;
     hero_position = (char *)((unsigned char *)&D_0013E533) + 0xE9D;
     distance_based_ease_value = fast_vec_dist(hero_position, collision_hit_point);
-    g2 = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
-    distance_based_ease_value = distance_based_ease_value - *(float *)(g2 + 0x234);
+    hit_hero_state_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
+    distance_based_ease_value = distance_based_ease_value - *(float *)(hit_hero_state_base + 0x234);
     distance_based_ease_value = (1.29999995f - distance_based_ease_value) / 1.29999995f;
     distance_based_ease_value = distance_based_ease_value * 1.25f;
     distance_based_ease_value = distance_based_ease_value * -1.22173047f;
@@ -2619,7 +2619,7 @@ void FUN_L00_0020a318(void) {
     if (distance_based_ease_value < -1.22173047f)
         distance_based_ease_value = -1.22173047f;
     *(float *)(hit_ease_table + 0x694) = distance_based_ease_value;
-    *(short *)(g2 + 0x22C8) = 1;
+    *(short *)(hit_hero_state_base + 0x22C8) = 1;
 }
 extern char D_0013F350_0020a500[] __asm__("D_0013F350");
 /* Clears the words at 0x1004/0x1008 of ((char *)&hero) and four 0x10-byte slots from 0x1024. */
