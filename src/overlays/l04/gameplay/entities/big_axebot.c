@@ -3124,12 +3124,12 @@ void platform_booster_update(struct Moby *moby) {
         PLATFORM_BOOSTER_STATE_ADVANCE_ANIMATION = 2
     };
     DoorVars *door_vars = (DoorVars *)moby->pvars;
-    f32 prev;
+    f32 previous_anim_time;
     struct Moby *lever;
     LeverVars *lv;
     u8 *slot;
 
-    prev = moby->anim_time;
+    previous_anim_time = moby->anim_time;
     if (door_vars == NULL) {
         mark_moby_for_removal(moby);
         return;
@@ -3159,7 +3159,7 @@ void platform_booster_update(struct Moby *moby) {
                     hero.ground_moby == &level_mobys[door_vars->target])) {
             moby->state = 2;
         }
-        if (moby->anim_time != prev) {
+        if (moby->anim_time != previous_anim_time) {
             if (lv->travel != 1.0f && lv->travel != 0.0f) {
                 if (FUN_L00_0028d8c0(moby, door_vars->voice) == 0) {
                     door_vars->voice = start_moby_sound(0, 4, (int)moby);
@@ -3190,7 +3190,7 @@ void platform_booster_update(struct Moby *moby) {
         struct Moby *link;
         LeverVars *link_vars;
 
-        moby->anim_time = prev + frame_time * 0.5f;
+        moby->anim_time = previous_anim_time + frame_time * 0.5f;
         if (1.0f < moby->anim_time) {
             moby->anim_time = 1.0f;
         }
@@ -3209,7 +3209,7 @@ void platform_booster_update(struct Moby *moby) {
             link_vars->travel = 1.0f - moby->anim_time;
             link_vars->spin = link_vars->travel * (link_vars->rate * 6.2831855f);
         }
-        if (moby->anim_time != prev) {
+        if (moby->anim_time != previous_anim_time) {
             if (link_vars->travel == 1.0f || link_vars->travel == 0.0f) {
                 if (FUN_L00_0028d8c0(moby, door_vars->voice) != 0) {
                     if (door_vars->voice != -1) {
