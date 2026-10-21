@@ -452,7 +452,7 @@ void FUN_L00_00276bd0(void) {
     Mth *active_callback_object;
     Ent *t;
     NO *obj;
-    s32 v;
+    s32 scene_state;
     s32 i, n, previous_decode_mode;
     s32 flag;
     s32 k;
@@ -542,8 +542,8 @@ void FUN_L00_00276bd0(void) {
         sound_update();
         return;
     }
-    v = D_L00_001B9CF0.state;
-    if (v == 0 || v == 0xA || v == 0xE || v == 0x11 || v == 0x21 || v == 0x2D || v == 0x23) {
+    scene_state = D_L00_001B9CF0.state;
+    if (scene_state == 0 || scene_state == 0xA || scene_state == 0xE || scene_state == 0x11 || scene_state == 0x21 || scene_state == 0x2D || scene_state == 0x23) {
         FUN_L00_00276368();
     }
     if ((mode_freeze_flags & 1) && !(level_timer < 8)) {
