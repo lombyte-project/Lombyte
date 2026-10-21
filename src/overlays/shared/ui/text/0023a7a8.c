@@ -113,51 +113,51 @@ int FUN_L00_0023aaa8(O_23aaa8 *hud_frame_state) {
         HUD_FRAME_MODE_PING_PONG_RESTART = 3
     };
     T_23aaa8 *frame_sequence = &D_L00_0017E4F4[hud_frame_state->id];
-    int r;
+    int frame_index;
     int k, restart_start_offset;
-    r = 0;
+    frame_index = 0;
     if (frame_sequence->id != 0xFFFF) {
         switch (hud_frame_state->mode) {
         case HUD_FRAME_MODE_STATIC:
-            r = frame_sequence->base;
+            frame_index = frame_sequence->base;
             break;
         case HUD_FRAME_MODE_LOOP:
-            r = frame_sequence->base + ((D_L00_0015F5CC_23aaa8 - hud_frame_state->start) / frame_sequence->rate) % frame_sequence->n;
+            frame_index = frame_sequence->base + ((D_L00_0015F5CC_23aaa8 - hud_frame_state->start) / frame_sequence->rate) % frame_sequence->n;
             break;
         case HUD_FRAME_MODE_PING_PONG:
-            r = (D_L00_0015F5CC_23aaa8 - hud_frame_state->start) / frame_sequence->rate;
+            frame_index = (D_L00_0015F5CC_23aaa8 - hud_frame_state->start) / frame_sequence->rate;
             k = frame_sequence->n * 2;
-            r = r % (k - 2);
-            if (r >= frame_sequence->n) {
-                int b = r + 2;
-                r = k - b;
+            frame_index = frame_index % (k - 2);
+            if (frame_index >= frame_sequence->n) {
+                int b = frame_index + 2;
+                frame_index = k - b;
             }
-            r += frame_sequence->base;
+            frame_index += frame_sequence->base;
             break;
         case HUD_FRAME_MODE_PING_PONG_RESTART:
             if (hud_frame_state->start < D_L00_0015F5CC_23aaa8) {
                 int doubled_frame_count;
-                r = (D_L00_0015F5CC_23aaa8 - hud_frame_state->start) / frame_sequence->rate;
+                frame_index = (D_L00_0015F5CC_23aaa8 - hud_frame_state->start) / frame_sequence->rate;
                 doubled_frame_count = frame_sequence->n * 2;
-                if (r < doubled_frame_count - 2) {
-                    if (r >= frame_sequence->n) {
-                        int b = r + 2;
-                        r = doubled_frame_count - b;
+                if (frame_index < doubled_frame_count - 2) {
+                    if (frame_index >= frame_sequence->n) {
+                        int b = frame_index + 2;
+                        frame_index = doubled_frame_count - b;
                     }
-                    r += frame_sequence->base;
+                    frame_index += frame_sequence->base;
                 } else {
-                    r = frame_sequence->base;
+                    frame_index = frame_sequence->base;
                     restart_start_offset = FUN_001f96f8_23aaa8(0xA);
                     hud_frame_state->start = frame_sequence->n * 2 + restart_start_offset + FUN_00213260_23aaa8(FUN_001f96f8_23aaa8(0x1E));
                 }
             } else {
-                r = hud_frame_state->frame;
+                frame_index = hud_frame_state->frame;
             }
             break;
         }
     }
-    hud_frame_state->frame = r;
-    return r;
+    hud_frame_state->frame = frame_index;
+    return frame_index;
 }
 typedef struct E_23ac78 {
     int a;
