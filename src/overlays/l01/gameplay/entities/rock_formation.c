@@ -453,7 +453,7 @@ void update_birdbot_projectile(DropMoby *) __asm__("FUN_L01_002fa4c0");
 void update_birdbot_projectile(DropMoby *projectile) {
     DropVars *projectile_vars;
     u128 *pos;
-    Vec4 prev;
+    Vec4 previous_position;
     DropProbe probe;
     u128 burst_position;
     f32 scaled_ten;
@@ -465,7 +465,7 @@ void update_birdbot_projectile(DropMoby *projectile) {
 
     projectile_vars = projectile->vars;
     pos = &projectile->pos.q;
-    qcopy(&prev, pos);
+    qcopy(&previous_position, pos);
     zero = 0.0f;
     one = 1.0f;
     ten = 10.0f;
@@ -493,7 +493,7 @@ void update_birdbot_projectile(DropMoby *projectile) {
         burst_position = projectile->pos.q;
         FUN_L01_002fa1b0(projectile, &burst_position, 0, 0.5f, zero);
         mark_moby_for_removal(projectile);
-    } else if (collision_line(&prev, pos, 0, projectile_vars->coll, &probe) != 0) {
+    } else if (collision_line(&previous_position, pos, 0, projectile_vars->coll, &probe) != 0) {
         qcopy(pos, &D_L01_001742E0);
         burst_position = projectile->pos.q;
         FUN_L01_002fa1b0(projectile, &burst_position, 0, 0.5f, zero);
