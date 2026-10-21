@@ -1104,7 +1104,7 @@ void FUN_L00_00217658(void);
 void FUN_L00_00217658(void) {
     f32 dir[4];
     f32 delta[4];
-    f32 mat[12];
+    f32 item_rotation_matrix[12];
     f32 cam_mat[12];
     f32 out_mat[16];
     struct Moby *target;
@@ -1155,17 +1155,17 @@ void FUN_L00_00217658(void) {
         build_spherical_offset(launched_item_vars->unk40, 1.0f, hero.aim_yaw, hero.aim_pitch);
     }
     clear_u64_value_c(dir);
-    rotmat_e(mat, dir);
+    rotmat_e(item_rotation_matrix, dir);
     if (aimed) {
         dir[0] = player_camera[0x150 / 4];
         dir[1] = player_camera[0x154 / 4];
         dir[2] = player_camera[0x158 / 4];
         rotmat_e(cam_mat, dir);
-        multiply_matrix3x3(mat, cam_mat, mat);
+        multiply_matrix3x3(item_rotation_matrix, cam_mat, item_rotation_matrix);
     } else {
-        multiply_matrix3x3(mat, &hero.moby->rot_row0, mat);
+        multiply_matrix3x3(item_rotation_matrix, &hero.moby->rot_row0, item_rotation_matrix);
     }
-    copy_matrix_rotation(out_mat, mat);
+    copy_matrix_rotation(out_mat, item_rotation_matrix);
     matrix_to_euler(out_mat, &item->rot);
     launched_item_vars->unk64 = 0;
     launched_item_vars->unk60 = frame_time * 23.0f;
