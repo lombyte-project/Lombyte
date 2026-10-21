@@ -1811,9 +1811,9 @@ stop:
         return;
     }
     if (params->timer == 0) {
-        u8 *g = (u8 *)&D_L00_00166C80;
-        params->start_lateral_stiffness = FOLLOW_CAM_STATE(*(struct UpdateCam **)(g + 0x180))->follow.lateral_stiffness;
-        params->start_lateral_damping = FOLLOW_CAM_STATE(*(struct UpdateCam **)(g + 0x180))->follow.lateral_damping;
+        u8 *camera_globals = (u8 *)&D_L00_00166C80;
+        params->start_lateral_stiffness = FOLLOW_CAM_STATE(*(struct UpdateCam **)(camera_globals + 0x180))->follow.lateral_stiffness;
+        params->start_lateral_damping = FOLLOW_CAM_STATE(*(struct UpdateCam **)(camera_globals + 0x180))->follow.lateral_damping;
     }
     /* One word over type and timer: type 5 on its first frame snaps the camera. */
     if (*(s32 *)&params->type == 5) {
