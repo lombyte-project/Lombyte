@@ -183,7 +183,7 @@ void FUN_L18_002dc260(struct Moby *moby) {
     char hit_descriptor[0x30];
     float hit_direction_vector[4];
     float *moby_vars = (float *)moby->pvars;
-    char *tgt;
+    char *target_position;
     char *pos;
     int flag;
 
@@ -192,14 +192,14 @@ void FUN_L18_002dc260(struct Moby *moby) {
         return;
     }
     pos = &moby->pos;
-    tgt = D_0013E533 + 0xE9D;
-    if (vector_distance(pos, tgt) < moby_vars[0] + 0.5f) {
-        fast_vec_sub(hit_direction_vector, tgt, pos);
+    target_position = D_0013E533 + 0xE9D;
+    if (vector_distance(pos, target_position) < moby_vars[0] + 0.5f) {
+        fast_vec_sub(hit_direction_vector, target_position, pos);
         hit_direction_vector[2] = 0.0f;
         fast_vec_normalize(hit_direction_vector, hit_direction_vector, frame_time * 4.0f);
         hit_direction_vector[2] = frame_time * 4.0f;
         make_hit_descriptor(hit_descriptor, (int)moby, 0x10001, hit_direction_vector, 1.0f);
-        FUN_L00_00259a88(*(int *)(tgt + 0x2000), hit_descriptor);
+        FUN_L00_00259a88(*(int *)(target_position + 0x2000), hit_descriptor);
     }
     flag = game_frame & 4;
     moby_vars[1] = moby_vars[1] + D_L18_00161CA0 * frame_time;
