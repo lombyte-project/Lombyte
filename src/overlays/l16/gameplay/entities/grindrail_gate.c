@@ -877,7 +877,7 @@ void FUN_L16_002e5010(struct Moby *gate_moby) {
         GRINDRAIL_GATE_WAIT_FOR_COMMAND_TIMEOUT = 2
     };
     char *command_timer = (char *)gate_moby->pvars;
-    char *g;
+    char *hero_position;
     float pos[16];
     float mat[4];
     float glow_cycle_phase;
@@ -891,10 +891,10 @@ void FUN_L16_002e5010(struct Moby *gate_moby) {
         gate_moby->update_dist = 0xFF;
         break;
     case GRINDRAIL_GATE_CHECK_HERO_BOUNDS:
-        g = (char *)&hero.motion.pos;
-        if (FUN_001f9b48(&gate_moby->pos, g) < 16.0f) {
+        hero_position = (char *)&hero.motion.pos;
+        if (FUN_001f9b48(&gate_moby->pos, hero_position) < 16.0f) {
             transpose_rotation_matrix(pos, &gate_moby->rot_row0);
-            subtract_vector_xyz(mat, g, &gate_moby->pos);
+            subtract_vector_xyz(mat, hero_position, &gate_moby->pos);
             transform_vector(mat, mat, pos);
             if (D_L16_001D9750[0] < mat[0] && mat[0] < D_L16_001D9750[1] &&
                 D_L16_001D9750[2] < mat[1] && mat[1] < D_L16_001D9750[3] &&
