@@ -1534,7 +1534,7 @@ int FUN_L00_002e4180(u128 *input_position, float radial_distance_extension) {
     char *selected_record;
     char *reference_position;
     char *extended_position;
-    float l, inv;
+    float selected_record_vector_length, inv;
     lookup_position_copy = *input_position;
     {
         int *lookup_result = (int *)FUN_L00_001ee1b0_002e4180(&lookup_position_copy);
@@ -1544,11 +1544,11 @@ int FUN_L00_002e4180(u128 *input_position, float radial_distance_extension) {
     }
     reference_position = selected_record + 0x30;
     FUN_001f9a28_002e4180(&position_delta, input_position, reference_position);
-    l = FUN_001f9af0_002e4180(selected_record);
+    selected_record_vector_length = FUN_001f9af0_002e4180(selected_record);
     inv = 1.0f / FUN_001f9af0_002e4180(&position_delta);
     extended_position = D_L00_00173E70_002e4180;
-    FUN_001f9a68_002e4180(extended_position, &position_delta, (l + radial_distance_extension) * inv);
-    FUN_001f9a68_002e4180(extended_position - 0x10, &position_delta, l * inv);
+    FUN_001f9a68_002e4180(extended_position, &position_delta, (selected_record_vector_length + radial_distance_extension) * inv);
+    FUN_001f9a68_002e4180(extended_position - 0x10, &position_delta, selected_record_vector_length * inv);
     FUN_001f9a10_002e4180(extended_position, extended_position, reference_position);
     FUN_001f9a10_002e4180(extended_position - 0x10, extended_position - 0x10, reference_position);
     return 1;
