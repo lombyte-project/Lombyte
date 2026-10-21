@@ -983,12 +983,12 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 unsigned char *FUN_L06_00300c60(char *unused_source_moby, float *pos, float *vel) {
     u128 position_copy, velocity_copy;
     u128 *pp = &position_copy;
-    u128 *pv = &velocity_copy;
+    u128 *saved_velocity = &velocity_copy;
     unsigned char *fragment_moby;
     char *fragment_vars;
 
     *pp = *(u128 *)pos;
-    *pv = *(u128 *)vel;
+    *saved_velocity = *(u128 *)vel;
     fragment_moby = create_moby(ftoi_300c60(random_float_between(1085.0f, 1089.0f)));
 
     if (fragment_moby != 0) {
@@ -998,7 +998,7 @@ unsigned char *FUN_L06_00300c60(char *unused_source_moby, float *pos, float *vel
         *(short *)(fragment_moby + 0x32) = 0x7E;
         fragment_moby[0x31] = 1;
         qcopy(fragment_moby + 0x10, pp);
-        qcopy(fragment_vars, pv);
+        qcopy(fragment_vars, saved_velocity);
         *(float *)(fragment_vars + 0x10) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
         *(float *)(fragment_vars + 0x14) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
         *(float *)(fragment_vars + 0x18) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
