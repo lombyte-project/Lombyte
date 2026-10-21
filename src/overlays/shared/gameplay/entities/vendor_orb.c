@@ -390,7 +390,7 @@ int FUN_001f96f8_2e01b0(int) __asm__("FUN_001f96f8");
 void FUN_L00_002e01b0(char *moby) {
     V_2e01b0 effect_position, v;
     char *moby_data = *(char **)(moby + 0x78);
-    struct Hero *g;
+    struct Hero *player;
     int countdown_lower_bound;
     float normalization_scale;
     if (FUN_001f9740_2e01b0(moby_data + 4) == 0)
@@ -398,10 +398,10 @@ void FUN_L00_002e01b0(char *moby) {
     add_vector_xyz_cf(moby, 0, &effect_position);
     normalization_scale = -FUN_002132a8_2e01b0(D_0015ED6C_2e01b0, D_0015ED6C_2e01b0 * 3.0f);
     fast_vec_normalize(&v, moby + 0xD0, normalization_scale);
-    g = &hero;
-    v.x += g->motion.displacement.f[0] * 0.8f;
-    v.y += g->motion.displacement.f[1] * 0.8f;
-    v.z += g->motion.displacement.f[2] +
+    player = &hero;
+    v.x += player->motion.displacement.f[0] * 0.8f;
+    v.y += player->motion.displacement.f[1] * 0.8f;
+    v.z += player->motion.displacement.f[2] +
            FUN_002132a8_2e01b0(D_0015ED6C_2e01b0 * -0.5f, D_0015ED6C_2e01b0 + D_0015ED6C_2e01b0);
     FUN_L00_0026f548_2e01b0(&effect_position, &v, 2, random_int_between(0x5A, 0x78));
     countdown_lower_bound = FUN_001f96f8_2e01b0(5);
