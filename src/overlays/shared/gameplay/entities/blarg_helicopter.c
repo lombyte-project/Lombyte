@@ -1702,7 +1702,7 @@ void FUN_L03_002d47c0(Moby *moby) {
 
 extern char *func_0020D348_m5208(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L03_002d5208(char *velocity, char *pos, int target_moby, int lifetime_frames, float target_height) {
+char *FUN_L03_002d5208(char *velocity, char *spawn_position, int target_moby, int lifetime_frames, float target_height) {
     char *spawned_moby = (char *)func_0020D348_m5208(0x350);
     char *data;
     if (spawned_moby != 0) {
@@ -1711,7 +1711,7 @@ char *FUN_L03_002d5208(char *velocity, char *pos, int target_moby, int lifetime_
         *(unsigned char *)(spawned_moby + 0x31) = 1;
         *(unsigned char *)(spawned_moby + 0x20) = 1;
         data = *(char **)(spawned_moby + 0x78);
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(spawned_moby + 0x10, spawn_position);
         qcopy(data, velocity);
         *(float *)(data + 0xC) = target_height;
         *(int *)(data + 0x14) = lifetime_frames;
