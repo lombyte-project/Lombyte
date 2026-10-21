@@ -91,11 +91,11 @@ extern int trunc_285768(float) __asm__("FUN_001fa6d0");
 /* Allocates a type 0x29 particle and fills it from the arguments; kind 0xFF
  * derives the frame from flags and picks one of two blend modes. */
 char *draw_number(float scale, void *pos, int a, int idx, int b, unsigned char flags, short h, unsigned char kind) __asm__("FUN_L01_00285768");
-char *draw_number(float scale, void *pos, int source_moby, int number_table_index, int particle_color, unsigned char flags, short particle_lifetime, unsigned char kind) {
+char *draw_number(float scale, void *particle_spawn_position, int source_moby, int number_table_index, int particle_color, unsigned char flags, short particle_lifetime, unsigned char kind) {
     char *particle = alloc_285768(0x29);
     if (particle != 0) {
         int *tail = (int *)(particle + 0x20);
-        qcopy(particle + 0x10, pos);
+        qcopy(particle + 0x10, particle_spawn_position);
         *(int *)(particle + 4) = particle_color;
         if (kind == 0xFF) {
             particle[9] = (flags >> 5) * 16 + trunc_285768(4.0f);
