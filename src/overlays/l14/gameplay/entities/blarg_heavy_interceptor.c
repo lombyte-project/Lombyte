@@ -1390,14 +1390,14 @@ extern int FUN_L00_0025d808_2afb40(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
 extern short D_L14_001613FC __attribute__((sda));
-void FUN_L14_002ae900(struct Moby *moby, float position_easing_factor, float b, float path_direction_multiplier) {
+void FUN_L14_002ae900(struct Moby *moby, float position_easing_factor, float path_traversal_speed, float path_direction_multiplier) {
     char *data = (char *)moby->pvars;
     int *list = D_L14_001B0BB0[*(int *)(data + 0x204)];
     float target_position[4];
     if (*(short *)(data + 0x208) != 0) {
         qcopy(target_position, (char *)list + list[0] * 16);
     } else {
-        if (FUN_L00_0025d808_2afb40(list, target_position, data + 0x80, data + 0x8C, 0, b * frame_time * path_direction_multiplier) !=
+        if (FUN_L00_0025d808_2afb40(list, target_position, data + 0x80, data + 0x8C, 0, path_traversal_speed * frame_time * path_direction_multiplier) !=
             0) {
             *(short *)(data + 0x208) = 1;
         }
