@@ -1850,23 +1850,23 @@ void FUN_L18_002db460(struct Moby *moby) {
 extern short D_L18_00161BFC_d __asm__("D_L18_00161BFC") __attribute__((sda));
 
 extern float D_L18_00161BF8 __attribute__((sda));
-void FUN_L18_002db938(char *pos, float *vec, int arg, float fa, float fb) {
+void FUN_L18_002db938(char *pos, float *initial_movement_step, int arg, float fa, float fb) {
     Obj *spawned_moby = (Obj *)func_0020D348_m(0x270);
     if (spawned_moby != 0) {
         Child *moby_vars;
-        int g;
+        int initial_glow_color;
         spawned_moby->b30 = 0xFF;
         spawned_moby->b31 = 1;
         spawned_moby->b20 = 0;
-        g = *(int *)&D_L18_00161BFC_d;
+        initial_glow_color = *(int *)&D_L18_00161BFC_d;
         spawned_moby->f2C = spawned_moby->f2C * D_L18_00161BF8;
         spawned_moby->s32 = 0xFF;
         spawned_moby->h34 |= 0x10;
-        spawned_moby->f90 = g;
+        spawned_moby->f90 = initial_glow_color;
         moby_vars = spawned_moby->child;
         qcopy(spawned_moby->pos, pos);
-        spawned_moby->f48 = fast_arc_tan(vec[0], vec[1]);
-        qcopy(moby_vars->v, vec);
+        spawned_moby->f48 = fast_arc_tan(initial_movement_step[0], initial_movement_step[1]);
+        qcopy(moby_vars->v, initial_movement_step);
         moby_vars->f34 = arg;
         moby_vars->f28 = fa;
         moby_vars->f20 = fb;
