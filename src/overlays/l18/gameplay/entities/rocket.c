@@ -2786,16 +2786,16 @@ extern unsigned char D_L18_00161FE1[3] __attribute__((section(".sdata")));
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EBBF0). */
 void spawn_explosion_burst(void *arg) __asm__("FUN_L18_002ea800");
-void spawn_explosion_burst(void *arg) {
+void spawn_explosion_burst(void *source_moby) {
     float velocity[4] __attribute__((aligned(16)));
     float offset[4] __attribute__((aligned(16)));
-    struct Moby *moby = arg;
+    struct Moby *moby = source_moby;
     int i = 0;
     int j;
     L18FlareView *camera;
     *(Q128 *)velocity = *(Q128 *)&moby->pos;
     FUN_L06_0030bef8(velocity, scale_ticks(30), 0x80806060, 0x801010);
-    trooper_play_sound(0x10, 0, (int)arg, 0x58E);
+    trooper_play_sound(0x10, 0, (int)source_moby, 0x58E);
     if (i < D_L18_00161F6C) {
         int a, b, third_spark_frame_count;
         float angle, elevation, scale, speed;
@@ -2849,17 +2849,17 @@ void spawn_explosion_burst(void *arg) {
     if (D_L18_00161FC0 > 0.0f) {
         void *pos = &moby->pos;
         int duration = scale_ticks(D_L18_00161FC4);
-        spawn_glow_particle(arg, pos, &D_L18_0015F580, D_L18_00161FC0, duration, D_L18_00161FC8, D_L18_00161FC9[0], D_L18_00161FC9[1], D_L18_00161FC9[2]);
+        spawn_glow_particle(source_moby, pos, &D_L18_0015F580, D_L18_00161FC0, duration, D_L18_00161FC8, D_L18_00161FC9[0], D_L18_00161FC9[1], D_L18_00161FC9[2]);
     }
     if (D_L18_00161FCC > 0.0f) {
         void *pos = &moby->pos;
         int duration = scale_ticks(D_L18_00161FD0);
-        spawn_glow_particle(arg, pos, &D_L18_0015F580, D_L18_00161FCC, duration, D_L18_00161FD4, D_L18_00161FD5[0], D_L18_00161FD5[1], D_L18_00161FD5[2]);
+        spawn_glow_particle(source_moby, pos, &D_L18_0015F580, D_L18_00161FCC, duration, D_L18_00161FD4, D_L18_00161FD5[0], D_L18_00161FD5[1], D_L18_00161FD5[2]);
     }
     if (D_L18_00161FD8 > 0.0f) {
         void *pos = &moby->pos;
         int duration = scale_ticks(D_L18_00161FDC);
-        spawn_glow_particle(arg, pos, &D_L18_0015F580, D_L18_00161FD8, duration, D_L18_00161FE0, D_L18_00161FE1[0], D_L18_00161FE1[1], D_L18_00161FE1[2]);
+        spawn_glow_particle(source_moby, pos, &D_L18_0015F580, D_L18_00161FD8, duration, D_L18_00161FE0, D_L18_00161FE1[0], D_L18_00161FE1[1], D_L18_00161FE1[2]);
     }
     if (D_L18_00161FE4 > 0.0f) {
         camera = &D_L18_00167680;
