@@ -2715,7 +2715,7 @@ extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f460
 extern int f_to_int(float) __asm__("FUN_001fa6d0");
 void FUN_L00_002b7568_c(void) __asm__("FUN_L00_002b7568");
 
-void FUN_L00_002b7398(void *arg) {
+void FUN_L00_002b7398(void *source_moby) {
     E8690 *effect_slot;
     unsigned short av;
     int i;
@@ -2755,8 +2755,8 @@ void FUN_L00_002b7398(void *arg) {
                 effect_slot->f += D_L00_001614B8 * frame_time;
         }
     }
-    moby_point_position(arg, 0, D_L00_001614E0);
-    enqueue_callback_list_1(FUN_L00_002b7568_c, arg);
+    moby_point_position(source_moby, 0, D_L00_001614E0);
+    enqueue_callback_list_1(FUN_L00_002b7568_c, source_moby);
 }
 typedef union {
     OvlQuad q;
