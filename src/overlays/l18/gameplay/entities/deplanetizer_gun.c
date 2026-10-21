@@ -1435,7 +1435,7 @@ extern float D_L18_001EFCD0[4][2];
 void FUN_L18_002fc860(struct Moby *m) {
     char *d = (char *)m->pvars;
     Pk_c860 pk;
-    float mat[4][4];
+    float quad_transform[4][4];
     float horizontal_axis_scale;
     float vertical_axis_scale;
     int c;
@@ -1443,15 +1443,15 @@ void FUN_L18_002fc860(struct Moby *m) {
     float *quad_vertex;
     vertical_axis_scale = *(float *)(d + 0x1F4) + 1.0f + D_L18_0016264C;
     horizontal_axis_scale = 1.0f - *(float *)(d + 0x1F4) + D_L18_00162650;
-    qcopy(mat[3], &m->pos);
-    mat[3][2] -= D_L18_00162648;
-    clear_g(mat[2]);
-    mat[2][2] = vertical_axis_scale;
-    sub_g(mat[0], D_L18_001677C0_g, &m->pos);
-    cross_g(mat[1], mat[0], mat[2]);
-    cross_g(mat[0], mat[1], mat[2]);
-    norm_g(mat[0], mat[0], horizontal_axis_scale);
-    norm_g(mat[1], mat[1], horizontal_axis_scale);
+    qcopy(quad_transform[3], &m->pos);
+    quad_transform[3][2] -= D_L18_00162648;
+    clear_g(quad_transform[2]);
+    quad_transform[2][2] = vertical_axis_scale;
+    sub_g(quad_transform[0], D_L18_001677C0_g, &m->pos);
+    cross_g(quad_transform[1], quad_transform[0], quad_transform[2]);
+    cross_g(quad_transform[0], quad_transform[1], quad_transform[2]);
+    norm_g(quad_transform[0], quad_transform[0], horizontal_axis_scale);
+    norm_g(quad_transform[1], quad_transform[1], horizontal_axis_scale);
     pk.b = tex_g(D_L18_00162644);
     pk.c = 0x0000FF9000000260ULL;
     pk.a = 0;
@@ -1474,7 +1474,7 @@ void FUN_L18_002fc860(struct Moby *m) {
         quad_vertex[3] = 1.0f;
         pk.col[i] = c;
     }
-    draw_g(&pk, mat, 0);
+    draw_g(&pk, quad_transform, 0);
 }
 #include "sda.h"
 
