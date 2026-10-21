@@ -1315,7 +1315,7 @@ void red_ship_1_update(char *moby) {
     int found;
     int advanced_path_node_index;
     int initial_path_node_index;
-    int idx;
+    int voice_slot_index;
     unsigned char *voice_slot_entry;
     float initial_speed_oscillation_phase;
     float step;
@@ -1439,11 +1439,11 @@ void red_ship_1_update(char *moby) {
         if (*(int *)(pm + 0x14) != -1) {
             moby[0x20] = 0;
         }
-        idx = *(int *)(data + 0x150);
-        if (idx != -1) {
-            voice_slot_entry = (unsigned char *)D_0013E550_29dba8 + idx * 0x70;
+        voice_slot_index = *(int *)(data + 0x150);
+        if (voice_slot_index != -1) {
+            voice_slot_entry = (unsigned char *)D_0013E550_29dba8 + voice_slot_index * 0x70;
             if (*(char **)(voice_slot_entry + 0x88) == moby && voice_slot_entry[0x74]) {
-                release_voice_slot(idx);
+                release_voice_slot(voice_slot_index);
             }
         }
         *(int *)(data + 0x150) = -1;
