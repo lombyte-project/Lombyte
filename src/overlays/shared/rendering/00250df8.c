@@ -101,7 +101,7 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int arg) {
     int amount_delta;
     int n;
     int call_flags;
-    int r;
+    int bound_offset;
     int cnt;
     unsigned char *g;
 
@@ -165,16 +165,16 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int arg) {
         amt = 0.0f;
     }
     if (amt > 0.0f) {
-        r = 0;
+        bound_offset = 0;
         if (amt >= 8.0f) {
-            r = FUN_001fa6d0_257470(amt * 0.25f);
+            bound_offset = FUN_001fa6d0_257470(amt * 0.25f);
         } else if (amt >= 2.0f) {
-            r = 1;
+            bound_offset = 1;
         }
         {
             int lower_bound = FUN_001fa6d0_257470(amt);
-            int hi = lower_bound + r;
-            lower_bound -= r;
+            int hi = lower_bound + bound_offset;
+            lower_bound -= bound_offset;
             FUN_L00_00260a88_257470(moby, lower_bound, hi, call_flags, arg);
         }
     }
