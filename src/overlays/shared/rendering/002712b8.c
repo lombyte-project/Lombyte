@@ -732,7 +732,7 @@ void FUN_L00_00272bc0(unsigned char *particle) {
     V_272bc0 particle_vector_scratch;
     unsigned char *particle_data;
     unsigned char *reference_position;
-    P_272bc0 *g;
+    P_272bc0 *reference_position_owner;
     int i;
     float emitted_lifetime_frames;
     float k;
@@ -771,12 +771,12 @@ void FUN_L00_00272bc0(unsigned char *particle) {
         }
         reference_position = (unsigned char *)(*(V_272bc0 *)D_0013F3D0);
         if (vector_distance(particle + 0x10, reference_position) < 0.3f) {
-            g = (P_272bc0 *)(reference_position - 0x80);
-            if (g->unk88 < *(float *)(particle + 0x18) + 1.2f) {
+            reference_position_owner = (P_272bc0 *)(reference_position - 0x80);
+            if (reference_position_owner->unk88 < *(float *)(particle + 0x18) + 1.2f) {
                 subtract_vector_xyz(particle_vector_scratch, reference_position, particle + 0x10);
                 normalize_vector_xyz(particle_vector_scratch, particle_vector_scratch, 1.0f);
                 particle_vector_scratch[2] = 1.0f;
-                FUN_L00_00259bc8_272bc0(g->i2080, *(int *)(particle_data + 0x18), 1, particle + 0x10, particle_vector_scratch,
+                FUN_L00_00259bc8_272bc0(reference_position_owner->i2080, *(int *)(particle_data + 0x18), 1, particle + 0x10, particle_vector_scratch,
                                         *(float *)(particle_data + 0x1C));
             }
         }
