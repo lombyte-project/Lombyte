@@ -1289,13 +1289,13 @@ float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 float FUN_001f9b48(void *, void *);
 void FUN_L00_002eba18(char *camera_object) {
-    struct Hero *g = &hero;
+    struct Hero *hero_data = &hero;
     char *camera_globals = D_00166C80_c;
-    char *hero_moby = ((char *)g->moby);
+    char *hero_moby = ((char *)hero_data->moby);
     float a = fast_arc_tan(*(float *)(hero_moby + 0x10) - *(float *)(camera_globals + 0x140),
                            *(float *)(hero_moby + 0x14) - *(float *)(camera_globals + 0x144));
     if (fast_difference_between_rotations(*(float *)(camera_globals + 0x158), a) < 0.5585053563117981f &&
-        FUN_001f9b48(&g->motion.pos, camera_globals + 0x140) < 8.0f) {
+        FUN_001f9b48(&hero_data->motion.pos, camera_globals + 0x140) < 8.0f) {
         *(char *)(camera_globals + 0x273) = 0;
         *(short *)(camera_object + 0x7E) = 2;
         *(float *)(camera_globals + 0x294) = 0.018f;
