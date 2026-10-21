@@ -1536,7 +1536,7 @@ extern void clear_2db198(void *) __asm__("FUN_001f99f8");
 
 /* Spawns a path mover (class 0x382, moved by FUN_L03_002db020) on path, dist
  * units along it, facing the path's last point. */
-struct Moby *FUN_L03_002db198(struct RailPath *path, float dist) {
+struct Moby *FUN_L03_002db198(struct RailPath *path, float initial_path_distance) {
     struct Moby *spawned_moby = func_0020D348_m(0x382);
     u8 *moby_vars;
     u8 *move;
@@ -1555,7 +1555,7 @@ struct Moby *FUN_L03_002db198(struct RailPath *path, float dist) {
         end = (Vec4 *)((u8 *)path + (path->count - 1) * 16) + 1;
         spawned_moby->rot.z = fast_arc_tan(end->f[0] - spawned_moby->pos.x, end->f[1] - spawned_moby->pos.y);
         move = moby_vars + 0x20;
-        *(float *)(moby_vars + 0x64) = dist;
+        *(float *)(moby_vars + 0x64) = initial_path_distance;
         *(struct RailPath **)(moby_vars + 0x60) = path;
         *(u8 **)(moby_vars + 0x8) = move;
         FUN_L00_00250df8(spawned_moby);
