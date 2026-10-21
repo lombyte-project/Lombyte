@@ -3641,17 +3641,17 @@ extern char D_L07_00173EE0_2cd2b0[] __asm__("D_L07_00173EE0");
 void FUN_L07_00312420(struct Moby *arg)
 {
     float line_endpoint[4], endpoint_work_vector[4], quad_side_offset[4], attachment_position[4], endpoint_to_attachment[4], oscillating_reference_position[4], effect_sample_position[4], c2[4], sample_probe_offset[4], ii[4], jj[4];
-    float f20, oscillation_work_value;
+    float frame_phase_work_value, oscillation_work_value;
     int flag = 1;
     EffData_313800 *moby_effect_data = ((EffData_313800 *)arg->pvars);
     int k;
     Packet_313800 pkt;
 
-    f20 = FUN_001fa6c0_2cd2b0(D_L07_0015F5CC_lui);
+    frame_phase_work_value = FUN_001fa6c0_2cd2b0(D_L07_0015F5CC_lui);
     qcopy(oscillating_reference_position, moby_effect_data->f140);
-    oscillation_work_value = FUN_001f9dc8_2cd2b0(FUN_L00_0025e310_2cd2b0(f20 / 11.0f));
-    f20 = f20 / 10.0f;
-    oscillation_work_value = FUN_L00_0025e310_2cd2b0(f20 + oscillation_work_value * 1.5707964f);
+    oscillation_work_value = FUN_001f9dc8_2cd2b0(FUN_L00_0025e310_2cd2b0(frame_phase_work_value / 11.0f));
+    frame_phase_work_value = frame_phase_work_value / 10.0f;
+    oscillation_work_value = FUN_L00_0025e310_2cd2b0(frame_phase_work_value + oscillation_work_value * 1.5707964f);
     oscillating_reference_position[0] = oscillating_reference_position[0] + FUN_001f9de0_2cd2b0(oscillation_work_value);
     add_vector_xyz_cf(arg, 2, attachment_position);
     subtract_vector_xyz(endpoint_work_vector, oscillating_reference_position, attachment_position);
