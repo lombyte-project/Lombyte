@@ -164,7 +164,7 @@ void drek_fight_missile_update(struct Moby *moby) {
 extern short *D_L18_001AC240[];
 extern unsigned char *D_L18_0015FFD8;
 
-int FUN_L18_002f0030(char *moby, int group, float *pos) {
+int FUN_L18_002f0030(char *moby, int group, float *missile_activation_position) {
     short *group_entry = D_L18_001AC240[group];
     int idle;
     int i;
@@ -176,7 +176,7 @@ int FUN_L18_002f0030(char *moby, int group, float *pos) {
         if (*(short *)(group_moby + 0xA6) == 0x54B && group_moby[0x20] == 1) {
             unsigned char *missile_vars = *(unsigned char **)(group_moby + 0x78);
             idle = 0;
-            qcopy(group_moby + 0x10, pos);
+            qcopy(group_moby + 0x10, missile_activation_position);
             i = 0;
             do {
                 qcopy(missile_vars + 0x10 + i * 16, group_moby + 0x10);
