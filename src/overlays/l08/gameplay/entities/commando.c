@@ -284,11 +284,11 @@ void FUN_L08_002ea4c0(struct Moby *moby) {
     SwingGateVars *vars = (SwingGateVars *)moby->pvars;
     f32 progress = *(f32 *)D_L08_0015FFD8[vars->driver].pvars;
     Vec4 mat[4];
-    Vec4 off;
+    Vec4 gate_position_offset;
     f32 yaw;
 
-    off.q = 0;
-    off.f[2] = 30.0f;
+    gate_position_offset.q = 0;
+    gate_position_offset.f[2] = 30.0f;
     if (D_L08_0015F5C4 == 2) {
         moby->visible = 0;
         moby->flags |= 1;
@@ -326,8 +326,8 @@ void FUN_L08_002ea4c0(struct Moby *moby) {
         }
     }
     euler_rotation_matrix(mat, &moby->rot);
-    transform_vector(&off, &off, mat);
-    add_vector_xyz(&moby->pos, &vars->home, &off);
+    transform_vector(&gate_position_offset, &gate_position_offset, mat);
+    add_vector_xyz(&moby->pos, &vars->home, &gate_position_offset);
     if (progress == 1.0f && moby->oclass == 0x1D4) {
         D_0013D388[vars->flag + 0x30] = 1;
         moby->state = 2;
