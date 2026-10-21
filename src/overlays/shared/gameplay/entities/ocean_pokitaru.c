@@ -327,7 +327,7 @@ void FUN_L11_00309098(char *moby) {
     float hit[4];
     float pad[4][2];
     float spark_velocity[4];
-    float r[4];
+    float spark_scatter_vector[4];
     char *data;
     char *pos;
     int trail_color;
@@ -346,14 +346,14 @@ void FUN_L11_00309098(char *moby) {
     if (collision_line(old, pos, 0, *(void **)(data + 0x1C), hit)) {
         int i;
         for (i = 0; i < 5; i++) {
-            *(OvlQuad *)r = 0;
-            r[0] = random_float_between(-1.0f, 1.0f);
-            r[1] = random_float_between(-1.0f, 1.0f);
-            r[2] = random_float_between(-1.0f, 1.0f);
-            *(OvlQuad *)spark_velocity = *(OvlQuad *)r;
-            FUN_L00_001ff660(r, data, D_L11_00174880);
-            normalize_vector_xyz(spark_velocity, spark_velocity, vector_length_xyz(r) * 0.5f);
-            add_vector_xyz(spark_velocity, r, spark_velocity);
+            *(OvlQuad *)spark_scatter_vector = 0;
+            spark_scatter_vector[0] = random_float_between(-1.0f, 1.0f);
+            spark_scatter_vector[1] = random_float_between(-1.0f, 1.0f);
+            spark_scatter_vector[2] = random_float_between(-1.0f, 1.0f);
+            *(OvlQuad *)spark_velocity = *(OvlQuad *)spark_scatter_vector;
+            FUN_L00_001ff660(spark_scatter_vector, data, D_L11_00174880);
+            normalize_vector_xyz(spark_velocity, spark_velocity, vector_length_xyz(spark_scatter_vector) * 0.5f);
+            add_vector_xyz(spark_velocity, spark_scatter_vector, spark_velocity);
             normalize_vector_xyz(spark_velocity, spark_velocity, random_float_between(frame_time * 5.0f, frame_time * 9.0f));
             FUN_L00_0026dd20(moby + 0x10, (char *)spark_velocity, 0x7F2F4F6F, random_int_between(scale_game_frames(10), scale_game_frames(15)), 90000.0f);
         }
