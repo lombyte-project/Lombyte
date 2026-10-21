@@ -722,33 +722,33 @@ extern void FUN_L01_00231ae0_u(void) __asm__("FUN_L01_00231ae0");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
 void FUN_L01_00231348(int vehicle_mode, int initial_state, int new_moby) {
-    char *g;
+    char *hero_state_base;
     FUN_L00_0020e698();
-    g = (char *)D_0013E533 + 0xE1D;
-    *(char *)(g + 0x20A6) = 1;
+    hero_state_base = (char *)D_0013E533 + 0xE1D;
+    *(char *)(hero_state_base + 0x20A6) = 1;
     hero_update_items();
-    *(int *)(g + 0x2080) = *(int *)(g + 0xA88);
-    FUN_L00_00262840(g + 0x1670);
-    *(int *)(*(char **)(g + 0x2080) + 0x98) = -1;
+    *(int *)(hero_state_base + 0x2080) = *(int *)(hero_state_base + 0xA88);
+    FUN_L00_00262840(hero_state_base + 0x1670);
+    *(int *)(*(char **)(hero_state_base + 0x2080) + 0x98) = -1;
     FUN_L00_00232fe8();
     FUN_L00_00206c08();
     FUN_L00_00205538();
-    *(char *)(g + 0x20A4) = vehicle_mode;
-    *(int *)(g + 0xA84) = new_moby;
-    *(int *)(g + 0x2080) = new_moby;
+    *(char *)(hero_state_base + 0x20A4) = vehicle_mode;
+    *(int *)(hero_state_base + 0xA84) = new_moby;
+    *(int *)(hero_state_base + 0x2080) = new_moby;
     FUN_L01_00231ae0_u();
-    *(float *)(g + 0x220) = *(float *)(g + 0x228);
-    *(float *)(g + 0x224) = *(float *)(g + 0x22C);
-    *(unsigned short *)(*(char **)(g + 0x2080) + 0x34) |= 6;
-    *(float *)(g + 0xA90) = 1.0f;
-    *(float *)(g + 0xA94) = 1.0f;
+    *(float *)(hero_state_base + 0x220) = *(float *)(hero_state_base + 0x228);
+    *(float *)(hero_state_base + 0x224) = *(float *)(hero_state_base + 0x22C);
+    *(unsigned short *)(*(char **)(hero_state_base + 0x2080) + 0x34) |= 6;
+    *(float *)(hero_state_base + 0xA90) = 1.0f;
+    *(float *)(hero_state_base + 0xA94) = 1.0f;
     FUN_L00_00232628();
-    FUN_L00_00257024(*(void **)(g + 0x2080));
+    FUN_L00_00257024(*(void **)(hero_state_base + 0x2080));
     FUN_L00_00207a58();
-    *(short *)(g + 0x22CC) = initial_state;
+    *(short *)(hero_state_base + 0x22CC) = initial_state;
     if (vehicle_mode == 1) {
-        *(unsigned short *)(g + 0x22B0) = *(unsigned short *)(g + 0x22A8);
-        *(int *)(g + 0x22A8) = *(int *)(g + 0x22AC);
+        *(unsigned short *)(hero_state_base + 0x22B0) = *(unsigned short *)(hero_state_base + 0x22A8);
+        *(int *)(hero_state_base + 0x22A8) = *(int *)(hero_state_base + 0x22AC);
     }
     hero_set_state(initial_state, 1);
 }
