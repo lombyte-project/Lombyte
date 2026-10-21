@@ -469,7 +469,7 @@ extern void add_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L05_002d1fd8(int unused, char *position) {
-    float v[4];
+    float effect_spawn_vector[4];
     char *spawned_object;
     int i;
     char *base;
@@ -480,18 +480,18 @@ void FUN_L05_002d1fd8(int unused, char *position) {
     for (base = (char *)&D_L05_001612E8, i = 15; i >= 0; i--) {
         float ang = random_angle_radians();
         float k = random_float_between(frame_time * 0.0f, frame_time * 3.0f);
-        v[0] = fast_cos(ang) * k;
-        v[1] = fast_sin(ang) * k;
-        v[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
+        effect_spawn_vector[0] = fast_cos(ang) * k;
+        effect_spawn_vector[1] = fast_sin(ang) * k;
+        effect_spawn_vector[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
         random_spawn_value = random_int_between(0x5A, 0x78);
-        FUN_L00_0026f548(position, v, random_integer_below(2), random_spawn_value);
+        FUN_L00_0026f548(position, effect_spawn_vector, random_integer_below(2), random_spawn_value);
     }
     for (i = 0; i < 16; i++) {
         unsigned char *splash;
-        random_vector(v, 1.0f, 1.0f);
-        add_vector_xyz(v, v, position);
-        v[2] = D_L05_001612E8 + 0.05f;
-        splash = spawn_splash(v, D_L05_0015F580_macro, base, random_float_between(0.7f, 1.0f),
+        random_vector(effect_spawn_vector, 1.0f, 1.0f);
+        add_vector_xyz(effect_spawn_vector, effect_spawn_vector, position);
+        effect_spawn_vector[2] = D_L05_001612E8 + 0.05f;
+        splash = spawn_splash(effect_spawn_vector, D_L05_0015F580_macro, base, random_float_between(0.7f, 1.0f),
                              i == 0 ? 2.0f : -2.0f);
         if (splash) {
             *(short *)(splash + 0xA) = func_001FA898_r(multiply_global_factor_ed64(random_float_between(30.0f, 60.0f)));
