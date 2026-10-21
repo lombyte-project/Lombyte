@@ -1763,7 +1763,7 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void FUN_L09_00300888(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     unsigned char *item_unlock_flags;
-    unsigned char *b;
+    unsigned char *frame_and_level_record;
     unsigned short *tp;
     int scaled_frame_quotient;
     if (D_L09_0015F5CC > 0) {
@@ -1781,17 +1781,17 @@ void FUN_L09_00300888(struct Moby *moby) {
             D_L09_001613C8 = 0;
         }
     }
-    b = D_00141968_q;
-    tp = (unsigned short *)(b + 0x2D8);
+    frame_and_level_record = D_00141968_q;
+    tp = (unsigned short *)(frame_and_level_record + 0x2D8);
     if (*tp == 0) {
         if (D_0013D4C2_q[9] != 0) {
             (*tp)++;
         }
         scaled_frame_quotient = scale_game_frames_q(D_0015EEA4_q) / 600;
-        if (*(unsigned short *)(b + 0x2DA) < scaled_frame_quotient) {
-            *(unsigned short *)(b + 0x2DA) = scale_game_frames_q(D_0015EEA4_q) / 600;
+        if (*(unsigned short *)(frame_and_level_record + 0x2DA) < scaled_frame_quotient) {
+            *(unsigned short *)(frame_and_level_record + 0x2DA) = scale_game_frames_q(D_0015EEA4_q) / 600;
         }
-        *(int *)(b + 0x2DC) = *(int *)(b + 0x2DC) | (1 << current_level_index) | 0x80000000;
+        *(int *)(frame_and_level_record + 0x2DC) = *(int *)(frame_and_level_record + 0x2DC) | (1 << current_level_index) | 0x80000000;
         if (is_point_inside_clip_volume(D_0013F3D0_q, *data) != 0) {
             give_reward(0x2329, 0x5B);
         }
