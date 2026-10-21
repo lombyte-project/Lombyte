@@ -1111,7 +1111,7 @@ extern void *func_L00_0026DEA0_x(void *, float, float, float, int, void *, float
 float D_L12_00161920[4] __attribute__((section(".sdata"))) = {-1.5f, 0.8f, -0.5f, 0.0f};
 void FUN_L12_002e3948(struct Moby *moby) {
     float emission_direction[4];
-    float b[4];
+    float secondary_emission_direction[4];
     float emission_position[4];
     float mirrored_emission_position[4];
     float z[4];
@@ -1123,18 +1123,18 @@ void FUN_L12_002e3948(struct Moby *moby) {
     transform_vector_by_basis(emission_direction, emission_direction, &moby->rot_row0);
     transform_vector_by_basis(emission_position, &D_L12_00161920, &moby->rot_row0);
     add_vector_xyz_c(emission_position, emission_position, &moby->pos);
-    b[0] = -random_float_between(0.0f, frame_time);
-    b[1] = random_float_between(-frame_time, frame_time);
-    b[2] = random_float_between(-frame_time, frame_time);
-    transform_vector_by_basis(b, b, &moby->rot_row0);
+    secondary_emission_direction[0] = -random_float_between(0.0f, frame_time);
+    secondary_emission_direction[1] = random_float_between(-frame_time, frame_time);
+    secondary_emission_direction[2] = random_float_between(-frame_time, frame_time);
+    transform_vector_by_basis(secondary_emission_direction, secondary_emission_direction, &moby->rot_row0);
     qcopy(mirrored_emission_position, &D_L12_00161920);
     mirrored_emission_position[1] = -mirrored_emission_position[1];
     transform_vector_by_basis(mirrored_emission_position, mirrored_emission_position, &moby->rot_row0);
     add_vector_xyz_c(mirrored_emission_position, mirrored_emission_position, &moby->pos);
     FUN_L00_0026cbb0(emission_position, emission_direction, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);
-    func_L00_0026DEA0_x(emission_position, 0.05f, 1.01f, 1.03f, 6, b, 30000.0f, 0x404040);
+    func_L00_0026DEA0_x(emission_position, 0.05f, 1.01f, 1.03f, 6, secondary_emission_direction, 30000.0f, 0x404040);
     FUN_L00_0026cbb0(mirrored_emission_position, emission_direction, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);
-    func_L00_0026DEA0_x(mirrored_emission_position, 0.05f, 1.01f, 1.03f, 6, b, 30000.0f, 0x404040);
+    func_L00_0026DEA0_x(mirrored_emission_position, 0.05f, 1.01f, 1.03f, 6, secondary_emission_direction, 30000.0f, 0x404040);
 }
 /* Steers the moby toward a target point, speeding up or braking, and turns it toward the given angles. */
 extern float D_0015ED6C_k __asm__("D_0015ED6C");
