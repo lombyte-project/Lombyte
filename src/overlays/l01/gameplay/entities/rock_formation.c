@@ -359,7 +359,7 @@ extern void mine_camera_blast(void *, void *, s32, s32) __asm__("FUN_L00_002d383
 
 void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 light)
 {
-    BurstVec pos;
+    BurstVec burst_position;
     BurstVec vel;
     BurstPalette inner;
     BurstPalette outer;
@@ -370,8 +370,8 @@ void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 
     s32 i;
 
     /* pos and inner are used through pointers, as in retail */
-    pos_p = &pos;
-    pos.q = *where;
+    pos_p = &burst_position;
+    burst_position.q = *where;
     clear_vector(&vel);
     inner_p = &inner;
     for (i = 2; i >= 0; i--) {
