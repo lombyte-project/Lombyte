@@ -2672,8 +2672,8 @@ void FUN_L08_002dd3c0(M46 *moby) {
             ((Persistent46*)(D_0013D388+data->persistent))->active=1;
             linked_object:
                 if (other->state<0x7F && other!=moby) {
-                    unsigned short cls=other->class_id;
-                    if ((unsigned int)(cls-0x223)<6) {
+                    unsigned short linked_moby_class_id=other->class_id;
+                    if ((unsigned int)(linked_moby_class_id-0x223)<6) {
                         clear_u64_value(accel);
                         switch ((short)(other->class_id-0x223)) {
                         case LINKED_CLASS_NEGATIVE_X_POSITIVE_Y_POSITIVE_Z_LAUNCH_OFFSET: *(Q46*)aux=(Q46)0; aux[0]=-3.331f; aux[1]=3.331f; aux[2]=0.275f; qcopy(effect,aux); break;
@@ -2699,7 +2699,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
                             else { min_frames=60.0f; max_frames=90.0f; }
                             FUN_L05_00318648(other,(int)moby,accel,launch_offset,func_001FA898_r(random_float_between_c2(min_frames,max_frames)));
                         }
-                    } else if ((short)cls==0x1A8) {
+                    } else if ((short)linked_moby_class_id==0x1A8) {
                         special=1; clear_u64_value(accel);
                         spawn_explosion(other,accel,other->position,0.0f,0.0f,50,60,60,12.0f,8.0f,9.0f,1.0f,-1,15.0f,1,1,-1,0);
                         mark_moby_for_removal(other);
