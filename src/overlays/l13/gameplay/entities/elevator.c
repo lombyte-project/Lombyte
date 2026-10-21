@@ -1983,8 +1983,8 @@ short D_L13_001613F8 = 0x7f4f;
 short D_L13_00161408 = -32513;
 short D_L13_00161418 = 0x7f00;
 void FUN_L13_002b8590(void *moby, char *flight_data) {
-    float vel[4];
-    float pos[4];
+    float initial_particle_velocity[4];
+    float joint_world_position[4];
     float first_particle_spawn_position[4];
     float second_particle_spawn_position[4];
     float third_particle_spawn_position[4];
@@ -1992,56 +1992,56 @@ void FUN_L13_002b8590(void *moby, char *flight_data) {
     int i;
 
     for (i = 1; i < 3; i++) {
-        *(OvlQuad *)vel = 0;
+        *(OvlQuad *)initial_particle_velocity = 0;
         particle_velocity_scale = *(float *)(flight_data + 0x64) / (frame_time * 24.0f);
         if (particle_velocity_scale > 1.0f)
             particle_velocity_scale = 1.0f;
         else if (particle_velocity_scale < 0.35f)
             particle_velocity_scale = 0.35f;
-        moby_point_position(moby, i, pos);
-        pos[3] = 0;
-        qcopy(first_particle_spawn_position, pos);
-        qcopy(second_particle_spawn_position, pos);
-        qcopy(third_particle_spawn_position, pos);
+        moby_point_position(moby, i, joint_world_position);
+        joint_world_position[3] = 0;
+        qcopy(first_particle_spawn_position, joint_world_position);
+        qcopy(second_particle_spawn_position, joint_world_position);
+        qcopy(third_particle_spawn_position, joint_world_position);
         FUN_L00_0025f8e0(first_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.02f);
         FUN_L00_0025f8e0(second_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.02f);
         FUN_L00_0025f8e0(third_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.01f + 0.02f);
-        vel[0] =
+        initial_particle_velocity[0] =
             -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 2.0f) * frame_time) *
             particle_velocity_scale;
-        FUN_L01_0028a7a8(moby, first_particle_spawn_position, vel, &D_L13_001613D8, 1);
-        vel[0] =
+        FUN_L01_0028a7a8(moby, first_particle_spawn_position, initial_particle_velocity, &D_L13_001613D8, 1);
+        initial_particle_velocity[0] =
             -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 3.0f) * frame_time) *
             particle_velocity_scale;
-        FUN_L01_0028a7a8(moby, second_particle_spawn_position, vel, &D_L13_001613E8, 1);
-        vel[0] =
+        FUN_L01_0028a7a8(moby, second_particle_spawn_position, initial_particle_velocity, &D_L13_001613E8, 1);
+        initial_particle_velocity[0] =
             -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 4.0f) * frame_time) *
             particle_velocity_scale;
-        FUN_L01_0028a7a8(moby, third_particle_spawn_position, vel, &D_L13_001613F8, 1);
+        FUN_L01_0028a7a8(moby, third_particle_spawn_position, initial_particle_velocity, &D_L13_001613F8, 1);
         if (*(float *)(flight_data + 0xC4) > 0.5f) {
             FUN_L00_0025f8e0(first_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.01f);
             FUN_L00_0025f8e0(second_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.01f);
             FUN_L00_0025f8e0(third_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.01f + 0.01f);
-            vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 2.0f) *
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 2.0f) *
                        frame_time) *
                      particle_velocity_scale;
-            FUN_L01_0028a7a8(moby, first_particle_spawn_position, vel, &D_L13_001613D8, 1);
-            vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 3.0f) *
+            FUN_L01_0028a7a8(moby, first_particle_spawn_position, initial_particle_velocity, &D_L13_001613D8, 1);
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 3.0f) *
                        frame_time) *
                      particle_velocity_scale;
-            FUN_L01_0028a7a8(moby, second_particle_spawn_position, vel, &D_L13_001613E8, 1);
-            vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 4.0f) *
+            FUN_L01_0028a7a8(moby, second_particle_spawn_position, initial_particle_velocity, &D_L13_001613E8, 1);
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 4.0f) *
                        frame_time) *
                      particle_velocity_scale;
-            FUN_L01_0028a7a8(moby, third_particle_spawn_position, vel, &D_L13_001613F8, 1);
-            vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 2.0f) *
+            FUN_L01_0028a7a8(moby, third_particle_spawn_position, initial_particle_velocity, &D_L13_001613F8, 1);
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 2.0f) *
                        frame_time) *
                      particle_velocity_scale;
-            FUN_L01_0028a7a8(moby, first_particle_spawn_position, vel, &D_L13_00161408, 1);
-            vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 3.0f) *
+            FUN_L01_0028a7a8(moby, first_particle_spawn_position, initial_particle_velocity, &D_L13_00161408, 1);
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 3.0f) *
                        frame_time) *
                      particle_velocity_scale;
-            FUN_L01_0028a7a8(moby, pos, vel, &D_L13_00161418, 1);
+            FUN_L01_0028a7a8(moby, joint_world_position, initial_particle_velocity, &D_L13_00161418, 1);
         }
     }
 }
