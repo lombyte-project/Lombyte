@@ -46,7 +46,7 @@ extern s32 FUN_L00_00261968_276a48(s32, OvlVec4 *, OvlVec4 *) __asm__("FUN_L00_0
 
 /* Bit i set for each point i of the path that none of the n segments in ids
    reaches from pos (with a sideways margin of radius when it is nonzero). */
-s32 FUN_L01_00276a48(s32 *ids, s32 id_count, f32 radius, s32 path_index, OvlVec4 *pos) {
+s32 FUN_L01_00276a48(s32 *ids, s32 id_count, f32 radius, s32 path_index, OvlVec4 *segment_origin) {
     Path_276a48 *path = D_L01_001B0930_276a48[path_index];
     OvlVec4 side;
     OvlVec4 left;
@@ -63,17 +63,17 @@ s32 FUN_L01_00276a48(s32 *ids, s32 id_count, f32 radius, s32 path_index, OvlVec4
             if (radius != 0.0f) {
                 up.q = 0;
                 up.f[2] = 1.0f;
-                vec_sub_276a48(&side, pos, &path->pts[i]);
+                vec_sub_276a48(&side, segment_origin, &path->pts[i]);
                 vec_cross_276a48(&side, &side, &up);
                 vec_normalize_276a48(&side, &side, radius);
-                vec_sub_276a48(&left, pos, &side);
-                vec_add_276a48(&right, pos, &side);
+                vec_sub_276a48(&left, segment_origin, &side);
+                vec_add_276a48(&right, segment_origin, &side);
                 if (FUN_L00_00261968_276a48(ids[j], &left, &path->pts[i])) {
                     hit = 1;
                 } else if (FUN_L00_00261968_276a48(ids[j], &right, &path->pts[i])) {
                     hit = 1;
                 }
-            } else if (FUN_L00_00261968_276a48(ids[j], pos, &path->pts[i])) {
+            } else if (FUN_L00_00261968_276a48(ids[j], segment_origin, &path->pts[i])) {
                 hit = 1;
             }
             if (hit) {
