@@ -1153,10 +1153,10 @@ void FUN_L00_0029a330(void) {
     int i;
     int *entry_offset_cursor;
     char *base;
-    int v;
-    v = D_L00_001CA4C0_d[6] + 0x80000;
+    int compressed_source_address;
+    compressed_source_address = D_L00_001CA4C0_d[6] + 0x80000;
     FlushCache(0);
-    fast_decompress(v, D_L00_001CA4C0_d[6]);
+    fast_decompress(compressed_source_address, D_L00_001CA4C0_d[6]);
     FlushCache(0);
     entry_offset_cursor = (int *)D_L00_001CA4C0_d[6];
     base = D_L00_00197300_d[D_L00_00197BCC];
