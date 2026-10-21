@@ -28,31 +28,31 @@ extern Rec D_L17_0017A3C0[];
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
 int FUN_L17_002020a8(int allow_slot_item_help) {
-    struct Hero *g = &hero;
-    switch (g->vehicle_mode) {
-    case 1:
+    struct Hero *hero_for_vehicle_check = &hero;
+    switch (hero_for_vehicle_check->vehicle_mode) {
+    case HERO_VEHICLE_MODE_CLANK:
         return 0;
     case 3:
         return 0;
     }
     {
-        struct Hero *g2 = &hero;
-        if (g2->health.hp == 1) {
+        struct Hero *hero_for_help_checks = &hero;
+        if (hero_for_help_checks->health.hp == 1) {
             return 0x54;
         }
-        if (g2->unk12E2 != 0) {
+        if (hero_for_help_checks->unk12E2 != 0) {
             return 0x6E;
         }
         if (allow_slot_item_help == 0) {
             return 0;
         }
-        if (g2->unk20A8 == 0) {
+        if (hero_for_help_checks->unk20A8 == 0) {
             return 0;
         }
-        if (g2->unk20AA == 0) {
+        if (hero_for_help_checks->unk20AA == 0) {
             return 0;
         }
-        if (g2->unk22C8 != 0) {
+        if (hero_for_help_checks->unk22C8 != 0) {
             return 0;
         }
     }
