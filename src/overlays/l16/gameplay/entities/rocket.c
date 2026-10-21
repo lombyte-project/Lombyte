@@ -2695,7 +2695,7 @@ void *FUN_L16_002d5ad0(int index, int secondary) {
     char *moby;
     float *data;
     float candidate_distance;
-    float g;
+    float activation_value;
     if (!group_entry)
         return 0;
     while (1) {
@@ -2709,10 +2709,10 @@ void *FUN_L16_002d5ad0(int index, int secondary) {
         }
         data = *(float **)(moby + 0x78);
         moby[0x20] = 1;
-        g = D_L16_00161A80;
-        data[5] = g;
+        activation_value = D_L16_00161A80;
+        data[5] = activation_value;
         if (secondary)
-            data[6] = g;
+            data[6] = activation_value;
         if (*group_entry++ < 0)
             return nearest;
     }
