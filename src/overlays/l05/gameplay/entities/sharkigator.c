@@ -975,7 +975,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L05_002db018(unsigned char *moby) {
-    float v[3];
+    float particle_spawn_position[3];
     if (moby[0x31] != 0) {
         if (random_integer_below(0x13) == 0) {
             float a = random_angle_radians();
@@ -984,11 +984,11 @@ void FUN_L05_002db018(unsigned char *moby) {
             float c = random_float_between_alt(z, 0.5f);
             float e = random_float_between_alt(0.5f, 1.0f);
             int s = func_001FA898_r(random_float_between_alt(120.0f, 180.0f));
-            v[0] = fast_cos(a) * b;
-            v[1] = fast_sin(a) * b;
-            v[2] = z;
-            add_vector_xyz(v, v, moby + 0x10);
-            FUN_L01_00287158(v, c, e, 0x30002028, 0x2020, scale_game_frames(s));
+            particle_spawn_position[0] = fast_cos(a) * b;
+            particle_spawn_position[1] = fast_sin(a) * b;
+            particle_spawn_position[2] = z;
+            add_vector_xyz(particle_spawn_position, particle_spawn_position, moby + 0x10);
+            FUN_L01_00287158(particle_spawn_position, c, e, 0x30002028, 0x2020, scale_game_frames(s));
         }
         if (random_integer_below(4) == 0) {
             float a = random_angle_radians();
@@ -997,11 +997,11 @@ void FUN_L05_002db018(unsigned char *moby) {
             float c = random_float_between_alt(z, 1.75f);
             float e = random_float_between_alt(1.75f, 2.25f);
             int s = func_001FA898_r(random_float_between_alt(120.0f, 180.0f));
-            v[0] = fast_cos(a) * b;
-            v[1] = fast_sin(a) * b;
-            v[2] = z;
-            add_vector_xyz(v, v, moby + 0x10);
-            FUN_L01_00287158(v, c, e, 0x20002020, 0x2030, scale_game_frames(s));
+            particle_spawn_position[0] = fast_cos(a) * b;
+            particle_spawn_position[1] = fast_sin(a) * b;
+            particle_spawn_position[2] = z;
+            add_vector_xyz(particle_spawn_position, particle_spawn_position, moby + 0x10);
+            FUN_L01_00287158(particle_spawn_position, c, e, 0x20002020, 0x2030, scale_game_frames(s));
         }
     }
 }
