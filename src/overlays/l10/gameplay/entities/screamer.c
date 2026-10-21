@@ -349,7 +349,7 @@ void FUN_L10_002dfc38(struct Moby *moby) {
     Hit_2DFC38 *hit_record;
     float relative_offset[4];
     float transformed_offset[4];
-    int st;
+    int hit_processing_status;
     int target_selection_status;
     float ang;
 
@@ -360,7 +360,7 @@ void FUN_L10_002dfc38(struct Moby *moby) {
     tick_timer_2DFC38(&data->f184);
     if (moby->state != 11) {
         hit_record = (Hit_2DFC38 *)hit_search_2DFC38(moby, 0x330000, 0);
-        hit_update_2DFC38(moby, hit_record, &data->f20, 5, &st, 0, 0, 4);
+        hit_update_2DFC38(moby, hit_record, &data->f20, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0) {
             if (data->f20 <= hit_record->f2C) {
                 if (D_00151F38 != 0 && D_0013D408_2DFC38.flag == 0) {
