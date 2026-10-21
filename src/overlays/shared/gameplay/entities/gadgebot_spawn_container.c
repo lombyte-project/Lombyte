@@ -1116,15 +1116,15 @@ void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm_
 /* Grabbed check: while FUN_L00_002db8f8 holds the moby, park it in state 0x10 (remembering the state it came from)
    unless it is in a state that cannot be grabbed; once released, drop it back to state 8. */
 int FUN_L06_002ea5e0(struct Moby *moby) {
-    int r = FUN_L00_002db8f8(moby);
-    if (r != 0) {
+    int grab_check_result = FUN_L00_002db8f8(moby);
+    if (grab_check_result != 0) {
         if (moby->state == 8 || moby->state == 9 || moby->state == 0xC || moby->state == 0xD || moby->state == 0x10) {
             if (moby->state != 0x10) {
                 moby->command = moby->state;
                 moby->state = 0x10;
             }
         } else {
-            r = 0;
+            grab_check_result = 0;
         }
     } else if (moby->state == 0x10) {
         moby->state = 8;
@@ -1132,7 +1132,7 @@ int FUN_L06_002ea5e0(struct Moby *moby) {
             blend_moby_animation_u((MobyAnim *)moby, 0, 0, scale_game_frames(10));
         }
     }
-    return r;
+    return grab_check_result;
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EBAD8), where it is exact; names translated to the US level program. */
 
