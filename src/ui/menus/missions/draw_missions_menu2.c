@@ -39,8 +39,8 @@ extern void vu1_add_g_sregister(s32, s32) __asm__("func_00233980");
 s32 draw_missions_menu2(struct MissionsMenu *menu) __asm__("FUN_0021f688");
 
 s32 draw_missions_menu2(struct MissionsMenu *menu) {
-    struct Rect dst;
-    struct Rect src;
+    struct Rect trailing_text_region;
+    struct Rect text_region_settings;
     s32 mask;
     s32 count;
     s32 i;
@@ -87,15 +87,15 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
         } while (i < count);
     }
     if (mask < 0) {
-        memset(&src, 0, 0x18);
-        src.unk02 = menu->unk24;
-        src.unk06 = menu->unk20;
-        src.unk08 = menu->unk24 >> 1;
-        src.unk0A = mission_text_y + 8;
-        src.unk10 = 0x10;
-        src.unk12 = 1;
-        dst = src;
-        font_print_window_small(&dst, 0x8020FFFF, get_help_message_text(0x523D), -1);
+        memset(&text_region_settings, 0, 0x18);
+        text_region_settings.unk02 = menu->unk24;
+        text_region_settings.unk06 = menu->unk20;
+        text_region_settings.unk08 = menu->unk24 >> 1;
+        text_region_settings.unk0A = mission_text_y + 8;
+        text_region_settings.unk10 = 0x10;
+        text_region_settings.unk12 = 1;
+        trailing_text_region = text_region_settings;
+        font_print_window_small(&trailing_text_region, 0x8020FFFF, get_help_message_text(0x523D), -1);
     }
     do_gif_paging();
     return 2;
