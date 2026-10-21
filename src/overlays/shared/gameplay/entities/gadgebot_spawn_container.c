@@ -3236,14 +3236,14 @@ void energy_sphere_update(struct Moby *sphere_moby) {
     };
     char *sphere_vars = (char *)sphere_moby->pvars;
     if (find_moby_hit(sphere_moby, 0x330000, 0) != 0) {
-        int idx;
+        int voice_slot_index;
         FUN_L06_002f7c68_c(sphere_moby);
         allocate_voice_for_target_entry(1, 0, (int)sphere_moby);
-        idx = *(int *)(sphere_vars + 0x60);
-        if (idx != -1) {
-            char *voice_slot = D_0013E550 + idx * 0x70;
+        voice_slot_index = *(int *)(sphere_vars + 0x60);
+        if (voice_slot_index != -1) {
+            char *voice_slot = D_0013E550 + voice_slot_index * 0x70;
             if (*(char **)(voice_slot + 0x88) == sphere_moby && *(unsigned char *)(voice_slot + 0x74) != 0) {
-                release_voice_slot(idx);
+                release_voice_slot(voice_slot_index);
             }
         }
         *(int *)(sphere_vars + 0x60) = -1;
