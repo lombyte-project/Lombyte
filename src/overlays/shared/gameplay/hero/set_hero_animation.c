@@ -27,7 +27,7 @@ void FUN_L00_00231d08(void) {
     struct Hero *base = &hero;
     char *slot3_moby = ((char *)base->items[3].moby);
     char *slot3_secondary_moby = ((char *)base->items[3].moby2);
-    int buf[2];
+    int mapped_animation_ids[2];
     int seq;
 
     if (slot3_moby == 0 || slot3_secondary_moby == 0) {
@@ -36,12 +36,12 @@ void FUN_L00_00231d08(void) {
     if (*(unsigned char *)(slot3_moby + 0x53) != 1) {
         return;
     }
-    if (FUN_L00_00231ff8(0, &buf[0], &buf[1]) == 0) {
+    if (FUN_L00_00231ff8(0, &mapped_animation_ids[0], &mapped_animation_ids[1]) == 0) {
         return;
     }
-    seq = buf[0];
+    seq = mapped_animation_ids[0];
     blend_moby_animation(slot3_moby, seq, 0, scale_game_frames(7));
-    seq = buf[1];
+    seq = mapped_animation_ids[1];
     blend_moby_animation(slot3_secondary_moby, seq, 0, scale_game_frames(7));
 }
 
