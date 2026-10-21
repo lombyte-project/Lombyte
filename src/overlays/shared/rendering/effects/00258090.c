@@ -16,7 +16,7 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L08_001B2880 __attribute__((section(".data")));
-void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
+void FUN_L08_00272cb8(float *span_start_position, int kind, float *span_direction, float scale) {
     enum {
         PARTICLE_SHORT_SPAN = 0,
         PARTICLE_MEDIUM_SPAN = 1,
@@ -32,7 +32,7 @@ void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
     float span_length;
     float f20;
     int k;
-    *(OvlQuad *)v = *(OvlQuad *)vec;
+    *(OvlQuad *)v = *(OvlQuad *)span_direction;
     particle = create_part(0);
     if (particle != 0) {
         color_high_byte = 0;
@@ -66,8 +66,8 @@ void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
         particle[3] = 0x44;
         particle[1] = 3;
         particle[2] = D_L08_001B2880[k];
-        *(OvlQuad *)(particle + 0x10) = *(OvlQuad *)pos;
-        add_vector_xyz(u, pos, span_offset);
+        *(OvlQuad *)(particle + 0x10) = *(OvlQuad *)span_start_position;
+        add_vector_xyz(u, span_start_position, span_offset);
         *(OvlQuad *)(particle + 0x20) = *(OvlQuad *)u;
         *(float *)(particle + 0x1C) = f20;
         *(float *)(particle + 0x2C) = 1.0f;
