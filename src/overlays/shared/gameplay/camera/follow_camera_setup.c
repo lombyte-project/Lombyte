@@ -320,9 +320,9 @@ extern char D_L00_00173F60_a[] __asm__("D_L00_00173E60");
    ray traces, nudging it sideways when directly above or below), then rebuilds the camera basis looking at the target. */
 void FUN_L00_002e66b8(int snap) {
     char *cams = D_L00_00166C80;
-    char *cam = *(char **)(cams + 0x180);
+    char *camera_moby = *(char **)(cams + 0x180);
     char *track = cams + 0x190; /* the followed player: position at 0, up vector at 0x30 */
-    char *data = *(char **)(cam + 0x70);
+    char *data = *(char **)(camera_moby + 0x70);
     char *orbit = data + 0x130; /* distance at 0x2C, height at 0x30 */
     char *target = data + 0x40; /* point looked at; eye height at 0xB0, moby at 0xC0 */
     float up[4], rise[4], look[4], eye[4];
@@ -340,18 +340,18 @@ void FUN_L00_002e66b8(int snap) {
         mask = 0x94;
         copy_matrix3x4(basis, player->unk0);
         transform_vector_by_basis(offset, part, *(char **)(target + 0xC0) + 0xC0);
-        add_vector_xyz(cam + 0x30, target, offset);
+        add_vector_xyz(camera_moby + 0x30, target, offset);
         scale_vector_xyz(rise, *(char **)(target + 0xC0) + 0xE0, *(float *)(target + 0xB0));
         add_vector_xyz(eye, target, rise);
-        if (FUN_001efa68(eye, cam + 0x30, mask, (int)player->moby, 0)) {
+        if (FUN_001efa68(eye, camera_moby + 0x30, mask, (int)player->moby, 0)) {
             if (vector_distance_xy(D_L00_00173F60_a, eye) < 0.001f) mask = 0x96;
         }
         hero2 = &hero;
-        if (FUN_001efa68(eye, cam + 0x30, mask, (int)hero2->moby, 0)) {
+        if (FUN_001efa68(eye, camera_moby + 0x30, mask, (int)hero2->moby, 0)) {
             subtract_vector_xyz(delta, (float *)D_L00_00173F60_a, eye);
             length = vector_length_xyz(delta);
             if (length == 0.0f) {
-                qcopy(cam + 0x30, target);
+                qcopy(camera_moby + 0x30, target);
             } else if (length < *(float *)&D_L00_00161CC8) {
                 /* the wall is too close to the eye: lift the eye out of it and trace again */
                 float radius = 0.5f;
@@ -371,55 +371,55 @@ void FUN_L00_002e66b8(int snap) {
                 subtract_vector_xyz(delta, eye, start);
                 length = vector_length_xyz(delta);
                 if (length == 0.0f) {
-                    qcopy(cam + 0x30, target);
+                    qcopy(camera_moby + 0x30, target);
                 } else {
                     scale_vector_xyz(delta, delta, *(float *)(orbit + 0x2C) / length);
-                    add_vector_xyz(cam + 0x30, start, delta);
+                    add_vector_xyz(camera_moby + 0x30, start, delta);
                     hero3 = &hero;
-                    if (FUN_001efa68(start, cam + 0x30, mask, (int)hero3->moby, 0)) {
+                    if (FUN_001efa68(start, camera_moby + 0x30, mask, (int)hero3->moby, 0)) {
                         subtract_vector_xyz(delta, (float *)D_L00_00173F60_a, eye);
                         length = vector_length_xyz(delta);
                         if (length == 0.0f) {
-                            qcopy(cam + 0x30, target);
+                            qcopy(camera_moby + 0x30, target);
                         } else {
                             scale_vector_xyz(delta, delta, (length - 0.5f) / length);
-                            add_vector_xyz(cam + 0x30, eye, delta);
+                            add_vector_xyz(camera_moby + 0x30, eye, delta);
                         }
                     }
                 }
             } else {
                 scale_vector_xyz(delta, delta, (length - 0.5f) / length);
-                add_vector_xyz(cam + 0x30, eye, delta);
+                add_vector_xyz(camera_moby + 0x30, eye, delta);
             }
         }
         /* straight above or below the target: nudge the camera sideways */
-        subtract_vector_xyz(offset, (float *)(cam + 0x30), (float *)target);
+        subtract_vector_xyz(offset, (float *)(camera_moby + 0x30), (float *)target);
         length = dot_vectors_xyz(offset, track + 0x30);
         scale_vector_xyz(part, track + 0x30, length);
         subtract_vector_xyz(offset, offset, part);
         if (vector_length_xyz(offset) < 0.05f) {
-            if (random_integer_below(2)) *(float *)(cam + 0x30) += 0.5f;
-            else *(float *)(cam + 0x30) -= 0.5f;
-            if (random_integer_below(2)) *(float *)(cam + 0x34) += 0.5f;
-            else *(float *)(cam + 0x34) -= 0.5f;
-            *(float *)(cam + 0x38) += 0.5f;
+            if (random_integer_below(2)) *(float *)(camera_moby + 0x30) += 0.5f;
+            else *(float *)(camera_moby + 0x30) -= 0.5f;
+            if (random_integer_below(2)) *(float *)(camera_moby + 0x34) += 0.5f;
+            else *(float *)(camera_moby + 0x34) -= 0.5f;
+            *(float *)(camera_moby + 0x38) += 0.5f;
         }
     }
-    from = (float *)(cam + 0x30);
-    to = (float *)(cam + 0x64);
+    from = (float *)(camera_moby + 0x30);
+    to = (float *)(camera_moby + 0x64);
     to[0] = from[0];
     to[1] = from[1];
     to[2] = from[2];
     qcopy(up, D_L00_00166E40);
     normalize_vector_xyz(rise, up, *(float *)(target + 0xB0));
     add_vector_xyz(eye, rise, target);
-    subtract_vector_xyz(look, eye, (float *)(cam + 0x30));
-    normalize_vector_xyz(cam, look, 1.0f);
-    qcopy(cam + 0x20, up);
-    cross_vectors_xyz(cam + 0x10, cam, cam + 0x20);
-    normalize_vector_xyz(cam + 0x10, cam + 0x10, 1.0f);
-    cross_vectors_xyz(cam + 0x20, cam + 0x10, cam);
-    qcopy(cam + 0x40, cam);
+    subtract_vector_xyz(look, eye, (float *)(camera_moby + 0x30));
+    normalize_vector_xyz(camera_moby, look, 1.0f);
+    qcopy(camera_moby + 0x20, up);
+    cross_vectors_xyz(camera_moby + 0x10, camera_moby, camera_moby + 0x20);
+    normalize_vector_xyz(camera_moby + 0x10, camera_moby + 0x10, 1.0f);
+    cross_vectors_xyz(camera_moby + 0x20, camera_moby + 0x10, camera_moby);
+    qcopy(camera_moby + 0x40, camera_moby);
 }
 
 extern float vdot_2e6bf8(void *, void *) __asm__("FUN_001f9ab0");
