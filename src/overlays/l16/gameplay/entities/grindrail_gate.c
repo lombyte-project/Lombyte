@@ -1355,7 +1355,7 @@ float FUN_L16_002e6428(void *m_v, void *t_v) {
     float *target_position = t_v;
     char *moby_data = *(char **)(moby + 0x78);
     float vel;
-    float vec[4];
+    float movement_delta[4];
     float dist;
     float oldz;
     float target_yaw = FUN_001f9e90_c(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
@@ -1367,9 +1367,9 @@ float FUN_L16_002e6428(void *m_v, void *t_v) {
                        D_0015ED70_c * 12.566371f, frame_time * 12.566371f);
     func_00214D88_7890(&vel, dist, D_0015ED70_c * 8.0f, D_0015ED70_c * 12.0f, frame_time * 4.0f,
                        (float *)(moby_data + 0x204));
-    normalize_vector_xyz(vec, moby + 0xC0, *(float *)(moby_data + 0x204));
-    vec[2] = *(float *)(moby_data + 0x208) - D_0015ED70_c * 10.0f;
-    FUN_L00_00258830(moby, vec, 0.5f, 0.5f, 0.0f, 0x10);
+    normalize_vector_xyz(movement_delta, moby + 0xC0, *(float *)(moby_data + 0x204));
+    movement_delta[2] = *(float *)(moby_data + 0x208) - D_0015ED70_c * 10.0f;
+    FUN_L00_00258830(moby, movement_delta, 0.5f, 0.5f, 0.0f, 0x10);
     FUN_L00_00261d78(0.333f, *(void **)(moby_data + 0x1F0), moby + 0x10, moby + 0x10);
     *(float *)(moby_data + 0x208) = oldz - *(float *)(moby + 0x18);
     return dist;
