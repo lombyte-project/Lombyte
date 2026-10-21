@@ -544,19 +544,19 @@ extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) 
 void FUN_L15_002d77c0(char *moby) {
     char buf[8];
     char *data = *(char **)(moby + 0x78);
-    float v;
+    float color_blend_factor;
     int col;
 
     draw_ui_frame(W(D_L15_00161BE4) + W(D_L15_00161BD8), W(D_L15_00161BE8) + W(D_L15_00161BD8),
                 W(D_L15_00161BEC) + W(D_L15_00161BD4), W(D_L15_00161BF0) + W(D_L15_00161BD4),
                 W(D_L15_00161BF4));
-    v = fast_sin(func_001FA888(D_L15_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
-    if (v > 1.0f) {
-        v = 1.0f;
-    } else if (v < 0.0f) {
-        v = 0.0f;
+    color_blend_factor = fast_sin(func_001FA888(D_L15_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
+    if (color_blend_factor > 1.0f) {
+        color_blend_factor = 1.0f;
+    } else if (color_blend_factor < 0.0f) {
+        color_blend_factor = 0.0f;
     }
-    col = fast_tween_color(W(D_L15_00161BDC), W(D_L15_00161BE0), v);
+    col = fast_tween_color(W(D_L15_00161BDC), W(D_L15_00161BE0), color_blend_factor);
     buf[0] = 0x30;
     buf[1] = *(short *)(data + 0x12) / scale_ticks(0xE10) + 0x30;
     buf[2] = 0x3A;
