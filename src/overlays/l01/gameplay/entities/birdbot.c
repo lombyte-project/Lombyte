@@ -3404,7 +3404,7 @@ void FUN_L01_002f8c58(SteamMoby *steam_moby) {
     SteamVec pos;
     SteamVec puff;
     SteamParticle *debris_particle;
-    f32 r;
+    f32 spawn_radius_or_vertical_velocity_increment;
     f32 ang;
     f32 size;
     s32 life;
@@ -3425,10 +3425,10 @@ void FUN_L01_002f8c58(SteamMoby *steam_moby) {
         pos.f[0] = random_float_between(frame_time_macro * -0.5f, frame_time_macro * 0.5f);
         pos.f[1] = random_float_between(frame_time_macro * -0.5f, frame_time_macro * 0.5f);
         vel.q = pos.q;
-        r = random_float_between(0.0f, 0.25f);
+        spawn_radius_or_vertical_velocity_increment = random_float_between(0.0f, 0.25f);
         ang = random_angle_radians();
-        pos.f[0] = fast_cos(ang) * r;
-        pos.f[1] = fast_sin(ang) * r;
+        pos.f[0] = fast_cos(ang) * spawn_radius_or_vertical_velocity_increment;
+        pos.f[1] = fast_sin(ang) * spawn_radius_or_vertical_velocity_increment;
         pos.f[2] = 0.0f;
         fast_vec_add(&pos, &pos, &steam_moby->pos);
         pos.f[2] += steam_vars->height;
@@ -3442,16 +3442,16 @@ void FUN_L01_002f8c58(SteamMoby *steam_moby) {
         puff.f[1] = random_float_between(frame_time_macro * -0.5f, frame_time_macro * 0.5f);
         puff.f[2] = random_float_between(frame_time_macro * 0.0f, frame_time_macro * 3.0f);
         vel.q = puff.q;
-        r = random_float_between(0.0f, 0.25f);
+        spawn_radius_or_vertical_velocity_increment = random_float_between(0.0f, 0.25f);
         ang = random_angle_radians();
-        puff.f[0] = fast_cos(ang) * r;
-        puff.f[1] = fast_sin(ang) * r;
+        puff.f[0] = fast_cos(ang) * spawn_radius_or_vertical_velocity_increment;
+        puff.f[1] = fast_sin(ang) * spawn_radius_or_vertical_velocity_increment;
         puff.f[2] = 0.0f;
         fast_vec_add(&puff, &puff, &steam_moby->pos);
-        r *= frame_time_macro;
-        r *= 8.0f;
+        spawn_radius_or_vertical_velocity_increment *= frame_time_macro;
+        spawn_radius_or_vertical_velocity_increment *= 8.0f;
         puff.f[2] += steam_vars->height;
-        vel.f[2] += r;
+        vel.f[2] += spawn_radius_or_vertical_velocity_increment;
         size = random_float_between(70000.0f, 140000.0f);
         life = scale_game_frames(0xB4);
         debris_particle = mine_debris(&puff, &vel, 0x0F081020, 0x00081020, size, life,
