@@ -1164,7 +1164,7 @@ void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
  * out the moby is hidden again unless the caller keeps it, and switches its update to the car update. */
 void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
     float spot[4];
-    float vel[4];
+    float halved_motion_delta[4];
     float push[4];
     char *data;
     char *hit;
@@ -1180,8 +1180,8 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
             spot[1] = fast_sin(*(float *)(moby + 0x48)) * -2.747f;
             spot[2] = 0.0f;
         }
-        *(OvlQuad *)vel = *(OvlQuad *)vel_in;
-        scale_vector_xyz(vel, vel, 0.5f);
+        *(OvlQuad *)halved_motion_delta = *(OvlQuad *)vel_in;
+        scale_vector_xyz(halved_motion_delta, halved_motion_delta, 0.5f);
         add_vector_xyz(spot, spot, moby + 0x10);
         if (*(int *)(hit + 0x24) & 0x800000) {
             FUN_L00_00260a88(moby, 10, 20, 2, -1);
@@ -1189,7 +1189,7 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
             FUN_L00_00260a88(moby, 3, 5, 2, -1);
         }
         *(short *)(data + 0x14A) = scale_game_frames(600);
-        spawn_explosion(moby, vel, spot, 0.0f, 0.0f, 20, 3, 4, 4.0f, 2.0f, 100000.0f, -1, 3.0f, 15.0f, 1, 1,
+        spawn_explosion(moby, halved_motion_delta, spot, 0.0f, 0.0f, 20, 3, 4, 4.0f, 2.0f, 100000.0f, -1, 3.0f, 15.0f, 1, 1,
                          -1, 0);
         scale_vector_xyz(push, moby + 0xC0, frame_scale * 0.075f);
         push[2] += frame_scale * 0.08f;
