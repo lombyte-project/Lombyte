@@ -41,15 +41,15 @@ f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 
 int FUN_L15_002d6770(void) {
     struct Hero *hero_ptr;
-    float vec[4];
+    float raised_probe_position[4];
     float ground_height;
     if (FUN_L00_0020d568() != 0)
         return 1;
     hero_ptr = &hero;
     if ((unsigned)(hero_ptr->state.current - 0x18) < 2) {
-        *(OvlQuad *)vec = *(OvlQuad *)&hero_ptr->motion.pos;
-        vec[2] = vec[2] + 2.0f;
-        ground_height = probe_ground_height(vec, 0, 0.5f);
+        *(OvlQuad *)raised_probe_position = *(OvlQuad *)&hero_ptr->motion.pos;
+        raised_probe_position[2] = raised_probe_position[2] + 2.0f;
+        ground_height = probe_ground_height(raised_probe_position, 0, 0.5f);
         if (collision_hit_material() != 0)
             return 0;
         if (hero_ptr->motion.pos.f[2] <= ground_height)
