@@ -870,7 +870,7 @@ typedef struct {
 extern E_2779c8 D_0013C940_2779c8 __asm__("D_0013C940") NOT_SDA;
 
 int FUN_L00_002779c8(int x) {
-    int v;
+    int transition_owner;
 
     if ((s32)D_L00_001B9CF0.owner->unk40 != x) {
         return 0;
@@ -879,9 +879,9 @@ int FUN_L00_002779c8(int x) {
         return 1;
     }
     if (D_0013C940_2779c8.flags & 0x10) {
-        v = (s32)D_L00_001B9CF0.owner->unk38;
-        if (v != 0) {
-            D_L00_001B9CF0.unk8 = (struct Own *)v;
+        transition_owner = (s32)D_L00_001B9CF0.owner->unk38;
+        if (transition_owner != 0) {
+            D_L00_001B9CF0.unk8 = (struct Own *)transition_owner;
         } else if (D_L00_001B9CF0.unk124 == 0) {
             return -1;
         }
