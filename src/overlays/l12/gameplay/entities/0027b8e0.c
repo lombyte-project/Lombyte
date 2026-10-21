@@ -16,16 +16,16 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-int FUN_L12_0027b8e0(char *moby, float *b, float x, float y, float z) {
-    float absolute_height_difference = absolute_float(b[2] - *(float *)(moby + 0x18));
+int FUN_L12_0027b8e0(char *moby, float *point_position, float x, float y, float z) {
+    float absolute_height_difference = absolute_float(point_position[2] - *(float *)(moby + 0x18));
     if (absolute_height_difference > y)
         return 0;
-    if (fast_vec_dist(b, moby + 0x10) > x)
+    if (fast_vec_dist(point_position, moby + 0x10) > x)
         return 0;
     if (!(0.0f < z))
         return 1;
     {
-        float r = fast_arc_tan(b[0] - *(float *)(moby + 0x10), b[1] - *(float *)(moby + 0x14));
+        float r = fast_arc_tan(point_position[0] - *(float *)(moby + 0x10), point_position[1] - *(float *)(moby + 0x14));
         r = fast_difference_between_rotations(*(float *)(moby + 0x48), r);
         if (r > z)
             return 0;
