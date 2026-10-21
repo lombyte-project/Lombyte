@@ -1504,11 +1504,11 @@ void FUN_L15_002ed398(struct Moby *moby) {
         HINT_DIALOGUE_CHECK_TRIGGERS = 1
     };
     Talk_2ed398 *hint_dialogue_data = (struct Talk_2ed398 *)moby->pvars;
-    int st = moby->state;
+    int hint_dialogue_state = moby->state;
     struct Moby *npc_moby;
     int i, j, found, npc, pick;
 
-    switch (st) {
+    switch (hint_dialogue_state) {
     case HINT_DIALOGUE_INITIALIZE:
         moby->update_dist = 0xFF;
         hint_dialogue_data->wait = scale_game_frames_2ed398(0x4B0);
