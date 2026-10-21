@@ -1033,7 +1033,7 @@ void FUN_L01_00232978(int flag) {
     struct Hero *g = &hero;
     float probe_height_offset, slope_probe_distance, hit_normal_elevation;
     int k, x;
-    struct Hero *h1, *h2, *h3;
+    struct Hero *material_probe_hero, *slope_probe_hero, *slide_hero;
     char *slope_hit, *slide_hit;
     float *slide_normal;
 
@@ -1071,33 +1071,33 @@ void FUN_L01_00232978(int flag) {
     add_vector_xyz(slope_probe_end, slope_probe_end, slope_probe_start);
     k = -1;
     add_vector_xyz(material_probe_end, material_probe_end, material_probe_start);
-    h1 = &hero;
-    if (FUN_001efa68(material_probe_start, material_probe_end, 4, (int)h1->moby, 0) != 0) {
+    material_probe_hero = &hero;
+    if (FUN_001efa68(material_probe_start, material_probe_end, 4, (int)material_probe_hero->moby, 0) != 0) {
         if (D_L01_001742DC > 0) {
             k = collision_hit_material();
         }
     }
     hit_normal_elevation = 0.0f;
-    h2 = &hero;
-    if (FUN_001efa68(slope_probe_start, slope_probe_end, 4, (int)h2->moby, 0) != 0) {
+    slope_probe_hero = &hero;
+    if (FUN_001efa68(slope_probe_start, slope_probe_end, 4, (int)slope_probe_hero->moby, 0) != 0) {
         slope_hit = D_L01_001742C0_d;
         if (*(int *)(slope_hit + 0x1C) > 0) {
             hit_normal_elevation = fast_arc_tan(*(float *)(slope_hit + 0x48), vector_length_xy(slope_hit + 0x40));
         }
     }
     if (hit_normal_elevation >= 0.87266463f || k == 8 || k == 12) {
-        h3 = &hero;
+        slide_hero = &hero;
         slide_hit = D_L01_001742C0_d;
         slide_normal = (float *)(slide_hit + 0x40);
         *(int *)(slide_hit + 0x48) = 0;
-        h3->unk240 = *(int *)(slide_hit + 0x18);
+        slide_hero->unk240 = *(int *)(slide_hit + 0x18);
         sceVu0Normalize(slide_normal, slide_normal);
         {
-            float c = -h3->motion.velocity.f[0] * *(float *)(slide_hit + 0x40) -
-                      h3->motion.velocity.f[1] * *(float *)(slide_hit + 0x44);
+            float c = -slide_hero->motion.velocity.f[0] * *(float *)(slide_hit + 0x40) -
+                      slide_hero->motion.velocity.f[1] * *(float *)(slide_hit + 0x44);
             if (c > 0.0f) {
                 fast_vec_scale(slide_normal, slide_normal, c);
-                add_vector_xyz(&h3->motion.velocity, &h3->motion.velocity, slide_normal);
+                add_vector_xyz(&slide_hero->motion.velocity, &slide_hero->motion.velocity, slide_normal);
             }
         }
     }
