@@ -2692,7 +2692,7 @@ extern float FUN_L00_0025b8c0_c2(float *p, float *v, float t, float u1, float u2
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void func_L00_002592B0_2B6AA0(char *moby, float target, float *vel, float k, float d, float max) __asm__("FUN_L00_00258278");
 
-void FUN_L14_002b5850(char *moby, float *target, float target_heading, float b, float c, float position_snap_threshold_scale, float heading_error_gain, float heading_velocity_damping, float g) {
+void FUN_L14_002b5850(char *moby, float *target, float target_heading, float b, float c, float position_snap_threshold_scale, float heading_error_gain, float heading_velocity_damping, float heading_velocity_limit) {
     int data;
     int moby_state = moby[0x20] & 0xFF;
     if ((moby_state >= 4 && moby_state <= 6) || moby_state == 8) {
@@ -2700,7 +2700,7 @@ void FUN_L14_002b5850(char *moby, float *target, float target_heading, float b, 
         FUN_L00_0025b8c0_c2((float *)(moby + 0x10), (float *)(data + 0xF0), target[0], b, c, position_snap_threshold_scale);
         FUN_L00_0025b8c0_c2((float *)(moby + 0x14), (float *)(data + 0xF4), target[1], b, c, position_snap_threshold_scale);
         FUN_L00_0025b8c0_c2((float *)(moby + 0x18), (float *)(data + 0xF8), target[2], b, c, position_snap_threshold_scale);
-        func_L00_002592B0_2B6AA0(moby, target_heading, (float *)(data + 0xE4), heading_error_gain, heading_velocity_damping, g);
+        func_L00_002592B0_2B6AA0(moby, target_heading, (float *)(data + 0xE4), heading_error_gain, heading_velocity_damping, heading_velocity_limit);
     }
 }
 typedef struct {
