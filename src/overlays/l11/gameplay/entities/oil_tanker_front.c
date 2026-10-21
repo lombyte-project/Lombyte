@@ -1778,13 +1778,13 @@ extern short D_L11_00162540 __attribute__((sda));
 extern short D_L11_00162550 __attribute__((sda));
 void FUN_L11_0031d8d8(int arg) {
     int *element_counts = (int *)&D_L11_00162530_d;
-    int *b = (int *)&D_L11_00162540;
+    int *triple_word_source_tables = (int *)&D_L11_00162540;
     int *pair_source_tables = (int *)&D_L11_00162550;
     int *word_source_tables = (int *)&D_L11_00162570_d;
     int i;
     for (i = 0; i < 4; i++) {
         FUN_L08_00258090(D_L11_001FF770, pair_source_tables[i], element_counts[i], (char *)D_L11_001FF750_u + arg * 8);
-        FUN_L00_001fde98(element_counts[i], b[i], word_source_tables[i], D_L11_001FF770, 1);
+        FUN_L00_001fde98(element_counts[i], triple_word_source_tables[i], word_source_tables[i], D_L11_001FF770, 1);
     }
 }
 extern int D_L11_001624F8 __attribute__((sda));
