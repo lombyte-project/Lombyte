@@ -1739,7 +1739,7 @@ void FUN_L00_00267a08_0026d470(void *) __asm__("FUN_L00_00267a08");
 void FUN_L00_0026d470(Part_26d470 *particle) {
     Src_26d470 *e;
     Body_26d470 *particle_data;
-    float v;
+    float updated_alpha_offset;
     u32 packed_rgb;
     if (!particle)
         return;
@@ -1752,13 +1752,13 @@ void FUN_L00_0026d470(Part_26d470 *particle) {
     qcopy(&particle->pos, &e->pos);
     particle->b8 = e->b8;
     particle->fC = e->fC * particle_data->f4 + particle_data->f8;
-    v = particle_data->fC + particle_data->f14;
-    particle_data->fC = v;
-    if (v < 0.0f) {
+    updated_alpha_offset = particle_data->fC + particle_data->f14;
+    particle_data->fC = updated_alpha_offset;
+    if (updated_alpha_offset < 0.0f) {
         particle_data->fC = 0.0f;
         return;
     }
-    if (1.0f < v)
+    if (1.0f < updated_alpha_offset)
         particle_data->fC = 1.0f;
     packed_rgb = particle->w4 & 0xFFFFFF;
     particle->w4 =
