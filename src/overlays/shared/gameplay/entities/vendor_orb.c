@@ -2051,7 +2051,7 @@ extern short D_L00_00161D0C __attribute__((sda));
 extern short D_L00_00161D10 __attribute__((sda));
 extern short D_L00_00161D80 __attribute__((sda));
 void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
-    float cam[4];
+    float hero_position[4];
     float target_position_or_up_offset[4];
     char *camera_state;
     char *attach_state;
@@ -2064,7 +2064,7 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
     int flag;
     camera_view = D_L00_00166E10;
     camera_state = *(char **)(camera + 0x70);
-    FUN_L00_002e4168_c(camera, cam);
+    FUN_L00_002e4168_c(camera, hero_position);
     pad = &hero;
     attach_state = camera_state + 0x40;
     if (pad->state.current == 0x77) {
@@ -2113,14 +2113,14 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
             if (absolute_float(*(float *)(camera_view + 0x30) - *(float *)(camera_view + 0x40)) > 0.001f ||
                 absolute_float(*(float *)(camera_view + 0x34) - *(float *)(camera_view + 0x44)) > 0.001f ||
                 absolute_float(*(float *)(camera_view + 0x38) - *(float *)(camera_view + 0x48)) > 0.001f) {
-                x = fast_vec_dot(cam, camera_view + 0x30);
+                x = fast_vec_dot(hero_position, camera_view + 0x30);
                 FUN_001f9a68_c2(out_focus_velocity, camera_view + 0x30, x);
-                FUN_001f9a28(attach_state, cam, out_focus_velocity);
+                FUN_001f9a28(attach_state, hero_position, out_focus_velocity);
             } else {
                 qcopy(out_focus_velocity, attach_state + 0x10);
-                x = fast_vec_dot(cam, camera_view + 0x30);
+                x = fast_vec_dot(hero_position, camera_view + 0x30);
                 FUN_001f9a68_c2(target_position_or_up_offset, camera_view + 0x30, x);
-                FUN_001f9a28(attach_state, cam, target_position_or_up_offset);
+                FUN_001f9a28(attach_state, hero_position, target_position_or_up_offset);
             }
         } else {
             FUN_L00_002e42c0_c(target_position_or_up_offset, 1);
@@ -2142,9 +2142,9 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
             }
         }
         qcopy(out_focus_velocity, attach_state + 0x10);
-        x = fast_vec_dot(cam, camera_view + 0x30);
+        x = fast_vec_dot(hero_position, camera_view + 0x30);
         FUN_001f9a68_c2(target_position_or_up_offset, camera_view + 0x30, x);
-        FUN_001f9a28(attach_state, cam, target_position_or_up_offset);
+        FUN_001f9a28(attach_state, hero_position, target_position_or_up_offset);
         if (FUN_001f9770_c(attach_state + 0xD4)) {
             if (*(unsigned char *)(attach_state + 0xC4) == 9) {
                 *(unsigned char *)(attach_state + 0xC4) = 0xA;
@@ -2168,22 +2168,22 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
         break;
     case CAM_ATTACH_HOLD_FOCUS_VELOCITY:
         qcopy(out_focus_velocity, attach_state + 0x10);
-        x = fast_vec_dot(cam, camera_view + 0x30);
+        x = fast_vec_dot(hero_position, camera_view + 0x30);
         FUN_001f9a68_c2(target_position_or_up_offset, camera_view + 0x30, x);
-        FUN_001f9a28(attach_state, cam, target_position_or_up_offset);
+        FUN_001f9a28(attach_state, hero_position, target_position_or_up_offset);
         break;
     case CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY:
     case CAM_ATTACH_CONTINUE_BLEND_PROJECTED_HERO_FOCUS_VELOCITY:
-        x = fast_vec_dot(cam, camera_view + 0x30);
+        x = fast_vec_dot(hero_position, camera_view + 0x30);
         FUN_001f9a68_c2(out_focus_velocity, camera_view + 0x30, x);
-        FUN_001f9a28(attach_state, cam, out_focus_velocity);
+        FUN_001f9a28(attach_state, hero_position, out_focus_velocity);
         lerp_vector(*(float *)&D_L00_00161D80, out_focus_velocity, out_focus_velocity, attach_state + 0x20);
         break;
     case CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY:
     default:
-        x = fast_vec_dot(cam, camera_view + 0x30);
+        x = fast_vec_dot(hero_position, camera_view + 0x30);
         FUN_001f9a68_c2(out_focus_velocity, camera_view + 0x30, x);
-        FUN_001f9a28(attach_state, cam, out_focus_velocity);
+        FUN_001f9a28(attach_state, hero_position, out_focus_velocity);
         break;
     }
 }
