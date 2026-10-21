@@ -2978,21 +2978,21 @@ void set_planar_vel(float radians) __asm__("FUN_L00_002120d8");
 void set_planar_vel(float radians) {
     struct Hero *g = &hero;
     float y;
-    float r;
+    float ground_speed;
     float out[4];
 
     y = g->motion.rot.f[2];
     if (radians <= 3.14159274f) {
         y = radians;
     }
-    r = g->ground_speed;
+    ground_speed = g->ground_speed;
 
     if (g->unk20B3 != 0) {
         float matrix[16];
         float vec[4];
 
-        vec[0] = fast_cos(0.0f) * r;
-        vec[1] = fast_sin(0.0f) * r;
+        vec[0] = fast_cos(0.0f) * ground_speed;
+        vec[1] = fast_sin(0.0f) * ground_speed;
         vec[2] = 0.0f;
 
         rotation_matrix(matrix, ((char *)g->moby) + 0x40);
@@ -3000,7 +3000,7 @@ void set_planar_vel(float radians) {
 
         qcopy(out, vec);
     } else {
-        func_00215C00(out, r, y, g->ground_pitch.f);
+        func_00215C00(out, ground_speed, y, g->ground_pitch.f);
     }
 
     qcopy(&hero.motion.velocity, out);
