@@ -2439,8 +2439,8 @@ void FUN_L13_002b97f8(char *moby) {
     unsigned char *g;
     unsigned char *player_health_state;
     unsigned char *b;
-    int sp10;
-    int sp14;
+    int target_screen_x;
+    int target_screen_y;
     int tex;
     int i;
     unsigned char ammo_icon_count;
@@ -2451,10 +2451,10 @@ void FUN_L13_002b97f8(char *moby) {
     int ex;
     int ey;
     int a;
-    int v;
+    int health_palette_fill_end;
     int lo;
     int hi;
-    int idx;
+    int health_palette_index;
     float marker_transition_fraction;
     float k;
     float marker_opacity_factor;
@@ -2463,7 +2463,7 @@ void FUN_L13_002b97f8(char *moby) {
 
     FUN_L13_002b95b8_c((int)moby, moby_vars);
     if (*(int *)(moby_vars + 0x88) != 0) {
-        FUN_L11_00311210(*(char **)(moby_vars + 0x88) + 0x10, &sp10, &sp14, 0);
+        FUN_L11_00311210(*(char **)(moby_vars + 0x88) + 0x10, &target_screen_x, &target_screen_y, 0);
         if (*(int *)(moby_vars + 0x8C) > scale_game_frames_alt(0x1F4)) {
             marker_transition_fraction = convert_integer_to_float(*(int *)(moby_vars + 0x8C) - scale_game_frames_alt(0x1F4));
             marker_transition_fraction = marker_transition_fraction / convert_integer_to_float(scale_game_frames_alt(0x4B));
@@ -2471,12 +2471,12 @@ void FUN_L13_002b97f8(char *moby) {
             k = marker_transition_fraction * 5.0f + 1.0f;
             if (marker_opacity_factor > 1.0f) marker_opacity_factor = 1.0f;
             c = func_001FA898_r(marker_opacity_factor * 96.0f);
-            func_L13_002B9590_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), k, normalize_angle(convert_integer_to_float(frame_count) / 30.0f), 0, 0xFF, 0, c);
+            func_L13_002B9590_f(convert_integer_to_float(target_screen_x), convert_integer_to_float(target_screen_y), k, normalize_angle(convert_integer_to_float(frame_count) / 30.0f), 0, 0xFF, 0, c);
             *(int *)(moby_vars + 0xEC) = 0;
         } else {
             a = 0xFF;
             if ((*(int *)(moby_vars + 0x8C) / scale_game_frames_alt(0x14)) & 1) a = 0;
-            func_L13_002B9590_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), 1.0f, 0.0f, 0xFF, a, 0, 0x60);
+            func_L13_002B9590_f(convert_integer_to_float(target_screen_x), convert_integer_to_float(target_screen_y), 1.0f, 0.0f, 0xFF, a, 0, 0x60);
             *(int *)(moby_vars + 0xEC) = *(int *)(moby_vars + 0x88);
         }
     }
@@ -2514,23 +2514,23 @@ void FUN_L13_002b97f8(char *moby) {
     hud_health_step_magnitude = absolute_float(hud_health_step);
     if (hud_health_step_magnitude > 1.0f) hud_health_step /= hud_health_step_magnitude;
     *(float *)(moby_vars + 0xF0) += hud_health_step;
-    v = func_001FA898_r(*(float *)(moby_vars + 0xF0) * 251.0f / *(float *)(player_health_state + 0x1600)) + 2;
-    if (v > 0xFD) v = 0xFD;
-    if (v < 2) v = 2;
-    lo = *(int *)(moby_vars + 0xF4) <= v ? *(int *)(moby_vars + 0xF4) : v;
-    hi = *(int *)(moby_vars + 0xF4) < v ? v : *(int *)(moby_vars + 0xF4);
+    health_palette_fill_end = func_001FA898_r(*(float *)(moby_vars + 0xF0) * 251.0f / *(float *)(player_health_state + 0x1600)) + 2;
+    if (health_palette_fill_end > 0xFD) health_palette_fill_end = 0xFD;
+    if (health_palette_fill_end < 2) health_palette_fill_end = 2;
+    lo = *(int *)(moby_vars + 0xF4) <= health_palette_fill_end ? *(int *)(moby_vars + 0xF4) : health_palette_fill_end;
+    hi = *(int *)(moby_vars + 0xF4) < health_palette_fill_end ? health_palette_fill_end : *(int *)(moby_vars + 0xF4);
     for (j = lo; j <= hi; j++) {
-        idx = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
-        if (j < v) {
-            hp_bar_clut[0][idx] = D_L13_001CBE70[idx];
+        health_palette_index = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
+        if (j < health_palette_fill_end) {
+            hp_bar_clut[0][health_palette_index] = D_L13_001CBE70[health_palette_index];
         } else {
-            hp_bar_clut[0][idx] = 0x80000000;
+            hp_bar_clut[0][health_palette_index] = 0x80000000;
         }
     }
     screen_dimensions = (char *)D_0013E500;
     draw_textured_quad_local(0x170, *(int *)(screen_dimensions + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(moby_vars + 0x104) + 0x28));
     draw_textured_quad_local(0x170, *(int *)(screen_dimensions + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(moby_vars + 0x104) + 0x29));
-    *(int *)(moby_vars + 0xF4) = v;
+    *(int *)(moby_vars + 0xF4) = health_palette_fill_end;
 }
 /* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB068), where it is exact; names translated to the US level program. */
