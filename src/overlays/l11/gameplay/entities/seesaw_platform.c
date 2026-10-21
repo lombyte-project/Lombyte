@@ -512,7 +512,7 @@ void FUN_L11_0030dd18(struct Moby *grid_controller) {
     float progress;
     float hi;
     float lo;
-    float lim;
+    float row_angle_offset_degrees;
     float angle;
     int row;
     int col;
@@ -534,7 +534,7 @@ void FUN_L11_0030dd18(struct Moby *grid_controller) {
     }
     for (row = 0; row < 4; row++) {
         for (col = 0; col < 6; col++) {
-            lim = (row < 2) ? hi : lo;
+            row_angle_offset_degrees = (row < 2) ? hi : lo;
             if (row < 2) {
                 add_vector_xyz(&grid[row][col]->pos, &grid_controller->pos, &parent_axis0_offset);
             } else {
@@ -543,13 +543,13 @@ void FUN_L11_0030dd18(struct Moby *grid_controller) {
             angle = ((float)col - 2.5f) * 0.2617994f;
             if (row & 1) {
                 grid[row][col]->rot.z = fast_add_rotations(grid_controller->rot.z, 0.0f);
-                angle = fast_add_rotations(angle, lim * 0.017453292f);
+                angle = fast_add_rotations(angle, row_angle_offset_degrees * 0.017453292f);
                 if (angle < -0.7853982f) {
                     angle += 1.5707964f;
                 }
             } else {
                 grid[row][col]->rot.z = fast_add_rotations(grid_controller->rot.z, 3.1415927f);
-                angle = fast_sub_rotations(angle, lim * 0.017453292f);
+                angle = fast_sub_rotations(angle, row_angle_offset_degrees * 0.017453292f);
                 if (0.7853982f < angle) {
                     angle -= 1.5707964f;
                 }
