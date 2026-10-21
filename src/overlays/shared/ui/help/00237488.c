@@ -1316,17 +1316,17 @@ extern char D_0013F3D0[];
 extern int D_0015ED84;
 extern char *D_L05_001B0930[];
 
-void FUN_L05_00254358(float *out, float *rot) {
-    char *g = (char *)((char *)((char *)&hero));
-    char *path_owner_moby = *(char **)(g + 0x86C);
+void FUN_L05_00254358(float *out, float *out_rotation) {
+    char *hero_base = (char *)((char *)((char *)&hero));
+    char *path_owner_moby = *(char **)(hero_base + 0x86C);
     char *path;
     float distance;
     int i, best;
     float tmp[4] __attribute__((aligned(16)));
 
     if (path_owner_moby == 0) {
-        qcopy(out, g + 0x80);
-        qcopy(rot, g + 0x90);
+        qcopy(out, hero_base + 0x80);
+        qcopy(out_rotation, hero_base + 0x90);
         return;
     }
     path = D_L05_001B0930[*(int *)(*(char **)(path_owner_moby + 0x78) + 0x24)];
@@ -1368,11 +1368,11 @@ void FUN_L05_00254358(float *out, float *rot) {
     qcopy(tmp, out);
     tmp[2] += 2.0f;
     out[2] = probe_ground_height(tmp, 0, 0.5f);
-    clear_u64_value(rot);
+    clear_u64_value(out_rotation);
     {
         float *selected_path_record = (float *)(path + best * 16);
         float *heading_target_path_record = (float *)(path + (best + 1) * 16);
-        rot[2] = fast_arc_tan_c(heading_target_path_record[4] - selected_path_record[4], heading_target_path_record[5] - selected_path_record[5]);
+        out_rotation[2] = fast_arc_tan_c(heading_target_path_record[4] - selected_path_record[4], heading_target_path_record[5] - selected_path_record[5]);
     }
 }
 extern int D_0015ED84_lui __asm__("D_0015ED84") __attribute__((section(".sdata")));
