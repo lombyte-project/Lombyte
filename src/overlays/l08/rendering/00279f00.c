@@ -92,12 +92,12 @@ extern int p27fe00_trunc(float) __asm__("FUN_001fa6d0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern unsigned char *D_L08_001B29B4 __attribute__((section(".data")));
 
-void FUN_L08_0027fe00(u128 *pos, u128 *dir, int life, float scale) {
+void FUN_L08_0027fe00(u128 *spawn_position, u128 *dir, int life, float scale) {
     unsigned char *effect;
     unsigned char *effect_data;
     effect = p27fe00_alloc(0x4D);
     if (effect != 0) {
-        qcopy(effect + 0x10, pos);
+        qcopy(effect + 0x10, spawn_position);
         effect_data = effect + 0x20;
         *(int *)(effect + 4) = 0x50504040;
         effect[9] = p27fe00_trunc(2.0f) + 0x40;
