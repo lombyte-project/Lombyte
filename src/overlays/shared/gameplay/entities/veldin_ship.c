@@ -1197,7 +1197,7 @@ void decoy_glove_update(unsigned char *moby) {
     extern int allocate_voice_for_target_entry(int, int, void *);
     char *glove_vars;
     char *tracked_target_moby;
-    char *g;
+    char *hero_data;
     float vb[4];
     float va[4];
     float vc[4];
@@ -1234,16 +1234,16 @@ void decoy_glove_update(unsigned char *moby) {
     }
     *(int *)(glove_vars + 0x50) = 0;
 target_valid:
-    g = ((char *)&hero);
-    if (*(int *)(g + 0x2084) == 1) FUN_L00_002223f8(0x1E, 1);
+    hero_data = ((char *)&hero);
+    if (*(int *)(hero_data + 0x2084) == 1) FUN_L00_002223f8(0x1E, 1);
     if (fast_dec_timer((int *)(glove_vars + 0x54))) {
-        if (*(unsigned char *)(g + 0x20AC) == 0) {
-            if (*(unsigned char *)(g + 0x20A8) && *(int *)(g + 0x1BC) == scale_game_frames_c2(0x11)) goto L3D10;
-            if (*(int *)(((char *)&D_0013CAE4)) & *(int *)(g + 0x10A0)) {
-                if (*(int *)(g + 0x2084) == 0x1E && FUN_L00_00233e98(-1)) goto L3D10;
+        if (*(unsigned char *)(hero_data + 0x20AC) == 0) {
+            if (*(unsigned char *)(hero_data + 0x20A8) && *(int *)(hero_data + 0x1BC) == scale_game_frames_c2(0x11)) goto L3D10;
+            if (*(int *)(((char *)&D_0013CAE4)) & *(int *)(hero_data + 0x10A0)) {
+                if (*(int *)(hero_data + 0x2084) == 0x1E && FUN_L00_00233e98(-1)) goto L3D10;
             }
-            g = ((char *)&hero);
-            if (*(int *)(g + 0x2084) == 0x23 && *(int *)(g + 0x198) == scale_game_frames_c2(0x10)) goto L3D10;
+            hero_data = ((char *)&hero);
+            if (*(int *)(hero_data + 0x2084) == 0x23 && *(int *)(hero_data + 0x198) == scale_game_frames_c2(0x10)) goto L3D10;
         }
     }
     goto L3D34;
