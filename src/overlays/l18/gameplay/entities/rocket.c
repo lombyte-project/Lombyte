@@ -1850,7 +1850,7 @@ void FUN_L18_002db460(struct Moby *moby) {
 extern short D_L18_00161BFC_d __asm__("D_L18_00161BFC") __attribute__((sda));
 
 extern float D_L18_00161BF8 __attribute__((sda));
-void FUN_L18_002db938(char *pos, float *initial_movement_step, int arg, float fa, float fb) {
+void FUN_L18_002db938(char *pos, float *initial_movement_step, int collision_filter_moby, float fa, float fb) {
     Obj *spawned_moby = (Obj *)func_0020D348_m(0x270);
     if (spawned_moby != 0) {
         Child *moby_vars;
@@ -1867,7 +1867,7 @@ void FUN_L18_002db938(char *pos, float *initial_movement_step, int arg, float fa
         qcopy(spawned_moby->pos, pos);
         spawned_moby->f48 = fast_arc_tan(initial_movement_step[0], initial_movement_step[1]);
         qcopy(moby_vars->v, initial_movement_step);
-        moby_vars->f34 = arg;
+        moby_vars->f34 = collision_filter_moby;
         moby_vars->f28 = fa;
         moby_vars->f20 = fb;
         moby_vars->f30 = 0;
