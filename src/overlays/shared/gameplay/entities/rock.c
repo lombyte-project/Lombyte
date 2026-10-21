@@ -336,18 +336,18 @@ void FUN_L01_002f6a30(struct Moby *moby) {
         for (flash = 0; flash < 5; flash++) {
             Cols_2F7E08 start_colors = D_L01_0020B470;
             Cols_2F7E08 end_colors = D_L01_0020B488;
-            Vec_2F7E08 vel;
+            Vec_2F7E08 flash_emission_vector;
             {
                 Vec_2F7E08 random_dir;
                 *(u128_f6 *)&random_dir = 0;
                 random_dir.x = random_float_between_c(-1.0f, 1.0f);
                 random_dir.y = random_float_between_c(-1.0f, 1.0f);
                 random_dir.z = random_float_between_c(-1.0f, 1.0f);
-                *(u128_f6 *)&vel = *(u128_f6 *)&random_dir;
+                *(u128_f6 *)&flash_emission_vector = *(u128_f6 *)&random_dir;
             }
             {
-                normalize_vector_xyz_c(&vel, &vel, size_scale * (random_float_between_c(0.0f, 3.0f) * D_0015ED6C));
-                FUN_L00_0026a4c8(&(*(Vec_2F7E08 *)&moby->pos), &vel, start_colors.c[random_integer_below_c2(6)], end_colors.c[random_integer_below_c2(6)],
+                normalize_vector_xyz_c(&flash_emission_vector, &flash_emission_vector, size_scale * (random_float_between_c(0.0f, 3.0f) * D_0015ED6C));
+                FUN_L00_0026a4c8(&(*(Vec_2F7E08 *)&moby->pos), &flash_emission_vector, start_colors.c[random_integer_below_c2(6)], end_colors.c[random_integer_below_c2(6)],
                                   FUN_L00_00257b90_c(scale_game_frames_alt(0xF), scale_game_frames_alt(0x14)) / rate_divisor, 200000.0f);
             }
         }
