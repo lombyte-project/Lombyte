@@ -720,7 +720,7 @@ void FUN_L16_002d3dc0(char *moby, void *owner, void *position, char *vector) {
 
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L16_002d3de0(struct Moby *moby, int arg) {
+void FUN_L16_002d3de0(struct Moby *moby, int return_countdown_ticks) {
     char *commando_data = (char *)moby->pvars;
     if (moby->state == 10) {
         moby->state = 1;
@@ -731,7 +731,7 @@ void FUN_L16_002d3de0(struct Moby *moby, int arg) {
         moby->flags &= 0xFFFE;
         moby->collision = moby->pclass->collision;
         moby->flags |= 0x1000;
-        *(short *)(commando_data + 0x2DC) = arg;
+        *(short *)(commando_data + 0x2DC) = return_countdown_ticks;
         *(float *)(commando_data + 0x2BC) = moby->pos.z;
         qcopy(commando_data + 0x2C0, &moby->pos);
         *(float *)(commando_data + 0x2D4) = frame_time * 5.0f;
