@@ -1763,11 +1763,11 @@ void lab_door_update(unsigned char *door_moby) {
         break;
     case LAB_DOOR_STATE_RISING: {
         float f = 4.0f / multiply_global_factor_ed64(20.0f);
-        float g = *(float *)(door_moby + 0x18) + f;
+        float unclamped_rising_height = *(float *)(door_moby + 0x18) + f;
         float raised_height;
-        *(float *)(door_moby + 0x18) = g;
+        *(float *)(door_moby + 0x18) = unclamped_rising_height;
         raised_height = *(float *)(door_vars + 2) + 4.0f;
-        if (raised_height <= g) {
+        if (raised_height <= unclamped_rising_height) {
             *(float *)(door_moby + 0x18) = raised_height;
             door_moby[0x20] = 4;
             if (door_vars[5] != -1)
