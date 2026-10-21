@@ -182,7 +182,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 
 void FUN_L00_0029ff58(void) {
     struct HoloPacket quad_packet;
-    float v[4][4];
+    float transformed_vertex_offsets[4][4];
     int i;
     D_L00_00161184 = D_L00_00161184 + 0.01f;
     if (D_L00_00161184 > 1.0f) D_L00_00161184 = D_L00_00161184 - 1.0f;
@@ -191,22 +191,22 @@ void FUN_L00_0029ff58(void) {
     quad_packet.hdr[0] = 0;
     quad_packet.hdr[1] = get_effect_texture_c(0x18);
     for (i = 0; i < 4; i++) {
-        transform_vector_by_basis(v[0], D_L00_001CA380[D_L00_001CA480[i].a], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
-        transform_vector_by_basis(v[1], D_L00_001CA380[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
-        transform_vector_by_basis(v[2], D_L00_001CA380[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
-        transform_vector_by_basis(v[3], D_L00_001CA380[D_L00_001CA480[i].d], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
-        quad_packet.pos[0][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + v[0][0];
-        quad_packet.pos[0][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + v[0][1];
-        quad_packet.pos[0][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + v[0][2];
-        quad_packet.pos[1][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + v[1][0];
-        quad_packet.pos[1][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + v[1][1];
-        quad_packet.pos[1][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + v[1][2];
-        quad_packet.pos[2][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + v[2][0];
-        quad_packet.pos[2][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + v[2][1];
-        quad_packet.pos[2][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + v[2][2];
-        quad_packet.pos[3][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + v[3][0];
-        quad_packet.pos[3][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + v[3][1];
-        quad_packet.pos[3][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + v[3][2];
+        transform_vector_by_basis(transformed_vertex_offsets[0], D_L00_001CA380[D_L00_001CA480[i].a], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[1], D_L00_001CA380[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[2], D_L00_001CA380[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[3], D_L00_001CA380[D_L00_001CA480[i].d], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        quad_packet.pos[0][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + transformed_vertex_offsets[0][0];
+        quad_packet.pos[0][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + transformed_vertex_offsets[0][1];
+        quad_packet.pos[0][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + transformed_vertex_offsets[0][2];
+        quad_packet.pos[1][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + transformed_vertex_offsets[1][0];
+        quad_packet.pos[1][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + transformed_vertex_offsets[1][1];
+        quad_packet.pos[1][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + transformed_vertex_offsets[1][2];
+        quad_packet.pos[2][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + transformed_vertex_offsets[2][0];
+        quad_packet.pos[2][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + transformed_vertex_offsets[2][1];
+        quad_packet.pos[2][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + transformed_vertex_offsets[2][2];
+        quad_packet.pos[3][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + transformed_vertex_offsets[3][0];
+        quad_packet.pos[3][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + transformed_vertex_offsets[3][1];
+        quad_packet.pos[3][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + transformed_vertex_offsets[3][2];
         quad_packet.col[0] = D_L00_001CA458[D_L00_001CA480[i].a];
         quad_packet.col[1] = D_L00_001CA458[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)];
         quad_packet.col[2] = D_L00_001CA458[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)];
