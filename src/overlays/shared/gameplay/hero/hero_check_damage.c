@@ -2204,7 +2204,7 @@ void FUN_L00_00232628_210a08(void) __asm__("FUN_L00_00232628");
 void FUN_L00_00257024_210a08(char *) __asm__("FUN_L00_00257024");
 void FUN_L00_00207a58_210a08(void) __asm__("FUN_L00_00207a58");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-void FUN_L00_00210a08(int mode, int b, char *vehicle_moby) {
+void FUN_L00_00210a08(int mode, int requested_state, char *vehicle_moby) {
     enum {
         VEHICLE_MODE_CLANK = 1,
         VEHICLE_MODE_GIANT_CLANK = 2
@@ -2232,7 +2232,7 @@ void FUN_L00_00210a08(int mode, int b, char *vehicle_moby) {
     FUN_L00_00232628_210a08();
     FUN_L00_00257024_210a08((char *)g->moby);
     FUN_L00_00207a58_210a08();
-    g->unk22CC = b;
+    g->unk22CC = requested_state;
     switch (mode) {
     case VEHICLE_MODE_CLANK:
         g->health.unk22B0 = *(unsigned short *)&g->health.hp;
@@ -2242,7 +2242,7 @@ void FUN_L00_00210a08(int mode, int b, char *vehicle_moby) {
         g->unk1630 = 200;
         break;
     }
-    hero_set_state(b, 1);
+    hero_set_state(requested_state, 1);
 }
 extern void FUN_0020c828_210b30(void *) __asm__("FUN_0020c828");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
