@@ -2873,11 +2873,11 @@ void FUN_L00_00211d78(int rotation_direction, float x, float y, float z) {
     V4_211d78 transformed_direction;
     float out;
     float zero = 0.0f;
-    float r;
+    float transformed_direction_angle;
     transform_vector(transformed_direction, &hero.motion.unk170, hero.unk40);
-    r = fast_arc_tan(transformed_direction[0], transformed_direction[1]);
+    transformed_direction_angle = fast_arc_tan(transformed_direction[0], transformed_direction[1]);
     out = zero;
-    hero.motion.unk188 = FUN_L00_0025bc98((char *)&out, (char *)&hero.motion.unk184, rotation_direction, r, x, y, z);
+    hero.motion.unk188 = FUN_L00_0025bc98((char *)&out, (char *)&hero.motion.unk184, rotation_direction, transformed_direction_angle, x, y, z);
     FUN_L00_00211cf8(zero, zero, out);
 }
 #define NOT_SDA
