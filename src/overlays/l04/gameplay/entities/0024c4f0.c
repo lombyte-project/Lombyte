@@ -83,7 +83,7 @@ int FUN_L04_0024c7d8(float *out, float *query_point, float *poly, int vertex_cou
     float diff[4];
     float best;
     int i;
-    int r = FUN_L04_0024c4f0(query_point, poly, vertex_count) != 0;
+    int has_positive_edge_cross = FUN_L04_0024c4f0(query_point, poly, vertex_count) != 0;
     best = 0;
     for (i = 0; i < vertex_count; i++) {
         float distance_to_edge;
@@ -95,5 +95,5 @@ int FUN_L04_0024c7d8(float *out, float *query_point, float *poly, int vertex_cou
             qcopy(out, edge_closest_point);
         }
     }
-    return r;
+    return has_positive_edge_cross;
 }
