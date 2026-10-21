@@ -1164,10 +1164,10 @@ void swingshot_versatarget_update(char *moby) {
         break;
     case VERSATARGET_STATE_ACTIVE:
         if (*(short *)(moby + 0xA6) == 0x323) {
-            struct Hero *g = &hero;
+            struct Hero *hero_ptr = &hero;
             float *rz = (float *)(moby + 0x48);
-            float yaw = fast_arc_tan(g->motion.pos.f[0] - *(float *)(moby + 0x10),
-                                     g->motion.pos.f[1] - *(float *)(moby + 0x14));
+            float yaw = fast_arc_tan(hero_ptr->motion.pos.f[0] - *(float *)(moby + 0x10),
+                                     hero_ptr->motion.pos.f[1] - *(float *)(moby + 0x14));
             func_L00_0025CE58_f(rz, yaw, (float *)(moby_data + 0x38), frame_time_sq * 6.2831855f,
                                 frame_time_sq * 6.2831855f, frame_time * 12.566371f);
             if (D_L02_0015F5CC & 1) {
