@@ -2958,13 +2958,13 @@ void FUN_L13_002e9680(void *unused, char *parent_data, int idx) {
     char *moby = *slot;
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
-        float *v = (float *)(data + 0x10);
+        float *child_launch_vector = (float *)(data + 0x10);
         float random_half_range, random_small_angle_step, random_second_angle_step, random_third_angle_step;
         cart_burst(unused, moby + 0x10, -1, 2.0f, 13.0f);
-        fast_vec_scale(v, parent_data + 0x70, 0.95f);
-        FUN_L00_0025f8e0(v, frame_time * 30.0f);
+        fast_vec_scale(child_launch_vector, parent_data + 0x70, 0.95f);
+        FUN_L00_0025f8e0(child_launch_vector, frame_time * 30.0f);
         moby[0x20] = 3;
-        fast_vec_add(moby + 0x10, moby + 0x10, v);
+        fast_vec_add(moby + 0x10, moby + 0x10, child_launch_vector);
         random_half_range = frame_time;
         random_half_range = random_half_range * 0.34906585f;
         random_small_angle_step = random_float_between_alt(-random_half_range, random_half_range);
