@@ -3365,7 +3365,7 @@ extern void FUN_L01_00261df8(f32 *) __asm__("FUN_L01_00261df8");
 extern void FUN_L01_002b80d0(f32 *) __asm__("FUN_L01_002b80d0");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
-void FUN_L01_002b91c8(f32 *pos, s32 count) {
+void FUN_L01_002b91c8(f32 *water_record, s32 count) {
     f32 corners[4][4];
     f32 near_clip[4];
     f32 far_clip[4];
@@ -3381,16 +3381,16 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
     FUN_L01_002b8f98();
     i = 0;
     if (count > 0) do {
-        f32 *next_pos = pos + 0x464;
-        u16 active = *(u16 *)((u8 *)pos + 0x1e);
+        f32 *next_pos = water_record + 0x464;
+        u16 active = *(u16 *)((u8 *)water_record + 0x1e);
         if (active == 0) goto next_entity;
-        x_offset = pos[0] + pool_light[2];
-        x_end = pos[0] - pool_light[2];
+        x_offset = water_record[0] + pool_light[2];
+        x_end = water_record[0] - pool_light[2];
         corners[0][0] = x_offset;
-        y_offset = pos[1] + pool_light[3];
-        y_end = pos[1] - pool_light[3];
+        y_offset = water_record[1] + pool_light[3];
+        y_end = water_record[1] - pool_light[3];
         corners[0][1] = y_offset;
-        z = pos[2];
+        z = water_record[2];
         corners[0][2] = z;
         corners[0][3] = 1.0f;
         corners[1][0] = x_end;
@@ -3422,34 +3422,34 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
         if ((near_bits & 0x08080808) == 0x08080808) goto next_entity;
         if ((near_bits & 0x20202020) == 0x20202020) goto next_entity;
 
-        FUN_L01_00261c10((void *)0x70000000, (u8 *)pos + (D_L01_00161220 * 0x5c0 + 0x50));
-        FUN_L01_00261df8(pos);
-        FUN_L01_002b8c08(pos);
-        FUN_L01_002b80d0(pos);
-        if (*(u32 *)(pos + 0x11) & 1) {
+        FUN_L01_00261c10((void *)0x70000000, (u8 *)water_record + (D_L01_00161220 * 0x5c0 + 0x50));
+        FUN_L01_00261df8(water_record);
+        FUN_L01_002b8c08(water_record);
+        FUN_L01_002b80d0(water_record);
+        if (*(u32 *)(water_record + 0x11) & 1) {
             height = (f32 *)0x70002008;
-            for (height_index = 0x10; height_index >= 0; height_index--, height += 3) *height = pos[2];
+            for (height_index = 0x10; height_index >= 0; height_index--, height += 3) *height = water_record[2];
         }
-        if (*(u32 *)(pos + 0x11) & 2) {
+        if (*(u32 *)(water_record + 0x11) & 2) {
             height = (f32 *)0x700020c8;
-            for (height_index = 0x10; height_index >= 0; height_index--, height += 0x33) *height = pos[2];
+            for (height_index = 0x10; height_index >= 0; height_index--, height += 0x33) *height = water_record[2];
         }
-        if (*(u32 *)(pos + 0x11) & 4) {
+        if (*(u32 *)(water_record + 0x11) & 4) {
             height = (f32 *)0x70002cc8;
-            for (height_index = 0x10; height_index >= 0; height_index--, height += 3) *height = pos[2];
+            for (height_index = 0x10; height_index >= 0; height_index--, height += 3) *height = water_record[2];
         }
-        if (*(u32 *)(pos + 0x11) & 8) {
+        if (*(u32 *)(water_record + 0x11) & 8) {
             height = (f32 *)0x70002008;
-            for (height_index = 0x10; height_index >= 0; height_index--, height += 0x33) *height = pos[2];
+            for (height_index = 0x10; height_index >= 0; height_index--, height += 0x33) *height = water_record[2];
         }
         mode = (far_bits & 0x2f2f2f2f) != 0;
         if (!mode) {
             mode = 2;
             if (!(near_bits & 0x2f2f2f2f)) mode = 0;
         }
-        mask = *(u16 *)((u8 *)pos + 0x1e);
-        if (*(u32 *)(pos + 5) != D_L01_00161228 || *(u32 *)(pos + 6) != D_L01_0016122C ||
-            *(u8 *)(pos + 7) != D_L01_00161230 || *(u8 *)((u8 *)pos + 0x1d) != D_L01_00161234) {
+        mask = *(u16 *)((u8 *)water_record + 0x1e);
+        if (*(u32 *)(water_record + 5) != D_L01_00161228 || *(u32 *)(water_record + 6) != D_L01_0016122C ||
+            *(u8 *)(water_record + 7) != D_L01_00161230 || *(u8 *)((u8 *)water_record + 0x1d) != D_L01_00161234) {
             l01_packet.words[0] = 0x10000005;
             l01_packet.words[1] = 0;
             l01_packet.words[2] = 0x11000000;
@@ -3459,30 +3459,30 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
             data = (u64 *)(packet + 4);
             data[0] = 0x4000000000008001ULL;
             data[1] = 0xeeee;
-            data[2] = ((u64)*(u8 *)((u8 *)pos + 0x1d) << 32) | 100;
+            data[2] = ((u64)*(u8 *)((u8 *)water_record + 0x1d) << 32) | 100;
             data[3] = 0x42;
-            data[4] = ((u64)*(u8 *)(pos + 7) << 32) | 100;
+            data[4] = ((u64)*(u8 *)(water_record + 7) << 32) | 100;
             data[5] = 0x43;
-            data[6] = get_effect_texture(*(s32 *)(pos + 6));
+            data[6] = get_effect_texture(*(s32 *)(water_record + 6));
             data[7] = 6;
-            data[8] = get_effect_texture(*(s32 *)(pos + 5));
+            data[8] = get_effect_texture(*(s32 *)(water_record + 5));
             data[9] = 7;
             l01_packet.words = packet + 0x18;
             {
-                u32 texture_id = *(u32 *)(pos + 5);
-                u32 second_texture_id = *(u32 *)(pos + 6);
+                u32 texture_id = *(u32 *)(water_record + 5);
+                u32 second_texture_id = *(u32 *)(water_record + 6);
                 D_L01_00161228 = texture_id;
                 D_L01_0016122C = second_texture_id;
             }
-            D_L01_00161230 = *(u8 *)(pos + 7);
-            D_L01_00161234 = *(u8 *)((u8 *)pos + 0x1d);
+            D_L01_00161230 = *(u8 *)(water_record + 7);
+            D_L01_00161234 = *(u8 *)((u8 *)water_record + 0x1d);
         }
         for (index = 0; index < 16; index++, mask = (s32)mask >> 1) {
-            if (mask & 1) FUN_L01_002b8cb0(pos, index, mode);
+            if (mask & 1) FUN_L01_002b8cb0(water_record, index, mode);
         }
 next_entity:
         i++;
-        pos = next_pos;
+        water_record = next_pos;
     } while (i < count);
     l01_packet.words[0] = 0x10000000;
     l01_packet.words[1] = 0;
