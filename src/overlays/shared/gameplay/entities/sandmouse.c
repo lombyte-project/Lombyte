@@ -1293,7 +1293,7 @@ void FUN_L01_00314e98(Camera *cam) {
     CameraTrack *track;
     CameraBlend *blend;
     CameraPath *preset_path, *track_path, *look_path, *target_path;
-    s32 i, j, k, segment_count, prev;
+    s32 i, j, k, segment_count, previous_path_node_index;
 
     focus = &cam->orbit->focus;
     focus->dist = 1.5f;
@@ -1346,9 +1346,9 @@ void FUN_L01_00314e98(Camera *cam) {
             preset_path->pts[i].f[0] = preset_path->pts[i].f[3];
             preset_path->pts[i].f[3] = seg;
         }
-        prev = preset_path->count - 1;
+        previous_path_node_index = preset_path->count - 1;
         for (i = 0; i < preset_path->count; i++) {
-            j = truncate_float_to_s32(preset_path->pts[prev].f[3]);
+            j = truncate_float_to_s32(preset_path->pts[previous_path_node_index].f[3]);
             segment_count = truncate_float_to_s32(preset_path->pts[i].f[3]) - j;
             if (segment_count < 0) {
                 segment_count += track_path->count;
@@ -1358,16 +1358,16 @@ void FUN_L01_00314e98(Camera *cam) {
                 path_fraction_or_length += track_path->pts[(j + i) % track_path->count].f[3];
             }
             preset_path->pts[i].f[1] = path_fraction_or_length;
-            prev = i;
+            previous_path_node_index = i;
         }
         for (i = 0; i < look_path->count; i++) {
             FUN_L00_0025df68(target_path, &look_path->pts[i], &at, &seg, &path_fraction_or_length, 0, 20.0f, 5.0f, 0.0f);
             look_path->pts[i].f[0] = look_path->pts[i].f[3];
             look_path->pts[i].f[3] = seg;
         }
-        prev = look_path->count - 1;
+        previous_path_node_index = look_path->count - 1;
         for (i = 0; i < look_path->count; i++) {
-            j = truncate_float_to_s32(look_path->pts[prev].f[3]);
+            j = truncate_float_to_s32(look_path->pts[previous_path_node_index].f[3]);
             segment_count = truncate_float_to_s32(look_path->pts[i].f[3]) - j;
             if (segment_count < 0) {
                 segment_count += target_path->count;
@@ -1377,7 +1377,7 @@ void FUN_L01_00314e98(Camera *cam) {
                 path_fraction_or_length += target_path->pts[(j + i) % target_path->count].f[3];
             }
             look_path->pts[i].f[1] = path_fraction_or_length;
-            prev = i;
+            previous_path_node_index = i;
         }
     }
     control->mode = 0;
