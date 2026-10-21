@@ -2892,12 +2892,12 @@ extern void FUN_L00_00211d78(int, float, float, float);
 /* Calls 00211d78 when hero.unk20B3 is set, else updates hero.motion.unk188 via 0025bc98. */
 void turn_to(int a, float x, float y, float z) __asm__("FUN_L00_00211e30");
 void turn_to(int rotation_direction, float x, float y, float z) {
-    struct Hero *g = &hero;
-    if (g->unk20B3 != 0) {
+    struct Hero *hero_state = &hero;
+    if (hero_state->unk20B3 != 0) {
         FUN_L00_00211d78(rotation_direction, x, y, z);
     } else {
-        g->motion.unk188 =
-            FUN_L00_0025bc98(&g->motion.rot.f[2], &g->motion.unk184, rotation_direction, g->motion.move_yaw, x, y, z);
+        hero_state->motion.unk188 =
+            FUN_L00_0025bc98(&hero_state->motion.rot.f[2], &hero_state->motion.unk184, rotation_direction, hero_state->motion.move_yaw, x, y, z);
     }
 }
 #define NOT_SDA
