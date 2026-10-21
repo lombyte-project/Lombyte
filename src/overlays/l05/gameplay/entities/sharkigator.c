@@ -114,11 +114,11 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
 void FUN_L05_00306d30(char *moby, int idx, float *out) {
     char *path = *(char **)(*(char **)(moby + 0x78) + 0x244);
-    float v[4];
+    float next_path_node[4];
     float perpendicular_heading;
     qcopy(out, path + 0x10 + idx * 16);
-    qcopy(v, path + 0x10 + ((idx + 1) % *(int *)path) * 16);
-    perpendicular_heading = fast_add_rotations(fast_arc_tan(v[0] - out[0], v[1] - out[1]), 1.5707964f);
+    qcopy(next_path_node, path + 0x10 + ((idx + 1) % *(int *)path) * 16);
+    perpendicular_heading = fast_add_rotations(fast_arc_tan(next_path_node[0] - out[0], next_path_node[1] - out[1]), 1.5707964f);
     out[0] = out[0] + fast_cos(perpendicular_heading) * 0.0f;
     out[1] = out[1] + fast_sin(perpendicular_heading) * 0.0f;
 }
