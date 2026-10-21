@@ -2473,8 +2473,8 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
     float vD[4];
     int placement_index;
     int k;
-    char *st;
-    char *g;
+    char *relocation_trigger_vars;
+    char *destination_moby;
     float f20;
 
     if (*(short *)(moby + 0xA6) != 0x515 && *(short *)(moby + 0xA6) != 0x15F) {
@@ -2488,15 +2488,15 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
     case MOBY_CLASS_OFFSET_RELOCATION_TRIGGER:
     case MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND:
         if (!(vector_distance_xy_alt(ctx + 0x10, candidate_position) < 1.0f)) return 0;
-        st = *(char **)(moby + 0x78);
-        if (*(int *)st < 0) return 0;
+        relocation_trigger_vars = *(char **)(moby + 0x78);
+        if (*(int *)relocation_trigger_vars < 0) return 0;
         placement_index = 0;
         if (*(short *)(moby + 0xA6) == 0x3B1) {
-            placement_index = *(int *)(st + 4);
-            *(int *)(st + 4) = placement_index + 1;
+            placement_index = *(int *)(relocation_trigger_vars + 4);
+            *(int *)(relocation_trigger_vars + 4) = placement_index + 1;
         } else if (*(short *)(moby + 0xA6) == 0x515 || *(short *)(moby + 0xA6) == 0x15F) {
-            placement_index = *(int *)(st + 4);
-            *(int *)(st + 4) = placement_index + 1;
+            placement_index = *(int *)(relocation_trigger_vars + 4);
+            *(int *)(relocation_trigger_vars + 4) = placement_index + 1;
         }
         if (*(short *)(moby + 0xA6) == 0x515) {
             trooper_play_sound(0, 0, (int)moby, 0x515);
@@ -2527,12 +2527,12 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
             FUN_L00_00272060(vA, r2, f21 * 0.07f, f21 * 0.7f, (r16 << 16) | gc | r18, 0, random_integer_below(2) ? 1 : -1, D_0015ED70 * 15.0f, vB);
         }
 
-        g = (*(char * *)&D_L06_0015FFD8) + (*(int *)st << 8);
+        destination_moby = (*(char * *)&D_L06_0015FFD8) + (*(int *)relocation_trigger_vars << 8);
         f20 = fast_normalize_angle(convert_integer_to_float(placement_index) * 60.0f * 0.017453292f);
-        vB[0] = fast_cos_c2(fast_add_rotations_c2(*(float *)(g + 0x48), f20));
-        vB[1] = fast_sin(fast_add_rotations_c2(*(float *)(g + 0x48), f20));
+        vB[0] = fast_cos_c2(fast_add_rotations_c2(*(float *)(destination_moby + 0x48), f20));
+        vB[1] = fast_sin(fast_add_rotations_c2(*(float *)(destination_moby + 0x48), f20));
         vB[2] = 0.0f;
-        add_vector_xyz(ctx + 0x10, vB, g + 0x10);
+        add_vector_xyz(ctx + 0x10, vB, destination_moby + 0x10);
         *(u128_F4058 *)(ow + 0x2F0) = *(u128_F4058 *)(ow + 0x2E0) = *(u128_F4058 *)(ctx + 0x10);
 
         for (k = 0; k < 10; k++) {
@@ -2565,10 +2565,10 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
         if (*(int *)(ow + 0x310) >= 2) {
             int idx;
             int *ids = (int *)(ow + 0x1E0);
-            int *cnt = (int *)(ow + 0x220);
+            int *path_nodes = (int *)(ow + 0x220);
             for (idx = 0; idx < 16; idx++) {
                 if (ids[idx] >= 0) {
-                    if (FUN_L01_00276a48(0.0f, (int *)(ow + 0x1E0) + idx, 1, cnt[idx], ctx + 0x10) != 0) {
+                    if (FUN_L01_00276a48(0.0f, (int *)(ow + 0x1E0) + idx, 1, path_nodes[idx], ctx + 0x10) != 0) {
                         *(int *)(ow + 0x27C) = idx;
                     }
                 }
