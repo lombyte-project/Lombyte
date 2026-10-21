@@ -755,7 +755,7 @@ extern void *memcpy(void *, const void *, u32);
 extern void FUN_L10_0024c7f0(unsigned char *m, int x, int y, void *p, float f);
 
 void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
-    OvlVec4 mat[3];
+    OvlVec4 moby_rotation_basis[3];
     OvlVec4 center;
     OvlVec4 delta;
     OvlVec4 local;
@@ -770,7 +770,7 @@ void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
     if (box->flags & 0x100) {
         return;
     }
-    euler_rotation_basis(mat, &moby->rot);
+    euler_rotation_basis(moby_rotation_basis, &moby->rot);
     if (box->width > box->depth) {
         radius = box->width * 0.5f;
     } else {
@@ -778,7 +778,7 @@ void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
     }
     qzero(&center);
     center.f[2] = radius;
-    transform_vector_by_basis(&center, &center, mat);
+    transform_vector_by_basis(&center, &center, moby_rotation_basis);
     fast_vec_add(&center, &center, &moby->pos);
     count = collect_mobies_in_sphere(&center, radius, 0x10, moby, 0);
     if (count != 0) {
@@ -792,7 +792,7 @@ void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
                 continue;
             }
             subtract_vector_xyz(&delta, &other->pos, &moby->pos);
-            transpose_rotation_matrix(inv, mat);
+            transpose_rotation_matrix(inv, moby_rotation_basis);
             transform_vector(&local, &delta, inv);
             qcopy(&point, &local);
             if (point.f[0] < -(box->width * 0.5f + box->margin_x)) {
@@ -806,7 +806,7 @@ void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
                 point.f[2] = box->depth * 0.5f;
             }
             point.f[1] = 0.0f;
-            transform_vector_by_basis(&point, &point, mat);
+            transform_vector_by_basis(&point, &point, moby_rotation_basis);
             fast_vec_add(&point, &point, &moby->pos);
             point_moby_count = collect_mobies_in_sphere(&point, box->margin_x, 0x10, moby, 0);
             for (j = 0; j < point_moby_count; j++) {
