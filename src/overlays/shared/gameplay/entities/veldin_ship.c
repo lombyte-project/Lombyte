@@ -713,7 +713,7 @@ void FUN_L00_002d1428(M2d1428 *moby) {
     };
     O2d1428 *vars;
     M2d1428 *chain_cursor, *parent_moby, *next;
-    V2d1428 collision_start, g, c2, hero_local_offset, adjusted_link_position, previous_position, previous_rotation, position_delta;
+    V2d1428 collision_start, collision_end, landing_position, hero_local_offset, adjusted_link_position, previous_position, previous_rotation, position_delta;
     f32 acceleration_scale_or_speed, v;
     s32 hit;
 
@@ -786,16 +786,16 @@ void FUN_L00_002d1428(M2d1428 *moby) {
         }
         if (vars->parent == 0) {
             qcopy(&collision_start, &moby->pos);
-            qcopy(&g, &moby->pos);
+            qcopy(&collision_end, &moby->pos);
             collision_start.z += vars->fB0 * 0.75f;
-            g.z += vars->vel.z;
-            hit = coll_line_fix(&collision_start, &g, 2, 0, 0);
-            qcopy(&c2, &D_L00_00173E60);
+            collision_end.z += vars->vel.z;
+            hit = coll_line_fix(&collision_start, &collision_end, 2, 0, 0);
+            qcopy(&landing_position, &D_L00_00173E60);
         } else {
-            qcopy(&c2, &vars->parent->pos);
-            c2.z += 1.0f;
+            qcopy(&landing_position, &vars->parent->pos);
+            landing_position.z += 1.0f;
             hit = 0;
-            if (moby->pos.z + vars->vel.z < c2.z)
+            if (moby->pos.z + vars->vel.z < landing_position.z)
                 hit = 1;
         }
         if (hit != 0) {
@@ -809,7 +809,7 @@ void FUN_L00_002d1428(M2d1428 *moby) {
                     vars->parent->bBC = 0;
                 }
             }
-            moby->pos.z = c2.z;
+            moby->pos.z = landing_position.z;
             vars->vel.z = 0.0f;
         } else {
             vars->flags |= 4;
