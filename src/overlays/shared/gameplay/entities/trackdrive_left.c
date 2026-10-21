@@ -326,7 +326,7 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 /* Spawn point for the moby: its slot's stored position and rotation, or, with no slot, a point beside it on the side facing the hero. */
 void FUN_L02_002d8910(float *pos, float *rot, char *moby) {
-    V2d8910 v;
+    V2d8910 midpoint_position;
     float left;
     float right;
     float pick;
@@ -343,9 +343,9 @@ void FUN_L02_002d8910(float *pos, float *rot, char *moby) {
                           D_L02_00167280_2d8910.y - *(float *)(moby + 0x14));
         dl = diffrot_2d8910(to, left);
         pick = dl < diffrot_2d8910(to, right) ? left : right;
-        fast_vec_add(v, &hero.motion.pos, moby + 0x10);
-        fast_vec_scale(v, v, 0.5f);
-        qcopy(pos, v);
+        fast_vec_add(midpoint_position, &hero.motion.pos, moby + 0x10);
+        fast_vec_scale(midpoint_position, midpoint_position, 0.5f);
+        qcopy(pos, midpoint_position);
         pos[0] += cos_2d8910(pick) * 2.0f;
         pos[1] += sin_2d8910(pick) * 2.0f;
         pos[2] += 1.0f;
