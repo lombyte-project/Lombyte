@@ -1448,7 +1448,7 @@ void robot_arm_update(char *moby) {
     float aD0[4];
     float aE0[4];
     char *rotation_step_euler;
-    float r;
+    float collision_radius;
     float *collision_normal;
 
     switch (*(unsigned char *)(moby + 0x20)) {
@@ -1489,11 +1489,11 @@ void robot_arm_update(char *moby) {
     subtract_vector_xyz(rotation_offset_delta, offset_after_rotation, effect_offset_or_world_position);
     subtract_vector_xyz((float *)(moby + 0x10), (float *)(moby + 0x10), rotation_offset_delta);
     add_vector_xyz(moby + 0x10, moby + 0x10, moby_data);
-    r = *(float *)(moby_data + 0x2C);
+    collision_radius = *(float *)(moby_data + 0x2C);
     *(float *)(moby_data + 8) = *(float *)(moby_data + 8) - *(float *)(moby_data + 0x38);
     transform_vector_by_basis(collision_probe_position, moby_data + 0x20, moby + 0xC0);
     add_vector_xyz(collision_probe_position, collision_probe_position, moby + 0x10);
-    if (func_L00_001F10E0_s(collision_probe_position, r, 0, moby)) {
+    if (func_L00_001F10E0_s(collision_probe_position, collision_radius, 0, moby)) {
         float speed, approach;
         collision_normal = coll_hit_normal;
         normalize_vector_xyz(collision_normal, collision_normal, 1.0f);
