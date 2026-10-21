@@ -226,13 +226,13 @@ typedef struct {
 float FUN_001f99c0_0025da70(float) __asm__("FUN_001f99c0");
 void FUN_001f9b80_0025da70(Vec4_0025da70 *, Vec4_0025da70 *) __asm__("FUN_001f9b80");
 void FUN_001f9b48_0025da70(Vec4_0025da70 *, Vec4_0025da70 *) __asm__("FUN_001f9b48");
-void FUN_L00_0025da70(u128_0025da70 *first_point, u128_0025da70 *second_point, float lim) {
+void FUN_L00_0025da70(u128_0025da70 *first_point, u128_0025da70 *second_point, float z_difference_threshold) {
     Vec4_0025da70 point_copies[2];
     Vec4_0025da70 *pa = &point_copies[0];
     Vec4_0025da70 *pb = &point_copies[1];
     *(u128_0025da70 *)pa = *first_point;
     *(u128_0025da70 *)pb = *second_point;
-    if (0.0f < lim && FUN_001f99c0_0025da70(pa->z - pb->z) < lim) {
+    if (0.0f < z_difference_threshold && FUN_001f99c0_0025da70(pa->z - pb->z) < z_difference_threshold) {
         FUN_001f9b80_0025da70(pa, pb);
     } else {
         FUN_001f9b48_0025da70(pa, pb);
