@@ -228,7 +228,7 @@ void FUN_L05_0031d5c8(unsigned char *m) {
     };
     unsigned int object_state = m[0x20];
     unsigned int range_offset;
-    G *g;
+    G *camera_target_table;
     switch (object_state) {
     case INITIALIZE:
         m[0x30] = 0xFF;
@@ -236,13 +236,13 @@ void FUN_L05_0031d5c8(unsigned char *m) {
         break;
     case ARMED:
         if (D_L05_0015F5C4 == 2) {
-            g = &D_L05_0016CC60;
-            range_offset = *(int *)((char *)g + 0x30) - 10;
+            camera_target_table = &D_L05_0016CC60;
+            range_offset = *(int *)((char *)camera_target_table + 0x30) - 10;
             if (range_offset < 2) {
                 int k = 3;
                 if (object_state < range_offset)
                     k = 0;
-                cutscene_set_camera_target((int)g->m[k]);
+                cutscene_set_camera_target((int)camera_target_table->m[k]);
             }
         }
         break;
