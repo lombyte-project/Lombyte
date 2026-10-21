@@ -1163,7 +1163,7 @@ void FUN_L00_002b3628(struct Moby *beam_moby) {
     Vec4A_2b3628 out[2];
     Ids_2b3628 ids;
     Vec4A_2b3628 up;
-    Vec4A_2b3628 res[4];
+    Vec4A_2b3628 beam_quad_transform[4];
     Vec4A_2b3628 idm[4];
     Vec4A_2b3628 billboard_view_direction;
     Vec4A_2b3628 billboard_side_axis;
@@ -1208,7 +1208,7 @@ void FUN_L00_002b3628(struct Moby *beam_moby) {
     idm[3].z = -0.075f;
     idm[3].x = 0.0f;
     idm[3].y = 0.0f;
-    func_001FA540_2b3628(res, mtx, idm);
+    func_001FA540_2b3628(beam_quad_transform, mtx, idm);
     pk.tag[1] = get_effect_texture_2b3628(0xC);
     for (i = 0; i < 4; i++) {
         pk.col[i] = 0x80808080;
@@ -1222,7 +1222,7 @@ void FUN_L00_002b3628(struct Moby *beam_moby) {
         pk.uv[i][0] = D_L00_001DAA60[i][0];
         pk.uv[i][1] = D_L00_001DAA60[i][1];
     }
-    draw_geometry_quad_2b3628(&pk, res, 0);
+    draw_geometry_quad_2b3628(&pk, beam_quad_transform, 0);
     for (i = 0; i < 4; i++) {
         if (i == 0 || i == 2) {
             scale_vector_xyz_2b3628(pk.pos[i], D_L00_001DAA20[i], data->f2C);
@@ -1232,7 +1232,7 @@ void FUN_L00_002b3628(struct Moby *beam_moby) {
             v[2] -= random_float_between_2b3628(0.0f, 0.1f);
         }
     }
-    draw_geometry_quad_2b3628(&pk, res, 0);
+    draw_geometry_quad_2b3628(&pk, beam_quad_transform, 0);
     pk.tag[1] = get_effect_texture_2b3628(0xB);
     scale_vector_xyz_2b3628(&billboard_origin, &mtx[2], -0.13f);
     add_vector_xyz_2b3628(&billboard_origin, &billboard_origin, &mtx[3]);
