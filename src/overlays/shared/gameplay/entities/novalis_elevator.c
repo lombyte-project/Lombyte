@@ -2809,19 +2809,19 @@ extern f32 FUN_001f9b80_2f2eb8(void *, void *) __asm__("FUN_001f9b80");
 
 extern s32 D_L01_00161AF0 __attribute__((sda));
 void FUN_L01_002f2eb8(struct Moby *moby) {
-    AreaVars_2f2eb8 *v = (AreaVars_2f2eb8 *)moby->pvars;
+    AreaVars_2f2eb8 *area_vars = (AreaVars_2f2eb8 *)moby->pvars;
     Vec4 target;
     s32 k;
     s32 *path;
     f32 target_distance;
 
     if (moby->state == 0) {
-        if (v == 0) {
+        if (area_vars == 0) {
             FUN_0020c828_2f2eb8(moby);
             return;
         }
         moby->update_dist = 0xFF;
-        qcopy(&v->home, &moby->pos);
+        qcopy(&area_vars->home, &moby->pos);
         moby->flags |= 0x41;
         moby->state = 1;
         if (moby->command == 0 && D_0015ED84 < 20) {
@@ -2834,8 +2834,8 @@ void FUN_L01_002f2eb8(struct Moby *moby) {
             D_L01_00161AF0++;
             moby->command = D_L01_00161AF0;
             k *= 5;
-            v->count -= k;
-            if (v->count <= 0) {
+            area_vars->count -= k;
+            if (area_vars->count <= 0) {
                 FUN_0020c828_2f2eb8(moby);
                 return;
             }
@@ -2848,17 +2848,17 @@ void FUN_L01_002f2eb8(struct Moby *moby) {
     } else {
         qcopy(&target, &hero.motion.pos);
     }
-    if (v->area.s.path != -1) {
-        path = D_L01_001B0930_2f2eb8[v->area.s.path];
+    if (area_vars->area.s.path != -1) {
+        path = D_L01_001B0930_2f2eb8[area_vars->area.s.path];
         k = FUN_L00_00259740_2f2eb8(&target, path + 4, path[0]);
         if (k) {
             goto in_range;
         }
     }
-    if (v->area.s.volume != -1 && FUN_00214720_2f2eb8(&target, v->area.s.volume)) {
+    if (area_vars->area.s.volume != -1 && FUN_00214720_2f2eb8(&target, area_vars->area.s.volume)) {
         goto in_range;
     }
-    if (v->area.both != -1) {
+    if (area_vars->area.both != -1) {
         return;
     }
 in_range:
