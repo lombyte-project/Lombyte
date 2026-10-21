@@ -279,7 +279,7 @@ extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-unsigned char *FUN_L13_002c1f28(char *owner, char *pos, char *initial_velocity) {
+unsigned char *FUN_L13_002c1f28(char *owner, char *spawn_position, char *initial_velocity) {
     unsigned char *moby = (unsigned char *)func_0020D348_m(0x53);
     if (moby != 0) {
         char *data;
@@ -290,7 +290,7 @@ unsigned char *FUN_L13_002c1f28(char *owner, char *pos, char *initial_velocity) 
         moby[0xBC] = 0;
         *(float *)((char *)moby + 0x2C) = *(float *)(*(char **)((char *)moby + 0x24) + 0x24) * 0.1f;
         data = *(char **)((char *)moby + 0x78);
-        qcopy((char *)moby + 0x10, pos);
+        qcopy((char *)moby + 0x10, spawn_position);
         qcopy(data + 0x60, initial_velocity);
         *(char **)(data + 0x74) = owner;
         data[0x28] = 0;
