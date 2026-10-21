@@ -115,7 +115,7 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
 
 extern int collect_mobies_in_sphere(float, void *, int, int, int) __asm__("FUN_L00_001f2868");
 
-void FUN_L02_002651d0(char **slots, int excluded_moby, int b) {
+void FUN_L02_002651d0(char **slots, int excluded_moby, int moby_record_payload) {
     int i;
     for (i = 6; i >= 0; i--, slots++) {
         char *slot_object = *slots;
@@ -128,7 +128,7 @@ void FUN_L02_002651d0(char **slots, int excluded_moby, int b) {
         if (slot_object[1] < 0) {
             *slots = 0;
         } else {
-            collect_mobies_in_sphere(*(float *)(slot_object + 0xC) / 210000.0f * 0.25f, slot_object + 0x10, 0, excluded_moby, b);
+            collect_mobies_in_sphere(*(float *)(slot_object + 0xC) / 210000.0f * 0.25f, slot_object + 0x10, 0, excluded_moby, moby_record_payload);
             if (*(short *)(slot_object + 0xA) < 5)
                 *slots = 0;
         }
