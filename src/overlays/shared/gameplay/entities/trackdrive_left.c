@@ -11,12 +11,12 @@ extern s32 D_L02_001612A8;
 extern s32 D_L02_001612AC;
 
 extern float D_L02_001CB500[];
-void FUN_L02_002a4058(char *arg, int val, float scale) {
+void FUN_L02_002a4058(char *value_target, int val, float scale) {
     int i;
     float *destination;
     float *source;
     float *base;
-    arg[0x3F] = val;
+    value_target[0x3F] = val;
     *(s32 *)(D_L02_001CB9C0 + 0x0) = D_L02_001612A0;
     *(s32 *)(D_L02_001CB9C0 + 0x4) = D_L02_001612A4;
     *(s32 *)(D_L02_001CB9C0 + 0x8) = D_L02_001612A8;
