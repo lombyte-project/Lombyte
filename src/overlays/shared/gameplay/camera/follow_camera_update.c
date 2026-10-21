@@ -808,12 +808,12 @@ extern char *FUN_L00_001eb1f8(int);
 /* Copies src to +0x80 of the object of entry 5 (from FUN_L00_001eb1f8 if needed). */
 void FUN_L00_002ea9d8(char *src);
 void FUN_L00_002ea9d8(char *src) {
-    char *g = D_L00_00166E00;
+    char *current_camera_record = D_L00_00166E00;
     char *camera_record;
-    if (*(short *)(g + 0x86) != 5)
+    if (*(short *)(current_camera_record + 0x86) != 5)
         camera_record = FUN_L00_001eb1f8(5);
     else
-        camera_record = g;
+        camera_record = current_camera_record;
     qcopy(*(char **)(camera_record + 0x70) + 0x80, src);
 }
 typedef struct {
