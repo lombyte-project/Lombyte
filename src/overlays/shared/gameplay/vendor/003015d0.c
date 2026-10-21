@@ -503,8 +503,8 @@ void FUN_L14_00302538(char *self) {
     struct Moby *beam_moby = (struct Moby *)self;
     D1224 *beam_vars = (D1224 *)beam_moby->pvars;
     VendorBeamReq req;
-    Vec4 dir, to_hero, base, end_a, end_b, from, to, beam_radius_offset;
-    f32 dot, len;
+    Vec4 damage_push_direction, to_hero, base, end_a, end_b, from, to, beam_radius_offset;
+    f32 dot, collision_offset_length;
 
     if (beam_vars->radius == 0.0f)
         return;
@@ -518,25 +518,25 @@ void FUN_L14_00302538(char *self) {
     req.v[3] = 5627.925f;
     req.a = 3;
     req.oclass = beam_moby->oclass;
-    dir.f[0] = fast_cos(beam_moby->rot.z);
-    dir.f[1] = fast_sin(beam_moby->rot.z);
-    dir.f[2] = 0.0f;
+    damage_push_direction.f[0] = fast_cos(beam_moby->rot.z);
+    damage_push_direction.f[1] = fast_sin(beam_moby->rot.z);
+    damage_push_direction.f[2] = 0.0f;
     subtract_vector_xyz(&to_hero, &hero.motion.pos, &beam_moby->pos);
     to_hero.f[2] = 0.0f;
-    dot = dot_vectors_xyz(&dir, &to_hero);
+    dot = dot_vectors_xyz(&damage_push_direction, &to_hero);
     if (vector_length_xyz(&to_hero) != 0.0f) {
         if (dot < 0.0f)
-            scale_vector_xyz(&dir, &dir, -1.0f);
-        req.v[0] = dir.f[0];
-        req.v[1] = dir.f[1];
+            scale_vector_xyz(&damage_push_direction, &damage_push_direction, -1.0f);
+        req.v[0] = damage_push_direction.f[0];
+        req.v[1] = damage_push_direction.f[1];
     }
     qcopy_nc(&base, &D_L14_001600EC[beam_vars->w0].origin);
     if (beam_vars->s8) {
         add_vector_xyz(&end_a, &base, &D_L14_001600EC[beam_vars->w0].axis[1]);
         if (collision_line(&base, &end_a, 0, beam_moby, 0)) {
             subtract_vector_xyz(&from, D_L14_00174560, &base);
-            len = vector_length_xyz(&from);
-            scale_vector_xyz(&from, &from, len * 0.98f / len);
+            collision_offset_length = vector_length_xyz(&from);
+            scale_vector_xyz(&from, &from, collision_offset_length * 0.98f / collision_offset_length);
             add_vector_xyz(&beam_vars->end_a, &base, &from);
             beam_vars->s8 = 0;
         } else {
@@ -547,8 +547,8 @@ void FUN_L14_00302538(char *self) {
         subtract_vector_xyz(&end_b, &base, &D_L14_001600EC[beam_vars->w0].axis[1]);
         if (collision_line(&base, &end_b, 0, beam_moby, 0)) {
             subtract_vector_xyz(&from, D_L14_00174560, &base);
-            len = vector_length_xyz(&from);
-            scale_vector_xyz(&from, &from, len * 0.98f / len);
+            collision_offset_length = vector_length_xyz(&from);
+            scale_vector_xyz(&from, &from, collision_offset_length * 0.98f / collision_offset_length);
             add_vector_xyz(&beam_vars->end_b, &base, &from);
             beam_vars->sA = 0;
         } else {
