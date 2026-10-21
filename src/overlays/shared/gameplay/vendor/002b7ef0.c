@@ -29,8 +29,8 @@ void FUN_L01_002b7f30(char *base, int record_count) {
     for (i = 0; i < record_count; i++) {
         char *current_record = base + i * 0x1190;
         if (*(unsigned short *)(current_record + 0x1E) != 0) {
-            int off = *(int *)&D_L01_00161218 * 0x5C0 + 0x50;
-            FUN_L01_00261c10((char *)0x70000000, current_record + off);
+            int source_slot_offset = *(int *)&D_L01_00161218 * 0x5C0 + 0x50;
+            FUN_L01_00261c10((char *)0x70000000, current_record + source_slot_offset);
             FUN_L01_00262038((char *)0x70000000, i, *(int *)&D_L01_0016121C, base);
         }
     }
