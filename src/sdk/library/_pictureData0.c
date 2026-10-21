@@ -18,7 +18,7 @@ extern void _doMC(MpegDec *d, s32 flag);
 extern void _Error(MpegDec *d, char *msg);
 
 s32 _pictureData0(MpegDec *decoder) {
-    s32 ret;
+    s32 decode_status;
     s32 mbs;
 
     decoder->unk810 = 0;
@@ -28,19 +28,19 @@ s32 _pictureData0(MpegDec *decoder) {
         mbs >>= 1;
     }
     do {
-        ret = _slice0(decoder, mbs);
-    } while (ret == 1 || ret == 3);
+        decode_status = _slice0(decoder, mbs);
+    } while (decode_status == 1 || decode_status == 3);
     _waitIpuIdle(decoder);
     if (_waitBdecOut(decoder) == 0) {
-        ret = 2;
+        decode_status = 2;
     }
     while ((*(volatile u32 *)0x1000D400 >> 8) & 1) {
     }
-    if (ret == 0) {
+    if (decode_status == 0) {
         _doMC(decoder, decoder->unk810 == 0);
     }
-    if (ret == 1 || ret == 2) {
+    if (decode_status == 1 || decode_status == 2) {
         _Error(decoder, D_001537E0);
     }
-    return ret == 0;
+    return decode_status == 0;
 }
