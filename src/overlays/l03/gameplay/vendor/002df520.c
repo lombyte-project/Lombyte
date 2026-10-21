@@ -332,7 +332,7 @@ void FUN_L03_002eb978(void *camera_instance) {
     char *pos;
     char *camera_data;
     char *timer;
-    char *ang;
+    char *camera_back_direction_data;
     int camera_table_base;
     float *camera_parameter_values;
     int i;
@@ -360,13 +360,13 @@ void FUN_L03_002eb978(void *camera_instance) {
     timer = *(char **)(camera + 0x70);
     ((s32 *)timer)[12] = scale_game_frames(0x78);
     camera_table_base = D_L03_0015EF50;
-    ang = *(char **)(camera + 0x70) + 0xF0;
-    *(s32 *)(ang + 0x30) = 0;
-    *(s32 *)(ang + 0x28) = 0;
-    *(s32 *)(ang + 0x2C) = 0;
-    *(float *)(ang + 0x34) = hero.motion.pos.f[2];
-    *(s32 *)(ang + 0x20) = 0;
-    *(s32 *)(ang + 0x24) = 0;
+    camera_back_direction_data = *(char **)(camera + 0x70) + 0xF0;
+    *(s32 *)(camera_back_direction_data + 0x30) = 0;
+    *(s32 *)(camera_back_direction_data + 0x28) = 0;
+    *(s32 *)(camera_back_direction_data + 0x2C) = 0;
+    *(float *)(camera_back_direction_data + 0x34) = hero.motion.pos.f[2];
+    *(s32 *)(camera_back_direction_data + 0x20) = 0;
+    *(s32 *)(camera_back_direction_data + 0x24) = 0;
     i = (*(s16 *)(camera + 0x84) << 5) + camera_table_base;
     i += 0x10;
     camera_parameter_values = (float *)i;
@@ -375,7 +375,7 @@ void FUN_L03_002eb978(void *camera_instance) {
     camera_rotation_angles[2] = camera_parameter_values[2];
     camera_rotation_angles[3] = 0.0f;
     euler_rotation_basis(mtx, camera_rotation_angles);
-    qcopy(ang, mtx);
+    qcopy(camera_back_direction_data, mtx);
     FUN_L03_002eb7e0(camera);
     *(s16 *)(camera + 0x7E) = 0;
     D_L03_00167074 = 0x78;
