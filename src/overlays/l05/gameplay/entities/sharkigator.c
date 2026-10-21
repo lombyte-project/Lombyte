@@ -632,7 +632,7 @@ void scenery_ship_update(char *moby) {
     char *hit;
     char *path;
     char *current;
-    char *prev;
+    char *previous_path_node_base;
     char *next;
     char *point;
     int i;
@@ -669,8 +669,8 @@ void scenery_ship_update(char *moby) {
             *(float *)(path + 0x1C) = func_001FA790_2D8388(out_angle, in_angle);
             for (i = 1; i < *(int *)path - 1; i++) {
                 current = path + i * 16;
-                prev = path + (i - 1) * 16;
-                in_angle = func_L00_001FF860_2D8388(*(float *)(current + 0x10) - *(float *)(prev + 0x10), *(float *)(current + 0x14) - *(float *)(prev + 0x14));
+                previous_path_node_base = path + (i - 1) * 16;
+                in_angle = func_L00_001FF860_2D8388(*(float *)(current + 0x10) - *(float *)(previous_path_node_base + 0x10), *(float *)(current + 0x14) - *(float *)(previous_path_node_base + 0x14));
                 next = path + (i + 1) * 16;
                 out_angle = func_L00_001FF860_2D8388(*(float *)(next + 0x10) - *(float *)(current + 0x10), *(float *)(next + 0x14) - *(float *)(current + 0x14));
                 turn = func_001FA790_2D8388(out_angle, in_angle);
