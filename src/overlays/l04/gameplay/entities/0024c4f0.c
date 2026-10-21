@@ -7,12 +7,12 @@ typedef struct {
 } V_24c4f0;
 
 int FUN_L04_0024c4f0(float *query_point, float *poly, int vertex_count) {
-    V_24c4f0 *v = (V_24c4f0 *)poly;
+    V_24c4f0 *polygon_vertices = (V_24c4f0 *)poly;
     int i;
 
     for (i = 0; i < vertex_count; i++) {
-        if ((v[(i + 1) % vertex_count].x - v[i].x) * (query_point[1] - v[i].y) -
-                (v[(i + 1) % vertex_count].y - v[i].y) * (query_point[0] - v[i].x) >
+        if ((polygon_vertices[(i + 1) % vertex_count].x - polygon_vertices[i].x) * (query_point[1] - polygon_vertices[i].y) -
+                (polygon_vertices[(i + 1) % vertex_count].y - polygon_vertices[i].y) * (query_point[0] - polygon_vertices[i].x) >
             0.0f) {
             return i + 1;
         }
