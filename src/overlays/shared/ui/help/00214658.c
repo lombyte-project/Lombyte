@@ -220,13 +220,13 @@ extern void FUN_L00_0020a1f8_214fe8(f32, f32) __asm__("FUN_L00_0020a1f8");
 #define V214(off) (D_L00_0017A680_214fe8.f[(off) / 4])
 void FUN_L00_00214fe8(void) {
     HopVec_214658 vec;
-    f32 *v = vec.f;
+    f32 *vector_components = vec.f;
     f32 limit, x, y, pitch, z, lean;
     struct Hero *state = &hero;
     if (state->unk308 == 0) return;
     vec.q = 0;
-    v[2] = -1.0f;
-    FUN_001f9d20_214fe8(v, v, (char *)state + 0x40);
+    vector_components[2] = -1.0f;
+    FUN_001f9d20_214fe8(vector_components, vector_components, (char *)state + 0x40);
     FUN_L00_0020a1f8_214fe8(frame_scale_sq * 0.013f, frame_scale_sq * 0.3f);
     limit = 0.43633232f;
     if (state->state.current == 0x3f) limit = 0.29670596f;
