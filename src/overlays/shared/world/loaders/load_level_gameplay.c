@@ -1829,23 +1829,23 @@ extern void FUN_L00_00264740(void);
 s32 FUN_L00_00244110(s32 full, s32 keep) {
     Load244110 *ld = &D_L00_00173E00_244110;
     s32 *core_header = ld->f4;
-    s32 *src = D_0015EE48.file;
+    s32 *level_file_base = D_0015EE48.file;
     char *base;
     s32 used;
     char *sound_reference_cursor;
     char *free;
     char *end;
     Span244110 *span;
-    TexRef244110 *tex;
+    TexRef244110 *moby_texture_refs;
     TexRef244110 *tfrag_texture_refs;
     TexRef244110 *tie_texture_refs;
     TexRef244110 *shrub_texture_refs;
-    char *tbl;
+    char *sound_table_base;
     s32 i;
     s32 j;
     s32 sound_slot_count;
     s32 k;
-    s32 c1, c2, c3, c4;
+    s32 tfrag_texture_ref_index, moby_texture_ref_index, tie_texture_ref_index, shrub_texture_ref_index;
     s32 moby_class_reference_index;
     char *sequence_offset_cursor;
     s32 sq;
@@ -1863,13 +1863,13 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
         load_hud_banks();
     base = ld->f14;
     if (full) {
-        fast_mem_copy(core_header, (char *)(src[4] + (s32)src), src[5]);
+        fast_mem_copy(core_header, (char *)(level_file_base[4] + (s32)level_file_base), level_file_base[5]);
         D_L00_0015F40C = 0;
         FUN_001f9838_244110(mission_state_macro, D_0014C050 + current_level_index * 16, 0x10);
-        upload_texture_images((char *)(src[6] + (s32)src), core_header[0], (char *)core_header + core_header[1]);
+        upload_texture_images((char *)(level_file_base[6] + (s32)level_file_base), core_header[0], (char *)core_header + core_header[1]);
         D_L00_00160004 = sound_bank_handle;
         flush_cache(0);
-        used = FUN_L00_0024d8d0_244110((char *)(src[0x14] + (s32)src), base);
+        used = FUN_L00_0024d8d0_244110((char *)(level_file_base[0x14] + (s32)level_file_base), base);
         D_L00_0015F40C = (s32)(base + core_header[0x18]);
 
         D_L00_001827C0[0] = GS_TEX0((gs_texture_allocation_base + core_header[0x24]) >> 8, 2, 0x13, 7, 7, 1, 0,
@@ -1887,21 +1887,21 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
 
         tfrag_texture_refs = (TexRef244110 *)((char *)core_header + core_header[0xD]);
         D_L00_00160F54 = core_header[0xC];
-        for (c1 = 0; c1 < D_L00_00160F54; c1++)
-            D_L00_001C4A00[c1] = D_L00_0015F40C + tfrag_texture_refs[c1].offset + (log2dim(tfrag_texture_refs[c1].kind) << 28);
-        tex = (TexRef244110 *)((char *)core_header + core_header[0xF]);
+        for (tfrag_texture_ref_index = 0; tfrag_texture_ref_index < D_L00_00160F54; tfrag_texture_ref_index++)
+            D_L00_001C4A00[tfrag_texture_ref_index] = D_L00_0015F40C + tfrag_texture_refs[tfrag_texture_ref_index].offset + (log2dim(tfrag_texture_refs[tfrag_texture_ref_index].kind) << 28);
+        moby_texture_refs = (TexRef244110 *)((char *)core_header + core_header[0xF]);
         texture_count = core_header[0xE];
-        for (c2 = 0; c2 < texture_count; c2++)
-            D_L00_00199A80[c2] = D_L00_0015F40C + tex[c2].offset + (log2dim(tex[c2].kind) << 28);
-        fast_mem_copy(D_L00_001AEBC0, tex, texture_count * 16);
+        for (moby_texture_ref_index = 0; moby_texture_ref_index < texture_count; moby_texture_ref_index++)
+            D_L00_00199A80[moby_texture_ref_index] = D_L00_0015F40C + moby_texture_refs[moby_texture_ref_index].offset + (log2dim(moby_texture_refs[moby_texture_ref_index].kind) << 28);
+        fast_mem_copy(D_L00_001AEBC0, moby_texture_refs, texture_count * 16);
         tie_texture_refs = (TexRef244110 *)((char *)core_header + core_header[0x11]);
         D_L00_00160FD4 = core_header[0x10];
-        for (c3 = 0; c3 < D_L00_00160FD4; c3++)
-            D_L00_001C6700[c3] = D_L00_0015F40C + tie_texture_refs[c3].offset + (log2dim(tie_texture_refs[c3].kind) << 28);
+        for (tie_texture_ref_index = 0; tie_texture_ref_index < D_L00_00160FD4; tie_texture_ref_index++)
+            D_L00_001C6700[tie_texture_ref_index] = D_L00_0015F40C + tie_texture_refs[tie_texture_ref_index].offset + (log2dim(tie_texture_refs[tie_texture_ref_index].kind) << 28);
         shrub_texture_refs = (TexRef244110 *)((char *)core_header + core_header[0x13]);
         D_L00_001604AC = core_header[0x12];
-        for (c4 = 0; c4 < D_L00_001604AC; c4++)
-            D_L00_001BC5B0[c4] = D_L00_0015F40C + shrub_texture_refs[c4].offset + (log2dim(shrub_texture_refs[c4].kind) << 28);
+        for (shrub_texture_ref_index = 0; shrub_texture_ref_index < D_L00_001604AC; shrub_texture_ref_index++)
+            D_L00_001BC5B0[shrub_texture_ref_index] = D_L00_0015F40C + shrub_texture_refs[shrub_texture_ref_index].offset + (log2dim(shrub_texture_refs[shrub_texture_ref_index].kind) << 28);
 
         initialize_tfrag_render_data(base + core_header[2], (char *)core_header + core_header[0xD]);
         if (core_header[3])
@@ -1966,16 +1966,16 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
             parse_particle_textures((char *)core_header + core_header[0x1B], x1, x2, core_header[0x14]);
         }
 
-        tbl = (char *)core_header + core_header[0x1C];
-        span = (Span244110 *)tbl;
+        sound_table_base = (char *)core_header + core_header[0x1C];
+        span = (Span244110 *)sound_table_base;
         free = (char *)((u32)(base + used + 0x3F) & ~0x3F);
         sound_slot_count = span->count;
         D_L00_0015F5F4 = (Slot244110 *)free;
         D_L00_0015F5F0 = sound_slot_count;
-        FUN_001f9838_244110(free, tbl + span->off, sound_slot_count * 32);
+        FUN_001f9838_244110(free, sound_table_base + span->off, sound_slot_count * 32);
         span++;
         free += sound_slot_count * 32;
-        sound_reference_cursor = tbl + span->off;
+        sound_reference_cursor = sound_table_base + span->off;
         for (sound_slot_index = 0; sound_slot_index < D_L00_0015F5F0; sound_slot_index++) {
             if (D_L00_0015F5F4[sound_slot_index].sound >= span->count) {
                 debug_print(D_L00_001E8780);
@@ -1988,21 +1988,21 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
         end = free + 0x3F;
         span++;
         for (ci = 0; ci < D_L00_0015FFC0; ci++, span++) {
-            Class244110 *cls = D_L00_00197300[ci];
-            if (cls == 0) {
+            Class244110 *moby_class = D_L00_00197300[ci];
+            if (moby_class == 0) {
                 for (j = 0; j < D_L00_00160008; j++)
                     if (D_L00_001AFBC0[j] == D_L00_00197A00[ci])
                         break;
                 if (j < D_L00_00160008) {
                     fill_transfer_words(D_L00_001AFE60[j], -1, 0x20);
-                    sound_reference_cursor = tbl + span->off;
+                    sound_reference_cursor = sound_table_base + span->off;
                     for (k = 0; k < span->count && k < 15; k++, sound_reference_cursor += 4)
                         D_L00_001AFE60[j][k] = *(u16 *)sound_reference_cursor;
                 }
             } else {
-                if (span->count != cls->count0D)
+                if (span->count != moby_class->count0D)
                     debug_print(D_L00_001E87A0, D_L00_00197A00[ci]);
-                sound_reference_cursor = tbl + span->off;
+                sound_reference_cursor = sound_table_base + span->off;
                 for (k = 0; k < D_L00_00197300[ci]->count0D; k++, sound_reference_cursor += 4) {
                     D_L00_00197300[ci]->f28[k].sound = *(u16 *)sound_reference_cursor;
                     D_L00_00197300[ci]->f28[k].time = sound_bank_handle;
