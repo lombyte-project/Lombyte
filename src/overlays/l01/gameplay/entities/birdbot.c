@@ -346,8 +346,8 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 /* Picks the path node the follower should head for: an ordered path just steps to the next stop; otherwise the
  * nearest node and its two neighbours are scored (distance, or heading change for slow movers) and the best one
  * is written to *idx. Returns nonzero when the pick differs from the nearest node. */
-int FUN_L01_002e6790(void *arg, int *idx) {
-    PathPickMoby *path_follower_moby = arg;
+int FUN_L01_002e6790(void *path_follower_entity, int *selected_path_node_index) {
+    PathPickMoby *path_follower_moby = path_follower_entity;
     PathPickTarget target;
     SplashVec pt;
     PathPickVars *path_pick_vars;
@@ -380,13 +380,13 @@ int FUN_L01_002e6790(void *arg, int *idx) {
     best = 0;
     if (path_pick_vars->ordered != 0) {
         do {
-            if (*idx < f->path->count - 1) {
-                *idx = (*idx + f->path->count + f->dir) % f->path->count;
+            if (*selected_path_node_index < f->path->count - 1) {
+                *selected_path_node_index = (*selected_path_node_index + f->path->count + f->dir) % f->path->count;
             }
-            if (*idx == f->path->count - 1) {
+            if (*selected_path_node_index == f->path->count - 1) {
                 break;
             }
-        } while (f->path->pts[*idx].w != 1.0f);
+        } while (f->path->pts[*selected_path_node_index].w != 1.0f);
         return 1;
     }
     last = 0;
@@ -414,18 +414,18 @@ int FUN_L01_002e6790(void *arg, int *idx) {
     if (fast) {
         best_d = 10000.0f;
     }
-    *idx = 0;
+    *selected_path_node_index = 0;
     for (;;) {
-        if (*idx == prev || *idx == i || *idx == next) {
+        if (*selected_path_node_index == prev || *selected_path_node_index == i || *selected_path_node_index == next) {
             if (fast) {
-                qcopy(&pt, &f->path->pts[*idx]);
+                qcopy(&pt, &f->path->pts[*selected_path_node_index]);
                 candidate_node_distance = FUN_001f9b48(&target, &pt);
                 if ((path_pick_vars->stops_only == 0 || pt.f[3] == 1.0f) && candidate_node_distance < best_d) {
-                    best = *idx;
+                    best = *selected_path_node_index;
                     best_d = candidate_node_distance;
                 }
             } else {
-                qcopy(&pt, &f->path->pts[*idx]);
+                qcopy(&pt, &f->path->pts[*selected_path_node_index]);
                 node_target_heading_difference = fast_difference_between_rotations(fast_arc_tan(pt.f[0] - path_follower_moby->pos.f[0], pt.f[1] - path_follower_moby->pos.f[1]),
                                                       fast_arc_tan(target.pos.f[0] - path_follower_moby->pos.f[0],
                                                                    target.pos.f[1] - path_follower_moby->pos.f[1]));
@@ -433,21 +433,21 @@ int FUN_L01_002e6790(void *arg, int *idx) {
                 if (path_pick_vars->stops_only == 0 || pt.f[3] == 1.0f) {
                     if (node_target_heading_difference < 1.5707964f) {
                         if (best_a < node_target_heading_difference) {
-                            best = *idx;
+                            best = *selected_path_node_index;
                             best_d = candidate_node_distance;
                             best_a = node_target_heading_difference;
                         }
                     } else if ((candidate_node_distance >= 12.0f && (candidate_node_distance < best_d || best_d < 12.0f)) || (candidate_node_distance < 12.0f && best_d < candidate_node_distance)) {
-                        best = *idx;
+                        best = *selected_path_node_index;
                         best_d = candidate_node_distance;
                         best_a = node_target_heading_difference;
                     }
                 }
             }
         }
-        *idx = (*idx + f->path->count + f->dir) % f->path->count;
-        if (*idx == 0) {
-            *idx = best;
+        *selected_path_node_index = (*selected_path_node_index + f->path->count + f->dir) % f->path->count;
+        if (*selected_path_node_index == 0) {
+            *selected_path_node_index = best;
             break;
         }
     }
