@@ -23,14 +23,14 @@ void FUN_L15_002cbd88(void) {
     int period_frames = scale_game_frames(*(int *)&D_L15_00161AD4);
     float period_frames_float = convert_integer_to_float(period_frames);
     float sine_value = fast_sin((float)(D_L15_0015F5CC % period_frames) / period_frames_float * 6.28318f);
-    float v = *(float *)&D_L15_00161ABC + *(float *)&D_L15_00161AD0 * sine_value;
-    int r;
+    float alpha_scale = *(float *)&D_L15_00161ABC + *(float *)&D_L15_00161AD0 * sine_value;
+    int alpha;
     int k;
-    if (v < 0.0f)
-        v = 0.0f;
-    r = func_001FA898_r((float)D_L15_00161ACF[0] * v);
+    if (alpha_scale < 0.0f)
+        alpha_scale = 0.0f;
+    alpha = func_001FA898_r((float)D_L15_00161ACF[0] * alpha_scale);
     k = *(int *)&D_L15_00161ACC;
-    emit_rgba_draw_packet(k & 0xFF, k >= 9, k >= 17, r);
+    emit_rgba_draw_packet(k & 0xFF, k >= 9, k >= 17, alpha);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002D7B60), where it is exact; names translated to the US level program. */
 
