@@ -618,7 +618,7 @@ void FUN_L00_002c8078(unsigned char *moby) {
 }
 #include "qcopy.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
-unsigned char *FUN_L00_002c8218(int spawning_moby, u128 *b, u128 *initial_velocity) {
+unsigned char *FUN_L00_002c8218(int spawning_moby, u128 *spawn_position, u128 *initial_velocity) {
     unsigned char *spawned_moby = create_moby(0xe6);
     if (spawned_moby) {
         char *moby_vars;
@@ -627,7 +627,7 @@ unsigned char *FUN_L00_002c8218(int spawning_moby, u128 *b, u128 *initial_veloci
         *(short *)(spawned_moby + 0x32) = 0xff;
         spawned_moby[0x31] = 1;
         spawned_moby[0x20] = 0;
-        qcopy(spawned_moby + 0x10, b);
+        qcopy(spawned_moby + 0x10, spawn_position);
         qcopy(moby_vars, initial_velocity);
         *(int *)(moby_vars + 0x30) = spawning_moby;
         *(int *)(moby_vars + 0x34) = 0;
