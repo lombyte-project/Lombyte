@@ -2071,26 +2071,26 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 /* Draws a map icon for a moby relative to the hero (level copy of FUN_L17_002eaae0 without the mirror flag). */
-void FUN_L13_002b89f8(char *rot, char *from, char *moby, int icon, long color, int tex) {
+void FUN_L13_002b89f8(char *radar_rotation, char *from, char *moby, int icon, long color, int tex) {
     float turn[4];
-    float mat[16];
+    float radar_rotation_matrix[16];
     float delta[4];
-    float pos[4];
+    float radar_offset[4];
     float len;
     int x, y;
     IconEC5D0 *icon_definition;
 
     qzero(turn);
-    turn[2] = *(float *)(rot + 8);
+    turn[2] = *(float *)(radar_rotation + 8);
     turn[2] = fast_subtract_rotations(1.5707964f, turn[2]);
-    euler_rotation_matrix(mat, turn);
+    euler_rotation_matrix(radar_rotation_matrix, turn);
     subtract_vector_xyz(delta, moby + 0x10, from);
     delta[2] = 0.0f;
-    transform_vector(pos, delta, mat);
-    scale_vector_xyz(pos, pos, 0.0714285746f);
-    len = vector_length_xyz(pos);
-    x = func_001FA898_r(pos[0]);
-    y = func_001FA898_r(-pos[1]);
+    transform_vector(radar_offset, delta, radar_rotation_matrix);
+    scale_vector_xyz(radar_offset, radar_offset, 0.0714285746f);
+    len = vector_length_xyz(radar_offset);
+    x = func_001FA898_r(radar_offset[0]);
+    y = func_001FA898_r(-radar_offset[1]);
     if (len < 46.0f) {
         if (len > 38.0f) {
             float distance_weighted_alpha;
