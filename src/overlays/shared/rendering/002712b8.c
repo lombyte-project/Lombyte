@@ -16,7 +16,7 @@ extern int FUN_00213260_2712b8(int) __asm__("FUN_00213260");
 extern unsigned char *D_L00_001B2130 __attribute__((section(".data")));
 unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int s, int a, int col, int n, float x,
                                 float y, float z, float w, float pw);
-unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int lifetime_frames, int initial_alpha, int col, int unscaled_increment, float x,
+unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *initial_velocity, int lifetime_frames, int initial_alpha, int col, int unscaled_increment, float x,
                                 float y, float z, float w, float pw) {
     unsigned char *particle = p27fe00_alloc(0x2C);
     if (particle) {
@@ -35,9 +35,9 @@ unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int lifetime_frames, i
         particle[2] = *D_L00_001B2130;
         *(short *)(particle + 0xA) = lifetime_frames;
         frame_scaled_increment = (float)unscaled_increment * frame_scale;
-        *(float *)(particle_data + 0) = vec[0];
-        *(float *)(particle_data + 4) = vec[1];
-        *(float *)(particle_data + 8) = vec[2];
+        *(float *)(particle_data + 0) = initial_velocity[0];
+        *(float *)(particle_data + 4) = initial_velocity[1];
+        *(float *)(particle_data + 8) = initial_velocity[2];
         particle_data[0x10] = FUN_001fa6d0_2712b8(frame_scaled_increment);
         time_scale = frame_scale;
         *(float *)(particle_data + 0xC) = w;
