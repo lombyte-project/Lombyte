@@ -3431,17 +3431,17 @@ extern void FUN_L13_002ea330_c2(char *a, char *b, float f) __asm__("FUN_L13_002e
 float FUN_L13_002ea400(float *pos, float *pitch, float *yaw, float lead) {
     struct Hero *base = &hero;
     char *hero_ship_moby = ((char *)base->ship_moby);
-    float v[4];
+    float target_position[4];
     float y;
     float pitch_angle;
     if (hero_ship_moby != 0 && *(short *)(hero_ship_moby + 0xA6) == 0x45) {
         if (lead > 0.0f) {
-            FUN_L13_002ea330_c2((char *)v, (char *)pos, lead);
+            FUN_L13_002ea330_c2((char *)target_position, (char *)pos, lead);
         } else {
-            qcopy(v, hero_ship_moby + 0x10);
+            qcopy(target_position, hero_ship_moby + 0x10);
         }
-        y = fast_arc_tan(v[0] - pos[0], v[1] - pos[1]);
-        pitch_angle = -fast_arc_tan(vector_distance(pos, v), v[2] - pos[2]);
+        y = fast_arc_tan(target_position[0] - pos[0], target_position[1] - pos[1]);
+        pitch_angle = -fast_arc_tan(vector_distance(pos, target_position), target_position[2] - pos[2]);
     } else {
         struct Hero *hero_state = &hero;
         y = fast_arc_tan(hero_state->motion.pos.f[0] - pos[0], hero_state->motion.pos.f[1] - pos[1]);
