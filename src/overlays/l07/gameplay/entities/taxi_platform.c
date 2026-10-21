@@ -1912,7 +1912,7 @@ void bombomatic_update(char *moby) {
     int ia;
     int hit_reaction_result;
 
-    float lim;
+    float hit_damage;
     float tv;
     float launch_work_vector[4];
     float target_buffer[20];
@@ -1971,20 +1971,20 @@ void bombomatic_update(char *moby) {
     if (ia >= 2) {
         char *hit_owner;
         if (hit_info == 0) {
-            lim = *(float *)(hit_info + 0x2C);
+            hit_damage = *(float *)(hit_info + 0x2C);
         } else {
             hit_owner = *(char **)(hit_info + 0x20);
             if (hit_owner == 0) {
-                lim = *(float *)(hit_info + 0x2C);
+                hit_damage = *(float *)(hit_info + 0x2C);
             } else {
                 if (*(short *)(hit_owner + 0xA6) == 0x372) {
                     goto eb20;
                 }
-                lim = *(float *)(hit_info + 0x2C);
+                hit_damage = *(float *)(hit_info + 0x2C);
             }
         }
         tv = *(float *)health_ptr;
-        if (tv <= lim) {
+        if (tv <= hit_damage) {
             FUN_L00_00257470(moby, 0, -1);
             *(float *)health_ptr = 0.0f;
             clear_u64_value(launch_work_vector);
@@ -1994,7 +1994,7 @@ void bombomatic_update(char *moby) {
             mark_moby_for_removal_c3(moby);
             return;
         }
-        tv -= lim;
+        tv -= hit_damage;
         *(float *)health_ptr = tv;
         *(unsigned char *)(moby_data + 0x67) = 0xFA;
         *(short *)(moby_data + 0x26) = scale_game_frames(60);
