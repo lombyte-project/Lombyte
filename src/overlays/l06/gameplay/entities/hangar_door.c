@@ -875,8 +875,8 @@ void FUN_L06_002f4390(char *vent_moby) {
         float f1C;
         int i20;
     } q;
-    float v[4];
-    float w[4];
+    float segment_start[4];
+    float segment_end[4];
     char *vent_data;
     float sp;
     int fl;
@@ -899,22 +899,22 @@ void FUN_L06_002f4390(char *vent_moby) {
          (*(float *)&spark_speed_gp * frame_time);
     if (*(float *)&D_L06_00161CF0 < sp)
         sp = *(float *)&D_L06_00161CF0;
-    normalize_vector_xyz(v, vent_moby + 0xD0, 0.125f);
-    add_vector_xyz(v, v, vent_moby + 0x10);
-    v[2] = v[2] + 0.125f;
-    w[0] = fast_cos(*(float *)(vent_moby + 0x48)) * sp;
-    w[1] = fast_sin(*(float *)(vent_moby + 0x48)) * sp;
-    w[2] = 0;
-    add_vector_xyz(w, w, v);
-    coll_line_fix(v, w, 0, vent_moby, &q);
-    normalize_vector_xyz(v, vent_moby + 0xD0, -0.125f);
-    add_vector_xyz(v, v, vent_moby + 0x10);
-    v[2] = v[2] + 0.125f;
-    w[0] = fast_cos(*(float *)(vent_moby + 0x48)) * sp;
-    w[1] = fast_sin(*(float *)(vent_moby + 0x48)) * sp;
-    w[2] = 0;
-    add_vector_xyz(w, w, v);
-    coll_line_fix(v, w, 0, vent_moby, &q);
+    normalize_vector_xyz(segment_start, vent_moby + 0xD0, 0.125f);
+    add_vector_xyz(segment_start, segment_start, vent_moby + 0x10);
+    segment_start[2] = segment_start[2] + 0.125f;
+    segment_end[0] = fast_cos(*(float *)(vent_moby + 0x48)) * sp;
+    segment_end[1] = fast_sin(*(float *)(vent_moby + 0x48)) * sp;
+    segment_end[2] = 0;
+    add_vector_xyz(segment_end, segment_end, segment_start);
+    coll_line_fix(segment_start, segment_end, 0, vent_moby, &q);
+    normalize_vector_xyz(segment_start, vent_moby + 0xD0, -0.125f);
+    add_vector_xyz(segment_start, segment_start, vent_moby + 0x10);
+    segment_start[2] = segment_start[2] + 0.125f;
+    segment_end[0] = fast_cos(*(float *)(vent_moby + 0x48)) * sp;
+    segment_end[1] = fast_sin(*(float *)(vent_moby + 0x48)) * sp;
+    segment_end[2] = 0;
+    add_vector_xyz(segment_end, segment_end, segment_start);
+    coll_line_fix(segment_start, segment_end, 0, vent_moby, &q);
 }
 /* Puts a moby in state 2 and its seven linked mobys in state 3, resetting each one's heading. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F68D0), where it is exact; names translated to the US level program. */
