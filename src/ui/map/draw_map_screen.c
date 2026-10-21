@@ -57,7 +57,7 @@ s32 draw_map_screen(struct MenuScreen *screen) __asm__("FUN_0021be60");
 
 extern s32 *menu_level_indices __asm__("D_001601E0") __attribute__((sda));
 s32 draw_map_screen(struct MenuScreen *screen) {
-    s32 prev;
+    s32 previous_selected_level_id;
     s32 selected_level_table_index;
     s32 next_level_id;
     s32 id;
@@ -69,7 +69,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     s32 map_mask_buffer;
     u8 *base;
     u8 *a;
-    u8 *tex;
+    u8 *texture_block_base;
     u8 *tbase;
     u8 *b;
     u8 *tex2_pixels;
@@ -80,7 +80,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
 
     update_map_zoom_and_pan();
     if (!(screen->data.raw.unk34 & 0x40)) {
-        prev = level_map_selection.level;
+        previous_selected_level_id = level_map_selection.level;
         if (controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) {
             if (menu_system.close_locked == 0) {
                 return 1;
@@ -120,7 +120,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
                 }
             }
         }
-        if (level_map_selection.level != prev) {
+        if (level_map_selection.level != previous_selected_level_id) {
             allocate_voice_for_target_entry(1, 0x11, screen->moby);
             update_mission_list();
         }
@@ -160,15 +160,15 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         }
         if (!(screen->data.raw.unk34 & 0x80)) {
             tbase = (u8 *)level_map_selection.hdr;
-            tex = tbase + hdr->unk10;
+            texture_block_base = tbase + hdr->unk10;
             b = tbase + hdr->unk14 + 0x420;
             tex2_pixels = tbase + hdr->unk18 + 0x420;
             level_map_selection.tex0 =
-                register_8bit_texture(7, 7, tex + 0x20, tex + 0x420, level_map_selection.tex_clut_vram, level_map_selection.tex0_vram);
+                register_8bit_texture(7, 7, texture_block_base + 0x20, texture_block_base + 0x420, level_map_selection.tex_clut_vram, level_map_selection.tex0_vram);
             level_map_selection.tex1 =
-                register_8bit_texture(7, 7, tex + 0x20, b, level_map_selection.tex_clut_vram, level_map_selection.tex1_vram);
+                register_8bit_texture(7, 7, texture_block_base + 0x20, b, level_map_selection.tex_clut_vram, level_map_selection.tex1_vram);
             level_map_selection.tex2 =
-                register_8bit_texture(7, 7, tex + 0x20, tex2_pixels, level_map_selection.tex_clut_vram, level_map_selection.tex2_vram);
+                register_8bit_texture(7, 7, texture_block_base + 0x20, tex2_pixels, level_map_selection.tex_clut_vram, level_map_selection.tex2_vram);
             if (map_mask_buffer != 0) {
                 register_8bit_texture(9, 9, pal, pal, 0x3FF000, level_map_selection.map_image_vram);
             }
