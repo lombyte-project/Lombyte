@@ -54,7 +54,7 @@ extern int func_001F9850_80970(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L01_001B2538 __attribute__((section(".data")));
 char *FUN_L01_00280970(int particle_value, char *position_source) {
     char *particle = func_00218928_80970(0xE);
-    int r;
+    int particle_frame_offset;
     int *particle_data;
     if (particle) {
         qcopy(particle + 0x10, position_source + 0x10);
@@ -62,8 +62,8 @@ char *FUN_L01_00280970(int particle_value, char *position_source) {
         *(float *)(particle + 0x14) += func_L00_00258C80_80970(0.0f, 0.03f);
         *(float *)(particle + 0x18) += func_L00_00258C80_80970(0.0f, 0.03f);
         *(int *)(particle + 4) = -1;
-        r = func_001FA898_r_80970(4.0f);
-        particle[9] = r - 0x60;
+        particle_frame_offset = func_001FA898_r_80970(4.0f);
+        particle[9] = particle_frame_offset - 0x60;
         particle[1] = 0;
         particle[3] = 0x48;
         *(float *)(particle + 0xC) = 29400.0f;
