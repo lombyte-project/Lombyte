@@ -48,7 +48,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 void FUN_L03_002bae48(char *moby) {
     char *moby_pvars = *(char **)(moby + 0x78);
     float ratio;
-    float v;
+    float accumulated_offset;
     int blended_color;
     int g;
     int b;
@@ -59,9 +59,9 @@ void FUN_L03_002bae48(char *moby) {
     *(float *)(moby + 0x44) = *(float *)(*(char **)moby_pvars + 0x44);
     *(float *)(moby + 0x48) = *(float *)(*(char **)moby_pvars + 0x48);
     qcopy(moby + 0x10, *(char **)(*(char **)moby_pvars + 0x78) + 0xF0);
-    v = *(float *)(moby_pvars + 0x10) + *(float *)(moby_pvars + 0x14);
-    *(float *)(moby_pvars + 0x10) = v;
-    FUN_L00_00262cf0(moby + 0x10, moby + 0x10, -v, *(float *)(moby + 0x48),
+    accumulated_offset = *(float *)(moby_pvars + 0x10) + *(float *)(moby_pvars + 0x14);
+    *(float *)(moby_pvars + 0x10) = accumulated_offset;
+    FUN_L00_00262cf0(moby + 0x10, moby + 0x10, -accumulated_offset, *(float *)(moby + 0x48),
                      *(float *)(moby + 0x44));
     *(float *)(moby + 0x40) =
         fast_add_rotations(*(float *)(moby + 0x40), frame_time * 5.235987663269043f);
