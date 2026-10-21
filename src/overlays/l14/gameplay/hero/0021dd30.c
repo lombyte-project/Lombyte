@@ -254,10 +254,10 @@ void FUN_L14_00222f38(void) {
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
         FUN_001f9b80_231ae0(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
         f32 *smoothed_values = D_0013F570;
-        struct Hero *b = (struct Hero *)((u8 *)smoothed_values - 0x220);
-        approach_value_231ae0(b->unk228, frame_scale * 0.02f, smoothed_values);
-        approach_value_231ae0(b->unk22C, frame_scale * 0.02f, smoothed_values + 1);
-        FUN_L00_0025b8c0_231ae0(smoothed_values + 5, smoothed_values + 6, b->unk230, frame_scale_sq * 0.02f,
+        struct Hero *hero_ptr = (struct Hero *)((u8 *)smoothed_values - 0x220);
+        approach_value_231ae0(hero_ptr->unk228, frame_scale * 0.02f, smoothed_values);
+        approach_value_231ae0(hero_ptr->unk22C, frame_scale * 0.02f, smoothed_values + 1);
+        FUN_L00_0025b8c0_231ae0(smoothed_values + 5, smoothed_values + 6, hero_ptr->unk230, frame_scale_sq * 0.02f,
                                 frame_scale_sq * 0.3f, D_0015ED6C_231ae0 * 4.0f);
     }
 }
