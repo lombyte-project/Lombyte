@@ -7371,8 +7371,8 @@ void FUN_L06_00303b68(struct Moby *moby) {
     float push[4];
     float spin[4];
     float pos[4];
-    float vel[4];
-    float accel[4];
+    float particle_velocity[4];
+    float particle_acceleration[4];
     struct Moby *piece;
     short *list;
     short count;
@@ -7416,12 +7416,12 @@ void FUN_L06_00303b68(struct Moby *moby) {
             piece = (struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68);
             random_vector_03b68(pos, 0.0f, piece->bsphere.w * 0.00048828125f);
             add_vector_03b68(pos, pos, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos);
-            random_vector_03b68(vel, 0.0f, D_L06_0016215C * frame_time);
-            clear_vector_03b68(accel);
-            vel[3] = random_float_between_03b68(D_L06_00162170, D_L06_00162174);
-            accel[3] = random_float_between_03b68(D_L06_00162178, D_L06_0016217C);
+            random_vector_03b68(particle_velocity, 0.0f, D_L06_0016215C * frame_time);
+            clear_vector_03b68(particle_acceleration);
+            particle_velocity[3] = random_float_between_03b68(D_L06_00162170, D_L06_00162174);
+            particle_acceleration[3] = random_float_between_03b68(D_L06_00162178, D_L06_0016217C);
             particle = emit_particle_03b68(
-                pos, vel, accel,
+                pos, particle_velocity, particle_acceleration,
                 fast_tween_color_03b68(D_L06_00162180, D_L06_00162184, random_float_between_03b68(0.0f, 1.0f)),
                 fast_tween_color_03b68(D_L06_00162188, D_L06_0016218C, random_float_between_03b68(0.0f, 1.0f)),
                 float_to_int_03b68(scale_time_03b68((float)D_L06_00162160 * random_float_between_03b68(0.0f, 1.0f) + 1.0f)),
