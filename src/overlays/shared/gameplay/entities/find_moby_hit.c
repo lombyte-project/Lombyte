@@ -292,16 +292,16 @@ extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68")
 void FUN_L00_0025a120(char *o);
 void FUN_L00_0025a120(char *moby) {
     float probe_end[4];
-    float b[4];
+    float probe_start[4];
     void *moby_position = moby + 0x10;
     qcopy(probe_end, moby_position);
     probe_end[2] = probe_end[2] - 16.0f;
     if (probe_end[2] < 0.5f) {
         probe_end[2] = 0.5f;
     }
-    qcopy(b, moby_position);
-    b[2] = b[2] + 0.5f;
-    if (collision_line(b, probe_end, 0x22, 0, 0) != 0) {
+    qcopy(probe_start, moby_position);
+    probe_start[2] = probe_start[2] + 0.5f;
+    if (collision_line(probe_start, probe_end, 0x22, 0, 0) != 0) {
         float *output_bounds_source = (float *)D_L00_00173E40_25a120;
         *(float *)(moby + 0x84) = output_bounds_source[10] - 0.2f;
         *(float *)(moby + 0x88) = output_bounds_source[10] + 0.2f;
