@@ -37,7 +37,7 @@ extern s32 memcpy();
 #define Bcopy(x, y)                                                                                \
     memcpy((char *)&x->_sign, (char *)&y->_sign, y->_wds * sizeof(s32) + 2 * sizeof(s32))
 
-_Bigint *_multadd(s32 ptr, _Bigint *bigint_operand, s32 multiplier, s32 carry) {
+_Bigint *_multadd(s32 reent_context, _Bigint *bigint_operand, s32 multiplier, s32 carry) {
     s32 i, wds;
     u32 *x, y;
     u32 xi, z;
@@ -55,9 +55,9 @@ _Bigint *_multadd(s32 ptr, _Bigint *bigint_operand, s32 multiplier, s32 carry) {
     } while (++i < wds);
     if (carry) {
         if (wds >= bigint_operand->_maxwds) {
-            expanded_bigint = _Balloc(ptr, bigint_operand->_k + 1);
+            expanded_bigint = _Balloc(reent_context, bigint_operand->_k + 1);
             Bcopy(expanded_bigint, bigint_operand);
-            InsertLinkObject(ptr, bigint_operand);
+            InsertLinkObject(reent_context, bigint_operand);
             bigint_operand = expanded_bigint;
         }
         bigint_operand->_x[wds++] = carry;
