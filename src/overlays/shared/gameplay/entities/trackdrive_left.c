@@ -114,7 +114,7 @@ struct QuadTextureState {
 extern struct QuadTextureState quad_texture_state __asm__("D_L02_001612F0") __attribute__((section(".sdata")));
 #define TEXTURE_REGISTER (quad_texture_state.tex0)
 
-void FUN_L02_002a40f0(QuadDrawArgs *arg) {
+void FUN_L02_002a40f0(QuadDrawArgs *draw_parameters) {
     float view_matrix[16];
     int *base;
     int *cursor;
@@ -128,10 +128,10 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     D_L02_00161300 = ((QuadCamera *)D_L02_0016D040)->f228;
     D_L02_00161304 = ((QuadCamera *)D_L02_0016D040)->f22C;
     if (D_L02_0015F458 != 1) {
-        ((QuadCamera *)D_L02_0016D040)->f218 = arg->f20;
-        ((QuadCamera *)D_L02_0016D040)->f21C = arg->f24;
-        ((QuadCamera *)D_L02_0016D040)->f228 = arg->f28;
-        ((QuadCamera *)D_L02_0016D040)->f22C = arg->f2C;
+        ((QuadCamera *)D_L02_0016D040)->f218 = draw_parameters->f20;
+        ((QuadCamera *)D_L02_0016D040)->f21C = draw_parameters->f24;
+        ((QuadCamera *)D_L02_0016D040)->f228 = draw_parameters->f28;
+        ((QuadCamera *)D_L02_0016D040)->f22C = draw_parameters->f2C;
     }
     update_view_context();
     update_camera_view_matrices();
@@ -190,21 +190,21 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
         QuadFrame *frame_to;
         char *from_a, *from_b, *to_a, *to_b;
         frame = FRAME_COUNTER;
-        step = frame / arg->frames;
-        fraction = (float)frame / (float)arg->frames - (float)step;
-        frame_from = &D_L02_0016D780[arg->first + step % arg->count];
-        frame_to = &D_L02_0016D780[arg->first + (step + 1) % arg->count];
+        step = frame / draw_parameters->frames;
+        fraction = (float)frame / (float)draw_parameters->frames - (float)step;
+        frame_from = &D_L02_0016D780[draw_parameters->first + step % draw_parameters->count];
+        frame_to = &D_L02_0016D780[draw_parameters->first + (step + 1) % draw_parameters->count];
         from_a = D_L02_0015F420 + frame_from->a * 16;
         from_b = D_L02_0015F420 + frame_from->b * 16;
         to_b = D_L02_0015F420 + frame_to->b * 16;
         to_a = D_L02_0015F420 + frame_to->a * 16;
-        dst = arg->dst;
+        dst = draw_parameters->dst;
         *(long *)dst = 0x0800000000000400;
-        *(long *)(arg->dst + 8) = 0;
-        FUN_L02_0024fca0(arg->dst + 0x10, from_a, from_b, to_a, to_b, 0x1000, fraction);
+        *(long *)(draw_parameters->dst + 8) = 0;
+        FUN_L02_0024fca0(draw_parameters->dst + 0x10, from_a, from_b, to_a, to_b, 0x1000, fraction);
     }
     TEXTURE_REGISTER = (TEXTURE_CURSOR >> 8) | 0x18100000 | 0x580000000;
-    color = arg->c30 | arg->c31 << 8 | arg->c32 << 16;
+    color = draw_parameters->c30 | draw_parameters->c31 << 8 | draw_parameters->c32 << 16;
     if (D_L02_0015F458 == 1) {
         color = ((QuadCamera *)D_L02_0016D040)->c230 | ((QuadCamera *)D_L02_0016D040)->c234 << 8
             | ((QuadCamera *)D_L02_0016D040)->c238 << 16;
@@ -212,12 +212,12 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     words = (long *)PACKET_CURSOR;
     alpha_limit = 0x60;
     blend_mode = 0x5360A;
-    if (!(alpha_limit < arg->alpha)) {
+    if (!(alpha_limit < draw_parameters->alpha)) {
         blend_mode = 0x5370B;
     }
     words[0] = 0x8000000000008001;
     words[1] = 0xEEEEEEEE;
-    words[2] = (long)arg->alpha << 32 | 0x64;
+    words[2] = (long)draw_parameters->alpha << 32 | 0x64;
     words[3] = 0x42;
     words[4] = TEXTURE_REGISTER;
     words[5] = 6;
@@ -235,7 +235,7 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     words[17] = 0x47;
     PACKET_CURSOR = (int *)(words + 18);
     PACKET_CURSOR[0] = 0x30000401;
-    PACKET_CURSOR[1] = (int)arg->dst;
+    PACKET_CURSOR[1] = (int)draw_parameters->dst;
     PACKET_CURSOR[2] = 0;
     PACKET_CURSOR[3] = 0x50000401;
     PACKET_CURSOR += 4;
