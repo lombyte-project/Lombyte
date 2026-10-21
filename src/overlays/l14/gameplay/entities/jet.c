@@ -2590,11 +2590,11 @@ found:
 extern void func_00215F80_f13f8(int, int) __asm__("FUN_00215130");
 void FUN_L14_002f13f8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    int v = *(short *)(data + 0xB4);
+    int taxi_stop_index = *(short *)(data + 0xB4);
     if (moby->state == 5) {
-        v = *(short *)(data + 0xB6);
+        taxi_stop_index = *(short *)(data + 0xB6);
     }
-    switch (v) {
+    switch (taxi_stop_index) {
     case TAXI_STOP_RETURN_HUB:
         func_00215F80_f13f8(4, 0x53ED);
         break;
