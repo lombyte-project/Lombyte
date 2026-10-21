@@ -684,10 +684,10 @@ void FUN_L00_0026ac78(char *particle) {
                 int a = truncate_float_to_s32((float)(unsigned char)particle_data[0x1B] *
                                         random_float_between_alt(0.9f, 1.1f));
                 int k = (unsigned char)particle_data[0x18];
-                float g = random_float_between_alt(0.85f, 1.0f);
+                float child_velocity_offset_scale = random_float_between_alt(0.85f, 1.0f);
                 FUN_L00_0026a9f0_u(particle + 0x10, particle_data, *(int *)(particle_data + 0x10), *(int *)(particle_data + 0x14), a, k,
                                    (unsigned char)particle_data[0x1A] + 1, *(float *)(particle_data + 0x1C),
-                                   (unsigned char)particle_data[0x19], *(float *)(particle_data + 0xC) * g);
+                                   (unsigned char)particle_data[0x19], *(float *)(particle_data + 0xC) * child_velocity_offset_scale);
             }
         }
         if (!(particle_data[0x19] & 4)) {
