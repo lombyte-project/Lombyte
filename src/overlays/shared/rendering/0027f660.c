@@ -249,8 +249,8 @@ int FUN_L01_0028b510(void *reference_point, List *point_list, float target) {
 }
 int FUN_L01_0028b5e0(char *a0, List *list, char *pt, char *out);
 int FUN_L01_0028b5e0(char *reference_object, List *list, char *pt, char *out) {
-    int idx0 = -1;
-    int idx1 = -1;
+    int nearest_reference_entry_index = -1;
+    int nearest_eligible_entry_index = -1;
     float best0 = 10000.0f;
     float best1 = 10000.0f;
     float d_init = fast_vec_dist(reference_object + 0x10, pt);
@@ -261,26 +261,26 @@ int FUN_L01_0028b5e0(char *reference_object, List *list, char *pt, char *out) {
         float d_a0 = fast_vec_dist(list->e[i], reference_object + 0x10);
         if (d_a0 < best0) {
             best0 = d_a0;
-            idx0 = i;
+            nearest_reference_entry_index = i;
         }
         if (d_pt < d_init) {
             if (d_pt < best1) {
                 best1 = d_pt;
-                idx1 = i;
+                nearest_eligible_entry_index = i;
             }
         }
     }
-    if (idx1 != -1) {
-        if (idx0 == idx1) {
-            qcopy(out, list->e[idx0]);
-            return idx0;
+    if (nearest_eligible_entry_index != -1) {
+        if (nearest_reference_entry_index == nearest_eligible_entry_index) {
+            qcopy(out, list->e[nearest_reference_entry_index]);
+            return nearest_reference_entry_index;
         }
-        if (idx0 < idx1) {
-            qcopy(out, list->e[idx0 + 1]);
-            return idx0 + 1;
+        if (nearest_reference_entry_index < nearest_eligible_entry_index) {
+            qcopy(out, list->e[nearest_reference_entry_index + 1]);
+            return nearest_reference_entry_index + 1;
         }
-        qcopy(out, list->e[idx0 - 1]);
-        return idx0 - 1;
+        qcopy(out, list->e[nearest_reference_entry_index - 1]);
+        return nearest_reference_entry_index - 1;
     }
     qcopy(out, pt);
     return -1;
