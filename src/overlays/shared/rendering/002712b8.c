@@ -1627,33 +1627,33 @@ void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 void FUN_L00_00274e48(M_274e48 *particle) {
     R_274e48 *r = &particle->r;
     V_274e48 applied_motion_delta, motion_vector_scratch, final_phase_motion_vector;
-    f32 d, k;
+    f32 distance_or_blend_factor, k;
     s32 color_without_alpha;
     if (D_L00_0015F5CC & 1)
         particle->b8++;
-    d = distance_xyz(&particle->v10, &(*(V_274e48 *)D_0013F420));
-    if (d < 5.0f && 0.0f < r->p18[2]) {
+    distance_or_blend_factor = distance_xyz(&particle->v10, &(*(V_274e48 *)D_0013F420));
+    if (distance_or_blend_factor < 5.0f && 0.0f < r->p18[2]) {
         subtract_vector_xyz(&motion_vector_scratch, r->p18, &particle->v10);
         if (0.5f < vector_length_xyz(&motion_vector_scratch)) {
-            FUN_001f9bf8_274e48(&motion_vector_scratch, &motion_vector_scratch, 0.1f / d);
+            FUN_001f9bf8_274e48(&motion_vector_scratch, &motion_vector_scratch, 0.1f / distance_or_blend_factor);
             FUN_001f9a10_274e48(&particle->v10, &particle->v10, &motion_vector_scratch);
         } else {
             FUN_001f9bf8_274e48(&motion_vector_scratch, &motion_vector_scratch, 0.005f);
             pack_vector_xyz_with_shared_scale(&motion_vector_scratch, (u8 *)r + 4);
         }
     }
-    d = (2.5f - (d - 0.5f)) / 2.5f;
-    if (1.0f < d)
-        d = 1.0f;
-    else if (d < 0.0f)
-        d = 0.0f;
-    particle->i4 = FUN_001fa6e0_274e48(r->i8, r->iC, d);
+    distance_or_blend_factor = (2.5f - (distance_or_blend_factor - 0.5f)) / 2.5f;
+    if (1.0f < distance_or_blend_factor)
+        distance_or_blend_factor = 1.0f;
+    else if (distance_or_blend_factor < 0.0f)
+        distance_or_blend_factor = 0.0f;
+    particle->i4 = FUN_001fa6e0_274e48(r->i8, r->iC, distance_or_blend_factor);
     if (r->h10) {
         *(volatile s32 *)0x10000000 = 0;
         load_display_text_resource_entry(&applied_motion_delta, r);
         FUN_001f9a10_274e48(&particle->v10, &particle->v10, &applied_motion_delta);
-        d = convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h10);
-        particle->i4 = FUN_001fa6e0_274e48(particle->i4 & 0xFFFFFF, particle->i4, 1.0f - d);
+        distance_or_blend_factor = convert_integer_to_float(particle->hA) / convert_integer_to_float(r->h10);
+        particle->i4 = FUN_001fa6e0_274e48(particle->i4 & 0xFFFFFF, particle->i4, 1.0f - distance_or_blend_factor);
         if (FUN_001f9770_274e48(&particle->hA)) {
             r->h10 = 0;
             particle->hA = r->h12;
