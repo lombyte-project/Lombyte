@@ -2415,17 +2415,17 @@ void FUN_L15_002a2488(char *moby) {
     char *hero_base;
     float fa;
     float fb;
-    float g;
+    float yaw_cosine;
     float yaw_sine;
     float reference_distance_xy;
     float yaw;
     float target_z;
     float fd;
     int state;
-    int ret;
-    int ret1;
+    int animation_blend_frames;
+    int particle_lifetime_frames;
     int ret2;
-    int ret3;
+    int particle_initial_rotation;
     unsigned char life;
 
     data = *(char **)(moby + 0x78);
@@ -2441,11 +2441,11 @@ void FUN_L15_002a2488(char *moby) {
             ((unsigned char *)moby)[0x20] = 1;
             goto tailA;
         }
-        ret1 = scale_game_frames_alt(D_L15_001614C0);
-        ret2 = func_001FA898_r((float)ret1);
+        particle_lifetime_frames = scale_game_frames_alt(D_L15_001614C0);
+        ret2 = func_001FA898_r((float)particle_lifetime_frames);
         life = (unsigned char)ret2;
-        ret3 = random_integer_below_c(0xFF);
-        FUN_L00_002730e0(pb, (char *)va, D_L15_001614B8, life, (unsigned char)ret3, 0, *(float *)&D_L15_001614BC);
+        particle_initial_rotation = random_integer_below_c(0xFF);
+        FUN_L00_002730e0(pb, (char *)va, D_L15_001614B8, life, (unsigned char)particle_initial_rotation, 0, *(float *)&D_L15_001614BC);
         callback_frame_stamp = *(char **)(data + 0x6C);
         if (callback_frame_stamp == 0 || *(int *)callback_frame_stamp != D_L15_0015F5CC_macro) {
             if (callback_frame_stamp != 0) {
@@ -2469,8 +2469,8 @@ s2:
     if (tick_countdown_32_alt(data + 0x68) == 0) return;
     ((unsigned char *)moby)[0x20] = 3;
     if (((unsigned char *)moby)[0x53] != 1) {
-        ret = scale_game_frames_alt(10);
-        blend_moby_animation_c2(moby, 1, 0, ret);
+        animation_blend_frames = scale_game_frames_alt(10);
+        blend_moby_animation_c2(moby, 1, 0, animation_blend_frames);
     }
     *(int *)(data + 0x68) = scale_game_frames_alt(0xF0);
     return;
@@ -2481,8 +2481,8 @@ s3:
     fb = *(float *)(hero_base + 0x84) - *(float *)(moby + 0x14);
     yaw = fast_add_rotations_c(*(float *)(data + 0x64), fast_arc_tan(fa, fb));
     target_z = *(float *)(hero_base + 0xC8);
-    g = fast_cos_c(yaw);
-    va[0] = g * (*(float *)&D_L15_001614B4 * D_0015ED6C);
+    yaw_cosine = fast_cos_c(yaw);
+    va[0] = yaw_cosine * (*(float *)&D_L15_001614B4 * D_0015ED6C);
     yaw_sine = fast_sin_c(yaw);
     va[1] = yaw_sine * (*(float *)&D_L15_001614B4 * D_0015ED6C);
     va[2] = 0.0f;
@@ -2500,8 +2500,8 @@ s3:
     }
     if (((unsigned char *)moby)[0x53] != 1) return;
     if ((((unsigned char *)moby)[0x70] & 2) == 0) return;
-    ret = scale_game_frames_alt(10);
-    blend_moby_animation_c2(moby, 2, 0, ret);
+    animation_blend_frames = scale_game_frames_alt(10);
+    blend_moby_animation_c2(moby, 2, 0, animation_blend_frames);
     return;
 
 s4:
