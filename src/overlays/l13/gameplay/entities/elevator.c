@@ -2436,7 +2436,7 @@ void FUN_L13_002b97f8(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
     char *screen_dimensions;
     unsigned char *base;
-    unsigned char *g;
+    unsigned char *player_ammo_state;
     unsigned char *player_health_state;
     unsigned char *b;
     int target_screen_x;
@@ -2485,13 +2485,13 @@ void FUN_L13_002b97f8(char *moby) {
     base = D_0013F350;
     ammo_icon_count = base[0x15F7];
     for (i = 0; i < ammo_icon_count; i++) {
-        g = D_0013F350;
-        if (i < g[0x15F6]) {
+        player_ammo_state = D_0013F350;
+        if (i < player_ammo_state[0x15F6]) {
             FUN_L11_00310ad0(x, y, 0.5f, D_L13_001CBC60, 0x19, 0xFFFFF3, 0x50008F00);
         } else {
             FUN_L11_00310ad0(x, y, 0.5f, D_L13_001CBC60, 0x19, 0xFFFFF3, 0x20004F00);
         }
-        ammo_icon_count = g[0x15F7];
+        ammo_icon_count = player_ammo_state[0x15F7];
         if (i == ammo_icon_count >> 1) {
             y = 0x2E;
             x += 0x1E;
