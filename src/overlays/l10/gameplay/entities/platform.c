@@ -2324,7 +2324,7 @@ extern void send_blast_hits(void *,void *,void *,int,int,int,int,int,float,float
 extern void FUN_L00_00262360_c(int,float *,float *,void *,float,float) __asm__("FUN_L00_00262360");
 
 void FUN_L10_002dd3d8(char *moby) {
- float old[4],pos[4],path_segment_index,path_segment_remainder;
+ float old[4],blast_hit_position[4],path_segment_index,path_segment_remainder;
  char *effect_data=*(char **)(moby+0x78);
  *(OvlQuad *)old=*(OvlQuad *)(moby+0x10);
  ((EffectData *)effect_data)->phase+=((EffectData *)effect_data)->speed;
@@ -2343,8 +2343,8 @@ void FUN_L10_002dd3d8(char *moby) {
  }
  if(*(float *)(*(char **)(moby+0x24)+0x24)*0.25f<*(float *)(moby+0x2C)) {
   int count=collect_mobies_in_sphere(moby+0x10,0.15f,16,*(void **)(effect_data+0x10),0);
-  *(OvlQuad *)pos=*(OvlQuad *)(moby+0x10);
-  send_blast_hits(*(void **)(effect_data+0x10),pos,D_L10_00178380_u,count,0,0x810001,2,1,2.0f,1.0f,1.0f);
+  *(OvlQuad *)blast_hit_position=*(OvlQuad *)(moby+0x10);
+  send_blast_hits(*(void **)(effect_data+0x10),blast_hit_position,D_L10_00178380_u,count,0,0x810001,2,1,2.0f,1.0f,1.0f);
  }
 }
 #include "sda.h"
