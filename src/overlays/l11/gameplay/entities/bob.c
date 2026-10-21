@@ -1625,7 +1625,7 @@ void blend_moby_animation_309378(MobyAnim_309378 *arg0, int arg1, int arg2,
                                  int arg3) __asm__("FUN_00212f90");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-unsigned char *FUN_L11_00309378(char *src, char *pos, char *target, char *spawn_rotation, int arg,
+unsigned char *FUN_L11_00309378(char *spawning_moby, char *spawn_position, char *target, char *spawn_rotation, int arg,
                                 float scale) {
     unsigned char *moby = func_0020D348_m(0x40A);
     if (moby != 0) {
@@ -1634,9 +1634,9 @@ unsigned char *FUN_L11_00309378(char *src, char *pos, char *target, char *spawn_
         *(short *)(moby + 0x32) = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(char **)(data + 0x20) = src;
+        *(char **)(data + 0x20) = spawning_moby;
         *(char **)(data + 0x24) = target;
-        qcopy(moby + 0x10, pos);
+        qcopy(moby + 0x10, spawn_position);
         qcopy(moby + 0x40, spawn_rotation);
         if (target != 0) {
             char *target_aux_data;
@@ -1659,7 +1659,7 @@ unsigned char *FUN_L11_00309378(char *src, char *pos, char *target, char *spawn_
         }
         *(float *)(moby + 0x2C) =
             *(float *)(*(char **)(moby + 0x24) + 0x24) *
-            (*(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24));
+            (*(float *)(spawning_moby + 0x2C) / *(float *)(*(char **)(spawning_moby + 0x24) + 0x24));
         FUN_L00_00250df8(moby);
     }
     return moby;
