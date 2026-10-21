@@ -1038,8 +1038,8 @@ void FUN_L00_00206e00(void) {
     if (input_token == 0) return;
     {
     char *history_owner = (char *)&hero;
-    unsigned char *b0 = (unsigned char *)history_owner + 0x21C4;
-    b0[*(int *)(history_owner + 0x21D4)] = input_token;
+    unsigned char *input_history = (unsigned char *)history_owner + 0x21C4;
+    input_history[*(int *)(history_owner + 0x21D4)] = input_token;
     *(int *)(history_owner + 0x21D4) += 1;
     for (i = 0; i < 12; i++) {
         char *g2 = (char *)&hero;
