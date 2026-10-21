@@ -1302,8 +1302,8 @@ void helga_update(struct Moby *helga_moby) {
         HELGA_UPDATE_DIALOGUE = 1,
         HELGA_RESOLVE_DIALOGUE = 2
     };
-    struct QuestGiverVars *v = (struct QuestGiverVars *)helga_moby->pvars;
-    struct TalkState *talk = &v->talk;
+    struct QuestGiverVars *helga_vars = (struct QuestGiverVars *)helga_moby->pvars;
+    struct TalkState *talk = &helga_vars->talk;
     struct Moby *helper_moby;
     struct Moby *reward_moby;
     u8 group;
@@ -1323,8 +1323,8 @@ void helga_update(struct Moby *helga_moby) {
     switch (helga_moby->state) {
     case HELGA_INITIALIZE:
         if (D_0013D4CC[0] != 0) {
-            if (v->link != -1) {
-                helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+            if (helga_vars->link != -1) {
+                helper_moby = (struct Moby *)((helga_vars->link << 8) + D_L03_0015FFD8_i);
                 if (helper_moby->oclass == 0x3F4) {
                     flag = (s32 *)(helper_moby->pvars + 0x8C);
                     *flag = 1;
@@ -1334,8 +1334,8 @@ void helga_update(struct Moby *helga_moby) {
             taxi_kill(helga_moby);
             return;
         }
-        if (visited52[helga_moby->mission + current_level_index * 16] == 0xFF && v->link != -1) {
-            helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+        if (visited52[helga_moby->mission + current_level_index * 16] == 0xFF && helga_vars->link != -1) {
+            helper_moby = (struct Moby *)((helga_vars->link << 8) + D_L03_0015FFD8_i);
             if (helper_moby->oclass == 0x3F4) {
                 flag = (s32 *)(helper_moby->pvars + 0x8C);
                 *flag = 1;
@@ -1345,7 +1345,7 @@ void helga_update(struct Moby *helga_moby) {
         helga_moby->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
         helga_moby->state = 1;
         talk->script = D_L03_00161BB8;
-        v->talk.unk48 = 5;
+        helga_vars->talk.unk48 = 5;
         initialize_npc_dialogue(helga_moby, talk);
         initialize_moby_grounding(helga_moby);
         break;
@@ -1353,8 +1353,8 @@ void helga_update(struct Moby *helga_moby) {
         if (update_npc_dialogue(helga_moby, talk)) {
             begin_dialogue_camera_transition(helga_moby, 2.3f);
             helga_moby->state = 2;
-            if (v->link != -1) {
-                helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+            if (helga_vars->link != -1) {
+                helper_moby = (struct Moby *)((helga_vars->link << 8) + D_L03_0015FFD8_i);
                 if (helper_moby->oclass == 0x3F4) {
                     flag = (s32 *)(helper_moby->pvars + 0x8C);
                     *flag = 1;
@@ -1365,29 +1365,29 @@ void helga_update(struct Moby *helga_moby) {
         break;
     case HELGA_RESOLVE_DIALOGUE:
         if (D_L03_0015F5C4 != 2) {
-            if (v->talk.mode != 2) {
+            if (helga_vars->talk.mode != 2) {
                 jet_clear_persistent(helga_moby->mission);
-                if (v->link != -1) {
-                    helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                if (helga_vars->link != -1) {
+                    helper_moby = (struct Moby *)((helga_vars->link << 8) + D_L03_0015FFD8_i);
                     if (helper_moby->oclass == 0x3F4) {
                         flag = (s32 *)(helper_moby->pvars + 0x8C);
                         *flag = 1;
                         FUN_L01_0029b0a0(flag, 4, helga_moby, 2, D_L03_001BA720);
                     }
                 }
-                if (v->talk.warp != -1) {
-                    jet_reset_camera(D_L03_001600EC + v->talk.warp * 128 + 0x30,
-                                     D_L03_001600EC + v->talk.warp * 128 + 0x70);
+                if (helga_vars->talk.warp != -1) {
+                    jet_reset_camera(D_L03_001600EC + helga_vars->talk.warp * 128 + 0x30,
+                                     D_L03_001600EC + helga_vars->talk.warp * 128 + 0x70);
                 }
             }
             helga_moby->state = 1;
-            if (v->talk.mode == 2) {
+            if (helga_vars->talk.mode == 2) {
                 FUN_L00_00260860(0xC, 1);
                 queue_dialogue_message(0xBC8, -1);
-                if (v->reward != -1) {
-                    D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
-                        ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
-                    reward_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
+                if (helga_vars->reward != -1) {
+                    D_L03_001BA6D0.collected[(s16)((struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i))->save_id] =
+                        ((struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
+                    reward_moby = (struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i);
                     /* Fakematch: same record as the || test in the level's other reward
                        code; the do/while (0) blocks keep the loop notes that make gcc
                        predict the 0xFF branch taken and keep the group load ahead of the
@@ -1404,28 +1404,28 @@ void helga_update(struct Moby *helga_moby) {
                             D_L03_001BB330.collected[(s16)reward_moby->save_id] = reward_moby->mission + 2;
                         } while (0);
                     }
-                    taxi_kill(&D_L03_0015FFD8[v->reward]);
+                    taxi_kill(&D_L03_0015FFD8[helga_vars->reward]);
                 }
-                if (v->link != -1) {
-                    helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+                if (helga_vars->link != -1) {
+                    helper_moby = (struct Moby *)((helga_vars->link << 8) + D_L03_0015FFD8_i);
                     if (helper_moby->oclass == 0x3F4) {
                         u8 *tv = helper_moby->pvars;
                         *(s32 *)(tv + 0x7C) = 0;
                         *(s32 *)(tv + 0x8C) = 0;
-                        *(s32 *)(tv + 0xA0) = v->link_arg;
+                        *(s32 *)(tv + 0xA0) = helga_vars->link_arg;
                     }
                 }
                 memcard_save_data(0, -1);
                 taxi_kill(helga_moby);
                 return;
             }
-        } else if (v->talk.unk36 == 2 && v->link != -1) {
-            helper_moby = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
+        } else if (helga_vars->talk.unk36 == 2 && helga_vars->link != -1) {
+            helper_moby = (struct Moby *)((helga_vars->link << 8) + D_L03_0015FFD8_i);
             if (helper_moby->oclass == 0x3F4) {
                 u8 *tv = helper_moby->pvars;
                 *(s32 *)(tv + 0x7C) = 0;
                 *(s32 *)(tv + 0x8C) = 0;
-                *(s32 *)(tv + 0xA0) = v->link_arg;
+                *(s32 *)(tv + 0xA0) = helga_vars->link_arg;
             }
         }
         break;
@@ -1441,27 +1441,27 @@ void helga_update(struct Moby *helga_moby) {
              fast_difference_between_rotations(helga_moby->rot.z, taxi_atan2(hero_state->motion.unkD0.f[0] - helga_moby->pos.x, hero_state->motion.unkD0.f[1] - helga_moby->pos.y))) <
                 1.5707964f) {
             if (vec_len((u8 *)g + 0x80) > 0.01f) {
-                v->watch_timer = scale_game_frames(120);
+                helga_vars->watch_timer = scale_game_frames(120);
             } else {
-                fast_dec_timer(&v->watch_timer);
+                fast_dec_timer(&helga_vars->watch_timer);
             }
-        } else if (v->watch_timer) {
-            v->watch_timer = 0;
-            qcopy(&v->target, &hero.motion.unkD0);
+        } else if (helga_vars->watch_timer) {
+            helga_vars->watch_timer = 0;
+            qcopy(&helga_vars->target, &hero.motion.unkD0);
         }
-        if (fast_dec_timer(&v->target_timer)) {
+        if (fast_dec_timer(&helga_vars->target_timer)) {
             float heading;
-            v->target_timer = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
+            helga_vars->target_timer = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
             heading = fast_add_rotations(helga_moby->rot.z, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
-            build_spherical_offset(&v->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
-            vec_add(&v->target, &v->target, &helga_moby->pos);
+            build_spherical_offset(&helga_vars->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
+            vec_add(&helga_vars->target, &helga_vars->target, &helga_moby->pos);
         }
-        if (v->watch_timer) {
+        if (helga_vars->watch_timer) {
             qcopy(scratch_target, &hero.motion.unkD0);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch_target, &v->target);
+            qcopy(scratch_target, &helga_vars->target);
         }
     }
     if (tracking) {
@@ -1478,13 +1478,13 @@ void helga_update(struct Moby *helga_moby) {
             pitch = 0.5235988f;
         else if (pitch < -0.5235988f)
             pitch = -0.5235988f;
-        v->pitch = pitch;
-        v->yaw = yaw * 0.5f;
+        helga_vars->pitch = pitch;
+        helga_vars->yaw = yaw * 0.5f;
     }
     if (big_head_cheat_enabled)
-        v->height = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, helga_moby, v->body, 0);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, helga_moby, v->head, 1);
+        helga_vars->height = 2.75f;
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, helga_moby, helga_vars->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, helga_moby, helga_vars->head, 1);
 }
 
 extern float cos_2db020(float) __asm__("FUN_001f9dc8");
