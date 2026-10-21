@@ -189,7 +189,7 @@ void FUN_L11_003089d0(struct Moby *moby) {
     float look[4];
     MissileHit_089d0 hit;
     float spark_velocity[4];
-    float r[4];
+    float spark_scatter_vector[4];
     struct Moby *target;
     float speed, yaw, yaw_off, pitch, pitch_off, max_yaw, max_pitch;
     int i;
@@ -241,14 +241,14 @@ void FUN_L11_003089d0(struct Moby *moby) {
     hit.oclass = moby->oclass;
     if (collision_line_089d0(old, &moby->pos, 0, vars->owner, &hit)) {
         for (i = 0; i < 5; i++) {
-            *(OvlQuad *)r = 0;
-            r[0] = random_float_between_089d0(-1.0f, 1.0f);
-            r[1] = random_float_between_089d0(-1.0f, 1.0f);
-            r[2] = random_float_between_089d0(-1.0f, 1.0f);
-            *(OvlQuad *)spark_velocity = *(OvlQuad *)r;
-            reflect_089d0(r, vars, D_L11_00174880);
-            normalize_vector_089d0(spark_velocity, spark_velocity, vector_length_089d0(r) * 0.5f);
-            add_vector_089d0(spark_velocity, r, spark_velocity);
+            *(OvlQuad *)spark_scatter_vector = 0;
+            spark_scatter_vector[0] = random_float_between_089d0(-1.0f, 1.0f);
+            spark_scatter_vector[1] = random_float_between_089d0(-1.0f, 1.0f);
+            spark_scatter_vector[2] = random_float_between_089d0(-1.0f, 1.0f);
+            *(OvlQuad *)spark_velocity = *(OvlQuad *)spark_scatter_vector;
+            reflect_089d0(spark_scatter_vector, vars, D_L11_00174880);
+            normalize_vector_089d0(spark_velocity, spark_velocity, vector_length_089d0(spark_scatter_vector) * 0.5f);
+            add_vector_089d0(spark_velocity, spark_scatter_vector, spark_velocity);
             normalize_vector_089d0(spark_velocity, spark_velocity, random_float_between_089d0(frame_time * 5.0f, frame_time * 9.0f));
             FUN_L00_0026dd20_c(&moby->pos, spark_velocity, 0x7F2F4F6F, random_int_between_089d0(scale_game_frames_089d0(10), scale_game_frames_089d0(15)), 90000.0f);
         }
