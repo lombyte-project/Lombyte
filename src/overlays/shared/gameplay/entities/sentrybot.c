@@ -982,10 +982,10 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L15_00299880_u(void *, void *, void *, void *, float) __asm__("FUN_L15_00299880");
 
 /* Aims at point (heading from the moby) and passes it on to FUN_L15_00299880. */
-void FUN_L15_00299a68(char *moby, void *moby_data, float *point, void *b, void *next_animation) {
+void FUN_L15_00299a68(char *moby, void *moby_data, float *point, void *next_state, void *next_animation) {
     float angle =
         fast_arc_tan(point[0] - *(float *)(moby + 0x10), point[1] - *(float *)(moby + 0x14));
-    FUN_L15_00299880_u(moby, moby_data, b, next_animation, angle);
+    FUN_L15_00299880_u(moby, moby_data, next_state, next_animation, angle);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029ACC0), where it is exact; names translated to the US level program. */
 
