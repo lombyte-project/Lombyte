@@ -972,19 +972,19 @@ void FUN_L16_002c9a50(struct Moby *moby) {
     do {
         char *other = D_L16_00160098_c9a50 + (((unsigned short)*group_entry & 0x7FFF) << 8);
         if (*(short *)(other + 0xA6) == 0x1D7) {
-            float dist = func_001F9D10_c9a50(D_L16_001671C0, other + 0x10);
-            if (dist < best) {
+            float candidate_distance = func_001F9D10_c9a50(D_L16_001671C0, other + 0x10);
+            if (candidate_distance < best) {
                 nearest = other;
-                best = dist;
+                best = candidate_distance;
             }
         }
     } while (*group_entry++ >= 0);
     if (func_001F9D10_c9a50(nearest + 0x10, D_L16_001671C0) < 64.0f) {
-        int idx = *(int *)(moby_data + 0x74);
+        int voice_slot_index = *(int *)(moby_data + 0x74);
         char *slot;
-        if (idx >= 0) {
+        if (voice_slot_index >= 0) {
             char *target;
-            slot = D_0013E633_c9a50 + idx * 0x70;
+            slot = D_0013E633_c9a50 + voice_slot_index * 0x70;
             target = *(char **)(slot + 0x88);
             if (target && *(short *)(target + 0xA6) == 0x1D7) {
                 func_L00_001FF4B0_c9a50(voice_position_offset, nearest + 0xE0, 2.5f);
@@ -994,9 +994,9 @@ void FUN_L16_002c9a50(struct Moby *moby) {
                 return;
             }
         }
-        idx = func_0022ED80_cae18_c9a50(0, 13, nearest);
-        *(int *)(moby_data + 0x74) = idx;
-        if (idx >= 0) {
+        voice_slot_index = func_0022ED80_cae18_c9a50(0, 13, nearest);
+        *(int *)(moby_data + 0x74) = voice_slot_index;
+        if (voice_slot_index >= 0) {
             func_L00_001FF4B0_c9a50(voice_position_offset, &moby->rot_row2, 2.5f);
             func_001F9BD8_c9a50(D_0013E633_c9a50 + 0x90 + *(int *)(moby_data + 0x74) * 0x70, voice_position_offset, &moby->pos);
         }
