@@ -117,7 +117,7 @@ void level_draw_dialog_text(void) {
         FREEZE_DIALOG_PLAIN_BODY_PAIRED_BUTTONS = 23,
         FREEZE_DIALOG_FORMATTED_BODY_PAIRED_BUTTONS = 24
     };
-    char buf[0x200];
+    char formatted_dialog_body[0x200];
     struct TextRegion box;
 
     setup_gif_paging(0);
@@ -235,8 +235,8 @@ void level_draw_dialog_text(void) {
             } else if (D_L00_0015F5A8 != 0) {
                 left = 0x524E;
                 right = 0x524B;
-                sprintf(buf, D_L00_0015F510, get_help_message_text(0x4FA9), 1, 1, get_help_message_text(0x4FAA));
-                text = buf;
+                sprintf(formatted_dialog_body, D_L00_0015F510, get_help_message_text(0x4FA9), 1, 1, get_help_message_text(0x4FAA));
+                text = formatted_dialog_body;
             } else {
                 mid = 0x4FA8;
                 text = get_help_message_text(0x4FA9);
@@ -253,8 +253,8 @@ void level_draw_dialog_text(void) {
         case FREEZE_DIALOG_FORMATTED_BODY_PAIRED_BUTTONS:
             left = 0x524E;
             right = 0x524B;
-            sprintf(buf, D_L00_0015F510, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));
-            text = buf;
+            sprintf(formatted_dialog_body, D_L00_0015F510, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));
+            text = formatted_dialog_body;
             break;
         case FREEZE_DIALOG_PLAIN_BODY_PAIRED_BUTTONS:
             left = 0x524E;
@@ -274,8 +274,8 @@ void level_draw_dialog_text(void) {
             break;
         case FREEZE_DIALOG_FORMATTED_BODY_CENTERED_BUTTON:
             mid = 0x4FA8;
-            sprintf(buf, D_L00_0015F510, get_help_message_text(0x4FB0), 1, 1, get_help_message_text(0x4FA7));
-            text = buf;
+            sprintf(formatted_dialog_body, D_L00_0015F510, get_help_message_text(0x4FB0), 1, 1, get_help_message_text(0x4FA7));
+            text = formatted_dialog_body;
             break;
         }
         box = (struct TextRegion){0, screen_extent.height, 0x60, 0x1A0, 0x100, 0x68, 0, 0, 0x10, 5};
