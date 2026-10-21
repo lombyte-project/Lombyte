@@ -1207,34 +1207,34 @@ extern short D_L14_0016147C __attribute__((sda));
 extern short D_L14_00161480 __attribute__((sda));
 void FUN_L14_002ae260(struct Moby *m) {
     char *d = (char *)m->pvars;
-    float pos[4];
+    float glow_quad_position[4];
     Pk_2af4a0 pk;
     float glow_to_camera_vector[4];
     float camera_pull_offset[4];
-    float len;
+    float glow_to_camera_distance;
     u32 col;
     int j;
-    qcopy(pos, d + 0x90);
-    pos[2] += 0.01f;
-    pos[3] = 1.0f;
+    qcopy(glow_quad_position, d + 0x90);
+    glow_quad_position[2] += 0.01f;
+    glow_quad_position[3] = 1.0f;
     pk.b = get_effect_texture_alt(0xB);
     pk.c = 0x0000FF9000000260ULL;
     pk.d = 0x8000000048ULL;
     pk.a = 0;
     vu1_add_g_sregister(0x4A, 0);
     vu1_add_g_sregister(0x47, 0x51001);
-    subtract_vector_xyz(glow_to_camera_vector, D_L14_001674C0_d, pos);
-    len = vector_length_xyz(glow_to_camera_vector);
-    if (0.0f < len) {
+    subtract_vector_xyz(glow_to_camera_vector, D_L14_001674C0_d, glow_quad_position);
+    glow_to_camera_distance = vector_length_xyz(glow_to_camera_vector);
+    if (0.0f < glow_to_camera_distance) {
         float camera_pull_distance = *(float *)(d + 0x218);
-        float camera_distance_margin = len - *(float *)&D_L14_0016147C;
+        float camera_distance_margin = glow_to_camera_distance - *(float *)&D_L14_0016147C;
         if (camera_distance_margin < camera_pull_distance) {
             camera_pull_distance = camera_distance_margin;
             if (camera_distance_margin < 0.0f)
                 camera_pull_distance = 0.0f;
         }
         normalize_vector_xyz(camera_pull_offset, glow_to_camera_vector, camera_pull_distance);
-        add_vector_xyz(pos, pos, camera_pull_offset);
+        add_vector_xyz(glow_quad_position, glow_quad_position, camera_pull_offset);
     }
     pk.uv[2] = 0.0f;
     pk.uv[0] = 1.0f;
@@ -1259,7 +1259,7 @@ void FUN_L14_002ae260(struct Moby *m) {
     }
     for (j = 0; j < 4; j++) {
         scale_vector_xyz(pk.m[j], D_L14_001D8640[j], *(float *)(d + 0x214));
-        add_vector_xyz(pk.m[j], pk.m[j], pos);
+        add_vector_xyz(pk.m[j], pk.m[j], glow_quad_position);
     }
     draw_geometry_quad(&pk, 0, 0);
 }
