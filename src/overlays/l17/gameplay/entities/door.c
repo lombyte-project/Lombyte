@@ -483,36 +483,36 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L17_002eaae0(char *rot, char *from, char *moby, int icon, long color, int tex) {
+void FUN_L17_002eaae0(char *radar_rotation, char *from, char *moby, int icon, long color, int tex) {
     float turn[4];
-    float mat[16];
+    float radar_rotation_matrix[16];
     float delta[4];
-    float pos[4];
-    float len;
+    float radar_offset[4];
+    float radar_distance;
     float side;
     int x, y;
     IconEC5D0 *radar_icon_definition;
 
     qzero(turn);
-    turn[2] = *(float *)(rot + 8);
+    turn[2] = *(float *)(radar_rotation + 8);
     turn[2] = fast_subtract_rotations(1.5707964f, turn[2]);
-    euler_rotation_matrix(mat, turn);
+    euler_rotation_matrix(radar_rotation_matrix, turn);
     subtract_vector_xyz(delta, moby + 0x10, from);
     delta[2] = 0.0f;
-    transform_vector(pos, delta, mat);
-    scale_vector_xyz(pos, pos, 0.0714285746f);
-    len = vector_length_xyz(pos);
+    transform_vector(radar_offset, delta, radar_rotation_matrix);
+    scale_vector_xyz(radar_offset, radar_offset, 0.0714285746f);
+    radar_distance = vector_length_xyz(radar_offset);
     side = 1.0f;
     if (D_0015EDB4[0] != 0) {
         side = -1.0f;
     }
-    x = func_001FA898_r(side * pos[0]);
-    y = func_001FA898_r(-pos[1]);
-    if (len < 46.0f) {
-        if (len > 38.0f) {
+    x = func_001FA898_r(side * radar_offset[0]);
+    y = func_001FA898_r(-radar_offset[1]);
+    if (radar_distance < 46.0f) {
+        if (radar_distance > 38.0f) {
             float alpha_distance_product;
-            len = 46.0f - len;
-            alpha_distance_product = convert_integer_to_float(((unsigned long)color >> 24) & 0xFF) * len;
+            radar_distance = 46.0f - radar_distance;
+            alpha_distance_product = convert_integer_to_float(((unsigned long)color >> 24) & 0xFF) * radar_distance;
             color &= 0xFFFFFF;
             color = (func_001FA898_r(alpha_distance_product * 0.125f) << 24) | color;
         }
