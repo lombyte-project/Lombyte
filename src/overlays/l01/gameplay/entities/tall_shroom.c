@@ -453,7 +453,7 @@ void FUN_L01_0030c190(struct Moby *moby) {
     struct Moby *cutscene_moby;
     char *splash;
     FxSpark *spark;
-    f32 ang;
+    f32 debris_horizontal_angle_radians;
     f32 debris_horizontal_magnitude;
     s32 i;
     s32 j;
@@ -501,10 +501,10 @@ void FUN_L01_0030c190(struct Moby *moby) {
                         }
                     }
                     for (i = 0; i < 16; i++) {
-                        ang = random_angle_radians();
+                        debris_horizontal_angle_radians = random_angle_radians();
                         debris_horizontal_magnitude = random_float_between(frame_time * 0.0f, frame_time * 3.0f);
-                        b.f[0] = fast_cos(ang) * debris_horizontal_magnitude;
-                        b.f[1] = fast_sin(ang) * debris_horizontal_magnitude;
+                        b.f[0] = fast_cos(debris_horizontal_angle_radians) * debris_horizontal_magnitude;
+                        b.f[1] = fast_sin(debris_horizontal_angle_radians) * debris_horizontal_magnitude;
                         b.f[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
                         debris_spawn_random_value = random_int_between(90, 120);
                         spawn_debris_chunk(&a, &b, random_integer_below(2), debris_spawn_random_value);
