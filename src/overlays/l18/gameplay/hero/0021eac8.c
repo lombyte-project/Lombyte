@@ -1641,13 +1641,13 @@ void FUN_L18_0021eac8(void) {
             hero.unk2218 = -1;
         }
         if (hero.state.current == HERO_STATE_GRIND || hero.state.current == 0x2B) {
-            f32 ang;
+            f32 grind_effect_yaw;
             f32 rr;
             qcopy(&general_vector_or_hit_descriptor_scratch, &hero.motion.pos);
-            ang = fast_add_rotations(hero.unk57C, randf_sym(0.0f, 0.5235988f));
+            grind_effect_yaw = fast_add_rotations(hero.unk57C, randf_sym(0.0f, 0.5235988f));
             rr = random_float_between(frame_time * 4.0f, frame_time * 7.0f);
-            v10.f[0] = fast_cos(ang) * rr;
-            v10.f[1] = fast_sin(ang) * rr;
+            v10.f[0] = fast_cos(grind_effect_yaw) * rr;
+            v10.f[1] = fast_sin(grind_effect_yaw) * rr;
             v10.f[2] = 0.0f;
             v10.f[2] = random_float_between(frame_time * 3.0f, frame_time * 5.0f);
             v10.f[3] = -(frame_time_sq * 30.0f);
@@ -1786,13 +1786,13 @@ void FUN_L18_0021eac8(void) {
                 }
             }
             if (hero.unk590 != 0 && hero.unk5A4 <= scale_game_frames(48)) {
-                f32 u;
+                f32 previous_rail_blend_fraction;
                 subtract_vector_xyz(&vector_or_hit_descriptor_scratch, &general_vector_or_hit_descriptor_scratch, &v10);
                 hero.unk5A4++;
                 fast_vec_scale(&vector_or_hit_descriptor_scratch, &vector_or_hit_descriptor_scratch, (f32)hero.unk5A4 / (f32)scale_game_frames(48));
-                u = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
+                previous_rail_blend_fraction = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
                 subtract_vector_xyz(&position_or_displacement_scratch, &general_vector_or_hit_descriptor_scratch, &v10);
-                fast_vec_scale(&position_or_displacement_scratch, &position_or_displacement_scratch, u);
+                fast_vec_scale(&position_or_displacement_scratch, &position_or_displacement_scratch, previous_rail_blend_fraction);
                 hero.motion.pos.f[2] += vector_or_hit_descriptor_scratch.f[2] - position_or_displacement_scratch.f[2];
                 add_vector_xyz(&position_or_displacement_scratch, &v10, &vector_or_hit_descriptor_scratch);
                 subtract_vector_xyz(&vector_or_hit_descriptor_scratch, &position_or_displacement_scratch, &hero.motion.pos);
