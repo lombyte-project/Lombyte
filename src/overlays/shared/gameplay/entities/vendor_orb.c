@@ -1514,8 +1514,8 @@ void robot_arm_update(char *moby) {
 }
 /* Copies the vector at D_0013F3D0 into b; a is unused. */
 void follow_camera_hero_target(int a, void *b) __asm__("FUN_L00_002e4168");
-void follow_camera_hero_target(int unused_camera, void *b) {
-    qcopy(b, &hero.motion.pos);
+void follow_camera_hero_target(int unused_camera, void *out_hero_position) {
+    qcopy(out_hero_position, &hero.motion.pos);
 }
 #include "eetypes.h"
 typedef struct {
