@@ -107,7 +107,7 @@ void FUN_L09_002c26c8(struct Moby *moby) {
     float vec[4];
     Buf_2c26c8 buf;
     float rotm[4][4];
-    float dist;
+    float nearest_parent_distance;
     int joint;
     Data_2c26c8 *part_vars = (*(Data_2c26c8 **)&moby->pvars);
 
@@ -135,13 +135,13 @@ void FUN_L09_002c26c8(struct Moby *moby) {
             }
         } else {
             struct Moby *p;
-            dist = 100000.0f;
-            p = (struct Moby *)FUN_L09_002c2610(((f32 *)&moby->pos), 0x4A0, &dist);
-            if (dist < 20.0f) {
+            nearest_parent_distance = 100000.0f;
+            p = (struct Moby *)FUN_L09_002c2610(((f32 *)&moby->pos), 0x4A0, &nearest_parent_distance);
+            if (nearest_parent_distance < 20.0f) {
                 part_vars->parent = p;
                 (*(Data_2c26c8 **)&p->pvars)->parts[moby->oclass - 0x49E] = moby;
             } else {
-                FUN_001e93b0_2c26c8(D_L09_002082A0, (*(short *)&moby->save_id), moby->oclass, FUN_00120478_2c26c8(dist));
+                FUN_001e93b0_2c26c8(D_L09_002082A0, (*(short *)&moby->save_id), moby->oclass, FUN_00120478_2c26c8(nearest_parent_distance));
             }
         }
         joint = 0;
