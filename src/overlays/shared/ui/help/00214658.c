@@ -1043,7 +1043,7 @@ void FUN_L00_00217450(void) {
     char *position_source;
     char *g;
     int random_integer_4_to_7, b;
-    float vector_magnitude, ang, elevation_angle, r;
+    float vector_magnitude, azimuth_angle, elevation_angle, r;
 
     scaled_frame_count = FUN_001f96f8_217450(0x28);
     position_source = D_0013F3D0;
@@ -1058,15 +1058,15 @@ void FUN_L00_00217450(void) {
             pos[0].f[2] = *(float *)(g + 0x2F4);
         }
         i--;
-        ang = random_angle_radians();
+        azimuth_angle = random_angle_radians();
         elevation_angle = random_float_between(0.34906584f, 1.3962634f);
         r = random_float_between(0.05f, *(float *)(g + 0x234) + 0.2f);
-        FUN_00214db0_217450(&out, vector_magnitude, ang, elevation_angle);
-        pos[0].f[0] += FUN_001f9dc8_217450(ang) * r;
-        pos[0].f[1] += FUN_001f9de0_217450(ang) * r;
+        FUN_00214db0_217450(&out, vector_magnitude, azimuth_angle, elevation_angle);
+        pos[0].f[0] += FUN_001f9dc8_217450(azimuth_angle) * r;
+        pos[0].f[1] += FUN_001f9de0_217450(azimuth_angle) * r;
         FUN_L00_00269958(pos, &out, 0x7000C0F0, 0x70F0, scaled_frame_count, random_integer_4_to_7, b, 1);
     } while (i >= 0);
-    if (!ang) {
+    if (!azimuth_angle) {
     }
 }
 typedef struct {
