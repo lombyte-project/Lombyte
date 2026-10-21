@@ -2886,10 +2886,10 @@ extern int FUN_L13_002e9160_c(char *, char *, int, int) __asm__("FUN_L13_002e916
 
 int FUN_L13_002e9408(struct Moby *moby, char *path_following_data, int idx, int aim) {
     char *path = D_L13_001B07B0_9408[*(int *)(&path_following_data[idx << 2] + 0xB0)];
-    int r = 0;
+    int result_flags = 0;
     float ahead[4];
     float behind[4];
-    float ahead_distance_to_hero, b;
+    float ahead_distance_to_hero, behind_distance_to_hero;
     int next_node_index;
     int k;
     int dir;
@@ -2905,10 +2905,10 @@ int FUN_L13_002e9408(struct Moby *moby, char *path_following_data, int idx, int 
             k = *(int *)path - 1;
         }
         qcopy(behind, path + k * 16 + 0x10);
-        b = dist_9408(behind, &hero.motion.pos);
-        if (ahead_distance_to_hero < b) {
+        behind_distance_to_hero = dist_9408(behind, &hero.motion.pos);
+        if (ahead_distance_to_hero < behind_distance_to_hero) {
             dir = -1;
-        } else if (b < ahead_distance_to_hero) {
+        } else if (behind_distance_to_hero < ahead_distance_to_hero) {
             dir = 1;
         } else {
             dir = path_following_data[0x10C] == 1 ? 1 : -1;
@@ -2936,12 +2936,12 @@ int FUN_L13_002e9408(struct Moby *moby, char *path_following_data, int idx, int 
                 *(float *)(path_following_data + 0xAC) = 0.0f;
             }
         }
-        r = FUN_L13_002e9160_c(moby, path_following_data, idx, aim);
+        result_flags = FUN_L13_002e9160_c(moby, path_following_data, idx, aim);
     }
     if (0.0f < *(float *)(path + (*(short *)(path_following_data + 0x9C) << 4) + 0x1C)) {
-        r |= 2;
+        result_flags |= 2;
     }
-    return r;
+    return result_flags;
 }
 /* Launches the child moby held in slot idx of p: spins it off with random-ish velocities and clears the slot. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EAAB8), where it is exact; names translated to the US level program. */
