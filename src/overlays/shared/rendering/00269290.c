@@ -1608,7 +1608,7 @@ int FUN_001fa6d0_26d000(float) __asm__("FUN_001fa6d0");
 float FUN_L00_00257c48_26d000(float, float) __asm__("FUN_L00_00257c48");
 int FUN_001f96f8_26d000(int) __asm__("FUN_001f96f8");
 float FUN_002132a8_26d000(float, float) __asm__("FUN_002132a8");
-unsigned char *FUN_L00_0026d000(void *pos, int spin_rate, void *vel, int color, float r, float lo, float hi,
+unsigned char *FUN_L00_0026d000(void *pos, int spin_rate, void *vel, int color, float position_jitter_scale, float lo, float hi,
                                 float size) {
     unsigned char *particle = FUN_L00_002678b8_26d000(0x17);
     if (particle) {
@@ -1624,9 +1624,9 @@ unsigned char *FUN_L00_0026d000(void *pos, int spin_rate, void *vel, int color, 
         particle[1] = 0;
         particle[8] = 0;
         particle[2] = *D_L00_001B20DC;
-        *(float *)(particle + 0x10) += FUN_L00_00257c48_26d000(z, r);
-        *(float *)(particle + 0x14) += FUN_L00_00257c48_26d000(z, r);
-        *(float *)(particle + 0x18) += FUN_L00_00257c48_26d000(z, r);
+        *(float *)(particle + 0x10) += FUN_L00_00257c48_26d000(z, position_jitter_scale);
+        *(float *)(particle + 0x14) += FUN_L00_00257c48_26d000(z, position_jitter_scale);
+        *(float *)(particle + 0x18) += FUN_L00_00257c48_26d000(z, position_jitter_scale);
         *(short *)(particle + 0xA) = FUN_001f96f8_26d000(0xA);
         *(int *)(particle_data + 4) = 0;
         *(int *)(particle_data + 0) = color;
