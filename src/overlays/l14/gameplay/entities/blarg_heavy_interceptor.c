@@ -2738,7 +2738,7 @@ extern PuffParticle *spawn_puff(void *, float, float, float, int, void *, float,
 
 void FUN_L14_002b5968(struct Moby *moby, float *point, float angle) {
     float offset[4];
-    float pos[4];
+    float effect_spawn_position[4];
     float small_offset[4];
     float direction[4];
     float original_pos[4];
@@ -2759,7 +2759,7 @@ void FUN_L14_002b5968(struct Moby *moby, float *point, float angle) {
     offset[0] = fast_cos(value) * 0.8f;
     offset[1] = fast_sin(value) * 0.8f;
     offset[2] = 0.0f;
-    add_vector_xyz(pos, point, offset);
+    add_vector_xyz(effect_spawn_position, point, offset);
     for (i = 5; i >= 0; i--) {
         signed_puff_random_value = random_integer_below(2);
         if (random_integer_below(2)) signed_puff_random_value = -signed_puff_random_value;
@@ -2768,7 +2768,7 @@ void FUN_L14_002b5968(struct Moby *moby, float *point, float angle) {
         low_color = (color << 8) | 0x7f000000;
         high_color = color << 16;
         packed_color = color | (high_color | low_color);
-        part = spawn_puff(pos, 0.2f, 1.0f, 1.01f, signed_puff_random_value, D_L14_0015F580_x, puff_size, packed_color);
+        part = spawn_puff(effect_spawn_position, 0.2f, 1.0f, 1.01f, signed_puff_random_value, D_L14_0015F580_x, puff_size, packed_color);
         if (part) {
             tail = &part->tail;
             part->life = scale_game_frames(120);
@@ -2780,15 +2780,15 @@ void FUN_L14_002b5968(struct Moby *moby, float *point, float angle) {
     qcopy(small_offset, offset);
     scale_vector_xyz(offset, offset, 0.0625f);
     offset[2] = random_float_between(0.025f, 0.06f);
-    qcopy(original_pos, pos);
+    qcopy(original_pos, effect_spawn_position);
     step = 0.6283f;
     for (j = 0; j < 16; j++) {
         value = randf_sym(0.0f, 0.5f);
         build_look_at_matrix(direction, offset, small_offset, (float)j * step + value);
-        pos[0] = original_pos[0] + randf_sym(0.0f, 0.2f);
-        pos[1] = original_pos[1] + randf_sym(0.0f, 0.2f);
-        pos[2] = original_pos[2] + randf_sym(0.0f, 0.2f);
-        FUN_L00_0026c6e8(pos, direction);
+        effect_spawn_position[0] = original_pos[0] + randf_sym(0.0f, 0.2f);
+        effect_spawn_position[1] = original_pos[1] + randf_sym(0.0f, 0.2f);
+        effect_spawn_position[2] = original_pos[2] + randf_sym(0.0f, 0.2f);
+        FUN_L00_0026c6e8(effect_spawn_position, direction);
     }
     mine_camera_blast((int)D_L14_001D88D0, original_pos, 0, 0);
 }
