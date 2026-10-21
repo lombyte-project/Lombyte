@@ -266,7 +266,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     char *follow_context = 0;
     unsigned char state;
     int ret;
-    Res_2E9358 *r;
+    Res_2E9358 *hit_result;
 
     previous_position.q = moby->pos;
     clear_u64_value(&collision_scratch_vector);
@@ -275,8 +275,8 @@ void poison_vessel_update(Moby_2E9358 *moby) {
             moby->bBC = 1;
         }
     }
-    r = trooper_find_hit(moby, 0x830000, 0);
-    if (r != 0 && r->owner != 0 && r->owner->hA6 != moby->hA6) {
+    hit_result = trooper_find_hit(moby, 0x830000, 0);
+    if (hit_result != 0 && hit_result->owner != 0 && hit_result->owner->hA6 != moby->hA6) {
         moby->bBC = 1;
     }
     moby->bA4 = 0xFF;
