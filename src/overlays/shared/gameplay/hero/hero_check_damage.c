@@ -209,7 +209,7 @@ void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
 void find_grind_rail(void) {
     V_cf58 proximity_or_rail_point, proximity_or_query_position, third_proximity_point;
 
-    s32 rail_owner, b, rail_kind;
+    s32 rail_owner, rail_query_integer_value, rail_kind;
     f32 rail_query_value;
     s32 control_mode;
     f32 height_above_rail;
@@ -270,7 +270,7 @@ void find_grind_rail(void) {
         }
     }
     *(OvlQuad *)&proximity_or_query_position = *(OvlQuad *)&hero.motion.pos;
-    if (!nearest_rail_point((OvlQuad *)&proximity_or_query_position, &rail_owner, &proximity_or_rail_point, &b, &rail_query_value, &rail_kind, 0, 0))
+    if (!nearest_rail_point((OvlQuad *)&proximity_or_query_position, &rail_owner, &proximity_or_rail_point, &rail_query_integer_value, &rail_query_value, &rail_kind, 0, 0))
         return;
     if (hero.state.current == 41 && hero.unk5C4 != 0 && rail_owner == hero.unk560)
         return;
@@ -281,7 +281,7 @@ void find_grind_rail(void) {
         return;
     qcopy(&hero.unk500, &proximity_or_rail_point);
     hero.unk560 = rail_owner;
-    hero.unk564 = b;
+    hero.unk564 = rail_query_integer_value;
     hero.unk568 = rail_query_value;
     hero.unk584 = rail_kind;
     hero.grind_rail = 1;
