@@ -238,7 +238,7 @@ void follow_camera_orbit(int arg) {
     float orbit_base_position[4];
     float forward_clamp_axis[4];
     float tb[4];
-    float x, bc, dot_product, reference_up_component, y, current_up_component, r, i, yaw_rotation_sign, len;
+    float x, bc, dot_product, reference_up_component, y, current_up_component, orbit_angle_scratch, i, yaw_rotation_sign, len;
     char *base = D_L00_00166E10;
     char *up = base + 0x20;
     char *base2;
@@ -255,8 +255,8 @@ void follow_camera_orbit(int arg) {
     reference_up_component = fast_vec_dot(reference_orbit_offset, up);
     y = fast_arc_sin(reference_up_component / x);
     current_up_component = fast_vec_dot(current_orbit_offset, up);
-    r = fast_arc_sin(current_up_component / bc);
-    i = rope_spring_turn(camera_state + 0x154, r, y, *(float *)&D_L00_00161CFC, *(float *)&D_L00_00161D00,
+    orbit_angle_scratch = fast_arc_sin(current_up_component / bc);
+    i = rope_spring_turn(camera_state + 0x154, orbit_angle_scratch, y, *(float *)&D_L00_00161CFC, *(float *)&D_L00_00161D00,
                          0.0f);
     fast_vec_scale(reference_up_projection, up, reference_up_component);
     subtract_vector_xyz(projected_reference_offset, reference_orbit_offset, reference_up_projection);
@@ -265,8 +265,8 @@ void follow_camera_orbit(int arg) {
     dot_product = fast_vec_dot(projected_reference_offset, projected_current_offset);
     x = fast_vec_length(projected_reference_offset);
     x = x * fast_vec_length(projected_current_offset);
-    r = 1.5707964f - fast_arc_sin(dot_product / x);
-    x = rope_spring_turn(camera_state + 0x150, 0.0f, r, *(float *)&D_L00_00161CF4,
+    orbit_angle_scratch = 1.5707964f - fast_arc_sin(dot_product / x);
+    x = rope_spring_turn(camera_state + 0x150, 0.0f, orbit_angle_scratch, *(float *)&D_L00_00161CF4,
                          *(float *)&D_L00_00161CF8, 0.0f);
     fast_vec_cross(orbit_cross_scratch, projected_current_offset, up);
     yaw_rotation_sign = (fast_vec_dot(orbit_cross_scratch, projected_reference_offset) >= 0.0f) ? 1.0f : -1.0f;
