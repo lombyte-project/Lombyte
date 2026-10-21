@@ -2209,8 +2209,8 @@ void FUN_L01_002eec68(char *moby) {
     float rate;
     float fixed_scale;
     float f24;
-    float dist;
-    float ang;
+    float candidate_distance;
+    float color_cycle_phase;
     float k;
     float seven;
 
@@ -2351,10 +2351,10 @@ void FUN_L01_002eec68(char *moby) {
     if (candidate_list_index >= 0) {
         cand = FUN_L01_002ef478_c(moby, candidate_list_index);
         if (cand != 0) {
-            dist = vector_distance_xy_alt(moby + 0x10, cand + 0x10);
-            if (dist < *(float *)(moby_vars + 0x228)) {
+            candidate_distance = vector_distance_xy_alt(moby + 0x10, cand + 0x10);
+            if (candidate_distance < *(float *)(moby_vars + 0x228)) {
                 if (*(int *)(moby_vars + 0x204) == 2
-                    || dist < vector_distance_xy_alt(moby + 0x10, *(char **)(moby_vars + 0x200) + 0x10)) {
+                    || candidate_distance < vector_distance_xy_alt(moby + 0x10, *(char **)(moby_vars + 0x200) + 0x10)) {
                     *(char **)(moby_vars + 0x200) = cand;
                     *(int *)(moby_vars + 0x204) = 1;
                 }
@@ -2364,9 +2364,9 @@ void FUN_L01_002eec68(char *moby) {
     if (*(int *)(moby_vars + 0x200) == 0) {
         *(int *)(moby_vars + 0x200) = *(int *)(((char *)((char (*))D_001413D0)));
     }
-    ang = fast_add_rotations_c(*(float *)(moby_vars + 0x254), frame_time * 9.424778f);
-    *(float *)(moby_vars + 0x254) = ang;
-    *(int *)(moby + 0x90) = fast_tween_color((fast_sin_c(ang) + 1.0f) * 0.5f,
+    color_cycle_phase = fast_add_rotations_c(*(float *)(moby_vars + 0x254), frame_time * 9.424778f);
+    *(float *)(moby_vars + 0x254) = color_cycle_phase;
+    *(int *)(moby + 0x90) = fast_tween_color((fast_sin_c(color_cycle_phase) + 1.0f) * 0.5f,
                                            *(int *)&D_L01_00161998, *(int *)&D_L01_0016199C);
 }
 extern short *D_L01_001ABCC0[];
