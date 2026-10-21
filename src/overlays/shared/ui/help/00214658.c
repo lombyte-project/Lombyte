@@ -664,7 +664,7 @@ extern f32 FUN_001f99c0(f32);
 void FUN_L00_002167d0(void) {
     struct Hero *hero_state;
     struct Hero *slope_hero_state;
-    Vec4 *r;
+    Vec4 *hero_velocity;
     V4 target_velocity, target_velocity_before_impulse, saved_move_impulse, xy_velocity_scratch, slope_velocity_delta;
     f32 f20, f21, f22, impulse_step_factor, b, base_impulse_step, frame_duration, impulse_gate_or_target_length, target_speed_y, k;
 
@@ -743,8 +743,8 @@ void FUN_L00_002167d0(void) {
     if (f21 < fast_vec_length(&xy_velocity_scratch)) {
         fast_vec_normalize(&xy_velocity_scratch, &xy_velocity_scratch, f21);
     }
-    r = &hero.motion.velocity;
-    FUN_001f9a10_c(r, &hero.motion.unk130, &xy_velocity_scratch);
+    hero_velocity = &hero.motion.velocity;
+    FUN_001f9a10_c(hero_velocity, &hero.motion.unk130, &xy_velocity_scratch);
     slope_hero_state = &hero;
     if (0.0872664601f < slope_hero_state->ground_slope.f) {
         f21 = FUN_001f9e90_c(slope_hero_state->unk270.f[0], slope_hero_state->unk270.f[1]);
@@ -756,12 +756,12 @@ void FUN_L00_002167d0(void) {
         xy_velocity_scratch.f[0] = fast_cos(f21) * f20;
         xy_velocity_scratch.f[1] = fast_sin(f21) * f20;
         xy_velocity_scratch.f[2] = 0.0f;
-        fast_vec_sub(&slope_velocity_delta, &xy_velocity_scratch, r);
+        fast_vec_sub(&slope_velocity_delta, &xy_velocity_scratch, hero_velocity);
         slope_velocity_delta.f[2] = 0.0f;
         if (f22 < fast_vec_length(&slope_velocity_delta)) {
             fast_vec_normalize(&slope_velocity_delta, &slope_velocity_delta, f22);
         }
-        FUN_001f9a10_c(r, r, &slope_velocity_delta);
+        FUN_001f9a10_c(hero_velocity, hero_velocity, &slope_velocity_delta);
     }
     qcopy(&xy_velocity_scratch, &hero.motion.velocity);
     xy_velocity_scratch.f[2] = 0.0f;
