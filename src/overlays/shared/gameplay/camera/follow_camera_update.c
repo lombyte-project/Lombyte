@@ -1985,9 +1985,9 @@ s32 volume_camera_swing_check(struct UpdateCam *cam) {
 
 /* Nonzero while the hero is in one of the aim camera's volumes; sets `done` otherwise. */
 s32 volume_camera_aim_active(struct UpdateCam *cam) __asm__("FUN_L00_002ed348");
-s32 volume_camera_aim_active(struct UpdateCam *cam) {
+s32 volume_camera_aim_active(struct UpdateCam *aim_camera_record) {
     struct UpdateCam *rec = current_follow_cam;
-    AimCameraParams *params = camera_descriptors[cam->descriptor_index].params;
+    AimCameraParams *params = camera_descriptors[aim_camera_record->descriptor_index].params;
     FollowCamState *state = FOLLOW_CAM_STATE(rec);
     FollowCamTail *tail = &state->tail;
     FollowCamFlags *ctl = &state->tail.ctl;
