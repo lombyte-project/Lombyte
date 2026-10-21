@@ -165,7 +165,7 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern unsigned char D_L01_001B2928_b[] __asm__("D_L01_001B2628");
 
 unsigned char *FUN_L01_0028a7a8(char *source_moby, char *pos, float *vel, char *cfg, int flag) {
-    float v[4];
+    float transformed_spawn_offset[4];
     float mat[16];
     unsigned char *particle = FUN_L00_002678b8(74);
     if (particle) {
@@ -184,16 +184,16 @@ unsigned char *FUN_L01_0028a7a8(char *source_moby, char *pos, float *vel, char *
         *(float *)particle_data = vel[0];
         *(float *)(particle_data + 4) = vel[1];
         *(float *)(particle_data + 8) = vel[2];
-        subtract_vector_xyz_c(v, pos, source_moby + 0x10);
+        subtract_vector_xyz_c(transformed_spawn_offset, pos, source_moby + 0x10);
         qzero(mat);
         qzero(mat + 4);
         qzero(mat + 8);
         qzero(mat + 12);
         transpose_rotation_matrix(mat, source_moby + 0xc0);
-        transform_vector(v, v, mat);
-        *(float *)(particle_data + 0x10) = v[0];
-        *(float *)(particle_data + 0x14) = v[1];
-        *(float *)(particle_data + 0x18) = v[2];
+        transform_vector(transformed_spawn_offset, transformed_spawn_offset, mat);
+        *(float *)(particle_data + 0x10) = transformed_spawn_offset[0];
+        *(float *)(particle_data + 0x14) = transformed_spawn_offset[1];
+        *(float *)(particle_data + 0x18) = transformed_spawn_offset[2];
         *(char **)(particle_data + 0xc) = source_moby;
         *(char **)(particle_data + 0x1c) = cfg;
         *(short *)(particle + 0xa) = *(unsigned short *)(cfg + 0xc);
