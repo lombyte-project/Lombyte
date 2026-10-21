@@ -28,7 +28,7 @@ f32 compute_interpolated_record_value(struct InterpolatedStateEntry *anim) {
     struct InterpKeyframeB *next_record;
     struct InterpKeyframeA *cur_record;
     f32 temp_f20_55;
-    u8 u50, u51;
+    u8 primary_binding_index, secondary_binding_index;
 
     if (anim->unk52 != 0xFF) {
         cur_record = anim->unk68;
@@ -41,9 +41,9 @@ f32 compute_interpolated_record_value(struct InterpolatedStateEntry *anim) {
     if (anim->unk52 != anim->unk53) {
         return (convert_integer_to_float(cur_record->unk4) * 0.0625f) + anim->unk54;
     }
-    u50 = anim->unk50;
-    u51 = anim->unk51;
-    if ((u8)u51 >= (u8)u50) {
+    primary_binding_index = anim->unk50;
+    secondary_binding_index = anim->unk51;
+    if ((u8)secondary_binding_index >= (u8)primary_binding_index) {
         next_record = anim->unk6C;
         temp_f20_55 = convert_integer_to_float(cur_record->unk4) * (1.0f - anim->unk54);
         return (temp_f20_55 + (convert_integer_to_float(next_record->unk4) * anim->unk54)) * 0.0625f;
