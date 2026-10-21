@@ -113,7 +113,7 @@ void FUN_L05_0031c8e0(struct Moby *moby);
 void FUN_L05_0031c8e0(struct Moby *moby) {
     struct MineVars_c8e0 *vars = (struct MineVars_c8e0 *)moby->pvars;
     Vec4 tip;
-    Vec4 vel;
+    Vec4 debris_velocity;
     Vec4 dir;
     Vec4 start;
     f32 distance;
@@ -170,18 +170,18 @@ void FUN_L05_0031c8e0(struct Moby *moby) {
         debris->spawn_frame = moby->spawn_frame;
     }
     FUN_L01_002787a0_c8e0(moby);
-    scale_vector_xyz_c8e0(&vel, &moby->rot_row0, D_L05_00161FD0 * frame_scale);
-    vel.f[2] += D_L05_00161FD4 * frame_scale;
+    scale_vector_xyz_c8e0(&debris_velocity, &moby->rot_row0, D_L05_00161FD0 * frame_scale);
+    debris_velocity.f[2] += D_L05_00161FD4 * frame_scale;
     debris = spawn_debris_c8e0(frame_time_sq * 12.0f, moby, 0x5EE, &moby->pos, &moby->rot, scale_game_frames_c8e0(0x5A), 0,
-                               &vel, D_L05_0015F580, D_L05_0015F580);
+                               &debris_velocity, D_L05_0015F580, D_L05_0015F580);
     if (debris != 0) {
         debris->spawn_frame = moby->spawn_frame;
     }
-    vel.f[0] = -vel.f[0];
-    vel.f[1] = -vel.f[1];
+    debris_velocity.f[0] = -debris_velocity.f[0];
+    debris_velocity.f[1] = -debris_velocity.f[1];
     moby->rot.z = fast_add_rotations_c8e0(moby->rot.z, 3.1415927f);
     debris = spawn_debris_c8e0(frame_time_sq * 12.0f, moby, 0x5EE, &moby->pos, &moby->rot, scale_game_frames_c8e0(0x5A), 0,
-                               &vel, D_L05_0015F580, D_L05_0015F580);
+                               &debris_velocity, D_L05_0015F580, D_L05_0015F580);
     if (debris != 0) {
         debris->spawn_frame = moby->spawn_frame;
     }
