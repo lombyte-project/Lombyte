@@ -1283,22 +1283,22 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int *D_L18_001AC240[];
 
-void *FUN_L18_002d6b58(float *reference_position, float *comparison_position, int idx) {
-    short *moby_list_entry = (short *)D_L18_001AC240[idx];
+void *FUN_L18_002d6b58(float *reference_position, float *comparison_position, int moby_list_index) {
+    short *moby_list_entry = (short *)D_L18_001AC240[moby_list_index];
     char *best = 0;
     float bestd = 0.0f;
     if (moby_list_entry == 0)
         return 0;
     while (1) {
-        int off = (*moby_list_entry & 0x7FFF) << 8;
-        if (*(short *)(off + (int)*(char **)&D_L18_0015FFD8_d + 0xA6) == 0x247) {
-            float ang = fast_arc_tan(reference_position[0] - comparison_position[0], reference_position[1] - comparison_position[1]);
-            L18Pos *candidate_moby = (L18Pos *)(off + (int)*(char **)&D_L18_0015FFD8_d);
+        int moby_byte_offset = (*moby_list_entry & 0x7FFF) << 8;
+        if (*(short *)(moby_byte_offset + (int)*(char **)&D_L18_0015FFD8_d + 0xA6) == 0x247) {
+            float comparison_to_reference_angle = fast_arc_tan(reference_position[0] - comparison_position[0], reference_position[1] - comparison_position[1]);
+            L18Pos *candidate_moby = (L18Pos *)(moby_byte_offset + (int)*(char **)&D_L18_0015FFD8_d);
             float d =
-                fast_difference_between_rotations(ang, fast_arc_tan(reference_position[0] - candidate_moby->x, reference_position[1] - candidate_moby->y));
+                fast_difference_between_rotations(comparison_to_reference_angle, fast_arc_tan(reference_position[0] - candidate_moby->x, reference_position[1] - candidate_moby->y));
             if (bestd < d) {
                 bestd = d;
-                best = (char *)D_L18_0015FFD8_m + off;
+                best = (char *)D_L18_0015FFD8_m + moby_byte_offset;
             }
         }
         if (*moby_list_entry++ < 0)
