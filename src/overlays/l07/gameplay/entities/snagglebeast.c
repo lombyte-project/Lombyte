@@ -2686,7 +2686,7 @@ extern struct Moby *break_spawn_shard(void *, void *, s32, f32, s32, f32, f32, f
 
 /* Breakable prop: when hit by moby 0x415 in state 8 or 0x452 in state 9 with hit kind 1.000123, scatters its shard count of pieces over its rotated extent, spawns debris and removes itself. */
 void FUN_L07_00319f48(struct Moby *moby) {
-    BreakableVars *v = (BreakableVars *)moby->pvars;
+    BreakableVars *breakable_vars = (BreakableVars *)moby->pvars;
     MobyHit *hit;
     Vec4f ext, shard_position, vel;
     f32 scale;
@@ -2698,11 +2698,11 @@ void FUN_L07_00319f48(struct Moby *moby) {
         && ((hit->moby->oclass == 0x415 && hit->moby->state == 8)
             || (hit->moby->oclass == 0x452 && hit->moby->state == 9))
         && hit->kind == 1.000123f) {
-        ext.x = v->size.x;
-        ext.y = v->size.y;
-        ext.z = v->size.z;
+        ext.x = breakable_vars->size.x;
+        ext.y = breakable_vars->size.y;
+        ext.z = breakable_vars->size.z;
         break_rotate(&ext, &ext, &moby->rot_row0);
-        for (i = 0; i < v->shards; i++) {
+        for (i = 0; i < breakable_vars->shards; i++) {
             shard_position.x = random_float_between(-ext.x, ext.x) * 0.5f;
             shard_position.y = random_float_between(-ext.y, ext.y) * 0.5f;
             shard_position.z = random_float_between(1.5f, ext.z);
