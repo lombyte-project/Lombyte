@@ -323,7 +323,7 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 void FUN_L11_00309098(char *moby) {
     float old[4];
     float trail_position[4];
-    float v[4];
+    float trail_velocity[4];
     float hit[4];
     float pad[4][2];
     float spark_velocity[4];
@@ -339,8 +339,8 @@ void FUN_L11_00309098(char *moby) {
     trail_color = fast_tween_color(D_L11_00161DC0, D_L11_00161DC4, random_float_between(0.0f, 1.0f));
     random_vector(trail_position, 0.0f, 0.1f);
     add_vector_xyz(trail_position, trail_position, pos);
-    scale_vector_xyz(v, data, D_L11_00161DD0);
-    FUN_L00_0026dd20((char *)trail_position, (char *)v, trail_color, scale_game_frames(D_L11_00161DC8), (float)D_L11_00161DCC);
+    scale_vector_xyz(trail_velocity, data, D_L11_00161DD0);
+    FUN_L00_0026dd20((char *)trail_position, (char *)trail_velocity, trail_color, scale_game_frames(D_L11_00161DC8), (float)D_L11_00161DCC);
     add_vector_xyz(pos, pos, data);
     make_hit_descriptor(hit, moby, 0x10000, *(float *)(data + 0x20), data);
     if (collision_line(old, pos, 0, *(void **)(data + 0x1C), hit)) {
