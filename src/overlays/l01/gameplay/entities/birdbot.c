@@ -42,35 +42,35 @@ extern void FUN_L01_00262618(ScrollLayer *);
 extern void FUN_L01_0021fa98(s32, s32, s32, s32, s32, s32);
 
 /* Scrolls the UV offsets of count overlay layers (wrapping into [-1, 1]) and, for each one in view, queues its two-texture GS setup and draws it. */
-void FUN_L01_002b96e0(s32 count, ScrollLayer *l) {
+void FUN_L01_002b96e0(s32 count, ScrollLayer *scroll_layer) {
     struct DmaTag *tag;
     u64 *packet_payload;
     s32 vis;
     s32 i;
 
-    for (i = 0; i < count; i++, l++) {
-        l->u0 += l->du0 * l->rate0;
-        l->v0 += l->dv0 * l->rate0;
-        if (l->u0 > 1.0f)
-            l->u0 -= 1.0f;
-        else if (l->u0 < -1.0f)
-            l->u0 += 1.0f;
-        if (l->v0 > 1.0f)
-            l->v0 -= 1.0f;
-        else if (l->v0 < -1.0f)
-            l->v0 += 1.0f;
-        l->u1 += l->du1 * l->rate1;
-        l->v1 += l->dv1 * l->rate1;
-        if (l->u1 > 1.0f)
-            l->u1 -= 1.0f;
-        else if (l->u1 < -1.0f)
-            l->u1 += 1.0f;
-        if (l->v1 > 1.0f)
-            l->v1 -= 1.0f;
-        else if (l->v1 < -1.0f)
-            l->v1 += 1.0f;
-        l->frame = (l->frame + l->frame_step) & 0xFFFFFF;
-        vis = sphere_visible(l->bounds, 400.0f);
+    for (i = 0; i < count; i++, scroll_layer++) {
+        scroll_layer->u0 += scroll_layer->du0 * scroll_layer->rate0;
+        scroll_layer->v0 += scroll_layer->dv0 * scroll_layer->rate0;
+        if (scroll_layer->u0 > 1.0f)
+            scroll_layer->u0 -= 1.0f;
+        else if (scroll_layer->u0 < -1.0f)
+            scroll_layer->u0 += 1.0f;
+        if (scroll_layer->v0 > 1.0f)
+            scroll_layer->v0 -= 1.0f;
+        else if (scroll_layer->v0 < -1.0f)
+            scroll_layer->v0 += 1.0f;
+        scroll_layer->u1 += scroll_layer->du1 * scroll_layer->rate1;
+        scroll_layer->v1 += scroll_layer->dv1 * scroll_layer->rate1;
+        if (scroll_layer->u1 > 1.0f)
+            scroll_layer->u1 -= 1.0f;
+        else if (scroll_layer->u1 < -1.0f)
+            scroll_layer->u1 += 1.0f;
+        if (scroll_layer->v1 > 1.0f)
+            scroll_layer->v1 -= 1.0f;
+        else if (scroll_layer->v1 < -1.0f)
+            scroll_layer->v1 += 1.0f;
+        scroll_layer->frame = (scroll_layer->frame + scroll_layer->frame_step) & 0xFFFFFF;
+        vis = sphere_visible(scroll_layer->bounds, 400.0f);
         if (vis == -1)
             continue;
         l01_packet.tag->tag = 0x30000007;
@@ -87,17 +87,17 @@ void FUN_L01_002b96e0(s32 count, ScrollLayer *l) {
         l01_packet.tag = tag + 1;
         packet_payload[0] = 0x4000000000008001;
         packet_payload[1] = 0xEEEE;
-        packet_payload[2] = ((u64)l->alpha0 << 32) | 100;
+        packet_payload[2] = ((u64)scroll_layer->alpha0 << 32) | 100;
         packet_payload[3] = 0x42;
-        packet_payload[4] = ((u64)l->alpha1 << 32) | 100;
+        packet_payload[4] = ((u64)scroll_layer->alpha1 << 32) | 100;
         packet_payload[5] = 0x43;
-        packet_payload[6] = texture_tex0(l->tex0);
+        packet_payload[6] = texture_tex0(scroll_layer->tex0);
         packet_payload[7] = 6;
-        packet_payload[8] = texture_tex0(l->tex1);
+        packet_payload[8] = texture_tex0(scroll_layer->tex1);
         packet_payload[9] = 7;
         l01_packet.tag = tag + 6;
-        FUN_L01_00262618(l);
-        FUN_L01_0021fa98(l->shape, 0x70000000, 0x70003000, 0x70001000, 0x70002000, 1 - vis);
+        FUN_L01_00262618(scroll_layer);
+        FUN_L01_0021fa98(scroll_layer->shape, 0x70000000, 0x70003000, 0x70001000, 0x70002000, 1 - vis);
     }
 }
 #include "eetypes.h"
