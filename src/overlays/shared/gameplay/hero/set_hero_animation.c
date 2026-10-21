@@ -63,24 +63,24 @@ extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern short D_L00_0015F6B8;
 
 int FUN_L00_00231db0(int key, int *out) {
-    SeqEntry *tbl;
+    SeqEntry *animation_lookup_table;
     int i;
 
     if (hero_slot_item_id(3) == 2) {
-        tbl = D_L00_0017BBF0;
+        animation_lookup_table = D_L00_0017BBF0;
     } else if (hero_slot_item_id(3) == 3) {
-        tbl = D_L00_0017BBD0;
+        animation_lookup_table = D_L00_0017BBD0;
     } else {
         int mode = hero_slot_item_id(3);
-        tbl = (SeqEntry *)&D_L00_0015F6B8;
+        animation_lookup_table = (SeqEntry *)&D_L00_0015F6B8;
         if (mode != 4) {
-            tbl = 0;
+            animation_lookup_table = 0;
         }
     }
-    if (tbl != 0) {
-        for (i = 0; tbl[i].seq != -1; i++) {
-            if (key == tbl[i].key) {
-                *out = tbl[i].seq;
+    if (animation_lookup_table != 0) {
+        for (i = 0; animation_lookup_table[i].seq != -1; i++) {
+            if (key == animation_lookup_table[i].key) {
+                *out = animation_lookup_table[i].seq;
                 return 1;
             }
         }
