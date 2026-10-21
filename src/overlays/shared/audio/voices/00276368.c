@@ -451,7 +451,7 @@ void FUN_L00_00276bd0(void) {
     Own *u8p;
     Mth *active_callback_object;
     Ent *t;
-    NO *obj;
+    NO *owner_callback_object;
     s32 scene_state;
     s32 i, n, previous_decode_mode;
     s32 flag;
@@ -559,9 +559,9 @@ void FUN_L00_00276bd0(void) {
             D_L00_001B9CF0.owner = u8p;
             D_L00_001B9CF0.state = u8p->unk3C;
             for (i = 0; i < 14; i++) {
-                obj = D_L00_001B9CF0.owner->objs[i];
-                if (obj != 0 && obj->f8 != 0) {
-                    obj->f8(obj, 0);
+                owner_callback_object = D_L00_001B9CF0.owner->objs[i];
+                if (owner_callback_object != 0 && owner_callback_object->f8 != 0) {
+                    owner_callback_object->f8(owner_callback_object, 0);
                 }
             }
             goto L2;
@@ -573,9 +573,9 @@ void FUN_L00_00276bd0(void) {
             allocate_voice_for_target_entry(4, 0x11, D_L00_001B9E90[0]);
         }
         for (i = 0; i < 14; i++) {
-            obj = D_L00_001B9CF0.owner->objs[i];
-            if (obj != 0 && obj->fC != 0) {
-                obj->fC(obj, 0);
+            owner_callback_object = D_L00_001B9CF0.owner->objs[i];
+            if (owner_callback_object != 0 && owner_callback_object->fC != 0) {
+                owner_callback_object->fC(owner_callback_object, 0);
             }
         }
         flag = (D_L00_001B9CF0.unk8 == D_L00_001B9CF0.owner->unk38);
