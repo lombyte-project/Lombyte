@@ -1540,7 +1540,7 @@ void FUN_L00_0026cbb0_0026ccb0(void *, void *, s32, s32, f32, int, int) __asm__(
 void FUN_L00_0026ccb0(O_0026ccb0_0026ccb0 *particle) {
     S_0026ccb0_0026ccb0 *s = &particle->s;
     u128 *particle_position;
-    V_0026ccb0_0026ccb0 updated_position_copy, b, r;
+    V_0026ccb0_0026ccb0 updated_position_copy, spawn_velocity_storage, random_direction;
     V_0026ccb0_0026ccb0 *spawn_velocity;
     f32 particle_speed;
     if (FUN_001f9770_0026ccb0(&particle->xa)) {
@@ -1554,13 +1554,13 @@ void FUN_L00_0026ccb0(O_0026ccb0_0026ccb0 *particle) {
         s->v[2] -= frame_scale_sq * 0.001f;
         qcopy(&updated_position_copy, particle_position);
         if (s->x1a != 0 && (D_L00_0015F5CC_0026ccb0 & 1)) {
-            *(u128 *)&r = 0;
-            r.x = FUN_002132a8_0026ccb0(-1.0f, 1.0f);
-            r.y = FUN_002132a8_0026ccb0(-1.0f, 1.0f);
-            r.z = FUN_002132a8_0026ccb0(-1.0f, 1.0f);
-            *(u128 *)&b = *(u128 *)&r;
+            *(u128 *)&random_direction = 0;
+            random_direction.x = FUN_002132a8_0026ccb0(-1.0f, 1.0f);
+            random_direction.y = FUN_002132a8_0026ccb0(-1.0f, 1.0f);
+            random_direction.z = FUN_002132a8_0026ccb0(-1.0f, 1.0f);
+            *(u128 *)&spawn_velocity_storage = *(u128 *)&random_direction;
             particle_speed = FUN_001f9af0_0026ccb0(s);
-            spawn_velocity = &b;
+            spawn_velocity = &spawn_velocity_storage;
             FUN_001f9bf8_0026ccb0(spawn_velocity, spawn_velocity, particle_speed * FUN_002132a8_0026ccb0(0.21f, 0.25f));
             FUN_001f9a10_0026ccb0(spawn_velocity, spawn_velocity, s);
             FUN_001f9a68_0026ccb0(spawn_velocity, spawn_velocity, FUN_002132a8_0026ccb0(0.75f, 0.95f));
