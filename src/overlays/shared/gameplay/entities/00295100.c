@@ -2240,7 +2240,7 @@ void FUN_L00_0029c648(void) {
     Vec4 position_scratch;
     Vec4 b;
     f32 camera_rotation_matrix[4][4];
-    s32 st;
+    s32 vendor_menu_state;
     s32 ok;
     s32 i;
     s32 j;
@@ -2282,8 +2282,8 @@ void FUN_L00_0029c648(void) {
             }
             noop_main_callback(D_L00_00161148, 5);
         }
-        st = vendor_menu.state;
-        if (st == 0) {
+        vendor_menu_state = vendor_menu.state;
+        if (vendor_menu_state == 0) {
             fade_level -= 0.34f;
             if (fade_level < 0.0f) {
                 fade_level = 0.0f;
@@ -2300,7 +2300,7 @@ void FUN_L00_0029c648(void) {
                 D_L00_00161E1C = 8;
                 allocate_voice_for_target_entry(4, 0, vendor_menu.f1c);
             }
-        } else if (st == 2) {
+        } else if (vendor_menu_state == 2) {
             ok = 0;
             if (vendor_menu.f40 == 0 && vendor_menu.f48 >= 0) {
                 if (D_L00_001CA020[vendor_menu.f48] >= 0) { ok = 1; }
