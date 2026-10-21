@@ -148,9 +148,9 @@ void FUN_L13_00309bc8(struct Moby *moby) {
         int spawn_position[4];
         float first_vector[4], second_vector[4];
         char *source_point_position;
-        int off = i * 16;
+        int source_point_byte_offset = i * 16;
         next_point_index = i + 1;
-        if (*(float *)(data + off + 0x21c) < 0.99f &&
+        if (*(float *)(data + source_point_byte_offset + 0x21c) < 0.99f &&
             *(float *)(data - (-(next_point_index * 16)) + 0x21c) < 0.99f) {
             continue;
         }
@@ -181,7 +181,7 @@ void FUN_L13_00309bc8(struct Moby *moby) {
         first_vector[3] = *(float *)&D_L13_00161EB8;
         scale_vector_xyz(second_vector, second_vector, 1.0f / (float)third_frame_count);
         second_vector[3] = *(float *)&D_L13_00161EBC;
-        source_point_position = data + (off + 0x210);
+        source_point_position = data + (source_point_byte_offset + 0x210);
         lerp_vector(spawn_position, source_point_position, source_point_position, random_float_between_alt(0.0f, 1.0f));
         spawn_spark(spawn_position, first_vector, second_vector, D_L13_00161EB0, D_L13_00161EB4, frame_count, second_frame_count, third_frame_count,
                      D_L13_00161EEC);
