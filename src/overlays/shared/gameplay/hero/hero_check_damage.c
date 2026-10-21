@@ -3465,10 +3465,10 @@ void FUN_001f9ab0(void *, Vec4_213350 *);
 /* dot_vectors_xyz of v with (cos, sin, 0) of the angle hero.motion.rot.z. */
 void FUN_L00_00213350(u128_213350 *input_vector) {
     u128_213350 dot_operands[2];
-    struct Hero *g = &hero;
+    struct Hero *hero_state = &hero;
     dot_operands[0] = *input_vector;
-    ((Vec4_213350 *)&dot_operands[1])->x = fast_cos(g->motion.rot.f[2]);
-    ((Vec4_213350 *)&dot_operands[1])->y = fast_sin(g->motion.rot.f[2]);
+    ((Vec4_213350 *)&dot_operands[1])->x = fast_cos(hero_state->motion.rot.f[2]);
+    ((Vec4_213350 *)&dot_operands[1])->y = fast_sin(hero_state->motion.rot.f[2]);
     ((Vec4_213350 *)&dot_operands[1])->z = 0.0f;
     FUN_001f9ab0(&dot_operands[0], (Vec4_213350 *)&dot_operands[1]);
 }
