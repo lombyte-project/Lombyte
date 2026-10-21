@@ -2042,8 +2042,8 @@ extern int D_L18_00161C90 __attribute__((sda));
 extern float D_L18_00161C98 __attribute__((sda));
 void FUN_L18_002dc0c8(struct Moby *moby, void *segment_start, void *segment_end) {
     float buf[4];
-    float v[4];
-    float w[4];
+    float particle_spawn_position[4];
+    float particle_velocity[4];
     char *moby_vars = (char *)moby->pvars;
     int col;
 
@@ -2053,15 +2053,15 @@ void FUN_L18_002dc0c8(struct Moby *moby, void *segment_start, void *segment_end)
         return;
     }
     if (random_float_between(0.0f, 1.0f) < D_L18_00161C98) {
-        lerp_vector(v, segment_start, segment_end, random_float_between(0.0f, 1.0f));
-        fast_vec_sub(w, v, &moby->pos);
-        fast_vec_normalize(w, w, *(float *)(moby_vars + 0x20));
+        lerp_vector(particle_spawn_position, segment_start, segment_end, random_float_between(0.0f, 1.0f));
+        fast_vec_sub(particle_velocity, particle_spawn_position, &moby->pos);
+        fast_vec_normalize(particle_velocity, particle_velocity, *(float *)(moby_vars + 0x20));
         col = FUN_001fa6e0(D_L18_00161C80, D_L18_00161C84,
                            random_float_between(0.0f, 1.0f));
-        FUN_L00_002730e0(v, w, col, scale_game_frames(D_L18_00161C8C) & 0xFF,
+        FUN_L00_002730e0(particle_spawn_position, particle_velocity, col, scale_game_frames(D_L18_00161C8C) & 0xFF,
                          random_integer_below(0xFF) & 0xFF, 0, D_L18_00161C88);
-        w[2] = 0.0f;
-        FUN_L00_002730e0(v, w, col, scale_game_frames(D_L18_00161C90) & 0xFF,
+        particle_velocity[2] = 0.0f;
+        FUN_L00_002730e0(particle_spawn_position, particle_velocity, col, scale_game_frames(D_L18_00161C90) & 0xFF,
                          random_integer_below(0xFF) & 0xFF, 0, D_L18_00161C88);
     }
 }
