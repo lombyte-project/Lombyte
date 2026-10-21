@@ -1506,11 +1506,11 @@ void FUN_L13_002f8880(char *moby) {
     };
     char *data = *(char **)(moby + 0x78);
     char *monitored_moby = 0;
-    int idx = *(int *)data;
+    int monitored_moby_index = *(int *)data;
     int found;
     int i;
-    if (idx != -1) {
-        monitored_moby = D_L13_0015FFD8_m + (idx << 8);
+    if (monitored_moby_index != -1) {
+        monitored_moby = D_L13_0015FFD8_m + (monitored_moby_index << 8);
     }
     switch (data[0x1C]) {
     case STATE_RELAY_INITIALIZE:
