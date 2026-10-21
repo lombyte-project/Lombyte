@@ -265,8 +265,8 @@ void FUN_L01_002e6518(SplashMoby_u *moby, u128 *origin) {
     SplashColors inner;
     SplashColors outer;
     SplashVec *bp;
-    u32 *c1;
-    u32 *c2;
+    u32 *inner_color_entry;
+    u32 *outer_color_entry;
     f32 size;
     s32 i;
 
@@ -284,10 +284,10 @@ void FUN_L01_002e6518(SplashMoby_u *moby, u128 *origin) {
         transform_vector_by_basis(&vel, &vel, moby->mtx);
         fast_vec_sub(&rel, &moby->pos, bp);
         fast_vec_add(&vel, &vel, &rel);
-        c1 = &inner.c[random_integer_below(6)];
-        c2 = &outer.c[random_integer_below(6)];
+        inner_color_entry = &inner.c[random_integer_below(6)];
+        outer_color_entry = &outer.c[random_integer_below(6)];
         size = random_float_between(105000.0f, 157500.0f);
-        FUN_L00_0026ced0(&vector_scratch, &vel, *c1, *c2, size, scale_game_frames(random_int_between(5, 0xF)));
+        FUN_L00_0026ced0(&vector_scratch, &vel, *inner_color_entry, *outer_color_entry, size, scale_game_frames(random_int_between(5, 0xF)));
     }
 }
 #include "qcopy.h"
