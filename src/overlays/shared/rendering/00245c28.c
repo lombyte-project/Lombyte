@@ -235,7 +235,7 @@ void FUN_L00_00245c28(void) {
             if (D_L00_001B9CF0.unk13C == 0) {
                 int rotation_period_frames = 55;
                 float size;
-                float ang;
+                float sprite_rotation_radians;
                 int hud_sprite;
 
                 setup_gif_paging(0);
@@ -243,9 +243,9 @@ void FUN_L00_00245c28(void) {
                 vu1_add_gs_register(0x47, 0x3004B);
                 hud_sprite = find_hud_sprite(0x755D, 0);
                 draw_hud_sprite(hud_sprite, 0x32, 0x12C, 0x40, 0x40, 0x80);
-                ang = (float)(D_L00_0015F3F8 % rotation_period_frames) * -6.2831855f / (float)rotation_period_frames;
+                sprite_rotation_radians = (float)(D_L00_0015F3F8 % rotation_period_frames) * -6.2831855f / (float)rotation_period_frames;
                 draw_rotated_sprite(1312.0f, 5312.0f, 0x40, 0x40, get_frame_texture(find_hud_sprite(0x755D, 1)),
-                                    size, size, ang);
+                                    size, size, sprite_rotation_radians);
                 do_gif_paging();
             }
         }
@@ -262,12 +262,12 @@ void FUN_L00_00245c28(void) {
             int mode = D_L00_0015F5C4;
 
             if (mode == 0 || mode == 2) {
-                int lim = 9600;
+                int frame_timer_threshold = 9600;
 
                 if (pal_mode != 0) {
-                    lim = 11520;
+                    frame_timer_threshold = 11520;
                 }
-                if (lim < *(volatile int *)0x10000800) {
+                if (frame_timer_threshold < *(volatile int *)0x10000800) {
                     if (mode == 0) {
                         register_audio_stream_callback();
                         FUN_L00_00297f78();
