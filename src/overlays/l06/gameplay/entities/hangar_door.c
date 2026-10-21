@@ -420,8 +420,8 @@ void FUN_L06_002fd088(char *moby) {
     }
     clip_volume_index_cursor = data + 0x10;
     for (i = 0; i < 4; clip_volume_index_cursor++, i++) {
-        char *g = (char *)D_0013E533 + 0xE1D;
-        if (*(int *)(g + 0x208C) == 15 ||
+        char *hero_data = (char *)D_0013E533 + 0xE1D;
+        if (*(int *)(hero_data + 0x208C) == 15 ||
             (*clip_volume_index_cursor >= 0 && is_point_inside_clip_volume(D_L06_00167540, *clip_volume_index_cursor))) {
             enqueue_callback_list_1((void *)FUN_L06_002fd748, moby);
             return;
