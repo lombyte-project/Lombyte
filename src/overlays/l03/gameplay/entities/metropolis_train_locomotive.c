@@ -221,7 +221,7 @@ void FUN_L03_00292890(char *moby) {
     float delta[4];
     float front[4];
     float hitch[4];
-    float dir[4];
+    float car_position_adjustment[4];
     float rear[4];
     char *coupling;
     Train292890 *data;
@@ -283,9 +283,9 @@ void FUN_L03_00292890(char *moby) {
             set_vector_length_xy(hitch, hitch, *(float *)&D_L03_00161368);
             add_vector_xyz(hitch, hitch, front);
             hitch[2] = front[2];
-            subtract_vector_xyz(dir, hitch, car + 0x10);
-            fast_vec_normalize(dir, dir, fast_vec_length(dir) - car_data->fC4);
-            add_vector_xyz(car + 0x10, dir, car + 0x10);
+            subtract_vector_xyz(car_position_adjustment, hitch, car + 0x10);
+            fast_vec_normalize(car_position_adjustment, car_position_adjustment, fast_vec_length(car_position_adjustment) - car_data->fC4);
+            add_vector_xyz(car + 0x10, car_position_adjustment, car + 0x10);
             *(float *)(car + 0x48) = fast_add_rotations(
                 fast_arc_tan(hitch[0] - *(float *)(car + 0x10), hitch[1] - *(float *)(car + 0x14)), 0.0f);
             *(float *)(car + 0x44) =
