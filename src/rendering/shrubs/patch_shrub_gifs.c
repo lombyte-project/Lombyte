@@ -27,7 +27,7 @@ void patch_shrub_gifs(void) {
     s32 j;
     struct GifPacket *pkt;
     u8 *gif;
-    struct TexRemap *r;
+    struct TexRemap *texture_remap;
 
     for (id = D_001D8DB0; *id >= 0; id++) {
         tc = D_001D7F30[*id];
@@ -35,12 +35,12 @@ void patch_shrub_gifs(void) {
             pkt = tc->slots[i].pkt + 1;
             gif = (u8 *)(pkt + pkt->skip) + 0x10;
             for (j = 0; j < pkt->count; j++) {
-                r = &shrub_paging_table[gif[0x13]];
-                if (r->lo != 0) {
-                    *(u32 *)(gif + 0x30) = (*(u32 *)(gif + 0x30) & 0xFFFFC000) | r->lo;
+                texture_remap = &shrub_paging_table[gif[0x13]];
+                if (texture_remap->lo != 0) {
+                    *(u32 *)(gif + 0x30) = (*(u32 *)(gif + 0x30) & 0xFFFFC000) | texture_remap->lo;
                 }
-                if (r->hi != 0) {
-                    *(u32 *)(gif + 0x20) = (*(u32 *)(gif + 0x20) & 0xFFFFC000) | r->hi;
+                if (texture_remap->hi != 0) {
+                    *(u32 *)(gif + 0x20) = (*(u32 *)(gif + 0x20) & 0xFFFFC000) | texture_remap->hi;
                 }
                 gif += 0x40;
             }
