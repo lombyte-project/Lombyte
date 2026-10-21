@@ -929,7 +929,7 @@ s32 FUN_L00_002e7318(O002e7318 *camera_moby) {
 }
 /* Does nothing and returns 0 (the buffer is unused). */
 int FUN_L00_002e7520(void) {
-    char buf[0x50];
+    char unused_stack_reservation[0x50];
     return 0;
 }
 typedef struct {
