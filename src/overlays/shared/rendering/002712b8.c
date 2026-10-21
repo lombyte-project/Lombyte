@@ -226,7 +226,7 @@ extern unsigned char *D_L00_001B213C __attribute__((section(".data")));
 unsigned char *FUN_L00_002678b8(int);
 int FUN_00213260(int);
 int FUN_001fa6d0(float);
-unsigned char *FUN_L00_00271b18(u128 *position, u128 *b, float x) {
+unsigned char *FUN_L00_00271b18(u128 *position, u128 *initial_velocity, float x) {
     unsigned char *particle = FUN_L00_002678b8(0x2f);
     if (particle) {
         qcopy(particle + 0x10, position);
@@ -236,7 +236,7 @@ unsigned char *FUN_L00_00271b18(u128 *position, u128 *b, float x) {
         particle[1] = 0;
         particle[2] = *D_L00_001B213C;
         *(float *)(particle + 0xc) = x;
-        qcopy(particle + 0x20, b);
+        qcopy(particle + 0x20, initial_velocity);
         particle[8] = FUN_00213260(0x100);
     }
     return particle;
