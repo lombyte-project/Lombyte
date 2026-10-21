@@ -344,43 +344,43 @@ extern void FUN_L00_00232628_227cf8(void) __asm__("FUN_L00_00232628");
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 
 void FUN_L06_00227cf8(void) {
-    struct Hero *g = &hero;
+    struct Hero *hero_context = &hero;
     unsigned char *flag_clear_target;
-    if (g->vehicle_mode == 1) {
-        g->health.unk22AC = g->health.hp;
-        g->health.hp = g->health.unk22B0;
-        if (g->unk1620) {
-            FUN_0020c828_227cf8(g->unk1620);
-            g->unk1620 = 0;
+    if (hero_context->vehicle_mode == 1) {
+        hero_context->health.unk22AC = hero_context->health.hp;
+        hero_context->health.hp = hero_context->health.unk22B0;
+        if (hero_context->unk1620) {
+            FUN_0020c828_227cf8(hero_context->unk1620);
+            hero_context->unk1620 = 0;
         }
-        if (g->unk1624) {
-            FUN_0020c828_227cf8(g->unk1624);
-            g->unk1624 = 0;
+        if (hero_context->unk1624) {
+            FUN_0020c828_227cf8(hero_context->unk1624);
+            hero_context->unk1624 = 0;
         }
     }
     {
-        struct Hero *g2 = &hero;
+        struct Hero *hero_restore_context = &hero;
         FUN_L00_00205538_227cf8();
-        g2->vehicle_mode = 0;
-        flag_clear_target = g2->unkA84;
+        hero_restore_context->vehicle_mode = 0;
+        flag_clear_target = hero_restore_context->unkA84;
         if (flag_clear_target) {
             *(u16 *)(flag_clear_target + 0x34) &= ~6;
         }
-        g2->unkA84 = 0;
-        if (g2->unkA8C) {
-            FUN_0020c828_227cf8(g2->unkA8C);
-            g2->unkA8C = 0;
+        hero_restore_context->unkA84 = 0;
+        if (hero_restore_context->unkA8C) {
+            FUN_0020c828_227cf8(hero_restore_context->unkA8C);
+            hero_restore_context->unkA8C = 0;
         }
         FUN_L00_00206c08_227cf8();
         {
-            unsigned char *restored_hero_moby = g2->unkA88;
-            g2->moby = (struct Moby *)restored_hero_moby;
-            qcopy(restored_hero_moby + 0x10, &g2->motion.pos);
+            unsigned char *restored_hero_moby = hero_restore_context->unkA88;
+            hero_restore_context->moby = (struct Moby *)restored_hero_moby;
+            qcopy(restored_hero_moby + 0x10, &hero_restore_context->motion.pos);
             *(int *)(restored_hero_moby + 0x98) = 0;
         }
-        g2->unkA94 = 1.0f;
+        hero_restore_context->unkA94 = 1.0f;
         FUN_L00_00232628_227cf8();
-        if (g2->state.current != 100 ||
+        if (hero_restore_context->state.current != 100 ||
             (D_L06_0015F5C4 != 2 && D_L06_0015F5C4 != 6)) {
             hero_set_state(HERO_STATE_IDLE, 1);
         }
