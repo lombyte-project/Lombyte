@@ -115,14 +115,14 @@ void show_health_hud(void) __asm__("FUN_L00_00234e00");
 void hero_change_health(s32 n) __asm__("FUN_L00_002050c0");
 void hero_change_health(s32 health_decrement) {
     if (health_decrement) {
-        struct Hero *g = &hero;
+        struct Hero *hero_health_owner = &hero;
         int health_after_subtraction;
         if (health_decrement >= 2)
             health_decrement = 1;
-        health_after_subtraction = g->health.hp - health_decrement;
-        g->health.hp = health_after_subtraction;
+        health_after_subtraction = hero_health_owner->health.hp - health_decrement;
+        hero_health_owner->health.hp = health_after_subtraction;
         if (health_after_subtraction < 0)
-            g->health.hp = 0;
+            hero_health_owner->health.hp = 0;
         show_health_hud();
     }
 }
