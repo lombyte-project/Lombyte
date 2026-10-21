@@ -7831,7 +7831,7 @@ void FUN_L06_003049f8(char *moby)
         int i;
         int j;
         int k;
-        int l;
+        int stream_point_index;
 
         if (voice_is_playing(moby, vector_stream_vars->f18) == 0) {
             vector_stream_vars->f18 = allocate_voice_for_target_entry(0, 4, moby);
@@ -7859,8 +7859,8 @@ void FUN_L06_003049f8(char *moby)
                 }
                 vector_stream_vars->timer[i] = D_L06_00162234;
             } else {
-                for (l = 1; l < 29; l++) {
-                    add_vector_xyz_c(vector_stream_vars->a[i][l], vector_stream_vars->a[i][l], vector_stream_vars->b[i][l]);
+                for (stream_point_index = 1; stream_point_index < 29; stream_point_index++) {
+                    add_vector_xyz_c(vector_stream_vars->a[i][stream_point_index], vector_stream_vars->a[i][stream_point_index], vector_stream_vars->b[i][stream_point_index]);
                 }
                 vector_stream_vars->timer[i]--;
             }
