@@ -173,7 +173,7 @@ void FUN_L07_0031eba8(char *moby) {
     int j;
     char *mob;
     char *S;
-    float buf[4];
+    float effect_spawn_position[4];
     switch (state) {
     case MOBY_STATE_INITIALIZE:
         *(unsigned char *)(moby + 0x30) = 0xFF;
@@ -186,8 +186,8 @@ void FUN_L07_0031eba8(char *moby) {
         S = D_L07_0016C960_c;
         scene_state_offset = *(int *)(S + 0x30) - 3;
         if ((unsigned)scene_state_offset < 2) {
-            int idx = (unsigned)scene_state_offset > 1 ? 0 : 2;
-            cutscene_set_camera_target(((L07SparkState *)S)->arr[idx]);
+            int camera_target_index = (unsigned)scene_state_offset > 1 ? 0 : 2;
+            cutscene_set_camera_target(((L07SparkState *)S)->arr[camera_target_index]);
         }
         if (*(int *)(S + 0x30) != current_scene_state)
             return;
@@ -199,7 +199,7 @@ void FUN_L07_0031eba8(char *moby) {
         if (k != 0) {
             mob = (char *)((L07SparkState *)S)->arr[k];
             for (i = 0; i < 4; i++) {
-                moby_point_position(mob, i, buf);
+                moby_point_position(mob, i, effect_spawn_position);
                 for (j = 9; j >= 0; j--) {
                     float effect_size = random_float_between(20000.0f, 200000.0f);
                     int col = (random_int_between(0x20, 0x80) << 24) | 0x7F7F7F;
@@ -208,7 +208,7 @@ void FUN_L07_0031eba8(char *moby) {
                     char *effect_tail;
                     if (random_integer_below(2) != 0)
                         v = -v;
-                    effect = func_L00_0026DEA0_c(buf, v, D_L07_0015F580, col, 0.6f, 1.0f, 1.01f, effect_size);
+                    effect = func_L00_0026DEA0_c(effect_spawn_position, v, D_L07_0015F580, col, 0.6f, 1.0f, 1.01f, effect_size);
                     if (effect != 0) {
                         effect_tail = effect + 0x20;
                         *(short *)(effect + 0xA) = scale_game_frames(random_int_between(0x3C, 0x5A));
