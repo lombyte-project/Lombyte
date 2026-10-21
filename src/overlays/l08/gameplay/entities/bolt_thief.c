@@ -2515,13 +2515,13 @@ extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
-void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
+void FUN_L08_002e4e90(struct Moby *moby, float *out, float *output_euler_angles) {
     float output_rotation_matrix[16];
     float base_rotation_matrix[16];
     float up[4];
     float side[4];
     float fwd[4];
-    float dir[4];
+    float planar_offset_direction[4];
     float u[4];
     float v[4];
     char *data = (char *)moby->pvars;
@@ -2547,9 +2547,9 @@ void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
     euler_rotation_matrix(base_rotation_matrix, (float *)(data + 0x10));
     normalize_vector_xyz(u, base_rotation_matrix, -fast_sin(*(float *)(data + 0x60)));
     normalize_vector_xyz(v, base_rotation_matrix + 4, fast_cos(*(float *)(data + 0x60)));
-    add_vector_xyz(dir, u, v);
+    add_vector_xyz(planar_offset_direction, u, v);
     basis_tilt_radians = sx * DEG_TO_RAD;
-    normalize_vector_xyz(u, dir, fast_cos(basis_tilt_radians));
+    normalize_vector_xyz(u, planar_offset_direction, fast_cos(basis_tilt_radians));
     normalize_vector_xyz(v, base_rotation_matrix + 8, fast_sin(basis_tilt_radians));
     add_vector_xyz(up, u, v);
     normalize_vector_xyz(u, base_rotation_matrix, -fast_cos(*(float *)(data + 0x60)));
@@ -2566,11 +2566,11 @@ void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
     output_rotation_matrix[11] = 0.0f;
     clear_u64_value(output_rotation_matrix + 12);
     output_rotation_matrix[15] = 1.0f;
-    matrix_to_euler(output_rotation_matrix, rot);
-    rot[3] = 0.0f;
+    matrix_to_euler(output_rotation_matrix, output_euler_angles);
+    output_euler_angles[3] = 0.0f;
     normalize_vector_xyz(u, base_rotation_matrix + 8, sy);
     add_vector_xyz(out, data, u);
-    normalize_vector_xyz(v, dir, sz);
+    normalize_vector_xyz(v, planar_offset_direction, sz);
     add_vector_xyz(out, out, v);
 }
 typedef struct {
