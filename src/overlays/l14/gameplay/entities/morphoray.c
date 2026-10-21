@@ -1352,10 +1352,10 @@ void FUN_L14_00314f00(char *camera) {
     int *camera_run;
     int *w;
     short *s;
-    Stops_4f00 *st;
+    Stops_4f00 *fov_stops;
     float *wf;
     short *ss;
-    float len;
+    float segment_length;
     int i;
     int fov_stop_count;
 
@@ -1370,33 +1370,33 @@ void FUN_L14_00314f00(char *camera) {
     *(short *)(camera_run + 5) = 0;
     *((short *)(camera_run + 5) + 1) = scale_game_frames_4f00(*(short *)(rec + 0x3A));
     fov_stops_state_base = *(char **)(camera + 0x70);
-    st = (Stops_4f00 *)(fov_stops_state_base + 0x58);
+    fov_stops = (Stops_4f00 *)(fov_stops_state_base + 0x58);
     {
         int k;
         for (k = 0; k < 8; k++) {
-            st->fov[k] = 0.0f;
-            st->seg[k] = -1;
+            fov_stops->fov[k] = 0.0f;
+            fov_stops->seg[k] = -1;
         }
     }
     /* Fakematch: the dead update rotates the three address temps around
        the atan2 call into retail's v0/a0/a1. */
     D_L14_001600EC++;
     D_L14_001600EC--;
-    st->fov_end = atan2_4f00(1.0f, D_L14_0016D140.fB0) * 2.0f;
+    fov_stops->fov_end = atan2_4f00(1.0f, D_L14_0016D140.fB0) * 2.0f;
     if (*(int *)(rec + 0x20) >= 0) {
         path = D_L14_001B0BB0[*(int *)(rec + 0x20)];
         fov_stop_count = 0;
         for (i = 0; i < *(int *)path; i++) {
             char *seg = path + i * 16;
             if (0.0f < *(float *)(seg + 0x1C)) {
-                st->fov[fov_stop_count] = *(float *)(seg + 0x1C);
-                st->seg[fov_stop_count] = i;
+                fov_stops->fov[fov_stop_count] = *(float *)(seg + 0x1C);
+                fov_stops->seg[fov_stop_count] = i;
                 fov_stop_count++;
             }
-            len = FUN_001f9b48(path + (i * 16 + 0x10), path + (((i + 1) % *(int *)path) * 16 + 0x10));
-            *(float *)(seg + 0x1C) = len;
+            segment_length = FUN_001f9b48(path + (i * 16 + 0x10), path + (((i + 1) % *(int *)path) * 16 + 0x10));
+            *(float *)(seg + 0x1C) = segment_length;
             if (i < *(int *)path - 1)
-                *(float *)(camera_run + 2) += len;
+                *(float *)(camera_run + 2) += segment_length;
         }
     }
     if (*(short *)(rec + 0x3A) > 0) {
@@ -1407,11 +1407,11 @@ void FUN_L14_00314f00(char *camera) {
         path = D_L14_001B0BB0[*(int *)(rec + 0x24)];
         for (i = 0; i < *(int *)path; i++) {
             char *seg;
-            len = FUN_001f9b48(path + (i * 16 + 0x10), path + (((i + 1) % *(int *)path) * 16 + 0x10));
+            segment_length = FUN_001f9b48(path + (i * 16 + 0x10), path + (((i + 1) % *(int *)path) * 16 + 0x10));
             seg = path + i * 16;
-            *(float *)(seg + 0x1C) = len;
+            *(float *)(seg + 0x1C) = segment_length;
             if (i < *(int *)path - 1)
-                *(float *)(camera_run + 3) += len;
+                *(float *)(camera_run + 3) += segment_length;
         }
     }
     camera_saved_state = *(char **)(camera + 0x70);
