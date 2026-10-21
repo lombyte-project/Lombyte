@@ -1302,7 +1302,7 @@ void FUN_L03_0020ef60(void) {
         hero.target_speed = 0.0f;
         if (MV(hero.unkA54) != NULL && scale_game_frames(4) > hero.state_timer) {
             f32 d = vector_distance(&MV(hero.unkA54)->u10.v10, &hero.motion.pos) - 0.5f;
-            f32 off;
+            f32 attack_spacing_offset;
             f32 tol;
             f32 mx;
             f32 diff;
@@ -1310,19 +1310,19 @@ void FUN_L03_0020ef60(void) {
                 d = 0.0f;
             }
             if (tb->kind == 0) {
-                off = 0.75f;
+                attack_spacing_offset = 0.75f;
                 tol = 0.8f;
                 mx = 4.0f;
             } else if (tb->kind == 1) {
-                off = 0.6f;
+                attack_spacing_offset = 0.6f;
                 tol = 1.7f;
                 mx = 4.0f;
             } else {
-                off = 1.3f;
+                attack_spacing_offset = 1.3f;
                 tol = 1.7f;
                 mx = 1.9f;
             }
-            diff = d - off;
+            diff = d - attack_spacing_offset;
             if (FUN_001f99c0(diff) < tol + 3.0f) {
                 f32 s = diff / 0.9f;
                 if (s > mx) {
@@ -2183,11 +2183,11 @@ void FUN_L03_0020ef60(void) {
     }
     case 0x56: {
         f32 len = vector_length_xy(&hero.motion.velocity);
-        f32 l2 = len;
+        f32 pre_damping_planar_speed = len;
         if (hero.air_frames.s != 0) {
-            len = frame_scale * -0.00999999f * l2 + l2;
+            len = frame_scale * -0.00999999f * pre_damping_planar_speed + pre_damping_planar_speed;
         } else {
-            len = frame_scale * -0.07999998f * l2 + l2;
+            len = frame_scale * -0.07999998f * pre_damping_planar_speed + pre_damping_planar_speed;
         }
         FUN_L00_001ff600(len, &hero.motion.velocity, &hero.motion.velocity);
         hero.motion.velocity.f[2] = 0.0f;
