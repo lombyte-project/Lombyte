@@ -786,7 +786,7 @@ void blarg_gun_update(char *moby)
         BLARG_GUN_STATE_MOVING = 1
     };
     char *data = *(char **)(moby + 0x78);
-    char buf[0x70];
+    char rotation_workspace[0x70];
     char *hs;
     int joint_index;
     float fade_decrement;
@@ -800,29 +800,29 @@ void blarg_gun_update(char *moby)
     case BLARG_GUN_STATE_MOVING:
         joint_index = *(int *)(data + 4);
         if (joint_index > 0) {
-            moby_point_position(moby, joint_index, buf + 0x40);
+            moby_point_position(moby, joint_index, rotation_workspace + 0x40);
             *(float *)(moby + 0x40) = fast_add_rotations_c(*(float *)(moby + 0x40), *(float *)(data + 0x20));
             *(float *)(moby + 0x44) = fast_add_rotations_c(*(float *)(moby + 0x44), *(float *)(data + 0x24));
             *(float *)(moby + 0x48) = fast_add_rotations_c(*(float *)(moby + 0x48), *(float *)(data + 0x28));
-            euler_rotation_matrix(buf, moby + 0x40);
-            copy_matrix3x4(moby + 0xC0, buf);
-            moby_point_position(moby, *(int *)(data + 4), buf + 0x50);
-            subtract_vector_xyz(buf + 0x60, buf + 0x40, buf + 0x50);
+            euler_rotation_matrix(rotation_workspace, moby + 0x40);
+            copy_matrix3x4(moby + 0xC0, rotation_workspace);
+            moby_point_position(moby, *(int *)(data + 4), rotation_workspace + 0x50);
+            subtract_vector_xyz(rotation_workspace + 0x60, rotation_workspace + 0x40, rotation_workspace + 0x50);
         } else {
-            transform_vector_by_basis(buf + 0x40, data + 0x10, moby + 0xC0);
+            transform_vector_by_basis(rotation_workspace + 0x40, data + 0x10, moby + 0xC0);
             *(float *)(moby + 0x40) = fast_add_rotations_c(*(float *)(moby + 0x40), *(float *)(data + 0x20));
             *(float *)(moby + 0x44) = fast_add_rotations_c(*(float *)(moby + 0x44), *(float *)(data + 0x24));
             *(float *)(moby + 0x48) = fast_add_rotations_c(*(float *)(moby + 0x48), *(float *)(data + 0x28));
-            euler_rotation_matrix(buf, moby + 0x40);
+            euler_rotation_matrix(rotation_workspace, moby + 0x40);
             if (*(unsigned short *)(moby + 0x34) & 0x8000)
-                scale_vector_xyz(buf + 0x10, buf + 0x10, -1.0f);
-            copy_matrix3x4(moby + 0xC0, buf);
-            transform_vector_by_basis(buf + 0x50, data + 0x10, moby + 0xC0);
-            subtract_vector_xyz(buf + 0x60, buf + 0x40, buf + 0x50);
-            add_vector_xyz(buf + 0x50, buf + 0x50, moby + 0x10);
+                scale_vector_xyz(rotation_workspace + 0x10, rotation_workspace + 0x10, -1.0f);
+            copy_matrix3x4(moby + 0xC0, rotation_workspace);
+            transform_vector_by_basis(rotation_workspace + 0x50, data + 0x10, moby + 0xC0);
+            subtract_vector_xyz(rotation_workspace + 0x60, rotation_workspace + 0x40, rotation_workspace + 0x50);
+            add_vector_xyz(rotation_workspace + 0x50, rotation_workspace + 0x50, moby + 0x10);
         }
 
-        if (coll_sphere(convert_integer_to_float(*(int *)(data + 0xC)) * 0.0009765625f, buf + 0x50, 0, moby)) {
+        if (coll_sphere(convert_integer_to_float(*(int *)(data + 0xC)) * 0.0009765625f, rotation_workspace + 0x50, 0, moby)) {
             hs = D_L05_00174240;
             if (*(int *)(hs + 0x18) == 0 || *(int *)(hs + 0x18) != *(int *)(data + 8)) {
                 *(int *)data = 0;
@@ -843,7 +843,7 @@ void blarg_gun_update(char *moby)
         }
         *(float *)(data + 0x38) = *(float *)(data + 0x38) - frame_time_sq * 10.8f;
         add_vector_xyz(moby + 0x10, moby + 0x10, data + 0x30);
-        add_vector_xyz(moby + 0x10, moby + 0x10, buf + 0x60);
+        add_vector_xyz(moby + 0x10, moby + 0x10, rotation_workspace + 0x60);
         if (*(float *)(moby + 0x18) < 5.0f)
             mark_moby_for_removal(moby);
         break;
