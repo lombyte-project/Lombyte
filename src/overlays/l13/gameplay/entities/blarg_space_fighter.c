@@ -3508,7 +3508,7 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 unsigned char *FUN_L13_002ea6b8(char *firing_moby, char *b) {
     float spawn_position[4], projectile_velocity[4], predicted_target_position[4], scratch_vector[4], random_velocity_offset[4];
     struct Hero *x;
-    unsigned char *r;
+    unsigned char *spawned_projectile_moby;
     moby_point_position(firing_moby, 0xE, spawn_position);
     x = &hero;
     if (((char *)x->ship_moby) != 0 && *(short *)(((char *)x->ship_moby) + 0xA6) == 0x45) {
@@ -3527,8 +3527,8 @@ unsigned char *FUN_L13_002ea6b8(char *firing_moby, char *b) {
         random_vector(projectile_velocity, frame_time * 0.0f, frame_time * 30.0f);
     }
     add_vector_xyz(projectile_velocity, projectile_velocity, b + 0x70);
-    r = FUN_L13_002c1f28_c(firing_moby, (char *)spawn_position, (char *)projectile_velocity);
-    if (r)
+    spawned_projectile_moby = FUN_L13_002c1f28_c(firing_moby, (char *)spawn_position, (char *)projectile_velocity);
+    if (spawned_projectile_moby)
         allocate_voice_for_target_entry(3, 0, (int)firing_moby);
-    return r;
+    return spawned_projectile_moby;
 }
