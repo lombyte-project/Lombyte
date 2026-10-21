@@ -2424,7 +2424,7 @@ void FUN_L15_002a2488(char *moby) {
     int state;
     int animation_blend_frames;
     int particle_lifetime_frames;
-    int ret2;
+    int converted_particle_lifetime_frames;
     int particle_initial_rotation;
     unsigned char life;
 
@@ -2442,8 +2442,8 @@ void FUN_L15_002a2488(char *moby) {
             goto tailA;
         }
         particle_lifetime_frames = scale_game_frames_alt(D_L15_001614C0);
-        ret2 = func_001FA898_r((float)particle_lifetime_frames);
-        life = (unsigned char)ret2;
+        converted_particle_lifetime_frames = func_001FA898_r((float)particle_lifetime_frames);
+        life = (unsigned char)converted_particle_lifetime_frames;
         particle_initial_rotation = random_integer_below_c(0xFF);
         FUN_L00_002730e0(pb, (char *)va, D_L15_001614B8, life, (unsigned char)particle_initial_rotation, 0, *(float *)&D_L15_001614BC);
         callback_frame_stamp = *(char **)(data + 0x6C);
