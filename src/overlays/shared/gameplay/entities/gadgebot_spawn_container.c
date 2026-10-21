@@ -3104,7 +3104,7 @@ void FUN_L06_002f7628(char *moby) {
     float pos[4];
     float step[4];
     float spark_position[4];
-    float b[4];
+    float spark_velocity[4];
     Beam_2f8a58 *beam = *(Beam_2f8a58 **)(moby + 0x78);
     int i;
     subtract_vector_xyz(pos, D_L06_00167540, beam->tgt + 0x10);
@@ -3134,10 +3134,10 @@ void FUN_L06_002f7628(char *moby) {
         if (level_frame_count & 4) sgn = -1.0f;
         clear_u64_value(spark_position);
         spark_position[2] += sgn * 0.9f;
-        normalize_vector_xyz(b, spark_position, -2.0f / (float)scale_game_frames(D_L06_00161E70));
+        normalize_vector_xyz(spark_velocity, spark_position, -2.0f / (float)scale_game_frames(D_L06_00161E70));
         add_vector_xyz(spark_position, spark_position, moby + 0x10);
         spark_position[2] += 0.85f;
-        func_L00_00273F80_g(spark_position, b, D_L06_00161E68, (unsigned char)func_001FA898_g((float)scale_game_frames(D_L06_00161E70)),
+        func_L00_00273F80_g(spark_position, spark_velocity, D_L06_00161E68, (unsigned char)func_001FA898_g((float)scale_game_frames(D_L06_00161E70)),
                           (unsigned char)random_integer_below(0xFF), 0, D_L06_00161E6C);
     }
 }
