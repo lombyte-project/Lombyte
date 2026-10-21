@@ -637,11 +637,11 @@ void FUN_L07_002cdb28(struct Moby *moby) {
     }
     switch (moby->command) {
     case TAXI_SHRINK_AND_RESET_TO_PATH_START: {
-        char *cls = moby->pclass;
-        float t = moby->scale - *(float *)(cls + 0x24) / 60.0f;
+        char *class_defaults = moby->pclass;
+        float t = moby->scale - *(float *)(class_defaults + 0x24) / 60.0f;
         moby->scale = t;
         if (t < 0.0f) {
-            moby->scale = *(float *)(cls + 0x24);
+            moby->scale = *(float *)(class_defaults + 0x24);
             qcopy(&moby->pos, path + 0x10);
             moby->command = 1;
             *(float *)(data + 0xA4) = 0.0f;
