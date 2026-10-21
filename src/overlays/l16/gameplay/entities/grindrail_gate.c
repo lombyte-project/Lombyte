@@ -1765,9 +1765,9 @@ void FUN_L16_002e7208(char *moby) {
     char *data = *(char **)(moby + 0x78);
     switch (*(int *)(data + 8)) {
     case CLIP_TRIGGER_WAIT_FOR_ARMING: {
-        char *g = (char *)&hero.motion.pos;
-        if (func_00215570_e7208(g, *(int *)data) != 0) {
-            if (*(int *)(g + 0x200C) == 0xF) {
+        char *hero_position = (char *)&hero.motion.pos;
+        if (func_00215570_e7208(hero_position, *(int *)data) != 0) {
+            if (*(int *)(hero_position + 0x200C) == 0xF) {
                 *(int *)(data + 8) = 1;
             }
         }
