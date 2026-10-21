@@ -3278,7 +3278,7 @@ void rocket_door1_update(struct Moby *moby) {
     Vec4 qz;
     Vec4 qxy;
     Vec4 rxy;
-    TurnerVars *v = (TurnerVars *)moby->pvars;
+    TurnerVars *door_vars = (TurnerVars *)moby->pvars;
 
     if (level_game_mode == 2 && moby->command == 0) {
         moby->visible = 0;
@@ -3289,38 +3289,38 @@ void rocket_door1_update(struct Moby *moby) {
     }
     switch (moby->state) {
     case ROCKET_DOOR1_INITIALIZE_ROTATION:
-        qcopy(&v->start, &moby->rot);
-        v->start.f[3] = 0.0f;
+        qcopy(&door_vars->start, &moby->rot);
+        door_vars->start.f[3] = 0.0f;
         if (D_0014C050[D_0015ED84][moby->mission] == 0xFF) {
-            moby->rot.x = v->goal.f[0] * 0.017453292f;
-            moby->rot.y = v->goal.f[1] * 0.017453292f;
-            moby->rot.z = v->goal.f[2] * 0.017453292f;
+            moby->rot.x = door_vars->goal.f[0] * 0.017453292f;
+            moby->rot.y = door_vars->goal.f[1] * 0.017453292f;
+            moby->rot.z = door_vars->goal.f[2] * 0.017453292f;
             moby->state = 3;
         } else {
             moby->state = 1;
             moby->flags |= 0x100;
-            FUN_L00_001fff28(&qx, 0, v->goal.f[0] * 0.017453292f);
-            FUN_L00_001fff28(&qy, 1, v->goal.f[1] * 0.017453292f);
-            FUN_L00_001fff28(&qz, 2, v->goal.f[2] * 0.017453292f);
+            FUN_L00_001fff28(&qx, 0, door_vars->goal.f[0] * 0.017453292f);
+            FUN_L00_001fff28(&qy, 1, door_vars->goal.f[1] * 0.017453292f);
+            FUN_L00_001fff28(&qz, 2, door_vars->goal.f[2] * 0.017453292f);
             multiply_quaternions(&qxy, &qx, &qy);
-            multiply_quaternions(&v->goal, &qxy, &qz);
+            multiply_quaternions(&door_vars->goal, &qxy, &qz);
             FUN_L00_001fff28(&qx, 0, moby->rot.x);
             FUN_L00_001fff28(&qy, 1, moby->rot.y);
             FUN_L00_001fff28(&qz, 2, moby->rot.z);
             multiply_quaternions(&rxy, &qx, &qy);
-            multiply_quaternions(&v->start, &rxy, &qz);
+            multiply_quaternions(&door_vars->start, &rxy, &qz);
         }
         break;
     case ROCKET_DOOR1_WAIT_FOR_COMMAND:
         if (moby->command != 0) {
             moby->state = 2;
-            v->speed = 0.0f;
-            v->t = 0.0f;
+            door_vars->speed = 0.0f;
+            door_vars->t = 0.0f;
         }
         break;
     case ROCKET_DOOR1_TURN_TO_GOAL_ROTATION:
-        approach_angle(&v->t, &v->speed, 1.0f, frame_time_sq_macro * 0.5f, frame_time_sq_macro * 0.5f, D_0015ED6C);
-        quaternion_nlerp(&qx, &v->start, &v->goal, v->t);
+        approach_angle(&door_vars->t, &door_vars->speed, 1.0f, frame_time_sq_macro * 0.5f, frame_time_sq_macro * 0.5f, D_0015ED6C);
+        quaternion_nlerp(&qx, &door_vars->start, &door_vars->goal, door_vars->t);
         quaternion_rotation_basis(&qx, &moby->rot_row0);
         break;
     }
