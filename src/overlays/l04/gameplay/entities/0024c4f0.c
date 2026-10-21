@@ -80,7 +80,7 @@ extern void FUN_L04_0024c660_u(float *, float *, float *, float *) __asm__("FUN_
 
 int FUN_L04_0024c7d8(float *out, float *query_point, float *poly, int vertex_count) {
     float edge_closest_point[4];
-    float diff[4];
+    float edge_to_query_offset[4];
     float best;
     int i;
     int has_positive_edge_cross = FUN_L04_0024c4f0(query_point, poly, vertex_count) != 0;
@@ -88,8 +88,8 @@ int FUN_L04_0024c7d8(float *out, float *query_point, float *poly, int vertex_cou
     for (i = 0; i < vertex_count; i++) {
         float distance_to_edge;
         FUN_L04_0024c660_u(edge_closest_point, poly + i * 4, poly + ((i + 1) % vertex_count) * 4, query_point);
-        fast_vec_sub(diff, query_point, edge_closest_point);
-        distance_to_edge = fast_vec_length(diff);
+        fast_vec_sub(edge_to_query_offset, query_point, edge_closest_point);
+        distance_to_edge = fast_vec_length(edge_to_query_offset);
         if (i == 0 || distance_to_edge < best) {
             best = distance_to_edge;
             qcopy(out, edge_closest_point);
