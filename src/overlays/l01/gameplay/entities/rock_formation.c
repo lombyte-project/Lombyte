@@ -1100,7 +1100,7 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
     s32 k;
     f32 bubble_path_fraction;
     f32 zero;
-    u8 *tex;
+    u8 *tile_binding_output;
     s32 ripple_tile_index;
     s32 bind_tile_index;
     PoolTile *tiles;
@@ -1147,14 +1147,14 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
         }
         pool_draw_count = 21;
         D_L01_00161208 = zero;
-        tex = pool_tile_tex;
+        tile_binding_output = pool_tile_tex;
         D_L01_0016120C = 32768.0f;
         D_L01_00161210 = 255.0f;
         D_L01_00161214 = 48.0f;
         pool_draw_tiles = pool_tiles;
         pool_draw_tex = pool_tile_tex;
         for (bind_tile_index = 0; bind_tile_index < 21; bind_tile_index++) {
-            pool_bind_tile(&pool_tiles[bind_tile_index], tex + bind_tile_index * 16);
+            pool_bind_tile(&pool_tiles[bind_tile_index], tile_binding_output + bind_tile_index * 16);
         }
         for (ripple_tile_index = 0; ripple_tile_index < 21; ripple_tile_index++) {
             PoolTile *tile = &pool_tiles[ripple_tile_index];
