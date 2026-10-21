@@ -509,14 +509,14 @@ extern int FUN_L00_0025e3b8_c(void *) __asm__("FUN_L00_0025e3b8");
 
 float FUN_L00_0020d6b0(char *target_moby, float yaw, float range, float ylim, float plim, int *out) {
     float v[4] __attribute__((aligned(16)));
-    struct Hero *g;
+    struct Hero *hero_state;
     float target_distance, hero_yaw_error, angular_penalty, elevation_angle_error, angular_limit_error, target_score;
 
     *out = 0;
     qcopy(v, &hero.motion.pos);
-    g = &hero;
-    if (g->state.current == 0x14) {
-        v[2] = g->ground_z.f;
+    hero_state = &hero;
+    if (hero_state->state.current == 0x14) {
+        v[2] = hero_state->ground_z.f;
     }
     target_distance = dist_20d6b0(v, target_moby + 0x10);
     if (range < target_distance)
@@ -525,7 +525,7 @@ float FUN_L00_0020d6b0(char *target_moby, float yaw, float range, float ylim, fl
     angular_penalty = hero_yaw_error;
     angular_limit_error = hero_yaw_error;
     elevation_angle_error = adiff_20d6b0(atan2_20d6b0(hdist_20d6b0(v, target_moby + 0x10), *(float *)(target_moby + 0x18) - v[2]), 0.0f);
-    if (g->state.current == 1 || g->state.current == 0x1E) {
+    if (hero_state->state.current == 1 || hero_state->state.current == 0x1E) {
         C_20d6b0 *camera = &player_camera;
         float b = adiff_20d6b0(
             atan2_20d6b0(*(float *)(target_moby + 0x10) - camera->v140[0], *(float *)(target_moby + 0x14) - camera->v140[1]),
