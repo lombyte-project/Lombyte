@@ -934,7 +934,7 @@ void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("F
 int FUN_L15_00299880(unsigned char *moby, char *moby_data, int next_state, int next_animation, float angle) {
     float heading_delta = -fast_subtract_rotations(*(float *)(moby + 0x48), angle);
     float stored_heading_delta;
-    int ret = 1;
+    int turn_required = 1;
     *(int *)(moby_data + 0x144) = 0;
     *(float *)(moby_data + 0x170) = *(float *)(moby + 0x48);
     *(float *)(moby_data + 0x174) = angle;
@@ -968,9 +968,9 @@ int FUN_L15_00299880(unsigned char *moby, char *moby_data, int next_state, int n
         if (moby[0x53] != next_animation) {
             blend_moby_animation_c(moby, next_animation, 0, scale_game_frames(10));
         }
-        ret = 0;
+        turn_required = 0;
     }
-    return ret;
+    return turn_required;
 }
 #define NOT_SDA
 
