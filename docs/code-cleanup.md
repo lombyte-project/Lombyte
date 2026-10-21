@@ -110,6 +110,8 @@ removing the trick does not change the code, it is not a fakematch: delete it.
 - Constants used by several C files belong in the owning subsystem's header.
   Constants shared only by functions in one C file stay at file scope; a private
   callback's selector stays local.
+- Use one canonical member per numeric ID within a domain and update callers
+  to reuse it. Describe consumer-specific behavior in comments, not aliases.
 - Extend an existing enum for the same selector. Keep state, substate, command,
   class ID and callback-result domains separate, even when their values overlap.
 

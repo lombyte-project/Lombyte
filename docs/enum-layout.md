@@ -22,15 +22,12 @@ Gravity helpers use one set of three names for the same hero gravity-mode
 field; vehicle-mode consumers likewise share their mode IDs. The fields remain
 their original integer types.
 
-Some legacy hero-state names represented different values. Vehicle states now
-distinguish mode 1 from mode 3. Other conflicting aliases carry an `Lxx` level
-qualifier; the level 16 entry and transition aliases also distinguish those
-contexts. These qualifiers preserve what the existing code proves without
-assigning one ambiguous name a universal value.
-
-Other descriptive hero-state aliases remain when the meaning is specific to
-one consumer. Equal numbers alone do not prove that two descriptions can be
-replaced by a single behavioral name.
+Each domain uses one canonical member per numeric ID. The follow-up audit
+removed 157 redundant aliases in 45 groups: 155 hero-state aliases, one camera
+attachment alias and one hit-response alias. `HeroStateId` now has 89 members
+instead of 244. Entry, movement and transition handlers share the same state
+name even when they describe different parts of its behavior. Vehicle states
+still distinguish mode 1 from mode 3 because those states have different IDs.
 
 ## Definitions private to a C file
 
@@ -78,7 +75,9 @@ justify a common header.
 
 ## Extending an enum
 
-Reuse a visible shared constant when both its value and role match. Add another
+Reuse a visible shared constant when both its value and role match. Keep one
+member per numeric ID within that domain; describe consumer-specific behavior
+in comments rather than adding another alias. Add another
 member to that domain's existing definition rather than creating a second enum
 in a caller. Keep a new private selector local until it has another consumer.
 Do not merge independent selectors merely because their members share a prefix.
