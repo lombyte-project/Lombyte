@@ -269,7 +269,7 @@ extern void aa_blur_pass_00233b68(void) __asm__("FUN_00233b68");
 
 void FUN_L02_002a46e0(void) {
     char *camera_state;
-    long *g;
+    long *gs_register_packet;
     int *packet_base;
     vu1_add_vif_code(0x13000000);
     camera_state = D_L02_0016D040;
@@ -285,12 +285,12 @@ void FUN_L02_002a46e0(void) {
     (*(int *volatile *)&D_L02_001611C0)[3] = 0x50000002;
     packet_base = *(int *volatile *)&D_L02_001611C0;
     D_L02_001611C0 = packet_base + 4;
-    g = (long *)(packet_base + 4);
-    g[0] = 0x1000000000008001L;
-    g[1] = 0xE;
-    g[2] = (long)*(int *)(camera_state + 0x230) | ((long)*(int *)(camera_state + 0x234) << 8) |
+    gs_register_packet = (long *)(packet_base + 4);
+    gs_register_packet[0] = 0x1000000000008001L;
+    gs_register_packet[1] = 0xE;
+    gs_register_packet[2] = (long)*(int *)(camera_state + 0x230) | ((long)*(int *)(camera_state + 0x234) << 8) |
            ((long)*(int *)(camera_state + 0x238) << 16);
-    g[3] = 0x3D;
+    gs_register_packet[3] = 0x3D;
     D_L02_001611C0 = packet_base + 12;
     aa_blur_pass_00233b68();
 }
