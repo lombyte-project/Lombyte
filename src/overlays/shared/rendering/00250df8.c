@@ -94,7 +94,7 @@ extern s32 D_0014C190_257218[][64] __asm__("D_0014C190") __attribute__((section(
 extern int D_L00_001BA4D0_lui[] __asm__("D_L00_001BA4D0") __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 void FUN_L00_00257470(unsigned char *m, int flags, int arg);
-void FUN_L00_00257470(unsigned char *moby, int flags, int arg) {
+void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_index) {
     float amt;
     int lvl;
     int k;
@@ -175,7 +175,7 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int arg) {
             int lower_bound = FUN_001fa6d0_257470(amt);
             int hi = lower_bound + bound_offset;
             lower_bound -= bound_offset;
-            FUN_L00_00260a88_257470(moby, lower_bound, hi, call_flags, arg);
+            FUN_L00_00260a88_257470(moby, lower_bound, hi, call_flags, trajectory_target_index);
         }
     }
 }
