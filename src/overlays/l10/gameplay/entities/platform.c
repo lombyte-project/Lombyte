@@ -38,7 +38,7 @@ void bombthrower_grass_update(struct Moby *moby) __asm__("FUN_L10_002d8c00");
 void bombthrower_grass_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float launch_offset[4];
-    float b[4];
+    float launch_position[4];
     if (moby->state == 0) {
         *(int *)data =
             scale_game_frames(random_int_between(D_L10_00161BF0, D_L10_00161BF4));
@@ -56,8 +56,8 @@ void bombthrower_grass_update(struct Moby *moby) {
             random_float_between_alt(D_L10_00161C04, D_L10_00161C08) *
                 frame_time,
             launch_yaw, r);
-        fast_vec_add(b, &moby->pos, launch_offset);
-        FUN_L10_002d8058_u(moby, b, launch_offset);
+        fast_vec_add(launch_position, &moby->pos, launch_offset);
+        FUN_L10_002d8058_u(moby, launch_position, launch_offset);
         allocate_voice_for_target_entry(0, 0, (int)moby);
         *(int *)data =
             scale_game_frames(random_int_between(D_L10_00161BF0, D_L10_00161BF4));
