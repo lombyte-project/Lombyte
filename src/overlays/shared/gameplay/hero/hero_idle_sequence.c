@@ -492,8 +492,8 @@ void FUN_L00_00205ea8(void) {
     if (hero_state->unk2044 < 20.0f && hero_state->unk2040 != 0) {
         hero_state->unk2048 = 1;
     } else {
-        struct Hero *g3 = &hero;
-        g3->unk2048 = 0;
+        struct Hero *animation_context_clear_owner = &hero;
+        animation_context_clear_owner->unk2048 = 0;
     }
     {
         struct Hero *animation_context_owner = &hero;
