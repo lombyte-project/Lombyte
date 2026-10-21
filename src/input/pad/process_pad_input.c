@@ -50,17 +50,17 @@ extern float convert_integer_to_float(s32) __asm__("func_001FA6C0");
 
 void process_pad_input(Pad *p, u8 *buf, s32 len) __asm__("FUN_00217328");
 
-void process_pad_input(Pad *pad_state, u8 *pad_read_data, s32 len) {
+void process_pad_input(Pad *pad_state, u8 *pad_read_data, s32 pad_read_byte_count) {
     float axis_vector[2];
     s32 i, j, k;
     s32 held_buttons, old, ncur, nold;
-    float mag, ang;
+    float mag, axis_vector_angle;
 
     pad_state->raw = pad_state->held = ((pad_read_data[0] << 8) | pad_read_data[1]) ^ 0xFFFF;
     for (i = 15; i >= 0; i--) {
         pad_state->axes[i] = 0;
     }
-    if (len >= 6) {
+    if (pad_read_byte_count >= 6) {
         for (i = 0; i < 4; i++) {
             s32 axis_center_distance = pad_read_data[i + 2] - 0x7F;
             if (axis_center_distance < 0)
@@ -77,7 +77,7 @@ void process_pad_input(Pad *pad_state, u8 *pad_read_data, s32 len) {
             }
         }
     }
-    if (len >= 0x12) {
+    if (pad_read_byte_count >= 0x12) {
         for (i = 4; i < 16; i++) {
             pad_state->axes[i] = convert_integer_to_float(pad_read_data[i + 2]) * 0.003921569f;
         }
@@ -89,9 +89,9 @@ void process_pad_input(Pad *pad_state, u8 *pad_read_data, s32 len) {
         pad_state->raw = pad_state->held;
     }
     {
-        float *dst = pad_state->prev, *src = pad_state->axes;
+        float *axis_copy_destination = pad_state->prev, *axis_copy_source = pad_state->axes;
         for (i = 15; i >= 0; i--) {
-            *dst++ = *src++;
+            *axis_copy_destination++ = *axis_copy_source++;
         }
     }
     if (((volatile float *)pad_state->axes)[2] != 0.0f || ((volatile float *)pad_state->axes)[3] != 0.0f) {
@@ -145,9 +145,9 @@ void process_pad_input(Pad *pad_state, u8 *pad_read_data, s32 len) {
     axis_vector[0] = pad_state->axes[2];
     axis_vector[1] = pad_state->axes[3];
     mag = vector_length_xy(axis_vector);
-    ang = fast_arc_tan(axis_vector[0], axis_vector[1]);
+    axis_vector_angle = fast_arc_tan(axis_vector[0], axis_vector[1]);
     pad_state->hist_mag[pad_state->idx] = mag;
-    pad_state->hist_ang[pad_state->idx] = ang;
+    pad_state->hist_ang[pad_state->idx] = axis_vector_angle;
     if (mag > 0.9f) {
         for (j = 1; j < scale_game_frames(4); j++) {
             float historical_magnitude = pad_state->hist_mag[(pad_state->idx - j + 30) % 30];
@@ -160,7 +160,7 @@ void process_pad_input(Pad *pad_state, u8 *pad_read_data, s32 len) {
         }
         if (!(pad_state->pressed & 0x10000)) {
             for (k = 1; k < scale_game_frames(5); k++) {
-                if (fast_difference_between_rotations(pad_state->hist_ang[(pad_state->idx - k + 30) % 30], ang) >
+                if (fast_difference_between_rotations(pad_state->hist_ang[(pad_state->idx - k + 30) % 30], axis_vector_angle) >
                     0.9599311f) {
                     pad_state->pressed |= 0x10000;
                     break;
