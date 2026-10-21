@@ -2711,10 +2711,10 @@ void FUN_L06_002f3640(unsigned char *moby) {
                 trooper_knockback_arc(&pos, &ang, state + 0x98, state + 0x9C);
                 trooper_start_knockback(moby, state + 0x80, 4, 5, 2, ang);
                 {
-                    float v = frame_time + frame_time;
+                    float doubled_frame_time = frame_time + frame_time;
                     *(float *)(state + 0xD0) = 10.0f;
                     *(float *)(state + 0xD4) = 20.0f;
-                    *(float *)(state + 0xCC) = v;
+                    *(float *)(state + 0xCC) = doubled_frame_time;
                 }
                 FUN_0022da68(2, 0, moby);
                 moby[0x20] = 9;
