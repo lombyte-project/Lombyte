@@ -2555,13 +2555,13 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
         *(char *)(ctx + 0x20) = 4;
         *out = 1;
         if (*(int *)(ow + 0x310) >= 2) {
-            int idx;
+            int path_slot_index;
             int *ids = (int *)(ow + 0x1E0);
             int *path_nodes = (int *)(ow + 0x220);
-            for (idx = 0; idx < 16; idx++) {
-                if (ids[idx] >= 0) {
-                    if (FUN_L01_00276a48(0.0f, (int *)(ow + 0x1E0) + idx, 1, path_nodes[idx], ctx + 0x10) != 0) {
-                        *(int *)(ow + 0x27C) = idx;
+            for (path_slot_index = 0; path_slot_index < 16; path_slot_index++) {
+                if (ids[path_slot_index] >= 0) {
+                    if (FUN_L01_00276a48(0.0f, (int *)(ow + 0x1E0) + path_slot_index, 1, path_nodes[path_slot_index], ctx + 0x10) != 0) {
+                        *(int *)(ow + 0x27C) = path_slot_index;
                     }
                 }
             }
