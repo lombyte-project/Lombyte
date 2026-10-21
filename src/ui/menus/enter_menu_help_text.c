@@ -19,14 +19,14 @@ s32 enter_menu_help_text(struct MenuScreen *menu) __asm__("FUN_0021d1f8");
 
 s32 enter_menu_help_text(struct MenuScreen *menu) {
     s32 i;
-    struct MenuSystem *g;
+    struct MenuSystem *menu_system_state;
 
     initialize_graphics_buffer_descriptors(1);
     menu->data.raw.unk54 = 0;
     menu->data.raw.unk38 = 0;
-    g = &menu_system;
+    menu_system_state = &menu_system;
     for (i = 0; i < 5; i++) {
-        if (graphics_buffer_descriptors[i].address != 0 && (u32)graphics_buffer_descriptors[i].address < (u32)g->unk10C) {
+        if (graphics_buffer_descriptors[i].address != 0 && (u32)graphics_buffer_descriptors[i].address < (u32)menu_system_state->unk10C) {
             graphics_buffer_descriptors[i].flags |= 2;
         }
     }
