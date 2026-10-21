@@ -608,7 +608,7 @@ typedef struct {
     float c[4];
 } M_2e0788;
 void FUN_L00_002e0788(unsigned char *moby) {
-    OvlQuad v[2];
+    OvlQuad sprite_position_and_step[2];
     M_2e0788 *moby_data = *(M_2e0788 **)(moby + 0x78);
     float *a;
     int *t;
@@ -616,12 +616,12 @@ void FUN_L00_002e0788(unsigned char *moby) {
     float pre_wrap_sum, g;
     j = 0;
     moby += 0x10;
-    fast_vec_sub(v, D_L00_00166DC0, moby);
+    fast_vec_sub(sprite_position_and_step, D_L00_00166DC0, moby);
     t = moby_data->t;
     a = moby_data->a;
-    vscl_2e0788(v, v, -0.3f);
-    vscl_2e0788(&v[1], v, 0.1f);
-    fast_vec_add(v, v, moby);
+    vscl_2e0788(sprite_position_and_step, sprite_position_and_step, -0.3f);
+    vscl_2e0788(&sprite_position_and_step[1], sprite_position_and_step, 0.1f);
+    fast_vec_add(sprite_position_and_step, sprite_position_and_step, moby);
     for (i = 3; i >= 0; i--) {
         pre_wrap_sum = *a + moby_data->b[j];
         *a = pre_wrap_sum;
@@ -637,9 +637,9 @@ void FUN_L00_002e0788(unsigned char *moby) {
         g = i2f_2e0788(ticks_2e0788(0xff) - moby_data->t[j]);
         g = g / (float)ticks_2e0788(0xff);
         c = fast_tween_color(0x4040FFFF, 0x1040FFFF, f99c0_2e0788(0.5f - g));
-        spr_2e0788(v, c, f2i_2e0788(*a++), 0x35, 1, 2, 0, moby_data->c[j]);
+        spr_2e0788(sprite_position_and_step, c, f2i_2e0788(*a++), 0x35, 1, 2, 0, moby_data->c[j]);
         j++;
-        fast_vec_add(v, v, &v[1]);
+        fast_vec_add(sprite_position_and_step, sprite_position_and_step, &sprite_position_and_step[1]);
     }
 }
 typedef int s32_2e1f28;
