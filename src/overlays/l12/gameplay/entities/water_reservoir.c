@@ -399,15 +399,15 @@ void FUN_L12_002ed280(struct Moby *moby) {
                     moby_vars[2] = 0;
                 }
                 if (scale_game_frames_c(0x28) < moby_vars[2]) {
-                    char *g = D_00141968_h;
+                    char *help_records = D_00141968_h;
                     moby_vars[1] = 0;
-                    if (*(unsigned short *)(g + 0x370) <= 0xFFFE) {
-                        *(unsigned short *)(g + 0x370) = *(unsigned short *)(g + 0x370) + 1;
+                    if (*(unsigned short *)(help_records + 0x370) <= 0xFFFE) {
+                        *(unsigned short *)(help_records + 0x370) = *(unsigned short *)(help_records + 0x370) + 1;
                     }
-                    if (scale_game_frames_c(D_0015EEA4) / 600 > *(unsigned short *)(g + 0x372)) {
-                        *(unsigned short *)(g + 0x372) = scale_game_frames_c(D_0015EEA4) / 600;
+                    if (scale_game_frames_c(D_0015EEA4) / 600 > *(unsigned short *)(help_records + 0x372)) {
+                        *(unsigned short *)(help_records + 0x372) = scale_game_frames_c(D_0015EEA4) / 600;
                     }
-                    *(unsigned int *)(g + 0x374) = *(unsigned int *)(g + 0x374) | (1 << current_level_index) | 0x80000000;
+                    *(unsigned int *)(help_records + 0x374) = *(unsigned int *)(help_records + 0x374) | (1 << current_level_index) | 0x80000000;
                 }
                 {
                     int help_threshold_step_frames = scale_game_frames_c(0x1C20);
