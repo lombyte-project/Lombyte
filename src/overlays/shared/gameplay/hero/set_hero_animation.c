@@ -281,10 +281,10 @@ extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
 /* Copies &hero.anim_speed to +0x58 of the object at +0x2278 when FUN_L00_002321c0 succeeds. */
 void FUN_L00_002322c8(void) {
     struct Hero *base = &hero;
-    int buf[4];
+    int mapped_animation_id[4];
 
     if (((void *)base->unk2278) != 0 && base->unk227C != 0 &&
-        FUN_L00_002321c0_u(*(unsigned char *)(((char *)base->moby) + 0x53), buf) != 0) {
+        FUN_L00_002321c0_u(*(unsigned char *)(((char *)base->moby) + 0x53), mapped_animation_id) != 0) {
         *(float *)(((char *)base->unk2278) + 0x58) = base->anim_speed;
     }
 }
