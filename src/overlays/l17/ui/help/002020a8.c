@@ -221,12 +221,12 @@ f32 approach_value_211380(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_211380(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void FUN_L17_0020e1c0(void) {
     switch (hero.vehicle_mode) {
-    case 0:
+    case HERO_VEHICLE_MODE_ON_FOOT:
         hero.unk228 = 0.8f;
         hero.unk22C = 0.7f;
         hero.unk230 = 0.45f;
         break;
-    case 1:
+    case HERO_VEHICLE_MODE_CLANK:
         hero.unk228 = 0.59999996f;
         hero.unk22C = 0.45000002f;
         hero.unk230 = 0.3f;
@@ -256,10 +256,10 @@ void FUN_L17_0020e1c0(void) {
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
         FUN_001f9b80_211380(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
         f32 *smoothing_state = D_0013F570;
-        struct Hero *b = (struct Hero *)((u8 *)smoothing_state - 0x220);
-        approach_value_211380(b->unk228, frame_scale * 0.02f, smoothing_state);
-        approach_value_211380(b->unk22C, frame_scale * 0.02f, smoothing_state + 1);
-        FUN_L00_0025b8c0_211380(smoothing_state + 5, smoothing_state + 6, b->unk230, frame_scale_sq * 0.02f,
+        struct Hero *hero_for_smoothing_targets = (struct Hero *)((u8 *)smoothing_state - 0x220);
+        approach_value_211380(hero_for_smoothing_targets->unk228, frame_scale * 0.02f, smoothing_state);
+        approach_value_211380(hero_for_smoothing_targets->unk22C, frame_scale * 0.02f, smoothing_state + 1);
+        FUN_L00_0025b8c0_211380(smoothing_state + 5, smoothing_state + 6, hero_for_smoothing_targets->unk230, frame_scale_sq * 0.02f,
                                 frame_scale_sq * 0.3f, frame_time * 4.0f);
     }
 }
