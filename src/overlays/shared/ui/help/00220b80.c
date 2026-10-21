@@ -74,7 +74,7 @@ void FUN_L02_002226d8(void)
     Vec4 velocity_projection_source;
     f32 limit;
     f32 velocity_measure;
-    f32 w;
+    f32 saved_platform_delta_w;
 
     qcopy(&old_pos, &hero.motion.pos);
     FUN_L00_00233f80(hero.unk4F8, &hero.motion.platform_delta, &hero.motion.rot);
@@ -165,9 +165,9 @@ void FUN_L02_002226d8(void)
     qcopy(&movement_vector_scratch, &hero.motion.pos);
     if (vector_length_xyz(&hero.motion.platform_delta) > 0.0001f) {
         add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.motion.platform_delta);
-        w = hero.motion.platform_delta.f[3];
+        saved_platform_delta_w = hero.motion.platform_delta.f[3];
         clear_vector(&hero.motion.platform_delta);
-        hero.motion.platform_delta.f[3] = w;
+        hero.motion.platform_delta.f[3] = saved_platform_delta_w;
         FUN_L00_002137a8();
         FUN_L02_002216a0();
         subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
