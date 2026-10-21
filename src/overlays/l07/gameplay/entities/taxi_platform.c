@@ -28,10 +28,10 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void func_00233AB8(void) __asm__("FUN_L07_002ba260");
 
 void purple_ship_update(char *arg) __asm__("FUN_L07_002fbdb8");
-void purple_ship_update(char *arg) {
-    arg[0x30] = 8;
-    *(short *)(arg + 0xA6) = 0x215;
-    add_draw_callback((void *)func_00233AB8, arg);
+void purple_ship_update(char *purple_ship_moby) {
+    purple_ship_moby[0x30] = 8;
+    *(short *)(purple_ship_moby + 0xA6) = 0x215;
+    add_draw_callback((void *)func_00233AB8, purple_ship_moby);
 }
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
