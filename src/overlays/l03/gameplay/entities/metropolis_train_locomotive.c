@@ -1111,12 +1111,12 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 void FUN_L03_0029cff0(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
     float position_delta[4];
-    float ang = (float)*(short *)(moby_data + 0x132) * DEG_TO_RAD;
+    float yaw_offset_radians = (float)*(short *)(moby_data + 0x132) * DEG_TO_RAD;
     float yaw_step, x, y, z, w;
-    fast_subtract_rotations(moby->rot.z, ang);
+    fast_subtract_rotations(moby->rot.z, yaw_offset_radians);
     x = fast_arc_tan(*(float *)(moby_data + 0xD0) - *(float *)(moby_data + 0xE0),
                      *(float *)(moby_data + 0xD4) - *(float *)(moby_data + 0xE4));
-    x = fast_add_rotations(x, ang);
+    x = fast_add_rotations(x, yaw_offset_radians);
     y = fast_subtract_rotations(x, moby->rot.z);
     yaw_step = y * (1.0f / *(float *)(moby_data + 0x120) * frame_scale);
     moby->rot.z = fast_add_rotations(yaw_step, moby->rot.z);
