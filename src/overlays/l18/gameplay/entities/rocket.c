@@ -537,7 +537,7 @@ extern float D_L18_00161960 __attribute__((sda));
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
-char *FUN_L18_002d5348(float *pos, float *dir, float *target, float movement_rotation_z, float movement_rotation_y, int frames, int kind) {
+char *FUN_L18_002d5348(float *pos, float *initial_movement_step, float *target, float movement_rotation_z, float movement_rotation_y, int frames, int kind) {
     char *moby = create_moby(0x234);
     if (moby != 0) {
         char *data;
@@ -549,7 +549,7 @@ char *FUN_L18_002d5348(float *pos, float *dir, float *target, float movement_rot
         *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * D_L18_00161960;
         qcopy(moby + 0x10, pos);
         data = *(char **)(moby + 0x78);
-        qcopy(data, dir);
+        qcopy(data, initial_movement_step);
         qcopy(data + 0x10, target);
         *(float *)(data + 0x24) = movement_rotation_z;
         *(float *)(data + 0x28) = movement_rotation_y;
@@ -557,8 +557,8 @@ char *FUN_L18_002d5348(float *pos, float *dir, float *target, float movement_rot
         *(int *)(data + 0x34) = frames;
         *(int *)(data + 0x30) = frames >> 1;
         *(int *)(data + 0x38) = kind;
-        *(float *)(moby + 0x48) = fast_arc_tan(dir[0], dir[1]);
-        *(float *)(moby + 0x44) = -fast_arc_tan(vector_length_xy(dir), dir[2]);
+        *(float *)(moby + 0x48) = fast_arc_tan(initial_movement_step[0], initial_movement_step[1]);
+        *(float *)(moby + 0x44) = -fast_arc_tan(vector_length_xy(initial_movement_step), initial_movement_step[2]);
         allocate_voice_for_target_entry(0, 0, (int)moby);
     }
     return moby;
