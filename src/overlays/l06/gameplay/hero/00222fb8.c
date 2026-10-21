@@ -24,16 +24,16 @@ void FUN_L06_00222fb8(void) {
     struct Hero *g1;
     struct Hero *g2;
     struct Hero *g3;
-    int u = g->unk12ED;
-    int w = g->ground_type;
+    int saved_ground_sound_class = g->unk12ED;
+    int previous_ground_type = g->ground_type;
     fast_mem_zero16(&g->ground_type, 0x10);
-    g->unk12ED = u;
+    g->unk12ED = saved_ground_sound_class;
     g->ground_type = -1;
     g->unk20A9 = 0;
     g->unk308 = 0;
-    if (w == -1)
+    if (previous_ground_type == -1)
         return;
-    if (w == 2) {
+    if (previous_ground_type == 2) {
         if (g->frames_off_ground.s == 0 || g->ground_distance < 0.3f) {
             g->unk12E7 = 1;
             if (g->vehicle_mode == 0) {
@@ -43,23 +43,23 @@ void FUN_L06_00222fb8(void) {
             }
         }
     }
-    if (w == 0xD) {
+    if (previous_ground_type == 0xD) {
         struct Hero *gx = &hero;
         gx->selector_13 = 1;
     }
-    if (w == 1) {
+    if (previous_ground_type == 1) {
         struct Hero *gx = &hero;
         gx->selector_1 = 1;
     }
-    if (w == 8) {
+    if (previous_ground_type == 8) {
         struct Hero *gx = &hero;
         gx->on_slip_ground = 1;
     }
-    if (w == 9) {
+    if (previous_ground_type == 9) {
         struct Hero *gx = &hero;
         gx->unk12EE = 1;
     }
-    if (w == 0xC) {
+    if (previous_ground_type == 0xC) {
         struct Hero *gx = &hero;
         gx->on_slip_ground = 1;
     }
