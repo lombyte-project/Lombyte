@@ -1683,20 +1683,20 @@ typedef struct {
 extern Ent D_L13_001D9BC0[];
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L13_0030a488(int arg) {
+void FUN_L13_0030a488(int tile_index) {
     int i;
-    D_L13_001D9BC0[arg].n[0] = 0xFF;
-    D_L13_001D9BC0[arg].n[2] = 0xFF;
-    D_L13_001D9BC0[arg].n[1] = 0xFF;
-    D_L13_001D9BC0[arg].n[3] = 0xFF;
-    D_L13_001D9BC0[arg].n[4] = 0xFF;
-    D_L13_001D9BC0[arg].n[5] = 0xFF;
-    D_L13_001D9BC0[arg].n[6] = 0xFF;
-    D_L13_001D9BC0[arg].n[7] = 0xFF;
+    D_L13_001D9BC0[tile_index].n[0] = 0xFF;
+    D_L13_001D9BC0[tile_index].n[2] = 0xFF;
+    D_L13_001D9BC0[tile_index].n[1] = 0xFF;
+    D_L13_001D9BC0[tile_index].n[3] = 0xFF;
+    D_L13_001D9BC0[tile_index].n[4] = 0xFF;
+    D_L13_001D9BC0[tile_index].n[5] = 0xFF;
+    D_L13_001D9BC0[tile_index].n[6] = 0xFF;
+    D_L13_001D9BC0[tile_index].n[7] = 0xFF;
     for (i = 0; i < 22; i++) {
-        if (arg != i) {
+        if (tile_index != i) {
             Ent *tile_table = D_L13_001D9BC0;
-            Ent *selected_tile = &tile_table[arg];
+            Ent *selected_tile = &tile_table[tile_index];
             float x = selected_tile->x - tile_table[i].x;
             float y = selected_tile->y - tile_table[i].y;
             if (absolute_float(x) < 0.1f) {
