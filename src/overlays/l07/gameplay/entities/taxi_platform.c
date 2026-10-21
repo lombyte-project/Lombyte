@@ -977,14 +977,14 @@ extern struct AnimTimer *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f
 
 /* resets a spawned moby from its class defaults and restarts its animation */
 void FUN_L07_0030af40(struct Moby *moby) {
-    struct SpawnClassView *cls;
+    struct SpawnClassView *class_defaults;
     struct AnimTimer *animation_timer;
 
     moby->state = 0;
-    cls = (struct SpawnClassView *)moby->pclass;
+    class_defaults = (struct SpawnClassView *)moby->pclass;
     moby->command = 0;
-    moby->flags = cls->flags;
-    moby->scale = cls->scale;
+    moby->flags = class_defaults->flags;
+    moby->scale = class_defaults->scale;
     moby->update_dist = 0xFF;
     moby->draw_dist = 0xFF;
     moby->visible = 1;
