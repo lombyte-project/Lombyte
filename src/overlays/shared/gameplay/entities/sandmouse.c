@@ -1540,7 +1540,7 @@ void FUN_L01_00315358(Cam_316730 *cam) {
         Path_316730 *pathC = D_L01_001B0C30_316730[params->unk28];
         Path_316730 *pathB = D_L01_001B0C30_316730[params->unk2C];
         int i;
-        int prev = 0;
+        int previous_path_node_index = 0;
         int range_start = 0;
         int range_end = 0;
         int j = 0;
@@ -1554,9 +1554,9 @@ void FUN_L01_00315358(Cam_316730 *cam) {
         float speed_scale;
         float dist;
 
-        prev = pathB->n - 1;
+        previous_path_node_index = pathB->n - 1;
         for (i = 0; i < pathB->n; i++) {
-            range_start = func_001FA898_r(pathB->nodes[prev].w);
+            range_start = func_001FA898_r(pathB->nodes[previous_path_node_index].w);
             range_end = func_001FA898_r(pathB->nodes[i].w);
             if (range_end < range_start) {
                 if (((Hero *)(((char *)((char *)&hero))))->unk564 >= range_start || ((Hero *)(((char *)((char *)&hero))))->unk564 < range_end) {
@@ -1567,7 +1567,7 @@ void FUN_L01_00315358(Cam_316730 *cam) {
                     break;
                 }
             }
-            prev = i;
+            previous_path_node_index = i;
         }
         progress->unk10 = i;
         sum = 0.0f;
