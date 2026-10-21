@@ -18,13 +18,13 @@ s32 _slice0(struct MpegDecoder *mp, s32 nmb) {
     s32 mbtype;
     s32 cbp;
     s32 qs;
-    s32 ret;
+    s32 slice_setup_status;
 
     mbx = 0;
     inc = 0;
-    ret = _sliceA0(mp, nmb, &mbx, &inc, blk);
-    if (ret != 0) {
-        return ret;
+    slice_setup_status = _sliceA0(mp, nmb, &mbx, &inc, blk);
+    if (slice_setup_status != 0) {
+        return slice_setup_status;
     }
     mp->unk11C = 0;
     for (;;) {
