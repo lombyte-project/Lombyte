@@ -188,17 +188,17 @@ void follow_camera_auto_turn(int camera_object) {
     if (*(short *)(camera_data + 0x10) > 0) {
         float position_difference[4];
         float vector_length;
-        float lim;
+        float maximum_length;
         subtract_vector_xyz(position_difference, (float *)camera_data, (float *)(camera_data + 0x90));
         lerp_vector(D_L00_0015EF40, auto_turn_vector, auto_turn_vector, position_difference);
         vector_length = fast_vec_length(auto_turn_vector);
-        lim = *(float *)(auto_turn_vector + 0x2C);
-        if (lim < vector_length) {
-            vector_length = lim;
+        maximum_length = *(float *)(auto_turn_vector + 0x2C);
+        if (maximum_length < vector_length) {
+            vector_length = maximum_length;
             fast_vec_normalize(auto_turn_vector, auto_turn_vector, vector_length);
             *(float *)(r + 0x30) = *(float *)(auto_turn_vector + 0x2C) - vector_length;
         } else {
-            float minimum_length = lim - *(float *)(r + 0x30);
+            float minimum_length = maximum_length - *(float *)(r + 0x30);
             if (vector_length < minimum_length) {
                 vector_length = minimum_length;
                 fast_vec_normalize(auto_turn_vector, auto_turn_vector, vector_length);
