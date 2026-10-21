@@ -1500,23 +1500,23 @@ void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 int FUN_L14_002aeba0(struct Moby *moby, int flag) {
     int ok = 0;
     char *data = (char *)moby->pvars;
-    float w[4];
-    float v[4];
+    float bounding_sphere[4];
+    float half_span_vector[4];
     float rotation_angle;
-    subtract_vector_xyz(v, data + 0x170, data + 0xD0);
-    scale_vector_xyz(v, v, 0.5f);
-    add_vector_xyz(w, data + 0xD0, v);
-    w[3] = vector_length_xyz(v) + 2.0f;
-    if (FUN_001fa728_c((char *)w, convert_integer_to_float(moby->draw_dist)) >= 0) {
+    subtract_vector_xyz(half_span_vector, data + 0x170, data + 0xD0);
+    scale_vector_xyz(half_span_vector, half_span_vector, 0.5f);
+    add_vector_xyz(bounding_sphere, data + 0xD0, half_span_vector);
+    bounding_sphere[3] = vector_length_xyz(half_span_vector) + 2.0f;
+    if (FUN_001fa728_c((char *)bounding_sphere, convert_integer_to_float(moby->draw_dist)) >= 0) {
         FUN_0020cca8_c(moby, 1, data + 0xA0);
         ok = 1;
         normalize_vector_xyz(data + 0xA0, data + 0xA0, 1.0f);
         normalize_vector_xyz(data + 0xB0, data + 0xB0, 1.0f);
         normalize_vector_xyz(data + 0xC0, data + 0xC0, 1.0f);
-        rotation_angle = fast_subtract_rotations(fast_arc_tan(v[0], v[1]), moby->rot.z);
+        rotation_angle = fast_subtract_rotations(fast_arc_tan(half_span_vector[0], half_span_vector[1]), moby->rot.z);
         FUN_L00_001fff28(data + 0xF0, 2, rotation_angle);
         *(float *)(data + 0x1BC) = rotation_angle;
-        rotation_angle = -fast_arc_tan(vector_length_xy(v), v[2]);
+        rotation_angle = -fast_arc_tan(vector_length_xy(half_span_vector), half_span_vector[2]);
         FUN_L00_001fff28(data + 0x130, 1, rotation_angle);
         *(float *)(data + 0x1C0) = rotation_angle;
         qcopy(data + 0x90, data + 0x170);
