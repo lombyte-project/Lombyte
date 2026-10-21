@@ -205,7 +205,7 @@ extern int FUN_L00_00231ff8(int, int *, int *);
 /* Copies &hero.anim_speed to +0x58 of the objects at 0x1180/0x1184 when the lookup succeeds. */
 void FUN_L00_00232128(void) {
     struct Hero *base = &hero;
-    int buf[2];
+    int mapped_animation_ids[2];
 
     if (base->vehicle_mode != 0) {
         return;
@@ -213,7 +213,7 @@ void FUN_L00_00232128(void) {
     if (base->items[3].state != 2) {
         return;
     }
-    if (FUN_L00_00231ff8(*(unsigned char *)(((char *)base->moby) + 0x53), &buf[0], &buf[1]) ==
+    if (FUN_L00_00231ff8(*(unsigned char *)(((char *)base->moby) + 0x53), &mapped_animation_ids[0], &mapped_animation_ids[1]) ==
         0) {
         return;
     }
