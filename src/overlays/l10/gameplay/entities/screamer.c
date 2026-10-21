@@ -2734,17 +2734,17 @@ void FUN_L10_002e5968(struct Moby *moby) {
     char *info = info_5968(moby, 0x370000, 0);
     int out;
     float dmg;
-    int r;
+    int hit_response_code;
     dmg = 0.0f;
-    r = fun_00213928(moby, info, pvars + 0x20, 5, &out, &dmg, 0, 4);
+    hit_response_code = fun_00213928(moby, info, pvars + 0x20, 5, &out, &dmg, 0, 4);
     if (info != 0 && out != 1 && moby->state != 8) {
         if ((*(float *)(pvars + 0x20) -= dmg) <= 0.0f) {
-            r = 1;
+            hit_response_code = 1;
         }
         if (*(int *)(info + 0x24) & 0x40000) {
-            r = 1;
+            hit_response_code = 1;
         }
-        switch (r) {
+        switch (hit_response_code) {
         case COLOR_UPDATE_ONLY_HIT_RESPONSE:
         case COLOR_UPDATE_WITHOUT_STATE_CHANGE_HIT_RESPONSE:
         case COLOR_EFFECT_ONLY_HIT_RESPONSE:
