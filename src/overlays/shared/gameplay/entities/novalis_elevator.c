@@ -2375,8 +2375,8 @@ void FUN_L01_002eec68(char *moby) {
 extern short *D_L01_001ABCC0[];
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L01_002ef350(void *arg) {
-    struct Moby *self = arg;
+char *FUN_L01_002ef350(void *source_moby) {
+    struct Moby *self = source_moby;
     short *list;
     char *entities;
     int entry;
