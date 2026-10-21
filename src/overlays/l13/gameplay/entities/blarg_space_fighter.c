@@ -2834,7 +2834,7 @@ int FUN_L13_002e9160(struct Moby *moby, char *moby_data, int idx, int aim) {
     char *path = D_L13_001B07B0[*(int *)(&moby_data[idx << 2] + 0xB0)];
     float distance_from_previous_node, seg, diff, steering_blend_factor, yaw, pitch;
     int wrapped = 0;
-    float v[4];
+    float target_node_steering_vector[4];
     distance_from_previous_node = FUN_001f9b48(path + (*(short *)(moby_data + 0x9E) * 16 + 0x10), &moby->pos);
     seg = FUN_001f9b48(path + (*(short *)(moby_data + 0x9E) * 16 + 0x10),
                        path + (*(short *)(moby_data + 0x9C) * 16 + 0x10));
@@ -2859,14 +2859,14 @@ int FUN_L13_002e9160(struct Moby *moby, char *moby_data, int idx, int aim) {
     if (1.0f < steering_blend_factor)
         steering_blend_factor = 1.0f;
     fast_vec_scale(moby_data + 0x70, moby_data + 0x70, 1.0f - steering_blend_factor);
-    fast_vec_sub(v, path + (*(short *)(moby_data + 0x9C) * 16 + 0x10), &moby->pos);
-    fast_vec_normalize(v, v, *(float *)(moby_data + 0xAC));
-    fast_vec_scale(v, v, steering_blend_factor);
-    fast_vec_add(moby_data + 0x70, moby_data + 0x70, v);
+    fast_vec_sub(target_node_steering_vector, path + (*(short *)(moby_data + 0x9C) * 16 + 0x10), &moby->pos);
+    fast_vec_normalize(target_node_steering_vector, target_node_steering_vector, *(float *)(moby_data + 0xAC));
+    fast_vec_scale(target_node_steering_vector, target_node_steering_vector, steering_blend_factor);
+    fast_vec_add(moby_data + 0x70, moby_data + 0x70, target_node_steering_vector);
     fast_vec_normalize(moby_data + 0x70, moby_data + 0x70, *(float *)(moby_data + 0xAC));
     fast_vec_add(&moby->pos, &moby->pos, moby_data + 0x70);
-    yaw = fast_arc_tan(v[0], v[1]);
-    pitch = -fast_arc_tan(vector_length_xy(v), v[2]);
+    yaw = fast_arc_tan(target_node_steering_vector[0], target_node_steering_vector[1]);
+    pitch = -fast_arc_tan(vector_length_xy(target_node_steering_vector), target_node_steering_vector[2]);
     if (moby->state == 5) {
         struct Hero *g = &hero;
         yaw = fast_arc_tan(g->motion.pos.f[0] - moby->pos.x,
