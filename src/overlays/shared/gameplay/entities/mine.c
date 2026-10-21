@@ -247,13 +247,13 @@ void mine_update(M910 *mine_moby) {
         MINE_DEBRIS_SPHERICAL_VELOCITY = 3
     };
     B910 camera_blast_parameters = D_L00_001E9830;
-    B910 b = D_L00_001E9880;
+    B910 alternate_camera_blast_parameters = D_L00_001E9880;
     U910 collision_response_velocity;
     U910 old;
     U910 up;
     W910 *v;
     M910 *hd;
-    int st;
+    int mine_state_snapshot;
 
     hd = 0;
     old.q = 0;
@@ -283,8 +283,8 @@ void mine_update(M910 *mine_moby) {
             FUN_L00_002aa2a8(v, mine_moby, 2);
         }
     }
-    st = mine_moby->state;
-    if (st == 0) {
+    mine_state_snapshot = mine_moby->state;
+    if (mine_state_snapshot == 0) {
         if (hero.items[0].moby != 0 && ((M910 *)hero.items[0].moby)->cls == 0xBE) {
             float mine_attachment_transform[4][4];
             float owner_bone_transform[4][4];
@@ -313,7 +313,7 @@ void mine_update(M910 *mine_moby) {
 
             mine_moby->flags &= 0xFEFF;
             qcopy(&old, &mine_moby->pos);
-            if (!(st & 4)) {
+            if (!(mine_state_snapshot & 4)) {
                 add_vector_xyz(&mine_moby->pos, &mine_moby->pos, v);
                 if (v->h50 == 0) {
                     v->vel.f[2] -= frame_time_sq * 9.8f;
@@ -635,10 +635,10 @@ void mine_update(M910 *mine_moby) {
                 v->p54 = 0;
             }
             {
-                char *res = find_moby_hit(mine_moby, 0x830000, 0);
+                char *moby_hit_record = find_moby_hit(mine_moby, 0x830000, 0);
 
-                if (res != 0 && *(M910 **)(res + 0x20) != 0 &&
-                    (*(M910 **)(res + 0x20))->cls != mine_moby->cls) {
+                if (moby_hit_record != 0 && *(M910 **)(moby_hit_record + 0x20) != 0 &&
+                    (*(M910 **)(moby_hit_record + 0x20))->cls != mine_moby->cls) {
                     mine_moby->bBC = 1;
                 }
             }
@@ -852,10 +852,10 @@ void mine_update(M910 *mine_moby) {
                     }
                 } else {
                     float sc = convert_integer_to_float(D_E910.b11) * 0.5f + 1.0f;
-                    int cnt = truncate_float_to_s32(dist * 15.0f);
+                    int explosion_debris_count = truncate_float_to_s32(dist * 15.0f);
                     int i;
 
-                    for (i = 0; i < cnt; i++) {
+                    for (i = 0; i < explosion_debris_count; i++) {
                         int kind = random_integer_below(4);
                         float tbl[4] = {frame_time * 14.0f, frame_time * 22.0f, frame_time * 12.0f,
                                         0.0f};
@@ -945,7 +945,7 @@ void mine_update(M910 *mine_moby) {
                 D_L00_00166C80.i168 = scale_game_frames(0x19);
                 FUN_001f9b48(&mine_moby->pos, hero.motion.pos.f);
                 if (D_E910.b11 != 0) {
-                    mine_camera_blast((char *)&b, (char *)&mine_moby->pos, 0, 0);
+                    mine_camera_blast((char *)&alternate_camera_blast_parameters, (char *)&mine_moby->pos, 0, 0);
                 } else {
                     mine_camera_blast((char *)&camera_blast_parameters, (char *)&mine_moby->pos, 0, 0);
                 }
