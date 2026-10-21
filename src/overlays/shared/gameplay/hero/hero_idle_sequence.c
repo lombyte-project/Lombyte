@@ -2372,7 +2372,7 @@ extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L0
 
 void FUN_L00_00209a40(int iteration_count, int mode) {
     float pos[4];
-    V_209a40 v;
+    V_209a40 randomized_displacement;
     int i;
     struct Hero *hero_state;
     V_209a40 *src;
@@ -2397,16 +2397,16 @@ void FUN_L00_00209a40(int iteration_count, int mode) {
                 FUN_L00_0024f7c8_209a40(hero_state->moby, 0x16, pos);
             }
         }
-        qcopy(&v, src);
+        qcopy(&randomized_displacement, src);
         if (hero_state->state.current == 0x34) {
-            scale_vector_xyz(&v, &v, 1.15f);
+            scale_vector_xyz(&randomized_displacement, &randomized_displacement, 1.15f);
         } else {
-            scale_vector_xyz(&v, &v, 0.7f);
+            scale_vector_xyz(&randomized_displacement, &randomized_displacement, 0.7f);
         }
-        v.f[0] += FUN_002132a8_209a40(D_0015ED6C * -0.4f, D_0015ED6C * 0.4f);
-        v.f[1] += FUN_002132a8_209a40(D_0015ED6C * -0.4f, D_0015ED6C * 0.4f);
-        v.f[2] += FUN_002132a8_209a40(-D_0015ED6C, D_0015ED6C * 0.0f);
-        random_integer_below_cf(pos, &v, FUN_002132a8_209a40(4200.0f, 7350.0f), -1.0f);
+        randomized_displacement.f[0] += FUN_002132a8_209a40(D_0015ED6C * -0.4f, D_0015ED6C * 0.4f);
+        randomized_displacement.f[1] += FUN_002132a8_209a40(D_0015ED6C * -0.4f, D_0015ED6C * 0.4f);
+        randomized_displacement.f[2] += FUN_002132a8_209a40(-D_0015ED6C, D_0015ED6C * 0.0f);
+        random_integer_below_cf(pos, &randomized_displacement, FUN_002132a8_209a40(4200.0f, 7350.0f), -1.0f);
     }
 }
 #include "rnc/math/circle_offset.h"
