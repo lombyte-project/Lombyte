@@ -17,14 +17,14 @@ s32 update_menu_option_list(struct MenuScreen *menu_screen) {
     s32 active;
     s32 old;
     s32 remaining_fade_frames;
-    s32 v;
+    s32 capped_fade_frames;
 
     active = menu_system.current->focus == menu_screen;
     if (menu_screen->data.options.fade_timer != 0) {
         remaining_fade_frames = menu_screen->data.options.fade_timer - 1;
-        v = remaining_fade_frames < 5 ? remaining_fade_frames : 4;
+        capped_fade_frames = remaining_fade_frames < 5 ? remaining_fade_frames : 4;
         menu_screen->data.options.fade_timer = remaining_fade_frames;
-        sequence = (f32)v * 0.25f;
+        sequence = (f32)capped_fade_frames * 0.25f;
         return 0;
     }
     if (!active) {
