@@ -779,12 +779,12 @@ void moving_platform_small_update(char *moby) {
     char *pos;
     char *vel;
     char *target;
-    int idx;
+    int voice_slot_index;
     int easing_frame_count;
     int next;
     int end;
     int count;
-    int off;
+    int next_path_node_byte_offset;
     int node_off;
     signed char dir;
     float speed;
@@ -847,11 +847,11 @@ void moving_platform_small_update(char *moby) {
         *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)endpoint_delta_or_position;
         if (*(int *)(data + 0x10C) >= scale_game_frames(240)) {
             pb[4] = pb[4] * -1;
-            idx = *(int *)(data + 0x104);
-            if (idx != -1) {
-                voice_slot_entry = (unsigned char *)D_0013E550_294c08 + idx * 0x70;
+            voice_slot_index = *(int *)(data + 0x104);
+            if (voice_slot_index != -1) {
+                voice_slot_entry = (unsigned char *)D_0013E550_294c08 + voice_slot_index * 0x70;
                 if (*(char **)(voice_slot_entry + 0x88) == moby && voice_slot_entry[0x74]) {
-                    release_voice_slot(idx);
+                    release_voice_slot(voice_slot_index);
                 }
             }
             *(int *)(data + 0x104) = -1;
@@ -875,10 +875,10 @@ void moving_platform_small_update(char *moby) {
         node_off = next * 0x10;
         pos = moby + 0x10;
         subtract_vector_xyz(data + 0xA0, (char *)path + (node_off + 0x10), pos);
-        off = node_off;
+        next_path_node_byte_offset = node_off;
         target = *(char **)(pc + 0x10) + 0x10;
         if (*(int *)(data + 0x108) != 0) {
-            target += off;
+            target += next_path_node_byte_offset;
         } else {
             target += end * 0x10;
             node_off = 0; /* dead store: unused afterwards, but needed for the retail register allocation */
@@ -892,14 +892,14 @@ void moving_platform_small_update(char *moby) {
         }
         FUN_L00_0025f730(data + 0xA0, *(float *)(data + 0xE4));
         add_vector_xyz(moby + 0x10, moby + 0x10, data + 0xA0);
-        if (FUN_001f9b48(moby + 0x10, *(char **)(pc + 0x10) + (off + 0x10)) < *(float *)(data + 0xE4) * 2.0f) {
+        if (FUN_001f9b48(moby + 0x10, *(char **)(pc + 0x10) + (next_path_node_byte_offset + 0x10)) < *(float *)(data + 0xE4) * 2.0f) {
             *(int *)pc = next;
             if ((next == end || *(int *)(data + 0x108) != 0) && *(int *)(data + 0xF0) > 0) {
-                idx = *(int *)(data + 0x104);
-                if (idx != -1) {
-                    voice_slot_entry = (unsigned char *)D_0013E550_294c08 + idx * 0x70;
+                voice_slot_index = *(int *)(data + 0x104);
+                if (voice_slot_index != -1) {
+                    voice_slot_entry = (unsigned char *)D_0013E550_294c08 + voice_slot_index * 0x70;
                     if (*(char **)(voice_slot_entry + 0x88) == moby && voice_slot_entry[0x74]) {
-                        release_voice_slot(idx);
+                        release_voice_slot(voice_slot_index);
                     }
                 }
                 *(int *)(data + 0x104) = -1;
