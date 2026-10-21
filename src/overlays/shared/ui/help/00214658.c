@@ -892,15 +892,15 @@ void FUN_L00_001ed280_00216f90(void) __asm__("FUN_L00_001ed280");
 void FUN_L00_002500b8_00216f90(int) __asm__("FUN_L00_002500b8");
 extern char D_0013F3D0[] __attribute__((section(".data")));
 void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag);
-void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag) {
+void FUN_L00_00216f90(Vec4_00216f90 *hero_world_position, Vec4_00216f90 *hero_euler_rotation, int mode, int flag) {
     char *position_destination = D_0013F3D0;
     char *hero_base;
     char *rotation_destination;
-    qcopy(position_destination, pos);
+    qcopy(position_destination, hero_world_position);
     hero_base = position_destination - 0x80;
-    qcopy(*(char **)(hero_base + 0x2080) + 0x10, pos);
+    qcopy(*(char **)(hero_base + 0x2080) + 0x10, hero_world_position);
     rotation_destination = position_destination + 0x10;
-    qcopy(rotation_destination, rot);
+    qcopy(rotation_destination, hero_euler_rotation);
     rotation_matrix(hero_base, rotation_destination);
     FUN_001fa030_00216f90(*(char **)(hero_base + 0x2080) + 0xC0, rotation_destination);
     FUN_L00_002118b0_00216f90();
