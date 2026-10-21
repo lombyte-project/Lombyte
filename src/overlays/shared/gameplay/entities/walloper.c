@@ -2487,13 +2487,13 @@ void FUN_L00_002bebc8(char *destination_state) {
 
 /* Saves moby fields 0x44..0x68 and its vector into ((char *)&hero) at 0x1F10..0x1F40. */
 void FUN_L00_002bec00(char *source_state) {
-    struct Hero *g = &hero;
-    g->unk1F20 = *(float *)(source_state + 0x50);
-    g->unk1F24 = *(float *)(source_state + 0x54);
-    g->unk1F28 = *(float *)(source_state + 0x58);
-    g->unk1F3F = *(char *)(source_state + 0x68);
-    g->unk1F40 = *(float *)(source_state + 0x44);
-    qcopy(&g->unk1F10, source_state);
+    struct Hero *hero_state = &hero;
+    hero_state->unk1F20 = *(float *)(source_state + 0x50);
+    hero_state->unk1F24 = *(float *)(source_state + 0x54);
+    hero_state->unk1F28 = *(float *)(source_state + 0x58);
+    hero_state->unk1F3F = *(char *)(source_state + 0x68);
+    hero_state->unk1F40 = *(float *)(source_state + 0x44);
+    qcopy(&hero_state->unk1F10, source_state);
 }
 #define NOT_SDA
 
