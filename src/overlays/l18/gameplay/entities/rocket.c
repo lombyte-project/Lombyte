@@ -1315,20 +1315,20 @@ extern int *D_L18_001AC240_c[] __asm__("D_L18_001AC240");
 extern int D_L18_0015FFD8; /* no foreign declaration */
 extern int D_L18_0015FFD8; /* no foreign declaration */
 
-char *FUN_L18_002d6c80(void *pos, int idx) {
-    short *moby_list_entry = (short *)D_L18_001AC240_c[idx];
+char *FUN_L18_002d6c80(void *pos, int moby_list_index) {
+    short *moby_list_entry = (short *)D_L18_001AC240_c[moby_list_index];
     char *best = 0;
     float bestd = 255.0f;
     if (moby_list_entry == 0)
         return 0;
     while (1) {
-        int off = (*moby_list_entry & 0x7FFF) << 8;
-        char *candidate_moby = (char *)(off + (int)D_L18_0015FFD8);
+        int moby_byte_offset = (*moby_list_entry & 0x7FFF) << 8;
+        char *candidate_moby = (char *)(moby_byte_offset + (int)D_L18_0015FFD8);
         if (*(short *)(candidate_moby + 0xA6) == 0x247) {
             float candidate_distance = FUN_001f9b48(pos, candidate_moby + 0x10);
             if (candidate_distance < bestd) {
                 bestd = candidate_distance;
-                best = D_L18_0015FFD8 + off;
+                best = D_L18_0015FFD8 + moby_byte_offset;
             }
         }
         if (*moby_list_entry++ < 0)
