@@ -2578,9 +2578,9 @@ s32 FUN_L00_002b6bc8(Moby *taunter_moby, f32 radius) {
 void taunter_update(Moby *m) __asm__("FUN_L00_002b6f10");
 void taunter_update(Moby *taunter_moby) {
     Vars *taunter_vars;
-    s32 v;
+    s32 taunter_state;
     s32 voice_slot_index;
-    s32 b;
+    s32 activation_button_bits;
     s32 i;
     s32 next_entry_scaled_x;
     s32 next_entry_scaled_y;
@@ -2602,15 +2602,15 @@ void taunter_update(Moby *taunter_moby) {
         taunter_moby->state++;
         D_L00_001614CC = 1;
     }
-    v = taunter_moby->state;
-    if ((u8)v == 1) {
+    taunter_state = taunter_moby->state;
+    if ((u8)taunter_state == 1) {
         if (taunter_moby->flags & 2) {
-            taunter_moby->state = v + 1;
+            taunter_moby->state = taunter_state + 1;
             taunter_vars->retry = 0;
         }
         goto end;
     }
-    if ((u8)v != 2)
+    if ((u8)taunter_state != 2)
         goto end;
     if (taunter_moby->type == 3 && hero.unk20AC == 0) {
         D_L00_001614D4 = 0;
@@ -2619,10 +2619,10 @@ void taunter_update(Moby *taunter_moby) {
         taunter_vars->cnt18 = 0;
     }
     if (FUN_L00_0028d8c0_u(taunter_moby, taunter_vars->anim) == 0) {
-        b = D_0013C940[0x1A4 / 4] & hero.items[0].button_mask;
-        if ((b != 0 || ((D_0013C940[0x1A0 / 4] & hero.items[0].button_mask) != 0 && taunter_vars->retry >= 0x11)) &&
+        activation_button_bits = D_0013C940[0x1A4 / 4] & hero.items[0].button_mask;
+        if ((activation_button_bits != 0 || ((D_0013C940[0x1A0 / 4] & hero.items[0].button_mask) != 0 && taunter_vars->retry >= 0x11)) &&
             hero.unk20AC == 0) {
-            if (b != 0) {
+            if (activation_button_bits != 0) {
                 taunter_vars->frame = FUN_001f96f8_c(random_int_between(0xF, 0x2D));
             }
             if (D_00141680.cnt < 0xFFFF)
