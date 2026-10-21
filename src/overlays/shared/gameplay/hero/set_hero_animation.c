@@ -1192,24 +1192,24 @@ extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern s32 D_0013DEA0[];
 /* Moves amount from weapon_ammo_counts[idx] to D_0013DEA0[idx]; 0 if too little, else 1. */
 s32 use_ammo(s32 idx, s32 amount) __asm__("FUN_L00_00233db8");
-s32 use_ammo(s32 idx, s32 amount) {
+s32 use_ammo(s32 weapon_index, s32 amount) {
     s32 vendor_item_stride;
     s32 available_ammo;
     VendorItemInfo *vendor_item_info;
     vendor_item_stride = 0x18;
-    if (idx == -1) {
-        idx = D_00140408[0];
+    if (weapon_index == -1) {
+        weapon_index = D_00140408[0];
     }
-    vendor_item_info = (VendorItemInfo *)((u8 *)D_L00_001C40B0 + vendor_item_stride * idx);
+    vendor_item_info = (VendorItemInfo *)((u8 *)D_L00_001C40B0 + vendor_item_stride * weapon_index);
     if (vendor_item_info->hE == 0) {
         return 1;
     }
-    available_ammo = weapon_ammo_counts[idx];
+    available_ammo = weapon_ammo_counts[weapon_index];
     if (available_ammo < amount) {
         return 0;
     }
-    weapon_ammo_counts[idx] = available_ammo - amount;
-    D_0013DEA0[idx] = D_0013DEA0[idx] + amount;
+    weapon_ammo_counts[weapon_index] = available_ammo - amount;
+    D_0013DEA0[weapon_index] = D_0013DEA0[weapon_index] + amount;
     return 1;
 }
 extern int weapon_ammo_counts[] __asm__("D_0013D428");
