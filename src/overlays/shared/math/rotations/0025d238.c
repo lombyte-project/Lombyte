@@ -759,13 +759,13 @@ void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) {
     float sp, big;
     clear_u64_value(&vel);
     for (i = 2; i >= 0; i--) {
-        S6y10 c0;
-        S6y10 c1;
+        S6y10 first_particle_color_palette;
+        S6y10 second_particle_color_palette;
         sp = random_float_between_c(8.0f, 10.0f) * frame_time;
         big = scale * 400000.0f;
-        c0 = D_L00_001E9030;
-        c1 = D_L00_001E9048;
-        FUN_L00_0026a9f0(pos, &vel, c0.v[random_integer_below(6)], c1.v[random_integer_below(6)],
+        first_particle_color_palette = D_L00_001E9030;
+        second_particle_color_palette = D_L00_001E9048;
+        FUN_L00_0026a9f0(pos, &vel, first_particle_color_palette.v[random_integer_below(6)], second_particle_color_palette.v[random_integer_below(6)],
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
