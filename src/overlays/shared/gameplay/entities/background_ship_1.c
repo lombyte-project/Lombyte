@@ -702,10 +702,10 @@ void FUN_L02_002f8aa0(float a, float b, float c, float d, float e, float f);
 void FUN_L02_002f8aa0(float first_triplet_middle, float first_triplet_first, float first_triplet_last, float second_triplet_middle, float second_triplet_first, float second_triplet_last) {
     char *moby = D_L02_00167400_d;
     char *data = *(char **)(moby + 0x70);
-    char *dst = data + 0x30;
-    *(float *)(dst + 0x20) = second_triplet_first;
-    *(float *)(dst + 0x24) = second_triplet_middle;
-    *(float *)(dst + 0x28) = second_triplet_last;
+    char *second_triplet_store_base = data + 0x30;
+    *(float *)(second_triplet_store_base + 0x20) = second_triplet_first;
+    *(float *)(second_triplet_store_base + 0x24) = second_triplet_middle;
+    *(float *)(second_triplet_store_base + 0x28) = second_triplet_last;
     {
         char *other = *(char **)(moby + 0x70);
         *(float *)(other + 0x10) = first_triplet_first;
