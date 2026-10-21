@@ -1180,13 +1180,13 @@ void FUN_L01_002e3830(struct Moby *moby, char *movement_state) {
         HOVER_FACE_GOAL_AND_WAIT = 0,
         HOVER_MOVE_TOWARD_GOAL = 2
     };
-    Vec4 v;
+    Vec4 velocity_adjustment;
     f32 reference_distance, ang, len, ground, near;
     s32 hit;
     s16 blocked_frames;
     struct Moby *target;
 
-    subtract_vector_xyz(&v, movement_state, &moby->pos);
+    subtract_vector_xyz(&velocity_adjustment, movement_state, &moby->pos);
     if (moby->state == 6)
         reference_distance = vector_distance(&moby->pos, movement_state + 0x30);
     else
@@ -1230,15 +1230,15 @@ void FUN_L01_002e3830(struct Moby *moby, char *movement_state) {
                          D_L01_00161948 * DEG_TO_RAD * frame_time_sq,
                          D_L01_0016194C * DEG_TO_RAD * frame_time);
     }
-    scale_vector_xyz(&v, &v, frame_scale * 0.04f);
-    subtract_vector_xyz(&v, &v, ((f32 *)(movement_state + 0x10)));
+    scale_vector_xyz(&velocity_adjustment, &velocity_adjustment, frame_scale * 0.04f);
+    subtract_vector_xyz(&velocity_adjustment, &velocity_adjustment, ((f32 *)(movement_state + 0x10)));
     if (1.3f < reference_distance) {
-        scale_vector_xyz(&v, &v, frame_scale_sq * 0.13f);
+        scale_vector_xyz(&velocity_adjustment, &velocity_adjustment, frame_scale_sq * 0.13f);
     } else {
-        fast_vec_scale(&v, &v, frame_scale_sq * 0.25f);
+        fast_vec_scale(&velocity_adjustment, &velocity_adjustment, frame_scale_sq * 0.25f);
     }
-    v.f[2] *= frame_scale * -0.100000024f + 1.0f;
-    add_vector_xyz(((f32 *)(movement_state + 0x10)), ((f32 *)(movement_state + 0x10)), &v);
+    velocity_adjustment.f[2] *= frame_scale * -0.100000024f + 1.0f;
+    add_vector_xyz(((f32 *)(movement_state + 0x10)), ((f32 *)(movement_state + 0x10)), &velocity_adjustment);
     if (moby->state == 6)
         clamp_vector_length(((f32 *)(movement_state + 0x10)), ((f32 *)(movement_state + 0x10)), frame_time * 2.7f);
     hit = FUN_L00_00258ad0(moby, ((f32 *)(movement_state + 0x10)), D_L01_001DEB38.count, 0,
