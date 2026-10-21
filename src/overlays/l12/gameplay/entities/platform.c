@@ -1773,8 +1773,8 @@ void FUN_L12_002e7208(struct Moby *moby) {
 
 extern void FUN_L00_0025f3e8(void *, void *, int, float, float);
 
-void FUN_L12_002e7290(void *moby, void *b) {
-    FUN_L00_0025f3e8(moby, b, -1, 1.0f, 10.0f);
+void FUN_L12_002e7290(void *moby, void *effect_position) {
+    FUN_L00_0025f3e8(moby, effect_position, -1, 1.0f, 10.0f);
 }
 extern void FUN_L12_002e81e0(struct Moby *);
 extern void FUN_L12_002e8608(struct Moby *, float *);
