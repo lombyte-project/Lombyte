@@ -325,15 +325,15 @@ extern void clear_u64_value_eb978(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern s32 D_L03_00167074 NOT_SDA;
 /* vendor camera init: aims the camera data at the hero, resets its blend state and places it (FUN_L03_002eb7e0) */
-void FUN_L03_002eb978(void *arg) {
-    char *camera = arg;
+void FUN_L03_002eb978(void *camera_instance) {
+    char *camera = camera_instance;
     char *camera_config = *(char **)((char *)D_L03_0015EF50 + *(s16 *)(camera + 0x84) * 32 + 0x1C);
     char *target;
     char *pos;
     char *camera_data;
     char *timer;
     char *ang;
-    int tbl;
+    int camera_table_base;
     float *camera_parameter_values;
     int i;
     float f;
@@ -359,7 +359,7 @@ void FUN_L03_002eb978(void *arg) {
     qcopy(pos, &hero.motion.pos);
     timer = *(char **)(camera + 0x70);
     ((s32 *)timer)[12] = scale_game_frames(0x78);
-    tbl = D_L03_0015EF50;
+    camera_table_base = D_L03_0015EF50;
     ang = *(char **)(camera + 0x70) + 0xF0;
     *(s32 *)(ang + 0x30) = 0;
     *(s32 *)(ang + 0x28) = 0;
@@ -367,7 +367,7 @@ void FUN_L03_002eb978(void *arg) {
     *(float *)(ang + 0x34) = hero.motion.pos.f[2];
     *(s32 *)(ang + 0x20) = 0;
     *(s32 *)(ang + 0x24) = 0;
-    i = (*(s16 *)(camera + 0x84) << 5) + tbl;
+    i = (*(s16 *)(camera + 0x84) << 5) + camera_table_base;
     i += 0x10;
     camera_parameter_values = (float *)i;
     camera_rotation_angles[0] = camera_parameter_values[0];
