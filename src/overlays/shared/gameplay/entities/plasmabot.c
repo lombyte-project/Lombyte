@@ -1757,8 +1757,8 @@ extern Particle_2E17B8 *func_L00_0026DEA0_2E17B8(void *, float, float, float, in
 
 void FUN_L14_002e03b8(Moby *moby) {
     Vec4_2E17B8 pos;
-    Vec4_2E17B8 dir;
-    Vec4_2E17B8 vel;
+    Vec4_2E17B8 emission_axis_offset;
+    Vec4_2E17B8 particle_initial_velocity;
     Vec4_2E17B8 emission_position_offset;
     Vars_2E17B8 *debris_motion_state;
     Particle_2E17B8 *particle;
@@ -1771,10 +1771,10 @@ void FUN_L14_002e03b8(Moby *moby) {
     float size;
 
     debris_motion_state = *(Vars_2E17B8 **)&moby->pvars;
-    func_L00_001FF4B0_2E17B8(&dir, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.2f);
-    func_001F9BD8_2E17B8(&pos, &*(Vec4_2E17B8 *)&moby->pos, &dir);
-    func_002141A8_2E17B8(&vel, 0.005f, 0.03f);
-    particle = func_L00_002757E8_2E17B8(&pos, &vel, 0x7F, moby);
+    func_L00_001FF4B0_2E17B8(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.2f);
+    func_001F9BD8_2E17B8(&pos, &*(Vec4_2E17B8 *)&moby->pos, &emission_axis_offset);
+    func_002141A8_2E17B8(&particle_initial_velocity, 0.005f, 0.03f);
+    particle = func_L00_002757E8_2E17B8(&pos, &particle_initial_velocity, 0x7F, moby);
     if (particle != 0) {
         particle->life = func_002140F8_2E17B8(6000.0f, 32000.0f);
     }
@@ -1798,17 +1798,17 @@ void FUN_L14_002e03b8(Moby *moby) {
         fade->color = color;
         fade->scale = f;
     }
-    vel.f[0] = debris_motion_state->f18;
-    vel.f[1] = debris_motion_state->f1C;
-    vel.f[2] = 0.0f;
-    vel.f[3] = 1.0f;
+    particle_initial_velocity.f[0] = debris_motion_state->f18;
+    particle_initial_velocity.f[1] = debris_motion_state->f1C;
+    particle_initial_velocity.f[2] = 0.0f;
+    particle_initial_velocity.f[3] = 1.0f;
     if (moby->state == 0) {
-        func_L00_001FF4B0_2E17B8(&dir, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.95f);
+        func_L00_001FF4B0_2E17B8(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.95f);
     } else {
-        func_L00_001FF4B0_2E17B8(&dir, &*(Vec4_2E17B8 *)&moby->rot_row2, 1.15f);
-        vel.f[2] = D_0015ED60 * 0.03f;
+        func_L00_001FF4B0_2E17B8(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 1.15f);
+        particle_initial_velocity.f[2] = D_0015ED60 * 0.03f;
     }
-    func_001F9BD8_2E17B8(&pos, &*(Vec4_2E17B8 *)&moby->pos, &dir);
+    func_001F9BD8_2E17B8(&pos, &*(Vec4_2E17B8 *)&moby->pos, &emission_axis_offset);
     emission_position_offset.f[0] = func_001F9F90_2E17B8(moby->rot.z) * 0.3f;
     emission_position_offset.f[1] = func_001F9FA8_2E17B8(moby->rot.z) * 0.3f;
     emission_position_offset.f[2] = 0.0f;
@@ -1817,7 +1817,7 @@ void FUN_L14_002e03b8(Moby *moby) {
         pos.f[0] += func_L00_00258C80_2E17B8(0.0f, 0.1f);
         pos.f[1] += func_L00_00258C80_2E17B8(0.0f, 0.1f);
     }
-    func_L00_0026DA50_2E17B8(&pos, &vel, 0x4F007FFF, 0x1FFFFFFF,
+    func_L00_0026DA50_2E17B8(&pos, &particle_initial_velocity, 0x4F007FFF, 0x1FFFFFFF,
                              func_L00_00258BC8_2E17B8(func_001F9850_2E17B8(10), func_001F9850_2E17B8(20)), 1, 60000.0f);
     signed_particle_variation = func_002140B0_2E17B8(6);
     if (func_002140B0_2E17B8(2) != 0) {
@@ -1826,7 +1826,7 @@ void FUN_L14_002e03b8(Moby *moby) {
     size = func_002140F8_2E17B8(60000.0f, 140000.0f);
     color_intensity = func_L00_00258BC8_2E17B8(0x30, 0xFF);
     alpha = 0x60000000;
-    spawned_particle = func_L00_0026DEA0_2E17B8(&pos, 0.025f, 1.0f, 1.0f, signed_particle_variation, &vel, size, color_intensity | ((color_intensity << 16) | ((color_intensity << 8) | alpha)));
+    spawned_particle = func_L00_0026DEA0_2E17B8(&pos, 0.025f, 1.0f, 1.0f, signed_particle_variation, &particle_initial_velocity, size, color_intensity | ((color_intensity << 16) | ((color_intensity << 8) | alpha)));
     if (spawned_particle != 0) {
         ParticleFade_2E17B8 *ef;
         ef = &spawned_particle->fade;
