@@ -992,10 +992,10 @@ void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
         GRAVITY_MODE_VECTOR_AXIS = 1,
         GRAVITY_MODE_DIRECTION_AXIS = 2
     };
-    struct Hero *b = &hero;
+    struct Hero *hero_base = &hero;
     M00233810 moby_rotation_matrix;
     V00233810 offset_vector;
-    switch (b->unk20B3) {
+    switch (hero_base->unk20B3) {
     case GRAVITY_MODE_WORLD_Z:
         qcopy(out, in);
         out[2] += z;
@@ -1004,7 +1004,7 @@ void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
     case GRAVITY_MODE_DIRECTION_AXIS:
         FUN_001f99f8_00233810(&offset_vector);
         offset_vector.v[2] = z;
-        FUN_001fa050_00233810(&moby_rotation_matrix, ((u8 *)b->moby) + 0x40);
+        FUN_001fa050_00233810(&moby_rotation_matrix, ((u8 *)hero_base->moby) + 0x40);
         FUN_001f9d20_00233810(&offset_vector, &offset_vector, &moby_rotation_matrix);
         FUN_001f9a10_00233810(out, in, &offset_vector);
         break;
