@@ -2403,21 +2403,21 @@ extern float D_L00_001601F4 __attribute__((sda));
 extern float D_L00_001601F8 __attribute__((sda));
 void FUN_L00_0026eb88(unsigned char *particle) {
     OvlQuad position_scratch;
-    OvlQuad b[1];
+    OvlQuad target_offset_scratch[1];
     unsigned char *target_object = *(unsigned char **)(particle + 0x30);
     if (target_object == 0 || target_object[0x20] == 0xFE || target_object[0x20] == 0xFD || tick_26eb88(particle + 0xA)) {
         kill_26eb88(particle);
         return;
     }
     vsub_26eb88(&position_scratch, *(unsigned char **)(particle + 0x30) + 0x10, particle + 0x10);
-    b[0] = position_scratch;
-    vscl_26eb88(b, b, (D_L00_001601F4 - 1.0f) * D_0015ED60_26eb88 + 1.0f);
-    vadd_26eb88(&position_scratch, b, *(unsigned char **)(particle + 0x30) + 0x10);
+    target_offset_scratch[0] = position_scratch;
+    vscl_26eb88(target_offset_scratch, target_offset_scratch, (D_L00_001601F4 - 1.0f) * D_0015ED60_26eb88 + 1.0f);
+    vadd_26eb88(&position_scratch, target_offset_scratch, *(unsigned char **)(particle + 0x30) + 0x10);
     *(OvlQuad *)(particle + 0x10) = position_scratch;
     vsub_26eb88(&position_scratch, *(unsigned char **)(particle + 0x30) + 0x10, particle + 0x20);
-    b[0] = position_scratch;
-    vscl_26eb88(b, b, (D_L00_001601F8 - 1.0f) * D_0015ED60_26eb88 + 1.0f);
-    vadd_26eb88(&position_scratch, b, *(unsigned char **)(particle + 0x30) + 0x10);
+    target_offset_scratch[0] = position_scratch;
+    vscl_26eb88(target_offset_scratch, target_offset_scratch, (D_L00_001601F8 - 1.0f) * D_0015ED60_26eb88 + 1.0f);
+    vadd_26eb88(&position_scratch, target_offset_scratch, *(unsigned char **)(particle + 0x30) + 0x10);
     *(OvlQuad *)(particle + 0x20) = position_scratch;
     if (dist_26eb88(particle + 0x10, particle + 0x20) < 0.1f ||
         dist_26eb88(particle + 0x10, *(unsigned char **)(particle + 0x30) + 0x10) < 1.0f) {
