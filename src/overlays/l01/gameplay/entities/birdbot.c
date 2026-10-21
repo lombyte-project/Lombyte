@@ -3024,7 +3024,7 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
     int i;
     int j;
     GunshipTargets explosion_vector_or_target_indices;
-    GunshipTargets b;
+    GunshipTargets explosion_vector_or_filtered_target_indices;
     SplashVec dir;
     SplashVec pos;
     SplashVec col;
@@ -3042,8 +3042,8 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
             allocate_voice_for_bank_entry(1, 0, 0);
             queue_dialogue_message(0x53D6, -1);
         }
-        subtract_vector_xyz(&b, gunship_vars->vD0, gunship_vars->vE0);
-        *(u128 *)&explosion_vector_or_target_indices = *(u128 *)&b;
+        subtract_vector_xyz(&explosion_vector_or_filtered_target_indices, gunship_vars->vD0, gunship_vars->vE0);
+        *(u128 *)&explosion_vector_or_target_indices = *(u128 *)&explosion_vector_or_filtered_target_indices;
         spawn_explosion(bomber_jet_moby, &explosion_vector_or_target_indices, bomber_jet_moby->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, 1, 15.0f, 1, 1, -1, 0);
         spawn_debris((char *)bomber_jet_moby, &explosion_vector_or_target_indices, distance_scale * 2.0f);
         for (i = 0; i < 4; i++) {
@@ -3164,13 +3164,13 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                 int cnt;
                 explosion_vector_or_target_indices = gunship_no_targets;
                 j = 0;
-                b = gunship_no_targets;
+                explosion_vector_or_filtered_target_indices = gunship_no_targets;
                 cnt = 0;
                 for (i = 0; i < 4; i++) {
                     if (gunship_vars->targets[found][i] != -1) {
                         explosion_vector_or_target_indices.v[j] = gunship_vars->targets[found][i];
                         j++;
-                        b.v[cnt] = gunship_vars->targets[found][i];
+                        explosion_vector_or_filtered_target_indices.v[cnt] = gunship_vars->targets[found][i];
                         cnt++;
                     }
                 }
@@ -3179,7 +3179,7 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                 for (i = j - 1; i >= 0; i--) {
                     if (collision_line(camera_pos, camera_points + (explosion_vector_or_target_indices.v[i] << 7) + 0x30, 0x86, bomber_jet_moby, 0)) {
                         if (collision_hit.moby == 0 || collision_hit.moby != bomber_jet_moby) {
-                            b.v[i] = -1;
+                            explosion_vector_or_filtered_target_indices.v[i] = -1;
                             cnt--;
                             break;
                         }
@@ -3188,8 +3188,8 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                 if (cnt != 0) {
                     int k = 0;
                     for (i = 0; i < j; i++) {
-                        if (b.v[i] != -1) {
-                            explosion_vector_or_target_indices.v[k] = b.v[i];
+                        if (explosion_vector_or_filtered_target_indices.v[i] != -1) {
+                            explosion_vector_or_target_indices.v[k] = explosion_vector_or_filtered_target_indices.v[i];
                             k++;
                         }
                     }
