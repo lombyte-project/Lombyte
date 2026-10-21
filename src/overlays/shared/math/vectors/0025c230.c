@@ -204,7 +204,7 @@ int mine_fall(char *moby, char *st) {
     char *collision_metadata;
     int flags = 0;
 
-    float sc, f21, f20, f12, motion_or_record_value, r, rr, one;
+    float sc, f21, landing_prediction_divisor, f12, motion_or_record_value, r, rr, one;
     int result_count, i;
 
     *(float *)(st + 0x8) = *(float *)(st + 0x8) - *(float *)(st + 0x10);
@@ -276,16 +276,16 @@ int mine_fall(char *moby, char *st) {
                 *(int *)(moby + 0x58) = 0;
             } else {
                 float negative_half_gravity_step = *(float *)(st + 0x10) * -0.5f;
-                f20 = 60.0f;
+                landing_prediction_divisor = 60.0f;
                 result_count = FUN_L00_002595a0(&larger_quadratic_root, &smaller_quadratic_root, negative_half_gravity_step, *(float *)(st + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - f21);
-                if (result_count > 0 && 0.0f < larger_quadratic_root && larger_quadratic_root < f20) {
-                    f20 = larger_quadratic_root;
+                if (result_count > 0 && 0.0f < larger_quadratic_root && larger_quadratic_root < landing_prediction_divisor) {
+                    landing_prediction_divisor = larger_quadratic_root;
                 }
-                if (f20 < 0.0001f) {
-                    f20 = 0.0001f;
+                if (landing_prediction_divisor < 0.0001f) {
+                    landing_prediction_divisor = 0.0001f;
                 }
                 motion_or_record_value = compute_interpolated_record_value(moby);
-                rr = (*(float *)(st + 0x54) - motion_or_record_value) / f20;
+                rr = (*(float *)(st + 0x54) - motion_or_record_value) / landing_prediction_divisor;
                 if (2.0f < rr) {
                     rr = 2.0f;
                 } else if (rr < 0.0f) {
