@@ -130,16 +130,16 @@ extern T_259a88 D_L00_00178100_259a88[] __asm__("D_L00_00178100") __attribute__(
 void FUN_001f99f8_259a88(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00259a88(unsigned char *m, L_259a88 *src);
 void FUN_L00_00259a88(unsigned char *owner_moby, L_259a88 *src) {
-    L_259a88 l;
+    L_259a88 hit_descriptor_copy;
     int i = D_L00_00173E40_259a88.idx;
     T_259a88 *hit_record;
-    ((u128_259a88 *)&l)[0] = ((u128_259a88 *)src)[0];
-    ((u128_259a88 *)&l)[1] = ((u128_259a88 *)src)[1];
-    ((u128_259a88 *)&l)[2] = ((u128_259a88 *)src)[2];
-    src = &l;
+    ((u128_259a88 *)&hit_descriptor_copy)[0] = ((u128_259a88 *)src)[0];
+    ((u128_259a88 *)&hit_descriptor_copy)[1] = ((u128_259a88 *)src)[1];
+    ((u128_259a88 *)&hit_descriptor_copy)[2] = ((u128_259a88 *)src)[2];
+    src = &hit_descriptor_copy;
     if (owner_moby[0xA4] != 0xFF) {
         T_259a88 *existing_hit = &D_L00_00178100_259a88[owner_moby[0xA4]];
-        if (existing_hit->owner == owner_moby && l.f < existing_hit->f)
+        if (existing_hit->owner == owner_moby && hit_descriptor_copy.f < existing_hit->f)
             return;
     }
     hit_record = &D_L00_00178100_259a88[i];
