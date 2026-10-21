@@ -1173,7 +1173,7 @@ int FUN_L14_00307620(struct Moby *moby) {
     float bank;
     float pitch;
     int end;
-    int idx;
+    int voice_slot_index;
 
     end = path_step_7620(D_L14_001B0BB0_7620[*(int *)(flying_car_data + 0x78)], pos, flying_car_data + 0x70, flying_car_data + 0x74, *(short *)(flying_car_data + 0x8E),
                          *(float *)(flying_car_data + 0xC8) * frame_time);
@@ -1189,11 +1189,11 @@ int FUN_L14_00307620(struct Moby *moby) {
             attached_part_moby->pos.y = 5.0f;
             attached_part_moby->pos.x = 5.0f;
         }
-        idx = *(int *)(flying_car_data + 0x7C);
-        if (idx != -1) {
-            VoicePoolWindow *voice_entry = (VoicePoolWindow *)((u8 *)&voice_pool + idx * 0x70);
+        voice_slot_index = *(int *)(flying_car_data + 0x7C);
+        if (voice_slot_index != -1) {
+            VoicePoolWindow *voice_entry = (VoicePoolWindow *)((u8 *)&voice_pool + voice_slot_index * 0x70);
             if (voice_entry->voice.owner == (VoiceMoby *)moby && voice_entry->voice.state != 0)
-                release_voice_slot(idx);
+                release_voice_slot(voice_slot_index);
         }
         *(int *)(flying_car_data + 0x7C) = -1;
         return 0;
