@@ -350,7 +350,7 @@ int FUN_L01_002e6790(void *arg, int *idx) {
     PathPickMoby *path_follower_moby = arg;
     PathPickTarget target;
     SplashVec pt;
-    PathPickVars *v;
+    PathPickVars *path_pick_vars;
     PathFollow *f;
     s32 fast;
     s32 prev;
@@ -362,23 +362,23 @@ int FUN_L01_002e6790(void *arg, int *idx) {
     f32 node_target_heading_difference;
     f32 best_d;
     f32 best_a;
-    f32 r;
+    f32 target_search_radius;
     f32 dist;
 
-    v = path_follower_moby->vars;
+    path_pick_vars = path_follower_moby->vars;
     fast = 0;
-    f = &v->follow;
-    if (v->w38 != 0 || v->h1E2 != 0) {
+    f = &path_pick_vars->follow;
+    if (path_pick_vars->w38 != 0 || path_pick_vars->h1E2 != 0) {
         fast = 1;
     }
-    r = fast ? v->radius * 2.0f : v->radius;
+    target_search_radius = fast ? path_pick_vars->radius * 2.0f : path_pick_vars->radius;
     prev = 0;
     next = 0;
-    FUN_L01_00274b78(path_follower_moby, &target, r);
+    FUN_L01_00274b78(path_follower_moby, &target, target_search_radius);
     best_d = 10000.0f;
     best_a = 0.0f;
     best = 0;
-    if (v->ordered != 0) {
+    if (path_pick_vars->ordered != 0) {
         do {
             if (*idx < f->path->count - 1) {
                 *idx = (*idx + f->path->count + f->dir) % f->path->count;
@@ -391,7 +391,7 @@ int FUN_L01_002e6790(void *arg, int *idx) {
     }
     last = 0;
     for (i = 0; i < f->path->count; i++) {
-        if (v->stops_only == 0 || f->path->pts[i].w == 1.0f) {
+        if (path_pick_vars->stops_only == 0 || f->path->pts[i].w == 1.0f) {
             dist = vector_distance(&f->path->pts[i], &path_follower_moby->pos);
             if (dist < best_d) {
                 prev = last;
@@ -420,7 +420,7 @@ int FUN_L01_002e6790(void *arg, int *idx) {
             if (fast) {
                 qcopy(&pt, &f->path->pts[*idx]);
                 candidate_node_distance = FUN_001f9b48(&target, &pt);
-                if ((v->stops_only == 0 || pt.f[3] == 1.0f) && candidate_node_distance < best_d) {
+                if ((path_pick_vars->stops_only == 0 || pt.f[3] == 1.0f) && candidate_node_distance < best_d) {
                     best = *idx;
                     best_d = candidate_node_distance;
                 }
@@ -430,7 +430,7 @@ int FUN_L01_002e6790(void *arg, int *idx) {
                                                       fast_arc_tan(target.pos.f[0] - path_follower_moby->pos.f[0],
                                                                    target.pos.f[1] - path_follower_moby->pos.f[1]));
                 candidate_node_distance = FUN_001f9b48(&path_follower_moby->pos, &pt);
-                if (v->stops_only == 0 || pt.f[3] == 1.0f) {
+                if (path_pick_vars->stops_only == 0 || pt.f[3] == 1.0f) {
                     if (node_target_heading_difference < 1.5707964f) {
                         if (best_a < node_target_heading_difference) {
                             best = *idx;
