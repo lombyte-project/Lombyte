@@ -3391,7 +3391,7 @@ void glove_of_doom_update(struct Moby *moby) {
     OvlVec4 pos;
     OvlVec4 offset;
     OvlVec4 local;
-    OvlVec4 mat[4];
+    OvlVec4 grip_bone_transform[4];
     OvlVec4 grip;
     CarrierVars *vars = (CarrierVars *)moby->pvars;
 
@@ -3400,8 +3400,8 @@ void glove_of_doom_update(struct Moby *moby) {
     offset.f[1] = -0.14f;
     offset.f[2] = -0.05f;
     moby_point_position((u8 *)moby, 0, &pos);
-    build_moby_bone_transform(moby, 0, mat);
-    transform_vector(&local, &offset, mat);
+    build_moby_bone_transform(moby, 0, grip_bone_transform);
+    transform_vector(&local, &offset, grip_bone_transform);
     add_vector_xyz(&vars->grip, &pos, &local);
     if (vars->held != 0) {
         vars->held->collision_disable = 1;
