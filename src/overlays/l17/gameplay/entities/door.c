@@ -2455,7 +2455,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
     Vars1382 *robot_dog_vars;
     unsigned char *tgt;
     int clip_volume_suppressed;
-    int a;
+    int clip_volume_id_or_animation_value;
     int secondary_clip_volume_id;
     float heading_vector[4];
     float pos[4];
@@ -2463,15 +2463,15 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
     clip_volume_suppressed = 0;
     robot_dog_vars = *(Vars1382 **)(robot_dog_moby + 0x78);
     if (robot_dog_moby[0x20] != 12) {
-        a = robot_dog_vars->c2B0;
-        if (a != -1) {
-            clip_volume_suppressed = is_point_inside_clip_volume(D_L17_001676C0, a) == 0;
+        clip_volume_id_or_animation_value = robot_dog_vars->c2B0;
+        if (clip_volume_id_or_animation_value != -1) {
+            clip_volume_suppressed = is_point_inside_clip_volume(D_L17_001676C0, clip_volume_id_or_animation_value) == 0;
             secondary_clip_volume_id = robot_dog_vars->c2B4;
             if (secondary_clip_volume_id != -1) {
                 clip_volume_suppressed &= is_point_inside_clip_volume(D_L17_001676C0, secondary_clip_volume_id) == 0;
             }
         } else if (robot_dog_vars->c2B8 != -1) {
-            clip_volume_suppressed = is_point_inside_clip_volume(D_L17_001676C0, a);
+            clip_volume_suppressed = is_point_inside_clip_volume(D_L17_001676C0, clip_volume_id_or_animation_value);
             secondary_clip_volume_id = robot_dog_vars->c2BC;
             if (secondary_clip_volume_id != -1) {
                 clip_volume_suppressed |= is_point_inside_clip_volume(D_L17_001676C0, secondary_clip_volume_id);
@@ -2604,17 +2604,17 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             } else if (robot_dog_vars->t1E0 == 0 && robot_dog_vars->mode == 0) {
                 robot_dog_moby[0x20] = 3;
                 if (robot_dog_moby[0x53] != 0) {
-                    a = random_integer_below(
+                    clip_volume_id_or_animation_value = random_integer_below(
                         *(unsigned char *)(*(char **)(*(char **)(robot_dog_moby + 0x24) + 0x48) + 0x10));
-                    blend_moby_animation_c(robot_dog_moby, 0, a, scale_game_frames(10));
+                    blend_moby_animation_c(robot_dog_moby, 0, clip_volume_id_or_animation_value, scale_game_frames(10));
                 }
             }
         } else if (random_integer_below(0x1F) == 0) {
             robot_dog_moby[0x20] = 3;
             if (robot_dog_moby[0x53] != 0) {
-                a = random_integer_below(
+                clip_volume_id_or_animation_value = random_integer_below(
                     *(unsigned char *)(*(char **)(*(char **)(robot_dog_moby + 0x24) + 0x48) + 0x10));
-                blend_moby_animation_c(robot_dog_moby, 0, a, scale_game_frames(10));
+                blend_moby_animation_c(robot_dog_moby, 0, clip_volume_id_or_animation_value, scale_game_frames(10));
             }
         }
         break;
@@ -2622,9 +2622,9 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
         if (robot_dog_moby[0x70] & 2) {
             robot_dog_moby[0x20] = 1;
             if (robot_dog_moby[0x53] != 0) {
-                a = random_integer_below(
+                clip_volume_id_or_animation_value = random_integer_below(
                     *(unsigned char *)(*(char **)(*(char **)(robot_dog_moby + 0x24) + 0x48) + 0x10) - 1);
-                blend_moby_animation_c(robot_dog_moby, 0, a, scale_game_frames(10));
+                blend_moby_animation_c(robot_dog_moby, 0, clip_volume_id_or_animation_value, scale_game_frames(10));
             }
         }
         break;
