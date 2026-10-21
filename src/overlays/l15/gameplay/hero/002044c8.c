@@ -177,14 +177,14 @@ void FUN_L00_002a9be0_210ce8(void) __asm__("FUN_L00_002a9be0");
 void FUN_001f99f8_210ce8(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
-s32 FUN_L15_00208e10(s32 arg) {
+s32 FUN_L15_00208e10(s32 apply_hit_reaction) {
     u8 *hero_moby;
-    T_210ce8 *tbl;
+    T_210ce8 *incoming_hit_record;
     u8 *mob;
     s32 flag;
     s32 id;
-    f32 horizontal_knockback_scale, b, knockback_scale_factor;
-    V_210ce8 v;
+    f32 horizontal_knockback_scale, vertical_knockback_scale, knockback_scale_factor;
+    V_210ce8 knockback_vector;
 
     if (hero.state.control_mode == 0x14) {
         return 0;
@@ -206,42 +206,42 @@ s32 FUN_L15_00208e10(s32 arg) {
     if (hero_moby[0xA4] == 0xFF) {
         return 0;
     }
-    tbl = &D_L15_00178700_210ce8[hero_moby[0xA4]];
-    if (tbl->p34 != hero_moby) {
+    incoming_hit_record = &D_L15_00178700_210ce8[hero_moby[0xA4]];
+    if (incoming_hit_record->p34 != hero_moby) {
         return 0;
     }
     if (hero.vehicle_mode == 2) {
-        if (!(tbl->i24 & 2)) {
+        if (!(incoming_hit_record->i24 & 2)) {
             return 0;
         }
-    } else if ((tbl->i24 ^ 1) & 1) {
+    } else if ((incoming_hit_record->i24 ^ 1) & 1) {
         return 0;
     }
     D_0013DF88[D_0015ED84_210ce8]++;
-    hero.unk2280 = (struct Moby *)tbl->p20;
+    hero.unk2280 = (struct Moby *)incoming_hit_record->p20;
     D_0015EEA8++;
     if (hero.vehicle_mode == 2) {
-        hero.unk1630 -= FUN_001fa6d0_210ce8(tbl->f2C);
+        hero.unk1630 -= FUN_001fa6d0_210ce8(incoming_hit_record->f2C);
         if (hero.unk1630 < 0) {
             hero.unk1630 = 0;
         }
     }
-    if (arg == 0) {
+    if (apply_hit_reaction == 0) {
         return 1;
     }
     FUN_L00_00206c08_210ce8();
     flag = 0;
-    if (tbl->i30 & 1) {
-        qcopy(&v, &tbl->v10);
-        if (*(f32 *)((u8 *)tbl + 0x1C) == 5627.9248046875f) {
+    if (incoming_hit_record->i30 & 1) {
+        qcopy(&knockback_vector, &incoming_hit_record->v10);
+        if (*(f32 *)((u8 *)incoming_hit_record + 0x1C) == 5627.9248046875f) {
             flag = 1;
         }
-    } else if (tbl->p20 != 0) {
-        FUN_001f9a28_210ce8(&v, &hero.motion.pos, tbl->p20 + 0x10);
+    } else if (incoming_hit_record->p20 != 0) {
+        FUN_001f9a28_210ce8(&knockback_vector, &hero.motion.pos, incoming_hit_record->p20 + 0x10);
     } else {
-        v.f[0] = FUN_001f9dc8_210ce8(FUN_001fa580_210ce8(hero.motion.rot.f[2], 3.1415927f));
-        v.f[1] = FUN_001f9de0_210ce8(FUN_001fa580_210ce8(hero.motion.rot.f[2], 3.1415927f));
-        v.i[2] = 0;
+        knockback_vector.f[0] = FUN_001f9dc8_210ce8(FUN_001fa580_210ce8(hero.motion.rot.f[2], 3.1415927f));
+        knockback_vector.f[1] = FUN_001f9de0_210ce8(FUN_001fa580_210ce8(hero.motion.rot.f[2], 3.1415927f));
+        knockback_vector.i[2] = 0;
     }
     switch (hero.vehicle_mode) {
     case HERO_VEHICLE_MODE_ON_FOOT:
@@ -292,35 +292,35 @@ s32 FUN_L15_00208e10(s32 arg) {
         }
         knockback_scale_factor = D_0015ED6C_210ce8;
         horizontal_knockback_scale = knockback_scale_factor * 5.7f;
-        b = knockback_scale_factor * 2.4f;
+        vertical_knockback_scale = knockback_scale_factor * 2.4f;
         if (hero.unk12E7 != 0) {
             horizontal_knockback_scale = 0.0f;
-            b = knockback_scale_factor * 1.7f;
+            vertical_knockback_scale = knockback_scale_factor * 1.7f;
         }
-        FUN_L00_00210c80_210ce8(&v, flag, horizontal_knockback_scale, b);
-        if (flag != 0 && tbl->b28 == 4) {
-            v.f[2] += v.f[2];
+        FUN_L00_00210c80_210ce8(&knockback_vector, flag, horizontal_knockback_scale, vertical_knockback_scale);
+        if (flag != 0 && incoming_hit_record->b28 == 4) {
+            knockback_vector.f[2] += knockback_vector.f[2];
         }
         break;
     case 2:
-        if ((tbl->i24 & 4) || hero.unk1630 <= 0) {
+        if ((incoming_hit_record->i24 & 4) || hero.unk1630 <= 0) {
             hero_set_state(0x5D, 1);
             FUN_L00_002a9be0_210ce8();
             if (hero.air_frames.s == 0) {
-                FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 7.0f,
+                FUN_L00_00210c80_210ce8(&knockback_vector, flag, D_0015ED6C_210ce8 * 7.0f,
                                         D_0015ED6C_210ce8 * 3.5f);
                 break;
             }
         }
-        FUN_001f99f8_210ce8(&v);
+        FUN_001f99f8_210ce8(&knockback_vector);
         break;
     case 3:
         hero_set_state(0x56, 1);
-        FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 5.0f, D_0015ED6C_210ce8 * 2.4f);
+        FUN_L00_00210c80_210ce8(&knockback_vector, flag, D_0015ED6C_210ce8 * 5.0f, D_0015ED6C_210ce8 * 2.4f);
         break;
     }
-    FUN_001f9a10_210ce8(&hero.motion.velocity, &hero.motion.velocity, &v);
-    FUN_001f9a10_210ce8(&hero.motion.displacement, &hero.motion.displacement, &v);
+    FUN_001f9a10_210ce8(&hero.motion.velocity, &hero.motion.velocity, &knockback_vector);
+    FUN_001f9a10_210ce8(&hero.motion.displacement, &hero.motion.displacement, &knockback_vector);
     return 1;
 }
 #include "eetypes.h"
