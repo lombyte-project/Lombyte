@@ -1868,20 +1868,20 @@ extern int FUN_L00_00261968_c(int, float *, float *) __asm__("FUN_L00_00261968")
 
 int FUN_L05_00303e50(char *moby, float *goal, float probe_offset_length)
 {
-    float v[4];
-    float w[4];
+    float probe_position[4];
+    float offset_probe_position[4];
     char *moby_data = *(char **)(moby + 0x78);
     float probe_heading;
     probe_heading = FUN_001f9e90_c(goal[0] - *(float *)(moby + 0x10), goal[1] - *(float *)(moby + 0x14));
     probe_heading = FUN_001fa580_c(probe_heading, *(float *)(moby_data + 0x294) * 1.5f);
-    v[0] = FUN_001f9dc8_c(probe_heading) * FUN_001f9b48_c(goal, (float *)(moby + 0x10));
-    v[1] = FUN_001f9de0_c(probe_heading) * FUN_001f9b48_c(goal, (float *)(moby + 0x10));
-    *(int *)&v[2] = 0;
-    FUN_001f9a10_c(v, v, (float *)(moby + 0x10));
-    FUN_001f9a28_c(w, v, goal);
-    FUN_001f9bf8_c(w, w, probe_offset_length);
-    FUN_001f9a10_c(w, w, (float *)(moby + 0x10));
-    return FUN_L00_00261968_c(*(int *)(moby_data + 0x2C0), v, w) == 0;
+    probe_position[0] = FUN_001f9dc8_c(probe_heading) * FUN_001f9b48_c(goal, (float *)(moby + 0x10));
+    probe_position[1] = FUN_001f9de0_c(probe_heading) * FUN_001f9b48_c(goal, (float *)(moby + 0x10));
+    *(int *)&probe_position[2] = 0;
+    FUN_001f9a10_c(probe_position, probe_position, (float *)(moby + 0x10));
+    FUN_001f9a28_c(offset_probe_position, probe_position, goal);
+    FUN_001f9bf8_c(offset_probe_position, offset_probe_position, probe_offset_length);
+    FUN_001f9a10_c(offset_probe_position, offset_probe_position, (float *)(moby + 0x10));
+    return FUN_L00_00261968_c(*(int *)(moby_data + 0x2C0), probe_position, offset_probe_position) == 0;
 }
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
