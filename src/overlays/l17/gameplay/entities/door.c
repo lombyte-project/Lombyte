@@ -64,13 +64,13 @@ void door_update(struct Moby *door_moby) {
         DOOR_STATE_RETURN_TO_ORIGIN = 5
     };
     char *door_vars = (char *)door_moby->pvars;
-    float v[4];
+    float position_offset[4];
     float updated_position[4];
-    float ang;
+    float movement_heading;
     float k;
     float k2;
     float displacement_sample;
-    int idx;
+    int voice_slot_index;
 
     if ((*(int *)(door_vars + ((0x18)))) == -1 || (*(int *)(door_vars + ((0x1C)))) == -1) {
         mark_moby_for_removal(door_moby);
@@ -100,24 +100,24 @@ void door_update(struct Moby *door_moby) {
         (*(float *)(door_vars + ((0x14)))) = displacement_sample + k;
         if ((door_moby->oclass) == 0x55C || (door_moby->oclass) == 0x55D ||
             (door_moby->oclass) == 0x557 || (door_moby->oclass) == 0x559) {
-            ang = fast_add_rotations(1.5707964f, door_moby->rot.z);
-            v[0] = fast_cos(ang) * (*(float *)(door_vars + ((0x14))));
-            v[1] = fast_sin(ang) * (*(float *)(door_vars + ((0x14))));
-            v[2] = 0.0f;
+            movement_heading = fast_add_rotations(1.5707964f, door_moby->rot.z);
+            position_offset[0] = fast_cos(movement_heading) * (*(float *)(door_vars + ((0x14))));
+            position_offset[1] = fast_sin(movement_heading) * (*(float *)(door_vars + ((0x14))));
+            position_offset[2] = 0.0f;
         } else {
-            v[0] = fast_cos(door_moby->rot.z) * (*(float *)(door_vars + ((0x14))));
-            v[1] = fast_sin(door_moby->rot.z) * (*(float *)(door_vars + ((0x14))));
-            v[2] = 0.0f;
+            position_offset[0] = fast_cos(door_moby->rot.z) * (*(float *)(door_vars + ((0x14))));
+            position_offset[1] = fast_sin(door_moby->rot.z) * (*(float *)(door_vars + ((0x14))));
+            position_offset[2] = 0.0f;
         }
-        add_vector_xyz(updated_position, door_vars, v);
+        add_vector_xyz(updated_position, door_vars, position_offset);
         *(OvlQuad *)&door_moby->pos = *(OvlQuad *)updated_position;
         if (absolute_float_c((*(float *)(door_vars + ((0x14))))) > 2.0f) {
-            idx = (*(int *)(door_vars + ((0x20))));
-            if (idx != -1) {
-                char *e = (char *)D_0013E633 - 0xE80 + idx * 0x70;
+            voice_slot_index = (*(int *)(door_vars + ((0x20))));
+            if (voice_slot_index != -1) {
+                char *e = (char *)D_0013E633 - 0xE80 + voice_slot_index * 0x70;
                 if (*(char **)(e + 0x88) == door_moby) {
                     if (*(unsigned char *)(e + 0x74) != 0)
-                        release_voice_slot(idx);
+                        release_voice_slot(voice_slot_index);
                 }
             }
             (*(int *)(door_vars + ((0x20)))) = -1;
@@ -126,12 +126,12 @@ void door_update(struct Moby *door_moby) {
         break;
     case DOOR_STATE_WAIT_AT_ORIGIN:
         (*(float *)(door_vars + ((0x14)))) = 0.0f;
-        idx = (*(int *)(door_vars + ((0x20))));
-        if (idx != -1) {
-            char *e = (char *)D_0013E633 - 0xE80 + idx * 0x70;
+        voice_slot_index = (*(int *)(door_vars + ((0x20))));
+        if (voice_slot_index != -1) {
+            char *e = (char *)D_0013E633 - 0xE80 + voice_slot_index * 0x70;
             if (*(char **)(e + 0x88) == door_moby) {
                 if (*(unsigned char *)(e + 0x74) != 0)
-                    release_voice_slot(idx);
+                    release_voice_slot(voice_slot_index);
             }
         }
         (*(int *)(door_vars + ((0x20)))) = -1;
@@ -155,12 +155,12 @@ void door_update(struct Moby *door_moby) {
     case 3:
         break;
     case DOOR_STATE_WAIT_DISPLACED:
-        idx = (*(int *)(door_vars + ((0x20))));
-        if (idx != -1) {
-            char *e = (char *)D_0013E633 - 0xE80 + idx * 0x70;
+        voice_slot_index = (*(int *)(door_vars + ((0x20))));
+        if (voice_slot_index != -1) {
+            char *e = (char *)D_0013E633 - 0xE80 + voice_slot_index * 0x70;
             if (*(char **)(e + 0x88) == door_moby) {
                 if (*(unsigned char *)(e + 0x74) != 0)
-                    release_voice_slot(idx);
+                    release_voice_slot(voice_slot_index);
             }
         }
         (*(int *)(door_vars + ((0x20)))) = -1;
@@ -194,38 +194,38 @@ void door_update(struct Moby *door_moby) {
         displacement_sample = absolute_float_c((*(float *)(door_vars + ((0x14)))));
         k2 = frame_time * 3.0f;
         if (displacement_sample > k2) {
-            float g = (*(float *)(door_vars + ((0x14))));
-            float r;
+            float previous_displacement = (*(float *)(door_vars + ((0x14))));
+            float return_displacement;
             if (door_moby->command == 0) {
                 float negative_return_step = -k2;
-                r = g - negative_return_step;
+                return_displacement = previous_displacement - negative_return_step;
             } else {
-                r = g - k2;
+                return_displacement = previous_displacement - k2;
             }
-            (*(float *)(door_vars + ((0x14)))) = r;
+            (*(float *)(door_vars + ((0x14)))) = return_displacement;
         } else {
             (*(float *)(door_vars + ((0x14)))) = 0.0f;
         }
         if ((door_moby->oclass) == 0x55C || (door_moby->oclass) == 0x55D ||
             (door_moby->oclass) == 0x557 || (door_moby->oclass) == 0x559) {
-            ang = fast_add_rotations(1.5707964f, door_moby->rot.z);
-            v[0] = fast_cos(ang) * (*(float *)(door_vars + ((0x14))));
-            v[1] = fast_sin(ang) * (*(float *)(door_vars + ((0x14))));
-            v[2] = 0.0f;
+            movement_heading = fast_add_rotations(1.5707964f, door_moby->rot.z);
+            position_offset[0] = fast_cos(movement_heading) * (*(float *)(door_vars + ((0x14))));
+            position_offset[1] = fast_sin(movement_heading) * (*(float *)(door_vars + ((0x14))));
+            position_offset[2] = 0.0f;
         } else {
-            v[0] = fast_cos(door_moby->rot.z) * (*(float *)(door_vars + ((0x14))));
-            v[1] = fast_sin(door_moby->rot.z) * (*(float *)(door_vars + ((0x14))));
-            v[2] = 0.0f;
+            position_offset[0] = fast_cos(door_moby->rot.z) * (*(float *)(door_vars + ((0x14))));
+            position_offset[1] = fast_sin(door_moby->rot.z) * (*(float *)(door_vars + ((0x14))));
+            position_offset[2] = 0.0f;
         }
-        add_vector_xyz(updated_position, door_vars, v);
+        add_vector_xyz(updated_position, door_vars, position_offset);
         *(OvlQuad *)&door_moby->pos = *(OvlQuad *)updated_position;
         if ((*(float *)(door_vars + ((0x14)))) == 0.0f) {
-            idx = (*(int *)(door_vars + ((0x20))));
-            if (idx != -1) {
-                char *e = (char *)D_0013E633 - 0xE80 + idx * 0x70;
+            voice_slot_index = (*(int *)(door_vars + ((0x20))));
+            if (voice_slot_index != -1) {
+                char *e = (char *)D_0013E633 - 0xE80 + voice_slot_index * 0x70;
                 if (*(char **)(e + 0x88) == door_moby) {
                     if (*(unsigned char *)(e + 0x74) != 0)
-                        release_voice_slot(idx);
+                        release_voice_slot(voice_slot_index);
                 }
             }
             (*(int *)(door_vars + ((0x20)))) = -1;
