@@ -133,8 +133,8 @@ void FUN_L00_002c40a0(S_2c40a0 *self) {
     O_2c40a0 *moby_vars = self->p78;
     P_2c40a0 *P = &D_0013F350_2c40a0;
     s16 proximity_response_gate = P->h1E2;
-    f32 v[4];
-    f32 horizontal_separation_error, len, g;
+    f32 horizontal_displacement[4];
+    f32 horizontal_separation_error, horizontal_separation_distance, ground_height;
     if (moby_vars->i68 == 0) {
         if (proximity_response_gate == 0)
             return;
@@ -144,9 +144,9 @@ void FUN_L00_002c40a0(S_2c40a0 *self) {
             return;
         moby_vars->i68 = 1;
     }
-    FUN_001f9a28_2c40a0(v, self->v10, P->v80);
-    v[2] = 0.0f;
-    horizontal_separation_error = FUN_001f9b20_2c40a0(v) - 1.4f;
+    FUN_001f9a28_2c40a0(horizontal_displacement, self->v10, P->v80);
+    horizontal_displacement[2] = 0.0f;
+    horizontal_separation_error = FUN_001f9b20_2c40a0(horizontal_displacement) - 1.4f;
     if (horizontal_separation_error > 0.0f)
         horizontal_separation_error = 0.0f;
     if (proximity_response_gate == 0)
@@ -157,22 +157,22 @@ void FUN_L00_002c40a0(S_2c40a0 *self) {
         if (FUN_001f99c0_2c40a0(self->f18 - FUN_00213508_2c40a0(self->v10, 0.5f, 0)) < 0.02f)
             moby_vars->i68 = 0;
     }
-    len = FUN_001f9af0_2c40a0(v);
-    if (len < moby_vars->f60)
-        moby_vars->f60 = len;
-    if (moby_vars->f60 < len)
-        FUN_001f9bf8_2c40a0(v, v, moby_vars->f60);
-    FUN_L00_00258830_2c40a0(self, v, 0.5f, 0.4f, 0.0f, 0);
-    g = FUN_00213508_2c40a0(self->v10, 0.5f, 0);
-    if (self->f18 < g) {
-        self->f18 = g;
+    horizontal_separation_distance = FUN_001f9af0_2c40a0(horizontal_displacement);
+    if (horizontal_separation_distance < moby_vars->f60)
+        moby_vars->f60 = horizontal_separation_distance;
+    if (moby_vars->f60 < horizontal_separation_distance)
+        FUN_001f9bf8_2c40a0(horizontal_displacement, horizontal_displacement, moby_vars->f60);
+    FUN_L00_00258830_2c40a0(self, horizontal_displacement, 0.5f, 0.4f, 0.0f, 0);
+    ground_height = FUN_00213508_2c40a0(self->v10, 0.5f, 0);
+    if (self->f18 < ground_height) {
+        self->f18 = ground_height;
         moby_vars->f64 = 0.0f;
         return;
     }
     moby_vars->f64 -= D_0015ED70_2c40a0 * 24.0f;
     self->f18 += moby_vars->f64;
-    if (self->f18 < g)
-        self->f18 = g;
+    if (self->f18 < ground_height)
+        self->f18 = ground_height;
 }
 s32 collision_hit_material() __asm__("FUN_001f0b58");
 void FUN_L00_002c3440();
