@@ -2000,12 +2000,12 @@ void FUN_L00_00275aa0(char *particle) {
     particle[8] += particle_data[0xA];
     if (*(short *)(particle_data + 8) - *(short *)(particle + 0xA) < 6) {
         int initial_alpha;
-        int c2;
+        int half_initial_alpha;
         interpolation_factor = (float)(*(short *)(particle_data + 8) - *(short *)(particle + 0xA)) / 5.0f;
         *(float *)(particle + 0xC) = *(float *)(particle_data + 4) + ((*(float *)(particle + 0x20) + *(float *)(particle_data + 4)) * 0.5f - *(float *)(particle_data + 4)) * interpolation_factor;
-        c2 = (unsigned char)particle_data[0xB] >> 1;
+        half_initial_alpha = (unsigned char)particle_data[0xB] >> 1;
         initial_alpha = (unsigned char)particle_data[0xB];
-        al = truncate_float_to_s32_c((float)initial_alpha + (float)(c2 - initial_alpha) * interpolation_factor);
+        al = truncate_float_to_s32_c((float)initial_alpha + (float)(half_initial_alpha - initial_alpha) * interpolation_factor);
     } else {
         interpolation_factor = (float)*(short *)(particle + 0xA) / convert_integer_to_float(*(short *)(particle_data + 8) - 6);
         *(float *)(particle + 0xC) = *(float *)(particle + 0x20) + ((*(float *)(particle + 0x20) + *(float *)(particle_data + 4)) * 0.5f - *(float *)(particle + 0x20)) * interpolation_factor;
