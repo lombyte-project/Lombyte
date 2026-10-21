@@ -44,7 +44,7 @@ extern float D_L12_00161A08 __attribute__((sda));
 void water_reservoir_update(struct Moby *moby) __asm__("FUN_L12_002ec720");
 void water_reservoir_update(struct Moby *moby) {
     float *data = (float *)moby->pvars;
-    float pos[4], offset0[4], offset1[4], diff0[4], diff1[4];
+    float pos[4], offset0[4], offset1[4], pos_offset_delta[4], offset_pair_delta[4];
     float fraction, frame_scale;
     int scaled;
     if (moby->state != 0) {
@@ -83,24 +83,24 @@ update:
                 random_vector_72(pos, 0.0f, D_L12_001619D4);
                 random_vector_72(offset0, 0.0f, D_L12_001619D4);
                 random_vector_72(offset1, 0.0f, D_L12_001619D4);
-                subtract_vector_72(diff0, pos, offset0);
-                diff0[2] += D_L12_00161A00 - D_L12_001619FC;
-                subtract_vector_72(diff1, offset0, offset1);
-                diff1[2] += D_L12_00161A04 - D_L12_00161A00;
+                subtract_vector_72(pos_offset_delta, pos, offset0);
+                pos_offset_delta[2] += D_L12_00161A00 - D_L12_001619FC;
+                subtract_vector_72(offset_pair_delta, offset0, offset1);
+                offset_pair_delta[2] += D_L12_00161A04 - D_L12_00161A00;
                 scaled = D_L12_001619EC;
-                scale_vector_72(diff0, diff0, 2.0f / (float)scaled);
-                scale_vector_72(diff1, diff1, 2.0f / (float)scaled);
+                scale_vector_72(pos_offset_delta, pos_offset_delta, 2.0f / (float)scaled);
+                scale_vector_72(offset_pair_delta, offset_pair_delta, 2.0f / (float)scaled);
                 add_vector_72(pos, pos, (float *)&moby->pos);
                 if (moby->command & 1) {
                     pos[2] += D_L12_00161A04;
-                    diff0[2] = -diff0[2];
-                    diff1[2] = -diff1[2];
+                    pos_offset_delta[2] = -pos_offset_delta[2];
+                    offset_pair_delta[2] = -offset_pair_delta[2];
                 } else {
                     pos[2] += D_L12_001619FC;
                 }
-                diff0[3] = random_float_between_72(D_L12_001619E0, D_L12_001619E4);
-                diff1[3] = random_float_between_72(D_L12_001619E0, D_L12_001619E4);
-                FUN_00218888_72(pos, diff0, diff1, D_L12_001619F4, D_L12_001619F4,
+                pos_offset_delta[3] = random_float_between_72(D_L12_001619E0, D_L12_001619E4);
+                offset_pair_delta[3] = random_float_between_72(D_L12_001619E0, D_L12_001619E4);
+                FUN_00218888_72(pos, pos_offset_delta, offset_pair_delta, D_L12_001619F4, D_L12_001619F4,
                                   D_L12_001619E8, scale_game_frames_72(D_L12_001619EC),
                                   D_L12_001619F0, D_L12_001619F8);
             }
