@@ -36,9 +36,9 @@ void FUN_L01_002b7f30(char *base, int record_count) {
     }
     {
         int saved_source_slot_index = *(int *)&D_L01_00161218;
-        int b = *(int *)&D_L01_0016121C;
+        int saved_next_source_slot_index = *(int *)&D_L01_0016121C;
         *(int *)&D_L01_0016121C = saved_source_slot_index;
-        *(int *)&D_L01_00161218 = b;
+        *(int *)&D_L01_00161218 = saved_next_source_slot_index;
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002B9198), where it is exact; names translated to the US level program. */
