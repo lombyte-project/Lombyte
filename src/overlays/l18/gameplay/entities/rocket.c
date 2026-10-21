@@ -352,25 +352,25 @@ extern char *D_L18_001B2DDC_c __asm__("D_L18_001B2ADC") __attribute__((section("
 void FUN_L18_002a7220(char *moby) {
     float next_position[4];
     char hit_descriptor[0x30];
-    float b[4];
+    float hit_direction_vector[4];
     float effect_vector[4];
     float effect_spawn_position[4];
     float world_effect_direction[4];
     char *data = *(char **)(moby + 0x78);
     float *p;
-    float f20, f1;
+    float movement_step_length, target_distance;
     char *referenced_moby;
 
     *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), frame_time * 6.2831855f);
     if (*(short *)(data + 0x12) != 0) {
-        f20 = vector_length_xyz(data);
+        movement_step_length = vector_length_xyz(data);
         subtract_vector_xyz(data, &hero.motion.unkC0, moby + 0x10);
-        f1 = vector_length_xyz(data);
-        if (f20 < f1) {
-            normalize_vector_xyz(data, data, f20);
+        target_distance = vector_length_xyz(data);
+        if (movement_step_length < target_distance) {
+            normalize_vector_xyz(data, data, movement_step_length);
             *(float *)(moby + 0x48) = fast_arc_tan(*(float *)data, *(float *)(data + 4));
             *(float *)(moby + 0x44) = -fast_arc_tan(vector_length_xy(data), *(float *)(data + 8));
-        } else if (f1 < 0.1f) {
+        } else if (target_distance < 0.1f) {
             mark_moby_for_removal_a7220(moby);
             return;
         }
@@ -379,14 +379,14 @@ void FUN_L18_002a7220(char *moby) {
     referenced_moby = *(char **)(data + 0x14);
     if (referenced_moby != 0 && *(short *)(referenced_moby + 0xA6) == 0x2E && ((unsigned char *)referenced_moby)[0x20] != 0xFE &&
         ((unsigned char *)referenced_moby)[0x20] != 0xFD) {
-        subtract_vector_xyz(b, moby + 0x10, referenced_moby + 0x10);
-        b[2] = 0.0f;
-        normalize_vector_xyz(b, b, 2.0f);
-        b[3] = 5627.925f;
+        subtract_vector_xyz(hit_direction_vector, moby + 0x10, referenced_moby + 0x10);
+        hit_direction_vector[2] = 0.0f;
+        normalize_vector_xyz(hit_direction_vector, hit_direction_vector, 2.0f);
+        hit_direction_vector[3] = 5627.925f;
     } else {
-        normalize_vector_xyz(b, data, 2.0f);
+        normalize_vector_xyz(hit_direction_vector, data, 2.0f);
     }
-    make_hit_descriptor(hit_descriptor, (int)moby, 1, b, 2.0f);
+    make_hit_descriptor(hit_descriptor, (int)moby, 1, hit_direction_vector, 2.0f);
     *(short *)(hit_descriptor + 0x1A) = *(unsigned short *)(moby + 0xA6);
     if (collision_line(moby + 0x10, next_position, 0, *(void **)(data + 0x14), hit_descriptor) != 0 ||
         fast_dec_timer_s16(data + 0x10) != 0) {
@@ -394,16 +394,16 @@ void FUN_L18_002a7220(char *moby) {
                               0, 0.0f, 0, 0, -1, 0);
         mark_moby_for_removal_a7220(moby);
     } else {
-        unsigned char *r;
+        unsigned char *particle;
         qcopy(moby + 0x10, next_position);
         FUN_L00_00257d78(effect_vector, frame_time * 0.1f, frame_time * 0.2f);
         scale_vector_xyz(effect_spawn_position, data, random_float_between(0.0f, 1.0f));
         add_vector_xyz(effect_spawn_position, effect_spawn_position, moby + 0x10);
-        r = FUN_L00_002712b8(effect_spawn_position, effect_vector, scale_game_frames(10), 0x7F, 0x606060, 3, 40000.0f, 1000.0f,
+        particle = FUN_L00_002712b8(effect_spawn_position, effect_vector, scale_game_frames(10), 0x7F, 0x606060, 3, 40000.0f, 1000.0f,
                              1.0f, -0.0002f, 0.0f);
-        if (r != 0) {
-            r[2] = *D_L18_001B2DDC_c;
-            r[3] = 0x44;
+        if (particle != 0) {
+            particle[2] = *D_L18_001B2DDC_c;
+            particle[3] = 0x44;
         }
         *(OvlQuad *)world_effect_direction = 0;
         world_effect_direction[2] = 0.02f;
