@@ -741,7 +741,7 @@ void ocean_pokitaru_update(OceanMoby_30b358 *moby) __asm__("FUN_L11_0030b358");
 void ocean_pokitaru_update(OceanMoby_30b358 *moby)
 {
     OceanVars_30b358 *ocean_vars = moby->vars;
-    float src[4];
+    float camera_displacement[4];
     float out[4];
     int k;
 
@@ -756,13 +756,13 @@ void ocean_pokitaru_update(OceanMoby_30b358 *moby)
         ocean_level = ocean_vars->level;
         return;
     }
-    subtract_vector_b358(src, camera_pos_b358, last_camera_pos);
+    subtract_vector_b358(camera_displacement, camera_pos_b358, last_camera_pos);
     qcopy(last_camera_pos, camera_pos_b358);
     if (!(ocean_vars->limit < camera_pos_b358[2])) {
         return;
     }
     for (k = 0; k < 2; k++) {
-        scale_vector_b358(out, src, (wave_speed[k] + wave_speed[k]) / (ocean_vars->scale * 5.0f));
+        scale_vector_b358(out, camera_displacement, (wave_speed[k] + wave_speed[k]) / (ocean_vars->scale * 5.0f));
         if (1.0f < out[0] || out[0] < 1.0f) {
             out[0] = out[0] - int_to_float_b358(float_to_int_b358(out[0]));
         }
