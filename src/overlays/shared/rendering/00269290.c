@@ -2556,7 +2556,7 @@ int FUN_L00_00257b90_26f080(int, int) __asm__("FUN_L00_00257b90");
 int FUN_001f96f8_26f080(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L00_001B2108 __attribute__((section(".data")));
 unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y);
-unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y) {
+unsigned char *FUN_L00_0026f080(void *pos, float *initial_velocity, float x, float y) {
     unsigned char *particle = FUN_L00_002678b8_26f080(0x22);
     if (particle) {
         float *particle_data = (float *)(particle + 0x20);
@@ -2584,9 +2584,9 @@ unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y) {
         particle_data[5] = FUN_00213308_26f080();
         particle_data[6] = FUN_002132a8_26f080(frame_time * 1.7453293f, frame_time * 6.981317f);
         particle_data[7] = FUN_002132a8_26f080(frame_time * 0.5f, frame_time * 1.4f);
-        particle_data[0] = v[0];
-        particle_data[1] = v[1];
-        particle_data[2] = v[2];
+        particle_data[0] = initial_velocity[0];
+        particle_data[1] = initial_velocity[1];
+        particle_data[2] = initial_velocity[2];
         qcopy(particle + 0x10, pos);
     }
     return particle;
