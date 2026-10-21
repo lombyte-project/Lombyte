@@ -750,12 +750,12 @@ void FUN_L18_002d5918(struct Moby *moby) {
         }
         if (moby->visible) {
             char buf[0x50];
-            float b[4];
-            int r = FUN_L00_0025fcb8((char *)moby, buf, 6.0f);
+            float previous_position[4];
+            int target_search_result = FUN_L00_0025fcb8((char *)moby, buf, 6.0f);
             char *hit;
 
             char *vel;
-            if (r == 2)
+            if (target_search_result == 2)
                 return;
             hit = *(char **)(buf + 0x40);
             if (hit == 0)
@@ -763,7 +763,7 @@ void FUN_L18_002d5918(struct Moby *moby) {
             if (vector_distance(&moby->pos, hit + 0x10) < 6.0f) {
                 float lim2 = *(float *)&D_L18_00161A6C * 3.0f;
                 float lim = frame_time_sq * 6.0f;
-                qcopy(b, &moby->pos);
+                qcopy(previous_position, &moby->pos);
                 subtract_vector_xyz(v, *(char **)(buf + 0x40) + 0x10, &moby->pos);
                 v[2] = -(D_0015EE70 * 10.0f);
                 if (lim < vector_length_xy(v)) {
@@ -775,7 +775,7 @@ void FUN_L18_002d5918(struct Moby *moby) {
                     set_vector_length_xy(vel, vel, lim2);
                 }
                 FUN_L00_00258830((int)moby, (int)vel, 0.0f, 0.5f, 0.0f, 0);
-                subtract_vector_xyz(vel, &moby->pos, b);
+                subtract_vector_xyz(vel, &moby->pos, previous_position);
                 if (0.0f < *(float *)(data + 0x48)) {
                     *(float *)(data + 0x48) = 0.0f;
                 } else if (*(float *)(data + 0x48) < -lim2) {
