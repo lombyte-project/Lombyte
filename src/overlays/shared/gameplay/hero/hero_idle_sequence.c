@@ -2063,12 +2063,12 @@ float FUN_L00_00209018(float *sample_values, int sample_count) {
     int i = truncate_float_to_s32(*(float *)(hero_base + 0xAA8));
     int last_sample_index = sample_count - 1;
     int previous_sample_index = (i + last_sample_index) % sample_count;
-    float w;
+    float current_sample_weight;
     if (*(int *)(hero_base + 0xA98) & 2) {
         previous_sample_index = last_sample_index;
     }
-    w = split_float_fraction(buf, *(float *)(hero_base + 0xAA8));
-    return w * sample_values[i] + (*(float *)(hero_base + 0xAAC) - w) * sample_values[previous_sample_index];
+    current_sample_weight = split_float_fraction(buf, *(float *)(hero_base + 0xAA8));
+    return current_sample_weight * sample_values[i] + (*(float *)(hero_base + 0xAAC) - current_sample_weight) * sample_values[previous_sample_index];
 }
 typedef unsigned int u128_002090d0 __attribute__((mode(TI), aligned(16)));
 typedef struct {
