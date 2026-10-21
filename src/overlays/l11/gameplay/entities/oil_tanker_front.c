@@ -636,20 +636,20 @@ void FUN_L11_00317678(struct Moby *moby) {
     char *path = *(char **)(chain_vars + 0xF0);
     int path_point_count;
     float current_path_point[4];
-    float b[4];
+    float next_path_point[4];
     float lookahead_path_point[4];
     float *pb;
     float *pc;
     float x, y, z;
     qcopy(current_path_point, path + i * 16 + 0x10);
     path_point_count = *(int *)path;
-    qcopy(pb = b, path + (i + 1) % path_point_count * 16 + 0x10);
+    qcopy(pb = next_path_point, path + (i + 1) % path_point_count * 16 + 0x10);
     qcopy(pc = lookahead_path_point, path + (i + 2) % path_point_count * 16 + 0x10);
-    x = fast_arc_tan(current_path_point[0] - b[0], current_path_point[1] - b[1]);
-    y = fast_arc_tan(b[0] - lookahead_path_point[0], b[1] - lookahead_path_point[1]);
-    z = fast_arc_tan(vector_distance(current_path_point, pb), b[2] - current_path_point[2]);
+    x = fast_arc_tan(current_path_point[0] - next_path_point[0], current_path_point[1] - next_path_point[1]);
+    y = fast_arc_tan(next_path_point[0] - lookahead_path_point[0], next_path_point[1] - lookahead_path_point[1]);
+    z = fast_arc_tan(vector_distance(current_path_point, pb), next_path_point[2] - current_path_point[2]);
     moby->rot.y = fast_add_rotations(
-        fast_subtract_rotations(fast_arc_tan(vector_distance(pb, pc), lookahead_path_point[2] - b[2]), z) *
+        fast_subtract_rotations(fast_arc_tan(vector_distance(pb, pc), lookahead_path_point[2] - next_path_point[2]), z) *
             *(float *)(chain_vars + 0x6C),
         z);
     moby->rot.z =
