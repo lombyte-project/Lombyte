@@ -902,10 +902,10 @@ extern int D_L15_00161CCA;
 extern int D_L15_00161CCC;
 extern int D_L15_00161CCE;
 void FUN_L15_002d8710(char *moby) {
-    float v = F(D_L15_00161C54_8710) - F(D_L15_00161C58_8710) * frame_scale;
-    F(D_L15_00161C54_8710) = v;
-    if (v <= -8.0f) {
-        F(D_L15_00161C54_8710) = v + 8.0f;
+    float decremented_accumulator = F(D_L15_00161C54_8710) - F(D_L15_00161C58_8710) * frame_scale;
+    F(D_L15_00161C54_8710) = decremented_accumulator;
+    if (decremented_accumulator <= -8.0f) {
+        F(D_L15_00161C54_8710) = decremented_accumulator + 8.0f;
     }
     FUN_L00_002baae0_8710(D_L15_001D3750_8710, W(D_L15_00161C3C_8710), W(D_L15_00161C44_8710), 0x14,
                           F(D_L15_00161C64_8710), F(D_L15_00161C68_8710), F(D_L15_00161C9C_8710));
