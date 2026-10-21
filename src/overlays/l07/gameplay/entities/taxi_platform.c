@@ -1912,7 +1912,7 @@ void bombomatic_update(char *moby) {
     char *hit_info;
     char *health_ptr;
     int ia;
-    int r;
+    int hit_reaction_result;
 
     float lim;
     float tv;
@@ -1940,8 +1940,8 @@ void bombomatic_update(char *moby) {
     }
     hit_info = FUN_L00_0025a420(moby, 0x230000, 0);
     health_ptr = moby_data + 0x20;
-    r = fun_00213928(moby, hit_info, health_ptr, 0, &ia, 0, 0, 4);
-    switch (r) {
+    hit_reaction_result = fun_00213928(moby, hit_info, health_ptr, 0, &ia, 0, 0, 4);
+    switch (hit_reaction_result) {
     case HIT_REACTION_NONE:
         break;
     case BOMBOMATIC_CLEAR_HEALTH_RESPONSE:
