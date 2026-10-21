@@ -18,14 +18,14 @@ extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern float D_L04_00173FE8 __attribute__((section(".data")));
 float FUN_L04_002922d0(float *pos) {
     float clamped_probe_point[4];
-    float b[4];
+    float raised_probe_point[4];
     qcopy(clamped_probe_point, pos);
     clamped_probe_point[2] = clamped_probe_point[2] - 2.5f;
     if (clamped_probe_point[2] < 0.1f)
         clamped_probe_point[2] = 0.1f;
-    qcopy(b, pos);
-    b[2] = b[2] + 0.75f;
-    if (coll_line_fix(b, clamped_probe_point, 2, 0, 0) != 0)
+    qcopy(raised_probe_point, pos);
+    raised_probe_point[2] = raised_probe_point[2] + 0.75f;
+    if (coll_line_fix(raised_probe_point, clamped_probe_point, 2, 0, 0) != 0)
         return D_L04_00173FE8;
     return 0.0f;
 }
