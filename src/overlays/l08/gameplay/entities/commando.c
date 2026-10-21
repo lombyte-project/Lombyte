@@ -283,7 +283,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L08_002ea4c0(struct Moby *moby) {
     SwingGateVars *vars = (SwingGateVars *)moby->pvars;
     f32 progress = *(f32 *)D_L08_0015FFD8[vars->driver].pvars;
-    Vec4 mat[4];
+    Vec4 gate_rotation_matrix[4];
     Vec4 gate_position_offset;
     f32 yaw;
 
@@ -325,8 +325,8 @@ void FUN_L08_002ea4c0(struct Moby *moby) {
                                               0x400 / scale_game_frames(60));
         }
     }
-    euler_rotation_matrix(mat, &moby->rot);
-    transform_vector(&gate_position_offset, &gate_position_offset, mat);
+    euler_rotation_matrix(gate_rotation_matrix, &moby->rot);
+    transform_vector(&gate_position_offset, &gate_position_offset, gate_rotation_matrix);
     add_vector_xyz(&moby->pos, &vars->home, &gate_position_offset);
     if (progress == 1.0f && moby->oclass == 0x1D4) {
         D_0013D388[vars->flag + 0x30] = 1;
