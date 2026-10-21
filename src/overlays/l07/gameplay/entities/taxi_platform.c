@@ -473,11 +473,11 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
     }
     switch (moby[0xBC]) {
     case TAXI_SHRINK_AND_RESET_TO_PATH_START: {
-        char *cls = *(char **)(moby + 0x24);
-        float t = F(moby, 0x2C) - F(cls, 0x24) / 60.0f;
+        char *class_defaults = *(char **)(moby + 0x24);
+        float t = F(moby, 0x2C) - F(class_defaults, 0x24) / 60.0f;
         F(moby, 0x2C) = t;
         if (t < 0.0f) {
-            F(moby, 0x2C) = F(cls, 0x24);
+            F(moby, 0x2C) = F(class_defaults, 0x24);
             qcopy((moby + 0x10), path + 0x10);
             moby[0xBC] = 1;
             F(data, 0xA4) = 0.0f;
