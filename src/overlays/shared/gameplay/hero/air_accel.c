@@ -47,13 +47,13 @@ extern int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4);
 
 void FUN_L01_00227e48(int voice_group_index, int voice_pair_index, int call_enabled) {
     if (call_enabled != 0) {
-        char *g = (char *)D_0013E533 + 0xE1D;
-        char *voice_index_source = *(char **)(g + 0x10E0);
+        char *hero_state_base = (char *)D_0013E533 + 0xE1D;
+        char *voice_index_source = *(char **)(hero_state_base + 0x10E0);
         int flag = 0;
         if (voice_index_source != 0) {
             flag = *(short *)(voice_index_source + 0xA6) == 0xAD;
         }
-        FUN_L00_0028de68(voice_group_index, voice_pair_index, flag, 0, *(int *)(g + 0x2080));
+        FUN_L00_0028de68(voice_group_index, voice_pair_index, flag, 0, *(int *)(hero_state_base + 0x2080));
     }
 }
 #include "rnc/gameplay/entities/moby.h"
