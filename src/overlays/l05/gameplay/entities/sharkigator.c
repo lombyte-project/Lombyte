@@ -156,8 +156,8 @@ void FUN_L05_00307358(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003088C8), where it is exact; names translated to the US level program. */
 
-int FUN_L05_00307470(int arg) {
-    return arg == 5 ? 6 : arg;
+int FUN_L05_00307470(int animation_index) {
+    return animation_index == 5 ? 6 : animation_index;
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003088D8), where it is exact; names translated to the US level program. */
 
