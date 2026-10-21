@@ -2352,7 +2352,7 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void FUN_L02_002dcfe0(struct Moby *moby) {
     char *nest_vars = (char *)moby->pvars;
-    float v[4];
+    float hit_knockback_vector[4];
     int hit;
     float dmg;
     float k1;
@@ -2384,8 +2384,8 @@ void FUN_L02_002dcfe0(struct Moby *moby) {
                 *(float *)(nest_vars + 0x88) = a;
                 *(float *)(nest_vars + 0x8C) = b;
             }
-            *(OvlQuad *)v = *(OvlQuad *)(hit_record + 0x10);
-            trooper_knockback_arc(v, &k1, nest_vars + 0x88, nest_vars + 0x8C);
+            *(OvlQuad *)hit_knockback_vector = *(OvlQuad *)(hit_record + 0x10);
+            trooper_knockback_arc(hit_knockback_vector, &k1, nest_vars + 0x88, nest_vars + 0x8C);
             trooper_start_knockback(k1, moby, nest_vars + 0x70, 3, 1, 0);
             if (1.0f <= dmg) {
                 nest_vars[0x67] = 0x78;
@@ -2404,8 +2404,8 @@ void FUN_L02_002dcfe0(struct Moby *moby) {
                 *(float *)(nest_vars + 0x8C) = a;
                 *(float *)(nest_vars + 0x88) = b;
             }
-            *(OvlQuad *)v = *(OvlQuad *)(hit_record + 0x10);
-            trooper_knockback_arc(v, &k2, nest_vars + 0x88, nest_vars + 0x8C);
+            *(OvlQuad *)hit_knockback_vector = *(OvlQuad *)(hit_record + 0x10);
+            trooper_knockback_arc(hit_knockback_vector, &k2, nest_vars + 0x88, nest_vars + 0x8C);
             trooper_start_knockback(k2, moby, nest_vars + 0x70, 3, 1, 0);
             *(float *)(nest_vars + 0xC0) = 9.0f;
             *(float *)(nest_vars + 0xC4) = 19.0f;
