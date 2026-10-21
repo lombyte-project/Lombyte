@@ -34,7 +34,7 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
     s32 x;
     s32 y;
     u8 *read_destination;
-    struct ClutImage *b;
+    struct ClutImage *stream_image;
     u8 *clut_data;
     u8 *pixel_data;
 
@@ -119,11 +119,11 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
                          stream->data.stream.buffer[0]);
             stream->data.stream.read_offset = 0;
         }
-        b = (struct ClutImage *)stream->data.stream.buffer[0];
-        clut_data = b->clut;
-        pixel_data = b->pixels;
-        x = log2dim(b->width);
-        y = log2dim(b->height);
+        stream_image = (struct ClutImage *)stream->data.stream.buffer[0];
+        clut_data = stream_image->clut;
+        pixel_data = stream_image->pixels;
+        x = log2dim(stream_image->width);
+        y = log2dim(stream_image->height);
         level_map_selection.tex0 = register_8bit_texture(x, y, clut_data, pixel_data, level_map_selection.tex_clut_vram, level_map_selection.tex0_vram);
         FUN_0020b4a8();
         stream->data.stream.state = 2;
