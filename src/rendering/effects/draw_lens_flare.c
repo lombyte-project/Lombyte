@@ -54,7 +54,7 @@ void draw_lens_flare(void) {
     s32 size;
     s64 tex;
     s32 rgba;
-    s32 w;
+    s32 quad_size;
     s32 x;
     s32 y;
 
@@ -101,11 +101,11 @@ void draw_lens_flare(void) {
         fade = fade * (fx * fy);
         rgba = (truncate_float_to_s32(fade * effect_ribbon.alpha[i]) << 24) |
                (effect_ribbon.color[i] & 0xFFFFFF);
-        w = truncate_float_to_s32(size * effect_ribbon.scale[i]);
-        half = w >> 1;
+        quad_size = truncate_float_to_s32(size * effect_ribbon.scale[i]);
+        half = quad_size >> 1;
         x = truncate_float_to_s32(at[0] - half);
         y = truncate_float_to_s32(at[1] - half);
-        draw_textured_quad(x, y, w, w, 0, 0, size, size, rgba, tex);
+        draw_textured_quad(x, y, quad_size, quad_size, 0, 0, size, size, rgba, tex);
     }
     effect_ribbon.intensity = 0.0f;
 }
