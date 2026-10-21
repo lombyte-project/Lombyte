@@ -785,23 +785,23 @@ void FUN_L11_00317c98(struct Moby *moby) {
     }
     approach_value(&chain_vars->health, 0.0f, total);
     if (total != 0.0f && chain_vars->health / 80.0f * 8.0f <= (float)(chain_vars->count - 1)) {
-        struct Moby *src;
-        struct Moby *dst;
+        struct Moby *last_hit_link;
+        struct Moby *detached_tail_link;
         *(u16 *)D_00141C18 = 0xFFFF;
         chain_vars->count--;
         FUN_L11_00318488(chain_vars->links[chain_vars->count]);
-        src = chain_vars->links[last_hit_link_index];
-        dst = chain_vars->links[chain_vars->count];
-        qcopy(&dst->pos, &src->pos);
-        qcopy(&dst->rot, &src->rot);
-        FUN_0022da68(1, 0, dst);
+        last_hit_link = chain_vars->links[last_hit_link_index];
+        detached_tail_link = chain_vars->links[chain_vars->count];
+        qcopy(&detached_tail_link->pos, &last_hit_link->pos);
+        qcopy(&detached_tail_link->rot, &last_hit_link->rot);
+        FUN_0022da68(1, 0, detached_tail_link);
         if (last_hit_link_index < chain_vars->count) {
-            float diff = chain_vars->offsets[last_hit_link_index] - chain_vars->offsets[last_hit_link_index + 1];
+            float path_point_offset_delta = chain_vars->offsets[last_hit_link_index] - chain_vars->offsets[last_hit_link_index + 1];
             int j;
             for (j = last_hit_link_index; j < chain_vars->count; j++) {
                 chain_vars->catchup[j] = chain_vars->catchup[j + 1];
             }
-            chain_vars->catchup[last_hit_link_index] += diff;
+            chain_vars->catchup[last_hit_link_index] += path_point_offset_delta;
             if (chain_vars->catchup[last_hit_link_index] < 0.0f) {
                 chain_vars->catchup[last_hit_link_index] += (float)*(s32 *)chain_vars->path;
             }
