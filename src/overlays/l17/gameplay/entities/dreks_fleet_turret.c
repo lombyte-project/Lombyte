@@ -24,25 +24,25 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 void FUN_L17_002cbc10(char *turret_moby) {
     char *turret_vars;
     char *hit_animation_state;
-    char *r;
+    char *hit_record;
     int st;
     float fv;
     int depletion_status;
     turret_vars = *(char **)(turret_moby + 0x78);
     if (*(unsigned char *)(turret_moby + 0x20) != 0) {
         fv = 0.0f;
-        r = find_moby_hit(turret_moby, 0x330000, 0);
-        if (r != 0) {
-            if (*(int *)(r + 0x20) != 0) {
-                int hit_moby_class_id = *(short *)(*(char **)(r + 0x20) + 0xA6);
+        hit_record = find_moby_hit(turret_moby, 0x330000, 0);
+        if (hit_record != 0) {
+            if (*(int *)(hit_record + 0x20) != 0) {
+                int hit_moby_class_id = *(short *)(*(char **)(hit_record + 0x20) + 0xA6);
                 if (hit_moby_class_id != 0x3F1) {
                     if (hit_moby_class_id != 0x127)
-                        r = 0;
+                        hit_record = 0;
                 }
             }
         }
         hit_animation_state = turret_vars + 0x60;
-        hit_reaction(turret_moby, r, turret_vars + 0x20, 0, &st, &fv, 0, 4);
+        hit_reaction(turret_moby, hit_record, turret_vars + 0x20, 0, &st, &fv, 0, 4);
         if (st != 1 && *(unsigned char *)(turret_moby + 0x20) != 4) {
             float remaining_value = *(float *)(turret_vars + 0x20) - fv;
             *(float *)(turret_vars + 0x20) = remaining_value;
