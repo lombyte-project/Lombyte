@@ -63,8 +63,8 @@ void start_level(int level) {
         memcard_update_state();
     }
     {
-        char *g = D_001940C0;
-        movie_work_area_base = *(int *)(g + 0x1C);
+        char *movie_work_area_record = D_001940C0;
+        movie_work_area_base = *(int *)(movie_work_area_record + 0x1C);
     }
     play_mpeg_movie(movie_start_sector, movie_size_bytes, movie_work_area_base + 0x100000, movie_work_area_base + 0x400000, 0);
     sceCdSync(0);
