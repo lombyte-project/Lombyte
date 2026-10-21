@@ -645,17 +645,17 @@ s32 map_filter_l15_0(s32 x, s32 y) __asm__("func_00207A18");
 
 s32 map_filter_l15_0(s32 x, s32 y) {
     Vec4 point_position;
-    Vec4 b;
+    Vec4 region_center;
     s32 near;
 
     if (D_001A03A8[0] == 0) {
         point_position.q = 0;
-        b.q = 0;
+        region_center.q = 0;
         point_position.f[0] = x;
         point_position.f[1] = y;
-        b.f[0] = 161.5f;
-        b.f[1] = 249.0f;
-        near = vector_distance_xy(&point_position, &b) <= 35.0f;
+        region_center.f[0] = 161.5f;
+        region_center.f[1] = 249.0f;
+        near = vector_distance_xy(&point_position, &region_center) <= 35.0f;
     } else {
         near = 1;
     }
