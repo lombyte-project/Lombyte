@@ -450,8 +450,8 @@ void FUN_L14_002ac618(struct Moby *moby) {
         INTERCEPTOR_STATE_DEATH_FALL = 9
     };
     char *moby_vars = (char *)moby->pvars;
-    float v[4];
-    float w[4];
+    float vector_scratch[4];
+    float secondary_vector_scratch[4];
     int near_seg;
     float near_t;
     int path_seg;
@@ -552,12 +552,12 @@ void FUN_L14_002ac618(struct Moby *moby) {
         FUN_L14_002ae7d8(moby);
         FUN_L14_002aea08_c618(moby);
         if (hit) {
-            lerp_vector_c618(v, moby_vars + 0x90, moby_vars + 0xD0, 0.5f);
-            qcopy(w, moby_vars + 0x90);
-            FUN_001e93e8_c618(w, *(float *)(moby_vars + 0x214) * 0.8f);
-            FUN_001e93e8_c618(v, *(float *)(moby_vars + 0x214) * 0.48f);
-            if (FUN_L00_001f2868_c618(*(float *)(moby_vars + 0x214) * 0.48f, v, 0, 0, 0) ||
-                FUN_L00_001f2868_c618(*(float *)(moby_vars + 0x214) * 0.9f, w, 0, 0, 0)) {
+            lerp_vector_c618(vector_scratch, moby_vars + 0x90, moby_vars + 0xD0, 0.5f);
+            qcopy(secondary_vector_scratch, moby_vars + 0x90);
+            FUN_001e93e8_c618(secondary_vector_scratch, *(float *)(moby_vars + 0x214) * 0.8f);
+            FUN_001e93e8_c618(vector_scratch, *(float *)(moby_vars + 0x214) * 0.48f);
+            if (FUN_L00_001f2868_c618(*(float *)(moby_vars + 0x214) * 0.48f, vector_scratch, 0, 0, 0) ||
+                FUN_L00_001f2868_c618(*(float *)(moby_vars + 0x214) * 0.9f, secondary_vector_scratch, 0, 0, 0)) {
                 struct Moby *t = D_L14_00174540.target;
 
                 if ((char *)t == D_001413D0_c618 || (t != 0 && (t->oclass == 0xCB || t->oclass == 0x10E))) {
@@ -592,18 +592,18 @@ void FUN_L14_002ac618(struct Moby *moby) {
             *(s16 *)(moby_vars + 0x200) = 1;
             *(s16 *)(moby_vars + 0x202) = 1;
             FUN_L14_002aeba0(moby, 1);
-            qcopy(v, &(*(struct Moby **)(moby_vars + 0x18C))->pos);
-            v[2] += 0.5f;
-            qcopy(w, v);
-            w[2] -= 4.0f;
-            if (FUN_001efa68_c618(v, w, 0x12, 0, 0)) {
-                qcopy(v, &D_L14_00174560);
+            qcopy(vector_scratch, &(*(struct Moby **)(moby_vars + 0x18C))->pos);
+            vector_scratch[2] += 0.5f;
+            qcopy(secondary_vector_scratch, vector_scratch);
+            secondary_vector_scratch[2] -= 4.0f;
+            if (FUN_001efa68_c618(vector_scratch, secondary_vector_scratch, 0x12, 0, 0)) {
+                qcopy(vector_scratch, &D_L14_00174560);
             } else {
-                v[2] -= 0.5f;
+                vector_scratch[2] -= 0.5f;
             }
-            ease_c618((f32 *)(moby_vars + 0x170), v[0], (f32 *)(moby_vars + 0x180), 0.003f, 0.2f, 0.0f);
-            ease_c618((f32 *)(moby_vars + 0x174), v[1], (f32 *)(moby_vars + 0x184), 0.003f, 0.2f, 0.0f);
-            ease_c618((f32 *)(moby_vars + 0x178), v[2], (f32 *)(moby_vars + 0x188), 0.003f, 0.2f, 0.0f);
+            ease_c618((f32 *)(moby_vars + 0x170), vector_scratch[0], (f32 *)(moby_vars + 0x180), 0.003f, 0.2f, 0.0f);
+            ease_c618((f32 *)(moby_vars + 0x174), vector_scratch[1], (f32 *)(moby_vars + 0x184), 0.003f, 0.2f, 0.0f);
+            ease_c618((f32 *)(moby_vars + 0x178), vector_scratch[2], (f32 *)(moby_vars + 0x188), 0.003f, 0.2f, 0.0f);
             FUN_L14_002ae7d8(moby);
             if ((s8)(*(struct Moby **)(moby_vars + 0x18C))->state < 0 || fast_dec_timer_s16((s16 *)(moby_vars + 0x1F2))) {
                 *(float *)(moby_vars + 0x8C) = 0.0f;
@@ -619,16 +619,16 @@ void FUN_L14_002ac618(struct Moby *moby) {
         }
     case INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY:
         moby->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
-        qcopy(v, &moby->pos);
-        v[3] = D_L14_0016139C;
-        if (fast_bsphere_check((u8 *)v, FUN_001fa6c0(moby->draw_dist)) >= 0) {
+        qcopy(vector_scratch, &moby->pos);
+        vector_scratch[3] = D_L14_0016139C;
+        if (fast_bsphere_check((u8 *)vector_scratch, FUN_001fa6c0(moby->draw_dist)) >= 0) {
             float *p;
 
-            FUN_L00_0024f7c8_c618(moby, 2, w);
+            FUN_L00_0024f7c8_c618(moby, 2, secondary_vector_scratch);
             p = (float *)(moby_vars + 0x1D4);
-            p[0] = w[0];
-            p[1] = w[1];
-            p[2] = w[2];
+            p[0] = secondary_vector_scratch[0];
+            p[1] = secondary_vector_scratch[1];
+            p[2] = secondary_vector_scratch[2];
             *(int *)(moby_vars + 0x20C) |= 8;
             FUN_L14_002aea08_c618(moby);
         }
@@ -669,7 +669,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
 
             near_seg = 0;
             near_t = 0.0f;
-            FUN_L00_0025df68_c618(tab, &moby->pos, v, &near_seg, &near_t, 0, 40.0f, 5.0f, 0.0f);
+            FUN_L00_0025df68_c618(tab, &moby->pos, vector_scratch, &near_seg, &near_t, 0, 40.0f, 5.0f, 0.0f);
             *(int *)(moby_vars + 0x84) = near_seg;
             *(float *)(moby_vars + 0x1CC) = near_t;
             *(s16 *)(moby_vars + 0x200) = 0;
@@ -698,18 +698,18 @@ void FUN_L14_002ac618(struct Moby *moby) {
         dir = *(s16 *)(moby_vars + 0x8A);
         path_seg = 0;
         path_t = 0.0f;
-        FUN_L00_0025d808_c618(tab, v, &path_seg, &path_t, dir, t);
-        ease_c618(&moby->pos.x, v[0], (f32 *)(moby_vars + 0x194), 0.005f, D_L14_001613A4_c618, 0.0f);
-        ease_c618(&moby->pos.y, v[1], (f32 *)(moby_vars + 0x198), 0.005f, D_L14_001613A4_c618, 0.0f);
-        ease_c618(&moby->pos.z, v[2], (f32 *)(moby_vars + 0x19C), 0.005f, D_L14_001613A4_c618, 0.0f);
+        FUN_L00_0025d808_c618(tab, vector_scratch, &path_seg, &path_t, dir, t);
+        ease_c618(&moby->pos.x, vector_scratch[0], (f32 *)(moby_vars + 0x194), 0.005f, D_L14_001613A4_c618, 0.0f);
+        ease_c618(&moby->pos.y, vector_scratch[1], (f32 *)(moby_vars + 0x198), 0.005f, D_L14_001613A4_c618, 0.0f);
+        ease_c618(&moby->pos.z, vector_scratch[2], (f32 *)(moby_vars + 0x19C), 0.005f, D_L14_001613A4_c618, 0.0f);
         FUN_L14_002aeba0(moby, 0);
-        if (FUN_001f9b48(&moby->pos, v) < 0.5f) {
+        if (FUN_001f9b48(&moby->pos, vector_scratch) < 0.5f) {
             moby->state = 1;
         }
-        FUN_L00_0025d808_c618(D_L14_001B0BB0[*(int *)(moby_vars + 0x78)], v, moby_vars + 0x84, moby_vars + 0x1CC, *(s16 *)(moby_vars + 0x8A), 0.0f);
-        ease_c618((f32 *)(moby_vars + 0x170), v[0], (f32 *)(moby_vars + 0x180), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
-        ease_c618((f32 *)(moby_vars + 0x174), v[1], (f32 *)(moby_vars + 0x184), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
-        ease_c618((f32 *)(moby_vars + 0x178), v[2], (f32 *)(moby_vars + 0x188), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
+        FUN_L00_0025d808_c618(D_L14_001B0BB0[*(int *)(moby_vars + 0x78)], vector_scratch, moby_vars + 0x84, moby_vars + 0x1CC, *(s16 *)(moby_vars + 0x8A), 0.0f);
+        ease_c618((f32 *)(moby_vars + 0x170), vector_scratch[0], (f32 *)(moby_vars + 0x180), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
+        ease_c618((f32 *)(moby_vars + 0x174), vector_scratch[1], (f32 *)(moby_vars + 0x184), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
+        ease_c618((f32 *)(moby_vars + 0x178), vector_scratch[2], (f32 *)(moby_vars + 0x188), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
         break;
     }
     case INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL: {
@@ -728,12 +728,12 @@ void FUN_L14_002ac618(struct Moby *moby) {
         }
         *(s32 *)(moby_vars + 0x1D0) = -1;
         FUN_L00_0025e450_c618(moby, moby_vars + 0x40, &moby->pos, 0.0f, 0.0f, 5, 2, 4, 4.0f, 2.0f, 9.0f, 1.0f, 1, 15.0f, 1, 5, -1, 0);
-        subtract_vector_c618(v, &moby->pos, &hero.motion.pos);
-        v[2] = 0.0f;
-        normalize_vector_c618(v, v, random_float_c618(D_L14_001613D8 * D_0015ED60_c618, D_L14_001613DC * D_0015ED60_c618));
-        cross_vectors_c618(w, &hero.gravity_dir, v);
+        subtract_vector_c618(vector_scratch, &moby->pos, &hero.motion.pos);
+        vector_scratch[2] = 0.0f;
+        normalize_vector_c618(vector_scratch, vector_scratch, random_float_c618(D_L14_001613D8 * D_0015ED60_c618, D_L14_001613DC * D_0015ED60_c618));
+        cross_vectors_c618(secondary_vector_scratch, &hero.gravity_dir, vector_scratch);
         ang = randf_sym(0.6981317f, 1.2217305f);
-        build_look_at_matrix_c618(moby_vars + 0x1E0, v, &hero.gravity_dir, ang);
+        build_look_at_matrix_c618(moby_vars + 0x1E0, vector_scratch, &hero.gravity_dir, ang);
         *(float *)(moby_vars + 0x1E8) = random_float_c618(D_L14_001613E0 * D_0015ED60_c618, D_L14_001613E4 * D_0015ED60_c618);
         moby->scale *= 0.1f;
         *(float *)(moby_vars + 0x140) = 10.0f;
