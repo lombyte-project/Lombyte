@@ -3002,30 +3002,30 @@ extern void FUN_001f9a68_002121c0(void *, void *, float) __asm__("FUN_001f9a68")
 extern void FUN_001f9a10_002121c0(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void FUN_L00_002121c0(void) {
-    struct Hero *g = &hero;
+    struct Hero *hero_state = &hero;
     V_2121c0_002121c0 horizontal_velocity_correction;
     float inward_velocity_component, x;
-    if (g->air_frames.s == 0)
+    if (hero_state->air_frames.s == 0)
         return;
-    if (!(g->ground_distance < 0.15f))
+    if (!(hero_state->ground_distance < 0.15f))
         return;
-    if (!(0.0f < g->motion.displacement.f[2]))
+    if (!(0.0f < hero_state->motion.displacement.f[2]))
         return;
-    if (g->wall_hit == 0)
+    if (hero_state->wall_hit == 0)
         return;
-    if (!(0.0f < g->unk200.f[2]))
+    if (!(0.0f < hero_state->unk200.f[2]))
         return;
-    if (!(0.87266463f <= FUN_001f9e90_002121c0(g->unk200.f[2], FUN_001f9b20_002121c0(&g->unk200))))
+    if (!(0.87266463f <= FUN_001f9e90_002121c0(hero_state->unk200.f[2], FUN_001f9b20_002121c0(&hero_state->unk200))))
         return;
-    qcopy(&horizontal_velocity_correction, &g->unk200);
+    qcopy(&horizontal_velocity_correction, &hero_state->unk200);
     horizontal_velocity_correction.f[2] = 0.0f;
     FUN_00125180_002121c0(&horizontal_velocity_correction, &horizontal_velocity_correction);
-    inward_velocity_component = -g->motion.velocity.f[0] * horizontal_velocity_correction.f[0] - g->motion.velocity.f[1] * horizontal_velocity_correction.f[1];
+    inward_velocity_component = -hero_state->motion.velocity.f[0] * horizontal_velocity_correction.f[0] - hero_state->motion.velocity.f[1] * horizontal_velocity_correction.f[1];
     if (0.0f < inward_velocity_component) {
         FUN_001f9a68_002121c0(&horizontal_velocity_correction, &horizontal_velocity_correction, inward_velocity_component);
-        FUN_001f9a10_002121c0(&g->motion.velocity, &g->motion.velocity, &horizontal_velocity_correction);
+        FUN_001f9a10_002121c0(&hero_state->motion.velocity, &hero_state->motion.velocity, &horizontal_velocity_correction);
         x = frame_time_sq * 54.0f;
-        g->motion.velocity.f[2] -= x + x;
+        hero_state->motion.velocity.f[2] -= x + x;
     }
 }
 typedef struct {
