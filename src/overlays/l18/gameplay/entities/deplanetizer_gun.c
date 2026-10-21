@@ -915,10 +915,10 @@ void FUN_L18_002fad28(M2 *moby) {
         INITIALIZE_TRAIL_EFFECT = 0,
         UPDATE_TRAIL_EFFECT = 1
     };
-    char buf[16];
-    char buf2[16];
-    char buf3[16];
-    int idx;
+    char joint_eight_world_position[16];
+    char joint_nine_world_position[16];
+    char trail_velocity[16];
+    int trail_source_moby_index;
     char *trail_source_moby;
     switch (moby->state) {
     case INITIALIZE_TRAIL_EFFECT:
@@ -928,18 +928,18 @@ void FUN_L18_002fad28(M2 *moby) {
     case UPDATE_TRAIL_EFFECT:
         if (D_L18_0015F5C4 == 2) {
             if (D_L18_0016D260.n < 4) {
-                idx = 0;
+                trail_source_moby_index = 0;
                 if (D_L18_0016D260.n == 0 || D_L18_0016D260.n == D_L18_0015F5C4 ||
                     D_L18_0016D260.n == 3)
-                    idx = 3;
+                    trail_source_moby_index = 3;
                 if (D_L18_0016D260.n == 1)
-                    idx = 4;
-                trail_source_moby = D_L18_0016D260.arr[idx];
-                moby_point_position(trail_source_moby, 8, buf);
-                moby_point_position(trail_source_moby, 9, buf2);
-                fast_vec_sub(buf3, buf, buf2);
-                fast_vec_normalize(buf3, buf3, *(float *)&D_L18_00162578);
-                draw_trail(buf, buf, buf3, *(float *)&D_L18_0016257C,
+                    trail_source_moby_index = 4;
+                trail_source_moby = D_L18_0016D260.arr[trail_source_moby_index];
+                moby_point_position(trail_source_moby, 8, joint_eight_world_position);
+                moby_point_position(trail_source_moby, 9, joint_nine_world_position);
+                fast_vec_sub(trail_velocity, joint_eight_world_position, joint_nine_world_position);
+                fast_vec_normalize(trail_velocity, trail_velocity, *(float *)&D_L18_00162578);
+                draw_trail(joint_eight_world_position, joint_eight_world_position, trail_velocity, *(float *)&D_L18_0016257C,
                                  *(float *)&D_L18_00162580);
             }
         }
