@@ -1365,7 +1365,7 @@ extern char D_L00_0017A6C0[] __attribute__((section(".data")));
 void FUN_L00_002078a8(void);
 void FUN_L00_002078a8(void) {
     struct Hero *P = &hero;
-    Vec4_2078a8 v;
+    Vec4_2078a8 position_offset;
     float m[16] __attribute__((aligned(16)));
     if (P->state.current == 0x7F) {
         FUN_L00_00262b00_002078a8(P->moby, &P->unk6A8, &P->unk6AC, 0.3f,
@@ -1377,12 +1377,12 @@ void FUN_L00_002078a8(void) {
         if (P->unk86C) {
             char *hero_moby = P->moby;
             qcopy(((char *)P->unk86C) + 0x10, hero_moby + 0x10);
-            v.q = 0;
-            v.f[2] = 0.21f;
-            transform_vector_by_basis(&v, &v, hero_moby + 0xC0);
+            position_offset.q = 0;
+            position_offset.f[2] = 0.21f;
+            transform_vector_by_basis(&position_offset, &position_offset, hero_moby + 0xC0);
             rotation_matrix(m, D_L00_0017A6C0);
-            transform_vector(&v, &v, m);
-            add_vector_xyz(((char *)P->unk86C) + 0x10, ((char *)P->unk86C) + 0x10, &v);
+            transform_vector(&position_offset, &position_offset, m);
+            add_vector_xyz(((char *)P->unk86C) + 0x10, ((char *)P->unk86C) + 0x10, &position_offset);
         }
     }
 }
