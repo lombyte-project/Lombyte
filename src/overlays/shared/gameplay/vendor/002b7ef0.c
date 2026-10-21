@@ -84,7 +84,7 @@ extern int D_L01_001CB1B0[];
 
 void FUN_L01_002b80d0(float *offset_animation_state) {
     int i;
-    float u0, first_v_offset, u1, second_v_offset;
+    float first_u_offset, first_v_offset, second_u_offset, second_v_offset;
     float unwrapped_offset;
     float *src, *dst;
     unwrapped_offset = offset_animation_state[8] + offset_animation_state[10];
@@ -105,16 +105,16 @@ void FUN_L01_002b80d0(float *offset_animation_state) {
     }
     offset_animation_state[12] = fast_add_rotations(offset_animation_state[12], offset_animation_state[14]);
     offset_animation_state[13] = fast_add_rotations(offset_animation_state[13], offset_animation_state[15]);
-    u0 = offset_animation_state[8] + fast_cos(offset_animation_state[12]) * offset_animation_state[16];
+    first_u_offset = offset_animation_state[8] + fast_cos(offset_animation_state[12]) * offset_animation_state[16];
     first_v_offset = offset_animation_state[9] + fast_sin(offset_animation_state[12]) * offset_animation_state[16];
-    u1 = offset_animation_state[8] + fast_cos(offset_animation_state[13]) * offset_animation_state[16];
+    second_u_offset = offset_animation_state[8] + fast_cos(offset_animation_state[13]) * offset_animation_state[16];
     second_v_offset = offset_animation_state[9] + fast_sin(offset_animation_state[13]) * offset_animation_state[16];
     for (i = 0; i < 0x5C; i += 2) {
         if (D_L01_001CB1B0[i >> 1] == 0) {
-            D_L01_001CAE60[i] = D_L01_001CAFE0[i] + u0;
+            D_L01_001CAE60[i] = D_L01_001CAFE0[i] + first_u_offset;
             D_L01_001CAE60[i + 1] = D_L01_001CAFE0[i + 1] + first_v_offset;
         } else {
-            D_L01_001CAE60[i] = D_L01_001CAFE0[i] + u1;
+            D_L01_001CAE60[i] = D_L01_001CAFE0[i] + second_u_offset;
             D_L01_001CAE60[i + 1] = D_L01_001CAFE0[i + 1] + second_v_offset;
         }
     }
