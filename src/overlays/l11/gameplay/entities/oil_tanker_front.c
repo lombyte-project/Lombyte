@@ -771,14 +771,14 @@ void FUN_L11_00318488(struct Moby *);
 void FUN_L11_00317c98(struct Moby *moby) {
     struct L11ChainVars *chain_vars = (struct L11ChainVars *)moby->pvars;
     int i;
-    int idx = -1;
+    int last_hit_link_index = -1;
     float total = 0.0f;
-    float vec[4];
+    float fragment_initial_velocity[4];
 
     for (i = 0; i < chain_vars->count; i++) {
         struct Moby *hit = find_moby_hit(chain_vars->links[i], -1, 0);
         if (hit != 0) {
-            idx = i;
+            last_hit_link_index = i;
             total += hit->scale;
             chain_vars->links[i]->hit_slot = 0xFF;
         }
@@ -790,25 +790,25 @@ void FUN_L11_00317c98(struct Moby *moby) {
         *(u16 *)D_00141C18 = 0xFFFF;
         chain_vars->count--;
         FUN_L11_00318488(chain_vars->links[chain_vars->count]);
-        src = chain_vars->links[idx];
+        src = chain_vars->links[last_hit_link_index];
         dst = chain_vars->links[chain_vars->count];
         qcopy(&dst->pos, &src->pos);
         qcopy(&dst->rot, &src->rot);
         FUN_0022da68(1, 0, dst);
-        if (idx < chain_vars->count) {
-            float diff = chain_vars->offsets[idx] - chain_vars->offsets[idx + 1];
+        if (last_hit_link_index < chain_vars->count) {
+            float diff = chain_vars->offsets[last_hit_link_index] - chain_vars->offsets[last_hit_link_index + 1];
             int j;
-            for (j = idx; j < chain_vars->count; j++) {
+            for (j = last_hit_link_index; j < chain_vars->count; j++) {
                 chain_vars->catchup[j] = chain_vars->catchup[j + 1];
             }
-            chain_vars->catchup[idx] += diff;
-            if (chain_vars->catchup[idx] < 0.0f) {
-                chain_vars->catchup[idx] += (float)*(s32 *)chain_vars->path;
+            chain_vars->catchup[last_hit_link_index] += diff;
+            if (chain_vars->catchup[last_hit_link_index] < 0.0f) {
+                chain_vars->catchup[last_hit_link_index] += (float)*(s32 *)chain_vars->path;
             }
         }
         {
             int k;
-            for (k = idx; k < chain_vars->count; k++) {
+            for (k = last_hit_link_index; k < chain_vars->count; k++) {
                 chain_vars->offsets[k] = chain_vars->offsets[k + 1];
             }
         }
@@ -816,13 +816,13 @@ void FUN_L11_00317c98(struct Moby *moby) {
             char *head_position = (char *)&moby->pos;
             float *dv;
             char *head_rotation;
-            fast_vec_scale(vec, &moby->rot_row0, (dv = D_L11_0015F580, head_rotation = (char *)&moby->rot, D_L11_00162330 * frame_scale));
-            vec[2] += frame_scale * 0.08f;
+            fast_vec_scale(fragment_initial_velocity, &moby->rot_row0, (dv = D_L11_0015F580, head_rotation = (char *)&moby->rot, D_L11_00162330 * frame_scale));
+            fragment_initial_velocity[2] += frame_scale * 0.08f;
             FUN_0022da68(2, 0, moby);
             cart_burst(moby, head_position, -1, 3.0f, 13.0f);
-            FUN_L00_00263fd8((char *)moby, 0x602, (float *)head_position, head_rotation, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
-            FUN_L00_00263fd8((char *)moby, 0x603, (float *)head_position, head_rotation, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
-            FUN_L00_00263fd8((char *)moby, 0x784, (float *)head_position, head_rotation, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
+            FUN_L00_00263fd8((char *)moby, 0x602, (float *)head_position, head_rotation, scale_game_frames(0x5A), 0, fragment_initial_velocity, dv, frame_time_sq * 12.0f, dv);
+            FUN_L00_00263fd8((char *)moby, 0x603, (float *)head_position, head_rotation, scale_game_frames(0x5A), 0, fragment_initial_velocity, dv, frame_time_sq * 12.0f, dv);
+            FUN_L00_00263fd8((char *)moby, 0x784, (float *)head_position, head_rotation, scale_game_frames(0x5A), 0, fragment_initial_velocity, dv, frame_time_sq * 12.0f, dv);
             mark_moby_for_removal(moby);
         }
     }
