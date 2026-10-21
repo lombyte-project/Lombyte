@@ -1301,12 +1301,12 @@ int FUN_001fa6d0(float);
 int FUN_00213260(int);
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
-unsigned char *FUN_L00_002743a8(int k, u128 *pos, int lifetime_frames, float x, float y, int mode, int col,
+unsigned char *FUN_L00_002743a8(int k, u128 *initial_position, int lifetime_frames, float x, float y, int mode, int col,
                                 float *vec) {
     unsigned char *particle = FUN_L00_002678b8(0x43);
     if (particle) {
         unsigned char *particle_data = particle + 0x20;
-        qcopy(particle + 0x10, pos);
+        qcopy(particle + 0x10, initial_position);
         *(int *)(particle_data + 0xC) = k;
         *(float *)(particle_data + 0x10) = x;
         *(float *)(particle_data + 0x14) = y;
