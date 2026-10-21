@@ -604,8 +604,8 @@ void FUN_L01_0030d880(struct Moby *moby, struct HoverVars *hover_vars) {
     Vec4 steering_correction;
     f32 reference_distance;
     f32 k;
-    f32 ang;
-    f32 len;
+    f32 bearing_yaw;
+    f32 velocity_magnitude;
     s32 hit;
     s16 stuck_frames;
     struct HoverTuning *hover_tuning;
@@ -619,8 +619,8 @@ void FUN_L01_0030d880(struct Moby *moby, struct HoverVars *hover_vars) {
     vector_distance(&moby->pos, hover_vars);
     switch (moby->command) {
     case HOVER_COMMAND_FACE_GOAL:
-        ang = fast_arc_tan(hover_vars->goal.f[0] - moby->pos.x, hover_vars->goal.f[1] - moby->pos.y);
-        FUN_L00_00258278(moby, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
+        bearing_yaw = fast_arc_tan(hover_vars->goal.f[0] - moby->pos.x, hover_vars->goal.f[1] - moby->pos.y);
+        FUN_L00_00258278(moby, &D_L01_001DEB4C, bearing_yaw, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
                          frame_time * 11.519173f);
         if (1.3f < reference_distance) {
             moby->command = 2;
@@ -628,12 +628,12 @@ void FUN_L01_0030d880(struct Moby *moby, struct HoverVars *hover_vars) {
         break;
     case HOVER_COMMAND_MOVE_TO_GOAL:
         if (hover_vars->target == 0) {
-            ang = fast_arc_tan(hover_vars->goal.f[0] - moby->pos.x, hover_vars->goal.f[1] - moby->pos.y);
-            FUN_L00_00258278(moby, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
+            bearing_yaw = fast_arc_tan(hover_vars->goal.f[0] - moby->pos.x, hover_vars->goal.f[1] - moby->pos.y);
+            FUN_L00_00258278(moby, &D_L01_001DEB4C, bearing_yaw, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
                              frame_time * 11.519173f);
         } else {
-            ang = fast_arc_tan(hover_vars->target->pos.x - moby->pos.x, hover_vars->target->pos.y - moby->pos.y);
-            FUN_L00_00258278(moby, &D_L01_001DEB4C, ang,
+            bearing_yaw = fast_arc_tan(hover_vars->target->pos.x - moby->pos.x, hover_vars->target->pos.y - moby->pos.y);
+            FUN_L00_00258278(moby, &D_L01_001DEB4C, bearing_yaw,
                              D_L01_001620C4 * DEG_TO_RAD * frame_time_sq, D_L01_001620C8 * DEG_TO_RAD * frame_time_sq,
                              D_L01_001620CC * DEG_TO_RAD * frame_time);
         }
@@ -651,10 +651,10 @@ void FUN_L01_0030d880(struct Moby *moby, struct HoverVars *hover_vars) {
         }
         hover_tuning = &D_L01_001DEB38;
         hit = FUN_L00_00258ad0(moby, &hover_vars->vel, 1.0f, hover_tuning->unk30, hover_tuning->unk0, 0);
-        len = fast_vec_length(&hover_vars->vel);
+        velocity_magnitude = fast_vec_length(&hover_vars->vel);
         if (hit == 0) {
             hover_vars->stuck = 0;
-        } else if (len < 0.005f) {
+        } else if (velocity_magnitude < 0.005f) {
             stuck_frames = ++hover_vars->stuck;
             if (scale_game_frames(20) < stuck_frames && moby->visible == 0) {
                 qcopy(&moby->pos, hover_vars);
@@ -663,9 +663,9 @@ void FUN_L01_0030d880(struct Moby *moby, struct HoverVars *hover_vars) {
         }
         if (reference_distance < 1.1f) {
             k = 1.1f - reference_distance;
-            ang = fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y);
-            hover_vars->vel.f[0] -= k * fast_cos(ang) * (frame_scale_sq * 0.1f);
-            hover_vars->vel.f[1] -= k * fast_sin(ang) * (frame_scale_sq * 0.1f);
+            bearing_yaw = fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y);
+            hover_vars->vel.f[0] -= k * fast_cos(bearing_yaw) * (frame_scale_sq * 0.1f);
+            hover_vars->vel.f[1] -= k * fast_sin(bearing_yaw) * (frame_scale_sq * 0.1f);
         }
         break;
     default:
