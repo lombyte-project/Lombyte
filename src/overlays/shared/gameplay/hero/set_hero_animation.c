@@ -683,7 +683,7 @@ void FUN_L00_002330d0(void) {
     struct Hero *blk2;
     struct Hero *blk3;
     struct Hero *blk4;
-    char *obj;
+    char *hero_flag_target;
     int i;
 
     *(unsigned short *)(*(char * *)&base->unkA88 + 0x34) &= ~1;
@@ -696,29 +696,29 @@ void FUN_L00_002330d0(void) {
         }
     }
     blk2 = &hero;
-    obj = *(char * *)&blk2->items[3].unk0C;
-    if (obj != 0) {
-        *(unsigned short *)(obj + 0x34) &= ~1;
+    hero_flag_target = *(char * *)&blk2->items[3].unk0C;
+    if (hero_flag_target != 0) {
+        *(unsigned short *)(hero_flag_target + 0x34) &= ~1;
     }
     if (blk2->vehicle_mode == 1) {
-        obj = *(char * *)&blk2->unk1624;
-        if (obj != 0) {
-            *(unsigned short *)(obj + 0x34) &= ~1;
+        hero_flag_target = *(char * *)&blk2->unk1624;
+        if (hero_flag_target != 0) {
+            *(unsigned short *)(hero_flag_target + 0x34) &= ~1;
         }
     }
     blk3 = &hero;
     if (blk3->unk22D8 != 0) {
-        obj = *(char * *)&blk3->items[3].moby;
-        if (obj != 0) {
-            *(unsigned short *)(obj + 0x34) |= 0x41;
+        hero_flag_target = *(char * *)&blk3->items[3].moby;
+        if (hero_flag_target != 0) {
+            *(unsigned short *)(hero_flag_target + 0x34) |= 0x41;
         }
-        obj = *(char * *)&blk3->items[3].moby2;
-        if (obj != 0) {
-            *(unsigned short *)(obj + 0x34) |= 0x41;
+        hero_flag_target = *(char * *)&blk3->items[3].moby2;
+        if (hero_flag_target != 0) {
+            *(unsigned short *)(hero_flag_target + 0x34) |= 0x41;
         }
-        obj = *(char * *)&blk3->items[3].unk0C;
-        if (obj != 0) {
-            *(unsigned short *)(obj + 0x34) |= 0x41;
+        hero_flag_target = *(char * *)&blk3->items[3].unk0C;
+        if (hero_flag_target != 0) {
+            *(unsigned short *)(hero_flag_target + 0x34) |= 0x41;
         }
     }
     blk4 = &hero;
@@ -726,9 +726,9 @@ void FUN_L00_002330d0(void) {
         blk4->unk20AF != 0) {
         struct Hero *blk5 = &hero;
 
-        obj = *(char **)&blk5->items[0].moby;
-        if (obj != 0) {
-            *(unsigned short *)(obj + 0x34) |= 0x41;
+        hero_flag_target = *(char **)&blk5->items[0].moby;
+        if (hero_flag_target != 0) {
+            *(unsigned short *)(hero_flag_target + 0x34) |= 0x41;
         }
     }
 }
