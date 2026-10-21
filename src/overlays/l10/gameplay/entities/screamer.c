@@ -337,9 +337,9 @@ extern void allocate_voice_for_bank_entry_2DFC38(int, int, int) __asm__("FUN_002
 
 void FUN_L10_002dfc38(struct Moby *moby) {
     MobyData_2DFC38 *data = (MobyData_2DFC38 *)moby->pvars;
-    Hit_2DFC38 *r;
-    float v[4];
-    float w[4];
+    Hit_2DFC38 *hit_record;
+    float relative_offset[4];
+    float transformed_offset[4];
     int st;
     int target_selection_status;
     float ang;
@@ -350,10 +350,10 @@ void FUN_L10_002dfc38(struct Moby *moby) {
     }
     tick_timer_2DFC38(&data->f184);
     if (moby->state != 11) {
-        r = (Hit_2DFC38 *)hit_search_2DFC38(moby, 0x330000, 0);
-        hit_update_2DFC38(moby, r, &data->f20, 5, &st, 0, 0, 4);
-        if (r != 0) {
-            if (data->f20 <= r->f2C) {
+        hit_record = (Hit_2DFC38 *)hit_search_2DFC38(moby, 0x330000, 0);
+        hit_update_2DFC38(moby, hit_record, &data->f20, 5, &st, 0, 0, 4);
+        if (hit_record != 0) {
+            if (data->f20 <= hit_record->f2C) {
                 if (D_00151F38 != 0 && D_0013D408_2DFC38.flag == 0) {
                     D_0013D408_2DFC38.flag = 1;
                     allocate_voice_for_bank_entry_2DFC38(1, 0, 0);
@@ -369,14 +369,14 @@ void FUN_L10_002dfc38(struct Moby *moby) {
                 data->f84 = 9;
                 data->f78 = D_0015ED6C * 7.0f;
                 data->f7C = D_0015ED6C * 10.0f;
-                if (r->f30 & 1) ang = angle_atan2(r->f10[0], r->f10[1]);
-                else ang = angle_atan2(moby->pos.x - r->x, moby->pos.y - r->y);
+                if (hit_record->f30 & 1) ang = angle_atan2(hit_record->f10[0], hit_record->f10[1]);
+                else ang = angle_atan2(moby->pos.x - hit_record->x, moby->pos.y - hit_record->y);
                 trooper_start_knockback(moby, data->f60, ang, 5, 1, 0);
                 data->f117 = 0x78;
                 trooper_anim_update(moby, data->f110);
                 func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
             } else {
-                data->f20 = data->f20 - r->f2C;
+                data->f20 = data->f20 - hit_record->f2C;
                 data->f117 = 0xfa;
                 data->f26 = game_frames_2DFC38(60);
                 trooper_anim_update(moby, data->f110);
@@ -394,10 +394,10 @@ void FUN_L10_002dfc38(struct Moby *moby) {
         target_selection_status = ahead_f(data->f180, moby, data->fC0);
         if (target_selection_status != 2) {
             Anim_2DFC38 *bp = &D_L10_001600EC_2DFC38[data->f194];
-            subtract_vector_xyz(v, D_0013F3D0, bp->f30);
-            v[3] = 0.0f;
-            transform_vector_by_basis(w, v, bp->f40);
-            if (w[0] <= -1.0f || 0.0f <= w[0] || w[1] <= -1.0f || 1.0f <= w[1] || w[2] <= -1.0f || 1.0f <= w[2]) data->f104 = 2;
+            subtract_vector_xyz(relative_offset, D_0013F3D0, bp->f30);
+            relative_offset[3] = 0.0f;
+            transform_vector_by_basis(transformed_offset, relative_offset, bp->f40);
+            if (transformed_offset[0] <= -1.0f || 0.0f <= transformed_offset[0] || transformed_offset[1] <= -1.0f || 1.0f <= transformed_offset[1] || transformed_offset[2] <= -1.0f || 1.0f <= transformed_offset[2]) data->f104 = 2;
         }
     } else if (moby->state == 1 && data->f18C >= 0) {
         Path_2DFC38 *path = D_L10_001B0C30_2DFC38[data->f18C];
