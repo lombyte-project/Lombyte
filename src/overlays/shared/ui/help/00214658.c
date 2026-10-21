@@ -823,12 +823,12 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 
 /* Allocates a voice (b, 4, a) for slot idx when it has none; records a in slot idx. */
 void FUN_L00_00216e48(int idx, int a, int b);
-void FUN_L00_00216e48(int idx, int a, int b) {
-    G *g = &D_0013F350;
-    if (g->a[idx] == -1) {
-        g->a[idx] = allocate_voice_for_target_entry(b, 4, a);
+void FUN_L00_00216e48(int voice_slot_index, int a, int b) {
+    G *hero_state = &D_0013F350;
+    if (hero_state->a[voice_slot_index] == -1) {
+        hero_state->a[voice_slot_index] = allocate_voice_for_target_entry(b, 4, a);
     }
-    g->b[idx] = a;
+    hero_state->b[voice_slot_index] = a;
 }
 /* D_0013F350 + 0x21D8 is an array of 8 s16 slots of four s16 fields each. */
 
