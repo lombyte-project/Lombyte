@@ -354,7 +354,7 @@ void FUN_L05_00329358(char *moby) {
     normalize_vector_xyz(focus_position + 8, &hero.gravity_dir, -1.0f);
 }
 extern char *D_L05_00167200 __attribute__((section(".data")));
-void FUN_L05_003294c0(float spring_distance, float spring_height, float focus_distance, float airborne_spring_distance, float airborne_spring_height, float airborne_focus_distance, float g, float position_spring_coefficient) {
+void FUN_L05_003294c0(float spring_distance, float spring_height, float focus_distance, float airborne_spring_distance, float airborne_spring_height, float airborne_focus_distance, float position_spring_response_coefficient, float position_spring_coefficient) {
     char *camera = D_L05_00167200;
     char *orbit = *(char **)(camera + 0x70);
 
@@ -365,10 +365,10 @@ void FUN_L05_003294c0(float spring_distance, float spring_height, float focus_di
     *(float *)(orbit + 0x194) = airborne_spring_height;
     *(float *)(orbit + 0x18C) = airborne_focus_distance;
     orbit = *(char **)(camera + 0x70);
-    if (g < 0.0f) {
+    if (position_spring_response_coefficient < 0.0f) {
         *(float *)(orbit + 0x10) = 0.01f;
     } else {
-        *(float *)(orbit + 0x10) = g;
+        *(float *)(orbit + 0x10) = position_spring_response_coefficient;
     }
     if (position_spring_coefficient < 0.0f) {
         *(float *)(orbit + 0x14) = 0.2f;
