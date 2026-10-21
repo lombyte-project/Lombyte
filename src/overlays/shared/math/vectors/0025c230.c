@@ -198,7 +198,7 @@ int mine_fall(char *moby, char *st) {
     float predicted_query_position[4];
     float surface_normal[4];
     float normal_response_vector[4];
-    float f60, f64, f68, f6c;
+    float horizontal_motion_magnitude, f64, f68, f6c;
     
     Vec4 *g;
     char *collision_metadata;
@@ -214,10 +214,10 @@ int mine_fall(char *moby, char *st) {
         }
     }
 
-    f60 = vector_length_xy(st);
+    horizontal_motion_magnitude = vector_length_xy(st);
     motion_or_record_value = (*(short *)(st + 0x3E) == 2) ? 0.0f : *(float *)(st + 0x4C);
-    approach_value(&f60, motion_or_record_value, *(float *)(st + 0x14));
-    set_vector_length_xy((float *)st, (float *)st, f60);
+    approach_value(&horizontal_motion_magnitude, motion_or_record_value, *(float *)(st + 0x14));
+    set_vector_length_xy((float *)st, (float *)st, horizontal_motion_magnitude);
     if (*(float *)(st + 0x1C) < *(float *)(st + 0x8)) {
         *(float *)(st + 0x8) = *(float *)(st + 0x1C);
     }
