@@ -2087,8 +2087,8 @@ void FUN_L16_002cf9d0(Level16VendorVectorMoby_u *moby, int index, void *out);
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
 /* Patrol step: advances the moby's path node until the next node is ahead and far enough, switching between the base path and its branches. */
-void FUN_L16_002cf9f8(char *obj) {
-    L16PatrolMoby *moby = (L16PatrolMoby *)obj;
+void FUN_L16_002cf9f8(char *patrol_moby) {
+    L16PatrolMoby *moby = (L16PatrolMoby *)patrol_moby;
     L16PatrolData *patrol_data = moby->data;
     float target[4];
     float heading, distance;
