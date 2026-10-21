@@ -156,7 +156,7 @@ int FUN_L00_002050b8_00231ff8(int) __asm__("FUN_L00_002050b8");
 int FUN_L00_0020d498_00231ff8(int) __asm__("FUN_L00_0020d498");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 int FUN_L00_00231ff8(int input_animation_id, int *out_primary_animation_id, int *out_secondary_animation_id) {
-    int idx[20];
+    int matching_animation_entry_indices[20];
     E_231ff8 *animation_table;
     int match_count = 0;
     int animation_lookup_key = FUN_L00_002050b8_00231ff8(input_animation_id);
@@ -173,14 +173,14 @@ int FUN_L00_00231ff8(int input_animation_id, int *out_primary_animation_id, int 
         int j = 0;
         while (animation_table[j].h0 != -1) {
             if (animation_lookup_key == animation_table[j].h0) {
-                idx[match_count] = j;
+                matching_animation_entry_indices[match_count] = j;
                 match_count++;
             }
             j++;
         }
     }
     if (match_count != 0) {
-        int k = idx[random_int_between(0, match_count - 1)];
+        int k = matching_animation_entry_indices[random_int_between(0, match_count - 1)];
         *out_primary_animation_id = animation_table[k].b2;
         *out_secondary_animation_id = animation_table[k].b3;
         return 1;
