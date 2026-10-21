@@ -2450,7 +2450,7 @@ extern int D_L00_0015F5CC_2a9ed0 __asm__("D_L00_0015F5CC");
 float FUN_002132a8_2a9ed0(float, float) __asm__("FUN_002132a8");
 void FUN_L00_00250df8_2a9ed0(void *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_mine(int owner, OvlQuad *pos) __asm__("FUN_L00_002a9ed0");
-unsigned char *spawn_mine(int owner, OvlQuad *pos) {
+unsigned char *spawn_mine(int owner, OvlQuad *spawn_position) {
     unsigned char *mine_moby = create_moby(0x4A);
     if (mine_moby) {
         unsigned char *mine_vars = *(unsigned char **)(mine_moby + 0x78);
@@ -2462,7 +2462,7 @@ unsigned char *spawn_mine(int owner, OvlQuad *pos) {
         *(int *)(mine_vars + 0x30) = owner;
         *(short *)(mine_vars + 0x36) = 0;
         *(int *)(mine_vars + 0x78) = 0;
-        qcopy(mine_moby + 0x10, pos);
+        qcopy(mine_moby + 0x10, spawn_position);
         clear_u64_value(mine_vars);
         {
             float a =
