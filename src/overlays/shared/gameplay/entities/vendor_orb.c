@@ -412,14 +412,14 @@ extern u8 *D_L00_0015FFD8;
 s32 FUN_L00_002e02e0(void) {
     struct Hero *base;
     u8 *tbl;
-    s32 v;
+    s32 ground_moby_address;
     s32 idx;
     u8 flags;
     base = &hero;
     tbl = D_L00_0015FFD8;
-    v = ((s32)base->ground_moby);
+    ground_moby_address = ((s32)base->ground_moby);
     flags = (u8)base->unk20B0;
-    tbl += *(s32 *)*(s32 *)((u8 *)v + 0x78) << 8;
+    tbl += *(s32 *)*(s32 *)((u8 *)ground_moby_address + 0x78) << 8;
     if (!flags) {
         if (tbl[0xBC] & 2)
             return 1;
