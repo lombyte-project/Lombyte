@@ -9,14 +9,14 @@ extern s32 EnableInterrupts(void);
 extern void _sendIpuCommand(MpegDec *d, u32 cmd);
 extern void _dispatchMpegCallback(void *cb, s32 *arg);
 
-void _doCSC(MpegDec *decoder, u32 src, s32 mbs) {
+void _doCSC(MpegDec *decoder, u32 ipu_output_address, s32 mbs) {
     s32 cbarg[8];
     s32 intr;
 
     while ((s32) * (volatile u32 *)0x10002010 < 0) {
     }
     intr = DIntr();
-    *(volatile u32 *)0x1000B010 = src & 0x0FFFFFFF;
+    *(volatile u32 *)0x1000B010 = ipu_output_address & 0x0FFFFFFF;
     *(volatile u32 *)0x1000B020 = mbs << 6;
     *(volatile u32 *)0x1000B000 = 0x100;
     if (intr) {
