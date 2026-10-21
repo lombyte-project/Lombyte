@@ -1472,7 +1472,7 @@ unsigned char *FUN_L14_002dea98(char *owner, char *pos) {
     unsigned char *spawned_moby = func_0020D348_m(0x145);
     char *spawned_vars;
     char *g;
-    float vec[8];
+    float launch_vector_scratch[8];
     if (spawned_moby != 0) {
         spawned_vars = *(char **)(spawned_moby + 0x78);
         *(char **)(spawned_vars + 0x24) = owner;
@@ -1483,14 +1483,14 @@ unsigned char *FUN_L14_002dea98(char *owner, char *pos) {
         *(short *)(spawned_moby + 0x32) = 0xFF;
         spawned_moby[0x31] = 1;
         g = (char *)&hero.motion.pos;
-        subtract_vector_xyz(vec, spawned_moby + 0x10, g);
+        subtract_vector_xyz(launch_vector_scratch, spawned_moby + 0x10, g);
         g = g + 0x210;
-        vec[2] = 0.0f;
-        normalize_vector_xyz(vec, vec,
+        launch_vector_scratch[2] = 0.0f;
+        normalize_vector_xyz(launch_vector_scratch, launch_vector_scratch,
                              random_float_between_alt(D_L14_00161B08 * frame_scale,
                                                       D_L14_00161B0C * frame_scale));
-        cross_vectors_xyz(vec + 4, g, vec);
-        build_look_at_matrix(spawned_vars, vec, g, FUN_L00_00257c48(0.34906584f, 1.0471976f));
+        cross_vectors_xyz(launch_vector_scratch + 4, g, launch_vector_scratch);
+        build_look_at_matrix(spawned_vars, launch_vector_scratch, g, FUN_L00_00257c48(0.34906584f, 1.0471976f));
         *(float *)(spawned_vars + 8) = random_float_between_alt(D_L14_00161B10 * frame_scale,
                                                      D_L14_00161B14 * frame_scale);
         *(float *)(spawned_vars + 0x10) = FUN_L00_00257c48(0.0f, 0.008726646f);
