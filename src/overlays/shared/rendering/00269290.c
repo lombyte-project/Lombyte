@@ -1026,7 +1026,7 @@ extern int FUN_001fa6d0_26bb70(float) __asm__("FUN_001fa6d0");
 extern int FUN_001160d8_26bb70(void) __asm__("FUN_001160d8");
 
 extern unsigned char *D_L00_001B20BC __attribute__((section(".data")));
-unsigned char *FUN_L00_0026bb70(void *spawn_position, void *initial_velocity, int initial_color, int final_color, float initial_size, int lifetime, int secondary_spawn_enabled, int g,
+unsigned char *FUN_L00_0026bb70(void *spawn_position, void *initial_velocity, int initial_color, int final_color, float initial_size, int lifetime, int secondary_spawn_enabled, int texture_id,
                                 int blend_mode) {
     unsigned char *particle;
     unsigned char *particle_data;
@@ -1046,10 +1046,10 @@ unsigned char *FUN_L00_0026bb70(void *spawn_position, void *initial_velocity, in
         particle[1] = 0;
         *(float *)(particle + 0xC) = initial_size;
         particle[8] = FUN_001160d8_26bb70();
-        if (g == -1) {
+        if (texture_id == -1) {
             particle[2] = *D_L00_001B20BC;
         } else {
-            particle[2] = g;
+            particle[2] = texture_id;
         }
         particle_data = particle + 0x20;
         *(s16 *)(particle + 0xA) = lifetime;
