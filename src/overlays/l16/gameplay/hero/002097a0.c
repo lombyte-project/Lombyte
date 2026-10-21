@@ -23,34 +23,34 @@ extern int hero_set_state(int, int) __asm__("FUN_L16_0021e398");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L16_002097a0(void) {
-    struct Hero *g = &hero;
-    int keep = g->unk12ED;
-    int st = g->ground_type;
+    struct Hero *hero_data = &hero;
+    int keep = hero_data->unk12ED;
+    int saved_ground_type = hero_data->ground_type;
     int level_index;
-    fast_mem_zero16(&g->ground_type, 0x10);
-    g->unk12ED = keep;
-    g->ground_type = -1;
-    g->unk20A9 = 0;
-    g->unk308 = 0;
-    if (st == -1)
+    fast_mem_zero16(&hero_data->ground_type, 0x10);
+    hero_data->unk12ED = keep;
+    hero_data->ground_type = -1;
+    hero_data->unk20A9 = 0;
+    hero_data->unk308 = 0;
+    if (saved_ground_type == -1)
         return;
-    if (st == 2) {
-        if (g->frames_off_ground.s == 0 || g->ground_distance < 0.3f) {
-            g->unk12E7 = 1;
-            if (g->vehicle_mode == 0) {
-                char *item_moby = (char *)g->items[1].moby;
+    if (saved_ground_type == 2) {
+        if (hero_data->frames_off_ground.s == 0 || hero_data->ground_distance < 0.3f) {
+            hero_data->unk12E7 = 1;
+            if (hero_data->vehicle_mode == 0) {
+                char *item_moby = (char *)hero_data->items[1].moby;
                 if (item_moby != 0 && *(short *)(item_moby + 0xA6) == 0xAD)
-                    g->unk308 = 1;
+                    hero_data->unk308 = 1;
             }
         }
     }
-    if (st == 0xE) {
+    if (saved_ground_type == 0xE) {
         struct Hero *q = &hero;
         q->base_condition = 1;
         q->unk22A4 = 0.2f;
         q->water_surface_z = q->ground_z.f + 0.2f;
     }
-    if (st == 0) {
+    if (saved_ground_type == 0) {
         struct Hero *q = &hero;
         float water_depth = q->water_surface_z - q->ground_z.f;
         q->unk22A4 = water_depth;
@@ -75,39 +75,39 @@ void FUN_L16_002097a0(void) {
             }
         }
     }
-    if (st == 0xB) {
+    if (saved_ground_type == 0xB) {
         struct Hero *q = &hero;
         q->selector_11 = 1;
     }
-    if (st == 0x5) {
+    if (saved_ground_type == 0x5) {
         struct Hero *q = &hero;
         q->unk12E8 = 1;
     }
-    if (st == 0x6) {
+    if (saved_ground_type == 0x6) {
         struct Hero *q = &hero;
         q->unk12E9 = 1;
     }
-    if (st == 0x2) {
+    if (saved_ground_type == 0x2) {
         struct Hero *q = &hero;
         q->unk12E7 = 1;
     }
-    if (st == 0x4) {
+    if (saved_ground_type == 0x4) {
         struct Hero *q = &hero;
         q->unk12E3 = 1;
     }
-    if (st == 0xD) {
+    if (saved_ground_type == 0xD) {
         struct Hero *q = &hero;
         q->selector_13 = 1;
     }
-    if (st == 0x8) {
+    if (saved_ground_type == 0x8) {
         struct Hero *q = &hero;
         q->on_slip_ground = 1;
     }
-    if (st == 0x9) {
+    if (saved_ground_type == 0x9) {
         struct Hero *q = &hero;
         q->unk12EE = 1;
     }
-    if (st == 0xC) {
+    if (saved_ground_type == 0xC) {
         struct Hero *q = &hero;
         q->on_slip_ground = 1;
     }
