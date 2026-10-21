@@ -104,26 +104,26 @@ void sky_particles_update(void) {
         E_289108 *particle = &D_L00_0016051C_289108->list[i];
         if (particle->b0 == 0) {
             unsigned short *phase_halves = &particle->hC;
-            float azimuth_radians, b;
+            float azimuth_radians, polar_angle_radians;
             particle->hC++;
             phase_halves[1]++;
             azimuth_radians = convert_integer_to_float((particle->hC & 0xFFF) - 0x800) * 0.0015339808f;
-            b = convert_integer_to_float((phase_halves[1] & 0xFFF) - 0x800) * 0.0015339808f;
-            particle->f10 = fast_cos(azimuth_radians) * fast_sin(b) * 50.0f;
-            particle->f14 = fast_sin(azimuth_radians) * fast_sin(b) * 50.0f;
-            particle->f18 = absolute_float(fast_cos(b)) * 50.0f;
+            polar_angle_radians = convert_integer_to_float((phase_halves[1] & 0xFFF) - 0x800) * 0.0015339808f;
+            particle->f10 = fast_cos(azimuth_radians) * fast_sin(polar_angle_radians) * 50.0f;
+            particle->f14 = fast_sin(azimuth_radians) * fast_sin(polar_angle_radians) * 50.0f;
+            particle->f18 = absolute_float(fast_cos(polar_angle_radians)) * 50.0f;
             if ((particle->hC & 0x3F) < 8) {
                 particle->w4 = 0x702020F0;
             } else {
                 particle->w4 = 0x202020F0;
             }
         } else if (particle->b0 == 1) {
-            int r = rand() >> 16;
-            int packed_color_offset = ((r & 0x1F00) << 10) - 0x202020;
+            int random_color_bits = rand() >> 16;
+            int packed_color_offset = ((random_color_bits & 0x1F00) << 10) - 0x202020;
             int packed_color = *(int *)&particle->hC;
             packed_color += packed_color_offset;
-            packed_color += (r & 0x1F0) << 6;
-            packed_color += (r & 0x1F) << 2;
+            packed_color += (random_color_bits & 0x1F0) << 6;
+            packed_color += (random_color_bits & 0x1F) << 2;
             particle->w4 = packed_color;
         }
     }
