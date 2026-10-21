@@ -7702,7 +7702,7 @@ extern int D_L06_001621B8 __attribute__((sda));
 void FUN_L06_00304818(int unused, void *obj) {
     float pos[4];
     V6 first_color_palette;
-    V6 b;
+    V6 second_color_palette;
     int i = 0;
     clear_u64_value(pos);
     if (D_L06_001621B8 > 0) {
@@ -7716,10 +7716,10 @@ void FUN_L06_00304818(int unused, void *obj) {
             i++;
             frame_scaled_random_factor = random_float_between(8.0f, 10.0f);
             first_color_palette = D_L06_002019A0;
-            b = D_L06_002019B8;
+            second_color_palette = D_L06_002019B8;
             frame_scaled_random_factor = frame_scaled_random_factor * frame_time;
             pa = first_color_palette.v + random_integer_below(6);
-            pb = b.v + random_integer_below(6);
+            pb = second_color_palette.v + random_integer_below(6);
             f = D_L06_001621B4 * 400000.0f;
             random_frame_count = random_int_between(scale_game_frames(0xF), scale_game_frames(0x14));
             FUN_L00_0026a9f0(obj, pos, *pa, *pb, f, random_frame_count, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, frame_scaled_random_factor * D_L06_001621B4);
