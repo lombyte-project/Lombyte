@@ -2640,11 +2640,11 @@ typedef struct {
     s32 f;
 } T6;
 s32 FUN_L00_002d5800(T6 *moby) {
-    s32 v;
+    s32 moby_vars_address;
     if (moby != 0) {
-        v = moby->f;
-        if (v != 0) {
-            return v + 0xD0;
+        moby_vars_address = moby->f;
+        if (moby_vars_address != 0) {
+            return moby_vars_address + 0xD0;
         }
         return 0;
     }
