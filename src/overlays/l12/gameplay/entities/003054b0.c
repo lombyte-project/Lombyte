@@ -841,7 +841,7 @@ void FUN_L12_003076e0(struct Moby *spawner) {
     int *indexed_spawner_data = (int *)(spawner_data + (*(int *)(spawner_data + 0xF0) << 2));
     struct Moby *spawned_moby = (struct Moby *)((unsigned char *)D_L12_0015FFD8_p + (indexed_spawner_data[0x30] << 8));
     struct MobyClass *moby_class;
-    short *r;
+    short *aim_height_data;
     int i;
     qcopy(&spawned_moby->pos, &spawner->pos);
     spawned_moby->pos.z -= 0.35f;
@@ -864,9 +864,9 @@ void FUN_L12_003076e0(struct Moby *spawner) {
     for (i = 0; i < 14; i++) {
         FUN_L00_0026de90(&spawner->pos, 0, random_float_between(frame_time * 3.0f, frame_time * 5.0f));
     }
-    r = suck_get_aim_height(spawned_moby);
-    if (r != 0) {
-        *(float *)r = r[2];
+    aim_height_data = suck_get_aim_height(spawned_moby);
+    if (aim_height_data != 0) {
+        *(float *)aim_height_data = aim_height_data[2];
     }
 }
 
