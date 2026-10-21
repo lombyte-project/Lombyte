@@ -1927,10 +1927,10 @@ void FUN_L11_00311be8(void *moby, void *active_moby_count, void *visible_moby_co
     if (moby_list_entry == 0)
         return;
     do {
-        int off = (*(unsigned short *)moby_list_entry & 0x7FFF) << 8;
-        if (((char *)D_L11_0015FFD8)[off + 0x20] >= 0) {
+        int listed_moby_byte_offset = (*(unsigned short *)moby_list_entry & 0x7FFF) << 8;
+        if (((char *)D_L11_0015FFD8)[listed_moby_byte_offset + 0x20] >= 0) {
             (*(unsigned short *)active_moby_count)++;
-            if (((unsigned char *)D_L11_0015FFD8)[off + 0x31] != 0) {
+            if (((unsigned char *)D_L11_0015FFD8)[listed_moby_byte_offset + 0x31] != 0) {
                 (*(unsigned short *)visible_moby_count)++;
             }
         }
