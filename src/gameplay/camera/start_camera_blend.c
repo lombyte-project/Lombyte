@@ -22,12 +22,12 @@ extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
    the +0x70 timer advances. */
 void start_camera_blend(void *arg) __asm__("FUN_001ec8a0");
 
-void start_camera_blend(void *arg) {
-    char *src = arg;
+void start_camera_blend(void *source_camera_transform) {
+    char *src = source_camera_transform;
     char *r = cam_trans_state;
-    char local0[16];
-    char local1[16];
-    char local2[16];
+    char orbit_reference_direction[16];
+    char orbit_yaw_side_direction[16];
+    char orbit_axis[16];
     unsigned char sub;
 
     if (*(short *)r == 1) {
@@ -42,11 +42,11 @@ void start_camera_blend(void *arg) {
         } else {
             struct Hero *g = &hero;
 
-            fast_vec_normalize(local0, (char *)g->moby + 0xC0, 1.0f);
-            fast_vec_normalize(local1, (char *)g->moby + 0xD0, 1.0f);
-            fast_vec_normalize(local2, (char *)g->moby + 0xE0, 1.0f);
+            fast_vec_normalize(orbit_reference_direction, (char *)g->moby + 0xC0, 1.0f);
+            fast_vec_normalize(orbit_yaw_side_direction, (char *)g->moby + 0xD0, 1.0f);
+            fast_vec_normalize(orbit_axis, (char *)g->moby + 0xE0, 1.0f);
             compute_camera_angles((float *)(r + 0x70), src + 0x30, *(char **)(r - 0xF0) + 0x30,
-                                  local0, local1, local2);
+                                  orbit_reference_direction, orbit_yaw_side_direction, orbit_axis);
             extract_matrix_rotation_quaternion(r + 0xB0, src);
             qcopy(r + 0xD0, r + 0xB0);
         }
