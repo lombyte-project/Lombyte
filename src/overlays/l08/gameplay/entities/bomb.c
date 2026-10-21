@@ -2854,7 +2854,7 @@ void FUN_L08_002de848(char *moby) {
         MOBY_STATE_FALLING = 2
     };
     float previous_position[4];
-    float b[4];
+    float frame_displacement[4];
     char *moby_vars = *(char **)(moby + 0x78);
     char *pos = moby + 0x10;
     int *path;
@@ -2892,19 +2892,19 @@ void FUN_L08_002de848(char *moby) {
         float c10 = 10.0f;
         float dd;
         float g;
-        char *v = moby_vars + 0x10;
+        char *falling_velocity = moby_vars + 0x10;
         g = D_0015ED6C * 7.3303828f;
         *(float *)(moby_vars + 0x18) = *(float *)(moby_vars + 0x18) - D_0015ED70 * c15;
         dd = fast_add_rotations(*(float *)(moby + 0x40), g);
         *(float *)(moby + 0x40) = *(float *)(moby + 0x40) + dd;
-        *(float *)(moby + 0x44) = -fast_arc_tan(vector_length_xy(v), *(float *)(moby_vars + 0x18));
-        add_vector_xyz(pos, pos, v);
+        *(float *)(moby + 0x44) = -fast_arc_tan(vector_length_xy(falling_velocity), *(float *)(moby_vars + 0x18));
+        add_vector_xyz(pos, pos, falling_velocity);
         if (*(float *)(moby + 0x18) < c10) {
             mark_moby_for_removal(moby);
             return;
         }
         if (coll_sphere(1.25f, pos, 0, moby)) {
-            spawn_explosion(moby, v, pos, 0.0f, 0.0f, 0x14, 0x28, 0x10, c10, 5.0f, 9.0f, 1.0f, -1, c15, 1, 1, -1, 0);
+            spawn_explosion(moby, falling_velocity, pos, 0.0f, 0.0f, 0x14, 0x28, 0x10, c10, 5.0f, 9.0f, 1.0f, -1, c15, 1, 1, -1, 0);
             mark_moby_for_removal(moby);
             return;
         }
@@ -2924,10 +2924,10 @@ void FUN_L08_002de848(char *moby) {
             allocate_voice_for_bank_entry(1, 0, 0);
             FUN_L00_00263d40(0x53D6, -1);
         }
-        subtract_vector_xyz(b, moby + 0x10, previous_position);
-        qcopy(moby_vars + 0x10, b);
+        subtract_vector_xyz(frame_displacement, moby + 0x10, previous_position);
+        qcopy(moby_vars + 0x10, frame_displacement);
         *(float *)(moby_vars + 0x18) = *(float *)(moby_vars + 0x18) + (D_0015ED6C + D_0015ED6C);
-        spawn_explosion(moby, b, moby + 0x10, 0.0f, 0.0f, 0x14, 0x28, 0x10, 10.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+        spawn_explosion(moby, frame_displacement, moby + 0x10, 0.0f, 0.0f, 0x14, 0x28, 0x10, 10.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
         moby[0x20] = 2;
     }
     *(unsigned char *)(moby + 0xA4) = 0xFF;
