@@ -104,6 +104,15 @@ removing the trick does not change the code, it is not a fakematch: delete it.
 - Name unused fields `pad_XXX[n]`.
 - Put offset checks in `src/check/*_layout_check.c`. `make check` runs them.
 
+**Enums**
+
+- Reuse the shared definitions in [enum scope and shared definitions](enum-layout.md).
+- Constants used by several C files belong in the owning subsystem's header.
+  Constants shared only by functions in one C file stay at file scope; a private
+  callback's selector stays local.
+- Extend an existing enum for the same selector. Keep state, substate, command,
+  class ID and callback-result domains separate, even when their values overlap.
+
 ## Data
 
 Data in C has its bytes checked too (`make elf`, `make overlays`), so a wrong
