@@ -32,13 +32,13 @@ extern int sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");
 
 /* Copies menu item idx's label into out, expanding one %b (the bolt cost)
  * or other % escape. */
-void FUN_L00_0024a618(s32 idx, u8 *out) {
-    u8 buf[16];
+void FUN_L00_0024a618(s32 menu_item_index, u8 *out) {
+    u8 substitution_text[16];
     u8 *label_cursor;
     u8 *substitution_cursor;
 
-    label_cursor = get_help_message_text(D_L00_001841F0.items[idx].label);
-    substitution_cursor = buf;
+    label_cursor = get_help_message_text(D_L00_001841F0.items[menu_item_index].label);
+    substitution_cursor = substitution_text;
     if (label_cursor == 0) {
         return;
     }
@@ -51,10 +51,10 @@ void FUN_L00_0024a618(s32 idx, u8 *out) {
     }
     label_cursor++;
     if (*label_cursor == 'b') {
-        sprintf_alt((char *)buf, D_L00_0015FE38,
-                    D_L00_001C40B0[D_L00_001841F0.items[idx].cost_index].f0);
+        sprintf_alt((char *)substitution_text, D_L00_0015FE38,
+                    D_L00_001C40B0[D_L00_001841F0.items[menu_item_index].cost_index].f0);
     } else {
-        sprintf_alt((char *)buf, D_L00_0015FE40);
+        sprintf_alt((char *)substitution_text, D_L00_0015FE40);
     }
     label_cursor++;
     while (*substitution_cursor != 0) {
