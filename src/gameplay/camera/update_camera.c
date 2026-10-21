@@ -32,7 +32,7 @@ extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 void update_camera(void) {
     char *preview_camera_state;
     char *target;
-    char *v;
+    char *camera_shake_base;
     float rotation_matrix[16];
 
     if (game_mode_macro == 5) {
@@ -72,13 +72,13 @@ void update_camera(void) {
         }
     }
 frozen:
-    v = D_001870A0;
-    apply_camera_shake(v, 0);
-    apply_camera_shake(v + 0x10, 1);
+    camera_shake_base = D_001870A0;
+    apply_camera_shake(camera_shake_base, 0);
+    apply_camera_shake(camera_shake_base + 0x10, 1);
     update_camera_underwater_flag();
-    update_camera_environment_from_regions(v - 0x20);
+    update_camera_environment_from_regions(camera_shake_base - 0x20);
     if (D_0015EDB4[0] != 0) {
-        fast_vec_cross(v + 0x200, v + 0x210, v + 0x1F0);
+        fast_vec_cross(camera_shake_base + 0x200, camera_shake_base + 0x210, camera_shake_base + 0x1F0);
     }
 }
 
