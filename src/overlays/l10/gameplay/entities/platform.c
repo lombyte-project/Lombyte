@@ -692,8 +692,8 @@ void FUN_L10_002c7a20(struct Moby *moby) {
     };
     char *data = (char *)moby->pvars;
     float rotation_matrix[16];
-    float v[4];
-    float r[4];
+    float position[4];
+    float rotated_vector[4];
     float position_step[4];
     switch (moby->state) {
     case MOBY_STATE_WAIT_FOR_ACTIVATION:
@@ -704,17 +704,17 @@ void FUN_L10_002c7a20(struct Moby *moby) {
         }
         break;
     case MOBY_STATE_ACTIVE_WITH_SOUND:
-        qcopy(v, &moby->pos);
+        qcopy(position, &moby->pos);
         euler_rotation_matrix(rotation_matrix, &moby->rot.x);
-        clear_u64_value(r);
-        r[2] = *(float *)data * 3.0f * D_0015ED6C_c;
-        transform_vector(r, r, rotation_matrix);
-        scale_vector_xyz(position_step, r, 0.33f);
-        FUN_L00_0026fd28((char *)v, (char *)r, 0x40, (int)moby);
-        add_vector_xyz(v, v, position_step);
-        FUN_L00_0026fd28((char *)v, (char *)r, 0x40, (int)moby);
-        add_vector_xyz(v, v, position_step);
-        FUN_L00_0026fd28((char *)v, (char *)r, 0x40, (int)moby);
+        clear_u64_value(rotated_vector);
+        rotated_vector[2] = *(float *)data * 3.0f * D_0015ED6C_c;
+        transform_vector(rotated_vector, rotated_vector, rotation_matrix);
+        scale_vector_xyz(position_step, rotated_vector, 0.33f);
+        FUN_L00_0026fd28((char *)position, (char *)rotated_vector, 0x40, (int)moby);
+        add_vector_xyz(position, position, position_step);
+        FUN_L00_0026fd28((char *)position, (char *)rotated_vector, 0x40, (int)moby);
+        add_vector_xyz(position, position, position_step);
+        FUN_L00_0026fd28((char *)position, (char *)rotated_vector, 0x40, (int)moby);
         if (voice_is_playing(moby, *(int *)(data + 0x10)) == 0) {
             *(int *)(data + 0x10) = FUN_L00_0028dc90(0, 4, (int)moby, 0x519);
         }
