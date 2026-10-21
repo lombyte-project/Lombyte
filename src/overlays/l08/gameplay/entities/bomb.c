@@ -1365,7 +1365,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 void FUN_L08_002da0f0(struct Moby *moby) {
     Vec4 pos;
-    Vec4 v;
+    Vec4 spray_velocity_or_splash_position;
     char *r;
     int i;
     int spray_random_value;
@@ -1394,20 +1394,20 @@ void FUN_L08_002da0f0(struct Moby *moby) {
     for (i = 0; i < 16; i++) {
         float ang = random_angle_radians();
         float k = random_float_between(frame_time * 0.0f, frame_time * 3.0f);
-        v.f[0] = fast_cos(ang) * k;
-        v.f[1] = fast_sin(ang) * k;
-        v.f[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
+        spray_velocity_or_splash_position.f[0] = fast_cos(ang) * k;
+        spray_velocity_or_splash_position.f[1] = fast_sin(ang) * k;
+        spray_velocity_or_splash_position.f[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
         spray_random_value = FUN_L00_00257b90(0x5A, 0x78);
-        FUN_L00_0026f548(&pos, &v, random_integer_below(2), spray_random_value);
+        FUN_L00_0026f548(&pos, &spray_velocity_or_splash_position, random_integer_below(2), spray_random_value);
     }
     for (i = 0; i < 16; i++) {
         unsigned char *splash;
-        random_vector(v.f, 1.0f, 1.0f);
-        add_vector_xyz(&v, &v, &pos);
-        v.f[2] = D_L08_001D7060[2] + 0.05f;
+        random_vector(spray_velocity_or_splash_position.f, 1.0f, 1.0f);
+        add_vector_xyz(&spray_velocity_or_splash_position, &spray_velocity_or_splash_position, &pos);
+        spray_velocity_or_splash_position.f[2] = D_L08_001D7060[2] + 0.05f;
         sc = random_float_between(0.7f, 1.0f);
         sp = i == 0 ? 2.0f : -2.0f;
-        splash = spawn_splash(&v, D_L08_0015F580, &D_L08_001D7060[2], sc, sp);
+        splash = spawn_splash(&spray_velocity_or_splash_position, D_L08_0015F580, &D_L08_001D7060[2], sc, sp);
         if (splash)
             *(short *)(splash + 0xA) = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(30.0f, 60.0f)));
     }
