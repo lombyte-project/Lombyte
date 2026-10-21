@@ -1018,7 +1018,7 @@ void FUN_L10_002e17c0(struct Moby *moby)
     MobyData_2E2B80 *data = ((struct MobyData_2E2B80 *)moby->pvars);
     float vector_scratch[4];
     float transformed_offset[4];
-    int st;
+    int hit_processing_status;
     float ang;
     Hit_2E2B80 *hit_record;
     int target_selection_status;
@@ -1030,7 +1030,7 @@ void FUN_L10_002e17c0(struct Moby *moby)
     func_001F9908_2E2B80(&data->f184);
     if (moby->state != 13) {
         hit_record = trooper_find_hit(moby, 0x330000, 0);
-        fun_00213928(moby, hit_record, &data->f20, 5, &st, 0, 0, 4);
+        fun_00213928(moby, hit_record, &data->f20, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0 && hit_record->moby->oclass != moby->oclass) {
             if (data->f20 <= hit_record->f2C) {
                 data->f20 = 0.0f;
