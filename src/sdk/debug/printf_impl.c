@@ -19,7 +19,7 @@ void _printf(const char *fmt, char *ap) {
     unsigned long hex_digit;
     u8 ch;
     char second;
-    s64 v;
+    s64 integer_value;
     s32 ie;
 
     ie = DIntr();
@@ -60,21 +60,21 @@ void _printf(const char *fmt, char *ap) {
                 goto again;
             case 'o' - '0':
                 if (mod == 'l') {
-                    v = ARG(s64);
+                    integer_value = ARG(s64);
                 } else if (mod == 'h') {
-                    v = ARG(u16);
+                    integer_value = ARG(u16);
                 } else {
-                    v = ARG(u32);
+                    integer_value = ARG(u32);
                 }
                 text_cursor = &buf[31];
                 *text_cursor = 0;
-                if (v == 0) {
+                if (integer_value == 0) {
                     *--text_cursor = '0';
                 } else {
                     do {
-                        *--text_cursor = (v & 7) + '0';
-                        v = (u64)v >> 3;
-                    } while (v != 0);
+                        *--text_cursor = (integer_value & 7) + '0';
+                        integer_value = (u64)integer_value >> 3;
+                    } while (integer_value != 0);
                 }
                 if (pad != 0 && pad < text_cursor) {
                     text_cursor = pad;
@@ -85,26 +85,26 @@ void _printf(const char *fmt, char *ap) {
                 break;
             case 'x' - '0':
                 if (mod == 'l') {
-                    v = ARG(s64);
+                    integer_value = ARG(s64);
                 } else if (mod == 'h') {
-                    v = ARG(u16);
+                    integer_value = ARG(u16);
                 } else {
-                    v = ARG(u32);
+                    integer_value = ARG(u32);
                 }
                 text_cursor = &buf[31];
                 *text_cursor = 0;
-                if (v == 0) {
+                if (integer_value == 0) {
                     *--text_cursor = '0';
                 } else {
                     do {
-                        hex_digit = v & 0xF;
+                        hex_digit = integer_value & 0xF;
                         if (hex_digit < 10) {
                             *--text_cursor = hex_digit + '0';
                         } else {
                             *--text_cursor = hex_digit + 'a' - 10;
                         }
-                        v = (u64)v >> 4;
-                    } while (v != 0);
+                        integer_value = (u64)integer_value >> 4;
+                    } while (integer_value != 0);
                 }
                 if (pad != 0 && pad < text_cursor) {
                     text_cursor = pad;
@@ -115,24 +115,24 @@ void _printf(const char *fmt, char *ap) {
                 break;
             case 'd' - '0':
                 if (mod == 'l') {
-                    v = ARG(s64);
+                    integer_value = ARG(s64);
                 } else if (mod == 'h') {
-                    v = ARG(s16);
+                    integer_value = ARG(s16);
                 } else {
-                    v = ARG(s32);
+                    integer_value = ARG(s32);
                 }
                 text_cursor = &buf[31];
                 *text_cursor = 0;
-                if (v == 0) {
+                if (integer_value == 0) {
                     *--text_cursor = '0';
                 } else {
-                    if (v < 0) {
-                        v = -v;
+                    if (integer_value < 0) {
+                        integer_value = -integer_value;
                         D_0012FC00[0]('-');
                     }
-                    while (v != 0) {
-                        *--text_cursor = v % 10 + '0';
-                        v = v / 10;
+                    while (integer_value != 0) {
+                        *--text_cursor = integer_value % 10 + '0';
+                        integer_value = integer_value / 10;
                     }
                 }
                 if (pad != 0 && pad < text_cursor) {
@@ -144,21 +144,21 @@ void _printf(const char *fmt, char *ap) {
                 break;
             case 'u' - '0':
                 if (mod == 'l') {
-                    v = ARG(s64);
+                    integer_value = ARG(s64);
                 } else if (mod == 'h') {
-                    v = ARG(u16);
+                    integer_value = ARG(u16);
                 } else {
-                    v = ARG(u32);
+                    integer_value = ARG(u32);
                 }
                 text_cursor = &buf[31];
                 *text_cursor = 0;
-                if (v == 0) {
+                if (integer_value == 0) {
                     *--text_cursor = '0';
                 } else {
                     do {
-                        *--text_cursor = (u64)v % 10 + '0';
-                        v = (u64)v / 10;
-                    } while (v != 0);
+                        *--text_cursor = (u64)integer_value % 10 + '0';
+                        integer_value = (u64)integer_value / 10;
+                    } while (integer_value != 0);
                 }
                 if (pad != 0 && pad < text_cursor) {
                     text_cursor = pad;
@@ -196,8 +196,8 @@ void _printf(const char *fmt, char *ap) {
                 break;
             }
             case 'c' - '0':
-                v = ARG(char);
-                D_0012FC00[0](v);
+                integer_value = ARG(char);
+                D_0012FC00[0](integer_value);
                 break;
             default:
                 break;
