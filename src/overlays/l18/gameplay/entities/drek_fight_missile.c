@@ -270,9 +270,9 @@ void FUN_L18_002f02e8(char *moby, void *out) {
     char *data = *(char **)(moby + 0x78);
     float wander_target_offset[3];
     float wander_radius = random_float_between_alt(*(float *)&D_L18_00162224, *(float *)&D_L18_00162228);
-    float ang = random_angle_radians();
-    wander_target_offset[0] = fast_cos(ang) * wander_radius;
-    wander_target_offset[1] = fast_sin(ang) * wander_radius;
+    float wander_target_angle = random_angle_radians();
+    wander_target_offset[0] = fast_cos(wander_target_angle) * wander_radius;
+    wander_target_offset[1] = fast_sin(wander_target_angle) * wander_radius;
     wander_target_offset[2] = 0.0f;
     wander_target_offset[2] = random_float_between_alt(*(float *)&D_L18_0016221C, *(float *)&D_L18_00162220);
     fast_vec_add(out, wander_target_offset, data + 0x120);
