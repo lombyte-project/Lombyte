@@ -357,7 +357,7 @@ void novalis_elevator_update(unsigned char *moby) {
             *(int *)(data + 0xC4) = -1;
         } else {
             int i;
-            float f20, path_point_index_float;
+            float segment_interpolation_fraction, path_point_index_float;
             char *segment_start;
             if (!voice_is_playing(moby, *(int *)(data + 0xC4))) {
                 *(int *)(data + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
@@ -387,18 +387,18 @@ void novalis_elevator_update(unsigned char *moby) {
                 }
                 *(int *)(data + 0xC4) = -1;
             }
-            f20 = convert_integer_to_float(*(int *)path - 1);
-            i = func_001FA898_r(f20 * F(data, 0xA4));
-            f20 = convert_integer_to_float(*(int *)path - 1);
+            segment_interpolation_fraction = convert_integer_to_float(*(int *)path - 1);
+            i = func_001FA898_r(segment_interpolation_fraction * F(data, 0xA4));
+            segment_interpolation_fraction = convert_integer_to_float(*(int *)path - 1);
             path_point_index_float = convert_integer_to_float(i);
-            f20 *= F(data, 0xA4);
-            f20 -= path_point_index_float;
+            segment_interpolation_fraction *= F(data, 0xA4);
+            segment_interpolation_fraction -= path_point_index_float;
             if (i == *(int *)path - 1) {
                 qcopy((moby + 0x10), path + 0x10 + i * 16);
             } else {
                 segment_start = path + 0x10 + i * 16;
                 subtract_vector_xyz(segment_offset, path + 0x20 + i * 16, segment_start);
-                scale_vector_xyz(segment_offset, segment_offset, f20);
+                scale_vector_xyz(segment_offset, segment_offset, segment_interpolation_fraction);
                 add_vector_xyz((moby + 0x10), segment_offset, segment_start);
             }
             F(data, 0xBC) = F(moby, 0x18) - orig[2];
