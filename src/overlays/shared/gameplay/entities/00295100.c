@@ -513,10 +513,10 @@ void FUN_L00_00298b18(void) {
     }
     if (active_scene_trigger.moby) {
         F_298b18 *scene_trigger_moby = active_scene_trigger.moby;
-        void *b = active_scene_trigger.trigger;
+        void *scene_trigger = active_scene_trigger.trigger;
         active_scene_trigger.moby = 0;
         active_scene_trigger.trigger = 0;
-        fun_00216c48(scene_trigger_moby, b, 1);
+        fun_00216c48(scene_trigger_moby, scene_trigger, 1);
     }
     FUN_L00_00265880(scale_game_frames(0x1E));
 }
