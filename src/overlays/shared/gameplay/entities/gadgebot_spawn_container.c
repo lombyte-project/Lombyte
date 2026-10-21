@@ -3161,7 +3161,7 @@ void FUN_L06_002f7930(char *moby) {
         CHECK_HERO_TRIGGER_VOLUMES = 1
     };
     char *trigger_vars = *(char **)(moby + 0x78);
-    struct Hero *g;
+    struct Hero *hero_data;
     int *list;
     int *list2;
     char *ship_moby;
@@ -3178,11 +3178,11 @@ void FUN_L06_002f7930(char *moby) {
         return;
     }
     list = (int *)trigger_vars;
-    g = &hero;
-    if (g->state.current == 0x32) {
-        ship_moby = ((char *)g->ship_moby);
+    hero_data = &hero;
+    if (hero_data->state.current == 0x32) {
+        ship_moby = ((char *)hero_data->ship_moby);
         if (ship_moby != 0 && ((unsigned char *)ship_moby)[0x20] != 0xFE && ((unsigned char *)ship_moby)[0x20] != 0xFD &&
-            g->ship_oclass == 0x45) {
+            hero_data->ship_oclass == 0x45) {
             return;
         }
     }
