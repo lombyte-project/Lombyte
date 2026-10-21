@@ -149,7 +149,7 @@ struct Moby *FUN_L03_002bec60(struct Moby *spawner_moby, Vec4 *at, s32 oclass)
 {
     Vec4 pos;
     Vec4 *src;
-    Spawner *pv;
+    Spawner *spawner_data;
     struct Moby *current_moby;
     struct Moby *spawned;
     SpawnClass *cls;
@@ -157,25 +157,25 @@ struct Moby *FUN_L03_002bec60(struct Moby *spawner_moby, Vec4 *at, s32 oclass)
     SpawnSound *sound;
     s32 found;
     s32 i;
-    s32 idx;
+    s32 pooled_child_moby_index;
     u16 flags;
 
     src = &pos;
     pos.q = at->q;
-    if (spawner_moby == NULL || (pv = (Spawner *)spawner_moby->pvars) == NULL) {
+    if (spawner_moby == NULL || (spawner_data = (Spawner *)spawner_moby->pvars) == NULL) {
         return NULL;
     }
-    pv->live = 0;
+    spawner_data->live = 0;
     found = 0;
     spawned = NULL;
     for (i = 0; i < 18; i++) {
-        idx = pv->slots[i];
-        if (idx == -1) {
+        pooled_child_moby_index = spawner_data->slots[i];
+        if (pooled_child_moby_index == -1) {
             continue;
         }
-        current_moby = &D_L03_0015FFD8_mb[idx];
+        current_moby = &D_L03_0015FFD8_mb[pooled_child_moby_index];
         if (current_moby != NULL && current_moby->state != 0xFE && current_moby->state != 0xFD) {
-            pv->live++;
+            spawner_data->live++;
             continue;
         }
         if (oclass != -1 && oclass != current_moby->oclass) {
@@ -184,7 +184,7 @@ struct Moby *FUN_L03_002bec60(struct Moby *spawner_moby, Vec4 *at, s32 oclass)
         if (found) {
             continue;
         }
-        pv->live++;
+        spawner_data->live++;
         found = 1;
         qcopy(&current_moby->pos, src);
         current_moby->pos.w = 0.0f;
@@ -207,7 +207,7 @@ struct Moby *FUN_L03_002bec60(struct Moby *spawner_moby, Vec4 *at, s32 oclass)
         current_moby->occlusion = 0x7F80;
         current_moby->unk72 = 0xFF;
         current_moby->hit_slot = 0xFF;
-        if (pv->options & 2) {
+        if (spawner_data->options & 2) {
             current_moby->scale = ((SpawnClass *)current_moby->pclass)->scale * 0.1f;
         }
         set_moby_animation(current_moby, 0, 0);
@@ -240,7 +240,7 @@ struct Moby *FUN_L03_002bec60(struct Moby *spawner_moby, Vec4 *at, s32 oclass)
     }
     for (current_moby = D_L03_0015FFE4; current_moby != NULL; current_moby = current_moby->next) {
         if (current_moby->oclass == 0x221 && current_moby->state != 0xFE && current_moby->state != 0xFD) {
-            pv->live++;
+            spawner_data->live++;
         }
     }
     if (spawned == NULL) {
