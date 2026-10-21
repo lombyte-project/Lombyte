@@ -6,9 +6,9 @@ void build_spherical_offset(void *) __asm__("FUN_00214db0");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00262cf0(void *a, void *b);
 void FUN_L00_00262cf0(void *destination, void *base_vector) {
-    char buf[16];
-    build_spherical_offset(buf);
-    add_vector_xyz(destination, buf, base_vector);
+    char spherical_offset[16];
+    build_spherical_offset(spherical_offset);
+    add_vector_xyz(destination, spherical_offset, base_vector);
 }
 typedef struct {
     s32 v[19];
