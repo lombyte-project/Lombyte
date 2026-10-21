@@ -1161,7 +1161,7 @@ void FUN_L15_0029a0d0(void *mp) {
     float source_line_endpoint[4];
     float listed_line_endpoint[4];
     short *group_moby_entry;
-    int off;
+    int listed_moby_byte_offset;
     char *listed_moby;
     if (D_001413D4_a0[0] == 0x65) {
         *(short *)(moby_data + 0x156) = 0;
@@ -1178,16 +1178,16 @@ void FUN_L15_0029a0d0(void *mp) {
     qcopy(source_line_endpoint, source_moby + 0x10);
     source_line_endpoint[2] += 1.0f;
     do {
-        off = (*(unsigned short *)group_moby_entry & 0x7FFF) << 8;
-        listed_moby = (char *)(off + D_L15_0015FFD8_a0);
+        listed_moby_byte_offset = (*(unsigned short *)group_moby_entry & 0x7FFF) << 8;
+        listed_moby = (char *)(listed_moby_byte_offset + D_L15_0015FFD8_a0);
         if (listed_moby[0x20] >= 0 && *(short *)(listed_moby + 0xA6) == 0x2C) {
             qcopy(listed_line_endpoint, listed_moby + 0x10);
             listed_line_endpoint[2] += 1.0f;
             if (FUN_001efa68_a0(listed_line_endpoint, source_line_endpoint, 2, 0, 0) == 0) {
-                moby_data = *(char **)((char *)(off + D_L15_0015FFD8_a0) + 0x78);
+                moby_data = *(char **)((char *)(listed_moby_byte_offset + D_L15_0015FFD8_a0) + 0x78);
                 ((D_a0d0 *)moby_data)->h156 = FUN_001f96f8_a0(300);
                 moby_data[0x15B] = 0;
-                FUN_L15_0029a248((char *)source_moby, (char *)(D_L15_0015FFD8_a0 + off));
+                FUN_L15_0029a248((char *)source_moby, (char *)(D_L15_0015FFD8_a0 + listed_moby_byte_offset));
             }
         }
     } while (*group_moby_entry++ >= 0);
