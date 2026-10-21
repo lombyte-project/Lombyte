@@ -417,10 +417,10 @@ void FUN_L05_00307010(char *moby) {
             if (*(short *)(l1 + 0xA6) == 0x473) {
                 float offset_test_position[4];
                 float m[16];
-                char *pos = l1;
+                char *candidate_moby = l1;
                 qcopy(offset_test_position, data + 0x200);
                 offset_test_position[2] += 0.8f;
-                subtract_vector_xyz(position_delta, pos + 0x10, offset_test_position);
+                subtract_vector_xyz(position_delta, candidate_moby + 0x10, offset_test_position);
                 if (!(8.0f < vector_length_xyz(position_delta))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, l1 + 0xC0);
