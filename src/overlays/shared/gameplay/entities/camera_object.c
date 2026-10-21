@@ -1485,13 +1485,13 @@ extern f32 uv_scale __asm__("D_L00_001613BC") __attribute__((sda));
 void FUN_L00_002a7780(O_2a7780 *effect_owner) {
     R_2a7780 *r;
     E_2a7780 *effect_config;
-    V_2a7780 v;
+    V_2a7780 quad;
     s32 sel0, sel1, sel2, sel3;
     u32 color;
     f32 scale, alpha;
     s32 tex, idx, nv; s32 k;
     s32 i, j, elapsed_frames, cur;
-    f32 effect_progress, w;
+    f32 effect_progress, uv_v_offset;
 
     r = effect_owner->r;
     if (r == 0) return;
@@ -1543,28 +1543,28 @@ void FUN_L00_002a7780(O_2a7780 *effect_owner) {
         if (k2 != 0x2B) r->f70 = 0.0f;
         return;
     }
-    v.tag[1] = FUN_001f44b8_2a7780(tex);
-    v.tag[2] = 0xFF9000000260LL;
-    v.tag[0] = 5;
-    v.tag[3] = (nv << 2) | 0x8000000040LL;
+    quad.tag[1] = FUN_001f44b8_2a7780(tex);
+    quad.tag[2] = 0xFF9000000260LL;
+    quad.tag[0] = 5;
+    quad.tag[3] = (nv << 2) | 0x8000000040LL;
     qcopy(&r->m30, P_2a7780_G.p2080 + 0x10);
     for (i = 0; i < effect_config->n; i++) {
         for (j = 0; j < 4; j++) {
             s32 vi = effect_config->idx[i][j][0];
             f32 *uv;
-            if (i == sel0) v.col[j] = effect_config->col[0][j];
-            else if (i == sel1) v.col[j] = effect_config->col[1][j];
-            else if (i == sel2) v.col[j] = effect_config->col[2][j];
-            else if (i == sel3) v.col[j] = effect_config->col[3][j];
-            else v.col[j] = 0x50808080;
-            v.col[j] = (FUN_001fa6d0_2a7780(((s32)v.col[j] >> 24) * alpha) << 24) | color;
-            FUN_001f9a68_2a7780(&v.pos[j], &effect_config->verts[vi], scale);
+            if (i == sel0) quad.col[j] = effect_config->col[0][j];
+            else if (i == sel1) quad.col[j] = effect_config->col[1][j];
+            else if (i == sel2) quad.col[j] = effect_config->col[2][j];
+            else if (i == sel3) quad.col[j] = effect_config->col[3][j];
+            else quad.col[j] = 0x50808080;
+            quad.col[j] = (FUN_001fa6d0_2a7780(((s32)quad.col[j] >> 24) * alpha) << 24) | color;
+            FUN_001f9a68_2a7780(&quad.pos[j], &effect_config->verts[vi], scale);
             uv = (f32 *)(effect_config->idx[i][j][1] * 8 + (s32)effect_config->uv);
-            w = 1.0f - r->f70 * effect_config->f5C;
-            v.uv[j][0] = (uv[0] - 0.5f) * uv_scale + 0.5f;
-            v.uv[j][1] = (uv[1] - 0.5f) * uv_scale + 0.5f + w;
+            uv_v_offset = 1.0f - r->f70 * effect_config->f5C;
+            quad.uv[j][0] = (uv[0] - 0.5f) * uv_scale + 0.5f;
+            quad.uv[j][1] = (uv[1] - 0.5f) * uv_scale + 0.5f + uv_v_offset;
         }
-        FUN_001f7d30_2a7780(&v, r, 0);
+        FUN_001f7d30_2a7780(&quad, r, 0);
     }
 }
 #undef P_2a7780_G
