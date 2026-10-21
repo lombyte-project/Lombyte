@@ -259,12 +259,12 @@ void FUN_L03_002e01d0(char *owner_moby) {
         if (D_L03_0015F5C4 != 2)
             break;
         if (D_L03_0016C960.mode == 4 || D_L03_0016C960.mode == 10) {
-            int v = D_L03_0016C960.mode;
+            int cutscene_mode = D_L03_0016C960.mode;
             int i;
             i = 0;
-            if (v == 4)
+            if (cutscene_mode == 4)
                 i = 2;
-            else if (v == 10)
+            else if (cutscene_mode == 10)
                 i = 0;
             cutscene_set_camera_target(D_L03_0016C960.mobys[i]);
         }
