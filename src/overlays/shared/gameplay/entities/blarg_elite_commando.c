@@ -125,7 +125,7 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern float D_L16_001613E0 __attribute__((sda));
 extern float D_L16_001613E4 __attribute__((sda));
 
-char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int blend_duration_ticks, float unused) {
+char *FUN_L16_002a0dc0(char *owner, char *initial_movement_vector, void *pos, void *vel, int blend_duration_ticks, float unused) {
     char *spawned_moby = (char *)func_0020D348_m(0x32);
     char *moby_data;
     float len, x, random_angle_radians, y;
@@ -138,11 +138,11 @@ char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int blend_d
         *(float *)(spawned_moby + 0x2C) = *(float *)(spawned_moby + 0x2C) * 3.0f;
         qcopy(spawned_moby + 0x10, pos);
         moby_data = *(char **)(spawned_moby + 0x78);
-        qcopy(moby_data, vec);
+        qcopy(moby_data, initial_movement_vector);
         qcopy(moby_data + 0x10, vel);
         *(int *)(moby_data + 0x30) = blend_duration_ticks;
         *(int *)(moby_data + 0x20) = blend_duration_ticks;
-        len = fast_vec_length(vec);
+        len = fast_vec_length(initial_movement_vector);
         x = D_L16_001613E0;
         *(float *)(moby_data + 0x24) = len;
         random_angle_radians = random_float_between_alt(-x, x) * DEG_TO_RAD;
@@ -150,8 +150,8 @@ char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int blend_d
         *(float *)(moby_data + 0x28) = random_angle_radians;
         *(float *)(moby_data + 0x2C) = random_float_between_alt(0.0f, y) * DEG_TO_RAD;
         *(int *)(moby_data + 0x34) = 0;
-        *(float *)(spawned_moby + 0x48) = fast_arc_tan(*(float *)vec, *(float *)(vec + 4));
-        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(vec), *(float *)(vec + 8));
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(*(float *)initial_movement_vector, *(float *)(initial_movement_vector + 4));
+        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(initial_movement_vector), *(float *)(initial_movement_vector + 8));
         spawned_moby[0x31] = 0;
         *(unsigned short *)(spawned_moby + 0x34) |= 1;
     }
