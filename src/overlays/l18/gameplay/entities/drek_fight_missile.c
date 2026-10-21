@@ -3008,7 +3008,7 @@ extern f32 D_L18_00162374 __attribute__((sda));
  * degrees per step), faster the closer the hero is, and eases it to the
  * node's height. */
 void FUN_L18_002f6aa0(struct Moby *moby) {
-    BossCircleVars *v = (BossCircleVars *)moby->pvars;
+    BossCircleVars *boss_circle_vars = (BossCircleVars *)moby->pvars;
     Vec4 goal;
     f32 ang;
     f32 self_ang;
@@ -3016,10 +3016,10 @@ void FUN_L18_002f6aa0(struct Moby *moby) {
     f32 speed;
     f32 dist;
 
-    ang = atan2_f(hero.motion.pos.f[0] - ((ArenaNode *)D_L18_001600EC)[v->node].center.f[0],
-                  hero.motion.pos.f[1] - ((ArenaNode *)D_L18_001600EC)[v->node].center.f[1]);
-    self_ang = atan2_f(v->pos.f[0] - ((ArenaNode *)D_L18_001600EC)[v->node].center.f[0],
-                       v->pos.f[1] - ((ArenaNode *)D_L18_001600EC)[v->node].center.f[1]);
+    ang = atan2_f(hero.motion.pos.f[0] - ((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center.f[0],
+                  hero.motion.pos.f[1] - ((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center.f[1]);
+    self_ang = atan2_f(boss_circle_vars->pos.f[0] - ((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center.f[0],
+                       boss_circle_vars->pos.f[1] - ((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center.f[1]);
     if (fast_subtract_rotations(self_ang, ang) < 0.0f)
         ang = fast_add_rotations(ang, -2.3561945f);
     else
@@ -3039,8 +3039,8 @@ void FUN_L18_002f6aa0(struct Moby *moby) {
         goal.f[1] = fast_sin(ang) * D_L18_00162374;
         goal.f[2] = 0.0f;
     }
-    add_vector_xyz(&goal, &goal, &((ArenaNode *)D_L18_001600EC)[v->node].center);
-    if (vector_distance(&v->pos, &((ArenaNode *)D_L18_001600EC)[v->node].center) > D_L18_00162374 + 1.0f) {
+    add_vector_xyz(&goal, &goal, &((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center);
+    if (vector_distance(&boss_circle_vars->pos, &((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center) > D_L18_00162374 + 1.0f) {
         speed = 10.0f;
     } else if (hero.state.control_mode != 0xF) {
         near = D_L18_0016235C;
@@ -3069,7 +3069,7 @@ void FUN_L18_002f6aa0(struct Moby *moby) {
         speed = 20.0f;
     }
     FUN_L18_002f6878((char *)moby, speed * frame_time, &goal);
-    approach_value(&v->pos.f[2], ((ArenaNode *)D_L18_001600EC)[v->node].center.f[2], frame_time * 4.0f);
+    approach_value(&boss_circle_vars->pos.f[2], ((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center.f[2], frame_time * 4.0f);
 }
 /* Finds the nearest moby in the self's list within range and returns it. */
 extern f32 dot_vectors_xyz(void *a, void *b) __asm__("FUN_001f9ab0");
