@@ -1247,10 +1247,10 @@ void FUN_L00_00207430(char *moby) {
     r = f2i_207430(red_blue_swing);
     g = f2i_207430(glow_wave * 52.0f);
     {
-        int w = ((f2i_207430(red_blue_swing) + 0x4C) << 16) | 0x80000000;
-        w |= (g + 0xA2) << 8;
-        w |= r + 0x44;
-        *(int *)(moby + 0x90) = w;
+        int glow_color = ((f2i_207430(red_blue_swing) + 0x4C) << 16) | 0x80000000;
+        glow_color |= (g + 0xA2) << 8;
+        glow_color |= r + 0x44;
+        *(int *)(moby + 0x90) = glow_color;
     }
     if (*(short *)(moby + 0xA6) == 0x1A3) {
         f4f7c8_207430(moby, 6, &v);
