@@ -475,19 +475,19 @@ void FUN_L05_0030c0a8(unsigned char *moby) {
         MOBY_WOBBLE_STATE_ANIMATE = 1
     };
     char *wobble_vars = *(char **)(moby + 0x78);
-    float r, lo, hi;
+    float random_angular_sample, lo, hi;
     switch (moby[0x20]) {
     case MOBY_WOBBLE_STATE_INITIALIZE:
         *(float *)(wobble_vars + 0x40) = *(float *)(moby + 0x48);
         *(float *)(wobble_vars + 0x48) = random_angle_radians();
-        r = random_angle_radians();
+        random_angular_sample = random_angle_radians();
         lo = frame_time * 0.47123888f;
         hi = frame_time * 0.5235988f;
-        *(float *)(wobble_vars + 0x44) = r;
-        r = randf_sym(lo, hi);
+        *(float *)(wobble_vars + 0x44) = random_angular_sample;
+        random_angular_sample = randf_sym(lo, hi);
         lo = frame_time * 0.20943951f;
         hi = frame_time * 0.2617994f;
-        *(float *)(wobble_vars + 0x50) = r;
+        *(float *)(wobble_vars + 0x50) = random_angular_sample;
         *(float *)(wobble_vars + 0x4C) = randf_sym(lo, hi);
         set_moby_color(moby, 0x80, 0x80, 0x80);
         attach_manipulator((char *)moby, 0, wobble_vars);
