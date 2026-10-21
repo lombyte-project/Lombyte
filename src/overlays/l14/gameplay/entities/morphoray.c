@@ -311,7 +311,7 @@ extern float D_L14_00162098 __attribute__((sda));
 char *FUN_L14_003014e0(int owner, float *pos, float *initial_velocity, int fade_timer, float gravity) {
     char *moby = FUN_0020c4f8_c(0x4A9);
     float initial_yaw, scaled_moby_value;
-    unsigned short g;
+    unsigned short initial_trail_timer;
     if (moby != 0) {
         char *spark_data = *(char **)(moby + 0x78);
         ((unsigned char *)moby)[0x30] = 0xFF;
@@ -321,10 +321,10 @@ char *FUN_L14_003014e0(int owner, float *pos, float *initial_velocity, int fade_
         *(int *)(spark_data + 0x24) = owner;
         qcopy(moby + 0x10, pos);
         qcopy(spark_data + 0x10, initial_velocity);
-        g = D_L14_0016208C_g;
+        initial_trail_timer = D_L14_0016208C_g;
         *(float *)(spark_data + 0x1C) = gravity;
         *(int *)(spark_data + 0x20) = fade_timer;
-        *(unsigned short *)(spark_data + 0x28) = g;
+        *(unsigned short *)(spark_data + 0x28) = initial_trail_timer;
         *(short *)(spark_data + 0x2A) = 0;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
