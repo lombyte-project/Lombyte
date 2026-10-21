@@ -394,15 +394,15 @@ void FUN_L01_0028ba80(float segment_parameter, void *out, void *start_point, voi
     char weighted_vector[16];
     float t_squared = segment_parameter * segment_parameter;
     float t_cubed = t_squared * segment_parameter;
-    float b = t_squared * 3.0f;
+    float three_times_t_squared = t_squared * 3.0f;
     float twice_t_cubed = t_cubed + t_cubed;
     float twice_t_squared = t_squared + t_squared;
-    fast_vec_scale(out, start_point, twice_t_cubed - b + 1.0f);
+    fast_vec_scale(out, start_point, twice_t_cubed - three_times_t_squared + 1.0f);
     fast_vec_scale(weighted_vector, start_tangent, t_cubed - twice_t_squared + segment_parameter);
     fast_vec_add(out, out, weighted_vector);
     fast_vec_scale(weighted_vector, end_tangent, t_cubed - t_squared);
     fast_vec_add(out, out, weighted_vector);
-    fast_vec_scale(weighted_vector, end_point, b - twice_t_cubed);
+    fast_vec_scale(weighted_vector, end_point, three_times_t_squared - twice_t_cubed);
     fast_vec_add(out, out, weighted_vector);
 }
 float FUN_L01_0028bb90(float tangent_tension, float b, T_28b828 *path, int particles, void *moby) {
