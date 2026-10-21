@@ -45,7 +45,7 @@ extern float D_L07_00166E40[];
 
 unsigned char *FUN_L07_0029b8d8(void *m, short index, float amount, float factor);
 unsigned char *FUN_L07_0029b8d8(void *moby, short index, float amount, float factor) {
-    float v[4];
+    float moby_point_world_position[4];
     float position_offset[4];
     unsigned char *particle = create_part(0x3d);
     if (particle != 0) {
@@ -69,10 +69,10 @@ unsigned char *FUN_L07_0029b8d8(void *moby, short index, float amount, float fac
         *(float *)(particle_payload + 0x10) = frame_scale * 0.015f;
         *(short *)(particle_payload + 0xe) = index;
         particle[8] = func_001FA898_r(*(float *)(particle_payload + 8) * 255.0f);
-        moby_point_position(*(void **)particle_payload, *(short *)(particle_payload + 0xe), v);
-        subtract_vector_xyz(position_offset, D_L07_00166E40, v);
+        moby_point_position(*(void **)particle_payload, *(short *)(particle_payload + 0xe), moby_point_world_position);
+        subtract_vector_xyz(position_offset, D_L07_00166E40, moby_point_world_position);
         normalize_vector_xyz(position_offset, position_offset, *(float *)(particle_payload + 0x14));
-        add_vector_xyz(particle + 0x10, v, position_offset);
+        add_vector_xyz(particle + 0x10, moby_point_world_position, position_offset);
     }
     return particle;
 }
