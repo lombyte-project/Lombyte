@@ -451,29 +451,29 @@ extern u128 D_L01_001742E0;
 
 void update_birdbot_projectile(DropMoby *) __asm__("FUN_L01_002fa4c0");
 void update_birdbot_projectile(DropMoby *projectile) {
-    DropVars *v;
+    DropVars *projectile_vars;
     u128 *pos;
     Vec4 prev;
     DropProbe probe;
     u128 burst_position;
     f32 scaled_ten;
-    f32 b;
+    f32 scaled_ten_product;
     f32 zero;
     f32 one;
     f32 ten;
     f32 half;
 
-    v = projectile->vars;
+    projectile_vars = projectile->vars;
     pos = &projectile->pos.q;
     qcopy(&prev, pos);
     zero = 0.0f;
     one = 1.0f;
     ten = 10.0f;
     scaled_ten = multiply_global_factor_ed64(ten);
-    b = multiply_global_factor_ed64(ten);
-    b = b * multiply_global_factor_ed64(ten);
-    ((f32 *)&v->vel)[2] -= (scaled_ten * zero + one) * 2.0f / b;
-    fast_vec_add(pos, pos, &v->vel);
+    scaled_ten_product = multiply_global_factor_ed64(ten);
+    scaled_ten_product = scaled_ten_product * multiply_global_factor_ed64(ten);
+    ((f32 *)&projectile_vars->vel)[2] -= (scaled_ten * zero + one) * 2.0f / scaled_ten_product;
+    fast_vec_add(pos, pos, &projectile_vars->vel);
     if (projectile->pos.f[0] < zero || projectile->pos.f[1] < zero || projectile->pos.f[2] < zero ||
         vector_distance(pos, D_L01_00167240) > 64.0f) {
         mark_moby_for_removal(projectile);
@@ -483,24 +483,24 @@ void update_birdbot_projectile(DropMoby *projectile) {
     probe.flags = 0x10001;
     probe.scale = one;
     probe.count = 1;
-    qcopy(&probe.dir, &v->vel);
+    qcopy(&probe.dir, &projectile_vars->vel);
     ((f32 *)&probe.dir)[2] = one;
     ((f32 *)&probe.dir)[3] = 5627.9248f;
     probe.b28 = 1;
     probe.b29 = 1;
     probe.id = projectile->hA6;
-    if (fast_dec_timer(v->sound) != 0) {
+    if (fast_dec_timer(projectile_vars->sound) != 0) {
         burst_position = projectile->pos.q;
         FUN_L01_002fa1b0(projectile, &burst_position, 0, 0.5f, zero);
         mark_moby_for_removal(projectile);
-    } else if (collision_line(&prev, pos, 0, v->coll, &probe) != 0) {
+    } else if (collision_line(&prev, pos, 0, projectile_vars->coll, &probe) != 0) {
         qcopy(pos, &D_L01_001742E0);
         burst_position = projectile->pos.q;
         FUN_L01_002fa1b0(projectile, &burst_position, 0, 0.5f, zero);
         mark_moby_for_removal(projectile);
     } else {
         half = 0.5f;
-        if (probe_world_sphere(half, pos, 0x10, v->coll, &probe) != 0) {
+        if (probe_world_sphere(half, pos, 0x10, projectile_vars->coll, &probe) != 0) {
             burst_position = projectile->pos.q;
             FUN_L01_002fa1b0(projectile, &burst_position, 0, half, zero);
             mark_moby_for_removal(projectile);
