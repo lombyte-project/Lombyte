@@ -3915,14 +3915,14 @@ void FUN_L18_002f8658(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     float path_target_position[4];
     float movement_step[4];
-    float ang, target_movement_step, z, sc;
+    float path_target_yaw, target_movement_step, z, sc;
     char *attached_moby;
     qcopy(path_target_position, (char *)D_L18_001B0EB0[*(int *)(moby_vars + 0x100)] + *(int *)(moby_vars + 0x120) * 16 + 0x10);
-    ang = fast_arc_tan(path_target_position[0] - moby->pos.x, path_target_position[1] - moby->pos.y);
-    approach_angle(&moby->rot.z, (float *)(moby_vars + 0x128), ang, D_0015ED6C_e[1] * 3.1415927f,
+    path_target_yaw = fast_arc_tan(path_target_position[0] - moby->pos.x, path_target_position[1] - moby->pos.y);
+    approach_angle(&moby->rot.z, (float *)(moby_vars + 0x128), path_target_yaw, D_0015ED6C_e[1] * 3.1415927f,
                      D_0015ED6C_e[1] * 3.1415927f, frame_time * 6.2831855f);
     target_movement_step = *(float *)&D_L18_00162478 * frame_time;
-    if (fast_difference_between_rotations(ang, moby->rot.z) > 0.2617994f) {
+    if (fast_difference_between_rotations(path_target_yaw, moby->rot.z) > 0.2617994f) {
         target_movement_step = D_0015ED6C_g;
     }
     approach_value((float *)(moby_vars + 0x12C), target_movement_step, D_0015ED6C_e[1]);
