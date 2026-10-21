@@ -1427,8 +1427,8 @@ extern OvlQuad D_L00_00173E60_2ebe70 __asm__("D_L00_00173E60");
 extern float D_L00_00173E70_2ebe70[] __asm__("D_L00_00173E70");
 extern float D_L00_00161DD8_2ebe70 __asm__("D_L00_00161DD8") __attribute__((sda));
 
-void FUN_L00_002ebe70(char *cam) {
-    char *state = *(char **)(cam + 0x70);
+void FUN_L00_002ebe70(char *camera_object) {
+    char *state = *(char **)(camera_object + 0x70);
     char *follow = state + 0x40;
     float *distance = (float *)(state + 0xa0);
     float *angle = (float *)(state + 0xb8);
@@ -1516,23 +1516,23 @@ void FUN_L00_002ebe70(char *cam) {
     FUN_001ff500_2ebe70(-*distance, position, follow + 0x30);
     position[2] += distance[4];
     fast_vec_add(position, position, &hero.motion.pos);
-    if (coll_line_fix(cam + 0x30, position, 0x12, 0, 0) != 0) {
-        fast_vec_sub(offset, &D_L00_00173E60_2ebe70, cam + 0x30);
+    if (coll_line_fix(camera_object + 0x30, position, 0x12, 0, 0) != 0) {
+        fast_vec_sub(offset, &D_L00_00173E60_2ebe70, camera_object + 0x30);
         collision_position = &D_L00_00173E60_2ebe70;
         length = fast_vec_length(offset);
         if (length > 0.5f) {
             FUN_001ff300_2ebe70((length - 0.5f) / length, offset, offset);
-            fast_vec_add(position, cam + 0x30, offset);
+            fast_vec_add(position, camera_object + 0x30, offset);
             for (i = 0; i < 5; i++) {
                 if (FUN_001f0d60_2ebe70(0.75f, position, 0, 0) != 0) qcopy(position, collision_position + 1);
                 else break;
             }
         }
-        qcopy(cam + 0x30, position);
-        fast_vec_sub(offset, &hero.motion.pos, cam + 0x30);
+        qcopy(camera_object + 0x30, position);
+        fast_vec_sub(offset, &hero.motion.pos, camera_object + 0x30);
         *angle = fast_arc_tan(offset[0], offset[1]);
         *(int *)(angle + 1) = 0;
-    } else qcopy(cam + 0x30, position);
+    } else qcopy(camera_object + 0x30, position);
 }
 typedef union {
     OvlQuad q;
