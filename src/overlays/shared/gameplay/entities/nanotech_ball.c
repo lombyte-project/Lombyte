@@ -3295,11 +3295,11 @@ typedef void (*CB09)(M09 *);
 void FUN_L00_002df3d8_u(M09 *) __asm__("FUN_L00_002df3d8");
 void FUN_001f4600(CB09, M09 *);
 void FUN_L00_002df4a8(M09 *moby) {
-    u8 b;
+    u8 moby_selection_key;
     s32 current_cache_value;
     S09 *s;
-    b = moby->pad[0x21];
-    if (b == 0xFF)
+    moby_selection_key = moby->pad[0x21];
+    if (moby_selection_key == 0xFF)
         return;
     s = moby->s;
     current_cache_value = D_L00_0015F5CC;
