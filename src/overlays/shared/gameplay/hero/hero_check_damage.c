@@ -397,21 +397,21 @@ s32 FUN_L00_0020d568(void);
 s32 FUN_L00_0020d568(void) {
     struct Hero *hero_state = &hero;
     u32 control_mode = hero_state->state.control_mode;
-    u32 b;
+    u32 current_state;
     if (control_mode - 0x11 < 2) {
         goto one;
     }
-    b = hero_state->state.current;
-    if (b == 0x6A) {
+    current_state = hero_state->state.current;
+    if (current_state == 0x6A) {
         goto one;
     }
-    if (b == 0x82) {
+    if (current_state == 0x82) {
         goto one;
     }
-    if (b == 0x76) {
+    if (current_state == 0x76) {
         goto one;
     }
-    if (b != 0x75) {
+    if (current_state != 0x75) {
         goto zero;
     }
 one:
