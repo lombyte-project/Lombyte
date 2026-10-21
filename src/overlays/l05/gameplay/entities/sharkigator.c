@@ -1901,10 +1901,10 @@ extern float func_001F9D10_03f80(void *, void *) __asm__("FUN_001f9b48");
 extern short *D_L05_001AC040_03f80[] __asm__("D_L05_001ABCC0");
 extern Ent_03f80 *D_L05_00160098_m_03f80 __asm__("D_L05_0015FFD8");
 extern short D_L05_00160098_03f80 __asm__("D_L05_0015FFD8");
-char *FUN_L05_00303f80(char *self, int idx) {
-    short *list = D_L05_001AC040_03f80[idx];
+char *FUN_L05_00303f80(char *self, int group_index) {
+    short *list = D_L05_001AC040_03f80[group_index];
     float best = 120.0f;
-    char *res = 0;
+    char *nearest_moby = 0;
     if (list == 0) {
         return 0;
     }
@@ -1916,13 +1916,13 @@ char *FUN_L05_00303f80(char *self, int idx) {
                     float candidate_distance = func_001F9D10_03f80(D_L05_00160098_m_03f80[i].pos, self + 0x10);
                     if (candidate_distance < best) {
                         best = candidate_distance;
-                        res = *(char **)&D_L05_00160098_03f80 + (i << 8);
+                        nearest_moby = *(char **)&D_L05_00160098_03f80 + (i << 8);
                     }
                 }
             }
         } while (*list++ >= 0);
     }
-    return res;
+    return nearest_moby;
 }
 /* Pushes a point clear of a path and returns the nearest wall distance, like
  * FUN_L00_00261d78. */
