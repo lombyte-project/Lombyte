@@ -1991,11 +1991,11 @@ int FUN_001160d8_0026dd20(void) __asm__("FUN_001160d8");
 int FUN_001fa6d0_0026dd20(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L00_001B20EC[];
 char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f);
-char *FUN_L00_0026dd20(void *pos, void *dir, int initial_color, int lifetime, float initial_particle_scalar) {
+char *FUN_L00_0026dd20(void *spawn_position, void *initial_velocity, int initial_color, int lifetime, float initial_particle_scalar) {
     char *particle = FUN_L00_002678b8_0026dd20(0x1B);
     if (particle) {
         char *particle_data = particle + 0x20;
-        qcopy(particle + 0x10, pos);
+        qcopy(particle + 0x10, spawn_position);
         particle[8] = FUN_001160d8_0026dd20();
         *(int *)(particle + 4) = initial_color;
         particle[9] = FUN_001fa6d0_0026dd20(4.0f) + 0x40;
@@ -2004,7 +2004,7 @@ char *FUN_L00_0026dd20(void *pos, void *dir, int initial_color, int lifetime, fl
         particle[1] = 0;
         particle[2] = D_L00_001B20EC[0][0];
         *(int *)(particle_data + 0x18) = particle[7];
-        qcopy(particle_data, dir);
+        qcopy(particle_data, initial_velocity);
         *(int *)(particle_data + 0x10) = lifetime;
         *(int *)(particle_data + 0x14) = lifetime;
     }
