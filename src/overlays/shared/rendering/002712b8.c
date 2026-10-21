@@ -1246,7 +1246,7 @@ unsigned char *FUN_L00_002741a0(void *position, int color, float size_scale, flo
     unsigned char *particle = p27fe00_alloc(0x42);
     if (particle) {
         float *particle_data;
-        float ang, horizontal_drift_speed;
+        float drift_angle_radians, horizontal_drift_speed;
         qcopy(particle + 0x10, position);
         *(int *)(particle + 4) = color == -1 ? ((FUN_00213260_2741a0(6) + 0x14) << 24) | 0x808080 : color;
         particle[9] = FUN_001fa6d0_2741a0(2.0f) + 0x20;
@@ -1261,10 +1261,10 @@ unsigned char *FUN_L00_002741a0(void *position, int color, float size_scale, flo
         particle_data = (float *)(particle + 0x20);
         *(s16 *)(particle + 0xA) = 4;
         *(float *)(particle + 0xC) = size_scale * 210000.0f;
-        ang = random_angle_radians();
+        drift_angle_radians = random_angle_radians();
         horizontal_drift_speed = FUN_002132a8_2741a0(0.0015f, 0.0025f);
-        particle_data[0] = fast_cos(ang) * horizontal_drift_speed;
-        particle_data[1] = fast_sin(ang) * horizontal_drift_speed;
+        particle_data[0] = fast_cos(drift_angle_radians) * horizontal_drift_speed;
+        particle_data[1] = fast_sin(drift_angle_radians) * horizontal_drift_speed;
         particle_data[4] = z;
         particle_data[2] = 0;
     }
