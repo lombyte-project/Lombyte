@@ -1997,38 +1997,38 @@ void FUN_L00_00208b60(void) {
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
 f32 FUN_L00_00208f20(f32 target_anim_frame, f32 anim_speed_divisor, f32 frame_delta_scale, f32 anim_speed_step) {
-    struct Hero *g = &hero;
-    f32 thresh = g->anim_frame;
+    struct Hero *hero_animation_state = &hero;
+    f32 thresh = hero_animation_state->anim_frame;
     f32 step;
     f32 negone = -1.0f;
 
     if (thresh < target_anim_frame) {
         step = target_anim_frame - thresh;
     } else {
-        s32 flag = g->unkA9C;
+        s32 flag = hero_animation_state->unkA9C;
         f32 rate = 2.0f;
 
         if (flag == 0) {
-            rate = 0.5f / g->unkA94;
+            rate = 0.5f / hero_animation_state->unkA94;
         }
 
         {
-            void *obj = ((void *)g->moby);
-            s32 idx = *(u8 *)((u8 *)obj + 0x53);
-            u8 *arr = *(u8 **)((u8 *)obj + 0x24);
-            void *entry = *(void **)(arr + (idx << 2) + 0x48);
+            void *hero_moby = ((void *)hero_animation_state->moby);
+            s32 animation_sequence_index = *(u8 *)((u8 *)hero_moby + 0x53);
+            u8 *arr = *(u8 **)((u8 *)hero_moby + 0x24);
+            void *entry = *(void **)(arr + (animation_sequence_index << 2) + 0x48);
             s32 cnt = *(u8 *)((u8 *)entry + 0x10);
             step = target_anim_frame + (rate * (f32)cnt - thresh);
         }
     }
 
     if (anim_speed_divisor > 0.0f) {
-        struct Hero *g2 = &hero;
-        f32 rate2 = g2->unkA94;
+        struct Hero *anim_speed_owner = &hero;
+        f32 rate2 = anim_speed_owner->unkA94;
 
-        if (g2->unkA9C != 0) {
-            void *obj2 = ((void *)g2->moby);
-            rate2 = *(f32 *)(*(void **)((u8 *)obj2 + 0x6C));
+        if (anim_speed_owner->unkA9C != 0) {
+            void *animation_rate_moby = ((void *)anim_speed_owner->moby);
+            rate2 = *(f32 *)(*(void **)((u8 *)animation_rate_moby + 0x6C));
         }
 
         {
@@ -2037,10 +2037,10 @@ f32 FUN_L00_00208f20(f32 target_anim_frame, f32 anim_speed_divisor, f32 frame_de
             f32 result = target / speed;
 
             if (anim_speed_step == negone) {
-                g2->anim_speed = result;
+                anim_speed_owner->anim_speed = result;
                 return negone;
             }
-            return approach_value((f32 *)(&g2->anim_speed), result, anim_speed_step);
+            return approach_value((f32 *)(&anim_speed_owner->anim_speed), result, anim_speed_step);
         }
     }
 
