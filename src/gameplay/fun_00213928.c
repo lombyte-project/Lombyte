@@ -44,7 +44,7 @@ extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 
 s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) __asm__("FUN_00213928");
 
-s32 fun_00213928(O_25a478 *hit_recipient_moby, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) {
+s32 fun_00213928(O_25a478 *hit_recipient_moby, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 hit_vector_scale_row) {
     enum {
         KIND_GATED_HIT_RESPONSE = 0x0,
         DEFAULT_HIT_RESPONSE = 0x1,
@@ -89,7 +89,7 @@ s32 fun_00213928(O_25a478 *hit_recipient_moby, P_25a478 *hit_record, Q_25a478 *q
             return 0;
         }
     }
-    if (idx == 4) idx = q->b8;
+    if (hit_vector_scale_row == 4) hit_vector_scale_row = q->b8;
     if (!hit_record) {
         if (q) {
             fast_dec_timer_s16(&q->h1C);
@@ -101,7 +101,7 @@ s32 fun_00213928(O_25a478 *hit_recipient_moby, P_25a478 *hit_record, Q_25a478 *q
     }
     if (hit_record->u.s.f1C == 5627.9248f) {
         V_25a478 *hit_vector = &hit_record->u.pos;
-        fast_vec_scale(hit_vector, hit_vector, D_001CC0C8[idx][hit_record->state]);
+        fast_vec_scale(hit_vector, hit_vector, D_001CC0C8[hit_vector_scale_row][hit_record->state]);
         kind = hit_record->kind;
         hit_record->u.s.f1C = 5627.9248f;
         if (kind == 0x47) {
