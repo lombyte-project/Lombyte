@@ -238,7 +238,7 @@ extern u8 D_L00_0015F580_2637f8[] __asm__("D_L00_0015F580") __attribute__((secti
 void cutscene_set_camera_target(u8 *m) __asm__("FUN_L00_002637f8");
 void cutscene_set_camera_target(u8 *moby) {
     Vec4_2634f8 vectors[4];
-    Vec4_2634f8 pos;
+    Vec4_2634f8 effect_spawn_position;
     Vec4_2634f8 scaled;
     f32 fraction, size, lifetime, scale;
     s32 count;
@@ -256,7 +256,7 @@ void cutscene_set_camera_target(u8 *moby) {
             size = fraction * 0.02f + 0.01f;
             w24 = 2;
             FUN_001f9bf8_2637f8(&scaled, &vectors[2], scale);
-            FUN_001f9a10_2637f8(&pos, &vectors[3], &scaled);
+            FUN_001f9a10_2637f8(&effect_spawn_position, &vectors[3], &scaled);
             b2A = 0x50;
             count = 1;
             do {
@@ -264,7 +264,7 @@ void cutscene_set_camera_target(u8 *moby) {
                 signed_random_value = FUN_00213260_2637f8(0x10);
                 if (FUN_00213260_2637f8(2) != 0)
                     signed_random_value = -signed_random_value;
-                effect = FUN_L00_0026d000_2637f8(&pos, size, 1.0f, 0.75f, signed_random_value,
+                effect = FUN_L00_0026d000_2637f8(&effect_spawn_position, size, 1.0f, 0.75f, signed_random_value,
                                                    D_L00_0015F580_2637f8, lifetime, 0x503030ff);
                 if (effect) {
                     EffectTail_2637f8 *tail = &effect->tail;
@@ -284,10 +284,10 @@ void cutscene_set_camera_target(u8 *moby) {
             w24 = 2;
             b2A = 0x7f;
             FUN_001f9bf8_2637f8(&scaled, &vectors[2], scale);
-            FUN_001f9a10_2637f8(&pos, &vectors[3], &scaled);
+            FUN_001f9a10_2637f8(&effect_spawn_position, &vectors[3], &scaled);
             count = 4;
             do {
-                effect = FUN_L00_0026d000_2637f8(&pos, size, 1.0f, 1.0f, 0x10,
+                effect = FUN_L00_0026d000_2637f8(&effect_spawn_position, size, 1.0f, 1.0f, 0x10,
                                                    D_L00_0015F580_2637f8, lifetime, 0x7fffffff);
                 if (effect) {
                     EffectTail_2637f8 *tail = &effect->tail;
