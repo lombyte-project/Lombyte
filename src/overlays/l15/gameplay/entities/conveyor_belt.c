@@ -1363,7 +1363,7 @@ void ultramech_scientist_update(struct Moby *moby) {
     char *player;
     float target[4];
     float eye[4];
-    float diff[4];
+    float eye_to_target_vector[4];
     float value;
     float pitch;
     float yaw;
@@ -1419,11 +1419,11 @@ aim_head:
     if (aim != 0) {
     qcopy(eye, &moby->pos);
     eye[2] = eye[2] + 1.0f;
-    subtract_vector_xyz(diff, target, eye);
-    value = fast_arc_tan(diff[0], diff[1]);
+    subtract_vector_xyz(eye_to_target_vector, target, eye);
+    value = fast_arc_tan(eye_to_target_vector[0], eye_to_target_vector[1]);
     yaw = fast_subtract_rotations(value, moby->rot.z);
-    value = vector_length_xy(diff);
-    value = fast_arc_tan(value, diff[2]);
+    value = vector_length_xy(eye_to_target_vector);
+    value = fast_arc_tan(value, eye_to_target_vector[2]);
     pitch = -value;
     if (yaw > 1.5707964f) {
         yaw = 1.5707964f;
