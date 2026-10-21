@@ -1265,8 +1265,8 @@ extern char D_L02_0015FFD8_c __asm__("D_L02_0015FFD8");
 extern void *FUN_L00_002dbb20(void *);
 
 void *FUN_L02_002d6210(struct Moby *moby) {
-    void *r = FUN_L00_002dbb20(moby);
-    if (r) {
+    void *helper_result = FUN_L00_002dbb20(moby);
+    if (helper_result) {
         int idx;
         moby->state = 9;
         idx = *(int *)((char *)moby->pvars + 0x288);
@@ -1277,7 +1277,7 @@ void *FUN_L02_002d6210(struct Moby *moby) {
     } else if (moby->state == 9) {
         moby->state = 1;
     }
-    return r;
+    return helper_result;
 }
 #include "qcopy.h"
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
