@@ -129,19 +129,19 @@ extern G002583f0 D_L00_00173E40_u __asm__("D_L00_00173E40");
 s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 FUN_L00_002583f0(void *pos, s32 moby, s32 flag, f32 up, f32 down) {
     V002583f0 raised_pos, lowered_pos;
-    s32 r;
+    s32 collision_result;
     qcopy(&raised_pos, pos);
     raised_pos.f[2] += up;
     qcopy(&lowered_pos, pos);
     lowered_pos.f[2] -= down;
     if (lowered_pos.f[2] < 0.0f)
         lowered_pos.f[2] = 0.0f;
-    r = collision_line(&raised_pos, &lowered_pos, 0x22, moby, 0);
+    collision_result = collision_line(&raised_pos, &lowered_pos, 0x22, moby, 0);
     if (D_L00_00173E40_u.x1c < 0)
-        r = 0;
+        collision_result = 0;
     if (flag && D_L00_00173E40_u.x18 != 0)
-        r = 0;
-    return r;
+        collision_result = 0;
+    return collision_result;
 }
 typedef union {
     OvlQuad q;
