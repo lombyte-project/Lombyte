@@ -1363,20 +1363,20 @@ float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L03_002ce238(char *helicopter_moby) {
     int st;
     float fv;
-    int res;
+    int hit_reaction_result;
     char *helicopter_data;
     char *hit_record;
     float reaction_heading_angle, reaction_relative_heading_angle, reaction_roll_angle, reaction_pitch_angle;
     helicopter_data = *(char **)(helicopter_moby + 0x78);
     fv = 0.0f;
     hit_record = find_moby_hit(helicopter_moby, 0x330000, 0);
-    res = hit_reaction(helicopter_moby, hit_record, helicopter_data + 0x20, 0, &st, &fv, 0, 4);
+    hit_reaction_result = hit_reaction(helicopter_moby, hit_record, helicopter_data + 0x20, 0, &st, &fv, 0, 4);
     if (st != 1 && *(unsigned char *)(helicopter_moby + 0x20) != 5) {
         float remaining_health = *(float *)(helicopter_data + 0x20) - fv;
         *(float *)(helicopter_data + 0x20) = remaining_health;
-        if (res == 1 || remaining_health <= 0.0f) {
+        if (hit_reaction_result == 1 || remaining_health <= 0.0f) {
             *(unsigned char *)(helicopter_moby + 0x20) = 5;
-        } else if (res != 0xB) {
+        } else if (hit_reaction_result != 0xB) {
             *(unsigned char *)(helicopter_data + 0x67) = 0xB4;
             trooper_anim_update(helicopter_moby, (short *)(helicopter_data + 0x60));
             if (*(float *)(hit_record + 0x1C) == 5627.925f && *(unsigned char *)(helicopter_moby + 0x20) != 4) {
