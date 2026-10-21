@@ -3123,14 +3123,14 @@ void platform_booster_update(struct Moby *moby) {
         PLATFORM_BOOSTER_STATE_FOLLOW_LEVER = 1,
         PLATFORM_BOOSTER_STATE_ADVANCE_ANIMATION = 2
     };
-    DoorVars *v = (DoorVars *)moby->pvars;
+    DoorVars *door_vars = (DoorVars *)moby->pvars;
     f32 prev;
     struct Moby *lever;
     LeverVars *lv;
     u8 *slot;
 
     prev = moby->anim_time;
-    if (v == NULL) {
+    if (door_vars == NULL) {
         mark_moby_for_removal(moby);
         return;
     }
@@ -3139,13 +3139,13 @@ void platform_booster_update(struct Moby *moby) {
         moby_play_anim(moby, 1, 0, scale_game_frames(300));
         moby->state = 1;
         moby->anim_speed = 0;
-        v->voice = -1;
+        door_vars->voice = -1;
         break;
     case PLATFORM_BOOSTER_STATE_FOLLOW_LEVER:
-        if (v->lever == -1) {
+        if (door_vars->lever == -1) {
             break;
         }
-        lever = &level_mobys[v->lever];
+        lever = &level_mobys[door_vars->lever];
         if (lever->oclass != 0x118) {
             break;
         }
@@ -3153,37 +3153,37 @@ void platform_booster_update(struct Moby *moby) {
         if (lever->state == 3) {
             moby->anim_time = 1.0f - lv->travel;
         } else if (lv->travel != 1.0f ||
-                   (v->target != -1 && v->locked == 0 &&
+                   (door_vars->target != -1 && door_vars->locked == 0 &&
                     ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9 ||
                      hero.state.control_mode == 12) &&
-                    hero.ground_moby == &level_mobys[v->target])) {
+                    hero.ground_moby == &level_mobys[door_vars->target])) {
             moby->state = 2;
         }
         if (moby->anim_time != prev) {
             if (lv->travel != 1.0f && lv->travel != 0.0f) {
-                if (FUN_L00_0028d8c0(moby, v->voice) == 0) {
-                    v->voice = start_moby_sound(0, 4, (int)moby);
+                if (FUN_L00_0028d8c0(moby, door_vars->voice) == 0) {
+                    door_vars->voice = start_moby_sound(0, 4, (int)moby);
                 }
             } else {
-                if (FUN_L00_0028d8c0(moby, v->voice) != 0) {
-                    if (v->voice != -1) {
-                        slot = voice_slots + v->voice * 0x70;
+                if (FUN_L00_0028d8c0(moby, door_vars->voice) != 0) {
+                    if (door_vars->voice != -1) {
+                        slot = voice_slots + door_vars->voice * 0x70;
                         if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74] != 0) {
-                            release_voice_slot(v->voice);
+                            release_voice_slot(door_vars->voice);
                         }
                     }
-                    v->voice = -1;
+                    door_vars->voice = -1;
                 }
                 start_moby_sound(1, 0, (int)moby);
             }
-        } else if (FUN_L00_0028d8c0(moby, v->voice) != 0) {
-            if (v->voice != -1) {
-                slot = voice_slots + v->voice * 0x70;
+        } else if (FUN_L00_0028d8c0(moby, door_vars->voice) != 0) {
+            if (door_vars->voice != -1) {
+                slot = voice_slots + door_vars->voice * 0x70;
                 if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74] != 0) {
-                    release_voice_slot(v->voice);
+                    release_voice_slot(door_vars->voice);
                 }
             }
-            v->voice = -1;
+            door_vars->voice = -1;
         }
         break;
     case PLATFORM_BOOSTER_STATE_ADVANCE_ANIMATION: {
@@ -3194,10 +3194,10 @@ void platform_booster_update(struct Moby *moby) {
         if (1.0f < moby->anim_time) {
             moby->anim_time = 1.0f;
         }
-        if (v->lever == -1) {
+        if (door_vars->lever == -1) {
             break;
         }
-        link = &level_moby_table[v->lever];
+        link = &level_moby_table[door_vars->lever];
         if (link->oclass != 0x118) {
             break;
         }
@@ -3211,32 +3211,32 @@ void platform_booster_update(struct Moby *moby) {
         }
         if (moby->anim_time != prev) {
             if (link_vars->travel == 1.0f || link_vars->travel == 0.0f) {
-                if (FUN_L00_0028d8c0(moby, v->voice) != 0) {
-                    if (v->voice != -1) {
-                        slot = voice_slots + v->voice * 0x70;
+                if (FUN_L00_0028d8c0(moby, door_vars->voice) != 0) {
+                    if (door_vars->voice != -1) {
+                        slot = voice_slots + door_vars->voice * 0x70;
                         if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74] != 0) {
-                            release_voice_slot(v->voice);
+                            release_voice_slot(door_vars->voice);
                         }
                     }
-                    v->voice = -1;
+                    door_vars->voice = -1;
                 }
                 start_moby_sound(1, 0, (int)moby);
-            } else if (FUN_L00_0028d8c0(moby, v->voice) == 0) {
-                v->voice = start_moby_sound(0, 4, (int)moby);
+            } else if (FUN_L00_0028d8c0(moby, door_vars->voice) == 0) {
+                door_vars->voice = start_moby_sound(0, 4, (int)moby);
             }
-        } else if (FUN_L00_0028d8c0(moby, v->voice) != 0) {
-            if (v->voice != -1) {
-                slot = voice_slots + v->voice * 0x70;
+        } else if (FUN_L00_0028d8c0(moby, door_vars->voice) != 0) {
+            if (door_vars->voice != -1) {
+                slot = voice_slots + door_vars->voice * 0x70;
                 if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74] != 0) {
-                    release_voice_slot(v->voice);
+                    release_voice_slot(door_vars->voice);
                 }
             }
-            v->voice = -1;
+            door_vars->voice = -1;
         }
         break;
     }
     }
-    if (v->target != -1) {
-        moby_point_position(moby, 0, &level_moby_table[v->target].pos);
+    if (door_vars->target != -1) {
+        moby_point_position(moby, 0, &level_moby_table[door_vars->target].pos);
     }
 }
