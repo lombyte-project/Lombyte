@@ -1300,10 +1300,10 @@ extern void *create_moby_local() __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L09_002ee380(char *owner, void *position, float angle) {
-    u128_ee380 pos;
-    void *copy = &pos;
+    u128_ee380 position_copy;
+    void *copy = &position_copy;
     char *moby;
-    pos = *(u128_ee380 *)position;
+    position_copy = *(u128_ee380 *)position;
     moby = create_moby_local(0x11C);
     if (moby != 0) {
         unsigned char state;
