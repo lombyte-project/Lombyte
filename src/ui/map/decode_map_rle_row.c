@@ -2,7 +2,7 @@
 
 void decode_map_rle_row(u8 *buf, s32 row, u8 *data, s16 *offsets) __asm__("FUN_00206860");
 
-void decode_map_rle_row(u8 *buf, s32 row, u8 *data, s16 *offsets) {
+void decode_map_rle_row(u8 *decoded_row_dst, s32 row, u8 *data, s16 *offsets) {
     u8 *dst;
     u8 *src;
     s16 *op;
@@ -16,7 +16,7 @@ void decode_map_rle_row(u8 *buf, s32 row, u8 *data, s16 *offsets) {
     s32 count;
     u32 pair;
 
-    dst = buf;
+    dst = decoded_row_dst;
     half = 0;
     if (row != 0) {
         src = data + offsets[row - 1];
