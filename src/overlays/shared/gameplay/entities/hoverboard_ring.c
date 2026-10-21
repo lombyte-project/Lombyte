@@ -253,7 +253,7 @@ void FUN_L05_0031cf58(char *m) {
     float up[4];
     float M[4][4];
     float sprite_offset[4];
-    float w[4];
+    float camera_facing_offset[4];
     u32 col;
     int j;
     *(OvlQuad *)up = 0;
@@ -278,8 +278,8 @@ void FUN_L05_0031cf58(char *m) {
     cross_vectors_xyz(M[1], M[0], up);
     normalize_vector_xyz(M[1], M[1], 1.0f);
     cross_vectors_xyz(M[2], M[1], M[0]);
-    scale_vector_xyz(w, M[0], *(float *)&D_L05_00161FCC);
-    add_vector_xyz(M[3], M[3], w);
+    scale_vector_xyz(camera_facing_offset, M[0], *(float *)&D_L05_00161FCC);
+    add_vector_xyz(M[3], M[3], camera_facing_offset);
     if (((unsigned char *)d)[0x67] != 0 && random_integer_below(8) == 0) {
         *(int *)(d + 0x60) >>= 1;
     }
