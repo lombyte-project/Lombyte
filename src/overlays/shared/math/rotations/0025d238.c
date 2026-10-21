@@ -927,7 +927,7 @@ extern u8 *D_L00_0015FFE0 __attribute__((sda));
 /* True for a moby inside the moby table whose class at 0xA6 is 0x1F4..0x21C. */
 s32 FUN_L00_0025e3b8(u8 *m);
 s32 FUN_L00_0025e3b8(u8 *moby) {
-    u32 v;
+    u32 moby_class_id;
     if (moby == 0) {
     bad:
         return 0;
@@ -938,6 +938,6 @@ s32 FUN_L00_0025e3b8(u8 *moby) {
     if (moby > D_L00_0015FFE0) {
         goto bad;
     }
-    v = *(u16 *)(moby + 0xA6);
-    return (v - 0x1F4) < 0x29;
+    moby_class_id = *(u16 *)(moby + 0xA6);
+    return (moby_class_id - 0x1F4) < 0x29;
 }
