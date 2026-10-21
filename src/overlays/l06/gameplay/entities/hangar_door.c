@@ -70,8 +70,8 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 /* Clears state 4 from every moby in the selected table. */
-void FUN_L06_002f45a0(int idx) {
-    short *moby_index_cursor = D_L06_001ABFC0[idx];
+void FUN_L06_002f45a0(int moby_list_index) {
+    short *moby_index_cursor = D_L06_001ABFC0[moby_list_index];
     do {
         char *moby = (char *)(((*moby_index_cursor & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
         if ((unsigned char)moby[0x20] == 4) {
