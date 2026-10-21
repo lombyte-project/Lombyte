@@ -1424,21 +1424,21 @@ void door_left_update(HoverMoby *door_moby) {
         DOOR_OPEN = 3,
         DOOR_CLOSING = 4
     };
-    HoverVars *v;
+    HoverVars *door_vars;
     Vec4 *player;
     Vec4 off;
     f32 k;
 
-    v = door_moby->vars;
+    door_vars = door_moby->vars;
     switch (door_moby->state) {
     case DOOR_INITIALIZE:
-        qcopy(&v->home, &door_moby->pos);
-        v->t = 0.0f;
+        qcopy(&door_vars->home, &door_moby->pos);
+        door_vars->t = 0.0f;
         door_moby->state = 1;
         break;
     case DOOR_CLOSED:
         player = &hero.motion.pos;
-        if (vector_distance(v, player) < v->radius &&
+        if (vector_distance(door_vars, player) < door_vars->radius &&
             FUN_001f99c0(door_moby->pos.f[2] - player->f[2]) < 2.0f) {
             door_moby->state = 2;
             if (door_moby->oclass == 0x300) {
@@ -1447,16 +1447,16 @@ void door_left_update(HoverMoby *door_moby) {
         }
         break;
     case DOOR_OPENING:
-        v->t += 1.0f / multiply_global_factor_ed64(20.0f);
-        if (v->t >= 1.0f) {
-            v->t = 1.0f;
+        door_vars->t += 1.0f / multiply_global_factor_ed64(20.0f);
+        if (door_vars->t >= 1.0f) {
+            door_vars->t = 1.0f;
             door_moby->state = 3;
         }
         break;
     case DOOR_OPEN:
         k = 1.1f;
-        if (vector_distance(v, &hero.motion.pos) > v->radius * k &&
-            vector_distance(v, D_L01_00167240) > v->radius * k) {
+        if (vector_distance(door_vars, &hero.motion.pos) > door_vars->radius * k &&
+            vector_distance(door_vars, D_L01_00167240) > door_vars->radius * k) {
             door_moby->state = 4;
             if (door_moby->oclass == 0x300) {
                 FUN_0022da68(0, 0, door_moby);
@@ -1465,23 +1465,23 @@ void door_left_update(HoverMoby *door_moby) {
         break;
     case DOOR_CLOSING:
         player = &hero.motion.pos;
-        if (vector_distance(v, player) < v->radius &&
+        if (vector_distance(door_vars, player) < door_vars->radius &&
             FUN_001f99c0(door_moby->pos.f[2] - player->f[2]) < 2.0f) {
             door_moby->state = 2;
         } else {
-            v->t -= 1.0f / multiply_global_factor_ed64(20.0f);
-            if (v->t <= 0.0f) {
-                v->t = 0.0f;
+            door_vars->t -= 1.0f / multiply_global_factor_ed64(20.0f);
+            if (door_vars->t <= 0.0f) {
+                door_vars->t = 0.0f;
                 door_moby->state = 1;
             }
         }
         break;
     }
-    off.f[0] = fast_cos(door_moby->rot_z) * v->t * (door_moby->oclass == 0x300 ? 2.0f : -2.0f);
-    off.f[1] = fast_sin(door_moby->rot_z) * v->t * (door_moby->oclass == 0x300 ? 2.0f : -2.0f);
+    off.f[0] = fast_cos(door_moby->rot_z) * door_vars->t * (door_moby->oclass == 0x300 ? 2.0f : -2.0f);
+    off.f[1] = fast_sin(door_moby->rot_z) * door_vars->t * (door_moby->oclass == 0x300 ? 2.0f : -2.0f);
     off.f[2] = 0.0f;
-    door_moby->pos.f[0] = v->home.f[0] + off.f[0];
-    door_moby->pos.f[1] = v->home.f[1] + off.f[1];
+    door_moby->pos.f[0] = door_vars->home.f[0] + off.f[0];
+    door_moby->pos.f[1] = door_vars->home.f[1] + off.f[1];
 }
 
 #define NOT_SDA
