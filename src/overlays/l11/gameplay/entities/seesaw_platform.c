@@ -275,7 +275,7 @@ extern void zero_vector_d1b0(void *) __asm__("FUN_001f99f8");
 void FUN_L11_0030d1b0(struct Moby *parent_moby) {
     Vec4f v;
     Vec4f child_position_scratch;
-    Vec4f b;
+    Vec4f parent_axis1_offset;
     int i;
     int j;
     int n;
@@ -294,8 +294,8 @@ void FUN_L11_0030d1b0(struct Moby *parent_moby) {
         v.z += D_L11_00161EAC;
         add_vector_xyz(&v, &v, &parent_moby->pos);
         normalize_vector_xyz(&child_position_scratch, &D_L11_001DA710[i]->rot_row2, D_L11_00161EB0);
-        normalize_vector_xyz(&b, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
-        add_vector_xyz(&child_position_scratch, &child_position_scratch, &b);
+        normalize_vector_xyz(&parent_axis1_offset, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
+        add_vector_xyz(&child_position_scratch, &child_position_scratch, &parent_axis1_offset);
         add_vector_xyz(&child_position_scratch, &child_position_scratch, &v);
         qcopy_nc(&D_L11_001DA710[i]->pos, &child_position_scratch);
         FUN_L00_00250df8(D_L11_001DA710[i]);
@@ -315,8 +315,8 @@ void FUN_L11_0030d1b0(struct Moby *parent_moby) {
         v.z += D_L11_00161EAC;
         add_vector_xyz(&v, &v, &parent_moby->pos);
         normalize_vector_xyz(&child_position_scratch, &D_L11_00161F20[j]->rot_row2, D_L11_00161EB0);
-        normalize_vector_xyz(&b, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
-        add_vector_xyz(&child_position_scratch, &child_position_scratch, &b);
+        normalize_vector_xyz(&parent_axis1_offset, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
+        add_vector_xyz(&child_position_scratch, &child_position_scratch, &parent_axis1_offset);
         add_vector_xyz(&child_position_scratch, &child_position_scratch, &v);
         qcopy(&D_L11_00161F20[j]->pos, &child_position_scratch);
         r = fast_sub_rotations((float)k * 0.2617994f, 1.3962634f);
