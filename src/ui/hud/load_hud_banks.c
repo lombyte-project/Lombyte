@@ -44,15 +44,15 @@ void load_hud_banks(void) {
     u32 size;
     u32 chunk_1_qword_count;
     s32 vram;
-    u32 *dst;
+    u32 *aligned_chunk_size_cursor;
     s32 *chunk_size_cursor;
     struct HudState *hb;
     struct Vram *vram_state_ptr;
 
-    dst = D_0019A420;
+    aligned_chunk_size_cursor = D_0019A420;
     chunk_size_cursor = &hud_file->chunk[1].size;
     for (i = 0; i < 5; i++) {
-        *dst++ = ALIGN64(*chunk_size_cursor);
+        *aligned_chunk_size_cursor++ = ALIGN64(*chunk_size_cursor);
         chunk_size_cursor += 2;
     }
     size = ALIGN64(hud_file->chunk[0].size);
