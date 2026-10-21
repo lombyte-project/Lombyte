@@ -1720,11 +1720,11 @@ extern int FUN_L00_002c5be8(void *);
 
 void FUN_L00_002a82c0(unsigned char *wrench_moby) {
     N_2a82c0 *scanned_moby = D_L00_0015FFE4;
-    struct Hero *g;
+    struct Hero *hero_context;
     int moby_processing_result;
     if (scanned_moby == 0)
         return;
-    g = &hero;
+    hero_context = &hero;
     do {
         if (scanned_moby->type == 0xFE)
             return;
@@ -1732,7 +1732,7 @@ void FUN_L00_002a82c0(unsigned char *wrench_moby) {
             return;
         if (scanned_moby && scanned_moby->info && *(short *)(scanned_moby->info + 0x46) == 0x13) {
             if (FUN_001f9b48((char *)scanned_moby + 0x10, wrench_moby + 0x10) < 2.7f) {
-                moby_processing_result = FUN_L00_002a7210(scanned_moby, ((void *)g->moby),
+                moby_processing_result = FUN_L00_002a7210(scanned_moby, ((void *)hero_context->moby),
                                      random_float_between(-30.0f, 30.0f) * DEG_TO_RAD, 0.0f);
                 goto check;
             }
