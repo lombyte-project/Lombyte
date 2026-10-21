@@ -1036,16 +1036,16 @@ s32 D_L02_001619A0 = 0x10306058;
 s32 D_L02_001619A4 = -1;
 
 void FUN_L02_002d5a68(Vec4 *from) {
-    Vec4 pos;
+    Vec4 saved_source_position;
     Vec4 at;
-    Vec4 accel;
-    Vec4 vel;
-    Vec4 *source_position = &pos;
+    Vec4 vertical_motion;
+    Vec4 radial_motion;
+    Vec4 *source_position = &saved_source_position;
     Vec4 *particle_position;
     float radial_angle;
     int frame_count, second_frame_count, third_frame_count;
 
-    pos.q = from->q;
+    saved_source_position.q = from->q;
     if (D_L02_00160178 >= 0x6A5)
         return;
     radial_angle = rand_angle_d57f8();
@@ -1054,18 +1054,18 @@ void FUN_L02_002d5a68(Vec4 *from) {
     at.f[2] = at.f[2] + rand_between_d57f8(0.125f, 0.0f);
     at.f[0] = at.f[0] + rand_between_d57f8(-0.125f, 0.125f);
     at.f[1] = at.f[1] + rand_between_d57f8(-0.125f, 0.125f);
-    clear_vec_d57f8(&accel);
-    vel.f[0] = fast_cos_d57f8(radial_angle) * (rand_between_d57f8(D_L02_00161974, D_L02_00161978) * D_0015ED6C);
-    vel.f[1] = fast_sin_d57f8(radial_angle) * (rand_between_d57f8(D_L02_00161974, D_L02_00161978) * D_0015ED6C);
-    vel.f[2] = 0.0f;
-    accel.f[2] = rand_between_d57f8(D_L02_00161964, D_L02_00161968) * D_0015ED6C;
-    vel.f[2] = rand_between_d57f8(D_L02_0016196C, D_L02_00161970) * D_0015ED6C;
-    accel.f[3] = D_L02_0016197C;
-    vel.f[3] = D_L02_00161980;
+    clear_vec_d57f8(&vertical_motion);
+    radial_motion.f[0] = fast_cos_d57f8(radial_angle) * (rand_between_d57f8(D_L02_00161974, D_L02_00161978) * D_0015ED6C);
+    radial_motion.f[1] = fast_sin_d57f8(radial_angle) * (rand_between_d57f8(D_L02_00161974, D_L02_00161978) * D_0015ED6C);
+    radial_motion.f[2] = 0.0f;
+    vertical_motion.f[2] = rand_between_d57f8(D_L02_00161964, D_L02_00161968) * D_0015ED6C;
+    radial_motion.f[2] = rand_between_d57f8(D_L02_0016196C, D_L02_00161970) * D_0015ED6C;
+    vertical_motion.f[3] = D_L02_0016197C;
+    radial_motion.f[3] = D_L02_00161980;
     frame_count = trunc_d57f8(rand_between_d57f8((float)D_L02_00161984, (float)D_L02_00161988));
     second_frame_count = trunc_d57f8(rand_between_d57f8((float)D_L02_0016198C, (float)D_L02_00161990));
     third_frame_count = trunc_d57f8(rand_between_d57f8((float)D_L02_00161994, (float)D_L02_00161998));
-    spawn_spark(&at, &accel, &vel, D_L02_0016199C, D_L02_001619A0, frame_count, second_frame_count, third_frame_count, D_L02_001619A4);
+    spawn_spark(&at, &vertical_motion, &radial_motion, D_L02_0016199C, D_L02_001619A0, frame_count, second_frame_count, third_frame_count, D_L02_001619A4);
 }
 
 /* pvars of the class FUN_L02_002d5c88 updates (only the fields it touches). */
