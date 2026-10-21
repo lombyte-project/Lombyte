@@ -713,7 +713,7 @@ void FUN_L00_002d1428(M2d1428 *moby) {
     };
     O2d1428 *vars;
     M2d1428 *chain_cursor, *parent_moby, *next;
-    V2d1428 collision_start, g, c2, hero_local_offset, b, previous_position, previous_rotation, position_delta;
+    V2d1428 collision_start, g, c2, hero_local_offset, adjusted_link_position, previous_position, previous_rotation, position_delta;
     f32 acceleration_scale_or_speed, v;
     s32 hit;
 
@@ -767,15 +767,15 @@ void FUN_L00_002d1428(M2d1428 *moby) {
                     0.0f)
                     *(s32 *)&vars->vel.w = 0;
             }
-            qcopy(&b, &vars->vD0);
-            b.z += vars->fF4;
+            qcopy(&adjusted_link_position, &vars->vD0);
+            adjusted_link_position.z += vars->fF4;
             if (moby)
                 moby->h36 = 0x7F80;
             qcopy(&previous_position, &moby->pos);
             qcopy(&previous_rotation, &moby->v40);
-            FUN_L00_002604f0(moby, vars->path, &b, vars->vE0, &moby->pos, &moby->v40);
+            FUN_L00_002604f0(moby, vars->path, &adjusted_link_position, vars->vE0, &moby->pos, &moby->v40);
             if (FUN_L00_002603d0(vars->path)->flags & 4) {
-                qcopy(&vars->vD0, &b);
+                qcopy(&vars->vD0, &adjusted_link_position);
                 vars->vD0.z -= vars->fF4;
             }
             fast_vec_sub(&position_delta, &moby->pos, &previous_position);
