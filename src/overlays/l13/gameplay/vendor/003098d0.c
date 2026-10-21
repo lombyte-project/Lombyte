@@ -143,10 +143,10 @@ void FUN_L13_00309bc8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int i, next_point_index;
     for (i = 0; i < 15; i = next_point_index) {
-        float f21, f22;
+        float first_vector_angle_radians, second_vector_angle_radians;
         int frame_count, second_frame_count, third_frame_count;
         int spawn_position[4];
-        float v[4], w[4];
+        float first_vector[4], second_vector[4];
         char *source_point_position;
         int off = i * 16;
         next_point_index = i + 1;
@@ -157,33 +157,33 @@ void FUN_L13_00309bc8(struct Moby *moby) {
         if (*(float *)&D_L13_00161EE8 < random_float_between_alt(0.0f, 1.0f)) {
             continue;
         }
-        f21 = random_angle_radians();
-        f22 = random_angle_radians();
-        v[0] = fast_cos(f21) *
+        first_vector_angle_radians = random_angle_radians();
+        second_vector_angle_radians = random_angle_radians();
+        first_vector[0] = fast_cos(first_vector_angle_radians) *
                random_float_between_alt(*(float *)&D_L13_00161ED8, *(float *)&D_L13_00161EDC);
-        v[1] = fast_sin(f21) *
+        first_vector[1] = fast_sin(first_vector_angle_radians) *
                random_float_between_alt(*(float *)&D_L13_00161ED8, *(float *)&D_L13_00161EDC);
-        v[2] = 0;
-        w[0] = fast_cos(f22) *
+        first_vector[2] = 0;
+        second_vector[0] = fast_cos(second_vector_angle_radians) *
                random_float_between_alt(*(float *)&D_L13_00161ED8, *(float *)&D_L13_00161EDC);
-        w[1] = fast_sin(f22) *
+        second_vector[1] = fast_sin(second_vector_angle_radians) *
                random_float_between_alt(*(float *)&D_L13_00161ED8, *(float *)&D_L13_00161EDC);
-        w[2] = 0;
-        v[2] = random_float_between_alt(*(float *)&D_L13_00161EE0, *(float *)&D_L13_00161EE4);
-        w[2] = random_float_between_alt(*(float *)&D_L13_00161EE0, *(float *)&D_L13_00161EE4);
+        second_vector[2] = 0;
+        first_vector[2] = random_float_between_alt(*(float *)&D_L13_00161EE0, *(float *)&D_L13_00161EE4);
+        second_vector[2] = random_float_between_alt(*(float *)&D_L13_00161EE0, *(float *)&D_L13_00161EE4);
         frame_count = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between_alt(*(float *)&D_L13_00161EC0, *(float *)&D_L13_00161EC4)));
         second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between_alt(*(float *)&D_L13_00161EC8, *(float *)&D_L13_00161ECC)));
         third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between_alt(*(float *)&D_L13_00161ED0, *(float *)&D_L13_00161ED4)));
-        scale_vector_xyz(v, v, 1.0f / (float)frame_count);
-        v[3] = *(float *)&D_L13_00161EB8;
-        scale_vector_xyz(w, w, 1.0f / (float)third_frame_count);
-        w[3] = *(float *)&D_L13_00161EBC;
+        scale_vector_xyz(first_vector, first_vector, 1.0f / (float)frame_count);
+        first_vector[3] = *(float *)&D_L13_00161EB8;
+        scale_vector_xyz(second_vector, second_vector, 1.0f / (float)third_frame_count);
+        second_vector[3] = *(float *)&D_L13_00161EBC;
         source_point_position = data + (off + 0x210);
         lerp_vector(spawn_position, source_point_position, source_point_position, random_float_between_alt(0.0f, 1.0f));
-        spawn_spark(spawn_position, v, w, D_L13_00161EB0, D_L13_00161EB4, frame_count, second_frame_count, third_frame_count,
+        spawn_spark(spawn_position, first_vector, second_vector, D_L13_00161EB0, D_L13_00161EB4, frame_count, second_frame_count, third_frame_count,
                      D_L13_00161EEC);
     }
 }
