@@ -808,7 +808,7 @@ void bolt_update(Bolt *obj) {
     };
     BoltVars *v = obj->vars;
     Vec4 geometry_scratch;
-    Vec4 b;
+    Vec4 vector_scratch;
     Vec4 rotation_scratch;
     Vec4 collection_offset;
     Vec4 attraction_rotation_angles;
@@ -846,9 +846,9 @@ void bolt_update(Bolt *obj) {
         }
         fast_vec_normalize(&geometry_scratch, &obj->unkE0, 0.2f);
         fast_vec_add(&geometry_scratch, &geometry_scratch, &obj->pos);
-        fast_vec_normalize(&b, &obj->unkE0, -3.0f);
-        fast_vec_add(&b, &b, &obj->pos);
-        hit = FUN_001efa68(&geometry_scratch, &b, 0x22, 0, 0);
+        fast_vec_normalize(&vector_scratch, &obj->unkE0, -3.0f);
+        fast_vec_add(&vector_scratch, &vector_scratch, &obj->pos);
+        hit = FUN_001efa68(&geometry_scratch, &vector_scratch, 0x22, 0, 0);
         if (v->landed == 0 && hit != 0) {
             qcopy(&v->pos, &D_L00_00173E40.point);
             clear_u64_value(&v->rot);
@@ -938,19 +938,19 @@ void bolt_update(Bolt *obj) {
             v->ground_moby = gm;
             FUN_L00_00260668(obj, gm, v, &v->rot, v, &v->rot);
         }
-        matrix_to_euler(&obj->rot, &b);
-        FUN_L00_00259f50(&v->spin, &b);
+        matrix_to_euler(&obj->rot, &vector_scratch);
+        FUN_L00_00259f50(&v->spin, &vector_scratch);
         return;
     case BOLT_SETTLING:
-        FUN_L00_002a6de8_c(obj, &b, 0);
+        FUN_L00_002a6de8_c(obj, &vector_scratch, 0);
         k = 0.25f;
-        b.f[2] += k;
+        vector_scratch.f[2] += k;
         matrix_to_euler(&obj->rot, &geometry_scratch);
         FUN_L00_00259f50(&rotation_scratch, &geometry_scratch);
         rotation_blend_step = 1.0f / convert_integer_to_float(v->hop_left);
         settling_hop_phase = convert_integer_to_float(v->hop_left) / convert_integer_to_float(v->hop_frames);
         quaternion_nlerp(&v->spin, &v->spin, &rotation_scratch, rotation_blend_step);
-        lerp_vector(&obj->pos, &obj->pos, &b, settling_hop_phase);
+        lerp_vector(&obj->pos, &obj->pos, &vector_scratch, settling_hop_phase);
         settling_hop_phase -= 0.5f;
         obj->pos.f[2] += -(settling_hop_phase * settling_hop_phase - k) * ((f32)v->hop_frames * 0.025f);
         quaternion_to_rotation_basis(&v->spin, &obj->rot);
@@ -1008,9 +1008,9 @@ void bolt_update(Bolt *obj) {
         }
         if (flag) {
             fast_vec_normalize(&geometry_scratch, &hero.unk0[8], D_0015ED6C * 7.0f);
-            fast_vec_sub(&b, &geometry_scratch, &v->vel);
-            FUN_L00_0025f730(&b, frame_time_sq * 50.0f);
-            fast_vec_add(&v->vel, &v->vel, &b);
+            fast_vec_sub(&vector_scratch, &geometry_scratch, &v->vel);
+            FUN_L00_0025f730(&vector_scratch, frame_time_sq * 50.0f);
+            fast_vec_add(&v->vel, &v->vel, &vector_scratch);
         } else {
             velocity_decay_step = frame_time_sq * 10.0f;
             if (velocity_decay_step < fast_vec_length(&v->vel)) {
@@ -1020,8 +1020,8 @@ void bolt_update(Bolt *obj) {
             approach_value(&v->speed, D_0015ED6C * 48.0f, frame_time_sq * 16.0f);
             x = D_0015ED6C * 8.0f;
             if (x < hero.motion.speed_xy) {
-                fast_vec_normalize(&b, &hero.motion.displacement, (hero.motion.speed_xy - x) * 0.5f);
-                fast_vec_add(&obj->pos, &obj->pos, &b);
+                fast_vec_normalize(&vector_scratch, &hero.motion.displacement, (hero.motion.speed_xy - x) * 0.5f);
+                fast_vec_add(&obj->pos, &obj->pos, &vector_scratch);
             }
         }
         quaternion_to_rotation_basis(&v->spin, &geometry_scratch);
