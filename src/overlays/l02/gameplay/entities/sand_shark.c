@@ -904,19 +904,19 @@ extern int D_L02_001ABE40[];
 extern int random_integer_below(int) __asm__("FUN_00213260");
 
 int FUN_L02_002d5658(void *argp) {
-    char *arg = argp;
+    char *moby = argp;
     int result = 0;
     short *group_ids;
-    if (((unsigned char *)arg)[0x21] == 0xFF) {
+    if (((unsigned char *)moby)[0x21] == 0xFF) {
         return 0;
     }
-    group_ids = (short *)D_L02_001ABE40[((unsigned char *)arg)[0x21]];
+    group_ids = (short *)D_L02_001ABE40[((unsigned char *)moby)[0x21]];
     do {
-        int idx = (*(unsigned short *)group_ids & 0x7FFF) << 8;
-        char *group_moby = (char *)(idx + D_L02_0015FFD8_m);
+        int group_moby_byte_offset = (*(unsigned short *)group_ids & 0x7FFF) << 8;
+        char *group_moby = (char *)(group_moby_byte_offset + D_L02_0015FFD8_m);
         if (*(short *)(group_moby + 0xA6) == 0x29C && ((unsigned char *)group_moby)[0x20] < 0x7F) {
             if (result == 0 || (random_integer_below(0xFF) & 1)) {
-                result = D_L02_0015FFD8_m + idx;
+                result = D_L02_0015FFD8_m + group_moby_byte_offset;
             }
         }
     } while (*group_ids++ >= 0);
