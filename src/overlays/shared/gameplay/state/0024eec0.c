@@ -297,7 +297,7 @@ void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) {
     int trailing_byte_count;
     int k;
     unsigned char *ix;
-    u64_24f440 *src;
+    u64_24f440 *scatter_source_cursor;
     u64_24f440 *q;
 
     {
@@ -323,14 +323,14 @@ void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) {
             FUN_001f9838_24f440(&((u64_24f440 *)out)[na + 2], from, trailing_byte_count);
     }
     ix = (unsigned char *)(*(char **)(*(char **)(obj + 0x18) + 0x1C) + 4);
-    src = selected_frame->q;
+    scatter_source_cursor = selected_frame->q;
     if (nb != 0) {
         int remaining_scatter_count = nb;
         do {
             remaining_scatter_count--;
-            ((u64_24f440 *)out)[*ix + 2] = *src;
+            ((u64_24f440 *)out)[*ix + 2] = *scatter_source_cursor;
             ix++;
-            src++;
+            scatter_source_cursor++;
         } while (remaining_scatter_count != 0);
     }
     q = (u64_24f440 *)((char *)out + out->h6 * 16);
