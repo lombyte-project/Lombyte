@@ -10,7 +10,7 @@ void music_start_track(s32 track, s32 track_flags, s32 volume) __asm__("FUN_0021
 
 void music_start_track(s32 track, s32 track_flags, s32 volume) {
     volatile s32 *entry;
-    s64 v;
+    s64 stream_location;
     u8 *tbl;
     s32 off;
 
@@ -27,9 +27,9 @@ void music_start_track(s32 track, s32 track_flags, s32 volume) {
             music_stream_state.primary.remaining_time = 0xBB80;
             music_stream_state.primary.volume = volume;
             music_stream_state.primary.crossfade_enabled = 0;
-            v = *entry;
+            stream_location = *entry;
             snd_play_vag_stream_by_loc_ex_cb(
-                v, 0, 0, 0, volume, 0, 1, 0, 0x20, music_primary_start_callback,
+                stream_location, 0, 0, 0, volume, 0, 1, 0, 0x20, music_primary_start_callback,
                 (u64)((s64)(((u8 *)&music_stream_state + 0x34)) << 0x20) >> 0x20);
         }
     }
