@@ -943,11 +943,11 @@ void FUN_L08_002f0f68(int **tabs, int table_count, int *counts, int flat, float 
     int i, j;
     for (i = 0; i < table_count; i++) {
         for (j = 0; j < counts[i]; j++) {
-            int w = tabs[i][j];
-            int c0 = w & 0xFF;
-            int c1 = (w & 0xFF00) >> 8;
-            int c2 = ((unsigned)w >> 16) & 0xFF;
-            int c3 = (unsigned)w >> 24;
+            int packed_rgba = tabs[i][j];
+            int c0 = packed_rgba & 0xFF;
+            int c1 = (packed_rgba & 0xFF00) >> 8;
+            int c2 = ((unsigned)packed_rgba >> 16) & 0xFF;
+            int c3 = (unsigned)packed_rgba >> 24;
             float fr, fg, fb, fa;
             if (flat == 0) {
                 fr = r * convert_integer_to_float(c0);
