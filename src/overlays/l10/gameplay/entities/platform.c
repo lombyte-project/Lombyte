@@ -1901,7 +1901,7 @@ void FUN_L10_002d9eb8(char *moby) {
         return;
     }
     if (find_moby_hit(moby, 0x40000, 0)) {
-        char *c0 = moby + 0xC0;
+        char *moby_rotation_basis = moby + 0xC0;
         zero_vector.q = 0;
         spawn_explosion(moby, &zero_vector, moby + 0x10, 0.0f, 0.0f, 5, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, -1, 15.0f, 1, 1, -1, 0);
         trooper_play_sound(0, 0, moby, 0x99);
@@ -1914,7 +1914,7 @@ void FUN_L10_002d9eb8(char *moby) {
             debris_vector.f[2] = random_float_between(-3.0f, 3.0f);
             debris_loop_countdown--;
             transformed_offset.q = debris_vector.q;
-            transform_vector_by_basis(&transformed_offset, &transformed_offset, c0);
+            transform_vector_by_basis(&transformed_offset, &transformed_offset, moby_rotation_basis);
             normalize_vector_xyz(&debris_vector, &transformed_offset, random_float_between(5.0f, 10.0f) * D_0015ED6C);
             FUN_L00_001ff290(&translated_position, &transformed_offset, moby + 0x10);
             if (random_integer_below(1) == 0)
@@ -1929,7 +1929,7 @@ void FUN_L10_002d9eb8(char *moby) {
         transformed_offset.f[0] = 2.8599999f;
         transformed_offset.f[1] = 1.57000005f;
         transformed_offset.f[2] = 1.83099997f;
-        transform_vector_by_basis(&transformed_offset, &transformed_offset, c0);
+        transform_vector_by_basis(&transformed_offset, &transformed_offset, moby_rotation_basis);
         spawn_explosion(moby, &zero_vector, &transformed_offset, 0.0f, 0.0f, 5, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, -1, 15.0f, 1, 1, -1, 0);
         FUN_L10_002dd848_c(moby);
         FUN_L10_002eb8c0(moby);
