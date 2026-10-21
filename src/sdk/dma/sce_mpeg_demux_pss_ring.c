@@ -78,7 +78,7 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
     sceMpegCallback cbfunc = 0;
     void *cbdata = 0;
     StreamCb *tbl;
-    int ret;
+    int consumed_bytes;
     int i;
     int cont;
     MpegSys *sys;
@@ -89,7 +89,7 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
     sys = mp->sys;
     tbl = sys->tbl;
     _sysbitInit(&bs, start, bufstart, bufsize);
-    ret = 0;
+    consumed_bytes = 0;
     i = 0;
     bitstream = &bs;
     if (i < sys->n) {
@@ -138,12 +138,12 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
                 cont = cbfunc(mp, &cb, cbdata);
             }
             if (cont) {
-                ret = bitstream->pos >> 3;
+                consumed_bytes = bitstream->pos >> 3;
             }
         }
         if (bitstream->pos > size * 8 || SignExtendPackedValue(bitstream, 32) != 0x1BA) {
             break;
         }
     }
-    return ret;
+    return consumed_bytes;
 }
