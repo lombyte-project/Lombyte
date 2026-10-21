@@ -585,14 +585,14 @@ void FUN_L03_002cbea8(struct Moby *mine_moby) {
         }
         break;
     case MINE_EXPLODE_AND_REMOVE: {
-        int cnt;
+        int debris_spawn_count;
 
         dist = mine_dist(&mine_moby->pos, D_L03_00166EC0);
         nearby_moby_count = mine_find_mobys(&mine_moby->pos, 0x10, mine_moby, 0, 2.0f);
         *(OvlQuad *)vector_scratch = *(OvlQuad *)&mine_moby->pos;
         mine_blast_mobys(mine_moby, vector_scratch, D_L03_00178000, nearby_moby_count, 0, 0x810001, 4, 1, 3.0f, 0.25f, 1.5f);
-        cnt = mine_ftoi(dist * 15.0f);
-        for (i = 0; i < cnt; i++) {
+        debris_spawn_count = mine_ftoi(dist * 15.0f);
+        for (i = 0; i < debris_spawn_count; i++) {
             int kind = mine_rand_below(4);
 
             *(Vec4f *)vector_scratch = (Vec4f){frame_time * 14.0f, frame_time * 22.0f, frame_time * 12.0f, 0.0f};
