@@ -2424,7 +2424,7 @@ void FUN_L05_00319208(void *moby_v) {
 void FUN_L05_003193a8(char *moby) {
     char *taxi_data = *(char **)(moby + 0x78);
     char *selected_path;
-    float inv, frame_scaled_travel_step, frame_squared_travel_step, r;
+    float inv, frame_scaled_travel_step, frame_squared_travel_step, first_path_segment_length;
     switch (*(short *)(taxi_data + 0xB4)) {
     case TAXI_PAIRED_ROUTE_FIRST_STOP:
         *(char **)(taxi_data + 0xAC) = D_L05_001B0930[*(int *)(taxi_data + 0x94)];
@@ -2453,10 +2453,10 @@ void FUN_L05_003193a8(char *moby) {
         break;
     }
     selected_path = *(char **)(taxi_data + 0xAC);
-    r = FUN_001f9b48(selected_path + 0x10, selected_path + 0x20);
+    first_path_segment_length = FUN_001f9b48(selected_path + 0x10, selected_path + 0x20);
     frame_scaled_travel_step = frame_time * 20.0f;
     frame_squared_travel_step = frame_time_sq * 5.0f;
-    inv = 1.0f / (r * (float)**(int **)(taxi_data + 0xAC));
+    inv = 1.0f / (first_path_segment_length * (float)**(int **)(taxi_data + 0xAC));
     *(int *)(taxi_data + 0xC4) = 0;
     *(int *)(taxi_data + 0xC0) = 0;
     *(float *)(taxi_data + 0xD4) = frame_scaled_travel_step * inv;
