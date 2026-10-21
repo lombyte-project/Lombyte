@@ -2413,13 +2413,13 @@ void FUN_L00_002a9c50(M_2a9c50 *moby) {
         spin_angle_numerator = convert_integer_to_float(D_L00_0015F5CC % scale_game_frames(180));
         {
             f32 spin_period = scale_time(180.0f);
-            f32 r;
+            f32 quad_spin_angle;
             spin_angle_numerator *= 6.28318548f;
-            r = fast_normalize_angle(spin_angle_numerator / spin_period);
+            quad_spin_angle = fast_normalize_angle(spin_angle_numerator / spin_period);
             if (odd) {
-                r = -r;
+                quad_spin_angle = -quad_spin_angle;
             }
-            spin_angles[1] = r;
+            spin_angles[1] = quad_spin_angle;
         }
         spin_angles[2] = 0.0f;
         spin_angles[3] = 0.0f;
