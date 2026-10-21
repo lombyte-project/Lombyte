@@ -2241,7 +2241,7 @@ void sand_shark_nest_update(unsigned char *moby) {
     Varscb38 *nest_vars = *(Varscb38 **)(moby + 0x78);
     char *launched_shark;
     int spawn_delay_factor;
-    OvlVec4 v;
+    OvlVec4 launch_velocity_or_explosion_position;
     OvlVec4 launch_position;
 
     FUN_L02_002dcfe0((struct Moby *)moby);
@@ -2299,10 +2299,10 @@ void sand_shark_nest_update(unsigned char *moby) {
                 }
                 qcopy(&launch_position, moby + 0x10);
                 launch_position.f[2] += 1.5f;
-                fast_vec_sub(&v, od + 0x220, moby + 0x10);
-                set_vector_length_xy(&v, &v, 2.0f * D_0015ED6C);
-                v.f[2] = D_0015ED6C * 6.0f;
-                FUN_L02_002d6118((unsigned char *)launched_shark, &launch_position, v.f);
+                fast_vec_sub(&launch_velocity_or_explosion_position, od + 0x220, moby + 0x10);
+                set_vector_length_xy(&launch_velocity_or_explosion_position, &launch_velocity_or_explosion_position, 2.0f * D_0015ED6C);
+                launch_velocity_or_explosion_position.f[2] = D_0015ED6C * 6.0f;
+                FUN_L02_002d6118((unsigned char *)launched_shark, &launch_position, launch_velocity_or_explosion_position.f);
             }
         }
         break;
@@ -2321,8 +2321,8 @@ void sand_shark_nest_update(unsigned char *moby) {
                 extern int D_L02_0015FFD8_s __asm__("D_L02_0015FFD8") __attribute__((sda));
                 (*(Spawnercb38 **)((nest_vars->spawner << 8) + D_L02_0015FFD8_s + 0x78))->i150 -= 1;
             }
-            qcopy(&v, moby + 0x10);
-            spawn_explosion(moby, nest_vars->vel, &v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1,
+            qcopy(&launch_velocity_or_explosion_position, moby + 0x10);
+            spawn_explosion(moby, nest_vars->vel, &launch_velocity_or_explosion_position, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1,
                              -1, 0);
             FUN_L00_00263fd8((char *)moby, 0x6E4, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L02_0015F580,
                              D_L02_0015F580, D_L02_0015F580);
