@@ -227,14 +227,14 @@ extern void FUN_L00_00235ea0_23adb8(void) __asm__("FUN_L00_00235ea0");
 extern void FUN_L00_0023a640_23adb8(void) __asm__("FUN_L00_0023a640");
 
 void FUN_L00_0023adb8(void) {
-    struct Hero *g;
+    struct Hero *hero_state;
     int weapon_item_id, mode, k;
     if (D_L00_0015F968_gp != 0) {
         return;
     }
-    g = &hero;
-    weapon_item_id = g->items[0].item_id;
-    mode = g->vehicle_mode;
+    hero_state = &hero;
+    weapon_item_id = hero_state->items[0].item_id;
+    mode = hero_state->vehicle_mode;
     weapon_item_id = (&D_L00_001C40B0[0] + weapon_item_id)->h8 ? weapon_item_id : 0;
     weapon_item_id = mode ? 0 : weapon_item_id;
     if (weapon_item_id != 0) {
@@ -247,9 +247,9 @@ void FUN_L00_0023adb8(void) {
             FUN_001ff570_23adb8(D_L00_0015F970, 0);
             D_L00_0015F970 = k;
         }
-        g->unk1634 =
+        hero_state->unk1634 =
             FUN_001ff308_23adb8(0x10, 0xFFFF, FUN_L00_00235d80_23adb8, FUN_L00_00235ea0_23adb8,
-                                FUN_L00_0023a640_23adb8, &g->unk1630, 200);
+                                FUN_L00_0023a640_23adb8, &hero_state->unk1630, 200);
     } else {
         if (D_L00_0015F970 != k) {
             FUN_001ff570_23adb8(D_L00_0015F970, 0);
