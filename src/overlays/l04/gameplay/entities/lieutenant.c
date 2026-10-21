@@ -65,7 +65,7 @@ void lieutenant_update(struct Moby *moby) {
     };
     Vec4 pos;
     Vec4 rot;
-    Vec4 *r;
+    Vec4 *rotation_ptr;
     struct VendorVars *vars = (struct VendorVars *)moby->pvars;
 
     if (moby->visible != 0 && FUN_001f9b48(&moby->pos, D_L04_00166F40) < 30.0f) {
@@ -98,11 +98,11 @@ void lieutenant_update(struct Moby *moby) {
             jet_clear_persistent(((struct VendorMobyView *)moby)->slot);
             fast_vec_normalize(&pos, &((struct VendorMobyView *)moby)->facing, 2.0f);
             add_vector_xyz(&pos, &pos, &moby->pos);
-            r = &rot;
-            qcopy(r, &moby->rot);
+            rotation_ptr = &rot;
+            qcopy(rotation_ptr, &moby->rot);
             rot.f[2] = fast_add_rotations(rot.f[2], 3.14159f);
             qcopy(&D_L04_0016C9F0.pos, &pos);
-            qcopy(&D_L04_0016C9F0.rot, r);
+            qcopy(&D_L04_0016C9F0.rot, rotation_ptr);
             D_L04_0016C9F0.active = 1;
             memcard_save_data(0, -1);
             moby->state = 3;
