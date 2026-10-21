@@ -2182,14 +2182,14 @@ void water_current_update(Moby *self)
     PePath *path;
     Vec4 nearest;
     Vec4 ahead;
-    Vec4 dir;
+    Vec4 current_acceleration;
     Vec4 pull;
     f32 path_segment_index;
     s32 seg;
     s32 at_end;
-    f32 dist;
+    f32 hero_path_distance;
     f32 limit;
-    f32 len;
+    f32 current_speed;
     f32 cap;
     s32 i;
 
@@ -2215,20 +2215,20 @@ void water_current_update(Moby *self)
     }
     FUN_L00_0025df68(path, &hero.motion.pos, &nearest, &path_segment_index, &seg, 0, 999.0f, 5.0f, 0.0f);
     at_end = sample_path(path, &ahead, &path_segment_index, &seg, 0, 2.0f);
-    dist = vector_distance(&hero.motion.pos, &nearest);
-    if (water_current_vars->radius < dist) {
+    hero_path_distance = vector_distance(&hero.motion.pos, &nearest);
+    if (water_current_vars->radius < hero_path_distance) {
         return;
     }
 
     if ((u32)(hero.state.control_mode - 0x11) < 2) {
-        if (hero.unk22B8 < dist) {
+        if (hero.unk22B8 < hero_path_distance) {
             return;
         }
-        hero.unk22B8 = dist;
+        hero.unk22B8 = hero_path_distance;
         if (at_end == 0) {
-            subtract_vector_xyz(&dir, &ahead, &nearest);
-            normalize_vector_xyz(&dir, &dir, frame_time_sq * 7.0f);
-            add_vector_xyz(water_current_vars, water_current_vars, &dir);
+            subtract_vector_xyz(&current_acceleration, &ahead, &nearest);
+            normalize_vector_xyz(&current_acceleration, &current_acceleration, frame_time_sq * 7.0f);
+            add_vector_xyz(water_current_vars, water_current_vars, &current_acceleration);
             water_current_vars->vel.f[2] = 0.0f;
             if (water_current_vars->max_speed < vector_length_xyz(water_current_vars)) {
                 normalize_vector_xyz(water_current_vars, water_current_vars, water_current_vars->max_speed);
@@ -2245,8 +2245,8 @@ void water_current_update(Moby *self)
             }
         } else {
             /* past the end: slow down (factor 1 - 0.005 per frame unit) */
-            len = vector_length_xyz(water_current_vars);
-            normalize_vector_xyz(water_current_vars, water_current_vars, frame_scale * -0.004999995231628418f * len + len);
+            current_speed = vector_length_xyz(water_current_vars);
+            normalize_vector_xyz(water_current_vars, water_current_vars, frame_scale * -0.004999995231628418f * current_speed + current_speed);
             qcopy(&hero.motion.platform_delta, water_current_vars);
         }
         if (hero.state.control_mode == 0x12 && hero.state.prev == hero.state.control_mode) {
@@ -2260,8 +2260,8 @@ void water_current_update(Moby *self)
         }
     } else if ((hero.state.prev_control_mode == 0x12 || hero.state.prev2_control_mode == 0x12)
                && (u32)(hero.state.control_mode - 4) < 2) {
-        len = vector_length_xyz(water_current_vars);
-        normalize_vector_xyz(water_current_vars, water_current_vars, frame_scale * -0.014999985694885254f * len + len);
+        current_speed = vector_length_xyz(water_current_vars);
+        normalize_vector_xyz(water_current_vars, water_current_vars, frame_scale * -0.014999985694885254f * current_speed + current_speed);
         qcopy(&hero.motion.platform_delta, water_current_vars);
         if (hero.unk1D8 < scale_game_frames(0x23)) {
             hero.unk1D8 = scale_game_frames(0x23);
