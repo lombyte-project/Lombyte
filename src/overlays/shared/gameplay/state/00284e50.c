@@ -176,13 +176,13 @@ void FUN_L00_00285208(int *entry_block) {
     for (i = 0; i < *entry_block; i++) {
         int moby_address = FUN_L00_002851c0_u(((Ent *)(entry_block + 1))[i].b, ((Ent *)(entry_block + 1))[i].a);
         if (moby_address != 0) {
-            int dst;
+            int entry_copy_destination;
             if (((Ent *)(entry_block + 1))[i].kind == 1) {
-                dst = ((Ent *)(entry_block + 1))[i].off + moby_address;
+                entry_copy_destination = ((Ent *)(entry_block + 1))[i].off + moby_address;
             } else {
-                dst = ((Ent *)(entry_block + 1))[i].off + *(int *)(moby_address + 0x78);
+                entry_copy_destination = ((Ent *)(entry_block + 1))[i].off + *(int *)(moby_address + 0x78);
             }
-            copy_memory_aligned(dst, &((Ent *)(entry_block + 1))[i].pad, ((Ent *)(entry_block + 1))[i].len);
+            copy_memory_aligned(entry_copy_destination, &((Ent *)(entry_block + 1))[i].pad, ((Ent *)(entry_block + 1))[i].len);
         }
     }
 }
