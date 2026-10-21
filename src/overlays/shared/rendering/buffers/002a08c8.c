@@ -14,20 +14,20 @@ extern int D_L00_001611D0;
 extern int D_L00_001611D4;
 extern char D_L00_001E9530[];
 void FUN_L00_002a08c8(void) {
-    int r;
+    int buffer_limit_exceeded;
     int buffer_used_bytes;
     u32 *flag_word;
     buffer_used_bytes = D_L00_001611C0_002a08c8 - D_L00_001611B8[D_L00_001611D0];
     D_L00_001611A0_002a08c8 |= 0x1F;
-    r = 0;
+    buffer_limit_exceeded = 0;
     if (D_L00_001611D4 < buffer_used_bytes) {
         D_L00_001611D4 = buffer_used_bytes;
         if (D_L00_001611CC < buffer_used_bytes) {
             FUN_001e93b0_002a08c8(D_L00_001E9530);
-            r = 1;
+            buffer_limit_exceeded = 1;
         }
     }
-    if (r == 0) {
+    if (buffer_limit_exceeded == 0) {
         {
             int *buffer_write_word = (int *)D_L00_001611C0_002a08c8;
             *buffer_write_word = 0x70000000;
