@@ -75,29 +75,29 @@ extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
 int hero_idle_sequence(int a) __asm__("FUN_L00_00205000");
 int hero_idle_sequence(int allow_item_idle_sequence) {
-    struct Hero *g = &hero;
-    int vehicle_mode = g->vehicle_mode;
+    struct Hero *vehicle_mode_owner = &hero;
+    int vehicle_mode = vehicle_mode_owner->vehicle_mode;
     if (vehicle_mode == 2 || (vehicle_mode < 3 ? vehicle_mode == 1 : vehicle_mode == 3)) {
         return 0;
     }
     {
-        struct Hero *g2 = &hero;
-        if (g2->health.hp == 1) {
+        struct Hero *idle_sequence_state = &hero;
+        if (idle_sequence_state->health.hp == 1) {
             return 0x54;
         }
-        if (g2->unk12E2 != 0) {
+        if (idle_sequence_state->unk12E2 != 0) {
             return 0x6E;
         }
         if (allow_item_idle_sequence == 0) {
             return 0;
         }
-        if (g2->unk20A8 == 0) {
+        if (idle_sequence_state->unk20A8 == 0) {
             return 0;
         }
-        if (g2->unk20AA == 0) {
+        if (idle_sequence_state->unk20AA == 0) {
             return 0;
         }
-        if (g2->unk22C8 != 0) {
+        if (idle_sequence_state->unk22C8 != 0) {
             return 0;
         }
     }
