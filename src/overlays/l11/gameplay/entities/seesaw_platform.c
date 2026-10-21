@@ -1364,7 +1364,7 @@ void FUN_L11_00310028(struct Moby *moby) {
         LINKED_MOBY_STATE_REMOVE = 4
     };
     char *data = (char *)moby->pvars;
-    char *u = data + 0x20;
+    char *health_ptr = data + 0x20;
     unsigned char *owner_moby = *(unsigned char **)(data + 0x70);
     if (owner_moby == 0 || owner_moby[0x20] == 0xFE || owner_moby[0x20] == 0xFD) {
         if (moby->state < 3) {
@@ -1385,7 +1385,7 @@ void FUN_L11_00310028(struct Moby *moby) {
         }
         break;
     case LINKED_MOBY_STATE_HANDLE_HITS:
-        FUN_L11_0030fe50(moby, data, u);
+        FUN_L11_0030fe50(moby, data, health_ptr);
         if ((moby->anim_flags & 2) && moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, 0xA);
         }
