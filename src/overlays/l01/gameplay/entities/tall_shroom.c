@@ -19,15 +19,15 @@ extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 
 void FUN_L01_00309bf8(void) {
-    f32 v;
+    f32 normalized_sine_value;
     s32 i;
 
     mine_blend_color();
     FUN_L01_002b96e0(3, D_L01_00202D80);
-    v = fast_sin((convert_integer_to_float(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
-    v = v * 0.5f + 0.5f;
+    normalized_sine_value = fast_sin((convert_integer_to_float(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
+    normalized_sine_value = normalized_sine_value * 0.5f + 0.5f;
     for (i = 2; i >= 0; i--) {
-        D_L01_00202D80[i].f5c = v;
+        D_L01_00202D80[i].f5c = normalized_sine_value;
     }
 }
 typedef struct {
