@@ -69,7 +69,7 @@ void FUN_L11_0030c788(struct Moby *child_sets_controller) {
         CHILD_SETS_STATE_UNFOLD_AND_BLEND_POSES = 3,
         CHILD_SETS_STATE_FADE_AFTER_HERO_HANDOFF = 4
     };
-    CamVars_c788 *pv = (CamVars_c788 *)child_sets_controller->pvars;
+    CamVars_c788 *child_sets_controller_vars = (CamVars_c788 *)child_sets_controller->pvars;
     Vec4f pos;
     Vec4f rot;
     int i;
@@ -140,24 +140,24 @@ void FUN_L11_0030c788(struct Moby *child_sets_controller) {
         child_sets_controller->state = 1;
         break;
     case CHILD_SETS_STATE_WAIT_FOR_LINK_TRIGGER:
-        if (pv->link != -1 && FUN_L11_0030f270_c788((void *)(D_L11_0015FFD8_c788 + (pv->link << 8)))) {
+        if (child_sets_controller_vars->link != -1 && FUN_L11_0030f270_c788((void *)(D_L11_0015FFD8_c788 + (child_sets_controller_vars->link << 8)))) {
             child_sets_controller->state = 2;
         }
         break;
     case CHILD_SETS_STATE_FADE_BEFORE_ACTIVATION:
-        approach_value_c788(&pv->fade, 1.0f, frame_time * 4.0f);
-        D_L11_0015F3FC = pv->fade;
-        if (1.0f <= pv->fade) {
+        approach_value_c788(&child_sets_controller_vars->fade, 1.0f, frame_time * 4.0f);
+        D_L11_0015F3FC = child_sets_controller_vars->fade;
+        if (1.0f <= child_sets_controller_vars->fade) {
             int j;
             child_sets_controller->state = 3;
-            qcopy(&pos, &((struct Moby *)(D_L11_0015FFD8_c788 + (pv->link << 8)))->pos);
+            qcopy(&pos, &((struct Moby *)(D_L11_0015FFD8_c788 + (child_sets_controller_vars->link << 8)))->pos);
             pos.z += 5.0f;
             pos.z = probe_ground_height(&pos, 0, 0.5f);
             zero_vector_c788(&rot);
             rot.z = atan2_c788(child_sets_controller->pos.x - pos.x, child_sets_controller->pos.y - pos.y);
             FUN_L00_00216f90(&pos, &rot, 0x72, 1);
-            jet_mount((char *)(D_L11_001600EC_c788 + (pv->from << 7)) + 0x30,
-                             (char *)(D_L11_001600EC_c788 + (pv->to << 7)) + 0x70, 1, 0, 0);
+            jet_mount((char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->from << 7)) + 0x30,
+                             (char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->to << 7)) + 0x70, 1, 0, 0);
             for (j = 0; j < 6; j++) {
                 D_L11_001DA710[j]->flags &= ~1;
                 D_L11_001DA710[j]->visible = 1;
@@ -216,20 +216,20 @@ void FUN_L11_0030c788(struct Moby *child_sets_controller) {
             child_sets_controller->command = 1;
         }
         if (D_L11_00161ED8 < 1.0f && child_sets_controller->command == 0) {
-            approach_value_c788(&pv->fade, 0.0f, frame_time * 4.0f);
+            approach_value_c788(&child_sets_controller_vars->fade, 0.0f, frame_time * 4.0f);
         } else {
-            approach_value_c788(&pv->fade, 1.0f, frame_time * 4.0f);
+            approach_value_c788(&child_sets_controller_vars->fade, 1.0f, frame_time * 4.0f);
         }
-        D_L11_0015F3FC = pv->fade;
+        D_L11_0015F3FC = child_sets_controller_vars->fade;
         approach_c788(&D_L11_00161EDC, &D_L11_00161EF8, 1.0f, frame_time_sq * 0.2f, frame_time_sq * 0.2f,
                       frame_time * 0.2f);
-        lerp_vector_c788(&pos, (char *)(D_L11_001600EC_c788 + (pv->from << 7)) + 0x30,
-                         (char *)(D_L11_001600EC_c788 + (pv->to << 7)) + 0x30, D_L11_00161EDC);
-        lerp_vector_c788(&rot, (char *)(D_L11_001600EC_c788 + (pv->from << 7)) + 0x70,
-                         (char *)(D_L11_001600EC_c788 + (pv->to << 7)) + 0x70, D_L11_00161EDC);
+        lerp_vector_c788(&pos, (char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->from << 7)) + 0x30,
+                         (char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->to << 7)) + 0x30, D_L11_00161EDC);
+        lerp_vector_c788(&rot, (char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->from << 7)) + 0x70,
+                         (char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->to << 7)) + 0x70, D_L11_00161EDC);
         FUN_L00_002ea9d8(&pos);
         FUN_L00_002eaa30(&rot);
-        if (1.0f <= pv->fade) {
+        if (1.0f <= child_sets_controller_vars->fade) {
             D_L11_00161EC4 = 1.0f;
             D_L11_00161EC8 = 1.0f;
             D_L11_00161ECC = 1.0f;
@@ -244,9 +244,9 @@ void FUN_L11_0030c788(struct Moby *child_sets_controller) {
         }
         break;
     case CHILD_SETS_STATE_FADE_AFTER_HERO_HANDOFF:
-        approach_value_c788(&pv->fade, 0.0f, frame_time * 4.0f);
-        D_L11_0015F3FC = pv->fade;
-        if (pv->fade == 0.0f) {
+        approach_value_c788(&child_sets_controller_vars->fade, 0.0f, frame_time * 4.0f);
+        D_L11_0015F3FC = child_sets_controller_vars->fade;
+        if (child_sets_controller_vars->fade == 0.0f) {
             child_sets_controller->state = 5;
         }
         break;
