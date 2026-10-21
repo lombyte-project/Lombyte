@@ -34,7 +34,7 @@ int FUN_L00_0023a7a8(char *hud_element) {
     char *fade_control_bytes = hud_element + 0x70;
     int x4;
     int y = 0x12;
-    int x, frame_alpha, alpha, w, text_color, tex, c1, wd, displayed_numerator;
+    int x, frame_alpha, alpha, base_frame_width, text_color, tex, c1, wd, displayed_numerator;
     float hud_fade_factor, text_color_blend_factor;
     if (pal_mode)
         y = 0xA;
@@ -57,11 +57,11 @@ int FUN_L00_0023a7a8(char *hud_element) {
         alpha = truncate_float_to_s32(hud_fade_factor * 128.0f);
         frame_alpha = truncate_float_to_s32((float)alpha * 0.7f);
         if (*(int *)(hud_element + 8) < 100)
-            w = *(int *)&D_L00_0015F924;
+            base_frame_width = *(int *)&D_L00_0015F924;
         else
-            w = *(int *)&D_L00_0015F928;
+            base_frame_width = *(int *)&D_L00_0015F928;
         x4 = x + 4;
-        wd = x + truncate_float_to_s32((float)w * hud_fade_factor);
+        wd = x + truncate_float_to_s32((float)base_frame_width * hud_fade_factor);
         draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 1), x - 0x1C, y, 0x20, 0x20,
                         frame_alpha);
         draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 0), x4, y, wd, 0x20, frame_alpha);
@@ -78,10 +78,10 @@ int FUN_L00_0023a7a8(char *hud_element) {
             text_color = fast_tween_color(*(int *)&D_L00_0015F934, *(int *)&D_L00_0015F938, text_color_blend_factor);
         c1 = fast_tween_color(0, 0x80000000, text_color_blend_factor);
         {
-            int tx = x + *(int *)&D_L00_0015F93C + w;
+            int tx = x + *(int *)&D_L00_0015F93C + base_frame_width;
             font_print_right(tx + 1, y + *(int *)&D_L00_0015F940 + 1, c1, buf, -1);
         }
-        font_print_right(x + *(int *)&D_L00_0015F93C + w, y + *(int *)&D_L00_0015F940, text_color, buf,
+        font_print_right(x + *(int *)&D_L00_0015F93C + base_frame_width, y + *(int *)&D_L00_0015F940, text_color, buf,
                          -1);
     }
     return *(int *)(hud_element + 0x58);
