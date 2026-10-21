@@ -803,7 +803,7 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
 /* Spawns an explosion burst at `pos`: three random-coloured particles, two tinted particles when `owner` is set, and
    (when `flash` is nonzero) a light with intensity `flash` (or 13 if negative). */
 void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash);
-void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
+void FUN_L00_0025f3e8(char *owner, char *effect_position, float scale, float flash) {
     Vy10 zero_vec;
     S6y10 first_particle_color_palette;
     S6y10 second_particle_color_palette;
@@ -817,7 +817,7 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
         big = scale * k5;
         first_particle_color_palette = D_L00_001E9030;
         second_particle_color_palette = D_L00_001E9048;
-        FUN_L00_0026a9f0(pos, &zero_vec, FUN_L00_0025c0e8(first_particle_color_palette.v[random_integer_below(6)], 1), FUN_L00_0025c0e8(second_particle_color_palette.v[random_integer_below(6)], 1),
+        FUN_L00_0026a9f0(effect_position, &zero_vec, FUN_L00_0025c0e8(first_particle_color_palette.v[random_integer_below(6)], 1), FUN_L00_0025c0e8(second_particle_color_palette.v[random_integer_below(6)], 1),
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
@@ -825,11 +825,11 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
         rgb[0] = 0x7F; rgb[1] = 0x40; rgb[2] = 0;
         FUN_L00_0025c088(&rgb[0], &rgb[1], &rgb[2], 1);
         first_glow_scale = scale * 4.0f;
-        spawn_glow_particle(owner, pos, &zero_vec, first_glow_scale, scale_game_frames_c(0x14), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x30);
+        spawn_glow_particle(owner, effect_position, &zero_vec, first_glow_scale, scale_game_frames_c(0x14), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x30);
         rgb[0] = 0x60; rgb[1] = 0x20; rgb[2] = 0;
         FUN_L00_0025c088(&rgb[0], &rgb[1], &rgb[2], 1);
         second_glow_scale = scale * 3.0f;
-        spawn_glow_particle(owner, pos, &zero_vec, second_glow_scale, scale_game_frames_c(0x1D), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x20);
+        spawn_glow_particle(owner, effect_position, &zero_vec, second_glow_scale, scale_game_frames_c(0x1D), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x20);
     }
     if (flash != 0.0f) {
         if (flash > 0.0f) {
@@ -841,7 +841,7 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
             D_L00_001B02F0[10] = 13.0f;
             D_L00_001B02F0[8] = 13.0f;
         }
-        mine_camera_blast(D_L00_001B02F0, pos, 0, 0);
+        mine_camera_blast(D_L00_001B02F0, effect_position, 0, 0);
     }
 }
 #define NOT_SDA
