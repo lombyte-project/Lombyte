@@ -681,25 +681,25 @@ void FUN_L00_00259508(void *destination, void *base_position, void *velocity, in
 }
 float FUN_001f99c0(float);
 float square_root(float) __asm__("FUN_001f9988");
-int FUN_L00_002595a0(float *larger_root_output, float *smaller_root_output, float quadratic_coefficient, float b, float constant_coefficient) {
-    float discriminant = b * b - quadratic_coefficient * 4.0f * constant_coefficient;
+int FUN_L00_002595a0(float *larger_root_output, float *smaller_root_output, float quadratic_coefficient, float linear_coefficient, float constant_coefficient) {
+    float discriminant = linear_coefficient * linear_coefficient - quadratic_coefficient * 4.0f * constant_coefficient;
     float sqrt_abs_discriminant, root_swap_temp;
     if (discriminant == 0.0f) {
-        *larger_root_output = -b / (quadratic_coefficient + quadratic_coefficient);
+        *larger_root_output = -linear_coefficient / (quadratic_coefficient + quadratic_coefficient);
         return 1;
     }
     sqrt_abs_discriminant = square_root(FUN_001f99c0(discriminant));
-    *larger_root_output = (-b + sqrt_abs_discriminant) / (quadratic_coefficient + quadratic_coefficient);
-    *smaller_root_output = (-b - sqrt_abs_discriminant) / (quadratic_coefficient + quadratic_coefficient);
+    *larger_root_output = (-linear_coefficient + sqrt_abs_discriminant) / (quadratic_coefficient + quadratic_coefficient);
+    *smaller_root_output = (-linear_coefficient - sqrt_abs_discriminant) / (quadratic_coefficient + quadratic_coefficient);
     if (*larger_root_output < *smaller_root_output) {
         root_swap_temp = *larger_root_output;
         *smaller_root_output = root_swap_temp;
-        *larger_root_output = (-b - sqrt_abs_discriminant) / (quadratic_coefficient + quadratic_coefficient);
+        *larger_root_output = (-linear_coefficient - sqrt_abs_discriminant) / (quadratic_coefficient + quadratic_coefficient);
     }
     {
-        int r = 0;
+        int real_root_count = 0;
         if (0.0f < discriminant)
-            r = 2;
-        return r;
+            real_root_count = 2;
+        return real_root_count;
     }
 }
