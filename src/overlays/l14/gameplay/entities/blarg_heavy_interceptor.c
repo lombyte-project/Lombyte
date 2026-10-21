@@ -1276,23 +1276,23 @@ void FUN_L14_002ae448(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     int *path;
     int i;
-    float len;
+    float segment_length;
     path = D_L14_001B0BB0[*(int *)(moby_vars + 0x78)];
     *(int *)(moby_vars + 0x16C) = 0;
     for (i = 0; i < path[0]; i++) {
-        len = FUN_001f9b48((char *)path + (i * 16 + 0x10), (char *)path + (((i + 1) % path[0]) * 16 + 0x10));
-        *(float *)((char *)path + (i << 4) + 0x1C) = len;
+        segment_length = FUN_001f9b48((char *)path + (i * 16 + 0x10), (char *)path + (((i + 1) % path[0]) * 16 + 0x10));
+        *(float *)((char *)path + (i << 4) + 0x1C) = segment_length;
         if (i != path[0] - 1) {
-            *(float *)(moby_vars + 0x16C) += len;
+            *(float *)(moby_vars + 0x16C) += segment_length;
         }
     }
     path = D_L14_001B0BB0[*(int *)(moby_vars + 0x74)];
     *(int *)(moby_vars + 0x190) = 0;
     for (i = 0; i < path[0]; i++) {
-        len = FUN_001f9b48((char *)path + (i * 16 + 0x10), (char *)path + (((i + 1) % path[0]) * 16 + 0x10));
-        *(float *)((char *)path + (i << 4) + 0x1C) = len;
+        segment_length = FUN_001f9b48((char *)path + (i * 16 + 0x10), (char *)path + (((i + 1) % path[0]) * 16 + 0x10));
+        *(float *)((char *)path + (i << 4) + 0x1C) = segment_length;
         if (i != path[0] - 1) {
-            *(float *)(moby_vars + 0x190) += len;
+            *(float *)(moby_vars + 0x190) += segment_length;
         }
     }
     path = D_L14_001B0BB0[*(int *)(moby_vars + 0x204)];
