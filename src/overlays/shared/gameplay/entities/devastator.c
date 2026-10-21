@@ -2097,7 +2097,7 @@ void FUN_L00_002b5d00(char *source_moby, int flag) {
     float particle_velocity[4];
     V6 A;
     V6 B;
-    float len, extra, sc;
+    float view_origin_distance, extra, sc;
     int count, i, j;
 
     qcopy(elevated_spawn_position, source_moby + 0x10);
@@ -2109,15 +2109,15 @@ void FUN_L00_002b5d00(char *source_moby, int flag) {
     if (flag != 0) {
         subtract_vector_xyz(view_origin_delta, D_L00_00166DC0, source_moby + 0x10);
         clear_u64_value(particle_velocity);
-        len = fast_vec_length(view_origin_delta);
-        if (len < 8.0f) {
-            count = func_001FA898_r(len) + 2;
+        view_origin_distance = fast_vec_length(view_origin_delta);
+        if (view_origin_distance < 8.0f) {
+            count = func_001FA898_r(view_origin_distance) + 2;
         } else {
             count = 10;
         }
         extra = 0.0f;
-        if (len < 7.0f)
-            extra = 7.0f - len;
+        if (view_origin_distance < 7.0f)
+            extra = 7.0f - view_origin_distance;
         if (count > 0) {
             i = count;
             do {
