@@ -850,21 +850,21 @@ unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *vel, int color, u8 life, u8
 unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *vel, int color, u8 life, u8 b, int mode,
                                 float scale) {
     unsigned char *particle;
-    float *v;
+    float *particle_data;
     if (pos[0] < 2.0f || 1021.0f < pos[0] || pos[1] < 2.0f || 1021.0f < pos[1] || pos[2] < 2.0f ||
         1021.0f < pos[2])
         return 0;
     particle = p27fe00_alloc(0x3C);
     if (particle) {
-        v = (float *)(particle + 0x20);
+        particle_data = (float *)(particle + 0x20);
         qcopy(particle + 0x10, pos);
-        qcopy(v, vel);
-        *(int *)(v + 7) = mode;
+        qcopy(particle_data, vel);
+        *(int *)(particle_data + 7) = mode;
         if (mode == 1) {
             struct Hero *g = &hero;
-            v[4] = *(float *)(particle + 0x10) - g->motion.pos.f[0];
-            v[5] = *(float *)(particle + 0x14) - g->motion.pos.f[1];
-            v[6] = *(float *)(particle + 0x18) - g->motion.pos.f[2];
+            particle_data[4] = *(float *)(particle + 0x10) - g->motion.pos.f[0];
+            particle_data[5] = *(float *)(particle + 0x14) - g->motion.pos.f[1];
+            particle_data[6] = *(float *)(particle + 0x18) - g->motion.pos.f[2];
         }
         *(int *)(particle + 4) = color;
         particle[9] = FUN_001fa6d0_2730e0(1.0f) + 0x20;
