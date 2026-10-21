@@ -594,11 +594,11 @@ void gadgebot_telepot_pad_update(char *moby)
             position[2] += func_001FA888_2BFBB8(i) * 0.1f * 0.0625f + 1.8f;
             effect = (char *)func_L00_00272488_2BFBB8(position, 0, 0x1eff7f40, 0.0f, D_0015ED6C * 315000.0f);
             if (effect != 0) {
-                float *vel = (float *)(effect + 0x20);
+                float *periodic_effect_velocity = (float *)(effect + 0x20);
                 float z = D_0015ED6C * -1.5f;
-                vel[0] = 0.0f;
-                vel[1] = 0.0f;
-                vel[2] = z;
+                periodic_effect_velocity[0] = 0.0f;
+                periodic_effect_velocity[1] = 0.0f;
+                periodic_effect_velocity[2] = z;
             }
         }
     }
