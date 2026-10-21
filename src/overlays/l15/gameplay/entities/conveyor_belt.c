@@ -2270,7 +2270,7 @@ void FUN_L15_002f88e8(char *moby) {
     int cone_check_delay_frames;
     int cycle_reset_frames;
     int spin_ramp_frames;
-    float r;
+    float spin_ramp_ratio;
     float spin_angle_radians;
     if (FUN_L00_002e83c0(moby) <= 0) {
         *(short *)(slot_data + 0x20) = 0;
@@ -2308,8 +2308,8 @@ void FUN_L15_002f88e8(char *moby) {
         *(int *)(slot_data + 0x3C) = hold_start_frames;
         *(short *)(slot_data + 0x20) = spin_ramp_frames;
     }
-    r = itof_s(*(short *)(slot_data + 0x20)) / itof_s(spin_ramp_frames);
-    spin_angle_radians = *(float *)slot_data * DEG_TO_RAD * r;
+    spin_ramp_ratio = itof_s(*(short *)(slot_data + 0x20)) / itof_s(spin_ramp_frames);
+    spin_angle_radians = *(float *)slot_data * DEG_TO_RAD * spin_ramp_ratio;
     if (done)
         FUN_L00_002e8970(target_record + 0x30, spin_angle_radians, 0.0f);
     if (*(float *)(slot_data + 0x34) != 0.0f) {
