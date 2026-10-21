@@ -553,9 +553,9 @@ void FUN_L18_002f16f0(struct Moby *moby) {
         float initial_acceleration_step = D_L18_00162290 * frame_time_sq;
         float initial_braking_step = D_L18_00162294 * frame_time_sq;
         float initial_maximum_speed = D_L18_00162298 * frame_time;
-        float b1 = D_L18_0016229C * frame_time_sq;
-        float b2 = D_L18_001622A0 * frame_time_sq;
-        float b3 = D_L18_001622A4 * frame_time;
+        float later_acceleration_step = D_L18_0016229C * frame_time_sq;
+        float later_braking_step = D_L18_001622A0 * frame_time_sq;
+        float later_maximum_speed = D_L18_001622A4 * frame_time;
         switch (moby->state) {
         case MOBY_INITIALIZE: {
             short **tp;
@@ -592,7 +592,7 @@ void FUN_L18_002f16f0(struct Moby *moby) {
                 if (moby_vars->f330 < 1.5f) {
                     advance_accelerated_scalar(1.5f, initial_acceleration_step, initial_braking_step, initial_maximum_speed, &moby_vars->f330, &moby_vars->f334);
                 } else {
-                    advance_accelerated_scalar(2.0f, b1, b2, b3, &moby_vars->f330, &moby_vars->f334);
+                    advance_accelerated_scalar(2.0f, later_acceleration_step, later_braking_step, later_maximum_speed, &moby_vars->f330, &moby_vars->f334);
                 }
             }
             if (moby_vars->f330 > D_L18_001622B8 && moby_vars->f344 == 0.0f) {
@@ -644,20 +644,20 @@ void FUN_L18_002f16f0(struct Moby *moby) {
         func_L12_0027C368_v(moby, (char *)moby_vars + 0x30, moby_vars->cnt);
         if (moby_vars->f344 != 0.0f) {
             if (moby->state != 4) {
-                float v[4];
-                float s, z, f20;
+                float debris_spawn_position[4];
+                float s, z, debris_spawn_angle;
                 int debris_spawn_frames;
                 moby_vars->f344 = moby_vars->f344 + 0.25f;
                 if (random_integer_below(func_001FA898_r(moby_vars->f344)) == 0) {
                     s = random_float_between(-1.0471976f, 1.0471976f);
-                    f20 = fast_add_rotations(s, D_L18_001677D8);
+                    debris_spawn_angle = fast_add_rotations(s, D_L18_001677D8);
                     z = random_float_between(0.0f, 20.0f);
-                    v[0] = fast_cos(f20) * z;
-                    v[1] = fast_sin(f20) * z;
-                    v[2] = 15.0f;
-                    add_vector_xyz(v, v, &hero.motion.pos);
+                    debris_spawn_position[0] = fast_cos(debris_spawn_angle) * z;
+                    debris_spawn_position[1] = fast_sin(debris_spawn_angle) * z;
+                    debris_spawn_position[2] = 15.0f;
+                    add_vector_xyz(debris_spawn_position, debris_spawn_position, &hero.motion.pos);
                     debris_spawn_frames = scale_game_frames(240);
-                    spawn_debris_chunk(v, D_L18_0015F580_c, 0x2B8, debris_spawn_frames, D_L18_001622C0, 2.0f, 1.0f,
+                    spawn_debris_chunk(debris_spawn_position, D_L18_0015F580_c, 0x2B8, debris_spawn_frames, D_L18_001622C0, 2.0f, 1.0f,
                                      0.75f, 0);
                 }
             }
