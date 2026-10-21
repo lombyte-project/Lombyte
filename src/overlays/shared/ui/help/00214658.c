@@ -219,12 +219,12 @@ extern void FUN_001f9d20_214fe8(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_L00_0020a1f8_214fe8(f32, f32) __asm__("FUN_L00_0020a1f8");
 #define V214(off) (D_L00_0017A680_214fe8.f[(off) / 4])
 void FUN_L00_00214fe8(void) {
-    HopVec_214658 vec;
-    f32 *vector_components = vec.f;
+    HopVec_214658 transformed_negative_z_vector;
+    f32 *vector_components = transformed_negative_z_vector.f;
     f32 limit, x, y, pitch, z, lean;
     struct Hero *state = &hero;
     if (state->unk308 == 0) return;
-    vec.q = 0;
+    transformed_negative_z_vector.q = 0;
     vector_components[2] = -1.0f;
     FUN_001f9d20_214fe8(vector_components, vector_components, (char *)state + 0x40);
     FUN_L00_0020a1f8_214fe8(frame_scale_sq * 0.013f, frame_scale_sq * 0.3f);
@@ -233,27 +233,27 @@ void FUN_L00_00214fe8(void) {
     else if (state->state.current == 0x70) limit = 0.08726646f;
     else if (state->state.current == 0x71 || state->state.current == 4) limit = 0.19198622f;
     if (hero.ground_moby != 0 && 0.15707964f < limit) limit = 0.15707964f;
-    x = vec.f[0] * 0.6981317f;
+    x = transformed_negative_z_vector.f[0] * 0.6981317f;
     if (limit < x) x = limit;
     else if (x < -limit) x = -limit;
     V214(0x114) = x;
     V214(0x274) = -x * 0.5f;
     /* Keep the independent scalar reloads used by retail. */
-    y = -((volatile f32 *)vec.f)[1] * 0.6981317f;
+    y = -((volatile f32 *)transformed_negative_z_vector.f)[1] * 0.6981317f;
     if (limit < y) y = limit;
     else if (y < -limit) y = -limit;
     V214(0x110) = y;
     V214(0x270) = -y * 0.25f;
-    x = -((volatile f32 *)vec.f)[0] * 1.2217305f;
+    x = -((volatile f32 *)transformed_negative_z_vector.f)[0] * 1.2217305f;
     if (0.99483764f < x) x = 0.99483764f;
     if (x < -0.12217305f) x = -0.12217305f;
-    if (0.85f < vec.f[2]) {
+    if (0.85f < transformed_negative_z_vector.f[2]) {
         if (x < 1.3962634f) x = 1.3962634f;
-    } else if (0.5f < vec.f[2]) {
+    } else if (0.5f < transformed_negative_z_vector.f[2]) {
         if (x < 1.2217305f) x = 1.2217305f;
     }
     pitch = x;
-    y = vec.f[1] * 1.2217305f;
+    y = transformed_negative_z_vector.f[1] * 1.2217305f;
     V214(0x954) = pitch * 0.57f;
     V214(0xA04) = pitch * 0.5f;
     V214(0xB64) = pitch * 0.35f;
