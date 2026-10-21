@@ -443,7 +443,7 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
     u128 *pp = &spawn_position_snapshot;
     u128 *vp = &spawn_velocity_snapshot;
     struct Moby *debris_moby;
-    DebrisVars_2f8530 *pv;
+    DebrisVars_2f8530 *debris_vars;
     f32 random_spin_magnitude;
     f32 initial_spin;
 
@@ -451,7 +451,7 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
     spawn_velocity_snapshot = *(u128 *)vel;
     debris_moby = create_moby_local(oclass);
     if (debris_moby != 0) {
-        pv = (DebrisVars_2f8530 *)debris_moby->pvars;
+        debris_vars = (DebrisVars_2f8530 *)debris_moby->pvars;
         FUN_L00_0025d1b8_2f8530(debris_moby);
         debris_moby->scale *= scale;
         debris_moby->update_dist = 0xFF;
@@ -461,7 +461,7 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
         debris_moby->rot.y = random_float_between_2f8530(-3.1415927f, 3.1415927f);
         debris_moby->rot.z = random_float_between_2f8530(-3.1415927f, 3.1415927f);
         qcopy(&debris_moby->pos, pp);
-        qcopy(&pv->vel, vp);
+        qcopy(&debris_vars->vel, vp);
         random_spin_magnitude = random_float_between_2f8530(D_0015ED6C_2f8530 * 1.5707964f,
                                         D_0015ED6C_2f8530 * 6.2831855f);
         if (rand_e50() & 1) {
@@ -469,13 +469,13 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
         } else {
             initial_spin = random_spin_magnitude * spin;
         }
-        pv->unk10 = initial_timer;
-        pv->unk28 = initial_timer;
-        pv->scale = scale;
-        pv->spin = initial_spin;
-        pv->life = truncate_float_to_s32(scale_time(seconds * 60.0f));
-        pv->unk20 = fade_out;
-        pv->gravity = gravity * 9.8f * frame_time_sq;
+        debris_vars->unk10 = initial_timer;
+        debris_vars->unk28 = initial_timer;
+        debris_vars->scale = scale;
+        debris_vars->spin = initial_spin;
+        debris_vars->life = truncate_float_to_s32(scale_time(seconds * 60.0f));
+        debris_vars->unk20 = fade_out;
+        debris_vars->gravity = gravity * 9.8f * frame_time_sq;
         upd_a(debris_moby);
     }
     return debris_moby;
