@@ -523,28 +523,28 @@ int FUN_L00_00258b50_259028(unsigned char *, char *, float *, void *,
                             float) __asm__("FUN_L00_00258b50");
 int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out);
 int FUN_L00_00259028(unsigned char *moby, char *movement_control, float *tgt, void *out) {
-    int r = 0;
+    int navigation_result_flags = 0;
     float target_heading, heading_error;
     FUN_001f99f8_259028(out);
     if (FUN_001f9b48_259028(moby + 0x10, tgt) < *(float *)(movement_control + 0x2C))
-        r = 4;
+        navigation_result_flags = 4;
     target_heading = FUN_001f9e90_259028(tgt[0] - *(float *)(moby + 0x10), tgt[1] - *(float *)(moby + 0x14));
     FUN_L00_00258278_259028(moby, (float *)(movement_control + 0x14), target_heading, *(float *)(movement_control + 0x3C), *(float *)(movement_control + 0x40),
                             *(float *)(movement_control + 0x44));
     heading_error = FUN_001fa688_259028(target_heading, *(float *)(moby + 0x48));
     if (*(float *)(movement_control + 0x28) <= heading_error)
-        r |= 0x10;
+        navigation_result_flags |= 0x10;
     FUN_001f9740_259028(movement_control + 0x48);
     if (heading_error < *(float *)(movement_control + 0x28) && *(int *)(movement_control + 0x48) < FUN_001f96f8_259028(4)) {
         *(int *)(movement_control + 0x48) = FUN_001f96f8_259028(4);
     }
     if (*(int *)(movement_control + 0x48) != 0) {
-        r |= FUN_L00_00258b50_259028(moby, movement_control, tgt, out,
+        navigation_result_flags |= FUN_L00_00258b50_259028(moby, movement_control, tgt, out,
                                      (*(float *)(movement_control + 0x28) - heading_error) / *(float *)(movement_control + 0x28));
         if (0.1f < heading_error)
-            r &= ~2;
+            navigation_result_flags &= ~2;
     }
-    return r;
+    return navigation_result_flags;
 }
 extern int D_L00_0015FFF4;
 extern unsigned short *D_L00_001AB840_2591d0[] __asm__("D_L00_001AB840");
