@@ -16,17 +16,17 @@ void update_camera_underwater_flag(void) __asm__("FUN_001ed7f0");
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 void update_camera_underwater_flag(void) {
-    char *cam = preview_camera;
+    char *preview_camera_base = preview_camera;
     float probe_start[4];
     float probe_end[4];
     int i;
 
-    if (*(short *)(*(char **)(cam + 0x180) + 0x86) == 6 || game_mode_macro != 0) {
-        *(int *)(cam + 0x394) = 0;
+    if (*(short *)(*(char **)(preview_camera_base + 0x180) + 0x86) == 6 || game_mode_macro != 0) {
+        *(int *)(preview_camera_base + 0x394) = 0;
         return;
     }
-    qcopy(probe_start, cam + 0x140);
-    qcopy(probe_end, cam + 0x140);
+    qcopy(probe_start, preview_camera_base + 0x140);
+    qcopy(probe_end, preview_camera_base + 0x140);
     probe_start[2] += 0.75f;
     probe_end[2] -= 0.75f;
     i = 0;
