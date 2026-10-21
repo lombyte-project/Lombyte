@@ -1200,16 +1200,16 @@ extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_
 extern void FUN_L00_002503c0(void *, void *);
 
 void FUN_L00_00207330(void *item_moby, char *hero_moby) {
-    Vx v;
+    Vx hero_vector_sample;
     float *global_float_base;
     float vector_component_sum;
     unsigned char *hero_color_block = hero_moby + 0x38;
     int color_channel_sum = hero_color_block[4] + hero_color_block[5] + hero_color_block[6];
     pack_render_command_fields(item_moby, color_channel_sum * 4 / 10 + ((color_channel_sum * 3 / 10) << 8), 12, 12, 0);
     FUN_0020d510(hero_moby, D_L00_001801D0);
-    FUN_L00_002503c0(hero_moby, &v);
+    FUN_L00_002503c0(hero_moby, &hero_vector_sample);
     global_float_base = (float *)(D_L00_001801D0 - 0x310);
-    vector_component_sum = v.x + v.y + v.z;
+    vector_component_sum = hero_vector_sample.x + hero_vector_sample.y + hero_vector_sample.z;
     global_float_base[0xC0] = vector_component_sum * 0.5f;
     global_float_base[0xC1] = vector_component_sum * 0.4f;
     global_float_base[0xC2] = vector_component_sum * 0.0f;
