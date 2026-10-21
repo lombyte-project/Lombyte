@@ -7,7 +7,7 @@ extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 s32 handle_cyclic_menu_selection_input(struct MenuScreen *menu) __asm__("FUN_00221d68");
 
 s32 handle_cyclic_menu_selection_input(struct MenuScreen *menu) {
-    s32 prev;
+    s32 previous_selection;
 
     if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) && menu_system.close_locked == 0) {
         return 1;
@@ -19,13 +19,13 @@ s32 handle_cyclic_menu_selection_input(struct MenuScreen *menu) {
             return -1;
         }
     }
-    prev = menu->data.list.selected;
+    previous_selection = menu->data.list.selected;
     if (controller_state.pressed & PAD_CROSS) {
-        menu->data.list.selected = (prev + 1) % 30;
+        menu->data.list.selected = (previous_selection + 1) % 30;
     } else if (controller_state.pressed & PAD_CIRCLE) {
-        menu->data.list.selected = (prev + 29) % 30;
+        menu->data.list.selected = (previous_selection + 29) % 30;
     }
-    if (menu->data.list.selected != prev) {
+    if (menu->data.list.selected != previous_selection) {
         allocate_voice_for_target_entry(1, 0x11, menu->moby);
     }
     return 0;
