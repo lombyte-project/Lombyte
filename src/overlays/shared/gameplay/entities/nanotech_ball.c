@@ -283,22 +283,22 @@ extern f32 D_L00_00161AA0[1] __attribute__((sda));
 extern f32 D_L00_00161AB0[1] __attribute__((sda));
 s32 FUN_L00_002d8510(M_2d8510 *moby) {
     O_2d8510 *effect_data;
-    V_2d8510 effect_position, b;
-    s32 i, ret, c, hi, al;
+    V_2d8510 effect_position, effect_position_step;
+    s32 i, any_effect_timer_above_threshold, c, hi, al;
     f32 z, color_progress_or_size_factor, unwrapped_effect_value;
     u8 *effect_record;
     effect_data = moby->p78;
     FUN_001f9a28_2d8510(&effect_position, &(*(V_2d8510 *)g_debug_camera), &moby->v10);
-    ret = 0;
+    any_effect_timer_above_threshold = 0;
     fast_vec_normalize(&effect_position, &effect_position, -0.3f);
-    fast_vec_normalize(&b, &effect_position, 0.1f);
+    fast_vec_normalize(&effect_position_step, &effect_position, 0.1f);
     fast_vec_add(&effect_position, &effect_position, &moby->v10);
     z = effect_position.z;
     for (i = 0; i < 4; i++) {
         if (FUN_001f9770_2d8510(&effect_data->h58[i]))
             continue;
         if (effect_data->h58[i] > FUN_001f96f8_2d8510(0x30))
-            ret = 1;
+            any_effect_timer_above_threshold = 1;
         unwrapped_effect_value = effect_data->f60[i] += D_L00_00161A90[i];
         if (255.0f <= unwrapped_effect_value)
             effect_data->f60[i] = unwrapped_effect_value - 255.0f;
@@ -322,9 +322,9 @@ s32 FUN_L00_002d8510(M_2d8510 *moby) {
                                     D_L00_00161AA0[i] * (color_progress_or_size_factor * 0.7f));
         if (effect_record)
             effect_record[2] = *D_L00_001B2080_2d8510.pF8;
-        fast_vec_add(&effect_position, &effect_position, &b);
+        fast_vec_add(&effect_position, &effect_position, &effect_position_step);
     }
-    return ret;
+    return any_effect_timer_above_threshold;
 }
 #include "eetypes.h"
 typedef union {
