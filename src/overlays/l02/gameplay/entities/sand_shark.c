@@ -3408,14 +3408,14 @@ void tresspasser_door2_update(struct Moby *moby) {
     }
     case TRESSPASSER_DOOR2_SLIDE_TO_OFFSET_POSITION: {
         float destination_position[4];
-        float b[4];
+        float movement_step[4];
         char *pos = &moby->pos;
         normalize_vector_xyz(destination_position, &moby->rot_row1, -2.0f);
         add_vector_xyz(destination_position, data, destination_position);
-        subtract_vector_xyz(b, destination_position, pos);
-        FUN_L00_0025f730(b, D_0015ED6C + D_0015ED6C);
-        add_vector_xyz(pos, pos, b);
-        if (vector_length_xyz(b) == 0.0f)
+        subtract_vector_xyz(movement_step, destination_position, pos);
+        FUN_L00_0025f730(movement_step, D_0015ED6C + D_0015ED6C);
+        add_vector_xyz(pos, pos, movement_step);
+        if (vector_length_xyz(movement_step) == 0.0f)
             moby->state = 3;
         break;
     }
