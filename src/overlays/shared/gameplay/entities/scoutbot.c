@@ -351,15 +351,15 @@ void FUN_L08_002d36e0(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int hit;
     float dmg;
-    int idx;
+    int hit_reaction_code;
     dmg = 0.0f;
-    idx = hit_reaction(moby, find_moby_hit(moby, 0x330000, 0), data + 0x20, 0, &hit, &dmg, 0, 4);
+    hit_reaction_code = hit_reaction(moby, find_moby_hit(moby, 0x330000, 0), data + 0x20, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)moby)[0x20] != 0x63) {
         *(float *)(data + 0x20) -= dmg;
         if (*(float *)(data + 0x20) <= 0.0f)
-            idx = 1;
-        if (idx < 12) {
-            if (idx >= 0) {
+            hit_reaction_code = 1;
+        if (hit_reaction_code < 12) {
+            if (hit_reaction_code >= 0) {
                 FUN_L00_00257470(moby, 0, -1);
                 moby[0x20] = 0x63;
             }
