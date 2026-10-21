@@ -894,21 +894,21 @@ extern char D_0013F3D0[] __attribute__((section(".data")));
 void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag);
 void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag) {
     char *position_destination = D_0013F3D0;
-    char *g;
+    char *hero_base;
     char *rotation_destination;
     qcopy(position_destination, pos);
-    g = position_destination - 0x80;
-    qcopy(*(char **)(g + 0x2080) + 0x10, pos);
+    hero_base = position_destination - 0x80;
+    qcopy(*(char **)(hero_base + 0x2080) + 0x10, pos);
     rotation_destination = position_destination + 0x10;
     qcopy(rotation_destination, rot);
-    rotation_matrix(g, rotation_destination);
-    FUN_001fa030_00216f90(*(char **)(g + 0x2080) + 0xC0, rotation_destination);
+    rotation_matrix(hero_base, rotation_destination);
+    FUN_001fa030_00216f90(*(char **)(hero_base + 0x2080) + 0xC0, rotation_destination);
     FUN_L00_002118b0_00216f90();
     FUN_L00_00262840_00216f90(position_destination + 0x15F0);
-    *(short *)(g + 0x30E) = 1;
-    *(int *)(g + 0x364) &= ~1;
-    *(int *)(g + 0x364) &= ~2;
-    *(int *)(g + 0x360) = 0;
+    *(short *)(hero_base + 0x30E) = 1;
+    *(int *)(hero_base + 0x364) &= ~1;
+    *(int *)(hero_base + 0x364) &= ~2;
+    *(int *)(hero_base + 0x360) = 0;
     FUN_001f99f8_00216f90(position_destination + 0x70);
     FUN_001f99f8_00216f90(position_destination + 0x60);
     FUN_001f99f8_00216f90(position_destination + 0x80);
@@ -916,16 +916,16 @@ void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag
     FUN_001f99f8_00216f90(position_destination + 0xA0);
     FUN_001f99f8_00216f90(position_destination + 0xD0);
     FUN_001f99f8_00216f90(position_destination + 0x20);
-    *(int *)(g + 0x184) = 0;
-    *(unsigned char *)(g + 0x22CA) = 0;
+    *(int *)(hero_base + 0x184) = 0;
+    *(unsigned char *)(hero_base + 0x22CA) = 0;
     FUN_00217020_00216f90();
     FUN_L00_0020e698_00216f90();
     FUN_L00_00205538_00216f90();
     if (mode != -1)
         hero_set_state(mode, 1);
-    FUN_L00_002325a0_00216f90(*(unsigned char *)(*(char **)(g + 0x2080) + 0x53),
-                              *(unsigned char *)(*(char **)(g + 0x2080) + 0x51));
-    if (*(int *)(g + 0x208C) == 0x11)
+    FUN_L00_002325a0_00216f90(*(unsigned char *)(*(char **)(hero_base + 0x2080) + 0x53),
+                              *(unsigned char *)(*(char **)(hero_base + 0x2080) + 0x51));
+    if (*(int *)(hero_base + 0x208C) == 0x11)
         D_L00_00167014_00216f90 = 1;
     else
         D_L00_00167014_00216f90 = 0;
