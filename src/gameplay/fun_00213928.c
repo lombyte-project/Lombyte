@@ -64,7 +64,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s3
     };
     V_25a478 v;
     V_25a478 combined_hit_vector;
-    s32 r;
+    s32 hit_response_index;
     s32 kind;
     s32 res;
     Q_25a478 *object_state;
@@ -121,43 +121,43 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s3
     }
     switch (hit_record->state) {
     case KIND_GATED_HIT_STATE:
-        if (hit_record->kind == 1 || hit_record->kind == 2) { *out = 2; r = 0; break; }
+        if (hit_record->kind == 1 || hit_record->kind == 2) { *out = 2; hit_response_index = 0; break; }
         goto dflt;
     case SUBSTATE_GATED_DAMAGE_PRESERVING_HIT_STATE:
-        if (hit_record->sub < 2) { *out = 2; r = 0xB; break; }
-        if (hit_record->sub == 2) { *out = 2; r = 5; break; }
-        *out = 2; r = 9;
+        if (hit_record->sub < 2) { *out = 2; hit_response_index = 0xB; break; }
+        if (hit_record->sub == 2) { *out = 2; hit_response_index = 5; break; }
+        *out = 2; hit_response_index = 9;
         break;
     case SUBSTATE_GATED_HIT_STATE:
-        if (hit_record->sub < 2) { *out = 2; r = 8; break; }
-        *out = 2; r = 0xD;
+        if (hit_record->sub < 2) { *out = 2; hit_response_index = 8; break; }
+        *out = 2; hit_response_index = 0xD;
         break;
     case COOLDOWN_RESETTING_HIT_STATE:
-        if (hit_record->sub < 2) { *out = 2; r = 0xA; break; }
-        if (hit_record->sub < 3) { *out = 2; r = 0xF; break; }
-        *out = 2; r = 0x10; q->h14 = -1; q->h1C = 0;
+        if (hit_record->sub < 2) { *out = 2; hit_response_index = 0xA; break; }
+        if (hit_record->sub < 3) { *out = 2; hit_response_index = 0xF; break; }
+        *out = 2; hit_response_index = 0x10; q->h14 = -1; q->h1C = 0;
         break;
     case FIXED_RESPONSE_HIT_STATE:
-        *out = 2; r = 0xE;
+        *out = 2; hit_response_index = 0xE;
         break;
     case SUBSTATE_GATED_AUXILIARY_FLAG_HIT_STATE:
-        if (hit_record->sub < 2) { *out = 3; r = 4; break; }
-        *out = 4; r = 7;
+        if (hit_record->sub < 2) { *out = 3; hit_response_index = 4; break; }
+        *out = 4; hit_response_index = 7;
         break;
     case SUBSTATE_GATED_COOLDOWN_DAMAGE_CLEARING_HIT_STATE:
-        if (hit_record->sub < 2) { *out = 2; r = 0xC; break; }
-        *out = 2; r = 0x11;
+        if (hit_record->sub < 2) { *out = 2; hit_response_index = 0xC; break; }
+        *out = 2; hit_response_index = 0x11;
         break;
     default:
     dflt:
-        *out = 2; r = 1;
+        *out = 2; hit_response_index = 1;
         break;
     }
     if (kp) *kp = kind;
-    res = D_001CC080[r][q->b8];
+    res = D_001CC080[hit_response_index][q->b8];
     if (q->h14 != kind) q->h1C = 0;
     if (fast_dec_timer_s16(&q->h1C)) {
-        switch (r) {
+        switch (hit_response_index) {
         case KIND_GATED_HIT_RESPONSE: q->h1C = scale_game_frames(0x25); break;
         case DEFAULT_HIT_RESPONSE: q->h1C = scale_game_frames(0xF); break;
         case AUXILIARY_FLAG_SETTING_HIT_RESPONSE: q->h1C = scale_game_frames(0x3C); break;
@@ -169,7 +169,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s3
         default: q->h1C = scale_game_frames(0x1E); break;
         }
     } else {
-        switch (r) {
+        switch (hit_response_index) {
         case KIND_GATED_HIT_RESPONSE:
         case FALLBACK_HIT_RESPONSE:
             if (!(flags & 0x10)) res = 0xB;
@@ -197,12 +197,12 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s3
     q->h14 = kind;
     q->h16 = kind;
     if (fp) *fp = hit_record->f2C;
-    if (r == 4) {
+    if (hit_response_index == 4) {
         object_state = ReadStateField(obj);
         if (object_state) object_state->b2E = 1;
     } else {
-        Q_25a478 *o2 = ReadStateField(obj);
-        if (o2) o2->b2E = 0;
+        Q_25a478 *object_state_for_flag_clear = ReadStateField(obj);
+        if (object_state_for_flag_clear) object_state_for_flag_clear->b2E = 0;
     }
     return res;
 }
