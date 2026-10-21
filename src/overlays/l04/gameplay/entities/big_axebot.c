@@ -2194,7 +2194,7 @@ extern f32 D_L04_001618BC __attribute__((sda));
 void FUN_L04_002c41e0(void *owner, void *from, void *to, int count, float from_puff_scale, float to_puff_scale) {
     Vec4 step;
     Vec4 at;
-    Vec4 vel;
+    Vec4 particle_spawn_velocity;
     float grow;
     int i;
     int tint;
@@ -2207,21 +2207,21 @@ void FUN_L04_002c41e0(void *owner, void *from, void *to, int count, float from_p
     subtract_vector_xyz_c(&step, to, from);
     scale_vector_xyz(&step, &step, 1.0f / (float)count);
     grow = (to_puff_scale - from_puff_scale) / (float)count;
-    vel.q = 0;
-    vel.f[3] = 1.0f;
-    vel.f[2] = 0.01f;
+    particle_spawn_velocity.q = 0;
+    particle_spawn_velocity.f[3] = 1.0f;
+    particle_spawn_velocity.f[2] = 0.01f;
     for (i = 0; i < count; i++) {
         scale_vector_xyz(&at, &step, convert_integer_to_float(i));
         add_vector_xyz(&at, from, &at);
-        vel.f[0] = randf_sym(0.0f, 0.005f);
-        vel.f[1] = randf_sym(0.0f, 0.005f);
-        vel.f[2] = random_float_between(D_L04_001618B4 * 0.1f, D_L04_001618B4);
+        particle_spawn_velocity.f[0] = randf_sym(0.0f, 0.005f);
+        particle_spawn_velocity.f[1] = randf_sym(0.0f, 0.005f);
+        particle_spawn_velocity.f[2] = random_float_between(D_L04_001618B4 * 0.1f, D_L04_001618B4);
         tint = random_int_between(0x40, 0x70);
         grey = random_int_between(0x40, 0x7F);
         grey = grey | (grey << 16 | grey << 8);
         size = random_float_between(1.0f, 1.02f);
         spin = random_int_between(-2, 2);
-        puff = spawn_puff(&at, D_L04_001618BC, 1.0f, size, spin, &vel, grow + from_puff_scale * 210000.0f, tint << 24 | grey);
+        puff = spawn_puff(&at, D_L04_001618BC, 1.0f, size, spin, &particle_spawn_velocity, grow + from_puff_scale * 210000.0f, tint << 24 | grey);
         if (puff != NULL) {
             tail = &puff->tail;
             if (random_integer_below(2) != 0) {
@@ -2236,17 +2236,17 @@ void FUN_L04_002c41e0(void *owner, void *from, void *to, int count, float from_p
             tail->fade = scale_game_frames(0x5A);
         }
     }
-    vel.f[0] = fast_cos(random_angle_radians()) * 0.05f;
-    vel.f[1] = fast_sin(random_angle_radians()) * 0.05f;
-    vel.f[2] = 0.0f;
-    vel.f[2] = random_float_between(0.01f, 0.03f);
-    spawn_burst(from, &vel, 0x4F007FFF, 0x1FFFFFFF, random_int_between(scale_game_frames(10), scale_game_frames(20)), 1,
+    particle_spawn_velocity.f[0] = fast_cos(random_angle_radians()) * 0.05f;
+    particle_spawn_velocity.f[1] = fast_sin(random_angle_radians()) * 0.05f;
+    particle_spawn_velocity.f[2] = 0.0f;
+    particle_spawn_velocity.f[2] = random_float_between(0.01f, 0.03f);
+    spawn_burst(from, &particle_spawn_velocity, 0x4F007FFF, 0x1FFFFFFF, random_int_between(scale_game_frames(10), scale_game_frames(20)), 1,
                 10000.0f);
-    vel.f[0] = fast_cos(random_angle_radians()) * 0.05f;
-    vel.f[1] = fast_sin(random_angle_radians()) * 0.05f;
-    vel.f[2] = 0.0f;
-    vel.f[2] = random_float_between(0.01f, 0.03f);
-    spawn_burst(to, &vel, 0x4F007FFF, 0x1FFFFFFF, random_int_between(scale_game_frames(10), scale_game_frames(20)), 1,
+    particle_spawn_velocity.f[0] = fast_cos(random_angle_radians()) * 0.05f;
+    particle_spawn_velocity.f[1] = fast_sin(random_angle_radians()) * 0.05f;
+    particle_spawn_velocity.f[2] = 0.0f;
+    particle_spawn_velocity.f[2] = random_float_between(0.01f, 0.03f);
+    spawn_burst(to, &particle_spawn_velocity, 0x4F007FFF, 0x1FFFFFFF, random_int_between(scale_game_frames(10), scale_game_frames(20)), 1,
                 20000.0f);
 }
 #include "qcopy.h"
