@@ -1337,7 +1337,7 @@ void teleporter_update(struct Moby *moby) {
         break;
     }
     case TELEPORTER_OPEN_PARTS: {
-        int r = FUN_L00_00233f38_2518();
+        int teleport_transition_status = FUN_L00_00233f38_2518();
         if (*(float *)(data + 0x20) < 1.0f) {
             advance_accelerated_scalar_2518((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
                                             D_L11_00161910 * D_0015ED70_2518,
@@ -1349,10 +1349,10 @@ void teleporter_update(struct Moby *moby) {
                                             D_L11_00161914 * D_0015ED70_2518,
                                             D_L11_00161918 * D_0015ED6C_2518);
         } else if (D_L11_0015F594 != 0xB || !(*(float *)(data + 0x20) > 0.25f)) {
-            if (r == 2) {
+            if (teleport_transition_status == 2) {
                 *(float *)(data + 0x3C) = 1.95f;
                 moby->state = 3;
-            } else if (r == 0) {
+            } else if (teleport_transition_status == 0) {
                 moby->state = 4;
             }
         }
