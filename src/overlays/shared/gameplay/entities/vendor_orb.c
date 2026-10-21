@@ -1355,9 +1355,9 @@ void pterodactyl_update(unsigned char *moby) {
         }
         {
             float first_segment_length = distance_xyz(path + 4, path + 8);
-            float b = distance_xyz(path + 4, path + *path * 4);
+            float first_to_last_distance = distance_xyz(path + 4, path + *path * 4);
             moby_data->f74 = D_L00_00161C98 * D_0015ED6C_2e3a88 / first_segment_length;
-            moby_data->i70 = FUN_001f99c0_2e3a88(first_segment_length - b) < 0.1f;
+            moby_data->i70 = FUN_001f99c0_2e3a88(first_segment_length - first_to_last_distance) < 0.1f;
         }
         moby_data->f6C = moby_data->f68 * (float)*path;
         moby[0x20] = 1;
