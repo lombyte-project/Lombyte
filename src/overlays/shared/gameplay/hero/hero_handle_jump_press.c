@@ -225,7 +225,7 @@ extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa6
 
 int FUN_L00_00229910(void) {
     struct Hero *g = &hero;
-    V_229910_00229910 v, w;
+    V_229910_00229910 collision_line_start, collision_line_end;
     float height_delta;
     if (g->motion.unk164 < g->unk234 / (float)FUN_001f96f8_00229910(20))
         return 0;
@@ -233,13 +233,13 @@ int FUN_L00_00229910(void) {
                                                                   g->motion.displacement.f[1]),
                                             g->motion.rot.f[2]))
         return 0;
-    qcopy(&v, &g->motion.pos);
-    v.f[0] += fast_cos(g->motion.rot.f[2]) * g->unk234 * 0.75f;
-    v.f[1] += fast_sin(g->motion.rot.f[2]) * g->unk234 * 0.75f;
-    qcopy(&w, &v);
-    v.f[2] += 0.47f;
-    w.f[2] -= 1.0f;
-    if (collision_line(&v, &w, 2, ((void *)g->moby), 0)) {
+    qcopy(&collision_line_start, &g->motion.pos);
+    collision_line_start.f[0] += fast_cos(g->motion.rot.f[2]) * g->unk234 * 0.75f;
+    collision_line_start.f[1] += fast_sin(g->motion.rot.f[2]) * g->unk234 * 0.75f;
+    qcopy(&collision_line_end, &collision_line_start);
+    collision_line_start.f[2] += 0.47f;
+    collision_line_end.f[2] -= 1.0f;
+    if (collision_line(&collision_line_start, &collision_line_end, 2, ((void *)g->moby), 0)) {
         height_delta = D_L00_00173E68_00229910 - g->motion.pos.f[2];
         if (height_delta < 0.37f && -1.0f < height_delta)
             return 1;
