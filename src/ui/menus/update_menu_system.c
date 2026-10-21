@@ -41,7 +41,7 @@ void update_menu_system(void) {
     s32 j;
     s32 k;
     s32 flag;
-    struct MenuScreen *obj;
+    struct MenuScreen *current_page_screen;
     struct MenuScreen **objs;
     struct MenuScreen *focused_screen;
 
@@ -83,9 +83,9 @@ void update_menu_system(void) {
             menu_system.current = incoming_page;
             menu_system.state = incoming_page->state;
             for (i = 0; i < 14; i++) {
-                obj = menu_system.current->screens[i];
-                if (obj != 0 && obj->enter != 0) {
-                    obj->enter(obj, 0);
+                current_page_screen = menu_system.current->screens[i];
+                if (current_page_screen != 0 && current_page_screen->enter != 0) {
+                    current_page_screen->enter(current_page_screen, 0);
                 }
             }
         }
@@ -96,9 +96,9 @@ void update_menu_system(void) {
             allocate_voice_for_target_entry(4, 0x11, panel_slots[0]);
         }
         for (i = 0; i < 14; i++) {
-            obj = menu_system.current->screens[i];
-            if (obj != 0 && obj->leave != 0) {
-                obj->leave(obj, 0);
+            current_page_screen = menu_system.current->screens[i];
+            if (current_page_screen != 0 && current_page_screen->leave != 0) {
+                current_page_screen->leave(current_page_screen, 0);
             }
         }
         flag = (menu_system.next == menu_system.current->back);
