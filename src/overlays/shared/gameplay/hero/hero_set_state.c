@@ -3772,7 +3772,7 @@ void FUN_L00_00228fa8(void) {
     struct Hero *g = &hero;
     void *moby_to_remove;
     void *item_moby;
-    void *b;
+    void *secondary_item_moby;
 
     moby_to_remove = ((void *)g->unk1614);
     if (moby_to_remove != 0) {
@@ -3783,8 +3783,8 @@ void FUN_L00_00228fa8(void) {
     if (item_moby != 0) {
         *(unsigned short *)((char *)item_moby + 0x34) &= 0xFFBE;
     }
-    b = ((void *)g->items[3].moby2);
-    if (b != 0) {
-        *(unsigned short *)((char *)b + 0x34) &= 0xFFBE;
+    secondary_item_moby = ((void *)g->items[3].moby2);
+    if (secondary_item_moby != 0) {
+        *(unsigned short *)((char *)secondary_item_moby + 0x34) &= 0xFFBE;
     }
 }
