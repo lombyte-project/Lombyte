@@ -910,12 +910,12 @@ extern void explode_h(void *, void *, void *, float, float, int, int, int, float
 
 void FUN_L18_002d5f20(unsigned char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
-    struct Hero *g;
+    struct Hero *hero_ptr;
     int hit;
     if (moby[0x20] == 5 || moby[0x20] == 0 || moby[0x20] == 4)
         return;
-    g = &hero;
-    if (g->state.current == 0x72) {
+    hero_ptr = &hero;
+    if (hero_ptr->state.current == 0x72) {
         moby[0x20] = 5;
         *(short *)(moby + 0x34) = (*(short *)(moby + 0x34) | 0x41) & ~0x1000;
         *(int *)(moby + 0x94) = 0;
@@ -923,7 +923,7 @@ void FUN_L18_002d5f20(unsigned char *moby) {
     }
     hit = trooper_find_hit(moby, 0x330000, 0);
     moby[0xA4] = 0xFF;
-    if (((unsigned char *)g->coll_hit_moby) == moby || ((unsigned char *)g->unk240) == moby || *(int *)(moby_vars + 0x19C) != 0) {
+    if (((unsigned char *)hero_ptr->coll_hit_moby) == moby || ((unsigned char *)hero_ptr->unk240) == moby || *(int *)(moby_vars + 0x19C) != 0) {
         explode_h(moby, D_L18_0015F580_h, 0, 1.5f, 1.0f, 0x14, 6, 0x20, 3.0f, 1.5f, 9.0f, 1.5f, 1, 0.0f, 1, 0, -1, 0);
         moby[0x20] = 5;
         *(short *)(moby + 0x34) = (*(short *)(moby + 0x34) | 0x41) & ~0x1000;
@@ -933,7 +933,7 @@ void FUN_L18_002d5f20(unsigned char *moby) {
     if (fast_dec_timer((int *)(moby_vars + 0x194)) == 0 && hit == 0) {
         if (moby[0x20] != 1)
             return;
-        if (!(vector_distance(moby + 0x10, &g->motion.pos) < 2.0f))
+        if (!(vector_distance(moby + 0x10, &hero_ptr->motion.pos) < 2.0f))
             return;
     }
     explode_h(moby, D_L18_0015F580_h, 0, 0.0f, 0.0f, 5, 2, 8, 1.0f, 0.5f, 9.0f, 0.5f, 1, 0.0f, 0, 0, -1, 0);
