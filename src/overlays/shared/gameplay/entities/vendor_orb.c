@@ -1529,12 +1529,12 @@ extern float FUN_001f9af0_002e4180(void *) __asm__("FUN_001f9af0");
 extern void FUN_001f9a68_002e4180(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_002e4180(void *, void *, void *) __asm__("FUN_001f9a10");
 
-int FUN_L00_002e4180(u128 *input_position, float r) {
+int FUN_L00_002e4180(u128 *input_position, float radial_distance_extension) {
     u128 lookup_position_copy;
     u128 position_delta;
     char *selected_record;
     char *reference_position;
-    char *v;
+    char *extended_position;
     float l, inv;
     lookup_position_copy = *input_position;
     {
@@ -1547,11 +1547,11 @@ int FUN_L00_002e4180(u128 *input_position, float r) {
     FUN_001f9a28_002e4180(&position_delta, input_position, reference_position);
     l = FUN_001f9af0_002e4180(selected_record);
     inv = 1.0f / FUN_001f9af0_002e4180(&position_delta);
-    v = D_L00_00173E70_002e4180;
-    FUN_001f9a68_002e4180(v, &position_delta, (l + r) * inv);
-    FUN_001f9a68_002e4180(v - 0x10, &position_delta, l * inv);
-    FUN_001f9a10_002e4180(v, v, reference_position);
-    FUN_001f9a10_002e4180(v - 0x10, v - 0x10, reference_position);
+    extended_position = D_L00_00173E70_002e4180;
+    FUN_001f9a68_002e4180(extended_position, &position_delta, (l + radial_distance_extension) * inv);
+    FUN_001f9a68_002e4180(extended_position - 0x10, &position_delta, l * inv);
+    FUN_001f9a10_002e4180(extended_position, extended_position, reference_position);
+    FUN_001f9a10_002e4180(extended_position - 0x10, extended_position - 0x10, reference_position);
     return 1;
 fail:
     return 0;
