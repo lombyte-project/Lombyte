@@ -2424,7 +2424,7 @@ extern void FUN_L00_0026f548(Vec4 *, Vec4 *, s32, s32);
    `debris` bits thrown out in random directions. The debris start point adds
    the x velocity to both x and y, as in the original. */
 void FUN_L00_00209ca8(s32 puffs, s32 debris, s32 flash) {
-    Vec4 v;
+    Vec4 effect_vector;
     Vec4 start;
     f32 ang;
     f32 speed;
@@ -2434,28 +2434,28 @@ void FUN_L00_00209ca8(s32 puffs, s32 debris, s32 flash) {
     s32 j;
 
     if (flash) {
-        qcopy(&v, &hero.motion.pos);
-        v.f[2] = hero.water_surface_z;
-        FUN_L00_002d7e90(&v, 2.25f);
+        qcopy(&effect_vector, &hero.motion.pos);
+        effect_vector.f[2] = hero.water_surface_z;
+        FUN_L00_002d7e90(&effect_vector, 2.25f);
     }
     for (j = 0; j < puffs; j++) {
-        v.f[0] = hero.motion.pos.f[0] + random_float_between(-0.3f, 0.3f);
-        v.f[1] = hero.motion.pos.f[1] + random_float_between(-0.3f, 0.3f);
-        v.f[2] = hero.water_surface_z;
-        FUN_L00_002715e8(&v, &hero.water_surface_z, -1, random_float_between(0.3f, 0.6f), 5250.0f);
+        effect_vector.f[0] = hero.motion.pos.f[0] + random_float_between(-0.3f, 0.3f);
+        effect_vector.f[1] = hero.motion.pos.f[1] + random_float_between(-0.3f, 0.3f);
+        effect_vector.f[2] = hero.water_surface_z;
+        FUN_L00_002715e8(&effect_vector, &hero.water_surface_z, -1, random_float_between(0.3f, 0.6f), 5250.0f);
     }
     for (i = 0; i < debris; i++) {
         ang = random_angle_radians();
         speed = random_float_between(D_0015ED6C * 0.0f, D_0015ED6C * 3.0f);
-        v.f[0] = fast_cos(ang) * speed;
-        v.f[1] = fast_sin(ang) * speed;
-        v.f[2] = random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 8.0f);
-        start.f[0] = hero.motion.pos.f[0] + v.f[0] * 8.0f;
-        start.f[1] = hero.motion.pos.f[1] + v.f[0] * 8.0f;
+        effect_vector.f[0] = fast_cos(ang) * speed;
+        effect_vector.f[1] = fast_sin(ang) * speed;
+        effect_vector.f[2] = random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 8.0f);
+        start.f[0] = hero.motion.pos.f[0] + effect_vector.f[0] * 8.0f;
+        start.f[1] = hero.motion.pos.f[1] + effect_vector.f[0] * 8.0f;
         start.f[2] = hero.water_surface_z - random_float_between(0.0f, 0.2f);
         color = random_integer_below(2);
         life = FUN_L00_00257b90(0x5A, 0x78);
-        FUN_L00_0026f548(&start, &v, color, life);
+        FUN_L00_0026f548(&start, &effect_vector, color, life);
     }
 }
 extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
