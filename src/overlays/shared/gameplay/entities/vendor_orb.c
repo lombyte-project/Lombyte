@@ -2391,7 +2391,7 @@ void follow_camera_springs(void *cam) {
 }
 /* Empty apart from an unused 0x50-byte volatile stack buffer. */
 void FUN_L00_002e8378(void) {
-    volatile char buf[0x50];
+    volatile char unused_stack_reservation[0x50];
 }
 struct P2_388 {
     char pad[0x220];
