@@ -1556,7 +1556,7 @@ void FUN_L13_00309e88(struct Moby *moby) {
         BOBBING_PLATFORM_INITIALIZE = 0,
         BOBBING_PLATFORM_UPDATE = 1
     };
-    Bob_9e88 *b;
+    Bob_9e88 *bobbing_platform_vars;
     float height_half_span_or_tile_enabled;
     int i, j, k, tile_index;
     int cr, cg;
@@ -1566,16 +1566,16 @@ void FUN_L13_00309e88(struct Moby *moby) {
     if (ship_moby != 0 && *(short *)(ship_moby + 0xA6) == 0x45 && (unsigned char)ship_moby[0x20] != 0xFE &&
         (unsigned char)ship_moby[0x20] != 0xFD && g->state.current == 0x32)
         return;
-    b = (Bob_9e88 *)moby->pvars;
-    if (b == 0)
+    bobbing_platform_vars = (Bob_9e88 *)moby->pvars;
+    if (bobbing_platform_vars == 0)
         return;
     switch (moby->state) {
     case BOBBING_PLATFORM_INITIALIZE: {
         float rate = frame_time;
         moby->flags |= 1;
-        b->angle = b->angle * DEG_TO_RAD;
-        b->speed = b->speed * DEG_TO_RAD * rate;
-        if (b->idx == 0) {
+        bobbing_platform_vars->angle = bobbing_platform_vars->angle * DEG_TO_RAD;
+        bobbing_platform_vars->speed = bobbing_platform_vars->speed * DEG_TO_RAD * rate;
+        if (bobbing_platform_vars->idx == 0) {
             Light_9e88 *l;
             char *tb;
             float light_direction_angle;
@@ -1609,7 +1609,7 @@ void FUN_L13_00309e88(struct Moby *moby) {
             D_L13_00161208 = 0;
             for (i = 0; i < 22; i++) {
                 pool_bind_tile(&Tiles_9e88[i], tb + i * 16);
-                Tiles_9e88[b->idx].c1E = D_L13_001F1E20[b->idx];
+                Tiles_9e88[bobbing_platform_vars->idx].c1E = D_L13_001F1E20[bobbing_platform_vars->idx];
             }
             for (k = 0; k < 22; k++) {
                 for (j = 0; j < 2; j++) {
@@ -1628,42 +1628,42 @@ void FUN_L13_00309e88(struct Moby *moby) {
     }
     case BOBBING_PLATFORM_UPDATE: {
         struct Hero *hero_context;
-        height_half_span_or_tile_enabled = b->top;
-        height_half_span_or_tile_enabled -= b->bottom;
+        height_half_span_or_tile_enabled = bobbing_platform_vars->top;
+        height_half_span_or_tile_enabled -= bobbing_platform_vars->bottom;
         height_half_span_or_tile_enabled *= 0.5f;
-        moby->pos.z = b->bottom + (fast_cos(b->angle) * height_half_span_or_tile_enabled + height_half_span_or_tile_enabled);
+        moby->pos.z = bobbing_platform_vars->bottom + (fast_cos(bobbing_platform_vars->angle) * height_half_span_or_tile_enabled + height_half_span_or_tile_enabled);
         hero_context = &hero;
         if (hero_context->state.control_mode != 0x14 && hero_context->state.control_mode != 0x19 &&
             hero_context->state.current != 0x3D && hero_context->state.current != 0x7B &&
             hero_context->state.current != 0x7C)
-            b->angle = fast_add_rotations(b->angle, b->speed);
-        Tiles_9e88[b->idx].c1C = D_L13_001CAB80.c3C;
-        Tiles_9e88[b->idx].c1D = D_L13_001CAB80.c3D;
+            bobbing_platform_vars->angle = fast_add_rotations(bobbing_platform_vars->angle, bobbing_platform_vars->speed);
+        Tiles_9e88[bobbing_platform_vars->idx].c1C = D_L13_001CAB80.c3C;
+        Tiles_9e88[bobbing_platform_vars->idx].c1D = D_L13_001CAB80.c3D;
         if (random_below_9e88(200) == 0) {
-            float x = Tiles_9e88[b->idx].x + rand_range_9e88(-4.0f, 4.0f);
+            float x = Tiles_9e88[bobbing_platform_vars->idx].x + rand_range_9e88(-4.0f, 4.0f);
             float y = rand_range_9e88(-4.0f, 4.0f);
-            Tile_9e88 *t = &Tiles_9e88[b->idx];
+            Tile_9e88 *t = &Tiles_9e88[bobbing_platform_vars->idx];
             pool_splash(x, t->y + y, 1.0f, -0.05f, t, 1, 1);
         }
         break;
     }
     }
-    if (b->idx >= 0) {
+    if (bobbing_platform_vars->idx >= 0) {
         height_half_span_or_tile_enabled = 0.0f;
-        (Tiles_9e88 + b->idx)->z = moby->pos.z;
+        (Tiles_9e88 + bobbing_platform_vars->idx)->z = moby->pos.z;
         if (FUN_L01_00275690(48.0f, moby) != -1)
             height_half_span_or_tile_enabled = 1.0f;
         if (height_half_span_or_tile_enabled == 0.0f)
-            Tiles_9e88[b->idx].c1E = 0;
+            Tiles_9e88[bobbing_platform_vars->idx].c1E = 0;
         else
-            Tiles_9e88[b->idx].c1E = D_L13_001F1E20[b->idx];
-        if (b->idx == 0) {
+            Tiles_9e88[bobbing_platform_vars->idx].c1E = D_L13_001F1E20[bobbing_platform_vars->idx];
+        if (bobbing_platform_vars->idx == 0) {
             pool_flush(Tiles_9e88, 22);
             enqueue_callback_list_1(FUN_L13_0030a460, moby);
         }
-        if (b->idx == D_L13_00161EF0) {
-            Tiles_9e88[b->idx].c1E = D_L13_00161EF4;
-            D_L13_001F1E20[b->idx] = D_L13_00161EF4;
+        if (bobbing_platform_vars->idx == D_L13_00161EF0) {
+            Tiles_9e88[bobbing_platform_vars->idx].c1E = D_L13_00161EF4;
+            D_L13_001F1E20[bobbing_platform_vars->idx] = D_L13_00161EF4;
         }
     }
 }
