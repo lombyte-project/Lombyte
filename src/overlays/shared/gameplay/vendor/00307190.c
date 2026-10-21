@@ -215,8 +215,8 @@ void FUN_L08_00307cf0(Moby *moby) {
     int flag;
     int big;
     int pass_attempt_count;
-    int cnt;
-    Obj_3091B0 *obj;
+    int remaining_pass_attempts;
+    Obj_3091B0 *moby_data;
     float lo;
     float hi;
     float fall;
@@ -255,7 +255,7 @@ void FUN_L08_00307cf0(Moby *moby) {
         zero = 0.0f;
         if (zero <= k) lo = k;
     }
-    obj = (Obj_3091B0 *)moby->pvars;
+    moby_data = (Obj_3091B0 *)moby->pvars;
     switch (moby->state) {
     case GROUND_PARTICLES_STATE_INITIALIZE:
         moby->state = 2;
@@ -264,7 +264,7 @@ void FUN_L08_00307cf0(Moby *moby) {
         break;
     case GROUND_PARTICLES_STATE_SCATTER:
         if (update_float_countdown(&D_L08_00162370)) func_L08_00309050_3091B0(flag);
-        func_001F9BF0_3091B0(&dv, D_L08_00167640_3091B0, &obj->v30);
+        func_001F9BF0_3091B0(&dv, D_L08_00167640_3091B0, &moby_data->v30);
         D_L08_00160250 = *(u128_3091B0 *)&dv;
         *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
         pass_attempt_count = D_L08_00162374;
@@ -273,7 +273,7 @@ void FUN_L08_00307cf0(Moby *moby) {
         base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344;
         if (pass_attempt_count > 0) {
             V_3091B0 *po = &off;
-            cnt = pass_attempt_count;
+            remaining_pass_attempts = pass_attempt_count;
             do {
                 float origin_distance_xy;
                 float t;
@@ -318,14 +318,14 @@ void FUN_L08_00307cf0(Moby *moby) {
                     if (flag == 0) func_L08_00273A80_3091B0(&pt, distance_selected_spawn_argument, w, &par);
                     if (flag == 1) func_L08_002803B8_3091B0(&pt, distance_selected_spawn_argument, w, &par);
                 }
-            } while (--cnt != 0);
+            } while (--remaining_pass_attempts != 0);
         }
         pass_attempt_count = (int)((float)pass_attempt_count * 1.4f);
         *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
         base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344;
         if (pass_attempt_count > 0) {
             float negative_spread = -spread;
-            cnt = pass_attempt_count;
+            remaining_pass_attempts = pass_attempt_count;
             do {
                 float u;
                 float t;
@@ -353,7 +353,7 @@ void FUN_L08_00307cf0(Moby *moby) {
                     if (flag == 0) func_L08_00273A80_3091B0(&pt, 0, w, &off);
                     if (flag == 1) func_L08_002803B8_3091B0(&pt, 0, w, &off);
                 }
-            } while (--cnt != 0);
+            } while (--remaining_pass_attempts != 0);
         }
         if (big != 0) {
             int sign;
@@ -365,7 +365,7 @@ void FUN_L08_00307cf0(Moby *moby) {
             sign = pass_attempt_count >> 31;
             base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344;
             if (pass_attempt_count > 0) {
-                cnt = pass_attempt_count;
+                remaining_pass_attempts = pass_attempt_count;
                 do {
                         *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
                     w = func_001F9F90_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
@@ -375,7 +375,7 @@ void FUN_L08_00307cf0(Moby *moby) {
                     w = w * func_002140F8_3091B0(0.0f, 30.0f);
                     pt.y += w;
                     func_L00_00264570_3091B0(&pt);
-                } while (--cnt != 0);
+                } while (--remaining_pass_attempts != 0);
             }
             *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
             func_L00_00263D68_3091B0(&base, &base, 4.0f, ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f158,
@@ -383,7 +383,7 @@ void FUN_L08_00307cf0(Moby *moby) {
             base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344;
             h = (pass_attempt_count - sign) >> 1;
             if (h > 0) {
-                        cnt = h;
+                        remaining_pass_attempts = h;
                 do {
                         *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
                     w = func_001F9F90_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
@@ -393,12 +393,12 @@ void FUN_L08_00307cf0(Moby *moby) {
                     w = w * func_002140F8_3091B0(0.0f, 8.0f);
                     pt.y += w;
                     func_L00_00264570_3091B0(&pt);
-                } while (--cnt != 0);
+                } while (--remaining_pass_attempts != 0);
             }
         }
         break;
     }
-    qcopy(&obj->v30, D_L08_00167640_3091B0);
+    qcopy(&moby_data->v30, D_L08_00167640_3091B0);
 }
 /* While the player is within range, scatters spawned particles around the moby on a random disc. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00309AB0), where it is exact; names translated to the US level program. */
