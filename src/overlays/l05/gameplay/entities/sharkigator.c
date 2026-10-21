@@ -647,7 +647,7 @@ void scenery_ship_update(char *moby) {
     float turn;
     float max_turn;
     float turn_scale;
-    float *pos, *rot, *tab;
+    float *effect_origin_position, *effect_origin_rotation, *tab;
 
     if (D_L05_001672C8_2D8388[0] < 55.0f) return;
     hit = func_L00_0025B478_2D8388(moby, 0x10000, 0);
@@ -749,16 +749,16 @@ void scenery_ship_update(char *moby) {
     case SCENERY_SHIP_SPAWN_EFFECTS_AND_REMOVE: {
         func_0022ED80_2D8388(0, 0, (int)moby);
         tab = (float *)D_L05_0015F580_macro;
-        pos = (float *)(moby + 0x10);
-        rot = (float *)(moby + 0x40);
+        effect_origin_position = (float *)(moby + 0x10);
+        effect_origin_rotation = (float *)(moby + 0x40);
         func_001F9C30_2D8388(&left_offset, moby + 0xC0, D_L05_001613E8 * frame_scale);
         left_offset.f[2] = left_offset.f[2] + D_L05_001613EC * frame_scale;
         lifetime = func_001F9850_2D8388(0x5A);
-        func_L00_00265050_2D8388(moby, 0x72E, pos, rot, lifetime, 0, left_offset.f, tab, D_0015ED70 * 12.0f, tab);
+        func_L00_00265050_2D8388(moby, 0x72E, effect_origin_position, effect_origin_rotation, lifetime, 0, left_offset.f, tab, D_0015ED70 * 12.0f, tab);
         lifetime = func_001F9850_2D8388(0x5A);
-        func_L00_00265050_2D8388(moby, 0x72E, pos, rot, lifetime, 0, left_offset.f, tab, D_0015ED70 * 12.0f, tab);
+        func_L00_00265050_2D8388(moby, 0x72E, effect_origin_position, effect_origin_rotation, lifetime, 0, left_offset.f, tab, D_0015ED70 * 12.0f, tab);
         lifetime = func_001F9850_2D8388(0x5A);
-        func_L00_00265050_2D8388(moby, 0x72E, pos, rot, lifetime, 0, left_offset.f, tab, D_0015ED70 * 12.0f, tab);
+        func_L00_00265050_2D8388(moby, 0x72E, effect_origin_position, effect_origin_rotation, lifetime, 0, left_offset.f, tab, D_0015ED70 * 12.0f, tab);
         func_0020D678_2D8388(moby);
         return;
     }
