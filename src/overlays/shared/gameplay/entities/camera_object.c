@@ -1473,8 +1473,8 @@ void FUN_L00_002a7780(O_2a7780 *effect_owner) {
     s32 sel0, sel1, sel2, sel3;
     u32 color;
     f32 scale, alpha;
-    s32 tex, idx, nv; s32 k;
-    s32 i, j, elapsed_frames, cur;
+    s32 effect_texture_id, idx, nv; s32 k;
+    s32 i, j, elapsed_frames, current_frame;
     f32 effect_progress, uv_v_offset;
 
     r = effect_owner->r;
@@ -1485,7 +1485,7 @@ void FUN_L00_002a7780(O_2a7780 *effect_owner) {
         if (P_2a7780_G.p2080[0x52] == 0xFF) { r->f70 = 0.0f; return; }
     }
     scale = 1.0f;
-    tex = 0x14;
+    effect_texture_id = 0x14;
     nv = 1;
     color = 0x808080;
     alpha = scale;
@@ -1499,7 +1499,7 @@ void FUN_L00_002a7780(O_2a7780 *effect_owner) {
         alpha = 0.7f;
         idx = 3;
         scale = 1.25f;
-        tex = 0xC;
+        effect_texture_id = 0xC;
         nv = 2;
         color = 0x408080;
     }
@@ -1510,24 +1510,24 @@ void FUN_L00_002a7780(O_2a7780 *effect_owner) {
     sel2 = effect_config->sel[2];
     sel3 = effect_config->sel[3];
     if (effect_progress == 1.0f) {
-        u8 *g = P_2a7780_G.p2080;
-        qcopy(&r->m[0], g + 0xC0);
-        qcopy(&r->m[1], g + 0xD0);
-        qcopy(&r->m[2], g + 0xE0);
+        u8 *hero_moby = P_2a7780_G.p2080;
+        qcopy(&r->m[0], hero_moby + 0xC0);
+        qcopy(&r->m[1], hero_moby + 0xD0);
+        qcopy(&r->m[2], hero_moby + 0xE0);
         last_frame = frame_2a7780;
     }
-    cur = frame_2a7780;
-    elapsed_frames = cur - last_frame;
+    current_frame = frame_2a7780;
+    elapsed_frames = current_frame - last_frame;
     if (elapsed_frames <= 0) elapsed_frames = 1;
     r->f70 = effect_progress + (f32)elapsed_frames * effect_config->f48;
-    last_frame = cur;
+    last_frame = current_frame;
     if ((f32)(effect_config->n * 2) <= r->f70) {
         s32 k2 = P_2a7780_G.p2080[0x52];
         if ((u32)(k2 - 0x17) < 3) return;
         if (k2 != 0x2B) r->f70 = 0.0f;
         return;
     }
-    quad.tag[1] = FUN_001f44b8_2a7780(tex);
+    quad.tag[1] = FUN_001f44b8_2a7780(effect_texture_id);
     quad.tag[2] = 0xFF9000000260LL;
     quad.tag[0] = 5;
     quad.tag[3] = (nv << 2) | 0x8000000040LL;
