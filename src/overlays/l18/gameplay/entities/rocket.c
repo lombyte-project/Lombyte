@@ -153,12 +153,12 @@ typedef struct {
     unsigned char state;
 } Level18State;
 
-int FUN_L18_002d8858(Level18State *obj) {
-    if (obj->state == 1) {
+int FUN_L18_002d8858(Level18State *platform_moby) {
+    if (platform_moby->state == 1) {
         return 1;
     }
-    if (obj->state == 2) {
-        obj->state = 5;
+    if (platform_moby->state == 2) {
+        platform_moby->state = 5;
     }
     return 0;
 }
