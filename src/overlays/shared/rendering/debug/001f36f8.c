@@ -412,11 +412,11 @@ void FUN_L00_001f4490(void) {
     B001f4490 *hero_camera_offsets = &D_L00_0016C058;
     struct Hero *hero_state;
     u8 *hero_moby;
-    f32 ang = fast_add_rotations(debug_camera_block->camera.angles[2], hero_camera_offsets->x88);
-    f32 angle_cosine = fast_cos(ang);
+    f32 camera_to_hero_angle = fast_add_rotations(debug_camera_block->camera.angles[2], hero_camera_offsets->x88);
+    f32 angle_cosine = fast_cos(camera_to_hero_angle);
     hero_state = &hero;
     hero_state->motion.pos.f[0] = debug_camera_block->camera.position[0] + angle_cosine * hero_camera_offsets->x8c;
-    hero_state->motion.pos.f[1] = debug_camera_block->camera.position[1] + fast_sin(ang) * hero_camera_offsets->x8c;
+    hero_state->motion.pos.f[1] = debug_camera_block->camera.position[1] + fast_sin(camera_to_hero_angle) * hero_camera_offsets->x8c;
     hero_state->motion.pos.f[2] = debug_camera_block->camera.position[2] + hero_camera_offsets->x90;
     hero_state->motion.rot.f[2] = fast_add_rotations(debug_camera_block->camera.angles[2], hero_camera_offsets->x84);
     euler_rotation_matrix(hero_state, hero_state->motion.rot.f);
