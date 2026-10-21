@@ -7826,8 +7826,8 @@ void FUN_L06_003049f8(char *moby)
         break;
     }
     case UPDATE_VECTOR_STREAMS: {
-        float f20;
-        float f21;
+        float stream_point_x;
+        float stream_point_x_step;
         float v;
         int i;
         int j;
@@ -7843,15 +7843,15 @@ void FUN_L06_003049f8(char *moby)
         if (1.0f < v) {
             D_L06_001621F8 = v - 1.0f;
         }
-        f21 = D_L06_00162204 / 30.0f;
-        f20 = -(D_L06_00162204 * 0.5f);
+        stream_point_x_step = D_L06_00162204 / 30.0f;
+        stream_point_x = -(D_L06_00162204 * 0.5f);
         for (i = 0; i < 4; i++) {
             if (vector_stream_vars->timer[i] == 0) {
                 for (j = 0; j < 30; j++) {
                     FUN_L06_00217300(vector_stream_vars->a[i][j]);
-                    vector_stream_vars->a[i][j][0] = f20;
+                    vector_stream_vars->a[i][j][0] = stream_point_x;
                     FUN_L00_00257d78(u.tmp[j], 0.0f, D_L06_00162200 * D_0015ED6C);
-                    f20 += f21;
+                    stream_point_x += stream_point_x_step;
                 }
                 for (k = 1; k < 29; k++) {
                     add_vector_xyz_c(vector_stream_vars->b[i][k], u.tmp[k - 1], u.tmp[k]);
