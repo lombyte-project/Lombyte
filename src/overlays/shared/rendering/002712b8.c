@@ -1866,21 +1866,21 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern int FUN_L00_00259430_002756f0(void *, int) __asm__("FUN_L00_00259430");
 
 void FUN_L00_002756f0(unsigned char *particle) {
-    unsigned char *v = particle + 0x20;
+    unsigned char *particle_data = particle + 0x20;
     float l, horizontal_velocity_scale, x;
-    particle[8] += v[0x12];
-    FUN_001f9a10_002756f0(particle + 0x10, particle + 0x10, v);
-    *(float *)(v + 8) -= frame_scale_sq * 0.003f;
-    l = vector_length_xy(v);
+    particle[8] += particle_data[0x12];
+    FUN_001f9a10_002756f0(particle + 0x10, particle + 0x10, particle_data);
+    *(float *)(particle_data + 8) -= frame_scale_sq * 0.003f;
+    l = vector_length_xy(particle_data);
     horizontal_velocity_scale = ((l * 0.97f - 1.0f) * frame_scale + 1.0f) / l;
     *(float *)(particle + 0x20) *= horizontal_velocity_scale;
-    *(float *)(v + 4) *= horizontal_velocity_scale;
+    *(float *)(particle_data + 4) *= horizontal_velocity_scale;
     if (!fast_dec_timer(particle + 0xA)) {
-        x = *(float *)(particle + 0xC) + (*(float *)(v + 0x14) + *(float *)(v + 0x14));
+        x = *(float *)(particle + 0xC) + (*(float *)(particle_data + 0x14) + *(float *)(particle_data + 0x14));
         *(float *)(particle + 0xC) = x;
         if (x < 15000.0f)
             *(float *)(particle + 0xC) = 15000.0f;
-    } else if (FUN_L00_00259430_002756f0(particle + 4, *(int *)(v + 0x1C))) {
+    } else if (FUN_L00_00259430_002756f0(particle + 4, *(int *)(particle_data + 0x1C))) {
         *(int *)(particle + 0xC) = 0;
         free_effect_particle(particle);
     }
