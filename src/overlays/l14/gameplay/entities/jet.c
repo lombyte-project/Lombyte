@@ -975,9 +975,9 @@ void FUN_L14_002ec810(struct Moby *moby) {
             return;
         }
         for (i = 0; i < path->count; i++) {
-            f32 len = mine_distance(&((f32 *)path)[i * 4 + 4], &((f32 *)path)[((i + 1) % path->count) * 4 + 4]);
+            f32 path_segment_length = mine_distance(&((f32 *)path)[i * 4 + 4], &((f32 *)path)[((i + 1) % path->count) * 4 + 4]);
             char *pt = (char *)path + i * 16;
-            *(f32 *)(pt + 0x1C) = len;
+            *(f32 *)(pt + 0x1C) = path_segment_length;
         }
         mine_vars->segment = 0;
         mine_vars->along = 0;
