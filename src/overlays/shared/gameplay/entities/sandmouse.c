@@ -1684,19 +1684,19 @@ extern OvlVec4 D_0013F3D0_315de0 __asm__("D_0013F3D0");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 
-void FUN_L01_00315de0(Camera *cam) {
+void FUN_L01_00315de0(Camera *destination_camera) {
     CameraPresetRow *rows = D_L01_0015EF50;
     Camera *source_camera = D_L01_00167284;
-    CameraPreset *camera_preset = rows[cam->preset].preset;
+    CameraPreset *camera_preset = rows[destination_camera->preset].preset;
     OvlVec4 at, delta, to_camera;
     s32 seg;
     f32 path_fraction;
 
-    qcopy((char *)cam + 0x30, (char *)source_camera + 0x30);
-    qcopy(cam, source_camera);
-    qcopy((char *)cam + 0x10, (char *)source_camera + 0x10);
-    qcopy((char *)cam + 0x20, (char *)source_camera + 0x20);
-    qcopy((char *)cam + 0x40, cam);
+    qcopy((char *)destination_camera + 0x30, (char *)source_camera + 0x30);
+    qcopy(destination_camera, source_camera);
+    qcopy((char *)destination_camera + 0x10, (char *)source_camera + 0x10);
+    qcopy((char *)destination_camera + 0x20, (char *)source_camera + 0x20);
+    qcopy((char *)destination_camera + 0x40, destination_camera);
 
     if (camera_preset->track_path >= 0) {
         CameraPath *path;
@@ -1724,13 +1724,13 @@ void FUN_L01_00315de0(Camera *cam) {
             fast_vec_sub(&delta, &path->pts[next], &path->pts[seg]);
             if (fast_vec_length(&delta) != 0.0f && next != seg) {
                 fast_vec_normalize(&delta, &delta, 1.0f);
-                fast_vec_sub(&to_camera, (char *)cam + 0x30, &D_0013F3D0_315de0);
+                fast_vec_sub(&to_camera, (char *)destination_camera + 0x30, &D_0013F3D0_315de0);
                 if (0.0f < fast_vec_dot(&to_camera, &delta))
                     *(s16 *)((char *)camera_preset + 0x36) = 1;
             }
         }
     }
-    FUN_L01_00314e98(cam);
+    FUN_L01_00314e98(destination_camera);
 }
 #include "sda.h"
 
