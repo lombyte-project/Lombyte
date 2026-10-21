@@ -2298,17 +2298,17 @@ extern void follow_cam_turn_towards(f32 amount, f32 rate) __asm__("FUN_L00_002e8
 /* Updates the follow camera: eases its focus and offset vectors, then places
    the eye behind the hero, pulled in where collision lines hit. */
 void follow_camera_springs(void *cam) __asm__("FUN_L00_002e5830");
-void follow_camera_springs(void *cam) {
+void follow_camera_springs(void *camera_moby) {
     f32 velocity[4], hero_pos[4], focus[4], up[4], lateral[4], look[4], base[4], probe[4], left[4], diff[4], mid[4];
     u8 *view = camera_view;
-    FollowCamState *camera_state = FOLLOW_CAM_STATE((struct UpdateCam *)cam);
+    FollowCamState *camera_state = FOLLOW_CAM_STATE((struct UpdateCam *)camera_moby);
     FollowCamTail *camera_tail = &camera_state->tail;
     FollowCamBlock *follow_block = &camera_state->follow;
     f32 len, back;
 
-    follow_cam_hero_position(cam, hero_pos);
-    follow_cam_update_mode(cam);
-    follow_cam_focus_velocity(cam, velocity);
+    follow_cam_hero_position(camera_moby, hero_pos);
+    follow_cam_update_mode(camera_moby);
+    follow_cam_focus_velocity(camera_moby, velocity);
     qcopy(&camera_state->follow.velocity, velocity);
     qcopy(focus, follow_block);
     len = dot_vectors_xyz(view + 0x30, camera_state->follow.offset);
@@ -2337,7 +2337,7 @@ void follow_camera_springs(void *cam) {
         lerp_vector((f32)follow_block->blend_timer / convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)), base, follow_block, camera_state->follow.offset);
         add_vector_xyz(camera_state->follow.look_target, look, base);
     }
-    follow_cam_spring_offset(cam, look);
+    follow_cam_spring_offset(camera_moby, look);
     if (hero.vehicle_mode == 2) {
         scale_vector_xyz(look, view + 0x20, 3.0f);
     } else if (hero.vehicle_mode == 1) {
