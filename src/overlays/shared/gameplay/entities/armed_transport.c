@@ -406,8 +406,8 @@ typedef struct {
     PathPoint2fa0 pts[1];
 } Path2fa0;
 
-void FUN_L16_002e2fa0(void *arg) {
-    Path2fa0 *path = arg;
+void FUN_L16_002e2fa0(void *path_data) {
+    Path2fa0 *path = path_data;
     int i;
     int point_count;
     for (i = 0; i < path->count - 1; i++) {
