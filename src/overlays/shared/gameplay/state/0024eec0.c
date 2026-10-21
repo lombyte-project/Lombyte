@@ -52,16 +52,16 @@ void FUN_L00_0024efb0(unsigned char *moby_class, int dx, int dy) {
     for (i = 0; i < entry_count; i++, entry_cursor += 4) {
         unsigned short *point_pair_cursor = *(unsigned short **)entry_cursor;
         int point_pair_count = ((unsigned char *)point_pair_cursor)[2];
-        int cnt;
+        int remaining_point_pair_count;
         point_pair_cursor += 2;
         if (point_pair_count != 0) {
-            cnt = point_pair_count;
+            remaining_point_pair_count = point_pair_count;
             do {
                 point_pair_cursor[0] = point_pair_cursor[0] + dx;
                 point_pair_cursor[1] = point_pair_cursor[1] + dy;
                 point_pair_cursor += 2;
-                cnt--;
-            } while (cnt != 0);
+                remaining_point_pair_count--;
+            } while (remaining_point_pair_count != 0);
         }
     }
 }
