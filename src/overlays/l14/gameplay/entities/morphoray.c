@@ -1604,7 +1604,7 @@ extern int func_L10_002F6E38_15920(void *) __asm__("FUN_L10_002f5a78");
 extern char *D_L14_0015F050_15920 __asm__("D_L14_0015EF50");
 int FUN_L14_00315920(char *camera, char *b) {
     char *rec = *(char **)(D_L14_0015F050_15920 + *(short *)(camera + 0x84) * 32 + 0x1C);
-    int required_control_mode, u;
+    int required_control_mode, required_hero_state;
     if (*(unsigned char *)(rec + 0x38) != 0)
         return -1;
     if (b != 0 && *(short *)(b + 0x7E) == 0) {
@@ -1616,8 +1616,8 @@ int FUN_L14_00315920(char *camera, char *b) {
     required_control_mode = *(int *)(rec + 0x48);
     if (required_control_mode >= 0 && hero.state.control_mode != required_control_mode)
         return 0;
-    u = *(int *)(rec + 0x44);
-    if (u >= 0 && hero.state.current != u)
+    required_hero_state = *(int *)(rec + 0x44);
+    if (required_hero_state >= 0 && hero.state.current != required_hero_state)
         return 0;
     return 1;
 }
