@@ -668,7 +668,7 @@ void FUN_L00_00298f90(void) {
     s32 last;
     s32 i;
     s32 id;
-    s32 lim;
+    s32 audio_chunk_frame_threshold;
     Vec4 *keys;
     f32 fade;
     f32 a[4] __attribute__((aligned(16)));
@@ -716,8 +716,8 @@ void FUN_L00_00298f90(void) {
     if (done) {
         FUN_L00_00298b18();
     } else {
-        lim = pal_mode ? 0x50 : 0x60;
-        if (D_L00_0016C860.f38 >= lim) {
+        audio_chunk_frame_threshold = pal_mode ? 0x50 : 0x60;
+        if (D_L00_0016C860.f38 >= audio_chunk_frame_threshold) {
             FUN_002168a8(1);
             D_L00_0016C860.f3C++;
             FUN_00204790();
