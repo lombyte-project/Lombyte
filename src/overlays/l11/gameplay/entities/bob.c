@@ -586,7 +586,7 @@ void FUN_L11_002d14b0(void *arg) {
     struct PokKeeperVars *moby_vars = (struct PokKeeperVars *)moby->pvars;
     int proximity = FUN_L11_002d2460(moby);
     float v[4];
-    float r[4];
+    float dialogue_rotation[4];
 
     if (moby->state >= 3 && moby->state <= 5 && proximity == 0) {
         FUN_L11_002d2088_c(moby, 6);
@@ -733,10 +733,10 @@ void FUN_L11_002d14b0(void *arg) {
             euler_rotation_basis(&moby->rot_row0, &moby->rot);
             scale_vector_14b0(v, &moby->rot_row0, 2.0f);
             fast_vec_add(v, v, &moby->pos);
-            qcopy(r, &moby->rot);
-            r[2] = fast_add_rotations(r[2], 3.14159f);
+            qcopy(dialogue_rotation, &moby->rot);
+            dialogue_rotation[2] = fast_add_rotations(dialogue_rotation[2], 3.14159f);
             qcopy(D_L11_0016D270, v);
-            qcopy(D_L11_0016D270 + 0x10, r);
+            qcopy(D_L11_0016D270 + 0x10, dialogue_rotation);
             *(short *)(D_L11_0016D270 + 0x36) = 1;
             begin_dialogue_camera_transition(moby, 2.5f);
             FUN_L11_002d2088_c(moby, 0xD);
