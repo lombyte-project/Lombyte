@@ -752,7 +752,7 @@ void FUN_L14_002dee28(struct Moby *moby) {
     struct Hero *x;
     float forward_point[4];
     float bounding_sphere[4];
-    int idx;
+    int voice_slot_index;
     switch (moby->state) {
     case MOBY_STATE_INITIALIZE:
         if (*(int *)(data + 0x1F4) == -1 || *(int *)(data + 0x1F8) == -1 ||
@@ -794,12 +794,12 @@ void FUN_L14_002dee28(struct Moby *moby) {
         return;
     }
 end:
-    idx = *(int *)(data + 0x204);
-    if (idx >= 0) {
-        if (idx != -1) {
-            char *voice_slot_entry = D_0013E633 - 0xE80 + idx * 0x70;
+    voice_slot_index = *(int *)(data + 0x204);
+    if (voice_slot_index >= 0) {
+        if (voice_slot_index != -1) {
+            char *voice_slot_entry = D_0013E633 - 0xE80 + voice_slot_index * 0x70;
             if (*(char **)(voice_slot_entry + 0x88) == moby && *(unsigned char *)(voice_slot_entry + 0x74) != 0) {
-                release_voice_slot(idx);
+                release_voice_slot(voice_slot_index);
             }
         }
         *(int *)(data + 0x204) = -1;
