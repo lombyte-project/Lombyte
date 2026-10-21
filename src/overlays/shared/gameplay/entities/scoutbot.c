@@ -611,8 +611,8 @@ extern float D_L08_001D1D80[4][4] __attribute__((section(".data")));
 extern float D_L08_00161898 __attribute__((sda));
 extern float D_L08_0016189C __attribute__((sda));
 void FUN_L08_002d4108(char *arg);
-void FUN_L08_002d4108(char *arg) {
-    char *data = *(char **)(arg + 0x78);
+void FUN_L08_002d4108(char *moby) {
+    char *data = *(char **)(moby + 0x78);
     Pk_002d4108 pk;
     float up[4];
     float M[4][4];
@@ -644,7 +644,7 @@ void FUN_L08_002d4108(char *arg) {
     fast_vec_cross(M[2], M[1], M[0]);
     fast_vec_scale(position_offset, M[0], D_L08_00161898);
     fast_vec_add(M[3], M[3], position_offset);
-    col = (*(u32 *)(arg + 0x90) & 0xFFFFFF) | 0x40000000;
+    col = (*(u32 *)(moby + 0x90) & 0xFFFFFF) | 0x40000000;
     pk.col[3] = col;
     pk.col[2] = col;
     pk.col[1] = col;
