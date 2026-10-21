@@ -835,11 +835,11 @@ void FUN_L12_00238900(void) {
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, MV(hero.moby), 0x13);
         } else {
-            s32 idx = hero.unk222C;
-            if (idx != -1) {
-                struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + idx * 0x70);
+            s32 voice_slot_index = hero.unk222C;
+            if (voice_slot_index != -1) {
+                struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + voice_slot_index * 0x70);
                 if (e->pm88 == MV(hero.moby) && e->b74 != 0) {
-                    release_voice_slot(idx);
+                    release_voice_slot(voice_slot_index);
                 }
             }
             hero.unk222C = -1;
@@ -1194,17 +1194,17 @@ void FUN_L12_00238900(void) {
     case 0x3A:
         if (MV(hero.ground_moby) != NULL && MV(hero.ground_moby)->hA6 == 0x155) {
             f32 d;
-            f32 lim;
+            f32 max_yaw_step;
             clear_u64_value(&geometry_and_hit_descriptor_scratch);
             add_vector_xyz(&geometry_and_hit_descriptor_scratch, &geometry_and_hit_descriptor_scratch, &MV(hero.ground_moby)->u10.v10);
             subtract_vector_xyz(&hero.motion.velocity, &geometry_and_hit_descriptor_scratch, &hero.motion.pos);
             FUN_L00_0025f730(&hero.motion.velocity, frame_time * 2.0f);
             d = fast_subtract_rotations(MV(hero.ground_moby)->u40.f48.v, hero.motion.rot.f[2]);
-            lim = frame_time * 9.424778f;
-            if (d > lim) {
-                d = lim;
-            } else if (d < -lim) {
-                d = -lim;
+            max_yaw_step = frame_time * 9.424778f;
+            if (d > max_yaw_step) {
+                d = max_yaw_step;
+            } else if (d < -max_yaw_step) {
+                d = -max_yaw_step;
             }
             hero.motion.rot.f[2] = fast_add_rotations(hero.motion.rot.f[2], d);
         }
@@ -2535,11 +2535,11 @@ void FUN_L12_00238900(void) {
     }
     case 0x56: {
         f32 len = vector_length_xy(&hero.motion.velocity);
-        f32 l2 = len;
+        f32 planar_speed_before_damping = len;
         if (hero.air_frames.s != 0) {
-            len = frame_scale * -0.00999999f * l2 + l2;
+            len = frame_scale * -0.00999999f * planar_speed_before_damping + planar_speed_before_damping;
         } else {
-            len = frame_scale * -0.07999998f * l2 + l2;
+            len = frame_scale * -0.07999998f * planar_speed_before_damping + planar_speed_before_damping;
         }
         FUN_L00_001ff600(len, &hero.motion.velocity, &hero.motion.velocity);
         hero.motion.velocity.f[2] = 0.0f;
