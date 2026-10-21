@@ -3633,12 +3633,12 @@ extern long FUN_001f44b8_2cd2b0(int) __asm__("FUN_001f44b8");
 extern char D_L07_00167050_2cd2b0[] __asm__("D_L07_00167050");
 extern char D_L07_00173EE0_2cd2b0[] __asm__("D_L07_00173EE0");
 
-void FUN_L07_00312420(struct Moby *arg)
+void FUN_L07_00312420(struct Moby *effect_owner_moby)
 {
-    float line_endpoint[4], endpoint_work_vector[4], quad_side_offset[4], attachment_position[4], endpoint_to_attachment[4], oscillating_reference_position[4], effect_sample_position[4], c2[4], sample_probe_offset[4], ii[4], jj[4];
+    float line_endpoint[4], endpoint_work_vector[4], quad_side_offset[4], attachment_position[4], endpoint_to_attachment[4], oscillating_reference_position[4], effect_sample_position[4], effect_sample_step[4], sample_probe_offset[4], ii[4], jj[4];
     float frame_phase_work_value, oscillation_work_value;
     int flag = 1;
-    EffData_313800 *moby_effect_data = ((EffData_313800 *)arg->pvars);
+    EffData_313800 *moby_effect_data = ((EffData_313800 *)effect_owner_moby->pvars);
     int k;
     Packet_313800 pkt;
 
@@ -3648,11 +3648,11 @@ void FUN_L07_00312420(struct Moby *arg)
     frame_phase_work_value = frame_phase_work_value / 10.0f;
     oscillation_work_value = FUN_L00_0025e310_2cd2b0(frame_phase_work_value + oscillation_work_value * 1.5707964f);
     oscillating_reference_position[0] = oscillating_reference_position[0] + FUN_001f9de0_2cd2b0(oscillation_work_value);
-    add_vector_xyz_cf(arg, 2, attachment_position);
+    add_vector_xyz_cf(effect_owner_moby, 2, attachment_position);
     subtract_vector_xyz(endpoint_work_vector, oscillating_reference_position, attachment_position);
     FUN_001f9bf8_2cd2b0(endpoint_work_vector, endpoint_work_vector, 30.0f);
     add_vector_xyz(line_endpoint, oscillating_reference_position, endpoint_work_vector);
-    if (FUN_001efa68_2cd2b0(attachment_position, line_endpoint, 2, arg, 0)) {
+    if (FUN_001efa68_2cd2b0(attachment_position, line_endpoint, 2, effect_owner_moby, 0)) {
         qcopy(line_endpoint, D_L07_00173EE0_2cd2b0);
     } else {
         flag = 0;
@@ -3664,28 +3664,28 @@ void FUN_L07_00312420(struct Moby *arg)
     if (flag) {
         FUN_L00_002729c8_2cd2b0(line_endpoint, 0, FUN_001f96f8_2cd2b0((rand_e50() & 1) + 0x2D),
             FUN_001f96f8_2cd2b0((rand_e50() & 7) + 0x37), 1,
-            FUN_001f96f8_2cd2b0((rand_e50() & 3) + 0xD), arg, 1.0f, 1.0f);
+            FUN_001f96f8_2cd2b0((rand_e50() & 3) + 0xD), effect_owner_moby, 1.0f, 1.0f);
         if (moby_effect_data->f15C != 0.0f) {
-            subtract_vector_xyz(c2, line_endpoint, moby_effect_data->f150);
-            FUN_001f9bf8_2cd2b0(c2, c2, 0.2f);
+            subtract_vector_xyz(effect_sample_step, line_endpoint, moby_effect_data->f150);
+            FUN_001f9bf8_2cd2b0(effect_sample_step, effect_sample_step, 0.2f);
             qcopy(effect_sample_position, moby_effect_data->f150);
             for (k = 0; k < 4; k++) {
-                add_vector_xyz(effect_sample_position, effect_sample_position, c2);
+                add_vector_xyz(effect_sample_position, effect_sample_position, effect_sample_step);
                 subtract_vector_xyz(sample_probe_offset, effect_sample_position, attachment_position);
                 FUN_001f9bf8_2cd2b0(sample_probe_offset, sample_probe_offset, 5.0f);
                 subtract_vector_xyz(ii, effect_sample_position, sample_probe_offset);
                 add_vector_xyz(jj, effect_sample_position, sample_probe_offset);
-                if (FUN_001efa68_2cd2b0(ii, jj, 2, arg, 0)) {
+                if (FUN_001efa68_2cd2b0(ii, jj, 2, effect_owner_moby, 0)) {
                     qcopy(effect_sample_position, D_L07_00173EE0_2cd2b0);
                 }
                 if (k == 2) {
                     FUN_L00_002729c8_2cd2b0(effect_sample_position, 0, FUN_001f96f8_2cd2b0((rand_e50() & 1) + 0x2D),
                         FUN_001f96f8_2cd2b0((rand_e50() & 7) + 0x37), 1,
-                        FUN_001f96f8_2cd2b0((rand_e50() & 3) + 0xD), arg, 1.0f, 1.0f);
+                        FUN_001f96f8_2cd2b0((rand_e50() & 3) + 0xD), effect_owner_moby, 1.0f, 1.0f);
                 } else {
                     FUN_L00_002729c8_2cd2b0(effect_sample_position, 1, FUN_001f96f8_2cd2b0(0x2D),
                         FUN_001f96f8_2cd2b0(0x37), 1,
-                        FUN_001f96f8_2cd2b0(0xD), arg, 1.0f, 1.0f);
+                        FUN_001f96f8_2cd2b0(0xD), effect_owner_moby, 1.0f, 1.0f);
                 }
             }
         }
