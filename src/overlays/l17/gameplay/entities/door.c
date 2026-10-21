@@ -791,8 +791,8 @@ void FUN_L17_002eb768(int ship_moby, char *ship_vars) {
     char *g = 0;
     char *pad;
     char *locked_target;
-    char *r;
-    float v[4];
+    char *candidate_target;
+    float radar_rotation[4];
     int lock_timer_reload;
     if (!(D_L17_0015F5C4 >= 3 && D_L17_0015F5C4 <= 4)) {
         fast_dec_timer((int *)(ship_vars + 0x8C));
@@ -818,22 +818,22 @@ void FUN_L17_002eb768(int ship_moby, char *ship_vars) {
     W(ship_vars, 0x128) = -1;
     W(ship_vars, 0x88) = 0;
 skip:
-    qcopy(v, D_L17_001676D0_lui);
-    r = (char *)FUN_L17_002eace8_u(ship_moby, ship_vars, D_L17_001676D0_lui - 0x10, (char *)v, 0.19634955f, 0.19634955f,
+    qcopy(radar_rotation, D_L17_001676D0_lui);
+    candidate_target = (char *)FUN_L17_002eace8_u(ship_moby, ship_vars, D_L17_001676D0_lui - 0x10, (char *)radar_rotation, 0.19634955f, 0.19634955f,
                                    255.0f, P(ship_vars, 0x88), g);
-    if ((r != P(ship_vars, 0x88) && W(ship_vars, 0x8C) >= 0x1F5) || FLAG == 0) {
+    if ((candidate_target != P(ship_vars, 0x88) && W(ship_vars, 0x8C) >= 0x1F5) || FLAG == 0) {
         W(ship_vars, 0xEC) = 0;
         W(ship_vars, 0x128) = -1;
         W(ship_vars, 0x88) = 0;
     }
-    if (r != 0 && (P(ship_vars, 0x88) == 0 || (H(P(ship_vars, 0x88), 0xA6) != 0x3EB && H(r, 0xA6) == 0x3EB)) &&
+    if (candidate_target != 0 && (P(ship_vars, 0x88) == 0 || (H(P(ship_vars, 0x88), 0xA6) != 0x3EB && H(candidate_target, 0xA6) == 0x3EB)) &&
         FLAG != 0) {
-        P(ship_vars, 0x88) = r;
+        P(ship_vars, 0x88) = candidate_target;
         lock_timer_reload = D_L17_0016216C;
-        W(ship_vars, 0x128) = H(r, 0xA6);
+        W(ship_vars, 0x128) = H(candidate_target, 0xA6);
         W(ship_vars, 0x8C) = lock_timer_reload;
     }
-    if (r != P(ship_vars, 0x88)) {
+    if (candidate_target != P(ship_vars, 0x88)) {
         W(ship_vars, 0x118) = W(ship_vars, 0x118) + 1;
         if (scale_game_frames(0x3C) < W(ship_vars, 0x118)) {
             W(ship_vars, 0xEC) = 0;
