@@ -924,20 +924,20 @@ void FUN_L11_003181f0(struct Moby *moby) {
     };
     char *link_vars = (char *)moby->pvars;
     float v[4];
-    float w[4];
-    float r[4];
+    float effect_motion_vector[4];
+    float random_motion_offset[4];
     switch (moby->state) {
     case TANKER_LINK_EMIT_EFFECT_AND_SAVE_POSITION:
         if (func_001F9908_i(link_vars + 0x28) == 0 && random_integer_below(*(int *)&D_L11_00162340) == 0 &&
             moby->visible != 0 && *(int *)&D_L11_0015FFBC >= 0x47) {
             transform_vector_by_basis(v, &D_L11_00162350, &moby->rot_row0);
             add_vector_xyz(v, v, &moby->pos);
-            random_vector(r, 0.0f, *(float *)&D_L11_00162368 * D_0015ED6C_n[1]);
-            subtract_vector_xyz(w, &moby->pos, link_vars);
-            w[2] -= D_0015ED6C_n[1] + D_0015ED6C_n[1];
-            add_vector_xyz(w, w, r);
+            random_vector(random_motion_offset, 0.0f, *(float *)&D_L11_00162368 * D_0015ED6C_n[1]);
+            subtract_vector_xyz(effect_motion_vector, &moby->pos, link_vars);
+            effect_motion_vector[2] -= D_0015ED6C_n[1] + D_0015ED6C_n[1];
+            add_vector_xyz(effect_motion_vector, effect_motion_vector, random_motion_offset);
             func_L11_0031C210_5(
-                v, w, D_L11_00161E18, 0,
+                v, effect_motion_vector, D_L11_00161E18, 0,
                 random_float_between(*(float *)&D_L11_00162360, *(float *)&D_L11_00162364));
         }
         qcopy(link_vars, &moby->pos);
