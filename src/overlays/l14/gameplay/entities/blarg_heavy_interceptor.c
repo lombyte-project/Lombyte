@@ -1357,7 +1357,7 @@ void FUN_L14_002ae7d8(struct Moby *moby) {
     int source_segment_index = *(int *)(data + 0x84);
     float dist = 0.0f;
     float out[4];
-    int idx;
+    int destination_segment_index;
     float frac;
     int i;
     int *tab;
@@ -1371,9 +1371,9 @@ void FUN_L14_002ae7d8(struct Moby *moby) {
     tab = D_L14_001B0BB0[*(int *)(data + 0x74)];
     destination_path_distance = dist / *(float *)(data + 0x16C) * *(float *)(data + 0x190);
     dir = *(short *)(data + 0x8A);
-    idx = 0;
+    destination_segment_index = 0;
     frac = 0.0f;
-    FUN_L00_0025d808_2af918(tab, out, &idx, &frac, dir, destination_path_distance);
+    FUN_L00_0025d808_2af918(tab, out, &destination_segment_index, &frac, dir, destination_path_distance);
     FUN_L00_0025b8c0_c(&moby->pos.x, (float *)(data + 0x194), out[0],
                        *(float *)&D_L14_001613A0_d, *(float *)&D_L14_001613A4_d, 0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.y, (float *)(data + 0x198), out[1],
