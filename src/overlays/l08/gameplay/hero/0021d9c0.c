@@ -1917,13 +1917,13 @@ void FUN_L08_002284e0(void) {
                 }
             }
             if (hero.unk590 != 0 && hero.unk5A4 <= scale_game_frames(48)) {
-                f32 u;
+                f32 previous_rail_blend_fraction;
                 subtract_vector_xyz(&vector_and_hit_descriptor_scratch, &vector_and_attack_descriptor_scratch, &v10);
                 hero.unk5A4++;
                 fast_vec_scale(&vector_and_hit_descriptor_scratch, &vector_and_hit_descriptor_scratch, (f32)hero.unk5A4 / (f32)scale_game_frames(48));
-                u = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
+                previous_rail_blend_fraction = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
                 subtract_vector_xyz(&movement_vector_scratch, &vector_and_attack_descriptor_scratch, &v10);
-                fast_vec_scale(&movement_vector_scratch, &movement_vector_scratch, u);
+                fast_vec_scale(&movement_vector_scratch, &movement_vector_scratch, previous_rail_blend_fraction);
                 hero.motion.pos.f[2] += vector_and_hit_descriptor_scratch.f[2] - movement_vector_scratch.f[2];
                 add_vector_xyz(&movement_vector_scratch, &v10, &vector_and_hit_descriptor_scratch);
                 subtract_vector_xyz(&vector_and_hit_descriptor_scratch, &movement_vector_scratch, &hero.motion.pos);
@@ -2539,11 +2539,11 @@ void FUN_L08_002284e0(void) {
     }
     case 0x56: {
         f32 len = vector_length_xy(&hero.motion.velocity);
-        f32 l2 = len;
+        f32 planar_speed_before_damping = len;
         if (hero.air_frames.s != 0) {
-            len = frame_scale * -0.00999999f * l2 + l2;
+            len = frame_scale * -0.00999999f * planar_speed_before_damping + planar_speed_before_damping;
         } else {
-            len = frame_scale * -0.07999998f * l2 + l2;
+            len = frame_scale * -0.07999998f * planar_speed_before_damping + planar_speed_before_damping;
         }
         FUN_L00_001ff600(len, &hero.motion.velocity, &hero.motion.velocity);
         hero.motion.velocity.f[2] = 0.0f;
