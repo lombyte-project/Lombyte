@@ -426,7 +426,7 @@ extern s32 D_L06_00162428 __attribute__((sda));
 /* Draws a screen-space sprite at the moby, grown and faded in by the first data float. */
 void FUN_L06_0030bfa8(char *moby) {
     float *effect_data = *(float **)(moby + 0x78);
-    OvlVec4 pos;
+    OvlVec4 world_position;
     s64 corners[4];
     u32 colors[4];
     s32 uvs[4];
@@ -440,14 +440,14 @@ void FUN_L06_0030bfa8(char *moby) {
     s32 *screen_center;
     float screen_offset;
 
-    qcopy(&pos, moby + 0x10);
+    qcopy(&world_position, moby + 0x10);
     size = effect_data[0];
     if (1.0f < size) size = 1.0f;
     fade = effect_data[0] - 1.0f;
     if (1.0f < fade) fade = 1.0f;
     else if (fade < 0.0f) fade = 0.0f;
     vu1_add_g_sregister(0x47, 0x5380B);
-    project_to_screen(screen, &pos);
+    project_to_screen(screen, &world_position);
     screen_center = D_0013E500;
     raw_x = truncate_float_to_s32(screen[0] - (float)screen_center[4]);
     screen_offset = (float)screen_center[4];
