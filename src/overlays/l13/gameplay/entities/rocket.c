@@ -1561,10 +1561,10 @@ void FUN_L13_00309e88(struct Moby *moby) {
     int i, j, k, tile_index;
     int cr, cg;
 
-    struct Hero *g = &hero;
-    char *ship_moby = ((char *)g->ship_moby);
+    struct Hero *player_hero = &hero;
+    char *ship_moby = ((char *)player_hero->ship_moby);
     if (ship_moby != 0 && *(short *)(ship_moby + 0xA6) == 0x45 && (unsigned char)ship_moby[0x20] != 0xFE &&
-        (unsigned char)ship_moby[0x20] != 0xFD && g->state.current == 0x32)
+        (unsigned char)ship_moby[0x20] != 0xFD && player_hero->state.current == 0x32)
         return;
     bobbing_platform_vars = (Bob_9e88 *)moby->pvars;
     if (bobbing_platform_vars == 0)
@@ -1576,29 +1576,29 @@ void FUN_L13_00309e88(struct Moby *moby) {
         bobbing_platform_vars->angle = bobbing_platform_vars->angle * DEG_TO_RAD;
         bobbing_platform_vars->speed = bobbing_platform_vars->speed * DEG_TO_RAD * rate;
         if (bobbing_platform_vars->idx == 0) {
-            Light_9e88 *l;
+            Light_9e88 *tile_lighting;
             char *tb;
             float light_direction_angle;
             pool_init_tiles(Tiles_9e88, 22);
             pool_set_scale(1.0f);
             moby->update_dist = 0xFF;
-            l = &D_L13_001CAB80;
-            l->f00 = 16.0f;
-            l->f04 = 16.0f;
-            l->f08 = -8.0f;
-            l->f0C = -8.0f;
-            l->f10 = 1.0f;
-            l->f14 = 1.0f;
-            l->f18 = 0.9f;
-            l->f20 = 0.1f;
+            tile_lighting = &D_L13_001CAB80;
+            tile_lighting->f00 = 16.0f;
+            tile_lighting->f04 = 16.0f;
+            tile_lighting->f08 = -8.0f;
+            tile_lighting->f0C = -8.0f;
+            tile_lighting->f10 = 1.0f;
+            tile_lighting->f14 = 1.0f;
+            tile_lighting->f18 = 0.9f;
+            tile_lighting->f20 = 0.1f;
             light_direction_angle = fast_arc_tan(D_L13_001801C0[4], D_L13_001801C0[5]);
-            l->f30 = fast_cos(light_direction_angle) * 0.57735f;
-            l->f34 = fast_sin(light_direction_angle) * 0.57735f;
-            l->f38 = -0.57735f;
-            l->i28 = 0x2D;
-            l->i2C = 0x2E;
-            l->c3C = 0x60;
-            l->c3D = 0x40;
+            tile_lighting->f30 = fast_cos(light_direction_angle) * 0.57735f;
+            tile_lighting->f34 = fast_sin(light_direction_angle) * 0.57735f;
+            tile_lighting->f38 = -0.57735f;
+            tile_lighting->i28 = 0x2D;
+            tile_lighting->i2C = 0x2E;
+            tile_lighting->c3C = 0x60;
+            tile_lighting->c3D = 0x40;
             tb = D_L13_001F1E80;
             D_L13_001612D8 = 22;
             D_L13_0016120C = 32768.0f;
