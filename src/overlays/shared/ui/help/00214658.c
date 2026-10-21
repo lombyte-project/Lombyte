@@ -954,7 +954,7 @@ void FUN_L00_00217118(float velocity_scale, float planar_length_threshold) {
     unsigned char *P = (&hero.motion.velocity);
     unsigned char *G;
     unsigned char *Q;
-    float k, r;
+    float k, final_call_enabled;
     unsigned char *collision_hit_data;
     if (gravity_length_xy(P) == 0.0f)
         return;
@@ -984,13 +984,13 @@ void FUN_L00_00217118(float velocity_scale, float planar_length_threshold) {
     if (P[0x20A4] == 2)
         k = -0.7f;
     FUN_L00_00233810_217118(collision_query_second_position, collision_query_second_position, k);
-    r = 1.0f;
+    final_call_enabled = 1.0f;
     if (FUN_L00_001efc70_217118(collision_query_position, collision_query_second_position, 4, *(void **)(P + 0x2080), 0)) {
         collision_hit_data = coll_hit;
         if (*(int *)(collision_hit_data + 0x1C) > 0 && FUN_L00_00233d30_217118(collision_hit_data + 0x40) <= 0.87266463f)
-            r = 0.0f;
+            final_call_enabled = 0.0f;
     }
-    if (r != 0.0f)
+    if (final_call_enabled != 0.0f)
         FUN_L00_00213de8_217118(0.0f);
 }
 /* Initialise the pool once, then for each of the first n entries of type 5 or 9 halve and apply its position. */
