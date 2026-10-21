@@ -1317,10 +1317,10 @@ extern float D_L14_001DFFE0[];
 /* Lightning arc between the two camera points: builds the bolt and its three branches once, then ages and fades them. */
 void FUN_L14_002ed530(char *moby) {
     Vec4 delta;
-    float len;
+    float arc_endpoint_distance;
     float path_fraction;
     float sign;
-    float ang;
+    float branch_segment_angle;
     float r;
     int i;
     int j;
@@ -1337,8 +1337,8 @@ void FUN_L14_002ed530(char *moby) {
         starts = D_L14_00161CF8_macro;
         *(int *)&D_L14_00161C6C = 0;
         arc_sub(&delta, D_L14_00161CD0_d530, D_L14_00161CC0);
-        len = arc_length(&delta);
-        D_L14_00161C74 = len / arc_itof(40);
+        arc_endpoint_distance = arc_length(&delta);
+        D_L14_00161C74 = arc_endpoint_distance / arc_itof(40);
         D_L14_00161CE0_d530 = 0;
         for (; i < 40; i++) {
             main_arc_age = &D_L14_001E0000[i];
@@ -1374,22 +1374,22 @@ void FUN_L14_002ed530(char *moby) {
             row[0][0] = 0.0f;
             row[0][2] = 0.0f;
             r = arc_random(1.0f, 10.0f);
-            ang = arc_random(0.5235988f, 1.3962634f) * sign;
-            row[0][0] = r * arc_cos(ang);
-            row[0][2] = r * arc_sin(ang);
+            branch_segment_angle = arc_random(0.5235988f, 1.3962634f) * sign;
+            row[0][0] = r * arc_cos(branch_segment_angle);
+            row[0][2] = r * arc_sin(branch_segment_angle);
             for (branch_point_index = 1; branch_point_index < 16; branch_point_index++) {
                 float angle_step;
                 float na;
                 r = arc_random(1.0f, 10.0f);
                 angle_step = FUN_L00_00257c48(0.0f, 40.0f) * 0.017453292f;
-                na = arc_add_rot(ang, angle_step);
-                if (arc_fabs(na) > 1.3962634f || (ang > 0.0f && na < 0.0f) || (ang < 0.0f && na > 0.0f)) {
-                    ang = arc_add_rot(ang, -angle_step);
+                na = arc_add_rot(branch_segment_angle, angle_step);
+                if (arc_fabs(na) > 1.3962634f || (branch_segment_angle > 0.0f && na < 0.0f) || (branch_segment_angle < 0.0f && na > 0.0f)) {
+                    branch_segment_angle = arc_add_rot(branch_segment_angle, -angle_step);
                 } else {
-                    ang = na;
+                    branch_segment_angle = na;
                 }
-                D_L14_001E0050_d530[j][branch_point_index][0] = r * arc_cos(ang);
-                D_L14_001E0050_d530[j][branch_point_index][2] = r * arc_sin(ang);
+                D_L14_001E0050_d530[j][branch_point_index][0] = r * arc_cos(branch_segment_angle);
+                D_L14_001E0050_d530[j][branch_point_index][2] = r * arc_sin(branch_segment_angle);
                 D_L14_001E0350_d530[j][branch_point_index] = D_L14_001E0000[starts[j] + branch_point_index];
             }
             sign = -sign;
