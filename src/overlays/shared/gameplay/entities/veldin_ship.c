@@ -3403,8 +3403,8 @@ void particle_spawner_smoke_fire_update(P *spawner) {
         PARTICLE_SPAWNER_ACTIVE = 1
     };
     Q *q = spawner->q;
-    u8 *tbl;
-    V v, particle_vector, b;
+    u8 *emitter_transform;
+    V culling_sphere, particle_vector, b;
     float g, sampled_particle_scalar;
     int i, j, particle_start, particle_end_or_emission_index, col, r;
     E *ent;
@@ -3448,11 +3448,11 @@ void particle_spawner_smoke_fire_update(P *spawner) {
         q->col = q->c2 << 16 | q->c1 << 8 | q->c0;
         return;
     case PARTICLE_SPAWNER_ACTIVE:
-        tbl = (u8 *)&D_L00_001600EC[q->idx];
-        qcopy(&v, tbl + 0x30);
-        v.z += 9.0f;
-        v.w = 10.0f;
-        if (fast_bsphere_check(&v, D_L00_001619E0) < 0)
+        emitter_transform = (u8 *)&D_L00_001600EC[q->idx];
+        qcopy(&culling_sphere, emitter_transform + 0x30);
+        culling_sphere.z += 9.0f;
+        culling_sphere.w = 10.0f;
+        if (fast_bsphere_check(&culling_sphere, D_L00_001619E0) < 0)
             return;
         if (q->flag42 && vector_distance(&D_L00_00166DC0, &spawner->pos) < 128.0f) {
             for (particle_end_or_emission_index = 0; particle_end_or_emission_index < D_L00_001619BC; particle_end_or_emission_index++) {
@@ -3460,7 +3460,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
                 particle_vector.y = FUN_L00_00257c48(0.0f, 1.0f);
                 particle_vector.z = 1.0f;
                 particle_vector.w = 1.0f;
-                FUN_001f9d20(&b, &particle_vector, tbl);
+                FUN_001f9d20(&b, &particle_vector, emitter_transform);
                 b.z += 0.5f;
                 particle_vector.x = FUN_L00_00257c48(0.0f, frame_time * 0.25f);
                 particle_vector.y = FUN_L00_00257c48(0.0f, frame_time * 0.25f);
