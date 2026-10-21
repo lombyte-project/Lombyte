@@ -9,7 +9,7 @@ void init_view_context(void) __asm__("FUN_001f2c60");
 
 void init_view_context(void) {
     struct FsAaBuf *fs_aa_buf = &fs_aa_buffer;
-    struct View *v = &view_context;
+    struct View *view = &view_context;
     s32 hw;
     s32 hh;
 
@@ -23,17 +23,17 @@ void init_view_context(void) {
     screen_extent.top = (0x800 - hh) << 4;
     screen_extent.right = (hw + 0x800) << 4;
     screen_extent.bottom = (hh + 0x800) << 4;
-    v->near_clip = 32.0f;
-    v->far_clip = 745472.0f;
-    v->fov.f[0] = 0.63f;
-    v->half_width = convert_integer_to_float(fs_aa_buf->display_width) * 0.5f;
-    v->half_height = convert_integer_to_float(fs_aa_buf->display_height) * 0.5f;
-    v->scr_x = v->half_width * 4.0f;
-    v->scr_y = v->half_height * 4.0f;
-    v->fog_far_dist = 524288.0f;
-    v->fog_near_int = 255.0f;
-    v->fog_near_dist = 0;
-    v->fog_far_int = 0;
+    view->near_clip = 32.0f;
+    view->far_clip = 745472.0f;
+    view->fov.f[0] = 0.63f;
+    view->half_width = convert_integer_to_float(fs_aa_buf->display_width) * 0.5f;
+    view->half_height = convert_integer_to_float(fs_aa_buf->display_height) * 0.5f;
+    view->scr_x = view->half_width * 4.0f;
+    view->scr_y = view->half_height * 4.0f;
+    view->fog_far_dist = 524288.0f;
+    view->fog_near_int = 255.0f;
+    view->fog_near_dist = 0;
+    view->fog_far_int = 0;
 }
 
 extern __typeof__(init_view_context) func_001F2C60 __attribute__((alias("FUN_001f2c60")));
