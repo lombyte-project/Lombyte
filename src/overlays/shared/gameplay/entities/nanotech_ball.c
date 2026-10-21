@@ -1031,14 +1031,14 @@ extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 
 /* Composes the 0xC0 matrix of a with the one built from c into b+0xC0 and flags b for update. */
-void FUN_L00_002d9fd0(char *source_moby, char *b, void *euler_angles) {
+void FUN_L00_002d9fd0(char *source_moby, char *destination_moby, void *euler_angles) {
     V euler_rotation, source_rotation, composed_rotation;
     euler_rotation_matrix(&euler_rotation, euler_angles);
     copy_matrix_rotation(&source_rotation, source_moby + 0xC0);
     multiply_matrix(&composed_rotation, &source_rotation, &euler_rotation);
-    copy_matrix3x4(b + 0xC0, &composed_rotation);
-    *(unsigned short *)(b + 0x34) |= 4;
-    refresh_moby_spatial_bounds_from_basis(b);
+    copy_matrix3x4(destination_moby + 0xC0, &composed_rotation);
+    *(unsigned short *)(destination_moby + 0x34) |= 4;
+    refresh_moby_spatial_bounds_from_basis(destination_moby);
 }
 
 #define NOT_SDA
