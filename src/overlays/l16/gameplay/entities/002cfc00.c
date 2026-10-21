@@ -22,20 +22,20 @@ extern void subtract_vector_xyz(void *, void *, void *);
 /* Same routine as FUN_L05_00307010, with this level's data offsets. */
 void FUN_L16_002cfc00(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    struct Hero *g = &hero;
+    struct Hero *hero_state = &hero;
     float displacement_vector[4];
     char *l1;
     char *l2;
     char *other;
     char *od;
 
-    if (g->unk894 < scale_game_frames(0xB4)) {
+    if (hero_state->unk894 < scale_game_frames(0xB4)) {
         return;
     }
     if (!tick_countdown_32((int *)(data + 0x2DC))) {
         return;
     }
-    other = ((char *)g->unk86C);
+    other = ((char *)hero_state->unk86C);
     if (!other) {
         return;
     }
