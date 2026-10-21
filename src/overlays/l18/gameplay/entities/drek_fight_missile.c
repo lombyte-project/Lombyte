@@ -73,11 +73,11 @@ void drek_fight_missile_update(struct Moby *moby) {
     switch (moby->state) {
     case DREK_MISSILE_INITIALIZE: {
         float wander_acceleration_scale = D_0015ED6C_a[1];
-        float b = frame_time;
+        float initialization_frame_time = frame_time;
         *(float *)(missile_vars + 0x158) = wander_acceleration_scale * 10.0f;
-        *(float *)(missile_vars + 0x154) = b * 12.566371f;
+        *(float *)(missile_vars + 0x154) = initialization_frame_time * 12.566371f;
         *(float *)(missile_vars + 0x150) = wander_acceleration_scale * 3.1415927f;
-        *(float *)(missile_vars + 0x15C) = b * 10.0f;
+        *(float *)(missile_vars + 0x15C) = initialization_frame_time * 10.0f;
         *(float *)(missile_vars + 0x168) = random_angle_radians();
         moby->draw_dist = 0xFF;
         qcopy(missile_vars + 0x120, &moby->pos);
@@ -107,19 +107,19 @@ void drek_fight_missile_update(struct Moby *moby) {
         break;
     }
     case DREK_MISSILE_DIVE: {
-        float v[4];
-        float w[4];
-        subtract_vector_xyz(v, missile_vars + 0x120, &moby->pos);
-        normalize_vector_xyz(v, v, *(float *)&D_L18_00162218 * frame_time);
+        float dive_movement_step[4];
+        float ground_check_position[4];
+        subtract_vector_xyz(dive_movement_step, missile_vars + 0x120, &moby->pos);
+        normalize_vector_xyz(dive_movement_step, dive_movement_step, *(float *)&D_L18_00162218 * frame_time);
         approach_value_alt((float *)(missile_vars + 0x14C), 1.0f, frame_time);
-        lerp_vector(v, missile_vars + 0x130, v, *(float *)(missile_vars + 0x14C));
-        add_vector_xyz(&moby->pos, &moby->pos, v);
-        moby->rot.z = fast_arc_tan(v[0], v[1]);
-        moby->rot.y = -fast_arc_tan(vector_length_xy(v), v[2]);
-        normalize_vector_xyz(w, &moby->rot_row0, 1.0f);
-        add_vector_xyz(w, w, &moby->pos);
+        lerp_vector(dive_movement_step, missile_vars + 0x130, dive_movement_step, *(float *)(missile_vars + 0x14C));
+        add_vector_xyz(&moby->pos, &moby->pos, dive_movement_step);
+        moby->rot.z = fast_arc_tan(dive_movement_step[0], dive_movement_step[1]);
+        moby->rot.y = -fast_arc_tan(vector_length_xy(dive_movement_step), dive_movement_step[2]);
+        normalize_vector_xyz(ground_check_position, &moby->rot_row0, 1.0f);
+        add_vector_xyz(ground_check_position, ground_check_position, &moby->pos);
         FUN_L18_002f0848(moby);
-        if (w[2] < *(float *)(missile_vars + 0x128)) {
+        if (ground_check_position[2] < *(float *)(missile_vars + 0x128)) {
             float minimum_missile_height;
             func_0022ED80_2F0F78(1, 0, (int)moby);
             moby->state = 4;
