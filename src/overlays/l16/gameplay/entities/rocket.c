@@ -98,7 +98,7 @@ void FUN_L16_002c9568(struct Moby *moby) {
     float *random_value_cursor = (float *)data;
     int *frame_count_cursor;
     int i;
-    int arg;
+    int unscaled_frame_count;
     for (i = 3; i >= 0; i--, random_value_cursor++) {
         *random_value_cursor = (float)random_integer_below(0xFF);
     }
@@ -107,10 +107,10 @@ void FUN_L16_002c9568(struct Moby *moby) {
     *(float *)(data + 0x14) = -2.25f;
     *(float *)(data + 0x18) = 1.25f;
     *(float *)(data + 0x1C) = 2.5f;
-    arg = 0x3F;
+    unscaled_frame_count = 0x3F;
     for (i = 3; i >= 0; i--, frame_count_cursor++) {
-        *frame_count_cursor = scale_game_frames(arg);
-        arg += 0x40;
+        *frame_count_cursor = scale_game_frames(unscaled_frame_count);
+        unscaled_frame_count += 0x40;
     }
     *(float *)(data + 0x30) = 3.5f;
     *(float *)(data + 0x34) = 4.2f;
