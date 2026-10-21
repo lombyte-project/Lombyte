@@ -481,7 +481,7 @@ void FUN_L06_002feb40(char *moby) {
     char *hit_record;
     char *fragment;
     int *route_record;
-    int r;
+    int hit_response_index;
     int k;
     int bits;
     float vv[4];
@@ -501,7 +501,7 @@ void FUN_L06_002feb40(char *moby) {
     tick_countdown_32_alt((s32 *)(vars + 0x188));
     *(int *)&dt = 0;
     hit_record = FUN_L00_0025a420(moby, 0x330000, 0);
-    r = fun_00213928(moby, hit_record, vars + 0x20, 0, &hit, &dt, 0, 4);
+    hit_response_index = fun_00213928(moby, hit_record, vars + 0x20, 0, &hit, &dt, 0, 4);
     if (hit != 1 && (unsigned char)moby[0x20] != 0x10) {
         if (current_level_index_gp == 0xA && hit_record != 0 && *(char **)(hit_record + 0x20) != 0 &&
             *(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0x31A && D_0013D408[0x11] == 0) {
@@ -511,10 +511,10 @@ void FUN_L06_002feb40(char *moby) {
         }
         remaining_health = *(float *)(vars + 0x20) - dt;
         *(float *)(vars + 0x20) = remaining_health;
-        if (remaining_health <= 0.0f) r = 1;
+        if (remaining_health <= 0.0f) hit_response_index = 1;
         *(int *)(vars + 0x80) = 0x1F4;
         *(float *)(vars + 0x88) = 0.5f;
-        switch (r) {
+        switch (hit_response_index) {
         case NONFATAL_KNOCKBACK_HIT_RESPONSE:
         case TIMED_NONFATAL_KNOCKBACK_HIT_RESPONSE:
         case RECOVERABLE_KNOCKBACK_HIT_RESPONSE:
