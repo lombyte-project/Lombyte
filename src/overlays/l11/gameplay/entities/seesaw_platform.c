@@ -3030,19 +3030,19 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 void FUN_L11_00313f60(struct Moby *moby, float *horizontal_steering_input, float *vertical_steering_input) {
     char *ship_vars = (char *)moby->pvars;
     float predicted_position_scratch[4];
-    float zz, dist, boundary_radius, hi, lo, boundary_center_heading, upper_altitude_limit, k, radial_steering_blend_weight, heading_difference;
+    float zz, predicted_boundary_distance_xy, boundary_radius, hi, lo, boundary_center_heading, upper_altitude_limit, k, radial_steering_blend_weight, heading_difference;
     scale_vector_xyz(predicted_position_scratch, ship_vars + 0x10, *(float *)(ship_vars + 0x64) * (float)scale_game_frames(0x3C));
     add_vector_xyz(predicted_position_scratch, predicted_position_scratch, &moby->pos);
     zz = predicted_position_scratch[2];
     subtract_vector_xyz(predicted_position_scratch, predicted_position_scratch, (*(int *)(ship_vars + 0x104) << 7) + D_L11_001600EC + 0x30);
-    dist = vector_length_xy(predicted_position_scratch);
+    predicted_boundary_distance_xy = vector_length_xy(predicted_position_scratch);
     boundary_radius = vector_length_xy((*(int *)(ship_vars + 0x104) << 7) + D_L11_001600EC);
     hi = *(float *)(D_L17_001600EC_t[*(int *)(ship_vars + 0x104)] + 0x28);
     lo = *(float *)(D_L17_001600EC_t[*(int *)(ship_vars + 0x104)] + 0x38);
     upper_altitude_limit = hi + lo;
     boundary_center_heading = fast_add_rotations(fast_arc_tan(predicted_position_scratch[0], predicted_position_scratch[1]), 3.141590118408203f);
-    if (boundary_radius - 10.0f < dist) {
-        radial_steering_blend_weight = (dist - boundary_radius + 10.0f) / 10.0f;
+    if (boundary_radius - 10.0f < predicted_boundary_distance_xy) {
+        radial_steering_blend_weight = (predicted_boundary_distance_xy - boundary_radius + 10.0f) / 10.0f;
         heading_difference = fast_subtract_rotations(boundary_center_heading, *(float *)(ship_vars + 0x38));
         if (radial_steering_blend_weight > 1.0f)
             radial_steering_blend_weight = 1.0f;
