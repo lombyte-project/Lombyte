@@ -40,23 +40,23 @@ extern float FUN_001f9988_2c1928(float) __asm__("FUN_001f9988");
 extern float FUN_001f9dc8_2c1928(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2c1928(float) __asm__("FUN_001f9de0");
 
-void FUN_L00_002c1928(float *origin_position, OvlQuad *target_position, float *out, float gravity, float b, float max_range) {
-    OvlQuad v[1];
+void FUN_L00_002c1928(float *origin_position, OvlQuad *target_position, float *out, float gravity, float min_horizontal_distance, float max_range) {
+    OvlQuad effective_target_position[1];
     float half = gravity * max_range * 0.5f;
     float effective_horizontal_distance, dz, ang, launch_component_speed_squared, launch_component_speed;
 
     if (max_range < FUN_001f9b48_2c1928(origin_position, target_position)) {
-        FUN_001f9a28_2c1928(v, target_position, origin_position);
-        FUN_001f9bf8_2c1928(v, v, max_range - 0.01f);
-        FUN_001f9a10_2c1928(v, v, origin_position);
+        FUN_001f9a28_2c1928(effective_target_position, target_position, origin_position);
+        FUN_001f9bf8_2c1928(effective_target_position, effective_target_position, max_range - 0.01f);
+        FUN_001f9a10_2c1928(effective_target_position, effective_target_position, origin_position);
     } else {
-        v[0] = *target_position;
+        effective_target_position[0] = *target_position;
     }
-    effective_horizontal_distance = FUN_001f9b80_2c1928(origin_position, v);
-    dz = ((float *)v)[2] - origin_position[2];
-    ang = FUN_001f9e90_2c1928(((float *)v)[0] - origin_position[0], ((float *)v)[1] - origin_position[1]);
-    if (effective_horizontal_distance < b)
-        effective_horizontal_distance = b;
+    effective_horizontal_distance = FUN_001f9b80_2c1928(origin_position, effective_target_position);
+    dz = ((float *)effective_target_position)[2] - origin_position[2];
+    ang = FUN_001f9e90_2c1928(((float *)effective_target_position)[0] - origin_position[0], ((float *)effective_target_position)[1] - origin_position[1]);
+    if (effective_horizontal_distance < min_horizontal_distance)
+        effective_horizontal_distance = min_horizontal_distance;
     if (effective_horizontal_distance <= dz)
         dz = effective_horizontal_distance - 0.01f;
     launch_component_speed_squared = gravity * effective_horizontal_distance * effective_horizontal_distance / ((effective_horizontal_distance - dz) + (effective_horizontal_distance - dz));
