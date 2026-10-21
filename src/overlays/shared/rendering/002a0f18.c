@@ -9,13 +9,13 @@ void wait_for_graphics_pipeline_idle(int, int) __asm__("FUN_00120558");
 void FUN_L00_002a0f18(int dst, int src, int size) {
     char buf[0x70] __attribute__((aligned(16)));
     int left = (size + 0x3FFF) & ~0x3FFF;
-    int off = 0;
+    int transfer_byte_offset = 0;
     while (left > 0) {
-        FUN_00122518(buf, (src + off) >> 8, 1, 0, 0, 0, 0x40, 0x40);
+        FUN_00122518(buf, (src + transfer_byte_offset) >> 8, 1, 0, 0, 0, 0x40, 0x40);
         left -= 0x4000;
         flush_cache(0);
-        FUN_001227d8(buf, dst + off);
-        off += 0x4000;
+        FUN_001227d8(buf, dst + transfer_byte_offset);
+        transfer_byte_offset += 0x4000;
         wait_for_graphics_pipeline_idle(0, 0);
     }
 }
