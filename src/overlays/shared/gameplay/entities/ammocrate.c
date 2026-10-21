@@ -165,7 +165,7 @@ void ammocrate_update(char *moby) {
     float position[4];
     float direction[4];
     float start_size, activated_size;
-    short cls;
+    short moby_class;
     float speed;
     switch ((unsigned char)moby[0x20]) {
     case SHIP_PICKUP_INITIALIZE:
@@ -221,20 +221,20 @@ void ammocrate_update(char *moby) {
         moby_point_position_1cc8(moby, 0, position);
         *(float *)(moby + 0x2c) += (*(float *)(*(char **)(moby + 0x24) + 0x24) - *(float *)(moby + 0x2c)) * 0.1f;
         if (coll_sphere_1cc8(2.0f, position, 1, moby) && D_L13_00174158_1cc8 != 0) {
-            short cls = *(short *)(D_L13_00174158_1cc8 + 0xa6);
-            if (cls == 0x4da || cls == 0x45 || cls == 0x563) hit = 1;
+            short moby_class = *(short *)(D_L13_00174158_1cc8 + 0xa6);
+            if (moby_class == 0x4da || moby_class == 0x45 || moby_class == 0x563) hit = 1;
         }
         if (hero.state.current == 0x32 && hero_moby != 0 &&
             *(unsigned char *)(hero_moby + 0x20) != 0xfe && *(unsigned char *)(hero_moby + 0x20) != 0xfd) {
-            short cls = *(short *)(hero_moby + 0xa6);
-            if (cls == 0x4da || cls == 0x45 || cls == 0x563)
+            short moby_class = *(short *)(hero_moby + 0xa6);
+            if (moby_class == 0x4da || moby_class == 0x45 || moby_class == 0x563)
                 distance = vec_distance_1cc8((void *)(hero_moby + 0x10), moby + 0x10);
         }
         if (hit || distance < 4.0f) {
-            cls = *(short *)(moby + 0xa6);
+            moby_class = *(short *)(moby + 0xa6);
             *(int *)(moby + 0x94) = 0;
-            if (cls == 0xe0) goto collect_ammo;
-            if (cls == 0xe4) goto collect_health;
+            if (moby_class == 0xe0) goto collect_ammo;
+            if (moby_class == 0xe4) goto collect_health;
             goto collected;
 collect_ammo:
             hero.ship_ammo += 5;
