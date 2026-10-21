@@ -412,8 +412,8 @@ int FUN_L00_0025aca0_263e30(void *, int, void *, int, float) __asm__("FUN_L00_00
 void FUN_001f99f8_263e30(void *) __asm__("FUN_001f99f8");
 float FUN_00213308_263e30(void) __asm__("FUN_00213308");
 int FUN_00213260_263e30(int) __asm__("FUN_00213260");
-void FUN_L00_00263e30(unsigned char *source_moby, int first_fragment_class, int cnt, int base, int range, int cnt2, int flag) {
-    u128_263e30 buf[16];
+void FUN_L00_00263e30(unsigned char *source_moby, int first_fragment_class, int consecutive_class_fragment_count, int base, int range, int random_class_fragment_limit, int flag) {
+    u128_263e30 fragment_spawn_positions[16];
     float v[4] __attribute__((aligned(16)));
     int mode = 0;
     int i, k;
@@ -421,22 +421,22 @@ void FUN_L00_00263e30(unsigned char *source_moby, int first_fragment_class, int 
         mode = 2;
     }
     if (first_fragment_class > 0) {
-        if (cnt > 0)
-            for (i = 0; i < cnt; i++) {
+        if (consecutive_class_fragment_count > 0)
+            for (i = 0; i < consecutive_class_fragment_count; i++) {
                 FUN_L00_00263fd8_263e30(source_moby, first_fragment_class + i, source_moby + 0x10, source_moby + 0x40, 0, mode,
                                         D_L00_0015F580_263e30, D_L00_0015F580_263e30, 0.0f,
                                         D_L00_0015F580_263e30);
             }
     }
     if (first_fragment_class > 0 && range > 0) {
-        k = FUN_L00_0025aca0_263e30(source_moby, cnt2, buf, 0xFFFF, 1000.0f);
+        k = FUN_L00_0025aca0_263e30(source_moby, random_class_fragment_limit, fragment_spawn_positions, 0xFFFF, 1000.0f);
         if (k) {
-            for (i = 0; i < cnt2 && i < k; i++) {
+            for (i = 0; i < random_class_fragment_limit && i < k; i++) {
                 FUN_001f99f8_263e30(v);
                 v[0] = FUN_00213308_263e30();
                 v[1] = FUN_00213308_263e30();
                 v[2] = FUN_00213308_263e30();
-                FUN_L00_00263fd8_263e30(source_moby, base + FUN_00213260_263e30(range), &buf[i], v, 0, mode,
+                FUN_L00_00263fd8_263e30(source_moby, base + FUN_00213260_263e30(range), &fragment_spawn_positions[i], v, 0, mode,
                                         D_L00_0015F580_263e30, D_L00_0015F580_263e30, 0.0f,
                                         D_L00_0015F580_263e30);
             }
