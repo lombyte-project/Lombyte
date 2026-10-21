@@ -2716,12 +2716,12 @@ void FUN_L00_0026f660(char *particle) {
         }
         qcopy(particle_position, &next_position);
     } else if (mode == 3) {
-        float lim;
+        float water_surface_z;
         particle_position = particle + 0x10;
         fast_vec_add(particle_position, particle_position, particle_data);
-        lim = hero.water_surface_z;
-        if (*(float *)(particle + 0x18) < lim) {
-            *(float *)(particle + 0x18) = lim;
+        water_surface_z = hero.water_surface_z;
+        if (*(float *)(particle + 0x18) < water_surface_z) {
+            *(float *)(particle + 0x18) = water_surface_z;
             FUN_L00_002715e8(particle_position, 0, -1, 0.2f, 5250.0f);
             free_effect_particle(particle);
             return;
