@@ -1786,7 +1786,7 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 /* Draws a map icon for a moby relative to the hero, mirrored when the view is flipped. */
-void FUN_L11_00311710(char *rot, char *from, char *moby, int icon, long color) {
+void FUN_L11_00311710(char *radar_reference_rotation, char *from, char *moby, int icon, long color) {
     float turn[4];
     float radar_rotation_matrix[16];
     float delta[4];
@@ -1797,9 +1797,9 @@ void FUN_L11_00311710(char *rot, char *from, char *moby, int icon, long color) {
     IconEC5D0 *icon_definition;
 
     qzero(turn);
-    turn[2] = *(float *)(rot + 8);
-    if (*(float *)(rot + 4) > 1.5707964f || *(float *)(rot + 4) < -1.5707964f) {
-        turn[2] = -*(float *)(rot + 8);
+    turn[2] = *(float *)(radar_reference_rotation + 8);
+    if (*(float *)(radar_reference_rotation + 4) > 1.5707964f || *(float *)(radar_reference_rotation + 4) < -1.5707964f) {
+        turn[2] = -*(float *)(radar_reference_rotation + 8);
     }
     turn[2] = fast_subtract_rotations(1.5707964f, turn[2]);
     euler_rotation_matrix(radar_rotation_matrix, turn);
