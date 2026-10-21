@@ -1375,11 +1375,11 @@ extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 void normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 
-void FUN_L00_0020f160(char *arg, u8 *entry) {
+void FUN_L00_0020f160(char *rotation_output_moby, u8 *entry) {
     V4_F7F8 vv[4];
     float fa[16];
     int ri;
-    int cnt;
+    int above_threshold_sample_count;
     float *sums;
     char *out;
     int history_window_size, i, k, acc;
@@ -1432,8 +1432,8 @@ void FUN_L00_0020f160(char *arg, u8 *entry) {
     }
     }
 
-    out = arg + 0x40;
-    cnt = 0;
+    out = rotation_output_moby + 0x40;
+    above_threshold_sample_count = 0;
 
     for (i = 0; i < history_window_size; i++) {
         char *b = ((char *)((char *)&hero_lui));
@@ -1462,13 +1462,13 @@ void FUN_L00_0020f160(char *arg, u8 *entry) {
 
     for (i = 0; i < history_window_size; i++) {
         if (mx * 0.2f < fa[i]) {
-            cnt++;
+            above_threshold_sample_count++;
         }
     }
 
     acc = 0;
     for (i = 0; i < history_window_size; i++) {
-        if (mx * 0.2f < fa[i] && cnt > 0 && cnt < 3) {
+        if (mx * 0.2f < fa[i] && above_threshold_sample_count > 0 && above_threshold_sample_count < 3) {
             continue;
         }
         acc++;
