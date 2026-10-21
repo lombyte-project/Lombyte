@@ -322,22 +322,22 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
 void FUN_L05_00329358(char *moby) {
-    float v[4];
+    float hero_focus_offset[4];
     char *orbit = *(char **)(moby + 0x70);
     float *focus_position = (float *)(orbit + 0x80);
-    *(OvlQuad *)v = 0;
-    v[2] = 0.7f;
-    transform_vector(v, v, &hero);
-    add_vector_xyz(focus_position, &hero.motion.pos, v);
+    *(OvlQuad *)hero_focus_offset = 0;
+    hero_focus_offset[2] = 0.7f;
+    transform_vector(hero_focus_offset, hero_focus_offset, &hero);
+    add_vector_xyz(focus_position, &hero.motion.pos, hero_focus_offset);
     qcopy(orbit + 0x1D0, focus_position);
     if (current_level_index == 5) {
-        float w[4];
-        *(OvlQuad *)w = 0;
-        w[0] = 286.16f;
-        w[1] = 447.82f;
-        w[2] = 63.37f;
-        w[3] = 1.0f;
-        if (vector_distance(w, focus_position) < 48.0f) {
+        float height_reference_position[4];
+        *(OvlQuad *)height_reference_position = 0;
+        height_reference_position[0] = 286.16f;
+        height_reference_position[1] = 447.82f;
+        height_reference_position[2] = 63.37f;
+        height_reference_position[3] = 1.0f;
+        if (vector_distance(height_reference_position, focus_position) < 48.0f) {
             if (focus_position[2] < 62.4f) {
                 focus_position[2] = 62.4f;
             }
