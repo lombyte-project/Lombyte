@@ -874,13 +874,13 @@ s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 extern short D_L15_00162198 __attribute__((sda));
 int D_L15_0016219C = 3;
 void FUN_L15_002eb928(struct Moby *moby) {
-    float vec[4];
+    float vertical_motion_vector[4];
     float *data = (float *)moby->pvars;
     if (random_integer_below(D_L15_0016219C - 1) == 0) {
         char *pos = &moby->pos;
-        clear_u64_value(vec);
-        vec[2] = random_float_between(0.75f, 1.5f) * *(float *)&D_L15_00162198 * frame_time;
-        FUN_L00_0026f080(random_float_between(0.06f, 0.12f) * 210000.0f, *data, pos, vec);
+        clear_u64_value(vertical_motion_vector);
+        vertical_motion_vector[2] = random_float_between(0.75f, 1.5f) * *(float *)&D_L15_00162198 * frame_time;
+        FUN_L00_0026f080(random_float_between(0.06f, 0.12f) * 210000.0f, *data, pos, vertical_motion_vector);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECDD0), where it is exact; names translated to the US level program. */
