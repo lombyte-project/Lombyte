@@ -585,9 +585,9 @@ void big_axebot_update(M_B7B0 *moby) {
     V4_B7B0 vector_quaternion_scratch;
     int flag = 0;
     float rot;
-    char *tgt;
-    float dist;
-    float ang;
+    char *target_moby;
+    float target_distance;
+    float target_yaw;
     float hd;
 
     if (data->f38 != 0 || data->f406 != 0) {
@@ -601,10 +601,10 @@ void big_axebot_update(M_B7B0 *moby) {
         }
     }
     FUN_L00_0025fcb8((char *)moby, (float *)&tg, flag ? data->f43C * 2.0f : data->f43C);
-    tgt = tg.f40;
+    target_moby = tg.f40;
     rot = moby->rot[2];
-    dist = vector_distance(moby->pos, (float *)&tg);
-    ang = fast_arc_tan(tg.pos[0] - moby->pos[0], tg.pos[1] - moby->pos[1]);
+    target_distance = vector_distance(moby->pos, (float *)&tg);
+    target_yaw = fast_arc_tan(tg.pos[0] - moby->pos[0], tg.pos[1] - moby->pos[1]);
     hd = compute_interpolated_record_value(moby);
     if (D_L04_0015F5C4 == 2) {
         moby->f34 |= 0x41;
@@ -632,7 +632,7 @@ void big_axebot_update(M_B7B0 *moby) {
         float dmg;
         Hit_B7B0 *hit;
         int hit_reaction_result;
-        float ang2;
+        float knockback_yaw;
 
         dmg = 0.0f;
         hit = (Hit_B7B0 *)find_moby_hit(moby, 0x210000, 0);
@@ -641,14 +641,14 @@ void big_axebot_update(M_B7B0 *moby) {
             if (hit->att != 0) {
                 struct Hero *h = &hero;
                 if (hit->att != h->items[0].moby) {
-                    ang2 = fast_arc_tan(moby->pos[0] - hit->att->pos[0],
+                    knockback_yaw = fast_arc_tan(moby->pos[0] - hit->att->pos[0],
                                         moby->pos[1] - hit->att->pos[1]);
                 } else {
-                    ang2 = fast_arc_tan(moby->pos[0] - h->motion.pos.f[0], moby->pos[1] - h->motion.pos.f[1]);
+                    knockback_yaw = fast_arc_tan(moby->pos[0] - h->motion.pos.f[0], moby->pos[1] - h->motion.pos.f[1]);
                 }
             } else {
                 struct Hero *h = &hero;
-                ang2 = fast_arc_tan(moby->pos[0] - h->motion.pos.f[0], moby->pos[1] - h->motion.pos.f[1]);
+                knockback_yaw = fast_arc_tan(moby->pos[0] - h->motion.pos.f[0], moby->pos[1] - h->motion.pos.f[1]);
             }
             data->fD4 = frame_time_sq * 12.0f;
             data->fD0 = frame_time_sq * 35.0f;
@@ -701,7 +701,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     FUN_L04_002ba3e0((char *)moby, (void *)5, 0, (void *)scale_game_frames(6));
                     FUN_L04_002ba448_c(moby, 2.0f);
                     moby->state = 8;
-                    trooper_start_knockback(ang2, moby, data->fC0, 5, 1, 0);
+                    trooper_start_knockback(knockback_yaw, moby, data->fC0, 5, 1, 0);
                     data->f110 = 5.0f;
                     data->f114 = 10.0f;
                     data->f42C = 3.4f / multiply_global_factor_ed64(7.0f);
@@ -728,8 +728,8 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->fE0 = 0x400;
                     trooper_set_knockback(data->fC0, 5.7f, 4.0f);
                     *(OvlQuad *)vector_quaternion_scratch = *(OvlQuad *)hit->pos;
-                    trooper_knockback_arc(vector_quaternion_scratch, &ang2, &data->fD8, &data->fDC);
-                    trooper_start_knockback(ang2, moby, data->fC0, 7, 1, 0);
+                    trooper_knockback_arc(vector_quaternion_scratch, &knockback_yaw, &data->fD8, &data->fDC);
+                    trooper_start_knockback(knockback_yaw, moby, data->fC0, 7, 1, 0);
                     data->f110 = 12.0f;
                     data->f114 = 25.0f;
                     moby->state = 10;
@@ -791,7 +791,7 @@ void big_axebot_update(M_B7B0 *moby) {
         if (moby->f53 == 6 && data->f402 == scale_game_frames(0x25)) {
             allocate_voice_for_target_entry(2, 0, (char *)moby);
         }
-        if ((moby->f70 & 2) && (flag ? data->f43C * 2.0f < dist : data->f43C < dist)) {
+        if ((moby->f70 & 2) && (flag ? data->f43C * 2.0f < target_distance : data->f43C < target_distance)) {
             int arr[6];
 
             random_integer_below_cf(arr, 0, 0x18);
@@ -799,7 +799,7 @@ void big_axebot_update(M_B7B0 *moby) {
             FUN_L04_002ba3e0((char *)moby, (void *)arr[is_point_inside_clip_volume_cf(6)], 0,
                              (void *)scale_game_frames(0x18));
         } else if (moby->f53 != 0xD && (moby->f53 != 6 || (moby->f70 & 2))) {
-            if (flag ? dist < data->f43C * 2.0f : dist < data->f43C) {
+            if (flag ? target_distance < data->f43C * 2.0f : target_distance < data->f43C) {
                 FUN_L04_002ba3e0((char *)moby, (void *)0xD, 0, (void *)scale_game_frames(0x18));
             }
         }
@@ -814,11 +814,11 @@ void big_axebot_update(M_B7B0 *moby) {
                 data->f407 = scale_game_frames(0xB4);
             }
             if (data->f402 == 0) {
-                if (dist < 4.5f) {
+                if (target_distance < 4.5f) {
                     FUN_L04_002ba3e0((char *)moby, (void *)4, (void *)4,
                                      (void *)scale_game_frames(0xC));
                     moby->state = 7;
-                } else if (flag ? dist < data->f43C * 2.0f : dist < data->f43C) {
+                } else if (flag ? target_distance < data->f43C * 2.0f : target_distance < data->f43C) {
                     int nf = (moby->fBC & 1) == 0;
                     if (nf) {
                         FUN_L04_002ba3e0((char *)moby, (void *)2, 0,
@@ -835,7 +835,7 @@ void big_axebot_update(M_B7B0 *moby) {
         if (moby->f52 == 2 && (moby->f70 & 2)) {
             FUN_L04_002ba3e0(
                 (char *)moby,
-                (void *)((flag ? dist < data->f43C * 2.0f : dist < data->f43C) ? 0xD : 0), 0,
+                (void *)((flag ? target_distance < data->f43C * 2.0f : target_distance < data->f43C) ? 0xD : 0), 0,
                 (void *)scale_game_frames(0xC));
             moby->state = 1;
         }
@@ -845,11 +845,11 @@ void big_axebot_update(M_B7B0 *moby) {
             FUN_L04_002ba3e0((char *)moby, (void *)0xB, 0, (void *)scale_game_frames(0xC));
         }
         if (data->f402 == 0) {
-            if (dist < 4.5f) {
+            if (target_distance < 4.5f) {
                 FUN_L04_002ba3e0((char *)moby, (void *)4, (void *)4,
                                  (void *)scale_game_frames(0xC));
                 moby->state = 7;
-            } else if (flag ? dist < data->f43C * 2.0f : dist < data->f43C) {
+            } else if (flag ? target_distance < data->f43C * 2.0f : target_distance < data->f43C) {
                 int nf = (moby->fBC & 1) == 0;
                 if (nf) {
                     FUN_L04_002ba3e0((char *)moby, (void *)2, 0, (void *)scale_game_frames(0xC));
@@ -866,14 +866,14 @@ void big_axebot_update(M_B7B0 *moby) {
         if (moby->f53 != 3) {
             FUN_L04_002ba3e0((char *)moby, (void *)3, 0, (void *)scale_game_frames(0xC));
         }
-        if (dist < 4.5f) {
+        if (target_distance < 4.5f) {
             FUN_L04_002ba3e0((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
             moby->state = 7;
         }
         if (vector_distance(path->pts[data->f438], moby->pos) < 1.0f) {
             data->f438++;
             if (data->f438 == path->count) {
-                if (flag ? data->f43C * 2.0f < dist : data->f43C < dist) {
+                if (flag ? data->f43C * 2.0f < target_distance : data->f43C < target_distance) {
                     FUN_L04_002ba3e0((char *)moby, 0, 0, (void *)scale_game_frames(0x18));
                 } else {
                     FUN_L04_002ba3e0((char *)moby, (void *)0xD, 0, (void *)scale_game_frames(0x18));
@@ -898,10 +898,10 @@ void big_axebot_update(M_B7B0 *moby) {
             moby->fBC &= ~8;
             FUN_L04_00295778_cf(moby, data->f1A0);
         }
-        data->f414 = fast_cos_cf(moby->rot[2], ang, &data->f410, frame_time_sq * 6.2831855f,
+        data->f414 = fast_cos_cf(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 6.2831855f,
                                  frame_time_sq * 125.663704f, frame_time * 12.566371f);
         FUN_L00_00259740_cf(moby, data->f1A0, frame_time * 4.0f, data->f414, frame_time_sq * 20.0f);
-        if (dist < 4.5f) {
+        if (target_distance < 4.5f) {
             FUN_L04_002ba3e0((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
             moby->state = 7;
         } else if (data->f41C != -1) {
@@ -922,7 +922,7 @@ void big_axebot_update(M_B7B0 *moby) {
         }
         break;
     case BIG_AXEBOT_STATE_RETURN_HOME:
-        if (dist < 4.5f) {
+        if (target_distance < 4.5f) {
             FUN_L04_002ba3e0((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
             moby->state = 7;
         } else {
@@ -966,13 +966,13 @@ void big_axebot_update(M_B7B0 *moby) {
             vector_distance(moby->pos, (float *)&tg) < 4.5f) {
             float p[4];
 
-            vector_quaternion_scratch[0] = fast_sin_cf(ang) * 0.2f;
-            vector_quaternion_scratch[1] = add_vector_xyz_cf(ang) * 0.2f;
+            vector_quaternion_scratch[0] = fast_sin_cf(target_yaw) * 0.2f;
+            vector_quaternion_scratch[1] = add_vector_xyz_cf(target_yaw) * 0.2f;
             vector_quaternion_scratch[2] = 0.0f;
             qcopy(p, tg.pos);
             p[2] += 0.75f;
-            if (tgt != 0) {
-                build_spherical_offset_cf(tgt, 1.0f, (int)moby, 1, p, vector_quaternion_scratch);
+            if (target_moby != 0) {
+                build_spherical_offset_cf(target_moby, 1.0f, (int)moby, 1, p, vector_quaternion_scratch);
             }
         }
         if (hd > 20.0f) {
@@ -989,7 +989,7 @@ void big_axebot_update(M_B7B0 *moby) {
             data->f402 = scale_game_frames(0x5A);
             FUN_L04_002ba3e0(
                 (char *)moby,
-                (void *)((flag ? dist < data->f43C * 2.0f : dist < data->f43C) ? 0xD : 0), 0,
+                (void *)((flag ? target_distance < data->f43C * 2.0f : target_distance < data->f43C) ? 0xD : 0), 0,
                 (void *)scale_game_frames(0xC));
             moby->state = 1;
         }
@@ -1011,13 +1011,13 @@ void big_axebot_update(M_B7B0 *moby) {
                 }
                 FUN_L00_0025c698_cf(vector_quaternion_scratch, data->f418, data->f414, moby->rot[1]);
                 FUN_L00_00258490_cf(moby->pos, moby->pos, vector_quaternion_scratch);
-                moby->rot[2] = fast_cos_cf(moby->rot[2], ang, &data->f410, frame_time_sq * 3.1415927f,
+                moby->rot[2] = fast_cos_cf(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 3.1415927f,
                                            frame_time_sq * 6.2831855f, frame_time * 4.1887903f);
             } else if (data->f418 > 0.0f) {
                 data->f418 -= frame_time_sq * 200.0f;
                 FUN_L00_0025c698_cf(vector_quaternion_scratch, data->f418, data->f414, moby->rot[1]);
                 FUN_L00_00258490_cf(moby->pos, moby->pos, vector_quaternion_scratch);
-                moby->rot[2] = fast_cos_cf(moby->rot[2], ang, &data->f410, frame_time_sq * 3.1415927f,
+                moby->rot[2] = fast_cos_cf(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 3.1415927f,
                                            frame_time_sq * 6.2831855f, frame_time * 4.1887903f);
             } else {
                 moby->state = 1;
@@ -1036,7 +1036,7 @@ void big_axebot_update(M_B7B0 *moby) {
             moby->rot[2] = fast_cos_cf(moby->rot[2], a, &data->f410, frame_time_sq * 3.1415927f,
                                        frame_time_sq * 6.2831855f, frame_time * 4.1887903f);
         } else {
-            moby->rot[2] = fast_cos_cf(moby->rot[2], ang, &data->f410, frame_time_sq * 3.1415927f,
+            moby->rot[2] = fast_cos_cf(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 3.1415927f,
                                        frame_time_sq * 6.2831855f, frame_time * 4.1887903f);
         }
         break;
@@ -1084,11 +1084,11 @@ void big_axebot_update(M_B7B0 *moby) {
     data->f420 += frame_time_sq * 29.8f;
     moby->pos[2] -= data->f420 - 2.0f;
     {
-        float g = probe_ground_height(moby->pos, 0, 0.5f);
+        float ground_height = probe_ground_height(moby->pos, 0, 0.5f);
 
         moby->pos[2] -= 2.0f;
-        if (moby->pos[2] < g) {
-            moby->pos[2] = g;
+        if (moby->pos[2] < ground_height) {
+            moby->pos[2] = ground_height;
             data->f420 = 0.0f;
         }
     }
@@ -1109,8 +1109,8 @@ void big_axebot_update(M_B7B0 *moby) {
                 fast_subtract_rotations_cf(data->f428, fast_add_rotations_cf(moby->rot[2], rot));
             build_moby_bone_transform((char *)moby, 0xC, (char *)bone_transform);
             matrix_to_euler(bone_transform, bone_euler_angles);
-            FUN_L00_001fff28(q, 2, fast_add_rotations_cf(ang, data->f428));
-            data->f428 = ang;
+            FUN_L00_001fff28(q, 2, fast_add_rotations_cf(target_yaw, data->f428));
+            data->f428 = target_yaw;
             multiply_quaternions(data->m160.q, data->m160.q, q);
         }
     }
