@@ -2315,28 +2315,28 @@ typedef struct {
 extern void trooper_knockback_arc(Vec4f *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(f32, struct Moby *, LaunchParams *, s32, s32, s32) __asm__("FUN_L00_0025c558");
 
-void FUN_L07_0030e720(struct Moby *moby, LaunchParams *l, Vec4f *dir) {
+void FUN_L07_0030e720(struct Moby *moby, LaunchParams *knockback_state, Vec4f *dir) {
     Vec4f knockback_direction_copy;
     f32 ang;
 
-    l->gravity = frame_time_sq * 29.400002f;
-    l->unk14 = 0.0005f;
-    l->unk18 = frame_time * 9.0f;
-    l->unk1C = frame_time * 7.0f;
-    l->flags = 0x400;
-    l->unk24 = 13;
-    l->unk28 = 1.0f;
-    l->unk30 = 0.24f;
-    l->unk34 = 0.5f;
-    l->unk38 = 0.65f;
-    l->unk48 = 0.2f;
-    l->unk4C = 0.01f;
-    l->unk50 = 3.0f;
-    l->unk54 = 9.0f;
-    l->unk3D = 0;
+    knockback_state->gravity = frame_time_sq * 29.400002f;
+    knockback_state->unk14 = 0.0005f;
+    knockback_state->unk18 = frame_time * 9.0f;
+    knockback_state->unk1C = frame_time * 7.0f;
+    knockback_state->flags = 0x400;
+    knockback_state->unk24 = 13;
+    knockback_state->unk28 = 1.0f;
+    knockback_state->unk30 = 0.24f;
+    knockback_state->unk34 = 0.5f;
+    knockback_state->unk38 = 0.65f;
+    knockback_state->unk48 = 0.2f;
+    knockback_state->unk4C = 0.01f;
+    knockback_state->unk50 = 3.0f;
+    knockback_state->unk54 = 9.0f;
+    knockback_state->unk3D = 0;
     *(u128 *)&knockback_direction_copy = *(u128 *)dir;
-    trooper_knockback_arc(&knockback_direction_copy, &ang, &l->unk18, &l->unk1C);
-    trooper_start_knockback(ang, moby, l, 12, 1, 0);
+    trooper_knockback_arc(&knockback_direction_copy, &ang, &knockback_state->unk18, &knockback_state->unk1C);
+    trooper_start_knockback(ang, moby, knockback_state, 12, 1, 0);
 }
 
 void FUN_L07_0030e858(struct Moby *moby, LaunchParams *l, Vec4f *dir) {
