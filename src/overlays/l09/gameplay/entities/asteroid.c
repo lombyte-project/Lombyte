@@ -1138,7 +1138,7 @@ void display_update(struct Moby *moby) {
     float top[4];
     float push[4];
     float pos[4];
-    float vel[4];
+    float debris_offset_or_velocity[4];
     float pull[4];
     char *hit;
     int replaced;
@@ -1192,21 +1192,21 @@ void display_update(struct Moby *moby) {
         spread = 2.0f;
     }
     for (i = 0; i < 20; i++) {
-        *(u128 *)vel = 0;
-        vel[0] = random_float_between_edc30(-0.5f, 0.5f);
-        vel[1] = random_float_between_edc30(-2.0f, 2.0f);
-        vel[2] = random_float_between_edc30(-spread, spread);
-        *(u128 *)pos = *(u128 *)vel;
+        *(u128 *)debris_offset_or_velocity = 0;
+        debris_offset_or_velocity[0] = random_float_between_edc30(-0.5f, 0.5f);
+        debris_offset_or_velocity[1] = random_float_between_edc30(-2.0f, 2.0f);
+        debris_offset_or_velocity[2] = random_float_between_edc30(-spread, spread);
+        *(u128 *)pos = *(u128 *)debris_offset_or_velocity;
         transform_vector_edc30(pos, pos, &moby->rot_row0);
         add_vector_edc30(pos, pos, top);
-        subtract_vector_edc30(vel, pos, center);
-        falloff = FUN_001f99c0_edc30(3.0f - vector_length_edc30(vel)) / 3.0f;
+        subtract_vector_edc30(debris_offset_or_velocity, pos, center);
+        falloff = FUN_001f99c0_edc30(3.0f - vector_length_edc30(debris_offset_or_velocity)) / 3.0f;
         set_vector_length_edc30(pull, hit + 0x10, falloff * falloff * 8.0f);
-        add_vector_edc30(vel, vel, pull);
-        set_vector_length_edc30(vel, vel, falloff * (random_float_between_edc30(6.0f, 10.0f) * frame_time_edc30));
+        add_vector_edc30(debris_offset_or_velocity, debris_offset_or_velocity, pull);
+        set_vector_length_edc30(debris_offset_or_velocity, debris_offset_or_velocity, falloff * (random_float_between_edc30(6.0f, 10.0f) * frame_time_edc30));
         add_vector_edc30(pos, pos, push);
         if (moby->oclass == 0x514 || random_integer_below_edc30(4) == 0) {
-            FUN_L09_002ef868(moby, (Vec4 *)pos, (Vec4 *)vel, i & 1, random_float_between_edc30(1.0f, 2.0f));
+            FUN_L09_002ef868(moby, (Vec4 *)pos, (Vec4 *)debris_offset_or_velocity, i & 1, random_float_between_edc30(1.0f, 2.0f));
         }
         if (i % 3 == 0) {
             FUN_L00_0025f090_edc30(moby, pos, -1, random_float_between_edc30(1.0f, 1.6f), 0.0f);
