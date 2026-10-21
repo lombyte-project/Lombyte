@@ -471,10 +471,10 @@ extern void FUN_L03_002ebb00_u(void *) __asm__("FUN_L03_002ebb00");
 extern void FUN_L03_002ebc58_u(void *) __asm__("FUN_L03_002ebc58");
 void no_op_main_callback(void *) __asm__("FUN_001e93e8");
 
-void FUN_L03_002ebdb0(void *arg) {
-    FUN_L03_002ebb00_u(arg);
-    no_op_main_callback(arg);
-    FUN_L03_002ebc58_u(arg);
+void FUN_L03_002ebdb0(void *camera) {
+    FUN_L03_002ebb00_u(camera);
+    no_op_main_callback(camera);
+    FUN_L03_002ebc58_u(camera);
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED1B0), where it is exact; names translated to the US level program. */
 
