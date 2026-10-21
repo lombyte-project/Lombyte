@@ -1710,7 +1710,7 @@ void lab_door_update(unsigned char *door_moby) {
         LAB_DOOR_STATE_AT_RAISED_HEIGHT = 4
     };
     int *door_vars = *(int **)(door_moby + 0x78);
-    OvlQuad v[2];
+    OvlQuad point_test_positions[2];
     int it;
     int flag;
     int hit;
@@ -1737,8 +1737,8 @@ void lab_door_update(unsigned char *door_moby) {
         if (door_vars[4] != -1) {
             if (FUN_L00_002591d0(&it, door_vars[4], 0, 0)) {
                 do {
-                    v[0] = *(OvlQuad *)(it + 0x10);
-                    if (FUN_L10_002d9000_c(door_moby, &v[0])) {
+                    point_test_positions[0] = *(OvlQuad *)(it + 0x10);
+                    if (FUN_L10_002d9000_c(door_moby, &point_test_positions[0])) {
                         flag = 1;
                         break;
                     }
@@ -1747,10 +1747,10 @@ void lab_door_update(unsigned char *door_moby) {
         }
         hit = 0;
         if (flag == 0) {
-            v[0] = D_L10_00167240;
-            if (FUN_L10_002d9000_c(door_moby, &v[0]) == 0) {
-                v[1] = *(OvlQuad *)&hero.motion.pos;
-                if (FUN_L10_002d9000_c(door_moby, &v[1]) == 0)
+            point_test_positions[0] = D_L10_00167240;
+            if (FUN_L10_002d9000_c(door_moby, &point_test_positions[0]) == 0) {
+                point_test_positions[1] = *(OvlQuad *)&hero.motion.pos;
+                if (FUN_L10_002d9000_c(door_moby, &point_test_positions[1]) == 0)
                     goto done;
             }
         }
