@@ -485,11 +485,11 @@ void FUN_L06_002feb40(char *moby) {
     int k;
     int bits;
     float vv[4];
-    float vec2[4];
+    float fragment_velocity[4];
     int hit;
     float dt;
     float remaining_health;
-    float lo, hi, spd, off, pull;
+    float lo, hi, spd, minimum_fragment_speed, pull;
 
     vars = *(char **)(moby + 0x78);
     *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L06_00161FA8;
@@ -561,7 +561,7 @@ void FUN_L06_002feb40(char *moby) {
             hi = *(float *)&bits;
             a = fast_arc_tan(*(float *)(hit_record + 0x10), *(float *)(hit_record + 0x14));
             bits = 0x40400000;
-            off = *(float *)&bits;
+            minimum_fragment_speed = *(float *)&bits;
             trooper_start_knockback(moby, q, a, 9, 1, 0);
             bits = 0x40E00000;
             pull = *(float *)&bits;
@@ -573,14 +573,14 @@ void FUN_L06_002feb40(char *moby) {
                 vv[1] = vv[1] + FUN_L00_00257c48(lo, hi);
                 vv[2] = vv[2] + FUN_L00_00257c48(lo, hi);
                 ang = random_angle_radians_c();
-                spd = random_float_between_c(off, 5.7f) * D_0015ED6C;
-                vec2[0] = fast_cos(ang) * spd;
-                vec2[1] = fast_sin_c2(ang) * spd;
-                vec2[2] = lo;
-                vec2[0] = vec2[0] + fast_cos(fast_arc_tan(*(float *)(hit_record + 0x10), *(float *)(hit_record + 0x14))) * (D_0015ED6C * pull);
-                vec2[1] = vec2[1] + fast_sin_c2(fast_arc_tan(*(float *)(hit_record + 0x10), *(float *)(hit_record + 0x14))) * (D_0015ED6C * pull);
-                vec2[2] = random_float_between_c(off, 8.5f) * D_0015ED6C;
-                fragment = FUN_L06_00300c60_c((int)moby, (char *)vv, (char *)vec2);
+                spd = random_float_between_c(minimum_fragment_speed, 5.7f) * D_0015ED6C;
+                fragment_velocity[0] = fast_cos(ang) * spd;
+                fragment_velocity[1] = fast_sin_c2(ang) * spd;
+                fragment_velocity[2] = lo;
+                fragment_velocity[0] = fragment_velocity[0] + fast_cos(fast_arc_tan(*(float *)(hit_record + 0x10), *(float *)(hit_record + 0x14))) * (D_0015ED6C * pull);
+                fragment_velocity[1] = fragment_velocity[1] + fast_sin_c2(fast_arc_tan(*(float *)(hit_record + 0x10), *(float *)(hit_record + 0x14))) * (D_0015ED6C * pull);
+                fragment_velocity[2] = random_float_between_c(minimum_fragment_speed, 8.5f) * D_0015ED6C;
+                fragment = FUN_L06_00300c60_c((int)moby, (char *)vv, (char *)fragment_velocity);
                 if (fragment != 0) {
                     *(float *)(fragment + 0x2C) = *(float *)(fragment + 0x2C) * 0.4f;
                 }
