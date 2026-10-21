@@ -1248,13 +1248,13 @@ void FUN_L17_002ec360(Moby *ship_moby, Obj *ship_vars) {
     W4 target;
     W4 diff;
     float horizontal_steering_input;
-    float b;
+    float vertical_steering_input;
     float ka;
     float kb;
     float lenA;
     float lenB;
     float distance_to_default_target;
-    float e1, e2;
+    float target_height_distance, target_height_distance_for_moby_pitch;
     float x, y;
     float half_fov, tn;
     float ratio;
@@ -1331,16 +1331,16 @@ void FUN_L17_002ec360(Moby *ship_moby, Obj *ship_vars) {
         ka = D_L17_001620B4;
         kb = D_L17_001620C4;
         horizontal_steering_input = x;
-        b = y;
+        vertical_steering_input = y;
         if (*(int *)(((char *)&D_0013CAE0)) & 0x200) {
             horizontal_steering_input = x / D_L17_00162028 * D_L17_00162030;
-            b = y / D_L17_00162024 * D_L17_0016202C;
+            vertical_steering_input = y / D_L17_00162024 * D_L17_0016202C;
             ka = D_L17_001620B8;
             kb = D_L17_001620C8;
         }
-        FUN_L17_002edf10((char *)ship_moby, &horizontal_steering_input, &b);
+        FUN_L17_002edf10((char *)ship_moby, &horizontal_steering_input, &vertical_steering_input);
         vendor_spring(&ship_vars->f6C, &ship_vars->f90, horizontal_steering_input, D_L17_001620AC, D_L17_001620B0, ka);
-        vendor_spring(&ship_vars->f70, &ship_vars->f94, b, D_L17_001620BC, D_L17_001620C0, kb);
+        vendor_spring(&ship_vars->f70, &ship_vars->f94, vertical_steering_input, D_L17_001620BC, D_L17_001620C0, kb);
         FUN_L00_0025bc98((char *)&ship_vars->f30, (char *)&ship_vars->f98, 0, ship_vars->f6C * D_L17_0016208C,
                          D_L17_001620CC, D_L17_001620D0, D_L17_001620D4);
         ship_vars->f34 = fast_subtract_rotations(ship_vars->f34, ship_vars->f70 * D_L17_00162024);
@@ -1376,12 +1376,12 @@ void FUN_L17_002ec360(Moby *ship_moby, Obj *ship_vars) {
         1, 5, distance_to_default_target, ship_vars->f38, fast_arc_tan(target[0] - ship_moby->pos[0], target[1] - ship_moby->pos[1]), 50.0f, lenB);
     ship_moby->r48 = FUN_L13_002ba088(
         1, 5, distance_to_default_target, ship_moby->r48, fast_arc_tan(target[0] - ship_moby->pos[0], target[1] - ship_moby->pos[1]), 50.0f, lenB);
-    e1 = absolute_float(target[2] - ship_moby->pos[2]);
-    ship_vars->f34 = FUN_L13_002ba088(1, 5, e1, ship_vars->f34,
+    target_height_distance = absolute_float(target[2] - ship_moby->pos[2]);
+    ship_vars->f34 = FUN_L13_002ba088(1, 5, target_height_distance, ship_vars->f34,
                               -fast_arc_tan(vector_distance(ship_moby->pos, target), target[2] - ship_moby->pos[2]),
                               50.0f, lenA);
-    e2 = absolute_float(target[2] - ship_moby->pos[2]);
-    ship_moby->r44 = FUN_L13_002ba088(1, 5, e2, ship_moby->r44,
+    target_height_distance_for_moby_pitch = absolute_float(target[2] - ship_moby->pos[2]);
+    ship_moby->r44 = FUN_L13_002ba088(1, 5, target_height_distance_for_moby_pitch, ship_moby->r44,
                               -fast_arc_tan(vector_distance(ship_moby->pos, target), target[2] - ship_moby->pos[2]),
                               50.0f, lenA);
     build_spherical_offset(dir.v, ship_vars->speed, ship_vars->f38, -ship_vars->f34);
