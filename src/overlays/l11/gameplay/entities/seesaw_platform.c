@@ -771,20 +771,20 @@ void FUN_L11_0030e088(struct Moby *water_tile_moby) {
 
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L11_0030e730(int arg) {
+void FUN_L11_0030e730(int selected_tile_index) {
     int i;
-    D_L11_001DA880[arg].n[0] = 0xFF;
-    D_L11_001DA880[arg].n[2] = 0xFF;
-    D_L11_001DA880[arg].n[1] = 0xFF;
-    D_L11_001DA880[arg].n[3] = 0xFF;
-    D_L11_001DA880[arg].n[4] = 0xFF;
-    D_L11_001DA880[arg].n[5] = 0xFF;
-    D_L11_001DA880[arg].n[6] = 0xFF;
-    D_L11_001DA880[arg].n[7] = 0xFF;
+    D_L11_001DA880[selected_tile_index].n[0] = 0xFF;
+    D_L11_001DA880[selected_tile_index].n[2] = 0xFF;
+    D_L11_001DA880[selected_tile_index].n[1] = 0xFF;
+    D_L11_001DA880[selected_tile_index].n[3] = 0xFF;
+    D_L11_001DA880[selected_tile_index].n[4] = 0xFF;
+    D_L11_001DA880[selected_tile_index].n[5] = 0xFF;
+    D_L11_001DA880[selected_tile_index].n[6] = 0xFF;
+    D_L11_001DA880[selected_tile_index].n[7] = 0xFF;
     for (i = 0; i < 20; i++) {
-        if (arg != i) {
+        if (selected_tile_index != i) {
             Ent *tile_table = D_L11_001DA880;
-            Ent *selected_tile = &tile_table[arg];
+            Ent *selected_tile = &tile_table[selected_tile_index];
             float x = selected_tile->x - tile_table[i].x;
             float y = selected_tile->y - tile_table[i].y;
             if (absolute_float(x) < 0.1f) {
