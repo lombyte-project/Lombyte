@@ -822,19 +822,19 @@ int FUN_L12_002e2eb8(struct Moby *moby, float speed) {
     float hit[4];
     float res[4] __attribute__((aligned(16)));
     float path_test_position[4];
-    float u[4];
-    int r;
+    float path_test_offset[4];
+    int move_result;
     *(OvlQuad *)old = *(OvlQuad *)&moby->pos;
     FUN_L12_002e1878_w(moby);
     approach_w(moby, (float *)(moby_vars + 0x2A0), speed, 0.05f, 0.3f, 0.2f);
     dir[0] = cos_w(moby->rot.z) * 2.0f;
     dir[1] = sin_w(moby->rot.z) * 2.0f;
     dir[2] = 0.0f;
-    r = move_w(moby, moby_vars + 0x180, dir, hit, 1.0f);
+    move_result = move_w(moby, moby_vars + 0x180, dir, hit, 1.0f);
     if (*(int *)(moby_vars + 0x2D0) != -1) {
-        sub_w(u, old, &moby->pos);
-        norm_w(u, u, 0.05f);
-        add_w(path_test_position, old, u);
+        sub_w(path_test_offset, old, &moby->pos);
+        norm_w(path_test_offset, path_test_offset, 0.05f);
+        add_w(path_test_position, old, path_test_offset);
         if (path_w(*(int *)(moby_vars + 0x2D0), &moby->pos, path_test_position, res) != 0) {
             char *path = D_L12_001B0930_w[*(int *)(moby_vars + 0x2D0)];
             if (inside_w(&moby->pos, path + 0x10, *(int *)path) == 0)
@@ -842,13 +842,13 @@ int FUN_L12_002e2eb8(struct Moby *moby, float speed) {
             if (dist_w(&moby->pos, old) < D_0015ED6C_w * 0.5f) {
                 *(int *)(moby_vars + 0x2D4) += 1;
                 if (frames_w(10) < *(int *)(moby_vars + 0x2D4))
-                    r = 2;
+                    move_result = 2;
             } else {
                 *(int *)(moby_vars + 0x2D4) = 0;
             }
         }
     }
-    return r;
+    return move_result;
 }
 #include "rnc/overlay/level_globals.h"
 #include "rnc/gameplay/state/item_state.h"
