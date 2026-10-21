@@ -1369,11 +1369,11 @@ void FUN_L00_002d2a90(Moby_2D3F40 *moby) {
     Data_2D3F40 *trail_data = moby->data;
     float t, unwrapped_phase, k;
     int col;
-    int tex;
+    int trail_quad_texture;
 
-    tex = func_001F4868_2D3F40(D_L00_00161918);
+    trail_quad_texture = func_001F4868_2D3F40(D_L00_00161918);
     q.c[0] = q.c[1] = q.c[2] = q.c[3] = D_L00_00161914;
-    q.g[1] = tex;
+    q.g[1] = trail_quad_texture;
     q.g[2] = 0xFF9000000260L;
     q.g[0] = 4;
     q.g[3] = (long)D_L00_00161900 | ((long)D_L00_00161904 << 2) | ((long)D_L00_00161908 << 4) | ((long)D_L00_0016190C << 6) | ((long)D_L00_00161910 << 32);
