@@ -1657,12 +1657,12 @@ extern void update_hoverboard_girl_boobs_animation(char *, int) __asm__("FUN_L05
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 void update_hoverboard_girl_cutscene_instances(char *arg) __asm__("FUN_L05_00316990");
-void update_hoverboard_girl_cutscene_instances(char *arg) {
+void update_hoverboard_girl_cutscene_instances(char *reference_moby) {
     if (D_L05_0015F5C4 == 2 && (D_0015EDB0[0] != 0 || *(int *)&breast_growth_count_gp != 0)) {
         int i;
         for (i = 0; i < D_L05_0016CC60.n; i++) {
             char *moby = D_L05_0016CC60.m[i];
-            if (*(short *)(moby + 0xA6) == *(short *)(arg + 0xA6)) {
+            if (*(short *)(moby + 0xA6) == *(short *)(reference_moby + 0xA6)) {
                 if (D_0015EDB0[0] != 0) {
                     unsigned char *manipulator = D_L05_0017C8A0;
                     if (manipulator[1] == 0) {
@@ -1673,7 +1673,7 @@ void update_hoverboard_girl_cutscene_instances(char *arg) {
                     }
                 }
                 if (*(int *)&breast_growth_count_gp != 0) {
-                    update_hoverboard_girl_boobs_animation(moby, *(int *)(arg + 0x78));
+                    update_hoverboard_girl_boobs_animation(moby, *(int *)(reference_moby + 0x78));
                 }
             }
         }
