@@ -189,7 +189,7 @@ extern char *func_0020D348_m(int);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_00250df8(void *);
 
-unsigned char *FUN_L14_002ffaf8(unsigned char *owner, char *pos) {
+unsigned char *FUN_L14_002ffaf8(unsigned char *owner, char *spawn_position) {
     unsigned char *spawned_moby = func_0020D348_m(0x3A5);
     if (spawned_moby != 0) {
         char *spawned_vars = *(char **)(spawned_moby + 0x78);
@@ -200,7 +200,7 @@ unsigned char *FUN_L14_002ffaf8(unsigned char *owner, char *pos) {
         *(float *)(spawned_vars + 0x10) = random_float_between_alt(0.0104719754f, 0.0209439509f);
         *(float *)(spawned_vars + 0x14) = random_float_between_alt(0.00698131695f, 0.0139626339f);
         *(float *)(spawned_vars + 0x18) = random_float_between_alt(0.00349065848f, 0.00698131695f);
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(spawned_moby + 0x10, spawn_position);
         *(float *)(spawned_moby + 0x48) = *(float *)(owner + 0x48);
         spawned_moby[0x20] = 0;
         spawned_moby[0x30] = 0xFF;
