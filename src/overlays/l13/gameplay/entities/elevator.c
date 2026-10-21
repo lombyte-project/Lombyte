@@ -390,21 +390,21 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void FUN_L13_002b4060(struct Moby *moby, float *v, float *w);
 void FUN_L13_002b4060(struct Moby *moby, float *camera_position, float *camera_rotation) {
-    float ang = moby->rot.z;
+    float camera_offset_azimuth = moby->rot.z;
     float horizontal_offset_radius = 2.5f;
     float z = 1.5f;
     unsigned char *x;
     if ((moby->command >= 2 && (moby->command & 1)) || (moby->state >= 2 && (moby->state & 1))) {
-        ang = fast_subtract_rotations(ang, 1.5707964f);
+        camera_offset_azimuth = fast_subtract_rotations(camera_offset_azimuth, 1.5707964f);
     } else {
-        ang = fast_add_rotations(ang, 1.5707964f);
+        camera_offset_azimuth = fast_add_rotations(camera_offset_azimuth, 1.5707964f);
     }
     if (moby->oclass == 0x15) {
         horizontal_offset_radius = 2.0f;
         z = 1.2f;
     }
-    camera_position[0] = fast_cos(ang) * horizontal_offset_radius;
-    camera_position[1] = fast_sin(ang) * horizontal_offset_radius;
+    camera_position[0] = fast_cos(camera_offset_azimuth) * horizontal_offset_radius;
+    camera_position[1] = fast_sin(camera_offset_azimuth) * horizontal_offset_radius;
     camera_position[2] = z;
     fast_vec_add(camera_position, camera_position, &moby->pos);
     clear_u64_value(camera_rotation);
