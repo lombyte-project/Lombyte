@@ -570,10 +570,10 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         }
         break;
     case BLARG_TURRET_STATE_DESTROY: {
-        V4_2B5368 v;
-        random_vector(&v.x, 0.5f, 1.0f);
+        V4_2B5368 destruction_effect_vector;
+        random_vector(&destruction_effect_vector.x, 0.5f, 1.0f);
         mark_moby_for_removal_cf(turret_moby, 0, -1);
-        FUN_L00_0025e450_2b0e80(turret_moby, &v, &turret_moby->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
+        FUN_L00_0025e450_2b0e80(turret_moby, &destruction_effect_vector, &turret_moby->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
         delete_moby(turret_moby);
         return;
     }
