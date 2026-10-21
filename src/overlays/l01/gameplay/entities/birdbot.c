@@ -353,7 +353,7 @@ int FUN_L01_002e6790(void *path_follower_entity, int *selected_path_node_index) 
     PathPickVars *path_pick_vars;
     PathFollow *f;
     s32 fast;
-    s32 prev;
+    s32 preceding_node_index;
     s32 next;
     s32 best;
     s32 last;
@@ -363,7 +363,7 @@ int FUN_L01_002e6790(void *path_follower_entity, int *selected_path_node_index) 
     f32 best_d;
     f32 best_a;
     f32 target_search_radius;
-    f32 dist;
+    f32 node_follower_distance;
 
     path_pick_vars = path_follower_moby->vars;
     fast = 0;
@@ -372,7 +372,7 @@ int FUN_L01_002e6790(void *path_follower_entity, int *selected_path_node_index) 
         fast = 1;
     }
     target_search_radius = fast ? path_pick_vars->radius * 2.0f : path_pick_vars->radius;
-    prev = 0;
+    preceding_node_index = 0;
     next = 0;
     FUN_L01_00274b78(path_follower_moby, &target, target_search_radius);
     best_d = 10000.0f;
@@ -392,10 +392,10 @@ int FUN_L01_002e6790(void *path_follower_entity, int *selected_path_node_index) 
     last = 0;
     for (i = 0; i < f->path->count; i++) {
         if (path_pick_vars->stops_only == 0 || f->path->pts[i].w == 1.0f) {
-            dist = vector_distance(&f->path->pts[i], &path_follower_moby->pos);
-            if (dist < best_d) {
-                prev = last;
-                best_d = dist;
+            node_follower_distance = vector_distance(&f->path->pts[i], &path_follower_moby->pos);
+            if (node_follower_distance < best_d) {
+                preceding_node_index = last;
+                best_d = node_follower_distance;
                 best = i;
             } else if (last == best) {
                 next = i;
@@ -407,7 +407,7 @@ int FUN_L01_002e6790(void *path_follower_entity, int *selected_path_node_index) 
     if (i == f->path->count - 1) {
         next = 0;
     } else if (i == 0) {
-        prev = f->path->count - 1;
+        preceding_node_index = f->path->count - 1;
     }
     best_d = 0.0f;
     best = 0;
@@ -416,7 +416,7 @@ int FUN_L01_002e6790(void *path_follower_entity, int *selected_path_node_index) 
     }
     *selected_path_node_index = 0;
     for (;;) {
-        if (*selected_path_node_index == prev || *selected_path_node_index == i || *selected_path_node_index == next) {
+        if (*selected_path_node_index == preceding_node_index || *selected_path_node_index == i || *selected_path_node_index == next) {
             if (fast) {
                 qcopy(&pt, &f->path->pts[*selected_path_node_index]);
                 candidate_node_distance = FUN_001f9b48(&target, &pt);
