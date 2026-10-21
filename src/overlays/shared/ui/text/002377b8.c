@@ -528,15 +528,15 @@ extern int D_L00_0015F72C __attribute__((sda));
 extern int D_L00_0015F740 __attribute__((sda));
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00238b18(char *hud_element) {
-    int element_width, b;
+    int element_width, element_height;
     D_L00_0015FA90 = 4;
     D_L00_0015FAC0 = &D_L00_0015F740;
     element_width = D_L00_0015F718_gp;
-    b = D_L00_0015F71C_gp;
+    element_height = D_L00_0015F71C_gp;
     *(short *)(hud_element + 0x48) = 0;
     *(short *)(hud_element + 0x4A) = 0;
     *(int *)(hud_element + 0x58) = element_width;
-    *(int *)(hud_element + 0x5C) = b;
+    *(int *)(hud_element + 0x5C) = element_height;
     *(int *)(hud_element + 0x74) = -2;
     *(int *)(hud_element + 0x78) = scale_game_frames(30);
     D_L00_0015F72C = 0;
