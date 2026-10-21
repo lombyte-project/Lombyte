@@ -393,13 +393,13 @@ extern int FUN_L07_0030e370_c() __asm__("FUN_L07_0030e370");
 extern void FUN_L00_001ff600(float, void *, void *);
 extern void FUN_L07_00311eb8_u(float, void *, void *, short, void *, short, unsigned int, int) __asm__("FUN_L07_00311eb8");
 
-int FUN_L07_003122b0(void *mp, char *obj, float *vec) {
+int FUN_L07_003122b0(void *mp, char *emitter_state, float *target_position) {
     unsigned char *moby = mp;
     float A[4];
     float B[4];
-    if (fast_dec_timer((int *)(obj + 0x160))) {
-        moby_point_position(moby, *(int *)(obj + 0x164) & 1, A);
-        fast_vec_sub(B, vec, A);
+    if (fast_dec_timer((int *)(emitter_state + 0x160))) {
+        moby_point_position(moby, *(int *)(emitter_state + 0x164) & 1, A);
+        fast_vec_sub(B, target_position, A);
         FUN_L00_001ff600(10.7f, B, B);
         B[2] += 0.5f;
         if (B[2] > 0.0f)
@@ -407,11 +407,11 @@ int FUN_L07_003122b0(void *mp, char *obj, float *vec) {
         fast_vec_normalize(B, B, frame_time * 9.0f);
         FUN_L07_0030e370_c(A, B, moby);
         FUN_0022da68(0, 0, (int)moby);
-        FUN_L07_00311eb8_u(10.0f, moby, obj, 0, A, scale_game_frames(0x1E), 0x800060FF, 0);
-        *(int *)(obj + 0x160) = scale_game_frames(9);
-        if (++*(int *)(obj + 0x164) >= 0x15) {
-            *(short *)(obj + 0x198) = scale_game_frames(0x23);
-            *(int *)(obj + 0x160) = scale_game_frames(0x1E);
+        FUN_L07_00311eb8_u(10.0f, moby, emitter_state, 0, A, scale_game_frames(0x1E), 0x800060FF, 0);
+        *(int *)(emitter_state + 0x160) = scale_game_frames(9);
+        if (++*(int *)(emitter_state + 0x164) >= 0x15) {
+            *(short *)(emitter_state + 0x198) = scale_game_frames(0x23);
+            *(int *)(emitter_state + 0x160) = scale_game_frames(0x1E);
             return 1;
         }
     }
