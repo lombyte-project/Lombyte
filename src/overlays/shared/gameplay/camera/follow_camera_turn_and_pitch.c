@@ -186,11 +186,11 @@ void follow_camera_auto_turn(int camera_object) {
     char *r = camera_data + 0x1D0;
     char *auto_turn_vector = camera_data + 0x130;
     if (*(short *)(camera_data + 0x10) > 0) {
-        float v[4];
+        float position_difference[4];
         float vector_length;
         float lim;
-        subtract_vector_xyz(v, (float *)camera_data, (float *)(camera_data + 0x90));
-        lerp_vector(D_L00_0015EF40, auto_turn_vector, auto_turn_vector, v);
+        subtract_vector_xyz(position_difference, (float *)camera_data, (float *)(camera_data + 0x90));
+        lerp_vector(D_L00_0015EF40, auto_turn_vector, auto_turn_vector, position_difference);
         vector_length = fast_vec_length(auto_turn_vector);
         lim = *(float *)(auto_turn_vector + 0x2C);
         if (lim < vector_length) {
