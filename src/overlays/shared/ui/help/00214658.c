@@ -418,12 +418,12 @@ void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 float square_root(float) __asm__("FUN_001f9988");
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-void FUN_L00_00216078(Vec4 *v, float *out) {
+void FUN_L00_00216078(Vec4 *input_vector, float *out) {
     Vec4 rotation_matrix[4];
     Vec4 transposed_rotation_matrix[4];
     Vec4 transformed_vector;
     Vec4 *tp = &transformed_vector;
-    qcopy(tp, v);
+    qcopy(tp, input_vector);
     euler_rotation_matrix(rotation_matrix, D_001413D0 + 0x40);
     transpose_rotation_matrix(transposed_rotation_matrix, rotation_matrix);
     transform_vector(tp, tp, transposed_rotation_matrix);
