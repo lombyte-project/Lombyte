@@ -516,12 +516,12 @@ void FUN_L04_002e53a0(struct Moby *moby) {
     case MODE_SLOT_STATE_DISPATCH_SELECTED_SLOT:
         if (D_L04_0015F5C4 == 2) {
             if (D_L04_0016C9E0.mode == 0 || D_L04_0016C9E0.mode == 1) {
-                int v = D_L04_0016C9E0.mode;
+                int mission_mode = D_L04_0016C9E0.mode;
                 int i;
                 i = 0;
-                if (v == 0)
+                if (mission_mode == 0)
                     i = 3;
-                else if (v == 1)
+                else if (mission_mode == 1)
                     i = 2;
                 cutscene_set_camera_target(D_L04_0016C9E0.slot[i]);
             }
