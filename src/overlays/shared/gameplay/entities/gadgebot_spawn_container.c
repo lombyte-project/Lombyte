@@ -29,7 +29,7 @@ void FUN_L06_002d8178(void *moby_ptr, void *target_ptr) {
     float origin[4];
     float displacement[4];
     float pos[4];
-    float vel[4];
+    float fragment_velocity[4];
     float angle;
     float direction_angle;
     float speed;
@@ -54,22 +54,22 @@ void FUN_L06_002d8178(void *moby_ptr, void *target_ptr) {
         pos[2] += random_float_between(0.15f, 0.55f);
         angle = random_angle_radians();
         speed = random_float_between(2.0f, 4.5f) * D_0015ED6C;
-        vel[0] = fast_cos(angle) * speed;
-        vel[1] = fast_sin(angle) * speed;
-        vel[2] = 0.0f;
+        fragment_velocity[0] = fast_cos(angle) * speed;
+        fragment_velocity[1] = fast_sin(angle) * speed;
+        fragment_velocity[2] = 0.0f;
         speed = random_float_between(D_0015ED6C * 0.7f, D_0015ED6C * 1.5f);
         if (target != 0) {
             direction_angle = fast_arc_tan(*(float *)(target + 0x10), *(float *)(target + 0x14));
-            vel[0] += fast_cos(direction_angle) * speed;
-            vel[1] += fast_sin(fast_arc_tan(*(float *)(target + 0x10), *(float *)(target + 0x14))) * speed;
+            fragment_velocity[0] += fast_cos(direction_angle) * speed;
+            fragment_velocity[1] += fast_sin(fast_arc_tan(*(float *)(target + 0x10), *(float *)(target + 0x14))) * speed;
         } else {
             direction_angle = fast_arc_tan(*(float *)(moby + 0x10) - hero.motion.pos.f[0],
                                   *(float *)(moby + 0x14) - hero.motion.pos.f[1]);
-            vel[0] += fast_cos(direction_angle) * speed;
-            vel[1] += fast_sin(direction_angle) * speed;
+            fragment_velocity[0] += fast_cos(direction_angle) * speed;
+            fragment_velocity[1] += fast_sin(direction_angle) * speed;
         }
-        vel[2] = random_float_between(2.0f, 7.0f) * D_0015ED6C;
-        fragment = FUN_L06_00300c60(moby, pos, vel);
+        fragment_velocity[2] = random_float_between(2.0f, 7.0f) * D_0015ED6C;
+        fragment = FUN_L06_00300c60(moby, pos, fragment_velocity);
         if (fragment != 0) {
             *(float *)(fragment + 0x2c) *= 0.3f;
         }
