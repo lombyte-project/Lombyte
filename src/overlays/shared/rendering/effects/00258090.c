@@ -24,7 +24,7 @@ void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
     };
     float v[4];
     float *vp = v;
-    float w[4];
+    float span_offset[4];
     float u[4];
     unsigned char *particle;
     int k2 = kind;
@@ -57,8 +57,8 @@ void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
             span_length = random_float_between_alt(20.0f, 30.0f);
             break;
         }
-        *(OvlQuad *)w = *(OvlQuad *)vp;
-        normalize_vector_xyz(w, w, span_length);
+        *(OvlQuad *)span_offset = *(OvlQuad *)vp;
+        normalize_vector_xyz(span_offset, span_offset, span_length);
         *(short *)(particle + 0xA) = k2;
         *(int *)(particle + 4) = ((color_high_byte >> 2) << 24) | 0x606060;
         *(int *)(particle + 0xC) = (color_high_byte << 24) | 0x907070;
@@ -67,7 +67,7 @@ void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
         particle[1] = 3;
         particle[2] = D_L08_001B2880[k];
         *(OvlQuad *)(particle + 0x10) = *(OvlQuad *)pos;
-        add_vector_xyz(u, pos, w);
+        add_vector_xyz(u, pos, span_offset);
         *(OvlQuad *)(particle + 0x20) = *(OvlQuad *)u;
         *(float *)(particle + 0x1C) = f20;
         *(float *)(particle + 0x2C) = 1.0f;
