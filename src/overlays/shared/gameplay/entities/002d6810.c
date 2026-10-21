@@ -542,7 +542,7 @@ extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) 
 #define W(x) (*(int *)&(x))
 
 void FUN_L15_002d77c0(char *moby) {
-    char buf[8];
+    char countdown_text[8];
     char *data = *(char **)(moby + 0x78);
     float color_blend_factor;
     int col;
@@ -557,15 +557,15 @@ void FUN_L15_002d77c0(char *moby) {
         color_blend_factor = 0.0f;
     }
     col = fast_tween_color(W(D_L15_00161BDC), W(D_L15_00161BE0), color_blend_factor);
-    buf[0] = 0x30;
-    buf[1] = *(short *)(data + 0x12) / scale_ticks(0xE10) + 0x30;
-    buf[2] = 0x3A;
-    buf[3] = *(short *)(data + 0x12) % scale_ticks(0xE10) / scale_ticks(0x258) + 0x30;
-    buf[4] = *(short *)(data + 0x12) % scale_ticks(0x258) / scale_ticks(0x3C) + 0x30;
-    buf[5] = 0x3A;
-    buf[6] = *(short *)(data + 0x12) % scale_ticks(0x3C) / scale_ticks(6) + 0x30;
-    buf[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
-    font_print_center_large_001f6c20(W(D_L15_00161BD4), W(D_L15_00161BD8), col, (int)buf, 8);
+    countdown_text[0] = 0x30;
+    countdown_text[1] = *(short *)(data + 0x12) / scale_ticks(0xE10) + 0x30;
+    countdown_text[2] = 0x3A;
+    countdown_text[3] = *(short *)(data + 0x12) % scale_ticks(0xE10) / scale_ticks(0x258) + 0x30;
+    countdown_text[4] = *(short *)(data + 0x12) % scale_ticks(0x258) / scale_ticks(0x3C) + 0x30;
+    countdown_text[5] = 0x3A;
+    countdown_text[6] = *(short *)(data + 0x12) % scale_ticks(0x3C) / scale_ticks(6) + 0x30;
+    countdown_text[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
+    font_print_center_large_001f6c20(W(D_L15_00161BD4), W(D_L15_00161BD8), col, (int)countdown_text, 8);
 }
 /* Starts the moby's trail when requested: resets the trail points and the counters. */
 extern int D_L15_00161C14_r __asm__("D_L15_00161C14") __attribute__((sda));
