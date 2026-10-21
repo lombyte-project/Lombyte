@@ -252,7 +252,7 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void FUN_L01_0030ba18(struct Moby *moby) {
-    BlobVars *v;
+    BlobVars *blob_vars;
     s32 hit;
     s32 i;
     s32 signed_puff_variation;
@@ -263,39 +263,39 @@ void FUN_L01_0030ba18(struct Moby *moby) {
     u8 *puff;
     u8 *puff_data;
 
-    v = (BlobVars *)moby->pvars;
+    blob_vars = (BlobVars *)moby->pvars;
     if (random_integer_below(2)) {
         enqueue_callback_list_1(FUN_L01_0030bfa8, moby);
     }
-    add_vector_xyz(&moby->pos, &moby->pos, v);
-    if (FUN_001f99c0(v->vel.x) > D_L01_00162060 * frame_scale) {
-        v->vel.x *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
+    add_vector_xyz(&moby->pos, &moby->pos, blob_vars);
+    if (FUN_001f99c0(blob_vars->vel.x) > D_L01_00162060 * frame_scale) {
+        blob_vars->vel.x *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
     }
-    if (FUN_001f99c0(v->vel.y) > D_L01_00162060 * frame_scale) {
-        v->vel.y *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
+    if (FUN_001f99c0(blob_vars->vel.y) > D_L01_00162060 * frame_scale) {
+        blob_vars->vel.y *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
     }
-    if (v->vel.z > 0.0f) {
-        v->vel.z *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
+    if (blob_vars->vel.z > 0.0f) {
+        blob_vars->vel.z *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
     }
-    v->vel.z -= D_L01_00162058 * frame_time_sq;
-    moby->rot.x = fast_add_rotations(moby->rot.x, v->spin.x);
-    moby->rot.y = fast_add_rotations(moby->rot.y, v->spin.y);
-    moby->rot.z = fast_add_rotations(moby->rot.z, v->spin.z);
+    blob_vars->vel.z -= D_L01_00162058 * frame_time_sq;
+    moby->rot.x = fast_add_rotations(moby->rot.x, blob_vars->spin.x);
+    moby->rot.y = fast_add_rotations(moby->rot.y, blob_vars->spin.y);
+    moby->rot.z = fast_add_rotations(moby->rot.z, blob_vars->spin.z);
     if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f ||
         moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
         mark_moby_for_removal(moby);
         return;
     }
-    hit = coll_sphere(2.0f, &moby->pos, 0, (void *)v->owner);
-    if (tick_countdown_32(&v->timer) || hit) {
+    hit = coll_sphere(2.0f, &moby->pos, 0, (void *)blob_vars->owner);
+    if (tick_countdown_32(&blob_vars->timer) || hit) {
         if (hit) {
             if (D_L01_001742C0.have_normal) {
-                FUN_L00_001ff660(v, v, &D_L01_001742C0.normal);
+                FUN_L00_001ff660(blob_vars, blob_vars, &D_L01_001742C0.normal);
             } else {
-                clear_vector(v);
+                clear_vector(blob_vars);
             }
         }
-        FUN_L00_0025e450(moby, v, &moby->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 0, 3.0f, 15.0f, 1, 1,
+        FUN_L00_0025e450(moby, blob_vars, &moby->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 0, 3.0f, 15.0f, 1, 1,
                          -1, 0);
         mark_moby_for_removal(moby);
         return;
