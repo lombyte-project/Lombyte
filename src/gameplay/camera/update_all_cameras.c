@@ -17,8 +17,8 @@ s32 update_all_cameras(void) {
     s32 changed;
     s32 i;
     void (*update)(struct UpdateCam *);
-    Vec4f *src;
-    Vec3 *dst;
+    Vec4f *camera_position;
+    Vec3 *previous_camera_position;
 
     best = cur_cam[0];
     changed = 0;
@@ -38,11 +38,11 @@ s32 update_all_cameras(void) {
     if (update != 0) {
         update(best);
     }
-    src = &best->pos;
-    dst = &best->prev_pos;
-    dst->x = src->x;
-    dst->y = src->y;
-    dst->z = src->z;
+    camera_position = &best->pos;
+    previous_camera_position = &best->prev_pos;
+    previous_camera_position->x = camera_position->x;
+    previous_camera_position->y = camera_position->y;
+    previous_camera_position->z = camera_position->z;
     execute_camera_post_update_callbacks();
     return -1;
 }
