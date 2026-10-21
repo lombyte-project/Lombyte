@@ -869,13 +869,13 @@ extern int func_L00_0023F0D0_2E3700(float *, float, float, float, float, float) 
 
 void FUN_L00_002e2250(int unused, int beam) {
     Vec_2E3700 span;
-    Vec_2E3700 dir;
+    Vec_2E3700 beam_direction;
     Vec_2E3700 side;
     Vec_2E3700 up;
     Vec_2E3700 from;
     Vec_2E3700 span2;
     Vec_2E3700 tip;
-    Vec4 vel;
+    Vec4 particle_velocity;
     Vec_2E3700 pos;
     int strand = beam * 2;
     int next_strand = strand + 1;
@@ -921,11 +921,11 @@ void FUN_L00_002e2250(int unused, int beam) {
     qcopy_nc(from, &D_L00_001E70A0_2E3700[beam]);
     one = 1.0f;
     func_001F9BF0_2E3700(span2, &D_L00_001E7130_2E3700[beam], from);
-    func_L00_001FF4B0_2E3700(dir, span2, one);
-    func_001F9CA0_2E3700(side, dir, D_0013E633_2E3700);
+    func_L00_001FF4B0_2E3700(beam_direction, span2, one);
+    func_001F9CA0_2E3700(side, beam_direction, D_0013E633_2E3700);
     func_L00_001FF4B0_2E3700(side, side, -1.0f);
-    func_001F9CA0_2E3700(up, side, dir);
-    func_001F9EE8_2E3700(tip, &D_L00_001E7190_2E3700[strand][18], dir);
+    func_001F9CA0_2E3700(up, side, beam_direction);
+    func_001F9EE8_2E3700(tip, &D_L00_001E7190_2E3700[strand][18], beam_direction);
     qcopy(&D_L00_001E7160_2E3700[beam], tip);
     point = D_L00_001E7190_2E3700[next_strand];
     for (second_strand_point_index = 0; second_strand_point_index < 19; second_strand_point_index++) {
@@ -955,13 +955,13 @@ void FUN_L00_002e2250(int unused, int beam) {
 
         one = 1.0f;
         angle = func_L00_00258C80_2E3700(0.34906584f, 0.6981317f);
-        vel.q = 0;
-        vel.f[0] = one;
-        vel.f[3] = one;
-        vel.f[0] = speed * func_001F9F90_2E3700(angle);
-        vel.f[1] = speed * func_001F9FA8_2E3700(angle);
-        func_001F9EC0_2E3700(&vel, &vel, &D_L00_001E7070_2E3700[beam]);
-        func_L00_002757E8_2E3700(D_L00_001E7070_2E3700[beam].v30, &vel, 0x7F, D_L00_00161D58_2E3700[beam]);
+        particle_velocity.q = 0;
+        particle_velocity.f[0] = one;
+        particle_velocity.f[3] = one;
+        particle_velocity.f[0] = speed * func_001F9F90_2E3700(angle);
+        particle_velocity.f[1] = speed * func_001F9FA8_2E3700(angle);
+        func_001F9EC0_2E3700(&particle_velocity, &particle_velocity, &D_L00_001E7070_2E3700[beam]);
+        func_L00_002757E8_2E3700(D_L00_001E7070_2E3700[beam].v30, &particle_velocity, 0x7F, D_L00_00161D58_2E3700[beam]);
         if (func_002140B0_2E3700(3) == 0) {
             Part_2E3700 *spark;
 
@@ -979,8 +979,8 @@ void FUN_L00_002e2250(int unused, int beam) {
             }
         }
         func_002140F8_2E3700(0.01f, 0.05f);
-        func_002141A8_2E3700(&vel, 0.01f, 0.05f);
-        func_L00_002757E8_2E3700(tip, &vel, 0x7F, D_L00_00161D58_2E3700[beam]);
+        func_002141A8_2E3700(&particle_velocity, 0.01f, 0.05f);
+        func_L00_002757E8_2E3700(tip, &particle_velocity, 0x7F, D_L00_00161D58_2E3700[beam]);
         if (func_002140B0_2E3700(3) == 0) {
             Part_2E3700 *spark = func_L00_002757E8_2E3700(tip, D_L00_0015F660_2E3700, 0x7F, D_L00_00161D58_2E3700[beam]);
 
