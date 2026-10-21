@@ -2864,7 +2864,7 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void update_float_countdown(float *) __asm__("FUN_L08_00211b08");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L17_002efa48(void *moby_v, int arg) {
+void FUN_L17_002efa48(void *moby_v, int clip_volume_suppressed) {
     Moby_2F1558 *moby = (Moby_2F1558 *)moby_v;
     Data_2F1558 *moby_vars;
     Hit_2F1558 *hit_record;
@@ -2909,7 +2909,7 @@ void FUN_L17_002efa48(void *moby_v, int arg) {
         trooper_anim_update(moby, moby_vars->h110);
     }
     moby->bA4 = 0xFF;
-    if (arg != 0) {
+    if (clip_volume_suppressed != 0) {
         return;
     }
     if (FUN_L00_0025ff38(128.0f, (char *)moby, moby_vars->v180, 0, 0, 0, 0) == 2) {
