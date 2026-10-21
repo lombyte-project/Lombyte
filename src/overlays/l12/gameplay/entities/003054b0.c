@@ -611,7 +611,7 @@ void planetbuster_maximus_part_update(char *moby) {
         PLANETBUSTER_TRANSITION_CLEANUP = 2
     };
     float v[4];
-    float w[4];
+    float transition_rotation[4];
     char *moby_data = *(char **)(moby + 0x78);
     if (((unsigned char *)moby)[0x20] != 0 && D_L12_001FB688[17] != 0) {
         qcopy(moby + 0x10, (char *)&D_L12_00161F60_gp);
@@ -765,18 +765,18 @@ void planetbuster_maximus_part_update(char *moby) {
                                   D_0015ED70 * 0.666f, D_0015ED70 * 0.666f, D_0015ED6C_gp * 0.4f);
                     lerp_vector(v, D_L12_001600EC + *(int *)(moby_data + 0x608) * 128 + 0x30,
                                   D_L12_001600EC + *(int *)(moby_data + 0x60C) * 128 + 0x30, *(float *)(moby_data + 0x610));
-                    clear_u64_value(w);
-                    w[0] = fast_subtract_rotations(*(float *)(D_L12_001600EC + *(int *)(moby_data + 0x60C) * 128 + 0x70),
+                    clear_u64_value(transition_rotation);
+                    transition_rotation[0] = fast_subtract_rotations(*(float *)(D_L12_001600EC + *(int *)(moby_data + 0x60C) * 128 + 0x70),
                                          *(float *)(D_L12_001600EC + *(int *)(moby_data + 0x608) * 128 + 0x70)) * *(float *)(moby_data + 0x610);
-                    w[0] = fast_add_rotations(*(float *)(D_L12_001600EC + *(int *)(moby_data + 0x608) * 128 + 0x70), w[1]);
-                    w[1] = fast_subtract_rotations(*(float *)(D_L12_001600EC + *(int *)(moby_data + 0x60C) * 128 + 0x74),
+                    transition_rotation[0] = fast_add_rotations(*(float *)(D_L12_001600EC + *(int *)(moby_data + 0x608) * 128 + 0x70), transition_rotation[1]);
+                    transition_rotation[1] = fast_subtract_rotations(*(float *)(D_L12_001600EC + *(int *)(moby_data + 0x60C) * 128 + 0x74),
                                          *(float *)(D_L12_001600EC + *(int *)(moby_data + 0x608) * 128 + 0x74)) * *(float *)(moby_data + 0x610);
-                    w[1] = fast_add_rotations(*(float *)(D_L12_001600EC + *(int *)(moby_data + 0x608) * 128 + 0x74), w[1]);
-                    w[2] = fast_subtract_rotations(*(float *)(D_L12_001600EC + *(int *)(moby_data + 0x60C) * 128 + 0x78),
+                    transition_rotation[1] = fast_add_rotations(*(float *)(D_L12_001600EC + *(int *)(moby_data + 0x608) * 128 + 0x74), transition_rotation[1]);
+                    transition_rotation[2] = fast_subtract_rotations(*(float *)(D_L12_001600EC + *(int *)(moby_data + 0x60C) * 128 + 0x78),
                                          *(float *)(D_L12_001600EC + *(int *)(moby_data + 0x608) * 128 + 0x78)) * *(float *)(moby_data + 0x610);
-                    w[2] = fast_add_rotations(*(float *)(D_L12_001600EC + *(int *)(moby_data + 0x608) * 128 + 0x78), w[2]);
+                    transition_rotation[2] = fast_add_rotations(*(float *)(D_L12_001600EC + *(int *)(moby_data + 0x608) * 128 + 0x78), transition_rotation[2]);
                     FUN_L00_002ea9d8(v);
-                    FUN_L00_002eaa30(w);
+                    FUN_L00_002eaa30(transition_rotation);
                 } else {
                     moby[0xBC] = 2;
                     D_L12_0015F404 = 0;
