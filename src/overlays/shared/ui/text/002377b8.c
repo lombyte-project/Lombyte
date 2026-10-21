@@ -1209,11 +1209,11 @@ void FUN_L00_0023a218(u8 *hud_element) {
     u8 *visibility_counters = hud_element + 0x70;
     if (D_00141398) {
         s32 scaled_duration_frames = scale_game_frames(10);
-        s32 lim = D_L00_0015F7F0_gp;
+        s32 visibility_counter_limit = D_L00_0015F7F0_gp;
         *(s32 *)(hud_element + 0x7C) = scaled_duration_frames;
-        if (hud_element[0x70] < lim) {
+        if (hud_element[0x70] < visibility_counter_limit) {
             hud_element[0x70]++;
-        } else if (visibility_counters[1] < lim) {
+        } else if (visibility_counters[1] < visibility_counter_limit) {
             visibility_counters[1]++;
         }
     } else {
