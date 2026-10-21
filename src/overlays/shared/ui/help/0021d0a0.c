@@ -25,28 +25,28 @@ extern Rec D_L06_0017A240[];
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
 int FUN_L06_0021d0a0(int allow_item_help) {
-    struct Hero *g = &hero;
-    switch (g->vehicle_mode) {
-    case 1:
+    struct Hero *hero_context = &hero;
+    switch (hero_context->vehicle_mode) {
+    case HERO_VEHICLE_MODE_CLANK:
         return 0;
     case 3:
         return 0;
     }
     {
-        struct Hero *g2 = &hero;
-        if (g2->health.hp == 1) {
+        struct Hero *hero_help_context = &hero;
+        if (hero_help_context->health.hp == 1) {
             return 0x54;
         }
         if (allow_item_help == 0) {
             return 0;
         }
-        if (g2->unk20A8 == 0) {
+        if (hero_help_context->unk20A8 == 0) {
             return 0;
         }
-        if (g2->unk20AA == 0) {
+        if (hero_help_context->unk20AA == 0) {
             return 0;
         }
-        if (g2->unk22C8 != 0) {
+        if (hero_help_context->unk22C8 != 0) {
             return 0;
         }
     }
