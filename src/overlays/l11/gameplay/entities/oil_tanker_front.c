@@ -676,28 +676,28 @@ void FUN_L11_00317820(struct Moby *moby) {
     struct L11ChainVars *chain_vars = (struct L11ChainVars *)moby->pvars;
     char *path = chain_vars->path;
     struct L11ChainPath *chain_path = (struct L11ChainPath *)chain_vars->path;
-    float v[4];
+    float spacing_reference_position[4];
     int i;
 
-    fast_vec_normalize(v, &moby->rot_row0, D_L11_00162328);
-    fast_vec_add(v, v, &moby->pos);
+    fast_vec_normalize(spacing_reference_position, &moby->rot_row0, D_L11_00162328);
+    fast_vec_add(spacing_reference_position, spacing_reference_position, &moby->pos);
     for (i = 0; i < chain_vars->count; i++) {
         int segment_start_index = chain_vars->offsets[i];
-        int b = (segment_start_index + 1) % chain_path->count;
+        int segment_end_index = (segment_start_index + 1) % chain_path->count;
         int lookahead_point_index = (segment_start_index + 2) % chain_path->count;
-        float segment_start_distance = FUN_001f9b48(&chain_path->pts[segment_start_index], v);
-        float segment_end_distance = FUN_001f9b48(&chain_path->pts[b], v);
+        float segment_start_distance = FUN_001f9b48(&chain_path->pts[segment_start_index], spacing_reference_position);
+        float segment_end_distance = FUN_001f9b48(&chain_path->pts[segment_end_index], spacing_reference_position);
         float segment_fraction;
         struct Moby *link;
         float yaw0, yaw1, pitch0;
         float *qa, *qb, *qc; /* the points as raw rows: [4], [5], [6] = x, y, z */
 
         while (segment_end_distance > D_L11_00162324) {
-            segment_start_index = b;
-            b = (segment_start_index + 1) % chain_path->count;
+            segment_start_index = segment_end_index;
+            segment_end_index = (segment_start_index + 1) % chain_path->count;
             segment_start_distance = segment_end_distance;
-            lookahead_point_index = (b + 1) % chain_path->count;
-            segment_end_distance = FUN_001f9b48(&chain_path->pts[b], v);
+            lookahead_point_index = (segment_end_index + 1) % chain_path->count;
+            segment_end_distance = FUN_001f9b48(&chain_path->pts[segment_end_index], spacing_reference_position);
         }
         {
             float *q = (float *)(path + segment_start_index * 16);
@@ -728,29 +728,29 @@ void FUN_L11_00317820(struct Moby *moby) {
                 catchup_adjusted_progress += 1.0f;
             }
             segment_start_index = (segment_start_index + k + chain_path->count) % chain_path->count;
-            b = (b + k + chain_path->count) % chain_path->count;
+            segment_end_index = (segment_end_index + k + chain_path->count) % chain_path->count;
             lookahead_point_index = (lookahead_point_index + k + chain_path->count) % chain_path->count;
             segment_fraction = catchup_adjusted_progress;
         }
         link = chain_vars->links[i];
-        lerp_vector(&link->pos, &chain_path->pts[segment_start_index], &chain_path->pts[b], segment_fraction);
-        qcopy(v, &chain_vars->links[i]->pos);
+        lerp_vector(&link->pos, &chain_path->pts[segment_start_index], &chain_path->pts[segment_end_index], segment_fraction);
+        qcopy(spacing_reference_position, &chain_vars->links[i]->pos);
         qa = (float *)(path + segment_start_index * 16);
-        qb = (float *)(path + b * 16);
+        qb = (float *)(path + segment_end_index * 16);
         qc = (float *)(path + lookahead_point_index * 16);
         yaw0 = fast_arc_tan(qa[4] - qb[4], qa[5] - qb[5]);
         yaw1 = fast_arc_tan(qb[4] - qc[4], qb[5] - qc[5]);
-        pitch0 = -fast_arc_tan(vector_distance(&chain_path->pts[b].x, &chain_path->pts[segment_start_index].x),
+        pitch0 = -fast_arc_tan(vector_distance(&chain_path->pts[segment_end_index].x, &chain_path->pts[segment_start_index].x),
                                qa[6] - qb[6]);
         chain_vars->links[i]->rot.y = fast_add_rotations(
-            fast_subtract_rotations(-fast_arc_tan(vector_distance(&chain_path->pts[lookahead_point_index].x, &chain_path->pts[b].x),
+            fast_subtract_rotations(-fast_arc_tan(vector_distance(&chain_path->pts[lookahead_point_index].x, &chain_path->pts[segment_end_index].x),
                                                   qb[6] - qc[6]),
                                     pitch0) * segment_fraction,
             pitch0);
         chain_vars->links[i]->rot.z = fast_add_rotations(fast_subtract_rotations(yaw1, yaw0) * segment_fraction, yaw0);
         FUN_L00_00250df8(chain_vars->links[i]);
-        fast_vec_normalize(v, &chain_vars->links[i]->rot_row0, D_L11_00162328);
-        fast_vec_add(v, v, &chain_vars->links[i]->pos);
+        fast_vec_normalize(spacing_reference_position, &chain_vars->links[i]->rot_row0, D_L11_00162328);
+        fast_vec_add(spacing_reference_position, spacing_reference_position, &chain_vars->links[i]->pos);
     }
 }
 extern char D_00141C18[];
