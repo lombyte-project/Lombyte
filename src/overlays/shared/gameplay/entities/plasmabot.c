@@ -1080,7 +1080,7 @@ extern float func_L00_0025CE58_2B4668(float *p, float a, float *v, float b, floa
 extern float D_L14_001614D8 __attribute__((sda));
 int FUN_L14_002b3418(char *moby) {
     float path_target_position[4];
-    float b[4];
+    float pre_spring_position[4];
     float target_offset[4];
     char *data = *(char **)(moby + 0x78);
     int reached = sample_path(D_L14_001B0BB0[*(int *)(data + 0x240)], path_target_position, data + 0x24C, data + 0x250, 0,
@@ -1088,10 +1088,10 @@ int FUN_L14_002b3418(char *moby) {
     float ang;
     float k;
     float turn_step_limit;
-    qcopy(b, moby + 0x10);
+    qcopy(pre_spring_position, moby + 0x10);
     vendor_spring((float *)(moby + 0x10), (float *)(data + 0x254), path_target_position[0], 0.01f, 0.2f, 0.0f);
     vendor_spring((float *)(moby + 0x14), (float *)(data + 0x258), path_target_position[1], 0.01f, 0.2f, 0.0f);
-    subtract_vector_xyz_c(target_offset, path_target_position, b);
+    subtract_vector_xyz_c(target_offset, path_target_position, pre_spring_position);
     ang = fast_arc_tan(target_offset[0], target_offset[1]);
     k = frame_time_sq * 12.566371f;
     turn_step_limit = frame_time * 6.2831855f;
