@@ -57,11 +57,11 @@ void setup_gif_paging(int skip_paging_entry_reset) {
             }
         }
         {
-            char *b = D_0019A3E8;
+            char *paging_arena = D_0019A3E8;
             int j;
 
-            for (j = 0; j < *(int *)(*(char **)(b + 0x18) + 0x24); j++) {
-                *(short *)(*(char **)(b + 0x28) + j * 8 + 4) = 0;
+            for (j = 0; j < *(int *)(*(char **)(paging_arena + 0x18) + 0x24); j++) {
+                *(short *)(*(char **)(paging_arena + 0x28) + j * 8 + 4) = 0;
             }
         }
     }
