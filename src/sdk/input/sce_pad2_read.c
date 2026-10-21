@@ -16,7 +16,7 @@ extern s32 scePad2SetButtonOrder();
 
 s32 scePad2Read(s32 port, u8 *data) {
     struct Pad2Data *side;
-    u8 *src;
+    u8 *pad_input_payload;
 
     if (*(u32 *)(D_0015B540 + port * 0x330) == 0) {
         return -1;
@@ -28,9 +28,9 @@ s32 scePad2Read(s32 port, u8 *data) {
     }
     side = scePad2GetSide(port);
     if (side->unk2 != 0) {
-        src = (u8 *)side + 0x1C;
-        if (src != NULL) {
-            memcpy(data, src, side->unk2);
+        pad_input_payload = (u8 *)side + 0x1C;
+        if (pad_input_payload != NULL) {
+            memcpy(data, pad_input_payload, side->unk2);
             scePad2SetButtonOrder((u8 *)side + (side->unk2 + 0x1C), D_0015B550 + port * 0x330);
         }
     }
