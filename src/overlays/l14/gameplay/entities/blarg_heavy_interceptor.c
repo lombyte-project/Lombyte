@@ -2835,14 +2835,14 @@ extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
  * program. */
 void FUN_L14_002b5c98(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
-    s32 idx;
+    s32 voice_slot_index;
     *(u16 *)(moby + 0x34) |= 0x41;
     *(s32 *)(moby + 0x94) = 0;
-    idx = *(s32 *)(data + 0x108);
-    if (idx != -1) {
-        u8 *voice_slot = D_0013E550 + idx * 0x70;
+    voice_slot_index = *(s32 *)(data + 0x108);
+    if (voice_slot_index != -1) {
+        u8 *voice_slot = D_0013E550 + voice_slot_index * 0x70;
         if (*(u8 **)(voice_slot + 0x88) == moby && *(u8 *)(voice_slot + 0x74) != 0) {
-            release_voice_slot(idx);
+            release_voice_slot(voice_slot_index);
         }
     }
     *(s32 *)(data + 0x108) = -1;
