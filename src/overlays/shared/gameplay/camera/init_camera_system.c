@@ -15,12 +15,12 @@ extern Ent09 D_L00_00167150_u[] __asm__("D_L00_00167150");
 s32 FUN_L00_001eb1f8(s32 id) {
     s32 camera_record_address;
     s32 camera_table_end_address;
-    s16 v;
+    s16 camera_record_id;
     camera_record_address = (s32)&D_L00_00167150_u[0];
     camera_table_end_address = camera_record_address + 0x1E00;
     for (;;) {
-        v = *(s16 *)(camera_record_address + 0x86);
-        if (v != id) {
+        camera_record_id = *(s16 *)(camera_record_address + 0x86);
+        if (camera_record_id != id) {
             camera_record_address += 0xA0;
             if (camera_record_address < camera_table_end_address)
                 continue;
