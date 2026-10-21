@@ -877,14 +877,14 @@ extern s32 FUN_L00_002e4180_c(V002e7318 *, f32) __asm__("FUN_L00_002e4180");
 extern s32 coll_sphere(V002e7318 *, f32, s32, s32) __asm__("FUN_L00_001f0d60");
 extern s32 FUN_L00_002e7138_c(O002e7318 *, V002e7318 *, s32, s32) __asm__("FUN_L00_002e7138");
 s32 FUN_L00_002e7318(O002e7318 *camera_moby) {
-    V002e7318 pos;
+    V002e7318 candidate_camera_position;
     V002e7318 normalized_position_delta;
     u8 *b = camera_moby->p70;
     X002e7318 *x = (X002e7318 *)(b + 0x1D0);
     u8 *camera_target_state = b + 0x40;
     u8 *camera_orbit_state = b + 0x130;
     P002e7318 *active_camera_state;
-    f32 lim;
+    f32 collision_probe_radius;
     f32 direction_alignment;
     s32 w;
     s32 i;
@@ -893,22 +893,22 @@ s32 FUN_L00_002e7318(O002e7318 *camera_moby) {
     s32 r;
     G002e7318 *g = &D_L00_00166E10_c;
 
-    add_vector_xyz(&pos, b + 0x90, camera_orbit_state);
+    add_vector_xyz(&candidate_camera_position, b + 0x90, camera_orbit_state);
     x->s38 = 2;
     active_camera_state = (P002e7318 *)((O002e7318 **)g)[-4]->p70;
     w = x->i48;
-    lim = follow_cam_min_distance_gp + active_camera_state->c * active_camera_state->a * (active_camera_state->b - 1.0f);
+    collision_probe_radius = follow_cam_min_distance_gp + active_camera_state->c * active_camera_state->a * (active_camera_state->b - 1.0f);
     i = 0;
     while (i < 3) {
-        if (FUN_L00_002e4180_c(&pos, lim)) {
+        if (FUN_L00_002e4180_c(&candidate_camera_position, collision_probe_radius)) {
             ha = 1;
         } else {
-            if (!coll_sphere(&pos, lim, w, g->i114))
+            if (!coll_sphere(&candidate_camera_position, collision_probe_radius, w, g->i114))
                 break;
             hb = 1;
         }
         if (x->s38 != 0) {
-            subtract_vector_xyz(&normalized_position_delta, &(*(V002e7318 *)&D_L00_00173E60), &pos);
+            subtract_vector_xyz(&normalized_position_delta, &(*(V002e7318 *)&D_L00_00173E60), &candidate_camera_position);
             normalize_vector_xyz(&normalized_position_delta, &normalized_position_delta, 1.0f);
             direction_alignment = dot_vectors_xyz(&g->v40, &normalized_position_delta);
             if (direction_alignment > 0.75f)
@@ -918,10 +918,10 @@ s32 FUN_L00_002e7318(O002e7318 *camera_moby) {
             else
                 x->s38 = 0;
         }
-        qcopy(&pos, &D_L00_00173E70);
+        qcopy(&candidate_camera_position, &D_L00_00173E70);
         i++;
     }
-    r = FUN_L00_002e7138_c(camera_moby, &pos, ha, hb);
+    r = FUN_L00_002e7138_c(camera_moby, &candidate_camera_position, ha, hb);
     add_vector_xyz(&x->m, camera_target_state + 0x50, camera_orbit_state);
     if (x->s38 == 2)
         x->s38 = 0;
