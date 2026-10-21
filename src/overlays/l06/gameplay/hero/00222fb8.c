@@ -402,7 +402,7 @@ void FUN_L06_00229650(void) {
     u8 *hit_moby_data;
 
     s32 k;
-    f32 g;
+    f32 ground_ray_start_offset;
 
     hero_lui.unk270.f[2] = 1.0f;
     hero_lui.air_frames.u++;
@@ -421,11 +421,11 @@ void FUN_L06_00229650(void) {
     k = 0;
     if (hero_lui.unk20B3)
         k = 1;
-    g = hero_lui.unk234 * 2.2f;
+    ground_ray_start_offset = hero_lui.unk234 * 2.2f;
     if (hero_lui.state.control_mode == 2) {
-        g = hero_lui.unk234 * 2.9f;
+        ground_ray_start_offset = hero_lui.unk234 * 2.9f;
     }
-    hero_get_collision_ray_endpoints(&ground_ray_start, &collision_ray_end, k, g, -48.0f);
+    hero_get_collision_ray_endpoints(&ground_ray_start, &collision_ray_end, k, ground_ray_start_offset, -48.0f);
     if (collision_line(&ground_ray_start, &collision_ray_end, 2, hero_lui.moby, 0) == 0) {
         goto tail;
     }
