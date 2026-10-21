@@ -31,22 +31,22 @@ Boston, MA 02111-1307, USA.  */
 #include "types.h"
 
 u64 __fixunsdfdi(f64 value) {
-    f64 b;
-    u64 v;
+    f64 high_word_quotient;
+    u64 integer_result;
     u64 high_word_coeff;
 
     high_word_coeff = 1ULL << 32;
     if (value < 0.0) {
         return 0;
     }
-    b = value / 4294967296.0;
-    v = (u32)b;
-    v <<= 32;
-    value -= (f64)v;
+    high_word_quotient = value / 4294967296.0;
+    integer_result = (u32)high_word_quotient;
+    integer_result <<= 32;
+    value -= (f64)integer_result;
     if (value < 0.0) {
-        v -= (u32)(-value);
+        integer_result -= (u32)(-value);
     } else {
-        v += (u32)value;
+        integer_result += (u32)value;
     }
-    return v;
+    return integer_result;
 }
