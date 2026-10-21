@@ -2072,11 +2072,11 @@ extern short *D_L11_001AC240[];
 extern s32 D_L11_0015FFF4;
 
 int FUN_L11_0030a850(struct Moby *moby) {
-    int idx = *(short *)((char *)moby->pvars + 0xB4);
+    int moby_group_index = *(short *)((char *)moby->pvars + 0xB4);
     short *group_entry;
-    if (idx < 0 || *(int *)&D_L11_0015FFF4 < idx)
+    if (moby_group_index < 0 || *(int *)&D_L11_0015FFF4 < moby_group_index)
         return 1;
-    group_entry = D_L11_001AC240[idx];
+    group_entry = D_L11_001AC240[moby_group_index];
     if (group_entry == 0)
         return 1;
     do {
