@@ -49,11 +49,11 @@ extern void FUN_L00_00250df8(void *);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 /* Creates a class 0x23A moby at pos, copying a few fields from src. */
-void *FUN_L04_002d34d8(char *source_moby, char *pos) {
+void *FUN_L04_002d34d8(char *source_moby, char *spawn_position) {
     char saved_position[16];
     char *saved_position_ptr = saved_position;
     char *created_moby;
-    *(OvlQuad *)saved_position = *(OvlQuad *)pos;
+    *(OvlQuad *)saved_position = *(OvlQuad *)spawn_position;
     created_moby = (char *)func_0020D348_m(0x23a);
     if (created_moby != 0) {
         *(unsigned char *)(created_moby + 0x30) = 0xFF;
