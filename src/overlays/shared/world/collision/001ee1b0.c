@@ -18,7 +18,7 @@ extern void debug_print(char *) __asm__("FUN_001e93b0");
 extern char D_L00_001E78B0[];
 extern s32 FUN_L00_001ee318_c(V *, s32 *, f32) __asm__("FUN_L00_001ee318");
 
-s32 *FUN_L00_001ee1b0(OvlQuad *v, f32 rad) {
+s32 *FUN_L00_001ee1b0(OvlQuad *input_point, f32 rad) {
     V query_point;
     V volume_delta;
     V *tp;
@@ -28,7 +28,7 @@ s32 *FUN_L00_001ee1b0(OvlQuad *v, f32 rad) {
     f32 f;
 
     tp = &query_point;
-    query_point.q = *v;
+    query_point.q = *input_point;
     i = truncate_float_to_s32(query_point.f[0] * 0.0625f);
     j = truncate_float_to_s32(query_point.f[1] * 0.0625f);
     if (i < 0 || j < 0 || i > 0x40 || j > 0x40) {
