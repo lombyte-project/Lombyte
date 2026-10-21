@@ -790,16 +790,16 @@ char *FUN_L17_002f4fb8(int list) {
     float A[4], B[4], C[4], D[4], E[4], F[4];
     char *selected_moby;
     char *moby_pvars;
-    int idx;
+    int moby_byte_offset;
     do {
-        idx = (*moby_index_ptr & 0x7FFF) << 8;
-        if (*(short *)(0xA6 + idx + D_L17_0015FFD8) != 0x733)
+        moby_byte_offset = (*moby_index_ptr & 0x7FFF) << 8;
+        if (*(short *)(0xA6 + moby_byte_offset + D_L17_0015FFD8) != 0x733)
             continue;
-        if (*(unsigned char *)(0x20 + idx + D_L17_0015FFD8) != 4)
+        if (*(unsigned char *)(0x20 + moby_byte_offset + D_L17_0015FFD8) != 4)
             continue;
         if (random_integer_below(10))
             continue;
-        selected_moby = D_L17_0015FFD8 + idx;
+        selected_moby = D_L17_0015FFD8 + moby_byte_offset;
         moby_pvars = *(char **)(selected_moby + 0x78);
         qcopy(C, D_L17_001676D0);
         C[0] = 0;
