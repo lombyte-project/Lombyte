@@ -53,7 +53,7 @@ void initialize_menu_preview_scene(void) __asm__("FUN_00218f98");
 
 void initialize_menu_preview_scene(void) {
     s32 i;
-    s32 preview_workspace_start, b, help_text_buffer_start, graphics_buffer_start;
+    s32 preview_workspace_start, graphics_workspace_base, help_text_buffer_start, graphics_buffer_start;
     menu_system.state = 2;
     menu_system.current = &D_001D45C8;
     menu_system.next = &D_001D45C8;
@@ -66,14 +66,14 @@ void initialize_menu_preview_scene(void) {
     sceGsSyncV(0);
     game_frame_counter++;
     preview_workspace_start = D_001940C0[1] + 0xA0000;
-    b = D_001940C0[2] + 0xA0000;
+    graphics_workspace_base = D_001940C0[2] + 0xA0000;
     help_text_buffer_start = preview_workspace_start + 0x3C000;
-    graphics_buffer_start = b + 0xE0000;
+    graphics_buffer_start = graphics_workspace_base + 0xE0000;
     menu_system.unkFC = help_text_buffer_start + 0xC1000;
     menu_system.unk100 = graphics_buffer_start + 0x11800;
     current_vu_chain = 0xA0000;
     menu_system.unk104 = preview_workspace_start;
-    menu_system.unk10 = b;
+    menu_system.unk10 = graphics_workspace_base;
     menu_system.help_text_buffer = help_text_buffer_start;
     menu_system.unk10C = graphics_buffer_start;
     func_00225AC0__void(1);
