@@ -619,11 +619,11 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 
 void FUN_L04_002d1608(void *moby) {
-    char pos[16];
+    char joint_world_position[16];
     char zero_vector[16];
     clear_vector(zero_vector);
-    moby_point_position(moby, 12, pos);
-    func_L00_0025F4A8_alt(moby, zero_vector, pos, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, 1.0f, -1, 15.0f,
+    moby_point_position(moby, 12, joint_world_position);
+    func_L00_0025F4A8_alt(moby, zero_vector, joint_world_position, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, 1.0f, -1, 15.0f,
                           1, 1, -1, 0);
 }
 
