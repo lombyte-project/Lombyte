@@ -803,7 +803,7 @@ extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 void FUN_L06_002ff680(char *moby) {
     char *data = *(char **)(moby + 0x78);
     QuadPacket_f680 pk[2];
-    f32 mat[4][4];
+    f32 quad_identity_matrix[4][4];
     f32 corner_inset_vector[4];
     s32 i;
     s32 j;
@@ -827,7 +827,7 @@ void FUN_L06_002ff680(char *moby) {
     pk[0].tag[0] = 0;
     pk[1].tag[3] = regs;
     pk[0].tag[3] = regs;
-    set_identity_matrix(mat);
+    set_identity_matrix(quad_identity_matrix);
     do {
         D_L06_001F2E90[1][1] = D_L06_001F2E90[3][1];
         D_L06_001F2E90[3][1] = random_float_between(0.0f, 0.2f);
@@ -854,7 +854,7 @@ void FUN_L06_002ff680(char *moby) {
             pk[1].uv[j][0] = D_L06_001F2E90[j][0];
             pk[1].uv[j][1] = D_L06_001F2E90[j][1];
         }
-        draw_geometry_quad(pk, mat, 0);
+        draw_geometry_quad(pk, quad_identity_matrix, 0);
         for (j = 0; j < 4; j++) {
             corner_position = pk[0].pos[j];
             if (j & 1) {
@@ -862,7 +862,7 @@ void FUN_L06_002ff680(char *moby) {
             }
         }
         i++;
-        draw_geometry_quad(pk, mat, 0);
+        draw_geometry_quad(pk, quad_identity_matrix, 0);
     } while (i < 15);
     vu1_add_gs_register(0x47, 0x5360B);
 }
