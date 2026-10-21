@@ -189,7 +189,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
     float sight;
     RocketTarget target;
     float muzzle[4];
-    float vel[4];
+    float projectile_launch_velocity[4];
     float spread[4];
     float scale;
     float ground;
@@ -288,11 +288,11 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
                 trooper_add(muzzle, muzzle, &mine_layer_moby->pos);
                 muzzle[2] += 2.0f;
                 trooper_scale(spread, &mine_layer_moby->rot_row0, trooper_rand(-1.0f, 1.0f) * frame_time);
-                trooper_scale(vel, &mine_layer_moby->rot_row1, D_L03_00161910 * frame_time);
-                trooper_scale4(vel, vel, scale);
-                trooper_add(vel, vel, spread);
-                vel[2] = D_L03_00161914 * frame_time * trooper_rand(0.9f, 1.1f);
-                FUN_L03_002cc888((char *)mine_layer_moby, muzzle, vel);
+                trooper_scale(projectile_launch_velocity, &mine_layer_moby->rot_row1, D_L03_00161910 * frame_time);
+                trooper_scale4(projectile_launch_velocity, projectile_launch_velocity, scale);
+                trooper_add(projectile_launch_velocity, projectile_launch_velocity, spread);
+                projectile_launch_velocity[2] = D_L03_00161914 * frame_time * trooper_rand(0.9f, 1.1f);
+                FUN_L03_002cc888((char *)mine_layer_moby, muzzle, projectile_launch_velocity);
             }
         }
         break;
