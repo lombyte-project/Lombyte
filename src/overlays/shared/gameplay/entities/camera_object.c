@@ -1243,15 +1243,15 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
     if (*(unsigned char *)(moby + 0x20) == 3) {
         char *obj = *(char **)(data + 0x5C);
         if (obj != 0 && *(unsigned char *)(data + 0x57) == 0) {
-            int r;
+            int should_detach_from_ground;
             char *x;
             if ((unsigned char)obj[0x20] == 0xFE ||
                 (*(unsigned char **)(data + 0x5C))[0x20] == 0xFD) {
-                r = 1;
+                should_detach_from_ground = 1;
             } else {
-                r = coll_sphere(c5, moby + 0x10, 0x22, moby) == 0;
+                should_detach_from_ground = coll_sphere(c5, moby + 0x10, 0x22, moby) == 0;
             }
-            if (r) {
+            if (should_detach_from_ground) {
                 moby[0x20] = 1;
                 clear_u64_value(data + 0x30);
                 *(float *)(data + 0x3C) = 1.0f;
