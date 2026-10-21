@@ -733,7 +733,7 @@ int FUN_L00_0025b440(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         DESCEND_TO_GROUND = 2,
         WAIT_AFTER_GROUND_CLAMP = 3
     };
-    float v[4];
+    float motion_displacement[4];
     float prediction_time;
     float g;
 
@@ -751,10 +751,10 @@ int FUN_L00_0025b440(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         }
     case INTEGRATE_ARC_MOTION:
         FUN_L00_00258278_25b440(moving_object, &arc_motion_state->f30, arc_motion_state->f18, arc_motion_state->f34, arc_motion_state->f38, arc_motion_state->f3C);
-        v[0] = FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
-        v[1] = FUN_001f9de0_25b440(arc_motion_state->f18) * arc_motion_state->f14;
-        v[2] = arc_motion_state->f10;
-        FUN_001f9a10_25b440(moving_object->pos, moving_object->pos, v);
+        motion_displacement[0] = FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
+        motion_displacement[1] = FUN_001f9de0_25b440(arc_motion_state->f18) * arc_motion_state->f14;
+        motion_displacement[2] = arc_motion_state->f10;
+        FUN_001f9a10_25b440(moving_object->pos, moving_object->pos, motion_displacement);
         arc_motion_state->f10 -= arc_motion_state->f1C;
         if (arc_motion_state->f10 < 0.0f) {
             prediction_time = FUN_001f96b0_25b440(arc_motion_state->f28 + arc_motion_state->f28 + 10.0f);
@@ -772,10 +772,10 @@ int FUN_L00_0025b440(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
             moving_object->z = g;
             arc_motion_state->state = 3;
         } else {
-            v[0] = FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
-            v[1] = FUN_001f9de0_25b440(arc_motion_state->f18) * arc_motion_state->f14;
-            v[2] = 0.0f;
-            FUN_001f9a10_25b440(moving_object->pos, moving_object->pos, v);
+            motion_displacement[0] = FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
+            motion_displacement[1] = FUN_001f9de0_25b440(arc_motion_state->f18) * arc_motion_state->f14;
+            motion_displacement[2] = 0.0f;
+            FUN_001f9a10_25b440(moving_object->pos, moving_object->pos, motion_displacement);
         }
     case WAIT_AFTER_GROUND_CLAMP:
         if (moving_object->b70 & 2) {
