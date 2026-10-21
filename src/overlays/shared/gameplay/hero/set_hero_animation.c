@@ -767,12 +767,12 @@ void FUN_L00_00233210(void) {
 
 void FUN_L00_00233248(void) {
     struct Hero *base = &hero;
-    char *obj;
+    char *optional_hero_flag_target;
 
     *(unsigned short *)(((char *)base->moby) + 0x34) &= ~1;
-    obj = ((char *)base->unk1620);
-    if (obj != 0) {
-        *(unsigned short *)(obj + 0x34) &= ~1;
+    optional_hero_flag_target = ((char *)base->unk1620);
+    if (optional_hero_flag_target != 0) {
+        *(unsigned short *)(optional_hero_flag_target + 0x34) &= ~1;
     }
 }
 /* 0x00233288, 68 bytes.  The datum it reaches is a
