@@ -17,12 +17,12 @@ extern int FUN_L00_002592b8(int *, int, int, int);
 extern void FUN_L00_00263618(void *, int, float, float);
 
 void FUN_L02_002ec308(char *self) {
-    char *cur;
-    FUN_L00_002591d0((int *)&cur, *(unsigned char *)(self + 0x21), 0, 0);
-    while (cur != 0) {
-        if (*(unsigned char *)(cur + 0x31) != 0) {
-            char *data = *(char **)(cur + 0x78);
-            if (*(short *)(cur + 0xA6) == *(short *)(self + 0xA6)) {
+    char *current_moby;
+    FUN_L00_002591d0((int *)&current_moby, *(unsigned char *)(self + 0x21), 0, 0);
+    while (current_moby != 0) {
+        if (*(unsigned char *)(current_moby + 0x31) != 0) {
+            char *data = *(char **)(current_moby + 0x78);
+            if (*(short *)(current_moby + 0xA6) == *(short *)(self + 0xA6)) {
                 if ((*(int *)(data + 0xB0) & 0xFF) > 0x80) {
                     char *joint_position = data + 0x80;
                     int i;
@@ -33,7 +33,7 @@ void FUN_L02_002ec308(char *self) {
                 }
             }
         }
-        FUN_L00_002592b8((int *)&cur, (int)cur, 0, 0);
+        FUN_L00_002592b8((int *)&current_moby, (int)current_moby, 0, 0);
     }
 }
 /* Refreshes a moby's three sub-objects, packs its colour bytes, and queues a redraw when the global changed. */
