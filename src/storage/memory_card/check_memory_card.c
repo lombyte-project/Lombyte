@@ -25,7 +25,7 @@ s32 check_memory_card(void) {
     s32 cmd_code;
     s32 result;
     s32 *blk;
-    struct McDirBlk *dir;
+    struct McDirBlk *card_state;
 
     blk = &memory_card_state.card[0].port;
     result = sceMcGetInfo(blk[0], blk[1], &card_type, &free_blocks, &format);
@@ -33,14 +33,14 @@ s32 check_memory_card(void) {
     while (sceMcSync(1, D_0013D348, D_0013D348 + 4) == 0) {
         sceGsSyncV(0);
     }
-    dir = (struct McDirBlk *)((u8 *)D_0013D348 - 0xB8);
-    if (dir->unkBC == -5) {
+    card_state = (struct McDirBlk *)((u8 *)D_0013D348 - 0xB8);
+    if (card_state->unkBC == -5) {
         return 1;
     }
-    if (dir->unkBC < -9) {
+    if (card_state->unkBC < -9) {
         return 1;
     }
-    if (dir->unkBC == -2) {
+    if (card_state->unkBC == -2) {
         return 0;
     }
     if (card_type != 2) {
@@ -49,7 +49,7 @@ s32 check_memory_card(void) {
     if (format == 0) {
         return 0;
     }
-    result = sceMcGetDir(memory_card_state.card[0].port, dir->unk4, D_0013D1D0, 0, -1, 0);
+    result = sceMcGetDir(memory_card_state.card[0].port, card_state->unk4, D_0013D1D0, 0, -1, 0);
     while (sceMcSync(1, &cmd_code, &result) == 0) {
         sceGsSyncV(0);
     }
