@@ -501,25 +501,25 @@ void FUN_L00_002b3458(unsigned char *source_moby) {
         STATE_INITIALIZE = 0,
         STATE_ACTIVE = 1
     };
-    V_2b3458 *v = *(V_2b3458 **)(source_moby + 0x78);
+    V_2b3458 *moby_vars = *(V_2b3458 **)(source_moby + 0x78);
     int r, i;
     switch (source_moby[0x20]) {
     case STATE_INITIALIZE:
         source_moby[0x20] = 1;
-        v->w4 = D_L00_00161478;
-        v->w8 = 3;
-        v->p[0] = D_L00_0015FFD8 + (v->idx[0] << 8);
-        v->p[1] = D_L00_0015FFD8 + (v->idx[1] << 8);
-        v->p[2] = D_L00_0015FFD8 + (v->idx[2] << 8);
-        v->p[3] = D_L00_0015FFD8 + (v->idx[3] << 8);
+        moby_vars->w4 = D_L00_00161478;
+        moby_vars->w8 = 3;
+        moby_vars->p[0] = D_L00_0015FFD8 + (moby_vars->idx[0] << 8);
+        moby_vars->p[1] = D_L00_0015FFD8 + (moby_vars->idx[1] << 8);
+        moby_vars->p[2] = D_L00_0015FFD8 + (moby_vars->idx[2] << 8);
+        moby_vars->p[3] = D_L00_0015FFD8 + (moby_vars->idx[3] << 8);
         break;
     case STATE_ACTIVE:
         r = FUN_L00_0025a420_2b3458(source_moby, 0x10000, 0);
-        FUN_001f9740_2b3458(&v->wC);
-        if (r && v->wC == 0) {
+        FUN_001f9740_2b3458(&moby_vars->wC);
+        if (r && moby_vars->wC == 0) {
             source_moby[0xA4] = 0xFF;
-            v->wC = D_L00_00161480;
-            if (--v->w8 <= 0) {
+            moby_vars->wC = D_L00_00161480;
+            if (--moby_vars->w8 <= 0) {
                 FUN_0020c828_2b3458(source_moby);
                 return;
             }
@@ -527,19 +527,19 @@ void FUN_L00_002b3458(unsigned char *source_moby) {
         goto test;
     found: {
         unsigned char *selected_object;
-        v->p[i][0x20] = 0x51;
-        selected_object = v->p[i];
+        moby_vars->p[i][0x20] = 0x51;
+        selected_object = moby_vars->p[i];
         qcopy(selected_object + 0x10, source_moby + 0x10);
         selected_object[0xA4] = 0xFF;
         return;
     }
     test:
-        if (v->p[0][0x20] == 0x50 || v->p[1][0x20] == 0x50 || v->p[2][0x20] == 0x50 ||
-            v->p[3][0x20] == 0x50) {
-            if (FUN_001f9740_2b3458(&v->w4)) {
-                v->w4 = D_L00_00161478;
+        if (moby_vars->p[0][0x20] == 0x50 || moby_vars->p[1][0x20] == 0x50 || moby_vars->p[2][0x20] == 0x50 ||
+            moby_vars->p[3][0x20] == 0x50) {
+            if (FUN_001f9740_2b3458(&moby_vars->w4)) {
+                moby_vars->w4 = D_L00_00161478;
                 for (i = 0; i < 4; i++) {
-                    if (v->p[i][0x20] == 0x50)
+                    if (moby_vars->p[i][0x20] == 0x50)
                         goto found;
                 }
             }
