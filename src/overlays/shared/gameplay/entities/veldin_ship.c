@@ -876,7 +876,7 @@ void veldin_ship_draw(u8 *moby) {
     Vec_2d19b0 normal, reflection, view;
     u8 *vars = *(u8 **)(moby + 0x78);
     s32 i, j, index, active = 0;
-    f32 blend, len, x, y;
+    f32 blend, reflection_projection_factor, x, y;
 
     quad.texture[1] = get_effect_texture(G_F0);
     quad.texture[2] = 0xff9000000260ULL;
@@ -899,19 +899,19 @@ void veldin_ship_draw(u8 *moby) {
             fast_vec_normalize(&view, &view, 1.0f);
             XFORM(&normal, &ship_normals[i], vars);
             fast_vec_normalize(&normal, &normal, 0.1f);
-            len = fast_vec_dot(&normal, &view);
-            fast_vec_scale(&reflection, &normal, len + len);
+            reflection_projection_factor = fast_vec_dot(&normal, &view);
+            fast_vec_scale(&reflection, &normal, reflection_projection_factor + reflection_projection_factor);
             fast_vec_sub(&reflection, &view, &reflection);
             fast_vec_normalize(&reflection, &reflection, 1.0f);
             reflection.z += 1.0f;
-            len = square_root(reflection.z + reflection.z);
-            len += len;
+            reflection_projection_factor = square_root(reflection.z + reflection.z);
+            reflection_projection_factor += reflection_projection_factor;
             if (moby[0x20] == 1 || *(s32 *)(vars + 0x40) == 0) {
-                ship_reflection_uvs[i][0] = reflection.x / len + 0.5f;
-                ship_reflection_uvs[i][1] = reflection.y / len + 0.5f;
+                ship_reflection_uvs[i][0] = reflection.x / reflection_projection_factor + 0.5f;
+                ship_reflection_uvs[i][1] = reflection.y / reflection_projection_factor + 0.5f;
             } else {
-                x = reflection.x / len + 0.5f;
-                y = reflection.y / len;
+                x = reflection.x / reflection_projection_factor + 0.5f;
+                y = reflection.y / reflection_projection_factor;
                 ship_reflection_uvs[i][0] = x + (ship_previous_uvs[i][0] - x) * blend;
                 x = y + 0.5f;
                 ship_reflection_uvs[i][1] = x + (ship_previous_uvs[i][1] - x) * blend;
