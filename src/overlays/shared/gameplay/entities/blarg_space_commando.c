@@ -682,8 +682,8 @@ extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L06_002ff2c8(void *arg) {
-    char *moby = arg;
+void FUN_L06_002ff2c8(void *owner_moby) {
+    char *moby = owner_moby;
     FanData *data = *(FanData **)(moby + 0x78);
     int frames;
     float point[4];
