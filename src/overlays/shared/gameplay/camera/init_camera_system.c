@@ -33,14 +33,14 @@ float FUN_001fa5c8_001eb328(float, float) __asm__("FUN_001fa5c8");
 float FUN_001f99c0_001eb328(float) __asm__("FUN_001f99c0");
 float FUN_001fa580_001eb328(float, float) __asm__("FUN_001fa580");
 float rope_spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_001eb328");
-float rope_spring_turn(float *spring_state, float current_angle, float target_angle, float response_gain, float damping_factor, float lim) {
+float rope_spring_turn(float *spring_state, float current_angle, float target_angle, float response_gain, float damping_factor, float spring_state_limit) {
     float angle_difference = FUN_001fa5c8_001eb328(target_angle, current_angle);
     *spring_state = *spring_state + (response_gain * angle_difference - damping_factor * *spring_state);
-    if (lim != 0.0f) {
-        if (*spring_state > lim)
-            *spring_state = lim;
-        else if (*spring_state < -lim)
-            *spring_state = -lim;
+    if (spring_state_limit != 0.0f) {
+        if (*spring_state > spring_state_limit)
+            *spring_state = spring_state_limit;
+        else if (*spring_state < -spring_state_limit)
+            *spring_state = -spring_state_limit;
     }
     if (*spring_state > FUN_001f99c0_001eb328(angle_difference))
         *spring_state = FUN_001f99c0_001eb328(angle_difference);
