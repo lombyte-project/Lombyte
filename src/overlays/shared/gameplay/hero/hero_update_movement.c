@@ -1919,13 +1919,13 @@ void hero_update_movement(void) {
                 }
             }
             if (hero.unk590 != 0 && hero.unk5A4 <= scale_game_frames(48)) {
-                f32 u;
+                f32 previous_path_blend_fraction;
                 subtract_vector_xyz(&v20, &v0, &v10);
                 hero.unk5A4++;
                 fast_vec_scale(&v20, &v20, (f32)hero.unk5A4 / (f32)scale_game_frames(48));
-                u = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
+                previous_path_blend_fraction = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
                 subtract_vector_xyz(&movement_vector_scratch, &v0, &v10);
-                fast_vec_scale(&movement_vector_scratch, &movement_vector_scratch, u);
+                fast_vec_scale(&movement_vector_scratch, &movement_vector_scratch, previous_path_blend_fraction);
                 hero.motion.pos.f[2] += v20.f[2] - movement_vector_scratch.f[2];
                 add_vector_xyz(&movement_vector_scratch, &v10, &v20);
                 subtract_vector_xyz(&v20, &movement_vector_scratch, &hero.motion.pos);
