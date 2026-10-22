@@ -1427,7 +1427,9 @@ extern char *FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
 
 /* Strings count glowing puffs from one point to another, growing from size0
  * to size1, then bursts a spark shower at each end. */
-void FUN_L08_002da3f0(struct Moby *moby, void *from, void *to, int count, f32 size0, f32 size1) {
+void spawn_particle_line_effect(struct Moby *moby, void *from, void *to, int count, f32 size0, f32 size1) __asm__("FUN_L08_002da3f0");
+
+void spawn_particle_line_effect(struct Moby *moby, void *from, void *to, int count, f32 size0, f32 size1) {
     Vec4 step;
     Vec4 puff_spawn_position;
     Vec4 effect_initial_velocity;
