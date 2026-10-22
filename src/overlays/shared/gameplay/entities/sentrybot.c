@@ -54,7 +54,7 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L15_00299880(unsigned char *, char *, int, int, float);
 extern int FUN_L15_00299ae0(char *moby, float *point, float arg);
-extern int FUN_L15_00299ca0(void *);
+extern int can_sentrybot_approach_linked_moby(void *) __asm__("FUN_L15_00299ca0");
 extern int FUN_L15_00299dd8(char *m);
 extern int FUN_L15_00299ff8(void *);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
@@ -569,7 +569,7 @@ void sentrybot_update(unsigned char *moby) {
                     *(int *)(*(char **)((char *)((*(int *)(data + 0x128) << 8) + D_L15_0015FFD8_m) +
                                         0x78) +
                              8) == 0 &&
-                    FUN_L15_00299ca0(moby) != 0) {
+                    can_sentrybot_approach_linked_moby(moby) != 0) {
                     moby[0x20] = 0xE;
                     if (moby[0x53] != 0xE)
                         blend_moby_animation(moby, 0xE, 0, scale_game_frames(0x14));
@@ -676,7 +676,7 @@ void sentrybot_update(unsigned char *moby) {
                                                     D_L15_0015FFD8_m) +
                                            0x78) +
                                 8) == 0 &&
-                       FUN_L15_00299ca0(moby) != 0) {
+                       can_sentrybot_approach_linked_moby(moby) != 0) {
                 moby[0x20] = 0xE;
                 if (moby[0x53] != 0xE)
                     blend_moby_animation(moby, 0xE, 0, scale_game_frames(0x14));
@@ -734,7 +734,7 @@ void sentrybot_update(unsigned char *moby) {
                                                     D_L15_0015FFD8_m) +
                                            0x78) +
                                 8) == 0 &&
-                       FUN_L15_00299ca0(moby) != 0) {
+                       can_sentrybot_approach_linked_moby(moby) != 0) {
                 moby[0x20] = 0xE;
                 if (moby[0x53] != 0xE)
                     blend_moby_animation(moby, 0xE, 0, scale_game_frames(0x14));
@@ -1030,7 +1030,9 @@ extern float FUN_001f9b80(float *, float *);
 extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
 extern int D_L15_001ABE40[];
 
-int FUN_L15_00299ca0(void *mm) {
+int can_sentrybot_approach_linked_moby(void *mm) __asm__("FUN_L15_00299ca0");
+
+int can_sentrybot_approach_linked_moby(void *mm) {
     char *moby = mm;
     int linked_moby_index = *(int *)(*(char **)(moby + 0x78) + 0x128);
     char *linked_moby;
