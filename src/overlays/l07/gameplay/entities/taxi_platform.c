@@ -3270,7 +3270,9 @@ extern char D_0013F3D0[];
 extern char D_0013F440[];
 extern float D_0013F448;
 
-void FUN_L07_003112c8(char *moby) {
+void update_command_triggered_falling_platform(char *moby) __asm__("FUN_L07_003112c8");
+
+void update_command_triggered_falling_platform(char *moby) {
     enum {
         PLATFORM_INITIALIZE = 0,
         PLATFORM_COMMAND_GATED_SWAY = 1,
