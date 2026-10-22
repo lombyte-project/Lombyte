@@ -1136,12 +1136,12 @@ void extermibot_update(unsigned char *moby) {
     float dir[4];
     float out[4];
     float hit[4];
-    float pos[4];
+    float spark_spawn_position[4];
     int i;
     int j;
-    float *rot;
+    float *moby_yaw_ptr;
     float yaw;
-    unsigned char *pos0;
+    unsigned char *moby_position;
     extern float fast_vec_dist(void *, void *);
 
     FUN_L00_00263b38(moby_data + 0x170, 2.5f);
@@ -1239,11 +1239,11 @@ void extermibot_update(unsigned char *moby) {
         }
         break;
     case EXTERMIBOT_WANDER_NEAR_START:
-        rot = (float *)(moby + 0x48);
-        pos0 = moby + 0x10;
+        moby_yaw_ptr = (float *)(moby + 0x48);
+        moby_position = moby + 0x10;
         yaw = fast_arc_tan(*(float *)(moby_data + 0x280) - *(float *)(moby + 0x10),
                                 *(float *)(moby_data + 0x284) - *(float *)(moby + 0x14));
-        FUN_L00_0025be00(rot, (float *)(moby_data + 0x290), yaw,
+        FUN_L00_0025be00(moby_yaw_ptr, (float *)(moby_data + 0x290), yaw,
                           D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f, D_0015ED6C * 6.2831855f);
         if (fast_difference_between_rotations(*(float *)(moby + 0x48),
                           fast_arc_tan(*(float *)(moby_data + 0x280) - *(float *)(moby + 0x10),
@@ -1252,10 +1252,10 @@ void extermibot_update(unsigned char *moby) {
             dir[1] = fast_sin_c6(*(float *)(moby + 0x48)) * 2.0f;
             dir[2] = 0.0f;
             FUN_L00_00258b50(moby, moby_data + 0xD0, dir, out, 1.0f);
-            FUN_L00_00261d78(*(int *)(moby_data + 0x2C0), pos0, pos0, (D_L05_00161A98) * 0.4f);
+            FUN_L00_00261d78(*(int *)(moby_data + 0x2C0), moby_position, moby_position, (D_L05_00161A98) * 0.4f);
         }
         (*(short *)(moby_data + 0x2D2))++;
-        if ((vector_distance_xy_alt(pos0, moby_data + 0x280) < 1.0f && *(short *)(moby_data + 0x2D2) > scale_game_frames(0x3C))
+        if ((vector_distance_xy_alt(moby_position, moby_data + 0x280) < 1.0f && *(short *)(moby_data + 0x2D2) > scale_game_frames(0x3C))
             || *(short *)(moby_data + 0x2D2) > scale_game_frames(0xB4)) {
             moby[0x20] = moby[0xBC];
             if (moby[0x53] != 0) blend_moby_animation(moby, 0, 0, scale_game_frames(20));
@@ -1263,12 +1263,12 @@ void extermibot_update(unsigned char *moby) {
         break;
     case EXTERMIBOT_APPROACH_TARGET_DIRECTLY: {
         int near;
-        rot = (float *)(moby + 0x48);
-        pos0 = moby + 0x10;
+        moby_yaw_ptr = (float *)(moby + 0x48);
+        moby_position = moby + 0x10;
         approach_value((float *)(moby_data + 0xF4), D_0015ED6C * 6.0f, D_0015ED70 * 6.0f);
         yaw = fast_arc_tan(*(float *)(target_moby + 0x10) - *(float *)(moby + 0x10),
                                 *(float *)(target_moby + 0x14) - *(float *)(moby + 0x14));
-        FUN_L00_0025be00(rot, (float *)(moby_data + 0x290), yaw,
+        FUN_L00_0025be00(moby_yaw_ptr, (float *)(moby_data + 0x290), yaw,
                           D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f, D_0015ED6C * 6.2831855f);
         if (fast_difference_between_rotations(*(float *)(moby + 0x48),
                           fast_arc_tan(*(float *)(target_moby + 0x10) - *(float *)(moby + 0x10),
@@ -1277,18 +1277,18 @@ void extermibot_update(unsigned char *moby) {
             dir[1] = fast_sin_c6(*(float *)(moby + 0x48)) * 2.0f;
             dir[2] = 0.0f;
             FUN_L00_00258b50(moby, moby_data + 0xD0, dir, out, 1.0f);
-            FUN_L00_00261d78(*(int *)(moby_data + 0x2C0), pos0, pos0, (D_L05_00161A98) * 0.4f);
+            FUN_L00_00261d78(*(int *)(moby_data + 0x2C0), moby_position, moby_position, (D_L05_00161A98) * 0.4f);
         }
         near = 0;
-        if (FUN_L00_00261b48(*(int *)(moby_data + 0x2C0), pos0, target_moby + 0x10, hit) != 0
-            && fast_vec_dist((float *)pos0, hit) < 1.5f) {
+        if (FUN_L00_00261b48(*(int *)(moby_data + 0x2C0), moby_position, target_moby + 0x10, hit) != 0
+            && fast_vec_dist((float *)moby_position, hit) < 1.5f) {
             near = 1;
         }
         if (near) {
             moby[0x20] = 5;
             if (moby[0x53] != 4) blend_moby_animation(moby, 4, 0, scale_game_frames(20));
         } else if (*(int *)(moby_data + 0x2B0) != 0) {
-            if (vector_distance_xy_alt(pos0, target_moby + 0x10) < 3.0f) {
+            if (vector_distance_xy_alt(moby_position, target_moby + 0x10) < 3.0f) {
                 moby[0x20] = 7;
                 *(short *)(moby_data + 0x2D0) = scale_game_frames(D_L05_00161AC8);
                 if (moby[0x53] != 2) blend_moby_animation(moby, 2, 0, scale_game_frames(10));
@@ -1330,9 +1330,9 @@ void extermibot_update(unsigned char *moby) {
         }
         break;
     case EXTERMIBOT_FOLLOW_TARGET: {
-        float dist = vector_distance_xy_alt(moby + 0x10, target_moby + 0x10);
+        float target_distance_xy = vector_distance_xy_alt(moby + 0x10, target_moby + 0x10);
         FUN_L05_00303b08_c((struct Moby *)moby, (s32)(target_moby + 0x10), *(float *)(moby_data + 0x294));
-        if (dist < 3.0f
+        if (target_distance_xy < 3.0f
             && fast_difference_between_rotations(*(float *)(moby + 0x48),
                              fast_arc_tan(*(float *)(target_moby + 0x10) - *(float *)(moby + 0x10),
                                                *(float *)(target_moby + 0x14) - *(float *)(moby + 0x14))) < 0.7853982f) {
@@ -1346,10 +1346,10 @@ void extermibot_update(unsigned char *moby) {
         break;
     }
     case EXTERMIBOT_AIM_BEFORE_STRIKE:
-        rot = (float *)(moby + 0x48);
+        moby_yaw_ptr = (float *)(moby + 0x48);
         yaw = fast_arc_tan(*(float *)(target_moby + 0x10) - *(float *)(moby + 0x10),
                                 *(float *)(target_moby + 0x14) - *(float *)(moby + 0x14));
-        FUN_L00_0025be00(rot, (float *)(moby_data + 0x290), yaw,
+        FUN_L00_0025be00(moby_yaw_ptr, (float *)(moby_data + 0x290), yaw,
                           D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 25.132742f);
         if ((moby[0x70] & 2) && moby[0x53] == 2) {
             blend_moby_animation(moby, 7, 0, scale_game_frames(5));
@@ -1369,32 +1369,32 @@ void extermibot_update(unsigned char *moby) {
             FUN_L00_0024f7c8(moby, 0, hit);
             for (i = 0x1D; i >= 0; i--) {
                 int c1, c2;
-                qcopy(pos, hit);
-                pos[0] += random_float_between_c3(-0.065f, 0.065f);
-                pos[1] += random_float_between_c3(-0.065f, 0.065f);
-                pos[2] += random_float_between_c3(-0.065f, 0.065f);
+                qcopy(spark_spawn_position, hit);
+                spark_spawn_position[0] += random_float_between_c3(-0.065f, 0.065f);
+                spark_spawn_position[1] += random_float_between_c3(-0.065f, 0.065f);
+                spark_spawn_position[2] += random_float_between_c3(-0.065f, 0.065f);
                 out[0] = random_float_between_c3(-D_0015ED6C, D_0015ED6C);
                 out[1] = random_float_between_c3(-D_0015ED6C, D_0015ED6C);
                 out[2] = random_float_between_c3(-(D_L05_00161ABC * D_0015ED6C), D_L05_00161ABC * D_0015ED6C);
                 c1 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AAC, D_L05_00161AAC * 2.0f)));
                 c2 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB0, D_L05_00161AB0 * 1.2f)));
-                spawn_spark_c(pos, dir, out, D_L05_00161A9C, D_L05_00161AA0, c1, c2,
+                spawn_spark_c(spark_spawn_position, dir, out, D_L05_00161A9C, D_L05_00161AA0, c1, c2,
                               truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))), -1);
             }
             dir[3] = D_L05_00161AC0 * 0.1f;
             out[3] = D_L05_00161AC4 * 0.1f;
             for (j = 0x1D; j >= 0; j--) {
                 int c1, c2;
-                qcopy(pos, hit);
-                pos[0] += random_float_between_c3(-0.065f, 0.065f);
-                pos[1] += random_float_between_c3(-0.065f, 0.065f);
-                pos[2] += random_float_between_c3(-0.065f, 0.065f);
+                qcopy(spark_spawn_position, hit);
+                spark_spawn_position[0] += random_float_between_c3(-0.065f, 0.065f);
+                spark_spawn_position[1] += random_float_between_c3(-0.065f, 0.065f);
+                spark_spawn_position[2] += random_float_between_c3(-0.065f, 0.065f);
                 out[0] = random_float_between_c3(-D_0015ED6C, D_0015ED6C);
                 out[1] = random_float_between_c3(-D_0015ED6C, D_0015ED6C);
                 out[2] = random_float_between_c3(-(D_L05_00161ABC * D_0015ED6C), D_L05_00161ABC * D_0015ED6C);
                 c1 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AAC, D_L05_00161AAC * 2.0f)));
                 c2 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB0, D_L05_00161AB0 * 1.2f)));
-                spawn_spark_c(pos, dir, out, D_L05_00161AA4, D_L05_00161AA8, c1, c2,
+                spawn_spark_c(spark_spawn_position, dir, out, D_L05_00161AA4, D_L05_00161AA8, c1, c2,
                               truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))), -1);
             }
         }
