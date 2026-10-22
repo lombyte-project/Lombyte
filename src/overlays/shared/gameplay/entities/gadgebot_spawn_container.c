@@ -2632,7 +2632,9 @@ int FUN_L06_002f32f0(char *moby, int flag)
 /* Scores a candidate target and keeps it if it beats the best so far. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F4818), where it is exact; names translated to the US level program. */
 
-void FUN_L06_002f33e8(char *moby, char *current_target, char *candidate_moby, int *out, float *best, float thresh) {
+void consider_moby_target_candidate(char *moby, char *current_target, char *candidate_moby, int *out, float *best, float thresh) __asm__("FUN_L06_002f33e8");
+
+void consider_moby_target_candidate(char *moby, char *current_target, char *candidate_moby, int *out, float *best, float thresh) {
     float candidate_distance = vector_distance(moby + 0x10, candidate_moby + 0x10);
     if (!(thresh < candidate_distance)) {
         float ang = fast_arc_tan(*(float *)(candidate_moby + 0x10) - *(float *)(moby + 0x10),
@@ -2677,9 +2679,9 @@ void FUN_L06_002f34d8(char *moby, char **current, f32 range) {
     best.score = 999999.0f;
     best.moby = 0;
     for (i = 0; i < D_L06_00161CE4; i++) {
-        FUN_L06_002f33e8(moby, *current, D_L06_001DAE60[i], (int *)&best.moby, &best.score, range);
+        consider_moby_target_candidate(moby, *current, D_L06_001DAE60[i], (int *)&best.moby, &best.score, range);
     }
-    FUN_L06_002f33e8(moby, *current, (char *)hero.moby, (int *)&best.moby, &best.score, range);
+    consider_moby_target_candidate(moby, *current, (char *)hero.moby, (int *)&best.moby, &best.score, range);
     *current = best.moby;
 }
 typedef unsigned int Q __attribute__((mode(TI), aligned(16)));
