@@ -649,7 +649,9 @@ extern void enqueue_e088(void *, void *) __asm__("FUN_001f4600");
 
 /* Tile moby: claims a D_L11_001DA880 row on spawn (row 0 also sets up the shared light block), then moves
    up or down once its switch fires and throws random sparks; row 0 flushes the visible rows each frame. */
-void FUN_L11_0030e088(struct Moby *water_tile_moby) {
+void update_water_tile(struct Moby *water_tile_moby) __asm__("FUN_L11_0030e088");
+
+void update_water_tile(struct Moby *water_tile_moby) {
     enum {
         WATER_TILE_STATE_INITIALIZE = 0,
         WATER_TILE_STATE_FIND_NEIGHBORS = 1,
