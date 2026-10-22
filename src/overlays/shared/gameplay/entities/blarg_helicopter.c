@@ -151,7 +151,9 @@ extern SpawnSound *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 extern void debug_print() __asm__("FUN_001e93b0");
 
 /* Spawner: revives the first free pooled child (of class oclass, -1 = any) at a copy of at, counts the live children, returns the revived one or NULL. */
-struct Moby *FUN_L03_002bec60(struct Moby *spawner_moby, Vec4 *at, s32 oclass)
+struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s32 oclass) __asm__("FUN_L03_002bec60");
+
+struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s32 oclass)
 {
     Vec4 pos;
     Vec4 *spawn_position_source;
@@ -863,7 +865,7 @@ first_collision_timer:
         moby->pos.w = 0.0f;
         moby->pos.z = height + 0.2f;
         next_pos.q = *(u128 *)pos;
-        *(struct Moby **)(vars + 6) = FUN_L03_002bec60(*(struct Moby **)(vars + 4), &next_pos, -1);
+        *(struct Moby **)(vars + 6) = revive_spawner_pooled_child(*(struct Moby **)(vars + 4), &next_pos, -1);
         moby->state = 2;
     break;
     }
