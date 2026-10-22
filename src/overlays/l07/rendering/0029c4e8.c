@@ -19,7 +19,9 @@ extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L07_001B2164 __attribute__((section(".data")));
-void FUN_L07_0029c4e8(void *particle_position_source, void *particle_payload_source) {
+void spawn_white_particle_with_payload(void *particle_position_source, void *particle_payload_source) __asm__("FUN_L07_0029c4e8");
+
+void spawn_white_particle_with_payload(void *particle_position_source, void *particle_payload_source) {
     unsigned char *particle = create_part(0x41);
     if (particle) {
         float *particle_payload = (float *)(particle + 0x20);

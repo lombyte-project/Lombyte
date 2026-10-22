@@ -708,7 +708,7 @@ extern void *spawn_moby_class_1046(int, void *, int, float, float, float, float,
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L07_00311eb8(void *, void *, int, void *, short, unsigned int, int, float);
 extern void FUN_00214db0(void *, float, float, float);
-extern void FUN_L07_0029c4e8(void *, void *);
+extern void spawn_white_particle_with_payload(void *, void *) __asm__("FUN_L07_0029c4e8");
 extern void FUN_L07_003120d8(char *);
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
@@ -1067,7 +1067,7 @@ void snagglebeast_update(unsigned char *moby) {
                 direction.f[2] += 0.1f;
                 add_vector_xyz(&direction, &direction, &position);
                 *(int *)&velocity.f[3] = 0;
-                FUN_L07_0029c4e8(&direction, &velocity);
+                spawn_white_particle_with_payload(&direction, &velocity);
             }
             FUN_L07_003120d8((char *)moby);
         }
