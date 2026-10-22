@@ -511,7 +511,7 @@ extern void FUN_0028dc90_2d09b8(s32, s32, void *, s32) __asm__("FUN_L00_0028dc90
 extern void FUN_0028dbe8_2d09b8(s32, s32, void *) __asm__("FUN_L00_0028dbe8");
 extern s32 FUN_0025e3b8_2d09b8(void *) __asm__("FUN_L00_0025e3b8");
 extern void FUN_001ff008_2d09b8(void) __asm__("FUN_001f97b0");
-extern void FUN_0026b790_2d09b8(f32, f32, f32, f32, f32, void *, s32, s32) __asm__("FUN_L00_0026b790");
+extern void spawn_spinning_fade_in_out_effect_particle(f32, f32, f32, f32, f32, void *, s32, s32) __asm__("FUN_L00_0026b790");
 extern void FUN_001ff2a8_2d09b8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 FUN_001ff8b0_2d09b8(f32, f32) __asm__("FUN_001f9e90");
 extern f32 FUN_00200130_2d09b8(f32, f32) __asm__("FUN_001fa5c8");
@@ -588,9 +588,9 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         s32 i;
         qcopy(&position, &moby->pos);
         position.f[2] += 0.3f;
-        FUN_0026b790_2d09b8(0.3f, 1.01f, 1.075f, 0.05f, 50000.0f, &position, 1, 0x40808080);
+        spawn_spinning_fade_in_out_effect_particle(0.3f, 1.01f, 1.075f, 0.05f, 50000.0f, &position, 1, 0x40808080);
         for (i = 4; i >= 0; i--)
-            FUN_0026b790_2d09b8(0.3f, 1.01f, 1.07f, 0.05f, 50000.0f, &position, 1, 0x40808080);
+            spawn_spinning_fade_in_out_effect_particle(0.3f, 1.01f, 1.07f, 0.05f, 50000.0f, &position, 1, 0x40808080);
         if (source)
             qcopy(&away, (u8 *)source + 0x10);
         else

@@ -8,7 +8,7 @@
 
 #include "qcopy.h"
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern unsigned char *FUN_L00_0026b790(void *, int, int, float, float, float, float, float);
+extern unsigned char *spawn_spinning_fade_in_out_effect_particle(void *, int, int, float, float, float, float, float) __asm__("FUN_L00_0026b790");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -40,9 +40,9 @@ void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
     allocate_voice_for_target_entry(0, 0, (int)moby);
     qcopy(origin, moby + 0x10);
     origin[2] += 0.3f;
-    FUN_L00_0026b790(origin, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
+    spawn_spinning_fade_in_out_effect_particle(origin, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
     for (i = 4; i >= 0; i--) {
-        FUN_L00_0026b790(origin, 1, 0x40808080, 0.3f, 1.01f, 1.07f, 0.05f, 50000.0f);
+        spawn_spinning_fade_in_out_effect_particle(origin, 1, 0x40808080, 0.3f, 1.01f, 1.07f, 0.05f, 50000.0f);
     }
     if (target != 0) {
         qcopy(displacement, target + 0x10);

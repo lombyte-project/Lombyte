@@ -2086,8 +2086,8 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_00257b90(int, int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *FUN_L00_0026b790(void *pos, int spin, int col, float range, float f1,
-                                       float f2, float f3, float scale);
+extern unsigned char *spawn_spinning_fade_in_out_effect_particle(void *pos, int spin, int col, float range, float f1,
+                                       float f2, float f3, float scale) __asm__("FUN_L00_0026b790");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float, float);
 extern void spawn_glow_particle(void *, void *, void *, int, int, int, int, int, float) __asm__("FUN_L00_002ac910");
@@ -2106,9 +2106,9 @@ void FUN_L00_002b5d00(char *source_moby, int flag) {
 
     qcopy(elevated_spawn_position, source_moby + 0x10);
     elevated_spawn_position[2] += 0.3f;
-    FUN_L00_0026b790(elevated_spawn_position, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
+    spawn_spinning_fade_in_out_effect_particle(elevated_spawn_position, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
     for (j = 4; j >= 0; j--) {
-        FUN_L00_0026b790(elevated_spawn_position, 1, 0x40808080, 0.3f, 1.01f, 1.07f, 0.05f, 50000.0f);
+        spawn_spinning_fade_in_out_effect_particle(elevated_spawn_position, 1, 0x40808080, 0.3f, 1.01f, 1.07f, 0.05f, 50000.0f);
     }
     if (flag != 0) {
         subtract_vector_xyz(view_origin_delta, D_L00_00166DC0, source_moby + 0x10);

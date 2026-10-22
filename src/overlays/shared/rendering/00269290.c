@@ -933,7 +933,10 @@ int FUN_001f96f8_26b790(int) __asm__("FUN_001f96f8");
 int FUN_00213260_26b790(int) __asm__("FUN_00213260");
 float FUN_002132a8_26b790(float, float) __asm__("FUN_002132a8");
 extern unsigned char *D_L00_001B20B4 __attribute__((section(".data")));
-unsigned char *FUN_L00_0026b790(void *spawn_origin, int spd, int color, float j, float lo, float hi, float vertical_position_step,
+unsigned char *spawn_spinning_fade_in_out_effect_particle(void *spawn_origin, int spd, int color, float j, float lo, float hi, float vertical_position_step,
+                                float size) __asm__("FUN_L00_0026b790");
+
+unsigned char *spawn_spinning_fade_in_out_effect_particle(void *spawn_origin, int spd, int color, float j, float lo, float hi, float vertical_position_step,
                                 float size) {
     unsigned char *particle = FUN_L00_002678b8_26b790(0xD);
     if (particle) {

@@ -1616,7 +1616,7 @@ extern float D_L13_0015F580;
 extern int FUN_L00_00257b90(int, int);
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
-extern unsigned char *FUN_L00_0026b790(void *pos, int spin, int col, float range, float f1, float f2, float f3, float scale);
+extern unsigned char *spawn_spinning_fade_in_out_effect_particle(void *pos, int spin, int col, float range, float f1, float f2, float f3, float scale) __asm__("FUN_L00_0026b790");
 extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, float, int, float);
 extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__("FUN_L00_002af8b0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
@@ -1659,9 +1659,9 @@ void emit_forcefield_tower_destruction_effects(unsigned char *source_moby, void 
     *(u128z *)vA = *(u128z *)effect_position;
     qcopy(vB, pA);
     vB[2] = vB[2] + 0.3f;
-    FUN_L00_0026b790(vB, 1, 0x40808080, 0.3f, 1.01f, 1.205f, 0.05f, 150000.0f);
+    spawn_spinning_fade_in_out_effect_particle(vB, 1, 0x40808080, 0.3f, 1.01f, 1.205f, 0.05f, 150000.0f);
     for (k = 0; k < 5; k++) {
-        FUN_L00_0026b790(vB, 1, 0x40808080, 0.3f, 1.01f, 1.1800001f, 0.05f, 150000.0f);
+        spawn_spinning_fade_in_out_effect_particle(vB, 1, 0x40808080, 0.3f, 1.01f, 1.1800001f, 0.05f, 150000.0f);
     }
     for (k = 0; k < 4; k++) {
         *(u128z *)vC = 0;
