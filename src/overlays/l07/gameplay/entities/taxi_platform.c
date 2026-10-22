@@ -784,7 +784,7 @@ extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void FUN_L00_00299460(int);
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
-extern void FUN_L07_00270248(int x, int y, int w, int h);
+extern void clear_bit_grid_rectangle(int x, int y, int w, int h) __asm__("FUN_L07_00270248");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void initialize_global_state_entry(int) __asm__("FUN_0022e188");
@@ -930,7 +930,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
             add_vector_xyz(&e->pos, &hero.motion.pos, linked_moby_to_hero_offset);
             delete_moby_m(e);
         }
-        FUN_L07_00270248(0x87, 0xC, 0x56, 0x3C);
+        clear_bit_grid_rectangle(0x87, 0xC, 0x56, 0x3C);
         unlock_planet(8);
         memcard_save_data(0, 8);
         initialize_global_state_entry(8);

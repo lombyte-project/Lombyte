@@ -16,7 +16,9 @@ typedef struct {
 extern Grid_270248 D_L07_00184270;
 extern int ensure_menu_cache_entry(int) __asm__("FUN_L00_00249d80");
 
-void FUN_L07_00270248(int x, int y0, int width, int height) {
+void clear_bit_grid_rectangle(int x, int y0, int width, int height) __asm__("FUN_L07_00270248");
+
+void clear_bit_grid_rectangle(int x, int y0, int width, int height) {
     int y = y0;
     for (; y < y0 + height; y++) {
         int rowbase = (y >> 5) << 4;
