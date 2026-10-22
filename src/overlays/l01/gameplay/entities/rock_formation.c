@@ -1273,7 +1273,7 @@ void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern void FUN_L01_002787a0();
 extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
-extern void FUN_L01_00278e20();
+extern void spawn_moby_from_placement() __asm__("FUN_L01_00278e20");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -1324,7 +1324,7 @@ void green_mushroom_update(SparkMoby *mushroom_moby) {
             FUN_L00_00263fd8(mushroom_moby, 0x719, &fragment_spawn_position, &fragment_rotation, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f,
                              &D_L01_0015F580);
         }
-        FUN_L01_00278e20(mushroom_moby, 0x718);
+        spawn_moby_from_placement(mushroom_moby, 0x718);
         mark_moby_for_removal(mushroom_moby);
         break;
     }

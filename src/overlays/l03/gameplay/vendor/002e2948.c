@@ -10,7 +10,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
-extern void FUN_L01_00278e20(void *, int);
+extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void lightpost_update(struct Moby *m) __asm__("FUN_L03_002e2948");
@@ -36,7 +36,7 @@ void lightpost_update(struct Moby *lightpost_moby) {
         allocate_voice_for_target_entry(0, 0, (int)lightpost_moby);
         FUN_L01_002787a0(lightpost_moby);
         FUN_L00_00263e30(lightpost_moby, 0x725, 1, 0x725, 1, 0x1, 2);
-        FUN_L01_00278e20(lightpost_moby, 0x724);
+        spawn_moby_from_placement(lightpost_moby, 0x724);
         mark_moby_for_removal(lightpost_moby);
         break;
     }

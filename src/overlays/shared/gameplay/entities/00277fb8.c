@@ -77,7 +77,9 @@ void FUN_L01_002787a0(char *moby) {
 extern char *func_0020D348_m(int);
 extern void FUN_L00_00250df8(void *);
 
-void FUN_L01_00278e20(struct Moby *placement_source_moby, int oClass) {
+void spawn_moby_from_placement(struct Moby *placement_source_moby, int oClass) __asm__("FUN_L01_00278e20");
+
+void spawn_moby_from_placement(struct Moby *placement_source_moby, int oClass) {
     char *destination_moby = func_0020D348_m(oClass);
     if (destination_moby != 0) {
         *(short *)(destination_moby + 0x32) = 0xFF;

@@ -371,7 +371,7 @@ void FUN_L10_002eb6f0(struct Moby *moby) {
 /* per-frame update: wait for a condition, then run, then clean up */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002ECBA0), where it is exact; names translated to the US level program. */
 
-extern void FUN_L01_00278e20(void *, int);
+extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void FUN_L10_002eb7e0(struct Moby *moby) {
     enum {
@@ -396,7 +396,7 @@ void FUN_L10_002eb7e0(struct Moby *moby) {
     case HIT_RESPONSE_STATE_RESPOND_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);
         FUN_L01_002787a0(moby);
-        FUN_L01_00278e20(moby, 0x741);
+        spawn_moby_from_placement(moby, 0x741);
         mark_moby_for_removal(moby);
         break;
     }

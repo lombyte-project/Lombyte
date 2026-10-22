@@ -839,7 +839,7 @@ extern int FUN_0022da68(int, int, int);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
-extern void FUN_L01_00278e20(void *, int);
+extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L17_002f5260(struct Moby *moby) {
@@ -866,7 +866,7 @@ void FUN_L17_002f5260(struct Moby *moby) {
         FUN_L01_002787a0(moby);
         FUN_L00_00263e30(moby, 0x753, 1, 0x753, 1, 11, 2);
         FUN_L00_00263e30(moby, 0x756, 1, 0x756, 1, 1, 2);
-        FUN_L01_00278e20(moby, 0x752);
+        spawn_moby_from_placement(moby, 0x752);
         mark_moby_for_removal(moby);
         break;
     }
@@ -907,7 +907,7 @@ void FUN_L17_002f5390(struct Moby *moby) {
         FUN_L00_00263fd8((char *)moby, 0x753, &moby->pos.x, &moby->rot, 0, 0, D_L17_0015F580_macro,
                          D_L17_0015F580_macro, 0.0f, D_L17_0015F580_macro);
         FUN_L00_00263e30(moby, 0x756, 1, 0x756, 1, 1, 2);
-        FUN_L01_00278e20(moby, 0x755);
+        spawn_moby_from_placement(moby, 0x755);
         mark_moby_for_removal_c(moby);
         break;
     }

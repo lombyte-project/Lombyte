@@ -80,7 +80,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
-extern void FUN_L01_00278e20(void *, int);
+extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L08_0030bc00(struct Moby *moby) {
@@ -105,7 +105,7 @@ void FUN_L08_0030bc00(struct Moby *moby) {
         allocate_voice_for_target_entry(0, 0, (int)moby);
         FUN_L01_002787a0(moby);
         FUN_L00_00263e30(moby, 0x736, 1, 0x737, 1, 0x1, 2);
-        FUN_L01_00278e20(moby, 0x735);
+        spawn_moby_from_placement(moby, 0x735);
         mark_moby_for_removal(moby);
         break;
     }
