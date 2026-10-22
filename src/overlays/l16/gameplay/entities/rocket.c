@@ -2963,7 +2963,9 @@ void FUN_L16_002d6260(struct Moby *moby, void *out1, float *out2) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E2290), where it is exact; names translated to the US level program. */
 
-int FUN_L16_002e0e28(char *moby_or_private_data) {
+int get_target_reposition_status(char *moby_or_private_data) __asm__("FUN_L16_002e0e28");
+
+int get_target_reposition_status(char *moby_or_private_data) {
     unsigned char moby_state = moby_or_private_data[0x20];
     moby_or_private_data = *(char **)(moby_or_private_data + 0x78);
     if (moby_state == 7 || moby_state == 8) {

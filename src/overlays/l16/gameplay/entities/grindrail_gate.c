@@ -2442,7 +2442,7 @@ char *FUN_L16_002e8b08(int idx);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int FUN_L16_002e0e28(void *);
+extern int get_target_reposition_status(void *) __asm__("FUN_L16_002e0e28");
 extern void FUN_L16_002c44f0(void *, void *);
 extern void FUN_L16_002e0de0(void *);
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
@@ -2483,7 +2483,7 @@ void FUN_L16_002e8970(struct Moby *moby) {
         }
         break;
     case TARGET_CYCLE_POLL_STATUS:
-        target_status = FUN_L16_002e0e28(target);
+        target_status = get_target_reposition_status(target);
         switch (target_status) {
         case TARGET_STATUS_INACTIVE:
             moby->state = 1;
