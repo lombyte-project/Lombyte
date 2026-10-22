@@ -59,7 +59,9 @@ extern int D_0013E500_23b6c0[] __asm__("D_0013E500");
 extern int D_L00_0017E4D8_23b6c0[] __asm__("D_L00_0017E4D8") __attribute__((section(".data")));
 extern u64 FUN_001ffa10_23b6c0(int) __asm__("FUN_001ffa10");
 
-void FUN_L00_0023b6c0(int tex, int x, int y, int draw_width, int draw_height, int alpha) {
+void draw_cropped_hud_sprite(int tex, int x, int y, int draw_width, int draw_height, int alpha) __asm__("FUN_L00_0023b6c0");
+
+void draw_cropped_hud_sprite(int tex, int x, int y, int draw_width, int draw_height, int alpha) {
     u64 *packet_words;
     int *coordinate_offsets;
     int *g;

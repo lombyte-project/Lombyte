@@ -205,7 +205,7 @@ extern void font_print_center_large(s32, s32, u64, char *, s32) __asm__("FUN_001
 extern void draw_framed_text(s32, s32, s32, char *) __asm__("FUN_00201200");
 extern s32 hud_screen_position(char *, s32 *, s32 *) __asm__("FUN_L00_00235a70");
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
-extern void FUN_L00_0023b6c0(s32, s32, s32, s32, s32, s32);
+extern void draw_cropped_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023b6c0");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 
 extern s32 D_L05_0015FAE4 __attribute__((section(".sdata")));
@@ -336,7 +336,7 @@ s32 FUN_L05_00262f50(char *element) {
     hud_screen_position(element, &x, &y);
     bar_width = (*(s32 *)(element + 0x74) * 0xDD) / *(s32 *)(element + 0x8) + 0x1B;
     fill_icon = get_icon_frame(0x7558, 1);
-    FUN_L00_0023b6c0(fill_icon, x, y, bar_width, 0x40, 0x80);
+    draw_cropped_hud_sprite(fill_icon, x, y, bar_width, 0x40, 0x80);
     frame_icon = get_icon_frame(0x7558, 0);
     draw_hud_sprite(frame_icon, x, y, 0x100, 0x40, 0x80);
     player = &hero;
