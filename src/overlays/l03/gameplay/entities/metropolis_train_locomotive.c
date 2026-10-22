@@ -1280,7 +1280,7 @@ extern int FUN_L01_00275690(char *, float);
 extern int FUN_L01_0028b510(void *, void *, float);
 extern int resolve_path_node_index(void *, int) __asm__("FUN_L01_0028b828");
 extern int advance_path_node_index(char *) __asm__("FUN_L01_0028b878");
-extern void FUN_L01_0028b410(char *);
+extern void initialize_path_descriptor(char *) __asm__("FUN_L01_0028b410");
 extern void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b);
 extern void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4);
 extern void FUN_L01_0028bb90(void *, int, void *, float, float);
@@ -1393,7 +1393,7 @@ void red_ship_1_update(char *moby) {
         }
         moby_position = moby + 0x10;
         data[0x131] = ((moby - D_L03_0015FFD8_29dba8) >> 8) / 2 % 7;
-        FUN_L01_0028b410(pm);
+        initialize_path_descriptor(pm);
         if (((unsigned char *)pm)[5] == 0) {
             if (*(int *)pm <= 0) {
                 initial_path_node_index = FUN_L01_0028b510(moby_position, *(void **)(pm + 0x10), 0.0f);

@@ -205,7 +205,9 @@ unsigned char *FUN_L01_0028a7a8(char *source_moby, char *particle_spawn_position
 
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
-void FUN_L01_0028b410(char *path_descriptor) {
+void initialize_path_descriptor(char *path_descriptor) __asm__("FUN_L01_0028b410");
+
+void initialize_path_descriptor(char *path_descriptor) {
     int i;
     int path_node_byte_offset;
     char *path_data;

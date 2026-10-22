@@ -3014,7 +3014,7 @@ extern s32 FUN_L00_00257b90(s32, s32);
 extern s32 FUN_001fa6d0(f32);
 extern s32 FUN_001e93b0(const char *, ...);
 extern f32 FUN_002132a8(f32, f32);
-extern void FUN_L01_0028b410(PathCursor *);
+extern void initialize_path_descriptor(PathCursor *) __asm__("FUN_L01_0028b410");
 extern s32 FUN_L01_0028b510(void *, PathNodes *, f32);
 extern f32 FUN_001f9e90(f32, f32);
 extern void FUN_L01_0028b8c8(QVec *, PathCursor *, s32, f32, f32);
@@ -3145,7 +3145,7 @@ void gunship_follow_path(struct Moby *m) {
             return;
         }
         v->unk121 = (m - (struct Moby *)D_L01_0015FFD8) / 2 % 7;
-        FUN_L01_0028b410(p);
+        initialize_path_descriptor(p);
         if (p->state == 0) {
             if (p->idx <= 0) {
                 s32 r = FUN_L01_0028b510(&m->pos, p->nodes, 0.0f);

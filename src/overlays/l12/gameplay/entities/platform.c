@@ -3159,7 +3159,7 @@ extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED6C;
-extern void FUN_L01_0028b410(char *p);
+extern void initialize_path_descriptor(char *p) __asm__("FUN_L01_0028b410");
 extern void FUN_L12_002ebca8_c(char *m, int flag) __asm__("FUN_L12_002ebca8");
 extern void add_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -3190,7 +3190,7 @@ void helicopter_update(char *moby) {
                 char *tbl;
                 int initial_node_index;
                 int last_node_index;
-                FUN_L01_0028b410(moby_vars + 0x60);
+                initialize_path_descriptor(moby_vars + 0x60);
                 tbl = D_L12_001B0930[*(int *)(moby_vars + 0x74)];
                 *(char **)(moby_vars + 0x70) = tbl;
                 initial_node_index = *(int *)(moby_vars + 0xA0);
