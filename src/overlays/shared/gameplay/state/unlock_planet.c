@@ -237,8 +237,10 @@ void FUN_00214598_002604f0(void *, void *) __asm__("FUN_00214598");
 void FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *,
                                void *) __asm__("FUN_L00_00260668");
 void FUN_L00_0025f730_002604f0(void *, float) __asm__("FUN_L00_0025f730");
-int FUN_L00_002604f0(u8 *a, u8 *b, void *c, void *d, void *e, void *f);
-int FUN_L00_002604f0(u8 *comparison_object, u8 *reference_object, void *position, void *rotation, void *transformed_position, void *transformed_rotation) {
+int transform_attachment_pose(u8 *comparison_object, u8 *reference_object, void *position, void *rotation, void *transformed_position, void *transformed_rotation) __asm__("FUN_L00_002604f0");
+
+int transform_attachment_pose(u8 *a, u8 *b, void *c, void *d, void *e, void *f) __asm__("FUN_L00_002604f0");
+int transform_attachment_pose(u8 *comparison_object, u8 *reference_object, void *position, void *rotation, void *transformed_position, void *transformed_rotation) {
     float m2[16] __attribute__((aligned(16)));
     float m[16] __attribute__((aligned(16)));
     V4_2604f0 translation_adjustment;

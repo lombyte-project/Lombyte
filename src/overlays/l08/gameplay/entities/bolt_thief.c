@@ -2028,7 +2028,7 @@ extern int D_L08_00161CD4_gp __asm__("D_L08_00161CD4") __attribute__((sda));
 extern int D_L08_00174658;
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern int FUN_L00_002604f0(void *, int, void *, void *, void *, void *);
+extern int transform_attachment_pose(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 extern int queue_animation_update_alt(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern s32 level_bolts[] __asm__("D_0013DF38");
 extern s32 D_0015ED98;
@@ -2137,7 +2137,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
         if (vars->u7C.i != 0) {
-            FUN_L00_002604f0(moby, vars->u7C.i, vars->v20, vars->v30, vars->anchor, vars->v10);
+            transform_attachment_pose(moby, vars->u7C.i, vars->v20, vars->v30, vars->anchor, vars->v10);
             if ((signed char)((struct Moby *)vars->u7C.i)->state < 0) {
                 vars = (Vars_4BE8 *)moby->pvars;
                 clear_u64_value(vars->velocity);

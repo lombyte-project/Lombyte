@@ -1344,7 +1344,7 @@ extern float f_001f9dc8(float) __asm__("FUN_001f9dc8");
 extern float f_001f9de0(float) __asm__("FUN_001f9de0");
 extern void probe_ground_height_cf(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern int FUN_L00_00260668(int, void *, void *, void *, void *, void *);
-extern void FUN_L00_002604f0(int, void *, void *, void *, void *, void *);
+extern void transform_attachment_pose(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 extern void f_001f99f8(void *) __asm__("FUN_001f99f8");
 extern float f_001f9b20(void *) __asm__("FUN_001f9b20");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
@@ -1457,8 +1457,8 @@ void FUN_L00_00233f80(void) {
         qcopy((Vec_234800 *)(hero_233f80 + 0x350), &attachment_motion_scratch);
     } else if (mode == 2) {
         probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &probe_transform_scratch, &anchored_probe_rotation);
-        FUN_L00_002604f0(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v310, &((Hero_234800 *)hero_233f80)->v320, &primary_attachment_position, &primary_attachment_rotation);
-        FUN_L00_002604f0(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v330, &((Hero_234800 *)hero_233f80)->v320, &secondary_attachment_position, &v90);
+        transform_attachment_pose(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v310, &((Hero_234800 *)hero_233f80)->v320, &primary_attachment_position, &primary_attachment_rotation);
+        transform_attachment_pose(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v330, &((Hero_234800 *)hero_233f80)->v320, &secondary_attachment_position, &v90);
         if ((((Hero_234800 *)hero_233f80)->i2084 == 1 || ((Hero_234800 *)hero_233f80)->i2084 == 0x1E) && ((Hero_234800 *)hero_233f80)->b20A5 != 0) {
             ((Hero_234800 *)hero_233f80)->v90.z = anchored_probe_rotation.z;
         } else if (((Hero_234800 *)hero_233f80)->i364 & 2) {

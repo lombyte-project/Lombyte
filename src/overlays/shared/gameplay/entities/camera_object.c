@@ -1149,7 +1149,7 @@ void FUN_L00_002a6b70(struct Moby *bolt)
 extern char *FUN_L00_002603d0_c(void *) __asm__("FUN_L00_002603d0");
 extern float D_0015ED6C;
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern int FUN_L00_002604f0(int x, char *o, float *p, float *q, float *r, float *s);
+extern int transform_attachment_pose(int x, char *o, float *p, float *q, float *r, float *s) __asm__("FUN_L00_002604f0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
@@ -1170,7 +1170,7 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
     float rotation_angle_step, c2, base_axis_offset_distance, rotated_axis_offset_distance, ground_collision_radius;
 
     if (*(char **)(data + 0x5C) != 0) {
-        FUN_L00_002604f0((int)moby, *(char **)(data + 0x5C), (float *)data, (float *)(data + 0x10),
+        transform_attachment_pose((int)moby, *(char **)(data + 0x5C), (float *)data, (float *)(data + 0x10),
                          A, B);
     } else {
         qcopy(A, data);

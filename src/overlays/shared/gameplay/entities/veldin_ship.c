@@ -484,7 +484,7 @@ f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 s32 coll_line_fix(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 void break_crate(M2d1428 *, s32, s32) __asm__("FUN_L00_002d09b8");
 void FUN_L00_002d0538_c(M2d1428 *) __asm__("FUN_L00_002d0538");
-void FUN_L00_002604f0(M2d1428 *, void *, void *, void *, void *, void *);
+void transform_attachment_pose(M2d1428 *, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 P2d1428 *FUN_L00_002603d0(void *);
 void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
@@ -773,7 +773,7 @@ void FUN_L00_002d1428(M2d1428 *moby) {
                 moby->h36 = 0x7F80;
             qcopy(&previous_position, &moby->pos);
             qcopy(&previous_rotation, &moby->v40);
-            FUN_L00_002604f0(moby, vars->path, &adjusted_link_position, vars->vE0, &moby->pos, &moby->v40);
+            transform_attachment_pose(moby, vars->path, &adjusted_link_position, vars->vE0, &moby->pos, &moby->v40);
             if (FUN_L00_002603d0(vars->path)->flags & 4) {
                 qcopy(&vars->vD0, &adjusted_link_position);
                 vars->vD0.z -= vars->fF4;

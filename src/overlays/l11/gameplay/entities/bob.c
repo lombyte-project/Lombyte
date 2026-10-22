@@ -371,7 +371,7 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float FUN_L00_0025abf0(void *, void *, float, int, float);
-extern void FUN_L00_002604f0(void *, void *, void *, void *, void *, void *);
+extern void transform_attachment_pose(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_00212f90(void *, int, int, int);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -455,7 +455,7 @@ void FUN_L11_002d1030(void *mp) {
         gate_moby_index_ptr += gate_slot_index;
         gate_moby = (char *)D_L11_0015FFD8;
         gate_moby += *gate_moby_index_ptr << 8;
-        FUN_L00_002604f0(moby, gate_moby, &D_L11_001613E0, &D_L11_001613F0, (char *)moby + 0x10, (char *)moby + 0x40);
+        transform_attachment_pose(moby, gate_moby, &D_L11_001613E0, &D_L11_001613F0, (char *)moby + 0x10, (char *)moby + 0x40);
         if (try_activate_pokitaru_gate((struct Moby *)gate_moby) == 0)
             break;
     }
