@@ -141,7 +141,7 @@ extern int FUN_L00_0023e738(void *, float, float, float, float, float);
 void initialize_electric_water_bolt_effect(char *moby) __asm__("FUN_L15_002d79e8");
 
 void initialize_electric_water_bolt_effect(char *m) __asm__("FUN_L15_002d79e8");
-void FUN_L15_002d7bb0(struct Moby *moby);
+void update_electric_water_bolt_effect(struct Moby *moby) __asm__("FUN_L15_002d7bb0");
 void draw_electric_water_bolt_effect(char *moby) __asm__("FUN_L15_002d8710");
 
 void draw_electric_water_bolt_effect(char *moby) __asm__("FUN_L15_002d8710");
@@ -309,7 +309,7 @@ void electric_water_update(struct Moby *moby) {
                         light->unkC = 0;
                     }
                     initialize_electric_water_bolt_effect((char *)moby);
-                    FUN_L15_002d7bb0(moby);
+                    update_electric_water_bolt_effect(moby);
                     enqueue_callback_list_1(draw_electric_water_bolt_effect, moby);
                 }
             }
@@ -360,7 +360,7 @@ void electric_water_update(struct Moby *moby) {
             vars->bolt_end = vars->bolt_aim;
             vars->bolt_start = hero.motion.unkD0.q;
             initialize_electric_water_bolt_effect((char *)moby);
-            FUN_L15_002d7bb0(moby);
+            update_electric_water_bolt_effect(moby);
             enqueue_callback_list_1(draw_electric_water_bolt_effect, moby);
             hit.attacker = moby;
             hit.flags = 0x10001;
@@ -717,7 +717,7 @@ extern s32 D_L15_00161CE0_2d8fa0 __asm__("D_L15_00161C60") __attribute__((sda));
 extern P_2d8fa0 D_L15_001D3E80_2d8fa0[] __asm__("D_L15_001D3BB0");
 extern float D_L15_00167440_2d8fa0[] __asm__("D_L15_001673C0");
 
-void FUN_L15_002d7bb0(Moby *moby) {
+void update_electric_water_bolt_effect(Moby *moby) {
     V_2d8fa0 vectors[10];
     V_2d8fa0 jitter[5];
     Data_2d8fa0 *data = (Data_2d8fa0 *)moby->pvars;
