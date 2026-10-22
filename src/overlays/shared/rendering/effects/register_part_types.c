@@ -85,7 +85,7 @@ extern void FUN_L00_002756f0(void);
 extern void FUN_L00_00275810(void);
 extern void FUN_L00_00275860(void);
 extern void FUN_L00_00275aa0(void);
-extern void FUN_L00_00275d68(void);
+extern void update_moving_fading_particle(void) __asm__("FUN_L00_00275d68");
 extern void FUN_L00_00275eb0(void);
 
 extern u32 effect_handlers[] __asm__("D_L00_001B1E80");
@@ -174,7 +174,7 @@ void register_part_types(void) {
     handlers[76] = (u32)FUN_L00_00275810;
     handlers[77] = (u32)FUN_L00_00275860;
     handlers[78] = (u32)FUN_L00_00275aa0;
-    handlers[79] = (u32)FUN_L00_00275d68;
+    handlers[79] = (u32)update_moving_fading_particle;
     handlers[80] = (u32)FUN_L00_00275eb0;
 }
 /*

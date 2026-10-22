@@ -2045,7 +2045,9 @@ void FUN_L00_00275aa0(char *particle) {
 }
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
-void FUN_L00_00275d68(unsigned char *particle) {
+void update_moving_fading_particle(unsigned char *particle) __asm__("FUN_L00_00275d68");
+
+void update_moving_fading_particle(unsigned char *particle) {
     float *particle_motion_data = (float *)(particle + 0x20);
     int color_without_alpha;
     float t;
