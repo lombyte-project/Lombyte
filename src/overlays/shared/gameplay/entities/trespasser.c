@@ -1533,7 +1533,7 @@ extern struct Moby *D_L00_001ABA00_2c26c8[] __asm__("D_L00_001ABA00") __attribut
 extern u8 *FUN_002141f8_2c26c8(struct Moby *) __asm__("FUN_002141f8");
 #include "rnc/input/pad_state.h"
 extern struct Moby *FUN_L00_002ace70(struct Moby *, void *);
-extern void FUN_L00_002acfd8(void *, struct Moby *, void *);
+extern void launch_bomb(void *, struct Moby *, void *) __asm__("FUN_L00_002acfd8");
 extern u8 D_0013E531;
 extern f32 D_0015ED68;
 extern f32 D_0015ED6C __attribute__((section(".sdata")));
@@ -1727,7 +1727,7 @@ void bomb_glove_update(struct Moby *moby) {
         if (vars->held == 0) {
             vars->held = FUN_L00_002ace70(moby, &vars->grip);
         } else {
-            FUN_L00_002acfd8(&pos, vars->held, vars->held->pvars);
+            launch_bomb(&pos, vars->held, vars->held->pvars);
             if (D_00141680_2c26c8.deliveries <= 0xfffe)
                 ++D_00141680_2c26c8.deliveries;
             {

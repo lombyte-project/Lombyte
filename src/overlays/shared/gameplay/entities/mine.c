@@ -1213,7 +1213,9 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern void aim_throw_arc(void *, void *, void *, f32, f32, f32) __asm__("FUN_L00_002c2488");
 #include "rnc/input/pad_globals.h"
-void FUN_L00_002acfd8(float *pos, unsigned char *moby, float *velocity) {
+void launch_bomb(float *pos, unsigned char *moby, float *velocity) __asm__("FUN_L00_002acfd8");
+
+void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
     float *vars = *(float **)(moby + 0x78);
     float difference[4] __attribute__((aligned(16)));
     float direction[4] __attribute__((aligned(16)));
