@@ -734,7 +734,7 @@ extern void *FUN_L00_002715e8(void *, int, int, float, float);
 extern void FUN_00210850(void *, int, void *, void *);
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float FUN_L07_00317e60(void *, void *);
+extern float update_snagglebeast_rope(void *, void *) __asm__("FUN_L07_00317e60");
 void detach_snagglebeast_rope_particles(int target_entry) __asm__("FUN_L07_00318e98");
 
 extern void detach_snagglebeast_rope_particles(int) __asm__("FUN_L07_00318e98");
@@ -1511,7 +1511,7 @@ void snagglebeast_update(unsigned char *moby) {
         ((int *)data)[0xA5] = 1;
         FUN_L00_00258278((struct Moby *)moby, hero_angle, (float *)(data + 0x168), frame_time_sq * 2.0943952f, frame_time_sq * 0.6981317f, frame_time * 2.0943952f);
         FUN_L00_0024f7c8(moby, 4, &position);
-        fr = FUN_L07_00317e60(moby, &position);
+        fr = update_snagglebeast_rope(moby, &position);
         if (moby[0x52] != 6) break;
         qcopy(data + 0x140, ((char *)&hero) + 0x80);
         *(float *)(data + 0x148) += 0.6f;
@@ -1978,7 +1978,7 @@ extern float FUN_001f99c0(float);
 extern int D_L07_00161B84_gp __asm__("D_L07_00161B84") __attribute__((sda));
 
 /* Updates the rope points, its ring mesh and the particles travelling along it. */
-float FUN_L07_00317e60(void *moby, void *anchor) {
+float update_snagglebeast_rope(void *moby, void *anchor) {
     RopeVec center;
     RopeVec step;
     RopeVec axis;
