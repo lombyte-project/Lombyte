@@ -1330,7 +1330,9 @@ extern s32 coll2_233940(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 coll3_233940(void *, f32) __asm__("FUN_L00_001f3170");
 extern void vscl_233940(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern u128_233940 D_L01_001742F0[] __attribute__((section(".data")));
-s32 FUN_L01_00233940(s32 mode) {
+s32 resolve_hero_position_with_collision_queries(s32 mode) __asm__("FUN_L01_00233940");
+
+s32 resolve_hero_position_with_collision_queries(s32 mode) {
     V_233940 old;
     V_233940 collision_query_offset;
     V_233940 resolved_position_delta;
