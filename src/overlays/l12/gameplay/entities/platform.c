@@ -2825,7 +2825,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L12_002eb220(struct Moby *moby) {
-    int st;
+    int hit_processing_status;
     float fv;
     int hit_reaction_code;
     char *vars;
@@ -2834,8 +2834,8 @@ void FUN_L12_002eb220(struct Moby *moby) {
     vars = (char *)moby->pvars;
     fv = 0.0f;
     hit_record = find_moby_hit(moby, 0x330000, 0);
-    hit_reaction_code = hit_reaction(moby, hit_record, vars + 0x20, 0, &st, &fv, 0, 4);
-    if (st != 1 && moby->state != 6 &&
+    hit_reaction_code = hit_reaction(moby, hit_record, vars + 0x20, 0, &hit_processing_status, &fv, 0, 4);
+    if (hit_processing_status != 1 && moby->state != 6 &&
         *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0xB8 &&
         *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x199) {
         float remaining_health;
