@@ -971,7 +971,7 @@ extern f32 D_L00_00161690 __attribute__((sda));
 extern f32 D_L00_00161694 __attribute__((sda));
 f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-void FUN_L00_002bbbc8(void *, s32, s32, s32, f32, f32, f32);
+void draw_walloper_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002bbbc8");
 void draw_walloper_camera_facing_quad(void *mv) __asm__("FUN_L00_002bc1a0");
 
 void draw_walloper_camera_facing_quad(void *) __asm__("FUN_L00_002bc1a0");
@@ -981,7 +981,7 @@ void FUN_L00_002bbb00(void *moby) {
     for (i = 0; i < 10; i++) {
         if (D_L00_001DBEC0[i] != 0) {
             arc_alpha = truncate_float_to_s32(convert_integer_to_float(D_L00_001DBED8[i]) * D_L00_00161660_f[29]);
-            FUN_L00_002bbbc8(&D_L00_001DBBA0[i], arc_alpha, arc_alpha, 5, D_L00_00161690, D_L00_00161694, 0.2f);
+            draw_walloper_arc_two_pass_quads(&D_L00_001DBBA0[i], arc_alpha, arc_alpha, 5, D_L00_00161690, D_L00_00161694, 0.2f);
         }
     }
     draw_walloper_camera_facing_quad(moby);
@@ -1017,7 +1017,7 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
-void FUN_L00_002bbbc8(void *mv, int first_pass_alpha, int second_pass_alpha, int point_count, float sx, float sy, float sz) {
+void draw_walloper_arc_two_pass_quads(void *mv, int first_pass_alpha, int second_pass_alpha, int point_count, float sx, float sy, float sz) {
     char *point_bytes = mv;
     RW first_pass_corners[4];
     RT first_pass_render_attributes;
