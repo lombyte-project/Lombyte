@@ -2166,7 +2166,9 @@ extern void FUN_L00_00267a08_26e150(void *) __asm__("FUN_L00_00267a08");
 extern int FUN_001fa6d0_26e150(float) __asm__("FUN_001fa6d0");
 extern void FUN_001f9a10_26e150(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L00_0026e150(M_26e150 *particle) {
+void update_moving_fade_in_out_effect_particle(M_26e150 *particle) __asm__("FUN_L00_0026e150");
+
+void update_moving_fade_in_out_effect_particle(M_26e150 *particle) {
     struct Q_26e150 *q = &particle->q;
     float vel = q->vel;
     float alpha_before_reversal;
