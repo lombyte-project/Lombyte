@@ -160,7 +160,9 @@ extern char *func_L00_0026DEA0_c(void *, int, void *, int, float, float, float,
                                  float) __asm__("FUN_L00_0026d000");
 extern char D_L07_0016C960_c[] __asm__("D_L07_0016C8E0");
 
-void FUN_L07_0031eba8(char *moby) {
+void update_scene_moby_effect_bursts(char *moby) __asm__("FUN_L07_0031eba8");
+
+void update_scene_moby_effect_bursts(char *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_UPDATE = 1
