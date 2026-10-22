@@ -1844,14 +1844,16 @@ extern float FUN_L11_00311a88_u(void *, void *) __asm__("FUN_L11_00311a88");
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern int collect_oil_tanker_chain_mobys(char *moby, void **out) __asm__("FUN_L11_00318050");
 extern short *D_L11_001AC240[];
-void FUN_L11_00311be8(void *moby, void *a1, void *a2);
+void count_active_and_visible_listed_mobys(void *moby, void *active_moby_count, void *visible_moby_count) __asm__("FUN_L11_00311be8");
+
+void count_active_and_visible_listed_mobys(void *moby, void *a1, void *a2) __asm__("FUN_L11_00311be8");
 
 void *FUN_L11_00311948(void *moby, char *ship_vars, float *reference_position, float *reference_rotation, float unused_float_parameter_0, float unused_float_parameter_1, float unused_float_parameter_2, void *current_target, int unused_parameter) {
     void *best = 0;
     float bestd = 1000.0f;
     short *moby_list_entry;
     void *list[12];
-    FUN_L11_00311be8(moby, ship_vars + 0xE8, ship_vars + 0xEA);
+    count_active_and_visible_listed_mobys(moby, ship_vars + 0xE8, ship_vars + 0xEA);
     if (current_target != 0) {
         if (FUN_L11_00311a88_u(moby, current_target) < bestd)
             return current_target;
@@ -1925,7 +1927,7 @@ float FUN_L11_00311a88(void *moby_v, void *o_v) {
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern short *D_L11_001AC240[];
 
-void FUN_L11_00311be8(void *moby, void *active_moby_count, void *visible_moby_count) {
+void count_active_and_visible_listed_mobys(void *moby, void *active_moby_count, void *visible_moby_count) {
     char *moby_private_data = *(char **)((char *)moby + 0x78);
     int type = *(short *)(moby_private_data + 0x108);
     short *moby_list_entry;
