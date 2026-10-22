@@ -1065,7 +1065,9 @@ extern f32 D_L08_00161FA0 __attribute__((sda));
 extern f32 D_L08_00161FA4 __attribute__((sda));
 extern f32 D_L08_00161FA8 __attribute__((sda));
 
-void FUN_L08_002f5830(char *moby) {
+void update_spark_emitter(char *moby) __asm__("FUN_L08_002f5830");
+
+void update_spark_emitter(char *moby) {
     f32 spark_motion_primary[4], spark_motion_secondary[4], spark_position[4], spark_motion_offset[4], spark_rotation_matrix[16];
     char *spark_data;
     s32 spark_frame_count, spark_second_frame_count, spark_third_frame_count;
