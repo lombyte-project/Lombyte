@@ -1478,7 +1478,7 @@ extern void FUN_L18_002d6dc0(void *moby);
 extern void FUN_L18_002d7f68(unsigned char *arg, int value);
 extern void FUN_L18_002d7fd0(unsigned char *arg);
 extern void FUN_L18_002db938(char *pos, float *vec, int arg, float fa, float fb);
-extern void FUN_L18_002dc458(char *moby, void *pos, float f);
+extern void refresh_ring_effect(char *moby, void *pos, float f) __asm__("FUN_L18_002dc458");
 extern void FUN_L18_002dfaa0(char *moby, void *v0, void *v1, void *v2, void *v3, void *v4, int a6,
                              int a7, int a8);
 extern void FUN_L18_002ea168(unsigned char *arg, void *src, void *position, int active,
@@ -2340,7 +2340,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         if (tick_countdown_32_alt(&boss_data->f354) != 0) {
             FUN_L18_002f6960((char *)moby);
         }
-        FUN_L18_002dc458(boss_data->f338, boss_data->f3C0, 5.8f);
+        refresh_ring_effect(boss_data->f338, boss_data->f3C0, 5.8f);
         if (voice_is_playing(moby, boss_data->f3B0) == 0) {
             boss_data->f3B0 = allocate_voice_for_target_entry(0xE, 4, (int)moby);
         }

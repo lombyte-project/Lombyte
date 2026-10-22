@@ -2077,7 +2077,9 @@ void FUN_L18_002dc0c8(struct Moby *moby, void *segment_start, void *segment_end)
 
 extern s32 D_L18_00161C9C_d __asm__("D_L18_00161C9C") __attribute__((sda));
 
-void FUN_L18_002dc458(struct Moby *moby, void *pos, float radius) {
+void refresh_ring_effect(struct Moby *moby, void *pos, float radius) __asm__("FUN_L18_002dc458");
+
+void refresh_ring_effect(struct Moby *moby, void *pos, float radius) {
     int *moby_vars = (int *)moby->pvars;
     int countdown_limit_frames;
     qcopy(&moby->pos, pos);
