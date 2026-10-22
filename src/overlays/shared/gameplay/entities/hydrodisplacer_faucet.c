@@ -470,7 +470,9 @@ extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void FUN_L05_0030c220(struct Moby *m);
+void draw_moby_wobble_quads(struct Moby *moby) __asm__("FUN_L05_0030c220");
+
+extern void draw_moby_wobble_quads(struct Moby *m) __asm__("FUN_L05_0030c220");
 void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
@@ -504,7 +506,7 @@ void update_moby_wobble(unsigned char *moby) {
     case MOBY_WOBBLE_STATE_ANIMATE: {
         float k = 0.5235988f;
         float wobble_phase;
-        enqueue_callback_list_1((void *)FUN_L05_0030c220, moby);
+        enqueue_callback_list_1((void *)draw_moby_wobble_quads, moby);
         wobble_phase = fast_add_rotations(*(float *)(wobble_vars + 0x44), *(float *)(wobble_vars + 0x4C));
         *(float *)(wobble_vars + 0x44) = wobble_phase;
         *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(wobble_vars + 0x40), fast_sin(wobble_phase) * k);
@@ -541,7 +543,7 @@ typedef struct {
     u64 control[4];
 } Quad_30c220;
 
-void FUN_L05_0030c220(struct Moby *moby) {
+void draw_moby_wobble_quads(struct Moby *moby) {
     Quad_30c220 quad_a, quad_b;
     float rotation[4];
     float position[4];
