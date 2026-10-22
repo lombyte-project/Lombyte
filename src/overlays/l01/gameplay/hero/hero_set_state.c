@@ -59,7 +59,7 @@ extern void FUN_L00_0020e360(int a, int b);
 extern void FUN_L00_0020e698(void);
 extern void stick_target(float, int) __asm__("FUN_L00_002118c8");
 extern void FUN_L00_00213de8(float);
-extern void FUN_L00_00214ed8(float a, float b, float c);
+extern void update_hero_target_heading(float a, float b, float c) __asm__("FUN_L00_00214ed8");
 extern void FUN_L00_00216ec0(int, int, int);
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_002325e0(int bank, int seq);
@@ -1175,7 +1175,7 @@ int hero_set_state(int a, int b) {
             q->unk2284 = 0x50;
             q->attack_record = 4;
             q->saved_item[0] = 0;
-            FUN_L00_00214ed8(8.0f, 1.0471976f, -1.0f);
+            update_hero_target_heading(8.0f, 1.0471976f, -1.0f);
             *(int *)&q->unkA70 = 0;
             q->items[0].timer = 0xA;
             if (b) {
@@ -1214,7 +1214,7 @@ int hero_set_state(int a, int b) {
             q = &hero;
             q->attack_record = 3;
             q->saved_item[0] = 0;
-            FUN_L00_00214ed8(14.0f, 0.5235988f, -1.0f);
+            update_hero_target_heading(14.0f, 0.5235988f, -1.0f);
             q->unkA7C = q->unkA7C == 0;
             if (b) {
                 int n = scale_game_frames(0xA);
@@ -1235,7 +1235,7 @@ int hero_set_state(int a, int b) {
                 set_hero_animation(0x67, 4, -1.0f);
                 blend_moby_animation(((void *)q->items[0].moby), 3, 4, -1);
             }
-            FUN_L00_00214ed8(11.0f, 0.87266463f, -1.0f);
+            update_hero_target_heading(11.0f, 0.87266463f, -1.0f);
             break;
         }
         case HERO_STATE_WRENCH_COMBO: {
@@ -1262,7 +1262,7 @@ int hero_set_state(int a, int b) {
                 struct Hero *r = &hero;
                 r->attack_record = k;
             }
-            FUN_L00_00214ed8(5.0f, 0.7853982f, 0.7853982f);
+            update_hero_target_heading(5.0f, 0.7853982f, 0.7853982f);
             if (b) {
                 char *m;
                 int j = 0;

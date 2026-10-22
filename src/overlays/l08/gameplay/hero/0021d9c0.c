@@ -358,7 +358,7 @@ extern void FUN_L00_002336e8(void *, void *, f32);
 extern void make_hit_descriptor(void *, struct MobyView *, s32, f32, void *) __asm__("FUN_L00_00259888");
 extern s32 collect_mobies_in_sphere(f32, void *, s32, struct MobyView *, void *) __asm__("FUN_L00_001f2868");
 extern f32 FUN_L00_0025bb38(s32, f32, f32);
-extern void FUN_L00_00214ed8(f32, f32, f32);
+extern void update_hero_target_heading(f32, f32, f32) __asm__("FUN_L00_00214ed8");
 extern void FUN_L00_002167d0(void);
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void set_tracked_class_5f3_moby_position(struct MobyView *, void *) __asm__("FUN_L00_002a9b80");
@@ -1269,7 +1269,7 @@ void FUN_L08_002284e0(void) {
             hero.motion.move_yaw = hero.unkA5C;
             turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         } else if (hero.anim_frame < 25.0f) {
-            FUN_L00_00214ed8(8.0f, 1.0471976f, 1.0471976f);
+            update_hero_target_heading(8.0f, 1.0471976f, 1.0471976f);
         }
         t1 = scale_game_frames(9);
         r = frame_time * 7.7f;
@@ -1345,7 +1345,7 @@ void FUN_L08_002284e0(void) {
                     ok = 0;
                 }
                 if (ok && hero.unk20B3 == 0) {
-                    FUN_L00_00214ed8(14.0f, 0.5235988f, 0.7853982f);
+                    update_hero_target_heading(14.0f, 0.5235988f, 0.7853982f);
                 }
             }
         }
@@ -1442,7 +1442,7 @@ void FUN_L08_002284e0(void) {
                 ok = 0;
             }
             if (ok) {
-                FUN_L00_00214ed8(5.0f, 0.7853982f, 0.7853982f);
+                update_hero_target_heading(5.0f, 0.7853982f, 0.7853982f);
             }
         }
         speed_step(frame_time_sq * 37.0f, frame_time_sq * 28.0f);
@@ -1479,7 +1479,7 @@ void FUN_L08_002284e0(void) {
             hero.motion.move_yaw = hero.unkA5C;
             turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         } else if (hero.state_timer < scale_game_frames(4)) {
-            FUN_L00_00214ed8(11.0f, 0.87266463f, -1.0f);
+            update_hero_target_heading(11.0f, 0.87266463f, -1.0f);
         }
         t1 = scale_game_frames(10);
         hero.target_speed = 0.0f;
@@ -1552,7 +1552,7 @@ void FUN_L08_002284e0(void) {
             hero.motion.move_yaw = hero.unkA5C;
             turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         } else {
-            FUN_L00_00214ed8(11.0f, 0.87266463f, -1.0f);
+            update_hero_target_heading(11.0f, 0.87266463f, -1.0f);
         }
         speed_step(frame_time_sq * 30.0f, frame_time_sq * 35.0f);
         set_planar_vel(99999.0f);

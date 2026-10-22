@@ -193,7 +193,9 @@ typedef struct {
 void FUN_L00_002118c8(int, float);
 char *FUN_L00_0020d8f8(float, float, float, float);
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-void FUN_L00_00214ed8(float a, float b, float c) {
+void update_hero_target_heading(float a, float b, float c) __asm__("FUN_L00_00214ed8");
+
+void update_hero_target_heading(float a, float b, float c) {
     struct Hero *g = &hero;
     float r;
     char *heading_target;
