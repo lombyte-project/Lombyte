@@ -153,7 +153,9 @@ typedef struct {
     unsigned char state;
 } Level18State;
 
-int FUN_L18_002d8858(Level18State *platform_moby) {
+int request_floating_platform_sink(Level18State *platform_moby) __asm__("FUN_L18_002d8858");
+
+int request_floating_platform_sink(Level18State *platform_moby) {
     if (platform_moby->state == 1) {
         return 1;
     }

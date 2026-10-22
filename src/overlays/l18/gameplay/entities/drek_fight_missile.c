@@ -3073,7 +3073,7 @@ void FUN_L18_002f6aa0(struct Moby *moby) {
 /* Finds the nearest moby in the self's list within range and returns it. */
 extern f32 dot_vectors_xyz(void *a, void *b) __asm__("FUN_001f9ab0");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
-extern int FUN_L18_002d8858(void *obj);
+extern int request_floating_platform_sink(void *obj) __asm__("FUN_L18_002d8858");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short *D_L18_001AC240_c2[] __asm__("D_L18_001AC240");
 extern short D_L18_00162338 __attribute__((sda));
@@ -3097,7 +3097,7 @@ unsigned char *FUN_L18_002f6e10(struct Moby *self) {
         if (*(short *)(listed_moby + 0xA6) == 0x24B) {
             char *selection_origin = data + 0x3C0;
             unsigned char *candidate_moby;
-            FUN_L18_002d8858(listed_moby);
+            request_floating_platform_sink(listed_moby);
             candidate_moby = D_L18_0015FFD8 + group_moby_byte_offset;
             if (vector_distance(candidate_moby + 0x10, selection_origin) < *(float *)&D_L18_00162338) {
                 unsigned char *in_range_moby;
