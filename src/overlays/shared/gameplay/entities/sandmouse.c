@@ -732,7 +732,9 @@ void draw_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030de68");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void enqueue_callback_list_1_alt(void (*)(char *), char *) __asm__("FUN_001f4600");
 
-void FUN_L01_0030ded0(char *moby) {
+void update_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030ded0");
+
+void update_sandmouse_billboard_quads(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *entry = data + 0x70;
     int i;
@@ -826,7 +828,7 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void FUN_L01_0030d260(void *unused, float *p);
 void FUN_L01_0030d5f0(char *moby, char *state);
 void FUN_L01_0030dda0(char *m);
-void FUN_L01_0030ded0(char *moby);
+void update_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030ded0");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 void detach_manipulator(void *moby, void *manip) __asm__("FUN_0020cb88");
 
@@ -874,7 +876,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
         } else if (*((u8 *)sandmouse_vars + 0x91) != 0) {
             detach_manipulator(sandmouse_moby, (u8 *)sandmouse_vars + 0x90);
         }
-        FUN_L01_0030ded0(sandmouse_moby);
+        update_sandmouse_billboard_quads(sandmouse_moby);
     }
     switch (sandmouse_moby->state) {
     case SANDMOUSE_STATE_INITIALIZE:
