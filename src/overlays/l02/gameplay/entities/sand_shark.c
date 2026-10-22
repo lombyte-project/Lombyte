@@ -2590,7 +2590,7 @@ extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0")
 extern void FUN_L00_002eac18(int);
 extern void path_marker_dc88(void *, void *, int, int, int, int, int, float) __asm__("FUN_L01_00285768");
 extern void FUN_L02_0022b728(int, int);
-extern void FUN_L02_00237478(void);
+extern void enter_hero_idle_or_stop(void) __asm__("FUN_L02_00237478");
 void advance_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_002def80");
 
 extern void advance_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_002def80");
@@ -2791,7 +2791,7 @@ void transport_pod_update(unsigned char *moby) {
         } else if (fast_dec_timer(&transport_pod_vars->ride_timer)) {
             FUN_L00_002eac18(2);
             moby[0x20] = 0xD;
-            FUN_L02_00237478();
+            enter_hero_idle_or_stop();
         }
         break;
     }

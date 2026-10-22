@@ -3621,7 +3621,9 @@ void FUN_L02_00230988(void) {
 #include "sda.h"
 extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 
-void FUN_L02_00237478(void) {
+void enter_hero_idle_or_stop(void) __asm__("FUN_L02_00237478");
+
+void enter_hero_idle_or_stop(void) {
     if (hero.motion.speed_xy < frame_time * 2.7f) {
         hero_set_state(HERO_STATE_IDLE, 1);
     } else {
