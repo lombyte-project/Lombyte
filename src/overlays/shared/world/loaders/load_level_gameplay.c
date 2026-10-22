@@ -1799,7 +1799,7 @@ extern void register_object_render_class(char *, void *, void *, s32) __asm__("F
 extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
 extern void register_shrub_render_class(char *, void *, void *, void *, s32) __asm__("FUN_00203b08");
 extern void unpack_point_records(void *, s32) __asm__("FUN_00202800");
-extern void FUN_L00_0023f120(char *);
+extern void relocate_counted_pointer_table(char *) __asm__("FUN_L00_0023f120");
 extern void FUN_L00_0023f0d8(char *);
 extern void parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_002026c8");
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
@@ -1941,7 +1941,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
         D_L00_0015F420 = base + core_header[0x1A];
         unpack_point_records((char *)core_header + core_header[0x17], core_header[0x16]);
         if (core_header[0x28]) {
-            FUN_L00_0023f120(base + core_header[0x28]);
+            relocate_counted_pointer_table(base + core_header[0x28]);
         } else {
             D_L00_0015F438 = 0;
             D_L00_0015F43C = 0;
