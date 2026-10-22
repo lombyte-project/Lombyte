@@ -2878,7 +2878,9 @@ extern void cart_burst(float, float, struct Moby *, void *, int) __asm__("FUN_L0
 extern void cart_bank_voice(int, int, int) __asm__("FUN_0022db10");
 extern void cart_dialog(int, int) __asm__("FUN_L00_00263d40");
 extern void cart_release(int) __asm__("FUN_0022d798");
-extern void FUN_L14_002fc890(struct Moby *);
+void initialize_flight_path_state(struct Moby *moby) __asm__("FUN_L14_002fc890");
+
+extern void initialize_flight_path_state(struct Moby *) __asm__("FUN_L14_002fc890");
 extern void FUN_L14_002fc9a0(struct Moby *);
 extern void FUN_L14_002fc3e8(struct Moby *);
 extern void cart_print(const char *, short) __asm__("FUN_001e93b0");
@@ -2958,7 +2960,7 @@ void FUN_L14_002fc0f0(struct Moby *moby) {
             cart_remove(moby);
             return;
         }
-        FUN_L14_002fc890(moby);
+        initialize_flight_path_state(moby);
         moby->state = 1;
         moby->update_dist = 0xff;
         moby->draw_dist = 0xff;
@@ -3119,7 +3121,7 @@ void FUN_L14_002fc3e8(struct Moby *emitter_moby) {
 extern char *D_L14_001B0BB0_c[] __asm__("D_L14_001B0BB0");
 extern float FUN_001f9b48(void *, void *);
 
-void FUN_L14_002fc890(struct Moby *moby) {
+void initialize_flight_path_state(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float *path = (float *)D_L14_001B0BB0_c[*(int *)(data + 0x68)];
     int i;
@@ -3216,7 +3218,7 @@ extern int tram_coll_line(void *, void *, int, void *, void *) __asm__("FUN_001e
 extern int tram_tick(void *) __asm__("FUN_001f9740");
 extern void tram_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void tram_add(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L14_002fc890(struct Moby *moby);
+void initialize_flight_path_state(struct Moby *moby) __asm__("FUN_L14_002fc890");
 void FUN_L14_002fd310(struct Moby *m);
 int FUN_L14_002fd918(struct Moby *m);
 
@@ -3301,7 +3303,7 @@ void FUN_L14_002fcbb0(struct Moby *moby) {
             tram_remove(moby);
             return;
         }
-        FUN_L14_002fc890(moby);
+        initialize_flight_path_state(moby);
         if (moby_vars->carrier != 0) {
             struct Moby *c;
             moby->state = 1;
