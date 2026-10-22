@@ -1027,7 +1027,9 @@ extern float FUN_001fa580_2acad8(float, float) __asm__("FUN_001fa580");
 extern int FUN_001f9770_2acad8(void *) __asm__("FUN_001f9770");
 extern void FUN_0020c828_2acad8(void *) __asm__("FUN_0020c828");
 
-void FUN_L00_002acad8(M_2acad8 *particle_moby) {
+void update_glow_particle(M_2acad8 *particle_moby) __asm__("FUN_L00_002acad8");
+
+void update_glow_particle(M_2acad8 *particle_moby) {
     V_2acad8 *v = particle_moby->v;
     float elapsed_lifetime_frames, total_lifetime_frames;
     int n;
