@@ -109,7 +109,7 @@ void FUN_00237a78_29fcd0(void *, void *, int *, int *, int *, int *) __asm__("FU
 void FUN_00239690_29fcd0(int, int, float) __asm__("FUN_00239690");
 void FUN_001fb740_29fcd0(int, int) __asm__("FUN_001fb740");
 void FUN_00233980_29fcd0(int, long) __asm__("FUN_00233980");
-void FUN_L00_0029ead8_29fcd0(void *, int, int) __asm__("FUN_L00_0029ead8");
+void draw_vendor_purchase_text(void *, int, int) __asm__("FUN_L00_0029ead8");
 void FUN_00239328_29fcd0(int, float, float) __asm__("FUN_00239328");
 void FUN_001f7978_29fcd0(void) __asm__("FUN_001f7978");
 void FUN_0020d330_29fcd0(void *, int) __asm__("FUN_0020d330");
@@ -152,7 +152,7 @@ void FUN_L00_0029fcd0(void *moby) {
     FUN_00239690_29fcd0(9, 7, 1.0f);
     FUN_001fb740_29fcd0(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
-    FUN_L00_0029ead8_29fcd0(moby, x, y);
+    draw_vendor_purchase_text(moby, x, y);
     FUN_00239328_29fcd0(6, (float)x, (float)y);
     FUN_001f7978_29fcd0();
     FUN_001fb740_29fcd0(0x200, 0x200);
