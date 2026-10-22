@@ -1432,7 +1432,9 @@ void FUN_L00_002d2a90(Moby_2D3F40 *moby) {
 extern int D_0015ED84;
 extern unsigned char D_0014BF10[];
 
-void FUN_L00_002d2e28(unsigned char *moby) {
+void increment_metal_detector_collection_counter(unsigned char *moby) __asm__("FUN_L00_002d2e28");
+
+void increment_metal_detector_collection_counter(unsigned char *moby) {
     int row = D_0015ED84;
     if (row < 20) {
         int index = moby[0xBC] - 1;
@@ -1683,9 +1685,9 @@ void metal_detector_update(struct Moby *moby) {
                                 tv->count -= 5;
                                 target_moby = hero.unk2040;
                             }
-                            FUN_L00_002d2e28((u8 *)target_moby);
+                            increment_metal_detector_collection_counter((u8 *)target_moby);
                         } else {
-                            FUN_L00_002d2e28((u8 *)target_moby);
+                            increment_metal_detector_collection_counter((u8 *)target_moby);
                         }
                     }
                     delete_moby(hero.unk2040);
