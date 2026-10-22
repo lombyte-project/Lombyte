@@ -577,7 +577,9 @@ typedef struct {
     s32 state;
 } VendorEventData;
 
-void FUN_L08_00307540(struct Moby *moby) {
+void update_batalia_item_triggers_and_help(struct Moby *moby) __asm__("FUN_L08_00307540");
+
+void update_batalia_item_triggers_and_help(struct Moby *moby) {
     enum {
         VENDOR_EVENT_WAIT_FOR_ARMING = 0,
         VENDOR_EVENT_ARMED = 1
