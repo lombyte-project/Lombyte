@@ -100,7 +100,9 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern unsigned char *FUN_L00_0026d000(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color);
 
 /* Emits n dust puffs evenly spaced along the segment from a to b. */
-void FUN_L02_002d3a50(void *moby, void *segment_start, void *b, int puff_count, float sa, float sb) {
+void emit_sand_shark_dust_puffs_along_segment(void *moby, void *segment_start, void *b, int puff_count, float sa, float sb) __asm__("FUN_L02_002d3a50");
+
+void emit_sand_shark_dust_puffs_along_segment(void *moby, void *segment_start, void *b, int puff_count, float sa, float sb) {
     float step[4];
     float dust_puff_position[4];
     float dust_puff_velocity[4];
@@ -153,7 +155,7 @@ extern short D_L02_001619D0 __attribute__((sda));
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void FUN_L02_002d3a50(void *, void *, void *, int, float, float);
+extern void emit_sand_shark_dust_puffs_along_segment(void *, void *, void *, int, float, float) __asm__("FUN_L02_002d3a50");
 
 void emit_sand_shark_dust_segment(struct Moby *moby, int segment_start_index, int segment_end_index, int puff_count) __asm__("FUN_L02_002d3c98");
 
@@ -173,7 +175,7 @@ void emit_sand_shark_dust_segment(struct Moby *moby, int segment_start_index, in
     fast_vec_sub(vb, vb, D_L02_001619C0);
     transform_vector_by_basis(vb, vb, &moby->rot_row0);
     fast_vec_add(vb, vb, &moby->pos);
-    FUN_L02_002d3a50(moby, va, vb, puff_count, pa[3] * *(float *)&D_L02_001619D0,
+    emit_sand_shark_dust_puffs_along_segment(moby, va, vb, puff_count, pa[3] * *(float *)&D_L02_001619D0,
                      pb[3] * *(float *)&D_L02_001619D0);
 }
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D51D0), where it is exact; names translated to the US level program. */
