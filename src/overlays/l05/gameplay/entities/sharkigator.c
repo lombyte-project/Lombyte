@@ -126,7 +126,7 @@ void FUN_L05_00306d30(char *moby, int path_node_index, float *out) {
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003087B0), where it is exact; names translated to the US level program. */
 
 extern char *D_L05_001B0930[];
-extern int FUN_L00_0025d7a0(char *, int, int, int);
+extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
 
 void FUN_L05_00307358(char *moby) {
     char *moby_data = *(char **)(moby + 0x78);
@@ -139,7 +139,7 @@ void FUN_L05_00307358(char *moby) {
             path_node_byte_offset = path_node_index * 16;
             if (*(float *)(active_path + path_node_byte_offset + 0x1C) == 1.0f) {
                 while (*(float *)(active_path + path_node_byte_offset + 0x1C) != 2.0f) {
-                    path_node_index = FUN_L00_0025d7a0(active_path, path_node_index, 1, 1);
+                    path_node_index = offset_path_index(active_path, path_node_index, 1, 1);
                     active_path = *(char **)(moby_data + 0x244);
                     path_node_byte_offset = path_node_index * 16;
                 }
@@ -2546,7 +2546,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int FUN_L01_0028b510(void *, void *, float);
-extern int FUN_L00_0025d7a0(char *, int, int, int);
+extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
 extern char *D_L05_001B0930[];
 extern int random_integer_below_e10(int) __asm__("FUN_00213260");
 extern int trunc_f2i_e10(float) __asm__("FUN_001fa6d0");
@@ -2606,7 +2606,7 @@ void FUN_L05_00306e10(char *patrol_moby) {
             if (patrol_data->node == path->count - 1) {
                 patrol_data->path = base;
                 patrol_data->node = FUN_L01_0028b510(patrol_data->position, base, 0.0f);
-                patrol_data->node = FUN_L00_0025d7a0((char *)patrol_data->path, patrol_data->node, 5, 1);
+                patrol_data->node = offset_path_index((char *)patrol_data->path, patrol_data->node, 5, 1);
             }
         } else if (path->points[patrol_data->node][3] > 0.0f && random_integer_below_e10(100) > 0) {
             /* At a marked node of the base path: more often than not, onto the branch the mark names. */
@@ -2903,7 +2903,7 @@ void skid_mcmarx_update(Moby *moby) {
                     int next;
 
                     for (i = data->point_index; i < data->jump_point; i = next) {
-                        next = FUN_L00_0025d7a0((char *)data->path, i, 1, 1);
+                        next = offset_path_index((char *)data->path, i, 1, 1);
                         path_length += vector_distance((float (*)[4])data->path + (i + 1), (float (*)[4])data->path + (next + 1));
                     }
                     air_time = path_length / data->speed;

@@ -325,7 +325,7 @@ extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern void FUN_L00_0026d598(void *, void *, s32);
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 extern s32 sample_path(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_0025d808");
-extern s32 FUN_L00_0025d7a0(void *, s32, s32, s32);
+extern s32 offset_path_index(void *, s32, s32, s32) __asm__("FUN_L00_0025d7a0");
 extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_001f96b0");
 extern void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
 extern void FUN_L00_00271b18(void *, void *, f32);
@@ -1665,7 +1665,7 @@ void FUN_L03_0020ef60(void) {
             break;
         }
         sample_path(hero.unk5F0, &v10, &hero.unk5F4, &hero.unk5F8, hero.unk604, hero.unk60C);
-        idx = FUN_L00_0025d7a0(hero.unk5F0, hero.unk5F4, 1, hero.unk60C);
+        idx = offset_path_index(hero.unk5F0, hero.unk5F4, 1, hero.unk60C);
         subtract_vector_xyz(&spatial_scratch_or_hit_descriptor_tail, (Vec4 *)hero.unk5F0 + (idx + 1), &v10);
         if (fast_vec_length(&spatial_scratch_or_hit_descriptor_tail) < 0.001f) {
             if (hero.unk5F4 == idx) {

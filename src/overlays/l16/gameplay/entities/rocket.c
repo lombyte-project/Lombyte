@@ -254,7 +254,7 @@ void FUN_L16_002cf9d0(Level16VendorVectorMoby_u *moby, int index, void *out) {
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D1310), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_0025d7a0(char *, int, int, int);
+extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
 
 void FUN_L16_002cff48(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -267,7 +267,7 @@ void FUN_L16_002cff48(struct Moby *moby) {
                 char *t;
                 if (*(float *)(tab + path_node_byte_offset + 0x1C) == 2.0f)
                     break;
-                path_node_index = FUN_L00_0025d7a0(tab, path_node_index, 1, 1);
+                path_node_index = offset_path_index(tab, path_node_index, 1, 1);
                 tab = *(char **)(data + 0x2C0);
                 path_node_byte_offset = path_node_index * 16;
             }
@@ -2081,7 +2081,7 @@ extern char *D_L16_001B0930[];
 extern float vector_distance_xy(void*,void*) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float,float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern int FUN_L00_0025d7a0(char *, int, int, int);
+extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
 extern int FUN_L01_0028b510(void *, void *, float);
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -2114,7 +2114,7 @@ void FUN_L16_002cf9f8(char *patrol_moby) {
             if (patrol_data->node == path->count - 1) {
                 patrol_data->path = base;
                 patrol_data->node = FUN_L01_0028b510(patrol_data->position, base, 0.0f);
-                patrol_data->node = FUN_L00_0025d7a0((char *)patrol_data->path, patrol_data->node, 5, 1);
+                patrol_data->node = offset_path_index((char *)patrol_data->path, patrol_data->node, 5, 1);
             }
         } else if (path->points[patrol_data->node][3] > 10.0f && random_integer_below(100) >= 31) {
             /* At a marked node of the base path: more often than not, onto the branch the mark names. */
@@ -2185,7 +2185,7 @@ void FUN_L16_002d0058(L16LeapMoby_u *leap_moby) {
     if (leap_data->timer == 0) {
         int next;
         float distance;
-        next = FUN_L00_0025d7a0(leap_data->path, leap_data->node, 1, 1) * 16;
+        next = offset_path_index(leap_data->path, leap_data->node, 1, 1) * 16;
         distance = vector_distance_xy(leap_data->path + (leap_data->node * 16 + 0x10), leap_data->path + (next + 0x10));
         pitch = fast_arc_tan(distance, *(float *)(leap_data->path + next + 0x18) -
                                            ((L16LeapPath *)leap_data->path)->points[leap_data->node][2]);
@@ -2335,7 +2335,7 @@ extern char *D_L16_001B0930[];
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int FUN_L00_0025d7a0(char *, int, int, int);
+extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
 extern int FUN_L00_0025e3b8(int);
 extern int FUN_L05_00307010();
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -2494,7 +2494,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
                 while (i < *(short *)(hoverboard_dummy_data + 0x2F0)) {
                     char *path;
 
-                    next = FUN_L00_0025d7a0(*(char **)(hoverboard_dummy_data + 0x2C0), i, 1, 1);
+                    next = offset_path_index(*(char **)(hoverboard_dummy_data + 0x2C0), i, 1, 1);
                     path = *(char **)(hoverboard_dummy_data + 0x2C0);
                     distance += vector_distance_xy(path + (i * 16 + 16), path + (next * 16 + 16));
                     i = next;

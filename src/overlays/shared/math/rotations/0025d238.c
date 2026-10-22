@@ -127,7 +127,9 @@ void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
     }
     glow_n(id, r, g, b);
 }
-s32 FUN_L00_0025d7a0(s32 *tab, s32 i, s32 index_offset, s32 wrap) {
+s32 offset_path_index(s32 *tab, s32 i, s32 index_offset, s32 wrap) __asm__("FUN_L00_0025d7a0");
+
+s32 offset_path_index(s32 *tab, s32 i, s32 index_offset, s32 wrap) {
     if (wrap) {
         i = (i + index_offset + tab[0]) % tab[0];
     } else {
@@ -396,7 +398,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
     current_fraction = best_fraction;
     end = best_segment;
     sample_path(path, &work[0], &end, &current_fraction, step, wrap);
-    end = FUN_L00_0025d7a0(path, end, 1, wrap);
+    end = offset_path_index(path, end, 1, wrap);
     current = start;
     distance = 1000000000.0f;
     do {

@@ -1681,7 +1681,7 @@ extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
 extern float frame_time __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int FUN_L00_0025d7a0(void *, int, int, int);
+extern int offset_path_index(void *, int, int, int) __asm__("FUN_L00_0025d7a0");
 extern int D_L05_0015F698 __attribute__((sda));
 
 int FUN_L05_00255208(void) {
@@ -1743,7 +1743,7 @@ int FUN_L05_00255208(void) {
     if ((&hero)->frames_off_ground.s == 0) {
         if ((&hero)->unk8B4 != 0) {
             int index = func_L01_0028C2D8_254608(&(&hero)->motion.pos, (&hero)->unk8B4, 0.0f);
-            int next = FUN_L00_0025d7a0((&hero)->unk8B4, index, -1, 1);
+            int next = offset_path_index((&hero)->unk8B4, index, -1, 1);
             (&hero)->unk8C8 = index;
             if (*(int *)0x0015ED84 == 5) {
                 Path_254608 *path = (Path_254608 *)(&hero)->unk8B4;
