@@ -2344,7 +2344,7 @@ extern float distance_8808(void *, void *) __asm__("FUN_001f9b80");
 extern float moved_distance_8808(void *, void *) __asm__("FUN_001f9b48");
 extern void turn_8808(void *, void *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern void approach_8808(void *, float, float) __asm__("FUN_00213ed8");
-extern void FUN_L12_00271dd8(void *, void *);
+extern void move_moby_along_heading(void *, void *) __asm__("FUN_L12_00271dd8");
 extern void subtract_8808(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2392,7 +2392,7 @@ void FUN_L12_002e8808(struct Moby *moby, float *target, float max_angle, float a
         }
     }
     *(OvlQuad *)old = *(OvlQuad *)&moby->pos;
-    FUN_L12_00271dd8(moby, data + 0xd0);
+    move_moby_along_heading(moby, data + 0xd0);
     if (*(int *)(data + 0x26c) != -1) {
         subtract_8808(delta, old, &moby->pos);
         fast_vec_normalize(delta, delta, 0.05f);
