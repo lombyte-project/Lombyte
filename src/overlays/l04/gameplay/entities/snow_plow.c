@@ -557,7 +557,9 @@ void transport_ship_update(void *moby) {
 extern void initialize_leg_rig_angle_defaults(void *, char *) __asm__("FUN_L04_00292370");
 extern void FUN_L04_002923b8(void *, char *);
 
-void FUN_L04_002d1418(void *moby) {
+void initialize_woodcut_bot_movement_data(void *moby) __asm__("FUN_L04_002d1418");
+
+void initialize_woodcut_bot_movement_data(void *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
     char *movement_data = moby_vars + 0x160;
     float speed;
@@ -784,7 +786,7 @@ extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void 
 extern void FUN_L00_002a1538(void *);
 extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__("FUN_L00_002af8b0");
 extern void FUN_L04_00295de8(void *, void *);
-extern void FUN_L04_002d1418(void *);
+extern void initialize_woodcut_bot_movement_data(void *) __asm__("FUN_L04_002d1418");
 extern void add_vector_xyz(void *, void *, void *);
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -1016,7 +1018,7 @@ void woodcut_bot_update(WBMoby *m) {
         qcopy(d->f3B0, pos);
         if (d->f121 == 0)
             attach_manipulator(m, 6, manipulator);
-        FUN_L04_002d1418(m);
+        initialize_woodcut_bot_movement_data(m);
         if (d->f3C0 != 0) {
             m->state = 3;
             blend_moby_animation(m, 0xB, 0, scale_game_frames(10));
