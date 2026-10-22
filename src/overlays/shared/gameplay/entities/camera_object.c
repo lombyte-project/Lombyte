@@ -1859,7 +1859,7 @@ extern void moby_point_position(void*,int,void*) __asm__("FUN_L00_0024f7c8");
 extern void make_hit_descriptor(void*,void*,int,float,void*) __asm__("FUN_L00_00259888");
 extern void spawn_nearby_effect(void*,int,int,void*,void*,float) __asm__("FUN_L00_00259bc8");
 extern void FUN_L00_0025b6b8(void*,void*,void*,float);
-extern void FUN_L00_00262480(char*,float,float,float);
+extern void compose_target_euler_rotation(char*,float,float,float) __asm__("FUN_L00_00262480");
 extern void FUN_L00_00262608(void*,int);
 extern void FUN_L00_00262840(char*);
 extern void FUN_L00_002a7780_cb(void) __asm__("FUN_L00_002a7780");
@@ -2065,7 +2065,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
         wrench_moby->parent=control_player->moby; control_player->wrench_state=2;
         if (wrench_moby->state==10 && control_player->thrown_sound==-1) control_player->thrown_sound=allocate_voice_for_target_entry_alt(14,4,(int)control_player->moby);
         }
-        FUN_L00_00262480((char*)wrench_moby,0.0f,0.0f,D_0015ED6C*24.434608f);
+        compose_target_euler_rotation((char*)wrench_moby,0.0f,0.0f,D_0015ED6C*24.434608f);
         if (wrench_hero()->attack_cooldown && tick_countdown_32_alt(&wrench_vars->timer)) wrench_hero()->attack_cooldown=0;
         position=wrench_moby->position;
         if (!wrench_hero()->no_ground_adjust) {
