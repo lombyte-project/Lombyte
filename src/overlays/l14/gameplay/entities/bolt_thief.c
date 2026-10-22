@@ -239,7 +239,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L14_002ffc08(void *);
 extern void FUN_L14_002fe900(void *);
-extern void FUN_L14_002fec28(void *);
+extern void update_linked_moby_position(void *) __asm__("FUN_L14_002fec28");
 extern void FUN_L14_002feca8(void *);
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
@@ -338,7 +338,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
                 set_moby_animation(moby, 0, 0);
             } else {
                 moby_data->child = spawn_floating_mine(moby, moby->position);
-                FUN_L14_002fec28(moby);
+                update_linked_moby_position(moby);
                 set_moby_animation(moby, 2, 0);
             }
             moby->flags &= 0xFFBE;
@@ -348,7 +348,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         break;
     case BOLT_THIEF_STATE_FOLLOW_PRIMARY_PATH:
         if (moby_data->mode == 0)
-            FUN_L14_002fec28(moby);
+            update_linked_moby_position(moby);
         if (FUN_L14_002fea80((char *)moby)) {
             moby->state = 3;
             blend_moby_animation(moby, 3, 0, 5);
@@ -362,7 +362,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         float zero;
 
         if (settle_data->mode == 0)
-            FUN_L14_002fec28(moby);
+            update_linked_moby_position(moby);
         qcopy(target, path + *(int *)path * 16);
         zero = 0.0f;
         vendor_spring(moby->position, &settle_data->vx, target[0], D_L14_00161FBC, D_L14_00161FC0, zero);

@@ -170,7 +170,9 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 extern float D_L14_00161FC4 __attribute__((sda));
 extern float D_L14_00161FC8 __attribute__((sda));
-void FUN_L14_002fec28(char *moby) {
+void update_linked_moby_position(char *moby) __asm__("FUN_L14_002fec28");
+
+void update_linked_moby_position(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float position_offset[4];
     if (*(char **)(data + 0xF4) != 0) {
