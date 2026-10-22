@@ -705,7 +705,7 @@ extern void suck_reset(void *) __asm__("FUN_L00_002ddca0");
 extern int FUN_001160d8(void);
 extern int tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
 extern int FUN_00213260(int);
-extern void FUN_L07_0029b8d8(char *, int, float, float);
+extern void spawn_moby_point_offset_particle(char *, int, float, float) __asm__("FUN_L07_0029b8d8");
 extern int update_alternating_joint_emission_burst(void *, char *, float *) __asm__("FUN_L07_003122b0");
 extern int FUN_00214cc8(void *, float);
 extern void *spawn_moby_class_1046(int, void *, int, float, float, float, float, float) __asm__("FUN_L07_0030dbb0");
@@ -1027,8 +1027,8 @@ void snagglebeast_update(unsigned char *moby) {
     case 2: {
         float rot;
         rot = *(float *)(moby + 0x48);
-        if (level_frame_count % 6 == 0) FUN_L07_0029b8d8((char *)moby, 0, 600000.0f, 5.0f);
-        if ((level_frame_count_lui - 2) % 6 == 0) FUN_L07_0029b8d8((char *)moby, 1, 600000.0f, 5.0f);
+        if (level_frame_count % 6 == 0) spawn_moby_point_offset_particle((char *)moby, 0, 600000.0f, 5.0f);
+        if ((level_frame_count_lui - 2) % 6 == 0) spawn_moby_point_offset_particle((char *)moby, 1, 600000.0f, 5.0f);
         if (start_snagglebeast_turn_toward_target(moby, data, (float *)(((char *)&hero) + 0x80), 9, 0)) break;
         FUN_L00_00258278((struct Moby *)moby, target_angle, (float *)(data + 0x168), frame_time_sq * 2.0943952f, frame_time_sq * 0.6981317f, frame_time * 2.0943952f);
         if (fast_difference_between_rotations(*(float *)(moby + 0x48), rot) > frame_time * 0.17453292f) {
@@ -1098,8 +1098,8 @@ void snagglebeast_update(unsigned char *moby) {
         if (*(int *)(data + 0x160) < scale_ticks(0x3C) / 2) {
             FUN_L00_0024f7c8(moby, 2, &position);
             FUN_L07_00311eb8(moby, data, 2, &position, scale_ticks(0x1E), 0x800060FF, 0, 10.0f);
-            if ((level_frame_count & 7) == 0) FUN_L07_0029b8d8((char *)moby, 2, 0.0f, 0.2f);
-            if (((level_frame_count - 4) & 7) == 0) FUN_L07_0029b8d8((char *)moby, 3, 0.0f, 0.2f);
+            if ((level_frame_count & 7) == 0) spawn_moby_point_offset_particle((char *)moby, 2, 0.0f, 0.2f);
+            if (((level_frame_count - 4) & 7) == 0) spawn_moby_point_offset_particle((char *)moby, 3, 0.0f, 0.2f);
         }
         if (moby[0x52] == 5) {
             qcopy(&position, &sight);
@@ -1684,8 +1684,8 @@ void snagglebeast_update(unsigned char *moby) {
             }
             if (tick_countdown_32_alt((int *)(data + 0x160))) {
                 *(int *)(data + 0x160) = scale_ticks(0xA);
-                FUN_L07_0029b8d8((char *)moby, 0, 800000.0f, 5.0f);
-                FUN_L07_0029b8d8((char *)moby, 1, 800000.0f, 5.0f);
+                spawn_moby_point_offset_particle((char *)moby, 0, 800000.0f, 5.0f);
+                spawn_moby_point_offset_particle((char *)moby, 1, 800000.0f, 5.0f);
             }
             if (FUN_0020c9e0(moby) >= 31.5f) {
                 *(float *)(data + 0x16C) = 0.0f;

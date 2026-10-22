@@ -2255,7 +2255,7 @@ extern int D_L07_00173ED8;
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_L00_0025e450();
-extern void FUN_L07_0029b8d8(char *, int, float, float);
+extern void spawn_moby_point_offset_particle(char *, int, float, float) __asm__("FUN_L07_0029b8d8");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_L00_001F10E0_f(float, void *, int, int) __asm__("FUN_L00_001f0d60");
@@ -2281,7 +2281,7 @@ void update_growing_ballistic_moby(struct Moby *moby) {
         moby->scale *= 1.2f;
     }
     if (D_L07_0015F5CC % 3 == 0) {
-        FUN_L07_0029b8d8(moby, 0, 400000.0f, 5.0f);
+        spawn_moby_point_offset_particle(moby, 0, 400000.0f, 5.0f);
     }
     if (FUN_001efa68(previous_position, &moby->pos, 0, *(int *)(moby_data + 0x10), 0) != 0 ||
         func_L00_001F10E0_f(0.1f, &moby->pos, 0, *(int *)(moby_data + 0x10)) != 0) {

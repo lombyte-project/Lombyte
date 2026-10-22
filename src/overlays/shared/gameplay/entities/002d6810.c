@@ -1021,7 +1021,7 @@ extern void spark_s(void *, float, void *, int, float, float, int, int, int) __a
 extern void blast_s(void *, void *, float, float, int) __asm__("FUN_L00_0025f090");
 extern void FUN_0022da68_s(int, int, void *) __asm__("FUN_0022da68");
 extern void remove_s(void *) __asm__("FUN_0020c828");
-extern void FUN_L07_0029b8d8(void *, float, int, float);
+extern void spawn_moby_point_offset_particle(void *, float, int, float) __asm__("FUN_L07_0029b8d8");
 
 void FUN_L15_002e4380(unsigned char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
@@ -1051,5 +1051,5 @@ void FUN_L15_002e4380(unsigned char *moby) {
     }
     qcopy(moby + 0x10, next);
     if (D_L15_0015F5CC_s % 3 == 0)
-        FUN_L07_0029b8d8(moby, 30000.0f, 0, 0.1f);
+        spawn_moby_point_offset_particle(moby, 30000.0f, 0, 0.1f);
 }
