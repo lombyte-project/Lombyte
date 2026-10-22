@@ -751,7 +751,9 @@ extern void register_hero_hit_in_clip_volume(char *) __asm__("FUN_L14_002dfc58")
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L14_002dee28(struct Moby *moby) {
+void update_ribbon_effect_moby(struct Moby *moby) __asm__("FUN_L14_002dee28");
+
+void update_ribbon_effect_moby(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_UPDATE = 1
