@@ -1,3 +1,5 @@
+int spawn_airship_part() __asm__("FUN_L09_002c2500");
+
 /* Airship parts update. Its own unit: it reads the spawn counter D_L09_001613C8 through gp, where FUN_L09_00300888 in asteroid.c reads it through lui. */
 #include "types.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -129,7 +131,7 @@ void FUN_L09_002c26c8(struct Moby *moby) {
                 part_vars->parent = 0;
                 for (i = 0x49E; i < 0x4A6; i++) {
                     if (i != 0x4A0) {
-                        FUN_L09_002c2500((char *)moby, (char *)point_offset_and_effect_scratch, i);
+                        spawn_airship_part((char *)moby, (char *)point_offset_and_effect_scratch, i);
                     }
                 }
             }

@@ -364,7 +364,9 @@ extern void FUN_L00_00250df8(void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-char *FUN_L09_002c2500(struct Moby *rotation_source_moby, char *spawn_reference_position, int spawned_moby_class) {
+char *spawn_airship_part(struct Moby *rotation_source_moby, char *spawn_reference_position, int spawned_moby_class) __asm__("FUN_L09_002c2500");
+
+char *spawn_airship_part(struct Moby *rotation_source_moby, char *spawn_reference_position, int spawned_moby_class) {
     char *spawned_moby = func_0020D348_m(spawned_moby_class);
     if (spawned_moby) {
         OvlQuad point_position;
