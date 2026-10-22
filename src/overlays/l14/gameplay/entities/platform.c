@@ -544,7 +544,9 @@ extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 
-void FUN_L14_002d7490(struct Moby *moby) {
+void update_moby_joint_visual_effects(struct Moby *moby) __asm__("FUN_L14_002d7490");
+
+void update_moby_joint_visual_effects(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
     float joint_position[4];
     float glow_position_offset[4];
