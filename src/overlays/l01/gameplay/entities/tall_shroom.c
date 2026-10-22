@@ -81,7 +81,7 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
-extern s32 FUN_L00_002d8128(void *);
+extern s32 is_moby_in_state_one(void *) __asm__("FUN_L00_002d8128");
 extern s32 FUN_L01_00275690(f32, void *);
 
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
@@ -198,7 +198,7 @@ void update_level01_tutorial_hints(struct Moby *moby) {
         for (health_hint_candidate_moby = moby_list; health_hint_candidate_moby != 0; health_hint_candidate_moby = health_hint_candidate_moby->next) {
             if (health_hint_candidate_moby->oclass == 0x326 && distance_xyz(&health_hint_candidate_moby->pos, &hero.motion.pos) < 10.0f && help_state.state == 0 &&
                 help_state.cur == -1 && help_records[1].id == 0 && help_records[2].id == 0 &&
-                usage_stats.stat[13].count == 0 && FUN_L00_002d8128(health_hint_candidate_moby) == 0) {
+                usage_stats.stat[13].count == 0 && is_moby_in_state_one(health_hint_candidate_moby) == 0) {
                 if (hero.health.hp < hero_max_health) {
                     if (usage_stats.stat[13].count < 0xFFFF) {
                         usage_stats.stat[13].count++;

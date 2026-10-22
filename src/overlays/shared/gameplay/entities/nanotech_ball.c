@@ -73,7 +73,9 @@ void update_linked_moby_transform_and_lifetime(S_002d7f88 *self) {
     self->f2C = scale_coefficient * 0.1f + scale_coefficient * moby_data->f4 / D_L00_001616DC;
 }
 /* True when the moby state byte is 1. */
-int FUN_L00_002d8128(unsigned char *moby) {
+int is_moby_in_state_one(unsigned char *moby) __asm__("FUN_L00_002d8128");
+
+int is_moby_in_state_one(unsigned char *moby) {
     return moby[0x20] == 1;
 }
 typedef struct {
@@ -949,7 +951,7 @@ void draw_nanotech_ball(Moby *moby) {
         quad.texcoords[7] = 1.0f;
         draw_geometry_quad(&quad, basis, 0);
     }
-    if (FUN_L00_002d8128((u8 *)moby)) {
+    if (is_moby_in_state_one((u8 *)moby)) {
         quad.texture[1] = get_effect_texture(D_L00_00161AE4_gp);
         quad.colors[3] = 0x107f7f7f;
         quad.colors[2] = 0x107f7f7f;
