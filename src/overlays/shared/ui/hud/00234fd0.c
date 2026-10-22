@@ -22,7 +22,9 @@ extern int D_L00_0017E510 __attribute__((section(".data")));
 extern int D_L00_0017E518 __attribute__((section(".data")));
 extern int D_L00_0017E51C __attribute__((section(".data")));
 extern int D_L00_0017E520 __attribute__((section(".data")));
-void FUN_L00_00234fd0(int mode) {
+void decompress_and_relocate_selected_groups(int mode) __asm__("FUN_L00_00234fd0");
+
+void decompress_and_relocate_selected_groups(int mode) {
     G_234fd0 *decompression_slot_state = &D_L00_0017E4D8_234fd0;
     int decompression_destination = D_L00_001B9CF0.unk104;
     void *compressed_data_buffer = (void *)D_L00_001B9CF0.unk10;

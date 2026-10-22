@@ -163,7 +163,7 @@ extern s32 sce_gs_sync_v(s32) __asm__("FUN_00122298");
 extern void initialize_menu_stream_buffers(s32) __asm__("FUN_00225ac0");
 extern Ent *create_menu_preview_moby(s32) __asm__("FUN_00225490");
 extern void initialize_render_archive_transfer(void) __asm__("FUN_L00_002468b8");
-extern void FUN_L00_00234fd0(s32);
+extern void decompress_and_relocate_selected_groups(s32) __asm__("FUN_L00_00234fd0");
 extern void FUN_L00_002a0f18(s32, s32, s32);
 extern void FUN_L00_002df638(Ent *);
 
@@ -295,9 +295,9 @@ void FUN_L00_00276368(void) {
     }
     apply_group_entry_adjustment(0);
     if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15 || D_L00_001B9CF0.state == 0x12) {
-        FUN_L00_00234fd0(1);
+        decompress_and_relocate_selected_groups(1);
     } else {
-        FUN_L00_00234fd0(0);
+        decompress_and_relocate_selected_groups(0);
     }
     FUN_L00_002a0f18(D_L00_001B9CF0.unk10, draw_buffer_address, frame_size << 11);
     texture_start = gs_texture_allocation_start;
