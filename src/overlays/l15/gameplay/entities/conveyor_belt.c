@@ -729,7 +729,9 @@ extern void FUN_L00_002607d0_v(int) __asm__("FUN_L00_002607d0");
 extern void FUN_L00_00284e50_v(void *, void *) __asm__("FUN_L00_00284e50");
 extern void FUN_L00_00262d38_v(int) __asm__("FUN_L00_00262d38");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
-void FUN_L15_002eb6b8(void);
+void draw_quartu_cutscene_messages(void) __asm__("FUN_L15_002eb6b8");
+
+void draw_quartu_cutscene_messages(void) __asm__("FUN_L15_002eb6b8");
 
 void update_quartu_cutscene_trigger(struct Moby *moby) __asm__("FUN_L15_002eb4c0");
 
@@ -791,7 +793,7 @@ void update_quartu_cutscene_trigger(struct Moby *moby) {
         break;
     }
     if (D_L15_0015F5C4 == 2)
-        enqueue_callback_list_1(FUN_L15_002eb6b8, moby);
+        enqueue_callback_list_1(draw_quartu_cutscene_messages, moby);
 }
 #define NOT_SDA __attribute__((section(".data")))
 
@@ -812,7 +814,7 @@ int D_L15_00162180 = 150;
 int D_L15_00162184 = 150;
 int D_L15_00162188 = 0x3800ffff;
 int D_L15_0016218C = 0x38800000;
-void FUN_L15_002eb6b8(void) {
+void draw_quartu_cutscene_messages(void) {
     char formatted_message_text[0x50];
     int flag = 0;
     int val = 0;
