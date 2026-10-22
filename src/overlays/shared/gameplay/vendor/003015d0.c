@@ -48,7 +48,7 @@ extern void FUN_L14_003017f8(char *);
 void update_vendor_beam_animation(char *moby) __asm__("FUN_L14_00301de8");
 
 extern void update_vendor_beam_animation(char *) __asm__("FUN_L14_00301de8");
-extern void FUN_L14_00301fa8(char *);
+extern void draw_vendor_beam(char *) __asm__("FUN_L14_00301fa8");
 void apply_vendor_beam_damage(char *self) __asm__("FUN_L14_00302538");
 
 extern void apply_vendor_beam_damage(char *) __asm__("FUN_L14_00302538");
@@ -135,7 +135,7 @@ void update_vendor_beam(unsigned char *moby) {
             if (D_L14_001621A4_s != 0) {
                 return;
             }
-            enqueue_callback_list_1(FUN_L14_00301fa8, moby);
+            enqueue_callback_list_1(draw_vendor_beam, moby);
         }
     }
 }
@@ -369,7 +369,7 @@ extern float D_L14_001E5FD0[4][2];
 #define EMPTY_SCOPES_4 { typedef int pad; } { typedef int pad; } { typedef int pad; } { typedef int pad; }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00303430.c: func_L14_00303430). */
-void FUN_L14_00301fa8(char *moby) {
+void draw_vendor_beam(char *moby) {
     VendorBeamVars *beam = *(VendorBeamVars **)(moby + 0x78);
     VendorBeamStripPacket packet[3];
     float world[16] __attribute__((aligned(16)));
