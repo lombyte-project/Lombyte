@@ -655,7 +655,7 @@ extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_00250df8(void *);
 extern void update_moby_shadow_range(void *) __asm__("FUN_00213700");
-extern void FUN_L00_00234b38(void *);
+extern void apply_hero_moby_scale(void *) __asm__("FUN_L00_00234b38");
 extern void FUN_L00_00207430(void *);
 
 /* Per-frame update while the cutscene in D_L00_0016C860 plays: runs the debug-gated subsystem
@@ -744,7 +744,7 @@ void FUN_L00_00298f90(void) {
                 update_moby_shadow_range(cutscene_moby);
             }
             if (cutscene_moby->oclass == 0) {
-                FUN_L00_00234b38(cutscene_moby);
+                apply_hero_moby_scale(cutscene_moby);
             }
             if (cutscene_moby->oclass == 10 || cutscene_moby->oclass == 0x1A3 || cutscene_moby->oclass == 0x555) {
                 FUN_L00_00207430(cutscene_moby);
@@ -1991,7 +1991,7 @@ extern void sceVu0RotMatrixZ(void *, void *, f32) __asm__("FUN_001252b8");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void update_moby_shadow_range(void *) __asm__("FUN_00213700");
-extern void FUN_L00_00234b38(void *);
+extern void apply_hero_moby_scale(void *) __asm__("FUN_L00_00234b38");
 extern void FUN_0022ca50(void);
 
 #define CUR_ITEM (vendor_menu.fD0[vendor_menu.f58])
@@ -2642,7 +2642,7 @@ void FUN_L00_0029c648(void) {
                 update_moby_shadow_range(mb);
             }
             if (mb->oclass == 0) {
-                FUN_L00_00234b38(mb);
+                apply_hero_moby_scale(mb);
             }
         }
         FUN_00201a28();

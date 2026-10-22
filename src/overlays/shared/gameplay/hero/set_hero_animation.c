@@ -1638,7 +1638,9 @@ extern B_00234b38 D_L00_0016C860_00234b38 __asm__("D_L00_0016C860")
     __attribute__((section(".data")));
 void FUN_0020cb10_00234b38(void *, s32, void *) __asm__("FUN_0020cb10");
 void FUN_L00_00234a50_00234b38(void *) __asm__("FUN_L00_00234a50");
-void FUN_L00_00234b38(void *a) {
+void apply_hero_moby_scale(void *a) __asm__("FUN_L00_00234b38");
+
+void apply_hero_moby_scale(void *a) {
     f32 scale_factor = D_0015EE14;
     A_00234b38 *scale_state;
     s32 level_index;
