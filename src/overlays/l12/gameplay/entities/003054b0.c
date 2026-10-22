@@ -1285,7 +1285,9 @@ extern void FUN_L08_002f0c18(int);
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
-void FUN_L12_0030be68(struct Moby *moby) {
+void draw_hoven_scrolling_texture_layers(struct Moby *moby) __asm__("FUN_L12_0030be68");
+
+void draw_hoven_scrolling_texture_layers(struct Moby *moby) {
     int *moby_data = (int *)moby->pvars;
     int i;
     font_queue_vu_state();
@@ -1379,7 +1381,7 @@ void FUN_L12_0030bff0(M_bff0 *moby) {
         if (D_L12_00162108[1] < -1.0f) {
             D_L12_00162108[1] += 1.0f;
         }
-        enqueue_callback_list_1(FUN_L12_0030be68, moby);
+        enqueue_callback_list_1(draw_hoven_scrolling_texture_layers, moby);
         break;
     }
 }
