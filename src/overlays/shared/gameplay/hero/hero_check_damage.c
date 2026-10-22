@@ -2907,7 +2907,9 @@ void turn_to(int rotation_direction, float x, float y, float z) {
 extern int FUN_L00_0020d498_u(int) __asm__("FUN_L00_0020d498");
 extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 
-void FUN_L00_00211e98(void) {
+void turn_hero_toward_move_direction_for_item(void) __asm__("FUN_L00_00211e98");
+
+void turn_hero_toward_move_direction_for_item(void) {
     float frame_scaled_turn_coefficient, frame_scaled_secondary_turn_coefficient, time_scaled_turn_amount;
     if (FUN_L00_0020d498_u(0) == 16) {
         frame_scaled_turn_coefficient = frame_scale_sq * 0.006f;
