@@ -485,7 +485,7 @@ void noop_main_callback(void) __asm__("FUN_001e93e8");
 void update_map_icons(s32, s32) __asm__("FUN_0020bf90");
 void start_audio_stream_read(s32, s32, s32) __asm__("FUN_00216788");
 void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
-void FUN_L00_00293d38(s32, s32, s32, s32);
+void send_dma_to_stash_slot(s32, s32, s32, s32) __asm__("FUN_L00_00293d38");
 void stash_receive_data(s32, s32, s32, s32, s32) __asm__("FUN_00232f20");
 
 void FUN_L00_002468b8(void) {
@@ -524,7 +524,7 @@ void FUN_L00_002468b8(void) {
             update_audio_stream_until_idle(1);
             state->loaded = 1;
             state->transfer_bytes = bytes;
-            FUN_L00_00293d38(state->buffer, state->file_handle, 0, bytes);
+            send_dma_to_stash_slot(state->buffer, state->file_handle, 0, bytes);
             state->level_slot = current_level_index + 0x100;
             state->last_transfer_bytes = bytes;
             state->active = 1;
