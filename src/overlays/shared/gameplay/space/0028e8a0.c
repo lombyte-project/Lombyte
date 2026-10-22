@@ -98,7 +98,7 @@ void f2335a0_28e9c8(void) __asm__("FUN_002335a0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void f232fe8_28e9c8(void) __asm__("FUN_L00_00232fe8");
 int fr_28e9c8(int) __asm__("FUN_001f96f8");
-void FUN_L00_00245610(int, int);
+void load_chunks_with_optional_fade(int, int) __asm__("FUN_L00_00245610");
 void f2049f0_28e9c8(int) __asm__("FUN_002049f0");
 void f22ca50_28e9c8(void) __asm__("FUN_0022ca50");
 int f122298_28e9c8(int) __asm__("FUN_00122298");
@@ -140,7 +140,7 @@ void FUN_L00_0028e9c8(int audio_selection_mode) {
             audio_stream_table_index = 8;
             secondary_track_index = 14;
         }
-        FUN_L00_00245610(audio_stream_table_index, fr_28e9c8(6));
+        load_chunks_with_optional_fade(audio_stream_table_index, fr_28e9c8(6));
     } else {
         int k, fade_frame_count;
         base_audio_selection_index = D_0013E030_28e9c8.x26;
@@ -163,7 +163,7 @@ void FUN_L00_0028e9c8(int audio_selection_mode) {
         fade_frame_count = 0;
         if (!D_0013E030_28e9c8.x2c)
             fade_frame_count = fr_28e9c8(6);
-        FUN_L00_00245610(alternate_audio_stream_table_index, fade_frame_count);
+        load_chunks_with_optional_fade(alternate_audio_stream_table_index, fade_frame_count);
     }
     music_stream_state.queued_secondary_track = secondary_track_index + 40000;
     f2049f0_28e9c8(0);

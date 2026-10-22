@@ -63,8 +63,10 @@ extern H_245610 H245610 __asm__("D_L00_0016C860");
 void start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 void fade_to_black(s32) __asm__("FUN_001f4a58");
-void FUN_L00_00245610(s32 i, s32 p);
-void FUN_L00_00245610(s32 i, s32 fade_frame_count) {
+void load_chunks_with_optional_fade(s32 i, s32 fade_frame_count) __asm__("FUN_L00_00245610");
+
+void load_chunks_with_optional_fade(s32 i, s32 p) __asm__("FUN_L00_00245610");
+void load_chunks_with_optional_fade(s32 i, s32 fade_frame_count) {
     s32 pointer_index;
     s32 *offset_entry;
     if (pal_mode == 0) {
