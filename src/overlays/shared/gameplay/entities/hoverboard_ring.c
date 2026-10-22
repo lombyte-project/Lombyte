@@ -917,7 +917,9 @@ extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("FUN_0021
 extern void FUN_L05_003296e0(Camera *);
 
 extern char *D_L05_00167204 __attribute__((section(".data")));
-void FUN_L05_0032a6e0(char *out) {
+void reset_camera_from_source_transform(char *out) __asm__("FUN_L05_0032a6e0");
+
+void reset_camera_from_source_transform(char *out) {
     char *source_camera_transform = D_L05_00167204;
     qcopy(out + 0x30, source_camera_transform + 0x30);
     qcopy(out, source_camera_transform);
