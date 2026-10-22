@@ -1094,7 +1094,9 @@ void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int 
 extern void func_L00_0026B890_2E2A38(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern char *func_00219780_2E2A38(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
-void FUN_L08_002e16c0(Moby_2E2A38 *debris_moby) {
+void update_falling_debris(Moby_2E2A38 *debris_moby) __asm__("FUN_L08_002e16c0");
+
+void update_falling_debris(Moby_2E2A38 *debris_moby) {
     enum {
         FALLING_DEBRIS_INITIALIZE = 1,
         FALLING_DEBRIS_BEFORE_BURST = 2,
