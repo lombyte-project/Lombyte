@@ -623,7 +623,9 @@ void gravity_set_z(void *, void *, float) __asm__("FUN_L00_00233b20");
 void FUN_L00_00233ba0(void *, void *, float);
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
-void FUN_L00_00216710(float x) {
+void reduce_and_apply_hero_planar_velocity_addend(float x) __asm__("FUN_L00_00216710");
+
+void reduce_and_apply_hero_planar_velocity_addend(float x) {
     char *planar_velocity_addend = (&hero.motion.unk150);
     float planar_length = gravity_length_xy(planar_velocity_addend);
     if (0.001f < planar_length) {

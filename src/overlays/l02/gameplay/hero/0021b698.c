@@ -750,7 +750,7 @@ extern void FUN_L00_00214108_cf(void *, int, int, void *, void *,
 extern void FUN_L00_00214ed8(float, float, float);
 extern void FUN_L00_00215340(void);
 extern void FUN_L00_00215ef8(void);
-extern void FUN_L00_00216710(float);
+extern void reduce_and_apply_hero_planar_velocity_addend(float) __asm__("FUN_L00_00216710");
 extern void FUN_L00_00216de8_cf(void) __asm__("FUN_L00_0020b5b8");
 extern void FUN_L00_00216e48(int, int, int);
 extern void FUN_L00_00217118(float, float);
@@ -928,7 +928,7 @@ void FUN_L02_00225c20(void) {
         }
         speed_step(0.0f, speed);
         clear_vector(hero.motion.velocity.f);
-        FUN_L00_00216710(speed);
+        reduce_and_apply_hero_planar_velocity_addend(speed);
         if (hero.unk12E7 != 0 && D_0013D4C0[0x1C] != 0) {
             if (hero.ground_distance > 0.2f) {
                 FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.unk110.f, frame_time_sq * 24.0f);
@@ -1007,7 +1007,7 @@ void FUN_L02_00225c20(void) {
         stick_target(1.0f, 0);
         speed_step(frame_time_sq * 12.6f, frame_time_sq * 12.6f);
         clear_vector(hero.motion.velocity.f);
-        FUN_L00_00216710(frame_time_sq * 12.6f);
+        reduce_and_apply_hero_planar_velocity_addend(frame_time_sq * 12.6f);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.displacement.f, frame_time_sq * 25.0f);
             func_0020D348_m_cf();
@@ -1026,7 +1026,7 @@ void FUN_L02_00225c20(void) {
         hero.target_speed = 0.0f;
         speed_step(frame_time_sq * 12.6f, frame_time_sq * 12.6f);
         clear_vector(hero.motion.velocity.f);
-        FUN_L00_00216710(frame_time_sq * 12.6f);
+        reduce_and_apply_hero_planar_velocity_addend(frame_time_sq * 12.6f);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.unk110.f, frame_time_sq * 24.0f);
             func_0020D348_m_cf();
@@ -2063,7 +2063,7 @@ void FUN_L02_00225c20(void) {
                     }
                 }
                 if (hero.unk418 != 0) {
-                    FUN_L00_00216710(hero.unk484);
+                    reduce_and_apply_hero_planar_velocity_addend(hero.unk484);
                 }
                 FUN_L00_002132b8(0.5f, frame_time * 2.0f);
                 if (hero.state.current == HERO_STATE_RUN_JUMP &&
@@ -2219,7 +2219,7 @@ void FUN_L02_00225c20(void) {
             clear_vector(hero.motion.unk150.f);
         }
         clear_vector(hero.motion.velocity.f);
-        FUN_L00_00216710(frame_time_sq * 12.0f);
+        reduce_and_apply_hero_planar_velocity_addend(frame_time_sq * 12.0f);
         clip_hero_horizontal_velocity(0);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.displacement.f, frame_time_sq * 25.0f);
@@ -2250,7 +2250,7 @@ void FUN_L02_00225c20(void) {
         hero.target_speed = 0.0f;
         speed_step(0.0f, frame_time_sq * 12.6f);
         clear_vector(hero.motion.velocity.f);
-        FUN_L00_00216710(frame_time_sq * 12.6f);
+        reduce_and_apply_hero_planar_velocity_addend(frame_time_sq * 12.6f);
         clip_hero_horizontal_velocity(0);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.unk120.f, frame_time_sq * 25.0f);
