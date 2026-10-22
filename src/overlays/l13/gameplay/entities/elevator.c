@@ -876,7 +876,9 @@ extern void * FUN_L13_00280400(void *, int, int, float, float, int, float, int);
 extern void kill_part(void *) __asm__("FUN_L00_00267a08");
 
 /* Per-frame glow effect: spawns it while the moby is active (byte 0x31 set), frees it otherwise. */
-void FUN_L13_002b4f28(struct Moby *moby, char *data) {
+void update_robosquawker_particle(struct Moby *moby, char *data) __asm__("FUN_L13_002b4f28");
+
+void update_robosquawker_particle(struct Moby *moby, char *data) {
     float opacity = 0.2f;
     void **handle = (void **)(data + 0x228);
     if (moby->visible) {
@@ -1151,7 +1153,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
-void FUN_L13_002b4f28(struct Moby *moby, char *data);
+void update_robosquawker_particle(struct Moby *moby, char *data) __asm__("FUN_L13_002b4f28");
 void FUN_L13_002b4ff0(struct Moby *m, char *d);
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
@@ -1318,7 +1320,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
     case ROBOSQUAWKER_STATE_FLIGHT_IDLE: {
         float d;
 
-        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
+        update_robosquawker_particle((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
         subtract_vector_xyz(&va, &selected_target_record, &robosquawker_moby->pos);
         d = probe_ground_height(&robosquawker_moby->pos, 0x120, 0.5f);
         if (d > 1.0f
@@ -1411,7 +1413,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             }
             robosquawker_moby->state = 0xE;
         }
-        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
+        update_robosquawker_particle((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
         break;
     }
     case ROBOSQUAWKER_STATE_FOLLOW_FLIGHT_PATH: {
@@ -1489,7 +1491,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_moby->bBC = 0;
             }
         }
-        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
+        update_robosquawker_particle((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
         break;
     }
     case ROBOSQUAWKER_STATE_LAND: {
@@ -1537,7 +1539,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             robosquawker_moby->state = 0xE;
             clear_u64_value(&robosquawker_vars->v40);
         }
-        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
+        update_robosquawker_particle((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
         break;
     }
     case ROBOSQUAWKER_STATE_GROUND_IDLE:
@@ -1603,7 +1605,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             trooper_start_knockback(robosquawker_moby, robosquawker_vars->x120, robosquawker_moby->rot.f[2], (rand() & 1) + 9, 1, 0);
             robosquawker_vars->f170 = 5.0f;
             robosquawker_vars->f174 = 10.0f;
-            FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
+            update_robosquawker_particle((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
             robosquawker_moby->state = 0xB;
         }
         break;
