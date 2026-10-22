@@ -2109,7 +2109,9 @@ extern void FUN_L00_00233ee8(void *, float, int);
 extern s32 FUN_L00_00233f38(void);
 void update_moby_oscillation(struct Moby *m) __asm__("FUN_L03_002dd0f0");
 
-void FUN_L03_002dccc0(struct Moby *lift_moby) {
+void update_rail_lift(struct Moby *lift_moby) __asm__("FUN_L03_002dccc0");
+
+void update_rail_lift(struct Moby *lift_moby) {
     enum {
         LIFT_INITIALIZE = 0,
         LIFT_WAIT_FOR_DEPARTURE = 1,
