@@ -6785,7 +6785,7 @@ extern void update_shuttle_route_selection_and_prompt(char *) __asm__("FUN_L06_0
 void mark_shuttle_linked_mobys_for_removal(char *moby) __asm__("FUN_L06_00304028");
 
 extern void mark_shuttle_linked_mobys_for_removal(char *) __asm__("FUN_L06_00304028");
-extern int FUN_L06_00303160(char *, int);
+extern int update_shuttle_path_ride(char *, int) __asm__("FUN_L06_00303160");
 extern int scale_game_frames_302578(int) __asm__("FUN_001f96f8");
 extern void FUN_L06_0030bef8_302578(void *, int, int, int) __asm__("FUN_L06_0030bef8");
 extern void blend_moby_animation_302578(void *, int, int, int) __asm__("FUN_00212f90");
@@ -6984,7 +6984,7 @@ void shuttle_update(struct Moby *moby) {
         }
         break;
     case UPDATE_SHUTTLE_PATH_RIDE:
-        if (FUN_L06_00303160((char *)moby, shuttle_vars->side) != 0) {
+        if (update_shuttle_path_ride((char *)moby, shuttle_vars->side) != 0) {
             int ofs;
             int base;
             moby->state = 4;
@@ -7195,7 +7195,7 @@ extern void break_apart_shuttle_linked_mobys(struct Moby *) __asm__("FUN_L06_003
 extern char D_L06_001B0C30_303160[] __asm__("D_L06_001B0C30");
 extern char *D_L06_001600EC_303160 __asm__("D_L06_001600EC");
 /* Moves the moby along three paths and plays the sound marked on the path points. */
-int FUN_L06_00303160(char *moby, int path) {
+int update_shuttle_path_ride(char *moby, int path) {
     float rotation[4], position[4];
     struct PathRide_303160 *ride = *(struct PathRide_303160 **)(moby + 0x78);
     Path_303160 *first_path = ((Path_303160 **)D_L06_001B0C30_303160)[ride->path_a[path]];
