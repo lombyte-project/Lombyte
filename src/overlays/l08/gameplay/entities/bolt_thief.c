@@ -1440,7 +1440,9 @@ extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090"
 extern struct Moby *spawn_class_1b3_projectile(void *, struct Moby *, void *, f32, f32) __asm__("FUN_L08_002de3e0");
 extern void FUN_L08_002e2250_u(struct Moby *) __asm__("FUN_L08_002e2250");
 
-void FUN_L08_002e24e8(struct Moby *moby) {
+void update_gunship(struct Moby *moby) __asm__("FUN_L08_002e24e8");
+
+void update_gunship(struct Moby *moby) {
     enum {
         GUNSHIP_INITIALIZE = 0,
         GUNSHIP_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET = 1,
