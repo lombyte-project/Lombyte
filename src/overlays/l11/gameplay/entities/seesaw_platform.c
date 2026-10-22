@@ -1802,7 +1802,9 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 /* Draws a map icon for a moby relative to the hero, mirrored when the view is flipped. */
-void FUN_L11_00311710(char *radar_reference_rotation, char *from, char *moby, int icon, long color) {
+void draw_ship_radar_moby_icon(char *radar_reference_rotation, char *from, char *moby, int icon, long color) __asm__("FUN_L11_00311710");
+
+void draw_ship_radar_moby_icon(char *radar_reference_rotation, char *from, char *moby, int icon, long color) {
     float turn[4];
     float radar_rotation_matrix[16];
     float delta[4];
@@ -2090,7 +2092,7 @@ void FUN_L11_00311d50(struct Moby *moby) {
                 s32 count = collect_oil_tanker_chain_mobys((char *)listed_moby, found);
 
                 for (i = 0; i < count; i++) {
-                    FUN_L11_00311710((char *)D_L11_001677D0, (char *)(D_L11_001677D0 - 4), found[i], 0,
+                    draw_ship_radar_moby_icon((char *)D_L11_001677D0, (char *)(D_L11_001677D0 - 4), found[i], 0,
                                      0x75808080);
                 }
             }
