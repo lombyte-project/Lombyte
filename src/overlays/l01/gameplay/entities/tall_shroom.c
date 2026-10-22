@@ -18,7 +18,9 @@ void FUN_L01_002b96e0(s32, void *);
 extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 
-void FUN_L01_00309bf8(void) {
+void draw_level01_scroll_layers(void) __asm__("FUN_L01_00309bf8");
+
+void draw_level01_scroll_layers(void) {
     f32 normalized_sine_value;
     s32 i;
 
@@ -36,7 +38,7 @@ typedef struct {
     u8 b31;
     s16 h32;
 } FlagMoby;
-extern void FUN_L01_00309bf8(void);
+extern void draw_level01_scroll_layers(void) __asm__("FUN_L01_00309bf8");
 void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
 
 /* Sets both flag fields to 0xFF and queues FUN_L01_00309bf8 for the moby. */
@@ -46,7 +48,7 @@ void set_moby_flags_and_queue_draw_callback(FlagMoby *moby) {
     int flag_init_value = 0xFF;
     moby->h32 = flag_init_value;
     moby->b30 = flag_init_value;
-    enqueue_callback_list_1(FUN_L01_00309bf8, moby);
+    enqueue_callback_list_1(draw_level01_scroll_layers, moby);
 }
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/state/usage_stats.h"
