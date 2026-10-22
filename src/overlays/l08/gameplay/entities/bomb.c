@@ -503,7 +503,7 @@ void FUN_L08_002d4ca0(Moby *moby);
 void advance_bomber_tank_along_path(struct Moby *moby, int path_id) __asm__("FUN_L08_002d55c8");
 
 void advance_bomber_tank_along_path(struct Moby *moby, int path_id) __asm__("FUN_L08_002d55c8");
-void FUN_L08_002d5d08(char *moby);
+void scatter_bomber_tank_linked_debris(char *moby) __asm__("FUN_L08_002d5d08");
 void remove_bomber_tank_linked_debris(struct Moby *moby) __asm__("FUN_L08_002d6450");
 
 void remove_bomber_tank_linked_debris(struct Moby *moby) __asm__("FUN_L08_002d6450");
@@ -708,7 +708,7 @@ void update_bomber_tank(Moby *moby) {
     case BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE:
         if (vars->mode != 2) {
             unsigned char *event_flags;
-            FUN_L08_002d5d08((char *)moby);
+            scatter_bomber_tank_linked_debris((char *)moby);
             event_flags = (unsigned char *)D_0013D388;
             if (event_flags[0x2E] != 0) allocate_voice_for_target_entry(6, 0, moby);
             event_flags[0x2E] = 1;
@@ -1207,7 +1207,7 @@ extern void FUN_L00_0025e450_c2(void *, void *, void *, float, float, int, int, 
 extern void initialize_moby_launch_motion(void*,int,void*,void*,int) __asm__("FUN_L05_00318648");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 
-void FUN_L08_002d5d08(char *moby) {
+void scatter_bomber_tank_linked_debris(char *moby) {
     enum {
         LINKED_CLASS_SECOND_HIGHEST_Y_LAUNCH_OFFSET = 0,
         LINKED_CLASS_FOURTH_LOWEST_X_LAUNCH_OFFSET = 1,
