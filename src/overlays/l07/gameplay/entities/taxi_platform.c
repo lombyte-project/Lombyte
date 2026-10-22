@@ -175,7 +175,9 @@ void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 void delete_moby(struct Obj *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L07_0030e1f8(unsigned char *moby) {
+void update_fading_ring_effect(unsigned char *moby) __asm__("FUN_L07_0030e1f8");
+
+void update_fading_ring_effect(unsigned char *moby) {
     char *moby_data = *(char **)(moby + 0x78);
     float radius_progress;
     char *affected_moby;
