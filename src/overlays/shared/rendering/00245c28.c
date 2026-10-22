@@ -488,7 +488,9 @@ void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 void send_dma_to_stash_slot(s32, s32, s32, s32) __asm__("FUN_L00_00293d38");
 void stash_receive_data(s32, s32, s32, s32, s32) __asm__("FUN_00232f20");
 
-void FUN_L00_002468b8(void) {
+void initialize_render_archive_transfer(void) __asm__("FUN_L00_002468b8");
+
+void initialize_render_archive_transfer(void) {
     s32 first_base;
     s32 second_base;
     s32 buffer;

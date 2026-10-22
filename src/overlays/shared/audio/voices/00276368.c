@@ -162,7 +162,7 @@ extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 extern s32 sce_gs_sync_v(s32) __asm__("FUN_00122298");
 extern void initialize_menu_stream_buffers(s32) __asm__("FUN_00225ac0");
 extern Ent *create_menu_preview_moby(s32) __asm__("FUN_00225490");
-extern void FUN_L00_002468b8(void);
+extern void initialize_render_archive_transfer(void) __asm__("FUN_L00_002468b8");
 extern void FUN_L00_00234fd0(s32);
 extern void FUN_L00_002a0f18(s32, s32, s32);
 extern void FUN_L00_002df638(Ent *);
@@ -291,7 +291,7 @@ void FUN_L00_00276368(void) {
     vu1_init_chain();
 
     if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
-        FUN_L00_002468b8();
+        initialize_render_archive_transfer();
     }
     apply_group_entry_adjustment(0);
     if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15 || D_L00_001B9CF0.state == 0x12) {
