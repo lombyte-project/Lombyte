@@ -104,7 +104,9 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int func_001F9850_95a38(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern char D_L10_001DC510[];
-void FUN_L10_00295a38(char *platform_moby) {
+void update_cycling_platform(char *platform_moby) __asm__("FUN_L10_00295a38");
+
+void update_cycling_platform(char *platform_moby) {
     enum {
         PLATFORM_STATE_INITIALIZE = 0,
         PLATFORM_STATE_RISING = 1,
