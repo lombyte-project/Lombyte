@@ -55,7 +55,9 @@ extern f32 seg_fabs(f32) __asm__("FUN_001f99c0");
 /* Finds the point of segment a-b nearest to the surface of the sphere (center, radius), preferring
    the one closer to ref when both hits are equally good. Writes it to out and returns its distance
    from the surface (0 when within 1% of the radius). */
-f32 FUN_L07_0029e6d8(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *a, Vec4f *b, f32 radius) {
+f32 select_segment_point_near_sphere_surface(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *a, Vec4f *b, f32 radius) __asm__("FUN_L07_0029e6d8");
+
+f32 select_segment_point_near_sphere_surface(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *a, Vec4f *b, f32 radius) {
     Vec4f w, dir, line_projection_point, lower_segment_point, upper_segment_point;
     f32 line_projection_t, lower_segment_t, upper_segment_t, intersection_t_offset, dd, dist, lower_surface_error, upper_surface_error, eps;
     Vec4f *upper_segment_point_ptr;

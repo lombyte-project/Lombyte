@@ -1960,7 +1960,7 @@ extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float D_L07_0020DBA0[];
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
-extern float FUN_L07_0029e6d8(void *, void *, void *, void *, void *, float);
+extern float select_segment_point_near_sphere_surface(void *, void *, void *, void *, void *, float) __asm__("FUN_L07_0029e6d8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern void release_particle(void *) __asm__("FUN_L00_00267a08");
@@ -2087,7 +2087,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         index = i;
         add_vector_xyz(rope_points[i], rope_previous_points[i], extension);
         {
-            float distance = FUN_L07_0029e6d8(tangent, center, center, rope_previous_points[i], rope_points[i], 0.0f);
+            float distance = select_segment_point_near_sphere_surface(tangent, center, center, rope_previous_points[i], rope_points[i], 0.0f);
             if (distance < minimum) {
                 minimum = distance;
             }
