@@ -151,7 +151,7 @@ extern s32 FUN_L00_00229a98(void);
 extern void turn_hero_toward_move_direction_for_item(void) __asm__("FUN_L00_00211e98");
 extern f32 FUN_001f99c0(f32);
 extern void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
-extern s32 FUN_L17_002020a8(s32);
+extern s32 select_hero_help_value(s32) __asm__("FUN_L17_002020a8");
 extern void FUN_L00_00208f20(f32, f32, f32, f32);
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -391,7 +391,7 @@ void FUN_L17_00214760(void) {
                 } else if (hero.motion.unk184 == 0.0f) {
                     s32 anim = 0xD;
                     if (hero.state.current == 0x17) {
-                        anim = FUN_L17_002020a8(0);
+                        anim = select_hero_help_value(0);
                     }
                     if (((struct MobyView *)hero.moby)->b53 != anim) {
                         set_hero_animation(anim, 0, scale_game_frames(7));
@@ -895,7 +895,7 @@ void FUN_L17_00214760(void) {
         if (anim != -1 && ((struct MobyView *)hero.moby)->b52 != 0x36) {
             set_hero_animation(anim, 0, frames);
         } else if ((((struct MobyView *)hero.moby)->b70 & 2) && ((struct MobyView *)hero.moby)->b52 == 0x36) {
-            s32 an = FUN_L17_002020a8(0);
+            s32 an = select_hero_help_value(0);
             set_hero_animation(an, 0, scale_game_frames(5));
         }
         break;

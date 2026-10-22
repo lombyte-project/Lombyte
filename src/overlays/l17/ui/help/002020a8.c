@@ -27,7 +27,9 @@ typedef struct {
 extern Rec D_L17_0017A3C0[];
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
-int FUN_L17_002020a8(int allow_slot_item_help) {
+int select_hero_help_value(int allow_slot_item_help) __asm__("FUN_L17_002020a8");
+
+int select_hero_help_value(int allow_slot_item_help) {
     struct Hero *hero_for_vehicle_check = &hero;
     switch (hero_for_vehicle_check->vehicle_mode) {
     case HERO_VEHICLE_MODE_CLANK:
