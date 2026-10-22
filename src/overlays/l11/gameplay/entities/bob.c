@@ -97,7 +97,9 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
 
-void FUN_L11_002cb810(struct Moby *moby) {
+void update_pokitaru_paired_rotation(struct Moby *moby) __asm__("FUN_L11_002cb810");
+
+void update_pokitaru_paired_rotation(struct Moby *moby) {
     enum {
         ROTATION_INITIALIZE = 0,
         ROTATION_WAIT_FOR_TRIGGER = 1,
