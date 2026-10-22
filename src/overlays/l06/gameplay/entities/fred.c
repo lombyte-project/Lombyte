@@ -6102,7 +6102,9 @@ void FUN_L06_00300df0(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003023C8), where it is exact; names translated to the US level program. */
 
-void FUN_L06_00300f70(char *moby, void *linear_velocity, void *angular_velocity) {
+void begin_moby_linear_and_angular_motion(char *moby, void *linear_velocity, void *angular_velocity) __asm__("FUN_L06_00300f70");
+
+void begin_moby_linear_and_angular_motion(char *moby, void *linear_velocity, void *angular_velocity) {
     char *motion_vars = *(char **)(moby + 0x78);
     moby[0x20] = 2;
     qcopy(motion_vars, linear_velocity);
@@ -7411,7 +7413,7 @@ void FUN_L06_00303b68(struct Moby *moby) {
         set_vector_length_03b68(push, push, -((piece->bsphere.w - largest) / largest) * speed + speed);
         push[3] = 6.0f;
         random_vector_03b68(spin, frame_time * 0.2617994f, frame_time * 0.08726646f);
-        FUN_L06_00300f70((char *)(D_L06_0015FFD8_03b68 + (id << 8)), push, spin);
+        begin_moby_linear_and_angular_motion((char *)(D_L06_0015FFD8_03b68 + (id << 8)), push, spin);
         for (i = 0; i < D_L06_00162190; i++) {
             piece = (struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68);
             random_vector_03b68(pos, 0.0f, piece->bsphere.w * 0.00048828125f);
