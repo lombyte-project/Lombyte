@@ -57,7 +57,9 @@ extern void lerp_vector_c788(void *, void *, void *, float) __asm__("FUN_001f9a4
 extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void FUN_L00_002eac18(int);
-void FUN_L11_0030d1b0(struct Moby *m);
+void update_child_set_poses(struct Moby *parent_moby) __asm__("FUN_L11_0030d1b0");
+
+void update_child_set_poses(struct Moby *m) __asm__("FUN_L11_0030d1b0");
 
 /* Controller for the child moby sets laid out by FUN_L11_0030d1b0: spawns them, waits for its linked
    moby, fades in, then unfolds the sets one after another while blending between two D_L11_001600EC points. */
@@ -136,7 +138,7 @@ void FUN_L11_0030c788(struct Moby *child_sets_controller) {
             D_L11_00161F10[i]->visible = 0;
             D_L11_00161F10[i]->collision = 0;
         }
-        FUN_L11_0030d1b0(child_sets_controller);
+        update_child_set_poses(child_sets_controller);
         child_sets_controller->state = 1;
         break;
     case CHILD_SETS_STATE_WAIT_FOR_LINK_TRIGGER:
@@ -211,7 +213,7 @@ void FUN_L11_0030c788(struct Moby *child_sets_controller) {
             approach_c788(&D_L11_00161ED8, &D_L11_00161EF4, 1.0f, frame_time_sq + frame_time_sq,
                           frame_time_sq * 4.0f, frame_time + frame_time);
         }
-        FUN_L11_0030d1b0(child_sets_controller);
+        update_child_set_poses(child_sets_controller);
         if (alternate_item_available_c788[0x56] != 0 && D_0013CAE4 != 0) {
             child_sets_controller->command = 1;
         }
@@ -236,7 +238,7 @@ void FUN_L11_0030c788(struct Moby *child_sets_controller) {
             D_L11_00161ED0 = 1.0f;
             D_L11_00161ED4 = 1.0f;
             D_L11_00161ED8 = 1.0f;
-            FUN_L11_0030d1b0(child_sets_controller);
+            update_child_set_poses(child_sets_controller);
             child_sets_controller->state = 4;
             FUN_L00_002eac18(3);
             FUN_L00_00216f90(&hero.motion.pos, &hero.motion.rot, 0, 1);
@@ -272,7 +274,7 @@ extern void zero_vector_d1b0(void *) __asm__("FUN_001f99f8");
 
 /* Places the child moby sets spawned by FUN_L11_0030c788 around this one, opened by the progress values
    D_L11_00161EC4..ED8. */
-void FUN_L11_0030d1b0(struct Moby *parent_moby) {
+void update_child_set_poses(struct Moby *parent_moby) {
     Vec4f v;
     Vec4f child_position_scratch;
     Vec4f parent_axis1_offset;
