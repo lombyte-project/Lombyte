@@ -1222,7 +1222,7 @@ float approach_angle(float *cur, float *vel, float target, float lim, float acce
 int FUN_L00_00258830(char *m, char *v, int flags, float a, float b, float c);
 int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out);
 int mine_fall(void *moby, void *motion) __asm__("FUN_L00_0025c698");
-int FUN_L01_0028b510(void *arg0, void *arg1, float target);
+int select_point_index_by_distance(void *arg0, void *arg1, float target) __asm__("FUN_L01_0028b510");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
 void FUN_L00_0025a120(char *o);
 void FUN_L00_0025f730(void *a, float x);
@@ -1257,7 +1257,7 @@ extern void FUN_L00_0025a120_c(void *) __asm__("FUN_L00_0025a120");
 extern int hero_anim302618(int) __asm__("FUN_00213260");
 extern void log302618(char *, int) __asm__("FUN_001e93b0");
 extern void FUN_L01_0026d930_c(void *) __asm__("FUN_L01_0026d930");
-extern int FUN_L01_0028b510(void *, void *, float);
+extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern void FUN_L00_00259028_c(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
 extern int range302618(int, int) __asm__("FUN_L00_00257b90");
 extern void subtract302618(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1351,7 +1351,7 @@ void blarg_paratrooper_update(char *moby) {
             int index;
             short direction;
             data->f20C=2*(random302618()&1)-1;
-            index=FUN_L01_0028b510(moby+0x10,path,0.0f)+data->f20C;
+            index=select_point_index_by_distance(moby+0x10,path,0.0f)+data->f20C;
             direction=data->f20C;
             data->f1F4=index;
             if(index>=(*(int *)((char *)(path)+0))||index<0) {
@@ -1377,13 +1377,13 @@ void blarg_paratrooper_update(char *moby) {
         }
         FUN_L00_00259028_c(moby,(char *)data+0xD0,path+0x10+data->f1F4*16,pos);
         if(target && data->f164!=2 && timer302618((char *)data+0x1F0)) {
-            data->f1F4=FUN_L01_0028b510(moby+0x10,D_L08_001B0CB0[data->f1D4],0.0f);
+            data->f1F4=select_point_index_by_distance(moby+0x10,D_L08_001B0CB0[data->f1D4],0.0f);
             (*(unsigned char *)((char *)(moby)+0x20))=2;
         }
         break;
     case PARATROOPER_STATE_APPROACH_WAYPOINT: {
         float distance;
-        data->f1F4=FUN_L01_0028b510(moby+0x10,D_L08_001B0CB0[data->f1D4],0.0f);
+        data->f1F4=select_point_index_by_distance(moby+0x10,D_L08_001B0CB0[data->f1D4],0.0f);
         distance=fast_distance302618(moby+0x10,D_L08_001B0CB0[data->f1D4]+0x10+data->f1F4*16);
         if(distance<1.0f || distance<data->fE0) {
             data->fE0=0.0f; (*(unsigned char *)((char *)(moby)+0x20))=3;

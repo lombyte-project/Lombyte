@@ -1128,7 +1128,7 @@ extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_002dc9f0(void *, void *);
 extern int FUN_L01_0026e008(int, int);
-extern int FUN_L01_0028b510(void *, void *, float);
+extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int FUN_L01_0028b5e0(void *, void *, void *, void *);
 extern int reserve_expired_frame_slot(int *, int, int) __asm__("FUN_L01_002efbf8");
 extern int select_robosquawker_target(void *, void *, float) __asm__("FUN_L13_0026bd00");
@@ -1320,7 +1320,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         }
         robosquawker_vars->pD0 = &D_L13_001613A0;
         if (robosquawker_vars->w220 != -1) {
-            robosquawker_vars->w224 = FUN_L01_0028b510(&robosquawker_moby->pos, D_L13_001B07B0[robosquawker_vars->w220], 0.0f);
+            robosquawker_vars->w224 = select_point_index_by_distance(&robosquawker_moby->pos, D_L13_001B07B0[robosquawker_vars->w220], 0.0f);
         }
         break;
     case ROBOSQUAWKER_STATE_FLIGHT_IDLE: {

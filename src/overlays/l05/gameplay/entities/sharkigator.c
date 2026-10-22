@@ -2555,7 +2555,7 @@ void FUN_L05_00305898(char *moby) {
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern int FUN_L01_0028b510(void *, void *, float);
+extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
 extern char *D_L05_001B0930[];
 extern int random_integer_below_e10(int) __asm__("FUN_00213260");
@@ -2615,7 +2615,7 @@ void FUN_L05_00306e10(char *patrol_moby) {
             /* At the last node of a branch: back to the base path, five nodes past its nearest one. */
             if (patrol_data->node == path->count - 1) {
                 patrol_data->path = base;
-                patrol_data->node = FUN_L01_0028b510(patrol_data->position, base, 0.0f);
+                patrol_data->node = select_point_index_by_distance(patrol_data->position, base, 0.0f);
                 patrol_data->node = offset_path_index((char *)patrol_data->path, patrol_data->node, 5, 1);
             }
         } else if (path->points[patrol_data->node][3] > 0.0f && random_integer_below_e10(100) > 0) {

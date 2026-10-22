@@ -1027,7 +1027,7 @@ extern int debug_print() __asm__("FUN_001e93b0");
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 extern int sample_path(void *path, void *pos, int *segment, float *distance, float step, int loop) __asm__("FUN_L00_0025d808");
-extern int FUN_L01_0028b510(void *, void *, float);
+extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);
 extern int fast_dec_timer(int *counter) __asm__("FUN_001f9740");
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
@@ -1139,7 +1139,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
             debug_print(D_L07_00211550, *(int *)(data + 0x74));
             return;
         }
-        first = *(int *)(data + 0x90) = FUN_L01_0028b510(&moby->pos, path, 0.0f);
+        first = *(int *)(data + 0x90) = select_point_index_by_distance(&moby->pos, path, 0.0f);
         placed = 0;
         if (0 < ((CrateGroupView *)data)->child_count) do {
             follower = *(int *)(current + 0x78);

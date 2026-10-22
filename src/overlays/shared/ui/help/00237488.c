@@ -1431,7 +1431,7 @@ extern float angle_atan2_254608(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations_254608(float, float) __asm__("FUN_001fa688");
 extern void func_L05_00254B38_254608(void *, void *) __asm__("FUN_L05_00254358");
 extern void func_L00_00217718_254608(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern int func_L01_0028C2D8_254608(void *, void *, float) __asm__("FUN_L01_0028b510");
+extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int allocate_voice_for_bank_entry_254608(int, int, int) __asm__("FUN_0022db10");
 extern void queue_dialogue_message_254608(int, int) __asm__("FUN_L00_00263d40");
 extern void mode_freeze_init_254608(int, void *) __asm__("FUN_001fbab8");
@@ -1544,7 +1544,7 @@ void update_hero_hoverboard_race_progress(void) {
                 hero.unk874 = v1[2];
                 func_L00_00217718_254608(v0, v1, 0x6B, 1);
                 if (((Path_254608 *)hero.unk8B4) != 0) {
-                    int r = func_L01_0028C2D8_254608(hero.motion.pos.f, (Path_254608 *)hero.unk8B4, 0.0f);
+                    int r = select_point_index_by_distance(hero.motion.pos.f, (Path_254608 *)hero.unk8B4, 0.0f);
 
                     if (r < hero.unk898) {
                         hero.unk898 = r;
@@ -1762,7 +1762,7 @@ int FUN_L05_00255208(void) {
     }
     if ((&hero)->frames_off_ground.s == 0) {
         if ((&hero)->unk8B4 != 0) {
-            int index = func_L01_0028C2D8_254608(&(&hero)->motion.pos, (&hero)->unk8B4, 0.0f);
+            int index = select_point_index_by_distance(&(&hero)->motion.pos, (&hero)->unk8B4, 0.0f);
             int next = offset_path_index((&hero)->unk8B4, index, -1, 1);
             (&hero)->unk8C8 = index;
             if (*(int *)0x0015ED84 == 5) {

@@ -1291,7 +1291,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 extern int FUN_L01_00275690(char *, float);
-extern int FUN_L01_0028b510(void *, void *, float);
+extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int resolve_path_node_index(void *, int) __asm__("FUN_L01_0028b828");
 extern int advance_path_node_index(char *) __asm__("FUN_L01_0028b878");
 extern void initialize_path_descriptor(char *) __asm__("FUN_L01_0028b410");
@@ -1410,7 +1410,7 @@ void red_ship_1_update(char *moby) {
         initialize_path_descriptor(pm);
         if (((unsigned char *)pm)[5] == 0) {
             if (*(int *)pm <= 0) {
-                initial_path_node_index = FUN_L01_0028b510(moby_position, *(void **)(pm + 0x10), 0.0f);
+                initial_path_node_index = select_point_index_by_distance(moby_position, *(void **)(pm + 0x10), 0.0f);
                 *(int *)pm = initial_path_node_index;
                 if (pm[4] >= 0 ? initial_path_node_index == **(int **)(pm + 0x10) - 1 : initial_path_node_index == 0) {
                     *(int *)pm = 0;

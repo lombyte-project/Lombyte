@@ -50,7 +50,7 @@ extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int sample_path(int *tab, float *out, int *a, float *b, int c, float d) __asm__("FUN_L00_0025d808");
 extern int FUN_L01_00226f10(int a);
-extern int FUN_L01_0028b510(void *, void *, float);
+extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int FUN_L05_002551b8(void);
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -493,7 +493,7 @@ int hero_set_state(int a, int b) {
             p->state.prev == 0x6E) {
             struct Hero *r = &hero;
             if (((void *)r->unk8B4) != 0) {
-                int n = FUN_L01_0028b510(&r->motion.pos, ((void *)r->unk8B4), 0.0f);
+                int n = select_point_index_by_distance(&r->motion.pos, ((void *)r->unk8B4), 0.0f);
                 if (n < r->unk898)
                     r->unk898 = n;
             }

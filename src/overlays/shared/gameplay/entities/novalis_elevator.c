@@ -3035,7 +3035,7 @@ extern s32 FUN_001fa6d0(f32);
 extern s32 FUN_001e93b0(const char *, ...);
 extern f32 FUN_002132a8(f32, f32);
 extern void initialize_path_descriptor(PathCursor *) __asm__("FUN_L01_0028b410");
-extern s32 FUN_L01_0028b510(void *, PathNodes *, f32);
+extern s32 select_point_index_by_distance(void *, PathNodes *, f32) __asm__("FUN_L01_0028b510");
 extern f32 FUN_001f9e90(f32, f32);
 extern void compute_path_node_tangent(QVec *, PathCursor *, s32, f32, f32) __asm__("FUN_L01_0028b8c8");
 extern f32 FUN_001f9b20(void *);
@@ -3168,7 +3168,7 @@ void gunship_follow_path(struct Moby *m) {
         initialize_path_descriptor(p);
         if (p->state == 0) {
             if (p->idx <= 0) {
-                s32 r = FUN_L01_0028b510(&m->pos, p->nodes, 0.0f);
+                s32 r = select_point_index_by_distance(&m->pos, p->nodes, 0.0f);
                 p->idx = r;
                 if ((p->dir >= 0 && r == p->nodes->count - 1) || (p->dir < 0 && r == 0))
                     p->idx = 0;

@@ -462,7 +462,7 @@ void add_random_xy_offset(float *out, float value) {
 
 extern char *D_L07_001B0530[];
 extern int follow_path(void *, void *, int, float, void *, void *, void *) __asm__("FUN_L01_00276fe8");
-extern int FUN_L01_0028b510(void *, void *, float);
+extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern void *FUN_L07_00313350_u(void *, void *, void *) __asm__("FUN_L07_00313350");
 
 void select_snagglebeast_chase_waypoint(char *moby, char *moby_vars, void *target_position, void *out_position) __asm__("FUN_L07_00313988");
@@ -473,13 +473,13 @@ void select_snagglebeast_chase_waypoint(char *moby, char *moby_vars, void *targe
     if (follow_path(navigation_ids, navigation_id_count, *(int *)(moby_vars + 0x188), 0.0f, moby + 0x10, target_position, out_position))
         return;
     {
-        int i = FUN_L01_0028b510(target_position, D_L07_001B0530[*(int *)(moby_vars + 0x290)], 0.0f);
-        int j = FUN_L01_0028b510(D_L07_001B0530[*(int *)(moby_vars + 0x290)] + (i * 16 + 0x10),
+        int i = select_point_index_by_distance(target_position, D_L07_001B0530[*(int *)(moby_vars + 0x290)], 0.0f);
+        int j = select_point_index_by_distance(D_L07_001B0530[*(int *)(moby_vars + 0x290)] + (i * 16 + 0x10),
                                  D_L07_001B0530[*(int *)(moby_vars + 0x188)], 0.0f);
         if (follow_path(navigation_ids, navigation_id_count, *(int *)(moby_vars + 0x188), 0.0f, moby + 0x10,
                              D_L07_001B0530[*(int *)(moby_vars + 0x188)] + (j * 16 + 0x10), out_position))
             return;
-        i = FUN_L01_0028b510(moby + 0x10, D_L07_001B0530[*(int *)(moby_vars + 0x188)], 0.0f);
+        i = select_point_index_by_distance(moby + 0x10, D_L07_001B0530[*(int *)(moby_vars + 0x188)], 0.0f);
         qcopy(out_position, D_L07_001B0530[*(int *)(moby_vars + 0x188)] + i * 16 + 0x10);
     }
 }
@@ -537,7 +537,7 @@ int update_snagglebeast_chase_movement(struct Moby *chaser_moby, struct ChaserVa
     if (range < goal_distance) {
         navigation_result = FUN_L00_00259028(chaser_moby, chaser_vars->nav, mode, chaser_vars->navOut);
         if (navigation_result == 2) {
-            subtract_vector_xyz(position_delta, path + (FUN_L01_0028b510(&chaser_moby->pos, path, 0.0f) * 16 + 0x10), &chaser_moby->pos);
+            subtract_vector_xyz(position_delta, path + (select_point_index_by_distance(&chaser_moby->pos, path, 0.0f) * 16 + 0x10), &chaser_moby->pos);
             clamp_vector_length(position_delta, position_delta, chaser_vars->pullSpeed);
             add_vector_xyz(&chaser_moby->pos, &chaser_moby->pos, position_delta);
         }
@@ -969,7 +969,7 @@ void snagglebeast_update(unsigned char *moby) {
         *(short *)(moby + 0x32) = 0xFF;
         *(int *)(data + 0x1A8) = -1;
         *(int *)(data + 0x1B0) = -1;
-        *(int *)(data + 0x1C0) = FUN_L01_0028b510(moby + 0x10, D_L07_001B0530[*(int *)(data + 0x188)], 0.0f);
+        *(int *)(data + 0x1C0) = select_point_index_by_distance(moby + 0x10, D_L07_001B0530[*(int *)(data + 0x188)], 0.0f);
         suck_reset(moby);
         *(float *)(moby + 0x2C) *= 1.75f;
         data[0x1C7] = 0;
@@ -1182,11 +1182,11 @@ void snagglebeast_update(unsigned char *moby) {
         if (!path_point_ready) {
             thr = 6.0f;
             if (*(int *)(data + 0x29C) != -1 && (data[0x19C] & 3) == 0 && FUN_00214720(&sight, *(int *)(data + 0x29C))) {
-                qcopy(&velocity, D_L07_001B0530[*(int *)(data + 0x1A0)] + FUN_L01_0028b510(&sight, D_L07_001B0530[*(int *)(data + 0x1A0)], 0.0f) * 16 + 0x10);
+                qcopy(&velocity, D_L07_001B0530[*(int *)(data + 0x1A0)] + select_point_index_by_distance(&sight, D_L07_001B0530[*(int *)(data + 0x1A0)], 0.0f) * 16 + 0x10);
                 dd = vector_distance(moby + 0x10, &velocity);
             } else {
                 qcopy(&velocity, &sight);
-                qcopy(&velocity, D_L07_001B0530[*(int *)(data + 0x290)] + FUN_L01_0028b510(&velocity, D_L07_001B0530[*(int *)(data + 0x290)], 0.0f) * 16 + 0x10);
+                qcopy(&velocity, D_L07_001B0530[*(int *)(data + 0x290)] + select_point_index_by_distance(&velocity, D_L07_001B0530[*(int *)(data + 0x290)], 0.0f) * 16 + 0x10);
                 dd = vector_distance(moby + 0x10, &velocity);
                 if (dd < *(float *)(data + 0x9C) + 1.0f) qcopy(&velocity, &sight);
             }
@@ -1595,7 +1595,7 @@ void snagglebeast_update(unsigned char *moby) {
                             float pfrac = 0.0f;
                             float d1;
                             float moby_to_sample_distance;
-                            pidx = FUN_L01_0028b510(((char *)&hero) + 0x80, path, 0.0f);
+                            pidx = select_point_index_by_distance(((char *)&hero) + 0x80, path, 0.0f);
                             do {
                                 *(float *)(data + 0x1AC) += 10.0f;
                                 sample_path(path, &start, &pidx, &pfrac, *(float *)(data + 0x1AC), 1);

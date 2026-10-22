@@ -1166,7 +1166,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED60;
 extern float D_L13_0015F5D0;
 extern float D_L13_0015F5D4;
-extern int FUN_L01_0028b510(void *, void *, float);
+extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int FUN_L13_002c3fc0();
 extern s32 rand(void);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -1263,7 +1263,7 @@ void update_blarg_space_fighter(Moby_2C56B0 *moby) {
             || p->state == 0xFD || p->bBC == 4) {
             normalize_vector_xyz(scratch_vector, D_L13_001670C0 + 0x84, 40.0f);
             subtract_vector_xyz_c(scratch_vector, D_L13_001670C0, scratch_vector);
-            fighter_data->hB6 = fighter_data->hB4 = FUN_L01_0028b510(scratch_vector, path, 0.0f);
+            fighter_data->hB6 = fighter_data->hB4 = select_point_index_by_distance(scratch_vector, path, 0.0f);
             qcopy(&fighter_data->v90, path + (fighter_data->hB6 * 16 + 0x10));
             qcopy(&moby->pos, &fighter_data->v90);
             moby->f94 = moby->cls->f10;

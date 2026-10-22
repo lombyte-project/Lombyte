@@ -1826,7 +1826,7 @@ extern int query_mobys_72(void *, int, void *, int, float) __asm__("FUN_L00_001f
 extern int FUN_L00_0025e3b8(void *);
 extern float FUN_L00_00257c48(float, float);
 extern void blend_moby_animation_ex(void *, int, int, int, int) __asm__("FUN_002130d8");
-extern int FUN_L01_0028b510(void *, void *, float);
+extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int test_point_within_moby_limits(void *, void *, float, float, float) __asm__("FUN_L12_0027b8e0");
 extern float vector_project_72(void *) __asm__("FUN_001f9b20");
 extern void spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
@@ -1958,7 +1958,7 @@ hide:
         if (moby->group != 0xff) FUN_L01_0026e090(moby->group, 1);
         if (TROOPER_I(0x254) == -1) goto state3;
         else {
-            TROOPER_I(0x260) = FUN_L01_0028b510(&moby->pos, D_L12_001B0930_w[TROOPER_I(0x254)], 0.0f);
+            TROOPER_I(0x260) = select_point_index_by_distance(&moby->pos, D_L12_001B0930_w[TROOPER_I(0x254)], 0.0f);
             moby->state = 1;
         }
         break;
