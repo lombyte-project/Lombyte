@@ -1007,7 +1007,9 @@ int FUN_001f9770_0026ba68(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08_0026ba68(unsigned char *) __asm__("FUN_L00_00267a08");
 int FUN_001f96f8_0026ba68(int) __asm__("FUN_001f96f8");
 int FUN_001fa6d0_0026ba68(float) __asm__("FUN_001fa6d0");
-void FUN_L00_0026ba68(unsigned char *particle) {
+void update_attached_or_fading_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026ba68");
+
+void update_attached_or_fading_effect_particle(unsigned char *particle) {
     u128 position_offset;
     int *particle_data = (int *)(particle + 0x20);
     particle[8] += particle[0x20];

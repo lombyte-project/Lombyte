@@ -20,7 +20,7 @@ extern void FUN_L00_0026a880(void);
 extern void FUN_L00_0026ac78(void);
 extern void FUN_L00_0026b500(void);
 extern void FUN_L00_0026b910(void);
-extern void FUN_L00_0026ba68(void);
+extern void update_attached_or_fading_effect_particle(void) __asm__("FUN_L00_0026ba68");
 extern void FUN_L00_0026bca8(void);
 extern void FUN_L00_0026c088(void);
 extern void FUN_L00_0026c3c8(void);
@@ -109,7 +109,7 @@ void register_part_types(void) {
     handlers[11] = (u32)FUN_L00_0026ac78;
     handlers[12] = (u32)FUN_L00_0026b500;
     handlers[13] = (u32)FUN_L00_0026b910;
-    handlers[14] = (u32)FUN_L00_0026ba68;
+    handlers[14] = (u32)update_attached_or_fading_effect_particle;
     handlers[15] = (u32)FUN_L00_0026bca8;
     handlers[16] = (u32)FUN_L00_0026c088;
     handlers[17] = (u32)FUN_L00_0026c3c8;
