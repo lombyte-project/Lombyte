@@ -147,7 +147,7 @@ extern CollisionHit HH __asm__("D_L05_00174240") __attribute__((section(".data")
 void FUN_L05_002402a8(void) {
     V shared_probe_endpoint, ground_probe_endpoint, ground_vector_scratch, side_probe_endpoint, unused_probe_vector, hit_normal_angles, normalized_hit_normal;
     f32 f;
-    s32 r;
+    s32 ground_sound_class;
     s32 i;
     f32 side_probe_angle;
     u8 *hit_moby_record;
@@ -180,11 +180,11 @@ void FUN_L05_002402a8(void) {
     if (collision_line(&ground_probe_endpoint, &shared_probe_endpoint, 2, (s32)hero.moby, 0) == 0) {
         goto tail;
     }
-    r = coll_sound_class();
-    if (r == -1) {
-        r = 3;
+    ground_sound_class = coll_sound_class();
+    if (ground_sound_class == -1) {
+        ground_sound_class = 3;
     }
-    hero.unk12ED = r;
+    hero.unk12ED = ground_sound_class;
     hero.ground_type = collision_hit_material();
     if (hero.ground_type == 0) {
         hero.water_surface_z = resolve_camera_surface_height(D_L05_00174260, (u8 *)&hero.unk280);
@@ -194,11 +194,11 @@ void FUN_L05_002402a8(void) {
         if (collision_line(&ground_probe_endpoint, &shared_probe_endpoint, 0x24, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
-        r = coll_sound_class();
+        ground_sound_class = coll_sound_class();
         if (current_level_index == 1 || current_level_index == 0x12) {
-            r = 3;
+            ground_sound_class = 3;
         }
-        hero.unk12ED = r;
+        hero.unk12ED = ground_sound_class;
     }
     if (hero.ground_type == 0xD) {
         hero.water_surface_z = D_L05_00174268;
