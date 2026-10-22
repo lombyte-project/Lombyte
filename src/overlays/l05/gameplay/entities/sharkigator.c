@@ -166,7 +166,9 @@ int FUN_L05_00307470(int animation_index) {
 extern int FUN_L05_00307470(int);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
-void FUN_L05_00307480(char *moby, int animation_index, int frame_index, int blend_frames) {
+void blend_racer_and_child_animations(char *moby, int animation_index, int frame_index, int blend_frames) __asm__("FUN_L05_00307480");
+
+void blend_racer_and_child_animations(char *moby, int animation_index, int frame_index, int blend_frames) {
     char *data;
     char *child;
     float ratio;
@@ -2653,7 +2655,7 @@ void FUN_L05_00307570(struct Moby *moby) {
         float duration;
         float acceleration;
         if (moby->prev_seq != 5 && scale_game_frames(3) >= leap_data->timer) {
-            FUN_L05_00307480(moby, 5, 1, scale_game_frames(5));
+            blend_racer_and_child_animations(moby, 5, 1, scale_game_frames(5));
             leap_data->sequence = -1;
         }
         acceleration = frame_time_sq * 21.0f * -0.5f;
@@ -2670,7 +2672,7 @@ void FUN_L05_00307570(struct Moby *moby) {
             chosen = random_int_between(0, 3) + 1;
             leap_data->sequence = chosen;
             sequence = chosen;
-            FUN_L05_00307480(moby, sequence, 1, scale_game_frames(7));
+            blend_racer_and_child_animations(moby, sequence, 1, scale_game_frames(7));
         }
         if (leap_data->sequence != -1) {
             if (moby->seq == moby->prev_seq) {
@@ -2686,10 +2688,10 @@ void FUN_L05_00307570(struct Moby *moby) {
             }
             if (leap_data->sequence != -1) {
                 if (duration < (float)scale_game_frames(9)) {
-                    FUN_L05_00307480(moby, 5, 3, scale_game_frames(7));
+                    blend_racer_and_child_animations(moby, 5, 3, scale_game_frames(7));
                     leap_data->sequence = -1;
                 } else if (moby->anim_flags & 2) {
-                    FUN_L05_00307480(moby, 5, 2, scale_game_frames(7));
+                    blend_racer_and_child_animations(moby, 5, 2, scale_game_frames(7));
                     leap_data->sequence = -1;
                 }
             }
@@ -2704,7 +2706,7 @@ void FUN_L05_00307570(struct Moby *moby) {
     } else {
         moby->anim_speed = 1.0f;
         if ((moby->anim_flags & 2) && moby->prev_seq != 0) {
-            FUN_L05_00307480(moby, 0, 0, scale_game_frames(8));
+            blend_racer_and_child_animations(moby, 0, 0, scale_game_frames(8));
         }
     }
     if (leap_data->rider != 0)
