@@ -1499,7 +1499,9 @@ void count_drek_boss_platform_event_once(struct Moby *moby) __asm__("FUN_L18_002
 
 extern void count_drek_boss_platform_event_once(struct Moby *moby) __asm__("FUN_L18_002f5e18");
 extern void FUN_L18_002f5e80(char *moby);
-extern void FUN_L18_002f6960(struct Moby *m);
+void update_drek_boss_hero_follow_movement(struct Moby *moby) __asm__("FUN_L18_002f6960");
+
+extern void update_drek_boss_hero_follow_movement(struct Moby *m) __asm__("FUN_L18_002f6960");
 extern void FUN_L18_002f6aa0(struct Moby *moby);
 void hide_drek_boss_moby_group(int unused, int group_index) __asm__("FUN_L18_002f6fa8");
 
@@ -2354,7 +2356,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         if (tick_countdown_32_alt(&boss_data->f354) != 0) {
-            FUN_L18_002f6960((char *)moby);
+            update_drek_boss_hero_follow_movement((char *)moby);
         }
         refresh_ring_effect(boss_data->f338, boss_data->f3C0, 5.8f);
         if (voice_is_playing(moby, boss_data->f3B0) == 0) {
@@ -2970,7 +2972,7 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 int FUN_L18_002f6878_c(char *moby, float arg, void *x) __asm__("FUN_L18_002f6878");
 
 extern short D_L18_0016237C __attribute__((sda));
-void FUN_L18_002f6960(struct Moby *moby) {
+void update_drek_boss_hero_follow_movement(struct Moby *moby) {
     float follow_target_position[4];
     char *moby_vars = (char *)moby->pvars;
     char *hero_position_bytes = (char *)&hero.motion.pos;
