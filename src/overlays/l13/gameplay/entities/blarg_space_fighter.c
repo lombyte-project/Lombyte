@@ -938,7 +938,9 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-void FUN_L13_002c3f08(char *out, float scale) {
+void predict_hero_vehicle_position(char *out, float scale) __asm__("FUN_L13_002c3f08");
+
+void predict_hero_vehicle_position(char *out, float scale) {
     char *x = D_0013E533 + 0xE1D;
     if (*(char **)(x + 0x15F0) == 0) {
         qcopy(out, x + 0x80);
@@ -996,7 +998,7 @@ int FUN_L13_002c3fc0(struct Moby *moby, char *vars, int aim) {
             clamp_vector_length(point, point, 100.0f);
             add_vector_xyz(point, point, linked + 0x10);
         } else {
-            FUN_L13_002c3f08((char *)point, 140.0f);
+            predict_hero_vehicle_position((char *)point, 140.0f);
         }
     } else {
         if (*(int *)(vars + 0xBC) == -1 ||
