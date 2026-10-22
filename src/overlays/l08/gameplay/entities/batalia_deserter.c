@@ -780,7 +780,9 @@ extern void FUN_L08_00258090(void *, float *, int, void *);
 
 float *D_L08_001623D0[2] = {D_L08_001EF7D0, D_L08_001EF978};
 float *D_L08_001623D8[2] = {D_L08_001EFB20, D_L08_001EFC40};
-void FUN_L08_00308f68(int x) {
+void queue_batalia_offset_textured_batches(int x) __asm__("FUN_L08_00308f68");
+
+void queue_batalia_offset_textured_batches(int x) {
     int i;
     int *element_counts = D_L08_001623C8;
     float **float_pair_tables = D_L08_001623D8;

@@ -47,7 +47,7 @@ extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L08_00308db8_u(int) __asm__("FUN_L08_00308db8");
 extern void FUN_L08_00308e90_u(int) __asm__("FUN_L08_00308e90");
-extern void FUN_L08_00308f68(int);
+extern void queue_batalia_offset_textured_batches(int) __asm__("FUN_L08_00308f68");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void FUN_L08_00309030(void) {
@@ -71,7 +71,7 @@ void FUN_L08_00309030(void) {
     FUN_L08_00308e90_u(1);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3D));
     vu1_add_g_sregister(0x42, (long)D_L08_001623C0 << 32 | 0x48);
-    FUN_L08_00308f68(0);
+    queue_batalia_offset_textured_batches(0);
 }
 #include "sda.h"
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
