@@ -220,7 +220,9 @@ extern char *D_L08_0015FFD8_g __asm__("D_L08_0015FFD8");
 extern int FUN_0022da68_c(int, int, char *) __asm__("FUN_0022da68");
 extern void FUN_00213ed8_c(char *, float, float) __asm__("FUN_00213ed8");
 
-void FUN_L08_002ea398(char *moby)
+void update_moby_height_from_driver(char *moby) __asm__("FUN_L08_002ea398");
+
+void update_moby_height_from_driver(char *moby)
 {
     enum {
         POSITION_BASELINE_INITIALIZE = 0,
