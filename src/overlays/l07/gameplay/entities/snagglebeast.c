@@ -2503,7 +2503,9 @@ typedef struct {
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_0031AA68), where it is exact; names translated to the US level program. */
 
-void FUN_L07_00319698(struct Moby *moby, SwooperSpawnerVars *spawner_vars) {
+void mark_swooper_for_removal(struct Moby *moby, SwooperSpawnerVars *spawner_vars) __asm__("FUN_L07_00319698");
+
+void mark_swooper_for_removal(struct Moby *moby, SwooperSpawnerVars *spawner_vars) {
     SwooperVars *vars = (SwooperVars *)moby->pvars;
 
     if (spawner_vars != NULL) {
@@ -2571,7 +2573,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
         hit->moby->oclass != 0x367) {
         spawn_explosion(moby, &vars->velocity, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
         FUN_L00_00257470(moby, 0, -1);
-        FUN_L07_00319698(moby, spawner_vars);
+        mark_swooper_for_removal(moby, spawner_vars);
     }
     switch (moby->state) {
     case SWOOPER_INITIALIZE:
@@ -2641,7 +2643,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
         clamp_vector_length(&vars->velocity, &vars->velocity, D_0015ED6C * 10.0f);
         add_vector_xyz(&moby->pos, &moby->pos, &vars->velocity);
         if (FUN_001f9b48(&moby->pos, &vars->home) > 64.0f) {
-            FUN_L07_00319698(moby, spawner_vars);
+            mark_swooper_for_removal(moby, spawner_vars);
         }
         make_hit_descriptor(contact, moby, 0x10001, 1.0f, &vars->velocity);
         qcopy(&probe, &moby->pos);
@@ -2651,7 +2653,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
             debris_target->oclass != 0x458 && debris_target->oclass != 0x365 &&
             debris_target->oclass != 0x367) {
             spawn_explosion(moby, &vars->velocity, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
-            FUN_L07_00319698(moby, spawner_vars);
+            mark_swooper_for_removal(moby, spawner_vars);
         }
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.55f;
@@ -2660,12 +2662,12 @@ void FUN_L07_003196e0(struct Moby *moby) {
             add_vector_xyz(&moby->pos, &moby->pos, &push);
         }
         if (vars->life_timer == 0) {
-            FUN_L07_00319698(moby, spawner_vars);
+            mark_swooper_for_removal(moby, spawner_vars);
         }
         break;
     case SWOOPER_EXPLODE:
         spawn_explosion(moby, &vars->velocity, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
-        FUN_L07_00319698(moby, spawner_vars);
+        mark_swooper_for_removal(moby, spawner_vars);
         break;
     case 4:
         break;
