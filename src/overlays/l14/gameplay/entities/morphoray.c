@@ -350,7 +350,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void FUN_L10_002f5a50(int);
-extern void FUN_L14_00305600(struct Moby *);
+void save_and_lower_unlock_sequence_mobys(struct Moby *moby) __asm__("FUN_L14_00305600");
+
+extern void save_and_lower_unlock_sequence_mobys(struct Moby *) __asm__("FUN_L14_00305600");
 extern void FUN_L14_00305680(struct Moby *);
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
@@ -380,7 +382,7 @@ void FUN_L14_00305408(unsigned char *moby) {
             return;
         }
         moby[0x20] = 1;
-        FUN_L14_00305600((char *)moby);
+        save_and_lower_unlock_sequence_mobys((char *)moby);
         break;
     case UNLOCK_SEQUENCE_WAIT_FOR_TRIGGER:
         if (((unsigned char *)D_L14_0015FFD8)[unlock_sequence_data[3] * 0x100 + 0x20] != 2) {
@@ -409,7 +411,7 @@ extern char *D_L14_0015FFD8;
 extern float D_L14_001EE5E0[];
 extern unsigned short *D_L14_001ABF40[];
 
-void FUN_L14_00305600(struct Moby *moby) {
+void save_and_lower_unlock_sequence_mobys(struct Moby *moby) {
     unsigned short *moby_id_cursor = D_L14_001ABF40[*(int *)moby->pvars];
     float *out;
     if (moby_id_cursor != 0) {
