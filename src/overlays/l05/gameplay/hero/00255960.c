@@ -146,10 +146,10 @@ void FUN_L05_00255960(void) {
     float v1[4] __attribute__((aligned(16)));
     int record_index;
     int sp24;
-    float sp28;
-    float sp2C;
-    float sp30;
-    float sp34;
+    float hang_probe_yaw;
+    float positive_shimmy_probe_yaw;
+    float negative_shimmy_probe_yaw;
+    float shimmy_probe_yaw;
     int sp38;
     int sp3C;
 
@@ -1148,8 +1148,8 @@ void FUN_L05_00255960(void) {
                     }
                     stick_target(0, 1.0f);
                     qcopy(v0, hero.motion.pos.f);
-                    sp28 = hero.motion.rot.f[2];
-                    if (FUN_L01_0022d838(v0, &sp28) == 0) {
+                    hang_probe_yaw = hero.motion.rot.f[2];
+                    if (FUN_L01_0022d838(v0, &hang_probe_yaw) == 0) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         hero.unk1B0 = scale_game_frames(0xA);
                         break;
@@ -1174,8 +1174,8 @@ void FUN_L05_00255960(void) {
                         qcopy(v1, hero.motion.pos.f);
                         v1[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         v1[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
-                        sp2C = hero.motion.rot.f[2];
-                        if (FUN_L01_0022d838(v1, &sp2C)) {
+                        positive_shimmy_probe_yaw = hero.motion.rot.f[2];
+                        if (FUN_L01_0022d838(v1, &positive_shimmy_probe_yaw)) {
                             hero_set_state(0x1A, 1);
                         }
                         break;
@@ -1189,8 +1189,8 @@ void FUN_L05_00255960(void) {
                             fast_cos(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         v1[1] +=
                             fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
-                        sp30 = hero.motion.rot.f[2];
-                        if (FUN_L01_0022d838(v1, &sp30)) {
+                        negative_shimmy_probe_yaw = hero.motion.rot.f[2];
+                        if (FUN_L01_0022d838(v1, &negative_shimmy_probe_yaw)) {
                             hero_set_state(0x1B, 1);
                         }
                     }
@@ -1206,13 +1206,13 @@ void FUN_L05_00255960(void) {
                     }
                     v0[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) * 0.3f;
                     v0[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) * 0.3f;
-                    sp34 = hero.motion.rot.f[2];
+                    shimmy_probe_yaw = hero.motion.rot.f[2];
                     stick_target(0, 1.0f);
                     if (hero.unk229C < 0.5f ||
                         0.7853982f <
                             fast_difference_between_rotations(
                                 hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) ||
-                        FUN_L01_0022d838(v0, &sp34) == 0) {
+                        FUN_L01_0022d838(v0, &shimmy_probe_yaw) == 0) {
                         if (hero.unkA98 & 2) {
                             hero_set_state(0x19, 1);
                             break;
