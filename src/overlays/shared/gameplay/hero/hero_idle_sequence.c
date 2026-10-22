@@ -2107,7 +2107,9 @@ void FUN_001f9a10_002090d0(Vec4_002090d0 *, Vec4_002090d0 *,
                            Vec4_002090d0 *) __asm__("FUN_001f9a10");
 void FUN_00214598_002090d0(Mtx_002090d0 *, Vec4_002090d0 *) __asm__("FUN_00214598");
 extern Vec4_002090d0 D_0013F3E0;
-void FUN_L00_002090d0(float *inf, float x, float y, float z) {
+void rotate_hero_about_local_pivot(float *inf, float x, float y, float z) __asm__("FUN_L00_002090d0");
+
+void rotate_hero_about_local_pivot(float *inf, float x, float y, float z) {
     u128_002090d0 *in = (u128_002090d0 *)inf;
     struct {
         Vec4_002090d0 p;
@@ -2142,7 +2144,7 @@ void FUN_L00_002090d0(float *inf, float x, float y, float z) {
 
 typedef float V[4] __attribute__((aligned(16)));
 
-extern void FUN_L00_002090d0(float *, float, float, float);
+extern void rotate_hero_about_local_pivot(float *, float, float, float) __asm__("FUN_L00_002090d0");
 
 /* Calls FUN_L00_002090d0 with a vector (0, 0, 0.6) and x, y, z. */
 void FUN_L00_002091d8(float x, float y, float z) {
@@ -2150,7 +2152,7 @@ void FUN_L00_002091d8(float x, float y, float z) {
 
     clear_u64_value(rotation_reference_vector);
     rotation_reference_vector[2] = 0.6f;
-    FUN_L00_002090d0(rotation_reference_vector, x, y, z);
+    rotate_hero_about_local_pivot(rotation_reference_vector, x, y, z);
 }
 #include "sda.h"
 typedef struct {

@@ -178,7 +178,7 @@ extern void compose_and_limit_hero_velocity(void) __asm__("FUN_L16_0020f8b0");
 extern void FUN_L05_00254358(void *, void *);
 extern void FUN_L00_00216f90(void *, void *, s32, s32);
 extern void FUN_L00_00216130(void *, void *, f32, f32, f32, s32);
-extern void FUN_L00_002090d0(void *, f32, f32, f32);
+extern void rotate_hero_about_local_pivot(void *, f32, f32, f32) __asm__("FUN_L00_002090d0");
 extern void FUN_L05_00254608(void);
 extern Vec4 D_L16_00179BE0[];
 extern struct PadState D_0013C940;
@@ -1174,7 +1174,7 @@ void FUN_L16_00214598(void) {
             y = -v10.f[1] * (frame_time * 12.217304f);
             hero.unk6D0 += x;
             hero.unk6D4 += y;
-            FUN_L00_002090d0(&primary_vector_scratch, x, y, 0.0f);
+            rotate_hero_about_local_pivot(&primary_vector_scratch, x, y, 0.0f);
         }
         FUN_L05_00254608();
         if (hero.wall_hit != 0)
