@@ -28,10 +28,10 @@ void FUN_L17_002ea418(unsigned char red, unsigned char green, unsigned char blue
 #include "qcopy.h"
 #include "sda.h"
 
-extern int FUN_L00_002dbe20(void *);
+extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 
 int FUN_L17_002f0040(struct Moby *moby) {
-    int helper_result = FUN_L00_002dbe20(moby);
+    int helper_result = cancel_suck_cannon_suction(moby);
     moby->state = 0xc;
     return helper_result;
 }

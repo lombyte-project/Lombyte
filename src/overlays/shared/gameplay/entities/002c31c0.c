@@ -132,11 +132,11 @@ int FUN_L00_002d56e0(char *a) {
     return r;
 }
 
-extern int FUN_L00_002dbe20(void *);
+extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 9. */
 int FUN_L00_002d57d0(char *moby) {
-    int helper_result = FUN_L00_002dbe20(moby);
+    int helper_result = cancel_suck_cannon_suction(moby);
     moby[0x20] = 0x9;
     return helper_result;
 }

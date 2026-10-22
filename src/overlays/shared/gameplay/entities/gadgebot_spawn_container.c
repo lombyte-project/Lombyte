@@ -1162,12 +1162,12 @@ int FUN_L06_002ea6a8(unsigned char *moby) {
     }
     return r;
 }
-extern s32 FUN_L00_002dbe20(void *);
+extern s32 cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 
 s32 FUN_L06_002ea7c8(unsigned char *moby) {
     u8 previous_state;
     s32 helper_result;
-    helper_result = FUN_L00_002dbe20(moby);
+    helper_result = cancel_suck_cannon_suction(moby);
     previous_state = moby[0x20];
     if (previous_state != 0x10) {
         moby[0xBC] = previous_state;

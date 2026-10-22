@@ -1961,7 +1961,9 @@ extern G D_0013F350_u __asm__("D_0013F350");
 u8 *FUN_L00_002db890_u(u8 *) __asm__("FUN_L00_002db890");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-s32 FUN_L00_002dbe20(u8 *moby) {
+s32 cancel_suck_cannon_suction(u8 *moby) __asm__("FUN_L00_002dbe20");
+
+s32 cancel_suck_cannon_suction(u8 *moby) {
     enum {
         SUCK_CANNON_INACTIVE = 0,
         SUCK_CANNON_ALIGNING_FOR_SUCTION = 1,

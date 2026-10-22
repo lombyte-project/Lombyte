@@ -21,11 +21,11 @@ int FUN_L01_002efaf8(char *a) {
     return r;
 }
 
-extern int FUN_L00_002dbe20(void *);
+extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 0xE. */
 int FUN_L01_002efb98(char *moby) {
-    int helper_result = FUN_L00_002dbe20(moby);
+    int helper_result = cancel_suck_cannon_suction(moby);
     moby[0x20] = 0xe;
     return helper_result;
 }
@@ -64,7 +64,7 @@ int FUN_L01_002f1c78(char *a) {
 int run_moby_helper_and_set_state_7(char *moby) __asm__("FUN_L01_002f1dc8");
 
 int run_moby_helper_and_set_state_7(char *moby) {
-    int helper_result = FUN_L00_002dbe20(moby);
+    int helper_result = cancel_suck_cannon_suction(moby);
     moby[0x20] = 0x7;
     return helper_result;
 }

@@ -1056,11 +1056,11 @@ int FUN_L00_002cae60(char *moby, int a, int target_moby, float target_height_off
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC360), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_002dbe20(void *);
+extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 5. */
 int FUN_L00_002caf10(char *moby) {
-    int helper_result = FUN_L00_002dbe20(moby);
+    int helper_result = cancel_suck_cannon_suction(moby);
     moby[0x20] = 5;
     return helper_result;
 }

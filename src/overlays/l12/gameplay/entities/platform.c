@@ -259,10 +259,10 @@ int FUN_L12_002e16b8(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l12/vendor_002C0310.c: func_L12_002E2B08), where it is exact; names translated to the US level program. */
 
 
-extern int FUN_L00_002dbe20(struct Moby *);
+extern int cancel_suck_cannon_suction(struct Moby *) __asm__("FUN_L00_002dbe20");
 
 int FUN_L12_002e17f8(struct Moby *moby) {
-    int result = FUN_L00_002dbe20(moby);
+    int result = cancel_suck_cannon_suction(moby);
     if (moby->state == 9 || moby->state == 11) {
         return 0;
     }

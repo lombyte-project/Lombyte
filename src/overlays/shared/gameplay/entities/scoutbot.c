@@ -576,13 +576,13 @@ void FUN_L08_002d3d78(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5358), where it is exact; names translated to the US level program. */
 
-extern void *FUN_L00_002dbe20(void *);
+extern void *cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void *enter_scoutbot_return_home_state(char *moby) __asm__("FUN_L08_002d4050");
 
 void *enter_scoutbot_return_home_state(char *moby) {
-    void *result = FUN_L00_002dbe20(moby);
+    void *result = cancel_suck_cannon_suction(moby);
     char *scoutbot_data = *(char **)(moby + 0x78);
     moby[0x20] = 3;
     *(float *)(scoutbot_data + 0x200) = 4.0f;
