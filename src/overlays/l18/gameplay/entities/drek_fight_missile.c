@@ -168,7 +168,9 @@ void drek_fight_missile_update(struct Moby *moby) {
 extern short *D_L18_001AC240[];
 extern unsigned char *D_L18_0015FFD8;
 
-int FUN_L18_002f0030(char *moby, int group, float *missile_activation_position) {
+int activate_drek_fight_missiles_in_group(char *moby, int group, float *missile_activation_position) __asm__("FUN_L18_002f0030");
+
+int activate_drek_fight_missiles_in_group(char *moby, int group, float *missile_activation_position) {
     short *group_entry = D_L18_001AC240[group];
     int idle;
     int i;
@@ -1449,7 +1451,7 @@ extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int FUN_L00_0025e450_u() __asm__("FUN_L00_0025e450");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L18_002dfba0(void *moby);
-extern int FUN_L18_002f0030(char *moby, int idx, float *pos);
+extern int activate_drek_fight_missiles_in_group(char *moby, int idx, float *pos) __asm__("FUN_L18_002f0030");
 extern int FUN_L18_002f6878(char *moby, float arg, void *x);
 extern int FUN_L18_002f70b8(struct Moby *moby);
 extern int FUN_L18_002fc668(int idx, float *pos, float *dir, float speed);
@@ -2013,7 +2015,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             boss_data->f354 = scale_game_frames(0x14);
             qcopy(position_and_displacement_scratch, boss_data->f3C0);
             position_and_displacement_scratch[2] = position_and_displacement_scratch[2] + 4.0f;
-            if (FUN_L18_002f0030((char *)moby, boss_data->f214, position_and_displacement_scratch) != 0) {
+            if (activate_drek_fight_missiles_in_group((char *)moby, boss_data->f214, position_and_displacement_scratch) != 0) {
                 moby->f20 = 0xC;
             }
         }
