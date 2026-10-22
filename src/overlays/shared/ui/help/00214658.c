@@ -962,7 +962,7 @@ void FUN_001f9a10_217118(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00233810_217118(void *, void *, float) __asm__("FUN_L00_00233810");
 int FUN_L00_001efc70_217118(void *, void *, int, void *, int) __asm__("FUN_L00_001efc70");
 float FUN_L00_00233d30_217118(void *) __asm__("FUN_L00_00233d30");
-void FUN_L00_00213de8_217118(float) __asm__("FUN_L00_00213de8");
+void scale_hero_motion(float) __asm__("FUN_L00_00213de8");
 
 void stop_hero_motion_without_forward_support(float velocity_scale, float planar_length_threshold) __asm__("FUN_L00_00217118");
 
@@ -1009,7 +1009,7 @@ void stop_hero_motion_without_forward_support(float velocity_scale, float planar
             final_call_enabled = 0.0f;
     }
     if (final_call_enabled != 0.0f)
-        FUN_L00_00213de8_217118(0.0f);
+        scale_hero_motion(0.0f);
 }
 /* Initialise the pool once, then for each of the first n entries of type 5 or 9 halve and apply its position. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217AF0), where it is exact; names translated to the US level program. */

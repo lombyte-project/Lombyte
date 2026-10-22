@@ -3830,7 +3830,9 @@ void apply_hero_motion_and_resolve_collisions(void)
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002144A0), where it is exact; names translated to the US level program. */
 
 /* Scales four vectors and one float of the hero by s. */
-void FUN_L00_00213de8(float scale_factor) {
+void scale_hero_motion(float scale_factor) __asm__("FUN_L00_00213de8");
+
+void scale_hero_motion(float scale_factor) {
     char *movement_vector_base = D_0013E533_lui + 0xF1D;
     float *hero_float_base;
 
