@@ -882,7 +882,9 @@ extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8,
 void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") __attribute__((section(".sdata")));
-void FUN_L17_002f5390(struct Moby *moby) {
+void update_hit_triggered_fragment_and_placement_spawner(struct Moby *moby) __asm__("FUN_L17_002f5390");
+
+void update_hit_triggered_fragment_and_placement_spawner(struct Moby *moby) {
     enum {
         HIT_EFFECT_INITIALIZE = 0,
         HIT_EFFECT_WAIT_FOR_HIT = 1,
