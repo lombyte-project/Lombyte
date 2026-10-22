@@ -31,7 +31,7 @@ extern u8 D_0013E550[];
 extern void FUN_L00_002321a8(void);
 extern void FUN_L00_00232628(void);
 extern void FUN_L00_00232320(void);
-extern void FUN_L00_00232128(void);
+extern void sync_hero_slot3_animation_speed(void) __asm__("FUN_L00_00232128");
 extern void sync_hero_mapped_moby_animation_speed(void) __asm__("FUN_L00_002322c8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
@@ -133,7 +133,7 @@ void FUN_L00_00232670(void) {
     } else if (m->unk7C != 0xFF && D_L00_0015F5C4 != 2 && D_L00_0015F5C4 != 6) {
         m->sound_slot = allocate_voice_for_target_entry(m->unk7C, 4, m);
     }
-    FUN_L00_00232128();
+    sync_hero_slot3_animation_speed();
     sync_hero_mapped_moby_animation_speed();
     prev = hero.anim_frame;
     hero.anim_frame = compute_interpolated_record_value(m);

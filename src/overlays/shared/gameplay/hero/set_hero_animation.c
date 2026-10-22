@@ -204,7 +204,9 @@ int FUN_L00_00231ff8(int input_animation_id, int *out_primary_animation_id, int 
 extern int FUN_L00_00231ff8(int, int *, int *);
 
 /* Copies &hero.anim_speed to +0x58 of the objects at 0x1180/0x1184 when the lookup succeeds. */
-void FUN_L00_00232128(void) {
+void sync_hero_slot3_animation_speed(void) __asm__("FUN_L00_00232128");
+
+void sync_hero_slot3_animation_speed(void) {
     struct Hero *base = &hero;
     int mapped_animation_ids[2];
 
