@@ -36,7 +36,7 @@ extern MapFilter D_L00_00182BA0[19][16] NOT_SDA;
 extern MapFilterCallback D_L00_00183F90[19][8] NOT_SDA;
 extern s32 D_L00_001844A8[] NOT_SDA;
 extern void world_to_map_coords(f32, f32, f32 *, f32 *, s32) __asm__("FUN_00208408");
-extern s32 FUN_L00_00249d80(s32);
+extern s32 ensure_menu_cache_entry(s32) __asm__("FUN_L00_00249d80");
 
 void FUN_L00_002484e0(f32 *position) {
     s32 filters[16];
@@ -236,7 +236,7 @@ void FUN_L00_002484e0(f32 *position) {
             {
                 u8 packed;
                 u8 selected;
-                FUN_L00_00249d80((column >> 5) + block_row);
+                ensure_menu_cache_entry((column >> 5) + block_row);
                 packed = *(D_L00_001841F0_lui.packed + ((column & 31) >> 1) + packed_row);
                 selected = (column & 1) ? packed >> 4 : packed & 15;
                 if (filters[selected] != 0) {
