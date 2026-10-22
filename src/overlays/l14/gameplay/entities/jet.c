@@ -3238,7 +3238,9 @@ extern void tram_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void tram_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void initialize_flight_path_state(struct Moby *moby) __asm__("FUN_L14_002fc890");
 void FUN_L14_002fd310(struct Moby *m);
-int FUN_L14_002fd918(struct Moby *m);
+int advance_moby_along_flight_path(struct Moby *moby) __asm__("FUN_L14_002fd918");
+
+int advance_moby_along_flight_path(struct Moby *m) __asm__("FUN_L14_002fd918");
 
 /* pvars of the tram (FUN_L14_002fcbb0 and its helpers fc890/fd918 read the same layout) */
 typedef struct {
@@ -3375,7 +3377,7 @@ void FUN_L14_002fcbb0(struct Moby *moby) {
         break;
     }
     case TRAM_STATE_FOLLOW_PATH:
-        if (FUN_L14_002fd918(moby) != 0)
+        if (advance_moby_along_flight_path(moby) != 0)
             return;
         if (moby_vars->carrier != 0 && moby_vars->stage < 2) {
             struct Moby *c;
@@ -3556,7 +3558,7 @@ extern int FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 extern int *D_L14_001B0BB0[];
 
-int FUN_L14_002fd918(struct Moby *moby) {
+int advance_moby_along_flight_path(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     float path_target_position[4];
     float path_position_delta[4];
