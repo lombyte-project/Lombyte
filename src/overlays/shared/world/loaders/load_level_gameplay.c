@@ -478,7 +478,7 @@ extern void light_ties(void *) __asm__("FUN_00237370");
 extern void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
 extern void initialize_hero(void) __asm__("FUN_L00_00204c60");
 extern void reset_hero_to_idle(void) __asm__("FUN_L00_00204f80");
-extern void FUN_L00_0024a798(int, int);
+extern void store_current_level_table_value(int, int) __asm__("FUN_L00_0024a798");
 extern void FUN_L00_00250df8(void *);
 extern void resolve_lookup_record(short *) __asm__("FUN_L00_0028df58");
 extern void update_moby_proximity_interaction() __asm__("FUN_L00_0028e180");
@@ -1084,7 +1084,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 PackRenderCommandFields(m, m->f80, 0, 0, 0);
                 m->f38 = upd;
                 if (*(int *)p != -1) {
-                    FUN_L00_0024a798((int)m, *(int *)p);
+                    store_current_level_table_value((int)m, *(int *)p);
                 }
                 count++;
             }
@@ -1487,7 +1487,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             set_moby_animation(m, 1, 0);
             FUN_L00_00250df8(m);
             D_0013E030.f0 = m;
-            FUN_L00_0024a798((int)m, 0);
+            store_current_level_table_value((int)m, 0);
         }
     }
     if (D_L00_0015F600 != 0 && hdr->f8C != 0) {
