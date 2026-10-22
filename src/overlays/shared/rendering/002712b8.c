@@ -649,7 +649,9 @@ void update_expanding_damped_rgb_fading_particle(u8 *particle) {
 void FUN_001f9a10_002728e8(void *, void *, void *) __asm__("FUN_001f9a10");
 int FUN_001fa6d0_002728e8(float) __asm__("FUN_001fa6d0");
 void FUN_L00_00267a08_002728e8(unsigned char *) __asm__("FUN_L00_00267a08");
-void FUN_L00_002728e8(unsigned char *particle) {
+void update_expanding_alpha_pulse_particle(unsigned char *particle) __asm__("FUN_L00_002728e8");
+
+void update_expanding_alpha_pulse_particle(unsigned char *particle) {
     float *particle_data = (float *)(particle + 0x20);
     FUN_001f9a10_002728e8(particle + 0x10, particle + 0x10, particle_data);
     *(float *)(particle + 0xc) += 5880.0f;
