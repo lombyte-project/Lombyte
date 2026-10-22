@@ -1352,7 +1352,7 @@ extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern void FUN_00216050_29a6b0(s32) __asm__("FUN_00216050");
 extern void FUN_0012dc80_29a6b0(void) __asm__("FUN_0012dc80");
 extern void FUN_L00_0029a400(s32);
-extern void FUN_L00_0023aef8_29a6b0(void) __asm__("FUN_L00_0023aef8");
+extern void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
 extern s32 add_text_29a6b0(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern void FUN_L00_00239cc8_29a6b0(void) __asm__("FUN_L00_00239cc8");
 extern void FUN_L00_00239d00_29a6b0(void) __asm__("FUN_L00_00239d00");
@@ -1428,7 +1428,7 @@ void FUN_L00_0029a6b0(VendorMoby_29a6b0 *vendor_moby) {
     if (half < 3) sel = 1;
     vendor_29a6b0.cursor = half / 2;
     vendor_29a6b0.scroll = (sel - half / 2) * 0x28;
-    FUN_L00_0023aef8_29a6b0();
+    reset_hud_and_suspend_weapon_updates();
     vendor_29a6b0.title_text = add_text_29a6b0(0x12, 0x754E, FUN_L00_00239cc8_29a6b0, FUN_L00_00239d00_29a6b0,
                                                FUN_L00_00239df8_29a6b0, &D_0015ED98_29a6b0, 0x98967F);
     if (vendor_29a6b0.entries[vendor_29a6b0.cursor].selected == 1) {

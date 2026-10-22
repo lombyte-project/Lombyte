@@ -31,7 +31,7 @@ extern void FUN_L00_002039a0(void);
 extern void update_item_tint_from_hero(int, int) __asm__("FUN_L00_00207330");
 extern void clear_hero_item_slot(int, int) __asm__("FUN_L00_0020fca8");
 extern void FUN_L00_00232fe8(void);
-extern void FUN_L00_0023aef8(void);
+extern void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
 extern void load_scene_chunks_with_fade(int) __asm__("FUN_L00_002454c8");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void fill_transfer_words_alt() __asm__("FUN_001f97e8");
@@ -70,7 +70,7 @@ void FUN_L01_002aea70(char *vendor_moby, int lvl) {
     *(int *)(vendor_screen_state + 4) = 0;
     *(char **)(vendor_screen_state + 0x28) = vendor_moby;
     sc = vendor_screen_state + 0xC0;
-    FUN_L00_0023aef8();
+    reset_hud_and_suspend_weapon_updates();
     FUN_L00_002039a0();
     hero_set_state(100, 1);
     *(char *)&hero_state->unk20AC = 1;

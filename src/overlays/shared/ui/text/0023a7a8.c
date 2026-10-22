@@ -268,7 +268,9 @@ extern int D_L00_0015F968_gp __asm__("D_L00_0015F968") __attribute__((sda));
 extern int D_L00_0015F970;
 extern int D_L00_0015F96C;
 /* Resets via FUN_L00_00235878, then sets the three state words to 1, -1 and 0. */
-void FUN_L00_0023aef8(void) {
+void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
+
+void reset_hud_and_suspend_weapon_updates(void) {
     reset_hud_animation_channels();
     D_L00_0015F968_gp = 1;
     D_L00_0015F970 = -1;
