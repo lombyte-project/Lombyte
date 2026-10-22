@@ -401,7 +401,7 @@ extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_001ff600_cf(void *) __asm__("FUN_001f9b20");
-extern float FUN_L00_00208f20(float, float, float, float);
+extern float adjust_hero_animation_speed_for_target_frame(float, float, float, float) __asm__("FUN_L00_00208f20");
 extern float FUN_L00_0020a1e0_cf(float) __asm__("FUN_001f9dc8");
 extern float FUN_L00_002121c0_cf(float) __asm__("FUN_001f9de0");
 extern float forward_component(void *) __asm__("FUN_L00_00213350");
@@ -627,7 +627,7 @@ void FUN_L01_002370b8(void) {
 
                 r = hero.motion.unk164 / speed;
                 if (scale_game_frames(5) < r && ((Moby *)hero.moby)->f51 < 5.5f) {
-                    FUN_L00_00208f20(13.0f, r, 0.5f, -1.0f);
+                    adjust_hero_animation_speed_for_target_frame(13.0f, r, 0.5f, -1.0f);
                     if (hero.anim_speed > 1.1f) {
                         hero.anim_speed = 1.1f;
                     }

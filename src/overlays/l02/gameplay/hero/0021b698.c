@@ -704,7 +704,7 @@ extern float D_L02_001C42B0[];
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_001ff600_cf(void *) __asm__("FUN_001f9b20");
-extern float FUN_L00_00208f20(float, float, float, float);
+extern float adjust_hero_animation_speed_for_target_frame(float, float, float, float) __asm__("FUN_L00_00208f20");
 extern float forward_component(void *) __asm__("FUN_L00_00213350");
 extern float gravity_z(float *) __asm__("FUN_L00_00233a78");
 extern float vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
@@ -911,7 +911,7 @@ void FUN_L02_00225c20(void) {
 
                 r = hero.motion.unk164 / speed;
                 if (scale_game_frames(5) < r && ((Moby *)hero.moby)->f51 < 5.5f) {
-                    FUN_L00_00208f20(13.0f, r, 0.5f, -1.0f);
+                    adjust_hero_animation_speed_for_target_frame(13.0f, r, 0.5f, -1.0f);
                     if (hero.anim_speed > 1.1f) {
                         hero.anim_speed = 1.1f;
                     }
@@ -1255,7 +1255,7 @@ void FUN_L02_00225c20(void) {
                     set_hero_animation(0x35, 6, scale_game_frames(0x11));
                     hero.unk9BC = 1;
                 } else if (((Moby *)hero.moby)->f52 == ((Moby *)hero.moby)->f53) {
-                    FUN_L00_00208f20(42.0f, a, 0.5f, -1.0f);
+                    adjust_hero_animation_speed_for_target_frame(42.0f, a, 0.5f, -1.0f);
                     hero.unk9BC = 0;
                 }
             } else {
@@ -1263,7 +1263,7 @@ void FUN_L02_00225c20(void) {
                     set_hero_animation(0x35, 0x15, scale_game_frames(9));
                     hero.unk9BC = 2;
                 } else if (((Moby *)hero.moby)->f52 == ((Moby *)hero.moby)->f53) {
-                    FUN_L00_00208f20(12.0f, a, 0.5f, -1.0f);
+                    adjust_hero_animation_speed_for_target_frame(12.0f, a, 0.5f, -1.0f);
                     hero.unk9BC = 0;
                 }
             }

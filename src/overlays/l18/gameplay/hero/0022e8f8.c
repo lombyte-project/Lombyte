@@ -61,7 +61,7 @@ extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern float FUN_L00_00208f20(float a, float b, float c, float d);
+extern float adjust_hero_animation_speed_for_target_frame(float a, float b, float c, float d) __asm__("FUN_L00_00208f20");
 extern float FUN_L00_00232b90(float a, float b, float c);
 extern float gravity_z(float *v) __asm__("FUN_L00_00233a78");
 extern float predict_hero_trajectory_z(float *pos, float *vel, int *steps, float step) __asm__("FUN_L00_00233c30");
@@ -724,7 +724,7 @@ void FUN_L18_0022e8f8(void) {
                             hero.anim_speed = 0.33f;
                         } else if (hero.unkA70 != 0.0f && hero.air_frames.s != 0 && r != 0 &&
                                    (float)n - hero.anim_frame > 1.0f) {
-                            FUN_L00_00208f20(n, r, 0.5f, -1.0f);
+                            adjust_hero_animation_speed_for_target_frame(n, r, 0.5f, -1.0f);
                             if (hero.ground_distance < 0.7f && hero.anim_speed < 0.75f) {
                                 hero.anim_speed = 0.75f;
                             }
@@ -1116,7 +1116,7 @@ void FUN_L18_0022e8f8(void) {
                     }
                     break;
                 case 37:
-                    FUN_L00_00208f20(10.0f, hero.unk96C, 0.5f, -1.0f);
+                    adjust_hero_animation_speed_for_target_frame(10.0f, hero.unk96C, 0.5f, -1.0f);
                     if ((float)scale_game_frames(0x16) > hero.unk96C &&
                         (float)scale_game_frames(0x1E) > hero.unk96C) {
                         set_hero_animation(0xA, 0, scale_game_frames(0x10));
@@ -1200,7 +1200,7 @@ void FUN_L18_0022e8f8(void) {
                             if (r == 2) {
                                 scale_game_frames(0xA);
                             }
-                            FUN_L00_00208f20(hero.unk4C0, hero.unk4BC, 0.5f, -1.0f);
+                            adjust_hero_animation_speed_for_target_frame(hero.unk4C0, hero.unk4BC, 0.5f, -1.0f);
                         } else {
                             hero.anim_speed = 1.0f;
                         }
@@ -1442,7 +1442,7 @@ void FUN_L18_0022e8f8(void) {
                             hero.unk41E == 0 && hero.unkA9C == 0) {
                             predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp40,
                                              hero.unk4A0);
-                            FUN_L00_00208f20(hero.unk440, sp40, 0.5f, frame_scale_sq * 0.25f);
+                            adjust_hero_animation_speed_for_target_frame(hero.unk440, sp40, 0.5f, frame_scale_sq * 0.25f);
                             if (hero.unk590 != 0) {
                                 if (hero.anim_speed > 2.0f) {
                                     hero.anim_speed = 2.0f;
@@ -1459,7 +1459,7 @@ void FUN_L18_0022e8f8(void) {
                                         60.0f, hero.unk4A0, hero.unk500.f[2]));
                                 }
                                 if (hero.unk44C != 0) {
-                                    FUN_L00_00208f20(hero.unk444, hero.unk44C, 0.5f,
+                                    adjust_hero_animation_speed_for_target_frame(hero.unk444, hero.unk44C, 0.5f,
                                                      frame_scale_sq * 0.25f);
                                 }
                                 if (hero.unk590 != 0) {
@@ -1503,7 +1503,7 @@ void FUN_L18_0022e8f8(void) {
                         if (hero.motion.velocity.f[2] > 0.0f) {
                             predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp44,
                                              frame_time_sq * 23.0f);
-                            FUN_L00_00208f20(9.0f, sp44, 0.5f, -1.0f);
+                            adjust_hero_animation_speed_for_target_frame(9.0f, sp44, 0.5f, -1.0f);
                         }
                         if (hero.unkA98 & 2) {
                             hero_set_state(HERO_STATE_GRIND, 1);
@@ -1993,7 +1993,7 @@ void FUN_L18_0022e8f8(void) {
                             if (hero.unk41C != 0) {
                                 float d = hero.unk3D0 - hero.state_timer;
                                 if (0.0f < d) {
-                                    FUN_L00_00208f20(hero.unk3D8, d, hero.unk494, -1.0f);
+                                    adjust_hero_animation_speed_for_target_frame(hero.unk3D8, d, hero.unk494, -1.0f);
                                 }
                                 break;
                             }
@@ -2002,7 +2002,7 @@ void FUN_L18_0022e8f8(void) {
                             }
                             predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp58,
                                              hero.unk4A0);
-                            FUN_L00_00208f20(hero.unk440, sp58, hero.unk494, -1.0f);
+                            adjust_hero_animation_speed_for_target_frame(hero.unk440, sp58, hero.unk494, -1.0f);
                             if (1.5f < hero.anim_speed) {
                                 hero.anim_speed = 1.5f;
                             }
@@ -2012,7 +2012,7 @@ void FUN_L18_0022e8f8(void) {
                             hero.state_timer < hero.unk3D4) {
                             float d = hero.unk3E0 - hero.unk3D0;
                             if (0.0f < d) {
-                                FUN_L00_00208f20(hero.unk440, d, hero.unk494, -1.0f);
+                                adjust_hero_animation_speed_for_target_frame(hero.unk440, d, hero.unk494, -1.0f);
                             }
                             break;
                         }
@@ -2043,7 +2043,7 @@ void FUN_L18_0022e8f8(void) {
                                     int r = truncate_float_to_s32(
                                         FUN_L00_00232b90(60.0f, hero.unk4A0, -1.0f));
                                     hero.unk44C = r;
-                                    FUN_L00_00208f20(hero.unk444, r, hero.unk494,
+                                    adjust_hero_animation_speed_for_target_frame(hero.unk444, r, hero.unk494,
                                                      frame_scale_sq * 0.2f);
                                 }
                                 if (!isNear) {
@@ -2278,7 +2278,7 @@ void FUN_L18_0022e8f8(void) {
                     }
                     if (hero.state_timer == hero.unk420 + scale_game_frames(1)) {
                         predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp60, hero.unk4A0);
-                        FUN_L00_00208f20(hero.unk440, sp60, hero.unk494, -1.0f);
+                        adjust_hero_animation_speed_for_target_frame(hero.unk440, sp60, hero.unk494, -1.0f);
                         break;
                     }
                     if (hero.unk418 != 0) {
@@ -2303,7 +2303,7 @@ void FUN_L18_0022e8f8(void) {
                             int fr;
 
                             hero.unk44C = r;
-                            FUN_L00_00208f20(hero.unk444, r, hero.unk494, -1.0f);
+                            adjust_hero_animation_speed_for_target_frame(hero.unk444, r, hero.unk494, -1.0f);
                             fr = truncate_float_to_s32(hero.unk448) + 1;
                             if (hero.anim_speed > 1.8f) {
                                 set_hero_animation(moby[0x53], fr, hero.unk44C + 2);

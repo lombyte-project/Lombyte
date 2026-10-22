@@ -489,7 +489,7 @@ extern void turn_hero_toward_move_direction_for_item(void) __asm__("FUN_L00_0021
 extern f32 FUN_001f99c0(f32);
 extern void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
 extern s32 FUN_L12_00227f10(s32);
-extern void FUN_L00_00208f20(f32, f32, f32, f32);
+extern void adjust_hero_animation_speed_for_target_frame(f32, f32, f32, f32) __asm__("FUN_L00_00208f20");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void reduce_and_apply_hero_planar_velocity_addend(f32) __asm__("FUN_L00_00216710");
@@ -749,7 +749,7 @@ void FUN_L12_00238900(void) {
             if (MV(hero.moby)->b52 == MV(hero.moby)->b53 && MV(hero.moby)->b52 != 0x14) {
                 f32 r = hero.motion.unk164 / speed;
                 if (scale_game_frames(5) < r && MV(hero.moby)->b51 < 5.5f) {
-                    FUN_L00_00208f20(13.0f, r, 0.5f, -1.0f);
+                    adjust_hero_animation_speed_for_target_frame(13.0f, r, 0.5f, -1.0f);
                     if (hero.anim_speed > 1.1f) {
                         hero.anim_speed = 1.1f;
                     }
@@ -1440,7 +1440,7 @@ void FUN_L12_00238900(void) {
                         set_hero_animation(0x35, 6, scale_game_frames(17));
                         hero.unk9BC = 1;
                     } else if (MV(hero.moby)->b52 == MV(hero.moby)->b53) {
-                        FUN_L00_00208f20(42.0f, t, 0.5f, -1.0f);
+                        adjust_hero_animation_speed_for_target_frame(42.0f, t, 0.5f, -1.0f);
                         hero.unk9BC = 0;
                     }
                 } else {
@@ -1448,7 +1448,7 @@ void FUN_L12_00238900(void) {
                         set_hero_animation(0x35, 0x15, scale_game_frames(9));
                         hero.unk9BC = 2;
                     } else if (MV(hero.moby)->b52 == MV(hero.moby)->b53) {
-                        FUN_L00_00208f20(12.0f, t, 0.5f, -1.0f);
+                        adjust_hero_animation_speed_for_target_frame(12.0f, t, 0.5f, -1.0f);
                         hero.unk9BC = 0;
                     }
                 }

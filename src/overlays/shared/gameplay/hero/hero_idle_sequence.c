@@ -2012,7 +2012,9 @@ void FUN_L00_00208b60(void) {
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
-f32 FUN_L00_00208f20(f32 target_anim_frame, f32 anim_speed_divisor, f32 frame_delta_scale, f32 anim_speed_step) {
+f32 adjust_hero_animation_speed_for_target_frame(f32 target_anim_frame, f32 anim_speed_divisor, f32 frame_delta_scale, f32 anim_speed_step) __asm__("FUN_L00_00208f20");
+
+f32 adjust_hero_animation_speed_for_target_frame(f32 target_anim_frame, f32 anim_speed_divisor, f32 frame_delta_scale, f32 anim_speed_step) {
     struct Hero *hero_animation_state = &hero;
     f32 thresh = hero_animation_state->anim_frame;
     f32 step;
