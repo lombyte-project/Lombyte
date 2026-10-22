@@ -50,7 +50,7 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
-extern struct Moby *FUN_L08_002de3e0(void *, struct Moby *, void *, f32, f32);
+extern struct Moby *spawn_class_1b3_projectile(void *, struct Moby *, void *, f32, f32) __asm__("FUN_L08_002de3e0");
 extern void FUN_L08_002e9558(struct Moby *);
 extern void FUN_L08_002e9758(struct Moby *);
 extern void FUN_L08_002e9a18(struct Moby *);
@@ -140,7 +140,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
             yaw = -0.34f;
         }
         normalize_vector_xyz(&velocity, &step, (D_L08_00161D34 + D_L08_00161D34) * frame_time);
-        shot = FUN_L08_002de3e0(&muzzle, target, &velocity, pitch, yaw);
+        shot = spawn_class_1b3_projectile(&muzzle, target, &velocity, pitch, yaw);
         shot->scale = shot->pclass->scale / 5.0f;
         target_vars = (SwarmTargetVars *)target->pvars;
         for (slot = 0; slot < 8; slot++) {
@@ -181,7 +181,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
         pitch = random_float_between(-0.5235988f, -0.2617994f);
         yaw = random_angle_radians();
         normalize_vector_xyz(&velocity, &step, (D_L08_00161D34 + D_L08_00161D34) * frame_time);
-        bolt = FUN_L08_002de3e0(&muzzle, NULL, &velocity, pitch, yaw);
+        bolt = spawn_class_1b3_projectile(&muzzle, NULL, &velocity, pitch, yaw);
         if (bolt != NULL) {
             bolt->rot.z = vars->parts[3].moby->rot.z;
             bolt->state = 5;

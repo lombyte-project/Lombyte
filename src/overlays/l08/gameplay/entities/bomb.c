@@ -2745,7 +2745,9 @@ extern int D_L08_00161A38 __attribute__((sda));
 extern int D_L08_00161A3C __attribute__((sda));
 extern float D_L08_00161A40 __attribute__((sda));
 
-struct Moby *FUN_L08_002de3e0(void *pos, struct Moby *target, void *velocity, float pitch, float yaw) {
+struct Moby *spawn_class_1b3_projectile(void *pos, struct Moby *target, void *velocity, float pitch, float yaw) __asm__("FUN_L08_002de3e0");
+
+struct Moby *spawn_class_1b3_projectile(void *pos, struct Moby *target, void *velocity, float pitch, float yaw) {
     struct Moby *moby = create_moby(0x1B3);
     char *data;
     float *reference;
