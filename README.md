@@ -5,7 +5,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/lombyte-title-dark.svg">
-    <img src="assets/lombyte-title-light.svg" alt="Lombyte, Ratchet and Clank Decompilation" height="66">
+    <img src="assets/lombyte-title-light.svg" alt="Lombyte Project, Ratchet and Clank Decompilation" height="70">
   </picture>
 </p>
 
