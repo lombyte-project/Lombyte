@@ -617,7 +617,9 @@ extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
 extern s32 FUN_L00_00211870(f32);
 
-void FUN_L15_0020ed50(void) {
+void update_hero_motion_for_current_state(void) __asm__("FUN_L15_0020ed50");
+
+void update_hero_motion_for_current_state(void) {
     enum {
         HERO_ATTACK_RECORD_DUAL_POINT_HIT_QUERY = 2
     };
