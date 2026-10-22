@@ -1682,7 +1682,9 @@ extern void clear_vector(void *) __asm__("func_001F99F8");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char D_L01_00174340_c[] __asm__("D_L01_001742C0");
 
-void FUN_L01_002eda00(char *moby) {
+void update_moby_motion_collision_and_burst(char *moby) __asm__("FUN_L01_002eda00");
+
+void update_moby_motion_collision_and_burst(char *moby) {
     enum {
         MOVE_UNTIL_COLLISION_OR_TIMEOUT = 1,
         BURST_AND_REMOVE = 2
