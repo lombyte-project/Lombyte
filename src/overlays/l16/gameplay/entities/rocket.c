@@ -59,7 +59,9 @@ unsigned char *FUN_L16_002c6268(int owner, void *spawn_position, float *initial_
 
 extern float D_0015ED6C;
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void FUN_L16_002c9568(struct Moby *);
+void initialize_moby_sprite_effect(struct Moby *moby) __asm__("FUN_L16_002c9568");
+
+extern void initialize_moby_sprite_effect(struct Moby *) __asm__("FUN_L16_002c9568");
 extern void FUN_L16_002c9650_u(char *) __asm__("FUN_L16_002c9650");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -73,7 +75,7 @@ void FUN_L16_002c9480(struct Moby *moby) {
     case MOBY_STATE_INITIALIZE: {
         float ground_height;
         float vertical_distance_to_ground;
-        FUN_L16_002c9568((char *)moby);
+        initialize_moby_sprite_effect((char *)moby);
         moby->scale = moby->scale * 0.9f;
         ground_height = probe_ground_height(&moby->pos, 0, 0.5f);
         vertical_distance_to_ground = absolute_float(ground_height - moby->pos.z);
@@ -93,7 +95,7 @@ void FUN_L16_002c9480(struct Moby *moby) {
 
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-void FUN_L16_002c9568(struct Moby *moby) {
+void initialize_moby_sprite_effect(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float *random_value_cursor = (float *)data;
     int *frame_count_cursor;
