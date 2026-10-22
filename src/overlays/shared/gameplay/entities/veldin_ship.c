@@ -304,7 +304,7 @@ void crate_drop_bolts(u8 *crate_moby) {
     T_2d0538 unused_global_copy;
     V_2d0538 trajectory_vector, adjusted_position, scratch_vector;
     s32 drop_type_or_skip_spawn;
-    f32 f54, f58;
+    f32 larger_trajectory_time_root, smaller_trajectory_time_root;
     s32 requested_drop_count, i;
     u8 *crate_vars, *spawned_moby, *spawned_vars;
     s16 crate_class;
@@ -396,13 +396,13 @@ void crate_drop_bolts(u8 *crate_moby) {
             }
             if (*(s32 *)(crate_vars + 0xC0) >= 0) {
                 s32 k = FUN_L00_002595a0_2d0538(
-                    &f54, &f58, D_0015ED70 * 10.8f * -0.5f,
+                    &larger_trajectory_time_root, &smaller_trajectory_time_root, D_0015ED70 * 10.8f * -0.5f,
                     *(f32 *)(spawned_vars + 0x18) - D_0015ED70 * 10.8f * -0.5f,
                     *(f32 *)(spawned_moby + 0x18) -
                         *(f32 *)(D_L00_001B04B0_2d0538[*(s32 *)(crate_vars + 0xC0)] + 0x18));
                 trajectory_time = 120.0f;
-                if ((f32)k >= 1.0f && f54 > 0.0f && f54 < 120.0f)
-                    trajectory_time = f54;
+                if ((f32)k >= 1.0f && larger_trajectory_time_root > 0.0f && larger_trajectory_time_root < 120.0f)
+                    trajectory_time = larger_trajectory_time_root;
                 scale_vector_xyz(&trajectory_vector, spawned_vars + 0x10, trajectory_time);
                 add_vector_xyz(&trajectory_vector, &trajectory_vector, crate_moby + 0x10);
                 FUN_L00_00261b48(*(s32 *)(crate_vars + 0xC0), crate_moby + 0x10, &trajectory_vector, &adjusted_position);
