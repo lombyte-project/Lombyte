@@ -346,7 +346,9 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 /* Picks the path node the follower should head for: an ordered path just steps to the next stop; otherwise the
  * nearest node and its two neighbours are scored (distance, or heading change for slow movers) and the best one
  * is written to *idx. Returns nonzero when the pick differs from the nearest node. */
-int FUN_L01_002e6790(void *path_follower_entity, int *selected_path_node_index) {
+int select_birdbot_path_node(void *path_follower_entity, int *selected_path_node_index) __asm__("FUN_L01_002e6790");
+
+int select_birdbot_path_node(void *path_follower_entity, int *selected_path_node_index) {
     PathPickMoby *path_follower_moby = path_follower_entity;
     PathPickTarget target;
     SplashVec pt;
@@ -654,7 +656,7 @@ extern int FUN_L00_0025a478_u(void *, void *, void *, int, int *, float *, int,
                               int) __asm__("FUN_L00_0025a478");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
-extern int FUN_L01_002e6790(void *, int *);
+extern int select_birdbot_path_node(void *, int *) __asm__("FUN_L01_002e6790");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(void *);
@@ -752,7 +754,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         birdbot_vars->w1C8--;
     }
     if (birdbot_moby->state != 0) {
-        path_reposition_requested = FUN_L01_002e6790(birdbot_moby, &idx);
+        path_reposition_requested = select_birdbot_path_node(birdbot_moby, &idx);
     }
     target_search_radius = flag ? birdbot_vars->f1A0 * 2.0f : birdbot_vars->f1A0;
     FUN_L00_0025fcb8(birdbot_moby, &selected_combat_target, target_search_radius);
