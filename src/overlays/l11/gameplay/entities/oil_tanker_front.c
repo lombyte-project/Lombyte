@@ -769,7 +769,9 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-void FUN_L11_00318488(struct Moby *);
+void start_oil_tanker_link_destruction(struct Moby *link_moby) __asm__("FUN_L11_00318488");
+
+void start_oil_tanker_link_destruction(struct Moby *) __asm__("FUN_L11_00318488");
 
 /* Drops the chain's damaged links: takes the hits, shrinks the chain as its health falls and blows the head up when no link is left. */
 void FUN_L11_00317c98(struct Moby *moby) {
@@ -793,7 +795,7 @@ void FUN_L11_00317c98(struct Moby *moby) {
         struct Moby *detached_tail_link;
         *(u16 *)D_00141C18 = 0xFFFF;
         chain_vars->count--;
-        FUN_L11_00318488(chain_vars->links[chain_vars->count]);
+        start_oil_tanker_link_destruction(chain_vars->links[chain_vars->count]);
         last_hit_link = chain_vars->links[last_hit_link_index];
         detached_tail_link = chain_vars->links[chain_vars->count];
         qcopy(&detached_tail_link->pos, &last_hit_link->pos);
@@ -975,7 +977,7 @@ void FUN_L11_003181f0(struct Moby *moby) {
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L11_00318488(struct Moby *link_moby) {
+void start_oil_tanker_link_destruction(struct Moby *link_moby) {
     char *link_vars = (char *)link_moby->pvars;
     link_moby->state = 1;
     link_moby->collision = 0;
