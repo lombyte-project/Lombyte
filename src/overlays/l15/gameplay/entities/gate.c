@@ -1163,7 +1163,9 @@ extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
  * same-class mobys within 10 units and keeps ~15 units off the goal while
  * another moby is closer to it (~10 otherwise); writes the steering point to
  * out and returns the heading to follow. */
-float FUN_L15_002c52b8(struct Moby *moby, float *out, Goal_52b8 goal) {
+float compute_helicopter_flocking_steering_point(struct Moby *moby, float *out, Goal_52b8 goal) __asm__("FUN_L15_002c52b8");
+
+float compute_helicopter_flocking_steering_point(struct Moby *moby, float *out, Goal_52b8 goal) {
     float steering_offset[4];
     float goal_distance;
     float wsum;
@@ -1569,7 +1571,7 @@ void helicopter_update(struct Moby *moby) {
     case HELICOPTER_ENGAGE_AND_FIRE:
         moby_point_position(moby, 0, &point);
         if (goal.status != 2) {
-            FUN_L15_002c52b8(moby, move.f, *(Goal_52b8 *)&goal);
+            compute_helicopter_flocking_steering_point(moby, move.f, *(Goal_52b8 *)&goal);
             aim.q = *(u128 *)&target->pos;
             steer_helicopter(moby, (SteeringVec_4f88 *)&move, (SteeringVec_4f88 *)&aim);
             if (fast_dec_timer_s16(&vars->fire_timer) && vars->shot == 0) {
