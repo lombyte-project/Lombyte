@@ -449,7 +449,7 @@ extern int FUN_L00_00257b90(int, int);
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void FUN_L00_0026c6e8(char *, char *);
+extern void spawn_two_point_effect_particle(char *, char *) __asm__("FUN_L00_0026c6e8");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void spawn_collision_particle_bursts(void) __asm__("FUN_L01_002c72c8");
@@ -469,7 +469,7 @@ void spawn_collision_particle_bursts(void) {
         build_spherical_offset(offset_vector, 0.2f, y, x);
         fast_vec_scale(spawn_position, offset_vector, random_float_between_alt(1.0f, 3.0f));
         fast_vec_add(spawn_position, spawn_position, D_L01_001742E0);
-        FUN_L00_0026c6e8((char *)spawn_position, (char *)offset_vector);
+        spawn_two_point_effect_particle((char *)spawn_position, (char *)offset_vector);
     }
     for (i = 9; i >= 0; i--) {
         float x, y;

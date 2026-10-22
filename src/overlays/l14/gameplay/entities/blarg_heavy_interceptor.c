@@ -2745,7 +2745,7 @@ extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float);
 extern int scale_game_frames(int);
 extern void build_look_at_matrix(void *, void *, void *, float);
-extern void FUN_L00_0026c6e8(void *, void *);
+extern void spawn_two_point_effect_particle(void *, void *) __asm__("FUN_L00_0026c6e8");
 extern void mine_camera_blast(int, void *, int, int) __asm__("FUN_L00_002d3838");
 extern char D_L14_001D88D0[] __asm__("D_L14_001D88D0");
 extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
@@ -2804,7 +2804,7 @@ void FUN_L14_002b5968(struct Moby *moby, float *point, float angle) {
         effect_spawn_position[0] = original_pos[0] + randf_sym(0.0f, 0.2f);
         effect_spawn_position[1] = original_pos[1] + randf_sym(0.0f, 0.2f);
         effect_spawn_position[2] = original_pos[2] + randf_sym(0.0f, 0.2f);
-        FUN_L00_0026c6e8(effect_spawn_position, direction);
+        spawn_two_point_effect_particle(effect_spawn_position, direction);
     }
     mine_camera_blast((int)D_L14_001D88D0, original_pos, 0, 0);
 }

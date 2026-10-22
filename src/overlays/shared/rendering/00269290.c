@@ -1346,8 +1346,10 @@ E0026c6e8 *FUN_L00_002678b8_u(s32) __asm__("FUN_L00_002678b8");
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-void FUN_L00_0026c6e8(void *pos, void *vel);
-void FUN_L00_0026c6e8(void *spawn_position, void *initial_velocity) {
+void spawn_two_point_effect_particle(void *spawn_position, void *initial_velocity) __asm__("FUN_L00_0026c6e8");
+
+void spawn_two_point_effect_particle(void *pos, void *vel) __asm__("FUN_L00_0026c6e8");
+void spawn_two_point_effect_particle(void *spawn_position, void *initial_velocity) {
     E0026c6e8 *particle = FUN_L00_002678b8_u(0x13);
     u32 initial_packed_color;
     if (particle == 0)
