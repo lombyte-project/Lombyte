@@ -21,7 +21,9 @@ extern char *D_001413D0 __attribute__((section(".data")));
 extern float D_0015ED6C;
 extern unsigned char *FUN_L06_00300c60(char *, float *, float *);
 
-void FUN_L06_002d8178(void *moby_ptr, void *target_ptr) {
+void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) __asm__("FUN_L06_002d8178");
+
+void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
     int i;
     int j;
     char *moby = moby_ptr;
@@ -116,7 +118,7 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_L00_001fefc8(void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void FUN_L06_002d8178(void *, void *);
+extern void destroy_gadgebot_spawn_container(void *, void *) __asm__("FUN_L06_002d8178");
 extern void FUN_L06_002d8738_u(char *) __asm__("FUN_L06_002d8738");
 extern void enqueue_callback_list_1(int, int) __asm__("FUN_001f4600");
 
@@ -146,7 +148,7 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
         color_pulse_value = (fast_sin(color_pulse_value) + 1.0f) * 0.5f;
         *(int *)(moby + 0x90) = fast_tween_color(0x80464646, 0x80828282, color_pulse_value);
         if (hit_record != 0) {
-            FUN_L06_002d8178(moby, hit_record);
+            destroy_gadgebot_spawn_container(moby, hit_record);
         }
         if (moby[0x31] != 0) {
             enqueue_callback_list_1((int)FUN_L06_002d8738_u, (int)moby);
