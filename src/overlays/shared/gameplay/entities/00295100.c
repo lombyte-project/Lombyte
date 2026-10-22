@@ -1078,7 +1078,9 @@ extern char D_0013D1D0[];
 extern s32 D_L00_00173BF0[];
 extern void FUN_0022ca50(void);
 
-void FUN_L00_00299c48(void) {
+void update_slideshow(void) __asm__("FUN_L00_00299c48");
+
+void update_slideshow(void) {
     s32 skip_check;
     s32 i;
     s32 *src;
