@@ -1071,7 +1071,9 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-char *FUN_L11_00318d10(char *source_moby, void *pos, int ticks) {
+char *spawn_class_511_moby_with_sparks(char *source_moby, void *pos, int ticks) __asm__("FUN_L11_00318d10");
+
+char *spawn_class_511_moby_with_sparks(char *source_moby, void *pos, int ticks) {
     char *mob = func_0020D348_m(0x511);
     if (mob != 0) {
         char *moby_vars;
