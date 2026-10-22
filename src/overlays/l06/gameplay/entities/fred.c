@@ -6500,7 +6500,7 @@ extern int jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern int FUN_L00_00211250(void);
 extern void FUN_001f4600(int, char *) __asm__("FUN_L06_00210fc8");
-extern void FUN_L06_003021d8(char *);
+extern void draw_pulsing_timer_display(char *) __asm__("FUN_L06_003021d8");
 extern void allocate_voice_for_group_entry(int, int, int) __asm__("FUN_0022dba0");
 extern void set_moby_list_state_4(int) __asm__("FUN_L06_002f45f0");
 extern void FUN_L00_002eac18(int);
@@ -6627,7 +6627,7 @@ void FUN_L06_00301b90(unsigned char *moby) {
             D_L06_00167400[88] = 0.4f;
             ((int *)D_L06_00167400)[90] = scale_game_frames(60);
         }
-        if (D_L06_0015F5C4 == 0) FUN_001f4600((int)FUN_L06_003021d8, (char *)moby);
+        if (D_L06_0015F5C4 == 0) FUN_001f4600((int)draw_pulsing_timer_display, (char *)moby);
         if (hero.state.current == 0x72) { moby[0x20] = 6; return; }
         if (D_L06_0015F5C4 != 0) return;
         if (fast_dec_timer(moby_vars + 0xB4) == 0) return;

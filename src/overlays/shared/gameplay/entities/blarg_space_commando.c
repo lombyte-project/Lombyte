@@ -1034,7 +1034,9 @@ extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) 
 #define W(x) (*(int *)&(x))
 
 /* Draws the level timer as "H:MM:SS.t" text with a pulsing colour. */
-void FUN_L06_003021d8(char *moby) {
+void draw_pulsing_timer_display(char *moby) __asm__("FUN_L06_003021d8");
+
+void draw_pulsing_timer_display(char *moby) {
     char timer_text[8];
     char *data = *(char **)(moby + 0x78);
     float color_blend_factor;
