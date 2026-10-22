@@ -1435,16 +1435,16 @@ void sand_mouse_update(struct Moby *moby) {
         initialize_mover_2e3f20((char *)&mover_2e3f20);
         {
             int kind;
-            float len;
+            float collision_probe_extent;
             int flag;
-            rig_probe_setup(moby, 0, &kind, va, &len, &flag);
+            rig_probe_setup(moby, 0, &kind, va, &collision_probe_extent, &flag);
             mover_2e3f20.yaw_speed = frame_scale * 0.4f;
             mover_2e3f20.unk8 = 0.15f;
             mover_2e3f20.unkC = 0.15f;
             mover_2e3f20.unk10 = frame_scale * 0.01f;
             mover_2e3f20.unk24 = frame_time * 2.7f;
             mover_2e3f20.unk1C = frame_scale * 0.01f;
-            mover_2e3f20.unk0 = truncate_float_to_s32(len * 1024.0f) + 1;
+            mover_2e3f20.unk0 = truncate_float_to_s32(collision_probe_extent * 1024.0f) + 1;
             mover_2e3f20.unk38 |= 8;
             mover_2e3f20.unk4 = 0.3f;
             mover_2e3f20.unk30 = 0.005f;
