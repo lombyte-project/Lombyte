@@ -579,7 +579,7 @@ void big_axebot_update(M_B7B0 *moby) {
     };
     D_B7B0 *data = moby->data;
     T_B7B0 tg;
-    V4_B7B0 prev;
+    V4_B7B0 initial_position_snapshot;
     V4_B7B0 dest;
     V4_B7B0 tpos;
     V4_B7B0 vector_quaternion_scratch;
@@ -617,7 +617,7 @@ void big_axebot_update(M_B7B0 *moby) {
             data->f424->f34 &= ~0x41;
         }
     }
-    qcopy(prev, moby->pos);
+    qcopy(initial_position_snapshot, moby->pos);
     qcopy(dest, moby->pos);
     qcopy(tpos, tg.pos);
     if (moby->f31 != 0) {
@@ -628,7 +628,7 @@ void big_axebot_update(M_B7B0 *moby) {
     }
     fast_dec_timer_s16(&data->f404);
     if (moby->state != 10 && moby->state != 0) {
-        int tmp;
+        int unused_hit_reaction_output;
         float dmg;
         Hit_B7B0 *hit;
         int hit_reaction_result;
@@ -636,7 +636,7 @@ void big_axebot_update(M_B7B0 *moby) {
 
         dmg = 0.0f;
         hit = (Hit_B7B0 *)find_moby_hit(moby, 0x210000, 0);
-        hit_reaction_result = hit_reaction(moby, hit, &data->hp, 0, &tmp, &dmg, 0, 4);
+        hit_reaction_result = hit_reaction(moby, hit, &data->hp, 0, &unused_hit_reaction_output, &dmg, 0, 4);
         if (hit != 0 && dmg != 0.0f && moby->state != 0) {
             if (hit->att != 0) {
                 struct Hero *h = &hero;
@@ -1002,12 +1002,12 @@ void big_axebot_update(M_B7B0 *moby) {
                 FUN_L04_002ba448_c(moby, 1.5f);
                 moby->state = 7;
             } else if (moby->f53 == 8 && (hd < 28.0f || moby->f52 != moby->f53)) {
-                float lim = frame_scale * 0.11111111f;
+                float hit_recovery_displacement_limit = frame_scale * 0.11111111f;
 
-                if (data->f418 < lim) {
+                if (data->f418 < hit_recovery_displacement_limit) {
                     data->f418 += frame_time_sq * 20.0f;
                 } else {
-                    data->f418 = lim;
+                    data->f418 = hit_recovery_displacement_limit;
                 }
                 FUN_L00_0025c698_cf(vector_quaternion_scratch, data->f418, data->f414, moby->rot[1]);
                 FUN_L00_00258490_cf(moby->pos, moby->pos, vector_quaternion_scratch);
