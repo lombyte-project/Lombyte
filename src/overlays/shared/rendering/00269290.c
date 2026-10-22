@@ -2427,7 +2427,9 @@ extern void vadd_26eb88(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float dist_26eb88(void *, void *) __asm__("FUN_001f9b48");
 extern float D_L00_001601F4 __attribute__((sda));
 extern float D_L00_001601F8 __attribute__((sda));
-void FUN_L00_0026eb88(unsigned char *particle) {
+void update_target_relative_two_point_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026eb88");
+
+void update_target_relative_two_point_effect_particle(unsigned char *particle) {
     OvlQuad position_scratch;
     OvlQuad target_offset_scratch[1];
     unsigned char *target_object = *(unsigned char **)(particle + 0x30);
