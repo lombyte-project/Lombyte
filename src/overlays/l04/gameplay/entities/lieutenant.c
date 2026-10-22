@@ -180,7 +180,9 @@ extern Moby *D_L04_00160058_2E57F8 __asm__("D_L04_0015FFD8");
 extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern s32 D_0015EEAC_macro __asm__("D_0015EEAC") MACRO_ADDR;
-void FUN_L04_002e4418(Moby *moby) {
+void update_eudora_tutorial_hints_and_stats(Moby *moby) __asm__("FUN_L04_002e4418");
+
+void update_eudora_tutorial_hints_and_stats(Moby *moby) {
     enum {
         TUTORIAL_TRIGGER_STATE_INITIALIZE = 0,
         TUTORIAL_TRIGGER_STATE_UPDATE_HINTS_AND_STATS = 1
