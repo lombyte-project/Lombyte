@@ -2673,7 +2673,7 @@ extern int D_L18_0016238C __attribute__((sda));
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F72E0) */
 void FUN_L18_002f5e80(char *moby) {
     char *boss_data = *(char **)(moby + 0x78);
-    int res;
+    int hit_processing_status;
     float step;
     char *hit_record;
     int crossed = 0;
@@ -2701,8 +2701,8 @@ void FUN_L18_002f5e80(char *moby) {
             }
         }
     }
-    moby_take_hits_5e80(moby, hit_record, boss_data + 0x20, 0, &res, &step, 0, 4);
-    if (res != 1) {
+    moby_take_hits_5e80(moby, hit_record, boss_data + 0x20, 0, &hit_processing_status, &step, 0, 4);
+    if (hit_processing_status != 1) {
         int type = *(unsigned char *)(moby + 0x20);
         if ((type >= 0xC && type <= 0x13) || type == 2) {
             char *o = *(char **)(hit_record + 0x20);
@@ -2834,7 +2834,7 @@ void FUN_L18_002f5e80(char *moby) {
                 int previous_phase_index;
                 int k;
                 int *next_phase_path;
-                float ang;
+                float previous_arena_node_yaw;
                 moby[0x20] = 3;
                 previous_phase_index = *(int *)(boss_data + 0x34C);
                 k = previous_phase_index + 1;
@@ -2850,12 +2850,12 @@ void FUN_L18_002f5e80(char *moby) {
                 ((VendorStage_5e80 *)boss_data)->f300[2] = 0;
                 add_vector_5e80(boss_data + 0x300, boss_data + 0x300, D_L18_001600EC + (((VendorStage_5e80 *)boss_data)->f250[*(int *)(boss_data + 0x34C) - 1] << 7) + 0x30);
                 clear_vector_5e80(boss_data + 0x310);
-                ang = atan2_5e80(((VendorNode_5e80 *)D_L18_001600EC)[((VendorStage_5e80 *)boss_data)->f250[*(int *)(boss_data + 0x34C) - 1]].pos[0] - *(float *)(boss_data + 0x300),
+                previous_arena_node_yaw = atan2_5e80(((VendorNode_5e80 *)D_L18_001600EC)[((VendorStage_5e80 *)boss_data)->f250[*(int *)(boss_data + 0x34C) - 1]].pos[0] - *(float *)(boss_data + 0x300),
                                  ((VendorNode_5e80 *)D_L18_001600EC)[((VendorStage_5e80 *)boss_data)->f250[*(int *)(boss_data + 0x34C) - 1]].pos[1] - *(float *)(boss_data + 0x304));
-                *(float *)(boss_data + 0x318) = ang;
+                *(float *)(boss_data + 0x318) = previous_arena_node_yaw;
                 qcopy(V50, boss_data + 0x300);
                 f20 = 20.0f;
-                V50[0] += fast_cos_5e80(ang) * f20;
+                V50[0] += fast_cos_5e80(previous_arena_node_yaw) * f20;
                 V50[1] += fast_sin_5e80(*(float *)(boss_data + 0x318)) * f20;
                 V50[2] += 3.0f;
                 qcopy(V90, ((VendorNode_5e80 *)D_L18_001600EC)[((VendorStage_5e80 *)boss_data)->f228[*(int *)(boss_data + 0x34C) - 1]].pos);
