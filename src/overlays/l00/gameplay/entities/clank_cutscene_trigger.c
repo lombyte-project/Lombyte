@@ -13,7 +13,9 @@ void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 extern void update_sky_shells_static(void) __asm__("FUN_L00_002892d0");
-extern void FUN_L00_00289330(void);
+void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00289330");
+
+extern void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00289330");
 extern void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
 extern void FUN_L00_002895a0(void);
 extern void FUN_L00_002899a8(void);
@@ -60,7 +62,7 @@ void FUN_L00_0023d968(void) {
     setup_sky_gif_paging();
     switch (current_level_index) {
     case LEVEL_WITH_SKY_PARTICLES_AND_ROTATING_SHELL:
-        FUN_L00_00289330();
+        draw_sky_shells_with_particles_and_rotating_shell();
         break;
     case LEVEL_WITH_THREE_SKY_SHELL_ROTATION_RATES:
         update_sky_shells_animated();
@@ -246,7 +248,7 @@ extern void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 extern void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-void FUN_L00_00289330(void) {
+void draw_sky_shells_with_particles_and_rotating_shell(void) {
     SkyRotVec sky_shell_rotation_radians;
 
     *(short *)(D_L00_0016051C + 4) = 0;
