@@ -481,7 +481,7 @@ extern void reset_hero_to_idle(void) __asm__("FUN_L00_00204f80");
 extern void FUN_L00_0024a798(int, int);
 extern void FUN_L00_00250df8(void *);
 extern void resolve_lookup_record(short *) __asm__("FUN_L00_0028df58");
-extern void FUN_L00_0028e180();
+extern void update_moby_proximity_interaction() __asm__("FUN_L00_0028e180");
 extern void initialize_moby_state_record(char *) __asm__("FUN_L00_0028e8a0");
 extern void FillTransferWords(void *, s32, s32);
 extern void FlushCache(s32);
@@ -1479,7 +1479,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             m->f14 = ship[1];
             m->f18 = ship[2];
             rot = ship[3];
-            m->f74 = FUN_L00_0028e180;
+            m->f74 = update_moby_proximity_interaction;
             m->f32 = 0xFF;
             m->f48 = rot;
             m->f30 = 0x10;

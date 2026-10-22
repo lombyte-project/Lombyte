@@ -28,7 +28,9 @@ extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
-void FUN_L00_0028e180(unsigned char *moby) {
+void update_moby_proximity_interaction(unsigned char *moby) __asm__("FUN_L00_0028e180");
+
+void update_moby_proximity_interaction(unsigned char *moby) {
     char *proximity_state_data = *(char **)(moby + 0x78);
     float *moby_position;
     float proximity_test_position[4];

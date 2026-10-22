@@ -16,7 +16,7 @@
 
 extern char D_0013E030_c[] __asm__("D_0013E030");
 extern void FUN_L00_0028e990_c(void) __asm__("FUN_L00_0028e990");
-extern void FUN_L00_0028e180(void);
+extern void update_moby_proximity_interaction(void) __asm__("FUN_L00_0028e180");
 void set_moby_animation(struct Obj *o, s32 sel, s32 idx) __asm__("FUN_00212ed8");
 
 extern s32 D_L00_00160540_gp __asm__("D_L00_00160540") __attribute__((sda));
@@ -37,7 +37,7 @@ void initialize_moby_state_record(char *moby) {
     moby_state_record = D_0013E030_c;
     *(short *)(moby_state_record + 0x26) = *(unsigned short *)(moby + 0xA6) - 0x213;
     *(char **)moby_state_record = moby;
-    *(void **)(moby + 0x74) = FUN_L00_0028e180;
+    *(void **)(moby + 0x74) = update_moby_proximity_interaction;
     *(unsigned short *)(moby + 0x34) &= 0xFFFC;
     *(int *)(moby + 0x94) = *(int *)(*(int *)(moby + 0x24) + 0x10);
     set_moby_animation(moby, 1, 0);
