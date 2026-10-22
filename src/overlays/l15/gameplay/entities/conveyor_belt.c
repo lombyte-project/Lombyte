@@ -2165,7 +2165,9 @@ extern int FUN_L00_0025fa38(void *p, int i);
 extern int FUN_L00_0025faf0(float *p, int idx);
 
 extern char *D_L15_0015EF48[] __attribute__((section(".sdata")));
-int FUN_L15_002f85a8(char *moby) {
+int is_hero_in_moby_follow_camera_region(char *moby) __asm__("FUN_L15_002f85a8");
+
+int is_hero_in_moby_follow_camera_region(char *moby) {
     int *slot_data = *(int **)(D_L15_0015EF48[2] + *(short *)(moby + 0x84) * 32 + 0x1C);
     int r;
     int i;
@@ -2290,7 +2292,7 @@ void FUN_L15_002f88e8(char *moby) {
         *(short *)(slot_data + 0x20) = 0;
         return;
     }
-    if (FUN_L15_002f85a8(moby) == 0) {
+    if (is_hero_in_moby_follow_camera_region(moby) == 0) {
         *(short *)(slot_data + 0x20) = 0;
         FUN_L00_002e8388(moby);
         return;
