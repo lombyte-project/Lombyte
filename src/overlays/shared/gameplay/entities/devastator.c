@@ -3730,7 +3730,9 @@ extern s32 FUN_L00_0020d498_4198(s32) __asm__("FUN_L00_0020d498");
 extern void FUN_0020c828_4198(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_002b3c50_4198(void *) __asm__("FUN_L00_002b3c50");
 
-void FUN_L00_002b4198(void *moby) {
+void update_beam_effect_lifecycle(void *moby) __asm__("FUN_L00_002b4198");
+
+void update_beam_effect_lifecycle(void *moby) {
     enum {
         STATE_INITIALIZE = 0,
         STATE_WAIT_FOR_BEAM = 1,
