@@ -2212,7 +2212,9 @@ extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float FUN_001f99c0(float);
 
-int FUN_L15_002f8698(char *moby, float projected_angle_limit_degrees, float b) {
+int check_moby_target_angular_limits(char *moby, float projected_angle_limit_degrees, float b) __asm__("FUN_L15_002f8698");
+
+int check_moby_target_angular_limits(char *moby, float projected_angle_limit_degrees, float b) {
     float target_displacement[4];
     float scaled_axis_vector[4];
     float target_axis_residual[4];
@@ -2312,7 +2314,7 @@ void FUN_L15_002f88e8(char *moby) {
     else if (D_0013C940_s.y != 0.0f)
         *(short *)(slot_data + 0x20) = hold_start_frames;
     if (*(short *)(slot_data + 0x20) >= hold_start_frames) {
-        if (++*(int *)(slot_data + 0x3C) >= cone_check_delay_frames && FUN_L15_002f8698(moby, 30.0f, 0.0f))
+        if (++*(int *)(slot_data + 0x3C) >= cone_check_delay_frames && check_moby_target_angular_limits(moby, 30.0f, 0.0f))
             *(short *)(slot_data + 0x20) = cycle_reset_frames;
         else
             done = 0;
