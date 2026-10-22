@@ -437,7 +437,9 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00314D00), where it is exact; names translated to the US level program. */
 
-void FUN_L07_00313920(float *out, float value) {
+void add_random_xy_offset(float *out, float value) __asm__("FUN_L07_00313920");
+
+void add_random_xy_offset(float *out, float value) {
     float neg = -value;
     out[0] += random_float_between(neg, value);
     out[1] += random_float_between(neg, value);
@@ -1575,7 +1577,7 @@ void snagglebeast_update(unsigned char *moby) {
                                 d1 = vector_distance(((char *)&hero) + 0x80, &start);
                                 moby_to_sample_distance = vector_distance(moby + 0x10, &start);
                             } while (d1 < 8.0f || moby_to_sample_distance < 12.0f);
-                            FUN_L07_00313920((float *)&start, 0.5f);
+                            add_random_xy_offset((float *)&start, 0.5f);
                             subtract_vector_xyz(&direction, &start, ((char *)&hero) + 0x80);
                             zv = start.f[2];
                             normalize_vector_xyz(&direction, &direction, 0.9f);
