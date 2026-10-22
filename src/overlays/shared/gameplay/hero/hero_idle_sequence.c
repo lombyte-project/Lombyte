@@ -1091,7 +1091,7 @@ void hero_update(void) __asm__("FUN_L00_00211670");
 void FUN_L00_0020b960(void);
 void FUN_L00_0020bed0_u(void) __asm__("FUN_L00_0020bed0");
 void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
-void FUN_L00_0020d330(void);
+void update_hero_offset_rail_candidate(void) __asm__("FUN_L00_0020d330");
 void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
 void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 void FUN_L00_0020b1d8_u(void) __asm__("FUN_L00_0020b1d8");
@@ -1142,7 +1142,7 @@ void FUN_L00_002070d0(void) {
     FUN_L00_0020b960();
     FUN_L00_0020bed0_u();
     find_grind_rail();
-    FUN_L00_0020d330();
+    update_hero_offset_rail_candidate();
     hero_update_transitions();
     if (hero_state->vehicle_mode)
         return;

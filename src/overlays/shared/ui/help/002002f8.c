@@ -28,7 +28,7 @@ extern void FUN_L00_0020a540(void);
 extern void FUN_L00_0020a9e8(void);
 extern void FUN_L00_0020ac98(void);
 extern void FUN_L00_0020b1d8(void);
-extern void FUN_L00_0020d330(void);
+extern void update_hero_offset_rail_candidate(void) __asm__("FUN_L00_0020d330");
 extern void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
 extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void FUN_L00_00214fe8(void);
@@ -65,7 +65,7 @@ void FUN_L03_002002f8(void) {
     hero_update();
     FUN_L01_0022cd48();
     FUN_L01_0022d090();
-    FUN_L00_0020d330();
+    update_hero_offset_rail_candidate();
     FUN_L03_0021c668();
     if (*(unsigned char *)(g + 0x20A4) != 0) {
         return;

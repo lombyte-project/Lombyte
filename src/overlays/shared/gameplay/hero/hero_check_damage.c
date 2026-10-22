@@ -308,7 +308,9 @@ typedef union {
 } Vec4_20d330;
 extern int D_0013CAE4_0020d330[] __asm__("D_0013CAE4");
 void FUN_L00_0020d2f8_0020d330(Vec4_20d330 *) __asm__("FUN_L00_0020d2f8");
-void FUN_L00_0020d330(void) {
+void update_hero_offset_rail_candidate(void) __asm__("FUN_L00_0020d330");
+
+void update_hero_offset_rail_candidate(void) {
     struct Hero *P = &hero;
     Vec4_20d330 rail_query_position, rail_point;
     Vec4_20d330 *pb;
