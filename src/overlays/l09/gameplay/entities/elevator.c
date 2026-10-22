@@ -1213,7 +1213,9 @@ extern char D_L09_002090B0[];
 typedef struct { char pad[0x18]; char *hit; } CollisionState;
 extern CollisionState D_L09_00173FC0;
 
-void FUN_L09_00305a28(struct Moby *moby) {
+void update_damage_causer(struct Moby *moby) __asm__("FUN_L09_00305a28");
+
+void update_damage_causer(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float work[24];
     int i;
