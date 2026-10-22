@@ -2277,7 +2277,7 @@ void horny_toad_update(Moby *moby) {
     };
     ToadVars *data;
     Moby *target;
-    ToadVec v;
+    ToadVec reference_point_or_movement_endpoint;
 
     data = (ToadVars *)moby->pvars;
     FUN_L00_002d5160_2d4610(moby);
@@ -2301,10 +2301,10 @@ void horny_toad_update(Moby *moby) {
         data->unk254 = k * 2.0f;
         data->unk258 = k * 2.9670596f;
         {
-            *(u128 *)v = 0;
-            v[0] = 150.0f;
-            v[1] = 127.0f;
-            if (vector_distance((*(ToadVec *)&moby->pos), v) < 5.0f) {
+            *(u128 *)reference_point_or_movement_endpoint = 0;
+            reference_point_or_movement_endpoint[0] = 150.0f;
+            reference_point_or_movement_endpoint[1] = 127.0f;
+            if (vector_distance((*(ToadVec *)&moby->pos), reference_point_or_movement_endpoint) < 5.0f) {
                 data->unk25C = 0.75f;
             }
         }
@@ -2419,11 +2419,11 @@ void horny_toad_update(Moby *moby) {
         }
         break;
     case HORNY_TOAD_MOVE_TO_POINT_OR_FACE_TARGET: {
-        fast_vec_sub(v, data->unk180, (*(ToadVec *)&moby->pos));
-        v[2] = 0.0f;
-        normalize_vector_xyz(v, v, 2.5f);
-        add_vector_xyz(v, v, (*(ToadVec *)&moby->pos));
-        if (FUN_L00_00261968_2d4610(data->unk1E0, (*(ToadVec *)&moby->pos), v) != 0) {
+        fast_vec_sub(reference_point_or_movement_endpoint, data->unk180, (*(ToadVec *)&moby->pos));
+        reference_point_or_movement_endpoint[2] = 0.0f;
+        normalize_vector_xyz(reference_point_or_movement_endpoint, reference_point_or_movement_endpoint, 2.5f);
+        add_vector_xyz(reference_point_or_movement_endpoint, reference_point_or_movement_endpoint, (*(ToadVec *)&moby->pos));
+        if (FUN_L00_00261968_2d4610(data->unk1E0, (*(ToadVec *)&moby->pos), reference_point_or_movement_endpoint) != 0) {
             approach_angle(&moby->rot.z, angle_atan2((*(ToadVec *)&data->target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&data->target->pos)[1] - (*(ToadVec *)&moby->pos)[1]), &data->turn_speed, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 12.566371f);
             if (moby->anim_flags & 2) {
                 if (moby->prev_seq != random_integer_below(2) + 2) FUN_00212f90_2d4610(moby, random_integer_below(2) + 2, 0, scale_game_frames(20));
