@@ -2645,7 +2645,9 @@ typedef struct {
 
 extern int D_L13_001D3508[];
 extern int D_L13_001D3520[];
-void FUN_L13_002e8920(struct Moby *source_moby, char *emission_gate_data) {
+void emit_gated_moby_joint_effects(struct Moby *source_moby, char *emission_gate_data) __asm__("FUN_L13_002e8920");
+
+void emit_gated_moby_joint_effects(struct Moby *source_moby, char *emission_gate_data) {
     OvlQuad zv;
     float bone_position[4];
     int i;

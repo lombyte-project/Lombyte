@@ -483,7 +483,7 @@ extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00258278(void *moby, float *vel, float target, float k, float d, float max);
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L13_002e8920(void *, void *);
+extern void emit_gated_moby_joint_effects(void *, void *) __asm__("FUN_L13_002e8920");
 extern void splash_L13(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L13_002e8d28(void *, void *);
 extern void FUN_L13_002e9018(void *, void *, float, float);
@@ -1043,7 +1043,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
     if (moby->state >= 2) {
         FUN_L13_002e8d28(moby, data);
         if (moby->state != 8 || scale_game_frames_alt(0x78) < data->iF8) {
-            FUN_L13_002e8920(moby, data);
+            emit_gated_moby_joint_effects(moby, data);
         }
         if (data->snd114 != -1) {
             char *voice = D_0013E633_snd + 0x1D + data->snd114 * 0x70;
