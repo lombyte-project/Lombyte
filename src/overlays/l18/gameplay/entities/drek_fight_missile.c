@@ -551,7 +551,9 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void func_L12_0027C368_v(char *, void *, int) __asm__("FUN_L12_0027b370");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L18_002f16f0(struct Moby *moby) {
+void update_linked_moby_group_transform_and_fall(struct Moby *moby) __asm__("FUN_L18_002f16f0");
+
+void update_linked_moby_group_transform_and_fall(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_APPROACH_TARGET_TRANSFORM = 2,
