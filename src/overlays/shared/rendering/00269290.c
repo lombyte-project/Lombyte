@@ -1978,7 +1978,9 @@ void FUN_L00_0024f7c8_0026dbe0(void *, int, V_0026dbe0 *) __asm__("FUN_L00_0024f
 void FUN_001f9a28_0026dbe0(V_0026dbe0 *, void *, V_0026dbe0 *) __asm__("FUN_001f9a28");
 void FUN_001f9bf8_0026dbe0(V_0026dbe0 *, V_0026dbe0 *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_0026dbe0(void *, V_0026dbe0 *, V_0026dbe0 *) __asm__("FUN_001f9a10");
-void FUN_L00_0026dbe0(unsigned char *particle) {
+void update_source_attached_fading_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026dbe0");
+
+void update_source_attached_fading_effect_particle(unsigned char *particle) {
     E_0026dbe0 *particle_data;
     V_0026dbe0 source_position, position_offset;
     if (particle == 0)
