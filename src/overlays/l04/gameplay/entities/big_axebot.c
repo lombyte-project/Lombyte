@@ -1163,7 +1163,9 @@ extern void engine_voice_set_volume(s32 voice, s32 volume) __asm__("FUN_L01_002a
 extern void engine_voice_set_pitch(s32 voice, s32 pitch) __asm__("FUN_L00_0028df38");
 
 /* Keeps the moby's engine voice playing, easing its volume and pitch toward the animation's levels. */
-void FUN_L04_002c1b80(struct Moby *moby) {
+void update_circular_saw_engine_sound(struct Moby *moby) __asm__("FUN_L04_002c1b80");
+
+void update_circular_saw_engine_sound(struct Moby *moby) {
     enum {
         CIRCULAR_SAW_ANIM_IDLE = 0,
         CIRCULAR_SAW_ANIM_MOVE_FORWARD = 1,
@@ -1553,7 +1555,7 @@ extern void FUN_L00_00261630(char *moby, char *d, float a, float b);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 extern void FUN_L01_0026d930(char *p);
-extern void FUN_L04_002c1b80(struct Moby *);
+extern void update_circular_saw_engine_sound(struct Moby *) __asm__("FUN_L04_002c1b80");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, void *, void *, void *) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -1628,7 +1630,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     qcopy(initial_position_snapshot, moby->pos);
     qcopy(dest, moby->pos);
     moby->f30 = 0x20;
-    FUN_L04_002c1b80((struct Moby *)moby);
+    update_circular_saw_engine_sound((struct Moby *)moby);
     if (moby->state == 1 || moby->state == 3) {
         H_35F0 *h = (H_35F0 *)(((char *)((char *)&hero)));
         if (h->f240 == moby || FUN_001f9b48(moby->pos, h->pos) < 1.5f) {
