@@ -117,7 +117,9 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void advance_moby_animation_alt(void *) __asm__("FUN_0020d580");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L03_00292578(struct Moby *moby, float *pos, float heading) {
+void place_metropolis_train(struct Moby *moby, float *pos, float heading) __asm__("FUN_L03_00292578");
+
+void place_metropolis_train(struct Moby *moby, float *pos, float heading) {
     float start[4];
     float offset[4];
     float delta[4];
@@ -579,7 +581,7 @@ void metropolis_train_locomotive_update(char *moby) {
         break;
     case TRAIN_SETUP_COUPLING_PATH:
         *(OvlQuad *)start = *(OvlQuad *)(D_L03_001B05B0_292e98[data->iA4] + 0x10);
-        FUN_L03_00292578(moby, start, 0.0f);
+        place_metropolis_train(moby, start, 0.0f);
         cdata->i74 = data->iA4;
         cdata->fFC = data->fC0;
         gunship_follow_path(coupling);
@@ -587,7 +589,7 @@ void metropolis_train_locomotive_update(char *moby) {
         break;
     case TRAIN_POSITION_FOR_BOARDING:
         *(OvlQuad *)start = *(OvlQuad *)(D_L03_001B05B0_292e98[data->iA8] + 0x10);
-        FUN_L03_00292578(moby, start, PATH_HEADING(D_L03_001B05B0_292e98[data->iA8]));
+        place_metropolis_train(moby, start, PATH_HEADING(D_L03_001B05B0_292e98[data->iA8]));
         moby[0xBC] = 3;
         cdata->i74 = data->iA4;
         cdata->path = D_L03_001B05B0_292e98[cdata->i74];
@@ -689,7 +691,7 @@ void metropolis_train_locomotive_update(char *moby) {
         D_L03_001600EC_292e98[tdb->i28].v70[2] = PATH_HEADING(D_L03_001B05B0_292e98[data->iAC]);
         tdb->i2C = scale_game_frames(10000);
         *(OvlQuad *)start = *(OvlQuad *)(D_L03_001B05B0_292e98[data->iAC] + 0x10);
-        FUN_L03_00292578(moby, start, PATH_HEADING(D_L03_001B05B0_292e98[data->iAC]));
+        place_metropolis_train(moby, start, PATH_HEADING(D_L03_001B05B0_292e98[data->iAC]));
         cdata->i74 = data->iAC;
         cdata->i60 = 1;
         cdata->fF0 = 1.0f;
