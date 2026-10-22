@@ -50,7 +50,9 @@ extern float D_L03_00161B00 __attribute__((sda));
 extern void FUN_L00_00262b00(float, float, char *, float *, float *);
 extern void FUN_L00_00262b80(char *, char *, char *, float, float, float);
 
-void FUN_L03_002d3c40(struct Moby *taxi_moby) {
+void update_taxi_bobbing_and_rocking(struct Moby *taxi_moby) __asm__("FUN_L03_002d3c40");
+
+void update_taxi_bobbing_and_rocking(struct Moby *taxi_moby) {
     char *moby_vars = (char *)taxi_moby->pvars;
     FUN_L00_00262b00(D_L03_00161AF0, D_L03_00161AF4 * DEG_TO_RAD * frame_time, taxi_moby,
                      (float *)(moby_vars + 0xEC), (float *)(moby_vars + 0xE8));
@@ -901,7 +903,7 @@ void FUN_L03_002d3198(struct Moby *taxi_moby) {
         }
         break;
     }
-    FUN_L03_002d3c40(taxi_moby);
+    update_taxi_bobbing_and_rocking(taxi_moby);
     taxi_vec_sub(&move, &taxi_moby->pos, &oldPos);
     update_entity_matrix(taxi_vars->coll, &move, &oldRot, &taxi_moby->rot);
 }
