@@ -108,6 +108,8 @@ void update_attached_rocket(struct Moby *moby) __asm__("FUN_L13_00305a58");
 void update_attached_rocket(struct Moby *moby) __asm__("FUN_L13_00305a58");
 void spawn_attached_rocket_non_damaging_explosion(struct Moby *moby) __asm__("FUN_L13_00306148");
 
+void spawn_attached_rocket_explosion(struct Moby *moby) __asm__("FUN_L13_003060b8");
+
 void update_attached_rocket(struct Moby *moby) {
     extern struct { char pad[0x18]; struct Moby *moby; int pad1; L13Vector_5a58 pos; L13Vector_5a58 pad2; L13Vector_5a58 matrix; } D_L13_00174140;
     extern int D_L13_0015F580;
@@ -190,7 +192,7 @@ void update_attached_rocket(struct Moby *moby) {
                 FUN_L07_0029a2a0(&moby->pos, &work.direction);
             }
         }
-        FUN_L13_003060b8(moby);
+        spawn_attached_rocket_explosion(moby);
         goto remove;
     }
     if (collision_line(&work.old_pos, &moby->pos, stationary,
@@ -226,7 +228,7 @@ void update_attached_rocket(struct Moby *moby) {
 special:
         spawn_attached_rocket_non_damaging_explosion(moby);
     } else {
-        FUN_L13_003060b8(moby);
+        spawn_attached_rocket_explosion(moby);
     }
     }
 remove:
@@ -249,7 +251,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00307550), where it is exact; names translated to the US level program. */
 
-void FUN_L13_003060b8(struct Moby *moby) {
+void spawn_attached_rocket_explosion(struct Moby *moby) {
     char vector[16];
     clear_u64_value(vector);
     func_L00_0025F4A8_alt(moby, vector, &moby->pos, 2.0f, 1.0f, 12, 4, 18, 4.0f, 3.0f, 1.0f, 2.0f,
