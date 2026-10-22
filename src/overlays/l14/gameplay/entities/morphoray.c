@@ -353,7 +353,9 @@ extern void FUN_L10_002f5a50(int);
 void save_and_lower_unlock_sequence_mobys(struct Moby *moby) __asm__("FUN_L14_00305600");
 
 extern void save_and_lower_unlock_sequence_mobys(struct Moby *) __asm__("FUN_L14_00305600");
-extern void FUN_L14_00305680(struct Moby *);
+void raise_unlock_sequence_mobys(struct Moby *moby) __asm__("FUN_L14_00305680");
+
+extern void raise_unlock_sequence_mobys(struct Moby *) __asm__("FUN_L14_00305680");
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Moby that unlocks once: skips straight to done if this level already recorded it, otherwise waits for its trigger moby to reach state 2, records the unlock in the level's bit sets and runs a countdown. */
@@ -397,7 +399,7 @@ void FUN_L14_00305408(unsigned char *moby) {
         break;
     case UNLOCK_SEQUENCE_COUNTDOWN:
         fast_dec_timer(&unlock_sequence_data[1]);
-        FUN_L14_00305680((char *)moby);
+        raise_unlock_sequence_mobys((char *)moby);
         if (unlock_sequence_data[1] == 0) {
             moby[0x20] = 3;
         }
@@ -429,7 +431,7 @@ extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 
 /* Per-frame update: slides each listed part toward a rest height by a factor from the moby's animation value. */
-void FUN_L14_00305680(struct Moby *moby) {
+void raise_unlock_sequence_mobys(struct Moby *moby) {
     int *unlock_sequence_data = (int *)moby->pvars;
     short *moby_id_cursor = (short *)D_L14_001ABF40[unlock_sequence_data[0]];
     float height_blend_factor;
