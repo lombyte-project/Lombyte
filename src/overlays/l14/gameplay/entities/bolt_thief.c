@@ -242,7 +242,7 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void FUN_L14_002ffc08(void *);
 extern void initialize_moby_path_state(void *) __asm__("FUN_L14_002fe900");
 extern void update_linked_moby_position(void *) __asm__("FUN_L14_002fec28");
-extern void FUN_L14_002feca8(void *);
+extern void emit_moby_offset_particles(void *) __asm__("FUN_L14_002feca8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void FUN_L00_00258278(char*,float,float*,float,float,float);
@@ -331,7 +331,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         FUN_L00_00258278((char *)moby,
                                  fast_arc_tan(player->motion.pos.f[0] - moby->position[0], player->motion.pos.f[1] - moby->position[1]),
                                  &moby_data->turn, 0.005f, 0.2f, 0.0f);
-        FUN_L14_002feca8(moby);
+        emit_moby_offset_particles(moby);
         break;
     }
     case BOLT_THIEF_STATE_WAIT_FOR_TRIGGER:
@@ -355,7 +355,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
             moby->state = 3;
             blend_moby_animation(moby, 3, 0, 5);
         }
-        FUN_L14_002feca8(moby);
+        emit_moby_offset_particles(moby);
         break;
     case BOLT_THIEF_STATE_SETTLE_AT_PATH_END: {
         L16CrateData *settle_data = moby->data;
@@ -386,7 +386,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
                 settle_data->counter = 0;
             }
         }
-        FUN_L14_002feca8(moby);
+        emit_moby_offset_particles(moby);
         break;
     }
     case BOLT_THIEF_STATE_FOLLOW_SECONDARY_PATH:
@@ -404,7 +404,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
             moby->rotation[2] = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
                                                *(float *)(path + 0x24) - *(float *)(path + 0x14));
         } else {
-            FUN_L14_002feca8(moby);
+            emit_moby_offset_particles(moby);
         }
         break;
     case BOLT_THIEF_STATE_KNOCKBACK:

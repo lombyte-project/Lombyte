@@ -1859,7 +1859,9 @@ extern float D_L14_00161FD0 __attribute__((sda));
 extern float D_L14_00161FD4 __attribute__((sda));
 extern float D_L14_00161FD8 __attribute__((sda));
 extern int D_L14_00161FE4 __attribute__((sda));
-void FUN_L14_002feca8(unsigned char *moby) {
+void emit_moby_offset_particles(unsigned char *moby) __asm__("FUN_L14_002feca8");
+
+void emit_moby_offset_particles(unsigned char *moby) {
     float emission_position_offset[4];
     float particle_spawn_position[4];
     int i;
