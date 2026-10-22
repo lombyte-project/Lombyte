@@ -1564,7 +1564,9 @@ void FUN_001f9ad8_2ec4a8(void *, void *, void *) __asm__("FUN_001f9ad8");
 void FUN_00214890_2ec4a8(void *, void *, void *, float) __asm__("FUN_00214890");
 
 extern u8 D_L00_00166E30_lui[] __asm__("D_L00_00166E30") __attribute__((section(".data")));
-void FUN_L00_002ec4a8(unsigned char *camera_object) {
+void turn_camera_view_toward_hero(unsigned char *camera_object) __asm__("FUN_L00_002ec4a8");
+
+void turn_camera_view_toward_hero(unsigned char *camera_object) {
     V_2ec4a8 raised_hero_position;
     V_2ec4a8 target_view_direction;
     V_2ec4a8 x;
