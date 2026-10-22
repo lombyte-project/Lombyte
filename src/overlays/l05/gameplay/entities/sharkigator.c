@@ -2798,7 +2798,7 @@ extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L05_00306d30_c(char *moby, int idx, float *out) __asm__("FUN_L05_00306d30");
-extern void FUN_L05_00307010(char *moby);
+extern void add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L05_00306e10_c(char *obj) __asm__("FUN_L05_00306e10");
 void FUN_L05_00307358_c(char *moby) __asm__("FUN_L05_00307358");
@@ -2899,7 +2899,7 @@ void skid_mcmarx_update(Moby *moby) {
             int j;
 
             FUN_L05_00306e10_c((char *)moby);
-            FUN_L05_00307010((char *)moby);
+            add_moby_frames_for_group_proximity((char *)moby);
             FUN_L05_00307358_c((char *)moby);
             if (data->jump_frames != 0) {
                 data->jump_frames++;

@@ -395,7 +395,9 @@ extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void subtract_vector_xyz(void *, void *, void *);
 
-void FUN_L05_00307010(char *moby) {
+void add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
+
+void add_moby_frames_for_group_proximity(char *moby) {
     char *data = *(char **)(moby + 0x78);
     struct Hero *player_hero = &hero;
     float position_delta[4];

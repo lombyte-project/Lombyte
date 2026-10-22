@@ -2363,7 +2363,7 @@ extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__(
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
 extern int FUN_L00_0025e3b8(int);
-extern int FUN_L05_00307010();
+extern int add_moby_frames_for_group_proximity() __asm__("FUN_L05_00307010");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D4DF __attribute__((section(".data")));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -2510,7 +2510,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         }
         moby[0xA4] = 255;
         advance_hoverboard_dummy_path_node((char *)moby);
-        FUN_L05_00307010((char *)moby);
+        add_moby_frames_for_group_proximity((char *)moby);
         prepare_hoverboard_dummy_path_jump((char *)moby);
         if (*(int *)(hoverboard_dummy_data + 0x2E4) != 0) {
             (*(int *)(hoverboard_dummy_data + 0x2E4))++;
