@@ -1421,7 +1421,9 @@ extern void FUN_L01_0026d930(char *p);
 extern void reset_shot_tracking(char *moby) __asm__("FUN_L02_00264e40");
 extern void FUN_L02_00264e70(void *, void *, void *, float);
 extern void collect_mobies_around_tracked_objects(char **slots, int a, int b) __asm__("FUN_L02_002651d0");
-extern void FUN_L02_002d85b8(void *);
+void handle_level02_bot_damage_and_retargeting(void *owner_moby) __asm__("FUN_L02_002d85b8");
+
+extern void handle_level02_bot_damage_and_retargeting(void *) __asm__("FUN_L02_002d85b8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_c3(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
@@ -1472,7 +1474,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x18;
     }
-    FUN_L02_002d85b8(moby);
+    handle_level02_bot_damage_and_retargeting(moby);
     switch (moby->state) {
     case L02_BOT_INITIALIZE:
         if (rand() & 1) {
@@ -1785,7 +1787,7 @@ typedef struct {
 } Vars85b8;
 
 /* Hit reaction: takes damage, flinches or dies (knocked away from the hero), then retargets. */
-void FUN_L02_002d85b8(void *owner_moby) {
+void handle_level02_bot_damage_and_retargeting(void *owner_moby) {
     char *moby = owner_moby;
     Vars85b8 *moby_vars = *(Vars85b8 **)(moby + 0x78);
     char *hit_record;
