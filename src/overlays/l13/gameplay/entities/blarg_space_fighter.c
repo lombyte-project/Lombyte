@@ -1818,7 +1818,7 @@ extern int start_moby_voice(int, int, void *) __asm__("FUN_L13_00297fa0");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
 extern void spawn_particle(void *, int, int, int, float, int, float) __asm__("FUN_L00_00269b70");
-extern char *FUN_L13_0030bfb0(char *, void *, float);
+extern char *spawn_scaled_owned_moby(char *, void *, float) __asm__("FUN_L13_0030bfb0");
 extern void set_voice_position(int, void *) __asm__("FUN_L13_002982e8");
 extern int D_0014C190[];
 
@@ -1866,7 +1866,7 @@ void forcefield_tower_update(struct Moby *moby) {
         }
         moby_point_position(moby, 0, position);
         position[2] += 1.1f;
-        FUN_L13_0030bfb0((char *)moby, position, 2.7f);
+        spawn_scaled_owned_moby((char *)moby, position, 2.7f);
         *(unsigned short *)(moby_bytes + 0x34) &= 0xEFFF;
         return;
     }

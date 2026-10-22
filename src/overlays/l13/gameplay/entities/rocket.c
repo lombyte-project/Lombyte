@@ -2369,7 +2369,9 @@ void FUN_L13_0030be60(struct Moby *moby) {
 extern char *func_0020D348_m(int);
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L13_0030bfb0(char *owner, void *position, float scale) {
+char *spawn_scaled_owned_moby(char *owner, void *position, float scale) __asm__("FUN_L13_0030bfb0");
+
+char *spawn_scaled_owned_moby(char *owner, void *position, float scale) {
     char *moby = func_0020D348_m(0x660);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
