@@ -352,7 +352,9 @@ void FUN_L00_001ff318(V *, V *, f32);
 void FUN_L00_001ff290(V *, V *, V *);
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_00271ec8(u8 *particle) {
+void update_damped_fading_particle(u8 *particle) __asm__("FUN_L00_00271ec8");
+
+void update_damped_fading_particle(u8 *particle) {
     V unused_vector_argument;
     V *particle_velocity = (V *)(particle + 0x20);
     u32 faded_color;

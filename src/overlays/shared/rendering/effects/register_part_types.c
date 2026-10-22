@@ -57,7 +57,7 @@ extern void FUN_L00_00271be8(void);
 extern void update_color_tween_particle(void) __asm__("FUN_L00_00271c88");
 extern void FUN_L00_00271d20(void);
 extern void FUN_L00_00271df8(void);
-extern void FUN_L00_00271ec8(void);
+extern void update_damped_fading_particle(void) __asm__("FUN_L00_00271ec8");
 extern void update_color_size_tween_particle(void) __asm__("FUN_L00_00271fc0");
 extern void FUN_L00_002721f0(void);
 extern void FUN_L00_00272438(void);
@@ -146,7 +146,7 @@ void register_part_types(void) {
     handlers[48] = (u32)update_color_tween_particle;
     handlers[49] = (u32)FUN_L00_00271d20;
     handlers[50] = (u32)FUN_L00_00271df8;
-    handlers[51] = (u32)FUN_L00_00271ec8;
+    handlers[51] = (u32)update_damped_fading_particle;
     handlers[52] = (u32)update_color_size_tween_particle;
     handlers[53] = (u32)FUN_L00_002721f0;
     handlers[54] = (u32)FUN_L00_00272438;
