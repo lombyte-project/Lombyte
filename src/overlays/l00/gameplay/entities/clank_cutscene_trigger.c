@@ -174,7 +174,9 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0026ced0(void *, void *, s32, s32, s32, f32);
 extern VeldinLevelState D_L00_0016C860;
 
-void FUN_L00_0023e268(void) {
+void apply_level_specific_cutscene_moby_effects(void) __asm__("FUN_L00_0023e268");
+
+void apply_level_specific_cutscene_moby_effects(void) {
     VeldinMoby *particle_source_moby;
     VeldinMoby *mb;
     char *joint_position_source_moby;

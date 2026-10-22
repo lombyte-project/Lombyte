@@ -647,7 +647,7 @@ extern f32 fade_level __asm__("D_L00_0015F3FC");
 extern VendorCutscene D_L00_0016C860;
 extern s32 D_0015EEA0;
 extern s32 decode_mode __asm__("D_0015EED8");
-extern void FUN_L00_0023e268(void);
+extern void apply_level_specific_cutscene_moby_effects(void) __asm__("FUN_L00_0023e268");
 extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern s32 FUN_002168a8(s32);
@@ -682,7 +682,7 @@ void FUN_L00_00298f90(void) {
         FUN_L00_00297e30();
     }
     if (!(g_debug_menu.update_flags & 0x10) || (D_0013CAE4 & 0x220)) {
-        FUN_L00_0023e268();
+        apply_level_specific_cutscene_moby_effects();
     }
     if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
         update_visible_resident_objects();
