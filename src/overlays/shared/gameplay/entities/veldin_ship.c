@@ -3385,7 +3385,9 @@ void FUN_0020c828_c(P *) __asm__("FUN_0020c828");
 float fast_vec_length(void *) __asm__("FUN_001f9af0");
 int FUN_L00_002a4dc8(int);
 int FUN_00213260_c(int) __asm__("FUN_00213260");
-void FUN_L00_002d7bf0(P *, int);
+void reset_smoke_fire_spawner_particle(P *spawner, int i) __asm__("FUN_L00_002d7bf0");
+
+void reset_smoke_fire_spawner_particle(P *, int) __asm__("FUN_L00_002d7bf0");
 void FUN_L00_002d7d58_c(P *, int) __asm__("FUN_L00_002d7d58");
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -3435,7 +3437,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
             r = FUN_00213260_c(2);
             D_L00_001CB7E0[i].w = 1.0f;
             D_L00_001D2860[i] = r;
-            FUN_L00_002d7bf0(spawner, i);
+            reset_smoke_fire_spawner_particle(spawner, i);
             D_L00_001D5740[i] = 0;
         }
         j = particle_end_or_emission_index;
@@ -3597,7 +3599,7 @@ void FUN_L00_002d73e8(P *spawner) {
                 alpha = truncate_float_to_s32((1.0f - convert_integer_to_float(D_L00_001D5740[i]) * D_L00_00161384) * D_L00_0016199C);
             } else if (D_L00_001D60A0[i]) {
                 if (fast_dec_timer_s16(&D_L00_001D60A0[i])) {
-                    FUN_L00_002d7bf0(spawner, i);
+                    reset_smoke_fire_spawner_particle(spawner, i);
                     alpha = 0;
                     D_L00_001D2860[i] = random_integer_below(2);
                 } else {
@@ -3674,7 +3676,7 @@ u8 D_L01_001D3190[1200] = {0};
 u8 D_L14_001D3410[1200] = {0};
 /* Resets particle i of the emitter: random direction, random speeds from
  * the emitter's ranges, and a start delay staggered by index. */
-void FUN_L00_002d7bf0(P *spawner, int i) {
+void reset_smoke_fire_spawner_particle(P *spawner, int i) {
     char *spawner_vars = (char *)spawner->q;
     V *particle_position;
     int emitter_particle_index;
