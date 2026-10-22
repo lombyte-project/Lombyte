@@ -176,7 +176,9 @@ extern u8 *D_L00_0016051C_c2 __asm__("D_L00_0016051C");
 extern s32 D_L00_0015F5CC_c __asm__("D_L00_0015F5CC");
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 void FUN_L00_001ffa90(void *, void *);
-void FUN_L00_0028a2f0(void) {
+void draw_sky_shells_with_modulo_40000_rotation(void) __asm__("FUN_L00_0028a2f0");
+
+void draw_sky_shells_with_modulo_40000_rotation(void) {
     V0028a2f0 shell_rotation;
     *(s16 *)(D_L00_0016051C_c2 + 4) = 0;
     set_identity_matrix(D_L00_001BD7E0);
