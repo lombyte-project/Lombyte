@@ -364,6 +364,8 @@ void spawner_update(struct Moby *moby) {
     };
     enum {
         SPAWNER_ACTIVATION_ENTER_SPAWN_ENABLED = 0,
+        SPAWNER_ACTIVATION_ENTER_SHARED_SPAWN_ENABLED = 1,
+        SPAWNER_ACTIVATION_ENTER_SHARED_SPAWN_ENABLED_ALIAS = 2,
         SPAWNER_ACTIVATION_SET_SPAWN_ENABLED = 3,
         SPAWNER_ACTIVATION_STAY_IN_PROXIMITY_WAIT = 6
     };
@@ -385,7 +387,7 @@ void spawner_update(struct Moby *moby) {
     int inVol;
     int room;
     int cond;
-    float dist;
+    float reference_distance_xy;
     float target_ground_height;
     int kids = 18;
 
@@ -415,9 +417,9 @@ void spawner_update(struct Moby *moby) {
             }
         }
     }
-    dist = FUN_001f9b80_2bef68(&moby->pos, D_0013E533_2bef68 + 0xE9D);
-    near1 = dist < spawner_data->f9C;
-    near2 = dist < spawner_data->f90;
+    reference_distance_xy = FUN_001f9b80_2bef68(&moby->pos, D_0013E533_2bef68 + 0xE9D);
+    near1 = reference_distance_xy < spawner_data->f9C;
+    near2 = reference_distance_xy < spawner_data->f90;
     spawn = 0;
     timerDone = FUN_001f9770_2bef68(&spawner_data->timer) != 0;
     inVol = 0;
@@ -480,10 +482,10 @@ void spawner_update(struct Moby *moby) {
             case SPAWNER_ACTIVATION_ENTER_SPAWN_ENABLED:
                 moby->state = 2;
                 break;
-            case 1:
+            case SPAWNER_ACTIVATION_ENTER_SHARED_SPAWN_ENABLED:
                 moby->state = 3;
                 break;
-            case 2:
+            case SPAWNER_ACTIVATION_ENTER_SHARED_SPAWN_ENABLED_ALIAS:
                 moby->state = 7;
                 break;
             case SPAWNER_ACTIVATION_SET_SPAWN_ENABLED:
