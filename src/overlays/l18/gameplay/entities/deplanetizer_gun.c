@@ -23,7 +23,9 @@ extern void enqueue_callback_list_1_overlay(void *, void *) __asm__("FUN_L18_002
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L18_002fa250(void *, void *, void *, float, float);
 extern void FUN_L18_002f9780(void);
-extern void FUN_L18_002f9a98(void *);
+void draw_moby_color_cycling_bone_glows(void *moby) __asm__("FUN_L18_002f9a98");
+
+extern void draw_moby_color_cycling_bone_glows(void *) __asm__("FUN_L18_002f9a98");
 extern void FUN_L18_002f9c20(struct Moby *);
 extern void FUN_L18_002f9eb8(struct Moby *);
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int,
@@ -266,7 +268,7 @@ void FUN_L18_002f88e8(struct Moby *moby) {
         }
     }
     if (D_L18_0016D260_update.state == 1 && D_L18_0016D260_update.objects[3])
-    enqueue_callback_list_1_overlay(FUN_L18_002f9a98, D_L18_0016D260_update.objects[3]);
+    enqueue_callback_list_1_overlay(draw_moby_color_cycling_bone_glows, D_L18_0016D260_update.objects[3]);
     if (D_L18_0016D260_update.state == 5 && frames_9780(138) <= D_L18_0016D260_update.n &&
         D_L18_0016D260_update.n <= frames_9780(264)) {
         struct Moby *target = D_L18_0016D260_update.objects[2];
@@ -321,7 +323,7 @@ void FUN_L18_002f88e8(struct Moby *moby) {
         goto burst;
     }
     if (D_L18_0016D260_update.objects[2])
-    enqueue_callback_list_1_overlay(FUN_L18_002f9a98, D_L18_0016D260_update.objects[2]);
+    enqueue_callback_list_1_overlay(draw_moby_color_cycling_bone_glows, D_L18_0016D260_update.objects[2]);
 burst:
     if (D_L18_0016D260_update.state == 3 && D_L18_0016D260_update.n == frames_9780(586)) {
         char *matrix = D_L18_001679D0;
@@ -475,7 +477,7 @@ extern float D_L18_00162454 ;
 extern float D_L18_00162450 ;
 
 extern short D_L18_00162500 __attribute__((sda));
-void FUN_L18_002f9a98(void *moby) {
+void draw_moby_color_cycling_bone_glows(void *moby) {
     char glow_position[16];
     char bone_transform_rows0_1[32];
     char bone_transform_row2[16];
