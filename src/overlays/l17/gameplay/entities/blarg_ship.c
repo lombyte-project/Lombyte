@@ -549,7 +549,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f730(void *a, float x);
-extern void FUN_L11_00319670(void *);
+extern void update_moby_trail_points(void *) __asm__("FUN_L11_00319670");
 extern void FUN_L11_0031a1c0(void *);
 extern void FUN_L11_0031a438(void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -608,7 +608,7 @@ void blarg_ship_update(struct Moby *moby) {
         break;
     case BLARG_SHIP_FOLLOW_PATH:
     case BLARG_SHIP_BURST_AND_HIDE:
-        FUN_L11_00319670(moby);
+        update_moby_trail_points(moby);
         *(float *)(moby_pvars + 0x68) += *(float *)(moby_pvars + 0x6C);
         if (*(float *)(moby_pvars + 0x68) > 1.0f) {
             *(float *)(moby_pvars + 0x68) -= 1.0f;

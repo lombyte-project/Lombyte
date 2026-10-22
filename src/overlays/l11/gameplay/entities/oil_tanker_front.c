@@ -1258,7 +1258,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f730(void *a, float x);
-extern void FUN_L11_00319670(void *);
+extern void update_moby_trail_points(void *) __asm__("FUN_L11_00319670");
 extern void FUN_L11_0031a1c0(void *);
 extern void FUN_L11_0031a438(void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1317,7 +1317,7 @@ void blarg_ship_update(struct Moby *moby) {
         break;
     case BLARG_SHIP_FOLLOW_PATH:
     case BLARG_SHIP_BURST_AND_WAIT_TO_REACTIVATE:
-        FUN_L11_00319670(moby);
+        update_moby_trail_points(moby);
         *(float *)(moby_vars + 0x68) += *(float *)(moby_vars + 0x6C);
         if (*(float *)(moby_vars + 0x68) > 1.0f) {
             *(float *)(moby_vars + 0x68) -= 1.0f;

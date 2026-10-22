@@ -543,7 +543,9 @@ void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern void f49(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L11_003192c8_c(void) __asm__("FUN_L11_003192c8");
 
-void FUN_L11_00319670(char *moby) {
+void update_moby_trail_points(char *moby) __asm__("FUN_L11_00319670");
+
+void update_moby_trail_points(char *moby) {
     char *trail_data = *(char **)(moby + 0x78);
     float first_trail_offset[4];
     float second_trail_offset[4];
