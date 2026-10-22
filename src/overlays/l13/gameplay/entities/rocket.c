@@ -106,6 +106,8 @@ typedef struct {
 void update_attached_rocket(struct Moby *moby) __asm__("FUN_L13_00305a58");
 
 void update_attached_rocket(struct Moby *moby) __asm__("FUN_L13_00305a58");
+void spawn_attached_rocket_non_damaging_explosion(struct Moby *moby) __asm__("FUN_L13_00306148");
+
 void update_attached_rocket(struct Moby *moby) {
     extern struct { char pad[0x18]; struct Moby *moby; int pad1; L13Vector_5a58 pos; L13Vector_5a58 pad2; L13Vector_5a58 matrix; } D_L13_00174140;
     extern int D_L13_0015F580;
@@ -222,7 +224,7 @@ void update_attached_rocket(struct Moby *moby) {
     struct Moby *target = D_L13_00174140.moby;
     if (target != 0 && target->oclass == 0x1df) {
 special:
-        FUN_L13_00306148(moby);
+        spawn_attached_rocket_non_damaging_explosion(moby);
     } else {
         FUN_L13_003060b8(moby);
     }
@@ -258,7 +260,7 @@ void FUN_L13_003060b8(struct Moby *moby) {
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
-void FUN_L13_00306148(struct Moby *moby) {
+void spawn_attached_rocket_non_damaging_explosion(struct Moby *moby) {
     char vector[16];
     clear_u64_value(vector);
     spawn_explosion(moby, vector, &moby->pos, 0.0f, 0.0f, 5, 1, 5, 0.0f, 0.0f, 0.0f, 1.0f, 0,
