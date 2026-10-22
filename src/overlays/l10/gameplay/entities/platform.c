@@ -2335,7 +2335,9 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void send_blast_hits(void *,void *,void *,int,int,int,int,int,float,float,float) __asm__("FUN_L00_0025a9f8");
 extern void FUN_L00_00262360_c(int,float *,float *,void *,float,float) __asm__("FUN_L00_00262360");
 
-void FUN_L10_002dd3d8(char *moby) {
+void update_path_spark_effect(char *moby) __asm__("FUN_L10_002dd3d8");
+
+void update_path_spark_effect(char *moby) {
  float old[4],blast_hit_position[4],path_segment_index,path_segment_remainder;
  char *effect_data=*(char **)(moby+0x78);
  *(OvlQuad *)old=*(OvlQuad *)(moby+0x10);
