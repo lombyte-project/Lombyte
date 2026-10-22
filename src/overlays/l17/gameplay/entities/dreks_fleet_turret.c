@@ -672,7 +672,9 @@ extern void transform_vector_by_basis(void *, void *, void *);
 extern void vu_euler_rotation_basis(void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L17_002d77f0(char *moby) {
+void update_fleet_rotating_radial_effect(char *moby) __asm__("FUN_L17_002d77f0");
+
+void update_fleet_rotating_radial_effect(char *moby) {
     enum {
         RING_INITIALIZE = 0,
         RING_ROTATE_AND_DRAW = 1
