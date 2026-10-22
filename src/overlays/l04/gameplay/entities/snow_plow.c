@@ -20,7 +20,9 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_0025d1b8(void *);
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
-void FUN_L04_002d3580(char *moby) {
+void update_moby_translation_delta_matrix(char *moby) __asm__("FUN_L04_002d3580");
+
+void update_moby_translation_delta_matrix(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
     float position_delta[4];
     fast_vec_sub(position_delta, moby + 0x10, moby_vars + 0xA0);
