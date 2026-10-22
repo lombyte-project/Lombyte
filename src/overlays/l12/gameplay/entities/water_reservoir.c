@@ -22,7 +22,9 @@ extern void add_vector_72(float *, float *, float *) __asm__("FUN_001f9a10");
 extern void *FUN_00218888_72(void *, float *, float *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float approach_value_72(float, float, float *) __asm__("FUN_00213ed8");
 extern void enqueue_callback_list_1_72(void *, void *) __asm__("FUN_001f4600");
-extern void FUN_L12_002ecac0(struct Moby *);
+void draw_water_reservoir(struct Moby *moby) __asm__("FUN_L12_002ecac0");
+
+extern void draw_water_reservoir(struct Moby *) __asm__("FUN_L12_002ecac0");
 extern float D_L12_0015F3FC;
 extern float D_L12_001619CC __attribute__((sda));
 int D_L12_001619D0 = 105;
@@ -111,7 +113,7 @@ update:
             approach_value_72(3.0f, D_L12_00161A08 * frame_time, &data[2]);
         }
     }
-    enqueue_callback_list_1_72(FUN_L12_002ecac0, moby);
+    enqueue_callback_list_1_72(draw_water_reservoir, moby);
 }
 
 #define NOT_SDA
@@ -144,7 +146,7 @@ extern short D_L12_00161A24 __attribute__((sda));
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void draw_geometry_quad(void *, void *, int);
 
-void FUN_L12_002ecac0(struct Moby *moby) {
+void draw_water_reservoir(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     Quad quad;
     float rotation_matrix[12];
