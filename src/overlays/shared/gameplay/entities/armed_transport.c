@@ -444,7 +444,9 @@ void update_armed_transport_joint_animation(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E6B70), where it is exact; names translated to the US level program. */
 
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-int FUN_L16_002e5cd0(int idx);
+int check_grindrail_barrier_release_condition(int moby_list_index) __asm__("FUN_L16_002e5cd0");
+
+int check_grindrail_barrier_release_condition(int idx) __asm__("FUN_L16_002e5cd0");
 extern void FUN_L16_002e58d8_u(void) __asm__("FUN_L16_002e58d8");
 extern void FUN_L16_002e5d30_c(int) __asm__("FUN_L16_002e5d30");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
@@ -486,14 +488,14 @@ void grindrail_barrier_update(struct Moby *barrier_moby) {
         }
         if (barrier_moby->visible)
             enqueue_callback_list_1_alt(FUN_L16_002e58d8_u, barrier_moby);
-        if (*(int *)(barrier_data + 0x20) != -1 && FUN_L16_002e5cd0(*(int *)(barrier_data + 0x20))) {
+        if (*(int *)(barrier_data + 0x20) != -1 && check_grindrail_barrier_release_condition(*(int *)(barrier_data + 0x20))) {
             barrier_moby->collision = 0;
             barrier_moby->state = 2;
             FUN_L16_002e5d30_c(*(int *)(barrier_data + 0x20));
         }
         break;
     case GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED:
-        if (!FUN_L16_002e5cd0(*(int *)(barrier_data + 0x20))) {
+        if (!check_grindrail_barrier_release_condition(*(int *)(barrier_data + 0x20))) {
             barrier_moby->state = 1;
             barrier_moby->collision = barrier_moby->pclass->collision;
         }
@@ -619,7 +621,7 @@ typedef struct {
     char pad2[0x43];
 } M_5cd0;
 
-int FUN_L16_002e5cd0(int moby_list_index) {
+int check_grindrail_barrier_release_condition(int moby_list_index) {
     unsigned short *moby_index_entry = (unsigned short *)D_L16_001ABCC0_5cd0[moby_list_index];
     if (moby_index_entry == 0) {
         return 0;
