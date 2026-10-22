@@ -1883,7 +1883,9 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 extern void spawn_debris_chunk(void *, void *, unsigned int, float, int, float, float, float, int) __asm__("FUN_L01_002f8530");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
-void FUN_L10_002d9eb8(char *moby) {
+void handle_moby_destruction(char *moby) __asm__("FUN_L10_002d9eb8");
+
+void handle_moby_destruction(char *moby) {
     typedef union { u128 q; float f[4]; } UVec;
     UVec zero_vector, transformed_offset, debris_vector, translated_position;
     unsigned short id = *(unsigned short *)(moby + 0xB2);
