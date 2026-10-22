@@ -1874,7 +1874,9 @@ extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((sda));
-void FUN_L02_00230988(void) {
+void update_hero_state_transitions(void) __asm__("FUN_L02_00230988");
+
+void update_hero_state_transitions(void) {
     unsigned char *moby;
     int prevSub;
     int prevState;
