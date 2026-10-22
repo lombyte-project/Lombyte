@@ -16,7 +16,9 @@ extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 extern void FUN_L00_00263618(void *, int, float, float);
 
-void FUN_L02_002ec308(char *self) {
+void draw_background_ship_1_joint_billboards(char *self) __asm__("FUN_L02_002ec308");
+
+void draw_background_ship_1_joint_billboards(char *self) {
     char *current_moby;
     FUN_L00_002591d0((int *)&current_moby, *(unsigned char *)(self + 0x21), 0, 0);
     while (current_moby != 0) {
@@ -42,7 +44,7 @@ void FUN_L02_002ec308(char *self) {
 extern int D_L02_0015F5CC;
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
-void FUN_L02_002ec308(char *self);
+void draw_background_ship_1_joint_billboards(char *self) __asm__("FUN_L02_002ec308");
 
 void FUN_L02_002ec3f0(char *moby) {
     int i;
@@ -73,7 +75,7 @@ void FUN_L02_002ec3f0(char *moby) {
         cached_global_value_ptr = *(int **)(data + 0xB4);
         if (current_global_value != *cached_global_value_ptr) {
             *cached_global_value_ptr = current_global_value;
-            enqueue_callback_list_1(FUN_L02_002ec308, moby);
+            enqueue_callback_list_1(draw_background_ship_1_joint_billboards, moby);
         }
     }
 }
@@ -318,7 +320,7 @@ void FUN_L02_002eca30(char *moby, void *previous_position) {
             spark_part[9] = func_001FA898_r(8.0f) + 0x60;
     }
 }
-void FUN_L02_002ec308(char *self);
+void draw_background_ship_1_joint_billboards(char *self) __asm__("FUN_L02_002ec308");
 void draw_matching_moby_slot_quads(char *self) __asm__("FUN_L02_002ecc68");
 
 void FUN_L02_002ecd50(char *moby) {
