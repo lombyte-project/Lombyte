@@ -1396,7 +1396,9 @@ extern void FUN_L00_00261d78(float, int, void *, void *);
 extern void FUN_L00_00272060(void *, int, float, float, int, int, int, float, void *);
 extern void build_symmetric_adjacency_masks(int *list, int n, int idx) __asm__("FUN_L05_0028be78");
 extern void FUN_L06_002f2250_u(void) __asm__("FUN_L06_002f2250");
-extern void FUN_L06_002f2910(void *);
+void select_nearest_gadgebot_interaction_target(void *moby_arg) __asm__("FUN_L06_002f2910");
+
+extern void select_nearest_gadgebot_interaction_target(void *) __asm__("FUN_L06_002f2910");
 extern void FUN_L06_002f3640_u(void *) __asm__("FUN_L06_002f3640");
 void update_gadgebot_glow_effects(char *moby) __asm__("FUN_L06_002f38c8");
 
@@ -1921,7 +1923,7 @@ void gadgebot_update(GbMoby *moby) {
         switch (moby->sub) {
         case GADGEBOT_INTERACTION_SEARCH_TARGET:
             moby->sub = 1;
-            FUN_L06_002f2910(moby);
+            select_nearest_gadgebot_interaction_target(moby);
             break;
         case GADGEBOT_INTERACTION_APPROACH_TARGET:
             if (gadgebot_vars->target != 0) {
@@ -2402,7 +2404,7 @@ extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 extern int D_L06_001AC180[];
 
-void FUN_L06_002f2910(void *moby_arg) {
+void select_nearest_gadgebot_interaction_target(void *moby_arg) {
     GbMoby *moby = moby_arg;
     GbVars *gadgebot_vars = moby->vars;
     GbMoby *candidate;
