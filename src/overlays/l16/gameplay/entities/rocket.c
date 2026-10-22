@@ -2367,7 +2367,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         HOVERBOARD_DUMMY_STATE_RACING = 2,
         HOVERBOARD_DUMMY_STATE_WAIT_FOR_REACTIVATION = 3
     };
-    float pos[4], delta[4], ahead[4], impact[4], spray[4], lateral[4], dust[4];
+    float path_node_or_explosion_position[4], delta[4], ahead[4], impact[4], spray[4], lateral[4], dust[4];
     char *hoverboard_dummy_data = *(char **)(moby + 0x78);
     char *hero_base;
     int i, nearby_moby_count, next;
@@ -2389,8 +2389,8 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         *(unsigned short *)(moby + 0x34) |= 0x41;
         path = D_L16_001B0930[*(int *)(hoverboard_dummy_data + 0x2B0)];
         *(char **)(hoverboard_dummy_data + 0x2C0) = path;
-        FUN_L16_002cf9d0_c((Level16VendorVectorMoby *)moby, 0, pos);
-        qcopy(moby + 0x10, pos);
+        FUN_L16_002cf9d0_c((Level16VendorVectorMoby *)moby, 0, path_node_or_explosion_position);
+        qcopy(moby + 0x10, path_node_or_explosion_position);
         qcopy(hoverboard_dummy_data + 0x260, moby + 0x10);
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
@@ -2467,9 +2467,9 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             break;
         }
         if (find_moby_hit(moby, mask, 0)) {
-            qcopy(pos, moby + 0x10);
-            pos[2] += 0.5f;
-            spawn_explosion(moby, &D_L16_0015F580, pos, 0.0f, 0.0f, 5, 15, 25, 2.5f, 1.5f, 4.0f, -1,
+            qcopy(path_node_or_explosion_position, moby + 0x10);
+            path_node_or_explosion_position[2] += 0.5f;
+            spawn_explosion(moby, &D_L16_0015F580, path_node_or_explosion_position, 0.0f, 0.0f, 5, 15, 25, 2.5f, 1.5f, 4.0f, -1,
                              1.0f, 7.0f, 0, 9, -1, 0);
             FUN_L00_00263e30(moby, 0x655, 1, 0x656, 2, 2, 0);
             FUN_L00_00263e30(moby, 0x6FA, 1, 0x6FB, 1, 1, 0);
@@ -2514,12 +2514,12 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             }
         }
         FUN_L16_002d0058_c((L16LeapMoby *)moby);
-        FUN_L16_002cf9d0_c((Level16VendorVectorMoby *)moby, *(short *)(hoverboard_dummy_data + 0x2F4), pos);
-        angle = fast_arc_tan(pos[0] - *(float *)(moby + 0x10), pos[1] - *(float *)(moby + 0x14));
+        FUN_L16_002cf9d0_c((Level16VendorVectorMoby *)moby, *(short *)(hoverboard_dummy_data + 0x2F4), path_node_or_explosion_position);
+        angle = fast_arc_tan(path_node_or_explosion_position[0] - *(float *)(moby + 0x10), path_node_or_explosion_position[1] - *(float *)(moby + 0x14));
         FUN_L00_0025bc98(moby + 0x48, hoverboard_dummy_data + 0x2C4, 0, angle, frame_scale_sq * 0.035f, frame_scale_sq * 0.3f,
                          D_0015ED6C * 6.981317f);
-        if (*(float *)(hoverboard_dummy_data + 0x268) < pos[2] - 5.0f) {
-            *(float *)(hoverboard_dummy_data + 0x268) = pos[2];
+        if (*(float *)(hoverboard_dummy_data + 0x268) < path_node_or_explosion_position[2] - 5.0f) {
+            *(float *)(hoverboard_dummy_data + 0x268) = path_node_or_explosion_position[2];
         }
         delta[0] = fast_cos(*(float *)(moby + 0x48)) * *(float *)(hoverboard_dummy_data + 0x2BC);
         delta[1] = fast_sin(*(float *)(moby + 0x48)) * *(float *)(hoverboard_dummy_data + 0x2BC);
