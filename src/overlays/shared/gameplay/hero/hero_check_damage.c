@@ -1046,7 +1046,9 @@ extern char D_0013F990[];
 
 #define HERO_ROTATION(h) (*(u128 *)((u8 *)(h) + 0x680))
 
-void FUN_L00_0020e728(void) {
+void update_hero_held_items_and_orientation(void) __asm__("FUN_L00_0020e728");
+
+void update_hero_held_items_and_orientation(void) {
     struct Hero *owner = &hero;
     int slot_index;
 
