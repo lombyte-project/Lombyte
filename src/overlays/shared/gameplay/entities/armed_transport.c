@@ -46,7 +46,9 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_L00_00257470(void *, int, int);
 extern void spawn_explosion(void*,void*,void*,float,float,int,int,int,float,float,float,int,float,float,int,int,int,int) __asm__("FUN_L00_0025e450");
 extern void FUN_L16_002e2b60(struct Moby *);
-extern void FUN_L16_002e2fa0(void *);
+void compute_armed_transport_path_headings(void *path_data) __asm__("FUN_L16_002e2fa0");
+
+extern void compute_armed_transport_path_headings(void *) __asm__("FUN_L16_002e2fa0");
 void update_armed_transport_joint_animation(char *moby) __asm__("FUN_L16_002e3050");
 
 extern void update_armed_transport_joint_animation(char *) __asm__("FUN_L16_002e3050");
@@ -89,8 +91,8 @@ void armed_transport_update(char *transport_moby) {
         *(float *)(transport_data + 0x20) = 12.0f;
         *(short *)(transport_data + 0x24) = 12;
         transport_data[0x28] = 3;
-        if (*(int *)(transport_data + 0xD8) != -1) FUN_L16_002e2fa0(D_L16_001B0930[*(int *)(transport_data + 0xD8)]);
-        if (*(int *)(transport_data + 0xDC) != -1) FUN_L16_002e2fa0(D_L16_001B0930[*(int *)(transport_data + 0xDC)]);
+        if (*(int *)(transport_data + 0xD8) != -1) compute_armed_transport_path_headings(D_L16_001B0930[*(int *)(transport_data + 0xD8)]);
+        if (*(int *)(transport_data + 0xDC) != -1) compute_armed_transport_path_headings(D_L16_001B0930[*(int *)(transport_data + 0xDC)]);
         speed = *(float *)&D_L16_00161D80 * frame_time;
         *(int *)(transport_data + 0x16C) = 0;
         *(int *)(transport_data + 0x168) = 0;
@@ -408,7 +410,7 @@ typedef struct {
     PathPoint2fa0 pts[1];
 } Path2fa0;
 
-void FUN_L16_002e2fa0(void *path_data) {
+void compute_armed_transport_path_headings(void *path_data) {
     Path2fa0 *path = path_data;
     int i;
     int point_count;
