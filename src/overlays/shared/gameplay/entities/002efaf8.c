@@ -61,7 +61,9 @@ int FUN_L01_002f1c78(char *a) {
 }
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 7. */
-int FUN_L01_002f1dc8(char *moby) {
+int run_moby_helper_and_set_state_7(char *moby) __asm__("FUN_L01_002f1dc8");
+
+int run_moby_helper_and_set_state_7(char *moby) {
     int helper_result = FUN_L00_002dbe20(moby);
     moby[0x20] = 0x7;
     return helper_result;
