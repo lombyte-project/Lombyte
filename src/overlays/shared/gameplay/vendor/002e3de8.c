@@ -56,7 +56,7 @@ void FUN_L10_002e3de8(char *moby) {
 extern float FUN_001f9b48(void *, void *);
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void FUN_L10_002e91b8(unsigned char *m);
+extern void draw_moby_animated_quad_layers(unsigned char *m) __asm__("FUN_L10_002e91b8");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
 
@@ -93,7 +93,7 @@ void update_hero_flag_from_moby_local_box(unsigned char *moby) {
                 hero.unk22CB = 0;
             }
         }
-        enqueue_callback_list_1(FUN_L10_002e91b8, moby);
+        enqueue_callback_list_1(draw_moby_animated_quad_layers, moby);
         break;
     }
 }
@@ -134,7 +134,7 @@ extern void fast_draw_quad_real(void *, void *, int);
     ((unsigned long)(a) | ((unsigned long)(b) << 2) | ((unsigned long)(k) << 4) | \
      ((unsigned long)(d) << 6) | ((unsigned long)(fix) << 32))
 
-void FUN_L10_002e91b8(unsigned char *moby) {
+void draw_moby_animated_quad_layers(unsigned char *moby) {
     TrailQuad first, second;
     float transform[12] __attribute__((aligned(16)));
     float position[4] __attribute__((aligned(16)));
