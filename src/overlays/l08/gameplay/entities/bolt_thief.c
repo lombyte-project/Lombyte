@@ -164,7 +164,9 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_L00_00250df8(void *);
 
 extern float D_L08_00161D28 __attribute__((sda));
-void FUN_L08_002e8ba0(struct Moby *parent_moby) {
+void update_shrub_parts(struct Moby *parent_moby) __asm__("FUN_L08_002e8ba0");
+
+void update_shrub_parts(struct Moby *parent_moby) {
     char *data = (char *)parent_moby->pvars;
     float part_joint_position[4], anchor_joint_position[4], joint_alignment_offset[4];
     char *base = data + 0x60;
@@ -2777,7 +2779,7 @@ extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090"
 extern struct Moby *FUN_L08_002de3e0(void *, struct Moby *, void *, f32, f32);
 extern void FUN_L08_002e8788(char *);
 extern void FUN_L08_002e88d8_u(struct Moby *) __asm__("FUN_L08_002e88d8");
-extern void FUN_L08_002e8ba0(struct Moby *);
+extern void update_shrub_parts(struct Moby *) __asm__("FUN_L08_002e8ba0");
 
 void shrub_update(struct Moby *moby) __asm__("FUN_L08_002e8cd0");
 void shrub_update(struct Moby *moby) {
@@ -2840,7 +2842,7 @@ void shrub_update(struct Moby *moby) {
                                       vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
                          &vars->turn_speed, 0.004f, 0.3f, 0.02f);
         FUN_L08_002e88d8_u(moby);
-        FUN_L08_002e8ba0((char *)moby);
+        update_shrub_parts((char *)moby);
         qcopy(&point, &vars->follow[0].path->points[waypoint]);
         if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
             vars->follow[0].point = waypoint;
@@ -2903,7 +2905,7 @@ void shrub_update(struct Moby *moby) {
             normalize_vector_xyz(&step, &step, D_L08_00161D24 * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
-        FUN_L08_002e8ba0((char *)moby);
+        update_shrub_parts((char *)moby);
         if (!fast_dec_timer_s16(&vars->fire_timer)) {
             break;
         }
@@ -2926,7 +2928,7 @@ void shrub_update(struct Moby *moby) {
         path = vars->follow[0].path;
         qcopy(&moby->pos, &path->points[0]);
         moby->rot.z = fast_arc_tan(path->points[1].f[0] - moby->pos.x, path->points[1].f[1] - moby->pos.y);
-        FUN_L08_002e8ba0((char *)moby);
+        update_shrub_parts((char *)moby);
         break;
     }
     case SHRUB_BREAK_APART_AND_REMOVE:
