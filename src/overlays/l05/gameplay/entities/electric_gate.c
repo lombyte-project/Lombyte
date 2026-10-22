@@ -2213,7 +2213,7 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void FUN_0022da68_c(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
 extern void FUN_L00_00266858(void *, int);
-extern void FUN_L05_00319510(void *);
+extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void FUN_L05_00319690(char *);
 extern void FUN_L05_00319740(char *);
 extern void FUN_L05_003198e8(char *);
@@ -2323,7 +2323,7 @@ void taxi_update(struct Moby *moby) {
             *(int *)(taxi_data + 0xC0) = 0;
             *(int *)(taxi_data + 0xC4) = 0;
             moby->state = 1;
-            FUN_L05_00319510(moby);
+            reset_selected_moby_to_current_placement(moby);
         }
         break;
     case TAXI_WAIT_FOR_ACTIVATION:

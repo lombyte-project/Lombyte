@@ -2227,7 +2227,7 @@ extern void update_entity_matrix(void *a, void *b, void *c, void *d) __asm__("FU
 extern void FUN_L00_00266858(void *, int);
 extern void FUN_L00_002e8450(int, float, float);
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
-extern void FUN_L05_00319510(void *);
+extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void FUN_L05_00319740(char *);
 extern void FUN_L05_003198e8(char *);
 extern void taxi_release(s32) __asm__("FUN_0022d798");
@@ -2410,7 +2410,7 @@ void taxi_update(struct Moby *moby) {
             taxi_vars->t = 0.0f;
             taxi_vars->tv = 0.0f;
             moby->state = 1;
-            FUN_L05_00319510(moby);
+            reset_selected_moby_to_current_placement(moby);
         }
         g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
