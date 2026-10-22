@@ -509,7 +509,9 @@ void apply_resort_owner_movement(void *mp) {
     }
     fast_vec_sub(moby_vars + 0x140, moby + 0x10, A);
 }
-extern int FUN_L11_002d2460(struct Moby *moby);
+int classify_resort_owner_target_proximity(struct Moby *moby) __asm__("FUN_L11_002d2460");
+
+extern int classify_resort_owner_target_proximity(struct Moby *moby) __asm__("FUN_L11_002d2460");
 int try_update_resort_owner_path_target(struct Moby *moby, char *other) __asm__("FUN_L11_002d2340");
 
 extern int try_update_resort_owner_path_target(struct Moby *moby, char *other) __asm__("FUN_L11_002d2340");
@@ -581,7 +583,7 @@ struct PokKeeperVars {
 void FUN_L11_002d14b0(void *resort_owner_moby) {
     struct Moby *moby = resort_owner_moby;
     struct PokKeeperVars *moby_vars = (struct PokKeeperVars *)moby->pvars;
-    int proximity = FUN_L11_002d2460(moby);
+    int proximity = classify_resort_owner_target_proximity(moby);
     float position_scratch[4];
     float dialogue_rotation[4];
 
@@ -940,7 +942,7 @@ struct TargetSets {
 };
 
 /* 2 when a live moby of the current target groups is within 10 units, 1 when one is alive, else 0. */
-int FUN_L11_002d2460(struct Moby *moby) {
+int classify_resort_owner_target_proximity(struct Moby *moby) {
     struct TargetSets *target_sets = (struct TargetSets *)moby->pvars;
     int found = 0;
     int i;
