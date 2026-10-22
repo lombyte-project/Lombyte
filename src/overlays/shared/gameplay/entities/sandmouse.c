@@ -176,7 +176,9 @@ extern void normalize_vector_xyz_bfa8(void *, void *, f32) __asm__("FUN_001f9bf8
 extern void transform_vector_bfa8(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_geometry_quad_bfa8(void *, void *, s32) __asm__("FUN_001f7d30");
 
-void FUN_L01_0030bfa8(char *moby) {
+void draw_moby_offset_textured_quad(char *moby) __asm__("FUN_L01_0030bfa8");
+
+void draw_moby_offset_textured_quad(char *moby) {
     struct {
         GlowQuad_bfa8 quad;
         GlowVec_bfa8 src_corner[4];

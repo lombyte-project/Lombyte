@@ -237,7 +237,7 @@ extern f32 D_L01_0016205C __attribute__((sda));
 extern f32 D_L01_00162060 __attribute__((sda));
 extern BlobHitInfo D_L01_001742C0;
 extern s32 D_L01_0015F580;
-extern void FUN_L01_0030bfa8(void);
+extern void draw_moby_offset_textured_quad(void) __asm__("FUN_L01_0030bfa8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 FUN_001f99c0(f32);
@@ -271,7 +271,7 @@ void update_explosive_moby(struct Moby *moby) {
 
     blob_vars = (BlobVars *)moby->pvars;
     if (random_integer_below(2)) {
-        enqueue_callback_list_1(FUN_L01_0030bfa8, moby);
+        enqueue_callback_list_1(draw_moby_offset_textured_quad, moby);
     }
     add_vector_xyz(&moby->pos, &moby->pos, blob_vars);
     if (FUN_001f99c0(blob_vars->vel.x) > D_L01_00162060 * frame_scale) {
