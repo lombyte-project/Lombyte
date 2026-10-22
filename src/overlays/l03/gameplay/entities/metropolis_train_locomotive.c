@@ -1178,7 +1178,9 @@ void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
 /* Wreck reaction for the Kerwan train and turret classes: when hit by a qualifying attack it bursts into
  * the class debris, starts the shake/smoke effects and arms the respawn countdown (0x14A); once that runs
  * out the moby is hidden again unless the caller keeps it, and switches its update to the car update. */
-void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
+void update_spline_moby_destruction_and_respawn(char *moby, void *vel_in, int flag) __asm__("FUN_L03_0029d2e0");
+
+void update_spline_moby_destruction_and_respawn(char *moby, void *vel_in, int flag) {
     float spot[4];
     float halved_motion_delta[4];
     float push[4];
@@ -1297,7 +1299,7 @@ extern void compute_path_node_tangent(void *out, int *l, int idx, float a, float
 extern void evaluate_cubic_hermite_segment(float t, void *out, void *p1, void *p2, void *p3, void *p4) __asm__("FUN_L01_0028ba80");
 extern void compute_sampled_spline_path_lengths(void *, int, void *, float, float) __asm__("FUN_L01_0028bb90");
 extern void add_moby_rotation_based_offsets(char *, char *) __asm__("FUN_L03_0029c8a8");
-extern void FUN_L03_0029d2e0(char *, void *, int);
+extern void update_spline_moby_destruction_and_respawn(char *, void *, int) __asm__("FUN_L03_0029d2e0");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void report_29dba8(void *, int, int) __asm__("FUN_001e93b0");
@@ -1502,7 +1504,7 @@ void red_ship_1_update(char *moby) {
         subtract_vector_xyz(position_delta, cur, old_pos);
         *(OvlQuad *)vec = *(OvlQuad *)position_delta;
         update_moby_emitter_effects(moby, vec, flag);
-        FUN_L03_0029d2e0(moby, vec, flag);
+        update_spline_moby_destruction_and_respawn(moby, vec, flag);
         break;
     }
 }
