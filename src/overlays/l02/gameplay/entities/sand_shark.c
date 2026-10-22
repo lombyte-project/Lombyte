@@ -2591,7 +2591,9 @@ extern void FUN_L00_002eac18(int);
 extern void path_marker_dc88(void *, void *, int, int, int, int, int, float) __asm__("FUN_L01_00285768");
 extern void FUN_L02_0022b728(int, int);
 extern void FUN_L02_00237478(void);
-extern void FUN_L02_002def80(struct Moby *moby);
+void advance_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_002def80");
+
+extern void advance_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_002def80");
 extern void snap_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_002df0b0");
 extern void FUN_L02_002f8a18(int, int);
 extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
@@ -2720,7 +2722,7 @@ void transport_pod_update(unsigned char *moby) {
     case TRANSPORT_POD_POSITION_RAILS_FOR_BOARDING:
         transport_pod_vars->rail_a_off = 2.0f;
         transport_pod_vars->rail_b_off = -4.0f;
-        FUN_L02_002def80((struct Moby *)moby);
+        advance_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (absolute_float_dc88(*(float *)(transport_pod_vars->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.0001f &&
             absolute_float_dc88(*(float *)(transport_pod_vars->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.0001f) {
             moby[0x20] = 5;
@@ -2796,7 +2798,7 @@ void transport_pod_update(unsigned char *moby) {
     case TRANSPORT_POD_POSITION_RAILS_FOR_DEPARTURE:
         transport_pod_vars->rail_a_off = -1.0f;
         transport_pod_vars->rail_b_off = -1.0f;
-        FUN_L02_002def80((struct Moby *)moby);
+        advance_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (absolute_float_dc88(*(float *)(transport_pod_vars->rail_a + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f &&
             absolute_float_dc88(*(float *)(transport_pod_vars->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f) {
             moby[0x20] = 8;
@@ -2855,7 +2857,7 @@ void transport_pod_update(unsigned char *moby) {
     case TRANSPORT_POD_POSITION_RAILS_FOR_DISEMBARKING:
         transport_pod_vars->rail_a_off = 2.0f;
         transport_pod_vars->rail_b_off = -4.0f;
-        FUN_L02_002def80((struct Moby *)moby);
+        advance_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (absolute_float_dc88(*(float *)(transport_pod_vars->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.01f &&
             absolute_float_dc88(*(float *)(transport_pod_vars->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.01f) {
             {
@@ -2904,7 +2906,7 @@ void transport_pod_update(unsigned char *moby) {
     case TRANSPORT_POD_POSITION_RAILS_FROM_CONFIGURED_OFFSETS:
         transport_pod_vars->rail_a_off = D_L02_00161C20;
         transport_pod_vars->rail_b_off = D_L02_00161C24;
-        FUN_L02_002def80((struct Moby *)moby);
+        advance_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (D_L02_00161C40 != 0.0f) {
             moby[0x20] = 0x10;
         }
@@ -2912,7 +2914,7 @@ void transport_pod_update(unsigned char *moby) {
     case TRANSPORT_POD_CYCLE_RAILS_TO_SPLIT_HEIGHTS:
         transport_pod_vars->rail_a_off = 2.0f;
         transport_pod_vars->rail_b_off = -4.0f;
-        FUN_L02_002def80((struct Moby *)moby);
+        advance_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (D_L02_00161C40 == 0.0f) {
             moby[0x20] = 0xF;
         } else if (absolute_float_dc88(*(float *)(transport_pod_vars->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.01f &&
@@ -2923,7 +2925,7 @@ void transport_pod_update(unsigned char *moby) {
     case TRANSPORT_POD_CYCLE_RAILS_TO_SHARED_LOWER_HEIGHT:
         transport_pod_vars->rail_a_off = -1.0f;
         transport_pod_vars->rail_b_off = -1.0f;
-        FUN_L02_002def80((struct Moby *)moby);
+        advance_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (D_L02_00161C40 == 0.0f) {
             moby[0x20] = 0xF;
         } else if (absolute_float_dc88(*(float *)(transport_pod_vars->rail_a + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f &&
@@ -2948,7 +2950,7 @@ extern f32 D_L02_00161C34_gp __asm__("D_L02_00161C34") __attribute__((sda));
 
 extern short D_L02_00161C38 __attribute__((sda));
 extern short D_L02_00161C3C __attribute__((sda));
-void FUN_L02_002def80(struct Moby *moby) {
+void advance_transport_pod_rails_to_offsets(struct Moby *moby) {
     char *transport_pod_vars = (char *)moby->pvars;
     advance_accelerated_scalar(
         (float *)(*(char **)(transport_pod_vars + 0x84) + 0x18), (float *)(transport_pod_vars + 0x8C),
