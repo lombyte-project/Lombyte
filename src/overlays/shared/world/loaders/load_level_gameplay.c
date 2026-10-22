@@ -476,7 +476,7 @@ extern void FUN_0022a5e0(void *);
 extern void light_tfrags(void *) __asm__("FUN_00234f98");
 extern void light_ties(void *) __asm__("FUN_00237370");
 extern void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
-extern void FUN_L00_00204c60(void);
+extern void initialize_hero(void) __asm__("FUN_L00_00204c60");
 extern void FUN_L00_00204f80(void);
 extern void FUN_L00_0024a798(int, int);
 extern void FUN_L00_00250df8(void *);
@@ -1639,7 +1639,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         D_L00_0016C058[7] = 0;
     }
     reset_draw_globals();
-    FUN_L00_00204c60();
+    initialize_hero();
     FUN_L00_00204f80();
     setup_level_cameras();
     update_camera();

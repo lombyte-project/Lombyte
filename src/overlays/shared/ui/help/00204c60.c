@@ -28,7 +28,9 @@ extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
    D_L00_00160540), resets the 31 manipulator records and the eight sound
    voices, and sets the starting hit points and timers. The item ids are read
    into save[] before and after the clear and never written back. */
-void FUN_L00_00204c60(void) {
+void initialize_hero(void) __asm__("FUN_L00_00204c60");
+
+void initialize_hero(void) {
     s32 save[7];
     s32 i;
     struct Moby *candidate_moby;
