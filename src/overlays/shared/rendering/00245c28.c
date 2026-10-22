@@ -31,7 +31,7 @@ extern float D_L00_0015F5A8_e[] __asm__("D_L00_0015F5A8") MACRO_ADDR;
 extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
 extern int debug_print(void *) __asm__("FUN_001e93b0");
 extern void init_stash(void) __asm__("FUN_00232d00");
-extern void FUN_L00_0023d028(void);
+extern void init_level_runtime_state(void) __asm__("FUN_L00_0023d028");
 extern int FUN_L00_00244110(int, int);
 extern void clear_dma_queue_entry(void) __asm__("FUN_001f0b88");
 extern void FUN_L00_002464a8_u(void) __asm__("FUN_L00_002464a8");
@@ -123,7 +123,7 @@ void FUN_L00_00245c28(void) {
     level_timer = 0;
     D_L00_0015F5C4 = 6;
     one = 1;
-    FUN_L00_0023d028();
+    init_level_runtime_state();
     music_stream_state.primary.track = 0;
     FUN_L00_00244110(1, 0);
     g_debug_menu.update_flags = 15;

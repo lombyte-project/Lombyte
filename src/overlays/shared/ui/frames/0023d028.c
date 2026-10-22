@@ -27,7 +27,9 @@ extern char D_L00_001C6F00[] __attribute__((section(".data")));
 extern char D_L00_001BD3B0[] __attribute__((section(".data")));
 extern char D_L00_001BCDB0[] __attribute__((section(".data")));
 extern char D_L00_00173EC0[] __attribute__((section(".data")));
-void FUN_L00_0023d028(void) {
+void init_level_runtime_state(void) __asm__("FUN_L00_0023d028");
+
+void init_level_runtime_state(void) {
     int texture_allocation_base;
     FUN_00215420_23d028();
     FUN_002335a0_23d028();
