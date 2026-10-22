@@ -1479,7 +1479,7 @@ extern char D_L11_001677C0[];
 extern s32 *D_L11_001B0EB0[];
 extern float D_L11_00161FC8 __attribute__((sda));
 extern float D_L11_00161FCC __attribute__((sda));
-void FUN_L11_00310698(struct Moby *m);
+void handle_psytcopus_hits(struct Moby *m) __asm__("FUN_L11_00310698");
 extern void FUN_L00_00263ac8_0180(struct Moby *, int, void *, float) __asm__("FUN_L00_00263ac8");
 extern float distance_0180(void *, void *) __asm__("FUN_001f9b48");
 extern void FUN_L00_0025a120_p(struct Moby *) __asm__("FUN_L00_0025a120");
@@ -1537,7 +1537,7 @@ void psytcopus_update(struct Moby *psytcopus) {
     s32 *path;
     int knockback_result_flags;
 
-    FUN_L11_00310698(psytcopus);
+    handle_psytcopus_hits(psytcopus);
     target = psytcopus_vars->target;
     FUN_L00_00263ac8_0180(psytcopus, 0, psytcopus_vars->unk1E0, 2.5f);
     if (psytcopus->visible != 0 && distance_0180(&psytcopus->pos, D_L11_001677C0) < 28.0f) {
@@ -1657,7 +1657,7 @@ void psytcopus_update(struct Moby *psytcopus) {
     }
 }
 /* Hit handling for the psytcopus_update moby: takes damage, picks the hurt or death reaction, keeps it on its path. */
-void FUN_L11_00310698(struct Moby *psytcopus) {
+void handle_psytcopus_hits(struct Moby *psytcopus) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_DEATH = 1,
