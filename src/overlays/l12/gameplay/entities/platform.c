@@ -1785,7 +1785,9 @@ extern void FUN_L12_002e8608(struct Moby *, float *);
 void remove_blarg_trooper_and_attachment(struct Moby *moby) __asm__("FUN_L12_002e86d0");
 
 extern void remove_blarg_trooper_and_attachment(struct Moby *) __asm__("FUN_L12_002e86d0");
-extern void FUN_L12_002e8720(struct Moby *);
+void update_blarg_trooper_attachment(struct Moby *moby) __asm__("FUN_L12_002e8720");
+
+extern void update_blarg_trooper_attachment(struct Moby *) __asm__("FUN_L12_002e8720");
 void ease_blarg_trooper_height_to_ground(char *moby) __asm__("FUN_L12_002e87b0");
 
 extern void ease_blarg_trooper_height_to_ground(char *) __asm__("FUN_L12_002e87b0");
@@ -2092,7 +2094,7 @@ leave:
     }
 finish:
     if (moby->visible || (TROOPER_CHILD && TROOPER_CHILD->visible)) {
-        FUN_L12_002e8720(moby);
+        update_blarg_trooper_attachment(moby);
         if (moby->flags & 0x8000) {
             TROOPER_F(0x188) = -TROOPER_F(0x188);
             TROOPER_F(0x208) = -TROOPER_F(0x208);
@@ -2308,7 +2310,7 @@ extern void *spawn_moby_attachment(void *, void *) __asm__("FUN_L04_002ce080");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L12_0027b9c0(void *, void *, int);
 
-void FUN_L12_002e8720(struct Moby *moby) {
+void update_blarg_trooper_attachment(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     unsigned char *target = *(unsigned char **)(data + 0x248);
     if (target != 0) {
