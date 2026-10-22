@@ -124,7 +124,9 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius, float la
 /* Starts the effect with an angle ramped from the moby's timer, capped at pi. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_003141A8), where it is exact; names translated to the US level program. */
 
-void FUN_L07_00312dc8(char *moby) {
+void draw_snagglebeast_sphere_effect(char *moby) __asm__("FUN_L07_00312dc8");
+
+void draw_snagglebeast_sphere_effect(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float latitude_span;
     if (*(float *)(data + 0x1C8) < 0.8f) {
@@ -899,7 +901,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         if (*(float *)(data + 0x1C8) < 0.0f) *(float *)(data + 0x1C8) = 0.0f;
     }
-    if (*(float *)(data + 0x1C8) > 0.0f) enqueue_callback_list_1(FUN_L07_00312dc8, moby);
+    if (*(float *)(data + 0x1C8) > 0.0f) enqueue_callback_list_1(draw_snagglebeast_sphere_effect, moby);
     FUN_L07_00313f60((char *)moby, (char *)data, (float *)(((char *)&hero) + 0x80));
     if (moby[0x20] != 0 && moby[0x20] != 0xA && moby[0x20] != 0x10) {
         *(int *)(data + 0x1B0) = queue_animation_update(0x16, 0xFFFF, (int)FUN_L00_00235d80, (int)FUN_L00_00235ea0,
