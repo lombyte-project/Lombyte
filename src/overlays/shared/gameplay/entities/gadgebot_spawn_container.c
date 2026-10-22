@@ -286,7 +286,9 @@ void FUN_L06_002d8738(char *moby) {
 extern char *func_0020D348_m(int);
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L06_002d8b98(char *owner) {
+char *spawn_gadgebot_pad(char *owner) __asm__("FUN_L06_002d8b98");
+
+char *spawn_gadgebot_pad(char *owner) {
     char *moby = func_0020D348_m(0x12F);
     if (moby != 0) {
         *(short *)(moby + 0x32) = 0x60;
@@ -1327,7 +1329,7 @@ typedef struct {
 } GbStats;
 
 char *spawn_gadgebot_spawn_container(char *owner) __asm__("FUN_L06_002d8510");
-char *FUN_L06_002d8b98(char *owner);
+char *spawn_gadgebot_pad(char *owner) __asm__("FUN_L06_002d8b98");
 extern GbHit D_L06_001745C0;
 extern Moby *D_L06_0015FFD8;
 extern GbMoby *D_L06_001745D8 __attribute__((section(".data")));
@@ -1509,7 +1511,7 @@ void gadgebot_update(GbMoby *moby) {
 
         gadgebot_vars->unk308 = 1.0f;
         moby->pos[2] = probe_ground_height(moby->pos, 0, 0.5f);
-        FUN_L06_002d8b98((char *)moby);
+        spawn_gadgebot_pad((char *)moby);
         gadgebot_vars->unk2F0.q = gadgebot_vars->unk2E0.q = *(OvlQuad *)moby->pos;
         if (visited52[moby->unkB0 + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
