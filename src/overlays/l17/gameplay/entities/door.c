@@ -556,7 +556,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
                      char *excluded_target) {
     float v[4];
     float w[4];
-    float mat[16];
+    float arrow_direction_rotation_matrix[16];
     float u[4];
     int sx, sy, tx, ty;
     char *scanned_moby;
@@ -745,9 +745,9 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
         u[2] += 4.0f;
         ap = (char *)ship_moby + 0x10;
         project_to_screen(w, u);
-        transpose_rotation_matrix(mat, D_L17_001678D0);
+        transpose_rotation_matrix(arrow_direction_rotation_matrix, D_L17_001678D0);
         fast_vec_sub(v, np, (&hero.motion.pos));
-        transform_vector(v, v, mat);
+        transform_vector(v, v, arrow_direction_rotation_matrix);
         v[0] = -v[1];
         v[1] = -v[2];
         v[2] = 0.0f;
