@@ -159,7 +159,7 @@ extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
 extern void register_shrub_render_class(char *, void *, void *, void *, s32) __asm__("FUN_00203b08");
 extern void unpack_point_records(void *, s32) __asm__("FUN_00202800");
 extern void relocate_counted_pointer_table(char *) __asm__("FUN_L00_0023f120");
-extern void FUN_L00_0023f0d8(char *);
+extern void load_two_int_two_float_header(char *) __asm__("FUN_L00_0023f0d8");
 extern void parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_002026c8");
 extern void printf_1e93b0(const char *, ...) __asm__("FUN_001e93b0");
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
@@ -311,7 +311,7 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
             D_L06_0015F440 = 0;
         }
         if (level_header[0x29]) {
-            FUN_L00_0023f0d8(base + level_header[0x29]);
+            load_two_int_two_float_header(base + level_header[0x29]);
         } else {
             D_L06_0015FC98 = 0;
             D_L06_0015FC9C = 0;
