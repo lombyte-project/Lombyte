@@ -1765,7 +1765,7 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
    descriptor's yaw over `timer`. */
 void volume_camera_swing(struct UpdateCam *cam) __asm__("FUN_L00_002ec988");
 void volume_camera_swing(struct UpdateCam *swing_camera_record) {
-    CameraVec dir;
+    CameraVec gravity_offset_or_yaw_direction;
     SwingCameraParams *params;
     struct UpdateCam *rec;
     Vec4f *pos;
@@ -1831,12 +1831,12 @@ stop:
         tail->distance = params->height;
         follow->look_height = params->offset_scale;
         qcopy(state->tail.unk140, tail->unk130);
-        fast_vec_scale(dir, &hero.gravity_dir, -tail->distance);
+        fast_vec_scale(gravity_offset_or_yaw_direction, &hero.gravity_dir, -tail->distance);
         pos = &rec->pos;
-        fast_vec_add(state->follow.eye, &hero.motion.pos, dir);
+        fast_vec_add(state->follow.eye, &hero.motion.pos, gravity_offset_or_yaw_direction);
         fast_vec_add(pos, state->follow.eye, tail->unk130);
-        fast_vec_scale(dir, &hero.gravity_dir, -follow->look_height);
-        fast_vec_add(state->follow.look_target, &hero.motion.pos, dir);
+        fast_vec_scale(gravity_offset_or_yaw_direction, &hero.gravity_dir, -follow->look_height);
+        fast_vec_add(state->follow.look_target, &hero.motion.pos, gravity_offset_or_yaw_direction);
         qcopy(state->follow.unkD0, state->follow.look_target);
         qcopy(follow->focus, &hero.motion.pos);
         qcopy(state->follow.offset, follow->focus);
@@ -1898,12 +1898,12 @@ stop:
             params->timer = scale_game_frames(200);
         }
     }
-    dir[0] = fast_cos(camera_descriptors[swing_camera_record->descriptor_index].yaw);
-    dir[1] = fast_sin(camera_descriptors[swing_camera_record->descriptor_index].yaw);
-    *(s32 *)&dir[2] = 0;
+    gravity_offset_or_yaw_direction[0] = fast_cos(camera_descriptors[swing_camera_record->descriptor_index].yaw);
+    gravity_offset_or_yaw_direction[1] = fast_sin(camera_descriptors[swing_camera_record->descriptor_index].yaw);
+    *(s32 *)&gravity_offset_or_yaw_direction[2] = 0;
     swing = params->swing * 0.017453292f * (params->timer / total);
     if ((params->type != 1 && params->type != 7 && params->type != 9) || at_end == 0) {
-        fun_l00_002e8918(dir, swing, params->pitch * 0.017453292f);
+        fun_l00_002e8918(gravity_offset_or_yaw_direction, swing, params->pitch * 0.017453292f);
     }
     if (params->distance != 0.0f) {
         if (params->type == 6 || params->type == 8) {
