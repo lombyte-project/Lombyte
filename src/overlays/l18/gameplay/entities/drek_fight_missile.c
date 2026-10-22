@@ -1514,6 +1514,8 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   int) __asm__("FUN_L00_0025e450");
 
 void drek_final_boss_robot_update(BossMoby *moby) __asm__("FUN_L18_002f2bf0");
+void spawn_drek_boss_firing_effects(char *moby, void *effect_position) __asm__("FUN_L18_002f76a0");
+
 void drek_final_boss_robot_update(BossMoby *moby) {
     enum {
         DREK_BOSS_INITIALIZE = 0,
@@ -2192,7 +2194,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                     e = 60.0f;
                 }
                 FUN_L18_002d5348(v1, v2, position_and_displacement_scratch, a, c, func_001FA898_r(multiply_global_factor_ed64(e)), 2);
-                FUN_L18_002f76a0((char *)moby, v1);
+                spawn_drek_boss_firing_effects((char *)moby, v1);
             }
         }
         if (tick_countdown_32_alt(&boss_data->f358) != 0 || (boss_data->f390 > 25.0f && (float)boss_data->f34C < 4.0f)) {
@@ -2234,7 +2236,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 }
                 normalize_vector_xyz(v1, v1, f * frame_time);
                 FUN_L18_002db938((char *)position_and_displacement_scratch, v1, (int)moby, 64.0f, frame_time * 18.0f);
-                FUN_L18_002f76a0((char *)moby, position_and_displacement_scratch);
+                spawn_drek_boss_firing_effects((char *)moby, position_and_displacement_scratch);
                 boss_data->f3BC = randf_sym(0.133f, 0.333f);
             } else if ((moby->f70 & 2) != 0 && moby->f53 != 3) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(0x14));
@@ -3438,7 +3440,7 @@ unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, in
                                 float y, float z, float w, float pw);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L18_002f76a0(char *moby, void *effect_position) {
+void spawn_drek_boss_firing_effects(char *moby, void *effect_position) {
     QVec emission_direction;
     QVec position_offset;
     float offset_world_position[4];
