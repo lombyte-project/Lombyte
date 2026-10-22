@@ -1095,7 +1095,9 @@ int FUN_L00_00257b90_26bca8(int, int) __asm__("FUN_L00_00257b90");
 int FUN_001f96f8_26bca8(int) __asm__("FUN_001f96f8");
 unsigned char *FUN_L00_0026bb70_26bca8(void *, void *, int, int, float, int, int, int,
                                        int) __asm__("FUN_L00_0026bb70");
-void FUN_L00_0026bca8(unsigned char *particle) {
+void update_shrinking_effect_particle_with_gravity_and_secondary_spawns(unsigned char *particle) __asm__("FUN_L00_0026bca8");
+
+void update_shrinking_effect_particle_with_gravity_and_secondary_spawns(unsigned char *particle) {
     V26bca8 updated_position_copy, spawn_velocity, random_direction;
     unsigned char *particle_data = particle + 0x20;
     unsigned char *particle_position;
