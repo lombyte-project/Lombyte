@@ -95,7 +95,9 @@ extern CollisionHit HH __asm__("D_L15_00174440") __attribute__((section(".data")
 #define HF(o) (*(f32 *)(D_L15_00174440 + (o)))
 
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
-void FUN_L15_0020a7a0(void) {
+void update_hero_ground_contact(void) __asm__("FUN_L15_0020a7a0");
+
+void update_hero_ground_contact(void) {
     V shared_ray_endpoint, ground_ray_endpoint, ground_displacement_or_angles, surface_probe_endpoint, unused_probe_vector, probe_surface_angles, probe_surface_normal;
     f32 f;
     s32 collision_sound_class;
