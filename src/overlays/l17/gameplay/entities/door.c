@@ -1045,7 +1045,7 @@ void FUN_L17_002ec000(char *moby, char *ship_vars, float aim_azimuth, float aim_
 /* Fires a projectile from the moby when the trigger is ready and the player presses a button. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EDC40), where it is exact; names translated to the US level program. */
 
-extern int FUN_L13_002e6a58(void *, void *, int, void *, float, int);
+extern int spawn_ship_rocket(void *, void *, int, void *, float, int) __asm__("FUN_L13_002e6a58");
 extern unsigned char D_0013E533_u[] __asm__("D_0013E533");
 
 extern short D_L17_00162074 __attribute__((sda));
@@ -1065,7 +1065,7 @@ void FUN_L17_002ec150(char *moby, char *ship_vars) {
             fast_vec_add(projectile_spawn_position, projectile_spawn_position, projectile_spawn_offset);
             projectile_scale = *(float *)&D_L17_00162074 * *(float *)&D_L17_001620A0_gp;
             scaled_frame_count = scale_game_frames(300);
-            if (FUN_L13_002e6a58(moby, projectile_spawn_position, *(int *)(ship_vars + 0xEC), projectile_initial_rotation, projectile_scale, scaled_frame_count)) {
+            if (spawn_ship_rocket(moby, projectile_spawn_position, *(int *)(ship_vars + 0xEC), projectile_initial_rotation, projectile_scale, scaled_frame_count)) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
                 hero.ship_ammo -= 1;
                 *(int *)(ship_vars + 0x84) = D_L17_00162078;

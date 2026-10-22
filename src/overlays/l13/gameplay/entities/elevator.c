@@ -2566,7 +2566,7 @@ void FUN_L13_002b9df8(struct Moby *moby, char *flight_data, float azimuth_angle,
 /* Fires a timed burst from a moby while a pad button is held and ammo remains. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB1C8), where it is exact; names translated to the US level program. */
 
-extern int FUN_L13_002e6a58(void *, void *, float, int, void *, int);
+extern int spawn_ship_rocket(void *, void *, float, int, void *, int) __asm__("FUN_L13_002e6a58");
 
 void FUN_L13_002b9f58(struct Moby *moby, char *flight_data) {
     if (fast_dec_timer(flight_data + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
@@ -2584,7 +2584,7 @@ void FUN_L13_002b9f58(struct Moby *moby, char *flight_data) {
             fast_vec_add(projectile_spawn_position, projectile_spawn_position, projectile_spawn_offset);
             projectile_scale = frame_time * 100.0f;
             projectile_frame_count = scale_game_frames(300);
-            if (FUN_L13_002e6a58(moby, projectile_spawn_position, projectile_scale, *(int *)(flight_data + 0xEC), projectile_initial_rotation, projectile_frame_count) != 0) {
+            if (spawn_ship_rocket(moby, projectile_spawn_position, projectile_scale, *(int *)(flight_data + 0xEC), projectile_initial_rotation, projectile_frame_count) != 0) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
                 player_ammo_state[0x15F6]--;
                 *(int *)(flight_data + 0x84) = scale_game_frames(30);
