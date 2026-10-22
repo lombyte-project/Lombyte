@@ -450,7 +450,9 @@ extern void refl_2e5178(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 rnd_2e5178(f32, f32) __asm__("FUN_L00_00257c48");
 extern void kill_2e5178(void *) __asm__("FUN_0020c828");
-void FUN_L04_002e5178(M2e5178 *entity) {
+void update_entity_bounce_and_decay(M2e5178 *entity) __asm__("FUN_L04_002e5178");
+
+void update_entity_bounce_and_decay(M2e5178 *entity) {
     enum {
         ENTITY_MOTION_STATE_BOUNCE = 0,
         ENTITY_MOTION_STATE_DECAY_AND_REMOVE = 1
