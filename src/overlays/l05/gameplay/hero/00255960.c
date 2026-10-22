@@ -125,7 +125,7 @@ extern void FUN_L01_002405a0(void);
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void FUN_L05_0023dc88(int i);
 extern void update_hero_hoverboard_trick_animations(void) __asm__("FUN_L05_00253850");
-extern void FUN_L05_00253b48(void);
+extern void process_hero_race_object_interactions(void) __asm__("FUN_L05_00253b48");
 extern void update_hero_hoverboard_trick_score(void) __asm__("FUN_L05_00254058");
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -1937,7 +1937,7 @@ void FUN_L05_00255960(void) {
                         }
                     }
                     update_hero_hoverboard_trick_animations();
-                    FUN_L05_00253b48();
+                    process_hero_race_object_interactions();
                     update_hero_hoverboard_trick_score();
                     if ((((unsigned char *)hero.moby)[0x53] == 0x55 || ((unsigned char *)hero.moby)[0x53] == 0x7F) &&
                         ((unsigned char *)hero.moby)[0x51] < 0xC) {
@@ -1988,7 +1988,7 @@ void FUN_L05_00255960(void) {
                         break;
                     }
                     update_hero_hoverboard_trick_animations();
-                    FUN_L05_00253b48();
+                    process_hero_race_object_interactions();
                     update_hero_hoverboard_trick_score();
                     break;
                 case 109:

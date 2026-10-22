@@ -1139,7 +1139,9 @@ extern s32 D_L00_0015F5CC __asm__("D_L00_0015F5CC");
 extern s32 D_0013D4B8;
 extern s32 weapon_ammo_counts[37] __asm__("D_0013D428");
 
-void FUN_L05_00253b48(void) {
+void process_hero_race_object_interactions(void) __asm__("FUN_L05_00253b48");
+
+void process_hero_race_object_interactions(void) {
     u8 *state;
     u8 *moby;
     u8 *first;
