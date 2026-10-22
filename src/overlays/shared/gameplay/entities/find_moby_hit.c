@@ -844,7 +844,9 @@ float FUN_L00_0025b750(float start_angle, float target_angle, float blend_fracti
 
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L00_0025b798(float *velocity, float rate, float error_gain, float damping_coefficient, float limit) {
+void advance_damped_scalar_velocity(float *velocity, float rate, float error_gain, float damping_coefficient, float limit) __asm__("FUN_L00_0025b798");
+
+void advance_damped_scalar_velocity(float *velocity, float rate, float error_gain, float damping_coefficient, float limit) {
     float unclamped_velocity = *velocity + (error_gain * rate - damping_coefficient * (*velocity));
 
     *velocity = unclamped_velocity;
