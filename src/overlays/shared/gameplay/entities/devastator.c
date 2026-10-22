@@ -2011,7 +2011,7 @@ extern int D_00141330[];
 void select_camera_mode_by_hero_alignment_and_distance() __asm__("FUN_L00_002eba18");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_002b57f0_u() __asm__("FUN_L00_002b57f0");
-void FUN_L00_00203b78();
+void clear_jet_camera_mode_latch() __asm__("FUN_L00_00203b78");
 void mark_moby_for_removal() __asm__("FUN_0020c828");
 /* Clears the moby state word 4 and the 0x14 handle, calls release helpers, marks a for removal. */
 void FUN_L00_002b5b20(void *missile_moby, char **missile_vars) {
@@ -2023,7 +2023,7 @@ void FUN_L00_002b5b20(void *missile_moby, char **missile_vars) {
     *(int *)((char *)missile_vars + 0x14) = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
     FUN_L00_002b57f0_u(missile_moby, 1);
-    FUN_L00_00203b78();
+    clear_jet_camera_mode_latch();
     mark_moby_for_removal(missile_moby);
     D_L00_00167014[0] = 0;
 }

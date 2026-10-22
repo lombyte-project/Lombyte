@@ -1660,7 +1660,7 @@ extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18(int);
 extern void jet_camera_mode(void) __asm__("FUN_L00_00203b18");
-extern void FUN_L00_00203b78(void);
+extern void clear_jet_camera_mode_latch(void) __asm__("FUN_L00_00203b78");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
@@ -1928,7 +1928,7 @@ void fighter_jet_update(ShipMoby *moby) {
             D_L17_0015F608 = 2;
             if (fast_dec_timer_s16(&ship_vars->hit_timer)) {
                 struct Hero *g = &hero;
-                FUN_L00_00203b78();
+                clear_jet_camera_mode_latch();
                 ((ShipCamera *)g->moby)->unk98 = 0;
                 hero_respawn();
                 FUN_L00_002eac18(0);

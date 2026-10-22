@@ -30,7 +30,9 @@ void jet_camera_mode(void) {
 }
 extern char D_L00_00179448[];
 /* Clears the short at D_L00_00179448. */
-void FUN_L00_00203b78(void) {
+void clear_jet_camera_mode_latch(void) __asm__("FUN_L00_00203b78");
+
+void clear_jet_camera_mode_latch(void) {
     *(short *)D_L00_00179448 = 0;
 }
 #define NOT_SDA
