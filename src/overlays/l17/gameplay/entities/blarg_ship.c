@@ -41,7 +41,9 @@ extern char D_00141D7C[];
 #include "rnc/gameplay/state/game_globals.h"
 extern int func_001F9908_i(int *) __asm__("FUN_001f9740");
 
-void FUN_L17_002f26d0(struct Moby *moby) {
+void update_fleet_camera_box_watcher(struct Moby *moby) __asm__("FUN_L17_002f26d0");
+
+void update_fleet_camera_box_watcher(struct Moby *moby) {
     enum {
         CAMERA_BOX_WATCHER_INITIALIZE = 0,
         CAMERA_BOX_WATCHER_MONITOR = 1,
