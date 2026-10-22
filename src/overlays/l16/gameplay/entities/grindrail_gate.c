@@ -2978,7 +2978,9 @@ extern float D_L16_001E34A0[];
 extern float D_L16_001E3828[];
 float *D_L16_00162018[4] __attribute__((section(".sdata"))) = {D_L16_001E2DB0, D_L16_001E34A0, D_L16_001E3828, 0};
 extern L16SingleSphere_2ea128 D_L16_001E5390[] __attribute__((section(".data")));
-void FUN_L16_002ea128(unsigned char *moby) {
+void update_level16_three_mesh_bounds_and_callback(unsigned char *moby) __asm__("FUN_L16_002ea128");
+
+void update_level16_three_mesh_bounds_and_callback(unsigned char *moby) {
     enum {
         MESH_RENDER_INITIALIZE_BOUNDING_SPHERES = 0,
         MESH_RENDER_QUEUE_CALLBACK = 1
