@@ -196,7 +196,9 @@ extern int D_001413DC __attribute__((section(".data")));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L16_002d38b0(struct Moby *);
-extern void FUN_L16_002d4070(char *);
+void select_blarg_elite_commando_movement_animation(char *moby) __asm__("FUN_L16_002d4070");
+
+extern void select_blarg_elite_commando_movement_animation(char *) __asm__("FUN_L16_002d4070");
 extern void add_vector_xyz(void *, void *, void *);
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -324,7 +326,7 @@ void blarg_elite_commando_update(char *commando_moby) {
                     *(short *)(commando_data + 0x2DC) =
                         truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(30.0f, 90.0f)));
                     *(short *)(commando_data + 0x300) = (*(short *)(commando_data + 0x300) + 1) % 2;
-                    FUN_L16_002d4070(commando_moby);
+                    select_blarg_elite_commando_movement_animation(commando_moby);
                 } else if (!random_integer_below(20)) {
                     commando_moby[0x20] = 4;
                     if (((unsigned char *)commando_moby)[0x53] != 2) {
@@ -337,7 +339,7 @@ void blarg_elite_commando_update(char *commando_moby) {
                 *(short *)(commando_data + 0x300) = (*(short *)(commando_data + 0x300) + 1) % 2;
                 commando_moby[0x20] = 3;
                 *(short *)(commando_data + 0x302) = scale_game_frames(180);
-                FUN_L16_002d4070(commando_moby);
+                select_blarg_elite_commando_movement_animation(commando_moby);
             }
         }
         break;
@@ -816,7 +818,7 @@ extern char *D_L16_001B0930[];
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L16_002d4070(char *moby) {
+void select_blarg_elite_commando_movement_animation(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *target = D_L16_001B0930[*(int *)(data + 0x120)] + (*(short *)(data + 0x300) << 4);
     float angle = fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
