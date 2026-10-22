@@ -1605,7 +1605,9 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int FUN_L00_00257b90(int lo, int hi);
 extern void FUN_L00_0026ced0_u(void *, void *, u32, u32, f32, s32) __asm__("FUN_L00_0026ced0");
 
-void FUN_L01_002ffb28(SmokeMoby *self) {
+void update_smoke_emitter(SmokeMoby *self) __asm__("FUN_L01_002ffb28");
+
+void update_smoke_emitter(SmokeMoby *self) {
     SmokeVars *smoke_vars;
     Vec4 pos;
     Vec4 particle_velocity;
