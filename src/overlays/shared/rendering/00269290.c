@@ -297,7 +297,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_00269c70(char *particle) {
+void update_scalar_and_fade_effect_particle(char *particle) __asm__("FUN_L00_00269c70");
+
+void update_scalar_and_fade_effect_particle(char *particle) {
     float *particle_data;
     particle_data = (float *)(particle + 0x20);
     if (fast_dec_timer(particle_data)) {
