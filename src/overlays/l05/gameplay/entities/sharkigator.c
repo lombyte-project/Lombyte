@@ -231,7 +231,7 @@ extern void set_camera_2d1688(void *, void *, int, int) __asm__("FUN_L00_00216f9
 extern int allocate_voice_for_target_entry_2d1688(int, int, char *) __asm__("FUN_0022da68");
 extern void sound_2d1688(void) __asm__("FUN_L00_00211250");
 extern void reset_2d1688(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L05_002d1e30(char *);
+extern void spawn_sharkigator_surface_effects(char *) __asm__("FUN_L05_002d1e30");
 extern void spawn_sharkigator_splash_effects(int, char *) __asm__("FUN_L05_002d1fd8");
 
 void sharkigator_update(char *moby) __asm__("FUN_L05_002d1688");
@@ -311,7 +311,7 @@ state_one:
             speed = (D_L05_001612E0_macro[2] - D_L05_00161388) - 2.0f;
         } else {
             speed = (D_L05_001612E0_macro[2] - D_L05_00161388) - 0.5f;
-            FUN_L05_002d1e30(moby);
+            spawn_sharkigator_surface_effects(moby);
         }
         move_2d1688((float *)(moby + 0x18), speed, (float *)(data + 0x78), frame_time_sq + frame_time_sq, frame_time_sq + frame_time_sq, frame_time + frame_time);
         return;
@@ -421,7 +421,9 @@ extern float D_L05_001612E8 __asm__("D_L05_001612E8");
 extern char D_L05_0015F580_macro[] __asm__("D_L05_0015F580") __attribute__((section(".sdata")));
 
 /* When the timer runs out, spawns two effects beside the moby, one to each side, and restarts the timer. */
-void FUN_L05_002d1e30(char *moby) {
+void spawn_sharkigator_surface_effects(char *moby) __asm__("FUN_L05_002d1e30");
+
+void spawn_sharkigator_surface_effects(char *moby) {
     V2d1e30 spawn_position;
     char *data;
     char *spawned_effect;
