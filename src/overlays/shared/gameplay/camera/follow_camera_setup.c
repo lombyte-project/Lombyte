@@ -132,7 +132,7 @@ extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 extern s32 collect_mobies_in_sphere(void *, s32, s32, s32, f32) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_002e8918(f32 *, f32, f32);
-extern void FUN_L00_002e8970(void *, f32, f32);
+extern void set_follow_camera_angle_blend_from_position(void *, f32, f32) __asm__("FUN_L00_002e8970");
 extern void follow_camera_start_slide(void) __asm__("FUN_L00_002e8648");
 extern void FUN_L00_002e8620(void);
 extern void follow_camera_set_height(f32, f32) __asm__("FUN_L00_002e84b8");
@@ -226,7 +226,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
             x->i260++;
             if (scale_game_frames(400) < x->i260) x->i260 = scale_game_frames(400);
             rotation_or_blend_value = convert_integer_to_float(x->i260) / convert_integer_to_float(scale_game_frames(400));
-            FUN_L00_002e8970(x->p25C + 0x10, rotation_or_blend_value * 0.20943952f, 0.0f);
+            set_follow_camera_angle_blend_from_position(x->p25C + 0x10, rotation_or_blend_value * 0.20943952f, 0.0f);
         }
     }
     camera_override_state->i10 = 0;

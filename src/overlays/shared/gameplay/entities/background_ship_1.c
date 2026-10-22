@@ -964,7 +964,7 @@ extern void follow_camera_set_up_spring(float, float) __asm__("FUN_L00_002e85d8"
 extern void FUN_L00_002e8620(void);
 extern void FUN_L00_002e8648(void) __asm__("FUN_L00_002e8648");
 extern void FUN_L00_002e8918(float, float, float *) __asm__("FUN_L00_002e8918");
-extern void FUN_L00_002e8970(float, float, void *);
+extern void set_follow_camera_angle_blend_from_position(float, float, void *) __asm__("FUN_L00_002e8970");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float absolute_float(float);
@@ -1149,9 +1149,9 @@ void FUN_L02_002fb9c8(char *moby) {
                     speed = (amount - 0.0f) * ((float)*(short *)(data + 0x20) / convert_integer_to_float(scale_game_frames(90))) + 0.0f;
                 else
                     speed = amount;
-                FUN_L00_002e8970(speed, 0.0f, target + 0x10);
+                set_follow_camera_angle_blend_from_position(speed, 0.0f, target + 0x10);
             } else {
-                FUN_L00_002e8970(amount, 0.0f, target + 0x10);
+                set_follow_camera_angle_blend_from_position(amount, 0.0f, target + 0x10);
             }
         }
     }

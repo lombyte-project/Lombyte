@@ -2255,7 +2255,7 @@ extern void FUN_L00_002e8388(char *);
 extern int frames_s(int) __asm__("FUN_001f96f8");
 extern void FUN_L02_002f6598(float, float, float);
 extern float itof_s(int) __asm__("FUN_001fa6c0");
-extern void FUN_L00_002e8970(void *, float, float);
+extern void set_follow_camera_angle_blend_from_position(void *, float, float) __asm__("FUN_L00_002e8970");
 extern void pitch_s(int, float, float) __asm__("FUN_L00_002e8450");
 extern void FUN_L00_002e8620(void);
 extern void yaw_s(float, float) __asm__("FUN_L00_002e84b8");
@@ -2311,7 +2311,7 @@ void FUN_L15_002f88e8(char *moby) {
     spin_ramp_ratio = itof_s(*(short *)(slot_data + 0x20)) / itof_s(spin_ramp_frames);
     spin_angle_radians = *(float *)slot_data * DEG_TO_RAD * spin_ramp_ratio;
     if (done)
-        FUN_L00_002e8970(target_record + 0x30, spin_angle_radians, 0.0f);
+        set_follow_camera_angle_blend_from_position(target_record + 0x30, spin_angle_radians, 0.0f);
     if (*(float *)(slot_data + 0x34) != 0.0f) {
         pitch_s(0, *(float *)(slot_data + 0x34), 0.003f);
         FUN_L00_002e8620();

@@ -2651,8 +2651,10 @@ void FUN_L00_002e8918(char *input_direction, float x, float y) {
 extern char *D_L00_00166E00_002e8970 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 void FUN_L00_002e88c8_002e8970(char *, char *, float) __asm__("FUN_L00_002e88c8");
 /* Stores x at +0x1BC of D_L00_00166E00+0x70 and calls FUN_L00_002e88c8 with a and y. */
-void FUN_L00_002e8970(char *a, float x, float y);
-void FUN_L00_002e8970(char *target_position, float x, float y) {
+void set_follow_camera_angle_blend_from_position(char *target_position, float x, float y) __asm__("FUN_L00_002e8970");
+
+void set_follow_camera_angle_blend_from_position(char *a, float x, float y) __asm__("FUN_L00_002e8970");
+void set_follow_camera_angle_blend_from_position(char *target_position, float x, float y) {
     char *target_position_arg = target_position;
     char *current_camera = D_L00_00166E00_002e8970;
     if (*(short *)(current_camera + 0x86) == 0) {
