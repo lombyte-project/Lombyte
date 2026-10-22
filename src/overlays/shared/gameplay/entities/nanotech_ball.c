@@ -1416,7 +1416,7 @@ extern void transpose_rotation_matrix(void *,void *) __asm__("FUN_001fa2d8");
 extern void FUN_L00_0020e4c8(void);
 extern void FUN_L00_0020e698(void);
 extern void FUN_L00_002223f8(int,int);
-extern void FUN_L00_002377b8(void);
+extern void update_hud_counter_cap_and_visibility(void) __asm__("FUN_L00_002377b8");
 extern void FUN_L00_00237840(void);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_002d9fd0(char *,char *,void *);
@@ -1464,7 +1464,7 @@ void suckcannon_update(SuckMoby *self) {
     int slot_released, i, sound, next_state;
     SuckMoby *stored;
 
-    queue_animation_update_alt(4, 0x753F, (int)suck_delete_callback, (int)FUN_L00_002377b8,
+    queue_animation_update_alt(4, 0x753F, (int)suck_delete_callback, (int)update_hud_counter_cap_and_visibility,
                  (int)FUN_L00_00237840, (int)&suck_hero.count, 5);
     cannon = self->data;
     slot_released = suck_hero.slot_state == 3;

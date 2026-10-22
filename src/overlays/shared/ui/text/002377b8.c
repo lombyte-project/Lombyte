@@ -11,7 +11,9 @@ extern unsigned char D_0013E529[];
 void FUN_L00_00235ea0(char *);
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 /* Sets p+8 to 10 or 5 by D_0013E529, then sets or caps the 0x7C timer by the hero mode. */
-void FUN_L00_002377b8(char *hud_element) {
+void update_hud_counter_cap_and_visibility(char *hud_element) __asm__("FUN_L00_002377b8");
+
+void update_hud_counter_cap_and_visibility(char *hud_element) {
     FUN_L00_00235ea0(hud_element);
     if (D_0013E529[0] != 0)
         *(int *)(hud_element + 8) = 10;
