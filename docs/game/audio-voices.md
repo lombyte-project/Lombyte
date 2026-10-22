@@ -5,10 +5,10 @@ a sound-driver handle or hardware voice number.
 
 ## Functions
 
-These C names describe observed behavior; none is claimed as an original
-Insomniac function name.
+The C names describe what the code does; they are not claimed to be
+Insomniac's original names.
 
-| C name | USA symbol | Contract |
+| C name | USA symbol | What it does |
 |---|---|---|
 | `allocate_voice_for_target_entry` | `FUN_0022da68` | Read a moby's class sound definition by index, queue it, record owner and entry index; return a slot or -1 |
 | `allocate_voice_slot` | `FUN_0022d7f0` | Find a free game-side slot and initialize a queued start; return a slot or -1 |
@@ -19,7 +19,7 @@ Insomniac function name.
 
 ## States
 
-The named states are a partial vocabulary, not the complete state machine.
+Only some states have names so far.
 
 | Value | Name | Evidence |
 |---|---|---|
@@ -36,9 +36,8 @@ The ordinary search covers the first 26 slots. The hero, its first item, and
 class `0x472` may search all 30. A definition rejected by the source-state/flag
 test, a full pool, or volume below `0x20` returns -1.
 
-The target-entry helper's preconditions are unchanged: it checks only the upper
-entry bound; release ignores negative indices but does not check the upper
-slot bound.
+The target-entry helper checks only the upper entry bound. Release ignores
+negative indices but does not check the upper slot bound.
 
 ## Layouts
 
@@ -51,8 +50,7 @@ slot bound.
   is inferred from the bounds check.
 - Definition `+0x1A` is the sound index and `+0x1C` the bank handle passed by
   `sound_update` to `snd_play_sound_vol_pan_pmpb`.
-  The allocator's unsigned 16-bit view is retained; the updater uses signed
-  16-bit access.
+  The allocator reads it as unsigned 16-bit, the updater as signed 16-bit.
 - Slot `+0x1C` is cleared as owner context, not unused padding.
 - Storage at slot `+0x44` includes 36 occlusion-history bytes and eight bytes
   not interpreted by this view; it is not a 44-sample history.
@@ -61,8 +59,8 @@ slot bound.
 
 ## OpenRAC comparison
 
-[OpenRAC's PAL sound.c](https://github.com/OpenRAC/rac1-decomp/blob/05da3217a4046ac01dec3ac74f051a348f063155/src/game/sound.c)
+[OpenRAC's sound.c](https://github.com/OpenRAC/rac1-decomp/blob/05da3217a4046ac01dec3ac74f051a348f063155/src/game/sound.c)
 has analogous release and target-entry helpers at `func_0022EAB0` and
 `func_0022ED80`; allocation at `func_0022EB08` remains an assembly stub.
-These support the access patterns, not original function names or independent
-proof, since the projects share research ancestry.
+They back up how the data is used, not the names, and are not independent
+proof: both projects share earlier research.

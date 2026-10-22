@@ -165,5 +165,5 @@ screen overlays.
 ## Scope
 
 Per-level `update/*` and `hero*` code lives in the level code overlays
-([overlays.md](overlays.md)). The module list above is context for naming,
+([overlays.md](../build/overlays.md)). The module list above is context for naming,
 not a work queue.

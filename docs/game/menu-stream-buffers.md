@@ -1,12 +1,12 @@
 # Menu stream buffers
 
 `src/ui/menus/stream_buffers/` owns the five descriptors used by menu images,
-previews, prompts, save screens and the map. These are descriptive USA names;
-the canonical linker symbols stay unchanged.
+previews, prompts, save screens and the map. The C names describe what the code
+does; the linker symbols stay the same.
 
 ## Functions
 
-| Function | USA address | Contract |
+| Function | USA address | What it does |
 |---|---|---|
 | `initialize_menu_stream_buffers` | 0x00225AC0 | Mode zero initializes one small buffer and clears four slots; nonzero initializes three small and two large buffers |
 | `acquire_menu_stream_buffer` | 0x00225C18 | Acquire and fill the first available buffer of the requested size class; return its address or zero |
@@ -32,5 +32,5 @@ in `src/check/menu_stream_buffer_layout_check.c`.
   that pending flag. Release does not establish successful I/O completion.
 
 Size and read-flag helpers match addresses without checking allocation or
-rejecting zero. Caller declarations retain their existing types and old-style
-prototypes to preserve code generation.
+rejecting zero. Callers keep their existing types and old-style prototypes, because
+changing them changes the generated code.

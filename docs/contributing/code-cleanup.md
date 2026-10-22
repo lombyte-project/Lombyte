@@ -2,10 +2,10 @@
 
 This guide is for C that already matches the original game. It explains how
 to make that code easier to read. To decompile new code, see
-[CONTRIBUTING.md](../CONTRIBUTING.md).
+[CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 For a bounded example of names, partial layouts and module boundaries, see
-[game-side voice allocation](audio-voices.md) and [IOP stash transfers](stash.md).
+[game-side voice allocation](../game/audio-voices.md) and [IOP stash transfers](../game/stash.md).
 
 > **The one rule:** after every change, the build must still produce exactly
 > the same bytes. Cleanup never changes what the game does.
@@ -71,7 +71,7 @@ removing the trick does not change the code, it is not a fakematch: delete it.
   own file uses in every file that calls it.
 - **Files:** a boot file is named after the function it holds; a level code
   file after the moby class or function it holds
-  ([overlays.md](overlays.md#sources-and-the-proof)). Keep `fun_<addr>.c`
+  ([overlays.md](../build/overlays.md#source-files-and-the-check)). Keep `fun_<addr>.c`
   until the name is proven.
 - **Renaming:** rename the function in its own file and in every caller,
   level code included (`grep -rn FUN_<addr> src include`).
@@ -106,7 +106,7 @@ removing the trick does not change the code, it is not a fakematch: delete it.
 
 **Enums**
 
-- Reuse the shared definitions in [enum scope and shared definitions](enum-layout.md).
+- Reuse the shared definitions in [enum scope and shared definitions](../game/enum-layout.md).
 - Constants used by several C files belong in the owning subsystem's header.
   Constants shared only by functions in one C file stay at file scope; a private
   callback's selector stays local.
@@ -158,7 +158,7 @@ edit fails at once.
 
 ## Moving files
 
-See [menu stream buffers](menu-stream-buffers.md) for a small module example.
+See [menu stream buffers](../game/menu-stream-buffers.md) for a small module example.
 
 - Folders follow the subsystem, for example `ui/menus/<screen>` or
   `gameplay/...`.
