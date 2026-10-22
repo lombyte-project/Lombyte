@@ -130,7 +130,9 @@ extern int func_001FA898_87158(float) __asm__("FUN_001fa6d0");
 extern int func_002140B0_87158(int) __asm__("FUN_00213260");
 extern float func_001FA888_87158(int) __asm__("FUN_001fa6c0");
 extern unsigned char *D_L01_001B25D0 __attribute__((section(".data")));
-unsigned char *FUN_L01_00287158(void *spawn_position, int b, int particle_data_value, int particle_lifetime, float particle_scale, float g) {
+unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_data_value, int particle_lifetime, float particle_scale, float g) __asm__("FUN_L01_00287158");
+
+unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_data_value, int particle_lifetime, float particle_scale, float g) {
     unsigned char *r = func_00218928_87158(0x34);
     if (r != 0) {
         char *particle_data = (char *)r + 0x20;

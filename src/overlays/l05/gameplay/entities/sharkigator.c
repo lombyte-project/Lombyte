@@ -976,7 +976,7 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
-extern void FUN_L01_00287158(float *, float, float, int, int, int);
+extern void spawn_type_52_particle(float *, float, float, int, int, int) __asm__("FUN_L01_00287158");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -994,7 +994,7 @@ void FUN_L05_002db018(unsigned char *moby) {
             particle_spawn_position[1] = fast_sin(a) * b;
             particle_spawn_position[2] = z;
             add_vector_xyz(particle_spawn_position, particle_spawn_position, moby + 0x10);
-            FUN_L01_00287158(particle_spawn_position, c, e, 0x30002028, 0x2020, scale_game_frames(s));
+            spawn_type_52_particle(particle_spawn_position, c, e, 0x30002028, 0x2020, scale_game_frames(s));
         }
         if (random_integer_below(4) == 0) {
             float a = random_angle_radians();
@@ -1007,7 +1007,7 @@ void FUN_L05_002db018(unsigned char *moby) {
             particle_spawn_position[1] = fast_sin(a) * b;
             particle_spawn_position[2] = z;
             add_vector_xyz(particle_spawn_position, particle_spawn_position, moby + 0x10);
-            FUN_L01_00287158(particle_spawn_position, c, e, 0x20002020, 0x2030, scale_game_frames(s));
+            spawn_type_52_particle(particle_spawn_position, c, e, 0x20002020, 0x2030, scale_game_frames(s));
         }
     }
 }
