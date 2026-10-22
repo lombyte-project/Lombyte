@@ -1200,7 +1200,9 @@ extern s32 FUN_001efa68_c(void *, V_da360 *, s32, M_da360 *, s32) __asm__("FUN_0
 int process_suck_cannon_suction_candidate(u8 *p, void *q, void *m_, void *r_, void *buf) __asm__("FUN_L00_002da058");
 extern void FUN_L00_002da1e0_c(M_da360 *) __asm__("FUN_L00_002da1e0");
 extern void FUN_L00_002df1e0_c(M_da360 *) __asm__("FUN_L00_002df1e0");
-void FUN_L00_002da360(u8 *cannon_moby, void *cannon_data) {
+void update_suck_cannon_suction(u8 *cannon_moby, void *cannon_data) __asm__("FUN_L00_002da360");
+
+void update_suck_cannon_suction(u8 *cannon_moby, void *cannon_data) {
     u8 buf[0x10] __attribute__((aligned(16)));
     V_da360 raised_candidate_position;
     f32 suction_yaw, suction_pitch;
@@ -1426,7 +1428,7 @@ extern void update_hud_counter_cap_and_visibility(void) __asm__("FUN_L00_002377b
 extern void FUN_L00_00237840(void);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_002d9fd0(char *,char *,void *);
-extern void FUN_L00_002da360(u8 *,void *);
+extern void update_suck_cannon_suction(u8 *,void *) __asm__("FUN_L00_002da360");
 extern void refresh_suck_cannon_slots(void) __asm__("FUN_L00_002da660");
 extern void FUN_L00_002defe0(int);
 void stop_suck_cannon_suction_effect(int callback_context) __asm__("FUN_L00_002df048");
@@ -1576,7 +1578,7 @@ void suckcannon_update(SuckMoby *self) {
             }
         } else {
             if (self->anim_flags&2) blend_moby_animation(self,3,0,scale_game_frames_alt(2));
-            FUN_L00_002da360((u8 *)self,cannon);
+            update_suck_cannon_suction((u8 *)self,cannon);
         }
         break;
     case SUCKCANNON_STATE_LOADED_AIM:
