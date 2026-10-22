@@ -1527,7 +1527,9 @@ void show_drek_boss_moby_group(int unused, int group_index) __asm__("FUN_L18_002
 extern void show_drek_boss_moby_group(int a0, int idx) __asm__("FUN_L18_002f7028");
 extern void set_drek_boss_relative_aim_yaw() __asm__("FUN_L18_002f7220");
 extern void FUN_L18_002f7288(char *moby);
-extern void FUN_L18_002f7880(struct Moby *moby);
+void render_drek_boss_joint_glows(struct Moby *moby) __asm__("FUN_L18_002f7880");
+
+extern void render_drek_boss_joint_glows(struct Moby *moby) __asm__("FUN_L18_002f7880");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_vector(void *) __asm__("func_001F99F8");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
@@ -2622,7 +2624,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         boss_data->f3B8 = (a << 24) | ((b / 3) << 16) | (g << 8) | (r / 3);
     }
     if (moby->f31 != 0) {
-        enqueue_callback_list_1_alt((void (*)(void))FUN_L18_002f7880, moby);
+        enqueue_callback_list_1_alt((void (*)(void))render_drek_boss_joint_glows, moby);
     }
 }
 /* Latches the target from the global block once, and counts a class 0x24B hit. */
@@ -3543,7 +3545,7 @@ extern short D_L18_00162468 __attribute__((sda));
 extern short D_L18_0016246C __attribute__((sda));
 extern short D_L18_00162470 __attribute__((sda));
 extern short D_L18_00162474 __attribute__((sda));
-void FUN_L18_002f7880(struct Moby *moby) {
+void render_drek_boss_joint_glows(struct Moby *moby) {
     char joint_world_position[16];
     char animation_glow_world_position[16];
     L18Q *boss_vars = (L18Q *)moby->pvars;
