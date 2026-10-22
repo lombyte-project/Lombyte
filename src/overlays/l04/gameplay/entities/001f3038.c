@@ -337,8 +337,10 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 
-void FUN_L04_001f3a80(char *a, char *b, char *c, float f);
-void FUN_L04_001f3a80(char *moby, char *movement_state, char *movement_params, float collision_z_offset) {
+void update_moby_movement_with_sphere_collision(char *moby, char *movement_state, char *movement_params, float collision_z_offset) __asm__("FUN_L04_001f3a80");
+
+void update_moby_movement_with_sphere_collision(char *a, char *b, char *c, float f) __asm__("FUN_L04_001f3a80");
+void update_moby_movement_with_sphere_collision(char *moby, char *movement_state, char *movement_params, float collision_z_offset) {
     int i;
     float collision_probe_position[4];
     char *movement_delta = movement_state + 0x10;

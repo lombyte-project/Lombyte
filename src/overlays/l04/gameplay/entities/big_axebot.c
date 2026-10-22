@@ -188,7 +188,7 @@ extern f32 random_float_between_29ecf8(f32, f32) __asm__("FUN_002132a8");
 extern f32 random_angle_29ecf8(void) __asm__("FUN_00213308");
 extern void update_spawned_moby_29ecf8(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void FUN_L04_001f30e0(void *, s32, struct Moby *, void *, void *);
-extern void FUN_L04_001f3a80(f32, struct Moby *, void *, void *);
+extern void update_moby_movement_with_sphere_collision(f32, struct Moby *, void *, void *) __asm__("FUN_L04_001f3a80");
 extern PathPoints_eb20 *D_L04_001b0630[];
 f32 D_L04_00166130[8] __attribute__((section(".bss")));
 extern s32 D_L04_001513C0 __attribute__((sda));
@@ -331,7 +331,7 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
         D_L04_00166130[6] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * ((child->anim_speed + 1.0f) * 0.5f) * 0.05f * frame_scale_sq * ((child->anim_speed + 1.0f) * 0.5f);
         D_L04_00166130[7] = (((data->radius * 7.753f) / 1800.0f) * frame_scale) * ((child->anim_speed + 1.0f) * 0.5f);
         FUN_L04_001f30e0(children, data->count, child, part, D_L04_00166130);
-        FUN_L04_001f3a80(0.0f, child, part, D_L04_00166130);
+        update_moby_movement_with_sphere_collision(0.0f, child, part, D_L04_00166130);
     }
     }
 }
