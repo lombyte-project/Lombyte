@@ -1475,7 +1475,9 @@ extern short D_L18_00162398 __attribute__((sda));
 extern s32 D_L18_001623A0 __asm__("D_L18_001623A0");
 extern short D_L18_0016239C __attribute__((sda));
 extern unsigned char *D_L18_0015FFD8;
-extern unsigned char *FUN_L18_002f6e10(struct Moby *self);
+unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) __asm__("FUN_L18_002f6e10");
+
+extern unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) __asm__("FUN_L18_002f6e10");
 extern void *FUN_L18_002d6b58(float *a, float *b, int idx);
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
@@ -1890,7 +1892,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
             add_vector_xyz(boss_data->f3C0, boss_data->f3C0, position_and_displacement_scratch);
         }
-        firing_target_moby = FUN_L18_002f6e10((char *)moby);
+        firing_target_moby = select_drek_boss_platform_firing_target((char *)moby);
         if (firing_target_moby != 0 && (is_value_within_interpolated_window((char *)moby, 1.0f) != 0 ||
                        is_value_within_interpolated_window((char *)moby, 16.0f) != 0)) {
             qcopy(v2, firing_target_moby + 0x10);
@@ -3106,7 +3108,7 @@ extern short D_L18_00162338 __attribute__((sda));
 extern short D_L18_0016233C __attribute__((sda));
 extern void request_floating_platform_tilt(void *, int, int) __asm__("FUN_L18_002d8888");
 
-unsigned char *FUN_L18_002f6e10(struct Moby *self) {
+unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) {
     char *data = (char *)self->pvars;
     short *group_entry = D_L18_001AC240_c2[*(int *)(data + 0x398)];
     unsigned char *best = 0;
