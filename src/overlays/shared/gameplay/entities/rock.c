@@ -1211,7 +1211,9 @@ extern void FUN_L00_002b5b20_302648(struct Moby *, void *) __asm__("FUN_L00_002b
 extern s32 D_L01_0015F30C __attribute__((sda));
 /* While the camera is in mode 0x1D, counts the frames the class 0xAC moby spends outside every zone.
  * Entering a zone resets the count; past a random threshold FUN_L00_002b5b20 runs on that moby. */
-void FUN_L01_00302648(struct Moby *moby) {
+void update_target_outside_zone_timeout(struct Moby *moby) __asm__("FUN_L01_00302648");
+
+void update_target_outside_zone_timeout(struct Moby *moby) {
     ZoneVars_302648 *zone_vars = (ZoneVars_302648 *)moby->pvars;
     struct Moby *target_moby = 0;
     struct Moby *candidate_moby;
