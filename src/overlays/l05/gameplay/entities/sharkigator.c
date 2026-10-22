@@ -3179,7 +3179,9 @@ extern void copy_slot_30ca80(float *, int *) __asm__("FUN_L01_002b7c68");
 extern void FUN_L05_0030d6a0_30ca80(int) __asm__("FUN_L05_0030d6a0");
 extern void FUN_L01_0026e0e0(int, int);
 extern float advance_accelerated_scalar_30ca80(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern void FUN_L05_0030d5c0(char *);
+void synchronize_group_water_heights(char *moby) __asm__("FUN_L05_0030d5c0");
+
+extern void synchronize_group_water_heights(char *) __asm__("FUN_L05_0030d5c0");
 extern void pool_splash_30ca80(void *, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
 extern int FUN_L01_00275690_30ca80(char *, float) __asm__("FUN_L01_00275690");
 extern void finish_slots_30ca80(char *, int) __asm__("FUN_L01_002b7fe0");
@@ -3330,7 +3332,7 @@ void water_update(struct Moby *moby) {
         }
         if (water_vars->moving != 0) {
             advance_accelerated_scalar_30ca80(&moby->pos.z, &water_vars->speed, water_vars->lowered_z, move_speed * D_0015ED70, move_speed * D_0015ED70, move_accel * D_0015ED6C_gp);
-            FUN_L05_0030d5c0((char *)moby);
+            synchronize_group_water_heights((char *)moby);
         }
         moby->command = 1;
         if (random_integer_below_30ca80(0xC8) == 0) {
@@ -3349,7 +3351,7 @@ void water_update(struct Moby *moby) {
         }
         if (water_vars->moving != 0) {
             advance_accelerated_scalar_30ca80(&moby->pos.z, &water_vars->speed, water_vars->raised_z, move_speed * D_0015ED70, move_speed * D_0015ED70, move_accel * D_0015ED6C_gp);
-            FUN_L05_0030d5c0((char *)moby);
+            synchronize_group_water_heights((char *)moby);
         }
         if (random_integer_below_30ca80(0xC8) == 0) {
             float x = water_records_30ca80[water_vars->record_index].x + random_float_between_30ca80(-4.0f, 4.0f);
@@ -3407,7 +3409,7 @@ void water_update(struct Moby *moby) {
             }
         }
         moby->pos.z += rise_speeds[rise_step] * D_0015ED6C_gp;
-        FUN_L05_0030d5c0((char *)moby);
+        synchronize_group_water_heights((char *)moby);
         water = moby->pos.z;
         {
             Vec4 rise_checkpoint_position;
@@ -3467,8 +3469,8 @@ extern char D_L05_001D6880[];
 extern int D_L05_0015FFD8;
 extern short *D_L05_001ABCC0[];
 
-void FUN_L05_0030d5c0(char *moby);
-void FUN_L05_0030d5c0(char *moby) {
+void synchronize_group_water_heights(char *moby) __asm__("FUN_L05_0030d5c0");
+void synchronize_group_water_heights(char *moby) {
     char *data = *(char **)(moby + 0x78);
     short *group_member_list = D_L05_001ABCC0[*(unsigned char *)(moby + 0x21)];
     char(*base)[256] = (char(*)[256])D_L05_0015FFD8;
