@@ -118,7 +118,9 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 extern float D_L18_00161A48 __attribute__((sda));
 extern float D_L18_00161A4C __attribute__((sda));
-void FUN_L18_002d8710(struct Moby *moby) {
+void update_floating_platform_tilt_and_bob(struct Moby *moby) __asm__("FUN_L18_002d8710");
+
+void update_floating_platform_tilt_and_bob(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float unclamped_rotation_y = fast_add_rotations(moby->rot.y, *(float *)(data + 0x6C));
     moby->rot.y = unclamped_rotation_y;
@@ -1626,7 +1628,7 @@ void floating_platform_update(struct Moby *moby) {
     default:
         break;
     }
-    FUN_L18_002d8710(moby);
+    update_floating_platform_tilt_and_bob(moby);
     add_vector_xyz(delta, delta, &moby->pos);
     update_entity_matrix(data + 0x20, delta, old_rot, &moby->rot);
 }
