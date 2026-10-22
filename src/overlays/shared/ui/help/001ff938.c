@@ -38,7 +38,7 @@ extern void FUN_L00_00232670(void);
 extern void FUN_L00_002484e0(void *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257024(void *);
-extern void FUN_L15_002044c8(void);
+extern void apply_hero_ground_type_effects(void) __asm__("FUN_L15_002044c8");
 extern void FUN_L15_0021d040(void);
 
 void FUN_L15_001ff938(void) {
@@ -51,7 +51,7 @@ void FUN_L15_001ff938(void) {
 
     FUN_L00_00232670();
     hero_update();
-    FUN_L15_002044c8();
+    apply_hero_ground_type_effects();
     FUN_L15_0021d040();
     hero0 = ((char *)&D_0013F350);
     if (hero0[0x20A4] == 0)
