@@ -971,8 +971,8 @@ extern char D_0013E550_6ee0[] __asm__("D_0013E550");
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002FF358.c (func_L14_00308368) */
-void FUN_L14_00306ee0(struct Moby *m);
-void FUN_L14_00306ee0(struct Moby *flying_car_moby) {
+void update_flying_car(struct Moby *m) __asm__("FUN_L14_00306ee0");
+void update_flying_car(struct Moby *flying_car_moby) {
     enum {
         FLYING_CAR_INITIALIZE = 0,
         FLYING_CAR_WAIT_FOR_TRIGGER = 1,
