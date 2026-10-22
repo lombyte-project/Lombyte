@@ -88,7 +88,9 @@ extern short D_L17_00161498 __attribute__((sda));
 extern unsigned char *FUN_L17_0026fb60(char *parent, void *pos, float *vec);
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void FUN_L00_001ff290(void *, void *, void *);
-extern void FUN_L17_002a95b8(struct Moby *moby);
+void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
+
+extern void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void normalize_vector_xyz(void *, void *, float);
@@ -255,7 +257,7 @@ void FUN_L17_002a8da0(struct Moby *beam_moby) {
             beam_vector_scratch[2] += random_float_between(-0.01f, 0.01f);
             FUN_L17_0026fb60(0, beam_vars + 0x20, beam_vector_scratch);
         }
-        enqueue_callback_list_1(FUN_L17_002a95b8, beam_moby);
+        enqueue_callback_list_1(draw_fleet_beam_quad, beam_moby);
     }
 }
 #ifndef NOT_SDA
@@ -284,7 +286,7 @@ extern void func_L00_001FD1D8_a95b8(void *, void *, int) __asm__("FUN_001f7d30")
 extern struct {
     float a, b;
 } D_L17_001E6620_a95b8[4] __asm__("D_L17_001E6320");
-void FUN_L17_002a95b8(struct Moby *moby) {
+void draw_fleet_beam_quad(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     S_a95b8 quad_primitive;
     char m1[16];
