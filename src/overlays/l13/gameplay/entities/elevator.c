@@ -2079,7 +2079,9 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 /* Draws a map icon for a moby relative to the hero (level copy of FUN_L17_002eaae0 without the mirror flag). */
-void FUN_L13_002b89f8(char *radar_rotation, char *from, char *moby, int icon, long color, int tex) {
+void draw_fighter_jet_radar_icon(char *radar_rotation, char *from, char *moby, int icon, long color, int tex) __asm__("FUN_L13_002b89f8");
+
+void draw_fighter_jet_radar_icon(char *radar_rotation, char *from, char *moby, int icon, long color, int tex) {
     float turn[4];
     float radar_rotation_matrix[16];
     float delta[4];
@@ -2153,7 +2155,7 @@ extern unsigned char D_0013F3D0[];
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 extern void FUN_L13_002b7d50(void *, int, int, long, float, float, float, float);
-extern void FUN_L13_002b89f8(char *rot, char *from, char *moby, int icon, long color, int tex);
+extern void draw_fighter_jet_radar_icon(char *rot, char *from, char *moby, int icon, long color, int tex) __asm__("FUN_L13_002b89f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void project_to_screen(f32 *, void *) __asm__("func_001F2070");
@@ -2213,17 +2215,17 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
         switch (*(short *)(candidate_moby + 0xA6)) {
         case 0xE0:
         case 0x4C2:
-            FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 2, 0x75808080, *(int *)(moby_vars + 0x104));
+            draw_fighter_jet_radar_icon(radar_rotation, radar_origin_position, candidate_moby, 2, 0x75808080, *(int *)(moby_vars + 0x104));
             break;
         case 0xE4:
         case 0x4C4:
-            FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 2, 0x75808080, *(int *)(moby_vars + 0x104));
+            draw_fighter_jet_radar_icon(radar_rotation, radar_origin_position, candidate_moby, 2, 0x75808080, *(int *)(moby_vars + 0x104));
             break;
         case 0x52:
-            FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 1, 0x75004080, *(int *)(moby_vars + 0x104));
+            draw_fighter_jet_radar_icon(radar_rotation, radar_origin_position, candidate_moby, 1, 0x75004080, *(int *)(moby_vars + 0x104));
             break;
         case 0x53:
-            FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 1, 0x75007080, *(int *)(moby_vars + 0x104));
+            draw_fighter_jet_radar_icon(radar_rotation, radar_origin_position, candidate_moby, 1, 0x75007080, *(int *)(moby_vars + 0x104));
             break;
         case 0x184:
         case 0x191:
@@ -2288,7 +2290,7 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
                         FUN_L13_002b7d50(&D_L13_001613C8, 3, 0xFFFFF3, (arrow_alpha << 24) | 0x8000, u[0], u[1], 240.0f / source_to_candidate_distance + 1.5f, ang);
                     }
                 }
-                FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 0, 0x75808080, *(int *)(moby_vars + 0x104));
+                draw_fighter_jet_radar_icon(radar_rotation, radar_origin_position, candidate_moby, 0, 0x75808080, *(int *)(moby_vars + 0x104));
                 if (*(short *)(candidate_moby + 0xA6) != 0x191) {
                     *(int *)(moby_vars + 0xE8) = *(int *)(moby_vars + 0xE8) + 1;
                 }
@@ -2306,7 +2308,7 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
                         FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
                     }
                 }
-                FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 1, 0x75808080, *(int *)(moby_vars + 0x104));
+                draw_fighter_jet_radar_icon(radar_rotation, radar_origin_position, candidate_moby, 1, 0x75808080, *(int *)(moby_vars + 0x104));
             }
             break;
         case 0x4BF:
@@ -2320,7 +2322,7 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
                         FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
                     }
                 }
-                FUN_L13_002b89f8(radar_rotation, radar_origin_position, candidate_moby, 1, 0x75808080, *(int *)(moby_vars + 0x104));
+                draw_fighter_jet_radar_icon(radar_rotation, radar_origin_position, candidate_moby, 1, 0x75808080, *(int *)(moby_vars + 0x104));
             }
             break;
         case 0x185: case 0x186: case 0x187: case 0x188:
