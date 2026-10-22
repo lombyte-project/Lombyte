@@ -280,7 +280,9 @@ char *create_class_326_moby(void *vector) {
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB4E0), where it is exact; names translated to the US level program. */
 
-char *FUN_L18_002ea0f0(void *owner, void *vector, int value) {
+char *create_class_3d7_moby(void *owner, void *vector, int value) __asm__("FUN_L18_002ea0f0");
+
+char *create_class_3d7_moby(void *owner, void *vector, int value) {
     char *moby = create_moby(0x3D7);
     if (moby != 0) {
         char *data;

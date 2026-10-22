@@ -1440,7 +1440,7 @@ extern char *create_rocket_moby(float *pos, float *dir, float *target, float a, 
 extern char *launch_class_238_moby_from_list(int owner, int idx, float *from, float *to, float speed, int frames) __asm__("FUN_L18_002d5cf8");
 extern char *find_nearest_class_247_moby_in_list(void *pos, int idx) __asm__("FUN_L18_002d6c80");
 extern char *FUN_L18_002dc3e0(void *owner, void *vector, float value);
-extern char *FUN_L18_002ea0f0(void *owner, void *vector, int value);
+extern char *create_class_3d7_moby(void *owner, void *vector, int value) __asm__("FUN_L18_002ea0f0");
 extern char D_0013E550[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 aas_c(f32, f32, f32, f32, f32 *, f32 *) __asm__("func_00213F38");
@@ -2029,7 +2029,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             show_drek_boss_moby_group((int)moby, boss_data->f398);
             hide_drek_boss_moby_group((int)moby, boss_data->f204[boss_data->f34C - 1]);
             moby_point_position(moby, 1, position_and_displacement_scratch);
-            boss_data->f33C = (unsigned char *)FUN_L18_002ea0f0(moby, position_and_displacement_scratch, 300);
+            boss_data->f33C = (unsigned char *)create_class_3d7_moby(moby, position_and_displacement_scratch, 300);
         }
         break;
     case DREK_BOSS_WAIT_FOR_PAIRED_TRANSFORM_TRANSITION:
@@ -2154,7 +2154,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         if (boss_data->f354 != 0) {
             if (boss_data->f33C == 0) {
                 moby_point_position(moby, 1, v1);
-                boss_data->f33C = (unsigned char *)FUN_L18_002ea0f0(
+                boss_data->f33C = (unsigned char *)create_class_3d7_moby(
                     moby, v1, scale_game_frames(*(int *)&D_L18_0016239C));
             } else if (tick_countdown_32_alt(&boss_data->f354) != 0) {
                 if (moby->f53 != 9) {
