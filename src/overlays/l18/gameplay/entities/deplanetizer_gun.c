@@ -918,7 +918,9 @@ extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00
 extern short D_L18_00162578 __attribute__((sda));
 extern short D_L18_0016257C __attribute__((sda));
 extern short D_L18_00162580 __attribute__((sda));
-void FUN_L18_002fad28(M2 *moby) {
+void update_selected_moby_joint_trail(M2 *moby) __asm__("FUN_L18_002fad28");
+
+void update_selected_moby_joint_trail(M2 *moby) {
     enum {
         INITIALIZE_TRAIL_EFFECT = 0,
         UPDATE_TRAIL_EFFECT = 1
