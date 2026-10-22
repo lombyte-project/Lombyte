@@ -1177,7 +1177,9 @@ void FUN_L00_002070d0(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_002078E0), where it is exact; names translated to the US level program. */
 
 
-void FUN_L00_002072c8(void) {
+void copy_hero_color_to_item_mobys(void) __asm__("FUN_L00_002072c8");
+
+void copy_hero_color_to_item_mobys(void) {
     int i, j;
     char *hero_base = ((char *)&hero);
     for (i = 0; i < 7; i++) {
@@ -1336,7 +1338,7 @@ void FUN_L00_002076a8(void) {
             blue = 0xf0;
         }
         glow_n(((void *)hero.moby), red, green, blue);
-        FUN_L00_002072c8();
+        copy_hero_color_to_item_mobys();
     }
     if (hero.items[0].item_id >= 0 &&
         item_text_variant[hero.items[0].item_id] != 0 &&

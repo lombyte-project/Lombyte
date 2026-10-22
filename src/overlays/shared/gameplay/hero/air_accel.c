@@ -275,7 +275,7 @@ void FUN_L01_00228870(void) {
 extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
 extern void get_moby_color(struct Moby *, int *, int *, int *) __asm__("FUN_L00_00250320");
 extern void set_moby_color(struct Moby *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void FUN_L00_002072c8(void);
+extern void copy_hero_color_to_item_mobys(void) __asm__("FUN_L00_002072c8");
 extern void FUN_L00_00207330(struct Moby *, struct Moby *);
 
 /*
@@ -308,7 +308,7 @@ void FUN_L01_00228e38(void)
             b = 0xF0;
         }
         set_moby_color(hero.moby, r, g, b);
-        FUN_L00_002072c8();
+        copy_hero_color_to_item_mobys();
     }
     if (hero.items[0].item_id >= 0 && gold_weapon_purchased[hero.items[0].item_id] != 0
         && hero.items[0].moby != 0)
