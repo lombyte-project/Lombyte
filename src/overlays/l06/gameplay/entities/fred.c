@@ -5603,7 +5603,9 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short *D_L06_001ABFC0[];
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
-void FUN_L06_002fda30(char *moby) {
+void update_clip_volume_moby_activation_trigger(char *moby) __asm__("FUN_L06_002fda30");
+
+void update_clip_volume_moby_activation_trigger(char *moby) {
     enum {
         WAIT_FOR_HERO_IN_CLIP_VOLUME = 0,
         WAIT_FOR_ANIMATION_SIGNAL = 1,
