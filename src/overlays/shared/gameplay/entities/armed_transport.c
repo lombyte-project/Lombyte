@@ -667,7 +667,7 @@ void FUN_L16_002e5d30(int idx) {
         }
     }
 }
-extern void FUN_L16_002e9ce0(void);
+extern void draw_level16_reflection_mesh_batch(void) __asm__("FUN_L16_002e9ce0");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 
 void FUN_L16_002e9df0(unsigned char *moby) {
@@ -676,7 +676,7 @@ void FUN_L16_002e9df0(unsigned char *moby) {
         moby[0x20] = 1;
         break;
     case 1:
-        enqueue_callback_list_1((int)FUN_L16_002e9ce0, (int)moby);
+        enqueue_callback_list_1((int)draw_level16_reflection_mesh_batch, (int)moby);
         break;
     }
 }

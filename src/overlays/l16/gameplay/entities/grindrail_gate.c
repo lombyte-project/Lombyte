@@ -2928,7 +2928,9 @@ extern float D_L16_001E2358[];
 extern float D_L16_001E25A8[];
 extern float D_L16_001E27F8[];
 float *D_L16_00161FF8[4] __attribute__((section(".sdata"))) = {D_L16_001E2358, D_L16_001E25A8, D_L16_001E27F8, 0};
-void FUN_L16_002e9ce0(void) {
+void draw_level16_reflection_mesh_batch(void) __asm__("FUN_L16_002e9ce0");
+
+void draw_level16_reflection_mesh_batch(void) {
     int i;
     vu1_add_g_sregister(6, get_effect_texture_alt(0x29));
     vu1_add_g_sregister(0x42, 0x4000000064L);
