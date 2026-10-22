@@ -738,7 +738,7 @@ void FUN_L02_002fa6d8(void) {
 
 extern float D_L02_0016760C __attribute__((section(".data")));
 extern void follow_camera_set_offset_scale(int, float, float) __asm__("FUN_L00_002e84f0");
-extern void FUN_L02_001fc008(void (*)(void));
+extern void register_camera_update_callback(void (*)(void)) __asm__("FUN_L02_001fc008");
 void update_camera_offset_effect_state(void) __asm__("FUN_L02_002fa770");
 
 extern void update_camera_offset_effect_state(void) __asm__("FUN_L02_002fa770");
@@ -746,7 +746,7 @@ extern void update_camera_offset_effect_state(void) __asm__("FUN_L02_002fa770");
 void FUN_L02_002fa710(void) {
     if (D_L02_0016760C != 0.0f) {
         follow_camera_set_offset_scale(1, D_L02_0016760C * 0.35f + 0.0f, 0.005f);
-        FUN_L02_001fc008(update_camera_offset_effect_state);
+        register_camera_update_callback(update_camera_offset_effect_state);
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FBBA8), where it is exact; names translated to the US level program. */

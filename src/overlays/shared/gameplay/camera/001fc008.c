@@ -6,7 +6,9 @@
 extern int D_L02_0015EF4C;
 extern int D_L02_001695F0[] NOT_SDA;
 
-void FUN_L02_001fc008(int x) {
+void register_camera_update_callback(int x) __asm__("FUN_L02_001fc008");
+
+void register_camera_update_callback(int x) {
     int i;
 
     if (D_L02_0015EF4C < 16) {
