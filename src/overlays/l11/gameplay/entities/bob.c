@@ -351,7 +351,7 @@ extern void update_resort_owner_state_actions(void *) __asm__("FUN_L11_002d1030"
 void apply_resort_owner_movement(void *mp) __asm__("FUN_L11_002d1340");
 
 extern void apply_resort_owner_movement(void *) __asm__("FUN_L11_002d1340");
-extern void FUN_L11_002d14b0(void *);
+extern void update_resort_owner_state_transitions(void *) __asm__("FUN_L11_002d14b0");
 void update_resort_owner_look_tracking(WM11 *moby) __asm__("FUN_L11_002d27b0");
 
 void update_resort_owner_look_tracking(WM11 *m) __asm__("FUN_L11_002d27b0");
@@ -365,7 +365,7 @@ void resort_owner_update(struct Moby *moby) {
     }
     update_resort_owner_state_actions(moby);
     apply_resort_owner_movement(moby);
-    FUN_L11_002d14b0(moby);
+    update_resort_owner_state_transitions(moby);
     update_resort_owner_look_tracking(moby);
 }
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -586,7 +586,7 @@ struct PokKeeperVars {
 
 /* NPC that talks to the hero, then walks a chain of level path points ahead of him, opening the
    gate mobys (FUN_L11_0030a840) and moving path points as it goes. */
-void FUN_L11_002d14b0(void *resort_owner_moby) {
+void update_resort_owner_state_transitions(void *resort_owner_moby) {
     struct Moby *moby = resort_owner_moby;
     struct PokKeeperVars *moby_vars = (struct PokKeeperVars *)moby->pvars;
     int proximity = classify_resort_owner_target_proximity(moby);
