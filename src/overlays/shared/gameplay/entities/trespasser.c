@@ -177,7 +177,9 @@ void FUN_L00_002c40a0(S_2c40a0 *self) {
 s32 collision_hit_material() __asm__("FUN_001f0b58");
 void FUN_L00_002c3440();
 /* Calls FUN_L00_002c3440 on m for collision_hit_material results 0, 1, 3, 8, 11, 12 and 13. */
-void FUN_L00_002c4328(void *moby) {
+void destroy_decoy_on_selected_materials(void *moby) __asm__("FUN_L00_002c4328");
+
+void destroy_decoy_on_selected_materials(void *moby) {
     enum {
         COLLISION_MATERIAL_WATER = 0
     };
@@ -2036,7 +2038,7 @@ extern int coll_sphere(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 extern float FUN_L00_00259698_2c4380(void *, int, float) __asm__("FUN_00213508");
 extern void FUN_L00_00260400(void *, int, void *, void *, void *, void *);
 extern void FUN_L00_002c40a0(S_2c40a0 *);
-extern void FUN_L00_002c4328(void *);
+extern void destroy_decoy_on_selected_materials(void *) __asm__("FUN_L00_002c4328");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025f8e0(float, void *);
@@ -2225,7 +2227,7 @@ void decoy_update(char *moby) {
                         }
                     }
                 }
-                FUN_L00_002c4328(moby);
+                destroy_decoy_on_selected_materials(moby);
                 if (FUN_001fefc8_2c4380(vars + 0x6f))
                     FUN_0028dbe8_2c4380(0, 0, moby), vars[0x6f] = FUN_001fef20_2c4380(20);
                 else
@@ -2304,7 +2306,7 @@ void decoy_update(char *moby) {
         if ((u8)moby[0x20] != 4) {
             len = FUN_L00_00259698_2c4380(moby + 0x10, 0, 0.5f);
             if (len != 0.0f) {
-                FUN_L00_002c4328(moby);
+                destroy_decoy_on_selected_materials(moby);
                 if (len + 0.02f < *(float *)(moby + 0x18)) {
                     *(float *)(vars + 0x18) -= D_0015ED70_2c4380 * 9.8f;
                     FUN_001ff278_2c4380(moby + 0x10, moby + 0x10, vars + 0x10);
