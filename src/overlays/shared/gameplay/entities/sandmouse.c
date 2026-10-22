@@ -714,7 +714,9 @@ void FUN_L01_0030dda0(char *source_moby) {
 
 extern void FUN_L00_00263618(void *, int, float, float);
 
-void FUN_L01_0030de68(char *moby) {
+void draw_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030de68");
+
+void draw_sandmouse_billboard_quads(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *entry = data + 0x70;
     int i;
@@ -726,7 +728,7 @@ void FUN_L01_0030de68(char *moby) {
 /* Attach two effect entries and register their update callback. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F2A8), where it is exact; names translated to the US level program. */
 
-void FUN_L01_0030de68(char *moby);
+void draw_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030de68");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void enqueue_callback_list_1_alt(void (*)(char *), char *) __asm__("FUN_001f4600");
 
@@ -738,7 +740,7 @@ void FUN_L01_0030ded0(char *moby) {
         moby_point_position(moby, i + 3, entry);
         entry += 0x10;
     }
-    enqueue_callback_list_1_alt(FUN_L01_0030de68, moby);
+    enqueue_callback_list_1_alt(draw_sandmouse_billboard_quads, moby);
 }
 #include "qcopy.h"
 #include "qzero.h"
