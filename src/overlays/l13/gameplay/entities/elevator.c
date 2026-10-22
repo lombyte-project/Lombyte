@@ -19,7 +19,9 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_002147
 extern void func_L01_0026F090_b0e80(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern char *D_L13_00160058_m_b0e80 __asm__("D_L13_0015FFD8");
 extern char D_L13_001F41F8[];
-void FUN_L13_002b0e80(char *moby) {
+void update_moby_volume_trigger(char *moby) __asm__("FUN_L13_002b0e80");
+
+void update_moby_volume_trigger(char *moby) {
     char *data = *(char **)(moby + 0x78);
     if (*(int *)data == -1) {
         stub_printf(D_L13_001F41F8, *(short *)(moby + 0xB2));
