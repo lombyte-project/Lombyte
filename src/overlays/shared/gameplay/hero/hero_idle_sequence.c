@@ -2474,7 +2474,9 @@ void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0")
 void FUN_L00_00269958(void *, void *, int, int, int, int, int,
                              int);
 extern char D_0013F7EE[] __attribute__((section(".data")));
-void FUN_L00_00209ec8(void) {
+void emit_hero_timed_effects(void) __asm__("FUN_L00_00209ec8");
+
+void emit_hero_timed_effects(void) {
     OvlQuad hero_position_copy[1];
     OvlQuad w[1];
     char *hero_effect_timer_anchor;

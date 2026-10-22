@@ -970,7 +970,7 @@ extern void FUN_L00_00233660(void *, f32, f32, f32);
 extern s32 FUN_L00_0025e3b8_c(s32) __asm__("FUN_L00_0025e3b8");
 extern void spawn_nearby_effect(s32, struct MobyView *, s32, void *, void *, f32) __asm__("FUN_L00_00259bc8");
 extern s32 D_L06_00178680[];
-extern void FUN_L00_00209ec8(void);
+extern void emit_hero_timed_effects(void) __asm__("FUN_L00_00209ec8");
 extern void gravity_flatten(void *, void *) __asm__("FUN_L00_002338d0");
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern void FUN_L00_0020b5b8(void);
@@ -2493,7 +2493,7 @@ void FUN_L06_0022e020(void) {
             }
         }
         if (hero.state.current == 0x3C && hero.unk41E == 0 && hero.motion.velocity.f[2] > D_0015ED6C_c * 1.5f) {
-            FUN_L00_00209ec8();
+            emit_hero_timed_effects();
         }
         hero_integrate_velocity();
         FUN_L00_0020b5b8();
