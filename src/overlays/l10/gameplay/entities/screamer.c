@@ -2720,7 +2720,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
 }
 /* Hit handling and path following for a level 10 vendor moby. */
 extern char *info_5968(void *, int, int) __asm__("FUN_L00_0025a420");
-extern void FUN_L06_002f34d8(float, void *, void *);
+extern void select_hero_or_gadgebot_target(float, void *, void *) __asm__("FUN_L06_002f34d8");
 extern int absolute_float_cf(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int follow_5968(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern char *D_L10_001B0930_5968[] __asm__("D_L10_001B0930");
@@ -2774,7 +2774,7 @@ void FUN_L10_002e5968(struct Moby *moby) {
     moby->hit_slot = 0xFF;
     trooper_anim_finish(moby, pvars + 0xC0);
     if (hero.vehicle_mode == 1) {
-        FUN_L06_002f34d8(101.0f, moby, pvars + 0x110);
+        select_hero_or_gadgebot_target(101.0f, moby, pvars + 0x110);
         if (*(char **)(pvars + 0x110) == 0) {
             *(int *)(pvars + 0x114) = 2;
         } else {
