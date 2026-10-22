@@ -1437,7 +1437,9 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern char *D_L04_0015FFD0[] __attribute__((section(".sdata")));
-void FUN_L04_002d6f68(char *moby) {
+void interpolate_moby_and_linked_moby_positions_on_path(char *moby) __asm__("FUN_L04_002d6f68");
+
+void interpolate_moby_and_linked_moby_positions_on_path(char *moby) {
     int *moby_vars = *(int **)(moby + 0x78);
     int *path_data = D_L04_001B0630[moby_vars[2]];
     char *base = D_L04_0015FFD0[2];
