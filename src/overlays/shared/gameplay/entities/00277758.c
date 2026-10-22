@@ -10,13 +10,13 @@
 
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern float FUN_L09_00277688(float);
+extern float scale_by_one_minus_random_squared(float) __asm__("FUN_L09_00277688");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 void FUN_L09_00277758(float *out, float scale) {
     float angle = random_angle_radians();
-    float magnitude = FUN_L09_00277688(scale);
+    float magnitude = scale_by_one_minus_random_squared(scale);
     clear_u64_value(out);
     out[0] = fast_cos(angle) * magnitude;
     out[1] = fast_sin(angle) * magnitude;

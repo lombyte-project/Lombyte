@@ -10,7 +10,9 @@
 
 extern s32 rand();
 
-float FUN_L09_00277688(float scale) {
+float scale_by_one_minus_random_squared(float scale) __asm__("FUN_L09_00277688");
+
+float scale_by_one_minus_random_squared(float scale) {
     int x = (rand() >> 16) & 0xFFF;
     float random_factor = (float)x;
     random_factor = random_factor * (1.0f / 4096.0f);
