@@ -553,7 +553,9 @@ s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 void FUN_L16_0020ffb0(void);
 extern char D_0013F430[] __attribute__((section(".sdata")));
 
-void FUN_L16_00211098(void) {
+void integrate_hero_motion(void) __asm__("FUN_L16_00211098");
+
+void integrate_hero_motion(void) {
     V previous;
     V work;
     V plane;
