@@ -30,7 +30,9 @@ extern Level14State D_L14_0016CF60;
 extern void FUN_L00_0023e008(void *);
 extern void func_L00_0023E4C8(void *) __asm__("FUN_L14_002459c0");
 
-void FUN_L14_002460f8(void) {
+void update_level14_event_moby_effects(void) __asm__("FUN_L14_002460f8");
+
+void update_level14_event_moby_effects(void) {
     void *moby;
     if (current_level_index != 14 || D_L14_0016CF60.state != 0) {
         return;
