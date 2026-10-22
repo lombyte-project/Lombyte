@@ -3157,7 +3157,9 @@ extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
-void FUN_L06_002f7930(char *moby) {
+void update_hero_trigger_volume_monitor(char *moby) __asm__("FUN_L06_002f7930");
+
+void update_hero_trigger_volume_monitor(char *moby) {
     enum {
         INITIALIZE_TRIGGER_MONITOR = 0,
         CHECK_HERO_TRIGGER_VOLUMES = 1
