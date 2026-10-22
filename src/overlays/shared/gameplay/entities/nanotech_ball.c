@@ -99,7 +99,9 @@ typedef struct {
 O2d8138 *create_moby(int) __asm__("FUN_0020c4f8");
 #include "qcopy.h"
 /* Creates a class 0x326 moby linked to p at p's position; 0 when p's state is negative. */
-O2d8138 *FUN_L00_002d8138(P2d8138 *p) {
+O2d8138 *create_linked_class_0326_moby(P2d8138 *p) __asm__("FUN_L00_002d8138");
+
+O2d8138 *create_linked_class_0326_moby(P2d8138 *p) {
     O2d8138 *spawned_moby;
     if (p->b20 < 0)
         return 0;

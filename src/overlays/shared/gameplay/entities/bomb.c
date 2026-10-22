@@ -2948,7 +2948,7 @@ extern void FUN_L00_002d1428(struct Moby *);
 extern Contact *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int fun_00213928(void *, void *, void *, int, int *, int *, int *, int) __asm__("FUN_00213928");
 extern void FUN_L00_002cfcb8(struct Moby *);
-extern void FUN_L00_002d8138(struct Moby *);
+extern void create_linked_class_0326_moby(struct Moby *) __asm__("FUN_L00_002d8138");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void update_moby_animation_state(struct Moby *) __asm__("FUN_0020c880");
@@ -3034,7 +3034,7 @@ void crate_update(struct Moby *moby) {
         if (moby->oclass == 0x1FF) {
             crate_vars->unkC6 = 100;
         } else if (moby->oclass == 0x1F5) {
-            FUN_L00_002d8138(moby);
+            create_linked_class_0326_moby(moby);
         }
         break;
 
