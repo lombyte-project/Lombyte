@@ -634,7 +634,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void pool_bind_tile(void *, void *) __asm__("FUN_L01_002b7c68");
 extern void FUN_L01_0026e0e0(int, int);
 extern void approach_e088(float *, void *, float, float, float, float) __asm__("FUN_00213f38");
-extern void FUN_L11_0030e690(struct Moby *);
+extern void synchronize_linked_moby_heights(struct Moby *) __asm__("FUN_L11_0030e690");
 extern int random_below_e088(int) __asm__("FUN_00213260");
 extern float rand_range_e088(float, float) __asm__("FUN_002132a8");
 extern void pool_splash(float, float, float, float, void *, int, int) __asm__("FUN_L00_002a3ec8");
@@ -724,7 +724,7 @@ void FUN_L11_0030e088(struct Moby *water_tile_moby) {
         water_tile_moby->command = 1;
         if (water_tile_vars[2] != 0) {
             approach_e088(&water_tile_moby->pos.z, water_tile_vars, 132.36f, frame_time_sq * 4.0f, frame_time_sq * 4.0f, frame_time * 4.0f);
-            FUN_L11_0030e690(water_tile_moby);
+            synchronize_linked_moby_heights(water_tile_moby);
         }
         if (random_below_e088(200) == 0) {
             float x = D_L11_001DA880[water_tile_vars[1]].x + rand_range_e088(-4.0f, 4.0f);
@@ -741,7 +741,7 @@ void FUN_L11_0030e088(struct Moby *water_tile_moby) {
         water_tile_moby->command = 2;
         if (water_tile_vars[2] != 0) {
             approach_e088(&water_tile_moby->pos.z, water_tile_vars, 137.0f, frame_time_sq * 4.0f, frame_time_sq * 4.0f, frame_time * 4.0f);
-            FUN_L11_0030e690(water_tile_moby);
+            synchronize_linked_moby_heights(water_tile_moby);
         }
         if (random_below_e088(200) == 0) {
             float x = D_L11_001DA880[water_tile_vars[1]].x + rand_range_e088(-4.0f, 4.0f);

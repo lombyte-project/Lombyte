@@ -15,7 +15,9 @@
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern short *D_L11_001AC240[];
 
-void FUN_L11_0030e690(char *moby) {
+void synchronize_linked_moby_heights(char *moby) __asm__("FUN_L11_0030e690");
+
+void synchronize_linked_moby_heights(char *moby) {
     short *moby_index_cursor = D_L11_001AC240[*(unsigned char *)(moby + 0x21)];
     int base = D_L11_0015FFD8;
     do {
