@@ -3380,7 +3380,9 @@ extern s32 coll_line_fix(void *, void *, s32, s32, void *) __asm__("FUN_001efa68
 extern f32 FUN_001fa6c0_c(s32) __asm__("FUN_001fa6c0");
 extern s32 FUN_001fa6d0_c(f32) __asm__("FUN_001fa6d0");
 
-void FUN_L00_00270948(M_270948 *particle) {
+void update_splitting_effect_particle_with_collision_and_fade(M_270948 *particle) __asm__("FUN_L00_00270948");
+
+void update_splitting_effect_particle_with_collision_and_fade(M_270948 *particle) {
     V_270948 v, position_scratch;
     C_270948 collision_parameters;
     E_270948 *e = &particle->e;
