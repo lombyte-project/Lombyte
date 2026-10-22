@@ -295,7 +295,9 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern struct { char pad0[0x184]; char *source; } D_L10_00167100;
 extern VendorView_5f18 D_L10_0016CEC0;
 
-void FUN_L10_002f5b58(struct UpdateCam *path_camera) {
+void initialize_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L10_002f5b58");
+
+void initialize_path_camera(struct UpdateCam *path_camera) {
     char *rec = *(char **)(D_L10_0015EF50 + path_camera->descriptor_index * 32 + 0x1C);
     VendorCamRun_5f18 *run;
     VendorCamStops_5f18 *stops;
