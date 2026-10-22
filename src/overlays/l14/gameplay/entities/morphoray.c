@@ -361,7 +361,9 @@ extern void raise_unlock_sequence_mobys(struct Moby *) __asm__("FUN_L14_00305680
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Moby that unlocks once: skips straight to done if this level already recorded it, otherwise waits for its trigger moby to reach state 2, records the unlock in the level's bit sets and runs a countdown. */
-void FUN_L14_00305408(unsigned char *moby) {
+void update_unlock_sequence_controller(unsigned char *moby) __asm__("FUN_L14_00305408");
+
+void update_unlock_sequence_controller(unsigned char *moby) {
     enum {
         UNLOCK_SEQUENCE_INITIALIZE = 0,
         UNLOCK_SEQUENCE_WAIT_FOR_TRIGGER = 1,
