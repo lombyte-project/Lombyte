@@ -549,7 +549,9 @@ int FUN_L07_00313af0(struct Moby *chaser_moby, struct ChaserVars *chaser_vars, V
 /* eases the chaser speed up with the gap to its target */
 struct ChaserSpeed { u8 pad0[0x80]; f32 base; u8 pad84[0x10]; f32 rate; u8 pad98[0x124]; f32 rate2; };
 struct ChaserAnim { u8 pad0[0x58]; f32 speed; };
-float FUN_L07_00313d30(struct ChaserAnim *chaser_anim, struct ChaserSpeed *chaser_speed, float x, float y, float k)
+float update_snagglebeast_chase_speed(struct ChaserAnim *chaser_anim, struct ChaserSpeed *chaser_speed, float x, float y, float k) __asm__("FUN_L07_00313d30");
+
+float update_snagglebeast_chase_speed(struct ChaserAnim *chaser_anim, struct ChaserSpeed *chaser_speed, float x, float y, float k)
 {
     float eased_rate = frame_scale * 0.06f;
     if (y < x) {
@@ -1171,7 +1173,7 @@ void snagglebeast_update(unsigned char *moby) {
             qcopy(&velocity, D_L07_001B0530[*(int *)(data + 0x188)] + *(int *)(data + 0x1A8) * 16 + 0x10);
             dd = vector_distance(moby + 0x10, &velocity);
         }
-        FUN_L07_00313d30((struct ChaserAnim *)moby, (struct ChaserSpeed *)data, dd, thr, 1.5f);
+        update_snagglebeast_chase_speed((struct ChaserAnim *)moby, (struct ChaserSpeed *)data, dd, thr, 1.5f);
         if ((*(int *)(data + 0x298) & 3) == 0) FUN_L07_00313988((char *)moby, (char *)data, &velocity, data + 0x140);
         qcopy(&position, data + 0x140);
         *(int *)(data + 0x298) += 1;
