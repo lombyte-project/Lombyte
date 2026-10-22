@@ -1221,7 +1221,7 @@ void FUN_L11_003191c0(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031ACA8), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len, float z);
-extern char *FUN_L11_0030f5a8(void *position, void *vector, int id);
+extern char *spawn_moby_with_random_yaw(void *position, void *vector, int id) __asm__("FUN_L11_0030f5a8");
 extern char D_L11_001B0EB0[];
 extern char D_L11_001F14B0[];
 extern char D_L11_001F14C0[];
@@ -1320,9 +1320,9 @@ void blarg_ship_update(struct Moby *moby) {
         if (moby->state == 2) {
             cart_burst(moby, &moby->pos, -1, 2.0f, 13.0f);
             if (random_integer_below_c2(2)) {
-                FUN_L11_0030f5a8(&moby->pos, D_L11_0015F580, 0x4C4);
+                spawn_moby_with_random_yaw(&moby->pos, D_L11_0015F580, 0x4C4);
             } else {
-                FUN_L11_0030f5a8(&moby->pos, D_L11_0015F580, 0x4C2);
+                spawn_moby_with_random_yaw(&moby->pos, D_L11_0015F580, 0x4C2);
             }
             allocate_voice_for_target_entry(1, 0, (int)moby);
             *(unsigned short *)(D_00141C18) = 0xFFFF;
@@ -1450,9 +1450,9 @@ void blarg_ship_update(struct Moby *moby) {
         add_vector_xyz(&moby->pos, &moby->pos, scratch_vector);
         cart_burst(moby, &moby->pos, -1, 2.0f, 13.0f);
         if (random_integer_below_c2(2)) {
-            FUN_L11_0030f5a8(&moby->pos, D_L11_0015F580, 0x4C4);
+            spawn_moby_with_random_yaw(&moby->pos, D_L11_0015F580, 0x4C4);
         } else {
-            FUN_L11_0030f5a8(&moby->pos, D_L11_0015F580, 0x4C2);
+            spawn_moby_with_random_yaw(&moby->pos, D_L11_0015F580, 0x4C2);
         }
         allocate_voice_for_target_entry(1, 0, (int)moby);
         moby->state = 4;

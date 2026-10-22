@@ -1033,7 +1033,9 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
-char *FUN_L11_0030f5a8(void *position, void *vector, int id) {
+char *spawn_moby_with_random_yaw(void *position, void *vector, int id) __asm__("FUN_L11_0030f5a8");
+
+char *spawn_moby_with_random_yaw(void *position, void *vector, int id) {
     char *moby = create_moby(id);
     if (moby != 0) {
         char *data;
