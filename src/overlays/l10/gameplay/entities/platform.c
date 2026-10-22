@@ -172,7 +172,7 @@ void FUN_L10_00295a38(char *platform_moby) {
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int FUN_L01_00277fb8(void *);
+extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void FUN_L00_00262b00(float, float, char *, float *, float *);
 extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
@@ -189,7 +189,7 @@ void FUN_L10_00295c20(struct Moby *moby) {
     float previous_position[4];
     float position_delta[4];
     *(OvlQuad *)previous_position = *(OvlQuad *)&moby->pos;
-    if (FUN_L01_00277fb8(moby)) moby->state = 2;
+    if (is_hero_on_moby(moby)) moby->state = 2;
     fast_dec_timer((int *)(platform_vars + 0xBC));
     switch (moby->state) {
     case PLATFORM_STATE_INITIALIZE:
@@ -218,7 +218,7 @@ void FUN_L10_00295c20(struct Moby *moby) {
         *(float *)(platform_vars + 0xA4) = a;
         if (a < sinking_step_lower_bound) *(float *)(platform_vars + 0xA4) = sinking_step_lower_bound;
         moby->pos.z += *(float *)(platform_vars + 0xA4);
-        if (FUN_L01_00277fb8(moby) == 0) moby->state = 3;
+        if (is_hero_on_moby(moby) == 0) moby->state = 3;
         if (*(int *)(platform_vars + 0xBC) <= 0) {
             allocate_voice_for_target_entry(0, 0, (int)moby);
             *(int *)(platform_vars + 0xBC) = random_int_between(0x28, 0x3C);

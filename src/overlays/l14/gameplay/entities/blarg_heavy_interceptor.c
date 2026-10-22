@@ -132,7 +132,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9b48(void *, void *);
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int FUN_L01_00277fb8(void *);
+extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
@@ -222,7 +222,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
         if (on) {
             f32 far;
 
-            if ((vars->retrigger != 0 && FUN_L01_00277fb8(moby)) ||
+            if ((vars->retrigger != 0 && is_hero_on_moby(moby)) ||
                 (far = FUN_001f9b48(&hero.motion.pos, &path->points[path->count - 1]),
                  FUN_001f9b48(&hero.motion.pos, &path->points[0]) < far)) {
                 moby->command = 2;
@@ -235,7 +235,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
         if (on) {
             f32 near;
 
-            if ((vars->retrigger != 0 && FUN_L01_00277fb8(moby)) ||
+            if ((vars->retrigger != 0 && is_hero_on_moby(moby)) ||
                 (near = FUN_001f9b48(&hero.motion.pos, &path->points[0]),
                  FUN_001f9b48(&hero.motion.pos, &path->points[path->count - 1]) < near)) {
                 moby->command = 2;
@@ -245,7 +245,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
         }
         break;
     case PATH_MOVER_COMMAND_TRAVERSE_PATH:
-        if (vars->silent == 0 && FUN_L01_00277fb8(moby)) {
+        if (vars->silent == 0 && is_hero_on_moby(moby)) {
             hero.unk1F2 = 4;
             hero.unk1F4 = 4;
         }
@@ -330,7 +330,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
     }
     subtract_vector_xyz(&delta, &moby->pos, &orig);
     update_entity_matrix(vars->carry, &delta, &moby->rot, &moby->rot);
-    if (!FUN_L01_00277fb8(moby)) {
+    if (!is_hero_on_moby(moby)) {
         if (2.0f < vector_distance(&moby->pos, &hero.motion.pos)) {
             if (vars->wait == 0) {
                 vars->retrigger = 1;

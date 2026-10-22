@@ -24,7 +24,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9b48(void *, void *);
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int FUN_L01_00277fb8(void *);
+extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -102,10 +102,10 @@ void elevator_update(unsigned char *moby) {
     case ELEVATOR_STATE_AT_PATH_END:
         if (on) {
             float far;
-            if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
+            if ((*(short *)(data + 0xB8) != 0 && is_hero_on_moby(moby)) ||
                 (far = FUN_001f9b48(&hero.motion.pos, path + *(int *)path * 16),
                  FUN_001f9b48(&hero.motion.pos, path + 0x10) < far)) {
-                if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
+                if (*(int *)(data + 0xC8) == 0 && is_hero_on_moby(moby)) {
                     hero_set_state(0x72, 1);
                 }
                 moby[0xBC] = 2;
@@ -117,10 +117,10 @@ void elevator_update(unsigned char *moby) {
     case ELEVATOR_STATE_AT_PATH_START:
         if (on) {
             float near;
-            if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
+            if ((*(short *)(data + 0xB8) != 0 && is_hero_on_moby(moby)) ||
                 (near = FUN_001f9b48(&hero.motion.pos, path + 0x10),
                  FUN_001f9b48(&hero.motion.pos, path + *(int *)path * 16) < near)) {
-                if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
+                if (*(int *)(data + 0xC8) == 0 && is_hero_on_moby(moby)) {
                     hero_set_state(0x72, 1);
                 }
                 allocate_voice_for_target_entry(1, 0, moby);
@@ -163,7 +163,7 @@ void elevator_update(unsigned char *moby) {
             F(data, 0xA4) = F(data, 0xA4) + F(data, 0xA8);
             if (0.5f < absolute_float(F(data, 0xA4) - 0.5f)) {
                 int r;
-                if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
+                if (*(int *)(data + 0xC8) == 0 && is_hero_on_moby(moby)) {
                     hero_set_state(HERO_STATE_IDLE, 1);
                 }
                 if (0.0f < F(data, 0xAC)) {
@@ -205,7 +205,7 @@ void elevator_update(unsigned char *moby) {
     }
     subtract_vector_xyz(delta, (moby + 0x10), orig);
     update_entity_matrix(data + 0x60, delta, moby + 0x40, moby + 0x40);
-    if (!FUN_L01_00277fb8(moby)) {
+    if (!is_hero_on_moby(moby)) {
         if (2.0f < vector_distance((moby + 0x10), &hero.motion.pos)) {
             if (*(short *)(data + 0xBA) == 0) {
                 *(short *)(data + 0xB8) = 1;

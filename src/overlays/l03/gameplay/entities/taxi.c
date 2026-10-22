@@ -751,7 +751,7 @@ extern s32 D_L03_0015F594 __attribute__((sda));
 extern void FUN_L00_00266858(void *, int);
 extern void draw_number(void *, struct Moby *, s32, u32, s32, s32, s32, f32) __asm__("FUN_L01_00285768");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern int FUN_L01_00277fb8(void *);
+extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void FUN_L00_00233ee8(void *, float, int);
 extern s32 FUN_L00_00233f38(void);
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
@@ -871,7 +871,7 @@ void FUN_L03_002d3198(struct Moby *taxi_moby) {
         }
         break;
     case TAXI_FOLLOW_RETURN_PATH:
-        if (FUN_L01_00277fb8(taxi_moby)) {
+        if (is_hero_on_moby(taxi_moby)) {
             hero.unk1F2 = 4;
             hero.unk1F4 = 4;
         }
@@ -2086,7 +2086,7 @@ struct RailLiftVars {
 extern s32 D_L03_0015F594 __attribute__((sda));
 extern void FUN_L00_00266858(void *, int);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern int FUN_L01_00277fb8(void *);
+extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void FUN_L00_00233ee8(void *, float, int);
 extern s32 FUN_L00_00233f38(void);
 void FUN_L03_002dd0f0(struct Moby *m);
@@ -2139,7 +2139,7 @@ void FUN_L03_002dccc0(struct Moby *lift_moby) {
         if (!lift_vars->started) {
             lift_moby->collision = 0;
             lift_moby->flags |= 0x41;
-        } else if (lift_vars->ready && FUN_L01_00277fb8(lift_moby)) {
+        } else if (lift_vars->ready && is_hero_on_moby(lift_moby)) {
             FUN_L03_002dcbc8((char *)lift_moby, lift_vars->help[lift_moby->command ^ 1]);
             if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
                 FUN_L00_00233ee8(&lift_moby->pos, lift_moby->rot.z, 0);
@@ -2160,7 +2160,7 @@ void FUN_L03_002dccc0(struct Moby *lift_moby) {
             lift_moby->state = 3;
         break;
     case LIFT_FOLLOW_PATH:
-        if (FUN_L01_00277fb8(lift_moby)) {
+        if (is_hero_on_moby(lift_moby)) {
             hero.unk1F2 = 4;
             hero.unk1F4 = 4;
         }
@@ -2173,6 +2173,6 @@ void FUN_L03_002dccc0(struct Moby *lift_moby) {
     FUN_L03_002dd0f0(lift_moby);
     vec_sub(&move, &lift_moby->pos, &oldPos);
     update_entity_matrix(lift_vars->coll, &move, &oldRot, &lift_moby->rot);
-    if (!FUN_L01_00277fb8(lift_moby) && vector_distance(&lift_moby->pos, &hero.motion.pos) > 2.0f && lift_vars->timer == 0)
+    if (!is_hero_on_moby(lift_moby) && vector_distance(&lift_moby->pos, &hero.motion.pos) > 2.0f && lift_vars->timer == 0)
         lift_vars->ready = 1;
 }

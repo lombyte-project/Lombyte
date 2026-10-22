@@ -444,7 +444,7 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
-extern int FUN_L01_00277fb8(char *);
+extern int is_hero_on_moby(char *) __asm__("FUN_L01_00277fb8");
 extern int FUN_L03_002c6c60(char *);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void fade_to_black(int) __asm__("FUN_001f4a58");
@@ -647,7 +647,7 @@ void metropolis_train_locomotive_update(char *moby) {
                                  *(short *)((char *)hero.ground_moby + 0xA6) == 0x4BA)) {
             FUN_L00_00266858(hero.ground_moby, 3);
         }
-        if (!FUN_L01_00277fb8(moby)) {
+        if (!is_hero_on_moby(moby)) {
             break;
         }
         if (data->iAC == -1) {

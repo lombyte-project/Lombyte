@@ -1266,7 +1266,7 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int FUN_L01_00277fb8(void *);
+extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern int FUN_L08_002025d0(void *, int, int, void *, int);
 extern s32 FUN_L01_0026e008(s32, s32);
 extern s32 tick_countdown_32_alt_c(s32 *) __asm__("FUN_001f9740");
@@ -1390,7 +1390,7 @@ void platform_update(Moby *moby) {
         }
         subtract_vector_xyz_c2(to_goal, goal, (*(float (*)[4])&moby->pos));
         angles[2] = fast_arc_tan(to_goal[0], to_goal[1]);
-        if (FUN_L01_00277fb8(moby)) {
+        if (is_hero_on_moby(moby)) {
             FUN_L12_002e3e28_c((char *)moby, angles, 1);
             func_L12_002E4F18_2E51E8(moby, angles, goal, 1, 0);
         } else {
@@ -1415,7 +1415,7 @@ void platform_update(Moby *moby) {
         *(u128 *)goal = *(u128 *)&path->nodes[1];
         FUN_L00_0025b6b8((*(float (*)[4])&moby->pos), angles, goal, swing);
         angles[2] = (*(float (*)[4])&moby->rot)[2];
-        if (FUN_L01_00277fb8(moby)) {
+        if (is_hero_on_moby(moby)) {
             FUN_L12_002e3e28_c((char *)moby, angles, 1);
             func_L12_002E4F18_2E51E8(moby, angles, (*(float (*)[4])&moby->pos), 1, 1);
         } else {
@@ -1451,7 +1451,7 @@ void platform_update(Moby *moby) {
             }
             moby->state = 2;
         }
-        if (FUN_L01_00277fb8(moby)) {
+        if (is_hero_on_moby(moby)) {
             FUN_L12_002e3e28_c((char *)moby, angles, 1);
             func_L12_002E4F18_2E51E8(moby, angles, (*(float (*)[4])&moby->pos), 1, 1);
         } else {
@@ -1506,7 +1506,7 @@ void platform_update(Moby *moby) {
         angles[2] = (*(float (*)[4])&height_reference_moby->pos)[2];
         clear_u64_value_c2(goal);
         goal[2] = (*(float (*)[4])&moby->rot)[2];
-        if (FUN_L01_00277fb8(moby)) {
+        if (is_hero_on_moby(moby)) {
             angles[2] = angles[2] + 0.2f;
             FUN_L12_002e3e28_c((char *)moby, goal, 1);
             func_L12_002E4F18_2E51E8(moby, goal, angles, 1, 1);

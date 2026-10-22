@@ -426,7 +426,7 @@ int FUN_L07_003122b0(void *mp, char *emitter_state, float *target_position) {
 extern char *D_L07_001B0530[];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int FUN_L01_00277fb8(void *);
+extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -488,9 +488,9 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
     }
     case TAXI_WAIT_FOR_HERO_BOARDING:
         if (*(short *)(data + 0xB8) != 0) {
-            if (FUN_L01_00277fb8(moby)) {
+            if (is_hero_on_moby(moby)) {
                 if (*(int *)(data + 0xC8) == 0) {
-                    if (FUN_L01_00277fb8(moby)) {
+                    if (is_hero_on_moby(moby)) {
                         hero_set_state(0x72, 1);
                     }
                 }
@@ -533,7 +533,7 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
             F(data, 0xA4) = F(data, 0xA4) + F(data, 0xA8);
             if (0.5f < absolute_float(F(data, 0xA4) - 0.5f)) {
                 int r;
-                if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
+                if (*(int *)(data + 0xC8) == 0 && is_hero_on_moby(moby)) {
                     FUN_L00_00227638();
                 }
                 if (0.0f < F(data, 0xAC)) {
@@ -574,7 +574,7 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
     }
     subtract_vector_xyz(delta, (moby + 0x10), orig);
     update_entity_matrix(data + 0x60, delta, moby + 0x40, moby + 0x40);
-    if (!FUN_L01_00277fb8(moby)) {
+    if (!is_hero_on_moby(moby)) {
         if (2.0f < vector_distance((moby + 0x10), &hero.motion.pos)) {
             if (*(short *)(data + 0xBA) == 0) {
                 *(short *)(data + 0xB8) = 1;
@@ -586,7 +586,7 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
 extern char *D_L07_001B0530[];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int FUN_L01_00277fb8(void *);
+extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_L07_0015FC88[] __attribute__((section(".sdata")));
@@ -652,9 +652,9 @@ void FUN_L07_002cdb28(struct Moby *moby) {
     }
     case TAXI_WAIT_FOR_HERO_BOARDING:
         if (*(short *)(data + 0xB8) != 0) {
-            if (FUN_L01_00277fb8(moby)) {
+            if (is_hero_on_moby(moby)) {
                 if (*(int *)(data + 0xC8) == 0) {
-                    if (FUN_L01_00277fb8(moby)) {
+                    if (is_hero_on_moby(moby)) {
                         hero_set_state(0x72, 1);
                     }
                 }
@@ -697,7 +697,7 @@ void FUN_L07_002cdb28(struct Moby *moby) {
             *(float *)(data + 0xA4) = *(float *)(data + 0xA4) + *(float *)(data + 0xA8);
             if (0.5f < absolute_float(*(float *)(data + 0xA4) - 0.5f)) {
                 int r;
-                if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
+                if (*(int *)(data + 0xC8) == 0 && is_hero_on_moby(moby)) {
                     FUN_L00_00227638();
                 }
                 if (0.0f < *(float *)(data + 0xAC)) {
@@ -736,14 +736,14 @@ void FUN_L07_002cdb28(struct Moby *moby) {
         }
         break;
     case TAXI_WAIT_FOR_HERO_TO_LEAVE:
-        if (!FUN_L01_00277fb8(moby)) {
+        if (!is_hero_on_moby(moby)) {
             moby->command = 0;
         }
         break;
     }
     subtract_vector_xyz(delta, &moby->pos, orig);
     update_entity_matrix(data + 0x60, delta, &moby->rot, &moby->rot);
-    if (!FUN_L01_00277fb8(moby)) {
+    if (!is_hero_on_moby(moby)) {
         if (2.0f < vector_distance(&moby->pos, &hero.motion.pos)) {
             if (*(short *)(data + 0xBA) == 0) {
                 *(short *)(data + 0xB8) = 1;
@@ -3479,7 +3479,7 @@ void FUN_L07_00311bc8(char *moby) {
         moby[0x20] = 1;
         break;
     case LEAF_WAIT_FOR_HERO_CONTACT:
-        if (FUN_L01_00277fb8(moby)) {
+        if (is_hero_on_moby(moby)) {
             *(float *)(moby_data + 0xA8) = *(float *)(moby + 0x40);
             *(float *)(moby_data + 0xAC) = *(float *)(moby + 0x44);
             *(short *)(moby_data + 0xA0) = scale_game_frames(0x1E);

@@ -229,7 +229,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9b48(void *, void *);
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int FUN_L01_00277fb8(void *);
+extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -321,7 +321,7 @@ void novalis_elevator_update(unsigned char *moby) {
     case NOVALIS_ELEVATOR_WAIT_AT_PATH_END:
         if (on) {
             float far;
-            if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
+            if ((*(short *)(data + 0xB8) != 0 && is_hero_on_moby(moby)) ||
                 (far = FUN_001f9b48(&hero.motion.pos, path + *(int *)path * 16),
                  FUN_001f9b48(&hero.motion.pos, path + 0x10) < far)) {
                 moby[0xBC] = 2;
@@ -333,7 +333,7 @@ void novalis_elevator_update(unsigned char *moby) {
     case NOVALIS_ELEVATOR_WAIT_AT_PATH_START:
         if (on) {
             float near;
-            if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
+            if ((*(short *)(data + 0xB8) != 0 && is_hero_on_moby(moby)) ||
                 (near = FUN_001f9b48(&hero.motion.pos, path + 0x10),
                  FUN_001f9b48(&hero.motion.pos, path + *(int *)path * 16) < near)) {
                 moby[0xBC] = 2;
@@ -343,7 +343,7 @@ void novalis_elevator_update(unsigned char *moby) {
         }
         break;
     case NOVALIS_ELEVATOR_TRAVERSE_PATH:
-        if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
+        if (*(int *)(data + 0xC8) == 0 && is_hero_on_moby(moby)) {
             struct Hero *player = &hero;
             player->unk1F2 = 4;
             player->unk1F4 = 4;
@@ -418,7 +418,7 @@ void novalis_elevator_update(unsigned char *moby) {
     }
     subtract_vector_xyz(delta, (moby + 0x10), orig);
     update_entity_matrix(data + 0x60, delta, moby + 0x40, moby + 0x40);
-    if (!FUN_L01_00277fb8(moby)) {
+    if (!is_hero_on_moby(moby)) {
         if (2.0f < vector_distance((moby + 0x10), &hero.motion.pos)) {
             if (*(short *)(data + 0xBA) == 0) {
                 *(short *)(data + 0xB8) = 1;
