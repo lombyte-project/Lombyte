@@ -1596,7 +1596,9 @@ extern void FUN_L00_002ebbd8_u(void *) __asm__("FUN_L00_002ebbd8");
 void refresh_point_light(s32 arg0) __asm__("FUN_00201f58");
 extern char D_L00_00166D80_c[] __asm__("D_L00_00166C80");
 
-void FUN_L00_002ec6c0(char *camera_object) {
+void update_target_tracking_camera(char *camera_object) __asm__("FUN_L00_002ec6c0");
+
+void update_target_tracking_camera(char *camera_object) {
     struct Hero *b = &hero;
     char *camera_target_state = *(char **)(camera_object + 0x70) + 0xB8;
     int hero_state = b->state.current;
