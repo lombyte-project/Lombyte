@@ -2422,7 +2422,9 @@ extern float FUN_L00_00257c48(float, float);
 extern void FUN_L01_00274b78(void *, void *, float);
 extern void FUN_L00_00263ac8(void *, int, void *, float);
 extern void FUN_L12_002eb220(struct Moby *);
-extern void FUN_L12_002eae00(struct Moby *);
+void update_blarg_helicopter_motion_tilt(struct Moby *moby) __asm__("FUN_L12_002eae00");
+
+extern void update_blarg_helicopter_motion_tilt(struct Moby *) __asm__("FUN_L12_002eae00");
 extern int FUN_L12_002eaf68(struct Moby *, int);
 extern void cache_consecutive_point_distances(int) __asm__("FUN_L12_0027ba70");
 extern struct Moby *create_class_55b_moby_from_source(struct Moby *) __asm__("FUN_L12_00308670");
@@ -2621,7 +2623,7 @@ update_state:
             angle = fast_arc_tan(value, moby->pos.z - target[2]);
             moby->rot.y = spring_turn((float *)(data + 0x9c), moby->rot.y, angle, 0.004f, 0.3f, frame_time * 0.7853982f);
             clear_u64_value(data + 0x70);
-            FUN_L12_002eae00(moby);
+            update_blarg_helicopter_motion_tilt(moby);
             if (fast_dec_timer_s16(data + 0x8c)) {
                 ++*(short *)(data + 0xbc);
                 moby_point_position(moby, *(int *)(data + 0xb8), &position);
@@ -2686,7 +2688,7 @@ update_state:
         } else approach_value_e9f68(data + 0x94, frame_time * 10.0f, frame_time_sq * 7.0f);
         fast_vec_normalize(data + 0x70, &position, *(float *)(data + 0x94));
         fast_vec_add(&moby->pos, &moby->pos, data + 0x70);
-        FUN_L12_002eae00(moby);
+        update_blarg_helicopter_motion_tilt(moby);
         break;
     case BLARG_HELICOPTER_KNOCKBACK:
         if (fast_dec_timer_s16(data + 0x8e)) {
@@ -2757,7 +2759,7 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 
-void FUN_L12_002eae00(struct Moby *moby) {
+void update_blarg_helicopter_motion_tilt(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float ang = fast_subtract_rotations(fast_arc_tan(*(float *)(data + 0x70), *(float *)(data + 0x74)),
                              moby->rot.z);
@@ -2786,7 +2788,7 @@ extern void sub_f(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void norm_f(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void add_f(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float dist_f(void *, void *) __asm__("FUN_001f9b48");
-extern void FUN_L12_002eae00(struct Moby *);
+extern void update_blarg_helicopter_motion_tilt(struct Moby *) __asm__("FUN_L12_002eae00");
 typedef struct { char pad[0x48]; float rz; } M_af68;
 typedef struct { float x, y, z, w; } N_af68;
 
@@ -2822,7 +2824,7 @@ int FUN_L12_002eaf68(struct Moby *moby, int path_index) {
         if (*(int *)path - 1 < *(int *)(moby_vars + 0xB4))
             *(int *)(moby_vars + 0xB4) = *(int *)path - 1;
     }
-    FUN_L12_002eae00(moby);
+    update_blarg_helicopter_motion_tilt(moby);
     return 0;
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002EC5A0), where it is exact; names translated to the US level program. */
