@@ -391,7 +391,9 @@ extern float add_rot_d800(float, float) __asm__("FUN_001fa580");
 extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void FUN_L00_002eac18(int);
-void FUN_L11_0030dd18(struct Moby *m);
+void update_child_grid_poses(struct Moby *grid_controller) __asm__("FUN_L11_0030dd18");
+
+void update_child_grid_poses(struct Moby *m) __asm__("FUN_L11_0030dd18");
 
 /* Spawns the 4x6 child grid, waits for its linked moby, then fades and blends between two D_L11_001600EC
    points (pos at 0x30, rotation at 0x70) before handing back to the hero. */
@@ -493,7 +495,7 @@ void update_child_grid_controller(struct Moby *grid_controller) {
     case CHILD_GRID_STATE_IDLE:
         break;
     }
-    FUN_L11_0030dd18(grid_controller);
+    update_child_grid_poses(grid_controller);
 }
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -507,7 +509,7 @@ extern float D_L11_00161F44 __attribute__((sda));
 extern float D_L11_00161F48 __attribute__((sda));
 
 /* Lays out the 4x6 grid of child mobys around this one, fanned by the progress value at pvars+0x6C. */
-void FUN_L11_0030dd18(struct Moby *grid_controller) {
+void update_child_grid_poses(struct Moby *grid_controller) {
     Vec4f parent_axis0_offset;
     Vec4f parent_axis1_offset;
     Vec4f child_position_offset;
