@@ -96,7 +96,9 @@ typedef struct {
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 /* Fills a moby data block: four random values, fixed constants, four frame-scaled counts. */
-void FUN_L01_00308470(O_FUN_L01_00308470 *moby) {
+void initialize_gold_bolt_data(O_FUN_L01_00308470 *moby) __asm__("FUN_L01_00308470");
+
+void initialize_gold_bolt_data(O_FUN_L01_00308470 *moby) {
     M_FUN_L01_00308470 *m = moby->m;
     s32 i;
     for (i = 0; i < 4; i++)

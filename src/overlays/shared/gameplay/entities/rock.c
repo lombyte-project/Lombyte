@@ -1292,7 +1292,7 @@ extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da
 extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void set_hero_animation(f32, s32, s32) __asm__("FUN_L00_002323b8");
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
-extern void FUN_L01_00308470(struct Moby *);
+extern void initialize_gold_bolt_data(struct Moby *) __asm__("FUN_L01_00308470");
 /* the unit defines these with a char * parameter further down */
 extern void FUN_L01_00308550_f(struct Moby *) __asm__("FUN_L01_00308550");
 extern void FUN_L01_00308380_f(struct Moby *) __asm__("FUN_L01_00308380");
@@ -1332,7 +1332,7 @@ void gold_bolt_update(struct Moby *moby) {
         vars->unk64 = D_L01_00161F24 * 0.017453292f * D_0015ED6C_f;
         vars->unk60 = D_L01_00161F28 * 0.017453292f * D_0015ED6C_f;
         moby->state = 1;
-        FUN_L01_00308470(moby);
+        initialize_gold_bolt_data(moby);
         return;
     case GOLD_BOLT_WAIT_FOR_PICKUP:
         moby->scale = moby->pclass->scale * D_L01_00161F10_gp;
