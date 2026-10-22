@@ -1573,7 +1573,7 @@ extern void FUN_L00_002a09d8(s32);
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void clear_hero_item_slot(s32, s32) __asm__("FUN_L00_0020fca8");
 extern void parse_space_scene_chunk(s32, s32) __asm__("FUN_002049f0");
-extern void FUN_L00_002454c8(s32);
+extern void load_scene_chunks_with_fade(s32) __asm__("FUN_L00_002454c8");
 extern void f204a40_29ad08(s32, s32) __asm__("FUN_00204a40");
 extern void FUN_L00_002455c0(s32);
 extern void f215b10_29ad08(void) __asm__("FUN_00215b10");
@@ -1625,7 +1625,7 @@ void FUN_L00_0029ad08(void) {
     if (hero.pending_item[0] == 0x18)
         hero.pending_item[0] = 0;
     f204a40_29ad08(D_L00_00179AC0_29ad08[D_L00_001CA4C0_29ad08.f48].id, -1);
-    FUN_L00_002454c8(item);
+    load_scene_chunks_with_fade(item);
     state = &D_001516D0_29ad08;
     *(s32 *)&state->pad[0x1C] = 0x2734;
     FUN_L00_002455c0(0);

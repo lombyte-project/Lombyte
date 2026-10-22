@@ -32,7 +32,7 @@ extern void FUN_L00_00207330(int, int);
 extern void clear_hero_item_slot(int, int) __asm__("FUN_L00_0020fca8");
 extern void FUN_L00_00232fe8(void);
 extern void FUN_L00_0023aef8(void);
-extern void FUN_L00_002454c8(int);
+extern void load_scene_chunks_with_fade(int) __asm__("FUN_L00_002454c8");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void fill_transfer_words_alt() __asm__("FUN_001f97e8");
 extern void music_pause(s32);
@@ -95,7 +95,7 @@ void FUN_L01_002aea70(char *vendor_moby, int lvl) {
     clear_hero_item_slot(0, 0);
     hero_state->pending_item[0] = lvl;
     select_world_object_resource_tables(D_L01_00179F40[lvl].f10, -1);
-    FUN_L00_002454c8(level_table_pair_index);
+    load_scene_chunks_with_fade(level_table_pair_index);
     music_state = &music_stream_state;
     music_state->queued_secondary_track = 0x2734;
     parse_space_scene_chunk(0);
