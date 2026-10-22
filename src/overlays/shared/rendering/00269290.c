@@ -241,7 +241,9 @@ void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 mine_blend_color(s32, s32, f32) __asm__("FUN_L00_002371e0");
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_00269a70(O00269a70 *particle) {
+void update_damped_effect_particle(O00269a70 *particle) __asm__("FUN_L00_00269a70");
+
+void update_damped_effect_particle(O00269a70 *particle) {
     S00269a70 *s = &particle->s;
     particle->xc = convert_integer_to_float(s->x18 * (s->x1c - particle->xa) / s->x1c + s->x1a) * 1000.0f;
     fast_vec_scale(s, s, D_0015ED60 * -0.019999980926513672f + 1.0f);
