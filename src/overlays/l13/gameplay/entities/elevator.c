@@ -2536,7 +2536,7 @@ void FUN_L13_002b97f8(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB068), where it is exact; names translated to the US level program. */
 
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern int FUN_L11_00308848(void *, void *, void *, float, float);
+extern int spawn_class_3f1_moby(void *, void *, void *, float, float) __asm__("FUN_L11_00308848");
 extern unsigned char D_0013A4E0[];
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L11_00311210(void *, void *, void *, int);
@@ -2555,7 +2555,7 @@ void FUN_L13_002b9df8(struct Moby *moby, char *flight_data, float azimuth_angle,
         fast_vec_normalize(muzzle_offset, aim_vector, 2.2f);
         moby_point_position(moby, 3 + (flight_data[0x61] & 1), projectile_spawn_position);
         fast_vec_add(projectile_spawn_position, projectile_spawn_position, muzzle_offset);
-        FUN_L11_00308848(moby, aim_vector, projectile_spawn_position, 200.0f, -1.0f);
+        spawn_class_3f1_moby(moby, aim_vector, projectile_spawn_position, 200.0f, -1.0f);
         *(int *)(flight_data + 0x80) = scale_game_frames(4);
         flight_data[0x61] ^= 1;
     }

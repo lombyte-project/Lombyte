@@ -1011,7 +1011,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
 
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern int FUN_L11_00308848(void *, void *, void *, float, float);
+extern int spawn_class_3f1_moby(void *, void *, void *, float, float) __asm__("FUN_L11_00308848");
 extern f32 D_L17_001620A0_gp __asm__("D_L17_001620A0") __attribute__((sda));
 extern unsigned char D_0013A4E0_u[] __asm__("D_0013A4E0");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1034,7 +1034,7 @@ void FUN_L17_002ec000(char *moby, char *ship_vars, float aim_azimuth, float aim_
         fast_vec_normalize(projectile_spawn_offset, aim_direction, 2.2f);
         moby_point_position(moby, 3 + (ship_vars[0x61] & 1), projectile_spawn_position);
         fast_vec_add(projectile_spawn_position, projectile_spawn_position, projectile_spawn_offset);
-        FUN_L11_00308848(moby, aim_direction, projectile_spawn_position, 200.0f, -1.0f);
+        spawn_class_3f1_moby(moby, aim_direction, projectile_spawn_position, 200.0f, -1.0f);
         *(int *)(ship_vars + 0x80) = D_L17_00162070;
         ship_vars[0x61] ^= 1;
     }
