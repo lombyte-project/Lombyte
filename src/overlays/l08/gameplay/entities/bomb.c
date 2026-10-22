@@ -2004,7 +2004,9 @@ void update_shuttle_stop_world_points(struct Moby *moby) __asm__("FUN_L08_002dc0
 
 void update_shuttle_stop_world_points(struct Moby *moby) __asm__("FUN_L08_002dc0c8");
 void FUN_L08_002dc180(struct Moby *moby);
-int FUN_L08_002dc648(struct Moby *m);
+int advance_shuttle_path_travel(struct Moby *moby) __asm__("FUN_L08_002dc648");
+
+int advance_shuttle_path_travel(struct Moby *m) __asm__("FUN_L08_002dc648");
 void try_set_shuttle_departure_help_message(struct Moby *moby) __asm__("FUN_L08_002dc7f0");
 
 void try_set_shuttle_departure_help_message(struct Moby *moby) __asm__("FUN_L08_002dc7f0");
@@ -2073,7 +2075,7 @@ void shuttle_update(struct Moby *moby) {
         hero.unk1F2 = 5;
         hero.unk1F4 = 5;
         hero.unk22DA = vars->stop;
-        if (FUN_L08_002dc648((char *)moby)) {
+        if (advance_shuttle_path_travel((char *)moby)) {
             FUN_L08_002dc180((char *)moby);
             moby->state = 2;
         }
@@ -2217,7 +2219,7 @@ extern float D_0015ED6C_lui __asm__("D_0015ED6C");
 extern float D_0015ED70;
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
 
-int FUN_L08_002dc648(struct Moby *moby) {
+int advance_shuttle_path_travel(struct Moby *moby) {
     char *shuttle_vars = (char *)moby->pvars;
     int *path;
     float path_acceleration_step = D_0015ED70 * 0.1f;
