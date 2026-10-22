@@ -1170,7 +1170,9 @@ int FUN_L06_002ea6a8(unsigned char *moby) {
 }
 extern s32 cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 
-s32 FUN_L06_002ea7c8(unsigned char *moby) {
+s32 cancel_moby_suction_and_save_state(unsigned char *moby) __asm__("FUN_L06_002ea7c8");
+
+s32 cancel_moby_suction_and_save_state(unsigned char *moby) {
     u8 previous_state;
     s32 helper_result;
     helper_result = cancel_suck_cannon_suction(moby);
