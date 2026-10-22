@@ -537,7 +537,7 @@ extern int D_L18_001622BC __attribute__((sda));
 extern unsigned char *D_L18_0015FFD8;
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void spawn_debris_chunk(void *, void *, unsigned int, int, float, float, float, float, int) __asm__("FUN_L01_002f8530");
-extern void FUN_L12_0027b268(char *, void *, int);
+extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");
 extern void FUN_L12_0027b370(Level18VendorMoby *, void *, int);
 extern void mark_class_0630_moby_and_child_for_removal(void *) __asm__("FUN_L18_002fa8e0");
 extern void add_vector_xyz(void *, void *, void *);
@@ -583,7 +583,7 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             moby_vars->f348 = 0;
             moby_vars->f34C = scale_game_frames(30);
             moby_vars->cnt = j;
-            FUN_L12_0027b268(moby, (char *)moby_vars + 0x30, j);
+            capture_linked_moby_relative_transforms(moby, (char *)moby_vars + 0x30, j);
             moby->state = 1;
             break;
         }

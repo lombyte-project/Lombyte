@@ -577,7 +577,7 @@ extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void FUN_L00_002eac18(int);
-extern void FUN_L12_0027b268(char *, void *, int);
+extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");
 extern void FUN_L12_0027b370(char *, char *, int);
 extern void FUN_L12_003064e8_c(char *) __asm__("FUN_L12_003064e8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -633,7 +633,7 @@ void planetbuster_maximus_part_update(char *moby) {
             int i;
             int j;
             D_L12_00161F24 = 0;
-            FUN_L12_0027b268(moby, moby_data, 0x11);
+            capture_linked_moby_relative_transforms(moby, moby_data, 0x11);
             path = ((P_7DB0 * *)&D_L12_001B0930)[*(int *)(moby_data + 0x5C0)];
             qcopy(moby + 0x10, path + 1);
             *(float *)(moby_data + 0x618) = *(float *)(moby + 0x18);

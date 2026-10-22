@@ -51,7 +51,9 @@ extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void vu_euler_rotation_basis(void *, void *);
 
-void FUN_L12_0027b268(char *moby, char *arr, int entry_count) {
+void capture_linked_moby_relative_transforms(char *moby, char *arr, int entry_count) __asm__("FUN_L12_0027b268");
+
+void capture_linked_moby_relative_transforms(char *moby, char *arr, int entry_count) {
     float moby_rotation_basis[12];
     float inverse_moby_rotation_matrix[16];
     float relative_rotation_matrix[16];
