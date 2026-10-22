@@ -379,7 +379,9 @@ extern void FUN_L14_002aea08_c618(struct Moby *) __asm__("FUN_L14_002aea08");
 extern void FUN_L14_002aead8_c618(struct Moby *) __asm__("FUN_L14_002aead8");
 extern int FUN_L14_002aeba0(struct Moby *, int);
 extern void FUN_L14_002aed50_c618(struct Moby *) __asm__("FUN_L14_002aed50");
-extern void FUN_L14_002aee28(struct Moby *);
+void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) __asm__("FUN_L14_002aee28");
+
+extern void draw_blarg_heavy_interceptor_group_effects(struct Moby *) __asm__("FUN_L14_002aee28");
 int count_moby_group_members(struct Moby *moby) __asm__("FUN_L14_002af048");
 
 extern int count_moby_group_members(struct Moby *) __asm__("FUN_L14_002af048");
@@ -478,7 +480,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
     }
     if (moby->state == 8) {
         FUN_L14_002aed50_c618(moby);
-        add_draw_callback(FUN_L14_002aee28, moby);
+        add_draw_callback(draw_blarg_heavy_interceptor_group_effects, moby);
         return;
     }
     *(int *)(moby_vars + 0x20C) = 0;
@@ -1579,7 +1581,7 @@ extern int D_L14_001D8680_b[] __asm__("D_L14_001D8680");
 char *FUN_L14_002aef28(int index, int *ids);
 extern void FUN_L14_002add48(char *);
 extern void FUN_L14_002ada18(char *);
-void FUN_L14_002aee28(struct Moby *moby) {
+void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     int i;
     int *out;
