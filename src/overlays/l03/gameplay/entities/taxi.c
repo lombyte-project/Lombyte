@@ -16,7 +16,9 @@
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 
-void FUN_L03_002cc828(unsigned char *mine_moby) {
+void handle_mine_hit(unsigned char *mine_moby) __asm__("FUN_L03_002cc828");
+
+void handle_mine_hit(unsigned char *mine_moby) {
     char *item = find_moby_hit(mine_moby, 0x130000, 0);
     if (item != 0) {
         char *other = *(char **)(item + 0x20);
@@ -533,7 +535,7 @@ void FUN_L03_002cbea8(struct Moby *mine_moby) {
     int i;
     int k;
 
-    FUN_L03_002cc828((unsigned char *)mine_moby);
+    handle_mine_hit((unsigned char *)mine_moby);
     mine_vars->unk60 = 0;
     mine_vars->age++;
     switch (mine_moby->state) {
