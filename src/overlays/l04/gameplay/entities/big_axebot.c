@@ -2205,7 +2205,9 @@ extern f32 D_L04_001618B4 __attribute__((sda));
 extern f32 D_L04_001618BC __attribute__((sda));
 
 /* Lays a trail of smoke puffs from FROM to TO with a burst at each end. */
-void FUN_L04_002c41e0(void *owner, void *from, void *to, int count, float from_puff_scale, float to_puff_scale) {
+void spawn_smoke_puff_trail_with_endpoint_bursts(void *owner, void *from, void *to, int count, float from_puff_scale, float to_puff_scale) __asm__("FUN_L04_002c41e0");
+
+void spawn_smoke_puff_trail_with_endpoint_bursts(void *owner, void *from, void *to, int count, float from_puff_scale, float to_puff_scale) {
     Vec4 step;
     Vec4 at;
     Vec4 particle_spawn_velocity;
