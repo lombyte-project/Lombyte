@@ -20,7 +20,9 @@ extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L06_00222fb8(void) {
+void apply_hero_ground_material_response(void) __asm__("FUN_L06_00222fb8");
+
+void apply_hero_ground_material_response(void) {
     struct Hero *hero_state = &hero;
     struct Hero *g1;
     struct Hero *g2;

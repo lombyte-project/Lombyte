@@ -70,7 +70,7 @@ extern s32 D_L06_0015F5CC_macro __asm__("D_L06_0015F5CC") __attribute__((section
 extern f32 D_L06_0017BFDC_lui __asm__("D_L06_0017BFDC") __attribute__((section(".data")));
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_00211670(void);
-extern void FUN_L06_00222fb8(void);
+extern void apply_hero_ground_material_response(void) __asm__("FUN_L06_00222fb8");
 extern void FUN_L00_0020bed0_u(void) __asm__("FUN_L00_0020bed0");
 extern void FUN_L00_00215b68(void);
 extern void FUN_L06_0023b440(void);
@@ -132,7 +132,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
 
     FUN_L00_00232670();
     FUN_L00_00211670();
-    FUN_L06_00222fb8();
+    apply_hero_ground_material_response();
     g = (char *)&hero;
     if (*(u8 *)(g + 0x20a4) == 1) {
         FUN_L00_0020bed0_u();
