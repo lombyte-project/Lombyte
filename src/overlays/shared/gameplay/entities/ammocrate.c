@@ -422,8 +422,8 @@ extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern Tex_2E8040 D_L13_001B2680_2E8040 __asm__("D_L13_001B2380");
 extern V4_2E8040 D_L13_001741E0_2E8040 __asm__("D_L13_00174160");
 
-void FUN_L13_002e6c08(Moby *m);
-void FUN_L13_002e6c08(Moby *rocket) {
+void update_ship_rocket(Moby *m) __asm__("FUN_L13_002e6c08");
+void update_ship_rocket(Moby *rocket) {
     Rocket_2E8040 *rocket_data = *(void **)&rocket->pvars;
     V4_2E8040 old;
     V4_2E8040 hitpos;
