@@ -2860,7 +2860,9 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void mmr_q(struct Obj *obj) __asm__("FUN_0020c828");
 
 extern char D_0013F3D0[] __attribute__((section(".data")));
-void FUN_L16_002d5ef8(struct Moby *moby) {
+void update_triggered_group_objective(struct Moby *moby) __asm__("FUN_L16_002d5ef8");
+
+void update_triggered_group_objective(struct Moby *moby) {
     enum {
         SCENE_STATE_INITIALIZE = 0,
         SCENE_STATE_WAIT_FOR_TRIGGER = 1,
