@@ -102,7 +102,7 @@ extern int sample_path(int *tab, float *out, int *a, float *b, int c, float d) _
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_00266e00(int, int, int, int);
-extern int FUN_L01_0022d838(float *, float *);
+extern int test_hero_ledge_ahead(float *, float *) __asm__("FUN_L01_0022d838");
 extern int process_hero_item_action_input(void) __asm__("FUN_L02_0022ee00");
 extern int get_hero_help_value(int a) __asm__("FUN_L06_0021d0a0");
 extern int process_hero_hurt_response(int) __asm__("FUN_L18_00218a90");
@@ -1529,7 +1529,7 @@ void process_hero_state_transitions(void) {
                     stick_target(0, 1.0f);
                     qcopy(v0, hero.motion.pos.f);
                     hang_probe_yaw = hero.motion.rot.f[2];
-                    if (FUN_L01_0022d838(v0, &hang_probe_yaw) == 0) {
+                    if (test_hero_ledge_ahead(v0, &hang_probe_yaw) == 0) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         hero.unk1B0 = scale_game_frames(0xA);
                         break;
@@ -1555,7 +1555,7 @@ void process_hero_state_transitions(void) {
                         v1[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         v1[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         positive_shimmy_probe_yaw = hero.motion.rot.f[2];
-                        if (FUN_L01_0022d838(v1, &positive_shimmy_probe_yaw)) {
+                        if (test_hero_ledge_ahead(v1, &positive_shimmy_probe_yaw)) {
                             hero_set_state(0x1A, 1);
                         }
                         break;
@@ -1570,7 +1570,7 @@ void process_hero_state_transitions(void) {
                         v1[1] +=
                             fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         negative_shimmy_probe_yaw = hero.motion.rot.f[2];
-                        if (FUN_L01_0022d838(v1, &negative_shimmy_probe_yaw)) {
+                        if (test_hero_ledge_ahead(v1, &negative_shimmy_probe_yaw)) {
                             hero_set_state(0x1B, 1);
                         }
                     }
@@ -1592,7 +1592,7 @@ void process_hero_state_transitions(void) {
                         0.7853982f <
                             fast_difference_between_rotations(
                                 hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], ang)) ||
-                        FUN_L01_0022d838(v0, &shimmy_probe_yaw) == 0) {
+                        test_hero_ledge_ahead(v0, &shimmy_probe_yaw) == 0) {
                         if (hero.unkA98 & 2) {
                             hero_set_state(0x19, 1);
                             break;
