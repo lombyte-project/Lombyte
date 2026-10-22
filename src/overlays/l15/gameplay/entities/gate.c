@@ -551,7 +551,9 @@ extern void FUN_L00_0025e450_7880(void *, void *, void *, float, float, int, int
 extern void *FUN_L01_002f8530_7880(void *, void *, int, float, int, float, float, float, int) __asm__("FUN_L01_002f8530");
 extern void *FUN_L00_0026bed0_7880(void *, void *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
 
-void FUN_L15_002a7880(struct Moby *moby)
+void update_destructible_moby_with_radial_debris(struct Moby *moby) __asm__("FUN_L15_002a7880");
+
+void update_destructible_moby_with_radial_debris(struct Moby *moby)
 {
     char *slot = 0;
     Vec_2a7880 velocity, first, second, offset, base;
