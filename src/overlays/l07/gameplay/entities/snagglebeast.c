@@ -330,7 +330,9 @@ extern int D_001413D4 __attribute__((section(".data")));
 extern char *D_L07_001600EC;
 extern char D_0013E5C4[];
 
-void FUN_L07_00313420(char *moby, char *data, float *health) {
+void process_snagglebeast_damage(char *moby, char *data, float *health) __asm__("FUN_L07_00313420");
+
+void process_snagglebeast_damage(char *moby, char *data, float *health) {
     enum {
         SNAGGLEBEAST_HIT_KIND_FORCE_UNIT_DAMAGE = 0x79,
         SNAGGLEBEAST_HIT_KIND_UNIT_DAMAGE_OVERRIDE = 0xba,
@@ -802,7 +804,7 @@ void snagglebeast_update(unsigned char *moby) {
     }
     qcopy(&oldpos, moby + 0x10);
     health = (float *)(data + 0x20);
-    FUN_L07_00313420((char *)moby, (char *)data, health);
+    process_snagglebeast_damage((char *)moby, (char *)data, health);
     follow_target = 0;
     get_target_sight((struct Moby *)moby, &sight, 30.0f);
     target_distance = vector_distance(&sight, moby + 0x10);
