@@ -119,7 +119,9 @@ void FUN_L00_00235ad8(HudElem *hud_element, int *x, int *y, int slide_index, int
 /* updates numeric HUD values and dimensions from digit count */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236610), where it is exact; names translated to the US level program. */
 
-void FUN_L00_00235c80(HudElem *hud_element) {
+void initialize_numeric_hud_values_and_dimensions(HudElem *hud_element) __asm__("FUN_L00_00235c80");
+
+void initialize_numeric_hud_values_and_dimensions(HudElem *hud_element) {
     int *value = hud_element->unk0C;
     int digits;
     int decimal_quotient, flags, width;
@@ -155,14 +157,14 @@ void FUN_L00_00235c80(HudElem *hud_element) {
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236710), where it is exact; names translated to the US level program. */
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00235c80(HudElem *);
+extern void initialize_numeric_hud_values_and_dimensions(HudElem *) __asm__("FUN_L00_00235c80");
 
 /* Sets unk7C to scale_game_frames(0xB4) + 0x1E, clears 0x48/0x4A, calls FUN_L00_00235c80. */
 void FUN_L00_00235d80(HudElem *hud_element) {
     hud_element->unk7C = scale_game_frames(0xB4) + 0x1E;
     hud_element->unk48 = 0;
     hud_element->unk4A = 0;
-    FUN_L00_00235c80(hud_element);
+    initialize_numeric_hud_values_and_dimensions(hud_element);
 }
 /* func_L00_00236710 for a 32 x 32 element. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236750), where it is exact; names translated to the US level program. */
@@ -176,7 +178,7 @@ void reset_numeric_hud_element_32x32_base(HudElem *hud_element) {
     hud_element->unk4A = 0;
     hud_element->w = 0x20;
     hud_element->h = 0x20;
-    FUN_L00_00235c80(hud_element);
+    initialize_numeric_hud_values_and_dimensions(hud_element);
 }
 typedef struct {
     u8 pad[0x64];

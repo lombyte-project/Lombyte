@@ -812,7 +812,7 @@ typedef struct {
 } Q2395b0;
 extern Q2395b0 D_L00_0015FAB0;
 int scale_game_frames(int) __asm__("FUN_001f96f8");
-void FUN_L00_00235c80();
+void initialize_numeric_hud_values_and_dimensions() __asm__("FUN_L00_00235c80");
 /* Sets 0x7C, 0x58/0x5C = 64, 0x48 = 32, calls 00235c80 and links D_L00_0015FAB0. */
 void initialize_hud_element_with_counters(char *hud_element) __asm__("FUN_L00_002395b0");
 
@@ -823,7 +823,7 @@ void initialize_hud_element_with_counters(char *hud_element) {
     *(int *)(hud_element + 0x5C) = 64;
     *(short *)(hud_element + 0x48) = 32;
     *(short *)(hud_element + 0x4A) = 0;
-    FUN_L00_00235c80(hud_element);
+    initialize_numeric_hud_values_and_dimensions(hud_element);
     *(Q2395b0 **)(hud_element + 0x80) = &D_L00_0015FAB0;
     D_L00_0015FAB0.d = 1;
     D_L00_0015FAB0.a = 0;
@@ -1341,14 +1341,14 @@ int FUN_L00_0023a640(char *rec) {
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B0F8), where it is exact; names translated to the US level program. */
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00235c80(HudElem *);
+extern void initialize_numeric_hud_values_and_dimensions(HudElem *) __asm__("FUN_L00_00235c80");
 
 /* Sets unk7C to scale_game_frames(0x78) + 0x1E and w/h to 0x20, calls FUN_L00_00235c80. */
 void FUN_L00_0023a760(HudElem *hud_element) {
     hud_element->unk7C = scale_game_frames(0x78) + 0x1E;
     hud_element->w = 0x20;
     hud_element->h = 0x20;
-    FUN_L00_00235c80(hud_element);
+    initialize_numeric_hud_values_and_dimensions(hud_element);
 }
 
 s32 D_L01_0017E0A0[1] __attribute__((section(".data"))) = {0};
