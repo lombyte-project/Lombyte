@@ -828,7 +828,9 @@ extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f460
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L08_003097b0(struct Moby *moby) {
+void update_batalia_textured_effect(struct Moby *moby) __asm__("FUN_L08_003097b0");
+
+void update_batalia_textured_effect(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_ACTIVE = 1
