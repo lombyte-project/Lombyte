@@ -638,7 +638,9 @@ extern int scene_state __asm__("D_L07_0015F5C4");
 extern unsigned char D_L07_0020C6C0[];
 extern void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
-void FUN_L07_00314058(char *moby) {
+void apply_snagglebeast_big_head_cheat(char *moby) __asm__("FUN_L07_00314058");
+
+void apply_snagglebeast_big_head_cheat(char *moby) {
     int i;
 
     if (scene_state == 2 && big_head_cheat_enabled != 0) {
@@ -774,7 +776,7 @@ void snagglebeast_update(unsigned char *moby) {
     float *health;
 
     FUN_L00_00263ac8(2.5f, (int)moby, 0xB, data + 0x2A0);
-    FUN_L07_00314058((char *)moby);
+    apply_snagglebeast_big_head_cheat((char *)moby);
     if (scene_state == 2) return;
     if (*(int *)(data + 0x1A4) != -1 && !FUN_00214720(((char *)&hero) + 0x80, *(int *)(data + 0x1A4))) return;
     if (moby[0x31] != 0) {
