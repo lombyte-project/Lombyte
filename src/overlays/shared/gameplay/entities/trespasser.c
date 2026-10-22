@@ -771,7 +771,7 @@ extern float FUN_L00_002bf050(void *,void *,float,float,float,float,float,void *
 extern int FUN_L00_002bf9f0(void *,void *,void *,int);
 extern void FUN_L00_002bf8b0(void *,void *,void *);
 extern int compute_moby_state_from_vertical_probe(void *) __asm__("FUN_L00_002bfec8");
-extern int FUN_L00_0025b440(void *,void *);
+extern int update_arc_motion(void *,void *) __asm__("FUN_L00_0025b440");
 extern int FUN_L00_00259028(void *,void *,void *,void *);
 
 /* Updates an Agent of Doom's movement, target selection and detonation. */
@@ -1054,7 +1054,7 @@ void doom_bot_update(struct Moby *moby) {
     case DOOM_BOT_EXECUTE_JUMP:
         z=moby->pos.z;
         FUN_L00_002bec00((char*)data);
-        result=FUN_L00_0025b440(moby,&((DoomBotParams*)&hero)->config);
+        result=update_arc_motion(moby,&((DoomBotParams*)&hero)->config);
         if (result==4) {
             moby->state=result;
             if (moby->prev_seq!=7) blend_moby_animation(moby,7,0,scale_game_frames(3));

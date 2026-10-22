@@ -724,7 +724,9 @@ extern void FUN_001f9a10_25b440(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float FUN_001f96b0_25b440(float) __asm__("FUN_001f96b0");
 extern float FUN_00213508_25b440(void *, int, float) __asm__("FUN_00213508");
 
-int FUN_L00_0025b440(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
+int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) __asm__("FUN_L00_0025b440");
+
+int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
     enum {
         CHECK_ARC_ENTRY_GATES = 0,
         INTEGRATE_ARC_MOTION = 1,
