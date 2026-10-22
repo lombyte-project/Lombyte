@@ -154,7 +154,9 @@ int D_L06_0016237C = 0x10019;
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 /* Level 06 moby update: a spark emitter; state 4 bursts on a random timer, state 3 sprays continuously. */
-void FUN_L06_00308c68(struct Moby *emitter) {
+void update_spark_emitter(struct Moby *emitter) __asm__("FUN_L06_00308c68");
+
+void update_spark_emitter(struct Moby *emitter) {
     enum {
         SPARK_EMITTER_INITIALIZE = 0,
         SPARK_EMITTER_DELAYED_ACTION = 2,
