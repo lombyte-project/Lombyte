@@ -108,7 +108,9 @@ extern void mark_moby_for_removal_c8e0(struct Moby *) __asm__("FUN_0020c828");
 char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) __asm__("FUN_L05_0031d160");
 
 extern char *spawn_moby_class_5ea_from_source(unsigned char *) __asm__("FUN_L05_0031d160");
-void FUN_L05_0031cf58(char *m);
+void draw_moby_glow_sprite(char *m) __asm__("FUN_L05_0031cf58");
+
+void draw_moby_glow_sprite(char *m) __asm__("FUN_L05_0031cf58");
 
 /* Mine update: sets its glow, fades it out with camera distance and blows up into debris, smoke and sparks when something touches it. */
 void FUN_L05_0031c8e0(struct Moby *moby);
@@ -148,7 +150,7 @@ void FUN_L05_0031c8e0(struct Moby *moby) {
     } else {
         vars->alpha = vars->max_alpha;
     }
-    enqueue_callback_c8e0(FUN_L05_0031cf58, moby);
+    enqueue_callback_c8e0(draw_moby_glow_sprite, moby);
     hit = find_moby_hit_c8e0(moby, 0x810000, 0);
     moby->hit_slot = 0xFF;
     if (hit == 0) {
@@ -249,7 +251,7 @@ u64 get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
 
 extern short D_L05_00161FCC __attribute__((sda));
 extern char D_L05_001671C0_lui[] __asm__("D_L05_001671C0") __attribute__((section(".data")));
-void FUN_L05_0031cf58(char *m) {
+void draw_moby_glow_sprite(char *m) {
     char *d = *(char **)(m + 0x78);
     Pk_31e468 pk;
     float up[4];
