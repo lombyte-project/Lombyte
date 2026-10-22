@@ -94,7 +94,7 @@ extern void FUN_L05_00266320(void);
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
-extern void FUN_L05_00266710(void);
+extern void draw_hud_timer(void) __asm__("FUN_L05_00266710");
 extern void scale_vector_xyz(void *, void *, float);
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
@@ -522,7 +522,7 @@ int hero_set_state(int a, int b) {
                 queue_animation_update(5, 0xFFFF, (int)initialize_hud_element_defaults, (int)FUN_L05_002661e8,
                                        (int)FUN_L05_00266320, 0, 0);
                 queue_animation_update(7, 0xFFFF, (int)initialize_hud_element_defaults, (int)FUN_L05_002661e8,
-                                       (int)FUN_L05_00266710, 0, 0);
+                                       (int)draw_hud_timer, 0, 0);
             } else {
                 q->unk854 = -dot_vectors_xyz(&q->gravity_dir, &q->motion.displacement);
             }

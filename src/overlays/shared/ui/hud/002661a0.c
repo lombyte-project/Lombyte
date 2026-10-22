@@ -153,7 +153,9 @@ int FUN_L05_00266320(HudElem *hud_element) {
     return hud_element->w;
 }
 
-int FUN_L05_00266710(HudElem *hud_element) {
+int draw_hud_timer(HudElem *hud_element) __asm__("FUN_L05_00266710");
+
+int draw_hud_timer(HudElem *hud_element) {
     char formatted_hud_text[64];
     int y0, y1, y2;
     int frames, per_min, per_sec;
