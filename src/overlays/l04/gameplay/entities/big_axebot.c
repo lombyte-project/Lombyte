@@ -2378,14 +2378,14 @@ void blarg_trooper_update(struct Moby *moby) {
     } st;
     int hit_reaction_status;
     float dmg;
-    float ang;
-    float ang2;
+    float fatal_knockback_yaw;
+    float recovery_knockback_yaw;
     float one;
     char *data;
     int flag;
     float *pos;
     char *target;
-    float dist;
+    float target_distance;
     float alive;
     float best;
     float target_selection_distance_limit;
@@ -2418,7 +2418,7 @@ void blarg_trooper_update(struct Moby *moby) {
     }
     FUN_L00_0025fcb8(moby, st.tgt, target_selection_distance_limit);
     target = *(char **)&st.tgt[16];
-    dist = vector_distance(pos, st.tgt);
+    target_distance = vector_distance(pos, st.tgt);
     dmg = 0.0f;
     alive = compute_interpolated_record_value(moby);
     if (moby->state != 0 && *(unsigned char *)(data + 0x2E) != 1) {
@@ -2465,15 +2465,15 @@ void blarg_trooper_update(struct Moby *moby) {
         if (o != 0) {
             struct Hero *g = &hero;
             if (o != ((char *)g->items[0].moby)) {
-                ang2 = fast_arc_tan(moby->pos.x - *(float *)(o + 0x10),
+                recovery_knockback_yaw = fast_arc_tan(moby->pos.x - *(float *)(o + 0x10),
                                     moby->pos.y - *(float *)(o + 0x14));
             } else {
-                ang2 = fast_arc_tan(moby->pos.x - g->motion.pos.f[0],
+                recovery_knockback_yaw = fast_arc_tan(moby->pos.x - g->motion.pos.f[0],
                                     moby->pos.y - g->motion.pos.f[1]);
             }
         } else {
             struct Hero *g = &hero;
-            ang2 = fast_arc_tan(moby->pos.x - g->motion.pos.f[0],
+            recovery_knockback_yaw = fast_arc_tan(moby->pos.x - g->motion.pos.f[0],
                                 moby->pos.y - g->motion.pos.f[1]);
         }
         t = *(float *)(data + 0x20) - dmg;
@@ -2500,8 +2500,8 @@ void blarg_trooper_update(struct Moby *moby) {
                 *(float *)(data + 0x8C) = d;
             }
             *(OvlQuad *)st.w.p.v70 = *(OvlQuad *)(hit + 0x10);
-            trooper_knockback_arc(st.w.p.v70, &ang, data + 0x88, data + 0x8C);
-            trooper_start_knockback(ang, moby, data + 0x70, 0xD, 1, 0);
+            trooper_knockback_arc(st.w.p.v70, &fatal_knockback_yaw, data + 0x88, data + 0x8C);
+            trooper_start_knockback(fatal_knockback_yaw, moby, data + 0x70, 0xD, 1, 0);
             *(float *)(data + 0xC0) = 12.0f;
             *(float *)(data + 0xC4) = 25.0f;
             moby->state = 0xB;
@@ -2520,8 +2520,8 @@ void blarg_trooper_update(struct Moby *moby) {
                 *(float *)(data + 0xF4) = 2.0f / multiply_global_factor_ed64(15.0f);
             }
             *(OvlQuad *)st.w.p.v70 = *(OvlQuad *)(hit + 0x10);
-            trooper_knockback_arc(st.w.p.v70, &ang2, data + 0xF4, &one);
-            moby->rot.z = fast_add_rotations(3.1415927f, ang2);
+            trooper_knockback_arc(st.w.p.v70, &recovery_knockback_yaw, data + 0xF4, &one);
+            moby->rot.z = fast_add_rotations(3.1415927f, recovery_knockback_yaw);
             break;
         }
         case BLARG_TROOPER_HIT_REACTION_START_KNOCKBACK_RECOVERY:
@@ -2531,8 +2531,8 @@ void blarg_trooper_update(struct Moby *moby) {
             moby->state = 0xA;
             *(float *)(data + 0xF4) = 2.0f / multiply_global_factor_ed64(15.0f);
             *(OvlQuad *)st.w.p.v70 = *(OvlQuad *)(hit + 0x10);
-            trooper_knockback_arc(st.w.p.v70, &ang2, data + 0xF4, &one);
-            moby->rot.z = fast_add_rotations(3.1415927f, ang2);
+            trooper_knockback_arc(st.w.p.v70, &recovery_knockback_yaw, data + 0xF4, &one);
+            moby->rot.z = fast_add_rotations(3.1415927f, recovery_knockback_yaw);
             break;
         case BLARG_TROOPER_HIT_REACTION_NO_ADDITIONAL_RESPONSE:
         case BLARG_TROOPER_HIT_REACTION_NO_ADDITIONAL_REACTION:
@@ -2596,19 +2596,19 @@ void blarg_trooper_update(struct Moby *moby) {
             moby->state = 3;
             break;
         }
-        if (dist > 2.5f && best > 1.0f) {
-            if (dist > 14.0f) {
+        if (target_distance > 2.5f && best > 1.0f) {
+            if (target_distance > 14.0f) {
                 blend_moby_animation_p(moby, (void *)0xA, 0, (void *)scale_game_frames(8));
                 moby->state = 2;
                 break;
             }
-            if (dist < 8.0f && *(int *)(data + 0x108) == 0) {
+            if (target_distance < 8.0f && *(int *)(data + 0x108) == 0) {
                 blend_moby_animation_p(moby, (void *)0xB, 0, (void *)scale_game_frames(8));
                 moby->state = 3;
                 break;
             }
         }
-        if (dist < 14.0f && dist >= 2.5f &&
+        if (target_distance < 14.0f && target_distance >= 2.5f &&
             absolute_float(moby->pos.z - st.tgt[2]) < 8.0f) {
             if (*(short *)(data + 0xF2) == 0) {
                 *(OvlQuad *)st.w.p.v90 = 0;
@@ -2621,7 +2621,7 @@ void blarg_trooper_update(struct Moby *moby) {
                     blend_moby_animation_p(moby, (void *)3, 0, (void *)scale_game_frames(7));
                 }
             }
-        } else if (dist <= 2.5f) {
+        } else if (target_distance <= 2.5f) {
             int t = *(short *)(data + 0xF2);
             if (t <= 0) {
                 moby->state = 7;
@@ -2632,7 +2632,7 @@ void blarg_trooper_update(struct Moby *moby) {
         }
         break;
     case BLARG_TROOPER_STATE_MOVE_TO_PATH_POINT:
-        if (dist < 13.0f || best < 1.0f) {
+        if (target_distance < 13.0f || best < 1.0f) {
             blend_moby_animation_p(moby, 0, 0, (void *)scale_game_frames(0xA));
             moby->state = 1;
         } else {
@@ -2689,27 +2689,27 @@ void blarg_trooper_update(struct Moby *moby) {
                 *(unsigned char *)(data + 0xFF) = scale_game_frames(0xF);
             }
             if (*(short *)(data + 0xF2) == 0) {
-                if (dist < 1.0f && fast_difference_between_rotations(
+                if (target_distance < 1.0f && fast_difference_between_rotations(
                                        fast_arc_tan(st.v50[0] - moby->pos.x,
                                                     st.v50[1] - moby->pos.y),
                                        moby->rot.z) < 0.2617994f) {
                     moby->state = 7;
                     blend_moby_animation_p(moby, (void *)7, 0, (void *)scale_game_frames(7));
                     *(unsigned char *)(data + 0xFF) = 0;
-                } else if (dist < 14.0f) {
+                } else if (target_distance < 14.0f) {
                     moby->state = 5;
                     blend_moby_animation_p(moby, (void *)3, 0, (void *)scale_game_frames(7));
                     *(unsigned char *)(data + 0xFF) = 0;
                 }
             }
         } else {
-            if (dist < 1.0f &&
+            if (target_distance < 1.0f &&
                 fast_difference_between_rotations(fast_arc_tan(st.v50[0] - moby->pos.x,
                                                                st.v50[1] - moby->pos.y),
                                                   moby->rot.z) < 0.2617994f) {
                 moby->state = 7;
                 blend_moby_animation_p(moby, (void *)7, 0, (void *)scale_game_frames(7));
-            } else if (dist > 9.0f) {
+            } else if (target_distance > 9.0f) {
                 moby->state = 5;
                 blend_moby_animation_p(moby, (void *)3, 0, (void *)scale_game_frames(7));
             } else if (best < 1.0f) {
@@ -2748,24 +2748,24 @@ void blarg_trooper_update(struct Moby *moby) {
         if ((moby->anim_flags & 2) && moby->seq != 4) {
             blend_moby_animation_p(moby, (void *)4, 0, (void *)scale_game_frames(7));
         }
-        if (!flag && dist > 2.5f && best > 1.0f) {
-            if (dist > 14.0f) {
+        if (!flag && target_distance > 2.5f && best > 1.0f) {
+            if (target_distance > 14.0f) {
                 blend_moby_animation_p(moby, (void *)0xA, 0, (void *)scale_game_frames(9));
                 moby->state = 2;
                 break;
             }
-            if (dist < 8.0f && *(int *)(data + 0x108) == 0) {
+            if (target_distance < 8.0f && *(int *)(data + 0x108) == 0) {
                 blend_moby_animation_p(moby, (void *)0xB, 0, (void *)scale_game_frames(5));
                 moby->state = 3;
                 break;
             }
         }
-        if (dist < 2.5f) {
+        if (target_distance < 2.5f) {
             moby->state = 7;
             blend_moby_animation_p(moby, (void *)7, 0, (void *)scale_game_frames(7));
             break;
         }
-        if (*(short *)(data + 0xF2) == 0 && dist < 14.0f &&
+        if (*(short *)(data + 0xF2) == 0 && target_distance < 14.0f &&
             absolute_float(moby->pos.z - st.tgt[2]) < 4.0f) {
             char *g = D_L04_00166E00;
             if (fast_difference_between_rotations(
@@ -2783,7 +2783,7 @@ void blarg_trooper_update(struct Moby *moby) {
                 break;
             }
         }
-        if (dist > 14.0f) {
+        if (target_distance > 14.0f) {
             moby->state = flag ? 3 : 1;
             blend_moby_animation_p(moby, (void *)6, 0, (void *)scale_game_frames(0xA));
             *(short *)(data + 0xF2) = scale_game_frames(0x1E);
@@ -2797,7 +2797,7 @@ void blarg_trooper_update(struct Moby *moby) {
             FUN_L00_00258278(moby, (float *)(data + 0xEC), a, frame_scale_sq * 0.04f, frame_scale_sq * 0.3f,
                              frame_time * 4.712389f);
         }
-        if (dist < 2.5f) {
+        if (target_distance < 2.5f) {
             moby->state = 7;
             blend_moby_animation_p(moby, (void *)7, 0, (void *)scale_game_frames(7));
         }
