@@ -543,7 +543,9 @@ extern s32 coll2_222270(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 coll3_222270(void *, f32) __asm__("FUN_L00_001f3170");
 extern void vscl_222270(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern u128_222270 D_L02_00174470[] __attribute__((section(".data")));
-s32 FUN_L02_00222270(s32 mode) {
+s32 resolve_hero_position_collisions(s32 mode) __asm__("FUN_L02_00222270");
+
+s32 resolve_hero_position_collisions(s32 mode) {
     V_222270 old;
     V_222270 collision_probe_offset;
     V_222270 corrected_displacement;
