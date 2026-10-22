@@ -579,7 +579,9 @@ void FUN_L08_002d3d78(char *moby) {
 extern void *FUN_L00_002dbe20(void *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void *FUN_L08_002d4050(char *moby) {
+void *enter_scoutbot_return_home_state(char *moby) __asm__("FUN_L08_002d4050");
+
+void *enter_scoutbot_return_home_state(char *moby) {
     void *result = FUN_L00_002dbe20(moby);
     char *scoutbot_data = *(char **)(moby + 0x78);
     moby[0x20] = 3;
