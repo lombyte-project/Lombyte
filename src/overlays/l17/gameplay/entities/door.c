@@ -2433,7 +2433,9 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 void FUN_L17_002efa48(void *moby_v, int arg);
-void FUN_L17_002f00a0(struct Moby *moby);
+void update_robot_dog_aim_joint(struct Moby *moby) __asm__("FUN_L17_002f00a0");
+
+void update_robot_dog_aim_joint(struct Moby *moby) __asm__("FUN_L17_002f00a0");
 void FUN_L17_002f0210(struct Moby *moby);
 extern void clear_vector(void *) __asm__("func_001F99F8");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
@@ -2479,7 +2481,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
     }
     robot_dog_moby[0x31] = 1;
     *(unsigned short *)(robot_dog_moby + 0x34) &= 0xFFFE;
-    FUN_L17_002f00a0(robot_dog_moby);
+    update_robot_dog_aim_joint(robot_dog_moby);
     FUN_L17_002f0210(robot_dog_moby);
     facing_target_moby = robot_dog_vars->target;
     FUN_L00_00263b38(robot_dog_vars->a230, 2.1f);
@@ -3005,7 +3007,7 @@ extern float vector_length_xy(void *);
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 
-void FUN_L17_002f00a0(struct Moby *moby) {
+void update_robot_dog_aim_joint(struct Moby *moby) {
     AimData_1BB0 *moby_vars = (AimData_1BB0 *)moby->pvars;
     float aim_joint_smoothing_factor = 0.02f;
     float speed = 0.3f;
