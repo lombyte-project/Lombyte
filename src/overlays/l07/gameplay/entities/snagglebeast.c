@@ -694,7 +694,7 @@ extern int FUN_00213260(int);
 extern void FUN_L07_0029b8d8(char *, int, float, float);
 extern int FUN_L07_003122b0(void *, char *, float *);
 extern int FUN_00214cc8(void *, float);
-extern void *FUN_L07_0030dbb0(int, void *, int, float, float, float, float, float);
+extern void *spawn_moby_class_1046(int, void *, int, float, float, float, float, float) __asm__("FUN_L07_0030dbb0");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L07_00311eb8(void *, void *, int, void *, short, unsigned int, int, float);
 extern void FUN_00214db0(void *, float, float, float);
@@ -1045,7 +1045,7 @@ void snagglebeast_update(unsigned char *moby) {
             qcopy(&position, moby + 0x10);
             speed = frame_time * 8.0f;
             *(int *)(data + 0x168) = 0;
-            FUN_L07_0030dbb0((int)moby, &position, 0x3A, 1.0f, 25.0f, 2.0f, speed, 1.0f);
+            spawn_moby_class_1046((int)moby, &position, 0x3A, 1.0f, 25.0f, 2.0f, speed, 1.0f);
             FUN_L00_0024f7c8(moby, (*(int *)(data + 0x164) & 1) + 5, &position);
             FUN_L07_00311eb8(moby, data, 1, &position, scale_ticks(0x1E), 0x800060FF, 0, 10.0f);
             position.f[2] = *(float *)(moby + 0x18);
@@ -1391,11 +1391,11 @@ void snagglebeast_update(unsigned char *moby) {
         }
         if (FUN_00214cc8(moby, 168.0f)) {
             FUN_L00_0024f7c8(moby, 5, &position);
-            FUN_L07_0030dbb0((int)moby, &position, 0x3A, 1.0f, 25.0f, 2.0f, frame_time * 8.0f, 1.0f);
+            spawn_moby_class_1046((int)moby, &position, 0x3A, 1.0f, 25.0f, 2.0f, frame_time * 8.0f, 1.0f);
         }
         if (FUN_00214cc8(moby, 168.5f)) {
             FUN_L00_0024f7c8(moby, 6, &position);
-            FUN_L07_0030dbb0((int)moby, &position, 0x3A, 1.0f, 25.0f, 2.0f, frame_time * 8.0f, 1.0f);
+            spawn_moby_class_1046((int)moby, &position, 0x3A, 1.0f, 25.0f, 2.0f, frame_time * 8.0f, 1.0f);
             FUN_L07_003120d8((char *)moby);
         }
         if (*(int *)(data + 0x164) > 0) {
