@@ -3379,7 +3379,7 @@ void gunship_follow_path(struct Moby *m) {
 #include "rnc/rendering/dma_tag.h"
 extern void FUN_L01_00261c10(void *, void *) __asm__("FUN_L01_00261c10");
 extern void FUN_L01_00261df8(f32 *) __asm__("FUN_L01_00261df8");
-extern void FUN_L01_002b80d0(f32 *) __asm__("FUN_L01_002b80d0");
+extern void update_animated_offset_pairs(f32 *) __asm__("FUN_L01_002b80d0");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
 void FUN_L01_002b91c8(f32 *water_record, s32 count) {
@@ -3442,7 +3442,7 @@ void FUN_L01_002b91c8(f32 *water_record, s32 count) {
         FUN_L01_00261c10((void *)0x70000000, (u8 *)water_record + (D_L01_00161220 * 0x5c0 + 0x50));
         FUN_L01_00261df8(water_record);
         build_height_grid_positions(water_record);
-        FUN_L01_002b80d0(water_record);
+        update_animated_offset_pairs(water_record);
         if (*(u32 *)(water_record + 0x11) & 1) {
             height = (f32 *)0x70002008;
             for (height_index = 0x10; height_index >= 0; height_index--, height += 3) *height = water_record[2];

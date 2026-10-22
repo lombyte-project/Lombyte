@@ -82,7 +82,9 @@ extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int D_L01_001CB1B0[];
 
-void FUN_L01_002b80d0(float *offset_animation_state) {
+void update_animated_offset_pairs(float *offset_animation_state) __asm__("FUN_L01_002b80d0");
+
+void update_animated_offset_pairs(float *offset_animation_state) {
     int i;
     float first_u_offset, first_v_offset, second_u_offset, second_v_offset;
     float unwrapped_offset;
