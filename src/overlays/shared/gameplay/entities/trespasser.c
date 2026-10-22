@@ -1845,7 +1845,9 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern char D_00173F60_alias[] __asm__("D_L00_00173E60");
 
-void FUN_L00_002c3888(float *release_position,char *moby,void *initial_velocity) {
+void release_moby_with_collision_check(float *release_position,char *moby,void *initial_velocity) __asm__("FUN_L00_002c3888");
+
+void release_moby_with_collision_check(float *release_position,char *moby,void *initial_velocity) {
  float collision_start[4],collision_normal[4],rotated_normal[4];
  char *state=*(char **)(moby+0x78);
  struct Hero *camera;

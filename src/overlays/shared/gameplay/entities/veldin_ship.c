@@ -1170,7 +1170,7 @@ extern short D_L00_001B0830[];
 extern void FUN_L00_002223f8(int, int);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
-extern void FUN_L00_002c3888(float *, char *, void *);
+extern void release_moby_with_collision_check(float *, char *, void *) __asm__("FUN_L00_002c3888");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal() __asm__("FUN_0020c828");
 extern void transform_vector_alt() __asm__("FUN_001f9d20");
@@ -1271,7 +1271,7 @@ L3D34:
             if (scale_game_frames_c2(D_0015EEA4) / 600 > (int)*(unsigned short *)(stats + 0xCA))
                 *(unsigned short *)(stats + 0xCA) = scale_game_frames_c2(D_0015EEA4) / 600;
             *(unsigned int *)(stats + 0xCC) = (*(unsigned int *)(stats + 0xCC) | (1 << D_0015ED84)) | 0x80000000;
-            FUN_L00_002c3888((float *)(glove_vars + 0x40), *(char **)(glove_vars + 0x50), *(char **)(*(char **)(glove_vars + 0x50) + 0x78) + 0x10);
+            release_moby_with_collision_check((float *)(glove_vars + 0x40), *(char **)(glove_vars + 0x50), *(char **)(*(char **)(glove_vars + 0x50) + 0x78) + 0x10);
             *(int *)(glove_vars + 0x50) = 0;
         } else {
             allocate_voice_for_target_entry(0, 0, (int)moby);
