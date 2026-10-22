@@ -239,7 +239,9 @@ extern char D_0013E550[];
 extern char D_L15_00167440_2A48B0[] __asm__("D_L15_001673C0");
 extern int D_L15_00184B28_2A48B0 __asm__("D_L15_00184AA8") __attribute__((section(".data")));
 
-void FUN_L15_002a36d0(GateMoby_2A48B0 *gate_moby)
+void update_vertical_gate(GateMoby_2A48B0 *gate_moby) __asm__("FUN_L15_002a36d0");
+
+void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
 {
     enum {
         GATE_INITIALIZE = 0,
