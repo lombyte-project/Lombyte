@@ -2551,7 +2551,9 @@ extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 
-void FUN_L13_002b9df8(struct Moby *moby, char *flight_data, float azimuth_angle, float elevation_angle) {
+void update_fighter_jet_gun_and_aim(struct Moby *moby, char *flight_data, float azimuth_angle, float elevation_angle) __asm__("FUN_L13_002b9df8");
+
+void update_fighter_jet_gun_and_aim(struct Moby *moby, char *flight_data, float azimuth_angle, float elevation_angle) {
     char aim_vector[16];
     char projectile_spawn_position[16];
     char muzzle_offset[16];
@@ -2919,7 +2921,7 @@ void FUN_L13_002ba178(void *moby_arg, void *data_arg) {
     }
     enqueue_callback_list_1(FUN_L13_002b97f8, moby);
     fire_fighter_jet_rocket((struct Moby *)moby, (char *)data);
-    FUN_L13_002b9df8((struct Moby *)moby, (char *)data, fast_add_rotations(data->camera_yaw, -data->steer_x / 7.0f),
+    update_fighter_jet_gun_and_aim((struct Moby *)moby, (char *)data, fast_add_rotations(data->camera_yaw, -data->steer_x / 7.0f),
                      -fast_add_rotations(data->camera_pitch, -(data->steer_y / 7.0f) - 0.1f));
 }
 
