@@ -407,7 +407,7 @@ int FUN_L06_002fb668(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FE4B8), where it is exact; names translated to the US level program. */
 
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void FUN_L06_002fd1a0(void);
+extern void draw_dual_texture_50_quad_mesh(void) __asm__("FUN_L06_002fd1a0");
 extern void FUN_L06_002fd460(void);
 extern void FUN_L06_002fd748(void);
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
@@ -424,7 +424,7 @@ void enqueue_moby_draw_callbacks_by_clip_volume(char *moby) {
         if (*clip_volume_index_cursor < 0)
             continue;
         if (is_point_inside_clip_volume(D_L06_00167540, *clip_volume_index_cursor)) {
-            enqueue_callback_list_1((void *)FUN_L06_002fd1a0, moby);
+            enqueue_callback_list_1((void *)draw_dual_texture_50_quad_mesh, moby);
             break;
         }
     }
