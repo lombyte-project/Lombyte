@@ -344,7 +344,9 @@ extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
 void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
 
-void FUN_L10_002eb6f0(struct Moby *moby) {
+void update_hit_triggered_fragment_spawner(struct Moby *moby) __asm__("FUN_L10_002eb6f0");
+
+void update_hit_triggered_fragment_spawner(struct Moby *moby) {
     enum {
         HIT_RESPONSE_STATE_INITIALIZE = 0,
         HIT_RESPONSE_STATE_WAIT_FOR_HIT = 1,
