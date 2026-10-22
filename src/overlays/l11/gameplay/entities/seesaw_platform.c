@@ -591,7 +591,9 @@ typedef struct {
 } Ent;
 
 extern Ent D_L11_001DA880[];
-void FUN_L11_0030e730(int arg);
+void populate_water_tile_neighbor_indices(int selected_tile_index) __asm__("FUN_L11_0030e730");
+
+void populate_water_tile_neighbor_indices(int arg) __asm__("FUN_L11_0030e730");
 
 typedef struct {
     f32 unk0;
@@ -713,7 +715,7 @@ void FUN_L11_0030e088(struct Moby *water_tile_moby) {
         break;
     case WATER_TILE_STATE_FIND_NEIGHBORS:
         D_L11_00161F64 = 0;
-        FUN_L11_0030e730(water_tile_vars[1]);
+        populate_water_tile_neighbor_indices(water_tile_vars[1]);
         water_tile_moby->state = 2;
         break;
     case WATER_TILE_STATE_APPROACH_LOWER_HEIGHT:
@@ -775,7 +777,7 @@ void FUN_L11_0030e088(struct Moby *water_tile_moby) {
 
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L11_0030e730(int selected_tile_index) {
+void populate_water_tile_neighbor_indices(int selected_tile_index) {
     int i;
     D_L11_001DA880[selected_tile_index].n[0] = 0xFF;
     D_L11_001DA880[selected_tile_index].n[2] = 0xFF;
