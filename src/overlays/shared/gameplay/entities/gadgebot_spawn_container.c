@@ -1396,7 +1396,9 @@ extern void build_symmetric_adjacency_masks(int *list, int n, int idx) __asm__("
 extern void FUN_L06_002f2250_u(void) __asm__("FUN_L06_002f2250");
 extern void FUN_L06_002f2910(void *);
 extern void FUN_L06_002f3640_u(void *) __asm__("FUN_L06_002f3640");
-extern void FUN_L06_002f38c8(char *);
+void update_gadgebot_glow_effects(char *moby) __asm__("FUN_L06_002f38c8");
+
+extern void update_gadgebot_glow_effects(char *) __asm__("FUN_L06_002f38c8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -1595,7 +1597,7 @@ void gadgebot_update(GbMoby *moby) {
                 gadgebot_vars->unk170->unk94 = gadgebot_vars->unk170->cls->unk10;
             }
             if (moby->unk31 != 0) {
-                FUN_L06_002f38c8((char *)moby);
+                update_gadgebot_glow_effects((char *)moby);
             }
             return;
         }
@@ -1977,7 +1979,7 @@ void gadgebot_update(GbMoby *moby) {
                              scale_game_frames(2), 3);
         }
         if (moby->unk31 != 0) {
-            FUN_L06_002f38c8((char *)moby);
+            update_gadgebot_glow_effects((char *)moby);
         }
         moby->unk94 = 0;
         moby->flags &= 0xEFFF;
@@ -2140,7 +2142,7 @@ void gadgebot_update(GbMoby *moby) {
             moby->unk7F = 0xD;
         }
         if (moby->unk31 != 0) {
-            FUN_L06_002f38c8((char *)moby);
+            update_gadgebot_glow_effects((char *)moby);
         }
     }
     gadgebot_vars->unk2F0.q = gadgebot_vars->unk2E0.q;
@@ -2772,7 +2774,7 @@ extern void FUN_L06_002f37d0_c(void *) __asm__("FUN_L06_002f37d0");
 
 extern int level_frame_count __asm__("D_L06_0015F5CC");
 
-void FUN_L06_002f38c8(char *moby) {
+void update_gadgebot_glow_effects(char *moby) {
     char *moby_vars;
     int tint;
     int i;
