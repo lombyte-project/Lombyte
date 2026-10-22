@@ -64,7 +64,9 @@ extern SeqEntry D_L00_0017BBF0[];
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern short D_L00_0015F6B8;
 
-int FUN_L00_00231db0(int key, int *out) {
+int lookup_hero_slot3_animation_key(int key, int *out) __asm__("FUN_L00_00231db0");
+
+int lookup_hero_slot3_animation_key(int key, int *out) {
     SeqEntry *animation_lookup_table;
     int i;
 
@@ -124,7 +126,7 @@ void FUN_L00_00231e78(int id, int frame_index, float blend_frames) {
     }
     blk2 = &hero;
     ok = 1;
-    if (blk2->state.control_mode == 0 && FUN_L00_00231db0(*(unsigned char *)(slot3_moby + 0x53), &id) != 0) {
+    if (blk2->state.control_mode == 0 && lookup_hero_slot3_animation_key(*(unsigned char *)(slot3_moby + 0x53), &id) != 0) {
         if (id == 0) {
             ok = 0;
         }
