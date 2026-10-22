@@ -3407,7 +3407,9 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void spawn_debris_chunk(void *, void *, u32, s32, f32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 extern void *mine_debris(void *, void *, u32, u32, f32, s32, u32) __asm__("FUN_L00_0026bed0");
 
-void FUN_L01_002f8c58(SteamMoby *steam_moby) {
+void update_rising_particle_and_debris_emitter(SteamMoby *steam_moby) __asm__("FUN_L01_002f8c58");
+
+void update_rising_particle_and_debris_emitter(SteamMoby *steam_moby) {
     SteamVars *steam_vars;
     SteamColors colors;
     SteamVec particle_initial_velocity;
