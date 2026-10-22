@@ -2244,7 +2244,9 @@ void FUN_L14_002f1140(struct Moby *moby);
 struct Moby *find_group_moby_by_tag(struct Moby *moby, int tag) __asm__("FUN_L14_002f12f0");
 
 struct Moby *find_group_moby_by_tag(struct Moby *moby, int tag) __asm__("FUN_L14_002f12f0");
-void FUN_L14_002f13f8(struct Moby *moby);
+void request_taxi_stop_prompt(struct Moby *moby) __asm__("FUN_L14_002f13f8");
+
+void request_taxi_stop_prompt(struct Moby *moby) __asm__("FUN_L14_002f13f8");
 
 extern void taxi_sample_f(s32 *, int, void *, void *, int, float) __asm__("FUN_00214e58");
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002E0538.c (func_L14_002F19C0) */
@@ -2284,7 +2286,7 @@ void taxi_update(struct Moby *moby) {
             transform_vector(hero_relative_position, hero_relative_position, blend_from_position_or_rotation_matrix);
             if (taxi_fabs(hero_relative_position[1]) < 1.2f) {
                 FUN_L14_002f1140(moby);
-                FUN_L14_002f13f8(moby);
+                request_taxi_stop_prompt(moby);
                 if ((*(int *)D_0013CAE4 & button) && D_L14_0015F594 == 4) {
                     struct Moby *m;
                     moby->state = 3;
@@ -2421,7 +2423,7 @@ void taxi_update(struct Moby *moby) {
             hero_relative_position[3] = 0;
             transform_vector(hero_relative_position, hero_relative_position, taxi_inverse_rotation_matrix);
             if (taxi_fabs(hero_relative_position[1]) < 1.2f) {
-                FUN_L14_002f13f8(moby);
+                request_taxi_stop_prompt(moby);
                 if (*(int *)D_0013CAE4 & button) {
                     qcopy(taxi_vars->save_pos, taxi_vars->pos);
                     qcopy(taxi_vars->save_rot, taxi_vars->rot);
@@ -2592,7 +2594,7 @@ found:
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 extern void func_00215F80_f13f8(int, int) __asm__("FUN_00215130");
-void FUN_L14_002f13f8(struct Moby *moby) {
+void request_taxi_stop_prompt(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int taxi_stop_index = *(short *)(data + 0xB4);
     if (moby->state == 5) {
