@@ -3560,7 +3560,7 @@ extern void fade_to_black(int) __asm__("FUN_001f4a58");
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void vu_euler_rotation_basis(void *, void *);
-int FUN_L17_002f2180(char *moby, int idx);
+int update_shuttle_travel_and_camera(char *moby, int idx) __asm__("FUN_L17_002f2180");
 void update_shuttle_help_message(struct Moby *moby) __asm__("FUN_L17_002f20d8");
 
 void update_shuttle_help_message(struct Moby *moby) __asm__("FUN_L17_002f20d8");
@@ -3701,7 +3701,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         }
         break;
     case SHUTTLE_STATE_TRAVEL:
-        if (FUN_L17_002f2180(shuttle_moby, shuttle_vars->side)) {
+        if (update_shuttle_travel_and_camera(shuttle_moby, shuttle_vars->side)) {
             int ofs;
             int base;
             shuttle_moby->state = 3;
@@ -3810,7 +3810,7 @@ extern float func_L00_0025CE58_f2180(float *p, float *v, float a, float b, float
                                      float d) __asm__("FUN_L00_0025be00");
 extern char D_L17_001B0DB0[];
 extern char *D_L17_001600EC;
-int FUN_L17_002f2180(char *moby, int route_index) {
+int update_shuttle_travel_and_camera(char *moby, int route_index) {
     float camera_rotation[4], camera_position[4];
     struct Dat_3CC0_f2180 *shuttle_vars = *(struct Dat_3CC0_f2180 **)(moby + 0x78);
     Path_3CC0_f2180 *camera_position_path = ((Path_3CC0_f2180 **)D_L17_001B0DB0)[shuttle_vars->a[route_index]];
