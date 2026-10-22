@@ -1536,7 +1536,9 @@ extern void clear_2db198(void *) __asm__("FUN_001f99f8");
 
 /* Spawns a path mover (class 0x382, moved by FUN_L03_002db020) on path, dist
  * units along it, facing the path's last point. */
-struct Moby *FUN_L03_002db198(struct RailPath *path, float initial_path_distance) {
+struct Moby *spawn_path_mover(struct RailPath *path, float initial_path_distance) __asm__("FUN_L03_002db198");
+
+struct Moby *spawn_path_mover(struct RailPath *path, float initial_path_distance) {
     struct Moby *spawned_moby = func_0020D348_m(0x382);
     u8 *moby_vars;
     u8 *move;
@@ -1582,7 +1584,7 @@ struct RailSpawnerMoby {
 extern char D_L03_001E35F0[];
 extern void debug_print(char *, int) __asm__("FUN_001e93b0");
 extern float FUN_001f9b48(void *, void *);
-extern struct Moby *FUN_L03_002db198(struct RailPath *, float);
+extern struct Moby *spawn_path_mover(struct RailPath *, float) __asm__("FUN_L03_002db198");
 extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern int voice_is_playing(struct RailSpawnerMoby *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L00_0028dc90(int, int, struct RailSpawnerMoby *, int);
@@ -1607,12 +1609,12 @@ void FUN_L03_002db280(struct RailSpawnerMoby *moby) {
         moby->state = 1;
         vars->voice = -1;
         for (spawn_distance = 2.9f; spawn_distance < path->count * path->pts[0].f[3]; spawn_distance += 2.9f)
-            FUN_L03_002db198(path, spawn_distance);
+            spawn_path_mover(path, spawn_distance);
         moby->unk30 = 0x60;
     }
     if (fast_dec_timer(&vars->timer)) {
         vars->timer = ftoi_2db020(2.9f / D_L03_00161BC0);
-        FUN_L03_002db198(D_L03_001B05B0[vars->path], 0.0f);
+        spawn_path_mover(D_L03_001B05B0[vars->path], 0.0f);
     }
     if (!voice_is_playing(moby, vars->voice))
         vars->voice = FUN_L00_0028dc90(0, 4, moby, 0x382);
