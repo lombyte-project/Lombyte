@@ -417,7 +417,9 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern Pair D_L08_00161E20[] __attribute__((section(".sdata")));
-void FUN_L08_002f1548(struct Moby *moby) {
+void update_layered_mesh_effect(struct Moby *moby) __asm__("FUN_L08_002f1548");
+
+void update_layered_mesh_effect(struct Moby *moby) {
     enum {
         DRAW_ELEMENTS_INITIALIZE = 0,
         DRAW_ELEMENTS_UPDATE = 1
