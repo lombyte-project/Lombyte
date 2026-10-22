@@ -2650,7 +2650,7 @@ struct LeapVars {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_001fa6d0(float);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int FUN_L00_002595a0(float *, float *, float, float, float);
+extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
 extern float FUN_0020c9e0(struct Moby *);
 
 void FUN_L05_00307570(struct Moby *moby) {
@@ -2666,7 +2666,7 @@ void FUN_L05_00307570(struct Moby *moby) {
         }
         acceleration = frame_time_sq * 21.0f * -0.5f;
         duration = 30.0f;
-        if (FUN_L00_002595a0(&root0, &root1, acceleration, leap_data->verticalSpeed - acceleration,
+        if (solve_quadratic_equation(&root0, &root1, acceleration, leap_data->verticalSpeed - acceleration,
                              leap_data->height - leap_data->targetHeight) > 0 &&
             root0 > 0.0f) {
             duration = FUN_001fa6d0(root0);

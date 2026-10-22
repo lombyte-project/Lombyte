@@ -176,7 +176,7 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
-int FUN_L00_002595a0(float *r0, float *r1, float a, float b, float c);
+int solve_quadratic_equation(float *r0, float *r1, float a, float b, float c) __asm__("FUN_L00_002595a0");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void FUN_L00_00259710(void *a);
 void spawn_nearby_effect(char *, float, int, int, void *, void *) __asm__("FUN_L00_00259bc8");
@@ -281,7 +281,7 @@ int mine_fall(char *moby, char *motion_state) {
             } else {
                 float negative_half_gravity_step = *(float *)(motion_state + 0x10) * -0.5f;
                 landing_prediction_divisor = 60.0f;
-                result_count = FUN_L00_002595a0(&larger_quadratic_root, &smaller_quadratic_root, negative_half_gravity_step, *(float *)(motion_state + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - f21);
+                result_count = solve_quadratic_equation(&larger_quadratic_root, &smaller_quadratic_root, negative_half_gravity_step, *(float *)(motion_state + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - f21);
                 if (result_count > 0 && 0.0f < larger_quadratic_root && larger_quadratic_root < landing_prediction_divisor) {
                     landing_prediction_divisor = larger_quadratic_root;
                 }

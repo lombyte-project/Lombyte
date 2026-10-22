@@ -440,7 +440,7 @@ extern void debug_print() __asm__("FUN_001e93b0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern int FUN_L00_002595a0(float *, float *, float, float, float);
+extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
 extern int FUN_L00_00261b48(int, void *, void *, void *);
 extern void spawn_bolt_by_value(void *, void *, void *, int, int, int) __asm__("FUN_L00_002a7438");
 
@@ -624,7 +624,7 @@ void FUN_L00_00260a88(struct Moby *moby, int min_bolts, int max_bolts, int flags
             rise = velocity[2] - gravity;
             height = position[2] - *(float *)(D_L00_001B04B0[path_index] + 0x18);
             time = 120.0f;
-            roots = FUN_L00_002595a0(&first_root, &second_root, gravity, rise, height);
+            roots = solve_quadratic_equation(&first_root, &second_root, gravity, rise, height);
             if (1.0f <= (float)roots) {
                 if (0.0f < first_root) {
                     if (first_root < time) {

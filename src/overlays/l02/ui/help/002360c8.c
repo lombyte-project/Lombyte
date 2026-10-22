@@ -24,7 +24,7 @@ extern void FUN_L00_0025d238_32b90(V4_32b90 *, void *) __asm__("FUN_L00_0025d238
 extern s32 FUN_001efa68_32b90(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 extern f32 FUN_L00_00233d30_32b90(void *) __asm__("FUN_L00_00233d30");
 extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
-extern s32 FUN_L00_002595a0_32b90(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
+extern s32 solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 
 extern u8 D_L02_00174480[] __attribute__((section(".data")));
 f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_acceleration_coefficient, f32 target_z) __asm__("FUN_L02_002360c8");
@@ -58,7 +58,7 @@ f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_a
             }
         }
         if (target_z > 0.0f) {
-            if (FUN_L00_002595a0_32b90(&quadratic_roots[0], &quadratic_roots[1], trajectory_acceleration_coefficient * -0.5f, hero.motion.velocity.f[2] - trajectory_acceleration_coefficient * -0.5f,
+            if (solve_quadratic_equation(&quadratic_roots[0], &quadratic_roots[1], trajectory_acceleration_coefficient * -0.5f, hero.motion.velocity.f[2] - trajectory_acceleration_coefficient * -0.5f,
                                        hero.motion.pos.f[2] - target_z) > 0 &&
                 quadratic_roots[0] > 0.0f) {
                 return quadratic_roots[0];
@@ -81,7 +81,7 @@ f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_a
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
             x = FUN_L00_00233a78_32b90(&hero.motion.pos);
             y = FUN_L00_00233a78_32b90(&D_L02_00174460);
-            if (FUN_L00_002595a0_32b90(&quadratic_roots[2], &quadratic_roots[3], nb, z, x - y) > 0 && quadratic_roots[2] > 0.0f) {
+            if (solve_quadratic_equation(&quadratic_roots[2], &quadratic_roots[3], nb, z, x - y) > 0 && quadratic_roots[2] > 0.0f) {
                 return quadratic_roots[2];
             }
         }
@@ -105,7 +105,7 @@ f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_a
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
             x = FUN_L00_00233a78_32b90(&hero.motion.pos);
             y = FUN_L00_00233a78_32b90(&D_L02_00174460);
-            if (FUN_L00_002595a0_32b90(&quadratic_roots[4], &quadratic_roots[5], nb, z, x - y) > 0 && quadratic_roots[4] > 0.0f) {
+            if (solve_quadratic_equation(&quadratic_roots[4], &quadratic_roots[5], nb, z, x - y) > 0 && quadratic_roots[4] > 0.0f) {
                 return quadratic_roots[4];
             }
         }

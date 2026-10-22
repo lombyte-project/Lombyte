@@ -541,7 +541,7 @@ extern void FUN_L00_0025d238_32b90(V4_32b90 *, void *) __asm__("FUN_L00_0025d238
 extern s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 extern f32 FUN_L00_00233d30_32b90(void *) __asm__("FUN_L00_00233d30");
 extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
-extern s32 FUN_L00_002595a0_32b90(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
+extern s32 solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 
 f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_acceleration, f32 target_height) __asm__("FUN_L00_00232b90");
 
@@ -569,7 +569,7 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
             }
         }
         if (target_height > 0.0f) {
-            if (FUN_L00_002595a0_32b90(&trajectory_solver_outputs[0], &trajectory_solver_outputs[1], gravity_acceleration * -0.5f, hero.motion.velocity.f[2] - gravity_acceleration * -0.5f,
+            if (solve_quadratic_equation(&trajectory_solver_outputs[0], &trajectory_solver_outputs[1], gravity_acceleration * -0.5f, hero.motion.velocity.f[2] - gravity_acceleration * -0.5f,
                                        hero.motion.pos.f[2] - target_height) > 0 &&
                 trajectory_solver_outputs[0] > 0.0f) {
                 return trajectory_solver_outputs[0];
@@ -592,7 +592,7 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
             x = FUN_L00_00233a78_32b90(&hero.motion.pos);
             y = FUN_L00_00233a78_32b90(&collision_hit_point);
-            if (FUN_L00_002595a0_32b90(&trajectory_solver_outputs[2], &trajectory_solver_outputs[3], nb, z, x - y) > 0 && trajectory_solver_outputs[2] > 0.0f) {
+            if (solve_quadratic_equation(&trajectory_solver_outputs[2], &trajectory_solver_outputs[3], nb, z, x - y) > 0 && trajectory_solver_outputs[2] > 0.0f) {
                 return trajectory_solver_outputs[2];
             }
         }
@@ -616,7 +616,7 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
             x = FUN_L00_00233a78_32b90(&hero.motion.pos);
             y = FUN_L00_00233a78_32b90(&collision_hit_point);
-            if (FUN_L00_002595a0_32b90(&trajectory_solver_outputs[4], &trajectory_solver_outputs[5], nb, z, x - y) > 0 && trajectory_solver_outputs[4] > 0.0f) {
+            if (solve_quadratic_equation(&trajectory_solver_outputs[4], &trajectory_solver_outputs[5], nb, z, x - y) > 0 && trajectory_solver_outputs[4] > 0.0f) {
                 return trajectory_solver_outputs[4];
             }
         }

@@ -730,7 +730,7 @@ extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int test_hero_animation_frame_window(float) __asm__("FUN_L00_00211870");
 extern int FUN_L00_00227d40_cf(float, void *, void *) __asm__("FUN_L00_001ff600");
 extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
-extern int FUN_L00_002595a0(float *, float *, float, float, float);
+extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
 extern int FUN_L01_00226f10(int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32(int *);
@@ -1069,7 +1069,7 @@ void update_hero_state_motion(void) {
         } else if (hero.state.step == 1) {
             approach_value(&hero.unk960, 0.0f, frame_time_sq * 42.0f);
         }
-        if (FUN_L00_002595a0(&t0, &t1, -(frame_time_sq * 42.0f) * 0.5f, hero.unk960,
+        if (solve_quadratic_equation(&t0, &t1, -(frame_time_sq * 42.0f) * 0.5f, hero.unk960,
                              -(hero.unk970 - 1.9f)) > 0 &&
             t0 > 0.0f) {
             hero.unk96C = t0;

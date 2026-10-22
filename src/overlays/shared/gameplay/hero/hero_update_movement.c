@@ -222,7 +222,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_0025f730(void *, f32);
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern s32 FUN_L00_002595a0(f32 *, f32 *, f32, f32, f32);
+extern s32 solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 extern void FUN_L00_0025bc00(f32 *, s32, f32, f32);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -937,7 +937,7 @@ void hero_update_movement(void) {
         } else if (hero.state.step == 1) {
             approach_value(&hero.unk960, 0.0f, frame_time_sq * 42.0f);
         }
-        if (FUN_L00_002595a0(&hit, &hit2, -(frame_time_sq * 42.0f) * 0.5f, hero.unk960, -(hero.unk970 - 1.9f)) >
+        if (solve_quadratic_equation(&hit, &hit2, -(frame_time_sq * 42.0f) * 0.5f, hero.unk960, -(hero.unk970 - 1.9f)) >
                 0 &&
             hit > 0.0f) {
             hero.unk96C = hit;

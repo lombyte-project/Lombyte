@@ -284,7 +284,7 @@ f32 FUN_00213308_2d0538(void) __asm__("FUN_00213308");
 f32 FUN_002132a8_2d0538(f32, f32) __asm__("FUN_002132a8");
 f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 f32 fast_sin(f32) __asm__("FUN_001f9de0");
-s32 FUN_L00_002595a0_2d0538(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
+s32 solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00261b48(s32, void *, void *, void *);
@@ -395,7 +395,7 @@ void crate_drop_bolts(u8 *crate_moby) {
                 }
             }
             if (*(s32 *)(crate_vars + 0xC0) >= 0) {
-                s32 k = FUN_L00_002595a0_2d0538(
+                s32 k = solve_quadratic_equation(
                     &larger_trajectory_time_root, &smaller_trajectory_time_root, D_0015ED70 * 10.8f * -0.5f,
                     *(f32 *)(spawned_vars + 0x18) - D_0015ED70 * 10.8f * -0.5f,
                     *(f32 *)(spawned_moby + 0x18) -

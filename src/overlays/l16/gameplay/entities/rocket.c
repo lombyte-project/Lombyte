@@ -2203,7 +2203,7 @@ typedef struct {
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int FUN_L00_002595a0(float *, float *, float, float, float);
+extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 f32 compute_interpolated_record_value_u(struct InterpolatedStateEntry *arg0) __asm__("FUN_0020c9e0");
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
@@ -2233,7 +2233,7 @@ void FUN_L16_002d0058(L16LeapMoby_u *leap_moby) {
         }
         acceleration = frame_time_sq * 21.0f * -0.5f;
         duration = 30.0f;
-        if (FUN_L00_002595a0(&root0, &root1, acceleration, leap_data->vertical_speed - acceleration,
+        if (solve_quadratic_equation(&root0, &root1, acceleration, leap_data->vertical_speed - acceleration,
                              leap_data->height - leap_data->target_height) > 0 &&
             root0 > 0.0f) {
             duration = func_001FA898_caa18(root0);
