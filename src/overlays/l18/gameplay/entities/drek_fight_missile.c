@@ -304,7 +304,9 @@ extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern void clear_memory(void *, int, int) __asm__("FUN_001153fc");
 
 /* Draw callback: builds a 16-segment glow trail and draws it behind every class 0x54B moby in the group. */
-void FUN_L18_002f0390(struct Moby *moby) {
+void draw_drek_fight_missile_group_trails(struct Moby *moby) __asm__("FUN_L18_002f0390");
+
+void draw_drek_fight_missile_group_trails(struct Moby *moby) {
     struct GeometryQuad quads[16];
     float extra[8];
     short *group_entry;
@@ -425,7 +427,7 @@ void render_drek_fight_missile_group_effects(struct Moby *group_moby) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F1C38), where it is exact; names translated to the US level program. */
 
 extern int game_frame __asm__("D_L18_0015F5CC");
-extern void FUN_L18_002f0390(struct Moby *moby);
+extern void draw_drek_fight_missile_group_trails(struct Moby *moby) __asm__("FUN_L18_002f0390");
 void render_drek_fight_missile_group_effects(struct Moby *m) __asm__("FUN_L18_002f06c0");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
@@ -448,7 +450,7 @@ void update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) {
     *(float *)(data + trail_slot_byte_offset + 0x1C) = 1.0f;
     if (current_game_frame != old) {
         *(int *)&D_L18_00162230 = current_game_frame;
-        enqueue_callback_list_1_alt(FUN_L18_002f0390, moby);
+        enqueue_callback_list_1_alt(draw_drek_fight_missile_group_trails, moby);
         enqueue_callback_list_1_alt(render_drek_fight_missile_group_effects, moby);
     }
 }
