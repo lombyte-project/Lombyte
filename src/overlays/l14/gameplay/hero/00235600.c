@@ -119,7 +119,7 @@ extern void FUN_L00_00239d00(void);
 extern void FUN_L00_00239df8(void);
 extern void FUN_L00_0025f730(void *a, float x);
 extern void FUN_L01_002405a0(void);
-extern void FUN_L02_00220b80(void);
+extern void update_hero_stick_target_magnitude(void) __asm__("FUN_L02_00220b80");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
@@ -427,7 +427,7 @@ void process_hero_state_transitions(void) {
                         hero_set_state(HERO_STATE_FIDGET_ALT, 1);
                         break;
                     }
-                    FUN_L02_00220b80();
+                    update_hero_stick_target_magnitude();
                     if (hero.target_speed > 0.0f) {
                         hero_set_state(HERO_STATE_FIDGET_ALT, 1);
                         break;
@@ -451,7 +451,7 @@ void process_hero_state_transitions(void) {
                             hero_set_state(HERO_STATE_CROUCH, 1);
                             break;
                         }
-                        FUN_L02_00220b80();
+                        update_hero_stick_target_magnitude();
                         if (hero.target_speed > 0.0f) {
                             hero_set_state(HERO_STATE_RUN, 1);
                             break;

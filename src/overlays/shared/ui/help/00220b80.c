@@ -8,7 +8,9 @@
 extern float D_L02_0017C3B8[];
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 
-void FUN_L02_00220b80(void) {
+void update_hero_stick_target_magnitude(void) __asm__("FUN_L02_00220b80");
+
+void update_hero_stick_target_magnitude(void) {
     char *x;
     stick_target(0, 1.0f);
     x = D_0013E533 + 0xE1D;

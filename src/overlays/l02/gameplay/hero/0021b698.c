@@ -783,7 +783,7 @@ extern void update_moby_transform_history(void *, int) __asm__("FUN_L00_00262608
 extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
 extern void clip_hero_horizontal_velocity(int) __asm__("FUN_L01_00232978");
 extern void air_accel(float) __asm__("FUN_L01_00234358");
-extern void FUN_L02_00220b80(void);
+extern void update_hero_stick_target_magnitude(void) __asm__("FUN_L02_00220b80");
 extern void FUN_L02_00223450(void);
 extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void func_0020D348_m_cf(void) __asm__("FUN_L00_002121c0");
@@ -1684,7 +1684,7 @@ void update_hero_state_motion(void) {
         float t;
         float lim;
 
-        FUN_L02_00220b80();
+        update_hero_stick_target_magnitude();
         transform_vector(vec[0], hero.motion.unk170.f, hero.unk40);
         a = absolute_float(fast_arc_tan(vec[0][0], vec[0][1]));
         if (a > slideAngle) {
@@ -1740,7 +1740,7 @@ void update_hero_state_motion(void) {
                 hero.unk3BE = 0;
             }
         }
-        FUN_L02_00220b80();
+        update_hero_stick_target_magnitude();
         if (hero.unk930 > 0.0f) {
 
             FUN_L00_002132b8(0.7f, 0.0f);
@@ -1896,7 +1896,7 @@ void update_hero_state_motion(void) {
                 hero.state.step = 1;
             }
         }
-        FUN_L02_00220b80();
+        update_hero_stick_target_magnitude();
         if (hero.unk1C4 == 0) {
             FUN_L02_00223450();
         }
