@@ -1878,7 +1878,9 @@ extern RopeParticle rope_particles[] __asm__("D_L07_0020C840");
 
 /* Starts the rope when one is pending: lays nine points out from the anchor along the moby's
  * axis, then resets the swing state and, once, clears every entry's link. */
-void FUN_L07_00317cb0(char *moby, void *anchor) {
+void initialize_snagglebeast_rope(char *moby, void *anchor) __asm__("FUN_L07_00317cb0");
+
+void initialize_snagglebeast_rope(char *moby, void *anchor) {
     RopeVec step;
     RopeVec up;
     RopeQuad rotation_input_vector;
@@ -1989,7 +1991,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
     float minimum;
 
     minimum = 1000.0f;
-    FUN_L07_00317cb0(moby, anchor);
+    initialize_snagglebeast_rope(moby, anchor);
     qcopy(center, D_0013F3D0);
     center[2] += 0.6f;
     D_L07_0020DBC8[0] += 4;
