@@ -769,7 +769,7 @@ extern void FUN_L00_00260400(void *,int,void *,void *,void *,void *);
 extern int FUN_L00_00258ad0(void *,void *,int,int,float,float);
 extern void FUN_L00_00258278(void *,float *,float,float,float,float);
 extern struct Moby *select_class5_target_or_hero(void *,void *,void *,void *,int) __asm__("FUN_L00_002bed90");
-extern float FUN_L00_002bf050(void *,void *,float,float,float,float,float,void *,void *,float);
+extern float select_moby_heading_by_collision_probes(void *,void *,float,float,float,float,float,void *,void *,float) __asm__("FUN_L00_002bf050");
 extern int try_start_moby_hop(void *,void *,void *,int) __asm__("FUN_L00_002bf9f0");
 extern void FUN_L00_002bf8b0(void *,void *,void *);
 extern int compute_moby_state_from_vertical_probe(void *) __asm__("FUN_L00_002bfec8");
@@ -935,7 +935,7 @@ void doom_bot_update(struct Moby *moby) {
                 float step_height=scale*0.35f;
                 float range=4.0f;
                 float radius=convert_integer_to_float(((DoomBotParams*)&hero)->damage)*0.0009765625f;
-                data->angle=FUN_L00_002bf050(moby,&moby->pos,angle,1.84799564f,range,step_height,4.0f,0,&clearance,radius);
+                data->angle=select_moby_heading_by_collision_probes(moby,&moby->pos,angle,1.84799564f,range,step_height,4.0f,0,&clearance,radius);
             }
             else clearance=5.0f;
         }
@@ -980,7 +980,7 @@ void doom_bot_update(struct Moby *moby) {
                 Vec4f *target_pos=&data->target_moby->pos;
                 float range=4.0f;
                 float radius=convert_integer_to_float(hp->damage)*0.0009765625f;
-                data->angle=FUN_L00_002bf050(moby,&moby->pos,moby->rot.z,
+                data->angle=select_moby_heading_by_collision_probes(moby,&moby->pos,moby->rot.z,
                     1.84799564f,range,0.35f,4.0f,target_pos,&clearance,radius);
             }
             else clearance=5.0f;
