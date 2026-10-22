@@ -2155,7 +2155,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_position, void *radar_rotation, float f0, float f1, float f2, char *current_target_moby, char *excluded_target_moby) {
     float v[4];
-    float mat[16];
+    float offscreen_arrow_rotation_matrix[16];
     float u[4];
     int sx, sy, tx, ty;
     char *candidate_moby;
@@ -2242,9 +2242,9 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
                 if (*(unsigned char *)(candidate_moby + 0x31) == 0) {
                     char *np = candidate_moby + 0x10;
                     int arrow_alpha;
-                    transpose_rotation_matrix(mat, D_L13_001672D0);
+                    transpose_rotation_matrix(offscreen_arrow_rotation_matrix, D_L13_001672D0);
                     subtract_vector_xyz(u, np, D_0013F3D0);
-                    transform_vector(u, u, mat);
+                    transform_vector(u, u, offscreen_arrow_rotation_matrix);
                     u[0] = -u[1];
                     u[1] = -u[2];
                     u[2] = 0.0f;
