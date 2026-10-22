@@ -1774,7 +1774,7 @@ segments:
           - [0x122780, textbin, text_gap_00221800_after_fun_002217f8]
           - [0x122888, c, ui/map/update_level_selection_map_screen]
           - [0x1228b0, c, ui/map/draw_level_selection_map_screen]
-          - [0x1228e8, c, ui/menus/fun_00221968]
+          - [0x1228e8, c, ui/menus/handle_menu_action_buttons]
           - [0x1229c4, textbin, text_gap_00221a44_before_fun_00221a48]
           - [0x1229c8, c, ui/menus/enter_menu_prompt]
           - [0x122a04, textbin, text_gap_00221a84_before_fun_00221a88]
