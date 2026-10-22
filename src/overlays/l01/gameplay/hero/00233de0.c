@@ -475,7 +475,7 @@ extern void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340
 extern void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");
 extern void reduce_and_apply_hero_planar_velocity_addend(float) __asm__("FUN_L00_00216710");
 extern void FUN_L00_00216de8_cf(void) __asm__("FUN_L00_0020b5b8");
-extern void FUN_L00_00216e48_cf(void) __asm__("FUN_L00_00227d40");
+extern void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
 extern void stop_hero_motion_without_forward_support(float, float) __asm__("FUN_L00_00217118");
 extern void FUN_L00_00217368(int, int);
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
@@ -712,7 +712,7 @@ void update_hero_motion_for_current_state(void) {
             FUN_L00_00227d40_cf(frame_scale * -0.07999998f * len + len, hero.motion.velocity.f,
                                 hero.motion.velocity.f);
         }
-        FUN_L00_00216e48_cf();
+        update_hero_water_height_and_bobbing();
         break;
     case 0x33:
     case 0x34:
@@ -1041,7 +1041,7 @@ void update_hero_motion_for_current_state(void) {
                                 hero.motion.velocity.f);
         }
         clip_hero_horizontal_velocity(0);
-        FUN_L00_00216e48_cf();
+        update_hero_water_height_and_bobbing();
         break;
     case HERO_STATE_DROWN:
     case 0x82: {
@@ -1131,7 +1131,7 @@ void update_hero_motion_for_current_state(void) {
         }
         reduce_and_apply_hero_planar_velocity_addend(frame_time_sq * 4.2f);
         clip_hero_horizontal_velocity(0);
-        FUN_L00_00216e48_cf();
+        update_hero_water_height_and_bobbing();
         break;
     case 0x30: {
         int anim;

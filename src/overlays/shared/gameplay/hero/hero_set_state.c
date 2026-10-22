@@ -3177,7 +3177,9 @@ f32 FUN_001f99c0_227d40(f32) __asm__("FUN_001f99c0");
 void FUN_L00_0025b8c0_227d40(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 #define G D_0013F350_227d40
-void FUN_L00_00227d40(void) {
+void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
+
+void update_hero_water_height_and_bobbing(void) {
     if (G.i198 > FUN_001f96f8_227d40(10) || G.f690 < 0.0f || G.i2094 == 0x11 || G.i20A0 == 0x11) {
         if (G.i2084 == 0x36) {
             FUN_L00_0025b8c0_227d40(&G.f690, &G.f8FC, 0.0f, frame_scale_sq * 0.03f,

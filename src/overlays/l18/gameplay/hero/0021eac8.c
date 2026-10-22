@@ -164,7 +164,7 @@ extern void FUN_L00_00250df8(struct MobyView *);
 extern s32 allocate_voice_for_target_entry(s32, s32, struct MobyView *) __asm__("FUN_0022da68");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern s32 FUN_L00_001ff600(f32, void *, void *);
-extern void FUN_L00_00227d40(void);
+extern void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
 extern struct PadState D_0013C940;
 #define PD D_0013C940
 extern struct PlayerJointTable D_L18_0017B080;
@@ -725,7 +725,7 @@ void update_hero_motion_for_current_state(void) {
         emit_hero_periodic_surface_effect(0xF, 0x1E);
         GROUND_FRICTION();
         adjust_hero_planar_velocity_from_probes(0);
-        FUN_L00_00227d40();
+        update_hero_water_height_and_bobbing();
         break;
     case 0x6A:
     case 0x82: {
@@ -806,7 +806,7 @@ void update_hero_motion_for_current_state(void) {
         }
         reduce_and_apply_hero_planar_velocity_addend(frame_time_sq * 4.2f);
         adjust_hero_planar_velocity_from_probes(0);
-        FUN_L00_00227d40();
+        update_hero_water_height_and_bobbing();
         break;
     case 0x38:
     case 0x39:

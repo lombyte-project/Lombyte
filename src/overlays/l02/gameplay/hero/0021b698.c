@@ -753,7 +753,7 @@ extern void turn_hero_toward_move_direction_for_item(void) __asm__("FUN_L00_0021
 extern void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_L00_00211f38");
 extern void speed_step(float, float) __asm__("FUN_L00_00212088");
 extern void set_planar_vel(float) __asm__("FUN_L00_002120d8");
-extern void FUN_L00_002121c0_cf(void) __asm__("FUN_L00_00227d40");
+extern void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
 extern void FUN_L00_002132b8(float, float);
 extern void FUN_L00_00214108_cf(void *, int, int, void *, void *,
                                 float) __asm__("FUN_L00_00259bc8");
@@ -1002,7 +1002,7 @@ void update_hero_state_motion(void) {
             FUN_L00_00227d40_cf(frame_scale * -0.07999998f * len + len, hero.motion.velocity.f,
                                 hero.motion.velocity.f);
         }
-        FUN_L00_002121c0_cf();
+        update_hero_water_height_and_bobbing();
         break;
     case 0x30: {
         int anim;

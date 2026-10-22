@@ -162,7 +162,7 @@ extern void FUN_L00_00250df8(struct MobyView *);
 extern s32 allocate_voice_for_target_entry(s32, s32, struct MobyView *) __asm__("FUN_0022da68");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern s32 FUN_L00_001ff600(f32, void *, void *);
-extern void FUN_L00_00227d40(void);
+extern void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
 extern f32 predict_hero_trajectory_intercept_time(f32, f32, f32) __asm__("FUN_L00_00232b90");
 extern void smooth_and_clamp_value_pair(void *, void *, f32) __asm__("FUN_L05_00237488");
 extern void apply_hero_rotation_offset(f32, f32, f32) __asm__("FUN_L00_00211cf8");
@@ -493,7 +493,7 @@ void update_hero_motion_by_state(void) {
             f32 len = vector_length_xy(&hero.motion.velocity);
             FUN_L00_001ff600(frame_scale * -0.07999998f * len + len, &hero.motion.velocity, &hero.motion.velocity);
         }
-        FUN_L00_00227d40();
+        update_hero_water_height_and_bobbing();
         break;
     case 0x33:
     case 0x34:
@@ -772,7 +772,7 @@ void update_hero_motion_by_state(void) {
         emit_hero_periodic_surface_effect(0xF, 0x1E);
         GROUND_FRICTION();
         clip_hero_horizontal_velocity(0);
-        FUN_L00_00227d40();
+        update_hero_water_height_and_bobbing();
         break;
     case 0x6A:
     case 0x82: {
@@ -853,7 +853,7 @@ void update_hero_motion_by_state(void) {
         }
         reduce_and_apply_hero_planar_velocity_addend(frame_time_sq * 4.2f);
         clip_hero_horizontal_velocity(0);
-        FUN_L00_00227d40();
+        update_hero_water_height_and_bobbing();
         break;
     case 0x6B:
     case 0x6C: {
@@ -1099,7 +1099,7 @@ void update_hero_motion_by_state(void) {
         }
         clear_u64_value(&hero.motion.velocity);
         reduce_and_apply_hero_planar_velocity_addend(frame_time_sq * 4.5f);
-        FUN_L00_00227d40();
+        update_hero_water_height_and_bobbing();
         FUN_L00_0025bc00(&hero.motion.rot.f[1], 0.0f, 0, frame_time * 6.108652f);
         FUN_L00_0025bc00(&hero.motion.rot.f[0], 0.0f, 0, frame_time * 6.108652f);
         break;
