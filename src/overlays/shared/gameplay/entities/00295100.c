@@ -146,7 +146,7 @@ extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
 extern void no_op_main_callback_alt(void) __asm__("FUN_001e93e8");
 extern void FUN_L00_002070d0(void);
 extern void update_parts(void) __asm__("FUN_00217b88");
-extern void FUN_L00_001fea18(void);
+extern void update_glints(void) __asm__("FUN_L00_001fea18");
 extern void update_camera(void) __asm__("FUN_001edaa8");
 extern void FUN_L00_001f3aa0(void);
 extern void update_hero_from_debug_camera(void) __asm__("FUN_L00_001f4490");
@@ -269,7 +269,7 @@ void handle_pause_input(void) {
     noop_main_callback(D_L00_00161008, 7);
     if (DBG(4)) {
         update_parts();
-        FUN_L00_001fea18();
+        update_glints();
     }
     noop_main_callback(D_L00_00161018, 5);
     if (DBG(8)) {

@@ -52,7 +52,9 @@ extern P glints[16] __asm__("D_L00_0016EA40");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern void fill_transfer_words(u8 *, s32, s32) __asm__("func_001F97E8");
 
-void FUN_L00_001fea18(void) {
+void update_glints(void) __asm__("FUN_L00_001fea18");
+
+void update_glints(void) {
     int i;
     P *glint_slot = glints;
     for (i = 15; i >= 0; i--, glint_slot++) {
