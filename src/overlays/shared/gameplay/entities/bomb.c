@@ -176,7 +176,9 @@ extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
 
 /* Six checked switch entries: state 5 shares the default state reset.
  * Case 2/3 shaped after rac1-decomp (nonmatching/shared/func_L00_002C9DC8.c). */
-void FUN_L00_002c89e8(struct Moby *thrown_moby)
+void update_doom_bot_spawner(struct Moby *thrown_moby) __asm__("FUN_L00_002c89e8");
+
+void update_doom_bot_spawner(struct Moby *thrown_moby)
 {
     enum {
         THROWN_MOBY_STATE_INITIALIZE = 0,
