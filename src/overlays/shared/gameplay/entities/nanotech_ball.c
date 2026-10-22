@@ -1875,7 +1875,9 @@ void FUN_L00_00257470_002dbb20(void *, s32, s32) __asm__("FUN_L00_00257470");
 s32 FUN_001f96f8_002dbb20(s32) __asm__("FUN_001f96f8");
 void FUN_00212f90_002dbb20(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern u32 D_L00_00161B20[1] __attribute__((sda));
-s32 FUN_L00_002dbb20(u8 *moby, OvlQuad *position) {
+s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) __asm__("FUN_L00_002dbb20");
+
+s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) {
     u8 *suction_record = FUN_L00_002db890_002dbb20(moby);
     u8 *sound_source_moby;
     if (suction_record == 0)

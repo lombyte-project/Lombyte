@@ -18,10 +18,10 @@
 /* Ported from rac1-decomp (src/overlays/l18/vendor_002A8400.c: func_L18_002D7580), where it is exact; names translated to the US level program. */
 
 
-extern int FUN_L00_002dbb20(struct Moby *);
+extern int store_moby_in_suck_cannon(struct Moby *) __asm__("FUN_L00_002dbb20");
 
 int FUN_L18_002d6190(struct Moby *moby) {
-    int active = FUN_L00_002dbb20(moby);
+    int active = store_moby_in_suck_cannon(moby);
     if (active != 0) {
         moby->state = 4;
     } else if (moby->state == 4) {

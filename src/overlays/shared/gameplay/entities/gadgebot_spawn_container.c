@@ -1145,10 +1145,10 @@ int update_moby_grab_state(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EBAD8), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_002dbb20(void *);
+extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 
 int FUN_L06_002ea6a8(unsigned char *moby) {
-    int r = FUN_L00_002dbb20(moby);
+    int r = store_moby_in_suck_cannon(moby);
     if (r != 0) {
         if (moby[0x20] != 0x10) {
             moby[0xBC] = moby[0x20];

@@ -36,11 +36,11 @@ void FUN_L12_002bf748(void) {
 #include "eetypes.h"
 
 
-extern int FUN_L00_002dbb20(void *);
+extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 
 /* Moby state 8 while FUN_L00_002dbb20 reports a hit, back to 1 when it stops. */
 int FUN_L12_002e1758(struct Moby *a) {
-    int r = FUN_L00_002dbb20(a);
+    int r = store_moby_in_suck_cannon(a);
     if (r == 0) {
         if (a->state == 0x8)
             a->state = 1;

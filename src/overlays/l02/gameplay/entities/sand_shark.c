@@ -1271,10 +1271,10 @@ void launch_sand_shark(struct Moby *moby, void *position, float *direction) {
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7648), where it is exact; names translated to the US level program. */
 
 extern char D_L02_0015FFD8_c __asm__("D_L02_0015FFD8");
-extern void *FUN_L00_002dbb20(void *);
+extern void *store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 
 void *FUN_L02_002d6210(struct Moby *moby) {
-    void *helper_result = FUN_L00_002dbb20(moby);
+    void *helper_result = store_moby_in_suck_cannon(moby);
     if (helper_result) {
         int spawner_moby_index;
         moby->state = 9;

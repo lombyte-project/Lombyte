@@ -344,10 +344,10 @@ int FUN_L11_00316160(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00317680), where it is exact; names translated to the US level program. */
 
-extern void *FUN_L00_002dbb20(void *);
+extern void *store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 
 void *FUN_L11_00316210(struct Moby *arg) {
-    void *found = FUN_L00_002dbb20(arg);
+    void *found = store_moby_in_suck_cannon(arg);
     if (found != 0) {
         unsigned char state = arg->state;
         if (state != 0x14) {

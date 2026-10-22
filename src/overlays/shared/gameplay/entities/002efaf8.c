@@ -7,11 +7,11 @@
 #include "sda.h"
 
 
-extern int FUN_L00_002dbb20(void *);
+extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 
 /* Moby state 0xE while FUN_L00_002dbb20 reports a hit, back to 1 when it stops. */
 int FUN_L01_002efaf8(char *a) {
-    int r = FUN_L00_002dbb20(a);
+    int r = store_moby_in_suck_cannon(a);
     if (r == 0) {
         if (*(unsigned char *)(a + 0x20) == 0xe)
             a[0x20] = 1;
