@@ -37,7 +37,9 @@ typedef struct {
 extern Ent D_L05_001D6880[];
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L05_0030d6a0(int selected_entry_index) {
+void record_grid_entry_neighbor_indices(int selected_entry_index) __asm__("FUN_L05_0030d6a0");
+
+void record_grid_entry_neighbor_indices(int selected_entry_index) {
     int i;
     Ent *entry_table = D_L05_001D6880;
     for (i = 0; i < 48; i++) {

@@ -3186,7 +3186,7 @@ extern void *D_L05_001612D0_30ca80 __asm__("D_L05_001612D0") __attribute__((sect
 extern void initialize_slots_30ca80(void *, int) __asm__("FUN_L01_002b7a48");
 extern void initialize_slot_data_30ca80(float) __asm__("FUN_L01_002b7ef0");
 extern void copy_slot_30ca80(float *, int *) __asm__("FUN_L01_002b7c68");
-extern void FUN_L05_0030d6a0_30ca80(int) __asm__("FUN_L05_0030d6a0");
+extern void record_grid_entry_neighbor_indices(int) __asm__("FUN_L05_0030d6a0");
 extern void FUN_L01_0026e0e0(int, int);
 extern float advance_accelerated_scalar_30ca80(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 void synchronize_group_water_heights(char *moby) __asm__("FUN_L05_0030d5c0");
@@ -3279,7 +3279,7 @@ void water_update(struct Moby *moby) {
                 water_records_30ca80[water_vars->record_index].h1E = record_draw_values[water_vars->record_index];
             }
             for (j = 0; j < 0x30; j++) {
-                FUN_L05_0030d6a0_30ca80(j);
+                record_grid_entry_neighbor_indices(j);
             }
         }
         moby->draw_dist = 0;
