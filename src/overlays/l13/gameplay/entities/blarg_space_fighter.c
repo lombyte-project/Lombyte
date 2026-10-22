@@ -431,7 +431,9 @@ extern float advance_accelerated_scalar(float, float, float, float, float *, flo
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
-void FUN_L13_002c25b8(unsigned char *moby) {
+void update_hovering_rocket_attacker(unsigned char *moby) __asm__("FUN_L13_002c25b8");
+
+void update_hovering_rocket_attacker(unsigned char *moby) {
     enum {
         UPDATE_INITIALIZE = 0x0,
         TRACK_TARGET_BEFORE_ATTACK = 0x2,
