@@ -447,7 +447,9 @@ extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 
 /* Cutscene effects: camera targets, splashes, sparks and trails keyed on the cutscene scene and frame. */
-void FUN_L01_0030c190(struct Moby *moby) {
+void update_level01_cutscene_effects(struct Moby *moby) __asm__("FUN_L01_0030c190");
+
+void update_level01_cutscene_effects(struct Moby *moby) {
     enum {
         CUTSCENE_FX_STATE_INITIALIZE = 0,
         CUTSCENE_FX_STATE_UPDATE = 1
