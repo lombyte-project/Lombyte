@@ -1395,7 +1395,9 @@ extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern f32 D_L14_00161B18 __attribute__((sda));
 extern f32 D_L14_00161B1C __attribute__((sda));
 extern f32 D_L14_00161B20 __attribute__((sda));
-void FUN_L14_002de670(struct Moby *moby) {
+void update_spinning_moby_with_particle_trail(struct Moby *moby) __asm__("FUN_L14_002de670");
+
+void update_spinning_moby_with_particle_trail(struct Moby *moby) {
     f32 *velocity = (f32 *)moby->pvars;
     s32 i;
     s32 signed_particle_variation;
