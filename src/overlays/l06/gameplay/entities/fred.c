@@ -5596,7 +5596,7 @@ void FUN_L06_002fd748(void) {
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_002FEE60), where it is exact; names translated to the US level program. */
 
 extern int D_L06_0015FFD8;
-extern int FUN_L06_002e9d10(void *, void *);
+extern int activate_state_15_moby_at_position(void *, void *) __asm__("FUN_L06_002e9d10");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -5639,7 +5639,7 @@ void FUN_L06_002fda30(char *moby) {
                 short *moby_list_entry = list;
                 char *pos = moby + 0x10;
                 do {
-                    if (FUN_L06_002e9d10(D_L06_0015FFD8 + ((*(unsigned short *)moby_list_entry & 0x7FFF) << 8),
+                    if (activate_state_15_moby_at_position(D_L06_0015FFD8 + ((*(unsigned short *)moby_list_entry & 0x7FFF) << 8),
                                          pos)) {
                         found = 1.0f;
                         break;

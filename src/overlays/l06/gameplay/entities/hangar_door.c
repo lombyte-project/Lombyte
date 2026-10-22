@@ -276,7 +276,9 @@ void FUN_L06_002f99b0(int index) {
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC4C0), where it is exact; names translated to the US level program. */
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-int FUN_L06_002e9d10(void *m_, void *pos);
+int activate_state_15_moby_at_position(void *m_, void *activation_position) __asm__("FUN_L06_002e9d10");
+
+int activate_state_15_moby_at_position(void *m_, void *pos) __asm__("FUN_L06_002e9d10");
 extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
 
 void FUN_L06_002fb090(char *moby) {
@@ -290,7 +292,7 @@ void FUN_L06_002fb090(char *moby) {
             float raised_position[4];
             qcopy(raised_position, (char *)(listed_moby_byte_offset + (int)D_L06_0015FFD8) + 0x10);
             raised_position[2] = raised_position[2] + random_float_between_alt(15.0f, 20.0f);
-            FUN_L06_002e9d10((char *)((int)D_L06_0015FFD8 + listed_moby_byte_offset), raised_position);
+            activate_state_15_moby_at_position((char *)((int)D_L06_0015FFD8 + listed_moby_byte_offset), raised_position);
         } while (*moby_index_cursor++ >= 0);
     }
 }
@@ -570,7 +572,7 @@ extern void vu_euler_rotation_basis(void *, void *);
 extern void func_L00_0025D5B0_2eb140(void *, void *, int, int, int,
                                      float) __asm__("FUN_L00_0025c558");
 
-int FUN_L06_002e9d10(void *m_, void *activation_position) {
+int activate_state_15_moby_at_position(void *m_, void *activation_position) {
     char *moby = (char *)m_;
     char *moby_data = *(char **)(moby + 0x78);
     float doubled_frame_time, scaled_frame_time_squared;
