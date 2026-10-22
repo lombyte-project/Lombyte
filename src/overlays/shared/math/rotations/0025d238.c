@@ -532,7 +532,7 @@ extern float D_L00_0015F5D0_macro __asm__("D_L00_0015F5D0") __attribute__((secti
 void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9,
                        float fC, float fD, float fE, float fF, int k10, float fG, int k11,
                        int s16, int s18, unsigned char flag) __asm__("FUN_L00_0025e450");
-void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float fB, int burst_particle_count, int k8, int k9,
+void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, float fA, float fB, int burst_particle_count, int k8, int k9,
                        float fC, float fD, float fE, float fF, int k10, float fG, int k11,
                        int spray_count, int effect_reduction_level, unsigned char flag) {
     Q_25e450 vb;
@@ -551,9 +551,9 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
         effect_reduction_level = 0;
         if (1.7f < effect_reduction_metric) effect_reduction_level = 1;
     }
-    if (pos == 0) {
+    if (explosion_position == 0) {
         if (owner_moby == 0) return;
-        pos = owner_moby + 0x10;
+        explosion_position = owner_moby + 0x10;
     }
     {
     if (fA > 0.0f) {
@@ -562,7 +562,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
         ev.b18 = 2;
         ev.b19 = 1;
         ev.h1A = *(unsigned short *)(owner_moby + 0xA6);
-        collect_mobies_in_sphere_25e450(fA, pos, 0x10, owner_moby, &ev);
+        collect_mobies_in_sphere_25e450(fA, explosion_position, 0x10, owner_moby, &ev);
     }
     }
     for (i = 0; i < burst_particle_count; i++) {
@@ -575,11 +575,11 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
         build_spherical_offset_25e450(&dir, fF * (random_float_between_25e450(7.0f, 10.5f) * frame_time_macro), b, a);
         dir.f[2] += frame_time_macro * 3.0f;
         dist = fF * 40000.0f;
-        func_L00_0026CA10_25e450(pos, &dir, func_L00_0025D140_25e450(0x4F007FFF, flag), func_L00_0025D140_25e450(0x1F00007F, flag),
+        func_L00_0026CA10_25e450(explosion_position, &dir, func_L00_0025D140_25e450(0x4F007FFF, flag), func_L00_0025D140_25e450(0x1F00007F, flag),
             random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x78)) - effect_reduction_level * 10, 1, -1, -1, dist);
         }
     }
-    subtract_vector_xyz_25e450(&effect_vector_work, D_L00_00166DC0_25e450, pos);
+    subtract_vector_xyz_25e450(&effect_vector_work, D_L00_00166DC0_25e450, explosion_position);
     dist = vector_length_xyz_25e450(&effect_vector_work);
     {
     if (spray_count != 0) {
@@ -597,7 +597,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
             normalize_vector_xyz_25e450(&effect_vector_work, &effect_vector_work, (dist + dist) * frame_time_macro);
             add_vector_xyz_25e450(&nearby_spray_vector, &nearby_spray_vector, &effect_vector_work);
             func_L00_001FF548_25e450(&nearby_spray_vector, &nearby_spray_vector, frame_time_macro * 10.0f);
-            func_L00_002B0738_25e450(pos, &nearby_spray_vector, random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x5A)), 0, 0);
+            func_L00_002B0738_25e450(explosion_position, &nearby_spray_vector, random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x5A)), 0, 0);
         }
         spray_count = spray_count - 1;
         for (i = 0; i < spray_count; i++) {
@@ -610,7 +610,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
             rnd.f[2] += frame_time_macro + frame_time_macro;
             sel = 0;
             if (i % 3 == 0) sel = 1;
-            func_L00_002B0738_25e450(pos, &rnd, random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x5A)), sel, 0);
+            func_L00_002B0738_25e450(explosion_position, &rnd, random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x5A)), sel, 0);
         }
     }
     }
@@ -632,11 +632,11 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
         c1 = D_L00_001E9048_25e450;
         sp = sp - proximity_speed_reduction * frame_time_macro;
         sp = sp * fF;
-        func_L00_0026B890_25e450(pos, &vb, func_L00_0025D140_25e450(c0.v[random_integer_below_25e450(6)], flag),
+        func_L00_0026B890_25e450(explosion_position, &vb, func_L00_0025D140_25e450(c0.v[random_integer_below_25e450(6)], flag),
             func_L00_0025D140_25e450(c1.v[random_integer_below_25e450(6)], flag), fF * 400000.0f,
             random_int_between_25e450(scale_game_frames_25e450(0xF), scale_game_frames_25e450(0x14)) - effect_reduction_level * 3,
             random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - effect_reduction_level * 5, 0, 0, sp);
-        func_L00_0026B890_25e450(pos, &vb, 0x7FFFFFFF, 0xFFFFFF, fF * 400000.0f,
+        func_L00_0026B890_25e450(explosion_position, &vb, 0x7FFFFFFF, 0xFFFFFF, fF * 400000.0f,
             random_int_between_25e450(scale_game_frames_25e450(5), scale_game_frames_25e450(0xA)) - effect_reduction_level * 2,
             random_int_between_25e450(scale_game_frames_25e450(0xF), scale_game_frames_25e450(0x14)) - effect_reduction_level * 3, 0, 0, sp * 0.5f);
     }
@@ -658,7 +658,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
         normalize_vector_xyz_25e450(&vel, &vel, fF * (random_float_between_25e450(0.0f, 3.0f) * frame_time_macro));
         first_packed_color = func_L00_0025D140_25e450(c0.v[random_integer_below_25e450(6)], flag);
         second_packed_color = func_L00_0025D140_25e450(c1.v[random_integer_below_25e450(6)], flag);
-        func_L00_0026B368_25e450(pos, &vel, first_packed_color, second_packed_color,
+        func_L00_0026B368_25e450(explosion_position, &vel, first_packed_color, second_packed_color,
             random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - effect_reduction_level * 5, 200000.0f);
     }
     }
@@ -674,18 +674,18 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
         }
         u = later_glow_red & 0xFF;
         if (D_L00_0015F5D0_macro < 0.95f && fE < dist) {
-            spawn_glow_particle_25e450(owner_moby, pos, &vb, fC, scale_game_frames_25e450(0x10), first_glow_red, 0x96, first_glow_blue, 0x20);
-            spawn_glow_particle_25e450(owner_moby, pos, &vb, fC, scale_game_frames_25e450(0x16), u, 0x7F, 0x50, 0x20);
+            spawn_glow_particle_25e450(owner_moby, explosion_position, &vb, fC, scale_game_frames_25e450(0x10), first_glow_red, 0x96, first_glow_blue, 0x20);
+            spawn_glow_particle_25e450(owner_moby, explosion_position, &vb, fC, scale_game_frames_25e450(0x16), u, 0x7F, 0x50, 0x20);
         }
-        spawn_glow_particle_25e450(owner_moby, pos, &vb, fC, scale_game_frames_25e450(0x1E), u, 0x7F, 0, 0x30);
+        spawn_glow_particle_25e450(owner_moby, explosion_position, &vb, fC, scale_game_frames_25e450(0x1E), u, 0x7F, 0, 0x30);
     }
     if (owner_moby != 0 && fD > 0.0f) {
-        spawn_glow_particle_25e450(owner_moby, pos, &vb, fD, scale_game_frames_25e450(0x1B), 0xFF, 0xFF, 0xFF, 0x20);
+        spawn_glow_particle_25e450(owner_moby, explosion_position, &vb, fD, scale_game_frames_25e450(0x1B), 0xFF, 0xFF, 0xFF, 0x20);
     }
     {
     if (k11) {
         Q_25e450 v;
-        *(u128_25e450 *)&v = *(u128_25e450 *)pos;
+        *(u128_25e450 *)&v = *(u128_25e450 *)explosion_position;
         v.f[3] = 2.0f;
         if (func_L00_00200290_25e450(&v, 10.0f) != -1) {
             ((Cam_25e450 *)D_L00_00166C80_25e450)->f160 = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
@@ -699,7 +699,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
     if (fG != 0.0f) {
         if (effect_reduction_level == 0) {
             Q_25e450 v;
-            qcopy(&v, pos);
+            qcopy(&v, explosion_position);
             v.f[3] = fG;
             if (func_L00_00200290_25e450(&v, 100.0f) != -1) {
                 if (0.0f < fG) {
@@ -712,9 +712,9 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
                     ((Fl_25e450 *)D_L00_001B0250)->f[8] = 15.0f;
                 }
                 if (flag) {
-                    func_L00_002D4CE8_25e450(D_L00_001B02A0, pos, 0, 0);
+                    func_L00_002D4CE8_25e450(D_L00_001B02A0, explosion_position, 0, 0);
                 } else {
-                    func_L00_002D4CE8_25e450(D_L00_001B0250, pos, 0, 0);
+                    func_L00_002D4CE8_25e450(D_L00_001B0250, explosion_position, 0, 0);
                 }
             }
         }
