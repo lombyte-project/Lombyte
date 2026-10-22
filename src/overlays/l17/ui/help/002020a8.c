@@ -221,7 +221,9 @@ s32 FUN_L17_0020dbe8(s32 apply_state_and_motion_response) {
 f32 FUN_001f9b80_211380(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_211380(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_211380(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-void FUN_L17_0020e1c0(void) {
+void update_hero_smoothing(void) __asm__("FUN_L17_0020e1c0");
+
+void update_hero_smoothing(void) {
     switch (hero.vehicle_mode) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         hero.unk228 = 0.8f;
