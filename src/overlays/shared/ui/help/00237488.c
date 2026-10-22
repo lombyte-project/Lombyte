@@ -95,7 +95,7 @@ void FUN_L05_0023dc88(int i) {
     int changed;
     int flag6;
     int flag4;
-    unsigned char st;
+    unsigned char item_switch_gate_state;
 
     if (i == 0) {
         int v;
@@ -211,11 +211,11 @@ void FUN_L05_0023dc88(int i) {
     if (i == 2) {
         struct Hero *g = &hero;
         struct Hero *h;
-        struct Hero *h2;
+        struct Hero *equipped_item_check_hero;
         if (g->state.control_mode == 0x11 || g->state.current == 0x76 || g->state.current == 0x6A || g->state.current == 0x82 ||
             *(unsigned char *)((char *)g + 0x22CB) != 0) {
             if (((int *)(D_00141660))[i] != 6 ||
-                (h2 = &hero, *(int *)((char *)h2 + i * 0x50 + 0x10B8) == 0)) {
+                (equipped_item_check_hero = &hero, *(int *)((char *)equipped_item_check_hero + i * 0x50 + 0x10B8) == 0)) {
                 h = &hero;
                 if (*(int *)((char *)h + i * 0x50 + 0x10B8) != 6 && h->selected_item[i] != 6 &&
                     D_0013D4C0[6] != 0) {
@@ -346,11 +346,11 @@ void FUN_L05_0023dc88(int i) {
     }
     {
         struct Hero *s = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
-        st = s->items[0].unk1C;
-        if (st == 2) {
+        item_switch_gate_state = s->items[0].unk1C;
+        if (item_switch_gate_state == 2) {
             changed = 0;
         }
-        if (st == 1 && s->items[0].timer == 0) {
+        if (item_switch_gate_state == 1 && s->items[0].timer == 0) {
             s->items[0].timer = s->items[0].timer_reload;
         }
     }
