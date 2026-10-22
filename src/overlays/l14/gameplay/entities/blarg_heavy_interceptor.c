@@ -1580,7 +1580,9 @@ void FUN_L14_002aed50(u8 *moby) {
 extern int D_L14_001D8680[];
 /* Same table under a second name, so its address is loaded again. */
 extern int D_L14_001D8680_b[] __asm__("D_L14_001D8680");
-char *FUN_L14_002aef28(int index, int *ids);
+char *select_farthest_unselected_group_moby(int index, int *ids) __asm__("FUN_L14_002aef28");
+
+char *select_farthest_unselected_group_moby(int index, int *ids) __asm__("FUN_L14_002aef28");
 extern void FUN_L14_002add48(char *);
 extern void FUN_L14_002ada18(char *);
 void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) {
@@ -1597,7 +1599,7 @@ void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) {
         int *ids = D_L14_001D8680_b;
         out = ids;
         do {
-            char *selected_moby = FUN_L14_002aef28(moby->group, ids);
+            char *selected_moby = select_farthest_unselected_group_moby(moby->group, ids);
             char *md;
             *out++ = *(short *)(selected_moby + 0xB2);
             md = *(char **)(selected_moby + 0x78);
@@ -1624,7 +1626,7 @@ extern unsigned char *D_L14_0015FFD0_e[] __asm__("D_L14_0015FFD0")
 extern int D_L14_001D8680[];
 extern short *D_L14_001AC2C0_2B0168[] __asm__("D_L14_001ABF40");
 
-char *FUN_L14_002aef28(int index, int *ids) {
+char *select_farthest_unselected_group_moby(int index, int *ids) {
     short *list_entry = D_L14_001AC2C0_2B0168[index];
     char *best = 0;
     float bestd = 0.0f;
