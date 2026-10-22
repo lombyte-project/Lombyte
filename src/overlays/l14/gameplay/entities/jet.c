@@ -365,7 +365,9 @@ typedef struct {
  * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c:
  * func_L14_002E1058), where it is exact; names translated to the US level
  * program. */
-void FUN_L14_002dfc58(u8 *moby) {
+void register_hero_hit_in_clip_volume(u8 *moby) __asm__("FUN_L14_002dfc58");
+
+void register_hero_hit_in_clip_volume(u8 *moby) {
     u8 *base = (u8 *)&hero.motion.pos;
     Level14Req hit_request;
     u8 *hero_base;

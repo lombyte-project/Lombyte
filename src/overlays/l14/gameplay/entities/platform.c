@@ -745,7 +745,7 @@ extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 extern void initialize_ribbon_effect_state(char *) __asm__("FUN_L14_002df080");
 extern void FUN_L14_002df138(char *);
-extern void FUN_L14_002dfc58(char *);
+extern void register_hero_hit_in_clip_volume(char *) __asm__("FUN_L14_002dfc58");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -787,7 +787,7 @@ void FUN_L14_002dee28(struct Moby *moby) {
         if (voice_is_playing(moby, *(int *)(data + 0x204)) == 0) {
             *(int *)(data + 0x204) = trooper_play_sound(6, 4, (int)moby, 0xD3);
         }
-        FUN_L14_002dfc58(moby);
+        register_hero_hit_in_clip_volume(moby);
         forward_point[0] = fast_cos(moby->rot.z) * 3.125f;
         forward_point[1] = fast_sin(moby->rot.z) * 3.125f;
         forward_point[2] = 0.0f;
