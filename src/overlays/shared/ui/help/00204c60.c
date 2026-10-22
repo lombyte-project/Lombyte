@@ -17,7 +17,7 @@ extern s32 D_L00_00160540;
 extern struct HeroEase D_L00_0017A680[] NOT_SDA;
 extern void memset_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern f32 probe_ground_height(Vec4f *, s32, f32) __asm__("FUN_00213508");
-extern void FUN_L00_002127b8(void);
+extern void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127b8");
 extern void update_hero_moby(void) __asm__("FUN_L00_00208820");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -53,7 +53,7 @@ void initialize_hero(void) {
             hero.unkA88 = (u8 *)hero.moby;
             hero.motion.rot.f[2] = hero.moby->rot.z;
             qcopy(&hero.motion.pos, &hero.moby->pos);
-            FUN_L00_002127b8();
+            update_hero_ground_contact_and_surface_slopes();
             update_hero_moby();
             if (D_L00_00160540 == 0) {
                 qcopy(&D_0013E090[0], &hero.motion.pos);

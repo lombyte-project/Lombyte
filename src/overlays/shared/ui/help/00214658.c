@@ -905,7 +905,7 @@ void FUN_L00_0020e698_00216f90(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_00205538_00216f90(void) __asm__("FUN_L00_00205538");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void set_hero_animation_sequence_and_frame(int, int) __asm__("FUN_L00_002325a0");
-void FUN_L00_002127b8_00216f90(void) __asm__("FUN_L00_002127b8");
+void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127b8");
 void FUN_L00_001ed280_00216f90(void) __asm__("FUN_L00_001ed280");
 void apply_nearest_environment_sample(int) __asm__("FUN_L00_002500b8");
 extern char D_0013F3D0[] __attribute__((section(".data")));
@@ -947,7 +947,7 @@ void FUN_L00_00216f90(Vec4_00216f90 *hero_world_position, Vec4_00216f90 *hero_eu
         D_L00_00167014_00216f90 = 1;
     else
         D_L00_00167014_00216f90 = 0;
-    FUN_L00_002127b8_00216f90();
+    update_hero_ground_contact_and_surface_slopes();
     if (flag)
         FUN_L00_001ed280_00216f90();
     apply_nearest_environment_sample(D_001413D0_00216f90);

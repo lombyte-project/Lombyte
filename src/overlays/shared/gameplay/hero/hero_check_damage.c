@@ -3227,7 +3227,9 @@ extern CollisionHit HH __asm__("D_L00_00173E40") __attribute__((section(".data")
 #define HI(o) (*(s32 *)(D_L00_00173E40 + (o)))
 #define HF(o) (*(f32 *)(D_L00_00173E40 + (o)))
 
-void FUN_L00_002127b8(void) {
+void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127b8");
+
+void update_hero_ground_contact_and_surface_slopes(void) {
     V collision_ray_end, ground_ray_start, ground_offset_or_angles, side_ray_start, unused_side_probe_point, side_hit_angles, side_hit_normal;
     f32 f;
     s32 collision_sound_class;
@@ -3692,7 +3694,7 @@ extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void normalize_vector_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 
 extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
-extern void FUN_L00_002127b8(void);
+extern void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127b8");
 extern void correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
 
 void apply_hero_motion_and_resolve_collisions(void) __asm__("FUN_L00_00213880");
@@ -3752,11 +3754,11 @@ void apply_hero_motion_and_resolve_collisions(void)
 
     if (vector_length_xyz(&hero.motion.platform_delta) <= 0.0001f) {
         resolve_hero_collisions_with_history();
-        FUN_L00_002127b8();
+        update_hero_ground_contact_and_surface_slopes();
         subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
         correct_hero_ground_penetration();
     } else {
-        FUN_L00_002127b8();
+        update_hero_ground_contact_and_surface_slopes();
     }
 
     /* movement direction, scaled by the velocity along it (never negative) */
@@ -3807,7 +3809,7 @@ void apply_hero_motion_and_resolve_collisions(void)
         clear_vector(&hero.motion.platform_delta);
         hero.motion.platform_delta.f[3] = saved_platform_delta_w;
         resolve_hero_collisions_with_history();
-        FUN_L00_002127b8();
+        update_hero_ground_contact_and_surface_slopes();
         subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
         correct_hero_ground_penetration();
     }
