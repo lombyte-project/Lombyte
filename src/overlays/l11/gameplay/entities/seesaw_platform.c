@@ -2453,7 +2453,9 @@ void adjust_ship_steering_for_flight_bounds(struct Moby *moby, float *horizontal
 
 void adjust_ship_steering_for_flight_bounds(struct Moby *moby, float *a, float *b) __asm__("FUN_L11_00313f60");
 
-void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
+void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars) __asm__("FUN_L11_00312838");
+
+void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
     W4_2838 old;
     W4_2838 vel;
     UQ_2838 up;
@@ -2910,7 +2912,7 @@ void jet_fighter_update(struct Moby *moby) {
                 D_L11_0015F3FC = ship_vars->fade;
             }
             D_L11_0015F608 = 2;
-            FUN_L11_00312838(moby, ship_vars);
+            update_player_ship_flight(moby, ship_vars);
             {
             int alive = count_listed_blarg_ships_in_state_5(ship_vars->i10C);
             if (ship_vars->sEA != 0 && alive < 5 - ship_vars->sE8 && timer_3290(&ship_vars->i114) &&
@@ -2970,7 +2972,7 @@ void jet_fighter_update(struct Moby *moby) {
             break;
         case JET_FIGHTER_STATE_DELAYED_EXIT:
             D_L11_0015F608 = 2;
-            FUN_L11_00312838(moby, ship_vars);
+            update_player_ship_flight(moby, ship_vars);
             if (timer_3290(&ship_vars->iF8)) {
                 approach_value_c788(&ship_vars->fade, 1.0f, frame_time * 4.0f);
                 D_L11_0015F3FC = ship_vars->fade;
