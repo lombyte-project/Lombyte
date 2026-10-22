@@ -662,7 +662,7 @@ extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 extern int FUN_L00_001f2868(void *, float, int, void *, void *);
 void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9, float fC, float fD, float fE, float fF, int k10, float fG, int k11, int s16, int s18, unsigned char flag) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
-unsigned char *FUN_L00_002cbf68(int unused, void *pos, float *vel);
+unsigned char *spawn_feather_moby(int unused, void *pos, float *vel) __asm__("FUN_L00_002cbf68");
 extern int FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
 extern void FUN_L00_00258278(void *, float *, float, float, float, float);
 extern float FUN_L00_00259710(void *);
@@ -807,7 +807,7 @@ void update_morphoray_chicken(Moby *chicken_moby) {
             angle = random_float_between(feather_speed_min * frame_time, feather_speed_max * frame_time);
             build_spherical_offset(&motion_and_normal_scratch, angle, random_angle_radians(), feather_pitch_deg * 0.017453292f);
             motion_and_normal_scratch.z = random_float_between(3.5f, 5.5f) * frame_time;
-            FUN_L00_002cbf68((int)chicken_moby, &point, &motion_and_normal_scratch.x);
+            spawn_feather_moby((int)chicken_moby, &point, &motion_and_normal_scratch.x);
         }
         allocate_voice_for_target_entry(1, 0, (char *)chicken_moby);
         if (vars->expire_timer >= 0) {
@@ -961,7 +961,7 @@ void update_morphoray_chicken(Moby *chicken_moby) {
             angle = random_float_between(feather_speed_min * frame_time, feather_speed_max * frame_time);
             build_spherical_offset(spawn_velocity, angle, random_angle_radians(), feather_pitch_deg * 0.017453292f);
             motion_and_normal_scratch.z = random_float_between(3.5f, 5.5f) * frame_time;
-            FUN_L00_002cbf68((int)chicken_moby, spawn_point, &spawn_velocity->x);
+            spawn_feather_moby((int)chicken_moby, spawn_point, &spawn_velocity->x);
         }
         return;
     }
@@ -1564,7 +1564,7 @@ void FUN_L00_0025d1b8_2cbf68(void *) __asm__("FUN_L00_0025d1b8");
 
 extern int D_L00_001618A4 __attribute__((sda));
 extern float D_L00_001618A0 __attribute__((sda));
-unsigned char *FUN_L00_002cbf68(int unused, void *spawn_position, float *initial_velocity) {
+unsigned char *spawn_feather_moby(int unused, void *spawn_position, float *initial_velocity) {
     unsigned char *spawned_moby = FUN_0020c4f8_2cbf68(0x1AC);
     if (spawned_moby) {
         unsigned char *moby_vars;

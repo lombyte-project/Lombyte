@@ -680,7 +680,7 @@ extern float random_angle_radians_q(void) __asm__("FUN_00213308");
 extern float random_float_between_alt_q(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_001f0d60_q(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
-extern void *FUN_L00_002cbf68_q(void *, void *, void *) __asm__("FUN_L00_002cbf68");
+extern void *spawn_feather_moby(void *, void *, void *) __asm__("FUN_L00_002cbf68");
 extern void FUN_0022da68_q(int, int, void *) __asm__("FUN_0022da68");
 extern void add_vector_xyz_q(void *, void *, void *) __asm__("FUN_001f9a10");
 void blend_moby_animation_q(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -730,7 +730,7 @@ void reposition_moby_with_collision_check(struct Moby *moby, void *new_position)
                                effectVelocity);
             speed = random_float_between_alt_q(3.5f, 5.5f);
             effect_velocity[2] = speed * D_0015ED6C;
-            FUN_L00_002cbf68_q(moby, effectPosition, effectVelocity);
+            spawn_feather_moby(moby, effectPosition, effectVelocity);
         } while (--i >= 0);
         func_0022ED80_57_q(1, 0, moby);
     } else {
