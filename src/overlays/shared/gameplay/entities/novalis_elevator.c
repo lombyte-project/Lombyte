@@ -1025,7 +1025,9 @@ extern struct DriftEmitter D_L01_001DEB38;
 extern s32 FUN_L00_00258ad0(void *, void *, s32, s32, f32, f32);
 
 /* shrinks and sinks the moby, then hands it to the drift emitter */
-s32 FUN_L01_002e3208(void *ctx, struct Moby *movement_state) {
+s32 update_sand_mouse_fall_motion(void *ctx, struct Moby *movement_state) __asm__("FUN_L01_002e3208");
+
+s32 update_sand_mouse_fall_motion(void *ctx, struct Moby *movement_state) {
     f32 shrink;
 
     movement_state->pos.z -= frame_time_sq * 29.7f;
@@ -1369,7 +1371,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void compute_sand_mouse_approach_target(int, void *) __asm__("FUN_L01_002e30b8");
 extern void FUN_L01_002e3110(char *, char *);
-extern s32 FUN_L01_002e3208(void *, struct Moby *);
+extern s32 update_sand_mouse_fall_motion(void *, struct Moby *) __asm__("FUN_L01_002e3208");
 extern void FUN_L01_002e35a8(char *, char *);
 extern void FUN_L01_002e3830(struct Moby *, char *);
 extern unsigned char D_0013D4C5 __attribute__((section(".data")));
@@ -1625,7 +1627,7 @@ void sand_mouse_update(struct Moby *moby) {
             sand_mouse_vars->vel[0] = sand_mouse_vars->vel[0] * velocity_damping_factor;
             sand_mouse_vars->vel[1] = sand_mouse_vars->vel[1] * velocity_damping_factor;
         }
-        if (FUN_L01_002e3208(moby, sand_mouse_vars) & 2) {
+        if (update_sand_mouse_fall_motion(moby, sand_mouse_vars) & 2) {
             qzero(sand_mouse_vars->vel);
             qcopy(sand_mouse_vars->target, ((float *)&ents_2e3f20[sand_mouse_vars->parent].pos));
             moby->state = 0x14;
