@@ -463,7 +463,9 @@ extern char D_L13_001670C0[];
 typedef struct { int v[6]; } L13EffectColors;
 extern L13EffectColors D_L13_001F5560;
 extern L13EffectColors D_L13_001F5578;
-extern char *FUN_L13_0030c138(void *, void *, int, int);
+char *spawn_poison_vessel_effect_moby(void *position, void *initial_velocity, int duration_frames, int effect_mode) __asm__("FUN_L13_0030c138");
+
+extern char *spawn_poison_vessel_effect_moby(void *, void *, int, int) __asm__("FUN_L13_0030c138");
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern char *FUN_L00_002df808(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, int);
 
@@ -510,7 +512,7 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
             add_vector_xyz(random_direction, random_direction, &work.velocity);
             lo = scale_game_frames(60); hi = scale_game_frames(120);
             duration = random_int_between(lo, hi);
-            FUN_L13_0030c138(&work.pos, random_direction, duration, 0);
+            spawn_poison_vessel_effect_moby(&work.pos, random_direction, duration, 0);
         }
     }
     twice_distance = distance + distance;
@@ -535,7 +537,7 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
             add_vector_xyz(random_direction, random_direction, &work.velocity);
             lo = scale_game_frames(60); hi = scale_game_frames(90);
             duration = random_int_between(lo, hi);
-            FUN_L13_0030c138(&work.pos, random_direction, duration, 1);
+            spawn_poison_vessel_effect_moby(&work.pos, random_direction, duration, 1);
         }
     }
     work.random_vector.q = 0;
@@ -553,7 +555,7 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
         int hi = scale_game_frames(90);
         duration = random_int_between(lo, hi);
     }
-    FUN_L13_0030c138(&work.pos, &work.random_direction, duration, 1);
+    spawn_poison_vessel_effect_moby(&work.pos, &work.random_direction, duration, 1);
     count = distance < 6.0f ? truncate_float_to_s32(distance) + 1 : 4;
     extra = 0.0f;
     if (distance < 7.0f) extra = 7.0f - distance;
@@ -2436,7 +2438,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L13_0030c138(void *position, void *initial_velocity, int duration_frames, int effect_mode) {
+char *spawn_poison_vessel_effect_moby(void *position, void *initial_velocity, int duration_frames, int effect_mode) {
     unsigned char *moby = (unsigned char *)func_0020D348_m(0x662);
     if (moby != 0) {
         char *data;
