@@ -27,7 +27,9 @@ typedef struct {
 extern Level07State D_L07_0016C8E0;
 extern void func_00233AB8(void *) __asm__("FUN_L07_002ba260");
 
-void FUN_L07_00265bd8(void) {
+void register_level07_moby_draw_callback(void) __asm__("FUN_L07_00265bd8");
+
+void register_level07_moby_draw_callback(void) {
     if (current_level_index == 7 && D_L07_0016C8E0.state == 4 && D_L07_0016C8E0.moby != 0 &&
         D_L07_0016C8E0.moby->class_id == 0x214) {
         add_draw_callback(func_00233AB8, D_L07_0016C8E0.moby);
