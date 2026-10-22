@@ -2154,7 +2154,7 @@ extern unsigned char D_0013E500[];
 extern unsigned char D_0013F3D0[];
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
-extern void FUN_L13_002b7d50(void *, int, int, long, float, float, float, float);
+extern void emit_transformed_2d_vertex_packet(void *, int, int, long, float, float, float, float) __asm__("FUN_L13_002b7d50");
 extern void draw_fighter_jet_radar_icon(char *rot, char *from, char *moby, int icon, long color, int tex) __asm__("FUN_L13_002b89f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -2238,13 +2238,13 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
                         float ang = normalize_angle(convert_integer_to_float(frame_count) / 20.0f);
-                        FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f, ang);
+                        emit_transformed_2d_vertex_packet(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f, ang);
                     }
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
                         float ang = normalize_angle(convert_integer_to_float(frame_count) / 20.0f);
-                        FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
+                        emit_transformed_2d_vertex_packet(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
                     }
                 }
             }
@@ -2278,16 +2278,16 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
                             float x = (v[0] - scr[4]) * 0.0625f;
                             float y = (v[1] - scr[5]) * 0.0625f;
                             float ang = normalize_angle(convert_integer_to_float(frame_count) / 20.0f);
-                            FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f, ang);
+                            emit_transformed_2d_vertex_packet(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f, ang);
                         }
                         {
                             float x = (v[0] - scr[4]) * 0.0625f;
                             float y = (v[1] - scr[5]) * 0.0625f;
                             float ang = normalize_angle(convert_integer_to_float(frame_count) / 20.0f);
-                            FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
+                            emit_transformed_2d_vertex_packet(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
                         }
                     } else {
-                        FUN_L13_002b7d50(&D_L13_001613C8, 3, 0xFFFFF3, (arrow_alpha << 24) | 0x8000, u[0], u[1], 240.0f / source_to_candidate_distance + 1.5f, ang);
+                        emit_transformed_2d_vertex_packet(&D_L13_001613C8, 3, 0xFFFFF3, (arrow_alpha << 24) | 0x8000, u[0], u[1], 240.0f / source_to_candidate_distance + 1.5f, ang);
                     }
                 }
                 draw_fighter_jet_radar_icon(radar_rotation, radar_origin_position, candidate_moby, 0, 0x75808080, *(int *)(moby_vars + 0x104));
@@ -2305,7 +2305,7 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
                         float ang = normalize_angle(convert_integer_to_float(frame_count) / 20.0f);
-                        FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
+                        emit_transformed_2d_vertex_packet(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
                     }
                 }
                 draw_fighter_jet_radar_icon(radar_rotation, radar_origin_position, candidate_moby, 1, 0x75808080, *(int *)(moby_vars + 0x104));
@@ -2319,7 +2319,7 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
                         float ang = normalize_angle(convert_integer_to_float(frame_count) / 20.0f);
-                        FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
+                        emit_transformed_2d_vertex_packet(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
                     }
                 }
                 draw_fighter_jet_radar_icon(radar_rotation, radar_origin_position, candidate_moby, 1, 0x75808080, *(int *)(moby_vars + 0x104));

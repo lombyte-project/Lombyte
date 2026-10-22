@@ -79,7 +79,9 @@ extern void scale_7d50(void *, void *, float) __asm__("FUN_001f9a68");
 extern int D_L13_001611C0;
 extern u128_7d50 D_L13_001608E0;
 extern u128_7d50 D_L13_001608F0;
-void FUN_L13_002b7d50(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale, float z_rotation_angle) {
+void emit_transformed_2d_vertex_packet(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale, float z_rotation_angle) __asm__("FUN_L13_002b7d50");
+
+void emit_transformed_2d_vertex_packet(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale, float z_rotation_angle) {
     float rotation_matrix[4][4];
     float rotation_angles[4];
     float transformed_point[4];

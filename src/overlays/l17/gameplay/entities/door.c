@@ -549,7 +549,7 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
-extern void FUN_L13_002b7d50(void *, int, int, long, float, float, float, float);
+extern void emit_transformed_2d_vertex_packet(void *, int, int, long, float, float, float, float) __asm__("FUN_L13_002b7d50");
 void draw_fighter_jet_radar_contact_icon(char *rot, char *from, char *moby, int icon, long color, int tex) __asm__("FUN_L17_002eaae0");
 extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -639,14 +639,14 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
                         float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
-                        FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f,
+                        emit_transformed_2d_vertex_packet(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f,
                                          ang);
                     }
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
                         float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
-                        FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f,
+                        emit_transformed_2d_vertex_packet(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f,
                                          -ang);
                     }
                 }
@@ -666,13 +666,13 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
                     float x = (v[0] - scr[4]) * 0.0625f;
                     float y = (v[1] - scr[5]) * 0.0625f;
                     float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
-                    FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x400000FF, x, y, 2.0f, ang);
+                    emit_transformed_2d_vertex_packet(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x400000FF, x, y, 2.0f, ang);
                 }
                 {
                     float x = (v[0] - scr[4]) * 0.0625f;
                     float y = (v[1] - scr[5]) * 0.0625f;
                     float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
-                    FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x400000FF, x, y, 2.5f, -ang);
+                    emit_transformed_2d_vertex_packet(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x400000FF, x, y, 2.5f, -ang);
                 }
             }
             dd = FUN_001f9b48(scanned_moby + 0x10, (&hero.motion.pos));
@@ -692,7 +692,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
                         float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
-                        FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f,
+                        emit_transformed_2d_vertex_packet(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f,
                                          -ang);
                     }
                 }
@@ -707,7 +707,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
                         float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
-                        FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f,
+                        emit_transformed_2d_vertex_packet(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f,
                                          -ang);
                     }
                 }
@@ -771,7 +771,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
         angular_error_magnitude = square_root(heading_error_magnitude * heading_error_magnitude + k * k);
         arrow_pulse_phase = fast_add_rotations(*(float *)(ship_vars + 0x114), 0.1f / (angular_error_magnitude / 3.1415927f));
         *(float *)(ship_vars + 0x114) = arrow_pulse_phase;
-        FUN_L13_002b7d50(&D_L17_00162188, 3, 0xFFFFF3,
+        emit_transformed_2d_vertex_packet(&D_L17_00162188, 3, 0xFFFFF3,
                          (func_001FA898_r((fast_sin(arrow_pulse_phase) + 1.4f) * 53.0f) << 24) | 0x8000, v[0],
                          v[1], 240.0f / ship_to_arrow_target_distance + 1.5f, ang);
     }
