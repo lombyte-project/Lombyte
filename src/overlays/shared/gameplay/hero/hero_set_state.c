@@ -3321,7 +3321,9 @@ extern int f_fun_001fa6d0_227fa0(float) __asm__("FUN_001fa6d0");
 
 extern int D_L00_0015F674 __attribute__((sda));
 extern s32 D_00141660 __attribute__((section(".data")));
-int FUN_L00_00227fa0(void) {
+int process_hero_equipped_item_input(void) __asm__("FUN_L00_00227fa0");
+
+int process_hero_equipped_item_input(void) {
     enum {
         ITEM_WRENCH = 8,
         ITEM_GRAPPLE = 12,
