@@ -71,7 +71,9 @@ extern s32 D_L05_0015FAFC_macro __asm__("D_L05_0015FAFC") __attribute__((section
 extern s32 D_L05_0015FB00;
 extern u8 D_L05_0015F87C __attribute__((sda));
 
-void FUN_L05_00262b58(HudCounter *element) {
+void update_trick_combo_hud(HudCounter *element) __asm__("FUN_L05_00262b58");
+
+void update_trick_combo_hud(HudCounter *element) {
     enum {
         HUD_COUNTER_WAITING_FOR_COMBO = 0,
         HUD_COUNTER_TRACKING_COMBO = 1,
