@@ -324,7 +324,7 @@ void FUN_L02_002216a0(void) {
     u8 *hit_moby_flag_data;
 
     s32 k;
-    f32 g;
+    f32 collision_ray_start_offset;
 
     hero.unk270.f[2] = 1.0f;
     hero.air_frames.u++;
@@ -343,11 +343,11 @@ void FUN_L02_002216a0(void) {
     k = 0;
     if (hero.unk20B3)
         k = 1;
-    g = hero.unk234 * 2.2f;
+    collision_ray_start_offset = hero.unk234 * 2.2f;
     if (hero.state.control_mode == 2) {
-        g = hero.unk234 * 2.9f;
+        collision_ray_start_offset = hero.unk234 * 2.9f;
     }
-    hero_get_collision_ray_endpoints(&collision_ray_start, &collision_ray_end, k, g, -48.0f);
+    hero_get_collision_ray_endpoints(&collision_ray_start, &collision_ray_end, k, collision_ray_start_offset, -48.0f);
     if (collision_line(&collision_ray_start, &collision_ray_end, 2, (s32)hero.moby, 0) == 0) {
         goto tail;
     }
