@@ -1445,7 +1445,9 @@ extern OvlQuad D_L00_00173E60_2ebe70 __asm__("D_L00_00173E60");
 extern float D_L00_00173E70_2ebe70[] __asm__("D_L00_00173E70");
 extern float D_L00_00161DD8_2ebe70 __asm__("D_L00_00161DD8") __attribute__((sda));
 
-void FUN_L00_002ebe70(char *camera_object) {
+void update_target_tracking_camera_position(char *camera_object) __asm__("FUN_L00_002ebe70");
+
+void update_target_tracking_camera_position(char *camera_object) {
     char *state = *(char **)(camera_object + 0x70);
     char *follow = state + 0x40;
     float *distance = (float *)(state + 0xa0);
