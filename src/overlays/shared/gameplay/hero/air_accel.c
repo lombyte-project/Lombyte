@@ -810,7 +810,7 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 #define G hero
 
 extern OvlMobyEntry40 D_L01_00178580[];
-s32 FUN_L01_00231580(s32 arg) {
+s32 FUN_L01_00231580(s32 apply_state_and_motion_response) {
     u8 *hero_moby;
     OvlMobyEntry40 *hero_moby_entry;
     u8 *mob;
@@ -849,7 +849,7 @@ s32 FUN_L01_00231580(s32 arg) {
     D_0013DF88[current_level_index]++;
     G.unk2280 = (struct Moby *)hero_moby_entry->target;
     D_0015EEA8++;
-    if (arg == 0) {
+    if (apply_state_and_motion_response == 0) {
         return 1;
     }
     FUN_L00_00206c08_8();
