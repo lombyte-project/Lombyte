@@ -19,7 +19,9 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
    declaration of it would have read; see the 0x33 call below. */
 extern void hero_set_state_v(int, int) __asm__("FUN_L00_002223f8");
 
-int FUN_L00_00227778(void) {
+int try_transition_hero_water_state(void) __asm__("FUN_L00_00227778");
+
+int try_transition_hero_water_state(void) {
     Vec4 start;
     Vec4 end;
     int decrement;

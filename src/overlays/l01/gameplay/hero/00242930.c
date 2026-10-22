@@ -72,7 +72,7 @@ extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern int FUN_L00_00221d98(void);
 extern int try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
-extern int FUN_L00_00227778(void);
+extern int try_transition_hero_water_state(void) __asm__("FUN_L00_00227778");
 extern int FUN_L00_002279b0(void);
 extern int try_start_hero_jump(int, int) __asm__("FUN_L00_00228b78");
 extern int pick_idle_fidget(int *) __asm__("FUN_L00_00229010");
@@ -151,7 +151,7 @@ void FUN_L01_00242930(void) {
         if (hero.health.hp <= 0 && hero.state.control_mode != 0x14 &&
             (hero.state.current == HERO_STATE_IDLE || hero.state.current == HERO_STATE_RUN)) {
             hero_set_state(HERO_STATE_DYING, 1);
-        } else if (FUN_L01_00240ed8() == 0 && FUN_L00_002279b0() == 0 && FUN_L00_00227778() == 0 &&
+        } else if (FUN_L01_00240ed8() == 0 && FUN_L00_002279b0() == 0 && try_transition_hero_water_state() == 0 &&
                    try_start_hero_weapon_fire_state() == 0) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
                 if (hero.items[0].unk1C != 2 && D_L01_0015F594 == 0 &&
