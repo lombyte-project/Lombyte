@@ -160,7 +160,9 @@ extern unsigned char D_0013E05A[];
 #include "rnc/data_labels.h"
 extern void update_item_tint_from_hero(int, int) __asm__("FUN_L00_00207330");
 
-void FUN_L15_00200788(void) {
+void update_enabled_item_tint_from_hero(void) __asm__("FUN_L15_00200788");
+
+void update_enabled_item_tint_from_hero(void) {
     unsigned char *base = ((unsigned char *)&D_0013E533) + 0xE1D;
     int index = *(int *)(base + 0x10B8);
     if (index >= 0 && *(D_0013E05A + 0x4C6 + index) != 0) {
