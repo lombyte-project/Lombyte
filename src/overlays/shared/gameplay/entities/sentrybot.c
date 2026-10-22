@@ -79,7 +79,9 @@ extern void FUN_L00_00263b38(void *, float);
 void begin_sentrybot_turn_toward_point(char *moby, void *moby_data, float *point, void *next_state, void *next_animation) __asm__("FUN_L15_00299a68");
 
 extern void begin_sentrybot_turn_toward_point(char *moby, void *a, float *point, void *b, void *c) __asm__("FUN_L15_00299a68");
-void FUN_L15_0029a0d0(void *mp);
+void alert_visible_group_sentrybots(void *mp) __asm__("FUN_L15_0029a0d0");
+
+void alert_visible_group_sentrybots(void *mp) __asm__("FUN_L15_0029a0d0");
 extern void FUN_L15_0029a2a8_u(void *) __asm__("FUN_L15_0029a2a8");
 extern void FUN_L15_0029a570(void *, int);
 void draw_sentrybot_effect_quads(char *moby) __asm__("FUN_L15_0029aba8");
@@ -574,7 +576,7 @@ void sentrybot_update(unsigned char *moby) {
                 if (moby[0x53] != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             } else {
-                FUN_L15_0029a0d0(moby);
+                alert_visible_group_sentrybots(moby);
                 if (*(int *)(data + 0x128) != -1 &&
                     *(int *)(*(char **)((char *)((*(int *)(data + 0x128) << 8) + D_L15_0015FFD8_m) +
                                         0x78) +
@@ -620,7 +622,7 @@ void sentrybot_update(unsigned char *moby) {
     case SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_POSITIVE_JOINT_AIM:
         *(short *)(data + 0x19C) = 0;
         *(short *)(data + 0x194) = 0;
-        FUN_L15_0029a0d0(moby);
+        alert_visible_group_sentrybots(moby);
         if (moby[0x70] & 2) {
             if (hero.state.current == 0x65) {
                 moby[0x20] = 0xC;
@@ -637,7 +639,7 @@ void sentrybot_update(unsigned char *moby) {
     case SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_NEGATIVE_JOINT_AIM:
         *(short *)(data + 0x19C) = 0;
         *(short *)(data + 0x194) = 0;
-        FUN_L15_0029a0d0(moby);
+        alert_visible_group_sentrybots(moby);
         if (moby[0x70] & 2) {
             if (hero.state.current == 0x65) {
                 moby[0x20] = 0xC;
@@ -654,7 +656,7 @@ void sentrybot_update(unsigned char *moby) {
     case SENTRYBOT_EMIT_WITH_POSITIVE_JOINT_AIM:
         *(short *)(data + 0x19C) = 0;
         *(short *)(data + 0x194) = 0;
-        FUN_L15_0029a0d0(moby);
+        alert_visible_group_sentrybots(moby);
         if (data[0x19E] == 0) {
             float t = compute_interpolated_record_value(moby);
             if (t >= 0.85f && t < 3.0f) {
@@ -712,7 +714,7 @@ void sentrybot_update(unsigned char *moby) {
     case SENTRYBOT_EMIT_WITH_NEGATIVE_JOINT_AIM:
         *(short *)(data + 0x19C) = 0;
         *(short *)(data + 0x194) = 0;
-        FUN_L15_0029a0d0(moby);
+        alert_visible_group_sentrybots(moby);
         if (data[0x19E] == 0) {
             float t = compute_interpolated_record_value(moby);
             if (t >= 0.85f && t < 3.0f) {
@@ -1169,7 +1171,7 @@ extern void set_sentrybot_attention_target(char *, char *) __asm__("FUN_L15_0029
 
 typedef struct { char p[0x156]; short h156; } D_a0d0;
 
-void FUN_L15_0029a0d0(void *mp) {
+void alert_visible_group_sentrybots(void *mp) {
     unsigned char *source_moby = mp;
     char *moby_data = *(char **)(source_moby + 0x78);
     float source_line_endpoint[4];
@@ -1355,7 +1357,7 @@ void FUN_L15_0029a570(void *object, int flag) {
     code = fun_00213928(moby, hit, data + 0x20, 0, &kind, &impact, 0, 4);
     if (kind != 1 && moby[0x20] != 0x17) {
         if ((unsigned char)D_001413F4[0] == 0)
-            FUN_L15_0029a0d0(moby);
+            alert_visible_group_sentrybots(moby);
         *(float *)(data + 0x20) -= impact;
         if (*(short *)(*(char **)(hit + 0x20) + 0xA6) == 0x47)
             code = 3;
