@@ -53,7 +53,7 @@ extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090"
 extern struct Moby *spawn_class_1b3_projectile(void *, struct Moby *, void *, f32, f32) __asm__("FUN_L08_002de3e0");
 extern void FUN_L08_002e9558(struct Moby *);
 extern void FUN_L08_002e9758(struct Moby *);
-extern void FUN_L08_002e9a18(struct Moby *);
+extern void update_commando_parts(struct Moby *) __asm__("FUN_L08_002e9a18");
 
 void FUN_L08_002e9b70(struct Moby *moby) {
     enum {
@@ -124,7 +124,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         FUN_L08_002e9758(moby);
-        FUN_L08_002e9a18(moby);
+        update_commando_parts(moby);
         if (moby->command == 0) {
             break;
         }
@@ -172,7 +172,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
             normalize_vector_xyz(&step, &step, D_L08_00161D34 * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
-        FUN_L08_002e9a18(moby);
+        update_commando_parts(moby);
         if (!tick_countdown_32_alt(&vars->fire_timer)) {
             break;
         }
@@ -195,7 +195,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
         path = vars->follow[0].path;
         qcopy(&moby->pos, &path->points[0]);
         moby->rot.z = fast_arc_tan(path->points[1].f[0] - moby->pos.x, path->points[1].f[1] - moby->pos.y);
-        FUN_L08_002e9a18(moby);
+        update_commando_parts(moby);
         break;
     }
     case SWARM_DISPERSE_AND_REMOVE:

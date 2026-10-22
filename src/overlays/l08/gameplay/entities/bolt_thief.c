@@ -199,7 +199,9 @@ void update_shrub_parts(struct Moby *parent_moby) {
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 extern float D_L08_00161D38 __attribute__((sda));
-void FUN_L08_002e9a18(struct Moby *parent_moby) {
+void update_commando_parts(struct Moby *parent_moby) __asm__("FUN_L08_002e9a18");
+
+void update_commando_parts(struct Moby *parent_moby) {
     char *data = (char *)parent_moby->pvars;
     float part_joint_position[4];
     float anchor_joint_position[4];
