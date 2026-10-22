@@ -666,7 +666,9 @@ void FUN_001f9a68_002c82f0(void *, void *, float) __asm__("FUN_001f9a68");
 int FUN_001efa68_002c82f0(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 void FUN_001f9bf8_002c82f0(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_L00_001ff660_002c82f0(void *, void *, void *) __asm__("FUN_L00_001ff660");
-void FUN_L00_002c82f0(Vec4_2c82f0 *release_position, u8 *released_moby, void *initial_velocity) {
+void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position, u8 *released_moby, void *initial_velocity) __asm__("FUN_L00_002c82f0");
+
+void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position, u8 *released_moby, void *initial_velocity) {
     char *q = *(char **)(released_moby + 0x78);
     S13F350_2c82f0 *P;
     char *released_moby_position, *collision_reference_moby;
@@ -3460,7 +3462,7 @@ void glove_of_doom_update(struct Moby *moby) {
                 D_00141680.unkA2 = scale_game_frames(D_0015EEA4) / 600;
             }
             D_00141680.levels = D_00141680.levels | (1 << current_level_index) | 0x80000000;
-            FUN_L00_002c82f0((void *)&vars->grip, (u8 *)vars->held, vars->held->pvars);
+            release_glove_of_doom_held_moby((void *)&vars->grip, (u8 *)vars->held, vars->held->pvars);
             vars->held = 0;
         } else {
             allocate_voice_for_target_entry(0, 0, moby);
