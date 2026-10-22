@@ -1111,7 +1111,9 @@ char *spawn_class_511_moby_with_sparks(char *source_moby, void *pos, int ticks) 
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A2E8), where it is exact; names translated to the US level program. */
 
-void FUN_L11_00318e78(struct Moby *moby, void *new_position) {
+void set_moby_position_and_refresh_removal_timer(struct Moby *moby, void *new_position) __asm__("FUN_L11_00318e78");
+
+void set_moby_position_and_refresh_removal_timer(struct Moby *moby, void *new_position) {
     char *moby_vars = (char *)moby->pvars;
     qcopy(&moby->pos, new_position);
     *(int *)(moby_vars + 0x28) = 5;

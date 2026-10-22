@@ -1509,7 +1509,7 @@ extern float D_L11_00161F94 __attribute__((sda));
 extern float D_L11_00161F98 __attribute__((sda));
 extern float D_L11_00161F9C __attribute__((sda));
 extern int FUN_001f9740_p(void *) __asm__("FUN_001f9740");
-extern void FUN_L11_00318e78_p(void *, void *) __asm__("FUN_L11_00318e78");
+extern void set_moby_position_and_refresh_removal_timer(void *, void *) __asm__("FUN_L11_00318e78");
 extern char *hit_info_0698(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern int take_hit_0698(struct Moby *, char *, float *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void FUN_L00_0025ab48_p(void *, float *, float *, float *) __asm__("FUN_L00_0025ab48");
@@ -1693,7 +1693,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         normalize_0180(&projectile_and_hit_vector_scratch, &psytcopus->rot_row0, D_L11_00161FC8);
         add_0180(&projectile_and_hit_vector_scratch, &projectile_and_hit_vector_scratch, &psytcopus->pos);
         projectile_and_hit_vector_scratch.z += D_L11_00161FCC;
-        FUN_L11_00318e78_p(psytcopus_vars->unk160, &projectile_and_hit_vector_scratch);
+        set_moby_position_and_refresh_removal_timer(psytcopus_vars->unk160, &projectile_and_hit_vector_scratch);
     }
     damage = 0.0f;
     info = hit_info_0698(psytcopus, 0x330000, 0);
