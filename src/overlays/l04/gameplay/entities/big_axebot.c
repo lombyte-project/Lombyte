@@ -152,7 +152,9 @@ static inline s32 path_next_eb20(PathPoints_eb20 *path, s32 i, s32 dir) {
     return i + dir;
 }
 
-s32 FUN_L04_0029eb20(struct Moby *moby, PathPoints_eb20 *path, s32 i, s32 path_index_step, f32 advance_distance) {
+s32 advance_moby_along_path(struct Moby *moby, PathPoints_eb20 *path, s32 i, s32 path_index_step, f32 advance_distance) __asm__("FUN_L04_0029eb20");
+
+s32 advance_moby_along_path(struct Moby *moby, PathPoints_eb20 *path, s32 i, s32 path_index_step, f32 advance_distance) {
     Vec4 seg;
     Vec4 rel;
     s32 next;
@@ -276,7 +278,7 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
         }
         speed = 0.0f;
         if (distance < 3.0f) speed = 3.0f - distance;
-        data->direction = FUN_L04_0029eb20(moby, D_L04_001b0630[data->path_index], data->direction, 1, speed);
+        data->direction = advance_moby_along_path(moby, D_L04_001b0630[data->path_index], data->direction, 1, speed);
     }
     if (data->initialized == 0) {
     s32 i;
