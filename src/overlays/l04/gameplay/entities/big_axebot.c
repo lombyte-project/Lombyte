@@ -232,7 +232,9 @@ typedef struct PVars_29ecf8 {
     s32 child_count;
 } PVars_29ecf8;
 
-void FUN_L04_0029ecf8(struct Moby *moby) {
+void update_class_55_swarm_controller(struct Moby *moby) __asm__("FUN_L04_0029ecf8");
+
+void update_class_55_swarm_controller(struct Moby *moby) {
     PVars_29ecf8 *data = (PVars_29ecf8 *)moby->pvars;
     struct Moby **children;
     struct Moby *other;
