@@ -898,7 +898,9 @@ extern void *func_001FE540_id(int) __asm__("FUN_001fdd10");
 extern int func_001F6F40_c(int, int, long, void *, int) __asm__("FUN_001f6af0");
 extern int func_001F6F40_c_001f6b88(int, int, long, void *, int) __asm__("FUN_001f6b88");
 
-void FUN_L17_002eb9a8(struct Moby *moby) {
+void draw_fighter_jet_hud(struct Moby *moby) __asm__("FUN_L17_002eb9a8");
+
+void draw_fighter_jet_hud(struct Moby *moby) {
     char *ship_vars = (char *)moby->pvars;
     char *screen_dimensions;
     int locked_target_screen_x;
@@ -1232,7 +1234,7 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
-extern void FUN_L17_002eb9a8();
+extern void draw_fighter_jet_hud();
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -1512,7 +1514,7 @@ void FUN_L17_002ec360(Moby *ship_moby, Obj *ship_vars) {
             }
         }
     }
-    enqueue_callback_list_1(FUN_L17_002eb9a8, ship_moby);
+    enqueue_callback_list_1(draw_fighter_jet_hud, ship_moby);
     try_fire_fighter_jet_rocket((char *)ship_moby, (char *)ship_vars);
     update_fighter_jet_aim_and_fire_projectile((char *)ship_moby, (char *)ship_vars, fast_add_rotations(ship_vars->f28, -ship_vars->f6C / 7.0f),
                      -fast_add_rotations(ship_vars->f24, -(ship_vars->f70 / 7.0f) - 0.1f));
