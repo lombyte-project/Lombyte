@@ -123,7 +123,9 @@ extern int D_L08_001746D8_2B94B0i __asm__("D_L08_00174658") __attribute__((secti
 extern char D_L08_00174700_2B94B0[] __asm__("D_L08_00174680");
 extern s32 D_0013DF38_arr[] __asm__("D_0013DF38");
 
-void FUN_L08_002b82a0(Moby_2B94B0 *moby)
+void update_bolt_pickup(Moby_2B94B0 *moby) __asm__("FUN_L08_002b82a0");
+
+void update_bolt_pickup(Moby_2B94B0 *moby)
 {
     enum {
         MOBY_STATE_INITIALIZE = 0,
