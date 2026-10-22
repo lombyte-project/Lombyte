@@ -119,7 +119,9 @@ extern OvlVec4 D_L09_00173FE0;
  * from the hero until the timer runs out) bursts into five sparks and a
  * flash, damages around the hit and is removed.
  */
-void FUN_L09_00307d68(struct Moby *projectile_moby)
+void update_class_4ea_projectile(struct Moby *projectile_moby) __asm__("FUN_L09_00307d68");
+
+void update_class_4ea_projectile(struct Moby *projectile_moby)
 {
     OvlVec4 old;
     CollisionProbe_307d68 pr;
