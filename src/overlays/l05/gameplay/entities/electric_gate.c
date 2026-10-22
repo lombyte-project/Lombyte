@@ -1597,7 +1597,9 @@ void FUN_L05_00316258(char *moby) {
         break;
     }
 }
-void FUN_L05_003166a0(struct Moby *moby) {
+void update_triggered_moby_yaw(struct Moby *moby) __asm__("FUN_L05_003166a0");
+
+void update_triggered_moby_yaw(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE_YAW = 0,
         MOBY_WAIT_FOR_TRIGGER = 1,
