@@ -267,7 +267,9 @@ extern unsigned char D_L05_00161200;
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
-void FUN_L05_0030e1f8(char *moby) {
+void update_fog_zone(char *moby) __asm__("FUN_L05_0030e1f8");
+
+void update_fog_zone(char *moby) {
     enum {
         FOG_ZONE_INITIALIZE = 0,
         FOG_ZONE_WAIT_TO_APPLY_PRESET = 1,
