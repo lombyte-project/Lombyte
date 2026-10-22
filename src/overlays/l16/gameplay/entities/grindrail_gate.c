@@ -1765,7 +1765,9 @@ extern int func_00215570_e7208(void *, int) __asm__("FUN_00214720");
 extern int func_0022EE28_e7208(int, int, int) __asm__("FUN_0022db10");
 extern void func_L00_00264DB8_e7208(int, int) __asm__("FUN_L00_00263d40");
 extern char D_0013D50F_e7208[] __asm__("D_0013D408");
-void FUN_L16_002e7208(char *moby) {
+void update_two_region_trigger_latch(char *moby) __asm__("FUN_L16_002e7208");
+
+void update_two_region_trigger_latch(char *moby) {
     enum {
         CLIP_TRIGGER_WAIT_FOR_ARMING = 0,
         CLIP_TRIGGER_CHECK_LATCH = 1
