@@ -60,7 +60,9 @@ extern int D_L11_00215190[];
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 
-void FUN_L11_0031e6a8(int pair_index) {
+void emit_render_batches_with_pair_offset(int pair_index) __asm__("FUN_L11_0031e6a8");
+
+void emit_render_batches_with_pair_offset(int pair_index) {
     int i;
     for (i = 0; i < 0x11; i++) {
         FUN_L08_00258090(D_L11_00217770, D_L11_00215190[i], D_L11_00207900[i], &D_L11_00217758[pair_index]);
