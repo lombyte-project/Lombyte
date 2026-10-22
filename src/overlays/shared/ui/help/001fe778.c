@@ -81,7 +81,7 @@ void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9ab0_c(void *, void *) __asm__("FUN_001f9ab0");
 void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
-void FUN_L00_00216078(void *, void *);
+void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void FUN_L00_002335c8(void *, f32, f32, f32);
 f32 FUN_001f99c0(f32);
 
@@ -231,7 +231,7 @@ d1:
     if (!(hero.ground_distance < 0.25f)) {
         return;
     }
-    FUN_L00_00216078(&hero.unk270, &ground_displacement_or_angles);
+    compute_rotated_vector_angles(&hero.unk270, &ground_displacement_or_angles);
     if (-0.78539819f < ground_displacement_or_angles.f[1] && ground_displacement_or_angles.f[1] < 0.78539819f) {
         hero.ground_pitch.f = ground_displacement_or_angles.f[1];
     }
@@ -252,7 +252,7 @@ d1:
                 hero.unk2C0.f[i] = 0.0f;
             }
             FUN_00125180_c(&probe_surface_normal, (u8 *)&HH.normal_x);
-            FUN_L00_00216078(&probe_surface_normal, &probe_surface_angles);
+            compute_rotated_vector_angles(&probe_surface_normal, &probe_surface_angles);
             if (-0.78539819f < probe_surface_angles.f[1] && probe_surface_angles.f[1] < 0.78539819f) {
                 hero.unk2C8.f[i] = probe_surface_angles.f[1];
             }
