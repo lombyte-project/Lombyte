@@ -726,7 +726,9 @@ extern void FUN_00210850(void *, int, void *, void *);
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float FUN_L07_00317e60(void *, void *);
-extern void FUN_L07_00318e98(int);
+void detach_snagglebeast_rope_particles(int target_entry) __asm__("FUN_L07_00318e98");
+
+extern void detach_snagglebeast_rope_particles(int) __asm__("FUN_L07_00318e98");
 extern void FUN_L00_00257d78(void *, float, float);
 extern int sample_path(void *, void *, int *, float *, float, int) __asm__("FUN_L00_0025d808");
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
@@ -1542,7 +1544,7 @@ void snagglebeast_update(unsigned char *moby) {
                     *(int *)(data + 0x164) = 0;
                     *(short *)(data + 0x196) = scale_ticks(0x320);
                     *(int *)(data + 0x160) = scale_ticks(0xF0);
-                    FUN_L07_00318e98((int)moby);
+                    detach_snagglebeast_rope_particles((int)moby);
                     { char *g3 = ((char *)&hero); if (*(int *)(g3 + 0x2084) == 0x78) FUN_L00_002223f8(0, 1); }
                     data[0x1C7] = 0;
                     if (*(int *)(data + 0x1F8) != -1) {
@@ -1619,7 +1621,7 @@ void snagglebeast_update(unsigned char *moby) {
         if (!sight_ready) {
             *(int *)(data + 0x164) = 0;
             *(short *)(data + 0x196) = scale_ticks(0xF);
-            FUN_L07_00318e98((int)moby);
+            detach_snagglebeast_rope_particles((int)moby);
             { char *g3 = ((char *)&hero); if (*(int *)(g3 + 0x2084) == 0x78) FUN_L00_002223f8(0, 1); }
             *(int *)(data + 0x160) = scale_ticks(0x46);
             data[0x1C7] = 0;
@@ -1638,7 +1640,7 @@ void snagglebeast_update(unsigned char *moby) {
                 int r = random_int_between(0, 2);
                 FUN_00212f90(moby, 9, r, random_int_between(0x10, 0x19));
             }
-            FUN_L07_00318e98((int)moby);
+            detach_snagglebeast_rope_particles((int)moby);
             { char *g3 = ((char *)&hero); if (*(int *)(g3 + 0x2084) == 0x78) FUN_L00_002223f8(0, 1); }
             if (*(int *)(data + 0x1F8) != -1) {
                 char *sl = (D_0013E5C4 - 0x74) + *(int *)(data + 0x1F8) * 0x70;
@@ -2262,7 +2264,7 @@ extern int D_L07_00161B70_gp __asm__("D_L07_00161B70") __attribute__((sda));
 extern float row_phase_step_gp __asm__("D_L07_00161B7C") __attribute__((sda));
 extern void FUN_L00_002defe0(int arg0);
 
-void FUN_L07_00318e98(int target_entry) {
+void detach_snagglebeast_rope_particles(int target_entry) {
     float segment_offset[4];
     float interpolated_segment_position[4];
     float particle_offset[4];
