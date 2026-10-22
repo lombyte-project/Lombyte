@@ -220,7 +220,7 @@ extern void FUN_L00_0020a1e0(f32, f32);
 extern void FUN_L16_00208038(f32, f32);
 extern void FUN_L16_00208050(f32, f32);
 extern void FUN_L16_00208068(f32, f32);
-extern void FUN_L00_00209848(s32, s32);
+extern void emit_hero_periodic_surface_particles(s32, s32) __asm__("FUN_L00_00209848");
 extern void FUN_L00_00209638(s32, s32);
 
 #define GROUND_FRICTION()                                                                          \
@@ -812,7 +812,7 @@ void update_hero_motion_for_current_state(void) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
         if (frame_time * 1.5f < hero.motion.unk164) {
-            FUN_L00_00209848(4, 0xC);
+            emit_hero_periodic_surface_particles(4, 0xC);
         }
         if (hero.state.current == 0x36 && frame_time < hero.motion.unk164) {
             FUN_L00_00209638(0, 1);
@@ -1923,7 +1923,7 @@ void update_hero_motion_for_current_state(void) {
                 FUN_L00_00209638(0, 2);
             }
             if (hero.motion.unk164 > frame_time * 0.5f) {
-                FUN_L00_00209848(2, 4);
+                emit_hero_periodic_surface_particles(2, 4);
             }
             FUN_L00_00209a40(5, 2);
         }

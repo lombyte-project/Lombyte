@@ -454,7 +454,7 @@ extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_00209018_cf(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_L00_002091d8(float, float, float);
 extern void emit_hero_periodic_surface_effect(int, int) __asm__("FUN_L00_00209540");
-extern void FUN_L00_00209638_cf(int, int) __asm__("FUN_L00_00209848");
+extern void emit_hero_periodic_surface_particles(int, int) __asm__("FUN_L00_00209848");
 extern void FUN_L00_00209848_cf(float, float) __asm__("FUN_L00_0020a1e0");
 extern void FUN_L00_00209848_cf_0022b5f8(float, float) __asm__("FUN_L01_0022b5f8");
 extern void FUN_L00_00209848_cf_0022b610(float, float) __asm__("FUN_L01_0022b610");
@@ -1083,7 +1083,7 @@ void update_hero_motion_for_current_state(void) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
         if (hero.motion.unk164 > frame_time * 1.5f) {
-            FUN_L00_00209638_cf(4, 0xC);
+            emit_hero_periodic_surface_particles(4, 0xC);
         }
         if (hero.state.current == 0x36 && hero.motion.unk164 > frame_time) {
             fast_sin_cf(0, 1);
@@ -1573,7 +1573,7 @@ void update_hero_motion_for_current_state(void) {
                 fast_sin_cf(0, 2);
             }
             if (hero.motion.unk164 > frame_time * 0.5f) {
-                FUN_L00_00209638_cf(2, 4);
+                emit_hero_periodic_surface_particles(2, 4);
             }
             FUN_L00_00209ca8_cf(5, 2);
         }
