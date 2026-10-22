@@ -2247,7 +2247,9 @@ extern float taxi_fabs(float) __asm__("FUN_001f99c0");
 extern int taxi_frames(int) __asm__("FUN_001f96f8");
 extern int taxi_inside(void *, int) __asm__("FUN_00214720");
 extern int taxi_sound(int, int, void *) __asm__("FUN_0022da68");
-void FUN_L14_002f1040(struct Moby *moby);
+void initialize_taxi_stop_from_position(struct Moby *moby) __asm__("FUN_L14_002f1040");
+
+void initialize_taxi_stop_from_position(struct Moby *moby) __asm__("FUN_L14_002f1040");
 void FUN_L14_002f1140(struct Moby *moby);
 struct Moby *find_group_moby_by_tag(struct Moby *moby, int tag) __asm__("FUN_L14_002f12f0");
 
@@ -2283,7 +2285,7 @@ void taxi_update(struct Moby *moby) {
     case TAXI_STATE_INITIALIZE:
         taxi_vars->hB0 = -1;
         taxi_vars->sound = -1;
-        FUN_L14_002f1040(moby);
+        initialize_taxi_stop_from_position(moby);
         break;
     case TAXI_STATE_WAIT_AT_STOP: {
         struct Hero *g = &hero;
@@ -2435,7 +2437,7 @@ void taxi_update(struct Moby *moby) {
                 if (*(int *)D_0013CAE4 & button) {
                     qcopy(taxi_vars->save_pos, taxi_vars->pos);
                     qcopy(taxi_vars->save_rot, taxi_vars->rot);
-                    FUN_L14_002f1040(moby);
+                    initialize_taxi_stop_from_position(moby);
                     taxi_vars->picked = taxi_vars->target;
                     FUN_L14_002f1140(moby);
                     moby->state = 7;
@@ -2510,7 +2512,7 @@ struct L14PickVars {
     short picked;
 };
 
-void FUN_L14_002f1040(struct Moby *moby) {
+void initialize_taxi_stop_from_position(struct Moby *moby) {
     struct L14PickVars *taxi_vars = (struct L14PickVars *)moby->pvars;
     int i;
     taxi_vars->picked = -1;
