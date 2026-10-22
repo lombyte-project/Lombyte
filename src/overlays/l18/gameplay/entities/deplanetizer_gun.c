@@ -988,7 +988,9 @@ extern int scale_game_frames(int);
 extern float D_L18_00162600 __attribute__((sda));
 extern void FUN_L00_002599e8(void *, float, float, float, int, int, int, int, int);
 extern void FUN_L18_002fc100(struct Moby *);
-void FUN_L18_002fc860(struct Moby *m);
+void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
+
+void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
@@ -1148,7 +1150,7 @@ void gadgebot_update(unsigned char *moby) {
         g = g - *(float *)(moby_vars + 0x1F4);
         scale_vector_xyz(moby_transform_ptr, moby_transform_ptr, g);
         scale_vector_xyz(moby + 0xD0, moby + 0xD0, g);
-        enqueue_callback_list_1(FUN_L18_002fc860, moby);
+        enqueue_callback_list_1(draw_gadgebot_launch_glow_quad, moby);
     }
 }
 #include "rnc/gameplay/hero.h"
@@ -1452,7 +1454,7 @@ extern float D_L18_00162648 __attribute__((sda));
 extern float D_L18_0016264C __attribute__((sda));
 extern float D_L18_00162650 __attribute__((sda));
 extern float D_L18_001EFCD0[4][2];
-void FUN_L18_002fc860(struct Moby *m) {
+void draw_gadgebot_launch_glow_quad(struct Moby *m) {
     char *d = (char *)m->pvars;
     Pk_c860 pk;
     float quad_transform[4][4];
