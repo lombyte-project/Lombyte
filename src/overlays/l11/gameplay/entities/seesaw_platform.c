@@ -1842,7 +1842,7 @@ void FUN_L11_00311710(char *radar_reference_rotation, char *from, char *moby, in
 
 extern float FUN_L11_00311a88_u(void *, void *) __asm__("FUN_L11_00311a88");
 extern int D_L11_0015FFD8; /* no foreign declaration */
-extern int FUN_L11_00318050(char *moby, void **out);
+extern int collect_oil_tanker_chain_mobys(char *moby, void **out) __asm__("FUN_L11_00318050");
 extern short *D_L11_001AC240[];
 void FUN_L11_00311be8(void *moby, void *a1, void *a2);
 
@@ -1862,7 +1862,7 @@ void *FUN_L11_00311948(void *moby, char *ship_vars, float *reference_position, f
     do {
         char *listed_moby = (char *)(((*(unsigned short *)moby_list_entry & 0x7FFF) << 8) + D_L11_0015FFD8);
         if (listed_moby[0x20] >= 0) {
-            int moby_count = FUN_L11_00318050(listed_moby, list);
+            int moby_count = collect_oil_tanker_chain_mobys(listed_moby, list);
             int i;
             for (i = 1; i < moby_count; i++) {
                 float reticle_distance_sq = FUN_L11_00311a88_u(moby, list[i]);
@@ -2073,7 +2073,7 @@ void FUN_L11_00311d50(struct Moby *moby) {
             struct Moby *listed_moby = (struct Moby *)(((*list & 0x7FFF) << 8) + D_L11_0015FFD8);
 
             if (listed_moby->state < 0x80) {
-                s32 count = FUN_L11_00318050((char *)listed_moby, found);
+                s32 count = collect_oil_tanker_chain_mobys((char *)listed_moby, found);
 
                 for (i = 0; i < count; i++) {
                     FUN_L11_00311710((char *)D_L11_001677D0, (char *)(D_L11_001677D0 - 4), found[i], 0,

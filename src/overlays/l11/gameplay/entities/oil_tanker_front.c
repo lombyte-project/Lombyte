@@ -831,7 +831,9 @@ void FUN_L11_00317c98(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003194C0), where it is exact; names translated to the US level program. */
 
-int FUN_L11_00318050(struct Moby *moby, void **out) {
+int collect_oil_tanker_chain_mobys(struct Moby *moby, void **out) __asm__("FUN_L11_00318050");
+
+int collect_oil_tanker_chain_mobys(struct Moby *moby, void **out) {
     char *data = (char *)moby->pvars;
     int i;
     int count = *(int *)(data + 0x64) + 1;
