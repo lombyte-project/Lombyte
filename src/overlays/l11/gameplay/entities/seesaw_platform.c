@@ -984,7 +984,9 @@ extern void FUN_0022da68_t(int, int, unsigned char *) __asm__("FUN_0022da68");
 extern float FUN_001fa580_t(float, float) __asm__("FUN_001fa580");
 extern float approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 
-void FUN_L11_0030f2a8(struct Moby *turning_moby) {
+void update_link_triggered_moby_turn(struct Moby *turning_moby) __asm__("FUN_L11_0030f2a8");
+
+void update_link_triggered_moby_turn(struct Moby *turning_moby) {
     enum {
         LINKED_TURN_STATE_INITIALIZE = 0,
         LINKED_TURN_STATE_WAIT_FOR_LINK = 1,
