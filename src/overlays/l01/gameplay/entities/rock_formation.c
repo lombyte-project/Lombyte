@@ -357,7 +357,9 @@ extern s32 spawn_glow_particle(void *, void *, void *, f32, s32, s32, s32, s32, 
 extern s32 FUN_0022da68(s32, s32, void *);
 extern void mine_camera_blast(void *, void *, s32, s32) __asm__("FUN_L00_002d3838");
 
-void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 light)
+void spawn_explosion_effects(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 light) __asm__("FUN_L01_002fa1b0");
+
+void spawn_explosion_effects(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 light)
 {
     BurstVec burst_position;
     BurstVec particle_base_velocity;
@@ -444,7 +446,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 collision_line(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
 extern s32 probe_world_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
-void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 light);
+void spawn_explosion_effects(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 light) __asm__("FUN_L01_002fa1b0");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern u8 D_L01_00167240[];
 extern u128 D_L01_001742E0;
@@ -491,18 +493,18 @@ void update_birdbot_projectile(DropMoby *projectile) {
     probe.id = projectile->hA6;
     if (fast_dec_timer(projectile_vars->sound) != 0) {
         burst_position = projectile->pos.q;
-        FUN_L01_002fa1b0(projectile, &burst_position, 0, 0.5f, zero);
+        spawn_explosion_effects(projectile, &burst_position, 0, 0.5f, zero);
         mark_moby_for_removal(projectile);
     } else if (collision_line(&previous_position, pos, 0, projectile_vars->coll, &probe) != 0) {
         qcopy(pos, &D_L01_001742E0);
         burst_position = projectile->pos.q;
-        FUN_L01_002fa1b0(projectile, &burst_position, 0, 0.5f, zero);
+        spawn_explosion_effects(projectile, &burst_position, 0, 0.5f, zero);
         mark_moby_for_removal(projectile);
     } else {
         half = 0.5f;
         if (probe_world_sphere(half, pos, 0x10, projectile_vars->coll, &probe) != 0) {
             burst_position = projectile->pos.q;
-            FUN_L01_002fa1b0(projectile, &burst_position, 0, half, zero);
+            spawn_explosion_effects(projectile, &burst_position, 0, half, zero);
             mark_moby_for_removal(projectile);
         }
     }
