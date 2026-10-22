@@ -21,7 +21,9 @@ extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L02_0021b698(void) {
+void process_hero_ground_material_effects(void) __asm__("FUN_L02_0021b698");
+
+void process_hero_ground_material_effects(void) {
     struct Hero *hero_state = &hero;
     int keep = hero_state->unk12ED;
     int saved_ground_type = hero_state->ground_type;
