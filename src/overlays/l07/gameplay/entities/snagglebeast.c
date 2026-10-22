@@ -2544,7 +2544,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
     SwooperSight sight;
     MobyHit *hit;
     u8 *collision;
-    Vec4 dir;
+    Vec4 chase_acceleration;
     u8 contact[0x30];
     Vec4 probe;
     Vec4 push;
@@ -2632,12 +2632,12 @@ void FUN_L07_003196e0(struct Moby *moby) {
         pitch = fast_arc_tan(vector_distance(&moby->pos, &sight.pos), sight.pos.f[2] - moby->pos.z);
         moby->rot.y = spring_turn(&vars->pitch_speed, moby->rot.y, pitch,
                                        frame_time_sq * 3.1415927f, D_0015ED6C * 3.1415927f, D_0015ED6C * 6.2831855f);
-        subtract_vector_xyz(&dir, &sight.pos, &moby->pos);
+        subtract_vector_xyz(&chase_acceleration, &sight.pos, &moby->pos);
         if (moby->command != 0) {
-            dir.f[2] = 0.0f;
+            chase_acceleration.f[2] = 0.0f;
         }
-        normalize_vector_xyz(&dir, &dir, frame_time_sq * 30.0f);
-        add_vector_xyz(&vars->velocity, &vars->velocity, &dir);
+        normalize_vector_xyz(&chase_acceleration, &chase_acceleration, frame_time_sq * 30.0f);
+        add_vector_xyz(&vars->velocity, &vars->velocity, &chase_acceleration);
         clamp_vector_length(&vars->velocity, &vars->velocity, D_0015ED6C * 10.0f);
         add_vector_xyz(&moby->pos, &moby->pos, &vars->velocity);
         if (FUN_001f9b48(&moby->pos, &vars->home) > 64.0f) {
