@@ -1427,7 +1427,9 @@ extern void FUN_L00_002d9fd0(char *,char *,void *);
 extern void FUN_L00_002da360(u8 *,void *);
 extern void refresh_suck_cannon_slots(void) __asm__("FUN_L00_002da660");
 extern void FUN_L00_002defe0(int);
-extern void FUN_L00_002df048(int);
+void stop_suck_cannon_suction_effect(int callback_context) __asm__("FUN_L00_002df048");
+
+extern void stop_suck_cannon_suction_effect(int) __asm__("FUN_L00_002df048");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
@@ -1556,7 +1558,7 @@ void suckcannon_update(SuckMoby *self) {
                 if(s[1].owner==self && s[1].active) release_voice_slot(sound);
             }
             cannon->sound=-1;
-            FUN_L00_002df048((int)self);
+            stop_suck_cannon_suction_effect((int)self);
             suck_hero.firing=0;
             if(suck_hero.count>0) {
                 blend_moby_animation(self,6,0,scale_game_frames_alt(4));
@@ -3198,7 +3200,7 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 void normalize_vector_xyz(void *, void *, f32);
 
-void FUN_L00_002df048(int callback_context) {
+void stop_suck_cannon_suction_effect(int callback_context) {
     VQ segment_offset, segment_position, marker_offset;
     int i;
     float segment_length;
