@@ -3772,7 +3772,9 @@ extern char D_0013F350[];
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 /* Removes the moby at &hero.unk1614 and clears flags 0x41 on those at 0x1180/0x1184. */
-void FUN_L00_00228fa8(void) {
+void remove_hero_cached_moby_and_clear_slot_three_moby_flags(void) __asm__("FUN_L00_00228fa8");
+
+void remove_hero_cached_moby_and_clear_slot_three_moby_flags(void) {
     struct Hero *hero_state = &hero;
     void *moby_to_remove;
     void *item_moby;

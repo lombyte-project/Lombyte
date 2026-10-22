@@ -112,7 +112,7 @@ extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8");
 extern void FUN_L00_00216de8(int, int);
 extern void update_hero_animation_for_movement_speed(void) __asm__("FUN_L00_00228c18");
-extern void FUN_L00_00228fa8(void);
+extern void remove_hero_cached_moby_and_clear_slot_three_moby_flags(void) __asm__("FUN_L00_00228fa8");
 extern void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_00232628(void);
@@ -440,13 +440,13 @@ void update_hero_state_transitions(void) {
                         break;
                     }
                     if (hero.unkA98 & 2) {
-                        FUN_L00_00228fa8();
+                        remove_hero_cached_moby_and_clear_slot_three_moby_flags();
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
                 case HERO_STATE_FIDGET_ALT:
                     if (scale_game_frames(8) < hero.state_timer) {
-                        FUN_L00_00228fa8();
+                        remove_hero_cached_moby_and_clear_slot_three_moby_flags();
                         if (hero.air_frames.s != 0) {
                             hero_set_state(HERO_STATE_FALL, 1);
                             break;
@@ -2365,7 +2365,7 @@ void update_hero_state_transitions(void) {
     }
     if ((hero.state.prev == 0x40 && hero.state.current != HERO_STATE_FIDGET_ALT) ||
         (hero.state.prev == 0x41 && hero.unk1614 != 0)) {
-        FUN_L00_00228fa8();
+        remove_hero_cached_moby_and_clear_slot_three_moby_flags();
     }
     if (prevState != hero.state.step) {
         hero.unk1A0 = 0;
