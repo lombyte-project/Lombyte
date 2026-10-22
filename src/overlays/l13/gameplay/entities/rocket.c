@@ -1990,7 +1990,9 @@ int count_eligible_mobies_in_list(int moby_list_index, int excluded_moby_state) 
 
 extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
 
-void FUN_L13_0030af50(struct Moby *moby) {
+void apply_configured_moby_state_and_command(struct Moby *moby) __asm__("FUN_L13_0030af50");
+
+void apply_configured_moby_state_and_command(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     int *moby_list_index_cursor = (int *)moby_vars;
     int i;
