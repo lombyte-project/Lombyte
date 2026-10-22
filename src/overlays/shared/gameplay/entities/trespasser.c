@@ -76,7 +76,9 @@ void FUN_L00_00269b70_2c3440(float *, unsigned char, unsigned char, unsigned cha
 void FUN_L00_0025f800_2c3440(void *, void *) __asm__("FUN_L00_0025f800");
 void FUN_0020c828_2c3440(void *) __asm__("FUN_0020c828");
 extern s16 D_L00_001B0830_lui[] __asm__("D_L00_001B0830") __attribute__((section(".data")));
-void FUN_L00_002c3440(unsigned char *moby) {
+void destroy_decoy_with_particles(unsigned char *moby) __asm__("FUN_L00_002c3440");
+
+void destroy_decoy_with_particles(unsigned char *moby) {
     float v[4] __attribute__((aligned(16)));
     int i;
     int r, g;
@@ -175,7 +177,7 @@ void FUN_L00_002c40a0(S_2c40a0 *self) {
         self->f18 = ground_height;
 }
 s32 collision_hit_material() __asm__("FUN_001f0b58");
-void FUN_L00_002c3440();
+void destroy_decoy_with_particles();
 /* Calls FUN_L00_002c3440 on m for collision_hit_material results 0, 1, 3, 8, 11, 12 and 13. */
 void destroy_decoy_on_selected_materials(void *moby) __asm__("FUN_L00_002c4328");
 
@@ -191,7 +193,7 @@ void destroy_decoy_on_selected_materials(void *moby) {
     case 11:
     case 12:
     case 13:
-        FUN_L00_002c3440(moby);
+        destroy_decoy_with_particles(moby);
         break;
     }
 }
