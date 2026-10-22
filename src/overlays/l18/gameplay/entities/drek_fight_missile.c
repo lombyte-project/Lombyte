@@ -42,7 +42,9 @@ extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern float D_L18_0015F580[] __attribute__((section(".sdata")));
 extern int D_L18_0015F5C4;
 extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section(".data")));
-extern int FUN_L18_002f0120(char *moby, float *vec);
+int update_drek_fight_missile_wander_movement(char *moby, float *wander_target_position) __asm__("FUN_L18_002f0120");
+
+extern int update_drek_fight_missile_wander_movement(char *moby, float *vec) __asm__("FUN_L18_002f0120");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -98,7 +100,7 @@ void drek_fight_missile_update(struct Moby *moby) {
     }
     case DREK_MISSILE_WANDER: {
         char *wander_target_position = missile_vars + 0x110;
-        if (FUN_L18_002f0120(moby, (float *)wander_target_position)) {
+        if (update_drek_fight_missile_wander_movement(moby, (float *)wander_target_position)) {
             select_drek_fight_missile_wander_target(moby, wander_target_position);
         }
         update_drek_fight_missile_trail_and_queue_effects(moby);
@@ -218,7 +220,7 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 
 extern short D_L18_0016222C __attribute__((sda));
-int FUN_L18_002f0120(char *moby, float *wander_target_position) {
+int update_drek_fight_missile_wander_movement(char *moby, float *wander_target_position) {
     float target_displacement[4];
     float redirected_target_position[4];
     char *missile_vars = *(char **)(moby + 0x78);
