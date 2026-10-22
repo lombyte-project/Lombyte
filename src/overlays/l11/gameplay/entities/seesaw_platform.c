@@ -2443,7 +2443,9 @@ extern void FUN_L00_001ff660(void *, void *, void *);
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L11_00311d50();
-void FUN_L11_00313f60(struct Moby *moby, float *a, float *b);
+void adjust_ship_steering_for_flight_bounds(struct Moby *moby, float *horizontal_steering_input, float *vertical_steering_input) __asm__("FUN_L11_00313f60");
+
+void adjust_ship_steering_for_flight_bounds(struct Moby *moby, float *a, float *b) __asm__("FUN_L11_00313f60");
 
 void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
     W4_2838 old;
@@ -2530,7 +2532,7 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
             ka = D_L11_001620A8;
             kb = D_L11_001620B8;
         }
-        FUN_L11_00313f60(ship_moby, &horizontal_steering_input, &vertical_steering_input);
+        adjust_ship_steering_for_flight_bounds(ship_moby, &horizontal_steering_input, &vertical_steering_input);
         vendor_spring(&ship_vars->f6C, &ship_vars->f90, horizontal_steering_input, D_L11_0016209C, D_L11_001620A0, ka);
         vendor_spring(&ship_vars->f70, &ship_vars->f94, vertical_steering_input, D_L11_001620AC, D_L11_001620B0, kb);
         FUN_L00_0025bc98(&ship_vars->f30, &ship_vars->f98, 0, ship_vars->f6C * D_L11_0016207C, D_L11_001620BC,
@@ -3059,7 +3061,7 @@ extern char (*D_L17_001600EC_t)[128] __asm__("D_L11_001600EC") __attribute__((se
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L11_00313f60(struct Moby *moby, float *horizontal_steering_input, float *vertical_steering_input) {
+void adjust_ship_steering_for_flight_bounds(struct Moby *moby, float *horizontal_steering_input, float *vertical_steering_input) {
     char *ship_vars = (char *)moby->pvars;
     float predicted_position_scratch[4];
     float zz, predicted_boundary_distance_xy, boundary_radius, hi, lo, boundary_center_heading, upper_altitude_limit, k, radial_steering_blend_weight, heading_difference;
