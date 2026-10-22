@@ -344,6 +344,7 @@ void spawner_update(struct Moby *moby) {
         SPAWNER_WAIT_FOR_PROXIMITY = 1,
         SPAWNER_SPAWN_ENABLED = 2,
         SPAWNER_SPAWN_ENABLED_SHARED = 3,
+        SPAWNER_SPAWN_ENABLED_AFTER_PROXIMITY = 5,
         SPAWNER_SPAWN_ENABLED_ALIAS = 6,
         SPAWNER_SPAWN_ENABLED_SHARED_ALIAS = 7,
         SPAWNER_DESTROY = 8,
@@ -513,7 +514,7 @@ void spawner_update(struct Moby *moby) {
     case 4:
         spawn = 1;
         break;
-    case 5:
+    case SPAWNER_SPAWN_ENABLED_AFTER_PROXIMITY:
         spawn = 1;
         break;
     case SPAWNER_SPAWN_ENABLED_ALIAS:
