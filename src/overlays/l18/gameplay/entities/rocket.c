@@ -428,7 +428,9 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
-char *FUN_L18_002a75f0(struct Moby *owner, float *spawn_position, float *initial_movement_step, int homing_enabled) {
+char *create_class_29_moby(struct Moby *owner, float *spawn_position, float *initial_movement_step, int homing_enabled) __asm__("FUN_L18_002a75f0");
+
+char *create_class_29_moby(struct Moby *owner, float *spawn_position, float *initial_movement_step, int homing_enabled) {
     char *moby = func_0020D348_m(0x29);
     if (moby != 0) {
         char *data;

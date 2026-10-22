@@ -3667,7 +3667,7 @@ typedef struct {
     D1454 *data;
 } M1454;
 
-extern char *FUN_L18_002a75f0(char *owner, float *pos, float *vec, int arg3);
+extern char *create_class_29_moby(char *owner, float *pos, float *vec, int arg3) __asm__("FUN_L18_002a75f0");
 extern char *func_0020D348_m(int);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
@@ -3781,9 +3781,9 @@ void rocket_tank_update(M1454 *moby) {
             allocate_voice_for_target_entry(0, 0, (int)moby);
             FUN_L03_00250ae8(moby, projectile_spawn_position, 0);
             if (vector_distance((char *)moby + 0x10, &hero.motion.pos) > 10.0f) {
-                FUN_L18_002a75f0((char *)moby, projectile_spawn_position, firing_vector, 0);
+                create_class_29_moby((char *)moby, projectile_spawn_position, firing_vector, 0);
             } else {
-                FUN_L18_002a75f0((char *)moby, projectile_spawn_position, firing_vector, 1);
+                create_class_29_moby((char *)moby, projectile_spawn_position, firing_vector, 1);
             }
         }
         if (*(int *)((char *)tank_data + 0xB4) == 2) {
