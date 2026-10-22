@@ -168,7 +168,9 @@ void FUN_L16_002ceca8(int moby_group_index) {
 extern char D_0013E533[];
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L16_002cf5c8_u() __asm__("FUN_L16_002cf5c8");
-int FUN_L16_002cf738(void *mv);
+int is_linked_pair_effect_enabled(void *mv) __asm__("FUN_L16_002cf738");
+
+int is_linked_pair_effect_enabled(void *mv) __asm__("FUN_L16_002cf738");
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void FUN_L16_002cf7a8_u(void) __asm__("FUN_L16_002cf7a8");
@@ -192,7 +194,7 @@ void FUN_L16_002cf4a8(struct Moby *moby) {
             }
             break;
         case MOBY_STATE_UPDATE_DRAW_AND_SOUND:
-            if (FUN_L16_002cf738(moby) != 0) {
+            if (is_linked_pair_effect_enabled(moby) != 0) {
                 data[2] = state;
                 enqueue_callback_list_1_alt(FUN_L16_002cf7a8_u, moby);
                 if (voice_is_playing(moby, data[3]) == 0) {
@@ -1927,7 +1929,7 @@ int FUN_L16_002cf678(struct Moby *moby) {
 extern char *D_L16_0015FFD8;
 extern int *D_L16_001ABCC0[];
 
-int FUN_L16_002cf738(void *mv) {
+int is_linked_pair_effect_enabled(void *mv) {
     unsigned char *moby = mv;
     unsigned short *group_entry = (unsigned short *)D_L16_001ABCC0[moby[0x21]];
     if (group_entry == 0)
