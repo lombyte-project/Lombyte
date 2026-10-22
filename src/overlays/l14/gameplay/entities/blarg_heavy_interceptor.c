@@ -370,7 +370,9 @@ extern void FUN_L14_002aead8_c618(struct Moby *) __asm__("FUN_L14_002aead8");
 extern int FUN_L14_002aeba0(struct Moby *, int);
 extern void FUN_L14_002aed50_c618(struct Moby *) __asm__("FUN_L14_002aed50");
 extern void FUN_L14_002aee28(struct Moby *);
-extern int FUN_L14_002af048(struct Moby *);
+int count_moby_group_members(struct Moby *moby) __asm__("FUN_L14_002af048");
+
+extern int count_moby_group_members(struct Moby *) __asm__("FUN_L14_002af048");
 extern int FUN_L14_002b4500(int);
 extern int FUN_L14_002b4670(int);
 extern void blend_moby_animation_c618(struct Moby *, int, int, int) __asm__("FUN_00212f90");
@@ -495,7 +497,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
             moby->state = 8;
             moby_vars[0x58] = truncate_float_to_s32(17.0f);
             moby_vars[0x5A] = truncate_float_to_s32(6.0f);
-            *(s16 *)(moby_vars + 0x20A) = FUN_L14_002af048(moby);
+            *(s16 *)(moby_vars + 0x20A) = count_moby_group_members(moby);
             return;
         }
         if (*(int *)(moby_vars + 0x74) == -1 || *D_L14_001B0BB0[*(int *)(moby_vars + 0x74)] == 0 ||
@@ -1638,7 +1640,7 @@ char *FUN_L14_002aef28(int index, int *ids) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B0288), where it is exact; names translated to the US level program. */
 
 
-int FUN_L14_002af048(struct Moby *moby) {
+int count_moby_group_members(struct Moby *moby) {
     short *table = D_L14_001AC2C0_2B0168[moby->group];
     int count = 0;
     if (table == 0)
