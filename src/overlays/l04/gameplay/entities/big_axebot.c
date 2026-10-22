@@ -2389,8 +2389,8 @@ void blarg_trooper_update(struct Moby *moby) {
     float alive;
     float best;
     float target_selection_distance_limit;
-    int e0;
-    int e4;
+    int path_index_when_selector_nonzero;
+    int path_index_when_selector_zero;
     int bi;
     int i;
     struct Path5BD0 *path;
@@ -2429,8 +2429,8 @@ void blarg_trooper_update(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    e0 = *(int *)(data + 0xE0);
-    if (e0 == -1 || (e4 = *(int *)(data + 0xE4), e4 == -1)) {
+    path_index_when_selector_nonzero = *(int *)(data + 0xE0);
+    if (path_index_when_selector_nonzero == -1 || (path_index_when_selector_zero = *(int *)(data + 0xE4), path_index_when_selector_zero == -1)) {
         DebugPrint(D_L04_001DBC80, truncate_float_to_s32((float)(((char *)moby - D_L04_0015FFD8) >> 8)));
         FUN_L04_002c4808_c(moby);
         return;
@@ -2438,7 +2438,7 @@ void blarg_trooper_update(struct Moby *moby) {
     bi = -1;
     best = 0.0f;
     qcopy(st.v50, &st.tgt[8]);
-    path = D_L04_001B0630[*(short *)(data + 0xE8) != 0 ? e0 : e4];
+    path = D_L04_001B0630[*(short *)(data + 0xE8) != 0 ? path_index_when_selector_nonzero : path_index_when_selector_zero];
     for (i = 0; i < path->count; i++) {
         float d = vector_distance(st.v50, path->pts[i]);
         if (d > best) {
