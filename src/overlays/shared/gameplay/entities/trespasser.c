@@ -1925,7 +1925,7 @@ extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa6
 extern s32 tick_countdown(s32 *) __asm__("FUN_001f9740");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern void FUN_001f4600(void *, void *);
-extern void FUN_L00_002c31c0(void);
+extern void draw_moby_oscillating_textured_quads(void) __asm__("FUN_L00_002c31c0");
 
 /*
  * Predicts where a thrown moby lands: steps the velocity (with gravity) from
@@ -2025,7 +2025,7 @@ s32 FUN_L00_002c3af8(ThrowVars *throw_vars, struct Moby *thrown_moby, s32 mode)
             goto ret0;
     }
     if (mode != 2 || coll_hit.moby == 0 || !FUN_L00_002603d0(coll_hit.moby))
-        FUN_001f4600(FUN_L00_002c31c0, thrown_moby);
+        FUN_001f4600(draw_moby_oscillating_textured_quads, thrown_moby);
     throw_vars->normal.q = coll_hit_normal.q;
     subtract_vector_xyz(&position_scratch, &throw_vars->landing, &D_L00_00166DC0);
     scale_vector_xyz(&position_scratch, &position_scratch, 0.94999998807907104492f);

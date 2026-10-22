@@ -40,7 +40,9 @@ extern void rmat_2acbf0(void *, void *) __asm__("FUN_001fa050");
 extern void mmul_2acbf0(void *, void *, void *) __asm__("FUN_001fa378");
 extern s64 tex_2acbf0(s32) __asm__("FUN_001f44b8");
 extern void draw_2acbf0(void *, void *, s32) __asm__("FUN_001f7d30");
-void FUN_L00_002c31c0(M_2acbf0_002acbf0 *moby) {
+void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) __asm__("FUN_L00_002c31c0");
+
+void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) {
     Q_2acbf0_002acbf0 quad;
     V_2acbf0_002acbf0 quad_transform[4];
     V_2acbf0_002acbf0 mz[4];
