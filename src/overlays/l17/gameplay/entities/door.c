@@ -2440,7 +2440,7 @@ extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") __attribute__((sec
 void robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
 void robot_dog_update(unsigned char *robot_dog_moby) {
     Vars1382 *robot_dog_vars;
-    unsigned char *tgt;
+    unsigned char *facing_target_moby;
     int clip_volume_suppressed;
     int clip_volume_id_or_animation_value;
     int secondary_clip_volume_id;
@@ -2475,7 +2475,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
     *(unsigned short *)(robot_dog_moby + 0x34) &= 0xFFFE;
     FUN_L17_002f00a0(robot_dog_moby);
     FUN_L17_002f0210(robot_dog_moby);
-    tgt = robot_dog_vars->target;
+    facing_target_moby = robot_dog_vars->target;
     FUN_L00_00263b38(robot_dog_vars->a230, 2.1f);
     if (robot_dog_moby[0x31] != 0 && FUN_001f9b48(robot_dog_moby + 0x10, D_L17_001676C0) < 29.0f) {
         FUN_L00_0025a120(robot_dog_moby);
@@ -2546,13 +2546,13 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
         }
         break;
     case ROBOT_DOG_STATE_TRACK_TARGET_FACING:
-        if (tgt != 0) {
+        if (facing_target_moby != 0) {
             float turn;
             float ang;
             float *yaw = (float *)(robot_dog_moby + 0x48);
             int mode;
-            ang = fast_arc_tan(*(float *)(tgt + 0x10) - *(float *)(robot_dog_moby + 0x10),
-                               *(float *)(tgt + 0x14) - *(float *)(robot_dog_moby + 0x14));
+            ang = fast_arc_tan(*(float *)(facing_target_moby + 0x10) - *(float *)(robot_dog_moby + 0x10),
+                               *(float *)(facing_target_moby + 0x14) - *(float *)(robot_dog_moby + 0x14));
             turn = frame_time_sq * 4.712389f;
             approach_angle(yaw, &robot_dog_vars->yawvel, ang, turn, turn, frame_time * 3.4906585f);
             if (absolute_float(robot_dog_vars->yawvel) > frame_time * 0.08726646f) {
@@ -2716,15 +2716,15 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
         }
         break;
     case ROBOT_DOG_STATE_RETURN_HOME: {
-        float dist;
+        float distance_to_home;
         float far;
         float k1;
         float k2;
         float frame_scaled_speed;
         FUN_L17_002efd48_c((char *)robot_dog_moby, (float *)&robot_dog_vars->home, frame_time * 5.0f);
         *(float *)(robot_dog_moby + 0x58) = 1.35f;
-        dist = vector_distance(robot_dog_moby + 0x10, &robot_dog_vars->home);
-        if ((dist < 1.4f && (robot_dog_moby[0x70] & 2)) || dist < 0.3f) {
+        distance_to_home = vector_distance(robot_dog_moby + 0x10, &robot_dog_vars->home);
+        if ((distance_to_home < 1.4f && (robot_dog_moby[0x70] & 2)) || distance_to_home < 0.3f) {
             robot_dog_moby[0x20] = 5;
             if (robot_dog_moby[0x53] != 3) {
                 blend_moby_animation_c(robot_dog_moby, 3, 0, scale_game_frames(10));
