@@ -1557,7 +1557,9 @@ void FUN_001f9bf8_0026ccb0(void *, void *, float) __asm__("FUN_001f9bf8");
 int FUN_001f96f8_0026ccb0(int) __asm__("FUN_001f96f8");
 int FUN_L00_00257b90_0026ccb0(int, int) __asm__("FUN_L00_00257b90");
 void FUN_L00_0026cbb0_0026ccb0(void *, void *, s32, s32, f32, int, int) __asm__("FUN_L00_0026cbb0");
-void FUN_L00_0026ccb0(O_0026ccb0_0026ccb0 *particle) {
+void update_shrinking_effect_particle_with_secondary_spawns(O_0026ccb0_0026ccb0 *particle) __asm__("FUN_L00_0026ccb0");
+
+void update_shrinking_effect_particle_with_secondary_spawns(O_0026ccb0_0026ccb0 *particle) {
     S_0026ccb0_0026ccb0 *s = &particle->s;
     u128 *particle_position;
     V_0026ccb0_0026ccb0 updated_position_copy, spawn_velocity_storage, random_direction;
