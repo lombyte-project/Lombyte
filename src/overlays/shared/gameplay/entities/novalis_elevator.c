@@ -495,7 +495,9 @@ extern void FUN_0020c828(void *);
 
 extern s32 D_L01_00161494 __attribute__((sda));
 extern f32 D_L01_0016149C __attribute__((sda));
-void FUN_L01_002c7530(char *moby) {
+void update_moby_motion_collision_and_lifetime(char *moby) __asm__("FUN_L01_002c7530");
+
+void update_moby_motion_collision_and_lifetime(char *moby) {
     enum {
         UPDATE_TRANSFORM_ONLY = 0,
         COLLISION_CHECK_AND_COUNTDOWN = 1,
