@@ -26,7 +26,9 @@ extern u16 D_00141850[];
 extern u16 D_00141968[];
 extern u8 *D_L00_0015FFD8 __attribute__((sda));
 
-void FUN_L00_002e0988(HelpMoby *moby) {
+void update_level_help_controller(HelpMoby *moby) __asm__("FUN_L00_002e0988");
+
+void update_level_help_controller(HelpMoby *moby) {
     s32 *vars;
     s32 *target_index_ptr;
     s32 i;
