@@ -329,7 +329,9 @@ typedef struct {
     int id[2];
 } AnimState;
 
-void FUN_L00_00232320(void) {
+void sync_hero_mapped_moby_animation_frames(void) __asm__("FUN_L00_00232320");
+
+void sync_hero_mapped_moby_animation_frames(void) {
     struct Hero *base = &hero;
     AnimState *animation_sync_target = ((AnimState *)base->unk2278);
 
