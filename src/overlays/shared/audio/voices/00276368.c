@@ -131,7 +131,7 @@ extern void music_unpause(void) __asm__("FUN_00216088");
 extern int sound_update(void) __asm__("FUN_0022ca50");
 extern void allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
-extern void FUN_L00_00235668(s32);
+extern void select_moby_context(s32) __asm__("FUN_L00_00235668");
 extern void FUN_L00_00276368(void);
 extern void FUN_L00_00276908(void);
 extern void FUN_L00_002831c0(void);
@@ -322,7 +322,7 @@ void FUN_L00_00276368(void) {
             slot--;
         }
     }
-    FUN_L00_00235668(1);
+    select_moby_context(1);
     D_L00_001B9CF0.saved_seq_count = ((struct MobyClass *)D_L00_00197300[0])->seq_count;
     ((struct MobyClass *)D_L00_00197300[0])->seq_count += 0x1C;
     for (item_index = 0; item_index < 4; item_index++) {
@@ -483,7 +483,7 @@ void FUN_L00_00276bd0(void) {
         qcopy(&D_L00_00166DC0[0], &D_L00_001B9CF0.v40);
         qcopy(&D_L00_00166DC0[1], &D_L00_001B9CF0.v50);
         D_L00_0016CAF0_lui = D_L00_001B9CF0.unkE8;
-        FUN_L00_00235668(0);
+        select_moby_context(0);
         if (D_L00_001B9CF0.unk140 != 0) {
             D_L00_0016000C = -1;
             select_world_object_resource_tables(D_L00_001B9CF0.unk140, D_L00_001B9CF0.unk144);

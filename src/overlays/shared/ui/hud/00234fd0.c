@@ -121,7 +121,9 @@ extern volatile int D_L00_0015FFE0;
 extern volatile int D_L00_0015FFE8;
 extern volatile int D_L00_0015F728 __attribute__((sda));
 
-void FUN_L00_00235668(int state) {
+void select_moby_context(int state) __asm__("FUN_L00_00235668");
+
+void select_moby_context(int state) {
     int oldState = D_L00_0015F728;
     if (state != oldState) {
         int old70, old74, old78, old7C, oldDC, oldE0, oldE8;
