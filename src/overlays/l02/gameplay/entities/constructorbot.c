@@ -157,7 +157,9 @@ extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40
 extern char D_00141968[];
 extern s32 D_0014EE90[];
 
-void FUN_L02_002ee890(struct Moby *moby) {
+void update_tutorial_hint_triggers(struct Moby *moby) __asm__("FUN_L02_002ee890");
+
+void update_tutorial_hint_triggers(struct Moby *moby) {
     enum {
         AIRBORNE_DIALOGUE_UNARMED = 0,
         AIRBORNE_DIALOGUE_ARMED = 1
