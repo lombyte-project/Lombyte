@@ -424,7 +424,9 @@ typedef struct {
     s32 x138;
 } O00262528;
 E00262528 *create_moby(s32) __asm__("FUN_0020c4f8");
-void FUN_L00_00262528(O00262528 *history_state, s32 initial_decay_value, s32 sample_delay) {
+void create_moby_transform_history_entry(O00262528 *history_state, s32 initial_decay_value, s32 sample_delay) __asm__("FUN_L00_00262528");
+
+void create_moby_transform_history_entry(O00262528 *history_state, s32 initial_decay_value, s32 sample_delay) {
     E00262528 *spawned_moby;
     if (history_state->x138 == 4)
         return;

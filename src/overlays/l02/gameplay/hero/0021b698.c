@@ -768,7 +768,7 @@ extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN
 extern void FUN_L00_0025e3b8_cf(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern void FUN_L00_0025f730(void *, float);
 extern void initialize_moby_transform_history(int, void *) __asm__("FUN_L00_00262500");
-extern void FUN_L00_00262528(void *, int, int);
+extern void create_moby_transform_history_entry(void *, int, int) __asm__("FUN_L00_00262528");
 extern void FUN_L00_00262608(void *, int);
 extern void FUN_L01_0022d090(void);
 extern void clip_hero_horizontal_velocity(int) __asm__("FUN_L01_00232978");
@@ -1584,9 +1584,9 @@ void FUN_L02_00225c20(void) {
         }
         if (hero.state_timer == scale_game_frames(8)) {
             initialize_moby_transform_history((int)((Moby *)hero.moby), &hero.trail);
-            FUN_L00_00262528(&hero.trail, 0x30, 2);
-            FUN_L00_00262528(&hero.trail, 0x17, 4);
-            FUN_L00_00262528(&hero.trail, 0xC, 6);
+            create_moby_transform_history_entry(&hero.trail, 0x30, 2);
+            create_moby_transform_history_entry(&hero.trail, 0x17, 4);
+            create_moby_transform_history_entry(&hero.trail, 0xC, 6);
         }
         n = 5;
         if (!(hero.state_timer > t1)) {

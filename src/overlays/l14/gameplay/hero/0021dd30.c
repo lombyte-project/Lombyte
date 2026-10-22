@@ -542,7 +542,7 @@ extern void FUN_L00_00211f38(void);
 extern f32 D_L14_0017C4C4[] __asm__("D_L14_0017C4B8+12");
 extern void FUN_L02_00220b80(void);
 extern void initialize_moby_transform_history(void *, void *) __asm__("FUN_L00_00262500");
-extern void FUN_L00_00262528(void *, s32, s32);
+extern void create_moby_transform_history_entry(void *, s32, s32) __asm__("FUN_L00_00262528");
 extern void FUN_L00_00262608(void *, s32);
 extern void FUN_L00_00217368(void *, s32);
 extern void FUN_L00_00217658(void);
@@ -1299,9 +1299,9 @@ void FUN_L14_00228cd0(void) {
         }
         if (hero.state_timer == scale_game_frames(8)) {
             initialize_moby_transform_history(MV(hero.moby), &hero.trail.pos[0]);
-            FUN_L00_00262528(&hero.trail.pos[0], 0x30, 2);
-            FUN_L00_00262528(&hero.trail.pos[0], 0x17, 4);
-            FUN_L00_00262528(&hero.trail.pos[0], 0xC, 6);
+            create_moby_transform_history_entry(&hero.trail.pos[0], 0x30, 2);
+            create_moby_transform_history_entry(&hero.trail.pos[0], 0x17, 4);
+            create_moby_transform_history_entry(&hero.trail.pos[0], 0xC, 6);
         }
         FUN_L00_00262608(&hero.trail.pos[0], t2 < hero.state_timer ? 5 : 0);
         if (hero.unk12E2 != 0) {

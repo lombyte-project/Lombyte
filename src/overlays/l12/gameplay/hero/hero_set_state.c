@@ -70,7 +70,7 @@ extern void FUN_L00_002325e0(int bank, int seq);
 extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_00233b20");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void initialize_moby_transform_history(int a, char *b) __asm__("FUN_L00_00262500");
-extern void FUN_L00_00262528(char *o, int a, int b);
+extern void create_moby_transform_history_entry(char *o, int a, int b) __asm__("FUN_L00_00262528");
 extern void FUN_L00_00262840(char *o);
 extern void pool_splash(int, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
 extern void FUN_L01_002405a0(void);
@@ -1117,9 +1117,9 @@ int hero_set_state(int a, int b) {
                 u->unk488 = 0.4f;
                 u->unk48C = 0.9f;
                 initialize_moby_transform_history(((int)u->moby), x);
-                FUN_L00_00262528(x, 0x28, 2);
-                FUN_L00_00262528(x, 0x14, 4);
-                FUN_L00_00262528(x, 0xA, 6);
+                create_moby_transform_history_entry(x, 0x28, 2);
+                create_moby_transform_history_entry(x, 0x14, 4);
+                create_moby_transform_history_entry(x, 0xA, 6);
                 u->unk4AE = 1;
                 u->unk3F4 = frame_time * 11.5f;
                 if (1.4f < u->ground_distance)
@@ -1173,8 +1173,8 @@ int hero_set_state(int a, int b) {
                 u->unk49A = scale_game_frames(0x78);
                 u->unk424 = frame_time * 1.9f;
                 initialize_moby_transform_history(((int)u->moby), x);
-                FUN_L00_00262528(x, 0x28, 3);
-                FUN_L00_00262528(x, 0x14, 5);
+                create_moby_transform_history_entry(x, 0x28, 3);
+                create_moby_transform_history_entry(x, 0x14, 5);
                 u->unk41C = 1;
                 u->unk3D0 = scale_game_frames(9);
                 u->unk3D4 = scale_game_frames(0x23) + u->unk3D0;
