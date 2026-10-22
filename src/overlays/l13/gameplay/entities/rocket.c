@@ -1961,7 +1961,9 @@ extern char *FUN_L00_002db890(char *);
 extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern short *D_L13_001ABB40[];
 
-int FUN_L13_0030ae68(int moby_list_index, int excluded_moby_state) {
+int count_eligible_mobies_in_list(int moby_list_index, int excluded_moby_state) __asm__("FUN_L13_0030ae68");
+
+int count_eligible_mobies_in_list(int moby_list_index, int excluded_moby_state) {
     short *moby_id_list = D_L13_001ABB40[moby_list_index];
     short *moby_id_cursor;
     int count = 0;
@@ -1995,7 +1997,7 @@ void FUN_L13_0030af50(struct Moby *moby) {
     char *base;
     for (i = 0; i < 8; i++) {
         if (*moby_list_index_cursor != -1) {
-            if (FUN_L13_0030ae68(*moby_list_index_cursor, -1) != 0)
+            if (count_eligible_mobies_in_list(*moby_list_index_cursor, -1) != 0)
                 return;
             moby_list_index_cursor++;
         }
