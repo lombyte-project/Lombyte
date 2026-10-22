@@ -2882,7 +2882,7 @@ void emit_moby_directional_particles(struct Moby *moby) {
 /* Health upgrade vendor: sells two upgrades (4000 bolts: 5 hp, 30000 bolts: 8 hp) once each,
    then saves the game and shows the purchase message. */
 extern void tick_countdown_32_vendor(void *) __asm__("FUN_001f9740");
-extern void FUN_L00_00266858_vendor(struct Moby *, int) __asm__("FUN_L00_00266858");
+extern void set_moby_dialogue_record_value(struct Moby *, int) __asm__("FUN_L00_00266858");
 extern int try_set_help_message_vendor(int, int) __asm__("FUN_00215130");
 extern void FUN_L00_00298840_vendor(int) __asm__("FUN_L00_00298840");
 extern int memcard_save_data_vendor(int, int) __asm__("FUN_0020b178");
@@ -2910,7 +2910,7 @@ void nanotech_upgrade_vendor_update(struct Moby *moby) {
         if (fast_difference_between_rotations(moby->rot.z, angle) < 1.5707964f &&
             vector_distance(&moby->pos, hero.motion.pos.f) < 4.0f &&
             timer[1] == 0 && D_L10_0015F5C4_vendor != 2) {
-            FUN_L00_00266858_vendor(moby, 1);
+            set_moby_dialogue_record_value(moby, 1);
             if (alternate_item_available[4] == 0) {
                 if (current_bolt_count >= 4001) {
                     int accepted = try_set_help_message_vendor(1, 0x271e) != 0;

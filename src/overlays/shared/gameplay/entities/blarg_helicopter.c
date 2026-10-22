@@ -1867,7 +1867,7 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_0020c828(void *);
 extern void FUN_L00_0025a120(void *);
-extern void FUN_L00_00266858(void *, int);
+extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void FUN_L01_002fb4b8(void *);
 
@@ -1913,7 +1913,7 @@ void qwark_rilgar_update(L03WatchMoby *moby) {
         break;
     case QWARK_RILGAR_WAIT_FOR_PLAYER_IN_REGION:
         if (watch_data->region_a != -1 && is_point_inside_clip_volume(&hero.motion.pos, watch_data->region_a)) {
-            FUN_L00_00266858(moby, 1);
+            set_moby_dialogue_record_value(moby, 1);
             moby->state = 2;
         }
         break;

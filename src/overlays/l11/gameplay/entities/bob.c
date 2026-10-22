@@ -530,7 +530,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void build_symmetric_adjacency_masks(void *, int, int) __asm__("FUN_L05_0028be78");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void FUN_L00_00266858(void *, int);
+extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern int is_moby_in_state_five(struct Moby *arg) __asm__("FUN_L11_0030a830");
 extern void FUN_L11_0030a840(unsigned char *arg);
 extern unsigned char D_0013D4EE __attribute__((section(".data")));
@@ -732,7 +732,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         if (update_npc_dialogue(moby, moby_vars->talk)) {
             jet_clear_persistent(moby_vars->unk10C);
             D_0013D3DC = 1;
-            FUN_L00_00266858(moby, 2);
+            set_moby_dialogue_record_value(moby, 2);
             qcopy_nc(&moby->pos, &path_points_14b0[moby_vars->points[moby_vars->leg]].pos);
             qcopy_nc(&moby->rot, &path_points_14b0[moby_vars->points[moby_vars->leg]].rot);
             euler_rotation_basis(&moby->rot_row0, &moby->rot);

@@ -2937,7 +2937,7 @@ extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void FUN_L00_00299460(s32);
 extern void FUN_L00_00262d38(s32);
-extern void FUN_L00_00266858(struct Moby *, s32);
+extern void set_moby_dialogue_record_value(struct Moby *, s32) __asm__("FUN_L00_00266858");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 extern void FUN_0020c828(struct Moby *);
 
@@ -3062,7 +3062,7 @@ void infobot_update(struct Moby *moby)
         moby->rot.x = spring_turn_2d5de8(moby->rot.x, 0.0f, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &infobot->spin[0]);
         if (FUN_001f9b48(&D_0013F350.target, &moby->pos) < 8.0f) {
             moby->state = 4;
-            FUN_L00_00266858(moby, 1);
+            set_moby_dialogue_record_value(moby, 1);
         }
         break;
     case INFOBOT_FOLLOW_SLOT_PATH:

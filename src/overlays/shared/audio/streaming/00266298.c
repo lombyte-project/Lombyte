@@ -197,7 +197,9 @@ typedef struct {
 extern E00266858 D_0013D5B0[];
 s32 FUN_L00_002667d0_u(s32, s32) __asm__("FUN_L00_002667d0");
 /* Stores b in the entry get_dialogue_entry finds, if it finds one. */
-void FUN_L00_00266858(s32 moby_address, s32 moby_record_value) {
+void set_moby_dialogue_record_value(s32 moby_address, s32 moby_record_value) __asm__("FUN_L00_00266858");
+
+void set_moby_dialogue_record_value(s32 moby_address, s32 moby_record_value) {
     s32 i = FUN_L00_002667d0_u(moby_address, moby_record_value);
     if (i != -1)
         D_0013D5B0[i].d = moby_record_value;

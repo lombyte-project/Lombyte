@@ -454,7 +454,7 @@ extern int is_hero_on_moby(char *) __asm__("FUN_L01_00277fb8");
 extern int is_moby_class_23e_in_state_14(char *) __asm__("FUN_L03_002c6c60");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void fade_to_black(int) __asm__("FUN_001f4a58");
-extern void FUN_L00_00266858(void *, int);
+extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void gunship_follow_path(char *) __asm__("FUN_L01_002f5168");
 extern void set_moby_state_14(char *) __asm__("FUN_L03_002c6c90");
@@ -615,7 +615,7 @@ void metropolis_train_locomotive_update(char *moby) {
             moby[0xBC] = 4;
             D_L03_0015FDFC = 1;
             jet_game_state(4, 7);
-            FUN_L00_00266858(moby, 1);
+            set_moby_dialogue_record_value(moby, 1);
             ((char *)&D_L03_0015FFD8_m292[data->i100])[0xBC] = 1;
             td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[data->i100] + 0x78);
             AIM_AT_HERO(td);
@@ -651,7 +651,7 @@ void metropolis_train_locomotive_update(char *moby) {
         }
         if (hero.ground_moby != 0 && (*(short *)((char *)hero.ground_moby + 0xA6) == 0x336 ||
                                  *(short *)((char *)hero.ground_moby + 0xA6) == 0x4BA)) {
-            FUN_L00_00266858(hero.ground_moby, 3);
+            set_moby_dialogue_record_value(hero.ground_moby, 3);
         }
         if (!is_hero_on_moby(moby)) {
             break;

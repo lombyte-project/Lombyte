@@ -319,7 +319,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_00212f90(void *, int, int, int);
 extern void FUN_L00_002223f8(int, int);
-extern void FUN_L00_00266858(void *, int);
+extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void FUN_L00_00200228(float, void *);
@@ -381,7 +381,7 @@ void process_snagglebeast_damage(char *moby, char *data, float *health) {
                 if ((u8)moby[0x53] != 2) FUN_00212f90(moby, 2, 0, random_int_between(10, 13));
                 if (D_001413D4 == 0x78) FUN_L00_002223f8(0, 1);
                 if (*(int *)(data + 0x1f0) != -1) {
-                    FUN_L00_00266858(moby, 1);
+                    set_moby_dialogue_record_value(moby, 1);
                     FUN_L00_00257470(moby, 0, -1);
                     jet_clear_persistent((u8)moby[0xb0]);
                     owner = D_L07_001600EC + (*(int *)(data + 0x1f0) << 7);
@@ -1435,7 +1435,7 @@ void snagglebeast_update(unsigned char *moby) {
                     *health = 0.0f;
                     if (moby[0x53] != 8) FUN_00212f90(moby, 8, 0, random_int_between(0xA, 0xD));
                     if (*(int *)(data + 0x1F0) != -1) {
-                        FUN_L00_00266858(moby, 1);
+                        set_moby_dialogue_record_value(moby, 1);
                         FUN_L00_00257470(moby, 0, -1);
                         jet_clear_persistent(moby[0xB0]);
                         jet_reset_camera(D_L07_001600EC + (*(int *)(data + 0x1F0) << 7) + 0x30, D_L07_001600EC + (*(int *)(data + 0x1F0) << 7) + 0x70);

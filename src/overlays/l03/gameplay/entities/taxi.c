@@ -758,7 +758,7 @@ extern f32 D_L03_00161B10 __attribute__((sda));
 extern f32 D_L03_00161B18 __attribute__((sda));
 extern L03LevelState D_L03_001BB330;
 extern s32 D_L03_0015F594 __attribute__((sda));
-extern void FUN_L00_00266858(void *, int);
+extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void draw_number(void *, struct Moby *, s32, u32, s32, s32, s32, f32) __asm__("FUN_L01_00285768");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
@@ -798,7 +798,7 @@ void update_rail_taxi(struct Moby *taxi_moby) {
     s32 i;
     s32 route_index;
 
-    FUN_L00_00266858(taxi_moby, is_taxi_in_round_trip_phase((u8 *)taxi_moby));
+    set_moby_dialogue_record_value(taxi_moby, is_taxi_in_round_trip_phase((u8 *)taxi_moby));
     if (D_L03_00161B04 != 0) {
         for (i = 0; i < D_L03_001B05B0[taxi_vars->out[0]]->count; i++) {
             draw_number(&D_L03_001B05B0[taxi_vars->out[0]]->pts[i], taxi_moby, 4, 0x800000FF, 0x7F, 2, 0xFF, 0.333f);
@@ -2106,7 +2106,7 @@ struct RailLiftVars {
 };
 
 extern s32 D_L03_0015F594 __attribute__((sda));
-extern void FUN_L00_00266858(void *, int);
+extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void FUN_L00_00233ee8(void *, float, int);
@@ -2128,7 +2128,7 @@ void update_rail_lift(struct Moby *lift_moby) {
 
     if (lift_vars->path[0] == -1 || lift_vars->path[1] == -1)
         return;
-    FUN_L00_00266858(lift_moby, is_rail_lift_started((unsigned char *)lift_moby));
+    set_moby_dialogue_record_value(lift_moby, is_rail_lift_started((unsigned char *)lift_moby));
     qcopy(&oldPos, &lift_moby->pos);
     oldRot.q = *(u128 *)&lift_moby->rot;
     fast_dec_timer(&lift_vars->timer);
