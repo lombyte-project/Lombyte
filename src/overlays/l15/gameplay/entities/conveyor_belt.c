@@ -939,7 +939,9 @@ void FUN_L15_002ebf28(int moby_list_index, int show) {
 extern int D_L15_001ABE40[];
 extern int D_L15_0015FFD8;
 
-int FUN_L15_002ebfb0(int moby_list_index) {
+int count_missing_or_dying_mobys_in_list(int moby_list_index) __asm__("FUN_L15_002ebfb0");
+
+int count_missing_or_dying_mobys_in_list(int moby_list_index) {
     unsigned short *moby_index_entry = (unsigned short *)D_L15_001ABE40[moby_list_index];
     int missing_or_dying_count = 0;
     int base;
@@ -976,7 +978,7 @@ extern void FUN_L15_002f78b8(int);
 int can_spawn_codebot_slot_effect(int slot) __asm__("FUN_L15_002f78e0");
 
 extern int can_spawn_codebot_slot_effect(int) __asm__("FUN_L15_002f78e0");
-extern int FUN_L15_002ebfb0(int);
+extern int count_missing_or_dying_mobys_in_list(int) __asm__("FUN_L15_002ebfb0");
 extern void FUN_L15_002ebf28(int, int);
 extern char *FUN_L15_002eb9e0(char *, char *);
 extern void FUN_L00_00216f90(void *, void *, int, int);
@@ -1102,7 +1104,7 @@ void codebot_slot_update(struct Moby *moby) {
             *(OvlQuad *)((char *)data[1] + 0x10) = *(OvlQuad *)vec;
             *(OvlQuad *)((char *)data[1] + 0x40) = *(OvlQuad *)tmp;
         }
-        if (alternate_item_available[0x6D] == 0 && FUN_L15_002ebfb0(data[8]) > 9) {
+        if (alternate_item_available[0x6D] == 0 && count_missing_or_dying_mobys_in_list(data[8]) > 9) {
             alternate_item_available[0x6D] = 1;
             D_L15_0015ED98 += 15000;
         }
