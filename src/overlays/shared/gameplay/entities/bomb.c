@@ -2948,7 +2948,7 @@ extern void *D_001413D0 __attribute__((section(".data")));
 extern s32 D_001413DC __attribute__((section(".data")));
 
 extern s32 FUN_L00_0025e3b8(void *);
-extern void FUN_L00_002d1428(struct Moby *);
+extern void update_crate_stack_motion(struct Moby *) __asm__("FUN_L00_002d1428");
 extern Contact *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int fun_00213928(void *, void *, void *, int, int *, int *, int *, int) __asm__("FUN_00213928");
 extern void FUN_L00_002cfcb8(struct Moby *);
@@ -3007,7 +3007,7 @@ void crate_update(struct Moby *moby) {
         coll->flags &= ~1;
     }
     if (crate_vars->frameB4 != D_L00_0015F5CC_macro && moby->state != 0 && (crate_vars->flags & 0xC)) {
-        FUN_L00_002d1428(moby);
+        update_crate_stack_motion(moby);
     }
     touched = 0;
     other = find_moby_hit(moby, 0x1830000, 0);

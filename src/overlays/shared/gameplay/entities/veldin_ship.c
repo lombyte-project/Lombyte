@@ -706,7 +706,9 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         FUN_002ac910_2d09b8(moby, &launch, &spin, 3.0f, FUN_001fef20_2d09b8(29), 32, 0, 0, 32);
     }
 }
-void FUN_L00_002d1428(M2d1428 *moby) {
+void update_crate_stack_motion(M2d1428 *moby) __asm__("FUN_L00_002d1428");
+
+void update_crate_stack_motion(M2d1428 *moby) {
     enum {
         CRATE_STATE_BREAKABLE = 1,
         CRATE_STATE_IMPACT_TRIGGERED = 5
