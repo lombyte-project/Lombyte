@@ -1841,7 +1841,9 @@ extern int random_integer_below_319928(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int set_voice_volume_319928(int, int) __asm__("FUN_L01_002a1968");
 
-void FUN_L01_00319928(char *moby) {
+void update_box_positional_voice(char *moby) __asm__("FUN_L01_00319928");
+
+void update_box_positional_voice(char *moby) {
     OvlVec4 delta, radius, box_size, listener;
     int *sound_data = *(int **)(moby + 8);
     int volume;
