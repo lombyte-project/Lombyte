@@ -445,7 +445,9 @@ void close_pause_menu(void) {
     }
 }
 
-void FUN_L00_00276bd0(void) {
+void update_pause_menu(void) __asm__("FUN_L00_00276bd0");
+
+void update_pause_menu(void) {
     enum {
         SCENE_STATE_DEFAULT = 2
     };
