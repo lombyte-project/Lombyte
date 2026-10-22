@@ -61,7 +61,9 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
-void FUN_L08_00307298(char *fire_bolt) {
+void update_fire_bolt(char *fire_bolt) __asm__("FUN_L08_00307298");
+
+void update_fire_bolt(char *fire_bolt) {
     enum {
         FIRE_BOLT_STATE_FLYING = 1,
         FIRE_BOLT_STATE_BURST_AND_REMOVE = 2
