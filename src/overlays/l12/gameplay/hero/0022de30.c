@@ -106,7 +106,7 @@ f32 approach_value_231ae0(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_231ae0(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void FUN_L12_00232b18(void) {
     switch (hero.vehicle_mode) {
-    case 0:
+    case HERO_VEHICLE_MODE_ON_FOOT:
         hero.unk228 = 0.8f;
         hero.unk22C = 0.7f;
         hero.unk230 = 0.45f;
