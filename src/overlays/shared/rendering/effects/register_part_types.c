@@ -31,7 +31,7 @@ extern void update_shrinking_effect_particle_with_secondary_spawns(void) __asm__
 extern void FUN_L00_00267b10(void);
 extern void update_moving_spinning_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026d1b0");
 extern void update_source_bound_effect_particle(void) __asm__("FUN_L00_0026d470");
-extern void FUN_L00_0026d700(void);
+extern void update_color_decaying_effect_particle_with_collision(void) __asm__("FUN_L00_0026d700");
 extern void update_source_attached_fading_effect_particle(void) __asm__("FUN_L00_0026dbe0");
 extern void move_and_fade_effect_particle_by_lifetime(void) __asm__("FUN_L00_0026de00");
 extern void update_moving_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026e150");
@@ -120,7 +120,7 @@ void register_part_types(void) {
     handlers[22] = (u32)FUN_L00_00267b10;
     handlers[23] = (u32)update_moving_spinning_fade_in_out_effect_particle;
     handlers[24] = (u32)update_source_bound_effect_particle;
-    handlers[25] = (u32)FUN_L00_0026d700;
+    handlers[25] = (u32)update_color_decaying_effect_particle_with_collision;
     handlers[26] = (u32)update_source_attached_fading_effect_particle;
     handlers[27] = (u32)move_and_fade_effect_particle_by_lifetime;
     handlers[28] = (u32)update_moving_fade_in_out_effect_particle;

@@ -1862,7 +1862,9 @@ void clr_26d700(void *) __asm__("FUN_001f99f8");
 int tick_26d700(void *) __asm__("FUN_001f9770");
 void kill_26d700(P_26d700 *) __asm__("FUN_L00_00267a08");
 int rgba_26d700(float, float, float, float) __asm__("FUN_L00_0025bfe0");
-void FUN_L00_0026d700(P_26d700 *particle) {
+void update_color_decaying_effect_particle_with_collision(P_26d700 *particle) __asm__("FUN_L00_0026d700");
+
+void update_color_decaying_effect_particle_with_collision(P_26d700 *particle) {
     V_26d700 next_position;
     S_26d700 *s;
     float r, g, b, dt;
