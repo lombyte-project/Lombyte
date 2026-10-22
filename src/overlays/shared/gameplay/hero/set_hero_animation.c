@@ -773,7 +773,10 @@ void FUN_L00_00233248(void) {
  * Ported from rac1-decomp (shared level code), where it is
  * exact; names translated to the US level program. */
 /* Stores two floats, an index and a byte, and sets the bits of a byte mask in a flag halfword. */
-void FUN_L00_00233288(float random_value_base, float random_value_half_range, short remaining_updates, unsigned char count_per_point, unsigned char flags_to_set,
+void configure_hero_point_effect_emission(float random_value_base, float random_value_half_range, short remaining_updates, unsigned char count_per_point, unsigned char flags_to_set,
+                      unsigned char flags_to_clear) __asm__("FUN_L00_00233288");
+
+void configure_hero_point_effect_emission(float random_value_base, float random_value_half_range, short remaining_updates, unsigned char count_per_point, unsigned char flags_to_set,
                       unsigned char flags_to_clear) {
     struct Hero *base = &hero;
 

@@ -2983,7 +2983,7 @@ extern A_20b1d8 D_L00_0017A680_20b1d8 __asm__("D_L00_0017A680");
 extern s32 FUN_L00_0020d568(void);
 extern f32 FUN_001f99c0(f32);
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern void FUN_L00_00233288(s32, s32, s32, s32, f32, f32);
+extern void configure_hero_point_effect_emission(s32, s32, s32, s32, f32, f32) __asm__("FUN_L00_00233288");
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_0026de90(void *, void *, f32);
 void FUN_L00_0020b1d8(void) {
@@ -3021,9 +3021,9 @@ void FUN_L00_0020b1d8(void) {
     }
     if (!(P.h12AE & 0x80)) {
         if (P.i2084 == 3)
-            FUN_L00_00233288(1, 2, 1, 0, 0.021f, 0.002f);
+            configure_hero_point_effect_emission(1, 2, 1, 0, 0.021f, 0.002f);
         if (P.i208C == 4 && P.i418 > 0 && P.i418 < scale_game_frames(12))
-            FUN_L00_00233288(1, 2, 0, 1, 0.016f, 0.002f);
+            configure_hero_point_effect_emission(1, 2, 0, 1, 0.016f, 0.002f);
         if (P.i12A8 <= 0)
             return;
         if (P.h12AC == 0)

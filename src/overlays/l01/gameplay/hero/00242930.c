@@ -104,8 +104,8 @@ extern void FUN_L00_00231d08(void);
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_00232628(void);
 extern void FUN_L00_00232640(int id);
-extern void FUN_L00_00233288(float a, float b, short c, unsigned char d, unsigned char e,
-                             unsigned char f);
+extern void configure_hero_point_effect_emission(float a, float b, short c, unsigned char d, unsigned char e,
+                             unsigned char f) __asm__("FUN_L00_00233288");
 extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_00233b20");
 extern void hud_keep_visible(int, int) __asm__("FUN_L00_00235e18");
 extern void FUN_L00_00237ae8(void);
@@ -1160,7 +1160,7 @@ void FUN_L01_00242930(void) {
                             if (first) {
                                 hero.unk1C4 = scale_game_frames(0x16);
                             }
-                            FUN_L00_00233288(0.022f, 0.004f, 0xA, 4, 0, 1);
+                            configure_hero_point_effect_emission(0.022f, 0.004f, 0xA, 4, 0, 1);
                             break;
                         }
                         if (hero.state.step == one) {
@@ -1178,12 +1178,12 @@ void FUN_L01_00242930(void) {
                                     hero.unk1C4 = scale_game_frames(0x12);
                                 }
                             }
-                            FUN_L00_00233288(0.019f, 0.002f, 0xA, 2, 0, 1);
+                            configure_hero_point_effect_emission(0.019f, 0.002f, 0xA, 2, 0, 1);
                             break;
                         }
                         if (hero.unk229C > 0.5f && hero.unk1C4 == 0) {
                             hero_set_state(HERO_STATE_RUN, 1);
-                            FUN_L00_00233288(0.016f, 0.002f, 7, 2, 0, 1);
+                            configure_hero_point_effect_emission(0.016f, 0.002f, 7, 2, 0, 1);
                             break;
                         }
                         if (frame_time * 3.0f < hero.motion.unk164) {
@@ -1195,7 +1195,7 @@ void FUN_L01_00242930(void) {
                             break;
                         }
                         hero_set_state(HERO_STATE_IDLE, 1);
-                        FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
+                        configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
                     }
                     if (hero.health.hp <= 0) {
@@ -1274,14 +1274,14 @@ void FUN_L01_00242930(void) {
                             break;
                         }
                         set_hero_animation(7, 0x17, scale_game_frames(9));
-                        FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
+                        configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
                     }
                     if (hero_set_state(HERO_STATE_IDLE, 0) == 0) {
                         break;
                     }
                     set_hero_animation(FUN_L01_00226f10(0), 0, -2.0f);
-                    FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
+                    configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 0, 1);
                     break;
                 case HERO_STATE_LAND:
                     if (hero.unk1B4 != 0) {
@@ -1323,7 +1323,7 @@ void FUN_L01_00242930(void) {
                     }
                     if (controller_state.held & 0xA) {
                         hero_set_state(HERO_STATE_CROUCH, 1);
-                        FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
+                        configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
                     }
                     if (hero.target_speed > D_L01_0017C238.fC &&
@@ -1339,7 +1339,7 @@ void FUN_L01_00242930(void) {
                             set_hero_animation(4, 2, scale_game_frames(8));
                             hero.unk3BC = 1;
                         }
-                        FUN_L00_00233288(0.016f, 0.002f, 5, 2, 1, 0);
+                        configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 1, 0);
                         break;
                     }
                     if (D_L01_0017C238.fC < hero.target_speed) {
@@ -1352,7 +1352,7 @@ void FUN_L01_00242930(void) {
                             hero.state.step = 1;
                             set_hero_animation(4, D_L01_0015F6DC, scale_game_frames(0xC));
                         }
-                        FUN_L00_00233288(0.016f, 0.002f, 5, 2, 1, 0);
+                        configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 1, 0);
                         break;
                     }
                     if (hero.air_frames.s == 0) {
@@ -1360,14 +1360,14 @@ void FUN_L01_00242930(void) {
                             break;
                         }
                         set_hero_animation(FUN_L01_00226f10(0), 0, -2.0f);
-                        FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
+                        configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
                     }
                     if (hero_set_state(HERO_STATE_IDLE, 0) == 0) {
                         break;
                     }
                     set_hero_animation(7, 0x17, scale_game_frames(9));
-                    FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
+                    configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 0, 1);
                     break;
                 case HERO_STATE_JUMP:
                 case HERO_STATE_RUN_JUMP:
@@ -1517,7 +1517,7 @@ void FUN_L01_00242930(void) {
                             int fr;
 
                             hero.unk418 = scale_game_frames(1);
-                            FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
+                            configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 0, 1);
                             fr = truncate_float_to_s32(hero.unk448) + 2;
                             if (hero.unk444 - 1.5f > hero.anim_frame) {
                                 set_hero_animation(FUN_L00_002050b8(moby[0x53]), fr,
