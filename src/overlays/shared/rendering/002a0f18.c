@@ -6,7 +6,9 @@ void FUN_00122518(void *, short, int, int, int, int, int, int);
 void flush_cache(int) __asm__("FUN_00118a80");
 void FUN_001227d8(void *, int);
 void wait_for_graphics_pipeline_idle(int, int) __asm__("FUN_00120558");
-void FUN_L00_002a0f18(int dst, int draw_buffer_byte_address, int size) {
+void transfer_draw_buffer_chunks(int dst, int draw_buffer_byte_address, int size) __asm__("FUN_L00_002a0f18");
+
+void transfer_draw_buffer_chunks(int dst, int draw_buffer_byte_address, int size) {
     char buf[0x70] __attribute__((aligned(16)));
     int left = (size + 0x3FFF) & ~0x3FFF;
     int transfer_byte_offset = 0;
