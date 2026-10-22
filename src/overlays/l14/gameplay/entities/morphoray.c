@@ -125,7 +125,9 @@ extern void burst_0e00(void *, void *, void *, float, float, int, int, int, floa
 extern void remove_0e00(void *) __asm__("FUN_0020c828");
 extern float add_rot_0e00(float, float) __asm__("FUN_001fa580");
 
-void FUN_L14_00300e00(struct Moby *spark_moby)
+void update_bouncing_spark(struct Moby *spark_moby) __asm__("FUN_L14_00300e00");
+
+void update_bouncing_spark(struct Moby *spark_moby)
 {
     enum {
         SPARK_COUNT_NEXT_BOUNCE = 0,
