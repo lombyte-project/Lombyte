@@ -1957,7 +1957,9 @@ extern float sin_ff640(float) __asm__("FUN_001f9de0");
 extern int ftoi_ff640(float) __asm__("FUN_001fa6d0");
 
 /* Floating mine: spins and pulses (and bobs in level 16); blows up on a hit and respawns once out of view. */
-void FUN_L14_002ff640(struct Moby *moby) {
+void update_floating_mine(struct Moby *moby) __asm__("FUN_L14_002ff640");
+
+void update_floating_mine(struct Moby *moby) {
     enum {
         FLOAT_MINE_INITIALIZE = 0,
         FLOAT_MINE_ACTIVE = 1,
