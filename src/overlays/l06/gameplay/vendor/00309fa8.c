@@ -36,7 +36,9 @@ void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *mk_a(int) __asm__("FUN_0020c4f8");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 
-void FUN_L06_00309fa8(char *self) {
+void update_hit_triggered_class_0681_spawner(char *self) __asm__("FUN_L06_00309fa8");
+
+void update_hit_triggered_class_0681_spawner(char *self) {
     enum {
         INITIALIZE = 0,
         WAIT_FOR_HIT = 1,
