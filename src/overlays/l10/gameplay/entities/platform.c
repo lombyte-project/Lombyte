@@ -945,7 +945,9 @@ void FUN_L10_002c9c70(struct Moby *moby) {
         break;
     }
 }
-void FUN_L10_002d7b18(struct Moby *moby, float target_height) {
+void approach_moby_height(struct Moby *moby, float target_height) __asm__("FUN_L10_002d7b18");
+
+void approach_moby_height(struct Moby *moby, float target_height) {
     float current_height = moby->pos.z;
     float height_delta = target_height - current_height;
     if (0.1f < height_delta) {
@@ -1000,7 +1002,7 @@ void update_height_adjusted_projectile(struct Moby *moby) {
     case HEIGHT_MODE_SKIP_ADJUSTMENT:
         break;
     case HEIGHT_MODE_APPROACH_FIXED_HEIGHT:
-        FUN_L10_002d7b18(moby, *(float *)(data + 0x1c));
+        approach_moby_height(moby, *(float *)(data + 0x1c));
         break;
     case HEIGHT_MODE_FOLLOW_COLLISION_HEIGHT:
         qcopy(check, &moby->pos);
@@ -1008,13 +1010,13 @@ void update_height_adjusted_projectile(struct Moby *moby) {
         check[2] += 0.1f;
         raised[2] -= *(float *)(data + 0x1c) + *(float *)(data + 0x1c);
         if (collision_line(check, raised, 2, (int)moby, 0))
-            FUN_L10_002d7b18(moby, *(float *)(D_L10_001742C0 + 0x28) + *(float *)(data + 0x1c));
+            approach_moby_height(moby, *(float *)(D_L10_001742C0 + 0x28) + *(float *)(data + 0x1c));
         else
-            FUN_L10_002d7b18(moby, moby->pos.z - 0.1f);
+            approach_moby_height(moby, moby->pos.z - 0.1f);
         break;
     case HEIGHT_MODE_FOLLOW_SELECTED_MOBY_HEIGHT:
         if (*(int *)((char *)found + 0x40) != 0)
-            FUN_L10_002d7b18(moby, found[2] + *(float *)(data + 0x1c));
+            approach_moby_height(moby, found[2] + *(float *)(data + 0x1c));
         break;
     case 4:
         break;
