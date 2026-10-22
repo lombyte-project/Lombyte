@@ -230,11 +230,11 @@ void blarg_elite_commando_update(char *commando_moby) {
     float distance, angle;
     float *heading, *movement;
     int ticks;
-    int cls;
+    int owner_moby_class;
     FUN_L16_002d38b0(commando_moby);
     owner = *(char **)(commando_data + 0x110);
-    cls = *(short *)(owner + 0xA6);
-    if (cls == 0 || cls == 0x1A3) {
+    owner_moby_class = *(short *)(owner + 0xA6);
+    if (owner_moby_class == 0 || owner_moby_class == 0x1A3) {
         qcopy(target, &hero.motion.unkC0);
     } else {
         qcopy(target, owner + 0x10);
