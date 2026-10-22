@@ -1991,7 +1991,7 @@ extern s32 FUN_001ff308(s32, s32, void *, void *, void *, void *, s32);
 extern void FUN_L00_0023a760(void);
 extern void FUN_L00_00235ea0(void);
 extern void FUN_L00_0023a7a8(void);
-void FUN_L00_0029ba78(void);
+void update_vendor_purchase(void) __asm__("FUN_L00_0029ba78");
 extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
 extern void update_moby_animation_state(void *) __asm__("FUN_0020c880");
@@ -2053,7 +2053,7 @@ extern void FUN_L00_0023a7a8_2ba78(void) __asm__("FUN_L00_0023a7a8");
 
 
 #define CUR_TB (D_L00_001C40B0[CUR_ITEM.fD0])
-void FUN_L00_0029ba78(void) {
+void update_vendor_purchase(void) {
     u128 lv;
     s32 purchase_state;
     s32 purchase_cost, k, last_row_index;
@@ -2532,7 +2532,7 @@ void FUN_L00_0029c648(void) {
                 allocate_voice_for_target_entry(5, 0, vendor_menu.f1c);
             }
         }
-        FUN_L00_0029ba78();
+        update_vendor_purchase();
         D_L00_00161E30 = pad_state.pressed_unmasked;
         if (D_L00_00161E20 == 1) {
             if (D_L00_00161E1C == 0) {
