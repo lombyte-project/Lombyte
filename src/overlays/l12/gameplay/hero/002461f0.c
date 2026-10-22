@@ -134,7 +134,7 @@ void FUN_L12_002461f0(void) {
     float probe_heading_2;
     float probe_heading_3;
     int sp34;
-    int sp38;
+    int jump_press_age_frames;
 
     moby = hero.moby;
     prevSub = hero.state.control_mode;
@@ -601,7 +601,7 @@ void FUN_L12_002461f0(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 58:
+                case HERO_STATE_ANIMATION_WAIT_TO_IDLE:
                     if (hero.unkA98 & 2) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -1239,8 +1239,8 @@ void FUN_L12_002461f0(void) {
                         }
                     }
                     break;
-                case 26:
-                case 27: {
+                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float sideways_yaw_offset;
 
                     qcopy(v0, hero.motion.pos.f);
@@ -1409,7 +1409,7 @@ void FUN_L12_002461f0(void) {
                         return;
                     }
                     break;
-                case 129:
+                case HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT:
                     if (hero.on_slip_ground != 0 && hero.ground_distance < 0.5f) {
                         hero_set_state(HERO_STATE_SLIP, 1);
                         break;
@@ -1787,8 +1787,8 @@ void FUN_L12_002461f0(void) {
                                 if (hero.state.current == 0x11) {
                                     a = scale_game_frames(7);
                                 }
-                                if (pad_pressed_within(0x40, a, &sp38)) {
-                                    if (sp38 < hero.state_timer) {
+                                if (pad_pressed_within(0x40, a, &jump_press_age_frames)) {
+                                    if (jump_press_age_frames < hero.state_timer) {
                                         hero_set_state(0x11, 1);
                                         break;
                                     }
