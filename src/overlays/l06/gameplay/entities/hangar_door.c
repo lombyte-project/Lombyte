@@ -524,7 +524,9 @@ void hangar_door_update(char *door_moby) {
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
-void FUN_L06_002d9d10(unsigned char *moby) {
+void update_moby_position_interpolation(unsigned char *moby) __asm__("FUN_L06_002d9d10");
+
+void update_moby_position_interpolation(unsigned char *moby) {
     enum {
         INITIALIZE_POSITION_ENDPOINTS = 0,
         INTERPOLATE_POSITION_TO_TARGET = 2
