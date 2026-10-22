@@ -2262,7 +2262,9 @@ void asteroid_update(struct Moby *moby) {
 /* runs one step of a moby's timed state and reports whether the timer ran out */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E56C8), where it is exact; names translated to the US level program. */
 
-int FUN_L13_002e4300(struct Moby *moby, char *moby_data, float *health) {
+int process_linked_switch_damage(struct Moby *moby, char *moby_data, float *health) __asm__("FUN_L13_002e4300");
+
+int process_linked_switch_damage(struct Moby *moby, char *moby_data, float *health) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
@@ -2366,7 +2368,7 @@ void FUN_L13_002e4448(char *moby) {
     int hit = 0;
 
     if (data->unk74 == 0 && (unsigned char)(moby[0x20] - 1) < 2) {
-        hit = FUN_L13_002e4300((struct Moby *)moby, data, &data->unk20);
+        hit = process_linked_switch_damage((struct Moby *)moby, data, &data->unk20);
     }
     switch ((unsigned char)moby[0x20]) {
     case INITIALIZE_LINKED_GROUP:
