@@ -2959,7 +2959,9 @@ extern char *FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
 extern int FUN_L00_0023e738(float *, float, float, float, float, float);
 extern PuffParticle *spawn_puff_d(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
-void FUN_L14_002bac78(struct Moby *moby) {
+void update_flying_debris(struct Moby *moby) __asm__("FUN_L14_002bac78");
+
+void update_flying_debris(struct Moby *moby) {
     char *debris_vars = (char *)moby->pvars;
     float joint[4];
     float ofs[4];
