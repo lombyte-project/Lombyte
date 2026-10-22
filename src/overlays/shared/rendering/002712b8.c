@@ -841,7 +841,9 @@ void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 /* Adds the vector at D_0013F3D0 in mode 1, then calls 00267a08 once the timer at +0xA ends. */
-void FUN_L00_00273088(u8 *particle) {
+void update_timed_hero_relative_particle(u8 *particle) __asm__("FUN_L00_00273088");
+
+void update_timed_hero_relative_particle(u8 *particle) {
     u8 *particle_data = particle + 0x20;
     if (*(s32 *)(particle_data + 0x10) == 1)
         fast_vec_add(particle + 0x10, &hero.motion.pos, particle_data);
