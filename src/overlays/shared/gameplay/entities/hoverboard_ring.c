@@ -385,7 +385,9 @@ void set_camera_follow_parameters(float spring_distance, float spring_height, fl
 
 extern void FUN_L05_00329358_c(void *) __asm__("FUN_L05_00329358");
 
-void FUN_L05_00329540(char *camera) {
+void build_hero_follow_camera_transform(char *camera) __asm__("FUN_L05_00329540");
+
+void build_hero_follow_camera_transform(char *camera) {
     char *orbit = *(char **)(camera + 0x70);
     char *at = camera + 0x30;
     char *up = camera + 0x10;
@@ -584,7 +586,7 @@ void FUN_L05_003296e0(Camera *camera_to_reset) {
     clear_u64_value(view);
     set_camera_follow_parameters(preset->spring_dist, preset->spring_height, preset->dist, preset->unk34,
                      preset->unk38, preset->unk3C, preset->unk40, preset->unk44);
-    FUN_L05_00329540((char *)camera_to_reset);
+    build_hero_follow_camera_transform((char *)camera_to_reset);
     camera_to_reset->unk7E = 0;
 }
 
