@@ -1217,7 +1217,9 @@ extern Vec4 D_L07_00173EE0;
 extern char D_L07_00173F00[];
 
 /* Bolt update: flies on, sparks out at the end of its range, bursts on impact, removes it out of bounds. */
-void FUN_L07_0030b6a8(struct Moby *moby) {
+void update_linear_projectile(struct Moby *moby) __asm__("FUN_L07_0030b6a8");
+
+void update_linear_projectile(struct Moby *moby) {
     BoltVars *bolt_vars = (BoltVars *)moby->pvars;
     Vec4 old;
     Vec4 particle_motion_vector;
