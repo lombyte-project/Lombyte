@@ -490,7 +490,7 @@ extern void splash_L13(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void update_moby_joint_attachments(void *, void *) __asm__("FUN_L13_002e8d28");
 extern void FUN_L13_002e9018(void *, void *, float, float);
 extern void FUN_L13_002e9680(void *, void *, int);
-extern void FUN_L13_002e9a48(void *, void *);
+extern void process_moby_attachment_damage(void *, void *) __asm__("FUN_L13_002e9a48");
 extern void draw_starfighter_tractor_beam();
 extern void FUN_L13_002eac00_c(void *, void *) __asm__("FUN_L13_002eac00");
 extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
@@ -678,7 +678,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
             }
         }
         if (moby->bBC != 4) {
-            FUN_L13_002e9a48(moby, data);
+            process_moby_attachment_damage(moby, data);
         } else {
             trooper_anim_finish(moby, (char *)data + 0x60);
         }
@@ -795,7 +795,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
             }
         }
         if (moby->bBC != 4) {
-            FUN_L13_002e9a48(moby, data);
+            process_moby_attachment_damage(moby, data);
         } else {
             trooper_anim_finish(moby, (char *)data + 0x60);
         }

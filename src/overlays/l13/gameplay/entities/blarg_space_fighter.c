@@ -3190,7 +3190,9 @@ extern void func_L00_0028EBF0_2EAE80(int) __asm__("FUN_0022d798");
 extern void func_L00_0025E590_2EAE80(void *, void *) __asm__("FUN_L00_0025d538");
 extern int func_L13_002E9B30_2EAE80(void *, void *, int, int) __asm__("FUN_L13_002e86f8");
 
-void FUN_L13_002e9a48(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
+void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) __asm__("FUN_L13_002e9a48");
+
+void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
     enum {
         DAMAGE_STAGE_SKIP_LINE_QUEUE = 0,
         DAMAGE_STAGE_QUEUE_RANDOM_LINE = 1,
