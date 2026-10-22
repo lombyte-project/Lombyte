@@ -1272,7 +1272,9 @@ extern int FUN_001fa6d0_2741a0(float) __asm__("FUN_001fa6d0");
 extern float FUN_002132a8_2741a0(float, float) __asm__("FUN_002132a8");
 
 extern unsigned char *D_L00_001B2188 __attribute__((section(".data")));
-unsigned char *FUN_L00_002741a0(void *position, int color, float size_scale, float z) {
+unsigned char *spawn_random_planar_drift_particle(void *position, int color, float size_scale, float z) __asm__("FUN_L00_002741a0");
+
+unsigned char *spawn_random_planar_drift_particle(void *position, int color, float size_scale, float z) {
     unsigned char *particle = p27fe00_alloc(0x42);
     if (particle) {
         float *particle_data;

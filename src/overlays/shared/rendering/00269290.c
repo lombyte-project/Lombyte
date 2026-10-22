@@ -2716,7 +2716,7 @@ typedef struct {
 extern V D_L00_00173E60;
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void FUN_L00_002715e8(void *, int, int, float, float);
-extern void FUN_L00_002741a0(void *, int, float, float);
+extern void spawn_random_planar_drift_particle(void *, int, float, float) __asm__("FUN_L00_002741a0");
 
 void FUN_L00_0026f660(char *particle) {
     char *particle_data = particle + 0x20;
@@ -2755,7 +2755,7 @@ void FUN_L00_0026f660(char *particle) {
             if (collision_hit_material() != 0) {
                 int *collision_data = D_L00_00173E40;
                 *(float *)((char *)collision_data + 0x28) += 0.05f;
-                FUN_L00_002741a0(collision_data + 8, -1, 0.25f, 3150.0f);
+                spawn_random_planar_drift_particle(collision_data + 8, -1, 0.25f, 3150.0f);
             }
             free_effect_particle(particle);
             return;
