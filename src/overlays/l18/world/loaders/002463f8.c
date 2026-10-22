@@ -456,7 +456,9 @@ extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) 
 
 
 /* Draws the level timer as "H:MM:SS.t" text with a pulsing colour. */
-void FUN_L18_002d8098(struct Moby *moby) {
+void draw_pulsing_timer_hud(struct Moby *moby) __asm__("FUN_L18_002d8098");
+
+void draw_pulsing_timer_hud(struct Moby *moby) {
     char timer_text[8];
     char *data = (char *)moby->pvars;
     float color_blend_factor;

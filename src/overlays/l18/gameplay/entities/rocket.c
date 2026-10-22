@@ -1371,7 +1371,7 @@ extern unsigned int D_0015EEA4 __asm__("D_0015EEA4") __attribute__((sda));
 extern unsigned char menu_item_enabled_115 __asm__("D_0013D407") __attribute__((section(".data")));
 /* Help message records (same layout as the usage counters): count, best play time, level mask. */
 extern struct UsageStat D_00141968_7b20[] __asm__("D_00141968");
-extern void FUN_L18_002d8098(void);
+extern void draw_pulsing_timer_hud(void) __asm__("FUN_L18_002d8098");
 extern void enqueue_callback_list_1_l18(void (*)(void), void *) __asm__("FUN_L18_002020c8");
 extern char D_0013E550[];
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -1426,7 +1426,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
             }
             *(int *)(data + 0x70) = -1;
         } else if (hero.state.current != 0x72) {
-            enqueue_callback_list_1_l18(FUN_L18_002d8098, moby);
+            enqueue_callback_list_1_l18(draw_pulsing_timer_hud, moby);
             if (tick_countdown_32((int *)(data + 0x6C)) != 0)
                 D_L18_00162390 = 1;
         }
