@@ -1049,7 +1049,7 @@ typedef struct {
 
 extern SndPair_254030 D_L05_00179BC0[];
 extern char D_0013CAE0[];
-extern float FUN_L00_00232b90(float a, float b, float c);
+extern float predict_hero_trajectory_intercept_time(float a, float b, float c) __asm__("FUN_L00_00232b90");
 extern int FUN_L05_002551b8_c(void) __asm__("FUN_L05_002551b8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -1062,7 +1062,7 @@ void update_hero_hoverboard_trick_animations(void) {
     struct Hero *hero_ptr = &hero;
     int pad;
     hero_ptr->unk888 =
-        truncate_float_to_s32(FUN_L00_00232b90(60.0f, hero_ptr->unk860, -1.0f));
+        truncate_float_to_s32(predict_hero_trajectory_intercept_time(60.0f, hero_ptr->unk860, -1.0f));
     if (hero_ptr->unk88D != 0 && ((pad = *(int *)(D_0013CAE0)) & 0xF) != 0) {
         hero_ptr->unk88F = 0;
         if (pad & 8)

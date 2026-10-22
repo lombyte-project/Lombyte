@@ -62,7 +62,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float adjust_hero_animation_speed_for_target_frame(float a, float b, float c, float d) __asm__("FUN_L00_00208f20");
-extern float FUN_L00_00232b90(float a, float b, float c);
+extern float predict_hero_trajectory_intercept_time(float a, float b, float c) __asm__("FUN_L00_00232b90");
 extern float gravity_z(float *v) __asm__("FUN_L00_00233a78");
 extern float predict_hero_trajectory_z(float *pos, float *vel, int *steps, float step) __asm__("FUN_L00_00233c30");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
@@ -750,7 +750,7 @@ void hero_update_transitions(void) {
                 case HERO_STATE_CROUCH_SWING:
                     if (hero.state.current == HERO_STATE_WRENCH_SLAM) {
                         int r = truncate_float_to_s32(
-                            FUN_L00_00232b90(60.0f, frame_time_sq * 130.0f, -1.0f));
+                            predict_hero_trajectory_intercept_time(60.0f, frame_time_sq * 130.0f, -1.0f));
                         int n = 0x1A;
                         if (hero.unkA70 == 0.0f) {
                             hero.anim_speed = 0.33f;
@@ -1293,7 +1293,7 @@ void hero_update_transitions(void) {
                     }
                     {
                         int r =
-                            truncate_float_to_s32(FUN_L00_00232b90(60.0f, hero.unk4B0, -1.0f));
+                            truncate_float_to_s32(predict_hero_trajectory_intercept_time(60.0f, hero.unk4B0, -1.0f));
                         hero.unk4BC = r;
                         if (hero.unk4B8 != 0.0f && hero.frames_off_ground.s != 0 && r != 0) {
                             if (r == 2) {
@@ -1553,7 +1553,7 @@ void hero_update_transitions(void) {
                             hero.unk44C = scale_game_frames(0x1E);
                             if (hero.unk570 == 0) {
                                 hero.unk44C = truncate_float_to_s32(
-                                    FUN_L00_00232b90(60.0f, hero.unk4A0, hero.unk500.f[2]));
+                                    predict_hero_trajectory_intercept_time(60.0f, hero.unk4A0, hero.unk500.f[2]));
                             }
                             if (hero.unk44C != 0) {
                                 adjust_hero_animation_speed_for_target_frame(hero.unk444, hero.unk44C, 0.5f,
@@ -2164,7 +2164,7 @@ void hero_update_transitions(void) {
                                     approach_value(&hero.anim_speed, 1.0f, frame_scale_sq * 0.15f);
                                 } else {
                                     int r = truncate_float_to_s32(
-                                        FUN_L00_00232b90(60.0f, hero.unk4A0, -1.0f));
+                                        predict_hero_trajectory_intercept_time(60.0f, hero.unk4A0, -1.0f));
                                     hero.unk44C = r;
                                     adjust_hero_animation_speed_for_target_frame(hero.unk444, r, hero.unk494,
                                                      frame_scale_sq * 0.2f);
@@ -2459,7 +2459,7 @@ void hero_update_transitions(void) {
                     } else if (hero.unk41E != 0) {
                         if (moby[0x51] < truncate_float_to_s32(hero.unk444)) {
                             int r = truncate_float_to_s32(
-                                FUN_L00_00232b90(60.0f, hero.unk4A0, -1.0f));
+                                predict_hero_trajectory_intercept_time(60.0f, hero.unk4A0, -1.0f));
                             int fr;
 
                             hero.unk44C = r;
@@ -2826,7 +2826,7 @@ void hero_update_transitions(void) {
                     } else if (hero.unk41E != 0) {
                         if (moby[0x51] < truncate_float_to_s32(hero.unk444)) {
                             int r = truncate_float_to_s32(
-                                FUN_L00_00232b90(60.0f, hero.unk4A0, -1.0f));
+                                predict_hero_trajectory_intercept_time(60.0f, hero.unk4A0, -1.0f));
                             int fr;
 
                             hero.unk44C = r;

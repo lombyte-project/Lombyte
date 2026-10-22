@@ -170,7 +170,7 @@ extern s32 allocate_voice_for_target_entry(s32, s32, struct MobyView *) __asm__(
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern s32 FUN_L00_001ff600(f32, void *, void *);
 extern void FUN_L00_00227d40(void);
-extern f32 FUN_L00_00232b90(f32, f32, f32);
+extern f32 predict_hero_trajectory_intercept_time(f32, f32, f32) __asm__("FUN_L00_00232b90");
 extern void smooth_and_clamp_value_pair(void *, void *, f32) __asm__("FUN_L05_00237488");
 extern void apply_hero_rotation_offset(f32, f32, f32) __asm__("FUN_L00_00211cf8");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
@@ -1225,7 +1225,7 @@ void FUN_L16_00214598(void) {
         set_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, len);
         sp = frame_time_sq * 27.0f;
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, sp);
-        n = truncate_float_to_s32(FUN_L00_00232b90(60.0f, sp, -1.0f));
+        n = truncate_float_to_s32(predict_hero_trajectory_intercept_time(60.0f, sp, -1.0f));
         k = 16;
         if (n != 0 && (f32)k - hero.anim_frame > 1.0f) {
             adjust_hero_animation_speed_for_target_frame((f32)k, (f32)n, 0.5f, -1.0f);
