@@ -1381,7 +1381,7 @@ void sand_mouse_update(struct Moby *moby) {
     Data_2e3f20 *sand_mouse_vars;
     float va[4];
     float vb[4];
-    float ang;
+    float desired_facing_yaw;
 
     if (moby == 0) {
         return;
@@ -1474,9 +1474,9 @@ void sand_mouse_update(struct Moby *moby) {
                 }
             }
             if (hero_2e3f20->helper != 0 && hero_2e3f20->i1158 == 5) {
-                ang = fast_arc_tan(hero_2e3f20->pos[0] - moby->pos.x,
+                desired_facing_yaw = fast_arc_tan(hero_2e3f20->pos[0] - moby->pos.x,
                                         hero_2e3f20->pos[1] - moby->pos.y);
-                face_target_2e3f20(moby, ang, &mover_2e3f20.yaw_speed,
+                face_target_2e3f20(moby, desired_facing_yaw, &mover_2e3f20.yaw_speed,
                                         frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
                 qcopy(va, ((float *)&ents_2e3f20[sand_mouse_vars->parent].pos));
                 va[2] = va[2] + 0.5f;
@@ -1522,8 +1522,8 @@ void sand_mouse_update(struct Moby *moby) {
         break;
     case SAND_MOUSE_MOVE_TOWARD_HERO:
         FUN_L01_002e30b8((int)moby, sand_mouse_vars);
-        ang = fast_arc_tan(sand_mouse_vars->target[0] - moby->pos.x, sand_mouse_vars->target[1] - moby->pos.y);
-        face_target_2e3f20(moby, ang, &mover_2e3f20.yaw_speed,
+        desired_facing_yaw = fast_arc_tan(sand_mouse_vars->target[0] - moby->pos.x, sand_mouse_vars->target[1] - moby->pos.y);
+        face_target_2e3f20(moby, desired_facing_yaw, &mover_2e3f20.yaw_speed,
                                 frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
         if ((step_mover_2e3f20(moby, &mover_2e3f20, sand_mouse_vars->target, sand_mouse_vars->vel) & 6)
             || vector_distance(((float *)&moby->pos), hero_2e3f20->pos) < 1.0f) {
@@ -1626,15 +1626,15 @@ void sand_mouse_update(struct Moby *moby) {
     case SAND_MOUSE_RETURN_TO_PARENT:
         {
             float z;
-            int r;
+            int mover_result_flags;
             mover_2e3f20.owner = 0;
-            ang = fast_arc_tan(sand_mouse_vars->target[0] - moby->pos.x, sand_mouse_vars->target[1] - moby->pos.y);
-            face_target_2e3f20(moby, ang, &mover_2e3f20.yaw_speed,
+            desired_facing_yaw = fast_arc_tan(sand_mouse_vars->target[0] - moby->pos.x, sand_mouse_vars->target[1] - moby->pos.y);
+            face_target_2e3f20(moby, desired_facing_yaw, &mover_2e3f20.yaw_speed,
                                     frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
             z = moby->pos.z;
-            r = step_mover_2e3f20(moby, &mover_2e3f20, sand_mouse_vars->target, sand_mouse_vars->vel);
+            mover_result_flags = step_mover_2e3f20(moby, &mover_2e3f20, sand_mouse_vars->target, sand_mouse_vars->vel);
             moby->pos.z = z;
-            if (r & 4) {
+            if (mover_result_flags & 4) {
                 if (moby->prev_seq != 0) {
                     blend_moby_animation_3830(moby, 0, 0, scale_game_frames(6));
                 }
