@@ -202,7 +202,9 @@ extern s16 *FUN_002141f8_30a778(struct Moby *) __asm__("FUN_002141f8");
 extern void FUN_001e93b0_30a778(char *, s32, s32) __asm__("FUN_001e93b0");
 extern char D_L09_00209280[];
 
-struct Moby *FUN_L09_0030a778(struct Moby *owner, Vec4 *pos)
+struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) __asm__("FUN_L09_0030a778");
+
+struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos)
 {
     struct Moby *spawned_moby;
     struct Moby *other;
@@ -608,7 +610,7 @@ extern void FUN_L00_001fefc8(void *);
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
-extern struct Moby *FUN_L09_0030a778(struct Moby *, Vec4 *);
+extern struct Moby *respawn_spawner_child(struct Moby *, Vec4 *) __asm__("FUN_L09_0030a778");
 
 static inline void bubble_bounce(struct Moby *moby, BubbleVars *vars) {
     CollisionHit *hit = &D_L09_00173FC0;
@@ -699,7 +701,7 @@ void spawner_egg_update(struct Moby *moby) {
         moby->pos.z = probe_ground_height(&moby->pos, 0, 0.5f) + 0.2f;
         moby->pos.w = 0.0f;
         step.q = ((Vec4 *)&moby->pos)->q;
-        vars->held = FUN_L09_0030a778(vars->owner, &step);
+        vars->held = respawn_spawner_child(vars->owner, &step);
         moby->state = 2;
         break;
     case 2:
