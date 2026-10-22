@@ -587,7 +587,9 @@ extern float wind_sin(float) __asm__("FUN_001f9de0");
 extern int wind_inside(void *, int) __asm__("FUN_00214720");
 extern int wind_tick(short *) __asm__("FUN_001f9770");
 extern void wind_add(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L14_002eb568(struct Moby *m);
+void update_wind_sparks(struct Moby *wind_control_moby) __asm__("FUN_L14_002eb568");
+
+void update_wind_sparks(struct Moby *m) __asm__("FUN_L14_002eb568");
 void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_travel_direction) __asm__("FUN_L14_002eb388");
 
 void initialize_wind_spark(struct Moby *m, int i, void *dir) __asm__("FUN_L14_002eb388");
@@ -643,7 +645,7 @@ void FUN_L14_002eaf88(struct Moby *wind_control_moby) {
         if (wind_control_moby != 0) {
             D_L14_00162240 = 1.0f;
         }
-        FUN_L14_002eb568(wind_control_moby);
+        update_wind_sparks(wind_control_moby);
         hero_base = (struct Hero *)(pos - 0x80);
         if (hero_base->unk308 == 0 && hero_base->unk2284 != 13 && (hero_base->unk12E2 != 0 || hero_base->frames_off_ground.s != 0) &&
             wind_inside(pos, wind_vars->clip_push) != 0) {
@@ -771,7 +773,7 @@ void draw_wind_sparks(struct Moby *m) __asm__("FUN_L14_002eb810");
 
 extern int D_L14_00161C10 __attribute__((sda));
 extern int D_L14_00161C2C __attribute__((sda));
-void FUN_L14_002eb568(struct Moby *wind_control_moby) {
+void update_wind_sparks(struct Moby *wind_control_moby) {
     Spk_k *spark_vars = (Spk_k *)wind_control_moby->pvars;
     float spark_travel_direction[4];
     float clip[4];
