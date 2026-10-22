@@ -1588,7 +1588,9 @@ extern void f215b10_29ad08(void) __asm__("FUN_00215b10");
 extern void sce_gs_sync_v(s32) __asm__("FUN_00122298");
 extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 
-void FUN_L00_0029ad08(void) {
+void start_vendor_exit_cutscene(void) __asm__("FUN_L00_0029ad08");
+
+void start_vendor_exit_cutscene(void) {
     Vendor_29a6b0 *vendor_state;
     VendorMoby_29a6b0 *moby;
     s32 index, item, offset;
@@ -1957,7 +1959,7 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_00212f90(void *, s32, s32, s32);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
-extern void FUN_L00_0029ad08(void);
+extern void start_vendor_exit_cutscene(void) __asm__("FUN_L00_0029ad08");
 extern void close_vendor_menu(s32) __asm__("FUN_L00_0029ab70");
 extern void update_hud_elements(s32) __asm__("FUN_L00_0023ac78");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
@@ -2336,7 +2338,7 @@ void FUN_L00_0029c648(void) {
                     row++;
                 }
                 if (ok) {
-                    FUN_L00_0029ad08();
+                    start_vendor_exit_cutscene();
                 } else {
                     close_vendor_menu(0);
                     allocate_voice_for_target_entry(6, 0, vendor_menu.f1c);
