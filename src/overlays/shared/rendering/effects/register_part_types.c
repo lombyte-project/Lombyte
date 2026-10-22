@@ -39,7 +39,7 @@ extern void FUN_L00_0026e3a8(void);
 extern void FUN_L00_0026e670(void);
 extern void FUN_L00_0026eb88(void);
 extern void FUN_L00_0026ee48(void);
-extern void FUN_L00_0026f048(void);
+extern void tick_effect_particle_lifetime(void) __asm__("FUN_L00_0026f048");
 extern void FUN_L00_0026f280(void);
 extern void FUN_L00_0026f660(void);
 extern void FUN_L00_0026f898(void);
@@ -128,7 +128,7 @@ void register_part_types(void) {
     handlers[30] = (u32)FUN_L00_0026e670;
     handlers[31] = (u32)FUN_L00_0026eb88;
     handlers[32] = (u32)FUN_L00_0026ee48;
-    handlers[33] = (u32)FUN_L00_0026f048;
+    handlers[33] = (u32)tick_effect_particle_lifetime;
     handlers[34] = (u32)FUN_L00_0026f280;
     handlers[35] = (u32)FUN_L00_0026f660;
     handlers[36] = (u32)FUN_L00_0026f898;
