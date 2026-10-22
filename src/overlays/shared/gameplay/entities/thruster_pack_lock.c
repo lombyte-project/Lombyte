@@ -190,7 +190,11 @@ extern int ftoi(float) __asm__("FUN_001fa6d0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 
-void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, int texture_width,
+void append_rotated_textured_screen_quad(float x, float y, float width, float height, float angle, int texture_width,
+                       int texture_height, long texture, int z_and_fog, int red, int green, int blue,
+                       int alpha) __asm__("FUN_L11_00310cf8");
+
+void append_rotated_textured_screen_quad(float x, float y, float width, float height, float angle, int texture_width,
                        int texture_height, long texture, int z_and_fog, int red, int green, int blue,
                        int alpha) {
     float vertical[4];
@@ -313,13 +317,13 @@ void FUN_L11_00311048(unsigned char red, unsigned char green, unsigned char blue
     float quad_size;
     texture = get_effect_texture(0x42);
     quad_size = scale * 20.0f;
-    FUN_L11_00310cf8(x, y, quad_size, quad_size, quad_rotation_angle, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
+    append_rotated_textured_screen_quad(x, y, quad_size, quad_size, quad_rotation_angle, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
     quad_rotation_angle = fast_add_rotations(quad_rotation_angle, 1.5707964f);
-    FUN_L11_00310cf8(x, y, quad_size, quad_size, quad_rotation_angle, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
+    append_rotated_textured_screen_quad(x, y, quad_size, quad_size, quad_rotation_angle, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
     quad_rotation_angle = fast_add_rotations(quad_rotation_angle, 1.5707964f);
-    FUN_L11_00310cf8(x, y, quad_size, quad_size, quad_rotation_angle, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
+    append_rotated_textured_screen_quad(x, y, quad_size, quad_size, quad_rotation_angle, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
     quad_rotation_angle = fast_add_rotations(quad_rotation_angle, 1.5707964f);
-    FUN_L11_00310cf8(x, y, quad_size, quad_size, quad_rotation_angle, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
+    append_rotated_textured_screen_quad(x, y, quad_size, quad_size, quad_rotation_angle, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
 }
 /* Projects a world point to screen and stores its x and y in 1/16 units, y plus an offset. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003126D8), where it is exact; names translated to the US level program. */

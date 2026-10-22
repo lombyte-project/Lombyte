@@ -5,8 +5,8 @@
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
-extern void FUN_L11_00310cf8(float, float, float, float, float, int, int, int, int, int, int, int,
-                             int);
+extern void append_rotated_textured_screen_quad(float, float, float, float, float, int, int, int, int, int, int, int,
+                             int) __asm__("FUN_L11_00310cf8");
 
 /* Draws four quads a quarter turn apart; same routine as FUN_L11_00311048 with this level's texture. */
 void draw_four_quarter_turn_effect_quads(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
@@ -18,13 +18,13 @@ void draw_four_quarter_turn_effect_quads(unsigned char red, unsigned char green,
     float quad_size;
     texture_handle = get_effect_texture(0x2E);
     quad_size = scale * 20.0f;
-    FUN_L11_00310cf8(x, y, quad_size, quad_size, quad_rotation_radians, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, green, blue, alpha);
+    append_rotated_textured_screen_quad(x, y, quad_size, quad_size, quad_rotation_radians, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, green, blue, alpha);
     quad_rotation_radians = fast_add_rotations(quad_rotation_radians, 1.5707964f);
-    FUN_L11_00310cf8(x, y, quad_size, quad_size, quad_rotation_radians, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, green, blue, alpha);
+    append_rotated_textured_screen_quad(x, y, quad_size, quad_size, quad_rotation_radians, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, green, blue, alpha);
     quad_rotation_radians = fast_add_rotations(quad_rotation_radians, 1.5707964f);
-    FUN_L11_00310cf8(x, y, quad_size, quad_size, quad_rotation_radians, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, green, blue, alpha);
+    append_rotated_textured_screen_quad(x, y, quad_size, quad_size, quad_rotation_radians, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, green, blue, alpha);
     quad_rotation_radians = fast_add_rotations(quad_rotation_radians, 1.5707964f);
-    FUN_L11_00310cf8(x, y, quad_size, quad_size, quad_rotation_radians, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, green, blue, alpha);
+    append_rotated_textured_screen_quad(x, y, quad_size, quad_size, quad_rotation_radians, 0x3F, 0x3F, texture_handle, 0xFFFFF3, red, green, blue, alpha);
 }
 
 #include "eetypes.h"
