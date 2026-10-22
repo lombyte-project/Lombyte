@@ -10,7 +10,7 @@
 
 
 extern char *FUN_L00_002db890(char *);
-extern int FUN_L00_002dbc30(char *, int, int, float);
+extern int launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");
 extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 
 /* Moby state 9 while FUN_L00_002dbc30 reports a hit; allocates a voice when the short at 0x68 of FUN_L00_002db890(moby) is 6. */
@@ -18,7 +18,7 @@ int process_moby_hit_state_and_voice(struct Moby *moby, int input_quad_address, 
 
 int process_moby_hit_state_and_voice(struct Moby *moby, int input_quad_address, int b, float f) {
     char *moby_callback_result = FUN_L00_002db890(moby);
-    int hit_processing_result = FUN_L00_002dbc30(moby, input_quad_address, b, f);
+    int hit_processing_result = launch_suck_cannon_projectile(moby, input_quad_address, b, f);
     if (hit_processing_result != 0) {
         moby->state = 0x9;
     } else if ((unsigned char)moby->state == 0x9) {

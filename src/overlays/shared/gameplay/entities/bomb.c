@@ -1034,12 +1034,12 @@ int FUN_L00_002cadc0(char *a) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC2B0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_002db890(char *);
-extern int FUN_L00_002dbc30(char *, int, int, float);
+extern int launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");
 extern int allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 
 int FUN_L00_002cae60(char *moby, int a, int target_moby, float target_height_offset) {
     char *class_callback_data = FUN_L00_002db890(moby);
-    int r = FUN_L00_002dbc30(moby, a, target_moby, target_height_offset);
+    int r = launch_suck_cannon_projectile(moby, a, target_moby, target_height_offset);
     if (r != 0) {
         moby[0x20] = 5;
     } else if ((unsigned char)moby[0x20] == 5) {

@@ -1917,7 +1917,9 @@ s32 FUN_001f96f8_002dbc30(s32) __asm__("FUN_001f96f8");
 void FUN_00212f90_002dbc30(void *, s32, s32, s32) __asm__("FUN_00212f90");
 f32 FUN_001f9b80_002dbc30(void *, void *) __asm__("FUN_001f9b80");
 void FUN_001f9a10_002dbc30(void *, void *, void *) __asm__("FUN_001f9a10");
-s32 FUN_L00_002dbc30(u8 *moby, u8 *launch_velocity, u8 *target, f32 target_height_offset) {
+s32 launch_suck_cannon_projectile(u8 *moby, u8 *launch_velocity, u8 *target, f32 target_height_offset) __asm__("FUN_L00_002dbc30");
+
+s32 launch_suck_cannon_projectile(u8 *moby, u8 *launch_velocity, u8 *target, f32 target_height_offset) {
     u8 *projectile_record = FUN_L00_002db890_002dbc30(moby);
     u8 *x;
     u8 *d;

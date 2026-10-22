@@ -2666,12 +2666,12 @@ s32 reserve_expired_frame_slot(s32 *values, s32 count, s32 offset) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002F30F0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_002db890(char *);
-extern int FUN_L00_002dbc30(char *, int, int, float);
+extern int launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");
 extern void FUN_0022da68(int, int, char *);
 
 int FUN_L01_002f1d18(char *moby, int a, int position_source_moby, float position_z_offset) {
     char *callback_record = FUN_L00_002db890(moby);
-    int r = FUN_L00_002dbc30(moby, a, position_source_moby, position_z_offset);
+    int r = launch_suck_cannon_projectile(moby, a, position_source_moby, position_z_offset);
     if (r != 0) {
         moby[0x20] = 7;
     } else if ((unsigned char)moby[0x20] == 7) {
