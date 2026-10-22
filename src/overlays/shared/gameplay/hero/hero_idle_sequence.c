@@ -2426,7 +2426,9 @@ extern float FUN_002132a8_209a40(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0024f7c8_209a40(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 
-void FUN_L00_00209a40(int iteration_count, int mode) {
+void emit_hero_randomized_motion_effects(int iteration_count, int mode) __asm__("FUN_L00_00209a40");
+
+void emit_hero_randomized_motion_effects(int iteration_count, int mode) {
     float pos[4];
     V_209a40 randomized_displacement;
     int i;

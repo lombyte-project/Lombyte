@@ -230,7 +230,7 @@ extern u8 D_L03_0017C0C0[];
 extern void FUN_L00_00216e48(s32, struct MobyView *, s32);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
-extern void FUN_L00_00209a40(s32, s32);
+extern void emit_hero_randomized_motion_effects(s32, s32) __asm__("FUN_L00_00209a40");
 extern void emit_hero_surface_effect_burst(s32, s32, s32) __asm__("FUN_L00_00209ca8");
 extern void pool_splash(s32, s32, s32, f32, f32, f32, f32) __asm__("FUN_L00_002a3ec8");
 extern f32 FUN_L00_0025bc98(f32 *, f32, f32 *, s32, f32, f32, f32);
@@ -548,13 +548,13 @@ void update_hero_motion_for_current_state(void) {
             s32 n;
             fast_dec_timer_s16(&hero.unk90A);
             n = (s16)hero.unk90A >> 2;
-            FUN_L00_00209a40(n > 8 ? 8 : n, 0);
+            emit_hero_randomized_motion_effects(n > 8 ? 8 : n, 0);
         }
         if (hero.state.current == 0x33 && hero.unkA9C == 0 && hero.anim_frame > 0.0f && hero.anim_frame < 10.0f) {
-            FUN_L00_00209a40(4, 1);
+            emit_hero_randomized_motion_effects(4, 1);
         }
         if (hero.state.current == 0x34 && hero.state.prev == 0x35 && scale_game_frames(15) > hero.state_timer) {
-            FUN_L00_00209a40((scale_game_frames(20) - hero.state_timer) / 3 + 1, 1);
+            emit_hero_randomized_motion_effects((scale_game_frames(20) - hero.state_timer) / 3 + 1, 1);
         }
         if (hero.state.step == 1) {
             if (hero.state_timer == 1) {
@@ -797,7 +797,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     case 0x76: {
         s32 n = 10 - hero.state_timer / 3;
-        FUN_L00_00209a40(n > 8 ? 8 : n, 0);
+        emit_hero_randomized_motion_effects(n > 8 ? 8 : n, 0);
         GROUND_FRICTION();
         clip_hero_horizontal_velocity(0);
         break;
@@ -851,7 +851,7 @@ void update_hero_motion_for_current_state(void) {
         }
         if (hero.unk90A != 0) {
             s32 n = --hero.unk90A >> 3;
-            FUN_L00_00209a40(n > 6 ? 6 : n, 0);
+            emit_hero_randomized_motion_effects(n > 6 ? 6 : n, 0);
         }
         hero.anim_speed = 0.6f;
         stick_target(frame_time * 3.0f, 0);
@@ -882,7 +882,7 @@ void update_hero_motion_for_current_state(void) {
         }
         if (hero.state.current == 0x36 && hero.unkA9C == 0 && hero.anim_frame > 0.0f) {
             if (hero.anim_frame < 10.0f) {
-                FUN_L00_00209a40(4, 1);
+                emit_hero_randomized_motion_effects(4, 1);
             }
         }
         reduce_and_apply_hero_planar_velocity_addend(frame_time_sq * 4.2f);
@@ -1509,7 +1509,7 @@ void update_hero_motion_for_current_state(void) {
             if (hero.motion.unk164 > frame_time * 0.5f) {
                 emit_hero_periodic_surface_particles(2, 4);
             }
-            FUN_L00_00209a40(5, 2);
+            emit_hero_randomized_motion_effects(5, 2);
         }
         if (hero.motion.unk164 < frame_time * 0.3f && hero.unk229C > 0.85f) {
             hero.unk3B8 = 1;
@@ -1598,7 +1598,7 @@ void update_hero_motion_for_current_state(void) {
             FUN_L00_00216e48(2, MV(hero.moby), 6);
         }
         if (current_level_index != 0xF) {
-            FUN_L00_00209a40(4, 2);
+            emit_hero_randomized_motion_effects(4, 2);
             spatial_scratch_or_hit_descriptor.f[0] = hero.motion.pos.f[0] + random_float_between(-0.25f, 0.25f);
             spatial_scratch_or_hit_descriptor.f[1] = hero.motion.pos.f[1] + random_float_between(-0.25f, 0.25f);
             spatial_scratch_or_hit_descriptor.f[2] = hero.motion.pos.f[2] + random_float_between(-0.1f, 0.4f);
@@ -1931,7 +1931,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
             if (hero.anim_frame >= 4.0f && hero.anim_frame <= 7.0f) {
-                FUN_L00_00209a40(7, 0);
+                emit_hero_randomized_motion_effects(7, 0);
             }
         }
         state_timer_or_trail_mode = hero.state_timer;
