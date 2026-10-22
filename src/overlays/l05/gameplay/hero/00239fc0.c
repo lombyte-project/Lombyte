@@ -509,7 +509,9 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_L05_002402a8(void);
 
 /* Same routine as FUN_L16_00211098, without the mode 15 and 21 cases. */
-void FUN_L05_002413e0(void) {
+void integrate_hero_motion_with_collisions(void) __asm__("FUN_L05_002413e0");
+
+void integrate_hero_motion_with_collisions(void) {
     V_c413e0 previous;
     V_c413e0 work;
     V_c413e0 plane;
