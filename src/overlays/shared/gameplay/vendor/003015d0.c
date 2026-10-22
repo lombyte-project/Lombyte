@@ -44,7 +44,7 @@ extern int D_L14_001620D8_t; /* no foreign declaration */
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L14_003017f8(char *);
+extern void start_vendor_beam_pulse(char *) __asm__("FUN_L14_003017f8");
 void update_vendor_beam_animation(char *moby) __asm__("FUN_L14_00301de8");
 
 extern void update_vendor_beam_animation(char *) __asm__("FUN_L14_00301de8");
@@ -86,7 +86,7 @@ void update_vendor_beam(unsigned char *moby) {
     beam_state = moby[0x20];
     switch (beam_state) {
     case BEAM_STATE_INITIALIZE:
-        FUN_L14_003017f8((char *)moby);
+        start_vendor_beam_pulse((char *)moby);
         beam_vars->s10 = scale_game_frames(beam_vars->wC);
         moby[0x20] = 2;
         beam_vars->f624 = vector_length_xyz(&D_L14_001600EC[beam_vars->w0].axis[1]);
@@ -97,7 +97,7 @@ void update_vendor_beam(unsigned char *moby) {
         if (D_L14_00162188_s != 0) {
             if (beam_vars->s12 == 0) {
                 D_L14_00162188_s = D_L14_00162188_s - 1;
-                FUN_L14_003017f8((char *)moby);
+                start_vendor_beam_pulse((char *)moby);
             }
         }
         break;
@@ -105,7 +105,7 @@ void update_vendor_beam(unsigned char *moby) {
         if (fast_dec_timer_s16(&beam_vars->s10) != 0) {
             moby[0x20] = 3;
             beam_vars->s10 = scale_game_frames(beam_vars->s4);
-            FUN_L14_003017f8((char *)moby);
+            start_vendor_beam_pulse((char *)moby);
         }
         break;
     case BEAM_STATE_REPEAT_PULSES:
@@ -118,7 +118,7 @@ void update_vendor_beam(unsigned char *moby) {
             }
             beam_vars->s10 = scale_game_frames(phase_duration_frames);
         } else if (beam_vars->s12 == 0) {
-            FUN_L14_003017f8((char *)moby);
+            start_vendor_beam_pulse((char *)moby);
         }
         break;
     }
@@ -178,7 +178,7 @@ typedef struct {
 } VendorBeamVars;
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00302C80). */
-void FUN_L14_003017f8(char *moby) {
+void start_vendor_beam_pulse(char *moby) {
     VendorBeamVars *beam = *(VendorBeamVars **)(moby + 0x78);
     Vec4 path[32];
     Vec4 path_steps[32];
