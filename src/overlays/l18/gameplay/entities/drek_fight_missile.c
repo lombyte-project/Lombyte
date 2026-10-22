@@ -670,7 +670,9 @@ void FUN_L18_002f16f0(struct Moby *moby) {
 extern void FUN_L18_002f1d08_u(int, int) __asm__("FUN_L18_002f1d08");
 extern void set_group_class_0630_moby_byte_bc(int, int) __asm__("FUN_L18_002fa888");
 
-void FUN_L18_002f1c38(struct Moby *moby) {
+void activate_drek_boss_class_0565_moby(struct Moby *moby) __asm__("FUN_L18_002f1c38");
+
+void activate_drek_boss_class_0565_moby(struct Moby *moby) {
     char *state = (char *)moby->pvars;
     if (moby->oclass == 0x565 && moby->state == 1) {
         if (*(int *)(state + 0xC) != -1) {
@@ -1510,7 +1512,7 @@ f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 float absolute_float(float input) __asm__("func_001F99C0");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 s32 is_value_within_interpolated_window(void *arg0, f32 fparg0) __asm__("FUN_00214cc8");
-void FUN_L18_002f1c38(struct Moby *moby);
+void activate_drek_boss_class_0565_moby(struct Moby *moby) __asm__("FUN_L18_002f1c38");
 void FUN_L18_002f2b18(char *moby);
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -1838,7 +1840,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             for (i = 0; i < 4; i++) {
                 int k = boss_data->f34C == 1 ? boss_data->f230[i] : boss_data->f240[i];
 
-                FUN_L18_002f1c38(D_L18_0015FFD8 + k * 0x100);
+                activate_drek_boss_class_0565_moby(D_L18_0015FFD8 + k * 0x100);
             }
         }
         if (boss_data->f33C != 0) {
