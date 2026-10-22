@@ -1447,7 +1447,9 @@ f32 FUN_L00_0025c230_26c860(void *, void *, void *, s32) __asm__("FUN_L00_0025c2
 s32 FUN_001f9770_26c860(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08_26c860(void *) __asm__("FUN_L00_00267a08");
 s32 FUN_001fa6d0_26c860(f32) __asm__("FUN_001fa6d0");
-void FUN_L00_0026c860(M_26c860 *particle) {
+void update_spiraling_fade_in_out_effect_particle(M_26c860 *particle) __asm__("FUN_L00_0026c860");
+
+void update_spiraling_fade_in_out_effect_particle(M_26c860 *particle) {
     R_26c860 *r = &particle->r;
     V_26c860 reference_position, position_offset_scratch, transformed_position_offset;
     M3_26c860 position_offset_matrix;
