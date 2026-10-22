@@ -1554,7 +1554,9 @@ extern f32 D_L14_00161B40 __attribute__((sda));
 extern f32 D_L14_00161B44 __attribute__((sda));
 extern f32 D_L14_00161B48 __attribute__((sda));
 /* A piece of debris: follows its race path until its timer runs out, then flies, spins and falls until it hits something or leaves the map. */
-void FUN_L14_002dfd10(struct Moby *moby) {
+void update_path_or_ballistic_debris(struct Moby *moby) __asm__("FUN_L14_002dfd10");
+
+void update_path_or_ballistic_debris(struct Moby *moby) {
     Data_dfd10 *data = (Data_dfd10 *)moby->pvars;
     Vec4 probe;
     f32 position_offset[4];
