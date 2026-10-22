@@ -363,7 +363,9 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 void mark_moby_for_removal_a7220(void *obj) __asm__("FUN_0020c828");
 extern char *D_L18_001B2DDC_c __asm__("D_L18_001B2ADC") __attribute__((section(".data")));
 
-void FUN_L18_002a7220(char *moby) {
+void update_projectile_motion_collision_and_trail(char *moby) __asm__("FUN_L18_002a7220");
+
+void update_projectile_motion_collision_and_trail(char *moby) {
     float next_position[4];
     char hit_descriptor[0x30];
     float hit_direction_vector[4];
