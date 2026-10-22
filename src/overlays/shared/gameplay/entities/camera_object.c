@@ -2237,7 +2237,9 @@ char *FUN_L00_002a96f8(void *owner, void *pos, float a, float b, float c, char *
 extern char *func_0020D348_m(int);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 
-void *FUN_L00_002a99b0(int unused, void *spawn_position, int initial_paired_value, float scale, float initial_private_scalar, float b) {
+void *spawn_class_593_moby(int unused, void *spawn_position, int initial_paired_value, float scale, float initial_private_scalar, float b) __asm__("FUN_L00_002a99b0");
+
+void *spawn_class_593_moby(int unused, void *spawn_position, int initial_paired_value, float scale, float initial_private_scalar, float b) {
     char *spawned_moby = func_0020D348_m(0x593);
     if (spawned_moby != 0) {
         char *moby_vars;

@@ -112,7 +112,7 @@ extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FU
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern unsigned char D_0013D4C0[];
-extern void *FUN_L00_002a99b0(int unused, void *pos, int c, float scale, float a, float b);
+extern void *spawn_class_593_moby(int unused, void *pos, int c, float scale, float a, float b) __asm__("FUN_L00_002a99b0");
 extern void FUN_L00_00205f60(int a0, int a1, int a2);
 extern void FUN_L00_00206c08(void);
 extern void FUN_L00_00209ca8(int, int, int);
@@ -2850,7 +2850,7 @@ void hero_update_transitions(void) {
                     if (hero.unk418 == 1) {
                         qcopy(v0, hero.motion.pos.f);
                         v0[2] = hero.ground_z.f + 0.2f;
-                        FUN_L00_002a99b0((int)((unsigned char *)hero.moby), v0, scale_game_frames(0x19), 2.0f,
+                        spawn_class_593_moby((int)((unsigned char *)hero.moby), v0, scale_game_frames(0x19), 2.0f,
                                          frame_time * 15.0f, 40.0f);
                     }
                     if (hero.unk418 != 0 && hero.unk1C4 == 0) {
