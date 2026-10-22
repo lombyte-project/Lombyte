@@ -690,12 +690,12 @@ void FUN_L01_002370b8(void) {
                 ((Moby *)hero.unk6A4)->f23 = 0x80;
             }
             {
-                Moby *dst = ((Moby *)hero.unk6A4);
-                Moby *src = ((Moby *)hero.moby);
+                Moby *sink_follower_moby = ((Moby *)hero.unk6A4);
+                Moby *hero_moby = ((Moby *)hero.moby);
 
-                qcopy(dst->f10, src->f10);
-                qcopy(dst->f40, src->f40);
-                allocate_voice_for_target_entry_cf(dst);
+                qcopy(sink_follower_moby->f10, hero_moby->f10);
+                qcopy(sink_follower_moby->f40, hero_moby->f40);
+                allocate_voice_for_target_entry_cf(sink_follower_moby);
             }
         }
         hero.motion.velocity.f[2] = 0.0f;
