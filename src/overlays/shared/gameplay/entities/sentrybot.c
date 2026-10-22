@@ -58,7 +58,9 @@ int move_sentrybot_toward_point(char *moby, float *point, float target_forward_s
 extern int move_sentrybot_toward_point(char *moby, float *point, float arg) __asm__("FUN_L15_00299ae0");
 extern int can_sentrybot_approach_linked_moby(void *) __asm__("FUN_L15_00299ca0");
 extern int FUN_L15_00299dd8(char *m);
-extern int FUN_L15_00299ff8(void *);
+int can_sentrybot_advance_patrol(void *input_moby) __asm__("FUN_L15_00299ff8");
+
+extern int can_sentrybot_advance_patrol(void *) __asm__("FUN_L15_00299ff8");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int random_integer_below(int);
@@ -283,7 +285,7 @@ void sentrybot_update(unsigned char *moby) {
                              (void *)0xA, (void *)0xF);
         } else if (moby[0x20] == 2) {
             if (*(int *)(data + 0x124) != -1) {
-                if (*(int *)(data + 0x144) == 0 || FUN_L15_00299ff8(moby) != 0) {
+                if (*(int *)(data + 0x144) == 0 || can_sentrybot_advance_patrol(moby) != 0) {
                     *(int *)(data + 0x14C) = scale_game_frames(*(int *)(data + 0x148));
                     moby[0x20] = 3;
                 }
@@ -1134,7 +1136,7 @@ int FUN_L15_00299dd8(char *moby) {
 extern int D_L15_0015FFD8;
 extern int D_L15_001ABE40[];
 
-int FUN_L15_00299ff8(void *input_moby) {
+int can_sentrybot_advance_patrol(void *input_moby) {
     unsigned char *moby = input_moby;
     unsigned short *group_moby_entry;
     char *moby_data;
