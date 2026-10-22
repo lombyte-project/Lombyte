@@ -448,7 +448,9 @@ extern float func_L00_0025CCF0_spark(void *, void *, float, float, float, float,
                                      int) __asm__("FUN_L00_0025bc98");
 extern int func_L00_001EFFF0_spark(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
-void FUN_L16_002a3f38(unsigned char *moby) {
+void update_homing_projectile(unsigned char *moby) __asm__("FUN_L16_002a3f38");
+
+void update_homing_projectile(unsigned char *moby) {
     enum {
         PROJECTILE_STATE_FLYING = 0,
         PROJECTILE_STATE_IMPACT = 1
