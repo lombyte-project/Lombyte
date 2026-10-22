@@ -415,7 +415,9 @@ extern s16 D_L00_00161666;
 extern u8 D_L00_001DB5C0[];
 extern u8 D_L00_001DBA20[];
 void FUN_L00_002baae0(void *, s32, s32, s32, f32, f32, f32);
-void FUN_L00_002bb0b0(void *);
+void draw_beam_anchor_camera_facing_quads(void *mv) __asm__("FUN_L00_002bb0b0");
+
+void draw_beam_anchor_camera_facing_quads(void *) __asm__("FUN_L00_002bb0b0");
 void draw_beam_and_arc_effects(u8 *moby) __asm__("FUN_L00_002ba970");
 
 void draw_beam_and_arc_effects(u8 *moby) {
@@ -436,7 +438,7 @@ void draw_beam_and_arc_effects(u8 *moby) {
                      D_L00_00161610, 0.2f);
     FUN_L00_002baae0(D_L00_001DBA20 + 0xF0, D_L00_00161666, D_L00_00161666, 5, D_L00_0016160C,
                      D_L00_00161610, 0.2f);
-    FUN_L00_002bb0b0(moby);
+    draw_beam_anchor_camera_facing_quads(moby);
 }
 
 #include "qcopy.h"
@@ -617,7 +619,7 @@ extern float D_L00_00161648 __attribute__((sda));
 extern float D_L00_0016164C __attribute__((sda));
 extern V_2bb0b0 D_L00_001DB560[] __attribute__((section(".data")));
 extern UV_2bb0b0 D_L00_001DB5A0[] __attribute__((section(".data")));
-void FUN_L00_002bb0b0(void *mv) {
+void draw_beam_anchor_camera_facing_quads(void *mv) {
     Q_2bb0b0 quad;
     V_2bb0b0 camera_facing_transform[4];
     V_2bb0b0 *quad_anchor_position = *(V_2bb0b0 **)((char *)mv + 0x78);
