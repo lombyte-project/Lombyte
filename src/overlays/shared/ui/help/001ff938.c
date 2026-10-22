@@ -181,7 +181,9 @@ extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void FUN_L00_00262b00(float, float, char *, float *, float *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L15_002007d8(void) {
+void update_hero_bobbing_and_target_position(void) __asm__("FUN_L15_002007d8");
+
+void update_hero_bobbing_and_target_position(void) {
     struct Hero *base = &hero;
     if (base->state.current == 0x6B && base->unk8BC == 0) {
         char *position_target;
