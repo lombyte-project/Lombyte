@@ -57,7 +57,9 @@ extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r_q(float) __asm__("FUN_001fa6d0");
 
-unsigned char *FUN_L17_0026fdd0(char *position_source, int mode, int step) {
+unsigned char *create_drone_flight_trail_record(char *position_source, int mode, int step) __asm__("FUN_L17_0026fdd0");
+
+unsigned char *create_drone_flight_trail_record(char *position_source, int mode, int step) {
     unsigned char *record;
     int remaining_steps;
     if (mode)

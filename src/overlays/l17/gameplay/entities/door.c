@@ -257,7 +257,7 @@ extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
 extern unsigned char *FUN_L00_002730e0_q(float *pos, char *vel, int color, unsigned char life,
                                          unsigned char b, int mode,
                                          float scale) __asm__("FUN_L00_002730e0");
-extern unsigned char *FUN_L17_0026fdd0_q(char *pos, int mode, int step) __asm__("FUN_L17_0026fdd0");
+extern unsigned char *create_drone_flight_trail_record(char *pos, int mode, int step) __asm__("FUN_L17_0026fdd0");
 extern unsigned char D_00141968_x_q[] __asm__("D_00141968");
 extern void FUN_001f9a40_q(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int,
@@ -323,9 +323,9 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
         if (*(int *)(drone_vars + 0x38) < 0x3C) {
             step = (0x3C - *(int *)(drone_vars + 0x38)) >> 2;
         }
-        FUN_L17_0026fdd0_q((char *)a, 1, step);
-        FUN_L17_0026fdd0_q((char *)movement_midpoint, 1, step);
-        FUN_L17_0026fdd0_q((char *)a, 0, step);
+        create_drone_flight_trail_record((char *)a, 1, step);
+        create_drone_flight_trail_record((char *)movement_midpoint, 1, step);
+        create_drone_flight_trail_record((char *)a, 0, step);
         b[2] = b[2] + 0.25f;
         func_L00_0025A8C0_alt_q((char *)hit_descriptor, (int)moby, 1, 6.0f, drone_vars);
         *(short *)((char *)hit_descriptor + 0x1A) = moby->oclass;
