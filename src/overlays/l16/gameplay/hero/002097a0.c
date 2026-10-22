@@ -147,7 +147,9 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_0025f730(void *a, float x);
 
-void FUN_L16_0020f8b0(void) {
+void compose_and_limit_hero_velocity(void) __asm__("FUN_L16_0020f8b0");
+
+void compose_and_limit_hero_velocity(void) {
     char normalized_vector[16];
     char *accumulated_vector = D_0013E533 + 0x158D;
     char *normalization_source;

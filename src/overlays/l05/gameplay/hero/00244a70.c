@@ -167,7 +167,7 @@ extern f32 FUN_L00_00232b90(f32, f32, f32);
 extern void FUN_L05_00237488(void *, void *, f32);
 extern void FUN_L00_00211cf8(f32, f32, f32);
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
-extern void FUN_L16_0020f8b0(void);
+extern void compose_and_limit_hero_velocity(void) __asm__("FUN_L16_0020f8b0");
 extern void FUN_L05_00254358(void *, void *);
 extern void FUN_L00_00216f90(void *, void *, s32, s32);
 extern void FUN_L00_00216130(void *, void *, f32, f32, f32, s32);
