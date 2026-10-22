@@ -21,7 +21,7 @@ extern void FUN_001f9a28_32b90(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68_32b90(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_32b90(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9bf8_32b90(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void FUN_L00_0025d238_32b90(V4_32b90 *, void *) __asm__("FUN_L00_0025d238");
+extern void clip_negative_segment_endpoint_xyz(V4_32b90 *, void *) __asm__("FUN_L00_0025d238");
 extern s32 FUN_001efa68_32b90(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 extern f32 FUN_L00_00233d30_32b90(void *) __asm__("FUN_L00_00233d30");
 extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
@@ -49,7 +49,7 @@ f32 calculate_hero_motion_prediction_time(f32 prediction_time, f32 acceleration_
             predicted_position[2] -= ((prediction_time * prediction_time + prediction_time) * 0.5f) * acceleration_scale;
             FUN_001f9a10_32b90(predicted_position, predicted_position, &hero.motion.pos);
             v.q = hero.motion.pos.q;
-            FUN_L00_0025d238_32b90(&v, predicted_position);
+            clip_negative_segment_endpoint_xyz(&v, predicted_position);
             qcopy(&v, &hero.motion.pos);
             if (FUN_001efa68_32b90(&v, predicted_position, 0xd24, 0, 0) != 0) {
                 if (FUN_L00_00233d30_32b90((f32 *)D_L00_00173E80_32b90) <= 0.87266463f) {
@@ -74,7 +74,7 @@ f32 calculate_hero_motion_prediction_time(f32 prediction_time, f32 acceleration_
         FUN_001f9a10_32b90(predicted_position, &vector_scratch, predicted_position);
         FUN_001f9a10_32b90(predicted_position, &hero.motion.pos, predicted_position);
         hero_position_copy.q = hero.motion.pos.q;
-        FUN_L00_0025d238_32b90(&hero_position_copy, predicted_position);
+        clip_negative_segment_endpoint_xyz(&hero_position_copy, predicted_position);
         if (FUN_001efa68_32b90(&hero.motion.pos, predicted_position, 0xd24, 0, 0) != 0) {
             f32 nb;
             nb = acceleration_scale * -0.5f;
@@ -98,7 +98,7 @@ f32 calculate_hero_motion_prediction_time(f32 prediction_time, f32 acceleration_
         FUN_001f9a10_32b90(predicted_position, &vector_scratch, predicted_position);
         FUN_001f9a10_32b90(predicted_position, &hero.motion.pos, predicted_position);
         hero_position_copy.q = hero.motion.pos.q;
-        FUN_L00_0025d238_32b90(&hero_position_copy, predicted_position);
+        clip_negative_segment_endpoint_xyz(&hero_position_copy, predicted_position);
         if (FUN_001efa68_32b90(&hero.motion.pos, predicted_position, 0xd24, 0, 0) != 0) {
             f32 nb;
             nb = acceleration_scale * -0.5f;

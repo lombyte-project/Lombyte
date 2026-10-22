@@ -3165,7 +3165,7 @@ typedef struct {
 } __attribute__((aligned(16))) Vec4_002126b8;
 void FUN_001f9bf8_002126b8(Vec4_002126b8 *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_002126b8(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_0025d238_002126b8(Vec4_002126b8 *, void *) __asm__("FUN_L00_0025d238");
+void clip_negative_segment_endpoint_xyz(Vec4_002126b8 *, void *) __asm__("FUN_L00_0025d238");
 void hero_get_collision_ray_endpoints(Vec4_002126b8 *, Vec4_002126b8 *, int, float, float) __asm__("FUN_L00_002126b8");
 void hero_get_collision_ray_endpoints(Vec4_002126b8 *ray_start, Vec4_002126b8 *ray_end, int mode, float fa, float fb) {
     Vec4_002126b8 ray_scratch_vectors[2];
@@ -3177,7 +3177,7 @@ void hero_get_collision_ray_endpoints(Vec4_002126b8 *ray_start, Vec4_002126b8 *r
         FUN_001f9bf8_002126b8(&ray_scratch_vectors[0], up, -fa);
         FUN_001f9a10_002126b8(ray_start, base, &ray_scratch_vectors[0]);
         *(u128_002126b8 *)&ray_scratch_vectors[1] = *(u128_002126b8 *)ray_start;
-        FUN_L00_0025d238_002126b8(&ray_scratch_vectors[1], ray_end);
+        clip_negative_segment_endpoint_xyz(&ray_scratch_vectors[1], ray_end);
     } else {
         qcopy(&ray_scratch_vectors[0], &hero.motion.pos);
         qcopy(ray_end, &ray_scratch_vectors[0]);

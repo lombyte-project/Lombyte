@@ -539,7 +539,7 @@ extern void FUN_001f9a28_32b90(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68_32b90(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_32b90(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9bf8_32b90(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void FUN_L00_0025d238_32b90(V4_32b90 *, void *) __asm__("FUN_L00_0025d238");
+extern void clip_negative_segment_endpoint_xyz(V4_32b90 *, void *) __asm__("FUN_L00_0025d238");
 extern s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 extern f32 FUN_L00_00233d30_32b90(void *) __asm__("FUN_L00_00233d30");
 extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
@@ -562,7 +562,7 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
             trajectory_endpoint[2] -= ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * gravity_acceleration;
             FUN_001f9a10_32b90(trajectory_endpoint, trajectory_endpoint, &hero.motion.pos);
             collision_start_or_gravity_vector.q = hero.motion.pos.q;
-            FUN_L00_0025d238_32b90(&collision_start_or_gravity_vector, trajectory_endpoint);
+            clip_negative_segment_endpoint_xyz(&collision_start_or_gravity_vector, trajectory_endpoint);
             qcopy(&collision_start_or_gravity_vector, &hero.motion.pos);
             if (collision_line(&collision_start_or_gravity_vector, trajectory_endpoint, 0x24, 0, 0) != 0) {
                 if (FUN_L00_00233d30_32b90((f32 *)coll_hit_normal) <= 0.87266463f) {
@@ -587,7 +587,7 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
         FUN_001f9a10_32b90(trajectory_endpoint, &trajectory_work_vector, trajectory_endpoint);
         FUN_001f9a10_32b90(trajectory_endpoint, &hero.motion.pos, trajectory_endpoint);
         hero_position_copy.q = hero.motion.pos.q;
-        FUN_L00_0025d238_32b90(&hero_position_copy, trajectory_endpoint);
+        clip_negative_segment_endpoint_xyz(&hero_position_copy, trajectory_endpoint);
         if (collision_line(&hero.motion.pos, trajectory_endpoint, 0x24, 0, 0) != 0) {
             f32 nb;
             nb = gravity_acceleration * -0.5f;
@@ -611,7 +611,7 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
         FUN_001f9a10_32b90(trajectory_endpoint, &trajectory_work_vector, trajectory_endpoint);
         FUN_001f9a10_32b90(trajectory_endpoint, &hero.motion.pos, trajectory_endpoint);
         hero_position_copy.q = hero.motion.pos.q;
-        FUN_L00_0025d238_32b90(&hero_position_copy, trajectory_endpoint);
+        clip_negative_segment_endpoint_xyz(&hero_position_copy, trajectory_endpoint);
         if (collision_line(&hero.motion.pos, trajectory_endpoint, 0x24, 0, 0) != 0) {
             f32 nb;
             nb = gravity_acceleration * -0.5f;
