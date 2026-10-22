@@ -108,7 +108,9 @@ extern int func_001FA898_1F3010(float) __asm__("FUN_001fa6d0");
 extern int func_L04_001F2F68_1F3010(Moby *, void *, int) __asm__("FUN_L04_001f3038");
 extern int func_L04_0024D790_1F3010(void *, void *, void *, int) __asm__("FUN_L04_0024c7d8");
 
-void FUN_L04_001f30e0(Moby **others, int other_count, Moby *moby, Steer_1F3010 *steer, float *params) {
+void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer_1F3010 *steer, float *params) __asm__("FUN_L04_001f30e0");
+
+void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer_1F3010 *steer, float *params) {
     Vec_1F3010 path_hit;
     Vec_1F3010 force;
     Vec_1F3010 uninitialized_point;
