@@ -844,7 +844,7 @@ typedef struct {
     short unk6;
 } HudCounter;
 
-extern int FUN_L00_0023aaa8(char *);
+extern int update_hud_animation_frame(char *) __asm__("FUN_L00_0023aaa8");
 extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 
 void FUN_L00_00239630(HudElem *hud_element) {
@@ -907,7 +907,7 @@ void FUN_L00_00239630(HudElem *hud_element) {
             hud_element->unk6C = -6;
         }
     }
-    FUN_L00_0023aaa8((char *)hud_element + 0x40);
+    update_hud_animation_frame((char *)hud_element + 0x40);
 }
 typedef struct {
     s16 x;

@@ -209,7 +209,7 @@ s32 hud_keep_visible(s32 key, s32 val) {
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int FUN_001fa6d0(float);
 extern float square_root(float) __asm__("FUN_001f9988");
-extern void FUN_L00_0023aaa8(void *);
+extern void update_hud_animation_frame(void *) __asm__("FUN_L00_0023aaa8");
 
 void FUN_L00_00235ea0(e) HudElem *e;
 {
@@ -274,11 +274,11 @@ void FUN_L00_00235ea0(e) HudElem *e;
             c[0]--;
         }
     }
-    FUN_L00_0023aaa8((char *)e + 0x40);
+    update_hud_animation_frame((char *)e + 0x40);
 }
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236AB8), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_0023aaa8(void *);
+extern void update_hud_animation_frame(void *) __asm__("FUN_L00_0023aaa8");
 
 void update_numeric_hud_element_direct_value(HudElem *hud_element) __asm__("FUN_L00_00236128");
 
@@ -320,7 +320,7 @@ void update_numeric_hud_element_direct_value(HudElem *hud_element) {
             hud_counters[0]--;
         }
     }
-    FUN_L00_0023aaa8((char *)hud_element + 0x40);
+    update_hud_animation_frame((char *)hud_element + 0x40);
 }
 extern float star_init_limit0_gp __asm__("D_L00_0015F750") __attribute__((sda));
 extern float star_init_limit1_gp __asm__("D_L00_0015F754") __attribute__((sda));

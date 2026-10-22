@@ -13,7 +13,7 @@
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int FUN_L00_0023aaa8(char *);
+extern int update_hud_animation_frame(char *) __asm__("FUN_L00_0023aaa8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 void FUN_L00_00235ea0(HudElem *hud_element) {
@@ -82,5 +82,5 @@ void FUN_L00_00235ea0(HudElem *hud_element) {
             counter_state_bytes[0]--;
         }
     }
-    FUN_L00_0023aaa8((char *)hud_element + 0x40);
+    update_hud_animation_frame((char *)hud_element + 0x40);
 }
