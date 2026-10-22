@@ -1584,7 +1584,9 @@ extern int level_frame __asm__("D_L11_0015F5CC");
 extern int random_integer_below_c3(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-void FUN_L11_0031ae68(struct Moby *m, float *ground, int n1, int n2);
+void spawn_bubble_surface_effects(struct Moby *source_moby, float *ground, int spark_count, int ground_effect_count) __asm__("FUN_L11_0031ae68");
+
+void spawn_bubble_surface_effects(struct Moby *m, float *ground, int n1, int n2) __asm__("FUN_L11_0031ae68");
 extern void FUN_L11_0031b098_c(char *) __asm__("FUN_L11_0031b098");
 extern void add_vector_xyz(void *, void *, void *);
 extern void scale_vector_xyz(void *, void *, float);
@@ -1630,14 +1632,14 @@ void FUN_L11_0031ab08(struct Moby *bubble_moby) {
         if (bubble_moby->pos.z < **(float **)(bubble_vars + 0x24)) {
             scale_vector_xyz(bubble_vars, bubble_vars, *(float *)&D_L11_0016240C);
             bubble_moby->state = 2;
-            FUN_L11_0031ae68((struct Moby *)bubble_moby, *(float **)(bubble_vars + 0x24), 8, 4);
+            spawn_bubble_surface_effects((struct Moby *)bubble_moby, *(float **)(bubble_vars + 0x24), 8, 4);
         }
         break;
     case BUBBLE_SHRINK_TO_REMOVAL:
         *(float *)(bubble_vars + 8) -= *(float *)&D_L11_00162404 * frame_time_sq;
         rate = bubble_moby->pclass->scale / (float)scale_game_frames(0x3C);
         if ((level_frame & 3) == 0) {
-            FUN_L11_0031ae68((struct Moby *)bubble_moby, *(float **)(bubble_vars + 0x24), 0, 1);
+            spawn_bubble_surface_effects((struct Moby *)bubble_moby, *(float **)(bubble_vars + 0x24), 0, 1);
             random_vector(randomized_effect_vector, 0.0f, D_0015ED6C_n[1]);
             randomized_effect_vector[2] = absolute_float(randomized_effect_vector[2]);
             spawned_effect = func_L00_0026FF20_p(&bubble_moby->pos, randomized_effect_vector, *(float *)&D_L11_00162414,
@@ -1707,7 +1709,7 @@ extern void add_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern char *func_L00_00272770_p(void *, void *, void *, float, float) __asm__("FUN_L00_002718d0");
 
-void FUN_L11_0031ae68(struct Moby *source_moby, float *ground, int spark_count, int ground_effect_count) {
+void spawn_bubble_surface_effects(struct Moby *source_moby, float *ground, int spark_count, int ground_effect_count) {
     float effect_spawn_scratch[4];
     int i;
     for (i = 0; i < spark_count; i++) {
