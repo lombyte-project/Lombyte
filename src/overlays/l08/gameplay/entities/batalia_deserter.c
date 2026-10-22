@@ -820,7 +820,7 @@ extern int *D_L08_001623E8[2] __attribute__((sda));
 extern int D_L08_001623C8[2] __attribute__((sda));
 extern void draw_layered_mesh_effect(void) __asm__("FUN_L08_002f0dc8");
 extern void queue_batalia_textured_batch_passes(void) __asm__("FUN_L08_00309030");
-extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
+extern void scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");
 extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
 extern void FUN_L08_002f12a0(int);
 extern void FUN_L08_002f1378(int);
@@ -841,9 +841,9 @@ void FUN_L08_003097b0(struct Moby *moby) {
     switch (moby->state) {
     case MOBY_INITIALIZE:
         if (D_L08_001623C4 == 0) {
-            FUN_L08_002f0f68(D_L08_001F8528, 8, D_L08_001F4C60, 0.5f, 0.5f, 0.65f, 0.5f, 1);
-            FUN_L08_002f0f68(D_L08_001623E8, 2, D_L08_001623C8, 0.5f, 0.5f, 0.5f, 1.0f, 1);
-            FUN_L08_002f0f68(D_L08_001F4C48, 6, D_L08_001F01C8, 0.25f, 0.25f, 0.25f, 1.0f, 1);
+            scale_rgba_tables(D_L08_001F8528, 8, D_L08_001F4C60, 0.5f, 0.5f, 0.65f, 0.5f, 1);
+            scale_rgba_tables(D_L08_001623E8, 2, D_L08_001623C8, 0.5f, 0.5f, 0.5f, 1.0f, 1);
+            scale_rgba_tables(D_L08_001F4C48, 6, D_L08_001F01C8, 0.25f, 0.25f, 0.25f, 1.0f, 1);
             D_L08_001623C4 = 1;
         }
         moby->state = 1;

@@ -1881,7 +1881,7 @@ extern int D_L11_0016252C __attribute__((sda));
 extern float vector_length_xyz(void *);
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern void draw_level11_layered_effect_batches(void) __asm__("FUN_L11_0031db50");
-extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
+extern void scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");
 extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
 extern void FUN_L08_002f12a0(int);
 extern void FUN_L08_002f1378(int);
@@ -1904,9 +1904,9 @@ void FUN_L11_0031e2f0(struct Moby *moby) {
     switch (moby->state) {
     case EFFECT_INITIALIZE:
         if (D_L11_0016252C == 0) {
-            FUN_L08_002f0f68(D_L11_00162570, 4, D_L11_00162530, 0.7f, 1.0f, 0.9f, 0.5f, 1);
-            FUN_L08_002f0f68(D_L11_001F9A48, 0xB, D_L11_001F4978, 0.5f, 0.5f, 0.5f, 1.0f, 1);
-            FUN_L08_002f0f68(D_L11_001FF730, 8, D_L11_001F9A78, 0.25f, 0.25f, 0.25f, 0.7f, 1);
+            scale_rgba_tables(D_L11_00162570, 4, D_L11_00162530, 0.7f, 1.0f, 0.9f, 0.5f, 1);
+            scale_rgba_tables(D_L11_001F9A48, 0xB, D_L11_001F4978, 0.5f, 0.5f, 0.5f, 1.0f, 1);
+            scale_rgba_tables(D_L11_001FF730, 8, D_L11_001F9A78, 0.25f, 0.25f, 0.25f, 0.7f, 1);
             D_L11_0016252C = 1;
         }
         moby->state = 1;
@@ -2059,7 +2059,7 @@ extern unsigned char D_L11_00162610_c __asm__("D_L11_00162610");
 extern float vector_length_xyz(void *);
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern void FUN_L11_0031e930_c(void) __asm__("FUN_L11_0031e930");
-extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
+extern void scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");
 extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
 extern void FUN_L08_002f12a0(int);
 extern void FUN_L08_002f1378(int);
@@ -2081,9 +2081,9 @@ void FUN_L11_0031f150(struct Moby *moby) {
     switch (moby->state) {
     case EFFECT_INITIALIZE:
         if (D_L11_001625FC == 0) {
-            FUN_L08_002f0f68(D_L11_00215220, 17, D_L11_00207900, 0.7f, 1.0f, 0.9f, 0.5f, 1);
-            FUN_L08_002f0f68(D_L11_00217740, 5, D_L11_00215268, 0.5f, 0.5f, 0.5f, 1.0f, 1);
-            FUN_L08_002f0f68(D_L11_002078D8, 9, D_L11_00200728, 0.25f, 0.25f, 0.25f, 0.7f, 1);
+            scale_rgba_tables(D_L11_00215220, 17, D_L11_00207900, 0.7f, 1.0f, 0.9f, 0.5f, 1);
+            scale_rgba_tables(D_L11_00217740, 5, D_L11_00215268, 0.5f, 0.5f, 0.5f, 1.0f, 1);
+            scale_rgba_tables(D_L11_002078D8, 9, D_L11_00200728, 0.25f, 0.25f, 0.25f, 0.7f, 1);
             D_L11_001625FC = 1;
         }
         moby->state = 1;

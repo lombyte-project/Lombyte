@@ -1321,7 +1321,7 @@ extern float D_L12_001620D8[2] __attribute__((sda));
 extern float frame_delta_time __asm__("D_0015ED7C") __attribute__((section(".sdata")));
 extern int *D_L12_00208AE0[];
 extern int D_L12_00205A80[];
-extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
+extern void scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 
 typedef struct {
@@ -1342,8 +1342,8 @@ void FUN_L12_0030bff0(M_bff0 *moby) {
     switch (moby->state) {
     case INITIALIZE_SCROLL_PHASES:
         if (D_L12_001620F0 == 0) {
-            FUN_L08_002f0f68(D_L12_00208AE0, 5, D_L12_00205A80, 0.1f, 0.5f, 0.4f, 0.5f, 1);
-            FUN_L08_002f0f68(D_L12_00205A58, 10, D_L12_001FBD10, 0.1f, 0.6f, 0.4f, 0.5f, 1);
+            scale_rgba_tables(D_L12_00208AE0, 5, D_L12_00205A80, 0.1f, 0.5f, 0.4f, 0.5f, 1);
+            scale_rgba_tables(D_L12_00205A58, 10, D_L12_001FBD10, 0.1f, 0.6f, 0.4f, 0.5f, 1);
             D_L12_001620F0 = 1;
         }
         moby->state = 1;
