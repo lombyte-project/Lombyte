@@ -302,7 +302,9 @@ extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
 extern s32 FUN_L00_00211870(f32);
 
-void FUN_L17_00214760(void) {
+void update_hero_motion_for_current_state(void) __asm__("FUN_L17_00214760");
+
+void update_hero_motion_for_current_state(void) {
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
