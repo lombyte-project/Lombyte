@@ -36,7 +36,9 @@ typedef struct {
     s32 f;
 } T6;
 /* Returns the moby data pointer plus 0xC0, or 0 when either is null. */
-s32 FUN_L01_002efbc8(T6 *moby) {
+s32 get_moby_data_plus_0xc0(T6 *moby) __asm__("FUN_L01_002efbc8");
+
+s32 get_moby_data_plus_0xc0(T6 *moby) {
     s32 moby_data_address;
     if (moby != 0) {
         moby_data_address = moby->f;
