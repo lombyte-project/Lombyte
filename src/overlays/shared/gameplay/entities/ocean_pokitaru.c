@@ -189,7 +189,9 @@ static inline void copy_xyz_089d0(float *dst, float *src) {
 
 /* Homing missile: eases its scale, re-picks a target every sixth frame, turns toward it within a cone and flies on;
    on impact it bursts into five sparks, otherwise it shrinks away once its timer runs out. */
-void FUN_L11_003089d0(struct Moby *moby) {
+void update_homing_missile(struct Moby *moby) __asm__("FUN_L11_003089d0");
+
+void update_homing_missile(struct Moby *moby) {
     MissileVars_089d0 *vars = (MissileVars_089d0 *)moby->pvars;
     float old[4];
     float look[4];
