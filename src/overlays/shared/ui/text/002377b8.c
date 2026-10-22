@@ -948,7 +948,9 @@ extern s32 D_L00_0015F7F8[1] __attribute__((sda));
 extern Pt D_L00_0017E478[];
 extern Pt D_L00_0017E460[];
 
-s32 FUN_L00_00239810(Hud *hud_element) {
+s32 draw_health_hud_panel(Hud *hud_element) __asm__("FUN_L00_00239810");
+
+s32 draw_health_hud_panel(Hud *hud_element) {
     s32 x;
     s32 y;
     s32 cnt;

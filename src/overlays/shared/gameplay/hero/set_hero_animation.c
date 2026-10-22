@@ -1722,12 +1722,12 @@ void try_reposition_hero_on_nearby_ground(void) {
 }
 void initialize_hud_element_with_counters() __asm__("FUN_L00_002395b0");
 void update_health_hud_animation_and_visibility() __asm__("FUN_L00_00239630");
-void FUN_L00_00239810();
+void draw_health_hud_panel() __asm__("FUN_L00_00239810");
 void queue_animation_update() __asm__("FUN_001ff308");
 /* Queues animation update 0x7535 with three FUN_L00_ callbacks and D_001415F8. */
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 void show_health_hud(void) {
-    queue_animation_update(1, 0x7535, initialize_hud_element_with_counters, update_health_hud_animation_and_visibility, FUN_L00_00239810,
+    queue_animation_update(1, 0x7535, initialize_hud_element_with_counters, update_health_hud_animation_and_visibility, draw_health_hud_panel,
                            &hero.health, 8);
 }
 
