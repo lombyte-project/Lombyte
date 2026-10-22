@@ -53,7 +53,9 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L15_00299880(unsigned char *, char *, int, int, float);
-extern int FUN_L15_00299ae0(char *moby, float *point, float arg);
+int move_sentrybot_toward_point(char *moby, float *point, float target_forward_step) __asm__("FUN_L15_00299ae0");
+
+extern int move_sentrybot_toward_point(char *moby, float *point, float arg) __asm__("FUN_L15_00299ae0");
 extern int can_sentrybot_approach_linked_moby(void *) __asm__("FUN_L15_00299ca0");
 extern int FUN_L15_00299dd8(char *m);
 extern int FUN_L15_00299ff8(void *);
@@ -408,7 +410,7 @@ void sentrybot_update(unsigned char *moby) {
         break;
     case SENTRYBOT_PATROL_MOVE: {
         float sp = frame_time * 2.0f;
-        if (FUN_L15_00299ae0((char *)moby,
+        if (move_sentrybot_toward_point((char *)moby,
                              (float *)((char *)D_L15_001B0AB0[*(int *)(data + 0x124)] +
                                        (*(int *)(data + 0x13C) * 0x10 + 0x10)),
                              sp)) {
@@ -473,7 +475,7 @@ void sentrybot_update(unsigned char *moby) {
     }
     case SENTRYBOT_PATROL_MOVE_FAST: {
         float sp = frame_time * 3.5f;
-        if (FUN_L15_00299ae0((char *)moby,
+        if (move_sentrybot_toward_point((char *)moby,
                              (float *)((char *)D_L15_001B0AB0[*(int *)(data + 0x124)] +
                                        (*(int *)(data + 0x13C) * 0x10 + 0x10)),
                              sp)) {
@@ -512,7 +514,7 @@ void sentrybot_update(unsigned char *moby) {
     case SENTRYBOT_RETURN_HOME: {
         unsigned char *home = data + 0x160;
         if (FUN_001f9b48(moby + 0x10, home) > 0.2f) {
-            FUN_L15_00299ae0((char *)moby, (float *)home, frame_time * 2.0f);
+            move_sentrybot_toward_point((char *)moby, (float *)home, frame_time * 2.0f);
         } else if (*(int *)(data + 0x124) != -1) {
             moby[0xBC] = 0;
             *(int *)(data + 0x144) = 0;
@@ -528,7 +530,7 @@ void sentrybot_update(unsigned char *moby) {
     case SENTRYBOT_RETURN_HOME_FAST: {
         unsigned char *home = data + 0x160;
         if (FUN_001f9b48(moby + 0x10, home) > 0.2f) {
-            FUN_L15_00299ae0((char *)moby, (float *)home, frame_time * 3.0f);
+            move_sentrybot_toward_point((char *)moby, (float *)home, frame_time * 3.0f);
         } else if (*(short *)(data + 0x156) == 0) {
             moby[0xBC] = 0;
             *(int *)(data + 0x144) = 0;
@@ -591,7 +593,7 @@ void sentrybot_update(unsigned char *moby) {
                             moby + 0x10);
         normalize_vector_xyz(va, va, vector_length_xyz(va) - 1.5f);
         add_vector_xyz(va, va, moby + 0x10);
-        if (FUN_L15_00299ae0((char *)moby, va, frame_time * 4.0f)) {
+        if (move_sentrybot_toward_point((char *)moby, va, frame_time * 4.0f)) {
             moby[0x20] = 0xF;
             if (moby[0x53] != 9)
                 blend_moby_animation(moby, 9, 0, scale_game_frames(10));
@@ -997,7 +999,7 @@ extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern void FUN_L00_00258830(int, int, float, float, float, int);
 
-int FUN_L15_00299ae0(char *moby, float *point, float target_forward_step) {
+int move_sentrybot_toward_point(char *moby, float *point, float target_forward_step) {
     float *fp = (float *)(moby + 0x48);
     char *moby_data = *(char **)(moby + 0x78);
     float movement_delta[4];
