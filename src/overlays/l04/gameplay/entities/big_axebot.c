@@ -45,7 +45,9 @@ void FUN_L04_002a5a08(struct Moby *moby) {
 
 void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
-void FUN_L04_002ba3e0(char *moby, void *new_seq, void *frame_index, void *blend_frames) {
+void blend_big_axebot_and_axe_animation(char *moby, void *new_seq, void *frame_index, void *blend_frames) __asm__("FUN_L04_002ba3e0");
+
+void blend_big_axebot_and_axe_animation(char *moby, void *new_seq, void *frame_index, void *blend_frames) {
     char *data = *(char **)(moby + 0x78);
     void *other;
     blend_moby_animation_u(moby, new_seq, frame_index, blend_frames);
@@ -548,7 +550,7 @@ extern void memset_cf(char *, int, void *) __asm__("FUN_0020cb10");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 extern void refresh_moby_spatial_bounds_from_basis(void *);
 extern void tick_countdown_32(int *counter);
-void FUN_L04_002ba3e0(char *arg, void *a, void *b, void *c);
+void blend_big_axebot_and_axe_animation(char *arg, void *a, void *b, void *c) __asm__("FUN_L04_002ba3e0");
 extern P_B7B0 *D_L04_001B0930_B7B0[] __asm__("D_L04_001B0630");
 
 void big_axebot_update(M_B7B0 *moby) __asm__("FUN_L04_002ba520");
@@ -682,7 +684,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     if ((hit->att->cls == 0 || hit->f2C > 1.0f) &&
                         (moby->f52 != 4 || hd < 17.0f || hd > 20.0f)) {
                         moby->fBC |= 5;
-                        FUN_L04_002ba3e0((char *)moby, (void *)5, 0, (void *)scale_game_frames(6));
+                        blend_big_axebot_and_axe_animation((char *)moby, (void *)5, 0, (void *)scale_game_frames(6));
                         FUN_L04_002ba448_c(moby, 2.0f);
                         moby->state = 8;
                     }
@@ -699,7 +701,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     }
                     data->f448 = scale_game_frames(0x1E);
                     moby->fBC |= 5;
-                    FUN_L04_002ba3e0((char *)moby, (void *)5, 0, (void *)scale_game_frames(6));
+                    blend_big_axebot_and_axe_animation((char *)moby, (void *)5, 0, (void *)scale_game_frames(6));
                     FUN_L04_002ba448_c(moby, 2.0f);
                     moby->state = 8;
                     trooper_start_knockback(knockback_yaw, moby, data->fC0, 5, 1, 0);
@@ -714,7 +716,7 @@ void big_axebot_update(M_B7B0 *moby) {
                 case BIG_AXEBOT_HIT_REACTION_RETURN_TO_IDLE:
                 case BIG_AXEBOT_HIT_REACTION_IDLE_RECOVERY:
                     allocate_voice_for_target_entry(0xB, 0, (char *)moby);
-                    FUN_L04_002ba3e0((char *)moby, (void *)6, (void *)2,
+                    blend_big_axebot_and_axe_animation((char *)moby, (void *)6, (void *)2,
                                      (void *)scale_game_frames(4));
                     data->f402 = scale_game_frames(0x28);
                     moby->state = 1;
@@ -783,7 +785,7 @@ void big_axebot_update(M_B7B0 *moby) {
         data->f5A = 0xC;
         if (data->f400 != 0) {
             moby->state = 3;
-            FUN_L04_002ba3e0((char *)moby, (void *)0xA, 0, (void *)scale_game_frames(0xC));
+            blend_big_axebot_and_axe_animation((char *)moby, (void *)0xA, 0, (void *)scale_game_frames(0xC));
         } else {
             moby->state = 1;
         }
@@ -797,11 +799,11 @@ void big_axebot_update(M_B7B0 *moby) {
 
             random_integer_below_cf(arr, 0, 0x18);
             arr[5] = 1;
-            FUN_L04_002ba3e0((char *)moby, (void *)arr[is_point_inside_clip_volume_cf(6)], 0,
+            blend_big_axebot_and_axe_animation((char *)moby, (void *)arr[is_point_inside_clip_volume_cf(6)], 0,
                              (void *)scale_game_frames(0x18));
         } else if (moby->f53 != 0xD && (moby->f53 != 6 || (moby->f70 & 2))) {
             if (flag ? target_distance < data->f43C * 2.0f : target_distance < data->f43C) {
-                FUN_L04_002ba3e0((char *)moby, (void *)0xD, 0, (void *)scale_game_frames(0x18));
+                blend_big_axebot_and_axe_animation((char *)moby, (void *)0xD, 0, (void *)scale_game_frames(0x18));
             }
         }
         if (data->f430 != -1 && data->f434 != -1 && data->f43A == 0 &&
@@ -816,13 +818,13 @@ void big_axebot_update(M_B7B0 *moby) {
             }
             if (data->f402 == 0) {
                 if (target_distance < 4.5f) {
-                    FUN_L04_002ba3e0((char *)moby, (void *)4, (void *)4,
+                    blend_big_axebot_and_axe_animation((char *)moby, (void *)4, (void *)4,
                                      (void *)scale_game_frames(0xC));
                     moby->state = 7;
                 } else if (flag ? target_distance < data->f43C * 2.0f : target_distance < data->f43C) {
                     int nf = (moby->fBC & 1) == 0;
                     if (nf) {
-                        FUN_L04_002ba3e0((char *)moby, (void *)2, 0,
+                        blend_big_axebot_and_axe_animation((char *)moby, (void *)2, 0,
                                          (void *)scale_game_frames(0xC));
                         moby->state = 2;
                         moby->fBC |= 1;
@@ -834,7 +836,7 @@ void big_axebot_update(M_B7B0 *moby) {
     }
     case BIG_AXEBOT_STATE_ALERT:
         if (moby->f52 == 2 && (moby->f70 & 2)) {
-            FUN_L04_002ba3e0(
+            blend_big_axebot_and_axe_animation(
                 (char *)moby,
                 (void *)((flag ? target_distance < data->f43C * 2.0f : target_distance < data->f43C) ? 0xD : 0), 0,
                 (void *)scale_game_frames(0xC));
@@ -843,17 +845,17 @@ void big_axebot_update(M_B7B0 *moby) {
         break;
     case BIG_AXEBOT_STATE_WAIT_FOR_TARGET:
         if (moby->f52 != 0 && (moby->f70 & 2)) {
-            FUN_L04_002ba3e0((char *)moby, (void *)0xB, 0, (void *)scale_game_frames(0xC));
+            blend_big_axebot_and_axe_animation((char *)moby, (void *)0xB, 0, (void *)scale_game_frames(0xC));
         }
         if (data->f402 == 0) {
             if (target_distance < 4.5f) {
-                FUN_L04_002ba3e0((char *)moby, (void *)4, (void *)4,
+                blend_big_axebot_and_axe_animation((char *)moby, (void *)4, (void *)4,
                                  (void *)scale_game_frames(0xC));
                 moby->state = 7;
             } else if (flag ? target_distance < data->f43C * 2.0f : target_distance < data->f43C) {
                 int nf = (moby->fBC & 1) == 0;
                 if (nf) {
-                    FUN_L04_002ba3e0((char *)moby, (void *)2, 0, (void *)scale_game_frames(0xC));
+                    blend_big_axebot_and_axe_animation((char *)moby, (void *)2, 0, (void *)scale_game_frames(0xC));
                     moby->state = 2;
                     moby->fBC |= 1;
                 }
@@ -865,19 +867,19 @@ void big_axebot_update(M_B7B0 *moby) {
         float a;
 
         if (moby->f53 != 3) {
-            FUN_L04_002ba3e0((char *)moby, (void *)3, 0, (void *)scale_game_frames(0xC));
+            blend_big_axebot_and_axe_animation((char *)moby, (void *)3, 0, (void *)scale_game_frames(0xC));
         }
         if (target_distance < 4.5f) {
-            FUN_L04_002ba3e0((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
+            blend_big_axebot_and_axe_animation((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
             moby->state = 7;
         }
         if (vector_distance(path->pts[data->f438], moby->pos) < 1.0f) {
             data->f438++;
             if (data->f438 == path->count) {
                 if (flag ? data->f43C * 2.0f < target_distance : data->f43C < target_distance) {
-                    FUN_L04_002ba3e0((char *)moby, 0, 0, (void *)scale_game_frames(0x18));
+                    blend_big_axebot_and_axe_animation((char *)moby, 0, 0, (void *)scale_game_frames(0x18));
                 } else {
-                    FUN_L04_002ba3e0((char *)moby, (void *)0xD, 0, (void *)scale_game_frames(0x18));
+                    blend_big_axebot_and_axe_animation((char *)moby, (void *)0xD, 0, (void *)scale_game_frames(0x18));
                 }
                 moby->state = 1;
                 break;
@@ -903,7 +905,7 @@ void big_axebot_update(M_B7B0 *moby) {
                                  frame_time_sq * 125.663704f, frame_time * 12.566371f);
         FUN_L00_00259740_cf(moby, data->f1A0, frame_time * 4.0f, data->f414, frame_time_sq * 20.0f);
         if (target_distance < 4.5f) {
-            FUN_L04_002ba3e0((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
+            blend_big_axebot_and_axe_animation((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
             moby->state = 7;
         } else if (data->f41C != -1) {
             vector_quaternion_scratch[0] = fast_sin_cf(moby->rot[2]) * 2.0f;
@@ -913,7 +915,7 @@ void big_axebot_update(M_B7B0 *moby) {
             if (absolute_float_cf(vector_quaternion_scratch, D_L04_001B0930_B7B0[data->f41C]->pts,
                                  D_L04_001B0930_B7B0[data->f41C]->count) == 0) {
                 data->f410 = 0.0f;
-                FUN_L04_002ba3e0((char *)moby, (void *)8, 0, (void *)scale_game_frames(0xC));
+                blend_big_axebot_and_axe_animation((char *)moby, (void *)8, 0, (void *)scale_game_frames(0xC));
                 moby->state = 9;
             }
             if (absolute_float_cf(tpos, D_L04_001B0930_B7B0[data->f41C]->pts,
@@ -924,7 +926,7 @@ void big_axebot_update(M_B7B0 *moby) {
         break;
     case BIG_AXEBOT_STATE_RETURN_HOME:
         if (target_distance < 4.5f) {
-            FUN_L04_002ba3e0((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
+            blend_big_axebot_and_axe_animation((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
             moby->state = 7;
         } else {
             float a;
@@ -949,7 +951,7 @@ void big_axebot_update(M_B7B0 *moby) {
                 if (absolute_float_cf(vector_quaternion_scratch, D_L04_001B0930_B7B0[data->f41C]->pts,
                                      D_L04_001B0930_B7B0[data->f41C]->count) == 0) {
                     data->f410 = 0.0f;
-                    FUN_L04_002ba3e0((char *)moby, (void *)8, 0, (void *)scale_game_frames(0xC));
+                    blend_big_axebot_and_axe_animation((char *)moby, (void *)8, 0, (void *)scale_game_frames(0xC));
                     moby->state = 9;
                     moby->fBC |= 0x10;
                 }
@@ -988,7 +990,7 @@ void big_axebot_update(M_B7B0 *moby) {
         }
         if (moby->f52 == 4 && (moby->f70 & 2)) {
             data->f402 = scale_game_frames(0x5A);
-            FUN_L04_002ba3e0(
+            blend_big_axebot_and_axe_animation(
                 (char *)moby,
                 (void *)((flag ? target_distance < data->f43C * 2.0f : target_distance < data->f43C) ? 0xD : 0), 0,
                 (void *)scale_game_frames(0xC));
@@ -999,7 +1001,7 @@ void big_axebot_update(M_B7B0 *moby) {
         if (!(moby->f53 == 5 && (moby->f52 != moby->f53 || hd <= 13.0f))) {
             if (moby->fBC & 4) {
                 moby->fBC &= ~4;
-                FUN_L04_002ba3e0((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(6));
+                blend_big_axebot_and_axe_animation((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(6));
                 FUN_L04_002ba448_c(moby, 1.5f);
                 moby->state = 7;
             } else if (moby->f53 == 8 && (hd < 28.0f || moby->f52 != moby->f53)) {
@@ -1030,7 +1032,7 @@ void big_axebot_update(M_B7B0 *moby) {
         if (moby->f52 == 8 && (moby->f70 & 2)) {
             moby->state = 5;
             moby->fBC = (moby->fBC | 8) & ~0x10;
-            FUN_L04_002ba3e0((char *)moby, (void *)9, 0, (void *)scale_game_frames(0xC));
+            blend_big_axebot_and_axe_animation((char *)moby, (void *)9, 0, (void *)scale_game_frames(0xC));
         } else if (moby->fBC & 0x10) {
             float a = fast_arc_tan(data->home[0] - moby->pos[0], data->home[1] - moby->pos[1]);
 
