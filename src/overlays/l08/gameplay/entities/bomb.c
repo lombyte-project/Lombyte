@@ -1998,7 +1998,9 @@ extern void FUN_L00_00261d78(s32, float, void *, void *);
 extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void FUN_L08_002dc4a0(struct Moby *);
-void FUN_L08_002dc0c8(struct Moby *moby);
+void update_shuttle_stop_world_points(struct Moby *moby) __asm__("FUN_L08_002dc0c8");
+
+void update_shuttle_stop_world_points(struct Moby *moby) __asm__("FUN_L08_002dc0c8");
 void FUN_L08_002dc180(struct Moby *moby);
 int FUN_L08_002dc648(struct Moby *m);
 void try_set_shuttle_departure_help_message(struct Moby *moby) __asm__("FUN_L08_002dc7f0");
@@ -2077,7 +2079,7 @@ void shuttle_update(struct Moby *moby) {
     }
     FUN_L08_002dc4a0(moby);
     if (vars->stop != -1)
-        FUN_L08_002dc0c8((char *)moby);
+        update_shuttle_stop_world_points((char *)moby);
     subtract_vector_xyz(&delta, &moby->pos, &old_pos);
     update_entity_matrix(vars->motion, &delta, &old_rot, &moby->rot);
 }
@@ -2087,7 +2089,7 @@ extern char D_L08_001DB280[];
 extern int D_L08_001B0CB0[];
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-void FUN_L08_002dc0c8(struct Moby *moby) {
+void update_shuttle_stop_world_points(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int *stop_point_table = (int *)D_L08_001B0CB0[*(int *)(data + 0x8C)];
     if (*stop_point_table == 8) {
