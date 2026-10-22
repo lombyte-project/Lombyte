@@ -3312,7 +3312,7 @@ extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 extern int FUN_L00_0020fe30(void);
 extern int FUN_L00_00216de8(int, int);
-extern void FUN_L00_0029a6b0(void *);
+extern void open_vendor_menu(void *) __asm__("FUN_L00_0029a6b0");
 extern int f_fun_l00_00233e98_227fa0(int) __asm__("FUN_L00_00233e98");
 extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
 extern int engine_voice_playing(void *, int) __asm__("FUN_L00_0028d8c0");
@@ -3519,7 +3519,7 @@ int process_hero_equipped_item_input(void) {
     case ITEM_REMOTE_VENDOR:
         if (D_0013F450_h228770.f208C < 3U || D_0013F450_h228770.f208C == 4 || D_0013F450_h228770.f208C == 5) {
             if (f_fun_l00_00266d60_227fa0(mask, f_fun_001f96f8_227fa0(8), 0)) {
-                FUN_L00_0029a6b0(0);
+                open_vendor_menu(0);
             }
         }
         break;

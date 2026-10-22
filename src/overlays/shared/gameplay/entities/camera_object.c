@@ -546,7 +546,7 @@ void upd_a(M_2a57a8 *) __asm__("FUN_L00_00250df8");
 f32 angle_atan2(f32, f32) __asm__("FUN_001f9e90");
 f32 FUN_001fa688_2a57a8(f32, f32) __asm__("FUN_001fa688");
 s32 try_set_help_message(s32, s32) __asm__("FUN_00215130");
-void FUN_L00_0029a6b0_2a57a8(P_2a57a8 *) __asm__("FUN_L00_0029a6b0");
+void open_vendor_menu(P_2a57a8 *) __asm__("FUN_L00_0029a6b0");
 
 extern f32 D_L00_001613A4 __attribute__((sda));
 extern f32 D_L00_0016139C __attribute__((sda));
@@ -656,7 +656,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         if (help_message_allowed)
             help_message_succeeded = try_set_help_message(1, 0x53E3) != 0;
         if ((D_0013CAE4_2a57a8 & 0x10) && interaction_allowed && help_message_succeeded) {
-            FUN_L00_0029a6b0_2a57a8(vendor_moby);
+            open_vendor_menu(vendor_moby);
             vendor_moby->b20 = 3;
         }
         break;

@@ -640,7 +640,7 @@ extern void FUN_L00_0020e4c8(void);
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern void FUN_L00_0024f7c8(void *, int, void *);
-extern void FUN_L00_0029a6b0(void *);
+extern void open_vendor_menu(void *) __asm__("FUN_L00_0029a6b0");
 extern void FUN_L05_0024cee8(int, int);
 extern void create_class_5c3_moby(void *, void *, void *, float, float) __asm__("FUN_L05_002d4168");
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
@@ -853,7 +853,7 @@ int process_hero_primary_item_input(void) {
     case ITEM_AMMO_MENU_DEVICE:
         if ((*(Hero *)((char *)&hero)).state.control_mode < 3U || (*(Hero *)((char *)&hero)).state.control_mode == 4 || (*(Hero *)((char *)&hero)).state.control_mode == 5) {
             if (FUN_L00_00266d60(mask, scale_game_frames_alt(8), 0)) {
-                FUN_L00_0029a6b0(0);
+                open_vendor_menu(0);
             }
         }
         break;

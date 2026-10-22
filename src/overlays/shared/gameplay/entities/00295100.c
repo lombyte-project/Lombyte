@@ -1384,8 +1384,8 @@ extern f32 D_L00_001610E0 __attribute__((sda));
 extern s32 game_language_macro __asm__("D_0015ED88") __attribute__((section(".sdata")));
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
 /* Opens the vendor: clears its state, spawns the vendor moby when none is given, builds the item list and its texts, then sets up the camera and the four slot offsets. */
-void FUN_L00_0029a6b0(VendorMoby_29a6b0 *m);
-void FUN_L00_0029a6b0(VendorMoby_29a6b0 *vendor_moby) {
+void open_vendor_menu(VendorMoby_29a6b0 *m) __asm__("FUN_L00_0029a6b0");
+void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
     s32 i;
     Vec4 *vector_destination_cursor;
     s32 half;

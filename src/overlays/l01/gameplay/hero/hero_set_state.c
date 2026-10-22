@@ -1616,7 +1616,7 @@ extern int FUN_L00_00216de8(int, int);
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern int FUN_L00_00233e98(int);
 extern int voice_is_playing(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
-extern void FUN_L00_0029a6b0(int);
+extern void open_vendor_menu(int) __asm__("FUN_L00_0029a6b0");
 
 int handle_hero_gadget_button(void) __asm__("FUN_L01_00240ed8");
 
@@ -1716,7 +1716,7 @@ int handle_hero_gadget_button(void) {
         if ((unsigned int)hero.state.control_mode < 3 || hero.state.control_mode == 4 ||
             hero.state.control_mode == 5) {
             if (FUN_L00_00266d60(buttons, scale_game_frames(8), 0) != 0)
-                FUN_L00_0029a6b0(0);
+                open_vendor_menu(0);
         }
         break;
     case 0xf:

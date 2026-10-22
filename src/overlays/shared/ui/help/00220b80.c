@@ -377,7 +377,7 @@ extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern void select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
 extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
-extern void FUN_L00_0029a6b0(s32);
+extern void open_vendor_menu(s32) __asm__("FUN_L00_0029a6b0");
 
 /*
  * Gadget button handling for the item in hero slot 0 (FUN_L00_00227fa0 twin).
@@ -543,7 +543,7 @@ s32 process_hero_item_action_input(void)
         if ((hero.state.control_mode == 0 || hero.state.control_mode == 1 || hero.state.control_mode == 2 ||
              hero.state.control_mode == 4 || hero.state.control_mode == 5) &&
             pad_pressed_within(buttons, scale_game_frames(8), NULL) != 0) {
-            FUN_L00_0029a6b0(0);
+            open_vendor_menu(0);
         }
         break;
 
