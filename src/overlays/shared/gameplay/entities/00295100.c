@@ -468,7 +468,9 @@ void f2330d0_298b18(void) __asm__("FUN_L00_002330d0");
 void f216f90_298b18(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void fun_00216c48(F_298b18 *, void *, int) __asm__("FUN_00216c48");
 void FUN_L00_00265880(int);
-void FUN_L00_00298b18(void) {
+void finish_cutscene(void) __asm__("FUN_L00_00298b18");
+
+void finish_cutscene(void) {
     O_298b18 *moby;
     float f, hero_candidate_z;
     int i;
@@ -716,7 +718,7 @@ void FUN_L00_00298f90(void) {
         }
     }
     if (done) {
-        FUN_L00_00298b18();
+        finish_cutscene();
     } else {
         audio_chunk_frame_threshold = pal_mode ? 0x50 : 0x60;
         if (D_L00_0016C860.f38 >= audio_chunk_frame_threshold) {
