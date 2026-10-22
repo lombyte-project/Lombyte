@@ -1550,7 +1550,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     };
     BossData *boss_data = (BossData *)moby->f78;
     BossMoby *aim_target_moby;
-    float v0[4];
+    float position_and_displacement_scratch[4];
     float v1[4];
     float v2[4];
     float second_rotation_angles[4];
@@ -1760,8 +1760,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         if (moby->f53 == 10 && (is_value_within_interpolated_window((char *)moby, 1.0f) != 0 ||
                                 is_value_within_interpolated_window((char *)moby, 16.0f) != 0)) {
-            qcopy(v0, hero.motion.unkC0.f);
-            if (absolute_float(v0[2] - boss_data->f3C0[2]) < 5.0f) {
+            qcopy(position_and_displacement_scratch, hero.motion.unkC0.f);
+            if (absolute_float(position_and_displacement_scratch[2] - boss_data->f3C0[2]) < 5.0f) {
                 if ((float)moby->f50 < 15.0f) {
                     moby_point_position(moby, 2, v1);
                 } else {
@@ -1777,7 +1777,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                     } else if (e < 60.0f) {
                         e = 60.0f;
                     }
-                    FUN_L18_002d5348(v1, v2, v0, a, c, func_001FA898_r(multiply_global_factor_ed64(e)), 0);
+                    FUN_L18_002d5348(v1, v2, position_and_displacement_scratch, a, c, func_001FA898_r(multiply_global_factor_ed64(e)), 0);
                 }
             }
         }
@@ -1793,8 +1793,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         desired_yaw = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
         approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
-        qcopy(v0, boss_data->f340 + 4);
-        hit = FUN_L18_002f6878((char *)moby, 20.0f, v0);
+        qcopy(position_and_displacement_scratch, boss_data->f340 + 4);
+        hit = FUN_L18_002f6878((char *)moby, 20.0f, position_and_displacement_scratch);
         lvl = FUN_L18_002dfb90(boss_data->f334);
         if (moby->f53 == 7) {
             if ((moby->f70 & 2) != 0) {
@@ -1854,26 +1854,26 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         approach_value(&boss_data->f374, frame_time * 12.0f, D_0015ED6C_e[1] * 20.0f);
         if (boss_data->f374 != 0.0f) {
-            subtract_vector_xyz(v0, (char *)boss_data->f340 + (boss_data->f348 * 0x10 + 0x10), boss_data->f3C0);
-            if (vector_length_xyz(v0) <= boss_data->f374) {
+            subtract_vector_xyz(position_and_displacement_scratch, (char *)boss_data->f340 + (boss_data->f348 * 0x10 + 0x10), boss_data->f3C0);
+            if (vector_length_xyz(position_and_displacement_scratch) <= boss_data->f374) {
                 boss_data->f348 = boss_data->f348 + 1;
             } else {
-                normalize_vector_xyz(v0, v0, boss_data->f374);
+                normalize_vector_xyz(position_and_displacement_scratch, position_and_displacement_scratch, boss_data->f374);
             }
-            add_vector_xyz(boss_data->f3C0, boss_data->f3C0, v0);
+            add_vector_xyz(boss_data->f3C0, boss_data->f3C0, position_and_displacement_scratch);
         }
         firing_target_moby = FUN_L18_002f6e10((char *)moby);
         if (firing_target_moby != 0 && (is_value_within_interpolated_window((char *)moby, 1.0f) != 0 ||
                        is_value_within_interpolated_window((char *)moby, 16.0f) != 0)) {
             qcopy(v2, firing_target_moby + 0x10);
-            qcopy(v0, boss_data->f3C0);
-            add_vector_xyz(v0, v0, moby->fC0);
-            v0[2] = v0[2] + 6.0f;
+            qcopy(position_and_displacement_scratch, boss_data->f3C0);
+            add_vector_xyz(position_and_displacement_scratch, position_and_displacement_scratch, moby->fC0);
+            position_and_displacement_scratch[2] = position_and_displacement_scratch[2] + 6.0f;
             normalize_vector_xyz(v1, moby->fC0, frame_time * 10.0f);
             {
                 float a = randf_sym(0.5235988f, 0.7853982f);
                 float c = -random_float_between_alt(0.34906584f, 0.5235988f);
-                FUN_L18_002d5348(v0, v1, v2, a, c, scale_game_frames(0x3C), 5);
+                FUN_L18_002d5348(position_and_displacement_scratch, v1, v2, a, c, scale_game_frames(0x3C), 5);
             }
         }
         if (boss_data->f348 == *boss_data->f340 - 2) {
@@ -1887,13 +1887,13 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     case DREK_BOSS_FINISH_PATH_AND_WAIT_FOR_HERO:
         if (boss_data->f348 != *boss_data->f340) {
             approach_value(&boss_data->f374, frame_time * 10.0f, D_0015ED6C_e[1] * 20.0f);
-            subtract_vector_xyz(v0, (char *)boss_data->f340 + (boss_data->f348 * 0x10 + 0x10), boss_data->f3C0);
-            if (vector_length_xyz(v0) <= boss_data->f374) {
+            subtract_vector_xyz(position_and_displacement_scratch, (char *)boss_data->f340 + (boss_data->f348 * 0x10 + 0x10), boss_data->f3C0);
+            if (vector_length_xyz(position_and_displacement_scratch) <= boss_data->f374) {
                 boss_data->f348 = boss_data->f348 + 1;
             } else {
-                normalize_vector_xyz(v0, v0, boss_data->f374);
+                normalize_vector_xyz(position_and_displacement_scratch, position_and_displacement_scratch, boss_data->f374);
             }
-            add_vector_xyz(boss_data->f3C0, boss_data->f3C0, v0);
+            add_vector_xyz(boss_data->f3C0, boss_data->f3C0, position_and_displacement_scratch);
             break;
         }
         if (vector_distance(moby->f10, hero.motion.pos.f) < 50.0f && hero.air_frames.s == 0 &&
@@ -1935,15 +1935,15 @@ void drek_final_boss_robot_update(BossMoby *moby) {
 
         b += 0x10;
         *(int *)&D_L18_00162390 = 0;
-        v0[0] = fast_cos(0.0f) * 6.0f;
-        v0[1] = fast_sin(0.0f) * 6.0f;
-        v0[2] = 0.0f;
+        position_and_displacement_scratch[0] = fast_cos(0.0f) * 6.0f;
+        position_and_displacement_scratch[1] = fast_sin(0.0f) * 6.0f;
+        position_and_displacement_scratch[2] = 0.0f;
         v1[0] = fast_cos(0.7853982f) * 6.0f;
         v1[1] = fast_sin(0.7853982f) * 6.0f;
         v1[2] = 0.0f;
-        add_vector_xyz(v0, v0, b);
+        add_vector_xyz(position_and_displacement_scratch, position_and_displacement_scratch, b);
         add_vector_xyz(v1, v1, b);
-        v0[2] = v0[2] + 5.0f;
+        position_and_displacement_scratch[2] = position_and_displacement_scratch[2] + 5.0f;
         v1[2] = v1[2] + 7.0f;
         clear_vector(v2);
         v2[2] = 3.1415927f;
@@ -1959,7 +1959,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             qcopy(node_position_and_yaw, recs + idx * 0x80 + 0x30);
             node_position_and_yaw[3] = *(float *)(recs + idx * 0x80 + 0x78);
         }
-        FUN_L18_002dfaa0((char *)boss_data->f334, v0, v1, v2, second_rotation_angles, node_position_and_yaw, *(int *)&D_L18_00162394,
+        FUN_L18_002dfaa0((char *)boss_data->f334, position_and_displacement_scratch, v1, v2, second_rotation_angles, node_position_and_yaw, *(int *)&D_L18_00162394,
                          *(int *)&D_L18_00162398, 1);
         hero.pending_item[3] = 3;
         moby->f20 = 8;
@@ -1976,8 +1976,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
             FUN_L18_002f7028((int)moby, boss_data->f398);
             FUN_L18_002f6fa8((int)moby, boss_data->f204[boss_data->f34C - 1]);
-            moby_point_position(moby, 1, v0);
-            boss_data->f33C = (unsigned char *)FUN_L18_002ea0f0(moby, v0, 300);
+            moby_point_position(moby, 1, position_and_displacement_scratch);
+            boss_data->f33C = (unsigned char *)FUN_L18_002ea0f0(moby, position_and_displacement_scratch, 300);
         }
         break;
     case DREK_BOSS_WAIT_FOR_PAIRED_TRANSFORM_TRANSITION:
@@ -1993,9 +1993,9 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     case DREK_BOSS_ACTIVATE_MISSILE_GROUP:
         if (tick_countdown_32_alt(&boss_data->f354) != 0) {
             boss_data->f354 = scale_game_frames(0x14);
-            qcopy(v0, boss_data->f3C0);
-            v0[2] = v0[2] + 4.0f;
-            if (FUN_L18_002f0030((char *)moby, boss_data->f214, v0) != 0) {
+            qcopy(position_and_displacement_scratch, boss_data->f3C0);
+            position_and_displacement_scratch[2] = position_and_displacement_scratch[2] + 4.0f;
+            if (FUN_L18_002f0030((char *)moby, boss_data->f214, position_and_displacement_scratch) != 0) {
                 moby->f20 = 0xC;
             }
         }
@@ -2057,11 +2057,11 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 for (i = 0; i < 3; i++) {
                     float w;
 
-                    qcopy(v0, D_L18_001600EC + boss_data->f280[i] * 0x80 + 0x30);
+                    qcopy(position_and_displacement_scratch, D_L18_001600EC + boss_data->f280[i] * 0x80 + 0x30);
                     w = fast_difference_between_rotations(
                         fast_arc_tan(boss_data->f3C0[0] - hero.motion.pos.f[0],
                                      boss_data->f3C0[1] - hero.motion.pos.f[1]),
-                        fast_arc_tan(boss_data->f3C0[0] - v0[0], boss_data->f3C0[1] - v0[1]));
+                        fast_arc_tan(boss_data->f3C0[0] - position_and_displacement_scratch[0], boss_data->f3C0[1] - position_and_displacement_scratch[1]));
                     if (best < w) {
                         boss_data->f3A8 = boss_data->f280[i];
                         best = w;
@@ -2092,9 +2092,9 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         desired_yaw = fast_arc_tan(boss_data->f320[0] - moby->f10[0], boss_data->f320[1] - moby->f10[1]);
         approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
-        moby_point_position(moby, 0x13, v0);
+        moby_point_position(moby, 0x13, position_and_displacement_scratch);
         *(BossTI *)v1 = *(BossTI *)boss_data->f320;
-        FUN_L18_002f7220((char *)moby, boss_data->f140, v0, v1);
+        FUN_L18_002f7220((char *)moby, boss_data->f140, position_and_displacement_scratch, v1);
         boss_data->f3D8 = -3.0f;
         if ((moby->f70 & 2) != 0 && moby->f53 != 8) {
             blend_moby_animation(moby, 8, 0, scale_game_frames(0x14));
@@ -2156,23 +2156,23 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 }
                 a = random_angle_radians();
                 r = random_float_between_alt(1.0f, 10.0f);
-                v0[0] = fast_cos(a) * r;
-                v0[1] = fast_sin(a) * r;
-                v0[2] = 0.0f;
-                add_vector_xyz(v0, v0, v1);
+                position_and_displacement_scratch[0] = fast_cos(a) * r;
+                position_and_displacement_scratch[1] = fast_sin(a) * r;
+                position_and_displacement_scratch[2] = 0.0f;
+                add_vector_xyz(position_and_displacement_scratch, position_and_displacement_scratch, v1);
             } else {
-                qcopy(v0, boss_data->f70);
+                qcopy(position_and_displacement_scratch, boss_data->f70);
             }
             if (hero.state.control_mode == 0xF) {
                 qcopy(v1, D_L18_001600EC + boss_data->f344 * 0x80 + 0x30);
-                subtract_vector_xyz(v0, v0, v1);
-                if (vector_length_xy(v0) > 29.0f) {
-                    set_vector_length_xy(v0, v0, 29.0f);
+                subtract_vector_xyz(position_and_displacement_scratch, position_and_displacement_scratch, v1);
+                if (vector_length_xy(position_and_displacement_scratch) > 29.0f) {
+                    set_vector_length_xy(position_and_displacement_scratch, position_and_displacement_scratch, 29.0f);
                 }
-                add_vector_xyz(v0, v0, v1);
+                add_vector_xyz(position_and_displacement_scratch, position_and_displacement_scratch, v1);
             }
-            v0[2] = probe_ground_height(v0, 0, 0.5f);
-            if (absolute_float(v0[2] - boss_data->f3C0[2]) < 5.0f) {
+            position_and_displacement_scratch[2] = probe_ground_height(position_and_displacement_scratch, 0, 0.5f);
+            if (absolute_float(position_and_displacement_scratch[2] - boss_data->f3C0[2]) < 5.0f) {
                 float a;
                 float c;
                 float e;
@@ -2191,7 +2191,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 } else if (e < 60.0f) {
                     e = 60.0f;
                 }
-                FUN_L18_002d5348(v1, v2, v0, a, c, func_001FA898_r(multiply_global_factor_ed64(e)), 2);
+                FUN_L18_002d5348(v1, v2, position_and_displacement_scratch, a, c, func_001FA898_r(multiply_global_factor_ed64(e)), 2);
                 FUN_L18_002f76a0((char *)moby, v1);
             }
         }
@@ -2222,19 +2222,19 @@ void drek_final_boss_robot_update(BossMoby *moby) {
 
                 boss_data->f354 = scale_game_frames(0x5A);
                 boss_data->f360 = scale_game_frames(300);
-                moby_point_position(moby, 0, v0);
+                moby_point_position(moby, 0, position_and_displacement_scratch);
                 qcopy(v1, moby->fC0);
                 normalize_vector_xyz(v2, moby->fD0, boss_data->f3BC);
                 add_vector_xyz(v1, v1, v2);
-                f = vector_distance(v0, aim_target_moby->f10) * 0.5f;
+                f = vector_distance(position_and_displacement_scratch, aim_target_moby->f10) * 0.5f;
                 if (f > 30.0f) {
                     f = 30.0f;
                 } else if (f < 0.0f) {
                     f = 0.0f;
                 }
                 normalize_vector_xyz(v1, v1, f * frame_time);
-                FUN_L18_002db938((char *)v0, v1, (int)moby, 64.0f, frame_time * 18.0f);
-                FUN_L18_002f76a0((char *)moby, v0);
+                FUN_L18_002db938((char *)position_and_displacement_scratch, v1, (int)moby, 64.0f, frame_time * 18.0f);
+                FUN_L18_002f76a0((char *)moby, position_and_displacement_scratch);
                 boss_data->f3BC = randf_sym(0.133f, 0.333f);
             } else if ((moby->f70 & 2) != 0 && moby->f53 != 3) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(0x14));
@@ -2258,7 +2258,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             float a;
             float r;
 
-            qcopy(v0, D_L18_001600EC + boss_data->f344 * 0x80 + 0x30);
+            qcopy(position_and_displacement_scratch, D_L18_001600EC + boss_data->f344 * 0x80 + 0x30);
             normalize_vector_xyz(v1, moby->fC0, 3.0f);
             add_vector_xyz(v1, v1, moby->f10);
             v1[2] = v1[2] + 3.0f;
@@ -2267,7 +2267,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             v2[0] = fast_cos(a) * r;
             v2[1] = fast_sin(a) * r;
             v2[2] = 0.0f;
-            add_vector_xyz(v2, v2, v0);
+            add_vector_xyz(v2, v2, position_and_displacement_scratch);
             v2[2] = v2[2] + 5.0f;
             v2[2] = probe_ground_height(v2, 0, 0.5f);
             if (absolute_float(v2[2] - boss_data->f3C0[2]) < 5.0f) {
@@ -2299,14 +2299,14 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             boss_data->f354 == scale_game_frames(0x1E)) {
             float f = boss_data->f354 != 0 ? 4.3f : -4.3f;
 
-            normalize_vector_xyz(v0, moby->fD0, f);
-            add_vector_xyz(v0, v0, boss_data->f3C0);
-            v0[2] = probe_ground_height(v0, 0, 0.5f);
-            if (absolute_float(v0[2] - boss_data->f3C0[2]) < 1.0f) {
+            normalize_vector_xyz(position_and_displacement_scratch, moby->fD0, f);
+            add_vector_xyz(position_and_displacement_scratch, position_and_displacement_scratch, boss_data->f3C0);
+            position_and_displacement_scratch[2] = probe_ground_height(position_and_displacement_scratch, 0, 0.5f);
+            if (absolute_float(position_and_displacement_scratch[2] - boss_data->f3C0[2]) < 1.0f) {
                 /* v1 is not written in this state; retail passes it all the same. */
-                float speed = vector_distance(v0, v1) / (float)scale_game_frames(0x3C);
+                float speed = vector_distance(position_and_displacement_scratch, v1) / (float)scale_game_frames(0x3C);
 
-                if (FUN_L18_002fc668(boss_data->f210, v0, v0, speed) != 0 && boss_data->f354 == 0) {
+                if (FUN_L18_002fc668(boss_data->f210, position_and_displacement_scratch, position_and_displacement_scratch, speed) != 0 && boss_data->f354 == 0) {
                     boss_data->f354 = scale_game_frames(0x3C);
                 }
             }
@@ -2454,23 +2454,23 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             float a = fast_add_rotations(moby->f40[2],
                                          random_float_between_alt(-30.0f, 30.0f) * DEG_TO_RAD);
 
-            v0[0] = fast_cos(a) * 6.0f;
-            v0[1] = fast_sin(a) * 6.0f;
-            v0[2] = 0.0f;
-            v0[2] = random_float_between_alt(3.0f, 8.0f);
-            add_vector_xyz(v0, v0, boss_data->f3C0);
-            func_L00_0025F4A8_alt(moby, D_L18_0015F580, v0, 0.0f, 0.0f, 0x14, 6, 0x20, 1.0f, 2.5f,
+            position_and_displacement_scratch[0] = fast_cos(a) * 6.0f;
+            position_and_displacement_scratch[1] = fast_sin(a) * 6.0f;
+            position_and_displacement_scratch[2] = 0.0f;
+            position_and_displacement_scratch[2] = random_float_between_alt(3.0f, 8.0f);
+            add_vector_xyz(position_and_displacement_scratch, position_and_displacement_scratch, boss_data->f3C0);
+            func_L00_0025F4A8_alt(moby, D_L18_0015F580, position_and_displacement_scratch, 0.0f, 0.0f, 0x14, 6, 0x20, 1.0f, 2.5f,
                                   9.0f, 1.0f, -1, 0.0f, 0, 0, -1, 0);
         }
         if (boss_data->f358 == scale_game_frames(0x78)) {
             if (moby->f53 != 14) {
                 blend_moby_animation(moby, 0xE, 5, 1);
             }
-            v0[0] = fast_cos(moby->f40[2]) * 3.0f;
-            v0[1] = fast_sin(moby->f40[2]) * 3.0f;
-            v0[2] = 6.0f;
-            add_vector_xyz(v0, v0, boss_data->f3C0);
-            func_L00_0025F4A8_alt(moby, D_L18_0015F580, v0, 0.0f, 0.0f, 0x28, 0xA, 0x20, 2.5f, 5.0f,
+            position_and_displacement_scratch[0] = fast_cos(moby->f40[2]) * 3.0f;
+            position_and_displacement_scratch[1] = fast_sin(moby->f40[2]) * 3.0f;
+            position_and_displacement_scratch[2] = 6.0f;
+            add_vector_xyz(position_and_displacement_scratch, position_and_displacement_scratch, boss_data->f3C0);
+            func_L00_0025F4A8_alt(moby, D_L18_0015F580, position_and_displacement_scratch, 0.0f, 0.0f, 0x28, 0xA, 0x20, 2.5f, 5.0f,
                                   9.0f, 2.0f, -1, 10.0f, 0, 0, -1, 0);
         }
         if (moby->f52 == moby->f53 && moby->f52 == 14 &&
@@ -2518,14 +2518,14 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 }
             }
         } else if (boss_data->f34C == 8) {
-            *(OvlQuad *)v0 = 0;
+            *(OvlQuad *)position_and_displacement_scratch = 0;
             *(OvlQuad *)v1 = 0;
-            v0[0] = 660.6f;
-            v0[1] = 481.4f;
-            v0[2] = 112.6f;
+            position_and_displacement_scratch[0] = 660.6f;
+            position_and_displacement_scratch[1] = 481.4f;
+            position_and_displacement_scratch[2] = 112.6f;
             v1[1] = -0.12f;
             v1[2] = -2.76f;
-            jet_mount(v0, v1, 1, 0, 0);
+            jet_mount(position_and_displacement_scratch, v1, 1, 0, 0);
             start_scene(5);
             boss_data->f34C = 9;
         } else if (boss_data->f34C == 9 && D_L18_0015F5C4 == 0) {
@@ -2553,11 +2553,11 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     }
     FUN_L18_002f7288((char *)moby);
     if (moby->f31 != 0) {
-        moby_point_position(moby, 8, v0);
+        moby_point_position(moby, 8, position_and_displacement_scratch);
         moby_point_position(moby, 9, v1);
-        subtract_vector_xyz(v2, v0, v1);
+        subtract_vector_xyz(v2, position_and_displacement_scratch, v1);
         normalize_vector_xyz(v2, v2, 0.1f);
-        draw_trail(v0, v0, v2, 600000.0f, 0.0f);
+        draw_trail(position_and_displacement_scratch, position_and_displacement_scratch, v2, 600000.0f, 0.0f);
     }
     if (boss_data->f34C > 1) {
         hero.unk5D8 = (struct Moby *)moby;
