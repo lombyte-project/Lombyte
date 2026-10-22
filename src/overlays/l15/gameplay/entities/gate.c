@@ -17,7 +17,9 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8");
 
 extern short D_L15_00161EC0 __attribute__((sda));
-void FUN_L15_002e46b0(struct Moby *moby) {
+void update_moby_yaw_from_linked_state(struct Moby *moby) __asm__("FUN_L15_002e46b0");
+
+void update_moby_yaw_from_linked_state(struct Moby *moby) {
     int linked_moby_index = *(int *)moby->pvars;
     if (linked_moby_index != -1) {
         char *other = (char *)(linked_moby_index * 256 + *(int *)&D_L15_0015FFD8_d);
