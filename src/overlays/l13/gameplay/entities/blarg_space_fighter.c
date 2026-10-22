@@ -3470,7 +3470,9 @@ extern void FUN_L13_002ea400_c(float *, float *, float *, float) __asm__("FUN_L1
 extern int FUN_001f96f8_e5(int) __asm__("FUN_001f96f8");
 extern void FUN_0022da68_e5(int, int, char *) __asm__("FUN_0022da68");
 
-unsigned char *FUN_L13_002ea540(struct Moby *firing_moby, unsigned char *starfighter_data) {
+unsigned char *fire_starfighter_homing_rocket(struct Moby *firing_moby, unsigned char *starfighter_data) __asm__("FUN_L13_002ea540");
+
+unsigned char *fire_starfighter_homing_rocket(struct Moby *firing_moby, unsigned char *starfighter_data) {
     float muzzle_position[4];
     struct {
         int a;
