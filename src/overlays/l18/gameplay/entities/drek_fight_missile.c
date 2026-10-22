@@ -668,7 +668,7 @@ void FUN_L18_002f16f0(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F3038), where it is exact; names translated to the US level program. */
 
 extern void FUN_L18_002f1d08_u(int, int) __asm__("FUN_L18_002f1d08");
-extern void FUN_L18_002fa888(int, int);
+extern void set_group_class_0630_moby_byte_bc(int, int) __asm__("FUN_L18_002fa888");
 
 void FUN_L18_002f1c38(struct Moby *moby) {
     char *state = (char *)moby->pvars;
@@ -679,7 +679,7 @@ void FUN_L18_002f1c38(struct Moby *moby) {
             FUN_L18_002f1d08_u(0x954, *(int *)(state + 0xC));
         }
         moby->state = 2;
-        FUN_L18_002fa888(moby->group, 1);
+        set_group_class_0630_moby_byte_bc(moby->group, 1);
     }
 }
 /* Reset this vendor moby's counters before its per-frame update. */

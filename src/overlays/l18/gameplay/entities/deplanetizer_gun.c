@@ -842,7 +842,9 @@ extern int D_L18_0015FFD8;
  * Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c:
  * func_L18_002FBCE8), where it is exact; names translated to the US level
  * program. */
-void FUN_L18_002fa888(int group_index, int value) {
+void set_group_class_0630_moby_byte_bc(int group_index, int value) __asm__("FUN_L18_002fa888");
+
+void set_group_class_0630_moby_byte_bc(int group_index, int value) {
     unsigned short *table = (unsigned short *)D_L18_001AC240[group_index];
 
     if (table != 0) {
