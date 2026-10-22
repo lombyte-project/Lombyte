@@ -3162,7 +3162,7 @@ extern float D_L11_001622E8 __attribute__((sda));
 extern float D_L11_001622EC __attribute__((sda));
 extern float D_L11_001622F0 __attribute__((sda));
 extern void FUN_L11_00315968(struct Moby *);
-extern void FUN_L11_00315f58(char *a0, float *a1);
+extern void update_moby_target_heading_and_conditional_movement(char *a0, float *a1) __asm__("FUN_L11_00315f58");
 extern short count_group_class_4de_mobys_in_states_13_to_17(struct Moby *self) __asm__("FUN_L11_00316090");
 extern void spawn_4318(struct Moby *, int, void *, float) __asm__("FUN_L00_00263ac8");
 extern float distance_4318(void *, void *) __asm__("FUN_001f9b48");
@@ -3357,7 +3357,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     case PUFFOID_STATE_WANDER_NEAR_HOME:
-        FUN_L11_00315f58((char *)moby, puffoid_vars->unk260);
+        update_moby_target_heading_and_conditional_movement((char *)moby, puffoid_vars->unk260);
         if (puffoid_vars->unk214 != 2) {
             puffoid_vars->unk24C = random_float_4318(-D_L11_001622E8, D_L11_001622E8) * 0.017453292f;
             moby->state = 4;
@@ -3378,7 +3378,7 @@ void puffoid_update(struct Moby *moby) {
                 set_anim_4318(moby, 2, 0, frames_4318(10));
             }
         } else {
-            FUN_L11_00315f58((char *)moby, (float *)&target->pos);
+            update_moby_target_heading_and_conditional_movement((char *)moby, (float *)&target->pos);
         }
         if (puffoid_vars->unk214 == 2) {
             moby->state = 6;
@@ -3395,7 +3395,7 @@ void puffoid_update(struct Moby *moby) {
             turn_to_4318(rz, &puffoid_vars->unk250, ang,
                          frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 12.566371f);
         } else {
-            FUN_L11_00315f58((char *)moby, puffoid_vars->unk1D0);
+            update_moby_target_heading_and_conditional_movement((char *)moby, puffoid_vars->unk1D0);
         }
         if (moby->anim_flags & 2) {
             if (puffoid_vars->unk214 != 2) {
@@ -3406,7 +3406,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     case PUFFOID_STATE_SPRAY_ATTACK:
-        FUN_L11_00315f58((char *)moby, (float *)&target->pos);
+        update_moby_target_heading_and_conditional_movement((char *)moby, (float *)&target->pos);
         if ((moby->anim_flags & 2) && D_L11_001622E4 < vector_distance_4318(&moby->pos, &target->pos)) {
             moby->state = 4;
             if (moby->prev_seq != 1) {
@@ -3432,7 +3432,7 @@ void puffoid_update(struct Moby *moby) {
                 set_anim_4318(moby, 1, 0, frames_4318(10));
             }
         } else {
-            FUN_L11_00315f58((char *)moby, puffoid_vars->home);
+            update_moby_target_heading_and_conditional_movement((char *)moby, puffoid_vars->home);
         }
         if ((moby->anim_flags & 2) && moby->prev_seq != 1) {
             set_anim_4318(moby, 1, 0, 5);
@@ -3536,7 +3536,7 @@ void puffoid_update(struct Moby *moby) {
     case PUFFOID_STATE_CARRIER_CHASE_TARGET:
         follow_carrier_4318(moby, D_L11_0015FFD8_4318 + (puffoid_vars->carrier << 8), &moby->pos, &moby->rot,
                             &moby->pos, &moby->rot);
-        FUN_L11_00315f58((char *)moby, (float *)&target->pos);
+        update_moby_target_heading_and_conditional_movement((char *)moby, (float *)&target->pos);
         if ((moby->anim_flags & 2) && vector_distance_4318(&moby->pos, &target->pos) < D_L11_001622E4) {
             moby->state = 0x10;
             if (moby->prev_seq != 2) {
@@ -3550,7 +3550,7 @@ void puffoid_update(struct Moby *moby) {
     case PUFFOID_STATE_CARRIER_SPRAY_ATTACK:
         follow_carrier_4318(moby, D_L11_0015FFD8_4318 + (puffoid_vars->carrier << 8), &moby->pos, &moby->rot,
                             &moby->pos, &moby->rot);
-        FUN_L11_00315f58((char *)moby, (float *)&target->pos);
+        update_moby_target_heading_and_conditional_movement((char *)moby, (float *)&target->pos);
         if ((moby->anim_flags & 2) && D_L11_001622E4 < vector_distance_4318(&moby->pos, &target->pos)) {
             moby->state = 0xF;
             if (moby->prev_seq != 1) {

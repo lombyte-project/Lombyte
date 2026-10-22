@@ -260,7 +260,9 @@ extern void FUN_L00_0025be00_c(char *, char *, float, float, float, float) __asm
 extern float FUN_0020c9e0_c(char *) __asm__("FUN_0020c9e0");
 extern void FUN_L00_00258b50_c(char *, char *, float *, float *, float) __asm__("FUN_L00_00258b50");
 
-void FUN_L11_00315f58(char *moby, float *target_position)
+void update_moby_target_heading_and_conditional_movement(char *moby, float *target_position) __asm__("FUN_L11_00315f58");
+
+void update_moby_target_heading_and_conditional_movement(char *moby, float *target_position)
 {
     char *moby_vars = *(char **)(moby + 0x78);
     float planar_heading_vector[4];
