@@ -1693,7 +1693,7 @@ extern s32 D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
 #include "rnc/gameplay/state/game_globals.h"
 extern char *D_L03_001600EC;
 extern float frame_scale_sq __asm__("D_0015ED64");
-extern void FUN_L03_002db480(struct Moby *);
+extern void attach_shared_manipulator_to_matching_class_moby(struct Moby *) __asm__("FUN_L03_002db480");
 extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758");
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
@@ -1737,7 +1737,7 @@ void big_al_update(struct Moby *guide_moby) {
     int tracking;
     u8 group;
 
-    FUN_L03_002db480(guide_moby);
+    attach_shared_manipulator_to_matching_class_moby(guide_moby);
     switch (guide_moby->state) {
     case BIG_AL_INITIALIZE:
         if (race_gates.unk14C == 0) {

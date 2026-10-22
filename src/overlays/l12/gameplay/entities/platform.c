@@ -2938,7 +2938,7 @@ typedef struct {
 extern L12WatchGlobals D_0013D5B0_b570 __asm__("D_0013D5B0") __attribute__((section(".data")));
 extern int D_L12_0015F5C4 __asm__("D_L12_0015F5C4");
 extern float D_0015ED64_b570 __asm__("D_0015ED64");
-extern void FUN_L03_002db480_b570(void *) __asm__("FUN_L03_002db480");
+extern void attach_shared_manipulator_to_matching_class_moby(void *) __asm__("FUN_L03_002db480");
 extern void blend_moby_animation_b570(void *, int, int, int) __asm__("FUN_00212f90");
 extern void FUN_L00_00260860_b570(int, int) __asm__("FUN_L00_00260860");
 
@@ -2954,7 +2954,7 @@ void edwina_update(L16WatchMoby *moby) {
     float rate;
     float head_rate;
     int tracking;
-    FUN_L03_002db480_b570(moby);
+    attach_shared_manipulator_to_matching_class_moby(moby);
     if (D_0013D5B0_b570.hidden == 0) {
         if (moby->animation != 1)
             blend_moby_animation_b570(moby, 1, 0, 2);

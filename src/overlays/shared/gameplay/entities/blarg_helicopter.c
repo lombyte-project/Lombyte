@@ -1751,7 +1751,9 @@ extern unsigned char D_L03_0017C540[];
 extern short D_L03_00161BC4 __attribute__((sda));
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
-void FUN_L03_002db480(char *moby) {
+void attach_shared_manipulator_to_matching_class_moby(char *moby) __asm__("FUN_L03_002db480");
+
+void attach_shared_manipulator_to_matching_class_moby(char *moby) {
     int i;
 
     if (D_L03_0015F5C4 == 2 && D_0015EDB0 != 0) {

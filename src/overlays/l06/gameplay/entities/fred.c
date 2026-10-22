@@ -6177,7 +6177,7 @@ typedef struct Busy_301070 {
     int f24;
 } Busy_301070;
 
-extern void FUN_L03_002db480_301070(char *) __asm__("FUN_L03_002db480");
+extern void attach_shared_manipulator_to_matching_class_moby(char *) __asm__("FUN_L03_002db480");
 extern float distance_xyz_301070(void *, void *) __asm__("FUN_001f9b48");
 extern void FUN_L00_0025a120_301070(void *) __asm__("FUN_L00_0025a120");
 extern void FUN_L06_002f53e8_301070(char *) __asm__("FUN_L06_002f53e8");
@@ -6240,7 +6240,7 @@ void fred_update(struct Moby *moby) {
     Data_301070 *fred_vars = *(struct Data_301070 **)&moby->pvars;
     float rate, head_rate;
     int tracking;
-    FUN_L03_002db480_301070((char *)moby);
+    attach_shared_manipulator_to_matching_class_moby((char *)moby);
     if (moby->visible != 0 && distance_xyz_301070(((float *)&moby->pos), ((char *)D_L06_00167540)) < 24.0f) {
         FUN_L00_0025a120_301070(moby);
         moby->shadow_range = 0x13;
