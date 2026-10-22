@@ -201,13 +201,13 @@ void devastator_update(struct Moby *devastator_moby) {
                         if (aim_info) point.f.z += aim_info->height;
                         else point.f.z += 0.5f;
                         if ((candidate_moby->flags & 0x1000) && candidate_moby && ((Class_2b2100 *)candidate_moby->pclass) && ((Class_2b2100 *)candidate_moby->pclass)->category == 5) {
-                            float tyaw, tpitch, distance, spread, off;
+                            float tyaw, tpitch, distance, spread, aim_angle_error;
                             tyaw = atan2_fast_2b2100(point.f.x - launch.f.x, point.f.y - launch.f.y);
                             tpitch = atan2_fast_2b2100(distance_xy_2b2100(&launch, &point), point.f.z - launch.f.z);
                             distance = distance_xyz_2b2100(&launch, &point);
                             if (distance < 2.5f) {
-                                struct Moby *cam = hero.moby;
-                                if (fast_difference_between_rotations_2b2100(cam->rot.z, atan2_fast_2b2100(candidate_moby->pos.x - hero.motion.pos.f[0], candidate_moby->pos.y - hero.motion.pos.f[1])) < 1.0471976f &&
+                                struct Moby *hero_moby = hero.moby;
+                                if (fast_difference_between_rotations_2b2100(hero_moby->rot.z, atan2_fast_2b2100(candidate_moby->pos.x - hero.motion.pos.f[0], candidate_moby->pos.y - hero.motion.pos.f[1])) < 1.0471976f &&
                                     absolute_float_2b2100(tpitch) < 0.7853982f) {
                                     limit = distance;
                                     pitch = -tpitch;
@@ -220,18 +220,18 @@ void devastator_update(struct Moby *devastator_moby) {
                                 spread = convert_integer_to_float_2b2100(item_variant_2b2100.level) * 0.6981317f;
                                 build_spherical_offset_2b2100(&probe, distance, yaw, pitch + hero.ground_pitch.f * 0.5f);
                                 add_vector_xyz_2b2100(&probe, &probe, &launch);
-                                off = approximate_arcsine_2b2100(distance_xyz_2b2100(&probe, &point) / (distance + distance));
-                                off = off + off;
-                                if (spread + 0.17453292f < off) {
+                                aim_angle_error = approximate_arcsine_2b2100(distance_xyz_2b2100(&probe, &point) / (distance + distance));
+                                aim_angle_error = aim_angle_error + aim_angle_error;
+                                if (spread + 0.17453292f < aim_angle_error) {
                                     if (aim_info) {
                                         float radius = convert_integer_to_float_2b2100(aim_info->radius) * 0.125f;
                                         if (radius < distance) {
-                                            off -= approximate_arcsine_2b2100(radius / distance);
-                                            if (off < 0.0f) off = 0.0f;
+                                            aim_angle_error -= approximate_arcsine_2b2100(radius / distance);
+                                            if (aim_angle_error < 0.0f) aim_angle_error = 0.0f;
                                         }
                                     }
                                 }
-                                if (off < spread + 0.17453292f) {
+                                if (aim_angle_error < spread + 0.17453292f) {
                                     if (!collision_segment_hits_2b2100(view_origin_2b2100, &point, 6, (int)devastator_moby, 0)) {
                                         best = candidate_moby;
                                         limit = distance;
