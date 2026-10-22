@@ -606,7 +606,9 @@ int FUN_L07_00313de8(unsigned char *moby, unsigned char *moby_vars, float *targe
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 
-void FUN_L07_00313f60(char *moby, char *moby_vars, float *target_position) {
+void update_snagglebeast_target_joint_animation(char *moby, char *moby_vars, float *target_position) __asm__("FUN_L07_00313f60");
+
+void update_snagglebeast_target_joint_animation(char *moby, char *moby_vars, float *target_position) {
     float target_heading;
     float k;
     if (((unsigned char *)moby)[0x20] < 10) {
@@ -904,7 +906,7 @@ void snagglebeast_update(unsigned char *moby) {
         if (*(float *)(data + 0x1C8) < 0.0f) *(float *)(data + 0x1C8) = 0.0f;
     }
     if (*(float *)(data + 0x1C8) > 0.0f) enqueue_callback_list_1(draw_snagglebeast_sphere_effect, moby);
-    FUN_L07_00313f60((char *)moby, (char *)data, (float *)(((char *)&hero) + 0x80));
+    update_snagglebeast_target_joint_animation((char *)moby, (char *)data, (float *)(((char *)&hero) + 0x80));
     if (moby[0x20] != 0 && moby[0x20] != 0xA && moby[0x20] != 0x10) {
         *(int *)(data + 0x1B0) = queue_animation_update(0x16, 0xFFFF, (int)FUN_L00_00235d80, (int)FUN_L00_00235ea0,
                                             (int)FUN_L06_00249738, (int)(data + 0x1B4),
