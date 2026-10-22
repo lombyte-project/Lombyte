@@ -1727,7 +1727,7 @@ int move_test_dummy_toward_position_and_heading(char *moby, void *target_positio
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int *D_L16_001ABCC0_c2[] __asm__("D_L16_001ABCC0");
 extern float D_L16_001619DC;
-extern void FUN_L16_002cef60();
+extern void draw_test_dummy_group_glows() __asm__("FUN_L16_002cef60");
 
 void FUN_L16_002cee70(struct Moby *moby) {
     short *group_entry;
@@ -1746,7 +1746,7 @@ void FUN_L16_002cee70(struct Moby *moby) {
             *(int *)(data + 0x118) = D_L16_0015F5CC;
             *(float *)(data + 0x11C) = fast_add_rotations(*(float *)(data + 0x11C), angle_increment);
         } while (*group_entry++ >= 0);
-        enqueue_callback_list_1_alt(FUN_L16_002cef60, moby);
+        enqueue_callback_list_1_alt(draw_test_dummy_group_glows, moby);
     }
 }
 /* Draw callback queued by FUN_L16_002cee70: one camera-facing glow quad on each live part (class 541) of the group, its colour pulsing with the part's spin angle. */
@@ -1778,7 +1778,7 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void draw_geometry_quad_alt(void *, void *, int) __asm__("FUN_001f7d30");
 
-void FUN_L16_002cef60(char *moby) {
+void draw_test_dummy_group_glows(char *moby) {
     GlowQuad glow_quad;
     float mat[4][4] __attribute__((aligned(16)));
     short *group_entry;
