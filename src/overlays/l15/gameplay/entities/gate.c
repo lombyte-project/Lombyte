@@ -79,7 +79,9 @@ extern int D_L15_001BAAD0[];
 extern s32 current_level_index __asm__("D_0015ED84");
 extern f32 frame_time __asm__("D_0015ED6C");
 
-void FUN_L15_0029aff0(struct Moby *gate_moby)
+void update_sliding_gate(struct Moby *gate_moby) __asm__("FUN_L15_0029aff0");
+
+void update_sliding_gate(struct Moby *gate_moby)
 {
     enum {
         GATE_INITIALIZE = 0,
