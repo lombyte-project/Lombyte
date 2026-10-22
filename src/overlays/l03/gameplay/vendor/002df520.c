@@ -471,7 +471,9 @@ extern void FUN_L03_002ebb00_u(void *) __asm__("FUN_L03_002ebb00");
 extern void FUN_L03_002ebc58_u(void *) __asm__("FUN_L03_002ebc58");
 void no_op_main_callback(void *) __asm__("FUN_001e93e8");
 
-void FUN_L03_002ebdb0(void *camera) {
+void update_camera_position_and_orientation(void *camera) __asm__("FUN_L03_002ebdb0");
+
+void update_camera_position_and_orientation(void *camera) {
     FUN_L03_002ebb00_u(camera);
     no_op_main_callback(camera);
     FUN_L03_002ebc58_u(camera);
