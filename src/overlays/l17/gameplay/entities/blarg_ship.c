@@ -455,7 +455,9 @@ extern float D_L17_001DDFE0[];
 extern float D_L17_001DE058[];
 extern float D_L17_001DE070[];
 extern float D_L17_001623D4 __attribute__((sda));
-void FUN_L17_002f3848(struct Moby *moby) {
+void update_fleet_backdrop_animation(struct Moby *moby) __asm__("FUN_L17_002f3848");
+
+void update_fleet_backdrop_animation(struct Moby *moby) {
     char *moby_pvars = (char *)moby->pvars;
     float offset_accumulator[4];
     float pvar_angle_offset[4];
