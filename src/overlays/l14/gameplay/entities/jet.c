@@ -2250,7 +2250,9 @@ extern int taxi_sound(int, int, void *) __asm__("FUN_0022da68");
 void initialize_taxi_stop_from_position(struct Moby *moby) __asm__("FUN_L14_002f1040");
 
 void initialize_taxi_stop_from_position(struct Moby *moby) __asm__("FUN_L14_002f1040");
-void FUN_L14_002f1140(struct Moby *moby);
+void prepare_taxi_route(struct Moby *moby) __asm__("FUN_L14_002f1140");
+
+void prepare_taxi_route(struct Moby *moby) __asm__("FUN_L14_002f1140");
 struct Moby *find_group_moby_by_tag(struct Moby *moby, int tag) __asm__("FUN_L14_002f12f0");
 
 struct Moby *find_group_moby_by_tag(struct Moby *moby, int tag) __asm__("FUN_L14_002f12f0");
@@ -2295,7 +2297,7 @@ void taxi_update(struct Moby *moby) {
             hero_relative_position[3] = 0;
             transform_vector(hero_relative_position, hero_relative_position, blend_from_position_or_rotation_matrix);
             if (taxi_fabs(hero_relative_position[1]) < 1.2f) {
-                FUN_L14_002f1140(moby);
+                prepare_taxi_route(moby);
                 request_taxi_stop_prompt(moby);
                 if ((*(int *)D_0013CAE4 & button) && D_L14_0015F594 == 4) {
                     struct Moby *m;
@@ -2326,7 +2328,7 @@ void taxi_update(struct Moby *moby) {
                     } else {
                         taxi_vars->picked = 1;
                     }
-                    FUN_L14_002f1140(moby);
+                    prepare_taxi_route(moby);
                     moby->state = 3;
                 }
             }
@@ -2341,7 +2343,7 @@ void taxi_update(struct Moby *moby) {
                     qcopy_nc(taxi_vars->rot, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
                 } else {
                     taxi_vars->picked = 0;
-                    FUN_L14_002f1140(moby);
+                    prepare_taxi_route(moby);
                     moby->state = 3;
                 }
             }
@@ -2356,7 +2358,7 @@ void taxi_update(struct Moby *moby) {
                     qcopy_nc(taxi_vars->rot, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
                 } else {
                     taxi_vars->picked = 2;
-                    FUN_L14_002f1140(moby);
+                    prepare_taxi_route(moby);
                     moby->state = 3;
                 }
             }
@@ -2439,7 +2441,7 @@ void taxi_update(struct Moby *moby) {
                     qcopy(taxi_vars->save_rot, taxi_vars->rot);
                     initialize_taxi_stop_from_position(moby);
                     taxi_vars->picked = taxi_vars->target;
-                    FUN_L14_002f1140(moby);
+                    prepare_taxi_route(moby);
                     moby->state = 7;
                     qcopy(taxi_vars->pos, taxi_vars->save_pos);
                     qcopy(taxi_vars->rot, taxi_vars->save_rot);
@@ -2535,7 +2537,7 @@ extern char *D_L14_001B0BB0_c2[] __asm__("D_L14_001B0BB0");
 extern float D_0015ED6C_u __asm__("D_0015ED6C");
 extern float FUN_001f9b48(void *, void *);
 
-void FUN_L14_002f1140(struct Moby *moby) {
+void prepare_taxi_route(struct Moby *moby) {
     char *taxi_vars = (char *)moby->pvars;
     char *selected_path;
     float inv, travel_step_limit, travel_acceleration_step, first_segment_length;
