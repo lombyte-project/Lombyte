@@ -1708,7 +1708,9 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
 /* Per-frame update of a falling debris moby: moves it, bursts into particles when it hits the ground, and removes it when its timer runs out. */
-void FUN_L01_002ffdc0(struct Moby *moby) {
+void update_falling_splash_moby(struct Moby *moby) __asm__("FUN_L01_002ffdc0");
+
+void update_falling_splash_moby(struct Moby *moby) {
     float next_pos[4];
     float effect_pos[4];
     float particle_vel[4];
