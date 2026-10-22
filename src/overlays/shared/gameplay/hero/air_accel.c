@@ -70,7 +70,7 @@ extern float D_L01_0017C04C[];
 extern unsigned int fast_tween_color(float, unsigned int, unsigned int);
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void FUN_L00_00207a58(void);
-extern void FUN_L00_00207c48(void);
+extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 extern void FUN_L00_00207d00(void);
 extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
 extern void FUN_L00_00208b60(void);
@@ -102,7 +102,7 @@ void FUN_L01_00228000(void) {
     if (hero.vehicle_mode == 0)
         return;
     update_hero_vehicle_moby();
-    FUN_L00_00207c48();
+    update_hero_scalar_pulse();
     FUN_L00_00207a58();
     FUN_L00_002484e0(&hero.motion.pos);
     if (hero.vehicle_mode == 3) {
@@ -192,7 +192,7 @@ extern void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080
 extern void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 extern void FUN_L00_00206e00(void);
 extern void FUN_L00_00207a58(void);
-extern void FUN_L00_00207c48(void);
+extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 extern void update_hero_moby(void) __asm__("FUN_L00_00208820");
 extern void FUN_L00_00208b60(void);
 extern void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
@@ -259,7 +259,7 @@ void update_hero_frame(void) {
     update_hero_world_matrices(0);
     update_hero_equipped_items();
     begin_draw_frame();
-    FUN_L00_00207c48();
+    update_hero_scalar_pulse();
     FUN_L00_00207a58();
     check_hero_item_reward_conditions();
     FUN_L00_00205ea8();

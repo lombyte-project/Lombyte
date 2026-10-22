@@ -641,7 +641,7 @@ extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
 
 extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
-extern void FUN_L00_00207c48(void);
+extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 extern void FUN_L00_00207a58(void);
 extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 extern void FUN_L00_00207d00(void);
@@ -708,7 +708,7 @@ void update_hero_in_vehicle_mode(void) {
     update_hero_easing_records();
     if (*(u8 *)(g + 0x20a4) == 0) return;
     update_hero_vehicle_moby();
-    FUN_L00_00207c48();
+    update_hero_scalar_pulse();
     FUN_L00_00207a58();
     if (*(u8 *)(g + 0x20a4) == 1) {
         D_L00_0017B85C_002062b0 = D_0015EE18_macro;
@@ -1127,7 +1127,7 @@ void update_hero_world_matrices(s32 moby_override) __asm__("FUN_L00_00209240");
 void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
 void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
 void begin_draw_frame(void) __asm__("FUN_001f7978");
-void FUN_L00_00207c48(void);
+void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 void FUN_L00_00207a58(void);
 void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 void FUN_L00_00205ea8(void);
@@ -1182,7 +1182,7 @@ void coordinate_hero_frame_update(void) {
     update_hero_world_matrices(0);
     update_hero_equipped_items();
     begin_draw_frame();
-    FUN_L00_00207c48();
+    update_hero_scalar_pulse();
     FUN_L00_00207a58();
     check_hero_item_reward_conditions();
     FUN_L00_00205ea8();
@@ -1497,7 +1497,7 @@ extern int D_L00_0015F684 __attribute__((sda));
 extern float D_L00_0015F67C __attribute__((sda));
 extern float D_L00_0015F3FC;
 float FUN_00213ed8(float *, float, float);
-void FUN_L00_00207c48(void) {
+void update_hero_scalar_pulse(void) {
     if (D_L00_0015F680 == 0)
         return;
     if (D_L00_0015F684 == 0) {
