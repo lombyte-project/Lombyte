@@ -3058,7 +3058,9 @@ extern int FUN_L00_00216de8(int a, int b);
 extern void hero_get_collision_ray_endpoints(void *, void *, int, float, float) __asm__("FUN_L00_002126b8");
 float absolute_float(float input) __asm__("FUN_001f99c0");
 
-int FUN_L00_002279b0(void) {
+int try_enter_hero_water_state(void) __asm__("FUN_L00_002279b0");
+
+int try_enter_hero_water_state(void) {
     struct Hero *hero_ptr = &hero;
     struct Hero *hero_depth_check_ptr;
     struct Hero *hero_collision_check_ptr;
