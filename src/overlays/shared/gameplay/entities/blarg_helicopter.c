@@ -1443,7 +1443,7 @@ typedef struct {
 
 extern float D_L03_0015F580[] MACRO_ADDR;
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
-extern void FUN_L01_002787a0(void *);
+extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
 void statue_update(unsigned char *m) __asm__("FUN_L03_002d3cd8");
@@ -1474,7 +1474,7 @@ void statue_update(unsigned char *statue_moby) {
         z = 0.0f;
         zero_vector = D_L03_0015F580;
         statue_position = statue_moby + 0x10;
-        FUN_L01_002787a0(statue_moby);
+        spawn_proximity_gated_bolts(statue_moby);
         statue_rotation = statue_moby + 0x40;
         FUN_L00_00263fd8(statue_moby, 0x727, statue_position, statue_rotation, 0, 0, z, zero_vector, zero_vector, zero_vector);
         FUN_L00_00263fd8(statue_moby, 0x728, statue_position, statue_rotation, 0, 0, z, zero_vector, zero_vector, zero_vector);

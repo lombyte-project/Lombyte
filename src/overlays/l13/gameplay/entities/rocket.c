@@ -2651,7 +2651,7 @@ extern int FUN_L01_0026e008(int, int);
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern void FUN_L01_002787a0(void *);
+extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void FUN_L00_0025f8e0(void *, float);
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
@@ -2709,7 +2709,7 @@ void blarg_ship_update(struct Moby *moby) {
         allocate_voice_for_target_entry(0, 0, moby);
         pos = &moby->pos;
         rot = &moby->rot;
-        FUN_L01_002787a0(moby);
+        spawn_proximity_gated_bolts(moby);
         zero_vector = D_L13_0015F580;
         D_0014C190_257218[current_level_index][(short)moby->save_id >> 5] |=
             1 << (moby->save_id & 31);

@@ -603,7 +603,7 @@ typedef struct {
 extern s32 D_L01_0015F580;
 void *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
-extern void FUN_L01_002787a0();
+extern void spawn_proximity_gated_bolts() __asm__("FUN_L01_002787a0");
 extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
 extern void spawn_moby_from_placement() __asm__("FUN_L01_00278e20");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -634,7 +634,7 @@ void tall_shroom_update(TriggerMoby *shroom_moby) {
         break;
     case TALL_SHROOM_STATE_REMOVE_WITH_EFFECTS:
         allocate_voice_for_target_entry(0, 0, shroom_moby);
-        FUN_L01_002787a0(shroom_moby);
+        spawn_proximity_gated_bolts(shroom_moby);
         FUN_L00_00263fd8(shroom_moby, 0x717, shroom_moby->pos, shroom_moby->rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580,
                          0.0f, &D_L01_0015F580);
         spawn_moby_from_placement(shroom_moby, 0x718);

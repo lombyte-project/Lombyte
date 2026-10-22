@@ -844,7 +844,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_0022da68(int, int, int);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
-extern void FUN_L01_002787a0(void *);
+extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -871,7 +871,7 @@ void update_hit_triggered_fragment_spawner(struct Moby *moby) {
     case HIT_EFFECT_EMIT_AND_REMOVE:
         FUN_0022da68(0, 0, (int)moby);
         FUN_L00_00257470(moby, 0, -1);
-        FUN_L01_002787a0(moby);
+        spawn_proximity_gated_bolts(moby);
         FUN_L00_00263e30(moby, 0x753, 1, 0x753, 1, 11, 2);
         FUN_L00_00263e30(moby, 0x756, 1, 0x756, 1, 1, 2);
         spawn_moby_from_placement(moby, 0x752);
@@ -913,7 +913,7 @@ void update_hit_triggered_fragment_and_placement_spawner(struct Moby *moby) {
     case HIT_EFFECT_EMIT_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);
         FUN_L00_00257470(moby, 0, -1);
-        FUN_L01_002787a0(moby);
+        spawn_proximity_gated_bolts(moby);
         FUN_L00_00263fd8((char *)moby, 0x753, &moby->pos.x, &moby->rot, 0, 0, D_L17_0015F580_macro,
                          D_L17_0015F580_macro, 0.0f, D_L17_0015F580_macro);
         FUN_L00_00263e30(moby, 0x756, 1, 0x756, 1, 1, 2);

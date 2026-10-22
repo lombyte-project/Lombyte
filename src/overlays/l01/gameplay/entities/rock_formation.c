@@ -1277,7 +1277,7 @@ typedef struct {
 extern s32 D_L01_0015F580;
 void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 FUN_0022da68(s32, s32, void *);
-extern void FUN_L01_002787a0();
+extern void spawn_proximity_gated_bolts() __asm__("FUN_L01_002787a0");
 extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
 extern void spawn_moby_from_placement() __asm__("FUN_L01_00278e20");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -1316,7 +1316,7 @@ void green_mushroom_update(SparkMoby *mushroom_moby) {
         break;
     case GREEN_MUSHROOM_SPAWN_PIECES_AND_REMOVE:
         FUN_0022da68(0, 0, mushroom_moby);
-        FUN_L01_002787a0(mushroom_moby);
+        spawn_proximity_gated_bolts(mushroom_moby);
         scale_ratio = mushroom_moby->scale / mushroom_moby->pclass->radius;
         for (i = 0; i < 4; i++) {
             fragment_placement_angle = (f32)i * 1.5707964f;

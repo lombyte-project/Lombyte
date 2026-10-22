@@ -337,7 +337,7 @@ void test_dummy_door_update(struct Moby *moby) {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
-extern void FUN_L01_002787a0(void *);
+extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void update_moby_hit_triggered_removal(struct Moby *moby) __asm__("FUN_L16_002d6740");
@@ -363,7 +363,7 @@ void update_moby_hit_triggered_removal(struct Moby *moby) {
     case MOBY_STATE_REMOVE_WITH_EFFECTS:
         allocate_voice_for_target_entry(0, 0, moby);
         FUN_L00_00257470(moby, 0, -1);
-        FUN_L01_002787a0(moby);
+        spawn_proximity_gated_bolts(moby);
         FUN_L00_00263e30(moby, 0x74E, 1, 0x74E, 1, 0xB, 2);
         mark_moby_for_removal_u(moby);
         break;
