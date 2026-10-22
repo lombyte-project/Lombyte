@@ -535,7 +535,9 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern s32 voice_is_playing(void *, s32) __asm__("FUN_L00_0028d8c0");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-void FUN_L11_00317678(struct Moby *);
+void update_oil_tanker_front_path_pose(struct Moby *moby) __asm__("FUN_L11_00317678");
+
+void update_oil_tanker_front_path_pose(struct Moby *) __asm__("FUN_L11_00317678");
 void FUN_L11_00317820(struct Moby *);
 void FUN_L11_00317c98(struct Moby *);
 void distribute_group_class_527_mobys_along_path(struct Moby *moby, int table_index) __asm__("FUN_L11_003180a0");
@@ -616,7 +618,7 @@ void oil_tanker_front_update(struct Moby *moby) {
                 FUN_0022da68(0, 0, chain_vars->links[i]);
             }
         }
-        FUN_L11_00317678(moby);
+        update_oil_tanker_front_path_pose(moby);
         FUN_L11_00317820(moby);
         if (moby->state == 2) {
             FUN_L11_00317c98(moby);
@@ -638,7 +640,7 @@ extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 
-void FUN_L11_00317678(struct Moby *moby) {
+void update_oil_tanker_front_path_pose(struct Moby *moby) {
     char *chain_vars = (char *)moby->pvars;
     int i = *(int *)(chain_vars + 0x68);
     char *path = *(char **)(chain_vars + 0xF0);
