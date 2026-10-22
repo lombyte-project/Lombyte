@@ -1440,7 +1440,9 @@ extern void FUN_L00_00233660_23c710(void *, f32, f32, f32) __asm__("FUN_L00_0023
 extern void FUN_L00_00211250_23c710(void) __asm__("FUN_L00_00211250");
 
 extern Entry70_23c710 D_L01_00179D70[];
-void FUN_L01_0023c710(void) {
+void update_hero_timers_and_vehicle_transitions(void) __asm__("FUN_L01_0023c710");
+
+void update_hero_timers_and_vehicle_transitions(void) {
     Vec4 sum;
     Vec4 sample_delta;
     struct Moby *vehicle_moby;
