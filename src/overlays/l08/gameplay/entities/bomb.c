@@ -485,7 +485,9 @@ extern unsigned char D_0013D3B6 __attribute__((section(".data")));
 extern unsigned char D_0013D4CB __attribute__((section(".data")));
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00260738(void *, void *, void *, void *);
-void FUN_L08_002d5950(char *moby, int joint, int count);
+void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) __asm__("FUN_L08_002d5950");
+
+void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) __asm__("FUN_L08_002d5950");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 extern unsigned short D_00141C38 __attribute__((section(".data")));
@@ -730,9 +732,9 @@ void update_bomber_tank(Moby *moby) {
         advance_bomber_tank_along_path(moby, vars->path);
         frame = compute_interpolated_record_value(moby);
         if ((59.0f <= frame && frame <= 60.0f) || (119.0f <= frame && frame <= 120.0f)) {
-            FUN_L08_002d5950((char *)moby, 4, 10);
+            spawn_bomber_tank_joint_particles((char *)moby, 4, 10);
         } else if ((29.0f <= frame && frame <= 30.0f) || (89.0f <= frame && frame <= 90.0f)) {
-            FUN_L08_002d5950((char *)moby, 5, 10);
+            spawn_bomber_tank_joint_particles((char *)moby, 5, 10);
         }
         break;
     }
@@ -1120,7 +1122,7 @@ extern float func_001F9878_2D6C58(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_2D6C58(float) __asm__("FUN_001fa6d0");
 extern char *func_00219780_2D6C58(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
-void FUN_L08_002d5950(char *moby, int joint, int count) {
+void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) {
     char *data = *(char **)(moby + 0x78);
     char joint_transform_buffer[32];
     float jitter_direction_source[8];
