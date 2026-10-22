@@ -2728,7 +2728,9 @@ float get_capped_hero_stick_magnitude(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211F28), where it is exact; names translated to the US level program. */
 
 /* True when t is before the time at hero.anim_frame by at most the span hero.unkAAC. */
-int FUN_L00_00211870(float animation_frame_threshold) {
+int test_hero_animation_frame_window(float animation_frame_threshold) __asm__("FUN_L00_00211870");
+
+int test_hero_animation_frame_window(float animation_frame_threshold) {
     float end = hero.anim_frame;
 
     if (animation_frame_threshold < end) {

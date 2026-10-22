@@ -1855,7 +1855,7 @@ extern int D_L00_00173E40_u[] __asm__("D_L00_00173E40");
 extern int FUN_001efa68(void*,void*,int,int,int);
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
-extern int FUN_L00_00211870(float);
+extern int test_hero_animation_frame_window(float) __asm__("FUN_L00_00211870");
 extern int FUN_L00_00216de8(int,int);
 extern int FUN_L00_002223f8(int,int);
 extern int sweep_hit_segment(void*,void*,void*,void*,void*,void*,int) __asm__("FUN_L00_00259d08");
@@ -2025,7 +2025,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 }
             }
         }
-        if (wrench_hero()->state==20 && FUN_L00_00211870(27.0f)) {
+        if (wrench_hero()->state==20 && test_hero_animation_frame_window(27.0f)) {
             allocate_voice_for_target_entry_alt(2,0,(int)wrench_moby);
             qcopy(work.v[0],wrench_hero()->sweep_end); qcopy(work.v[1],work.v[0]);
             FUN_L00_002336e8(work.v[0],work.v[0],0.7f); FUN_L00_002336e8(work.v[1],work.v[1],-0.9f);

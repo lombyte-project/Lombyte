@@ -300,7 +300,7 @@ extern void update_moby_transform_history(void *, s32) __asm__("FUN_L00_00262608
 extern void FUN_L00_00217368(void *, s32);
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
-extern s32 FUN_L00_00211870(f32);
+extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
 
 void hero_update_movement(void) __asm__("FUN_L00_00217970");
 void hero_update_movement(void) {
@@ -1225,7 +1225,7 @@ void hero_update_movement(void) {
             ((u8 *)&v20)[8] = 0;
             collect_mobies_in_sphere(0.4f, &v0, 0x10, (struct MobyView *)hero.moby, &v10);
         }
-        FUN_L00_00211870(27.0f);
+        test_hero_animation_frame_window(27.0f);
         if (hero.state_timer < t1) {
             f32 h = gravity_z(&hero.motion.velocity);
             approach_value(&h, r, mx);
@@ -1281,7 +1281,7 @@ void hero_update_movement(void) {
                 }
             }
         }
-        if (hero.unkA9C == 0 && FUN_L00_00211870(33.0f) != 0) {
+        if (hero.unkA9C == 0 && test_hero_animation_frame_window(33.0f) != 0) {
             if (hero.unk12E2 != 0 && hero.motion.speed_xy < frame_time * 2.0f) {
                 hero.motion.velocity.f[0] += fast_cos(hero.motion.rot.f[2]) * (frame_time * 1.3f);
                 hero.motion.velocity.f[1] += fast_sin(hero.motion.rot.f[2]) * (frame_time * 1.3f);
@@ -1290,7 +1290,7 @@ void hero_update_movement(void) {
             launch_hero_wrench();
         }
         if (hero.unk12E2 != 0) {
-            if (FUN_L00_00211870(84.0f) != 0) {
+            if (test_hero_animation_frame_window(84.0f) != 0) {
                 f32 a = fast_add_rotations(hero.motion.rot.f[2], 3.1415927f);
                 f32 s = frame_time * 2.5f;
                 if (pad_held[0] & 0xA) {
@@ -2339,7 +2339,7 @@ void hero_update_movement(void) {
         s32 t198;
         s32 jump_timer_threshold;
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
-            if (FUN_L00_00211870(10.0f) != 0) {
+            if (test_hero_animation_frame_window(10.0f) != 0) {
                 FUN_L00_00216de8(4, 0);
             }
         }
@@ -2898,7 +2898,7 @@ void hero_update_movement(void) {
         turn_to(0, frame_scale_sq * 0.01f, frame_scale_sq * 0.2f, frame_time * 1.2217305f);
         clear_u64_value(&hero.motion.velocity);
         reduce_and_apply_hero_planar_velocity_addend(frame_time_sq * 12.6f);
-        if (FUN_L00_00211870(4.0f) != 0) {
+        if (test_hero_animation_frame_window(4.0f) != 0) {
             s32 i;
             f32 w = z;
             z = 1.0f;
@@ -2941,7 +2941,7 @@ void hero_update_movement(void) {
             FUN_L00_002335c8(&v0, 1.8f, fast_add_rotations(-0.7853982f, (f32)i * 0.7853982f), 1.4f);
             play_entity_sound((struct MobyView *)hero.moby, 2.7f, &v0, 0x30000, 40.0f, 1.0f, 0, 1, 0);
         }
-        if (FUN_L00_00211870(30.0f) != 0 || FUN_L00_00211870(0.0f) != 0) {
+        if (test_hero_animation_frame_window(30.0f) != 0 || test_hero_animation_frame_window(0.0f) != 0) {
             Q.f160 = 0.1f;
             Q.i168 = scale_game_frames(20);
         }

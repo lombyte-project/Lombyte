@@ -645,7 +645,7 @@ extern void update_moby_transform_history(void *, s32) __asm__("FUN_L00_00262608
 extern void FUN_L00_00217368(void *, s32);
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
-extern s32 FUN_L00_00211870(f32);
+extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
 
 void update_hero_motion_for_current_state(void) __asm__("FUN_L12_00238900");
 
@@ -1568,7 +1568,7 @@ void update_hero_motion_for_current_state(void) {
             ((u8 *)&geometry_rotation_and_hit_descriptor_scratch)[8] = 0;
             collect_mobies_in_sphere(0.4f, &geometry_and_hit_descriptor_scratch, 0x10, MV(hero.moby), &v10);
         }
-        FUN_L00_00211870(27.0f);
+        test_hero_animation_frame_window(27.0f);
         if (hero.state_timer < t1) {
             f32 h = gravity_z(&hero.motion.velocity);
             approach_value(&h, r, mx);
@@ -1624,7 +1624,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
         }
-        if (hero.unkA9C == 0 && FUN_L00_00211870(33.0f) != 0) {
+        if (hero.unkA9C == 0 && test_hero_animation_frame_window(33.0f) != 0) {
             if (hero.unk12E2 != 0 && hero.motion.speed_xy < frame_time * 2.0f) {
                 hero.motion.velocity.f[0] += fast_cos(hero.motion.rot.f[2]) * (frame_time * 1.3f);
                 hero.motion.velocity.f[1] += fast_sin(hero.motion.rot.f[2]) * (frame_time * 1.3f);
@@ -1633,7 +1633,7 @@ void update_hero_motion_for_current_state(void) {
             launch_hero_wrench();
         }
         if (hero.unk12E2 != 0) {
-            if (FUN_L00_00211870(84.0f) != 0) {
+            if (test_hero_animation_frame_window(84.0f) != 0) {
                 f32 a = fast_add_rotations(hero.motion.rot.f[2], 3.1415927f);
                 f32 s = frame_time * 2.5f;
                 if (D_0013CAE0[0] & 0xA) {
@@ -2254,7 +2254,7 @@ void update_hero_motion_for_current_state(void) {
         s32 state_timer_or_trail_control;
         s32 state_timer_threshold;
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
-            if (FUN_L00_00211870(10.0f) != 0) {
+            if (test_hero_animation_frame_window(10.0f) != 0) {
                 FUN_L00_00216de8(4, 0);
             }
         }

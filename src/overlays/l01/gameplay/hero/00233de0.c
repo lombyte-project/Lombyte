@@ -428,7 +428,7 @@ extern int D_0015EEA4;
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00209a40_cf(void *) __asm__("FUN_001f9770");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
-extern int FUN_L00_00211870(float);
+extern int test_hero_animation_frame_window(float) __asm__("FUN_L00_00211870");
 extern int FUN_L00_00227d40_cf(float, void *, void *) __asm__("FUN_L00_001ff600");
 extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int FUN_L00_00233660_cf(void *, void *, int, int, int) __asm__("FUN_001efa68");
@@ -1262,7 +1262,7 @@ void update_hero_motion_for_current_state(void) {
             ((HitC *)vec[1])->f18 = 0;
             collect_mobies_in_sphere(0.4f, vec[0], 0x10, ((Moby *)hero.moby), vec[1]);
         }
-        FUN_L00_00211870(27.0f);
+        test_hero_animation_frame_window(27.0f);
         if (hero.state_timer < t0) {
             float z;
 
@@ -1332,7 +1332,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
         }
-        if (hero.unkA9C == 0 && FUN_L00_00211870(33.0f)) {
+        if (hero.unkA9C == 0 && test_hero_animation_frame_window(33.0f)) {
             launch_hero_wrench();
         }
         speed_step(frame_time_sq * 37.0f, frame_time_sq * 28.0f);
@@ -1924,7 +1924,7 @@ void update_hero_motion_for_current_state(void) {
     case 0x5E:
     case 0x69:
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
-            if (FUN_L00_00211870(10.0f)) {
+            if (test_hero_animation_frame_window(10.0f)) {
                 FUN_L00_00233708_cf(4, 0);
             }
         }

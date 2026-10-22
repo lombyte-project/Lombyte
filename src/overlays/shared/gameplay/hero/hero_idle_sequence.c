@@ -551,7 +551,7 @@ void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int enab
     }
 }
 extern int FUN_001f96f8_206080(int) __asm__("FUN_001f96f8");
-extern int FUN_L00_00211870_206080(float) __asm__("FUN_L00_00211870");
+extern int test_hero_animation_frame_window(float) __asm__("FUN_L00_00211870");
 extern void FUN_L00_00205f60_206080(int, char *, int) __asm__("FUN_L00_00205f60");
 
 void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
@@ -571,10 +571,10 @@ void dispatch_hero_animation_timed_events(void) {
         if (hero.unkA9C) {
             return;
         }
-        if (FUN_L00_00211870_206080(49.5f)) {
+        if (test_hero_animation_frame_window(49.5f)) {
             FUN_L00_00205f60_206080(k, 0, 1);
         }
-        if (FUN_L00_00211870_206080(17.0f)) {
+        if (test_hero_animation_frame_window(17.0f)) {
             FUN_L00_00205f60_206080(k, (char *)1, 1);
         }
         break;
@@ -582,10 +582,10 @@ void dispatch_hero_animation_timed_events(void) {
         if (hero.unkA9C) {
             return;
         }
-        if (FUN_L00_00211870_206080(12.5f)) {
+        if (test_hero_animation_frame_window(12.5f)) {
             FUN_L00_00205f60_206080(k, 0, 1);
         }
-        if (FUN_L00_00211870_206080(1.0f)) {
+        if (test_hero_animation_frame_window(1.0f)) {
             FUN_L00_00205f60_206080(k, (char *)1, 1);
         }
         break;

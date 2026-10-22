@@ -91,7 +91,7 @@ extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int hero_check_damage(int) __asm__("FUN_L00_00210ce8");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
-extern int FUN_L00_00211870(float t);
+extern int test_hero_animation_frame_window(float t) __asm__("FUN_L00_00211870");
 extern int FUN_L00_00221d98(void);
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern int try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
@@ -1616,7 +1616,7 @@ void hero_update_transitions(void) {
                     break;
                 case 116:
                     if (((unsigned char *)hero.moby)[0x53] == 0x73) {
-                        if (FUN_L00_00211870(11.0f)) {
+                        if (test_hero_animation_frame_window(11.0f)) {
                             FUN_L00_00216de8(0xD, 0);
                             FUN_L00_002a7e20(hero.unk5E0.f, 4);
                         }
