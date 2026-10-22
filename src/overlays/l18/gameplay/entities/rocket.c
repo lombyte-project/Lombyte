@@ -252,7 +252,9 @@ typedef struct {
     Level18VendorFloatData *data;
 } Level18VendorFloatMoby;
 
-float FUN_L18_002dfb90(Level18VendorFloatMoby *moby) {
+float get_position_and_rotation_transition_progress(Level18VendorFloatMoby *moby) __asm__("FUN_L18_002dfb90");
+
+float get_position_and_rotation_transition_progress(Level18VendorFloatMoby *moby) {
     return moby->data->value;
 }
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");

@@ -1459,7 +1459,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
-extern float FUN_L18_002dfb90(void *moby);
+extern float get_position_and_rotation_transition_progress(void *moby) __asm__("FUN_L18_002dfb90");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -1847,7 +1847,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         qcopy(position_and_displacement_scratch, boss_data->f340 + 4);
         hit = FUN_L18_002f6878((char *)moby, 20.0f, position_and_displacement_scratch);
-        lvl = FUN_L18_002dfb90(boss_data->f334);
+        lvl = get_position_and_rotation_transition_progress(boss_data->f334);
         if (moby->f53 == 7) {
             if ((moby->f70 & 2) != 0) {
                 blend_moby_animation(moby, 8, 0, scale_game_frames(10));
@@ -2034,7 +2034,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         break;
     case DREK_BOSS_WAIT_FOR_PAIRED_TRANSFORM_TRANSITION:
         moby->f34 |= 0x41;
-        if (FUN_L18_002dfb90(boss_data->f334) >= 1.0f) {
+        if (get_position_and_rotation_transition_progress(boss_data->f334) >= 1.0f) {
             moby->f20 = 0xC;
             moby->f34 &= 0xFFBE;
             if (moby->f53 != 0) {
