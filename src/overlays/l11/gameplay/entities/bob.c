@@ -1715,7 +1715,9 @@ extern void FUN_L00_002e8450_309ac0(int, float, float) __asm__("FUN_L00_002e8450
 extern void FUN_L00_002e84b8_309ac0(float, float) __asm__("FUN_L00_002e84b8");
 extern void FUN_L11_0030a500(struct Moby *);
 extern float sin_309ac0(float) __asm__("FUN_001f9de0");
-extern int FUN_L11_0030a850(struct Moby *);
+int is_pokitaru_boat_target_group_clear(struct Moby *moby) __asm__("FUN_L11_0030a850");
+
+extern int is_pokitaru_boat_target_group_clear(struct Moby *) __asm__("FUN_L11_0030a850");
 
 extern float D_L11_00161DD4 __attribute__((sda));
 extern float D_L11_00161DD8 __attribute__((sda));
@@ -1880,7 +1882,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         break;
     }
     case POKITARU_BOAT_WAIT_FOR_GROUP_CLEAR:
-        if (FUN_L11_0030a850(moby) != 0) {
+        if (is_pokitaru_boat_target_group_clear(moby) != 0) {
             if (boat_vars->flag_b0 != 0) {
                 boat_vars->approach_d0 = 0.0f;
                 moby->state = 4;
@@ -2034,7 +2036,7 @@ extern int is_moby_in_bob_target_exclusion_state(char *) __asm__("FUN_L11_003161
 extern short *D_L11_001AC240[];
 extern s32 D_L11_0015FFF4;
 
-int FUN_L11_0030a850(struct Moby *moby) {
+int is_pokitaru_boat_target_group_clear(struct Moby *moby) {
     int moby_group_index = *(short *)((char *)moby->pvars + 0xB4);
     short *group_entry;
     if (moby_group_index < 0 || *(int *)&D_L11_0015FFF4 < moby_group_index)
