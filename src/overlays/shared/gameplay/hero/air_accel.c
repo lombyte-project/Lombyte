@@ -1020,7 +1020,9 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 extern int D_L01_001742DC __attribute__((section(".data")));
-void FUN_L01_00232978(int flag) {
+void clip_hero_horizontal_velocity(int flag) __asm__("FUN_L01_00232978");
+
+void clip_hero_horizontal_velocity(int flag) {
     float slope_probe_start[4];
     float slope_probe_end[4];
     float material_probe_start[4];

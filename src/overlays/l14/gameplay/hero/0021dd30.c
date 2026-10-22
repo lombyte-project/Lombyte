@@ -406,7 +406,7 @@ extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_00216710(f32);
 extern void FUN_L00_002334d0(void *, void *, f32);
-extern void FUN_L01_00232978(s32);
+extern void clip_hero_horizontal_velocity(s32) __asm__("FUN_L01_00232978");
 extern void FUN_L00_002121c0(void);
 extern void FUN_L00_00217450(void);
 extern struct MobyView *create_moby(s32) __asm__("FUN_0020c4f8");
@@ -686,7 +686,7 @@ void FUN_L14_00228cd0(void) {
                 }
             }
         } else {
-            FUN_L01_00232978(0);
+            clip_hero_horizontal_velocity(0);
             if (hero.air_frames.s != 0) {
                 FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 25.0f);
                 FUN_L00_002121c0();
@@ -1356,7 +1356,7 @@ void FUN_L14_00228cd0(void) {
         if (scale_game_frames(10) < hero.state_timer) {
             FUN_L00_00217118(3.7f, 0.0f);
         }
-        FUN_L01_00232978(1);
+        clip_hero_horizontal_velocity(1);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk110, frame_time_sq * 24.0f);
             FUN_L00_002121c0();
@@ -1490,7 +1490,7 @@ void FUN_L14_00228cd0(void) {
         } else {
             set_planar_vel(99999.0f);
         }
-        FUN_L01_00232978(1);
+        clip_hero_horizontal_velocity(1);
         if (hero.unk1F4 != 0) {
             FUN_L00_00217118(5.0f, 0.2f);
         }
@@ -1994,7 +1994,7 @@ void FUN_L14_00228cd0(void) {
             FUN_L00_00213e68(g);
         }
         FUN_L00_00215340();
-        FUN_L01_00232978(1);
+        clip_hero_horizontal_velocity(1);
         if (big) {
             gravity_flatten(&hero.motion.velocity, &hero.motion.velocity);
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, sp * 0.72f);
@@ -2238,7 +2238,7 @@ void FUN_L14_00228cd0(void) {
         speed_step(frame_time_sq * 7.5f * k, frame_time_sq * 8.5f);
         set_planar_vel(99999.0f);
         if (hero.vehicle_mode == 0) {
-            FUN_L01_00232978(1);
+            clip_hero_horizontal_velocity(1);
         }
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.displacement, frame_time_sq * 25.0f);
@@ -2255,7 +2255,7 @@ void FUN_L14_00228cd0(void) {
         }
         clear_u64_value(&hero.motion.velocity);
         FUN_L00_00216710(frame_time_sq * 12.0f);
-        FUN_L01_00232978(0);
+        clip_hero_horizontal_velocity(0);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.displacement, frame_time_sq * 25.0f);
             FUN_L00_002121c0();
@@ -2276,7 +2276,7 @@ void FUN_L14_00228cd0(void) {
         speed_step(0.0f, frame_time_sq * 12.6f);
         clear_u64_value(&hero.motion.velocity);
         FUN_L00_00216710(frame_time_sq * 12.6f);
-        FUN_L01_00232978(0);
+        clip_hero_horizontal_velocity(0);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 25.0f);
             FUN_L00_002121c0();
@@ -2322,7 +2322,7 @@ void FUN_L14_00228cd0(void) {
         } else {
             set_planar_vel(99999.0f);
         }
-        FUN_L01_00232978(1);
+        clip_hero_horizontal_velocity(1);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 25.0f);
             FUN_L00_002121c0();
