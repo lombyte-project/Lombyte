@@ -281,7 +281,9 @@ void FUN_002335a0_eed0(void) __asm__("FUN_002335a0");
 void FUN_L00_0028e9c8_eed0(s32) __asm__("FUN_L00_0028e9c8");
 extern u8 D_0013DD43 __attribute__((section(".data")));
 extern u8 D_0013D3F0[];
-void FUN_L00_0028eed0(void) {
+void prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");
+
+void prepare_level_entry_transition(void) {
     int level_index, shared_table_offset;
     D_0013E030_eed0.x2c = 1;
     if (D_0013E030_eed0.x2a != 0)

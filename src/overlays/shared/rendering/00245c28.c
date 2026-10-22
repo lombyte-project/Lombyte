@@ -37,7 +37,7 @@ extern void clear_dma_queue_entry(void) __asm__("FUN_001f0b88");
 extern void FUN_L00_002464a8_u(void) __asm__("FUN_L00_002464a8");
 extern void init_hud(void) __asm__("FUN_001fee88");
 extern void load_misc_animations_into_stash(void) __asm__("FUN_L00_00276078");
-extern void FUN_L00_0028eed0(void);
+extern void prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");
 extern int sce_gs_sync_v(int) __asm__("FUN_00122298");
 extern void put_disp_buffer(void) __asm__("FUN_001fb2a8");
 extern void music_start_track(int, int, int) __asm__("FUN_00215c40");
@@ -137,7 +137,7 @@ void run_level_main_loop(void) {
     FUN_L00_002464a8_u();
     init_hud();
     load_misc_animations_into_stash();
-    FUN_L00_0028eed0();
+    prepare_level_entry_transition();
     D_L00_0015F3F8 = 0;
     sce_gs_sync_v(0);
     put_disp_buffer();
