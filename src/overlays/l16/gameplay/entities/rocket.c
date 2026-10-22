@@ -1210,7 +1210,7 @@ extern void play_entity_sound(int, float, void *, int, float, float, int, int, i
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f730(void *, float);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
-extern void FUN_L02_00264e40(char *);
+extern void reset_shot_tracking(char *) __asm__("FUN_L02_00264e40");
 extern void FUN_L02_00264e70(void *, void *, void *, float);
 extern void FUN_L02_002651d0(char **, int, int);
 extern void FUN_L16_002ce9f0_u(void *) __asm__("FUN_L16_002ce9f0");
@@ -1288,7 +1288,7 @@ void test_dummy_update(unsigned char *moby) {
             break;
         case TEST_DUMMY_KIND_SPRAYER:
             dummy_data->child = func_0020D348_m(0x36C);
-            FUN_L02_00264e40(dummy_data->slots);
+            reset_shot_tracking(dummy_data->slots);
             break;
         }
         if (dummy_data->child) {

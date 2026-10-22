@@ -1405,7 +1405,7 @@ extern void FUN_L00_0025f730(void *a, float x);
 extern void FUN_L00_00263ac8(float x, int a, int b, unsigned char *m);
 extern void FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
 extern void FUN_L01_0026d930(char *p);
-extern void FUN_L02_00264e40(char *moby);
+extern void reset_shot_tracking(char *moby) __asm__("FUN_L02_00264e40");
 extern void FUN_L02_00264e70(void *, void *, void *, float);
 extern void FUN_L02_002651d0(char **slots, int a, int b);
 extern void FUN_L02_002d85b8(void *);
@@ -1483,7 +1483,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
         data->walk_d8 = 2.0f;
         data->f20 = 3.0f;
         clear_u64_value(data->velocity);
-        FUN_L02_00264e40((char *)data->shots);
+        reset_shot_tracking((char *)data->shots);
         switch (data->start) {
         case L02_BOT_START_SELECT_ATTACK_OR_WANDER:
         default:
