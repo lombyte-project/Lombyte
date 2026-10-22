@@ -1872,7 +1872,7 @@ void update_hero_moby(void) {
     }
 }
 extern void set_hero_moby_flag_bit0(void) __asm__("FUN_L00_00233210");
-extern void FUN_L00_00233248_00208a10(void) __asm__("FUN_L00_00233248");
+extern void clear_hero_moby_flag_bit0(void) __asm__("FUN_L00_00233248");
 extern void FUN_L00_00232fe8_00208a10(void) __asm__("FUN_L00_00232fe8");
 extern void FUN_001f9838_00208a10(void *, void *, int) __asm__("FUN_001f9838");
 extern void FUN_L00_002336e8_00208a10(void *, void *, float) __asm__("FUN_L00_002336e8");
@@ -1886,7 +1886,7 @@ void update_hero_vehicle_moby(void) {
     if (hero.unk20A5) {
         set_hero_moby_flag_bit0();
     } else {
-        FUN_L00_00233248_00208a10();
+        clear_hero_moby_flag_bit0();
     }
     FUN_L00_00232fe8_00208a10();
     ((unsigned char *)hero.moby)[0xA4] = 0xFF;

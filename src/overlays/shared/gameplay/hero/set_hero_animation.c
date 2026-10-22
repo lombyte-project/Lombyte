@@ -774,7 +774,9 @@ void set_hero_moby_flag_bit0(void) {
    objects at hero +0x2080 and, when present, +0x1620. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233AC8), where it is exact; names translated to the US level program. */
 
-void FUN_L00_00233248(void) {
+void clear_hero_moby_flag_bit0(void) __asm__("FUN_L00_00233248");
+
+void clear_hero_moby_flag_bit0(void) {
     struct Hero *base = &hero;
     char *optional_hero_flag_target;
 
