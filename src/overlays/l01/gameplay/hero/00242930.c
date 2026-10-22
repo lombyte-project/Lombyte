@@ -1375,12 +1375,12 @@ void FUN_L01_00242930(void) {
                 case HERO_STATE_HIGH_JUMP:
                 case 12:
                 case 13:
-                case 14:
+                case HERO_STATE_DOUBLE_JUMP:
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
                 case 18:
-                case 28:
+                case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case 105:
                     if (hero.unk4AE != 0) {
