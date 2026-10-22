@@ -1538,7 +1538,9 @@ extern float FUN_001f9af0_002e4180(void *) __asm__("FUN_001f9af0");
 extern void FUN_001f9a68_002e4180(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_002e4180(void *, void *, void *) __asm__("FUN_001f9a10");
 
-int FUN_L00_002e4180(u128 *input_position, float radial_distance_extension) {
+int compute_follow_camera_radial_collision_positions(u128 *input_position, float radial_distance_extension) __asm__("FUN_L00_002e4180");
+
+int compute_follow_camera_radial_collision_positions(u128 *input_position, float radial_distance_extension) {
     u128 lookup_position_copy;
     u128 position_delta;
     char *selected_record;

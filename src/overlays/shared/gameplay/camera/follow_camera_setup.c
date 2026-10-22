@@ -873,7 +873,7 @@ typedef struct G002e7318 {
 extern G002e7318 D_L00_00166E10_c __asm__("D_L00_00166E10");
 extern f32 follow_cam_min_distance_gp __asm__("D_L00_00161CD8") __attribute__((sda));
 extern V002e7318 D_L00_00173E70;
-extern s32 FUN_L00_002e4180_c(V002e7318 *, f32) __asm__("FUN_L00_002e4180");
+extern s32 compute_follow_camera_radial_collision_positions(V002e7318 *, f32) __asm__("FUN_L00_002e4180");
 extern s32 coll_sphere(V002e7318 *, f32, s32, s32) __asm__("FUN_L00_001f0d60");
 extern s32 FUN_L00_002e7138_c(O002e7318 *, V002e7318 *, s32, s32) __asm__("FUN_L00_002e7138");
 s32 FUN_L00_002e7318(O002e7318 *camera_moby) {
@@ -900,7 +900,7 @@ s32 FUN_L00_002e7318(O002e7318 *camera_moby) {
     collision_probe_radius = follow_cam_min_distance_gp + active_camera_state->c * active_camera_state->a * (active_camera_state->b - 1.0f);
     i = 0;
     while (i < 3) {
-        if (FUN_L00_002e4180_c(&candidate_camera_position, collision_probe_radius)) {
+        if (compute_follow_camera_radial_collision_positions(&candidate_camera_position, collision_probe_radius)) {
             ha = 1;
         } else {
             if (!coll_sphere(&candidate_camera_position, collision_probe_radius, w, g->i114))
