@@ -1588,7 +1588,9 @@ extern int FUN_L00_00262360();
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_0023e838(int);
-unsigned char *FUN_L10_002dd270(int a, void *pos, int b, float x, float y, float z);
+unsigned char *spawn_path_spark_effect(int source_moby, void *initial_position, int path_address, float x, float y, float z) __asm__("FUN_L10_002dd270");
+
+unsigned char *spawn_path_spark_effect(int a, void *pos, int b, float x, float y, float z) __asm__("FUN_L10_002dd270");
 extern int func_001E9730_2da0f0(void *, int) __asm__("FUN_001e93b0");
 extern int func_001F9908_v(void *) __asm__("FUN_001f9740");
 extern void func_L00_002633D8_f(float, float, void *, int *, float *,
@@ -1649,7 +1651,7 @@ void FUN_L10_002d8d30(char *moby) {
         if (random_integer_below(2) != 0)
             return;
         if (D_L10_0015F5CC & 1) {
-            FUN_L10_002dd270(moby, spark_path_position, path, *(float *)(spark_vars + 4), frame_time * 5.0f, first_path_segment_length);
+            spawn_path_spark_effect(moby, spark_path_position, path, *(float *)(spark_vars + 4), frame_time * 5.0f, first_path_segment_length);
         }
         if (voice_is_playing(moby, *(int *)(spark_vars + 0x10)) == 0) {
             int voice_slot_index = trooper_play_sound(0, 0xC, moby, 0x442);
@@ -2292,7 +2294,7 @@ extern int FUN_001fa6d0_dd(float) __asm__("FUN_001fa6d0");
 extern float FUN_002132a8_dd(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0026daa0_dd(unsigned char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 
-unsigned char *FUN_L10_002dd270(int source_moby, void *initial_position, int path_address, float x, float y, float z) {
+unsigned char *spawn_path_spark_effect(int source_moby, void *initial_position, int path_address, float x, float y, float z) {
     unsigned char *effect_moby = FUN_0020c4f8_dd(0x442);
     int *effect_data;
     float lifetime_frames;
