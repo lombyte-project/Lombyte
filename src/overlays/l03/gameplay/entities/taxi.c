@@ -2040,7 +2040,9 @@ s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
                            s32 b) __asm__("FUN_001ff308");
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
-void FUN_L03_002dcbc8(struct Moby *lift_moby, int mode) {
+void update_rail_lift_help_and_hud(struct Moby *lift_moby, int mode) __asm__("FUN_L03_002dcbc8");
+
+void update_rail_lift_help_and_hud(struct Moby *lift_moby, int mode) {
     char *lift_vars = (char *)lift_moby->pvars;
     int hud_key;
     switch (mode) {
@@ -2144,7 +2146,7 @@ void FUN_L03_002dccc0(struct Moby *lift_moby) {
             lift_moby->collision = 0;
             lift_moby->flags |= 0x41;
         } else if (lift_vars->ready && is_hero_on_moby(lift_moby)) {
-            FUN_L03_002dcbc8((char *)lift_moby, lift_vars->help[lift_moby->command ^ 1]);
+            update_rail_lift_help_and_hud((char *)lift_moby, lift_vars->help[lift_moby->command ^ 1]);
             if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
                 FUN_L00_00233ee8(&lift_moby->pos, lift_moby->rot.z, 0);
                 lift_moby->command ^= 1;
