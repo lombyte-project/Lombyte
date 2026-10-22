@@ -383,7 +383,9 @@ extern void draw_hud_sprite_c2(s32, s32, s32, s32, s32, s32) __asm__("func_001FF
 int FUN_L00_00235a70_c3(HudElem *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
 
 
-int FUN_L00_002382a0(HudElem *rec) {
+int draw_hud_item_selector_panel(HudElem *rec) __asm__("FUN_L00_002382a0");
+
+int draw_hud_item_selector_panel(HudElem *rec) {
     char *weapon_entry;
     int x, y, half_w, half_h, alpha;
     int marker_alpha;

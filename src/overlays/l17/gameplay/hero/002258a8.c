@@ -126,7 +126,7 @@ extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_0023
 extern void hud_keep_visible(int, int) __asm__("FUN_L00_00235e18");
 extern void initialize_eight_slot_hud_selector(void) __asm__("FUN_L00_00237ae8");
 extern void update_hud_item_selector_selection_and_visibility(void) __asm__("FUN_L00_00237ba0");
-extern void FUN_L00_002382a0(void);
+extern void draw_hud_item_selector_panel(void) __asm__("FUN_L00_002382a0");
 extern void initialize_four_slot_hud_selector(void) __asm__("FUN_L00_00238b18");
 extern void update_hud_radial_selector_selection_and_visibility(void) __asm__("FUN_L00_00238b80");
 extern void draw_hud_radial_selector_panel(void) __asm__("FUN_L00_00238f88");
@@ -200,7 +200,7 @@ void FUN_L17_002258a8(void) {
                             hero.unk22D2 = scale_game_frames(0xF);
                         }
                         queue_animation_update(3, 0, (int)initialize_eight_slot_hud_selector, (int)update_hud_item_selector_selection_and_visibility,
-                                               (int)FUN_L00_002382a0, 0, 0);
+                                               (int)draw_hud_item_selector_panel, 0, 0);
                         id = func_L00_00235790_r();
                         hud_keep_visible(id, scale_game_frames(0xB4));
                         id = queue_animation_update(2, 0x754E, (int)FUN_L00_00239cc8,
