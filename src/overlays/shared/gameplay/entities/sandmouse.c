@@ -1516,7 +1516,9 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern int D_0015EE84_c __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern Path_316730 *D_L01_001B0C30_316730[] __asm__("D_L01_001B0930");
 
-void FUN_L01_00315358(Cam_316730 *cam) {
+void update_camera_position_and_orientation_from_paths(Cam_316730 *cam) __asm__("FUN_L01_00315358");
+
+void update_camera_position_and_orientation_from_paths(Cam_316730 *cam) {
     float camera_goal[4];
     float look_offset[4];
     float look_dir[4];
