@@ -714,8 +714,8 @@ void hoven_turret_update(struct Moby *moby) {
         {
             float joy[2];
             float y;
-            float tgt;
-            float tgt2;
+            float target_yaw_step;
+            float target_pitch_step;
 
             joy[0] = ((Hero *)(D_0013E533 + 0xE1D))->stick_x;
             y = ((Hero *)(D_0013E533 + 0xE1D))->stick_y;
@@ -723,18 +723,18 @@ void hoven_turret_update(struct Moby *moby) {
                 y = -y;
             }
             joy[1] = y;
-            tgt = D_L12_00161ED0 * 0.017453292f * D_0015ED6C_gp * -joy[0];
-            if ((data->f7C >= 0.0f && data->f7C < tgt) || (data->f7C <= 0.0f && tgt < data->f7C)) {
-                approach_value(&data->f7C, tgt, D_L12_00161ED8 * 0.017453292f * frame_time_sq_macro);
+            target_yaw_step = D_L12_00161ED0 * 0.017453292f * D_0015ED6C_gp * -joy[0];
+            if ((data->f7C >= 0.0f && data->f7C < target_yaw_step) || (data->f7C <= 0.0f && target_yaw_step < data->f7C)) {
+                approach_value(&data->f7C, target_yaw_step, D_L12_00161ED8 * 0.017453292f * frame_time_sq_macro);
             } else {
-                approach_value(&data->f7C, tgt, D_L12_00161EE0 * 0.017453292f * frame_time_sq_macro);
+                approach_value(&data->f7C, target_yaw_step, D_L12_00161EE0 * 0.017453292f * frame_time_sq_macro);
             }
             moby->rot.z = fast_add_rotations_c3(moby->rot.z, data->f7C);
-            tgt2 = -(D_L12_00161ED4 * 0.017453292f * D_0015ED6C_gp) * -joy[1];
-            if ((data->f78 >= 0.0f && data->f78 < tgt2) || (data->f78 <= 0.0f && tgt2 < data->f78)) {
-                approach_value(&data->f78, tgt2, D_L12_00161EDC * 0.017453292f * frame_time_sq_macro);
+            target_pitch_step = -(D_L12_00161ED4 * 0.017453292f * D_0015ED6C_gp) * -joy[1];
+            if ((data->f78 >= 0.0f && data->f78 < target_pitch_step) || (data->f78 <= 0.0f && target_pitch_step < data->f78)) {
+                approach_value(&data->f78, target_pitch_step, D_L12_00161EDC * 0.017453292f * frame_time_sq_macro);
             } else {
-                approach_value(&data->f78, tgt2, D_L12_00161EE4 * 0.017453292f * frame_time_sq_macro);
+                approach_value(&data->f78, target_pitch_step, D_L12_00161EE4 * 0.017453292f * frame_time_sq_macro);
             }
             data->f74 = fast_add_rotations_c3(data->f74, data->f78);
             if (data->f74 > D_L12_00161EAC) {
