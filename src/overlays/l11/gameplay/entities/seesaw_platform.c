@@ -851,7 +851,9 @@ extern void func_L00_001FF4B0_u(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_u(void *, void *, void *) __asm__("FUN_001f9a10");
 extern char D_0013D355_t[] __asm__("D_0013D388");
 
-void FUN_L11_0030e978(struct Moby *moving_moby) {
+void update_link_triggered_moby_motion(struct Moby *moving_moby) __asm__("FUN_L11_0030e978");
+
+void update_link_triggered_moby_motion(struct Moby *moving_moby) {
     enum {
         LINKED_MOTION_STATE_INITIALIZE = 0,
         LINKED_MOTION_STATE_WAIT_FOR_LINK_TRIGGER = 1,
