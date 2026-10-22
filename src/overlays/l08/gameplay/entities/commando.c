@@ -51,7 +51,7 @@ extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern struct Moby *spawn_class_1b3_projectile(void *, struct Moby *, void *, f32, f32) __asm__("FUN_L08_002de3e0");
-extern void FUN_L08_002e9558(struct Moby *);
+extern void spawn_joint_linked_moby_parts(struct Moby *) __asm__("FUN_L08_002e9558");
 extern void FUN_L08_002e9758(struct Moby *);
 extern void update_commando_parts(struct Moby *) __asm__("FUN_L08_002e9a18");
 
@@ -102,7 +102,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
         vars->fire_timer = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(300.0f, 600.0f)));
         moby->flags |= 0x4000;
         qcopy(&moby->pos, &vars->follow[1].path->points[0]);
-        FUN_L08_002e9558(moby);
+        spawn_joint_linked_moby_parts(moby);
         moby->state = 2;
         moby->rot.z = fast_arc_tan(vars->follow[1].path->points[1].f[0] - moby->pos.x,
                                    vars->follow[1].path->points[1].f[1] - moby->pos.y);

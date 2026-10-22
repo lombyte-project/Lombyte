@@ -2964,7 +2964,9 @@ void shrub_update(struct Moby *moby) {
 void *FUN_L08_002e1c98_c2(char *parent, int oClass, int joint,
                           int pjoint) __asm__("FUN_L08_002e1c98");
 
-void FUN_L08_002e9558(char *moby) {
+void spawn_joint_linked_moby_parts(char *moby) __asm__("FUN_L08_002e9558");
+
+void spawn_joint_linked_moby_parts(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *anchor_joint_cursor = data + 0xFC;
     int i = 0;
