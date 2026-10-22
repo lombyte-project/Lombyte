@@ -1747,7 +1747,7 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E8588), where it is exact; names translated to the US level program. */
 
 extern char D_L12_00167240[];
-extern void FUN_L12_002e71b0(void);
+extern void draw_level_12_effects(void) __asm__("FUN_L12_002e71b0");
 
 void FUN_L12_002e7208(struct Moby *moby) {
     enum {
@@ -1763,7 +1763,7 @@ void FUN_L12_002e7208(struct Moby *moby) {
     case DRAW_CALLBACK_CHECK_VOLUME_AND_REGISTER: {
         int value = *(int *)(data + 0xC);
         if (value == -1 || is_point_inside_clip_volume(D_L12_00167240, value)) {
-            add_draw_callback((void *)FUN_L12_002e71b0, moby);
+            add_draw_callback((void *)draw_level_12_effects, moby);
         }
     } break;
     }
