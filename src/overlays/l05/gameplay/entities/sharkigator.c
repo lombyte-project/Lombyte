@@ -1823,7 +1823,9 @@ extern s32 follow_path(void *, s32, s32, void *, s32, void *, f32) __asm__("FUN_
 extern f32 angle_diff(f32, f32) __asm__("FUN_001fa688");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 approach_angle(f32 *angle, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025be00");
-extern s32 FUN_L05_00303e50(char *moby, float *goal, float s);
+int test_extermibot_offset_path_clearance(char *moby, float *goal, float probe_offset_length) __asm__("FUN_L05_00303e50");
+
+extern s32 test_extermibot_offset_path_clearance(char *moby, float *goal, float s) __asm__("FUN_L05_00303e50");
 extern f32 FUN_L05_00304058_u(s32, void *, void *, f32) __asm__("FUN_L05_00304058");
 
 /* Walks m toward its next path node, steering `side` radians off the direct heading while
@@ -1841,7 +1843,7 @@ void FUN_L05_00303b08(struct Moby *moby, s32 node, f32 side) {
     }
     qcopy(&goal, &walker_vars->goal);
     distance_to_goal = vector_distance(&moby->pos, &goal);
-    if (distance_to_goal > 5.0f && side != 0.0f && FUN_L05_00303e50((char *)moby, (float *)&goal, D_L05_00161A98_gp * 0.4f)) {
+    if (distance_to_goal > 5.0f && side != 0.0f && test_extermibot_offset_path_clearance((char *)moby, (float *)&goal, D_L05_00161A98_gp * 0.4f)) {
         offset_heading = fast_add_rotations(fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y), side);
         approach_angle(&moby->rot.z, offset_heading, &walker_vars->yaw_vel, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f,
                        frame_time * 25.132742f);
@@ -1872,7 +1874,7 @@ extern void FUN_001f9a28_c(float *, float *, float *) __asm__("FUN_001f9a28");
 extern void FUN_001f9bf8_c(float *, float *, float) __asm__("FUN_001f9bf8");
 extern int FUN_L00_00261968_c(int, float *, float *) __asm__("FUN_L00_00261968");
 
-int FUN_L05_00303e50(char *moby, float *goal, float probe_offset_length)
+int test_extermibot_offset_path_clearance(char *moby, float *goal, float probe_offset_length)
 {
     float probe_position[4];
     float offset_probe_position[4];
