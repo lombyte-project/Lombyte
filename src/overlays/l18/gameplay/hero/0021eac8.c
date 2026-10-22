@@ -299,7 +299,9 @@ extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
 extern s32 FUN_L00_00211870(f32);
 
-void FUN_L18_0021eac8(void) {
+void update_hero_motion_for_current_state(void) __asm__("FUN_L18_0021eac8");
+
+void update_hero_motion_for_current_state(void) {
     enum {
         ATTACK_RECORD_POINT_3_STRIKE = 0,
         ATTACK_RECORD_POINT_4_STRIKE = 1,
