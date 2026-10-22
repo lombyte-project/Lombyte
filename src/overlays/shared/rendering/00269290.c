@@ -883,7 +883,9 @@ extern unsigned char D_0013E05A[];
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 
-void FUN_L00_0026b500(unsigned char *particle) {
+void update_spinning_and_fading_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026b500");
+
+void update_spinning_and_fading_effect_particle(unsigned char *particle) {
     unsigned char *particle_data = particle + 0x20;
     float negated_particle_speed;
     float size_endpoint_scale = 1.0f;
