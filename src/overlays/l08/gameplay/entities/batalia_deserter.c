@@ -735,7 +735,9 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void spawn_effect_with_initial_motion(float *, float *, int, float) __asm__("FUN_L08_0027fe00");
 
-void FUN_L08_00308c90(struct Moby *moby) {
+void spawn_batalia_moby_effects_with_random_motion(struct Moby *moby) __asm__("FUN_L08_00308c90");
+
+void spawn_batalia_moby_effects_with_random_motion(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float effect_position[4];
     float rotation_basis[12];
