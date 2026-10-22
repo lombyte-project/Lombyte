@@ -19,7 +19,9 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern short D_L15_00161ACC __attribute__((sda));
 extern short D_L15_00161AD0 __attribute__((sda));
 extern short D_L15_00161AD4 __attribute__((sda));
-void FUN_L15_002cbd88(void) {
+void emit_sine_modulated_rgba_draw_packet(void) __asm__("FUN_L15_002cbd88");
+
+void emit_sine_modulated_rgba_draw_packet(void) {
     int period_frames = scale_game_frames(*(int *)&D_L15_00161AD4);
     float period_frames_float = convert_integer_to_float(period_frames);
     float sine_value = fast_sin((float)(D_L15_0015F5CC % period_frames) / period_frames_float * 6.28318f);

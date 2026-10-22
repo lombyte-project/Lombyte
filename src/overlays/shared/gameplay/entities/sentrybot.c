@@ -3570,7 +3570,7 @@ extern int D_0015ED84;
 extern s32 D_L15_00161AB8 ;
 extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
 extern s32 D_L15_00161AC0_gp __asm__("D_L15_00161AC0") __attribute__((sda));
-extern void FUN_L15_002cbd88_u(void) __asm__("FUN_L15_002cbd88");
+extern void emit_sine_modulated_rgba_draw_packet(void) __asm__("FUN_L15_002cbd88");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
 extern int D_L15_00161AC4 __attribute__((sda));
@@ -3592,7 +3592,7 @@ void update_sentrybot_alarm_effect(void *moby) {
             D_L15_00161AC4 = allocate_voice_for_target_entry(5, 0x11, (int)moby);
             *(void **)&D_L15_00161AC8 = moby;
         }
-        enqueue_callback_list_1_alt(FUN_L15_002cbd88_u, moby);
+        enqueue_callback_list_1_alt(emit_sine_modulated_rgba_draw_packet, moby);
     } else {
         if (voice_is_playing(*(void **)&D_L15_00161AC8, D_L15_00161AC4) != 0) {
             release_voice_slot(D_L15_00161AC4);
