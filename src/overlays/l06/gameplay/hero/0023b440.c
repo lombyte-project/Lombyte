@@ -131,7 +131,9 @@ extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 extern float D_L06_00167558_lui __asm__("D_L06_00167558") __attribute__((section(".data")));
-void FUN_L06_0023b440(void) {
+void update_hero_state_machine(void) __asm__("FUN_L06_0023b440");
+
+void update_hero_state_machine(void) {
     unsigned char *moby;
     int prevSub;
     int prevState;
