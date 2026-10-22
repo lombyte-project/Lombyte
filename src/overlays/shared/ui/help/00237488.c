@@ -1437,8 +1437,8 @@ void FUN_L05_00254608(void) {
     int j;
     int k;
     int comparison_opponent_index;
-    float ang;
-    float dir;
+    float path_segment_heading;
+    float wrong_way_reference_heading;
 
     hero.unk894++;
     if (((struct Moby *)hero.unk86C) == 0) {
@@ -1481,8 +1481,8 @@ void FUN_L05_00254608(void) {
         i = hero.unk898;
         n1 = path->n + 1;
         next = (i + n1) % path->n;
-        ang = angle_atan2_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
-        if (fast_difference_between_rotations_254608(ang, angle_atan2_254608(hero.motion.pos.f[0] - path->p[i].x, hero.motion.pos.f[1] - path->p[i].y)) < 1.5707964f) {
+        path_segment_heading = angle_atan2_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
+        if (fast_difference_between_rotations_254608(path_segment_heading, angle_atan2_254608(hero.motion.pos.f[0] - path->p[i].x, hero.motion.pos.f[1] - path->p[i].y)) < 1.5707964f) {
             hero.unk898 = next;
             if (next == 0) {
                 hero.unk89A++;
@@ -1506,9 +1506,9 @@ void FUN_L05_00254608(void) {
         i = hero.unk8C8;
         n1 = path->n + 1;
         next = (i + n1) % path->n;
-        dir = angle_atan2_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
+        wrong_way_reference_heading = angle_atan2_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
     }
-    if (near != 0 || (fast_difference_between_rotations_254608(hero.motion.rot.f[2], dir) > 1.5707964f && hero.unk88D == 0)) {
+    if (near != 0 || (fast_difference_between_rotations_254608(hero.motion.rot.f[2], wrong_way_reference_heading) > 1.5707964f && hero.unk88D == 0)) {
         hero.unk8AE++;
         if (hero.unk8AE > FUN_001f96f8_254608(0xB4)) {
             if (D_L05_0015F680 == 0) {
@@ -1543,9 +1543,9 @@ void FUN_L05_00254608(void) {
         i = hero.unk7B0[j];
         n1 = path->n + 1;
         next = (i + n1) % path->n;
-        ang = angle_atan2_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
+        path_segment_heading = angle_atan2_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
         qcopy(v0, D_L05_0015FFD8_254608[race_pvars->f2C[j]].pos);
-        if (fast_difference_between_rotations_254608(ang, angle_atan2_254608(v0[0] - path->p[i].x, v0[1] - path->p[i].y)) < 1.5707964f) {
+        if (fast_difference_between_rotations_254608(path_segment_heading, angle_atan2_254608(v0[0] - path->p[i].x, v0[1] - path->p[i].y)) < 1.5707964f) {
             hero.unk7B0[j] = next;
             if (next == 0) {
                 hero.unk7A0[j]++;
