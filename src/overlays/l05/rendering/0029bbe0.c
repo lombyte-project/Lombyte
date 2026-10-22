@@ -9,7 +9,9 @@ extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 unsigned char *D_L05_001B25C0 __attribute__((section(".data"))) = 0;
 
-unsigned char *FUN_L05_0029bbe0(float unscaled_particle_scalar, void *initial_position_source, void *initial_velocity_source, int life, int size, int color) {
+unsigned char *create_particle_with_velocity_and_lifetime(float unscaled_particle_scalar, void *initial_position_source, void *initial_velocity_source, int life, int size, int color) __asm__("FUN_L05_0029bbe0");
+
+unsigned char *create_particle_with_velocity_and_lifetime(float unscaled_particle_scalar, void *initial_position_source, void *initial_velocity_source, int life, int size, int color) {
     unsigned char *allocated_object = FUN_L00_002678b8(0x30);
     if (allocated_object != 0) {
         unsigned char *velocity_block;

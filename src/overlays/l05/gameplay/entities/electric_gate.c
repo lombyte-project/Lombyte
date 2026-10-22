@@ -698,7 +698,7 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L05_00161DB8_d __asm__("D_L05_00161DB8") __attribute__((sda));
-extern void FUN_L05_0029bbe0(float, void *, void *, int, int, int);
+extern void create_particle_with_velocity_and_lifetime(float, void *, void *, int, int, int) __asm__("FUN_L05_0029bbe0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_vector(void *) __asm__("func_001F99F8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -735,7 +735,7 @@ void FUN_L05_0030f218(char *particle_source_moby, float lower_height_bound, floa
         k = scale_game_frames(*(int *)&D_L05_00161DB8_d);
         particle_size = func_001FA898_r(FUN_L00_00257c48(fi, (float)*(int *)&D_L05_00161DC4));
         particle_color = *(int *)&D_L05_00161DCC;
-        FUN_L05_0029bbe0(u, particle_position, v, k, particle_size, particle_color);
+        create_particle_with_velocity_and_lifetime(u, particle_position, v, k, particle_size, particle_color);
     }
 }
 #define MOBY(p) ((struct Moby *)(p))
