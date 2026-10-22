@@ -2416,7 +2416,9 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_00259a88(void *, void *);
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L13_0030c060(struct Moby *moby) {
+void forward_moby_hits_to_owner(struct Moby *moby) __asm__("FUN_L13_0030c060");
+
+void forward_moby_hits_to_owner(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *owner = *(char **)(data + 0x60);
     char *hit_record;
