@@ -464,8 +464,8 @@ extern f32 D_L14_001613A0_c618 __asm__("D_L14_001613A0") __attribute__((sda));
 extern f32 D_L14_001613A4_c618 __asm__("D_L14_001613A4") __attribute__((sda));
 
 extern Vec4 D_L14_00174560;
-void FUN_L14_002ac618(struct Moby *m);
-void FUN_L14_002ac618(struct Moby *moby) {
+void update_blarg_heavy_interceptor(struct Moby *m) __asm__("FUN_L14_002ac618");
+void update_blarg_heavy_interceptor(struct Moby *moby) {
     enum {
         INTERCEPTOR_STATE_INITIALIZE = 0,
         INTERCEPTOR_STATE_PATROL_AND_SCAN = 1,
