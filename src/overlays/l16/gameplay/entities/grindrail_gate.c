@@ -247,7 +247,9 @@ void initialize_moby_rotation_scales(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E4BD8), where it is exact; names translated to the US level program. */
 
-void FUN_L16_002e3770(void *moby, int on) {
+void set_class_056b_collision_enabled(void *moby, int on) __asm__("FUN_L16_002e3770");
+
+void set_class_056b_collision_enabled(void *moby, int on) {
     if (*(short *)((char *)moby + 0xA6) == 0x56B) {
         if (on != 0) {
             *(int *)((char *)moby + 0x94) = *(int *)(*(char **)((char *)moby + 0x24) + 0x10);

@@ -1822,7 +1822,7 @@ extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
 extern int truncate_float_to_s32(float);
 extern unsigned char visited52_lui[] __asm__("D_0014C050") __attribute__((section(".data")));
-extern void FUN_L16_002e3770(void *, int);
+extern void set_class_056b_collision_enabled(void *, int) __asm__("FUN_L16_002e3770");
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
@@ -1845,7 +1845,7 @@ void wall_button_update(struct Moby *moby) {
             (*(unsigned char *)((char *)(moby) + (0xBC))) = 1;
             (*(unsigned char *)((char *)(moby) + (0x20))) = 2;
             if ((*(int *)((char *)(wall_button_data) + (0x60))) != -1) {
-                FUN_L16_002e3770(D_L16_0015FFD8 + ((*(int *)((char *)(wall_button_data) + (0x60))) << 8), 0);
+                set_class_056b_collision_enabled(D_L16_0015FFD8 + ((*(int *)((char *)(wall_button_data) + (0x60))) << 8), 0);
             }
         } else
             (*(unsigned char *)((char *)(moby) + (0x20))) = 1;
@@ -1868,7 +1868,7 @@ void wall_button_update(struct Moby *moby) {
             (*(float *)((char *)(wall_button_data) + (0x68))) = 1.5707964f;
             func_0022ED80_i(0, 0, moby);
             if ((*(int *)((char *)(wall_button_data) + (0x60))) != -1)
-                FUN_L16_002e3770(D_L16_0015FFD8 + ((*(int *)((char *)(wall_button_data) + (0x60))) << 8), 0);
+                set_class_056b_collision_enabled(D_L16_0015FFD8 + ((*(int *)((char *)(wall_button_data) + (0x60))) << 8), 0);
             if ((*(int *)((char *)(wall_button_data) + (0x64))) > 0)
                 (*(int *)((char *)(wall_button_data) + (0x6C))) =
                     scale_game_frames((*(int *)((char *)(wall_button_data) + (0x64))));
@@ -1889,7 +1889,7 @@ void wall_button_update(struct Moby *moby) {
                 (*(unsigned char *)((char *)(moby) + (0x20))) = 1;
                 (*(float *)((char *)(wall_button_data) + (0x68))) = 1.5707964f;
                 if ((*(int *)((char *)(wall_button_data) + (0x60))) != -1) {
-                    FUN_L16_002e3770(D_L16_0015FFD8 + ((*(int *)((char *)(wall_button_data) + (0x60))) << 8), 1);
+                    set_class_056b_collision_enabled(D_L16_0015FFD8 + ((*(int *)((char *)(wall_button_data) + (0x60))) << 8), 1);
                 }
             } else if ((*(int *)((char *)(wall_button_data) + (0x6C))) < scale_game_frames(90))
                 (*(float *)((char *)(wall_button_data) + (0x68))) =
