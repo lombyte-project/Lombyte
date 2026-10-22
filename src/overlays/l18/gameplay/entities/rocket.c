@@ -463,7 +463,7 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-void FUN_L18_002d5488(void *mobyp, void *vec);
+void spawn_rocket_trail_effects(void *mobyp, void *vec) __asm__("FUN_L18_002d5488");
 extern void FUN_L18_002d5610_u(void *, void *) __asm__("FUN_L18_002d5610");
 void FUN_L18_002d5768(struct Moby *m);
 
@@ -501,7 +501,7 @@ void FUN_L18_002d5050(struct Moby *moby) {
         transform_vector_by_basis(target_movement_step, target_movement_step, configured_rotation_basis);
         transform_vector_by_basis(target_movement_step, target_movement_step, target_heading_basis);
         lerp_vector(movement_step, moby_vars, target_movement_step, movement_blend_weight);
-        FUN_L18_002d5488(moby, movement_step);
+        spawn_rocket_trail_effects(moby, movement_step);
         fast_vec_add(&moby->pos, &moby->pos, movement_step);
         moby->rot.z = fast_arc_tan(movement_step[0], movement_step[1]);
         pitch_angle_or_remaining_frames = fast_arc_tan(vector_length_xy(movement_step), movement_step[2]);
@@ -584,7 +584,9 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void scale_vector_xyz(void *, void *, float);
 extern void transform_vector_by_basis(void *, void *, void *);
 
-void FUN_L18_002d5488(void *mobyp, void *movement_step) {
+void spawn_rocket_trail_effects(void *mobyp, void *movement_step) __asm__("FUN_L18_002d5488");
+
+void spawn_rocket_trail_effects(void *mobyp, void *movement_step) {
     char *moby = mobyp;
     float effect_vector[4];
     float effect_spawn_position[4];
