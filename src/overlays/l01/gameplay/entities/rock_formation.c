@@ -1349,7 +1349,9 @@ extern void draw_four_scroll_layers(void) __asm__("FUN_L01_002feb28");
 extern int enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 
 /* On first use, lowers and ripples the layers' vertices; every frame, pulses their glow and queues FUN_L01_002feb28. */
-void FUN_L01_002feb58(void *callback_argument) {
+void update_scroll_layers_and_queue_draw(void *callback_argument) __asm__("FUN_L01_002feb58");
+
+void update_scroll_layers_and_queue_draw(void *callback_argument) {
     s32 i;
     s32 glow_layer_index;
     s32 j;
