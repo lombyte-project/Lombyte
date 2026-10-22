@@ -1169,7 +1169,9 @@ extern unsigned char *mine_debris(void *a, void *b, int c, int d, float f, int n
 extern int FUN_L00_002371e0(int, int, float);
 extern u32 D_L00_00160228 __attribute__((sda));
 
-void FUN_L00_00273a68(struct EmberParticle *ember_particle) {
+void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) __asm__("FUN_L00_00273a68");
+
+void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) {
     struct EmberMotion *m = &ember_particle->m;
     Vec4 emitted_position;
     s32 cr, cg, cb;
