@@ -384,7 +384,9 @@ void FUN_L00_00262480(char *rotation_target, float x, float y, float z) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263578), where it is exact; names translated to the US level program. */
 
 /* Unless the flag at b+0x13C is set: sets it, stores a at 0x134, clears 0x130..0x138. */
-void FUN_L00_00262500(int source_moby, char *history_state) {
+void initialize_moby_transform_history(int source_moby, char *history_state) __asm__("FUN_L00_00262500");
+
+void initialize_moby_transform_history(int source_moby, char *history_state) {
     if (*(int *)(history_state + 0x13C) == 0) {
         *(int *)(history_state + 0x134) = source_moby;
         *(int *)(history_state + 0x13C) = 1;

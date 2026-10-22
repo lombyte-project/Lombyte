@@ -1094,7 +1094,7 @@ extern void rotmat_e(void *, void *) __asm__("FUN_001fa030");
 extern void multiply_matrix3x3(void *, void *, void *) __asm__("FUN_001fa328");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
-extern void FUN_L00_00262500(void *, char *);
+extern void initialize_moby_transform_history(void *, char *) __asm__("FUN_L00_00262500");
 extern void FUN_L00_00262528(char *, int, int);
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 
@@ -1169,7 +1169,7 @@ void FUN_L00_00217658(void) {
     matrix_to_euler(out_mat, &item->rot);
     launched_item_vars->unk64 = 0;
     launched_item_vars->unk60 = frame_time * 23.0f;
-    FUN_L00_00262500(item, hero.unk17B0);
+    initialize_moby_transform_history(item, hero.unk17B0);
     FUN_L00_00262528(hero.unk17B0, 0x30, 3);
     FUN_L00_00262528(hero.unk17B0, 0x17, 5);
     blend_moby_animation(item, 6, 0, scale_game_frames(5));

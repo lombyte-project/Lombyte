@@ -73,7 +73,7 @@ extern void FUN_L00_002325e0(int bank, int seq);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void sample_path(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
 extern void FUN_L00_0025f730(void *a, float x);
-extern void FUN_L00_00262500(int a, char *b);
+extern void initialize_moby_transform_history(int a, char *b) __asm__("FUN_L00_00262500");
 extern void FUN_L00_00262528(char *o, int a, int b);
 extern void FUN_L00_00262840(char *o);
 extern void FUN_L06_00239528(void);
@@ -963,7 +963,7 @@ int hero_set_state(int a, int b) {
                 u->unk430 = 0.4f;
                 u->unk488 = 0.4f;
                 u->unk48C = 0.9f;
-                FUN_L00_00262500(*(int *)&u->moby, x);
+                initialize_moby_transform_history(*(int *)&u->moby, x);
                 FUN_L00_00262528(x, 0x28, 2);
                 FUN_L00_00262528(x, 0x14, 4);
                 FUN_L00_00262528(x, 0xA, 6);
@@ -1031,7 +1031,7 @@ int hero_set_state(int a, int b) {
                 u->unk490 = 4.5f;
                 u->unk49A = scale_game_frames(0x78);
                 u->unk424 = frame_time * 1.9f;
-                FUN_L00_00262500(*(int *)&u->moby, x);
+                initialize_moby_transform_history(*(int *)&u->moby, x);
                 FUN_L00_00262528(x, 0x28, 3);
                 FUN_L00_00262528(x, 0x14, 5);
                 u->unk41C = 1;
