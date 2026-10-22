@@ -147,8 +147,8 @@ extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_L01_0027e900(void *, void *, f32, f32, f32, f32, f32, f32, f32, f32, f32, s32, u8,
-                             u8, u8);
+extern void create_spark_particle(void *, void *, f32, f32, f32, f32, f32, f32, f32, f32, f32, s32, u8,
+                             u8, u8) __asm__("FUN_L01_0027e900");
 
 void FUN_L01_002bd100(EmitterMoby *self) {
     Emitter *emitter_vars;
@@ -204,7 +204,7 @@ void FUN_L01_002bd100(EmitterMoby *self) {
                 euler_rotation_matrix(&u.rot.m, &u.rot.ang);
                 transform_vector(&out, &emitter_vars->vel, &u.rot.m);
                 size = random_float_between(emitter_vars->size_min, emitter_vars->size_max);
-                FUN_L01_0027e900(emitter_vars, &position_scratch, out.f[0], out.f[1], out.f[2], size,
+                create_spark_particle(emitter_vars, &position_scratch, out.f[0], out.f[1], out.f[2], size,
                                  random_float_between(emitter_vars->life_min, emitter_vars->life_max), emitter_vars->fade[0],
                                  emitter_vars->fade[1], emitter_vars->fade[2], emitter_vars->fade[3], emitter_vars->tex, emitter_vars->blend, emitter_vars->alpha,
                                  0xFF);
@@ -217,7 +217,7 @@ void FUN_L01_002bd100(EmitterMoby *self) {
                     transform_vector(&u.lin.vel, &u.lin.vel, &u.lin.m);
                 }
                 size = random_float_between(emitter_vars->size_min, emitter_vars->size_max);
-                FUN_L01_0027e900(emitter_vars, &position_scratch, u.lin.vel.f[0], u.lin.vel.f[1], u.lin.vel.f[2], size,
+                create_spark_particle(emitter_vars, &position_scratch, u.lin.vel.f[0], u.lin.vel.f[1], u.lin.vel.f[2], size,
                                  random_float_between(emitter_vars->life_min, emitter_vars->life_max), emitter_vars->fade[0],
                                  emitter_vars->fade[1], emitter_vars->fade[2], emitter_vars->fade[3], emitter_vars->tex, emitter_vars->blend, emitter_vars->alpha,
                                  0xFF);
