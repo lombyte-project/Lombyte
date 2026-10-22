@@ -477,7 +477,7 @@ void FUN_L00_002d81b8_c(unsigned char *m) __asm__("FUN_L00_002d81b8");
 void FUN_L00_002d8418_c(char *p) __asm__("FUN_L00_002d8418");
 void FUN_L00_002d8850_c(unsigned char *p, float *out, int i) __asm__("FUN_L00_002d8850");
 void FUN_L00_002d8908_c(void) __asm__("FUN_L00_002d8908");
-void FUN_L00_002d9810(Moby *moby);
+void draw_nanotech_ball(Moby *moby) __asm__("FUN_L00_002d9810");
 extern V_2D9EA0 D_L00_001E4070_2D9EA0[] __asm__("D_L00_001E3D20");
 extern float D_L00_001E17F0_2D9EA0[] __asm__("D_L00_001E14A0");
 extern float func_002140F8_2D9EA0(float, float) __asm__("FUN_002132a8");
@@ -658,7 +658,7 @@ void nanotech_ball_update(Moby *moby) {
         if (func_L00_00200290_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, 64.0f) >= 0) {
             int i;
             int lifetime;
-            func_001F49B0_2D9EA0((void (*)(void))FUN_L00_002d9810, (int)moby);
+            func_001F49B0_2D9EA0((void (*)(void))draw_nanotech_ball, (int)moby);
             if (10.0f < func_001F9D48_2D9EA0(&moby->pos, D_L00_00166DC0)) lifetime = func_001F9850_2D9EA0(5);
             else lifetime = func_001F9850_2D9EA0(40);
             for (i = 0; i < 8; i++) {
@@ -844,7 +844,7 @@ extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 float FUN_L00_00200260(float, float);
 
-void FUN_L00_002d9810(Moby *moby) {
+void draw_nanotech_ball(Moby *moby) {
     GeometryQuad quad;
     float basis[4] __attribute__((aligned(16)));
     float *forward;
