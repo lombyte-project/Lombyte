@@ -818,7 +818,9 @@ void FUN_001fa050_002332d0(void *, void *) __asm__("FUN_001fa050");
 void FUN_001f9d20_002332d0(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f99f8_002332d0(void *) __asm__("FUN_001f99f8");
 float FUN_001f9e90_002332d0(float, float) __asm__("FUN_001f9e90");
-float FUN_L00_002332d0(void) {
+float compute_hero_ground_aligned_heading(void) __asm__("FUN_L00_002332d0");
+
+float compute_hero_ground_aligned_heading(void) {
     float m[16] __attribute__((aligned(16)));
     Vec4_2332d0 heading_direction, z_rotation_angles, y_rotation_angles, y_alignment_reference_vector;
     struct Hero *P;

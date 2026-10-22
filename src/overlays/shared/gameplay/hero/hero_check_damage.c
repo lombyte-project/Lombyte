@@ -2761,7 +2761,7 @@ extern unsigned char D_L00_00166FD0_2118c8[] __asm__("D_L00_00166FD0")
 extern float FUN_001f99c0_2118c8(float) __asm__("FUN_001f99c0");
 extern float FUN_001f9b20_2118c8(void *) __asm__("FUN_001f9b20");
 extern void FUN_L00_001ff378_2118c8(void *, void *, float) __asm__("FUN_L00_001ff378");
-extern float FUN_L00_002332d0_2118c8(void) __asm__("FUN_L00_002332d0");
+extern float compute_hero_ground_aligned_heading(void) __asm__("FUN_L00_002332d0");
 extern void FUN_001f9cf8_2118c8(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float FUN_001f9e90_2118c8(float, float) __asm__("FUN_001f9e90");
 extern int FUN_001fa6d0_2118c8(float) __asm__("FUN_001fa6d0");
@@ -2793,7 +2793,7 @@ void stick_target(float scale, int mode) {
     if (stick_vector.f[0] == 0.0f && stick_vector.f[1] == 0.0f) {
         hero.target_speed = 0.0f;
         if (hero.unk20B3) {
-            hero.motion.move_yaw = FUN_L00_002332d0_2118c8();
+            hero.motion.move_yaw = compute_hero_ground_aligned_heading();
         } else {
             hero.motion.move_yaw = hero.motion.rot.f[2];
         }
