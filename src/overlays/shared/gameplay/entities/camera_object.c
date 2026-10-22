@@ -783,7 +783,7 @@ extern void approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
 extern void FUN_0020c828(void *);
 extern s32 FUN_L00_001f0d60(void *, s32, void *, f32);
 extern void FUN_L00_001ff660(void *, void *, void *);
-extern s32 FUN_L00_001fe990(void *, s32, f32);
+extern s32 allocate_glint_slot(void *, s32, f32) __asm__("FUN_L00_001fe990");
 extern s32 FUN_L00_002603d0(void *);
 extern void FUN_L00_00260668(void *, void *, void *, void *, void *, void *);
 extern s32 FUN_L00_00257b90(s32, s32);
@@ -987,7 +987,7 @@ void bolt_update(Bolt *bolt_moby) {
         }
         transform_vector_by_basis(&geometry_scratch, &D_L00_001D73D0[bolt_moby->oclass], &bolt_moby->rot);
         fast_vec_add(&geometry_scratch, &geometry_scratch, &bolt_moby->pos);
-        v->slot = FUN_L00_001fe990(&geometry_scratch, ((u8 *)bolt_moby - D_L00_0015FFD8) >> 8, 1.4f);
+        v->slot = allocate_glint_slot(&geometry_scratch, ((u8 *)bolt_moby - D_L00_0015FFD8) >> 8, 1.4f);
         v->slot_timer = FUN_L00_00257b90(scale_game_frames(300), scale_game_frames(600));
         } else if (v->hop_left != 0) {
             v->hop_left--;
