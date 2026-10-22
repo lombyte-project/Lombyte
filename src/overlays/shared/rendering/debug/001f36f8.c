@@ -499,7 +499,9 @@ extern u32 strlen(const char *);
 
 /* Debug menu input: moves between the columns and rows and changes the selected toggle, mode, item
    count or fog value; the last column records occlusion sample points to files. */
-void FUN_L00_001f4598(void) {
+void update_debug_menu(void) __asm__("FUN_L00_001f4598");
+
+void update_debug_menu(void) {
     enum {
         DEBUG_COLUMN_UPDATE_FLAGS = 0,
         DEBUG_COLUMN_OPTIONS = 1,
