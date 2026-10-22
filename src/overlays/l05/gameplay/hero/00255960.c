@@ -126,7 +126,7 @@ extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void FUN_L05_0023dc88(int i);
 extern void update_hero_hoverboard_trick_animations(void) __asm__("FUN_L05_00253850");
 extern void FUN_L05_00253b48(void);
-extern void FUN_L05_00254058(void);
+extern void update_hero_hoverboard_trick_score(void) __asm__("FUN_L05_00254058");
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
@@ -1938,7 +1938,7 @@ void FUN_L05_00255960(void) {
                     }
                     update_hero_hoverboard_trick_animations();
                     FUN_L05_00253b48();
-                    FUN_L05_00254058();
+                    update_hero_hoverboard_trick_score();
                     if ((((unsigned char *)hero.moby)[0x53] == 0x55 || ((unsigned char *)hero.moby)[0x53] == 0x7F) &&
                         ((unsigned char *)hero.moby)[0x51] < 0xC) {
                         if (hero.unk888 != 0) {
@@ -1989,7 +1989,7 @@ void FUN_L05_00255960(void) {
                     }
                     update_hero_hoverboard_trick_animations();
                     FUN_L05_00253b48();
-                    FUN_L05_00254058();
+                    update_hero_hoverboard_trick_score();
                     break;
                 case 109:
                     if (current_level_index == 5 && 61.4f > hero.motion.pos.f[2]) {

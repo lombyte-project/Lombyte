@@ -1259,7 +1259,9 @@ extern u8 alternate_item_available[128] __asm__("D_0013D388");
 
 #define TALLY ((struct HeroTally *)&hero)
 
-void FUN_L05_00254058(void) {
+void update_hero_hoverboard_trick_score(void) __asm__("FUN_L05_00254058");
+
+void update_hero_hoverboard_trick_score(void) {
     int i;
     if (alternate_item_available[0] == 0) return;
     if (TALLY->active != 0) {
