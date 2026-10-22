@@ -1224,7 +1224,7 @@ extern short D_L14_00161C64 __attribute__((sda));
 extern void FUN_L00_0028e990(void);
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L01_002a2480(void);
-extern void FUN_L14_002ed530(char *);
+extern void update_branched_lightning_arc(char *) __asm__("FUN_L14_002ed530");
 extern int *D_L14_001B0F30_ee[] __asm__("D_L14_001B0BB0");
 extern float D_L14_00161CD0_f __asm__("D_L14_00161CD0");
 extern float D_L14_00161CD4;
@@ -1287,7 +1287,7 @@ void update_path_lightning_controller(struct Moby *moby) {
             qcopy(&moby->pos, D_L14_00161CC0);
         }
     }
-    FUN_L14_002ed530(moby);
+    update_branched_lightning_arc(moby);
     if (D_L14_00161CB4 == 0) {
         *(int *)&D_L14_00161C50 = scale_game_frames(*(int *)&D_L14_00161C54);
         *(int *)&D_L14_00161C58 = 0;
@@ -1339,7 +1339,7 @@ extern float D_L14_00161CD0_d530[] __asm__("D_L14_00161CD0") __attribute__((sect
 
 extern float D_L14_001DFFE0[];
 /* Lightning arc between the two camera points: builds the bolt and its three branches once, then ages and fades them. */
-void FUN_L14_002ed530(char *moby) {
+void update_branched_lightning_arc(char *moby) {
     Vec4 delta;
     float arc_endpoint_distance;
     float path_fraction;
