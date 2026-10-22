@@ -3043,7 +3043,9 @@ extern void FUN_00125180_002121c0(void *, void *) __asm__("FUN_00125180");
 extern void FUN_001f9a68_002121c0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_002121c0(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L00_002121c0(void) {
+void correct_hero_airborne_wall_velocity(void) __asm__("FUN_L00_002121c0");
+
+void correct_hero_airborne_wall_velocity(void) {
     struct Hero *hero_state = &hero;
     V_2121c0_002121c0 horizontal_velocity_correction;
     float inward_velocity_component, x;

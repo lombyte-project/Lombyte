@@ -473,7 +473,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void reduce_and_apply_hero_planar_velocity_addend(f32) __asm__("FUN_L00_00216710");
 extern void FUN_L00_002334d0(void *, void *, f32);
 extern void adjust_hero_planar_velocity_from_probes(s32) __asm__("FUN_L15_0020a328");
-extern void FUN_L00_002121c0(void);
+extern void correct_hero_airborne_wall_velocity(void) __asm__("FUN_L00_002121c0");
 extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
 extern struct MobyView *create_moby(s32) __asm__("FUN_0020c4f8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -766,7 +766,7 @@ void update_hero_motion_for_current_state(void) {
             adjust_hero_planar_velocity_from_probes(0);
             if (hero.air_frames.s != 0) {
                 FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 25.0f);
-                FUN_L00_002121c0();
+                correct_hero_airborne_wall_velocity();
             } else {
                 FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
             }
@@ -1147,7 +1147,7 @@ void update_hero_motion_for_current_state(void) {
         reduce_and_apply_hero_planar_velocity_addend(frame_time_sq * 12.6f);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.displacement, frame_time_sq * 25.0f);
-            FUN_L00_002121c0();
+            correct_hero_airborne_wall_velocity();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
@@ -1168,7 +1168,7 @@ void update_hero_motion_for_current_state(void) {
         reduce_and_apply_hero_planar_velocity_addend(frame_time_sq * 12.6f);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk110, frame_time_sq * 24.0f);
-            FUN_L00_002121c0();
+            correct_hero_airborne_wall_velocity();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
@@ -1715,7 +1715,7 @@ void update_hero_motion_for_current_state(void) {
         adjust_hero_planar_velocity_from_probes(1);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk110, frame_time_sq * 24.0f);
-            FUN_L00_002121c0();
+            correct_hero_airborne_wall_velocity();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
@@ -1733,7 +1733,7 @@ void update_hero_motion_for_current_state(void) {
         set_planar_vel(99999.0f);
         if (hero.air_frames.s != 0) {
             hero.motion.velocity.f[2] = hero.motion.displacement.f[2] - frame_time_sq * 25.0f;
-            FUN_L00_002121c0();
+            correct_hero_airborne_wall_velocity();
         } else {
             hero.motion.velocity.f[2] = hero.motion.velocity.f[2] - frame_time_sq * 54.0f;
         }
@@ -1825,7 +1825,7 @@ void update_hero_motion_for_current_state(void) {
         }
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 25.0f);
-            FUN_L00_002121c0();
+            correct_hero_airborne_wall_velocity();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
@@ -2278,7 +2278,7 @@ void update_hero_motion_for_current_state(void) {
         }
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.displacement, frame_time_sq * 25.0f);
-            FUN_L00_002121c0();
+            correct_hero_airborne_wall_velocity();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
@@ -2294,7 +2294,7 @@ void update_hero_motion_for_current_state(void) {
         adjust_hero_planar_velocity_from_probes(0);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.displacement, frame_time_sq * 25.0f);
-            FUN_L00_002121c0();
+            correct_hero_airborne_wall_velocity();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
@@ -2327,7 +2327,7 @@ void update_hero_motion_for_current_state(void) {
         adjust_hero_planar_velocity_from_probes(0);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 25.0f);
-            FUN_L00_002121c0();
+            correct_hero_airborne_wall_velocity();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
@@ -2422,7 +2422,7 @@ void update_hero_motion_for_current_state(void) {
         }
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 25.0f);
-            FUN_L00_002121c0();
+            correct_hero_airborne_wall_velocity();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
@@ -2449,7 +2449,7 @@ void update_hero_motion_for_current_state(void) {
         }
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 25.0f);
-            FUN_L00_002121c0();
+            correct_hero_airborne_wall_velocity();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
@@ -2519,7 +2519,7 @@ void update_hero_motion_for_current_state(void) {
         adjust_hero_planar_velocity_from_probes(1);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 25.0f);
-            FUN_L00_002121c0();
+            correct_hero_airborne_wall_velocity();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
@@ -2554,7 +2554,7 @@ void update_hero_motion_for_current_state(void) {
         adjust_hero_planar_velocity_from_probes(0);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 25.0f);
-            FUN_L00_002121c0();
+            correct_hero_airborne_wall_velocity();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
@@ -2600,7 +2600,7 @@ void update_hero_motion_for_current_state(void) {
         adjust_hero_planar_velocity_from_probes(1);
         if (hero.air_frames.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 25.0f);
-            FUN_L00_002121c0();
+            correct_hero_airborne_wall_velocity();
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
