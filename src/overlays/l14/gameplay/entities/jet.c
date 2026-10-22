@@ -3277,7 +3277,9 @@ typedef struct {
     s32 clip;        /* 0xA4 */
 } L14TramVars;
 /* Tram update: carries its rider moby, unlocks once the three items are bought and the camera looks at it. */
-void FUN_L14_002fcbb0(struct Moby *moby) {
+void update_enemy_fighter_921(struct Moby *moby) __asm__("FUN_L14_002fcbb0");
+
+void update_enemy_fighter_921(struct Moby *moby) {
     enum {
         TRAM_STATE_INITIALIZE = 0,
         TRAM_STATE_WAIT_FOR_UNLOCK = 1,
