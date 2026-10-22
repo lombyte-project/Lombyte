@@ -1004,7 +1004,7 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void FUN_L01_0026e0e0(int, int);
-extern void FUN_L05_0029be70(float, float, float, void *, void *, int, int);
+extern void create_particle_with_velocity_and_randomized_parameters(float, float, float, void *, void *, int, int) __asm__("FUN_L05_0029be70");
 extern void spawn_splash(float, float, void *, void *, void *) __asm__("FUN_L00_002718d0");
 extern unsigned char D_0014C050[][16];
 extern struct Moby *D_L05_0015FFD8;
@@ -1111,7 +1111,7 @@ void FUN_L05_003150f0(struct Moby *emitter_moby) {
                 kind = D_L05_00161E9C;
                 v[2] += D_L05_00161EB4 - scale + 0.4f;
             }
-            FUN_L05_0029be70(scale * random_float_between(0.8f, 1.2f), floor, frame_time_sq * 10.0f, v, particle_velocity, kind,
+            create_particle_with_velocity_and_randomized_parameters(scale * random_float_between(0.8f, 1.2f), floor, frame_time_sq * 10.0f, v, particle_velocity, kind,
                              big);
             if (random_integer_below(2)) {
                 /* fall time from the emitter to the floor */
