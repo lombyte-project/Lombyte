@@ -598,7 +598,9 @@ void initialize_wind_spark(struct Moby *m, int i, void *dir) __asm__("FUN_L14_00
 
 extern f32 D_L14_00161C08 __attribute__((sda));
 extern s32 D_L14_00161C04 __attribute__((sda));
-void FUN_L14_002eaf88(struct Moby *wind_control_moby) {
+void update_wind_control(struct Moby *wind_control_moby) __asm__("FUN_L14_002eaf88");
+
+void update_wind_control(struct Moby *wind_control_moby) {
     L14WindVars *wind_vars = (L14WindVars *)wind_control_moby->pvars;
     float wind_direction_or_push_delta[4];
     char *pos;
