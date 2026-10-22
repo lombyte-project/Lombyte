@@ -487,7 +487,9 @@ extern char D_L15_001DAD98[];
 extern char D_L15_001DB238[];
 int D_L15_001620D0[2] = {(int)D_L15_001DAD98, (int)D_L15_001DB238};
 
-void FUN_L15_002eac90(struct Moby *moby) {
+void draw_moby_radial_ripple_mesh_buffers(struct Moby *moby) __asm__("FUN_L15_002eac90");
+
+void draw_moby_radial_ripple_mesh_buffers(struct Moby *moby) {
     RippleData *ripple_data = (RippleData *)moby->pvars;
     float scale;
     int r, g, b;

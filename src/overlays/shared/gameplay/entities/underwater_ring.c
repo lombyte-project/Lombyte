@@ -183,7 +183,7 @@ void underwater_ring_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002EC490), where it is exact; names translated to the US level program. */
 
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void FUN_L15_002eac90(void);
+extern void draw_moby_radial_ripple_mesh_buffers(void) __asm__("FUN_L15_002eac90");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void FUN_L15_002eb0a0(char *moby) {
@@ -191,7 +191,7 @@ void FUN_L15_002eb0a0(char *moby) {
         set_moby_color(moby, 0x40, 0x40, 0x40);
         moby[0x20] = 1;
     } else {
-        enqueue_callback_list_1((void *)FUN_L15_002eac90, moby);
+        enqueue_callback_list_1((void *)draw_moby_radial_ripple_mesh_buffers, moby);
         *(short *)(moby + 0x32) = 0;
         *(unsigned short *)(moby + 0x34) |= 1;
     }
