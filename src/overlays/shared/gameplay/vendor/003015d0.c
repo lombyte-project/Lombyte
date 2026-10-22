@@ -58,7 +58,9 @@ extern s32 D_L14_001620C8_gp __asm__("D_L14_001620C8") __attribute__((sda));
 extern int D_L14_001621A4_s __asm__("D_L14_001620D4") __attribute__((sda));
 
 extern int D_L14_001620D8 __attribute__((sda));
-void FUN_L14_003015d0(unsigned char *moby) {
+void update_vendor_beam(unsigned char *moby) __asm__("FUN_L14_003015d0");
+
+void update_vendor_beam(unsigned char *moby) {
     enum {
         BEAM_STATE_INITIALIZE = 0,
         BEAM_STATE_COUNTER_TRIGGERED_PULSES = 1,
