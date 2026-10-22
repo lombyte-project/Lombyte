@@ -1050,7 +1050,9 @@ extern unsigned char D_0013E533_u[] __asm__("D_0013E533");
 
 extern short D_L17_00162074 __attribute__((sda));
 int D_L17_00162078 = 30;
-void FUN_L17_002ec150(char *moby, char *ship_vars) {
+void try_fire_fighter_jet_rocket(char *moby, char *ship_vars) __asm__("FUN_L17_002ec150");
+
+void try_fire_fighter_jet_rocket(char *moby, char *ship_vars) {
     char projectile_spawn_position[16];
     char projectile_spawn_offset[16];
     if (fast_dec_timer(ship_vars + 0x84) && (*(int *)(D_0013A4E0_u + 0x2610) & 0x28)) {
@@ -1232,7 +1234,7 @@ extern void update_view_context() __asm__("func_001F2D98");
 extern void vu_euler_rotation_basis(void *, void *);
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L17_002ec000(char *moby, char *obj, float p2, float p3);
-void FUN_L17_002ec150(char *moby, char *obj);
+void try_fire_fighter_jet_rocket(char *moby, char *obj) __asm__("FUN_L17_002ec150");
 void FUN_L17_002edf10(char *moby, float *a, float *b);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
@@ -1501,7 +1503,7 @@ void FUN_L17_002ec360(Moby *ship_moby, Obj *ship_vars) {
         }
     }
     enqueue_callback_list_1(FUN_L17_002eb9a8, ship_moby);
-    FUN_L17_002ec150((char *)ship_moby, (char *)ship_vars);
+    try_fire_fighter_jet_rocket((char *)ship_moby, (char *)ship_vars);
     FUN_L17_002ec000((char *)ship_moby, (char *)ship_vars, fast_add_rotations(ship_vars->f28, -ship_vars->f6C / 7.0f),
                      -fast_add_rotations(ship_vars->f24, -(ship_vars->f70 / 7.0f) - 0.1f));
 }
