@@ -12,7 +12,9 @@ void emit_rgba_draw_packet(int, int, int, int) __asm__("FUN_001f5210");
 /* The level overlay's own copy of draw_dialog_text: same code, own data. */
 void level_draw_dialog_text(void) __asm__("FUN_L00_002018c8");
 extern s32 D_L00_0015F3F4_gp __asm__("D_L00_0015F3F4") __attribute__((sda));
-void FUN_L00_001f8ec8(void) {
+void draw_dialog_background_and_text(void) __asm__("FUN_L00_001f8ec8");
+
+void draw_dialog_background_and_text(void) {
     if (D_L00_0015F5D8 == 0) {
         if (FUN_L00_00201720() == 0) {
             append_gif_transfer_packet();
