@@ -777,7 +777,9 @@ extern unsigned char *D_L18_0015FFD8;
 extern void FUN_L18_002f1fd8(struct Moby *);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
-void FUN_L18_002f1e68(struct Moby *moby) {
+void update_glow_moby_state_and_voice(struct Moby *moby) __asm__("FUN_L18_002f1e68");
+
+void update_glow_moby_state_and_voice(struct Moby *moby) {
     enum {
         GLOW_INITIALIZE = 0,
         GLOW_ACTIVE = 1,
