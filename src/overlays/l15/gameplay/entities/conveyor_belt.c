@@ -915,7 +915,9 @@ char *FUN_L15_002eb9e0(char *spawn_position, char *spawn_rotation) {
 extern int D_L15_001ABE40[];
 extern int D_L15_0015FFD8;
 
-void FUN_L15_002ebf28(int moby_list_index, int show) {
+void set_moby_list_visibility(int moby_list_index, int show) __asm__("FUN_L15_002ebf28");
+
+void set_moby_list_visibility(int moby_list_index, int show) {
     short *moby_index_entry = (short *)D_L15_001ABE40[moby_list_index];
     if (moby_index_entry == 0)
         return;
@@ -979,7 +981,7 @@ int can_spawn_codebot_slot_effect(int slot) __asm__("FUN_L15_002f78e0");
 
 extern int can_spawn_codebot_slot_effect(int) __asm__("FUN_L15_002f78e0");
 extern int count_missing_or_dying_mobys_in_list(int) __asm__("FUN_L15_002ebfb0");
-extern void FUN_L15_002ebf28(int, int);
+extern void set_moby_list_visibility(int, int) __asm__("FUN_L15_002ebf28");
 extern char *FUN_L15_002eb9e0(char *, char *);
 extern void FUN_L00_00216f90(void *, void *, int, int);
 
@@ -1025,7 +1027,7 @@ void codebot_slot_update(struct Moby *moby) {
         moby->state = 1;
         for (i = 0; i < 24; i++) {
             if (data[i + 8] != -1)
-                FUN_L15_002ebf28(data[i + 8], 0);
+                set_moby_list_visibility(data[i + 8], 0);
         }
         break;
     }
@@ -1055,7 +1057,7 @@ void codebot_slot_update(struct Moby *moby) {
             tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
             FUN_L00_00216f90(vec, tmp, 0x72, 0);
             if (data[8] != -1)
-                FUN_L15_002ebf28(data[8], 1);
+                set_moby_list_visibility(data[8], 1);
             moby->state = 3;
         }
         break;
