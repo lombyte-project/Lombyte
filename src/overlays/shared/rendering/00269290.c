@@ -20,7 +20,9 @@ extern int f9770_269290(void *) __asm__("FUN_001f9770");
 extern void lerp_269290(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void f7a08_269290(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_00269290(char *particle) {
+void update_three_phase_effect_particle(char *particle) __asm__("FUN_L00_00269290");
+
+void update_three_phase_effect_particle(char *particle) {
     S_269290 *particle_data = (S_269290 *)(particle + 0x20);
     float v[4] __attribute__((aligned(16)));
     float a[4] __attribute__((aligned(16)));

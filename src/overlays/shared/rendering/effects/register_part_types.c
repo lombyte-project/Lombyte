@@ -8,7 +8,7 @@
 
 extern void update_falling_effect_particle() __asm__("FUN_L00_00268d48");
 extern void update_timed_effect_particle() __asm__("FUN_L00_00268fe8");
-extern void FUN_L00_00269290(void);
+extern void update_three_phase_effect_particle(void) __asm__("FUN_L00_00269290");
 extern void FUN_L00_002694f8(void);
 extern void update_damped_effect_particle(void) __asm__("FUN_L00_00269a70");
 extern void update_scalar_and_fade_effect_particle(void) __asm__("FUN_L00_00269c70");
@@ -97,7 +97,7 @@ void register_part_types(void) {
 
     handlers[0] = (u32)update_falling_effect_particle;
     handlers[1] = (u32)update_timed_effect_particle;
-    handlers[2] = (u32)FUN_L00_00269290;
+    handlers[2] = (u32)update_three_phase_effect_particle;
     handlers[3] = (u32)FUN_L00_002694f8;
     handlers[4] = (u32)update_damped_effect_particle;
     handlers[5] = (u32)update_scalar_and_fade_effect_particle;
