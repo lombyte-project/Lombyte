@@ -2645,7 +2645,9 @@ typedef struct {
     char pad[0x78];
     s32 f;
 } T6;
-s32 FUN_L00_002d5800(T6 *moby) {
+s32 get_moby_private_data_d0_address(T6 *moby) __asm__("FUN_L00_002d5800");
+
+s32 get_moby_private_data_d0_address(T6 *moby) {
     s32 moby_vars_address;
     if (moby != 0) {
         moby_vars_address = moby->f;
