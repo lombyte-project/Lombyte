@@ -69,7 +69,9 @@ extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
 extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
 
-int FUN_L16_002e4c40(struct Moby *moby) {
+int advance_moby_path(struct Moby *moby) __asm__("FUN_L16_002e4c40");
+
+int advance_moby_path(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
     int *path;
     advance_accelerated_scalar(1.0f, *(float *)(moby_data + 0xC8), *(float *)(moby_data + 0xC8),
