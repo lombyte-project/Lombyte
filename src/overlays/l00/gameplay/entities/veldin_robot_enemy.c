@@ -826,7 +826,9 @@ extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8")
 extern void draw_trail(void *, void *, void *, f32, f32) __asm__("FUN_L00_00263b70");
 extern FlockPart *FUN_L00_0026d000(void *, s32, void *, s32, f32, f32, f32, f32);
 
-void FUN_L00_002e3800(FlockMoby *moby) {
+void update_phase_effect_controller(FlockMoby *moby) __asm__("FUN_L00_002e3800");
+
+void update_phase_effect_controller(FlockMoby *moby) {
     enum {
         FLOCK_EFFECT_STATE_INITIALIZE = 0,
         FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS = 1
