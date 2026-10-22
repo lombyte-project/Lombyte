@@ -2089,7 +2089,9 @@ extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 
-void FUN_L16_002e7e00(struct Moby *moby) {
+void update_paired_joint_particle_trails(struct Moby *moby) __asm__("FUN_L16_002e7e00");
+
+void update_paired_joint_particle_trails(struct Moby *moby) {
     enum {
         JOINT_TRAIL_INITIALIZE = 0,
         JOINT_TRAIL_EMIT = 1
