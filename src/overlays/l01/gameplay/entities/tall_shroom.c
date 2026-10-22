@@ -251,7 +251,9 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
-void FUN_L01_0030ba18(struct Moby *moby) {
+void update_explosive_moby(struct Moby *moby) __asm__("FUN_L01_0030ba18");
+
+void update_explosive_moby(struct Moby *moby) {
     BlobVars *blob_vars;
     s32 hit;
     s32 i;
