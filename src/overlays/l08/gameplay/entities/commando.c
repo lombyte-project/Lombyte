@@ -1006,7 +1006,9 @@ void FUN_L08_002f5e58(struct Moby *m) {
 }
 #endif
 
-void FUN_L08_002f70a0(struct Moby *moby) {
+void update_flickering_mesh_effect(struct Moby *moby) __asm__("FUN_L08_002f70a0");
+
+void update_flickering_mesh_effect(struct Moby *moby) {
     FlickerLightVars *light_vars;
     Vec4 pos;
     f32 view, draw_fade_distance, fade;
