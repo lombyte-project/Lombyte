@@ -201,7 +201,9 @@ int FUN_L00_002a4dc8(int addend) {
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_00250df8(unsigned char *);
 /* Creates a class 0x3EF moby at v and runs FUN_L00_00250df8 on it. */
-unsigned char *FUN_L00_002a4de0(u128 *spawn_position) {
+unsigned char *create_camera_collision_moby(u128 *spawn_position) __asm__("FUN_L00_002a4de0");
+
+unsigned char *create_camera_collision_moby(u128 *spawn_position) {
     unsigned char *spawned_moby = create_moby(0x3ef);
     if (spawned_moby) {
         spawned_moby[0x30] = 0xff;
