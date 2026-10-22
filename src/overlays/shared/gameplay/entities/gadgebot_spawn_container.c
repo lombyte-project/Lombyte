@@ -1445,7 +1445,7 @@ void gadgebot_update(GbMoby *moby) {
     int flags;
     float hero_distance;
     float dz;
-    int r;
+    int interaction_result;
 
     flags = 0;
     movement_control = &gadgebot_vars->ctl;
@@ -2008,8 +2008,8 @@ void gadgebot_update(GbMoby *moby) {
         }
         break;
     }
-    r = FUN_L06_002f32f0_u(moby, moby->state != 7);
-    if (r == 2) {
+    interaction_result = FUN_L06_002f32f0_u(moby, moby->state != 7);
+    if (interaction_result == 2) {
         return;
     }
     if (moby->state != 1) {
@@ -2054,7 +2054,7 @@ void gadgebot_update(GbMoby *moby) {
         if (moby->state != 9) {
             float ground_height;
 
-            if (r == 0) {
+            if (interaction_result == 0) {
                 float z = moby->pos[2];
                 float *hp = D_L06_001745C0.unk30;
                 int i;
