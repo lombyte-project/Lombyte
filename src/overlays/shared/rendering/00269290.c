@@ -315,7 +315,7 @@ void FUN_L00_00269c70(char *particle) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269d20.s", FUN_L00_00269d20);
 #else
 extern int particle_collision_269d20(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern void FUN_L00_0025c2b0(float, void *, void *, void *);
+extern void subtract_homogeneous_scaled_vector_xyz(float, void *, void *, void *) __asm__("FUN_L00_0025c2b0");
 extern void particle_matrix_269d20(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void particle_transform_269d20(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float particle_color_float_269d20(int) __asm__("FUN_001fa6c0");
@@ -347,7 +347,7 @@ void FUN_L00_00269d20(unsigned char *m) {
         velocity[0] = *(float *)(p + 0x0);
         velocity[1] = *(float *)(p + 0x4);
         velocity[2] = *(float *)(p + 0x8);
-        FUN_L00_0025c2b0(*(float *)(e + 0x3c), matrix, velocity, D_L00_00173E80_26ff10);
+        subtract_homogeneous_scaled_vector_xyz(*(float *)(e + 0x3c), matrix, velocity, D_L00_00173E80_26ff10);
         *(float *)(p + 0x0) = matrix[0];
         *(float *)(p + 0x4) = matrix[1];
         *(float *)(p + 0x8) = matrix[2];
