@@ -13,7 +13,9 @@ typedef struct {
     K0024ed18 *k[1];
 } O0024ed18;
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-s32 FUN_L00_0024ed18(O0024ed18 *animation_sequence, f32 target_sequence_position) {
+s32 find_nearest_animation_sequence_entry(O0024ed18 *animation_sequence, f32 target_sequence_position) __asm__("FUN_L00_0024ed18");
+
+s32 find_nearest_animation_sequence_entry(O0024ed18 *animation_sequence, f32 target_sequence_position) {
     s16 scaled_target_position = truncate_float_to_s32(target_sequence_position * 16.0f);
     s32 i;
     for (i = 0; i < animation_sequence->n; i++) {
