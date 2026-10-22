@@ -1470,7 +1470,9 @@ void blarg_ship_update(struct Moby *moby) {
 extern short *D_L11_001AC240[];
 extern char *D_L11_0015FFD8;
 
-short FUN_L11_0031a758(int moby_list_index) {
+short count_listed_blarg_ships_in_state_5(int moby_list_index) __asm__("FUN_L11_0031a758");
+
+short count_listed_blarg_ships_in_state_5(int moby_list_index) {
     short *moby_list_entry = D_L11_001AC240[moby_list_index];
     short found = 0;
     short n = 0;

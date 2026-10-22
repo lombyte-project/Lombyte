@@ -2696,7 +2696,7 @@ extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L11_003112b8(void *, void *);
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int FUN_L11_0031a758(int);
+extern int count_listed_blarg_ships_in_state_5(int) __asm__("FUN_L11_0031a758");
 extern int FUN_L11_0031a7d8(int);
 
 s32 hp_bar_saved __asm__("D_L11_00162170") = 0;
@@ -2880,7 +2880,7 @@ void jet_fighter_update(struct Moby *moby) {
             D_L11_0015F608 = 2;
             FUN_L11_00312838(moby, ship_vars);
             {
-            int alive = FUN_L11_0031a758(ship_vars->i10C);
+            int alive = count_listed_blarg_ships_in_state_5(ship_vars->i10C);
             if (ship_vars->sEA != 0 && alive < 5 - ship_vars->sE8 && timer_3290(&ship_vars->i114) &&
                 FUN_L11_0031a7d8(ship_vars->i10C)) {
                 ship_vars->i114 = scale_game_frames(0xF0);
