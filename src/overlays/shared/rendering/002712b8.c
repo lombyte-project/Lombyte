@@ -1232,7 +1232,9 @@ void FUN_001f9a10_273ee0(void *, void *, void *) __asm__("FUN_001f9a10");
 int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 int FUN_L00_0025bfe0_273ee0(float, float, float, float) __asm__("FUN_L00_0025bfe0");
-void FUN_L00_00273ee0(unsigned char *particle) {
+void update_line_collision_rgb_fading_particle(unsigned char *particle) __asm__("FUN_L00_00273ee0");
+
+void update_line_collision_rgb_fading_particle(unsigned char *particle) {
     u128 out[1];
     float *particle_data;
     unsigned char *particle_position;

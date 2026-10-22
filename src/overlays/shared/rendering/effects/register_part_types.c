@@ -71,7 +71,7 @@ extern void update_moby_point_attached_alpha_pulse_particle(void) __asm__("FUN_L
 extern void update_mode_controlled_alpha_fade_particle(void) __asm__("FUN_L00_00273800");
 extern void FUN_L00_00273a68(void);
 extern void FUN_L00_002738b0(void);
-extern void FUN_L00_00273ee0(void);
+extern void update_line_collision_rgb_fading_particle(void) __asm__("FUN_L00_00273ee0");
 extern void update_moving_resizing_periodic_alpha_fade_particle(void) __asm__("FUN_L00_00274308");
 extern void FUN_L00_00274518(void);
 extern void update_randomized_moby_point_attached_particle(void) __asm__("FUN_L00_00274818");
@@ -160,7 +160,7 @@ void register_part_types(void) {
     handlers[62] = (u32)update_mode_controlled_alpha_fade_particle;
     handlers[63] = (u32)FUN_L00_002738b0;
     handlers[64] = (u32)FUN_L00_00273a68;
-    handlers[65] = (u32)FUN_L00_00273ee0;
+    handlers[65] = (u32)update_line_collision_rgb_fading_particle;
     handlers[66] = (u32)update_moving_resizing_periodic_alpha_fade_particle;
     handlers[67] = (u32)FUN_L00_00274518;
     handlers[68] = (u32)update_randomized_moby_point_attached_particle;
