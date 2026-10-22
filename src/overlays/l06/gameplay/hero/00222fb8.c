@@ -973,7 +973,7 @@ extern s32 FUN_L00_00216de8(s32, s32);
 extern void FUN_L00_00233708(void *, void *, f32);
 extern void FUN_L00_00233810(void *, void *, f32);
 extern s32 FUN_001efa68_c(void *, void *, s32, struct MobyView *, s32) __asm__("FUN_001efa68");
-extern void FUN_L00_00215b68(void);
+extern void update_hero_motion_response_parameters(void) __asm__("FUN_L00_00215b68");
 extern void FUN_L00_00233660(void *, f32, f32, f32);
 extern s32 FUN_L00_0025e3b8_c(s32) __asm__("FUN_L00_0025e3b8");
 extern void spawn_nearby_effect(s32, struct MobyView *, s32, void *, void *, f32) __asm__("FUN_L00_00259bc8");
@@ -2481,7 +2481,7 @@ void update_hero_motion_for_current_state(void) {
             adjust_hero_pose_targets_from_motion();
         }
         if (hero.vehicle_mode == 1) {
-            FUN_L00_00215b68();
+            update_hero_motion_response_parameters();
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP || hero.state.current == 0xD) {
             state_timer_or_trail_control = (scale_game_frames(12) < hero.state_timer) * 2;

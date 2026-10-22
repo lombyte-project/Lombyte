@@ -288,7 +288,9 @@ extern X_215b68 D_L00_0017A680_215b68 __asm__("D_L00_0017A680") __attribute__((s
 extern f32 FUN_001f99c0_215b68(f32) __asm__("FUN_001f99c0");
 #define X D_L00_0017A680_215b68
 
-void FUN_L00_00215b68(void) {
+void update_hero_motion_response_parameters(void) __asm__("FUN_L00_00215b68");
+
+void update_hero_motion_response_parameters(void) {
     f32 t, clamped_speed_ratio, negated_scaled_input, v, clamp_bound, u, unclamped_negated_value, b, unclamped_magnitude;
     s32 control_mode;
 

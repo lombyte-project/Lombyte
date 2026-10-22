@@ -636,7 +636,7 @@ extern void FUN_L00_00232670(void);
 extern void FUN_L00_00211670(void);
 extern void apply_hero_selected_flags_and_state_transitions(void) __asm__("FUN_L00_0020b960");
 extern void FUN_L00_0020bed0_u(void) __asm__("FUN_L00_0020bed0");
-extern void FUN_L00_00215b68(void);
+extern void update_hero_motion_response_parameters(void) __asm__("FUN_L00_00215b68");
 extern void FUN_L00_00229b70(void);
 extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
@@ -702,7 +702,7 @@ void update_hero_in_vehicle_mode(void) {
     g = (char *)&hero;
     if (*(u8 *)(g + 0x20a4) == 1) {
         FUN_L00_0020bed0_u();
-        FUN_L00_00215b68();
+        update_hero_motion_response_parameters();
     }
     FUN_L00_00229b70();
     if (*(u8 *)(g + 0x20a4) == 0) return;
