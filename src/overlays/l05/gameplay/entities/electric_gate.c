@@ -370,7 +370,9 @@ extern float advance_accelerated_scalar(float, float, float, float, float *,
 /* Slides the moby out along its pose-table entry's direction: 0 places it,
    1 waits for the trigger byte 0xBC of its D_L05_0015FFD8 record, 2 eases
    it toward the end point, 3 lowers it to 5.9 below the entry's height. */
-void FUN_L05_0030e508(char *moby) {
+void update_triggered_moby_slide_and_lowering(char *moby) __asm__("FUN_L05_0030e508");
+
+void update_triggered_moby_slide_and_lowering(char *moby) {
     enum {
         MOBY_PLACE_AT_POSE_OFFSET = 0,
         MOBY_WAIT_FOR_TRIGGER = 1,
