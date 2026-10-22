@@ -1610,7 +1610,9 @@ extern char *FUN_002141f8_002a7d90(void *) __asm__("FUN_002141f8");
 extern void *D_L00_00173E58_002a7d90 __asm__("D_L00_00173E58") __attribute__((section(".data")));
 
 /* True when the record for D_L00_00173E58 (suck_get_aim_height) has byte 9 equal to 1. */
-int FUN_L00_002a7d90(void) {
+int get_wrench_hit_sound_variant(void) __asm__("FUN_L00_002a7d90");
+
+int get_wrench_hit_sound_variant(void) {
     int record_byte_9_is_one = 0;
     char *x = 0;
     if (D_L00_00173E58_002a7d90 != 0)
@@ -1869,7 +1871,7 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-int FUN_L00_002a7d90(void);
+int get_wrench_hit_sound_variant(void) __asm__("FUN_L00_002a7d90");
 int should_trigger_wrench_hit_reaction(void) __asm__("FUN_L00_002a7de0");
 void suck_draw_reticle(int a, int b, void *pos, int kind, int mode, float x, float y, float z) __asm__("FUN_L00_001edf60");
 void FUN_L00_002a7c70_c(void *m) __asm__("FUN_L00_002a7c70");
@@ -2028,7 +2030,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 if (should_trigger_wrench_hit_reaction()) reaction=1;
                 else if (!wrench_hero()->attack_cooldown) {
                     if (!collision_hit.moby || !collision_hit.moby->model || collision_hit.moby->model->kind!=20) {
-                        wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(FUN_L00_002a7d90(),0,(int)wrench_moby); FUN_L00_002a8028((char*)wrench_moby);
+                        wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(get_wrench_hit_sound_variant(),0,(int)wrench_moby); FUN_L00_002a8028((char*)wrench_moby);
                     }
                 }
             }
@@ -2040,7 +2042,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             if (sweep_hero()->state==20) radius=0.47f;
             if (collide_sphere(work.v[4],radius,0,sweep_hero()->moby,work.v[0]) && (!D_L00_00177F00[0] || !D_L00_00177F00[0]->model || D_L00_00177F00[0]->model->kind!=18)) {
                 if (should_trigger_wrench_hit_reaction()) reaction=1;
-                else if (!wrench_hero()->attack_cooldown) { wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(FUN_L00_002a7d90(),0,(int)wrench_moby); FUN_L00_002a8028((char*)wrench_moby); }
+                else if (!wrench_hero()->attack_cooldown) { wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(get_wrench_hit_sound_variant(),0,(int)wrench_moby); FUN_L00_002a8028((char*)wrench_moby); }
             }
         }
         if (reaction) {
@@ -2127,7 +2129,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 if (!hit || hit->hit_count<2 || hit->hit_index!=work.shifted.query.class_id) {
                     work.q[7]=*(WrenchQuad*)collision_hit.moby->position;
                     FUN_L00_0025b6b8(work.v[6],work.v[5],work.v[7],0.5f); FUN_L00_002a7e20(work.v[6],5);
-                    wrench_vars->timer=scale_game_frames_alt(30); wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(FUN_L00_002a7d90(),0,(int)wrench_moby);
+                    wrench_vars->timer=scale_game_frames_alt(30); wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(get_wrench_hit_sound_variant(),0,(int)wrench_moby);
                 }
             }
         }
