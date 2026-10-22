@@ -602,7 +602,9 @@ void FUN_L00_0024f0e8_20da68(char *, char **) __asm__("FUN_L00_0024f0e8");
 int FUN_001f96f8_20da68(int) __asm__("FUN_001f96f8");
 void FUN_L00_0024f3e0_20da68(char *, char *, int, int, int, int) __asm__("FUN_L00_0024f3e0");
 void FUN_L00_0024f190_20da68(char *, char *) __asm__("FUN_L00_0024f190");
-void FUN_L00_0020da68(void) {
+void update_hero_condition_animation(void) __asm__("FUN_L00_0020da68");
+
+void update_hero_condition_animation(void) {
     int on, anim, slot_zero_item_id, hero_animation_id;
     float spd, t;
     unsigned char *animation_selector_data;
