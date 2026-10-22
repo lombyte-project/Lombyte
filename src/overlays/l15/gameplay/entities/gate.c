@@ -2140,9 +2140,9 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         scale_vector_xyz(&position_or_motion_vector, &position_or_motion_vector, frac);
         add_vector_xyz(&position_or_motion_vector, &position_or_motion_vector, (UVec *)path + (seg + 1));
         if (seg + 1 < path->n - 8) {
-            float ang = fast_arc_tan(path->pt[seg + 1].f[0] - ultramech_moby->pos.f[0],
+            float desired_heading = fast_arc_tan(path->pt[seg + 1].f[0] - ultramech_moby->pos.f[0],
                                      path->pt[seg + 1].f[1] - ultramech_moby->pos.f[1]);
-            ultramech_moby->rot.f[2] = spring_turn(&ultramech_vars->turnVel, ultramech_moby->rot.f[2], ang, 0.01f, 0.3f, 0.1f);
+            ultramech_moby->rot.f[2] = spring_turn(&ultramech_vars->turnVel, ultramech_moby->rot.f[2], desired_heading, 0.01f, 0.3f, 0.1f);
         }
         subtract_vector_xyz(&vector_or_hit_descriptor, &position_or_motion_vector, &ultramech_moby->pos);
         entry_path_step_length = vector_length_xyz(&vector_or_hit_descriptor);
@@ -2313,9 +2313,9 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         }
         break;
     case ULTRAMECH_APPROACH_TARGET: {
-        float ang = fast_arc_tan(combat_target->pos.f[0] - ultramech_moby->pos.f[0], combat_target->pos.f[1] - ultramech_moby->pos.f[1]);
+        float desired_heading = fast_arc_tan(combat_target->pos.f[0] - ultramech_moby->pos.f[0], combat_target->pos.f[1] - ultramech_moby->pos.f[1]);
         if (ultramech_vars->w164 != 2) {
-            ang = FUN_L15_002cf110_u(ultramech_moby, &position_or_motion_vector, ultramech_vars->f1B8);
+            desired_heading = FUN_L15_002cf110_u(ultramech_moby, &position_or_motion_vector, ultramech_vars->f1B8);
             if (vector_distance(&ultramech_moby->pos, &combat_target->pos) < *(float *)&D_L15_00161B28) {
                 ultramech_moby->state = 8;
                 if (ultramech_moby->anim != 2)
@@ -2326,7 +2326,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
             if (ultramech_moby->anim != 0)
                 blend_moby_animation(ultramech_moby, 0, 0, scale_game_frames(0x14));
         }
-        FUN_L00_00258278((char *)ultramech_moby, &ultramech_vars->turnVel, ang, frame_time_sq * 1.0471976f,
+        FUN_L00_00258278((char *)ultramech_moby, &ultramech_vars->turnVel, desired_heading, frame_time_sq * 1.0471976f,
                          frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
         qcopy(&vector_or_hit_descriptor, &ultramech_moby->pos);
         subtract_vector_xyz(&vector_arithmetic_result, &position_or_motion_vector, &ultramech_moby->pos);
