@@ -2427,7 +2427,9 @@ extern float D_L15_001614BC __attribute__((sda));
 extern int D_L15_001614C0 __attribute__((sda));
 extern float D_L15_001614C4 __attribute__((sda));
 extern void FUN_L00_002730e0(float *pos, char *vel, int color, unsigned char life, unsigned char b, int mode, float scale);
-extern void FUN_L15_002a29b8(unsigned char *);
+void draw_group_moby_effect_quads(unsigned char *moby) __asm__("FUN_L15_002a29b8");
+
+extern void draw_group_moby_effect_quads(unsigned char *) __asm__("FUN_L15_002a29b8");
 extern void blend_moby_animation_c2(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern char D_0013F420[];
@@ -2477,7 +2479,7 @@ void FUN_L15_002a2488(char *moby) {
             if (callback_frame_stamp != 0) {
                 *(int *)callback_frame_stamp = D_L15_0015F5CC_macro;
             }
-            enqueue_callback_list_1_alt(FUN_L15_002a29b8, moby);
+            enqueue_callback_list_1_alt(draw_group_moby_effect_quads, moby);
         }
     }
     state = ((unsigned char *)moby)[0x20];
@@ -2596,7 +2598,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void rotation_matrix_from_euler(void *, void *) __asm__("FUN_001fa050");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
-void FUN_L15_002a29b8(unsigned char *moby) {
+void draw_group_moby_effect_quads(unsigned char *moby) {
     EffectQuad effect_quad;
     float angles[4] __attribute__((aligned(16)));
     float rotation[12] __attribute__((aligned(16)));
