@@ -319,7 +319,7 @@ void FUN_L02_002eca30(char *moby, void *previous_position) {
     }
 }
 void FUN_L02_002ec308(char *self);
-void FUN_L02_002ecc68(char *self);
+void draw_matching_moby_slot_quads(char *self) __asm__("FUN_L02_002ecc68");
 
 void FUN_L02_002ecd50(char *moby) {
     int i;
@@ -350,7 +350,7 @@ void FUN_L02_002ecd50(char *moby) {
         cached_global_value_ptr = *(int **)(data + 0xE4);
         if (current_global_value != *cached_global_value_ptr) {
             *cached_global_value_ptr = current_global_value;
-            enqueue_callback_list_1(FUN_L02_002ecc68, moby);
+            enqueue_callback_list_1(draw_matching_moby_slot_quads, moby);
         }
     }
 }

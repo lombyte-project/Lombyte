@@ -10,7 +10,9 @@ extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 extern void FUN_L00_00263618(void *, int, float, float);
 
-void FUN_L02_002ecc68(char *self) {
+void draw_matching_moby_slot_quads(char *self) __asm__("FUN_L02_002ecc68");
+
+void draw_matching_moby_slot_quads(char *self) {
     char *current_moby;
     FUN_L00_002591d0((int *)&current_moby, *(unsigned char *)(self + 0x21), 0, 0);
     while (current_moby != 0) {
