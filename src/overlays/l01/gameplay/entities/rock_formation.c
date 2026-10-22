@@ -1088,7 +1088,9 @@ extern f32 D_L01_00161208 __attribute__((section(".sdata")));
 extern f32 D_L01_0016120C __attribute__((section(".sdata")));
 extern f32 D_L01_00161210 __attribute__((section(".sdata")));
 extern f32 D_L01_00161214 __attribute__((section(".sdata")));
-void FUN_L01_002fd0e8(struct Moby *moby) {
+void update_pool_tiles_and_effects(struct Moby *moby) __asm__("FUN_L01_002fd0e8");
+
+void update_pool_tiles_and_effects(struct Moby *moby) {
     enum {
         POOL_INITIALIZE = 0,
         POOL_UPDATE_TILES_AND_EFFECTS = 1
