@@ -1118,7 +1118,9 @@ extern float spring_turn(float *vel, float cur, float target, float k, float d, 
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L03_0029cff0(struct Moby *moby) {
+void update_spline_moby_orientation(struct Moby *moby) __asm__("FUN_L03_0029cff0");
+
+void update_spline_moby_orientation(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
     float position_delta[4];
     float yaw_offset_radians = (float)*(short *)(moby_data + 0x132) * DEG_TO_RAD;
@@ -1481,7 +1483,7 @@ void red_ship_1_update(char *moby) {
         *(OvlQuad *)(data + 0xE0) = *(OvlQuad *)(data + 0xD0);
         evaluate_cubic_hermite_segment(*(float *)(data + 0x100) + step, data + 0xD0, data + 0xB0, data + 0xC0, data + 0x90, cur);
         if (!flag) {
-            FUN_L03_0029cff0(moby);
+            update_spline_moby_orientation(moby);
         } else {
             clear_vector(moby + 0x40);
             *(float *)(moby + 0x48) = fast_arc_tan(*(float *)(data + 0xD0) - *(float *)(data + 0xE0),
