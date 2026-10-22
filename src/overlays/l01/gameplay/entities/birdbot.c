@@ -2775,7 +2775,7 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern void FUN_L01_002f6150(void);
+extern void draw_two_scroll_layers(void) __asm__("FUN_L01_002f6150");
 void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
 
 void FUN_L01_002f6180(void *callback_argument) {
@@ -2810,7 +2810,7 @@ void FUN_L01_002f6180(void *callback_argument) {
             qcopy((D_L01_001E3380 + i)->out, &bounding_sphere);
         }
     }
-    enqueue_callback_list_1(FUN_L01_002f6150, callback_argument);
+    enqueue_callback_list_1(draw_two_scroll_layers, callback_argument);
 }
 #include "eetypes.h"
 #include "qcopy.h"

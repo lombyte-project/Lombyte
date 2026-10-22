@@ -14,7 +14,9 @@ extern u8 D_L01_001E3380[];
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void FUN_L01_002b96e0(s32, void *);
 
-void FUN_L01_002f6150(void) {
+void draw_two_scroll_layers(void) __asm__("FUN_L01_002f6150");
+
+void draw_two_scroll_layers(void) {
     mine_blend_color();
     FUN_L01_002b96e0(0x2, D_L01_001E3380);
 }
