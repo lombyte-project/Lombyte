@@ -2084,7 +2084,9 @@ extern OvlQuad D_L00_001DC060[][20] __attribute__((section(".data")));
 extern OvlQuad D_L00_001DC1A0[][20] __attribute__((section(".data")));
 void FUN_L00_002be078(void *, int, int, int, float, float, float, int);
 void FUN_L00_002be650(void *);
-void FUN_L00_002be890(void *);
+void draw_beam_origin_camera_facing_quads(void *mv) __asm__("FUN_L00_002be890");
+
+void draw_beam_origin_camera_facing_quads(void *) __asm__("FUN_L00_002be890");
 long FUN_001f44b8(int);
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
@@ -2104,7 +2106,7 @@ void FUN_L00_002bdc50(void *moby) {
     FUN_L00_002be078(D_L00_001DC020, D_L00_0016176C, D_L00_00161770, 12, D_L00_00161774, D_L00_00161778, D_L00_0016177C, D_L00_00161784);
     FUN_L00_002be078(D_L00_001DC0E0, D_L00_0016176C, D_L00_00161770, 12, D_L00_00161774, D_L00_00161778, D_L00_0016177C, D_L00_00161788);
     FUN_L00_002be650(moby);
-    FUN_L00_002be890(moby);
+    draw_beam_origin_camera_facing_quads(moby);
     k = D_0013E535;
     c = k ? D_L00_00161798 : D_L00_00161794;
     quad.tex = FUN_001f44b8(D_L00_0016179C);
@@ -2370,7 +2372,7 @@ extern float D_L00_001617B4 __attribute__((sda));
 extern float D_L00_001617AC __attribute__((sda));
 extern float D_L00_001617B0 __attribute__((sda));
 extern int D_L00_001617B8 __attribute__((sda));
-void FUN_L00_002be890(void *mv) {
+void draw_beam_origin_camera_facing_quads(void *mv) {
     char *moby_bytes = mv;
     Q_2be890 quad;
     V_2be890 camera_facing_transform[4];
