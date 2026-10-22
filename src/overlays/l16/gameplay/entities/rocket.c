@@ -686,7 +686,9 @@ extern float D_L16_001618F0 __attribute__((sda));
 extern float D_L16_001618F4 __attribute__((sda));
 extern float D_L16_001618F8 __attribute__((sda));
 extern float D_L16_001618FC __attribute__((sda));
-void FUN_L16_002c44f0(struct Moby *moby, void *new_position) {
+void reposition_moby_with_collision_check(struct Moby *moby, void *new_position) __asm__("FUN_L16_002c44f0");
+
+void reposition_moby_with_collision_check(struct Moby *moby, void *new_position) {
     float origin[4];
     float pos[4];
     float effect_velocity[4];

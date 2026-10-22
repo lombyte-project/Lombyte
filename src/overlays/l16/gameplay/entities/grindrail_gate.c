@@ -2459,7 +2459,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int get_target_reposition_status(void *) __asm__("FUN_L16_002e0e28");
-extern void FUN_L16_002c44f0(void *, void *);
+extern void reposition_moby_with_collision_check(void *, void *) __asm__("FUN_L16_002c44f0");
 extern void FUN_L16_002e0de0(void *);
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
@@ -2514,7 +2514,7 @@ void update_target_reposition_cycle(struct Moby *moby) {
                     qcopy(pos, target + 0x10);
                     pos[2] += 1.0f;
                     pos[2] = probe_ground_height(pos, 0, 0.5f);
-                    FUN_L16_002c44f0(other, pos);
+                    reposition_moby_with_collision_check(other, pos);
                 }
             }
             break;
