@@ -1313,7 +1313,9 @@ extern f32_26c558 D_0015ED60;
 extern int tick_26c558(void *) __asm__("FUN_001f9770");
 extern void kill_26c558(void *) __asm__("FUN_L00_00267a08");
 extern int trunc_26c558(f32_26c558) __asm__("FUN_001fa6d0");
-void FUN_L00_0026c558(P_26c558 *particle) {
+void update_descending_fade_in_out_effect_particle(P_26c558 *particle) __asm__("FUN_L00_0026c558");
+
+void update_descending_fade_in_out_effect_particle(P_26c558 *particle) {
     Q_26c558 *q = &particle->q;
     q->f4 += D_0015ED60 * 0.013f * q->fC;
     if (q->f4 <= 0.0f || tick_26c558(&particle->hA)) {
