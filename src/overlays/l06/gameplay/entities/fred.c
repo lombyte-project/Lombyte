@@ -6455,7 +6455,9 @@ extern int D_L06_0015F880 __asm__("D_L06_0015F880");
 extern void FUN_L06_002f45f0(int);
 extern void FUN_L06_002f9948(int);
 extern int FUN_L01_0026e008(int, int);
-extern void FUN_L06_003047b8(char *);
+void begin_red_button_rotation(char *moby) __asm__("FUN_L06_003047b8");
+
+extern void begin_red_button_rotation(char *) __asm__("FUN_L06_003047b8");
 extern int FUN_L06_003047f8(const u8 *);
 extern void FUN_L06_00302400(struct Moby *, int);
 extern void FUN_L06_002ffc38(int);
@@ -6521,7 +6523,7 @@ void FUN_L06_00301b90(unsigned char *moby) {
         return;
     case TRIGGER_LINKED_SEQUENCE_WHEN_GROUP_INACTIVE:
         if (FUN_L01_0026e008(*(int *)(moby_vars + 0x1C), -1) != 0) return;
-        FUN_L06_003047b8(D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x2C) << 8));
+        begin_red_button_rotation(D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x2C) << 8));
         if (FUN_L06_003047f8((const u8 *)D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x2C) << 8)) != 1) return;
         moby[0x20] = 2;
         FUN_L06_00302400((struct Moby *)moby, 0);
@@ -7671,7 +7673,7 @@ void red_button_update(struct Moby *moby) {
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 /* Moves the moby from state 1 to 2 and gives it a voice. */
-void FUN_L06_003047b8(char *moby) {
+void begin_red_button_rotation(char *moby) {
     if ((unsigned char)moby[0x20] == 1) {
         moby[0x20] = 2;
         allocate_voice_for_target_entry(0, 0, moby);
