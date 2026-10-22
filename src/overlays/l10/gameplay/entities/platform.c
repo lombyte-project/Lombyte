@@ -1601,7 +1601,9 @@ extern void func_L00_002633D8_f(float, float, void *, int *, float *,
                                 void *) __asm__("FUN_L00_00262360");
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 
-void FUN_L10_002d8d30(char *moby) {
+void update_path_spark_emitter(char *moby) __asm__("FUN_L10_002d8d30");
+
+void update_path_spark_emitter(char *moby) {
     enum {
         SPARK_STATE_WAIT_FOR_TIMER = 0,
         SPARK_STATE_TRAVERSE_PATH = 1
