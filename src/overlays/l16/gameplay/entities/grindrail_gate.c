@@ -2438,7 +2438,9 @@ void gadgetron_sign_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9DE8), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_0015FFD8;
-char *FUN_L16_002e8b08(int idx);
+char *find_group_class_010e_moby_in_state_6(int moby_group_index) __asm__("FUN_L16_002e8b08");
+
+char *find_group_class_010e_moby_in_state_6(int idx) __asm__("FUN_L16_002e8b08");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -2473,7 +2475,7 @@ void FUN_L16_002e8970(struct Moby *moby) {
         break;
     case TARGET_CYCLE_WAIT_TO_TRIGGER:
         if (vector_distance(hero_position, target + 0x10) > 3.0f) {
-            if (FUN_L16_002e8b08(*(int *)data) != 0) {
+            if (find_group_class_010e_moby_in_state_6(*(int *)data) != 0) {
                 if (FUN_001f9740_c(data + 0xC)) {
                     moby->state = 2;
                     FUN_L16_002e0de0(target);
@@ -2491,7 +2493,7 @@ void FUN_L16_002e8970(struct Moby *moby) {
         case TARGET_STATUS_REPOSITION_READY:
             moby->state = 1;
             {
-                char *other = FUN_L16_002e8b08(*(int *)data);
+                char *other = find_group_class_010e_moby_in_state_6(*(int *)data);
                 if (other != 0) {
                     qcopy(pos, target + 0x10);
                     pos[2] += 1.0f;
@@ -2515,7 +2517,7 @@ extern char *D_L16_0015FFD8;
 extern int FUN_L16_002c4710(void *);
 extern short *D_L16_001ABCC0[];
 
-char *FUN_L16_002e8b08(int moby_group_index) {
+char *find_group_class_010e_moby_in_state_6(int moby_group_index) {
     short *moby_index_entry = D_L16_001ABCC0[moby_group_index];
     char *moby;
     if (moby_index_entry == 0)
