@@ -873,7 +873,9 @@ void FUN_L00_0025f730(void *vector, float x) {
 extern int D_L00_0015FFD8;
 
 /* Adds the moby index of a to the short list unless present or the list holds max. */
-void FUN_L00_0025f780(int moby_address, short *list, short max) {
+void append_unique_moby_index(int moby_address, short *list, short max) __asm__("FUN_L00_0025f780");
+
+void append_unique_moby_index(int moby_address, short *list, short max) {
     int k = ((moby_address - D_L00_0015FFD8) << 8) >> 16;
     int i;
     for (i = 1; i <= list[0]; i++) {

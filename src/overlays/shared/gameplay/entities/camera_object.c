@@ -2171,7 +2171,7 @@ extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern float D_L00_001613C4 __attribute__((sda));
 extern short D_L00_001B0770[];
 extern void FUN_L00_00250df8_c(void *) __asm__("FUN_L00_00250df8");
-extern void FUN_L00_0025f780(void *, short *, int);
+extern void append_unique_moby_index(void *, short *, int) __asm__("FUN_L00_0025f780");
 
 char *FUN_L00_002a96f8(void *owner, void *pos, float a, float b, float c, char *tgt, float rz, float ry) {
     char *m;
@@ -2236,7 +2236,7 @@ char *FUN_L00_002a96f8(void *owner, void *pos, float a, float b, float c, char *
             qcopy(m + 0x10, &D_L00_00173E60);
         }
         FUN_L00_00250df8_c(m);
-        FUN_L00_0025f780(m, D_L00_001B0770, 0x1F);
+        append_unique_moby_index(m, D_L00_001B0770, 0x1F);
         *(float *)(m + 0x2C) += *(float *)(m + 0x2C);
     }
     return m;

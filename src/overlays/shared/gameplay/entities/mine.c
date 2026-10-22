@@ -2253,7 +2253,7 @@ extern int FUN_001f96f8_2afc70(int) __asm__("FUN_001f96f8");
 extern float FUN_001f9af0_2afc70(void *) __asm__("FUN_001f9af0");
 extern int FUN_001efa68_2afc70(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void FUN_L00_00250df8_2afc70(void *) __asm__("FUN_L00_00250df8");
-extern void FUN_L00_0025f780_2afc70(void *, void *, int) __asm__("FUN_L00_0025f780");
+extern void append_unique_moby_index(void *, void *, int) __asm__("FUN_L00_0025f780");
 
 unsigned char *FUN_L00_002afc70(unsigned char *owner, V_2afc70 *spawn_position, unsigned char *target_moby, float guidance_yaw,
                                 float guidance_pitch, float target_height_offset, float initial_yaw, float initial_pitch) {
@@ -2323,7 +2323,7 @@ unsigned char *FUN_L00_002afc70(unsigned char *owner, V_2afc70 *spawn_position, 
             qcopy(missile_moby + 0x10, D_L00_00173E60_2afc70);
         }
         FUN_L00_00250df8_2afc70(missile_moby);
-        FUN_L00_0025f780_2afc70(missile_moby, D_L00_001B0770_lui, 0x1F);
+        append_unique_moby_index(missile_moby, D_L00_001B0770_lui, 0x1F);
         *(float *)(missile_moby + 0x2C) += *(float *)(missile_moby + 0x2C);
     }
     return missile_moby;

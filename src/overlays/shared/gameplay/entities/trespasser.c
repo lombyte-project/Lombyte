@@ -1207,7 +1207,7 @@ extern OvlVec4 D_L00_00166C80_2c1ad0[3] __asm__("D_L00_00166C80") __attribute__(
 extern s16 D_L00_001B07B0_lui[]  __asm__("D_L00_001B07B0")__attribute__((section(".data")));
 extern void initialize_moby_motion_at_position(void *, void *, void *) __asm__("FUN_L00_002aa008");
 extern struct Moby *FUN_L00_002a9ed0(void *, void *, void *);
-extern void FUN_L00_0025f780(void *, void *, int);
+extern void append_unique_moby_index(void *, void *, int) __asm__("FUN_L00_0025f780");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern f32 square_root(f32) __asm__("FUN_001f9988");
@@ -1394,7 +1394,7 @@ void mine_glove_update(struct Moby *moby) {
                     D_00141680_2c1ad0.unkA2 = scale_game_frames(D_0015EEA4_macro) / 600;
             }
             D_00141680_2c1ad0.levels = (D_00141680_2c1ad0.levels | (1u << current_level_index_macro)) | 0x80000000;
-            FUN_L00_0025f780(vars->held, D_L00_001B07B0, 0x3F);
+            append_unique_moby_index(vars->held, D_L00_001B07B0, 0x3F);
             vars->held = 0;
             vars->timer54 = scale_game_frames(10);
         }
@@ -1546,7 +1546,7 @@ extern OvlVec4 D_L00_00166C80_2c1ad0[3] __asm__("D_L00_00166C80") __attribute__(
 extern s16 D_L00_001B07B0_lui[]  __asm__("D_L00_001B07B0")__attribute__((section(".data")));
 extern void initialize_moby_motion_at_position(void *, void *, void *) __asm__("FUN_L00_002aa008");
 extern struct Moby *FUN_L00_002a9ed0(void *, void *, void *);
-extern void FUN_L00_0025f780(void *, void *, int);
+extern void append_unique_moby_index(void *, void *, int) __asm__("FUN_L00_0025f780");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern f32 square_root(f32) __asm__("FUN_001f9988");
@@ -1766,7 +1766,7 @@ extern s16 D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")__attribute__((section
 extern f32 FUN_002132a8_2c35c0(f32, f32) __asm__("FUN_002132a8");
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void FUN_L00_0025d1b8(void *);
-extern void FUN_L00_0025f780(void *, void *, s32);
+extern void append_unique_moby_index(void *, void *, s32) __asm__("FUN_L00_0025f780");
 
 u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) __asm__("FUN_L00_002c35c0");
 
@@ -1830,7 +1830,7 @@ u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) {
         data[7] = 0x80;
         *(u16 *)(data + 0x0c) = 4;
         *(u16 *)(data + 0x0e) = 0xf;
-        FUN_L00_0025f780(spawned_moby, D_L00_001B0830_lui, 0x1f);
+        append_unique_moby_index(spawned_moby, D_L00_001B0830_lui, 0x1f);
         if (hero.unk20A5 != 0 || hero.unk20AF != 0)
             *(u16 *)(spawned_moby + 0x34) |= 0x41;
     }
