@@ -2022,7 +2022,9 @@ extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_0026de00(char *particle) {
+void move_and_fade_effect_particle_by_lifetime(char *particle) __asm__("FUN_L00_0026de00");
+
+void move_and_fade_effect_particle_by_lifetime(char *particle) {
     char *particle_data = particle + 0x20;
     fast_vec_add(particle + 0x10, particle + 0x10, particle_data);
     *(unsigned *)(particle + 4) = (*(unsigned *)(particle + 4) & 0xFFFFFF) +
