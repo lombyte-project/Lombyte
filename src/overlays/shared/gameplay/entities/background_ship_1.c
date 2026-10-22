@@ -839,7 +839,9 @@ extern int FUN_L00_0025fa38(void *, int);
 extern int FUN_L00_0025faf0(void *, int);
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 
-int FUN_L02_002fb648(char *moby) {
+int test_moby_camera_control_activation(char *moby) __asm__("FUN_L02_002fb648");
+
+int test_moby_camera_control_activation(char *moby) {
     char *special = D_L02_001674DC;
     char *data = *(char **)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1c);
     char *target = *(char **)(data + 0x48);
@@ -1054,7 +1056,7 @@ void FUN_L02_002fb9c8(char *moby) {
         *(short *)(data + 0x20) = 0;
         return;
     }
-    if (FUN_L02_002fb648(moby) == 0) {
+    if (test_moby_camera_control_activation(moby) == 0) {
         *(short *)(data + 0x20) = 0;
         FUN_L00_002e8388(moby);
         return;
