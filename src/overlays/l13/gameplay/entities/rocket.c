@@ -477,7 +477,9 @@ extern char *spawn_poison_vessel_effect_moby(void *, void *, int, int) __asm__("
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern char *FUN_L00_002df808(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, int);
 
-void FUN_L13_003073c8(struct Moby *moby, void *vars) {
+void spawn_poison_vessel_destruction_effects(struct Moby *moby, void *vars) __asm__("FUN_L13_003073c8");
+
+void spawn_poison_vessel_destruction_effects(struct Moby *moby, void *vars) {
     struct {
         OvlVec4 direction, velocity, axis, offset, pos, random_direction, random_vector;
     } work;
@@ -717,7 +719,7 @@ void poison_vessel_update(struct Moby *moby) {
                 vars->effect_level = 0x78;
                 anim_reset_7b10(moby, effects);
                 vars->timer = 0;
-                FUN_L13_003073c8(moby, vars);
+                spawn_poison_vessel_destruction_effects(moby, vars);
                 FUN_L10_002e3de8(moby);
                 allocate_voice_7b10(0, 0, (int)moby);
                 moby->state = 1;
