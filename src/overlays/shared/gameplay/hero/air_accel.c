@@ -82,7 +82,7 @@ extern void FUN_L00_002484e0(void *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257024(void *);
 extern void FUN_L01_0022cd48(void);
-extern void FUN_L01_00242930(void);
+extern void update_hero_state_machine(void) __asm__("FUN_L01_00242930");
 
 /* Per-frame hero update; in vehicle mode 3 it also pulses the hero moby's glow colour. */
 void FUN_L01_00228000(void) {
@@ -94,7 +94,7 @@ void FUN_L01_00228000(void) {
     FUN_L00_00232670();
     hero_update();
     FUN_L01_0022cd48();
-    FUN_L01_00242930();
+    update_hero_state_machine();
     if (hero.vehicle_mode == 0)
         return;
     update_hero_delayed_voice_requests();
@@ -214,7 +214,7 @@ void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
 extern void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
 extern void FUN_L01_0022cd48_u(void) __asm__("FUN_L01_0022cd48");
 extern void FUN_L01_0022d090(void);
-extern void FUN_L01_00242930(void);
+extern void update_hero_state_machine(void) __asm__("FUN_L01_00242930");
 extern void no_op_main_callback_alt(void *) __asm__("FUN_001e93e8");
 void begin_draw_frame(void) __asm__("FUN_001f7978");
 void fade_to_black(s32 n) __asm__("FUN_001f4a58");
@@ -241,7 +241,7 @@ void update_hero_frame(void) {
     hero_update();
     FUN_L01_0022cd48_u();
     FUN_L01_0022d090();
-    FUN_L01_00242930();
+    update_hero_state_machine();
     if (*(unsigned char *)(hero_state_base + 0x20A4) != 0) {
         return;
     }
