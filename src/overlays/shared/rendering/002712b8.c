@@ -847,7 +847,7 @@ typedef struct {
 int FUN_001fa6d0_2730e0(float) __asm__("FUN_001fa6d0");
 unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *vel, int color, u8 life, u8 b, int mode,
                                 float scale);
-unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *vel, int color, u8 life, u8 initial_rotation, int mode,
+unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *initial_velocity, int color, u8 life, u8 initial_rotation, int mode,
                                 float scale) {
     unsigned char *particle;
     float *particle_data;
@@ -858,7 +858,7 @@ unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *vel, int color, u8 life, u8
     if (particle) {
         particle_data = (float *)(particle + 0x20);
         qcopy(particle + 0x10, pos);
-        qcopy(particle_data, vel);
+        qcopy(particle_data, initial_velocity);
         *(int *)(particle_data + 7) = mode;
         if (mode == 1) {
             struct Hero *hero_reference = &hero;
