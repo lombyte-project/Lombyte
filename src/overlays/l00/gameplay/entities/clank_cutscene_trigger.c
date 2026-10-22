@@ -29,7 +29,7 @@ extern void FUN_L00_0028a7a0(void);
 extern void FUN_L00_0028ab08(void);
 extern void FUN_L00_0028a920(void);
 extern void FUN_L00_0028a998(void);
-extern void FUN_L00_0028aa98(void);
+extern void draw_two_sky_shells_with_particles(void) __asm__("FUN_L00_0028aa98");
 extern void FUN_L00_0028ac88(void);
 extern void FUN_L00_0028b080(void);
 extern void FUN_L00_0028b1a0(void);
@@ -105,7 +105,7 @@ void FUN_L00_0023d968(void) {
         FUN_L00_0028a998();
         break;
     case LEVEL_WITH_TWO_SKY_SHELLS_AND_PARTICLES:
-        FUN_L00_0028aa98();
+        draw_two_sky_shells_with_particles();
         break;
     case LEVEL_WITH_SLOW_MEDIUM_AND_FAST_ROTATING_SKY_SHELLS:
         FUN_L00_0028ab08();
