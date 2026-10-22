@@ -939,7 +939,9 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L17_002f54d8(int vertex_count, V3 *input_directions, V3 *vertex_positions, int unused, float *out) {
+void compute_reflection_sphere_map_uvs(int vertex_count, V3 *input_directions, V3 *vertex_positions, int unused, float *out) __asm__("FUN_L17_002f54d8");
+
+void compute_reflection_sphere_map_uvs(int vertex_count, V3 *input_directions, V3 *vertex_positions, int unused, float *out) {
     V4 normalized_position_delta;
     V4 vertex_position;
     V4 reflection_mapping_vector;
@@ -976,7 +978,7 @@ extern char D_L17_001DE8A0[];
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
-void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out);
+void compute_reflection_sphere_map_uvs(int n, V3 *b, V3 *a, int unused, float *out) __asm__("FUN_L17_002f54d8");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 int D_L17_001623F0[2] = {26, 26};
@@ -1002,7 +1004,7 @@ void FUN_L17_002f5690(void) {
     font_queue_vu_state();
     p = (float *)D_L17_001DE8A0;
     for (i = 0; i < 2; i++) {
-        FUN_L17_002f54d8(D_L17_001623F0[i], ((int *)D_L17_00162408)[i],
+        compute_reflection_sphere_map_uvs(D_L17_001623F0[i], ((int *)D_L17_00162408)[i],
                          ((int *)D_L17_001623F8)[i], ((int *)D_L17_00162400)[i], p);
         FUN_L00_001fde98(D_L17_001623F0[i], ((int *)D_L17_001623F8)[i],
                          ((int *)D_L17_00162410)[i], p, 1);
@@ -1017,7 +1019,7 @@ extern float D_L17_001DF280[];
 float *D_L17_00162450[2] = {D_L17_001DF280, 0};
 extern float D_L17_001DF598[];
 float *D_L17_00162458[2] = {D_L17_001DF598, 0};
-void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out);
+void compute_reflection_sphere_map_uvs(int n, V3 *b, V3 *a, int unused, float *out) __asm__("FUN_L17_002f54d8");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 int D_L17_00162420[2] = {66, 0};
@@ -1033,7 +1035,7 @@ void FUN_L17_002f59a8(void) {
     font_queue_vu_state();
     p = (float *)D_L17_001DF6A0;
     for (i = 0; i < 1; i++) {
-        FUN_L17_002f54d8(D_L17_00162420[i], (V3 *)((int *)D_L17_00162450)[i],
+        compute_reflection_sphere_map_uvs(D_L17_00162420[i], (V3 *)((int *)D_L17_00162450)[i],
                          (V3 *)((int *)D_L17_00162440)[i], ((int *)D_L17_00162448)[i], p);
         FUN_L00_001fde98(D_L17_00162420[i], ((int *)D_L17_00162440)[i],
                          ((int *)D_L17_00162458)[i], p, 1);
