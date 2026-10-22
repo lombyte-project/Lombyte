@@ -730,7 +730,7 @@ extern void FUN_L06_002e6148(char *);
 extern void FUN_L00_0023e838(int);
 extern void mark_moby_for_removal(void *);
 extern void jet_animate(struct Moby *, float) __asm__("FUN_L00_00259fe8");
-extern void FUN_L07_00312150(char *);
+extern void update_timed_point_light_color(char *) __asm__("FUN_L07_00312150");
 void snagglebeast_update(unsigned char *moby) __asm__("FUN_L07_00314150");
 void snagglebeast_update(unsigned char *moby) {
     enum {
@@ -1763,7 +1763,7 @@ void snagglebeast_update(unsigned char *moby) {
     }
     subtract_vector_xyz(data + 0x100, moby + 0x10, &oldpos);
     if (moby[0x20] < 0xA) jet_animate((struct Moby *)moby, 2.5f);
-    FUN_L07_00312150((char *)data);
+    update_timed_point_light_color((char *)data);
 }
 float scroll_phase __asm__("D_L07_00161B74") = 0;
 float row_start_phase __asm__("D_L07_00161B78") = 0;

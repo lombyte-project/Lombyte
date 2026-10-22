@@ -358,7 +358,9 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void FUN_L00_0023e838(int);
 
-void FUN_L07_00312150(char *light_effect_state) {
+void update_timed_point_light_color(char *light_effect_state) __asm__("FUN_L07_00312150");
+
+void update_timed_point_light_color(char *light_effect_state) {
     int color_phase_threshold;
     float phase_remaining_fraction;
     int interpolated_packed_color;
