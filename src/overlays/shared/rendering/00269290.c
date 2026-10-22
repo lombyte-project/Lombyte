@@ -2654,7 +2654,9 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-void FUN_L00_0026f280(char *particle) {
+void update_swaying_and_fading_effect_particle(char *particle) __asm__("FUN_L00_0026f280");
+
+void update_swaying_and_fading_effect_particle(char *particle) {
     char *particle_data = particle + 0x20;
     float motion_vector_scratch[3];
     char *q;
