@@ -485,7 +485,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void emit_gated_moby_joint_effects(void *, void *) __asm__("FUN_L13_002e8920");
 extern void splash_L13(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void FUN_L13_002e8d28(void *, void *);
+extern void update_moby_joint_attachments(void *, void *) __asm__("FUN_L13_002e8d28");
 extern void FUN_L13_002e9018(void *, void *, float, float);
 extern void FUN_L13_002e9680(void *, void *, int);
 extern void FUN_L13_002e9a48(void *, void *);
@@ -1041,7 +1041,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
     }
 
     if (moby->state >= 2) {
-        FUN_L13_002e8d28(moby, data);
+        update_moby_joint_attachments(moby, data);
         if (moby->state != 8 || scale_game_frames_alt(0x78) < data->iF8) {
             emit_gated_moby_joint_effects(moby, data);
         }

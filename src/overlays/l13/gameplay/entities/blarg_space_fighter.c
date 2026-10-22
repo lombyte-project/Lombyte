@@ -2733,7 +2733,9 @@ extern int D_L13_001D34A8[];
 extern char *FUN_L13_002ecd10(char *, int, int);
 extern void FUN_0020c828(char *);
 
-void FUN_L13_002e8d28(struct Moby *parent_moby, char *attachment_data) {
+void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_data) __asm__("FUN_L13_002e8d28");
+
+void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_data) {
     int i;
     int attachment_joint_index;
     char *attached_moby;
