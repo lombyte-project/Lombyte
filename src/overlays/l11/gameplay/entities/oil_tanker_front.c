@@ -539,7 +539,9 @@ void update_oil_tanker_front_path_pose(struct Moby *moby) __asm__("FUN_L11_00317
 
 void update_oil_tanker_front_path_pose(struct Moby *) __asm__("FUN_L11_00317678");
 void FUN_L11_00317820(struct Moby *);
-void FUN_L11_00317c98(struct Moby *);
+void process_oil_tanker_damage_and_destruction(struct Moby *moby) __asm__("FUN_L11_00317c98");
+
+void process_oil_tanker_damage_and_destruction(struct Moby *) __asm__("FUN_L11_00317c98");
 void distribute_group_class_527_mobys_along_path(struct Moby *moby, int table_index) __asm__("FUN_L11_003180a0");
 
 void distribute_group_class_527_mobys_along_path(struct Moby *, int) __asm__("FUN_L11_003180a0");
@@ -621,7 +623,7 @@ void oil_tanker_front_update(struct Moby *moby) {
         update_oil_tanker_front_path_pose(moby);
         FUN_L11_00317820(moby);
         if (moby->state == 2) {
-            FUN_L11_00317c98(moby);
+            process_oil_tanker_damage_and_destruction(moby);
         }
         if (voice_is_playing(moby, chain_vars->sound) == 0) {
             chain_vars->sound = FUN_0022da68(0, 4, moby);
@@ -780,7 +782,7 @@ void start_oil_tanker_link_destruction(struct Moby *link_moby) __asm__("FUN_L11_
 void start_oil_tanker_link_destruction(struct Moby *) __asm__("FUN_L11_00318488");
 
 /* Drops the chain's damaged links: takes the hits, shrinks the chain as its health falls and blows the head up when no link is left. */
-void FUN_L11_00317c98(struct Moby *moby) {
+void process_oil_tanker_damage_and_destruction(struct Moby *moby) {
     struct L11ChainVars *chain_vars = (struct L11ChainVars *)moby->pvars;
     int i;
     int last_hit_link_index = -1;
