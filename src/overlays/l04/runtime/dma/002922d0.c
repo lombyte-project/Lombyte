@@ -550,7 +550,9 @@ extern float animation_start(int, int) __asm__("FUN_L04_002418b0");
 extern float FUN_001f99c0(float);
 extern int rig_pick_mode(struct Moby *m, LegRig *rig, float t) __asm__("FUN_L04_002927d0");
 
-void FUN_L04_00295de8(struct Moby *moby, LegRig *rig) {
+void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) __asm__("FUN_L04_00295de8");
+
+void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) {
     int joints[6];
     float mtx[4][4];
     float animation_time;

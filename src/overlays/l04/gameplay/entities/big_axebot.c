@@ -546,7 +546,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025fcb8(char *, float *, float);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void trooper_set_knockback(float *p, float a, float b) __asm__("FUN_L03_00250a78");
-extern void FUN_L04_00295778_cf(void *, void *) __asm__("FUN_L04_00295de8");
+extern void reset_leg_rig_from_animation(void *, void *) __asm__("FUN_L04_00295de8");
 extern void FUN_L04_002ba448_c(void *, float) __asm__("FUN_L04_002ba448");
 extern void advance_moby_animation(void *);
 extern void attach_manipulator_cf(void *) __asm__("FUN_0020c828");
@@ -907,7 +907,7 @@ void big_axebot_update(M_B7B0 *moby) {
     case BIG_AXEBOT_STATE_CHASE_TARGET:
         if (moby->fBC & 8) {
             moby->fBC &= ~8;
-            FUN_L04_00295778_cf(moby, data->f1A0);
+            reset_leg_rig_from_animation(moby, data->f1A0);
         }
         data->f414 = fast_cos_cf(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 6.2831855f,
                                  frame_time_sq * 125.663704f, frame_time * 12.566371f);
@@ -941,7 +941,7 @@ void big_axebot_update(M_B7B0 *moby) {
 
             if (moby->fBC & 8) {
                 moby->fBC &= ~8;
-                FUN_L04_00295778_cf(moby, data->f1A0);
+                reset_leg_rig_from_animation(moby, data->f1A0);
             }
             a = fast_arc_tan(data->home[0] - moby->pos[0], data->home[1] - moby->pos[1]);
             data->f414 = fast_cos_cf(moby->rot[2], a, &data->f410, frame_time_sq * 6.2831855f,

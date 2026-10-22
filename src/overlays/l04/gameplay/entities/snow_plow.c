@@ -785,7 +785,7 @@ extern void FUN_L00_00263ac8(float, void *, int, void *);
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void FUN_L00_002a1538(void *);
 extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__("FUN_L00_002af8b0");
-extern void FUN_L04_00295de8(void *, void *);
+extern void reset_leg_rig_from_animation(void *, void *) __asm__("FUN_L04_00295de8");
 extern void initialize_woodcut_bot_movement_data(void *) __asm__("FUN_L04_002d1418");
 extern void add_vector_xyz(void *, void *, void *);
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
@@ -1161,7 +1161,7 @@ void woodcut_bot_update(WBMoby *m) {
     case WOODCUT_BOT_MOVE_TOWARD_TARGET: {
         if (m->fBC & 8) {
             m->fBC &= ~8;
-            FUN_L04_00295de8(m, d->f160);
+            reset_leg_rig_from_animation(m, d->f160);
         }
         FUN_L04_00295778(m, d->f160, frame_time * 4.0f,
                          fast_arc_tan(selected_target_position[0] - m->pos[0], selected_target_position[1] - m->pos[1]), frame_time_sq * 20.0f);
@@ -1201,7 +1201,7 @@ void woodcut_bot_update(WBMoby *m) {
     case WOODCUT_BOT_RETURN_TO_SAVED_POSITION:
         if (m->fBC & 8) {
             m->fBC &= ~8;
-            FUN_L04_00295de8(m, d->f160);
+            reset_leg_rig_from_animation(m, d->f160);
         }
         if (target_distance < 3.0f && adiff < 1.5707964f) {
             blend_moby_animation(m, 4, 0, scale_game_frames(10));
@@ -1210,7 +1210,7 @@ void woodcut_bot_update(WBMoby *m) {
         } else {
             if (m->fBC & 8) {
                 m->fBC &= ~8;
-                FUN_L04_00295de8(m, d->f160);
+                reset_leg_rig_from_animation(m, d->f160);
             }
             if (vector_distance(pos, d->f3B0) < 2.0f) {
                 m->state = 7;
