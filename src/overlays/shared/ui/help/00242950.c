@@ -27,7 +27,9 @@ extern f32 FUN_L00_00233d30_32b90(void *) __asm__("FUN_L00_00233d30");
 extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
 extern s32 FUN_L00_002595a0_32b90(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 
-f32 FUN_L06_00242950(f32 prediction_time, f32 acceleration_scale, f32 target_z) {
+f32 calculate_hero_motion_prediction_time(f32 prediction_time, f32 acceleration_scale, f32 target_z) __asm__("FUN_L06_00242950");
+
+f32 calculate_hero_motion_prediction_time(f32 prediction_time, f32 acceleration_scale, f32 target_z) {
     enum {
         HERO_MOTION_Z_AXIS_ACCELERATION = 0,
         HERO_MOTION_STORED_VECTOR_ACCELERATION = 1,
