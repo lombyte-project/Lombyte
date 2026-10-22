@@ -927,7 +927,9 @@ extern void draw_lift_25_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2620"
 void draw_lift_38_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f27c8");
 
 extern void draw_lift_38_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f27c8");
-extern void FUN_L18_002f2970(struct Moby *moby);
+void draw_lift_22_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2970");
+
+extern void draw_lift_22_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2970");
 
 extern int D_L18_001622FC __attribute__((sda));
 extern int D_L18_001622F8 __attribute__((sda));
@@ -1010,7 +1012,7 @@ void FUN_L18_002f2310(struct Moby *lift_moby) {
         enqueue_2310(draw_lift_38_quad_mesh, lift_moby);
         break;
     case LIFT_DRAW_22_QUAD_MESH:
-        enqueue_2310(FUN_L18_002f2970, lift_moby);
+        enqueue_2310(draw_lift_22_quad_mesh, lift_moby);
         break;
     }
 }
@@ -1172,7 +1174,7 @@ extern f32 D_L18_00162308_gp __asm__("D_L18_00162308") __attribute__((sda));
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 
-void FUN_L18_002f2970(struct Moby *moby) {
+void draw_lift_22_quad_mesh(struct Moby *moby) {
     FRow_l18 quad_positions[4];
     int colors[4];
     float uv[4][2];
