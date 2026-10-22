@@ -1907,7 +1907,9 @@ extern unsigned char D_0013D4DA __attribute__((section(".data")));
 extern int FUN_L00_0025fa38(void *, int);
 extern float D_L02_00161BDC __attribute__((sda));
 extern float D_L02_00161BE0 __attribute__((sda));
-extern void FUN_L02_002dc2c8(struct Moby *);
+void draw_elevator_rotating_rings(struct Moby *moby) __asm__("FUN_L02_002dc2c8");
+
+extern void draw_elevator_rotating_rings(struct Moby *) __asm__("FUN_L02_002dc2c8");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
@@ -2027,7 +2029,7 @@ void elevator_update(L16PlatformMoby *moby) {
                 break;
             }
             if (elevator_vars->speed != 0.0f) {
-                enqueue_callback_list_1(FUN_L02_002dc2c8, moby);
+                enqueue_callback_list_1(draw_elevator_rotating_rings, moby);
             }
             break;
         }
@@ -2080,7 +2082,7 @@ extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void draw_geometry_quad(void *, void *, int);
 
-void FUN_L02_002dc2c8(struct Moby *moby) {
+void draw_elevator_rotating_rings(struct Moby *moby) {
     L16RingPacket packet;
     L16RingMatrix matrix;
     char *moby_vars = (char *)moby->pvars;
