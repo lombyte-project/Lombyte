@@ -3719,6 +3719,8 @@ extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 extern void func_L18_002F9AB8_v(void *) __asm__("FUN_L18_002f8658");
 
 void rocket_tank_update(M1454 *m) __asm__("FUN_L18_002f7c40");
+void update_rocket_tank_damage_and_aim(void *mv) __asm__("FUN_L18_002f8050");
+
 void rocket_tank_update(M1454 *moby) {
     enum {
         ROCKET_TANK_INITIALIZE = 0,
@@ -3726,7 +3728,7 @@ void rocket_tank_update(M1454 *moby) {
         ROCKET_TANK_FIRING = 2
     };
     D1454 *tank_data = moby->data;
-    FUN_L18_002f8050(moby);
+    update_rocket_tank_damage_and_aim(moby);
     switch (moby->state) {
     case ROCKET_TANK_INITIALIZE:
         attach_manipulator((char *)moby, 0, tank_data->buf);
@@ -3865,7 +3867,7 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
 
-void FUN_L18_002f8050(void *mv) {
+void update_rocket_tank_damage_and_aim(void *mv) {
     unsigned char *moby_bytes = mv;
     char *tank_data = *(char **)(moby_bytes + 0x78);
     int r;
