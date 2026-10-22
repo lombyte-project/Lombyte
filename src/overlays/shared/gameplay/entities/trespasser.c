@@ -775,6 +775,7 @@ void doom_bot_update(struct Moby *moby) {
         DOOM_BOT_ALIGN_TO_TARGET = 6,
         DOOM_BOT_EXECUTE_JUMP = 7,
         DOOM_BOT_COLLISION_RECOVERY_FALL = 8,
+        DOOM_BOT_WAIT_FOR_ANIMATION_TO_SELECT_MOVEMENT = 9,
         DOOM_BOT_DETONATE = 11,
         DOOM_BOT_WAIT_FOR_TRANSITION_ANIMATION = 12,
         DOOM_BOT_SQUIRM = 13,
@@ -886,7 +887,7 @@ void doom_bot_update(struct Moby *moby) {
         }
         goto Falling;
     }
-    case DOOM_BOT_WAIT_FOR_ANIMATION_BEFORE_MOVEMENT: case 9: case 10:
+    case DOOM_BOT_WAIT_FOR_ANIMATION_BEFORE_MOVEMENT: case DOOM_BOT_WAIT_FOR_ANIMATION_TO_SELECT_MOVEMENT: case 10:
         if (moby->anim_flags&2) moby->state=2;
         goto Contact;
     case DOOM_BOT_SELECT_MOVEMENT_MODE: case DOOM_BOT_UPDATE_TARGET_AND_MOVEMENT: case DOOM_BOT_MOVE_HIGH_TURN_RATE: case DOOM_BOT_MOVE_LOW_TURN_RATE: {
