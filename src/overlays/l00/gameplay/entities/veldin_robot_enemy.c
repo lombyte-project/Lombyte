@@ -218,7 +218,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 advance_accelerated_scalar(f32, f32, f32, f32, f32 *, f32 *) __asm__("FUN_00213f38");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern s32 FUN_L00_002e1f28(ElectroidMoby *, s32, s32);
+extern s32 register_beam_slot(ElectroidMoby *, s32, s32) __asm__("FUN_L00_002e1f28");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern void build_moby_bone_transform(ElectroidMoby *, s32, void *) __asm__("FUN_0020cca8");
@@ -348,7 +348,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         } else if (moby->unk70 & 2) {
             ELECTROID_ANIM(moby, random_integer_below(2) + 1, scale_game_frames_s32(20));
         }
-        if (vars->unk114 != 2 && FUN_L00_002e1f28(moby, 0, 0) != 0) {
+        if (vars->unk114 != 2 && register_beam_slot(moby, 0, 0) != 0) {
             moby->state = 4;
             ELECTROID_ANIM(moby, 5, scale_game_frames_s32(10));
         }
