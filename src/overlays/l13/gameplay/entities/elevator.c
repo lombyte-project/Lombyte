@@ -597,7 +597,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5950), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L13_003061c8(float, float *, float *, void *);
+extern char *spawn_gemlik_projectile(float, float *, float *, void *) __asm__("FUN_L13_003061c8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int frame_count __asm__("D_L13_0015F5CC");
@@ -621,7 +621,7 @@ void FUN_L13_002b47a0(struct Moby *moby) {
         horizontal_offset[1] = fast_sin(projectile_yaw) * (D_L13_00161388 * frame_time);
         horizontal_offset[2] = 0;
         fast_vec_add(projectile_spawn_position, projectile_spawn_position, horizontal_offset);
-        FUN_L13_003061c8(*(float *)(data + 0x68), projectile_spawn_position, horizontal_offset, moby);
+        spawn_gemlik_projectile(*(float *)(data + 0x68), projectile_spawn_position, horizontal_offset, moby);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5A88), where it is exact; names translated to the US level program. */

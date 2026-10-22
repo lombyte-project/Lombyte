@@ -275,7 +275,9 @@ extern void FUN_L00_00250df8(void *);
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-char *FUN_L13_003061c8(float speed, float *spawn_position, float *launch_displacement, void *source_moby) {
+char *spawn_gemlik_projectile(float speed, float *spawn_position, float *launch_displacement, void *source_moby) __asm__("FUN_L13_003061c8");
+
+char *spawn_gemlik_projectile(float speed, float *spawn_position, float *launch_displacement, void *source_moby) {
     char *moby;
     char *moby_vars;
     float direction_length_xy;
