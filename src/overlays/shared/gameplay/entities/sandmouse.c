@@ -844,7 +844,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
         SANDMOUSE_STATE_RESET = 7
     };
     Pv_30F318 *sandmouse_vars;
-    f32 ang;
+    f32 goal_bearing_yaw;
     int dv;
     s16 timer_frames;
     if (sandmouse_moby == 0) return;
@@ -1018,8 +1018,8 @@ void sandmouse_update(Moby *sandmouse_moby) {
             movement_result_flags = movement_result_flags ? 0 : 2;
         } else {
             FUN_L01_002e30b8(sandmouse_moby, sandmouse_vars);
-            ang = fast_arc_tan(sandmouse_vars->goal.f[0] - sandmouse_moby->pos.x, sandmouse_vars->goal.f[1] - sandmouse_moby->pos.y);
-            FUN_L00_00258278_df40(sandmouse_moby, ang, &D_L01_001DEB38_lui.yaw_speed,
+            goal_bearing_yaw = fast_arc_tan(sandmouse_vars->goal.f[0] - sandmouse_moby->pos.x, sandmouse_vars->goal.f[1] - sandmouse_moby->pos.y);
+            FUN_L00_00258278_df40(sandmouse_moby, goal_bearing_yaw, &D_L01_001DEB38_lui.yaw_speed,
                 frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
             sandmouse_vars->vel.f[2] = 0;
             movement_result_flags = FUN_L00_00259028(sandmouse_moby, &D_L01_001DEB38_lui, sandmouse_vars, &sandmouse_vars->vel);
@@ -1149,8 +1149,8 @@ void sandmouse_update(Moby *sandmouse_moby) {
         qzero(&sandmouse_vars->vel);
         qcopy(sandmouse_vars, &LNK(sandmouse_vars->link)->pos);
         D_L01_001DEB38_lui.owner = 0;
-        ang = fast_arc_tan(sandmouse_vars->goal.f[0] - sandmouse_moby->pos.x, sandmouse_vars->goal.f[1] - sandmouse_moby->pos.y);
-        FUN_L00_00258278_df40(sandmouse_moby, ang, &D_L01_001DEB38_lui.yaw_speed,
+        goal_bearing_yaw = fast_arc_tan(sandmouse_vars->goal.f[0] - sandmouse_moby->pos.x, sandmouse_vars->goal.f[1] - sandmouse_moby->pos.y);
+        FUN_L00_00258278_df40(sandmouse_moby, goal_bearing_yaw, &D_L01_001DEB38_lui.yaw_speed,
             frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
         if (sandmouse_moby->prev_seq != 0) {
             blend_moby_animation(sandmouse_moby, 0, 0, scale_game_frames(6));
