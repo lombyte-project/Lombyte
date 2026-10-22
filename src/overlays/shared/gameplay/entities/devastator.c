@@ -2889,7 +2889,7 @@ extern f32 D_L00_00161528 __attribute__((sda));
 extern s32 D_L00_00161530 __attribute__((sda));
 extern f32 D_L00_001601E8;
 
-void FUN_L00_002b8230(unsigned char *);
+void update_pyrocitor_usage_and_cleanup(unsigned char *) __asm__("FUN_L00_002b8230");
 void FUN_L00_002b8438(char *);
 extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
 extern struct Moby *FUN_L00_002bb360_2b77f0(struct Moby *) __asm__("FUN_L00_002bb360");
@@ -2924,7 +2924,7 @@ void pyrocitor_update(struct Moby *moby) {
     s32 ready;
     s32 h;
 
-    FUN_L00_002b8230((unsigned char *)moby);
+    update_pyrocitor_usage_and_cleanup((unsigned char *)moby);
     FUN_L00_0024f7c8_2b2100(moby, 0, &pos);
     switch (moby->state) {
     case 0:
@@ -3095,7 +3095,9 @@ int FUN_001f96f8_2b8230(int) __asm__("FUN_001f96f8");
 void FUN_L00_00203908_2b8230(int, int) __asm__("FUN_L00_00203908");
 
 extern unsigned short D_00141BD8 __attribute__((section(".data")));
-void FUN_L00_002b8230(unsigned char *pyrocitor_moby) {
+void update_pyrocitor_usage_and_cleanup(unsigned char *pyrocitor_moby) __asm__("FUN_L00_002b8230");
+
+void update_pyrocitor_usage_and_cleanup(unsigned char *pyrocitor_moby) {
     unsigned char *pyrocitor_vars = *(unsigned char **)(pyrocitor_moby + 0x78);
     struct UsageStats *P;
     unsigned char *voice;
