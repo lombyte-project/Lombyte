@@ -383,7 +383,9 @@ void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby, floa
 extern void update_blarg_heavy_interceptor_return_path_position(struct Moby *, float, float, float) __asm__("FUN_L14_002ae900");
 extern void FUN_L14_002aea08_c618(struct Moby *) __asm__("FUN_L14_002aea08");
 extern void FUN_L14_002aead8_c618(struct Moby *) __asm__("FUN_L14_002aead8");
-extern int FUN_L14_002aeba0(struct Moby *, int);
+int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) __asm__("FUN_L14_002aeba0");
+
+extern int update_blarg_heavy_interceptor_aim_transforms(struct Moby *, int) __asm__("FUN_L14_002aeba0");
 extern void FUN_L14_002aed50_c618(struct Moby *) __asm__("FUN_L14_002aed50");
 void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) __asm__("FUN_L14_002aee28");
 
@@ -571,7 +573,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
         *(s16 *)(moby_vars + 0x202) = 0;
         *(s16 *)(moby_vars + 0x200) = 1;
         found = 0;
-        hit = FUN_L14_002aeba0(moby, 1);
+        hit = update_blarg_heavy_interceptor_aim_transforms(moby, 1);
         update_blarg_heavy_interceptor_patrol_aim_point(moby);
         update_blarg_heavy_interceptor_patrol_path_position(moby);
         FUN_L14_002aea08_c618(moby);
@@ -615,7 +617,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
         if (*(struct Moby **)(moby_vars + 0x18C) != 0) {
             *(s16 *)(moby_vars + 0x200) = 1;
             *(s16 *)(moby_vars + 0x202) = 1;
-            FUN_L14_002aeba0(moby, 1);
+            update_blarg_heavy_interceptor_aim_transforms(moby, 1);
             qcopy(vector_scratch, &(*(struct Moby **)(moby_vars + 0x18C))->pos);
             vector_scratch[2] += 0.5f;
             qcopy(secondary_vector_scratch, vector_scratch);
@@ -726,7 +728,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
         ease_c618(&moby->pos.x, vector_scratch[0], (f32 *)(moby_vars + 0x194), 0.005f, D_L14_001613A4_c618, 0.0f);
         ease_c618(&moby->pos.y, vector_scratch[1], (f32 *)(moby_vars + 0x198), 0.005f, D_L14_001613A4_c618, 0.0f);
         ease_c618(&moby->pos.z, vector_scratch[2], (f32 *)(moby_vars + 0x19C), 0.005f, D_L14_001613A4_c618, 0.0f);
-        FUN_L14_002aeba0(moby, 0);
+        update_blarg_heavy_interceptor_aim_transforms(moby, 0);
         if (FUN_001f9b48(&moby->pos, vector_scratch) < 0.5f) {
             moby->state = 1;
         }
@@ -1521,7 +1523,7 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 
-int FUN_L14_002aeba0(struct Moby *moby, int flag) {
+int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) {
     int ok = 0;
     char *data = (char *)moby->pvars;
     float bounding_sphere[4];
