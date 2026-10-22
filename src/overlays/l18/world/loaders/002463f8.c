@@ -487,7 +487,9 @@ void draw_pulsing_timer_hud(struct Moby *moby) {
 
 extern void FUN_L02_002a4058_u(char *arg, int val) __asm__("FUN_L01_0026e0e0");
 
-void FUN_L18_002e9e50(char *moby_group) {
+void set_moby_group_state_two(char *moby_group) __asm__("FUN_L18_002e9e50");
+
+void set_moby_group_state_two(char *moby_group) {
     FUN_L02_002a4058_u(moby_group, 0x2);
 }
 

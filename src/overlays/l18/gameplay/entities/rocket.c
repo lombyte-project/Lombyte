@@ -2413,7 +2413,7 @@ s32 FUN_L18_002dfba0(const u8 *moby) {
     return result;
 }
 extern int FUN_L00_0025a420(void *, int, int);
-extern void FUN_L18_002e9e50(int);
+extern void set_moby_group_state_two(int) __asm__("FUN_L18_002e9e50");
 extern void cart_burst(float, float, void *, void *, int) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00257d78(float *, float, float);
 extern float FUN_L00_00257c48(float, float);
@@ -2464,7 +2464,7 @@ void update_moby_hit_response_burst_and_ballistic_flight(struct Moby *moby) {
     }
     case STATE_WAIT_FOR_HIT:
         if (FUN_L00_0025a420(moby, 0x80000, 0)) {
-            FUN_L18_002e9e50(moby->group);
+            set_moby_group_state_two(moby->group);
             trooper_play_sound(0, 0, (int)moby, 0x375);
         }
         moby->hit_slot = 0xff;
