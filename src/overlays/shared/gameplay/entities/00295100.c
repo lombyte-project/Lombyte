@@ -802,7 +802,9 @@ typedef struct {
 extern Tab D_00137B80;
 void FUN_L00_002995d0(s32, s32, s32);
 /* Passes disc table entry i at 0x1A28 (0x1A50 while D_0015ED80 is set) to FUN_L00_002995d0. */
-void FUN_L00_002994f8(s32 i) {
+void queue_language_zero_movie(s32 i) __asm__("FUN_L00_002994f8");
+
+void queue_language_zero_movie(s32 i) {
     s32 a, b;
     if (i < 0)
         return;
