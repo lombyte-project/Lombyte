@@ -1057,7 +1057,9 @@ unsigned char *FUN_L00_00273708(void *position, int alpha_fade_divisor, int part
 
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_00273800(char *particle) {
+void update_mode_controlled_alpha_fade_particle(char *particle) __asm__("FUN_L00_00273800");
+
+void update_mode_controlled_alpha_fade_particle(char *particle) {
     char *particle_data = particle + 0x20;
     int packed_color;
     int faded_alpha;

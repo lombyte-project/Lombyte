@@ -68,7 +68,7 @@ extern void FUN_L00_00272bc0(void);
 extern void update_timed_hero_relative_particle(void) __asm__("FUN_L00_00273088");
 extern void FUN_L00_00273298(void);
 extern void FUN_L00_00273448(void);
-extern void FUN_L00_00273800(void);
+extern void update_mode_controlled_alpha_fade_particle(void) __asm__("FUN_L00_00273800");
 extern void FUN_L00_00273a68(void);
 extern void FUN_L00_002738b0(void);
 extern void FUN_L00_00273ee0(void);
@@ -157,7 +157,7 @@ void register_part_types(void) {
     handlers[59] = (u32)update_timed_hero_relative_particle;
     handlers[60] = (u32)FUN_L00_00273298;
     handlers[61] = (u32)FUN_L00_00273448;
-    handlers[62] = (u32)FUN_L00_00273800;
+    handlers[62] = (u32)update_mode_controlled_alpha_fade_particle;
     handlers[63] = (u32)FUN_L00_002738b0;
     handlers[64] = (u32)FUN_L00_00273a68;
     handlers[65] = (u32)FUN_L00_00273ee0;
