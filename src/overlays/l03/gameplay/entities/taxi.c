@@ -2012,7 +2012,9 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         break;
     }
 }
-int FUN_L03_002dcb30(struct Moby *moby) {
+int is_rail_lift_started(struct Moby *moby) __asm__("FUN_L03_002dcb30");
+
+int is_rail_lift_started(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     if (moby->oclass != 0x3F4) {
         return 0;
@@ -2102,7 +2104,7 @@ void FUN_L03_002dccc0(struct Moby *lift_moby) {
 
     if (lift_vars->path[0] == -1 || lift_vars->path[1] == -1)
         return;
-    FUN_L00_00266858(lift_moby, FUN_L03_002dcb30((unsigned char *)lift_moby));
+    FUN_L00_00266858(lift_moby, is_rail_lift_started((unsigned char *)lift_moby));
     qcopy(&oldPos, &lift_moby->pos);
     oldRot.q = *(u128 *)&lift_moby->rot;
     fast_dec_timer(&lift_vars->timer);
