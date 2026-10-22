@@ -693,7 +693,9 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern struct G08c D_L08_0016D060_c __asm__("D_L08_0016D060");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
-void FUN_L08_003084d8(struct Moby *moby) {
+void update_batalia_selected_moby_effects(struct Moby *moby) __asm__("FUN_L08_003084d8");
+
+void update_batalia_selected_moby_effects(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_ACTIVE = 1
