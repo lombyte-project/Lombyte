@@ -1208,7 +1208,9 @@ extern float D_L16_001619CC __attribute__((sda));
 extern float D_L16_001619D0 __attribute__((sda));
 extern float D_L16_001619D4 __attribute__((sda));
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
-extern int FUN_L16_002ced20(char *, void *, float);
+int move_test_dummy_toward_position_and_heading(char *moby, void *target_position, float angle) __asm__("FUN_L16_002ced20");
+
+extern int move_test_dummy_toward_position_and_heading(char *, void *, float) __asm__("FUN_L16_002ced20");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -1319,7 +1321,7 @@ void test_dummy_update(unsigned char *moby) {
     case TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE: /* turn to the path's first node, then start by variant */
         refresh_test_dummy_door_timer(dummy_data->route);
         position_or_delta.quad = *(u128 *)(path + 0x10);
-        if (FUN_L16_002ced20(moby, position_or_delta.f, *(float *)(moby + 0x48))) {
+        if (move_test_dummy_toward_position_and_heading(moby, position_or_delta.f, *(float *)(moby + 0x48))) {
             dummy_data->timer = scale_game_frames(30);
             dummy_data->node = 1;
             dummy_data->step = 1;
@@ -1335,7 +1337,7 @@ void test_dummy_update(unsigned char *moby) {
     case TEST_DUMMY_STATE_APPROACH_THROW_NODE: /* thrower: wait, face the node, wind up */
         if (tick_countdown_32_alt(&dummy_data->timer)) {
             position_or_delta.quad = *(u128 *)(path + dummy_data->node * 16 + 16);
-            if (FUN_L16_002ced20(
+            if (move_test_dummy_toward_position_and_heading(
                     moby, position_or_delta.f,
                     fast_arc_tan(((float *)(path + (dummy_data->node << 4)))[4] - *(float *)(moby + 16),
                                  ((float *)(path + (dummy_data->node << 4)))[5] - *(float *)(moby + 20)))) {
@@ -1378,12 +1380,12 @@ void test_dummy_update(unsigned char *moby) {
         }
         if (compute_interpolated_record_value(moby) < 15.0f) {
             position_or_direction.quad = *(u128 *)(moby + 16);
-            FUN_L16_002ced20(
+            move_test_dummy_toward_position_and_heading(
                 moby, position_or_direction.f, fast_arc_tan(position_or_delta.f[0] - *(float *)(moby + 16), position_or_delta.f[1] - *(float *)(moby + 20)));
         } else {
             int node = (dummy_data->node + 1) & 1;
             position_or_direction.quad = *(u128 *)(moby + 16);
-            FUN_L16_002ced20(moby, position_or_direction.f,
+            move_test_dummy_toward_position_and_heading(moby, position_or_direction.f,
                              fast_arc_tan(((float *)(path + (node << 4)))[4] - *(float *)(moby + 16),
                                           ((float *)(path + (node << 4)))[5] - *(float *)(moby + 20)));
         }
@@ -1438,7 +1440,7 @@ void test_dummy_update(unsigned char *moby) {
     case TEST_DUMMY_STATE_APPROACH_SPRAY_NODE: /* sprayer: wait, face the node, start */
         if (tick_countdown_32_alt(&dummy_data->timer)) {
             position_or_delta.quad = *(u128 *)(path + dummy_data->node * 16 + 16);
-            if (FUN_L16_002ced20(moby, position_or_delta.f, *(float *)(moby + 0x48))) {
+            if (move_test_dummy_toward_position_and_heading(moby, position_or_delta.f, *(float *)(moby + 0x48))) {
                 dummy_data->timer = scale_game_frames(30);
                 moby[0x20] = 8;
                 if (moby[0x53] != 1) {
@@ -1456,7 +1458,7 @@ void test_dummy_update(unsigned char *moby) {
     case TEST_DUMMY_STATE_SPRAY_FROM_CHILD: /* sprayer: face the target and emit from the child toward it */
         if (dummy_data->mode != 2) {
             position_or_delta.quad = *(u128 *)(moby + 16);
-            FUN_L16_002ced20(
+            move_test_dummy_toward_position_and_heading(
                 moby, position_or_delta.f,
                 fast_arc_tan(dummy_data->target[0] - *(float *)(moby + 16), dummy_data->target[1] - *(float *)(moby + 20)));
         }
@@ -1488,7 +1490,7 @@ void test_dummy_update(unsigned char *moby) {
         break;
     case TEST_DUMMY_STATE_TURN_AND_RESUME_SAVED_STATE: /* turn back to the node, then resume the saved state and animation */
         position_or_delta.quad = *(u128 *)(path + dummy_data->node * 16 + 16);
-        FUN_L16_002ced20(moby, position_or_delta.f, dummy_data->f10C);
+        move_test_dummy_toward_position_and_heading(moby, position_or_delta.f, dummy_data->f10C);
         if (moby[0x70] & 2) {
             moby[0x20] = dummy_data->next_state;
             if (moby[0x53] != dummy_data->next_anim) {
@@ -1693,7 +1695,7 @@ extern float approach_angle(float *, float *, float, float, float, float) __asm_
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-int FUN_L16_002ced20(char *moby, void *target_position, float angle) {
+int move_test_dummy_toward_position_and_heading(char *moby, void *target_position, float angle) {
     float a[4] __attribute__((aligned(16)));
     float b[4] __attribute__((aligned(16)));
     float speed;
