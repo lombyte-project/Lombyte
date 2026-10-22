@@ -302,7 +302,7 @@ s32 FUN_L15_00208e10(s32 apply_hit_reaction) {
             knockback_vector.f[2] += knockback_vector.f[2];
         }
         break;
-    case 2:
+    case HERO_VEHICLE_MODE_GIANT_CLANK:
         if ((incoming_hit_record->i24 & 4) || hero.unk1630 <= 0) {
             hero_set_state(0x5D, 1);
             FUN_L00_002a9be0_210ce8();
