@@ -409,7 +409,9 @@ extern struct Moby *D_L15_0015FFD8;
 extern f32 D_L15_001614FC __attribute__((sda));
 extern f32 D_L15_00161500 __attribute__((sda));
 
-void FUN_L15_002a3ba8(struct Moby *moby) {
+void update_swinging_door(struct Moby *moby) __asm__("FUN_L15_002a3ba8");
+
+void update_swinging_door(struct Moby *moby) {
     enum {
         SWINGING_DOOR_INITIALIZE = 0,
         SWINGING_DOOR_CLOSED = 1,
