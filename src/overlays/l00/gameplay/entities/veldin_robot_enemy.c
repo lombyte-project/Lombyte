@@ -613,7 +613,7 @@ extern void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_002133
 extern SparkPart *FUN_L00_00274948(void *, void *, s32, void *);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern void FUN_L00_002e1c78();
+extern void draw_veldin_robot_effect_quad() __asm__("FUN_L00_002e1c78");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void FUN_L00_002e1aa8(SparkMoby *moby) {
@@ -650,7 +650,7 @@ void FUN_L00_002e1aa8(SparkMoby *moby) {
             particle_tail->unk16 = 3;
         }
     }
-    enqueue_callback_list_1((s32)FUN_L00_002e1c78, (s32)moby);
+    enqueue_callback_list_1((s32)draw_veldin_robot_effect_quad, (s32)moby);
 }
 typedef union {
     u128 q;
@@ -692,7 +692,7 @@ extern void fast_draw_quad_real(void *, void *, s32) __asm__("FUN_001f7d30");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
-void FUN_L00_002e1c78(GlowMoby *moby) {
+void draw_veldin_robot_effect_quad(GlowMoby *moby) {
     GlowQuad quad;
     GlowVec quad_transform[4];
     GlowVec *template_corner;
