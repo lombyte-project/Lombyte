@@ -1496,7 +1496,9 @@ extern void FUN_L18_002f6aa0(struct Moby *moby);
 void hide_drek_boss_moby_group(int unused, int group_index) __asm__("FUN_L18_002f6fa8");
 
 extern void hide_drek_boss_moby_group(int unused, int idx) __asm__("FUN_L18_002f6fa8");
-extern void FUN_L18_002f7028(int a0, int idx);
+void show_drek_boss_moby_group(int unused, int group_index) __asm__("FUN_L18_002f7028");
+
+extern void show_drek_boss_moby_group(int a0, int idx) __asm__("FUN_L18_002f7028");
 extern void set_drek_boss_relative_aim_yaw() __asm__("FUN_L18_002f7220");
 extern void FUN_L18_002f7288(char *moby);
 extern void FUN_L18_002f7880(struct Moby *moby);
@@ -1667,7 +1669,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 }
                 moby->f40[2] = fast_arc_tan(hero.motion.pos.f[0] - boss_data->f3C0[0],
                                             hero.motion.pos.f[1] - boss_data->f3C0[1]);
-                FUN_L18_002f7028((int)moby, boss_data->f204[0]);
+                show_drek_boss_moby_group((int)moby, boss_data->f204[0]);
                 boss_data->f38C = boss_data->f38C * 0.85714287f;
             } else if (FUN_001f9b48(hero.motion.pos.f, D_L18_001600EC + (boss_data->f250[0] << 7) + 0x30) <
                        50.0f) {
@@ -1748,7 +1750,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
             jet_clear_persistent(boss_data->f2B0);
             jet_reset_camera(hero.motion.pos.f, hero.motion.rot.f);
-            FUN_L18_002f7028((int)moby, boss_data->f204[0]);
+            show_drek_boss_moby_group((int)moby, boss_data->f204[0]);
             start_scene(1);
             moby->f20 = 7;
             moby->f34 |= 0x41;
@@ -1984,7 +1986,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             if (moby->f53 != 7) {
                 blend_moby_animation(moby, 7, 0, scale_game_frames(0x14));
             }
-            FUN_L18_002f7028((int)moby, boss_data->f398);
+            show_drek_boss_moby_group((int)moby, boss_data->f398);
             hide_drek_boss_moby_group((int)moby, boss_data->f204[boss_data->f34C - 1]);
             moby_point_position(moby, 1, position_and_displacement_scratch);
             boss_data->f33C = (unsigned char *)FUN_L18_002ea0f0(moby, position_and_displacement_scratch, 300);
@@ -3161,7 +3163,7 @@ extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8");
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Walks a list of moby indices and resets the flags of each live moby.
-void FUN_L18_002f7028(int unused, int group_index) {
+void show_drek_boss_moby_group(int unused, int group_index) {
     short *group_entry = D_L18_001AC240_u[group_index];
     if (group_entry != 0) {
         do {
