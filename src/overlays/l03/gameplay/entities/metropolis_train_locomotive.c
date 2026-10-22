@@ -1277,7 +1277,7 @@ extern int FUN_L00_002592b8(int *, int, int, int);
 extern int FUN_L01_00275690(char *, float);
 extern int FUN_L01_0028b510(void *, void *, float);
 extern int FUN_L01_0028b828(void *, int);
-extern int FUN_L01_0028b878(char *);
+extern int advance_path_node_index(char *) __asm__("FUN_L01_0028b878");
 extern void FUN_L01_0028b410(char *);
 extern void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b);
 extern void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4);
@@ -1461,7 +1461,7 @@ void red_ship_1_update(char *moby) {
         cur = data + 0xA0;
         if (*(float *)(data + 0x100) >= 1.0f) {
             *(float *)(data + 0x100) -= 1.0f;
-            advanced_path_node_index = FUN_L01_0028b878(pm);
+            advanced_path_node_index = advance_path_node_index(pm);
             *(OvlQuad *)(data + 0x90) = *(OvlQuad *)(data + 0xA0);
             FUN_L01_0028b8c8(cur, (int *)pm, 1, *(float *)(data + 0x104), *(float *)(data + 0x108));
             *(OvlQuad *)(data + 0xB0) = *(OvlQuad *)(data + 0xC0);

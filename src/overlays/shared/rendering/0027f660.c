@@ -325,7 +325,9 @@ int FUN_L01_0028b828(T_28b828 *path, int node_index) {
 /* 0x0028b878, 76 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
-int FUN_L01_0028b878(char *path_descriptor) {
+int advance_path_node_index(char *path_descriptor) __asm__("FUN_L01_0028b878");
+
+int advance_path_node_index(char *path_descriptor) {
     int max = 0;
     int next;
     if (path_descriptor[4] >= 0) {

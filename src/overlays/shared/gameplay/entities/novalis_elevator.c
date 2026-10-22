@@ -3015,7 +3015,7 @@ extern void FUN_L00_0024f7c8(struct Moby *, s32, QVec *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, f32);
 extern void FUN_0022d798(s32);
-extern s32 FUN_L01_0028b878(PathCursor *);
+extern s32 advance_path_node_index(PathCursor *) __asm__("FUN_L01_0028b878");
 extern s32 FUN_L01_0028b828(PathCursor *, s32);
 extern f32 FUN_001f9de0(f32);
 extern f32 FUN_001f9dc8(f32);
@@ -3227,7 +3227,7 @@ void gunship_follow_path(struct Moby *m) {
     if (1.0f <= v->unkF0) {
         s32 n;
         v->unkF0 -= 1.0f;
-        n = FUN_L01_0028b878(p);
+        n = advance_path_node_index(p);
         v->unk90.q = v->unkA0.q;
         FUN_L01_0028b8c8(&v->unkA0, p, 1, v->unkF4, v->unkF8);
         v->unkB0.q = v->unkC0.q;
