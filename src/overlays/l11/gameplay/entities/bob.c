@@ -515,7 +515,9 @@ extern int classify_resort_owner_target_proximity(struct Moby *moby) __asm__("FU
 int try_update_resort_owner_path_target(struct Moby *moby, char *other) __asm__("FUN_L11_002d2340");
 
 extern int try_update_resort_owner_path_target(struct Moby *moby, char *other) __asm__("FUN_L11_002d2340");
-extern int FUN_L11_002d25e8(struct Moby *m, float *out);
+int try_find_resort_owner_jump_target(struct Moby *moby, float *out) __asm__("FUN_L11_002d25e8");
+
+extern int try_find_resort_owner_jump_target(struct Moby *m, float *out) __asm__("FUN_L11_002d25e8");
 extern void FUN_L11_002d2088_c(struct Moby *moby, int state) __asm__("FUN_L11_002d2088");
 extern float ground_height_14b0(void *) __asm__("FUN_L00_00259710");
 extern void scale_vector_14b0(void *out, void *a, f32 s) __asm__("FUN_001f9bf8");
@@ -594,7 +596,7 @@ void FUN_L11_002d14b0(void *resort_owner_moby) {
     if (moby->state >= 4 && moby->state <= 6) {
         scale_vector_14b0(position_scratch, &moby->rot_row0, 3.0f);
         fast_vec_add(position_scratch, position_scratch, &moby->pos);
-        if (FUN_L11_002d25e8(moby, position_scratch)) {
+        if (try_find_resort_owner_jump_target(moby, position_scratch)) {
             qcopy(&moby_vars->target, position_scratch);
             moby_vars->target.z = ground_height_14b0(&moby_vars->target);
             moby_vars->next_state = 3;
@@ -983,7 +985,7 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void FUN_L00_00259710(void *a);
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
 
-int FUN_L11_002d25e8(struct Moby *moby, float *out) {
+int try_find_resort_owner_jump_target(struct Moby *moby, float *out) {
     char *pvars = (char *)moby->pvars;
     int *clip_volume_index_ptr = (int *)(pvars + 0xF8);
     int i;
