@@ -555,7 +555,7 @@ short D_L17_00162188 = 2;
 int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *current_target,
                      char *excluded_target) {
     float v[4];
-    float w[4];
+    float arrow_target_position_scratch[4];
     float arrow_direction_rotation_matrix[16];
     float u[4];
     int sx, sy, tx, ty;
@@ -653,9 +653,9 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
             FUN_L17_002eaae0(radar_rotation, radar_origin, scanned_moby, 0, 0x70808080, *(int *)(ship_vars + 0x104));
             break;
         case MOBY_CLASS_OFFSCREEN_ARROW_TARGET:
-            qcopy(w, scanned_moby + 0x10);
-            w[2] += 4.0f;
-            project_to_screen(v, w);
+            qcopy(arrow_target_position_scratch, scanned_moby + 0x10);
+            arrow_target_position_scratch[2] += 4.0f;
+            project_to_screen(v, arrow_target_position_scratch);
             if (*(unsigned char *)(scanned_moby + 0x31) != 0) {
                 flag = 1;
                 {
@@ -676,7 +676,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
                 near = scanned_moby;
                 bestd = dd;
             }
-            FUN_L17_002eaae0(radar_rotation, (char *)w, scanned_moby, 0, 0x70808080, *(int *)(ship_vars + 0x104));
+            FUN_L17_002eaae0(radar_rotation, (char *)arrow_target_position_scratch, scanned_moby, 0, 0x70808080, *(int *)(ship_vars + 0x104));
             *(int *)(ship_vars + 0xE8) = *(int *)(ship_vars + 0xE8) + 1;
             break;
         case MOBY_CLASS_FLAG_GATED_MARKED_TARGET:
@@ -744,7 +744,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
         np = near + 0x10;
         u[2] += 4.0f;
         ap = (char *)ship_moby + 0x10;
-        project_to_screen(w, u);
+        project_to_screen(arrow_target_position_scratch, u);
         transpose_rotation_matrix(arrow_direction_rotation_matrix, D_L17_001678D0);
         fast_vec_sub(v, np, (&hero.motion.pos));
         transform_vector(v, v, arrow_direction_rotation_matrix);
