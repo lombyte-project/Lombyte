@@ -49,7 +49,7 @@ extern void move_slot_c(float, float, float, float, void *, int, int) __asm__("F
 extern int FUN_L01_00275690_c(float, void *) __asm__("FUN_L01_00275690");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void register_callback_c(void *, void *) __asm__("FUN_L12_0021be50");
-extern void FUN_L12_002bf6d0(struct Moby *);
+extern void copy_moby_z_to_group_records(struct Moby *) __asm__("FUN_L12_002bf6d0");
 extern void FUN_L12_002bf770(int);
 extern void FUN_L12_002bf748(void);
 
@@ -136,7 +136,7 @@ void FUN_L12_002bf140(struct Moby *moby) {
         }
         if (data[5] != 0) {
             move_scalar_c(&moby->pos.z, (float *)(data + 2), *(float *)(data + 4), D_0015ED70_c * 4.0f, D_0015ED70_c * 4.0f, D_0015ED6C_c * 4.0f);
-            FUN_L12_002bf6d0(moby);
+            copy_moby_z_to_group_records(moby);
         }
         if (absolute_float(hero.motion.pos.f[0] - moby->pos.x) <= 8.0f ||
             absolute_float(hero.motion.pos.f[1] - moby->pos.y) <= 8.0f) {
