@@ -174,7 +174,7 @@ f32 FUN_001f9de0_210ce8(f32) __asm__("FUN_001f9de0");
 void FUN_001f9a10_210ce8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
 void FUN_L00_00216de8_210ce8(s32, s32) __asm__("FUN_L00_00216de8");
-void FUN_L00_002a9be0_210ce8(void) __asm__("FUN_L00_002a9be0");
+void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 void FUN_001f99f8_210ce8(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
@@ -313,7 +313,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     case HERO_VEHICLE_MODE_GIANT_CLANK:
         if ((response_record->i24 & 4) || hero.unk1630 <= 0) {
             hero_set_state(0x5D, 1);
-            FUN_L00_002a9be0_210ce8();
+            remove_tracked_class_5f3_moby();
             if (hero.air_frames.s == 0) {
                 FUN_L00_00210c80_210ce8(&response_motion_delta, flag, frame_time * 7.0f,
                                         frame_time * 3.5f);
