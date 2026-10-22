@@ -1782,7 +1782,7 @@ void spawn_blarg_trooper_death_effects(void *moby, void *effect_position) __asm_
 void spawn_blarg_trooper_death_effects(void *moby, void *effect_position) {
     FUN_L00_0025f3e8(moby, effect_position, -1, 1.0f, 10.0f);
 }
-extern void FUN_L12_002e81e0(struct Moby *);
+extern void process_blarg_trooper_damage_and_alerts(struct Moby *) __asm__("FUN_L12_002e81e0");
 void set_blarg_trooper_aim_yaw_offsets(struct Moby *moby, float *pos) __asm__("FUN_L12_002e8608");
 
 extern void set_blarg_trooper_aim_yaw_offsets(struct Moby *, float *) __asm__("FUN_L12_002e8608");
@@ -1872,7 +1872,7 @@ hide:
         if (TROOPER_CHILD) TROOPER_CHILD->flags &= 0xffbe;
     }
     if (TROOPER_B(0x2e) == 2) goto leave;
-    FUN_L12_002e81e0(moby);
+    process_blarg_trooper_damage_and_alerts(moby);
     FUN_L01_00274b78_c((char *)moby, (char *)&work, TROOPER_F(0x230));
     target = (struct Moby *)work.moby;
     if (!target) {
@@ -2187,7 +2187,7 @@ extern void remove_blarg_trooper_and_attachment(struct Moby *) __asm__("FUN_L12_
    speed while alerted, calls for help behind itself once its groups have 9 or
    more members, hands off inside its clip volume, and takes hits from other
    classes (dying, or staggering back). */
-void FUN_L12_002e81e0(struct Moby *moby) {
+void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
     BlargTrooperVars_e81e0 *vars = (BlargTrooperVars_e81e0 *)moby->pvars;
     Vec4 help_direction_or_hit_position;
     s32 hit;
