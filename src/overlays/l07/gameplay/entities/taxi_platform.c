@@ -795,7 +795,9 @@ extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void initialize_global_state_entry(int) __asm__("FUN_0022e188");
 
-void FUN_L07_002f5ba0(struct Moby *moby)
+void update_umbris_scene_progression(struct Moby *moby) __asm__("FUN_L07_002f5ba0");
+
+void update_umbris_scene_progression(struct Moby *moby)
 {
     enum {
         CONTROLLER_WAIT_FOR_SCENE_IDLE = 0,
