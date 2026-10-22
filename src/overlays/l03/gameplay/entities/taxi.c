@@ -517,7 +517,9 @@ extern void mine_spawn_drops(struct Moby *, void *) __asm__("FUN_L00_0025f800");
 
 /* l03 mine update: falls until it lands, sticks to or homes on its target, arms,
    and explodes on contact (debris, camera shake, blast) or shrinks away when old. */
-void FUN_L03_002cbea8(struct Moby *mine_moby) {
+void update_mine(struct Moby *mine_moby) __asm__("FUN_L03_002cbea8");
+
+void update_mine(struct Moby *mine_moby) {
     enum {
         MINE_IDLE = 0,
         MINE_FALL_UNTIL_LANDING = 1,
