@@ -51,6 +51,7 @@ void update_mode_freeze(void) {
     };
     enum {
         FREEZE_MODE_CONFIRM_CANCEL_CHOICE = 0,
+        FREEZE_MODE_DELAYED_CONTINUE = 5,
         FREEZE_MODE_VIDEO_MODE_TEST = 6
     };
     enum {
@@ -66,7 +67,7 @@ void update_mode_freeze(void) {
         freeze.unk4--;
     }
     switch (freeze.unk0) {
-    case 5: {
+    case FREEZE_MODE_DELAYED_CONTINUE: {
         struct FreezeModeState *state = &freeze;
         state->unk20++;
         if (scale_game_frames(0x5A) < state->unk20) {
