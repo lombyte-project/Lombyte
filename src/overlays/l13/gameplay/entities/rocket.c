@@ -347,7 +347,9 @@ extern void FUN_L00_00259a88(void *, void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L13_00306300(struct Moby *moby) {
+void update_gemlik_projectile(struct Moby *moby) __asm__("FUN_L13_00306300");
+
+void update_gemlik_projectile(struct Moby *moby) {
     extern struct { char pad[0x18]; struct Moby *moby; int pad1; L13Vec_p pos; L13Vec_p pad2; L13Vec_p matrix; } D_L13_00174140;
     char *data = (char *)moby->pvars;
     struct {
