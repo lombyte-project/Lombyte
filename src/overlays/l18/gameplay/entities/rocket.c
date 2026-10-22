@@ -2247,7 +2247,9 @@ extern void FUN_L00_002eac18_q(int) __asm__("FUN_L00_002eac18");
 extern int D_L18_0015F404;
 extern int D_L18_00179E10[] __attribute__((section(".data")));
 extern int D_L18_0017EF08 __attribute__((section(".data")));
-void FUN_L18_002df608(struct Moby *moby) {
+void update_position_and_rotation_transition(struct Moby *moby) __asm__("FUN_L18_002df608");
+
+void update_position_and_rotation_transition(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,
         STATE_PRE_TRANSITION_RAMP_UP = 2,
