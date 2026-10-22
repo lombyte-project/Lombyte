@@ -634,7 +634,7 @@ extern void FUN_L00_00221ee0(void);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_0029a6b0(void *);
 extern void FUN_L05_0024cee8(int, int);
-extern void FUN_L05_002d4168(void *, void *, void *, float, float);
+extern void create_class_5c3_moby(void *, void *, void *, float, float) __asm__("FUN_L05_002d4168");
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 extern PadState D_0013CA40_p2523C8 __asm__("D_0013C940");
 extern int D_00141760_2523C8 __asm__("D_00141660") __attribute__((section(".data")));
@@ -1008,7 +1008,7 @@ int FUN_L05_00251be8(void) {
             stats->stat[27].level_mask = stats->stat[27].level_mask | (1 << D_0015ED84_gp) | 0x80000000;
             allocate_voice_for_target_entry_alt(0, 0, (int)item);
             FUN_L00_0024f7c8(item, 0, joint_pos);
-            FUN_L05_002d4168(item, joint_pos, best, (*(Hero *)((char *)&hero)).motion.rot.f[2], (*(Hero *)((char *)&hero)).motion.rot.f[1]);
+            create_class_5c3_moby(item, joint_pos, best, (*(Hero *)((char *)&hero)).motion.rot.f[2], (*(Hero *)((char *)&hero)).motion.rot.f[1]);
         }
         break;
     }
