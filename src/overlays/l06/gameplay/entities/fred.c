@@ -5726,7 +5726,9 @@ extern int D_L06_0015F408;
 extern float D_L06_00162048 __attribute__((sda));
 extern int D_L06_00162044 __attribute__((sda));
 extern float D_L06_00162050 __attribute__((sda));
-void FUN_L06_002ffcb0(char *moby) {
+void update_moby_camera_sequence_and_draw_selection(char *moby) __asm__("FUN_L06_002ffcb0");
+
+void update_moby_camera_sequence_and_draw_selection(char *moby) {
     enum {
         INITIALIZE_DRAW_SELECTION = 0,
         WAIT_FOR_LINKED_MOBY_TRIGGER = 1,
