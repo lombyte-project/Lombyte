@@ -1045,7 +1045,9 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float spring_turn(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
 
-void FUN_L15_002c4f88(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f88 *look) {
+void steer_helicopter(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f88 *look) __asm__("FUN_L15_002c4f88");
+
+void steer_helicopter(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f88 *look) {
     SteeringVec_4f88 target;
     SteeringVec_4f88 look_copy;
     SteeringVec_4f88 scaled;
@@ -1532,7 +1534,7 @@ void helicopter_update(struct Moby *moby) {
         }
         move.f[2] = target->pos.z + 7.5f;
         point.q = *(u128 *)&target->pos;
-        FUN_L15_002c4f88(moby, (SteeringVec_4f88 *)&move, (SteeringVec_4f88 *)&point);
+        steer_helicopter(moby, (SteeringVec_4f88 *)&move, (SteeringVec_4f88 *)&point);
         if (vector_distance(&move, &moby->pos) < 1.0f || point_in_path_xy(&moby->pos, path->pt, path->n)) {
             if (goal.status != 2) {
                 moby->state = 5;
@@ -1548,7 +1550,7 @@ void helicopter_update(struct Moby *moby) {
         path = D_L15_001B0AB0[vars->area_path];
         move.q = *(u128 *)&moby->pos;
         point.q = *(u128 *)&target->pos;
-        FUN_L15_002c4f88(moby, (SteeringVec_4f88 *)&move, (SteeringVec_4f88 *)&point);
+        steer_helicopter(moby, (SteeringVec_4f88 *)&move, (SteeringVec_4f88 *)&point);
         if (goal.status == 2) break;
         if (point_in_path_xy(&moby->pos, path->pt, path->n)) {
             moby->state = 5;
@@ -1563,7 +1565,7 @@ void helicopter_update(struct Moby *moby) {
         if (goal.status != 2) {
             FUN_L15_002c52b8(moby, move.f, *(Goal_52b8 *)&goal);
             aim.q = *(u128 *)&target->pos;
-            FUN_L15_002c4f88(moby, (SteeringVec_4f88 *)&move, (SteeringVec_4f88 *)&aim);
+            steer_helicopter(moby, (SteeringVec_4f88 *)&move, (SteeringVec_4f88 *)&aim);
             if (fast_dec_timer_s16(&vars->fire_timer) && vars->shot == 0) {
                 vars->fire_timer = scale_game_frames(0x3C);
                 qcopy(&target_pos, &goal);
@@ -1575,7 +1577,7 @@ void helicopter_update(struct Moby *moby) {
         } else {
             aim.q = *(u128 *)&moby->pos;
             target_pos.q = *(u128 *)&target->pos;
-            FUN_L15_002c4f88(moby, (SteeringVec_4f88 *)&aim, (SteeringVec_4f88 *)&target_pos);
+            steer_helicopter(moby, (SteeringVec_4f88 *)&aim, (SteeringVec_4f88 *)&target_pos);
             moby->state = 4;
         }
         break;
