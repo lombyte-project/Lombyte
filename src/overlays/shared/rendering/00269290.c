@@ -3462,7 +3462,9 @@ s32 FUN_001fa6d0_2710a0(f32) __asm__("FUN_001fa6d0");
 s32 FUN_001f96f8_2710a0(s32) __asm__("FUN_001f96f8");
 void FUN_001f9a10_2710a0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00267a08_2710a0(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_002710a0(u8 *particle) {
+void update_accelerating_fade_in_out_effect_particle(u8 *particle) __asm__("FUN_L00_002710a0");
+
+void update_accelerating_fade_in_out_effect_particle(u8 *particle) {
     u8 *particle_data = particle + 0x20;
     s16 elapsed_ticks;
     f32 fade_ratio, x;

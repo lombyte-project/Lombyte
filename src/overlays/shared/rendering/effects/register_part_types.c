@@ -49,7 +49,7 @@ extern void update_animated_offset_effect_particle(void) __asm__("FUN_L00_0026fc
 extern void FUN_L00_0026ff10(void);
 extern void tick_finite_effect_particle_lifetime(void) __asm__("FUN_L00_00270710");
 extern void FUN_L00_00270948(void);
-extern void FUN_L00_002710a0(void);
+extern void update_accelerating_fade_in_out_effect_particle(void) __asm__("FUN_L00_002710a0");
 extern void update_moving_rotating_resizing_alpha_fade_particle(void) __asm__("FUN_L00_00271450");
 extern void update_moving_resizing_height_snapped_alpha_fade_particle(void) __asm__("FUN_L00_00271748");
 extern void update_expanding_rotating_alpha_fade_particle(void) __asm__("FUN_L00_002719f0");
@@ -138,7 +138,7 @@ void register_part_types(void) {
     handlers[40] = (u32)FUN_L00_0026ff10;
     handlers[41] = (u32)tick_finite_effect_particle_lifetime;
     handlers[42] = (u32)FUN_L00_00270948;
-    handlers[43] = (u32)FUN_L00_002710a0;
+    handlers[43] = (u32)update_accelerating_fade_in_out_effect_particle;
     handlers[44] = (u32)update_moving_rotating_resizing_alpha_fade_particle;
     handlers[45] = (u32)update_moving_resizing_height_snapped_alpha_fade_particle;
     handlers[46] = (u32)update_expanding_rotating_alpha_fade_particle;
