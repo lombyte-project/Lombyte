@@ -3187,7 +3187,7 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void FUN_L14_002e0170(struct Moby *, s32 *, int);
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-void FUN_L14_002d6358(struct Moby *m);
+void initialize_racer_path_tracking(struct Moby *m) __asm__("FUN_L14_002d6358");
 int interpolate_racer_to_path_start(struct Moby *m) __asm__("FUN_L14_002d64d0");
 void FUN_L14_002d67e8(struct Moby *m);
 void advance_moby_along_path(struct Moby *m) __asm__("FUN_L14_002d7198");
@@ -3217,7 +3217,7 @@ void FUN_L14_002d5f40(struct Moby *racer_moby) {
             FUN_0020c828(racer_moby);
             return;
         }
-        FUN_L14_002d6358(racer_moby);
+        initialize_racer_path_tracking(racer_moby);
         racer_moby->state = 1;
         racer_moby->flags = (racer_moby->flags & 0xEFFF) | 0x41;
         racer_moby->collision = 0;
