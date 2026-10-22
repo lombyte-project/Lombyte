@@ -7537,7 +7537,7 @@ extern void update_moby_304098(void *) __asm__("FUN_L00_00250df8");
 void emit_red_button_particle_burst(int unused, void *effect_position) __asm__("FUN_L06_00304818");
 
 extern void emit_red_button_particle_burst(int, void *) __asm__("FUN_L06_00304818");
-extern void FUN_L06_00303150(unsigned char *);
+extern void set_moby_state_two(unsigned char *) __asm__("FUN_L06_00303150");
 
 extern char D_0013A5E0[] __attribute__((section(".data")));
 extern char D_0013D3AA __attribute__((section(".data")));
@@ -7685,7 +7685,7 @@ void red_button_update(struct Moby *moby) {
             data->timer2 = scale_game_frames_304098(0xE10);
             copy_camera_304098(&D_L06_001600EC_304098[data->cut2].a, &D_L06_001600EC_304098[data->cut2].b, 0, 0);
             finish_camera_move_304098(3);
-            FUN_L06_00303150((unsigned char *)&D_L06_0015FFD8_304098[data->moby3]);
+            set_moby_state_two((unsigned char *)&D_L06_0015FFD8_304098[data->moby3]);
         }
         break;
     }

@@ -35,6 +35,8 @@ void initialize_energy_sphere_holder_vars(char *moby) {
 #include "sda.h"
 
 /* Sets the moby state byte to 2. */
-void FUN_L06_00303150(unsigned char *moby) {
+void set_moby_state_two(unsigned char *moby) __asm__("FUN_L06_00303150");
+
+void set_moby_state_two(unsigned char *moby) {
     moby[0x20] = 0x2;
 }
