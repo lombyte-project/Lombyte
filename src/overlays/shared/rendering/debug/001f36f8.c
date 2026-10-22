@@ -31,7 +31,9 @@ u8 D_L15_0016A640[0x800] = {0};
 u8 D_L16_0016A440[0x800] = {0};
 u8 D_L17_0016A940[0x800] = {0};
 u8 D_L18_0016AA40[0x800] = {0};
-void FUN_L00_001f3770(s32, s32, s32, s32);
+void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) __asm__("FUN_L00_001f3770");
+
+void draw_debug_text(s32, s32, s32, s32) __asm__("FUN_L00_001f3770");
 /* Calls FUN_L00_001f3770 for each queued D_L00_0016A840 entry and resets the queue. */
 void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
 
@@ -39,7 +41,7 @@ void flush_debug_text_queue(void) {
     s32 i;
     E001f36f8 *unused_text_entry;
     for (i = 0; i < D_L00_0015EFC4; i++)
-        FUN_L00_001f3770(D_L00_0016A840[i].a, D_L00_0016A840[i].b, D_L00_0016A840[i].c,
+        draw_debug_text(D_L00_0016A840[i].a, D_L00_0016A840[i].b, D_L00_0016A840[i].c,
                          D_L00_0016A840[i].d);
     D_L00_0015EFC4 = 0;
     D_L00_0015EFC0 = D_L00_0016A040;
@@ -69,7 +71,7 @@ extern s32 D_L00_00169B00[];
 #define debug_font_texture (*(DebugFontTexture *)&debug_font_pif_header)
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 
-void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
+void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) {
     const u8 *text = (const u8 *)text_address;
     s32 glyph_count = 0;
     u32 quadwords;
