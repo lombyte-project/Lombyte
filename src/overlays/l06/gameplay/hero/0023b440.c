@@ -119,7 +119,7 @@ extern void FUN_L00_00239d00(void);
 extern void FUN_L00_00239df8(void);
 extern void FUN_L00_0025f730(void *a, float x);
 extern void request_hero_voice_if_enabled(int a0, int a1, int a2) __asm__("FUN_L01_00227e48");
-extern void FUN_L01_00242198(void);
+extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void FUN_L06_00228b40(void);
 extern void FUN_L06_00239528(void);
 extern void add_vector_xyz(void *, void *, void *);
@@ -1850,7 +1850,7 @@ void FUN_L06_0023b440(void) {
                         }
                     }
                     if (hero.unk418 > scale_game_frames(1) && hero.state.current != HERO_STATE_PACK_JUMP) {
-                        FUN_L01_00242198();
+                        select_hero_locomotion_state();
                     } else if (hero.unk41E != 0 && !(hero.unk4AA > hero.state_timer) &&
                                hero.ground_distance > hero.unk490) {
                         hero_set_state(HERO_STATE_FALL, 1);

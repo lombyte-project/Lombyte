@@ -1583,7 +1583,9 @@ void FUN_L00_002118c8_242198(s32, f32) __asm__("FUN_L00_002118c8");
 void FUN_L00_002325e0_242198(s32, s32) __asm__("FUN_L00_002325e0");
 void FUN_L00_0025f730_242198(void *, f32) __asm__("FUN_L00_0025f730");
 s32 FUN_L01_00226f10_242198(s32) __asm__("FUN_L01_00226f10");
-void FUN_L01_00242198(void) {
+void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
+
+void select_hero_locomotion_state(void) {
     struct Hero *hero_ptr, *run_hero, *stop_idle_hero;
     s32 run_frames_or_idle_selector;
     hero_ptr = &hero;
