@@ -121,8 +121,8 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
     D_L00_001BA5D0_257470.a[*(short *)(moby + 0xB2)] = moby[0xB0] + 2;
     k = moby[0xB0];
     {
-        unsigned int u = k & 0xFF;
-        if (k == 0xFF || (D_L00_0015FC88_257470[u] != 0xFF && D_0014C050_257470[lvl][u] == 0xFF)) {
+        unsigned int moby_lookup_index = k & 0xFF;
+        if (k == 0xFF || (D_L00_0015FC88_257470[moby_lookup_index] != 0xFF && D_0014C050_257470[lvl][moby_lookup_index] == 0xFF)) {
             D_L00_001BB230_257470.a[*(short *)(moby + 0xB2)] = k + 2;
         }
     }
