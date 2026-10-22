@@ -1157,7 +1157,9 @@ extern void FlushCache(s32);
 extern void relocate_asset_entry_pointers_alt(char *arg0, int idx) __asm__("FUN_002032e0");
 
 extern unsigned char D_L00_00197BCC __attribute__((section(".data")));
-void FUN_L00_0029a330(void) {
+void decompress_and_relocate_vendor_moby_assets(void) __asm__("FUN_L00_0029a330");
+
+void decompress_and_relocate_vendor_moby_assets(void) {
     int i;
     int *entry_offset_cursor;
     char *base;
@@ -1955,7 +1957,7 @@ extern void FUN_L00_0029f990(void);
 extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void FUN_00201a28(void);
-extern void FUN_L00_0029a330(void);
+extern void decompress_and_relocate_vendor_moby_assets(void) __asm__("FUN_L00_0029a330");
 extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
 extern void FUN_L00_00250df8(void *);
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
@@ -2348,7 +2350,7 @@ void FUN_L00_0029c648(void) {
         break;
     case VENDOR_MENU_OPEN:
         if (D_L00_00161188 == 0 && cd_read_active[0] == 0 && D_L00_0016118C != 0) {
-            FUN_L00_0029a330();
+            decompress_and_relocate_vendor_moby_assets();
             vendor_menu.f24 = vendor_menu.f14;
             init_moby_instance(vendor_menu.f24, 0xC);
             vendor_menu.f24->h32 = 0x40;
