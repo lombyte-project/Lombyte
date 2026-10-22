@@ -2737,7 +2737,7 @@ extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern int FUN_0022da68(int, int, void *);
 extern char *level_mobys __asm__("D_L07_0015FFD8");
-extern void FUN_L07_0030b538(void *, void *, void *, int);
+extern void spawn_machinegun_turret_projectile(void *, void *, void *, int) __asm__("FUN_L07_0030b538");
 extern float D_0015ED6C;
 
 void machinegun_turret_update(unsigned char *moby) __asm__("FUN_L07_0031a250");
@@ -2831,7 +2831,7 @@ void machinegun_turret_update(unsigned char *moby) {
                 velocity[1] = fast_sin(*(float *)(moby + 0x48)) * (D_0015ED6C * 15.0f);
                 velocity[2] = 0.0f;
                 FUN_0022da68(0, 0, moby);
-                FUN_L07_0030b538(position, velocity, moby, (u8)data[0x9e]);
+                spawn_machinegun_turret_projectile(position, velocity, moby, (u8)data[0x9e]);
             }
             if (*(int *)(data + 0x98) != 0) {
                 if (fast_dec_timer_s16(data + 0x9c) != 0) {

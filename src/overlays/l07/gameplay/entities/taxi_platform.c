@@ -48,7 +48,9 @@ extern void FUN_L00_00250df8(void *);
 extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
 void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
-unsigned char *FUN_L07_0030b538(void *spawn_position, float *initial_velocity, int collision_ignore_moby, int solid_collision) {
+unsigned char *spawn_machinegun_turret_projectile(void *spawn_position, float *initial_velocity, int collision_ignore_moby, int solid_collision) __asm__("FUN_L07_0030b538");
+
+unsigned char *spawn_machinegun_turret_projectile(void *spawn_position, float *initial_velocity, int collision_ignore_moby, int solid_collision) {
     unsigned char *spawned_moby = func_0020D348_m(0x370);
     if (spawned_moby) {
         char *moby_data;
