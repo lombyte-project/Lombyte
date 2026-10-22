@@ -349,7 +349,9 @@ extern float fast_arc_tan(float,float) __asm__("FUN_001f9e90");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int debug_print_alt() __asm__("FUN_001e93b0");
 extern int mine_fall(void *,void *) __asm__("FUN_L00_0025c698");
-extern int FUN_L16_002e3fa0(struct Moby *moby);
+int advance_bolt_thief_path(struct Moby *moby) __asm__("FUN_L16_002e3fa0");
+
+extern int advance_bolt_thief_path(struct Moby *moby) __asm__("FUN_L16_002e3fa0");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32 D_L16_00161D94;
@@ -473,7 +475,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
     case BOLT_THIEF_FOLLOW_PRIMARY_PATH:
         if (bolt_thief_data->mode == 0)
             update_linked_moby_position(moby);
-        if (FUN_L16_002e3fa0((char *)moby)) {
+        if (advance_bolt_thief_path((char *)moby)) {
             moby->state = 3;
             blend_moby_animation(moby, 3, 0, 5);
         }
@@ -512,7 +514,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         break;
     }
     case BOLT_THIEF_FOLLOW_OTHER_PATH:
-        if (FUN_L16_002e3fa0((char *)moby)) {
+        if (advance_bolt_thief_path((char *)moby)) {
             char *path;
 
             moby->state = 2;
@@ -563,7 +565,7 @@ extern void func_L00_002592B0_path54(char *, float, float *, float, float,
                                      float) __asm__("FUN_L00_00258278");
 extern char *D_L16_001B0930[];
 
-int FUN_L16_002e3fa0(struct Moby *moby) {
+int advance_bolt_thief_path(struct Moby *moby) {
     float pos[4];
     float delta[4];
     char *data = (char *)moby->pvars;
