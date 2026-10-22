@@ -59,7 +59,7 @@ extern void FUN_L02_002101b8(void *, int, int);
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002A59F8), where it is exact; names translated to the US level program. */
 
 extern char D_L02_001CB400[];
-extern void FUN_L02_002a40f0(void *);
+extern void build_interpolated_dma_packet(void *) __asm__("FUN_L02_002a40f0");
 
 void begin_animated_frame_rendering(int fog_red, int fog_green, int fog_blue, int ticks_per_frame, float x, float y, float z, float w, int frame_table_start_index, int frame_count,
                       int frame_packet_address) __asm__("FUN_L02_002a4818");
@@ -81,7 +81,7 @@ void begin_animated_frame_rendering(int fog_red, int fog_green, int fog_blue, in
     scratch[0x33] = ticks_per_frame;
     ((unsigned char *)scratch)[0x3F] = 0x80;
     *(int *)(scratch + 0x1C) = frame_packet_address;
-    FUN_L02_002a40f0(scratch);
+    build_interpolated_dma_packet(scratch);
     FUN_L02_002101b8(D_L02_001CB400, 0x70002800, 0xF8);
 }
 #include "rnc/overlay/quad.h"

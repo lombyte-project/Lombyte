@@ -114,7 +114,9 @@ struct QuadTextureState {
 extern struct QuadTextureState quad_texture_state __asm__("D_L02_001612F0") __attribute__((section(".sdata")));
 #define TEXTURE_REGISTER (quad_texture_state.tex0)
 
-void FUN_L02_002a40f0(QuadDrawArgs *draw_parameters) {
+void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) __asm__("FUN_L02_002a40f0");
+
+void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     float view_matrix[16];
     int *base;
     int *cursor;
