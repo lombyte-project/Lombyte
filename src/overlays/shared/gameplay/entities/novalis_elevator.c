@@ -2683,7 +2683,9 @@ extern char *FUN_L00_002db890(char *);
 extern int launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");
 extern void FUN_0022da68(int, int, char *);
 
-int FUN_L01_002f1d18(char *moby, int a, int position_source_moby, float position_z_offset) {
+int launch_suck_cannon_projectile_and_sync_moby_state(char *moby, int a, int position_source_moby, float position_z_offset) __asm__("FUN_L01_002f1d18");
+
+int launch_suck_cannon_projectile_and_sync_moby_state(char *moby, int a, int position_source_moby, float position_z_offset) {
     char *callback_record = FUN_L00_002db890(moby);
     int r = launch_suck_cannon_projectile(moby, a, position_source_moby, position_z_offset);
     if (r != 0) {
