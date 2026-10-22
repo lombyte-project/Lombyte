@@ -2637,7 +2637,9 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
 
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
-int FUN_L01_002efa88(unsigned char *moby) {
+int process_amoeboid_suck_cannon_suction(unsigned char *moby) __asm__("FUN_L01_002efa88");
+
+int process_amoeboid_suck_cannon_suction(unsigned char *moby) {
     int value = process_moby_suck_cannon_suction(moby);
     if (value != 0) {
         if (*(short *)(moby + 0xA6) != 0x362) {
