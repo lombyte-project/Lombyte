@@ -131,7 +131,9 @@ f32 FUN_L00_0025b8c0_2c40a0(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_0
 f32 FUN_00213508_2c40a0(void *, f32, s32) __asm__("FUN_00213508");
 void FUN_001f9bf8_2c40a0(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_L00_00258830_2c40a0(void *, void *, f32, f32, f32, int) __asm__("FUN_L00_00258830");
-void FUN_L00_002c40a0(S_2c40a0 *self) {
+void update_decoy_proximity_motion(S_2c40a0 *self) __asm__("FUN_L00_002c40a0");
+
+void update_decoy_proximity_motion(S_2c40a0 *self) {
     O_2c40a0 *moby_vars = self->p78;
     P_2c40a0 *P = &D_0013F350_2c40a0;
     s16 proximity_response_gate = P->h1E2;
@@ -2045,7 +2047,7 @@ extern int FUN_L00_00258830(void *, void *, float, float, float, int);
 extern int coll_sphere(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 extern float FUN_L00_00259698_2c4380(void *, int, float) __asm__("FUN_00213508");
 extern void FUN_L00_00260400(void *, int, void *, void *, void *, void *);
-extern void FUN_L00_002c40a0(S_2c40a0 *);
+extern void update_decoy_proximity_motion(S_2c40a0 *) __asm__("FUN_L00_002c40a0");
 extern void destroy_decoy_on_selected_materials(void *) __asm__("FUN_L00_002c4328");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -2256,7 +2258,7 @@ void decoy_update(char *moby) {
         *(float *)(moby + 0x44) = FUN_002000e8_2c4380(*(float *)(moby + 0x44),
             FUN_00200130_2c4380(*(float *)(vars + 0x50), *(float *)(moby + 0x44)) *
             (D_0015ED60_2c4380 * 0.1f));
-        FUN_L00_002c40a0((S_2c40a0 *)moby);
+        update_decoy_proximity_motion((S_2c40a0 *)moby);
         FUN_001fef68_2c4380(vars + 0x5c);
         FUN_001fef98_2c4380(vars + 0x6c);
         if (hit) {
