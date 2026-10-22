@@ -31,7 +31,9 @@ typedef struct {
 
 
 extern Level02MobyList talk_camera __asm__("D_L02_0016CE60");
-void FUN_L02_002400c8(void) {
+void set_level02_class_1b1_moby_flag_0800(void) __asm__("FUN_L02_002400c8");
+
+void set_level02_class_1b1_moby_flag_0800(void) {
     int i;
     if (current_level_index == 2) {
         for (i = 0; i < talk_camera.count; i++) {
