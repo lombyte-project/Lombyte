@@ -24,7 +24,9 @@ extern char D_L01_00167240_b618[] __asm__("D_L01_00167240");
 extern char *D_L01_0015FFD8_b618 __asm__("D_L01_0015FFD8");
 
 extern char D_L01_00180740[];
-void FUN_L01_0030b618(u8 *moby) {
+void update_moby_interpolated_point_light(u8 *moby) __asm__("FUN_L01_0030b618");
+
+void update_moby_interpolated_point_light(u8 *moby) {
     enum {
         EFFECT_STATE_INITIALIZE = 0,
         EFFECT_STATE_UPDATE = 1
