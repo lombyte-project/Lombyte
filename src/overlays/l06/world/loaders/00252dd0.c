@@ -445,7 +445,9 @@ void set_moby_state_3(unsigned char *moby) {
     moby[0x20] = 0x3;
 }
 
-void FUN_L06_00304088(unsigned char *moby) {
+void set_moby_state_5(unsigned char *moby) __asm__("FUN_L06_00304088");
+
+void set_moby_state_5(unsigned char *moby) {
     moby[0x20] = 0x5;
 }
 

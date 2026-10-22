@@ -6495,7 +6495,7 @@ extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void FUN_L06_002356a0(int, int);
-extern void FUN_L06_00304088(char *);
+extern void set_moby_state_5(char *) __asm__("FUN_L06_00304088");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
@@ -6646,7 +6646,7 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
         q = D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x30) << 8);
         *(float *)(moby_vars + 0xB8) = 0.0f;
         *(int *)(moby_vars + 0xBC) = x;
-        FUN_L06_00304088(q);
+        set_moby_state_5(q);
         allocate_voice_for_group_entry(1, 0, (int)hero.moby);
         return;
     }
