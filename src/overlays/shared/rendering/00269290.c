@@ -2514,7 +2514,9 @@ extern float D_0015ED60_26ee48 __asm__("D_0015ED60");
 void FUN_L00_00267a08_26ee48(void *) __asm__("FUN_L00_00267a08");
 int FUN_L00_0025bfe0_26ee48(float, float, float, float) __asm__("FUN_L00_0025bfe0");
 int FUN_001fa6d0_26ee48(float) __asm__("FUN_001fa6d0");
-void FUN_L00_0026ee48(unsigned char *particle) {
+void update_moby_bound_fade_in_out_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026ee48");
+
+void update_moby_bound_fade_in_out_effect_particle(unsigned char *particle) {
     B_26ee48 *particle_data;
     unsigned char *o;
     if (particle == 0)

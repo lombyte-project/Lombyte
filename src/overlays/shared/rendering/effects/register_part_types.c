@@ -38,7 +38,7 @@ extern void FUN_L00_0026e150(void);
 extern void FUN_L00_0026e3a8(void);
 extern void FUN_L00_0026e670(void);
 extern void update_target_relative_two_point_effect_particle(void) __asm__("FUN_L00_0026eb88");
-extern void FUN_L00_0026ee48(void);
+extern void update_moby_bound_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026ee48");
 extern void tick_effect_particle_lifetime(void) __asm__("FUN_L00_0026f048");
 extern void FUN_L00_0026f280(void);
 extern void FUN_L00_0026f660(void);
@@ -127,7 +127,7 @@ void register_part_types(void) {
     handlers[29] = (u32)FUN_L00_0026e3a8;
     handlers[30] = (u32)FUN_L00_0026e670;
     handlers[31] = (u32)update_target_relative_two_point_effect_particle;
-    handlers[32] = (u32)FUN_L00_0026ee48;
+    handlers[32] = (u32)update_moby_bound_fade_in_out_effect_particle;
     handlers[33] = (u32)tick_effect_particle_lifetime;
     handlers[34] = (u32)FUN_L00_0026f280;
     handlers[35] = (u32)FUN_L00_0026f660;
