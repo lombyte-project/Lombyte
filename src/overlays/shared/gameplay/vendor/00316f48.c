@@ -21,7 +21,9 @@ typedef struct { char pad0[0x86]; short class_id; } Level13VendorCurrentMoby;
 extern Level13VendorCurrentMoby *D_L13_00167100 __attribute__((section(".data")));
 extern Level13VendorRecord *D_L13_0015EF50;
 
-void FUN_L13_00316f48(int slot) {
+void flag_vendor_item(int slot) __asm__("FUN_L13_00316f48");
+
+void flag_vendor_item(int slot) {
  Level13VendorCurrentMoby *moby=D_L13_00167100;
  Level13VendorRecord *record=(Level13VendorRecord *)(slot*32+(int)D_L13_0015EF50);
  Level13VendorItem *item=record->item;

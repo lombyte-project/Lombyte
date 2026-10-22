@@ -491,7 +491,7 @@ extern void FUN_L13_002e9680(void *, void *, int);
 extern void FUN_L13_002e9a48(void *, void *);
 extern void FUN_L13_002ea8c8();
 extern void FUN_L13_002eac00_c(void *, void *) __asm__("FUN_L13_002eac00");
-extern void FUN_L13_00316f48(int);
+extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L06_00249738();
@@ -907,7 +907,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
             if (data->light120 != -1) {
                 FUN_L00_0023e838(data->light120);
             }
-            FUN_L13_00316f48(data->i12C);
+            flag_vendor_item(data->i12C);
             mark_moby_for_removal_c(moby);
             return;
         }

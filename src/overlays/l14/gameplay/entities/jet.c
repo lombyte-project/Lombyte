@@ -3511,7 +3511,7 @@ extern float D_L14_00161F84 __attribute__((sda));
 extern float D_L14_00161F88 __attribute__((sda));
 extern float D_L14_00161F78 __attribute__((sda));
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
-extern void FUN_L13_00316f48(int);
+extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -3531,7 +3531,7 @@ int FUN_L14_002fd918(struct Moby *moby) {
                                  (unsigned int)*(int *)(moby_vars + 0x8C) >> 31,
                                  D_L14_00161F78 * D_0015ED6C_f2);
     if (*(int *)(moby_vars + 0x8C) != 0 && (path_boundary_reached != 0 || *(short *)(D_L14_00167500 + 0x86) != 0x13)) {
-        FUN_L13_00316f48(*(int *)(moby_vars + 0x90));
+        flag_vendor_item(*(int *)(moby_vars + 0x90));
         if (*(int *)(moby_vars + 0x6C) != -1) {
             char *voice_entry = D_0013E550 + *(int *)(moby_vars + 0x6C) * 0x70;
             if (*(char **)(voice_entry + 0x88) == moby && ((unsigned char *)voice_entry)[0x74] != 0) {
