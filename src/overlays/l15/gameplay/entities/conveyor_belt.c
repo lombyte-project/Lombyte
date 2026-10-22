@@ -1839,7 +1839,9 @@ extern float D_L15_001621F8 __attribute__((sda));
 extern float D_L15_001621FC __attribute__((sda));
 extern float D_L15_00162200 __attribute__((sda));
 /* Builds and draws the animated ring of lights around a moby: 46 scaled vertices and colours, then two passes of 46 texture coordinates. */
-void FUN_L15_002edbe0(struct Moby *moby) {
+void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L15_002edbe0");
+
+void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
     RingVars_2edbe0 *data = (RingVars_2edbe0 *)moby->pvars;
     unsigned int i;
     unsigned int uv_vertex_index;
