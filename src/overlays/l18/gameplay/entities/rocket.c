@@ -1770,7 +1770,9 @@ extern int D_L18_00161C40 __attribute__((sda));
 extern int D_L18_00161C44 __attribute__((sda));
 extern void jet_animate(unsigned char *m, float s) __asm__("FUN_L00_00259fe8");
 extern void FUN_L18_002dba20();
-void FUN_L18_002dbe80(struct Moby *moby);
+void process_expanding_ring_collisions(struct Moby *moby) __asm__("FUN_L18_002dbe80");
+
+void process_expanding_ring_collisions(struct Moby *moby) __asm__("FUN_L18_002dbe80");
 extern void add_vector_xyz(void *, void *, void *);
 extern void clear_vector(void *);
 extern void mark_moby_for_removal_p(void *) __asm__("FUN_0020c828");
@@ -1869,7 +1871,7 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
         break;
     case STATE_EXPANDING_RING:
         moby_vars[9] = moby_vars[9] + moby_vars[8];
-        FUN_L18_002dbe80(moby);
+        process_expanding_ring_collisions(moby);
         enqueue_callback_list_1(FUN_L18_002dba20, moby);
         if (moby_vars[9] > moby_vars[10]) {
             moby->state = 3;
@@ -2027,7 +2029,7 @@ void FUN_L18_002dba20(M_dba20 *moby) {
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern void FUN_L18_002dc0c8_u(char *moby, void *a1, void *a2) __asm__("FUN_L18_002dc0c8");
 
-void FUN_L18_002dbe80(struct Moby *moby) {
+void process_expanding_ring_collisions(struct Moby *moby) {
     char hit[0x30];
     float hit_direction_vector[4];
     float segment_start[4];
