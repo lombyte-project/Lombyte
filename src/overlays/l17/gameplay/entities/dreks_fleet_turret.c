@@ -102,7 +102,9 @@ extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
                                   void *src) __asm__("FUN_L00_00259888");
 
 extern char *D_L17_0015FFD0[] __attribute__((section(".sdata")));
-void FUN_L17_002a8da0(struct Moby *beam_moby) {
+void update_fleet_beam(struct Moby *beam_moby) __asm__("FUN_L17_002a8da0");
+
+void update_fleet_beam(struct Moby *beam_moby) {
     enum {
         BEAM_INITIALIZE = 0,
         BEAM_UPDATE_STATIONARY = 1,
