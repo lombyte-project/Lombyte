@@ -1118,7 +1118,9 @@ extern void FUN_L00_002599e8(void *, int, int, float, float, float, int, int, in
 extern void FUN_L00_0025a120(void *);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
-void FUN_L16_002e6208(void *arg);
+void update_chomper_hit_reaction_and_target(void *chomper_instance) __asm__("FUN_L16_002e6208");
+
+void update_chomper_hit_reaction_and_target(void *arg) __asm__("FUN_L16_002e6208");
 s32 is_value_within_interpolated_window(struct InterpolatedStateEntry *arg0, f32 fparg0) __asm__("FUN_00214cc8");
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
@@ -1136,7 +1138,7 @@ void chomper_update(struct Moby *chomper_moby) {
         CHOMPER_KNOCKBACK = 8
     };
     char *chomper_data = (char *)chomper_moby->pvars;
-    FUN_L16_002e6208(chomper_moby);
+    update_chomper_hit_reaction_and_target(chomper_moby);
     FUN_L00_00263ac8(2.1f, (int)chomper_moby, 1, (unsigned char *)(chomper_data + 0x220));
     if (chomper_moby->visible != 0 && FUN_001f9b48(&chomper_moby->pos, D_L16_001671C0) < 29.0f) {
         FUN_L00_0025a120(chomper_moby);
@@ -1289,7 +1291,7 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L16_002e6208(void *chomper_instance) {
+void update_chomper_hit_reaction_and_target(void *chomper_instance) {
     L16PursuitMoby *chomper_moby = chomper_instance;
     L16PursuitData *pursuit_data = chomper_moby->data;
     char *hit;
