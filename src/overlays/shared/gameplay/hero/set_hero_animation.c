@@ -20,7 +20,9 @@ extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232560), where it is exact; names translated to the US level program. */
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int FUN_L00_00231ff8(int, int *, int *);
+int select_hero_slot3_animation_pair(int input_animation_id, int *out_primary_animation_id, int *out_secondary_animation_id) __asm__("FUN_L00_00231ff8");
+
+extern int select_hero_slot3_animation_pair(int, int *, int *) __asm__("FUN_L00_00231ff8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
@@ -38,7 +40,7 @@ void blend_hero_slot3_animation_pair(void) {
     if (*(unsigned char *)(slot3_moby + 0x53) != 1) {
         return;
     }
-    if (FUN_L00_00231ff8(0, &mapped_animation_ids[0], &mapped_animation_ids[1]) == 0) {
+    if (select_hero_slot3_animation_pair(0, &mapped_animation_ids[0], &mapped_animation_ids[1]) == 0) {
         return;
     }
     seq = mapped_animation_ids[0];
@@ -116,7 +118,7 @@ void FUN_L00_00231e78(int id, int frame_index, float blend_frames) {
     if (slot3_moby == 0 || slot3_secondary_moby == 0) {
         return;
     }
-    if (FUN_L00_00231ff8(id, &seq0, &seq1) != 0 && id != 0) {
+    if (select_hero_slot3_animation_pair(id, &seq0, &seq1) != 0 && id != 0) {
         if (*(unsigned char *)(slot3_moby + 0x53) == seq0) {
             return;
         }
@@ -159,7 +161,7 @@ extern E_231ff8 D_L00_0015F6B8_00231ff8[1] __asm__("D_L00_0015F6B8") __attribute
 int FUN_L00_002050b8_00231ff8(int) __asm__("FUN_L00_002050b8");
 int FUN_L00_0020d498_00231ff8(int) __asm__("FUN_L00_0020d498");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-int FUN_L00_00231ff8(int input_animation_id, int *out_primary_animation_id, int *out_secondary_animation_id) {
+int select_hero_slot3_animation_pair(int input_animation_id, int *out_primary_animation_id, int *out_secondary_animation_id) {
     int matching_animation_entry_indices[20];
     E_231ff8 *animation_table;
     int match_count = 0;
@@ -205,7 +207,7 @@ int FUN_L00_00231ff8(int input_animation_id, int *out_primary_animation_id, int 
    retail's `ori $6, $sp, 4`). */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232980), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_00231ff8(int, int *, int *);
+extern int select_hero_slot3_animation_pair(int, int *, int *) __asm__("FUN_L00_00231ff8");
 
 /* Copies &hero.anim_speed to +0x58 of the objects at 0x1180/0x1184 when the lookup succeeds. */
 void sync_hero_slot3_animation_speed(void) __asm__("FUN_L00_00232128");
@@ -220,7 +222,7 @@ void sync_hero_slot3_animation_speed(void) {
     if (base->items[3].state != 2) {
         return;
     }
-    if (FUN_L00_00231ff8(*(unsigned char *)(((char *)base->moby) + 0x53), &mapped_animation_ids[0], &mapped_animation_ids[1]) ==
+    if (select_hero_slot3_animation_pair(*(unsigned char *)(((char *)base->moby) + 0x53), &mapped_animation_ids[0], &mapped_animation_ids[1]) ==
         0) {
         return;
     }
