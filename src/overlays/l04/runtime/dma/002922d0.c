@@ -35,7 +35,9 @@ float FUN_L04_002922d0(float *probe_origin) {
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293530), where it is exact; names translated to the US level program. */
 
-void FUN_L04_00292370(void *unused, char *movement_data) {
+void initialize_leg_rig_angle_defaults(void *unused, char *movement_data) __asm__("FUN_L04_00292370");
+
+void initialize_leg_rig_angle_defaults(void *unused, char *movement_data) {
     *(float *)(movement_data + 0x10C) = -0.19634955f;
     *(float *)(movement_data + 0x110) = 1.5707964f;
     *(float *)(movement_data + 0x1BC) = -1.5707964f;

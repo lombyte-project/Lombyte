@@ -552,7 +552,7 @@ void transport_ship_update(void *moby) {
     remove_moby_2ce060(moby);
 }
 
-extern void FUN_L04_00292370(void *, char *);
+extern void initialize_leg_rig_angle_defaults(void *, char *) __asm__("FUN_L04_00292370");
 extern void FUN_L04_002923b8(void *, char *);
 
 void FUN_L04_002d1418(void *moby) {
@@ -578,7 +578,7 @@ void FUN_L04_002d1418(void *moby) {
     *(int *)(moby_vars + 0x1f8) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
     *(int *)(moby_vars + 0x1fc) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
     *(int *)(moby_vars + 0x200) = *(int *)(*(char **)(*(char **)(moby + 0x24) + 0x70) + 0x14);
-    FUN_L04_00292370(moby, movement_data);
+    initialize_leg_rig_angle_defaults(moby, movement_data);
     frameScale = frame_time_sq;
     otherScale = frame_time;
     angleFull = frameScale * 6.2831855f;
