@@ -22,7 +22,9 @@ typedef struct {
 extern void FUN_L00_00257024(void *);
 
 extern Level15State mission __asm__("D_L15_0016CE60");
-void FUN_L15_0022db50(void) {
+void update_level15_mission_mobys(void) __asm__("FUN_L15_0022db50");
+
+void update_level15_mission_mobys(void) {
     int i;
     if (current_level_index == 15 && (unsigned)(mission.state - 3) < 2) {
         for (i = 0; i < mission.count; i++) {
