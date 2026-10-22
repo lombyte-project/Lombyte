@@ -155,7 +155,9 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void FUN_L02_002d3a50(void *, void *, void *, int, float, float);
 
-void FUN_L02_002d3c98(struct Moby *moby, int segment_start_index, int segment_end_index, int puff_count) {
+void emit_sand_shark_dust_segment(struct Moby *moby, int segment_start_index, int segment_end_index, int puff_count) __asm__("FUN_L02_002d3c98");
+
+void emit_sand_shark_dust_segment(struct Moby *moby, int segment_start_index, int segment_end_index, int puff_count) {
     float va[4];
     float vb[4];
     float *pa = D_L02_001D3230[segment_start_index];
@@ -176,18 +178,18 @@ void FUN_L02_002d3c98(struct Moby *moby, int segment_start_index, int segment_en
 }
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D51D0), where it is exact; names translated to the US level program. */
 
-extern void FUN_L02_002d3c98(struct Moby *moby, int a, int b, int d);
+extern void emit_sand_shark_dust_segment(struct Moby *moby, int a, int b, int d) __asm__("FUN_L02_002d3c98");
 
 int D_L02_001619EC = 0xa;
 int D_L02_001619F0 = 0xa;
 int D_L02_001619F4 = 8;
 int D_L02_001619F8 = 8;
 void FUN_L02_002d3dd0(void *moby) {
-    FUN_L02_002d3c98(moby, 0, 1, D_L02_001619F0);
-    FUN_L02_002d3c98(moby, 2, 3, D_L02_001619EC);
-    FUN_L02_002d3c98(moby, 4, 5, D_L02_001619F4);
-    FUN_L02_002d3c98(moby, 6, 7, D_L02_001619F4);
-    FUN_L02_002d3c98(moby, 8, 9, D_L02_001619F8);
+    emit_sand_shark_dust_segment(moby, 0, 1, D_L02_001619F0);
+    emit_sand_shark_dust_segment(moby, 2, 3, D_L02_001619EC);
+    emit_sand_shark_dust_segment(moby, 4, 5, D_L02_001619F4);
+    emit_sand_shark_dust_segment(moby, 6, 7, D_L02_001619F4);
+    emit_sand_shark_dust_segment(moby, 8, 9, D_L02_001619F8);
 }
 /* pvars of the Aridia enemy sand_shark_update updates (it leaves its burrow, walks, jumps and digs back in). */
 typedef struct {
