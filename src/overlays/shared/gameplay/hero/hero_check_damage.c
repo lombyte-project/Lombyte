@@ -2533,7 +2533,7 @@ s32 hero_check_damage(s32 apply_damage_response) {
 }
 extern s32 D_0015EEAC __asm__("D_0015EEAC");
 extern s32 D_0014EE90[] __asm__("D_0014EE90");
-extern void FUN_L00_00203a28_211250(void) __asm__("FUN_L00_00203a28");
+extern void clear_help_record_high_bits(void) __asm__("FUN_L00_00203a28");
 extern int FUN_001f96f8_211250(int) __asm__("FUN_001f96f8");
 extern void fade_to_black(int) __asm__("FUN_001f4a58");
 
@@ -2551,7 +2551,7 @@ void hero_respawn(void) {
         lvl == 15) {
         D_L00_0015F5A4 = 1;
     }
-    FUN_L00_00203a28_211250();
+    clear_help_record_high_bits();
     damage_source_moby = ((char *)hero.unk2280);
     if (damage_source_moby != 0 && *(u8 *)(damage_source_moby + 0xB0) != 0xFF) {
         D_0014E990[current_level_index][*(u8 *)(damage_source_moby + 0xB0)]++;

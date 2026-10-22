@@ -64,7 +64,9 @@ typedef struct {
 } P;
 extern P D_00141968[];
 /* Clears the top bit of each of the 0x94 help records. */
-void FUN_L00_00203a28(void) {
+void clear_help_record_high_bits(void) __asm__("FUN_L00_00203a28");
+
+void clear_help_record_high_bits(void) {
     s32 i;
     for (i = 0; i < 0x94; i++)
         D_00141968[i].b &= 0x7FFFFFFF;
