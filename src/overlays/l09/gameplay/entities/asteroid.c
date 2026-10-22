@@ -1082,7 +1082,9 @@ extern s32 rand();
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
-char *FUN_L09_002edb60(char *source_moby, int spawned_moby_class) {
+char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_class) __asm__("FUN_L09_002edb60");
+
+char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_class) {
     char *moby = func_0020D348_m(spawned_moby_class);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;
@@ -1172,7 +1174,7 @@ void display_update(struct Moby *moby) {
             next = 0x514;
             break;
         }
-        replaced = FUN_L09_002edb60((char *)moby, next) != 0;
+        replaced = spawn_breakable_stack_replacement((char *)moby, next) != 0;
     }
     moby->command = scale_game_frames_edc30(10);
     qcopy(top, &moby->pos);
