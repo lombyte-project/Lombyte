@@ -1444,7 +1444,9 @@ extern f32 frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern s32 pal_mode __asm__("D_0015ED80") __attribute__((section(".sdata")));
 extern s32 current_bolt_count_macro __asm__("D_0015ED98") __attribute__((section(".sdata")));
 /* Hoverboard race tick: advances the hero's and the opponents' path nodes and laps, handles wrong-way and fall resets, ranks everyone and finishes the race after three laps. */
-void FUN_L05_00254608(void) {
+void update_hero_hoverboard_race_progress(void) __asm__("FUN_L05_00254608");
+
+void update_hero_hoverboard_race_progress(void) {
     float v0[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
     Data_254608 *race_pvars;
