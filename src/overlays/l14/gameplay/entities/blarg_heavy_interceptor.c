@@ -1047,7 +1047,9 @@ float D_L14_001D8600[4][4] = {
     {0.0f, 1.0f, 1.0f, 1.0f},
     {0.0f, 1.0f, -1.0f, 1.0f},
 };
-void FUN_L14_002add48(char *moby) {
+void draw_blarg_heavy_interceptor_spinning_beam(char *moby) __asm__("FUN_L14_002add48");
+
+void draw_blarg_heavy_interceptor_spinning_beam(char *moby) {
     char *d = *(char **)(moby + 0x78);
     float src[4][4];
     Pk_2add48 pk;
@@ -1597,7 +1599,7 @@ extern int D_L14_001D8680_b[] __asm__("D_L14_001D8680");
 char *select_farthest_unselected_group_moby(int index, int *ids) __asm__("FUN_L14_002aef28");
 
 char *select_farthest_unselected_group_moby(int index, int *ids) __asm__("FUN_L14_002aef28");
-extern void FUN_L14_002add48(char *);
+extern void draw_blarg_heavy_interceptor_spinning_beam(char *) __asm__("FUN_L14_002add48");
 extern void draw_blarg_heavy_interceptor_light_ring(char *) __asm__("FUN_L14_002ada18");
 void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
@@ -1618,7 +1620,7 @@ void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) {
             *out++ = *(short *)(selected_moby + 0xB2);
             md = *(char **)(selected_moby + 0x78);
             if (*(int *)(md + 0x20C) & 8)
-                FUN_L14_002add48(selected_moby);
+                draw_blarg_heavy_interceptor_spinning_beam(selected_moby);
             if (*(int *)(md + 0x20C) & 2)
                 draw_blarg_heavy_interceptor_light_ring(selected_moby);
             i++;
