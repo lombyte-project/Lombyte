@@ -6516,7 +6516,9 @@ extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
 
 extern float D_L06_0015F400;
-void FUN_L06_00301b90(unsigned char *moby) {
+void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) __asm__("FUN_L06_00301b90");
+
+void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
     enum {
         INITIALIZE_ENTITY = 0,
         TRIGGER_LINKED_SEQUENCE_WHEN_GROUP_INACTIVE = 1,
