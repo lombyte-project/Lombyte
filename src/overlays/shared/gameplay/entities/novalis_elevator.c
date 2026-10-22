@@ -554,7 +554,9 @@ void update_moby_motion_collision_and_lifetime(char *moby) {
 extern int D_0015ED84;
 extern unsigned char menu_item_enabled_1_lui __asm__("D_0013D395") __attribute__((section(".data")));
 /* On level 1, when a state-5 moby of type 0x118 has sub-id 0x34 or 0x35, sets the matching flag byte (D_0013D394 / D_0013D395). */
-void FUN_L01_002e0bd8(char *moby)
+void set_novalis_bolt_crank_completion_flags(char *moby) __asm__("FUN_L01_002e0bd8");
+
+void set_novalis_bolt_crank_completion_flags(char *moby)
 {
     int level = current_level_index;
     if (level != 1) return;
@@ -883,7 +885,7 @@ void bolt_crank_update(struct Moby *moby) {
         goto done;
     }
 done:
-    FUN_L01_002e0bd8((char *)moby);
+    set_novalis_bolt_crank_completion_flags((char *)moby);
 }
 #include "sda.h"
 #include "rnc/gameplay/entities/moby.h"
