@@ -1153,7 +1153,9 @@ float FUN_L00_001eb328_2eb480(void *, float, float, float, float,
                               float) __asm__("FUN_L00_001eb328");
 float FUN_001ebd78_2eb480(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
 #define F(p, o) (*(float *)((char *)(p) + (o)))
-void FUN_L00_002eb480(char *camera_object) {
+void update_orbit_camera_pose(char *camera_object) __asm__("FUN_L00_002eb480");
+
+void update_orbit_camera_pose(char *camera_object) {
     float rotation_matrix[16];
     char *camera_state = *(char **)(camera_object + 0x70);
     char *orbit_origin = camera_state + 0xB0;
