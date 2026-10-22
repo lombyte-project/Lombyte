@@ -76,7 +76,7 @@ struct L11HitInfo {
 extern struct L11HitInfo *FUN_L00_0025a420_h(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 fun_00213928(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern void FUN_L00_0025f3e8(void *, void *, s32, f32, f32);
-extern s32 FUN_L11_0030a830(void *);
+extern s32 is_moby_in_state_five(void *) __asm__("FUN_L11_0030a830");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern s32 FUN_001fa6d0(float);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -128,7 +128,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
         }
     }
     if (moby->state == 0xC && patrol_vars->carrier != -1) {
-        if (FUN_L11_0030a830(&((struct Moby *)D_L11_0015FFD8)[patrol_vars->carrier]) != 0 && moby->visible == 0) {
+        if (is_moby_in_state_five(&((struct Moby *)D_L11_0015FFD8)[patrol_vars->carrier]) != 0 && moby->visible == 0) {
             mark_moby_for_removal(moby);
             return;
         }

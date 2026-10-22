@@ -531,7 +531,7 @@ extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void build_symmetric_adjacency_masks(void *, int, int) __asm__("FUN_L05_0028be78");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_00266858(void *, int);
-extern int FUN_L11_0030a830(struct Moby *arg);
+extern int is_moby_in_state_five(struct Moby *arg) __asm__("FUN_L11_0030a830");
 extern void FUN_L11_0030a840(unsigned char *arg);
 extern unsigned char D_0013D4EE __attribute__((section(".data")));
 extern unsigned char D_0013D3DC __attribute__((section(".data")));
@@ -764,7 +764,7 @@ void FUN_L11_002d14b0(void *resort_owner_moby) {
     case RESORT_OWNER_WAIT_AT_GATE:
         {
             int i = moby_vars->leg != 0;
-            if (FUN_L11_0030a830((struct Moby *)(D_L11_0015FFD8 + (moby_vars->gates[i] << 8))))
+            if (is_moby_in_state_five((struct Moby *)(D_L11_0015FFD8 + (moby_vars->gates[i] << 8))))
                 FUN_L11_002d2088_c(moby, 0xA);
         }
         break;
@@ -777,7 +777,7 @@ void FUN_L11_002d14b0(void *resort_owner_moby) {
         }
         break;
     case RESORT_OWNER_WAIT_TO_ADVANCE_FINAL_PATH_LEG:
-        if (FUN_L11_0030a830((struct Moby *)(D_L11_0015FFD8 + (moby_vars->unk100 << 8)))) {
+        if (is_moby_in_state_five((struct Moby *)(D_L11_0015FFD8 + (moby_vars->unk100 << 8)))) {
             moby_vars->leg += 1;
             FUN_L11_002d2088_c(moby, 3);
         }
@@ -2039,7 +2039,7 @@ void update_pokitaru_boat_joint_effects(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC00), where it is exact; names translated to the US level program. */
 
-int FUN_L11_0030a830(struct Moby *moby) {
+int is_moby_in_state_five(struct Moby *moby) {
     return moby->state == 5;
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC10), where it is exact; names translated to the US level program. */
