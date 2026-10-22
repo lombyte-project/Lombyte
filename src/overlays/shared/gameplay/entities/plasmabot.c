@@ -139,7 +139,9 @@ void FUN_L14_002b3890(int idx) {
 
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
-void FUN_L14_002fe900(char *moby) {
+void initialize_moby_path_state(char *moby) __asm__("FUN_L14_002fe900");
+
+void initialize_moby_path_state(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *path;
     int i;

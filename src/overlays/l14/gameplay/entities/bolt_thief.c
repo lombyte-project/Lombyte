@@ -238,7 +238,7 @@ extern void trooper_start_knockback(void *, void *, int, int, int, float) __asm_
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L14_002ffc08(void *);
-extern void FUN_L14_002fe900(void *);
+extern void initialize_moby_path_state(void *) __asm__("FUN_L14_002fe900");
 extern void update_linked_moby_position(void *) __asm__("FUN_L14_002fec28");
 extern void FUN_L14_002feca8(void *);
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -315,7 +315,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            FUN_L14_002fe900(moby);
+            initialize_moby_path_state(moby);
             moby->state = 2;
             moby->collision = 0x80;
             moby->flags |= 0x41;
