@@ -1897,7 +1897,9 @@ extern void FUN_001f9a10_002756f0(void *, void *, void *) __asm__("FUN_001f9a10"
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern int FUN_L00_00259430_002756f0(void *, int) __asm__("FUN_L00_00259430");
 
-void FUN_L00_002756f0(unsigned char *particle) {
+void update_gravity_damped_resizing_particle(unsigned char *particle) __asm__("FUN_L00_002756f0");
+
+void update_gravity_damped_resizing_particle(unsigned char *particle) {
     unsigned char *particle_data = particle + 0x20;
     float horizontal_speed, horizontal_velocity_scale, x;
     particle[8] += particle_data[0x12];
