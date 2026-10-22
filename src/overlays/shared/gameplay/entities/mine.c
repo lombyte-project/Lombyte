@@ -1085,7 +1085,9 @@ extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void mmul_2acbf0(void *, void *, void *) __asm__("FUN_001fa378");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
-void FUN_L00_002acbf0(M_2acbf0_002acbf0 *moby) {
+void draw_bomb_landing_marker(M_2acbf0_002acbf0 *moby) __asm__("FUN_L00_002acbf0");
+
+void draw_bomb_landing_marker(M_2acbf0_002acbf0 *moby) {
     Q_2acbf0_002acbf0 quad;
     V_2acbf0_002acbf0 quad_transform[4];
     V_2acbf0_002acbf0 mz[4];
@@ -1445,7 +1447,7 @@ check_surface:
             goto return_zero;
     }
     if (mode != 2 || !coll_hit.moby || !FUN_L00_002603d0_2ad410(coll_hit.moby))
-        enqueue_callback_list_1(FUN_L00_002acbf0, thrown_moby);
+        enqueue_callback_list_1(draw_bomb_landing_marker, thrown_moby);
     if (!object_hit && v->last_hit) {
         if (v->last_hit->state == 0xfe) {
             v->hit_count = 0;
