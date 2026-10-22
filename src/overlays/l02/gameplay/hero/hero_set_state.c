@@ -1822,7 +1822,7 @@ extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int FUN_L00_00216de8(int, int);
 extern int FUN_L00_00221d98(void);
 extern int FUN_L00_002276c0(void);
-extern int FUN_L00_00228b78(int, int);
+extern int try_start_hero_jump(int, int) __asm__("FUN_L00_00228b78");
 extern int pick_idle_fidget(int *) __asm__("FUN_L00_00229010");
 extern int hero_handle_jump_press(void) __asm__("FUN_L00_00229660");
 extern int FUN_L00_00229910(void);
@@ -2098,7 +2098,7 @@ void FUN_L02_00230988(void) {
                                 if (hero.unk1D4 != 0) {
                                     t = 1;
                                 }
-                                if (FUN_L00_00228b78(t, 0)) {
+                                if (try_start_hero_jump(t, 0)) {
                                     break;
                                 }
                             }
@@ -2172,7 +2172,7 @@ void FUN_L02_00230988(void) {
                             hero_set_state(HERO_STATE_FALL, 1);
                             break;
                         }
-                        if (FUN_L00_00228b78(scale_game_frames(7), 0)) {
+                        if (try_start_hero_jump(scale_game_frames(7), 0)) {
                             break;
                         }
                         if (controller_state.held & 0xA) {
@@ -2370,7 +2370,7 @@ void FUN_L02_00230988(void) {
                             if (!(hero.air_frames.s > scale_game_frames(4)) ||
                                 hero.unk1E2 != 0) {
                                 stick_target(1.0f, 0);
-                                if (FUN_L00_00228b78(t, 1)) {
+                                if (try_start_hero_jump(t, 1)) {
                                     break;
                                 }
                                 if (hero.state.step <= 0) {
@@ -2926,7 +2926,7 @@ void FUN_L02_00230988(void) {
                         if (hero.unk1D4 != 0) {
                             t = 1;
                         }
-                        if (FUN_L00_00228b78(t, 0)) {
+                        if (try_start_hero_jump(t, 0)) {
                             break;
                         }
                     }

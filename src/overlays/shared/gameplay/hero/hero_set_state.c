@@ -3621,7 +3621,9 @@ extern int FUN_L00_00221d98(void);
 extern int pad_pressed_within(int, void *, void *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_00266e00(int, void *, void *, int);
 
-int FUN_L00_00228b78(void *jump_press_window_frames, int suppress_normal_jump) {
+int try_start_hero_jump(void *jump_press_window_frames, int suppress_normal_jump) __asm__("FUN_L00_00228b78");
+
+int try_start_hero_jump(void *jump_press_window_frames, int suppress_normal_jump) {
     s32 jump_press_age_frames;
     int high_jump_timing_window_frames;
 
