@@ -1781,7 +1781,9 @@ void spawn_blarg_trooper_death_effects(void *moby, void *effect_position) {
     FUN_L00_0025f3e8(moby, effect_position, -1, 1.0f, 10.0f);
 }
 extern void FUN_L12_002e81e0(struct Moby *);
-extern void FUN_L12_002e8608(struct Moby *, float *);
+void set_blarg_trooper_aim_yaw_offsets(struct Moby *moby, float *pos) __asm__("FUN_L12_002e8608");
+
+extern void set_blarg_trooper_aim_yaw_offsets(struct Moby *, float *) __asm__("FUN_L12_002e8608");
 void remove_blarg_trooper_and_attachment(struct Moby *moby) __asm__("FUN_L12_002e86d0");
 
 extern void remove_blarg_trooper_and_attachment(struct Moby *) __asm__("FUN_L12_002e86d0");
@@ -2000,7 +2002,7 @@ hide:
     }
     case BLARG_TROOPER_PREPARE_SHOT: {
         if (TROOPER_F(0x28c) < 8.0f) TROOPER_F(0x28c) = 8.0f;
-        FUN_L12_002e8608(moby, (float *)&target->pos);
+        set_blarg_trooper_aim_yaw_offsets(moby, (float *)&target->pos);
         ease_blarg_trooper_height_to_ground((char *)moby);
         if (moby->prev_seq != 2 && moby->seq == moby->prev_seq)
             blend_moby_animation_ex(moby, 2, 0, scale_game_frames_e81e0(8), 5);
@@ -2013,7 +2015,7 @@ hide:
     }
     case BLARG_TROOPER_FIRE_PROJECTILE: {
         int count; float angle; float other; float value;
-        FUN_L12_002e8608(moby, (float *)&target->pos);
+        set_blarg_trooper_aim_yaw_offsets(moby, (float *)&target->pos);
         ease_blarg_trooper_height_to_ground((char *)moby);
         if (TROOPER_CHILD && is_value_within_interpolated_window(moby, 0.0f)) {
             moby_point_position(TROOPER_CHILD, 0, &query_position_or_projectile_origin);
@@ -2037,7 +2039,7 @@ hide:
     }
     case BLARG_TROOPER_WAIT_BETWEEN_SHOTS: {
         float angle;
-        FUN_L12_002e8608(moby, (float *)&target->pos);
+        set_blarg_trooper_aim_yaw_offsets(moby, (float *)&target->pos);
         ease_blarg_trooper_height_to_ground((char *)moby);
         if ((moby->prev_seq != 5 || (moby->anim_flags & 2)) && moby->prev_seq != 0 && moby->seq == moby->prev_seq)
             blend_moby_animation_ex(moby, 0, 0, scale_game_frames_e81e0(8), 5);
@@ -2270,7 +2272,7 @@ void FUN_L12_002e81e0(struct Moby *moby) {
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
-void FUN_L12_002e8608(struct Moby *moby, float *pos) {
+void set_blarg_trooper_aim_yaw_offsets(struct Moby *moby, float *pos) {
     char *data = (char *)moby->pvars;
     float target_yaw = fast_arc_tan(pos[0] - moby->pos.x, pos[1] - moby->pos.y);
     float yaw_offset = fast_subtract_rotations(target_yaw, moby->rot.z);
