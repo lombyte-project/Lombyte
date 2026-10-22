@@ -259,7 +259,9 @@ extern int f8dc90_2c5be8(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 
 extern int D_0013DE08[];
 extern int D_L00_00161838;
-int FUN_L00_002c5be8(char *pickup_moby) {
+int try_collect_ammo_pickup(char *pickup_moby) __asm__("FUN_L00_002c5be8");
+
+int try_collect_ammo_pickup(char *pickup_moby) {
     int *pickup_vars = *(int **)(pickup_moby + 0x78);
     int before;
     float excess_ammo_amount;

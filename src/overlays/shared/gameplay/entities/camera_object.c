@@ -1722,7 +1722,7 @@ extern float FUN_001f9b48(void *, void *);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_002a7210(void *, void *, float, float);
 extern int FUN_L00_0025e3f8(void *);
-extern int FUN_L00_002c5be8(void *);
+extern int try_collect_ammo_pickup(void *) __asm__("FUN_L00_002c5be8");
 
 void process_mobies_near_returning_wrench(unsigned char *wrench_moby) __asm__("FUN_L00_002a82c0");
 
@@ -1745,7 +1745,7 @@ void process_mobies_near_returning_wrench(unsigned char *wrench_moby) {
                 goto check;
             }
         } else if (FUN_L00_0025e3f8(scanned_moby) && FUN_001f9b48((char *)scanned_moby + 0x10, wrench_moby + 0x10) < 2.7f) {
-            moby_processing_result = FUN_L00_002c5be8(scanned_moby);
+            moby_processing_result = try_collect_ammo_pickup(scanned_moby);
         check:
             if (moby_processing_result)
                 return;

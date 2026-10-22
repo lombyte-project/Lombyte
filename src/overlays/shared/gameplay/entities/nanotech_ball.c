@@ -3246,7 +3246,7 @@ s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 FUN_L00_0025e3f8(O_2df1e0 *);
 f32 FUN_001f9b48(void *, void *);
 void FUN_L00_002a7210(O_2df1e0 *, void *, f32, f32);
-void FUN_L00_002c5be8(O_2df1e0 *);
+void try_collect_ammo_pickup(O_2df1e0 *) __asm__("FUN_L00_002c5be8");
 void FUN_L00_002df1e0(O_2df1e0 *p) {
     s32 i;
     f32 f;
@@ -3270,7 +3270,7 @@ void FUN_L00_002df1e0(O_2df1e0 *p) {
             if (p && p->p24 && p->p24->h46 == 0x13) {
                 FUN_L00_002a7210(p, hero.moby, 0.0f, 0.0f);
             } else {
-                FUN_L00_002c5be8(p);
+                try_collect_ammo_pickup(p);
             }
         }
     }
