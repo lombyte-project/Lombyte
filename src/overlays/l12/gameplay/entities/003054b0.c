@@ -485,7 +485,9 @@ void FUN_L12_003064e8(char *moby) {
 extern int D_L12_0015F5CC;
 extern unsigned char * D_L12_0015FFD8;
 
-void FUN_L12_00306828(struct Moby *moby) {
+void update_planetbuster_maximus_glow_color(struct Moby *moby) __asm__("FUN_L12_00306828");
+
+void update_planetbuster_maximus_glow_color(struct Moby *moby) {
     int i;
     int alpha = 0x80000000;
     char *data = (char *)moby->pvars;
@@ -816,7 +818,7 @@ void planetbuster_maximus_part_update(char *moby) {
         FUN_L12_003064e8_c(moby);
         break;
     }
-    FUN_L12_00306828(moby);
+    update_planetbuster_maximus_glow_color(moby);
     if ((unsigned char)moby[0x20] >= 1 && (unsigned char)moby[0x20] <= 3) {
         if (*(int *)(moby_data + 0x604) == -1) *(int *)(moby_data + 0x604) = allocate_voice_for_target_entry(0, 4, moby);
     } else {
