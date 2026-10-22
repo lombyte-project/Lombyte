@@ -255,7 +255,7 @@ extern int D_L14_0015F5C4;
 extern int coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern int FUN_L00_00261968(int, void *, void *);
+extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern int register_beam_slot(void *, int, int) __asm__("FUN_L00_002e1f28");
 extern int FUN_L00_002e2040(char *);
 extern int set_beam_origin_transform_and_endpoint(void *, void *, void *) __asm__("FUN_L00_002e2190");
@@ -558,7 +558,7 @@ void update_plasmabot(char *moby) {
         if (random_integer_below(4) != 0) break;
         if (!(fast_difference_between_rotations(*(float *)(moby + 0x48), ang) < 0.017453292f)) break;
         if (!(aim < 0.017453292f)) break;
-        if (FUN_L00_00261968(*(int *)(data + 0x244), moby + 0x10, owner + 0x10) != 0) break;
+        if (test_path_segment_strict_crossing(*(int *)(data + 0x244), moby + 0x10, owner + 0x10) != 0) break;
         FUN_L14_002b3890_c(((unsigned char *)moby)[0x21]);
         *(float *)(data + 0x278) = ang;
         ((unsigned char *)moby)[0x20] = 5;

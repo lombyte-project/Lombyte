@@ -1375,7 +1375,7 @@ extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_0025e3b8(void *);
-extern int FUN_L00_00261968(int, void *, void *);
+extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 extern int compute_clear_path_point_mask(float, int *, int, int, void *) __asm__("FUN_L01_00276a48");
 extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("FUN_L01_00276fe8");
@@ -1839,7 +1839,7 @@ void gadgebot_update(GbMoby *moby) {
                 position_and_displacement_scratch[1] = fast_sin(approach_heading) * 3.0f;
                 position_and_displacement_scratch[2] = 0.0f;
                 add_vector_xyz(position_and_displacement_scratch, position_and_displacement_scratch, moby->pos);
-                if (gadgebot_vars->unk27C != -1 && FUN_L00_00261968(gadgebot_vars->paths.id[gadgebot_vars->unk27C], moby->pos, position_and_displacement_scratch) != 0) {
+                if (gadgebot_vars->unk27C != -1 && test_path_segment_strict_crossing(gadgebot_vars->paths.id[gadgebot_vars->unk27C], moby->pos, position_and_displacement_scratch) != 0) {
                     FUN_L00_0025bc00(&gadgebot_vars->unk17C, 0, 0.0f, frame_time * 1.5707964f);
                 }
                 FUN_L00_00258278((char *)moby, approach_heading, &gadgebot_vars->ctl.unk14, frame_scale_sq * 0.07f,

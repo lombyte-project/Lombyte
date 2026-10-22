@@ -18,7 +18,9 @@ extern void FUN_001ff500_261968(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8
 extern void FUN_001ff260_261968(OvlVec4 *) __asm__("FUN_001f99f8");
 extern void FUN_001ff6d0_261968(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9cf8");
 
-s32 FUN_L00_00261968(s32 path_index, OvlVec4 *start, OvlVec4 *end) {
+s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *end) __asm__("FUN_L00_00261968");
+
+s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *end) {
     OvlVec4 direction;
     OvlVec4 axis;
     OvlVec4 origin;

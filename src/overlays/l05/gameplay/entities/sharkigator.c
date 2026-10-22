@@ -1876,7 +1876,7 @@ extern float FUN_001f9b48_c(float *, float *) __asm__("FUN_001f9b48");
 extern void FUN_001f9a10_c(float *, float *, float *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a28_c(float *, float *, float *) __asm__("FUN_001f9a28");
 extern void FUN_001f9bf8_c(float *, float *, float) __asm__("FUN_001f9bf8");
-extern int FUN_L00_00261968_c(int, float *, float *) __asm__("FUN_L00_00261968");
+extern int test_path_segment_strict_crossing(int, float *, float *) __asm__("FUN_L00_00261968");
 
 int test_extermibot_offset_path_clearance(char *moby, float *goal, float probe_offset_length)
 {
@@ -1893,7 +1893,7 @@ int test_extermibot_offset_path_clearance(char *moby, float *goal, float probe_o
     FUN_001f9a28_c(offset_probe_position, probe_position, goal);
     FUN_001f9bf8_c(offset_probe_position, offset_probe_position, probe_offset_length);
     FUN_001f9a10_c(offset_probe_position, offset_probe_position, (float *)(moby + 0x10));
-    return FUN_L00_00261968_c(*(int *)(moby_data + 0x2C0), probe_position, offset_probe_position) == 0;
+    return test_path_segment_strict_crossing(*(int *)(moby_data + 0x2C0), probe_position, offset_probe_position) == 0;
 }
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))

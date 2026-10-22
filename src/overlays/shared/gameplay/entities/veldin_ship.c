@@ -2247,7 +2247,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern int is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
 extern void FUN_L00_002599e8_2d4610(void *, float, float, float, int, int, int, int, int) __asm__("FUN_L00_002599e8");
 extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
-extern int FUN_L00_00261968_2d4610(int, void *, void *) __asm__("FUN_L00_00261968");
+extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int FUN_L00_0025c698_2d4610(void *, void *) __asm__("FUN_L00_0025c698");
 extern void FUN_0022da68_2d4610(int, int, int) __asm__("FUN_0022da68");
@@ -2429,7 +2429,7 @@ void horny_toad_update(Moby *moby) {
         reference_point_or_movement_endpoint[2] = 0.0f;
         normalize_vector_xyz(reference_point_or_movement_endpoint, reference_point_or_movement_endpoint, 2.5f);
         add_vector_xyz(reference_point_or_movement_endpoint, reference_point_or_movement_endpoint, (*(ToadVec *)&moby->pos));
-        if (FUN_L00_00261968_2d4610(data->unk1E0, (*(ToadVec *)&moby->pos), reference_point_or_movement_endpoint) != 0) {
+        if (test_path_segment_strict_crossing(data->unk1E0, (*(ToadVec *)&moby->pos), reference_point_or_movement_endpoint) != 0) {
             approach_angle(&moby->rot.z, angle_atan2((*(ToadVec *)&data->target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&data->target->pos)[1] - (*(ToadVec *)&moby->pos)[1]), &data->turn_speed, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 12.566371f);
             if (moby->anim_flags & 2) {
                 if (moby->prev_seq != random_integer_below(2) + 2) FUN_00212f90_2d4610(moby, random_integer_below(2) + 2, 0, scale_game_frames(20));

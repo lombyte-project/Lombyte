@@ -3216,7 +3216,7 @@ extern float turn_to_4318(float *, float *, float, float, float, float) __asm__(
 extern int FUN_L00_0025c698_4318(struct Moby *, void *) __asm__("FUN_L00_0025c698");
 extern void FUN_L00_0025f3e8(struct Moby *, void *, int, float, float);
 extern void follow_carrier_4318(struct Moby *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
-extern int FUN_L00_00261968_4318(int, void *, void *) __asm__("FUN_L00_00261968");
+extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern void move_4318(struct Moby *, void *, float, float, float, int) __asm__("FUN_L00_00258830");
 extern float rnd_4318(float, float) __asm__("FUN_L00_00257c48");
 extern void smoke_4318(void *, void *, float, float) __asm__("FUN_L00_0026f080");
@@ -3419,7 +3419,7 @@ void puffoid_update(struct Moby *moby) {
         pos[2] = 0.0f;
         normalize_4318(pos, pos, 2.5f);
         add_vector_4318(pos, pos, &moby->pos);
-        if (FUN_L00_00261968_4318(puffoid_vars->unk230, &moby->pos, pos)) {
+        if (test_path_segment_strict_crossing(puffoid_vars->unk230, &moby->pos, pos)) {
             float *rz = &moby->rot.z;
             float ang = atan2_4318(puffoid_vars->target->pos.x - moby->pos.x, puffoid_vars->target->pos.y - moby->pos.y);
             turn_to_4318(rz, &puffoid_vars->unk250, ang,
