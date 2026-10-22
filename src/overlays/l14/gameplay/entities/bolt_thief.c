@@ -139,7 +139,9 @@ void FUN_L14_002fded0(Moby_2FF358 *source_moby) {
 extern char *D_L14_0015FFD8;
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
-void FUN_L14_002fe238(char *moby) {
+void mark_moby_and_linked_moby_for_removal(char *moby) __asm__("FUN_L14_002fe238");
+
+void mark_moby_and_linked_moby_for_removal(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *other = D_L14_0015FFD8 + (*(int *)(data + 4) << 8);
     if (other != 0 && other[0x20] >= 0)

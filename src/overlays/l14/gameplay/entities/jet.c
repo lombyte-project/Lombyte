@@ -3184,7 +3184,7 @@ extern unsigned char D_0013D408_t[] __asm__("D_0013D408");
 extern char D_L14_001FCE98[];
 extern char D_L14_001FCED0[];
 extern s32 D_L14_00161F8C __attribute__((sda));
-extern void FUN_L14_002fe238(char *moby);
+extern void mark_moby_and_linked_moby_for_removal(char *moby) __asm__("FUN_L14_002fe238");
 extern void FUN_L06_00303150(unsigned char *moby);
 extern void FUN_L10_002f5a50(int);
 extern void *tram_hit(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -3240,7 +3240,7 @@ void FUN_L14_002fcbb0(struct Moby *moby) {
         u16 id = moby->save_id;
         if (D_L14_001BB930_t.collected[(short)id] != 0 ||
             (D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
-            FUN_L14_002fe238((char *)&D_L14_0015FFD8_t[moby_vars->carrier]);
+            mark_moby_and_linked_moby_for_removal((char *)&D_L14_0015FFD8_t[moby_vars->carrier]);
             tram_remove(moby);
             return;
         }
