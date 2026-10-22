@@ -57,7 +57,9 @@ int move_sentrybot_toward_point(char *moby, float *point, float target_forward_s
 
 extern int move_sentrybot_toward_point(char *moby, float *point, float arg) __asm__("FUN_L15_00299ae0");
 extern int can_sentrybot_approach_linked_moby(void *) __asm__("FUN_L15_00299ca0");
-extern int FUN_L15_00299dd8(char *m);
+int find_sentrybot_attention_target(char *moby) __asm__("FUN_L15_00299dd8");
+
+extern int find_sentrybot_attention_target(char *m) __asm__("FUN_L15_00299dd8");
 int can_sentrybot_advance_patrol(void *input_moby) __asm__("FUN_L15_00299ff8");
 
 extern int can_sentrybot_advance_patrol(void *) __asm__("FUN_L15_00299ff8");
@@ -280,7 +282,7 @@ void sentrybot_update(unsigned char *moby) {
             begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(*(char **)(data + 0x198) + 0x10),
                              (void *)0xA, (void *)0xF);
         } else if (fast_dec_timer_s16(data + 0x196) != 0 &&
-                   (*(int *)(data + 0x190) = FUN_L15_00299dd8((char *)moby)) != 0 &&
+                   (*(int *)(data + 0x190) = find_sentrybot_attention_target((char *)moby)) != 0 &&
                    (*(short *)(data + 0x194) != 0 ||
                     random_integer_below(scale_game_frames(0x96)) == 0)) {
             begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(*(char **)(data + 0x190) + 0x10),
@@ -475,7 +477,7 @@ void sentrybot_update(unsigned char *moby) {
                     blend_moby_animation(moby, 2, 0, scale_game_frames(10));
             }
         } else if (fast_dec_timer_s16(data + 0x196) != 0 &&
-                   (*(int *)(data + 0x190) = FUN_L15_00299dd8((char *)moby)) != 0 &&
+                   (*(int *)(data + 0x190) = find_sentrybot_attention_target((char *)moby)) != 0 &&
                    (*(short *)(data + 0x194) != 0 ||
                     random_integer_below(scale_game_frames(0x96)) == 0)) {
             begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(*(char **)(data + 0x190) + 0x10),
@@ -1087,7 +1089,7 @@ extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
 extern int D_L15_001ABE40[];
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
-int FUN_L15_00299dd8(char *moby) {
+int find_sentrybot_attention_target(char *moby) {
     char *moby_data = *(char **)(moby + 0x78);
     int best = 0;
     float bd;
