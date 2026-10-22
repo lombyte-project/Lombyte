@@ -3293,7 +3293,9 @@ extern void FUN_L00_002c7320_2c7548(float *pos, float *tgt, float *out, float sp
 
 /* Moves the moby the carrier holds toward its throw target: ahead of the hero,
    or along the camera aim (and up to a collision hit) while pad bits 0x5 are held. */
-void FUN_L00_002c7548(struct Moby *moby, CarrierVars *vars, OvlVec4 *grip)
+void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *vars, OvlVec4 *grip) __asm__("FUN_L00_002c7548");
+
+void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *vars, OvlVec4 *grip)
 {
     Vec_2c7548 throw_origin;
     Mat3_2c7548 basis;
@@ -3393,7 +3395,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern int FUN_L00_00216de8(int, int);
 extern int use_ammo(int, int) __asm__("FUN_L00_00233db8");
 extern int get_ammo(int) __asm__("FUN_L00_00233e98");
-extern void FUN_L00_002c7548(struct Moby *, CarrierVars *, OvlVec4 *);
+extern void compute_glove_of_doom_throw_velocity(struct Moby *, CarrierVars *, OvlVec4 *) __asm__("FUN_L00_002c7548");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 /* Carrier: keeps its grip point in front of it, hands the held moby over when the hero asks, and
@@ -3443,7 +3445,7 @@ void glove_of_doom_update(struct Moby *moby) {
         }
     }
     grip.q = vars->grip.q;
-    FUN_L00_002c7548(moby, vars, &grip);
+    compute_glove_of_doom_throw_velocity(moby, vars, &grip);
     switch (moby->state) {
     case GLOVE_INITIALIZE:
         vars->held = 0;
