@@ -1277,7 +1277,9 @@ void launch_sand_shark(struct Moby *moby, void *position, float *direction) {
 extern char D_L02_0015FFD8_c __asm__("D_L02_0015FFD8");
 extern void *store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 
-void *FUN_L02_002d6210(struct Moby *moby) {
+void *handle_sand_shark_suck_cannon_storage(struct Moby *moby) __asm__("FUN_L02_002d6210");
+
+void *handle_sand_shark_suck_cannon_storage(struct Moby *moby) {
     void *helper_result = store_moby_in_suck_cannon(moby);
     if (helper_result) {
         int spawner_moby_index;
