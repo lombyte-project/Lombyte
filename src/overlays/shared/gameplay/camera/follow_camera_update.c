@@ -327,7 +327,7 @@ void FUN_L00_002e9aa0(int unused_camera_moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EB060), where it is exact; names translated to the US level program. */
 
 extern void follow_camera_avoid_mobies(int) __asm__("FUN_L00_002e7d20");
-extern void FUN_L00_002e8378(int);
+extern void run_follow_camera_noop(int) __asm__("FUN_L00_002e8378");
 extern void follow_camera_read_stick(int, float *, float *) __asm__("FUN_L00_002e89b0");
 extern void follow_camera_turn_and_pitch(int, float, float) __asm__("FUN_L00_002e8bb8");
 extern void follow_camera_auto_turn(int) __asm__("FUN_L00_002e8f40");
@@ -346,7 +346,7 @@ void update_follow_camera_pose(int camera_moby) {
     follow_camera_turn_and_pitch(camera_moby, camera_stick_input[0], camera_stick_input[1]);
     follow_camera_avoid_mobies(camera_moby);
     FUN_L00_002e9720_u(camera_moby);
-    FUN_L00_002e8378(camera_moby);
+    run_follow_camera_noop(camera_moby);
     FUN_L00_002e9010_u(camera_moby);
 }
 extern s32 opt_cam_yaw_rate __asm__("D_0015EDE4");

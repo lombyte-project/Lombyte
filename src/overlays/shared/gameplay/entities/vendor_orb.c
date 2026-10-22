@@ -2404,7 +2404,9 @@ void follow_camera_springs(void *camera_moby) {
     }
 }
 /* Empty apart from an unused 0x50-byte volatile stack buffer. */
-void FUN_L00_002e8378(void) {
+void run_follow_camera_noop(void) __asm__("FUN_L00_002e8378");
+
+void run_follow_camera_noop(void) {
     volatile char unused_stack_reservation[0x50];
 }
 struct P2_388 {
