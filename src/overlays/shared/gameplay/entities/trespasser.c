@@ -770,7 +770,7 @@ extern int FUN_L00_00258ad0(void *,void *,int,int,float,float);
 extern void FUN_L00_00258278(void *,float *,float,float,float,float);
 extern struct Moby *select_class5_target_or_hero(void *,void *,void *,void *,int) __asm__("FUN_L00_002bed90");
 extern float FUN_L00_002bf050(void *,void *,float,float,float,float,float,void *,void *,float);
-extern int FUN_L00_002bf9f0(void *,void *,void *,int);
+extern int try_start_moby_hop(void *,void *,void *,int) __asm__("FUN_L00_002bf9f0");
 extern void FUN_L00_002bf8b0(void *,void *,void *);
 extern int compute_moby_state_from_vertical_probe(void *) __asm__("FUN_L00_002bfec8");
 extern int update_arc_motion(void *,void *) __asm__("FUN_L00_0025b440");
@@ -952,7 +952,7 @@ void doom_bot_update(struct Moby *moby) {
             if (moby->prev_seq!=6) blend_moby_animation(moby,6,0,scale_game_frames(10));
             data->turn_rate=frame_scale*0.0273f*speed;
         } else {
-            if (random_integer_below(4)==0 && FUN_L00_002bf9f0(moby,data,&data->target_moby->pos,1)) {
+            if (random_integer_below(4)==0 && try_start_moby_hop(moby,data,&data->target_moby->pos,1)) {
                 qcopy(data,&data->target_moby->pos);
                 data->turn_rate=frame_scale*0.066f*speed;
                 if (moby->prev_seq!=0) blend_moby_animation(moby,0,0,scale_game_frames(2));
@@ -1022,7 +1022,7 @@ void doom_bot_update(struct Moby *moby) {
         }
         restore_state_fields_from_hero((char*)data);
         if ((move_flags&2) || clearance<4.0f) {
-            if (FUN_L00_002bf9f0(moby,data,data,0)) {
+            if (try_start_moby_hop(moby,data,data,0)) {
                 data->turn_rate=frame_scale*0.066f*speed;
                 if (moby->prev_seq!=0) blend_moby_animation(moby,0,0,scale_game_frames(2));
                 moby->state=6; goto Contact;

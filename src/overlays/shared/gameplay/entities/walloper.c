@@ -2963,7 +2963,9 @@ extern char D_L00_00173F80_2C0CF8[] __asm__("D_L00_00173E80");
 extern void *D_L00_00173F58_2C0CF8[] __asm__("D_L00_00173E58");
 extern char D_0013E633_2C0CF8[] __asm__("D_00141260");
 
-int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int check_line) {
+int try_start_moby_hop(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int check_line) __asm__("FUN_L00_002bf9f0");
+
+int try_start_moby_hop(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int check_line) {
     float jump[4];
     float land[4];
     float from[4];
@@ -2989,13 +2991,13 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int chec
     jump[2] = land[2] - moby->pos[2];
     if (land[2] == 0.0f) {
         if (can_halve) {
-            return FUN_L00_002bf9f0(moby, block, half, 1);
+            return try_start_moby_hop(moby, block, half, 1);
         }
         return 0;
     }
     if (moby->f2C * 3.0f / moby->p24->unk24 < jump[2]) {
         if (can_halve) {
-            return FUN_L00_002bf9f0(moby, block, half, 1);
+            return try_start_moby_hop(moby, block, half, 1);
         }
         return 0;
     }
@@ -3005,14 +3007,14 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int chec
     sum = sum + func_001F9B88_2C0CF8(mid[1]);
     if (func_001F9B88_2C0CF8(mid[2]) < sum) {
         if (can_halve) {
-            return FUN_L00_002bf9f0(moby, block, half, 1);
+            return try_start_moby_hop(moby, block, half, 1);
         }
         return 0;
     }
     land[2] = land[2] + moby->f2C * 0.025f / moby->p24->unk24;
     if (func_L00_002BFDB8_2C0CF8(moby, 6, land)) {
         if (can_halve) {
-            return FUN_L00_002bf9f0(moby, block, half, 1);
+            return try_start_moby_hop(moby, block, half, 1);
         }
         return 0;
     }
@@ -3024,7 +3026,7 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int chec
     if (check_line) {
         if (func_L00_001EFFF0_2C0CF8(from, to, 6, moby, 0) == 0) {
             if (can_halve) {
-                return FUN_L00_002bf9f0(moby, block, half, 1);
+                return try_start_moby_hop(moby, block, half, 1);
             }
             return 0;
         }
@@ -3041,13 +3043,13 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int chec
     func_L00_002C0B18_2C0CF8(to, mid, 10, 0, 32, 32, 40000.0f, 60);
     if (func_L00_001EFFF0_2C0CF8(from, mid, 6, moby, 0) != 0 && D_L00_00173F58_2C0CF8[0] != block->p38) {
         if (can_halve) {
-            return FUN_L00_002bf9f0(moby, block, half, 1);
+            return try_start_moby_hop(moby, block, half, 1);
         }
         return 0;
     }
     if (func_L00_001EFFF0_2C0CF8(mid, to, 6, moby, 0) != 0 && D_L00_00173F58_2C0CF8[0] != block->p38) {
         if (can_halve) {
-            return FUN_L00_002bf9f0(moby, block, half, 1);
+            return try_start_moby_hop(moby, block, half, 1);
         }
         return 0;
     }
