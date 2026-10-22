@@ -434,7 +434,7 @@ typedef struct {
 } Path388;
 
 extern Moby388 *D_L13_00174158[];
-extern char *FUN_L13_002e8438(void *);
+extern char *spawn_owner_linked_class_160_moby(void *) __asm__("FUN_L13_002e8438");
 extern char *FUN_L13_002ecd10_c(char *, int, int) __asm__("FUN_L13_002ecd10");
 extern char D_L13_001F4F38[];
 extern char D_L13_00161958[];
@@ -1004,7 +1004,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
 
     if (moby->bBC == 4) {
         if (data->child110 == 0) {
-            data->child110 = FUN_L13_002e8438(moby);
+            data->child110 = spawn_owner_linked_class_160_moby(moby);
         } else if (((Moby388 *)data->child110)->state >= 3) {
             ((Moby388 *)data->child110)->state = 1;
         }

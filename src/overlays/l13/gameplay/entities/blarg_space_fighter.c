@@ -2484,7 +2484,9 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
-char *FUN_L13_002e8438(char *owner) {
+char *spawn_owner_linked_class_160_moby(char *owner) __asm__("FUN_L13_002e8438");
+
+char *spawn_owner_linked_class_160_moby(char *owner) {
     char *moby = create_moby(0x160);
     if (moby != 0) {
         char *data;
