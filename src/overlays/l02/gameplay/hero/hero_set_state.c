@@ -40,7 +40,7 @@ extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
-extern int FUN_L00_002050b8(int);
+extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 extern int FUN_L00_0020d568(void);
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int FUN_L00_00216de8(int, int);
@@ -383,7 +383,7 @@ int hero_set_state(int a, int b) {
             struct Hero *q = &hero;
             float d = q->anim_frame;
             int id = 6;
-            if (FUN_L00_002050b8(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f)
+            if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f)
                 id = 5;
             set_hero_animation(id, 4, (float)scale_game_frames(9));
         }
@@ -399,7 +399,7 @@ int hero_set_state(int a, int b) {
         if (b) {
             int id = 6;
             float d = p->anim_frame;
-            if (FUN_L00_002050b8(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f)
+            if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f)
                 id = 5;
             set_hero_animation(id, 4, (float)scale_game_frames(9));
         }
@@ -995,7 +995,7 @@ int hero_set_state(int a, int b) {
                 } else if (s == 9) {
                     int id = 8;
                     int n = truncate_float_to_s32(q->anim_frame);
-                    if (FUN_L00_002050b8(*(unsigned char *)(moby + 0x52)) == 4)
+                    if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4)
                         id = D_L02_0017C3D8[n];
                     set_hero_animation(id, 0, (float)scale_game_frames(5));
                 } else if (s == 0xA) {
@@ -1437,7 +1437,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->unk2284 = 0x51;
         p->state.control_mode = 0;
-        if (FUN_L00_002050b8(*(unsigned char *)(((char *)p->moby) + 0x53)) !=
+        if (return_hero_animation_id_unchanged(*(unsigned char *)(((char *)p->moby) + 0x53)) !=
             FUN_L01_00226f10(1)) {
             set_hero_animation(FUN_L01_00226f10(1), 0, (float)scale_game_frames(5));
         }
@@ -1816,7 +1816,7 @@ extern int D_L02_0015F6DC_d __asm__("D_L02_0015F6DC");
 extern int D_L02_0015F594 __attribute__((sda));
 extern int D_L02_0016CD80 __attribute__((section(".data")));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int FUN_L00_002050b8(int);
+extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int FUN_L00_00216de8(int, int);
@@ -2004,7 +2004,7 @@ void update_hero_state_transitions(void) {
                                 blend_moby_animation(m, 1, 0, scale_game_frames(0xC));
                             }
                         }
-                        r = FUN_L00_002050b8(moby[0x53]);
+                        r = return_hero_animation_id_unchanged(moby[0x53]);
                         if (r == FUN_L01_00226f10(0) && flag) {
                             if (pick_idle_fidget(&record_index)) {
                                 HeroTableEntry70 *rec;
@@ -3240,7 +3240,7 @@ void update_hero_state_transitions(void) {
                             configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 0, 1);
                             fr = truncate_float_to_s32(hero.unk448) + 2;
                             if (hero.unk444 - 1.5f > hero.anim_frame) {
-                                set_hero_animation(FUN_L00_002050b8(moby[0x53]), fr,
+                                set_hero_animation(return_hero_animation_id_unchanged(moby[0x53]), fr,
                                                  scale_game_frames(7));
                             }
                         }
@@ -3260,7 +3260,7 @@ void update_hero_state_transitions(void) {
                                 if (!isNear) {
                                     int fr = truncate_float_to_s32(hero.unk448) + 2;
                                     if (hero.anim_speed > 1.8f) {
-                                        set_hero_animation(FUN_L00_002050b8(moby[0x53]), fr,
+                                        set_hero_animation(return_hero_animation_id_unchanged(moby[0x53]), fr,
                                                          hero.unk44C + 3);
                                     }
                                 }
@@ -3273,8 +3273,8 @@ void update_hero_state_transitions(void) {
                             }
                             if (hero.state.current == HERO_STATE_RUN_JUMP &&
                                 hero.unk444 - hero.anim_frame > 6.0f &&
-                                (FUN_L00_002050b8(moby[0x52]) == 8 ||
-                                 FUN_L00_002050b8(moby[0x52]) == 9) &&
+                                (return_hero_animation_id_unchanged(moby[0x52]) == 8 ||
+                                 return_hero_animation_id_unchanged(moby[0x52]) == 9) &&
                                 moby[0x52] == moby[0x53] &&
                                 D_L02_0017C3B8.f18 * frame_time * 0.1f > hero.target_speed &&
                                 frame_time * 2.5f > hero.motion.unk164) {

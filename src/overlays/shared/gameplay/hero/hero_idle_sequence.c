@@ -111,7 +111,9 @@ int hero_idle_sequence(int allow_item_idle_sequence) {
     }
 }
 /* Returns its argument unchanged. */
-s32 FUN_L00_002050b8(s32 input_value) {
+s32 return_hero_animation_id_unchanged(s32 input_value) __asm__("FUN_L00_002050b8");
+
+s32 return_hero_animation_id_unchanged(s32 input_value) {
     return input_value;
 }
 void show_health_hud(void) __asm__("FUN_L00_00234e00");

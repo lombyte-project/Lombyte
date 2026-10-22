@@ -74,7 +74,7 @@ extern int D_L16_0015F594 __attribute__((sda));
 extern int D_L16_0016CB80 __attribute__((section(".data")));
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int FUN_L00_002050b8(int);
+extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 #include "rnc/overlay/path.h"
 extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
@@ -286,7 +286,7 @@ void update_hero_state_transitions(void) {
                                 blend_moby_animation(m, 1, 0, scale_game_frames(0xC));
                             }
                         }
-                        r = FUN_L00_002050b8(moby[0x53]);
+                        r = return_hero_animation_id_unchanged(moby[0x53]);
                         if (r == FUN_L01_00226f10(0) && flag) {
                             if (pick_idle_fidget(&record_index)) {
                                 HeroTableEntry70 *rec;
@@ -2001,7 +2001,7 @@ void update_hero_state_transitions(void) {
                             configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 0, 1);
                             fr = truncate_float_to_s32(hero.unk448) + 2;
                             if (hero.unk444 - 1.5f > hero.anim_frame) {
-                                set_hero_animation(FUN_L00_002050b8(moby[0x53]), fr,
+                                set_hero_animation(return_hero_animation_id_unchanged(moby[0x53]), fr,
                                                  scale_game_frames(7));
                             }
                         }
@@ -2021,7 +2021,7 @@ void update_hero_state_transitions(void) {
                                 if (!isNear) {
                                     int fr = truncate_float_to_s32(hero.unk448) + 2;
                                     if (hero.anim_speed > 1.8f) {
-                                        set_hero_animation(FUN_L00_002050b8(moby[0x53]), fr,
+                                        set_hero_animation(return_hero_animation_id_unchanged(moby[0x53]), fr,
                                                          hero.unk44C + 3);
                                     }
                                 }
@@ -2033,8 +2033,8 @@ void update_hero_state_transitions(void) {
                                 }
                             }
                             if (hero.state.current == HERO_STATE_RUN_JUMP && hero.unk444 - hero.anim_frame > 6.0f &&
-                                (FUN_L00_002050b8(moby[0x52]) == 8 ||
-                                 FUN_L00_002050b8(moby[0x52]) == 9) &&
+                                (return_hero_animation_id_unchanged(moby[0x52]) == 8 ||
+                                 return_hero_animation_id_unchanged(moby[0x52]) == 9) &&
                                 moby[0x52] == moby[0x53] &&
                                 D_L16_0017C218.f18 * frame_time * 0.1f > hero.target_speed &&
                                 frame_time * 2.5f > hero.motion.unk164) {

@@ -701,7 +701,7 @@ extern u8 *FUN_L00_0024f028_20dd20(struct Moby *, s32) __asm__("FUN_L00_0024f028
 extern void FUN_L00_0024f0e8_20dd20(struct Moby *, u8 **) __asm__("FUN_L00_0024f0e8");
 extern void FUN_L00_0024f190_20dd20(struct Moby *, u8 *) __asm__("FUN_L00_0024f190");
 extern f32 FUN_00213ed8_20dd20(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern s32 FUN_L00_002050b8_20dd20(s32) __asm__("FUN_L00_002050b8");
+extern s32 return_hero_animation_id_unchanged(s32) __asm__("FUN_L00_002050b8");
 extern s32 FUN_L00_0020d5d0_20dd20(s32, f32 *) __asm__("FUN_L00_0020d5d0");
 extern s32 FUN_L00_0020d5b8_20dd20(struct Moby *, s32) __asm__("FUN_L00_0020d5b8");
 extern s32 FUN_001f96f8_20dd20(s32) __asm__("FUN_001f96f8");
@@ -784,8 +784,8 @@ void FUN_L00_0020dd20(void) {
 
         w.v = 0;
         if (diff && hero.unkA9C != 0) {
-            s32 a = FUN_L00_002050b8_20dd20(o[0x23]);
-            s32 b = FUN_L00_002050b8_20dd20(((u8 *)hero.moby)[0x53]);
+            s32 a = return_hero_animation_id_unchanged(o[0x23]);
+            s32 b = return_hero_animation_id_unchanged(((u8 *)hero.moby)[0x53]);
             if (a != b) {
                 w.v = o[0x22] != o[0x23];
             }
