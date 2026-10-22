@@ -107,6 +107,8 @@ void draw_dialog_text(void) {
         MODE_FREEZE_SHARED_BOOT_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE = 4,
         MODE_FREEZE_FORMATTED_CENTERED_FOOTER_MESSAGE = 5,
         MODE_FREEZE_ALTERNATE_LEFT_PAIRED_FOOTER_MESSAGE = 6,
+        MODE_FREEZE_BODY_ONLY_MESSAGE = 7,
+        MODE_FREEZE_SHARED_BODY_ONLY_MESSAGE = 8,
         MODE_FREEZE_FLAG_GATED_PAIRED_OR_CENTERED_FOOTER_MESSAGE = 12,
         MODE_FREEZE_SHARED_ALTERNATE_LEFT_PAIRED_FOOTER_MESSAGE = 13,
         MODE_FREEZE_CENTERED_FOOTER_MESSAGE = 17,
@@ -203,8 +205,8 @@ void draw_dialog_text(void) {
         case 11:
             text = get_help_message_text(0x4FC1);
             break;
-        case 7:
-        case 8:
+        case MODE_FREEZE_BODY_ONLY_MESSAGE:
+        case MODE_FREEZE_SHARED_BODY_ONLY_MESSAGE:
             text = get_help_message_text(0x4FB7);
             break;
         case 14:
