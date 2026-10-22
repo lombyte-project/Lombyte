@@ -903,7 +903,9 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001f99c0(float);
 
-int FUN_L02_002fb788(char *moby, float residual_angle_limit_degrees, float b) {
+int test_moby_camera_target_angle_limits(char *moby, float residual_angle_limit_degrees, float b) __asm__("FUN_L02_002fb788");
+
+int test_moby_camera_target_angle_limits(char *moby, float residual_angle_limit_degrees, float b) {
     float target_displacement[4];
     float scaled_axis_vector[4];
     float target_axis_residual[4];
@@ -1121,7 +1123,7 @@ void FUN_L02_002fb9c8(char *moby) {
             int waited = (unsigned short)*(short *)(data + 0x3e) + 1;
             *(short *)(data + 0x3e) = waited;
             if ((short)waited >= count) {
-                if (FUN_L02_002fb788(moby, 30.0f, 0.0f) != 0)
+                if (test_moby_camera_target_angle_limits(moby, 30.0f, 0.0f) != 0)
                     *(short *)(data + 0x20) = end;
                 else
                     active = 0;
@@ -1144,7 +1146,7 @@ void FUN_L02_002fb9c8(char *moby) {
     hit = 0;
     amount = *(float *)data * scale * 0.017453292f * ((float)*(short *)(data + 0x20) / convert_integer_to_float(frames));
     if (active) {
-        if (FUN_L02_002fb788(moby, *(float *)(data + 0x30), *(float *)(data + 0x2c)) != 0) {
+        if (test_moby_camera_target_angle_limits(moby, *(float *)(data + 0x30), *(float *)(data + 0x2c)) != 0) {
             hit = 1;
             if ((unsigned short)(*(short *)(data + 0x3c) - 4) < 2) {
                 heading_vector[0] = fast_cos(*(float *)(data + 0x40));
