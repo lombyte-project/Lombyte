@@ -1549,7 +1549,9 @@ extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry_alt(int, int, int) __asm__("FUN_0022db10");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
-void FUN_L11_0031aa80(struct Moby *moby) {
+void update_moby_list_empty_dialogue_trigger(struct Moby *moby) __asm__("FUN_L11_0031aa80");
+
+void update_moby_list_empty_dialogue_trigger(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     if (data[0] == -1) {
         mark_moby_for_removal(moby);
