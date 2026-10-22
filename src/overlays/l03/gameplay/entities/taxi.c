@@ -703,7 +703,9 @@ char *FUN_L03_002cc888(char *parent_moby, void *pos, float *launch_velocity) {
 }
 
 /* Test the observed halfword and byte range without inferring object identity. */
-s32 FUN_L03_002d30d8(u8 *object) {
+s32 is_taxi_in_round_trip_phase(u8 *object) __asm__("FUN_L03_002d30d8");
+
+s32 is_taxi_in_round_trip_phase(u8 *object) {
     if (*(s16 *)(object + 0xa6) != 0x330) {
         return 0;
     }
@@ -780,7 +782,7 @@ void FUN_L03_002d3198(struct Moby *taxi_moby) {
     s32 i;
     s32 route_index;
 
-    FUN_L00_00266858(taxi_moby, FUN_L03_002d30d8((u8 *)taxi_moby));
+    FUN_L00_00266858(taxi_moby, is_taxi_in_round_trip_phase((u8 *)taxi_moby));
     if (D_L03_00161B04 != 0) {
         for (i = 0; i < D_L03_001B05B0[taxi_vars->out[0]]->count; i++) {
             draw_number(&D_L03_001B05B0[taxi_vars->out[0]]->pts[i], taxi_moby, 4, 0x800000FF, 0x7F, 2, 0xFF, 0.333f);
