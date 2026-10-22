@@ -55,7 +55,9 @@ extern void spawn_joint_linked_moby_parts(struct Moby *) __asm__("FUN_L08_002e95
 extern void process_linked_moby_part_hits(struct Moby *) __asm__("FUN_L08_002e9758");
 extern void update_commando_parts(struct Moby *) __asm__("FUN_L08_002e9a18");
 
-void FUN_L08_002e9b70(struct Moby *moby) {
+void update_path_following_moby_swarm(struct Moby *moby) __asm__("FUN_L08_002e9b70");
+
+void update_path_following_moby_swarm(struct Moby *moby) {
     enum {
         SWARM_INITIALIZE = 0,
         SWARM_FOLLOW_PRIMARY_PATH = 1,
