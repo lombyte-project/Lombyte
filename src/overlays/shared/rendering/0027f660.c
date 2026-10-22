@@ -54,7 +54,9 @@ extern int func_001FA898_r_80970(float) __asm__("FUN_001fa6d0");
 extern int func_002140B0_80970(int) __asm__("FUN_00213260");
 extern int func_001F9850_80970(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L01_001B2538 __attribute__((section(".data")));
-char *FUN_L01_00280970(int particle_value, char *position_source) {
+char *spawn_type_14_particle(int particle_value, char *position_source) __asm__("FUN_L01_00280970");
+
+char *spawn_type_14_particle(int particle_value, char *position_source) {
     char *particle = func_00218928_80970(0xE);
     int particle_frame_offset;
     int *particle_data;
