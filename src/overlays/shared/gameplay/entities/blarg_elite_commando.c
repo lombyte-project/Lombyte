@@ -722,7 +722,9 @@ void set_blarg_elite_commando_parent_transform(char *moby, void *owner, void *po
 
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L16_002d3de0(struct Moby *moby, int return_countdown_ticks) {
+void start_blarg_elite_commando_return_to_initial_position(struct Moby *moby, int return_countdown_ticks) __asm__("FUN_L16_002d3de0");
+
+void start_blarg_elite_commando_return_to_initial_position(struct Moby *moby, int return_countdown_ticks) {
     char *commando_data = (char *)moby->pvars;
     if (moby->state == 10) {
         moby->state = 1;
