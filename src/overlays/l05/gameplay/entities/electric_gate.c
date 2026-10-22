@@ -808,7 +808,7 @@ extern float fast_add_rotations_f5c8(float, float) __asm__("FUN_001fa580");
 extern float fast_cos_f5c8(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_f5c8(float) __asm__("FUN_001f9de0");
 extern int allocate_target_entry_f5c8(int, int, void *) __asm__("FUN_0022da68");
-extern void FUN_L05_00318648(struct Moby *, struct Moby *, void *, void *, int);
+extern void initialize_moby_launch_motion(struct Moby *, struct Moby *, void *, void *, int) __asm__("FUN_L05_00318648");
 extern void FUN_L01_0029b0a0(void *, int, void *, int, void *);
 extern void update_entity_f5c8(struct Moby *) __asm__("FUN_L00_00250df8");
 extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
@@ -841,7 +841,7 @@ void pipe_mounted_grating_update(struct Moby *moby) {
             speed = random_float_between_f5c8(5.0f, 12.0f);
             scale_vector_f5c8(piece_initial_motion_step, &moby->rot_row0, -(speed * frame_time));
             clear_vector_f5c8(spin_vel);
-            FUN_L05_00318648(piece, moby, piece_initial_motion_step, spin_vel, scale_game_frames_f5c8(60));
+            initialize_moby_launch_motion(piece, moby, piece_initial_motion_step, spin_vel, scale_game_frames_f5c8(60));
             *(int *)(vars + 0xC) = 0x200;
         }
         allocate_target_entry_f5c8(0, 0, piece);
@@ -887,7 +887,7 @@ void pipe_mounted_grating_update(struct Moby *moby) {
                     life = random_float_between_f5c8(60.0f, 120.0f);
                     scale_vector_f5c8(piece_initial_motion_step, &moby->rot_row0, -(speed * frame_time));
                     clear_vector_f5c8(spin_vel);
-                    FUN_L05_00318648(piece, moby, piece_initial_motion_step, spin_vel, float_to_int_f5c8(scale_time_f5c8(life)));
+                    initialize_moby_launch_motion(piece, moby, piece_initial_motion_step, spin_vel, float_to_int_f5c8(scale_time_f5c8(life)));
                     *(int *)(vars + 0xC) = 0x200;
                     piece->rot.x = angle;
                     update_entity_f5c8(piece);

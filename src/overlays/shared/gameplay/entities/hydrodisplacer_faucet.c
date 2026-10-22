@@ -750,7 +750,9 @@ typedef struct {
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
-void FUN_L05_00318648(char *moby, int unused_source_moby, void *initial_motion_step, void *local_rotation_offset, int lifetime_frames) {
+void initialize_moby_launch_motion(char *moby, int unused_source_moby, void *initial_motion_step, void *local_rotation_offset, int lifetime_frames) __asm__("FUN_L05_00318648");
+
+void initialize_moby_launch_motion(char *moby, int unused_source_moby, void *initial_motion_step, void *local_rotation_offset, int lifetime_frames) {
     Dat *moby_vars = *(Dat **)(moby + 0x78);
     moby[0x20] = 1;
     qcopy((char *)moby_vars + 0x30, initial_motion_step);

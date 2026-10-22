@@ -1194,7 +1194,7 @@ extern int D_L08_0015FFBC;
 extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
 extern short *D_L08_001AC040[];
 extern void FUN_L00_0025e450_c2(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L05_00318648(void*,int,void*,void*,int);
+extern void initialize_moby_launch_motion(void*,int,void*,void*,int) __asm__("FUN_L05_00318648");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 
 void FUN_L08_002d5d08(char *moby) {
@@ -1246,7 +1246,7 @@ void FUN_L08_002d5d08(char *moby) {
             launch_velocity_or_offset[1] = fast_sin(ang) * (D_0015ED6C_lui * 15.0f);
             launch_velocity_or_offset[2] = 0.0f;
             launch_velocity_or_offset[2] = random_float_between_c4(D_0015ED6C_lui * 8.0f, D_0015ED6C_lui * 12.0f);
-            FUN_L05_00318648(spawned_debris_moby, (int)moby, launch_velocity_or_offset, launch_offset, func_001FA898_2D6C58(random_float_between_c4(60.0f, 90.0f)));
+            initialize_moby_launch_motion(spawned_debris_moby, (int)moby, launch_velocity_or_offset, launch_offset, func_001FA898_2D6C58(random_float_between_c4(60.0f, 90.0f)));
         }
     }
     while (1) {
@@ -1298,9 +1298,9 @@ void FUN_L08_002d5d08(char *moby) {
                 if (fast_difference_between_rotations_c2(fast_arc_tan_c(position_or_velocity_scratch[0], position_or_velocity_scratch[1]),
                                   fast_arc_tan_c(D_L08_00167480.x - *(float *)(moby + 0x10),
                                                     D_L08_00167480.y - *(float *)(moby + 0x14))) < 0.2617994f) {
-                    FUN_L05_00318648(other, (int)moby, position_or_velocity_scratch, launch_offset, func_001FA898_2D6C58(random_float_between_c4(10.0f, 20.0f)));
+                    initialize_moby_launch_motion(other, (int)moby, position_or_velocity_scratch, launch_offset, func_001FA898_2D6C58(random_float_between_c4(10.0f, 20.0f)));
                 } else {
-                    FUN_L05_00318648(other, (int)moby, position_or_velocity_scratch, launch_offset, func_001FA898_2D6C58(random_float_between_c4(30.0f, 45.0f)));
+                    initialize_moby_launch_motion(other, (int)moby, position_or_velocity_scratch, launch_offset, func_001FA898_2D6C58(random_float_between_c4(30.0f, 45.0f)));
                 }
             } else if ((short)cls == 0x1D8) {
                 clear_u64_value(position_or_velocity_scratch);
@@ -2524,7 +2524,7 @@ extern void cart_burst(void*,void*,int,float,float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f730(void*,float);
 extern void FUN_L00_00262cf0(void*,void*,float,float,float);
 extern void FUN_L00_00269958(void*,void*,int,int,int,int,int,int);
-extern void FUN_L05_00318648(void*,int,void*,void*,int);
+extern void initialize_moby_launch_motion(void*,int,void*,void*,int) __asm__("FUN_L05_00318648");
 extern void FUN_L08_002de528_u(void*,int,int,int) __asm__("FUN_L08_002de528");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
@@ -2707,7 +2707,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
                             launch_offset=effect;
                             if (angle_delta<0.7853982f) { min_frames=10.0f; max_frames=20.0f; }
                             else { min_frames=60.0f; max_frames=90.0f; }
-                            FUN_L05_00318648(other,(int)moby,velocity_correction_or_effect_velocity,launch_offset,func_001FA898_r(random_float_between_c2(min_frames,max_frames)));
+                            initialize_moby_launch_motion(other,(int)moby,velocity_correction_or_effect_velocity,launch_offset,func_001FA898_r(random_float_between_c2(min_frames,max_frames)));
                         }
                     } else if ((short)linked_moby_class_id==0x1A8) {
                         special=1; clear_u64_value(velocity_correction_or_effect_velocity);
@@ -2836,7 +2836,7 @@ void FUN_L08_002de528(char *moby, int transform_index, int spawn_count, int flag
             subtract_vector_xyz(launch_velocity, spawn_position, moby + 0x10);
             set_vector_length_xy(launch_velocity, launch_velocity, random_float_between_c3(D_0015ED6C_lui * 12.0f, D_0015ED6C_lui * 15.0f));
             launch_velocity[2] = random_float_between_c3(D_0015ED6C_lui * 6.0f, D_0015ED6C_lui * 18.0f);
-            FUN_L05_00318648(spawned_moby, (int)moby, launch_velocity, local_rotation_offset, func_001FA898_r(random_float_between_c3(60.0f, 90.0f)));
+            initialize_moby_launch_motion(spawned_moby, (int)moby, launch_velocity, local_rotation_offset, func_001FA898_r(random_float_between_c3(60.0f, 90.0f)));
         }
     }
 }
