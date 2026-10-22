@@ -3170,7 +3170,7 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 void FUN_L14_002d6358(struct Moby *m);
 int FUN_L14_002d64d0(struct Moby *m);
 void FUN_L14_002d67e8(struct Moby *m);
-void FUN_L14_002d7198(struct Moby *m);
+void advance_moby_along_path(struct Moby *m) __asm__("FUN_L14_002d7198");
 void FUN_L14_002d7490(struct Moby *m);
 
 void FUN_L14_002d5f40(struct Moby *m);
@@ -3243,7 +3243,7 @@ void FUN_L14_002d5f40(struct Moby *racer_moby) {
         }
         break;
     case RACER_STATE_FOLLOW_PATH:
-        FUN_L14_002d7198(racer_moby);
+        advance_moby_along_path(racer_moby);
         break;
     case RACER_STATE_WAIT_FOR_EXIT_VOLUME:
         FUN_L14_002d67e8(racer_moby);

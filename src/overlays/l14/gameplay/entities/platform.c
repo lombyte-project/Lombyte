@@ -431,7 +431,9 @@ extern int D_L14_0015F70C;
 extern void sample_path(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
 
 extern float D_L14_00161A30 __attribute__((sda));
-void FUN_L14_002d7198(struct Moby *moby) {
+void advance_moby_along_path(struct Moby *moby) __asm__("FUN_L14_002d7198");
+
+void advance_moby_along_path(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int path_index = *(int *)(data + 0x60);
     sample_path(*(int *)((path_index << 5) + D_L14_0015F70C + 0x10), &moby->pos, data + 0x64,
