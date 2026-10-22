@@ -179,7 +179,9 @@ void FUN_L00_002a9be0_210ce8(void) __asm__("FUN_L00_002a9be0");
 void FUN_001f99f8_210ce8(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
-s32 FUN_L15_00208e10(s32 apply_hit_reaction) {
+s32 process_hero_incoming_hit(s32 apply_hit_reaction) __asm__("FUN_L15_00208e10");
+
+s32 process_hero_incoming_hit(s32 apply_hit_reaction) {
     u8 *hero_moby;
     T_210ce8 *incoming_hit_record;
     u8 *mob;
