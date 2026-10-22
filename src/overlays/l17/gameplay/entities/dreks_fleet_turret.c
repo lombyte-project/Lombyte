@@ -658,7 +658,9 @@ extern unsigned char *FUN_L00_002730e0(float *pos, char *vel, int color, unsigne
                                        unsigned char b, int mode, float scale);
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
-void FUN_L17_002d7cf0(struct Moby *moby);
+void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
+
+void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
@@ -705,7 +707,7 @@ void FUN_L17_002d77f0(char *moby) {
             break;
         case RING_ROTATE_AND_DRAW:
             *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), ring_vars[1]);
-            enqueue_callback_list_1(FUN_L17_002d7cf0, moby);
+            enqueue_callback_list_1(draw_fleet_scrolling_radial_quads, moby);
             break;
         }
         subtract_vector_xyz(moby_to_hero_vector, &hero.motion.pos, (moby + 0x10));
@@ -834,7 +836,7 @@ extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void draw_geometry_quad(void *, void *, int);
 extern void wrap_angle_alt(void *, float, float, float) __asm__("FUN_00214db0");
 
-void FUN_L17_002d7cf0(struct Moby *moby) {
+void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
     RingPrim quad_primitive;
     float moby_transform_matrix[16];
     float scroll;
