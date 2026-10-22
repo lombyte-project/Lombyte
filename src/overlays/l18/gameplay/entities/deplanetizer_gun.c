@@ -1150,7 +1150,9 @@ void gadgebot_update(unsigned char *moby) {
 extern int game_frame __asm__("D_L18_0015F5CC");
 extern int D_L18_0015F5C4;
 extern int *D_L18_001B0EB0[] __asm__("D_L18_001B0EB0");
-extern void FUN_L18_002fca98(struct Moby *moby);
+void draw_group_class_0772_joint_glows(struct Moby *moby) __asm__("FUN_L18_002fca98");
+
+extern void draw_group_class_0772_joint_glows(struct Moby *moby) __asm__("FUN_L18_002fca98");
 extern float fast_add_rotations_c100(float, float) __asm__("FUN_001fa580");
 extern float fast_sin_c100(float) __asm__("FUN_001f9de0");
 extern int tween_color_c100(int, int, float) __asm__("FUN_001fa6e0");
@@ -1224,7 +1226,7 @@ void FUN_L18_002fc100(struct Moby *moby) {
     }
     if (moby->state != 7 && game_frame != D_L18_00162604) {
         D_L18_00162604 = game_frame;
-        enqueue_callback_list_1(FUN_L18_002fca98, moby);
+        enqueue_callback_list_1(draw_group_class_0772_joint_glows, moby);
     }
     speed = D_L18_00162614;
     if (moby->state == 4 || moby->state == 5) {
@@ -1496,7 +1498,7 @@ extern short D_L18_00162654;
 extern unsigned short *D_L18_001AC240_c[] __asm__("D_L18_001AC240");
 extern void FUN_L00_00263618(void *, int, float, float);
 
-void FUN_L18_002fca98(struct Moby *moby) {
+void draw_group_class_0772_joint_glows(struct Moby *moby) {
     unsigned short *group_moby_entry = D_L18_001AC240_c[moby->group];
     if (group_moby_entry != 0) {
         while (1) {
