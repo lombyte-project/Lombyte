@@ -44,7 +44,9 @@ extern void FUN_L00_00232628(void);
 
 /* Resets hero fields 0x220..0x234, 0x22CB, 0x2084 and 0xA94, then calls 00232628 and 002223f8. */
 extern unsigned char D_0014161B[];
-void FUN_L00_00204f80(void) {
+void reset_hero_to_idle(void) __asm__("FUN_L00_00204f80");
+
+void reset_hero_to_idle(void) {
     struct Hero *hero_state = &hero;
     hero_state->capsule_top = 0.8f;
     hero_state->unk234 = 0.45f;
