@@ -94,7 +94,9 @@ extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 FUN_L00_0025ff38(void *, void *, s32, s32, void *, s32, float);
 
 /* Path patroller update: rides its carrier moby until dropped, takes hits (hit and death states), and follows its D_L11_001B0EB0 path toward the hero. */
-void FUN_L11_00315968(struct Moby *moby) {
+void update_puffoid_damage_and_path_goal(struct Moby *moby) __asm__("FUN_L11_00315968");
+
+void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     enum {
         HIT_RESPONSE_NO_ADDITIONAL_REACTION = 0,
         HIT_RESPONSE_DEATH = 1,

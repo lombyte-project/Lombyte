@@ -3185,7 +3185,7 @@ extern float D_L11_001622E4 __attribute__((sda));
 extern float D_L11_001622E8 __attribute__((sda));
 extern float D_L11_001622EC __attribute__((sda));
 extern float D_L11_001622F0 __attribute__((sda));
-extern void FUN_L11_00315968(struct Moby *);
+extern void update_puffoid_damage_and_path_goal(struct Moby *) __asm__("FUN_L11_00315968");
 extern void update_moby_target_heading_and_conditional_movement(char *a0, float *a1) __asm__("FUN_L11_00315f58");
 extern short count_group_class_4de_mobys_in_states_13_to_17(struct Moby *self) __asm__("FUN_L11_00316090");
 extern void spawn_4318(struct Moby *, int, void *, float) __asm__("FUN_L00_00263ac8");
@@ -3268,7 +3268,7 @@ void puffoid_update(struct Moby *moby) {
 
     if (moby->state != 0x14) {
         puffoid_vars->unkC8 = 0;
-        FUN_L11_00315968(moby);
+        update_puffoid_damage_and_path_goal(moby);
     }
     target = puffoid_vars->target;
     spawn_4318(moby, 0, puffoid_vars->unk280, 2.5f);
