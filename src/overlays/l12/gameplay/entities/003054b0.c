@@ -1011,7 +1011,9 @@ extern int FUN_0022da68(int, int, void *);
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void FUN_L12_00308350(struct Moby *);
+void draw_hoven_jittered_quad_layers(struct Moby *moby) __asm__("FUN_L12_00308350");
+
+extern void draw_hoven_jittered_quad_layers(struct Moby *) __asm__("FUN_L12_00308350");
 
 /* Pvars: d[0] is the moby to watch, d[1] the voice slot held for this moby. */
 void update_moby_draw_and_monitor_linked_state(struct Moby *moby) __asm__("FUN_L12_003081b0");
@@ -1039,7 +1041,7 @@ void update_moby_draw_and_monitor_linked_state(struct Moby *moby) {
             vis = 0;
         }
         if (vis) {
-            enqueue_callback_list_1(FUN_L12_00308350, moby);
+            enqueue_callback_list_1(draw_hoven_jittered_quad_layers, moby);
         }
         if (moby_data[1] == -1) {
             moby_data[1] = FUN_0022da68(0, 4, moby);
@@ -1098,7 +1100,7 @@ extern void copy_moby_matrix(void *, void *) __asm__("FUN_001fa298");
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad_l12(void *, void *, int) __asm__("FUN_001f7d30");
 
-void FUN_L12_00308350(struct Moby *moby) {
+void draw_hoven_jittered_quad_layers(struct Moby *moby) {
     VendorDrawPacket packets[2] __attribute__((aligned(16)));
     float matrix[16] __attribute__((aligned(16)));
     long texture;
