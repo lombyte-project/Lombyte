@@ -1815,7 +1815,7 @@ extern int FUN_L00_0025e3b8(void *);
 extern float FUN_L00_00257c48(float, float);
 extern void blend_moby_animation_ex(void *, int, int, int, int) __asm__("FUN_002130d8");
 extern int FUN_L01_0028b510(void *, void *, float);
-extern int FUN_L12_0027b8e0(void *, void *, float, float, float);
+extern int test_point_within_moby_limits(void *, void *, float, float, float) __asm__("FUN_L12_0027b8e0");
 extern float vector_project_72(void *) __asm__("FUN_001f9b20");
 extern void spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 
@@ -1928,7 +1928,7 @@ hide:
         if (distance_xyz(&moby->pos, &hero.motion.pos) > 64.0f) return;
         if (moby->prev_seq != 0 && moby->seq == moby->prev_seq)
             blend_moby_animation_ex(moby, 0, 0, scale_game_frames_e81e0(8), 5);
-        if (!FUN_L12_0027b8e0(moby, &target->pos, TROOPER_F(0x230), 3.0f, 0.0f)) {
+        if (!test_point_within_moby_limits(moby, &target->pos, TROOPER_F(0x230), 3.0f, 0.0f)) {
             if ((TROOPER_I(0x25c) == -1 || !is_point_inside_clip_volume(&target->pos, TROOPER_I(0x25c))) && moby->command == 0) break;
         }
         if (moby->flags & 1) {
