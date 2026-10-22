@@ -2422,7 +2422,7 @@ extern void FUN_L00_00263ac8(void *, int, void *, float);
 extern void FUN_L12_002eb220(struct Moby *);
 extern void FUN_L12_002eae00(struct Moby *);
 extern int FUN_L12_002eaf68(struct Moby *, int);
-extern void FUN_L12_0027ba70(int);
+extern void cache_consecutive_point_distances(int) __asm__("FUN_L12_0027ba70");
 extern struct Moby *create_class_55b_moby_from_source(struct Moby *) __asm__("FUN_L12_00308670");
 extern void FUN_L12_00308708(struct Moby *, struct Moby *);
 extern int allocate_voice_for_target_entry_e9f68(int, int, int) __asm__("FUN_0022da68");
@@ -2539,9 +2539,9 @@ update_state:
         *(float *)(data + 0x9c) = 0.0f;
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xefff;
-        FUN_L12_0027ba70(*(int *)(data + 0xa0));
-        FUN_L12_0027ba70(*(int *)(data + 0xa0));
-        FUN_L12_0027ba70(*(int *)(data + 0xa4));
+        cache_consecutive_point_distances(*(int *)(data + 0xa0));
+        cache_consecutive_point_distances(*(int *)(data + 0xa0));
+        cache_consecutive_point_distances(*(int *)(data + 0xa4));
         if (moby->draw_dist < 128) moby->draw_dist = 128;
         if (*(struct Moby **)(data + 0xac) == 0) {
             *(struct Moby **)(data + 0xac) = create_class_55b_moby_from_source(moby);
