@@ -1591,7 +1591,9 @@ unsigned char *FUN_L00_00274cf8(void *position, int particle_texture_index, floa
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 /* Every second tick lowers the top byte at a+4 by 1; calls 00267a08 once it reaches 0. */
-void FUN_L00_00274de0(char *particle) {
+void update_periodic_alpha_fade_particle(char *particle) __asm__("FUN_L00_00274de0");
+
+void update_periodic_alpha_fade_particle(char *particle) {
     int decremented_fade_timer = *(unsigned short *)(particle + 0xA) - 1;
     *(short *)(particle + 0xA) = decremented_fade_timer;
     if ((short)decremented_fade_timer == 0) {
