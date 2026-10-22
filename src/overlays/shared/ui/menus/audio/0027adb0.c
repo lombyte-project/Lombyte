@@ -13,7 +13,9 @@ typedef struct {
 extern u16 D_L00_00179452[];
 extern E_27adb0 D_L00_001B3D40[];
 /* Fills D_L00_001B3D40 from the D_00141E08 table in reverse order, then ends it with 0. */
-s32 FUN_L00_0027adb0(void) {
+s32 build_reversed_active_message_list(void) __asm__("FUN_L00_0027adb0");
+
+s32 build_reversed_active_message_list(void) {
     s32 i, j;
     for (i = 0; i < active_message_record_count; i = j) {
         j = i + 1;
