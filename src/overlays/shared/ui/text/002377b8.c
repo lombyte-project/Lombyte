@@ -1211,7 +1211,9 @@ int FUN_L00_00239df8(HudElem *hud_element)
 extern s32 D_00141398 NOT_SDA;
 extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-void FUN_L00_0023a218(u8 *hud_element) {
+void update_hud_panel_visibility(u8 *hud_element) __asm__("FUN_L00_0023a218");
+
+void update_hud_panel_visibility(u8 *hud_element) {
     u8 *visibility_counters = hud_element + 0x70;
     if (D_00141398) {
         s32 scaled_duration_frames = scale_game_frames(10);
