@@ -6460,7 +6460,9 @@ extern int FUN_L01_0026e008(int, int);
 void begin_red_button_rotation(char *moby) __asm__("FUN_L06_003047b8");
 
 extern void begin_red_button_rotation(char *) __asm__("FUN_L06_003047b8");
-extern int FUN_L06_003047f8(const u8 *);
+s32 get_red_button_sequence_status(const u8 *moby) __asm__("FUN_L06_003047f8");
+
+extern int get_red_button_sequence_status(const u8 *) __asm__("FUN_L06_003047f8");
 extern void FUN_L06_00302400(struct Moby *, int);
 extern void set_moby_list_state_17(int) __asm__("FUN_L06_002ffc38");
 extern void set_moby_list_state_15(int) __asm__("FUN_L06_002e9e30");
@@ -6526,14 +6528,14 @@ void FUN_L06_00301b90(unsigned char *moby) {
     case TRIGGER_LINKED_SEQUENCE_WHEN_GROUP_INACTIVE:
         if (FUN_L01_0026e008(*(int *)(moby_vars + 0x1C), -1) != 0) return;
         begin_red_button_rotation(D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x2C) << 8));
-        if (FUN_L06_003047f8((const u8 *)D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x2C) << 8)) != 1) return;
+        if (get_red_button_sequence_status((const u8 *)D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x2C) << 8)) != 1) return;
         moby[0x20] = 2;
         FUN_L06_00302400((struct Moby *)moby, 0);
         return;
     case WAIT_FOR_LINKED_SEQUENCE_COMPLETION: {
         int *p;
         float r;
-        if (FUN_L06_003047f8((const u8 *)D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x2C) << 8)) != 2) return;
+        if (get_red_button_sequence_status((const u8 *)D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x2C) << 8)) != 2) return;
         moby[0x20] = 3;
         *(int *)(moby_vars + 0xB0) = 1;
         jet_game_state(6, 9);
@@ -7683,7 +7685,7 @@ void begin_red_button_rotation(char *moby) {
         allocate_voice_for_target_entry(0, 0, moby);
     }
 }
-s32 FUN_L06_003047f8(const u8 *moby) {
+s32 get_red_button_sequence_status(const u8 *moby) {
     u32 state = moby[0x20];
 
     if (state == 7) {
