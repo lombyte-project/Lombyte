@@ -665,7 +665,9 @@ extern void update_moby_pulsing_glow_effects(void *) __asm__("FUN_L00_00207430")
 /* Per-frame update while the cutscene in D_L00_0016C860 plays: runs the debug-gated subsystem
    updates, fades, advances the frame counters and either finishes the cutscene (end frame
    reached or skipped) or steps each of its mobys between two keyframes. */
-void FUN_L00_00298f90(void) {
+void update_cutscene_playback(void) __asm__("FUN_L00_00298f90");
+
+void update_cutscene_playback(void) {
     VendorCutscene *cs;
     VendorMoby *cutscene_moby;
     s32 done;

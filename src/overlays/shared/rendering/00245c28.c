@@ -48,7 +48,7 @@ extern void FUN_L00_001f58e0(void);
 extern void FUN_L00_00297f78(void);
 extern void draw_debug_profiler_if_enabled(void) __asm__("FUN_L00_001f8e30");
 extern void play_queued_movie(void) __asm__("FUN_L00_002999a8");
-extern void FUN_L00_00298f90(void);
+extern void update_cutscene_playback(void) __asm__("FUN_L00_00298f90");
 extern void prepare_debug_profiler_render(void) __asm__("FUN_001f4248");
 extern void FUN_L00_00276bd0(void);
 extern void draw_page_contents(void) __asm__("FUN_L00_001f8f50");
@@ -190,7 +190,7 @@ void FUN_L00_00245c28(void) {
             break;
         case LEVEL_MODE_DEBUG_PROFILER_RENDER:
             register_audio_stream_callback();
-            FUN_L00_00298f90();
+            update_cutscene_playback();
             prepare_debug_profiler_render();
             break;
         case LEVEL_MODE_CALLBACK_TABLE_UPDATE:
@@ -273,7 +273,7 @@ void FUN_L00_00245c28(void) {
                         FUN_L00_00297f78();
                     } else if (mode == 2 && D_L00_0016C8B0 == 0) {
                         register_audio_stream_callback();
-                        FUN_L00_00298f90();
+                        update_cutscene_playback();
                     }
                 }
                 sce_gs_sync_v(0);
