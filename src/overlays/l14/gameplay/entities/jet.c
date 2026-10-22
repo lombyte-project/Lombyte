@@ -765,7 +765,9 @@ struct L14SparkTarget {
     float yaw;    /* 0x158 */
 };
 extern struct L14SparkTarget D_L14_00167380_spark __asm__("D_L14_00167380");
-void FUN_L14_002eb810(struct Moby *m);
+void draw_wind_sparks(struct Moby *m) __asm__("FUN_L14_002eb810");
+
+void draw_wind_sparks(struct Moby *m) __asm__("FUN_L14_002eb810");
 
 extern int D_L14_00161C10 __attribute__((sda));
 extern int D_L14_00161C2C __attribute__((sda));
@@ -828,7 +830,7 @@ void FUN_L14_002eb568(struct Moby *wind_control_moby) {
         shade++;
         i++;
     } while (i < 48);
-    spark_enqueue_callback(FUN_L14_002eb810, wind_control_moby);
+    spark_enqueue_callback(draw_wind_sparks, wind_control_moby);
 }
 /* Draws every live spark as a quad that faces the camera, faded by its age. */
 typedef unsigned int u128_m __attribute__((mode(TI)));
@@ -855,7 +857,7 @@ float D_L14_001DFD40[4][4] = {
     {0.0f, -1.0f, 1.0f, 1.0f},
     {0.0f, -1.0f, -1.0f, 1.0f},
 };
-void FUN_L14_002eb810(struct Moby *m) {
+void draw_wind_sparks(struct Moby *m) {
     Spk_k *d = (Spk_k *)m->pvars;
     Pk_m pk;
     float spark_quad_to_world[4][4];
