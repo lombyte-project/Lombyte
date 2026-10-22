@@ -83,7 +83,9 @@ extern float D_L18_00162520;
 extern float D_L18_0016252C;
 extern char D_L18_001679D0[];
 /* Preserve the state-4 frame conversion and the state-7 raw-frame arithmetic. */
-void FUN_L18_002f88e8(struct Moby *moby) {
+void update_deplanetizer_gun_sequence_effects(struct Moby *moby) __asm__("FUN_L18_002f88e8");
+
+void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
     enum {
         INITIALIZE_EFFECT_TIMING = 0,
         UPDATE_SEQUENCE_EFFECTS = 1
