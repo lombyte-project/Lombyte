@@ -1675,7 +1675,9 @@ extern int FUN_001fa6d0_26d1b0(float) __asm__("FUN_001fa6d0");
 extern float FUN_001fa6c0_26d1b0(int) __asm__("FUN_001fa6c0");
 extern void FUN_L00_00267a08_26d1b0(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_0026d1b0(unsigned char *particle) {
+void update_moving_spinning_fade_in_out_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026d1b0");
+
+void update_moving_spinning_fade_in_out_effect_particle(unsigned char *particle) {
     unsigned char *particle_data = particle + 0x20;
     float alpha_fade_scratch;
     int phase_duration;
