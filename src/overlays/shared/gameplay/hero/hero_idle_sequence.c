@@ -521,7 +521,7 @@ void update_hero_bolt_exclamation_hud(void) {
         }
     }
 }
-extern void FUN_L00_0028de68_205f60(int, char *, int, int, int) __asm__("FUN_L00_0028de68");
+extern void request_grouped_voice(int, char *, int, int, int) __asm__("FUN_L00_0028de68");
 extern void add_vector_xyz_cf(int, char *, float *) __asm__("FUN_L00_0024f7c8");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -536,7 +536,7 @@ void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int enab
         if (((char *)g->items[1].moby)) {
             item_moby_is_type_ad = *(s16 *)(((char *)g->items[1].moby) + 0xA6) == 0xAD;
         }
-        FUN_L00_0028de68_205f60(record_group_index, joint_index_offset, item_moby_is_type_ad, 0, ((int)g->moby));
+        request_grouped_voice(record_group_index, joint_index_offset, item_moby_is_type_ad, 0, ((int)g->moby));
     }
     if (current_level_index == 12) {
         struct Hero *g = &hero;

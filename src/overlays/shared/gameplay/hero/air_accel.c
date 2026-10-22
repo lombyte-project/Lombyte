@@ -44,7 +44,7 @@ int FUN_L01_00226f10(int item_lookup_enabled) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002283E0), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4);
+extern int request_grouped_voice(int a0, int a1, int a2, int a3, int a4) __asm__("FUN_L00_0028de68");
 
 void request_hero_voice_if_enabled(int voice_group_index, int voice_pair_index, int call_enabled) __asm__("FUN_L01_00227e48");
 
@@ -56,7 +56,7 @@ void request_hero_voice_if_enabled(int voice_group_index, int voice_pair_index, 
         if (voice_index_source != 0) {
             flag = *(short *)(voice_index_source + 0xA6) == 0xAD;
         }
-        FUN_L00_0028de68(voice_group_index, voice_pair_index, flag, 0, *(int *)(hero_state_base + 0x2080));
+        request_grouped_voice(voice_group_index, voice_pair_index, flag, 0, *(int *)(hero_state_base + 0x2080));
     }
 }
 #include "rnc/gameplay/entities/moby.h"
