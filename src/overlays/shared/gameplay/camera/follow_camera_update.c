@@ -408,7 +408,9 @@ extern void FUN_001f9a68_2e9dd0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_2e9dd0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9ad8_2e9dd0(void *, void *, void *) __asm__("FUN_001f9ad8");
 
-void FUN_L00_002e9dd0(char *camera_object) {
+void initialize_hero_aligned_camera_pose(char *camera_object) __asm__("FUN_L00_002e9dd0");
+
+void initialize_hero_aligned_camera_pose(char *camera_object) {
     u128 hero_up_axis;
     u128 scaled_hero_up_axis;
     struct Hero *hero_state = &hero;
@@ -430,7 +432,7 @@ void FUN_L00_002e9dd0(char *camera_object) {
     FUN_001f9ad8_2e9dd0(camera_object, &hero_up_axis, camera_object + 0x10);
     qcopy(camera_object + 0x40, camera_object);
 }
-void FUN_L00_002e9dd0();
+void initialize_hero_aligned_camera_pose();
 /* Clears seven words of the object at p+0x70, calls FUN_L00_002e9dd0, clears 0x7E. */
 void FUN_L00_002e9ef0(char *camera_object) {
     int *camera_state = *(int **)(camera_object + 0x70);
@@ -441,7 +443,7 @@ void FUN_L00_002e9ef0(char *camera_object) {
     camera_state[4] = 0;
     camera_state[5] = 0;
     camera_state[6] = 0;
-    FUN_L00_002e9dd0(camera_object);
+    initialize_hero_aligned_camera_pose(camera_object);
     *(short *)(camera_object + 0x7E) = 0;
 }
 typedef struct {
