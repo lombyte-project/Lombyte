@@ -1371,7 +1371,7 @@ extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_0025e3b8(void *);
 extern int FUN_L00_00261968(int, void *, void *);
 extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
-extern int FUN_L01_00276a48(float, int *, int, int, void *);
+extern int compute_clear_path_point_mask(float, int *, int, int, void *) __asm__("FUN_L01_00276a48");
 extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("FUN_L01_00276fe8");
 extern int FUN_L06_002f32f0_u(void *, int) __asm__("FUN_L06_002f32f0");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
@@ -1563,7 +1563,7 @@ void gadgebot_update(GbMoby *moby) {
                 for (i = 0; i < 16; i++) {
                     if (gadgebot_vars->paths.id[i] >= 0) {
                         build_symmetric_adjacency_masks(&gadgebot_vars->paths.id[i], 1, gadgebot_vars->paths.node[i]);
-                        if (FUN_L01_00276a48(0.0f, &gadgebot_vars->paths.id[i], 1, gadgebot_vars->paths.node[i],
+                        if (compute_clear_path_point_mask(0.0f, &gadgebot_vars->paths.id[i], 1, gadgebot_vars->paths.node[i],
                                              moby->pos) != 0) {
                             gadgebot_vars->unk27C = i;
                         }
@@ -2572,7 +2572,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
             int *path_nodes = (int *)(ow + 0x220);
             for (path_slot_index = 0; path_slot_index < 16; path_slot_index++) {
                 if (ids[path_slot_index] >= 0) {
-                    if (FUN_L01_00276a48(0.0f, (int *)(ow + 0x1E0) + path_slot_index, 1, path_nodes[path_slot_index], ctx + 0x10) != 0) {
+                    if (compute_clear_path_point_mask(0.0f, (int *)(ow + 0x1E0) + path_slot_index, 1, path_nodes[path_slot_index], ctx + 0x10) != 0) {
                         *(int *)(ow + 0x27C) = path_slot_index;
                     }
                 }

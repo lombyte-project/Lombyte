@@ -48,7 +48,9 @@ extern s32 FUN_L00_00261968_276a48(s32, OvlVec4 *, OvlVec4 *) __asm__("FUN_L00_0
 
 /* Bit i set for each point i of the path that none of the n segments in ids
    reaches from pos (with a sideways margin of radius when it is nonzero). */
-s32 FUN_L01_00276a48(s32 *ids, s32 id_count, f32 radius, s32 path_index, OvlVec4 *segment_origin) {
+s32 compute_clear_path_point_mask(s32 *ids, s32 id_count, f32 radius, s32 path_index, OvlVec4 *segment_origin) __asm__("FUN_L01_00276a48");
+
+s32 compute_clear_path_point_mask(s32 *ids, s32 id_count, f32 radius, s32 path_index, OvlVec4 *segment_origin) {
     Path_276a48 *path = D_L01_001B0930_276a48[path_index];
     OvlVec4 side;
     OvlVec4 left;
@@ -129,8 +131,8 @@ s32 follow_path(s32 *ids, s32 id_count, s32 path_index, f32 radius,
     }
     if (hit) {
         path = D_L01_001B0930_276a48[path_index];
-        from_mask = FUN_L01_00276a48(ids, id_count, radius, path_index, start_position);
-        to_mask = FUN_L01_00276a48(ids, id_count, radius, path_index, target);
+        from_mask = compute_clear_path_point_mask(ids, id_count, radius, path_index, start_position);
+        to_mask = compute_clear_path_point_mask(ids, id_count, radius, path_index, target);
         mask = expand_path_mask_to_intersection(path_index, from_mask, to_mask);
         if (mask != 0) {
             nearest = 10000.0f;
