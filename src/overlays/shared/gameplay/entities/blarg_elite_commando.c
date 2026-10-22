@@ -20,7 +20,9 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
-char *FUN_L16_002a09a0(char *owner, float *initial_movement_vector, char *spawn_position) {
+char *spawn_blarg_elite_commando_rocket(char *owner, float *initial_movement_vector, char *spawn_position) __asm__("FUN_L16_002a09a0");
+
+char *spawn_blarg_elite_commando_rocket(char *owner, float *initial_movement_vector, char *spawn_position) {
     char *moby = func_0020D348_m(0x31);
     if (moby != 0) {
         char *data;
@@ -165,7 +167,7 @@ char *FUN_L16_002a0dc0(char *owner, char *initial_movement_vector, void *pos, vo
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D40B8), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_001B0930[];
-extern char *FUN_L16_002a09a0(char *, float *, char *);
+extern char *spawn_blarg_elite_commando_rocket(char *, float *, char *) __asm__("FUN_L16_002a09a0");
 extern char D_L16_001671C0[], D_0013E633[];
 extern char D_L16_00167240[], D_0013E533[];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
@@ -386,7 +388,7 @@ void blarg_elite_commando_update(char *commando_moby) {
             moby_point_position(commando_moby, 0, scratch_vector);
             subtract_vector_xyz(delta, target, scratch_vector);
             normalize_vector_xyz(delta, delta, frame_time * 20.0f);
-            FUN_L16_002a09a0(commando_moby, delta, (char *)scratch_vector);
+            spawn_blarg_elite_commando_rocket(commando_moby, delta, (char *)scratch_vector);
         } else if (is_value_within_interpolated_window(commando_moby, 10.0f)) {
             int count = *(unsigned short *)(commando_data + 0x2DE) + 1;
             *(unsigned short *)(commando_data + 0x2DE) = count;
