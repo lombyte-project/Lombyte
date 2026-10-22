@@ -329,7 +329,9 @@ extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__(
 extern char *FUN_L00_0025a420(void *, int, int);
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
-void FUN_L13_002c2048(Moby_2C27B0 *moby) {
+void update_level_13_class_53_projectile(Moby_2C27B0 *moby) __asm__("FUN_L13_002c2048");
+
+void update_level_13_class_53_projectile(Moby_2C27B0 *moby) {
     char *moby_data = (char *)moby->data;
     V4_2C27B0 steering_and_collision_vector;
     float hitpos[12];
