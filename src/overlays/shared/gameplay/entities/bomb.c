@@ -2114,20 +2114,20 @@ void rocket_update(char *rocket_moby) {
     char *p;
     char *gg;
     V4_cd previous_position;
-    V4_cd dir;
+    V4_cd explosion_direction;
     V4_cd z;
     V4_cd forward_step;
     union { struct { V4_cd a; V4_cd b; V4_cd c; } v; RocketHit h; } u;
     V4_cd intercept_direction;
     V4_cd va0[4];
-    int r;
+    int steering_timer_threshold;
     unsigned char flag;
     float selected_intercept_root;
     float s;
     float k;
     float k60;
     float a;
-    float g;
+    float intercept_angle_scratch;
     float sp;
     float zf;
 
@@ -2139,7 +2139,7 @@ void rocket_update(char *rocket_moby) {
     k = D_0015ED6C;
     *(u128_cd *)&z = 0;
     z.f[2] = k * 8.0f;
-    *(u128_cd *)&dir = *(u128_cd *)&z;
+    *(u128_cd *)&explosion_direction = *(u128_cd *)&z;
     k60 = D_0015ED60;
     {
         float k64 = D_0015ED64;
@@ -2149,16 +2149,16 @@ void rocket_update(char *rocket_moby) {
             *(float *)(rocket_vars + 0x30) = e + (k * 20.0f - e) * (k60 * 0.1f) * k64;
         }
     }
-    r = scale_game_frames_c(250);
-    r -= scale_game_frames_c(5);
-    if (*(int *)(rocket_vars + 0x24) < r) {
+    steering_timer_threshold = scale_game_frames_c(250);
+    steering_timer_threshold -= scale_game_frames_c(5);
+    if (*(int *)(rocket_vars + 0x24) < steering_timer_threshold) {
         target_moby = *(char **)(rocket_vars + 0x28);
         if (target_moby == 0 || *(short *)(target_moby + 0xA6) != *(int *)(rocket_vars + 0x58) || *(unsigned char *)(target_moby + 0x20) == 0xFE || *(unsigned char *)(target_moby + 0x20) == 0xFD) {
             *(float *)(rocket_vars + 0x44) = *(float *)(rocket_vars + 0x44) + D_0015ED60 * 0.1f;
             *(int *)(rocket_vars + 0x28) = 0;
-            r = scale_game_frames_c(250);
-            r -= scale_game_frames_c(100);
-            if (*(int *)(rocket_vars + 0x24) < r) {
+            steering_timer_threshold = scale_game_frames_c(250);
+            steering_timer_threshold -= scale_game_frames_c(100);
+            if (*(int *)(rocket_vars + 0x24) < steering_timer_threshold) {
                 *(float *)(rocket_moby + 0x44) = fast_add_rotations(*(float *)(rocket_moby + 0x44), fast_sin_c(*(float *)(rocket_vars + 0x48)) * (D_0015ED60 * 0.04f));
             }
             *(float *)(rocket_moby + 0x48) = fast_add_rotations(*(float *)(rocket_moby + 0x48), fast_cos_c(*(float *)(rocket_vars + 0x48)) * (D_0015ED60 * 0.05f));
@@ -2189,10 +2189,10 @@ void rocket_update(char *rocket_moby) {
             if (0.0f < selected_intercept_root) {
                 fast_vec_scale(&intercept_direction, &u.v.b, selected_intercept_root);
                 add_vector_xyz(&intercept_direction, &intercept_direction, &u.v.a);
-                g = fast_arc_tan_c(intercept_direction.f[0], intercept_direction.f[1]);
-                *(float *)(rocket_moby + 0x48) = FUN_L00_00258110((float *)(rocket_vars + 0x34), *(float *)(rocket_moby + 0x48), g, D_0015ED70 * 188.49556f, 0.0f, 0.0f);
-                g = fast_arc_tan_c(vector_length_xy(&intercept_direction), intercept_direction.f[2]);
-                *(float *)(rocket_moby + 0x44) = FUN_L00_00258110((float *)(rocket_vars + 0x38), *(float *)(rocket_moby + 0x44), -g, D_0015ED70 * 188.49556f, 0.0f, 0.0f);
+                intercept_angle_scratch = fast_arc_tan_c(intercept_direction.f[0], intercept_direction.f[1]);
+                *(float *)(rocket_moby + 0x48) = FUN_L00_00258110((float *)(rocket_vars + 0x34), *(float *)(rocket_moby + 0x48), intercept_angle_scratch, D_0015ED70 * 188.49556f, 0.0f, 0.0f);
+                intercept_angle_scratch = fast_arc_tan_c(vector_length_xy(&intercept_direction), intercept_direction.f[2]);
+                *(float *)(rocket_moby + 0x44) = FUN_L00_00258110((float *)(rocket_vars + 0x38), *(float *)(rocket_moby + 0x44), -intercept_angle_scratch, D_0015ED70 * 188.49556f, 0.0f, 0.0f);
             }
             s = fast_vec_length(&u.v.a);
             if (s < 6.0f) {
@@ -2279,18 +2279,18 @@ done:
                 || *(short *)(p + 0xA6) == 0x1C9 || *(short *)(p + 0xA6) == 0) goto keep;
             rocket_moby[0xBC] = 2;
             qcopy(rocket_moby + 0x10, gg + 0x20);
-            FUN_L00_001ff660(&dir, &forward_step, gg + 0x40);
-            fast_vec_normalize(&dir, &dir, D_0015ED6C + D_0015ED6C);
-            func_L00_0025F4A8_alt(rocket_moby, &dir, 0, 0.0f, 0.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
+            FUN_L00_001ff660(&explosion_direction, &forward_step, gg + 0x40);
+            fast_vec_normalize(&explosion_direction, &explosion_direction, D_0015ED6C + D_0015ED6C);
+            func_L00_0025F4A8_alt(rocket_moby, &explosion_direction, 0, 0.0f, 0.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
             mark_moby_for_removal_c(rocket_moby);
             return;
         } else {
             if (*(int *)(gg + 0x1C) <= 0) goto keep;
             rocket_moby[0xBC] = 1;
             qcopy(rocket_moby + 0x10, gg + 0x20);
-            FUN_L00_001ff660(&dir, &forward_step, gg + 0x40);
-            fast_vec_normalize(&dir, &dir, D_0015ED6C + D_0015ED6C);
-            func_L00_0025F4A8_alt(rocket_moby, &dir, 0, 0.0f, 1.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
+            FUN_L00_001ff660(&explosion_direction, &forward_step, gg + 0x40);
+            fast_vec_normalize(&explosion_direction, &explosion_direction, D_0015ED6C + D_0015ED6C);
+            func_L00_0025F4A8_alt(rocket_moby, &explosion_direction, 0, 0.0f, 1.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
             mark_moby_for_removal_c(rocket_moby);
             return;
         }
