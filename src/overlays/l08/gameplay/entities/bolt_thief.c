@@ -1195,7 +1195,9 @@ typedef struct {
     s16 points;
 } TargetBoardVars;
 
-void FUN_L08_002e1d70(struct Moby *moby) {
+void spawn_gunship_parts(struct Moby *moby) __asm__("FUN_L08_002e1d70");
+
+void spawn_gunship_parts(struct Moby *moby) {
     TargetBoardVars *vars = (TargetBoardVars *)moby->pvars;
     struct Moby *child_moby;
     s32 i;
@@ -1482,7 +1484,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
         vars->follow[1].path = D_L08_001B0CB0[vars->follow[1].path_id];
         vars->fire_timer = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(300.0f, 600.0f)));
         qcopy(&moby->pos, &vars->follow[1].path->points[0]);
-        FUN_L08_002e1d70(moby);
+        spawn_gunship_parts(moby);
         moby->state = 2;
         moby->rot.z = fast_arc_tan(vars->follow[1].path->points[1].f[0] - moby->pos.x,
                                    vars->follow[1].path->points[1].f[1] - moby->pos.y);
