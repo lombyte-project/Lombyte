@@ -30,7 +30,9 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
    Scalar analogue matched at src/game/mobyutil.c:func_00214220. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258FA8), where it is exact; names translated to the US level program. */
 
-void FUN_L00_00257f70(void *interpolated_vector_output, void *start_vector, void *target_vector, float interpolation_fraction) {
+void interpolate_vector_xyz_cosine_eased(void *interpolated_vector_output, void *start_vector, void *target_vector, float interpolation_fraction) __asm__("FUN_L00_00257f70");
+
+void interpolate_vector_xyz_cosine_eased(void *interpolated_vector_output, void *start_vector, void *target_vector, float interpolation_fraction) {
     float interpolation_delta[4];
     float ease;
 
