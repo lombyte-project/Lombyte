@@ -2747,7 +2747,9 @@ int test_hero_animation_frame_window(float animation_frame_threshold) {
     return 0;
 }
 /* Clears hero.target_speed and unk194 as words. */
-void FUN_L00_002118b0(void) {
+void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
+
+void clear_hero_target_and_ground_speeds(void) {
     struct Hero *hero_state = &hero;
     *(int *)&hero_state->target_speed = 0;
     *(int *)&hero_state->ground_speed = 0;

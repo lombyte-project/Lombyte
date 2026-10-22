@@ -397,7 +397,7 @@ extern unsigned char D_0015EDB4_m[4] __asm__("D_0015EDB4") __attribute__((sectio
 extern int FUN_L00_0024f698(void *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L00_0015F6E0 __attribute__((sda));
-extern void FUN_L00_002118b0(void);
+extern void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
 extern void FUN_L00_002321a8(void);
 extern void FUN_L00_00231e78_c(int, int, float) __asm__("FUN_L00_00231e78");
 extern void FUN_L00_00232220_c(int, int, float) __asm__("FUN_L00_00232220");
