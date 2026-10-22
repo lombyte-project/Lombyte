@@ -59,7 +59,9 @@ extern float integer_to_float_l14(int) __asm__("FUN_001fa6c0");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float spread_l14(float, float) __asm__("FUN_L00_00257c48");
 extern void enqueue_callback_l14(void *, void *) __asm__("FUN_001f4600");
-void FUN_L14_002df458(struct Moby *);
+void draw_ribbon_effect(struct Moby *ribbon_moby) __asm__("FUN_L14_002df458");
+
+void draw_ribbon_effect(struct Moby *) __asm__("FUN_L14_002df458");
 
 /* 0x002DF138, 796 bytes.  Advances the three rotation phases and rebuilds
  * both vector tables: the first half of table 0 is a sine ripple, the second
@@ -141,7 +143,7 @@ void FUN_L14_002df138(u8 *moby) {
         moby_vars[(i * 4) + (0xA0 / 4)] = sweep_point_index * 0.39f;
         moby_vars[(i * 4) + (0xAC / 4)] = 1.0f;
     }
-    enqueue_callback_l14(FUN_L14_002df458, moby);
+    enqueue_callback_l14(draw_ribbon_effect, moby);
 }
 #define NOT_SDA
 
@@ -152,7 +154,7 @@ void FUN_L14_002df138(u8 *moby) {
 extern void FUN_L14_002df510(struct Moby *, void *, int, int, int);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-void FUN_L14_002df458(struct Moby *ribbon_moby) {
+void draw_ribbon_effect(struct Moby *ribbon_moby) {
     char *moby_vars = (char *)ribbon_moby->pvars;
     float updated_texture_u_offset = *(float *)(moby_vars + 0x1EC) - frame_scale * 0.2f;
     *(float *)(moby_vars + 0x1EC) = updated_texture_u_offset;
