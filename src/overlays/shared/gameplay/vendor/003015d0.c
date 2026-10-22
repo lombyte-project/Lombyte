@@ -586,7 +586,7 @@ void apply_vendor_beam_damage(char *self) {
 extern int D_L14_00162148[] __attribute__((section(".sdata")));
 extern int D_L14_001621D8[] __attribute__((section(".sdata")));
 extern void release_beam_slot(int) __asm__("FUN_L00_002e20f8");
-extern void FUN_L00_002e2250(int, int);
+extern void update_slot_panes_and_effects(int, int) __asm__("FUN_L00_002e2250");
 extern void draw_active_beam_slots(void) __asm__("FUN_L00_002e2af0");
 
 void update_beam_slots(unsigned char *moby) __asm__("FUN_L14_003039e0");
@@ -623,7 +623,7 @@ void update_beam_slots(unsigned char *moby) {
                 release_beam_slot(i);
             } else if (slot_state != 0) {
                 started_slot_count++;
-                FUN_L00_002e2250(D_L14_001621D8[i], i);
+                update_slot_panes_and_effects(D_L14_001621D8[i], i);
                 D_L14_00162148[i] = 4;
             }
         }

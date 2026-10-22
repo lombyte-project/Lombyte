@@ -873,7 +873,9 @@ extern int func_001F9850_2E3700(int) __asm__("FUN_001f96f8");
 extern void func_002141A8_2E3700(void *, float, float) __asm__("FUN_00213358");
 extern int func_L00_0023F0D0_2E3700(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 
-void FUN_L00_002e2250(int unused, int beam) {
+void update_slot_panes_and_effects(int unused, int beam) __asm__("FUN_L00_002e2250");
+
+void update_slot_panes_and_effects(int unused, int beam) {
     Vec_2E3700 span;
     Vec_2E3700 beam_direction;
     Vec_2E3700 side;

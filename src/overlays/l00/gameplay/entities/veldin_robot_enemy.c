@@ -741,7 +741,7 @@ typedef struct {
 extern s32 D_L00_00161BF8[] MACRO_ADDR;
 extern s32 D_L00_00161C88[] MACRO_ADDR;
 extern void release_beam_slot(s32) __asm__("FUN_L00_002e20f8");
-extern void FUN_L00_002e2250(s32, s32);
+extern void update_slot_panes_and_effects(s32, s32) __asm__("FUN_L00_002e2250");
 extern void draw_active_beam_slots() __asm__("FUN_L00_002e2af0");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
@@ -775,7 +775,7 @@ void update_beam_slot_controller(SlotMoby *slot_controller) {
                 release_beam_slot(i);
             } else if (slot_state != 0) {
                 dispatched_slot_count++;
-                FUN_L00_002e2250(D_L00_00161C88[i], i);
+                update_slot_panes_and_effects(D_L00_00161C88[i], i);
                 D_L00_00161BF8[i] = 4;
             }
         }
