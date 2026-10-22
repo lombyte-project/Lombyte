@@ -932,7 +932,9 @@ typedef struct {
 int FUN_001f9770_273298(s16 *) __asm__("FUN_001f9770");
 u32 FUN_001fa6e0_273298(u32, u32, f32) __asm__("FUN_001fa6e0");
 void FUN_001f9a10_273298(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_00273298(Part_273298 *particle) {
+void update_moving_hero_relative_alpha_fade_particle(Part_273298 *particle) __asm__("FUN_L00_00273298");
+
+void update_moving_hero_relative_alpha_fade_particle(Part_273298 *particle) {
     V_273298 *particle_data = (V_273298 *)((u8 *)particle + 0x20);
     float remaining_frames_minus_one;
     u32 color_without_alpha;
