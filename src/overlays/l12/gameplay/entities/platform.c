@@ -55,7 +55,9 @@ extern void copy_moby_z_to_group_records(struct Moby *) __asm__("FUN_L12_002bf6d
 extern void initialize_level_12_slot_grid_neighbors(int) __asm__("FUN_L12_002bf770");
 extern void FUN_L12_002bf748(void);
 
-void FUN_L12_002bf140(struct Moby *moby) {
+void update_level_12_water_tile(struct Moby *moby) __asm__("FUN_L12_002bf140");
+
+void update_level_12_water_tile(struct Moby *moby) {
     enum {
         SLOT_INITIALIZE = 0,
         SLOT_INITIALIZE_NEIGHBORS_AND_HEIGHT = 1,
