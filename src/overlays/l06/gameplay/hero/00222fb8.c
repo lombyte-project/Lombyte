@@ -207,7 +207,7 @@ s32 FUN_L06_00227e78(s32 apply_hurt_response) {
             hurt_impulse.f[2] += hurt_impulse.f[2];
         }
         break;
-    case 1:
+    case HERO_VEHICLE_MODE_CLANK:
         hero_set_state(0x46, 1);
         FUN_L00_00210c80_8(&hurt_impulse, flag, D_0015ED6C_8 * 5.0f, D_0015ED6C_8 * 3.0f);
         break;
