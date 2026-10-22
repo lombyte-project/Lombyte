@@ -1791,7 +1791,9 @@ typedef struct {
 
 extern RopeVec rope_grid[][20] __asm__("D_L07_0020DBE0");
 /* Draws the rope grid as textured quads between neighbouring rows, each row faded by its level. */
-void FUN_L07_00317910(void) {
+void draw_rope_strips(void) __asm__("FUN_L07_00317910");
+
+void draw_rope_strips(void) {
     L07RopeDrawPacket packet;
     float phase;
     float row_phase;
@@ -2126,7 +2128,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         normalize_vector_xyz(step, extension, 2.8f);
     }
     }
-    enqueue_callback_list_1(FUN_L07_00317910, moby);
+    enqueue_callback_list_1(draw_rope_strips, moby);
     {
     int created;
     int extras;
