@@ -82,7 +82,9 @@ void draw_ribbon_effect(struct Moby *) __asm__("FUN_L14_002df458");
  *   scheduling barrier.
  * - rp is formed as an integer sum so fold keeps `d` as the last operand
  *   (`addu a0, v0, s1`), the way loop.c's giv init would have emitted it. */
-void FUN_L14_002df138(u8 *moby) {
+void animate_ribbon_effect_paths(u8 *moby) __asm__("FUN_L14_002df138");
+
+void animate_ribbon_effect_paths(u8 *moby) {
     f32 *moby_vars = *(f32 **)(moby + 0x78);
     f32 step;
     f32 ripple_point_index;

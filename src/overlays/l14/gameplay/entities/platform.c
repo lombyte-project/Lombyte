@@ -752,7 +752,7 @@ extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 extern void initialize_ribbon_effect_state(char *) __asm__("FUN_L14_002df080");
-extern void FUN_L14_002df138(char *);
+extern void animate_ribbon_effect_paths(char *) __asm__("FUN_L14_002df138");
 extern void register_hero_hit_in_clip_volume(char *) __asm__("FUN_L14_002dfc58");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
@@ -805,7 +805,7 @@ void update_ribbon_effect_moby(struct Moby *moby) {
         qcopy(bounding_sphere, forward_point);
         bounding_sphere[3] = 4.5f;
         if (fast_bsphere_check((char *)bounding_sphere, 64.0f) >= 0) {
-            FUN_L14_002df138(moby);
+            animate_ribbon_effect_paths(moby);
         }
         return;
     }
