@@ -507,7 +507,9 @@ typedef union {
 } V4_w22c;
 
 extern s32 cutscene_mode_gp __asm__("D_L01_0015F5C4") __attribute__((sda));
-void FUN_L01_0030d5f0(char *moby, char *state) {
+void try_fire_sandmouse_projectile(char *moby, char *state) __asm__("FUN_L01_0030d5f0");
+
+void try_fire_sandmouse_projectile(char *moby, char *state) {
     V4_w22c spawn_position;
     V4_w22c target_aim_position;
     V4_w22c spawn_offset;
@@ -832,7 +834,7 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void compute_sandmouse_follow_goal(void *unused, float *p) __asm__("FUN_L01_0030d260");
-void FUN_L01_0030d5f0(char *moby, char *state);
+void try_fire_sandmouse_projectile(char *moby, char *state) __asm__("FUN_L01_0030d5f0");
 void emit_sandmouse_particles(char *m) __asm__("FUN_L01_0030dda0");
 void update_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030ded0");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
@@ -1108,7 +1110,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 }
             }
         }
-        FUN_L01_0030d5f0(sandmouse_moby, sandmouse_vars);
+        try_fire_sandmouse_projectile(sandmouse_moby, sandmouse_vars);
         break;
     case SANDMOUSE_STATE_FADE_OUT:
         if (sandmouse_vars->slot != -1) {
