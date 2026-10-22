@@ -376,7 +376,9 @@ extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 
 /* In hero state 2, sets the lean values from motion.unk188 (clamped to
    +-1.4); needs the moby in item slot 3. */
-void FUN_L00_00215ef8(void)
+void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");
+
+void update_hero_lean_and_sway_parameters(void)
 {
     struct Hero *hero_state = &hero;
     f32 scale;

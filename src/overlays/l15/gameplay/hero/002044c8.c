@@ -601,7 +601,7 @@ extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_001f96b0");
 extern void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
 extern void spawn_random_alpha_rotated_particle(void *, void *, f32) __asm__("FUN_L00_00271b18");
 extern void FUN_L00_00215340(void);
-extern void FUN_L00_00215ef8(void);
+extern void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");
 extern void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_L00_00211f38");
 extern f32 D_L15_0017C3C4[];
 extern void FUN_L01_00232290(void);
@@ -1791,7 +1791,7 @@ void FUN_L15_0020ed50(void) {
             }
         }
         FUN_L00_00215340();
-        FUN_L00_00215ef8();
+        update_hero_lean_and_sway_parameters();
         {
             f32 a = frame_time_sq * 7.5f * k;
             f32 b = frame_time_sq * 8.5f;

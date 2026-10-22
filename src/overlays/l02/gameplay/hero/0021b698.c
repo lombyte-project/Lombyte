@@ -749,7 +749,7 @@ extern void FUN_L00_00214108_cf(void *, int, int, void *, void *,
                                 float) __asm__("FUN_L00_00259bc8");
 extern void update_hero_target_heading(float, float, float) __asm__("FUN_L00_00214ed8");
 extern void FUN_L00_00215340(void);
-extern void FUN_L00_00215ef8(void);
+extern void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");
 extern void reduce_and_apply_hero_planar_velocity_addend(float) __asm__("FUN_L00_00216710");
 extern void FUN_L00_00216de8_cf(void) __asm__("FUN_L00_0020b5b8");
 extern void FUN_L00_00216e48(int, int, int);
@@ -1769,7 +1769,7 @@ void FUN_L02_00225c20(void) {
             }
         }
         FUN_L00_00215340();
-        FUN_L00_00215ef8();
+        update_hero_lean_and_sway_parameters();
         up = frame_time_sq * 7.5f * k;
         down = frame_time_sq * 8.5f;
         if (hero.unk3BE != 0) {

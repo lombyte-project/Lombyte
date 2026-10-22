@@ -992,7 +992,7 @@ extern u8 D_L06_0017A240[];
 extern struct HeroAnimRow D_L06_0017A240_t[] __asm__("D_L06_0017A240");
 extern void spawn_random_alpha_rotated_particle(void *, void *, f32) __asm__("FUN_L00_00271b18");
 extern void FUN_L00_00215340(void);
-extern void FUN_L00_00215ef8(void);
+extern void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");
 extern void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_L00_00211f38");
 extern f32 D_L06_0017C544[];
 extern void FUN_L06_00228b40_c(void) __asm__("FUN_L06_00228b40");
@@ -1836,7 +1836,7 @@ void FUN_L06_0022e020(void) {
             }
         }
         FUN_L00_00215340();
-        FUN_L00_00215ef8();
+        update_hero_lean_and_sway_parameters();
         {
             f32 a = frame_time_sq * 7.5f * k;
             f32 b = frame_time_sq * 8.5f;
