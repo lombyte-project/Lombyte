@@ -428,7 +428,9 @@ extern void FUN_L00_0022e9a0(void *, void *) __asm__("FUN_001fa298");
 extern void FUN_L00_0022eac0(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L00_0022e9c0(void *, void *) __asm__("FUN_001fa2b8");
 
-void FUN_L05_0024bdc0(void) {
+void update_hero_movement_and_collision_probes(void) __asm__("FUN_L05_0024bdc0");
+
+void update_hero_movement_and_collision_probes(void) {
     float start[4], end[4], probe[4];
     u128 moby_rotation[4], rotation[4], combined[4];
     float distance;
