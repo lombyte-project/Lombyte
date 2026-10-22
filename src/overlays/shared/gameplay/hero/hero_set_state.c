@@ -614,7 +614,7 @@ extern int D_L00_0015F5C4;
 extern int hero_idle_sequence(int a) __asm__("FUN_L00_00205000");
 extern int FUN_L00_002050b8(int);
 extern int FUN_L00_0020d568(void);
-extern int FUN_L00_00211360(char *);
+extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int FUN_L00_00216de8(int, int);
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int FUN_L00_00229a98(void);
@@ -2200,7 +2200,7 @@ int hero_set_state(int a, int b) {
                     n = scale_game_frames(0x11);
                 set_hero_animation(0x2B, 4, (float)n);
                 m = hero_slot_moby(0);
-                if (FUN_L00_00211360(m))
+                if (is_wrench_moby(m))
                     blend_moby_animation(m, 0xA, 4, n + 2);
             }
             break;
@@ -2303,7 +2303,7 @@ int hero_set_state(int a, int b) {
                 j = j / 2;
                 set_hero_animation(k + 0x17, j, (float)n);
                 m = hero_slot_moby(0);
-                if (FUN_L00_00211360(m))
+                if (is_wrench_moby(m))
                     blend_moby_animation(m, k + 3, j, n);
             }
             break;
@@ -2371,7 +2371,7 @@ int hero_set_state(int a, int b) {
                 int n = scale_game_frames(5);
                 set_hero_animation(e + 0x5C, z, (float)n);
                 m = hero_slot_moby(0);
-                if (FUN_L00_00211360(m))
+                if (is_wrench_moby(m))
                     blend_moby_animation(m, e + 0xC, z, n);
             }
         }
@@ -2392,7 +2392,7 @@ int hero_set_state(int a, int b) {
             int n = scale_game_frames(4);
             set_hero_animation(q->attack_record + 0x4E, 0, (float)n);
             m = hero_slot_moby(0);
-            if (FUN_L00_00211360(m))
+            if (is_wrench_moby(m))
                 blend_moby_animation(m, q->attack_record + 0xC, 0, n);
         }
         break;
@@ -2412,7 +2412,7 @@ int hero_set_state(int a, int b) {
             n = scale_game_frames(5);
             set_hero_animation(k + 0x27, 5, (float)n);
             m = hero_slot_moby(0);
-            if (FUN_L00_00211360(m))
+            if (is_wrench_moby(m))
                 blend_moby_animation(m, k + 7, 5, n);
         }
         break;
@@ -2927,7 +2927,7 @@ int hero_set_state(int a, int b) {
         n = scale_game_frames(8);
         set_hero_animation(0x44, 2, (float)n);
         m = ((char *)p->items[0].moby);
-        if (FUN_L00_00211360(m))
+        if (is_wrench_moby(m))
             blend_moby_animation(m, 0xB, 2, n + scale_game_frames(5));
         break;
     }
@@ -3287,7 +3287,7 @@ extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern Rec2C_228770 D_L00_0017BD28_228770[] __asm__("D_L00_0017BC28");
 
 /* Gadget and weapon input for the current hero state: starts the matching move and returns 1 when the state changed. */
-extern int FUN_L00_00211360(char *);
+extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern void FUN_L00_00217658(void);
 extern int f_fun_l00_002223f8_227fa0(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_00221ee0(void);
@@ -3346,7 +3346,7 @@ int FUN_L00_00227fa0(void) {
             if (equipped_item_moby == 0) {
                 break;
             }
-            if (!FUN_L00_00211360((char *)equipped_item_moby)) {
+            if (!is_wrench_moby((char *)equipped_item_moby)) {
                 break;
             }
             if (equipped_item_moby->state != 0) {

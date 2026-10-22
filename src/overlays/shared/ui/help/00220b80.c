@@ -366,7 +366,7 @@ extern u32 pad_pressed_within(u32 mask, s32 n, s32 *out) __asm__("FUN_L00_00266d
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern void FUN_L00_0020e4c8(void);
 extern s32 FUN_L00_0020fe30(void);
-extern s32 FUN_L00_00211360(struct Moby *);
+extern s32 is_wrench_moby(struct Moby *) __asm__("FUN_L00_00211360");
 extern s32 FUN_L00_00216de8(s32, s32);
 extern void FUN_L00_00217658(void);
 extern void FUN_L00_00221ee0(void);
@@ -431,7 +431,7 @@ s32 FUN_L02_0022ee00(void)
             (hero.state.control_mode == 4 && hero.unk418 != 0)) {
             if (hero.on_slip_ground == 0 && pad_pressed_within(buttons, scale_game_frames(7), &out0) != 0) {
                 moby = hero.items[0].moby;
-                if (moby != NULL && FUN_L00_00211360(moby) != 0 && moby->state == 0) {
+                if (moby != NULL && is_wrench_moby(moby) != 0 && moby->state == 0) {
                     if ((controller_state.held & 0xA) ||
                         ((hero.state.current == HERO_STATE_LOOK || hero.state.current == 0x1E) &&
                          scale_game_frames(0x14) < hero.state_timer)) {

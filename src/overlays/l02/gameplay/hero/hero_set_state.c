@@ -42,7 +42,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern int FUN_L00_002050b8(int);
 extern int FUN_L00_0020d568(void);
-extern int FUN_L00_00211360(char *);
+extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int FUN_L00_00216de8(int, int);
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int FUN_L00_00229a98(void);
@@ -1083,7 +1083,7 @@ int hero_set_state(int a, int b) {
                     n = scale_game_frames(0x11);
                 set_hero_animation(0x2B, 4, (float)n);
                 m = hero_slot_moby(0);
-                if (FUN_L00_00211360(m))
+                if (is_wrench_moby(m))
                     blend_moby_animation(m, 0xA, 4, n + 2);
             }
             break;
@@ -1186,7 +1186,7 @@ int hero_set_state(int a, int b) {
                 j = j / 2;
                 set_hero_animation(k + 0x17, j, (float)n);
                 m = hero_slot_moby(0);
-                if (FUN_L00_00211360(m))
+                if (is_wrench_moby(m))
                     blend_moby_animation(m, k + 3, j, n);
             }
             break;
@@ -1228,7 +1228,7 @@ int hero_set_state(int a, int b) {
                 int n = scale_game_frames(5);
                 set_hero_animation(e + 0x5C, z, (float)n);
                 m = hero_slot_moby(0);
-                if (FUN_L00_00211360(m))
+                if (is_wrench_moby(m))
                     blend_moby_animation(m, e + 0xC, z, n);
             }
         }
@@ -1249,7 +1249,7 @@ int hero_set_state(int a, int b) {
             n = scale_game_frames(5);
             set_hero_animation(k + 0x27, 5, (float)n);
             m = hero_slot_moby(0);
-            if (FUN_L00_00211360(m))
+            if (is_wrench_moby(m))
                 blend_moby_animation(m, k + 7, 5, n);
         }
         break;
@@ -1818,7 +1818,7 @@ extern int D_L02_0016CD80 __attribute__((section(".data")));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_002050b8(int);
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
-extern int FUN_L00_00211360(char *);
+extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int FUN_L00_00216de8(int, int);
 extern int FUN_L00_00221d98(void);
 extern int FUN_L00_002276c0(void);
@@ -2223,7 +2223,7 @@ void FUN_L02_00230988(void) {
                     {
                         unsigned char *m = ((unsigned char *)hero.items[0].moby);
                         int ok = 1;
-                        if (m != 0 && FUN_L00_00211360((char *)m) && m[0x20] != 0) {
+                        if (m != 0 && is_wrench_moby((char *)m) && m[0x20] != 0) {
                             ok = 0;
                         }
                         if (controller_state.held & 5) {

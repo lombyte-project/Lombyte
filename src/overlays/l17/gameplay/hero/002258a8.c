@@ -80,7 +80,7 @@ extern int FUN_L00_0020c758(float *, float *);
 #include "rnc/overlay/path.h"
 extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
-extern int FUN_L00_00211360(void *);
+extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern int FUN_L00_00211870(float t);
 extern int FUN_L00_00221d98(void);
 extern int FUN_L00_002276c0(void);
@@ -675,7 +675,7 @@ void FUN_L17_002258a8(void) {
                     {
                         unsigned char *m = ((unsigned char *)hero.items[0].moby);
                         int ok = 1;
-                        if (m != 0 && FUN_L00_00211360(m) && m[0x20] != 0) {
+                        if (m != 0 && is_wrench_moby(m) && m[0x20] != 0) {
                             ok = 0;
                         }
                         if (controller_state.held & 5) {

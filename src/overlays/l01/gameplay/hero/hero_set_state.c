@@ -38,7 +38,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern int FUN_L00_002050b8(int);
 extern int FUN_L00_0020d568(void);
-extern int FUN_L00_00211360(char *);
+extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int FUN_L00_00216de8(int, int);
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int FUN_L00_00229a98(void);
@@ -1185,7 +1185,7 @@ int hero_set_state(int a, int b) {
                     n = scale_game_frames(0x11);
                 set_hero_animation(0x2B, 4, (float)n);
                 m = hero_slot_moby(0);
-                if (FUN_L00_00211360(m))
+                if (is_wrench_moby(m))
                     blend_moby_animation(m, 0xA, 4, n + 2);
             }
             break;
@@ -1288,7 +1288,7 @@ int hero_set_state(int a, int b) {
                 j = j / 2;
                 set_hero_animation(k + 0x17, j, (float)n);
                 m = hero_slot_moby(0);
-                if (FUN_L00_00211360(m))
+                if (is_wrench_moby(m))
                     blend_moby_animation(m, k + 3, j, n);
             }
             break;
@@ -1324,7 +1324,7 @@ int hero_set_state(int a, int b) {
             n = scale_game_frames(5);
             set_hero_animation(k + 0x27, 5, (float)n);
             m = hero_slot_moby(0);
-            if (FUN_L00_00211360(m))
+            if (is_wrench_moby(m))
                 blend_moby_animation(m, k + 7, 5, n);
         }
         break;
@@ -1537,7 +1537,7 @@ int hero_set_state(int a, int b) {
         n = scale_game_frames(8);
         set_hero_animation(0x44, 2, (float)n);
         m = ((char *)p->items[0].moby);
-        if (FUN_L00_00211360(m))
+        if (is_wrench_moby(m))
             blend_moby_animation(m, 0xB, 2, n + scale_game_frames(5));
         break;
     }
@@ -1646,7 +1646,7 @@ int FUN_L01_00240ed8(void) {
             (hero.state.control_mode == 4 && hero.unk418 != 0)) {
             if (hero.on_slip_ground == 0 && FUN_L00_00266d60(buttons, scale_game_frames(7), &out0) != 0) {
                 moby = hero.items[0].moby;
-                if (moby != 0 && FUN_L00_00211360((char *)moby) != 0 && moby->state == 0) {
+                if (moby != 0 && is_wrench_moby((char *)moby) != 0 && moby->state == 0) {
                     if ((controller_state.held & 0xa) != 0 ||
                         ((hero.state.current == 1 || hero.state.current == 0x1e) &&
                          scale_game_frames(0x14) < hero.state_timer)) {

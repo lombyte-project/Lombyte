@@ -2543,8 +2543,10 @@ typedef struct {
     s16 f;
 } K2;
 /* True when p is non-null and its field f is 0x47. */
-s32 FUN_L00_00211360(K2 *p);
-s32 FUN_L00_00211360(K2 *candidate_moby) {
+s32 is_wrench_moby(K2 *candidate_moby) __asm__("FUN_L00_00211360");
+
+s32 is_wrench_moby(K2 *p) __asm__("FUN_L00_00211360");
+s32 is_wrench_moby(K2 *candidate_moby) {
     if (candidate_moby == 0) {
         return 0;
     }

@@ -63,7 +63,7 @@ extern int D_L11_0016D180 __attribute__((section(".data")));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_002050b8(int);
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
-extern int FUN_L00_00211360(void *);
+extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern int FUN_L00_00221d98(void);
 extern int FUN_L00_002276c0(void);
 extern int FUN_L00_00227778(void);
@@ -616,7 +616,7 @@ void FUN_L11_00253a18(void) {
                     {
                         struct Moby *m = hero.items[0].moby;
                         int ok = 1;
-                        if (m != 0 && FUN_L00_00211360(m) && m->state != 0) {
+                        if (m != 0 && is_wrench_moby(m) && m->state != 0) {
                             ok = 0;
                         }
                         if (controller_state.held & 5) {

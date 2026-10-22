@@ -1082,7 +1082,7 @@ typedef struct {
 } ThrowPvars_217658;
 
 extern f32 player_camera[] __asm__("D_L00_00166C80");
-extern int FUN_L00_00211360(void *);
+extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern void FUN_L00_00233660(void *, f32, f32, f32);
 extern float FUN_001f9e90_c2(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -1120,7 +1120,7 @@ void FUN_L00_00217658(void) {
     if (aimed) {
         target = hero.items[0].moby;
         has_target = 0;
-        if (target != NULL && FUN_L00_00211360(target)) {
+        if (target != NULL && is_wrench_moby(target)) {
             tpv = (ThrowPvars_217658 *)target->pvars;
             if (tpv->unk7E) {
                 has_target = 1;
@@ -1136,7 +1136,7 @@ void FUN_L00_00217658(void) {
         }
     }
     item = hero.items[0].moby;
-    if (!FUN_L00_00211360(item)) {
+    if (!is_wrench_moby(item)) {
         return;
     }
     hero.items[0].unk1A = 1;

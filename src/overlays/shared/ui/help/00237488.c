@@ -616,7 +616,7 @@ extern int FUN_L00_001fefc8(void *);
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int FUN_L00_0020d498(int);
 extern int FUN_L00_0020fe30_c(void) __asm__("FUN_L00_0020fe30");
-extern int FUN_L00_00211360(void *);
+extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern int FUN_L00_00222158(void);
 extern int FUN_L00_00233e98(int);
 extern int FUN_L00_00266d60(int, int, int *);
@@ -691,7 +691,7 @@ int FUN_L05_00251be8(void) {
             if (item == 0) {
                 break;
             }
-            if (!FUN_L00_00211360(item)) {
+            if (!is_wrench_moby(item)) {
                 break;
             }
             if (item->state != 0) {
