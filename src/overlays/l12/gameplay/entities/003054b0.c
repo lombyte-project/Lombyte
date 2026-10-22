@@ -836,7 +836,9 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0026de90(char *, int, float);
 extern short *suck_get_aim_height(unsigned char *) __asm__("FUN_002141f8");
 
-void FUN_L12_003076e0(struct Moby *spawner) {
+void spawn_next_linked_moby(struct Moby *spawner) __asm__("FUN_L12_003076e0");
+
+void spawn_next_linked_moby(struct Moby *spawner) {
     char *spawner_data = (char *)spawner->pvars;
     int *indexed_spawner_data = (int *)(spawner_data + (*(int *)(spawner_data + 0xF0) << 2));
     struct Moby *spawned_moby = (struct Moby *)((unsigned char *)D_L12_0015FFD8_p + (indexed_spawner_data[0x30] << 8));
@@ -880,7 +882,7 @@ void FUN_L12_003076e0(struct Moby *spawner) {
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-void FUN_L12_003076e0(struct Moby *m);
+void spawn_next_linked_moby(struct Moby *m) __asm__("FUN_L12_003076e0");
 extern void FUN_L12_00307ab8(struct Moby *m);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -934,7 +936,7 @@ void homing_mine_spawner_update(struct Moby *spawner) {
     case HOMING_MINE_SPAWNER_SPAWN_LINKED_MOBYS:
         if (fast_dec_timer_s16(spawner_data + 0xFC)) {
             if (slots[*(int *)(spawner_data + 0xF0)] != -1) {
-                FUN_L12_003076e0(spawner);
+                spawn_next_linked_moby(spawner);
                 spawner->command = spawner->command == 0;
                 *(short *)(spawner_data + 0xFC) = scale_game_frames(0x28);
             }
