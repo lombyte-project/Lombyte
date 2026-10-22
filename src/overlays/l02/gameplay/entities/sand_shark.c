@@ -2237,7 +2237,9 @@ extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void FUN_L02_002dcfe0(struct Moby *m);
+void handle_sand_shark_nest_damage(struct Moby *moby) __asm__("FUN_L02_002dcfe0");
+
+extern void handle_sand_shark_nest_damage(struct Moby *m) __asm__("FUN_L02_002dcfe0");
 extern char *FUN_L02_002dd2a8_c(void *) __asm__("FUN_L02_002dd2a8");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int,
                              float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -2259,7 +2261,7 @@ void sand_shark_nest_update(unsigned char *moby) {
     OvlVec4 launch_velocity_or_explosion_position;
     OvlVec4 launch_position;
 
-    FUN_L02_002dcfe0((struct Moby *)moby);
+    handle_sand_shark_nest_damage((struct Moby *)moby);
     if ((signed char)moby[0x20] < 0) {
         return;
     }
@@ -2365,7 +2367,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void blend_moby_animation_c2(void *, s32, s32, s32) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
-void FUN_L02_002dcfe0(struct Moby *moby) {
+void handle_sand_shark_nest_damage(struct Moby *moby) {
     char *nest_vars = (char *)moby->pvars;
     float hit_knockback_vector[4];
     int hit;
