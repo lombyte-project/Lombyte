@@ -1302,7 +1302,9 @@ extern int frames_fe50(int) __asm__("FUN_001f96f8");
 extern void update_fe50(void *, void *) __asm__("FUN_L00_0025d538");
 char D_L11_0021B530[] = "Moby class %d Damage Received: %f\n";
 
-void FUN_L11_0030fe50(struct Moby *moby, unsigned char *private_data, float *health) {
+void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_data, float *health) __asm__("FUN_L11_0030fe50");
+
+void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_data, float *health) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_DEATH = 1,
@@ -1360,7 +1362,7 @@ void FUN_L11_0030fe50(struct Moby *moby, unsigned char *private_data, float *hea
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_003114F0), where it is exact; names translated to the US level program. */
 
-void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t);
+void handle_owner_linked_moby_hits(struct Moby *m, unsigned char *d, float *t) __asm__("FUN_L11_0030fe50");
 f32 compute_interpolated_record_value(struct InterpolatedStateEntry *arg0) __asm__("FUN_0020c9e0");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
@@ -1397,7 +1399,7 @@ void update_owner_linked_moby_state(struct Moby *moby) {
         }
         break;
     case LINKED_MOBY_STATE_HANDLE_HITS:
-        FUN_L11_0030fe50(moby, data, health_ptr);
+        handle_owner_linked_moby_hits(moby, data, health_ptr);
         if ((moby->anim_flags & 2) && moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, 0xA);
         }
