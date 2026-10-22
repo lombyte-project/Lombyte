@@ -3813,7 +3813,7 @@ void FUN_L18_002f8050(void *mv) {
     char *tank_data = *(char **)(moby_bytes + 0x78);
     int r;
     float damage_amount;
-    float v[4];
+    float explosion_and_aim_scratch[4];
     int hit_reaction_status;
     hit_reaction(moby_bytes, find_moby_hit(moby_bytes, 0x330000, 0), tank_data + 0x20, 0, &hit_reaction_status, &damage_amount, 0, 4);
     if (hit_reaction_status != 1 && moby_bytes[0x20] != 0) {
@@ -3824,10 +3824,10 @@ void FUN_L18_002f8050(void *mv) {
         } else {
             float *pa;
             float *dv;
-            qcopy(v, moby_bytes + 0x10);
-            v[2] = v[2] + 1.0f;
+            qcopy(explosion_and_aim_scratch, moby_bytes + 0x10);
+            explosion_and_aim_scratch[2] = explosion_and_aim_scratch[2] + 1.0f;
             pa = (float *)(moby_bytes + 0x10);
-            func_L00_0025F4A8_alt(moby_bytes, tank_data + 0x40, v, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1,
+            func_L00_0025F4A8_alt(moby_bytes, tank_data + 0x40, explosion_and_aim_scratch, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1,
                                   15.0f, 1, 1, -1, 0);
             dv = D_L18_0015F580;
             FUN_L00_00257470_cf(moby_bytes, 0x700, pa, moby_bytes + 0x40, 0, 0, 0.0f, dv, dv, dv);
@@ -3867,14 +3867,14 @@ void FUN_L18_002f8050(void *mv) {
     }
     if (*(int *)(tank_data + 0xB4) != 2) {
         float aim_yaw, aim_pitch;
-        subtract_vector_xyz(v, tank_data + 0x70, moby_bytes + 0x10);
-        v[2] = v[2] - 3.0f;
-        if (vector_length_xyz(v) > *(float *)(tank_data + 0x130)) {
-            set_vector_length_xy(v, v, *(float *)(tank_data + 0x130));
+        subtract_vector_xyz(explosion_and_aim_scratch, tank_data + 0x70, moby_bytes + 0x10);
+        explosion_and_aim_scratch[2] = explosion_and_aim_scratch[2] - 3.0f;
+        if (vector_length_xyz(explosion_and_aim_scratch) > *(float *)(tank_data + 0x130)) {
+            set_vector_length_xy(explosion_and_aim_scratch, explosion_and_aim_scratch, *(float *)(tank_data + 0x130));
         }
         aim_yaw = fast_sin(*(float *)(tank_data + 0x134)) * 0.08726646f;
-        aim_yaw = fast_add_rotations(fast_arc_tan(v[0], v[1]), aim_yaw);
-        aim_pitch = -fast_arc_tan(vector_length_xy(v), v[2]);
+        aim_yaw = fast_add_rotations(fast_arc_tan(explosion_and_aim_scratch[0], explosion_and_aim_scratch[1]), aim_yaw);
+        aim_pitch = -fast_arc_tan(vector_length_xy(explosion_and_aim_scratch), explosion_and_aim_scratch[2]);
         if (aim_pitch > 0.34906584f) {
             aim_pitch = 0.34906584f;
         } else if (aim_pitch < -0.7853982f) {
@@ -3894,10 +3894,10 @@ void FUN_L18_002f8050(void *mv) {
                          D_0015ED6C_e[1] * 12.566371f, D_0015ED6C_e[1] * 12.566371f,
                          frame_time * 9.424778f);
     }
-    FUN_L00_001fff28(v, 1, *(float *)(tank_data + 0x118));
+    FUN_L00_001fff28(explosion_and_aim_scratch, 1, *(float *)(tank_data + 0x118));
     FUN_L00_001fff28(tank_data + 0xD0, 2,
                      fast_subtract_rotations(*(float *)(tank_data + 0x110), *(float *)(moby_bytes + 0x48)));
-    multiply_quaternions(tank_data + 0xD0, v, tank_data + 0xD0);
+    multiply_quaternions(tank_data + 0xD0, explosion_and_aim_scratch, tank_data + 0xD0);
     trooper_anim_finish(moby_bytes, tank_data + 0x60);
 }
 /* Steers the moby along its path toward the next node, slowing on sharp turns. */
