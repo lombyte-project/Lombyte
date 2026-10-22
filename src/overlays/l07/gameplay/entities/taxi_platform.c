@@ -606,7 +606,9 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E550[];
 
-void FUN_L07_002cdb28(struct Moby *moby) {
+void update_mission_gated_taxi_platform(struct Moby *moby) __asm__("FUN_L07_002cdb28");
+
+void update_mission_gated_taxi_platform(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *path;
     float orig[4], delta[4], path_segment_offset[4];
