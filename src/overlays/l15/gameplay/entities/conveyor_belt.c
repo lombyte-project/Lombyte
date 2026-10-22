@@ -2284,7 +2284,9 @@ extern void yaw_s(float, float) __asm__("FUN_L00_002e84b8");
 extern void zoom_s(int, float, float) __asm__("FUN_L00_002e84f0");
 
 /* Runs the aim timer while the player holds the target in view; spins the target once aimed. */
-void FUN_L15_002f88e8(char *moby) {
+void update_moby_follow_camera(char *moby) __asm__("FUN_L15_002f88e8");
+
+void update_moby_follow_camera(char *moby) {
     char *slot_data = *(char **)(D_L15_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
     char *target_record = D_L15_001600EC + (*(int *)(slot_data + 0x48) << 7);
     int done;
@@ -2347,7 +2349,7 @@ void FUN_L15_002f88e8(char *moby) {
 
 extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section(".data")));
 extern unsigned char D_001413F4 __attribute__((section(".data")));
-void FUN_L15_002f88e8(char *m);
+void update_moby_follow_camera(char *m) __asm__("FUN_L15_002f88e8");
 
 int dispatch_moby_follow_camera_update(char *moby) __asm__("FUN_L15_002f8ba8");
 
@@ -2355,6 +2357,6 @@ int dispatch_moby_follow_camera_update(char *moby) {
     char *slot_data = *(char **)(D_L15_0015EF48[2] + *(short *)(moby + 0x84) * 32 + 0x1C);
     if (*(short *)(D_L15_00167400_lui + 0x86) == 0 && *(short *)(slot_data + 0x20) >= 0 &&
         D_001413F4 == 2)
-        FUN_L15_002f88e8(moby);
+        update_moby_follow_camera(moby);
     return -1;
 }
