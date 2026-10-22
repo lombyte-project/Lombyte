@@ -223,7 +223,9 @@ extern char D_L00_001BD7E0_lui[] __asm__("D_L00_001BD7E0") __attribute__((sectio
 extern void FUN_001fa070_28a480(void *, void *) __asm__("FUN_001fa070");
 extern void FUN_001f9fc8_28a480(void *) __asm__("FUN_001f9fc8");
 
-void FUN_L00_0028a480(void) {
+void draw_sky_shells_with_scaled_phase_rotation(void) __asm__("FUN_L00_0028a480");
+
+void draw_sky_shells_with_scaled_phase_rotation(void) {
     enum {
         SKY_SHELL_DOUBLE_PHASE_ROTATION = 0,
         SKY_SHELL_QUINTUPLE_PHASE_ROTATION = 1,
