@@ -246,7 +246,7 @@ extern f32 FUN_L00_0025bb38(s32, f32, f32);
 extern void FUN_L00_00214ed8(f32, f32, f32);
 extern void FUN_L00_002167d0(void);
 extern void FUN_L00_001ff290(void *, void *, void *);
-extern void FUN_L00_002a9b80(struct MobyView *, void *);
+extern void set_tracked_class_5f3_moby_position(struct MobyView *, void *) __asm__("FUN_L00_002a9b80");
 extern s32 FUN_L00_002a96f8(struct MobyView *, void *, f32, f32, s32, f32, f32, f32);
 extern void FUN_L00_002335c8(void *, f32, f32, f32);
 extern f32 D_L00_001C3CF0[];
@@ -2878,7 +2878,7 @@ void hero_update_movement(void) {
                 fast_vec_normalize(&v0, &hero, 3.0f);
                 v0.f[2] += 5.0f;
                 FUN_L00_001ff290(&v10, &v0, &moby->u10.v10);
-                FUN_L00_002a9b80(moby, &v0);
+                set_tracked_class_5f3_moby_position(moby, &v0);
                 hero.anim_speed = 0.5f;
             }
         }

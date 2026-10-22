@@ -2295,7 +2295,9 @@ void *FUN_L00_002a9aa0(int unused, float *spawn_position) {
 }
 extern u8 *D_L00_001613C8 __attribute__((sda));
 void FUN_L00_002a9aa0_u(void *, OvlQuad *) __asm__("FUN_L00_002a9aa0");
-void FUN_L00_002a9b80(void *unused_creation_arg, OvlQuad *position) {
+void set_tracked_class_5f3_moby_position(void *unused_creation_arg, OvlQuad *position) __asm__("FUN_L00_002a9b80");
+
+void set_tracked_class_5f3_moby_position(void *unused_creation_arg, OvlQuad *position) {
     OvlQuad position_copy = *position;
     u8 *moby;
     u8 *moby_vars;
