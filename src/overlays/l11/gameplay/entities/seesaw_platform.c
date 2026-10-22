@@ -1363,7 +1363,9 @@ f32 compute_interpolated_record_value(struct InterpolatedStateEntry *arg0) __asm
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L11_00310028(struct Moby *moby) {
+void update_owner_linked_moby_state(struct Moby *moby) __asm__("FUN_L11_00310028");
+
+void update_owner_linked_moby_state(struct Moby *moby) {
     enum {
         LINKED_MOBY_STATE_START_ANIMATION = 0,
         LINKED_MOBY_STATE_WAIT_FOR_ANIMATION_FLAG = 1,
