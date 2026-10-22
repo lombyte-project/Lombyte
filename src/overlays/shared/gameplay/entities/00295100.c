@@ -2258,7 +2258,9 @@ void update_vendor_purchase(void) {
     FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
 }
 
-void FUN_L00_0029c648(void) {
+void update_vendor_menu(void) __asm__("FUN_L00_0029c648");
+
+void update_vendor_menu(void) {
     enum {
         VENDOR_MENU_OPENING = 0,
         VENDOR_MENU_OPEN = 1,
