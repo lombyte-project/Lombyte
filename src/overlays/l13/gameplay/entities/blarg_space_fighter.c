@@ -1481,7 +1481,9 @@ typedef struct Data_2C7F38 {
     int start_active;
 } Data_2C7F38;
 
-void FUN_L13_002c7f38(struct Moby *moby) {
+void update_linked_moby_rotation(struct Moby *moby) __asm__("FUN_L13_002c7f38");
+
+void update_linked_moby_rotation(struct Moby *moby) {
     enum {
         INITIALIZE_ROTATION = 0,
         WAIT_TO_ADVANCE_ROTATION = 1,
