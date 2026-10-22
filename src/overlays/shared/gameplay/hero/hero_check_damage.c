@@ -1391,7 +1391,9 @@ extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 void normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 
-void FUN_L00_0020f160(char *rotation_output_moby, u8 *entry) {
+void update_hero_item_rotation_from_history(char *rotation_output_moby, u8 *entry) __asm__("FUN_L00_0020f160");
+
+void update_hero_item_rotation_from_history(char *rotation_output_moby, u8 *entry) {
     V4_F7F8 vv[4];
     float fa[16];
     int ri;
@@ -1640,7 +1642,7 @@ void FUN_L00_0020f580(void)
                         if (large_font_height == 0 || i != 0)
                             FUN_0025d330_f580(D_0013FE10_f580 + index * 0x40, moby + 0x40);
                         else
-                            FUN_L00_0020f160(moby, D_0013FE10_f580 + index * 0x40);
+                            update_hero_item_rotation_from_history(moby, D_0013FE10_f580 + index * 0x40);
                         FUN_00250df8_f580(moby);
                         if (opt_mirror_anim) FUN_001ff3c0_f580(moby + 0xe0, moby + 0xc0, moby + 0xd0);
                         FUN_00250f98_f580(moby);
