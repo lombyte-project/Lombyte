@@ -47,7 +47,9 @@ extern void FUN_L00_00257470(void *, int, int);
 extern void spawn_explosion(void*,void*,void*,float,float,int,int,int,float,float,float,int,float,float,int,int,int,int) __asm__("FUN_L00_0025e450");
 extern void FUN_L16_002e2b60(struct Moby *);
 extern void FUN_L16_002e2fa0(void *);
-extern void FUN_L16_002e3050(char *);
+void update_armed_transport_joint_animation(char *moby) __asm__("FUN_L16_002e3050");
+
+extern void update_armed_transport_joint_animation(char *) __asm__("FUN_L16_002e3050");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
@@ -252,7 +254,7 @@ void armed_transport_update(char *transport_moby) {
     *(float *)(transport_data + 0x18C) = fast_add_rotations(*(float *)(transport_data + 0x18C),
                                           *(float *)&D_L16_00161D88 * DEG_TO_RAD * frame_time);
     *(float *)(transport_moby + 0x18) = *(float *)(transport_data + 0x194) + *(float *)&D_L16_00161D8C * fast_sin(*(float *)(transport_data + 0x18C));
-    FUN_L16_002e3050(transport_moby);
+    update_armed_transport_joint_animation(transport_moby);
 }
 #include "qcopy.h"
 
@@ -430,7 +432,7 @@ void FUN_L16_002e2fa0(void *path_data) {
 
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 
-void FUN_L16_002e3050(char *moby) {
+void update_armed_transport_joint_animation(char *moby) {
     float ticks = frame_scale_sq;
     float joint_animation_smoothing_factor = ticks * 0.03f;
     float joint_animation_secondary_control = ticks * 0.3f;
