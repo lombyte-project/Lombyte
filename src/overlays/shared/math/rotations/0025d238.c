@@ -511,7 +511,7 @@ extern int random_integer_below_25e450(int) __asm__("FUN_00213260");
 extern void build_spherical_offset_25e450(void *, float, float, float) __asm__("FUN_00214db0");
 extern unsigned func_L00_0025D140_25e450(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern int random_int_between_25e450(int, int) __asm__("FUN_L00_00257b90");
-extern void func_L00_0025A890_25e450(void *, void *, int, float) __asm__("FUN_L00_00259858");
+extern void initialize_hit_descriptor(void *, void *, int, float) __asm__("FUN_L00_00259858");
 extern int collect_mobies_in_sphere_25e450(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void *func_L00_0026CA10_25e450(void *, void *, int, int, int, int, int, int, float) __asm__("FUN_L00_0026bb70");
 extern void subtract_vector_xyz_25e450(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -562,7 +562,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
     {
     if (fA > 0.0f) {
         Ev_25e450 ev;
-        func_L00_0025A890_25e450(&ev, owner_moby, 0x810001, fB);
+        initialize_hit_descriptor(&ev, owner_moby, 0x810001, fB);
         ev.b18 = 2;
         ev.b19 = 1;
         ev.h1A = *(unsigned short *)(owner_moby + 0xA6);

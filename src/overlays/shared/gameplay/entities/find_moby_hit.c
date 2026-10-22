@@ -53,8 +53,8 @@ int test_moby_linked_record_word8(char *moby) {
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Fills a record with b, c, d and flag 0, and clears the 64-bit value at its start. */
-void FUN_L00_00259858(char *a, int b, int c, float d);
-void FUN_L00_00259858(char *hit_descriptor, int source_moby, int hit_mask, float hit_priority) {
+void initialize_hit_descriptor(char *a, int b, int c, float d) __asm__("FUN_L00_00259858");
+void initialize_hit_descriptor(char *hit_descriptor, int source_moby, int hit_mask, float hit_priority) {
     *(int *)(hit_descriptor + 0x10) = source_moby;
     *(int *)(hit_descriptor + 0x14) = hit_mask;
     *(float *)(hit_descriptor + 0x1C) = hit_priority;

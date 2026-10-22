@@ -170,7 +170,7 @@ extern void build_spherical_offset_089d0(void *, float, float, float) __asm__("F
 extern void no_op_089d0(void *, void *) __asm__("FUN_001e93e8");
 extern void add_vector_089d0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_089d0(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L00_00259858(float, void *, struct Moby *, int);
+extern void initialize_hit_descriptor(float, void *, struct Moby *, int) __asm__("FUN_L00_00259858");
 extern int collision_line_089d0(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern float random_float_between_089d0(float, float) __asm__("FUN_002132a8");
 extern void reflect_089d0(void *, void *, void *) __asm__("FUN_L00_001ff660");
@@ -245,7 +245,7 @@ void update_homing_missile(struct Moby *moby) {
         remove_moby_089d0(moby);
         return;
     }
-    FUN_L00_00259858(1.0f, &hit, moby, 0x10000);
+    initialize_hit_descriptor(1.0f, &hit, moby, 0x10000);
     hit.oclass = moby->oclass;
     if (collision_line_089d0(old, &moby->pos, 0, vars->owner, &hit)) {
         for (i = 0; i < 5; i++) {

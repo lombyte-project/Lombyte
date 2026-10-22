@@ -2601,7 +2601,7 @@ extern Vec4 D_L00_00173E70;
 extern void clamp_vector_length(void *, void *, f32) __asm__("FUN_001f9c90");
 extern s32 func_L00_001F10E0_2CF808(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern s32 func_L00_00259868_2CF808(f32, f32, f32, void *, void *, s32) __asm__("FUN_L00_00258830");
-extern void func_L00_0025A890_2CF808(void *, void *, s32, f32) __asm__("FUN_L00_00259858");
+extern void initialize_hit_descriptor(void *, void *, s32, f32) __asm__("FUN_L00_00259858");
 extern void func_L00_0025AAC0_2CF808(void *, void *) __asm__("FUN_L00_00259a88");
 extern void func_L00_0025B040_2CF808(f32, void *) __asm__("FUN_L00_00259fe8");
 extern void *func_L00_0025B478_2CF808(void *, s32, s32) __asm__("FUN_L00_0025a420");
@@ -2779,7 +2779,7 @@ state2:
             category = ((struct Moby *)coll_hit.moby) && ((struct Moby *)coll_hit.moby)->pclass ? *(u8 *)((u8 *)((struct Moby *)coll_hit.moby)->pclass + 0x46) : 0;
             if (((struct Moby *)coll_hit.moby) && ((struct Moby *)coll_hit.moby)->state != 0xFE && ((struct Moby *)coll_hit.moby)->state != 0xFD &&
                 (category == 5 || category == 7 || category == 8)) {
-                func_L00_0025A890_2CF808(((BombHit_2CF808 *)&direction), updated_moby, 0x10000, 1.0f);
+                initialize_hit_descriptor(((BombHit_2CF808 *)&direction), updated_moby, 0x10000, 1.0f);
                 set_vector_length_xy(((BombHit_2CF808 *)&direction), &drone_vars->position, 1.0f);
                 ((BombHit_2CF808 *)&direction)->direction.f[2] = 1.0f;
                 ((BombHit_2CF808 *)&direction)->direction.f[3] = 5627.925f;
@@ -2840,7 +2840,7 @@ state3:
                     qcopy(&updated_moby->pos, &D_L00_00173E70);
                 } else {
                     s32 cat2 = hm->pclass ? *(u8 *)((u8 *)hm->pclass + 0x46) : 0;
-                    func_L00_0025A890_2CF808(((BombHit_2CF808 *)&direction), updated_moby, 0x10000, 1.0f);
+                    initialize_hit_descriptor(((BombHit_2CF808 *)&direction), updated_moby, 0x10000, 1.0f);
                     set_vector_length_xy(((BombHit_2CF808 *)&direction), &drone_vars->position, 1.0f);
                     ((BombHit_2CF808 *)&direction)->direction.f[2] = 1.0f;
                     ((BombHit_2CF808 *)&direction)->direction.f[3] = 5627.925f;

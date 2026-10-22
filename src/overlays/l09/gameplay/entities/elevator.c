@@ -1208,7 +1208,7 @@ void turret_update(struct Moby *moby) {
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void FUN_001f9bf8(f32, void *, void *);
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_L00_00259858(void *, void *, s32, f32);
+extern void initialize_hit_descriptor(void *, void *, s32, f32) __asm__("FUN_L00_00259858");
 extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 extern char D_L09_002090B0[];
 
@@ -1245,7 +1245,7 @@ void update_damage_causer(struct Moby *moby) {
     transform_vector_by_basis(work, work, (char *)moby + 0xc0);
     FUN_001f9bf8(F(data, 0), work + 8, work);
     fast_vec_add(work + 4, work + 4, work + 8);
-    FUN_L00_00259858(work + 12, moby, *(s32 *)(data + 0x10), *(float *)(data + 0xc));
+    initialize_hit_descriptor(work + 12, moby, *(s32 *)(data + 0x10), *(float *)(data + 0xc));
     i = 0;
     if (*(s32 *)(data + 8) > 0) do {
         if (collect_mobies_in_sphere(F(data, 0), work + 4, 1, moby, work + 12) != 0) {

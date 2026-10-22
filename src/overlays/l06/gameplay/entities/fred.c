@@ -7955,7 +7955,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
 
 extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void FUN_L00_00259858(char *a, int b, int c, float d);
+extern void initialize_hit_descriptor(char *a, int b, int c, float d) __asm__("FUN_L00_00259858");
 
 extern float D_L06_001621E8 __attribute__((sda));
 extern float D_L06_001621EC __attribute__((sda));
@@ -7964,7 +7964,7 @@ void FUN_L06_00305000(char *moby) {
     float P[4];
     float Q[4];
     float A[12];
-    FUN_L00_00259858((char *)A, (int)moby, 0x10000, 6.0f);
+    initialize_hit_descriptor((char *)A, (int)moby, 0x10000, 6.0f);
     P[0] = D_L06_001621E8;
     P[1] = D_L06_001621EC;
     P[2] = D_L06_001621F0;

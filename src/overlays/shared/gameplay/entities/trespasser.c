@@ -2056,7 +2056,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025f8e0(float, void *);
 extern void spawn_explosion(float, void *, void *, int, float, float, int, int, int,
                               float, float, float, float, int, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L00_00259858(float, void *, void *, int);
+extern void initialize_hit_descriptor(float, void *, void *, int) __asm__("FUN_L00_00259858");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_0024eb68_2c4380(void *) __asm__("FUN_0020c828");
 extern void FUN_00257880_2c4380(void *, int, int, int) __asm__("FUN_00212f90");
@@ -2295,7 +2295,7 @@ void decoy_update(char *moby) {
                         spawn_explosion(0, moby, v, 0, 0, 4.0f, 0, 0, 0,
                                          3.0f, 9.0f, 1.0f, 12.0f, 2, 1, 1, -1, active);
                         if (active) {
-                            FUN_L00_00259858(effect + effect, scratch.w, moby, 0x810000);
+                            initialize_hit_descriptor(effect + effect, scratch.w, moby, 0x810000);
                             ((u8 *)scratch.x)[8] = 2;
                             ((u8 *)scratch.x)[9] = 1;
                             *(u16 *)((u8 *)scratch.x + 10) = *(u16 *)(moby + 0xa6);
