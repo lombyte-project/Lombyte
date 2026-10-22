@@ -19,7 +19,9 @@ extern void debug_print_alt() __asm__("FUN_001e93b0");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void pack_render_command_fields(struct RenderEntry *, s32, s32, s32, s32) __asm__("PackRenderCommandFields");
 
-void FUN_L00_002500b8(char *object) {
+void apply_nearest_environment_sample(char *object) __asm__("FUN_L00_002500b8");
+
+void apply_nearest_environment_sample(char *object) {
     float position_delta[4];
     float best = 999999.0f;
     float entry_distance;

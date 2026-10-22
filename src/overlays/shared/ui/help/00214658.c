@@ -907,7 +907,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_002325a0_00216f90(int, int) __asm__("FUN_L00_002325a0");
 void FUN_L00_002127b8_00216f90(void) __asm__("FUN_L00_002127b8");
 void FUN_L00_001ed280_00216f90(void) __asm__("FUN_L00_001ed280");
-void FUN_L00_002500b8_00216f90(int) __asm__("FUN_L00_002500b8");
+void apply_nearest_environment_sample(int) __asm__("FUN_L00_002500b8");
 extern char D_0013F3D0[] __attribute__((section(".data")));
 void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag);
 void FUN_L00_00216f90(Vec4_00216f90 *hero_world_position, Vec4_00216f90 *hero_euler_rotation, int mode, int flag) {
@@ -950,7 +950,7 @@ void FUN_L00_00216f90(Vec4_00216f90 *hero_world_position, Vec4_00216f90 *hero_eu
     FUN_L00_002127b8_00216f90();
     if (flag)
         FUN_L00_001ed280_00216f90();
-    FUN_L00_002500b8_00216f90(D_001413D0_00216f90);
+    apply_nearest_environment_sample(D_001413D0_00216f90);
 }
 extern unsigned char D_0013F350_217118[] __asm__("D_0013F350");
 extern unsigned char coll_hit[] __asm__("D_L00_00173E40")
