@@ -565,7 +565,9 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
 extern char *D_L10_0015EF50;
 extern int FUN_L10_002f5a78_u(char *, char *) __asm__("FUN_L10_002f5a78");
 
-int FUN_L10_002f65f8(char *descriptor_owner, char *comparison_object) {
+int evaluate_descriptor_eligibility(char *descriptor_owner, char *comparison_object) __asm__("FUN_L10_002f65f8");
+
+int evaluate_descriptor_eligibility(char *descriptor_owner, char *comparison_object) {
     unsigned char *descriptor_record = *(unsigned char **)(D_L10_0015EF50 + *(short *)(descriptor_owner + 0x84) * 32 + 0x1C);
     int x;
     int y;
