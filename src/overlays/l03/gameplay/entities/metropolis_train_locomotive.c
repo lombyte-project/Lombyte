@@ -457,7 +457,7 @@ extern void fade_to_black(int) __asm__("FUN_001f4a58");
 extern void FUN_L00_00266858(void *, int);
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void gunship_follow_path(char *) __asm__("FUN_L01_002f5168");
-extern void FUN_L03_002c6c90(char *);
+extern void set_moby_state_14(char *) __asm__("FUN_L03_002c6c90");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void debug_printf_292e98(char *, ...) __asm__("FUN_001e93b0");
 extern void mark_moby_for_removal_292e98(void *) __asm__("FUN_0020c828");
@@ -669,7 +669,7 @@ void metropolis_train_locomotive_update(char *moby) {
             car = D_L03_0015FFD8_292e98 + (data->ids[i] << 8);
             if (data->ids[i] != -1 && car != 0 && ((unsigned char *)car)[0x20] != 0xFE &&
                 ((unsigned char *)car)[0x20] != 0xFD && !FUN_L03_002c6c60(car)) {
-                FUN_L03_002c6c90(car);
+                set_moby_state_14(car);
                 break;
             }
         }

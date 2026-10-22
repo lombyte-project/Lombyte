@@ -911,7 +911,9 @@ int FUN_L03_002c6c60(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00301090), where it is exact; names translated to the US level program. */
 
-void FUN_L03_002c6c90(unsigned char *moby) {
+void set_moby_state_14(unsigned char *moby) __asm__("FUN_L03_002c6c90");
+
+void set_moby_state_14(unsigned char *moby) {
     moby[0x20] = 14;
 }
 /* Updates the gunship (helicopter) moby: activation path (1), patrol route with gun aiming and shots (2),
