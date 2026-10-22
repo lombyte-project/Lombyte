@@ -159,7 +159,7 @@ void FUN_L18_0022e8f8(void) {
     float v0[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
     int record_index;
-    int sp24;
+    int respawn_jump_press_age_frames;
     int path_seg;
     float path_t;
     int new_path;
@@ -173,7 +173,7 @@ void FUN_L18_0022e8f8(void) {
     float negative_shimmy_probe_yaw;
     float shimmy_probe_yaw;
     int sp58;
-    int sp5C;
+    int repeat_jump_press_age_frames;
     int sp60;
 
     moby = ((unsigned char *)hero.moby);
@@ -632,7 +632,7 @@ void FUN_L18_0022e8f8(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 58:
+                case HERO_STATE_ANIMATION_WAIT_TO_IDLE:
                     if (hero.unkA98 & 2) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -703,7 +703,7 @@ void FUN_L18_0022e8f8(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 46: {
+                case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT: {
                     int mask = hero.items[0].button_mask;
                     if (((unsigned char *)hero.moby)[0x52] == 0x2E && hero.anim_frame > 28.0f) {
                         if (controller_state.held & mask) {
@@ -943,7 +943,7 @@ void FUN_L18_0022e8f8(void) {
                     if (hero.unk1660 < 2) {
                         if (scale_game_frames(0xF) + hero.unk1660 * scale_game_frames(0x19) <
                             hero.state_timer) {
-                            if (pad_pressed_within(0x40, scale_game_frames(7), &sp24)) {
+                            if (pad_pressed_within(0x40, scale_game_frames(7), &respawn_jump_press_age_frames)) {
                                 hero_set_state(0x69, 1);
                             }
                         }
@@ -954,7 +954,7 @@ void FUN_L18_0022e8f8(void) {
                         return;
                     }
                     break;
-                case 123:
+                case HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT:
                     if (hero.unk2F4 - 1.2f > hero.motion.pos.f[2] ||
                         hero.state_timer > scale_game_frames(0x96)) {
                         hero_respawn();
@@ -998,17 +998,17 @@ void FUN_L18_0022e8f8(void) {
                         }
                     }
                     break;
-                case 112:
+                case HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT:
                     if (hero.anim_frame > (float)D_L18_0017C628[hero.attack_record].f18) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 113:
+                case HERO_STATE_ANIMATION_FRAME_EXIT_WAIT:
                     if (25.0f < hero.anim_frame) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 49:
+                case HERO_STATE_VOICE_SLOT_CLEANUP_IDLE_EXIT:
                     if (hero.unk12E3 != 0) {
                         break;
                     }
@@ -2129,8 +2129,8 @@ void FUN_L18_0022e8f8(void) {
                                 if (hero.state.current == 0x11) {
                                     a = scale_game_frames(7);
                                 }
-                                if (pad_pressed_within(0x40, a, &sp5C)) {
-                                    if (sp5C < hero.state_timer) {
+                                if (pad_pressed_within(0x40, a, &repeat_jump_press_age_frames)) {
+                                    if (repeat_jump_press_age_frames < hero.state_timer) {
                                         hero_set_state(0x11, 1);
                                         break;
                                     }
@@ -2575,7 +2575,7 @@ void FUN_L18_0022e8f8(void) {
                         hero_set_state(0x53, 0);
                     }
                     break;
-                case 30:
+                case HERO_STATE_LOOK_RELEASE_WAIT:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
@@ -2609,7 +2609,7 @@ void FUN_L18_0022e8f8(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 35:
+                case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
                     if (19.0f < hero.anim_frame &&
                         pad_pressed_within(0x40, scale_game_frames(0xB), 0)) {
                         if (controller_state.held & 0xA) {
