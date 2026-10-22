@@ -306,7 +306,7 @@ s32 FUN_L18_00218a90(s32 apply_hurt_response) {
             response_motion_delta.f[2] += response_motion_delta.f[2];
         }
         break;
-    case 2:
+    case HERO_VEHICLE_MODE_GIANT_CLANK:
         if ((response_record->i24 & 4) || hero.unk1630 <= 0) {
             hero_set_state(0x5D, 1);
             FUN_L00_002a9be0_210ce8();
