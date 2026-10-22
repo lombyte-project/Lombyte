@@ -749,7 +749,7 @@ extern void send_blast_hits(void *,void *,void *,int,void *,int,int,int,float,fl
 extern int allocate_voice_for_target_entry(int,int,void *) __asm__("FUN_0022da68");
 extern int FUN_L00_001ff600(float,void *,void *);
 extern void save_state_fields_to_hero(char *) __asm__("FUN_L00_002beb90");
-extern void FUN_L00_002bebc8(char *);
+extern void restore_state_fields_from_hero(char *) __asm__("FUN_L00_002bebc8");
 extern void FUN_L00_002bec00(char *);
 extern void FUN_L00_002bec48(char *);
 extern int FUN_L00_002beab0(char *,int,void *);
@@ -1008,7 +1008,7 @@ void doom_bot_update(struct Moby *moby) {
             data->velocity.f[2]=0.01f;
             fast_vec_normalize(&data->velocity,&data->velocity,0.1f);
         }
-        FUN_L00_002bebc8((char*)data);
+        restore_state_fields_from_hero((char*)data);
         if ((move_flags&2) || clearance<4.0f) {
             if (FUN_L00_002bf9f0(moby,data,data,0)) {
                 data->turn_rate=frame_scale*0.066f*speed;
@@ -1034,7 +1034,7 @@ void doom_bot_update(struct Moby *moby) {
         velocity=&((DoomBotParams*)&hero)->movement_velocity;
         hp=(DoomBotParams*)&hero;
         FUN_L00_00258278(moby,velocity,heading,2.0f*hp->move_k,0.5f*hp->move_d,2.0f*hp->move_max);
-        FUN_L00_002bebc8((char*)data);
+        restore_state_fields_from_hero((char*)data);
         if (fast_difference_between_rotations(moby->rot.z,heading)<0.08726646f) {
             blend_moby_animation(moby,hp->config.anim2C,0,scale_game_frames(3));
             moby->state=7;
@@ -1106,7 +1106,7 @@ Falling: do {
         /* Fakematch: no-op update of data; it depends on the a1 setup, so a1 is scheduled before a0. */
         data=(DoomBotVars*)((int)data|((unsigned char)(int)data>>8));
     } while (0);
-        FUN_L00_002bebc8((char*)data);
+        restore_state_fields_from_hero((char*)data);
 Contact:
         /* Fakematch: the zero term keeps data live so combine keeps the no-op update above. */
         moby->state=compute_moby_state_from_vertical_probe(moby)|((unsigned char)(int)data>>8);

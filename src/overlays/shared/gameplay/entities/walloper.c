@@ -2475,7 +2475,9 @@ void save_state_fields_to_hero(char *source_state) {
 
 
 /* Restores the moby's position, word 0x4C and float 0x5C from ((char *)&hero) at 0x1ED0. */
-void FUN_L00_002bebc8(char *destination_state) {
+void restore_state_fields_from_hero(char *destination_state) __asm__("FUN_L00_002bebc8");
+
+void restore_state_fields_from_hero(char *destination_state) {
     struct Hero *hero_state = &hero;
     *(float *)(destination_state + 0x40) = hero_state->unk1ED0;
     *(float *)(destination_state + 0x44) = hero_state->unk1ED4;
