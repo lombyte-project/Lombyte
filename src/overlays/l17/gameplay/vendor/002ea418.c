@@ -9,7 +9,10 @@ extern void FUN_L11_00310cf8(float, float, float, float, float, int, int, int, i
                              int);
 
 /* Draws four quads a quarter turn apart; same routine as FUN_L11_00311048 with this level's texture. */
-void FUN_L17_002ea418(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
+void draw_four_quarter_turn_effect_quads(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
+                      float y, float scale, float quad_rotation_radians) __asm__("FUN_L17_002ea418");
+
+void draw_four_quarter_turn_effect_quads(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
                       float y, float scale, float quad_rotation_radians) {
     int texture_handle;
     float quad_size;
