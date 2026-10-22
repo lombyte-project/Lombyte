@@ -587,7 +587,9 @@ extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("f
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L16_002c3d38(struct Moby *moby) {
+void update_path_following_rocket(struct Moby *moby) __asm__("FUN_L16_002c3d38");
+
+void update_path_following_rocket(struct Moby *moby) {
     enum {
         ROCKET_STATE_INITIALIZE = 0,
         ROCKET_STATE_WAIT_FOR_TRIGGER = 1,
