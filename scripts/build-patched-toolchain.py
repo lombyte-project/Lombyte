@@ -3,10 +3,10 @@
 
 Clones the public snapshot at the pinned revision, applies
 ``patches/ee-gcc-2.9-991111-01/patched-ee-gcc.patch``, and builds ``cc1``,
-``cpp`` and ``xgcc`` into ``tools/ee-gcc2.9-991111-01-patched/``. Needs a
+``cpp`` and ``xgcc`` into ``tools/compilers/patched-compiler/``. Needs a
 32-bit host build environment (``gcc -m32``, e.g. ``gcc-multilib``); builds
 bison 1.28 automatically when no 1.2x bison is on PATH. See
-docs/patched-toolchain.md. Offline: pass ``--source-dir`` and ``--bison``.
+docs/build/patched-compiler.md. Offline: pass ``--source-dir`` and ``--bison``.
 """
 
 from __future__ import annotations
@@ -68,8 +68,8 @@ def parse_args(argv=None):
     parser.add_argument(
         "--output",
         type=Path,
-        default=ROOT / "tools" / "ee-gcc2.9-991111-01-patched",
-        help="install directory for cc1/cpp/xgcc (default: tools/ee-gcc2.9-991111-01-patched)",
+        default=ROOT / "tools" / "compilers" / "patched-compiler",
+        help="install directory for cc1/cpp/xgcc (default: tools/compilers/patched-compiler)",
     )
     parser.add_argument(
         "--bison",
@@ -413,8 +413,7 @@ def main(argv=None) -> int:
     print(
         "\nThe published reference hashes identify the maintainer's build; "
         "rebuilds embed their own build paths and normally differ.\n"
-        "Use it with:\n"
-        f"  export EE_GCC_PATCHED_ROOT={output}"
+        "make elf picks it up from tools/compilers/patched-compiler."
     )
     return 0
 

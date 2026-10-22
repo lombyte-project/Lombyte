@@ -31,7 +31,7 @@ tools/*
 !tools/compilers/*/bin/README.md
 
 # Python
-.venv/
+.venv
 __pycache__/
 *.pyc
 

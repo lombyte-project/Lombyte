@@ -36,11 +36,19 @@ ROOT = Path.cwd()
 
 # —— Toolchain and paths ——
 
-# The two compilers of the retail build: tools/compilers/game-compiler (the
-# reconstructed Sony/Cygnus 2.9-ee-991111b, game code) and
-# tools/compilers/sdk-compiler (the vendored EE-GCC 2.9-991111-01, the SDK
-# libraries).  The build stages tools/compilers as tools/cc.
+# All compilers live in tools/compilers (setup.sh installs them; make elf
+# copies the folder into build/baseline):
+#   game-compiler     game code (reconstructed Sony/Cygnus 2.9-ee-991111b)
+#   sdk-compiler      SDK libraries (EE-GCC 2.9-991111-01)
+#   sn-compiler       SN EE-GCC 2.95.2 and its Ps2EeAs assembler (all game
+#                     code is assembled by Ps2EeAs; ROUTE_EXCEPTIONS units also
+#                     compile with it)
+#   patched-compiler  optional patched 991111 cc1 (docs/build/patched-compiler.md)
+COMPILERS = ROOT / "tools/compilers"
+GAME_COMPILER = COMPILERS / "game-compiler"
 SDK_COMPILER = "sdk-compiler"
+SN_COMPILER = COMPILERS / "sn-compiler"
+PATCHED_COMPILER = COMPILERS / "patched-compiler"
 
 # decomp.me id of the SDK compiler, for the permuter settings.
 SDK_COMPILER_DECOMPME = "ee-gcc2.9-991111-01"
@@ -53,17 +61,6 @@ COMPILER_FLAGS = "-DMATCHING_DECOMP -O2 -g2 -gstabs"
 SDK_COMPILER_FLAGS = "-DMATCHING_DECOMP -O2"
 
 LANG_DEFINE = "-DBUILD_US_VERSION"
-
-# Overrides for the game compiler location (default tools/compilers/game-compiler,
-# rebuilt from patches/sce-991111b).
-GAME_COMPILER_ROOT = os.environ.get("GAME_COMPILER_ROOT", "").strip()
-
-# Retiring toolchains, needed only by ROUTE_EXCEPTIONS below: the SN tree
-# (cc_sn, cc_sn_padless and the Ps2EeAs assembler) and the locally built
-# patched 991111 cc1 (cc_ee_gcc_patched, docs/patched-toolchain.md).
-SN_TOOLCHAIN_ROOT = os.environ.get("SN_TOOLCHAIN_ROOT", "").strip()
-
-EE_GCC_PATCHED_ROOT = os.environ.get("EE_GCC_PATCHED_ROOT", "").strip()
 
 LANGUAGES = {
     "SCUS_971.99": "us",
@@ -721,7 +718,7 @@ def suppress_stdout_stderr():
             os.close(fd)
 
 def get_compiler_command(command: str) -> Path:
-    compiler_dir = Path("tools") / "cc" / SDK_COMPILER
+    compiler_dir = Path("tools") / "compilers" / SDK_COMPILER
     ee_dir = compiler_dir / "lib" / "gcc-lib" / "ee"
     ee_compiler_dirname = next(os.walk(ee_dir))[1][0]
 
@@ -734,7 +731,7 @@ def get_compiler_command(command: str) -> Path:
 
 def make_compiler_cmd(config_dir: Path, src_path: Path) -> tuple[str, str]:
     rel_root = Path(os.path.relpath(ROOT, config_dir))
-    sdk_cc_dir = f"{rel_root}/tools/cc/{SDK_COMPILER}/bin"
+    sdk_cc_dir = f"{rel_root}/tools/compilers/{SDK_COMPILER}/bin"
 
     common_includes = (
         f"-I{src_path.parent / 'src'} "
@@ -750,31 +747,13 @@ def make_compiler_cmd(config_dir: Path, src_path: Path) -> tuple[str, str]:
     return compile_cmd, common_includes
 
 def sn_compiler_configured() -> bool:
-    return (
-        bool(SN_TOOLCHAIN_ROOT)
-        and (Path(SN_TOOLCHAIN_ROOT) / "bin/ee-gcc.exe").is_file()
-    )
-
-def _game_compiler_root() -> Path:
-    """Locate the reconstructed game compiler.
-
-    The repository keeps it under tools/compilers/game-compiler; the baseline
-    staging workspace copies the whole compilers tree to tools/cc, and
-    GAME_COMPILER_ROOT overrides both.
-    """
-    if GAME_COMPILER_ROOT:
-        return Path(GAME_COMPILER_ROOT)
-    for candidate in (ROOT / "tools/compilers/game-compiler", ROOT / "tools/cc/game-compiler"):
-        if (candidate / "ee-gcc").is_file():
-            return candidate
-    return ROOT / "tools/compilers/game-compiler"
+    return (SN_COMPILER / "bin/ee-gcc.exe").is_file()
 
 def game_compiler_configured() -> bool:
-    root = _game_compiler_root()
-    return all((root / name).is_file() for name in ("ee-gcc", "cc1", "sdk-as"))
+    return all((GAME_COMPILER / name).is_file() for name in ("ee-gcc", "cc1", "sdk-as"))
 
 def ee_gcc_patched_configured() -> bool:
-    return bool(EE_GCC_PATCHED_ROOT) and (Path(EE_GCC_PATCHED_ROOT) / "xgcc").is_file()
+    return (PATCHED_COMPILER / "xgcc").is_file()
 
 def _win_path(value: str) -> str:
     """Convert a WSL mount path to the form the Windows driver needs.
@@ -789,7 +768,7 @@ def _win_path(value: str) -> str:
     # and it cannot resolve a UNC path at all: keep the path unchanged.
     if _wine_binary():
         return value
-    # A native WSL path (e.g. a BASELINE_ROOT on ext4) is reachable from
+    # A native WSL path (e.g. a checkout in the Linux home) is reachable from
     # Windows only over UNC (\\wsl.localhost\<distro>\...).
     distro = os.environ.get("WSL_DISTRO_NAME")
     if distro and value.startswith("/"):
@@ -1233,7 +1212,7 @@ compiler_type = "gcc"
 [preserve_macros]
 
 [decompme.compilers]
-"tools/cc/{SDK_COMPILER}/bin/ee-gcc" = "{SDK_COMPILER_DECOMPME}"
+"tools/compilers/{SDK_COMPILER}/bin/ee-gcc" = "{SDK_COMPILER_DECOMPME}"
 """
         )
 
@@ -1336,25 +1315,23 @@ def build_stuff(
         # they can be deleted instead of sitting as dead configuration.
         raise SystemExit(
             "the reconstructed game compiler is required: "
-            f"{_game_compiler_root()} has no ee-gcc/cc1/sdk-as.\n"
-            "Install it at tools/compilers/game-compiler (the baseline "
-            "workspace stages it under tools/cc/game-compiler) or point "
-            "GAME_COMPILER_ROOT at it. The patch stack that rebuilds it from "
-            "the pinned source archive is in patches/sce-991111b; see "
-            "docs/building.md."
+            f"{GAME_COMPILER} has no ee-gcc/cc1/sdk-as.\n"
+            "Run ./setup.sh to install it at tools/compilers/game-compiler. "
+            "The patch stack that rebuilds it from the pinned source archive "
+            "is in patches/sce-991111b; see docs/build/building.md."
         )
 
     if not sn_compiler_configured():
         raise SystemExit(
-            "the game code is assembled by Ps2EeAs: set SN_TOOLCHAIN_ROOT to the "
-            "SN tree that holds ee/bin/Ps2EeAs.exe (see docs/building.md)"
+            "the game code is assembled by Ps2EeAs: run ./setup.sh to install "
+            "tools/compilers/sn-compiler (see docs/build/building.md)"
         )
     # The generated helper rewrites GNU alias assignments to labels for
     # Ps2EeAs and trims only the section tail padding Ps2EeAs adds.
     (config_dir / "padless-asm.py").write_text(PADLESS_ASM_HELPER)
-    ee_assembler = _windows_exe(str(Path(SN_TOOLCHAIN_ROOT) / "ee/bin/Ps2EeAs.exe"))
+    ee_assembler = _windows_exe(str(SN_COMPILER / "ee/bin/Ps2EeAs.exe"))
 
-    game_root = _game_compiler_root()
+    game_root = GAME_COMPILER
     # SDK code: the SDK compiler's cc1, assembled by sdk-as (built with the
     # game compiler from the same archive): GNU as with patch 0059, which fills
     # an empty jump delay slot the way retail's SDK assembler did.
@@ -1403,7 +1380,7 @@ def build_stuff(
     )
 
     if sn_compiler_configured():
-        sn_root = Path(SN_TOOLCHAIN_ROOT)
+        sn_root = SN_COMPILER
         sn_repo = ROOT
         sn_driver = _windows_exe(str(sn_root / "bin/ee-gcc.exe"))
         sn_lib = _win_path(str(sn_root / "lib/gcc-lib/ee/2.95.2"))
@@ -1451,7 +1428,7 @@ def build_stuff(
         # the same alias normalization + Ps2EeAs + padless finish.  Native
         # driver, so only the assembler step needs Windows paths.
         if ee_gcc_patched_configured():
-            patched_root = Path(EE_GCC_PATCHED_ROOT)
+            patched_root = PATCHED_COMPILER
             patched_driver = str(patched_root / "xgcc")
             patched_include = str(ROOT / "include")
             ninja.rule(
@@ -1555,8 +1532,8 @@ def build_stuff(
             elif rule in ("cc_sn", "cc_sn_padless"):
                 if not sn_compiler_configured():
                     raise SystemExit(
-                        f"{unit} still needs the SN toolchain ({rule}); set "
-                        "SN_TOOLCHAIN_ROOT (see ROUTE_EXCEPTIONS)"
+                        f"{unit} still needs the SN compiler ({rule}); run "
+                        "./setup.sh to install tools/compilers/sn-compiler"
                     )
                 sn_work = str(ROOT / "build/sn-work/units" / unit)
                 flags = SN_FLAG_UNITS.get(unit, "")
@@ -1598,7 +1575,7 @@ def build_stuff(
             json.dumps(
                 {
                     "schema": "rnc-oracle-fallback-v1",
-                    "reason": "EE_GCC_PATCHED_ROOT is not configured",
+                    "reason": "tools/compilers/patched-compiler is not installed",
                     "units": sorted(oracle_fallback_units),
                 },
                 indent=2,
@@ -1610,9 +1587,9 @@ def build_stuff(
             if source.is_file():
                 alias_entries.update(_alias_symbols(source))
         print(
-            f"EE_GCC_PATCHED_ROOT not configured: {len(oracle_fallback_units)} "
+            f"no patched compiler: {len(oracle_fallback_units)} "
             "unit(s) will be built from the retail oracle "
-            "(see docs/patched-toolchain.md)"
+            "(see docs/build/patched-compiler.md)"
         )
     else:
         fallback_path.unlink(missing_ok=True)
@@ -2125,7 +2102,7 @@ def overlay_sn_functions(units: set[str]) -> set[str]:
     return names
 
 def build_overlays() -> Path:
-    """Write build/overlays/build.ninja for the level overlays (docs/overlays.md).
+    """Write build/overlays/build.ninja for the level overlays (docs/build/overlays.md).
 
     The objects are never linked; the executable's build does not see them.
     Each src/overlays file is built twice:
@@ -2145,7 +2122,7 @@ def build_overlays() -> Path:
     if not game_compiler_configured():
         raise SystemExit(
             "the reconstructed game compiler is required: "
-            f"{_game_compiler_root()} has no ee-gcc/cc1/sdk-as (see docs/building.md)"
+            f"{GAME_COMPILER} has no ee-gcc/cc1/sdk-as (see docs/build/building.md)"
         )
     asm_dir = Path("config/us/overlays/asm")
     if not asm_dir.is_dir():
@@ -2153,10 +2130,10 @@ def build_overlays() -> Path:
             f"{asm_dir} is missing: run `python3 scripts/overlay-extract.py --iso "
             "<your disc image>` (or ./setup.sh) first"
         )
-    sn_root = Path(SN_TOOLCHAIN_ROOT or ROOT / "tools/compilers/ee-gcc-2.95.2")
+    sn_root = SN_COMPILER
     OVERLAYS_BUILD.mkdir(parents=True, exist_ok=True)
     (OVERLAYS_BUILD / "padless-asm.py").write_text(PADLESS_ASM_HELPER)
-    game_root = _game_compiler_root()
+    game_root = GAME_COMPILER
     rel_root = os.path.relpath(ROOT, OVERLAYS_BUILD)
     includes = (f"-I{game_root}/include -I{rel_root}/src -I{rel_root}/include "
                 f"-Wa,-I{rel_root}/include -Wa,-I{rel_root}")
@@ -2274,7 +2251,7 @@ def main():
     )
     parser.add_argument(
         "--overlays",
-        help="Only write build/overlays/build.ninja for the level overlay sources (docs/overlays.md)",
+        help="Only write build/overlays/build.ninja for the level overlay sources (docs/build/overlays.md)",
         action="store_true",
     )
     args = cast(ArgsProtocol, parser.parse_args())

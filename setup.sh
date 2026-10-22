@@ -70,7 +70,7 @@ Options:
   --iso PATH        extract SCUS_971.99 from this disc image (default: first dumps/*.iso)
   --elf PATH        copy this SCUS_971.99 instead
   --no-build        install the toolchain, skip `make elf`
-  --with-patched    also build the optional patched EE-GCC profile (docs/patched-toolchain.md)
+  --with-patched    also build the optional patched EE-GCC profile (docs/build/patched-compiler.md)
   --docker          run the setup inside an Ubuntu container (macOS, other distros)
   --shell           open a shell in that container with the toolchain on PATH
   --check           verify the installed toolchain and inputs, change nothing
@@ -222,9 +222,9 @@ check_installed() {
     check() { if "$@" >/dev/null 2>&1; then printf 'OK    %s\n' "$LABEL"; else printf 'MISS  %s\n' "$LABEL"; ok=0; fi; }
     LABEL="game compiler (tools/compilers/game-compiler)";      check test -x "$COMPILERS/game-compiler/cc1" -a -x "$COMPILERS/game-compiler/as" -a -x "$COMPILERS/game-compiler/sdk-as" -a -f "$COMPILERS/game-compiler/include/stdarg.h"
     LABEL="SDK compiler (tools/compilers/sdk-compiler)";        check test -x "$COMPILERS/sdk-compiler/bin/ee-gcc"
-    LABEL="SN compiler (tools/compilers/ee-gcc-2.95.2)";        check test -f "$COMPILERS/ee-gcc-2.95.2/bin/ee-gcc.exe"
-    LABEL="SN assembler ps2eeas 1.9.25.758 (no divbug, 64 MiB stack)";        check sha_ok "$COMPILERS/ee-gcc-2.95.2/ee/bin/Ps2EeAs.exe" "$SN_AS_PATCHED_SHA"
-    LABEL="SN GCC 2.95.2 headers";                              check sha_ok "$COMPILERS/ee-gcc-2.95.2/lib/gcc-lib/ee/2.95.2/include/stdarg.h" "$SDK_MIRROR_STDARG_SHA"
+    LABEL="SN compiler (tools/compilers/sn-compiler)";         check test -f "$COMPILERS/sn-compiler/bin/ee-gcc.exe"
+    LABEL="SN assembler ps2eeas 1.9.25.758 (no divbug, 64 MiB stack)";        check sha_ok "$COMPILERS/sn-compiler/ee/bin/Ps2EeAs.exe" "$SN_AS_PATCHED_SHA"
+    LABEL="SN GCC 2.95.2 headers";                              check sha_ok "$COMPILERS/sn-compiler/lib/gcc-lib/ee/2.95.2/include/stdarg.h" "$SDK_MIRROR_STDARG_SHA"
     LABEL="R5900 binutils (tools/binutils-mips-ps2-decompals)"; check test -x "$TOOLS/binutils-mips-ps2-decompals/mips-ps2-decompals-ld"
     LABEL="objdiff-cli (tools/objdiff)";                        check test -x "$TOOLS/objdiff/objdiff-cli"
     LABEL="Python environment (.venv)";                         check "$ROOT/.venv/bin/python" -c "import splat, spimdisasm, ninja"
@@ -333,7 +333,7 @@ install_sdk_compiler() {
 }
 
 install_sn_compiler() {
-    local target="$COMPILERS/ee-gcc-2.95.2"
+    local target="$COMPILERS/sn-compiler"
     local include="$target/lib/gcc-lib/ee/2.95.2/include"
     if [[ -f "$target/bin/ee-gcc.exe" ]] && sha_ok "$target/ee/bin/Ps2EeAs.exe" "$SN_AS_PATCHED_SHA" \
         && sha_ok "$include/stdarg.h" "$SDK_MIRROR_STDARG_SHA"; then
@@ -400,11 +400,11 @@ install_python() {
 }
 
 install_patched_profile() {
-    local root="$TOOLS/ee-gcc2.9-991111-01-patched"
+    local root="$COMPILERS/patched-compiler"
     if [[ -x "$root/cc1" && -x "$root/xgcc" ]]; then
         return
     fi
-    say "building the optional patched EE-GCC profile (docs/patched-toolchain.md)"
+    say "building the optional patched EE-GCC profile (docs/build/patched-compiler.md)"
     python3 scripts/build-patched-toolchain.py
 }
 
@@ -509,9 +509,6 @@ check_installed || die "some components are still missing (see above)"
 if [[ "$BUILD" == 1 ]]; then
     say "rebuilding the boot ELF (make elf)"
     export WINEDEBUG=-all
-    if [[ "$WITH_PATCHED" == 1 ]]; then
-        export EE_GCC_PATCHED_ROOT="$TOOLS/ee-gcc2.9-991111-01-patched"
-    fi
     make elf
     install_overlays
 elif [[ -n "$ISO" && ! -d config/us/overlays/asm ]]; then

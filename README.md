@@ -12,7 +12,7 @@
 <p align="center">
   <a href="https://bytematch.dev/lombyte-project/Lombyte"><img src="https://img.shields.io/badge/bytematch.dev-Progress-de812f?style=flat-square&logo=hackthebox&logoColor=de812f&labelColor=0d1117" alt="bytematch.dev progress"></a>
   <a href="https://discord.gg/XVdFrwKuw"><img src="https://img.shields.io/badge/Discord-Community-5865F2?style=flat-square&logo=discord&logoColor=5865F2&labelColor=0d1117" alt="Community Discord"></a>
-  <a href="docs/building.md"><img src="https://img.shields.io/badge/Build-Guide-c3cbd8?style=flat-square&logo=gnubash&logoColor=c3cbd8&labelColor=0d1117" alt="Build guide"></a>
+  <a href="docs/build/building.md"><img src="https://img.shields.io/badge/Build-Guide-c3cbd8?style=flat-square&logo=gnubash&logoColor=c3cbd8&labelColor=0d1117" alt="Build guide"></a>
   <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/Contributing-Guide-c3cbd8?style=flat-square&logo=github&logoColor=c3cbd8&labelColor=0d1117" alt="Contributing guide"></a>
 </p>
 <p align="center">
@@ -67,7 +67,7 @@ git clone https://github.com/lombyte-project/lombyte.git && cd lombyte
 ./setup.sh --iso /path/to/your-ratchet-and-clank-usa.iso
 ```
 
-Windows, macOS and other options: [docs/building.md](docs/building.md#quick-setup).
+Windows, macOS and other options: [docs/build/building.md](docs/build/building.md#quick-setup).
 
 Work-in-progress C is also welcome when it preserves the matching baseline. Do not submit game images, extracted game data, or proprietary compiler binaries.
 
@@ -83,4 +83,4 @@ Work-in-progress C is also welcome when it preserves the matching baseline. Do n
 
 Repository code is distributed under the [GNU General Public License v3.0](LICENSE). Code reconstructed from third-party binaries belongs to its copyright holders; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-The Lombyte emblem in [`assets/`](assets/) is the project's original artwork.
+The Lombyte emblem in [`assets/`](assets) is the project's original artwork.

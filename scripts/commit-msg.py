@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Git hook: validate the commit subject against docs/commit-messages.md.
+"""Git hook: validate the commit subject against docs/contributing/commit-messages.md.
 
 Install into the repository (idempotent):
 
@@ -39,7 +39,7 @@ NAMING = Path(os.environ.get("RNC_COMMIT_NAMING", ""))
 # Trailer form only (line starts with the token + ":"): prose that merely
 # mentions the term, e.g. in a commit about this hook, must survive.
 # A person credited by their GitHub noreply address is kept (see
-# docs/commit-messages.md); every other co-author line is an agent trailer.
+# docs/contributing/commit-messages.md); every other co-author line is an agent trailer.
 TRAILER_RE = re.compile(r"^\s*(?:claude[-_]?session\s*:|co[-_]?authored[-_]?by\s*:"
                         r"(?!\s*[\w-]+ <\d+\+[\w-]+@users\.noreply\.github\.com>\s*$))",
                         re.IGNORECASE | re.MULTILINE)
@@ -140,7 +140,7 @@ def main() -> None:
         for problem in problems:
             print(f"commit-msg: {problem}", file=sys.stderr)
         print(f"commit-msg: got '{subject.strip()}'", file=sys.stderr)
-        print("commit-msg: see docs/commit-messages.md", file=sys.stderr)
+        print("commit-msg: see docs/contributing/commit-messages.md", file=sys.stderr)
         sys.exit(1)
 
 

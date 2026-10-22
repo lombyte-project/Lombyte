@@ -258,12 +258,7 @@ def install(
     function_map: Path,
     elf: Path,
 ) -> dict[str, object]:
-    binutils_root = os.environ.get("BINUTILS_ROOT")
-    assembler = Path(
-        (str(Path(binutils_root) / "mips-ps2-decompals-as") if binutils_root else None)
-        or shutil.which("mips-ps2-decompals-as")
-        or "/opt/binutils-mips-ps2-decompals/mips-ps2-decompals-as"
-    )
+    assembler = Path(shutil.which("mips-ps2-decompals-as") or "mips-ps2-decompals-as")
     installed: list[str] = []
     errors: list[dict[str, str]] = []
     retail_names = _symbol_addrs(config.parent / "symbol_addrs.txt")

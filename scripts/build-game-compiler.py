@@ -79,7 +79,7 @@ REFERENCE_HASHES = {
 }
 
 # The driver has no builtin include directory; these three headers from the
-# archive's gcc/ginclude are installed next to it (docs/building.md).
+# archive's gcc/ginclude are installed next to it (docs/build/building.md).
 GINCLUDE_HASHES = {
     "stdarg.h": "6cf354c23924f3389dd16f7f1f35b4189383dbedac26d821c2db2536836de3e0",
     "stddef.h": "23ed59b27cda4de82a312f98e85a258f29d61711beb873a42a1f8404558894ae",

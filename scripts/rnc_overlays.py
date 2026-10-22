@@ -1,4 +1,4 @@
-"""Level overlays: records, catalogue and names (docs/overlays.md).
+"""Level overlays: records, catalogue and names (docs/build/overlays.md).
 
 The records are cut from your own disc image by ``scripts/overlay-extract.py``
 into ``config/us/overlays/level_NN/`` (gitignored, never committed).

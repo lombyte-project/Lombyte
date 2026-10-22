@@ -1,6 +1,6 @@
 name: cleanup
 
-# docs/code-cleanup.md on the code a pull request
+# docs/contributing/code-cleanup.md on the code a pull request
 # changes: only problems it adds fail, older ones on main do not.
 on:
   pull_request:

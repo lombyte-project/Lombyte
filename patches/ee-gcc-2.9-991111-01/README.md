@@ -2,7 +2,7 @@
 Source patch for the optional compiler profile used by some units in `src/`.
 `make elf` does not need it: without it those units are rebuilt from the retail
 oracle. Build instructions and requirements:
-[`docs/patched-toolchain.md`](../../docs/patched-toolchain.md).
+[`docs/build/patched-compiler.md`](../../docs/build/patched-compiler.md).
 - Base: <https://github.com/SSXModding/ps2-ee-toolchain> at `b595ded`
   (public Sony EE-GCC 2.9 snapshot).
 - File: [`patched-ee-gcc.patch`](patched-ee-gcc.patch), applied with

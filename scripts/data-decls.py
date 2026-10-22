@@ -5,7 +5,7 @@ or more than one name.
 A file that needs another placement keeps its own alias, named <name>_gp
 (sda), <name>_lui (NOT_SDA) or <name>_macro (MACRO_ADDR); those count as the
 same name. Everything else is a conflict to fix by hand: find what the
-object really is (docs/code-cleanup.md, Data) and give every declaration that type.
+object really is (docs/contributing/code-cleanup.md, Data) and give every declaration that type.
 
 usage: data-decls.py [--root DIR] [--count]
 """

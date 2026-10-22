@@ -9,8 +9,8 @@ are listed, so you can refine rather than write from scratch.
 
 With ``--score`` every listed unit's C body is measured against retail and the
 highest scores are listed first.  This needs the baseline workspace built once
-with ``./verify-baseline.sh`` (``build/baseline`` inside the checkout, or
-``$BASELINE_ROOT`` when set); only that workspace is written to.
+with ``./verify-baseline.sh`` (``build/baseline``); only that workspace is
+written to.
 
 Usage:
   python3 scripts/list-functions.py                 # 25 smallest with a C body
@@ -75,7 +75,7 @@ def parse_args(argv=None):
         "--workspace",
         type=Path,
         default=None,
-        help="baseline workspace for --score (default: $BASELINE_ROOT or build/baseline in the checkout)",
+        help="baseline workspace for --score (default: build/baseline)",
     )
     parser.add_argument(
         "--json",

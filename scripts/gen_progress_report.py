@@ -16,7 +16,7 @@ What the report counts (the same contract as ``assets/decomp_map.json``):
 * every recoverable configured C unit (``config/us/rnc1.us.yaml`` rows
   ``[0xADDR, c, owner]``) with its byte size, nested under a logical group;
 * every shared and level function of the 19 level overlays
-  (``config/overlays/us/functions.tsv``, ``docs/overlays.md``), once each,
+  (``config/overlays/us/functions.tsv``, ``docs/build/overlays.md``), once each,
   grouped by its ``src/overlays/`` file; it is matched when its C is there
   (promotion follows the byte proof) and pending while it is an
   ``INCLUDE_ASM`` stub. The top-level measures cover the executable and the

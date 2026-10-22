@@ -10,7 +10,7 @@
   it ([CONTRIBUTING.md](../CONTRIBUTING.md#6-promote-an-exact-unit)).
 - `overlays/` holds the level code (`shared/` and `lNN/`), built by
   `make overlays` and not linked into the boot executable
-  ([docs/overlays.md](../docs/overlays.md)).
+  ([docs/build/overlays.md](../docs/build/overlays.md)).
 
 Each file's owner path in `config/us/rnc1.us.yaml` must match its location.
-Moving or renaming a file follows [docs/code-cleanup.md](../docs/code-cleanup.md).
+Moving or renaming a file follows [docs/contributing/code-cleanup.md](../docs/contributing/code-cleanup.md).

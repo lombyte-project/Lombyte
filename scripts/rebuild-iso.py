@@ -15,8 +15,8 @@ Usage:
   python3 scripts/rebuild-iso.py [--iso dumps/....iso] [--elf PATH] [--out build/....iso]
 
 If --elf is omitted, the script looks for the reconstructed boot ELF in the
-baseline workspace (build/baseline/config/us/build/SCUS_971.99 in the checkout,
-or under BASELINE_ROOT when set); run `make elf` first to produce it. For a dry
+baseline workspace (build/baseline/config/us/build/SCUS_971.99); run `make elf`
+first to produce it. For a dry
 check of the patching machinery you may pass config/us/SCUS_971.99 (the retail
 executable, byte-identical to the built ELF).
 """
@@ -25,7 +25,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import os
 import pathlib
 import struct
 import sys
@@ -68,12 +67,7 @@ def find_boot_extent(iso: bytes, want_name: str = "SCUS_971.99;1") -> tuple[int,
 
 
 def built_elf_candidates() -> list[pathlib.Path]:
-    override = os.environ.get("BASELINE_ROOT", "").strip()
     candidates = [ROOT / "build/SCUS_971.99"]
-    if override:
-        baseline = pathlib.Path(override).expanduser()
-        candidates.append(baseline / "config/us/build/SCUS_971.99")
-        candidates.append(baseline / "build/SCUS_971.99")
     candidates.append(ROOT / "build/baseline/config/us/build/SCUS_971.99")
     candidates.append(ROOT / "build/baseline/build/SCUS_971.99")
     return candidates

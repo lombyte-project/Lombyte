@@ -5,7 +5,7 @@ Usage:
   python3 scripts/check-unit.py <unit> [--workspace DIR] [--json]
 
 ``<unit>`` is a configured unit path such as ``assembly/textbin/runtime/memory/clear_u64_value``,
-or a level overlay function such as ``FUN_L00_002e0988`` (docs/overlays.md); a
+or a level overlay function such as ``FUN_L00_002e0988`` (docs/build/overlays.md); a
 leading ``src/`` and a trailing ``.c`` are accepted.  When the file keeps its
 assembly oracle under ``#ifndef NON_MATCHING``, the C body under ``#else`` is
 staged into the workspace and measured alone, so the source tree keeps its
@@ -13,7 +13,7 @@ oracle while you iterate.
 
 This is the fast inner loop, not the acceptance gate: ``make elf`` stays
 authoritative.  It needs a baseline workspace built once with
-``./verify-baseline.sh`` (``build/baseline``, or ``$BASELINE_ROOT``) and writes
+``./verify-baseline.sh`` (``build/baseline``) and writes
 only inside it.
 
 Usage examples:
@@ -47,7 +47,7 @@ def parse_args(argv=None):
         "--workspace",
         type=Path,
         default=None,
-        help="baseline workspace (default: $BASELINE_ROOT or build/baseline in the checkout)",
+        help="baseline workspace (default: build/baseline)",
     )
     parser.add_argument("--json", action="store_true", help="print the result as JSON")
     return parser.parse_args(argv)
@@ -85,25 +85,8 @@ def find_ninja() -> str | None:
 def build_environment() -> dict:
     env = dict(os.environ)
     # Match verify-baseline.sh when reconfiguring its disposable workspace.
-    env["SN_TOOLCHAIN_ROOT"] = env.get("SN_TOOLCHAIN_ROOT") or str(
-        ROOT / "tools/compilers/ee-gcc-2.95.2"
-    )
-    prefix = []
-    venv_bin = ROOT / ".venv" / "bin"
-    if venv_bin.is_dir():
-        prefix.append(str(venv_bin))
-    binutils = os.environ.get("BINUTILS_ROOT")
-    candidates = (
-        [Path(binutils)]
-        if binutils
-        else [ROOT / "tools" / "binutils-mips-ps2-decompals", Path("/opt/binutils-mips-ps2-decompals")]
-    )
-    for candidate in candidates:
-        if candidate.is_dir():
-            prefix.append(str(candidate))
-            break
-    if prefix:
-        env["PATH"] = os.pathsep.join(prefix + [env.get("PATH", "")])
+    prefix = [str(ROOT / ".venv" / "bin"), str(ROOT / "tools" / "binutils-mips-ps2-decompals")]
+    env["PATH"] = os.pathsep.join(prefix + [env.get("PATH", "")])
     return env
 
 
@@ -421,7 +404,7 @@ def main(argv=None) -> int:
             unit,
             "oracle-fallback",
             f"{unit} is rebuilt from the retail oracle in this workspace "
-            "because EE_GCC_PATCHED_ROOT is not set; run "
+            "because tools/compilers/patched-compiler is missing; run "
             "scripts/build-patched-toolchain.py, re-run make elf, then measure "
             "its C",
             as_json=args.json,

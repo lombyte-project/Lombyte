@@ -1,4 +1,4 @@
-"""The level overlay functions as progress units (docs/overlays.md).
+"""The level overlay functions as progress units (docs/build/overlays.md).
 
 Reads ``config/overlays/us/functions.tsv`` (the catalogue: every distinct
 function of the 19 level programs, once) and ``src/overlays/``: a shared or

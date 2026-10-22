@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check a change against the rules in docs/code-cleanup.md.
+"""Check a change against the rules in docs/contributing/code-cleanup.md.
 
 Every check runs on the base tree and on the working tree.  Only problems the
 change adds are reported, so older code on main never fails the check; a
@@ -69,11 +69,11 @@ TYPE_WORDS = ("s8|u8|s16|u16|s32|u32|s64|u64|s128|u128|f32|f64|b32|vs8|vu8|vs16|
 DECL_LINE = re.compile(r"^\s*(?:(?:register|volatile|const|static|extern)\s+)*(?:" + TYPE_WORDS + r")\b"
                        r"(?:\s+(?:" + TYPE_WORDS + r")\b)*\s*([^;(){}]*?)\s*;", re.M)
 # A byte array defined with a list of numbers: raw bytes, which stay in assembly
-# (docs/code-cleanup.md, Data). Strings and typed tables are fine.
+# (docs/contributing/code-cleanup.md, Data). Strings and typed tables are fine.
 RAW_BYTES = re.compile(r"^(?:const\s+)?(?:u8|s8|(?:un)?signed\s+char|char)\s+(\w+)\s*\[[^\]\n]*\]"
                        r"(?:\s*__asm__\s*\(\s*\"([^\"]*)\"\s*\))?[^=;\n]*=\s*\{([^;]*?)\}\s*;", re.M)
 RAW_BYTES_MAX = 16
-# Code that only steers the compiler (docs/code-cleanup.md, Fakematches). Each use
+# Code that only steers the compiler (docs/contributing/code-cleanup.md, Fakematches). Each use
 # needs a `Fakematch:` comment that ends at most FAKEMATCH_REACH lines above it.
 OPERAND = r"\*?[A-Za-z_][\w.\[\]]*(?:->[\w.\[\]]+)*"
 STEP = r"(?:(" + OPERAND + r")\s*(\+\+|--)|(\+\+|--)\s*(" + OPERAND + r"))"
@@ -698,7 +698,7 @@ def main() -> int:
     for p in problems:
         print(p)
     if problems:
-        print(f"\n{len(problems)} new problems (docs/code-cleanup.md)", file=sys.stderr)
+        print(f"\n{len(problems)} new problems (docs/contributing/code-cleanup.md)", file=sys.stderr)
         return 1
     print("cleanup check: no new problems")
     return 0

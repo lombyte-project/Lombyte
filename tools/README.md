@@ -1,14 +1,15 @@
-# `tools/` — local toolchain (not tracked)
+# `tools/`: local toolchain (not tracked)
 
-`../setup.sh` installs the matching toolchain here; the directory contents are
-ignored by Git (only this README is tracked).
+`../setup.sh` installs everything here. Git ignores this folder except this
+README. Nothing here is configurable: the build always looks at these paths.
 
-The expected layout and versions are documented in
-[docs/building.md](../docs/building.md): the two compilers of the retail build,
-`compilers/game-compiler` (required — `configure.py` refuses to generate a build
-without it) and `compilers/sdk-compiler`, the SN EE-GCC 2.95.2 tree (its `Ps2EeAs` assembles
-all game code),
-the R5900 binutils, and the objdiff CLI.
+| Path                          | What                                               |
+| :---------------------------- | :------------------------------------------------- |
+| `compilers/game-compiler`     | game code compiler (required)                      |
+| `compilers/sdk-compiler`      | SDK library compiler                               |
+| `compilers/sn-compiler`       | SN EE-GCC 2.95.2 and Ps2EeAs (assembles game code) |
+| `compilers/patched-compiler`  | optional, `./setup.sh --with-patched`              |
+| `binutils-mips-ps2-decompals` | R5900 binutils                                     |
+| `objdiff`                     | objdiff CLI                                        |
 
-No game data, compiler binaries, or proprietary tools are distributed with
-this repository.
+No game data or proprietary tools are stored in the repository.

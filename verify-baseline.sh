@@ -1,67 +1,34 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Rebuild the boot ELF byte-for-byte from the checked-in sources.
-#
-# The build runs in a staging directory inside the checkout (default
-# build/baseline). Set BASELINE_ROOT to a native Linux directory (for example
-# $HOME/rnc-baseline) when the checkout itself is on a Windows-mounted drive.
-# `make iso` patches the verified ELF into a copy of your legally owned disc
-# image.
+# Rebuild the boot ELF byte-for-byte from the checked-in sources, in
+# build/baseline (recreated on every run). `make iso` patches the verified ELF
+# into a copy of your own disc image.
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BASELINE_ROOT="${BASELINE_ROOT:-$PROJECT_ROOT/build/baseline}"
-VENV="${VENV:-$PROJECT_ROOT/.venv}"
-# R5900 binutils: setup.sh installs them into the checkout; /opt is the
-# older manual location.
-if [[ -z "${BINUTILS_ROOT:-}" && -d "$PROJECT_ROOT/tools/binutils-mips-ps2-decompals" ]]; then
-  BINUTILS_ROOT="$PROJECT_ROOT/tools/binutils-mips-ps2-decompals"
-fi
-BINUTILS_ROOT="${BINUTILS_ROOT:-/opt/binutils-mips-ps2-decompals}"
-COMPILER_ROOT="${COMPILER_ROOT:-$PROJECT_ROOT/tools/compilers}"
-# Per-unit textbin ee-gcc (Windows PE): lives in the repository so the driver
-# can reach its native (Windows) path from the WSL mirror.
-SN_TOOLCHAIN_ROOT="${SN_TOOLCHAIN_ROOT:-$PROJECT_ROOT/tools/compilers/ee-gcc-2.95.2}"
-export SN_TOOLCHAIN_ROOT
+BASELINE_ROOT="$PROJECT_ROOT/build/baseline"
+VENV="$PROJECT_ROOT/.venv"
+COMPILERS="$PROJECT_ROOT/tools/compilers"
+BINUTILS="$PROJECT_ROOT/tools/binutils-mips-ps2-decompals"
 
 die() { printf 'error: %s\n' "$1" >&2; exit 1; }
 [[ "$(uname -s)" == Linux* ]] || die "run inside WSL or another Linux environment"
 
-# Refuse destructive roots: never wipe the repository or any ancestor.
-_RESOLVED_ROOT="$(realpath -m "$BASELINE_ROOT" 2>/dev/null || printf '%s' "$BASELINE_ROOT")"
-case "$_RESOLVED_ROOT" in
-  /*) ;;
-  *) die "BASELINE_ROOT must be an absolute path: $BASELINE_ROOT" ;;
-esac
-case "$_RESOLVED_ROOT" in
-  /) die "BASELINE_ROOT must not be the filesystem root" ;;
-  "${HOME:-}") die "BASELINE_ROOT must not be the home directory (${HOME:-})" ;;
-esac
-_PROJECT_RESOLVED="$(realpath -m "$PROJECT_ROOT")"
-case "$_PROJECT_RESOLVED" in
-  "$_RESOLVED_ROOT" | "$_RESOLVED_ROOT"/*)
-    die "BASELINE_ROOT must not be the checkout or a parent of it: $BASELINE_ROOT" ;;
-esac
-
-# Refuse to delete an existing directory that is not a baseline workspace.
-# The marker below is created by this script; any other directory may hold
-# unrelated user data.
+# Refuse to delete a build/baseline this script did not create.
 if [[ -e "$BASELINE_ROOT" && ! -f "$BASELINE_ROOT/.rnc-baseline-root" ]]; then
-  die "refusing to remove a directory that is not a baseline workspace: $BASELINE_ROOT (delete it manually if intended, or choose another BASELINE_ROOT)"
+  die "refusing to remove a directory that is not a baseline workspace: $BASELINE_ROOT (delete it yourself if you meant to)"
 fi
 
-[[ -x "$VENV/bin/python" ]] || die "missing virtual environment: $VENV (create it with: python3 -m venv .venv && .venv/bin/pip install -r requirements.txt)"
-[[ -x "$COMPILER_ROOT/game-compiler/ee-gcc" ]] || die "missing game compiler: $COMPILER_ROOT/game-compiler"
-[[ -x "$COMPILER_ROOT/sdk-compiler/bin/ee-gcc" ]] || die "missing SDK compiler: $COMPILER_ROOT/sdk-compiler"
-[[ -x "$SN_TOOLCHAIN_ROOT/bin/ee-gcc.exe" ]] || die "missing textbin ee-gcc under $SN_TOOLCHAIN_ROOT"
-if [[ -n "${EE_GCC_PATCHED_ROOT:-}" && -x "$EE_GCC_PATCHED_ROOT/xgcc" ]]; then
-  printf 'note: patched EE-GCC profile: %s\n' "$EE_GCC_PATCHED_ROOT"
+[[ -x "$VENV/bin/python" ]] || die "missing virtual environment: $VENV (run ./setup.sh)"
+[[ -x "$COMPILERS/game-compiler/ee-gcc" ]] || die "missing game compiler: $COMPILERS/game-compiler (run ./setup.sh)"
+[[ -x "$COMPILERS/sdk-compiler/bin/ee-gcc" ]] || die "missing SDK compiler: $COMPILERS/sdk-compiler (run ./setup.sh)"
+[[ -f "$COMPILERS/sn-compiler/bin/ee-gcc.exe" ]] || die "missing SN compiler: $COMPILERS/sn-compiler (run ./setup.sh)"
+[[ -x "$BINUTILS/mips-ps2-decompals-ld" ]] || die "missing R5900 binutils: $BINUTILS (run ./setup.sh)"
+if [[ -x "$COMPILERS/patched-compiler/xgcc" ]]; then
   "$VENV/bin/python" "$PROJECT_ROOT/scripts/check-patched-profile.py" \
-    --profile "$EE_GCC_PATCHED_ROOT" || true
-elif [[ -n "${EE_GCC_PATCHED_ROOT:-}" ]]; then
-  printf 'warning: EE_GCC_PATCHED_ROOT has no xgcc; patched-profile units fall back to the retail oracle\n' >&2
+    --profile "$COMPILERS/patched-compiler" || true
 else
-  printf 'note: EE_GCC_PATCHED_ROOT is not set; patched-profile units fall back to the retail oracle (docs/patched-toolchain.md)\n'
+  printf 'note: no tools/compilers/patched-compiler; its units build from the retail oracle (docs/build/patched-compiler.md)\n'
 fi
 
 rm -rf "$BASELINE_ROOT"
@@ -72,7 +39,7 @@ mkdir -p "$BASELINE_ROOT/scripts"
 mkdir -p "$BASELINE_ROOT/tools/objdiff"
 cp "$PROJECT_ROOT/tools/objdiff/objdiff-cli" "$BASELINE_ROOT/tools/objdiff/objdiff-cli"
 chmod +x "$BASELINE_ROOT/tools/objdiff/objdiff-cli"
-cp -a "$COMPILER_ROOT" "$BASELINE_ROOT/tools/cc"
+cp -a "$COMPILERS" "$BASELINE_ROOT/tools/compilers"
 mkdir -p "$BASELINE_ROOT/config/us"
 cp "$PROJECT_ROOT/config/us/rnc1.us.yaml" "$BASELINE_ROOT/config/us/rnc1.us.yaml"
 cp "$PROJECT_ROOT/config/us/SCUS_971.99" "$BASELINE_ROOT/config/us/SCUS_971.99"
@@ -83,7 +50,7 @@ cp "$PROJECT_ROOT/config/us/symbol_addrs.txt" "$BASELINE_ROOT/config/us/symbol_a
 cp -a "$PROJECT_ROOT/include/." "$BASELINE_ROOT/include/"
 cp -a "$PROJECT_ROOT/src/." "$BASELINE_ROOT/src/"
 touch "$BASELINE_ROOT/config/us/undefined_syms_auto.txt"
-export PATH="$VENV/bin:$BINUTILS_ROOT:$PATH"
+export PATH="$VENV/bin:$BINUTILS:$PATH"
 cd "$BASELINE_ROOT"
 python configure.py config/us/rnc1.us.yaml -c
 python configure.py config/us/rnc1.us.yaml --make-asm

@@ -1,6 +1,6 @@
 # Overlay configuration
 
-Metadata for the 19 level programs ([docs/overlays.md](../../docs/overlays.md)).
+Metadata for the 19 level programs ([docs/build/overlays.md](../../docs/build/overlays.md)).
 Names, sizes, addresses and hashes only: no game bytes.
 
 - `us/level-table.json`: each level's byte offset and size on the USA disc.

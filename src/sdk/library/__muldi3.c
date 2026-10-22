@@ -28,7 +28,7 @@ Boston, MA 02111-1307, USA.  */
 
 /* __muldi3: GCC 2.95.2 libgcc2 L_muldi3 with the longlong.h MIPS umul macro.
  *
- * Evidence: tools/compilers/ee-gcc-2.95.2/lib/gcc-lib/ee/2.95.2/libgcc.a
+ * Evidence: tools/compilers/sn-compiler/lib/gcc-lib/ee/2.95.2/libgcc.a
  * _muldi3.o is byte-identical (96 B .text) to the retail expected object
  * build/workspace/rnc-refval/config/us/expected/obj/assembly/sdk/library/__muldi3.c.o
  * (verified 2026-09-11, run pipeline-2026-09-11-6).

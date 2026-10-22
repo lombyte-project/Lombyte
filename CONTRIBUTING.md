@@ -2,8 +2,8 @@
 
 Thanks for helping decompile _Ratchet & Clank_! The goal is to turn
 assembly-backed code into C that compiles to the exact retail bytes: units of
-the boot executable under [`src/assembly/`](src/assembly/), and level code
-under [`src/overlays/`](src/overlays/) ([Level overlays](#level-overlays)).
+the boot executable under [`src/assembly/`](src/assembly), and level code
+under [`src/overlays/`](src/overlays) ([Level overlays](#level-overlays)).
 Writing C, recovering names, improving types, and fixing docs all help.
 
 The build is the safety net: it verifies the reconstructed executable against
@@ -19,22 +19,21 @@ build instead of slipping through.
 ```
 
 installs the toolchain, extracts the boot executable from your own disc image
-and runs the first `make elf` (see [Quick setup](docs/building.md#quick-setup) for
-Windows, WSL and macOS, and [docs/building.md](docs/building.md) for the manual
-route). Afterwards, rebuild at any time with:
+and runs the first `make elf` (Windows, macOS and manual setup:
+[docs/build/building.md](docs/build/building.md)). Afterwards, rebuild at any
+time with:
 
 ```sh
 make elf
 ```
 
-Some units need an optional patched EE-GCC profile
-([docs/patched-toolchain.md](docs/patched-toolchain.md)); without it they fall
-back to the retail oracle.
+A few units need the optional
+[patched compiler](docs/build/patched-compiler.md); without it they are built
+from the retail bytes.
 
 The run ends with `PASS: reconstructed boot ELF matches retail` and leaves a
-workspace at `build/baseline` inside the checkout (override with
-`BASELINE_ROOT`) holding the retail assembly and per-unit comparison targets
-used below.
+workspace at `build/baseline` holding the retail assembly and per-unit
+comparison targets used below.
 
 ### 2. Pick a function
 
@@ -87,7 +86,7 @@ next to the C and the surrounding units.
 - Declare variables at the start of blocks and use the project typedefs
   (`u32`, `s32`, `f32`, …) — this is GCC 2.9 era, not modern C.
 - Keep it descriptive C: no inline assembly or copied disassembly in the body.
-- Follow [docs/code-cleanup.md](docs/code-cleanup.md) for names, structs, globals and
+- Follow [docs/contributing/code-cleanup.md](docs/contributing/code-cleanup.md) for names, structs, globals and
   data placement.
 
 ### 5. Check your work
@@ -133,7 +132,7 @@ change in C_EXACT, in data in C and the newly matched functions.
 ### 7. Open a pull request
 
 Commit with the project's message standard (see
-[`docs/commit-messages.md`](docs/commit-messages.md)), for example
+[`docs/contributing/commit-messages.md`](docs/contributing/commit-messages.md)), for example
 `decomp: promote clear_u64_value (8 B)`, and open a pull request
 using the template. Include the unit name, its size, and the `PASS` line from
 `make elf`. A maintainer will review and merge.
@@ -181,10 +180,10 @@ Data can move to C too; its bytes are checked like code.
    `src/overlays/shared/data/level_globals.c`.
 3. `make elf` (boot) or `make overlays` (levels) must end with `PASS`.
 
-Names, types and placement: [docs/code-cleanup.md](docs/code-cleanup.md#data);
-level rows: [docs/overlays.md](docs/overlays.md#sources-and-the-proof); how
-data is counted in the report and the map:
-[docs/progress-metrics.md](docs/progress-metrics.md#data).
+More: names, types and placement in
+[code-cleanup.md](docs/contributing/code-cleanup.md#data), level rows in
+[overlays.md](docs/build/overlays.md#source-files-and-the-check), how data is
+counted in [progress.md](docs/build/progress.md#data).
 
 ## Continuous integration
 
@@ -230,23 +229,22 @@ a work-in-progress pull request describing what you tried and where the first
 mismatch is.
 
 If you are stuck, open an issue with the unit name, the `check-unit` output,
-and the mismatch you cannot classify. See
-[`docs/decompilation-tips.md`](docs/decompilation-tips.md) for the full
-acceptance discipline and the recovery ladder.
+and the mismatch you cannot classify. More tips:
+[docs/contributing/decompilation-tips.md](docs/contributing/decompilation-tips.md).
 
 ## House rules
 
 - Keep changes focused; one unit per pull request is perfect for a first
   contribution.
 - The check tools only read the checkout and write inside the baseline
-  workspace (`build/baseline`, or `$BASELINE_ROOT` when you set one); they
+  workspace (`build/baseline`); they
   never touch other locations.
 - Never commit game data, disc images, or compiler binaries. `dumps/`,
   `build/`, `tools/` and `config/us/overlays/` stay out of Git; the test
   suite fails if any of it is tracked.
 - Do not edit `tools/`; it is local toolchain setup.
 - Readability work on matching code follows
-  [docs/code-cleanup.md](docs/code-cleanup.md) and must stay byte-exact.
+  [docs/contributing/code-cleanup.md](docs/contributing/code-cleanup.md) and must stay byte-exact.
 - Run `python3 scripts/test_public_tools.py` before changing anything under
   `scripts/`.
 - The tracked [`.pre-commit-config.yaml`](.pre-commit-config.yaml) runs the

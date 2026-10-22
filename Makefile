@@ -6,7 +6,7 @@
 # leaving the raw game data untouched.
 #
 # Setup: put a legally owned disc dump in dumps/ (e.g. dumps/game.iso) and
-# install the toolchain (docs/building.md). Then run `make elf`.
+# install the toolchain (docs/build/building.md). Then run `make elf`.
 
 .PHONY: elf iso clean-iso check progress overlays
 
@@ -16,22 +16,22 @@ check: ## Run the public CI checks locally (tests, script parse, progress report
 	python3 scripts/gen_progress_report.py
 	python3 scripts/generate_treemap.py
 	@# Struct layout checks (src/check/*_layout_check.c), compiled with the EE compiler when present.
-	@cc=tools/ee-gcc2.9-991111-01-patched; if [ -x $$cc/cc1 ]; then \
+	@cc=tools/compilers/patched-compiler; if [ -x $$cc/cc1 ]; then \
 	  for f in $$(find src/check -name '*_layout_check.c' | sort); do \
 	    $$cc/cpp -Iinclude $$f | $$cc/cc1 -quiet -o /dev/null || exit 1; done; \
 	  echo "layout checks: OK"; else echo "layout checks: skipped (no $$cc)"; fi
 
 progress: ## After `make elf`: measure C_FUZZY and preview the report and map in build/progress/
-	$${VENV:-.venv}/bin/python scripts/gen_progress_report.py --workspace "$${BASELINE_ROOT:-build/baseline}"
-	$${VENV:-.venv}/bin/python scripts/generate_treemap.py
+	.venv/bin/python scripts/gen_progress_report.py --workspace build/baseline
+	.venv/bin/python scripts/generate_treemap.py
 
 elf: ## Rebuild the boot ELF byte-for-byte (full baseline + SHA gate)
 	./verify-baseline.sh
-	@ls -l "$${BASELINE_ROOT:-build/baseline}/config/us/build/SCUS_971.99"
+	@ls -l build/baseline/config/us/build/SCUS_971.99
 
-overlays: ## Build src/overlays and prove every overlay function in C against retail (docs/overlays.md)
-	$${VENV:-.venv}/bin/python configure.py --overlays
-	$${VENV:-.venv}/bin/python scripts/overlay_unit.py
+overlays: ## Build src/overlays and prove every overlay function in C against retail (docs/build/overlays.md)
+	.venv/bin/python configure.py --overlays
+	.venv/bin/python scripts/overlay_unit.py
 
 iso: elf ## Patch the rebuilt boot ELF into a copy of the disc image
 	@iso="$$(ls dumps/*.iso 2>/dev/null | head -1)"; \

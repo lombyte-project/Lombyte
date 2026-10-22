@@ -4,7 +4,7 @@
     python3 scripts/overlay-extract.py --iso game.iso   # records + asm
     python3 scripts/overlay-extract.py                  # asm only, from the records
 
-Writes only gitignored files under config/us/overlays/ (docs/overlays.md):
+Writes only gitignored files under config/us/overlays/ (docs/build/overlays.md):
 
     level_NN/{lit,bss,data,vtbl,camvtbl,sndvtbl,text}.bin, manifest.json
     asm/FUN_LNN_xxxxxxxx.s   (one per shared/level function, INCLUDE_ASM target)
@@ -586,7 +586,7 @@ def comment_gp_accesses(content: str, level: int) -> str:
     """A `$gp`-relative access keeps its retail offset (the assembler takes
     `%gp_rel` only on some instructions, and the bytes are what the proof
     compares) and gets the global's name in a comment: gp is 0x166C00 in every
-    level (docs/overlays.md)."""
+    level (docs/build/overlays.md)."""
     out = []
     for line in content.split("\n"):
         m = GP_ACCESS.match(line)

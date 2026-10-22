@@ -11,4 +11,4 @@ in this directory. Binary-only compilers (SN ProDG) are used as they are.
 | Folder | Compiler | Source | Used for |
 | :--- | :--- | :--- | :--- |
 | [`sce-991111b/`](sce-991111b/README.md) | Sony/Cygnus EE-GCC 2.9-ee-991111b | Internet Archive copy of `gnu-ee-binutils-gcc-1.1.tar.gz` | the game compiler and the SDK assembler `sdk-as`; built by `scripts/build-game-compiler.py` |
-| [`ee-gcc-2.9-991111-01/`](ee-gcc-2.9-991111-01/README.md) | Sony/Cygnus EE-GCC 2.9-ee-991111-01 | <https://github.com/SSXModding/ps2-ee-toolchain> at `b595ded` | the optional patched profile ([docs/patched-toolchain.md](../docs/patched-toolchain.md)) |
+| [`ee-gcc-2.9-991111-01/`](ee-gcc-2.9-991111-01/README.md) | Sony/Cygnus EE-GCC 2.9-ee-991111-01 | <https://github.com/SSXModding/ps2-ee-toolchain> at `b595ded` | the optional patched profile ([docs/build/patched-compiler.md](../docs/build/patched-compiler.md)) |

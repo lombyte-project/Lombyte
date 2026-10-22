@@ -525,68 +525,38 @@ class OverlaySourceStateTests(unittest.TestCase):
 
 
 class BaselineGuardTests(unittest.TestCase):
-    """verify-baseline.sh must never delete a non-baseline directory."""
+    """verify-baseline.sh must never delete a build/baseline it did not create."""
+
+    def _run(self, checkout: Path) -> subprocess.CompletedProcess:
+        script = checkout / "verify-baseline.sh"
+        script.write_text((ROOT / "verify-baseline.sh").read_text())
+        return subprocess.run(
+            ["bash", str(script)], capture_output=True, text=True, cwd=checkout
+        )
 
     def test_refuses_foreign_directory(self):
         with tempfile.TemporaryDirectory() as name:
-            foreign = Path(name) / "user-data"
-            foreign.mkdir()
+            checkout = Path(name)
+            foreign = checkout / "build" / "baseline"
+            foreign.mkdir(parents=True)
             keep = foreign / "important.txt"
             keep.write_text("do not delete\n")
-            env = dict(os.environ)
-            env["BASELINE_ROOT"] = str(foreign)
-            proc = subprocess.run(
-                ["bash", str(ROOT / "verify-baseline.sh")],
-                capture_output=True,
-                text=True,
-                env=env,
-                cwd=ROOT,
-            )
+            proc = self._run(checkout)
             self.assertNotEqual(proc.returncode, 0)
             self.assertIn("refusing to remove", proc.stderr)
-            self.assertTrue(keep.is_file())
             self.assertEqual(keep.read_text(), "do not delete\n")
 
     def test_accepts_marked_baseline_directory(self):
         with tempfile.TemporaryDirectory() as name:
-            marked = Path(name) / "baseline"
-            marked.mkdir()
+            checkout = Path(name)
+            marked = checkout / "build" / "baseline"
+            marked.mkdir(parents=True)
             (marked / ".rnc-baseline-root").write_text("")
-            env = dict(os.environ)
-            env["BASELINE_ROOT"] = str(marked)
-            # Stop after the guard: an intentionally invalid venv makes the
-            # script die at the next check instead of building.
-            env["VENV"] = str(Path(name) / "missing-venv")
-            proc = subprocess.run(
-                ["bash", str(ROOT / "verify-baseline.sh")],
-                capture_output=True,
-                text=True,
-                env=env,
-                cwd=ROOT,
-            )
+            # Stop after the guard: the temporary checkout has no .venv, so
+            # the script dies at the next check instead of building.
+            proc = self._run(checkout)
             self.assertNotIn("refusing to remove", proc.stderr)
             self.assertIn("missing virtual environment", proc.stderr)
-
-    def test_refuses_the_checkout_and_its_parents(self):
-        with tempfile.TemporaryDirectory() as name:
-            tmp = Path(name)
-            checkout = tmp / "checkout"
-            checkout.mkdir()
-            script = checkout / "verify-baseline.sh"
-            script.write_text((ROOT / "verify-baseline.sh").read_text())
-            for baseline in (checkout, tmp):
-                env = dict(os.environ)
-                env["BASELINE_ROOT"] = str(baseline)
-                proc = subprocess.run(
-                    ["bash", str(script)],
-                    capture_output=True,
-                    text=True,
-                    env=env,
-                    cwd=checkout,
-                )
-                self.assertNotEqual(proc.returncode, 0)
-                self.assertIn("must not be the checkout or a parent", proc.stderr)
-            self.assertTrue(checkout.is_dir())
 
 
 class PatchedProfileTests(unittest.TestCase):
@@ -921,15 +891,7 @@ class UnitListHelpersTests(unittest.TestCase):
 
     def test_default_workspace_is_project_local(self):
         repo = Path("/tmp/example-checkout")
-        with mock.patch.dict(os.environ, {}, clear=False):
-            os.environ.pop("BASELINE_ROOT", None)
-            self.assertEqual(
-                self.units.default_workspace(repo), repo / "build" / "baseline"
-            )
-        with mock.patch.dict(os.environ, {"BASELINE_ROOT": "/tmp/custom-ws"}):
-            self.assertEqual(
-                self.units.default_workspace(repo), Path("/tmp/custom-ws")
-            )
+        self.assertEqual(self.units.default_workspace(repo), repo / "build" / "baseline")
 
     def test_workspace_problem_refuses_checkout_and_parents(self):
         with tempfile.TemporaryDirectory() as name:
@@ -1338,18 +1300,12 @@ class ListFunctionsTests(unittest.TestCase):
         self.assertEqual(leftovers, [])
 
     def test_score_defaults_to_the_project_local_workspace(self):
-        environment = {
-            key: value
-            for key, value in os.environ.items()
-            if key != "BASELINE_ROOT"
-        }
         with tempfile.TemporaryDirectory() as name:
             tmp = Path(name)
             self._repo(tmp)
             stderr = io.StringIO()
             with (
                 mock.patch.object(self.lister, "ROOT", tmp),
-                mock.patch.dict(os.environ, environment, clear=True),
                 contextlib.redirect_stderr(stderr),
             ):
                 code = self.lister.main(["--score"])
@@ -1505,13 +1461,6 @@ class CheckUnitTests(unittest.TestCase):
             self.assertEqual(calls[0], [self.check.sys.executable, str(ws / "configure.py"), "config/us/rnc1.us.yaml"])
             self.assertEqual(len(calls), 3)  # Configure once, then build each measurement.
             self.assertIn("INCLUDE_ASM", (tmp / f"src/{self.unit}.c").read_text())
-
-    def test_reconfigure_uses_baseline_assembler_default_and_preserves_override(self):
-        with mock.patch.dict(os.environ, {"SN_TOOLCHAIN_ROOT": ""}):
-            self.assertEqual(self.check.build_environment()["SN_TOOLCHAIN_ROOT"],
-                             str(self.check.ROOT / "tools/compilers/ee-gcc-2.95.2"))
-        with mock.patch.dict(os.environ, {"SN_TOOLCHAIN_ROOT": "/custom/sn"}):
-            self.assertEqual(self.check.build_environment()["SN_TOOLCHAIN_ROOT"], "/custom/sn")
 
     def test_keeps_other_compiler_routes(self):
         for rule in ("game-compiler", "sdk-compiler", "sdk-compiler-patched"):

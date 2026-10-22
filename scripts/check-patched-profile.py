@@ -4,7 +4,7 @@
 Usage:
   python3 scripts/check-patched-profile.py [--profile DIR] [--patch FILE]
 
-``--profile`` defaults to ``$EE_GCC_PATCHED_ROOT``.  A profile built by
+``--profile`` defaults to ``tools/compilers/patched-compiler``.  A profile built by
 ``scripts/build-patched-toolchain.py`` records the patch it came from in
 ``provenance.json``; when that hash no longer matches
 ``patches/ee-gcc-2.9-991111-01/patched-ee-gcc.patch``, patched-profile units
@@ -18,8 +18,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -33,8 +31,8 @@ def parse_args(argv=None):
     parser.add_argument(
         "--profile",
         type=Path,
-        default=os.environ.get("EE_GCC_PATCHED_ROOT") or None,
-        help="installed profile directory (default: $EE_GCC_PATCHED_ROOT)",
+        default=ROOT / "tools" / "compilers" / "patched-compiler",
+        help="installed profile directory (default: tools/compilers/patched-compiler)",
     )
     parser.add_argument(
         "--patch",
@@ -90,12 +88,6 @@ def check(profile: Path, patch: Path) -> int:
 
 def main(argv=None) -> int:
     args = parse_args(argv)
-    if args.profile is None:
-        print(
-            "check-patched-profile: error: pass --profile or set EE_GCC_PATCHED_ROOT",
-            file=sys.stderr,
-        )
-        return 2
     patch = args.patch if args.patch is not None else DEFAULT_PATCH
     return check(args.profile.expanduser(), patch)
 

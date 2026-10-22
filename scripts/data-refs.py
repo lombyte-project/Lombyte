@@ -958,7 +958,7 @@ def main(argv=None) -> int:
 
     if args.level is None:
         if not args.elf.exists():
-            print(f"missing {args.elf}: copy your own SCUS_971.99 there (see docs/building.md)",
+            print(f"missing {args.elf}: copy your own SCUS_971.99 there (see docs/build/building.md)",
                   file=sys.stderr)
             return 1
         gp_match = GP_VALUE_RE.search(CONFIG_PATH.read_text())

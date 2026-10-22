@@ -1,6 +1,6 @@
 /* EE ABI checks against the offsets used by the retail voice allocator,
  * release helper and sound_update. Nothing in this file is linked.
- * See docs/audio-voices.md for the binary identities and partial views. */
+ * See docs/game/audio-voices.md for the binary identities and partial views. */
 #include "rnc/audio/voice_pool.h"
 
 #define CHECK_CAT2(a, b) a##b

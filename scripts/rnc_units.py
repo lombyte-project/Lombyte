@@ -10,7 +10,6 @@ own parser so it stays standalone.
 from __future__ import annotations
 
 import json
-import os
 import re
 from pathlib import Path
 
@@ -152,16 +151,7 @@ def unsafe_unit_name(name: str) -> bool:
 
 
 def default_workspace(repo: Path) -> Path:
-    """Baseline workspace used when none is configured.
-
-    ``BASELINE_ROOT`` wins when set; otherwise the project-local
-    ``build/baseline`` created by ``./verify-baseline.sh`` is used, so the
-    contribution scripts never touch a location outside the checkout unless
-    the user points them there explicitly.
-    """
-    override = os.environ.get("BASELINE_ROOT", "").strip()
-    if override:
-        return Path(override).expanduser()
+    """The ``build/baseline`` workspace that ``./verify-baseline.sh`` creates."""
     return repo / "build" / "baseline"
 
 
