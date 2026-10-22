@@ -741,7 +741,7 @@ extern void stop_moby_sound_e94f0(void *, int, int) __asm__("FUN_L00_00257470");
 extern int allocate_voice_e94f0(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L06_002ea198(struct Moby *, Vec4 *);
 extern void FUN_L06_002e9f30(struct Moby *);
-extern void FUN_L06_002ea498(char *);
+extern void spawn_moby_death_effect_burst(char *) __asm__("FUN_L06_002ea498");
 extern float fast_add_rotations_e94f0(float, float) __asm__("FUN_001fa580");
 extern float fast_sin_e94f0(float) __asm__("FUN_001f9de0");
 extern int blend_color_e94f0(int, int, float) __asm__("FUN_001fa6e0");
@@ -795,7 +795,7 @@ void FUN_L06_002e94f0(struct Moby *moby) {
             stop_moby_sound_e94f0(moby, 0, -1);
             FUN_L06_002ea198(moby, (Vec4 *)&hit->pos);
             if (vars->sparks_pending == 1) {
-                FUN_L06_002ea498((char *)moby);
+                spawn_moby_death_effect_burst((char *)moby);
                 vars->sparks_pending = 0;
             }
             allocate_voice_e94f0(3, 0, (int)moby);
@@ -1094,7 +1094,9 @@ extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-void FUN_L06_002ea498(char *moby) {
+void spawn_moby_death_effect_burst(char *moby) __asm__("FUN_L06_002ea498");
+
+void spawn_moby_death_effect_burst(char *moby) {
     float spherical_offset[4];
     float spawn_position[4];
     int i;
