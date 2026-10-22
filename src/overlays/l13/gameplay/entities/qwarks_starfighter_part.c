@@ -1243,7 +1243,9 @@ extern void *memcpy(void *, const void *, unsigned int);
 
 extern void *sphere_hits_ed158[] __asm__("D_L13_00178200");
 
-void FUN_L13_002ed158(void *moby, void *data) {
+void spawn_forcefield_contact_effects(void *moby, void *data) __asm__("FUN_L13_002ed158");
+
+void spawn_forcefield_contact_effects(void *moby, void *data) {
     float matrix[12];
     float query[4];
     float candidate_pos[4];
@@ -1302,7 +1304,7 @@ extern int D_L13_0015FFD8_n __asm__("D_L13_0015FFD8");
 extern int D_0015ED84_n __asm__("D_0015ED84");
 extern void stub_printf(char *, int, int) __asm__("FUN_001e93b0");
 extern void glow_n(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void FUN_L13_002ed158(void *, void *);
+extern void spawn_forcefield_contact_effects(void *, void *) __asm__("FUN_L13_002ed158");
 extern int ftoi_n(float) __asm__("FUN_001fa6d0");
 extern void FUN_L00_0023e838(int);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -1342,7 +1344,7 @@ void forcefield_update(unsigned char *moby) {
             moby[0x20] = 2;
             stub_printf(D_L13_001F4FB0, *(short *)(moby + 0xA6), *(short *)(moby + 0xB2));
         }
-        FUN_L13_002ed158(moby, forcefield_data);
+        spawn_forcefield_contact_effects(moby, forcefield_data);
         break;
     case FORCEFIELD_STATE_FADE_OUT:
         *(float *)(forcefield_data + 4) -= frame_scale * 0.05f;
