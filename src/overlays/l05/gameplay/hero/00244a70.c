@@ -164,7 +164,7 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern s32 FUN_L00_001ff600(f32, void *, void *);
 extern void FUN_L00_00227d40(void);
 extern f32 FUN_L00_00232b90(f32, f32, f32);
-extern void FUN_L05_00237488(void *, void *, f32);
+extern void smooth_and_clamp_value_pair(void *, void *, f32) __asm__("FUN_L05_00237488");
 extern void apply_hero_rotation_offset(f32, f32, f32) __asm__("FUN_L00_00211cf8");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
 extern void compose_and_limit_hero_velocity(void) __asm__("FUN_L16_0020f8b0");
@@ -966,7 +966,7 @@ void FUN_L05_00244a70(void) {
             set_planar_vel(99999.0f);
         }
         if (hero.frames_off_ground.s == 0 || hero.unk88D == 0) {
-            FUN_L05_00237488(&vector_and_hit_scratch, &hero.unk720, frame_scale_sq * 0.17f);
+            smooth_and_clamp_value_pair(&vector_and_hit_scratch, &hero.unk720, frame_scale_sq * 0.17f);
             hero.motion.move_yaw = fast_add_rotations(Q.f158, fast_arc_tan(-vector_and_hit_scratch.f[1], vector_and_hit_scratch.f[0]));
             if (hero.unk229C > 0.2f) {
                 f32 a = frame_scale_sq * 0.005f;
@@ -1014,7 +1014,7 @@ void FUN_L05_00244a70(void) {
             f32 y;
             hero.motion.unk184 = 0.0f;
             qcopy(&vector_and_hit_scratch, &D_L05_00179BE0[hero.unk88F]);
-            FUN_L05_00237488(&v10, &hero.unk6C0, frame_scale_sq * 0.2f);
+            smooth_and_clamp_value_pair(&v10, &hero.unk6C0, frame_scale_sq * 0.2f);
             x = -v10.f[0] * (frame_time * 12.217304f);
             y = -v10.f[1] * (frame_time * 12.217304f);
             hero.unk6D0 += x;
