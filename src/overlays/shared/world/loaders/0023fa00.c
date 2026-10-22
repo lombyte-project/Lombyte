@@ -46,7 +46,9 @@ extern s32 D_L00_00160564 __attribute__((section(".sdata")));
 extern s32 D_L00_0016056C __attribute__((section(".sdata")));
 extern s32 texture_count_macro __asm__("D_L00_0015FFC8") __attribute__((section(".sdata")));
 /* Loads a level's four packed images through the GS loader, adds two texture records and registers the moby class of each one not loaded yet. */
-char *FUN_L00_0023fa00(char *bank, s32 *header) {
+char *load_level_texture_bank(char *bank, s32 *header) __asm__("FUN_L00_0023fa00");
+
+char *load_level_texture_bank(char *bank, s32 *header) {
     s32 image[24];
     s32 i = 0;
     s32 sky_offset;

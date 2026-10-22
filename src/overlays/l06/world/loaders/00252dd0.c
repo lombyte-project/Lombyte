@@ -163,7 +163,7 @@ extern void FUN_L00_0023f0d8(char *);
 extern void parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_002026c8");
 extern void printf_1e93b0(const char *, ...) __asm__("FUN_001e93b0");
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern char *FUN_L00_0023fa00(char *, s32 *);
+extern char *load_level_texture_bank(char *, s32 *) __asm__("FUN_L00_0023fa00");
 extern char *FUN_L00_00241940_252dd0(s32) __asm__("FUN_L00_00241940");
 extern f32 int_to_float(s32) __asm__("FUN_001fa6c0");
 extern void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
@@ -370,7 +370,7 @@ s32 FUN_L06_00252dd0(s32 full, s32 keep) {
                 }
             }
         }
-        D_L18_00174800_252dd0.f18 = FUN_L00_0023fa00((char *)((u32)end & ~0x3F), level_header);
+        D_L18_00174800_252dd0.f18 = load_level_texture_bank((char *)((u32)end & ~0x3F), level_header);
     }
     D_L18_00174800_252dd0.f1C = FUN_L00_00241940_252dd0(full);
     if (full) {
