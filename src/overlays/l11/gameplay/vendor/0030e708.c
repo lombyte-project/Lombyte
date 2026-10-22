@@ -12,7 +12,9 @@
 
 extern void render_water_grids(char *, int) __asm__("FUN_L01_002b91c8");
 
-void FUN_L11_0030e708(void) {
+void render_level_11_water_grids(void) __asm__("FUN_L11_0030e708");
+
+void render_level_11_water_grids(void) {
     render_water_grids(D_L11_001DA880, 0x14);
 }
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */

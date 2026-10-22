@@ -646,7 +646,7 @@ extern float rand_range_e088(float, float) __asm__("FUN_002132a8");
 extern void pool_splash(float, float, float, float, void *, int, int) __asm__("FUN_L00_002a3ec8");
 extern int FUN_L01_00275690(float, void *);
 extern void pool_flush(void *, int) __asm__("FUN_L01_002b7fe0");
-extern void FUN_L11_0030e708(void);
+extern void render_level_11_water_grids(void) __asm__("FUN_L11_0030e708");
 extern void enqueue_e088(void *, void *) __asm__("FUN_001f4600");
 
 /* Tile moby: claims a D_L11_001DA880 row on spawn (row 0 also sets up the shared light block), then moves
@@ -771,7 +771,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
         }
         if (water_tile_vars[1] == 0) {
             pool_flush(D_L11_001DA880, 20);
-            enqueue_e088(FUN_L11_0030e708, water_tile_moby);
+            enqueue_e088(render_level_11_water_grids, water_tile_moby);
         }
     }
 }
