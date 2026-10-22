@@ -557,7 +557,9 @@ void FUN_L00_00267a08_0026a880(unsigned char *) __asm__("FUN_L00_00267a08");
 int FUN_001fa6d0_0026a880(float) __asm__("FUN_001fa6d0");
 void FUN_001f9a10_0026a880(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a68_0026a880(void *, void *, float) __asm__("FUN_001f9a68");
-void FUN_L00_0026a880(unsigned char *particle) {
+void update_damped_blue_shift_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026a880");
+
+void update_damped_blue_shift_effect_particle(unsigned char *particle) {
     float *particle_data = (float *)(particle + 0x20);
     int blue_byte, alpha_byte;
     float dt;
