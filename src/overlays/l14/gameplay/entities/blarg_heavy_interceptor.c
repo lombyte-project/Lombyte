@@ -937,7 +937,9 @@ extern s64 tex_r(s32) __asm__("FUN_001f44b8");
 extern void sreg_r(s32, s64) __asm__("FUN_00233980");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
-void FUN_L14_002ada18(char *moby) {
+void draw_blarg_heavy_interceptor_light_ring(char *moby) __asm__("FUN_L14_002ada18");
+
+void draw_blarg_heavy_interceptor_light_ring(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
     struct {
         float mat[4][4];    /* camera-facing frame */
@@ -1596,7 +1598,7 @@ char *select_farthest_unselected_group_moby(int index, int *ids) __asm__("FUN_L1
 
 char *select_farthest_unselected_group_moby(int index, int *ids) __asm__("FUN_L14_002aef28");
 extern void FUN_L14_002add48(char *);
-extern void FUN_L14_002ada18(char *);
+extern void draw_blarg_heavy_interceptor_light_ring(char *) __asm__("FUN_L14_002ada18");
 void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     int i;
@@ -1618,7 +1620,7 @@ void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) {
             if (*(int *)(md + 0x20C) & 8)
                 FUN_L14_002add48(selected_moby);
             if (*(int *)(md + 0x20C) & 2)
-                FUN_L14_002ada18(selected_moby);
+                draw_blarg_heavy_interceptor_light_ring(selected_moby);
             i++;
         } while (i < *(short *)(moby_vars + 0x20A));
     }
