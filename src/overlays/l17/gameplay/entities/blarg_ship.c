@@ -1044,7 +1044,9 @@ void FUN_L17_002f59a8(void) {
 /* Computes a per-vertex 2D sphere-map texture coordinate from position and normal arrays. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7C78), where it is exact; names translated to the US level program. */
 
-void FUN_L17_002f6138(int vertex_count, char *nrm, char *vertex_positions, int unused, float *out) {
+void compute_vertex_to_reference_sphere_map_uvs(int vertex_count, char *nrm, char *vertex_positions, int unused, float *out) __asm__("FUN_L17_002f6138");
+
+void compute_vertex_to_reference_sphere_map_uvs(int vertex_count, char *nrm, char *vertex_positions, int unused, float *out) {
     float normalized_position_delta[4];
     float vertex_position[4];
     float reflection_mapping_vector[4];
