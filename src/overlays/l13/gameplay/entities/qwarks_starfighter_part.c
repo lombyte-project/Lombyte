@@ -1166,7 +1166,9 @@ struct PieceVars {
     int point;
 };
 
-void FUN_L13_002ece00(struct Moby *moby) {
+void update_qwarks_starfighter_part(struct Moby *moby) __asm__("FUN_L13_002ece00");
+
+void update_qwarks_starfighter_part(struct Moby *moby) {
     enum {
         PART_STATE_INITIALIZE = 0,
         PART_STATE_SYNC_PARENT_SCALE = 1,
