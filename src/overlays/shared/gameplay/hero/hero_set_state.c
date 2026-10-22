@@ -407,8 +407,10 @@ f32 FUN_L00_0020d6b0_221ee0(M_221ee0 *, s32 *, f32, f32, f32, f32) __asm__("FUN_
 s32 FUN_00214720_221ee0(void *, s32) __asm__("FUN_00214720");
 s32 FUN_001efa68_221ee0(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 #define G D_0013F350_221ee0
-void FUN_L00_00221ee0(void);
-void FUN_L00_00221ee0(void) {
+void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
+
+void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
+void select_hero_grapple_swing_target(void) {
     union {
         OvlQuad q;
         f32 f[4];
@@ -3294,7 +3296,7 @@ extern Rec2C_228770 D_L00_0017BD28_228770[] __asm__("D_L00_0017BC28");
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern void FUN_L00_00217658(void);
 extern int f_fun_l00_002223f8_227fa0(int, int) __asm__("FUN_L00_002223f8");
-extern void FUN_L00_00221ee0(void);
+extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern int FUN_L00_00222158(void);
 extern int FUN_L00_0020fe30(void);
 extern int FUN_L00_00216de8(int, int);
@@ -3448,7 +3450,7 @@ int FUN_L00_00227fa0(void) {
         {
             int t;
 
-            FUN_L00_00221ee0();
+            select_hero_grapple_swing_target();
             FUN_L00_00222158();
             t = f_fun_001f96f8_227fa0(5);
             if (D_0013F450_h228770.f30E != 0) {

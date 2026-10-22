@@ -630,7 +630,7 @@ extern unsigned short D_00141920[] __attribute__((section(".data")));
 extern unsigned short D_00141D80[] __attribute__((section(".data")));
 extern void FUN_L00_0020e4c8(void);
 extern void FUN_L00_00217658(void);
-extern void FUN_L00_00221ee0(void);
+extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_0029a6b0(void *);
 extern void FUN_L05_0024cee8(int, int);
@@ -788,7 +788,7 @@ int FUN_L05_00251be8(void) {
         {
             int window;
 
-            FUN_L00_00221ee0();
+            select_hero_grapple_swing_target();
             FUN_L00_00222158();
             window = scale_game_frames_alt(5);
             if ((*(Hero *)((char *)&hero)).air_frames.s != 0) {
