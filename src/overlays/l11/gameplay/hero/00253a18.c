@@ -1070,12 +1070,12 @@ void FUN_L11_00253a18(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 24:
+                case HERO_STATE_LEDGE_HANG_ENTRY:
                     if (13.5f < hero.anim_frame) {
                         hero_set_state(0x19, 0);
                     }
                     break;
-                case 25:
+                case HERO_STATE_LEDGE_HANG:
                     if ((hero.unkA98 & 2) && hero.moby->prev_seq == 0x20) {
                         set_hero_animation(0x21, 0, scale_game_frames(6));
                     }
@@ -1128,8 +1128,8 @@ void FUN_L11_00253a18(void) {
                         }
                     }
                     break;
-                case 26:
-                case 27: {
+                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float shimmy_yaw_offset;
 
                     qcopy(v0, hero.motion.pos.f);
