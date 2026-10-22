@@ -733,7 +733,7 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern void FUN_L08_0027fe00(float *, float *, int, float);
+extern void spawn_effect_with_initial_motion(float *, float *, int, float) __asm__("FUN_L08_0027fe00");
 
 void FUN_L08_00308c90(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -755,7 +755,7 @@ void FUN_L08_00308c90(struct Moby *moby) {
         effect_direction[2] = random_float_between_alt(*(float *)(data + 0x20) * frame_time,
                                         *(float *)(data + 0x24) * frame_time);
         effect_direction[3] = 0;
-        FUN_L08_0027fe00(effect_position, effect_direction, *(int *)(data + 0x10), *(float *)(data + 0xC));
+        spawn_effect_with_initial_motion(effect_position, effect_direction, *(int *)(data + 0x10), *(float *)(data + 0xC));
     }
 }
 #define NOT_SDA

@@ -94,7 +94,9 @@ extern int p27fe00_trunc(float) __asm__("FUN_001fa6d0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern unsigned char *D_L08_001B29B4 __attribute__((section(".data")));
 
-void FUN_L08_0027fe00(u128 *spawn_position, u128 *initial_motion_vector, int life, float scale) {
+void spawn_effect_with_initial_motion(u128 *spawn_position, u128 *initial_motion_vector, int life, float scale) __asm__("FUN_L08_0027fe00");
+
+void spawn_effect_with_initial_motion(u128 *spawn_position, u128 *initial_motion_vector, int life, float scale) {
     unsigned char *effect;
     unsigned char *effect_data;
     effect = p27fe00_alloc(0x4D);
