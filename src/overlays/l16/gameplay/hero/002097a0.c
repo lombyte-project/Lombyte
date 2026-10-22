@@ -388,7 +388,9 @@ extern s32 coll2_2133a8(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 FUN_L00_001f3170(void *, f32);
 extern void vscl_2133a8(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern u128_2133a8 D_L16_00174270[] __attribute__((section(".data")));
-s32 FUN_L16_00210b60(s32 mode) {
+s32 resolve_hero_position_collisions(s32 mode) __asm__("FUN_L16_00210b60");
+
+s32 resolve_hero_position_collisions(s32 mode) {
     V_2133a8 old;
     V_2133a8 collision_position_offset;
     V_2133a8 resolved_position_delta;
