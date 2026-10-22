@@ -7504,7 +7504,9 @@ extern void finish_camera_move_304098(int) __asm__("FUN_L00_002eac18");
 extern void clear_vector_304098(void *) __asm__("FUN_001f99f8");
 extern float float_from_int_304098(int) __asm__("FUN_001fa6c0");
 extern void update_moby_304098(void *) __asm__("FUN_L00_00250df8");
-extern void FUN_L06_00304818(int, void *);
+void emit_red_button_particle_burst(int unused, void *effect_position) __asm__("FUN_L06_00304818");
+
+extern void emit_red_button_particle_burst(int, void *) __asm__("FUN_L06_00304818");
 extern void FUN_L06_00303150(unsigned char *);
 
 extern char D_0013A5E0[] __attribute__((section(".data")));
@@ -7617,7 +7619,7 @@ void red_button_update(struct Moby *moby) {
         entry = data->list;
         for (i = 8; i >= 0; i--, entry++) {
             if (previous_value < D_L06_001600EC_304098[*entry].b.z && D_L06_001600EC_304098[*entry].b.z < current_angle) {
-                FUN_L06_00304818((int)moby, &D_L06_001600EC_304098[*entry].a);
+                emit_red_button_particle_burst((int)moby, &D_L06_001600EC_304098[*entry].a);
                 event_304098(0, 0, moby);
             }
         }
@@ -7698,7 +7700,7 @@ extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
 extern float D_L06_001621B4 __attribute__((sda));
 extern int D_L06_001621B8 __attribute__((sda));
-void FUN_L06_00304818(int unused, void *effect_position) {
+void emit_red_button_particle_burst(int unused, void *effect_position) {
     float pos[4];
     V6 first_color_palette;
     V6 second_color_palette;
