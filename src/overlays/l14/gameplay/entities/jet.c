@@ -1756,7 +1756,9 @@ void FUN_L14_002ef3e0(struct Moby *m);
 void rebuild_elevator_world_path(u8 *moby) __asm__("FUN_L14_002ef630");
 
 void rebuild_elevator_world_path(u8 *moby) __asm__("FUN_L14_002ef630");
-void FUN_L14_002ef6f0(struct Moby *moby);
+void update_elevator_idle_glow(struct Moby *moby) __asm__("FUN_L14_002ef6f0");
+
+void update_elevator_idle_glow(struct Moby *moby) __asm__("FUN_L14_002ef6f0");
 
 /* pvars of the vendor platform (shared with FUN_L14_002eef60/ef150/ef3e0/ef630) */
 typedef struct {
@@ -1836,7 +1838,7 @@ void elevator_update(struct Moby *elevator_moby) {
         break;
     }
     case ELEVATOR_STATE_WAIT_FOR_RIDER:
-        FUN_L14_002ef6f0(elevator_moby);
+        update_elevator_idle_glow(elevator_moby);
         if (elevator_vars->clip_a >= 0 && vendor_inside(&hero.motion.pos, elevator_vars->clip_a) != 0) {
             elevator_moby->command = 0;
             elevator_vars->dir = -1.0f;
@@ -1908,7 +1910,7 @@ void elevator_update(struct Moby *elevator_moby) {
             rebuild_elevator_world_path((u8 *)elevator_moby);
         } else {
             int voice;
-            FUN_L14_002ef6f0(elevator_moby);
+            update_elevator_idle_glow(elevator_moby);
             if (elevator_vars->motor != -1) {
                 char *e = D_0013E550 + elevator_vars->motor * 0x70;
                 if (*(struct Moby **)(e + 0x88) == elevator_moby && ((u8 *)e)[0x74] != 0)
@@ -1924,7 +1926,7 @@ void elevator_update(struct Moby *elevator_moby) {
         }
         break;
     case ELEVATOR_STATE_WAIT_FOR_RIDER_EXIT:
-        FUN_L14_002ef6f0(elevator_moby);
+        update_elevator_idle_glow(elevator_moby);
         if (hero.ground_moby != elevator_moby)
             elevator_moby->state = 1;
         break;
@@ -2171,7 +2173,7 @@ extern int truncate_float_to_s32();
 extern short D_0015EE6C_s __asm__("D_0015ED6C");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L14_002ef6f0(struct Moby *moby) {
+void update_elevator_idle_glow(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     struct Hero *x = &hero;
     if (absolute_float(moby->pos.x - x->motion.pos.f[0]) > 40.0f ||
