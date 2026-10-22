@@ -262,7 +262,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
     ElectroidVec mtx[4];
     ElectroidProbe query;
     ElectroidVec probe;
-    f32 vel;
+    f32 path_step_distance;
     s32 hit;
 
     vars = moby->vars;
@@ -316,7 +316,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         }
         break;
     case VELDIN_ROBOT_STATE_FOLLOW_PATH:
-        vel = 0.0f;
+        path_step_distance = 0.0f;
         path = D_L00_001B04B0[vars->pathIdx];
         qcopy(&delta, &path->pts[vars->pathPt]);
         ELECTROID_TURN(moby, vars,
@@ -324,7 +324,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
                   12.566371f);
         subtract_vector_xyz(&dir, &delta, &moby->pos);
         advance_accelerated_scalar(FUN_001f9b48(&moby->pos, &path->pts[path->count - 1]),
-                                   frame_time_sq * 8.0f, frame_time_sq * 16.0f, frame_time * 12.0f, &vel,
+                                   frame_time_sq * 8.0f, frame_time_sq * 16.0f, frame_time * 12.0f, &path_step_distance,
                                    &vars->speed);
         if (fast_vec_length(&dir) < vars->speed + vars->speed) {
             vars->pathPt++;
