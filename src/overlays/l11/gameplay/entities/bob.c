@@ -570,7 +570,7 @@ void FUN_L11_002d14b0(void *resort_owner_moby) {
     struct Moby *moby = resort_owner_moby;
     struct PokKeeperVars *moby_vars = (struct PokKeeperVars *)moby->pvars;
     int proximity = FUN_L11_002d2460(moby);
-    float v[4];
+    float position_scratch[4];
     float dialogue_rotation[4];
 
     if (moby->state >= 3 && moby->state <= 5 && proximity == 0) {
@@ -578,10 +578,10 @@ void FUN_L11_002d14b0(void *resort_owner_moby) {
         return;
     }
     if (moby->state >= 4 && moby->state <= 6) {
-        scale_vector_14b0(v, &moby->rot_row0, 3.0f);
-        fast_vec_add(v, v, &moby->pos);
-        if (FUN_L11_002d25e8(moby, v)) {
-            qcopy(&moby_vars->target, v);
+        scale_vector_14b0(position_scratch, &moby->rot_row0, 3.0f);
+        fast_vec_add(position_scratch, position_scratch, &moby->pos);
+        if (FUN_L11_002d25e8(moby, position_scratch)) {
+            qcopy(&moby_vars->target, position_scratch);
             moby_vars->target.z = ground_height_14b0(&moby_vars->target);
             moby_vars->next_state = 3;
             FUN_L11_002d2088_c(moby, 7);
@@ -673,12 +673,12 @@ void FUN_L11_002d14b0(void *resort_owner_moby) {
             case RESORT_OWNER_FIRST_PATH_LEG: {
                 struct Moby *o = (struct Moby *)(D_L11_0015FFD8 + (moby_vars->gates[0] << 8));
                 qcopy(&moby_vars->target, &o->pos);
-                scale_vector_14b0(v, &o->rot_row0, D_L11_00161418);
-                fast_vec_add(&moby_vars->target, &moby_vars->target, v);
-                scale_vector_14b0(v, &o->rot_row1, D_L11_00161414);
-                fast_vec_add(&moby_vars->target, &moby_vars->target, v);
-                scale_vector_14b0(v, &o->rot_row2, D_L11_00161410);
-                fast_vec_add(&moby_vars->target, &moby_vars->target, v);
+                scale_vector_14b0(position_scratch, &o->rot_row0, D_L11_00161418);
+                fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
+                scale_vector_14b0(position_scratch, &o->rot_row1, D_L11_00161414);
+                fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
+                scale_vector_14b0(position_scratch, &o->rot_row2, D_L11_00161410);
+                fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
                 moby_vars->next_state = 8;
                 FUN_L11_002d2088_c(moby, 7);
                 break;
@@ -686,12 +686,12 @@ void FUN_L11_002d14b0(void *resort_owner_moby) {
             case RESORT_OWNER_SECOND_PATH_LEG: {
                 struct Moby *o = (struct Moby *)(D_L11_0015FFD8 + (moby_vars->gates[1] << 8));
                 qcopy(&moby_vars->target, &o->pos);
-                scale_vector_14b0(v, &o->rot_row0, D_L11_00161418);
-                fast_vec_add(&moby_vars->target, &moby_vars->target, v);
-                scale_vector_14b0(v, &o->rot_row1, -D_L11_00161414);
-                fast_vec_add(&moby_vars->target, &moby_vars->target, v);
-                scale_vector_14b0(v, &o->rot_row2, D_L11_00161410);
-                fast_vec_add(&moby_vars->target, &moby_vars->target, v);
+                scale_vector_14b0(position_scratch, &o->rot_row0, D_L11_00161418);
+                fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
+                scale_vector_14b0(position_scratch, &o->rot_row1, -D_L11_00161414);
+                fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
+                scale_vector_14b0(position_scratch, &o->rot_row2, D_L11_00161410);
+                fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
                 path_points_14b0[moby_vars->unk110].pos.z += 500.0f;
                 moby_vars->next_state = 8;
                 FUN_L11_002d2088_c(moby, 7);
@@ -716,11 +716,11 @@ void FUN_L11_002d14b0(void *resort_owner_moby) {
             qcopy_nc(&moby->pos, &path_points_14b0[moby_vars->points[moby_vars->leg]].pos);
             qcopy_nc(&moby->rot, &path_points_14b0[moby_vars->points[moby_vars->leg]].rot);
             euler_rotation_basis(&moby->rot_row0, &moby->rot);
-            scale_vector_14b0(v, &moby->rot_row0, 2.0f);
-            fast_vec_add(v, v, &moby->pos);
+            scale_vector_14b0(position_scratch, &moby->rot_row0, 2.0f);
+            fast_vec_add(position_scratch, position_scratch, &moby->pos);
             qcopy(dialogue_rotation, &moby->rot);
             dialogue_rotation[2] = fast_add_rotations(dialogue_rotation[2], 3.14159f);
-            qcopy(D_L11_0016D270, v);
+            qcopy(D_L11_0016D270, position_scratch);
             qcopy(D_L11_0016D270 + 0x10, dialogue_rotation);
             *(short *)(D_L11_0016D270 + 0x36) = 1;
             begin_dialogue_camera_transition(moby, 2.5f);
