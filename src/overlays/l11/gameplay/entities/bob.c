@@ -138,7 +138,9 @@ void FUN_L11_002cb810(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CCB50), where it is exact; names translated to the US level program. */
 
-void FUN_L11_002cb990(struct Moby *moby) {
+void trigger_pokitaru_paired_rotation(struct Moby *moby) __asm__("FUN_L11_002cb990");
+
+void trigger_pokitaru_paired_rotation(struct Moby *moby) {
     char *state = (char *)moby->pvars;
     if (moby->oclass == 0x41 && moby->state == 1) {
         char *child;
@@ -459,7 +461,7 @@ void FUN_L11_002d1030(void *mp) {
             break;
         if (D_L11_0016D260[13] != scale_game_frames(0x7D0))
             break;
-        FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (*(int *)(pvars + 0x104) << 8)));
+        trigger_pokitaru_paired_rotation((struct Moby *)(D_L11_0015FFD8 + (*(int *)(pvars + 0x104) << 8)));
         break;
     default:
         break;
@@ -600,7 +602,7 @@ void FUN_L11_002d14b0(void *resort_owner_moby) {
             if (D_0014C050[moby_vars->unk10C + D_0015ED84 * 16] == 0xFF) {
                 FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (moby_vars->gates[0] << 8)));
                 FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (moby_vars->gates[1] << 8)));
-                FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (moby_vars->unk104 << 8)));
+                trigger_pokitaru_paired_rotation((struct Moby *)(D_L11_0015FFD8 + (moby_vars->unk104 << 8)));
                 mark_moby_for_removal(moby);
                 break;
             }
@@ -609,7 +611,7 @@ void FUN_L11_002d14b0(void *resort_owner_moby) {
                 moby_vars->leg = 3;
                 qcopy_nc(&moby->pos, &path_points_14b0[moby_vars->points[3]].pos);
                 qcopy_nc(&moby->rot, &path_points_14b0[moby_vars->points[3]].rot);
-                FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (moby_vars->unk104 << 8)));
+                trigger_pokitaru_paired_rotation((struct Moby *)(D_L11_0015FFD8 + (moby_vars->unk104 << 8)));
                 FUN_L11_002d2088_c(moby, 0xE);
                 moby_vars->talk_range = 10.0f;
                 FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (moby_vars->gates[0] << 8)));
@@ -729,7 +731,7 @@ void FUN_L11_002d14b0(void *resort_owner_moby) {
         break;
     case RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END:
         if (D_L11_0015F5C4 != 2) {
-            FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (moby_vars->unk104 << 8)));
+            trigger_pokitaru_paired_rotation((struct Moby *)(D_L11_0015FFD8 + (moby_vars->unk104 << 8)));
             FUN_L11_002d2088_c(moby, 0xE);
         }
         break;
