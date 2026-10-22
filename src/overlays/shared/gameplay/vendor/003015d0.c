@@ -49,7 +49,9 @@ void update_vendor_beam_animation(char *moby) __asm__("FUN_L14_00301de8");
 
 extern void update_vendor_beam_animation(char *) __asm__("FUN_L14_00301de8");
 extern void FUN_L14_00301fa8(char *);
-extern void FUN_L14_00302538(char *);
+void apply_vendor_beam_damage(char *self) __asm__("FUN_L14_00302538");
+
+extern void apply_vendor_beam_damage(char *) __asm__("FUN_L14_00302538");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int D_L14_0016219C_s __asm__("D_L14_001620CC") __attribute__((sda));
 extern int D_L14_00162188_s __asm__("D_L14_001620B8") __attribute__((sda));
@@ -122,7 +124,7 @@ void update_vendor_beam(unsigned char *moby) {
     }
     if (D_L14_001620D8 == 0) {
         if (vector_distance(moby + 0x10, &hero.motion.pos) < 10.0f) {
-            FUN_L14_00302538((char *)moby);
+            apply_vendor_beam_damage((char *)moby);
         }
     }
     if (beam_vars->s12 != 0) {
@@ -503,7 +505,7 @@ extern f32 dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
 /* Sweeps the beam's two end lines; anything they cross takes damage pushed away from the beam. */
-void FUN_L14_00302538(char *self) {
+void apply_vendor_beam_damage(char *self) {
     struct Moby *beam_moby = (struct Moby *)self;
     D1224 *beam_vars = (D1224 *)beam_moby->pvars;
     VendorBeamReq req;
