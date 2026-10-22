@@ -117,7 +117,7 @@ void FUN_L17_002a8da0(struct Moby *beam_moby) {
     int i;
     int k;
     int j;
-    float len;
+    float signed_beam_length;
 
     if (beam_moby->state == 3)
         return;
@@ -219,32 +219,32 @@ void FUN_L17_002a8da0(struct Moby *beam_moby) {
         normalize_vector_xyz(beam_vars + 0x10, beam_vector_scratch, 0.2f);
         subtract_vector_xyz(beam_endpoint_position_scratch, &beam_moby->pos, beam_vars + 0x10);
         *(OvlQuad *)(beam_vars + 0x10) = *(OvlQuad *)beam_endpoint_position_scratch;
-        len = vector_length_xyz(beam_vars + 0x30);
+        signed_beam_length = vector_length_xyz(beam_vars + 0x30);
         lerp_vector(b, beam_vars + 0x10, beam_vars + 0x20, 0.5f);
-        b[3] = len * 0.5f;
+        b[3] = signed_beam_length * 0.5f;
         if (fast_bsphere_check((char *)b, 32.0f) != -1) {
             subtract_vector_xyz(hero_offset, &hero.motion.pos, &beam_moby->pos);
             normalize_vector_xyz(axis_aligned_hero_offset, &beam_moby->rot_row0, dot_vectors_xyz(&beam_moby->rot_row0, hero_offset));
             subtract_vector_xyz(hero_offset, hero_offset, axis_aligned_hero_offset);
             func_L00_0025A8C0_alt((char *)hit_descriptor_and_vector_scratch, (int)beam_moby, 0x10001, 1.0f, hero_offset);
             collision_line(&beam_moby->pos, beam_vars + 0x20, 9, beam_moby, hit_descriptor_and_vector_scratch);
-            len = vector_length_xyz(beam_vars + 0x30);
+            signed_beam_length = vector_length_xyz(beam_vars + 0x30);
             *(OvlQuad *)beam_endpoint_position_scratch = *(OvlQuad *)(beam_vars + 0x10);
             for (i = 0; i < 7; i++) {
                 scale_vector_xyz(c, beam_vars + 0x30, random_float_between(0.0f, 0.9f));
                 FUN_L00_001ff290(hit_descriptor_and_vector_scratch, c, beam_endpoint_position_scratch);
                 normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30,
-                                     random_float_between(frame_time * 10.0f, len / 20.0f));
+                                     random_float_between(frame_time * 10.0f, signed_beam_length / 20.0f));
                 FUN_L17_0026fb60(beam_moby, c, beam_vector_scratch);
             }
-            len = -len;
+            signed_beam_length = -signed_beam_length;
             *(OvlQuad *)beam_endpoint_position_scratch = *(OvlQuad *)(beam_vars + 0x20);
             for (i = 0; i < 8; i++) {
                 scale_vector_xyz(c, beam_vars + 0x30, random_float_between(0.0f, 0.9f));
                 subtract_vector_xyz(hit_descriptor_and_vector_scratch, beam_endpoint_position_scratch, c);
                 *(OvlQuad *)c = *(OvlQuad *)hit_descriptor_and_vector_scratch;
                 normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30,
-                                     random_float_between(frame_time * 10.0f, len / 20.0f));
+                                     random_float_between(frame_time * 10.0f, signed_beam_length / 20.0f));
                 FUN_L17_0026fb60(beam_moby, c, beam_vector_scratch);
             }
             normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30, -random_float_between(frame_time * 0.5f, frame_time));
