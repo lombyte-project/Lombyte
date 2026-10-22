@@ -480,7 +480,7 @@ extern void initialize_hero(void) __asm__("FUN_L00_00204c60");
 extern void FUN_L00_00204f80(void);
 extern void FUN_L00_0024a798(int, int);
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_0028df58(short *);
+extern void resolve_lookup_record(short *) __asm__("FUN_L00_0028df58");
 extern void FUN_L00_0028e180();
 extern void FUN_L00_0028e8a0(char *);
 extern void FillTransferWords(void *, s32, s32);
@@ -917,7 +917,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
 
                 copy_memory_aligned(e, p, 0x90);
                 p += 0x90;
-                FUN_L00_0028df58((short *)e);
+                resolve_lookup_record((short *)e);
             }
         } else {
             D_0013E550.fD94 = 0;
