@@ -2152,7 +2152,9 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
-float FUN_L06_002f2148(char *moby, char *b, int target_kind) {
+float score_gadgebot_target_candidate(char *moby, char *b, int target_kind) __asm__("FUN_L06_002f2148");
+
+float score_gadgebot_target_candidate(char *moby, char *b, int target_kind) {
     float r = vector_distance(moby + 0x10, b + 0x10);
     float *g = (float *)D_L06_00167400;
     float t = fast_difference_between_rotations(
@@ -2205,7 +2207,7 @@ typedef struct {
 
 extern int D_L06_001AC180[];
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float FUN_L06_002f2148(char *a, char *b, int kind);
+extern float score_gadgebot_target_candidate(char *a, char *b, int kind) __asm__("FUN_L06_002f2148");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern unsigned char *suck_get_aim_height(int);
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -2273,7 +2275,7 @@ void FUN_L06_002f2250(void) {
             *(float *)(end + 8) += 0.25f;
             if (collision_line(start, end, 2, (int)moby, 0) != 0 &&
                 (char *)D_L06_001745C0.unk18 != candidate) continue;
-            score = FUN_L06_002f2148(moby, candidate, 5);
+            score = score_gadgebot_target_candidate(moby, candidate, 5);
             for (k = 0; k < CANDIDATE_COUNT(vars); k++) {
                 if (score < CANDIDATE_SCORES(vars)[k]) {
                     int last_index = CANDIDATE_COUNT(vars) - 1;
