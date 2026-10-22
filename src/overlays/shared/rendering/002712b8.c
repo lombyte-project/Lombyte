@@ -379,7 +379,9 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_001fa6e0(int, int, float);
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_00271fc0(char *particle) {
+void update_color_size_tween_particle(char *particle) __asm__("FUN_L00_00271fc0");
+
+void update_color_size_tween_particle(char *particle) {
     char *particle_data;
     float interpolation_factor;
     if (fast_dec_timer_s16(particle + 0xA)) {
