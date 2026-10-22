@@ -35,13 +35,15 @@ int FUN_L17_002f0040(struct Moby *moby) {
     moby->state = 0xc;
     return helper_result;
 }
-extern void FUN_L17_002f0448(struct Moby *m);
+void draw_three_moby_effect_quads(struct Moby *effect_owner) __asm__("FUN_L17_002f0448");
+
+extern void draw_three_moby_effect_quads(struct Moby *m) __asm__("FUN_L17_002f0448");
 
 /* Applies the same effect to three consecutive 16-byte slots of a moby's data, tagged with its colour word. */
 
 extern void FUN_L00_00263618(void *, int, float, float);
 
-void FUN_L17_002f0448(struct Moby *effect_owner) {
+void draw_three_moby_effect_quads(struct Moby *effect_owner) {
     int effect_color = (effect_owner->glow_color & 0xFFFFFF) | 0x30000000;
     char *effect_position = (char *)effect_owner->pvars + 0x200;
     int i;

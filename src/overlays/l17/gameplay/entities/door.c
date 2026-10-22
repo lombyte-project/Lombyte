@@ -3040,7 +3040,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L15_0029aba8(char *);
-extern void FUN_L17_002f0448(char *);
+extern void draw_three_moby_effect_quads(char *) __asm__("FUN_L17_002f0448");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -3122,7 +3122,7 @@ void FUN_L17_002f0210(struct Moby *moby) {
         for (i = 0; i < 3; i++) {
             moby_point_position(moby, i + 1, data + 0x200 + i * 16);
         }
-        enqueue_callback_list_1_alt(FUN_L17_002f0448, moby);
+        enqueue_callback_list_1_alt(draw_three_moby_effect_quads, moby);
     }
 }
 
