@@ -3489,7 +3489,9 @@ void follow_camera_set_distance(s32, f32, f32) __asm__("FUN_L00_002e8450");
 void follow_camera_set_height(f32, f32) __asm__("FUN_L00_002e84b8");
 void follow_camera_set_offset_scale(s32, f32, f32) __asm__("FUN_L00_002e84f0");
 
-void FUN_L01_002f9000(Obj *falling_rock_moby) {
+void apply_falling_rock_camera_overrides(Obj *falling_rock_moby) __asm__("FUN_L01_002f9000");
+
+void apply_falling_rock_camera_overrides(Obj *falling_rock_moby) {
     u8 rotated_vector[16];
     u8 *camera_record;
 
@@ -3561,7 +3563,7 @@ extern s32 D_0014C190[][64];
 extern s32 moby_killed[] __asm__("D_L01_001BA950");
 extern s32 cutscene_active __asm__("D_L01_0015F404");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-void FUN_L01_002f9000(Obj *obj);
+void apply_falling_rock_camera_overrides(Obj *obj) __asm__("FUN_L01_002f9000");
 extern void FUN_L00_002eac18(s32);
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
@@ -3631,7 +3633,7 @@ void falling_rock_update(CapMoby *falling_rock) {
         }
         break;
     case FALLING_ROCK_STATE_WAIT_BEFORE_FALL:
-        FUN_L01_002f9000((Obj *)falling_rock);
+        apply_falling_rock_camera_overrides((Obj *)falling_rock);
         if (fast_dec_timer_s16(&falling_rock_vars->rise)) {
             clear_u64_value(&falling_rock_vars->rot);
             falling_rock_vars->hold = scale_game_frames(0x2D);
@@ -3641,7 +3643,7 @@ void falling_rock_update(CapMoby *falling_rock) {
     case FALLING_ROCK_STATE_FALLING: {
         CapVec3 old;
 
-        FUN_L01_002f9000((Obj *)falling_rock);
+        apply_falling_rock_camera_overrides((Obj *)falling_rock);
         falling_rock->pos.f[2] -= 0.0f;
         qcopy(&old, &falling_rock->pos);
         falling_rock_vars->rot.f[2] -= frame_time_sq * 30.0f;
