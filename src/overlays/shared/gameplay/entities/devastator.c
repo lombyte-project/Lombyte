@@ -2576,6 +2576,8 @@ s32 FUN_L00_002b6bc8(Moby *taunter_moby, f32 radius) {
 
 
 void taunter_update(Moby *m) __asm__("FUN_L00_002b6f10");
+void update_taunter_effect_slots(void *source_moby) __asm__("FUN_L00_002b7398");
+
 void taunter_update(Moby *taunter_moby) {
     Vars *taunter_vars;
     s32 taunter_state;
@@ -2678,7 +2680,7 @@ L7340:
         FUN_L00_002b6bc8(taunter_moby, taunter_vars->radius);
 end:
     if ((s32)(hero.items[0].state ^ 3) != 0)
-        FUN_L00_002b7398(taunter_moby);
+        update_taunter_effect_slots(taunter_moby);
 }
 
 #define NOT_SDA
@@ -2715,7 +2717,7 @@ extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f460
 extern int f_to_int(float) __asm__("FUN_001fa6d0");
 void FUN_L00_002b7568_c(void) __asm__("FUN_L00_002b7568");
 
-void FUN_L00_002b7398(void *source_moby) {
+void update_taunter_effect_slots(void *source_moby) {
     E8690 *effect_slot;
     unsigned short av;
     int i;
