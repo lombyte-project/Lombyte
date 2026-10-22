@@ -2438,7 +2438,9 @@ void FUN_L17_002efa48(void *moby_v, int arg);
 void update_robot_dog_aim_joint(struct Moby *moby) __asm__("FUN_L17_002f00a0");
 
 void update_robot_dog_aim_joint(struct Moby *moby) __asm__("FUN_L17_002f00a0");
-void FUN_L17_002f0210(struct Moby *moby);
+void update_robot_dog_glow_effects(struct Moby *moby) __asm__("FUN_L17_002f0210");
+
+void update_robot_dog_glow_effects(struct Moby *moby) __asm__("FUN_L17_002f0210");
 extern void clear_vector(void *) __asm__("func_001F99F8");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -2484,7 +2486,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
     robot_dog_moby[0x31] = 1;
     *(unsigned short *)(robot_dog_moby + 0x34) &= 0xFFFE;
     update_robot_dog_aim_joint(robot_dog_moby);
-    FUN_L17_002f0210(robot_dog_moby);
+    update_robot_dog_glow_effects(robot_dog_moby);
     facing_target_moby = robot_dog_vars->target;
     FUN_L00_00263b38(robot_dog_vars->a230, 2.1f);
     if (robot_dog_moby[0x31] != 0 && FUN_001f9b48(robot_dog_moby + 0x10, D_L17_001676C0) < 29.0f) {
@@ -3054,7 +3056,7 @@ extern void draw_three_moby_effect_quads(char *) __asm__("FUN_L17_002f0448");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L17_002f0210(struct Moby *moby) {
+void update_robot_dog_glow_effects(struct Moby *moby) {
     char *data;
     int glow_pulse_period_frames;
     int alpha;
