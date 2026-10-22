@@ -3341,7 +3341,9 @@ extern int interpolate_color_2a3138(float, int, int) __asm__("FUN_001fa6e0");
 extern int D_L15_00161AB4 __attribute__((sda));
 extern int D_L15_00161AB8 __attribute__((sda));
 extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
-extern void FUN_L15_002cbc30(void *);
+void update_sentrybot_alarm_effect(void *moby) __asm__("FUN_L15_002cbc30");
+
+extern void update_sentrybot_alarm_effect(void *) __asm__("FUN_L15_002cbc30");
 
 /* Advances the animation state, pulses the color, and updates the shared effect. */
 void FUN_L15_002cb4c8(unsigned char *moby) {
@@ -3487,7 +3489,7 @@ stop_animation:
 update:
     if (D_L15_00161AB4 != D_L15_0015F5CC) {
         D_L15_00161AB4 = D_L15_0015F5CC;
-        FUN_L15_002cbc30(moby);
+        update_sentrybot_alarm_effect(moby);
         D_L15_00161AB8 = 0;
     }
 }
@@ -3559,7 +3561,7 @@ extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001
 
 extern int D_L15_00161AC4 __attribute__((sda));
 extern short D_L15_00161AC8 __attribute__((sda));
-void FUN_L15_002cbc30(void *moby) {
+void update_sentrybot_alarm_effect(void *moby) {
     struct Hero *base = &hero;
     if (base->state.current == 0x65) {
         approach_value(&D_L15_00161ABC_gp, 0.0f, frame_time * 2);
