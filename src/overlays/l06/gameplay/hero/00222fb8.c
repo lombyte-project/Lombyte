@@ -990,7 +990,7 @@ extern void FUN_L00_002091d8(f32, f32, f32);
 extern void FUN_L06_0022b438_c(void) __asm__("FUN_L06_0022b438");
 extern void FUN_L00_0020d2f8(void *);
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
-extern void FUN_L00_0026d598(void *, void *, s32);
+extern void spawn_color_decaying_effect_particle(void *, void *, s32) __asm__("FUN_L00_0026d598");
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 extern s32 sample_path(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_0025d808");
 extern s32 offset_path_index(void *, s32, s32, s32) __asm__("FUN_L00_0025d7a0");
@@ -1913,7 +1913,7 @@ void update_hero_motion_for_current_state(void) {
             v10.f[2] = 0.0f;
             v10.f[2] = random_float_between(D_0015ED6C_c * 3.0f, D_0015ED6C_c * 5.0f);
             v10.f[3] = -(frame_time_sq * 30.0f);
-            FUN_L00_0026d598(&vector_or_hit_descriptor_scratch, &v10, 0);
+            spawn_color_decaying_effect_particle(&vector_or_hit_descriptor_scratch, &v10, 0);
         }
         t = hero.items[0].item_id;
         has = D_L06_0017A240_t[t].unk18 != 0;

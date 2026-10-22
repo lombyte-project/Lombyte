@@ -2519,7 +2519,7 @@ extern float D_0015ED6C;
 int fast_dec_timer(void *) __asm__("FUN_001f9770");
 float FUN_001fa580_209ec8(float, float) __asm__("FUN_001fa580");
 float spread_k(float, float) __asm__("FUN_L00_00257c48");
-void FUN_L00_0026d598_209ec8(void *, void *, int) __asm__("FUN_L00_0026d598");
+void spawn_color_decaying_effect_particle(void *, void *, int) __asm__("FUN_L00_0026d598");
 int FUN_001f96f8_209ec8(int) __asm__("FUN_001f96f8");
 int FUN_001fa6d0_209ec8(float) __asm__("FUN_001fa6d0");
 float FUN_002132a8_209ec8(float, float) __asm__("FUN_002132a8");
@@ -2548,7 +2548,7 @@ void emit_hero_timed_effects(void) {
         ((float *)w)[1] = fast_sin(lateral_angle) * planar_scale;
         ((int *)w)[2] = 0;
         ((float *)w)[3] = frame_time_sq * -8.0f;
-        FUN_L00_0026d598_209ec8(hero_position_copy, w, 0);
+        spawn_color_decaying_effect_particle(hero_position_copy, w, 0);
         *(short *)(base + 0x49E) = random_int_between(2, 3);
     }
     if (!fast_dec_timer(hero_effect_timer_anchor - 2))

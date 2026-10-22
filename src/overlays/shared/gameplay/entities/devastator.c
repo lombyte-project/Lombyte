@@ -2909,7 +2909,7 @@ extern void FUN_L00_00257d78_2b77f0(void *, f32, f32) __asm__("FUN_L00_00257d78"
 extern void *FUN_L00_0026b230_2b77f0(void *, void *, s32, f32) __asm__("FUN_L00_0026b230");
 extern void FUN_L00_002b8798_2b77f0(struct Moby *, void *) __asm__("FUN_L00_002b8798");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-extern void FUN_L00_0026d598_2b77f0(void *, void *, s32) __asm__("FUN_L00_0026d598");
+extern void spawn_color_decaying_effect_particle(void *, void *, s32) __asm__("FUN_L00_0026d598");
 extern void FUN_001fa030_2b77f0(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_001fa328_2b77f0(void *, void *, void *) __asm__("FUN_001fa328");
 extern void FUN_L00_00250df8_2b77f0(void) __asm__("FUN_L00_00250df8");
@@ -3060,7 +3060,7 @@ void pyrocitor_update(struct Moby *moby) {
             FUN_L00_00257d78_2b77f0(&random_vec, 0.0f, frame_time + frame_time);
             scale_vector_xyz_2b3628(&particle_pos, &dir, random_float_between_2b3628(0.5f, 0.1f));
             add_vector_xyz_2b2100(&particle_pos, &particle_pos, &random_vec);
-            FUN_L00_0026d598_2b77f0(&scratch, &particle_pos, item_text_variant[16]);
+            spawn_color_decaying_effect_particle(&scratch, &particle_pos, item_text_variant[16]);
         }
         if (D_L00_0015F5CC % scale_game_frames_2b2100(D_L00_00161530) == 0)
             FUN_L00_00233db8_2b2100(-1, 1);

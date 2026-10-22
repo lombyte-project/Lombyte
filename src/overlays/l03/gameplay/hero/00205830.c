@@ -325,7 +325,7 @@ extern void FUN_L00_002091d8(f32, f32, f32);
 extern void FUN_L02_00223450(void);
 extern void FUN_L00_0020d2f8(void *);
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
-extern void FUN_L00_0026d598(void *, void *, s32);
+extern void spawn_color_decaying_effect_particle(void *, void *, s32) __asm__("FUN_L00_0026d598");
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 extern s32 sample_path(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_0025d808");
 extern s32 offset_path_index(void *, s32, s32, s32) __asm__("FUN_L00_0025d7a0");
@@ -1658,7 +1658,7 @@ void update_hero_motion_for_current_state(void) {
                 spatial_scratch_or_hit_descriptor_tail.f[1] += fast_sin(a) * r;
                 spatial_scratch_or_hit_descriptor_tail.f[2] = random_float_between(frame_time * 3.0f, frame_time * 5.0f);
                 spatial_scratch_or_hit_descriptor_tail.f[3] = -(frame_time_sq * 35.0f);
-                FUN_L00_0026d598(&v10, &spatial_scratch_or_hit_descriptor_tail, 0);
+                spawn_color_decaying_effect_particle(&v10, &spatial_scratch_or_hit_descriptor_tail, 0);
             }
         }
         FUN_L00_0025df68(hero.unk5F0, &spatial_scratch_or_hit_descriptor, &hero.unk5E0, &hero.unk5F4, &hero.unk5F8, hero.unk60C, 999.0f, 8.0f, 2.5f);
