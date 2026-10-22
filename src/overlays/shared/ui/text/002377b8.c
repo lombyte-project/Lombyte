@@ -1334,7 +1334,9 @@ void FUN_L00_00235ad8(char *, int *, int *, int, int);
 int get_icon_frame(int, int) __asm__("FUN_001ff960");
 void draw_cropped_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023b6c0");
 void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
-int FUN_L00_0023a640(char *rec) {
+int draw_hud_cropped_gauge_panel(char *rec) __asm__("FUN_L00_0023a640");
+
+int draw_hud_cropped_gauge_panel(char *rec) {
     int x, y;
     int sprite_width;
     x = *(int *)(rec + 0x50);

@@ -230,7 +230,7 @@ extern void FUN_L00_0023cdb8_23adb8(void) __asm__("FUN_L00_0023cdb8");
 extern void FUN_L00_0023a7a8_23adb8(void) __asm__("FUN_L00_0023a7a8");
 extern void FUN_L00_00235d80_23adb8(void) __asm__("FUN_L00_00235d80");
 extern void FUN_L00_00235ea0_23adb8(void) __asm__("FUN_L00_00235ea0");
-extern void FUN_L00_0023a640_23adb8(void) __asm__("FUN_L00_0023a640");
+extern void draw_hud_cropped_gauge_panel(void) __asm__("FUN_L00_0023a640");
 
 void update_weapon_hud_state(void) {
     struct Hero *hero_state;
@@ -255,7 +255,7 @@ void update_weapon_hud_state(void) {
         }
         hero_state->unk1634 =
             FUN_001ff308_23adb8(0x10, 0xFFFF, FUN_L00_00235d80_23adb8, FUN_L00_00235ea0_23adb8,
-                                FUN_L00_0023a640_23adb8, &hero_state->unk1630, 200);
+                                draw_hud_cropped_gauge_panel, &hero_state->unk1630, 200);
     } else {
         if (D_L00_0015F970 != k) {
             FUN_001ff570_23adb8(D_L00_0015F970, 0);
