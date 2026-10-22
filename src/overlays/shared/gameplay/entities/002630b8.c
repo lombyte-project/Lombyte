@@ -33,7 +33,10 @@ int collision_line(void *, Vec4 *, int, void *, int) __asm__("FUN_001efa68");
 
 /* Picks the best auto-aim target moby (kind 5) for a shot from pos along dir:
    writes yaw/pitch toward it and its aim height, returns the moby or 0. */
-struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw, f32 *pitch,
+struct Moby *select_auto_aim_target_moby(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw, f32 *pitch,
+                              f32 *height, f32 max_angle) __asm__("FUN_L00_002630c8");
+
+struct Moby *select_auto_aim_target_moby(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw, f32 *pitch,
                               f32 *height, f32 max_angle) {
     Vec4 pos, shot_direction, target, probe;
     Vec4 *pp = &pos, *dp = &shot_direction;

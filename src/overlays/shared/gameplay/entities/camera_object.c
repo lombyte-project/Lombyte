@@ -2158,7 +2158,7 @@ typedef union { Q_2aa998 q; float f[4]; } BoltVector_2AA998;
 typedef struct { char pad[0x10]; BoltVector_2AA998 position; } BoltOwner_2AA998;
 
 extern V D_L00_00173E60;
-extern char *FUN_L00_002630c8(void *, void *, void *, float *, float *, float *, float);
+extern char *select_auto_aim_target_moby(void *, void *, void *, float *, float *, float *, float) __asm__("FUN_L00_002630c8");
 extern char *func_0020D348_m(int);
 extern char D_0013F490[];
 extern void *D_001413D0;
@@ -2187,7 +2187,7 @@ char *FUN_L00_002a96f8(void *owner, void *pos, float a, float b, float c, char *
         if (tgt == 0) {
             build_spherical_offset(&t, D_0015ED6C * 20.0f, rz, ry);
             p.q = *(Q_2aa998 *)pos;
-            tgt = FUN_L00_002630c8(owner, &p, &t, &a, &b, &c, 0.34906584f);
+            tgt = select_auto_aim_target_moby(owner, &p, &t, &a, &b, &c, 0.34906584f);
         }
         *(void **)(d + 0x10) = owner;
         qcopy(m + 0x10, pos);
