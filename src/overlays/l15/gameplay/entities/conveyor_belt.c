@@ -731,7 +731,9 @@ extern void FUN_L00_00262d38_v(int) __asm__("FUN_L00_00262d38");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 void FUN_L15_002eb6b8(void);
 
-void FUN_L15_002eb4c0(struct Moby *moby) {
+void update_quartu_cutscene_trigger(struct Moby *moby) __asm__("FUN_L15_002eb4c0");
+
+void update_quartu_cutscene_trigger(struct Moby *moby) {
     enum {
         CUTSCENE_TRIGGER_WAIT_FOR_CONDITIONS = 0,
         CUTSCENE_TRIGGER_START_SECOND_SCENE = 1,
