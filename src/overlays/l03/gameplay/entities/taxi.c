@@ -1605,7 +1605,9 @@ extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern int voice_is_playing(struct RailSpawnerMoby *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L00_0028dc90(int, int, struct RailSpawnerMoby *, int);
 
-void FUN_L03_002db280(struct RailSpawnerMoby *moby) {
+void update_path_mover_spawner(struct RailSpawnerMoby *moby) __asm__("FUN_L03_002db280");
+
+void update_path_mover_spawner(struct RailSpawnerMoby *moby) {
     struct RailSpawnerVars *vars = moby->vars;
     struct RailPath *path;
     float spawn_distance;
