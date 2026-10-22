@@ -32,7 +32,9 @@ extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
 extern void vu1_add_g_sregister(int, long);
 
-void FUN_L00_0029f990(char *vertex_batch) {
+void draw_vendor_inset_quads(char *vertex_batch) __asm__("FUN_L00_0029f990");
+
+void draw_vendor_inset_quads(char *vertex_batch) {
     float A[4];
     float B[4];
     float C[4];
@@ -422,7 +424,7 @@ void draw_vendor_screen(void) {
     if (p->f5C != 0) {
         FUN_L00_0029fcd0_c(p->f20 + 0x400);
     }
-    FUN_L00_0029f990(p->f1C);
+    draw_vendor_inset_quads(p->f1C);
     FUN_00233980(0x42, 0x8000000044LL);
     update_hud();
     do_gif_paging();

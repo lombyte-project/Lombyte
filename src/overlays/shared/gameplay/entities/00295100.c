@@ -1967,7 +1967,7 @@ extern void start_vendor_exit_cutscene(void) __asm__("FUN_L00_0029ad08");
 extern void close_vendor_menu(s32) __asm__("FUN_L00_0029ab70");
 extern void update_hud_elements(s32) __asm__("FUN_L00_0023ac78");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
-extern void FUN_L00_0029f990(void);
+extern void draw_vendor_inset_quads(void) __asm__("FUN_L00_0029f990");
 extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void FUN_00201a28(void);
@@ -2351,7 +2351,7 @@ void FUN_L00_0029c648(void) {
             update_hud_elements(1);
         }
         if (vendor_menu.f4 <= scale_game_frames(36)) {
-            enqueue_callback_list_1(FUN_L00_0029f990, vendor_menu.f1c);
+            enqueue_callback_list_1(draw_vendor_inset_quads, vendor_menu.f1c);
         }
         if (vendor_menu.f40 == 0) {
             FUN_L00_002ea9d8(&vendor_menu.f60);
