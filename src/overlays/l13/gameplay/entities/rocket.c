@@ -2546,7 +2546,9 @@ typedef union {
 
 #include "qzero.h"
 
-void FUN_L13_0030c3b8(struct Moby *moby) {
+void update_moby_motion_and_emit_sparks(struct Moby *moby) __asm__("FUN_L13_0030c3b8");
+
+void update_moby_motion_and_emit_sparks(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     L13EffectVector old_pos, position, velocity, acceleration, second_pos;
     float angle, direction, amount;
