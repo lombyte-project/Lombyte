@@ -49,7 +49,9 @@ extern s32 allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 
 /* Kerwan tutorial hint triggers: plays help messages and counts usage stats while the hero is inside the moby's clip volumes. */
-void FUN_L03_002df520(u8 *moby) {
+void update_kerwan_tutorial_hints(u8 *moby) __asm__("FUN_L03_002df520");
+
+void update_kerwan_tutorial_hints(u8 *moby) {
     enum {
         TUTORIAL_HINTS_INITIALIZE = 0,
         TUTORIAL_HINTS_UPDATE = 1
