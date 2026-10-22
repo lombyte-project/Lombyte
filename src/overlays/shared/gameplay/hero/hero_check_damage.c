@@ -2615,7 +2615,9 @@ void FUN_L00_00211380(void) {
     }
 }
 extern u8 FUN_L00_00233440(void);
-extern f32 FUN_L00_00211830(void);
+float get_capped_hero_stick_magnitude(void) __asm__("FUN_L00_00211830");
+
+extern f32 get_capped_hero_stick_magnitude(void) __asm__("FUN_L00_00211830");
 extern f32 FUN_L00_001ff408(void *);
 extern void hero_update_movement(void) __asm__("FUN_L00_00217970");
 extern void FUN_L00_001ffa70(void *, void *);
@@ -2641,7 +2643,7 @@ void hero_update(void)
     mode = FUN_L00_00233440();
     hero_state = &hero;
     hero_state->unk20B3 = mode;
-    hero_state->unk229C = FUN_L00_00211830();
+    hero_state->unk229C = get_capped_hero_stick_magnitude();
     hero_state->unk240 = 0;
     source = controller_state;
     hero_state->stick_x = *(f32 *)(source + 0x108);
@@ -2693,7 +2695,7 @@ void hero_update(void)
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 
 /* Length from vector_length_xy on hero.stick_x, capped at 1. */
-float FUN_L00_00211830(void) {
+float get_capped_hero_stick_magnitude(void) {
     float stick_magnitude = vector_length_xy(&hero.stick_x);
 
     if (1.0f < stick_magnitude) {
