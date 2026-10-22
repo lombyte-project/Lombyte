@@ -912,7 +912,7 @@ int FUN_L11_002d2340(struct Moby *moby, char *other) {
     return follow_path(path_ids, path_id_count, moby_vars->b[moby_vars->idx], &moby->pos, other, moby_vars->e, 0.2f) != 0;
 }
 extern int D_L11_0015FFD8;
-extern int FUN_L11_00316128(char *);
+extern int is_moby_in_bob_target_exclusion_state(char *) __asm__("FUN_L11_00316128");
 extern short *D_L11_001AC240[];
 extern int D_L11_0015FFF4 ;
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
@@ -946,7 +946,7 @@ int FUN_L11_002d2460(struct Moby *moby) {
             int offset = (*group_moby_entry & 0x7fff) << 8;
             struct Moby *other = (struct Moby *)(offset + D_L11_0015FFD8);
             if ((signed char)other->state >= 0) {
-                if (other->oclass != 0x4de || FUN_L11_00316128((char *)other) == 0) {
+                if (other->oclass != 0x4de || is_moby_in_bob_target_exclusion_state((char *)other) == 0) {
                     found = 1;
                     if (fast_vec_dist(&moby->pos, &((struct Moby *)(D_L11_0015FFD8 + offset))->pos) < 10.0f)
                         return 2;
@@ -2024,7 +2024,7 @@ void FUN_L11_0030a840(unsigned char *gate_moby) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC20), where it is exact; names translated to the US level program. */
 
 extern int D_L11_0015FFD8; /* no foreign declaration */
-extern int FUN_L11_00316128(char *);
+extern int is_moby_in_bob_target_exclusion_state(char *) __asm__("FUN_L11_00316128");
 extern short *D_L11_001AC240[];
 extern s32 D_L11_0015FFF4;
 
@@ -2039,7 +2039,7 @@ int FUN_L11_0030a850(struct Moby *moby) {
     do {
         char *group_moby = (char *)(((*group_entry & 0x7FFF) << 8) + D_L11_0015FFD8);
         if (group_moby[0x20] >= 0 && *(short *)(group_moby + 0xA6) == 0x4DE) {
-            if (FUN_L11_00316128(group_moby) == 0)
+            if (is_moby_in_bob_target_exclusion_state(group_moby) == 0)
                 return 0;
         }
     } while (*group_entry++ >= 0);
