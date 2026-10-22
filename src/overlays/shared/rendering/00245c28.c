@@ -93,7 +93,9 @@ extern void FUN_00226e08(void);
 
 extern char D_L00_00165FB0[];
 extern char D_L00_00161E00[];
-void FUN_L00_00245c28(void) {
+void run_level_main_loop(void) __asm__("FUN_L00_00245c28");
+
+void run_level_main_loop(void) {
     enum {
         LEVEL_MODE_DEBUG_FLAG_GATED_UPDATE = 0,
         LEVEL_MODE_MEMORY_CARD_DRAIN = 1,
