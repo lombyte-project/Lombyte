@@ -733,7 +733,9 @@ extern void *mine_debris(void *pos, void *vel, int color, int color2, float size
 /* Hit by a shot (a 0x40-byte entry of the hit table that names this moby): sparks fly from the hit
    point, a burst and delta follow, then the moby goes away. Not hit: on its first update it sets its
    distances and is removed when its save bit says it is gone. */
-void FUN_L15_002aa280(struct Moby *moby)
+void update_destructible_moby_on_hit(struct Moby *moby) __asm__("FUN_L15_002aa280");
+
+void update_destructible_moby_on_hit(struct Moby *moby)
 {
     char *hit = 0;
     Vec4 velocity, hit_direction, push, offset, center;
