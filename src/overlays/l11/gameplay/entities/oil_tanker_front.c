@@ -2079,7 +2079,9 @@ extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f460
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L11_0031f150(struct Moby *moby) {
+void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) __asm__("FUN_L11_0031f150");
+
+void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
     enum {
         EFFECT_INITIALIZE = 0,
         EFFECT_UPDATE_AND_QUEUE_DRAW = 1
