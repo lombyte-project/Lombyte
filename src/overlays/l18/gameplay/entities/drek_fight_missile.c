@@ -924,7 +924,9 @@ extern void synchronize_lift_group_height(void *a) __asm__("FUN_L18_002f2598");
 void draw_lift_25_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2620");
 
 extern void draw_lift_25_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2620");
-extern void FUN_L18_002f27c8(struct Moby *moby);
+void draw_lift_38_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f27c8");
+
+extern void draw_lift_38_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f27c8");
 extern void FUN_L18_002f2970(struct Moby *moby);
 
 extern int D_L18_001622FC __attribute__((sda));
@@ -1005,7 +1007,7 @@ void FUN_L18_002f2310(struct Moby *lift_moby) {
         enqueue_2310(draw_lift_25_quad_mesh, lift_moby);
         break;
     case LIFT_DRAW_38_QUAD_MESH:
-        enqueue_2310(FUN_L18_002f27c8, lift_moby);
+        enqueue_2310(draw_lift_38_quad_mesh, lift_moby);
         break;
     case LIFT_DRAW_22_QUAD_MESH:
         enqueue_2310(FUN_L18_002f2970, lift_moby);
@@ -1121,7 +1123,7 @@ extern FRow_l18 D_L18_001DA8D0[] __attribute__((section(".data")));
 extern short D_L18_001DAC20[][4][2] __attribute__((section(".data")));
 extern int get_effect_texture_l18(int) __asm__("FUN_001f44b8");
 
-void FUN_L18_002f27c8(struct Moby *moby) {
+void draw_lift_38_quad_mesh(struct Moby *moby) {
     FRow_l18 quad_positions[4];
     int colors[4];
     float uv[4][2];
