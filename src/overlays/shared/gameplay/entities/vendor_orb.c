@@ -1036,7 +1036,7 @@ extern Pane_2e3fa0 D_L00_001E6E40[];
 extern float D_L00_00161C78_f[] __asm__("D_L00_00161C78") __attribute__((section(".sdata")));
 extern int D_L00_00161BF8_c2[] __asm__("D_L00_00161BF8") __attribute__((section(".sdata")));
 extern int D_L00_00161C88_c2[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
-extern void FUN_L00_002e2c88(int, int, void *, int, int, int);
+extern void draw_beam_strand_with_glow(int, int, void *, int, int, int) __asm__("FUN_L00_002e2c88");
 extern void FUN_L00_002e3388_c(int, int) __asm__("FUN_L00_002e3388");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
@@ -1059,8 +1059,8 @@ void draw_active_beam_slots(char *moby) {
         FUN_L00_002e3388_c(D_L00_00161C88_c2[i], i);
         texture_id = moby_data[1] + 0x28;
         glow_texture_id = moby_data[0] + 0x28;
-        FUN_L00_002e2c88(texture_id, glow_texture_id, &D_L00_001E6E40[pane], 0x80, 0x40, i);
-        FUN_L00_002e2c88(texture_id, glow_texture_id, &D_L00_001E6E40[next_pane], 0x30, 0x10, i);
+        draw_beam_strand_with_glow(texture_id, glow_texture_id, &D_L00_001E6E40[pane], 0x80, 0x40, i);
+        draw_beam_strand_with_glow(texture_id, glow_texture_id, &D_L00_001E6E40[next_pane], 0x30, 0x10, i);
     }
 }
 /* Builds the trail quad and its glow quad from the slot tables and draws them along the
@@ -1072,7 +1072,7 @@ extern TrailSlot D_L00_001E6D30[];
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void fast_draw_quad_real(void *, int, int) __asm__("FUN_001f7d30");
-void FUN_L00_002e2c88(int texture_id, int glow_texture_id, void *points, int alpha, int glow_alpha, int slot)
+void draw_beam_strand_with_glow(int texture_id, int glow_texture_id, void *points, int alpha, int glow_alpha, int slot)
 {
     struct GeometryQuad quads[2];
     OvlVec4 width, glow_width;
