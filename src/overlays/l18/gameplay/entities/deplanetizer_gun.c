@@ -28,7 +28,9 @@ extern void FUN_L18_002f9780(void);
 void draw_moby_color_cycling_bone_glows(void *moby) __asm__("FUN_L18_002f9a98");
 
 extern void draw_moby_color_cycling_bone_glows(void *) __asm__("FUN_L18_002f9a98");
-extern void FUN_L18_002f9c20(struct Moby *);
+void draw_moby_two_tint_glow_quads(struct Moby *m) __asm__("FUN_L18_002f9c20");
+
+extern void draw_moby_two_tint_glow_quads(struct Moby *) __asm__("FUN_L18_002f9c20");
 extern void FUN_L18_002f9eb8(struct Moby *);
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int,
                                float, float, float, float, int, float, int, int, int, int)
@@ -195,7 +197,7 @@ void FUN_L18_002f88e8(struct Moby *moby) {
             denominator = convert_integer_to_float(frames_9780(D_L18_001624C0 - D_L18_001624BC));
             numerator = numerator / denominator;
             D_L18_00162524 = truncate_float_to_s32(numerator * 255.0f);
-            enqueue_callback_list_1_overlay(FUN_L18_002f9c20, D_L18_00162528);
+            enqueue_callback_list_1_overlay(draw_moby_two_tint_glow_quads, D_L18_00162528);
         }
         if (frames_9780(D_L18_001624C4) <= D_L18_0016D260_update.n &&
             D_L18_0016D260_update.n < frames_9780(D_L18_001624C8)) {
@@ -244,7 +246,7 @@ void FUN_L18_002f88e8(struct Moby *moby) {
             denominator = convert_integer_to_float(D_L18_001624C0 - D_L18_001624BC);
             numerator = numerator / denominator;
             D_L18_00162524 = truncate_float_to_s32(numerator * 255.0f);
-            enqueue_callback_list_1_overlay(FUN_L18_002f9c20, D_L18_00162528);
+            enqueue_callback_list_1_overlay(draw_moby_two_tint_glow_quads, D_L18_00162528);
         }
         if (frames_9780(D_L18_001624C4) <= D_L18_0016D260_update.n &&
             D_L18_0016D260_update.n < frames_9780(D_L18_001624C8)) {
@@ -535,7 +537,7 @@ extern int D_L18_00162504 __attribute__((sda));
 extern float D_L18_00162508 __attribute__((sda));
 extern float D_L18_0016250C __attribute__((sda));
 extern int D_L18_00162510 __attribute__((sda));
-void FUN_L18_002f9c20(struct Moby *m) {
+void draw_moby_two_tint_glow_quads(struct Moby *m) {
     Pk_9c20 pk;
     float quad_transform[4][4];
     float up[4];
