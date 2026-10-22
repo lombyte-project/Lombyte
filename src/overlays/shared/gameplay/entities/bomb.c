@@ -1794,8 +1794,8 @@ void ryno_update(struct Moby *ryno_moby) {
     Vec4 dir;
     Vec4 ofs;
     Ryno_2cc608 *ryno_vars = *(Ryno_2cc608 **)&ryno_moby->pvars;
-    struct Moby *r;
-    Bounds_2cc608 *b;
+    struct Moby *acquired_target;
+    Bounds_2cc608 *target_bounds;
     float yaw, pitch;
     int i;
 
@@ -1809,16 +1809,16 @@ void ryno_update(struct Moby *ryno_moby) {
         qcopy(aim.f, camera_rot_2cc608.f);
         aim.f[1] = -aim.f[1];
         muzzle_2cc608(ryno_moby, ryno_vars->slot, dir.f);
-        r = FUN_L00_002cc360_c(dir.f, aim.f, 0, 1.6981583f, 1.6981583f, 80.0f);
-        if ((r != 0 && ryno_vars->target == 0) || ryno_vars->target == 0 || ryno_vars->target->state == 0xFE || ryno_vars->target->state == 0xFD || ryno_vars->target->visible == 0) {
+        acquired_target = FUN_L00_002cc360_c(dir.f, aim.f, 0, 1.6981583f, 1.6981583f, 80.0f);
+        if ((acquired_target != 0 && ryno_vars->target == 0) || ryno_vars->target == 0 || ryno_vars->target->state == 0xFE || ryno_vars->target->state == 0xFD || ryno_vars->target->visible == 0) {
             ryno_vars->height = 0;
-            ryno_vars->target = r;
+            ryno_vars->target = acquired_target;
             ryno_vars->lock_timer = ticks_2cc608(20);
             ryno_vars->life = 1.0f;
-            b = bounds_2cc608(ryno_vars->target);
-            if (b != 0) {
-                ryno_vars->height = b->height;
-                ryno_vars->life = b->radius;
+            target_bounds = bounds_2cc608(ryno_vars->target);
+            if (target_bounds != 0) {
+                ryno_vars->height = target_bounds->height;
+                ryno_vars->life = target_bounds->radius;
             }
         }
         if (ryno_vars->target != 0 && timer16_2cc608(&ryno_vars->track_timer) && has_ammo_2cc608(-1)) {
@@ -1945,10 +1945,10 @@ void ryno_update(struct Moby *ryno_moby) {
             ryno_vars->height = 0;
             ryno_vars->lock_timer = ticks_2cc608(20);
             ryno_vars->life = 1.0f;
-            b = bounds_2cc608(ryno_vars->target);
-            if (b != 0) {
-                ryno_vars->height = b->height;
-                ryno_vars->life = b->radius;
+            target_bounds = bounds_2cc608(ryno_vars->target);
+            if (target_bounds != 0) {
+                ryno_vars->height = target_bounds->height;
+                ryno_vars->life = target_bounds->radius;
             }
         }
         break;
