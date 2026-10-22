@@ -73,7 +73,9 @@ void emit_render_batches_with_pair_offset(int pair_index) {
 extern Pair D_L11_00162618[] __attribute__((section(".sdata")));
 extern int D_L11_00207888[];
 extern int D_L11_00207860[];
-void FUN_L11_0031e780(int pair_index) {
+void emit_oil_tanker_render_batches_with_pair_offset(int pair_index) __asm__("FUN_L11_0031e780");
+
+void emit_oil_tanker_render_batches_with_pair_offset(int pair_index) {
     int i;
     for (i = 0; i < 0x9; i++) {
         FUN_L08_00258090(D_L11_00217770, D_L11_00207888[i], D_L11_00200728[i], &D_L11_00162618[pair_index]);

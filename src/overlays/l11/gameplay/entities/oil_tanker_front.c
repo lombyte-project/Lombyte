@@ -1810,7 +1810,7 @@ extern void FUN_L11_0031d8d8_c(int) __asm__("FUN_L11_0031d8d8");
 extern void FUN_L08_002f0c18(int);
 extern void emit_pair_offset_render_batch(int) __asm__("FUN_L08_002f0cf0");
 extern void FUN_L11_0031e858(int);
-extern void FUN_L11_0031e780(int);
+extern void emit_oil_tanker_render_batches_with_pair_offset(int) __asm__("FUN_L11_0031e780");
 void vu1_add_g_sregister_31db50(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 extern unsigned char D_L11_0016258C[] __attribute__((section(".sdata")));
@@ -2006,9 +2006,9 @@ void FUN_L11_0031e930(struct Moby *moby) {
     }
     vu1_add_g_sregister(6, get_effect_texture(0x2A));
     vu1_add_g_sregister(0x42, ((long)*(int *)&D_L11_001625E8 << 32) | 0x48);
-    FUN_L11_0031e780(0);
+    emit_oil_tanker_render_batches_with_pair_offset(0);
     vu1_add_g_sregister(0x42, ((long)D_L11_001625EC << 32) | 0x48);
-    FUN_L11_0031e780(1);
+    emit_oil_tanker_render_batches_with_pair_offset(1);
     if (flag) {
         vu1_add_g_sregister(6, get_effect_texture(0x2B));
         vu1_add_g_sregister(0x42, ((long)*(int *)&D_L11_001625F8 << 32) | 0x48);
