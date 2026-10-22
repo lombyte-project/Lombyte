@@ -1843,7 +1843,7 @@ extern void FUN_L00_0020e698(void);
 extern void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void stick_target(float, int) __asm__("FUN_L00_002118c8");
-extern void FUN_L00_00228c18(void);
+extern void update_hero_animation_for_movement_speed(void) __asm__("FUN_L00_00228c18");
 extern void FUN_L00_00228fa8(void);
 extern void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
@@ -2447,7 +2447,7 @@ void FUN_L02_00230988(void) {
                             }
                             break;
                         }
-                        FUN_L00_00228c18();
+                        update_hero_animation_for_movement_speed();
                         break;
                     }
                     break;
@@ -2465,7 +2465,7 @@ void FUN_L02_00230988(void) {
                         }
                         break;
                     }
-                    FUN_L00_00228c18();
+                    update_hero_animation_for_movement_speed();
                     break;
                 case HERO_STATE_BRAKE_AT_TARGET_POSITION:
                     if (hero.unkA98 & 2) {

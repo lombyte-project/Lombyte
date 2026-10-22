@@ -3666,7 +3666,9 @@ typedef struct {
 extern SpeedStepThreshold_228c18 D_L00_0017BDB8[];
 extern s32 D_L00_0015F6C8_gp __asm__("D_L00_0015F6C8") __attribute__((sda));
 
-void FUN_L00_00228c18(void) {
+void update_hero_animation_for_movement_speed(void) __asm__("FUN_L00_00228c18");
+
+void update_hero_animation_for_movement_speed(void) {
     enum {
         HERO_SPEED_STEP_LOW = 0,
         HERO_SPEED_STEP_HIGH = 1
