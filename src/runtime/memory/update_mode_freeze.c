@@ -51,6 +51,7 @@ void update_mode_freeze(void) {
     };
     enum {
         FREEZE_MODE_CONFIRM_CANCEL_CHOICE = 0,
+        FREEZE_MODE_AWAIT_CROSS_CONTINUE = 2,
         FREEZE_MODE_DELAYED_CONTINUE = 5,
         FREEZE_MODE_VIDEO_MODE_TEST = 6
     };
@@ -161,7 +162,7 @@ void update_mode_freeze(void) {
         }
         break;
 
-    case 2:
+    case FREEZE_MODE_AWAIT_CROSS_CONTINUE:
         D_0015F648 = 2;
         if (controller_state.pressed & PAD_CROSS) {
             game_mode = 0;
