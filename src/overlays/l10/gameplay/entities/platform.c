@@ -1964,7 +1964,7 @@ extern char D_L10_001DD1D0[] __asm__("D_L10_001DD1D0");
 extern char D_L10_001DD210[] __asm__("D_L10_001DD210");
 extern unsigned char D_L10_00161CA8[] __asm__("D_L10_00161CA8");
 extern unsigned char D_001413F4[];
-void FUN_L10_002da690(u8 *moby);
+void render_data_processor_linked_effect(u8 *moby) __asm__("FUN_L10_002da690");
 extern int stub_printf() __asm__("FUN_001e93b0");
 extern void delete_moby(void *) __asm__("FUN_0020c828");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -2043,7 +2043,7 @@ void update_data_processor_linked_effect(struct Moby *moby) {
         position1[2] += half_height;
         position1[3] = square_root(radius_squared + half_width * half_width);
         if (fast_vec_dist(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)fast_bsphere_check(position1, 80.0f))
-            enqueue_callback_list_1((void *)FUN_L10_002da690, moby);
+            enqueue_callback_list_1((void *)render_data_processor_linked_effect, moby);
         if (voice_is_playing(moby, *(int *)(data + 0x30)) == 0)
             *(int *)(data + 0x30) = allocate_voice_for_target_entry(0, 4, (int)moby);
         break;
@@ -2066,7 +2066,7 @@ void update_data_processor_linked_effect(struct Moby *moby) {
         scratch.position2[2] += half_height;
         scratch.position2[3] = square_root(radius_squared + half_width * half_width);
         if (fast_vec_dist(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)fast_bsphere_check(scratch.position2, 80.0f))
-            enqueue_callback_list_1((void *)FUN_L10_002da690, moby);
+            enqueue_callback_list_1((void *)render_data_processor_linked_effect, moby);
         break;
     }
     }
@@ -2101,7 +2101,7 @@ extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 
-void FUN_L10_002da690(u8 *moby) {
+void render_data_processor_linked_effect(u8 *moby) {
     char *data = *(char **)(moby + 0x78);
     char *base = *(char **)((*(int *)(data + 0xc) << 8) + (int)D_L10_0015FFD8 + 0x78);
     char scratch[(unsigned int)*(int *)(data + 4) * 0x40];
