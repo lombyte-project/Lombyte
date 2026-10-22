@@ -691,7 +691,7 @@ extern char D_L01_001620F0 __attribute__((sda));
 extern char D_L01_00162100 __attribute__((sda));
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L01_0028a7a8(void *, void *, void *, void *, int);
+extern void spawn_type_74_particle(void *, void *, void *, void *, int) __asm__("FUN_L01_0028a7a8");
 
 void emit_sandmouse_particles(char *source_moby) __asm__("FUN_L01_0030dda0");
 
@@ -704,9 +704,9 @@ void emit_sandmouse_particles(char *source_moby) {
         z[2] = -(random_float_between_alt(1.0f, 2.0f) * frame_time);
         *(OvlQuad *)particle_velocity = *(OvlQuad *)z;
         moby_point_position(source_moby, 0, particle_spawn_position);
-        FUN_L01_0028a7a8(source_moby, particle_spawn_position, particle_velocity, &D_L01_001620E0, 1);
-        FUN_L01_0028a7a8(source_moby, particle_spawn_position, particle_velocity, &D_L01_001620F0, 1);
-        FUN_L01_0028a7a8(source_moby, particle_spawn_position, particle_velocity, &D_L01_00162100, 1);
+        spawn_type_74_particle(source_moby, particle_spawn_position, particle_velocity, &D_L01_001620E0, 1);
+        spawn_type_74_particle(source_moby, particle_spawn_position, particle_velocity, &D_L01_001620F0, 1);
+        spawn_type_74_particle(source_moby, particle_spawn_position, particle_velocity, &D_L01_00162100, 1);
     }
 }
 #define NOT_SDA

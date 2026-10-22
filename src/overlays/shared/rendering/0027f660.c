@@ -170,7 +170,9 @@ extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28"
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern unsigned char D_L01_001B2928_b[] __asm__("D_L01_001B2628");
 
-unsigned char *FUN_L01_0028a7a8(char *source_moby, char *particle_spawn_position, float *initial_particle_velocity, char *cfg, int flag) {
+unsigned char *spawn_type_74_particle(char *source_moby, char *particle_spawn_position, float *initial_particle_velocity, char *cfg, int flag) __asm__("FUN_L01_0028a7a8");
+
+unsigned char *spawn_type_74_particle(char *source_moby, char *particle_spawn_position, float *initial_particle_velocity, char *cfg, int flag) {
     float transformed_spawn_offset[4];
     float spawn_offset_transform[16];
     unsigned char *particle = FUN_L00_002678b8(74);
