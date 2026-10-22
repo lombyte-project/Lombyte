@@ -142,7 +142,9 @@ extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-extern void FUN_L14_002ac2b8(struct Moby *);
+void ease_path_mover_to_endpoint(struct Moby *moby) __asm__("FUN_L14_002ac2b8");
+
+extern void ease_path_mover_to_endpoint(struct Moby *) __asm__("FUN_L14_002ac2b8");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
@@ -332,7 +334,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
         break;
     }
     if (moby->command != 2) {
-        FUN_L14_002ac2b8(moby);
+        ease_path_mover_to_endpoint(moby);
     }
     subtract_vector_xyz(&delta, &moby->pos, &orig);
     update_entity_matrix(vars->carry, &delta, &moby->rot, &moby->rot);
@@ -349,7 +351,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
 extern int *D_L14_001B0BB0[];
 extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 
-void FUN_L14_002ac2b8(struct Moby *moby) {
+void ease_path_mover_to_endpoint(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     float t[4] __attribute__((aligned(16)));
     int *path = D_L14_001B0BB0[*(int *)(moby_vars + 0xB4)];
