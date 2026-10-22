@@ -1372,7 +1372,9 @@ extern void FUN_L00_00259a88(void *, void *);
 void draw_beam_barrier_segments(char *moby) __asm__("FUN_L06_002f6dd0");
 
 extern void draw_beam_barrier_segments(char *moby) __asm__("FUN_L06_002f6dd0");
-extern void FUN_L06_002f7000(struct Moby *moby);
+void animate_beam_barrier_strands(struct Moby *moby) __asm__("FUN_L06_002f7000");
+
+extern void animate_beam_barrier_strands(struct Moby *moby) __asm__("FUN_L06_002f7000");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1436,7 +1438,7 @@ void FUN_L06_002f6470(struct Moby *moby) {
             vars->voice = ((int (*)(int, int, int))allocate_voice_for_target_entry_alt)(0, 4, (int)moby);
         {
             cursor = (float *)&moby->pos;
-            FUN_L06_002f7000(moby);
+            animate_beam_barrier_strands(moby);
             distance = fast_vec_dist(cursor, D_L06_00167540);
             pos = cursor;
         }
@@ -1729,7 +1731,7 @@ extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 
 /* Spins the moby and animates four 30-point strands: a strand whose timer ran out is rebuilt with a smoothed random
    drift (each point averages three jitters) and its timer reset; otherwise every inner point moves by its drift. */
-void FUN_L06_002f7000(struct Moby *moby) {
+void animate_beam_barrier_strands(struct Moby *moby) {
     Vec4 jitter[30];
     float y;
     float step;
