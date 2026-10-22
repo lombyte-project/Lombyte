@@ -518,7 +518,8 @@ void FUN_L00_001f4598(void) {
     enum {
         DEBUG_CONTROL_MODE_ENABLE_LOW_FOUR_UPDATE_FLAGS = 0,
         DEBUG_CONTROL_MODE_CLEAR_UPDATE_FLAGS = 1,
-        DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET = 2
+        DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET = 2,
+        DEBUG_CONTROL_MODE_ENABLE_SECOND_AND_THIRD_UPDATE_FLAGS = 3
     };
     DebugRowCounts row_counts;
     union {
@@ -613,7 +614,7 @@ void FUN_L00_001f4598(void) {
                     g_debug_menu.target_yaw =
                         fast_subtract_rotations(hero.motion.rot.f[2], D_L00_00166C80.camera.angles[2]);
                     break;
-                case 3:
+                case DEBUG_CONTROL_MODE_ENABLE_SECOND_AND_THIRD_UPDATE_FLAGS:
                     g_debug_menu.update_flags = 6;
                     break;
                 }
