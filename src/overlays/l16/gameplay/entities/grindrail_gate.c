@@ -2462,7 +2462,9 @@ extern void FUN_L16_002e0de0(void *);
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
-void FUN_L16_002e8970(struct Moby *moby) {
+void update_target_reposition_cycle(struct Moby *moby) __asm__("FUN_L16_002e8970");
+
+void update_target_reposition_cycle(struct Moby *moby) {
     enum {
         TARGET_CYCLE_INITIALIZE_DELAY = 0,
         TARGET_CYCLE_WAIT_TO_TRIGGER = 1,
