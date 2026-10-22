@@ -32,7 +32,9 @@ extern f32 distance_307ba8(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9b48");
 extern u8 *FUN_L00_0026daa0_307ba8(f32, struct Moby *, u32, s32, s32) __asm__("FUN_L00_0026daa0");
 extern void FUN_L00_00250df8_307ba8(struct Moby *) __asm__("FUN_L00_00250df8");
 
-struct Moby *FUN_L09_00307ba8(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life) {
+struct Moby *spawn_class_4ea_projectile(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life) __asm__("FUN_L09_00307ba8");
+
+struct Moby *spawn_class_4ea_projectile(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life) {
     OvlVec4 position_copy;
     OvlVec4 velocity_copy;
     OvlVec4 *pp = &position_copy;

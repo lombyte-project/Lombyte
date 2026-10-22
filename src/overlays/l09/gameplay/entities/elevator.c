@@ -941,7 +941,7 @@ extern f32 D_L09_00161CC0[2] __attribute__((sda)); /* a vector; declared small s
 extern TurretShake D_L09_00166E00;
 extern TurretBeam D_L09_00180440[];
 extern void spawn_class_144_moby(struct Moby *, Vec4 *) __asm__("FUN_L09_002efda8");
-extern struct Moby *FUN_L09_00307ba8(void *, void *, void *, int);
+extern struct Moby *spawn_class_4ea_projectile(void *, void *, void *, int) __asm__("FUN_L09_00307ba8");
 extern void FUN_L08_00313ba8(void);
 extern int FUN_L00_0023e738(void *, float, float, float, float, float);
 extern void FUN_L00_0023e838(int);
@@ -1133,7 +1133,7 @@ void turret_update(struct Moby *moby) {
                 if (absolute_float(compute_interpolated_record_value(moby) - 1.0f) <= 0.25f) {
                     build_spherical_offset(&shot, frame_time * 60.0f, fast_add_rotations(1.5707964f, moby->rot.z), vars->pitch);
                     moby_point_position(moby, 1, &muzzle);
-                    FUN_L09_00307ba8(moby, &muzzle, &shot, scale_game_frames(90));
+                    spawn_class_4ea_projectile(moby, &muzzle, &shot, scale_game_frames(90));
                     allocate_voice_for_target_entry(0, 0, moby);
                     D_L09_00166E00.unk160 = 0.03f;
                     D_L09_00166E00.unk168 = scale_game_frames(10);
@@ -1160,7 +1160,7 @@ void turret_update(struct Moby *moby) {
                 if (absolute_float(compute_interpolated_record_value(moby) - 1.0f) <= 0.25f) {
                     build_spherical_offset(&shot, frame_time * 60.0f, fast_add_rotations(1.5707964f, moby->rot.z), vars->pitch);
                     moby_point_position(moby, 2, &muzzle);
-                    FUN_L09_00307ba8(moby, &muzzle, &shot, scale_game_frames(90));
+                    spawn_class_4ea_projectile(moby, &muzzle, &shot, scale_game_frames(90));
                     allocate_voice_for_target_entry(0, 0, moby);
                     D_L09_00166E00.unk160 = 0.03f;
                     D_L09_00166E00.unk168 = scale_game_frames(10);

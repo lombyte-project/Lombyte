@@ -3137,7 +3137,7 @@ extern int D_L10_001BA950[] __asm__("D_L10_001BA950");
 extern int D_0014C190_8ab0[] __asm__("D_0014C190");
 extern float FUN_L00_00258110(float *, float, float, float, float, float);
 extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
-extern struct Moby *FUN_L09_00307ba8(void *, void *, void *, int);
+extern struct Moby *spawn_class_4ea_projectile(void *, void *, void *, int) __asm__("FUN_L09_00307ba8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -3246,7 +3246,7 @@ state_two:
                 build_spherical_offset(rotation, D_0015ED6C * 40.0f,
                     fast_arc_tan(target->pos.x - position[0], target->pos.y - position[1]),
                     fast_arc_tan(vector_distance(position, &target->pos), target->pos.z - position[2]));
-                FUN_L09_00307ba8(moby, position, rotation, scale_game_frames(30));
+                spawn_class_4ea_projectile(moby, position, rotation, scale_game_frames(30));
                 if (target == (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8)))
                     vars->targets[0] = -1;
                 else if (target == (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[1] << 8)))
