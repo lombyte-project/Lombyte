@@ -146,7 +146,9 @@ extern CollisionHit HH __asm__("D_L05_00174240") __attribute__((section(".data")
 #define HI(o) (*(s32 *)(D_L05_00174240 + (o)))
 #define HF(o) (*(f32 *)(D_L05_00174240 + (o)))
 
-void FUN_L05_002402a8(void) {
+void update_hero_ground_contact(void) __asm__("FUN_L05_002402a8");
+
+void update_hero_ground_contact(void) {
     V shared_probe_endpoint, ground_probe_endpoint, ground_vector_scratch, side_probe_endpoint, unused_probe_vector, hit_normal_angles, normalized_hit_normal;
     f32 f;
     s32 ground_sound_class;
@@ -506,7 +508,7 @@ extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-void FUN_L05_002402a8(void);
+void update_hero_ground_contact(void) __asm__("FUN_L05_002402a8");
 
 /* Same routine as FUN_L16_00211098, without the mode 15 and 21 cases. */
 void integrate_hero_motion_with_collisions(void) __asm__("FUN_L05_002413e0");
@@ -596,11 +598,11 @@ void integrate_hero_motion_with_collisions(void) {
     contact_player->contact_state = 0;
     if (vector_length_xyz((char *)position + 0x70) <= 0.0001f) {
         resolve_hero_collisions_with_history();
-        FUN_L05_002402a8();
+        update_hero_ground_contact();
         subtract_vector_xyz((char *)position + 0x80, position, previous.f);
         correct_hero_ground_penetration();
     } else {
-        FUN_L05_002402a8();
+        update_hero_ground_contact();
     }
     delta = (float *)(&hero.motion.unk110);
     new_position = (float *)((char *)delta - 0x90);
@@ -645,7 +647,7 @@ void integrate_hero_motion_with_collisions(void) {
         clear_u64_value(contact);
         motion_player->contact[3] = saved;
         resolve_hero_collisions_with_history();
-        FUN_L05_002402a8();
+        update_hero_ground_contact();
         subtract_vector_xyz(external, new_position, previous.f);
         correct_hero_ground_penetration();
     }
