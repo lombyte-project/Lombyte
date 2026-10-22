@@ -180,7 +180,9 @@ extern void FUN_L00_00262b00(float, float, char *, float *, float *);
 extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L10_00295c20(struct Moby *moby) {
+void update_sinking_platform(struct Moby *moby) __asm__("FUN_L10_00295c20");
+
+void update_sinking_platform(struct Moby *moby) {
     enum {
         PLATFORM_STATE_INITIALIZE = 0,
         PLATFORM_STATE_BOBBING = 1,
