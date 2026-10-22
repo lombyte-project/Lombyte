@@ -62,7 +62,9 @@ extern s32 level_game_mode_macro __asm__("D_L02_0015F5C4") __attribute__((sectio
 extern WatcherReward D_L02_0016CE60;
 extern char D_L02_00161D00[];
 extern void FUN_L02_002e0cd8(struct Moby *);
-extern void FUN_L02_002e1fb8(struct Moby *);
+void update_skid_mcmarx_relocation_sequence(struct Moby *moby) __asm__("FUN_L02_002e1fb8");
+
+extern void update_skid_mcmarx_relocation_sequence(struct Moby *) __asm__("FUN_L02_002e1fb8");
 extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758");
 extern void delete_moby(struct Moby *) __asm__("FUN_0020c828");
 extern void watcher_init(struct Moby *, WatcherVars *) __asm__("FUN_L00_002668a0");
@@ -373,7 +375,7 @@ void skid_mcmarx_update(struct Moby *moby) {
     s32 tracking;
 
     FUN_L02_002e0cd8(moby);
-    FUN_L02_002e1fb8((char *)moby);
+    update_skid_mcmarx_relocation_sequence((char *)moby);
     switch (moby->state) {
     case SKID_MCMARX_INITIALIZE:
         if (D_0013D506) {
@@ -506,7 +508,7 @@ extern void update_hud_counter_transition(void) __asm__("FUN_L02_0023ccc8");
 extern void FUN_L02_0023cda8(void);
 
 /* Three-state controller (data+0x180): 0 waits for its trigger, 1 runs timed effects until released, then moves the moby to its spawn point, sets the two linked mobys' flags and enters state 2. */
-void FUN_L02_002e1fb8(struct Moby *moby) {
+void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float fx_pos[4] __attribute__((aligned(16)));
     float fx_rot[4] __attribute__((aligned(16)));
