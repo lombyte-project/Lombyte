@@ -1970,7 +1970,7 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_002147
 extern char D_L11_001625C8[4] __attribute__((sda));
 extern char D_L11_001625E8[4] __attribute__((sda));
 extern char D_L11_001625F8[4] __attribute__((sda));
-extern void FUN_L08_002f0b40(int arg);
+extern void draw_scrolled_mesh_batch(int arg) __asm__("FUN_L08_002f0b40");
 extern void FUN_L08_002f0c18(int);
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
@@ -1993,16 +1993,16 @@ void FUN_L11_0031e930(struct Moby *moby) {
     if (flag) {
         vu1_add_g_sregister(6, get_effect_texture(0x2C));
         vu1_add_g_sregister(0x42, ((long)*(int *)&D_L11_001625C8 << 32) | 0x44);
-        FUN_L08_002f0b40(0);
+        draw_scrolled_mesh_batch(0);
     }
     if (*(unsigned char *)&D_L11_00162610 != 0 && flag) {
         vu1_add_g_sregister(6, get_effect_texture(0x29));
         vu1_add_g_sregister(
             0x42, ((long)((D_L11_001625CC * *(unsigned char *)&D_L11_00162610) >> 8) << 32) | 0x68);
-        FUN_L08_002f0b40(1);
+        draw_scrolled_mesh_batch(1);
         vu1_add_g_sregister(
             0x42, ((long)((D_L11_001625CC * *(unsigned char *)&D_L11_00162610) >> 8) << 32) | 0x62);
-        FUN_L08_002f0b40(2);
+        draw_scrolled_mesh_batch(2);
     }
     vu1_add_g_sregister(6, get_effect_texture(0x2A));
     vu1_add_g_sregister(0x42, ((long)*(int *)&D_L11_001625E8 << 32) | 0x48);
