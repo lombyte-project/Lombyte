@@ -186,7 +186,9 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
-void FUN_L07_0031b3f0(struct Moby *moby) {
+void update_swing_gate(struct Moby *moby) __asm__("FUN_L07_0031b3f0");
+
+void update_swing_gate(struct Moby *moby) {
     enum {
         SWING_GATE_INITIALIZE = 0,
         SWING_GATE_WAIT_FOR_OPEN_CONDITION = 1,
