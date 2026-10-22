@@ -35,7 +35,9 @@ extern struct Amb D_L00_001CB7C0;
 float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L00_002a4890(void) {
+void update_ambience_target_cycle(void) __asm__("FUN_L00_002a4890");
+
+void update_ambience_target_cycle(void) {
     enum {
         AMBIENCE_WAIT_AND_SELECT_TARGET = 0,
         AMBIENCE_INTERPOLATE_TO_TARGET = 1

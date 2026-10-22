@@ -141,7 +141,7 @@ extern void FUN_L00_00297e30_c(void) __asm__("FUN_L00_00297e30");
 extern void FUN_L00_0024e7a8(void);
 extern void FUN_L00_002648e0(void);
 extern void enqueue_voice_request(void) __asm__("FUN_0022dc50");
-extern void FUN_L00_002a4890(void);
+extern void update_ambience_target_cycle(void) __asm__("FUN_L00_002a4890");
 extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
 extern void no_op_main_callback_alt(void) __asm__("FUN_001e93e8");
 extern void coordinate_hero_frame_update(void) __asm__("FUN_L00_002070d0");
@@ -261,7 +261,7 @@ void handle_pause_input(void) {
         FUN_L00_0024e7a8();
         FUN_L00_002648e0();
         enqueue_voice_request();
-        FUN_L00_002a4890();
+        update_ambience_target_cycle();
     }
     noop_main_callback(D_L00_00160FF8, 3);
     if (DBG(1))
