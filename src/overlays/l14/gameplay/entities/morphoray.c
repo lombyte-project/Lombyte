@@ -1845,9 +1845,9 @@ void FUN_L14_00315d48(char *cam) {
     float key_interpolation_fraction;
     float k;
     float x;
-    float ang;
+    float camera_placement_heading;
     float current_key_heading_override;
-    float b;
+    float heading_blend_target;
     float camera_placement_parameters[4];
     float unused[4];
     CamKey5d48 *keys;
@@ -2002,37 +2002,37 @@ void FUN_L14_00315d48(char *cam) {
     k = D_L14_001624A0;
     x = FUN_L00_0025b750(D_L14_001F6488[st->idx].a10 * 0.017453292f, D_L14_001F6488[st->idx + 1].a10 * 0.017453292f, key_interpolation_fraction);
     cur->f10 = cam_interp_angle_5d48(vel + 4, cur->f10, x, k, 0.2f, 0.0f);
-    ang = add_rots_5d48(atan2_5d48(hero.moby->rot_row1.x, hero.moby->rot_row1.y), cur->f0);
-    D_L14_001624BC = ang;
+    camera_placement_heading = add_rots_5d48(atan2_5d48(hero.moby->rot_row1.x, hero.moby->rot_row1.y), cur->f0);
+    D_L14_001624BC = camera_placement_heading;
     if (side == 0) {
         current_key_heading_override = D_L14_001F6488[st->idx].t18;
-        b = D_L14_001F6488[st->idx + 1].t18;
+        heading_blend_target = D_L14_001F6488[st->idx + 1].t18;
     } else if (side == 1) {
         current_key_heading_override = D_L14_001F6488[st->idx].t1C;
-        b = D_L14_001F6488[st->idx + 1].t1C;
+        heading_blend_target = D_L14_001F6488[st->idx + 1].t1C;
     } else {
         current_key_heading_override = D_L14_001F6488[st->idx].t20;
-        b = D_L14_001F6488[st->idx + 1].t20;
+        heading_blend_target = D_L14_001F6488[st->idx + 1].t20;
     }
-    if (b == 0.0f && current_key_heading_override == 0.0f) {
-        b = (st->fC != 0.0f) ? st->fC : st->f8;
+    if (heading_blend_target == 0.0f && current_key_heading_override == 0.0f) {
+        heading_blend_target = (st->fC != 0.0f) ? st->fC : st->f8;
         st->f10 += (0.0f - st->f10) * D_L14_001624A4;
-        ang = FUN_L00_0025b750(ang, b, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
+        camera_placement_heading = FUN_L00_0025b750(camera_placement_heading, heading_blend_target, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
     } else {
-        if (b != 0.0f) {
+        if (heading_blend_target != 0.0f) {
             st->f10 += (1.0f - st->f10) * D_L14_001624A4;
-            ang = FUN_L00_0025b750(ang, b, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
+            camera_placement_heading = FUN_L00_0025b750(camera_placement_heading, heading_blend_target, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
             st->f8 = current_key_heading_override;
-            st->fC = b;
+            st->fC = heading_blend_target;
         } else {
             st->f10 += (0.0f - st->f10) * D_L14_001624A4;
-            ang = FUN_L00_0025b750(ang, current_key_heading_override, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
+            camera_placement_heading = FUN_L00_0025b750(camera_placement_heading, current_key_heading_override, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
             st->f8 = current_key_heading_override;
-            st->fC = b;
+            st->fC = heading_blend_target;
         }
     }
     camera_placement_parameters[1] = cur->f4;
-    camera_placement_parameters[0] = ang;
+    camera_placement_parameters[0] = camera_placement_heading;
     camera_placement_parameters[2] = cur->f8;
     FUN_L00_001ed580_5d48(cam + 0x30, camera_placement_parameters, &hero.motion.pos);
     vec_sub_5d48(look_direction, &hero.motion.pos, cam + 0x30);
