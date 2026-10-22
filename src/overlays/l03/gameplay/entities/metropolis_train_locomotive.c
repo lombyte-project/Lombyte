@@ -24,7 +24,9 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
-void FUN_L03_0029d1b8(struct Moby *moby) {
+void update_emitter_intermittent_sound(struct Moby *moby) __asm__("FUN_L03_0029d1b8");
+
+void update_emitter_intermittent_sound(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int unused_local;
     float distance_to_reference;
@@ -1367,7 +1369,7 @@ void red_ship_1_update(char *moby) {
         }
     }
     maintain_emitter_sound_voice((unsigned char *)moby);
-    FUN_L03_0029d1b8(moby);
+    update_emitter_intermittent_sound(moby);
     switch (((unsigned char *)moby)[0x20]) {
     case RED_SHIP_INITIALIZE:
         *(unsigned short *)(moby + 0x34) |= 0x1000;
