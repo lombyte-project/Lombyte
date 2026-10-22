@@ -506,7 +506,9 @@ void FUN_L11_002d1340(void *mp) {
     fast_vec_sub(moby_vars + 0x140, moby + 0x10, A);
 }
 extern int FUN_L11_002d2460(struct Moby *moby);
-extern int FUN_L11_002d2340(struct Moby *moby, char *other);
+int try_update_resort_owner_path_target(struct Moby *moby, char *other) __asm__("FUN_L11_002d2340");
+
+extern int try_update_resort_owner_path_target(struct Moby *moby, char *other) __asm__("FUN_L11_002d2340");
 extern int FUN_L11_002d25e8(struct Moby *m, float *out);
 extern void FUN_L11_002d2088_c(struct Moby *moby, int state) __asm__("FUN_L11_002d2088");
 extern float ground_height_14b0(void *) __asm__("FUN_L00_00259710");
@@ -655,25 +657,25 @@ void FUN_L11_002d14b0(void *resort_owner_moby) {
         break;
     case RESORT_OWNER_WAIT_TO_FOLLOW_HERO:
         if (vector_distance(&moby->pos, &hero.motion.pos) > 6.0f &&
-            FUN_L11_002d2340(moby, (char *)&hero.motion.pos) && proximity == 1)
+            try_update_resort_owner_path_target(moby, (char *)&hero.motion.pos) && proximity == 1)
             FUN_L11_002d2088_c(moby, 4);
         break;
     case RESORT_OWNER_FOLLOW_HERO:
         if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f ||
-            !FUN_L11_002d2340(moby, (char *)&hero.motion.pos) || proximity == 2)
+            !try_update_resort_owner_path_target(moby, (char *)&hero.motion.pos) || proximity == 2)
             FUN_L11_002d2088_c(moby, 3);
         else if (vector_distance(&moby->pos, &hero.motion.pos) > 8.0f)
             FUN_L11_002d2088_c(moby, 5);
         break;
     case RESORT_OWNER_FOLLOW_DISTANT_HERO:
         if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f ||
-            !FUN_L11_002d2340(moby, (char *)&hero.motion.pos) || proximity == 2)
+            !try_update_resort_owner_path_target(moby, (char *)&hero.motion.pos) || proximity == 2)
             FUN_L11_002d2088_c(moby, 3);
         else if (vector_distance(&moby->pos, &hero.motion.pos) < 4.0f)
             FUN_L11_002d2088_c(moby, 4);
         break;
     case RESORT_OWNER_MOVE_TO_PATH_POINT:
-        FUN_L11_002d2340(moby, (char *)&path_points_14b0[moby_vars->points[moby_vars->leg]].pos);
+        try_update_resort_owner_path_target(moby, (char *)&path_points_14b0[moby_vars->points[moby_vars->leg]].pos);
         if (vector_distance(&moby->pos, &moby_vars->target) < 1.0f) {
             switch (moby_vars->leg) {
             case RESORT_OWNER_FIRST_PATH_LEG: {
@@ -890,7 +892,7 @@ extern int *D_L11_001B0EB0[];
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("FUN_L01_00276fe8");
 
-int FUN_L11_002d2340(struct Moby *moby, char *other) {
+int try_update_resort_owner_path_target(struct Moby *moby, char *other) {
     struct TgtData *moby_vars = (struct TgtData *)moby->pvars;
     int *leg_path_ids = moby_vars->a;
     int *ent = D_L11_001B0EB0[*(int *)((char *)leg_path_ids - (-(moby_vars->idx * 4)))];
