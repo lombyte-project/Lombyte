@@ -199,7 +199,9 @@ extern float D_L09_00161304 __attribute__((section(".sdata")));
 #include "qcopy.h"
 #define PACKET_CURSOR (*(int * volatile *)&D_L09_001611C0)
 
-void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
+void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int count) __asm__("FUN_L09_002c1978");
+
+void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int count) {
     char *data = data_ptr;
     char *list = list_ptr;
     int i;
@@ -1406,7 +1408,7 @@ extern char D_L09_001F63C0[];
 extern char D_L09_001FC740[];
 extern int D_L09_0015F5CC;
 extern void draw_textured_grid(char *moby) __asm__("FUN_L03_00291918");
-extern void FUN_L09_002c1978(void *, void *, int);
+extern void build_packet_and_draw_scaled_entries(void *, void *, int) __asm__("FUN_L09_002c1978");
 
 void draw_level09_textured_surfaces(void) __asm__("FUN_L09_002ef750");
 
@@ -1417,7 +1419,7 @@ void draw_level09_textured_surfaces(void) {
     float texture_sequence_step_float = (float)texture_sequence_step;
     draw_level09_scrolling_textured_strips(D_L09_001F3080, 0x6C, texture_sequence_position - texture_sequence_step_float, (texture_sequence_step & 15) + 0x2C, ((texture_sequence_step + 1) & 15) + 0x2C);
     draw_textured_grid(D_L09_001FC740);
-    FUN_L09_002c1978(D_L09_001FC740, D_L09_001F63C0, 10);
+    build_packet_and_draw_scaled_entries(D_L09_001FC740, D_L09_001F63C0, 10);
 }
 struct DebrisVars {
     Vec4 vel;           /* 0x00 */
