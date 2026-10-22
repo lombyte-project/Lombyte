@@ -92,7 +92,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_00266e00(int, int, int, int);
 extern int FUN_L01_0022d838(float *, float *);
-extern int FUN_L02_0022ee00(void);
+extern int process_hero_item_action_input(void) __asm__("FUN_L02_0022ee00");
 extern int get_hero_help_value(int a) __asm__("FUN_L06_0021d0a0");
 extern int process_hero_incoming_hit(int) __asm__("FUN_L15_00208e10");
 extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
@@ -163,7 +163,7 @@ void FUN_L15_0021d040(void) {
         if (hero.health.hp <= 0 && hero.state.control_mode != 0x14 &&
             (hero.state.current == HERO_STATE_IDLE || hero.state.current == HERO_STATE_RUN)) {
             hero_set_state(HERO_STATE_DYING, 1);
-        } else if (FUN_L02_0022ee00() == 0 && try_enter_hero_water_state() == 0 && try_transition_hero_water_state() == 0 &&
+        } else if (process_hero_item_action_input() == 0 && try_enter_hero_water_state() == 0 && try_transition_hero_water_state() == 0 &&
                    try_start_hero_weapon_fire_state() == 0) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
                 if (hero.items[0].unk1C != 2 && D_L15_0015F594 == 0 &&

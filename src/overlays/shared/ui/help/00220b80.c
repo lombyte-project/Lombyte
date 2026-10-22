@@ -385,7 +385,9 @@ extern void FUN_L00_0029a6b0(s32);
  * it handles the 0x81 state on button 8 (D_L02_0015F674 counts the window down)
  * or clears hero.unk22CA. Returns nonzero when the hero state changed.
  */
-s32 FUN_L02_0022ee00(void)
+s32 process_hero_item_action_input(void) __asm__("FUN_L02_0022ee00");
+
+s32 process_hero_item_action_input(void)
 {
     enum {
         HERO_ITEM_WRENCH = 8,
