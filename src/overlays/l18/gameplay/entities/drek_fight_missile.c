@@ -3610,8 +3610,10 @@ extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
 extern int D_L18_00162384_w[] __asm__("D_L18_00162384") __attribute__((section(".sdata")));
 extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section(".data")));
 
-void FUN_L18_002f7ad8(M *moby);
-void FUN_L18_002f7ad8(M *moby) {
+void update_moby_scene_visibility_and_height_reflection(M *moby) __asm__("FUN_L18_002f7ad8");
+
+void update_moby_scene_visibility_and_height_reflection(M *moby) __asm__("FUN_L18_002f7ad8");
+void update_moby_scene_visibility_and_height_reflection(M *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_WAIT_FOR_SCENE_TRIGGER = 1,
