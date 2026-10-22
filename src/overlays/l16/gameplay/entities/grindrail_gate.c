@@ -228,7 +228,9 @@ void help_desk_lady_update(L16WatchMoby *moby) {
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_00250df8(void *);
 
-void FUN_L16_002e36e8(struct Moby *moby) {
+void initialize_moby_rotation_scales(struct Moby *moby) __asm__("FUN_L16_002e36e8");
+
+void initialize_moby_rotation_scales(struct Moby *moby) {
     float *rotation_scale_data = (float *)moby->pvars;
     if (moby->state == 0) {
         fast_vec_normalize(&moby->rot_row1, &moby->rot_row1, rotation_scale_data[0] * 0.25f);
