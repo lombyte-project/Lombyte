@@ -86,7 +86,7 @@ extern int FUN_L01_00226f10(int a);
 extern int FUN_L01_0022d838(float *, float *);
 extern int FUN_L01_00231580(int);
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
-extern int FUN_L01_00240ed8(void);
+extern int handle_hero_gadget_button(void) __asm__("FUN_L01_00240ed8");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -151,7 +151,7 @@ void FUN_L01_00242930(void) {
         if (hero.health.hp <= 0 && hero.state.control_mode != 0x14 &&
             (hero.state.current == HERO_STATE_IDLE || hero.state.current == HERO_STATE_RUN)) {
             hero_set_state(HERO_STATE_DYING, 1);
-        } else if (FUN_L01_00240ed8() == 0 && try_enter_hero_water_state() == 0 && try_transition_hero_water_state() == 0 &&
+        } else if (handle_hero_gadget_button() == 0 && try_enter_hero_water_state() == 0 && try_transition_hero_water_state() == 0 &&
                    try_start_hero_weapon_fire_state() == 0) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
                 if (hero.items[0].unk1C != 2 && D_L01_0015F594 == 0 &&

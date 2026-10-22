@@ -1618,7 +1618,9 @@ extern int FUN_L00_00233e98(int);
 extern int voice_is_playing(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
 extern void FUN_L00_0029a6b0(int);
 
-int FUN_L01_00240ed8(void) {
+int handle_hero_gadget_button(void) __asm__("FUN_L01_00240ed8");
+
+int handle_hero_gadget_button(void) {
     enum {
         ITEM_WRENCH = 8
     };
