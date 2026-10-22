@@ -2420,7 +2420,7 @@ extern void release_voice(int) __asm__("FUN_0022d798");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
-extern char *FUN_L12_002ecce8(void *, void *, int, int, float, float, float);
+extern char *spawn_rocket(void *, void *, int, int, float, float, float) __asm__("FUN_L12_002ecce8");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern unsigned char D_001413F4 __attribute__((section(".data")));
 extern int D_L12_00161F00 __attribute__((section(".sdata")));
@@ -2626,7 +2626,7 @@ update_state:
                 angle = fast_arc_tan(delta.f[0], delta.f[1]);
                 spread = 1.3f;
                 a = scale_game_frames_alt(130);
-                FUN_L12_002ecce8(&delta, &position, (int)moby, a, angle, frame_time * 15.0f, 0.0f);
+                spawn_rocket(&delta, &position, (int)moby, a, angle, frame_time * 15.0f, 0.0f);
                 allocate_voice_for_target_entry_e9f68(0, 0, (int)moby);
                 fast_vec_normalize(&delta, &delta, 0.5f);
                 fast_vec_add(&position, &position, &delta);

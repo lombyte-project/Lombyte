@@ -199,7 +199,9 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L12_002ecce8(char *initial_velocity, char *pos, int owner, int seed, float yaw, float f1, float f2) {
+char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float f1, float f2) __asm__("FUN_L12_002ecce8");
+
+char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float f1, float f2) {
     struct Moby *moby = (struct Moby *)func_0020D348_m(0x199);
     if (moby != 0) {
         char *data;
