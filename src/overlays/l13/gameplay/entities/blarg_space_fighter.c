@@ -1185,7 +1185,9 @@ extern int func_0022ED80_s(int, int, int) __asm__("FUN_0022da68");
 extern int func_L13_002C5248_56B0(void *, void *, int) __asm__("FUN_L13_002c3fc0");
 extern int func_001FA898_s(float) __asm__("FUN_001fa6d0");
 
-void FUN_L13_002c4428(Moby_2C56B0 *moby) {
+void update_blarg_space_fighter(Moby_2C56B0 *moby) __asm__("FUN_L13_002c4428");
+
+void update_blarg_space_fighter(Moby_2C56B0 *moby) {
     enum {
         FIGHTER_INITIALIZE = 0,
         FIGHTER_WAIT_TO_JOIN_PATH = 1,
