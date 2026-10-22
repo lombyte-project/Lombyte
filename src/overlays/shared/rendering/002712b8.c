@@ -988,7 +988,9 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void pos_273448(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void vscl_273448(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void vadd_273448(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_00273448(P_273448 *particle) {
+void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) __asm__("FUN_L00_00273448");
+
+void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
     E_273448 *e;
     f32 alpha_reversal_threshold;
     f32 a[4] __attribute__((aligned(16)));
