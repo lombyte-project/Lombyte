@@ -251,7 +251,9 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_00271be8(char *particle) {
+void update_expanding_damped_fading_particle(char *particle) __asm__("FUN_L00_00271be8");
+
+void update_expanding_damped_fading_particle(char *particle) {
     char *particle_data = particle + 0x20;
     int faded_color;
     fast_vec_scale(particle_data, particle_data, 0.975f);
