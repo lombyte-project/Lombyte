@@ -29,7 +29,9 @@ s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
                            s32 b) __asm__("FUN_001ff308");
 void apply_pending_animation(struct Anim *anim) __asm__("FUN_001ff418");
 
-void FUN_L00_00235878(void) {
+void reset_hud_animation_channels(void) __asm__("FUN_L00_00235878");
+
+void reset_hud_animation_channels(void) {
     int i;
 
     for (i = 0; i < 13; i++) {
