@@ -13,6 +13,7 @@ BINUTILS="$PROJECT_ROOT/tools/binutils-mips-ps2-decompals"
 
 die() { printf 'error: %s\n' "$1" >&2; exit 1; }
 [[ "$(uname -s)" == Linux* ]] || die "run inside WSL or another Linux environment"
+[[ "$PROJECT_ROOT" != /mnt/[A-Za-z]/* ]] || die "this folder is on a Windows drive, which is slow. Copy the project to the Linux disk (e.g. ~/lombyte) and run it there."
 
 # Refuse to delete a build/baseline this script did not create.
 if [[ -e "$BASELINE_ROOT" && ! -f "$BASELINE_ROOT/.rnc-baseline-root" ]]; then

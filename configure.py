@@ -755,48 +755,14 @@ def game_compiler_configured() -> bool:
 def ee_gcc_patched_configured() -> bool:
     return (PATCHED_COMPILER / "xgcc").is_file()
 
-def _win_path(value: str) -> str:
-    """Convert a WSL mount path to the form the Windows driver needs.
-
-    The drive letter is derived from the mount itself, so any /mnt/<drive>
-    mount works regardless of the actual drive letter on a given machine.
-    """
-    match = re.match(r"^/mnt/([A-Za-z])/(.*)$", value)
-    if match:
-        return f"{match.group(1).upper()}:/{match.group(2)}".replace("/", "\\")
-    # Under wine the PE reads the Unix path directly (wine maps / to Z:),
-    # and it cannot resolve a UNC path at all: keep the path unchanged.
-    if _wine_binary():
-        return value
-    # A native WSL path (e.g. a checkout in the Linux home) is reachable from
-    # Windows only over UNC (\\wsl.localhost\<distro>\...).
-    distro = os.environ.get("WSL_DISTRO_NAME")
-    if distro and value.startswith("/"):
-        return f"\\\\wsl.localhost\\{distro}{value}".replace("/", "\\")
-    return value.replace("/", "\\")
-
-def _wine_binary() -> str:
-    """The wine binary the PE tools must run under, or "" to run them directly."""
-    wine = os.environ.get("RNC_WINE")
-    if wine is not None:
-        return wine
-    on_windows_drive = re.match(r"^/mnt/[A-Za-z]/", str(ROOT)) is not None
-    return "" if on_windows_drive else (shutil.which("wine") or "")
-
 def _windows_exe(path: str) -> str:
     """Spell a Windows tool (Ps2EeAs, the SN driver) for a ninja command.
 
-    A checkout on a Windows drive under WSL (/mnt/<drive>/, see _win_path)
-    runs the PE natively through WSL interop. Anywhere else the PE can only run
-    under wine, so it is launched through an explicit `wine` rather than
-    whatever binfmt_misc resolves: launched that way, Ps2EeAs exits 253
-    printing nothing on some inputs (fun_001ec530, a div.s in a branch delay
-    slot) that `wine Ps2EeAs.exe` assembles. RNC_WINE overrides the wine
-    binary; an empty RNC_WINE runs the PE directly.
+    It runs under an explicit `wine`, not through binfmt_misc: launched that
+    way, Ps2EeAs exits 253 printing nothing on some inputs (fun_001ec530, a
+    div.s in a branch delay slot) that `wine Ps2EeAs.exe` assembles.
     """
-    wine = _wine_binary()
-    quoted = shlex.quote(path)
-    return f"{shlex.quote(wine)} {quoted}" if wine else quoted
+    return f"wine {shlex.quote(path)}"
 
 def _unit_from_object(object_path: Path) -> str:
     """Derive the unit name from the ninja object path.
@@ -1361,7 +1327,7 @@ def build_stuff(
             f"{game_root}/ee-gcc -S -I{game_root}/include {common_includes} "
             f"{LANG_DEFINE} -DMATCHING_DECOMP -O2 $in $extra -o $gc_work/cand.s && "
             f"{sys.executable} padless-asm.py normalize $gc_work/cand.s $gc_work/cand-final.s none && "
-            f"{ee_assembler} -o '$gc_work_win/cand-padded.o' '$gc_work_win/cand-final.s' && "
+            f"{ee_assembler} -o '$gc_work/cand-padded.o' '$gc_work/cand-final.s' && "
             f"{game_root}/as -mabi=eabi -o $gc_work/cand-ref.o $gc_work/cand-final.s && "
             f"{sys.executable} padless-asm.py finish $gc_work/cand-padded.o $out $gc_work/cand-ref.o && "
             f"{CROSS}strip $out -N dummy-symbol-name -R .mdebug"
@@ -1383,14 +1349,12 @@ def build_stuff(
         sn_root = SN_COMPILER
         sn_repo = ROOT
         sn_driver = _windows_exe(str(sn_root / "bin/ee-gcc.exe"))
-        sn_lib = _win_path(str(sn_root / "lib/gcc-lib/ee/2.95.2"))
-        sn_eebin = _win_path(str(sn_root / "ee/bin"))
-        sn_inc = _win_path(str(sn_root / "lib/gcc-lib/ee/2.95.2/include"))
-        sn_repo_inc = _win_path(str(sn_repo / "include"))
-        # The SN driver is a Windows PE: it can only read/write native
-        # Windows paths, so this rule stages the source under the real
-        # repository (a WSL mount) and copies the object back into the
-        # staging build.
+        sn_lib = str(sn_root / "lib/gcc-lib/ee/2.95.2")
+        sn_eebin = str(sn_root / "ee/bin")
+        sn_inc = str(sn_root / "lib/gcc-lib/ee/2.95.2/include")
+        sn_repo_inc = str(sn_repo / "include")
+        # The SN driver is a Windows program run under wine: it compiles a
+        # copy of the source in its work folder and the object is copied back.
         ninja.rule(
             "cc_sn",
             description="cc_sn $in",
@@ -1399,7 +1363,7 @@ def build_stuff(
                 f"{sn_driver} -c '-B{sn_lib}\\' '-B{sn_eebin}\\' "
                 f"-I'{sn_inc}' -I'{sn_repo_inc}' "
                 f"-DBUILD_US_VERSION -DMATCHING_DECOMP -O2 -g2 $extra "
-                f"'$sn_work_win/cand.c' -o '$sn_work_win/cand.o' && "
+                f"'$sn_work/cand.c' -o '$sn_work/cand.o' && "
                 f"cp $sn_work/cand.o $out && {CROSS}strip $out -N dummy-symbol-name -R .mdebug"
             ),
         )
@@ -1416,9 +1380,9 @@ def build_stuff(
                 f"{sn_driver} -S '-B{sn_lib}\\' '-B{sn_eebin}\\' "
                 f"-I'{sn_inc}' -I'{sn_repo_inc}' "
                 f"-DBUILD_US_VERSION -DMATCHING_DECOMP -O2 -g2 $extra "
-                f"'$sn_work_win/cand.c' -o '$sn_work_win/cand.s' && "
+                f"'$sn_work/cand.c' -o '$sn_work/cand.s' && "
                 f"{sys.executable} padless-asm.py normalize $sn_work/cand.s $sn_work/cand-final.s $policy && "
-                f"{ee_assembler} -o '$sn_work_win/cand-padded.o' '$sn_work_win/cand-final.s' && "
+                f"{ee_assembler} -o '$sn_work/cand-padded.o' '$sn_work/cand-final.s' && "
                 f"{sys.executable} padless-asm.py finish $sn_work/cand-padded.o $out && "
                 f"{CROSS}strip $out -N dummy-symbol-name -R .mdebug"
             ),
@@ -1440,7 +1404,7 @@ def build_stuff(
                     f"-DBUILD_US_VERSION -DMATCHING_DECOMP -O2 -g2 "
                     f"$pat_work/cand.c -o $pat_work/cand.s && "
                     f"{sys.executable} padless-asm.py normalize $pat_work/cand.s $pat_work/cand-final.s $policy && "
-                    f"{ee_assembler} -o '$pat_work_win/cand-padded.o' '$pat_work_win/cand-final.s' && "
+                    f"{ee_assembler} -o '$pat_work/cand-padded.o' '$pat_work/cand-final.s' && "
                     f"{sys.executable} padless-asm.py finish $pat_work/cand-padded.o $out && "
                     f"{CROSS}strip $out -N dummy-symbol-name -R .mdebug"
                 ),
@@ -1502,7 +1466,7 @@ def build_stuff(
             elif rule == "game-compiler":
                 flags = GAME_COMPILER_FLAG_UNITS.get(unit, "")
                 gc_work = str(ROOT / "build/game-work/units" / unit)
-                variables = {"gc_work": gc_work, "gc_work_win": _win_path(gc_work)}
+                variables = {"gc_work": gc_work}
                 if flags:
                     variables["extra"] = f"{flags} "
                 build(entry.object_path, entry.src_paths, rule, variables=variables)
@@ -1525,7 +1489,6 @@ def build_stuff(
                 pat_work = str(ROOT / "build/patched-work/units" / unit)
                 variables = {
                     "pat_work": pat_work,
-                    "pat_work_win": _win_path(pat_work),
                     "policy": PADLESS_POLICY_UNITS.get(unit, "none"),
                 }
                 build(entry.object_path, entry.src_paths, rule, variables=variables)
@@ -1539,7 +1502,6 @@ def build_stuff(
                 flags = SN_FLAG_UNITS.get(unit, "")
                 variables = {
                     "sn_work": sn_work,
-                    "sn_work_win": _win_path(sn_work),
                 }
                 if rule == "cc_sn_padless":
                     variables["policy"] = PADLESS_POLICY_UNITS.get(unit, "none")
@@ -2166,7 +2128,7 @@ def build_overlays() -> Path:
             f"mkdir -p {work} && "
             f"{game_root}/ee-gcc -S {includes} {LANG_DEFINE} -DMATCHING_DECOMP -O2 $in -o {work}/cand.s && "
             f"{sys.executable} padless-asm.py normalize {work}/cand.s {work}/cand-final.s none && "
-            f"{ee_assembler} -o '$work_win/cand-padded.o' '$work_win/cand-final.s' && "
+            f"{ee_assembler} -o {work}/cand-padded.o {work}/cand-final.s && "
             f"{sys.executable} padless-asm.py reference {work}/cand-final.s {work}/cand-ref.s && "
             f"{game_root}/as -mabi=eabi -o {work}/cand-ref.o {work}/cand-ref.s && "
             f"{sys.executable} padless-asm.py finish {work}/cand-padded.o $out {work}/cand-ref.o"
@@ -2179,7 +2141,7 @@ def build_overlays() -> Path:
     sn_driver = _windows_exe(str(sn_root / "bin/ee-gcc295.exe"))
     # -B pins specs and cc1 to this toolchain (as in cc_sn): a GCC_EXEC_PREFIX
     # left in the shell would otherwise win over the driver's own lib/.
-    sn_lib = _win_path(str(sn_root / "lib/gcc-lib/ee/2.95.2"))
+    sn_lib = str(sn_root / "lib/gcc-lib/ee/2.95.2")
     ninja.rule(
         "overlay-sn",
         description="overlay-sn $in",
@@ -2189,7 +2151,7 @@ def build_overlays() -> Path:
             f"{LANG_DEFINE} -DMATCHING_DECOMP -O2 cand.c -o cand.s && cd - >/dev/null && "
             f"{sys.executable} padless-asm.py normalize {work}/cand.s {work}/cand-norm.s none && "
             f"{sys.executable} padless-asm.py externs {work}/cand-norm.s {work}/cand-final.s $in && "
-            f"{ee_assembler} -o '$work_win/cand-padded.o' '$work_win/cand-final.s' && "
+            f"{ee_assembler} -o {work}/cand-padded.o {work}/cand-final.s && "
             f"{sys.executable} padless-asm.py reference {work}/cand-final.s {work}/cand-ref.s && "
             f"{game_root}/as -mabi=eabi -o {work}/cand-ref.o {work}/cand-ref.s && "
             f"{sys.executable} padless-asm.py finish {work}/cand-padded.o $out {work}/cand-ref.o"
@@ -2198,9 +2160,7 @@ def build_overlays() -> Path:
     sn_units = overlay_sn_units()
 
     def game_edge(out: str, src: str, rule: str = "overlay-game") -> None:
-        path = str((OVERLAYS_BUILD / out).resolve()) + ".work"
-        ninja.build(outputs=[out], rule=rule, inputs=[src],
-                    implicit=["padless-asm.py"], variables={"work_win": _win_path(path)})
+        ninja.build(outputs=[out], rule=rule, inputs=[src], implicit=["padless-asm.py"])
 
     objects = []
     for src in sources:

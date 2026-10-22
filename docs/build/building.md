@@ -14,11 +14,8 @@ Next step: [CONTRIBUTING.md](../../CONTRIBUTING.md).
 | Platform                          | How                                                                                                 |
 | :-------------------------------- | :-------------------------------------------------------------------------------------------------- |
 | Linux (Ubuntu 24.04+, Debian 13+) | the two lines above                                                                                 |
-| Windows                           | `wsl --install -d Ubuntu` in PowerShell, reboot, open Ubuntu, run the two lines above in `~`        |
+| Windows                           | `wsl --install -d Ubuntu` in PowerShell, reboot, open Ubuntu, run the two lines above              |
 | macOS, other Linux                | with [Docker](https://docs.docker.com/get-docker/): `./setup.sh --docker --iso ...`, then `./setup.sh --shell` |
-
-On Windows, clone into your Linux home (`~`), not into `/mnt/c`: the build
-does not work from a Windows drive.
 
 Other options:
 

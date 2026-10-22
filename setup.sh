@@ -213,7 +213,7 @@ esac
 [[ "$(uname -m)" == x86_64 ]] || die "an x86-64 host is required (found $(uname -m)); on other machines use ./setup.sh --docker"
 case "$ROOT" in
     /mnt/[A-Za-z]/*)
-        warn "the checkout is on a Windows drive ($ROOT); builds are much faster from the Linux filesystem, e.g. ~/Lombyte" ;;
+        die "this folder is on a Windows drive, which is slow. Copy the project to the Linux disk (e.g. ~/lombyte) and run it there." ;;
 esac
 
 # ------------------------------------------------------------------ check
@@ -228,11 +228,7 @@ check_installed() {
     LABEL="R5900 binutils (tools/binutils-mips-ps2-decompals)"; check test -x "$TOOLS/binutils-mips-ps2-decompals/mips-ps2-decompals-ld"
     LABEL="objdiff-cli (tools/objdiff)";                        check test -x "$TOOLS/objdiff/objdiff-cli"
     LABEL="Python environment (.venv)";                         check "$ROOT/.venv/bin/python" -c "import splat, spimdisasm, ninja"
-    if [[ "$ROOT" =~ ^/mnt/[A-Za-z]/ ]]; then
-        LABEL="PE runner (WSL interop, checkout on a Windows drive)"; check true
-    else
-        LABEL="PE runner (wine)";                                   check command -v wine
-    fi
+    LABEL="PE runner (wine)";                                   check command -v wine
     LABEL="retail boot ELF (config/us/SCUS_971.99)";            check sha_ok "$ELF_TARGET" "$ELF_SHA"
     [[ "$ok" == 1 ]] || return 1
     # optional: overlay work needs the disc image (scripts/overlay-extract.py)
@@ -259,11 +255,8 @@ install_packages() {
         for p in "${packages[@]}"; do
             dpkg -s "$p" >/dev/null 2>&1 || missing+=("$p")
         done
-        # configure.py runs the PE tools under wine whenever the checkout is
-        # not on /mnt/<drive>/ (_windows_exe): its Ps2EeAs exits 253 through
-        # WSL interop on some inputs. Mirror that choice here rather than
-        # keying on is_wsl, so a checkout on a native path gets wine on WSL too.
-        if ! command -v wine >/dev/null 2>&1 && [[ ! "$ROOT" =~ ^/mnt/[A-Za-z]/ ]]; then
+        # The Windows tools (Ps2EeAs, the SN compiler) always run under wine.
+        if ! command -v wine >/dev/null 2>&1; then
             missing+=(wine wine64 wine32:i386)
         fi
         if [[ ${#missing[@]} -gt 0 ]]; then
@@ -276,9 +269,7 @@ install_packages() {
             as_root apt-get install -y --no-install-recommends "${missing[@]}"
         fi
     else
-        local wine_note=""
-        [[ "$ROOT" =~ ^/mnt/[A-Za-z]/ ]] || wine_note=" wine (with 32-bit support)"
-        warn "not a Debian/Ubuntu system; make sure these are installed: ${packages[*]}${wine_note}"
+        warn "not a Debian/Ubuntu system; make sure these are installed: ${packages[*]} wine (with 32-bit support)"
     fi
     local need tool
     for tool in curl git make tar xz gcc python3 ninja flex; do
