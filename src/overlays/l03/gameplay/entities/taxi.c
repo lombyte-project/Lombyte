@@ -777,7 +777,9 @@ extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Rail taxi: waits at its stop until the hero enters a route's trigger volume,
    flies the outbound path, lets the hero off, flies back (or onward) and returns
    to waiting. With the debug flag set it draws its first route's paths. */
-void FUN_L03_002d3198(struct Moby *taxi_moby) {
+void update_rail_taxi(struct Moby *taxi_moby) __asm__("FUN_L03_002d3198");
+
+void update_rail_taxi(struct Moby *taxi_moby) {
     enum {
         TAXI_INITIALIZE = 0,
         TAXI_WAIT_FOR_ROUTE_TRIGGER = 1,
