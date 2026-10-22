@@ -150,7 +150,9 @@ extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 extern int D_L16_0015F6EC;
-void FUN_L16_002270c8(void) {
+void update_hero_state_transitions(void) __asm__("FUN_L16_002270c8");
+
+void update_hero_state_transitions(void) {
     unsigned char *moby;
     int prevSub;
     int prevState;
