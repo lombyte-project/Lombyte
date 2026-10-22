@@ -319,7 +319,9 @@ extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") __attribute__((section(".sdata")));
 extern float D_L08_00174660[];
 
-void FUN_L08_002d23f0(char *moby) {
+void update_bomb(char *moby) __asm__("FUN_L08_002d23f0");
+
+void update_bomb(char *moby) {
     enum {
         BOMB_STATE_MOVING = 1,
         BOMB_STATE_STATIONARY_FUSE = 2,
