@@ -1196,7 +1196,9 @@ extern s32 *walker_paths_8d10[] __asm__("D_L13_001B07B0");
 extern char D_L13_00160680[] __attribute__((section(".sdata")));
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
 extern CollisionHit coll_hit_8d10 __asm__("D_L13_00174140");
-extern void FUN_L13_003094f8(struct Moby *);
+void update_gemlik_trail(struct Moby *moby) __asm__("FUN_L13_003094f8");
+
+extern void update_gemlik_trail(struct Moby *) __asm__("FUN_L13_003094f8");
 extern f32 random_float_between_8d10(f32, f32) __asm__("FUN_002132a8");
 extern f32 FUN_001f96b0_8d10(f32) __asm__("FUN_001f96b0");
 extern s32 float_to_int_8d10(f32) __asm__("FUN_001fa6d0");
@@ -1245,7 +1247,7 @@ void FUN_L13_00308d10(struct Moby *moby) {
     Vec4f push;
 
     moby->scale = moby->pclass->scale * D_L13_00161E58;
-    FUN_L13_003094f8(moby);
+    update_gemlik_trail(moby);
     if (vars->init != 0) {
         vars->idle_timer = float_to_int_8d10(FUN_001f96b0_8d10(random_float_between_8d10(180.0f, 240.0f)));
         vars->init = 0;
@@ -1433,7 +1435,7 @@ typedef struct {
     TrailPoint_94f8 point[17];
 } TrailVars_94f8;
 
-void FUN_L13_003094f8(struct Moby *moby) {
+void update_gemlik_trail(struct Moby *moby) {
     TrailVars_94f8 *data = *(TrailVars_94f8 **)&moby->pvars;
     TrailPoint_94f8 next;
     union {
