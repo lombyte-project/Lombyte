@@ -153,7 +153,7 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 extern OvlMobyEntry40 D_L02_00178700[];
 s32 FUN_L02_0021ff70(s32 apply_hurt_response) {
     u8 *hero_moby;
-    OvlMobyEntry40 *tbl;
+    OvlMobyEntry40 *hurt_response_entry;
     u8 *mob;
     s32 flag;
     s32 id;
@@ -180,28 +180,28 @@ s32 FUN_L02_0021ff70(s32 apply_hurt_response) {
     if (hero_moby[0xA4] == 0xFF) {
         return 0;
     }
-    tbl = &D_L02_00178700[hero_moby[0xA4]];
-    if (tbl->owner != hero_moby) {
+    hurt_response_entry = &D_L02_00178700[hero_moby[0xA4]];
+    if (hurt_response_entry->owner != hero_moby) {
         return 0;
     }
-    if ((tbl->unk24 ^ 1) & 1) {
+    if ((hurt_response_entry->unk24 ^ 1) & 1) {
         return 0;
     }
     D_0013DF88[D_0015ED84_8]++;
-    G.unk2280 = (struct Moby *)tbl->target;
+    G.unk2280 = (struct Moby *)hurt_response_entry->target;
     D_0015EEA8++;
     if (apply_hurt_response == 0) {
         return 1;
     }
     FUN_L00_00206c08_8();
     flag = 0;
-    if (tbl->flags & 1) {
-        qcopy(&hurt_impulse, &tbl->pos);
-        if (*(f32 *)((u8 *)tbl + 0x1C) == 5627.9248046875f) {
+    if (hurt_response_entry->flags & 1) {
+        qcopy(&hurt_impulse, &hurt_response_entry->pos);
+        if (*(f32 *)((u8 *)hurt_response_entry + 0x1C) == 5627.9248046875f) {
             flag = 1;
         }
-    } else if (tbl->target != 0) {
-        FUN_001f9a28_8(&hurt_impulse, (u8 *)&G + 0x80, tbl->target + 0x10);
+    } else if (hurt_response_entry->target != 0) {
+        FUN_001f9a28_8(&hurt_impulse, (u8 *)&G + 0x80, hurt_response_entry->target + 0x10);
     } else {
         hurt_impulse.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
         hurt_impulse.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
@@ -230,7 +230,7 @@ s32 FUN_L02_0021ff70(s32 apply_hurt_response) {
             vertical_impulse_scale = cached_frame_time * 1.7f;
         }
         FUN_L00_00210c80_8(&hurt_impulse, flag, planar_impulse_scale, vertical_impulse_scale);
-        if (flag != 0 && tbl->unk28 == 4) {
+        if (flag != 0 && hurt_response_entry->unk28 == 4) {
             hurt_impulse.f[2] += hurt_impulse.f[2];
         }
         break;
