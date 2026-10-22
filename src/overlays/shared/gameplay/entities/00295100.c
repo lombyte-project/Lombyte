@@ -543,7 +543,9 @@ extern void mrz_298de8(void *, void *, float) __asm__("FUN_001252b8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-int FUN_L00_00298de8(void) {
+int apply_cutscene_camera_key(void) __asm__("FUN_L00_00298de8");
+
+int apply_cutscene_camera_key(void) {
     float m[16] __attribute__((aligned(16)));
     OvlQuad camera_offset[1];
     char *camera_key = D_L00_0016C860_298de8.p54 + D_L00_0016C860_298de8.i38 * 32;
@@ -723,7 +725,7 @@ void FUN_L00_00298f90(void) {
             FUN_00204790();
             FUN_L00_002451b8(D_L00_0016C860.f3C + 1);
         }
-        last = FUN_L00_00298de8();
+        last = apply_cutscene_camera_key();
         for (i = 0; i < D_L00_0016C860.h44; i++) {
             cutscene_moby = D_L00_0016C860.f178[i];
             id = D_L00_0016C860.f38 >> 1;
