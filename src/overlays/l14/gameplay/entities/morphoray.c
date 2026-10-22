@@ -1,3 +1,5 @@
+int initialize_morphoray_private_state() __asm__("FUN_L14_00305a38");
+
 /* Level 14 moby classes: morphoray, button, blarg_heavy_interceptor. */
 #include "types.h"
 #include "rnc/overlay/level_globals.h"
@@ -494,7 +496,7 @@ void morphoray_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        FUN_L14_00305a38((void *)moby);
+        initialize_morphoray_private_state((void *)moby);
         probe_ground_height(moby_bytes + 0x10, 0, 0.5f);
         moby->rot.x = 0.0f;
         moby->rot.y = -1.5707964f;

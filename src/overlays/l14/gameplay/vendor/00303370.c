@@ -42,7 +42,9 @@ typedef struct {
 } O_FUN_L14_00305a38;
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-void FUN_L14_00305a38(O_FUN_L14_00305a38 *moby) {
+void initialize_morphoray_private_state(O_FUN_L14_00305a38 *moby) __asm__("FUN_L14_00305a38");
+
+void initialize_morphoray_private_state(O_FUN_L14_00305a38 *moby) {
     M_FUN_L14_00305a38 *m = moby->m;
     s32 i;
     for (i = 0; i < 4; i++)
