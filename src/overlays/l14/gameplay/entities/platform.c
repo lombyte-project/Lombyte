@@ -377,20 +377,20 @@ void FUN_L14_002d67e8(struct Moby *racer_moby) {
             ray.b18 = 0;
             ray_67e8(moby_data + 0xD0, moby_data + 0x1E0, 9, racer_moby, &ray);
         } else if (racer_moby->command == 2 || racer_moby->command == 4) {
-            char *p;
+            char *muzzle_flash_particle;
             float r;
             char *muzzle = moby_data + 0xD0;
             scale_67e8(&ray, moby_data + 0xA0, D_L14_00161A44);
             add_67e8(&ray, &ray, muzzle);
-            p = FUN_L00_00274948_c(&ray, D_L14_0015F580_67e8, 0x7F, racer_moby);
-            if (p != 0) {
-                char *q = p + 0x20;
+            muzzle_flash_particle = FUN_L00_00274948_c(&ray, D_L14_0015F580_67e8, 0x7F, racer_moby);
+            if (muzzle_flash_particle != 0) {
+                char *q = muzzle_flash_particle + 0x20;
                 int lifetime_frames;
-                *(float *)(p + 0xC) = (D_L14_00161A48 - 1000.0f) * blend + 1000.0f;
+                *(float *)(muzzle_flash_particle + 0xC) = (D_L14_00161A48 - 1000.0f) * blend + 1000.0f;
                 *(short *)(q + 0x14) = ftoi_67e8(blend * 111.0f + 16.0f);
                 *(short *)(q + 0x16) = 1;
                 lifetime_frames = frames_67e8(4);
-                *(short *)(p + 0xA) = lifetime_frames;
+                *(short *)(muzzle_flash_particle + 0xA) = lifetime_frames;
                 *(float *)(q + 0x10) = 1.0f / itof_67e8((short)lifetime_frames);
                 *(int *)(q + 0x18) = 0x7F7F7F;
             }
@@ -401,12 +401,12 @@ void FUN_L14_002d67e8(struct Moby *racer_moby) {
                 *(int *)(moby_data + 0xF0) = FUN_L00_0023e738_c(&ray.self, r, 0.0f, D_L14_00161A50, D_L14_00161A54, D_L14_00161A58);
             }
             if (*(int *)(moby_data + 0xF0) >= 0) {
-                float *l = (float *)(D_L14_001809C0 + (*(int *)(moby_data + 0xF0) << 5));
-                qcopy(l + 4, &ray.self);
-                l[7] = r;
-                l[0] = D_L14_00161A50;
-                l[1] = D_L14_00161A54;
-                l[2] = D_L14_00161A58;
+                float *muzzle_light_entry = (float *)(D_L14_001809C0 + (*(int *)(moby_data + 0xF0) << 5));
+                qcopy(muzzle_light_entry + 4, &ray.self);
+                muzzle_light_entry[7] = r;
+                muzzle_light_entry[0] = D_L14_00161A50;
+                muzzle_light_entry[1] = D_L14_00161A54;
+                muzzle_light_entry[2] = D_L14_00161A58;
             }
         } else if (*(int *)(moby_data + 0xF0) != -1) {
             light_off_67e8(*(int *)(moby_data + 0xF0));
