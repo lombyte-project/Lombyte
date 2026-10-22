@@ -120,7 +120,9 @@ extern void FUN_L09_0021e560_u(int, int) __asm__("FUN_L09_0021e560");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 extern int *D_L09_001611B8[] __attribute__((section(".sdata")));
-void FUN_L09_0021e8c0(char *list, int count, float unused, long first_texture_index, long second_texture_index) {
+void draw_level09_scrolling_textured_strips(char *list, int count, float unused, long first_texture_index, long second_texture_index) __asm__("FUN_L09_0021e8c0");
+
+void draw_level09_scrolling_textured_strips(char *list, int count, float unused, long first_texture_index, long second_texture_index) {
     int i;
     int j;
     int strip_vertex_index;
@@ -1411,7 +1413,7 @@ void draw_level09_textured_surfaces(void) {
     int texture_sequence_step = texture_sequence_numerator / 20;
     float texture_sequence_position = (float)texture_sequence_numerator / 20.0f;
     float texture_sequence_step_float = (float)texture_sequence_step;
-    FUN_L09_0021e8c0(D_L09_001F3080, 0x6C, texture_sequence_position - texture_sequence_step_float, (texture_sequence_step & 15) + 0x2C, ((texture_sequence_step + 1) & 15) + 0x2C);
+    draw_level09_scrolling_textured_strips(D_L09_001F3080, 0x6C, texture_sequence_position - texture_sequence_step_float, (texture_sequence_step & 15) + 0x2C, ((texture_sequence_step + 1) & 15) + 0x2C);
     draw_textured_grid(D_L09_001FC740);
     FUN_L09_002c1978(D_L09_001FC740, D_L09_001F63C0, 10);
 }
