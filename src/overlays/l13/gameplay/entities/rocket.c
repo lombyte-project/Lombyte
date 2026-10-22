@@ -2340,7 +2340,9 @@ void update_cutscene_target_effects(struct Moby *moby) {
     }
 }
 /* Records the classes of the tracked mobys, then removes this moby once too few of them are left. */
-void FUN_L13_0030be60(struct Moby *moby) {
+void remove_moby_when_tracked_count_below_threshold(struct Moby *moby) __asm__("FUN_L13_0030be60");
+
+void remove_moby_when_tracked_count_below_threshold(struct Moby *moby) {
     int *moby_vars = (int *)moby->pvars;
     if (moby->state == 0) {
         int *ids = moby_vars + 4;
