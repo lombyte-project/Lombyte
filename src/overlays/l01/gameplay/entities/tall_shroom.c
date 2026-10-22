@@ -690,7 +690,9 @@ void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 void FUN_L01_0030ef18();
 void FUN_L00_001fde98(s32, s32, s32, void *, s32);
 
-void FUN_L01_0030f0e0(void) {
+void draw_level01_environment_mapped_meshes(void) __asm__("FUN_L01_0030f0e0");
+
+void draw_level01_environment_mapped_meshes(void) {
     s32 i;
 
     vu1_add_g_sregister(6, get_effect_texture(0x28));
@@ -711,7 +713,7 @@ typedef struct {
 } ScrollMoby;
 
 extern f32 frame_delta_time __asm__("D_0015ED7C");
-void FUN_L01_0030f0e0(void);
+void draw_level01_environment_mapped_meshes(void) __asm__("FUN_L01_0030f0e0");
 void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
 
 void FUN_L01_0030f208(ScrollMoby *moby) {
@@ -743,7 +745,7 @@ void FUN_L01_0030f208(ScrollMoby *moby) {
         if (D_L01_00162110[1] < -1.0f) {
             D_L01_00162110[1] += 1.0f;
         }
-        enqueue_callback_list_1(FUN_L01_0030f0e0, moby);
+        enqueue_callback_list_1(draw_level01_environment_mapped_meshes, moby);
         break;
     }
 }
