@@ -328,7 +328,9 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L11_00311210(void *pt, int *outx, int *outy, int yoff) {
+void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yoff) __asm__("FUN_L11_00311210");
+
+void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yoff) {
     float projected_point[4];
     int *screen_extent_data;
     project_to_screen(projected_point, pt);

@@ -544,7 +544,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void FUN_L11_00311210(void *, void *, void *, int);
+extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 extern void FUN_L13_002b7d50(void *, int, int, long, float, float, float, float);
 void FUN_L17_002eaae0(char *rot, char *from, char *moby, int icon, long color, int tex);
 extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
@@ -580,7 +580,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
         scr = (int *)(D_0013E500);
         if ((*(unsigned short *)(scanned_moby + 0x34) & 0x1000) && *(unsigned char *)(scanned_moby + 0x31) != 0 &&
             scanned_moby != 0 && *(char **)(scanned_moby + 0x24) != 0 && *(short *)(*(char **)(scanned_moby + 0x24) + 0x46) == 5) {
-            FUN_L11_00311210(scanned_moby + 0x10, &sx, &sy, 0);
+            project_world_point_to_screen_pixels(scanned_moby + 0x10, &sx, &sy, 0);
             dx = sx - *(int *)(ship_vars + 0xE0);
             dy = sy - *(int *)(ship_vars + 0xE4);
             if (dx < 0)
@@ -590,7 +590,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
             qcopy(v, D_L17_001678E0);
             fast_vec_scale(v, D_L17_001678E0, *(float *)(scanned_moby + 0xC) / 1280.0f);
             fast_vec_add(v, v, scanned_moby + 0x10);
-            FUN_L11_00311210(v, &tx, &ty, 0);
+            project_world_point_to_screen_pixels(v, &tx, &ty, 0);
             tx -= sx;
             ty -= sy;
             aim_selection_screen_radius = func_001FA898_r(square_root(convert_integer_to_float(tx * tx + ty * ty))) + 0x1C;
@@ -875,7 +875,7 @@ extern unsigned char D_0013E500[];
 extern void append_rotated_sprite_quad(float, float, float, float, float, int, int, long, int, int,
                                        int, int, float, float) __asm__("FUN_001f5ab0");
 extern void FUN_L11_00310ad0(float, float, float, void *, int, int, long);
-extern void FUN_L11_00311210(void *, void *, void *, int);
+extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 extern void FUN_L17_002eb768(int a, char *p);
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
@@ -927,7 +927,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     vu1_add_g_sregister(0x42, 0x8000000048L);
     FUN_L17_002eb768((int)moby, ship_vars);
     if (*(int *)(ship_vars + 0x88) != 0) {
-        FUN_L11_00311210(*(char **)(ship_vars + 0x88) + 0x10, &locked_target_screen_x, &locked_target_screen_y, 0);
+        project_world_point_to_screen_pixels(*(char **)(ship_vars + 0x88) + 0x10, &locked_target_screen_x, &locked_target_screen_y, 0);
         if (*(int *)(ship_vars + 0x8C) > lock_hold_frames) {
             lock_fade_ratio = convert_integer_to_float(*(int *)(ship_vars + 0x8C) - lock_hold_frames);
             lock_fade_ratio = lock_fade_ratio / convert_integer_to_float(lock_fade_frames);
@@ -1017,7 +1017,7 @@ extern unsigned char D_0013A4E0_u[] __asm__("D_0013A4E0");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L11_00311210(void *, void *, void *, int);
+extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 extern short D_L17_0016206C __attribute__((sda));
@@ -1040,7 +1040,7 @@ void FUN_L17_002ec000(char *moby, char *ship_vars, float aim_azimuth, float aim_
     }
     fast_vec_normalize(aim_direction, aim_direction, 23.0f);
     fast_vec_add(aim_world_position, aim_direction, moby + 0x10);
-    FUN_L11_00311210(aim_world_position, ship_vars + 0xE0, ship_vars + 0xE4, 0);
+    project_world_point_to_screen_pixels(aim_world_position, ship_vars + 0xE0, ship_vars + 0xE4, 0);
 }
 /* Fires a projectile from the moby when the trigger is ready and the player presses a button. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EDC40), where it is exact; names translated to the US level program. */

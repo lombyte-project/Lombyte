@@ -2147,7 +2147,7 @@ short D_L13_001613C8 = 2;
 extern unsigned char D_0013E500[];
 extern unsigned char D_0013F3D0[];
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void FUN_L11_00311210(void *, void *, void *, int);
+extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 extern void FUN_L13_002b7d50(void *, int, int, long, float, float, float, float);
 extern void FUN_L13_002b89f8(char *rot, char *from, char *moby, int icon, long color, int tex);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2179,7 +2179,7 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
         scr = (int *)(D_0013E500);
         if ((((Moby_2B9E50 *)candidate_moby)->f34 & 0x1000) && !(((Moby_2B9E50 *)candidate_moby)->f34 & 3) && *(unsigned char *)(candidate_moby + 0x31) != 0 &&
             candidate_moby != 0 && *(char **)(candidate_moby + 0x24) != 0 && *(short *)(*(char **)(candidate_moby + 0x24) + 0x46) == 5) {
-            FUN_L11_00311210(candidate_moby + 0x10, &sx, &sy, 0);
+            project_world_point_to_screen_pixels(candidate_moby + 0x10, &sx, &sy, 0);
             dx = sx - *(int *)(moby_vars + 0xE0);
             dy = sy - *(int *)(moby_vars + 0xE4);
             if (dx < 0) dx = -dx;
@@ -2187,7 +2187,7 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
             qcopy(v, D_L13_001672E0);
             scale_vector_xyz(v, D_L13_001672E0, *(float *)(candidate_moby + 0xC) / 1280.0f);
             add_vector_xyz(v, v, candidate_moby + 0x10);
-            FUN_L11_00311210(v, &tx, &ty, 0);
+            project_world_point_to_screen_pixels(v, &tx, &ty, 0);
             tx -= sx;
             ty -= sy;
             target_selection_radius = func_001FA898_r(seg_sqrt(convert_integer_to_float(tx * tx + ty * ty))) + 0x1C;
@@ -2426,7 +2426,7 @@ int *hp_bar_clut[1] __asm__("D_L13_001613C0") = {0};
 extern unsigned char D_0013E500[];
 extern unsigned char D_0013F350[];
 extern void FUN_L11_00310ad0(float, float, float, void *, int, int, long);
-extern void FUN_L11_00311210(void *, void *, void *, int);
+extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 extern void append_rotated_sprite_quad(float, float, float, float, float, int, int, int, int, int, int, int, float, float);
 extern void draw_textured_quad_local(int, int, int, int, int, int, int, int, long, long) __asm__("FUN_001f5450");
 void FUN_L13_002b8320(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x, float y, float s, float ang);
@@ -2467,7 +2467,7 @@ void FUN_L13_002b97f8(char *moby) {
 
     FUN_L13_002b95b8_c((int)moby, moby_vars);
     if (*(int *)(moby_vars + 0x88) != 0) {
-        FUN_L11_00311210(*(char **)(moby_vars + 0x88) + 0x10, &target_screen_x, &target_screen_y, 0);
+        project_world_point_to_screen_pixels(*(char **)(moby_vars + 0x88) + 0x10, &target_screen_x, &target_screen_y, 0);
         if (*(int *)(moby_vars + 0x8C) > scale_game_frames_alt(0x1F4)) {
             marker_transition_fraction = convert_integer_to_float(*(int *)(moby_vars + 0x8C) - scale_game_frames_alt(0x1F4));
             marker_transition_fraction = marker_transition_fraction / convert_integer_to_float(scale_game_frames_alt(0x4B));
@@ -2543,7 +2543,7 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern int spawn_class_3f1_moby(void *, void *, void *, float, float) __asm__("FUN_L11_00308848");
 extern unsigned char D_0013A4E0[];
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L11_00311210(void *, void *, void *, int);
+extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 
@@ -2565,7 +2565,7 @@ void FUN_L13_002b9df8(struct Moby *moby, char *flight_data, float azimuth_angle,
     }
     fast_vec_normalize(aim_vector, aim_vector, 23.0f);
     fast_vec_add(aim_world_position, aim_vector, &moby->pos);
-    FUN_L11_00311210(aim_world_position, flight_data + 0xE0, flight_data + 0xE4, 0);
+    project_world_point_to_screen_pixels(aim_world_position, flight_data + 0xE0, flight_data + 0xE4, 0);
 }
 /* Fires a timed burst from a moby while a pad button is held and ammo remains. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB1C8), where it is exact; names translated to the US level program. */

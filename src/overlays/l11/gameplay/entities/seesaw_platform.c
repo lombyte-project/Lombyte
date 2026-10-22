@@ -1884,7 +1884,7 @@ extern char D_L11_001679E0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_L11_00311210(void *, void *, void *, int);
+extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -1897,7 +1897,7 @@ float FUN_L11_00311a88(void *moby_v, void *o_v) {
         char target_projection_point[16];
         int ax, ay, cx, cy;
         int dx, dy, reticle_axis_limit;
-        FUN_L11_00311210(target_moby + 0x10, &ax, &ay, 0);
+        project_world_point_to_screen_pixels(target_moby + 0x10, &ax, &ay, 0);
         dx = ax - *(int *)(data + 0xE0);
         dy = ay - *(int *)(data + 0xE4);
         if (dx < 0)
@@ -1907,7 +1907,7 @@ float FUN_L11_00311a88(void *moby_v, void *o_v) {
         qcopy(target_projection_point, D_L11_001679E0);
         scale_vector_xyz(target_projection_point, D_L11_001679E0, *(float *)(target_moby + 0xC) / 1280.0f);
         add_vector_xyz(target_projection_point, target_projection_point, target_moby + 0x10);
-        FUN_L11_00311210(target_projection_point, &cx, &cy, 0);
+        project_world_point_to_screen_pixels(target_projection_point, &cx, &cy, 0);
         cx = cx - ax;
         cy = cy - ay;
         reticle_axis_limit = func_001FA898_r(square_root(convert_integer_to_float(cx * cx + cy * cy))) + 0x1C;
@@ -2115,7 +2115,7 @@ void FUN_L11_00311d50(struct Moby *moby) {
 
     FUN_L11_00311c80(moby, (char *)vars);
     if (vars->target != NULL) {
-        FUN_L11_00311210(&vars->target->pos, &sx, &sy, 0);
+        project_world_point_to_screen_pixels(&vars->target->pos, &sx, &sy, 0);
         if (vars->lock_timer > lock_hold_frames) {
             remaining_lock_fade_fraction = convert_integer_to_float(vars->lock_timer - lock_hold_frames) / convert_integer_to_float(lock_fade_frames);
             fade = 2.0f * (1.0f - remaining_lock_fade_fraction);
@@ -2209,7 +2209,7 @@ extern unsigned char D_0013A4E0[];
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L11_00311210(void *, void *, void *, int);
+extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 extern short D_L11_0016205C __attribute__((sda));
@@ -2234,7 +2234,7 @@ void FUN_L11_003125a8(struct Moby *moby, char *ship_vars, float aim_azimuth, flo
     }
     fast_vec_normalize(shot_direction, shot_direction, 23.0f);
     fast_vec_add(reticle_world_position, shot_direction, &moby->pos);
-    FUN_L11_00311210(reticle_world_position, ship_vars + 0xE0, ship_vars + 0xE4, 0);
+    project_world_point_to_screen_pixels(reticle_world_position, ship_vars + 0xE0, ship_vars + 0xE4, 0);
 }
 /* on a pad press, fires the aimed shot and resets the cooldown */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00313BC0), where it is exact; names translated to the US level program. */
