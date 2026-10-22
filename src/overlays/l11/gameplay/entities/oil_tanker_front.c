@@ -1603,7 +1603,9 @@ extern short D_L11_00162410 __attribute__((sda));
 extern short D_L11_00162414 __attribute__((sda));
 extern short D_L11_00162418 __attribute__((sda));
 extern short D_L11_0016241C __attribute__((sda));
-void FUN_L11_0031ab08(struct Moby *bubble_moby) {
+void update_bubble_motion_and_scale(struct Moby *bubble_moby) __asm__("FUN_L11_0031ab08");
+
+void update_bubble_motion_and_scale(struct Moby *bubble_moby) {
     enum {
         BUBBLE_MOVE_UNTIL_SURFACE_CROSSING = 1,
         BUBBLE_SHRINK_TO_REMOVAL = 2
