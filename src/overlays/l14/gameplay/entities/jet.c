@@ -1111,7 +1111,9 @@ extern struct {
 } D_L14_00174540;
 extern char D_L14_00174580[];
 
-void FUN_L14_002ece00(struct Moby *projectile_moby) {
+void update_flying_bolt(struct Moby *projectile_moby) __asm__("FUN_L14_002ece00");
+
+void update_flying_bolt(struct Moby *projectile_moby) {
     L14BoltVars *bolt_vars = (L14BoltVars *)projectile_moby->pvars;
     Vec4 old;
     Vec4 target;
