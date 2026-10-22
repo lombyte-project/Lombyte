@@ -6767,7 +6767,9 @@ extern char *D_L06_001B0C30_302578[] __asm__("D_L06_001B0C30");
 extern char D_0013D3AC_302578[] __asm__("D_0013D3A7") __attribute__((section(".data")));
 extern char D_0013D388_302578[] __asm__("D_0013D388") __attribute__((section(".data")));
 extern char D_0013A4E0_302578[] __asm__("D_0013A4E0") __attribute__((section(".data")));
-extern void FUN_L06_00302fd8(char *);
+void update_shuttle_route_selection_and_prompt(char *shuttle_moby) __asm__("FUN_L06_00302fd8");
+
+extern void update_shuttle_route_selection_and_prompt(char *) __asm__("FUN_L06_00302fd8");
 void mark_shuttle_linked_mobys_for_removal(char *moby) __asm__("FUN_L06_00304028");
 
 extern void mark_shuttle_linked_mobys_for_removal(char *) __asm__("FUN_L06_00304028");
@@ -6875,7 +6877,7 @@ void shuttle_update(struct Moby *moby) {
         }
         if ((busy == 0 && ((Hero_302578 *)((char *)&hero))->f2FC == moby && ((Hero_302578 *)((char *)&hero))->f30E == 0)
             || D_L06_00162100 != 0) {
-            FUN_L06_00302fd8((char *)moby);
+            update_shuttle_route_selection_and_prompt((char *)moby);
             now = D_L06_00162100;
             if (now != 0 || ((*(int *)(D_0013A4E0_302578 + 0x2604) & 0x10) && D_L06_0015F594 == 10 && shuttle_vars->f9C >= 0)) {
                 shuttle_vars->go = 1;
@@ -7086,7 +7088,7 @@ extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern unsigned short D_00141C00 __attribute__((section(".data")));
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 
-void FUN_L06_00302fd8(char *shuttle_moby) {
+void update_shuttle_route_selection_and_prompt(char *shuttle_moby) {
     enum {
         SHUTTLE_AT_INITIAL_STOP = 0,
         SHUTTLE_AT_SECOND_STOP = 1,
