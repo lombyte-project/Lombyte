@@ -1216,7 +1216,9 @@ extern void reset_shot_tracking(char *) __asm__("FUN_L02_00264e40");
 extern void FUN_L02_00264e70(void *, void *, void *, float);
 extern void FUN_L02_002651d0(char **, int, int);
 extern void FUN_L16_002ce9f0_u(void *) __asm__("FUN_L16_002ce9f0");
-extern void FUN_L16_002d5e80(struct Moby *);
+void refresh_test_dummy_door_timer(struct Moby *moby) __asm__("FUN_L16_002d5e80");
+
+extern void refresh_test_dummy_door_timer(struct Moby *) __asm__("FUN_L16_002d5e80");
 extern void add_vector_xyz(void *, void *, void *);
 extern void allocate_voice_for_target_entry_alt(int, int, void *) __asm__("FUN_0022da68");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -1303,7 +1305,7 @@ void test_dummy_update(unsigned char *moby) {
     case TEST_DUMMY_STATE_IDLE:
         break;
     case TEST_DUMMY_STATE_APPROACH_FIRST_PATH_NODE: /* turn to the path's first node, then start by variant */
-        FUN_L16_002d5e80(dummy_data->route);
+        refresh_test_dummy_door_timer(dummy_data->route);
         position_or_delta.quad = *(u128 *)(path + 0x10);
         if (FUN_L16_002ced20(moby, position_or_delta.f, *(float *)(moby + 0x48))) {
             dummy_data->timer = scale_game_frames(30);
@@ -2791,7 +2793,7 @@ extern s32 FUN_001f99a8_5e80(s32) __asm__("FUN_001f99a8");
 extern s32 FUN_001f96f8_5e80(s32) __asm__("FUN_001f96f8");
 extern void FUN_0022da68_5e80(int, int, void *) __asm__("FUN_0022da68");
 
-void FUN_L16_002d5e80(struct Moby *moby) {
+void refresh_test_dummy_door_timer(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
     if (*(int *)(moby_data + 8) == 0) {
         if (FUN_001f99a8_5e80(D_L16_00161A88 - D_L16_0015F5CC) >= 4) {
