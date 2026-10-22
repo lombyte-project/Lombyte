@@ -2540,7 +2540,9 @@ tailA:
 extern int D_L15_0015FFD8;
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-int FUN_L15_002a2868(int moby_group_index, void *pos) {
+int activate_first_inactive_group_moby(int moby_group_index, void *pos) __asm__("FUN_L15_002a2868");
+
+int activate_first_inactive_group_moby(int moby_group_index, void *pos) {
     short *group_moby_entry = (short *)D_L15_001ABE40[moby_group_index];
     struct Hero *hero_data = &hero;
     do {
@@ -3448,7 +3450,7 @@ stop_animation:
         if (FUN_001f9b80(pos, hero_pos) < 16.0f && D_L15_0015F5C4 != 2 && tick_countdown_32_alt(data + 3)) {
             qcopy(position, pos);
             position[2] += 1.0f;
-            if (collision_line(position, hero_pos + 20, 2, 0, 0) == 0 && FUN_L15_002a2868(data[1], pos))
+            if (collision_line(position, hero_pos + 20, 2, 0, 0) == 0 && activate_first_inactive_group_moby(data[1], pos))
                 data[3] = data[4];
         }
         if (tick_countdown_32_alt(data + 6) || D_L15_0015F5C4 == 2) {
