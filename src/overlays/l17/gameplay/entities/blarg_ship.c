@@ -525,7 +525,7 @@ done:
 /* UpdateMoby 1843: a flying fleet craft that circles, follows a path, strafes the player and fires. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5C18), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len, float z);
+extern char *spawn_class_3f9_moby(int owner, float *dir, float *pos, float size, float len, float z) __asm__("FUN_L11_00308f48");
 extern char D_L17_001676C0[];
 extern char D_L17_001DE110[];
 extern char D_L17_001DE120[];
@@ -733,7 +733,7 @@ void blarg_ship_update(struct Moby *moby) {
                 subtract_vector_xyz(firing_target_delta, sB0, sA0);
                 normalize_vector_xyz(firing_direction, firing_target_delta, D_L17_001623E8 * frame_time);
                 add_vector_xyz(firing_direction, firing_direction, hero_position_delta);
-                firing_moby = FUN_L11_00308f48((int)moby, firing_direction, sA0, 128.0f, -1.0f, 10.0f);
+                firing_moby = spawn_class_3f9_moby((int)moby, firing_direction, sA0, 128.0f, -1.0f, 10.0f);
                 if (firing_moby) {
                     subtract_vector_xyz(firing_direction, firing_direction, hero_position_delta);
                     *(float *)(firing_moby + 0x44) = -fast_arc_tan(vector_length_xy(firing_direction), firing_direction[2]);

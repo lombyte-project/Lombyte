@@ -1144,7 +1144,7 @@ typedef struct Hero_2C56B0 { char pad0[0x15F0]; Moby_2C56B0 *veh; char pad15F4[0
 typedef struct Snd_2C56B0 { char pad0[0x74]; unsigned char b74; char pad75[0x13]; void *f88; } Snd_2C56B0;
 
 extern char *D_L13_0015FFD8;
-extern char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len, float z);
+extern char *spawn_class_3f9_moby(int owner, float *dir, float *pos, float size, float len, float z) __asm__("FUN_L11_00308f48");
 extern char D_L13_001F4700[];
 extern float D_L13_001670C0[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -1352,7 +1352,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
                         subtract_vector_xyz_c(scratch_vector, scratch_vector, &moby->pos);
                         normalize_vector_xyz(spawn_position, scratch_vector, 2.6f);
                         add_vector_xyz(spawn_position, spawn_position, &moby->pos);
-                        FUN_L11_00308f48((int)moby, scratch_vector, spawn_position, 121.0f, D_0015ED6C * 50.0f, 5.0f);
+                        spawn_class_3f9_moby((int)moby, scratch_vector, spawn_position, 121.0f, D_0015ED6C * 50.0f, 5.0f);
                         func_0022ED80_s(0, 0, (int)moby);
                     }
                     fighter_data->fAC = fighter_data->fAC * ((random_float_between(0.92f, 0.94f) - 1.0f) * D_0015ED60 + 1.0f);

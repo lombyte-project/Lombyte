@@ -1220,7 +1220,7 @@ void FUN_L11_003191c0(struct Moby *moby) {
 /* UpdateMoby 1319: a flying craft that circles, follows a path, strafes the player and fires. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031ACA8), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len, float z);
+extern char *spawn_class_3f9_moby(int owner, float *dir, float *pos, float size, float len, float z) __asm__("FUN_L11_00308f48");
 extern char *spawn_moby_with_random_yaw(void *position, void *vector, int id) __asm__("FUN_L11_0030f5a8");
 extern char D_L11_001B0EB0[];
 extern char D_L11_001F14B0[];
@@ -1429,7 +1429,7 @@ void blarg_ship_update(struct Moby *moby) {
                 subtract_vector_xyz(shot_displacement, sB0, sA0);
                 normalize_vector_xyz(shot_velocity, shot_displacement, *(float *)&D_L11_001623D0 * D_0015ED6C_n[1]);
                 add_vector_xyz(shot_velocity, shot_velocity, hero_position_delta);
-                spawned_shot = FUN_L11_00308f48((int)moby, shot_velocity, sA0, 128.0f, -1.0f, 10.0f);
+                spawned_shot = spawn_class_3f9_moby((int)moby, shot_velocity, sA0, 128.0f, -1.0f, 10.0f);
                 if (spawned_shot) {
                     subtract_vector_xyz(shot_velocity, shot_velocity, hero_position_delta);
                     *(float *)(spawned_shot + 0x44) = -fast_arc_tan(vector_length_xy(shot_velocity), shot_velocity[2]);

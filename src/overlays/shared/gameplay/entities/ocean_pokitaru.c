@@ -264,7 +264,9 @@ void FUN_L11_003089d0(struct Moby *moby) {
 /* spawns a streak moby aimed along a direction with the given size and colour */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030A318), where it is exact; names translated to the US level program. */
 
-char *FUN_L11_00308f48(int owner, float *launch_direction, float *spawn_position, float size, float step_length, float z) {
+char *spawn_class_3f9_moby(int owner, float *launch_direction, float *spawn_position, float size, float step_length, float z) __asm__("FUN_L11_00308f48");
+
+char *spawn_class_3f9_moby(int owner, float *launch_direction, float *spawn_position, float size, float step_length, float z) {
     char *spawned_moby = func_0020D348_m(0x3F9);
     if (spawned_moby != 0) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
