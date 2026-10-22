@@ -336,7 +336,9 @@ extern void FUN_L00_002e9720_u(int) __asm__("FUN_L00_002e9720");
 extern void FUN_L00_002e9aa0(int);
 
 /* Runs eight FUN_L00_002e* steps on object a in order. */
-void FUN_L00_002e9bb0(int camera_moby) {
+void update_follow_camera_pose(int camera_moby) __asm__("FUN_L00_002e9bb0");
+
+void update_follow_camera_pose(int camera_moby) {
     float camera_stick_input[2];
     FUN_L00_002e9aa0(camera_moby);
     follow_camera_auto_turn(camera_moby);
@@ -353,7 +355,7 @@ void apply_follow_camera_translation() __asm__("FUN_L00_002e46b8");
 void follow_camera_apply_overrides() __asm__("FUN_L00_002e6000");
 void noop_main_callback() __asm__("FUN_001e93e8");
 void follow_camera_springs() __asm__("FUN_L00_002e5830");
-void FUN_L00_002e9bb0();
+void update_follow_camera_pose();
 void follow_camera_approach() __asm__("FUN_L00_002e5e38");
 void follow_camera_update(u8 *m) __asm__("FUN_L00_002e9c28");
 extern f32 D_L00_0015EF44_gp __asm__("D_L00_0015EF44") __attribute__((sda));
@@ -365,7 +367,7 @@ void follow_camera_update(u8 *camera_moby) {
     noop_main_callback(camera_moby);
     follow_camera_springs(camera_moby);
     noop_main_callback(camera_moby, camera_spring_state);
-    FUN_L00_002e9bb0(camera_moby);
+    update_follow_camera_pose(camera_moby);
     noop_main_callback(camera_moby);
     follow_camera_approach(camera_moby);
 }
