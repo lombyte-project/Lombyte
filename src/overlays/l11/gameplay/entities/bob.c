@@ -200,7 +200,7 @@ typedef struct {
     int target_timer;
 } WD11;
 
-extern void FUN_L05_00317398(void *);
+extern void attach_big_head_cheat_manipulator(void *) __asm__("FUN_L05_00317398");
 extern int FUN_00214720(void *, int);
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
@@ -242,7 +242,7 @@ void bob_update(WM11 *moby) {
     float rate;
     float head_rate;
     int tracking;
-    FUN_L05_00317398(moby);
+    attach_big_head_cheat_manipulator(moby);
     switch (moby->state) {
     case BOB_INITIALIZE:
         if (D_0013D4C3) {

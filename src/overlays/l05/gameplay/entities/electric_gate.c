@@ -1780,7 +1780,7 @@ typedef struct {
     float target[4];
 } WD2;
 extern char D_L05_00161EF0[];
-extern void FUN_L05_00317398(void *);
+extern void attach_big_head_cheat_manipulator(void *) __asm__("FUN_L05_00317398");
 extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
@@ -1798,7 +1798,7 @@ void qwarks_bouncer_update(WM_c *bouncer_moby) {
     float rate;
     float head_rate;
     int tracking;
-    FUN_L05_00317398(bouncer_moby);
+    attach_big_head_cheat_manipulator(bouncer_moby);
     if (!bouncer_data)
         return;
     switch (bouncer_moby->state) {

@@ -718,7 +718,9 @@ extern int D_L05_0015F5C4;
 extern unsigned char D_L05_0017C8A0[];
 extern short D_L05_00161EE8 __attribute__((sda));
 
-void FUN_L05_00317398(char *moby) {
+void attach_big_head_cheat_manipulator(char *moby) __asm__("FUN_L05_00317398");
+
+void attach_big_head_cheat_manipulator(char *moby) {
     int i;
 
     if (D_L05_0015F5C4 == 2 && big_head_cheat_enabled != 0) {
