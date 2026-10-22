@@ -1101,7 +1101,9 @@ void update_hero_offset_rail_candidate(void) __asm__("FUN_L00_0020d330");
 void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
 void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 void FUN_L00_0020b1d8_u(void) __asm__("FUN_L00_0020b1d8");
-void FUN_L00_0020a318(void);
+void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
+
+void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
 void FUN_L00_0020a540_u(void) __asm__("FUN_L00_0020a540");
 void FUN_L00_0020ac98_u(void) __asm__("FUN_L00_0020ac98");
 void FUN_L00_0020a9e8_u(void) __asm__("FUN_L00_0020a9e8");
@@ -1154,7 +1156,7 @@ void FUN_L00_002070d0(void) {
         return;
     update_hero_delayed_voice_requests();
     FUN_L00_0020b1d8_u();
-    FUN_L00_0020a318();
+    update_hero_collision_ease_target();
     FUN_L00_0020a540_u();
     FUN_L00_0020ac98_u();
     FUN_L00_0020a9e8_u();
@@ -2604,7 +2606,7 @@ extern int FUN_L00_0020a240_u(int, float, float) __asm__("FUN_L00_0020a240");
 extern int FUN_L00_0025e3b8(void *);
 extern void *D_L00_00173E58_d __asm__("D_L00_00173E58") __attribute__((section(".data")));
 
-void FUN_L00_0020a318(void) {
+void update_hero_collision_ease_target(void) {
     char *hero_state_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
     char *state_ease_table;
     char *hit_ease_table;
