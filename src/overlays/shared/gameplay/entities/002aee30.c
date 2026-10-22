@@ -22,7 +22,9 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern void FUN_L04_002c41e0(void *, void *, void *, int, float, float);
 
 extern short D_L04_001618B0 __attribute__((sda));
-void FUN_L04_002c45b8(char *moby, int i, int j, int k) {
+void spawn_moby_table_segment_puffs(char *moby, int i, int j, int k) __asm__("FUN_L04_002c45b8");
+
+void spawn_moby_table_segment_puffs(char *moby, int i, int j, int k) {
     float first_world_position[4], second_world_position[4];
     char *pi, *pj;
     pi = D_L04_001D2C90 + i * 16;
@@ -40,7 +42,7 @@ void FUN_L04_002c45b8(char *moby, int i, int j, int k) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5A50), where it is exact; names translated to the US level program. */
 
-extern void FUN_L04_002c45b8(char *a, int i, int j, int k);
+extern void spawn_moby_table_segment_puffs(char *a, int i, int j, int k) __asm__("FUN_L04_002c45b8");
 
 extern short D_L04_001618C0 __attribute__((sda));
 extern short D_L04_001618C4 __attribute__((sda));
@@ -51,20 +53,20 @@ extern short D_L04_001618D4 __attribute__((sda));
 extern short D_L04_001618D8 __attribute__((sda));
 extern short D_L04_001618DC __attribute__((sda));
 void FUN_L04_002c46d0(char *moby) {
-    FUN_L04_002c45b8(moby, 0, 1, *(int *)&D_L04_001618C0);
-    FUN_L04_002c45b8(moby, 2, 3, *(int *)&D_L04_001618C4);
-    FUN_L04_002c45b8(moby, 4, 5, *(int *)&D_L04_001618C8);
-    FUN_L04_002c45b8(moby, 5, 6, *(int *)&D_L04_001618CC);
-    FUN_L04_002c45b8(moby, 6, 7, *(int *)&D_L04_001618D0);
-    FUN_L04_002c45b8(moby, 8, 9, *(int *)&D_L04_001618C8);
-    FUN_L04_002c45b8(moby, 9, 10, *(int *)&D_L04_001618CC);
-    FUN_L04_002c45b8(moby, 10, 11, *(int *)&D_L04_001618D0);
-    FUN_L04_002c45b8(moby, 12, 13, *(int *)&D_L04_001618D4);
-    FUN_L04_002c45b8(moby, 14, 15, *(int *)&D_L04_001618D4);
-    FUN_L04_002c45b8(moby, 16, 17, *(int *)&D_L04_001618D8);
-    FUN_L04_002c45b8(moby, 20, 21, *(int *)&D_L04_001618D8);
-    FUN_L04_002c45b8(moby, 18, 19, *(int *)&D_L04_001618DC);
-    FUN_L04_002c45b8(moby, 22, 23, *(int *)&D_L04_001618DC);
+    spawn_moby_table_segment_puffs(moby, 0, 1, *(int *)&D_L04_001618C0);
+    spawn_moby_table_segment_puffs(moby, 2, 3, *(int *)&D_L04_001618C4);
+    spawn_moby_table_segment_puffs(moby, 4, 5, *(int *)&D_L04_001618C8);
+    spawn_moby_table_segment_puffs(moby, 5, 6, *(int *)&D_L04_001618CC);
+    spawn_moby_table_segment_puffs(moby, 6, 7, *(int *)&D_L04_001618D0);
+    spawn_moby_table_segment_puffs(moby, 8, 9, *(int *)&D_L04_001618C8);
+    spawn_moby_table_segment_puffs(moby, 9, 10, *(int *)&D_L04_001618CC);
+    spawn_moby_table_segment_puffs(moby, 10, 11, *(int *)&D_L04_001618D0);
+    spawn_moby_table_segment_puffs(moby, 12, 13, *(int *)&D_L04_001618D4);
+    spawn_moby_table_segment_puffs(moby, 14, 15, *(int *)&D_L04_001618D4);
+    spawn_moby_table_segment_puffs(moby, 16, 17, *(int *)&D_L04_001618D8);
+    spawn_moby_table_segment_puffs(moby, 20, 21, *(int *)&D_L04_001618D8);
+    spawn_moby_table_segment_puffs(moby, 18, 19, *(int *)&D_L04_001618DC);
+    spawn_moby_table_segment_puffs(moby, 22, 23, *(int *)&D_L04_001618DC);
 }
 
 /* sda.h here, after the unit's empty MACRO_ADDR: D_0015ED6C needs the real one */
