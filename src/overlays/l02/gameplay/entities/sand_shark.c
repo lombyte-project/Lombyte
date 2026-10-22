@@ -935,7 +935,9 @@ extern int D_L02_0015FFD8; /* no foreign declaration */
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L02_002d5728(char *moby) {
+void extend_group_sand_shark_timers(char *moby) __asm__("FUN_L02_002d5728");
+
+void extend_group_sand_shark_timers(char *moby) {
     short *group_ids;
     if (((unsigned char *)moby)[0x21] != 0xFF) {
         group_ids = (short *)D_L02_001ABE40[((unsigned char *)moby)[0x21]];
@@ -1137,7 +1139,7 @@ extern float FUN_00213508(void *, int, float);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern int FUN_L02_002d5658(void *argp);
-extern void FUN_L02_002d5728(char *arg);
+extern void extend_group_sand_shark_timers(char *arg) __asm__("FUN_L02_002d5728");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -1190,7 +1192,7 @@ void FUN_L02_002d5c88(unsigned char *moby) {
     hit_record = find_moby_hit(moby, 0x330000, 0);
     fun_00213928(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && moby[0x20] != 0x18) {
-        FUN_L02_002d5728((char *)moby);
+        extend_group_sand_shark_timers((char *)moby);
         moby_vars->i29C = 0;
         moby_vars->hp -= dmg;
         if (moby_vars->hp <= 0.0f) {
