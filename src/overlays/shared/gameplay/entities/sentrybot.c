@@ -1796,7 +1796,9 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013F490[];
 extern char D_0013F350[];
 
-void FUN_L15_0029d6c0(M_29E8A0 *missile_moby) {
+void update_target_leading_missile(M_29E8A0 *missile_moby) __asm__("FUN_L15_0029d6c0");
+
+void update_target_leading_missile(M_29E8A0 *missile_moby) {
     Tbl_29E8A0 camera_blast_parameters;
     float effect_bias_velocity[4];
     float previous_position[4];
