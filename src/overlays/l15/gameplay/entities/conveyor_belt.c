@@ -408,7 +408,9 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L15_0016207C;
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L15_002eabd8(struct Moby *moby) {
+void update_poison_vessel_spawner(struct Moby *moby) __asm__("FUN_L15_002eabd8");
+
+void update_poison_vessel_spawner(struct Moby *moby) {
     enum {
         INITIALIZE_SPAWN_TIMER = 0,
         WAIT_FOR_SPAWN_TIMER = 1
