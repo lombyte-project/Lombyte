@@ -154,7 +154,9 @@ void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 void FUN_00233980(int, long);
 void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
-void FUN_L00_0028a208(void) {
+void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_0028a208");
+
+void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) {
     float v[4] __attribute__((aligned(16)));
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(0);
