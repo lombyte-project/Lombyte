@@ -1031,7 +1031,9 @@ extern float D_L05_00161EB4 __attribute__((sda));
 extern float D_L05_00161EB8 __attribute__((sda));
 extern float D_L05_00161EBC __attribute__((sda));
 
-void FUN_L05_003150f0(struct Moby *emitter_moby) {
+void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) __asm__("FUN_L05_003150f0");
+
+void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) {
     enum {
         EMITTER_INITIALIZE = 0,
         EMITTER_WAIT_FOR_TRIGGER = 1,
