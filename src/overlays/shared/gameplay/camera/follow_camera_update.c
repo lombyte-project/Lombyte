@@ -1318,7 +1318,9 @@ typedef struct {
 void FUN_L00_001eb0b0(void *);
 void FUN_L00_001eb0c8(void *, void *, f32);
 void FUN_L00_002eb3b0_u(O002ebb00 *) __asm__("FUN_L00_002eb3b0");
-void FUN_L00_002ebb00(O002ebb00 *camera_object) {
+void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) __asm__("FUN_L00_002ebb00");
+
+void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) {
     u8 *m = camera_object->m;
     u8 *raised_hero_position = m + 0xB0;
     u8 *camera_state;
