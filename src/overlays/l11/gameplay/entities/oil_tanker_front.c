@@ -538,7 +538,7 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 void update_oil_tanker_front_path_pose(struct Moby *moby) __asm__("FUN_L11_00317678");
 
 void update_oil_tanker_front_path_pose(struct Moby *) __asm__("FUN_L11_00317678");
-void FUN_L11_00317820(struct Moby *);
+void update_oil_tanker_link_path_poses(struct Moby *) __asm__("FUN_L11_00317820");
 void process_oil_tanker_damage_and_destruction(struct Moby *moby) __asm__("FUN_L11_00317c98");
 
 void process_oil_tanker_damage_and_destruction(struct Moby *) __asm__("FUN_L11_00317c98");
@@ -621,7 +621,7 @@ void oil_tanker_front_update(struct Moby *moby) {
             }
         }
         update_oil_tanker_front_path_pose(moby);
-        FUN_L11_00317820(moby);
+        update_oil_tanker_link_path_poses(moby);
         if (moby->state == 2) {
             process_oil_tanker_damage_and_destruction(moby);
         }
@@ -684,7 +684,7 @@ struct L11ChainPath {
 };
 
 /* Moves each chain link along the path to a fixed distance behind the one before it and turns it to follow the curve. */
-void FUN_L11_00317820(struct Moby *moby) {
+void update_oil_tanker_link_path_poses(struct Moby *moby) {
     struct L11ChainVars *chain_vars = (struct L11ChainVars *)moby->pvars;
     char *path = chain_vars->path;
     struct L11ChainPath *chain_path = (struct L11ChainPath *)chain_vars->path;
