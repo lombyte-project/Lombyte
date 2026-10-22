@@ -61,6 +61,9 @@ void update_mode_freeze(void) {
         FREEZE_CHOICE_CONFIRM_EXIT = 2,
         FREEZE_CHOICE_CANCEL_EXIT = 3
     };
+    enum {
+        MODE_FREEZE_RESUME_WITH_ACTION_LIST = 16
+    };
     s32 video_mode;
     s32 step;
     sound_update();
@@ -290,7 +293,7 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case 16:
+        case MODE_FREEZE_RESUME_WITH_ACTION_LIST:
             game_mode = freeze.unk14;
             pause_current_action_list[0] = freeze.unk18;
             break;
