@@ -1025,7 +1025,9 @@ extern void FUN_0022da68_s(int, int, void *) __asm__("FUN_0022da68");
 extern void remove_s(void *) __asm__("FUN_0020c828");
 extern void spawn_moby_point_offset_particle(void *, float, int, float) __asm__("FUN_L07_0029b8d8");
 
-void FUN_L15_002e4380(unsigned char *moby) {
+void update_spinning_projectile(unsigned char *moby) __asm__("FUN_L15_002e4380");
+
+void update_spinning_projectile(unsigned char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
     float next[4];
     char col[0x30];
