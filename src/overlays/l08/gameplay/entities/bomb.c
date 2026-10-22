@@ -2541,7 +2541,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         LINKED_CLASS_NEGATIVE_Y_POSITIVE_Z_LAUNCH_OFFSET = 4,
         LINKED_CLASS_ZERO_LAUNCH_OFFSET = 5
     };
-    V46 target,delta,accel,effect,aux;
+    V46 target,delta,velocity_correction_or_effect_velocity,effect,aux;
     D46 *data=moby->data;
     if (FUN_L00_0025a420(moby,0x210000,0) && moby->state!=4) {
         allocate_voice_for_target_entry_alt(0,0,moby);
@@ -2575,9 +2575,9 @@ void FUN_L08_002dd3c0(M46 *moby) {
         FUN_L00_00262cf0(target,target,data->roll,data->yaw,data->pitch);
         subtract_vector_xyz(delta,target,moby->position);
         FUN_L00_0025f730(delta,target_data->speed*D_0015ED6C);
-        subtract_vector_xyz(accel,delta,data->velocity);
-        FUN_L00_0025f730(accel,D_L08_00161A04*frame_time_sq_macro);
-        add_vector_xyz(data->velocity,data->velocity,accel);
+        subtract_vector_xyz(velocity_correction_or_effect_velocity,delta,data->velocity);
+        FUN_L00_0025f730(velocity_correction_or_effect_velocity,D_L08_00161A04*frame_time_sq_macro);
+        add_vector_xyz(data->velocity,data->velocity,velocity_correction_or_effect_velocity);
         add_vector_xyz(moby->position,moby->position,data->velocity);
         moby->rotation[1]=-fast_arc_tan(vector_length_xy(data->velocity),data->velocity[2]);
         moby->rotation[2]=fast_arc_tan(data->velocity[0],data->velocity[1]);
@@ -2603,9 +2603,9 @@ void FUN_L08_002dd3c0(M46 *moby) {
         qcopy(target,data->target->position); target[2]+=5.0f;
         subtract_vector_xyz(delta,target,moby->position);
         FUN_L00_0025f730(delta,target_data->speed*D_0015ED6C);
-        subtract_vector_xyz(accel,delta,data->velocity);
-        FUN_L00_0025f730(accel,D_L08_00161A04*4.0f*frame_time_sq_macro);
-        add_vector_xyz(data->velocity,data->velocity,accel);
+        subtract_vector_xyz(velocity_correction_or_effect_velocity,delta,data->velocity);
+        FUN_L00_0025f730(velocity_correction_or_effect_velocity,D_L08_00161A04*4.0f*frame_time_sq_macro);
+        add_vector_xyz(data->velocity,data->velocity,velocity_correction_or_effect_velocity);
         add_vector_xyz(moby->position,moby->position,data->velocity);
         moby->rotation[1]=-fast_arc_tan(vector_length_xy(data->velocity),data->velocity[2]);
         moby->rotation[2]=fast_arc_tan(data->velocity[0],data->velocity[1]);
@@ -2650,10 +2650,10 @@ void FUN_L08_002dd3c0(M46 *moby) {
             if (distance_xyz_c(moby->position,target)<0.5f) route->waypoint=next;
             *(Q46*)effect=(Q46)0;
             effect[0]=random_float_between_c2(-1.0f,1.0f); effect[1]=random_float_between_c2(-1.0f,1.0f); effect[2]=random_float_between_c2(-1.0f,1.0f);
-            *(Q46*)accel=*(Q46*)effect; FUN_L00_0025f730(accel,D_0015ED6C+D_0015ED6C);
+            *(Q46*)velocity_correction_or_effect_velocity=*(Q46*)effect; FUN_L00_0025f730(velocity_correction_or_effect_velocity,D_0015ED6C+D_0015ED6C);
             life0=scale_game_frames_alt(FUN_L00_00257b90(30,45));
             size1=FUN_L00_00257b90(40,70);
-            FUN_L00_00269958(moby->position,accel,0x6F00AFFF,0xFF,life0,40,size1,1);
+            FUN_L00_00269958(moby->position,velocity_correction_or_effect_velocity,0x6F00AFFF,0xFF,life0,40,size1,1);
             *(Q46*)aux=(Q46)0;
             aux[0]=random_float_between_c2(-1.0f,1.0f); aux[1]=random_float_between_c2(-1.0f,1.0f); aux[2]=random_float_between_c2(-1.0f,1.0f);
             *(Q46*)effect=*(Q46*)aux; FUN_L00_0025f730(effect,D_0015ED6C+D_0015ED6C);
@@ -2674,7 +2674,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
                 if (other->state<0x7F && other!=moby) {
                     unsigned short linked_moby_class_id=other->class_id;
                     if ((unsigned int)(linked_moby_class_id-0x223)<6) {
-                        clear_u64_value(accel);
+                        clear_u64_value(velocity_correction_or_effect_velocity);
                         switch ((short)(other->class_id-0x223)) {
                         case LINKED_CLASS_NEGATIVE_X_POSITIVE_Y_POSITIVE_Z_LAUNCH_OFFSET: *(Q46*)aux=(Q46)0; aux[0]=-3.331f; aux[1]=3.331f; aux[2]=0.275f; qcopy(effect,aux); break;
                         case LINKED_CLASS_NEGATIVE_X_POSITIVE_Y_NEGATIVE_Z_LAUNCH_OFFSET: *(Q46*)aux=(Q46)0; aux[0]=-6.0f; aux[1]=6.0f; aux[2]=-1.772f; qcopy(effect,aux); break;
@@ -2687,21 +2687,21 @@ void FUN_L08_002dd3c0(M46 *moby) {
                         else {
                             float launch_yaw,center_yaw,min_frames,max_frames,angle_delta;
                             float *launch_offset;
-                            subtract_vector_xyz(accel,other->position,moby->position); accel[2]=0.0f;
-                            normalize_vector_xyz(accel,accel,D_0015ED6C*12.0f);
-                            accel[2]=random_float_between_c2(D_0015ED6C*8.0f,D_0015ED6C*12.0f);
+                            subtract_vector_xyz(velocity_correction_or_effect_velocity,other->position,moby->position); velocity_correction_or_effect_velocity[2]=0.0f;
+                            normalize_vector_xyz(velocity_correction_or_effect_velocity,velocity_correction_or_effect_velocity,D_0015ED6C*12.0f);
+                            velocity_correction_or_effect_velocity[2]=random_float_between_c2(D_0015ED6C*8.0f,D_0015ED6C*12.0f);
                             other->animation=0;
-                            launch_yaw=fast_arc_tan(accel[0],accel[1]);
+                            launch_yaw=fast_arc_tan(velocity_correction_or_effect_velocity[0],velocity_correction_or_effect_velocity[1]);
                             center_yaw=fast_arc_tan(D_L08_00167480.x-moby->position[0],D_L08_00167480.y-moby->position[1]);
                             angle_delta=fast_difference_between_rotations_c(launch_yaw,center_yaw);
                             launch_offset=effect;
                             if (angle_delta<0.7853982f) { min_frames=10.0f; max_frames=20.0f; }
                             else { min_frames=60.0f; max_frames=90.0f; }
-                            FUN_L05_00318648(other,(int)moby,accel,launch_offset,func_001FA898_r(random_float_between_c2(min_frames,max_frames)));
+                            FUN_L05_00318648(other,(int)moby,velocity_correction_or_effect_velocity,launch_offset,func_001FA898_r(random_float_between_c2(min_frames,max_frames)));
                         }
                     } else if ((short)linked_moby_class_id==0x1A8) {
-                        special=1; clear_u64_value(accel);
-                        spawn_explosion(other,accel,other->position,0.0f,0.0f,50,60,60,12.0f,8.0f,9.0f,1.0f,-1,15.0f,1,1,-1,0);
+                        special=1; clear_u64_value(velocity_correction_or_effect_velocity);
+                        spawn_explosion(other,velocity_correction_or_effect_velocity,other->position,0.0f,0.0f,50,60,60,12.0f,8.0f,9.0f,1.0f,-1,15.0f,1,1,-1,0);
                         mark_moby_for_removal(other);
                     }
                 }
