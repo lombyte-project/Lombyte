@@ -10,7 +10,7 @@
 
 extern s32 D_L00_0015F5CC;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
-extern void FUN_L00_00213880(void);
+extern void apply_hero_motion_and_resolve_collisions(void) __asm__("FUN_L00_00213880");
 extern s32 FUN_L00_0020a240(f32 *, f32, f32);
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
@@ -32,7 +32,7 @@ void update_hero_motion_and_collision_probes(void) {
     s32 hit;
 
     if (hero.unk20AD == 0) {
-        FUN_L00_00213880();
+        apply_hero_motion_and_resolve_collisions();
     }
     if (D_L00_0015F5CC % 3 == 0) {
         hero.wall_probe_distance = 4.0f;

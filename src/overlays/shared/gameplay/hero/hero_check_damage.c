@@ -3683,7 +3683,9 @@ extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8
 extern void FUN_L00_002127b8(void);
 extern void correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
 
-void FUN_L00_00213880(void)
+void apply_hero_motion_and_resolve_collisions(void) __asm__("FUN_L00_00213880");
+
+void apply_hero_motion_and_resolve_collisions(void)
 {
     Vec4 old_pos;
     Vec4 movement_scratch_vector;
