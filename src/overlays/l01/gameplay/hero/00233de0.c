@@ -204,7 +204,9 @@ extern void FUN_001f9c48_u(float *, float *, float) __asm__("FUN_001f9c48");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void air_accel(f32) __asm__("FUN_L01_00234358");
 
-void FUN_L01_00234b40(void) {
+void update_hero_airborne_planar_motion(void) __asm__("FUN_L01_00234b40");
+
+void update_hero_airborne_planar_motion(void) {
     HopVec added_velocity;
     f32 speed;
     f32 additional_planar_speed;
@@ -498,7 +500,7 @@ extern void FUN_L01_0022d090(void);
 extern void FUN_L01_00232290(void);
 extern void clip_hero_horizontal_velocity(int) __asm__("FUN_L01_00232978");
 extern void air_accel(float) __asm__("FUN_L01_00234358");
-extern void FUN_L01_00234b40(void);
+extern void update_hero_airborne_planar_motion(void) __asm__("FUN_L01_00234b40");
 extern void add_vector_xyz_cf(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void clear_vector(void *);
@@ -1792,7 +1794,7 @@ void FUN_L01_002370b8(void) {
     case 0x2D:
         FUN_L01_00232290();
         if (hero.unk1C4 == 0) {
-            FUN_L01_00234b40();
+            update_hero_airborne_planar_motion();
         }
         FUN_L00_00215340();
         FUN_L00_002132b8(0.7f, frame_time * 0.0f);
@@ -2007,7 +2009,7 @@ void FUN_L01_002370b8(void) {
                     }
                 }
             } else {
-                FUN_L01_00234b40();
+                update_hero_airborne_planar_motion();
                 if (hero.state.current == 0x12) {
                     float len;
 
@@ -2185,7 +2187,7 @@ void FUN_L01_002370b8(void) {
     case HERO_STATE_VEHICLE_MODE_3_FALL:
         stick_target(frame_time * 1.5f, 0);
         if (hero.unk1C4 == 0) {
-            FUN_L01_00234b40();
+            update_hero_airborne_planar_motion();
         }
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 21.0f);
         if (hero.motion.velocity.f[2] < frame_time * -15.0f) {
