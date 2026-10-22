@@ -2073,7 +2073,9 @@ extern void func_L00_0023A690_4BE8(void) __asm__("FUN_L08_002444e0");
 extern void func_L00_0023A788_4BE8(void) __asm__("FUN_L08_002445d8");
 extern int D_L08_00174658_lui __asm__("D_L08_00174658") __attribute__((section(".data")));
 
-void FUN_L08_002e3870(struct Moby *moby) {
+void update_batalia_bolt_pickup(struct Moby *moby) __asm__("FUN_L08_002e3870");
+
+void update_batalia_bolt_pickup(struct Moby *moby) {
     enum {
         BOLT_PICKUP_INITIALIZE = 0,
         BOLT_PICKUP_WAIT_FOR_HERO = 1,
