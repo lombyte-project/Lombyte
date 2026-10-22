@@ -1835,7 +1835,7 @@ typedef struct {
     f32 y;
 } PlayerPosView;
 extern s32 FUN_L01_0026e008(s32, s32);
-extern ClonedMoby *FUN_L01_00302328(ClonedMoby *);
+extern ClonedMoby *initialize_beehive_spawn_moby(ClonedMoby *) __asm__("FUN_L01_00302328");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void trooper_start_knockback(void *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
@@ -1867,7 +1867,7 @@ void beehive_update(SpawnerMoby *beehive_moby) {
             break;
         }
         beehive_vars->count++;
-        spawned_clone = (SpawnerMoby *)FUN_L01_00302328((ClonedMoby *)beehive_moby);
+        spawned_clone = (SpawnerMoby *)initialize_beehive_spawn_moby((ClonedMoby *)beehive_moby);
         if (spawned_clone != 0) {
             nv = spawned_clone->pvars;
             k = 0.8f;
@@ -1888,7 +1888,9 @@ void beehive_update(SpawnerMoby *beehive_moby) {
     }
 }
 
-ClonedMoby *FUN_L01_00302328(ClonedMoby *clone_spawner_moby) {
+ClonedMoby *initialize_beehive_spawn_moby(ClonedMoby *clone_spawner_moby) __asm__("FUN_L01_00302328");
+
+ClonedMoby *initialize_beehive_spawn_moby(ClonedMoby *clone_spawner_moby) {
     ClonedMoby *destination_moby;
     ClonedVars *destination_moby_vars;
 
