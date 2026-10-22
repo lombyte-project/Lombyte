@@ -533,7 +533,9 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Resets the camera from its preset (row cam->preset of D_L05_0015EF50): distances,
    angle limits and damping, cleared velocities, then places it. */
-void FUN_L05_003296e0(Camera *camera_to_reset) {
+void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) __asm__("FUN_L05_003296e0");
+
+void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
     CameraPreset *preset = D_L05_0015EF50[camera_to_reset->preset].preset;
     CameraOrbit *orbit_state;
     CameraFocus *focus;
@@ -920,7 +922,7 @@ void FUN_L05_00329ce8(Camera_32B1F8 *camera) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032BBF0), where it is exact; names translated to the US level program. */
 
 extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("FUN_002144d8");
-extern void FUN_L05_003296e0(Camera *);
+extern void reset_hero_follow_camera_from_preset(Camera *) __asm__("FUN_L05_003296e0");
 
 extern char *D_L05_00167204 __attribute__((section(".data")));
 void reset_camera_from_source_transform(char *out) __asm__("FUN_L05_0032a6e0");
@@ -932,5 +934,5 @@ void reset_camera_from_source_transform(char *out) {
     qcopy(out + 0x10, source_camera_transform + 0x10);
     qcopy(out + 0x20, source_camera_transform + 0x20);
     extract_matrix_rotation_quaternion(out + 0x40, out);
-    FUN_L05_003296e0((Camera *)out);
+    reset_hero_follow_camera_from_preset((Camera *)out);
 }
