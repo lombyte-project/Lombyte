@@ -80,7 +80,9 @@ extern void begin_sentrybot_turn_toward_point(char *moby, void *a, float *point,
 void FUN_L15_0029a0d0(void *mp);
 extern void FUN_L15_0029a2a8_u(void *) __asm__("FUN_L15_0029a2a8");
 extern void FUN_L15_0029a570(void *, int);
-extern void FUN_L15_0029aba8(char *m);
+void draw_sentrybot_effect_quads(char *moby) __asm__("FUN_L15_0029aba8");
+
+extern void draw_sentrybot_effect_quads(char *m) __asm__("FUN_L15_0029aba8");
 extern void FUN_L15_002a35d8(int);
 extern void FUN_L15_002cbac0(char *m, int a);
 extern void FUN_L15_002cbba0(unsigned char *moby);
@@ -927,7 +929,7 @@ void sentrybot_update(unsigned char *moby) {
             effect_position += 0x10;
         }
     }
-    enqueue_callback_list_1((void (*)(void))FUN_L15_0029aba8, moby);
+    enqueue_callback_list_1((void (*)(void))draw_sentrybot_effect_quads, moby);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029AA60), where it is exact; names translated to the US level program. */
 
@@ -1522,7 +1524,7 @@ void FUN_L15_0029a570(void *object, int flag) {
 
 extern void FUN_L00_00263618(void *, int, float, float);
 
-void FUN_L15_0029aba8(char *moby) {
+void draw_sentrybot_effect_quads(char *moby) {
     int effect_color = (*(int *)(moby + 0x90) & 0xFFFFFF) | 0x30000000;
     char *effect_position = *(char **)(moby + 0x78) + 0x2A0;
     int i;
