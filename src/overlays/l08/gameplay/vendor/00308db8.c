@@ -83,7 +83,9 @@ extern void FUN_L01_002787a0(void *);
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L08_0030bc00(struct Moby *moby) {
+void update_moby_hit_removal_state(struct Moby *moby) __asm__("FUN_L08_0030bc00");
+
+void update_moby_hit_removal_state(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_WAIT_FOR_HIT = 1,
