@@ -408,7 +408,7 @@ int FUN_L06_002fb668(char *moby) {
 
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void draw_dual_texture_50_quad_mesh(void) __asm__("FUN_L06_002fd1a0");
-extern void FUN_L06_002fd460(void);
+extern void draw_dual_texture_58_quad_mesh(void) __asm__("FUN_L06_002fd460");
 extern void FUN_L06_002fd748(void);
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
@@ -418,7 +418,7 @@ void enqueue_moby_draw_callbacks_by_clip_volume(char *moby) {
     int *data = *(int **)(moby + 0x78);
     int *clip_volume_index_cursor;
     int i;
-    enqueue_callback_list_1((void *)FUN_L06_002fd460, moby);
+    enqueue_callback_list_1((void *)draw_dual_texture_58_quad_mesh, moby);
     clip_volume_index_cursor = data;
     for (i = 0; i < 4; clip_volume_index_cursor++, i++) {
         if (*clip_volume_index_cursor < 0)

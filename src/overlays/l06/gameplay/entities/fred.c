@@ -1023,7 +1023,9 @@ extern void transform_other_2fd1a0(void *, void *, void *) __asm__("FUN_001f9cf8
 extern float normalize_other_2fd1a0(void *, void *) __asm__("FUN_001f9ab0");
 extern void draw_2fd1a0(void *, void *, int) __asm__("FUN_001f7d30");
 
-void FUN_L06_002fd460(void) {
+void draw_dual_texture_58_quad_mesh(void) __asm__("FUN_L06_002fd460");
+
+void draw_dual_texture_58_quad_mesh(void) {
     Packet_2fd460 first, second;
     float matrix[4][4] __attribute__((aligned(16)));
     float vec2[4] __attribute__((aligned(16)));
