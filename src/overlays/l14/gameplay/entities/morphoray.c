@@ -1245,7 +1245,9 @@ void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
  * func_L14_00308F08), where it is exact; names translated to the US level
  * program. The size-matched rac1-decomp neighbour was the callback this one enqueues,
  * not this body. */
-void FUN_L14_00307a80(struct Moby *moby) {
+void enqueue_moby_draw_callback(struct Moby *moby) __asm__("FUN_L14_00307a80");
+
+void enqueue_moby_draw_callback(struct Moby *moby) {
     enum {
         DRAW_CALLBACK_INITIALIZE = 0,
         DRAW_CALLBACK_ENQUEUE = 1
