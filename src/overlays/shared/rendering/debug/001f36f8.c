@@ -1062,7 +1062,9 @@ static __inline__ int flag_offset60(int flags) {
     return sizeof(char *);
 }
 
-void FUN_L00_001f58e0(void) {
+void draw_debug_menu(void) __asm__("FUN_L00_001f58e0");
+
+void draw_debug_menu(void) {
     char menu_value_text[16];
     int stride;
     char *fmt;

@@ -44,7 +44,7 @@ extern void music_start_track(int, int, int) __asm__("FUN_00215c40");
 extern void noop_main_callback() __asm__("FUN_001e93e8");
 extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
 extern void FUN_L00_001f4598(void);
-extern void FUN_L00_001f58e0(void);
+extern void draw_debug_menu(void) __asm__("FUN_L00_001f58e0");
 extern void FUN_L00_00297f78(void);
 extern void draw_debug_profiler_if_enabled(void) __asm__("FUN_L00_001f8e30");
 extern void play_queued_movie(void) __asm__("FUN_L00_002999a8");
@@ -180,7 +180,7 @@ void run_level_main_loop(void) {
         case -1:
             register_audio_stream_callback();
             FUN_L00_001f4598();
-            FUN_L00_001f58e0();
+            draw_debug_menu();
             break;
         case LEVEL_MODE_DEBUG_FLAG_GATED_UPDATE:
             register_audio_stream_callback();
