@@ -1566,7 +1566,9 @@ extern void pool_splash(float, float, float, float, void *, int, int) __asm__("F
 extern int FUN_L01_00275690(float, void *);
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L13_0030a460(void);
-extern void FUN_L13_0030a488(int);
+void initialize_gemlik_pool_tile_neighbors(int tile_index) __asm__("FUN_L13_0030a488");
+
+extern void initialize_gemlik_pool_tile_neighbors(int) __asm__("FUN_L13_0030a488");
 
 void FUN_L13_00309e88(struct Moby *moby) {
     enum {
@@ -1637,7 +1639,7 @@ void FUN_L13_00309e88(struct Moby *moby) {
                 }
             }
             for (tile_index = 0; tile_index < 22; tile_index++)
-                FUN_L13_0030a488(tile_index);
+                initialize_gemlik_pool_tile_neighbors(tile_index);
         }
         moby->draw_dist = 0;
         moby->state = 1;
@@ -1700,7 +1702,7 @@ typedef struct {
 extern Ent D_L13_001D9BC0[];
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L13_0030a488(int tile_index) {
+void initialize_gemlik_pool_tile_neighbors(int tile_index) {
     int i;
     D_L13_001D9BC0[tile_index].n[0] = 0xFF;
     D_L13_001D9BC0[tile_index].n[2] = 0xFF;
