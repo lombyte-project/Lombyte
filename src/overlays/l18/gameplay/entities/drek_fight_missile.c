@@ -55,7 +55,9 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 void select_drek_fight_missile_wander_target(char *moby, void *out) __asm__("FUN_L18_002f02e8");
 
 extern void select_drek_fight_missile_wander_target(char *moby, void *out) __asm__("FUN_L18_002f02e8");
-extern void FUN_L18_002f0848(struct Moby *moby);
+void update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) __asm__("FUN_L18_002f0848");
+
+extern void update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) __asm__("FUN_L18_002f0848");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
@@ -99,7 +101,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         if (FUN_L18_002f0120(moby, (float *)wander_target_position)) {
             select_drek_fight_missile_wander_target(moby, wander_target_position);
         }
-        FUN_L18_002f0848(moby);
+        update_drek_fight_missile_trail_and_queue_effects(moby);
         if (random_integer_below(*(int *)&D_L18_00162234)) {
             return;
         }
@@ -122,7 +124,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         moby->rot.y = -fast_arc_tan(vector_length_xy(dive_movement_step), dive_movement_step[2]);
         normalize_vector_xyz(ground_check_position, &moby->rot_row0, 1.0f);
         add_vector_xyz(ground_check_position, ground_check_position, &moby->pos);
-        FUN_L18_002f0848(moby);
+        update_drek_fight_missile_trail_and_queue_effects(moby);
         if (ground_check_position[2] < *(float *)(missile_vars + 0x128)) {
             float minimum_missile_height;
             func_0022ED80_2F0F78(1, 0, (int)moby);
@@ -153,7 +155,7 @@ void drek_fight_missile_update(struct Moby *moby) {
                 qcopy(missile_vars + 0x10 + i * 16, pos);
             }
         } else {
-            FUN_L18_002f0848(moby);
+            update_drek_fight_missile_trail_and_queue_effects(moby);
         }
         break;
     }
@@ -422,7 +424,7 @@ void FUN_L18_002f06c0(struct Moby *m);
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
 extern short D_L18_00162230 __attribute__((sda));
-void FUN_L18_002f0848(struct Moby *moby) {
+void update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int trail_slot_byte_offset;
     int current_game_frame;
