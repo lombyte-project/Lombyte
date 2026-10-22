@@ -33,7 +33,9 @@ u8 D_L17_0016A940[0x800] = {0};
 u8 D_L18_0016AA40[0x800] = {0};
 void FUN_L00_001f3770(s32, s32, s32, s32);
 /* Calls FUN_L00_001f3770 for each queued D_L00_0016A840 entry and resets the queue. */
-void FUN_L00_001f36f8(void) {
+void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
+
+void flush_debug_text_queue(void) {
     s32 i;
     E001f36f8 *unused_text_entry;
     for (i = 0; i < D_L00_0015EFC4; i++)
@@ -1048,7 +1050,7 @@ extern s32 sprintf(char *, const char *, ...);
 extern u8 D_L00_0015F444;
 extern u8 D_L00_0015F445;
 extern u8 D_L00_0015F446;
-extern void FUN_L00_001f36f8(void);
+extern void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
 extern void append_gif_transfer_packet() __asm__("func_001FB368");
 void print_debug_text(s32 x, s32 y, s32 color, char *text) __asm__("FUN_001f0bd0");
 extern double promote_float60(float) __asm__("FUN_00120478");
@@ -1250,7 +1252,7 @@ void FUN_L00_001f58e0(void) {
         menu_value_text[1] = 0;
         menu_value_text[0] = g_debug_menu.start_capture_status;
         print_debug_text(0x1CA, 0x141, 0x80F0F0F0, menu_value_text);
-        FUN_L00_001f36f8();
+        flush_debug_text_queue();
         while (D_L00_001611A0 & 1) {}
     }
 }

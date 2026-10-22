@@ -80,7 +80,7 @@ extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30"
 extern long get_frame_texture(int) __asm__("FUN_001ffa10");
 extern void draw_rotated_sprite(float, float, int, int, long, float, float, float) __asm__("FUN_00200600");
 extern void do_gif_paging(void) __asm__("FUN_001f4398");
-extern void FUN_L00_001f36f8(void);
+extern void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void reset_gs_registers_pr(void) __asm__("FUN_001f3958");
@@ -250,7 +250,7 @@ void FUN_L00_00245c28(void) {
             }
         }
         D_L00_001B9CF0.unk13C = 0;
-        FUN_L00_001f36f8();
+        flush_debug_text_queue();
         noop_main_callback(level_frame_callback_args, 0x10);
         noop_main_callback(level_frame_callback_args, 0x10);
         vu1_sync_chain(1);
