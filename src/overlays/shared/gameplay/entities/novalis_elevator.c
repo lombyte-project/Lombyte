@@ -450,7 +450,9 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_L00_0026c6e8(char *, char *);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-void FUN_L01_002c72c8(void) {
+void spawn_collision_particle_bursts(void) __asm__("FUN_L01_002c72c8");
+
+void spawn_collision_particle_bursts(void) {
     float offset_vector[4];
     float spawn_position[4];
     float base_angle, b;
@@ -526,7 +528,7 @@ void update_moby_motion_collision_and_lifetime(char *moby) {
             CollisionHit *contact = (CollisionHit *)D_L01_001742C0;
             if (contact->moby != 0)
                 FUN_L00_00259bc8_2c7530(1.0f, contact->moby, moby, 0x10001, &contact->point, normal);
-            ((void (*)(void *))FUN_L01_002c72c8)(moby);
+            ((void (*)(void *))spawn_collision_particle_bursts)(moby);
             goto remove;
         }
         if (fast_dec_timer(data)) {
