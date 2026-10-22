@@ -742,7 +742,7 @@ extern s32 D_L00_00161BF8[] MACRO_ADDR;
 extern s32 D_L00_00161C88[] MACRO_ADDR;
 extern void release_beam_slot(s32) __asm__("FUN_L00_002e20f8");
 extern void FUN_L00_002e2250(s32, s32);
-extern void FUN_L00_002e2af0();
+extern void draw_active_beam_slots() __asm__("FUN_L00_002e2af0");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void update_beam_slot_controller(SlotMoby *slot_controller) __asm__("FUN_L00_002e1df0");
@@ -780,7 +780,7 @@ void update_beam_slot_controller(SlotMoby *slot_controller) {
             }
         }
         if (dispatched_slot_count != 0) {
-            enqueue_callback_list_1((s32)FUN_L00_002e2af0, (s32)slot_controller);
+            enqueue_callback_list_1((s32)draw_active_beam_slots, (s32)slot_controller);
         }
         break;
     }

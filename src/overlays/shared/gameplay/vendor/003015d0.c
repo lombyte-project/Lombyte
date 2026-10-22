@@ -581,7 +581,7 @@ extern int D_L14_00162148[] __attribute__((section(".sdata")));
 extern int D_L14_001621D8[] __attribute__((section(".sdata")));
 extern void release_beam_slot(int) __asm__("FUN_L00_002e20f8");
 extern void FUN_L00_002e2250(int, int);
-extern void FUN_L00_002e2af0(void);
+extern void draw_active_beam_slots(void) __asm__("FUN_L00_002e2af0");
 
 void update_beam_slots(unsigned char *moby) __asm__("FUN_L14_003039e0");
 
@@ -622,7 +622,7 @@ void update_beam_slots(unsigned char *moby) {
             }
         }
         if (started_slot_count != 0) {
-            enqueue_callback_list_1(FUN_L00_002e2af0, moby);
+            enqueue_callback_list_1(draw_active_beam_slots, moby);
         }
         break;
     }

@@ -1040,7 +1040,9 @@ extern void FUN_L00_002e2c88(int, int, void *, int, int, int);
 extern void FUN_L00_002e3388_c(int, int) __asm__("FUN_L00_002e3388");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
-void FUN_L00_002e2af0(char *moby) {
+void draw_active_beam_slots(char *moby) __asm__("FUN_L00_002e2af0");
+
+void draw_active_beam_slots(char *moby) {
     int *moby_data = *(int **)(moby + 0x78);
     int i;
     vu1_add_g_sregister(0x47, 0x51001);
