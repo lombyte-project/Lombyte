@@ -876,7 +876,9 @@ extern int func_0022ED80_6478(int, int, void *) __asm__("FUN_0022da68");
 int D_L16_00161DD8 = 600;
 int D_L16_00161DDC = 0x80808080;
 int D_L16_00161DE0 = 0x80202020;
-void FUN_L16_002e5010(struct Moby *gate_moby) {
+void update_grindrail_gate(struct Moby *gate_moby) __asm__("FUN_L16_002e5010");
+
+void update_grindrail_gate(struct Moby *gate_moby) {
     enum {
         GRINDRAIL_GATE_INITIALIZE = 0,
         GRINDRAIL_GATE_CHECK_HERO_BOUNDS = 1,
