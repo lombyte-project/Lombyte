@@ -407,7 +407,7 @@ extern s32 D_L08_001DDF20[];
 extern s32 D_L08_001DB518[];
 extern void FUN_L08_002f0dc8(void);
 extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
-extern void FUN_L08_002f1158(void *, float, float, float, void *);
+extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
 extern void FUN_L08_002f12a0(int);
 extern void FUN_L08_002f1378(int);
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
@@ -463,7 +463,7 @@ void FUN_L08_002f1548(struct Moby *moby) {
             distance = vector_length_xyz(distance_vector);
             if (distance <= 84.0f) {
                 FUN_L08_002f12a0(0);
-                FUN_L08_002f1158(D_L08_001E8350, 0.52f, 0.62f, 0.06f, (void *)&D_L08_00161E28);
+                advance_wrapped_sine_pair(D_L08_001E8350, 0.52f, 0.62f, 0.06f, (void *)&D_L08_00161E28);
                 FUN_L08_002f12a0(2);
                 if (distance < 20.0f) {
                     *(unsigned char *)&D_L08_00161E08 = 0xFF;

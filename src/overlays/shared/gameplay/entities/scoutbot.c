@@ -975,7 +975,9 @@ void FUN_L08_002f0f68(int **tabs, int table_count, int *counts, int flat, float 
 extern float frame_delta_time __asm__("D_0015ED7C");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 
-void FUN_L08_002f1158(float *out, float *ph, float first_phase_rate, float second_phase_rate, float scale) {
+void advance_wrapped_sine_pair(float *out, float *ph, float first_phase_rate, float second_phase_rate, float scale) __asm__("FUN_L08_002f1158");
+
+void advance_wrapped_sine_pair(float *out, float *ph, float first_phase_rate, float second_phase_rate, float scale) {
     ph[0] += first_phase_rate * frame_delta_time;
     if (ph[0] > 1.0f) {
         ph[0] -= 2.0f;
