@@ -737,7 +737,7 @@ extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned FUN_L00_0025c0e8(unsigned, int);
-extern void FUN_L00_0025c088(int *, int *, int *, int);
+extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
 extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
@@ -827,11 +827,11 @@ void FUN_L00_0025f3e8(char *owner, char *effect_position, float scale, float fla
     }
     if (owner != 0) {
         rgb[0] = 0x7F; rgb[1] = 0x40; rgb[2] = 0;
-        FUN_L00_0025c088(&rgb[0], &rgb[1], &rgb[2], 1);
+        swap_color_channel_words(&rgb[0], &rgb[1], &rgb[2], 1);
         first_glow_scale = scale * 4.0f;
         spawn_glow_particle(owner, effect_position, &zero_vec, first_glow_scale, scale_game_frames_c(0x14), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x30);
         rgb[0] = 0x60; rgb[1] = 0x20; rgb[2] = 0;
-        FUN_L00_0025c088(&rgb[0], &rgb[1], &rgb[2], 1);
+        swap_color_channel_words(&rgb[0], &rgb[1], &rgb[2], 1);
         second_glow_scale = scale * 3.0f;
         spawn_glow_particle(owner, effect_position, &zero_vec, second_glow_scale, scale_game_frames_c(0x1D), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x20);
     }

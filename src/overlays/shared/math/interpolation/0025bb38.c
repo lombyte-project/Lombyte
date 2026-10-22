@@ -132,7 +132,9 @@ unsigned int FUN_L00_0025bfe0(float r, float g, float b, float high_byte_compone
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D0E0), where it is exact; names translated to the US level program. */
 
 /* Swaps a/b, b/c and c/a as bits 1, 2 and 4 of mask select. */
-void FUN_L00_0025c088(int *red_channel, int *green_channel, int *blue_channel, int mask) {
+void swap_color_channel_words(int *red_channel, int *green_channel, int *blue_channel, int mask) __asm__("FUN_L00_0025c088");
+
+void swap_color_channel_words(int *red_channel, int *green_channel, int *blue_channel, int mask) {
     int x, y;
     if (mask & 1) {
         x = *green_channel;
@@ -155,7 +157,7 @@ void FUN_L00_0025c088(int *red_channel, int *green_channel, int *blue_channel, i
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D140), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_0025c088(int *, int *, int *, int);
+extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
 
 /* Splits colour c into bytes, passes the low three through 0025c088 with mask, and repacks them. */
 unsigned FUN_L00_0025c0e8(unsigned c, int mask);
@@ -169,7 +171,7 @@ unsigned FUN_L00_0025c0e8(unsigned packed_color, int mask) {
     rgb_channels[1] = ((int)(packed_color & 0xFF00)) >> 8;
     rgb_channels[2] = (packed_color >> 16) & 0xFF;
     preserved_high_byte = packed_color >> 24;
-    FUN_L00_0025c088(&rgb_channels[0], &rgb_channels[1], &rgb_channels[2], mask);
+    swap_color_channel_words(&rgb_channels[0], &rgb_channels[1], &rgb_channels[2], mask);
     repacked_color = (preserved_high_byte << 24) | (rgb_channels[2] << 16);
     repacked_color |= rgb_channels[1] << 8;
     return repacked_color | rgb_channels[0];

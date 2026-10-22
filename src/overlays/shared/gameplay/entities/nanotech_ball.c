@@ -2056,7 +2056,7 @@ extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern unsigned FUN_L00_0025c0e8(unsigned, int);
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
-extern void FUN_L00_0025c088(int *, int *, int *, int);
+extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
 extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -2175,13 +2175,13 @@ void FUN_L00_002dbf28(char *self, char *q) {
         r0 = 0x7F;
         g0 = 0x20;
         b0 = 0;
-        FUN_L00_0025c088(&r0, &g0, &b0, (&D_0013E520)->b9);
+        swap_color_channel_words(&r0, &g0, &b0, (&D_0013E520)->b9);
         func_L00_002E0CB8_DD3D8(size, self, self + 0x10, spray_bias_vector, scale_game_frames_c(24), r0, g0, b0, 0x20);
     }
     r1 = 0x7F;
     g1 = 0x3F;
     b1 = 0;
-    FUN_L00_0025c088(&r1, &g1, &b1, (&D_0013E520)->b9);
+    swap_color_channel_words(&r1, &g1, &b1, (&D_0013E520)->b9);
     {
         float s = variant_effect_scale * 4.0f;
         func_L00_002E0CB8_DD3D8(s, self, self + 0x10, spray_bias_vector, scale_game_frames_c(20), r1, g1, b1, 0x30);
@@ -2189,7 +2189,7 @@ void FUN_L00_002dbf28(char *self, char *q) {
     r1 = 0x60;
     g1 = 0x10;
     b1 = 0;
-    FUN_L00_0025c088(&r1, &g1, &b1, (&D_0013E520)->b9);
+    swap_color_channel_words(&r1, &g1, &b1, (&D_0013E520)->b9);
     {
         float s = variant_effect_scale * 3.5f;
         func_L00_002E0CB8_DD3D8(s, self, self + 0x10, spray_bias_vector, scale_game_frames_c(27), r1, g1, b1, 0x40);
@@ -2197,7 +2197,7 @@ void FUN_L00_002dbf28(char *self, char *q) {
     r1 = 0x20;
     g1 = 0;
     b1 = 0;
-    FUN_L00_0025c088(&r1, &g1, &b1, (&D_0013E520)->b9);
+    swap_color_channel_words(&r1, &g1, &b1, (&D_0013E520)->b9);
     {
         float s = variant_effect_scale * 3.0f;
         func_L00_002E0CB8_DD3D8(s, self, self + 0x10, spray_bias_vector, scale_game_frames_c(29), r1, g1, b1, 0x20);
