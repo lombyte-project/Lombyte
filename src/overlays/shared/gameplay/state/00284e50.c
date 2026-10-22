@@ -172,7 +172,9 @@ typedef struct {
 extern int FUN_L00_002851c0_u(int, int) __asm__("FUN_L00_002851c0");
 extern void copy_memory_aligned(int, void *, unsigned short) __asm__("FUN_001f9838");
 
-void FUN_L00_00285208(int *entry_block) {
+void restore_moby_state_entries(int *entry_block) __asm__("FUN_L00_00285208");
+
+void restore_moby_state_entries(int *entry_block) {
     int i;
 
     for (i = 0; i < *entry_block; i++) {
