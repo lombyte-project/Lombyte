@@ -1063,7 +1063,9 @@ extern G_2db508 D_0013F350_a __asm__("D_0013F350");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern void blend_moby_animation_alt(void *, int, int, int) __asm__("FUN_00212f90");
 
-int FUN_L00_002da058(u8 *cannon_moby, void *cannon_data, void *m_, void *r_, void *suction_origin) {
+int process_suck_cannon_suction_candidate(u8 *cannon_moby, void *cannon_data, void *m_, void *r_, void *suction_origin) __asm__("FUN_L00_002da058");
+
+int process_suck_cannon_suction_candidate(u8 *cannon_moby, void *cannon_data, void *m_, void *r_, void *suction_origin) {
     char *candidate_moby = (char *)m_;
     char *suction_record = (char *)r_;
     int suction_callback_result = 0;
@@ -1193,7 +1195,7 @@ extern s32 FUN_L00_002d9f78_c(void) __asm__("FUN_L00_002d9f78");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern s32 FUN_001efa68_c(void *, V_da360 *, s32, M_da360 *, s32) __asm__("FUN_001efa68");
-int FUN_L00_002da058(u8 *p, void *q, void *m_, void *r_, void *buf);
+int process_suck_cannon_suction_candidate(u8 *p, void *q, void *m_, void *r_, void *buf) __asm__("FUN_L00_002da058");
 extern void FUN_L00_002da1e0_c(M_da360 *) __asm__("FUN_L00_002da1e0");
 extern void FUN_L00_002df1e0_c(M_da360 *) __asm__("FUN_L00_002df1e0");
 void FUN_L00_002da360(u8 *cannon_moby, void *cannon_data) {
@@ -1238,7 +1240,7 @@ void FUN_L00_002da360(u8 *cannon_moby, void *cannon_data) {
                             FUN_L00_002da1e0_c(candidate_moby);
                     } else if (suction_record->h68 < 4) {
                     hit:
-                        FUN_L00_002da058(cannon_moby, cannon_data, candidate_moby, suction_record, buf);
+                        process_suck_cannon_suction_candidate(cannon_moby, cannon_data, candidate_moby, suction_record, buf);
                     }
                 } else if (suction_record->h68 != 0)
                     FUN_L00_002da1e0_c(candidate_moby);
