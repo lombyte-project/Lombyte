@@ -201,7 +201,9 @@ void FUN_001f9a10_002719f0(void *, void *, void *) __asm__("FUN_001f9a10");
 int FUN_001fa6d0_002719f0(float) __asm__("FUN_001fa6d0");
 float absolute_float(float) __asm__("FUN_001f99c0");
 void FUN_L00_00267a08_002719f0(unsigned char *) __asm__("FUN_L00_00267a08");
-void FUN_L00_002719f0(unsigned char *particle) {
+void update_expanding_rotating_alpha_fade_particle(unsigned char *particle) __asm__("FUN_L00_002719f0");
+
+void update_expanding_rotating_alpha_fade_particle(unsigned char *particle) {
     float *particle_data = (float *)(particle + 0x20);
     FUN_001f9a10_002719f0(particle + 0x10, particle + 0x10, particle_data);
     *(float *)(particle + 0xc) += 5880.0f;
