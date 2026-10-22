@@ -1234,7 +1234,7 @@ typedef struct {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
-extern char *FUN_L09_002ee380(char *owner, void *position, float angle);
+extern char *spawn_class_11c_moby(char *owner, void *position, float angle) __asm__("FUN_L09_002ee380");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern float vector_length_xyz(void *);
@@ -1280,7 +1280,7 @@ void FUN_L09_002ee110(struct Moby *moby) {
                                  random_float_between(20000.0f, 50000.0f));
             }
             *(OvlQuad *)&effect_velocity_or_spawn_position = *(OvlQuad *)&moby->pos;
-            FUN_L09_002ee380(moby, &effect_velocity_or_spawn_position, moby->rot.z);
+            spawn_class_11c_moby(moby, &effect_velocity_or_spawn_position, moby->rot.z);
             mark_moby_for_removal(moby);
             return;
         }
@@ -1299,7 +1299,9 @@ extern void *create_moby_local() __asm__("FUN_0020c4f8");
 
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L09_002ee380(char *owner, void *position, float angle) {
+char *spawn_class_11c_moby(char *owner, void *position, float angle) __asm__("FUN_L09_002ee380");
+
+char *spawn_class_11c_moby(char *owner, void *position, float angle) {
     u128_ee380 position_copy;
     void *copy = &position_copy;
     char *moby;
