@@ -344,7 +344,9 @@ extern float D_L11_001677C0[];
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L02_002e0cd8(void *);
 extern void FUN_L11_002d1030(void *);
-extern void FUN_L11_002d1340(void *);
+void apply_resort_owner_movement(void *mp) __asm__("FUN_L11_002d1340");
+
+extern void apply_resort_owner_movement(void *) __asm__("FUN_L11_002d1340");
 extern void FUN_L11_002d14b0(void *);
 void FUN_L11_002d27b0(WM11 *m);
 
@@ -356,7 +358,7 @@ void resort_owner_update(struct Moby *moby) {
         moby->shadow_range = 30;
     }
     FUN_L11_002d1030(moby);
-    FUN_L11_002d1340(moby);
+    apply_resort_owner_movement(moby);
     FUN_L11_002d14b0(moby);
     FUN_L11_002d27b0(moby);
 }
@@ -480,7 +482,7 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void FUN_L00_00261d78(float, void *, void *, void *);
 
-void FUN_L11_002d1340(void *mp) {
+void apply_resort_owner_movement(void *mp) {
     unsigned char *moby = mp;
     char *moby_vars = *(char **)(moby + 0x78);
     float A[4];
