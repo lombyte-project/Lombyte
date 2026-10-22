@@ -1236,10 +1236,7 @@ void FUN_L13_00308d10(struct Moby *moby) {
         HIT_RESULT_NO_REACTION = 11
     };
     enum {
-        GROUND_MATERIAL_DESTROYS_WALKER = 0,
-        GROUND_MATERIAL_TRIGGERS_WALKER_EXPLOSION = 1,
-        GROUND_MATERIAL_EXPLODES_AND_REMOVES_WALKER = 3,
-        GROUND_MATERIAL_KILLS_WALKER_WITH_EXPLOSION = 11
+        GROUND_MATERIAL_DESTROYS_WALKER = 0
     };
     struct WalkerVars_8d10 *vars = (struct WalkerVars_8d10 *)moby->pvars;
     char *hit;
@@ -1331,10 +1328,11 @@ void FUN_L13_00308d10(struct Moby *moby) {
     ground = probe_ground_height_8d10(&moby->pos, 0, 0.5f);
     if (ground != 0.0f) {
         switch (ground_material_8d10()) {
+        /* These material IDs all destroy the walker; their material names are unknown. */
         case GROUND_MATERIAL_DESTROYS_WALKER:
-        case GROUND_MATERIAL_TRIGGERS_WALKER_EXPLOSION:
-        case GROUND_MATERIAL_EXPLODES_AND_REMOVES_WALKER:
-        case GROUND_MATERIAL_KILLS_WALKER_WITH_EXPLOSION:
+        case 1:
+        case 3:
+        case 11:
         case 13:
             moby->flags &= ~0x1000;
             stop_moby_sound_8d10(moby, 0, -1);
