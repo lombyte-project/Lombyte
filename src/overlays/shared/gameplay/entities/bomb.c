@@ -1614,7 +1614,9 @@ void FUN_0020c828_2cc210(void *) __asm__("FUN_0020c828");
 int FUN_001f96f8_2cc210(int) __asm__("FUN_001f96f8");
 int FUN_L00_001fefc8_2cc210(void *) __asm__("FUN_L00_001fefc8");
 extern float D_L00_001618A8 __attribute__((sda));
-void FUN_L00_002cc210(unsigned char *updated_moby) {
+void update_damped_falling_moby(unsigned char *updated_moby) __asm__("FUN_L00_002cc210");
+
+void update_damped_falling_moby(unsigned char *updated_moby) {
     float *moby_vars = *(float **)(updated_moby + 0x78);
     float sc;
     FUN_001f9a10_2cc210(updated_moby + 0x10, updated_moby + 0x10, moby_vars);
