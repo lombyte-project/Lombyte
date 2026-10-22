@@ -1936,7 +1936,9 @@ extern void draw_moby_oscillating_textured_quads(void) __asm__("FUN_L00_002c31c0
  * normal in vars and pulls the point 5% toward D_L00_00166DC0. mode 0 needs
  * a live hit moby; mode 1 starts from the hero's hand. Returns 1 on a hit.
  */
-s32 FUN_L00_002c3af8(ThrowVars *throw_vars, struct Moby *thrown_moby, s32 mode)
+s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby, s32 mode) __asm__("FUN_L00_002c3af8");
+
+s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby, s32 mode)
 {
     Vec4 predicted_position, predicted_velocity, position_scratch, q, ground_probe_position;
     s32 prediction_countdown;
@@ -2129,9 +2131,9 @@ void decoy_update(char *moby) {
     if (*(short *)(*(char **)(vars + 0x40) + 0xa6) == 0x232 && *(short *)(vars + 0x46) == 0 &&
         FUN_001ff3d8_2c4380(vars + 0x10) > 0.0f) {
         if (hero.ground_moby == 0 || !FUN_L00_002603d0((int)hero.ground_moby))
-            FUN_L00_002c3af8((ThrowVars *)vars, (struct Moby *)moby, 1);
-        else if (!FUN_L00_002c3af8((ThrowVars *)vars, (struct Moby *)moby, 0))
-            FUN_L00_002c3af8((ThrowVars *)vars, (struct Moby *)moby, 2);
+            predict_thrown_moby_landing((ThrowVars *)vars, (struct Moby *)moby, 1);
+        else if (!predict_thrown_moby_landing((ThrowVars *)vars, (struct Moby *)moby, 0))
+            predict_thrown_moby_landing((ThrowVars *)vars, (struct Moby *)moby, 2);
     }
     switch ((u8)moby[0x20]) {
     case DECOY_INITIALIZE:
