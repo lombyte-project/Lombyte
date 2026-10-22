@@ -2257,7 +2257,9 @@ extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
 extern short D_L11_00162064 __attribute__((sda));
 int D_L11_00162068 = 30;
-void FUN_L11_003126f8(struct Moby *moby, char *ship_vars) {
+void try_fire_ship_projectile(struct Moby *moby, char *ship_vars) __asm__("FUN_L11_003126f8");
+
+void try_fire_ship_projectile(struct Moby *moby, char *ship_vars) {
     if (func_001F9908_i(ship_vars + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
         if (hero.ship_ammo != 0) {
             char projectile_spawn_position[16];
@@ -2644,7 +2646,7 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
         help_request(0x2AFC, 0x55);
     }
     enqueue_2838(FUN_L11_00311d50, ship_moby);
-    FUN_L11_003126f8(ship_moby, (char *)ship_vars);
+    try_fire_ship_projectile(ship_moby, (char *)ship_vars);
     FUN_L11_003125a8(ship_moby, (char *)ship_vars, fast_add_rot_2838(ship_vars->f28, -ship_vars->f6C / 7.0f),
                      -fast_add_rot_2838(ship_vars->f24, -(ship_vars->f70 / 7.0f) - 0.1f));
 }
