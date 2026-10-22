@@ -555,7 +555,7 @@ void transport_ship_update(void *moby) {
 }
 
 extern void initialize_leg_rig_angle_defaults(void *, char *) __asm__("FUN_L04_00292370");
-extern void FUN_L04_002923b8(void *, char *);
+extern void initialize_leg_rig(void *, char *) __asm__("FUN_L04_002923b8");
 
 void initialize_woodcut_bot_movement_data(void *moby) __asm__("FUN_L04_002d1418");
 
@@ -610,7 +610,7 @@ void initialize_woodcut_bot_movement_data(void *moby) {
     *(unsigned char *)(moby_vars + 0x303) = 13;
     *(unsigned char *)(moby_vars + 0x302) = 15;
     *(float *)(moby_vars + 0x240) = 0.5f;
-    FUN_L04_002923b8(moby, movement_data);
+    initialize_leg_rig(moby, movement_data);
 }
 #include "sda.h"
 

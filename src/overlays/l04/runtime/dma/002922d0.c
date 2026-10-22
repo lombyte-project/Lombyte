@@ -55,7 +55,9 @@ extern void get_joint_matrix(struct Moby *m, int joint, float *mtx) __asm__("FUN
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void attach_manipulator(struct Moby *m, int slot, LegRigManip *manip) __asm__("FUN_0020cb10");
 
-void FUN_L04_002923b8(struct Moby *moby, LegRig *rig) {
+void initialize_leg_rig(struct Moby *moby, LegRig *rig) __asm__("FUN_L04_002923b8");
+
+void initialize_leg_rig(struct Moby *moby, LegRig *rig) {
     int joints[6];
     float matrix[4][4];
     int i;
