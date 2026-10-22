@@ -1040,7 +1040,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9bf8_4f88(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a68_4f88(float, void *, void *) __asm__("FUN_001f9a68");
 extern void FUN_L00_001ff290(void *, void *, void *);
-extern void FUN_L15_00247e90(float, float, struct Moby *, void *, int);
+extern void move_moby_with_sphere_collision(float, float, struct Moby *, void *, int) __asm__("FUN_L15_00247e90");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
@@ -1106,7 +1106,7 @@ void steer_helicopter(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f8
     FUN_001f9a68_4f88(0.9f, &delta, &vars->delta);
     vars->delta.q = delta.q;
     FUN_L00_001ff290(&delta, &vars->delta, &scaled);
-    FUN_L15_00247e90(1.0f, 2.0f, moby, &vars->delta, 0);
+    move_moby_with_sphere_collision(1.0f, 2.0f, moby, &vars->delta, 0);
     /* Preserve the retail height store and facing input access order. */
     height = *(volatile float *)&vars->height;
     pos_x = *(volatile float *)&moby->pos.x;
