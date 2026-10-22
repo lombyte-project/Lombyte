@@ -938,7 +938,9 @@ extern int D_L18_001622F8 __attribute__((sda));
 extern float D_L18_0016230C __attribute__((sda));
 extern unsigned char D_00141400 __attribute__((section(".data")));
 extern unsigned char D_0013D406 __attribute__((section(".data")));
-void FUN_L18_002f2310(struct Moby *lift_moby) {
+void update_lift_state_and_queue_draw(struct Moby *lift_moby) __asm__("FUN_L18_002f2310");
+
+void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
     enum {
         LIFT_INITIALIZE = 0,
         LIFT_SELECT_INITIAL_HEIGHT = 1,
