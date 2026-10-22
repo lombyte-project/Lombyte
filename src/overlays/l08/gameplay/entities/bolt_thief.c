@@ -48,7 +48,9 @@ int FUN_L08_002e0228(struct Moby *moby) {
 extern int hero_set_state(int, int) __asm__("FUN_L08_00230b38");
 
 /* Sets the moby's byte 0xBC and calls hero_set_state(0x32, 1). */
-void FUN_L08_002e1698(struct Moby *command_target_moby) {
+void request_batalia_cannon_mount(struct Moby *command_target_moby) __asm__("FUN_L08_002e1698");
+
+void request_batalia_cannon_mount(struct Moby *command_target_moby) {
     command_target_moby->command = 1;
     hero_set_state(0x32, 1);
 }

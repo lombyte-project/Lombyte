@@ -408,7 +408,7 @@ extern char D_L08_00162308[];
 extern char *D_L08_001600EC;
 extern unsigned char *D_L08_0015FFD8;
 extern void FUN_L08_003063f0_c(void *) __asm__("FUN_L08_003063f0");
-extern void FUN_L08_002e1698(void *);
+extern void request_batalia_cannon_mount(void *) __asm__("FUN_L08_002e1698");
 extern void FUN_L00_00299460(int);
 extern void FUN_L08_002a1880(int);
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
@@ -447,7 +447,7 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
             char *camera_record = D_L08_001600EC + watch_data->i48 * 128;
             jet_reset_camera(camera_record + 0x30, camera_record + 0x70);
             moby->state = 2;
-            FUN_L08_002e1698(D_L08_0015FFD8 + watch_data->i50 * 256);
+            request_batalia_cannon_mount(D_L08_0015FFD8 + watch_data->i50 * 256);
         }
         if (watch_data->sub == 3) {
             FUN_L08_002a1880(1);
