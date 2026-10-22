@@ -3400,7 +3400,7 @@ int FUN_L00_00257b90(int, int);
 E *FUN_L00_0026d000(V *, int, float, float, V *, float, int, float);
 s16 FUN_001f96f8_c(int) __asm__("FUN_001f96f8");
 void FUN_001f4600_c(void *, P *) __asm__("FUN_001f4600");
-void FUN_L00_002d73e8(P *);
+void draw_smoke_fire_spawner(P *) __asm__("FUN_L00_002d73e8");
 
 void particle_spawner_smoke_fire_update(P *p) __asm__("FUN_L00_002d6f28");
 void particle_spawner_smoke_fire_update(P *spawner) {
@@ -3486,7 +3486,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
                 }
             }
         }
-        FUN_001f4600_c(FUN_L00_002d73e8, spawner);
+        FUN_001f4600_c(draw_smoke_fire_spawner, spawner);
         return;
     }
 }
@@ -3517,7 +3517,7 @@ extern float D_L00_001E1200[][4];
 extern float D_L00_001E13E0[];
 extern float D_L00_001E13E4[];
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
-void FUN_L00_002d73e8(P *spawner) {
+void draw_smoke_fire_spawner(P *spawner) {
     Vec4 position, up;
     Vec4 facing[4], flipped[4];
     struct GeometryQuad quad;
