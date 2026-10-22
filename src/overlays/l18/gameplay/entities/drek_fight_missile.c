@@ -1469,7 +1469,7 @@ extern void update_joint_animation(char *, char *, int, float, float) __asm__("F
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void FUN_L00_00299560(int i);
+extern void queue_movie_with_game_language(int i) __asm__("FUN_L00_00299560");
 extern void FUN_L00_00299a68(void);
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L15_00208ca8(void);
@@ -2539,7 +2539,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             int k = boss_data->f34C;
 
             if (k == 10 && D_L18_0015F5C4 == 0) {
-                FUN_L00_00299560(0xB);
+                queue_movie_with_game_language(0xB);
                 boss_data->f34C = 0xB;
             } else if (k == 0xB && D_L18_0015F5C4 == 0) {
                 *(int *)&D_L18_00162360 = 0;

@@ -819,7 +819,9 @@ void queue_language_zero_movie(s32 i) {
 }
 void FUN_L00_002995d0(s32, s32, s32);
 /* Passes movie i (the alt table while D_0015ED80 is set) and the language to FUN_L00_002995d0. */
-void FUN_L00_00299560(s32 i) {
+void queue_movie_with_game_language(s32 i) __asm__("FUN_L00_00299560");
+
+void queue_movie_with_game_language(s32 i) {
     s32 movie_sector, movie_size;
     if (i < 0)
         return;
