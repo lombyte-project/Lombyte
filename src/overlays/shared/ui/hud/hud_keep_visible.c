@@ -423,7 +423,7 @@ extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN
 extern float scale_game_seconds(float) __asm__("FUN_001f96b0");
 extern void FUN_L00_00216de8(int, int);
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
-extern void FUN_L00_0023bac0(int, int, int, int, int, int);
+extern void draw_rotated_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023bac0");
 extern void FUN_L00_001ff348(void *, void *, void *);
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -481,7 +481,7 @@ int FUN_L00_002365a8(HudElem *element) {
     image = get_icon_frame(*(int *)element, current);
     sixteen = 16.0f;
     thirty_two = 32.0f;
-    FUN_L00_0023bac0(image, x + element->unk48, y + element->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
+    draw_rotated_hud_sprite(image, x + element->unk48, y + element->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
 
     {
         float center_x, center_y, half_w, half_h;
@@ -563,7 +563,7 @@ extern int D_L00_0015F764 __attribute__((sda));
 extern float D_L00_0015F768 __attribute__((sda));
 extern float D_L00_0015F76C __attribute__((sda));
 extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
-extern void FUN_L00_0023bac0(int, int, int, int, int, int);
+extern void draw_rotated_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023bac0");
 extern void FUN_L00_001ff348(void *, void *, void *);
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -584,7 +584,7 @@ int FUN_L00_00236e50(HudElem *hud_element) {
     hud_screen_position(hud_element, &x, &y);
     FUN_L00_00235ad8(hud_element, &x, &y, hud_element->unk6C, 0);
     image = get_icon_frame(*(int *)hud_element, 0);
-    FUN_L00_0023bac0(image, x + hud_element->unk48, y + hud_element->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
+    draw_rotated_hud_sprite(image, x + hud_element->unk48, y + hud_element->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
     {
         float center_x, center_y, half_w, half_h;
         half_w = (D_L00_0015F760 * D_L00_0015F768 * 0.5f) / 17.0f;

@@ -108,7 +108,9 @@ extern char *D_L00_001611C0_23bac0 __asm__("D_L00_001611C0");
 extern int D_0013E500_23bac0[] __asm__("D_0013E500");
 extern G_23bac0 D_L00_0017E4D8_23bac0 __asm__("D_L00_0017E4D8") __attribute__((section(".data")));
 extern u64_23bac0 FUN_001ffa10_23bac0(int) __asm__("FUN_001ffa10");
-void FUN_L00_0023bac0(int id, int x, int y, int draw_width, int draw_height, int alpha) {
+void draw_rotated_hud_sprite(int id, int x, int y, int draw_width, int draw_height, int alpha) __asm__("FUN_L00_0023bac0");
+
+void draw_rotated_hud_sprite(int id, int x, int y, int draw_width, int draw_height, int alpha) {
     u64_23bac0 *packet_words;
     int *coordinate_offsets;
     G_23bac0 *g = &D_L00_0017E4D8_23bac0;

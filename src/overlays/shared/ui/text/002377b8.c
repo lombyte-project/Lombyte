@@ -54,7 +54,7 @@ extern s32 find_valid_animation_frame_index_alt(s32, s32) __asm__("func_001FF960
 extern int D_L00_0015F760 __attribute__((sda));
 extern int D_L00_0015F764 __attribute__((sda));
 extern void FUN_L00_00235ad8_c(HudElem_237840 *, int *, int *, int, int) __asm__("FUN_L00_00235ad8");
-extern void FUN_L00_0023bac0(int, int, int, int, int, int);
+extern void draw_rotated_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023bac0");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 int FUN_L00_00235a70_c2(HudElem_237840 *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
 
@@ -106,7 +106,7 @@ int FUN_L00_00237840(HudElem_237840 *e) {
         append_screen_rect_packet(left, top, right, top + 32, 0x80000000, 1);
     } while (i < e->unk74);
     w = find_valid_animation_frame_index_alt(*(int *)e, 0);
-    FUN_L00_0023bac0(w, pos[0] + e->unk48, pos[1] + e->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
+    draw_rotated_hud_sprite(w, pos[0] + e->unk48, pos[1] + e->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
     return e->w;
 }
 typedef struct {
