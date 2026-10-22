@@ -796,7 +796,9 @@ extern void FUN_L00_00250df8(void *);
 extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-void FUN_L18_002fa728(char *moby) {
+void update_moby_transform_and_child(char *moby) __asm__("FUN_L18_002fa728");
+
+void update_moby_transform_and_child(char *moby) {
     enum {
         INITIALIZE_TRANSFORM_HISTORY = 0,
         UPDATE_TRANSFORM_FROM_HISTORY = 1
