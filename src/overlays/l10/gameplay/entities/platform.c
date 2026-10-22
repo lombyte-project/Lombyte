@@ -1977,7 +1977,9 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
 
 extern float D_L10_00161C98 __attribute__((sda));
-void FUN_L10_002da2c8(struct Moby *moby) {
+void update_data_processor_linked_effect(struct Moby *moby) __asm__("FUN_L10_002da2c8");
+
+void update_data_processor_linked_effect(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_ACTIVE_WITH_SOUND = 1,
