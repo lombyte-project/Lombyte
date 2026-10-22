@@ -2239,7 +2239,9 @@ extern int taxi_inside(void *, int) __asm__("FUN_00214720");
 extern int taxi_sound(int, int, void *) __asm__("FUN_0022da68");
 void FUN_L14_002f1040(struct Moby *moby);
 void FUN_L14_002f1140(struct Moby *moby);
-struct Moby *FUN_L14_002f12f0(struct Moby *moby, int tag);
+struct Moby *find_group_moby_by_tag(struct Moby *moby, int tag) __asm__("FUN_L14_002f12f0");
+
+struct Moby *find_group_moby_by_tag(struct Moby *moby, int tag) __asm__("FUN_L14_002f12f0");
 void FUN_L14_002f13f8(struct Moby *moby);
 
 extern void taxi_sample_f(s32 *, int, void *, void *, int, float) __asm__("FUN_00214e58");
@@ -2284,7 +2286,7 @@ void taxi_update(struct Moby *moby) {
                 if ((*(int *)D_0013CAE4 & button) && D_L14_0015F594 == 4) {
                     struct Moby *m;
                     moby->state = 3;
-                    m = FUN_L14_002f12f0(moby, taxi_vars->target);
+                    m = find_group_moby_by_tag(moby, taxi_vars->target);
                     if (m != 0) {
                         m->state = 2;
                         m->flags |= 1;
@@ -2428,7 +2430,7 @@ void taxi_update(struct Moby *moby) {
                     qcopy(taxi_vars->pos, taxi_vars->save_pos);
                     qcopy(taxi_vars->rot, taxi_vars->save_rot);
                     {
-                        struct Moby *m = FUN_L14_002f12f0(moby, taxi_vars->target);
+                        struct Moby *m = find_group_moby_by_tag(moby, taxi_vars->target);
                         if (m != 0) {
                             m->state = 2;
                             m->flags |= 1;
@@ -2563,7 +2565,7 @@ extern s32 D_L14_0015FFF4;
 extern u16 *D_L14_001ABF40[];
 extern struct Moby *D_L14_0015FFD8_12f0 __asm__("D_L14_0015FFD8");
 
-struct Moby *FUN_L14_002f12f0(struct Moby *moby, int tag) {
+struct Moby *find_group_moby_by_tag(struct Moby *moby, int tag) {
     u16 *group_entry_cursor;
     struct Moby *pool;
     int group_moby_index;
