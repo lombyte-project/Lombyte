@@ -516,7 +516,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern struct Path5BD0 *D_L04_001B0630[];
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *,
                               float *);
-extern void *FUN_L04_002ce080(void *, void *);
+extern void *spawn_moby_attachment(void *, void *) __asm__("FUN_L04_002ce080");
 extern void *spawn_class_23a_moby(void *, void *) __asm__("FUN_L04_002d34d8");
 extern void *random_integer_below_cf(void *, int, unsigned int) __asm__("FUN_001153fc");
 extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
@@ -2308,7 +2308,7 @@ extern int rand(void);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern struct Path5BD0 *D_L04_001B0630[];
-extern void *FUN_L04_002ce080(void *, void *);
+extern void *spawn_moby_attachment(void *, void *) __asm__("FUN_L04_002ce080");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
@@ -2944,7 +2944,7 @@ void blarg_trooper_update(struct Moby *moby) {
         *(unsigned short *)(*(char **)(data + 0xF8) + 0x34) |= 6;
     } else {
         moby_point_position(moby, 1, st.w.m);
-        *(char **)(data + 0xF8) = FUN_L04_002ce080(moby, st.w.m);
+        *(char **)(data + 0xF8) = spawn_moby_attachment(moby, st.w.m);
     }
     *(float *)(data + 0xD0) = *(float *)(data + 0xD0) + frame_time_sq * 9.8f;
     moby->pos.z = moby->pos.z - (*(float *)(data + 0xD0) - 2.0f);

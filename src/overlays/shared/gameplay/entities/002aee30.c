@@ -271,7 +271,9 @@ void FUN_L04_002af058(struct Moby *moby)
 extern void FUN_L00_00250df8(void *);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-void *FUN_L04_002ce080(char *source_moby, char *spawn_position) {
+void *spawn_moby_attachment(char *source_moby, char *spawn_position) __asm__("FUN_L04_002ce080");
+
+void *spawn_moby_attachment(char *source_moby, char *spawn_position) {
     char position_copy[16];
     char *position_copy_ptr = position_copy;
     char *spawned_moby;

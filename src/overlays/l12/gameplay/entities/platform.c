@@ -2296,7 +2296,7 @@ void FUN_L12_002e86d0(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9AA0), where it is exact; names translated to the US level program. */
 
-extern void *FUN_L04_002ce080(void *, void *);
+extern void *spawn_moby_attachment(void *, void *) __asm__("FUN_L04_002ce080");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L12_0027b9c0(void *, void *, int);
 
@@ -2315,7 +2315,7 @@ void FUN_L12_002e8720(struct Moby *moby) {
     } else {
         char vector[16];
         moby_point_position(moby, 1, vector);
-        *(void **)(data + 0x248) = FUN_L04_002ce080(moby, vector);
+        *(void **)(data + 0x248) = spawn_moby_attachment(moby, vector);
     }
 }
 /* Initialize two vendor vectors using the global scale. */
