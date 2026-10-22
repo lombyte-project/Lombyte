@@ -1722,7 +1722,9 @@ extern char D_L13_001f4980[];
 extern char D_L13_001f49a8[];
 #include "rnc/audio/voice_pool.h"
 
-void FUN_L13_002cecb8(struct Moby *moby, unsigned char *moby_data, float *health) {
+void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data, float *health) __asm__("FUN_L13_002cecb8");
+
+void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data, float *health) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
@@ -1894,7 +1896,7 @@ voice_done:
             spawn_particle(position, red, green, blue, scale,
                                       scale_game_frames(FUN_001160d8() % 40 + 40), 0.0f);
         }
-        FUN_L13_002cecb8(moby, (unsigned char *)data, (float *)((char *)data + 0x20));
+        process_forcefield_tower_damage(moby, (unsigned char *)data, (float *)((char *)data + 0x20));
         return;
     }
     case TOWER_STATE_DESTRUCTION: {
