@@ -133,7 +133,9 @@ extern void allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022d
 extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 extern void select_moby_context(s32) __asm__("FUN_L00_00235668");
 extern void FUN_L00_00276368(void);
-extern void FUN_L00_00276908(void);
+void close_pause_menu(void) __asm__("FUN_L00_00276908");
+
+extern void close_pause_menu(void) __asm__("FUN_L00_00276908");
 extern void process_unlock_code_input(void) __asm__("FUN_L00_002831c0");
 extern void prepare_target_level_transition(s32) __asm__("FUN_L00_0028ed58");
 extern void start_scene(void *) __asm__("FUN_L00_00298840");
@@ -353,7 +355,7 @@ void FUN_L00_00276368(void) {
 
 /* Closes the scene once its progress reaches 10: releases its objects, restores the hero's
    items and HUD bank, deletes the 14 scene mobies, shows the health and bolt HUD, enters state 0x14. */
-void FUN_L00_00276908(void) {
+void close_pause_menu(void) {
     s32 i;
     s32 value;
     s32 handle;
@@ -632,7 +634,7 @@ L2:
     update_visible_resident_objects();
     sound_update();
     if (D_L00_001B9CF0.unkC != 0) {
-        FUN_L00_00276908();
+        close_pause_menu();
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_002781D8). */
