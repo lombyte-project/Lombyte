@@ -128,7 +128,7 @@ extern void initialize_eight_slot_hud_selector(void) __asm__("FUN_L00_00237ae8")
 extern void FUN_L00_00237ba0(void);
 extern void FUN_L00_002382a0(void);
 extern void initialize_four_slot_hud_selector(void) __asm__("FUN_L00_00238b18");
-extern void FUN_L00_00238b80(void);
+extern void update_hud_radial_selector_selection_and_visibility(void) __asm__("FUN_L00_00238b80");
 extern void FUN_L00_00238f88(void);
 extern void FUN_L00_00239cc8(void);
 extern void FUN_L00_00239d00(void);
@@ -209,7 +209,7 @@ void FUN_L17_002258a8(void) {
                         hud_keep_visible(id, scale_game_frames(0xB4));
                     } break;
                     case 1:
-                        queue_animation_update(3, 0, (int)initialize_four_slot_hud_selector, (int)FUN_L00_00238b80,
+                        queue_animation_update(3, 0, (int)initialize_four_slot_hud_selector, (int)update_hud_radial_selector_selection_and_visibility,
                                                (int)FUN_L00_00238f88, 0, 0);
                         break;
                     }

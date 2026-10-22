@@ -548,7 +548,9 @@ void initialize_four_slot_hud_selector(char *hud_element) {
     D_L00_0015F72C = 0;
 }
 
-void FUN_L00_00238b80(Obj *hud_element) {
+void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) __asm__("FUN_L00_00238b80");
+
+void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) {
     float x, y, input_magnitude, selection_angle;
     int old, pad_slot_index, slot_count, next_slot_index;
     u8 *counters = &hud_element->b70;
