@@ -514,7 +514,9 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern void transform_vector_by_basis(void *, void *, void *);
 extern s32 D_0013CB14[];
 
-void FUN_L01_002370b8(void) {
+void update_hero_motion_for_current_state(void) __asm__("FUN_L01_002370b8");
+
+void update_hero_motion_for_current_state(void) {
     FVec4 vec[6];
     Moby *moby;
     int prevState;
