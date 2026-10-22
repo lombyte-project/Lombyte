@@ -233,7 +233,7 @@ extern void cart_burst(ElectroidMoby *, void *, s32, f32, f32) __asm__("FUN_L00_
 extern void FUN_L00_00263e30(ElectroidMoby *, s32, s32, s32, s32, s32, s32);
 extern void FUN_L00_00263fd8(ElectroidMoby *, s32, void *, void *, s32, s32, f32, void *, void *,
                              void *);
-extern void FUN_L00_002e1aa8();
+extern void update_veldin_robot_effects() __asm__("FUN_L00_002e1aa8");
 
 #define ELECTROID_TURN(m, v, ang, k)                                                               \
     approach_angle(&(m)->unk40.f[2], ang, &(v)->turnVel, frame_time_sq *(k), frame_time_sq *(k),       \
@@ -452,7 +452,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         }
         break;
     }
-    FUN_L00_002e1aa8(moby);
+    update_veldin_robot_effects(moby);
 }
 #include "eetypes.h"
 #include "qcopy.h"
@@ -616,7 +616,7 @@ extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void draw_veldin_robot_effect_quad() __asm__("FUN_L00_002e1c78");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
-void FUN_L00_002e1aa8(SparkMoby *moby) {
+void update_veldin_robot_effects(SparkMoby *moby) {
     SparkVars *vars;
     SparkPart *particle;
     SparkTail *particle_tail;
