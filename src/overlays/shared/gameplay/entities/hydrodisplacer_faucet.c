@@ -470,8 +470,10 @@ extern void FUN_L05_0030c220(struct Moby *m);
 void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
-void FUN_L05_0030c0a8(unsigned char *m);
-void FUN_L05_0030c0a8(unsigned char *moby) {
+void update_moby_wobble(unsigned char *moby) __asm__("FUN_L05_0030c0a8");
+
+void update_moby_wobble(unsigned char *m) __asm__("FUN_L05_0030c0a8");
+void update_moby_wobble(unsigned char *moby) {
     enum {
         MOBY_WOBBLE_STATE_INITIALIZE = 0,
         MOBY_WOBBLE_STATE_ANIMATE = 1
