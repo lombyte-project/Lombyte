@@ -1569,7 +1569,7 @@ extern void pool_ripple(float, float, float, float, void *, int) __asm__("FUN_L0
 extern void pool_splash(float, float, float, float, void *, int, int) __asm__("FUN_L00_002a3ec8");
 extern int FUN_L01_00275690(float, void *);
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
-extern void FUN_L13_0030a460(void);
+extern void render_level13_water_grids(void) __asm__("FUN_L13_0030a460");
 void initialize_gemlik_pool_tile_neighbors(int tile_index) __asm__("FUN_L13_0030a488");
 
 extern void initialize_gemlik_pool_tile_neighbors(int) __asm__("FUN_L13_0030a488");
@@ -1684,7 +1684,7 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
             Tiles_9e88[bobbing_platform_vars->idx].c1E = D_L13_001F1E20[bobbing_platform_vars->idx];
         if (bobbing_platform_vars->idx == 0) {
             pool_flush(Tiles_9e88, 22);
-            enqueue_callback_list_1(FUN_L13_0030a460, moby);
+            enqueue_callback_list_1(render_level13_water_grids, moby);
         }
         if (bobbing_platform_vars->idx == D_L13_00161EF0) {
             Tiles_9e88[bobbing_platform_vars->idx].c1E = D_L13_00161EF4;
