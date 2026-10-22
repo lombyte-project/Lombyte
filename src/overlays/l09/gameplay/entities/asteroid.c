@@ -1520,7 +1520,9 @@ void FUN_L09_002ef9b0(struct Moby *moby) {
 }
 extern char *create_moby_c(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L09_002efda8(struct Moby *owner, void *position, float angle) {
+char *spawn_class_144_moby(struct Moby *owner, void *position, float angle) __asm__("FUN_L09_002efda8");
+
+char *spawn_class_144_moby(struct Moby *owner, void *position, float angle) {
     u128_ee380 position_copy;
     void *copy = &position_copy;
     char *moby;

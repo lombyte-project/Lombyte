@@ -936,7 +936,7 @@ extern f32 D_L09_00161CB4 __attribute__((sda));
 extern f32 D_L09_00161CC0[2] __attribute__((sda)); /* a vector; declared small so Ps2EeAs reaches it through $gp */
 extern TurretShake D_L09_00166E00;
 extern TurretBeam D_L09_00180440[];
-extern void FUN_L09_002efda8(struct Moby *, Vec4 *);
+extern void spawn_class_144_moby(struct Moby *, Vec4 *) __asm__("FUN_L09_002efda8");
 extern struct Moby *FUN_L09_00307ba8(void *, void *, void *, int);
 extern void FUN_L08_00313ba8(void);
 extern int FUN_L00_0023e738(void *, float, float, float, float, float);
@@ -1036,7 +1036,7 @@ void turret_update(struct Moby *moby) {
     case TURRET_STATE_INITIALIZE:
         attach_manipulator(moby, 0, vars);
         work_vector.q = *(u128 *)&moby->pos;
-        FUN_L09_002efda8(moby, &work_vector);
+        spawn_class_144_moby(moby, &work_vector);
         moby->state = 4;
         vars->rest_z = moby->pos.z;
         vars->pitch = 0.0f;
