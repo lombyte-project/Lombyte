@@ -140,7 +140,7 @@ extern void play_entity_sound(int, float, void *, int, float, float, int, int, i
 extern void FUN_L00_0025f730(void *a, float x);
 extern void request_hero_voice_if_enabled(int a0, int a1, int a2) __asm__("FUN_L01_00227e48");
 extern void FUN_L01_00242198(void);
-extern void FUN_L15_0021ab60(void);
+extern void set_hero_state_for_vehicle_mode(void) __asm__("FUN_L15_0021ab60");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
@@ -666,7 +666,7 @@ void FUN_L18_0022e8f8(void) {
                         }
                     }
                     if (hero.vehicle_mode != 0) {
-                        FUN_L15_0021ab60();
+                        set_hero_state_for_vehicle_mode();
                         break;
                     }
                     if (controller_state.held & 0xA) {
