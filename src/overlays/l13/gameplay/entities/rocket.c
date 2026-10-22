@@ -1780,7 +1780,9 @@ extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0")
 extern void FUN_L00_002eac18(int);
 extern void FUN_L13_0030ad38(struct Moby *, float *, float *);
 
-void FUN_L13_0030a6d8(struct Moby *moby) {
+void update_lift(struct Moby *moby) __asm__("FUN_L13_0030a6d8");
+
+void update_lift(struct Moby *moby) {
     enum {
         LIFT_INITIALIZE = 0,
         LIFT_BLEND_TO_MOUNT_TRANSFORM = 1,
