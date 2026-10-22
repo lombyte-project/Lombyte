@@ -489,7 +489,7 @@ extern void FUN_L00_0025e3b8_cf(float *, float, float, float) __asm__("FUN_L00_0
 extern void FUN_L00_0025f730(void *, float);
 extern void initialize_moby_transform_history(int, void *) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(void *, int, int) __asm__("FUN_L00_00262528");
-extern void FUN_L00_00262608(void *, int);
+extern void update_moby_transform_history(void *, int) __asm__("FUN_L00_00262608");
 extern void FUN_L00_0026f080_cf(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_002a3ec8_cf(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void FUN_L01_0022d090(void);
@@ -1476,7 +1476,7 @@ void FUN_L01_002370b8(void) {
         if (!(hero.state_timer > t1)) {
             n = 0;
         }
-        FUN_L00_00262608(&hero.trail, n);
+        update_moby_transform_history(&hero.trail, n);
         if (hero.state_timer > t0) {
             speed_step(frame_time_sq * 190.0f, frame_time_sq * 90.0f);
         }
@@ -2040,7 +2040,7 @@ void FUN_L01_002370b8(void) {
             int late;
 
             late = hero.state_timer > scale_game_frames(0xC);
-            FUN_L00_00262608(&hero.trail, late * 2);
+            update_moby_transform_history(&hero.trail, late * 2);
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP && hero.state_timer > scale_game_frames(8)) {
             if (hero.anim_frame < 28.0f) {

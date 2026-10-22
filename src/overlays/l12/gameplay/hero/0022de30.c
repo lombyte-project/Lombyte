@@ -635,7 +635,7 @@ extern f32 D_L12_X_f[] __asm__("D_L12_0017C238");
 extern void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8");
 extern void initialize_moby_transform_history(void *, void *) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(void *, s32, s32) __asm__("FUN_L00_00262528");
-extern void FUN_L00_00262608(void *, s32);
+extern void update_moby_transform_history(void *, s32) __asm__("FUN_L00_00262608");
 extern void FUN_L00_00217368(void *, s32);
 extern void FUN_L00_00217658(void);
 extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
@@ -1778,7 +1778,7 @@ void FUN_L12_00238900(void) {
             create_moby_transform_history_entry(&hero.trail.pos[0], 0x17, 4);
             create_moby_transform_history_entry(&hero.trail.pos[0], 0xC, 6);
         }
-        FUN_L00_00262608(&hero.trail.pos[0], t2 < hero.state_timer ? 5 : 0);
+        update_moby_transform_history(&hero.trail.pos[0], t2 < hero.state_timer ? 5 : 0);
         if (hero.unk12E2 != 0) {
             if (t1 < hero.state_timer && hero.state_timer < t1 + scale_game_frames(7) && hero.motion.unk168 < frame_time * 8.5f) {
                 hero.motion.velocity.f[0] += fast_cos(hero.motion.rot.f[2]) * (frame_time * 1.2f);
@@ -2358,7 +2358,7 @@ void FUN_L12_00238900(void) {
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP || hero.state.current == 0xD) {
             state_timer_or_trail_control = (scale_game_frames(12) < hero.state_timer) * 2;
-            FUN_L00_00262608(&hero.trail.pos[0], state_timer_or_trail_control);
+            update_moby_transform_history(&hero.trail.pos[0], state_timer_or_trail_control);
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP && scale_game_frames(8) < hero.state_timer && hero.anim_frame < 28.0f) {
             s32 n;

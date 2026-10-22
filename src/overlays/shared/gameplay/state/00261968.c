@@ -466,7 +466,9 @@ void FUN_L00_00262840_262608(S_262608 *) __asm__("FUN_L00_00262840");
 void FUN_0020c880_262608(void *) __asm__("FUN_0020c880");
 void FUN_L00_00250df8_262608(void *) __asm__("FUN_L00_00250df8");
 
-void FUN_L00_00262608(S_262608 *history_state, int dec) {
+void update_moby_transform_history(S_262608 *history_state, int dec) __asm__("FUN_L00_00262608");
+
+void update_moby_transform_history(S_262608 *history_state, int dec) {
     unsigned char *src;
     unsigned char *destination;
     int history_write_index, i, k, done;

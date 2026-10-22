@@ -1864,7 +1864,7 @@ extern void make_hit_descriptor(void*,void*,int,float,void*) __asm__("FUN_L00_00
 extern void spawn_nearby_effect(void*,int,int,void*,void*,float) __asm__("FUN_L00_00259bc8");
 extern void FUN_L00_0025b6b8(void*,void*,void*,float);
 extern void compose_target_euler_rotation(char*,float,float,float) __asm__("FUN_L00_00262480");
-extern void FUN_L00_00262608(void*,int);
+extern void update_moby_transform_history(void*,int) __asm__("FUN_L00_00262608");
 extern void FUN_L00_00262840(char*);
 extern void FUN_L00_002a7780_cb(void) __asm__("FUN_L00_002a7780");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2065,7 +2065,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
         {
         char *control=((char *)&D_00140B00);
         WrenchHero *control_player=(WrenchHero*)(control-0x17B0);
-        FUN_L00_00262608(control,0);
+        update_moby_transform_history(control,0);
         wrench_moby->parent=control_player->moby; control_player->wrench_state=2;
         if (wrench_moby->state==10 && control_player->thrown_sound==-1) control_player->thrown_sound=allocate_voice_for_target_entry_alt(14,4,(int)control_player->moby);
         }

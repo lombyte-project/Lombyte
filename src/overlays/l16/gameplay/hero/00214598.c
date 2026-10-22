@@ -308,7 +308,7 @@ extern f32 D_L16_0017C224[] __asm__("D_L16_0017C218+12");
 extern void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8");
 extern void initialize_moby_transform_history(void *, void *) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(void *, s32, s32) __asm__("FUN_L00_00262528");
-extern void FUN_L00_00262608(void *, s32);
+extern void update_moby_transform_history(void *, s32) __asm__("FUN_L00_00262608");
 extern void FUN_L00_00217368(void *, s32);
 extern void FUN_L00_00217658(void);
 extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
@@ -1039,7 +1039,7 @@ void FUN_L16_00214598(void) {
             }
         }
         c = hero.unk884 == 0 || hero.unk868 == frame_time * 11.0f;
-        FUN_L00_00262608(&hero.trail.pos[0], c);
+        update_moby_transform_history(&hero.trail.pos[0], c);
         if ((struct MobyView *)hero.unk86C != NULL) {
             if (hero.unk884 != 0) {
                 FUN_L00_00216e48(7, (struct MobyView *)hero.unk86C, 2);
@@ -1799,7 +1799,7 @@ void FUN_L16_00214598(void) {
             create_moby_transform_history_entry(&hero.trail.pos[0], 0x17, 4);
             create_moby_transform_history_entry(&hero.trail.pos[0], 0xC, 6);
         }
-        FUN_L00_00262608(&hero.trail.pos[0], t2 < hero.state_timer ? 5 : 0);
+        update_moby_transform_history(&hero.trail.pos[0], t2 < hero.state_timer ? 5 : 0);
         if (t1 < hero.state_timer) {
             speed_step(frame_time_sq * 190.0f, frame_time_sq * 90.0f);
         }
@@ -2668,7 +2668,7 @@ void FUN_L16_00214598(void) {
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP || hero.state.current == 0xD) {
             jump_frame_or_trail_mode = (scale_game_frames(12) < hero.state_timer) * 2;
-            FUN_L00_00262608(&hero.trail.pos[0], jump_frame_or_trail_mode);
+            update_moby_transform_history(&hero.trail.pos[0], jump_frame_or_trail_mode);
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP && scale_game_frames(8) < hero.state_timer && hero.anim_frame < 28.0f) {
             s32 n;
