@@ -187,7 +187,9 @@ extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f460
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 extern float D_L18_00161CA0 __attribute__((sda));
-void FUN_L18_002dc260(struct Moby *moby) {
+void update_class_274_ring_effect(struct Moby *moby) __asm__("FUN_L18_002dc260");
+
+void update_class_274_ring_effect(struct Moby *moby) {
     char hit_descriptor[0x30];
     float hit_direction_vector[4];
     float *moby_vars = (float *)moby->pvars;
