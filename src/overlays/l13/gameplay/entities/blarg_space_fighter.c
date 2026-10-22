@@ -889,7 +889,9 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 void FUN_L13_002c3988_c(char *moby, char *d, float p2, float p3) __asm__("FUN_L13_002c3988");
 
-int FUN_L13_002c3c88(struct Moby *moby, char *moby_data, int aim) {
+int advance_blarg_space_fighter_along_path(struct Moby *moby, char *moby_data, int aim) __asm__("FUN_L13_002c3c88");
+
+int advance_blarg_space_fighter_along_path(struct Moby *moby, char *moby_data, int aim) {
     char *path = D_L13_001B07B0[*(int *)(moby_data + 0xA0)];
     float distance_from_previous_node, seg, segment_distance_shortfall, steering_blend_factor;
     int wrapped = 0;
@@ -1078,7 +1080,7 @@ int FUN_L13_002c3fc0(struct Moby *moby, char *vars, int aim) {
         *(float *)(vars + 0xCC) = maximum;
     }
 update_path:
-    result = FUN_L13_002c3c88(moby, vars, aim);
+    result = advance_blarg_space_fighter_along_path(moby, vars, aim);
 done:
     return result;
 }
