@@ -538,7 +538,9 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 void FUN_L11_00317678(struct Moby *);
 void FUN_L11_00317820(struct Moby *);
 void FUN_L11_00317c98(struct Moby *);
-void FUN_L11_003180a0(struct Moby *, int);
+void distribute_group_class_527_mobys_along_path(struct Moby *moby, int table_index) __asm__("FUN_L11_003180a0");
+
+void distribute_group_class_527_mobys_along_path(struct Moby *, int) __asm__("FUN_L11_003180a0");
 
 /* Chain head update: spawns the eight 0x4F1 links, waits for D_001413D4 to reach 0x32, then moves along its path and runs the link helpers. */
 void oil_tanker_front_update(struct Moby *moby) __asm__("FUN_L11_003172c0");
@@ -554,7 +556,7 @@ void oil_tanker_front_update(struct Moby *moby) {
     case OIL_TANKER_INITIALIZE: {
         int i;
 
-        FUN_L11_003180a0(moby, chain_vars->path_index);
+        distribute_group_class_527_mobys_along_path(moby, chain_vars->path_index);
         if (visited52[moby->mission + current_level_index * 0x10] == 0xFF) {
             mark_moby_for_removal(moby);
             break;
@@ -853,7 +855,7 @@ extern char D_L11_001B0EB0[];
 
 /* Spreads the 0x527 chain mobys of a D_L11_001AC240 group evenly along path table_index: each gets a start point and its path index. */
 /* idx is shared by both loops (one multi-block pseudo), which gives the second loop retail's register choice. */
-void FUN_L11_003180a0(struct Moby *moby, int table_index) {
+void distribute_group_class_527_mobys_along_path(struct Moby *moby, int table_index) {
     short group = ((struct L11ChainVars *)moby->pvars)->group;
     u16 *list = (u16 *)D_L11_001AC240[group];
     short count = 0;
