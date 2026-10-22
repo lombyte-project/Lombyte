@@ -745,7 +745,9 @@ extern void FUN_L00_002e2250(s32, s32);
 extern void FUN_L00_002e2af0();
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
-void FUN_L00_002e1df0(SlotMoby *slot_controller) {
+void update_beam_slot_controller(SlotMoby *slot_controller) __asm__("FUN_L00_002e1df0");
+
+void update_beam_slot_controller(SlotMoby *slot_controller) {
     enum {
         SLOT_CONTROLLER_STATE_INITIALIZE = 0,
         SLOT_CONTROLLER_STATE_PROCESS_SLOTS = 1
