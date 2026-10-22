@@ -1594,9 +1594,9 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     V4_35F0 dest;
     int flag = 0;
     float rot = moby->rot;
-    int tgt;
+    int target_moby;
     float hd;
-    float dist;
+    float target_distance;
     float ta;
 
     if (data->f38 != 0 || data->f136 != 0) {
@@ -1610,9 +1610,9 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         }
     }
     FUN_L00_0025fcb8((char *)moby, (float *)&tg, flag ? data->f140 * 2.0f : data->f140);
-    tgt = tg.f40;
+    target_moby = tg.f40;
     hd = compute_interpolated_record_value(moby);
-    dist = vector_distance(moby->pos, (float *)&tg);
+    target_distance = vector_distance(moby->pos, (float *)&tg);
     qcopy(prev, moby->pos);
     qcopy(dest, moby->pos);
     moby->f30 = 0x20;
@@ -1720,7 +1720,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 normalize_vector_xyz(melee_hit_parameters.v, melee_hit_parameters.v, frame_time * 10.0f);
                 melee_hit_parameters.f20 = 1;
                 collect_mobies_in_sphere(jp, 0x10, moby, &melee_hit_parameters, 0.5f);
-                if (D_L04_00173FC0.f18 == tgt) {
+                if (D_L04_00173FC0.f18 == target_moby) {
                     data->f146 =
                         data->f146 < scale_game_frames(0x3C) ? data->f146 : scale_game_frames(0x3C);
                 }
@@ -1791,7 +1791,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             if (moby->f52 != 0 && (moby->f70 & 2)) {
                 blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(5));
             }
-            if (flag ? dist < data->f140 * 2.0f : dist < data->f140) {
+            if (flag ? target_distance < data->f140 * 2.0f : target_distance < data->f140) {
                 if (flag || data->f138 == -1 ||
                     point_in_path_xy(&tg, D_L04_001B0930_2C35F0[data->f138]->pts,
                                      D_L04_001B0930_2C35F0[data->f138]->count) != 0) {
@@ -1802,11 +1802,11 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                         data->f146 = scale_game_frames(0x3C);
                     }
                     ta = fast_arc_tan(tg.pos[0] - moby->pos[0], tg.pos[1] - moby->pos[1]);
-                    if (dist < 2.0f && data->f146 == 0 && FUN_L04_002c1e98((char *)moby) != 0) {
+                    if (target_distance < 2.0f && data->f146 == 0 && FUN_L04_002c1e98((char *)moby) != 0) {
                         blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
                         data->f146 = scale_game_frames(0x3C);
                         moby->state = 7;
-                    } else if (flag ? dist < data->f140 * 2.0f : dist < data->f140) {
+                    } else if (flag ? target_distance < data->f140 * 2.0f : target_distance < data->f140) {
                         if (data->f146 == 0) {
                             blend_moby_animation(moby, (void *)1, 0, (void *)scale_game_frames(10));
                             data->f14C = 0;
@@ -1828,12 +1828,12 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         }
         break;
     case CIRCULAR_SAW_STATE_CHASE_TARGET:
-        if ((flag ? dist < data->f140 * 2.0f : dist < data->f140) &&
+        if ((flag ? target_distance < data->f140 * 2.0f : target_distance < data->f140) &&
             (flag || data->f138 == -1 ||
              point_in_path_xy(&tg, D_L04_001B0930_2C35F0[data->f138]->pts,
                               D_L04_001B0930_2C35F0[data->f138]->count) != 0)) {
             rot = FUN_L04_002c1fb8_u(moby, dest, flag ? data->f140 * 2.0f : data->f140);
-            if (dist < 2.0f && data->f146 == 0 && FUN_L04_002c1e98((char *)moby) != 0) {
+            if (target_distance < 2.0f && data->f146 == 0 && FUN_L04_002c1e98((char *)moby) != 0) {
                 blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
                 data->f146 = scale_game_frames(0x3C);
                 moby->state = 7;
@@ -1853,7 +1853,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         int i;
         float *vel;
 
-        if (flag ? dist < data->f140 * 2.0f : dist < data->f140) {
+        if (flag ? target_distance < data->f140 * 2.0f : target_distance < data->f140) {
             if (flag || data->f138 == -1 ||
                 point_in_path_xy(&tg, D_L04_001B0930_2C35F0[data->f138]->pts,
                                  D_L04_001B0930_2C35F0[data->f138]->count) != 0) {
@@ -1864,11 +1864,11 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                     data->f146 = scale_game_frames(0x3C);
                 }
                 ta = fast_arc_tan(tg.pos[0] - moby->pos[0], tg.pos[1] - moby->pos[1]);
-                if (dist < 2.0f && data->f146 == 0 && FUN_L04_002c1e98((char *)moby) != 0) {
+                if (target_distance < 2.0f && data->f146 == 0 && FUN_L04_002c1e98((char *)moby) != 0) {
                     blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
                     data->f146 = scale_game_frames(0x3C);
                     moby->state = 7;
-                } else if (flag ? dist < data->f140 * 2.0f : dist < data->f140) {
+                } else if (flag ? target_distance < data->f140 * 2.0f : target_distance < data->f140) {
                     if (data->f146 == 0) {
                         blend_moby_animation(moby, (void *)1, 0, (void *)scale_game_frames(10));
                         data->f14C = 0;
@@ -1909,7 +1909,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     case CIRCULAR_SAW_STATE_POINT_ATTACK: {
         P_35F0 *path = D_L04_001B0930_2C35F0[data->f150];
 
-        if (flag ? dist < data->f140 * 2.0f : dist < data->f140) {
+        if (flag ? target_distance < data->f140 * 2.0f : target_distance < data->f140) {
             if (flag || data->f138 == -1 ||
                 point_in_path_xy(&tg, D_L04_001B0930_2C35F0[data->f138]->pts,
                                  D_L04_001B0930_2C35F0[data->f138]->count) != 0) {
@@ -1920,12 +1920,12 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                     data->f146 = scale_game_frames(0x3C);
                 }
                 ta = fast_arc_tan(tg.pos[0] - moby->pos[0], tg.pos[1] - moby->pos[1]);
-                if (dist < 2.0f && data->f146 == 0 && FUN_L04_002c1e98((char *)moby) != 0) {
+                if (target_distance < 2.0f && data->f146 == 0 && FUN_L04_002c1e98((char *)moby) != 0) {
                     blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
                     data->f146 = scale_game_frames(0x3C);
                     moby->state = 7;
                     data->f130 = 0.0f;
-                } else if (flag ? dist < data->f140 * 2.0f : dist < data->f140) {
+                } else if (flag ? target_distance < data->f140 * 2.0f : target_distance < data->f140) {
                     if (data->f146 == 0) {
                         blend_moby_animation(moby, (void *)1, 0, (void *)scale_game_frames(10));
                         data->f14C = 0;
@@ -2057,7 +2057,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             if (vector_distance(moby->pos, dest) >= frame_time * 3.0f * 2.0f) {
                 float rel = fast_subtract_rotations(ang, moby->rot);
                 float biased_relative_yaw = fast_add_rotations(rel, 0.3926991f);
-                float dir;
+                float movement_relative_yaw;
                 if (biased_relative_yaw < 0.0f) {
                     biased_relative_yaw += 6.2831855f;
                 }
@@ -2067,9 +2067,9 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                     data->f14C = truncate_float_to_s32(biased_relative_yaw * 1.999f / 3.1415927f);
                     anim = movement_animation_by_direction.v[data->f14C];
                 }
-                dir = wrap_angle(convert_integer_to_float(data->f14C) * 1.5707964f);
-                v[0] = fast_cos(fast_add_rotations(moby->rot, dir)) * (frame_time * 3.0f);
-                v[1] = fast_sin(fast_add_rotations(moby->rot, dir)) * (frame_time * 3.0f);
+                movement_relative_yaw = wrap_angle(convert_integer_to_float(data->f14C) * 1.5707964f);
+                v[0] = fast_cos(fast_add_rotations(moby->rot, movement_relative_yaw)) * (frame_time * 3.0f);
+                v[1] = fast_sin(fast_add_rotations(moby->rot, movement_relative_yaw)) * (frame_time * 3.0f);
                 v[2] = 0.0f;
                 add_vector_xyz(v, v, moby->pos);
             } else {
