@@ -34,7 +34,9 @@ extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_L16_0015F5C4;
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
-extern int FUN_L16_002e2e88(char *, char *);
+int advance_armed_transport_along_path(char *transport_moby, char *path) __asm__("FUN_L16_002e2e88");
+
+extern int advance_armed_transport_along_path(char *, char *) __asm__("FUN_L16_002e2e88");
 extern int fast_dec_timer(int*) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L16_00161D7C __attribute__((sda));
@@ -146,7 +148,7 @@ void armed_transport_update(char *transport_moby) {
             advance_accelerated_scalar((float *)(transport_data + 0x17C), (float *)(transport_data + 0x180), 1.5707964f, frame_time_sq * 12.566371f,
                           frame_time_sq * 12.566371f, frame_time * 6.2831855f);
         }
-        if (FUN_L16_002e2e88(transport_moby, path)) {
+        if (advance_armed_transport_along_path(transport_moby, path)) {
             if (loaded) {
                 transport_moby[0x20] = 3;
             } else if (*(int *)(transport_data + 0xDC) == -1) {
@@ -200,7 +202,7 @@ void armed_transport_update(char *transport_moby) {
     case ARMED_TRANSPORT_STATE_FOLLOW_SECOND_PATH:
         advance_accelerated_scalar((float *)(transport_data + 0x17C), (float *)(transport_data + 0x180), 0.0f, frame_time_sq * 12.566371f,
                       frame_time_sq * 12.566371f, frame_time * 6.2831855f);
-        if (FUN_L16_002e2e88(transport_moby, D_L16_001B0930[*(int *)(transport_data + 0xDC)])) {
+        if (advance_armed_transport_along_path(transport_moby, D_L16_001B0930[*(int *)(transport_data + 0xDC)])) {
             if (*(int *)(transport_data + 0xD0) == -1) {
                 mark_moby_for_removal(transport_moby);
                 return;
@@ -375,7 +377,7 @@ extern float func_00214D88_path42_q(float, float, float, float, float *,
                                     float *) __asm__("FUN_00213f38");
 
 extern float D_L16_00161D84 __attribute__((sda));
-int FUN_L16_002e2e88(char *transport_moby, char *path) {
+int advance_armed_transport_along_path(char *transport_moby, char *path) {
     char *transport_data = *(char **)(transport_moby + 0x78);
     float progress = (float)*(int *)(transport_data + 0x168) + *(float *)(transport_data + 0x16C) +
                      *(float *)(transport_data + 0x170) / *(float *)(transport_data + 0x174);
