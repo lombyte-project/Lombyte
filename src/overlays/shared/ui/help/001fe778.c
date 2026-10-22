@@ -20,7 +20,7 @@ extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 int FUN_L15_001fe778(int allow_item_lookup) {
     struct Hero *vehicle_check_hero = &hero;
     switch (vehicle_check_hero->vehicle_mode) {
-    case 2:
+    case HERO_VEHICLE_MODE_GIANT_CLANK:
         return 0;
     case 3:
         return 0;
