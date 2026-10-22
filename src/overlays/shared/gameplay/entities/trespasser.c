@@ -748,7 +748,7 @@ extern int collect_mobies_in_sphere(void *,float,int,void *,void *) __asm__("FUN
 extern void send_blast_hits(void *,void *,void *,int,void *,int,int,int,float,float,float) __asm__("FUN_L00_0025a9f8");
 extern int allocate_voice_for_target_entry(int,int,void *) __asm__("FUN_0022da68");
 extern int FUN_L00_001ff600(float,void *,void *);
-extern void FUN_L00_002beb90(char *);
+extern void save_state_fields_to_hero(char *) __asm__("FUN_L00_002beb90");
 extern void FUN_L00_002bebc8(char *);
 extern void FUN_L00_002bec00(char *);
 extern void FUN_L00_002bec48(char *);
@@ -835,7 +835,7 @@ void doom_bot_update(struct Moby *moby) {
             hp->config.max=frame*0.045f;
             data->target_moby=0; moby->state=14; data->timer=0;
             data->turn_rate=frame_scale*0.1f*speed;
-            FUN_L00_002beb90((char*)data);
+            save_state_fields_to_hero((char*)data);
             FUN_L00_002bec00((char*)data);
             if (moby->prev_seq!=5) blend_moby_animation(moby,5,0,scale_game_frames(5));
         }
@@ -878,7 +878,7 @@ void doom_bot_update(struct Moby *moby) {
         DoomBotParams *hp;
         fast_vec_add(&scratch[0],&moby->pos,&data->velocity);
         data->velocity.f[2]-=frame_time_sq*9.0f;
-        FUN_L00_002beb90((char*)data);
+        save_state_fields_to_hero((char*)data);
         hp=(DoomBotParams*)&hero;
         blocked=FUN_L00_00258ad0(moby,&data->velocity,hp->damage,0,scale*0.7f,hp->f1EF0)&2;
         if (blocked) { data->velocity.f[2]=0; fast_vec_scale(&data->velocity,&data->velocity,0.5f); }
@@ -981,7 +981,7 @@ void doom_bot_update(struct Moby *moby) {
         data->target.f[1]=moby->pos.y+fast_sin(data->angle)*5.0f;
         data->target.f[0]=moby->pos.x+fast_cos(data->angle)*5.0f;
         data->target.f[2]=moby->pos.z+1.0f;
-        FUN_L00_002beb90((char*)data);
+        save_state_fields_to_hero((char*)data);
         { DoomBotParams *hp=(DoomBotParams*)&hero;
         FUN_L00_00258278(moby,&data->movement_speed,data->angle,hp->move_k,hp->move_d,hp->move_max);
         }
@@ -1030,7 +1030,7 @@ void doom_bot_update(struct Moby *moby) {
         float heading=fast_arc_tan(data->target.f[0]-moby->pos.x,data->target.f[1]-moby->pos.y);
         float *velocity;
         DoomBotParams *hp;
-        FUN_L00_002beb90((char*)data);
+        save_state_fields_to_hero((char*)data);
         velocity=&((DoomBotParams*)&hero)->movement_velocity;
         hp=(DoomBotParams*)&hero;
         FUN_L00_00258278(moby,velocity,heading,2.0f*hp->move_k,0.5f*hp->move_d,2.0f*hp->move_max);
@@ -1089,7 +1089,7 @@ void doom_bot_update(struct Moby *moby) {
             fast_vec_add(&moby->pos,&moby->pos,&scratch[1]);
         }
         data->velocity.f[2]-=frame_time_sq*9.0f;
-        FUN_L00_002beb90((char*)data);
+        save_state_fields_to_hero((char*)data);
         hp=(DoomBotParams*)&hero;
         blocked=FUN_L00_00258ad0(moby,&data->velocity,hp->damage,0,scale*0.7f,hp->f1EF0)&2;
         if (blocked) { data->velocity.f[2]=0; fast_vec_scale(&data->velocity,&data->velocity,0.5f); }

@@ -2457,7 +2457,9 @@ int FUN_L00_002beab0(char *moby, int b, Vx *position_override) {
 
 
 /* Saves the moby's position, word 0x4C and float 0x5C into ((char *)&hero) at 0x1ED0. */
-void FUN_L00_002beb90(char *source_state) {
+void save_state_fields_to_hero(char *source_state) __asm__("FUN_L00_002beb90");
+
+void save_state_fields_to_hero(char *source_state) {
     struct Hero *hero_state = &hero;
     hero_state->unk1ED0 = *(float *)(source_state + 0x40);
     hero_state->unk1ED4 = *(float *)(source_state + 0x44);
