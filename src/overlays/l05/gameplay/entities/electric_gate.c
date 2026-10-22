@@ -2235,7 +2235,7 @@ extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00
 extern void request_moby_variant_help_message(char *) __asm__("FUN_L05_00319690");
 extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_00319740");
 extern void transform_moby_vector_table_to_world_space(char *) __asm__("FUN_L05_003198e8");
-void FUN_L05_00319208(void *moby_v);
+void initialize_taxi_stop_state(void *moby_v) __asm__("FUN_L05_00319208");
 extern void FUN_L05_003193a8_u(char *) __asm__("FUN_L05_003193a8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
@@ -2270,7 +2270,7 @@ void taxi_update(struct Moby *moby) {
     switch (moby->state) {
     case TAXI_INITIALIZE:
         *(short *)(taxi_data + 0xB2) = *(short *)(taxi_data + 0xB0) = -1;
-        FUN_L05_00319208(moby);
+        initialize_taxi_stop_state(moby);
         break;
     case TAXI_WAIT_FOR_PICKUP:
         pickup_hero = &hero;
@@ -2384,7 +2384,7 @@ extern float func_001F9D10_19208(void *, void *) __asm__("FUN_001f9b48");
 extern char *D_L05_001600EC_19208 __asm__("D_L05_001600EC");
 extern unsigned char D_0014C050_19208[] __asm__("D_0014C050");
 
-void FUN_L05_00319208(void *moby_v) {
+void initialize_taxi_stop_state(void *moby_v) {
     char *moby = moby_v;
     char *data = *(char **)(moby + 0x78);
     int *list = (int *)(data + 0x80);
