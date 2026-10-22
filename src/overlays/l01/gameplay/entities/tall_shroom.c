@@ -87,7 +87,9 @@ extern s32 FUN_L01_00275690(f32, void *);
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 /* Novalis tutorial hint triggers: plays help messages and counts usage stats. */
-void FUN_L01_0030acb8(struct Moby *moby) {
+void update_level01_tutorial_hints(struct Moby *moby) __asm__("FUN_L01_0030acb8");
+
+void update_level01_tutorial_hints(struct Moby *moby) {
     enum {
         TUTORIAL_HINT_STATE_INITIALIZE = 0,
         TUTORIAL_HINT_STATE_UPDATE = 1
