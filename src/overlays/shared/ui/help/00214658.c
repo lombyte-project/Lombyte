@@ -669,7 +669,9 @@ extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void clip_hero_velocity_against_probed_surfaces(s32) __asm__("FUN_L00_00212318");
 extern f32 FUN_001f99c0(f32);
 
-void FUN_L00_002167d0(void) {
+void update_hero_planar_movement_velocity(void) __asm__("FUN_L00_002167d0");
+
+void update_hero_planar_movement_velocity(void) {
     struct Hero *hero_state;
     struct Hero *slope_hero_state;
     Vec4 *hero_velocity;

@@ -588,7 +588,7 @@ extern void make_hit_descriptor(void *, struct MobyView *, s32, f32, void *) __a
 extern s32 collect_mobies_in_sphere(f32, void *, s32, struct MobyView *, void *) __asm__("FUN_L00_001f2868");
 extern f32 FUN_L00_0025bb38(s32, f32, f32);
 extern void update_hero_target_heading(f32, f32, f32) __asm__("FUN_L00_00214ed8");
-extern void FUN_L00_002167d0(void);
+extern void update_hero_planar_movement_velocity(void) __asm__("FUN_L00_002167d0");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void set_tracked_class_5f3_moby_position(struct MobyView *, void *) __asm__("FUN_L00_002a9b80");
 extern s32 FUN_L00_002a96f8(struct MobyView *, void *, f32, f32, s32, f32, f32, f32);
@@ -1639,7 +1639,7 @@ void FUN_L12_00238900(void) {
                 hero.motion.velocity.f[1] += fast_sin(a) * s;
                 qcopy(&hero.motion.unk130, &hero.motion.velocity);
             }
-            FUN_L00_002167d0();
+            update_hero_planar_movement_velocity();
         } else {
             speed_step(frame_time_sq * 37.0f, frame_time_sq * 28.0f);
             set_planar_vel(99999.0f);
@@ -1654,7 +1654,7 @@ void FUN_L12_00238900(void) {
     case HERO_STATE_WRENCH_COMBO: {
         struct HeroTableRow2C *tb;
         if (hero.unk12E2 != 0) {
-            FUN_L00_002167d0();
+            update_hero_planar_movement_velocity();
             break;
         }
         if (hero.unkA9C != 0 || hero.anim_frame < D_L12_0017C0A8[hero.attack_record].f20) {
@@ -1789,7 +1789,7 @@ void FUN_L12_00238900(void) {
                 hero.motion.velocity.f[1] += fast_sin(hero.motion.rot.f[2]) * (frame_time * 1.2f);
                 qcopy(&hero.motion.unk130, &hero.motion.velocity);
             }
-            FUN_L00_002167d0();
+            update_hero_planar_movement_velocity();
         } else {
             if (t1 < hero.state_timer) {
                 speed_step(frame_time_sq * 190.0f, frame_time_sq * 90.0f);
@@ -1996,7 +1996,7 @@ void FUN_L12_00238900(void) {
     }
     case 0x2F: {
         f32 a;
-        FUN_L00_002167d0();
+        update_hero_planar_movement_velocity();
         FUN_L00_0020a1e0(0.04f, 0.2f);
         FUN_L12_0022c6c8(0.04f, 0.2f);
         FUN_L12_0022c6e0(0.04f, 0.2f);
@@ -2282,7 +2282,7 @@ void FUN_L12_00238900(void) {
         if (hero.unk418 != 0 || (state_timer_or_trail_control < state_timer_threshold && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
                             hero.state.current != 0x11 && hero.state.current != 0x1C && hero.state.current != 0x4C)) {
             if (hero.unk4A8 != 0) {
-                FUN_L00_002167d0();
+                update_hero_planar_movement_velocity();
                 if (hero.state.current == HERO_STATE_PACK_JUMP && hero.state_timer < scale_game_frames(10) &&
                     hero.motion.unk168 < frame_time * 7.0f) {
                     hero.motion.velocity.f[0] += fast_cos(hero.motion.rot.f[2]) * (frame_time * 0.7f);
