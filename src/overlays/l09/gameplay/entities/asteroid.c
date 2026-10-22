@@ -1770,7 +1770,9 @@ extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
-void FUN_L09_00300888(struct Moby *moby) {
+void update_level09_item_unlock_and_frame_record(struct Moby *moby) __asm__("FUN_L09_00300888");
+
+void update_level09_item_unlock_and_frame_record(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     unsigned char *item_unlock_flags;
     unsigned char *frame_and_level_record;
