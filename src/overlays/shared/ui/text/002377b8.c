@@ -847,7 +847,9 @@ typedef struct {
 extern int update_hud_animation_frame(char *) __asm__("FUN_L00_0023aaa8");
 extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 
-void FUN_L00_00239630(HudElem *hud_element) {
+void update_health_hud_animation_and_visibility(HudElem *hud_element) __asm__("FUN_L00_00239630");
+
+void update_health_hud_animation_and_visibility(HudElem *hud_element) {
     unsigned char *visibility_counters = hud_element->cnt;
     HudCounter *animation_counters;
     HudCounter *health_icon_animation_counters;
