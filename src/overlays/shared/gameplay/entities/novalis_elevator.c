@@ -1124,7 +1124,9 @@ typedef union {
     float f[4];
 } V4_w22c;
 
-void FUN_L01_002e35a8(char *moby, char *state) {
+void update_sand_mouse_targeted_spawning(char *moby, char *state) __asm__("FUN_L01_002e35a8");
+
+void update_sand_mouse_targeted_spawning(char *moby, char *state) {
     V4_w22c spawn_position;
     V4_w22c target_aim_position;
     V4_w22c spawn_offset;
@@ -1376,7 +1378,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void compute_sand_mouse_approach_target(int, void *) __asm__("FUN_L01_002e30b8");
 extern void FUN_L01_002e3110(char *, char *);
 extern s32 update_sand_mouse_fall_motion(void *, struct Moby *) __asm__("FUN_L01_002e3208");
-extern void FUN_L01_002e35a8(char *, char *);
+extern void update_sand_mouse_targeted_spawning(char *, char *) __asm__("FUN_L01_002e35a8");
 extern void FUN_L01_002e3830(struct Moby *, char *);
 extern unsigned char D_0013D4C5 __attribute__((section(".data")));
 void sand_mouse_update(struct Moby *moby) __asm__("FUN_L01_002e3f20");
@@ -1588,7 +1590,7 @@ void sand_mouse_update(struct Moby *moby) {
                 ents_2e3f20[sand_mouse_vars->parent].command = 5;
             }
         }
-        FUN_L01_002e35a8((char *)moby, (char *)sand_mouse_vars);
+        update_sand_mouse_targeted_spawning((char *)moby, (char *)sand_mouse_vars);
         break;
     case SAND_MOUSE_FADE_OUT_AND_RESET_HOME:
         if (fast_dec_timer_s16(&sand_mouse_vars->timer)) {
