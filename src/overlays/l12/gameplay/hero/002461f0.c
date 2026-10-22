@@ -121,7 +121,9 @@ extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 int r1_repeat_timer __asm__("D_L12_0015F678") = 0;
-void FUN_L12_002461f0(void) {
+void update_hero_state_transitions(void) __asm__("FUN_L12_002461f0");
+
+void update_hero_state_transitions(void) {
     struct Moby *moby;
     int prevSub;
     int prevState;
