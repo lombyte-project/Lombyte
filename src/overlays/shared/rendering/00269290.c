@@ -2734,7 +2734,9 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void FUN_L00_002715e8(void *, int, int, float, float);
 extern void spawn_random_planar_drift_particle(void *, int, float, float) __asm__("FUN_L00_002741a0");
 
-void FUN_L00_0026f660(char *particle) {
+void update_ballistic_effect_particle_with_contact_spawns(char *particle) __asm__("FUN_L00_0026f660");
+
+void update_ballistic_effect_particle_with_contact_spawns(char *particle) {
     char *particle_data = particle + 0x20;
     int mode = *(int *)(particle_data + 0x10);
     V next_position;

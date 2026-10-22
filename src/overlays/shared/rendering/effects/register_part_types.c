@@ -41,7 +41,7 @@ extern void update_target_relative_two_point_effect_particle(void) __asm__("FUN_
 extern void update_moby_bound_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026ee48");
 extern void tick_effect_particle_lifetime(void) __asm__("FUN_L00_0026f048");
 extern void FUN_L00_0026f280(void);
-extern void FUN_L00_0026f660(void);
+extern void update_ballistic_effect_particle_with_contact_spawns(void) __asm__("FUN_L00_0026f660");
 extern void update_flag_controlled_pulsing_effect_particle(void) __asm__("FUN_L00_0026f898");
 extern void update_offset_and_pulse_effect_particle(void) __asm__("FUN_L00_0026fa00");
 extern void update_damped_and_fading_effect_particle(void) __asm__("FUN_L00_0026fb00");
@@ -130,7 +130,7 @@ void register_part_types(void) {
     handlers[32] = (u32)update_moby_bound_fade_in_out_effect_particle;
     handlers[33] = (u32)tick_effect_particle_lifetime;
     handlers[34] = (u32)FUN_L00_0026f280;
-    handlers[35] = (u32)FUN_L00_0026f660;
+    handlers[35] = (u32)update_ballistic_effect_particle_with_contact_spawns;
     handlers[36] = (u32)update_flag_controlled_pulsing_effect_particle;
     handlers[37] = (u32)update_offset_and_pulse_effect_particle;
     handlers[38] = (u32)update_damped_and_fading_effect_particle;
