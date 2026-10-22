@@ -139,7 +139,9 @@ extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L13_00309bc8(struct Moby *moby) {
+void spawn_point_table_sparks(struct Moby *moby) __asm__("FUN_L13_00309bc8");
+
+void spawn_point_table_sparks(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int i, next_point_index;
     for (i = 0; i < 15; i = next_point_index) {
