@@ -760,7 +760,9 @@ extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__(
 extern void *memcpy(void *, const void *, u32);
 extern void spawn_nearby_effect_without_direction(unsigned char *m, int x, int y, void *p, float f) __asm__("FUN_L10_0024c7f0");
 
-void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
+void spawn_linked_hitbox_contact_effects(struct Moby *moby, HitBox *box) __asm__("FUN_L10_002c9958");
+
+void spawn_linked_hitbox_contact_effects(struct Moby *moby, HitBox *box) {
     OvlVec4 moby_rotation_basis[3];
     OvlVec4 center;
     OvlVec4 delta;
@@ -926,7 +928,7 @@ void FUN_L10_002c9c70(struct Moby *moby) {
             *(int *)(linked_hitbox_vars + 0x40) = *(int *)(linked_hitbox_vars + 0xc);
             moby->state = 2;
         }
-        FUN_L10_002c9958(moby, (HitBox *)linked_hitbox_vars);
+        spawn_linked_hitbox_contact_effects(moby, (HitBox *)linked_hitbox_vars);
         return;
     case LINKED_HITBOX_STATE_WAIT_FOR_TARGET_STATE_OR_TIMER:
         if (target != 0) {
@@ -941,7 +943,7 @@ void FUN_L10_002c9c70(struct Moby *moby) {
             moby->state = 3;
         if ((*(int *)(linked_hitbox_vars + 8) & 8) == 0 && FUN_001f9740_2c9c70((int *)(linked_hitbox_vars + 0x40)) != 0)
             moby->state = 3;
-        FUN_L10_002c9958(moby, (HitBox *)linked_hitbox_vars);
+        spawn_linked_hitbox_contact_effects(moby, (HitBox *)linked_hitbox_vars);
         return;
     case LINKED_HITBOX_STATE_REMOVE:
         if (target != 0 && (*(int *)(linked_hitbox_vars + 8) & 1) == 0) delete_moby(target);
