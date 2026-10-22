@@ -153,8 +153,8 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 float absolute_float(float input) __asm__("FUN_001f99c0");
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
-void FUN_L14_002aba80(struct Moby *moby);
-void FUN_L14_002aba80(struct Moby *moby) {
+void update_path_mover(struct Moby *moby) __asm__("FUN_L14_002aba80");
+void update_path_mover(struct Moby *moby) {
     enum {
         PATH_MOVER_COMMAND_WAIT_AT_LAST_POINT = 0,
         PATH_MOVER_COMMAND_WAIT_AT_FIRST_POINT = 1,
