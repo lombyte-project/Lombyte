@@ -2083,7 +2083,9 @@ extern OvlVec4 D_L00_001DC0E0[] __attribute__((section(".data")));
 extern OvlQuad D_L00_001DC060[][20] __attribute__((section(".data")));
 extern OvlQuad D_L00_001DC1A0[][20] __attribute__((section(".data")));
 void FUN_L00_002be078(void *, int, int, int, float, float, float, int);
-void FUN_L00_002be650(void *);
+void draw_beam_pulse_quads(void *unused) __asm__("FUN_L00_002be650");
+
+void draw_beam_pulse_quads(void *) __asm__("FUN_L00_002be650");
 void draw_beam_origin_camera_facing_quads(void *mv) __asm__("FUN_L00_002be890");
 
 void draw_beam_origin_camera_facing_quads(void *) __asm__("FUN_L00_002be890");
@@ -2105,7 +2107,7 @@ void FUN_L00_002bdc50(void *moby) {
     if (D_L00_0016178C <= -8.0f) D_L00_0016178C += 8.0f;
     FUN_L00_002be078(D_L00_001DC020, D_L00_0016176C, D_L00_00161770, 12, D_L00_00161774, D_L00_00161778, D_L00_0016177C, D_L00_00161784);
     FUN_L00_002be078(D_L00_001DC0E0, D_L00_0016176C, D_L00_00161770, 12, D_L00_00161774, D_L00_00161778, D_L00_0016177C, D_L00_00161788);
-    FUN_L00_002be650(moby);
+    draw_beam_pulse_quads(moby);
     draw_beam_origin_camera_facing_quads(moby);
     k = D_0013E535;
     c = k ? D_L00_00161798 : D_L00_00161794;
@@ -2298,7 +2300,7 @@ extern float D_L00_00161808_macro[3] __asm__("D_L00_00161808") __attribute__((se
 extern int D_L00_00161818_macro[3] __asm__("D_L00_00161818") __attribute__((section(".sdata")));
 extern OvlVec4 D_L00_001DBF20[] __attribute__((section(".data")));
 
-void FUN_L00_002be650(void *unused) {
+void draw_beam_pulse_quads(void *unused) {
     struct GeometryQuad quad;
     Vec4 basis[3], position, corner;
     int color;
