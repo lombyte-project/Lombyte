@@ -14,7 +14,9 @@
 void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 
 /* Draws the debug profiler unless D_L00_0015F5D8 or D_001413F5[0xC] is set. */
-void FUN_L00_001f8e30(void) {
+void draw_debug_profiler_if_enabled(void) __asm__("FUN_L00_001f8e30");
+
+void draw_debug_profiler_if_enabled(void) {
     if (D_L00_0015F5D8 == 0 && hero.unk20B1 == 0) {
         D_L00_0015F3F4 = 0x100FF;
         if (D_L00_0015F5C4 == 3)

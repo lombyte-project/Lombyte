@@ -46,7 +46,7 @@ extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
 extern void FUN_L00_001f4598(void);
 extern void FUN_L00_001f58e0(void);
 extern void FUN_L00_00297f78(void);
-extern void FUN_L00_001f8e30(void);
+extern void draw_debug_profiler_if_enabled(void) __asm__("FUN_L00_001f8e30");
 extern void FUN_L00_002999a8(void);
 extern void FUN_L00_00298f90(void);
 extern void prepare_debug_profiler_render(void) __asm__("FUN_001f4248");
@@ -183,7 +183,7 @@ void FUN_L00_00245c28(void) {
         case LEVEL_MODE_DEBUG_FLAG_GATED_UPDATE:
             register_audio_stream_callback();
             FUN_L00_00297f78();
-            FUN_L00_001f8e30();
+            draw_debug_profiler_if_enabled();
             break;
         case LEVEL_MODE_MEMORY_CARD_DRAIN:
             FUN_L00_002999a8();
