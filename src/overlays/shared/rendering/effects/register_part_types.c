@@ -6,7 +6,7 @@
 #include "qcopy.h"
 #include "rnc/math/vector.h"
 
-extern void FUN_L00_00268d48();
+extern void update_falling_effect_particle() __asm__("FUN_L00_00268d48");
 extern void update_timed_effect_particle() __asm__("FUN_L00_00268fe8");
 extern void FUN_L00_00269290(void);
 extern void FUN_L00_002694f8(void);
@@ -95,7 +95,7 @@ void register_part_types(void) __asm__("FUN_L00_00268900");
 void register_part_types(void) {
     u32 *handlers = effect_handlers;
 
-    handlers[0] = (u32)FUN_L00_00268d48;
+    handlers[0] = (u32)update_falling_effect_particle;
     handlers[1] = (u32)update_timed_effect_particle;
     handlers[2] = (u32)FUN_L00_00269290;
     handlers[3] = (u32)FUN_L00_002694f8;
@@ -206,7 +206,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 ground_height_at(Vec4 *) __asm__("FUN_L00_00263468");
 extern void free_effect_particle(FallingParticle *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_00268d48(FallingParticle *particle)
+void update_falling_effect_particle(FallingParticle *particle)
 {
     Vec4 step;
     Vec4 ground_test_probe;
