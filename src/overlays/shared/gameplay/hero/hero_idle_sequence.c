@@ -630,7 +630,7 @@ extern s32 D_L00_0015F5CC __attribute__((section(".sdata")));
 extern f32 D_L00_0017B85C_002062b0 __asm__("D_L00_0017B85C") __attribute__((section(".data")));
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_00211670(void);
-extern void FUN_L00_0020b960(void);
+extern void apply_hero_selected_flags_and_state_transitions(void) __asm__("FUN_L00_0020b960");
 extern void FUN_L00_0020bed0_u(void) __asm__("FUN_L00_0020bed0");
 extern void FUN_L00_00215b68(void);
 extern void FUN_L00_00229b70(void);
@@ -694,7 +694,7 @@ void update_hero_in_vehicle_mode(void) {
 
     FUN_L00_00232670();
     FUN_L00_00211670();
-    FUN_L00_0020b960();
+    apply_hero_selected_flags_and_state_transitions();
     g = (char *)&hero;
     if (*(u8 *)(g + 0x20a4) == 1) {
         FUN_L00_0020bed0_u();
@@ -1100,7 +1100,7 @@ void fade_to_black(int) __asm__("FUN_001f4a58");
 void update_hero_in_vehicle_mode(void) __asm__("FUN_L00_002062b0");
 void FUN_L00_00232670(void);
 void hero_update(void) __asm__("FUN_L00_00211670");
-void FUN_L00_0020b960(void);
+void apply_hero_selected_flags_and_state_transitions(void) __asm__("FUN_L00_0020b960");
 void FUN_L00_0020bed0_u(void) __asm__("FUN_L00_0020bed0");
 void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
 void update_hero_offset_rail_candidate(void) __asm__("FUN_L00_0020d330");
@@ -1159,7 +1159,7 @@ void coordinate_hero_frame_update(void) {
     }
     FUN_L00_00232670();
     hero_update();
-    FUN_L00_0020b960();
+    apply_hero_selected_flags_and_state_transitions();
     FUN_L00_0020bed0_u();
     find_grind_rail();
     update_hero_offset_rail_candidate();
@@ -3288,7 +3288,7 @@ f32 FUN_001f99c0_20b960(f32) __asm__("FUN_001f99c0");
 void FUN_L00_0020b930_20b960(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 #define P D_0013F350_20b960
-void FUN_L00_0020b960(void) {
+void apply_hero_selected_flags_and_state_transitions(void) {
     u8 save = P.b12ED;
     s16 saved_flag_selector = P.h12E0;
     f32 height_difference;
