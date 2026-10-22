@@ -976,7 +976,9 @@ int FUN_001f9770_0026b910(s16 *) __asm__("FUN_001f9770");
 int FUN_001f96f8_0026b910(int) __asm__("FUN_001f96f8");
 s32 FUN_001fa6d0_0026b910(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_00267a08_0026b910(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_0026b910(Part_26b910 *particle) {
+void update_spinning_fade_in_out_effect_particle(Part_26b910 *particle) __asm__("FUN_L00_0026b910");
+
+void update_spinning_fade_in_out_effect_particle(Part_26b910 *particle) {
     Body_26b910 *particle_data = &particle->body;
     particle->b8 += particle_data->b8;
     particle->f18 += particle_data->f10;
