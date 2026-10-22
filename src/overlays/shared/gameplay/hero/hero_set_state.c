@@ -3022,7 +3022,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E533[];
 extern void FUN_L00_0020e698(void);
 
-int FUN_L00_002276c0(void) {
+int try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
+
+int try_start_hero_weapon_fire_state(void) {
     char *hero_base = (char *)D_0013E533 + 0xE1D;
     int current_state = *(int *)(hero_base + 0x2084);
     if ((unsigned)(current_state - 2) < 2 || current_state == 0) {
