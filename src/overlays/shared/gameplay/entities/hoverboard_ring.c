@@ -354,7 +354,9 @@ void FUN_L05_00329358(char *moby) {
     normalize_vector_xyz(focus_position + 8, &hero.gravity_dir, -1.0f);
 }
 extern char *D_L05_00167200 __attribute__((section(".data")));
-void FUN_L05_003294c0(float spring_distance, float spring_height, float focus_distance, float airborne_spring_distance, float airborne_spring_height, float airborne_focus_distance, float position_spring_response_coefficient, float position_spring_coefficient) {
+void set_camera_follow_parameters(float spring_distance, float spring_height, float focus_distance, float airborne_spring_distance, float airborne_spring_height, float airborne_focus_distance, float position_spring_response_coefficient, float position_spring_coefficient) __asm__("FUN_L05_003294c0");
+
+void set_camera_follow_parameters(float spring_distance, float spring_height, float focus_distance, float airborne_spring_distance, float airborne_spring_height, float airborne_focus_distance, float position_spring_response_coefficient, float position_spring_coefficient) {
     char *camera = D_L05_00167200;
     char *orbit = *(char **)(camera + 0x70);
 
@@ -578,7 +580,7 @@ void FUN_L05_003296e0(Camera *camera_to_reset) {
     view->unk28 = 0;
     view->unk2C = 0;
     clear_u64_value(view);
-    FUN_L05_003294c0(preset->spring_dist, preset->spring_height, preset->dist, preset->unk34,
+    set_camera_follow_parameters(preset->spring_dist, preset->spring_height, preset->dist, preset->unk34,
                      preset->unk38, preset->unk3C, preset->unk40, preset->unk44);
     FUN_L05_00329540((char *)camera_to_reset);
     camera_to_reset->unk7E = 0;
