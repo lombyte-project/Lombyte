@@ -1724,7 +1724,9 @@ extern int FUN_L00_002a7210(void *, void *, float, float);
 extern int FUN_L00_0025e3f8(void *);
 extern int FUN_L00_002c5be8(void *);
 
-void FUN_L00_002a82c0(unsigned char *wrench_moby) {
+void process_mobies_near_returning_wrench(unsigned char *wrench_moby) __asm__("FUN_L00_002a82c0");
+
+void process_mobies_near_returning_wrench(unsigned char *wrench_moby) {
     N_2a82c0 *scanned_moby = D_L00_0015FFE4;
     struct Hero *hero_context;
     int moby_processing_result;
@@ -1879,7 +1881,7 @@ void suck_draw_reticle(int a, int b, void *pos, int kind, int mode, float x, flo
 void FUN_L00_002a7c70_c(void *m) __asm__("FUN_L00_002a7c70");
 void FUN_L00_002a7e20(float *pos, int n);
 void FUN_L00_002a8028(u8 *o);
-void FUN_L00_002a82c0(unsigned char *m);
+void process_mobies_near_returning_wrench(unsigned char *m) __asm__("FUN_L00_002a82c0");
 void scale_wrench_collision_vector_by_heading(float *v) __asm__("FUN_L00_002a8418");
 extern char D_0013CAE0[];
 extern char D_00140B00[];
@@ -2090,7 +2092,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
         } else {
             int arrived=0;
             float length,steps;
-            FUN_L00_002a82c0((char*)wrench_moby);
+            process_mobies_near_returning_wrench((char*)wrench_moby);
             subtract_vector_xyz(work.v[1],((char *)&D_001403C0),position);
             wrench_vars->acceleration+=frame_time_sq*0.9f; wrench_vars->speed+=wrench_vars->acceleration;
             length=vector_length_xyz(work.v[1]); steps=wrench_vars->speed; steps=length/steps;
