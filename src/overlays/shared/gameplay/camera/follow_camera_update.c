@@ -2255,7 +2255,9 @@ extern s32 play_2edad8(s32, s32, void *, s32) __asm__("FUN_L00_0028ddd8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 irand_2edad8(s32) __asm__("FUN_00213260");
 extern s32 scale_2edad8(s32) __asm__("FUN_001f96f8");
-void FUN_L00_002edad8(u8 *sound_emitter) {
+void update_sound_emitter_playback_at_random_position(u8 *sound_emitter) __asm__("FUN_L00_002edad8");
+
+void update_sound_emitter_playback_at_random_position(u8 *sound_emitter) {
     V_2edad8 reference_position_delta;
     V_2edad8 uniform_range_vector;
     V_2edad8 transformed_reference_position_delta;
