@@ -274,7 +274,9 @@ extern void func_L00_0025A8C0_alt_q(char *arg, int a, int b, float scale,
                                     void *src) __asm__("FUN_L00_00259888");
 
 extern char D_L17_00174760_lui[] __asm__("D_L17_00174760") __attribute__((section(".data")));
-void FUN_L17_002e8e08(struct Moby *moby) {
+void update_drone_flight_and_sparks(struct Moby *moby) __asm__("FUN_L17_002e8e08");
+
+void update_drone_flight_and_sparks(struct Moby *moby) {
     enum {
         DRONE_STATE_FLIGHT = 0,
         DRONE_STATE_SPARKS_UNTIL_REMOVAL = 1
