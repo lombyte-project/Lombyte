@@ -1847,7 +1847,9 @@ extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022d
 void emit_path_walker_particle(unsigned char *source_moby, void *previous_position) __asm__("FUN_L16_002e7a30");
 
 extern void emit_path_walker_particle(unsigned char *, void *) __asm__("FUN_L16_002e7a30");
-extern void FUN_L16_002e7ba0(struct Moby *);
+void initialize_path_walker_group(struct Moby *moby) __asm__("FUN_L16_002e7ba0");
+
+extern void initialize_path_walker_group(struct Moby *) __asm__("FUN_L16_002e7ba0");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void sample_camera_path(void *, f32, s32, void *, void *, s32) __asm__("func_00214E58");
 
@@ -1878,7 +1880,7 @@ void FUN_L16_002e76b8(unsigned char *walker_moby) {
             mark_moby_for_removal(walker_moby);
             return;
         }
-        FUN_L16_002e7ba0(walker_moby);
+        initialize_path_walker_group(walker_moby);
         break;
     case PATH_WALKER_FOLLOW_PATH: {
         L16WalkerData_c *other = *(L16WalkerData_c **)(walker_data->owner + 0x78);
@@ -2021,7 +2023,7 @@ extern float D_L16_00161E94 __attribute__((sda)); /* no foreign declaration */
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern short *D_L16_001ABCC0[];
 
-void FUN_L16_002e7ba0(struct Moby *moby) {
+void initialize_path_walker_group(struct Moby *moby) {
     unsigned char *objects[16];
     unsigned char *previous;
     L16WalkerData *walker_data = (L16WalkerData *)moby->pvars;
