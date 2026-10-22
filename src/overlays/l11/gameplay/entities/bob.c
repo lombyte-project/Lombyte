@@ -1575,7 +1575,9 @@ typedef struct {
     unsigned short index;
 } Globals;
 
-void FUN_L11_002f3350(struct Moby *moby) {
+void copy_pokitaru_pvar_to_hero(struct Moby *moby) __asm__("FUN_L11_002f3350");
+
+void copy_pokitaru_pvar_to_hero(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_COPY_PVAR_TO_HERO = 1
