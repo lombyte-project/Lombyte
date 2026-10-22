@@ -1808,7 +1808,7 @@ extern int get_effect_texture_alt_31db50(int) __asm__("FUN_001f44b8");
 extern void FUN_001f76a0_31db50(void) __asm__("FUN_001f76a0");
 extern void FUN_L11_0031d8d8_c(int) __asm__("FUN_L11_0031d8d8");
 extern void FUN_L08_002f0c18(int);
-extern void FUN_L08_002f0cf0(int);
+extern void emit_pair_offset_render_batch(int) __asm__("FUN_L08_002f0cf0");
 extern void FUN_L11_0031e858(int);
 extern void FUN_L11_0031e780(int);
 void vu1_add_g_sregister_31db50(s32 a0, s64 a1) __asm__("FUN_00233980");
@@ -1834,9 +1834,9 @@ void FUN_L11_0031db50(void) {
     }
     vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x2A));
     vu1_add_g_sregister_31db50(0x42, (long)D_L11_00162518 << 32 | 0x48);
-    FUN_L08_002f0cf0(0);
+    emit_pair_offset_render_batch(0);
     vu1_add_g_sregister_31db50(0x42, (long)D_L11_0016251C << 32 | 0x48);
-    FUN_L08_002f0cf0(1);
+    emit_pair_offset_render_batch(1);
     vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x2B));
     vu1_add_g_sregister_31db50(0x42, (long)D_L11_00162528 << 32 | 0x48);
     FUN_L08_002f0c18(0);

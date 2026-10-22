@@ -352,7 +352,7 @@ extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L08_002f0b40(int);
 extern void FUN_L08_002f0c18(int);
-extern void FUN_L08_002f0cf0(int);
+extern void emit_pair_offset_render_batch(int) __asm__("FUN_L08_002f0cf0");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void FUN_L08_002f0dc8(void) {
@@ -376,7 +376,7 @@ void FUN_L08_002f0dc8(void) {
     FUN_L08_002f0c18(1);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3D));
     vu1_add_g_sregister(0x42, (long)D_L08_00161E00 << 32 | 0x48);
-    FUN_L08_002f0cf0(0);
+    emit_pair_offset_render_batch(0);
 }
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */

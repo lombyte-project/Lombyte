@@ -10,7 +10,9 @@ extern void FUN_L08_00258090(void *, int, int, void *);
 extern Pair D_L08_00161E20[] __attribute__((section(".sdata")));
 extern int D_L08_001DDEE0[];
 extern int D_L08_001DDEC0[];
-void FUN_L08_002f0cf0(int pair_index) {
+void emit_pair_offset_render_batch(int pair_index) __asm__("FUN_L08_002f0cf0");
+
+void emit_pair_offset_render_batch(int pair_index) {
     int i;
     for (i = 0; i < 0x8; i++) {
         FUN_L08_00258090(D_L08_001E8360, D_L08_001DDEE0[i], D_L08_001DB518[i], &D_L08_00161E20[pair_index]);
