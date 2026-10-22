@@ -85,7 +85,7 @@ void alert_visible_group_sentrybots(void *mp) __asm__("FUN_L15_0029a0d0");
 
 void alert_visible_group_sentrybots(void *mp) __asm__("FUN_L15_0029a0d0");
 extern void FUN_L15_0029a2a8_u(void *) __asm__("FUN_L15_0029a2a8");
-extern void FUN_L15_0029a570(void *, int);
+extern void update_sentrybot_hit_response_and_target_visibility(void *, int) __asm__("FUN_L15_0029a570");
 void draw_sentrybot_effect_quads(char *moby) __asm__("FUN_L15_0029aba8");
 
 extern void draw_sentrybot_effect_quads(char *m) __asm__("FUN_L15_0029aba8");
@@ -173,7 +173,7 @@ void sentrybot_update(unsigned char *moby) {
             flag |= is_point_inside_clip_volume(D_L15_001673C0, *(int *)(data + 0x2DC));
         }
     }
-    FUN_L15_0029a570(moby, flag);
+    update_sentrybot_hit_response_and_target_visibility(moby, flag);
     if (flag != 0 && moby[0x20] != 0x15 && moby[0x20] != 0x17) {
         *(int *)(moby + 0x94) = 0;
         *(unsigned short *)(moby + 0x34) = (*(unsigned short *)(moby + 0x34) | 0x41) & 0xEFFF;
@@ -1321,7 +1321,7 @@ extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern int FUN_L00_0025ff38(void *, void *, float, int, int, void *, int);
 
-void FUN_L15_0029a570(void *object, int flag) {
+void update_sentrybot_hit_response_and_target_visibility(void *object, int flag) {
     enum {
         SENTRYBOT_NO_KNOCKBACK_SETUP_RESPONSE = 0,
         LETHAL_HIT_RESPONSE = 1,
