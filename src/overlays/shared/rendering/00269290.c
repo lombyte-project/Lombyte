@@ -2352,7 +2352,9 @@ s32 FUN_L00_001f0d60_x(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 void FUN_L00_001ff660_x(void *, void *, void *) __asm__("FUN_L00_001ff660");
 void FUN_L00_00267a08_x(O_26e670_26e670 *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_0026e670(O_26e670_26e670 *particle) {
+void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *particle) __asm__("FUN_L00_0026e670");
+
+void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *particle) {
     V_26e670_26e670 next_position, position_displacement, acc, projected_next_position;
     P_26e670_26e670 *P = &particle->p;
 

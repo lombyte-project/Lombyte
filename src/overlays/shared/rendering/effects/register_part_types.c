@@ -36,7 +36,7 @@ extern void update_source_attached_fading_effect_particle(void) __asm__("FUN_L00
 extern void move_and_fade_effect_particle_by_lifetime(void) __asm__("FUN_L00_0026de00");
 extern void update_moving_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026e150");
 extern void update_animated_source_attached_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026e3a8");
-extern void FUN_L00_0026e670(void);
+extern void update_linked_effect_particle_with_collision_and_fade(void) __asm__("FUN_L00_0026e670");
 extern void update_target_relative_two_point_effect_particle(void) __asm__("FUN_L00_0026eb88");
 extern void update_moby_bound_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026ee48");
 extern void tick_effect_particle_lifetime(void) __asm__("FUN_L00_0026f048");
@@ -125,7 +125,7 @@ void register_part_types(void) {
     handlers[27] = (u32)move_and_fade_effect_particle_by_lifetime;
     handlers[28] = (u32)update_moving_fade_in_out_effect_particle;
     handlers[29] = (u32)update_animated_source_attached_fade_in_out_effect_particle;
-    handlers[30] = (u32)FUN_L00_0026e670;
+    handlers[30] = (u32)update_linked_effect_particle_with_collision_and_fade;
     handlers[31] = (u32)update_target_relative_two_point_effect_particle;
     handlers[32] = (u32)update_moby_bound_fade_in_out_effect_particle;
     handlers[33] = (u32)tick_effect_particle_lifetime;
