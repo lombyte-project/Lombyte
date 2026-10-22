@@ -2284,7 +2284,7 @@ extern void FUN_L00_00263fd8_cf(void *, void *, void *, float, float, int, int, 
 extern void FUN_L01_0026d930_cf(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L03_00250ae8_cf(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L03_002c95a8_cf(void *) __asm__("FUN_0020c828");
-extern void FUN_L03_002d4288_cf(void *, void *, int) __asm__("FUN_L03_00250ae8");
+extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void compute_interpolated_record_value_cf(void *, void *, void *, int, float, float,
                                                  float) __asm__("FUN_L03_002d4288");
@@ -2555,7 +2555,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
             }
             FUN_L00_001ff290_cf(scaled_launch_vector, b, truncate_float_to_s32_cf(10.0f));
             FUN_L03_00250ae8_cf(e, scaled_launch_vector, a);
-            FUN_L03_002d4288_cf(m, scaled_launch_vector, 0);
+            emit_radial_particle_burst(m, scaled_launch_vector, 0);
             compute_interpolated_record_value_cf(b, a, m, FUN_L03_002c6d98_cf(0x82), ang,
                                                  frame_time * 6.0f, 0.75f);
         }

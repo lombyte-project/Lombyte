@@ -2475,7 +2475,7 @@ extern void *FUN_L00_00263fd8_c(char *, int, float *, void *, int, int, float, f
 extern void DebugPrint(char *, ...);
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_0025f730_c(void *, float) __asm__("FUN_L00_0025f730");
-extern void FUN_L03_00250ae8(void *, void *, int);
+extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 extern void FUN_L10_002e5968_c(char *m) __asm__("FUN_L10_002e5968");
 extern void add_vector_xyz_c3(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -2616,7 +2616,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
                 fast_vec_normalize(&B, &B, D_L10_00161EE8 * D_0015ED6C);
                 fast_vec_scale(&E, &B, FUN_L04_001f1978(3.0f));
                 FUN_L00_001ff290(&D, &E, &C);
-                FUN_L03_00250ae8(ship, &E, 0);
+                emit_radial_particle_burst(ship, &E, 0);
                 FUN_L10_002cc1b8(&B, &C, (int)ship, (int)tgt, scale_game_frames_c2(300), 1.0f);
             }
         } else if (ship->b52 == 3 && ship->b53 != 2) {

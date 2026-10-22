@@ -1999,7 +1999,7 @@ extern void FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float,
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
-extern void FUN_L03_00250ae8(void *, void *, int);
+extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 extern void process_ultramech_hits_and_update_target(void *) __asm__("FUN_L15_002d0fa8");
 extern void no_op_main_callback(void *, void *) __asm__("func_001E93E8");
 extern void add_vector_xyz(void *, void *, void *);
@@ -2250,7 +2250,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                                     scale_game_frames(D_L15_00161B1C));
                 normalize_vector_xyz(&position_or_motion_vector, &position_or_motion_vector, 3.0f);
                 FUN_L00_001ff290(&vector_arithmetic_result, &vector_or_hit_descriptor, &position_or_motion_vector);
-                FUN_L03_00250ae8(ultramech_moby, &vector_or_hit_descriptor, 0);
+                emit_radial_particle_burst(ultramech_moby, &vector_or_hit_descriptor, 0);
                 ultramech_vars->shots++;
             } else if ((float)ultramech_vars->shots >= 6.0f && (ultramech_moby->animFlags & 2)) {
                 ultramech_moby->state = 6;

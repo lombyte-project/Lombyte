@@ -3710,7 +3710,7 @@ extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022D
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L18_0016247C_gp __asm__("D_L18_0016247C") __attribute__((sda));
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L03_00250ae8(void *, void *, int);
+extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 s32 is_value_within_interpolated_window(void *arg0, f32 fparg0) __asm__("FUN_00214cc8");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -3815,7 +3815,7 @@ void rocket_tank_update(M1454 *moby) {
             firing_vector[2] = 0;
             firing_vector[2] = -fast_sin(tank_data->f118) * firing_vector_scale;
             allocate_voice_for_target_entry(0, 0, (int)moby);
-            FUN_L03_00250ae8(moby, projectile_spawn_position, 0);
+            emit_radial_particle_burst(moby, projectile_spawn_position, 0);
             if (vector_distance((char *)moby + 0x10, &hero.motion.pos) > 10.0f) {
                 create_class_29_moby((char *)moby, projectile_spawn_position, firing_vector, 0);
             } else {
