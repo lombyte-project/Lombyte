@@ -33,7 +33,7 @@ extern void FUN_L00_00208a10(void);
 extern void FUN_L00_00208b60(void);
 extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void FUN_L00_00216de8(int, int);
-extern void FUN_L00_00216f10(void);
+extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_002484e0(void *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -56,7 +56,7 @@ void FUN_L15_001ff938(void) {
     hero0 = ((char *)&D_0013F350);
     if (hero0[0x20A4] == 0)
         return;
-    FUN_L00_00216f10();
+    update_hero_delayed_voice_requests();
     update_hero_easing_records();
     if (hero0[0x20A4] == 0)
         return;

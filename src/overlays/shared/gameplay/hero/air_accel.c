@@ -76,7 +76,7 @@ extern void FUN_L00_00208a10(void);
 extern void FUN_L00_00208b60(void);
 extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void FUN_L00_00216de8(int, int);
-extern void FUN_L00_00216f10(void);
+extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_002484e0(void *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -97,7 +97,7 @@ void FUN_L01_00228000(void) {
     FUN_L01_00242930();
     if (hero.vehicle_mode == 0)
         return;
-    FUN_L00_00216f10();
+    update_hero_delayed_voice_requests();
     update_hero_easing_records();
     if (hero.vehicle_mode == 0)
         return;
@@ -204,7 +204,7 @@ extern void FUN_L00_0020b1d8(void);
 extern void FUN_L00_00210928(void);
 extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void FUN_L00_00214fe8(void);
-extern void FUN_L00_00216f10(void);
+extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_002484e0(void *);
 extern void FUN_L00_00257024(void *);
@@ -241,7 +241,7 @@ void FUN_L01_00228870(void) {
     if (*(unsigned char *)(hero_state_base + 0x20A4) != 0) {
         return;
     }
-    FUN_L00_00216f10();
+    update_hero_delayed_voice_requests();
     FUN_L00_0020b1d8();
     FUN_L00_0020a318();
     FUN_L00_0020a540();

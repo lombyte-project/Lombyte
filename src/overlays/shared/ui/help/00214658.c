@@ -860,7 +860,9 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_00216de8();
 
 /* For each of eight timers that fast_dec_timer reports as 2, clears a field and calls 00216de8. */
-void FUN_L00_00216f10(void) {
+void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
+
+void update_hero_delayed_voice_requests(void) {
     char *slot_timer_base = (char *)&hero.unk21D8[0][2];
     short *slot_voice_argument_base = (short *)(&hero.unk21D8[0][3]);
     int i;

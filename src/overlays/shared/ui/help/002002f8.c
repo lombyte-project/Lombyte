@@ -32,7 +32,7 @@ extern void FUN_L00_0020d330(void);
 extern void FUN_L00_00210928(void);
 extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void FUN_L00_00214fe8(void);
-extern void FUN_L00_00216f10(void);
+extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_002484e0(void *);
 extern void FUN_L00_00257024(void *);
@@ -70,7 +70,7 @@ void FUN_L03_002002f8(void) {
     if (*(unsigned char *)(g + 0x20A4) != 0) {
         return;
     }
-    FUN_L00_00216f10();
+    update_hero_delayed_voice_requests();
     FUN_L00_0020b1d8();
     FUN_L00_0020a318();
     FUN_L00_0020a540();

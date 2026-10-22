@@ -622,7 +622,7 @@ extern void FUN_L00_0020b960(void);
 extern void FUN_L00_0020bed0_u(void) __asm__("FUN_L00_0020bed0");
 extern void FUN_L00_00215b68(void);
 extern void FUN_L00_00229b70(void);
-extern void FUN_L00_00216f10(void);
+extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void FUN_L00_00208a10(void);
 extern void FUN_L00_00207c48(void);
@@ -688,7 +688,7 @@ void update_hero_in_vehicle_mode(void) {
     }
     FUN_L00_00229b70();
     if (*(u8 *)(g + 0x20a4) == 0) return;
-    FUN_L00_00216f10();
+    update_hero_delayed_voice_requests();
     update_hero_easing_records();
     if (*(u8 *)(g + 0x20a4) == 0) return;
     FUN_L00_00208a10();
@@ -1089,7 +1089,7 @@ void FUN_L00_0020bed0_u(void) __asm__("FUN_L00_0020bed0");
 void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
 void FUN_L00_0020d330(void);
 void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
-void FUN_L00_00216f10(void);
+void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 void FUN_L00_0020b1d8_u(void) __asm__("FUN_L00_0020b1d8");
 void FUN_L00_0020a318(void);
 void FUN_L00_0020a540_u(void) __asm__("FUN_L00_0020a540");
@@ -1140,7 +1140,7 @@ void FUN_L00_002070d0(void) {
     hero_update_transitions();
     if (hero_state->vehicle_mode)
         return;
-    FUN_L00_00216f10();
+    update_hero_delayed_voice_requests();
     FUN_L00_0020b1d8_u();
     FUN_L00_0020a318();
     FUN_L00_0020a540_u();
