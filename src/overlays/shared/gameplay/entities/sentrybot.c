@@ -1155,7 +1155,9 @@ extern short *D_L15_001ABE40_a0[] __asm__("D_L15_001ABE40");
 extern int D_L15_0015FFD8_a0 __asm__("D_L15_0015FFD8");
 extern int FUN_001f96f8_a0(int) __asm__("FUN_001f96f8");
 extern int FUN_001efa68_a0(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern void FUN_L15_0029a248(char *, char *);
+void set_sentrybot_attention_target(char *source_moby, char *recipient_moby) __asm__("FUN_L15_0029a248");
+
+extern void set_sentrybot_attention_target(char *, char *) __asm__("FUN_L15_0029a248");
 
 typedef struct { char p[0x156]; short h156; } D_a0d0;
 
@@ -1191,7 +1193,7 @@ void FUN_L15_0029a0d0(void *mp) {
                 moby_data = *(char **)((char *)(listed_moby_byte_offset + D_L15_0015FFD8_a0) + 0x78);
                 ((D_a0d0 *)moby_data)->h156 = FUN_001f96f8_a0(300);
                 moby_data[0x15B] = 0;
-                FUN_L15_0029a248((char *)source_moby, (char *)(D_L15_0015FFD8_a0 + listed_moby_byte_offset));
+                set_sentrybot_attention_target((char *)source_moby, (char *)(D_L15_0015FFD8_a0 + listed_moby_byte_offset));
             }
         }
     } while (*group_moby_entry++ >= 0);
@@ -1201,7 +1203,7 @@ void FUN_L15_0029a0d0(void *mp) {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-void FUN_L15_0029a248(char *source_moby, char *recipient_moby) {
+void set_sentrybot_attention_target(char *source_moby, char *recipient_moby) {
     char *recipient_moby_data;
     if (source_moby != recipient_moby) {
         recipient_moby_data = *(char **)(recipient_moby + 0x78);
