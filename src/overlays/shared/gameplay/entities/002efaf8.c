@@ -24,7 +24,9 @@ int FUN_L01_002efaf8(char *a) {
 extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 0xE. */
-int FUN_L01_002efb98(char *moby) {
+int cancel_suck_cannon_suction_and_set_state_14(char *moby) __asm__("FUN_L01_002efb98");
+
+int cancel_suck_cannon_suction_and_set_state_14(char *moby) {
     int helper_result = cancel_suck_cannon_suction(moby);
     moby[0x20] = 0xe;
     return helper_result;
