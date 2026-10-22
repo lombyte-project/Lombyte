@@ -471,7 +471,9 @@ extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 angle) __
 extern char D_0013E550[];
 extern char D_0013E5E0[];
 
-void FUN_L08_00316fa8(char *moby) {
+void update_ground_height_modulated_voice(char *moby) __asm__("FUN_L08_00316fa8");
+
+void update_ground_height_modulated_voice(char *moby) {
     float point[4];
     float radius[4];
     float axis[4];
