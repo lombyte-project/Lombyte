@@ -629,7 +629,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern unsigned short D_00141920[] __attribute__((section(".data")));
 extern unsigned short D_00141D80[] __attribute__((section(".data")));
 extern void FUN_L00_0020e4c8(void);
-extern void FUN_L00_00217658(void);
+extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_0029a6b0(void *);
@@ -701,7 +701,7 @@ int FUN_L05_00251be8(void) {
             }
             if ((D_0013CA40_p2523C8.held & 0xA) || (((*(Hero *)((char *)&hero)).state.current == 1 || (*(Hero *)((char *)&hero)).state.current == 0x1E) && (*(Hero *)((char *)&hero)).state_timer > scale_game_frames_alt(0x14))) {
                 if (((*(Hero *)((char *)&hero)).state.current == 1 || (*(Hero *)((char *)&hero)).state.current == 0x1E) && (*(Hero *)((char *)&hero)).state_timer > scale_game_frames_alt(0x14)) {
-                    FUN_L00_00217658();
+                    launch_hero_wrench();
                     break;
                 }
                 func_L05_0024D680_2523C8(0x15, 1);

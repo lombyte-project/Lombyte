@@ -641,7 +641,7 @@ extern void initialize_moby_transform_history(void *, void *) __asm__("FUN_L00_0
 extern void create_moby_transform_history_entry(void *, s32, s32) __asm__("FUN_L00_00262528");
 extern void update_moby_transform_history(void *, s32) __asm__("FUN_L00_00262608");
 extern void FUN_L00_00217368(void *, s32);
-extern void FUN_L00_00217658(void);
+extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
 extern s32 FUN_L00_00211870(f32);
 
@@ -1626,7 +1626,7 @@ void FUN_L12_00238900(void) {
                 hero.motion.velocity.f[1] += fast_sin(hero.motion.rot.f[2]) * (frame_time * 1.3f);
                 qcopy(&hero.motion.unk130, &hero.motion.velocity);
             }
-            FUN_L00_00217658();
+            launch_hero_wrench();
         }
         if (hero.unk12E2 != 0) {
             if (FUN_L00_00211870(84.0f) != 0) {

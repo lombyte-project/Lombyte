@@ -3298,7 +3298,7 @@ extern Rec2C_228770 D_L00_0017BD28_228770[] __asm__("D_L00_0017BC28");
 
 /* Gadget and weapon input for the current hero state: starts the matching move and returns 1 when the state changed. */
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
-extern void FUN_L00_00217658(void);
+extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern int f_fun_l00_002223f8_227fa0(int, int) __asm__("FUN_L00_002223f8");
 extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
@@ -3364,7 +3364,7 @@ int FUN_L00_00227fa0(void) {
             }
             if ((D_0013CA40_p228770.f1A0 & 0xA) || ((D_0013F450_h228770.f2084 == 1 || D_0013F450_h228770.f2084 == 0x1E) && D_0013F450_h228770.f198 > f_fun_001f96f8_227fa0(0x14))) {
                 if ((D_0013F450_h228770.f2084 == 1 || D_0013F450_h228770.f2084 == 0x1E) && D_0013F450_h228770.f198 > f_fun_001f96f8_227fa0(0x14)) {
-                    FUN_L00_00217658();
+                    launch_hero_wrench();
                     break;
                 }
                 f_fun_l00_002223f8_227fa0(0x15, 1);

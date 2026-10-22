@@ -368,7 +368,7 @@ extern void FUN_L00_0020e4c8(void);
 extern s32 FUN_L00_0020fe30(void);
 extern s32 is_wrench_moby(struct Moby *) __asm__("FUN_L00_00211360");
 extern s32 FUN_L00_00216de8(s32, s32);
-extern void FUN_L00_00217658(void);
+extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern void select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
@@ -437,7 +437,7 @@ s32 FUN_L02_0022ee00(void)
                          scale_game_frames(0x14) < hero.state_timer)) {
                         if ((hero.state.current == HERO_STATE_LOOK || hero.state.current == 0x1E) &&
                             scale_game_frames(0x14) < hero.state_timer) {
-                            FUN_L00_00217658();
+                            launch_hero_wrench();
                         } else {
                             hero_set_state(HERO_STATE_CROUCH_SWING, 1);
                         }

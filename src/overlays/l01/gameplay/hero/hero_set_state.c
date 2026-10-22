@@ -1613,7 +1613,7 @@ extern int FUN_L00_0020d498(int);
 extern void FUN_L00_0020e4c8(void);
 extern int FUN_L00_0020fe30(void);
 extern int FUN_L00_00216de8(int, int);
-extern void FUN_L00_00217658(void);
+extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern int FUN_L00_00233e98(int);
 extern int voice_is_playing(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
 extern void FUN_L00_0029a6b0(int);
@@ -1652,7 +1652,7 @@ int FUN_L01_00240ed8(void) {
                          scale_game_frames(0x14) < hero.state_timer)) {
                         if ((hero.state.current == 1 || hero.state.current == 0x1e) &&
                             scale_game_frames(0x14) < hero.state_timer) {
-                            FUN_L00_00217658();
+                            launch_hero_wrench();
                         } else {
                             hero_set_state(0x15, 1);
                         }

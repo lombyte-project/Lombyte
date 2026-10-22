@@ -1112,8 +1112,10 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 
 /* Launches the equipped gadget moby: aims it at its target (or along the camera),
  * builds its orientation matrix and starts its animation/sound. */
-void FUN_L00_00217658(void);
-void FUN_L00_00217658(void) {
+void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
+
+void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
+void launch_hero_wrench(void) {
     f32 aim_origin_or_euler_angles[4];
     f32 delta[4];
     f32 item_rotation_matrix[12];
