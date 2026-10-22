@@ -2910,7 +2910,7 @@ extern void initialize_flight_path_state(struct Moby *) __asm__("FUN_L14_002fc89
 void advance_enemy_fighter_along_flight_path(struct Moby *moby) __asm__("FUN_L14_002fc9a0");
 
 extern void advance_enemy_fighter_along_flight_path(struct Moby *) __asm__("FUN_L14_002fc9a0");
-extern void FUN_L14_002fc3e8(struct Moby *);
+extern void spawn_enemy_fighter_exhaust(struct Moby *) __asm__("FUN_L14_002fc3e8");
 extern void cart_print(const char *, short) __asm__("FUN_001e93b0");
 extern void cart_remove(struct Moby *) __asm__("FUN_0020c828");
 extern int cart_frames(int) __asm__("FUN_001f96f8");
@@ -3018,7 +3018,7 @@ void update_enemy_fighter(struct Moby *moby) {
       }
       break;
     }
-    FUN_L14_002fc3e8(moby);
+    spawn_enemy_fighter_exhaust(moby);
     if (moby->state != 0 && moby->state != 2 &&
         cart_voice_alive(moby, data->sound) == 0)
         data->sound = cart_sound(0, 4, moby);
@@ -3058,7 +3058,7 @@ extern int exhaust_ftoi(float) __asm__("FUN_001fa6d0");
 extern L14Puff *exhaust_puff(void *, f32, f32, f32, int, void *, f32, int) __asm__("FUN_L00_0026d000");
 
 /* Engine exhaust: two smoke puffs and three fading rings on each side of the moby. */
-void FUN_L14_002fc3e8(struct Moby *emitter_moby) {
+void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     Vec4 step;
     Vec4 pos;
     Vec4 base;
