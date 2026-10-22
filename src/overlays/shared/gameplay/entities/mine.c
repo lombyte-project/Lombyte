@@ -2989,7 +2989,9 @@ void spawn_particle(void *, void *, int, int, int, int, float, float, float, flo
                   float) __asm__("FUN_L00_002712b8");
 void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern P_2b1af0 D_0013F450;
-void FUN_L00_002b1af0(unsigned char *source_object) {
+void emit_object_offset_particles(unsigned char *source_object) __asm__("FUN_L00_002b1af0");
+
+void emit_object_offset_particles(unsigned char *source_object) {
     V_2b1af0 b;
     V_2b1af0 a;
     V_2b1af0 emission_position;

@@ -58,7 +58,7 @@ extern int D_L00_0015F5CC_2b2100 __asm__("D_L00_0015F5CC");
 extern float frame_time_2b2100 __asm__("D_0015ED6C");
 extern int D_0015EEA4;
 extern int level_index_2b2100 __asm__("D_0015ED84");
-extern void FUN_L00_002b1af0_2b2100(struct Moby *) __asm__("FUN_L00_002b1af0");
+extern void emit_object_offset_particles(struct Moby *) __asm__("FUN_L00_002b1af0");
 extern void copy_matrix3x4_2b2100(void *, void *) __asm__("FUN_001fa2b8");
 extern void FUN_001fa2d8_2b2100(void *, void *) __asm__("FUN_001fa2d8");
 extern int tick_countdown_32_2b2100(int *) __asm__("FUN_001f9740");
@@ -119,7 +119,7 @@ void devastator_update(struct Moby *devastator_moby) {
     float muzzle_light_color_x, muzzle_light_color_y, muzzle_light_color_z;
     int i;
 
-    FUN_L00_002b1af0_2b2100(devastator_moby);
+    emit_object_offset_particles(devastator_moby);
     height = 0.75f;
     limit = 10000.0f;
     if ((unsigned char)devastator_moby->state == 0) {
