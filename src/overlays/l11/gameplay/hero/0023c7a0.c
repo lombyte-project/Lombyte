@@ -23,7 +23,9 @@ extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L11_0024db50");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L11_0023c7a0(void) {
+void update_hero_surface_condition_flags(void) __asm__("FUN_L11_0023c7a0");
+
+void update_hero_surface_condition_flags(void) {
     struct Hero *hero_object_ptr = &hero;
     unsigned char saved;
     int state;
