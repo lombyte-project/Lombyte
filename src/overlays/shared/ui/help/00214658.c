@@ -958,7 +958,9 @@ int FUN_L00_001efc70_217118(void *, void *, int, void *, int) __asm__("FUN_L00_0
 float FUN_L00_00233d30_217118(void *) __asm__("FUN_L00_00233d30");
 void FUN_L00_00213de8_217118(float) __asm__("FUN_L00_00213de8");
 
-void FUN_L00_00217118(float velocity_scale, float planar_length_threshold) {
+void stop_hero_motion_without_forward_support(float velocity_scale, float planar_length_threshold) __asm__("FUN_L00_00217118");
+
+void stop_hero_motion_without_forward_support(float velocity_scale, float planar_length_threshold) {
     OvlQuad collision_query_position[1];
     OvlQuad collision_query_second_position[1];
     unsigned char *P = (&hero.motion.velocity);
