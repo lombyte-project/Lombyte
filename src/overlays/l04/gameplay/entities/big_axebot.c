@@ -81,7 +81,9 @@ extern char *D_L04_0015FFE4;
 extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
 extern void FUN_L00_0025fcb8(char *, float *, float);
 
-int FUN_L04_002c1e98(struct Moby *moby) {
+int check_circular_saw_melee_attack_spacing(struct Moby *moby) __asm__("FUN_L04_002c1e98");
+
+int check_circular_saw_melee_attack_spacing(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float target_selection_output[20];
     float target_distance;
@@ -1555,7 +1557,7 @@ extern void normalize_vector_xyz(void *, void *, float);
 extern void release_voice_slot(int);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern void transform_vector_by_basis(void *, void *, void *);
-int FUN_L04_002c1e98(struct Moby *moby);
+int check_circular_saw_melee_attack_spacing(struct Moby *moby) __asm__("FUN_L04_002c1e98");
 void FUN_L04_002c1d70(struct Moby *moby);
 extern char D_0013E550[];
 extern void *func_L00_0025B478_2C35F0(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -1808,7 +1810,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                         data->f146 = scale_game_frames(0x3C);
                     }
                     ta = fast_arc_tan(tg.pos[0] - moby->pos[0], tg.pos[1] - moby->pos[1]);
-                    if (target_distance < 2.0f && data->f146 == 0 && FUN_L04_002c1e98((char *)moby) != 0) {
+                    if (target_distance < 2.0f && data->f146 == 0 && check_circular_saw_melee_attack_spacing((char *)moby) != 0) {
                         blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
                         data->f146 = scale_game_frames(0x3C);
                         moby->state = 7;
@@ -1839,7 +1841,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
              point_in_path_xy(&tg, D_L04_001B0930_2C35F0[data->f138]->pts,
                               D_L04_001B0930_2C35F0[data->f138]->count) != 0)) {
             rot = FUN_L04_002c1fb8_u(moby, dest, flag ? data->f140 * 2.0f : data->f140);
-            if (target_distance < 2.0f && data->f146 == 0 && FUN_L04_002c1e98((char *)moby) != 0) {
+            if (target_distance < 2.0f && data->f146 == 0 && check_circular_saw_melee_attack_spacing((char *)moby) != 0) {
                 blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
                 data->f146 = scale_game_frames(0x3C);
                 moby->state = 7;
@@ -1870,7 +1872,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                     data->f146 = scale_game_frames(0x3C);
                 }
                 ta = fast_arc_tan(tg.pos[0] - moby->pos[0], tg.pos[1] - moby->pos[1]);
-                if (target_distance < 2.0f && data->f146 == 0 && FUN_L04_002c1e98((char *)moby) != 0) {
+                if (target_distance < 2.0f && data->f146 == 0 && check_circular_saw_melee_attack_spacing((char *)moby) != 0) {
                     blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
                     data->f146 = scale_game_frames(0x3C);
                     moby->state = 7;
@@ -1926,7 +1928,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                     data->f146 = scale_game_frames(0x3C);
                 }
                 ta = fast_arc_tan(tg.pos[0] - moby->pos[0], tg.pos[1] - moby->pos[1]);
-                if (target_distance < 2.0f && data->f146 == 0 && FUN_L04_002c1e98((char *)moby) != 0) {
+                if (target_distance < 2.0f && data->f146 == 0 && check_circular_saw_melee_attack_spacing((char *)moby) != 0) {
                     blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
                     data->f146 = scale_game_frames(0x3C);
                     moby->state = 7;
