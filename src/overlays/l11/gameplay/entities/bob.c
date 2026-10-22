@@ -350,7 +350,9 @@ void apply_resort_owner_movement(void *mp) __asm__("FUN_L11_002d1340");
 
 extern void apply_resort_owner_movement(void *) __asm__("FUN_L11_002d1340");
 extern void FUN_L11_002d14b0(void *);
-void FUN_L11_002d27b0(WM11 *m);
+void update_resort_owner_look_tracking(WM11 *moby) __asm__("FUN_L11_002d27b0");
+
+void update_resort_owner_look_tracking(WM11 *m) __asm__("FUN_L11_002d27b0");
 
 void resort_owner_update(struct Moby *moby) __asm__("FUN_L11_002d0fa8");
 void resort_owner_update(struct Moby *moby) {
@@ -362,7 +364,7 @@ void resort_owner_update(struct Moby *moby) {
     FUN_L11_002d1030(moby);
     apply_resort_owner_movement(moby);
     FUN_L11_002d14b0(moby);
-    FUN_L11_002d27b0(moby);
+    update_resort_owner_look_tracking(moby);
 }
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
@@ -1039,7 +1041,7 @@ typedef struct {
 } WD11b;
 
 /* Guard head update: in its watching states it turns its body and head toward the hero. */
-void FUN_L11_002d27b0(WM11 *moby) {
+void update_resort_owner_look_tracking(WM11 *moby) {
     WS11 scratch;
     WD11b *moby_vars = (WD11b *)moby->data;
     float rate;
