@@ -499,7 +499,7 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-void FUN_L08_002d4ca0(Moby *moby);
+void update_bomber_tank_damage_and_aim(Moby *moby) __asm__("FUN_L08_002d4ca0");
 void advance_bomber_tank_along_path(struct Moby *moby, int path_id) __asm__("FUN_L08_002d55c8");
 
 void advance_bomber_tank_along_path(struct Moby *moby, int path_id) __asm__("FUN_L08_002d55c8");
@@ -575,7 +575,7 @@ void update_bomber_tank(Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    FUN_L08_002d4ca0(moby);
+    update_bomber_tank_damage_and_aim(moby);
     target = vars->target;
     switch (moby->state) {
     case BOMBER_TANK_STATE_INITIALIZE:
@@ -843,7 +843,7 @@ extern void matmul_2D5FA8(float *, float *, float *) __asm__("FUN_001fa3c0");
 extern void effects_update_2D5FA8(Moby *, short *) __asm__("FUN_L00_0025d538");
 
 extern int D_L08_0015F5B8 __attribute__((sda));
-void FUN_L08_002d4ca0(Moby *moby) {
+void update_bomber_tank_damage_and_aim(Moby *moby) {
     Data_2D5FA8 *data = (Data_2D5FA8 *)moby->pvars;
     Hit_2D5FA8 *source;
     Hit_2D5FA8 *part_a_source;
