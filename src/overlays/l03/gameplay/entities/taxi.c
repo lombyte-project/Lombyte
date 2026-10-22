@@ -2047,7 +2047,7 @@ extern void reset_numeric_hud_element_32x32_base(void) __asm__("FUN_L00_00235dc0
 extern void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
 extern void hud_keep_visible(int, int) __asm__("FUN_L00_00235e18");
 extern void FUN_L00_002371e0(void);
-extern void FUN_L00_00237200(void);
+extern void draw_hud_text_panel(void) __asm__("FUN_L00_00237200");
 s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
                            s32 b) __asm__("FUN_001ff308");
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
@@ -2077,7 +2077,7 @@ void update_rail_lift_help_and_hud(struct Moby *lift_moby, int mode) {
     hud_key = *(int *)(lift_vars + 0xA4);
     if (hud_key == -1) {
         *(int *)(lift_vars + 0xA4) = queue_animation_update(
-            0xC, 0, (int)initialize_numeric_hud_element, (int)FUN_L00_002371e0, (int)FUN_L00_00237200, 0, 0);
+            0xC, 0, (int)initialize_numeric_hud_element, (int)FUN_L00_002371e0, (int)draw_hud_text_panel, 0, 0);
     } else {
         hud_keep_visible(hud_key, 0xA);
     }

@@ -651,7 +651,9 @@ extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
 extern s32 sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern void draw_framed_text(s32, s32, s32, char *) __asm__("FUN_00201200");
 
-int FUN_L00_00237200(HudElem *hud_element) {
+int draw_hud_text_panel(HudElem *hud_element) __asm__("FUN_L00_00237200");
+
+int draw_hud_text_panel(HudElem *hud_element) {
     int y, i;
     int alpha, color, level;
     float fade;

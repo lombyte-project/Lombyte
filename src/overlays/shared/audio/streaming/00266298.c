@@ -73,7 +73,7 @@ extern s32 hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
 extern void mine_blend_color(void) __asm__("FUN_L00_002371e0");
-extern void FUN_L00_00237200(void);
+extern void draw_hud_text_panel(void) __asm__("FUN_L00_00237200");
 extern void FUN_L00_00239cc8(void);
 extern void FUN_L00_00239d00(void);
 extern void FUN_L00_00239df8(void);
@@ -156,7 +156,7 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
 
     if (hud_keep_visible(bolt_hud_item, 10)) {
         bolt_hud_item = queue_animation_update(12, 0, initialize_numeric_hud_element, mine_blend_color,
-                                               FUN_L00_00237200, 0, 0);
+                                               draw_hud_text_panel, 0, 0);
     }
     {
         /* a fresh block-local pointer (not `entry`) keeps retail's registers */
