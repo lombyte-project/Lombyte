@@ -1258,7 +1258,9 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
-extern float FUN_L10_002e4840(struct Moby *self);
+float compute_toxic_crab_group_approach_angle(struct Moby *self) __asm__("FUN_L10_002e4840");
+
+extern float compute_toxic_crab_group_approach_angle(struct Moby *self) __asm__("FUN_L10_002e4840");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -1521,7 +1523,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             if (D_L10_00161E4C * DEG_TO_RAD < diff || crab_data->i1D8 == 0) {
                 FUN_L00_00258278((char *)m, &crab_data->f190, ang, 0.02f, 0.3f, frame_time * 6.2831855f);
             }
-            aim = FUN_L10_002e4840((struct Moby *)m);
+            aim = compute_toxic_crab_group_approach_angle((struct Moby *)m);
             v[0] = fast_cos(aim) * (*(short *)(target_moby + 0xA6) == 0x359 ? 2.0f : 3.57f);
             v[1] = fast_sin(aim) * (*(short *)(target_moby + 0xA6) == 0x359 ? 2.0f : 3.57f);
             v[2] = 0.0f;
@@ -2334,7 +2336,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 extern float D_L10_00161E48 __attribute__((sda));
-float FUN_L10_002e4840(struct Moby *self) {
+float compute_toxic_crab_group_approach_angle(struct Moby *self) {
     char *owner = *(char **)(self->pvars + 0x160);
     float hi, lo, owner_to_self_angle, owner_to_self_distance, v[3];
     short *group_entry;
