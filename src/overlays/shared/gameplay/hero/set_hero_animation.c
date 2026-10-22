@@ -474,7 +474,9 @@ void set_hero_animation(int a0, int a1, float t) {
 extern char *D_001413D0_2325a0[] __asm__("D_001413D0");
 extern void FUN_0020c880_2325a0(void *) __asm__("FUN_0020c880");
 /* Fills bytes 0x50..0x53 of D_001413D0[0] from a and b, clears 0x54, calls update_moby_animation_state. */
-void FUN_L00_002325a0(int animation_id, int frame_index) {
+void set_hero_animation_sequence_and_frame(int animation_id, int frame_index) __asm__("FUN_L00_002325a0");
+
+void set_hero_animation_sequence_and_frame(int animation_id, int frame_index) {
     char *animation_moby = D_001413D0_2325a0[0];
     animation_moby[0x50] = frame_index;
     animation_moby[0x51] = frame_index + 1;
