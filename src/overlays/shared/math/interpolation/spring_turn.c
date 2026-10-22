@@ -13,7 +13,9 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Cosine-eased rotation from x toward y at z. */
-float FUN_L00_00257ef0(float x, float y, float z) {
+float interpolate_wrapped_angle_cosine_eased(float x, float y, float z) __asm__("FUN_L00_00257ef0");
+
+float interpolate_wrapped_angle_cosine_eased(float x, float y, float z) {
     float wrapped_angle_delta = fast_subtract_rotations(y, x);
     float phase_cosine = fast_cos(z * 3.1415927f);
     return fast_add_rotations(x, wrapped_angle_delta * ((1.0f - phase_cosine) * 0.5f));

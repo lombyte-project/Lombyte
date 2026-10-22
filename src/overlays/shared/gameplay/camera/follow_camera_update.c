@@ -940,7 +940,7 @@ extern float D_L00_00166DD8 __attribute__((section(".data")));
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
-extern float FUN_L00_00257ef0(float, float, float);
+extern float interpolate_wrapped_angle_cosine_eased(float, float, float) __asm__("FUN_L00_00257ef0");
 extern float cosine_interpolate_alt(float, float, float) __asm__("FUN_002133d0");
 extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
 extern void FUN_L00_001ed580(void *, void *, void *);
@@ -988,11 +988,11 @@ void FUN_L00_002eae20(void *camera) {
                 }
                 F(transition_state, 0x1C) += cosine_interpolate_alt(0, transition_azimuth_delta, t);
             } else {
-                F(transition_state, 0x1C) = FUN_L00_00257ef0(F(transition_state, 0x1C), F(transition_state, 8), t);
+                F(transition_state, 0x1C) = interpolate_wrapped_angle_cosine_eased(F(transition_state, 0x1C), F(transition_state, 8), t);
             }
             F(transition_state, 0x24) = F(transition_state, 0x24) + (F(transition_state, 0x10) - F(transition_state, 0x24)) *
                                           cubic_hermite_scalar(F(transition_state, 0x44), 0, 1.0f, F(transition_state, 0x48), t);
-            F(transition_state, 0x20) = FUN_L00_00257ef0(F(transition_state, 0x20), F(transition_state, 0xC), t);
+            F(transition_state, 0x20) = interpolate_wrapped_angle_cosine_eased(F(transition_state, 0x20), F(transition_state, 0xC), t);
             FUN_L00_00257f70(transition_state + 0x30, transition_state + 0x30, &hero.motion.pos, t);
             FUN_L00_001ed580(camera_object + 0x30, transition_state + 0x1C, transition_state + 0x30);
             FUN_L00_00258050((float *)(camera_object + 0x40), (float *)(camera_object + 0x40), (float *)(target_position + 0x10), t);
