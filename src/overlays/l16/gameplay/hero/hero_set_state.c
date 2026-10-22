@@ -85,7 +85,7 @@ extern void pool_splash(void *, int, int, float, float, float, float) __asm__("F
 extern void FUN_L01_002405a0(void);
 extern void initialize_trick_combo_hud(void) __asm__("FUN_L05_00262ae8");
 extern void update_trick_combo_hud(void) __asm__("FUN_L05_00262b58");
-extern void FUN_L05_00262f50(void);
+extern void draw_trick_combo_hud(void) __asm__("FUN_L05_00262f50");
 extern void FUN_L05_00264298(void);
 extern void initialize_hud_element_defaults(void) __asm__("FUN_L05_002661a0");
 extern void FUN_L05_002661e8(void);
@@ -529,7 +529,7 @@ int hero_set_state(int a, int b) {
                     FUN_L05_00264298();
                     q->unk880 = queue_animation_update(
                         0x10, 0xFFFF, (int)initialize_trick_combo_hud, (int)update_trick_combo_hud,
-                        (int)FUN_L05_00262f50, (int)&q->unk864,
+                        (int)draw_trick_combo_hud, (int)&q->unk864,
                         (int)((float)scale_game_frames(0x11) * 60.0f));
                 }
                 q->unk874 = q->motion.rot.f[2];

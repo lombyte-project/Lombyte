@@ -234,7 +234,9 @@ extern s32 D_L05_0015F8C0 __attribute__((sda));
 extern s32 D_L05_0015F8C4 __attribute__((sda));
 extern s32 D_L05_0015F8C8 __attribute__((sda));
 
-s32 FUN_L05_00262f50(char *element) {
+s32 draw_trick_combo_hud(char *element) __asm__("FUN_L05_00262f50");
+
+s32 draw_trick_combo_hud(char *element) {
     u8 *state_bytes = (u8 *)(element + 0x70);
     char text[0x80];
     s32 pose_ids[4];
