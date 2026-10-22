@@ -1287,7 +1287,7 @@ extern int FUN_L01_0028b510(void *, void *, float);
 extern int resolve_path_node_index(void *, int) __asm__("FUN_L01_0028b828");
 extern int advance_path_node_index(char *) __asm__("FUN_L01_0028b878");
 extern void initialize_path_descriptor(char *) __asm__("FUN_L01_0028b410");
-extern void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b);
+extern void compute_path_node_tangent(void *out, int *l, int idx, float a, float b) __asm__("FUN_L01_0028b8c8");
 extern void evaluate_cubic_hermite_segment(float t, void *out, void *p1, void *p2, void *p3, void *p4) __asm__("FUN_L01_0028ba80");
 extern void FUN_L01_0028bb90(void *, int, void *, float, float);
 extern void add_moby_rotation_based_offsets(char *, char *) __asm__("FUN_L03_0029c8a8");
@@ -1419,7 +1419,7 @@ void red_ship_1_update(char *moby) {
         cur0 = data + 0xA0;
         *(OvlQuad *)(data + 0xE0) = *(OvlQuad *)(*(char **)(pm + 0x10) + *(int *)pm * 0x10 + 0x10);
         *(float *)(data + 0x100) = 1.0f;
-        FUN_L01_0028b8c8(cur0, (int *)pm, 0, *(float *)(data + 0x104), *(float *)(data + 0x108));
+        compute_path_node_tangent(cur0, (int *)pm, 0, *(float *)(data + 0x104), *(float *)(data + 0x108));
         *(OvlQuad *)(data + 0xB0) = *(OvlQuad *)(data + 0xC0) =
             *(OvlQuad *)(*(char **)(pm + 0x10) + *(int *)pm * 0x10 + 0x10);
         *(float *)(moby + 0x40) = 0.0f;
@@ -1471,7 +1471,7 @@ void red_ship_1_update(char *moby) {
             *(float *)(data + 0x100) -= 1.0f;
             advanced_path_node_index = advance_path_node_index(pm);
             *(OvlQuad *)(data + 0x90) = *(OvlQuad *)(data + 0xA0);
-            FUN_L01_0028b8c8(cur, (int *)pm, 1, *(float *)(data + 0x104), *(float *)(data + 0x108));
+            compute_path_node_tangent(cur, (int *)pm, 1, *(float *)(data + 0x104), *(float *)(data + 0x108));
             *(OvlQuad *)(data + 0xB0) = *(OvlQuad *)(data + 0xC0);
             *(OvlQuad *)(data + 0xC0) = *(OvlQuad *)(*(char **)(pm + 0x10) + resolve_path_node_index(pm, advanced_path_node_index + 1) * 0x10 + 0x10);
         }

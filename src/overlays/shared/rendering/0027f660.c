@@ -367,7 +367,9 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void *func_001153FC_c(void *, int, unsigned int) __asm__("FUN_001153fc");
 
-void FUN_L01_0028b8c8(void *out, int *path_descriptor, int node_index_offset, float tangent_tension, float tangent_bias) {
+void compute_path_node_tangent(void *out, int *path_descriptor, int node_index_offset, float tangent_tension, float tangent_bias) __asm__("FUN_L01_0028b8c8");
+
+void compute_path_node_tangent(void *out, int *path_descriptor, int node_index_offset, float tangent_tension, float tangent_bias) {
     void *neighboring_points[3];
     float weighted_incoming_delta[4];
     float weighted_outgoing_delta[4];
@@ -442,7 +444,7 @@ float FUN_L01_0028bb90(float tangent_tension, float tangent_bias, T_28b828 *path
     }
     /* The SN ABI assigns float arguments independently of the integer arguments.
      * Keep the retail argument setup order without changing the shared helper. */
-    ((void (*)(void *, int *, float, float, int))FUN_L01_0028b8c8)(&nextTangent, (int *)path, tangent_tension, tangent_bias, 0);
+    ((void (*)(void *, int *, float, float, int))compute_path_node_tangent)(&nextTangent, (int *)path, tangent_tension, tangent_bias, 0);
 
     index = 0;
     while (index < count) {
@@ -460,7 +462,7 @@ float FUN_L01_0028bb90(float tangent_tension, float tangent_bias, T_28b828 *path
         segmentLength = 0.0f;
         nextNode.q = *(OvlQuad *)((char *)path->f10 + nextIndex * 16 + 0x10);
         *(int *)path = index;
-        ((void (*)(void *, int *, float, float, int))FUN_L01_0028b8c8)(&nextTangent, (int *)path, tangent_tension, tangent_bias, 1);
+        ((void (*)(void *, int *, float, float, int))compute_path_node_tangent)(&nextTangent, (int *)path, tangent_tension, tangent_bias, 1);
         previousPoint.q = currentNode.q;
         step = segment_parameter;
         do {

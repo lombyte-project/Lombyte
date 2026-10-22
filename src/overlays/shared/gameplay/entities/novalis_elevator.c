@@ -3019,7 +3019,7 @@ extern f32 FUN_002132a8(f32, f32);
 extern void initialize_path_descriptor(PathCursor *) __asm__("FUN_L01_0028b410");
 extern s32 FUN_L01_0028b510(void *, PathNodes *, f32);
 extern f32 FUN_001f9e90(f32, f32);
-extern void FUN_L01_0028b8c8(QVec *, PathCursor *, s32, f32, f32);
+extern void compute_path_node_tangent(QVec *, PathCursor *, s32, f32, f32) __asm__("FUN_L01_0028b8c8");
 extern f32 FUN_001f9b20(void *);
 extern f32 FUN_00213308(void);
 extern f32 FUN_L01_0028bb90(f32, f32, PathCursor *, s32, struct Moby *);
@@ -3164,7 +3164,7 @@ void gunship_follow_path(struct Moby *m) {
         }
         v->unkE0.q = (p->nodes->node + p->idx)->q;
         v->unkF0 = 1.0f;
-        FUN_L01_0028b8c8(&v->unkA0, p, 0, v->unkF4, v->unkF8);
+        compute_path_node_tangent(&v->unkA0, p, 0, v->unkF4, v->unkF8);
         v->unkB0.q = v->unkC0.q = (p->nodes->node + p->idx)->q;
         *(s32 *)&m->rot.x = 0;
         m->rot.y = -FUN_001f9e90(FUN_001f9b20(&v->unkA0), v->unkA0.v.z);
@@ -3241,7 +3241,7 @@ void gunship_follow_path(struct Moby *m) {
         v->unkF0 -= 1.0f;
         n = advance_path_node_index(p);
         v->unk90.q = v->unkA0.q;
-        FUN_L01_0028b8c8(&v->unkA0, p, 1, v->unkF4, v->unkF8);
+        compute_path_node_tangent(&v->unkA0, p, 1, v->unkF4, v->unkF8);
         v->unkB0.q = v->unkC0.q;
         v->unkC0.q = (p->nodes->node + resolve_path_node_index(p, n + 1))->q;
     }
