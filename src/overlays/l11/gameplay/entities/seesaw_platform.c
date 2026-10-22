@@ -3591,7 +3591,7 @@ void puffoid_update(struct Moby *moby) {
         break;
     case PUFFOID_STATE_FOLLOW_PATH: {
         float vel[4];
-        float lim;
+        float path_vertical_step_limit;
         float dist;
         qcopy(pos, D_L11_001B0EB0_4318[puffoid_vars->path] + puffoid_vars->point * 16 + 0x10);
         if (puffoid_vars->carrier >= 0) {
@@ -3609,11 +3609,11 @@ void puffoid_update(struct Moby *moby) {
         vel[0] = cos_4318(moby->rot.z) * (frame_time + frame_time);
         vel[1] = sin_4318(moby->rot.z) * (frame_time + frame_time);
         vel[2] = pos[2] - moby->pos.z;
-        lim = frame_time * 4.0f;
-        if (vel[2] > lim) {
-            vel[2] = lim;
-        } else if (vel[2] < -lim) {
-            vel[2] = -lim;
+        path_vertical_step_limit = frame_time * 4.0f;
+        if (vel[2] > path_vertical_step_limit) {
+            vel[2] = path_vertical_step_limit;
+        } else if (vel[2] < -path_vertical_step_limit) {
+            vel[2] = -path_vertical_step_limit;
         }
         move_4318(moby, vel, 0.5f, 0.5f, 0.0f, 0x10);
         if (distance_4318(pos, &moby->pos) < 1.0f) {
