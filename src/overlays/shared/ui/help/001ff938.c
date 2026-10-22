@@ -345,7 +345,9 @@ extern void FUN_00125180_20a328(void *, void *) __asm__("FUN_00125180");
 
 extern s32 D_L15_0017445C __attribute__((section(".data")));
 extern char D_0013F3D0[] __attribute__((section(".data")));
-void FUN_L15_0020a328(int force) {
+void adjust_hero_planar_velocity_from_probes(int force) __asm__("FUN_L15_0020a328");
+
+void adjust_hero_planar_velocity_from_probes(int force) {
     V_20a328 offset_position, primary_endpoint, b, secondary_endpoint;
     char *hero_position;
     P_20a328 *g;
