@@ -1024,7 +1024,9 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 
 extern short D_L17_0016206C __attribute__((sda));
 int D_L17_00162070 = 4;
-void FUN_L17_002ec000(char *moby, char *ship_vars, float aim_azimuth, float aim_elevation) {
+void update_fighter_jet_aim_and_fire_projectile(char *moby, char *ship_vars, float aim_azimuth, float aim_elevation) __asm__("FUN_L17_002ec000");
+
+void update_fighter_jet_aim_and_fire_projectile(char *moby, char *ship_vars, float aim_azimuth, float aim_elevation) {
     char aim_direction[16];
     char projectile_spawn_position[16];
     char projectile_spawn_offset[16];
@@ -1235,7 +1237,7 @@ extern void transform_vector_by_basis(void *, void *, void *);
 extern void update_view_context() __asm__("func_001F2D98");
 extern void vu_euler_rotation_basis(void *, void *);
 float absolute_float(float input) __asm__("func_001F99C0");
-void FUN_L17_002ec000(char *moby, char *obj, float p2, float p3);
+void update_fighter_jet_aim_and_fire_projectile(char *moby, char *obj, float p2, float p3) __asm__("FUN_L17_002ec000");
 void try_fire_fighter_jet_rocket(char *moby, char *obj) __asm__("FUN_L17_002ec150");
 void FUN_L17_002edf10(char *moby, float *a, float *b);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -1506,7 +1508,7 @@ void FUN_L17_002ec360(Moby *ship_moby, Obj *ship_vars) {
     }
     enqueue_callback_list_1(FUN_L17_002eb9a8, ship_moby);
     try_fire_fighter_jet_rocket((char *)ship_moby, (char *)ship_vars);
-    FUN_L17_002ec000((char *)ship_moby, (char *)ship_vars, fast_add_rotations(ship_vars->f28, -ship_vars->f6C / 7.0f),
+    update_fighter_jet_aim_and_fire_projectile((char *)ship_moby, (char *)ship_vars, fast_add_rotations(ship_vars->f28, -ship_vars->f6C / 7.0f),
                      -fast_add_rotations(ship_vars->f24, -(ship_vars->f70 / 7.0f) - 0.1f));
 }
 /* Per-frame update for the player's ship moby on Veldin Orbit: takes hits, boards and leaves the ship, and runs the flight states. */
