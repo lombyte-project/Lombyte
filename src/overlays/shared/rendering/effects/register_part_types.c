@@ -84,7 +84,7 @@ extern void update_damped_moby_relative_color_size_tween_particle(void) __asm__(
 extern void update_gravity_damped_resizing_particle(void) __asm__("FUN_L00_002756f0");
 extern void update_timed_alpha_fade_particle(void) __asm__("FUN_L00_00275810");
 extern void update_moving_lifetime_scaled_alpha_particle(void) __asm__("FUN_L00_00275860");
-extern void FUN_L00_00275aa0(void);
+extern void update_proximity_corrected_size_alpha_tween_particle(void) __asm__("FUN_L00_00275aa0");
 extern void update_moving_fading_particle(void) __asm__("FUN_L00_00275d68");
 extern void update_mode_controlled_shrinking_color_tween_particle(void) __asm__("FUN_L00_00275eb0");
 
@@ -173,7 +173,7 @@ void register_part_types(void) {
     handlers[75] = (u32)update_gravity_damped_resizing_particle;
     handlers[76] = (u32)update_timed_alpha_fade_particle;
     handlers[77] = (u32)update_moving_lifetime_scaled_alpha_particle;
-    handlers[78] = (u32)FUN_L00_00275aa0;
+    handlers[78] = (u32)update_proximity_corrected_size_alpha_tween_particle;
     handlers[79] = (u32)update_moving_fading_particle;
     handlers[80] = (u32)update_mode_controlled_shrinking_color_tween_particle;
 }

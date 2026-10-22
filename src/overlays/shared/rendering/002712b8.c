@@ -2054,7 +2054,9 @@ static __inline__ void vcopy_276940(float *d, float *s) {
     *(int *)&d[3] = 0;
 }
 
-void FUN_L00_00275aa0(char *particle) {
+void update_proximity_corrected_size_alpha_tween_particle(char *particle) __asm__("FUN_L00_00275aa0");
+
+void update_proximity_corrected_size_alpha_tween_particle(char *particle) {
     char *particle_data = particle + 0x20;
     char *particle_position;
     float interpolation_factor;
