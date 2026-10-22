@@ -781,7 +781,9 @@ extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void FUN_L05_003298d8_c(Camera_32B1F8 *) __asm__("FUN_L05_003298d8");
 
 extern float D_L05_00174278 __attribute__((section(".data")));
-void FUN_L05_00329ce8(Camera_32B1F8 *camera) {
+void update_orbit_camera_position(Camera_32B1F8 *camera) __asm__("FUN_L05_00329ce8");
+
+void update_orbit_camera_position(Camera_32B1F8 *camera) {
     V_32B1F8 down;
     V_32B1F8 focus;
     V_32B1F8 rel;
