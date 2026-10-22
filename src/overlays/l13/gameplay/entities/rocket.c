@@ -1216,7 +1216,8 @@ void FUN_L13_00308d10(struct Moby *moby) {
         HIT_RESULT_NO_REACTION = 11
     };
     enum {
-        GROUND_MATERIAL_DESTROYS_WALKER = 0
+        GROUND_MATERIAL_DESTROYS_WALKER = 0,
+        GROUND_MATERIAL_TRIGGERS_WALKER_EXPLOSION = 1
     };
     struct WalkerVars_8d10 *vars = (struct WalkerVars_8d10 *)moby->pvars;
     char *hit;
@@ -1309,7 +1310,7 @@ void FUN_L13_00308d10(struct Moby *moby) {
     if (ground != 0.0f) {
         switch (ground_material_8d10()) {
         case GROUND_MATERIAL_DESTROYS_WALKER:
-        case 1:
+        case GROUND_MATERIAL_TRIGGERS_WALKER_EXPLOSION:
         case 3:
         case 11:
         case 13:
