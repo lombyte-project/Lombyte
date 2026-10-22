@@ -64,7 +64,7 @@ extern void update_timed_sphere_probed_particle(void) __asm__("FUN_L00_00272438"
 extern void update_moby_point_attached_particle(void) __asm__("FUN_L00_002726d8");
 extern void update_expanding_damped_rgb_fading_particle(void) __asm__("FUN_L00_00272838");
 extern void update_expanding_alpha_pulse_particle(void) __asm__("FUN_L00_002728e8");
-extern void FUN_L00_00272bc0(void);
+extern void update_color_tween_emitter_particle(void) __asm__("FUN_L00_00272bc0");
 extern void update_timed_hero_relative_particle(void) __asm__("FUN_L00_00273088");
 extern void update_moving_hero_relative_alpha_fade_particle(void) __asm__("FUN_L00_00273298");
 extern void update_moby_point_attached_alpha_pulse_particle(void) __asm__("FUN_L00_00273448");
@@ -153,7 +153,7 @@ void register_part_types(void) {
     handlers[55] = (u32)update_moby_point_attached_particle;
     handlers[56] = (u32)update_expanding_damped_rgb_fading_particle;
     handlers[57] = (u32)update_expanding_alpha_pulse_particle;
-    handlers[58] = (u32)FUN_L00_00272bc0;
+    handlers[58] = (u32)update_color_tween_emitter_particle;
     handlers[59] = (u32)update_timed_hero_relative_particle;
     handlers[60] = (u32)update_moving_hero_relative_alpha_fade_particle;
     handlers[61] = (u32)update_moby_point_attached_alpha_pulse_particle;

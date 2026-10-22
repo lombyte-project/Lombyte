@@ -755,7 +755,9 @@ extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_00259bc8_272bc0(int, int, int, void *, void *,
                                     float) __asm__("FUN_L00_00259bc8");
 
-void FUN_L00_00272bc0(unsigned char *particle) {
+void update_color_tween_emitter_particle(unsigned char *particle) __asm__("FUN_L00_00272bc0");
+
+void update_color_tween_emitter_particle(unsigned char *particle) {
     enum {
         PARTICLE_PHASE_INITIAL_COLOR_TWEEN = 0,
         PARTICLE_PHASE_EMISSION = 1,
