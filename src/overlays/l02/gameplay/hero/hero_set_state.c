@@ -1820,7 +1820,7 @@ extern int FUN_L00_002050b8(int);
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int FUN_L00_00216de8(int, int);
-extern int FUN_L00_00221d98(void);
+extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
 extern int try_start_hero_jump(int, int) __asm__("FUN_L00_00228b78");
 extern int pick_idle_fidget(int *) __asm__("FUN_L00_00229010");
@@ -3102,7 +3102,7 @@ void update_hero_state_transitions(void) {
                 case 60:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
                     if (hero.unk4AE != 0) {
-                        int t = FUN_L00_00221d98();
+                        int t = get_hero_high_jump_input_window_frames();
                         if (t > 0 && (hero.state_timer < t || hero.unk418 != 0) &&
                             hero.grounded_frames != 0) {
                             if (hero.state.current != HERO_STATE_HIGH_JUMP ||

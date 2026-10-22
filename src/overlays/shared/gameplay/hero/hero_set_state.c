@@ -333,7 +333,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 
 /* scale_game_frames(12), or 0 when stick_direction_vs_facing returns 2. */
-int FUN_L00_00221d98(void) {
+int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
+
+int get_hero_high_jump_input_window_frames(void) {
     int frame_count = scale_game_frames(12);
     int stick_direction = stick_direction_vs_facing();
     if (stick_direction == 2) {
@@ -3631,7 +3633,7 @@ int process_hero_equipped_item_input(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00229348), where it is exact; names translated to the US level program. */
 
 extern int D_0013A4E0[];
-extern int FUN_L00_00221d98(void);
+extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int pad_pressed_within(int, void *, void *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_00266e00(int, void *, void *, int);
 
@@ -3644,7 +3646,7 @@ int try_start_hero_jump(void *jump_press_window_frames, int suppress_normal_jump
     if (!pad_pressed_within(0x40, jump_press_window_frames, &jump_press_age_frames))
         return 0;
 
-    high_jump_timing_window_frames = FUN_L00_00221d98();
+    high_jump_timing_window_frames = get_hero_high_jump_input_window_frames();
 
     if ((*(int *)((char *)D_0013A4E0 + 0x2600) & 0xA) != 0) {
         if (high_jump_timing_window_frames > 0 && FUN_L00_00266e00(0x40, (void *)0x1F000, (char *)jump_press_window_frames + high_jump_timing_window_frames, high_jump_timing_window_frames)) {
