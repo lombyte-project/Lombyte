@@ -1392,7 +1392,7 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void FUN_L00_00261630(char *moby, char *d, float a, float b);
 extern void FUN_L00_00261d78(float, int, void *, void *);
 extern void FUN_L00_00272060(void *, int, float, float, int, int, int, float, void *);
-extern void FUN_L05_0028be78(int *list, int n, int idx);
+extern void build_symmetric_adjacency_masks(int *list, int n, int idx) __asm__("FUN_L05_0028be78");
 extern void FUN_L06_002f2250_u(void) __asm__("FUN_L06_002f2250");
 extern void FUN_L06_002f2910(void *);
 extern void FUN_L06_002f3640_u(void *) __asm__("FUN_L06_002f3640");
@@ -1562,7 +1562,7 @@ void gadgebot_update(GbMoby *moby) {
 
                 for (i = 0; i < 16; i++) {
                     if (gadgebot_vars->paths.id[i] >= 0) {
-                        FUN_L05_0028be78(&gadgebot_vars->paths.id[i], 1, gadgebot_vars->paths.node[i]);
+                        build_symmetric_adjacency_masks(&gadgebot_vars->paths.id[i], 1, gadgebot_vars->paths.node[i]);
                         if (FUN_L01_00276a48(0.0f, &gadgebot_vars->paths.id[i], 1, gadgebot_vars->paths.node[i],
                                              moby->pos) != 0) {
                             gadgebot_vars->unk27C = i;

@@ -1109,7 +1109,7 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void FUN_L00_00261d78(int, void *, void *, float);
 extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L00_00263fd8_c(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
-extern void FUN_L05_0028be78(int *, int, int);
+extern void build_symmetric_adjacency_masks(int *, int, int) __asm__("FUN_L05_0028be78");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
@@ -1210,7 +1210,7 @@ void extermibot_update(unsigned char *moby) {
             moby[0x20] = 1;
             if (moby[0x53] != 0) blend_moby_animation(moby, 0, 0, 0);
         }
-        FUN_L05_0028be78((int *)(moby_data + 0x2C0), 1, *(int *)(moby_data + 0x2C4));
+        build_symmetric_adjacency_masks((int *)(moby_data + 0x2C0), 1, *(int *)(moby_data + 0x2C4));
         break;
     case EXTERMIBOT_IDLE_AND_CHECK_TARGET_PATH:
         if (*(int *)(moby_data + 0x164) != 2 && random_integer_below_c2(9) == 0) {

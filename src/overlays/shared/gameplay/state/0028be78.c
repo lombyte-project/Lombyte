@@ -12,7 +12,9 @@
 
 extern int FUN_L00_00261968(int, void *, void *);
 
-void FUN_L05_0028be78(int *list, int list_count, int adjacency_table_index) {
+void build_symmetric_adjacency_masks(int *list, int list_count, int adjacency_table_index) __asm__("FUN_L05_0028be78");
+
+void build_symmetric_adjacency_masks(int *list, int list_count, int adjacency_table_index) {
     char *adjacency_table = D_L05_001B0930[adjacency_table_index];
     int i, j, k, found;
     {

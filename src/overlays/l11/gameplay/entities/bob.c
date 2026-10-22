@@ -520,7 +520,7 @@ extern void scale_vector_14b0(void *out, void *a, f32 s) __asm__("FUN_001f9bf8")
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern void FUN_L05_0028be78(void *, int, int);
+extern void build_symmetric_adjacency_masks(void *, int, int) __asm__("FUN_L05_0028be78");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_00266858(void *, int);
 extern int FUN_L11_0030a830(struct Moby *arg);
@@ -603,9 +603,9 @@ void FUN_L11_002d14b0(void *resort_owner_moby) {
     case RESORT_OWNER_INITIALIZE:
         initialize_npc_dialogue(moby, moby_vars->talk);
         moby->update_dist = 0xFF;
-        FUN_L05_0028be78(&moby_vars->unk60[0], 1, moby_vars->unk70[0]);
-        FUN_L05_0028be78(&moby_vars->unk60[1], 1, moby_vars->unk70[1]);
-        FUN_L05_0028be78(&moby_vars->unk60[2], 1, moby_vars->unk70[2]);
+        build_symmetric_adjacency_masks(&moby_vars->unk60[0], 1, moby_vars->unk70[0]);
+        build_symmetric_adjacency_masks(&moby_vars->unk60[1], 1, moby_vars->unk70[1]);
+        build_symmetric_adjacency_masks(&moby_vars->unk60[2], 1, moby_vars->unk70[2]);
         clear_u64_value(&moby_vars->unk130);
         clear_u64_value(&moby_vars->unk140);
         if (D_0013D4EE) {

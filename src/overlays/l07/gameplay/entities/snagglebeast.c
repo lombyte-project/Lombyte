@@ -700,7 +700,7 @@ extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FU
 extern void FUN_L00_00235d80(void);
 extern void FUN_L00_00235ea0(void);
 extern void FUN_L06_00249738(void);
-extern void FUN_L05_0028be78(int *, int, int);
+extern void build_symmetric_adjacency_masks(int *, int, int) __asm__("FUN_L05_0028be78");
 extern void suck_reset(void *) __asm__("FUN_L00_002ddca0");
 extern int FUN_001160d8(void);
 extern int tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
@@ -950,7 +950,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         *(int *)(data + 0xA8) &= ~8;
         *(unsigned short *)(moby + 0x34) |= 0x1000;
-        FUN_L05_0028be78((int *)(data + 0x170), 3, *(int *)(data + 0x188));
+        build_symmetric_adjacency_masks((int *)(data + 0x170), 3, *(int *)(data + 0x188));
         data[0x19C] = 7;
         moby[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
@@ -1459,7 +1459,7 @@ void snagglebeast_update(unsigned char *moby) {
                 }
                 }
                 *(int *)(data + 0x1A8) = ((ChaserPathPoints *)data)->path_points[data[0x19D]];
-                FUN_L05_0028be78((int *)&position, (int)FUN_L07_00313350(moby, data, &position), *(int *)(data + 0x188));
+                build_symmetric_adjacency_masks((int *)&position, (int)FUN_L07_00313350(moby, data, &position), *(int *)(data + 0x188));
                 moby[0x20] = 0xF;
             }
         }
