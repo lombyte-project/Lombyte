@@ -159,7 +159,9 @@ extern void vu1_gs_regs_font(void) __asm__("FUN_00233c90");
 extern void FUN_L01_002b4c28(void);
 
 extern L01Camera D_L01_0016CEC0;
-void FUN_L01_002b8f98(void) {
+void build_water_render_setup_packet(void) __asm__("FUN_L01_002b8f98");
+
+void build_water_render_setup_packet(void) {
     f32 scaled_translation_matrix[4][4];
     struct DmaTag *base;
     u8 *packet_write_cursor;
@@ -3399,7 +3401,7 @@ void FUN_L01_002b91c8(f32 *water_record, s32 count) {
     u32 *packet;
     u64 *data;
 
-    FUN_L01_002b8f98();
+    build_water_render_setup_packet();
     i = 0;
     if (count > 0) do {
         f32 *next_pos = water_record + 0x464;
