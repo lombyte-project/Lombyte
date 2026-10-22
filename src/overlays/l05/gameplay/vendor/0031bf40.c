@@ -221,7 +221,9 @@ typedef struct {
 extern G D_L05_0016CC60;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
-void FUN_L05_0031d5c8(unsigned char *m) {
+void update_selected_moby_effects(unsigned char *m) __asm__("FUN_L05_0031d5c8");
+
+void update_selected_moby_effects(unsigned char *m) {
     enum {
         INITIALIZE = 0,
         ARMED = 1
