@@ -620,7 +620,9 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 
-void FUN_L04_002d1608(void *moby) {
+void emit_woodcut_bot_death_effects(void *moby) __asm__("FUN_L04_002d1608");
+
+void emit_woodcut_bot_death_effects(void *moby) {
     char joint_world_position[16];
     char zero_vector[16];
     clear_vector(zero_vector);
@@ -791,7 +793,7 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
-void FUN_L04_002d1608(void *m);
+void emit_woodcut_bot_death_effects(void *m) __asm__("FUN_L04_002d1608");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
@@ -1368,7 +1370,7 @@ void woodcut_bot_update(WBMoby *m) {
         break;
     case WOODCUT_BOT_DEATH_KNOCKBACK:
         if ((mine_fall(m, d->fC0) & 0x40) || m->pos[2] < 1.0f) {
-            FUN_L04_002d1608(m);
+            emit_woodcut_bot_death_effects(m);
             FUN_L00_00263fd8(m, 0x6CB, pos, m->rot, 0, 0, 0.0f, D_L04_0015F580, D_L04_0015F580,
                              D_L04_0015F580);
             FUN_L00_00263fd8(m, 0x6CC, pos, m->rot, 0, 0, 0.0f, D_L04_0015F580, D_L04_0015F580,
