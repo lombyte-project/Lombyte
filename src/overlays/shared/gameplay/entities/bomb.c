@@ -170,7 +170,7 @@ extern void FUN_L00_001ff290(void *, void *, void *);
 extern char *FUN_L00_002603d0(char *);
 extern void FUN_L00_0026ed28(struct Moby *);
 extern void FUN_L00_002c8078(struct Moby *);
-extern void FUN_L00_002bfe08(struct Moby *, void *, void *);
+extern void spawn_doom_bot(struct Moby *, void *, void *) __asm__("FUN_L00_002bfe08");
 extern void FUN_L00_00260400(struct Moby *, s32, void *, void *, void *, void *);
 extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
 
@@ -340,7 +340,7 @@ collision_miss:
                 if (hero.ground_moby && FUN_L00_002603d0((char *)hero.ground_moby))
                     fast_vec_add(&start, &start, &hero.motion.displacement);
                 fast_vec_add(&next_pos, &start, &thrown_moby->pos);
-                FUN_L00_002bfe08(vars->holder, &next_pos, &start);
+                spawn_doom_bot(vars->holder, &next_pos, &start);
                 vars->timer = scale_game_frames(8);
                 {
                     s32 spawned = vars->spawn_count + 1;

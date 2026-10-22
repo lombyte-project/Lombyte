@@ -3041,7 +3041,9 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int chec
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_00250df8(unsigned char *);
 void FUN_L00_0025d1b8(unsigned char *);
-unsigned char *FUN_L00_002bfe08(int a, u128 *spawn_position, u128 *initial_vector) {
+unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector) __asm__("FUN_L00_002bfe08");
+
+unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector) {
     unsigned char *spawned_moby = create_moby(0xba);
     if (spawned_moby) {
         char *moby_vars;
