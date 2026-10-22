@@ -1333,7 +1333,9 @@ typedef struct {
     short h32;
 } M_bff0;
 
-void FUN_L12_0030bff0(M_bff0 *moby) {
+void update_hoven_scrolling_texture_layers(M_bff0 *moby) __asm__("FUN_L12_0030bff0");
+
+void update_hoven_scrolling_texture_layers(M_bff0 *moby) {
     enum {
         INITIALIZE_SCROLL_PHASES = 0,
         UPDATE_SCROLL_PHASES_AND_QUEUE_DRAW = 1
