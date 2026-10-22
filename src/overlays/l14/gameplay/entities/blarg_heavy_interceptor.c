@@ -714,7 +714,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
     }
     case INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL: {
         s32 voice;
-        float ang;
+        float death_launch_angle;
 
         *(s16 *)(moby_vars + 0x1F0) = scale_game_frames(D_L14_001613D4);
         FUN_L14_002b44a8(*(int *)(moby_vars + 0x70));
@@ -732,8 +732,8 @@ void FUN_L14_002ac618(struct Moby *moby) {
         vector_scratch[2] = 0.0f;
         normalize_vector_c618(vector_scratch, vector_scratch, random_float_c618(D_L14_001613D8 * D_0015ED60_c618, D_L14_001613DC * D_0015ED60_c618));
         cross_vectors_c618(secondary_vector_scratch, &hero.gravity_dir, vector_scratch);
-        ang = randf_sym(0.6981317f, 1.2217305f);
-        build_look_at_matrix_c618(moby_vars + 0x1E0, vector_scratch, &hero.gravity_dir, ang);
+        death_launch_angle = randf_sym(0.6981317f, 1.2217305f);
+        build_look_at_matrix_c618(moby_vars + 0x1E0, vector_scratch, &hero.gravity_dir, death_launch_angle);
         *(float *)(moby_vars + 0x1E8) = random_float_c618(D_L14_001613E0 * D_0015ED60_c618, D_L14_001613E4 * D_0015ED60_c618);
         moby->scale *= 0.1f;
         *(float *)(moby_vars + 0x140) = 10.0f;
