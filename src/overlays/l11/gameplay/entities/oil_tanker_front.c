@@ -1820,7 +1820,9 @@ extern void emit_oil_tanker_render_batches_with_pair_offset(int) __asm__("FUN_L1
 void vu1_add_g_sregister_31db50(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 extern unsigned char D_L11_0016258C[] __attribute__((section(".sdata")));
-void FUN_L11_0031db50(void) {
+void draw_level11_layered_effect_batches(void) __asm__("FUN_L11_0031db50");
+
+void draw_level11_layered_effect_batches(void) {
     vu1_add_g_sregister_31db50(0x42, 0x8000000044L);
     vu1_add_g_sregister_31db50(8, 0);
     vu1_add_g_sregister_31db50(0x14, 0xFF9000000260L);
@@ -1878,7 +1880,7 @@ extern char D_L11_00167680[];
 extern int D_L11_0016252C __attribute__((sda));
 extern float vector_length_xyz(void *);
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
-extern void FUN_L11_0031db50(void);
+extern void draw_level11_layered_effect_batches(void) __asm__("FUN_L11_0031db50");
 extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
 extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
 extern void FUN_L08_002f12a0(int);
@@ -1956,7 +1958,7 @@ void FUN_L11_0031e2f0(struct Moby *moby) {
         FUN_L08_002f1378(0);
         FUN_L08_002f1378(0);
         FUN_L08_002f1378(1);
-        enqueue_callback_list_1(FUN_L11_0031db50, moby);
+        enqueue_callback_list_1(draw_level11_layered_effect_batches, moby);
         break;
     }
 }
