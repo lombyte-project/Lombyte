@@ -2381,7 +2381,9 @@ extern s32 FUN_001efa68_u(void *, void *, s32, char *, void *) __asm__("FUN_001e
 extern s32 FUN_002141f8_u(char *) __asm__("FUN_002141f8");
 extern s32 FUN_L00_0025f878(char *);
 
-void FUN_L00_002affa8(char *self, O *out, char *skip) {
+void select_gold_devastator_missile_target(char *self, O *out, char *skip) __asm__("FUN_L00_002affa8");
+
+void select_gold_devastator_missile_target(char *self, O *out, char *skip) {
     VU candidate_aim_position;
     VU lv;
     char *candidate_moby;
@@ -2597,7 +2599,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 void FUN_L00_0026a4c8(Q1688 *a, Q1688 *b, int c, int d, int n, float f);
 void FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
 void spawn_particle(void *, void *, int, int, int, int, float, float, float, float, float) __asm__("FUN_L00_002712b8");
-void FUN_L00_002affa8(char *self, O *out, char *skip);
+void select_gold_devastator_missile_target(char *self, O *out, char *skip) __asm__("FUN_L00_002affa8");
 extern Impact1688 impact1688 __asm__("D_L00_00173E40");
 extern HeroMotion1688 hero_motion1688 __asm__("D_0013F350");
 extern float FUN_L00_001ff430_c(void *) __asm__("FUN_L00_001ff430");
@@ -2952,7 +2954,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         add_vector_xyz((&missile_moby->pos),(&missile_moby->pos),&bounce[1]);
         if(impact1688.moby) missile_data->owner=impact1688.moby;
         if(!missile_data->bounce_timer) missile_data->bounce_timer=scale_game_frames_alt(90);
-        FUN_L00_002affa8((char *)missile_moby,(O *)missile_data,(char *)impact1688.moby);
+        select_gold_devastator_missile_target((char *)missile_moby,(O *)missile_data,(char *)impact1688.moby);
         allocate_voice_for_target_entry_alt(1,0,(int)missile_moby);
             }
     }
