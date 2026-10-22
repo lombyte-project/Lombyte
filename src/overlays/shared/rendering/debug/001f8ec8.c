@@ -38,7 +38,7 @@ void draw_page_contents(void) {
 extern volatile s32 D_L00_0015F628;
 extern s16 D_L00_0015F626;
 extern u8 D_L00_00173080[];
-void FUN_L00_001fc558(s32);
+void queue_framebuffer_upload(s32) __asm__("FUN_L00_001fc558");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void FUN_001f5210_c(s32, s32, s32, s32) __asm__("FUN_001f5210");
 void reset_gs_registers(void) __asm__("FUN_001f3868");
@@ -52,7 +52,7 @@ void draw_framebuffer_with_timed_text(void) {
     u8 *timed_text_entry;
     if (D_L00_0015F5D8)
         return;
-    FUN_L00_001fc558(D_L00_0015F628);
+    queue_framebuffer_upload(D_L00_0015F628);
     if (0.0f < fade_level) {
         if (1.0f < fade_level)
             fade_level = 1.0f;

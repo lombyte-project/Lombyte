@@ -11,7 +11,9 @@ extern void vu1_tex_flush(void) __asm__("func_00233B68");
 
 #define PK ((unsigned char *)(*(int * *)&D_L00_001611C0))
 
-void FUN_L00_001fc558(unsigned int source) {
+void queue_framebuffer_upload(unsigned int source) __asm__("FUN_L00_001fc558");
+
+void queue_framebuffer_upload(unsigned int source) {
     int remaining = frame_size[0];
     int destination = draw_buffer_address >> 8;
     unsigned long count;
