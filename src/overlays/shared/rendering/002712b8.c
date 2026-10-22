@@ -649,7 +649,7 @@ int FUN_001fa6d0_2729c8(float) __asm__("FUN_001fa6d0");
 float FUN_002132a8_2729c8(float, float) __asm__("FUN_002132a8");
 void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern unsigned char *D_L00_001B2168 __attribute__((section(".data")));
-unsigned char *FUN_L00_002729c8(void *pos, unsigned char particle_mode, unsigned char b, unsigned char emission_duration_frames,
+unsigned char *FUN_L00_002729c8(void *initial_position, unsigned char particle_mode, unsigned char b, unsigned char emission_duration_frames,
                                 unsigned char particles_per_update, unsigned char emitted_lifetime_frames, int g, float x, float y) {
     enum {
         PARTICLE_MODE_COLOR_TWEEN_THEN_EMIT = 0,
@@ -662,7 +662,7 @@ unsigned char *FUN_L00_002729c8(void *pos, unsigned char particle_mode, unsigned
         float r, azimuth_angle, elevation_angle;
         int k;
         int mode;
-        qcopy(particle + 0x10, pos);
+        qcopy(particle + 0x10, initial_position);
         particle_data = particle + 0x20;
         particle[9] = FUN_001fa6d0_2729c8(0.0f) + 0x70;
         particle[1] = 0;
