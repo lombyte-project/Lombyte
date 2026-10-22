@@ -556,7 +556,9 @@ float FUN_L00_0020d6b0(char *target_moby, float yaw, float range, float ylim, fl
 extern char *active_mobies[] __asm__("D_L00_001ABA00") __attribute__((section(".data")));
 float *FUN_002141f8_20d8f8(char *) __asm__("FUN_002141f8");
 float FUN_L00_0020d6b0(char *, float, float, float, float, int *);
-char *FUN_L00_0020d8f8(float range_limit, float reference_yaw, float angular_error_limit, float elevation_angle_limit) {
+char *find_best_hero_heading_target(float range_limit, float reference_yaw, float angular_error_limit, float elevation_angle_limit) __asm__("FUN_L00_0020d8f8");
+
+char *find_best_hero_heading_target(float range_limit, float reference_yaw, float angular_error_limit, float elevation_angle_limit) {
     char *best = 0;
     float bd = 1.0e8f;
     int i = 0;
