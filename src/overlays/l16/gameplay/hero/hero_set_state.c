@@ -87,7 +87,7 @@ extern void FUN_L05_00262ae8(void);
 extern void FUN_L05_00262b58(void);
 extern void FUN_L05_00262f50(void);
 extern void FUN_L05_00264298(void);
-extern void FUN_L05_002661a0(void);
+extern void initialize_hud_element_defaults(void) __asm__("FUN_L05_002661a0");
 extern void FUN_L05_002661e8(void);
 extern void FUN_L05_00266320(void);
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
@@ -533,9 +533,9 @@ int hero_set_state(int a, int b) {
                         (int)((float)scale_game_frames(0x11) * 60.0f));
                 }
                 q->unk874 = q->motion.rot.f[2];
-                queue_animation_update(5, 0xFFFF, (int)FUN_L05_002661a0, (int)FUN_L05_002661e8,
+                queue_animation_update(5, 0xFFFF, (int)initialize_hud_element_defaults, (int)FUN_L05_002661e8,
                                        (int)FUN_L05_00266320, 0, 0);
-                queue_animation_update(7, 0xFFFF, (int)FUN_L05_002661a0, (int)FUN_L05_002661e8,
+                queue_animation_update(7, 0xFFFF, (int)initialize_hud_element_defaults, (int)FUN_L05_002661e8,
                                        (int)FUN_L05_00266710, 0, 0);
             } else {
                 q->unk854 = -dot_vectors_xyz(&q->gravity_dir, &q->motion.displacement);

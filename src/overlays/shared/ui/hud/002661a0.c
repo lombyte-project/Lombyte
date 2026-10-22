@@ -14,7 +14,9 @@
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
-void FUN_L05_002661a0(HudElem *hud_element) {
+void initialize_hud_element_defaults(HudElem *hud_element) __asm__("FUN_L05_002661a0");
+
+void initialize_hud_element_defaults(HudElem *hud_element) {
     hud_element->unk7C = scale_game_frames(0xB4) + 0x1E;
     hud_element->w = 0x80;
     hud_element->unk48 = 0;
