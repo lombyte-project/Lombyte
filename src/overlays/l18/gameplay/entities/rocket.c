@@ -728,7 +728,9 @@ extern void blend_moby_animation_alt(void *, int, int, int) __asm__("FUN_00212f9
 extern short D_L18_00161A6C __asm__("D_0015ED6C");
 extern float D_L18_6C_m __asm__("D_0015ED6C");
 
-void FUN_L18_002d5918(struct Moby *moby) {
+void update_class_238_moby(struct Moby *moby) __asm__("FUN_L18_002d5918");
+
+void update_class_238_moby(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,
         STATE_BALLISTIC_FLIGHT = 1,
