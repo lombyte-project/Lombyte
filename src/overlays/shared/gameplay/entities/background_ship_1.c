@@ -979,7 +979,9 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float absolute_float(float);
 
-void FUN_L02_002fb9c8(char *moby) {
+void apply_moby_camera_control(char *moby) __asm__("FUN_L02_002fb9c8");
+
+void apply_moby_camera_control(char *moby) {
     char *data = *(char **)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1c);
     char *target;
     unsigned short *group;
@@ -1220,7 +1222,7 @@ int update_moby_camera_control(char *moby) __asm__("FUN_L02_002fc298");
 int update_moby_camera_control(char *moby) {
     char *moby_camera_control_data = *(char **)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
     if (*(short *)(D_L02_00167400_c298 + 0x86) == 0 && *(short *)(moby_camera_control_data + 0x20) >= 0)
-        FUN_L02_002fb9c8(moby);
+        apply_moby_camera_control(moby);
     *(int *)(moby_camera_control_data + 0x50) = 0;
     return 0;
 }
