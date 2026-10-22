@@ -1486,7 +1486,9 @@ extern void FUN_L00_00299460(int);
 extern void FUN_L16_002923d0(int);
 extern void begin_dialogue_camera_transition(float, void *) __asm__("FUN_L01_002783a8");
 extern void FUN_L02_002e0cd8(void *);
-extern void FUN_L16_002e70c0(struct Moby *);
+void activate_gadgetron_ceo_challenge_environment(struct Moby *moby) __asm__("FUN_L16_002e70c0");
+
+extern void activate_gadgetron_ceo_challenge_environment(struct Moby *) __asm__("FUN_L16_002e70c0");
 void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) __asm__("FUN_L16_002e7168");
 
 extern void restore_gadgetron_ceo_non_challenge_environment(struct Moby *) __asm__("FUN_L16_002e7168");
@@ -1566,11 +1568,11 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
             qcopy(camera, pose + 0x20);
             qcopy(camera + 0x10, pose + 0x30);
             ceo_moby->state = 3;
-            FUN_L16_002e70c0((char *)ceo_moby);
+            activate_gadgetron_ceo_challenge_environment((char *)ceo_moby);
         }
         if (((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->mode == 22) {
             ceo_moby->state = 3;
-            FUN_L16_002e70c0((char *)ceo_moby);
+            activate_gadgetron_ceo_challenge_environment((char *)ceo_moby);
         }
         break;
     }
@@ -1717,7 +1719,7 @@ extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void jet_group_state(int, int, int, int) __asm__("FUN_L13_002650a8");
 extern void FUN_L16_002de3b8(float f);
 
-void FUN_L16_002e70c0(struct Moby *moby) {
+void activate_gadgetron_ceo_challenge_environment(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int *group_index_entry = (int *)(data + 0x60);
     int i;
