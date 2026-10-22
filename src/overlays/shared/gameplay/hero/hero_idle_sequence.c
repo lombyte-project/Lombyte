@@ -1128,7 +1128,9 @@ void FUN_L00_00206e00_u(void) __asm__("FUN_L00_00206e00");
 void noop_main_callback(int) __asm__("FUN_001e93e8");
 void FUN_L00_002484e0(void *);
 void FUN_L00_00257024(int);
-void FUN_L00_002076a8(void);
+void update_hero_color_and_item_tint(void) __asm__("FUN_L00_002076a8");
+
+void update_hero_color_and_item_tint(void) __asm__("FUN_L00_002076a8");
 void FUN_L00_00208b60_u(void) __asm__("FUN_L00_00208b60");
 void coordinate_hero_frame_update(void) __asm__("FUN_L00_002070d0");
 
@@ -1185,7 +1187,7 @@ void coordinate_hero_frame_update(void) {
         struct Hero *g2 = &hero;
         FUN_L00_00257024((int)g2->moby);
     }
-    FUN_L00_002076a8();
+    update_hero_color_and_item_tint();
     FUN_L00_00208b60_u();
 }
 #define NOT_SDA
@@ -1315,7 +1317,7 @@ extern void glow_n(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
 extern u8 item_text_variant[] __asm__("D_0013E520");
 
-void FUN_L00_002076a8(void) {
+void update_hero_color_and_item_tint(void) {
     struct Hero *player = &hero;
     int blink;
 
