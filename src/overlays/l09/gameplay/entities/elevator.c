@@ -1482,7 +1482,9 @@ extern char D_L09_00209518_30A560[] __asm__("D_L09_00209228");
 extern unsigned char D_0013E633_30A560[] __asm__("D_0013F350");
 extern unsigned char D_0013F3D0[];
 
-void FUN_L09_003091b0(char *moby) {
+void update_floating_ship_piece(char *moby) __asm__("FUN_L09_003091b0");
+
+void update_floating_ship_piece(char *moby) {
     enum {
         PLATFORM_STATE_INITIALIZE = 0,
         PLATFORM_STATE_WAIT_FOR_LINK_REMOVAL = 1,
