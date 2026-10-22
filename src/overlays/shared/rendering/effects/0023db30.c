@@ -175,7 +175,9 @@ extern unsigned char *FUN_L00_00272060(float *, int, float, float, float, int, i
                                   void *);
 extern int rf_23e008(float) __asm__("FUN_001fa6d0");
 
-void FUN_L00_0023e008(void *moby) {
+void emit_moby_particle_pairs(void *moby) __asm__("FUN_L00_0023e008");
+
+void emit_moby_particle_pairs(void *moby) {
     OvlQuad initial_velocity[1];
     OvlQuad old[1];
     float pos[4] __attribute__((aligned(16)));

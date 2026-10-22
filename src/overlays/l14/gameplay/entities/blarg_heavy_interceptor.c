@@ -27,7 +27,7 @@ typedef struct {
 } Level14State;
 
 extern Level14State D_L14_0016CF60;
-extern void FUN_L00_0023e008(void *);
+extern void emit_moby_particle_pairs(void *) __asm__("FUN_L00_0023e008");
 extern void func_L00_0023E4C8(void *) __asm__("FUN_L14_002459c0");
 
 void update_level14_event_moby_effects(void) __asm__("FUN_L14_002460f8");
@@ -39,7 +39,7 @@ void update_level14_event_moby_effects(void) {
     }
     moby = D_L14_0016CF60.moby;
     if (moby != 0 && (unsigned)(D_L14_0016CF60.phase - 0x1C) < 6) {
-        FUN_L00_0023e008(moby);
+        emit_moby_particle_pairs(moby);
         add_draw_callback(func_L00_0023E4C8, moby);
     }
 }

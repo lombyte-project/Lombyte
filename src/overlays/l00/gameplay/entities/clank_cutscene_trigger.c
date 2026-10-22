@@ -167,7 +167,7 @@ extern f32 veldin_random_angle(void) __asm__("FUN_00213308");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern void FUN_L00_0023db30();
 extern void FUN_L00_002935b8();
-extern void FUN_L00_0023e008(VeldinMoby *);
+extern void emit_moby_particle_pairs(VeldinMoby *) __asm__("FUN_L00_0023e008");
 void moby_point_position(char *arg0, int arg1, void *arg2) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257024(void *);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -228,7 +228,7 @@ void FUN_L00_0023e268(void) {
     if (current_level_index == 14 && D_L00_0016C860.state == 0) {
         particle_source_moby = D_L00_0016C860.unk17C;
         if (particle_source_moby != 0 && (u32)(D_L00_0016C860.timer - 0x1C) < 6) {
-            FUN_L00_0023e008(particle_source_moby);
+            emit_moby_particle_pairs(particle_source_moby);
             enqueue_callback_list_1((s32)FUN_L00_0023db30, (s32)particle_source_moby);
         }
     }
