@@ -1937,7 +1937,9 @@ s32 FUN_001fa6d0(f32);
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_00275860(O00275860 *particle) {
+void update_moving_lifetime_scaled_alpha_particle(O00275860 *particle) __asm__("FUN_L00_00275860");
+
+void update_moving_lifetime_scaled_alpha_particle(O00275860 *particle) {
     V00275860 velocity_xyz;
     f32 lifetime_scale_divisor, k;
     velocity_xyz.q = particle->vel.q;
