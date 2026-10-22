@@ -579,7 +579,7 @@ void FUN_L14_00302538(char *self) {
 
 extern int D_L14_00162148[] __attribute__((section(".sdata")));
 extern int D_L14_001621D8[] __attribute__((section(".sdata")));
-extern void FUN_L00_002e20f8(int);
+extern void release_beam_slot(int) __asm__("FUN_L00_002e20f8");
 extern void FUN_L00_002e2250(int, int);
 extern void FUN_L00_002e2af0(void);
 
@@ -612,7 +612,7 @@ void FUN_L14_003039e0(unsigned char *moby) {
                     D_L14_001621D8[i] = 0;
                 }
             } else if (slot_state == 4) {
-                FUN_L00_002e20f8(i);
+                release_beam_slot(i);
             } else if (slot_state != 0) {
                 started_slot_count++;
                 FUN_L00_002e2250(D_L14_001621D8[i], i);

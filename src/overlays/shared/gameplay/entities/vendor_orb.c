@@ -714,7 +714,9 @@ extern s32 D_L00_00161C48[] MACRO_ADDR;
 extern s32 D_L00_00161C88[] MACRO_ADDR;
 extern void FUN_L00_0023e838(s32);
 
-void FUN_L00_002e20f8(s32 i) {
+void release_beam_slot(s32 i) __asm__("FUN_L00_002e20f8");
+
+void release_beam_slot(s32 i) {
     s32 first_endpoint_light_index;
     first_endpoint_light_index = D_L00_00161C38[i];
     D_L00_00161BF8[i] = 0;
