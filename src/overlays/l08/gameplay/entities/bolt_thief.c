@@ -1612,7 +1612,9 @@ void FUN_L08_002e24e8(struct Moby *moby) {
 
 extern char *D_L08_0015FFD8;
 
-void FUN_L08_002e2da0(struct Moby *moby) {
+void build_bolt_thief_target_list(struct Moby *moby) __asm__("FUN_L08_002e2da0");
+
+void build_bolt_thief_target_list(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int oclass = 0x279;
     char *base = D_L08_0015FFD8;
@@ -1747,7 +1749,7 @@ void bolt_thief_update(struct Moby *moby) {
     case BOLT_THIEF_WAIT_FOR_HERO_NEAR_TRIGGER:
         qcopy(&point, &D_L08_001B0CB0[data->w220]->points[0]);
         if (FUN_001f9b48(hero.motion.pos.f, &point) < 24.0f) {
-            FUN_L08_002e2da0((char *)moby);
+            build_bolt_thief_target_list((char *)moby);
             moby->state = 5;
             if (moby->prev_seq != 3) {
                 FUN_00212f90(moby, 3, 0, 6);
@@ -1786,7 +1788,7 @@ void bolt_thief_update(struct Moby *moby) {
         if (moby->anim_flags & 2) {
             int i;
 
-            FUN_L08_002e2da0((char *)moby);
+            build_bolt_thief_target_list((char *)moby);
             for (i = 0; i < 0x32; i++) {
                 struct Moby *other = data->list[i];
 
