@@ -687,7 +687,9 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int tick_countdown_32(void *) __asm__("func_001F9740");
 
-void FUN_L10_002c7a20(struct Moby *moby) {
+void update_timed_effect_emitter(struct Moby *moby) __asm__("FUN_L10_002c7a20");
+
+void update_timed_effect_emitter(struct Moby *moby) {
     enum {
         MOBY_STATE_WAIT_FOR_ACTIVATION = 0,
         MOBY_STATE_ACTIVE_WITH_SOUND = 1
