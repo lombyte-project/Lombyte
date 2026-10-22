@@ -2565,7 +2565,9 @@ extern s32 coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d6
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
 
 /* Swooper: holds at its goal, dives at the hero once it sees it and bursts on contact. */
-void FUN_L07_003196e0(struct Moby *moby) {
+void update_swooper(struct Moby *moby) __asm__("FUN_L07_003196e0");
+
+void update_swooper(struct Moby *moby) {
     enum {
         SWOOPER_INITIALIZE = 0,
         SWOOPER_WAIT_AT_GOAL = 1,
