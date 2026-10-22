@@ -312,7 +312,9 @@ void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 s32 coll_line_fix(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-void FUN_L00_00271d20(O00271d20 *particle) {
+void update_timed_line_collision_particle(O00271d20 *particle) __asm__("FUN_L00_00271d20");
+
+void update_timed_line_collision_particle(O00271d20 *particle) {
     V00271d20 motion_delta_xyz;
     V00271d20 *acc = &particle->acc;
     V00271d20 *pos = &particle->pos;
