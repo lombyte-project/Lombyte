@@ -1678,7 +1678,9 @@ s32 FUN_001fa6e0_274e48(s32, s32, f32) __asm__("FUN_001fa6e0");
 void load_display_text_resource_entry(void *, void *) __asm__("FUN_00214bc0");
 s32 FUN_001f9770_274e48(void *) __asm__("FUN_001f9770");
 void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
-void FUN_L00_00274e48(M_274e48 *particle) {
+void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) __asm__("FUN_L00_00274e48");
+
+void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) {
     R_274e48 *r = &particle->r;
     V_274e48 applied_motion_delta, motion_vector_scratch, final_phase_motion_vector;
     f32 distance_or_blend_factor, k;
