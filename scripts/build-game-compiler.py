@@ -75,7 +75,7 @@ REFERENCE_HASHES = {
     "cpp": "45b15c9c451eb003e4565a571120974680164d5537fa94c5bfa336075e25f064",
     "xgcc": "799912e0b2174799b9aa8e647e00ccfaabd64b22e13dc35496b46ebb9bc98a99",
     "as": "fe87060e6ff8660bac31474cac6c41ee4d9d44e5878f54f75d8dfcc35bc9022f",
-    "sdk-as": "ef6bef9e1c1fe4738700240ee15c687a42147e6e12fef4d2e3e9c96ac98aa90b",
+    "sdk-as": "bd0a1b4584e50d17ce18a015027e713e21d5b39928ac5374ca29b1205c0593f5",
 }
 
 # The driver has no builtin include directory; these three headers from the

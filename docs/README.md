@@ -10,7 +10,6 @@ Start with [build/building.md](build/building.md), then
 | :----------------------------------------------------------------------- | :--------------------------------------------- |
 | [build/building.md](build/building.md)                                   | setting up the toolchain, `make` targets       |
 | [build/overlays.md](build/overlays.md)                                   | working on level code                          |
-| [build/patched-compiler.md](build/patched-compiler.md)                   | the optional patched compiler                  |
 | [build/progress.md](build/progress.md)                                   | what C_EXACT, C_FUZZY and the map count        |
 | [contributing/code-cleanup.md](contributing/code-cleanup.md)             | naming, structs, data, moving files            |
 | [contributing/commit-messages.md](contributing/commit-messages.md)       | writing a commit message                       |

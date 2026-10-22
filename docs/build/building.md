@@ -24,7 +24,6 @@ Other options:
 | `./setup.sh --elf SCUS_971.99`   | use the executable instead of the disc image                   |
 | `./setup.sh --check`             | show what is installed                                         |
 | `./setup.sh --no-build`          | install only, do not build                                     |
-| `./setup.sh --with-patched`      | also build the optional [patched compiler](patched-compiler.md) |
 | `./setup.sh --help`              | everything else                                                |
 
 ## What setup does
@@ -84,8 +83,7 @@ The retail executable was built with two compilers, and so is ours:
   game code. Its output is assembled by `Ps2EeAs`, SN's Windows assembler,
   run through Wine.
 
-A few units still need the SN compiler (EE-GCC 2.95.2) or the
-[patched compiler](patched-compiler.md). They are listed in
+A few units still need the SN compiler (EE-GCC 2.95.2). They are listed in
 `ROUTE_EXCEPTIONS` at the top of `configure.py`, with every other per-unit
 compiler setting. That list only gets shorter.
 

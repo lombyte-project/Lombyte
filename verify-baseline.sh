@@ -25,12 +25,6 @@ fi
 [[ -x "$COMPILERS/sdk-compiler/bin/ee-gcc" ]] || die "missing SDK compiler: $COMPILERS/sdk-compiler (run ./setup.sh)"
 [[ -f "$COMPILERS/sn-compiler/bin/ee-gcc.exe" ]] || die "missing SN compiler: $COMPILERS/sn-compiler (run ./setup.sh)"
 [[ -x "$BINUTILS/mips-ps2-decompals-ld" ]] || die "missing R5900 binutils: $BINUTILS (run ./setup.sh)"
-if [[ -x "$COMPILERS/patched-compiler/xgcc" ]]; then
-  "$VENV/bin/python" "$PROJECT_ROOT/scripts/check-patched-profile.py" \
-    --profile "$COMPILERS/patched-compiler" || true
-else
-  printf 'note: no tools/compilers/patched-compiler; its units build from the retail oracle (docs/build/patched-compiler.md)\n'
-fi
 
 rm -rf "$BASELINE_ROOT"
 mkdir -p "$BASELINE_ROOT"

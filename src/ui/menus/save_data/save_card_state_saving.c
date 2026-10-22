@@ -1,7 +1,7 @@
 /* save_card_state_saving exact recovery: retail keeps the `mode_freeze_flags |= 0x40` result
-   in v0 and the 0x15 constant in v1; without the pin the allocator swaps them
-   (98.67% under the patched profile).  The register-asm pin reproduces
-   retail's block, one instruction stream for all 30 instructions. */
+   in v0 and the 0x15 constant in v1; without the pin the allocator swaps them.
+   The register-asm pin reproduces retail's block, one instruction stream for
+   all 30 instructions. */
 
 #include "types.h"
 #include "rnc/ui/menus/save_data/save_card_state.h"

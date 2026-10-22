@@ -43,12 +43,10 @@ ROOT = Path.cwd()
 #   sn-compiler       SN EE-GCC 2.95.2 and its Ps2EeAs assembler (all game
 #                     code is assembled by Ps2EeAs; ROUTE_EXCEPTIONS units also
 #                     compile with it)
-#   patched-compiler  optional patched 991111 cc1 (docs/build/patched-compiler.md)
 COMPILERS = ROOT / "tools/compilers"
 GAME_COMPILER = COMPILERS / "game-compiler"
 SDK_COMPILER = "sdk-compiler"
 SN_COMPILER = COMPILERS / "sn-compiler"
-PATCHED_COMPILER = COMPILERS / "patched-compiler"
 
 # decomp.me id of the SDK compiler, for the permuter settings.
 SDK_COMPILER_DECOMPME = "ee-gcc2.9-991111-01"
@@ -151,14 +149,6 @@ ROUTE_EXCEPTIONS = {
     # fun_00232d00: bind the stash RPC server, read its IOP buffer and reset the
     # stash slots
     "storage/stash/init_stash": "cc_sn_padless",
-    # SDK code still built by the patched 991111 compiler (plus the SN assembler).
-    # Retail uses classic mult/mflo; the frozen trees emit the R5900 rd-form.
-    # 100/100/100 + patha linked-byte equal (0x12D3A0), 2026-09-12.
-    "sdk/time/bcd_to_time": "cc_ee_gcc_patched",
-    # _pictureCodingExtension: the absolute IPU_CTRL volatile stores fill the
-    # _nextBit call delay slots through $at (lui $1 before the call, sw in
-    # the slot), which the patched profile does for every unit.
-    "sdk/library/picturecodingextension": "cc_ee_gcc_patched",
 }
 
 # Per-unit assembler policies applied by the generated padless-asm.py helper.
@@ -752,8 +742,6 @@ def sn_compiler_configured() -> bool:
 def game_compiler_configured() -> bool:
     return all((GAME_COMPILER / name).is_file() for name in ("ee-gcc", "cc1", "sdk-as"))
 
-def ee_gcc_patched_configured() -> bool:
-    return (PATCHED_COMPILER / "xgcc").is_file()
 
 def _windows_exe(path: str) -> str:
     """Spell a Windows tool (Ps2EeAs, the SN driver) for a ninja command.
@@ -777,20 +765,6 @@ def _unit_from_object(object_path: Path) -> str:
     if joined.endswith(".c.o"):
         joined = joined[: -len(".c.o")]
     return joined
-
-# C aliases in promoted sources: ALIAS __attribute__((alias("TARGET"))).
-# The oracle fallback keeps the bytes but not the aliases, so they are handed
-# to the linker (PROVIDE, only when nothing else defines them).
-# The declaration may carry a parameter list between the name and the
-# attribute, so the name is not always immediately followed by __attribute__.
-_ALIAS_RE = re.compile(
-    r"([A-Za-z_]\w*)\s*(?:\([^;{]*?\))?\s*__attribute__\s*\(\(\s*alias\s*\(\s*\"([^\"]+)\"\s*\)\s*\)\)"
-)
-
-def _alias_symbols(source: Path) -> set[tuple[str, str]]:
-    """(alias, target) pairs declared in a source file."""
-    text = source.read_text(errors="replace")
-    return {(match.group(1), match.group(2)) for match in _ALIAS_RE.finditer(text)}
 
 PADLESS_ASM_HELPER = r'''#!/usr/bin/env python3
 """Normalize SN cc1 output for Ps2EeAs and drop section tail padding.
@@ -1274,7 +1248,7 @@ def build_stuff(
     if not game_compiler_configured():
         # The reconstructed game compiler is mandatory, not optional.  Without
         # it, every unit in GAME_COMPILER_UNITS silently falls through to
-        # another rule (patched/SN/EE-GCC 2.9), which changes codegen for 297
+        # another rule (SN/EE-GCC 2.9), which changes codegen for 297
         # units without any error - the repository ignores tools/, so a fresh
         # clone reroutes them unnoticed.  Failing here keeps the build honest
         # and makes the per-unit SN entries for game-compiler owners unreachable, so
@@ -1388,32 +1362,10 @@ def build_stuff(
             ),
         )
 
-        # Patched public 991111 cc1 (R5900 quad saves + classic mult/mflo) with
-        # the same alias normalization + Ps2EeAs + padless finish.  Native
-        # driver, so only the assembler step needs Windows paths.
-        if ee_gcc_patched_configured():
-            patched_root = PATCHED_COMPILER
-            patched_driver = str(patched_root / "xgcc")
-            patched_include = str(ROOT / "include")
-            ninja.rule(
-                "cc_ee_gcc_patched",
-                description="cc_ee_gcc_patched $in",
-                command=(
-                    f"mkdir -p $pat_work && cp $in $pat_work/cand.c && "
-                    f"'{patched_driver}' -S -B'{patched_root}/' -I'{patched_include}' "
-                    f"-DBUILD_US_VERSION -DMATCHING_DECOMP -O2 -g2 "
-                    f"$pat_work/cand.c -o $pat_work/cand.s && "
-                    f"{sys.executable} padless-asm.py normalize $pat_work/cand.s $pat_work/cand-final.s $policy && "
-                    f"{ee_assembler} -o '$pat_work/cand-padded.o' '$pat_work/cand-final.s' && "
-                    f"{sys.executable} padless-asm.py finish $pat_work/cand-padded.o $out && "
-                    f"{CROSS}strip $out -N dummy-symbol-name -R .mdebug"
-                ),
-            )
-
     ninja.rule(
         "ld",
         description="link $out",
-        command=f"{CROSS}ld {ld_args} -T oracle-aliases.txt",
+        command=f"{CROSS}ld {ld_args}",
     )
 
     ninja.rule(
@@ -1428,23 +1380,11 @@ def build_stuff(
         command="cmp -s $in && touch $out",
     )
 
-    # Fallback for patched-profile units when the profile is absent: build
-    # them from the retail oracle instead of their C.
-    ninja.rule(
-        "oracle_obj",
-        description="oracle $out",
-        command="cp $in $out",
-    )
-
     ninja.rule(
         "elf",
         description="elf $out",
         command=f"{CROSS}objcopy $in $out -O binary",
     )
-
-    # The patched route needs both the profile and the SN assembler.
-    patched_route = ee_gcc_patched_configured() and sn_compiler_configured()
-    oracle_fallback_units: list[str] = []
 
     for entry in linker_entries:
         seg = entry.segment
@@ -1475,22 +1415,6 @@ def build_stuff(
                 variables = {"sdk_work": str(ROOT / "build/sdk-work/units" / unit)}
                 if flags:
                     variables["extra"] = f"{flags} "
-                build(entry.object_path, entry.src_paths, rule, variables=variables)
-            elif rule == "cc_ee_gcc_patched" and not patched_route:
-                # No patched profile: build from the retail oracle; the C is
-                # verified when the profile is available.
-                oracle_fallback_units.append(unit)
-                build(
-                    entry.object_path,
-                    [Path("expected/obj") / f"{unit}.c.o"],
-                    "oracle_obj",
-                )
-            elif rule == "cc_ee_gcc_patched":
-                pat_work = str(ROOT / "build/patched-work/units" / unit)
-                variables = {
-                    "pat_work": pat_work,
-                    "policy": PADLESS_POLICY_UNITS.get(unit, "none"),
-                }
                 build(entry.object_path, entry.src_paths, rule, variables=variables)
             elif rule in ("cc_sn", "cc_sn_padless"):
                 if not sn_compiler_configured():
@@ -1528,41 +1452,6 @@ def build_stuff(
         else:
             print(f"ERROR: Unsupported build segment type {seg.type}")
             sys.exit(1)
-
-    fallback_path = config_dir / "oracle-fallback-units.json"
-    alias_path = config_dir / "oracle-aliases.txt"
-    alias_entries: set[tuple[str, str]] = set()
-    if oracle_fallback_units:
-        fallback_path.write_text(
-            json.dumps(
-                {
-                    "schema": "rnc-oracle-fallback-v1",
-                    "reason": "tools/compilers/patched-compiler is not installed",
-                    "units": sorted(oracle_fallback_units),
-                },
-                indent=2,
-            )
-            + "\n"
-        )
-        for unit in oracle_fallback_units:
-            source = (config_dir / ".." / ".." / "src" / f"{unit}.c").resolve()
-            if source.is_file():
-                alias_entries.update(_alias_symbols(source))
-        print(
-            f"no patched compiler: {len(oracle_fallback_units)} "
-            "unit(s) will be built from the retail oracle "
-            "(see docs/build/patched-compiler.md)"
-        )
-    else:
-        fallback_path.unlink(missing_ok=True)
-    alias_lines = [
-        "/* Generated by configure.py: aliases for oracle-built patched-profile",
-        " * units, provided only when nothing else defines them. */",
-    ]
-    alias_lines.extend(
-        f"PROVIDE({alias} = {target});" for alias, target in sorted(alias_entries)
-    )
-    alias_path.write_text("\n".join(alias_lines) + "\n")
 
     link_copies = []
     for obj, link, section in write_fast_linkerscript(config_dir):

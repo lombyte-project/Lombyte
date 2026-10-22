@@ -399,18 +399,6 @@ def main(argv=None) -> int:
             f"{unit} is not part of {workspace}; re-run ./verify-baseline.sh "
             "after pulling the latest source"
         )
-    if unit in rnc_units.oracle_fallback_units(workspace):
-        return fail_result(
-            unit,
-            "oracle-fallback",
-            f"{unit} is rebuilt from the retail oracle in this workspace "
-            "because tools/compilers/patched-compiler is missing; run "
-            "scripts/build-patched-toolchain.py, re-run make elf, then measure "
-            "its C",
-            as_json=args.json,
-            code=2,
-        )
-
     ninja = find_ninja()
     if ninja is None:
         return error("ninja was not found; install the requirements into .venv")

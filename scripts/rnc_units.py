@@ -164,21 +164,6 @@ def path_inside(path: Path, root: Path) -> bool:
         return False
 
 
-def oracle_fallback_units(workspace: Path) -> set[str]:
-    """Units this workspace rebuilds from the retail oracle instead of their C."""
-    path = Path(workspace) / "config" / "us" / "oracle-fallback-units.json"
-    if not path.is_file():
-        return set()
-    try:
-        payload = json.loads(path.read_text())
-    except (OSError, json.JSONDecodeError):
-        return set()
-    units = payload.get("units")
-    if not isinstance(units, list):
-        return set()
-    return {str(unit) for unit in units}
-
-
 def workspace_problem(workspace: Path, repo: Path | None = None) -> str | None:
     """Describe why ``workspace`` cannot be used, or return None.
 

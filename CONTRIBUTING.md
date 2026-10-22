@@ -27,10 +27,6 @@ time with:
 make elf
 ```
 
-A few units need the optional
-[patched compiler](docs/build/patched-compiler.md); without it they are built
-from the retail bytes.
-
 The run ends with `PASS: reconstructed boot ELF matches retail` and leaves a
 workspace at `build/baseline` holding the retail assembly and per-unit
 comparison targets used below.

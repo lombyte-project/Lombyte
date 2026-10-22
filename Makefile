@@ -16,7 +16,7 @@ check: ## Run the public CI checks locally (tests, script parse, progress report
 	python3 scripts/gen_progress_report.py
 	python3 scripts/generate_treemap.py
 	@# Struct layout checks (src/check/*_layout_check.c), compiled with the EE compiler when present.
-	@cc=tools/compilers/patched-compiler; if [ -x $$cc/cc1 ]; then \
+	@cc=tools/compilers/game-compiler; if [ -x $$cc/cc1 ]; then \
 	  for f in $$(find src/check -name '*_layout_check.c' | sort); do \
 	    $$cc/cpp -Iinclude $$f | $$cc/cc1 -quiet -o /dev/null || exit 1; done; \
 	  echo "layout checks: OK"; else echo "layout checks: skipped (no $$cc)"; fi

@@ -2,21 +2,22 @@ diff --git a/gas/config/tc-mips.c b/gas/config/tc-mips.c
 index 00ba431..792324a 100644
 --- a/gas/config/tc-mips.c
 +++ b/gas/config/tc-mips.c
-@@ -1222,7 +1222,12 @@ md_assemble (str)
+@@ -1222,7 +1222,13 @@ md_assemble (str)
        if (mips_opts.mips16)
  	mips16_macro (&insn);
        else
 -	macro (&insn);
 +	{
 +	  macro (&insn);
-+	  /* The retail SDK assembler never moved an instruction of a
-+	     macro expansion into a delay slot.  */
-+	  prev_insn_is_delay_slot = 1;
++	  /* The retail SDK assembler never moved the last instruction of
++	     an li.d expansion into a delay slot.  */
++	  if (strcmp (insn.insn_mo->name, "li.d") == 0)
++	    prev_insn_is_delay_slot = 1;
 +	}
      }
    else
      {
-@@ -1951,7 +1956,10 @@ append_insn (place, ip, address_expr, reloc_type, unmatched_hi)
+@@ -1951,7 +1957,10 @@ append_insn (place, ip, address_expr, reloc_type, unmatched_hi)
  		      & (INSN_LOAD_COPROC_DELAY
  			 | INSN_COPROC_MOVE_DELAY
  			 | INSN_WRITE_COND_CODE)))

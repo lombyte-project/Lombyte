@@ -559,54 +559,6 @@ class BaselineGuardTests(unittest.TestCase):
             self.assertIn("missing virtual environment", proc.stderr)
 
 
-class PatchedProfileTests(unittest.TestCase):
-    """check-patched-profile.py must flag profiles built from other patches."""
-
-    @classmethod
-    def setUpClass(cls):
-        cls.checker = load_module(
-            "check_patched_profile", ROOT / "scripts" / "check-patched-profile.py"
-        )
-
-    def setUp(self):
-        self.tmp = tempfile.TemporaryDirectory()
-        self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
-        self.patch = self.root / "patched-ee-gcc.patch"
-        self.patch.write_text("diff --git a/x b/x\n")
-        self.profile = self.root / "profile"
-        self.profile.mkdir()
-        (self.profile / "xgcc").write_text("")
-
-    def write_provenance(self, digest):
-        (self.profile / "provenance.json").write_text(
-            json.dumps({"schema": "rnc-patched-ee-gcc-v1", "patch_sha256": digest})
-        )
-
-    def run_check(self):
-        with contextlib.redirect_stdout(io.StringIO()) as captured:
-            code = self.checker.check(self.profile, self.patch)
-        return code, captured.getvalue()
-
-    def test_matching_patch_is_ok(self):
-        self.write_provenance(self.checker.sha256(self.patch))
-        code, output = self.run_check()
-        self.assertEqual(code, 0)
-        self.assertIn("ok", output)
-
-    def test_other_patch_is_stale(self):
-        self.write_provenance("d" * 64)
-        code, output = self.run_check()
-        self.assertEqual(code, 1)
-        self.assertIn("warning", output)
-        self.assertIn("build-patched-toolchain.py", output)
-
-    def test_missing_provenance_is_unverifiable(self):
-        code, output = self.run_check()
-        self.assertEqual(code, 2)
-        self.assertIn("no provenance.json", output)
-
-
 class RebuildIsoExtentTests(unittest.TestCase):
     """rebuild-iso.py must locate, bounds-check and patch the boot extent."""
 
@@ -937,23 +889,6 @@ class UnitListHelpersTests(unittest.TestCase):
         self.assertTrue(self.units.unsafe_unit_name("textbin/foo bar"))
         self.assertTrue(self.units.unsafe_unit_name(""))
 
-    def test_oracle_fallback_units(self):
-        with tempfile.TemporaryDirectory() as name:
-            workspace = Path(name) / "ws"
-            (workspace / "config" / "us").mkdir(parents=True)
-            self.assertEqual(self.units.oracle_fallback_units(workspace), set())
-            (workspace / "config" / "us" / "oracle-fallback-units.json").write_text(
-                json.dumps(
-                    {
-                        "schema": "rnc-oracle-fallback-v1",
-                        "units": ["sdk/time/bcd_to_time", "textbin/fun_002133d0"],
-                    }
-                )
-            )
-            self.assertEqual(
-                self.units.oracle_fallback_units(workspace),
-                {"sdk/time/bcd_to_time", "textbin/fun_002133d0"},
-            )
 
 
 class OracleMaterializerGuardTests(unittest.TestCase):
@@ -1463,7 +1398,7 @@ class CheckUnitTests(unittest.TestCase):
             self.assertIn("INCLUDE_ASM", (tmp / f"src/{self.unit}.c").read_text())
 
     def test_keeps_other_compiler_routes(self):
-        for rule in ("game-compiler", "sdk-compiler", "sdk-compiler-patched"):
+        for rule in ("game-compiler", "sdk-compiler"):
             with self.subTest(rule=rule), tempfile.TemporaryDirectory() as name:
                 tmp = Path(name)
                 self._repo(tmp)
@@ -1683,49 +1618,6 @@ class CheckUnitTests(unittest.TestCase):
                     code = self.check.main(["../outside/x"])
         self.assertEqual(code, 2)
         self.assertIn("invalid unit path", stderr.getvalue())
-
-    def test_refuses_oracle_fallback_units(self):
-        with tempfile.TemporaryDirectory() as name:
-            tmp = Path(name)
-            self._repo(tmp)
-            ws = self._workspace(tmp)
-            (ws / "config" / "us" / "oracle-fallback-units.json").write_text(
-                json.dumps({"units": [self.unit]})
-            )
-            with mock.patch.object(self.check, "ROOT", tmp):
-                with contextlib.redirect_stderr(io.StringIO()) as stderr:
-                    code = self.check.main([self.unit, "--workspace", str(ws)])
-        self.assertEqual(code, 2)
-        self.assertIn("rebuilt from the retail oracle", stderr.getvalue())
-
-
-class PatchedToolchainArtifactTests(unittest.TestCase):
-    """The published toolchain patch and its build script must agree."""
-
-    @classmethod
-    def setUpClass(cls):
-        cls.builder = load_module(
-            "rnc_build_patched_toolchain",
-            ROOT / "scripts" / "build-patched-toolchain.py",
-        )
-
-    def test_patch_file_matches_pinned_hash(self):
-        patch = Path(self.builder.PATCH_PATH)
-        self.assertTrue(patch.is_file(), patch)
-        self.assertEqual(
-            hashlib.sha256(patch.read_bytes()).hexdigest(),
-            self.builder.PATCH_SHA256,
-        )
-
-    def test_source_and_bison_are_pinned(self):
-        self.assertEqual(self.builder.SOURCE_REVISION, "b595ded")
-        self.assertIn("ps2-ee-toolchain", self.builder.SOURCE_URL)
-        self.assertEqual(len(self.builder.BISON_SHA256), 64)
-        self.assertIn("bison-1.28", self.builder.BISON_URL)
-
-    def test_reference_hashes_are_full_sha256(self):
-        for name, digest in self.builder.REFERENCE_HASHES.items():
-            self.assertEqual(len(digest), 64, name)
 
 
 class NoGameDataTests(unittest.TestCase):

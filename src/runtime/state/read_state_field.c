@@ -1,5 +1,3 @@
-/* ReadStateField exact recovery: guard on the state byte bit 0x20 then forward the unk10 field; the patched profile (lq/sq saves) reproduces all 12 instructions. */
-
 #include "types.h"
 struct MobyObject {
     u8 pad_0[0x34];

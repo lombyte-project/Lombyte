@@ -59,7 +59,6 @@ ISO=""
 ELF=""
 BUILD=1
 MODE=native
-WITH_PATCHED=0
 IN_CONTAINER=${LOMBYTE_IN_CONTAINER:-0}
 
 usage() {
@@ -70,7 +69,6 @@ Options:
   --iso PATH        extract SCUS_971.99 from this disc image (default: first dumps/*.iso)
   --elf PATH        copy this SCUS_971.99 instead
   --no-build        install the toolchain, skip `make elf`
-  --with-patched    also build the optional patched EE-GCC profile (docs/build/patched-compiler.md)
   --docker          run the setup inside an Ubuntu container (macOS, other distros)
   --shell           open a shell in that container with the toolchain on PATH
   --check           verify the installed toolchain and inputs, change nothing
@@ -83,7 +81,6 @@ while [[ $# -gt 0 ]]; do
         --iso) [[ $# -ge 2 ]] || { echo "error: --iso needs a path" >&2; exit 2; }; ISO=$2; shift 2 ;;
         --elf) [[ $# -ge 2 ]] || { echo "error: --elf needs a path" >&2; exit 2; }; ELF=$2; shift 2 ;;
         --no-build) BUILD=0; shift ;;
-        --with-patched) WITH_PATCHED=1; shift ;;
         --docker) MODE=docker; shift ;;
         --shell) MODE=shell; shift ;;
         --check) MODE=check; shift ;;
@@ -188,7 +185,6 @@ if [[ "$MODE" == docker ]]; then
         DOCKER_MOUNTS+=(--volume "$(cd -- "$(dirname -- "$ELF")" && pwd -P)/$(basename -- "$ELF"):/input/SCUS_971.99:ro")
         args+=(--elf /input/SCUS_971.99)
     fi
-    [[ "$WITH_PATCHED" == 1 ]] && args+=(--with-patched)
     docker_run bash setup.sh ${args[@]+"${args[@]}"}
     say "done. Open a shell with the toolchain: ./setup.sh --shell  (then: make elf, python3 scripts/check-unit.py ...)"
     exit 0
@@ -390,15 +386,6 @@ install_python() {
     .venv/bin/python -m pip install --quiet --disable-pip-version-check -r requirements.txt
 }
 
-install_patched_profile() {
-    local root="$COMPILERS/patched-compiler"
-    if [[ -x "$root/cc1" && -x "$root/xgcc" ]]; then
-        return
-    fi
-    say "building the optional patched EE-GCC profile (docs/build/patched-compiler.md)"
-    python3 scripts/build-patched-toolchain.py
-}
-
 # ------------------------------------------------------------- game files
 extract_elf_from_iso() { # iso
     say "extracting SCUS_971.99 from $(basename -- "$1")"
@@ -490,7 +477,6 @@ install_sdk_compiler
 install_sn_compiler
 install_game_compiler
 install_python
-[[ "$WITH_PATCHED" == 1 ]] && install_patched_profile
 install_elf
 rm -rf -- "$STAGE"
 

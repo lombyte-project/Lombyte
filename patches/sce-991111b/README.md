@@ -83,7 +83,7 @@ and `0059`, none of the game assembler patches.
 | Patch | Kind | Change | Source or fixtures |
 |---|---|---|---|
 | [0063](0063-gas-sync-no-swap.patch) | upstream | the `sync` test reads `prev_pinfo & INSN_SYNC`; the archive's `&&` was true for every instruction, so no delay slot was ever filled | binutils 2.10 and later, Ian Lance Taylor 1999-08-03: "Correct INSN_SYNC test.  From Ralf Baechle" |
-| [0059](0059-gas-sdk-delay-slots.patch) | retail | an instruction of a macro expansion, and an `mflo`/`mfhi`, stay out of a delay slot | `kputchar`, `ftoi`, `sceCdRead`, `_calloc_r` (`mflo`), `_dtoa_r` (`li.d`) |
+| [0059](0059-gas-sdk-delay-slots.patch) | retail | the last instruction of an `li.d` expansion, and an `mflo`/`mfhi`, stay out of a delay slot; other macros may fill one | `_dtoa_r` (`li.d`), `_calloc_r` (`mflo`); `_pictureCodingExtension` fills its `jal` slots with the `sw` of an absolute-address store |
 
 No binutils release has `0059`: binutils 2.17 and older have no R5900, and
 2.25 counts the R5900 HI/LO as interlocked, so it would move an `mflo` into
@@ -113,7 +113,7 @@ the slot. Both rules come from the retail SDK code only.
 0056-sda-extern-before-use.patch                  0900ebe87a1d8fe160e27e68e2668aa7e57b16b2f30492d0f0ea6212a46b230a
 0057-reorg-sticky-volatile-set.patch              6cdde99d4d4e2854d31ee6d2433a638b6eb564fcb70cb3a00d78c4aceae402e2
 0058-reorg-trap-if-sets-volatile.patch            1171f8e37de070d8ff418ea9812b8c1f27313eeb19fcbb49fd8b6aef45590346
-0059-gas-sdk-delay-slots.patch                    0d1fa03a7bb1ee3d2d0710967e15cb9b046af2449118fc9290241f1579e0d703
+0059-gas-sdk-delay-slots.patch                    078b372e972d03a0ebfa9a0e31d88b1caa8e94f89974bda435c32a0169077a1f
 0060-alias-static-chain-not-a-base.patch          0bf0ab1423c33e674c7cc34b0286750e75777d42f52d540be9e53957bb7d3789
 0061-copy-rtx-if-shared-virtual-mems.patch        4f21bbdd604aa90367775c96d39aea13c14fe21217e4e1f2fc24ee7d9470d928
 0062-reload-reg-unavailable.patch                 9bddaf0912802fba0a322dcfaace0ec3626da4a11b9f5c698b60cebab7a7c2c0
