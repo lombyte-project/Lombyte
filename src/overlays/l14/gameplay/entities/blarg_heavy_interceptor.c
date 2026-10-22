@@ -2239,7 +2239,7 @@ void minibomber_update(Moby_2B5938 *moby) {
     };
     Data_2B5938 *d = moby->d;
     float v[12];
-    float *tgt;
+    float *path_endpoint_target_position;
     char *manipulator_state;
     float tg;
     float blended_aim_angle;
@@ -2256,10 +2256,10 @@ void minibomber_update(Moby_2B5938 *moby) {
             }
         }
     }
-    tgt = d->f180;
+    path_endpoint_target_position = d->f180;
     FUN_L14_002b5290_c((unsigned char *)moby);
     FUN_L14_002b5530_c((char *)moby);
-    FUN_L14_002b5850_c((char *)moby, tgt, d->f17C, d->f170, d->f174, d->f178, d->f154, d->f158, d->f15C);
+    FUN_L14_002b5850_c((char *)moby, path_endpoint_target_position, d->f17C, d->f170, d->f174, d->f178, d->f154, d->f158, d->f15C);
     FUN_L14_002b5428_c((char *)moby);
     FUN_L14_002b5dd8_c((char *)moby);
     if (moby->f31 != 0) {
