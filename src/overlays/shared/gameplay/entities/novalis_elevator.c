@@ -1749,7 +1749,9 @@ void update_moby_motion_collision_and_burst(char *moby) {
 extern void FUN_L00_00263ac8(float, void *, int, void *);
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L01_002eec68_u(char *) __asm__("FUN_L01_002eec68");
-extern void FUN_L01_002ef560(unsigned char *);
+void spawn_amoeboid_movement_particles(unsigned char *moby) __asm__("FUN_L01_002ef560");
+
+extern void spawn_amoeboid_movement_particles(unsigned char *) __asm__("FUN_L01_002ef560");
 extern void FUN_L01_002ef770(unsigned char *, float *);
 extern int follow_path(int *, int, int, float, void *, void *, void *) __asm__("FUN_L01_00276fe8");
 extern void FUN_L01_0026d930(void *);
@@ -1949,7 +1951,7 @@ void large_amoeboid_update(unsigned char *moby) {
             if (moby[0x53] != 1)
                 blend_moby_animation(moby, 1, 0, 5);
         }
-        FUN_L01_002ef560(moby);
+        spawn_amoeboid_movement_particles(moby);
         return;
     case LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET:
         blocked = 0;
@@ -2017,7 +2019,7 @@ void large_amoeboid_update(unsigned char *moby) {
                 *(int *)(data + 0x204) = 2;
             }
             if (*(int *)(data + 0x204) == 2) moby[0x20] = 5;
-            FUN_L01_002ef560(moby);
+            spawn_amoeboid_movement_particles(moby);
             return;
         }
     }
@@ -2094,7 +2096,7 @@ void large_amoeboid_update(unsigned char *moby) {
         }
         if (*(int *)(data + 0x204) != 2 && (moby[0x20] = 4, moby[0x53] != 1))
             blend_moby_animation(moby, 1, 0, scale_game_frames(3));
-        FUN_L01_002ef560(moby);
+        spawn_amoeboid_movement_particles(moby);
         return;
     }
     case LARGE_AMOEBOID_PROCESS_KNOCKBACK:
@@ -2509,7 +2511,7 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void spawn_type_52_particle(float *, float, float, int, int, int) __asm__("FUN_L01_00287158");
 
-void FUN_L01_002ef560(unsigned char *moby) {
+void spawn_amoeboid_movement_particles(unsigned char *moby) {
     char *data = (char *)MOBY(moby)->pvars;
     float pos[3];
     float angle, radius, lower, upper;
