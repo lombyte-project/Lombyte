@@ -2431,7 +2431,7 @@ extern s32 get_effect_texture_c(s32) __asm__("func_001F44B8");
 int *hp_bar_clut[1] __asm__("D_L13_001613C0") = {0};
 extern unsigned char D_0013E500[];
 extern unsigned char D_0013F350[];
-extern void FUN_L11_00310ad0(float, float, float, void *, int, int, long);
+extern void append_scaled_screen_triangle_strip(float, float, float, void *, int, int, long) __asm__("FUN_L11_00310ad0");
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 extern void append_rotated_sprite_quad(float, float, float, float, float, int, int, int, int, int, int, int, float, float);
 extern void draw_textured_quad_local(int, int, int, int, int, int, int, int, long, long) __asm__("FUN_001f5450");
@@ -2497,9 +2497,9 @@ void FUN_L13_002b97f8(char *moby) {
     for (i = 0; i < ammo_icon_count; i++) {
         player_ammo_state = D_0013F350;
         if (i < player_ammo_state[0x15F6]) {
-            FUN_L11_00310ad0(x, y, 0.5f, D_L13_001CBC60, 0x19, 0xFFFFF3, 0x50008F00);
+            append_scaled_screen_triangle_strip(x, y, 0.5f, D_L13_001CBC60, 0x19, 0xFFFFF3, 0x50008F00);
         } else {
-            FUN_L11_00310ad0(x, y, 0.5f, D_L13_001CBC60, 0x19, 0xFFFFF3, 0x20004F00);
+            append_scaled_screen_triangle_strip(x, y, 0.5f, D_L13_001CBC60, 0x19, 0xFFFFF3, 0x20004F00);
         }
         ammo_icon_count = player_ammo_state[0x15F7];
         if (i == ammo_icon_count >> 1) {

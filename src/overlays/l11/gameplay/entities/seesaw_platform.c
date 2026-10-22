@@ -2037,7 +2037,7 @@ extern s32 D_L11_001F1088[]; /* the health bar palette as loaded */
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 extern void append_rotated_sprite_quad(f32, f32, f32, f32, f32, s32, s32, s64, s32, s32, s32, s32, f32,
                                        f32) __asm__("FUN_001f5ab0");
-extern void FUN_L11_00310ad0(short *pts, int n, f32 x, f32 y, u32 col, u64 prim, f32 scale);
+extern void append_scaled_screen_triangle_strip(short *pts, int n, f32 x, f32 y, u32 col, u64 prim, f32 scale) __asm__("FUN_L11_00310ad0");
 extern void FUN_L11_00311048(f32 x, f32 y, f32 scale, f32 angle, u8 r, u8 g, u8 b, u8 a);
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 extern s32 help_request(s32 message, s32 help) __asm__("FUN_L00_00203908");
@@ -2101,9 +2101,9 @@ void FUN_L11_00311d50(struct Moby *moby) {
     x = 0x18;
     for (i = 0; i < hero.ship_ammo_max; i++) {
         if (i < hero.ship_ammo) {
-            FUN_L11_00310ad0(D_L11_001F0CF8, 0x19, x, y, 0xFFFFF3, 0x50008F00, 0.5f);
+            append_scaled_screen_triangle_strip(D_L11_001F0CF8, 0x19, x, y, 0xFFFFF3, 0x50008F00, 0.5f);
         } else {
-            FUN_L11_00310ad0(D_L11_001F0CF8, 0x19, x, y, 0xFFFFF3, 0x20004F00, 0.5f);
+            append_scaled_screen_triangle_strip(D_L11_001F0CF8, 0x19, x, y, 0xFFFFF3, 0x20004F00, 0.5f);
         }
         pips = hero.ship_ammo_max;
         if (i == pips >> 1) {

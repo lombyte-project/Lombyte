@@ -668,7 +668,9 @@ extern int ftoi_g(float) __asm__("FUN_001fa6d0");
 
 extern u128_ad0 D_L11_001608E0;
 extern u128_ad0 D_L11_001608F0;
-void FUN_L11_00310ad0(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale) {
+void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale) __asm__("FUN_L11_00310ad0");
+
+void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale) {
     int packet_qword_count = (point_count + 1) / 2 + 3;
     unsigned long long *vertex_payload;
     int x, y;
