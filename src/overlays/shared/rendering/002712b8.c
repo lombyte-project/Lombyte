@@ -2141,7 +2141,9 @@ extern T1_276078 D_00137B80;
 extern u8 D_L00_001602D0[];
 void Load(s32, s32, s32) __asm__("FUN_00216828");
 s32 stash_send_data(s32, s32, s32, void *) __asm__("FUN_00232e40");
-void FUN_L00_00276078(void) {
+void load_misc_animations_into_stash(void) __asm__("FUN_L00_00276078");
+
+void load_misc_animations_into_stash(void) {
     s32 stash_source_address = D_L00_00173E08;
     s32 i;
     for (i = 0; i < 20; i++) {

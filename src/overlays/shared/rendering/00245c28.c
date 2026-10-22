@@ -36,7 +36,7 @@ extern int FUN_L00_00244110(int, int);
 extern void clear_dma_queue_entry(void) __asm__("FUN_001f0b88");
 extern void FUN_L00_002464a8_u(void) __asm__("FUN_L00_002464a8");
 extern void init_hud(void) __asm__("FUN_001fee88");
-extern void FUN_L00_00276078(void);
+extern void load_misc_animations_into_stash(void) __asm__("FUN_L00_00276078");
 extern void FUN_L00_0028eed0(void);
 extern int sce_gs_sync_v(int) __asm__("FUN_00122298");
 extern void put_disp_buffer(void) __asm__("FUN_001fb2a8");
@@ -134,7 +134,7 @@ void FUN_L00_00245c28(void) {
     clear_dma_queue_entry();
     FUN_L00_002464a8_u();
     init_hud();
-    FUN_L00_00276078();
+    load_misc_animations_into_stash();
     FUN_L00_0028eed0();
     D_L00_0015F3F8 = 0;
     sce_gs_sync_v(0);
