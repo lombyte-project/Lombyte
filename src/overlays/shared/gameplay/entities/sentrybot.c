@@ -376,33 +376,33 @@ void sentrybot_update(unsigned char *moby) {
             }
         } else {
             int anim = moby[0x52];
-            float *tbl = 0;
+            float *turn_heading_offsets_degrees = 0;
             switch (anim) {
             case SENTRYBOT_ANIM_TURN_AROUND:
-                tbl = D_L15_001CC0E0;
+                turn_heading_offsets_degrees = D_L15_001CC0E0;
                 break;
             case SENTRYBOT_ANIM_TURN_NEGATIVE_HEADING_DELTA:
-                tbl = D_L15_001CC060;
+                turn_heading_offsets_degrees = D_L15_001CC060;
                 break;
             case SENTRYBOT_ANIM_TURN_POSITIVE_HEADING_DELTA:
-                tbl = D_L15_001CBFE0;
+                turn_heading_offsets_degrees = D_L15_001CBFE0;
                 break;
             }
             if (moby[0x70] & 2) {
                 int k = func_001FA898_r(animation_end(moby[0x22], anim));
-                if (tbl != 0) {
+                if (turn_heading_offsets_degrees != 0) {
                     *(float *)(moby + 0x48) =
-                        fast_add_rotations(*(float *)(data + 0x170), tbl[k] * DEG_TO_RAD);
+                        fast_add_rotations(*(float *)(data + 0x170), turn_heading_offsets_degrees[k] * DEG_TO_RAD);
                 }
                 moby[0x20] = data[0x15C];
                 if (moby[0x53] != data[0x15D])
                     blend_moby_animation(moby, data[0x15D], 0, scale_game_frames(10));
-            } else if (moby[0x52] == moby[0x53] && tbl != 0) {
+            } else if (moby[0x52] == moby[0x53] && turn_heading_offsets_degrees != 0) {
                 float t = compute_interpolated_record_value(moby);
                 int k = func_001FA898_r(t);
                 t -= convert_integer_to_float(k);
                 *(float *)(moby + 0x48) = fast_add_rotations(
-                    *(float *)(data + 0x170), (tbl[k] + (tbl[k + 1] - tbl[k]) * t) * DEG_TO_RAD);
+                    *(float *)(data + 0x170), (turn_heading_offsets_degrees[k] + (turn_heading_offsets_degrees[k + 1] - turn_heading_offsets_degrees[k]) * t) * DEG_TO_RAD);
             }
         }
         break;
@@ -813,8 +813,8 @@ void sentrybot_update(unsigned char *moby) {
         }
         break;
     case SENTRYBOT_RECOVERABLE_KNOCKBACK: {
-        int r = mine_fall(moby, data + 0x70);
-        if (r & 0x40) {
+        int knockback_fall_flags = mine_fall(moby, data + 0x70);
+        if (knockback_fall_flags & 0x40) {
             probe_ground_height(moby + 0x10, 0, 0.5f);
             if (collision_hit_material() == -1 && *(float *)(data + 0x168) - 5.0f < *(float *)(moby + 0x18)) {
                 if (hero.state.current == 0x65) {
@@ -851,7 +851,7 @@ void sentrybot_update(unsigned char *moby) {
             FUN_L00_00257470(moby, 0, -1);
             mark_moby_for_removal(moby);
             return;
-        } else if (r & 0x120) {
+        } else if (knockback_fall_flags & 0x120) {
             mark_moby_for_removal(moby);
             return;
         }
