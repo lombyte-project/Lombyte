@@ -1693,7 +1693,9 @@ void FUN_001f9a10_00234d40(Vec4_00234d40 *, Vec4_00234d40 *,
 float probe_ground_height(Vec4_00234d40 *, int, float) __asm__("FUN_00213508");
 float absolute_float(float) __asm__("FUN_001f99c0");
 void FUN_L00_00233ee8_00234d40(void *, float, int) __asm__("FUN_L00_00233ee8");
-void FUN_L00_00234d40(void) {
+void try_reposition_hero_on_nearby_ground(void) __asm__("FUN_L00_00234d40");
+
+void try_reposition_hero_on_nearby_ground(void) {
     Vec4_00234d40 candidate_ground_position;
     struct Hero *hero_base = &hero;
     Vec4_00234d40 *pos = (Vec4_00234d40 *)&hero_base->motion.pos;
