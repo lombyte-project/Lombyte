@@ -6469,7 +6469,7 @@ extern void set_moby_list_state_15(int) __asm__("FUN_L06_002e9e30");
 extern void clear_moby_list_state_4(int) __asm__("FUN_L06_002f45a0");
 extern void FUN_L06_002f99b0(int);
 extern void FUN_L06_002fc630(char *);
-extern void FUN_L06_00309240(int);
+extern void activate_listed_class_5e8_mobys(int) __asm__("FUN_L06_00309240");
 extern void FUN_L06_00312a78(void *);
 extern void FUN_L06_00312ad0(void *);
 extern void FUN_L06_00312ce8(int);
@@ -6587,7 +6587,7 @@ void FUN_L06_00301b90(unsigned char *moby) {
             D_L06_0015F404 = 0;
             return;
         }
-        FUN_L06_00309240(*(int *)(moby_vars + 0x34));
+        activate_listed_class_5e8_mobys(*(int *)(moby_vars + 0x34));
         x = *(int *)(moby_vars + 0xB0) - 30;
         if (x < 0) x = 0;
         qcopy(va, (char *)D_L06_001B0C30_301b90[*(int *)(moby_vars + 0x24)] + 0x10 + (x << 4));

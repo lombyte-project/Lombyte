@@ -265,7 +265,9 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short *D_L06_001ABFC0[];
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L06_00309240(int moby_list_index) {
+void activate_listed_class_5e8_mobys(int moby_list_index) __asm__("FUN_L06_00309240");
+
+void activate_listed_class_5e8_mobys(int moby_list_index) {
     short *moby_index_entry;
     char *moby;
     char *data;
