@@ -20,7 +20,9 @@ typedef struct {
 
 extern void copy_memory_aligned(int, void *, int) __asm__("FUN_001f9838");
 
-void FUN_L01_0029b0a0(char *source, int byte_count, char *context_moby, int mode, Table *entry_table) {
+void record_moby_context_bytes(char *source, int byte_count, char *context_moby, int mode, Table *entry_table) __asm__("FUN_L01_0029b0a0");
+
+void record_moby_context_bytes(char *source, int byte_count, char *context_moby, int mode, Table *entry_table) {
     short v20 = *(short *)(context_moby + 0xB2);
     short v19 = *(short *)(context_moby + 0xA6);
     short key;

@@ -892,7 +892,7 @@ extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void FUN_L00_00262d38(int);
-extern void FUN_L01_0029b0a0(void *, int, void *, int, void *);
+extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 /* Watcher moby update with a level-specific state script, then turns its head toward the hero or a random target. */
@@ -962,7 +962,7 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
             unlock_planet(2);
             FUN_L00_00262d38(2);
             plumber_moby->state = 3;
-            FUN_L01_0029b0a0((char *)plumber_moby + 0x20, 1, plumber_moby, 1, D_L01_001BAAA0);
+            record_moby_context_bytes((char *)plumber_moby + 0x20, 1, plumber_moby, 1, D_L01_001BAAA0);
             memcard_save_data(0, -1);
         }
         break;

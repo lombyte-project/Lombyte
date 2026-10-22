@@ -713,7 +713,7 @@ extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void func_L00_0029A7D0_2FC140(int) __asm__("FUN_L00_00299460");
 extern void func_L00_00261848_2FC140(int) __asm__("FUN_L00_002607d0");
 extern void func_L00_00263DB0_2FC140(int) __asm__("FUN_L00_00262d38");
-extern void func_L01_0029C2A0_2FC140(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
+extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
 extern void func_L00_002512D8_2FC140(int) __asm__("FUN_L00_002502a0");
 extern void func_L00_00286128_2FC140(void *, void *) __asm__("FUN_L00_00284e50");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
@@ -909,8 +909,8 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
             if (data->f34 != -1 && data->f38 != -1) {
                 D_L01_00160058_2FC140[data->f34].fBC = 2;
                 D_L01_00160058_2FC140[data->f38].fBC = 2;
-                func_L01_0029C2A0_2FC140(&D_L01_00160058_2FC140[data->f34].fBC, 1, &D_L01_00160058_2FC140[data->f34], 1, D_L01_001BAAA0);
-                func_L01_0029C2A0_2FC140(&D_L01_00160058_2FC140[data->f38].fBC, 1, &D_L01_00160058_2FC140[data->f38], 1, D_L01_001BAAA0);
+                record_moby_context_bytes(&D_L01_00160058_2FC140[data->f34].fBC, 1, &D_L01_00160058_2FC140[data->f34], 1, D_L01_001BAAA0);
+                record_moby_context_bytes(&D_L01_00160058_2FC140[data->f38].fBC, 1, &D_L01_00160058_2FC140[data->f38], 1, D_L01_001BAAA0);
             }
         }
         func_L00_002512D8_2FC140(moby->fB0);

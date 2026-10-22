@@ -1295,7 +1295,7 @@ extern u8 D_L03_0015FC88[];
 extern L03LevelState D_L03_001BA6D0;
 extern char *D_L03_001600EC;
 extern float frame_scale_sq __asm__("D_0015ED64");
-extern void FUN_L01_0029b0a0(void *, int, struct Moby *, int, void *);
+extern void record_moby_context_bytes(void *, int, struct Moby *, int, void *) __asm__("FUN_L01_0029b0a0");
 extern void initialize_npc_dialogue(struct Moby *, struct TalkState *) __asm__("FUN_L00_002668a0");
 extern int update_npc_dialogue(struct Moby *, struct TalkState *) __asm__("FUN_L00_00266448");
 extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758");
@@ -1350,7 +1350,7 @@ void helga_update(struct Moby *helga_moby) {
                 if (helper_moby->oclass == 0x3F4) {
                     flag = (s32 *)(helper_moby->pvars + 0x8C);
                     *flag = 1;
-                    FUN_L01_0029b0a0(flag, 4, helga_moby, 2, D_L03_001BA720);
+                    record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
                 }
             }
             taxi_kill(helga_moby);
@@ -1361,7 +1361,7 @@ void helga_update(struct Moby *helga_moby) {
             if (helper_moby->oclass == 0x3F4) {
                 flag = (s32 *)(helper_moby->pvars + 0x8C);
                 *flag = 1;
-                FUN_L01_0029b0a0(flag, 4, helga_moby, 2, D_L03_001BA720);
+                record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
             }
         }
         helga_moby->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
@@ -1380,7 +1380,7 @@ void helga_update(struct Moby *helga_moby) {
                 if (helper_moby->oclass == 0x3F4) {
                     flag = (s32 *)(helper_moby->pvars + 0x8C);
                     *flag = 1;
-                    FUN_L01_0029b0a0(flag, 4, helga_moby, 2, D_L03_001BA720);
+                    record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
                 }
             }
         }
@@ -1394,7 +1394,7 @@ void helga_update(struct Moby *helga_moby) {
                     if (helper_moby->oclass == 0x3F4) {
                         flag = (s32 *)(helper_moby->pvars + 0x8C);
                         *flag = 1;
-                        FUN_L01_0029b0a0(flag, 4, helga_moby, 2, D_L03_001BA720);
+                        record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
                     }
                 }
                 if (helga_vars->talk.warp != -1) {

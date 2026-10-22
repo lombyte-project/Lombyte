@@ -817,7 +817,7 @@ extern float fast_cos_f5c8(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_f5c8(float) __asm__("FUN_001f9de0");
 extern int allocate_target_entry_f5c8(int, int, void *) __asm__("FUN_0022da68");
 extern void initialize_moby_launch_motion(struct Moby *, struct Moby *, void *, void *, int) __asm__("FUN_L05_00318648");
-extern void FUN_L01_0029b0a0(void *, int, void *, int, void *);
+extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
 extern void update_entity_f5c8(struct Moby *) __asm__("FUN_L00_00250df8");
 extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
                             void *vel, f32 f2);
@@ -903,7 +903,7 @@ void pipe_mounted_grating_update(struct Moby *moby) {
             }
         }
         moby->command = 1;
-        FUN_L01_0029b0a0(&moby->command, 1, moby, 1, D_L05_001BAAA0);
+        record_moby_context_bytes(&moby->command, 1, moby, 1, D_L05_001BAAA0);
         mark_moby_for_removal_f5c8(moby);
     } else if (moby->command) {
         mark_moby_for_removal_f5c8(moby);

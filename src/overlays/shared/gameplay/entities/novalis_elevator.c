@@ -626,7 +626,7 @@ extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18(int);
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
-extern void FUN_L01_0029b0a0(void *, int, void *, int, void *);
+extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
 extern void set_camera_5_track_acceleration_yz(f32, f32) __asm__("FUN_L01_00316e88");
 
 /* Turned by the hero (state 0x3B) until progress reaches 1, then lowered and saved as done. */
@@ -728,7 +728,7 @@ void bolt_crank_update(struct Moby *moby) {
             }
             if (crank->exit_camera_point != -1 &&
                 visited52[moby->mission + (current_level_index << 4)] != 0xFF) {
-                FUN_L01_0029b0a0(crank, 4, moby, 2, D_L01_001BAAA0);
+                record_moby_context_bytes(crank, 4, moby, 2, D_L01_001BAAA0);
                 jet_clear_persistent(moby->mission);
                 if (crank->exit_camera_point != -1) {
                     char *point = D_L01_001600EC + (crank->exit_camera_point << 7);
@@ -758,7 +758,7 @@ void bolt_crank_update(struct Moby *moby) {
             if (crank->reusable != 0) {
                 moby->state = BOLT_CRANK_IDLE;
             } else if (crank->progress == 1.0f) {
-                FUN_L01_0029b0a0(crank, 4, moby, 2, D_L01_001BAAA0);
+                record_moby_context_bytes(crank, 4, moby, 2, D_L01_001BAAA0);
                 moby->state = BOLT_CRANK_LOWERING;
                 D_0014C190_257218[current_level_index][(short)moby->save_id >> 5] |=
                     1 << (moby->save_id & 0x1F);
@@ -766,7 +766,7 @@ void bolt_crank_update(struct Moby *moby) {
                 allocate_voice_for_target_entry(0, 0, moby);
                 if (crank->exit_camera_point != -1 &&
                     visited52[moby->mission + (current_level_index << 4)] != 0xFF) {
-                    FUN_L01_0029b0a0(crank, 4, moby, 2, D_L01_001BAAA0);
+                    record_moby_context_bytes(crank, 4, moby, 2, D_L01_001BAAA0);
                     jet_clear_persistent(moby->mission);
                     if (crank->exit_camera_point != -1) {
                         char *point = D_L01_001600EC + (crank->exit_camera_point << 7);
