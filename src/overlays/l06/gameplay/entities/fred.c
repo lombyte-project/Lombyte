@@ -6760,7 +6760,9 @@ extern char D_0013D3AC_302578[] __asm__("D_0013D3A7") __attribute__((section(".d
 extern char D_0013D388_302578[] __asm__("D_0013D388") __attribute__((section(".data")));
 extern char D_0013A4E0_302578[] __asm__("D_0013A4E0") __attribute__((section(".data")));
 extern void FUN_L06_00302fd8(char *);
-extern void FUN_L06_00304028(char *);
+void mark_shuttle_linked_mobys_for_removal(char *moby) __asm__("FUN_L06_00304028");
+
+extern void mark_shuttle_linked_mobys_for_removal(char *) __asm__("FUN_L06_00304028");
 extern int FUN_L06_00303160(char *, int);
 extern int scale_game_frames_302578(int) __asm__("FUN_001f96f8");
 extern void FUN_L06_0030bef8_302578(void *, int, int, int) __asm__("FUN_L06_0030bef8");
@@ -6842,7 +6844,7 @@ void shuttle_update(struct Moby *moby) {
     case INITIALIZE_SHUTTLE:
         D_L06_0015FDF8 = 0;
         if (*(unsigned char *)(shuttle_vars->fF8 + (current_level_index << 4) + (int)visited52) == 0xFF) {
-            FUN_L06_00304028((char *)moby);
+            mark_shuttle_linked_mobys_for_removal((char *)moby);
         } else {
             D_0013D3AC_302578[5] = 0;
         }
@@ -7448,7 +7450,7 @@ extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
 /* Marks every moby in the moby's list for removal; the list ends after its first negative entry. */
-void FUN_L06_00304028(char *moby) {
+void mark_shuttle_linked_mobys_for_removal(char *moby) {
     char *data = *(char **)(moby + 0x78);
     short *moby_list_entry = D_L06_001ABFC0_c[*(int *)(data + 0xCC)];
     do {
