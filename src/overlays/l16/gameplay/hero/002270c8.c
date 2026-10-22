@@ -135,7 +135,7 @@ extern void request_hero_voice_if_enabled(int a0, int a1, int a2) __asm__("FUN_L
 extern void FUN_L01_002405a0(void);
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void FUN_L05_0023dc88(int i);
-extern void FUN_L05_00253850(void);
+extern void update_hero_hoverboard_trick_animations(void) __asm__("FUN_L05_00253850");
 extern void FUN_L05_00253b48(void);
 extern void FUN_L05_00254058(void);
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
@@ -2293,7 +2293,7 @@ void FUN_L16_002270c8(void) {
                             hero.motion.unk120.f[2] = v0[2] + dz;
                         }
                     }
-                    FUN_L05_00253850();
+                    update_hero_hoverboard_trick_animations();
                     FUN_L05_00253b48();
                     FUN_L05_00254058();
                     if ((((unsigned char *)hero.moby)[0x53] == 0x55 || ((unsigned char *)hero.moby)[0x53] == 0x7F) &&
@@ -2344,7 +2344,7 @@ void FUN_L16_002270c8(void) {
                     if (FUN_L05_00255208()) {
                         break;
                     }
-                    FUN_L05_00253850();
+                    update_hero_hoverboard_trick_animations();
                     FUN_L05_00253b48();
                     FUN_L05_00254058();
                     break;

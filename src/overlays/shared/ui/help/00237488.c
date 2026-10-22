@@ -1052,7 +1052,9 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_002325e0(int bank, int seq);
 
-void FUN_L05_00253850(void) {
+void update_hero_hoverboard_trick_animations(void) __asm__("FUN_L05_00253850");
+
+void update_hero_hoverboard_trick_animations(void) {
     struct Hero *hero_ptr = &hero;
     int pad;
     hero_ptr->unk888 =
