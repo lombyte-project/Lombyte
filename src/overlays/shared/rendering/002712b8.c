@@ -1291,7 +1291,9 @@ unsigned char *FUN_L00_002741a0(void *position, int color, float size_scale, flo
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_00274308(char *particle) {
+void update_moving_resizing_periodic_alpha_fade_particle(char *particle) __asm__("FUN_L00_00274308");
+
+void update_moving_resizing_periodic_alpha_fade_particle(char *particle) {
     char *particle_data = particle + 0x20;
     int decremented_fade_timer;
     fast_vec_add(particle + 0x10, particle + 0x10, particle_data);
