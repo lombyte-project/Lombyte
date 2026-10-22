@@ -193,7 +193,9 @@ void draw_sky_shells_with_modulo_40000_rotation(void) {
 extern int D_L00_0015F5CC;
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
-void FUN_L00_0028a3a8(void) {
+void draw_sky_shells_with_modulo_25000_rotation(void) __asm__("FUN_L00_0028a3a8");
+
+void draw_sky_shells_with_modulo_25000_rotation(void) {
     float shell_rotation[3];
     *(short *)(D_L00_0016051C + 4) = 0;
     set_identity_matrix(D_L00_001BD7E0);

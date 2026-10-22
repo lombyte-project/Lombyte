@@ -5,7 +5,7 @@
 
 
 extern void update_sky_shells_static(void) __asm__("FUN_L00_002892d0");
-extern void FUN_L00_0028a3a8(void);
+extern void draw_sky_shells_with_modulo_25000_rotation(void) __asm__("FUN_L00_0028a3a8");
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
 void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
@@ -15,7 +15,7 @@ void render_sky_shells(void) __asm__("FUN_L09_0025d648");
 void render_sky_shells(void) {
     setup_sky_gif_paging();
     if (current_level_index == 0x9) {
-        FUN_L00_0028a3a8();
+        draw_sky_shells_with_modulo_25000_rotation();
     } else {
         update_sky_shells_static();
     }
