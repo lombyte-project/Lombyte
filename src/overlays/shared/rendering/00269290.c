@@ -2872,7 +2872,9 @@ extern void FUN_L00_00267a08_26fb00(void *) __asm__("FUN_L00_00267a08");
 extern void FUN_001f9a10_26fb00(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a68_26fb00(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L00_0026fb00(P_26fb00 *particle) {
+void update_damped_and_fading_effect_particle(P_26fb00 *particle) __asm__("FUN_L00_0026fb00");
+
+void update_damped_and_fading_effect_particle(P_26fb00 *particle) {
     Q_26fb00 *q = &particle->q;
     float zero, x, y;
     if (FUN_001f9770_26fb00(&particle->ha)) {

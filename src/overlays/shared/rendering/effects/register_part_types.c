@@ -44,7 +44,7 @@ extern void FUN_L00_0026f280(void);
 extern void FUN_L00_0026f660(void);
 extern void FUN_L00_0026f898(void);
 extern void update_offset_and_pulse_effect_particle(void) __asm__("FUN_L00_0026fa00");
-extern void FUN_L00_0026fb00(void);
+extern void update_damped_and_fading_effect_particle(void) __asm__("FUN_L00_0026fb00");
 extern void update_animated_offset_effect_particle(void) __asm__("FUN_L00_0026fc38");
 extern void FUN_L00_0026ff10(void);
 extern void tick_finite_effect_particle_lifetime(void) __asm__("FUN_L00_00270710");
@@ -133,7 +133,7 @@ void register_part_types(void) {
     handlers[35] = (u32)FUN_L00_0026f660;
     handlers[36] = (u32)FUN_L00_0026f898;
     handlers[37] = (u32)update_offset_and_pulse_effect_particle;
-    handlers[38] = (u32)FUN_L00_0026fb00;
+    handlers[38] = (u32)update_damped_and_fading_effect_particle;
     handlers[39] = (u32)update_animated_offset_effect_particle;
     handlers[40] = (u32)FUN_L00_0026ff10;
     handlers[41] = (u32)tick_finite_effect_particle_lifetime;
