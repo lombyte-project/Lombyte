@@ -2109,7 +2109,9 @@ void FUN_L16_002cf9d0(Level16VendorVectorMoby_u *moby, int index, void *out);
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
 /* Patrol step: advances the moby's path node until the next node is ahead and far enough, switching between the base path and its branches. */
-void FUN_L16_002cf9f8(char *patrol_moby) {
+void advance_hoverboard_dummy_path_node(char *patrol_moby) __asm__("FUN_L16_002cf9f8");
+
+void advance_hoverboard_dummy_path_node(char *patrol_moby) {
     L16PatrolMoby *moby = (L16PatrolMoby *)patrol_moby;
     L16PatrolData *patrol_data = moby->data;
     float target[4];
@@ -2369,7 +2371,7 @@ extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
-void FUN_L16_002cf9f8(char *m);
+void advance_hoverboard_dummy_path_node(char *m) __asm__("FUN_L16_002cf9f8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void scale_vector_xyz(void *, void *, float);
@@ -2503,7 +2505,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             break;
         }
         moby[0xA4] = 255;
-        FUN_L16_002cf9f8((char *)moby);
+        advance_hoverboard_dummy_path_node((char *)moby);
         FUN_L05_00307010((char *)moby);
         prepare_hoverboard_dummy_path_jump((char *)moby);
         if (*(int *)(hoverboard_dummy_data + 0x2E4) != 0) {
