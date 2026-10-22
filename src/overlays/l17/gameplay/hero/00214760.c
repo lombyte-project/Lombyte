@@ -139,7 +139,7 @@ extern struct Hero hero_b __asm__("D_0013F350");
 extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
 s32 D_L17_0015F68C = 0;
 
-extern void FUN_L00_00209540(s32, s32);
+extern void emit_hero_periodic_surface_effect(s32, s32) __asm__("FUN_L00_00209540");
 extern void FUN_L00_002132b8(f32, f32);
 extern void FUN_L00_00217118(f32, f32);
 extern void stick_target(f32, s32) __asm__("FUN_L00_002118c8");
@@ -331,7 +331,7 @@ void FUN_L17_00214760(void) {
     case 0x72:
     case 0x80:
         if (hero.unk20A9 != 0) {
-            FUN_L00_00209540(0xF, 0x1E);
+            emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
         if (hero.unk12E2 != 0) {
             FUN_L00_002132b8(0.7f, frame_time * 0.0f);
@@ -767,7 +767,7 @@ void FUN_L17_00214760(void) {
         break;
     }
     case 0x75:
-        FUN_L00_00209540(0xF, 0x1E);
+        emit_hero_periodic_surface_effect(0xF, 0x1E);
         GROUND_FRICTION();
         FUN_L06_002291d0(0);
         FUN_L00_00227d40();
@@ -805,7 +805,7 @@ void FUN_L17_00214760(void) {
     case 0x36:
     case 0x37:
         if (hero.state.current == 0x37) {
-            FUN_L00_00209540(0xF, 0x1E);
+            emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
         if (frame_time * 1.5f < hero.motion.unk164) {
             FUN_L00_00209848(4, 0xC);

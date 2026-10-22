@@ -842,7 +842,7 @@ extern s32 D_L06_0015F688 __attribute__((sda));
 s32 D_L06_0015F68C = 0;
 extern u8 D_L06_00167558[];
 
-extern void FUN_L00_00209540(s32, s32);
+extern void emit_hero_periodic_surface_effect(s32, s32) __asm__("FUN_L00_00209540");
 extern void FUN_L00_002132b8(f32, f32);
 extern void FUN_L00_00217118(f32, f32);
 extern void FUN_L00_002118c8_c(f32, s32) __asm__("FUN_L00_002118c8");

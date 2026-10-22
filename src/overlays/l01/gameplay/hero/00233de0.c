@@ -449,7 +449,7 @@ extern void FUN_001f9770_cf(int) __asm__("FUN_0022d798");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_00209018_cf(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_L00_002091d8(float, float, float);
-extern void FUN_L00_00209540(int, int);
+extern void emit_hero_periodic_surface_effect(int, int) __asm__("FUN_L00_00209540");
 extern void FUN_L00_00209638_cf(int, int) __asm__("FUN_L00_00209848");
 extern void FUN_L00_00209848_cf(float, float) __asm__("FUN_L00_0020a1e0");
 extern void FUN_L00_00209848_cf_0022b5f8(float, float) __asm__("FUN_L01_0022b5f8");
@@ -538,7 +538,7 @@ void FUN_L01_002370b8(void) {
         float speed;
 
         if (hero.unk20A9 != 0) {
-            FUN_L00_00209540(0xF, 0x1E);
+            emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
         FUN_L00_002132b8(0.5f, frame_time * 2.0f);
         FUN_L00_00217118(3.7f, 0.0f);
@@ -1025,7 +1025,7 @@ void FUN_L01_002370b8(void) {
         clip_hero_horizontal_velocity(0);
     } break;
     case 0x75:
-        FUN_L00_00209540(0xF, 0x1E);
+        emit_hero_periodic_surface_effect(0xF, 0x1E);
         hero.motion.velocity.f[2] = 0.0f;
         {
             float len;
@@ -1074,7 +1074,7 @@ void FUN_L01_002370b8(void) {
     case 0x36:
     case 0x37:
         if (hero.state.current == 0x37) {
-            FUN_L00_00209540(0xF, 0x1E);
+            emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
         if (hero.motion.unk164 > frame_time * 1.5f) {
             FUN_L00_00209638_cf(4, 0xC);

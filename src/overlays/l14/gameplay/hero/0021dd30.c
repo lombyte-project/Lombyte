@@ -388,7 +388,7 @@ struct LevelTable_QS {
 extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
 s32 D_L14_0015F68C = 0;
 
-extern void FUN_L00_00209540(s32, s32);
+extern void emit_hero_periodic_surface_effect(s32, s32) __asm__("FUN_L00_00209540");
 extern void FUN_L00_002132b8(f32, f32);
 extern void FUN_L00_00217118(f32, f32);
 extern void stick_target(f32, s32) __asm__("FUN_L00_002118c8");
