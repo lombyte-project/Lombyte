@@ -2001,7 +2001,9 @@ extern void FUN_L08_002dc4a0(struct Moby *);
 void FUN_L08_002dc0c8(struct Moby *moby);
 void FUN_L08_002dc180(struct Moby *moby);
 int FUN_L08_002dc648(struct Moby *m);
-void FUN_L08_002dc7f0(struct Moby *moby);
+void try_set_shuttle_departure_help_message(struct Moby *moby) __asm__("FUN_L08_002dc7f0");
+
+void try_set_shuttle_departure_help_message(struct Moby *moby) __asm__("FUN_L08_002dc7f0");
 
 /* Lift update: runs the lift's state machine (0 setup, 2 carry the hero
  * when riding, 3 travel to the selected stop) and moves anything riding it
@@ -2054,7 +2056,7 @@ void shuttle_update(struct Moby *moby) {
                 qcopy(&hero_position_probe, &hero.motion.pos);
                 FUN_L00_00261d78(vars->stop, 0.5f, &hero_position_probe, &hero_position_probe);
                 if (distance_xyz(&hero.motion.pos, &hero_position_probe) < 0.001f) {
-                    FUN_L08_002dc7f0((char *)moby);
+                    try_set_shuttle_departure_help_message((char *)moby);
                     if ((D_0013CAE4[0] & 0x10) && hero.air_frames.s == 0 && D_L08_0015F594 == 10)
                         moby->state = 3;
                 }
@@ -2245,7 +2247,7 @@ int FUN_L08_002dc648(struct Moby *moby) {
 
 extern int D_L08_001B0CB0[];
 
-void FUN_L08_002dc7f0(struct Moby *moby) {
+void try_set_shuttle_departure_help_message(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     if (*(float *)(data + 0x104) > 0.9f) {
         try_set_help_message(0xA, 0x1F4D);
