@@ -1489,7 +1489,9 @@ extern void count_drek_boss_platform_event_once(struct Moby *moby) __asm__("FUN_
 extern void FUN_L18_002f5e80(char *moby);
 extern void FUN_L18_002f6960(struct Moby *m);
 extern void FUN_L18_002f6aa0(struct Moby *moby);
-extern void FUN_L18_002f6fa8(int unused, int idx);
+void hide_drek_boss_moby_group(int unused, int group_index) __asm__("FUN_L18_002f6fa8");
+
+extern void hide_drek_boss_moby_group(int unused, int idx) __asm__("FUN_L18_002f6fa8");
 extern void FUN_L18_002f7028(int a0, int idx);
 extern void set_drek_boss_relative_aim_yaw() __asm__("FUN_L18_002f7220");
 extern void FUN_L18_002f7288(char *moby);
@@ -1602,7 +1604,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         boss_data->f3D0 = 0.75f;
         boss_data->f374 = 0.0f;
         for (i = 0; i < 3; i++) {
-            FUN_L18_002f6fa8((int)moby, boss_data->f204[i]);
+            hide_drek_boss_moby_group((int)moby, boss_data->f204[i]);
         }
         break;
     }
@@ -1930,7 +1932,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             moby->f34 |= 0x41;
             start_scene(2);
             for (i = 0; i < 3; i++) {
-                FUN_L18_002f6fa8((int)moby, boss_data->f204[i]);
+                hide_drek_boss_moby_group((int)moby, boss_data->f204[i]);
             }
         }
         break;
@@ -1979,7 +1981,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 blend_moby_animation(moby, 7, 0, scale_game_frames(0x14));
             }
             FUN_L18_002f7028((int)moby, boss_data->f398);
-            FUN_L18_002f6fa8((int)moby, boss_data->f204[boss_data->f34C - 1]);
+            hide_drek_boss_moby_group((int)moby, boss_data->f204[boss_data->f34C - 1]);
             moby_point_position(moby, 1, position_and_displacement_scratch);
             boss_data->f33C = (unsigned char *)FUN_L18_002ea0f0(moby, position_and_displacement_scratch, 300);
         }
@@ -3133,7 +3135,7 @@ extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8");
 /* 0x002f6fa8, 124 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
-void FUN_L18_002f6fa8(int unused, int group_index) {
+void hide_drek_boss_moby_group(int unused, int group_index) {
     short *group_entry = D_L18_001AC240_u[group_index];
     if (group_entry != 0) {
         do {
