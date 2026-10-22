@@ -1277,7 +1277,9 @@ typedef struct {
 
 /* Keeps the 33 linked parts glued to their anchors' joints and facing the moby, spins three of them (the middle
    one backwards), turns link 3 towards the hero, then updates every part. */
-void FUN_L08_002e2078(struct Moby *moby) {
+void update_linked_moby_parts(struct Moby *moby) __asm__("FUN_L08_002e2078");
+
+void update_linked_moby_parts(struct Moby *moby) {
     LinkedPartsVars *linked_parts_vars = (LinkedPartsVars *)moby->pvars;
     PartLink *links = linked_parts_vars->links;
     float part_joint_position[4];
@@ -1490,7 +1492,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
                                       vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
                          &vars->turn_speed, 0.004f, 0.3f, 0.02f);
         FUN_L08_002e2250_u(moby);
-        FUN_L08_002e2078(moby);
+        update_linked_moby_parts(moby);
         qcopy(&point, &vars->follow[0].path->points[waypoint]);
         if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
             vars->follow[0].point = waypoint;
@@ -1557,7 +1559,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
             normalize_vector_xyz(&step, &step, D_L08_00161C38 * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
-        FUN_L08_002e2078(moby);
+        update_linked_moby_parts(moby);
         if (!tick_countdown_32_alt(&vars->fire_timer)) {
             break;
         }
@@ -1581,7 +1583,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
         qcopy(&moby->pos, &path->points[0]);
         moby->rot.z = fast_arc_tan(path->points[1].f[0] - moby->pos.x, path->points[1].f[1] - moby->pos.y);
         moby->rot.x = 0.0f;
-        FUN_L08_002e2078(moby);
+        update_linked_moby_parts(moby);
         break;
     }
     case GUNSHIP_BREAK_APART_AND_REMOVE:
