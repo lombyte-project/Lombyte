@@ -305,7 +305,7 @@ extern void FUN_L00_00215340(void);
 extern void FUN_L00_00215ef8(void);
 extern void FUN_L00_00211f38(void);
 extern f32 D_L16_0017C224[] __asm__("D_L16_0017C218+12");
-extern void FUN_L00_00211be8(void);
+extern void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8");
 extern void initialize_moby_transform_history(void *, void *) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(void *, s32, s32) __asm__("FUN_L00_00262528");
 extern void FUN_L00_00262608(void *, s32);
@@ -1872,7 +1872,7 @@ void FUN_L16_00214598(void) {
     case 0x3F: {
         f32 a;
         f32 f;
-        FUN_L00_00211be8();
+        update_hero_target_speed_from_stick();
         transform_vector(&primary_vector_scratch, &hero_b.motion.unk170, (Vec4 *)hero_b.unk40);
         a = FUN_001f99c0(fast_arc_tan(primary_vector_scratch.f[0], primary_vector_scratch.f[1]));
         if (a > 0.69813168f) {
@@ -1934,7 +1934,7 @@ void FUN_L16_00214598(void) {
         if (hero.unk3BE != 0 && (FUN_001f99c0(hero.motion.unk188) < 0.06981317f || hero.unk20A8 != 0)) {
             hero.unk3BE = 0;
         }
-        FUN_L00_00211be8();
+        update_hero_target_speed_from_stick();
         if (hero.unk930 > 0.0f) {
             Vec4 *move_impulse_ptr = &hero.move_impulse;
             FUN_L00_002132b8(0.7f, 0.0f);
@@ -2440,7 +2440,7 @@ void FUN_L16_00214598(void) {
                 hero.state.step = 1;
             }
         }
-        FUN_L00_00211be8();
+        update_hero_target_speed_from_stick();
         if (hero.unk1C4 == 0) {
             FUN_L02_00223450();
         }

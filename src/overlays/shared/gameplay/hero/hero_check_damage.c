@@ -2816,7 +2816,9 @@ void stick_target(float scale, int mode) {
 extern float D_L00_0017BDB8[];
 
 /* Hero speed clamp after a move update (twin of FUN_L01_00232290): in state 0x3F it scales unk190 by 3.5 frame steps with a floor; otherwise it picks a table speed, and in state 0x73 it slows by 0.8 down to a floor. */
-void FUN_L00_00211be8(void) {
+void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8");
+
+void update_hero_target_speed_from_stick(void) {
     stick_target(1.0f, 0);
     if (hero.state.current == 0x3F) {
         float min = frame_time + frame_time;

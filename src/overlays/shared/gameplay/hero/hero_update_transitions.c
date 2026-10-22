@@ -120,7 +120,7 @@ extern void FUN_L00_0020e698(void);
 extern void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
-extern void FUN_L00_00211be8(void);
+extern void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8");
 extern void FUN_L00_00216de8(int, int);
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void FUN_L00_00228c18(void);
@@ -469,7 +469,7 @@ void hero_update_transitions(void) {
                         hero_set_state(HERO_STATE_FIDGET_ALT, 1);
                         break;
                     }
-                    FUN_L00_00211be8();
+                    update_hero_target_speed_from_stick();
                     if (hero.target_speed > 0.0f) {
                         hero_set_state(HERO_STATE_FIDGET_ALT, 1);
                         break;
@@ -493,7 +493,7 @@ void hero_update_transitions(void) {
                             hero_set_state(HERO_STATE_CROUCH, 1);
                             break;
                         }
-                        FUN_L00_00211be8();
+                        update_hero_target_speed_from_stick();
                         if (hero.target_speed > 0.0f) {
                             hero_set_state(HERO_STATE_RUN, 1);
                             break;
