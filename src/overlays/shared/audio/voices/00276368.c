@@ -98,7 +98,7 @@ extern void FUN_L00_002a09d8(s32);
 extern void vu1_init_chain(void) __asm__("FUN_002335d0");
 extern void FUN_L00_002a08c8(void);
 extern void hud_send_resident_bank(s32, s32, s32) __asm__("FUN_001ff128");
-extern void FUN_L00_00235310(s32);
+extern void apply_group_entry_adjustment(s32) __asm__("FUN_L00_00235310");
 extern Ent *delete_moby(Ent *) __asm__("FUN_00225530");
 extern s32 show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern s32 hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
@@ -293,7 +293,7 @@ void FUN_L00_00276368(void) {
     if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
         FUN_L00_002468b8();
     }
-    FUN_L00_00235310(0);
+    apply_group_entry_adjustment(0);
     if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15 || D_L00_001B9CF0.state == 0x12) {
         FUN_L00_00234fd0(1);
     } else {
@@ -397,12 +397,12 @@ void FUN_L00_00276908(void) {
             D_0015EE78_gp = state->saved_texture_start;
             hud_send_resident_bank(0, value, 0);
         }
-        FUN_L00_00235310(2);
+        apply_group_entry_adjustment(2);
         if (*(s32 *)((u8 *)*(void **)(table + 0x18) + 0x80) != 0) {
-            FUN_L00_00235310(3);
+            apply_group_entry_adjustment(3);
         }
         if (*(s32 *)((u8 *)*(void **)(table + 0x18) + 0x84) != 0) {
-            FUN_L00_00235310(4);
+            apply_group_entry_adjustment(4);
         }
         {
             s32 remaining;

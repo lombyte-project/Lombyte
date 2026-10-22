@@ -84,7 +84,9 @@ typedef struct {
 } G_235310;
 extern G_235310 D_L00_0017E4D8 __attribute__((section(".data")));
 
-void FUN_L00_00235310(int group_index) {
+void apply_group_entry_adjustment(int group_index) __asm__("FUN_L00_00235310");
+
+void apply_group_entry_adjustment(int group_index) {
     int subtraction_amount = D_L00_0017E4D8.t->c[group_index];
     int i, j, s, end;
     if (group_index == 0) {
