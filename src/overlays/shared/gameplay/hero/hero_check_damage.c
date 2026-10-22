@@ -2640,7 +2640,7 @@ extern void FUN_L00_001ffa70(void *, void *);
 extern void FUN_L00_001ff9e8(void *);
 extern void matrix_from_basis_rows(void *, void *) __asm__("FUN_L00_001ffcf8");
 extern void update_hero_motion_and_collision_probes(void) __asm__("FUN_L00_00221310");
-extern void FUN_L00_002215c8(void);
+extern void update_hero_timers_and_reach_state(void) __asm__("FUN_L00_002215c8");
 extern u8 controller_state[] __asm__("D_0013C940");
 
 /* Per-frame hero input: stick (or d-pad) into unk1D20/24, the yaw and position
@@ -2700,7 +2700,7 @@ void hero_update(void)
     matrix_from_basis_rows(hero_state->unk40, hero_state);
     FUN_L00_00211380();
     update_hero_motion_and_collision_probes();
-    FUN_L00_002215c8();
+    update_hero_timers_and_reach_state();
 }
 #define NOT_SDA
 
