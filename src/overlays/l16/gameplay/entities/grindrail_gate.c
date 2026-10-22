@@ -1838,7 +1838,9 @@ extern int D_L16_00161E90 __attribute__((sda));
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L16_002e7a30(unsigned char *, void *);
+void emit_path_walker_particle(unsigned char *source_moby, void *previous_position) __asm__("FUN_L16_002e7a30");
+
+extern void emit_path_walker_particle(unsigned char *, void *) __asm__("FUN_L16_002e7a30");
 extern void FUN_L16_002e7ba0(struct Moby *);
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void sample_camera_path(void *, f32, s32, void *, void *, s32) __asm__("func_00214E58");
@@ -1936,7 +1938,7 @@ void FUN_L16_002e76b8(unsigned char *walker_moby) {
     }
     }
     if (*(unsigned short *)(walker_moby + 0xA6) & 1) {
-        FUN_L16_002e7a30(walker_moby, old);
+        emit_path_walker_particle(walker_moby, old);
     }
 }
 /* Emits a particle near an active moby when the target is close. */
@@ -1957,7 +1959,7 @@ int D_L16_00161E9C = 0x801000;
 extern float D_L16_00161EA0 __attribute__((sda));
 extern float D_L16_00161EA4 __attribute__((sda));
 extern float D_L16_00161EA8 __attribute__((sda));
-void FUN_L16_002e7a30(unsigned char *source_moby, void *previous_position) {
+void emit_path_walker_particle(unsigned char *source_moby, void *previous_position) {
     float input[4];
     float offset[4];
     float out[4];
