@@ -158,7 +158,7 @@ void FUN_L15_001ff938(void) {
 
 extern unsigned char D_0013E05A[];
 #include "rnc/data_labels.h"
-extern void FUN_L00_00207330(int, int);
+extern void update_item_tint_from_hero(int, int) __asm__("FUN_L00_00207330");
 
 void FUN_L15_00200788(void) {
     unsigned char *base = ((unsigned char *)&D_0013E533) + 0xE1D;
@@ -166,7 +166,7 @@ void FUN_L15_00200788(void) {
     if (index >= 0 && *(D_0013E05A + 0x4C6 + index) != 0) {
         int first = *(int *)(base + 0x1090);
         if (first != 0) {
-            FUN_L00_00207330(first, *(int *)(base + 0x2080));
+            update_item_tint_from_hero(first, *(int *)(base + 0x2080));
         }
     }
 }

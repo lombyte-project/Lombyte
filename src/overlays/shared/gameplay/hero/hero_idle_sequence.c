@@ -1213,7 +1213,9 @@ extern void FUN_0020d510(void *, void *);
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
 extern void FUN_L00_002503c0(void *, void *);
 
-void FUN_L00_00207330(void *item_moby, char *hero_moby) {
+void update_item_tint_from_hero(void *item_moby, char *hero_moby) __asm__("FUN_L00_00207330");
+
+void update_item_tint_from_hero(void *item_moby, char *hero_moby) {
     Vx hero_vector_sample;
     float *global_float_base;
     float vector_component_sum;
@@ -1349,7 +1351,7 @@ void FUN_L00_002076a8(void) {
     if (hero.items[0].item_id >= 0 &&
         item_text_variant[hero.items[0].item_id] != 0 &&
         ((int)hero.items[0].moby) != 0) {
-        FUN_L00_00207330(((void *)hero.items[0].moby), ((char *)hero.moby));
+        update_item_tint_from_hero(((void *)hero.items[0].moby), ((char *)hero.moby));
     }
 }
 typedef unsigned int u128_2078a8 __attribute__((mode(TI), aligned(16)));

@@ -276,7 +276,7 @@ extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
 extern void get_moby_color(struct Moby *, int *, int *, int *) __asm__("FUN_L00_00250320");
 extern void set_moby_color(struct Moby *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void copy_hero_color_to_item_mobys(void) __asm__("FUN_L00_002072c8");
-extern void FUN_L00_00207330(struct Moby *, struct Moby *);
+extern void update_item_tint_from_hero(struct Moby *, struct Moby *) __asm__("FUN_L00_00207330");
 
 /*
  * Blinks the hero's moby colour for the first 30 frames of states 0x80 and
@@ -312,7 +312,7 @@ void FUN_L01_00228e38(void)
     }
     if (hero.items[0].item_id >= 0 && gold_weapon_purchased[hero.items[0].item_id] != 0
         && hero.items[0].moby != 0)
-        FUN_L00_00207330(hero.items[0].moby, hero.moby);
+        update_item_tint_from_hero(hero.items[0].moby, hero.moby);
 }
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
