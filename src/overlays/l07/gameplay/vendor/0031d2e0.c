@@ -34,7 +34,9 @@ extern L07ScaleRow D_L07_001C4130[];
 /* Ported from rac1-decomp nonmatching/l07_umbris/func_L07_0031E6B0.c (func_L07_0031E6B0) */
 /* Umbris item spawner: measures its path once, then for each listed item whose stock ratio is in
  * range spawns batches of pickups along the path, away from the target moby. */
-void FUN_L07_0031d2e0(char *moby) {
+void update_equalizer_ammo_spawner(char *moby) __asm__("FUN_L07_0031d2e0");
+
+void update_equalizer_ammo_spawner(char *moby) {
     int *data = *(int **)(moby + 0x78);
     int state = *(unsigned char *)(moby + 0x20);
     if (state == 1) goto state_one;
