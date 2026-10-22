@@ -20,7 +20,9 @@ extern short D_L08_00160200 __attribute__((sda));
 extern short D_L08_00160204 __attribute__((sda));
 extern short D_L08_00160208 __attribute__((sda));
 extern unsigned char *D_L08_001B291C __attribute__((section(".data")));
-unsigned char *FUN_L08_00279f00(char *source_moby) {
+unsigned char *spawn_moby_offset_effect(char *source_moby) __asm__("FUN_L08_00279f00");
+
+unsigned char *spawn_moby_offset_effect(char *source_moby) {
     float position_offset[4];
     unsigned char *effect = FUN_L00_002678b8(0x27);
     char *source_position;
