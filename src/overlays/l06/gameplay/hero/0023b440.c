@@ -48,7 +48,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float FUN_L00_00208f20(float a, float b, float c, float d);
 extern float FUN_L00_00232b90(float a, float b, float c);
 extern float gravity_z(float *v) __asm__("FUN_L00_00233a78");
-extern float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step);
+extern float predict_hero_trajectory_z(float *pos, float *vel, int *steps, float step) __asm__("FUN_L00_00233c30");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float FUN_L00_00259468(float *a, float *b, int *out, float f);
 extern float FUN_L00_0025abf0(void *a, void *b, void *out, float speed, float g);
@@ -1183,7 +1183,7 @@ void FUN_L06_0023b440(void) {
                         if (!(hero.state_timer < hero.unk420 + scale_game_frames(1)) &&
                             hero.state_timer < hero.unk420 + scale_game_frames(9) &&
                             hero.unk41E == 0 && hero.unkA9C == 0) {
-                            FUN_L00_00233c30(hero.motion.pos.f, hero.motion.velocity.f, &sp3C,
+                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp3C,
                                              hero.unk4A0);
                             FUN_L00_00208f20(hero.unk440, sp3C, 0.5f, frame_scale_sq * 0.25f);
                             if (hero.unk590 != 0) {
@@ -1244,7 +1244,7 @@ void FUN_L06_0023b440(void) {
                         }
                     } else if (hero.state.current == 0x42) {
                         if (hero.motion.velocity.f[2] > 0.0f) {
-                            FUN_L00_00233c30(hero.motion.pos.f, hero.motion.velocity.f, &sp40,
+                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp40,
                                              frame_time_sq * 23.0f);
                             FUN_L00_00208f20(9.0f, sp40, 0.5f, -1.0f);
                         }
@@ -1744,7 +1744,7 @@ void FUN_L06_0023b440(void) {
                             if (hero.state.current == 0xE) {
                                 break;
                             }
-                            FUN_L00_00233c30(hero.motion.pos.f, hero.motion.velocity.f, &sp54,
+                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp54,
                                              hero.unk4A0);
                             FUN_L00_00208f20(hero.unk440, sp54, hero.unk494, -1.0f);
                             if (1.5f < hero.anim_speed) {
@@ -2052,7 +2052,7 @@ void FUN_L06_0023b440(void) {
                         break;
                     }
                     if (hero.state_timer == hero.unk420 + scale_game_frames(1)) {
-                        FUN_L00_00233c30(hero.motion.pos.f, hero.motion.velocity.f, &sp5C, hero.unk4A0);
+                        predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp5C, hero.unk4A0);
                         FUN_L00_00208f20(hero.unk440, sp5C, 0.5f, -1.0f);
                         break;
                     }

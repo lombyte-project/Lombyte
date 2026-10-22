@@ -61,7 +61,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float FUN_L00_00208f20(float a, float b, float c, float d);
 extern float FUN_L00_00232b90(float a, float b, float c);
 extern float gravity_z(float *v) __asm__("FUN_L00_00233a78");
-extern float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step);
+extern float predict_hero_trajectory_z(float *pos, float *vel, int *steps, float step) __asm__("FUN_L00_00233c30");
 extern float read_pad_float_history(int) __asm__("FUN_L00_00266e80");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -1592,7 +1592,7 @@ void FUN_L15_0021d040(void) {
                             if (hero.state.current == 0xE) {
                                 break;
                             }
-                            FUN_L00_00233c30(hero.motion.pos.f, hero.motion.velocity.f, &sp38,
+                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp38,
                                              hero.unk4A0);
                             FUN_L00_00208f20(hero.unk440, sp38, hero.unk494, -1.0f);
                             if (1.5f < hero.anim_speed) {
@@ -1864,7 +1864,7 @@ void FUN_L15_0021d040(void) {
                         break;
                     }
                     if (hero.state_timer == hero.unk420 + scale_game_frames(1)) {
-                        FUN_L00_00233c30(hero.motion.pos.f, hero.motion.velocity.f, &sp40, hero.unk4A0);
+                        predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp40, hero.unk4A0);
                         FUN_L00_00208f20(hero.unk440, sp40, hero.unk494, -1.0f);
                         break;
                     }

@@ -1148,7 +1148,9 @@ extern float FUN_L00_00233a78_c(void *) __asm__("FUN_L00_00233a78");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
-float FUN_L00_00233c30(float *initial_position, float *initial_velocity, int *steps, float step) {
+float predict_hero_trajectory_z(float *initial_position, float *initial_velocity, int *steps, float step) __asm__("FUN_L00_00233c30");
+
+float predict_hero_trajectory_z(float *initial_position, float *initial_velocity, int *steps, float step) {
     int step_count;
     int k;
     float step_count_float;
