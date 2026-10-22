@@ -286,7 +286,9 @@ int FUN_L01_0028b5e0(char *reference_object, List *list, char *pt, char *out) {
     return -1;
 }
 /* Select a 16-byte entry using the descriptor's signed index rules. */
-void *FUN_L01_0028b7b0(void *descriptor, s32 index) {
+void *get_path_node(void *descriptor, s32 index) __asm__("FUN_L01_0028b7b0");
+
+void *get_path_node(void *descriptor, s32 index) {
     char *data;
     s32 last;
 
@@ -347,7 +349,7 @@ int advance_path_node_index(char *path_descriptor) {
 
 
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
-extern void *FUN_L01_0028b7b0(void *, int);
+extern void *get_path_node(void *, int) __asm__("FUN_L01_0028b7b0");
 extern void *memset(void *, int, unsigned int);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
@@ -363,9 +365,9 @@ void FUN_L01_0028b8c8(void *out, int *path_descriptor, int node_index_offset, fl
     float incoming_segment_distance, outgoing_segment_distance, delta_length_limit, blended_delta_length;
     float wa, wb;
     func_001153FC_c(neighboring_points, 0, 12);
-    neighboring_points[0] = FUN_L01_0028b7b0(path_descriptor, *path_descriptor + node_index_offset - 1);
-    neighboring_points[1] = FUN_L01_0028b7b0(path_descriptor, *path_descriptor + node_index_offset);
-    neighboring_points[2] = FUN_L01_0028b7b0(path_descriptor, *path_descriptor + node_index_offset + 1);
+    neighboring_points[0] = get_path_node(path_descriptor, *path_descriptor + node_index_offset - 1);
+    neighboring_points[1] = get_path_node(path_descriptor, *path_descriptor + node_index_offset);
+    neighboring_points[2] = get_path_node(path_descriptor, *path_descriptor + node_index_offset + 1);
     {
         wb = (1.0f - tangent_tension) * (tangent_bias + 1.0f) * 0.5f;
         wa = (1.0f - tangent_tension) * (1.0f - tangent_bias) * 0.5f;
