@@ -416,7 +416,9 @@ void FUN_L13_002c2048(Moby_2C27B0 *moby) {
         mark_moby_for_removal(moby);
     }
 }
-extern void FUN_L13_002c2d30(unsigned char *);
+void update_hovering_rocket_attacker_common(unsigned char *moby) __asm__("FUN_L13_002c2d30");
+
+extern void update_hovering_rocket_attacker_common(unsigned char *) __asm__("FUN_L13_002c2d30");
 extern unsigned char *create_attached_rocket(void *, int) __asm__("FUN_L13_003058a8");
 extern void launch_attached_rocket(void *, void *, void *, float) __asm__("FUN_L13_00305988");
 extern char *D_L13_001600EC;
@@ -451,7 +453,7 @@ void FUN_L13_002c25b8(unsigned char *moby) {
     float *moby_yaw;
     float *moby_position;
     int index;
-    FUN_L13_002c2d30(moby);
+    update_hovering_rocket_attacker_common(moby);
     target = *(unsigned char **)(moby_data + 0xB0);
     switch (moby[0x20]) {
     case UPDATE_INITIALIZE:
@@ -618,7 +620,7 @@ extern char *D_L13_001B07B0[];
 extern int frame_count __asm__("D_L13_0015F5CC");
 extern float D_L13_00161490 __attribute__((sda));
 
-void FUN_L13_002c2d30(unsigned char *moby) {
+void update_hovering_rocket_attacker_common(unsigned char *moby) {
     enum {
         HIT_REACTION_NONE = 0,
         HIT_REACTION_LETHAL = 1,
