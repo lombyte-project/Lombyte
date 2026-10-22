@@ -5660,7 +5660,9 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 /* 0x002ffc38, 116 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
-void FUN_L06_002ffc38(int moby_list_index) {
+void set_moby_list_state_17(int moby_list_index) __asm__("FUN_L06_002ffc38");
+
+void set_moby_list_state_17(int moby_list_index) {
     short *moby_list_entry = D_L06_001ABFC0_u[moby_list_index];
     if (moby_list_entry != 0) {
         do {
@@ -6460,7 +6462,7 @@ void begin_red_button_rotation(char *moby) __asm__("FUN_L06_003047b8");
 extern void begin_red_button_rotation(char *) __asm__("FUN_L06_003047b8");
 extern int FUN_L06_003047f8(const u8 *);
 extern void FUN_L06_00302400(struct Moby *, int);
-extern void FUN_L06_002ffc38(int);
+extern void set_moby_list_state_17(int) __asm__("FUN_L06_002ffc38");
 extern void set_moby_list_state_15(int) __asm__("FUN_L06_002e9e30");
 extern void clear_moby_list_state_4(int) __asm__("FUN_L06_002f45a0");
 extern void FUN_L06_002f99b0(int);
@@ -6536,7 +6538,7 @@ void FUN_L06_00301b90(unsigned char *moby) {
         *(int *)(moby_vars + 0xB0) = 1;
         jet_game_state(6, 9);
         if (*(short *)D_0015172A == 3) continue_audio_stream_if_ready();
-        FUN_L06_002ffc38(*(int *)(moby_vars + 0x10));
+        set_moby_list_state_17(*(int *)(moby_vars + 0x10));
         set_moby_list_state_15(*(int *)(moby_vars + 0x14));
         set_moby_list_state_15(*(int *)(moby_vars + 0x18));
         clear_moby_list_state_4(*(int *)(moby_vars + 0));
