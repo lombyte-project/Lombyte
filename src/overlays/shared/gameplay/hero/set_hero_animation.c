@@ -1510,14 +1510,14 @@ void FUN_L00_00233f80(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00235040), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_00262030(int, void *, void *, float);
+extern int resolve_point_path_segment_clearance(int, void *, void *, float) __asm__("FUN_L00_00262030");
 
 /* Sets the short at &hero.unk1F6 to 4 when FUN_L00_00262030 succeeds. */
 void FUN_L00_002347c0(void);
 void FUN_L00_002347c0(void) {
     struct Hero *base = &hero;
 
-    if (FUN_L00_00262030(base->unk22DA, &base->motion.pos, &base->motion.pos,
+    if (resolve_point_path_segment_clearance(base->unk22DA, &base->motion.pos, &base->motion.pos,
                          base->unk234) != 0) {
         base->unk1F6 = 4;
     }
