@@ -1483,7 +1483,9 @@ extern void FUN_L18_002dfaa0(char *moby, void *v0, void *v1, void *v2, void *v3,
                              int a7, int a8);
 extern void FUN_L18_002ea168(unsigned char *arg, void *src, void *position, int active,
                              float speed);
-extern void FUN_L18_002f5e18(struct Moby *moby);
+void count_drek_boss_platform_event_once(struct Moby *moby) __asm__("FUN_L18_002f5e18");
+
+extern void count_drek_boss_platform_event_once(struct Moby *moby) __asm__("FUN_L18_002f5e18");
 extern void FUN_L18_002f5e80(char *moby);
 extern void FUN_L18_002f6960(struct Moby *m);
 extern void FUN_L18_002f6aa0(struct Moby *moby);
@@ -1562,7 +1564,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     float *aim;
     float fast;
 
-    FUN_L18_002f5e18((char *)moby);
+    count_drek_boss_platform_event_once((char *)moby);
     FUN_L18_002f5e80((char *)moby);
     aim_target_moby = boss_data->fB0;
     /* The file defines this one without parameters; retail passes the moby. */
@@ -2594,7 +2596,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
 
 extern s32 D_L18_001623A8_gp __asm__("D_L18_001623A8") __attribute__((sda));
 
-void FUN_L18_002f5e18(struct Moby *moby) {
+void count_drek_boss_platform_event_once(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     if (*(int *)(moby_vars + 0x3E4) == 0) {
         char *latch_source_data = D_0013E533 + 0xE1D;
