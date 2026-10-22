@@ -1999,7 +1999,7 @@ extern void FUN_L00_00259f50(void *, void *);
 extern void FUN_L00_00261d78(s32, float, void *, void *);
 extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void FUN_L08_002dc4a0(struct Moby *);
+extern void update_moby_transform_wobble(struct Moby *) __asm__("FUN_L08_002dc4a0");
 void update_shuttle_stop_world_points(struct Moby *moby) __asm__("FUN_L08_002dc0c8");
 
 void update_shuttle_stop_world_points(struct Moby *moby) __asm__("FUN_L08_002dc0c8");
@@ -2081,7 +2081,7 @@ void shuttle_update(struct Moby *moby) {
         }
         break;
     }
-    FUN_L08_002dc4a0(moby);
+    update_moby_transform_wobble(moby);
     if (vars->stop != -1)
         update_shuttle_stop_world_points((char *)moby);
     subtract_vector_xyz(&delta, &moby->pos, &old_pos);

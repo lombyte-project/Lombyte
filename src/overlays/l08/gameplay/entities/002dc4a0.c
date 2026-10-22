@@ -12,7 +12,9 @@
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
-void FUN_L08_002dc4a0(struct Moby *moby) {
+void update_moby_transform_wobble(struct Moby *moby) __asm__("FUN_L08_002dc4a0");
+
+void update_moby_transform_wobble(struct Moby *moby) {
     char *pvars = (char *)moby->pvars;
     float wobble_phase, wobble_value, wobble_phase_step;
     qcopy(&moby->pos, pvars + 0x60);
