@@ -2823,7 +2823,9 @@ extern s32 FUN_00214720_2f2eb8(void *, s32) __asm__("FUN_00214720");
 extern f32 FUN_001f9b80_2f2eb8(void *, void *) __asm__("FUN_001f9b80");
 
 extern s32 D_L01_00161AF0 __attribute__((sda));
-void FUN_L01_002f2eb8(struct Moby *moby) {
+void update_nearest_area_moby_selection(struct Moby *moby) __asm__("FUN_L01_002f2eb8");
+
+void update_nearest_area_moby_selection(struct Moby *moby) {
     AreaVars_2f2eb8 *area_vars = (AreaVars_2f2eb8 *)moby->pvars;
     Vec4 target;
     s32 k;
