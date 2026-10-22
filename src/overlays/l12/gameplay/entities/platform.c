@@ -1773,7 +1773,9 @@ void FUN_L12_002e7208(struct Moby *moby) {
 
 extern void FUN_L00_0025f3e8(void *, void *, int, float, float);
 
-void FUN_L12_002e7290(void *moby, void *effect_position) {
+void spawn_blarg_trooper_death_effects(void *moby, void *effect_position) __asm__("FUN_L12_002e7290");
+
+void spawn_blarg_trooper_death_effects(void *moby, void *effect_position) {
     FUN_L00_0025f3e8(moby, effect_position, -1, 1.0f, 10.0f);
 }
 extern void FUN_L12_002e81e0(struct Moby *);
@@ -2070,7 +2072,7 @@ state3:
     case BLARG_TROOPER_DEATH_FALL: {
         if (mine_fall(moby, data + 0x70) & 0x60) {
             FUN_L00_00257470(moby, 0, -1);
-            FUN_L12_002e7290(moby, &moby->pos);
+            spawn_blarg_trooper_death_effects(moby, &moby->pos);
             goto leave;
         }
         if (moby->pos.z < 2.0f) {
