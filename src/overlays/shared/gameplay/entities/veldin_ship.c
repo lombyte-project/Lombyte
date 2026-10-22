@@ -1868,7 +1868,9 @@ extern void mark_moby_for_removal() __asm__("FUN_0020c828");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L00_002d3a10(unsigned char *moby) {
+void update_animated_point_light_moby(unsigned char *moby) __asm__("FUN_L00_002d3a10");
+
+void update_animated_point_light_moby(unsigned char *moby) {
     unsigned char *vars;
     Vx tp;
     Vx base_position;
