@@ -1237,7 +1237,9 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   int) __asm__("FUN_L00_0025e450");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
-void FUN_L04_002c1d70(struct Moby *moby) {
+void spawn_circular_saw_destruction_effects(struct Moby *moby) __asm__("FUN_L04_002c1d70");
+
+void spawn_circular_saw_destruction_effects(struct Moby *moby) {
     float explosion_position[4];
     float vec[4];
     char *data = (char *)moby->pvars;
@@ -1558,7 +1560,7 @@ extern void release_voice_slot(int);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern void transform_vector_by_basis(void *, void *, void *);
 int check_circular_saw_melee_attack_spacing(struct Moby *moby) __asm__("FUN_L04_002c1e98");
-void FUN_L04_002c1d70(struct Moby *moby);
+void spawn_circular_saw_destruction_effects(struct Moby *moby) __asm__("FUN_L04_002c1d70");
 extern char D_0013E550[];
 extern void *func_L00_0025B478_2C35F0(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void func_L00_002592B0_b(char *moby, float target, float *vel, float k, float d,
@@ -1676,7 +1678,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 break;
             case CIRCULAR_SAW_HIT_REACTION_FATAL:
             case CIRCULAR_SAW_HIT_REACTION_DESTROY_IMMEDIATELY:
-                FUN_L04_002c1d70((char *)moby);
+                spawn_circular_saw_destruction_effects((char *)moby);
                 mark_moby_for_removal(moby);
                 return;
             case CIRCULAR_SAW_HIT_REACTION_START_HIT_RECOVERY:
@@ -2009,7 +2011,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         break;
     case CIRCULAR_SAW_STATE_DYING:
         if (moby->f70 & 2) {
-            FUN_L04_002c1d70((char *)moby);
+            spawn_circular_saw_destruction_effects((char *)moby);
             mark_moby_for_removal(moby);
             return;
         }
@@ -2139,7 +2141,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         }
     }
     if (moby->pos[2] < data->f120[2] - 5.0f) {
-        FUN_L04_002c1d70((char *)moby);
+        spawn_circular_saw_destruction_effects((char *)moby);
         mark_moby_for_removal(moby);
         return;
     }
