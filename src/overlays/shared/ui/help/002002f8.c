@@ -37,7 +37,7 @@ extern void FUN_L00_00232670(void);
 extern void FUN_L00_002484e0(void *);
 extern void FUN_L00_00257024(void *);
 extern void FUN_L01_00228000(void);
-extern void FUN_L01_00228e38(void);
+extern void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
 extern void FUN_L01_0022cd48(void);
 extern void FUN_L01_0022d090(void);
 extern void FUN_L03_0021c668(void);
@@ -98,6 +98,6 @@ void FUN_L03_002002f8(void) {
         char *q = (char *)D_0013E533 + 0xE1D;
         FUN_L00_00257024(*(void **)(q + 0x2080));
     }
-    FUN_L01_00228e38();
+    update_hero_blink_and_gold_weapon_tint();
     FUN_L00_00208b60();
 }

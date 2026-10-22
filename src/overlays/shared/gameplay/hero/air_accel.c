@@ -209,7 +209,9 @@ extern void FUN_L00_00232670(void);
 extern void FUN_L00_002484e0(void *);
 extern void FUN_L00_00257024(void *);
 extern void FUN_L01_00228000_u(void) __asm__("FUN_L01_00228000");
-extern void FUN_L01_00228e38(void);
+void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
+
+extern void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
 extern void FUN_L01_0022cd48_u(void) __asm__("FUN_L01_0022cd48");
 extern void FUN_L01_0022d090(void);
 extern void FUN_L01_00242930(void);
@@ -269,7 +271,7 @@ void FUN_L01_00228870(void) {
         char *q = (char *)D_0013E533 + 0xE1D;
         FUN_L00_00257024(*(void **)(q + 0x2080));
     }
-    FUN_L01_00228e38();
+    update_hero_blink_and_gold_weapon_tint();
     FUN_L00_00208b60();
 }
 extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
@@ -283,7 +285,7 @@ extern void update_item_tint_from_hero(struct Moby *, struct Moby *) __asm__("FU
  * 0x82 (and of state 0x76 for 20 frames in levels 15 and 17), then, when the
  * equipped item is a gold weapon, runs FUN_L00_00207330 on its moby.
  */
-void FUN_L01_00228e38(void)
+void update_hero_blink_and_gold_weapon_tint(void)
 {
     /* three scalars, not an array: an int[3] changes the stack layout */
     int r, g, b;
