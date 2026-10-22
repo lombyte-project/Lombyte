@@ -59,7 +59,7 @@ extern void draw_vendor_screen(void) __asm__("FUN_L00_002a02b0");
 extern void update_resident_gameplay_state(void) __asm__("FUN_0022f778");
 extern void dispatch_game_state_update(void) __asm__("FUN_00230ee8");
 extern void FUN_L00_00299c48(void);
-extern void FUN_L00_001f8f78(void);
+extern void draw_framebuffer_with_timed_text(void) __asm__("FUN_L00_001f8f78");
 extern void FUN_L00_001f6d70(void);
 extern void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 extern void put_draw_buffer_small(void) __asm__("FUN_001fb3d0");
@@ -216,7 +216,7 @@ void FUN_L00_00245c28(void) {
         case LEVEL_MODE_TIMED_BUFFER_SEQUENCE:
             register_audio_stream_callback();
             FUN_L00_00299c48();
-            FUN_L00_001f8f78();
+            draw_framebuffer_with_timed_text();
             break;
         }
         if (D_L00_0015F5C4 != saved_level_mode) {

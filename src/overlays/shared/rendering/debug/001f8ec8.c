@@ -45,7 +45,9 @@ void reset_gs_registers(void) __asm__("FUN_001f3868");
 void setup_gif_paging(s32) __asm__("FUN_001f4280");
 void draw_timed_text(void *, s32) __asm__("FUN_L00_001fcca0");
 void do_gif_paging(void) __asm__("FUN_001f4398");
-void FUN_L00_001f8f78(void) {
+void draw_framebuffer_with_timed_text(void) __asm__("FUN_L00_001f8f78");
+
+void draw_framebuffer_with_timed_text(void) {
     s32 i;
     u8 *timed_text_entry;
     if (D_L00_0015F5D8)
