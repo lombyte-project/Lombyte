@@ -13,7 +13,9 @@
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
-float FUN_L13_002ba088(int flag, int squaring_loop_limit, float x, float start_value, float end_value, float lo, float hi) {
+float interpolate_value_with_repeated_squaring(int flag, int squaring_loop_limit, float x, float start_value, float end_value, float lo, float hi) __asm__("FUN_L13_002ba088");
+
+float interpolate_value_with_repeated_squaring(int flag, int squaring_loop_limit, float x, float start_value, float end_value, float lo, float hi) {
     float end_value_weight;
     float start_value_weight;
     float interpolated_value = 0.0f;

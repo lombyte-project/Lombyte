@@ -1139,7 +1139,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
-extern float FUN_L13_002ba088(int, int, float, float, float, float, float);
+extern float interpolate_value_with_repeated_squaring(int, int, float, float, float, float, float) __asm__("FUN_L13_002ba088");
 extern float fast_add_rotations(float, float);
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
@@ -1377,16 +1377,16 @@ void FUN_L17_002ec360(Moby *ship_moby, Obj *ship_vars) {
     }
 
     distance_to_default_target = vector_distance(ship_moby->pos, D_L17_001621F0);
-    ship_vars->f38 = FUN_L13_002ba088(
+    ship_vars->f38 = interpolate_value_with_repeated_squaring(
         1, 5, distance_to_default_target, ship_vars->f38, fast_arc_tan(target[0] - ship_moby->pos[0], target[1] - ship_moby->pos[1]), 50.0f, lenB);
-    ship_moby->r48 = FUN_L13_002ba088(
+    ship_moby->r48 = interpolate_value_with_repeated_squaring(
         1, 5, distance_to_default_target, ship_moby->r48, fast_arc_tan(target[0] - ship_moby->pos[0], target[1] - ship_moby->pos[1]), 50.0f, lenB);
     target_height_distance = absolute_float(target[2] - ship_moby->pos[2]);
-    ship_vars->f34 = FUN_L13_002ba088(1, 5, target_height_distance, ship_vars->f34,
+    ship_vars->f34 = interpolate_value_with_repeated_squaring(1, 5, target_height_distance, ship_vars->f34,
                               -fast_arc_tan(vector_distance(ship_moby->pos, target), target[2] - ship_moby->pos[2]),
                               50.0f, lenA);
     target_height_distance_for_moby_pitch = absolute_float(target[2] - ship_moby->pos[2]);
-    ship_moby->r44 = FUN_L13_002ba088(1, 5, target_height_distance_for_moby_pitch, ship_moby->r44,
+    ship_moby->r44 = interpolate_value_with_repeated_squaring(1, 5, target_height_distance_for_moby_pitch, ship_moby->r44,
                               -fast_arc_tan(vector_distance(ship_moby->pos, target), target[2] - ship_moby->pos[2]),
                               50.0f, lenA);
     build_spherical_offset(movement_delta.v, ship_vars->speed, ship_vars->f38, -ship_vars->f34);
