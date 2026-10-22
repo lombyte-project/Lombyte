@@ -482,7 +482,7 @@ void FUN_L08_002370d8(void) {
                         return;
                     }
                     break;
-                case 51:
+                case HERO_STATE_SWIM:
                 case 53:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
@@ -517,7 +517,7 @@ void FUN_L08_002370d8(void) {
                         hero_set_state(0x34, 1);
                     }
                     break;
-                case 52:
+                case HERO_STATE_SWIM_IDLE:
                     if (hero.unkA98 & 2) {
                         if (((unsigned char *)hero.moby)[0x53] != 0x3C) {
                             set_hero_animation(0x3C, 0, scale_game_frames(0xB));
@@ -1709,7 +1709,7 @@ void FUN_L08_002370d8(void) {
                         return;
                     }
                     break;
-                case 129:
+                case HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT:
                     if (hero.on_slip_ground != 0 && hero.ground_distance < 0.5f) {
                         hero_set_state(HERO_STATE_SLIP, 1);
                         break;
@@ -2306,7 +2306,7 @@ void FUN_L08_002370d8(void) {
                         hero_set_state(0x53, 0);
                     }
                     break;
-                case 30:
+                case HERO_STATE_LOOK_RELEASE_WAIT:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
