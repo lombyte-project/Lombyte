@@ -6465,7 +6465,9 @@ extern void begin_red_button_rotation(char *) __asm__("FUN_L06_003047b8");
 s32 get_red_button_sequence_status(const u8 *moby) __asm__("FUN_L06_003047f8");
 
 extern int get_red_button_sequence_status(const u8 *) __asm__("FUN_L06_003047f8");
-extern void FUN_L06_00302400(struct Moby *, int);
+void select_localized_moby_voice_line(struct Moby *moby, s32 kind) __asm__("FUN_L06_00302400");
+
+extern void select_localized_moby_voice_line(struct Moby *, int) __asm__("FUN_L06_00302400");
 extern void set_moby_list_state_17(int) __asm__("FUN_L06_002ffc38");
 extern void set_moby_list_state_15(int) __asm__("FUN_L06_002e9e30");
 extern void clear_moby_list_state_4(int) __asm__("FUN_L06_002f45a0");
@@ -6532,7 +6534,7 @@ void FUN_L06_00301b90(unsigned char *moby) {
         begin_red_button_rotation(D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x2C) << 8));
         if (get_red_button_sequence_status((const u8 *)D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x2C) << 8)) != 1) return;
         moby[0x20] = 2;
-        FUN_L06_00302400((struct Moby *)moby, 0);
+        select_localized_moby_voice_line((struct Moby *)moby, 0);
         return;
     case WAIT_FOR_LINKED_SEQUENCE_COMPLETION: {
         int *p;
@@ -6582,7 +6584,7 @@ void FUN_L06_00301b90(unsigned char *moby) {
         *(int *)(moby_vars + 0xB0) = nb;
         if (nb == **p - 1) {
             moby[0x20] = 4;
-            FUN_L06_00302400((struct Moby *)moby, 1);
+            select_localized_moby_voice_line((struct Moby *)moby, 1);
             *(int *)(moby_vars + 0xB4) = truncate_float_to_s32(FUN_L06_00216fa8(D_L06_001620C4));
             FUN_L06_00312ce8(2);
             FUN_L06_002356a0(0, 1);
@@ -6609,7 +6611,7 @@ void FUN_L06_00301b90(unsigned char *moby) {
             if (*(short *)D_0015172A == 3) continue_audio_stream_if_ready();
         } else {
             x = scale_game_frames(900);
-            if (*(int *)(moby_vars + 0xB4) == x) FUN_L06_00302400((struct Moby *)moby, 2);
+            if (*(int *)(moby_vars + 0xB4) == x) select_localized_moby_voice_line((struct Moby *)moby, 2);
             else {
                 x = scale_game_frames(300);
                 if (*(int *)(moby_vars + 0xB4) == x && *(short *)D_0015172A == 3) continue_audio_stream_if_ready();
@@ -6661,7 +6663,7 @@ extern s32 D_001516EC[];
 extern s32 FUN_00213260(s32);
 
 /* plays one of the vendor's greet, chatter or leave lines in the current language */
-void FUN_L06_00302400(struct Moby *moby, s32 kind) {
+void select_localized_moby_voice_line(struct Moby *moby, s32 kind) {
     enum {
         VOICE_KIND_GREETING = 0,
         VOICE_KIND_CHATTER = 1,
