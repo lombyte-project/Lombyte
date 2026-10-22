@@ -386,7 +386,9 @@ struct L11GateVars {
 };
 
 /* Two-door gate: spawns both 0x4DF doors, then once the hero is close lifts, swings and tilts them open. */
-void FUN_L11_00316320(struct Moby *moby) {
+void update_two_door_gate(struct Moby *moby) __asm__("FUN_L11_00316320");
+
+void update_two_door_gate(struct Moby *moby) {
     enum {
         GATE_INITIALIZE_DOORS = 0,
         GATE_WAIT_FOR_HERO_TRIGGER = 1,
