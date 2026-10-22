@@ -402,7 +402,9 @@ void FUN_001f9a80_28b1a0(void *, void *, float) __asm__("FUN_001f9a80");
 
 extern float D_L00_001604C0 __attribute__((sda));
 extern OvlQuad D_L00_00160520 __attribute__((section(".sdata")));
-void FUN_L00_0028b1a0(void) {
+void draw_sky_shells_with_rotation_and_scaling(void) __asm__("FUN_L00_0028b1a0");
+
+void draw_sky_shells_with_rotation_and_scaling(void) {
     enum {
         SKY_SHELL_TRIPLE_SCALE = 1,
         SKY_SHELL_TWO_AND_A_HALF_SCALE = 2,
