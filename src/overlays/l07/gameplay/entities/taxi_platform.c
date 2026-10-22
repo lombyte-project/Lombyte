@@ -976,7 +976,9 @@ extern void FUN_L00_0025d1b8(struct Moby *);
 extern struct AnimTimer *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 
 /* resets a spawned moby from its class defaults and restarts its animation */
-void FUN_L07_0030af40(struct Moby *moby) {
+void reset_moby_from_class_defaults(struct Moby *moby) __asm__("FUN_L07_0030af40");
+
+void reset_moby_from_class_defaults(struct Moby *moby) {
     struct SpawnClassView *class_defaults;
     struct AnimTimer *animation_timer;
 
@@ -1175,7 +1177,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
                     qcopy((void *)(cursor + 0x10), (void *)(child + 0x80));
                     if (fast_dec_timer((int *)(child + 0x98)) &&
                         *(int *)(child + 0x90) == *(int *)(data + 0x90))
-                        FUN_L07_0030af40((struct Moby *)cursor);
+                        reset_moby_from_class_defaults((struct Moby *)cursor);
                 }
             }
             FUN_L00_002592b8(&cursor, cursor, 1, 0);
