@@ -1369,7 +1369,9 @@ extern unsigned char *FUN_L00_002730e0(float *, char *, int, unsigned char, unsi
 extern void rotation_matrix_y(void *, float) __asm__("FUN_001f9ff8");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_00259a88(void *, void *);
-extern void FUN_L06_002f6dd0(char *moby);
+void draw_beam_barrier_segments(char *moby) __asm__("FUN_L06_002f6dd0");
+
+extern void draw_beam_barrier_segments(char *moby) __asm__("FUN_L06_002f6dd0");
 extern void FUN_L06_002f7000(struct Moby *moby);
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
@@ -1508,7 +1510,7 @@ void FUN_L06_002f6470(struct Moby *moby) {
             approach_value(&vars->fade, 0.0f, (step = frame_time_macro) + step);
         }
         if (vars->fade != 0.0f)
-            enqueue_callback_list_1((s32)FUN_L06_002f6dd0, (s32)moby);
+            enqueue_callback_list_1((s32)draw_beam_barrier_segments, (s32)moby);
         if (D_00141968[43].count == 0) {
             if (vars->touch_timer == 0) {
                 char *hit = find_moby_hit(moby, 0x330000, 0);
@@ -1640,7 +1642,7 @@ extern float D_L06_001DAFD0[];
 extern float D_L06_001DB060[];
 Vec4 D_L06_001DB0F0[4][30] = {0};
 
-void FUN_L06_002f6dd0(char *moby) {
+void draw_beam_barrier_segments(char *moby) {
     float base_matrix[16];
     float yaw_matrix[16];
     float segment_matrix[9][16];
