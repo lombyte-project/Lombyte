@@ -30,7 +30,7 @@ extern void FUN_L00_0026c860(void);
 extern void FUN_L00_0026ccb0(void);
 extern void FUN_L00_00267b10(void);
 extern void FUN_L00_0026d1b0(void);
-extern void FUN_L00_0026d470(void);
+extern void update_source_bound_effect_particle(void) __asm__("FUN_L00_0026d470");
 extern void FUN_L00_0026d700(void);
 extern void FUN_L00_0026dbe0(void);
 extern void move_and_fade_effect_particle_by_lifetime(void) __asm__("FUN_L00_0026de00");
@@ -119,7 +119,7 @@ void register_part_types(void) {
     handlers[21] = (u32)FUN_L00_0026ccb0;
     handlers[22] = (u32)FUN_L00_00267b10;
     handlers[23] = (u32)FUN_L00_0026d1b0;
-    handlers[24] = (u32)FUN_L00_0026d470;
+    handlers[24] = (u32)update_source_bound_effect_particle;
     handlers[25] = (u32)FUN_L00_0026d700;
     handlers[26] = (u32)FUN_L00_0026dbe0;
     handlers[27] = (u32)move_and_fade_effect_particle_by_lifetime;

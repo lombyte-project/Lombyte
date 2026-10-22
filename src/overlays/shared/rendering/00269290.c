@@ -1746,7 +1746,9 @@ typedef struct {
 f32 FUN_001fa6c0_0026d470(s32) __asm__("FUN_001fa6c0");
 s32 FUN_001fa6d0_0026d470(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_00267a08_0026d470(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_0026d470(Part_26d470 *particle) {
+void update_source_bound_effect_particle(Part_26d470 *particle) __asm__("FUN_L00_0026d470");
+
+void update_source_bound_effect_particle(Part_26d470 *particle) {
     Src_26d470 *e;
     Body_26d470 *particle_data;
     float updated_alpha_offset;
