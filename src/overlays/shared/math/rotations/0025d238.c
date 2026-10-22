@@ -294,8 +294,10 @@ extern void vscl_25dcd8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern float dot_25dcd8(void *, void *) __asm__("FUN_001f9ab0");
 extern float FUN_L00_0025da70_c(void *, void *, float) __asm__("FUN_L00_0025da70");
-float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r);
-float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) {
+float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) __asm__("FUN_L00_0025dcd8");
+
+float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r) __asm__("FUN_L00_0025dcd8");
+float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) {
     OvlQuad segment_workspace[2];
     OvlQuad direction_copy[1];
     OvlQuad query_point_copy[1];
@@ -420,7 +422,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
         count = *path;
         previous = count - 1;
         previous = (best_segment + previous) % count;
-        distance = FUN_L00_0025dcd8(nearest, point,
+        distance = resolve_level_path_segment_point(nearest, point,
             (OvlQuad *)(path + 4 + previous * 4),
             (OvlQuad *)(path + 4 + best_segment * 4), height_tolerance);
         *segment = previous;
@@ -432,7 +434,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
     }
     count = *path;
     if (best_segment < count - 1 || wrap) {
-        next_distance = FUN_L00_0025dcd8(&work[1], point,
+        next_distance = resolve_level_path_segment_point(&work[1], point,
             (OvlQuad *)(path + 4 + best_segment * 4),
             (OvlQuad *)(path + 4 + ((best_segment + 1) % count) * 4),
             height_tolerance);

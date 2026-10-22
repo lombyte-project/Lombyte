@@ -962,7 +962,7 @@ extern void clear_u64_value_2e7618(void *) __asm__("FUN_001f99f8");
 extern void add_vector_xyz_2e7618(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz_2e7618(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
-extern float FUN_L00_0025dcd8(V002e7530 *, V002e7530 *, V002e7530 *, V002e7530 *, float);
+extern float resolve_level_path_segment_point(V002e7530 *, V002e7530 *, V002e7530 *, V002e7530 *, float) __asm__("FUN_L00_0025dcd8");
 extern int coll_sphere_2e7618(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 
 int FUN_L00_002e7618(O002e7530 *camera_moby, V002e7530 *out, int step, float radial_adjustment_distance, float spd) {
@@ -987,7 +987,7 @@ int FUN_L00_002e7618(O002e7530 *camera_moby, V002e7530 *out, int step, float rad
     qcopy(&near, &D_L00_00173E70);
     path = (V002e7530 *)(m + 0x90);
     add_vector_xyz_2e7618(&path_segment_end, path, orbit);
-    measure = FUN_L00_0025dcd8(&path_segment_point, &hit, path, &path_segment_end, 0.0f);
+    measure = resolve_level_path_segment_point(&path_segment_point, &hit, path, &path_segment_end, 0.0f);
     radius = distance_xyz(path, &path_segment_point) /
               (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30));
     radius = (follow_cam_min_distance_gp + (radius_interpolation_target - follow_cam_min_distance_gp) * radius) * 0.75f;
@@ -998,7 +998,7 @@ int FUN_L00_002e7618(O002e7530 *camera_moby, V002e7530 *out, int step, float rad
         if (coll_sphere_2e7618(out, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
             subtract_vector_xyz_2e7618(&probe_to_start_delta, &start, out);
             add_vector_xyz_2e7618(&hit, &D_L00_00173E60, &probe_to_start_delta);
-            measure = FUN_L00_0025dcd8(&path_segment_point, &hit, path, &path_segment_end, 0.0f);
+            measure = resolve_level_path_segment_point(&path_segment_point, &hit, path, &path_segment_end, 0.0f);
             radius = distance_xyz(path, &path_segment_point) /
                       (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30));
             radius = (follow_cam_min_distance_gp + (radius_interpolation_target - follow_cam_min_distance_gp) * radius) * 0.75f;
@@ -1009,7 +1009,7 @@ int FUN_L00_002e7618(O002e7530 *camera_moby, V002e7530 *out, int step, float rad
                 if (coll_sphere_2e7618(out, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
                     subtract_vector_xyz_2e7618(&probe_to_start_delta, &start, out);
                     add_vector_xyz_2e7618(&hit, &D_L00_00173E60, &probe_to_start_delta);
-                    measure = FUN_L00_0025dcd8(&path_segment_point, &hit, path, &path_segment_end, 0.0f);
+                    measure = resolve_level_path_segment_point(&path_segment_point, &hit, path, &path_segment_end, 0.0f);
                     radius = distance_xyz(path, &path_segment_point) /
                               (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30));
                     radius = (follow_cam_min_distance_gp + (radius_interpolation_target - follow_cam_min_distance_gp) * radius) * 0.75f;
