@@ -3003,7 +3003,9 @@ extern int D_L06_001BAC50[];
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void FUN_L02_002ea7d0(char *);
 extern void initialize_energy_sphere_holder_vars(char *) __asm__("FUN_L06_002f7548");
-void FUN_L06_002f7628(char *m);
+void update_energy_sphere_holder_beam_effects(char *moby) __asm__("FUN_L06_002f7628");
+
+void update_energy_sphere_holder_beam_effects(char *m) __asm__("FUN_L06_002f7628");
 extern char D_0014171B_86b8[] __asm__("D_0014C190");
 #include "rnc/gameplay/state/game_globals.h"
 
@@ -3061,7 +3063,7 @@ void energy_sphere_holder_update(char *holder_moby) {
             D_L06_001BAC50[(short)*(unsigned short *)(holder_moby + 0xB2) >> 5] |=
                 1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F);
         } else {
-            FUN_L06_002f7628(holder_moby);
+            update_energy_sphere_holder_beam_effects(holder_moby);
         }
         break;
     }
@@ -3106,7 +3108,7 @@ extern int func_001FA898_g(float) __asm__("FUN_001fa6d0");
 extern unsigned char *func_L00_00273E08_g(void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 extern void func_L00_00273F80_g(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 
-void FUN_L06_002f7628(char *moby) {
+void update_energy_sphere_holder_beam_effects(char *moby) {
     float beam_sprite_position[4];
     float step[4];
     float spark_position[4];
