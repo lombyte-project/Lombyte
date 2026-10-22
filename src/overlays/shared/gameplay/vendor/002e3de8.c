@@ -234,7 +234,7 @@ extern char *D_L10_0015EF50;
 extern char *D_L10_001B0930_5a78[] __asm__("D_L10_001B0930");
 extern int FUN_00214720_5a78(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_0025fa38_5a78(void *, int) __asm__("FUN_L00_0025fa38");
-extern int FUN_L00_0025faf0_5a78(float *, int) __asm__("FUN_L00_0025faf0");
+extern int test_point_in_transformed_unit_sphere(float *, int) __asm__("FUN_L00_0025faf0");
 extern int FUN_L00_00259740_5a78(float *, float *, int) __asm__("FUN_L00_00259740");
 
 int FUN_L10_002f5a78(char *moby) {
@@ -248,7 +248,7 @@ int FUN_L10_002f5a78(char *moby) {
         if (FUN_L00_0025fa38_5a78(&hero.motion.pos, *(int *)(e + 0x10)))
             return 1;
     } else if (*(int *)(e + 0x08) >= 0) {
-        if (FUN_L00_0025faf0_5a78((float *)(&hero.motion.pos), *(int *)(e + 0x08)))
+        if (test_point_in_transformed_unit_sphere((float *)(&hero.motion.pos), *(int *)(e + 0x08)))
             return 1;
     } else if (*(int *)(e + 0x14) >= 0) {
         int i = *(int *)(e + 0x14);

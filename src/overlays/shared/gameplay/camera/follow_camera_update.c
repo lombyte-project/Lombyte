@@ -1748,7 +1748,7 @@ extern u8 *D_L00_001B04B0[];
 
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern s32 FUN_L00_0025fa38(void *, s32);
-extern s32 FUN_L00_0025faf0(void *, s32);
+extern s32 test_point_in_transformed_unit_sphere(void *, s32) __asm__("FUN_L00_0025faf0");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
 extern s32 fun_l00_002e83c0(struct UpdateCam *) __asm__("FUN_L00_002e83c0");
 extern void fun_l00_002e8388(struct UpdateCam *) __asm__("FUN_L00_002e8388");
@@ -1782,7 +1782,7 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
         return 1;
     if (params->volume_25fa38 >= 0 && (forced || FUN_L00_0025fa38(&hero.motion.pos, params->volume_25fa38)))
         return 1;
-    if (params->volume_25faf0 >= 0 && (forced || FUN_L00_0025faf0(&hero.motion.pos, params->volume_25faf0)))
+    if (params->volume_25faf0 >= 0 && (forced || test_point_in_transformed_unit_sphere(&hero.motion.pos, params->volume_25faf0)))
         return 1;
     if (params->path >= 0 && (forced || point_in_path_xy(&hero.motion.pos, D_L00_001B04B0[params->path] + 0x10,
                                                          *(s32 *)D_L00_001B04B0[params->path])))
@@ -2037,7 +2037,7 @@ s32 volume_camera_aim_active(struct UpdateCam *aim_camera_record) {
         return 1;
     if (params->volume_25fa38 >= 0 && FUN_L00_0025fa38(&hero.motion.pos, params->volume_25fa38))
         return 1;
-    if (params->volume_25faf0 >= 0 && FUN_L00_0025faf0(&hero.motion.pos, params->volume_25faf0))
+    if (params->volume_25faf0 >= 0 && test_point_in_transformed_unit_sphere(&hero.motion.pos, params->volume_25faf0))
         return 1;
     params->done = 1;
     return 0;
