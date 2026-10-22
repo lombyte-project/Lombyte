@@ -157,7 +157,9 @@ int FUN_L03_002e8870(char *candidate_object, char *comparison_object) {
 extern int D_L03_0015EF50;
 extern int is_point_inside_clip_volume_alt(void *arg0, int arg1) __asm__("FUN_00214720");
 
-void FUN_L03_002e8980(char *moby) {
+void set_transform_state_three_when_outside_clip_volume(char *moby) __asm__("FUN_L03_002e8980");
+
+void set_transform_state_three_when_outside_clip_volume(char *moby) {
     char *entry = (char *)(D_L03_0015EF50 + (*(short *)(moby + 0x84) << 5));
     char *sub = *(char **)(entry + 0x1C);
     if (*(int *)(moby + 0x74) == 4) {
