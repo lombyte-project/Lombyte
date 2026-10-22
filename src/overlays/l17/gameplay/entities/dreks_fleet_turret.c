@@ -358,7 +358,7 @@ typedef struct {
 } Aim347;
 
 extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
-extern char *FUN_L17_002e94d8(char *src, char *pos, float *v, float f);
+extern char *spawn_class_558_moby_toward_target(char *src, char *pos, float *v, float f) __asm__("FUN_L17_002e94d8");
 extern char *FUN_L17_002f4fb8(int list);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -485,7 +485,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
                         p[9] = func_001FA898_r(4.0f) + 0x70;
                     }
                     allocate_voice_for_target_entry(0, 0, (int)turret_moby);
-                    FUN_L17_002e94d8(turret_moby, (char *)from,
+                    spawn_class_558_moby_toward_target(turret_moby, (char *)from,
                                      (float *)(D_L17_001600EC + (turret_vars->zone << 7) + 0x30),
                                      frame_time * 60.0f);
                 }
@@ -538,7 +538,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
                         }
                         turret_vars->timer = scale_game_frames(0x5A) / 2;
                         allocate_voice_for_target_entry(0, 0, (int)turret_moby);
-                        FUN_L17_002e94d8(turret_moby, (char *)from, tmp, frame_time * 60.0f);
+                        spawn_class_558_moby_toward_target(turret_moby, (char *)from, tmp, frame_time * 60.0f);
                     }
                 }
             }

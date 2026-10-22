@@ -421,7 +421,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-char *FUN_L17_002e94d8(struct Moby *source_moby, char *spawn_position, float *target_position, float movement_speed) {
+char *spawn_class_558_moby_toward_target(struct Moby *source_moby, char *spawn_position, float *target_position, float movement_speed) __asm__("FUN_L17_002e94d8");
+
+char *spawn_class_558_moby_toward_target(struct Moby *source_moby, char *spawn_position, float *target_position, float movement_speed) {
     char *spawned_moby = func_0020D348_m(0x558);
     if (spawned_moby != 0) {
         char *spawned_vars;
