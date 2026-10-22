@@ -2234,7 +2234,7 @@ void FUN_L11_003125a8(struct Moby *moby, char *ship_vars, float aim_azimuth, flo
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00313BC0), where it is exact; names translated to the US level program. */
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int FUN_L11_00309378(void *, void *, int, void *, float, int);
+extern int spawn_ship_projectile(void *, void *, int, void *, float, int) __asm__("FUN_L11_00309378");
 extern f32 D_L11_00162090_gp __asm__("D_L11_00162090") __attribute__((sda));
 extern unsigned char D_0013A4E0[];
 extern void fast_dec_timer(int *arg0) __asm__("FUN_001f9740");
@@ -2260,7 +2260,7 @@ void FUN_L11_003126f8(struct Moby *moby, char *ship_vars) {
             fast_vec_add(projectile_spawn_position, projectile_spawn_position, projectile_spawn_offset);
             if (*(int *)(ship_vars + 0x88) != 0 && !(500 < *(int *)(ship_vars + 0x8C)))
                 projectile_target = *(int *)(ship_vars + 0x88);
-            if (FUN_L11_00309378(moby, projectile_spawn_position, projectile_target, &moby->rot,
+            if (spawn_ship_projectile(moby, projectile_spawn_position, projectile_target, &moby->rot,
                                  *(float *)&D_L11_00162064 * *(float *)&D_L11_00162090_gp,
                                  scale_game_frames(300))) {
                 func_0022ED80_i(2, 0, (int)moby);

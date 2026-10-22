@@ -1625,7 +1625,10 @@ void blend_moby_animation_309378(MobyAnim_309378 *arg0, int arg1, int arg2,
                                  int arg3) __asm__("FUN_00212f90");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-unsigned char *FUN_L11_00309378(char *spawning_moby, char *spawn_position, char *target, char *spawn_rotation, int arg,
+unsigned char *spawn_ship_projectile(char *spawning_moby, char *spawn_position, char *target, char *spawn_rotation, int arg,
+                                float scale) __asm__("FUN_L11_00309378");
+
+unsigned char *spawn_ship_projectile(char *spawning_moby, char *spawn_position, char *target, char *spawn_rotation, int arg,
                                 float scale) {
     unsigned char *moby = func_0020D348_m(0x40A);
     if (moby != 0) {
