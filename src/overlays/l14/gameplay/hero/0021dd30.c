@@ -124,7 +124,9 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 #define G hero
 
 extern OvlMobyEntry40 D_L14_00178800[];
-s32 FUN_L14_00222aa8(s32 apply_hit_reaction) {
+s32 process_hero_hit_reaction(s32 apply_hit_reaction) __asm__("FUN_L14_00222aa8");
+
+s32 process_hero_hit_reaction(s32 apply_hit_reaction) {
     u8 *hero_moby_bytes;
     OvlMobyEntry40 *hero_hit_entry;
     u8 *mob;

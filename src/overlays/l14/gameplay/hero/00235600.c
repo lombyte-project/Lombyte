@@ -87,7 +87,7 @@ extern int FUN_L00_00266e00(int, int, int, int);
 extern int FUN_L01_0022d838(float *, float *);
 extern int FUN_L02_0022ee00(void);
 extern int FUN_L12_00227f10(int a);
-extern int FUN_L14_00222aa8(int);
+extern int process_hero_hit_reaction(int) __asm__("FUN_L14_00222aa8");
 extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -156,7 +156,7 @@ void FUN_L14_00235600(void) {
     prevSub = hero.state.control_mode;
     prevState = hero.state.step;
     prevAnim = moby[0x53];
-    if (FUN_L14_00222aa8(1) == 0) {
+    if (process_hero_hit_reaction(1) == 0) {
         if (hero.health.hp <= 0 && hero.state.control_mode != 0x14 &&
             (hero.state.current == HERO_STATE_IDLE || hero.state.current == HERO_STATE_RUN)) {
             hero_set_state(HERO_STATE_DYING, 1);
