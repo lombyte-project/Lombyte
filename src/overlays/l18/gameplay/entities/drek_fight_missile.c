@@ -1456,7 +1456,7 @@ extern int FUN_L18_002f6878(char *moby, float arg, void *x);
 int select_drek_boss_next_action(struct Moby *moby) __asm__("FUN_L18_002f70b8");
 
 extern int select_drek_boss_next_action(struct Moby *moby) __asm__("FUN_L18_002f70b8");
-extern int FUN_L18_002fc668(int idx, float *pos, float *dir, float speed);
+extern int launch_first_idle_group_class_0772_moby(int idx, float *pos, float *dir, float speed) __asm__("FUN_L18_002fc668");
 extern int count_group_class_0772_mobys_not_in_state_8(int idx) __asm__("FUN_L18_002fc7e0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
@@ -2330,7 +2330,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 /* v1 is not written in this state; retail passes it all the same. */
                 float speed = vector_distance(position_and_displacement_scratch, v1) / (float)scale_game_frames(0x3C);
 
-                if (FUN_L18_002fc668(boss_data->f210, position_and_displacement_scratch, position_and_displacement_scratch, speed) != 0 && boss_data->f354 == 0) {
+                if (launch_first_idle_group_class_0772_moby(boss_data->f210, position_and_displacement_scratch, position_and_displacement_scratch, speed) != 0 && boss_data->f354 == 0) {
                     boss_data->f354 = scale_game_frames(0x3C);
                 }
             }

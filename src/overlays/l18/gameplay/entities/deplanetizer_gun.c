@@ -1365,7 +1365,9 @@ extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 
 /* Launches the first idle (state 8) class-0x772 moby of group `group` from `from` towards `to` at `speed`.
    Returns 1 when one was launched. */
-int FUN_L18_002fc668(int group, void *from, void *to, float speed) {
+int launch_first_idle_group_class_0772_moby(int group, void *from, void *to, float speed) __asm__("FUN_L18_002fc668");
+
+int launch_first_idle_group_class_0772_moby(int group, void *from, void *to, float speed) {
     unsigned short *group_moby_entry = (unsigned short *)D_L18_001AC240[group];
     struct Moby *table;
     struct Moby *moby;
