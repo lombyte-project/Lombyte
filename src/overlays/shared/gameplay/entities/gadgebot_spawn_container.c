@@ -2992,7 +2992,7 @@ extern float random_angle_radians_alt(void) __asm__("FUN_00213308");
 extern int D_L06_001BAC50[];
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void FUN_L02_002ea7d0(char *);
-extern void FUN_L06_002f7548(char *);
+extern void initialize_energy_sphere_holder_vars(char *) __asm__("FUN_L06_002f7548");
 void FUN_L06_002f7628(char *m);
 extern char D_0014171B_86b8[] __asm__("D_0014C190");
 #include "rnc/gameplay/state/game_globals.h"
@@ -3031,7 +3031,7 @@ void energy_sphere_holder_update(char *holder_moby) {
         *(float *)(spawned_moby + 0x18) += 0.85f;
         *(char **)(holder_vars + 0x40) = spawned_moby;
         holder_moby[0x20] = 1;
-        FUN_L06_002f7548(holder_moby);
+        initialize_energy_sphere_holder_vars(holder_moby);
         *(int *)(current_level_index * 256 + ((short)*(unsigned short *)(holder_moby + 0xB2) >> 5) * 4 +
                  D_0014171B_86b8) &= ~(1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F));
         D_L06_001BAC50[(short)*(unsigned short *)(holder_moby + 0xB2) >> 5] &=
