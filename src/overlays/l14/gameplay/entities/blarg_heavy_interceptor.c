@@ -371,7 +371,9 @@ void ease_path_mover_to_endpoint(struct Moby *moby) {
 void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) __asm__("FUN_L14_002ad8b8");
 
 extern void process_blarg_heavy_interceptor_hit_reactions(struct Moby *) __asm__("FUN_L14_002ad8b8");
-extern void FUN_L14_002ae448(struct Moby *);
+void initialize_blarg_heavy_interceptor_paths(struct Moby *moby) __asm__("FUN_L14_002ae448");
+
+extern void initialize_blarg_heavy_interceptor_paths(struct Moby *) __asm__("FUN_L14_002ae448");
 void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) __asm__("FUN_L14_002ae6d8");
 
 extern void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *) __asm__("FUN_L14_002ae6d8");
@@ -537,7 +539,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
         moby_vars[0x28] = 3;
         qcopy(&moby->pos, (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0x74)] + 0x10);
         qcopy(moby_vars + 0x170, (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0x78)] + 0x10);
-        FUN_L14_002ae448(moby);
+        initialize_blarg_heavy_interceptor_paths(moby);
         *(s16 *)(moby_vars + 0x88) = 1;
         *(float *)(moby_vars + 0x21C) = -1.0f;
         *(float *)(moby_vars + 0x180) = *(float *)(moby_vars + 0x184) = *(float *)(moby_vars + 0x188) = 0.0f;
@@ -1300,7 +1302,7 @@ extern void sample_path(int a, char *pos, char *b, char *c, int d, float f) __as
 extern int FUN_L00_0025d808_2af688(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
-void FUN_L14_002ae448(struct Moby *moby) {
+void initialize_blarg_heavy_interceptor_paths(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     int *path;
     int i;
