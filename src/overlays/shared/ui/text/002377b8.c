@@ -1256,7 +1256,9 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void print_text_with_texture_3(s32, s32, s32, char *, s32) __asm__("FUN_L00_001fb470");
 
 /* Draws the short counter panel, its spinning icon, and a pulsing label. */
-s32 FUN_L00_0023a2d0(Hud *hud_element) {
+s32 draw_hud_bolt_exclamation_panel(Hud *hud_element) __asm__("FUN_L00_0023a2d0");
+
+s32 draw_hud_bolt_exclamation_panel(Hud *hud_element) {
     char formatted_label_text[16];
     u8 *visibility_counters;
     s32 x, y, panel_right, panel_left, slide, alpha, text_alpha;

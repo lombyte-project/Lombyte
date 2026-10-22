@@ -486,7 +486,7 @@ extern unsigned char D_0013D4D5[];
 #include "rnc/data_labels.h"
 extern void reset_numeric_hud_element_32x32_base(void) __asm__("FUN_L00_00235dc0");
 extern void update_hud_panel_visibility(void) __asm__("FUN_L00_0023a218");
-extern void FUN_L00_0023a2d0(void);
+extern void draw_hud_bolt_exclamation_panel(void) __asm__("FUN_L00_0023a2d0");
 s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
                            s32 b) __asm__("FUN_001ff308");
 
@@ -509,7 +509,7 @@ void FUN_L00_00205ea8(void) {
         animation_context_owner->unk2040 = 0;
         if (animation_context_owner->unk2048 != 0) {
             queue_animation_update(7, 0x753A, (int)reset_numeric_hud_element_32x32_base, (int)update_hud_panel_visibility,
-                                   (int)FUN_L00_0023a2d0, (int)(&animation_context_owner->unk2048), 1);
+                                   (int)draw_hud_bolt_exclamation_panel, (int)(&animation_context_owner->unk2048), 1);
         }
     }
 }
