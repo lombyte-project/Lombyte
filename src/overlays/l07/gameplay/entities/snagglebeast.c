@@ -153,7 +153,9 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L07_00312e70(char *moby, float radius, int phase, float speed, int color) {
+void draw_snagglebeast_rope_attack_layer(char *moby, float radius, int phase, float speed, int color) __asm__("FUN_L07_00312e70");
+
+void draw_snagglebeast_rope_attack_layer(char *moby, float radius, int phase, float speed, int color) {
     char *vars = *(char **)(moby + 0x78);
     struct GeometryQuad quad;
     struct GeometryQuad inner;
@@ -243,7 +245,7 @@ extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001e
 extern s32 probe_world_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 extern void make_hit_descriptor(void *, void *, s32, f32, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_00258278(struct Moby *, f32, void *, f32, f32, f32);
-extern void FUN_L07_00312e70(char *, float, int, float, int);
+extern void draw_snagglebeast_rope_attack_layer(char *, float, int, float, int) __asm__("FUN_L07_00312e70");
 
 /* Rope draw: moves the two end points along the rope direction, draws three strands, then casts a ray between the ends. */
 void draw_and_probe_snagglebeast_rope_attack(char *moby) __asm__("FUN_L07_003131b0");
@@ -262,9 +264,9 @@ void draw_and_probe_snagglebeast_rope_attack(char *moby) {
     add_vector_xyz(data + 0x140, &rope_offset, data + 0x110);
     normalize_vector_xyz(&rope_offset, &rope_offset, *(float *)(data + 0x16C));
     add_vector_xyz(data + 0x120, &rope_offset, data + 0x110);
-    FUN_L07_00312e70(moby, one, 0, one, 0x20000080);
-    FUN_L07_00312e70(moby, 0.7f, 10, 2.0f, 0x28008080);
-    FUN_L07_00312e70(moby, 0.4f, 20, 3.0f, 0x30B0FFFF);
+    draw_snagglebeast_rope_attack_layer(moby, one, 0, one, 0x20000080);
+    draw_snagglebeast_rope_attack_layer(moby, 0.7f, 10, 2.0f, 0x28008080);
+    draw_snagglebeast_rope_attack_layer(moby, 0.4f, 20, 3.0f, 0x30B0FFFF);
     subtract_vector_xyz(rope_direction, data + 0x120, data + 0x110);
     normalize_vector_xyz(rope_direction, rope_direction, one);
     make_hit_descriptor(blk, moby, 0x30000, 1.00012302f, rope_direction);
