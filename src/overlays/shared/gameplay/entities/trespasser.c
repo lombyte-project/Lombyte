@@ -769,6 +769,7 @@ void doom_bot_update(struct Moby *moby) {
         DOOM_BOT_INITIALIZE = 0,
         DOOM_BOT_WAIT_FOR_ANIMATION_BEFORE_MOVEMENT = 1,
         DOOM_BOT_SELECT_MOVEMENT_MODE = 2,
+        DOOM_BOT_UPDATE_TARGET_AND_MOVEMENT = 3,
         DOOM_BOT_MOVE_HIGH_TURN_RATE = 4,
         DOOM_BOT_MOVE_LOW_TURN_RATE = 5,
         DOOM_BOT_ALIGN_TO_TARGET = 6,
@@ -888,7 +889,7 @@ void doom_bot_update(struct Moby *moby) {
     case DOOM_BOT_WAIT_FOR_ANIMATION_BEFORE_MOVEMENT: case 9: case 10:
         if (moby->anim_flags&2) moby->state=2;
         goto Contact;
-    case DOOM_BOT_SELECT_MOVEMENT_MODE: case 3: case DOOM_BOT_MOVE_HIGH_TURN_RATE: case DOOM_BOT_MOVE_LOW_TURN_RATE: {
+    case DOOM_BOT_SELECT_MOVEMENT_MODE: case DOOM_BOT_UPDATE_TARGET_AND_MOVEMENT: case DOOM_BOT_MOVE_HIGH_TURN_RATE: case DOOM_BOT_MOVE_LOW_TURN_RATE: {
         target=data->target_moby;
         if (target && target->state!=0xFE && target->state!=0xFD) {
             height=target->pos.z;
