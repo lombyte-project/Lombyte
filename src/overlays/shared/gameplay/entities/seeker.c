@@ -687,7 +687,9 @@ extern void splash_2E39E0(Moby *, void *, int, float, float) __asm__("FUN_L00_00
 extern void delete_2E39E0(Moby *) __asm__("FUN_0020c828");
 extern void effects_update_2E39E0(Moby *, void *) __asm__("FUN_L00_0025d538");
 
-void FUN_L09_002e27d8(Moby *moby) {
+void update_ground_melee_enemy(Moby *moby) __asm__("FUN_L09_002e27d8");
+
+void update_ground_melee_enemy(Moby *moby) {
     enum {
         GROUND_ENEMY_STATE_INITIALIZE = 0,
         GROUND_ENEMY_STATE_IDLE = 1,
