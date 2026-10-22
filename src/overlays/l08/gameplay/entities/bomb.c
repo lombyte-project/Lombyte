@@ -472,7 +472,7 @@ void FUN_L08_002d23f0(char *moby) {
 /* Bomber tank (class 253) update: spawns its two parts, then a state machine for driving, firing and the group's debris. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002D55E0), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L08_002dc8a0(char *src, char *pos, char *vec);
+extern char *spawn_bomber_tank_projectile(char *src, char *pos, char *vec) __asm__("FUN_L08_002dc8a0");
 extern char D_0013D388[] __attribute__((section(".data")));
 extern s32 D_001413D0[];
 extern const float D_L08_001618CC __attribute__((sda));
@@ -673,7 +673,7 @@ void update_bomber_tank(Moby *moby) {
             velocity[1] = fast_sin(fast_add_rotations(vars->yaw, moby->rot.z)) * (fast_cos(vars->pitch) * shot_speed);
             velocity[2] = 0.0f;
             velocity[2] = -fast_sin(vars->pitch) * shot_speed;
-            shot = FUN_L08_002dc8a0((char *)moby, (char *)muzzle, (char *)velocity);
+            shot = spawn_bomber_tank_projectile((char *)moby, (char *)muzzle, (char *)velocity);
             if (shot != 0) shot[0x20] = 1;
         }
         break;
@@ -2256,7 +2256,9 @@ void FUN_L08_002dc7f0(struct Moby *moby) {
 /* Spawns a moby of class 0x1A9 at a position, with a random spin and a heading from a vector. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DDC18), where it is exact; names translated to the US level program. */
 
-char *FUN_L08_002dc8a0(char *source_moby, char *spawn_position, char *initial_velocity) {
+char *spawn_bomber_tank_projectile(char *source_moby, char *spawn_position, char *initial_velocity) __asm__("FUN_L08_002dc8a0");
+
+char *spawn_bomber_tank_projectile(char *source_moby, char *spawn_position, char *initial_velocity) {
     char *moby = func_0020D348_m(0x1A9);
     char *data;
     if (moby) {
