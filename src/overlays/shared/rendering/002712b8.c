@@ -2127,7 +2127,9 @@ typedef struct {
 } Part_275eb0;
 int FUN_001f9770_00275eb0(s16 *) __asm__("FUN_001f9770");
 u32 FUN_001fa6e0_00275eb0(u32, u32, f32) __asm__("FUN_001fa6e0");
-void FUN_L00_00275eb0(Part_275eb0 *particle) {
+void update_mode_controlled_shrinking_color_tween_particle(Part_275eb0 *particle) __asm__("FUN_L00_00275eb0");
+
+void update_mode_controlled_shrinking_color_tween_particle(Part_275eb0 *particle) {
     float remaining_frames_minus_one;
     if (particle->unk10 < 2.0f || 1021.0f < particle->unk10 || particle->unk14 < 2.0f || 1021.0f < particle->unk14 || particle->unk18 < 2.0f ||
         1021.0f < particle->unk18 || FUN_001f9770_00275eb0(&particle->hA)) {
