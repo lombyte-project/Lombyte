@@ -2871,7 +2871,9 @@ extern void FUN_L00_00263d40(int, int);
 extern void FUN_L08_002dec90_c(char *m, char *pos) __asm__("FUN_L08_002dec90");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 
-void FUN_L08_002de848(char *moby) {
+void update_path_following_moby(char *moby) __asm__("FUN_L08_002de848");
+
+void update_path_following_moby(char *moby) {
     enum {
         MOBY_STATE_INITIALIZE_PATH = 0,
         MOBY_STATE_FOLLOW_PATH = 1,
