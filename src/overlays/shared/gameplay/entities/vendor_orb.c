@@ -1695,7 +1695,9 @@ extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a28(float *, float *, float *);
 extern void FUN_001f9a68_c(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L00_002e46b8(char *camera) {
+void apply_follow_camera_translation(char *camera) __asm__("FUN_L00_002e46b8");
+
+void apply_follow_camera_translation(char *camera) {
     Vq4 translation_delta;
     Vq4 camera_translation_adjustment, lateral_displacement;
     char *camera_view = D_L00_00166E10;
