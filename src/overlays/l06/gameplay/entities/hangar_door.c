@@ -412,7 +412,9 @@ extern void FUN_L06_002fd460(void);
 extern void FUN_L06_002fd748(void);
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
-void FUN_L06_002fd088(char *moby) {
+void enqueue_moby_draw_callbacks_by_clip_volume(char *moby) __asm__("FUN_L06_002fd088");
+
+void enqueue_moby_draw_callbacks_by_clip_volume(char *moby) {
     int *data = *(int **)(moby + 0x78);
     int *clip_volume_index_cursor;
     int i;
