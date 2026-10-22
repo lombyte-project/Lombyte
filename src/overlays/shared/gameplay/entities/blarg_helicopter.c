@@ -1976,7 +1976,9 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern unsigned char D_L03_001DC1A0[];
 extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
 
-void FUN_L03_002dc9b0(unsigned char *moby) {
+void update_moby_draw_callback(unsigned char *moby) __asm__("FUN_L03_002dc9b0");
+
+void update_moby_draw_callback(unsigned char *moby) {
     enum {
         DRAW_CALLBACK_INITIALIZE = 0,
         DRAW_CALLBACK_REGISTER = 1
