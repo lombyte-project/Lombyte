@@ -24,7 +24,7 @@ void reset_shot_tracking(char *moby) {
 
 typedef struct { char *p[7]; short timer; } Slots_265E88;
 
-extern char *FUN_L00_0026b230(void *, void *, unsigned long, float);
+extern char *spawn_spinning_and_fading_effect_particle(void *, void *, unsigned long, float) __asm__("FUN_L00_0026b230");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
@@ -91,7 +91,7 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
         fast_vec_scale(velocity, adjusted, random_float_between(0.0f, 1.0f));
         add_vector_xyz(velocity, velocity, origin);
         if (i < first_count) fl = 1; else fl = 0;
-        shot = FUN_L00_0026b230(velocity, offset, fl, travel);
+        shot = spawn_spinning_and_fading_effect_particle(velocity, offset, fl, travel);
         if (i == 2 && save_shot) {
             int j;
             for (j = 0; j < 7; j++) {

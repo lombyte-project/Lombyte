@@ -803,7 +803,9 @@ extern float D_L00_001601D8_gp __asm__("D_L00_001601D8") __attribute__((sda));
 extern int D_L00_001601E0 __attribute__((sda));
 extern int D_L00_001601E4 __attribute__((sda));
 extern unsigned char *D_L00_001B20E0 __attribute__((section(".data")));
-unsigned char *FUN_L00_0026b230(void *spawn_position, void *initial_velocity, unsigned char flags, float size) {
+unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, void *initial_velocity, unsigned char flags, float size) __asm__("FUN_L00_0026b230");
+
+unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, void *initial_velocity, unsigned char flags, float size) {
     void *source = spawn_position;
     unsigned char *particle = create_part2(0xC, 0);
     if (particle) {

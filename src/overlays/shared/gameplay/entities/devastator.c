@@ -2906,7 +2906,7 @@ extern s32 FUN_L00_0028d8c0_2b77f0(struct Moby *, s32) __asm__("FUN_L00_0028d8c0
 extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern void FUN_L00_00257d78_2b77f0(void *, f32, f32) __asm__("FUN_L00_00257d78");
-extern void *FUN_L00_0026b230_2b77f0(void *, void *, s32, f32) __asm__("FUN_L00_0026b230");
+extern void *spawn_spinning_and_fading_effect_particle(void *, void *, s32, f32) __asm__("FUN_L00_0026b230");
 extern void FUN_L00_002b8798_2b77f0(struct Moby *, void *) __asm__("FUN_L00_002b8798");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void spawn_color_decaying_effect_particle(void *, void *, s32) __asm__("FUN_L00_0026d598");
@@ -3032,7 +3032,7 @@ void pyrocitor_update(struct Moby *moby) {
                 fl = 1;
             else
                 fl = 0;
-            effect = FUN_L00_0026b230_2b77f0(&particle_pos, &random_vec, fl | 4, length);
+            effect = spawn_spinning_and_fading_effect_particle(&particle_pos, &random_vec, fl | 4, length);
             if (i == 2 && gate)
                 FUN_L00_002b8798_2b77f0(moby, effect);
         }
