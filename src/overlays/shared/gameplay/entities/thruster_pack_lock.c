@@ -726,7 +726,9 @@ extern float advance_accelerated_scalar(float *, float *, float, float, float, f
 #include "rnc/gameplay/entities/moby.h"
 #define MOBY(p) ((struct Moby *)(p))
 
-void FUN_L11_0031a438(char *moby) {
+void update_moby_path_transform(char *moby) __asm__("FUN_L11_0031a438");
+
+void update_moby_path_transform(char *moby) {
     char *moby_vars = (char *)MOBY(moby)->pvars;
     int i = *(int *)(moby_vars + 0x64);
     char *table = *(char **)(path_table + *(int *)(moby_vars + 0x60) * 4);

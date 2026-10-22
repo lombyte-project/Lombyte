@@ -551,7 +551,7 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void FUN_L00_0025f730(void *a, float x);
 extern void update_moby_trail_points(void *) __asm__("FUN_L11_00319670");
 extern void update_moby_hit_stats_and_state(void *) __asm__("FUN_L11_0031a1c0");
-extern void FUN_L11_0031a438(void *);
+extern void update_moby_path_transform(void *) __asm__("FUN_L11_0031a438");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -621,7 +621,7 @@ void blarg_ship_update(struct Moby *moby) {
                 **(int **)(D_L17_001B0DB0 + *(int *)(moby_pvars + 0x60) * 4);
         }
         fast_add_rotations(*(float *)(moby_pvars + 0x70), *(float *)(moby_pvars + 0x74));
-        FUN_L11_0031a438(moby);
+        update_moby_path_transform(moby);
         if (moby->state == 2) {
             cart_burst(moby, &moby->pos, -1, 2.0f, 13.0f);
             if (random_integer_below_c(2)) {
