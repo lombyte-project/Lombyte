@@ -2659,7 +2659,9 @@ extern L16SingleSphere_2e8e80 D_L16_00161F60_bounds_2e8e80[] __asm__("D_L16_001D
 
 extern void FUN_L16_002e8d40_c(void *) __asm__("FUN_L16_002e8d40");
 extern void draw_level16_visible_textured_batches(void) __asm__("FUN_L16_002e97a0");
-void FUN_L16_002e8e80(struct Moby *moby) {
+void update_level16_three_mesh_render_state(struct Moby *moby) __asm__("FUN_L16_002e8e80");
+
+void update_level16_three_mesh_render_state(struct Moby *moby) {
     enum {
         MESH_RENDER_INITIALIZE_BOUNDING_SPHERES = 0,
         MESH_RENDER_QUEUE_CALLBACK = 1
