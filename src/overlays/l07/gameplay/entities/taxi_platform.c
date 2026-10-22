@@ -2460,7 +2460,9 @@ void FUN_L07_0030e998(char *moby, char *x, float *hp) {
 
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
-void FUN_L07_0030eb38(char *data) {
+void cache_path_segment_lengths(char *data) __asm__("FUN_L07_0030eb38");
+
+void cache_path_segment_lengths(char *data) {
     int i, count;
     if (data != 0) {
         count = *(int *)data;
@@ -2493,12 +2495,12 @@ int FUN_L07_0030ed30(char *moby, char *data) {
         stub_printf(D_L07_00211720, (moby - D_L07_0015FFD8_30ed30) >> 8);
         return 1;
     }
-    FUN_L07_0030eb38(*(char **)(data + 0x128) = D_L07_001B0530[*(int *)(data + 0x110)]);
+    cache_path_segment_lengths(*(char **)(data + 0x128) = D_L07_001B0530[*(int *)(data + 0x110)]);
     if (*(int *)(data + 0x144) == -1) {
         stub_printf(D_L07_00211758, (moby - D_L07_0015FFD8_30ed30) >> 8);
         return 1;
     }
-    FUN_L07_0030eb38(*(char **)(data + 0x148) = D_L07_001B0530[*(int *)(data + 0x144)]);
+    cache_path_segment_lengths(*(char **)(data + 0x148) = D_L07_001B0530[*(int *)(data + 0x144)]);
     if (*(int *)(data + 0x118) == -1) {
         stub_printf(D_L07_00211790, (moby - D_L07_0015FFD8_30ed30) >> 8);
         return 1;
