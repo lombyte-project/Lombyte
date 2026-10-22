@@ -1402,7 +1402,9 @@ void FUN_L00_002b3c50(X *x) {
 extern char *func_0020D348_m(int);
 
 /* Creates a class 0xA7 moby carrying a in its data; sets bytes 0x30/0x31, 0x32 and state 0. */
-char *FUN_L00_002b4138(int instance_index) {
+char *spawn_indexed_class_a7_moby(int instance_index) __asm__("FUN_L00_002b4138");
+
+char *spawn_indexed_class_a7_moby(int instance_index) {
     char *spawned_moby = func_0020D348_m(0xA7);
     if (spawned_moby != 0) {
         int *moby_vars = *(int **)(spawned_moby + 0x78);

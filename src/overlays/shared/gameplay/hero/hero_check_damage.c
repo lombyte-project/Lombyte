@@ -1178,7 +1178,7 @@ extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
 extern void memset_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern void blend_moby_animation_ea80(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void FUN_L00_002b4138_ea80(s32) __asm__("FUN_L00_002b4138");
+extern void spawn_indexed_class_a7_moby(s32) __asm__("FUN_L00_002b4138");
 
 void spawn_hero_item_mobies(void) __asm__("FUN_L00_0020ea80");
 void spawn_hero_item_mobies(void) {
@@ -1252,8 +1252,8 @@ void spawn_hero_item_mobies(void) {
             if (hero.unk22D8 != 0)
                 created_moby->flags |= 0x41;
             if (hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
-                FUN_L00_002b4138_ea80(0);
-                FUN_L00_002b4138_ea80(1);
+                spawn_indexed_class_a7_moby(0);
+                spawn_indexed_class_a7_moby(1);
             }
         }
     }
