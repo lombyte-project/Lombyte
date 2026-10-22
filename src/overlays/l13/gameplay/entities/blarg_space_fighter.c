@@ -1260,16 +1260,16 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
     case FIGHTER_FOLLOW_PATH_AND_ATTACK: {
         Moby_2C56B0 *boss;
         Boss_2C56B0 *bossd;
-        float dist;
+        float fighter_to_vehicle_distance;
 
         FUN_L13_002c37e0_c((unsigned char *)moby, (unsigned char *)fighter_data, &fighter_data->f20);
         if (veh != 0 && veh->state != 0xFE && veh->state != 0xFD) {
             vehd = veh->data;
             qcopy(hpos, &((Hero_2C56B0 *)(((char *)&D_0013F350)))->veh->pos);
             close = 0;
-            dist = distance_xyz(&moby->pos, hpos);
+            fighter_to_vehicle_distance = distance_xyz(&moby->pos, hpos);
             if (((Hero_2C56B0 *)(((char *)&D_0013F350)))->f2084 == 0x32 && (veh->hA6 == 0x45 || veh->hA6 == 0x4DA)) {
-                if (dist < 110.0f) {
+                if (fighter_to_vehicle_distance < 110.0f) {
                     close = 1;
                 }
             }
