@@ -780,7 +780,9 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern int FUN_0022da68(int, int, int);
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern unsigned char *D_L18_0015FFD8;
-extern void FUN_L18_002f1fd8(struct Moby *);
+void draw_glow_moby_layered_quads(struct Moby *moby) __asm__("FUN_L18_002f1fd8");
+
+extern void draw_glow_moby_layered_quads(struct Moby *) __asm__("FUN_L18_002f1fd8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 void update_glow_moby_state_and_voice(struct Moby *moby) __asm__("FUN_L18_002f1e68");
@@ -798,7 +800,7 @@ void update_glow_moby_state_and_voice(struct Moby *moby) {
         ((float *)moby_vars)[3] = 1.0f;
         break;
     case GLOW_ACTIVE:
-        enqueue_callback_list_1_alt((void (*)(void))FUN_L18_002f1fd8, moby);
+        enqueue_callback_list_1_alt((void (*)(void))draw_glow_moby_layered_quads, moby);
         if (voice_is_playing(moby, moby_vars[1]) == 0) {
             moby_vars[1] = FUN_0022da68(0, 4, (int)moby);
         }
@@ -859,7 +861,7 @@ f32 D_L18_001DA350[4][2] = {
 };
 extern u128 D_L18_001DA370[4];
 
-void FUN_L18_002f1fd8(struct Moby *moby) {
+void draw_glow_moby_layered_quads(struct Moby *moby) {
     struct GeometryQuad quads[4];
     float matrix[4][4] __attribute__((aligned(16)));
     struct GlowVars *vars;
