@@ -276,7 +276,9 @@ extern int FUN_001fa6e0(int, int, float);
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
-void FUN_L00_00271c88(char *particle) {
+void update_color_tween_particle(char *particle) __asm__("FUN_L00_00271c88");
+
+void update_color_tween_particle(char *particle) {
     char *particle_data = particle + 0x20;
     particle[8] += particle_data[0x1C];
     fast_vec_add(particle + 0x10, particle + 0x10, particle_data);
