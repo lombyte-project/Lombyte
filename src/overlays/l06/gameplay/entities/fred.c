@@ -6462,7 +6462,7 @@ extern int FUN_L06_003047f8(const u8 *);
 extern void FUN_L06_00302400(struct Moby *, int);
 extern void FUN_L06_002ffc38(int);
 extern void FUN_L06_002e9e30(int);
-extern void FUN_L06_002f45a0(int);
+extern void clear_moby_list_state_4(int) __asm__("FUN_L06_002f45a0");
 extern void FUN_L06_002f99b0(int);
 extern void FUN_L06_002fc630(char *);
 extern void FUN_L06_00309240(int);
@@ -6539,7 +6539,7 @@ void FUN_L06_00301b90(unsigned char *moby) {
         FUN_L06_002ffc38(*(int *)(moby_vars + 0x10));
         FUN_L06_002e9e30(*(int *)(moby_vars + 0x14));
         FUN_L06_002e9e30(*(int *)(moby_vars + 0x18));
-        FUN_L06_002f45a0(*(int *)(moby_vars + 0));
+        clear_moby_list_state_4(*(int *)(moby_vars + 0));
         FUN_L06_002f99b0(*(int *)(moby_vars + 4));
         FUN_L06_002f99b0(*(int *)(moby_vars + 8));
         FUN_L06_002fc630(D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x20) << 8));
