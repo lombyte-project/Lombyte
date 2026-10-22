@@ -2631,18 +2631,18 @@ void transport_pod_update(unsigned char *moby) {
     Varsdc88 *transport_pod_vars = *(Varsdc88 **)(moby + 0x78);
     int i;
     int *path;
-    int lim;
+    int help_request_threshold_ticks;
     int adjusted_help_ticks;
     float s;
     OvlVec4 delta;
-    OvlVec4 rot;
+    OvlVec4 previous_rotation;
     OvlVec4 a;
     OvlVec4 b;
     OvlVec4 camera_position_or_stop_look;
     OvlVec4 initial_camera_rotation;
 
     fast_vec_scale(&delta, moby + 0x10, -1.0f);
-    qcopy(&rot, moby + 0x40);
+    qcopy(&previous_rotation, moby + 0x40);
     if (D_L02_00161C44 != 0.0f) {
         for (i = 0; i < *D_L02_001B0AB0_dc88[transport_pod_vars->path]; i++) {
             qcopy(&a, (char *)D_L02_001B0AB0_dc88[transport_pod_vars->path] + i * 0x10 + 0x10);
@@ -2859,8 +2859,8 @@ void transport_pod_update(unsigned char *moby) {
             {
                 adjusted_help_ticks = scale_ticks(D_0015EEA4_gp) - usage_stats.stat[9].unk2 * 600;
             }
-            lim = scale_ticks(3600) * 60.0f;
-            if (lim < adjusted_help_ticks) {
+            help_request_threshold_ticks = scale_ticks(3600) * 60.0f;
+            if (help_request_threshold_ticks < adjusted_help_ticks) {
                 extern int D_0015ED84_dc88 __asm__("D_0015ED84") __attribute__((sda));
                 if (!(D_00141BAC & (1 << D_0015ED84_dc88))) {
                     help_request(0x7DD, 0x48);
@@ -2934,7 +2934,7 @@ void transport_pod_update(unsigned char *moby) {
     if (fast_vec_length(&delta) > 4.0f) {
         clear_vec_d57f8(&delta);
     }
-    update_entity_matrix(transport_pod_vars->riders, &delta, &rot, moby + 0x40);
+    update_entity_matrix(transport_pod_vars->riders, &delta, &previous_rotation, moby + 0x40);
 }
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E03B8), where it is exact; names translated to the US level program. */
 
