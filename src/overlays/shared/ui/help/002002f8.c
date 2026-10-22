@@ -18,7 +18,7 @@ extern void update_hero_bolt_exclamation_hud(void) __asm__("FUN_L00_00205ea8");
 extern void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
 extern void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 extern void FUN_L00_00206e00(void);
-extern void FUN_L00_00207a58(void);
+extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 extern void update_hero_moby(void) __asm__("FUN_L00_00208820");
 extern void FUN_L00_00208b60(void);
@@ -85,7 +85,7 @@ void FUN_L03_002002f8(void) {
     update_hero_equipped_items();
     begin_draw_frame();
     update_hero_scalar_pulse();
-    FUN_L00_00207a58();
+    apply_hero_and_item_scale_sequence();
     check_hero_item_reward_conditions();
     update_hero_bolt_exclamation_hud();
     dispatch_hero_animation_timed_events();

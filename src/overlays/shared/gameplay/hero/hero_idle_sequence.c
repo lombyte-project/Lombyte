@@ -644,7 +644,7 @@ void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
 
 extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
 extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
-extern void FUN_L00_00207a58(void);
+extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 extern void FUN_L00_00207d00(void);
 extern void FUN_L00_00208b60(void);
@@ -711,7 +711,7 @@ void update_hero_in_vehicle_mode(void) {
     if (*(u8 *)(g + 0x20a4) == 0) return;
     update_hero_vehicle_moby();
     update_hero_scalar_pulse();
-    FUN_L00_00207a58();
+    apply_hero_and_item_scale_sequence();
     if (*(u8 *)(g + 0x20a4) == 1) {
         D_L00_0017B85C_002062b0 = D_0015EE18_macro;
         update_hero_glow_and_extra_manipulators();
@@ -1130,7 +1130,7 @@ void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
 void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
 void begin_draw_frame(void) __asm__("FUN_001f7978");
 void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
-void FUN_L00_00207a58(void);
+void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 void update_hero_bolt_exclamation_hud(void) __asm__("FUN_L00_00205ea8");
 void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
@@ -1185,7 +1185,7 @@ void coordinate_hero_frame_update(void) {
     update_hero_equipped_items();
     begin_draw_frame();
     update_hero_scalar_pulse();
-    FUN_L00_00207a58();
+    apply_hero_and_item_scale_sequence();
     check_hero_item_reward_conditions();
     update_hero_bolt_exclamation_hud();
     dispatch_hero_animation_timed_events();
@@ -1453,7 +1453,7 @@ void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 void gravity_set_z(void *, void *, float) __asm__("FUN_L00_00233b20");
 
 extern float D_L00_001797D8[] __attribute__((section(".data")));
-void FUN_L00_00207a58(void) {
+void apply_hero_and_item_scale_sequence(void) {
     struct Hero *G = &hero;
     OvlQuad planar_offset[1];
     float sequence_scale, item_scale;

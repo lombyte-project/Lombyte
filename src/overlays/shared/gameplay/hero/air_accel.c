@@ -69,7 +69,7 @@ extern unsigned char D_0013D4DC[];
 extern float D_L01_0017C04C[];
 extern unsigned int fast_tween_color(float, unsigned int, unsigned int);
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
-extern void FUN_L00_00207a58(void);
+extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 extern void FUN_L00_00207d00(void);
 extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
@@ -103,7 +103,7 @@ void FUN_L01_00228000(void) {
         return;
     update_hero_vehicle_moby();
     update_hero_scalar_pulse();
-    FUN_L00_00207a58();
+    apply_hero_and_item_scale_sequence();
     FUN_L00_002484e0(&hero.motion.pos);
     if (hero.vehicle_mode == 3) {
         if ((&big_head_cheat_enabled)[1] != 0)
@@ -191,7 +191,7 @@ extern void update_hero_bolt_exclamation_hud(void) __asm__("FUN_L00_00205ea8");
 extern void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
 extern void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 extern void FUN_L00_00206e00(void);
-extern void FUN_L00_00207a58(void);
+extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 extern void update_hero_moby(void) __asm__("FUN_L00_00208820");
 extern void FUN_L00_00208b60(void);
@@ -260,7 +260,7 @@ void update_hero_frame(void) {
     update_hero_equipped_items();
     begin_draw_frame();
     update_hero_scalar_pulse();
-    FUN_L00_00207a58();
+    apply_hero_and_item_scale_sequence();
     check_hero_item_reward_conditions();
     update_hero_bolt_exclamation_hud();
     dispatch_hero_animation_timed_events();
@@ -752,7 +752,7 @@ void FUN_L01_00231348(int vehicle_mode, int initial_state, int new_moby) {
     *(float *)(hero_state_base + 0xA94) = 1.0f;
     FUN_L00_00232628();
     FUN_L00_00257024(*(void **)(hero_state_base + 0x2080));
-    FUN_L00_00207a58();
+    apply_hero_and_item_scale_sequence();
     *(short *)(hero_state_base + 0x22CC) = initial_state;
     if (vehicle_mode == 1) {
         *(unsigned short *)(hero_state_base + 0x22B0) = *(unsigned short *)(hero_state_base + 0x22A8);

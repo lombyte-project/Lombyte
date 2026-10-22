@@ -26,7 +26,7 @@ extern unsigned int fast_tween_color(float, unsigned int, unsigned int);
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 extern void update_hero_bone_attachment(void) __asm__("FUN_L00_002061f0");
-extern void FUN_L00_00207a58(void);
+extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 extern void FUN_L00_00207d00(void);
 extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
@@ -62,7 +62,7 @@ void FUN_L15_001ff938(void) {
         return;
     update_hero_vehicle_moby();
     update_hero_scalar_pulse();
-    FUN_L00_00207a58();
+    apply_hero_and_item_scale_sequence();
     FUN_L00_002484e0(hero0 + 0x80);
 
     if (hero0[0x20A4] == 2) {

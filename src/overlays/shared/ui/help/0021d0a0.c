@@ -78,7 +78,7 @@ extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10")
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
 extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
-extern void FUN_L00_00207a58(void);
+extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 extern void FUN_L00_00207d00(void);
 extern void FUN_L00_00208b60(void);
@@ -145,7 +145,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
     if (*(u8 *)(g + 0x20a4) == 0) return;
     update_hero_vehicle_moby();
     update_hero_scalar_pulse();
-    FUN_L00_00207a58();
+    apply_hero_and_item_scale_sequence();
     if (*(u8 *)(g + 0x20a4) == 1) {
         D_L06_0017BFDC_lui = D_0015EE18_macro;
         update_hero_glow_and_extra_manipulators();

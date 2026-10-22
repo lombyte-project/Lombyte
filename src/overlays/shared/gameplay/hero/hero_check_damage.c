@@ -2223,7 +2223,7 @@ void FUN_L00_00205538_210a08(void) __asm__("FUN_L00_00205538");
 void FUN_L00_00211380_210a08(void) __asm__("FUN_L00_00211380");
 void FUN_L00_00232628_210a08(void) __asm__("FUN_L00_00232628");
 void FUN_L00_00257024_210a08(char *) __asm__("FUN_L00_00257024");
-void FUN_L00_00207a58_210a08(void) __asm__("FUN_L00_00207a58");
+void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_00210a08(int mode, int requested_state, char *vehicle_moby) {
     struct Hero *hero_state;
@@ -2248,7 +2248,7 @@ void FUN_L00_00210a08(int mode, int requested_state, char *vehicle_moby) {
     hero_state->unkA94 = 1.0f;
     FUN_L00_00232628_210a08();
     FUN_L00_00257024_210a08((char *)hero_state->moby);
-    FUN_L00_00207a58_210a08();
+    apply_hero_and_item_scale_sequence();
     hero_state->unk22CC = requested_state;
     switch (mode) {
     case HERO_VEHICLE_MODE_CLANK:
