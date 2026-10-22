@@ -1784,7 +1784,9 @@ void remove_blarg_trooper_and_attachment(struct Moby *moby) __asm__("FUN_L12_002
 
 extern void remove_blarg_trooper_and_attachment(struct Moby *) __asm__("FUN_L12_002e86d0");
 extern void FUN_L12_002e8720(struct Moby *);
-extern void FUN_L12_002e87b0(char *);
+void ease_blarg_trooper_height_to_ground(char *moby) __asm__("FUN_L12_002e87b0");
+
+extern void ease_blarg_trooper_height_to_ground(char *) __asm__("FUN_L12_002e87b0");
 extern void FUN_L12_002e8808(struct Moby *, float *, float, float);
 extern s32 D_001413D0_e81e0 __asm__("D_001413D0") __attribute__((section(".data")));
 extern s32 scale_game_frames_e81e0(s32) __asm__("FUN_001f96f8");
@@ -1995,7 +1997,7 @@ hide:
     case BLARG_TROOPER_PREPARE_SHOT: {
         if (TROOPER_F(0x28c) < 8.0f) TROOPER_F(0x28c) = 8.0f;
         FUN_L12_002e8608(moby, (float *)&target->pos);
-        FUN_L12_002e87b0((char *)moby);
+        ease_blarg_trooper_height_to_ground((char *)moby);
         if (moby->prev_seq != 2 && moby->seq == moby->prev_seq)
             blend_moby_animation_ex(moby, 2, 0, scale_game_frames_e81e0(8), 5);
         if (moby->anim_flags & 2) {
@@ -2008,7 +2010,7 @@ hide:
     case BLARG_TROOPER_FIRE_PROJECTILE: {
         int count; float angle; float other; float value;
         FUN_L12_002e8608(moby, (float *)&target->pos);
-        FUN_L12_002e87b0((char *)moby);
+        ease_blarg_trooper_height_to_ground((char *)moby);
         if (TROOPER_CHILD && is_value_within_interpolated_window(moby, 0.0f)) {
             moby_point_position(TROOPER_CHILD, 0, &query_position_or_projectile_origin);
             subtract_8808(&delta, work.v20, &query_position_or_projectile_origin);
@@ -2032,7 +2034,7 @@ hide:
     case BLARG_TROOPER_WAIT_BETWEEN_SHOTS: {
         float angle;
         FUN_L12_002e8608(moby, (float *)&target->pos);
-        FUN_L12_002e87b0((char *)moby);
+        ease_blarg_trooper_height_to_ground((char *)moby);
         if ((moby->prev_seq != 5 || (moby->anim_flags & 2)) && moby->prev_seq != 0 && moby->seq == moby->prev_seq)
             blend_moby_animation_ex(moby, 0, 0, scale_game_frames_e81e0(8), 5);
         if (!random_integer_below_e81e0(9)) goto state5;
@@ -2329,7 +2331,7 @@ extern void approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 
 /* Eases the moby's height toward the ground below it. */
-void FUN_L12_002e87b0(char *moby) {
+void ease_blarg_trooper_height_to_ground(char *moby) {
     float value = probe_ground_height(moby + 0x10, 0, 0.5f);
     approach_value(moby + 0x18, value, 27.0f * frame_time_sq);
 }
