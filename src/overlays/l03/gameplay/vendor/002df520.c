@@ -294,7 +294,9 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 /* places the camera behind the hero and rebuilds its orientation axes */
-void FUN_L03_002eb7e0(char *camera) {
+void rebuild_hero_relative_camera_transform(char *camera) __asm__("FUN_L03_002eb7e0");
+
+void rebuild_hero_relative_camera_transform(char *camera) {
     char *camera_data = *(char **)(camera + 0x70);
     float *camera_target_data = (float *)(camera_data + 0xB0);
     float *camera_offset_direction = (float *)(camera_data + 0xF0);
@@ -378,7 +380,7 @@ void initialize_hero_relative_camera(void *camera_instance) {
     camera_rotation_angles[3] = 0.0f;
     euler_rotation_basis(mtx, camera_rotation_angles);
     qcopy(camera_back_direction_data, mtx);
-    FUN_L03_002eb7e0(camera);
+    rebuild_hero_relative_camera_transform(camera);
     *(s16 *)(camera + 0x7E) = 0;
     D_L03_00167074 = 0x78;
 }
