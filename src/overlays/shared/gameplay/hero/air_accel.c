@@ -187,7 +187,7 @@ extern unsigned char D_0013E533[];
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
 extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
-extern void FUN_L00_00205ea8(void);
+extern void update_hero_bolt_exclamation_hud(void) __asm__("FUN_L00_00205ea8");
 extern void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
 extern void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 extern void FUN_L00_00206e00(void);
@@ -262,7 +262,7 @@ void update_hero_frame(void) {
     update_hero_scalar_pulse();
     FUN_L00_00207a58();
     check_hero_item_reward_conditions();
-    FUN_L00_00205ea8();
+    update_hero_bolt_exclamation_hud();
     dispatch_hero_animation_timed_events();
     FUN_L00_00206e00();
     no_op_main_callback_alt(*(void **)(hero_state_base + 0x2080));

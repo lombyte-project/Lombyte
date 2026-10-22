@@ -496,7 +496,9 @@ extern void draw_hud_bolt_exclamation_panel(void) __asm__("FUN_L00_0023a2d0");
 s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
                            s32 b) __asm__("FUN_001ff308");
 
-void FUN_L00_00205ea8(void) {
+void update_hero_bolt_exclamation_hud(void) __asm__("FUN_L00_00205ea8");
+
+void update_hero_bolt_exclamation_hud(void) {
     struct Hero *hero_state;
     if (D_0013D4D5[6] == 0) {
         *(int *)(((unsigned char *)&D_0013E533) + 0x2E65) = 0;
@@ -1130,7 +1132,7 @@ void begin_draw_frame(void) __asm__("FUN_001f7978");
 void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 void FUN_L00_00207a58(void);
 void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
-void FUN_L00_00205ea8(void);
+void update_hero_bolt_exclamation_hud(void) __asm__("FUN_L00_00205ea8");
 void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
 void FUN_L00_00206e00_u(void) __asm__("FUN_L00_00206e00");
 void noop_main_callback(int) __asm__("FUN_001e93e8");
@@ -1185,7 +1187,7 @@ void coordinate_hero_frame_update(void) {
     update_hero_scalar_pulse();
     FUN_L00_00207a58();
     check_hero_item_reward_conditions();
-    FUN_L00_00205ea8();
+    update_hero_bolt_exclamation_hud();
     dispatch_hero_animation_timed_events();
     FUN_L00_00206e00_u();
     noop_main_callback((int)hero_state->moby);
