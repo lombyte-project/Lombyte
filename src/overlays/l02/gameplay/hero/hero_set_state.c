@@ -1883,10 +1883,10 @@ void FUN_L02_00230988(void) {
     float v1[4] __attribute__((aligned(16)));
     int record_index;
     int sp24;
-    float sp28;
-    float sp2C;
-    float sp30;
-    float sp34;
+    float current_position_probe_yaw;
+    float positive_lateral_probe_yaw;
+    float negative_lateral_probe_yaw;
+    float lateral_step_probe_yaw;
     int sp38;
     int sp3C;
 
@@ -2258,7 +2258,7 @@ void FUN_L02_00230988(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 48:
+                case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -2271,7 +2271,7 @@ void FUN_L02_00230988(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 46: {
+                case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT: {
                     int mask = hero.items[0].button_mask;
                     if (((unsigned char *)hero.moby)[0x52] == 0x2E && hero.anim_frame > 28.0f) {
                         if (controller_state.held & mask) {
@@ -2335,7 +2335,7 @@ void FUN_L02_00230988(void) {
                         }
                     }
                     break;
-                case 33:
+                case HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE:
                 case HERO_STATE_WALL_BONK:
                     if (hero.unkA98 & 2) {
                         hero_set_state(HERO_STATE_IDLE, 1);
@@ -2480,7 +2480,7 @@ void FUN_L02_00230988(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 104:
+                case HERO_STATE_WAIT_FOR_JUMP_OR_RESPAWN:
                     if (hero.unk1660 < 2) {
                         if (scale_game_frames(0xF) + hero.unk1660 * scale_game_frames(0x19) <
                             hero.state_timer) {
@@ -2495,7 +2495,7 @@ void FUN_L02_00230988(void) {
                         return;
                     }
                     break;
-                case 123:
+                case HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT:
                     if (hero.unk2F4 - 1.2f > hero.motion.pos.f[2] ||
                         hero.state_timer > scale_game_frames(0x96)) {
                         hero_respawn();
@@ -2544,7 +2544,7 @@ void FUN_L02_00230988(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 113:
+                case HERO_STATE_ANIMATION_FRAME_EXIT_WAIT:
                     if (25.0f < hero.anim_frame) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -2737,8 +2737,8 @@ void FUN_L02_00230988(void) {
                     }
                     stick_target(1.0f, 0);
                     qcopy(v0, hero.motion.pos.f);
-                    sp28 = hero.motion.rot.f[2];
-                    if (FUN_L01_0022d838(v0, &sp28) == 0) {
+                    current_position_probe_yaw = hero.motion.rot.f[2];
+                    if (FUN_L01_0022d838(v0, &current_position_probe_yaw) == 0) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         hero.unk1B0 = scale_game_frames(0xA);
                         break;
@@ -2765,8 +2765,8 @@ void FUN_L02_00230988(void) {
                             fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         v1[1] +=
                             fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
-                        sp2C = hero.motion.rot.f[2];
-                        if (FUN_L01_0022d838(v1, &sp2C)) {
+                        positive_lateral_probe_yaw = hero.motion.rot.f[2];
+                        if (FUN_L01_0022d838(v1, &positive_lateral_probe_yaw)) {
                             hero_set_state(0x1A, 1);
                         }
                         break;
@@ -2780,8 +2780,8 @@ void FUN_L02_00230988(void) {
                             fast_cos(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         v1[1] +=
                             fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
-                        sp30 = hero.motion.rot.f[2];
-                        if (FUN_L01_0022d838(v1, &sp30)) {
+                        negative_lateral_probe_yaw = hero.motion.rot.f[2];
+                        if (FUN_L01_0022d838(v1, &negative_lateral_probe_yaw)) {
                             hero_set_state(0x1B, 1);
                         }
                     }
@@ -2797,13 +2797,13 @@ void FUN_L02_00230988(void) {
                     }
                     v0[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], lateral_probe_yaw_offset)) * 0.3f;
                     v0[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], lateral_probe_yaw_offset)) * 0.3f;
-                    sp34 = hero.motion.rot.f[2];
+                    lateral_step_probe_yaw = hero.motion.rot.f[2];
                     stick_target(1.0f, 0);
                     if (hero.unk229C < 0.5f ||
                         0.7853982f <
                             fast_difference_between_rotations(
                                 hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], lateral_probe_yaw_offset)) ||
-                        FUN_L01_0022d838(v0, &sp34) == 0) {
+                        FUN_L01_0022d838(v0, &lateral_step_probe_yaw) == 0) {
                         if (hero.unkA98 & 2) {
                             hero_set_state(0x19, 1);
                             break;
@@ -2957,7 +2957,7 @@ void FUN_L02_00230988(void) {
                         return;
                     }
                     break;
-                case 129:
+                case HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT:
                     if (hero.on_slip_ground != 0 && hero.ground_distance < 0.5f) {
                         hero_set_state(HERO_STATE_SLIP, 1);
                         break;
@@ -3478,7 +3478,7 @@ void FUN_L02_00230988(void) {
                     }
                     hero_set_state(0x53, 1);
                     break;
-                case 89:
+                case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT:
                     if (hero.state_timer > scale_game_frames(0x2D) && !(controller_state.held & 0x20)) {
                         hero_set_state(0x53, 0);
                         set_hero_animation(0, 0, scale_game_frames(0x14));
