@@ -63,7 +63,10 @@ extern unsigned char *D_L08_001B292C __attribute__((section(".data")));
 extern unsigned char *FUN_L00_002678b8(int);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-unsigned char *FUN_L08_0027b450(int owner, void *spawn_position, void *vec, short ticks, unsigned char r,
+unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *vec, short ticks, unsigned char r,
+                                unsigned char g, unsigned char b, unsigned char a, float size) __asm__("FUN_L08_0027b450");
+
+unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *vec, short ticks, unsigned char r,
                                 unsigned char g, unsigned char b, unsigned char a, float size) {
     unsigned char *effect = FUN_L00_002678b8(0x2B);
     unsigned char *effect_data;

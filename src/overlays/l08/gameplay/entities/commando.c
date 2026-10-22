@@ -689,7 +689,7 @@ extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void fast_draw_quad_real(void *, void *, s32) __asm__("FUN_001f7d30");
 extern void FUN_L00_0026ced0(void *, void *, u32, u32, s32, f32);
-extern void FUN_L08_0027b450(struct Moby *, void *, void *, s32, s32, s32, s32, s32, f32);
+extern void spawn_colored_effect(struct Moby *, void *, void *, s32, s32, s32, s32, s32, f32) __asm__("FUN_L08_0027b450");
 
 /* The draw helper reads this contiguous 0x90-byte packet. */
 typedef struct {
@@ -947,7 +947,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
             red = b[0xec]; green = b[0xed]; blue = b[0xee];
             {
                 s32 temp = (u8)truncate_float_to_s32_u(convert_integer_to_float(b[0xef])*a);
-                FUN_L08_0027b450(m, &offset, &velocity, lifetime, red, green, blue, temp, t);
+                spawn_colored_effect(m, &offset, &velocity, lifetime, red, green, blue, temp, t);
             }
         } while (i < b[0xf2]);
     }
