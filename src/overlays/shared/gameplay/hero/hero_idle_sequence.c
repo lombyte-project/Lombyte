@@ -3122,7 +3122,9 @@ extern f32 FUN_L00_00233d30_20b5b8(void *) __asm__("FUN_L00_00233d30");
 extern f32 FUN_001fa688_20b5b8(f32, f32) __asm__("FUN_001fa688");
 extern f32 FUN_001f9b80_20b5b8(void *, void *) __asm__("FUN_001f9b80");
 
-void FUN_L00_0020b5b8(void) {
+void probe_hero_airborne_wall_contact(void) __asm__("FUN_L00_0020b5b8");
+
+void probe_hero_airborne_wall_contact(void) {
     V4_20b5b8 position_scratch, collision_probe_end, z;
     struct Hero *g;
     struct Hero *hero_state;

@@ -761,7 +761,7 @@ extern void update_hero_target_heading(float, float, float) __asm__("FUN_L00_002
 extern void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340");
 extern void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");
 extern void reduce_and_apply_hero_planar_velocity_addend(float) __asm__("FUN_L00_00216710");
-extern void FUN_L00_00216de8_cf(void) __asm__("FUN_L00_0020b5b8");
+extern void probe_hero_airborne_wall_contact(void) __asm__("FUN_L00_0020b5b8");
 extern void FUN_L00_00216e48(int, int, int);
 extern void stop_hero_motion_without_forward_support(float, float) __asm__("FUN_L00_00217118");
 extern void FUN_L00_00217368(int, int);
@@ -2006,7 +2006,7 @@ void update_hero_state_motion(void) {
         if (hero.motion.pos.f[2] < hero.unk410) {
             approach_value(&hero.unk410, hero.motion.pos.f[2], frame_time * 4.0f);
         }
-        FUN_L00_00216de8_cf();
+        probe_hero_airborne_wall_contact();
     } break;
     case HERO_STATE_JUMP:
     case HERO_STATE_RUN_JUMP:
@@ -2149,7 +2149,7 @@ void update_hero_state_motion(void) {
             }
         }
         FUN_L00_0020b5b8_cf();
-        FUN_L00_00216de8_cf();
+        probe_hero_airborne_wall_contact();
         break;
     case HERO_STATE_HURT: {
         float len;

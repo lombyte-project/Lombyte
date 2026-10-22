@@ -280,7 +280,7 @@ extern s32 D_L05_00178300[];
 extern void emit_hero_timed_effects(void) __asm__("FUN_L00_00209ec8");
 extern void gravity_flatten(void *, void *) __asm__("FUN_L00_002338d0");
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
-extern void FUN_L00_0020b5b8(void);
+extern void probe_hero_airborne_wall_contact(void) __asm__("FUN_L00_0020b5b8");
 extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern f32 D_L05_001C4130[];
@@ -2369,7 +2369,7 @@ void update_hero_motion_by_state(void) {
         if (hero.motion.pos.f[2] < hero.unk410) {
             approach_value(&hero.unk410, hero.motion.pos.f[2], frame_time * 4.0f);
         }
-        FUN_L00_0020b5b8();
+        probe_hero_airborne_wall_contact();
         break;
     }
     case HERO_STATE_JUMP:
@@ -2514,7 +2514,7 @@ void update_hero_motion_by_state(void) {
             emit_hero_timed_effects();
         }
         hero_integrate_velocity();
-        FUN_L00_0020b5b8();
+        probe_hero_airborne_wall_contact();
         break;
     }
     case HERO_STATE_HURT: {
