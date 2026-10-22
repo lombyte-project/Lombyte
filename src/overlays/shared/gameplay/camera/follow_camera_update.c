@@ -724,7 +724,9 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 extern void FUN_L00_002e9ef0_v(void) __asm__("FUN_L00_002e9ef0");
 
 /* Sets s to 1 (2 if set), resets D_L00_00166C80, calls 002e9ef0, allocates a voice for its p. */
-void FUN_L00_002ea7a0(void) {
+void initialize_hero_aligned_camera_mode(void) __asm__("FUN_L00_002ea7a0");
+
+void initialize_hero_aligned_camera_mode(void) {
     S *shared_camera_globals = &D_L00_00166C80;
     S *camera_globals;
     if (shared_camera_globals->s == 0)
