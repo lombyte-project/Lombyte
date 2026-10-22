@@ -1491,7 +1491,7 @@ extern void FUN_L18_002f6960(struct Moby *m);
 extern void FUN_L18_002f6aa0(struct Moby *moby);
 extern void FUN_L18_002f6fa8(int unused, int idx);
 extern void FUN_L18_002f7028(int a0, int idx);
-extern void FUN_L18_002f7220();
+extern void set_drek_boss_relative_aim_yaw() __asm__("FUN_L18_002f7220");
 extern void FUN_L18_002f7288(char *moby);
 extern void FUN_L18_002f7880(struct Moby *moby);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2098,7 +2098,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         moby_point_position(moby, 0x13, position_and_displacement_scratch);
         *(BossTI *)v1 = *(BossTI *)boss_data->f320;
-        FUN_L18_002f7220((char *)moby, boss_data->f140, position_and_displacement_scratch, v1);
+        set_drek_boss_relative_aim_yaw((char *)moby, boss_data->f140, position_and_displacement_scratch, v1);
         boss_data->f3D8 = -3.0f;
         if ((moby->f70 & 2) != 0 && moby->f53 != 8) {
             blend_moby_animation(moby, 8, 0, scale_game_frames(0x14));
@@ -3249,7 +3249,7 @@ typedef union {
 
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
-void FUN_L18_002f7220(struct Moby *source, char *dest, L18Vector *from, L18Vector *to) {
+void set_drek_boss_relative_aim_yaw(struct Moby *source, char *dest, L18Vector *from, L18Vector *to) {
     L18Vector from_position, to_position;
     from_position.quad = from->quad;
     to_position.quad = to->quad;
