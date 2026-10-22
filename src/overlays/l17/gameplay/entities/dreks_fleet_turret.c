@@ -918,7 +918,9 @@ extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
                                   void *src) __asm__("FUN_L00_00259888");
 extern int func_L00_001F2BE8_alt(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
-void FUN_L17_002dc3f8(struct Moby *moby) {
+void update_fleet_bobbing_moby(struct Moby *moby) __asm__("FUN_L17_002dc3f8");
+
+void update_fleet_bobbing_moby(struct Moby *moby) {
     enum {
         BOBBING_INITIALIZE = 0,
         BOBBING_UPDATE_AND_CHECK_CONTACT = 1
