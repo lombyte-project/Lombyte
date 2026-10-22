@@ -32,7 +32,7 @@ extern int D_0015ED80_e[] __asm__("D_0015ED80") __attribute__((section(".sdata")
 extern void DebugPrint();
 extern void FUN_L00_002039a0(void);
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
-extern void FUN_L00_002e8680(void);
+extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 extern void set_follow_camera_angle_blend_from_position(int a, float x, float y) __asm__("FUN_L00_002e8970");
 extern void FUN_L06_00239528(void);
 extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
@@ -235,7 +235,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
         break;
     case CAMERA_BOX_WATCHER_ALIGN_FIRST_TARGET: {
         char *cam;
-        FUN_L00_002e8680();
+        set_follow_camera_blend_output_flags();
         set_follow_camera_angle_blend_from_position((int)(D_L17_001600EC + (*(int *)(pvars + 0x44) << 7) + 0x30), 0.02617994f,
                          0.0f);
         cam = D_L17_00167580;
@@ -250,7 +250,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
         break;
     }
     case CAMERA_BOX_WATCHER_WAIT_AND_ALIGN_SECOND_TARGET:
-        FUN_L00_002e8680();
+        set_follow_camera_blend_output_flags();
         if (func_001F9908_i((int *)(pvars + 0x5C))) {
             char *cam;
             set_follow_camera_angle_blend_from_position((int)(D_L17_001600EC + (*(int *)(pvars + 0x40) << 7) + 0x30), 0.02617994f,

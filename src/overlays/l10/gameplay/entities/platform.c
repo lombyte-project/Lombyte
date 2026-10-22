@@ -475,7 +475,7 @@ extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_002e8568(int);
 extern void follow_camera_set_lateral_spring(float, float) __asm__("FUN_L00_002e8590");
 extern void FUN_L00_002e8648(void);
-extern void FUN_L00_002e8680(void);
+extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern struct Moby * D_L10_0015FFD8;
 
@@ -497,7 +497,7 @@ extern struct Moby * D_L10_0015FFD8;
 #define func_001FA8A8_2BFBB8 fast_tween_color
 #define func_001F9908_2BFBB8 ((int (*)(int *))tick_countdown_32_alt)
 #define func_L00_002E9A40_2BFBB8 follow_camera_set_lateral_spring
-#define func_L00_002E9B30_2BFBB8 FUN_L00_002e8680
+#define func_L00_002E9B30_2BFBB8 set_follow_camera_blend_output_flags
 #define func_L00_002E9AF8_2BFBB8 FUN_L00_002e8648
 #define func_L00_002E9A18_2BFBB8 FUN_L00_002e8568
 

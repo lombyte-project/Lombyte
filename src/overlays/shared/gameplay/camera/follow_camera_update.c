@@ -1758,7 +1758,7 @@ extern void fun_l00_002e8490(f32) __asm__("FUN_L00_002e8490");
 extern void fun_l00_002e8540(f32) __asm__("FUN_L00_002e8540");
 extern void fun_l00_002e8568(s32) __asm__("FUN_L00_002e8568");
 extern void fun_l00_002e8620(void) __asm__("FUN_L00_002e8620");
-extern void fun_l00_002e8680(void) __asm__("FUN_L00_002e8680");
+extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 extern void fun_l00_002e8918(void *, f32, f32) __asm__("FUN_L00_002e8918");
 
 /* Nonzero while the hero is in one of the swing camera's volumes. */
@@ -1888,11 +1888,11 @@ stop:
     total = convert_integer_to_float(scale_game_frames(200));
     params->timer++;
     if (params->type == 10) {
-        fun_l00_002e8680();
+        set_follow_camera_blend_output_flags();
         FOLLOW_CAM_STATE(current_follow_cam)->tail.mode = 0x14D;
     }
     if (params->type == 11) {
-        fun_l00_002e8680();
+        set_follow_camera_blend_output_flags();
         FOLLOW_CAM_STATE(current_follow_cam)->tail.mode = 2;
     }
     if (params->type == 2 || params->type == 4) {
