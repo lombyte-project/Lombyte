@@ -943,7 +943,9 @@ int D_L16_00161DE4 = 600;
 int D_L16_00161DE8 = 0x80202020;
 int D_L16_00161DEC = 0x80808080;
 extern char D_0013F3D0[] __attribute__((section(".data")));
-void FUN_L16_002e5258(struct Moby *trigger_moby) {
+void update_local_bounds_command_trigger(struct Moby *trigger_moby) __asm__("FUN_L16_002e5258");
+
+void update_local_bounds_command_trigger(struct Moby *trigger_moby) {
     enum {
         GRINDRAIL_TRIGGER_INITIALIZE = 0,
         GRINDRAIL_TRIGGER_CHECK_LOCAL_BOUNDS = 1,
