@@ -393,7 +393,9 @@ void FUN_L11_0030dd18(struct Moby *m);
 
 /* Spawns the 4x6 child grid, waits for its linked moby, then fades and blends between two D_L11_001600EC
    points (pos at 0x30, rotation at 0x70) before handing back to the hero. */
-void FUN_L11_0030d800(struct Moby *grid_controller) {
+void update_child_grid_controller(struct Moby *grid_controller) __asm__("FUN_L11_0030d800");
+
+void update_child_grid_controller(struct Moby *grid_controller) {
     enum {
         CHILD_GRID_STATE_CREATE_CHILDREN = 0,
         CHILD_GRID_STATE_WAIT_LINK_COMMAND = 1,
