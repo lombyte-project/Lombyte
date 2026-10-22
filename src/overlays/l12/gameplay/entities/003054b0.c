@@ -1222,7 +1222,9 @@ static inline unsigned char camera_target_index(int phase) {
     return 0;
 }
 
-void FUN_L12_003094a0(struct Moby *moby) {
+void emit_phase_selected_moby_effects(struct Moby *moby) __asm__("FUN_L12_003094a0");
+
+void emit_phase_selected_moby_effects(struct Moby *moby) {
     enum {
         INITIALIZE_UPDATE_DISTANCE = 0,
         DISPATCH_PHASE_SELECTED_MOBY = 1
