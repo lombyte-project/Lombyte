@@ -2477,7 +2477,9 @@ extern void FUN_L00_0026f548(Vec4 *, Vec4 *, s32, s32);
    first a flash at the hero; then `puffs` puffs within 0.3 of the hero and
    `debris` bits thrown out in random directions. The debris start point adds
    the x velocity to both x and y, as in the original. */
-void FUN_L00_00209ca8(s32 puffs, s32 debris, s32 flash) {
+void emit_hero_surface_effect_burst(s32 puffs, s32 debris, s32 flash) __asm__("FUN_L00_00209ca8");
+
+void emit_hero_surface_effect_burst(s32 puffs, s32 debris, s32 flash) {
     Vec4 effect_vector;
     Vec4 start;
     f32 debris_planar_angle_radians;

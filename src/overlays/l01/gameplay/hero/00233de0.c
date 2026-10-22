@@ -495,7 +495,7 @@ extern void initialize_moby_transform_history(int, void *) __asm__("FUN_L00_0026
 extern void create_moby_transform_history_entry(void *, int, int) __asm__("FUN_L00_00262528");
 extern void update_moby_transform_history(void *, int) __asm__("FUN_L00_00262608");
 extern void FUN_L00_0026f080_cf(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L00_002a3ec8_cf(int, int, int) __asm__("FUN_L00_00209ca8");
+extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
 extern void FUN_L01_00232290(void);
 extern void clip_hero_horizontal_velocity(int) __asm__("FUN_L01_00232978");
@@ -762,7 +762,7 @@ void update_hero_motion_for_current_state(void) {
         }
         if (hero.state.step == 1) {
             if (hero.state_timer == 1) {
-                FUN_L00_002a3ec8_cf(3, 0x10, 0);
+                emit_hero_surface_effect_burst(3, 0x10, 0);
                 if (D_L01_001612D0 != 0) {
                     FUN_L00_0025bc98_cf(D_L01_001612D0, pool_draw_count, 0, hero.motion.pos.f[0],
                                         hero.motion.pos.f[1], 0.4f, -0.3f);
@@ -1938,7 +1938,7 @@ void update_hero_motion_for_current_state(void) {
         }
         if (hero.state.current == 0x12) {
             if (hero.state_timer == scale_game_frames(0x14)) {
-                FUN_L00_002a3ec8_cf(3, 0x10, 1);
+                emit_hero_surface_effect_burst(3, 0x10, 1);
                 if (D_L01_001612D0 != 0) {
                     FUN_L00_0025bc98_cf(D_L01_001612D0, pool_draw_count, 0, hero.motion.pos.f[0],
                                         hero.motion.pos.f[1], 0.4f, 0.35f);

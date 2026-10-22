@@ -52,7 +52,7 @@ extern unsigned char D_L01_0017C258[];
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");
 extern void FUN_L00_00206c08(void);
-extern void FUN_L00_00209ca8(int, int, int);
+extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void FUN_L00_0020b930(void);
 extern void create_missing_hero_item_slot_animations(int a, int b) __asm__("FUN_L00_0020e360");
@@ -287,14 +287,14 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         p->unk90A = 0;
         if (p->state.prev_control_mode == 0x11) {
-            FUN_L00_00209ca8(3, 0xA, 0);
+            emit_hero_surface_effect_burst(3, 0xA, 0);
             if (pool_draw_tiles != 0) {
                 pool_splash(pool_draw_tiles, pool_draw_count, 0, p->motion.pos.f[0],
                                  p->motion.pos.f[1], 0.4f, 0.3f);
             }
         } else if (p->motion.displacement.f[2] < frame_time * -0.5f) {
             int n = truncate_float_to_s32(absolute_float(p->motion.displacement.f[2]) * 300.0f);
-            FUN_L00_00209ca8(3, n < 0x28 ? n : 0x28, 1);
+            emit_hero_surface_effect_burst(3, n < 0x28 ? n : 0x28, 1);
             if (pool_draw_tiles != 0) {
                 pool_splash(pool_draw_tiles, pool_draw_count, 0, p->motion.pos.f[0],
                                  p->motion.pos.f[1], 0.5f, -0.4f);
@@ -826,7 +826,7 @@ int hero_set_state(int a, int b) {
             if (*(int *)(r + 0x2084) != 0x12) {
                 if (*(unsigned char *)(r + 0x12E4) != 0 &&
                     *(float *)(r + 0x88) < *(float *)(r + 0x2F0) + 0.5f) {
-                    FUN_L00_00209ca8(3, 0x10, 0);
+                    emit_hero_surface_effect_burst(3, 0x10, 0);
                 }
             }
         }

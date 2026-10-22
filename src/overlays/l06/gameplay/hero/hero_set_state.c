@@ -60,7 +60,7 @@ extern unsigned char D_L06_0017C558[];
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");
 extern void FUN_L00_00206c08(void);
-extern void FUN_L00_00209ca8(int, int, int);
+extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void FUN_L00_0020b930(void);
 extern void create_missing_hero_item_slot_animations(int a, int b) __asm__("FUN_L00_0020e360");
@@ -782,7 +782,7 @@ int hero_set_state(int a, int b) {
             if (*(int *)(r + 0x2084) != 0x12) {
                 if (*(unsigned char *)(r + 0x12E4) != 0 &&
                     *(float *)(r + 0x88) < *(float *)(r + 0x2F0) + 0.5f) {
-                    FUN_L00_00209ca8(3, 0x10, 0);
+                    emit_hero_surface_effect_burst(3, 0x10, 0);
                 }
             }
         }

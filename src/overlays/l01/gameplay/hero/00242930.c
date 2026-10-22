@@ -92,7 +92,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern unsigned char D_0013D4C0[];
 extern void FUN_L00_00206c08(void);
-extern void FUN_L00_00209ca8(int, int, int);
+extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void FUN_L00_0020e698(void);
 extern void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
@@ -1511,7 +1511,7 @@ void update_hero_state_machine(void) {
                         }
                         if (hero.unk2F8 == 1) {
                             FUN_L00_00216de8(0x11, 0);
-                            FUN_L00_00209ca8(3, 0x18, 1);
+                            emit_hero_surface_effect_burst(3, 0x18, 1);
                         }
                         if (hero.unk418 != 0) {
                             hero.unk418 = hero.unk418 + 1;

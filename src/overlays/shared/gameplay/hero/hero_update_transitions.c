@@ -115,7 +115,7 @@ extern unsigned char D_0013D4C0[];
 extern void *spawn_class_593_moby(int unused, void *pos, int c, float scale, float a, float b) __asm__("FUN_L00_002a99b0");
 extern void FUN_L00_00205f60(int a0, int a1, int a2);
 extern void FUN_L00_00206c08(void);
-extern void FUN_L00_00209ca8(int, int, int);
+extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void FUN_L00_0020e698(void);
 extern void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
@@ -2141,7 +2141,7 @@ void hero_update_transitions(void) {
                         }
                         if (hero.unk2F8 == 1) {
                             FUN_L00_00216de8(0x11, 0);
-                            FUN_L00_00209ca8(3, 0x18, 1);
+                            emit_hero_surface_effect_burst(3, 0x18, 1);
                         }
                         if (hero.unk418 != 0) {
                             hero.unk418 = hero.unk418 + 1;

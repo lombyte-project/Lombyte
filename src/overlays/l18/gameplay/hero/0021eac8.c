@@ -182,7 +182,7 @@ extern void FUN_L00_00216e48(s32, struct MobyView *, s32);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern void FUN_L00_00209a40(s32, s32);
-extern void FUN_L00_00209ca8(s32, s32, s32);
+extern void emit_hero_surface_effect_burst(s32, s32, s32) __asm__("FUN_L00_00209ca8");
 extern void pool_splash(s32, s32, s32, f32, f32, f32, f32) __asm__("FUN_L00_002a3ec8");
 extern f32 FUN_L00_0025bc98(f32 *, f32, f32 *, s32, f32, f32, f32);
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
@@ -477,7 +477,7 @@ void update_hero_motion_for_current_state(void) {
         }
         if (hero.state.step == 1) {
             if (hero.state_timer == 1) {
-                FUN_L00_00209ca8(3, 0x10, 0);
+                emit_hero_surface_effect_burst(3, 0x10, 0);
                 if (D_L18_001612D0 != 0) {
                     pool_splash(D_L18_001612D0, D_L18_001612D8, 0, hero.motion.pos.f[0], hero.motion.pos.f[1],
                                      0.4f, -0.3f);
@@ -2146,7 +2146,7 @@ void update_hero_motion_for_current_state(void) {
         }
         if (hero.state.current == 0x12) {
             if (hero.state_timer == scale_game_frames(20)) {
-                FUN_L00_00209ca8(3, 0x10, 1);
+                emit_hero_surface_effect_burst(3, 0x10, 1);
                 if (D_L18_001612D0 != 0) {
                     pool_splash(D_L18_001612D0, D_L18_001612D8, 0, hero.motion.pos.f[0], hero.motion.pos.f[1],
                                      0.4f, 0.35f);
