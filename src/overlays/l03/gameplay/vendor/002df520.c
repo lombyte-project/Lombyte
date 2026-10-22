@@ -240,7 +240,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 
 /* Starts the cutscene, then during mode 3 (frames 900-10000) emits two particle beams from the listed moby. */
-void FUN_L03_002e01d0(char *owner_moby) {
+void update_kerwan_cutscene_effects(char *owner_moby) __asm__("FUN_L03_002e01d0");
+
+void update_kerwan_cutscene_effects(char *owner_moby) {
     enum {
         CUTSCENE_EFFECTS_INITIALIZE = 0,
         CUTSCENE_EFFECTS_UPDATE = 1
