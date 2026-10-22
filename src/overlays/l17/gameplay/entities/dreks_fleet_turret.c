@@ -361,7 +361,7 @@ typedef struct {
 
 extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern char *spawn_class_558_moby_toward_target(char *src, char *pos, float *v, float f) __asm__("FUN_L17_002e94d8");
-extern char *FUN_L17_002f4fb8(int list);
+extern char *try_activate_blarg_ship_from_list(int list) __asm__("FUN_L17_002f4fb8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -547,7 +547,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
                 }
             }
             if (turret_vars->list != 0 && random_integer_below(0x1F4) == 0) {
-                FUN_L17_002f4fb8(turret_vars->list);
+                try_activate_blarg_ship_from_list(turret_vars->list);
             }
         }
         break;

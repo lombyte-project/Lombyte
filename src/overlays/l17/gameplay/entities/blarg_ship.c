@@ -785,7 +785,9 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-char *FUN_L17_002f4fb8(int list) {
+char *try_activate_blarg_ship_from_list(int list) __asm__("FUN_L17_002f4fb8");
+
+char *try_activate_blarg_ship_from_list(int list) {
     short *moby_index_ptr = D_L17_001AC140[list];
     float A[4], B[4], C[4], D[4], E[4], F[4];
     char *selected_moby;
