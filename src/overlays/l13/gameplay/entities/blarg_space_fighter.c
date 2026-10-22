@@ -2362,7 +2362,9 @@ typedef struct {
     short unk84;
 } SwitchVars;
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
-void FUN_L13_002e4448(char *moby) {
+void update_linked_switch_group(char *moby) __asm__("FUN_L13_002e4448");
+
+void update_linked_switch_group(char *moby) {
     enum {
         INITIALIZE_LINKED_GROUP = 0,
         MONITOR_LINKED_GROUP_HITS = 1,
