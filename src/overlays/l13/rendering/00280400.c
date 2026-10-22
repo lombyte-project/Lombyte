@@ -15,7 +15,10 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L13_001B2490 NOT_SDA;
-unsigned char *FUN_L13_00280400(char *moby, unsigned char joint_index, int b, int c, unsigned char d, float x,
+unsigned char *create_moby_joint_particle(char *moby, unsigned char joint_index, int b, int c, unsigned char d, float x,
+                                float y, float z) __asm__("FUN_L13_00280400");
+
+unsigned char *create_moby_joint_particle(char *moby, unsigned char joint_index, int b, int c, unsigned char d, float x,
                                 float y, float z) {
     unsigned char *particle = create_part(0x44);
     if (particle != 0) {

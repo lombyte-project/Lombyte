@@ -872,7 +872,7 @@ void blarg_gunner_update(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B60D8), where it is exact; names translated to the US level program. */
 
-extern void * FUN_L13_00280400(void *, int, int, float, float, int, float, int);
+extern void * create_moby_joint_particle(void *, int, int, float, float, int, float, int) __asm__("FUN_L13_00280400");
 extern void kill_part(void *) __asm__("FUN_L00_00267a08");
 
 /* Per-frame glow effect: spawns it while the moby is active (byte 0x31 set), frees it otherwise. */
@@ -883,7 +883,7 @@ void update_robosquawker_particle(struct Moby *moby, char *data) {
     void **handle = (void **)(data + 0x228);
     if (moby->visible) {
         if (!*handle) {
-            *handle = FUN_L13_00280400(moby, 0, 0x80808080, opacity, opacity, 0x10808080, 0.8f, 0x19);
+            *handle = create_moby_joint_particle(moby, 0, 0x80808080, opacity, opacity, 0x10808080, 0.8f, 0x19);
         }
     } else if (*handle) {
         kill_part(*handle);
