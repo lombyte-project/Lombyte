@@ -1285,7 +1285,9 @@ extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
-void FUN_L14_003087c0(struct Moby *moby) {
+void update_moby_list_clear_notification(struct Moby *moby) __asm__("FUN_L14_003087c0");
+
+void update_moby_list_clear_notification(struct Moby *moby) {
     enum {
         MOBY_UPDATE_DISTANCE_INITIALIZE = 0,
         MOBY_UPDATE_CUTSCENE_TARGET = 1
