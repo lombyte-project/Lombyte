@@ -2256,7 +2256,9 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   int) __asm__("FUN_L00_0025e450");
 
 extern char *D_L07_00173ED0[];
-void FUN_L07_0030e458(struct Moby *moby) {
+void update_growing_ballistic_moby(struct Moby *moby) __asm__("FUN_L07_0030e458");
+
+void update_growing_ballistic_moby(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
     float previous_position[4];
     qcopy(previous_position, &moby->pos);
