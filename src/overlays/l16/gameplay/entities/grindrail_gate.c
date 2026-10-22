@@ -1487,7 +1487,9 @@ extern void FUN_L16_002923d0(int);
 extern void begin_dialogue_camera_transition(float, void *) __asm__("FUN_L01_002783a8");
 extern void FUN_L02_002e0cd8(void *);
 extern void FUN_L16_002e70c0(struct Moby *);
-extern void FUN_L16_002e7168(struct Moby *);
+void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) __asm__("FUN_L16_002e7168");
+
+extern void restore_gadgetron_ceo_non_challenge_environment(struct Moby *) __asm__("FUN_L16_002e7168");
 extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void subtract_vector_xyz(void *, void *, void *);
@@ -1522,7 +1524,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         ceo_data->initial_yaw = ceo_moby->yaw;
         if (*(int *)(D_0013D408 + 0x814) == 0)
             ceo_moby->yaw = fast_add_rotations(ceo_moby->yaw, 3.14159265f);
-        FUN_L16_002e7168((char *)ceo_moby);
+        restore_gadgetron_ceo_non_challenge_environment((char *)ceo_moby);
         break;
     case GADGETRON_CEO_POLL_DIALOGUE: {
         if (((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->mode != 15)
@@ -1606,7 +1608,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         }
         if (((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->mode == 0) {
             ceo_moby->state = 1;
-            FUN_L16_002e7168((char *)ceo_moby);
+            restore_gadgetron_ceo_non_challenge_environment((char *)ceo_moby);
         }
         event = ceo_moby->event;
         if (event == 1) {
@@ -1623,13 +1625,13 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
                 activation->pending = pending;
                 activation->flag = event;
             }
-            FUN_L16_002e7168((char *)ceo_moby);
+            restore_gadgetron_ceo_non_challenge_environment((char *)ceo_moby);
         }
         if (ceo_moby->event == 2) {
             ceo_moby->state = 1;
             FUN_L00_00216f90(D_L16_001D9860, D_L16_001D9860 + 0x10, 0, 1);
             ceo_moby->event = 0;
-            FUN_L16_002e7168((char *)ceo_moby);
+            restore_gadgetron_ceo_non_challenge_environment((char *)ceo_moby);
         }
         if (ceo_moby->event == 3) {
             char *camera;
@@ -1734,7 +1736,7 @@ void FUN_L16_002e70c0(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E85E0), where it is exact; names translated to the US level program. */
 
-void FUN_L16_002e7168(struct Moby *moby) {
+void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int *group_index_entry;
     int i;
