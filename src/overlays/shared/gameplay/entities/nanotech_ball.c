@@ -1677,10 +1677,10 @@ void suckcannon_update(SuckMoby *self) {
                 while(candidate_target) {
                     if(candidate_target->state>=0 && candidate_target!=stored) {
                         float tyaw,tpitch,dyaw,distance,offangle;
-                        SuckAimHeight *r;
+                        SuckAimHeight *candidate_aim_height;
                         qcopy(&work.fire.point,&candidate_target->pos);
-                        r=suck_get_aim_height(candidate_target);
-                        if(r) work.fire.point.f.z+=r->height;
+                        candidate_aim_height=suck_get_aim_height(candidate_target);
+                        if(candidate_aim_height) work.fire.point.f.z+=candidate_aim_height->height;
                         else work.fire.point.f.z+=0.5f;
                         if((candidate_target->flags&0x1000) && candidate_target && candidate_target->cls && candidate_target->cls->category==5) {
                             tyaw=fast_arc_tan(work.fire.point.f.x-work.fire.launch.f.x,work.fire.point.f.y-work.fire.launch.f.y);
