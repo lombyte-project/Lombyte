@@ -440,7 +440,9 @@ extern void FUN_00125180_2291d0(void *, void *) __asm__("FUN_00125180");
 
 extern s32 D_L06_001745DC __attribute__((section(".data")));
 extern char D_0013F3D0[] __attribute__((section(".data")));
-void FUN_L06_002291d0(int force) {
+void adjust_hero_velocity_from_collision_probes(int force) __asm__("FUN_L06_002291d0");
+
+void adjust_hero_velocity_from_collision_probes(int force) {
     V_2291d0 primary_vector_origin, primary_vector_endpoint, b, secondary_vector_endpoint;
     char *vector_origin_base;
     P_2291d0 *g;
