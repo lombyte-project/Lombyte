@@ -1101,7 +1101,9 @@ typedef struct {
 
 extern struct Moby *hit_moby __asm__("D_L12_001742D8") __attribute__((section(".data")));
 /* A homing mine: rises, then steers toward the point ahead and blows up near it or on contact. */
-void FUN_L12_00304e00(struct Moby *moby) {
+void update_homing_mine(struct Moby *moby) __asm__("FUN_L12_00304e00");
+
+void update_homing_mine(struct Moby *moby) {
     enum {
         HOMING_MINE_STATE_INITIALIZE = 0,
         HOMING_MINE_STATE_HOMING = 1,
