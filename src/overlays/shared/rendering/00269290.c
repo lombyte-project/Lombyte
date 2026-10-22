@@ -2794,7 +2794,9 @@ typedef struct {
     u128 v10;
 } Q_26f898;
 
-void FUN_L00_0026f898(unsigned char *particle) {
+void update_flag_controlled_pulsing_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026f898");
+
+void update_flag_controlled_pulsing_effect_particle(unsigned char *particle) {
     u128 position_offset;
     Q_26f898 *particle_data;
     float angle_sine;
