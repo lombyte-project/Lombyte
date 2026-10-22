@@ -140,7 +140,7 @@ extern void start_scene(void *) __asm__("FUN_L00_00298840");
 extern void FUN_L00_00299460(void *);
 extern void queue_language_zero_movie(void *) __asm__("FUN_L00_002994f8");
 extern void queue_movie_with_game_language(void *) __asm__("FUN_L00_00299560");
-extern void FUN_L00_00299a68(void);
+extern void start_slideshow(void) __asm__("FUN_L00_00299a68");
 extern Own D_L00_001B2588;
 extern Own D_L00_001B3518;
 extern Own D_L00_001B6088;
@@ -530,7 +530,7 @@ void FUN_L00_00276bd0(void) {
             D_L00_001B9CF0.unk130 = previous_decode_mode;
             fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
-            FUN_L00_00299a68();
+            start_slideshow();
         } else {
             D_L00_0015F5C4 = 0;
         }

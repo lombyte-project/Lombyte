@@ -1023,7 +1023,9 @@ extern s32 start_audio_stream_read(s32 dst, s32 sector, s32 sector_count) __asm_
 extern void FillTransferWords(void *, s32, s32);
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
-void FUN_L00_00299a68(void) {
+void start_slideshow(void) __asm__("FUN_L00_00299a68");
+
+void start_slideshow(void) {
     int slideshow_buffer_base;
     update_audio_stream_until_idle(0);
     fade_to_black(8);
