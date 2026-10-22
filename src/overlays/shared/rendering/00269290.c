@@ -2914,7 +2914,9 @@ extern s32 D_L00_00160204 __attribute__((sda));
 extern f32 D_L00_00160208 __attribute__((sda));
 extern u8 D_L00_0016020C __attribute__((sda));
 extern u8 *D_L00_001B211C __attribute__((section(".data")));
-void FUN_L00_0026fc38(O0026fc38 *particle) {
+void update_animated_offset_effect_particle(O0026fc38 *particle) __asm__("FUN_L00_0026fc38");
+
+void update_animated_offset_effect_particle(O0026fc38 *particle) {
     V0026fc38 position_offset;
     S0026fc38 *s = &particle->s;
     particle->xc = D_L00_00160200;
