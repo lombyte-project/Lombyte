@@ -2201,7 +2201,9 @@ void FUN_L00_002e55b8(void *mm, void *vv, void *tt, f32 stiffness, f32 damping, 
     current_values[2] = cam_interp_values(camera_state + 0xE8, current_values[2], target_values[2], stiffness, damping, limit);
 }
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-s32 FUN_L00_002e5678(void *mm, void *input_offset, void *out_target_position, s32 k) {
+s32 compute_follow_camera_target_position(void *mm, void *input_offset, void *out_target_position, s32 k) __asm__("FUN_L00_002e5678");
+
+s32 compute_follow_camera_target_position(void *mm, void *input_offset, void *out_target_position, s32 k) {
     u8 *camera = mm;
     s32 attach_mode_return_flag = 1;
     u8 *stored_focus_position = *(u8 **)(camera + 0x70) + 0x40;
@@ -2249,7 +2251,7 @@ extern f32 D_L00_00161D2C __attribute__((sda));
 extern f32 D_L00_00161D30 __attribute__((sda));
 extern f32 D_L00_00161D34 __attribute__((sda));
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-s32 FUN_L00_002e5678(void *, void *, void *, s32);
+s32 compute_follow_camera_target_position(void *, void *, void *, s32) __asm__("FUN_L00_002e5678");
 void FUN_L00_002e55b8(void *, void *, void *, f32, f32, f32);
 void follow_camera_transition(O002e5730 *o, void *a) __asm__("FUN_L00_002e5730");
 void follow_camera_transition(O002e5730 *camera, void *input_offset) {
@@ -2261,7 +2263,7 @@ void follow_camera_transition(O002e5730 *camera, void *input_offset) {
     if (fast_dec_timer_s16(m + 0x106))
         attach_state->xc5 = attach_state->xc4;
     k = (f32)attach_state->xc6 * attach_state->xc8;
-    FUN_L00_002e5678(camera, input_offset, &target_position, attach_state->xc4);
+    compute_follow_camera_target_position(camera, input_offset, &target_position, attach_state->xc4);
     attach_mode = attach_state->xc4;
     if (attach_mode == 3 || attach_mode == 5 || attach_mode == 6 || attach_mode == 7 || attach_mode == 1) {
         x = D_L00_00161D30 + (D_L00_00161D28 - D_L00_00161D30) * k;
