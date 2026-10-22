@@ -2283,7 +2283,7 @@ extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section
 typedef struct { char pad[0x100]; float x; float y; } G_88e8;
 extern G_88e8 D_0013C940_s __asm__("D_0013C940") __attribute__((section(".data")));
 extern int FUN_L00_002e83c0(char *);
-extern void FUN_L00_002e8388(char *);
+extern void clear_follow_camera_volume_if_current(char *) __asm__("FUN_L00_002e8388");
 extern int frames_s(int) __asm__("FUN_001f96f8");
 extern void set_nonzero_follow_camera_parameters(float, float, float) __asm__("FUN_L02_002f6598");
 extern float itof_s(int) __asm__("FUN_001fa6c0");
@@ -2312,7 +2312,7 @@ void update_moby_follow_camera(char *moby) {
     }
     if (is_hero_in_moby_follow_camera_region(moby) == 0) {
         *(short *)(slot_data + 0x20) = 0;
-        FUN_L00_002e8388(moby);
+        clear_follow_camera_volume_if_current(moby);
         return;
     }
     *(int *)(*(char **)(D_L15_00167400_lui + 0x70) + 0x230) = 2;

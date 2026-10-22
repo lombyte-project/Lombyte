@@ -1753,7 +1753,7 @@ extern s32 test_point_in_transformed_unit_cylinder(void *, s32) __asm__("FUN_L00
 extern s32 test_point_in_transformed_unit_sphere(void *, s32) __asm__("FUN_L00_0025faf0");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
 extern s32 fun_l00_002e83c0(struct UpdateCam *) __asm__("FUN_L00_002e83c0");
-extern void fun_l00_002e8388(struct UpdateCam *) __asm__("FUN_L00_002e8388");
+extern void clear_follow_camera_volume_if_current(struct UpdateCam *) __asm__("FUN_L00_002e8388");
 extern void fun_l00_002e8490(f32) __asm__("FUN_L00_002e8490");
 extern void fun_l00_002e8540(f32) __asm__("FUN_L00_002e8540");
 extern void fun_l00_002e8568(s32) __asm__("FUN_L00_002e8568");
@@ -1839,7 +1839,7 @@ stop:
             params->done = 1;
         }
         params->timer = 0;
-        fun_l00_002e8388(swing_camera_record);
+        clear_follow_camera_volume_if_current(swing_camera_record);
         return;
     }
     if (params->timer == 0) {
@@ -2083,7 +2083,7 @@ void volume_camera_aim(struct UpdateCam *aim_camera_record) {
         params->done = 1;
     }
     params->timer = 0;
-    fun_l00_002e8388(aim_camera_record);
+    clear_follow_camera_volume_if_current(aim_camera_record);
     return;
 run:
     if (params->timer < 2) {

@@ -964,7 +964,7 @@ int test_moby_camera_target_angle_limits(char *moby, float residual_angle_limit_
 extern int D_L02_0015FFD8 MACRO_ADDR;
 extern int D_L02_001ABE40[];
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
-extern void FUN_L00_002e8388(char *);
+extern void clear_follow_camera_volume_if_current(char *) __asm__("FUN_L00_002e8388");
 extern int FUN_L00_002e83c0(char *);
 extern void FUN_L00_002e8450(int, float, float) __asm__("FUN_L00_002e8450");
 extern void FUN_L00_002e84b8(float, float) __asm__("FUN_L00_002e84b8");
@@ -1001,7 +1001,7 @@ void apply_moby_camera_control(char *moby) {
 
     if (*(int *)(data + 0x50) != 0) {
         *(short *)(data + 0x20) = 0;
-        FUN_L00_002e8388(moby);
+        clear_follow_camera_volume_if_current(moby);
         return;
     }
     index = *(int *)(data + 0x44);
@@ -1009,7 +1009,7 @@ void apply_moby_camera_control(char *moby) {
         group = (unsigned short *)D_L02_001ABE40[index];
         if (group == 0) {
             *(short *)(data + 0x20) = -1;
-            FUN_L00_002e8388(moby);
+            clear_follow_camera_volume_if_current(moby);
             return;
         }
         {
@@ -1026,7 +1026,7 @@ void apply_moby_camera_control(char *moby) {
                 do {
                     if ((id << 16) < 0) {
                         *(short *)(data + 0x20) = -1;
-                        FUN_L00_002e8388(moby);
+                        clear_follow_camera_volume_if_current(moby);
                         return;
                     }
                     group++;
@@ -1046,14 +1046,14 @@ void apply_moby_camera_control(char *moby) {
         target = (char *)(D_L02_0015FFD8 + (*(int *)(data + 0x28) << 8));
         if (*(signed char *)(target + 0x20) < 0) {
             *(short *)(data + 0x20) = -1;
-            FUN_L00_002e8388(moby);
+            clear_follow_camera_volume_if_current(moby);
             return;
         }
     }
     *(char **)(data + 0x48) = target;
     if (*(short *)(data + 0x3c) == 6 && (char *)hero_lui.ground_moby != target) {
         *(short *)(data + 0x20) = 0;
-        FUN_L00_002e8388(moby);
+        clear_follow_camera_volume_if_current(moby);
         return;
     }
     if (FUN_L00_002e83c0(moby) <= 0) {
@@ -1062,7 +1062,7 @@ void apply_moby_camera_control(char *moby) {
     }
     if (test_moby_camera_control_activation(moby) == 0) {
         *(short *)(data + 0x20) = 0;
-        FUN_L00_002e8388(moby);
+        clear_follow_camera_volume_if_current(moby);
         return;
     }
     if (*(short *)(data + 0x3c) == 5) {
