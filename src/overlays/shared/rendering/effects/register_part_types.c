@@ -79,7 +79,7 @@ extern void FUN_L00_00274a70(void);
 extern void update_periodic_alpha_fade_particle(void) __asm__("FUN_L00_00274de0");
 extern void FUN_L00_00274e48(void);
 extern void update_size_gated_rotating_particle(void) __asm__("FUN_L00_002752e0");
-extern void FUN_L00_00275320(void);
+extern void update_gravity_ground_culled_particle(void) __asm__("FUN_L00_00275320");
 extern void update_damped_moby_relative_color_size_tween_particle(void) __asm__("FUN_L00_00275510");
 extern void update_gravity_damped_resizing_particle(void) __asm__("FUN_L00_002756f0");
 extern void update_timed_alpha_fade_particle(void) __asm__("FUN_L00_00275810");
@@ -168,7 +168,7 @@ void register_part_types(void) {
     handlers[70] = (u32)update_periodic_alpha_fade_particle;
     handlers[71] = (u32)FUN_L00_00274e48;
     handlers[72] = (u32)update_size_gated_rotating_particle;
-    handlers[73] = (u32)FUN_L00_00275320;
+    handlers[73] = (u32)update_gravity_ground_culled_particle;
     handlers[74] = (u32)update_damped_moby_relative_color_size_tween_particle;
     handlers[75] = (u32)update_gravity_damped_resizing_particle;
     handlers[76] = (u32)update_timed_alpha_fade_particle;

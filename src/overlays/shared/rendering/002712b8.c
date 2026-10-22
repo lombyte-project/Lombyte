@@ -1803,7 +1803,9 @@ extern void FUN_001f9a10_275320(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float ground_height_at(void *) __asm__("FUN_L00_00263468");
 extern void FUN_L00_002634f8_275320(void *) __asm__("FUN_L00_002634f8");
 
-void FUN_L00_00275320(O_275320 *particle) {
+void update_gravity_ground_culled_particle(O_275320 *particle) __asm__("FUN_L00_00275320");
+
+void update_gravity_ground_culled_particle(O_275320 *particle) {
     V_275320 particle_vector_scratch;
     V_275320 ground_probe_position;
     V_275320 ground_recheck_position;
