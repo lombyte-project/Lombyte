@@ -441,7 +441,9 @@ extern void FUN_L00_00211250_215e58(void) __asm__("FUN_L00_00211250");
 
 extern Entry70_215e58 D_L15_00179EF0[];
 /* Per-frame hero upkeep: tick the hero timers, spawn the respawn marker, track sinking, and set the camera follow target. Clone of FUN_L00_002215c8 without the case-1 camera tuning. */
-void FUN_L15_00215e58(void) {
+void update_hero_timers_and_auxiliary_state(void) __asm__("FUN_L15_00215e58");
+
+void update_hero_timers_and_auxiliary_state(void) {
     Vec4 sum;
     Vec4 d;
     struct Moby *spawned_moby;
