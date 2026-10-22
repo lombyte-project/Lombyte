@@ -1953,7 +1953,9 @@ int lock_fade_frames __asm__("D_L11_00162164") = 100;
 extern float D_L11_001677D0[];
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 
-void FUN_L11_00311c80(void *self, char *moby) {
+void update_ship_lock_on_target(void *self, char *moby) __asm__("FUN_L11_00311c80");
+
+void update_ship_lock_on_target(void *self, char *moby) {
     float v[4] __attribute__((aligned(16)));
     float *reference_rotation_source;
     unsigned char *current_target;
@@ -2113,7 +2115,7 @@ void FUN_L11_00311d50(struct Moby *moby) {
     append_rotated_sprite_quad(rx, ry, 10.0f, 10.0f, 0.0f, 0x1F, 0x1F, reticle_texture_tex0, 0xFFFFF3,
                                0xFF20FF20, 0, 0, 0.5f, 0.5f);
 
-    FUN_L11_00311c80(moby, (char *)vars);
+    update_ship_lock_on_target(moby, (char *)vars);
     if (vars->target != NULL) {
         project_world_point_to_screen_pixels(&vars->target->pos, &sx, &sy, 0);
         if (vars->lock_timer > lock_hold_frames) {
