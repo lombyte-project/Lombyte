@@ -1308,7 +1308,9 @@ extern f32 D_L00_00161890[2];
 extern f32 jitter __asm__("D_L00_0016187C") __attribute__((sda));
 extern f32 trail_speed __asm__("D_L00_00161880") __attribute__((sda));
 extern f32 trail_decay __asm__("D_L00_00161884") __attribute__((sda));
-void FUN_L00_002cb418(Moby *shot_moby) {
+void update_homing_shot(Moby *shot_moby) __asm__("FUN_L00_002cb418");
+
+void update_homing_shot(Moby *shot_moby) {
     Vec4A start;
     Vec4A step;
     ShotQuery_2cb418 query;
