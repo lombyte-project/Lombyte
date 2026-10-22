@@ -1524,7 +1524,9 @@ extern void FUN_L18_002f5e80(char *moby);
 void update_drek_boss_hero_follow_movement(struct Moby *moby) __asm__("FUN_L18_002f6960");
 
 extern void update_drek_boss_hero_follow_movement(struct Moby *m) __asm__("FUN_L18_002f6960");
-extern void FUN_L18_002f6aa0(struct Moby *moby);
+void update_drek_boss_arena_circling_movement(struct Moby *moby) __asm__("FUN_L18_002f6aa0");
+
+extern void update_drek_boss_arena_circling_movement(struct Moby *moby) __asm__("FUN_L18_002f6aa0");
 void hide_drek_boss_moby_group(int unused, int group_index) __asm__("FUN_L18_002f6fa8");
 
 extern void hide_drek_boss_moby_group(int unused, int idx) __asm__("FUN_L18_002f6fa8");
@@ -1771,7 +1773,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         desired_yaw = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
         approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
-        FUN_L18_002f6aa0((struct Moby *)moby);
+        update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if (boss_data->f38C <= 301.0f) {
             if (hero.vehicle_mode != 0) {
                 ((BossMoby *)hero.moby)->f94 = 0;
@@ -2051,7 +2053,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         desired_yaw = fast_arc_tan(aim_target_moby->f10[0] - moby->f10[0], aim_target_moby->f10[1] - moby->f10[1]);
         approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
-        FUN_L18_002f6aa0((struct Moby *)moby);
+        update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if ((moby->f70 & 2) == 0) {
             break;
         }
@@ -2188,7 +2190,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         desired_yaw = fast_arc_tan(aim_target_moby->f10[0] - moby->f10[0], aim_target_moby->f10[1] - moby->f10[1]);
         approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
-        FUN_L18_002f6aa0((struct Moby *)moby);
+        update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if (is_value_within_interpolated_window((char *)moby, 1.0f) != 0 ||
             is_value_within_interpolated_window((char *)moby, 16.0f) != 0) {
             if (random_integer_below(5) != 0 || boss_data->fB4 == 2) {
@@ -2251,7 +2253,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         desired_yaw = fast_arc_tan(aim_target_moby->f10[0] - moby->f10[0], aim_target_moby->f10[1] - moby->f10[1]);
         approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
-        FUN_L18_002f6aa0((struct Moby *)moby);
+        update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if (boss_data->f354 < boss_data->f358 + boss_data->f35C) {
             boss_data->f128 = fast_arc_tan(1.0f, boss_data->f3BC);
         }
@@ -2299,7 +2301,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         desired_yaw = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
         approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
-        FUN_L18_002f6aa0((struct Moby *)moby);
+        update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if (tick_countdown_32_alt(&boss_data->f354) != 0) {
             float a;
             float r;
@@ -2337,7 +2339,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         desired_yaw = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
         approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
-        FUN_L18_002f6aa0((struct Moby *)moby);
+        update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if ((moby->f70 & 2) != 0 && moby->f53 != 12) {
             blend_moby_animation(moby, 0xC, 0, scale_game_frames(0x14));
         }
@@ -2493,7 +2495,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         desired_yaw = fast_arc_tan(hero.motion.pos.f[0] - moby->f10[0], hero.motion.pos.f[1] - moby->f10[1]);
         approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
-        FUN_L18_002f6aa0((struct Moby *)moby);
+        update_drek_boss_arena_circling_movement((struct Moby *)moby);
         boss_data->f358 = boss_data->f358 + 1;
         n = scale_game_frames(0x14);
         if (boss_data->f358 % n == 0) {
@@ -3050,7 +3052,7 @@ extern f32 D_L18_00162374 __attribute__((sda));
 /* Steers the boss around its node on the far side from the hero (at most 10
  * degrees per step), faster the closer the hero is, and eases it to the
  * node's height. */
-void FUN_L18_002f6aa0(struct Moby *moby) {
+void update_drek_boss_arena_circling_movement(struct Moby *moby) {
     BossCircleVars *boss_circle_vars = (BossCircleVars *)moby->pvars;
     Vec4 goal;
     f32 ang;
