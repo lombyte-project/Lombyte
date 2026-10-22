@@ -235,7 +235,9 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 extern short D_L07_00161CD8 __attribute__((sda));
 extern short D_L07_00161CDC __attribute__((sda));
 extern short D_L07_00161CE0 __attribute__((sda));
-void FUN_L07_0031f900(unsigned char *moby) {
+void update_scene_moby_trails(unsigned char *moby) __asm__("FUN_L07_0031f900");
+
+void update_scene_moby_trails(unsigned char *moby) {
     enum {
         TRAIL_STATE_INITIALIZE = 0,
         TRAIL_STATE_UPDATE = 1
