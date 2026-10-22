@@ -517,7 +517,7 @@ extern struct Path5BD0 *D_L04_001B0630[];
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *,
                               float *);
 extern void *FUN_L04_002ce080(void *, void *);
-extern void *FUN_L04_002d34d8(void *, void *);
+extern void *spawn_class_23a_moby(void *, void *) __asm__("FUN_L04_002d34d8");
 extern void *random_integer_below_cf(void *, int, unsigned int) __asm__("FUN_001153fc");
 extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
@@ -1134,7 +1134,7 @@ void big_axebot_update(M_B7B0 *moby) {
         float p[4];
 
         moby_point_position(moby, 0xB, p);
-        data->f424 = FUN_L04_002d34d8(moby, p);
+        data->f424 = spawn_class_23a_moby(moby, p);
     }
 }
 /* The engine-sound fields of the moby's pvars. */
