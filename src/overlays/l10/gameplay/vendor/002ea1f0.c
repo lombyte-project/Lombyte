@@ -375,7 +375,9 @@ void FUN_L10_002eb6f0(struct Moby *moby) {
 
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
-void FUN_L10_002eb7e0(struct Moby *moby) {
+void update_hit_triggered_moby_spawner(struct Moby *moby) __asm__("FUN_L10_002eb7e0");
+
+void update_hit_triggered_moby_spawner(struct Moby *moby) {
     enum {
         HIT_RESPONSE_STATE_INITIALIZE = 0,
         HIT_RESPONSE_STATE_WAIT_FOR_HIT = 1,
