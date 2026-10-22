@@ -1300,7 +1300,9 @@ extern struct Moby *debris_target __asm__("D_L07_00173ED8") __attribute__((secti
 extern char debris_far_point[] __asm__("D_L07_00166E40");
 
 /* Debris update: moves and spins it, bursts it on impact, removes it out of bounds. */
-void FUN_L07_0030bbc8(struct Moby *moby) {
+void update_tumbling_ballistic_moby(struct Moby *moby) __asm__("FUN_L07_0030bbc8");
+
+void update_tumbling_ballistic_moby(struct Moby *moby) {
     Vec4f *pos = &moby->pos;
     DebrisVars *debris_vars = (DebrisVars *)moby->pvars;
     Vec4 old;
