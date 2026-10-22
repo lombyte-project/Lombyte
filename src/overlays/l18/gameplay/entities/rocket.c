@@ -955,7 +955,9 @@ void FUN_L18_002d5f20(unsigned char *moby) {
 
 extern int FUN_L00_002db8f8(void *);
 
-int FUN_L18_002d6108(struct Moby *moby) {
+int update_moby_state_pause(struct Moby *moby) __asm__("FUN_L18_002d6108");
+
+int update_moby_state_pause(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     int state_pause_result = FUN_L00_002db8f8(moby);
     if (state_pause_result != 0) {
