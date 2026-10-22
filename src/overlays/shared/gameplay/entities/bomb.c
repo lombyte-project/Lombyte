@@ -55,7 +55,9 @@ extern s32 FUN_001f0b58_2c8440(void) __asm__("FUN_001f0b58");
  * normal in vars and pulls the point 5% toward D_L00_00166DC0_2c8440. mode 0 needs
  * a live hit moby; mode 1 starts from the hero's hand. Returns 1 on a hit.
  */
-s32 FUN_L00_002c8440(ThrowVars_2c8440 *throw_vars, struct Moby *thrown_moby, s32 mode)
+s32 predict_doom_bot_spawner_landing(ThrowVars_2c8440 *throw_vars, struct Moby *thrown_moby, s32 mode) __asm__("FUN_L00_002c8440");
+
+s32 predict_doom_bot_spawner_landing(ThrowVars_2c8440 *throw_vars, struct Moby *thrown_moby, s32 mode)
 {
     Vec4 simulated_position, simulated_velocity, position_scratch, q, landing_probe_position;
     s32 prediction_timer;
@@ -212,9 +214,9 @@ void update_doom_bot_spawner(struct Moby *thrown_moby)
         thrown_moby->flags &= 0xffbe;
     if (vars->holder->oclass == 0xe5 && vars->unk46 == 0 && fast_vec_length(vars) > 0.0f) {
         if (!hero.ground_moby || !FUN_L00_002603d0((char *)hero.ground_moby))
-            FUN_L00_002c8440(vars, thrown_moby, 1);
-        else if (!FUN_L00_002c8440(vars, thrown_moby, 0))
-            FUN_L00_002c8440(vars, thrown_moby, 2);
+            predict_doom_bot_spawner_landing(vars, thrown_moby, 1);
+        else if (!predict_doom_bot_spawner_landing(vars, thrown_moby, 0))
+            predict_doom_bot_spawner_landing(vars, thrown_moby, 2);
     }
     switch (thrown_moby->state) {
     case THROWN_MOBY_STATE_INITIALIZE:
