@@ -19,7 +19,9 @@ int FUN_00213260_28efc8(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_28efc8(int) __asm__("func_001FA6C0");
 void FUN_L00_001fd228_28efc8(void *, void *, int) __asm__("func_001F7D30");
 extern int D_001604C0[1] __attribute__((sda));
-void FUN_0022e1b0(unsigned char *quad_source) {
+void build_variant_effect_quads(unsigned char *quad_source) __asm__("FUN_0022e1b0");
+
+void build_variant_effect_quads(unsigned char *quad_source) {
     struct GeometryQuad quad;
     QuadOffset quad_source_translation;
     QuadOffset *selected_quad_offsets;
@@ -55,7 +57,7 @@ void FUN_0022e1b0(unsigned char *quad_source) {
     }
 }
 
-extern __typeof__(FUN_0022e1b0) func_0022E1B0 __attribute__((alias("FUN_0022e1b0")));
+extern __typeof__(build_variant_effect_quads) func_0022E1B0 __attribute__((alias("FUN_0022e1b0")));
 
 f32 quad_uvs[4][2] = {{0, 0}, {1.0f, 0}, {0, 1.0f}, {1.0f, 1.0f}};
 

@@ -130,7 +130,7 @@ extern ScriptedPath *D_001CC3B0[];
 extern PositionPair D_001D99B0[];
 extern Vector4 D_001D9C80[];
 extern Vector4 D_001D9CB0[];
-extern void FUN_0022e1b0();
+extern void build_variant_effect_quads() __asm__("FUN_0022e1b0");
 
 extern void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
 extern void music_pause(s32);
@@ -466,7 +466,7 @@ void update_resident_gameplay_state(void) {
                                 (s32)(((f32)render_sequence.time - multiply_global_scale(420.0f)) *
                                       (frame_scale * 1.2f));
                             level_render_state.player->unkB2 = 0;
-                            enqueue_callback_list_1(FUN_0022e1b0, level_render_state.player);
+                            enqueue_callback_list_1(build_variant_effect_quads, level_render_state.player);
                         }
                         if (scale_ticks(0x1D0) < render_sequence.time) {
                             D_0015F440 += 0.025f;
@@ -501,7 +501,7 @@ void update_resident_gameplay_state(void) {
                     }
                     object->unkBC = 0x32;
                     object->unkB2 = 10;
-                    enqueue_callback_list_1(FUN_0022e1b0, object);
+                    enqueue_callback_list_1(build_variant_effect_quads, object);
                 } else if (render_sequence.time <= scale_ticks(360)) {
                     s32 color_intensity;
                     if (render_sequence.time < scale_ticks(300)) {
@@ -509,7 +509,7 @@ void update_resident_gameplay_state(void) {
                             (s32)((multiply_global_scale(300.0f) - (f32)render_sequence.time) *
                                   (frame_scale * 1.5f));
                         level_render_state.player->unkB2 = 0;
-                        enqueue_callback_list_1(FUN_0022e1b0, level_render_state.player);
+                        enqueue_callback_list_1(build_variant_effect_quads, level_render_state.player);
                     }
                     color_intensity = (s32)((multiply_global_scale(360.0f) - (f32)render_sequence.time) *
                                             (frame_scale * 1.25f));
@@ -711,7 +711,7 @@ void update_resident_gameplay_state(void) {
                 if (level_render_state.content_variant < 2) {
                     level_render_state.player->unkBC = 0x32;
                     level_render_state.player->unkB2 = 10;
-                    enqueue_callback_list_1(FUN_0022e1b0, level_render_state.player);
+                    enqueue_callback_list_1(build_variant_effect_quads, level_render_state.player);
                 }
                 level_render_state.path_progress +=
                     level_render_state.speed * frame_time / level_render_state.path_segment_length;

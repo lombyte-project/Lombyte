@@ -1956,7 +1956,7 @@ segments:
           - [0x12f0ec, textbin, text_gap_0022e16c_after_fun_0022df40]
           - [0x12f108, c, runtime/state/initialize_global_state_entry]
           - [0x12f124, textbin, text_gap_0022e1a4_before_fun_0022e420]
-          - [0x12f130, c, gameplay/fun_0022e1b0]
+          - [0x12f130, c, gameplay/build_variant_effect_quads]
           - [0x12f3a0, c, rendering/effects/build_resident_indexed_texture_warp_meshes]
           - [0x12f844, textbin, text_gap_0022e8c4_before_fun_0022e8c8]
           - [0x12f848, c, gameplay/space/draw_resident_textured_quad]
