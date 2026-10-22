@@ -26,7 +26,9 @@ enum TaxiStop {
  * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002E0480), where it is exact; names translated to the US level
  * program. */
-void FUN_L14_002df080(u8 *moby) {
+void initialize_ribbon_effect_state(u8 *moby) __asm__("FUN_L14_002df080");
+
+void initialize_ribbon_effect_state(u8 *moby) {
     f32 *moby_vars = *(f32 **)(moby + 0x78);
     f32 *vector_cursor = moby_vars;
     s32 i;

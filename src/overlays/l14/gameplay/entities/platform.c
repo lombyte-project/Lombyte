@@ -741,7 +741,7 @@ extern int D_L14_0015F7EC __asm__("D_L14_0015F70C");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
-extern void FUN_L14_002df080(char *);
+extern void initialize_ribbon_effect_state(char *) __asm__("FUN_L14_002df080");
 extern void FUN_L14_002df138(char *);
 extern void FUN_L14_002dfc58(char *);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -764,7 +764,7 @@ void FUN_L14_002dee28(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        FUN_L14_002df080(moby);
+        initialize_ribbon_effect_state(moby);
         moby->state = 1;
         *(int *)(data + 0x204) = -1;
         break;
