@@ -181,7 +181,9 @@ extern void FUN_L00_0023adb8(void);
 extern void apply_pending_animation(void *) __asm__("FUN_001ff418");
 
 int scale_game_frames(int) __asm__("FUN_001f96f8");
-int FUN_L00_0023ac78(int call) {
+int update_hud_elements(int call) __asm__("FUN_L00_0023ac78");
+
+int update_hud_elements(int call) {
     int positive_timer_count = 0;
     E_23ac78 *hud_element;
     H_23ac78 *hud_timer_refresh_control;

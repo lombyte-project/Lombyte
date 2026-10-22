@@ -153,7 +153,7 @@ extern void update_hero_from_debug_camera(void) __asm__("FUN_L00_001f4490");
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void update_all_point_lights(void) __asm__("FUN_00201a28");
 extern void update_resident_packed_direction(void) __asm__("FUN_0020cfd0");
-extern void FUN_L00_0023ac78(s32);
+extern void update_hud_elements(s32) __asm__("FUN_L00_0023ac78");
 extern void update_help_state(void) __asm__("FUN_001fde90");
 extern void FUN_L00_00297e70_c(void) __asm__("FUN_L00_00297e70");
 
@@ -284,7 +284,7 @@ void handle_pause_input(void) {
     noop_main_callback(D_L00_00161038, 6);
     update_all_point_lights();
     update_resident_packed_direction();
-    FUN_L00_0023ac78(1);
+    update_hud_elements(1);
     update_help_state();
     if (DBG(2))
         FUN_L00_00297e70_c();
@@ -1951,7 +1951,7 @@ extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da
 extern void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
 extern void FUN_L00_0029ad08(void);
 extern void FUN_L00_0029ab70(s32);
-extern void FUN_L00_0023ac78(s32);
+extern void update_hud_elements(s32) __asm__("FUN_L00_0023ac78");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L00_0029f990(void);
 extern void FUN_L00_002ea9d8(void *);
@@ -2334,7 +2334,7 @@ void FUN_L00_0029c648(void) {
                     allocate_voice_for_target_entry(6, 0, vendor_menu.f1c);
                 }
             }
-            FUN_L00_0023ac78(1);
+            update_hud_elements(1);
         }
         if (vendor_menu.f4 <= scale_game_frames(36)) {
             enqueue_callback_list_1(FUN_L00_0029f990, vendor_menu.f1c);
@@ -2550,7 +2550,7 @@ void FUN_L00_0029c648(void) {
         } else if (D_L00_00161E38 != 0) {
             FUN_L00_0029b680();
         }
-        FUN_L00_0023ac78(1);
+        update_hud_elements(1);
         break;
     case VENDOR_MENU_EXIT_CUTSCENE:
         FUN_L00_00297e30();
