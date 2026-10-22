@@ -2690,7 +2690,9 @@ extern void func_001F49B0_2A3DD0(void (*)(void), void *) __asm__("FUN_001f4600")
 extern void func_L15_002A4318_2A3DD0(void) __asm__("FUN_L15_002a3138");
 extern unsigned char *func_L15_002655D0_2A3DD0(void *, void *, void *, int, int, int, int, int, void *) __asm__("FUN_L15_002647f0");
 
-void FUN_L15_002a2bf0(unsigned char *moby) {
+void update_spark_emitter_moby(unsigned char *moby) __asm__("FUN_L15_002a2bf0");
+
+void update_spark_emitter_moby(unsigned char *moby) {
     enum {
         INITIALIZE_EFFECT = 0,
         EMIT_SPARKS = 1,
