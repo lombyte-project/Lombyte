@@ -1518,7 +1518,9 @@ extern int D_0015EEA4_macro __asm__("D_0015EEA4") __attribute__((section(".sdata
 extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
 /* Quartu moby update (class 1469): hint and dialogue triggers from the hero's zones, with the play-time
    records of the two hint messages. */
-void FUN_L15_002ed398(struct Moby *moby) {
+void update_quartu_hint_triggers(struct Moby *moby) __asm__("FUN_L15_002ed398");
+
+void update_quartu_hint_triggers(struct Moby *moby) {
     enum {
         HINT_DIALOGUE_INITIALIZE = 0,
         HINT_DIALOGUE_CHECK_TRIGGERS = 1
