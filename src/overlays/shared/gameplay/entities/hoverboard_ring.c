@@ -105,7 +105,9 @@ extern void spawn_trail_c8e0(void *, s32, f32, f32, s32, s32, s32, void *, f32) 
 extern struct Spark_c8e0 *spawn_spark_c8e0(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
 extern s32 random_int_between_c8e0(s32, s32) __asm__("FUN_L00_00257b90");
 extern void mark_moby_for_removal_c8e0(struct Moby *) __asm__("FUN_0020c828");
-extern char *FUN_L05_0031d160(unsigned char *);
+char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) __asm__("FUN_L05_0031d160");
+
+extern char *spawn_moby_class_5ea_from_source(unsigned char *) __asm__("FUN_L05_0031d160");
 void FUN_L05_0031cf58(char *m);
 
 /* Mine update: sets its glow, fades it out with camera distance and blows up into debris, smoke and sparks when something touches it. */
@@ -163,7 +165,7 @@ void FUN_L05_0031c8e0(struct Moby *moby) {
         }
     }
     play_sound_c8e0(0, 0, moby);
-    FUN_L05_0031d160((unsigned char *)moby);
+    spawn_moby_class_5ea_from_source((unsigned char *)moby);
     debris = spawn_debris_c8e0(frame_time_sq * 12.0f, moby, 0x5ED, &moby->pos, &moby->rot, scale_game_frames_c8e0(0x5A), 0,
                                D_L05_0015F580, D_L05_0015F580, D_L05_0015F580);
     if (debris != 0) {
@@ -297,7 +299,7 @@ void FUN_L05_0031cf58(char *m) {
 extern char *FUN_0020c4f8_d160(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_d160(void *) __asm__("FUN_L00_00250df8");
 
-char *FUN_L05_0031d160(unsigned char *source_moby) {
+char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) {
     unsigned char *destination_moby = (unsigned char *)FUN_0020c4f8_d160(0x5EA);
     if (destination_moby != 0) {
         destination_moby[0x30] = source_moby[0x30];
