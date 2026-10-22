@@ -27,7 +27,9 @@ void FUN_L00_001f8ec8(void) {
 extern s32 D_L00_0015F5D8;
 void FUN_L00_002772c0(s32);
 /* Calls FUN_L00_002772c0(0) while D_L00_0015F5D8 is clear. */
-void FUN_L00_001f8f50(void) {
+void draw_page_contents(void) __asm__("FUN_L00_001f8f50");
+
+void draw_page_contents(void) {
     if (D_L00_0015F5D8 == 0)
         FUN_L00_002772c0(0);
 }

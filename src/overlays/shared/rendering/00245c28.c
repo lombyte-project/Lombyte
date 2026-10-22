@@ -51,7 +51,7 @@ extern void FUN_L00_002999a8(void);
 extern void FUN_L00_00298f90(void);
 extern void prepare_debug_profiler_render(void) __asm__("FUN_001f4248");
 extern void FUN_L00_00276bd0(void);
-extern void FUN_L00_001f8f50(void);
+extern void draw_page_contents(void) __asm__("FUN_L00_001f8f50");
 extern void update_mode_freeze(void) __asm__("FUN_001fce28");
 extern void FUN_L00_001f8ec8(void);
 extern void FUN_L00_0029c648(void);
@@ -196,7 +196,7 @@ void FUN_L00_00245c28(void) {
         case LEVEL_MODE_CALLBACK_TABLE_UPDATE:
             register_audio_stream_callback();
             FUN_L00_00276bd0();
-            FUN_L00_001f8f50();
+            draw_page_contents();
             break;
         case LEVEL_MODE_FREEZE:
             register_audio_stream_callback();
