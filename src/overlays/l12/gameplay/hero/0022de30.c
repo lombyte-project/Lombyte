@@ -180,7 +180,9 @@ extern CollisionHit HH __asm__("D_L12_001742C0") __attribute__((section(".data")
 #define HI(o) (*(s32 *)(D_L12_001742C0 + (o)))
 #define HF(o) (*(f32 *)(D_L12_001742C0 + (o)))
 
-void FUN_L12_00233e80(void) {
+void update_hero_ground_contact_and_gravity(void) __asm__("FUN_L12_00233e80");
+
+void update_hero_ground_contact_and_gravity(void) {
     V collision_ray_second_endpoint, ground_ray_first_endpoint, ground_geometry_scratch, ground_probe_first_endpoint, unused_ground_probe_output, hit_surface_angles, normalized_hit_normal;
     f32 f;
     s32 collision_sound_class;
