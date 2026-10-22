@@ -149,7 +149,7 @@ extern void update_parts(void) __asm__("FUN_00217b88");
 extern void FUN_L00_001fea18(void);
 extern void update_camera(void) __asm__("FUN_001edaa8");
 extern void FUN_L00_001f3aa0(void);
-extern void FUN_L00_001f4490(void);
+extern void update_hero_from_debug_camera(void) __asm__("FUN_L00_001f4490");
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void update_all_point_lights(void) __asm__("FUN_00201a28");
 extern void update_resident_packed_direction(void) __asm__("FUN_0020cfd0");
@@ -277,7 +277,7 @@ void handle_pause_input(void) {
     } else if (D_L00_0016C058.w14) {
         FUN_L00_001f3aa0();
         if (D_L00_0016C058.w14 == 2)
-            FUN_L00_001f4490();
+            update_hero_from_debug_camera();
     }
     noop_main_callback(D_L00_00161028, 8);
     sound_update();
