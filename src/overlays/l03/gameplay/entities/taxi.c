@@ -150,7 +150,9 @@ extern char D_L03_00166EC0[];
 extern void FUN_L03_0024e830(void *, void *, f32);
 extern void FUN_L00_00263ac8(struct Moby *, int, void *, f32);
 void FUN_L03_002ca808(struct Moby *m);
-char *FUN_L03_002cc888(char *p, void *pos, float *dir);
+char *spawn_mine_layer_projectile(char *parent_moby, void *pos, float *launch_velocity) __asm__("FUN_L03_002cc888");
+
+char *spawn_mine_layer_projectile(char *p, void *pos, float *dir) __asm__("FUN_L03_002cc888");
 extern s32 trooper_frames(s32) __asm__("FUN_001f96f8");
 extern s32 trooper_tick(s32 *) __asm__("FUN_001f9740");
 extern s32 trooper_tick16(s16 *) __asm__("FUN_001f9770");
@@ -298,7 +300,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
                 trooper_scale4(projectile_launch_velocity, projectile_launch_velocity, scale);
                 trooper_add(projectile_launch_velocity, projectile_launch_velocity, spread);
                 projectile_launch_velocity[2] = D_L03_00161914 * frame_time * trooper_rand(0.9f, 1.1f);
-                FUN_L03_002cc888((char *)mine_layer_moby, muzzle, projectile_launch_velocity);
+                spawn_mine_layer_projectile((char *)mine_layer_moby, muzzle, projectile_launch_velocity);
             }
         }
         break;
@@ -673,7 +675,7 @@ extern void set_path_2cc888(void *, void *, int, int, int, float) __asm__("FUN_L
 
 /* Spawns a projectile moby (class 0x273) at pos, heading along dir,
  * owned by parent p. */
-char *FUN_L03_002cc888(char *parent_moby, void *pos, float *launch_velocity) {
+char *spawn_mine_layer_projectile(char *parent_moby, void *pos, float *launch_velocity) {
     char *spawned_moby = create_moby_2cc888(0x273);
     char *spawned_moby_vars;
     float frame_scale_squared;
