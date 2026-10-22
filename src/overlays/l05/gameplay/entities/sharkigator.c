@@ -228,7 +228,7 @@ extern int allocate_voice_for_target_entry_2d1688(int, int, char *) __asm__("FUN
 extern void sound_2d1688(void) __asm__("FUN_L00_00211250");
 extern void reset_2d1688(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L05_002d1e30(char *);
-extern void FUN_L05_002d1fd8(int, char *);
+extern void spawn_sharkigator_splash_effects(int, char *) __asm__("FUN_L05_002d1fd8");
 
 void sharkigator_update(char *moby) __asm__("FUN_L05_002d1688");
 void sharkigator_update(char *moby) {
@@ -357,7 +357,7 @@ state_three:
                 if (h->state.current != 0x72) {
                     qcopy_nc(v, &h->motion.pos);
                     v[2] = h->water_surface_z;
-                    FUN_L05_002d1fd8((int)moby, (char *)v);
+                    spawn_sharkigator_splash_effects((int)moby, (char *)v);
                     set_camera_2d1688(&h->motion.pos, &h->motion.rot, 0x72, 0);
                 } else {
                     qcopy(&h->motion.pos, moby + 0x10);
@@ -393,7 +393,7 @@ state_three:
                 fast_vec_normalize((D_L05_00161388), v, moby + 0xe0);
                 fast_vec_add(v, v, moby + 0x10);
                 v[2] = hero.water_surface_z;
-                FUN_L05_002d1fd8((int)moby, (char *)v);
+                spawn_sharkigator_splash_effects((int)moby, (char *)v);
             }
         }
         if (*(float *)(data + 0x78) < 0.0f &&
@@ -468,7 +468,9 @@ extern void FUN_L00_0026f548(void *, void *, int, int);
 extern void add_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L05_002d1fd8(int unused, char *position) {
+void spawn_sharkigator_splash_effects(int unused, char *position) __asm__("FUN_L05_002d1fd8");
+
+void spawn_sharkigator_splash_effects(int unused, char *position) {
     float effect_spawn_vector[4];
     char *spawned_object;
     int i;
