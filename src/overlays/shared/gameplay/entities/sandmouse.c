@@ -1299,7 +1299,9 @@ extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32,
 
 /* Resets the camera's orbit, focus, spring, view and track from fixed values; for a kind 2 preset it
    also prepares its two paths once, measuring each point against the path it follows. */
-void FUN_L01_00314e98(Camera *destination_camera) {
+void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) __asm__("FUN_L01_00314e98");
+
+void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
     Vec4 at;
     s32 seg;
     f32 path_fraction_or_length;
@@ -1751,7 +1753,7 @@ void initialize_camera_transform_and_paths(Camera *destination_camera) {
             }
         }
     }
-    FUN_L01_00314e98(destination_camera);
+    reset_camera_state_and_prepare_preset_paths(destination_camera);
 }
 #include "sda.h"
 
