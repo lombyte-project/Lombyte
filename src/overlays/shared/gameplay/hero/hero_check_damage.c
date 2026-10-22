@@ -26,7 +26,9 @@ extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
  * 65 degrees and the ledge edge is found within 2.4 units along it.
  * Constants live in locals because retail loads each one once.
  */
-int FUN_L00_0020c758(Vec4 *ledge_probe_origin, f32 *facing_yaw)
+int probe_hero_ledge_edge(Vec4 *ledge_probe_origin, f32 *facing_yaw) __asm__("FUN_L00_0020c758");
+
+int probe_hero_ledge_edge(Vec4 *ledge_probe_origin, f32 *facing_yaw)
 {
     Vec4 probe, top, low, wall, edge;
     f32 drop, fwd, up, reach, min_height;

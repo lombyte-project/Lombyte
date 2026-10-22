@@ -3115,7 +3115,7 @@ extern float D_0015ED6C;
 extern V4_20b5b8 coll_hit_normal[] __asm__("D_L00_00173E80");
 
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
-extern s32 FUN_L00_0020c758_20b5b8(void *, void *) __asm__("FUN_L00_0020c758");
+extern s32 probe_hero_ledge_edge(void *, void *) __asm__("FUN_L00_0020c758");
 extern s32 FUN_L00_0020a240_20b5b8(s32, f32, f32) __asm__("FUN_L00_0020a240");
 extern void FUN_L00_002335c8_20b5b8(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 extern s32 FUN_001efa68_20b5b8(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
@@ -3162,7 +3162,7 @@ void probe_hero_airborne_wall_contact(void) {
     }
     position_scratch.f[0] = position_scratch.f[0] + projected_x_displacement;
     position_scratch.f[1] = position_scratch.f[1] + projected_y_displacement;
-    if (FUN_L00_0020c758_20b5b8(&position_scratch, &g->motion.rot.f[2]) != 0) {
+    if (probe_hero_ledge_edge(&position_scratch, &g->motion.rot.f[2]) != 0) {
         g->unk1B4 = 0;
         g->unk1F0 = prediction_frames + 2;
         return;

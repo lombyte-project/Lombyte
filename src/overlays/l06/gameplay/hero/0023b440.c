@@ -66,7 +66,7 @@ extern int D_L06_0016CF00 __attribute__((section(".data")));
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
-extern int FUN_L00_0020c758(float *, float *);
+extern int probe_hero_ledge_edge(float *, float *) __asm__("FUN_L00_0020c758");
 #include "rnc/overlay/path.h"
 extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
@@ -1272,7 +1272,7 @@ void update_hero_state_machine(void) {
                     stick_target(0, 1.0f);
                     qcopy(v0, hero.motion.pos.f);
                     sp44 = hero.motion.rot.f[2];
-                    if (FUN_L00_0020c758(v0, &sp44) == 0) {
+                    if (probe_hero_ledge_edge(v0, &sp44) == 0) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         hero.unk1B0 = scale_game_frames(0xA);
                         break;
@@ -1298,7 +1298,7 @@ void update_hero_state_machine(void) {
                         v1[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         v1[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         sp48 = hero.motion.rot.f[2];
-                        if (FUN_L00_0020c758(v1, &sp48)) {
+                        if (probe_hero_ledge_edge(v1, &sp48)) {
                             hero_set_state(0x1A, 1);
                         }
                         break;
@@ -1313,7 +1313,7 @@ void update_hero_state_machine(void) {
                         v1[1] +=
                             fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         sp4C = hero.motion.rot.f[2];
-                        if (FUN_L00_0020c758(v1, &sp4C)) {
+                        if (probe_hero_ledge_edge(v1, &sp4C)) {
                             hero_set_state(0x1B, 1);
                         }
                     }
@@ -1335,7 +1335,7 @@ void update_hero_state_machine(void) {
                         0.7853982f <
                             fast_difference_between_rotations(
                                 hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], ang)) ||
-                        FUN_L00_0020c758(v0, &sp50) == 0) {
+                        probe_hero_ledge_edge(v0, &sp50) == 0) {
                         if (hero.unkA98 & 2) {
                             hero_set_state(0x19, 1);
                             break;
@@ -2292,7 +2292,7 @@ void update_hero_state_machine(void) {
                     stick_target(0, 1.0f);
                     qcopy(v0, hero.motion.pos.f);
                     sp60 = hero.motion.rot.f[2];
-                    if (FUN_L00_0020c758(v0, &sp60) == 0) {
+                    if (probe_hero_ledge_edge(v0, &sp60) == 0) {
                         hero_set_state(0x45, 1);
                         hero.unk1B0 = scale_game_frames(0xA);
                         break;
@@ -2318,7 +2318,7 @@ void update_hero_state_machine(void) {
                         v1[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         v1[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         sp64 = hero.motion.rot.f[2];
-                        if (FUN_L00_0020c758(v1, &sp64)) {
+                        if (probe_hero_ledge_edge(v1, &sp64)) {
                             hero_set_state(0x4D, 1);
                         }
                         break;
@@ -2333,7 +2333,7 @@ void update_hero_state_machine(void) {
                         v1[1] +=
                             fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         sp68 = hero.motion.rot.f[2];
-                        if (FUN_L00_0020c758(v1, &sp68)) {
+                        if (probe_hero_ledge_edge(v1, &sp68)) {
                             hero_set_state(0x4E, 1);
                         }
                     }
@@ -2355,7 +2355,7 @@ void update_hero_state_machine(void) {
                         0.7853982f <
                             fast_difference_between_rotations(
                                 hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], ang)) ||
-                        FUN_L00_0020c758(v0, &sp6C) == 0) {
+                        probe_hero_ledge_edge(v0, &sp6C) == 0) {
                         if (hero.unkA98 & 2) {
                             hero_set_state(0x4B, 1);
                             break;
