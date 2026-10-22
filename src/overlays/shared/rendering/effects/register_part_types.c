@@ -56,7 +56,7 @@ extern void FUN_L00_002719f0(void);
 extern void update_expanding_damped_fading_particle(void) __asm__("FUN_L00_00271be8");
 extern void update_color_tween_particle(void) __asm__("FUN_L00_00271c88");
 extern void update_timed_line_collision_particle(void) __asm__("FUN_L00_00271d20");
-extern void FUN_L00_00271df8(void);
+extern void update_moving_height_culled_particle(void) __asm__("FUN_L00_00271df8");
 extern void update_damped_fading_particle(void) __asm__("FUN_L00_00271ec8");
 extern void update_color_size_tween_particle(void) __asm__("FUN_L00_00271fc0");
 extern void update_moving_size_alpha_tween_particle(void) __asm__("FUN_L00_002721f0");
@@ -145,7 +145,7 @@ void register_part_types(void) {
     handlers[47] = (u32)update_expanding_damped_fading_particle;
     handlers[48] = (u32)update_color_tween_particle;
     handlers[49] = (u32)update_timed_line_collision_particle;
-    handlers[50] = (u32)FUN_L00_00271df8;
+    handlers[50] = (u32)update_moving_height_culled_particle;
     handlers[51] = (u32)update_damped_fading_particle;
     handlers[52] = (u32)update_color_size_tween_particle;
     handlers[53] = (u32)update_moving_size_alpha_tween_particle;

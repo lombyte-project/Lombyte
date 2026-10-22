@@ -336,7 +336,9 @@ void FUN_001f9a10_00271df8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00267a08_00271df8(unsigned char *) __asm__("FUN_L00_00267a08");
 extern unsigned char *D_L00_001B2148[];
 extern float D_L00_00160210 __attribute__((sda));
-void FUN_L00_00271df8(unsigned char *particle) {
+void update_moving_height_culled_particle(unsigned char *particle) __asm__("FUN_L00_00271df8");
+
+void update_moving_height_culled_particle(unsigned char *particle) {
     unsigned char *particle_data = particle + 0x20;
     if (fast_dec_timer(particle + 0xA)) {
         *(float *)(particle_data + 8) -= *(float *)(particle_data + 0x18);
