@@ -1791,7 +1791,7 @@ void ryno_update(struct Moby *ryno_moby) {
     Mat3_2cc608 cam;
     Mat4_2cc608 view;
     Vec4 aim;
-    Vec4 dir;
+    Vec4 muzzle_position_and_launch_direction;
     Vec4 ofs;
     Ryno_2cc608 *ryno_vars = *(Ryno_2cc608 **)&ryno_moby->pvars;
     struct Moby *acquired_target;
@@ -1808,8 +1808,8 @@ void ryno_update(struct Moby *ryno_moby) {
         }
         qcopy(aim.f, camera_rot_2cc608.f);
         aim.f[1] = -aim.f[1];
-        muzzle_2cc608(ryno_moby, ryno_vars->slot, dir.f);
-        acquired_target = FUN_L00_002cc360_c(dir.f, aim.f, 0, 1.6981583f, 1.6981583f, 80.0f);
+        muzzle_2cc608(ryno_moby, ryno_vars->slot, muzzle_position_and_launch_direction.f);
+        acquired_target = FUN_L00_002cc360_c(muzzle_position_and_launch_direction.f, aim.f, 0, 1.6981583f, 1.6981583f, 80.0f);
         if ((acquired_target != 0 && ryno_vars->target == 0) || ryno_vars->target == 0 || ryno_vars->target->state == 0xFE || ryno_vars->target->state == 0xFD || ryno_vars->target->visible == 0) {
             ryno_vars->height = 0;
             ryno_vars->target = acquired_target;
@@ -1904,23 +1904,23 @@ void ryno_update(struct Moby *ryno_moby) {
         ryno_vars->slot++;
         ryno_vars->slot = ryno_vars->slot % 9;
         ryno_vars->shots++;
-        dir.q = 0;
+        muzzle_position_and_launch_direction.q = 0;
         if (hero.state.current == 30) {
-            dir.f[2] = 1.0f;
-            apply_mat4_2cc608(dir.f, dir.f, &view);
+            muzzle_position_and_launch_direction.f[2] = 1.0f;
+            apply_mat4_2cc608(muzzle_position_and_launch_direction.f, muzzle_position_and_launch_direction.f, &view);
         } else {
-            dir.f[0] = 1.0f;
-            apply_mat3_2cc608(dir.f, dir.f,  hero.basis);
+            muzzle_position_and_launch_direction.f[0] = 1.0f;
+            apply_mat3_2cc608(muzzle_position_and_launch_direction.f, muzzle_position_and_launch_direction.f,  hero.basis);
         }
         add_2cc608(ofs.f, &hero.motion.displacement, &hero.motion.platform_carry);
         scale_2cc608(ofs.f, ofs.f, 3.0f);
-        add_2cc608(dir.f, dir.f, ofs.f);
+        add_2cc608(muzzle_position_and_launch_direction.f, muzzle_position_and_launch_direction.f, ofs.f);
         if (hero.items[6].unk40 != 0) {
             yaw = hero.items[6].unk4C;
         } else {
-            yaw = angle_2cc608(dir.f[0], dir.f[1]);
+            yaw = angle_2cc608(muzzle_position_and_launch_direction.f[0], muzzle_position_and_launch_direction.f[1]);
         }
-        pitch = -angle_2cc608(length_2cc608(dir.f), dir.f[2]);
+        pitch = -angle_2cc608(length_2cc608(muzzle_position_and_launch_direction.f), muzzle_position_and_launch_direction.f[2]);
         muzzle_2cc608(ryno_moby, ryno_vars->slot, aim.f);
         FUN_L00_0020e4c8();
         FUN_L00_002ccee0_c(ryno_moby, aim.f, ryno_vars->target, ryno_vars->height, yaw, pitch);
