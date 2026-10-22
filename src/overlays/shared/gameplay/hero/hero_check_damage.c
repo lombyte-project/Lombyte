@@ -385,7 +385,9 @@ int FUN_L00_0020d4d0(int slot_index) {
     return 0;
 }
 /* True when hero_slot_item_id(a) is 5, 6 or 7. */
-s32 FUN_L00_0020d518(int slot_index) {
+s32 is_hero_slot_item_id_5_to_7(int slot_index) __asm__("FUN_L00_0020d518");
+
+s32 is_hero_slot_item_id_5_to_7(int slot_index) {
     return (u32)(FUN_L00_0020d498_u(slot_index) - 5) < 3;
 }
 int FUN_L00_0020d498_0020d540() __asm__("FUN_L00_0020d498");
@@ -1566,7 +1568,7 @@ void FUN_L00_0020f580(void)
                         *(u128 *)(moby + 0x10) = *(u128 *)(D_0013FE40_f580 + index * 0x40);
                         if (large_font_height == 0 || *(s32 *)(D_00179AC0_f580 + *(s32 *)(slot + 0x10b8) * 0x4c + 0x18) == 0) {
                             first = FUN_L00_0020d4d0(i);
-                            second = FUN_L00_0020d518(i);
+                            second = is_hero_slot_item_id_5_to_7(i);
                             third = FUN_L00_0020d540_f580(i);
                             if (first == 0 && second == 0 && third == 0) FUN_00250480_f580(moby);
                             FUN_00250df8_f580(moby);
