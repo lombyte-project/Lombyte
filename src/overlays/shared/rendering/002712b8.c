@@ -1741,7 +1741,9 @@ unsigned char *FUN_L00_00275158(void *position, void *initial_particle_vector, i
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 /* Adds byte 0x38 to byte 8; calls free_effect_particle once the float at 0xC is <= 0. */
-void FUN_L00_002752e0(char *particle) {
+void update_size_gated_rotating_particle(char *particle) __asm__("FUN_L00_002752e0");
+
+void update_size_gated_rotating_particle(char *particle) {
     *(unsigned char *)(particle + 8) = *(unsigned char *)(particle + 8) + *(unsigned char *)(particle + 0x38);
     if (*(float *)(particle + 0xC) <= 0.0f) {
         *(float *)(particle + 0xC) = 0.0f;

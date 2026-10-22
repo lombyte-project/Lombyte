@@ -78,7 +78,7 @@ extern void FUN_L00_00274818(void);
 extern void FUN_L00_00274a70(void);
 extern void FUN_L00_00274de0(void);
 extern void FUN_L00_00274e48(void);
-extern void FUN_L00_002752e0(void);
+extern void update_size_gated_rotating_particle(void) __asm__("FUN_L00_002752e0");
 extern void FUN_L00_00275320(void);
 extern void FUN_L00_00275510(void);
 extern void FUN_L00_002756f0(void);
@@ -167,7 +167,7 @@ void register_part_types(void) {
     handlers[69] = (u32)FUN_L00_00274a70;
     handlers[70] = (u32)FUN_L00_00274de0;
     handlers[71] = (u32)FUN_L00_00274e48;
-    handlers[72] = (u32)FUN_L00_002752e0;
+    handlers[72] = (u32)update_size_gated_rotating_particle;
     handlers[73] = (u32)FUN_L00_00275320;
     handlers[74] = (u32)FUN_L00_00275510;
     handlers[75] = (u32)FUN_L00_002756f0;
