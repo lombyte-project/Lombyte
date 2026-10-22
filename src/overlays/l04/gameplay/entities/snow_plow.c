@@ -810,6 +810,7 @@ void woodcut_bot_update(WBMoby *m) {
         WOODCUT_BOT_DEATH_KNOCKBACK = 11
     };
     enum {
+        WOODCUT_BOT_REACTION_NO_ADDITIONAL_RESPONSE = 0,
         WOODCUT_BOT_REACTION_START_DEATH_KNOCKBACK = 1,
         WOODCUT_BOT_REACTION_DEATH_KNOCKBACK = 2,
         WOODCUT_BOT_REACTION_HIT_RECOVERY_AND_REPOSITION = 3,
@@ -897,7 +898,7 @@ void woodcut_bot_update(WBMoby *m) {
             if (d->hp <= 0.0f)
                 r = 1;
             switch (r) {
-            case 0:
+            case WOODCUT_BOT_REACTION_NO_ADDITIONAL_RESPONSE:
                 break;
             case WOODCUT_BOT_REACTION_START_DEATH_KNOCKBACK:
             case WOODCUT_BOT_REACTION_DEATH_KNOCKBACK:
