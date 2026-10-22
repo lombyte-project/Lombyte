@@ -2803,8 +2803,8 @@ void FUN_L18_002f5e80(char *moby) {
     {
         int type = *(unsigned char *)(moby + 0x20);
         if (type >= 0xC && type <= 0x13) {
-            int r = FUN_L18_002d8050_5e80((char *)*(int *)&D_L18_0015FFD8_5e80 + (*(int *)(boss_data + 0x21C) << 8));
-            if (r == 1) {
+            int linked_moby_state_transition_status = FUN_L18_002d8050_5e80((char *)*(int *)&D_L18_0015FFD8_5e80 + (*(int *)(boss_data + 0x21C) << 8));
+            if (linked_moby_state_transition_status == 1) {
                 moby[0x20] = 0x13;
                 if (*(unsigned char *)(moby + 0x53) != 1) {
                     blend_moby_animation_5e80(moby, 1, 0, scale_game_frames_5e80(0x14));
@@ -2813,7 +2813,7 @@ void FUN_L18_002f5e80(char *moby) {
                 *(int *)(boss_data + 0x354) = scale_game_frames_5e80(0x14);
                 *(int *)(boss_data + 0x364) = 0;
                 *(char **)(boss_data + 0x338) = FUN_L18_002dc3e0_5e80(moby, boss_data + 0x3C0, 5.8f);
-            } else if (r == -1) {
+            } else if (linked_moby_state_transition_status == -1) {
                 *(unsigned short *)(moby + 0x34) |= 0x41;
                 moby[0x20] = 7;
                 FUN_L00_00298840_5e80(7);
