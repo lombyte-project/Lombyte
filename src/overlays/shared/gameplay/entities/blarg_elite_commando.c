@@ -66,7 +66,7 @@ extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L15_0029ae18(char *);
+extern void spawn_rocket_trail_spark(char *) __asm__("FUN_L15_0029ae18");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -85,7 +85,7 @@ void rocket_update(char *rocket_moby) {
     }
     if (*(unsigned char *)(rocket_moby + 0x20) != 0)
         return;
-    FUN_L15_0029ae18(rocket_moby);
+    spawn_rocket_trail_spark(rocket_moby);
     subtract_vector_xyz(delta, rocket_data + 0x10, rocket_moby + 0x10);
     yaw = fast_arc_tan(delta[0], delta[1]);
     pitch = fast_arc_tan(vector_length_xy(delta), delta[2]);

@@ -1553,7 +1553,9 @@ extern void setupcol_y(void *, void *, int, float, void *) __asm__("FUN_L00_0025
 extern int collide_y(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int tick_y(void *) __asm__("FUN_001f9740");
 extern void remove_y(void *) __asm__("FUN_0020c828");
-void FUN_L15_0029ae18(char *moby);
+void spawn_rocket_trail_spark(char *moby) __asm__("FUN_L15_0029ae18");
+
+void spawn_rocket_trail_spark(char *moby) __asm__("FUN_L15_0029ae18");
 void spawn_rocket_detonation_glow(char *moby) __asm__("FUN_L15_0029af88");
 
 void spawn_rocket_detonation_glow(char *moby) __asm__("FUN_L15_0029af88");
@@ -1591,7 +1593,7 @@ void rocket_update(unsigned char *moby) {
         }
     }
     qcopy(moby + 0x10, next);
-    FUN_L15_0029ae18((char *)moby);
+    spawn_rocket_trail_spark((char *)moby);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029BFF8), where it is exact; names translated to the US level program. */
 
@@ -1620,7 +1622,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L15_0029ae18(char *moby) {
+void spawn_rocket_trail_spark(char *moby) {
     float noise[4];
     float spark_a[4];
     float spark_b[4];
