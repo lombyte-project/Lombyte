@@ -2778,7 +2778,9 @@ extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void draw_two_scroll_layers(void) __asm__("FUN_L01_002f6150");
 void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
 
-void FUN_L01_002f6180(void *callback_argument) {
+void initialize_bounds_and_enqueue_scroll_layers(void *callback_argument) __asm__("FUN_L01_002f6180");
+
+void initialize_bounds_and_enqueue_scroll_layers(void *callback_argument) {
     Vec4 bounding_sphere;
     Vec4 point_to_center;
     Vec4 *point_cursor;
