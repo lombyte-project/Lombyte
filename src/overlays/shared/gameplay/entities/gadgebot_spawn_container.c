@@ -2883,7 +2883,9 @@ extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern int func_0022ED80_2F6330(int, int, void *) __asm__("FUN_0022da68");
 
-void FUN_L06_002f4f00(Moby *moby) {
+void update_moby_rotation_group(Moby *moby) __asm__("FUN_L06_002f4f00");
+
+void update_moby_rotation_group(Moby *moby) {
     enum {
         SPAWN_CHILD_MOBYS = 0,
         INITIALIZE_BASE_TRANSFORM = 1,
