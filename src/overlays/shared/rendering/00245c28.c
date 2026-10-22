@@ -55,7 +55,7 @@ extern void FUN_L00_001f8f50(void);
 extern void update_mode_freeze(void) __asm__("FUN_001fce28");
 extern void FUN_L00_001f8ec8(void);
 extern void FUN_L00_0029c648(void);
-extern void FUN_L00_002a02b0(void);
+extern void draw_vendor_screen(void) __asm__("FUN_L00_002a02b0");
 extern void update_resident_gameplay_state(void) __asm__("FUN_0022f778");
 extern void dispatch_game_state_update(void) __asm__("FUN_00230ee8");
 extern void FUN_L00_00299c48(void);
@@ -206,7 +206,7 @@ void FUN_L00_00245c28(void) {
         case LEVEL_MODE_STATEFUL_RENDER_PIPELINE:
             register_audio_stream_callback();
             FUN_L00_0029c648();
-            FUN_L00_002a02b0();
+            draw_vendor_screen();
             break;
         case LEVEL_MODE_GAME_STATE_UPDATE:
             register_audio_stream_callback();

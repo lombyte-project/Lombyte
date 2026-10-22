@@ -311,7 +311,9 @@ extern void restore_moby_class_dists(void) __asm__("FUN_0020d248");
 extern void draw_mobys_clean_up(void) __asm__("FUN_0020d3b0");
 extern void patch_moby_gifs(void) __asm__("FUN_0020cef8");
 
-void FUN_L00_002a02b0(void) {
+void draw_vendor_screen(void) __asm__("FUN_L00_002a02b0");
+
+void draw_vendor_screen(void) {
     A02b0_obj *e;
     A02b0_tab *g;
 #define p (&D_L00_001CA4C0)
