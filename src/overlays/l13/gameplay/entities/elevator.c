@@ -903,7 +903,9 @@ typedef struct {
 extern void kill_part(void *) __asm__("FUN_L00_00267a08");
 
 /* Passes the stored value to free_effect_particle once, then clears it. */
-void FUN_L13_002b4fb8(Level13VendorMoby *moby) {
+void release_robosquawker_particle(Level13VendorMoby *moby) __asm__("FUN_L13_002b4fb8");
+
+void release_robosquawker_particle(Level13VendorMoby *moby) {
     if (moby->value != 0) {
         kill_part(moby->value);
         moby->value = 0;
@@ -1257,7 +1259,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_vars->f170 = 11.0f;
                 robosquawker_vars->f174 = 18.0f;
                 robosquawker_moby->state = 0x63;
-                FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
+                release_robosquawker_particle((Level13VendorMoby *)robosquawker_vars);
                 robosquawker_vars->x110[7] = 0x78;
                 trooper_anim_update(robosquawker_moby, (short *)robosquawker_vars->x110);
                 FUN_L00_00257470(robosquawker_moby, 0, -1);
@@ -1268,7 +1270,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_vars->f170 = 5.0f;
                 robosquawker_vars->f174 = 10.0f;
                 robosquawker_moby->state = 6;
-                FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
+                release_robosquawker_particle((Level13VendorMoby *)robosquawker_vars);
                 *(unsigned char *)&robosquawker_vars->x110[7] = 0xFA;
                 robosquawker_vars->h26 = scale_game_frames_alt(0x3C);
                 trooper_anim_update(robosquawker_moby, (short *)robosquawker_vars->x110);
@@ -1327,7 +1329,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
             robosquawker_moby->state = 0x11;
-            FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
+            release_robosquawker_particle((Level13VendorMoby *)robosquawker_vars);
         } else if (d > 1.0f && robosquawker_moby->bBC == 1 && random_integer_below(4) == 0) {
             if (random_integer_below(0x100) & 1) {
                 robosquawker_vars->f1F8 = -robosquawker_vars->f1F8;
@@ -1337,7 +1339,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             if (robosquawker_moby->b53 != 0) {
                 blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
-            FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
+            release_robosquawker_particle((Level13VendorMoby *)robosquawker_vars);
             robosquawker_moby->state = 0x11;
             clear_u64_value(&robosquawker_vars->v40);
             robosquawker_moby->bBC = 0;
@@ -1470,7 +1472,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 }
                 qzero(&robosquawker_vars->v40);
                 robosquawker_moby->state = 0x11;
-                FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
+                release_robosquawker_particle((Level13VendorMoby *)robosquawker_vars);
             } else if (g > 1.0f && robosquawker_moby->bBC == 1 && random_integer_below(4) == 0) {
                 if (random_integer_below(0x100) & 1) {
                     robosquawker_vars->f1F8 = -robosquawker_vars->f1F8;
@@ -1480,7 +1482,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 if (robosquawker_moby->b53 != 0) {
                     blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
                 }
-                FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
+                release_robosquawker_particle((Level13VendorMoby *)robosquawker_vars);
                 qzero(&robosquawker_vars->v40);
                 robosquawker_moby->state = 0x11;
                 clear_u64_value(&robosquawker_vars->v40);
@@ -1608,7 +1610,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
     }
     case ROBOSQUAWKER_STATE_HOME_HOP:
         if (mine_fall(robosquawker_moby, robosquawker_vars->x120) & 1) {
-            FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
+            release_robosquawker_particle((Level13VendorMoby *)robosquawker_vars);
             qzero(robosquawker_vars->x120);
             robosquawker_moby->state = 3;
             if (random_integer_below(0x100) & 1) {
@@ -1824,7 +1826,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         }
         break;
     case ROBOSQUAWKER_STATE_RECOVER_TO_FLIGHT_IDLE:
-        FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
+        release_robosquawker_particle((Level13VendorMoby *)robosquawker_vars);
         if (FUN_L00_002dc9f0(robosquawker_moby, robosquawker_vars->x120) != 0) {
             robosquawker_moby->state = 0xE;
             if (robosquawker_moby->b53 != 0) {
