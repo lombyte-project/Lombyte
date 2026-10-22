@@ -954,7 +954,9 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern f32 D_L06_00162080_gp __asm__("D_L06_00162080") __attribute__((sda));
 extern void fast_vec_add(float *, float *, float *) __asm__("FUN_001f9a10");
 
-void FUN_L06_00300b90(struct Moby *moby) {
+void update_falling_spinning_moby(struct Moby *moby) __asm__("FUN_L06_00300b90");
+
+void update_falling_spinning_moby(struct Moby *moby) {
     char *data;
     float vertical_velocity_decrement = frame_time_sq * 15.0f;
     moby->scale =
