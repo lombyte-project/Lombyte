@@ -674,7 +674,9 @@ extern float feather_radius_min __asm__("D_L00_00161868") __attribute__((sda));
 extern float feather_radius_max __asm__("D_L00_0016186C") __attribute__((sda));
 extern char D_L00_00177F00[];
 
-void FUN_L00_002c97e0(Moby *chicken_moby) {
+void update_morphoray_chicken(Moby *chicken_moby) __asm__("FUN_L00_002c97e0");
+
+void update_morphoray_chicken(Moby *chicken_moby) {
     enum {
         CHICKEN_STATE_INITIALIZE = 0,
         CHICKEN_STATE_IDLE = 1,
