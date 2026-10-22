@@ -195,7 +195,7 @@ extern int truncate_float_to_s32(float);
 extern int D_001413DC __attribute__((section(".data")));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00263b38(void *, float);
-extern void FUN_L16_002d38b0(struct Moby *);
+extern void update_blarg_elite_commando_damage_and_pursuit(struct Moby *) __asm__("FUN_L16_002d38b0");
 void select_blarg_elite_commando_movement_animation(char *moby) __asm__("FUN_L16_002d4070");
 
 extern void select_blarg_elite_commando_movement_animation(char *) __asm__("FUN_L16_002d4070");
@@ -239,7 +239,7 @@ void blarg_elite_commando_update(char *commando_moby) {
     float *heading, *movement;
     int ticks;
     int owner_moby_class;
-    FUN_L16_002d38b0(commando_moby);
+    update_blarg_elite_commando_damage_and_pursuit(commando_moby);
     owner = *(char **)(commando_data + 0x110);
     owner_moby_class = *(short *)(owner + 0xA6);
     if (owner_moby_class == 0 || owner_moby_class == 0x1A3) {
@@ -566,7 +566,7 @@ extern void FUN_L16_002d3f78_u(void *, int, int) __asm__("FUN_L16_002d3f78");
 extern s32 tick_countdown_32(void *) __asm__("func_001F9740");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
-void FUN_L16_002d38b0(struct Moby *commando_moby) {
+void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) {
     enum {
         HIT_RESPONSE_UNAVAILABLE = 0,
         HIT_RESPONSE_FATAL = 1,
