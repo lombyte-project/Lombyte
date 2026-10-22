@@ -5702,7 +5702,9 @@ extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void FUN_L00_002eac18(int);
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
-extern void FUN_L06_00300278(char *);
+void spawn_moby_breakup_effect(char *source_moby) __asm__("FUN_L06_00300278");
+
+extern void spawn_moby_breakup_effect(char *) __asm__("FUN_L06_00300278");
 extern void enqueue_callback_list_1(int, char *) __asm__("FUN_L06_00210fc8");
 extern void allocate_voice_for_target_entry_ffcb0(int, int, char *) __asm__("FUN_0022da68");
 
@@ -5742,7 +5744,7 @@ void FUN_L06_002ffcb0(char *moby) {
             moby[0x20] = 2;
             data[9] = scale_frames_ffcb0(30);
         } else {
-            FUN_L06_00300278(moby);
+            spawn_moby_breakup_effect(moby);
             moby[0x20] = 4;
         }
         break;
@@ -5817,7 +5819,7 @@ void FUN_L06_002ffcb0(char *moby) {
             }
             if (data[1] == 1 && vector_distance_ffcb0(moby + 0x10, D_L06_0015FFD8_ffcb0 + (data[8] << 8) + 0x10) > 0.1f) {
                 allocate_voice_for_target_entry_ffcb0(0, 0, moby);
-                FUN_L06_00300278(moby);
+                spawn_moby_breakup_effect(moby);
             }
             approach_two_stage_ffcb0((float *)(data + 6), (float *)(data + 7), 1.0f, frame_time_sq, frame_time_sq, frame_time * 1.5f);
             {
@@ -5878,7 +5880,7 @@ extern unsigned char *FUN_L06_00300c60(char *, float *, float *);
 extern float D_L06_0016204C __attribute__((sda));
 /* Breaks the moby apart: spawns a copy (class 0x43C) and throws 50
  * fragments out in random directions. */
-void FUN_L06_00300278(char *source_moby) {
+void spawn_moby_breakup_effect(char *source_moby) {
     float fragment_position[4];
     float fragment_velocity[4];
     char *spawned_moby;
