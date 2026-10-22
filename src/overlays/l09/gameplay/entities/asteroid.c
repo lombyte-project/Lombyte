@@ -1398,7 +1398,9 @@ extern int D_L09_0015F5CC;
 extern void draw_textured_grid(char *moby) __asm__("FUN_L03_00291918");
 extern void FUN_L09_002c1978(void *, void *, int);
 
-void FUN_L09_002ef750(void) {
+void draw_level09_textured_surfaces(void) __asm__("FUN_L09_002ef750");
+
+void draw_level09_textured_surfaces(void) {
     int texture_sequence_numerator = D_L09_0015F5CC;
     int texture_sequence_step = texture_sequence_numerator / 20;
     float texture_sequence_position = (float)texture_sequence_numerator / 20.0f;
