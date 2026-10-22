@@ -87,7 +87,9 @@ int advance_moby_path(struct Moby *moby) {
 
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
-void FUN_L16_002e4cd8(struct Moby *moby) {
+void request_moby_help_message(struct Moby *moby) __asm__("FUN_L16_002e4cd8");
+
+void request_moby_help_message(struct Moby *moby) {
     switch (*(short *)((char *)moby->pvars + 0xae)) {
     case 0:
         try_set_help_message(8, 0x3e89);
