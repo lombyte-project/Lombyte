@@ -107,7 +107,7 @@ extern int FUN_L13_002e86f8(void *, void *, int, int);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern unsigned char *FUN_L13_002ea6b8(char *, char *);
+extern unsigned char *fire_class_53_projectile(char *, char *) __asm__("FUN_L13_002ea6b8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void fire_starfighter_homing_rocket(void *, void *) __asm__("FUN_L13_002ea540");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -249,7 +249,7 @@ s2e:
     if (((unsigned char *)starfighter_data)[0xFE] == 0) {
         goto s380;
     }
-    FUN_L13_002ea6b8(moby, starfighter_data);
+    fire_class_53_projectile(moby, starfighter_data);
     *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x14);
     *(int *)(starfighter_data + 0x124) = scale_game_frames_alt(0xF0);
     return;
@@ -309,13 +309,13 @@ s2z:
     return;
 
 s2y:
-    FUN_L13_002ea6b8(moby, starfighter_data);
+    fire_class_53_projectile(moby, starfighter_data);
     *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x14);
     return;
 
 s2b:
     moby[0x20] = 3;
-    FUN_L13_002ea6b8(moby, starfighter_data);
+    fire_class_53_projectile(moby, starfighter_data);
     *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x14);
     return;
 

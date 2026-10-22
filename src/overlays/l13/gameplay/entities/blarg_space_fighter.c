@@ -3517,7 +3517,9 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_L13_002ea330_c(char *a, char *b, float f) __asm__("FUN_L13_002ea330");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-unsigned char *FUN_L13_002ea6b8(char *firing_moby, char *velocity_source_data) {
+unsigned char *fire_class_53_projectile(char *firing_moby, char *velocity_source_data) __asm__("FUN_L13_002ea6b8");
+
+unsigned char *fire_class_53_projectile(char *firing_moby, char *velocity_source_data) {
     float spawn_position[4], projectile_velocity[4], predicted_target_position[4], scratch_vector[4], random_velocity_offset[4];
     struct Hero *x;
     unsigned char *spawned_projectile_moby;
