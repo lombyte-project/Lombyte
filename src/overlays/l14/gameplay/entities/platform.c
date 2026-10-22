@@ -467,7 +467,9 @@ extern unsigned long tex_g(s32) __asm__("FUN_001f44b8");
 extern void xform_g(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_g(void *, int, int) __asm__("FUN_001f7d30");
 
-void FUN_L14_002d71f0(struct Moby *m) {
+void draw_racer_glow_quads(struct Moby *m) __asm__("FUN_L14_002d71f0");
+
+void draw_racer_glow_quads(struct Moby *m) {
     char *d = (char *)m->pvars;
     Pk_2d71f0 pk;
     float glow_quad_transform[4][4];
@@ -538,7 +540,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern float D_L14_00161A60 __attribute__((sda));
 extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L14_002d71f0(struct Moby *);
+extern void draw_racer_glow_quads(struct Moby *) __asm__("FUN_L14_002d71f0");
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
@@ -593,7 +595,7 @@ void update_moby_joint_visual_effects(struct Moby *moby) {
         *(short *)(e + 0x16) = 3;
     }
     moby_point_position(moby, 6, moby_data + 0x200);
-    enqueue_callback_list_1(FUN_L14_002d71f0, moby);
+    enqueue_callback_list_1(draw_racer_glow_quads, moby);
 }
 #include "qzero.h"
 extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002de2b8");
