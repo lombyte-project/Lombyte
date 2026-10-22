@@ -208,7 +208,9 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern void transform_vector_by_basis(void *, void *, void *);
 float FUN_L16_002d3eb8(char *moby, float *target);
 extern void FUN_L16_002d41f8_2(void *, void *) __asm__("FUN_L16_002d41f8");
-void FUN_L16_002d4590(char *m);
+void update_blarg_elite_commando_joint_aim(char *commando_moby) __asm__("FUN_L16_002d4590");
+
+void update_blarg_elite_commando_joint_aim(char *m) __asm__("FUN_L16_002d4590");
 void emit_blarg_elite_commando_joint_sparks(char *commando_moby) __asm__("FUN_L16_002d4908");
 
 void emit_blarg_elite_commando_joint_sparks(char *m) __asm__("FUN_L16_002d4908");
@@ -474,7 +476,7 @@ void blarg_elite_commando_update(char *commando_moby) {
             *(int *)(commando_data + 0x304) = func_0022ED80_update(7, 4, commando_moby);
     }
     if (D_L16_00161A78)
-        FUN_L16_002d4590(commando_moby);
+        update_blarg_elite_commando_joint_aim(commando_moby);
     if (D_L16_00161A7C && D_001413DC != 22)
         emit_blarg_elite_commando_joint_sparks(commando_moby);
     if (current_level_index == 18 && D_L16_0015F5C4 == 2 && (unsigned int)(D_L16_0016CC90 - 3) < 3U)
@@ -933,7 +935,7 @@ extern void update_joint_animation(char *, char *, int, float, float) __asm__("F
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
-void FUN_L16_002d4590(char *commando_moby) {
+void update_blarg_elite_commando_joint_aim(char *commando_moby) {
     float position[4], target[4], matrix[16], delta[4], aim[4], aimDelta[4], velocity[4];
     char *commando_data = *(char **)(commando_moby + 0x78);
     if (*(int *)(commando_data + 0x114) != 2) {
