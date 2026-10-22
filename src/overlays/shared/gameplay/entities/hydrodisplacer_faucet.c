@@ -964,7 +964,9 @@ void request_moby_variant_help_message(char *moby) {
 
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 
-void FUN_L05_00319740(char *moby) {
+void apply_moby_position_and_rotation_wobble(char *moby) __asm__("FUN_L05_00319740");
+
+void apply_moby_position_and_rotation_wobble(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
     float wobble_phase, wobble_result, wobble_phase_step;
     qcopy(moby + 0x10, moby_vars + 0x60);

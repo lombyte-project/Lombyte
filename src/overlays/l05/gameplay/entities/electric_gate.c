@@ -2219,7 +2219,7 @@ extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
 extern void FUN_L00_00266858(void *, int);
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void request_moby_variant_help_message(char *) __asm__("FUN_L05_00319690");
-extern void FUN_L05_00319740(char *);
+extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_00319740");
 extern void transform_moby_vector_table_to_world_space(char *) __asm__("FUN_L05_003198e8");
 void FUN_L05_00319208(void *moby_v);
 extern void FUN_L05_003193a8_u(char *) __asm__("FUN_L05_003193a8");
@@ -2343,7 +2343,7 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     }
-    FUN_L05_00319740(moby);
+    apply_moby_position_and_rotation_wobble(moby);
     if (moby->state >= 3 && moby->state <= 5) {
         travel_hero = &hero;
         travel_hero->unk1F2 = 2;

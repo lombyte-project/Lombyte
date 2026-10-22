@@ -2242,7 +2242,7 @@ extern void FUN_L00_00266858(void *, int);
 extern void FUN_L00_002e8450(int, float, float);
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
-extern void FUN_L05_00319740(char *);
+extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_00319740");
 extern void transform_moby_vector_table_to_world_space(char *) __asm__("FUN_L05_003198e8");
 extern void taxi_release(s32) __asm__("FUN_0022d798");
 extern void taxi_sample(float, s32 *, int, void *, void *, int) __asm__("FUN_00214e58");
@@ -2477,7 +2477,7 @@ void taxi_update(struct Moby *moby) {
         break;
     }
     }
-    FUN_L05_00319740((char *)moby);
+    apply_moby_position_and_rotation_wobble((char *)moby);
     if (moby->state >= 3 && moby->state <= 4) {
         struct Hero *g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
