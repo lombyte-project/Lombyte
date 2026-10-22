@@ -2297,12 +2297,12 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         ENEMY_ANIM_LOCOMOTION = 1,
         ENEMY_ANIM_HEADING_TURN = 9
     };
-    Tgt2C8398 tgt;
+    Tgt2C8398 selected_target;
     Data2C8398 *moby_data = m->data;
-    float dist;
+    float target_distance;
 
-    FUN_L00_0025fcb8(m, &tgt, moby_data->f270);
-    dist = vector_distance(m->pos, &tgt);
+    FUN_L00_0025fcb8(m, &selected_target, moby_data->f270);
+    target_distance = vector_distance(m->pos, &selected_target);
     FUN_L00_00263b38(&moby_data->look0, 2.5f);
     if (moby_data->b262 == 1) {
         if ((visited52)[m->bB0 + (current_level_index << 4)] == 0xFF) {
@@ -2323,13 +2323,13 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
     }
     FUN_L00_001fefc8_cf(m);
     fast_subtract_rotations_cf(&moby_data->b263);
-    if (m->b31 != 0 || dist < 24.0f) {
+    if (m->b31 != 0 || target_distance < 24.0f) {
         if (m->state == 0xC) {
             moby_data->look0.f68 = FUN_001f9e90_cf(moby_data->f28C, m->rot[2]) * 0.25f;
             moby_data->look1.f68 = FUN_001f9e90_cf(moby_data->f28C, m->rot[2]) * 0.75f;
-        } else if (m->state < 7 && dist < moby_data->f270) {
+        } else if (m->state < 7 && target_distance < moby_data->f270) {
             moby_data->look1.f68 = FUN_001f9e90_cf(
-                FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0], tgt.pos[1] - m->pos[1]), m->rot[2]);
+                FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]), m->rot[2]);
         }
         if (moby_data->look0.f68 > 0.7853982f) {
             moby_data->look0.f68 = 0.7853982f;
@@ -2407,9 +2407,9 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             *(OvlQuad *)m->pos = *(OvlQuad *)(np + 0x10);
             m->rot[2] = FUN_L00_002628d8_cf(*(float *)(np + 0x20) - *(float *)(np + 0x10),
                                             *(float *)(np + 0x24) - *(float *)(np + 0x14));
-            if (is_point_inside_clip_volume_cf(m->b21) || absolute_float_cf(&tgt, moby_data->i29C) ||
+            if (is_point_inside_clip_volume_cf(m->b21) || absolute_float_cf(&selected_target, moby_data->i29C) ||
                 (visited52)[m->bB0 + (current_level_index << 4)] == 0xFF ||
-                (dist < moby_data->f294 && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 4.0f)) {
+                (target_distance < moby_data->f294 && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 4.0f)) {
                 moby_data->i298 = 0;
                 m->state = 9;
                 if (m->anim != 1) {
@@ -2420,14 +2420,14 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
             m->state = 2;
         } else {
-            if (dist < moby_data->f270 || dist < moby_data->f27C) {
+            if (target_distance < moby_data->f270 || target_distance < moby_data->f27C) {
                 if (FUN_001f9770_cf(
-                        FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0], tgt.pos[1] - m->pos[1]),
-                        (unsigned char *)m, (char *)&tgt)) {
+                        FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
+                        (unsigned char *)m, (char *)&selected_target)) {
                     break;
                 }
             }
-            if (dist < moby_data->f27C && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 4.0f) {
+            if (target_distance < moby_data->f27C && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 4.0f) {
                 moby_data->f27C = 0.0f;
                 moby_data->s256 = 1;
                 m->state = 8;
@@ -2435,15 +2435,15 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                     blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
                 }
             }
-            if (dist < 3.5f && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 3.0f) {
+            if (target_distance < 3.5f && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 3.0f) {
                 m->state = 6;
                 if (m->anim != 2) {
                     blend_moby_animation(m, 2, 0, FUN_L03_002c6d98_cf(10));
                 }
-            } else if (dist < moby_data->f270 && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 10.0f &&
+            } else if (target_distance < moby_data->f270 && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 10.0f &&
                        FUN_001fa688_cf(&moby_data->s250)) {
-                if (FUN_L03_002c9ca0_cf(m->rot[2], FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0],
-                                                                       tgt.pos[1] - m->pos[1])) <
+                if (FUN_L03_002c9ca0_cf(m->rot[2], FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0],
+                                                                       selected_target.pos[1] - m->pos[1])) <
                     0.7853982f) {
                     if (m->b31 != 0) {
                         m->state = 4;
@@ -2456,7 +2456,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         }
         break;
     case ENEMY_WAIT_FOR_LINKED_MOBY:
-        if (dist < moby_data->f270 && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 4.0f &&
+        if (target_distance < moby_data->f270 && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 4.0f &&
             m->anim != 0xA) {
             blend_moby_animation(m, 0xA, 0, FUN_L03_002c6d98_cf(10));
             break;
@@ -2469,8 +2469,8 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                 moby_data->s250 = FUN_L03_002c6d98_cf(0x3C);
                 moby_data->i284 = -1;
             } else {
-                FUN_001f9770_cf(FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0], tgt.pos[1] - m->pos[1]),
-                                (unsigned char *)m, (char *)&tgt);
+                FUN_001f9770_cf(FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
+                                (unsigned char *)m, (char *)&selected_target);
             }
         }
         break;
@@ -2481,12 +2481,12 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             if (m->anim != 4) {
                 blend_moby_animation(m, 4, 0, 0);
             }
-        } else if (dist < 3.5f && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 3.0f) {
+        } else if (target_distance < 3.5f && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 3.0f) {
             m->state = 6;
             if (m->anim != 2) {
                 blend_moby_animation(m, 2, 0, FUN_L03_002c6d98_cf(10));
             }
-        } else if (dist < moby_data->f278 && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 10.0f) {
+        } else if (target_distance < moby_data->f278 && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 10.0f) {
             if (moby_data->i274 != 0) {
                 Data2C8398 *d2 = m->data;
                 if (d2->pf.idx < *(int *)d2->pf.path - 1) {
@@ -2515,7 +2515,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             float df;
             moby_data->b254++;
             subtract_vector_xyz_cf(m, 0, a);
-            normalize_vector_xyz_cf(b, tgt.dir, a);
+            normalize_vector_xyz_cf(b, selected_target.dir, a);
             fast_add_rotations_cf(b, b, frame_time * 6.0f);
             b[2] *= 0.5f;
             ang = FUN_L00_002628d8_cf(b[0], b[1]);
@@ -2541,41 +2541,41 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             if (moby_data->b254 == 0) {
                 break;
             }
-            if (dist < moby_data->f27C && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 4.0f) {
+            if (target_distance < moby_data->f27C && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 4.0f) {
                 moby_data->f27C = 0.0f;
                 m->state = 8;
                 if (m->anim != 1) {
                     blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
                 }
             }
-            if (FUN_001f9770_cf(FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0], tgt.pos[1] - m->pos[1]),
-                                (unsigned char *)m, (char *)&tgt)) {
+            if (FUN_001f9770_cf(FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
+                                (unsigned char *)m, (char *)&selected_target)) {
                 break;
             }
-            if (dist < moby_data->f270 && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 10.0f &&
+            if (target_distance < moby_data->f270 && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 10.0f &&
                 FUN_001fa688_cf(&moby_data->s250) &&
-                FUN_L03_002c9ca0_cf(m->rot[2], FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0],
-                                                                   tgt.pos[1] - m->pos[1])) <
+                FUN_L03_002c9ca0_cf(m->rot[2], FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0],
+                                                                   selected_target.pos[1] - m->pos[1])) <
                     0.08726646f &&
                 m->b31 != 0) {
                 break;
             }
-            if (dist < 3.5f && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 3.0f) {
+            if (target_distance < 3.5f && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 3.0f) {
                 m->state = 6;
                 if (m->anim != 2) {
                     blend_moby_animation(m, 2, 0, FUN_L03_002c6d98_cf(10));
                 }
             }
-        } else if (dist < 3.5f && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 3.0f) {
-            if (FUN_001f9770_cf(FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0], tgt.pos[1] - m->pos[1]),
-                                (unsigned char *)m, (char *)&tgt)) {
+        } else if (target_distance < 3.5f && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 3.0f) {
+            if (FUN_001f9770_cf(FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
+                                (unsigned char *)m, (char *)&selected_target)) {
                 break;
             }
             m->state = 6;
             if (m->anim != 2) {
                 blend_moby_animation(m, 2, 0, FUN_L03_002c6d98_cf(10));
             }
-        } else if (dist < moby_data->f278 && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 10.0f) {
+        } else if (target_distance < moby_data->f278 && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 10.0f) {
             if (moby_data->i274 != 0) {
                 Data2C8398 *d2 = m->data;
                 if (d2->pf.idx < *(int *)d2->pf.path - 1) {
@@ -2602,13 +2602,13 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             float fr;
             float ang;
             fr = FUN_L00_00258278_cf(m);
-            ang = FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0], tgt.pos[1] - m->pos[1]);
+            ang = FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]);
             FUN_001f9c48_cf((char *)m, &moby_data->f258, ang, 0.03f, 0.3f, 0.3f);
             subtract_vector_xyz_cf(m, 0, v);
-            if (25.0f <= fr && fr <= 31.0f && FUN_L03_002c6e18_cf(m->pos[2] - tgt.pos[2]) < 2.0f &&
-                vector_distance(m->pos, &tgt) < 3.5f &&
+            if (25.0f <= fr && fr <= 31.0f && FUN_L03_002c6e18_cf(m->pos[2] - selected_target.pos[2]) < 2.0f &&
+                vector_distance(m->pos, &selected_target) < 3.5f &&
                 FUN_L03_002c9ca0_cf(
-                    FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0], tgt.pos[1] - m->pos[1]),
+                    FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
                     m->rot[2]) < 0.2617994f) {
                 hit.m = m;
                 hit.flags = 0x10001;
@@ -2622,8 +2622,8 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                 hit.b0 = 0;
                 hit.b1 = 1;
                 hit.id = m->cls;
-                if (tgt.obj != 0) {
-                    FUN_L00_00259028_cf(tgt.obj, &hit);
+                if (selected_target.obj != 0) {
+                    FUN_L00_00259028_cf(selected_target.obj, &hit);
                 }
             } else if (m->b70 & 2) {
                 if (moby_data->i274 != 0) {
@@ -2640,8 +2640,8 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                             blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
                         }
                         FUN_001f9770_cf(
-                            FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0], tgt.pos[1] - m->pos[1]),
-                            (unsigned char *)m, (char *)&tgt);
+                            FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
+                            (unsigned char *)m, (char *)&selected_target);
                     }
                 } else {
                     is_value_within_interpolated_window_cf(m);
@@ -2664,7 +2664,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             int path_node_byte_offset = pf->idx * 0x10;
             if (FUN_001f9770_cf(FUN_L00_002628d8_cf(*(float *)(pf->path + path_node_byte_offset + 0x10) - m->pos[0],
                                                     *(float *)(pf->path + path_node_byte_offset + 0x14) - m->pos[1]),
-                                (unsigned char *)m, (char *)&tgt)) {
+                                (unsigned char *)m, (char *)&selected_target)) {
                 break;
             }
         }
@@ -2673,7 +2673,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
               0x14)) {
             break;
         }
-        if (dist < moby_data->f278 && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 10.0f) {
+        if (target_distance < moby_data->f278 && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 10.0f) {
             if (moby_data->i274 != 0) {
                 Data2C8398 *d2 = m->data;
                 if (d2->pf.idx < *(int *)d2->pf.path - 1) {
@@ -2688,8 +2688,8 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                         blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
                     }
                     FUN_001f9770_cf(
-                        FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0], tgt.pos[1] - m->pos[1]),
-                        (unsigned char *)m, (char *)&tgt);
+                        FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
+                        (unsigned char *)m, (char *)&selected_target);
                 }
             } else {
                 is_value_within_interpolated_window_cf(m);
@@ -2703,8 +2703,8 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             if (m->anim != 0) {
                 blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
             }
-            FUN_001f9770_cf(FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0], tgt.pos[1] - m->pos[1]),
-                            (unsigned char *)m, (char *)&tgt);
+            FUN_001f9770_cf(FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
+                            (unsigned char *)m, (char *)&selected_target);
         }
         break;
     }
@@ -2730,8 +2730,8 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                 if (m->anim != 0) {
                     blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
                 }
-                FUN_001f9770_cf(FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0], tgt.pos[1] - m->pos[1]),
-                                (unsigned char *)m, (char *)&tgt);
+                FUN_001f9770_cf(FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
+                                (unsigned char *)m, (char *)&selected_target);
             }
         }
         break;
@@ -2764,8 +2764,8 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                     m->state = 2;
                 } else {
                     FUN_001f9770_cf(
-                        FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0], tgt.pos[1] - m->pos[1]),
-                        (unsigned char *)m, (char *)&tgt);
+                        FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
+                        (unsigned char *)m, (char *)&selected_target);
                 }
             }
         }
@@ -2796,8 +2796,8 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                         blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
                     }
                     FUN_001f9770_cf(
-                        FUN_L00_002628d8_cf(tgt.pos[0] - m->pos[0], tgt.pos[1] - m->pos[1]),
-                        (unsigned char *)m, (char *)&tgt);
+                        FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
+                        (unsigned char *)m, (char *)&selected_target);
                 }
             } else {
                 is_value_within_interpolated_window_cf(m);
