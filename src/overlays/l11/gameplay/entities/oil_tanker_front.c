@@ -931,7 +931,9 @@ extern char *func_L11_0031C210_5(void *, void *, void *, int, float) __asm__("FU
 extern void *func_L00_00265050_s(char *, int, void *, void *, int, int, float *, float *, float,
                                  float *) __asm__("FUN_L00_00263fd8");
 
-void FUN_L11_003181f0(struct Moby *moby) {
+void update_oil_tanker_link_effects_and_destruction(struct Moby *moby) __asm__("FUN_L11_003181f0");
+
+void update_oil_tanker_link_effects_and_destruction(struct Moby *moby) {
     enum {
         TANKER_LINK_EMIT_EFFECT_AND_SAVE_POSITION = 0,
         TANKER_LINK_BURST_AND_HIDE = 1
