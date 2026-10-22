@@ -1594,7 +1594,9 @@ extern void FUN_L00_0024efb0(unsigned char *, int, int);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int func_001FA898_d(float) __asm__("FUN_001fa6d0");
 
-void FUN_L13_002f8a78(char *moby) {
+void update_controller_linked_gate(char *moby) __asm__("FUN_L13_002f8a78");
+
+void update_controller_linked_gate(char *moby) {
     enum {
         GATE_STATE_INITIALIZE = 0,
         GATE_STATE_OPEN = 1,
