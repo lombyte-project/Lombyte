@@ -10,7 +10,9 @@ void do_sky_gif_paging(void) __asm__("FUN_0022b558");
 void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-void FUN_L07_00265b58(void) {
+void draw_sky_with_gif_paging(void) __asm__("FUN_L07_00265b58");
+
+void draw_sky_with_gif_paging(void) {
     setup_sky_gif_paging();
     if (current_level_index == 0x7) {
         FUN_L00_0028a208();
