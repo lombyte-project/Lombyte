@@ -723,7 +723,9 @@ extern int func_001FA8A8_239918(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_001F6EA8_239918(int, int, int, int, int) __asm__("FUN_001f6af0");
 extern int func_L00_00236400_239918(void *, int *, int *) __asm__("FUN_L00_00235a70");
 
-int FUN_L00_00238f88(Elem_239918 *element) {
+int draw_hud_radial_selector_panel(Elem_239918 *element) __asm__("FUN_L00_00238f88");
+
+int draw_hud_radial_selector_panel(Elem_239918 *element) {
     Ids_239918 text_ids;
     int x, y;
     int frame_alpha, pulse_alpha, half_width, half_height, i, alpha, selected, text_y, color, shadow, text;
