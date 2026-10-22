@@ -2895,7 +2895,9 @@ extern void add_vector_xyz_q(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void cross_vectors_xyz_q(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void scale_vector_xyz_q(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 
-void FUN_L01_002f5040(char *moby, float *out) {
+void apply_gunship_path_position_offsets(char *moby, float *out) __asm__("FUN_L01_002f5040");
+
+void apply_gunship_path_position_offsets(char *moby, float *out) {
     float unit_x_axis[4];
     float rotated_x_axis[4];
     float horizontal_offset[4];
@@ -3170,7 +3172,7 @@ void gunship_follow_path(struct Moby *m) {
         v->unk104 = 0;
         v->unk10C = 0;
         *(u128 *)&m->pos = v->unkE0.q;
-        FUN_L01_002f5040((char *)m, (float *)&m->pos);
+        apply_gunship_path_position_offsets((char *)m, (float *)&m->pos);
         v->unk121 = 7;
         if (6.2831855f < v->unk12C) {
             v->unk12C = v->unk12C * 0.017453292f;
@@ -3289,7 +3291,7 @@ void gunship_follow_path(struct Moby *m) {
     v->unkF0 += f24;
     *(u128 *)&m->pos = v->unkE0.q;
     if (!frozen)
-        FUN_L01_002f5040((char *)m, (float *)&m->pos);
+        apply_gunship_path_position_offsets((char *)m, (float *)&m->pos);
     if (v->unk120 & 0x1F) {
         s32 n2 = 0;
         s32 i;
