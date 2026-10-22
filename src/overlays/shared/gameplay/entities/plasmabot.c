@@ -1511,7 +1511,7 @@ unsigned char *FUN_L14_002dea98(char *owner, char *pos) {
     }
     return spawned_moby;
 }
-extern void FUN_L14_002e03b8(struct Moby *);
+extern void emit_debris_trail_particles(struct Moby *) __asm__("FUN_L14_002e03b8");
 extern s32 D_001413D0_dfd10 __asm__("D_001413D0") __attribute__((section(".data")));
 extern s32 tick_countdown_dfd10(s32 *) __asm__("FUN_001f9740");
 extern f32 fabsf_dfd10(f32) __asm__("FUN_001f99c0");
@@ -1571,7 +1571,7 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
         subtract_vector_xyz_dfd10(position_offset, &moby->pos, &probe);
         data->offset_x = position_offset[0];
         data->offset_y = position_offset[1];
-        FUN_L14_002e03b8(moby);
+        emit_debris_trail_particles(moby);
         if (tick_countdown_dfd10(&data->timer) == 0)
             return;
         normalize_vector_xyz_dfd10(position_offset, position_offset, 0.5f);
@@ -1613,7 +1613,7 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
         return;
     }
     if (random_integer_below_dfd10(2) != 0)
-        FUN_L14_002e03b8(moby);
+        emit_debris_trail_particles(moby);
 }
 extern unsigned char *spawn_moby_2e0170(int) __asm__("FUN_0020c4f8");
 extern int scale_game_frames_2e0170(int) __asm__("FUN_001f96f8");
@@ -1767,7 +1767,7 @@ extern int func_L00_00258BC8_2E17B8(int, int) __asm__("FUN_L00_00257b90");
 extern void func_L00_0026DA50_2E17B8(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern Particle_2E17B8 *func_L00_0026DEA0_2E17B8(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
-void FUN_L14_002e03b8(Moby *moby) {
+void emit_debris_trail_particles(Moby *moby) {
     Vec4_2E17B8 pos;
     Vec4_2E17B8 emission_axis_offset;
     Vec4_2E17B8 particle_initial_velocity;
