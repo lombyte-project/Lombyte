@@ -1782,7 +1782,9 @@ extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18(int);
-extern void FUN_L13_0030ad38(struct Moby *, float *, float *);
+void compute_lift_mount_transform(struct Moby *moby, float *mount_position, float *mount_rotation) __asm__("FUN_L13_0030ad38");
+
+extern void compute_lift_mount_transform(struct Moby *, float *, float *) __asm__("FUN_L13_0030ad38");
 
 void update_lift(struct Moby *moby) __asm__("FUN_L13_0030a6d8");
 
@@ -1820,7 +1822,7 @@ void update_lift(struct Moby *moby) {
         if (vars->blend < 1.0f) {
             float remaining_blend_ratio = (1.0f - vars->blend) / (1.0f - old);
             char *base;
-            FUN_L13_0030ad38(moby, mount_transform_work, mount_rotation);
+            compute_lift_mount_transform(moby, mount_transform_work, mount_rotation);
             subtract_vector_xyz(mount_position_work, D_L13_001670C0, mount_transform_work);
             base = D_L13_001670C0 - 0x140;
             scale_vector_xyz(mount_position_work, mount_position_work, remaining_blend_ratio);
@@ -1842,7 +1844,7 @@ void update_lift(struct Moby *moby) {
         if (!voice_is_playing(moby, vars->voice))
             vars->voice = allocate_voice(0, 4, moby);
         if (moby->command != 0) {
-            FUN_L13_0030ad38(moby, mount_position_work, mount_transform_work);
+            compute_lift_mount_transform(moby, mount_position_work, mount_transform_work);
             FUN_L00_002ea9d8(mount_position_work);
             FUN_L00_002eaa30(mount_transform_work);
         }
@@ -1929,7 +1931,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-void FUN_L13_0030ad38(struct Moby *moby, float *mount_position, float *mount_rotation) {
+void compute_lift_mount_transform(struct Moby *moby, float *mount_position, float *mount_rotation) {
     float mount_offset_angle, k;
     char *base;
     clear_u64_value(mount_rotation);
