@@ -3207,8 +3207,10 @@ void FUN_L14_002d67e8(struct Moby *m);
 void advance_moby_along_path(struct Moby *m) __asm__("FUN_L14_002d7198");
 void update_moby_joint_visual_effects(struct Moby *m) __asm__("FUN_L14_002d7490");
 
-void FUN_L14_002d5f40(struct Moby *m);
-void FUN_L14_002d5f40(struct Moby *racer_moby) {
+void update_level14_racer(struct Moby *racer_moby) __asm__("FUN_L14_002d5f40");
+
+void update_level14_racer(struct Moby *m) __asm__("FUN_L14_002d5f40");
+void update_level14_racer(struct Moby *racer_moby) {
     enum {
         RACER_STATE_INITIALIZE = 0,
         RACER_STATE_WAIT_FOR_RACE_START = 1,
