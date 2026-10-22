@@ -12,7 +12,9 @@ extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 extern short D_L13_001B0B30[] __attribute__((section(".data")));
 extern char *D_L13_001D1E90[] __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
-int FUN_L13_0026bd00(char *source_object, char *selection_output, float best) {
+int select_robosquawker_target(char *source_object, char *selection_output, float best) __asm__("FUN_L13_0026bd00");
+
+int select_robosquawker_target(char *source_object, char *selection_output, float best) {
     struct Hero *hero = &hero_lui;
     char *selected_object;
     char *candidate_object;

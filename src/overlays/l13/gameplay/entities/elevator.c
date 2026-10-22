@@ -1129,7 +1129,7 @@ extern int FUN_L01_0026e008(int, int);
 extern int FUN_L01_0028b510(void *, void *, float);
 extern int FUN_L01_0028b5e0(void *, void *, void *, void *);
 extern int reserve_expired_frame_slot(int *, int, int) __asm__("FUN_L01_002efbf8");
-extern int FUN_L13_0026bd00(void *, void *, float);
+extern int select_robosquawker_target(void *, void *, float) __asm__("FUN_L13_0026bd00");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 rand(void);
@@ -1213,7 +1213,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
     }
     robosquawker_moby->w94 = *(int *)(robosquawker_moby->w24 + 0x10);
     robosquawker_moby->h34 &= 0xFFBE;
-    FUN_L13_0026bd00(robosquawker_moby, &selected_target_record, robosquawker_vars->f1FC + 4.0f);
+    select_robosquawker_target(robosquawker_moby, &selected_target_record, robosquawker_vars->f1FC + 4.0f);
     tm = selected_target_record.moby;
     if (tm == 0 || (robosquawker_vars->h214 == 0 && robosquawker_vars->w22C != -1 && is_point_inside_clip_volume(&selected_target_record, robosquawker_vars->w22C) == 0)) {
         selected_target_record.moby = 0;
