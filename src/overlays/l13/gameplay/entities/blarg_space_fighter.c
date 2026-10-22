@@ -2896,7 +2896,9 @@ extern float D_0015ED60_9408 __asm__("D_0015ED60");
 extern float dist_9408(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_L13_002e9160_c(char *, char *, int, int) __asm__("FUN_L13_002e9160");
 
-int FUN_L13_002e9408(struct Moby *moby, char *path_following_data, int path_slot_index, int aim) {
+int update_moby_path_following_away_from_hero(struct Moby *moby, char *path_following_data, int path_slot_index, int aim) __asm__("FUN_L13_002e9408");
+
+int update_moby_path_following_away_from_hero(struct Moby *moby, char *path_following_data, int path_slot_index, int aim) {
     char *path = D_L13_001B07B0_9408[*(int *)(&path_following_data[path_slot_index << 2] + 0xB0)];
     int result_flags = 0;
     float ahead[4];

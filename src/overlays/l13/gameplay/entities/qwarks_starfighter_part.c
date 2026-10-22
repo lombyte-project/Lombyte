@@ -468,7 +468,7 @@ extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int FUN_L00_0023e738(float *, float, float, float, float, float);
 extern int FUN_L01_0028b510(void *, void *, float);
 extern int FUN_L13_002e9160(void *, void *, int, int);
-extern int FUN_L13_002e9408(void *, void *, int, int);
+extern int update_moby_path_following_away_from_hero(void *, void *, int, int) __asm__("FUN_L13_002e9408");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern int continue_audio_stream_if_ready_alt(void) __asm__("FUN_00215b10");
 extern int queue_animation_update_alt(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
@@ -663,7 +663,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
         }
         FUN_L13_002eac00_c(moby, data);
-        if (FUN_L13_002e9408(moby, data, data->b13B, 1) & 2) {
+        if (update_moby_path_following_away_from_hero(moby, data, data->b13B, 1) & 2) {
             if (data->b13B != D_L13_001D3448[moby->bBC]) {
                 data->b13B = D_L13_001D3448[moby->bBC];
                 data->s9C = FUN_L01_0028b510(moby->pos, walker_paths[data->paths[D_L13_001D3448[moby->bBC]]], 0.0f);
