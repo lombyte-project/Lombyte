@@ -532,7 +532,9 @@ float FUN_001fa580_0026a6f0(float, float) __asm__("FUN_001fa580");
 int FUN_001fa6d0_0026a6f0(float) __asm__("FUN_001fa6d0");
 int FUN_001f96f8_0026a6f0(int) __asm__("FUN_001f96f8");
 extern int D_L00_001601A4 __attribute__((sda));
-void FUN_L00_0026a6f0(unsigned char *particle) {
+void update_rotating_grayscale_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026a6f0");
+
+void update_rotating_grayscale_effect_particle(unsigned char *particle) {
     int *particle_data = (int *)(particle + 0x20);
     int faded_alpha;
     if (FUN_001f9740_0026a6f0(particle_data)) {

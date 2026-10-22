@@ -15,7 +15,7 @@ extern void update_scalar_and_fade_effect_particle(void) __asm__("FUN_L00_00269c
 extern void FUN_L00_00269d20(void);
 extern void FUN_L00_0026a418(void);
 extern void update_animated_fading_effect_particle(void) __asm__("FUN_L00_0026a5b8");
-extern void FUN_L00_0026a6f0(void);
+extern void update_rotating_grayscale_effect_particle(void) __asm__("FUN_L00_0026a6f0");
 extern void update_damped_blue_shift_effect_particle(void) __asm__("FUN_L00_0026a880");
 extern void FUN_L00_0026ac78(void);
 extern void FUN_L00_0026b500(void);
@@ -104,7 +104,7 @@ void register_part_types(void) {
     handlers[6] = (u32)FUN_L00_00269d20;
     handlers[7] = (u32)FUN_L00_0026a418;
     handlers[8] = (u32)update_animated_fading_effect_particle;
-    handlers[9] = (u32)FUN_L00_0026a6f0;
+    handlers[9] = (u32)update_rotating_grayscale_effect_particle;
     handlers[10] = (u32)update_damped_blue_shift_effect_particle;
     handlers[11] = (u32)FUN_L00_0026ac78;
     handlers[12] = (u32)FUN_L00_0026b500;
