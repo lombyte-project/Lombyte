@@ -27,7 +27,9 @@ extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L14_0021dd30(void) {
+void resolve_hero_surface_reactions(void) __asm__("FUN_L14_0021dd30");
+
+void resolve_hero_surface_reactions(void) {
     struct Hero *hero_ptr;
     struct Hero *hero_data = &hero;
     int keep = hero_data->unk12ED;
