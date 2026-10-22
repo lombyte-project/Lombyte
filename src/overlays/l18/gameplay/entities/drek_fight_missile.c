@@ -1522,7 +1522,7 @@ extern void refresh_moby_position_and_activate(unsigned char *arg, void *src, vo
 void count_drek_boss_platform_event_once(struct Moby *moby) __asm__("FUN_L18_002f5e18");
 
 extern void count_drek_boss_platform_event_once(struct Moby *moby) __asm__("FUN_L18_002f5e18");
-extern void FUN_L18_002f5e80(char *moby);
+extern void update_drek_boss_damage_and_phase_transitions(char *moby) __asm__("FUN_L18_002f5e80");
 void update_drek_boss_hero_follow_movement(struct Moby *moby) __asm__("FUN_L18_002f6960");
 
 extern void update_drek_boss_hero_follow_movement(struct Moby *m) __asm__("FUN_L18_002f6960");
@@ -1613,7 +1613,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     float fast;
 
     count_drek_boss_platform_event_once((char *)moby);
-    FUN_L18_002f5e80((char *)moby);
+    update_drek_boss_damage_and_phase_transitions((char *)moby);
     aim_target_moby = boss_data->fB0;
     /* The file defines this one without parameters; retail passes the moby. */
     attach_drek_boss_big_head_manipulator((char *)moby);
@@ -2724,7 +2724,7 @@ extern short D_L18_00162330 __attribute__((sda));
 extern int D_L18_00162388 __attribute__((sda));
 extern int D_L18_0016238C __attribute__((sda));
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F72E0) */
-void FUN_L18_002f5e80(char *moby) {
+void update_drek_boss_damage_and_phase_transitions(char *moby) {
     char *boss_data = *(char **)(moby + 0x78);
     int hit_processing_status;
     float step;
