@@ -1263,7 +1263,9 @@ extern H_002da660 item_text_variant __asm__("D_0013E520") __attribute__((section
 u8 *FUN_L00_002db890_002da660(u8 *) __asm__("FUN_L00_002db890");
 void FUN_001e93b0_002da660(void *, s32, s32) __asm__("FUN_001e93b0");
 extern char D_L00_001E9FE8[] __attribute__((section(".data")));
-void FUN_L00_002da660(void) {
+void refresh_suck_cannon_slots(void) __asm__("FUN_L00_002da660");
+
+void refresh_suck_cannon_slots(void) {
     s32 i;
     D_0013F350_002da660.i207C = 0;
     D_0013F350_002da660.i2078 = 0;
@@ -1421,7 +1423,7 @@ extern void FUN_L00_00237840(void);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_002d9fd0(char *,char *,void *);
 extern void FUN_L00_002da360(u8 *,void *);
-extern void FUN_L00_002da660(void);
+extern void refresh_suck_cannon_slots(void) __asm__("FUN_L00_002da660");
 extern void FUN_L00_002defe0(int);
 extern void FUN_L00_002df048(int);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1469,7 +1471,7 @@ void suckcannon_update(SuckMoby *self) {
     cannon = self->data;
     slot_released = suck_hero.slot_state == 3;
     if ((u8)self->state != 3 && (u8)self->state != 0) FUN_L00_002defe0((int)self);
-    FUN_L00_002da660();
+    refresh_suck_cannon_slots();
     switch ((u8)self->state) {
     case SUCKCANNON_STATE_INITIALIZE:
         for (i=0; i<(suck_item_variant.gold == 0 ? 5 : 10); ++i) {
