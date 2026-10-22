@@ -18,7 +18,9 @@ extern int scale_game_frames_83b0(int) __asm__("FUN_001f96f8");
 extern int FUN_L01_0026e008(int, int);
 
 /* Level 6 help hints: shows the help messages for the area and records how often and when each was due. */
-void FUN_L06_003083b0(struct Moby *moby) {
+void update_level06_help_hints(struct Moby *moby) __asm__("FUN_L06_003083b0");
+
+void update_level06_help_hints(struct Moby *moby) {
     int *vars = (int *)moby->pvars;
     struct Moby *indexed_moby;
     int i;
