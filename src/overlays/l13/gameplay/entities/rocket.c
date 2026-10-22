@@ -103,8 +103,10 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) L13Vector_5a58;
 
-void FUN_L13_00305a58(struct Moby *moby);
-void FUN_L13_00305a58(struct Moby *moby) {
+void update_attached_rocket(struct Moby *moby) __asm__("FUN_L13_00305a58");
+
+void update_attached_rocket(struct Moby *moby) __asm__("FUN_L13_00305a58");
+void update_attached_rocket(struct Moby *moby) {
     extern struct { char pad[0x18]; struct Moby *moby; int pad1; L13Vector_5a58 pos; L13Vector_5a58 pad2; L13Vector_5a58 matrix; } D_L13_00174140;
     extern int D_L13_0015F580;
     char *data = (char *)moby->pvars;
