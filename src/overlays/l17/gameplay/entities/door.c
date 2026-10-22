@@ -1243,7 +1243,9 @@ extern void vu_euler_rotation_basis(void *, void *);
 float absolute_float(float input) __asm__("func_001F99C0");
 void update_fighter_jet_aim_and_fire_projectile(char *moby, char *obj, float p2, float p3) __asm__("FUN_L17_002ec000");
 void try_fire_fighter_jet_rocket(char *moby, char *obj) __asm__("FUN_L17_002ec150");
-void FUN_L17_002edf10(char *moby, float *a, float *b);
+void adjust_fighter_jet_steering_for_flight_bounds(char *moby, float *horizontal_steering_input, float *vertical_steering_input) __asm__("FUN_L17_002edf10");
+
+void adjust_fighter_jet_steering_for_flight_bounds(char *moby, float *a, float *b) __asm__("FUN_L17_002edf10");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern char D_0013C940[];
@@ -1353,7 +1355,7 @@ void FUN_L17_002ec360(Moby *ship_moby, Obj *ship_vars) {
             ka = D_L17_001620B8;
             kb = D_L17_001620C8;
         }
-        FUN_L17_002edf10((char *)ship_moby, &horizontal_steering_input, &vertical_steering_input);
+        adjust_fighter_jet_steering_for_flight_bounds((char *)ship_moby, &horizontal_steering_input, &vertical_steering_input);
         vendor_spring(&ship_vars->f6C, &ship_vars->f90, horizontal_steering_input, D_L17_001620AC, D_L17_001620B0, ka);
         vendor_spring(&ship_vars->f70, &ship_vars->f94, vertical_steering_input, D_L17_001620BC, D_L17_001620C0, kb);
         FUN_L00_0025bc98((char *)&ship_vars->f30, (char *)&ship_vars->f98, 0, ship_vars->f6C * D_L17_0016208C,
@@ -2057,7 +2059,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L17_002edf10(char *moby, float *horizontal_steering_input, float *vertical_steering_input) {
+void adjust_fighter_jet_steering_for_flight_bounds(char *moby, float *horizontal_steering_input, float *vertical_steering_input) {
     char *ship_vars = *(char **)(moby + 0x78);
     float v[4];
     float zz, predicted_horizontal_distance_from_boundary_center, horizontal_boundary_radius, hi, lo, inward_heading, upper_height_limit, k, horizontal_boundary_blend_factor, heading_error;
