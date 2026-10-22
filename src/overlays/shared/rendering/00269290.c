@@ -98,7 +98,9 @@ extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 float absolute_float(float input) __asm__("FUN_001f99c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
-void FUN_L00_002694f8(char *particle) {
+void update_drifting_effect_particle_with_distance_fade(char *particle) __asm__("FUN_L00_002694f8");
+
+void update_drifting_effect_particle_with_distance_fade(char *particle) {
     char *particle_data = particle + 0x20;
     float position_scratch[4];
     float reference_distance, reference_angle_delta;
