@@ -3557,7 +3557,9 @@ typedef struct {
     unsigned short flags;
 } Level18VendorMobyShort;
 
-void FUN_L18_002f7ab0(Level18VendorMobyShort *moby) {
+void initialize_moby_state_and_flags(Level18VendorMobyShort *moby) __asm__("FUN_L18_002f7ab0");
+
+void initialize_moby_state_and_flags(Level18VendorMobyShort *moby) {
     if (moby->state == 0) {
         moby->state = 1;
         moby->flags |= 3;
