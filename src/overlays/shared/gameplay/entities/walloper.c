@@ -705,7 +705,9 @@ typedef struct {
     float fC;
 } V_2bb400;
 
-void FUN_L00_002bb400(unsigned char *moby) {
+void update_linked_moby_scale_and_rotation(unsigned char *moby) __asm__("FUN_L00_002bb400");
+
+void update_linked_moby_scale_and_rotation(unsigned char *moby) {
     V_2bb400 *moby_vars = *(V_2bb400 **)(moby + 0x78);
     unsigned char *o = moby_vars->o;
     int old, unwrapped_angle, angle_delta;
