@@ -1779,7 +1779,7 @@ extern int D_L18_00161C3C __attribute__((sda));
 extern int D_L18_00161C40 __attribute__((sda));
 extern int D_L18_00161C44 __attribute__((sda));
 extern void jet_animate(unsigned char *m, float s) __asm__("FUN_L00_00259fe8");
-extern void FUN_L18_002dba20();
+extern void draw_expanding_projectile_ring() __asm__("FUN_L18_002dba20");
 void process_expanding_ring_collisions(struct Moby *moby) __asm__("FUN_L18_002dbe80");
 
 void process_expanding_ring_collisions(struct Moby *moby) __asm__("FUN_L18_002dbe80");
@@ -1882,7 +1882,7 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
     case STATE_EXPANDING_RING:
         moby_vars[9] = moby_vars[9] + moby_vars[8];
         process_expanding_ring_collisions(moby);
-        enqueue_callback_list_1(FUN_L18_002dba20, moby);
+        enqueue_callback_list_1(draw_expanding_projectile_ring, moby);
         if (moby_vars[9] > moby_vars[10]) {
             moby->state = 3;
         }
@@ -1971,7 +1971,7 @@ extern float D_L18_00161C70 __attribute__((sda));
 extern float D_L18_00161C74 __attribute__((sda));
 extern float D_L18_00161C78 __attribute__((sda));
 extern float D_L18_00161C7C __attribute__((sda));
-void FUN_L18_002dba20(M_dba20 *moby) {
+void draw_expanding_projectile_ring(M_dba20 *moby) {
     Q_dba20 quad_packets[4];
     V_dba20 draw_matrix[4];
     V_dba20 segment_rotation_basis[3];
