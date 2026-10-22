@@ -605,7 +605,9 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-float FUN_L08_002f5d98(float x, char *sample_ring_data) {
+float interpolate_sample_ring(float x, char *sample_ring_data) __asm__("FUN_L08_002f5d98");
+
+float interpolate_sample_ring(float x, char *sample_ring_data) {
     float sample_position = x * 8.0f;
     int i = func_001FA898_r(sample_position);
     float fr = sample_position - convert_integer_to_float(i);
@@ -816,7 +818,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
             next_b = phase_b + step_b;
             subtract_vector_xyz(&across, &edge[1], &edge[0]);
             fast_vec_scale(&across, &across, inv_x);
-            noise_y = FUN_L08_002f5d98(y, (char *)d);
+            noise_y = interpolate_sample_ring(y, (char *)d);
             k = i * stride;
             weight = (f32 *)((char *)grid + k + 12);
             for (j = 0; j <= b[8]; j++) {
@@ -827,7 +829,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
                 c = fast_sin(a);
                 t = f[0x16] * c;
                 base = time * phase + t;
-                noise_x = FUN_L08_002f5d98(x, (char *)d);
+                noise_x = interpolate_sample_ring(x, (char *)d);
                 base = base + (noise_x * f[0x34] + noise_y * f[0x35] + bend * f[0x36]);
                 shape = height_a * x + height_b * (1.0f-x);
                 a = normalize_angle(base + phase_a + f[0xb] * x + f[0xd] * y);
