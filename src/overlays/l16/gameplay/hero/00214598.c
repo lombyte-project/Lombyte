@@ -172,7 +172,7 @@ extern s32 FUN_L00_001ff600(f32, void *, void *);
 extern void FUN_L00_00227d40(void);
 extern f32 FUN_L00_00232b90(f32, f32, f32);
 extern void FUN_L05_00237488(void *, void *, f32);
-extern void FUN_L00_00211cf8(f32, f32, f32);
+extern void apply_hero_rotation_offset(f32, f32, f32) __asm__("FUN_L00_00211cf8");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
 extern void compose_and_limit_hero_velocity(void) __asm__("FUN_L16_0020f8b0");
 extern void FUN_L05_00254358(void *, void *);
@@ -956,7 +956,7 @@ void FUN_L16_00214598(void) {
         }
         FUN_L05_00237488(&v10, &hero.unk8D0, frame_scale_sq * 0.1f);
         if (hero.unk88E != 0) {
-            FUN_L00_00211cf8(0.0f, 0.0f, v10.f[0] * (frame_time * 6.2831855f));
+            apply_hero_rotation_offset(0.0f, 0.0f, v10.f[0] * (frame_time * 6.2831855f));
         } else if (fast_dec_timer_s16(&hero.unk886) == 0) {
             qcopy(&hero.motion.unk170, &hero.unk750);
             turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.3f, frame_time * 6.981317f);

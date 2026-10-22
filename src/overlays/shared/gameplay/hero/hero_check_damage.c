@@ -2847,7 +2847,9 @@ extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_00214598(void *, void *);
 
 /* Multiplies the 001fa050 matrices of (x, y, z) and of hero.unk40, stored back by 00214598. */
-void FUN_L00_00211cf8(float x, float y, float z) {
+void apply_hero_rotation_offset(float x, float y, float z) __asm__("FUN_L00_00211cf8");
+
+void apply_hero_rotation_offset(float x, float y, float z) {
     float in[3];
     float input_rotation_matrix[16], hero_rotation_matrix[16];
     in[0] = x;
@@ -2861,7 +2863,7 @@ void FUN_L00_00211cf8(float x, float y, float z) {
 typedef float V4_211d78[4] __attribute__((aligned(16)));
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-void FUN_L00_00211cf8(float, float, float);
+void apply_hero_rotation_offset(float, float, float) __asm__("FUN_L00_00211cf8");
 extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
 void turn_hero_toward_transformed_move_direction(int rotation_direction, float x, float y, float z) __asm__("FUN_L00_00211d78");
 
@@ -2874,7 +2876,7 @@ void turn_hero_toward_transformed_move_direction(int rotation_direction, float x
     transformed_direction_angle = fast_arc_tan(transformed_direction[0], transformed_direction[1]);
     out = zero;
     hero.motion.unk188 = FUN_L00_0025bc98((char *)&out, (char *)&hero.motion.unk184, rotation_direction, transformed_direction_angle, x, y, z);
-    FUN_L00_00211cf8(zero, zero, out);
+    apply_hero_rotation_offset(zero, zero, out);
 }
 #define NOT_SDA
 
