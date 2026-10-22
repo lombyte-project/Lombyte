@@ -6059,7 +6059,9 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 extern float D_L06_00162090 __attribute__((sda));
 extern int GB_FRAME_gp __asm__("D_L06_0015F5CC") __attribute__((sda));
-void FUN_L06_00300df0(char *moby) {
+void update_moby_bobbing_and_motion(char *moby) __asm__("FUN_L06_00300df0");
+
+void update_moby_bobbing_and_motion(char *moby) {
     enum {
         INITIALIZE_BOBBING_HEIGHT = 0,
         UPDATE_BOBBING_HEIGHT = 1,
