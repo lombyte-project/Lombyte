@@ -1416,7 +1416,9 @@ void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9cf8_274518(void *, void *, void *) __asm__("FUN_001f9cf8");
 f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-void FUN_L00_00274518(M_274518 *particle) {
+void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) __asm__("FUN_L00_00274518");
+
+void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
     R_274518 *r = &particle->r;
     V_274518 position_offset_scratch, secondary_position_offset, rotation_angles;
     V_274518 secondary_offset_rotation_matrix[4];

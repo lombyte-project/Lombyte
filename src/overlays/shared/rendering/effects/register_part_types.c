@@ -73,7 +73,7 @@ extern void FUN_L00_00273a68(void);
 extern void FUN_L00_002738b0(void);
 extern void update_line_collision_rgb_fading_particle(void) __asm__("FUN_L00_00273ee0");
 extern void update_moving_resizing_periodic_alpha_fade_particle(void) __asm__("FUN_L00_00274308");
-extern void FUN_L00_00274518(void);
+extern void update_mode_controlled_orbiting_trail_particle(void) __asm__("FUN_L00_00274518");
 extern void update_randomized_moby_point_attached_particle(void) __asm__("FUN_L00_00274818");
 extern void update_mode_controlled_rotating_alpha_fade_particle(void) __asm__("FUN_L00_00274a70");
 extern void update_periodic_alpha_fade_particle(void) __asm__("FUN_L00_00274de0");
@@ -162,7 +162,7 @@ void register_part_types(void) {
     handlers[64] = (u32)FUN_L00_00273a68;
     handlers[65] = (u32)update_line_collision_rgb_fading_particle;
     handlers[66] = (u32)update_moving_resizing_periodic_alpha_fade_particle;
-    handlers[67] = (u32)FUN_L00_00274518;
+    handlers[67] = (u32)update_mode_controlled_orbiting_trail_particle;
     handlers[68] = (u32)update_randomized_moby_point_attached_particle;
     handlers[69] = (u32)update_mode_controlled_rotating_alpha_fade_particle;
     handlers[70] = (u32)update_periodic_alpha_fade_particle;
