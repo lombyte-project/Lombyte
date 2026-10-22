@@ -1680,7 +1680,9 @@ extern s32 fr_2a8028(s32) __asm__("FUN_001f96f8");
 extern s32 rndi_2a8028(s32, s32) __asm__("FUN_L00_00257b90");
 extern void spawn_burst(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
 extern void FUN_L00_002a7e20_c(void *, s32) __asm__("FUN_L00_002a7e20");
-void FUN_L00_002a8028(u8 *wrench_moby) {
+void spawn_wrench_impact_effects(u8 *wrench_moby) __asm__("FUN_L00_002a8028");
+
+void spawn_wrench_impact_effects(u8 *wrench_moby) {
     V2a8028 effect_direction_scratch;
     V2a8028 effect_spawn_position;
     f32 pitch;
@@ -1880,7 +1882,7 @@ int should_trigger_wrench_hit_reaction(void) __asm__("FUN_L00_002a7de0");
 void suck_draw_reticle(int a, int b, void *pos, int kind, int mode, float x, float y, float z) __asm__("FUN_L00_001edf60");
 void FUN_L00_002a7c70_c(void *m) __asm__("FUN_L00_002a7c70");
 void FUN_L00_002a7e20(float *pos, int n);
-void FUN_L00_002a8028(u8 *o);
+void spawn_wrench_impact_effects(u8 *o) __asm__("FUN_L00_002a8028");
 void process_mobies_near_returning_wrench(unsigned char *m) __asm__("FUN_L00_002a82c0");
 void scale_wrench_collision_vector_by_heading(float *v) __asm__("FUN_L00_002a8418");
 extern char D_0013CAE0[];
@@ -2009,7 +2011,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             scale_wrench_collision_vector_by_heading(work.v[2]); add_vector_xyz(work.v[1],work.v[1],work.v[2]);
             if (!sweep_hero()->attack_cooldown && FUN_001efa68(work.v[0],work.v[1],2,0,0) && collision_hit_material()) {
                 if (!collision_hit.moby || FUN_L00_0025e368((char*)collision_hit.moby)) {
-                    sweep_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(2,0,(int)wrench_moby); FUN_L00_002a8028((char*)wrench_moby);
+                    sweep_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(2,0,(int)wrench_moby); spawn_wrench_impact_effects((char*)wrench_moby);
                     if (collision_hit.moby) {
                         work.v[3][0]=fast_cos(yaw); work.v[3][1]=fast_sin(yaw); work.v[3][2]=0.0f;
                         spawn_nearby_effect(collision_hit.moby,(int)wrench_moby,0x10000,collision_hit.position,work.v[3],1.0f);
@@ -2021,7 +2023,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             allocate_voice_for_target_entry_alt(2,0,(int)wrench_moby);
             qcopy(work.v[0],wrench_hero()->sweep_end); qcopy(work.v[1],work.v[0]);
             FUN_L00_002336e8(work.v[0],work.v[0],0.7f); FUN_L00_002336e8(work.v[1],work.v[1],-0.9f);
-            if (FUN_001efa68(work.v[0],work.v[1],2,0,0)) FUN_L00_002a8028((char*)wrench_moby);
+            if (FUN_001efa68(work.v[0],work.v[1],2,0,0)) spawn_wrench_impact_effects((char*)wrench_moby);
         }
         if (active) {
             int count=1;
@@ -2034,7 +2036,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 if (should_trigger_wrench_hit_reaction()) reaction=1;
                 else if (!wrench_hero()->attack_cooldown) {
                     if (!collision_hit.moby || !collision_hit.moby->model || collision_hit.moby->model->kind!=20) {
-                        wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(get_wrench_hit_sound_variant(),0,(int)wrench_moby); FUN_L00_002a8028((char*)wrench_moby);
+                        wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(get_wrench_hit_sound_variant(),0,(int)wrench_moby); spawn_wrench_impact_effects((char*)wrench_moby);
                     }
                 }
             }
@@ -2046,7 +2048,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             if (sweep_hero()->state==20) radius=0.47f;
             if (collide_sphere(work.v[4],radius,0,sweep_hero()->moby,work.v[0]) && (!D_L00_00177F00[0] || !D_L00_00177F00[0]->model || D_L00_00177F00[0]->model->kind!=18)) {
                 if (should_trigger_wrench_hit_reaction()) reaction=1;
-                else if (!wrench_hero()->attack_cooldown) { wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(get_wrench_hit_sound_variant(),0,(int)wrench_moby); FUN_L00_002a8028((char*)wrench_moby); }
+                else if (!wrench_hero()->attack_cooldown) { wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(get_wrench_hit_sound_variant(),0,(int)wrench_moby); spawn_wrench_impact_effects((char*)wrench_moby); }
             }
         }
         if (reaction) {
@@ -2119,7 +2121,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
         if (collided || wrench_vars->collision) {
             wrench_vars->collision=0;
             if (!wrench_hero()->attack_cooldown) { wrench_vars->timer=scale_game_frames_alt(30); wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(2,0,(int)wrench_moby); }
-            if (wrench_moby->state==10) { FUN_L00_002a8028((char*)wrench_moby); wrench_vars->speed*=0.5f; wrench_moby->state=11; }
+            if (wrench_moby->state==10) { spawn_wrench_impact_effects((char*)wrench_moby); wrench_vars->speed*=0.5f; wrench_moby->state=11; }
         }
         radius=1.2f; if (wrench_moby->state==11) radius=-0.37f;
         normalize_vector_xyz(work.v[4],wrench_vars->direction,radius);
