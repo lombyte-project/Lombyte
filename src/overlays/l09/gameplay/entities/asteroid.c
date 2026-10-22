@@ -1479,7 +1479,9 @@ extern void mark_moby_for_removal_2ef9b0(void *) __asm__("FUN_0020c828");
 
 /* The heavier tumbling debris: as FUN_L09_002ef430, inside a 2..1021 box, with eight sparks; on a hit it either
    slows down or bounces off, shrinking, with a new random spin. */
-void FUN_L09_002ef9b0(struct Moby *moby) {
+void update_shrinking_tumbling_debris(struct Moby *moby) __asm__("FUN_L09_002ef9b0");
+
+void update_shrinking_tumbling_debris(struct Moby *moby) {
     float old[4];
     float spark_velocity[4];
     float random_spark_vector[4];
