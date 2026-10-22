@@ -1285,7 +1285,9 @@ void FUN_L00_001eb0b0_002eb930(void *) __asm__("FUN_L00_001eb0b0");
 extern char D_L00_001E77C0[];
 extern char D_L00_001E77D8[];
 extern char D_L00_001E77F0[];
-char *FUN_L00_002eb930(void *target_moby) {
+char *initialize_mode6_orbit_camera(void *target_moby) __asm__("FUN_L00_002eb930");
+
+char *initialize_mode6_orbit_camera(void *target_moby) {
     char *camera_record = FUN_L00_001eb1f8_002eb930(6);
     char *camera_state;
     D_L00_00166EF0_002eb930[0] = 0;

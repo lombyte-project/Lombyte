@@ -1938,7 +1938,7 @@ float FUN_001f9af0_2b58d8(void *) __asm__("FUN_001f9af0");
 int FUN_001f96f8_2b58d8(int) __asm__("FUN_001f96f8");
 void FUN_L00_002b56d0_2b58d8(void *) __asm__("FUN_L00_002b56d0");
 void FUN_L00_00250df8_2b58d8(void *) __asm__("FUN_L00_00250df8");
-int FUN_L00_002eb930_2b58d8(void *) __asm__("FUN_L00_002eb930");
+int initialize_mode6_orbit_camera(void *) __asm__("FUN_L00_002eb930");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_001f97e8_2b58d8(void *, int, int) __asm__("FUN_001f97e8");
 void FUN_0020cb10_2b58d8(void *, int, void *) __asm__("FUN_0020cb10");
@@ -1982,7 +1982,7 @@ unsigned char *FUN_L00_002b58d8(unsigned char *source_moby, V_2b58d8 *pos, float
         *(float *)(spawned_moby_vars + 0x44) = 0.4f;
         FUN_L00_002b56d0_2b58d8(spawned_moby);
         FUN_L00_00250df8_2b58d8(spawned_moby);
-        *(int *)(spawned_moby_vars + 0x14) = FUN_L00_002eb930_2b58d8(spawned_moby);
+        *(int *)(spawned_moby_vars + 0x14) = initialize_mode6_orbit_camera(spawned_moby);
         hero_set_state(0x1D, 1);
         FUN_001f97e8_2b58d8(*(void **)(spawned_moby_vars + 0x24), 0, 0x40);
         FUN_001f97e8_2b58d8(*(void **)(spawned_moby_vars + 0x28), 0, 0x40);
