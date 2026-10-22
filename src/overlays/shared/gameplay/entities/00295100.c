@@ -772,7 +772,9 @@ typedef struct {
 } Tab;
 extern s32 D_0015ED80;
 extern Tab D_00137B80;
-void FUN_L00_002995d0(s32, s32, s32);
+void prepare_movie_playback(s32 sector, s32 size, s32 language) __asm__("FUN_L00_002995d0");
+
+void prepare_movie_playback(s32, s32, s32) __asm__("FUN_L00_002995d0");
 void hero_respawn() __asm__("FUN_L00_00211250");
 void FUN_L00_00299460(s32 i) {
     s32 a, b;
@@ -790,7 +792,7 @@ void FUN_L00_00299460(s32 i) {
     if (hero_ptr->health.hp == 0) {
         hero_respawn();
     } else if (hero_ptr->unk20B1 == 0) {
-        FUN_L00_002995d0(a, b, game_language);
+        prepare_movie_playback(a, b, game_language);
     }
 }
 typedef struct {
@@ -802,7 +804,7 @@ typedef struct {
     P2_002994f8 y[5];
 } Tab_002994f8;
 extern Tab D_00137B80;
-void FUN_L00_002995d0(s32, s32, s32);
+void prepare_movie_playback(s32, s32, s32) __asm__("FUN_L00_002995d0");
 /* Passes disc table entry i at 0x1A28 (0x1A50 while D_0015ED80 is set) to FUN_L00_002995d0. */
 void queue_language_zero_movie(s32 i) __asm__("FUN_L00_002994f8");
 
@@ -817,9 +819,9 @@ void queue_language_zero_movie(s32 i) {
         a = (*(Tab_002994f8 *)&D_00137B80).x[i].a;
         b = (*(Tab_002994f8 *)&D_00137B80).x[i].b;
     }
-    FUN_L00_002995d0(a, b, 0);
+    prepare_movie_playback(a, b, 0);
 }
-void FUN_L00_002995d0(s32, s32, s32);
+void prepare_movie_playback(s32, s32, s32) __asm__("FUN_L00_002995d0");
 /* Passes movie i (the alt table while D_0015ED80 is set) and the language to FUN_L00_002995d0. */
 void queue_movie_with_game_language(s32 i) __asm__("FUN_L00_00299560");
 
@@ -834,7 +836,7 @@ void queue_movie_with_game_language(s32 i) {
         movie_sector = disc_table.movies[i].sector;
         movie_size = disc_table.movies[i].size;
     }
-    FUN_L00_002995d0(movie_sector, movie_size, game_language);
+    prepare_movie_playback(movie_sector, movie_size, game_language);
 }
 extern int D_L00_00161048_macro __asm__("D_L00_00161048") __attribute__((section(".sdata")));
 extern int D_L00_0016104C_macro __asm__("D_L00_0016104C") __attribute__((section(".sdata")));
@@ -859,7 +861,7 @@ extern void FUN_001f97b0(void);
 extern char D_L00_001E9480[];
 
 /* Sets up a movie load, then uploads image data from the level buffer to GS memory in two runs of strips. */
-void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
+void prepare_movie_playback(s32 sector, s32 size, s32 language) {
     s32 image[24];
     s32 large_count, small_count, gs_address, source, i, j;
 
