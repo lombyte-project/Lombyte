@@ -136,7 +136,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     ShotInfo shot;
     s32 near;
     s32 hit;
-    f32 dist;
+    f32 route_destination_distance;
     f32 angle;
     f32 frame;
     f32 cur_frame;
@@ -210,8 +210,8 @@ void blarg_space_commando_update(struct Moby *moby) {
         }
         route = D_L06_001B0C30[vars->route];
         qcopy(&position_or_movement_vector, &route[*route * 4]);
-        dist = vector_distance(&moby->pos, &position_or_movement_vector);
-        if (dist < 0.25f) {
+        route_destination_distance = vector_distance(&moby->pos, &position_or_movement_vector);
+        if (route_destination_distance < 0.25f) {
             angle = fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
             FUN_L00_00258278(moby, angle, &vars->turn_speed, 0.05f, 0.3f, frame_time * 5.5850534f);
             if (fast_difference_between_rotations(angle, moby->rot.z) < 0.2617994f) {
@@ -225,11 +225,11 @@ void blarg_space_commando_update(struct Moby *moby) {
         } else {
             FUN_L00_00258278(moby, fast_arc_tan(position_or_movement_vector.f[0] - moby->pos.x, position_or_movement_vector.f[1] - moby->pos.y), &vars->turn_speed,
                              0.025f, 0.3f, frame_time * 5.5850534f);
-            if (dist > 2.0f) {
-                dist = 2.0f;
+            if (route_destination_distance > 2.0f) {
+                route_destination_distance = 2.0f;
             }
-            movement_input_or_output_or_melee_origin.f[0] = fast_cos(moby->rot.z) * dist;
-            movement_input_or_output_or_melee_origin.f[1] = fast_sin(moby->rot.z) * dist;
+            movement_input_or_output_or_melee_origin.f[0] = fast_cos(moby->rot.z) * route_destination_distance;
+            movement_input_or_output_or_melee_origin.f[1] = fast_sin(moby->rot.z) * route_destination_distance;
             movement_input_or_output_or_melee_origin.f[2] = 0.0f;
             FUN_L00_00258b50(moby, &vars->ctl, &movement_input_or_output_or_melee_origin, &movement_output_or_hit_vector_or_path_point, 1.0f);
         }
