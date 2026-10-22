@@ -1900,7 +1900,9 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L01_00319f18(char *moby) {
+void update_requested_state_from_box_position(char *moby) __asm__("FUN_L01_00319f18");
+
+void update_requested_state_from_box_position(char *moby) {
     float hero_offset_from_box[4];
     float hero_offset_in_box_basis[4];
     unsigned char *data = *(unsigned char **)(moby + 8);
