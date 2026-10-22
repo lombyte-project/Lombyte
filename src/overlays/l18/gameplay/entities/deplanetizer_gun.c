@@ -878,7 +878,9 @@ typedef struct {
     short class_id;
 } L18VM_a8e0;
 
-void FUN_L18_002fa8e0(L18VM_a8e0 *moby) {
+void mark_class_0630_moby_and_child_for_removal(L18VM_a8e0 *moby) __asm__("FUN_L18_002fa8e0");
+
+void mark_class_0630_moby_and_child_for_removal(L18VM_a8e0 *moby) {
     if (moby->class_id == 0x630) {
         void *child = moby->data->child;
         if (child != 0) {

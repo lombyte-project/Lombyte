@@ -533,7 +533,7 @@ extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void spawn_debris_chunk(void *, void *, unsigned int, int, float, float, float, float, int) __asm__("FUN_L01_002f8530");
 extern void FUN_L12_0027b268(char *, void *, int);
 extern void FUN_L12_0027b370(Level18VendorMoby *, void *, int);
-extern void FUN_L18_002fa8e0(void *);
+extern void mark_class_0630_moby_and_child_for_removal(void *) __asm__("FUN_L18_002fa8e0");
 extern void add_vector_xyz(void *, void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void func_L12_0027C368_v(char *, void *, int) __asm__("FUN_L12_0027b370");
@@ -626,7 +626,7 @@ void FUN_L18_002f16f0(struct Moby *moby) {
             if (moby->pos.z < 20.0f) {
                 int i;
                 for (i = 0; i < moby_vars->cnt; i++) {
-                    FUN_L18_002fa8e0(D_L18_0015FFD8 + (moby_vars->ent[i].idx << 8));
+                    mark_class_0630_moby_and_child_for_removal(D_L18_0015FFD8 + (moby_vars->ent[i].idx << 8));
                 }
                 mark_moby_for_removal(moby);
                 return;
