@@ -51,7 +51,7 @@ extern void tick_finite_effect_particle_lifetime(void) __asm__("FUN_L00_00270710
 extern void FUN_L00_00270948(void);
 extern void FUN_L00_002710a0(void);
 extern void FUN_L00_00271450(void);
-extern void FUN_L00_00271748(void);
+extern void update_moving_resizing_height_snapped_alpha_fade_particle(void) __asm__("FUN_L00_00271748");
 extern void update_expanding_rotating_alpha_fade_particle(void) __asm__("FUN_L00_002719f0");
 extern void update_expanding_damped_fading_particle(void) __asm__("FUN_L00_00271be8");
 extern void update_color_tween_particle(void) __asm__("FUN_L00_00271c88");
@@ -140,7 +140,7 @@ void register_part_types(void) {
     handlers[42] = (u32)FUN_L00_00270948;
     handlers[43] = (u32)FUN_L00_002710a0;
     handlers[44] = (u32)FUN_L00_00271450;
-    handlers[45] = (u32)FUN_L00_00271748;
+    handlers[45] = (u32)update_moving_resizing_height_snapped_alpha_fade_particle;
     handlers[46] = (u32)update_expanding_rotating_alpha_fade_particle;
     handlers[47] = (u32)update_expanding_damped_fading_particle;
     handlers[48] = (u32)update_color_tween_particle;

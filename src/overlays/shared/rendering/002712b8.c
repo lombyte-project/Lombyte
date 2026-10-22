@@ -143,7 +143,9 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 extern float FUN_001f99c0(float);
 
-void FUN_L00_00271748(unsigned char *particle) {
+void update_moving_resizing_height_snapped_alpha_fade_particle(unsigned char *particle) __asm__("FUN_L00_00271748");
+
+void update_moving_resizing_height_snapped_alpha_fade_particle(unsigned char *particle) {
     unsigned char *particle_data = particle + 0x20;
     float z;
     fast_vec_add(particle + 0x10, particle + 0x10, particle_data);
