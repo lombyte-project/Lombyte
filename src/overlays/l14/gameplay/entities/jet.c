@@ -1752,7 +1752,9 @@ extern void vendor_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float vendor_spring(float *p, float t, float *v, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 void FUN_L14_002eef60(struct Moby *m);
 int FUN_L14_002ef150(struct Moby *m);
-void FUN_L14_002ef3e0(struct Moby *m);
+void settle_elevator_at_path_endpoint(struct Moby *elevator_moby) __asm__("FUN_L14_002ef3e0");
+
+void settle_elevator_at_path_endpoint(struct Moby *m) __asm__("FUN_L14_002ef3e0");
 void rebuild_elevator_world_path(u8 *moby) __asm__("FUN_L14_002ef630");
 
 void rebuild_elevator_world_path(u8 *moby) __asm__("FUN_L14_002ef630");
@@ -1932,7 +1934,7 @@ void elevator_update(struct Moby *elevator_moby) {
         break;
     }
     if (elevator_moby->state != 2 && elevator_moby->state != 0) {
-        FUN_L14_002ef3e0(elevator_moby);
+        settle_elevator_at_path_endpoint(elevator_moby);
         if (hero.ground_moby == elevator_moby) {
             vendor_sub(&delta, &elevator_moby->pos, &old);
             update_entity_matrix(elevator_vars->spring, &delta, &rot, &elevator_moby->rot);
@@ -2064,7 +2066,7 @@ int FUN_L14_002ef150(struct Moby *elevator_moby) {
 
 extern char *D_L14_001B0BB0_c4[] __asm__("D_L14_001B0BB0");
 
-void FUN_L14_002ef3e0(struct Moby *elevator_moby) {
+void settle_elevator_at_path_endpoint(struct Moby *elevator_moby) {
     char *moby_vars = (char *)elevator_moby->pvars;
     float pos[4];
     float rot[4];
