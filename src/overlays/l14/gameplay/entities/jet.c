@@ -1759,7 +1759,9 @@ extern float vendor_spring(float *p, float t, float *v, float u1, float u2, floa
 void initialize_elevator_path_state(struct Moby *moby) __asm__("FUN_L14_002eef60");
 
 void initialize_elevator_path_state(struct Moby *m) __asm__("FUN_L14_002eef60");
-int FUN_L14_002ef150(struct Moby *m);
+int advance_elevator_along_path(struct Moby *elevator_moby) __asm__("FUN_L14_002ef150");
+
+int advance_elevator_along_path(struct Moby *m) __asm__("FUN_L14_002ef150");
 void settle_elevator_at_path_endpoint(struct Moby *elevator_moby) __asm__("FUN_L14_002ef3e0");
 
 void settle_elevator_at_path_endpoint(struct Moby *m) __asm__("FUN_L14_002ef3e0");
@@ -1900,7 +1902,7 @@ void elevator_update(struct Moby *elevator_moby) {
             }
         }
         elevator_moby->glow_color = fast_tween_color(elevator_moby->glow_color, 0x80808040, 0.1f);
-        if (FUN_L14_002ef150(elevator_moby) != 0) {
+        if (advance_elevator_along_path(elevator_moby) != 0) {
             elevator_moby->state = 3;
             elevator_vars->level = elevator_vars->motor_volume;
         }
@@ -2010,7 +2012,7 @@ extern int FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
 extern short D_L14_00161D14 __attribute__((sda));
-int FUN_L14_002ef150(struct Moby *elevator_moby) {
+int advance_elevator_along_path(struct Moby *elevator_moby) {
     char *moby_vars = (char *)elevator_moby->pvars;
     float rot[4];
     float pos[4];
