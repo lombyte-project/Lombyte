@@ -280,7 +280,9 @@ void FUN_L00_00235ea0(e) HudElem *e;
 
 extern void FUN_L00_0023aaa8(void *);
 
-void FUN_L00_00236128(HudElem *hud_element) {
+void update_numeric_hud_element_direct_value(HudElem *hud_element) __asm__("FUN_L00_00236128");
+
+void update_numeric_hud_element_direct_value(HudElem *hud_element) {
     unsigned char *hud_counters = hud_element->cnt;
     int sampled_value;
     int cap;
