@@ -482,7 +482,9 @@ void update_camera_position_and_orientation(void *camera) {
 
 extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
 
-void FUN_L03_002ebde8(char *moby) {
+void update_camera_state_outside_clip_volume(char *moby) __asm__("FUN_L03_002ebde8");
+
+void update_camera_state_outside_clip_volume(char *moby) {
     char *entry = (char *)((*(short *)(moby + 0x84) << 5) + D_L03_0015EF50);
     char *sub = *(char **)(entry + 0x1C);
     int value = *(int *)(sub + 0xC);
