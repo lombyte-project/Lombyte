@@ -728,7 +728,7 @@ extern void FUN_L07_003120d8(char *);
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void FUN_L07_00312420(void);
+extern void draw_collision_clipped_moby_beam(void) __asm__("FUN_L07_00312420");
 extern float FUN_0020c9e0(void *);
 extern void *FUN_L00_002715e8(void *, int, int, float, float);
 extern void FUN_00210850(void *, int, void *, void *);
@@ -1162,7 +1162,7 @@ void snagglebeast_update(unsigned char *moby) {
             } else {
                 if (*(int *)(data + 0x160) < scale_ticks(0x3C)) {
                     add_vector_xyz(data + 0x140, data + 0x140, data + 0x130);
-                    enqueue_callback_list_1(FUN_L07_00312420, moby);
+                    enqueue_callback_list_1(draw_collision_clipped_moby_beam, moby);
                     *(int *)(data + 0x164) = 2;
                 } else {
                     *(int *)(data + 0x164) = 0;

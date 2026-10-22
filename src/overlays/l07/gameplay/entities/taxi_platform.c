@@ -3662,7 +3662,9 @@ extern long FUN_001f44b8_2cd2b0(int) __asm__("FUN_001f44b8");
 extern char D_L07_00167050_2cd2b0[] __asm__("D_L07_00167050");
 extern char D_L07_00173EE0_2cd2b0[] __asm__("D_L07_00173EE0");
 
-void FUN_L07_00312420(struct Moby *effect_owner_moby)
+void draw_collision_clipped_moby_beam(struct Moby *effect_owner_moby) __asm__("FUN_L07_00312420");
+
+void draw_collision_clipped_moby_beam(struct Moby *effect_owner_moby)
 {
     float line_endpoint[4], endpoint_work_vector[4], quad_side_offset[4], attachment_position[4], endpoint_to_attachment[4], oscillating_reference_position[4], effect_sample_position[4], effect_sample_step[4], sample_probe_offset[4], ii[4], jj[4];
     float frame_phase_work_value, oscillation_work_value;
