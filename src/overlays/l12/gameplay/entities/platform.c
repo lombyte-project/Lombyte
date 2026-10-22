@@ -2429,7 +2429,9 @@ extern void process_blarg_helicopter_hits(struct Moby *) __asm__("FUN_L12_002eb2
 void update_blarg_helicopter_motion_tilt(struct Moby *moby) __asm__("FUN_L12_002eae00");
 
 extern void update_blarg_helicopter_motion_tilt(struct Moby *) __asm__("FUN_L12_002eae00");
-extern int FUN_L12_002eaf68(struct Moby *, int);
+int follow_blarg_helicopter_path(struct Moby *moby, int path_index) __asm__("FUN_L12_002eaf68");
+
+extern int follow_blarg_helicopter_path(struct Moby *, int) __asm__("FUN_L12_002eaf68");
 extern void cache_consecutive_point_distances(int) __asm__("FUN_L12_0027ba70");
 extern struct Moby *create_class_55b_moby_from_source(struct Moby *) __asm__("FUN_L12_00308670");
 extern void start_blarg_commander_knockback(struct Moby *, struct Moby *) __asm__("FUN_L12_00308708");
@@ -2605,7 +2607,7 @@ update_state:
             if (count < limit * scale_game_frames_alt(15))
                 *(short *)(data + 0x8c) = limit * scale_game_frames_alt(15);
         }
-        if (FUN_L12_002eaf68(moby, *(int *)(data + 0xa0))) moby->state = 3;
+        if (follow_blarg_helicopter_path(moby, *(int *)(data + 0xa0))) moby->state = 3;
         break;
     case BLARG_HELICOPTER_AIM_AND_FIRE: {
         int count, limit, a, b, color, life, size;
@@ -2797,7 +2799,7 @@ typedef struct { char pad[0x48]; float rz; } M_af68;
 typedef struct { float x, y, z, w; } N_af68;
 
 /* Follows a path: steers toward the current node, slows to a stop near the end, returns 1 once stopped. */
-int FUN_L12_002eaf68(struct Moby *moby, int path_index) {
+int follow_blarg_helicopter_path(struct Moby *moby, int path_index) {
     char *path = D_L12_001B0930_f[path_index];
     char *moby_vars = (char *)moby->pvars;
     float sum = 0.0f;
