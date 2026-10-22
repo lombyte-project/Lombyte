@@ -1427,7 +1427,7 @@ extern MobyList D_L18_0016D260_c __asm__("D_L18_0016D260");
 extern char *D_L18_001600EC;
 extern char *create_rocket_moby(float *pos, float *dir, float *target, float a, float b, int frames,
                               int kind) __asm__("FUN_L18_002d5348");
-extern char *FUN_L18_002d5cf8(int owner, int idx, float *from, float *to, float speed, int frames);
+extern char *launch_class_238_moby_from_list(int owner, int idx, float *from, float *to, float speed, int frames) __asm__("FUN_L18_002d5cf8");
 extern char *find_nearest_class_247_moby_in_list(void *pos, int idx) __asm__("FUN_L18_002d6c80");
 extern char *FUN_L18_002dc3e0(void *owner, void *vector, float value);
 extern char *FUN_L18_002ea0f0(void *owner, void *vector, int value);
@@ -2310,7 +2310,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 float speed = vector_distance(v2, v1) / (float)scale_game_frames(0x3C);
                 float w = random_float_between_alt(18.0f, 20.0f);
 
-                FUN_L18_002d5cf8((int)moby, boss_data->f29C, v1, v2, speed,
+                launch_class_238_moby_from_list((int)moby, boss_data->f29C, v1, v2, speed,
                                  func_001FA898_r(multiply_global_factor_ed64(w * 60.0f)));
             }
             boss_data->f354 = scale_game_frames(0xF);
