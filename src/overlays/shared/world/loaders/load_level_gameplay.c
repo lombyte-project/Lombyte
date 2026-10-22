@@ -1826,7 +1826,9 @@ extern void FUN_L00_00264740(void);
  * mobies at 0x24 of their data); a stored coordinate times scale / 1024 gives
  * world units. Index 0x10 gives where the sky data starts and 0x14 where the
  * collision data starts. */
-s32 FUN_L00_00244110(s32 full, s32 keep) {
+s32 load_level_assets_and_gameplay(s32 full, s32 keep) __asm__("FUN_L00_00244110");
+
+s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
     Load244110 *ld = &D_L00_00173E00_244110;
     s32 *core_header = ld->f4;
     s32 *level_file_base = D_0015EE48.file;

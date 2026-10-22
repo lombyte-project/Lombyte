@@ -32,7 +32,7 @@ extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
 extern int debug_print(void *) __asm__("FUN_001e93b0");
 extern void init_stash(void) __asm__("FUN_00232d00");
 extern void init_level_runtime_state(void) __asm__("FUN_L00_0023d028");
-extern int FUN_L00_00244110(int, int);
+extern int load_level_assets_and_gameplay(int, int) __asm__("FUN_L00_00244110");
 extern void clear_dma_queue_entry(void) __asm__("FUN_001f0b88");
 extern void FUN_L00_002464a8_u(void) __asm__("FUN_L00_002464a8");
 extern void init_hud(void) __asm__("FUN_001fee88");
@@ -127,7 +127,7 @@ void run_level_main_loop(void) {
     one = 1;
     init_level_runtime_state();
     music_stream_state.primary.track = 0;
-    FUN_L00_00244110(1, 0);
+    load_level_assets_and_gameplay(1, 0);
     g_debug_menu.update_flags = 15;
     g_debug_menu.television_mode = pal_mode;
     g_debug_menu.scene_index = -1;
@@ -300,7 +300,7 @@ void run_level_main_loop(void) {
             snd_flush_sound_commands();
             sound_stop_all_sounds();
             music_stop();
-            FUN_L00_00244110(0, full);
+            load_level_assets_and_gameplay(0, full);
             D_L00_0015F5C4 = 0;
             music_start_track(music_stream_state.primary.track, 1, 0x400);
             init_hud();
