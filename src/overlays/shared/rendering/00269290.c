@@ -2240,7 +2240,9 @@ extern void pos_26e3a8(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void vsub_26e3a8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vscl_26e3a8(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void vadd_26e3a8(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_0026e3a8(P_26e3a8 *particle) {
+void update_animated_source_attached_fade_in_out_effect_particle(P_26e3a8 *particle) __asm__("FUN_L00_0026e3a8");
+
+void update_animated_source_attached_fade_in_out_effect_particle(P_26e3a8 *particle) {
     E_26e3a8 *e;
     f32 alpha_reversal_threshold;
     f32 a[4] __attribute__((aligned(16)));
