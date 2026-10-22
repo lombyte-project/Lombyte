@@ -2151,7 +2151,7 @@ typedef int u128_2F0040 __attribute__((mode(TI)));
 typedef union { u128_2F0040 q; float f[4]; } V_2F0040;
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern char *FUN_L01_002ef350(void *);
+extern char *activate_smaller_amoeboid(void *) __asm__("FUN_L01_002ef350");
 extern char *FUN_L01_002ef478_c(char *, int) __asm__("FUN_L01_002ef478");
 extern char D_0013E533[];
 extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
@@ -2261,7 +2261,7 @@ void FUN_L01_002eec68(char *moby) {
         *(float *)(moby_vars + 0x88) = *(float *)(moby_vars + 0x250) * size_multiplier;
         FUN_L01_002ef770((unsigned char *)moby, (float *)(hit_record + 0x10));
         if (0.0f < *(float *)(moby_vars + 0x20)) {
-            spawned = FUN_L01_002ef350(moby);
+            spawned = activate_smaller_amoeboid(moby);
             if (spawned != 0) {
                 q = *(char **)(spawned + 0x78);
                 q[0x9D] = 3;
@@ -2283,7 +2283,7 @@ void FUN_L01_002eec68(char *moby) {
                 spawned[0x20] = 8;
                 *(float *)(spawned + 0x58) = f24;
             }
-            spawned = FUN_L01_002ef350(moby);
+            spawned = activate_smaller_amoeboid(moby);
             if (spawned != 0) {
                 q = *(char **)(spawned + 0x78);
                 *(float *)(q + 0x70) = rate;
@@ -2372,7 +2372,9 @@ void FUN_L01_002eec68(char *moby) {
 extern short *D_L01_001ABCC0[];
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L01_002ef350(void *source_moby) {
+char *activate_smaller_amoeboid(void *source_moby) __asm__("FUN_L01_002ef350");
+
+char *activate_smaller_amoeboid(void *source_moby) {
     struct Moby *self = source_moby;
     short *list;
     char *entities;
