@@ -429,7 +429,10 @@ extern struct Moby *D_L01_001ABE80[];
 extern CollisionHit D_L01_001742C0;
 /* FUN_L01_002e32a8 over the null-terminated moby table D_L01_001ABE80: the
    best lock-on target for moby seen from `from` along `ang`. */
-struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *reference_rotation, f32 yawMax, f32 pitchMax,
+struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f32 *reference_rotation, f32 yawMax, f32 pitchMax,
+                              f32 range, f32 near, f32 nearYaw, f32 nearPitch) __asm__("FUN_L01_0030d308");
+
+struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f32 *reference_rotation, f32 yawMax, f32 pitchMax,
                               f32 range, f32 near, f32 nearYaw, f32 nearPitch) {
     f32 tp[4];
     struct Moby *best = 0;
@@ -489,8 +492,8 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags, struct VoiceTarget *target) __asm__("FUN_0022da68");
-struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax, f32 pitchMax,
-                              f32 range, f32 near, f32 nearYaw, f32 nearPitch);
+struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax, f32 pitchMax,
+                              f32 range, f32 near, f32 nearYaw, f32 nearPitch) __asm__("FUN_L01_0030d308");
 extern void FUN_L01_0030c898_c(void *, void *, float, float, float,
                                float) __asm__("FUN_L01_0030c898");
 
@@ -520,7 +523,7 @@ void try_fire_sandmouse_projectile(char *moby, char *state) {
         return;
     moby_point_position(moby, (state[0x56] & 1) + 1, &spawn_position);
     state[0x56] = state[0x56] ^ 1;
-    target_moby = FUN_L01_0030d308(moby, &spawn_position, moby + 0x40, D_L01_00162088 * DEG_TO_RAD,
+    target_moby = select_sandmouse_projectile_target(moby, &spawn_position, moby + 0x40, D_L01_00162088 * DEG_TO_RAD,
                          D_L01_0016208C * DEG_TO_RAD, D_L01_00162084, 2.0f, 3.1415927f,
                          3.1415927f);
     if (target_moby != 0) {
