@@ -300,7 +300,9 @@ extern u8 D_L00_001BD7B0[] __attribute__((section(".data")));
 
 
 /* Render particles with phase, byte-state and randomized-color variants. */
-void FUN_L00_00289cb8(void) {
+void draw_three_sky_shells_with_three_particle_types(void) __asm__("FUN_L00_00289cb8");
+
+void draw_three_sky_shells_with_three_particle_types(void) {
     Part *init_particle;
     Part *update_particle;
     PU *update_state;
