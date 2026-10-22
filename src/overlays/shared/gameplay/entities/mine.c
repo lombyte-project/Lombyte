@@ -3040,7 +3040,9 @@ int count_2b1de0(float) __asm__("FUN_001fa6d0");
 int random_bit_2b1de0(int) __asm__("FUN_00213260");
 
 extern V_2b1af0 D_0013F9B0;
-void FUN_L00_002b1de0(unsigned char *source_object) {
+void emit_object_offset_particle_burst(unsigned char *source_object) __asm__("FUN_L00_002b1de0");
+
+void emit_object_offset_particle_burst(unsigned char *source_object) {
     V_2b1af0 particle_velocity;
     V_2b1af0 emission_offset;
     V_2b1af0 emission_position;

@@ -88,7 +88,7 @@ extern void build_spherical_offset_2b2100(void *, float, float, float) __asm__("
 extern float approximate_arcsine_2b2100(float) __asm__("FUN_001f9df8");
 extern int find_listed_moby_by_data_id(void *) __asm__("FUN_L00_0025f878");
 extern int allocate_voice_for_target_entry_2b2100(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L00_002b1de0_2b2100(void *) __asm__("FUN_L00_002b1de0");
+extern void emit_object_offset_particle_burst(void *) __asm__("FUN_L00_002b1de0");
 extern void *spawn_devastator_missile(void *, void *, void *, float, float, float, float, float) __asm__("FUN_L00_002afc70");
 extern float calculate_eased_step_sum(int) __asm__("FUN_L00_002aff50");
 extern void FUN_L00_002323b8_2b2100(int, int, float) __asm__("FUN_L00_002323b8");
@@ -253,7 +253,7 @@ void devastator_update(struct Moby *devastator_moby) {
             }
             allocate_voice_for_target_entry_2b2100(0, 0, (int)devastator_moby);
             data->glow = scale_game_frames_2b2100(5) + scale_game_frames_2b2100(10);
-            if (hero.state.current != 30) FUN_L00_002b1de0_2b2100(devastator_moby);
+            if (hero.state.current != 30) emit_object_offset_particle_burst(devastator_moby);
             stats = (UsageStat_2b2100 *)usage_stats_2b2100;
             if (stats->uses < 65535) stats->uses++;
             if (scale_game_frames_2b2100(D_0015EEA4) / 600 > stats->longest)
