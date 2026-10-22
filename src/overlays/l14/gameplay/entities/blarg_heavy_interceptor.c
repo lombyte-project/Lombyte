@@ -373,7 +373,9 @@ extern void FUN_L14_002ae448(struct Moby *);
 void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) __asm__("FUN_L14_002ae6d8");
 
 extern void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *) __asm__("FUN_L14_002ae6d8");
-extern void FUN_L14_002ae7d8(struct Moby *);
+void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) __asm__("FUN_L14_002ae7d8");
+
+extern void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *) __asm__("FUN_L14_002ae7d8");
 void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby, float position_easing_factor, float path_traversal_speed, float path_direction_multiplier) __asm__("FUN_L14_002ae900");
 
 extern void update_blarg_heavy_interceptor_return_path_position(struct Moby *, float, float, float) __asm__("FUN_L14_002ae900");
@@ -567,7 +569,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
         found = 0;
         hit = FUN_L14_002aeba0(moby, 1);
         update_blarg_heavy_interceptor_patrol_aim_point(moby);
-        FUN_L14_002ae7d8(moby);
+        update_blarg_heavy_interceptor_patrol_path_position(moby);
         FUN_L14_002aea08_c618(moby);
         if (hit) {
             lerp_vector_c618(vector_scratch, moby_vars + 0x90, moby_vars + 0xD0, 0.5f);
@@ -622,7 +624,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
             ease_c618((f32 *)(moby_vars + 0x170), vector_scratch[0], (f32 *)(moby_vars + 0x180), 0.003f, 0.2f, 0.0f);
             ease_c618((f32 *)(moby_vars + 0x174), vector_scratch[1], (f32 *)(moby_vars + 0x184), 0.003f, 0.2f, 0.0f);
             ease_c618((f32 *)(moby_vars + 0x178), vector_scratch[2], (f32 *)(moby_vars + 0x188), 0.003f, 0.2f, 0.0f);
-            FUN_L14_002ae7d8(moby);
+            update_blarg_heavy_interceptor_patrol_path_position(moby);
             if ((s8)(*(struct Moby **)(moby_vars + 0x18C))->state < 0 || fast_dec_timer_s16((s16 *)(moby_vars + 0x1F2))) {
                 *(float *)(moby_vars + 0x8C) = 0.0f;
                 *(int *)(moby_vars + 0x80) = 0;
@@ -1369,7 +1371,7 @@ void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) {
     }
 }
 /* Moves the moby to the point on its second path that matches how far along its first path it is. */
-void FUN_L14_002ae7d8(struct Moby *moby) {
+void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *seg = (char *)D_L14_001B0BB0[*(int *)(data + 0x78)];
     int source_segment_index = *(int *)(data + 0x84);
