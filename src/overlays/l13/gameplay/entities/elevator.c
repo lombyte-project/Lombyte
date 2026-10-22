@@ -216,7 +216,9 @@ extern void FUN_L00_002eaa30(void *);
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18(int);
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void FUN_L13_002b4060(struct Moby *, float *, float *);
+void compute_elevator_camera_pose(struct Moby *moby, float *camera_position, float *camera_rotation) __asm__("FUN_L13_002b4060");
+
+extern void compute_elevator_camera_pose(struct Moby *, float *, float *) __asm__("FUN_L13_002b4060");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -256,7 +258,7 @@ void elevator_update(struct Moby *moby) {
         if (vars->blend < 1.0f) {
             float t = (1.0f - vars->blend) / (1.0f - old);
             char *base;
-            FUN_L13_002b4060(moby, camera_pose_scratch, blended_camera_rotation);
+            compute_elevator_camera_pose(moby, camera_pose_scratch, blended_camera_rotation);
             subtract_vector_xyz(camera_position_scratch, D_L13_001670C0_2b39e0, camera_pose_scratch);
             base = D_L13_001670C0_2b39e0 - 0x140;
             scale_vector_xyz(camera_position_scratch, camera_position_scratch, t);
@@ -279,7 +281,7 @@ void elevator_update(struct Moby *moby) {
             vars->voice = allocate_voice_2b39e0(0, 4, moby);
         }
         if (moby->command != 0) {
-            FUN_L13_002b4060(moby, camera_position_scratch, camera_pose_scratch);
+            compute_elevator_camera_pose(moby, camera_position_scratch, camera_pose_scratch);
             FUN_L00_002ea9d8(camera_position_scratch);
             FUN_L00_002eaa30(camera_pose_scratch);
         }
@@ -388,8 +390,8 @@ extern unsigned char D_0013E533[];
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L13_002b4060(struct Moby *moby, float *v, float *w);
-void FUN_L13_002b4060(struct Moby *moby, float *camera_position, float *camera_rotation) {
+void compute_elevator_camera_pose(struct Moby *moby, float *v, float *w) __asm__("FUN_L13_002b4060");
+void compute_elevator_camera_pose(struct Moby *moby, float *camera_position, float *camera_rotation) {
     float camera_offset_azimuth = moby->rot.z;
     float horizontal_offset_radius = 2.5f;
     float z = 1.5f;
