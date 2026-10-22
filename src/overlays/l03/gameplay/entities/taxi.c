@@ -767,7 +767,9 @@ extern void taxi_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 taxi_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 taxi_dist2(void *, void *) __asm__("FUN_001f9b80");
 extern f32 taxi_approach_angle(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_0025be00");
-s32 FUN_L03_002d3918(struct Moby *m, s32 path, s32 *snd);
+s32 advance_moby_along_rail_path(struct Moby *rail_moby, s32 path, s32 *snd) __asm__("FUN_L03_002d3918");
+
+s32 advance_moby_along_rail_path(struct Moby *m, s32 path, s32 *snd) __asm__("FUN_L03_002d3918");
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Rail taxi: waits at its stop until the hero enters a route's trigger volume,
@@ -852,7 +854,7 @@ void FUN_L03_002d3198(struct Moby *taxi_moby) {
         }
         break;
     case TAXI_FOLLOW_OUTBOUND_PATH:
-        if (taxi_vars->out[taxi_moby->command] == -1 || FUN_L03_002d3918(taxi_moby, taxi_vars->out[taxi_moby->command], &taxi_vars->snd)) {
+        if (taxi_vars->out[taxi_moby->command] == -1 || advance_moby_along_rail_path(taxi_moby, taxi_vars->out[taxi_moby->command], &taxi_vars->snd)) {
             taxi_moby->state = 3;
             taxi_vars->unkE4 = -1;
         }
@@ -881,7 +883,7 @@ void FUN_L03_002d3198(struct Moby *taxi_moby) {
             hero.unk1F2 = 4;
             hero.unk1F4 = 4;
         }
-        if (FUN_L03_002d3918(taxi_moby, taxi_vars->back[taxi_moby->command], &taxi_vars->snd)) {
+        if (advance_moby_along_rail_path(taxi_moby, taxi_vars->back[taxi_moby->command], &taxi_vars->snd)) {
             taxi_moby->state = 6;
         }
         break;
@@ -898,7 +900,7 @@ void FUN_L03_002d3198(struct Moby *taxi_moby) {
         }
         break;
     case TAXI_FOLLOW_ONWARD_PATH:
-        if (FUN_L03_002d3918(taxi_moby, taxi_vars->onward[taxi_moby->command], &taxi_vars->snd)) {
+        if (advance_moby_along_rail_path(taxi_moby, taxi_vars->onward[taxi_moby->command], &taxi_vars->snd)) {
             taxi_moby->draw_dist = 0;
             taxi_moby->state = 1;
             taxi_moby->collision = 0;
@@ -948,7 +950,7 @@ extern void release_voice(s32) __asm__("FUN_0022d798");
 
 /* Moves m along rail path `path`, easing speed toward the end and banking into turns;
    keeps the travel sound playing and releases it on arrival. Returns 1 at the last point. */
-s32 FUN_L03_002d3918(struct Moby *rail_moby, s32 path, s32 *snd) {
+s32 advance_moby_along_rail_path(struct Moby *rail_moby, s32 path, s32 *snd) {
     RailFlyerVars *rail_flyer_vars = (RailFlyerVars *)rail_moby->pvars;
     struct RailPath **pp = &D_L03_001B05B0[path];
     Vec4f target_path_point, movement_delta;
@@ -2178,7 +2180,7 @@ void FUN_L03_002dccc0(struct Moby *lift_moby) {
             hero.unk1F2 = 4;
             hero.unk1F4 = 4;
         }
-        if (FUN_L03_002d3918(lift_moby, lift_vars->path[lift_moby->command], &lift_vars->snd)) {
+        if (advance_moby_along_rail_path(lift_moby, lift_vars->path[lift_moby->command], &lift_vars->snd)) {
             lift_moby->state = 1;
             lift_vars->timer = scale_game_frames(0xF);
         }
