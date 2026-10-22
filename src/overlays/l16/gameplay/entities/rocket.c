@@ -336,7 +336,9 @@ extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L16_002d6740(struct Moby *moby) {
+void update_moby_hit_triggered_removal(struct Moby *moby) __asm__("FUN_L16_002d6740");
+
+void update_moby_hit_triggered_removal(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_CHECK_HIT_FOR_REMOVAL = 1,
