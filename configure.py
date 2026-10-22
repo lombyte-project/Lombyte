@@ -2200,12 +2200,15 @@ def build_overlays() -> Path:
     # (OVERLAY_SN_UNITS): SN cc1, its externs ordered for Ps2EeAs, then the
     # same Ps2EeAs + padless finish as overlay-game.
     sn_driver = _windows_exe(str(sn_root / "bin/ee-gcc295.exe"))
+    # -B pins specs and cc1 to this toolchain (as in cc_sn): a GCC_EXEC_PREFIX
+    # left in the shell would otherwise win over the driver's own lib/.
+    sn_lib = _win_path(str(sn_root / "lib/gcc-lib/ee/2.95.2"))
     ninja.rule(
         "overlay-sn",
         description="overlay-sn $in",
         command=(
             f"mkdir -p {work} && cp $in {work}/cand.c && "
-            f"cd {work} && {sn_driver} -S -I{ROOT}/src -I{ROOT}/include "
+            f"cd {work} && {sn_driver} -S '-B{sn_lib}\\' -I{ROOT}/src -I{ROOT}/include "
             f"{LANG_DEFINE} -DMATCHING_DECOMP -O2 cand.c -o cand.s && cd - >/dev/null && "
             f"{sys.executable} padless-asm.py normalize {work}/cand.s {work}/cand-norm.s none && "
             f"{sys.executable} padless-asm.py externs {work}/cand-norm.s {work}/cand-final.s $in && "
