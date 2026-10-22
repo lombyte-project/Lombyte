@@ -113,8 +113,8 @@ void draw_moby_glow_sprite(char *m) __asm__("FUN_L05_0031cf58");
 void draw_moby_glow_sprite(char *m) __asm__("FUN_L05_0031cf58");
 
 /* Mine update: sets its glow, fades it out with camera distance and blows up into debris, smoke and sparks when something touches it. */
-void FUN_L05_0031c8e0(struct Moby *moby);
-void FUN_L05_0031c8e0(struct Moby *moby) {
+void update_moby_glow_and_contact_explosion(struct Moby *moby) __asm__("FUN_L05_0031c8e0");
+void update_moby_glow_and_contact_explosion(struct Moby *moby) {
     struct MineVars_c8e0 *vars = (struct MineVars_c8e0 *)moby->pvars;
     Vec4 tip;
     Vec4 debris_velocity;
