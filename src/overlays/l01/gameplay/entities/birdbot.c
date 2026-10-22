@@ -152,7 +152,9 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void create_spark_particle(void *, void *, f32, f32, f32, f32, f32, f32, f32, f32, f32, s32, u8,
                              u8, u8) __asm__("FUN_L01_0027e900");
 
-void FUN_L01_002bd100(EmitterMoby *self) {
+void update_spark_particle_emitter(EmitterMoby *self) __asm__("FUN_L01_002bd100");
+
+void update_spark_particle_emitter(EmitterMoby *self) {
     Emitter *emitter_vars;
     EmitVec out;
     EmitVec position_scratch;
