@@ -368,7 +368,9 @@ void ease_path_mover_to_endpoint(struct Moby *moby) {
  * 2 drops the engine sound and alerts its group, 3 chases the locked-on target, 4 waits on the
  * group trigger, 5 and 6 fly the path in 0x204 and rejoin the patrol path, 7 is the hit that sends it
  * tumbling and 9 the fall that ends in a burst of debris. 8 only draws. */
-extern void FUN_L14_002ad8b8(struct Moby *);
+void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) __asm__("FUN_L14_002ad8b8");
+
+extern void process_blarg_heavy_interceptor_hit_reactions(struct Moby *) __asm__("FUN_L14_002ad8b8");
 extern void FUN_L14_002ae448(struct Moby *);
 void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) __asm__("FUN_L14_002ae6d8");
 
@@ -498,7 +500,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
             }
         }
     }
-    FUN_L14_002ad8b8(moby);
+    process_blarg_heavy_interceptor_hit_reactions(moby);
     if (moby->state > 0 && moby->state < 7) {
         if (FUN_001f9b48(&moby->pos, D_L14_001674C0) < 40.0f) {
             FUN_L00_0025a120(moby);
@@ -849,7 +851,7 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L14_002ad8b8(struct Moby *moby) {
+void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
     enum {
         HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_LETHAL = 1,
