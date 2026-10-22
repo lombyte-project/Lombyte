@@ -14,7 +14,9 @@ void FUN_00210850(char *, int, int, M4 *);
 void multiply_matrix(void *, Mtx *, void *) __asm__("FUN_001fa378");
 void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_0024f8f0(char *transform_source, int matrix_count, int matrix_selection_indices, M4 *out) {
+void compute_selected_world_matrices(char *transform_source, int matrix_count, int matrix_selection_indices, M4 *out) __asm__("FUN_L00_0024f8f0");
+
+void compute_selected_world_matrices(char *transform_source, int matrix_count, int matrix_selection_indices, M4 *out) {
     Mtx rotation_matrix;
     float translation_scale = *(float *)(transform_source + 0x2C) * (1.0f / 1024.0f);
     int i;

@@ -69,7 +69,7 @@ extern int D_L15_001613E8 __attribute__((sda));
 extern float D_L15_00161410 __attribute__((sda));
 extern int D_L15_00161414 __attribute__((sda));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_0024f8f0(void *, int, void *, void *);
+extern void compute_selected_world_matrices(void *, int, void *, void *) __asm__("FUN_L00_0024f8f0");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025a120(void *);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -657,7 +657,7 @@ void sentrybot_update(unsigned char *moby) {
             float t = compute_interpolated_record_value(moby);
             if (t >= 0.85f && t < 3.0f) {
                 j2 = 2;
-                FUN_L00_0024f8f0(moby, 1, &j2, mat);
+                compute_selected_world_matrices(moby, 1, &j2, mat);
                 transform_scaled_vertex_batch((char *)moby, 1, &j2, (char *)pos);
                 normalize_vector_xyz(va, mat[1], D_L15_00161410 * frame_time);
                 subtract_vector_xyz(vb, data + 0x100, pos);
@@ -715,7 +715,7 @@ void sentrybot_update(unsigned char *moby) {
             float t = compute_interpolated_record_value(moby);
             if (t >= 0.85f && t < 3.0f) {
                 j3 = 3;
-                FUN_L00_0024f8f0(moby, 1, &j3, mat);
+                compute_selected_world_matrices(moby, 1, &j3, mat);
                 transform_scaled_vertex_batch((char *)moby, 1, &j3, (char *)pos);
                 normalize_vector_xyz(va, mat[1], -(D_L15_00161410 * frame_time));
                 subtract_vector_xyz(vb, data + 0x100, pos);
