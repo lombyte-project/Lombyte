@@ -639,7 +639,9 @@ extern void FUN_L00_00213de8(float);
 extern void FUN_L00_00214ed8(float a, float b, float c);
 extern void FUN_L00_00216ec0(int, int, int);
 extern void FUN_L00_00217450(void);
-extern void FUN_L00_00227638(void);
+void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
+
+extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_002325e0(int bank, int seq);
 extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_00233b20");
@@ -726,7 +728,7 @@ int hero_set_state(int a, int b) {
         p->unk1010 = random_int_between(scale_game_frames(0x32), scale_game_frames(0x64));
         clear_hero_idle_rotation_targets();
         if (p->vehicle_mode != 0) {
-            FUN_L00_00227638();
+            set_hero_idle_state_for_vehicle_mode();
             return 1;
         }
         qcopy(&p->motion.unk150, &p->motion.unk110);
@@ -2994,7 +2996,7 @@ int hero_set_state(int a, int b) {
 
 extern unsigned char D_0013E533[];
 
-void FUN_L00_00227638(void) {
+void set_hero_idle_state_for_vehicle_mode(void) {
     switch (D_0013E533[0x2EC1]) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         hero_set_state(HERO_STATE_IDLE, 1);

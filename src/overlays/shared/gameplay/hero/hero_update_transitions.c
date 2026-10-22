@@ -122,7 +122,7 @@ extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern void FUN_L00_00211be8(void);
 extern void FUN_L00_00216de8(int, int);
-extern void FUN_L00_00227638(void);
+extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void FUN_L00_00228c18(void);
 extern void FUN_L00_00228fa8(void);
 extern void FUN_L00_002293a8(void);
@@ -698,7 +698,7 @@ void hero_update_transitions(void) {
                         }
                     }
                     if (hero.vehicle_mode != 0) {
-                        FUN_L00_00227638();
+                        set_hero_idle_state_for_vehicle_mode();
                         break;
                     }
                     if (controller_state.held & 0xA) {

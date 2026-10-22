@@ -430,7 +430,7 @@ extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void FUN_L00_00227638(void);
+extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -534,7 +534,7 @@ void FUN_L07_002cd2b0(unsigned char *moby) {
             if (0.5f < absolute_float(F(data, 0xA4) - 0.5f)) {
                 int r;
                 if (*(int *)(data + 0xC8) == 0 && is_hero_on_moby(moby)) {
-                    FUN_L00_00227638();
+                    set_hero_idle_state_for_vehicle_mode();
                 }
                 if (0.0f < F(data, 0xAC)) {
                     moby[0xBC] = 0;
@@ -591,7 +591,7 @@ extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022D
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_L07_0015FC88[] __attribute__((section(".sdata")));
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void FUN_L00_00227638(void);
+extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
@@ -698,7 +698,7 @@ void FUN_L07_002cdb28(struct Moby *moby) {
             if (0.5f < absolute_float(*(float *)(data + 0xA4) - 0.5f)) {
                 int r;
                 if (*(int *)(data + 0xC8) == 0 && is_hero_on_moby(moby)) {
-                    FUN_L00_00227638();
+                    set_hero_idle_state_for_vehicle_mode();
                 }
                 if (0.0f < *(float *)(data + 0xAC)) {
                     moby->command = 3;
