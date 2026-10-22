@@ -1431,8 +1431,8 @@ extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float_c(float input) __asm__("func_001F99C0");
 
-void FUN_L02_002d7748(struct Moby *moby);
-void FUN_L02_002d7748(struct Moby *moby) {
+void update_level02_bot(struct Moby *moby) __asm__("FUN_L02_002d7748");
+void update_level02_bot(struct Moby *moby) {
     enum {
         L02_BOT_INITIALIZE = 0,
         L02_BOT_WAIT_FOR_WAKE_ANIMATION = 2,
