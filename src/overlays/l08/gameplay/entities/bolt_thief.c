@@ -3035,7 +3035,9 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern float D_0015ED6C;
 
-void FUN_L08_002e9758(struct Moby *moby) {
+void process_linked_moby_part_hits(struct Moby *moby) __asm__("FUN_L08_002e9758");
+
+void process_linked_moby_part_hits(struct Moby *moby) {
     int selected = 0;
     char *data = (char *)moby->pvars;
     SwarmPart *slots = (SwarmPart *)(data + 0x60);

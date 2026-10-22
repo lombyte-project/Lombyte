@@ -52,7 +52,7 @@ extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern struct Moby *spawn_class_1b3_projectile(void *, struct Moby *, void *, f32, f32) __asm__("FUN_L08_002de3e0");
 extern void spawn_joint_linked_moby_parts(struct Moby *) __asm__("FUN_L08_002e9558");
-extern void FUN_L08_002e9758(struct Moby *);
+extern void process_linked_moby_part_hits(struct Moby *) __asm__("FUN_L08_002e9758");
 extern void update_commando_parts(struct Moby *) __asm__("FUN_L08_002e9a18");
 
 void FUN_L08_002e9b70(struct Moby *moby) {
@@ -123,7 +123,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
             normalize_vector_xyz(&step, &step, D_L08_00161D34 * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
-        FUN_L08_002e9758(moby);
+        process_linked_moby_part_hits(moby);
         update_commando_parts(moby);
         if (moby->command == 0) {
             break;
