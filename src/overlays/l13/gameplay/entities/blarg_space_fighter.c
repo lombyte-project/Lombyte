@@ -142,8 +142,10 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
-void FUN_L13_002c1528(Moby_2C27B0 *m);
-void FUN_L13_002c1528(Moby_2C27B0 *rocket_moby) {
+void update_level_13_homing_rocket(Moby_2C27B0 *rocket_moby) __asm__("FUN_L13_002c1528");
+
+void update_level_13_homing_rocket(Moby_2C27B0 *m) __asm__("FUN_L13_002c1528");
+void update_level_13_homing_rocket(Moby_2C27B0 *rocket_moby) {
     Rocket_2C27B0 *rocket_data = rocket_moby->data;
     V4_2C27B0 old;
     V4_2C27B0 hitpos;
