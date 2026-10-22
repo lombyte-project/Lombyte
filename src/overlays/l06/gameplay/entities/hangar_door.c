@@ -3307,7 +3307,9 @@ extern int D_L06_00161F54 __attribute__((sda));
 extern int D_L06_00161F58 __attribute__((sda));
 extern float D_L06_00161F5C __attribute__((sda));
 
-void FUN_L06_002fbfb0(char *moby) {
+void update_moby_pair_transforms(char *moby) __asm__("FUN_L06_002fbfb0");
+
+void update_moby_pair_transforms(char *moby) {
     enum {
         INITIALIZE_CHILD_AND_TRANSFORMS = 0,
         WAIT_FOR_HERO_IN_CLIP_VOLUME = 1,
