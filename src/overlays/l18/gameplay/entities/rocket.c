@@ -3017,8 +3017,8 @@ void FUN_L18_002eaea0(void *moby) {
     qcopy(D_L18_001D9D00[1], (char *)moby + 0x10);
     for (i = 1; i < 20; i++) {
         float primary_bolt_z_offset;
-        float len;
-        float len0;
+        float arc_endpoint_distance;
+        float blended_step_length;
         float azimuth_angle;
         float b;
         primary_bolt_z_offset = *(float *)&D_L18_00162000
@@ -3032,36 +3032,36 @@ void FUN_L18_002eaea0(void *moby) {
         build_spherical_offset(&scratch_vectors[1], scale, azimuth_angle, b);
         scratch_vectors[1].f[2] = scratch_vectors[1].f[2] * 0.5f;
         lerp_vector(&scratch_vectors[2], &scratch_vectors[3], &scratch_vectors[1], *(float *)&D_L18_0016208C);
-        len0 = vector_length_xyz(&scratch_vectors[2]);
-        if (len0 == 0.0f) {
+        blended_step_length = vector_length_xyz(&scratch_vectors[2]);
+        if (blended_step_length == 0.0f) {
             qcopy(&D_L18_001D9D00[0][i], &D_L18_001D9D00[0][i - 1]);
         } else {
-            scale_vector_xyz_c(&scratch_vectors[2], &scratch_vectors[2], scale / len0);
+            scale_vector_xyz_c(&scratch_vectors[2], &scratch_vectors[2], scale / blended_step_length);
             add_vector_xyz(&D_L18_001D9D00[0][i], &D_L18_001D9CF0[i], &scratch_vectors[2]);
             qcopy(&scratch_vectors[3], &scratch_vectors[2]);
         }
         D_L18_001D9D00[0][i].f[2] = D_L18_001D9D00[0][i].f[2] + primary_bolt_z_offset;
         subtract_vector_xyz(&scratch_vectors[1], &D_L18_001D9D00[0][i], &D_L18_001D9CF0[i]);
         subtract_vector_xyz(&scratch_vectors[5], data + 0x10, &D_L18_001D9D00[0][i]);
-        len = vector_length_xyz(&scratch_vectors[5]);
-        if (len != 0.0f) {
+        arc_endpoint_distance = vector_length_xyz(&scratch_vectors[5]);
+        if (arc_endpoint_distance != 0.0f) {
             float endpoint_direction_blend_weight;
             if (i == 19) {
                 endpoint_direction_blend_weight = 0.5f;
-                scale = len;
+                scale = arc_endpoint_distance;
             } else if (i >= 16) {
                 endpoint_direction_blend_weight = 0.5f;
-                scale = len / convert_integer_to_float(19 - i);
+                scale = arc_endpoint_distance / convert_integer_to_float(19 - i);
             } else {
                 endpoint_direction_blend_weight = 0.1f;
             }
-            scale_vector_xyz_c(&scratch_vectors[5], &scratch_vectors[5], scale / len);
+            scale_vector_xyz_c(&scratch_vectors[5], &scratch_vectors[5], scale / arc_endpoint_distance);
             lerp_vector(&scratch_vectors[3], &scratch_vectors[3], &scratch_vectors[5], endpoint_direction_blend_weight);
         }
         if (i < 10) {
             float g;
             float secondary_bolt_z_offset;
-            float ang;
+            float secondary_bolt_lateral_angle;
             float secondary_bolt_lateral_offset;
             g = normalize_angle(*(float *)&D_L18_00162010 + (float)i * *(float *)&D_L18_00162018);
             secondary_bolt_z_offset = *(float *)&D_L18_0016201C
@@ -3070,10 +3070,10 @@ void FUN_L18_002eaea0(void *moby) {
             secondary_bolt_z_offset = secondary_bolt_z_offset * fast_sin_c(g) + FUN_L00_00257c48(0.0f, 0.1f);
             D_L18_001D9D00[1][i].f[2] = D_L18_001D9D00[1][i].f[2] + secondary_bolt_z_offset;
             D_L18_001DA110[i] = secondary_bolt_z_offset;
-            ang = fast_add_rotations(fast_arc_tan(scratch_vectors[1].f[0], scratch_vectors[1].f[1]), 1.5707964f);
+            secondary_bolt_lateral_angle = fast_add_rotations(fast_arc_tan(scratch_vectors[1].f[0], scratch_vectors[1].f[1]), 1.5707964f);
             secondary_bolt_lateral_offset = *(float *)&D_L18_00162020 * fast_cos_c(g);
-            scratch_vectors[4].f[0] = fast_cos_c(ang) * secondary_bolt_lateral_offset;
-            scratch_vectors[4].f[1] = fast_sin_c(ang) * secondary_bolt_lateral_offset;
+            scratch_vectors[4].f[0] = fast_cos_c(secondary_bolt_lateral_angle) * secondary_bolt_lateral_offset;
+            scratch_vectors[4].f[1] = fast_sin_c(secondary_bolt_lateral_angle) * secondary_bolt_lateral_offset;
             scratch_vectors[4].f[2] = 0.0f;
             qcopy(&D_L18_001D9FD0[i], &scratch_vectors[4]);
             add_vector_xyz(&D_L18_001D9D00[1][i], &D_L18_001D9D00[1][i], &scratch_vectors[4]);
