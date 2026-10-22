@@ -660,7 +660,9 @@ extern void FUN_L00_00233660_2348d0(void *, f32, f32, f32) __asm__("FUN_L00_0023
 extern void FUN_L00_00211250_2348d0(void) __asm__("FUN_L00_00211250");
 
 extern Entry70_2348d0 D_L06_0017A070[];
-void FUN_L06_002348d0(void) {
+void update_hero_timers_and_spatial_state(void) __asm__("FUN_L06_002348d0");
+
+void update_hero_timers_and_spatial_state(void) {
     Vec4 sum;
     Vec4 history_delta;
     struct Moby *spawned_moby;
