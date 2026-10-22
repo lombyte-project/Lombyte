@@ -526,7 +526,7 @@ extern void add_vector_xyz_cf(int, char *, float *) __asm__("FUN_L00_0024f7c8");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float probe_ground_height(float *, int, float) __asm__("FUN_00213508");
-extern void FUN_L00_00274cf8_205f60(float *, int, float) __asm__("FUN_L00_00274cf8");
+extern void spawn_texture_indexed_rotated_particle(float *, int, float) __asm__("FUN_L00_00274cf8");
 
 void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int enable_record_dispatch) {
     float ground_adjusted_position[4];
@@ -546,7 +546,7 @@ void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int enab
             ground_adjusted_position[0] += fast_cos(g->motion.rot.f[2]) * k;
             ground_adjusted_position[1] += fast_sin(g->motion.rot.f[2]) * k;
             ground_adjusted_position[2] = probe_ground_height(ground_adjusted_position, 0, 0.5f) + 0.04f;
-            FUN_L00_00274cf8_205f60(ground_adjusted_position, joint_index_offset == 0, g->motion.rot.f[2]);
+            spawn_texture_indexed_rotated_particle(ground_adjusted_position, joint_index_offset == 0, g->motion.rot.f[2]);
         }
     }
 }

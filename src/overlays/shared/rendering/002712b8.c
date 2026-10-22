@@ -1613,7 +1613,9 @@ void update_mode_controlled_rotating_alpha_fade_particle(u8 *particle) {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L00_001B2198 __attribute__((section(".data")));
 
-unsigned char *FUN_L00_00274cf8(void *position, int particle_texture_index, float initial_rotation_radians) {
+unsigned char *spawn_texture_indexed_rotated_particle(void *position, int particle_texture_index, float initial_rotation_radians) __asm__("FUN_L00_00274cf8");
+
+unsigned char *spawn_texture_indexed_rotated_particle(void *position, int particle_texture_index, float initial_rotation_radians) {
     unsigned char *particle = p27fe00_alloc(0x46);
     if (particle != 0) {
         qcopy(particle + 0x10, position);
