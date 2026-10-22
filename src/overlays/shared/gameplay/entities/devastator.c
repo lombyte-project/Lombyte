@@ -496,7 +496,9 @@ int FUN_001f9740_2b3458(int *) __asm__("FUN_001f9740");
 void FUN_0020c828_2b3458(void *) __asm__("FUN_0020c828");
 extern int D_L00_00161478 __attribute__((sda));
 extern int D_L00_00161480 __attribute__((sda));
-void FUN_L00_002b3458(unsigned char *source_moby) {
+void update_linked_moby_states(unsigned char *source_moby) __asm__("FUN_L00_002b3458");
+
+void update_linked_moby_states(unsigned char *source_moby) {
     enum {
         STATE_INITIALIZE = 0,
         STATE_ACTIVE = 1
