@@ -3436,7 +3436,9 @@ extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_0025
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
-void FUN_L17_002f10c8(struct Moby *moby) {
+void draw_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L17_002f10c8");
+
+void draw_moby_radial_ripple_mesh(struct Moby *moby) {
     unsigned int i = 0;
     unsigned int output_vertex_byte_offset = 0;
     RingVars *data = (RingVars *)moby->pvars;
