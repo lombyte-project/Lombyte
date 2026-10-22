@@ -414,7 +414,9 @@ extern float fast_sin(float) __asm__("func_001F9DE0");
 extern void FUN_L08_00272cb8(void *, void *, void *, float);
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L08_003085f0(char *moby) {
+void spawn_moby_radial_particles(char *moby) __asm__("FUN_L08_003085f0");
+
+void spawn_moby_radial_particles(char *moby) {
     float v[4];
     float spawn_center_position[4];
     float w[4];
