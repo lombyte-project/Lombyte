@@ -3404,7 +3404,9 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern float func_L00_0025C918_2136A8(float *p, float t, float *v, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 
-void FUN_L00_00212ff0(void) {
+void correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
+
+void correct_hero_ground_penetration(void) {
     struct Hero *globals = &hero;
     float ground_position_correction[4];
     if (globals->unk20B3 != 0) {
@@ -3673,7 +3675,7 @@ extern void normalize_vector_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 
 extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
 extern void FUN_L00_002127b8(void);
-extern void FUN_L00_00212ff0(void);
+extern void correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
 
 void FUN_L00_00213880(void)
 {
@@ -3732,7 +3734,7 @@ void FUN_L00_00213880(void)
         resolve_hero_collisions_with_history();
         FUN_L00_002127b8();
         subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
-        FUN_L00_00212ff0();
+        correct_hero_ground_penetration();
     } else {
         FUN_L00_002127b8();
     }
@@ -3787,7 +3789,7 @@ void FUN_L00_00213880(void)
         resolve_hero_collisions_with_history();
         FUN_L00_002127b8();
         subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
-        FUN_L00_00212ff0();
+        correct_hero_ground_penetration();
     }
     subtract_vector_xyz(&hero.motion.platform_carry, &hero.motion.pos, &movement_scratch_vector);
     {

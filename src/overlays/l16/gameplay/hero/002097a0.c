@@ -534,7 +534,7 @@ extern float forward_component(void *) __asm__("FUN_L00_00213350");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float gravity_z(float *) __asm__("FUN_L00_00233a78");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-extern void FUN_L00_00212ff0(void);
+extern void correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
 extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
 extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
 extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
@@ -655,7 +655,7 @@ void FUN_L16_00211098(void) {
         resolve_hero_collisions_with_history();
         FUN_L16_0020ffb0();
         subtract_vector_xyz((char *)position + 0x80, position, previous.f);
-        FUN_L00_00212ff0();
+        correct_hero_ground_penetration();
     } else {
         FUN_L16_0020ffb0();
     }
@@ -704,7 +704,7 @@ void FUN_L16_00211098(void) {
         resolve_hero_collisions_with_history();
         FUN_L16_0020ffb0();
         subtract_vector_xyz(external, new_position, previous.f);
-        FUN_L00_00212ff0();
+        correct_hero_ground_penetration();
     }
     subtract_vector_xyz((char *)delta + 0x30, new_position, work.f);
     motion_player->frame_delta[3] = motion_player->contact[3];

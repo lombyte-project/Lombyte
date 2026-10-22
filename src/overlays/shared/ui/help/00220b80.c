@@ -65,7 +65,7 @@ extern void clear_vector(void *) __asm__("FUN_001f99f8");
 
 extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
 extern void FUN_L02_002216a0(void);
-extern void FUN_L00_00212ff0(void);
+extern void correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
 
 void FUN_L02_002226d8(void)
 {
@@ -116,7 +116,7 @@ void FUN_L02_002226d8(void)
         resolve_hero_collisions_with_history();
         FUN_L02_002216a0();
         subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
-        FUN_L00_00212ff0();
+        correct_hero_ground_penetration();
     } else {
         FUN_L02_002216a0();
     }
@@ -171,7 +171,7 @@ void FUN_L02_002226d8(void)
         resolve_hero_collisions_with_history();
         FUN_L02_002216a0();
         subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
-        FUN_L00_00212ff0();
+        correct_hero_ground_penetration();
     }
     subtract_vector_xyz(&hero.motion.platform_carry, &hero.motion.pos, &movement_vector_scratch);
     {
