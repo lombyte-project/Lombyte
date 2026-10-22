@@ -182,7 +182,7 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void FUN_L00_00259a88(int, void *);
-extern void FUN_L18_002dc4b8();
+extern void draw_class_274_ring_effect() __asm__("FUN_L18_002dc4b8");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -216,7 +216,7 @@ void update_class_274_ring_effect(struct Moby *moby) {
     if (flag == 0) {
         play_entity_sound(*(int *)(moby_vars + 3), moby_vars[0], pos, 0x10000, 1.0f, 1.0f, 0, 1, 0);
     }
-    enqueue_callback_list_1(FUN_L18_002dc4b8, moby);
+    enqueue_callback_list_1(draw_class_274_ring_effect, moby);
 }
 #include "qcopy.h"
 extern void *create_moby() __asm__("FUN_0020c4f8");
@@ -2168,7 +2168,7 @@ extern float D_L18_00161CC4 __attribute__((sda));
 extern float D_L18_00161CC8 __attribute__((sda));
 extern float D_L18_00161CCC __attribute__((sda));
 extern float D_L18_00161CD4 __attribute__((sda));
-void FUN_L18_002dc4b8(char *moby) {
+void draw_class_274_ring_effect(char *moby) {
     Q_dc4b8 quad[4];
     V_dc4b8 quad_draw_transform[4];
     V_dc4b8 ring_segment_rotation_basis[3];
