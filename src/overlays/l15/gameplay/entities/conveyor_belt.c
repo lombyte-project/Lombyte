@@ -875,7 +875,9 @@ s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 extern short D_L15_00162198 __attribute__((sda));
 int D_L15_0016219C = 3;
-void FUN_L15_002eb928(struct Moby *moby) {
+void emit_randomized_vertical_effect(struct Moby *moby) __asm__("FUN_L15_002eb928");
+
+void emit_randomized_vertical_effect(struct Moby *moby) {
     float vertical_motion_vector[4];
     float *data = (float *)moby->pvars;
     if (random_integer_below(D_L15_0016219C - 1) == 0) {
