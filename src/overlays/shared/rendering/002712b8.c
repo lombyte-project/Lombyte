@@ -557,7 +557,9 @@ extern u8 *D_L00_001B215C __attribute__((section(".data")));
 P_2725d8 *FUN_L00_002678b8_c2(s32) __asm__("FUN_L00_002678b8");
 s32 FUN_001fa6d0(f32);
 void add_vector_xyz_cf(u8 *, u8 *, void *) __asm__("FUN_L00_0024f7c8");
-P_2725d8 *FUN_L00_002725d8(u8 *owner, u8 *attachment_point_selector, s32 color, s32 initial_size_bits, f32 primary_position_w, f32 secondary_position_w) {
+P_2725d8 *spawn_moby_point_attached_particle(u8 *owner, u8 *attachment_point_selector, s32 color, s32 initial_size_bits, f32 primary_position_w, f32 secondary_position_w) __asm__("FUN_L00_002725d8");
+
+P_2725d8 *spawn_moby_point_attached_particle(u8 *owner, u8 *attachment_point_selector, s32 color, s32 initial_size_bits, f32 primary_position_w, f32 secondary_position_w) {
     P_2725d8 *particle = FUN_L00_002678b8_c2(0x37);
     /* Fakematch: the dead update gives a0 and a3 retail's saved registers. */
     initial_size_bits++;

@@ -2380,15 +2380,15 @@ void FUN_L00_002cdcc0(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CF328), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_002725d8(void *, int, float, float, unsigned, unsigned);
+extern int spawn_moby_point_attached_particle(void *, int, float, float, unsigned, unsigned) __asm__("FUN_L00_002725d8");
 
 void FUN_L00_002cde78(char *owner_moby) {
     char *moby_vars = *(char **)(owner_moby + 0x78);
     if (*(int *)(moby_vars + 0x4C) == 0) {
-        *(int *)(moby_vars + 0x4C) = FUN_L00_002725d8(owner_moby, 0, 0.05f, 0.01f, 0x80808080, 0x10808080);
+        *(int *)(moby_vars + 0x4C) = spawn_moby_point_attached_particle(owner_moby, 0, 0.05f, 0.01f, 0x80808080, 0x10808080);
     }
     if (*(int *)(moby_vars + 0x50) == 0) {
-        *(int *)(moby_vars + 0x50) = FUN_L00_002725d8(owner_moby, 1, 0.05f, 0.01f, 0x80808080, 0x10808080);
+        *(int *)(moby_vars + 0x50) = spawn_moby_point_attached_particle(owner_moby, 1, 0.05f, 0.01f, 0x80808080, 0x10808080);
     }
 }
 /* Exact match: tools/ps2eeas_nops.py keeps the hazard nop after the label the branch lands on. */
