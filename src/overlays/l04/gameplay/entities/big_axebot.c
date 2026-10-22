@@ -19,7 +19,9 @@ extern s32 rand();
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
-void FUN_L04_002a5a08(struct Moby *moby) {
+void update_moby_random_interval_animation(struct Moby *moby) __asm__("FUN_L04_002a5a08");
+
+void update_moby_random_interval_animation(struct Moby *moby) {
     int *animation_countdown;
     if (moby != 0) {
         moby->collision = 0;
