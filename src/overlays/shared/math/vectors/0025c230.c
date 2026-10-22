@@ -14,7 +14,9 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 /* Returns component d of c - a transformed by the matrix transpose_rotation_matrix builds from b. */
-float FUN_L00_0025c230(void *subtrahend_vector, void *rotation_matrix_source, void *minuend_vector, int component_index) {
+float compute_transformed_delta_component(void *subtrahend_vector, void *rotation_matrix_source, void *minuend_vector, int component_index) __asm__("FUN_L00_0025c230");
+
+float compute_transformed_delta_component(void *subtrahend_vector, void *rotation_matrix_source, void *minuend_vector, int component_index) {
     float delta[4], transformed_delta[4], transposed_rotation_matrix[16];
     float *transformed_delta_ptr = transformed_delta;
     subtract_vector_xyz(delta, minuend_vector, subtrahend_vector);

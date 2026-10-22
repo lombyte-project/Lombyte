@@ -1447,7 +1447,7 @@ void FUN_001f9a10_26c860(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_0024f7c8_26c860(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 void FUN_L00_001ff500_26c860(void *, void *, f32) __asm__("FUN_L00_001ff500");
 f32 FUN_001fa580_26c860(f32, f32) __asm__("FUN_001fa580");
-f32 FUN_L00_0025c230_26c860(void *, void *, void *, s32) __asm__("FUN_L00_0025c230");
+f32 compute_transformed_delta_component(void *, void *, void *, s32) __asm__("FUN_L00_0025c230");
 s32 FUN_001f9770_26c860(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08_26c860(void *) __asm__("FUN_L00_00267a08");
 s32 FUN_001fa6d0_26c860(f32) __asm__("FUN_001fa6d0");
@@ -1481,7 +1481,7 @@ void update_spiraling_fade_in_out_effect_particle(M_26c860 *particle) {
         position_offset_scratch.w = zero;
         FUN_001f9d20_26c860(&transformed_position_offset, &position_offset_scratch, &position_offset_matrix);
         FUN_001f9a10_26c860(&particle->v10, &particle->v10, &transformed_position_offset);
-        if (zero < FUN_L00_0025c230_26c860(&reference_position, r->p18 + 0xC0, &particle->v10, 1)) {
+        if (zero < compute_transformed_delta_component(&reference_position, r->p18 + 0xC0, &particle->v10, 1)) {
             FUN_L00_00267a08_26c860(particle);
             return;
         }
