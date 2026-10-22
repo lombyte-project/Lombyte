@@ -409,7 +409,7 @@ int FUN_L06_002fb668(char *moby) {
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void draw_dual_texture_50_quad_mesh(void) __asm__("FUN_L06_002fd1a0");
 extern void draw_dual_texture_58_quad_mesh(void) __asm__("FUN_L06_002fd460");
-extern void FUN_L06_002fd748(void);
+extern void draw_dual_texture_864_quad_mesh(void) __asm__("FUN_L06_002fd748");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void enqueue_moby_draw_callbacks_by_clip_volume(char *moby) __asm__("FUN_L06_002fd088");
@@ -433,7 +433,7 @@ void enqueue_moby_draw_callbacks_by_clip_volume(char *moby) {
         char *hero_data = (char *)D_0013E533 + 0xE1D;
         if (*(int *)(hero_data + 0x208C) == 15 ||
             (*clip_volume_index_cursor >= 0 && is_point_inside_clip_volume(D_L06_00167540, *clip_volume_index_cursor))) {
-            enqueue_callback_list_1((void *)FUN_L06_002fd748, moby);
+            enqueue_callback_list_1((void *)draw_dual_texture_864_quad_mesh, moby);
             return;
         }
     }
