@@ -1299,7 +1299,9 @@ extern float D_L15_00161A0C __attribute__((sda));
 
 extern struct Moby *create_class_55b_moby_from_source(struct Moby *) __asm__("FUN_L12_00308670");
 extern void start_blarg_commander_knockback(void *, struct Moby *) __asm__("FUN_L12_00308708");
-void FUN_L15_002c6900(struct Moby *m);
+void process_helicopter_hits(struct Moby *moby) __asm__("FUN_L15_002c6900");
+
+void process_helicopter_hits(struct Moby *m) __asm__("FUN_L15_002c6900");
 extern void FUN_L02_00261c80(void *, float *, float);
 extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern int FUN_L01_0026e008(int, int);
@@ -1368,7 +1370,7 @@ void helicopter_update(struct Moby *moby) {
         moby->state = 1;
         return;
     }
-    FUN_L15_002c6900(moby);
+    process_helicopter_hits(moby);
     goal.status = 0;
     if (moby->state == 1) {
         vars->range = vars->wake_range;
@@ -1721,7 +1723,7 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L15_002c6900(struct Moby *moby) {
+void process_helicopter_hits(struct Moby *moby) {
     int hit_reaction_status;
     float fv;
     int hit_reaction_code;
