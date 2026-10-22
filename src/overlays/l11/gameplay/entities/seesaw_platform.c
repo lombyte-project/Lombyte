@@ -1848,7 +1848,9 @@ void count_active_and_visible_listed_mobys(void *moby, void *active_moby_count, 
 
 void count_active_and_visible_listed_mobys(void *moby, void *a1, void *a2) __asm__("FUN_L11_00311be8");
 
-void *FUN_L11_00311948(void *moby, char *ship_vars, float *reference_position, float *reference_rotation, float unused_float_parameter_0, float unused_float_parameter_1, float unused_float_parameter_2, void *current_target, int unused_parameter) {
+void *select_ship_lock_on_target(void *moby, char *ship_vars, float *reference_position, float *reference_rotation, float unused_float_parameter_0, float unused_float_parameter_1, float unused_float_parameter_2, void *current_target, int unused_parameter) __asm__("FUN_L11_00311948");
+
+void *select_ship_lock_on_target(void *moby, char *ship_vars, float *reference_position, float *reference_rotation, float unused_float_parameter_0, float unused_float_parameter_1, float unused_float_parameter_2, void *current_target, int unused_parameter) {
     void *best = 0;
     float bestd = 1000.0f;
     short *moby_list_entry;
@@ -1972,7 +1974,7 @@ void update_ship_lock_on_target(void *self, char *moby) {
         }
         reference_rotation_source = D_L11_001677D0;
         qcopy(v, reference_rotation_source);
-        selected_target = FUN_L11_00311948(self, moby, reference_rotation_source - 4, v, 0.19634955f, 0.19634955f, 255.0f, *(void **)(moby + 0x88), 0);
+        selected_target = select_ship_lock_on_target(self, moby, reference_rotation_source - 4, v, 0.19634955f, 0.19634955f, 255.0f, *(void **)(moby + 0x88), 0);
         if (selected_target != *(void **)(moby + 0x88)) {
             int initial_lock_timer_frames = lock_hold_frames + lock_fade_frames;
             *(void **)(moby + 0x88) = selected_target;
