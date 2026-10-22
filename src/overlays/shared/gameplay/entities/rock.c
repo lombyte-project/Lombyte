@@ -653,7 +653,9 @@ extern char D_L01_001672C0_c[] __asm__("D_L01_00167240");
 extern char D_0014171B_c[] __asm__("D_0014C190");
 extern int stub_printf(void *, int, int) __asm__("FUN_001e93b0");
 
-void FUN_L01_002fb5b0(char *moby) {
+void update_cutscene_trigger(char *moby) __asm__("FUN_L01_002fb5b0");
+
+void update_cutscene_trigger(char *moby) {
     enum {
         CUTSCENE_TRIGGER_INITIALIZE = 0,
         CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER = 1,
