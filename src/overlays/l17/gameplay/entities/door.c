@@ -485,7 +485,9 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L17_002eaae0(char *radar_rotation, char *from, char *moby, int icon, long color, int tex) {
+void draw_fighter_jet_radar_contact_icon(char *radar_rotation, char *from, char *moby, int icon, long color, int tex) __asm__("FUN_L17_002eaae0");
+
+void draw_fighter_jet_radar_contact_icon(char *radar_rotation, char *from, char *moby, int icon, long color, int tex) {
     float turn[4];
     float radar_rotation_matrix[16];
     float delta[4];
@@ -548,7 +550,7 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 extern void FUN_L13_002b7d50(void *, int, int, long, float, float, float, float);
-void FUN_L17_002eaae0(char *rot, char *from, char *moby, int icon, long color, int tex);
+void draw_fighter_jet_radar_contact_icon(char *rot, char *from, char *moby, int icon, long color, int tex) __asm__("FUN_L17_002eaae0");
 extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -614,17 +616,17 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
         switch (*(short *)(scanned_moby + 0xA6)) {
         case MOBY_CLASS_GRAY_RADAR_CONTACT:
         case MOBY_CLASS_GRAY_RADAR_ICON_TWO_CONTACT:
-            FUN_L17_002eaae0(radar_rotation, radar_origin, scanned_moby, 2, 0x70808080, *(int *)(ship_vars + 0x104));
+            draw_fighter_jet_radar_contact_icon(radar_rotation, radar_origin, scanned_moby, 2, 0x70808080, *(int *)(ship_vars + 0x104));
             break;
         case MOBY_CLASS_GRAY_RADAR_QUAD_CONTACT:
         case MOBY_CLASS_GRAY_RADAR_BLIP_CONTACT:
-            FUN_L17_002eaae0(radar_rotation, radar_origin, scanned_moby, 2, 0x70808080, *(int *)(ship_vars + 0x104));
+            draw_fighter_jet_radar_contact_icon(radar_rotation, radar_origin, scanned_moby, 2, 0x70808080, *(int *)(ship_vars + 0x104));
             break;
         case MOBY_CLASS_ORANGE_RADAR_CONTACT:
-            FUN_L17_002eaae0(radar_rotation, radar_origin, scanned_moby, 1, 0x70004080, *(int *)(ship_vars + 0x104));
+            draw_fighter_jet_radar_contact_icon(radar_rotation, radar_origin, scanned_moby, 1, 0x70004080, *(int *)(ship_vars + 0x104));
             break;
         case MOBY_CLASS_YELLOW_RADAR_CONTACT:
-            FUN_L17_002eaae0(radar_rotation, radar_origin, scanned_moby, 1, 0x70007080, *(int *)(ship_vars + 0x104));
+            draw_fighter_jet_radar_contact_icon(radar_rotation, radar_origin, scanned_moby, 1, 0x70007080, *(int *)(ship_vars + 0x104));
             break;
         case MOBY_CLASS_UNMARKED_COUNTED_TARGET:
         case MOBY_CLASS_UNCOUNTED_MARKED_TARGET:
@@ -652,7 +654,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
             if (*(short *)(scanned_moby + 0xA6) != 0x191) {
                 *(int *)(ship_vars + 0xE8) = *(int *)(ship_vars + 0xE8) + 1;
             }
-            FUN_L17_002eaae0(radar_rotation, radar_origin, scanned_moby, 0, 0x70808080, *(int *)(ship_vars + 0x104));
+            draw_fighter_jet_radar_contact_icon(radar_rotation, radar_origin, scanned_moby, 0, 0x70808080, *(int *)(ship_vars + 0x104));
             break;
         case MOBY_CLASS_OFFSCREEN_ARROW_TARGET:
             qcopy(arrow_target_position_scratch, scanned_moby + 0x10);
@@ -678,7 +680,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
                 near = scanned_moby;
                 bestd = dd;
             }
-            FUN_L17_002eaae0(radar_rotation, (char *)arrow_target_position_scratch, scanned_moby, 0, 0x70808080, *(int *)(ship_vars + 0x104));
+            draw_fighter_jet_radar_contact_icon(radar_rotation, (char *)arrow_target_position_scratch, scanned_moby, 0, 0x70808080, *(int *)(ship_vars + 0x104));
             *(int *)(ship_vars + 0xE8) = *(int *)(ship_vars + 0xE8) + 1;
             break;
         case MOBY_CLASS_FLAG_GATED_MARKED_TARGET:
@@ -694,7 +696,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
                                          -ang);
                     }
                 }
-                FUN_L17_002eaae0(radar_rotation, radar_origin, scanned_moby, 1, 0x70808080, *(int *)(ship_vars + 0x104));
+                draw_fighter_jet_radar_contact_icon(radar_rotation, radar_origin, scanned_moby, 1, 0x70808080, *(int *)(ship_vars + 0x104));
             }
             break;
         case MOBY_CLASS_STATE_GATED_MARKED_TARGET:
@@ -709,7 +711,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
                                          -ang);
                     }
                 }
-                FUN_L17_002eaae0(radar_rotation, radar_origin, scanned_moby, 1, 0x70808080, *(int *)(ship_vars + 0x104));
+                draw_fighter_jet_radar_contact_icon(radar_rotation, radar_origin, scanned_moby, 1, 0x70808080, *(int *)(ship_vars + 0x104));
             }
             break;
         case MOBY_CLASS_EXCLUDED_FROM_RADAR:
@@ -733,7 +735,7 @@ int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *r
         default:
             if (scanned_moby != 0 && *(char **)(scanned_moby + 0x24) != 0 &&
                 *(short *)(*(char **)(scanned_moby + 0x24) + 0x46) == 5) {
-                FUN_L17_002eaae0(radar_rotation, radar_origin, scanned_moby, 1, 0x70808080, *(int *)(ship_vars + 0x104));
+                draw_fighter_jet_radar_contact_icon(radar_rotation, radar_origin, scanned_moby, 1, 0x70808080, *(int *)(ship_vars + 0x104));
             }
             break;
         }
