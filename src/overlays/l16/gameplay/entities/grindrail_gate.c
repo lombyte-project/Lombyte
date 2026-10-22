@@ -2775,7 +2775,9 @@ void enqueue_callback_list_1_u(int arg0, int arg1) __asm__("FUN_001f4600");
 extern L16SingleSphere D_L16_00161F60_bounds[] __asm__("D_L16_00161F80")
     __attribute__((section(".sdata")));
 
-void FUN_L16_002e93b0(unsigned char *moby) {
+void update_level16_single_mesh_render_state(unsigned char *moby) __asm__("FUN_L16_002e93b0");
+
+void update_level16_single_mesh_render_state(unsigned char *moby) {
     enum {
         SINGLE_MESH_RENDER_INITIALIZE_BOUNDING_SPHERE = 0,
         SINGLE_MESH_RENDER_QUEUE_CALLBACK = 1
