@@ -53,7 +53,7 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void register_callback_c(void *, void *) __asm__("FUN_L12_0021be50");
 extern void copy_moby_z_to_group_records(struct Moby *) __asm__("FUN_L12_002bf6d0");
 extern void initialize_level_12_slot_grid_neighbors(int) __asm__("FUN_L12_002bf770");
-extern void FUN_L12_002bf748(void);
+extern void render_level_12_water_grids(void) __asm__("FUN_L12_002bf748");
 
 void update_level_12_water_tile(struct Moby *moby) __asm__("FUN_L12_002bf140");
 
@@ -170,7 +170,7 @@ update_slot:
         }
         if (data[3] == 0) {
             finish_slots_c(D_L12_001CBF40_c, 17);
-            register_callback_c(FUN_L12_002bf748, moby);
+            register_callback_c(render_level_12_water_grids, moby);
         }
     }
 }
