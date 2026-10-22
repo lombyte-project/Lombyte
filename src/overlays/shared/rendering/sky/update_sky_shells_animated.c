@@ -304,7 +304,9 @@ extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 extern void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-void FUN_L00_0028a920(void) {
+void draw_three_sky_shells_with_particles(void) __asm__("FUN_L00_0028a920");
+
+void draw_three_sky_shells_with_particles(void) {
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(0);
     sky_draw_shell(1);
