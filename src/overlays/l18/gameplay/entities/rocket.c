@@ -2558,7 +2558,9 @@ extern float probe_ground_height_c(void *, int, float) __asm__("func_00213508");
 extern void draw_electric_water_bolt_effect(char *) __asm__("FUN_L15_002d8710");
 extern void FUN_L18_002ea1f8_u(struct Moby *) __asm__("FUN_L18_002ea1f8");
 void spawn_explosion_burst(void *arg) __asm__("FUN_L18_002ea800");
-void FUN_L18_002eacd8(struct Moby *m);
+void initialize_electric_bolt_effect_if_requested(struct Moby *moby) __asm__("FUN_L18_002eacd8");
+
+void initialize_electric_bolt_effect_if_requested(struct Moby *m) __asm__("FUN_L18_002eacd8");
 extern void FUN_L18_002eaea0_u(void *) __asm__("FUN_L18_002eaea0");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 void FUN_L18_002ea598_c(char *moby) __asm__("FUN_L18_002ea598");
@@ -2597,7 +2599,7 @@ void FUN_L18_002e9e70(struct Moby *moby) {
         FUN_L18_002ea598_c(moby);
         FUN_L00_00257d78(arc_endpoint_position, D_L18_00161ED8 * moby_vars[9], D_L18_00161ED8 * moby_vars[9]);
         add_vector_xyz(arc_endpoint_position, arc_endpoint_position, position);
-        FUN_L18_002eacd8(moby);
+        initialize_electric_bolt_effect_if_requested(moby);
         FUN_L18_002eaea0_u(moby);
         enqueue_callback_list_1((void (*)(void))draw_electric_water_bolt_effect, moby);
         if (target_distance < movement_step_length) {
@@ -2930,7 +2932,7 @@ extern short D_L18_001620D4;
 extern short D_L18_001620D6;
 extern int D_L18_001620D8;
 extern int D_L18_001620DC;
-void FUN_L18_002eacd8(struct Moby *moby) {
+void initialize_electric_bolt_effect_if_requested(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     float arc_endpoint_displacement[4];
     float step[4];
