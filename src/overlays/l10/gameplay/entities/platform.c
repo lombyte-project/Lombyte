@@ -752,7 +752,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void *memcpy(void *, const void *, u32);
-extern void FUN_L10_0024c7f0(unsigned char *m, int x, int y, void *p, float f);
+extern void spawn_nearby_effect_without_direction(unsigned char *m, int x, int y, void *p, float f) __asm__("FUN_L10_0024c7f0");
 
 void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
     OvlVec4 moby_rotation_basis[3];
@@ -811,7 +811,7 @@ void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
             point_moby_count = collect_mobies_in_sphere(&point, box->margin_x, 0x10, moby, 0);
             for (j = 0; j < point_moby_count; j++) {
                 if (D_L10_00178380_u[j] == other) {
-                    FUN_L10_0024c7f0((unsigned char *)other, (int)moby, 0x10001, &point, box->strength);
+                    spawn_nearby_effect_without_direction((unsigned char *)other, (int)moby, 0x10001, &point, box->strength);
                 }
             }
         }

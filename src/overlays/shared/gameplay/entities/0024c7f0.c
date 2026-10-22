@@ -5,6 +5,8 @@
 
 extern void spawn_nearby_effect(unsigned char *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 
-void FUN_L10_0024c7f0(unsigned char *effect_owner, int x, int y, void *effect_position, float effect_priority) {
+void spawn_nearby_effect_without_direction(unsigned char *effect_owner, int x, int y, void *effect_position, float effect_priority) __asm__("FUN_L10_0024c7f0");
+
+void spawn_nearby_effect_without_direction(unsigned char *effect_owner, int x, int y, void *effect_position, float effect_priority) {
     spawn_nearby_effect(effect_owner, x, y, effect_position, D_L10_0015F580, effect_priority);
 }

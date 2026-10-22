@@ -1238,7 +1238,7 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern void FUN_L10_0024c7f0(float, void *, void *, int, void *);
+extern void spawn_nearby_effect_without_direction(float, void *, void *, int, void *) __asm__("FUN_L10_0024c7f0");
 extern void *memcpy(void *, const void *, unsigned int);
 
 extern void *sphere_hits_ed158[] __asm__("D_L13_00178200");
@@ -1293,7 +1293,7 @@ void FUN_L13_002ed158(void *moby, void *data) {
         hit_count = collect_mobies_in_sphere(probe, 0.7f, 0x10, moby, 0);
         for (j = 0; j < hit_count; j++) {
             if (sphere_hits_ed158[j] == candidate)
-                FUN_L10_0024c7f0(1.0f, candidate, moby, 0x10001, probe);
+                spawn_nearby_effect_without_direction(1.0f, candidate, moby, 0x10001, probe);
         }
     }
 }
