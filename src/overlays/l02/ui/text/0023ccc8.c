@@ -11,7 +11,9 @@
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
-void FUN_L02_0023ccc8(char *transition_state) {
+void update_hud_counter_transition(char *transition_state) __asm__("FUN_L02_0023ccc8");
+
+void update_hud_counter_transition(char *transition_state) {
     unsigned char *transition_counters = (unsigned char *)(transition_state + 0x70);
     if (*(int *)(transition_state + 0x7C) >= scale_game_frames(5)) {
         if (transition_counters[0] < scale_game_frames(8)) {
