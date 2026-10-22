@@ -363,7 +363,9 @@ extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry_alt(int, int, int) __asm__("FUN_0022db10");
 extern unsigned char D_0013D50F_e[] __asm__("D_0013D408");
 
-void FUN_L12_002ed280(struct Moby *moby) {
+void update_hoven_help_and_dialogue(struct Moby *moby) __asm__("FUN_L12_002ed280");
+
+void update_hoven_help_and_dialogue(struct Moby *moby) {
     int *moby_vars = (int *)moby->pvars;
     if (FUN_L01_0026e008(moby_vars[3], -1) == 0) {
         unsigned char *dialogue_trigger_state = D_0013D50F_e;
