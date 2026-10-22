@@ -601,18 +601,18 @@ char *load_level_gameplay(int skip_gameplay_read) {
         D_L00_0015FBC4 = *(int *)p;
         p += 0x10;
         if (D_L00_0015FBC4 != 0) {
-            Light *l;
+            Light *current_light;
             int i;
 
             copy_memory_aligned(D_L00_0017ECC0, p, D_L00_0015FBC4 << 4);
             copy_memory_aligned(D_L00_0017EEC0, p + (D_L00_0015FBC4 << 4), D_L00_0015FBC4 << 7);
             for (i = 0; i < D_L00_0015FBC4; i++) {
-                l = &D_L00_0017EEC0[i];
-                if (l->f48 < 0) {
-                    l->f48 = 11;
+                current_light = &D_L00_0017EEC0[i];
+                if (current_light->f48 < 0) {
+                    current_light->f48 = 11;
                 }
-                if (l->f4C < 0) {
-                    l->f4C = 11;
+                if (current_light->f4C < 0) {
+                    current_light->f4C = 11;
                 }
             }
         }
@@ -1009,9 +1009,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 int a;
                 float ground_height_offset;
                 int pv;
-                int c0;
-                int c1;
-                int c2;
+                int moby_red;
+                int moby_green;
+                int moby_blue;
                 int upd;
 
                 {
@@ -1072,15 +1072,15 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 if (m->f24 != 0) {
                     FUN_L00_00250df8(m);
                 }
-                c0 = *(int *)p;
+                moby_red = *(int *)p;
                 p += 4;
-                c1 = *(int *)p;
+                moby_green = *(int *)p;
                 p += 4;
-                c2 = *(int *)p;
+                moby_blue = *(int *)p;
                 p += 4;
                 upd = *(int *)p;
                 p += 4;
-                m->f80 = (c2 << 16) + (c1 << 8) + c0;
+                m->f80 = (moby_blue << 16) + (moby_green << 8) + moby_red;
                 PackRenderCommandFields(m, m->f80, 0, 0, 0);
                 m->f38 = upd;
                 if (*(int *)p != -1) {
