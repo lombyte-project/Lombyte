@@ -1048,7 +1048,9 @@ void fade_to_black(s32) __asm__("FUN_001f4a58");
 void request_audio_stream_break(void) __asm__("FUN_002166e8");
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 /* Calls 002a09d8(1), fades to black, breaks the audio stream, clears globals, calls 002335a0. */
-void FUN_L00_00299c00(void) {
+void end_slideshow(void) __asm__("FUN_L00_00299c00");
+
+void end_slideshow(void) {
     FUN_L00_002a09d8(1);
     fade_to_black(0xC);
     request_audio_stream_break();
@@ -1085,7 +1087,7 @@ void FUN_L00_00299c48(void) {
             }
             if (!skip_check && slideshow.slide == 0x27) {
             end_show:
-                FUN_L00_00299c00();
+                end_slideshow();
                 return;
             }
             if (slideshow.slide >= 0x2B) {
@@ -1136,7 +1138,7 @@ void FUN_L00_00299c48(void) {
     slideshow.timer++;
     slideshow.frame++;
     if (D_0013CAE4 & 0x800) {
-        FUN_L00_00299c00();
+        end_slideshow();
     }
     FUN_0022ca50();
 }
