@@ -2540,7 +2540,7 @@ void update_target_reposition_cycle(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9F80), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_0015FFD8;
-extern int FUN_L16_002c4710(void *);
+extern int is_moby_in_state_6(void *) __asm__("FUN_L16_002c4710");
 extern short *D_L16_001ABCC0[];
 
 char *find_group_class_010e_moby_in_state_6(int moby_group_index) {
@@ -2550,7 +2550,7 @@ char *find_group_class_010e_moby_in_state_6(int moby_group_index) {
         return 0;
     for (;;) {
         moby = D_L16_0015FFD8 + ((*(unsigned short *)moby_index_entry & 0x7FFF) << 8);
-        if (*(short *)(moby + 0xA6) == 0x10E && FUN_L16_002c4710(moby))
+        if (*(short *)(moby + 0xA6) == 0x10E && is_moby_in_state_6(moby))
             return moby;
         if (*moby_index_entry++ < 0)
             return 0;

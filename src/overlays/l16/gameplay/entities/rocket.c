@@ -18,7 +18,9 @@ typedef struct {
     unsigned char state;
 } Level16VendorMoby;
 
-int FUN_L16_002c4710(Level16VendorMoby *moby) {
+int is_moby_in_state_6(Level16VendorMoby *moby) __asm__("FUN_L16_002c4710");
+
+int is_moby_in_state_6(Level16VendorMoby *moby) {
     return moby->state == 6;
 }
 #include "qcopy.h"
