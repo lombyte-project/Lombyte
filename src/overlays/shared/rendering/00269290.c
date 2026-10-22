@@ -3118,7 +3118,9 @@ extern void FUN_L00_00267a08_26ff10(Moby_26ff10 *) __asm__("FUN_L00_00267a08");
 extern f32 FUN_001fa6c0_26ff10(s32) __asm__("FUN_001fa6c0");
 extern s32 FUN_001fa6d0_26ff10(f32) __asm__("FUN_001fa6d0");
 
-void FUN_L00_0026ff10(Moby_26ff10 *particle) {
+void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff10 *particle) __asm__("FUN_L00_0026ff10");
+
+void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff10 *particle) {
     VV_26ff10 v0u;
     VV_26ff10 v1u;
     S_26ff10 collision_parameters;
