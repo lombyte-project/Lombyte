@@ -46,11 +46,11 @@ s32 FUN_L01_002efbc8(T6 *moby) {
     return 0;
 }
 
-extern int FUN_L00_002db8f8(void *);
+extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 /* Moby state 7 while FUN_L00_002db8f8 reports a hit, back to 1 when it stops. */
 int FUN_L01_002f1c78(char *a) {
-    int r = FUN_L00_002db8f8(a);
+    int r = process_moby_suck_cannon_suction(a);
     if (r == 0) {
         if (*(unsigned char *)(a + 0x20) == 0x7)
             a[0x20] = 1;

@@ -1014,11 +1014,11 @@ void update_morphoray_chicken(Moby *chicken_moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_002db8f8(void *);
+extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 /* Moby state 5 while FUN_L00_002db8f8 reports a hit, back to 1 when it stops. */
 int FUN_L00_002cadc0(char *a) {
-    int r = FUN_L00_002db8f8(a);
+    int r = process_moby_suck_cannon_suction(a);
     if (r == 0) {
         if (*(unsigned char *)(a + 0x20) == 5)
             a[0x20] = 1;

@@ -1795,7 +1795,9 @@ u8 *FUN_L00_002db890_002db8f8(u8 *) __asm__("FUN_L00_002db890");
 s32 scale_game_frames_2db8f8(s32) __asm__("FUN_001f96f8");
 void blend_moby_animation_2db8f8(void *, s32, s32, s32) __asm__("FUN_00212f90");
 f32 vector_distance_2db8f8(void *, void *) __asm__("FUN_001f9b80");
-s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
+s32 process_moby_suck_cannon_suction(u8 *moby, u8 *position, u8 *target) __asm__("FUN_L00_002db8f8");
+
+s32 process_moby_suck_cannon_suction(u8 *moby, u8 *position, u8 *target) {
     enum {
         SUCK_DISPATCH_ALIGNING_FOR_SUCTION = 0,
         SUCK_DISPATCH_RISING_FOR_SUCTION = 1,

@@ -118,11 +118,11 @@ void FUN_L00_002c31c0(M_2acbf0_002acbf0 *moby) {
 #include "sda.h"
 
 
-extern int FUN_L00_002db8f8(void *);
+extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 /* Moby state 9 while FUN_L00_002db8f8 reports a hit, back to 5 when it stops. */
 int FUN_L00_002d56e0(char *a) {
-    int r = FUN_L00_002db8f8(a);
+    int r = process_moby_suck_cannon_suction(a);
     if (r == 0) {
         if (*(unsigned char *)(a + 0x20) == 0x9)
             a[0x20] = 0x5;

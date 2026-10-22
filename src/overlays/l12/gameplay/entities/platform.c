@@ -234,14 +234,14 @@ void FUN_L12_002bf770(int selected_slot_index) {
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E29C8), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_002db8f8(void *);
+extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 extern void FUN_L01_0026e090(int, int);
 
 int FUN_L12_002e16b8(struct Moby *moby) {
     int active;
     if (moby->state == 9 || moby->state == 11 || moby->state == 13)
         return 0;
-    active = FUN_L00_002db8f8(moby);
+    active = process_moby_suck_cannon_suction(moby);
     if (active) {
         if (moby->group != 0xFF)
             FUN_L01_0026e090(moby->group, 1);

@@ -8,10 +8,10 @@
 #include "sda.h"
 
 
-extern int FUN_L00_002db8f8(void *);
+extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 int FUN_L18_002fcbb0(struct Moby *a) {
-    int r = FUN_L00_002db8f8(a);
+    int r = process_moby_suck_cannon_suction(a);
     if (r == 0) {
         if (a->state == 0x7)
             a->state = 0x2;

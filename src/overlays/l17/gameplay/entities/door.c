@@ -2966,11 +2966,11 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F19B8), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_002db8f8(void *);
+extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 int FUN_L17_002efea8(struct Moby *moby) {
-    int result = FUN_L00_002db8f8(moby);
+    int result = process_moby_suck_cannon_suction(moby);
     if (result) {
         moby->state = 12;
     } else if (moby->state == 12) {

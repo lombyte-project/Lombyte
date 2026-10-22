@@ -320,11 +320,11 @@ s32 is_moby_in_bob_target_exclusion_state(const u8 *moby) {
     return 0;
 }
 
-extern int FUN_L00_002db8f8(void *);
+extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 /* Grabbed check: while held, park the moby in state 0x14 (remembering its state) unless it cannot be grabbed; restore the saved state once released. */
 int FUN_L11_00316160(struct Moby *moby) {
-    int grab_check_result = FUN_L00_002db8f8(moby);
+    int grab_check_result = process_moby_suck_cannon_suction(moby);
     if (grab_check_result != 0) {
         if (moby->state == 2 || moby->state == 4 || moby->state == 5 || moby->state == 6 ||
             moby->state == 0xE || moby->state == 0xF || moby->state == 0x10 || moby->state == 0x14) {
