@@ -553,7 +553,9 @@ extern void func_0020D678_2E2EF0(void *) __asm__("FUN_0020c828");
 extern void func_L00_00263950_2E2EF0(char *,char *,int,float,float) __asm__("FUN_L00_002628d8");
 extern void func_L00_0025B178_2E2EF0(void *) __asm__("FUN_L00_0025a120");
 
-void FUN_L12_002e1be0(AnklebiterMoby_2E2EF0 *moby) {
+void update_hoven_anklebiter(AnklebiterMoby_2E2EF0 *moby) __asm__("FUN_L12_002e1be0");
+
+void update_hoven_anklebiter(AnklebiterMoby_2E2EF0 *moby) {
     enum {
         ANKLEBITER_INITIALIZE = 0,
         ANKLEBITER_IDLE = 1,
