@@ -1190,7 +1190,9 @@ extern f32 probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void blend_moby_animation_3830(void *, int, int, int) __asm__("FUN_00212f90");
 extern int random_integer_3830(void) __asm__("FUN_001160d8");
 
-void FUN_L01_002e3830(struct Moby *moby, char *movement_state) {
+void update_hover_moby_steering(struct Moby *moby, char *movement_state) __asm__("FUN_L01_002e3830");
+
+void update_hover_moby_steering(struct Moby *moby, char *movement_state) {
     enum {
         HOVER_FACE_GOAL_AND_WAIT = 0,
         HOVER_MOVE_TOWARD_GOAL = 2
@@ -1381,7 +1383,7 @@ extern void compute_sand_mouse_approach_target(int, void *) __asm__("FUN_L01_002
 extern void FUN_L01_002e3110(char *, char *);
 extern s32 update_sand_mouse_fall_motion(void *, struct Moby *) __asm__("FUN_L01_002e3208");
 extern void update_sand_mouse_targeted_spawning(char *, char *) __asm__("FUN_L01_002e35a8");
-extern void FUN_L01_002e3830(struct Moby *, char *);
+extern void update_hover_moby_steering(struct Moby *, char *) __asm__("FUN_L01_002e3830");
 extern unsigned char D_0013D4C5 __attribute__((section(".data")));
 void sand_mouse_update(struct Moby *moby) __asm__("FUN_L01_002e3f20");
 void sand_mouse_update(struct Moby *moby) {
@@ -1580,7 +1582,7 @@ void sand_mouse_update(struct Moby *moby) {
             && !fast_dec_timer(&sand_mouse_vars->t60)
             && sand_mouse_vars->count < D_L01_0016191C) {
             FUN_L01_002e3110((char *)moby, (char *)sand_mouse_vars);
-            FUN_L01_002e3830(moby, sand_mouse_vars);
+            update_hover_moby_steering(moby, sand_mouse_vars);
         } else {
             if (moby->prev_seq != 5) {
                 blend_moby_animation_3830(moby, 5, 0, scale_game_frames(10));
