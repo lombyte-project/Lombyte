@@ -2338,7 +2338,9 @@ typedef struct EffectRecord_2DC9A8 {
 } EffectRecord_2DC9A8;
 
 extern CollisionHit D_L08_00174640;
-void FUN_L08_002dc9a8(struct Moby *moby) {
+void update_ballistic_projectile(struct Moby *moby) __asm__("FUN_L08_002dc9a8");
+
+void update_ballistic_projectile(struct Moby *moby) {
     enum {
         PROJECTILE_STATE_FLYING = 1,
         PROJECTILE_STATE_DETONATE = 99
