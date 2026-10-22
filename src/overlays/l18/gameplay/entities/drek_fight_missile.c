@@ -1453,7 +1453,9 @@ extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L18_002dfba0(void *moby);
 extern int activate_drek_fight_missiles_in_group(char *moby, int idx, float *pos) __asm__("FUN_L18_002f0030");
 extern int FUN_L18_002f6878(char *moby, float arg, void *x);
-extern int FUN_L18_002f70b8(struct Moby *moby);
+int select_drek_boss_next_action(struct Moby *moby) __asm__("FUN_L18_002f70b8");
+
+extern int select_drek_boss_next_action(struct Moby *moby) __asm__("FUN_L18_002f70b8");
 extern int FUN_L18_002fc668(int idx, float *pos, float *dir, float speed);
 extern int count_group_class_0772_mobys_not_in_state_8(int idx) __asm__("FUN_L18_002fc7e0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -2031,7 +2033,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         if ((moby->f70 & 2) == 0) {
             break;
         }
-        switch (FUN_L18_002f70b8((char *)moby)) {
+        switch (select_drek_boss_next_action((char *)moby)) {
         case DREK_BOSS_TARGET_GROUND_POINTS:
             moby->f20 = 0xF;
             if (moby->f53 != 10) {
@@ -3196,7 +3198,7 @@ extern short D_L18_00162378_gp __asm__("D_L18_00162378") __attribute__((sda));
 extern short D_L18_001DFB40[];
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-int FUN_L18_002f70b8(struct Moby *moby) {
+int select_drek_boss_next_action(struct Moby *moby) {
     enum {
         BOSS_ACTION_CHOICE_LAUNCH_FORWARD_WITH_LATERAL_OFFSET = 0,
         BOSS_ACTION_CHOICE_REPOSITION_AND_AIM = 1,
