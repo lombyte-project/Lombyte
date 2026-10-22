@@ -42,7 +42,9 @@ extern void FUN_L01_00262618(ScrollLayer *);
 extern void FUN_L01_0021fa98(s32, s32, s32, s32, s32, s32);
 
 /* Scrolls the UV offsets of count overlay layers (wrapping into [-1, 1]) and, for each one in view, queues its two-texture GS setup and draws it. */
-void FUN_L01_002b96e0(s32 count, ScrollLayer *scroll_layer) {
+void update_and_draw_scrolling_overlay_layers(s32 count, ScrollLayer *scroll_layer) __asm__("FUN_L01_002b96e0");
+
+void update_and_draw_scrolling_overlay_layers(s32 count, ScrollLayer *scroll_layer) {
     struct DmaTag *tag;
     u64 *packet_payload;
     s32 vis;
@@ -2746,13 +2748,13 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
 }
 extern ScrollLayer D_L01_001E2FC0[];
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
-void FUN_L01_002b96e0(s32, ScrollLayer *);
+void update_and_draw_scrolling_overlay_layers(s32, ScrollLayer *) __asm__("FUN_L01_002b96e0");
 
 void update_and_draw_level01_scrolling_layers(void) __asm__("FUN_L01_002f60f8");
 
 void update_and_draw_level01_scrolling_layers(void) {
     mine_blend_color();
-    FUN_L01_002b96e0(8, D_L01_001E2FC0);
+    update_and_draw_scrolling_overlay_layers(8, D_L01_001E2FC0);
 }
 #include "eetypes.h"
 #include "qzero.h"

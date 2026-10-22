@@ -14,7 +14,7 @@ typedef struct {
 extern Ent D_L01_00202D80[];
 extern s32 level_frame_count __asm__("D_L01_0015F5CC");
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
-void FUN_L01_002b96e0(s32, void *);
+void update_and_draw_scrolling_overlay_layers(s32, void *) __asm__("FUN_L01_002b96e0");
 extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 
@@ -25,7 +25,7 @@ void draw_level01_scroll_layers(void) {
     s32 i;
 
     mine_blend_color();
-    FUN_L01_002b96e0(3, D_L01_00202D80);
+    update_and_draw_scrolling_overlay_layers(3, D_L01_00202D80);
     normalized_sine_value = fast_sin((convert_integer_to_float(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
     normalized_sine_value = normalized_sine_value * 0.5f + 0.5f;
     for (i = 2; i >= 0; i--) {
