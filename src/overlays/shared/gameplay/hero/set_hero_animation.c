@@ -1359,7 +1359,9 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 /* The hero on a moving platform: finds the platform the hero stands on or hangs from, tracks the platform's motion
    between frames (its attach points at 0x310-0x330) and carries the hero (position, facing, ledge-grab point) with it. */
-void FUN_L00_00233f80(void) {
+void update_hero_attachment(void) __asm__("FUN_L00_00233f80");
+
+void update_hero_attachment(void) {
     Vec_234800 probed_position, unanchored_probe_rotation, attachment_motion_scratch, attachment_position_motion_scratch, probe_transform_scratch, anchored_probe_rotation, primary_attachment_position, primary_attachment_rotation, secondary_attachment_position, v90, vA0;
     float sB0, sB4;
     float amt, saved_hero_yaw;

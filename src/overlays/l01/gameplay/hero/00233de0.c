@@ -23,7 +23,7 @@
 
 /* The FUN_L00_00233xxx helpers work in the hero's gravity frame (hero byte
    0x20B3: 0 = world z up, otherwise the frame of the hero's moby). */
-extern void FUN_L00_00233f80(s32, void *, void *);
+extern void update_hero_attachment(s32, void *, void *) __asm__("FUN_L00_00233f80");
 extern f32 gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
@@ -56,7 +56,7 @@ void integrate_hero_movement(void)
     f32 saved_platform_delta_w;
 
     qcopy(&old_pos, &hero.motion.pos);
-    FUN_L00_00233f80(hero.unk4F8, &hero.motion.platform_delta, &hero.motion.rot);
+    update_hero_attachment(hero.unk4F8, &hero.motion.platform_delta, &hero.motion.rot);
 
     /* cap the speed; states 0x22 and 0x14 cap the horizontal part and the fall speed */
     if (hero.state.current == 0x22 || hero.state.current == HERO_STATE_WRENCH_SLAM) {

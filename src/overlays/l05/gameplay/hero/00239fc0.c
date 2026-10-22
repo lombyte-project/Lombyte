@@ -500,7 +500,7 @@ extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8
 extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
 extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
 extern void FUN_L00_00233ba0(float *, float *, float);
-extern void FUN_L00_00233f80(int, void *, void *);
+extern void update_hero_attachment(int, void *, void *) __asm__("FUN_L00_00233f80");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -532,7 +532,7 @@ void integrate_hero_motion_with_collisions(void) {
 
     qcopy(previous.f, position);
     player = (L16MovementPlayer *)((char *)position - 0x80);
-    FUN_L00_00233f80(player->physics_mode, (char *)position + 0x70, (char *)position + 0x10);
+    update_hero_attachment(player->physics_mode, (char *)position + 0x70, (char *)position + 0x10);
     /* Limit the velocity by state and mode. Inside an arm `position` moves on to the velocity; it is formed again below. */
     if (player->state == 34 || player->state == 20) {
         float limit;
