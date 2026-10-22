@@ -908,7 +908,9 @@ extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
 extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
 
-int FUN_L05_003195f8(char *moby) {
+int advance_moby_path(char *moby) __asm__("FUN_L05_003195f8");
+
+int advance_moby_path(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
     int *path;
     advance_accelerated_scalar(1.0f, *(float *)(moby_vars + 0xD8), *(float *)(moby_vars + 0xD8),

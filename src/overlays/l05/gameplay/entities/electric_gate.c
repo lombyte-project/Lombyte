@@ -2206,7 +2206,7 @@ extern float advance_accelerated_scalar_c(float, float, float, float, float *,
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int FUN_L05_003195f8(char *);
+extern int advance_moby_path(char *) __asm__("FUN_L05_003195f8");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void FUN_001f9d20(void *, void *, void *);
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
@@ -2299,7 +2299,7 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     case TAXI_FOLLOW_PATH:
-        if (FUN_L05_003195f8(moby)) {
+        if (advance_moby_path(moby)) {
             *(int *)(taxi_data + 0xC0) = 0;
             *(int *)(taxi_data + 0xC4) = 0;
             moby->state = 5;

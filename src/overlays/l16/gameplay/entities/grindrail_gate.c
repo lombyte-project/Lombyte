@@ -617,7 +617,7 @@ extern float frame_time,
 extern float D_0015EE6C_u,
     D_0015ED70_c2 __asm__("D_0015ED70");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int FUN_L05_003195f8(char *);
+extern int advance_moby_path(char *) __asm__("FUN_L05_003195f8");
 extern s32 D_L16_0015F594;
 extern unsigned char D_0013D4E1 __attribute__((section(".data")));
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
@@ -713,7 +713,7 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     case TAXI_FOLLOW_PATH:
-        if (FUN_L05_003195f8(moby)) {
+        if (advance_moby_path(moby)) {
             *(int *)(taxi_data + 0xB0) = 0;
             *(int *)(taxi_data + 0xB4) = 0;
             moby->state = 5;
