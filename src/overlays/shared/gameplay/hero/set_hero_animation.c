@@ -23,7 +23,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_00231ff8(int, int *, int *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L00_00231d08(void) {
+void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
+
+void blend_hero_slot3_animation_pair(void) {
     struct Hero *base = &hero;
     char *slot3_moby = ((char *)base->items[3].moby);
     char *slot3_secondary_moby = ((char *)base->items[3].moby2);

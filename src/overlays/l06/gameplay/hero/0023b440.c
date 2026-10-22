@@ -100,7 +100,7 @@ extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern void FUN_L00_00216de8(int, int);
 extern void FUN_L00_00228c18(void);
 extern void FUN_L00_00228fa8(void);
-extern void FUN_L00_00231d08(void);
+extern void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_00232628(void);
 extern void FUN_L00_00232640(int id);
@@ -318,7 +318,7 @@ void FUN_L06_0023b440(void) {
                                     D_L06_0017AE00.f254 < 0.34906584f && hero.items[3].state == 2) {
                                     hero.unk22C4 = random_int_between(scale_game_frames(0x6E),
                                                                         scale_game_frames(0x10E));
-                                    FUN_L00_00231d08();
+                                    blend_hero_slot3_animation_pair();
                                 }
                             }
                         }
