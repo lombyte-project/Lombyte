@@ -1105,7 +1105,9 @@ extern CollisionHit D_L03_00173F40;
 
 /* Homing rocket update: flies on, trails smoke, steers up or down toward a target, explodes on impact or timeout. */
 extern Vec4 D_0013F490_v __asm__("D_0013F490");
-void FUN_L03_002d43c8(struct Moby *rocket_moby) {
+void update_homing_rocket(struct Moby *rocket_moby) __asm__("FUN_L03_002d43c8");
+
+void update_homing_rocket(struct Moby *rocket_moby) {
     enum {
         ROCKET_FLY = 1,
         ROCKET_BURST_AND_REMOVE = 2
