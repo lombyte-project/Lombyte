@@ -379,7 +379,9 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void FUN_L00_0025fcb8(void *, void *, float);
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void process_dreks_fleet_turret_hits(char *m) __asm__("FUN_L17_002cbc10");
-extern void FUN_L17_002cbd38(char *m);
+void distribute_class_733_group_mobys_along_path(char *turret_moby) __asm__("FUN_L17_002cbd38");
+
+extern void distribute_class_733_group_mobys_along_path(char *m) __asm__("FUN_L17_002cbd38");
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void scale_vector_xyz(void *, void *, float);
@@ -408,7 +410,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
         turret_moby->state = 1;
         turret_vars->f20 = 15.0f;
         turret_vars->s24 = 0xF;
-        FUN_L17_002cbd38(turret_moby);
+        distribute_class_733_group_mobys_along_path(turret_moby);
         if (visited52[turret_moby->mission + (current_level_index << 4)] == 0xFF) {
             mark_moby_for_removal(turret_moby);
         }
@@ -562,7 +564,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
 extern char *D_L17_0015FFD8_m __asm__("D_L17_0015FFD8") __attribute__((section(".sdata")));
 
 /* Spreads the class-0x733 mobies of this moby's group evenly along its path. */
-void FUN_L17_002cbd38(char *turret_moby) {
+void distribute_class_733_group_mobys_along_path(char *turret_moby) {
     char *turret_vars;
     char *path;
     char *mobys;
