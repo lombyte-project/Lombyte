@@ -1771,7 +1771,9 @@ typedef struct {
 extern CamSlot_316030 *D_L01_0015EF50_316030 __asm__("D_L01_0015EF50");
 extern CamTarget_316030 *D_L01_0015F70C_316030 __asm__("D_L01_0015F70C");
 
-void FUN_L01_00316030(CamUser_316030 *camera_user) {
+void update_camera_mode_from_preset(CamUser_316030 *camera_user) __asm__("FUN_L01_00316030");
+
+void update_camera_mode_from_preset(CamUser_316030 *camera_user) {
     CamData_316030 *camera_preset = D_L01_0015EF50_316030[camera_user->slot].data;
 
     if (hero.unk2284 == camera_user->unk86) {
