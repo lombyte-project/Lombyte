@@ -28,7 +28,9 @@ void FUN_L03_002cc828(unsigned char *mine_moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D44C8), where it is exact; names translated to the US level program. */
 
-void FUN_L03_002d3100(void *taxi_moby, int mode) {
+void request_taxi_return_help_message(void *taxi_moby, int mode) __asm__("FUN_L03_002d3100");
+
+void request_taxi_return_help_message(void *taxi_moby, int mode) {
     if (mode == 1) {
         try_set_help_message(8, 0xBC9);
     } else {
@@ -855,7 +857,7 @@ void FUN_L03_002d3198(struct Moby *taxi_moby) {
         taxi_approach_angle(&taxi_moby->rot.x, 0.0f, &taxi_vars->roll_vel, D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
                             D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
         if (hero.ground_moby == taxi_moby && hero.air_frames.s == 0) {
-            FUN_L03_002d3100(taxi_moby, taxi_vars->help[taxi_moby->command]);
+            request_taxi_return_help_message(taxi_moby, taxi_vars->help[taxi_moby->command]);
             if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
                 FUN_L00_00233ee8(&taxi_moby->pos, taxi_moby->rot.z, 0);
                 taxi_moby->state = 4;
