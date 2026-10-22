@@ -83,7 +83,9 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-int FUN_L03_002beba0(int transform_index, float *out) {
+int sample_random_transformed_point(int transform_index, float *out) __asm__("FUN_L03_002beba0");
+
+int sample_random_transformed_point(int transform_index, float *out) {
     char *selected_transform;
     if (transform_index != -1) {
         selected_transform = D_L03_001600EC + transform_index * 128;
@@ -600,7 +602,7 @@ void spawner_update(struct Moby *moby) {
                 for (j = 0; j < 4; j++) {
                     float dd;
                     if (used[j] == 1) continue;
-                    if (FUN_L03_002beba0(spawner_data->pts[j], (float *)&sampled_point_scratch) != 0) continue;
+                    if (sample_random_transformed_point(spawner_data->pts[j], (float *)&sampled_point_scratch) != 0) continue;
                     dd = FUN_001f9b80_2bef68(&moby->pos, D_0013E533_2bef68 + 0xE9D);
                     if (dd < best) {
                         qcopy(&spawn_position, &sampled_point_scratch);
@@ -633,7 +635,7 @@ void spawner_update(struct Moby *moby) {
                 for (j = 0; j < 4; j++) {
                     if (p[j] != -1) k--;
                     if (k != 0) continue;
-                    if (FUN_L03_002beba0(p[j], (float *)&spawn_position) != 0) continue;
+                    if (sample_random_transformed_point(p[j], (float *)&spawn_position) != 0) continue;
                     break;
                 }
                 FUN_001f9a28_2bef68(&launch_velocity, &spawn_position, &launch_origin);
@@ -659,7 +661,7 @@ void spawner_update(struct Moby *moby) {
                 for (j = 0; j < 4; j++) {
                     if (p[j] != -1) k--;
                     if (k != 0) continue;
-                    if (FUN_L03_002beba0(p[j], (float *)&spawn_position) != 0) continue;
+                    if (sample_random_transformed_point(p[j], (float *)&spawn_position) != 0) continue;
                     break;
                 }
                 FUN_001f9a28_2bef68(&launch_velocity, &spawn_position, &launch_origin);
