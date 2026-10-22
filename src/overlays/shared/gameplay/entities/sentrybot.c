@@ -28,7 +28,7 @@ typedef struct {
     int f180[4];
 } Sentry98BB8;
 
-extern char *FUN_L15_002e4580(char *, float *, char *, char *);
+extern char *spawn_class_3a6_moby(char *, float *, char *, char *) __asm__("FUN_L15_002e4580");
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float D_L15_001673C0[4];
 extern float D_L15_001CBFE0[];
@@ -659,9 +659,9 @@ void sentrybot_update(unsigned char *moby) {
                     fast_difference_between_rotations(fast_arc_tan(vector_length_xy(va), va[2]),
                                                       fast_arc_tan(vector_length_xy(vb), vb[2])) >
                         0.7853982f) {
-                    FUN_L15_002e4580((char *)moby, va, (char *)pos, (char *)(data + 0x100));
+                    spawn_class_3a6_moby((char *)moby, va, (char *)pos, (char *)(data + 0x100));
                 } else {
-                    FUN_L15_002e4580((char *)moby, vb, (char *)pos, (char *)(data + 0x100));
+                    spawn_class_3a6_moby((char *)moby, vb, (char *)pos, (char *)(data + 0x100));
                 }
                 data[0x19E] = 1;
             }
@@ -717,9 +717,9 @@ void sentrybot_update(unsigned char *moby) {
                     fast_difference_between_rotations(fast_arc_tan(vector_length_xy(va), va[2]),
                                                       fast_arc_tan(vector_length_xy(vb), vb[2])) >
                         0.7853982f) {
-                    FUN_L15_002e4580((char *)moby, va, (char *)pos, (char *)(data + 0x100));
+                    spawn_class_3a6_moby((char *)moby, va, (char *)pos, (char *)(data + 0x100));
                 } else {
-                    FUN_L15_002e4580((char *)moby, vb, (char *)pos, (char *)(data + 0x100));
+                    spawn_class_3a6_moby((char *)moby, vb, (char *)pos, (char *)(data + 0x100));
                 }
                 data[0x19E] = 1;
             }
