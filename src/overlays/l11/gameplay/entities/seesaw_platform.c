@@ -2218,7 +2218,9 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 
 extern short D_L11_0016205C __attribute__((sda));
 int D_L11_00162060 = 4;
-void FUN_L11_003125a8(struct Moby *moby, char *ship_vars, float aim_azimuth, float aim_elevation) {
+void update_ship_shot_firing_and_reticle(struct Moby *moby, char *ship_vars, float aim_azimuth, float aim_elevation) __asm__("FUN_L11_003125a8");
+
+void update_ship_shot_firing_and_reticle(struct Moby *moby, char *ship_vars, float aim_azimuth, float aim_elevation) {
     char shot_direction[16];
     char projectile_spawn_position[16];
     char muzzle_forward_offset[16];
@@ -2647,7 +2649,7 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
     }
     enqueue_2838(FUN_L11_00311d50, ship_moby);
     try_fire_ship_projectile(ship_moby, (char *)ship_vars);
-    FUN_L11_003125a8(ship_moby, (char *)ship_vars, fast_add_rot_2838(ship_vars->f28, -ship_vars->f6C / 7.0f),
+    update_ship_shot_firing_and_reticle(ship_moby, (char *)ship_vars, fast_add_rot_2838(ship_vars->f28, -ship_vars->f6C / 7.0f),
                      -fast_add_rot_2838(ship_vars->f24, -(ship_vars->f70 / 7.0f) - 0.1f));
 }
 /* Per-frame update for the player's ship moby on Pokitaru: takes hits, boards and leaves the ship,
