@@ -47,7 +47,9 @@ extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, flo
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void spawn_explosion(void*,void*,void*,float,float,int,int,int,float,float,float,int,float,float,int,int,int,int) __asm__("FUN_L00_0025e450");
-extern void FUN_L16_002e2b60(struct Moby *);
+void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) __asm__("FUN_L16_002e2b60");
+
+extern void update_armed_transport_damage_and_targeting(struct Moby *) __asm__("FUN_L16_002e2b60");
 void compute_armed_transport_path_headings(void *path_data) __asm__("FUN_L16_002e2fa0");
 
 extern void compute_armed_transport_path_headings(void *) __asm__("FUN_L16_002e2fa0");
@@ -82,7 +84,7 @@ void armed_transport_update(char *transport_moby) {
     L16TransportVector vector, rotation;
     char *transport_data = *(char **)(transport_moby + 0x78);
 
-    FUN_L16_002e2b60(transport_moby);
+    update_armed_transport_damage_and_targeting(transport_moby);
     switch (*(unsigned char *)(transport_moby + 0x20)) {
     case ARMED_TRANSPORT_STATE_INITIALIZE: {
         char *path;
@@ -292,7 +294,7 @@ typedef struct {
 
 extern float D_L16_00161D78_gp __asm__("D_L16_00161D78") __attribute__((sda));
 /* Update interaction ownership, damage responses and pursuit tracking. */
-void FUN_L16_002e2b60(struct Moby *transport_moby) {
+void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
     L16Hit_e hit;
     char *transport_data = (char *)transport_moby->pvars;
     float zero;
