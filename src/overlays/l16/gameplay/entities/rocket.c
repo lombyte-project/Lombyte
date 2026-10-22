@@ -771,7 +771,9 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern L16SparkHitN D_L16_hitN __asm__("D_L16_00174240");
 extern int func_0022ED80_n(int, int, void *) __asm__("FUN_0022da68");
 
-void FUN_L16_002c5eb0(L16FallingMoby *moby) {
+void update_thrown_bomb(L16FallingMoby *moby) __asm__("FUN_L16_002c5eb0");
+
+void update_thrown_bomb(L16FallingMoby *moby) {
     enum {
         BOMB_STATE_MOVING = 1,
         BOMB_STATE_RESTING = 2,
