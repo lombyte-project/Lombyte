@@ -183,7 +183,9 @@ extern u8 D_L18_0015FC88[] __attribute__((section(".sdata")));
  * mobies at 0x24 of their data); a stored coordinate times scale / 1024 gives
  * world units. Index 0x10 gives where the sky data starts and 0x14 where the
  * collision data starts. */
-s32 FUN_L18_002463f8(s32 full, s32 keep) {
+s32 load_level_core_data(s32 full, s32 keep) __asm__("FUN_L18_002463f8");
+
+s32 load_level_core_data(s32 full, s32 keep) {
     Load2463f8 *ld = &D_L18_00174800_2463f8;
     s32 *level_header = ld->f4;
     s32 *level_file_base = D_0015EE48.file;
