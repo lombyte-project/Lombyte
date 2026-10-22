@@ -135,7 +135,7 @@ float FUN_L00_00263468_002634f8(Vec4_2634f8 *) __asm__("FUN_L00_00263468");
 int FUN_001efa68_002634f8(Vec4_2634f8 *, Vec4_2634f8 *, int, void *, int) __asm__("FUN_001efa68");
 void FUN_001f9a28_002634f8(void *, void *, void *) __asm__("FUN_001f9a28");
 float FUN_001f9b20_002634f8(void *) __asm__("FUN_001f9b20");
-void FUN_L00_00268f10_002634f8(Vec4_2634f8 *, int) __asm__("FUN_L00_00268f10");
+void spawn_timed_effect_particle(Vec4_2634f8 *, int) __asm__("FUN_L00_00268f10");
 void FUN_L00_002634f8(Vec4_2634f8 *v) {
     Vec4_2634f8 ground_probe_start, u, position_delta;
     float k, f;
@@ -150,7 +150,7 @@ void FUN_L00_002634f8(Vec4_2634f8 *v) {
         u.f[2] = u.f[2] - (k + k);
         if (FUN_001efa68_002634f8(&ground_probe_start, &u, 0x12, 0, 0)) {
             FUN_001f9a28_002634f8(&position_delta, &D_L00_00173E60_002634f8, &position_owner->pos);
-            FUN_L00_00268f10_002634f8(
+            spawn_timed_effect_particle(
                 &D_L00_00173E60_002634f8,
                 (u8)(int)(FUN_001f9b20_002634f8(&position_delta) / 60.0f * 191.0f + 64.0f));
         }
