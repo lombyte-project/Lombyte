@@ -1963,7 +1963,9 @@ extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void transform_vector_by_basis(void *, void *, void *);
 
-void FUN_L01_0031a128(int *moby) {
+void update_music_box_exit_trigger(int *moby) __asm__("FUN_L01_0031a128");
+
+void update_music_box_exit_trigger(int *moby) {
     float hero_offset_vectors[8];
     int *music_trigger_data = (int *)moby[2];
     if (((unsigned *)music_trigger_data)[3] != 0xFFFFFFFF) {
