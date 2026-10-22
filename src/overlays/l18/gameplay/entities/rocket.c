@@ -1872,7 +1872,9 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
 extern short D_L18_00161BFC_d __asm__("D_L18_00161BFC") __attribute__((sda));
 
 extern float D_L18_00161BF8 __attribute__((sda));
-void FUN_L18_002db938(char *pos, float *initial_movement_step, int collision_filter_moby, float fa, float fb) {
+void spawn_class_270_moby(char *pos, float *initial_movement_step, int collision_filter_moby, float fa, float fb) __asm__("FUN_L18_002db938");
+
+void spawn_class_270_moby(char *pos, float *initial_movement_step, int collision_filter_moby, float fa, float fb) {
     Obj *spawned_moby = (Obj *)func_0020D348_m(0x270);
     if (spawned_moby != 0) {
         Child *moby_vars;

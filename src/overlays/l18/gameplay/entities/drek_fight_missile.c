@@ -1487,7 +1487,7 @@ extern void FUN_L18_002d6d50(int idx);
 extern void FUN_L18_002d6dc0(void *moby);
 extern void request_thruster_pack_lock_red_wait(unsigned char *arg, int value) __asm__("FUN_L18_002d7f68");
 extern void end_thruster_pack_lock_red_wait(unsigned char *arg) __asm__("FUN_L18_002d7fd0");
-extern void FUN_L18_002db938(char *pos, float *vec, int arg, float fa, float fb);
+extern void spawn_class_270_moby(char *pos, float *vec, int arg, float fa, float fb) __asm__("FUN_L18_002db938");
 extern void refresh_ring_effect(char *moby, void *pos, float f) __asm__("FUN_L18_002dc458");
 extern void FUN_L18_002dfaa0(char *moby, void *v0, void *v1, void *v2, void *v3, void *v4, int a6,
                              int a7, int a8);
@@ -2251,7 +2251,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                     f = 0.0f;
                 }
                 normalize_vector_xyz(v1, v1, f * frame_time);
-                FUN_L18_002db938((char *)position_and_displacement_scratch, v1, (int)moby, 64.0f, frame_time * 18.0f);
+                spawn_class_270_moby((char *)position_and_displacement_scratch, v1, (int)moby, 64.0f, frame_time * 18.0f);
                 spawn_drek_boss_firing_effects((char *)moby, position_and_displacement_scratch);
                 boss_data->f3BC = randf_sym(0.133f, 0.333f);
             } else if ((moby->f70 & 2) != 0 && moby->f53 != 3) {
