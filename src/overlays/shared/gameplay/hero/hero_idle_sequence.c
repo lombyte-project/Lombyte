@@ -3231,12 +3231,12 @@ void FUN_L00_0020b5b8(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020BFA8), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00210b30(void);
+extern void exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
 
 /* Calls FUN_L00_00210b30 when the byte at 0x20A4 of ((char *)&hero) is 3. */
 void FUN_L00_0020b930(void) {
     if (hero.vehicle_mode == 3) {
-        FUN_L00_00210b30();
+        exit_hero_vehicle_mode();
     }
 }
 typedef struct {

@@ -106,7 +106,7 @@ extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") __attribute__((section(".data")))
 extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_2215c8(s32 *) __asm__("FUN_001f9740");
 extern s16 fast_dec_timer(s16 *) __asm__("FUN_001f9770");
-extern void FUN_L00_00210b30_2215c8(void) __asm__("FUN_L00_00210b30");
+extern void exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
 extern s32 FUN_001f96f8_2215c8(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_00266d60_2215c8(s32, s32, s32) __asm__("FUN_L00_00266d60");
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
@@ -184,7 +184,7 @@ void update_hero_timers_and_reach_state(void) {
     if (hero.unk22DE != 0 && fast_dec_timer(&hero.unk22DE) != 0 &&
         hero.health.hp != 0 && D_L00_0015F5C4_2215c8 == 0) {
         if (hero.vehicle_mode == 3) {
-            FUN_L00_00210b30_2215c8();
+            exit_hero_vehicle_mode();
             if (FUN_L00_00266d60_2215c8(0x80, FUN_001f96f8_2215c8(0x12), 0)) {
                 hero.unk20A6 = 1;
             }

@@ -348,7 +348,7 @@ extern int try_set_help_message_98b68(int, int) __asm__("FUN_00215130");
 extern void FUN_L00_00216f90_98b68(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void enter_hero_vehicle_mode(int, int, struct Moby *) __asm__("FUN_L00_00210a08");
 extern void FUN_L01_0027a248_98b68(int, int) __asm__("FUN_L01_0027a248");
-extern void FUN_L00_00210b30(void);
+extern void exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
 extern void mark_moby_for_removal_98b68(struct Moby *) __asm__("FUN_0020c828");
 
 extern short D_00141948 __attribute__((section(".data")));
@@ -425,7 +425,7 @@ void update_hero_relocation_trigger(struct Moby *moby) {
         return;
     }
     if (hero.vehicle_mode == 1) {
-        FUN_L00_00210b30();
+        exit_hero_vehicle_mode();
         FUN_L00_00216f90_98b68(D_L10_001600EC_98b68 + vars->vehicle_spot * 128 + 0x30,
                                D_L10_001600EC_98b68 + vars->vehicle_spot * 128 + 0x70, 0, 1);
         FUN_L01_0027a248_98b68(0, 5);

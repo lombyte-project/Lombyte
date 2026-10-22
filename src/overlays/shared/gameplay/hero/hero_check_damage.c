@@ -2270,7 +2270,9 @@ extern void FUN_L00_00206c08_210b30(void) __asm__("FUN_L00_00206c08");
 extern void FUN_L00_00232628_210b30(void) __asm__("FUN_L00_00232628");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 
-void FUN_L00_00210b30(void) {
+void exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
+
+void exit_hero_vehicle_mode(void) {
     struct Hero *hero_state = &hero;
     unsigned char *vehicle_moby;
     if (hero_state->vehicle_mode == 1) {
