@@ -263,7 +263,9 @@ extern int D_L00_0015F5CC;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-void FUN_L00_00205600(void) {
+void update_hero_random_timer(void) __asm__("FUN_L00_00205600");
+
+void update_hero_random_timer(void) {
     struct Hero *hero_random_timer_owner = &hero;
     if (hero_random_timer_owner->rand_timer.fired == 0) {
         if (hero_random_timer_owner->rand_timer.range == 0) {
@@ -314,7 +316,7 @@ void FUN_L00_002056a8(void) {
         if (*(f32 *)(e + 0x8a4) < -0.12217305f)
             *(f32 *)(e + 0x8a4) = -0.12217305f;
     }
-    FUN_L00_00205600();
+    update_hero_random_timer();
     {
         if (hero.rand_timer.fired == 0)
             return;
