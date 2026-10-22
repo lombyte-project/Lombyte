@@ -141,7 +141,9 @@ extern D00237ae8 D_L00_0017DAC0[];
 extern E00237ae8 item_defs[] __asm__("D_L00_00179AC0");
 extern s32 pause_iop_sprite_lists[] __asm__("D_00141EA0");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-void FUN_L00_00237ae8(O00237ae8 *hud_element) {
+void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) __asm__("FUN_L00_00237ae8");
+
+void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) {
     s32 i;
     D00237ae8 *slot_entry;
     s32 *item_id_cursor;
