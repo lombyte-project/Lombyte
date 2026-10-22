@@ -103,7 +103,9 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void approach_value(f32, f32, void *) __asm__("FUN_00213ed8");
 
-void FUN_L06_0021e1a0(void) {
+void update_hero_vehicle_attachments_and_effects(void) __asm__("FUN_L06_0021e1a0");
+
+void update_hero_vehicle_attachments_and_effects(void) {
     enum {
         ATTACHMENT_PULSE_GREEN = 1,
         ATTACHMENT_PULSE_YELLOW = 2,
