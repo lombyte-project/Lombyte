@@ -2326,7 +2326,9 @@ typedef struct {
 extern void trooper_knockback_arc(Vec4f *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(f32, struct Moby *, LaunchParams *, s32, s32, s32) __asm__("FUN_L00_0025c558");
 
-void FUN_L07_0030e720(struct Moby *moby, LaunchParams *knockback_state, Vec4f *knockback_direction) {
+void start_sharkigator_death_knockback(struct Moby *moby, LaunchParams *knockback_state, Vec4f *knockback_direction) __asm__("FUN_L07_0030e720");
+
+void start_sharkigator_death_knockback(struct Moby *moby, LaunchParams *knockback_state, Vec4f *knockback_direction) {
     Vec4f knockback_direction_copy;
     f32 knockback_angle;
 
@@ -2441,7 +2443,7 @@ void FUN_L07_0030e998(char *moby, char *x, float *hp) {
             if (*hp <= *(float *)(info + 0x2C)) {
                 *hp = 0.0f;
                 *(unsigned short *)(moby + 0x34) &= 0xEFFF;
-                FUN_L07_0030e720(moby, x + 0x70, info + 0x10);
+                start_sharkigator_death_knockback(moby, x + 0x70, info + 0x10);
                 FUN_L00_00257470(moby, 0, -1);
                 x[0x67] = 0x78;
                 trooper_anim_update(moby, (short *)(x + 0x60));
