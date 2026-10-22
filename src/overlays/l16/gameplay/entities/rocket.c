@@ -911,7 +911,7 @@ extern float D_0015ED6C, D_0015EE70;
 extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), D_0015ED70_c __asm__("D_0015ED70");
 extern void FUN_L16_002c9a50_u(unsigned char *) __asm__("FUN_L16_002c9a50");
 extern void FUN_L16_002c9c38_c(int, void *) __asm__("FUN_L16_002c9c38");
-void FUN_L16_002c9cd0(char *m);
+void draw_conveyor_belt_strips(char *m) __asm__("FUN_L16_002c9cd0");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
@@ -948,7 +948,7 @@ void conveyor_belt_update(struct Moby *moby) {
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(conveyor_data + 0x68)))
             moby->state = one;
-        enqueue_callback_list_1_alt(FUN_L16_002c9cd0, moby);
+        enqueue_callback_list_1_alt(draw_conveyor_belt_strips, moby);
         break;
     case CONVEYOR_BELT_STATE_APPROACH_BASE_SPEED:
         target = D_L16_0016198C * D_0015ED6C;
@@ -959,7 +959,7 @@ void conveyor_belt_update(struct Moby *moby) {
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(conveyor_data + 0x64)))
             moby->state = 2;
-        enqueue_callback_list_1_alt(FUN_L16_002c9cd0, moby);
+        enqueue_callback_list_1_alt(draw_conveyor_belt_strips, moby);
         break;
     }
     if (moby->state)
@@ -1060,7 +1060,7 @@ extern void draw_geometry_quad_u(void *, void *, int) __asm__("draw_geometry_qua
 extern int func_001FA8A8_caa18(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
-void FUN_L16_002c9cd0(char *moby) {
+void draw_conveyor_belt_strips(char *moby) {
     L16RibbonPacket_u packets[2];
     char *conveyor_data = *(char **)(moby + 0x78);
     float scale = vector_length_xyz(D_L16_001600EC_m + ((*(int *)(conveyor_data + 0x60)) << 7)) * 2.001f;
