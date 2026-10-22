@@ -2436,7 +2436,9 @@ extern void FUN_L00_0025a120(void *);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
-void FUN_L17_002efa48(void *moby_v, int arg);
+void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_volume_suppressed) __asm__("FUN_L17_002efa48");
+
+void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int arg) __asm__("FUN_L17_002efa48");
 void update_robot_dog_aim_joint(struct Moby *moby) __asm__("FUN_L17_002f00a0");
 
 void update_robot_dog_aim_joint(struct Moby *moby) __asm__("FUN_L17_002f00a0");
@@ -2479,7 +2481,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             }
         }
     }
-    FUN_L17_002efa48(robot_dog_moby, clip_volume_suppressed);
+    update_robot_dog_hit_reaction_and_target_detection(robot_dog_moby, clip_volume_suppressed);
     if (clip_volume_suppressed != 0 && robot_dog_moby[0x20] != 15) {
         robot_dog_moby[0x31] = 0;
         *(unsigned short *)(robot_dog_moby + 0x34) |= 1;
@@ -2878,7 +2880,7 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void update_float_countdown(float *) __asm__("FUN_L08_00211b08");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L17_002efa48(void *moby_v, int clip_volume_suppressed) {
+void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_volume_suppressed) {
     Moby_2F1558 *moby = (Moby_2F1558 *)moby_v;
     Data_2F1558 *moby_vars;
     Hit_2F1558 *hit_record;
