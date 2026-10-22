@@ -1780,7 +1780,9 @@ void spawn_blarg_trooper_death_effects(void *moby, void *effect_position) {
 }
 extern void FUN_L12_002e81e0(struct Moby *);
 extern void FUN_L12_002e8608(struct Moby *, float *);
-extern void FUN_L12_002e86d0(struct Moby *);
+void remove_blarg_trooper_and_attachment(struct Moby *moby) __asm__("FUN_L12_002e86d0");
+
+extern void remove_blarg_trooper_and_attachment(struct Moby *) __asm__("FUN_L12_002e86d0");
 extern void FUN_L12_002e8720(struct Moby *);
 extern void FUN_L12_002e87b0(char *);
 extern void FUN_L12_002e8808(struct Moby *, float *, float, float);
@@ -2078,7 +2080,7 @@ state3:
         if (moby->pos.z < 2.0f) {
             FUN_L00_00257470(moby, 0, -1);
 leave:
-            FUN_L12_002e86d0(moby);
+            remove_blarg_trooper_and_attachment(moby);
             return;
         }
         break;
@@ -2167,7 +2169,7 @@ extern void knockback_e81e0(void *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab
 extern void start_fall_e81e0(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 extern void anim_reset_e81e0(struct Moby *, void *) __asm__("FUN_L00_0025d458");
 extern void anim_update_e81e0(struct Moby *, void *) __asm__("FUN_L00_0025d538");
-extern void FUN_L12_002e86d0(struct Moby *);
+extern void remove_blarg_trooper_and_attachment(struct Moby *) __asm__("FUN_L12_002e86d0");
 
 /* Damage and alert step of the Hoven blarg trooper (cf. FUN_L12_002e3528): refreshes its
    speed while alerted, calls for help behind itself once its groups have 9 or
@@ -2210,7 +2212,7 @@ void FUN_L12_002e81e0(struct Moby *moby) {
         }
     }
     if (vars->volume != -1 && is_point_inside_clip_volume_e81e0(&hero.motion.pos, vars->volume)) {
-        FUN_L12_002e86d0(moby);
+        remove_blarg_trooper_and_attachment(moby);
         return;
     }
     coll = find_hit_e81e0(moby, 0x330000, 0);
@@ -2287,8 +2289,8 @@ typedef struct {
 
 extern void FUN_L00_00257470(struct Moby *, int, int);
 
-void FUN_L12_002e86d0(struct Moby *moby);
-void FUN_L12_002e86d0(struct Moby *moby) {
+void remove_blarg_trooper_and_attachment(struct Moby *moby) __asm__("FUN_L12_002e86d0");
+void remove_blarg_trooper_and_attachment(struct Moby *moby) {
     moby->unkB4 = 0;
     FUN_L00_00257470(moby, 0, -1);
     if (((Level12VendorData *)moby->pvars)->child != 0) {
