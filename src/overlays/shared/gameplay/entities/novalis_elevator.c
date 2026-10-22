@@ -1758,7 +1758,9 @@ extern void FUN_L01_002eec68_u(char *) __asm__("FUN_L01_002eec68");
 void spawn_amoeboid_movement_particles(unsigned char *moby) __asm__("FUN_L01_002ef560");
 
 extern void spawn_amoeboid_movement_particles(unsigned char *) __asm__("FUN_L01_002ef560");
-extern void FUN_L01_002ef770(unsigned char *, float *);
+void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) __asm__("FUN_L01_002ef770");
+
+extern void spawn_amoeboid_burst_sparks(unsigned char *, float *) __asm__("FUN_L01_002ef770");
 extern int follow_path(int *, int, int, float, void *, void *, void *) __asm__("FUN_L01_00276fe8");
 extern void FUN_L01_0026d930(void *);
 extern void FUN_L00_00258b50(void *, void *, void *, void *, float);
@@ -2120,7 +2122,7 @@ void large_amoeboid_update(unsigned char *moby) {
                 qcopy(data + 0x210, moby + 0x10);
                 return;
             }
-            FUN_L01_002ef770(moby, D_L01_0015F580);
+            spawn_amoeboid_burst_sparks(moby, D_L01_0015F580);
             FUN_L00_00257470(moby, 0, -1);
         } else if (!(result & 0x120)) {
             return;
@@ -2281,7 +2283,7 @@ void FUN_L01_002eec68(char *moby) {
         *(int *)(moby_vars + 0x84) = 8;
         *(int *)(moby_vars + 0x80) = truncate_float_to_s32_c(*(float *)(moby_vars + 0x250) * size_multiplier * fixed_scale);
         *(float *)(moby_vars + 0x88) = *(float *)(moby_vars + 0x250) * size_multiplier;
-        FUN_L01_002ef770((unsigned char *)moby, (float *)(hit_record + 0x10));
+        spawn_amoeboid_burst_sparks((unsigned char *)moby, (float *)(hit_record + 0x10));
         if (0.0f < *(float *)(moby_vars + 0x20)) {
             spawned = activate_smaller_amoeboid(moby);
             if (spawned != 0) {
@@ -2345,7 +2347,7 @@ void FUN_L01_002eec68(char *moby) {
     if (c258 != 0 && *(unsigned char *)(moby + 0x20) != 0
         && *(float *)(moby + 0x18) < *(float *)(c258 * 0x1190 + D_L01_001612D0 + 8)) {
         clear_u64_value_c(&scratch_vector);
-        FUN_L01_002ef770((unsigned char *)moby, (float *)&scratch_vector);
+        spawn_amoeboid_burst_sparks((unsigned char *)moby, (float *)&scratch_vector);
         mark_moby_for_removal_c(moby);
         return;
     }
@@ -2579,7 +2581,7 @@ extern f32 FUN_00220e20(f32) __asm__("FUN_001f96b0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
-void FUN_L01_002ef770(unsigned char *moby, f32 *mode) {
+void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
     char *data = (char *)MOBY(moby)->pvars;
     f32 spawn_position[4], origin[4], velocity[4];
     u128 *dest;
