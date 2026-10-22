@@ -948,7 +948,7 @@ extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
 extern void FUN_L00_001ed580(void *, void *, void *);
 extern void FUN_L00_001ed630(void *, void *, void *);
 extern void FUN_L00_00257f70(void *, void *, void *, float);
-extern void FUN_L00_00258050(float *, float *, float *, float);
+extern void interpolate_wrapped_rotations_cosine_eased(float *, float *, float *, float) __asm__("FUN_L00_00258050");
 f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 vel) __asm__("FUN_001ebd78");
 
@@ -968,7 +968,7 @@ void FUN_L00_002eae20(void *camera) {
         tick_countdown_32((int *)transition_state);
         transition_fraction = (float)(*(int *)(transition_state + 4) - *(int *)(camera_state + 0xE0)) / convert_integer_to_float(*(int *)(transition_state + 4));
         FUN_L00_00257f70(camera_object + 0x30, camera_object + 0x30, target_position, transition_fraction);
-        FUN_L00_00258050((float *)(camera_object + 0x40), (float *)(camera_object + 0x40), (float *)(camera_state + 0x90), transition_fraction);
+        interpolate_wrapped_rotations_cosine_eased((float *)(camera_object + 0x40), (float *)(camera_object + 0x40), (float *)(camera_state + 0x90), transition_fraction);
     } else if (t == 3) {
         if (tick_countdown_32((int *)transition_state) != 0) {
             qcopy(camera_object + 0x30, target_position);
@@ -997,7 +997,7 @@ void FUN_L00_002eae20(void *camera) {
             F(transition_state, 0x20) = interpolate_wrapped_angle_cosine_eased(F(transition_state, 0x20), F(transition_state, 0xC), t);
             FUN_L00_00257f70(transition_state + 0x30, transition_state + 0x30, &hero.motion.pos, t);
             FUN_L00_001ed580(camera_object + 0x30, transition_state + 0x1C, transition_state + 0x30);
-            FUN_L00_00258050((float *)(camera_object + 0x40), (float *)(camera_object + 0x40), (float *)(target_position + 0x10), t);
+            interpolate_wrapped_rotations_cosine_eased((float *)(camera_object + 0x40), (float *)(camera_object + 0x40), (float *)(target_position + 0x10), t);
         }
     } else {
         if (*(short *)(camera_state + 0x1C) == 1) {

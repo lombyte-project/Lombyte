@@ -58,7 +58,9 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Blends three angles from a toward b with a cosine ease; ang 0 gives a, 1 gives b. */
-void FUN_L00_00258050(float *out, float *start_rotations, float *target_rotations, float interpolation_fraction) {
+void interpolate_wrapped_rotations_cosine_eased(float *out, float *start_rotations, float *target_rotations, float interpolation_fraction) __asm__("FUN_L00_00258050");
+
+void interpolate_wrapped_rotations_cosine_eased(float *out, float *start_rotations, float *target_rotations, float interpolation_fraction) {
     float cosine_ease_weight = (1.0f - fast_cos(interpolation_fraction * 3.1415927f)) * 0.5f;
     out[0] = fast_add_rotations(start_rotations[0], fast_subtract_rotations(target_rotations[0], start_rotations[0]) * cosine_ease_weight);
     out[1] = fast_add_rotations(start_rotations[1], fast_subtract_rotations(target_rotations[1], start_rotations[1]) * cosine_ease_weight);
