@@ -38,7 +38,9 @@ void FUN_L02_002a4058(char *value_target, int val, float scale) {
 
 extern void FUN_L02_002a4058_u(char *arg, int val) __asm__("FUN_L02_002a4058");
 
-void FUN_L02_002a40d0(char *value_target) {
+void prepare_scaled_table_with_byte_128(char *value_target) __asm__("FUN_L02_002a40d0");
+
+void prepare_scaled_table_with_byte_128(char *value_target) {
     FUN_L02_002a4058_u(value_target, 0x80);
 }
 #include "qcopy.h"

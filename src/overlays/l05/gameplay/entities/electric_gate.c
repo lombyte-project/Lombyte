@@ -1459,7 +1459,7 @@ void FUN_L05_00316070(char *moby) {
 extern char D_L05_00211B28[];
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int frame_number __asm__("D_L05_0015F5CC");
-extern void FUN_L02_002a40d0(void *, float);
+extern void prepare_scaled_table_with_byte_128(void *, float) __asm__("FUN_L02_002a40d0");
 void FUN_L05_00316070_c(char *moby) __asm__("FUN_L05_00316070");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern void func_L05_00317538_3175D8(void) __asm__("FUN_L05_00316070");
@@ -1473,7 +1473,7 @@ void ocean_rilgar_update(char *moby) {
     };
     switch ((unsigned char)moby[0x20]) {
     case OCEAN_RILGAR_INITIALIZE:
-        FUN_L02_002a40d0(D_L05_00211B20, 1.0f);
+        prepare_scaled_table_with_byte_128(D_L05_00211B20, 1.0f);
         moby[0x20] = 1;
         ((unsigned char *)moby)[0x30] = 0xFF;
         break;

@@ -1358,7 +1358,7 @@ void remove_bomber_tank_linked_debris(struct Moby *moby) {
 extern int D_L08_00161970 __attribute__((sda));
 extern float D_L08_001D7060[4];
 extern f32 D_L08_0015F580[] __attribute__((section(".sdata")));
-extern void FUN_L02_002a40d0(void *, float);
+extern void prepare_scaled_table_with_byte_128(void *, float) __asm__("FUN_L02_002a40d0");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L08_002da0d0(void *);
 extern int voice_is_playing(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
@@ -1387,7 +1387,7 @@ void update_hero_water_entry_effects(struct Moby *moby) {
 
     if (D_L08_00161970 == 0) {
         D_L08_00161970 = 1;
-        FUN_L02_002a40d0(D_L08_001D7060, 0.6666667f);
+        prepare_scaled_table_with_byte_128(D_L08_001D7060, 0.6666667f);
     }
     enqueue_callback_list_1(FUN_L08_002da0d0, moby);
     if (current_level_index != 8)

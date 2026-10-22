@@ -46,12 +46,12 @@ void set_level02_class_1b1_moby_flag_0800(void) {
 }
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002A59D8), where it is exact; names translated to the US level program. */
 
-extern void FUN_L02_002a40d0(void *);
+extern void prepare_scaled_table_with_byte_128(void *) __asm__("FUN_L02_002a40d0");
 
 void FUN_L02_002a47f8(void);
 void FUN_L02_002a47f8(void) {
     char scratch[0x40];
-    FUN_L02_002a40d0(scratch);
+    prepare_scaled_table_with_byte_128(scratch);
 }
 extern void write_dma_channel(void *, int, int) __asm__("FUN_001f9928");
 extern void FUN_L02_002101b8(void *, int, int);
