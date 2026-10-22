@@ -69,7 +69,9 @@ int run_moby_helper_and_set_state_7(char *moby) {
     return helper_result;
 }
 /* Returns the moby data pointer plus 0x60, or 0 when either is null. */
-s32 FUN_L01_002f1df8(T6 *moby) {
+s32 get_moby_data_plus_0x60(T6 *moby) __asm__("FUN_L01_002f1df8");
+
+s32 get_moby_data_plus_0x60(T6 *moby) {
     s32 moby_data_address;
     if (moby != 0) {
         moby_data_address = moby->f;
