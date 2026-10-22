@@ -1992,7 +1992,9 @@ short D_L13_001613E8 = -1;
 short D_L13_001613F8 = 0x7f4f;
 short D_L13_00161408 = -32513;
 short D_L13_00161418 = 0x7f00;
-void FUN_L13_002b8590(void *moby, char *flight_data) {
+void spawn_fighter_jet_joint_particles(void *moby, char *flight_data) __asm__("FUN_L13_002b8590");
+
+void spawn_fighter_jet_joint_particles(void *moby, char *flight_data) {
     float initial_particle_velocity[4];
     float joint_world_position[4];
     float first_particle_spawn_position[4];
@@ -3248,5 +3250,5 @@ void fighter_jet_update(Jet *jet_moby) {
     if (jet_moby->position[2]>1008.0f) jet_moby->position[2]=1008.0f;
     state=jet_moby->state;
     if ((unsigned char)state==4) { qcopy_nc((char *)&jet_player47+0x80,jet_moby->position); qcopy_nc((char *)&jet_player47+0x90,jet_data->angles); }
-    if ((unsigned int)(state-3)<2 || (unsigned char)state==8) FUN_L13_002b8590(jet_moby,(char*)jet_data);
+    if ((unsigned int)(state-3)<2 || (unsigned char)state==8) spawn_fighter_jet_joint_particles(jet_moby,(char*)jet_data);
 }
