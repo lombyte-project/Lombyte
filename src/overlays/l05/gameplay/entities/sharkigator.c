@@ -158,12 +158,14 @@ void FUN_L05_00307358(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003088C8), where it is exact; names translated to the US level program. */
 
-int FUN_L05_00307470(int animation_index) {
+int map_racer_animation_to_child_index(int animation_index) __asm__("FUN_L05_00307470");
+
+int map_racer_animation_to_child_index(int animation_index) {
     return animation_index == 5 ? 6 : animation_index;
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003088D8), where it is exact; names translated to the US level program. */
 
-extern int FUN_L05_00307470(int);
+extern int map_racer_animation_to_child_index(int) __asm__("FUN_L05_00307470");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void blend_racer_and_child_animations(char *moby, int animation_index, int frame_index, int blend_frames) __asm__("FUN_L05_00307480");
@@ -180,7 +182,7 @@ void blend_racer_and_child_animations(char *moby, int animation_index, int frame
     child = *(char **)(data + 0x268);
     if (child != 0) {
         ratio = *(float *)(child + 0x5C) / *(float *)(moby + 0x5C);
-        child_animation_index = FUN_L05_00307470(animation_index);
+        child_animation_index = map_racer_animation_to_child_index(animation_index);
         child_frame_index = (float)frame_index * ratio;
         max = (float)*(unsigned char *)(*(char **)(*(char **)(*(char **)(data + 0x268) + 0x24) -
                                                    (-(child_animation_index * 4)) + 0x48) +
