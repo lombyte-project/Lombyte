@@ -138,7 +138,9 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_L00_0023e738(void *, float, float, float, float, float);
-void FUN_L15_002d79e8(char *m);
+void initialize_electric_water_bolt_effect(char *moby) __asm__("FUN_L15_002d79e8");
+
+void initialize_electric_water_bolt_effect(char *m) __asm__("FUN_L15_002d79e8");
 void FUN_L15_002d7bb0(struct Moby *moby);
 void draw_electric_water_bolt_effect(char *moby) __asm__("FUN_L15_002d8710");
 
@@ -304,7 +306,7 @@ void electric_water_update(struct Moby *moby) {
                         light->unk8 = 0.5f;
                         light->unkC = 0;
                     }
-                    FUN_L15_002d79e8((char *)moby);
+                    initialize_electric_water_bolt_effect((char *)moby);
                     FUN_L15_002d7bb0(moby);
                     enqueue_callback_list_1(draw_electric_water_bolt_effect, moby);
                 }
@@ -355,7 +357,7 @@ void electric_water_update(struct Moby *moby) {
             FUN_L00_001ff290(unused_vector_argument, &vars->bolt_aim, &hero.motion.unkD0);
             vars->bolt_end = vars->bolt_aim;
             vars->bolt_start = hero.motion.unkD0.q;
-            FUN_L15_002d79e8((char *)moby);
+            initialize_electric_water_bolt_effect((char *)moby);
             FUN_L15_002d7bb0(moby);
             enqueue_callback_list_1(draw_electric_water_bolt_effect, moby);
             hit.attacker = moby;
@@ -603,7 +605,7 @@ extern short D_L15_00161CDC;
 extern short D_L15_00161CDE;
 extern int D_L15_00161CE0;
 extern int D_L15_00161CE4;
-void FUN_L15_002d79e8(char *moby) {
+void initialize_electric_water_bolt_effect(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
     float bolt_displacement[4];
     float step[4];
