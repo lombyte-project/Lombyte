@@ -259,7 +259,9 @@ extern f32 D_0013F570[] __asm__("D_0013F570");
 f32 FUN_001f9b80_209450(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_209450(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_209450(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-void FUN_L15_00209450(void) {
+void update_hero_smoothing_parameters(void) __asm__("FUN_L15_00209450");
+
+void update_hero_smoothing_parameters(void) {
     switch (hero.vehicle_mode) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         hero.unk228 = 0.8f;
