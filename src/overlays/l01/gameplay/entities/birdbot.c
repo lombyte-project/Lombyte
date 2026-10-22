@@ -2748,7 +2748,9 @@ extern ScrollLayer D_L01_001E2FC0[];
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void FUN_L01_002b96e0(s32, ScrollLayer *);
 
-void FUN_L01_002f60f8(void) {
+void update_and_draw_level01_scrolling_layers(void) __asm__("FUN_L01_002f60f8");
+
+void update_and_draw_level01_scrolling_layers(void) {
     mine_blend_color();
     FUN_L01_002b96e0(8, D_L01_001E2FC0);
 }
