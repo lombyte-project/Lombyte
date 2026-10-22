@@ -17,7 +17,9 @@ extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 extern void FUN_L00_00263618(void *, int, float, float);
 
-void FUN_L05_002d6f48(unsigned char *moby) {
+void draw_group_moby_glow_quads(unsigned char *moby) __asm__("FUN_L05_002d6f48");
+
+void draw_group_moby_glow_quads(unsigned char *moby) {
     unsigned char *it;
     int i;
     char *data;
@@ -507,7 +509,7 @@ extern float sin_2d7020(float) __asm__("FUN_001f9de0");
 extern int lerp_2d7020(float, int, int) __asm__("FUN_001fa6e0");
 extern int frame_number __asm__("D_L05_0015F5CC");
 extern void queue_2d7020(void *, void *) __asm__("FUN_001f4600");
-void FUN_L05_002d6f48(unsigned char *moby);
+void draw_group_moby_glow_quads(unsigned char *moby) __asm__("FUN_L05_002d6f48");
 
 /* Per-frame glow: updates three parts, pulses the colour, and queues a redraw
  * once per frame. */
@@ -534,7 +536,7 @@ void FUN_L05_002d7020(char *moby) {
             last_queued_frame_ptr = *(int **)(moby_data + 0x364);
             if (current_frame != *last_queued_frame_ptr) {
                 *last_queued_frame_ptr = current_frame;
-                queue_2d7020(FUN_L05_002d6f48, moby);
+                queue_2d7020(draw_group_moby_glow_quads, moby);
             }
         }
     }
