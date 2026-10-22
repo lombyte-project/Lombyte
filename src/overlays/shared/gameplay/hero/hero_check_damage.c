@@ -3180,13 +3180,13 @@ extern CollisionHit HH __asm__("D_L00_00173E40") __attribute__((section(".data")
 void FUN_L00_002127b8(void) {
     V collision_ray_end, ground_ray_start, ground_offset_or_angles, side_ray_start, unused_side_probe_point, side_hit_angles, side_hit_normal;
     f32 f;
-    s32 r;
+    s32 collision_sound_class;
     s32 i;
     f32 side_probe_angle;
     u8 *hit_moby_flag_data;
 
     s32 k;
-    f32 g;
+    f32 ground_ray_start_offset;
 
     hero.unk270.f[2] = 1.0f;
     hero.air_frames.u++;
@@ -3205,19 +3205,19 @@ void FUN_L00_002127b8(void) {
     k = 0;
     if (hero.unk20B3)
         k = 1;
-    g = hero.unk234 * 2.2f;
+    ground_ray_start_offset = hero.unk234 * 2.2f;
     if (hero.state.control_mode == 2) {
-        g = hero.unk234 * 2.9f;
+        ground_ray_start_offset = hero.unk234 * 2.9f;
     }
-    hero_get_collision_ray_endpoints((Vec4_002126b8 *)&ground_ray_start, (Vec4_002126b8 *)&collision_ray_end, k, g, -48.0f);
+    hero_get_collision_ray_endpoints((Vec4_002126b8 *)&ground_ray_start, (Vec4_002126b8 *)&collision_ray_end, k, ground_ray_start_offset, -48.0f);
     if (collision_line(&ground_ray_start, &collision_ray_end, 2, hero.moby, 0) == 0) {
         goto tail;
     }
-    r = coll_sound_class();
-    if (r == -1) {
-        r = 3;
+    collision_sound_class = coll_sound_class();
+    if (collision_sound_class == -1) {
+        collision_sound_class = 3;
     }
-    hero.unk12ED = r;
+    hero.unk12ED = collision_sound_class;
     hero.ground_type = collision_hit_material();
     if (hero.ground_type == 0) {
         hero.water_surface_z = resolve_camera_surface_height(((u8 *)&D_L00_00173E60_lui), &hero.unk280);
@@ -3227,11 +3227,11 @@ void FUN_L00_002127b8(void) {
         if (collision_line(&ground_ray_start, &collision_ray_end, 0x24, hero.moby, 0) == 0) {
             goto d1;
         }
-        r = coll_sound_class();
+        collision_sound_class = coll_sound_class();
         if (current_level_index == 1 || current_level_index == 0x12) {
-            r = 3;
+            collision_sound_class = 3;
         }
-        hero.unk12ED = r;
+        hero.unk12ED = collision_sound_class;
     }
     if (hero.ground_type == 0xD) {
         hero.water_surface_z = D_L00_00173E68;
