@@ -93,7 +93,9 @@ int D_L02_00161F50 = 0x60;
 int D_L02_00161F54 = 0x10;
 
 /* Spawns a projectile moby from src at pos, heading along dir, with its lifetime in the moby data. */
-char *FUN_L02_002ec228(char *source_moby, void *pos, float *dir) {
+char *spawn_projectile_moby(char *source_moby, void *pos, float *dir) __asm__("FUN_L02_002ec228");
+
+char *spawn_projectile_moby(char *source_moby, void *pos, float *dir) {
     char *moby;
     char *data;
     moby = create_moby_c(0x4B8);

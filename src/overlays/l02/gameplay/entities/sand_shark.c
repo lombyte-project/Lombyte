@@ -3122,7 +3122,7 @@ s32 D_L02_00161C78 = 0x800000ff;
 s32 D_L02_00161C7C = 0x80329600;
 extern f32 D_L02_00161C84 __attribute__((sda));
 extern void FUN_L02_002df730(struct Moby *moby);
-extern char *FUN_L02_002ec228(char *src, void *pos, float *dir);
+extern char *spawn_projectile_moby(char *src, void *pos, float *dir) __asm__("FUN_L02_002ec228");
 extern s32 turret_count_down(s16 *) __asm__("FUN_001f9770");
 extern f32 turret_rand_range(f32, f32) __asm__("FUN_002132a8");
 extern f32 turret_scale_time(f32) __asm__("FUN_001f96b0");
@@ -3189,7 +3189,7 @@ void rocket_launcher_update(struct Moby *moby) {
             turret_vec_set_len(&projectile_velocity, &projectile_velocity, D_L02_00161C6C * D_0015ED6C);
             turret_spawn_debris(moby, &projectile_velocity, &muzzle, 0.0f, 0.0f, 0, 6, 0x20, 7.0f, 4.0f, 1.0f, 3.0f, -1, 30.0f,
                                 0, 1, -1, 0);
-            FUN_L02_002ec228((char *)moby, &muzzle, (float *)&projectile_velocity);
+            spawn_projectile_moby((char *)moby, &muzzle, (float *)&projectile_velocity);
         }
         break;
     case ROCKET_LAUNCHER_WAIT_FOR_POST_SHOT_ANIMATION:
