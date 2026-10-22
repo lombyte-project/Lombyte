@@ -83,7 +83,7 @@ extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_00266e00(int, int, int, int);
 extern int FUN_L01_00226f10(int a);
 extern int FUN_L01_0022d838(float *, float *);
-extern int FUN_L01_00231580(int);
+extern int process_hero_hit_response(int) __asm__("FUN_L01_00231580");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 extern int try_apply_hero_water_and_ground_transitions(void) __asm__("FUN_L05_002515d0");
 extern int FUN_L05_00251be8(void);
@@ -159,7 +159,7 @@ void update_hero_state_machine(void) {
     prevSub = hero.state.control_mode;
     prevState = hero.state.step;
     prevAnim = moby[0x53];
-    if (FUN_L01_00231580(1) == 0) {
+    if (process_hero_hit_response(1) == 0) {
         if (hero.health.hp <= 0 && hero.state.control_mode != 0x14 &&
             (hero.state.current == HERO_STATE_IDLE || hero.state.current == HERO_STATE_RUN)) {
             hero_set_state(HERO_STATE_DYING, 1);

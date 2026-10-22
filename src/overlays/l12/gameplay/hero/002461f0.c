@@ -76,7 +76,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_00266e00(int, int, int, int);
 extern int FUN_L01_0022d838(float *, float *);
-extern int FUN_L01_00231580(int);
+extern int process_hero_hit_response(int) __asm__("FUN_L01_00231580");
 extern int process_hero_item_action_input(void) __asm__("FUN_L02_0022ee00");
 extern int FUN_L12_00227f10(int a);
 extern int hero_set_state(int, int) __asm__("FUN_L12_002400d0");
@@ -142,7 +142,7 @@ void update_hero_state_transitions(void) {
     prevSub = hero.state.control_mode;
     prevState = hero.state.step;
     prevAnim = moby->prev_seq;
-    if (FUN_L01_00231580(1) == 0) {
+    if (process_hero_hit_response(1) == 0) {
         if (hero.health.hp <= 0 && hero.state.control_mode != 0x14 &&
             (hero.state.current == HERO_STATE_IDLE || hero.state.current == HERO_STATE_RUN)) {
             hero_set_state(HERO_STATE_DYING, 1);
