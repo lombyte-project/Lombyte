@@ -179,7 +179,9 @@ void FUN_001f99f8_210ce8(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 extern T_210ce8 D_L18_00178B00[];
-s32 FUN_L18_00218a90(s32 apply_hurt_response) {
+s32 process_hero_hurt_response(s32 apply_hurt_response) __asm__("FUN_L18_00218a90");
+
+s32 process_hero_hurt_response(s32 apply_hurt_response) {
     u8 *hero_moby_bytes;
     T_210ce8 *response_record;
     u8 *mob;
