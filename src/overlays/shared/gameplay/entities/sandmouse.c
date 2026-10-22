@@ -609,7 +609,9 @@ extern void FUN_L00_00258278(struct Moby *, f32 *, f32, f32, f32, f32);
 extern s32 FUN_L00_00258ad0(struct Moby *, Vec4 *, f32, f32, s32, s32);
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 
-void FUN_L01_0030d880(struct Moby *moby, struct HoverVars *hover_vars) {
+void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_vars) __asm__("FUN_L01_0030d880");
+
+void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_vars) {
     enum {
         HOVER_COMMAND_FACE_GOAL = 0,
         HOVER_COMMAND_MOVE_TO_GOAL = 2
@@ -1032,7 +1034,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
         if (0.6f < vector_distance(&sandmouse_moby->pos, &sandmouse_vars->a30) && sandmouse_vars->timer == 0) {
             D_L01_001DEB38_lui.unk4 = 0.7f;
             compute_sandmouse_follow_goal(sandmouse_moby, sandmouse_vars);
-            FUN_L01_0030d880(sandmouse_moby, (struct HoverVars *)sandmouse_vars);
+            update_sandmouse_hover_movement(sandmouse_moby, (struct HoverVars *)sandmouse_vars);
             movement_result_flags = sandmouse_vars->stuck < 0x15;
             movement_result_flags = movement_result_flags ? 0 : 2;
         } else {
@@ -1099,7 +1101,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 && *(u8 *)(hero_bytes + 0x20A4) == 0 && *(s16 *)(D_L01_00167280 + 0x86) != 0x14
                 && fast_dec_timer(&sandmouse_vars->k58) == 0 && sandmouse_vars->k5C < *(int *)&D_L01_0016209C) {
                 compute_sandmouse_follow_goal(sandmouse_moby, sandmouse_vars);
-                FUN_L01_0030d880(sandmouse_moby, (struct HoverVars *)sandmouse_vars);
+                update_sandmouse_hover_movement(sandmouse_moby, (struct HoverVars *)sandmouse_vars);
             } else {
                 qzero(&sandmouse_vars->vel);
                 sandmouse_vars->timer = *(int *)&D_L01_001620A4;
