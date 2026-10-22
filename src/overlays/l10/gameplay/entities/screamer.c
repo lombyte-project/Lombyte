@@ -3034,7 +3034,9 @@ extern unsigned char D_00141B18[];
 extern unsigned char D_0013D4CB[];
 extern unsigned char D_00141C48[];
 extern unsigned char D_00141CB8[];
-void FUN_L10_002e85b8(Moby *moby)
+void update_conditional_help_messages(Moby *moby) __asm__("FUN_L10_002e85b8");
+
+void update_conditional_help_messages(Moby *moby)
 {
     enum {
         HELP_MESSAGE_STATE_INITIALIZE = 0,
