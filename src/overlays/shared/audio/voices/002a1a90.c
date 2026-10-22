@@ -9,7 +9,9 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/sound_002A2C90.c: func_L01_002A2C90), where it is exact; names translated to the US level program. */
 
-void FUN_L01_002a1a90(int moby_address, int requested_state_byte, int requested_state_value, int requested_pair_first_value, int requested_pair_second_value) {
+void set_requested_state_and_mark_changes(int moby_address, int requested_state_byte, int requested_state_value, int requested_pair_first_value, int requested_pair_second_value) __asm__("FUN_L01_002a1a90");
+
+void set_requested_state_and_mark_changes(int moby_address, int requested_state_byte, int requested_state_value, int requested_pair_first_value, int requested_pair_second_value) {
     char *state_base = D_0013E533 + 0x1D;
     *(int *)(state_base + 0x60) = moby_address;
     if ((unsigned char)state_base[0x68] != requested_state_byte) {

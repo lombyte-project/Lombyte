@@ -1886,7 +1886,7 @@ void FUN_L01_00319928(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0031AD00.c: func_L01_0031B2F0), where it is exact; names translated to the US level program. */
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern void FUN_L01_002a1a90(int a, int b, int c, int d, int e);
+extern void set_requested_state_and_mark_changes(int a, int b, int c, int d, int e) __asm__("FUN_L01_002a1a90");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -1905,13 +1905,13 @@ void FUN_L01_00319f18(char *moby) {
         int clamped_state_value = *(int *)(data + 4);
         if (!(clamped_state_value < scaled_state_value))
             clamped_state_value = scaled_state_value;
-        FUN_L01_002a1a90((int)moby, data[0], clamped_state_value, data[1], data[2]);
+        set_requested_state_and_mark_changes((int)moby, data[0], clamped_state_value, data[1], data[2]);
         data[3] = 1;
     } else if (data[3] != 0) {
         if (hero_offset_in_box_basis[0] > 0.0f) {
-            FUN_L01_002a1a90(0, data[0], *(int *)(data + 4), data[1], data[2]);
+            set_requested_state_and_mark_changes(0, data[0], *(int *)(data + 4), data[1], data[2]);
         } else {
-            FUN_L01_002a1a90((int)moby, 0, 0, 0, 0);
+            set_requested_state_and_mark_changes((int)moby, 0, 0, 0, 0);
         }
         data[3] = 0;
     }
