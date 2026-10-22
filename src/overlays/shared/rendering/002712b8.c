@@ -514,7 +514,9 @@ typedef struct {
     int i10;
     void *p14;
 } Q_272438;
-void FUN_L00_00272438(unsigned char *particle) {
+void update_timed_sphere_probed_particle(unsigned char *particle) __asm__("FUN_L00_00272438");
+
+void update_timed_sphere_probed_particle(unsigned char *particle) {
     u128_272438 *particle_position = (u128_272438 *)(particle + 0x10);
     Q_272438 *particle_data = (Q_272438 *)(particle + 0x20);
     volatile u128_272438 old;
