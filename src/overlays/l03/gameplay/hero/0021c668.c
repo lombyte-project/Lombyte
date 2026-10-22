@@ -131,7 +131,9 @@ extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 int r1_repeat_timer __asm__("D_L03_0015F678") = 0;
-void FUN_L03_0021c668(void) {
+void update_hero_state_machine(void) __asm__("FUN_L03_0021c668");
+
+void update_hero_state_machine(void) {
     unsigned char *moby;
     int prevSub;
     int prevState;

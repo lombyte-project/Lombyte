@@ -40,7 +40,7 @@ extern void FUN_L01_00228000(void);
 extern void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
 extern void FUN_L01_0022cd48(void);
 extern void FUN_L01_0022d090(void);
-extern void FUN_L03_0021c668(void);
+extern void update_hero_state_machine(void) __asm__("FUN_L03_0021c668");
 extern void no_op_main_callback_alt(void *) __asm__("FUN_001e93e8");
 void begin_draw_frame(void) __asm__("FUN_001f7978");
 void fade_to_black(s32 n) __asm__("FUN_001f4a58");
@@ -66,7 +66,7 @@ void FUN_L03_002002f8(void) {
     FUN_L01_0022cd48();
     FUN_L01_0022d090();
     update_hero_offset_rail_candidate();
-    FUN_L03_0021c668();
+    update_hero_state_machine();
     if (*(unsigned char *)(g + 0x20A4) != 0) {
         return;
     }
