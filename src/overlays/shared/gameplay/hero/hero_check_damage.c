@@ -2614,7 +2614,7 @@ void FUN_L00_00211380(void) {
                                 frame_scale_sq * 0.3f, D_0015ED6C_211380 * 4.0f);
     }
 }
-extern u8 FUN_L00_00233440(void);
+extern u8 resolve_hero_gravity_mode(void) __asm__("FUN_L00_00233440");
 float get_capped_hero_stick_magnitude(void) __asm__("FUN_L00_00211830");
 
 extern f32 get_capped_hero_stick_magnitude(void) __asm__("FUN_L00_00211830");
@@ -2640,7 +2640,7 @@ void hero_update(void)
     u8 *source;
     Vec4 *positions;
 
-    mode = FUN_L00_00233440();
+    mode = resolve_hero_gravity_mode();
     hero_state = &hero;
     hero_state->unk20B3 = mode;
     hero_state->unk229C = get_capped_hero_stick_magnitude();

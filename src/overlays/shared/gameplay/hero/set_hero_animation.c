@@ -835,7 +835,9 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 extern unsigned char D_0013D4DC[];
 
-int FUN_L00_00233440(void) {
+int resolve_hero_gravity_mode(void) __asm__("FUN_L00_00233440");
+
+int resolve_hero_gravity_mode(void) {
     struct Hero *base = &hero;
     int state = base->state.current;
     int return_value = base->unk308;
