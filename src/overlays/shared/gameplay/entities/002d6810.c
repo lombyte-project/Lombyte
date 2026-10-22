@@ -145,7 +145,9 @@ void FUN_L15_002d7bb0(struct Moby *moby);
 void draw_electric_water_bolt_effect(char *moby) __asm__("FUN_L15_002d8710");
 
 void draw_electric_water_bolt_effect(char *moby) __asm__("FUN_L15_002d8710");
-void FUN_L15_002d77c0(char *moby);
+void draw_electric_water_countdown(char *moby) __asm__("FUN_L15_002d77c0");
+
+void draw_electric_water_countdown(char *moby) __asm__("FUN_L15_002d77c0");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern int FUN_L00_0028dc90(int, int, void *, int);
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
@@ -457,7 +459,7 @@ void electric_water_update(struct Moby *moby) {
             vars->light = -1;
         }
         if (vars->off_timer != 0) {
-            enqueue_callback_list_1(FUN_L15_002d77c0, moby);
+            enqueue_callback_list_1(draw_electric_water_countdown, moby);
         }
         if (vars->owner != 0) {
             if (vars->voice0 != -1) {
@@ -549,7 +551,7 @@ extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) 
 
 #define W(x) (*(int *)&(x))
 
-void FUN_L15_002d77c0(char *moby) {
+void draw_electric_water_countdown(char *moby) {
     char countdown_text[8];
     char *data = *(char **)(moby + 0x78);
     float color_blend_factor;
