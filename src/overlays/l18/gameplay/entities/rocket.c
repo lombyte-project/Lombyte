@@ -2576,7 +2576,9 @@ extern float D_L18_00161ED0 __attribute__((sda));
 extern float D_L18_00161ED4 __attribute__((sda));
 extern float D_L18_00161ED8 __attribute__((sda));
 extern float D_L18_00161EE0 __attribute__((sda));
-void FUN_L18_002e9e70(struct Moby *moby) {
+void update_moby_target_travel_and_electric_effects(struct Moby *moby) __asm__("FUN_L18_002e9e70");
+
+void update_moby_target_travel_and_electric_effects(struct Moby *moby) {
     enum {
         STATE_TIMED_REMOVAL_WAIT = 0,
         STATE_TRAVEL_TO_TARGET = 1
