@@ -342,8 +342,8 @@ void draw_dialog_text(void) {
         char line[0x40];
         s32 pulse;
         s32 c1;
-        s32 c2;
-        s32 c3;
+        s32 matched_record_text_color;
+        s32 unmatched_record_text_color;
         s32 best;
         s32 record;
         s32 unit;
@@ -366,8 +366,8 @@ void draw_dialog_text(void) {
             scale = 0.1f;
         }
         c1 = D_0015F52C;
-        c2 = D_0015F534;
-        c3 = D_0015F53C;
+        matched_record_text_color = D_0015F534;
+        unmatched_record_text_color = D_0015F53C;
         if (freeze.unk24 != 0) {
             color_blend_fraction = (f32)freeze.unk24 * 0.125f;
             if (color_blend_fraction > 1.0f) {
@@ -376,8 +376,8 @@ void draw_dialog_text(void) {
                 color_blend_fraction = 0.0f;
             }
             c1 = fast_tween_color(D_0015F52C, D_0015F530, color_blend_fraction);
-            c2 = fast_tween_color(D_0015F534, D_0015F538, color_blend_fraction);
-            c3 = fast_tween_color(D_0015F53C, D_0015F540, color_blend_fraction);
+            matched_record_text_color = fast_tween_color(D_0015F534, D_0015F538, color_blend_fraction);
+            unmatched_record_text_color = fast_tween_color(D_0015F53C, D_0015F540, color_blend_fraction);
         }
         if (hero.unk89A < 3) {
             draw_outlined_rect(D_0015F4FC - truncate_float_to_s32((f32)D_0015F504 * scale),
@@ -404,9 +404,9 @@ void draw_dialog_text(void) {
             }
             line[3] = ' ';
             if (hero.unk8C0 == 1) {
-                font_print_center(0x100, freeze_stats_text, c2, line, -1);
+                font_print_center(0x100, freeze_stats_text, matched_record_text_color, line, -1);
             } else {
-                font_print_center(0x100, freeze_stats_text, c3, line, -1);
+                font_print_center(0x100, freeze_stats_text, unmatched_record_text_color, line, -1);
             }
             best = freeze_stats_time_ref[(current_level_index ^ 0x10) ? 0 : 1];
             if (best == hero.unk894) {
@@ -417,22 +417,22 @@ void draw_dialog_text(void) {
                 sec = rem / per;
                 hund = (rem - sec * per) * 100 / per;
                 sprintf(line, D_0015F588, get_help_message_text(0x50A3));
-                font_print_center(0x100, freeze_stats_text + 0x26, c2, line, -1);
+                font_print_center(0x100, freeze_stats_text + 0x26, matched_record_text_color, line, -1);
                 sprintf(line, freeze_fmt_time, min, sec, hund);
-                font_print_center(0x100, freeze_stats_text + 0x3A, c2, line, -1);
+                font_print_center(0x100, freeze_stats_text + 0x3A, matched_record_text_color, line, -1);
             } else {
                 sprintf(line, D_0015F588, get_help_message_text(0x50A2));
-                font_print_center(0x100, freeze_stats_text + 0x30, c3, line, -1);
+                font_print_center(0x100, freeze_stats_text + 0x30, unmatched_record_text_color, line, -1);
             }
             record = freeze_stats_score_ref_a[(current_level_index ^ 0x10) ? 0 : 1];
             if (record != 0 && record == hero.unk8A8) {
                 sprintf(line, D_0015F588, get_help_message_text(0x50A5));
-                font_print_center(0x100, freeze_stats_text + 0x56, c2, line, -1);
+                font_print_center(0x100, freeze_stats_text + 0x56, matched_record_text_color, line, -1);
                 sprintf(line, freeze_fmt_score, hero.unk8A8);
-                font_print_center(0x100, freeze_stats_text + 0x6A, c2, line, -1);
+                font_print_center(0x100, freeze_stats_text + 0x6A, matched_record_text_color, line, -1);
             } else {
                 sprintf(line, D_0015F588, get_help_message_text(0x50A4));
-                font_print_center(0x100, freeze_stats_text + 0x60, c3, line, -1);
+                font_print_center(0x100, freeze_stats_text + 0x60, unmatched_record_text_color, line, -1);
             }
             font_print_center(0x100, freeze_stats_text + 0x90, c1, get_help_message_text(0x5249), -1);
             font_print_center(0x100, freeze_stats_text + 0xA8, c1, get_help_message_text(0x5248), -1);
