@@ -2192,7 +2192,9 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
     }
 }
 f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
-void FUN_L00_002e55b8(void *mm, void *vv, void *tt, f32 stiffness, f32 damping, f32 limit) {
+void interpolate_follow_camera_position(void *mm, void *vv, void *tt, f32 stiffness, f32 damping, f32 limit) __asm__("FUN_L00_002e55b8");
+
+void interpolate_follow_camera_position(void *mm, void *vv, void *tt, f32 stiffness, f32 damping, f32 limit) {
     u8 *camera_state = *(u8 **)((u8 *)mm + 0x70);
     f32 *current_values = vv;
     f32 *target_values = tt;
@@ -2252,7 +2254,7 @@ extern f32 D_L00_00161D30 __attribute__((sda));
 extern f32 D_L00_00161D34 __attribute__((sda));
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 s32 compute_follow_camera_target_position(void *, void *, void *, s32) __asm__("FUN_L00_002e5678");
-void FUN_L00_002e55b8(void *, void *, void *, f32, f32, f32);
+void interpolate_follow_camera_position(void *, void *, void *, f32, f32, f32) __asm__("FUN_L00_002e55b8");
 void follow_camera_transition(O002e5730 *o, void *a) __asm__("FUN_L00_002e5730");
 void follow_camera_transition(O002e5730 *camera, void *input_offset) {
     V002e5730 target_position;
@@ -2272,7 +2274,7 @@ void follow_camera_transition(O002e5730 *camera, void *input_offset) {
         x = D_L00_00161D28;
         y = D_L00_00161D2C;
     }
-    FUN_L00_002e55b8(camera, attach_state->x90, &target_position, x, y, 0.0f);
+    interpolate_follow_camera_position(camera, attach_state->x90, &target_position, x, y, 0.0f);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E6CE0); names and data translated to the US level program. */
 
