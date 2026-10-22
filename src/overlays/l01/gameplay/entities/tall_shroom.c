@@ -40,7 +40,9 @@ extern void FUN_L01_00309bf8(void);
 void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
 
 /* Sets both flag fields to 0xFF and queues FUN_L01_00309bf8 for the moby. */
-void FUN_L01_00309c98(FlagMoby *moby) {
+void set_moby_flags_and_queue_draw_callback(FlagMoby *moby) __asm__("FUN_L01_00309c98");
+
+void set_moby_flags_and_queue_draw_callback(FlagMoby *moby) {
     int flag_init_value = 0xFF;
     moby->h32 = flag_init_value;
     moby->b30 = flag_init_value;
