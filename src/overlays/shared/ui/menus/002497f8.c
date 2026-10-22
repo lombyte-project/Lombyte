@@ -34,7 +34,9 @@ extern int sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");
 
 /* Copies menu item idx's label into out, expanding one %b (the bolt cost)
  * or other % escape. */
-void FUN_L00_0024a618(s32 menu_item_index, u8 *out) {
+void format_menu_item_label(s32 menu_item_index, u8 *out) __asm__("FUN_L00_0024a618");
+
+void format_menu_item_label(s32 menu_item_index, u8 *out) {
     u8 substitution_text[16];
     u8 *label_cursor;
     u8 *substitution_cursor;
