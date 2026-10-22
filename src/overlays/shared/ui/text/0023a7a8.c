@@ -177,7 +177,9 @@ typedef struct {
     int b;
 } H_23ac78;
 extern H_23ac78 D_L00_0017E4D8 __attribute__((section(".data")));
-extern void FUN_L00_0023adb8(void);
+void update_weapon_hud_state(void) __asm__("FUN_L00_0023adb8");
+
+extern void update_weapon_hud_state(void) __asm__("FUN_L00_0023adb8");
 extern void apply_pending_animation(void *) __asm__("FUN_001ff418");
 
 int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -187,7 +189,7 @@ int update_hud_elements(int call) {
     int positive_timer_count = 0;
     E_23ac78 *hud_element;
     H_23ac78 *hud_timer_refresh_control;
-    FUN_L00_0023adb8();
+    update_weapon_hud_state();
     hud_element = hud_elements;
     hud_timer_refresh_control = &D_L00_0017E4D8;
     do {
@@ -228,7 +230,7 @@ extern void FUN_L00_00235d80_23adb8(void) __asm__("FUN_L00_00235d80");
 extern void FUN_L00_00235ea0_23adb8(void) __asm__("FUN_L00_00235ea0");
 extern void FUN_L00_0023a640_23adb8(void) __asm__("FUN_L00_0023a640");
 
-void FUN_L00_0023adb8(void) {
+void update_weapon_hud_state(void) {
     struct Hero *hero_state;
     int weapon_item_id, mode, k;
     if (D_L00_0015F968_gp != 0) {
