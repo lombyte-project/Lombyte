@@ -347,7 +347,9 @@ extern s32 FUN_L00_00211870(f32);
 
 extern s32 D_L03_0015F688_gp __asm__("D_L03_0015F688") __attribute__((sda));
 extern s32 D_L03_0015F68C_gp __asm__("D_L03_0015F68C") __attribute__((sda));
-void FUN_L03_0020ef60(void) {
+void update_hero_motion_for_current_state(void) __asm__("FUN_L03_0020ef60");
+
+void update_hero_motion_for_current_state(void) {
     struct MobyView *moby = MV(hero.moby);
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
