@@ -1853,7 +1853,9 @@ extern void initialize_path_walker_group(struct Moby *) __asm__("FUN_L16_002e7ba
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void sample_camera_path(void *, f32, s32, void *, void *, s32) __asm__("func_00214E58");
 
-void FUN_L16_002e76b8(unsigned char *walker_moby) {
+void update_path_walker(unsigned char *walker_moby) __asm__("FUN_L16_002e76b8");
+
+void update_path_walker(unsigned char *walker_moby) {
     enum {
         PATH_WALKER_INITIALIZE_GROUP = 0,
         PATH_WALKER_FOLLOW_PATH = 1
