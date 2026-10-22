@@ -374,7 +374,9 @@ void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) __asm__(
 
 extern void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *) __asm__("FUN_L14_002ae6d8");
 extern void FUN_L14_002ae7d8(struct Moby *);
-extern void FUN_L14_002ae900(struct Moby *, float, float, float);
+void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby, float position_easing_factor, float path_traversal_speed, float path_direction_multiplier) __asm__("FUN_L14_002ae900");
+
+extern void update_blarg_heavy_interceptor_return_path_position(struct Moby *, float, float, float) __asm__("FUN_L14_002ae900");
 extern void FUN_L14_002aea08_c618(struct Moby *) __asm__("FUN_L14_002aea08");
 extern void FUN_L14_002aead8_c618(struct Moby *) __asm__("FUN_L14_002aead8");
 extern int FUN_L14_002aeba0(struct Moby *, int);
@@ -652,7 +654,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
             if (moby->prev_seq == 0) {
                 blend_moby_animation_c618(moby, 2, 0, 5);
             }
-            FUN_L14_002ae900(moby, D_L14_001613F8, D_L14_001613F4, 1.0f);
+            update_blarg_heavy_interceptor_return_path_position(moby, D_L14_001613F8, D_L14_001613F4, 1.0f);
             if (*(float *)(moby_vars + 0x1C0) != 0.0f || *(float *)(moby_vars + 0x1BC) != 0.0f) {
                 ease_c618((f32 *)(moby_vars + 0x1C0), 0.0f, (f32 *)(moby_vars + 0x1C8), 0.004f, 0.2f, 0.0f);
                 ease_c618((f32 *)(moby_vars + 0x1BC), 0.0f, (f32 *)(moby_vars + 0x1C4), 0.004f, 0.2f, 0.0f);
@@ -672,14 +674,14 @@ void FUN_L14_002ac618(struct Moby *moby) {
                 *(int *)(moby_vars + 0x80) = p->count - 2;
                 *(float *)(moby_vars + 0x8C) = p->points[*(int *)(moby_vars + 0x80)].f[3];
                 *(s16 *)(moby_vars + 0x208) = 0;
-                FUN_L14_002ae900(moby, 0.01f, 5.0f, -1.0f);
+                update_blarg_heavy_interceptor_return_path_position(moby, 0.01f, 5.0f, -1.0f);
                 blend_moby_animation_c618(moby, 0, 0, scale_game_frames(10));
             }
         }
         break;
     case INTERCEPTOR_STATE_FOLLOW_RETURN_PATH:
         FUN_L14_002aea08_c618(moby);
-        FUN_L14_002ae900(moby, 0.01f, 5.0f, -1.0f);
+        update_blarg_heavy_interceptor_return_path_position(moby, 0.01f, 5.0f, -1.0f);
         if (*(s16 *)(moby_vars + 0x208) != 0) {
             int *tab = D_L14_001B0BB0[*(int *)(moby_vars + 0x78)];
 
@@ -1406,7 +1408,7 @@ extern int FUN_L00_0025d808_2afb40(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
 extern short D_L14_001613FC __attribute__((sda));
-void FUN_L14_002ae900(struct Moby *moby, float position_easing_factor, float path_traversal_speed, float path_direction_multiplier) {
+void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby, float position_easing_factor, float path_traversal_speed, float path_direction_multiplier) {
     char *data = (char *)moby->pvars;
     int *list = D_L14_001B0BB0[*(int *)(data + 0x204)];
     float target_position[4];
