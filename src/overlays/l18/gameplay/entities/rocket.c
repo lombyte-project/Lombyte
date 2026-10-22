@@ -1744,7 +1744,9 @@ extern void clear_vector(void *);
 extern void mark_moby_for_removal_p(void *) __asm__("FUN_0020c828");
 extern void scale_vector_xyz(void *, void *, float);
 
-void FUN_L18_002db460(struct Moby *moby) {
+void update_ballistic_ring_projectile(struct Moby *moby) __asm__("FUN_L18_002db460");
+
+void update_ballistic_ring_projectile(struct Moby *moby) {
     enum {
         STATE_BALLISTIC_FLIGHT = 0,
         STATE_GROUND_IMPACT_DELAY = 1,
