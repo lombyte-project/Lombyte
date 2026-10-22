@@ -649,7 +649,9 @@ extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 
-void FUN_L01_0030ef18(s32 vertex_count, f32 (*normals)[3], f32 (*verts)[3], s32 unused, f32 (*uv)[2]) {
+void generate_level01_environment_map_uvs(s32 vertex_count, f32 (*normals)[3], f32 (*verts)[3], s32 unused, f32 (*uv)[2]) __asm__("FUN_L01_0030ef18");
+
+void generate_level01_environment_map_uvs(s32 vertex_count, f32 (*normals)[3], f32 (*verts)[3], s32 unused, f32 (*uv)[2]) {
     EnvVec eye;
     EnvVec vertex_position;
     EnvVec refl;
@@ -687,7 +689,7 @@ extern u8 D_L01_00208170[];
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
-void FUN_L01_0030ef18();
+void generate_level01_environment_map_uvs();
 void FUN_L00_001fde98(s32, s32, s32, void *, s32);
 
 void draw_level01_environment_mapped_meshes(void) __asm__("FUN_L01_0030f0e0");
@@ -701,7 +703,7 @@ void draw_level01_environment_mapped_meshes(void) {
     vu1_add_g_sregister(0x14, 0xFF9000000260);
     font_queue_vu_state();
     for (i = 0; i < 5; i++) {
-        FUN_L01_0030ef18(D_L01_00202EA0[i], D_L01_00208138[i], D_L01_00208108[i], D_L01_00208120[i],
+        generate_level01_environment_map_uvs(D_L01_00202EA0[i], D_L01_00208138[i], D_L01_00208108[i], D_L01_00208120[i],
                          D_L01_00208170);
         FUN_L00_001fde98(D_L01_00202EA0[i], D_L01_00208108[i], D_L01_00208150[i], D_L01_00208170,
                          1);
