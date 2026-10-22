@@ -1694,7 +1694,9 @@ extern OvlVec4 D_0013F3D0_315de0 __asm__("D_0013F3D0");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 
-void FUN_L01_00315de0(Camera *destination_camera) {
+void initialize_camera_transform_and_paths(Camera *destination_camera) __asm__("FUN_L01_00315de0");
+
+void initialize_camera_transform_and_paths(Camera *destination_camera) {
     CameraPresetRow *rows = D_L01_0015EF50;
     Camera *source_camera = D_L01_00167284;
     CameraPreset *camera_preset = rows[destination_camera->preset].preset;
