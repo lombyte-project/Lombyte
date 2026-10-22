@@ -132,7 +132,7 @@ extern int sound_update(void) __asm__("FUN_0022ca50");
 extern void allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 extern void select_moby_context(s32) __asm__("FUN_L00_00235668");
-extern void FUN_L00_00276368(void);
+extern void initialize_pause_menu(void) __asm__("FUN_L00_00276368");
 void close_pause_menu(void) __asm__("FUN_L00_00276908");
 
 extern void close_pause_menu(void) __asm__("FUN_L00_00276908");
@@ -170,7 +170,7 @@ extern void FUN_L00_002a0f18(s32, s32, s32);
 extern void FUN_L00_002df638(Ent *);
 
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_00277208). */
-void FUN_L00_00276368(void) {
+void initialize_pause_menu(void) {
     struct GameState *state = &D_L00_001B9CF0;
     Own *page;
     s32 small_buffers = 0;
@@ -546,7 +546,7 @@ void FUN_L00_00276bd0(void) {
     }
     scene_state = D_L00_001B9CF0.state;
     if (scene_state == 0 || scene_state == 0xA || scene_state == 0xE || scene_state == 0x11 || scene_state == 0x21 || scene_state == 0x2D || scene_state == 0x23) {
-        FUN_L00_00276368();
+        initialize_pause_menu();
     }
     if ((mode_freeze_flags & 1) && !(level_timer < 8)) {
         mode_freeze_init(3, D_L00_001B9CF0.owner);
