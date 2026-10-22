@@ -78,7 +78,7 @@ extern int try_start_hero_jump(int, int) __asm__("FUN_L00_00228b78");
 extern int pick_idle_fidget(int *) __asm__("FUN_L00_00229010");
 extern int hero_handle_jump_press(void) __asm__("FUN_L00_00229660");
 extern int FUN_L00_00229910(void);
-extern int FUN_L00_00229a98(void);
+extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_00266e00(int, int, int, int);
@@ -828,7 +828,7 @@ void FUN_L01_00242930(void) {
                             if (!(hero.state_timer > scale_game_frames(0x19))) {
                                 break;
                             }
-                            if (FUN_L00_00229a98()) {
+                            if (try_start_hero_item_idle_animation()) {
                                 break;
                             }
                             if (hero_set_state(HERO_STATE_IDLE, 0) == 0) {

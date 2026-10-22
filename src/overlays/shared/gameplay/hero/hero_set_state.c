@@ -617,7 +617,7 @@ extern int FUN_L00_0020d568(void);
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int FUN_L00_00216de8(int, int);
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
-extern int FUN_L00_00229a98(void);
+extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -1237,7 +1237,7 @@ int hero_set_state(int a, int b) {
             hero_set_state(HERO_STATE_SLIP, 1);
             return 0;
         }
-        if (FUN_L00_00229a98())
+        if (try_start_hero_item_idle_animation())
             return 0;
         if (hero_idle_sequence(0) == 0x54) {
             if (hero_set_state(HERO_STATE_IDLE, 0)) {

@@ -257,7 +257,9 @@ void FUN_L00_0020e698(void);
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
-s32 FUN_L00_00229a98(void) {
+s32 try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
+
+s32 try_start_hero_item_idle_animation(void) {
     struct Hero *hero_ptr = &hero;
     s32 id, k;
     if (hero_ptr->unk20A8 == 0 || hero_ptr->unk20AA == 0 || hero_ptr->unk22C8 != 0)

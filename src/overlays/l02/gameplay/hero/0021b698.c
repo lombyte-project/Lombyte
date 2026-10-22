@@ -719,7 +719,7 @@ extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__(
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int FUN_L00_00211870(float);
 extern int FUN_L00_00227d40_cf(float, void *, void *) __asm__("FUN_L00_001ff600");
-extern int FUN_L00_00229a98(void);
+extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int FUN_L00_002595a0(float *, float *, float, float, float);
 extern int FUN_L01_00226f10(int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -851,7 +851,7 @@ void FUN_L02_00225c20(void) {
             }
         }
         if (hero.state.current == HERO_STATE_STOP) {
-            if (FUN_L00_00229a98() != 0) {
+            if (try_start_hero_item_idle_animation() != 0) {
                 break;
             }
         }
