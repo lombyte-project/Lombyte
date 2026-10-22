@@ -2853,7 +2853,9 @@ extern short D_L16_00161F98_gp __asm__("D_L16_00161F98") __attribute__((sda));
 extern L16SingleSphere_2e98e0 D_L16_00161F60_bounds_2e98e0[] __asm__("D_L16_001DF2B0")
     __attribute__((section(".data")));
 
-void FUN_L16_002e98e0(unsigned char *moby) {
+void update_level16_two_mesh_render_state(unsigned char *moby) __asm__("FUN_L16_002e98e0");
+
+void update_level16_two_mesh_render_state(unsigned char *moby) {
     enum {
         TWO_MESH_RENDER_INITIALIZE_BOUNDING_SPHERES = 0,
         TWO_MESH_RENDER_QUEUE_CALLBACK = 1
