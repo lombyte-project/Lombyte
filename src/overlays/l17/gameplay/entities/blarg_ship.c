@@ -546,7 +546,7 @@ extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int FUN_0022da68(int, int, int);
 extern int random_integer_below_c(int) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern unsigned char *FUN_L13_002e1c50(char *position, int moby_class);
+extern unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void FUN_L11_00319670(void *);
@@ -625,9 +625,9 @@ void blarg_ship_update(struct Moby *moby) {
         if (moby->state == 2) {
             cart_burst(moby, &moby->pos, -1, 2.0f, 13.0f);
             if (random_integer_below_c(2)) {
-                FUN_L13_002e1c50((char *)&moby->pos, 0xE0);
+                spawn_ship_pickup((char *)&moby->pos, 0xE0);
             } else {
-                FUN_L13_002e1c50((char *)&moby->pos, 0xE4);
+                spawn_ship_pickup((char *)&moby->pos, 0xE4);
             }
             FUN_0022da68(1, 0, (int)moby);
             moby->state = 3;
@@ -753,9 +753,9 @@ void blarg_ship_update(struct Moby *moby) {
         add_vector_xyz(&moby->pos, &moby->pos, scratch_vector);
         cart_burst(moby, &moby->pos, -1, 2.0f, 13.0f);
         if (random_integer_below_c(2)) {
-            FUN_L13_002e1c50((char *)&moby->pos, 0xE0);
+            spawn_ship_pickup((char *)&moby->pos, 0xE0);
         } else {
-            FUN_L13_002e1c50((char *)&moby->pos, 0xE4);
+            spawn_ship_pickup((char *)&moby->pos, 0xE4);
         }
         FUN_0022da68(1, 0, (int)moby);
         moby->state = 4;

@@ -1156,7 +1156,7 @@ extern int FUN_L01_0028b510(void *, void *, float);
 extern int FUN_L13_002c3fc0();
 extern s32 rand(void);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern unsigned char *FUN_L13_002e1c50(char *position, int moby_class);
+extern unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
 extern void DebugPrint(char *, ...);
 extern void FUN_L00_0025f8e0(float *v, float s);
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
@@ -1390,7 +1390,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         scale_vector_xyz(scratch_vector, &fighter_data->vel, 0.5f);
         switch (rand() % 10) {
         case FIGHTER_DESTRUCTION_SPAWN_CLASS_E0:
-            FUN_L13_002e1c50((char *)spawn_position, 0xE0);
+            spawn_ship_pickup((char *)spawn_position, 0xE0);
             break;
         case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4:
         case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_ALTERNATE:
@@ -1398,7 +1398,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_THIRD_ALTERNATE:
         case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_FOURTH_ALTERNATE:
         case FIGHTER_DESTRUCTION_SPAWN_CLASS_E4_FIFTH_ALTERNATE:
-            FUN_L13_002e1c50((char *)spawn_position, 0xE4);
+            spawn_ship_pickup((char *)spawn_position, 0xE4);
             break;
         case FIGHTER_DESTRUCTION_SKIP_SPAWN:
         case FIGHTER_DESTRUCTION_SKIP_SPAWN_ALTERNATE:

@@ -48,7 +48,9 @@ extern char *func_0020D348_m(int);
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
-unsigned char *FUN_L13_002e1c50(char *position, int moby_class) {
+unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
+
+unsigned char *spawn_ship_pickup(char *position, int moby_class) {
     unsigned char *moby = func_0020D348_m(moby_class);
     if (moby != 0) {
         moby[0x30] = 0xFF;
