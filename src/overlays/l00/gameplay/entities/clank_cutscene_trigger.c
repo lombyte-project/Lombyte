@@ -26,7 +26,7 @@ extern void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void)
 extern void draw_sky_shells_with_modulo_40000_rotation(void) __asm__("FUN_L00_0028a2f0");
 extern void draw_sky_shells_with_modulo_25000_rotation(void) __asm__("FUN_L00_0028a3a8");
 extern void FUN_L00_0028a480(void);
-extern void FUN_L00_0028a620(void);
+extern void draw_sky_shells_with_slow_medium_and_fast_rotation(void) __asm__("FUN_L00_0028a620");
 extern void FUN_L00_0028a7a0(void);
 extern void FUN_L00_0028ab08(void);
 extern void draw_three_sky_shells_with_particles(void) __asm__("FUN_L00_0028a920");
@@ -95,7 +95,7 @@ void FUN_L00_0023d968(void) {
         FUN_L00_0028a480();
         break;
     case LEVEL_WITH_THREE_ROTATING_SKY_SHELLS:
-        FUN_L00_0028a620();
+        draw_sky_shells_with_slow_medium_and_fast_rotation();
         break;
     case LEVEL_WITH_ROTATING_SKY_SHELLS_ONE_THROUGH_THREE:
         FUN_L00_0028a7a0();
