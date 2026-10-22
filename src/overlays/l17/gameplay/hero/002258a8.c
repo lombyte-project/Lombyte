@@ -652,7 +652,7 @@ void FUN_L17_002258a8(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 58:
+                case HERO_STATE_ANIMATION_WAIT_TO_IDLE:
                     if (hero.unkA98 & 2) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -710,7 +710,7 @@ void FUN_L17_002258a8(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 48:
+                case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -786,7 +786,7 @@ void FUN_L17_002258a8(void) {
                         }
                     }
                     break;
-                case 33:
+                case HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE:
                 case HERO_STATE_WALL_BONK:
                     if (hero.unkA98 & 2) {
                         hero_set_state(HERO_STATE_IDLE, 1);
@@ -1012,7 +1012,7 @@ void FUN_L17_002258a8(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 104:
+                case HERO_STATE_WAIT_FOR_JUMP_OR_RESPAWN:
                     if (hero.unk1660 < 2) {
                         if (scale_game_frames(0xF) + hero.unk1660 * scale_game_frames(0x19) <
                             hero.state_timer) {
@@ -1085,17 +1085,17 @@ void FUN_L17_002258a8(void) {
                         }
                     }
                     break;
-                case 112:
+                case HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT:
                     if (hero.anim_frame > (float)D_L17_0017C528[hero.attack_record].f18) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 113:
+                case HERO_STATE_ANIMATION_FRAME_EXIT_WAIT:
                     if (25.0f < hero.anim_frame) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 49:
+                case HERO_STATE_VOICE_SLOT_CLEANUP_IDLE_EXIT:
                     if (hero.unk12E3 != 0) {
                         break;
                     }
@@ -2888,12 +2888,12 @@ void FUN_L17_002258a8(void) {
                     }
                     D_L17_0016D080 = 0;
                     break;
-                case 32:
+                case HERO_STATE_HELD_ITEM_ATTACK:
                     if (((unsigned char *)hero.items[0].moby) != 0 && hero.unkA9C == 0 && hero.anim_frame > 20.0f) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 35:
+                case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
                     if (19.0f < hero.anim_frame &&
                         pad_pressed_within(0x40, scale_game_frames(0xB), 0)) {
                         if (controller_state.held & 0xA) {
