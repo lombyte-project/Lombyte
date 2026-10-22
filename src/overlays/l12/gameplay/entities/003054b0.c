@@ -835,7 +835,7 @@ void planetbuster_maximus_part_update(char *moby) {
 /* Spawns the next linked moby at this one's spot, sets it up and gives it a random spin. */
 extern void FUN_L00_00250df8(unsigned char *);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void FUN_L00_0026de90(char *, int, float);
+extern void spawn_jittered_effect_particle_with_optional_basis(char *, int, float) __asm__("FUN_L00_0026de90");
 extern short *suck_get_aim_height(unsigned char *) __asm__("FUN_002141f8");
 
 void spawn_next_linked_moby(struct Moby *spawner) __asm__("FUN_L12_003076e0");
@@ -866,7 +866,7 @@ void spawn_next_linked_moby(struct Moby *spawner) {
     FUN_L00_00250df8(spawned_moby);
     spawned_moby->parent = spawner;
     for (i = 0; i < 14; i++) {
-        FUN_L00_0026de90(&spawner->pos, 0, random_float_between(frame_time * 3.0f, frame_time * 5.0f));
+        spawn_jittered_effect_particle_with_optional_basis(&spawner->pos, 0, random_float_between(frame_time * 3.0f, frame_time * 5.0f));
     }
     aim_height_data = suck_get_aim_height(spawned_moby);
     if (aim_height_data != 0) {

@@ -2098,7 +2098,9 @@ s32 FUN_001fa6d0_26de90(f32) __asm__("FUN_001fa6d0");
 s32 FUN_001f96f8_26de90(s32) __asm__("FUN_001f96f8");
 void FUN_001f9cf8_26de90(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern u8 *D_L00_001B20F0 __attribute__((section(".data")));
-void FUN_L00_0026de90(void *spawn_origin, void *optional_spawn_basis, f32 size) {
+void spawn_jittered_effect_particle_with_optional_basis(void *spawn_origin, void *optional_spawn_basis, f32 size) __asm__("FUN_L00_0026de90");
+
+void spawn_jittered_effect_particle_with_optional_basis(void *spawn_origin, void *optional_spawn_basis, f32 size) {
     M_26de90 *particle;
     V_26de90 transformed_spawn_offset, spawn_offset, local_velocity;
     X_26de90 x;

@@ -3029,7 +3029,7 @@ extern f32 FUN_001f99c0(f32);
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern void configure_hero_point_effect_emission(s32, s32, s32, s32, f32, f32) __asm__("FUN_L00_00233288");
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_0026de90(void *, void *, f32);
+extern void spawn_jittered_effect_particle_with_optional_basis(void *, void *, f32) __asm__("FUN_L00_0026de90");
 void FUN_L00_0020b1d8(void) {
     u8 buf[0x10] __attribute__((aligned(16)));
     f32 clamped_rotation_angle, secondary_clamped_rotation_angle;
@@ -3078,10 +3078,10 @@ void FUN_L00_0020b1d8(void) {
         P.i12A8--;
         moby_point_position(P.p2080, 0x16, buf);
         for (i = 0; i < P.h12AC; i++)
-            FUN_L00_0026de90(buf, optional_moby_basis, P.f12A0 + random_float_between(-P.f12A4, P.f12A4));
+            spawn_jittered_effect_particle_with_optional_basis(buf, optional_moby_basis, P.f12A0 + random_float_between(-P.f12A4, P.f12A4));
         moby_point_position(P.p2080, 0x17, buf);
         for (i = 0; i < P.h12AC; i++)
-            FUN_L00_0026de90(buf, optional_moby_basis, P.f12A0 + random_float_between(-P.f12A4, P.f12A4));
+            spawn_jittered_effect_particle_with_optional_basis(buf, optional_moby_basis, P.f12A0 + random_float_between(-P.f12A4, P.f12A4));
     } else
         P.i12A8 = 0;
 }
