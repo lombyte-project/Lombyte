@@ -14,7 +14,9 @@ extern void *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L07_001B21CC NOT_SDA;
-unsigned char *FUN_L07_0029a2a0(char *particle_spawn_position, char *particle_motion_vector) {
+unsigned char *spawn_projectile_expiry_particle(char *particle_spawn_position, char *particle_motion_vector) __asm__("FUN_L07_0029a2a0");
+
+unsigned char *spawn_projectile_expiry_particle(char *particle_spawn_position, char *particle_motion_vector) {
     unsigned char *particle = create_part(0x33);
     if (particle != 0) {
         char *particle_vector = (char *)particle + 0x20;

@@ -95,7 +95,7 @@ extern int FUN_L00_002712b8(void *, void *, int, int, int, int, float, float, fl
 extern void make_hit_descriptor(void *, struct Moby *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
-extern void FUN_L07_0029a2a0(void *, void *);
+extern void spawn_projectile_expiry_particle(void *, void *) __asm__("FUN_L07_0029a2a0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float D_0015ED6C;
 
@@ -189,7 +189,7 @@ void update_attached_rocket(struct Moby *moby) {
                 fast_vec_add(&work.direction, &work.random_direction, &work.direction);
                 fast_vec_normalize(&work.direction, &work.direction,
                     FUN_002132a8(D_0015ED6C + D_0015ED6C, D_0015ED6C * 4.0f));
-                FUN_L07_0029a2a0(&moby->pos, &work.direction);
+                spawn_projectile_expiry_particle(&moby->pos, &work.direction);
             }
         }
         spawn_attached_rocket_explosion(moby);
@@ -420,7 +420,7 @@ void FUN_L13_00306300(struct Moby *moby) {
                 add_vector_xyz(&work.direction, &work.random_direction, &work.direction);
                 fast_vec_normalize(&work.direction, &work.direction,
                     random_float_between(D_0015ED6C + D_0015ED6C, D_0015ED6C * 4.0f));
-                FUN_L07_0029a2a0(&moby->pos, &work.direction);
+                spawn_projectile_expiry_particle(&moby->pos, &work.direction);
             }
         }
         goto remove;

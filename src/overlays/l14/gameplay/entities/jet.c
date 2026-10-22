@@ -1083,7 +1083,7 @@ extern int FUN_L00_00257b90(int, int);
 extern s32 bolt_frames(s32) __asm__("FUN_001f96f8");
 extern int bolt_coll_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void FUN_L00_00259888(void *, struct Moby *, s32, void *, f32);
-extern void FUN_L07_0029a2a0(void *, void *);
+extern void spawn_projectile_expiry_particle(void *, void *) __asm__("FUN_L07_0029a2a0");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern char *FUN_L00_0026dd20(char *, char *, int c, int d, float f);
 extern int bolt_sound(int, int, void *) __asm__("FUN_0022da68");
@@ -1136,7 +1136,7 @@ void FUN_L14_002ece00(struct Moby *projectile_moby) {
                 bolt_normalize(&particle_launch_vector, &particle_launch_vector, bolt_length(&spark) * 0.1f);
                 bolt_add(&particle_launch_vector, &spark, &particle_launch_vector);
                 bolt_normalize(&particle_launch_vector, &particle_launch_vector, bolt_random(frame_time + frame_time, frame_time * 4.0f));
-                FUN_L07_0029a2a0(&projectile_moby->pos, &particle_launch_vector);
+                spawn_projectile_expiry_particle(&projectile_moby->pos, &particle_launch_vector);
             }
         }
         bolt_remove(projectile_moby);

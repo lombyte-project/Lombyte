@@ -1208,7 +1208,7 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern void FUN_L07_0029a2a0(void *, void *);
+extern void spawn_projectile_expiry_particle(void *, void *) __asm__("FUN_L07_0029a2a0");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern char *FUN_L00_0026dd20(char *, char *, int c, int d, float f);
 extern int play_moby_sound(int, int, void *) __asm__("FUN_0022da68");
@@ -1243,7 +1243,7 @@ void update_linear_projectile(struct Moby *moby) {
                 add_vector_xyz(&particle_motion_vector, &spark, &particle_motion_vector);
                 normalize_vector_xyz(&particle_motion_vector, &particle_motion_vector,
                                      random_float_between(frame_time + frame_time, frame_time * 4.0f));
-                FUN_L07_0029a2a0(&moby->pos, &particle_motion_vector);
+                spawn_projectile_expiry_particle(&moby->pos, &particle_motion_vector);
             }
         }
         mark_moby_for_removal(moby);
