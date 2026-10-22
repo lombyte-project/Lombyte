@@ -906,7 +906,9 @@ extern float D_L18_00162308_gp __asm__("D_L18_00162308") __attribute__((sda));
 extern float D_0015ED6C_2310 __asm__("D_0015ED6C");
 extern float approach_2310(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void enqueue_2310(void *, void *) __asm__("FUN_001f4600");
-extern void FUN_L18_002f2598(void *a);
+void synchronize_lift_group_height(void *source_moby) __asm__("FUN_L18_002f2598");
+
+extern void synchronize_lift_group_height(void *a) __asm__("FUN_L18_002f2598");
 extern void FUN_L18_002f2620(struct Moby *moby);
 extern void FUN_L18_002f27c8(struct Moby *moby);
 extern void FUN_L18_002f2970(struct Moby *moby);
@@ -966,7 +968,7 @@ void FUN_L18_002f2310(struct Moby *lift_moby) {
         }
         approach_2310(&lift_moby->pos.z, (float *)(lift_vars + 0x18), *(float *)(lift_vars + 4), frame_time_sq * 4.0f,
                       frame_time_sq * 4.0f, D_0015ED6C_2310 * 4.0f);
-        FUN_L18_002f2598(lift_moby);
+        synchronize_lift_group_height(lift_moby);
         lift_moby->command = 1;
         break;
     case LIFT_APPROACH_BASE_HEIGHT:
@@ -975,7 +977,7 @@ void FUN_L18_002f2310(struct Moby *lift_moby) {
             D_L18_001622FC = 1;
         }
         lift_moby->command = 2;
-        FUN_L18_002f2598(lift_moby);
+        synchronize_lift_group_height(lift_moby);
         approach_2310(&lift_moby->pos.z, (float *)(lift_vars + 0x18), *(float *)(lift_vars + 0), frame_time_sq * 4.0f,
                       frame_time_sq * 4.0f, D_0015ED6C_2310 * 4.0f);
         break;
@@ -1023,7 +1025,7 @@ extern E D_L18_001DB500[];
 extern short *D_L18_001AC240_c[] __asm__("D_L18_001AC240");
 extern unsigned char *D_L18_0015FFD8;
 
-void FUN_L18_002f2598(void *source_moby) {
+void synchronize_lift_group_height(void *source_moby) {
     unsigned char *source_moby_bytes = source_moby;
     short *group_entry = D_L18_001AC240_c[source_moby_bytes[0x21]];
     E *height_records = D_L18_001DB500;
