@@ -345,7 +345,9 @@ extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern float D_L11_001677C0[];
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L02_002e0cd8(void *);
-extern void FUN_L11_002d1030(void *);
+void update_resort_owner_state_actions(void *mp) __asm__("FUN_L11_002d1030");
+
+extern void update_resort_owner_state_actions(void *) __asm__("FUN_L11_002d1030");
 void apply_resort_owner_movement(void *mp) __asm__("FUN_L11_002d1340");
 
 extern void apply_resort_owner_movement(void *) __asm__("FUN_L11_002d1340");
@@ -361,7 +363,7 @@ void resort_owner_update(struct Moby *moby) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 30;
     }
-    FUN_L11_002d1030(moby);
+    update_resort_owner_state_actions(moby);
     apply_resort_owner_movement(moby);
     FUN_L11_002d14b0(moby);
     update_resort_owner_look_tracking(moby);
@@ -388,7 +390,7 @@ extern int D_L11_0015FFD8;
 
 int try_activate_pokitaru_gate(struct Moby *moby) __asm__("FUN_L11_0030a480");
 
-void FUN_L11_002d1030(void *mp) {
+void update_resort_owner_state_actions(void *mp) {
     struct Moby *moby = mp;
     char *pvars = (char *)moby->pvars;
     float target_yaw;
