@@ -49,7 +49,9 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 /* Switches every moby listed in a table into state 15 until a negative entry. */
-void FUN_L06_002e9e30(int index) {
+void set_moby_list_state_15(int index) __asm__("FUN_L06_002e9e30");
+
+void set_moby_list_state_15(int index) {
     short *moby_index_cursor = D_L06_001ABFC0[index];
     do {
         char *moby = D_L06_0015FFD8_d + ((*(unsigned short *)moby_index_cursor & 0x7FFF) << 8);
