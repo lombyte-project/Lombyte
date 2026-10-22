@@ -15,7 +15,9 @@
 extern char *func_L05_0031AAA8_19510(void *, int) __asm__("FUN_L16_002e4be0");
 extern void func_L16_002E5D68_19510(void *) __asm__("FUN_L16_002e4900");
 extern char *D_L16_001601AC_m_19510 __asm__("D_L16_001600EC");
-void FUN_L16_002e4b58(void *moby_v) {
+void transfer_moby_placement_to_linked_moby(void *moby_v) __asm__("FUN_L16_002e4b58");
+
+void transfer_moby_placement_to_linked_moby(void *moby_v) {
     char *moby = moby_v;
     char *data = *(char **)(moby + 0x78);
     char *spawn = func_L05_0031AAA8_19510(moby, *(short *)(data + 0xae));
