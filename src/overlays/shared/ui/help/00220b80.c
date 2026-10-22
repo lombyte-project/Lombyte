@@ -63,7 +63,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 
-extern void FUN_L00_002137a8(void);
+extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
 extern void FUN_L02_002216a0(void);
 extern void FUN_L00_00212ff0(void);
 
@@ -113,7 +113,7 @@ void FUN_L02_002226d8(void)
     hero.coll_hit_moby = 0;
 
     if (vector_length_xyz(&hero.motion.platform_delta) <= 0.0001f) {
-        FUN_L00_002137a8();
+        resolve_hero_collisions_with_history();
         FUN_L02_002216a0();
         subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
         FUN_L00_00212ff0();
@@ -168,7 +168,7 @@ void FUN_L02_002226d8(void)
         saved_platform_delta_w = hero.motion.platform_delta.f[3];
         clear_vector(&hero.motion.platform_delta);
         hero.motion.platform_delta.f[3] = saved_platform_delta_w;
-        FUN_L00_002137a8();
+        resolve_hero_collisions_with_history();
         FUN_L02_002216a0();
         subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
         FUN_L00_00212ff0();

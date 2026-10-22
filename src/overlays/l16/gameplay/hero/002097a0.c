@@ -535,7 +535,7 @@ extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float gravity_z(float *) __asm__("FUN_L00_00233a78");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_00212ff0(void);
-extern void FUN_L00_002137a8(void);
+extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
 extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
 extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
 extern void FUN_L00_00233ba0(float *, float *, float);
@@ -652,7 +652,7 @@ void FUN_L16_00211098(void) {
     contact_player->contact_flag = 0;
     contact_player->contact_state = 0;
     if (vector_length_xyz((char *)position + 0x70) <= 0.0001f) {
-        FUN_L00_002137a8();
+        resolve_hero_collisions_with_history();
         FUN_L16_0020ffb0();
         subtract_vector_xyz((char *)position + 0x80, position, previous.f);
         FUN_L00_00212ff0();
@@ -701,7 +701,7 @@ void FUN_L16_00211098(void) {
         saved = motion_player->contact[3];
         clear_u64_value(contact);
         motion_player->contact[3] = saved;
-        FUN_L00_002137a8();
+        resolve_hero_collisions_with_history();
         FUN_L16_0020ffb0();
         subtract_vector_xyz(external, new_position, previous.f);
         FUN_L00_00212ff0();
