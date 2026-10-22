@@ -3123,7 +3123,9 @@ extern f32 D_L02_00161C74 __attribute__((sda));
 s32 D_L02_00161C78 = 0x800000ff;
 s32 D_L02_00161C7C = 0x80329600;
 extern f32 D_L02_00161C84 __attribute__((sda));
-extern void FUN_L02_002df730(struct Moby *moby);
+void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) __asm__("FUN_L02_002df730");
+
+extern void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) __asm__("FUN_L02_002df730");
 extern char *spawn_projectile_moby(char *src, void *pos, float *dir) __asm__("FUN_L02_002ec228");
 extern s32 turret_count_down(s16 *) __asm__("FUN_001f9770");
 extern f32 turret_rand_range(f32, f32) __asm__("FUN_002132a8");
@@ -3156,7 +3158,7 @@ void rocket_launcher_update(struct Moby *moby) {
     Vec4f projectile_velocity, muzzle;
     f32 glow_blend_fraction;
 
-    FUN_L02_002df730(moby);
+    play_rocket_launcher_delayed_shot_sounds(moby);
     switch (moby->state) {
     case ROCKET_LAUNCHER_WAIT_BETWEEN_SHOTS:
         if (turret_count_down(&rocket_launcher_vars->wait_timer)) {
@@ -3232,7 +3234,7 @@ s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags,
                                     void *target) __asm__("FUN_0022da68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L02_002df730(struct Moby *moby) {
+void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float distance;
     int sound_a, sound_b, gain_a, gain_b;
