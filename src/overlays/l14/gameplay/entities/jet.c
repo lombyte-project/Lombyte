@@ -1752,7 +1752,9 @@ extern int vendor_ftoi(float) __asm__("FUN_001fa6d0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void vendor_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float vendor_spring(float *p, float t, float *v, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
-void FUN_L14_002eef60(struct Moby *m);
+void initialize_elevator_path_state(struct Moby *moby) __asm__("FUN_L14_002eef60");
+
+void initialize_elevator_path_state(struct Moby *m) __asm__("FUN_L14_002eef60");
 int FUN_L14_002ef150(struct Moby *m);
 void settle_elevator_at_path_endpoint(struct Moby *elevator_moby) __asm__("FUN_L14_002ef3e0");
 
@@ -1823,7 +1825,7 @@ void elevator_update(struct Moby *elevator_moby) {
         u16 id;
         elevator_moby->command = 0;
         elevator_moby->state = 1;
-        FUN_L14_002eef60(elevator_moby);
+        initialize_elevator_path_state(elevator_moby);
         qcopy(&elevator_moby->pos, D_L14_001B0BB0_v[elevator_vars->path] + 0x10);
         qcopy(&elevator_moby->rot, elevator_vars->rot);
         id = elevator_moby->save_id;
@@ -1947,7 +1949,7 @@ extern char *D_L14_001B0BB0_rail[] __asm__("D_L14_001B0BB0");
 extern float FUN_001f9b48(void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
-void FUN_L14_002eef60(struct Moby *moby) {
+void initialize_elevator_path_state(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     int *path;
     int *primary_path;
