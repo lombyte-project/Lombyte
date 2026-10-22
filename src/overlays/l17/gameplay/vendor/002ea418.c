@@ -33,7 +33,9 @@ void draw_four_quarter_turn_effect_quads(unsigned char red, unsigned char green,
 
 extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 
-int FUN_L17_002f0040(struct Moby *moby) {
+int cancel_suck_cannon_suction_and_set_state_12(struct Moby *moby) __asm__("FUN_L17_002f0040");
+
+int cancel_suck_cannon_suction_and_set_state_12(struct Moby *moby) {
     int helper_result = cancel_suck_cannon_suction(moby);
     moby->state = 0xc;
     return helper_result;
