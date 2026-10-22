@@ -2405,13 +2405,13 @@ char *FUN_L00_002cdf28(char *search_position, int *excl) {
     float best = 1e9f;
     float candidate_position_scratch[4];
     for (candidate_moby = (char *)D_L00_0015FFE4; candidate_moby != 0; candidate_moby = *(char **)(candidate_moby + 0x28)) {
-        char *cls = *(char **)(candidate_moby + 0x24);
+        char *candidate_moby_class = *(char **)(candidate_moby + 0x24);
         int class_category = 0;
         float search_to_candidate_distance;
         char *class_callback_data;
         char *x;
-        if (cls != 0)
-            class_category = *(unsigned char *)(cls + 0x46);
+        if (candidate_moby_class != 0)
+            class_category = *(unsigned char *)(candidate_moby_class + 0x46);
         if (candidate_moby == 0 || *(unsigned char *)(candidate_moby + 0x20) == 0xFE)
             continue;
         if (*(unsigned char *)(candidate_moby + 0x20) == 0xFD)
