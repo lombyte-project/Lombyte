@@ -1223,7 +1223,9 @@ extern float D_L14_00161CD4;
 extern float D_L14_00161CD8;
 
 extern float D_L14_00161CCC;
-void FUN_L14_002ed280(struct Moby *moby) {
+void update_path_lightning_controller(struct Moby *moby) __asm__("FUN_L14_002ed280");
+
+void update_path_lightning_controller(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     int visible_path_point_indices[5];
     float visibility_test_point[4];
