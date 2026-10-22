@@ -157,7 +157,7 @@ extern s32 D_0013CAE0_229660 __asm__("D_0013CAE0") __attribute__((section(".data
 extern u8 D_0013D4C2_229660 __asm__("D_0013D4C2") __attribute__((section(".data")));
 extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int FUN_001f96f8_229660(int) __asm__("FUN_001f96f8");
-extern int FUN_L00_00266e00_229660(int, void *, int, int) __asm__("FUN_L00_00266e00");
+extern int check_pad_press_separation(int, void *, int, int) __asm__("FUN_L00_00266e00");
 extern int FUN_L00_00266d60_229660(int, int, void *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_0020d498_229660(int) __asm__("FUN_L00_0020d498");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -174,7 +174,7 @@ int hero_handle_jump_press(void) {
     input_history_separation_limit = get_hero_high_jump_input_window_frames();
     input_history_window_padding = FUN_001f96f8_229660(5);
     if ((D_0013CAE0_229660 & 0xA) && input_history_separation_limit > 0 &&
-        FUN_L00_00266e00_229660(0x40, (void *)0x1F000, input_history_window_padding + input_history_separation_limit, input_history_separation_limit)) {
+        check_pad_press_separation(0x40, (void *)0x1F000, input_history_window_padding + input_history_separation_limit, input_history_separation_limit)) {
         next_state = 0xB;
     found:
         hero_set_state(next_state, 1);

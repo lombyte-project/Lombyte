@@ -107,7 +107,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int sample_path(int *tab, float *out, int *a, float *b, int c, float d) __asm__("FUN_L00_0025d808");
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
-extern int FUN_L00_00266e00(int, int, int, int);
+extern int check_pad_press_separation(int, int, int, int) __asm__("FUN_L00_00266e00");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -1832,7 +1832,7 @@ void hero_update_transitions(void) {
                         }
                     }
                     if (hero_slot_item_id(3) == 3 && hero.unk22D8 == 0) {
-                        if (FUN_L00_00266e00(0x40, 0xA, scale_game_frames(9),
+                        if (check_pad_press_separation(0x40, 0xA, scale_game_frames(9),
                                              scale_game_frames(8))) {
                             if ((controller_state.held & 0xA) && (controller_state.pressed & 0x40)) {
                                 if (hero.unk41E == 0 || hero.ground_distance > 1.5f) {

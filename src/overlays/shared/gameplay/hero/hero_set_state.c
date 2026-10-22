@@ -3635,7 +3635,7 @@ int process_hero_equipped_item_input(void) {
 extern int D_0013A4E0[];
 extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int pad_pressed_within(int, void *, void *) __asm__("FUN_L00_00266d60");
-extern int FUN_L00_00266e00(int, void *, void *, int);
+extern int check_pad_press_separation(int, void *, void *, int) __asm__("FUN_L00_00266e00");
 
 int try_start_hero_jump(void *jump_press_window_frames, int suppress_normal_jump) __asm__("FUN_L00_00228b78");
 
@@ -3649,7 +3649,7 @@ int try_start_hero_jump(void *jump_press_window_frames, int suppress_normal_jump
     high_jump_timing_window_frames = get_hero_high_jump_input_window_frames();
 
     if ((*(int *)((char *)D_0013A4E0 + 0x2600) & 0xA) != 0) {
-        if (high_jump_timing_window_frames > 0 && FUN_L00_00266e00(0x40, (void *)0x1F000, (char *)jump_press_window_frames + high_jump_timing_window_frames, high_jump_timing_window_frames)) {
+        if (high_jump_timing_window_frames > 0 && check_pad_press_separation(0x40, (void *)0x1F000, (char *)jump_press_window_frames + high_jump_timing_window_frames, high_jump_timing_window_frames)) {
             hero_set_state(HERO_STATE_HIGH_JUMP, 1);
             return 1;
         }

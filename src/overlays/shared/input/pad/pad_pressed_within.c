@@ -36,7 +36,9 @@ extern int FUN_L00_00266d60_u(int, int, int *) __asm__("FUN_L00_00266d60");
 extern s32 SubtractIntegerWithClamp(s32);
 
 /* True when both lookups succeed and the clamped difference of their values is below d. */
-int FUN_L00_00266e00(int first_button_mask, int second_button_mask, int lookback_frames, int press_difference_limit) {
+int check_pad_press_separation(int first_button_mask, int second_button_mask, int lookback_frames, int press_difference_limit) __asm__("FUN_L00_00266e00");
+
+int check_pad_press_separation(int first_button_mask, int second_button_mask, int lookback_frames, int press_difference_limit) {
     int press_ages_frames[2];
     int presses_within_limit = 0;
     if (FUN_L00_00266d60_u(first_button_mask, lookback_frames, &press_ages_frames[0])) {
