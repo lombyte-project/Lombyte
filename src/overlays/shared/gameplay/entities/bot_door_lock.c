@@ -137,7 +137,9 @@ extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
 
-void FUN_L06_00307c48(unsigned char *lock_moby, unsigned char *target_moby) {
+void activate_bot_door_lock_target(unsigned char *lock_moby, unsigned char *target_moby) __asm__("FUN_L06_00307c48");
+
+void activate_bot_door_lock_target(unsigned char *lock_moby, unsigned char *target_moby) {
     switch (*(short *)(target_moby + 0xA6)) {
     case 0x3F7:
     case 0x502:
@@ -266,7 +268,7 @@ void bot_door_lock_update(char *moby) {
         }
         if (idata[5] < 1 || D_0014C050[(unsigned char)moby[0xb0] + current_level_index * 16] == 0xff) {
             for (i = 0; i < 4; i++) {
-                if (idata[i] != -1) FUN_L06_00307c48((unsigned char *)moby, (unsigned char *)(D_L06_0015FFD8_gp + idata[i] * 0x100));
+                if (idata[i] != -1) activate_bot_door_lock_target((unsigned char *)moby, (unsigned char *)(D_L06_0015FFD8_gp + idata[i] * 0x100));
             }
             moby[0x20] = 2;
         }
