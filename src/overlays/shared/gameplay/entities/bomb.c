@@ -2594,7 +2594,9 @@ extern void func_L00_0025F4A8_2CF808(void *, void *, void *, f32, f32, s32, s32,
 extern struct Moby *func_L00_002CF3D8_2CF808(void *, void *) __asm__("FUN_L00_002cdf28");
 extern void func_L00_002CF328_2CF808(void *) __asm__("FUN_L00_002cde78");
 
-void FUN_L00_002ce358(struct Moby *updated_moby) {
+void update_drone(struct Moby *updated_moby) __asm__("FUN_L00_002ce358");
+
+void update_drone(struct Moby *updated_moby) {
     DroneVars_2CF808 *drone_vars = (DroneVars_2CF808 *)updated_moby->pvars;
     Vec4 collision_data[1], old_pos;
     Vec4 direction, rotated;
