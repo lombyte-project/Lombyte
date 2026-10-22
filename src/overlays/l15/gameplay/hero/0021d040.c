@@ -138,7 +138,9 @@ void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
-void FUN_L15_0021d040(void) {
+void update_hero_state_machine(void) __asm__("FUN_L15_0021d040");
+
+void update_hero_state_machine(void) {
     unsigned char *moby;
     int prevSub;
     int prevState;
