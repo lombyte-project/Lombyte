@@ -134,7 +134,7 @@ extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 extern void select_moby_context(s32) __asm__("FUN_L00_00235668");
 extern void FUN_L00_00276368(void);
 extern void FUN_L00_00276908(void);
-extern void FUN_L00_002831c0(void);
+extern void process_unlock_code_input(void) __asm__("FUN_L00_002831c0");
 extern void prepare_target_level_transition(s32) __asm__("FUN_L00_0028ed58");
 extern void start_scene(void *) __asm__("FUN_L00_00298840");
 extern void FUN_L00_00299460(void *);
@@ -550,7 +550,7 @@ void FUN_L00_00276bd0(void) {
         mode_freeze_init(3, D_L00_001B9CF0.owner);
         return;
     }
-    FUN_L00_002831c0();
+    process_unlock_code_input();
     if (D_L00_001B9CF0.state == 1) {
         D_L00_001B9CF0.unk14 = (D_L00_001B9CF0.unk14 < 1) ? 0 : D_L00_001B9CF0.unk14 - 1;
         if (D_L00_001B9CF0.unk14 == 0) {

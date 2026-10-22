@@ -27,7 +27,9 @@ extern void FUN_L00_002607d0(int);
 extern void FUN_L00_00263d40(int, int);
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 
-void FUN_L00_002831c0(void) {
+void process_unlock_code_input(void) __asm__("FUN_L00_002831c0");
+
+void process_unlock_code_input(void) {
     char *pad = (char *)((char *)&D_0013C940);
     int staged_candidate_index_limit, candidate_index_limit;
     int va, vb, vc;
