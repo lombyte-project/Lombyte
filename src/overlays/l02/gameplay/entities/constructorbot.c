@@ -584,7 +584,9 @@ void FUN_L02_002ef020(struct Moby *moby) {
 extern void FUN_L00_001ed630(void *, void *, void *);
 
 /* Sets the vendor camera mode; mode 3 also aims it from the hero's position. */
-void FUN_L02_002f8a18(int mode, int camera_argument_value) {
+void set_vendor_camera_mode(int mode, int camera_argument_value) __asm__("FUN_L02_002f8a18");
+
+void set_vendor_camera_mode(int mode, int camera_argument_value) {
     enum {
         VENDOR_CAMERA_MODE_SET_ARGUMENT_PAIR = 2,
         VENDOR_CAMERA_MODE_CAPTURE_HERO_POSITION = 3

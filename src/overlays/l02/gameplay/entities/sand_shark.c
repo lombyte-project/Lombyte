@@ -2602,7 +2602,7 @@ void advance_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_
 
 extern void advance_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_002def80");
 extern void snap_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_002df0b0");
-extern void FUN_L02_002f8a18(int, int);
+extern void set_vendor_camera_mode(int, int) __asm__("FUN_L02_002f8a18");
 extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
 
 /* D_L02_001600EC entries (0x80 bytes): lift stops. */
@@ -2834,7 +2834,7 @@ void transport_pod_update(unsigned char *moby) {
             FUN_L00_00216f90(&b, &camera_position_or_stop_look, 0x72, 0);
             transport_pod_vars->speed = -transport_pod_vars->speed;
             moby[0x20] = 9;
-            FUN_L02_002f8a18(2, scale_ticks(0xB4));
+            set_vendor_camera_mode(2, scale_ticks(0xB4));
         }
         break;
     case TRANSPORT_POD_ADVANCE_RIDE_CAMERA:
