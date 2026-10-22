@@ -1311,7 +1311,7 @@ void FUN_L00_002cb418(Moby *shot_moby) {
     Vec4A step;
     ShotQuery_2cb418 query;
     Vec4A vector_scratch;
-    Vec4A b;
+    Vec4A spark_and_pushout_scratch;
     Vec4A spark_velocity;
     ShotVars_2cb418 *vars;
     float yaw;
@@ -1376,16 +1376,16 @@ void FUN_L00_002cb418(Moby *shot_moby) {
         } else {
             qcopy((Vec4A *)&shot_moby->pos, ((char *)D_L00_00173E60));
             for (i = 0; i < 5; i++) {
-                *(u128 *)&b = 0;
-                b.x = random_float_between_2cb418(-1.0f, 1.0f);
-                b.y = random_float_between_2cb418(-1.0f, 1.0f);
-                b.z = random_float_between_2cb418(-1.0f, 1.0f);
-                *(u128 *)&vector_scratch = *(u128 *)&b;
-                reflect_vector_2cb418(&b, &step, ((char *)D_L00_00173E60) + 0x20);
-                normalize_vector_xyz_2cb418(&vector_scratch, &vector_scratch, vector_length_xyz_2cb418(&b) * 0.5f);
-                add_vector_xyz_2cb418(&b, &b, &vector_scratch);
-                normalize_vector_xyz_2cb418(&b, &b, random_float_between_2cb418(D_0015ED6C_lui * 3.0f, D_0015ED6C_lui * 6.0f));
-                spawn_spark_2cb418((Vec4A *)&shot_moby->pos, &b, 0x7F2F4F6F, random_int_between_2cb418(scale_game_frames_2cb418(10), scale_game_frames_2cb418(15)), 30000.0f);
+                *(u128 *)&spark_and_pushout_scratch = 0;
+                spark_and_pushout_scratch.x = random_float_between_2cb418(-1.0f, 1.0f);
+                spark_and_pushout_scratch.y = random_float_between_2cb418(-1.0f, 1.0f);
+                spark_and_pushout_scratch.z = random_float_between_2cb418(-1.0f, 1.0f);
+                *(u128 *)&vector_scratch = *(u128 *)&spark_and_pushout_scratch;
+                reflect_vector_2cb418(&spark_and_pushout_scratch, &step, ((char *)D_L00_00173E60) + 0x20);
+                normalize_vector_xyz_2cb418(&vector_scratch, &vector_scratch, vector_length_xyz_2cb418(&spark_and_pushout_scratch) * 0.5f);
+                add_vector_xyz_2cb418(&spark_and_pushout_scratch, &spark_and_pushout_scratch, &vector_scratch);
+                normalize_vector_xyz_2cb418(&spark_and_pushout_scratch, &spark_and_pushout_scratch, random_float_between_2cb418(D_0015ED6C_lui * 3.0f, D_0015ED6C_lui * 6.0f));
+                spawn_spark_2cb418((Vec4A *)&shot_moby->pos, &spark_and_pushout_scratch, 0x7F2F4F6F, random_int_between_2cb418(scale_game_frames_2cb418(10), scale_game_frames_2cb418(15)), 30000.0f);
             }
             if (D_0013E520_2cb418[15] == 0) {
                 FUN_L00_002cbcc0_2cb418(shot_moby, 0);
@@ -1414,8 +1414,8 @@ void FUN_L00_002cb418(Moby *shot_moby) {
             shot_moby->rot.y = -atan2_f_2cb418(vector_length_xy_2cb418(&vector_scratch), vector_scratch.z);
             vars->yaw_rate = 0.0f;
             vars->pitch_rate = 0.0f;
-            normalize_vector_xyz_2cb418(&b, ((char *)D_L00_00173E60) + 0x20, 0.05f);
-            add_vector_xyz_2cb418((Vec4A *)&shot_moby->pos, ((char *)D_L00_00173E60), &b);
+            normalize_vector_xyz_2cb418(&spark_and_pushout_scratch, ((char *)D_L00_00173E60) + 0x20, 0.05f);
+            add_vector_xyz_2cb418((Vec4A *)&shot_moby->pos, ((char *)D_L00_00173E60), &spark_and_pushout_scratch);
             if (D_001403E0_2cb418 != 0 && D_001403E0_2cb418->oclass == 0xA8
                 && D_001403E0_2cb418->state != 0xFE && D_001403E0_2cb418->state != 0xFD) {
                 play_sound_2cb418(4, 0, D_001403E0_2cb418);
@@ -1451,13 +1451,13 @@ void FUN_L00_002cb418(Moby *shot_moby) {
     if (random_integer_below_2cb418(5) != 0) {
         return;
     }
-    cross_vectors_xyz_2cb418(&b, &step, D_L00_00166FF0_2cb418);
-    rotate_vector_2cb418(&b, &b, &step, random_float_2cb418(0.0f, 3.1415927f));
-    spark_direction_length = vector_length_xyz_2cb418(&b);
+    cross_vectors_xyz_2cb418(&spark_and_pushout_scratch, &step, D_L00_00166FF0_2cb418);
+    rotate_vector_2cb418(&spark_and_pushout_scratch, &spark_and_pushout_scratch, &step, random_float_2cb418(0.0f, 3.1415927f));
+    spark_direction_length = vector_length_xyz_2cb418(&spark_and_pushout_scratch);
     if (spark_direction_length == 0.0f) {
         return;
     }
-    scale_vector_xyz_2cb418(&spark_velocity, &b, random_float_between_2cb418(D_0015ED6C_lui * 0.5f, D_0015ED6C_lui + D_0015ED6C_lui) / spark_direction_length);
+    scale_vector_xyz_2cb418(&spark_velocity, &spark_and_pushout_scratch, random_float_between_2cb418(D_0015ED6C_lui * 0.5f, D_0015ED6C_lui + D_0015ED6C_lui) / spark_direction_length);
     spawn_spark_2cb418((Vec4A *)&shot_moby->pos, &spark_velocity, 0x7F2F4F6F, random_int_between_2cb418(scale_game_frames_2cb418(10), scale_game_frames_2cb418(15)), 30000.0f);
 }
 extern void FUN_00267a08_2cbcc0(void *) __asm__("FUN_L00_00267a08");
