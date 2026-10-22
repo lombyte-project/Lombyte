@@ -46,7 +46,9 @@ int FUN_L01_00226f10(int item_lookup_enabled) {
 
 extern int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4);
 
-void FUN_L01_00227e48(int voice_group_index, int voice_pair_index, int call_enabled) {
+void request_hero_voice_if_enabled(int voice_group_index, int voice_pair_index, int call_enabled) __asm__("FUN_L01_00227e48");
+
+void request_hero_voice_if_enabled(int voice_group_index, int voice_pair_index, int call_enabled) {
     if (call_enabled != 0) {
         char *hero_state_base = (char *)D_0013E533 + 0xE1D;
         char *voice_index_source = *(char **)(hero_state_base + 0x10E0);

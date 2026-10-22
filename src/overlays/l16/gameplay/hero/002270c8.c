@@ -131,7 +131,7 @@ extern void FUN_L00_00239cc8(void);
 extern void FUN_L00_00239d00(void);
 extern void FUN_L00_00239df8(void);
 extern void FUN_L00_0025f730(void *a, float x);
-extern void FUN_L01_00227e48(int a0, int a1, int a2);
+extern void request_hero_voice_if_enabled(int a0, int a1, int a2) __asm__("FUN_L01_00227e48");
 extern void FUN_L01_002405a0(void);
 extern void FUN_L01_00242198(void);
 extern void FUN_L05_0023dc88(int i);
@@ -416,8 +416,8 @@ void FUN_L16_002270c8(void) {
                         if (ok && 0.22f < hero.unk229C) {
                             if (current_level_index == 0xC) {
                                 int slot = hero.unk12ED;
-                                FUN_L01_00227e48(slot, 0, 0);
-                                FUN_L01_00227e48(slot, 1, 0);
+                                request_hero_voice_if_enabled(slot, 0, 0);
+                                request_hero_voice_if_enabled(slot, 1, 0);
                             }
                             hero_set_state(HERO_STATE_RUN, 1);
                         }
@@ -1610,8 +1610,8 @@ void FUN_L16_002270c8(void) {
                         int first;
                         int one;
 
-                        FUN_L01_00227e48(hero.unk12ED, 0, 1);
-                        FUN_L01_00227e48(hero.unk12ED, 1, 1);
+                        request_hero_voice_if_enabled(hero.unk12ED, 0, 1);
+                        request_hero_voice_if_enabled(hero.unk12ED, 1, 1);
                         if (frame_time * -9.0f > hero.motion.displacement.f[2]) {
                             hero.motion.displacement.f[2] = frame_time * -9.0f;
                         }
