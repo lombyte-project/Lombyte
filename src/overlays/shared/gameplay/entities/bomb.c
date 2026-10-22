@@ -169,7 +169,7 @@ extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern char *FUN_L00_002603d0(char *);
 extern void FUN_L00_0026ed28(struct Moby *);
-extern void FUN_L00_002c8078(struct Moby *);
+extern void spawn_moby_collision_particles(struct Moby *) __asm__("FUN_L00_002c8078");
 extern void spawn_doom_bot(struct Moby *, void *, void *) __asm__("FUN_L00_002bfe08");
 extern void FUN_L00_00260400(struct Moby *, s32, void *, void *, void *, void *);
 extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
@@ -306,7 +306,7 @@ settle:
                 fast_vec_add(vars, vars, &hero.motion.displacement);
         }
         fast_vec_add(&thrown_moby->pos, &thrown_moby->pos, vars);
-        FUN_L00_002c8078(thrown_moby);
+        spawn_moby_collision_particles(thrown_moby);
         break;
 collision_miss:
         qcopy_nc(&thrown_moby->pos, &next_pos);

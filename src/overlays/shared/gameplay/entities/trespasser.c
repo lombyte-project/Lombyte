@@ -584,7 +584,9 @@ float random_float_between(float, float) __asm__("FUN_002132a8");
 int rand(void) __asm__("FUN_001160d8");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00269b70(float *, unsigned char, unsigned char, unsigned char, float, float, int);
-void FUN_L00_002c8078(unsigned char *moby) {
+void spawn_moby_collision_particles(unsigned char *moby) __asm__("FUN_L00_002c8078");
+
+void spawn_moby_collision_particles(unsigned char *moby) {
     enum {
         COLLISION_MATERIAL_WATER = 0
     };
