@@ -262,7 +262,9 @@ void FUN_L16_002cf9d0(Level16VendorVectorMoby_u *moby, int index, void *out) {
 
 extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
 
-void FUN_L16_002cff48(struct Moby *moby) {
+void prepare_hoverboard_dummy_path_jump(struct Moby *moby) __asm__("FUN_L16_002cff48");
+
+void prepare_hoverboard_dummy_path_jump(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     if (*(float *)(data + 0x2C8) <= 0.0f) {
         int path_node_index = *(short *)(data + 0x2F4);
@@ -2367,7 +2369,7 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L16_002cf9d0_c(Level16VendorVectorMoby *moby, int index,
                         void *out) __asm__("FUN_L16_002cf9d0");
-void FUN_L16_002cff48(struct Moby *moby);
+void prepare_hoverboard_dummy_path_jump(struct Moby *moby) __asm__("FUN_L16_002cff48");
 void FUN_L16_002d0058_c(L16LeapMoby *m) __asm__("FUN_L16_002d0058");
 
 extern int D_L16_00161A08 __attribute__((sda));
@@ -2495,7 +2497,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         moby[0xA4] = 255;
         FUN_L16_002cf9f8((char *)moby);
         FUN_L05_00307010((char *)moby);
-        FUN_L16_002cff48((char *)moby);
+        prepare_hoverboard_dummy_path_jump((char *)moby);
         if (*(int *)(hoverboard_dummy_data + 0x2E4) != 0) {
             (*(int *)(hoverboard_dummy_data + 0x2E4))++;
             if (*(int *)(hoverboard_dummy_data + 0x2E4) < scale_game_frames(17)) {
