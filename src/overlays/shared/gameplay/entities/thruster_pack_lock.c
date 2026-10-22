@@ -359,7 +359,9 @@ extern short D_L11_001621D8 __attribute__((sda));
 extern short D_L11_001621E8 __attribute__((sda));
 extern short D_L11_001621F8 __attribute__((sda));
 extern short D_L11_00162208 __attribute__((sda));
-void FUN_L11_003112b8(void *moby, char *particle_emission_data) {
+void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission_data) __asm__("FUN_L11_003112b8");
+
+void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission_data) {
     int i;
     for (i = 1; i < 3; i++) {
         float initial_particle_velocity[4];

@@ -2720,7 +2720,7 @@ extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void FUN_L11_003112b8(void *, void *);
+extern void emit_type_74_particles_from_moby_joints(void *, void *) __asm__("FUN_L11_003112b8");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int count_listed_blarg_ships_in_state_5(int) __asm__("FUN_L11_0031a758");
 extern int activate_listed_blarg_ship(int) __asm__("FUN_L11_0031a7d8");
@@ -3033,7 +3033,7 @@ void jet_fighter_update(struct Moby *moby) {
             qcopy_nc(&hero.motion.rot, &ship_vars->f30);
         }
         if (moby->state == 3 || moby->state == 4) {
-            FUN_L11_003112b8(moby, ship_vars);
+            emit_type_74_particles_from_moby_joints(moby, ship_vars);
             if (voice_is_playing(moby, ship_vars->voice) == 0) {
                 ship_vars->voice = alloc_voice_3290(0, 4, moby);
             }

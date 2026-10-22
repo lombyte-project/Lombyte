@@ -1661,7 +1661,7 @@ extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
-extern void FUN_L11_003112b8(void *, void *);
+extern void emit_type_74_particles_from_moby_joints(void *, void *) __asm__("FUN_L11_003112b8");
 extern void jet_group_state(int, int, int, int) __asm__("FUN_L13_002650a8");
 extern void FUN_L17_0021e530(int, int);
 extern void update_moby_class_flags_and_link(int, int, int, int) __asm__("FUN_L17_00253a90");
@@ -2045,7 +2045,7 @@ void fighter_jet_update(ShipMoby *moby) {
             qcopy_nc(&hero.motion.rot, ship_vars->rot);
         }
         if (moby->state == 3 || moby->state == 4) {
-            FUN_L11_003112b8(moby, ship_vars);
+            emit_type_74_particles_from_moby_joints(moby, ship_vars);
         }
     }
 }
