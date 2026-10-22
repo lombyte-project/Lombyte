@@ -622,7 +622,9 @@ void spawn_moby_collision_particles(unsigned char *moby) {
 }
 #include "qcopy.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
-unsigned char *FUN_L00_002c8218(int spawning_moby, u128 *spawn_position, u128 *initial_velocity) {
+unsigned char *spawn_glove_of_doom_held_moby(int spawning_moby, u128 *spawn_position, u128 *initial_velocity) __asm__("FUN_L00_002c8218");
+
+unsigned char *spawn_glove_of_doom_held_moby(int spawning_moby, u128 *spawn_position, u128 *initial_velocity) {
     unsigned char *spawned_moby = create_moby(0xe6);
     if (spawned_moby) {
         char *moby_vars;
@@ -3481,7 +3483,7 @@ void glove_of_doom_update(struct Moby *moby) {
         qcopy(&vars->held->pos, &vars->grip);
     } else if (get_ammo(-1)) {
         qzero(&grip);
-        vars->held = (struct Moby *)FUN_L00_002c8218((int)moby, (void *)&vars->grip, (void *)&grip);
+        vars->held = (struct Moby *)spawn_glove_of_doom_held_moby((int)moby, (void *)&vars->grip, (void *)&grip);
     }
 }
 
