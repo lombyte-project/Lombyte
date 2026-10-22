@@ -805,7 +805,9 @@ void scale_vector_xyz(void *, void *, f32);
 void subtract_vector_xyz(void *, void *, void *);
 extern s32 D_0013CB14[];
 
-void FUN_L02_00225c20(void) {
+void update_hero_state_motion(void) __asm__("FUN_L02_00225c20");
+
+void update_hero_state_motion(void) {
     FVec4 vec[14];
     Moby *moby;
     int prevState;
