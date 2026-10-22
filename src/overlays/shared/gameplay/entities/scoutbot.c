@@ -795,8 +795,8 @@ extern float D_L08_00161D20 __attribute__((sda));
 typedef struct { unsigned int words[4]; } Vec_002e8210 __attribute__((aligned(16)));
 
 extern float D_L08_00174660[4];
-void FUN_L08_002e8210(char *moby);
-void FUN_L08_002e8210(char *moby) {
+void update_homing_projectile(char *moby) __asm__("FUN_L08_002e8210");
+void update_homing_projectile(char *moby) {
     char *position_ptr = moby + 0x10;
     char *data = *(char **)(moby + 0x78);
     float position_copy[4] __attribute__((aligned(16)));
