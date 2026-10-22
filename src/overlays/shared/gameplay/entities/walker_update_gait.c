@@ -172,7 +172,7 @@ void FUN_L00_002a1538_c(u8 *a0) __asm__("FUN_L00_002a1538");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float ang, float accel) __asm__("FUN_L00_002a1670");
-void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, float speed, float ang, float accel) {
+void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, float speed, float movement_heading, float accel) {
     enum {
         WALKER_GAIT_IDLE = 0,
         WALKER_GAIT_WALK = 1,
@@ -212,7 +212,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
             gait_data->bB6 = FUN_L00_002a13f0_c(gait_data->anim[7], (float)gait_data->anim[7]->i14);
             gait_data->sEC = 0;
         } else if (speed > frame_time * 0.21f ||
-                   fast_difference_between_rotations(walker_moby->f48, ang) > 0.10471976f) {
+                   fast_difference_between_rotations(walker_moby->f48, movement_heading) > 0.10471976f) {
             gait_data->sEC++;
             if (gait_data->sEC >= 4) {
                 {
@@ -242,7 +242,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
     case WALKER_GAIT_TRANSITION_FROM_DOWNHILL_TO_WALK:
     case WALKER_GAIT_ALTERNATE_TRANSITION_FROM_DOWNHILL_TO_WALK: {
         int gait_animation_index = D_L00_001CA760[gait_data->bB7];
-        if (walker_moby->f58 < 0.25f && fast_difference_between_rotations(walker_moby->f48, ang) < 0.09239978f &&
+        if (walker_moby->f58 < 0.25f && fast_difference_between_rotations(walker_moby->f48, movement_heading) < 0.09239978f &&
             speed < frame_time * 0.19f) {
             blend_moby_animation(walker_moby, gait_data->bB0, 0, 10);
             FUN_L00_002a1538_c((char *)gait_data);
@@ -303,8 +303,8 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
                     }
                 } else {
                     float ground_height;
-                    ground_probe_position[0] = fast_cos(ang) * gait_data->anim[gait_animation_index]->f04 * 0.5f;
-                    ground_probe_position[1] = fast_sin(ang) * gait_data->anim[gait_animation_index]->f04 * 0.5f;
+                    ground_probe_position[0] = fast_cos(movement_heading) * gait_data->anim[gait_animation_index]->f04 * 0.5f;
+                    ground_probe_position[1] = fast_sin(movement_heading) * gait_data->anim[gait_animation_index]->f04 * 0.5f;
                     ground_probe_position[2] = 0.0f;
                     if (flags & 1) {
                         add_vector_xyz(ground_probe_position, ground_probe_position, gait_data->m10);
@@ -808,8 +808,8 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
                         gait_data->bB7 = 0xE;
                     }
                 } else {
-                    ground_probe_position[0] = fast_cos(ang) * gait_data->anim[0]->f04 * 0.5f;
-                    ground_probe_position[1] = fast_sin(ang) * gait_data->anim[0]->f04 * 0.5f;
+                    ground_probe_position[0] = fast_cos(movement_heading) * gait_data->anim[0]->f04 * 0.5f;
+                    ground_probe_position[1] = fast_sin(movement_heading) * gait_data->anim[0]->f04 * 0.5f;
                     ground_probe_position[2] = 0.0f;
                     if (flags & 1) {
                         add_vector_xyz(ground_probe_position, ground_probe_position, gait_data->m10);
@@ -974,8 +974,8 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
             gait_data->bB7 = 0xD;
             gait_data->bB6 = 1;
             gait_data->uEE &= 0xFFFD;
-            ground_probe_position[0] = fast_cos(ang) * gait_data->anim[7]->f04 * 0.5f;
-            ground_probe_position[1] = fast_sin(ang) * gait_data->anim[7]->f04 * 0.5f;
+            ground_probe_position[0] = fast_cos(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
+            ground_probe_position[1] = fast_sin(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
             ground_probe_position[2] = 0.0f;
             add_vector_xyz(ground_probe_position, ground_probe_position, gait_data->m10);
             ground_probe_position[2] += 1.0f;
@@ -997,8 +997,8 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
             gait_data->bB7 = 0xD;
             gait_data->bB6 = 1;
             gait_data->uEE &= 0xFFFD;
-            ground_probe_position[0] = fast_cos(ang) * gait_data->anim[7]->f04 * 0.5f;
-            ground_probe_position[1] = fast_sin(ang) * gait_data->anim[7]->f04 * 0.5f;
+            ground_probe_position[0] = fast_cos(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
+            ground_probe_position[1] = fast_sin(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
             ground_probe_position[2] = 0.0f;
             add_vector_xyz(ground_probe_position, ground_probe_position, gait_data->m10);
             ground_probe_position[2] += 1.0f;
