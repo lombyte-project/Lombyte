@@ -52,7 +52,9 @@ extern short D_L04_001618D0 __attribute__((sda));
 extern short D_L04_001618D4 __attribute__((sda));
 extern short D_L04_001618D8 __attribute__((sda));
 extern short D_L04_001618DC __attribute__((sda));
-void FUN_L04_002c46d0(char *moby) {
+void spawn_moby_table_puff_pattern(char *moby) __asm__("FUN_L04_002c46d0");
+
+void spawn_moby_table_puff_pattern(char *moby) {
     spawn_moby_table_segment_puffs(moby, 0, 1, *(int *)&D_L04_001618C0);
     spawn_moby_table_segment_puffs(moby, 2, 3, *(int *)&D_L04_001618C4);
     spawn_moby_table_segment_puffs(moby, 4, 5, *(int *)&D_L04_001618C8);

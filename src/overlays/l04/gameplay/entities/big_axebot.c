@@ -115,7 +115,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C5B88), where it is exact; names translated to the US level program. */
 
-extern void FUN_L04_002c46d0(void *);
+extern void spawn_moby_table_puff_pattern(void *) __asm__("FUN_L04_002c46d0");
 
 void FUN_L04_002c4808(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -123,7 +123,7 @@ void FUN_L04_002c4808(char *moby) {
     if (other != 0) {
         mark_moby_for_removal(other);
     }
-    FUN_L04_002c46d0(moby);
+    spawn_moby_table_puff_pattern(moby);
     mark_moby_for_removal(moby);
 }
 

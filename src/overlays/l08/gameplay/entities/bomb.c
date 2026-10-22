@@ -1624,7 +1624,7 @@ extern void FUN_L00_0025d458_c2(void *, short *) __asm__("FUN_L00_0025d458");
 extern void FUN_L00_0025d538_c2(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025f730(void*,float);
 extern void FUN_L01_0026d930(char *p);
-extern void FUN_L04_002c46d0(void *);
+extern void spawn_moby_table_puff_pattern(void *) __asm__("FUN_L04_002c46d0");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 void FUN_L00_00257470(unsigned char *m, int flags, int arg);
@@ -1683,7 +1683,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         float duration = convert_integer_to_float_c(D_L08_001619D0_gp);
         int start_alpha = vars->s132;
         moby->alpha = func_001FA898_2D6C58((float)start_alpha + (float)-start_alpha * ((float)(D_L08_001619D0_gp - vars->s130) / duration));
-        FUN_L04_002c46d0(moby);
+        spawn_moby_table_puff_pattern(moby);
         return;
     }
     FUN_00213928(moby, find_2D5FA8_c(moby, 0x330000, 0), &vars->health, 0, &hit, &damage, 0, 4);
@@ -1952,7 +1952,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             moby->collision = 0;
             vars->s132 = 0x28;
             vars->s130 = D_L08_001619D0_gp;
-            FUN_L04_002c46d0(moby);
+            spawn_moby_table_puff_pattern(moby);
             mark_moby_for_removal(moby);
             return;
         }
