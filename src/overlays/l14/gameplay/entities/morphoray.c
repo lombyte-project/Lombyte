@@ -462,7 +462,9 @@ extern u8 D_0013D4D5 __attribute__((section(".data")));
 extern s32 D_L14_0015F5CC;
 extern s32 D_L14_0015F5C4;
 extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
-extern void FUN_L14_00305b18(struct Moby *);
+void update_morphoray_particles(struct Moby *morphoray_moby) __asm__("FUN_L14_00305b18");
+
+extern void update_morphoray_particles(struct Moby *) __asm__("FUN_L14_00305b18");
 extern f32 D_L14_001621E8 __attribute__((sda));
 extern f32 D_L14_001621EC __attribute__((sda));
 extern f32 D_L14_001621F0 __attribute__((sda));
@@ -511,7 +513,7 @@ void morphoray_update(struct Moby *moby) {
         qcopy(moby_bytes + 0x10, morphoray_pvars);
         scale_vector_xyz(position_offset, moby_bytes + 0xd0, D_L14_001621F0);
         add_vector_xyz(moby_bytes + 0x10, moby_bytes + 0x10, position_offset);
-        FUN_L14_00305b18(moby);
+        update_morphoray_particles(moby);
         if (D_L14_0015F5CC % 10 != 0)
             return;
         if (!(vector_distance_xy(moby_bytes + 0x10, hero.motion.pos.f) < 1.0f))
@@ -580,7 +582,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001F9908_r(int *arg0) __asm__("FUN_001f9740");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L14_00305b18(struct Moby *morphoray_moby) {
+void update_morphoray_particles(struct Moby *morphoray_moby) {
     float particle_position_and_step[8];
     FxData14 *effect_data = (FxData14 *)morphoray_moby->pvars;
     float *a;
