@@ -1492,20 +1492,20 @@ void toxic_crab_update(Moby2E30F8 *m) {
             float out[4];
             float old[4];
             float v[4];
-            float dist;
+            float target_distance;
             float ang;
             float diff;
             float aim;
 
-            dist = FUN_001f9b48(m->pos, target_moby + 0x10);
-            if (dist > (*(short *)(target_moby + 0xA6) == 0x359 ? 2.0f : 3.57f)) {
+            target_distance = FUN_001f9b48(m->pos, target_moby + 0x10);
+            if (target_distance > (*(short *)(target_moby + 0xA6) == 0x359 ? 2.0f : 3.57f)) {
                 approach_value(&crab_data->fF4, crab_data->f1A4 * frame_time, frame_time_sq * 8.0f);
             } else {
                 approach_value(&crab_data->fF4, crab_data->f1A4 * frame_time * 0.3f, frame_time_sq * 20.0f);
             }
             *(OvlQuad *)old = *(OvlQuad *)m->pos;
             if (see &&
-                absolute_float(dist - (*(short *)(target_moby + 0xA6) == 0x359 ? 2.0f : 3.57f)) < 0.35f) {
+                absolute_float(target_distance - (*(short *)(target_moby + 0xA6) == 0x359 ? 2.0f : 3.57f)) < 0.35f) {
                 approach_value(&crab_data->fF4, 0.0f, frame_time_sq * 30.0f);
             } else if (crab_data->i1D8 != 0) {
                 approach_value(&crab_data->fF4, 0.0f, frame_time_sq * 10.0f);
@@ -1884,17 +1884,17 @@ void toxic_crab_update(Moby2E30F8 *m) {
     }
     }
     if (m->state == 3 || m->state == 5 || m->state == 7 || m->state == 8) {
-        float g = probe_ground_height(m->pos, 0, 0.5f);
-        if (g < m->pos[2]) {
+        float ground_height = probe_ground_height(m->pos, 0, 0.5f);
+        if (ground_height < m->pos[2]) {
             crab_data->f78 = crab_data->f78 - crab_data->f80;
             if (crab_data->f78 < frame_time * -7.0f) {
                 crab_data->f78 = frame_time * -7.0f;
             }
             m->pos[2] = m->pos[2] + crab_data->f78;
-            if (m->pos[2] < g) {
-                m->pos[2] = g;
+            if (m->pos[2] < ground_height) {
+                m->pos[2] = ground_height;
             }
-            if (g < crab_data->v170[2] - 2.0f) {
+            if (ground_height < crab_data->v170[2] - 2.0f) {
                 if (m->anim != 0xE) {
                     blend_moby_animation(m, 0xE, 0, scale_game_frames(6));
                 }
