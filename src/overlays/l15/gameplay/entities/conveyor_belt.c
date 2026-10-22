@@ -802,7 +802,7 @@ extern int sprintf(char *str, const char *fmt, ...) __asm__("FUN_00116248");
 extern int strlen_alt(char *) __asm__("FUN_001166cc");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 void font_print_large(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6530");
-extern void FUN_L00_001fb470(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void print_text_with_texture_3(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_L00_001fb470");
 
 int D_L15_00162180 = 150;
 int D_L15_00162184 = 150;
@@ -858,10 +858,10 @@ void FUN_L15_002eb6b8(void) {
         if ((print_character_count - val) & 4)
             print_character_count = print_character_count - 1;
     }
-    FUN_L00_001fb470((void *)(D_L15_00162180 + 1),
+    print_text_with_texture_3((void *)(D_L15_00162180 + 1),
                      (void *)(D_L15_00162184 + 1), (void *)D_L15_0016218C,
                      formatted_message_text, (void *)print_character_count);
-    FUN_L00_001fb470((void *)D_L15_00162180, (void *)D_L15_00162184,
+    print_text_with_texture_3((void *)D_L15_00162180, (void *)D_L15_00162184,
                      (void *)D_L15_00162188, formatted_message_text, (void *)print_character_count);
 }
 /* Per-frame update: when the counter check is zero, builds a vector and calls the movement helper. */

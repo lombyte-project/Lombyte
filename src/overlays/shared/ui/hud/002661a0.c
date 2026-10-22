@@ -57,7 +57,7 @@ extern void draw_stretchable_ui_frame(int, int, int, int, int) __asm__("FUN_0020
 extern char *get_help_message_text(int) __asm__("FUN_001fdd10");
 extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern int FUN_001f6250(char *, int);
-extern void FUN_L00_001fb470(int x, int y, u64 color, char *text, int len);
+extern void print_text_with_texture_3(int x, int y, u64 color, char *text, int len) __asm__("FUN_L00_001fb470");
 extern int D_0015ED84;
 extern char D_L05_0015F860[];
 extern char D_L05_0015F9E0[];
@@ -101,14 +101,14 @@ int FUN_L05_00266320(HudElem *hud_element) {
     }
     x = D_L05_0015F9A0;
     sprintf(formatted_hud_text, D_L05_0015F9D8, get_help_message_text(0x523F));
-    FUN_L00_001fb470(x - 1, y + 1, 0x80000000, formatted_hud_text, -1);
-    FUN_L00_001fb470(x, y, D_L05_0015F998, formatted_hud_text, -1);
+    print_text_with_texture_3(x - 1, y + 1, 0x80000000, formatted_hud_text, -1);
+    print_text_with_texture_3(x, y, D_L05_0015F998, formatted_hud_text, -1);
     x += measure_text_width_regular(formatted_hud_text, -1);
     count = hero.unk89A + 1;
     if (count > 3) count = 3;
     sprintf(formatted_hud_text, D_L05_0015F9E0, count);
-    FUN_L00_001fb470(x - 1, y + 2, 0x80000000, formatted_hud_text, -1);
-    FUN_L00_001fb470(x, y, D_L05_0015F99C, formatted_hud_text, -1);
+    print_text_with_texture_3(x - 1, y + 2, 0x80000000, formatted_hud_text, -1);
+    print_text_with_texture_3(x, y, D_L05_0015F99C, formatted_hud_text, -1);
     {
         int count = hero.unk8C0;
         x = D_L05_0015F9B0;
@@ -123,12 +123,12 @@ int FUN_L05_00266320(HudElem *hud_element) {
         }
     }
     x -= measure_text_width_regular(formatted_hud_text, -1);
-    FUN_L00_001fb470(x + 1, y + 1, 0x80000000, formatted_hud_text, -1);
-    FUN_L00_001fb470(x, y, D_L05_0015F99C, formatted_hud_text, -1);
+    print_text_with_texture_3(x + 1, y + 1, 0x80000000, formatted_hud_text, -1);
+    print_text_with_texture_3(x, y, D_L05_0015F99C, formatted_hud_text, -1);
     sprintf(formatted_hud_text, D_L05_0015FA08, get_help_message_text(0x5240));
     x -= measure_text_width_regular(formatted_hud_text, -1);
-    FUN_L00_001fb470(x + 1, y + 1, 0x80000000, formatted_hud_text, -1);
-    FUN_L00_001fb470(x, y, D_L05_0015F998, formatted_hud_text, -1);
+    print_text_with_texture_3(x + 1, y + 1, 0x80000000, formatted_hud_text, -1);
+    print_text_with_texture_3(x, y, D_L05_0015F998, formatted_hud_text, -1);
     if (D_0015ED84 == 0x10) {
         int y2, x2;
         sprintf(small_buf, D_L05_0015F860, hero.unk8CE);
@@ -143,11 +143,11 @@ int FUN_L05_00266320(HudElem *hud_element) {
         }
         draw_stretchable_ui_frame(x2 - 0x18, y2, D_L05_0015F9C8, 0x20, 0x60);
         draw_hud_sprite(get_icon_frame(0x7558, 2), x2, y2, 0x20, 0x20, 0x80);
-        FUN_L00_001fb470(x2 + 0x29, y2 + 8, 0x80000000, small_buf, -1);
+        print_text_with_texture_3(x2 + 0x29, y2 + 8, 0x80000000, small_buf, -1);
         if (hero.unk8CE != 0) {
-            FUN_L00_001fb470(x2 + 0x28, y2 + 7, 0x80e08060, small_buf, -1);
+            print_text_with_texture_3(x2 + 0x28, y2 + 7, 0x80e08060, small_buf, -1);
         } else {
-            FUN_L00_001fb470(x2 + 0x28, y2 + 7, 0x80202080, small_buf, -1);
+            print_text_with_texture_3(x2 + 0x28, y2 + 7, 0x80202080, small_buf, -1);
         }
     }
     return hud_element->w;
@@ -182,22 +182,22 @@ int FUN_L05_00266710(HudElem *hud_element) {
         sprintf(formatted_hud_text, D_L05_0015F788, get_help_message_text(0x50A6), hero.unk8A8);
         x -= FUN_001f6250(formatted_hud_text, -1) >> 1;
         sprintf(formatted_hud_text, D_L05_0015F9D8, get_help_message_text(0x50A6));
-        FUN_L00_001fb470(x + 1, y1 + 1, 0x80000000, formatted_hud_text, -1);
-        FUN_L00_001fb470(x, y1, D_L05_0015FA28, formatted_hud_text, -1);
+        print_text_with_texture_3(x + 1, y1 + 1, 0x80000000, formatted_hud_text, -1);
+        print_text_with_texture_3(x, y1, D_L05_0015FA28, formatted_hud_text, -1);
         x += FUN_001f6250(formatted_hud_text, -1);
         sprintf(formatted_hud_text, D_L05_0015FA50, hero.unk8A8);
-        FUN_L00_001fb470(x + 1, y1 + 1, 0x80000000, formatted_hud_text, -1);
-        FUN_L00_001fb470(x, y1, D_L05_0015FA2C, formatted_hud_text, -1);
+        print_text_with_texture_3(x + 1, y1 + 1, 0x80000000, formatted_hud_text, -1);
+        print_text_with_texture_3(x, y1, D_L05_0015FA2C, formatted_hud_text, -1);
     }
     x = D_L05_0015FA30;
     sprintf(formatted_hud_text, D_L05_0015FA58, get_help_message_text(0x5241));
     x -= FUN_001f6250(formatted_hud_text, -1) >> 1;
     sprintf(formatted_hud_text, D_L05_0015FA68, get_help_message_text(0x5241));
-    FUN_L00_001fb470(x + 1, y2 + 1, 0x80000000, formatted_hud_text, -1);
-    FUN_L00_001fb470(x, y2, D_L05_0015FA28, formatted_hud_text, -1);
+    print_text_with_texture_3(x + 1, y2 + 1, 0x80000000, formatted_hud_text, -1);
+    print_text_with_texture_3(x, y2, D_L05_0015FA28, formatted_hud_text, -1);
     x += FUN_001f6250(formatted_hud_text, -1);
     sprintf(formatted_hud_text, D_L05_0015FA70, min, sec, hund);
-    FUN_L00_001fb470(x + 1, y2 + 1, 0x80000000, formatted_hud_text, -1);
-    FUN_L00_001fb470(x, y2, D_L05_0015FA2C, formatted_hud_text, -1);
+    print_text_with_texture_3(x + 1, y2 + 1, 0x80000000, formatted_hud_text, -1);
+    print_text_with_texture_3(x, y2, D_L05_0015FA2C, formatted_hud_text, -1);
     return hud_element->w;
 }

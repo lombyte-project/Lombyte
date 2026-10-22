@@ -8,8 +8,10 @@ extern int tex_1fb470(int) __asm__("FUN_001f44b8");
 extern void font_print(int, int, int, int, int, int, void *) __asm__("FUN_001f62b0");
 
 /* font_print with effect texture 3 and D_L00_001C3890. */
-void FUN_L00_001fb470(int a, int b, int c, int d, int e);
-void FUN_L00_001fb470(int x, int y, int color, int text, int character_limit) {
+void print_text_with_texture_3(int x, int y, int color, int text, int character_limit) __asm__("FUN_L00_001fb470");
+
+void print_text_with_texture_3(int a, int b, int c, int d, int e) __asm__("FUN_L00_001fb470");
+void print_text_with_texture_3(int x, int y, int color, int text, int character_limit) {
     font_print(x, y, color, text, character_limit, tex_1fb470(3), D_L00_001C3890);
 }
 
