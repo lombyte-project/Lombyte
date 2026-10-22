@@ -1210,7 +1210,9 @@ extern unsigned char D_L18_0017CE40[];
 extern short D_L18_001623A4 __attribute__((sda));
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
-void FUN_L18_002f2b18(char *moby) {
+void attach_drek_boss_big_head_manipulator(char *moby) __asm__("FUN_L18_002f2b18");
+
+void attach_drek_boss_big_head_manipulator(char *moby) {
     int i;
 
     if (D_L18_0015F5C4 == 2 && big_head_cheat_enabled != 0) {
@@ -1519,7 +1521,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 s32 is_value_within_interpolated_window(void *arg0, f32 fparg0) __asm__("FUN_00214cc8");
 void activate_drek_boss_class_0565_moby(struct Moby *moby) __asm__("FUN_L18_002f1c38");
-void FUN_L18_002f2b18(char *moby);
+void attach_drek_boss_big_head_manipulator(char *moby) __asm__("FUN_L18_002f2b18");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -1580,7 +1582,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     FUN_L18_002f5e80((char *)moby);
     aim_target_moby = boss_data->fB0;
     /* The file defines this one without parameters; retail passes the moby. */
-    FUN_L18_002f2b18((char *)moby);
+    attach_drek_boss_big_head_manipulator((char *)moby);
     {
         char *manipulator_owner_moby = boss_data->f3A4;
         if (manipulator_owner_moby != 0 && manipulator_owner_moby[0x20] >= 0) {
