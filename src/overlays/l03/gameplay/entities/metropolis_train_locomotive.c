@@ -219,7 +219,9 @@ typedef struct {
     float fC4;
 } Car292890;
 
-void FUN_L03_00292890(char *moby) {
+void update_metropolis_train_motion(char *moby) __asm__("FUN_L03_00292890");
+
+void update_metropolis_train_motion(char *moby) {
     float old_pos[4];
     float old_rot[4];
     float delta[4];
@@ -460,7 +462,7 @@ extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void debug_printf_292e98(char *, ...) __asm__("FUN_001e93b0");
 extern void mark_moby_for_removal_292e98(void *) __asm__("FUN_0020c828");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-void FUN_L03_00292890(char *moby);
+void update_metropolis_train_motion(char *moby) __asm__("FUN_L03_00292890");
 
 /* Heading of a path's first segment. */
 #define PATH_HEADING(p) \
@@ -628,7 +630,7 @@ void metropolis_train_locomotive_update(char *moby) {
             data->fC8 = data->fC0;
         }
         D_L03_0015FDFC = 1;
-        FUN_L03_00292890(moby);
+        update_metropolis_train_motion(moby);
         ENGINE_SOUND();
         if (hero.air_frames.s != 0 && hero.state.control_mode != 3) {
             FUN_L00_0025df68(cdata->path, hero.motion.pos.f, start, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
@@ -707,7 +709,7 @@ void metropolis_train_locomotive_update(char *moby) {
         break;
     case TRAIN_FOLLOW_SECOND_PATH_AND_BRAKE:
         td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[data->iD8] + 0x78);
-        FUN_L03_00292890(moby);
+        update_metropolis_train_motion(moby);
         D_L03_0015FDFC = 1;
         ENGINE_SOUND();
         if (cdata->i60 >= data->iD4) {
