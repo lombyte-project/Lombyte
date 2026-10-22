@@ -571,7 +571,7 @@ extern s32 D_L00_0015F590;
 extern s32 D_L00_0015F594;
 extern s32 D_L00_00161E08;
 extern s32 D_L00_00161E04;
-void FUN_L00_00237190(void);
+void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void FUN_L00_00237200(void);
 s32 queue_animation_update(s32, s32, void *, void *, void *, s32, s32) __asm__("FUN_001ff308");
@@ -584,7 +584,7 @@ void FUN_L00_00264328(void) {
     if (D_L00_0015F594 == 0 || D_L00_00161E08 == 0) {
         D_L00_00161E04 = -1;
     } else if (D_L00_00161E04 == -1) {
-        D_L00_00161E04 = queue_animation_update(0xC, 0, FUN_L00_00237190, mine_blend_color,
+        D_L00_00161E04 = queue_animation_update(0xC, 0, initialize_numeric_hud_element, mine_blend_color,
                                                 FUN_L00_00237200, 0, 0);
     } else {
         hud_keep_visible(D_L00_00161E04, 10);

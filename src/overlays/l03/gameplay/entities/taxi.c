@@ -2028,7 +2028,7 @@ int is_rail_lift_started(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002DDF90), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00235dc0(void);
-extern void FUN_L00_00237190(void);
+extern void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
 extern void hud_keep_visible(int, int) __asm__("FUN_L00_00235e18");
 extern void FUN_L00_002371e0(void);
 extern void FUN_L00_00237200(void);
@@ -2059,7 +2059,7 @@ void FUN_L03_002dcbc8(struct Moby *lift_moby, int mode) {
     hud_key = *(int *)(lift_vars + 0xA4);
     if (hud_key == -1) {
         *(int *)(lift_vars + 0xA4) = queue_animation_update(
-            0xC, 0, (int)FUN_L00_00237190, (int)FUN_L00_002371e0, (int)FUN_L00_00237200, 0, 0);
+            0xC, 0, (int)initialize_numeric_hud_element, (int)FUN_L00_002371e0, (int)FUN_L00_00237200, 0, 0);
     } else {
         hud_keep_visible(hud_key, 0xA);
     }
