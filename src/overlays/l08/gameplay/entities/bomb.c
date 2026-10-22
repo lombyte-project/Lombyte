@@ -494,7 +494,9 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 void FUN_L08_002d4ca0(Moby *moby);
-void FUN_L08_002d55c8(struct Moby *moby, int path_id);
+void advance_bomber_tank_along_path(struct Moby *moby, int path_id) __asm__("FUN_L08_002d55c8");
+
+void advance_bomber_tank_along_path(struct Moby *moby, int path_id) __asm__("FUN_L08_002d55c8");
 void FUN_L08_002d5d08(char *moby);
 void remove_bomber_tank_linked_debris(struct Moby *moby) __asm__("FUN_L08_002d6450");
 
@@ -647,7 +649,7 @@ void update_bomber_tank(Moby *moby) {
         vars->unk5A = truncate_float_to_s32(D_L08_001618D0 * 8.0f);
         break;
     case BOMBER_TANK_STATE_FOLLOW_PATH:
-        FUN_L08_002d55c8(moby, vars->path);
+        advance_bomber_tank_along_path(moby, vars->path);
         if (vars->mode != 2 && vector_distance(&moby->pos, &target->pos) < 20.0f) {
             if (D_00141C38 == 0 && D_0013D4CB == 0) {
                 help_request(0x1F44, 0x5A);
@@ -657,7 +659,7 @@ void update_bomber_tank(Moby *moby) {
         }
         break;
     case BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE:
-        FUN_L08_002d55c8(moby, vars->path);
+        advance_bomber_tank_along_path(moby, vars->path);
         if (vars->mode == 2 || vector_distance(&moby->pos, &target->pos) > 22.0f) {
             moby->state = 6;
             if (moby->prev_seq != 1) blend_moby_animation(moby, 1, 0, scale_game_frames(10));
@@ -725,7 +727,7 @@ void update_bomber_tank(Moby *moby) {
         break;
     case BOMBER_TANK_STATE_DAMAGED_FOLLOW_PATH: {
         float frame;
-        FUN_L08_002d55c8(moby, vars->path);
+        advance_bomber_tank_along_path(moby, vars->path);
         frame = compute_interpolated_record_value(moby);
         if ((59.0f <= frame && frame <= 60.0f) || (119.0f <= frame && frame <= 120.0f)) {
             FUN_L08_002d5950((char *)moby, 4, 10);
@@ -1020,7 +1022,7 @@ typedef struct {
     float speed;
 } PathMoverVars_2d55c8;
 
-void FUN_L08_002d55c8(struct Moby *moby, int path_id) {
+void advance_bomber_tank_along_path(struct Moby *moby, int path_id) {
     PathMoverVars_2d55c8 *vars = (PathMoverVars_2d55c8 *)moby->pvars;
     int *path = (int *)D_L08_001B0CB0[path_id];
     float point[4];
