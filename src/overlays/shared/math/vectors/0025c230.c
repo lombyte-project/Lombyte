@@ -63,7 +63,7 @@ typedef struct {
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int FUN_L00_0025aca0(void *, int, void *, void *, float);
+extern int generate_random_points_from_shape_entries(void *, int, void *, void *, float) __asm__("FUN_L00_0025aca0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E520[];
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
@@ -75,7 +75,7 @@ void FUN_L00_0025c398(void *source_object, void *base_vector, void *point_source
     float randomized_vector[4];
     int point_count, i;
 
-    point_count = FUN_L00_0025aca0(source_object, 20, generated_points, point_source_mask, 14.0f);
+    point_count = generate_random_points_from_shape_entries(source_object, 20, generated_points, point_source_mask, 14.0f);
     if (point_count == 0) {
         return;
     }

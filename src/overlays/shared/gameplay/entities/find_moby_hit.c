@@ -514,7 +514,9 @@ extern float FUN_001f9de0_25aca0(float) __asm__("FUN_001f9de0");
 extern float FUN_002132a8_25aca0(float, float) __asm__("FUN_002132a8");
 extern float FUN_00213308_25aca0(void) __asm__("FUN_00213308");
 
-int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25aca0 *out, int mask) {
+int generate_random_points_from_shape_entries(float density, unsigned char *entity, int maximum, Vec4_25aca0 *out, int mask) __asm__("FUN_L00_0025aca0");
+
+int generate_random_points_from_shape_entries(float density, unsigned char *entity, int maximum, Vec4_25aca0 *out, int mask) {
     enum HitShape {
         SHAPE_INLINE_CENTER_SPHERE = 0x0,
         SHAPE_INDEXED_CENTER_SPHERE = 0x2,

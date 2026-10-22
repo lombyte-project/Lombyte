@@ -411,7 +411,7 @@ extern unsigned char D_L00_0015F580_263e30[] __asm__("D_L00_0015F580")
     __attribute__((section(".sdata")));
 void FUN_L00_00263fd8_263e30(void *, int, void *, void *, int, int, void *, void *, float,
                              void *) __asm__("FUN_L00_00263fd8");
-int FUN_L00_0025aca0_263e30(void *, int, void *, int, float) __asm__("FUN_L00_0025aca0");
+int generate_random_points_from_shape_entries(void *, int, void *, int, float) __asm__("FUN_L00_0025aca0");
 void FUN_001f99f8_263e30(void *) __asm__("FUN_001f99f8");
 float FUN_00213308_263e30(void) __asm__("FUN_00213308");
 int FUN_00213260_263e30(int) __asm__("FUN_00213260");
@@ -432,7 +432,7 @@ void FUN_L00_00263e30(unsigned char *source_moby, int first_fragment_class, int 
             }
     }
     if (first_fragment_class > 0 && range > 0) {
-        k = FUN_L00_0025aca0_263e30(source_moby, random_class_fragment_limit, fragment_spawn_positions, 0xFFFF, 1000.0f);
+        k = generate_random_points_from_shape_entries(source_moby, random_class_fragment_limit, fragment_spawn_positions, 0xFFFF, 1000.0f);
         if (k) {
             for (i = 0; i < random_class_fragment_limit && i < k; i++) {
                 FUN_001f99f8_263e30(v);
