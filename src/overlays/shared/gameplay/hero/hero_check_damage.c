@@ -1812,7 +1812,7 @@ void hero_switch_item(int i) {
     int changed;
     int flag6;
     int flag4;
-    unsigned char st;
+    unsigned char item_switch_mode;
 
     if (i == 0) {
         int v;
@@ -2055,11 +2055,11 @@ void hero_switch_item(int i) {
     }
     {
         struct Hero *s = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
-        st = s->items[0].unk1C;
-        if (st == 2) {
+        item_switch_mode = s->items[0].unk1C;
+        if (item_switch_mode == 2) {
             changed = 0;
         }
-        if (st == 1 && s->items[0].timer == 0) {
+        if (item_switch_mode == 1 && s->items[0].timer == 0) {
             s->items[0].timer = s->items[0].timer_reload;
         }
     }
