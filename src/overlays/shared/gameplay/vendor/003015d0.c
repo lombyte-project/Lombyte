@@ -45,7 +45,9 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L14_003017f8(char *);
-extern void FUN_L14_00301de8(char *);
+void update_vendor_beam_animation(char *moby) __asm__("FUN_L14_00301de8");
+
+extern void update_vendor_beam_animation(char *) __asm__("FUN_L14_00301de8");
 extern void FUN_L14_00301fa8(char *);
 extern void FUN_L14_00302538(char *);
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
@@ -123,7 +125,7 @@ void FUN_L14_003015d0(unsigned char *moby) {
     }
     if (beam_vars->s12 != 0) {
         if (D_L14_001621A0_s == 0) {
-            FUN_L14_00301de8((char *)moby);
+            update_vendor_beam_animation((char *)moby);
         }
         if (*(int *)&D_L14_001620C8_gp < beam_vars->s12) {
             if (D_L14_001621A4_s != 0) {
@@ -281,7 +283,7 @@ extern int D_L14_001620F8 __attribute__((sda));
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L14_00301de8(char *moby) {
+void update_vendor_beam_animation(char *moby) {
     char *vars = *(char **)(moby + 0x78);
     char *beam_point, *src;
     u8 *indices;
