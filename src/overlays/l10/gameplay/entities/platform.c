@@ -258,7 +258,7 @@ void update_sinking_platform(struct Moby *moby) {
 /* Spinning pickup: waits until the hero is close and level with it, then plays the scene, saves and goes away. */
 extern char *D_L10_0015FFD8_p __asm__("D_L10_0015FFD8");
 extern void FUN_L00_002d6bf0_p(void *) __asm__("FUN_L00_002d6bf0");
-extern void FUN_L10_00298940_p(void *) __asm__("FUN_L10_00298940");
+extern void emit_moby_sprite_particles(void *) __asm__("FUN_L10_00298940");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern void start_scene_p(int) __asm__("FUN_L00_00298840");
@@ -290,7 +290,7 @@ void magnetboots_update(struct Moby *moby) {
         moby->scale = moby->scale * 0.667f;
         break;
     case MAGNETBOOTS_STATE_WAIT_FOR_HERO_PROXIMITY:
-        FUN_L10_00298940_p(moby);
+        emit_moby_sprite_particles(moby);
         if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f) {
             struct Hero *hero_ref = &hero;
             if (absolute_float(moby->pos.z - hero_ref->motion.pos.f[2]) < 2.0f && hero_ref->health.hp != 0) {

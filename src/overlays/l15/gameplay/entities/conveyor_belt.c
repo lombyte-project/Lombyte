@@ -352,7 +352,7 @@ extern void FUN_L00_00260860(int, int);
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_002d6bf0(char *);
-extern void FUN_L10_00298940(char *);
+extern void emit_moby_sprite_particles(char *) __asm__("FUN_L10_00298940");
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 
 extern short D_L15_00162078 __attribute__((sda));
@@ -377,7 +377,7 @@ void bolt_grabber_update(struct Moby *moby) {
         moby->pos.z = moby->pos.z + 1.0f;
         break;
     case BOLT_GRABBER_WAIT_FOR_PROXIMITY:
-        FUN_L10_00298940((char *)moby);
+        emit_moby_sprite_particles((char *)moby);
         if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f) {
             moby->flags |= 0x41;
             start_scene(5);
