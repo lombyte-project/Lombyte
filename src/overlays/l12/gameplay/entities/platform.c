@@ -1805,7 +1805,7 @@ extern void blend_moby_animation_ex(void *, int, int, int, int) __asm__("FUN_002
 extern int FUN_L01_0028b510(void *, void *, float);
 extern int FUN_L12_0027b8e0(void *, void *, float, float, float);
 extern float vector_project_72(void *) __asm__("FUN_001f9b20");
-extern void FUN_L04_002aee30(void *, void *, void *, int);
+extern void spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 
 #define TROOPER_I(offset) (*(int *)(data + (offset)))
 #define TROOPER_F(offset) (*(float *)(data + (offset)))
@@ -2016,7 +2016,7 @@ hide:
             build_spherical_offset(&delta, D_0015ED6C * 15.0f, angle, value);
             allocate_voice_for_target_entry(0, 0, (int)moby);
             count = truncate_float_to_s32(18.0f / (D_0015ED6C * 15.0f));
-            FUN_L04_002aee30(moby, &query_position_or_projectile_origin, &delta, count);
+            spawn_class_b8_projectile(moby, &query_position_or_projectile_origin, &delta, count);
         }
         if (moby->anim_flags & 2) {
             if (moby->prev_seq != 5 && moby->seq == moby->prev_seq)

@@ -2320,7 +2320,7 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_00263b38(void *, float);
-extern void FUN_L04_002aee30(void *, void *, void *, int);
+extern void spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 extern void add_vector_xyz(void *, void *, void *);
 extern void advance_moby_animation(void *);
 extern void blend_moby_animation_p(void *, void *, void *, void *) __asm__("FUN_00212f90");
@@ -2818,7 +2818,7 @@ void blarg_trooper_update(struct Moby *moby) {
                 build_spherical_offset(st.w.p.v80, frame_time * 10.0f, a, p);
             }
             allocate_voice_for_target_entry(7, 0, moby);
-            FUN_L04_002aee30(moby, st.w.p.v70, st.w.p.v80,
+            spawn_class_b8_projectile(moby, st.w.p.v70, st.w.p.v80,
                              truncate_float_to_s32(14.0f / (frame_time * 10.0f)));
             FUN_L00_001fefc8(data + 0xFD);
         } else if ((moby->anim_flags & 2) && *(short *)(data + 0xF2) == 0 &&

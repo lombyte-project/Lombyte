@@ -96,7 +96,9 @@ extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata
  * `life` frames, with two glows (bluish, or reddish for an owner of class
  * 0xFF, which also keeps full scale). Returns the new moby or 0.
  */
-struct Moby *FUN_L04_002aee30(struct Moby *owner, void *pos, void *dir, int life)
+struct Moby *spawn_class_b8_projectile(struct Moby *owner, void *pos, void *dir, int life) __asm__("FUN_L04_002aee30");
+
+struct Moby *spawn_class_b8_projectile(struct Moby *owner, void *pos, void *dir, int life)
 {
     struct Moby *spawned_moby;
     ShotVars *vars;

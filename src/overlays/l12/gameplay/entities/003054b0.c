@@ -70,7 +70,7 @@ extern int FUN_L00_00257b90(int, int);
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void *FUN_L04_002aee30(void *, void *, void *, int);
+extern void *spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
@@ -198,7 +198,7 @@ void FUN_L12_003054b0(char *moby) {
                         aim_target_position[2] += random_float_between_c((float)n * -0.3f, (float)n * 0.3f);
                         pitch = fast_arc_tan(vector_distance_xy_alt(position_buffer, aim_target_position), aim_target_position[2] - position_buffer[2]);
                         build_spherical_offset(scratch_vector, D_0015ED6C_gp * 80.0f, rz, pitch);
-                        if (FUN_L04_002aee30(gun_moby, position_buffer, scratch_vector, scale_game_frames(0x96)) != 0) {
+                        if (spawn_class_b8_projectile(gun_moby, position_buffer, scratch_vector, scale_game_frames(0x96)) != 0) {
                             int j;
                             md->b92 = scale_game_frames(0x14);
                             for (j = 0; j < 9; j++) {
