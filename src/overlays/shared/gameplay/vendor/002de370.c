@@ -102,7 +102,9 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L03_002e8730(char *transform_state) {
+void smooth_transform_orientation_toward_hero(char *transform_state) __asm__("FUN_L03_002e8730");
+
+void smooth_transform_orientation_toward_hero(char *transform_state) {
     float position[4] __attribute__((aligned(16)));
     float direction[4] __attribute__((aligned(16)));
     char *data = *(char **)(transform_state + 0x70);
