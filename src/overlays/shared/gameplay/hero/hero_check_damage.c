@@ -1815,7 +1815,7 @@ extern int FUN_L00_00216de8(int, int);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void FUN_L00_0020e698_c(void) __asm__("FUN_L00_0020e698");
-extern void FUN_L00_002cdcc0(void);
+extern void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
 s32 FUN_L00_0020fe30_c(void) __asm__("FUN_L00_0020fe30");
 void FUN_L00_0020fd80_c(int id) __asm__("FUN_L00_0020fd80");
 void FUN_L00_0020fde0_c(int id) __asm__("FUN_L00_0020fde0");
@@ -2009,7 +2009,7 @@ void hero_switch_item(int i) {
         int *s;
         int *sb;
         if (g->unk1FF5 != 0) {
-            FUN_L00_002cdcc0();
+            replenish_hero_drones();
             g->pending_item[i] = 0;
         }
         sb = g->pending_item;

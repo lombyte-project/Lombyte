@@ -2342,7 +2342,9 @@ float FUN_001f9de0_2cdcc0(float) __asm__("FUN_001f9de0");
 int FUN_001f96f8_2cdcc0(int) __asm__("FUN_001f96f8");
 void FUN_001f9a10_2cdcc0(void *, void *, void *) __asm__("FUN_001f9a10");
 unsigned char *FUN_L00_002ce1f0_2cdcc0(unsigned char *, void *) __asm__("FUN_L00_002ce1f0");
-void FUN_L00_002cdcc0(void) {
+void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
+
+void replenish_hero_drones(void) {
     P_2cdcc0 *hero_state = &(*(P_2cdcc0 *)((char *)&hero));
     S_2cdcc0 *usage_stats;
     float d[4] __attribute__((aligned(16)));

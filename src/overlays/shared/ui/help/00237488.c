@@ -87,7 +87,7 @@ extern int FUN_L00_00216de8(int, int);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void FUN_L00_0020e698(void);
-extern void FUN_L00_002cdcc0(void);
+extern void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
 s32 FUN_L00_0020fe30(void);
 void FUN_L00_0020fd80(int id);
 void FUN_L00_0020fde0(int id);
@@ -288,7 +288,7 @@ void FUN_L05_0023dc88(int i) {
         int *s;
         int *sb;
         if (*(unsigned char *)((char *)g + 0x1FF5) != 0) {
-            FUN_L00_002cdcc0();
+            replenish_hero_drones();
             g->pending_item[i] = 0;
         }
         sb = g->pending_item;
