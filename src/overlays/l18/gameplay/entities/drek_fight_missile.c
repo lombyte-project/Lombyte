@@ -379,7 +379,9 @@ extern int D_L18_00162260 __attribute__((sda));
 extern int D_L18_00162264 __attribute__((sda));
 extern float D_L18_00162268 __attribute__((sda));
 extern float D_L18_0016226C __attribute__((sda));
-void FUN_L18_002f06c0(struct Moby *group_moby) {
+void render_drek_fight_missile_group_effects(struct Moby *group_moby) __asm__("FUN_L18_002f06c0");
+
+void render_drek_fight_missile_group_effects(struct Moby *group_moby) {
     float effect_world_position[4];
     short *group_entry;
     unsigned char *missile_moby;
@@ -422,7 +424,7 @@ void FUN_L18_002f06c0(struct Moby *group_moby) {
 
 extern int game_frame __asm__("D_L18_0015F5CC");
 extern void FUN_L18_002f0390(struct Moby *moby);
-void FUN_L18_002f06c0(struct Moby *m);
+void render_drek_fight_missile_group_effects(struct Moby *m) __asm__("FUN_L18_002f06c0");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
 extern short D_L18_00162230 __attribute__((sda));
@@ -445,7 +447,7 @@ void update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) {
     if (current_game_frame != old) {
         *(int *)&D_L18_00162230 = current_game_frame;
         enqueue_callback_list_1_alt(FUN_L18_002f0390, moby);
-        enqueue_callback_list_1_alt(FUN_L18_002f06c0, moby);
+        enqueue_callback_list_1_alt(render_drek_fight_missile_group_effects, moby);
     }
 }
 
