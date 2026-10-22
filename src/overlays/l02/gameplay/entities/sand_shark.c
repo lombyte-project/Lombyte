@@ -834,13 +834,13 @@ void sand_shark_update(struct Moby *moby) {
         break;
     }
     case SAND_SHARK_DEATH_KNOCKBACK: {
-        int res = FUN_L00_0025c698_e50(moby, vars->unk120);
-        if ((res & 1) && vars->unk29C == 0) {
+        int knockback_status_flags = FUN_L00_0025c698_e50(moby, vars->unk120);
+        if ((knockback_status_flags & 1) && vars->unk29C == 0) {
             vars->unk29C = 1;
             position_or_offset_scratch.q = *(OvlQuad *)&moby->pos;
             FUN_L02_002d57f8_e50(&position_or_offset_scratch, 0x1B);
         }
-        if (res & 0x140) {
+        if (knockback_status_flags & 0x140) {
             FUN_L00_00257470_e50(moby, 0, -1);
             vars->unk27C = FUN_L02_002d5658_e50(moby);
             if (vars->unk27C != 0) {
