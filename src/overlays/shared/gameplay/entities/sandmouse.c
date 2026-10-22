@@ -693,7 +693,9 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L01_0028a7a8(void *, void *, void *, void *, int);
 
-void FUN_L01_0030dda0(char *source_moby) {
+void emit_sandmouse_particles(char *source_moby) __asm__("FUN_L01_0030dda0");
+
+void emit_sandmouse_particles(char *source_moby) {
     if (*(unsigned char *)(source_moby + 0x31) != 0) {
         float particle_spawn_position[4];
         float particle_velocity[4];
@@ -829,7 +831,7 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void compute_sandmouse_follow_goal(void *unused, float *p) __asm__("FUN_L01_0030d260");
 void FUN_L01_0030d5f0(char *moby, char *state);
-void FUN_L01_0030dda0(char *m);
+void emit_sandmouse_particles(char *m) __asm__("FUN_L01_0030dda0");
 void update_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030ded0");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 void detach_manipulator(void *moby, void *manip) __asm__("FUN_0020cb88");
@@ -1170,7 +1172,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
     }
     if (sandmouse_moby->state >= 2) {
         jet_animate(sandmouse_moby, 0.3f);
-        ((void (*)(void *, void *))FUN_L01_0030dda0)(sandmouse_moby, sandmouse_vars);
+        ((void (*)(void *, void *))emit_sandmouse_particles)(sandmouse_moby, sandmouse_vars);
     }
     if (sandmouse_vars->link != -1) {
         LNK(sandmouse_vars->link)->collision = LNK(sandmouse_vars->link)->pclass->collision;
