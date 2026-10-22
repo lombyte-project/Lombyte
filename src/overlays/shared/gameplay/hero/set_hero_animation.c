@@ -1260,10 +1260,10 @@ extern s32 D_001413D4[];
 s32 FUN_L00_00233f38(void) {
     s32 current_hero_state = D_001413D4[0];
     switch (current_hero_state) {
-    case 0x65:
-    case 0x66:
+    case HERO_STATE_APPROACH_TARGET_POSE:
+    case HERO_STATE_BRAKE_AT_TARGET_POSITION:
         return 1;
-    case 0x67:
+    case HERO_STATE_AT_TARGET_POSE:
         return 2;
     default:
         return 0;
