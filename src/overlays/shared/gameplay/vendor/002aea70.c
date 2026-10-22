@@ -49,7 +49,9 @@ void snd_pause_all_sounds_in_group(s32 arg0) __asm__("FUN_0012e3e8");
 extern char D_L01_00161100 __attribute__((sda));
 extern int D_L01_0015F5D8 __attribute__((sda));
 extern short D_L01_0015F400 __attribute__((sda));
-void FUN_L01_002aea70(char *vendor_moby, int lvl) {
+void initialize_vendor_screen(char *vendor_moby, int lvl) __asm__("FUN_L01_002aea70");
+
+void initialize_vendor_screen(char *vendor_moby, int lvl) {
     struct Hero *hero_state = &hero;
     char *vendor_screen_state = D_L01_001CA940;
     char *relocated_address_block = D_L01_0016CCE0;

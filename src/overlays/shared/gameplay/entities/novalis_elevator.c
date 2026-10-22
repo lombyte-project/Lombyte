@@ -919,7 +919,7 @@ extern u8 D_0013E520_2e1ac0[] __asm__("D_0013E520");
 extern void FUN_0020c828_2e1ac0(struct Moby *) __asm__("FUN_0020c828");
 extern s32 FUN_L00_002668a0_2e1ac0(struct Moby *, SaleVars_2e1ac0 *) __asm__("FUN_L00_002668a0");
 extern s32 FUN_L00_00266448_2e1ac0(struct Moby *, SaleVars_2e1ac0 *) __asm__("FUN_L00_00266448");
-extern void FUN_L01_002aea70_2e1ac0(struct Moby *, s32, ItemPrice_2e1ac0 *) __asm__("FUN_L01_002aea70");
+extern void initialize_vendor_screen(struct Moby *, s32, ItemPrice_2e1ac0 *) __asm__("FUN_L01_002aea70");
 extern s32 FUN_0020b178_2e1ac0(s32, s32) __asm__("FUN_0020b178");
 
 extern s32 D_L01_001DEB10[];
@@ -962,7 +962,7 @@ void gold_weapon_case_update(struct Moby *moby) {
             item = D_L01_001DEB10[sale_vars->slot];
             price = &D_L01_001C4530[item];
             current_bolt_count -= price->bolts;
-            FUN_L01_002aea70_2e1ac0(moby, item, price);
+            initialize_vendor_screen(moby, item, price);
         }
         break;
     case GOLD_WEAPON_CASE_IDLE: /* sold out or done: idle */
