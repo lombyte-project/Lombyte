@@ -1073,7 +1073,7 @@ extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern void FUN_L01_002fd0c0(void);
+extern void render_level_water_grids(void) __asm__("FUN_L01_002fd0c0");
 extern int enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void pool_drip(void *, f32) __asm__("FUN_L01_002ffcd0");
 extern void pool_bubble(void *, void *, f32) __asm__("FUN_L01_00287b00");
@@ -1215,7 +1215,7 @@ void update_pool_tiles_and_effects(struct Moby *moby) {
             }
         }
         pool_flush(pool_tiles, 21);
-        enqueue_callback_list_1(FUN_L01_002fd0c0, moby);
+        enqueue_callback_list_1(render_level_water_grids, moby);
         if (found == 0 || found == 6) {
             pool_drip_timer--;
             if (pool_drip_timer <= 0) {

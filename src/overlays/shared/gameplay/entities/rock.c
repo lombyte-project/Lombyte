@@ -759,7 +759,9 @@ void update_cutscene_trigger(char *moby) {
 extern char D_L01_001E34C0[];
 extern void render_water_grids(char *, int) __asm__("FUN_L01_002b91c8");
 
-void FUN_L01_002fd0c0(void) {
+void render_level_water_grids(void) __asm__("FUN_L01_002fd0c0");
+
+void render_level_water_grids(void) {
     render_water_grids(D_L01_001E34C0, 0x15);
 }
 /* Resets the marker record's scale once, for mobys of the caller's class or class 0x32B. */
