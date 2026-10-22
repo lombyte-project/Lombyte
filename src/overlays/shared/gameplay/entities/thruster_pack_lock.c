@@ -600,7 +600,9 @@ extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
-void FUN_L11_0031a1c0(char *moby) {
+void update_moby_hit_stats_and_state(char *moby) __asm__("FUN_L11_0031a1c0");
+
+void update_moby_hit_stats_and_state(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
     char *info = find_moby_hit(moby, 0x330000, 0);
     struct Hero *player_hero;

@@ -550,7 +550,7 @@ extern unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__(
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void update_moby_trail_points(void *) __asm__("FUN_L11_00319670");
-extern void FUN_L11_0031a1c0(void *);
+extern void update_moby_hit_stats_and_state(void *) __asm__("FUN_L11_0031a1c0");
 extern void FUN_L11_0031a438(void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
@@ -589,7 +589,7 @@ void blarg_ship_update(struct Moby *moby) {
     float movement_target_distance;
     char *firing_moby;
 
-    FUN_L11_0031a1c0(moby);
+    update_moby_hit_stats_and_state(moby);
     switch (moby->state) {
     case BLARG_SHIP_INITIALIZE:
         moby->draw_dist = 0xFF;
