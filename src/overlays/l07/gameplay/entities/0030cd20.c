@@ -36,7 +36,9 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void transform_vector_xyz(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-void FUN_L07_0031a9e8(struct Moby *moby) {
+void update_moby_offset_motion(struct Moby *moby) __asm__("FUN_L07_0031a9e8");
+
+void update_moby_offset_motion(struct Moby *moby) {
     enum {
         MOVING_MOBY_INITIALIZE = 0,
         MOVING_MOBY_WAIT_AT_HOME = 1,
