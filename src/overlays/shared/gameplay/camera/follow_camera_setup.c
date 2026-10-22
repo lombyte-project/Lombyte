@@ -939,7 +939,10 @@ typedef struct {
     u8 p[0x70];
     u8 *m;
 } O002e7530;
-void FUN_L00_002e7530(O002e7530 *camera_moby, V002e7530 *position_delta, V002e7530 *path_segment_point, V002e7530 *separation_reference_position, V002e7530 *out,
+void compute_follow_camera_collision_delta(O002e7530 *camera_moby, V002e7530 *position_delta, V002e7530 *path_segment_point, V002e7530 *separation_reference_position, V002e7530 *out,
+                      f32 k1, f32 k2) __asm__("FUN_L00_002e7530");
+
+void compute_follow_camera_collision_delta(O002e7530 *camera_moby, V002e7530 *position_delta, V002e7530 *path_segment_point, V002e7530 *separation_reference_position, V002e7530 *out,
                       f32 k1, f32 k2) {
     V002e7530 separation_vector, separation_step, radial_offset, adjusted_position;
     u8 *m = camera_moby->m;
@@ -990,7 +993,7 @@ int FUN_L00_002e7618(O002e7530 *camera_moby, V002e7530 *out, int step, float rad
     radius = (follow_cam_min_distance_gp + (radius_interpolation_target - follow_cam_min_distance_gp) * radius) * 0.75f;
     if (measure < radius) {
         found = 1;
-        FUN_L00_002e7530(camera_moby, &delta, &path_segment_point, &hit, &start, radius - measure, radial_adjustment_distance);
+        compute_follow_camera_collision_delta(camera_moby, &delta, &path_segment_point, &hit, &start, radius - measure, radial_adjustment_distance);
         qcopy(out, &near);
         if (coll_sphere_2e7618(out, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
             subtract_vector_xyz_2e7618(&probe_to_start_delta, &start, out);
@@ -1000,7 +1003,7 @@ int FUN_L00_002e7618(O002e7530 *camera_moby, V002e7530 *out, int step, float rad
                       (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30));
             radius = (follow_cam_min_distance_gp + (radius_interpolation_target - follow_cam_min_distance_gp) * radius) * 0.75f;
             if (measure < radius) {
-                FUN_L00_002e7530(camera_moby, &next, &path_segment_point, &hit, &start, radius - measure, radial_adjustment_distance);
+                compute_follow_camera_collision_delta(camera_moby, &next, &path_segment_point, &hit, &start, radius - measure, radial_adjustment_distance);
                 add_vector_xyz_2e7618(&delta, &delta, &next);
                 qcopy(out, &D_L00_00173E70);
                 if (coll_sphere_2e7618(out, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
@@ -1011,7 +1014,7 @@ int FUN_L00_002e7618(O002e7530 *camera_moby, V002e7530 *out, int step, float rad
                               (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30));
                     radius = (follow_cam_min_distance_gp + (radius_interpolation_target - follow_cam_min_distance_gp) * radius) * 0.75f;
                     if (measure < radius) {
-                        FUN_L00_002e7530(camera_moby, &next, &path_segment_point, &hit, &start, radius - measure, radial_adjustment_distance);
+                        compute_follow_camera_collision_delta(camera_moby, &next, &path_segment_point, &hit, &start, radius - measure, radial_adjustment_distance);
                         add_vector_xyz_2e7618(&delta, &delta, &next);
                     }
                 }
