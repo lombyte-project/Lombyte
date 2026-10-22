@@ -2352,7 +2352,9 @@ void start_sharkigator_death_knockback(struct Moby *moby, LaunchParams *knockbac
     trooper_start_knockback(knockback_angle, moby, knockback_state, 12, 1, 0);
 }
 
-void FUN_L07_0030e858(struct Moby *moby, LaunchParams *knockback_state, Vec4f *knockback_direction) {
+void start_sharkigator_hit_knockback(struct Moby *moby, LaunchParams *knockback_state, Vec4f *knockback_direction) __asm__("FUN_L07_0030e858");
+
+void start_sharkigator_hit_knockback(struct Moby *moby, LaunchParams *knockback_state, Vec4f *knockback_direction) {
     Vec4f knockback_direction_copy;
     f32 knockback_angle;
 
@@ -2426,7 +2428,7 @@ void FUN_L07_0030e998(char *moby, char *x, float *hp) {
         case SHARKIGATOR_START_HIT_KNOCKBACK_RECOVERY:
         case SHARKIGATOR_LAUNCH_HIT_KNOCKBACK_RECOVERY:
         case SHARKIGATOR_ENTER_HIT_KNOCKBACK_RECOVERY:
-            FUN_L07_0030e858(moby, x + 0x70, info + 0x10);
+            start_sharkigator_hit_knockback(moby, x + 0x70, info + 0x10);
             moby[0x20] = 0xC;
             break;
         case SHARKIGATOR_HIT_ANIMATION_RESPONSE:
