@@ -27,7 +27,9 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L18_002fcd00(struct Moby *moby) {
+void hide_moby_and_clear_collision(struct Moby *moby) __asm__("FUN_L18_002fcd00");
+
+void hide_moby_and_clear_collision(struct Moby *moby) {
     unsigned short flags;
     moby->state = 0x8;
     if (moby->prev_seq != 0) {
