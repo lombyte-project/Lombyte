@@ -1550,7 +1550,7 @@ extern s32 FUN_L00_002dc9f0(void *, void *);
 extern void FUN_L01_0026d930(void *);
 extern void FUN_L01_0026e090(s32, s32);
 extern void FUN_L01_0028b5e0(void *, s32, void *, void *);
-extern s32 FUN_L01_002efbf8(void *, s32, s32);
+extern s32 reserve_expired_frame_slot(void *, s32, s32) __asm__("FUN_L01_002efbf8");
 
 #define SET_ANIM(m, a, b, c)                                                                       \
     if ((m)->anim != (a))                                                                          \
@@ -2024,7 +2024,7 @@ void peckbot_update(Mob577 *self) {
         if (mine_fall(self, peckbot_vars->knock) & 0x140) {
             clear_u64_value(&vector_scratch);
             frame_count_or_animation_id = scale_game_frames(1) * 60.0f;
-            if (FUN_L01_002efbf8(D_L01_00161A80, 3, frame_count_or_animation_id) >= 0) {
+            if (reserve_expired_frame_slot(D_L01_00161A80, 3, frame_count_or_animation_id) >= 0) {
                 cart_burst(self, &self->pos, 4, 0.5f, 13.0f);
             }
             FUN_L00_00263fd8(self, 0x6D3, &self->pos, &self->rot, 0, 0, 0.0f, D_L01_0015F580,

@@ -1122,7 +1122,7 @@ extern int FUN_L00_002dc9f0(void *, void *);
 extern int FUN_L01_0026e008(int, int);
 extern int FUN_L01_0028b510(void *, void *, float);
 extern int FUN_L01_0028b5e0(void *, void *, void *, void *);
-extern int FUN_L01_002efbf8(int *, int, int);
+extern int reserve_expired_frame_slot(int *, int, int) __asm__("FUN_L01_002efbf8");
 extern int FUN_L13_0026bd00(void *, void *, float);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -1842,7 +1842,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         if (mine_fall(robosquawker_moby, robosquawker_vars->x120) & 0x140) {
             clear_u64_value(&va);
             slot_reuse_delay_frames = (int)((float)scale_game_frames_alt(1) * 60.0f);
-            if (FUN_L01_002efbf8(D_L13_001613B0, 3, slot_reuse_delay_frames) >= 0) {
+            if (reserve_expired_frame_slot(D_L13_001613B0, 3, slot_reuse_delay_frames) >= 0) {
                 cart_burst(robosquawker_moby, &robosquawker_moby->pos, 4, 0.5f, 13.0f);
             }
             mark_moby_for_removal_c(robosquawker_moby);
