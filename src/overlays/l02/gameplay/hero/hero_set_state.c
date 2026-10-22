@@ -1882,13 +1882,13 @@ void FUN_L02_00230988(void) {
     float v0[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
     int record_index;
-    int sp24;
+    int respawn_jump_press_age_frames;
     float current_position_probe_yaw;
     float positive_lateral_probe_yaw;
     float negative_lateral_probe_yaw;
     float lateral_step_probe_yaw;
     int sp38;
-    int sp3C;
+    int jump_press_age_frames;
 
     moby = ((unsigned char *)hero.moby);
     prevSub = hero.state.control_mode;
@@ -2484,7 +2484,7 @@ void FUN_L02_00230988(void) {
                     if (hero.unk1660 < 2) {
                         if (scale_game_frames(0xF) + hero.unk1660 * scale_game_frames(0x19) <
                             hero.state_timer) {
-                            if (pad_pressed_within(0x40, scale_game_frames(7), &sp24)) {
+                            if (pad_pressed_within(0x40, scale_game_frames(7), &respawn_jump_press_age_frames)) {
                                 hero_set_state(0x69, 1);
                             }
                         }
@@ -2726,12 +2726,12 @@ void FUN_L02_00230988(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 24:
+                case HERO_STATE_LEDGE_HANG_ENTRY:
                     if (13.5f < hero.anim_frame) {
                         hero_set_state(0x19, 0);
                     }
                     break;
-                case 25:
+                case HERO_STATE_LEDGE_HANG:
                     if ((hero.unkA98 & 2) && ((unsigned char *)hero.moby)[0x53] == 0x20) {
                         set_hero_animation(0x21, 0, scale_game_frames(6));
                     }
@@ -2786,8 +2786,8 @@ void FUN_L02_00230988(void) {
                         }
                     }
                     break;
-                case 26:
-                case 27: {
+                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float lateral_probe_yaw_offset;
 
                     qcopy(v0, hero.motion.pos.f);
@@ -3096,9 +3096,9 @@ void FUN_L02_00230988(void) {
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
                 case 18:
-                case 28:
+                case HERO_STATE_LEDGE_JUMP:
                 case 60:
-                case 105:
+                case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
                     if (hero.unk4AE != 0) {
                         int t = FUN_L00_00221d98();
                         if (t > 0 && (hero.state_timer < t || hero.unk418 != 0) &&
@@ -3340,8 +3340,8 @@ void FUN_L02_00230988(void) {
                                 if (hero.state.current == 0x11) {
                                     a = scale_game_frames(7);
                                 }
-                                if (pad_pressed_within(0x40, a, &sp3C)) {
-                                    if (sp3C < hero.state_timer) {
+                                if (pad_pressed_within(0x40, a, &jump_press_age_frames)) {
+                                    if (jump_press_age_frames < hero.state_timer) {
                                         hero_set_state(0x11, 1);
                                         break;
                                     }
