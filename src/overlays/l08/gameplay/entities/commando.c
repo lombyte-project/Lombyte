@@ -508,7 +508,9 @@ extern void FUN_L00_0025e450_44c0(char *, void *, char *, f32, f32, s32, s32, s3
                          f32, f32, f32, f32, s32, f32, s32, s32, s32, u8) __asm__("FUN_L00_0025e450");
 
 extern f32 D_L08_00161F70 __attribute__((sda));
-void FUN_L08_002f44c0(struct Moby *moby)
+void update_path_following_moby_with_fade(struct Moby *moby) __asm__("FUN_L08_002f44c0");
+
+void update_path_following_moby_with_fade(struct Moby *moby)
 {
     enum {
         PATH_FOLLOWER_INITIALIZE_HEIGHT_OFFSET = 0,
