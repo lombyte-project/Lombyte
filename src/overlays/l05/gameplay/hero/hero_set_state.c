@@ -90,7 +90,7 @@ extern void FUN_L05_00262f50(void);
 extern void FUN_L05_00264298(void);
 extern void initialize_hud_element_defaults(void) __asm__("FUN_L05_002661a0");
 extern void FUN_L05_002661e8(void);
-extern void FUN_L05_00266320(void);
+extern void draw_hud_progress_and_rank(void) __asm__("FUN_L05_00266320");
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
@@ -520,7 +520,7 @@ int hero_set_state(int a, int b) {
                 }
                 q->unk874 = q->motion.rot.f[2];
                 queue_animation_update(5, 0xFFFF, (int)initialize_hud_element_defaults, (int)FUN_L05_002661e8,
-                                       (int)FUN_L05_00266320, 0, 0);
+                                       (int)draw_hud_progress_and_rank, 0, 0);
                 queue_animation_update(7, 0xFFFF, (int)initialize_hud_element_defaults, (int)FUN_L05_002661e8,
                                        (int)draw_hud_timer, 0, 0);
             } else {

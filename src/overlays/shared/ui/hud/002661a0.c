@@ -70,7 +70,9 @@ extern int measure_text_width_regular(char *, int) __asm__("FUN_L05_00229d48");
 extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 
-int FUN_L05_00266320(HudElem *hud_element) {
+int draw_hud_progress_and_rank(HudElem *hud_element) __asm__("FUN_L05_00266320");
+
+int draw_hud_progress_and_rank(HudElem *hud_element) {
     /* The retail GP is 0x166C00; this renderer uses the preceding
        data words, rather than the timer renderer's shared globals. */
     extern int D_L05_0015F984 __attribute__((sda));
