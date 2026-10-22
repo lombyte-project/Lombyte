@@ -27,7 +27,9 @@ extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
 extern s32 FUN_L00_002595a0_32b90(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 
 extern u8 D_L02_00174480[] __attribute__((section(".data")));
-f32 FUN_L02_002360c8(f32 trajectory_parameter, f32 trajectory_acceleration_coefficient, f32 target_z) {
+f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_acceleration_coefficient, f32 target_z) __asm__("FUN_L02_002360c8");
+
+f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_acceleration_coefficient, f32 target_z) {
     enum {
         HERO_TRAJECTORY_Z_AXIS_ACCELERATION = 0,
         HERO_TRAJECTORY_STORED_VECTOR_ACCELERATION = 1,
