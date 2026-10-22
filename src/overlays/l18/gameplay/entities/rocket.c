@@ -717,7 +717,9 @@ extern short D_L18_00161988 __attribute__((sda));
 extern float D_L18_00161994 __attribute__((sda));
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_00258830(int, int, float, float, float, int);
-void FUN_L18_002d5f20(unsigned char *m);
+void update_class_238_detonation(unsigned char *moby) __asm__("FUN_L18_002d5f20");
+
+void update_class_238_detonation(unsigned char *m) __asm__("FUN_L18_002d5f20");
 extern void blend_moby_animation_alt(void *, int, int, int) __asm__("FUN_00212f90");
 extern short D_L18_00161A6C __asm__("D_0015ED6C");
 extern float D_L18_6C_m __asm__("D_0015ED6C");
@@ -732,7 +734,7 @@ void FUN_L18_002d5918(struct Moby *moby) {
     };
     char *data = (char *)moby->pvars;
     float v[4];
-    FUN_L18_002d5f20(moby);
+    update_class_238_detonation(moby);
     switch (moby->state) {
     case STATE_INITIALIZE:
         moby->collision = 0;
@@ -930,7 +932,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void explode_h(void *, void *, void *, float, float, int, int, int, float, float, float, float, int,
                       float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
-void FUN_L18_002d5f20(unsigned char *moby) {
+void update_class_238_detonation(unsigned char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
     struct Hero *hero_ptr;
     int hit;
