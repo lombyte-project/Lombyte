@@ -655,7 +655,9 @@ extern Moby *D_L05_00160098_2523C8 __asm__("D_L05_0015FFD8") __attribute__((sect
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") __attribute__((section(".sdata")));
 extern int D_0015ED84_gp __asm__("D_0015ED84") __attribute__((section(".sdata")));
 
-int FUN_L05_00251be8(void) {
+int process_hero_primary_item_input(void) __asm__("FUN_L05_00251be8");
+
+int process_hero_primary_item_input(void) {
     enum {
         ITEM_WRENCH = 8,
         ITEM_BUFFERED_SOUND_DEVICE = 10,

@@ -95,7 +95,7 @@ extern int FUN_L00_00266e00(int, int, int, int);
 extern int FUN_L01_00226f10(int a);
 extern int test_hero_ledge_ahead(float *, float *) __asm__("FUN_L01_0022d838");
 extern int try_apply_hero_water_and_ground_transitions(void) __asm__("FUN_L05_002515d0");
-extern int FUN_L05_00251be8(void);
+extern int process_hero_primary_item_input(void) __asm__("FUN_L05_00251be8");
 extern int FUN_L05_00254358(float *, float *);
 extern int FUN_L05_002551b8(void);
 extern int FUN_L05_002551d0(void);
@@ -183,7 +183,7 @@ void update_hero_state_transitions(void) {
         if (hero.health.hp <= 0 && hero.state.control_mode != 0x14 &&
             (hero.state.current == HERO_STATE_IDLE || hero.state.current == HERO_STATE_RUN)) {
             hero_set_state(HERO_STATE_DYING, 1);
-        } else if (FUN_L05_00251be8() == 0 && try_apply_hero_water_and_ground_transitions() == 0 && try_transition_hero_water_state() == 0 &&
+        } else if (process_hero_primary_item_input() == 0 && try_apply_hero_water_and_ground_transitions() == 0 && try_transition_hero_water_state() == 0 &&
                    try_start_hero_weapon_fire_state() == 0) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
                 if (hero.items[0].unk1C != 2 && D_L16_0015F594 == 0 &&
