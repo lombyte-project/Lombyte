@@ -2224,7 +2224,7 @@ extern unsigned char *D_L15_001B26AC __attribute__((section(".data")));
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void FUN_L00_0023e838(int);
 extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
-extern void FUN_L15_0025e2c0(int a0, void *a1, char *a2);
+extern void spawn_owner_target_particle(int a0, void *a1, char *a2) __asm__("FUN_L15_0025e2c0");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 unsigned char *FUN_L00_0026bb70(void *a, void *b, int c, int d, float f, int n, int e, int g, int h);
@@ -2280,7 +2280,7 @@ void update_charged_blast(Moby29FF90 *moby) {
                 if (g > 0xFF) g = 0xFF;
                 normalize_vector_xyz_c(random_effect_vector, random_effect_vector, random_float_between(20.0f, 40.0f));
                 FUN_L00_001ff290(effect_vector_scratch, random_effect_vector, moby->pos);
-                FUN_L15_0025e2c0((0x7F << 24) | (rc << 16) | (g << 8) | 0x4F, random_effect_vector, (char *)moby);
+                spawn_owner_target_particle((0x7F << 24) | (rc << 16) | (g << 8) | 0x4F, random_effect_vector, (char *)moby);
             }
             if (moby_data->f10 < 0x32) {
                 int fade_alpha = D_L15_0015F330.col.b[3];

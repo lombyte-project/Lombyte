@@ -17,7 +17,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int D_L15_001601FC __attribute__((sda));
 
 /* Spawns particle type 0x1F of colour `color` at `pos`, starting a quarter of the way from `owner` towards it. */
-void FUN_L15_0025e2c0(int color, u128 *target_position, char *owner) {
+void spawn_owner_target_particle(int color, u128 *target_position, char *owner) __asm__("FUN_L15_0025e2c0");
+
+void spawn_owner_target_particle(int color, u128 *target_position, char *owner) {
     Vec4 target;
     Vec4 step;
     u128 at;
