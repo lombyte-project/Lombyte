@@ -21,7 +21,9 @@ extern char D_L12_001CBE00_c[] __asm__("D_L12_001CBE00");
 extern char D_L12_0020BC90[];
 extern char D_L12_00167240[];
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern void FUN_L12_002bf770(int);
+void initialize_level_12_slot_grid_neighbors(int selected_slot_index) __asm__("FUN_L12_002bf770");
+
+extern void initialize_level_12_slot_grid_neighbors(int) __asm__("FUN_L12_002bf770");
 
 extern int D_L12_00151388 __attribute__((sda));
 extern float D_0015ED70_c __asm__("D_0015ED70");
@@ -50,7 +52,7 @@ extern int FUN_L01_00275690_c(float, void *) __asm__("FUN_L01_00275690");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void register_callback_c(void *, void *) __asm__("FUN_L12_0021be50");
 extern void copy_moby_z_to_group_records(struct Moby *) __asm__("FUN_L12_002bf6d0");
-extern void FUN_L12_002bf770(int);
+extern void initialize_level_12_slot_grid_neighbors(int) __asm__("FUN_L12_002bf770");
 extern void FUN_L12_002bf748(void);
 
 void FUN_L12_002bf140(struct Moby *moby) {
@@ -122,7 +124,7 @@ void FUN_L12_002bf140(struct Moby *moby) {
         break;
     case SLOT_INITIALIZE_NEIGHBORS_AND_HEIGHT:
         D_L12_00151388 = 0;
-        FUN_L12_002bf770(data[3]);
+        initialize_level_12_slot_grid_neighbors(data[3]);
         moby->state = 2;
         *(float *)(data + 4) = moby->pos.z;
         break;
@@ -186,7 +188,7 @@ typedef struct {
 extern Ent D_L12_001CBF40[];
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L12_002bf770(int selected_slot_index) {
+void initialize_level_12_slot_grid_neighbors(int selected_slot_index) {
     int i;
     D_L12_001CBF40[selected_slot_index].n[0] = 0xFF;
     D_L12_001CBF40[selected_slot_index].n[2] = 0xFF;
