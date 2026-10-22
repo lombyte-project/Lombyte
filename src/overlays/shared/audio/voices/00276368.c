@@ -869,7 +869,9 @@ typedef struct {
 
 extern E_2779c8 D_0013C940_2779c8 __asm__("D_0013C940") NOT_SDA;
 
-int FUN_L00_002779c8(int x) {
+int process_active_menu_object_actions(int x) __asm__("FUN_L00_002779c8");
+
+int process_active_menu_object_actions(int x) {
     int transition_owner;
 
     if ((s32)D_L00_001B9CF0.owner->unk40 != x) {
