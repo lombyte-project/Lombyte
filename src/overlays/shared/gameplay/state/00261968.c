@@ -550,7 +550,7 @@ void FUN_0020cb10_2628d8(void *, int, void *) __asm__("FUN_0020cb10");
 float FUN_001f99c0_2628d8(float) __asm__("FUN_001f99c0");
 float FUN_L00_0025bc98_2628d8(void *, void *, float, float, float, float,
                               int) __asm__("FUN_L00_0025bc98");
-void FUN_L00_00259f50_2628d8(void *, void *) __asm__("FUN_L00_00259f50");
+void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 void FUN_001f99f8_2628d8(void *) __asm__("FUN_001f99f8");
 
 void update_joint_animation(void *m, unsigned char *p, int c, float fa, float fb) __asm__("FUN_L00_002628d8");
@@ -579,7 +579,7 @@ void update_joint_animation(void *moby, unsigned char *joint_animation_state, in
     FUN_L00_0025bc98_2628d8(joint_animation_state + 0x48, joint_animation_state + 0x58, *(float *)(joint_animation_state + 0x68), fa, fb, 0.0f, 0);
     if (!joint_animation_state[1])
         FUN_0020cb10_2628d8(moby, joint_index, joint_animation_state);
-    FUN_L00_00259f50_2628d8(joint_animation_state + 0x10, joint_animation_state + 0x40);
+    build_quaternion_from_axis_rotations(joint_animation_state + 0x10, joint_animation_state + 0x40);
     uniform_scale = *(float *)(joint_animation_state + 0x70);
     *(float *)(joint_animation_state + 0x20) = uniform_scale;
     *(float *)(joint_animation_state + 0x24) = uniform_scale;

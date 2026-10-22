@@ -244,7 +244,9 @@ typedef struct {
 extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
 extern void FUN_L00_001fff28(void *, int, float);
 
-void FUN_L00_00259f50(void *output_quaternion, float *axis_rotation_angles) {
+void build_quaternion_from_axis_rotations(void *output_quaternion, float *axis_rotation_angles) __asm__("FUN_L00_00259f50");
+
+void build_quaternion_from_axis_rotations(void *output_quaternion, float *axis_rotation_angles) {
     Vk z_axis_quaternion, y_axis_quaternion, x_axis_quaternion;
     FUN_L00_001fff28(&x_axis_quaternion, 0, axis_rotation_angles[0]);
     FUN_L00_001fff28(&y_axis_quaternion, 1, axis_rotation_angles[1]);

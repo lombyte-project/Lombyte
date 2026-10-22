@@ -2003,7 +2003,7 @@ extern s32 D_L08_0015F594 __attribute__((sda));
 extern LiftLock D_L08_00179C10;
 extern s32 D_0013CAE4[];
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
-extern void FUN_L00_00259f50(void *, void *);
+extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 extern void FUN_L00_00261d78(s32, float, void *, void *);
 extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
@@ -2049,7 +2049,7 @@ void shuttle_update(struct Moby *moby) {
     if (vars->manip_set == 0)
         attach_manipulator(moby, 0, &vars->manip);
     vars->spin.f[0] = fast_add_rotations(vars->spin.f[0], frame_time * 1.5707964f);
-    FUN_L00_00259f50(vars->spin_state, &vars->spin);
+    build_quaternion_from_axis_rotations(vars->spin_state, &vars->spin);
     switch (moby->state) {
     case SHUTTLE_STATE_INITIALIZE:
         clear_u64_value(&vars->spin);

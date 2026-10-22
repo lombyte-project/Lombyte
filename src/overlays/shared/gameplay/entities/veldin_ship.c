@@ -1522,7 +1522,7 @@ extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_quaternion(void *, void *) __asm__("FUN_00214260");
-extern void FUN_L00_00259f50(void *, void *);
+extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 extern void quaternion_nlerp(void *, void *, void *, f32) __asm__("FUN_001fa400");
 extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
@@ -1639,7 +1639,7 @@ void metal_detector_update(struct Moby *moby) {
             matrix_to_quaternion(u, aim_rotation_product);
         } else {
             *(u128 *)scratch_vector = 0;
-            FUN_L00_00259f50(u, scratch_vector);
+            build_quaternion_from_axis_rotations(u, scratch_vector);
         }
         qcopy(&vars->unk30, v);
         quaternion_nlerp(D_L00_001E1170, D_L00_001E1170, u, 0.1f);

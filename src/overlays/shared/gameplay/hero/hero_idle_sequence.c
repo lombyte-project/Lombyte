@@ -158,7 +158,7 @@ void attach_manipulator(s32, s32, void *) __asm__("FUN_0020cb10");
    gives retail's register allocation. */
 f32 turn_k(f32 *, f32, f32 *, f32, f32, f32, s32) __asm__("FUN_L00_0025bc98");
 void vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-void FUN_L00_00259f50(void *, void *);
+void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 
 /* Eases one record's rotation and position toward their targets and rebuilds its matrix;
    once targets are zero and it has settled, detaches it from its moby. */
@@ -201,7 +201,7 @@ void update_hero_easing_record(struct HeroEase *ease_record) {
         vendor_spring(&pos->f[2], &ease_record->pos_vel.f[2], ease_record->pos_target.f[2], ease_record->accel, ease_record->max_speed, 0.0f);
         if (!ease_record->attached)
             attach_manipulator(moby, ease_record->unkA0, ease_record);
-        FUN_L00_00259f50(&ease_record->quat, rot);
+        build_quaternion_from_axis_rotations(&ease_record->quat, rot);
         qcopy(&ease_record->translation, pos);
         ease_record->scale3.f[0] = ease_record->scale;
         ease_record->scale3.f[1] = ease_record->scale;

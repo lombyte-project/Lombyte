@@ -791,7 +791,7 @@ extern s32 allocate_glint_slot(void *, s32, f32) __asm__("FUN_L00_001fe990");
 extern s32 FUN_L00_002603d0(void *);
 extern void FUN_L00_00260668(void *, void *, void *, void *, void *, void *);
 extern s32 FUN_L00_00257b90(s32, s32);
-extern void FUN_L00_00259f50(void *, void *);
+extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 extern void FUN_L00_0025f730(void *, f32);
 extern void FUN_L00_002a6de8_c(Bolt *, void *, s32) __asm__("FUN_L00_002a6de8");
 extern void FUN_L00_002a6b70_c(Bolt *) __asm__("FUN_L00_002a6b70");
@@ -939,14 +939,14 @@ void bolt_update(Bolt *bolt_moby) {
             FUN_L00_00260668(bolt_moby, gm, v, &v->rot, v, &v->rot);
         }
         matrix_to_euler(&bolt_moby->rot, &vector_scratch);
-        FUN_L00_00259f50(&v->spin, &vector_scratch);
+        build_quaternion_from_axis_rotations(&v->spin, &vector_scratch);
         return;
     case BOLT_SETTLING:
         FUN_L00_002a6de8_c(bolt_moby, &vector_scratch, 0);
         k = 0.25f;
         vector_scratch.f[2] += k;
         matrix_to_euler(&bolt_moby->rot, &geometry_scratch);
-        FUN_L00_00259f50(&rotation_scratch, &geometry_scratch);
+        build_quaternion_from_axis_rotations(&rotation_scratch, &geometry_scratch);
         rotation_blend_step = 1.0f / convert_integer_to_float(v->hop_left);
         settling_hop_phase = convert_integer_to_float(v->hop_left) / convert_integer_to_float(v->hop_frames);
         quaternion_nlerp(&v->spin, &v->spin, &rotation_scratch, rotation_blend_step);
