@@ -1534,7 +1534,9 @@ void show_drek_boss_moby_group(int unused, int group_index) __asm__("FUN_L18_002
 
 extern void show_drek_boss_moby_group(int a0, int idx) __asm__("FUN_L18_002f7028");
 extern void set_drek_boss_relative_aim_yaw() __asm__("FUN_L18_002f7220");
-extern void FUN_L18_002f7288(char *moby);
+void update_drek_boss_state_dependent_scalars(char *moby) __asm__("FUN_L18_002f7288");
+
+extern void update_drek_boss_state_dependent_scalars(char *moby) __asm__("FUN_L18_002f7288");
 void render_drek_boss_joint_glows(struct Moby *moby) __asm__("FUN_L18_002f7880");
 
 extern void render_drek_boss_joint_glows(struct Moby *moby) __asm__("FUN_L18_002f7880");
@@ -2599,7 +2601,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         break;
     }
-    FUN_L18_002f7288((char *)moby);
+    update_drek_boss_state_dependent_scalars((char *)moby);
     if (moby->f31 != 0) {
         moby_point_position(moby, 8, position_and_displacement_scratch);
         moby_point_position(moby, 9, v1);
@@ -3332,7 +3334,7 @@ extern float advance_accelerated_scalar_7288(float *, float, float *, float, flo
 extern float D_L18_001623CC __attribute__((sda));
 extern float D_L18_001623E4 __attribute__((sda));
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F86E8) */
-void FUN_L18_002f7288(char *moby) {
+void update_drek_boss_state_dependent_scalars(char *moby) {
     char *boss_data = *(char **)(moby + 0x78);
     char *selected_scalar_record = *(char **)(D_L18_0015EF50 + *(int *)(boss_data + 0x224) * 32 + 0x1c);
     float f;
