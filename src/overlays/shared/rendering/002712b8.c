@@ -1867,7 +1867,9 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void scale_vector_xyz(void *, void *, float);
 extern void transform_vector_by_basis(void *, void *, void *);
 
-void FUN_L00_00275510(char *particle) {
+void update_damped_moby_relative_color_size_tween_particle(char *particle) __asm__("FUN_L00_00275510");
+
+void update_damped_moby_relative_color_size_tween_particle(char *particle) {
     char *particle_data = particle + 0x20;
     char *appearance_parameters = *(char **)(particle_data + 0x1C);
     float local_velocity[3];
