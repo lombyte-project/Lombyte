@@ -22,7 +22,7 @@ extern void update_spinning_and_fading_effect_particle(void) __asm__("FUN_L00_00
 extern void update_spinning_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026b910");
 extern void update_attached_or_fading_effect_particle(void) __asm__("FUN_L00_0026ba68");
 extern void update_shrinking_effect_particle_with_gravity_and_secondary_spawns(void) __asm__("FUN_L00_0026bca8");
-extern void FUN_L00_0026c088(void);
+extern void update_fading_debris_particle_with_landing_spawn(void) __asm__("FUN_L00_0026c088");
 extern void FUN_L00_0026c3c8(void);
 extern void update_descending_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026c558");
 extern void move_and_fade_two_point_particle(void) __asm__("FUN_L00_0026c7f0");
@@ -111,7 +111,7 @@ void register_part_types(void) {
     handlers[13] = (u32)update_spinning_fade_in_out_effect_particle;
     handlers[14] = (u32)update_attached_or_fading_effect_particle;
     handlers[15] = (u32)update_shrinking_effect_particle_with_gravity_and_secondary_spawns;
-    handlers[16] = (u32)FUN_L00_0026c088;
+    handlers[16] = (u32)update_fading_debris_particle_with_landing_spawn;
     handlers[17] = (u32)FUN_L00_0026c3c8;
     handlers[18] = (u32)update_descending_fade_in_out_effect_particle;
     handlers[19] = (u32)move_and_fade_two_point_particle;
