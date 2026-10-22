@@ -2423,7 +2423,9 @@ extern float spring_turn(float *, float, float, float, float, float) __asm__("FU
 extern float FUN_L00_00257c48(float, float);
 extern void FUN_L01_00274b78(void *, void *, float);
 extern void FUN_L00_00263ac8(void *, int, void *, float);
-extern void FUN_L12_002eb220(struct Moby *);
+void process_blarg_helicopter_hits(struct Moby *moby) __asm__("FUN_L12_002eb220");
+
+extern void process_blarg_helicopter_hits(struct Moby *) __asm__("FUN_L12_002eb220");
 void update_blarg_helicopter_motion_tilt(struct Moby *moby) __asm__("FUN_L12_002eae00");
 
 extern void update_blarg_helicopter_motion_tilt(struct Moby *) __asm__("FUN_L12_002eae00");
@@ -2473,7 +2475,7 @@ void blarg_helicopter_update(struct Moby *moby) {
     child = *(struct Moby **)(data + 0xac);
     if (child != 0 && (signed char)child->state >= 0)
         FUN_L00_00263ac8(child, 0, data + 0xd0, 2.7f);
-    FUN_L12_002eb220(moby);
+    process_blarg_helicopter_hits(moby);
     if (D_001413F4 == 2) {
         moby->scale = moby->pclass->scale * 0.5f;
         {
@@ -2840,7 +2842,7 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L12_002eb220(struct Moby *moby) {
+void process_blarg_helicopter_hits(struct Moby *moby) {
     int hit_processing_status;
     float fv;
     int hit_reaction_code;
