@@ -1365,7 +1365,9 @@ extern unsigned char *spawn_splash(void *, void *, void *, float, float) __asm__
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
-void FUN_L08_002da0f0(struct Moby *moby) {
+void update_hero_water_entry_effects(struct Moby *moby) __asm__("FUN_L08_002da0f0");
+
+void update_hero_water_entry_effects(struct Moby *moby) {
     Vec4 pos;
     Vec4 spray_velocity_or_splash_position;
     char *water_entry_moby;
