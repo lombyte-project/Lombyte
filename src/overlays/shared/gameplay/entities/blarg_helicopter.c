@@ -1543,7 +1543,9 @@ extern void create_type_31_part(void *, void *, void *, void *, int) __asm__("FU
 extern void mark_moby_for_removal_c_c(void *) __asm__("func_0020C828");
 extern char D_0013E550[];
 
-void FUN_L03_002d47c0(Moby *moby) {
+void update_homing_spark_projectile(Moby *moby) __asm__("FUN_L03_002d47c0");
+
+void update_homing_spark_projectile(Moby *moby) {
     enum {
         SPARK_HOME_AND_EMIT = 1,
         SPARK_CLEANUP_AND_REMOVE = 2
