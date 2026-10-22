@@ -2435,7 +2435,9 @@ extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001
 extern char D_0013F420[];
 extern void func_L00_0025A8E8_m(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 
-void FUN_L15_002a2488(char *moby) {
+void update_hero_seeking_group_moby(char *moby) __asm__("FUN_L15_002a2488");
+
+void update_hero_seeking_group_moby(char *moby) {
     float va[4];
     float pb[4];
     char *data;
