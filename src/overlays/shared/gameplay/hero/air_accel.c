@@ -201,7 +201,7 @@ extern void FUN_L00_0020a540(void);
 extern void FUN_L00_0020a9e8(void);
 extern void FUN_L00_0020ac98(void);
 extern void FUN_L00_0020b1d8(void);
-extern void FUN_L00_00210928(void);
+extern void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
 extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void FUN_L00_00214fe8(void);
 extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
@@ -253,7 +253,7 @@ void FUN_L01_00228870(void) {
     update_hero_easing_records();
     FUN_L00_00208820();
     update_hero_world_matrices(0);
-    FUN_L00_00210928();
+    update_hero_equipped_items();
     begin_draw_frame();
     FUN_L00_00207c48();
     FUN_L00_00207a58();

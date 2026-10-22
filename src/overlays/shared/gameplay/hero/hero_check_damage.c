@@ -2182,7 +2182,9 @@ void spawn_hero_item_mobies() __asm__("FUN_L00_0020ea80");
 void FUN_L00_0020f580();
 void FUN_L00_00234808();
 void FUN_L00_002080b0();
-void FUN_L00_00210928(void) {
+void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
+
+void update_hero_equipped_items(void) {
     if (hero.unk308 == 1 || (u32)(hero.state.control_mode - 0x15) < 2 ||
         FUN_L00_0020d568_u()) {
         hero.unk20A7 = 1;
