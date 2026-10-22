@@ -62,7 +62,7 @@ extern void FUN_L00_00206c08(void);
 extern void FUN_L00_00209ca8(int, int, int);
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void FUN_L00_0020b930(void);
-extern void FUN_L00_0020e360(int a, int b);
+extern void create_missing_hero_item_slot_animations(int a, int b) __asm__("FUN_L00_0020e360");
 extern void FUN_L00_0020e698(void);
 extern void stick_target(float, int) __asm__("FUN_L00_002118c8");
 extern void FUN_L00_00213de8(float);
@@ -137,7 +137,7 @@ int hero_set_state(int a, int b) {
     }
     {
         struct Hero *p = &hero;
-        FUN_L00_0020e360(p->state.prev, p->state.current);
+        create_missing_hero_item_slot_animations(p->state.prev, p->state.current);
         p->rand_timer.range = 0;
     }
     switch (a) {
