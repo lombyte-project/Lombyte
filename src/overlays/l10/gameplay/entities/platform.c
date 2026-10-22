@@ -1893,7 +1893,7 @@ typedef union { u128 q; float f[4]; } UVec;
 extern L10State D_L10_001BB6B0;
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L10_002dd848_c(char *owner) __asm__("FUN_L10_002dd848");
-extern char *FUN_L10_002eb8c0(char *owner);
+extern char *spawn_destruction_replacement_moby(char *owner) __asm__("FUN_L10_002eb8c0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int D_0015ED84; /* no foreign declaration */
 extern int D_L10_001BA950[];
@@ -1918,7 +1918,7 @@ void handle_moby_destruction(char *moby) {
     if (D_L10_001BB6B0.collected[(short)id] != 0
         || ((*(int *)(D_0014C190_c + (((short)id >> 5) * 4 + (D_0015ED84 << 8))) >> (id & 0x1F)) & 1)) {
         FUN_L10_002dd848_c(moby);
-        FUN_L10_002eb8c0(moby);
+        spawn_destruction_replacement_moby(moby);
         delete_moby(moby);
         return;
     }
@@ -1954,7 +1954,7 @@ void handle_moby_destruction(char *moby) {
         transform_vector_by_basis(&transformed_offset, &transformed_offset, moby_rotation_basis);
         spawn_explosion(moby, &zero_vector, &transformed_offset, 0.0f, 0.0f, 5, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, -1, 15.0f, 1, 1, -1, 0);
         FUN_L10_002dd848_c(moby);
-        FUN_L10_002eb8c0(moby);
+        spawn_destruction_replacement_moby(moby);
         *(int *)(D_0014C190_c + (((short)*(unsigned short *)(moby + 0xB2) >> 5) * 4 + (D_0015ED84 << 8))) |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
         D_L10_001BA950[(short)*(unsigned short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
         delete_moby(moby);
