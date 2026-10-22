@@ -507,7 +507,9 @@ void FUN_L00_00267a08_0026a5b8(unsigned char *) __asm__("FUN_L00_00267a08");
 float FUN_001fa6c0_0026a5b8(int) __asm__("FUN_001fa6c0");
 int FUN_001fa6e0_0026a5b8(int, int, float) __asm__("FUN_001fa6e0");
 int FUN_001f96f8_0026a5b8(int) __asm__("FUN_001f96f8");
-void FUN_L00_0026a5b8(unsigned char *particle) {
+void update_animated_fading_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026a5b8");
+
+void update_animated_fading_effect_particle(unsigned char *particle) {
     int *particle_data = (int *)(particle + 0x20);
     FUN_001f9a10_0026a5b8(particle + 0x10, particle + 0x10, particle_data);
     if (FUN_001f9770_0026a5b8(particle + 0xa)) {
