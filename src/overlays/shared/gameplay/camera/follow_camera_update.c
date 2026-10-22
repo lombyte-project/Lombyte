@@ -1028,7 +1028,9 @@ extern void FUN_L00_001ed6a8(void *, float);
 extern void FUN_L00_002eae20_u(void *) __asm__("FUN_L00_002eae20");
 
 /* Runs FUN_L00_002eae20; if word +0x120 of its object is set, clears 0x89 and calls 001ed6a8. */
-void FUN_L00_002eb218(char *camera_object) {
+void update_camera_pose_with_optional_collision(char *camera_object) __asm__("FUN_L00_002eb218");
+
+void update_camera_pose_with_optional_collision(char *camera_object) {
     char *transition_state = *(char **)(camera_object + 0x70) + 0xE0;
     FUN_L00_002eae20_u(camera_object);
     if (*(int *)(transition_state + 0x40) != 0) {
