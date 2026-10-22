@@ -3611,7 +3611,9 @@ extern unsigned char D_0013D5CA_2FDA70[] __asm__("D_0013D4C6");
 extern unsigned char alternate_item_available[] __asm__("D_0013D388");
 extern char D_0013A5E0_2FDA70[] __asm__("D_0013CAE4");
 
-void FUN_L06_002fc640(Moby_2FDA70 *moby) {
+void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) __asm__("FUN_L06_002fc640");
+
+void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
     enum {
         INITIALIZE_POSITION_AND_LINKED_MOBYS = 0,
         WAIT_FOR_INITIAL_HERO_ACTIVATION = 1,
