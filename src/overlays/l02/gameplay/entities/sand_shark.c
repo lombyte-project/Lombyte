@@ -1293,7 +1293,9 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 extern void FUN_L02_002d3dd0(void *);
 
-void FUN_L02_002d6340(struct Moby *moby) {
+void prepare_sand_shark_for_relaunch_or_remove(struct Moby *moby) __asm__("FUN_L02_002d6340");
+
+void prepare_sand_shark_for_relaunch_or_remove(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int result = FUN_L02_002d5658(moby);
     *(int *)(data + 0x27C) = result;
