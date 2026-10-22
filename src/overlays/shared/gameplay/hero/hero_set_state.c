@@ -103,7 +103,7 @@ extern struct PadState D_0013C940_2215c8 __asm__("D_0013C940");
 extern s32 D_L00_0015F5C4_2215c8 __asm__("D_L00_0015F5C4");
 extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") __attribute__((section(".data")));
 
-extern void FUN_L00_002165b8_2215c8(void) __asm__("FUN_L00_002165b8");
+extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_2215c8(s32 *) __asm__("FUN_001f9740");
 extern s16 fast_dec_timer(s16 *) __asm__("FUN_001f9770");
 extern void FUN_L00_00210b30_2215c8(void) __asm__("FUN_L00_00210b30");
@@ -134,7 +134,7 @@ void update_hero_timers_and_reach_state(void) {
     s32 sample_count;
 
     if (hero.unk20AD == 0) {
-        FUN_L00_002165b8_2215c8();
+        update_hero_tilt();
     }
     hero.state_timer++;
     hero.unk19C++;

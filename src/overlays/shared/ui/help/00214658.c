@@ -587,7 +587,9 @@ extern float FUN_L00_0025bc98_2165b8(void *, void *, int, float, float, float,
                                      float) __asm__("FUN_L00_0025bc98");
 extern void FUN_L00_002163f0_2165b8(void) __asm__("FUN_L00_002163f0");
 
-void FUN_L00_002165b8(void) {
+void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
+
+void update_hero_tilt(void) {
     enum {
         HERO_TILT_RETURN_TO_ZERO = 0,
         HERO_TILT_APPLY_REFERENCE_ORIENTATION = 1,

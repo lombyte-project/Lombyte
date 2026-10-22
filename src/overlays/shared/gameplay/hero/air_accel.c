@@ -1426,7 +1426,7 @@ typedef struct {
 extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern u8 D_0013D4C0_23c710[] __asm__("D_0013D4C0");
 
-extern void FUN_L00_002165b8_23c710(void) __asm__("FUN_L00_002165b8");
+extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_23c710(s32 *) __asm__("FUN_001f9740");
 extern s16 FUN_001f9770_23c710(s16 *) __asm__("FUN_001f9770");
 extern void FUN_L01_00231450_23c710(void) __asm__("FUN_L01_00231450");
@@ -1457,7 +1457,7 @@ void update_hero_timers_and_vehicle_transitions(void) {
     s32 sample_count;
 
     if (hero.unk20AD == 0) {
-        FUN_L00_002165b8_23c710();
+        update_hero_tilt();
     }
     hero.state_timer++;
     hero.unk19C++;

@@ -642,7 +642,7 @@ typedef struct {
 
 extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") __attribute__((section(".data")));
 
-extern void FUN_L00_002165b8_2348d0(void) __asm__("FUN_L00_002165b8");
+extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_2348d0(s32 *) __asm__("FUN_001f9740");
 extern s16 FUN_001f9770_2348d0(s16 *) __asm__("FUN_001f9770");
 extern void FUN_L06_00227cf8_2348d0(void) __asm__("FUN_L06_00227cf8");
@@ -673,7 +673,7 @@ void update_hero_timers_and_spatial_state(void) {
     s32 sample_count;
 
     if (hero.unk20AD == 0) {
-        FUN_L00_002165b8_2348d0();
+        update_hero_tilt();
     }
     hero.state_timer++;
     hero.unk19C++;
