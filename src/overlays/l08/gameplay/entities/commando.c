@@ -280,7 +280,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 /* Swings the gate to its driver's progress, fading a creak in while it
  * moves and out when it stops, and latches its flag once fully open. */
-void FUN_L08_002ea4c0(struct Moby *moby) {
+void update_swing_gate_from_driver(struct Moby *moby) __asm__("FUN_L08_002ea4c0");
+
+void update_swing_gate_from_driver(struct Moby *moby) {
     SwingGateVars *vars = (SwingGateVars *)moby->pvars;
     f32 progress = *(f32 *)D_L08_0015FFD8[vars->driver].pvars;
     Vec4 gate_rotation_matrix[4];
