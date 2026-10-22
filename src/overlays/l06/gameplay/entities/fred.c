@@ -7189,7 +7189,7 @@ extern void set_rotation_303160(void *) __asm__("FUN_L00_002eaa30");
 extern float approach_angle_303160(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern int allocate_voice_for_group_entry_303160(int, int, void *) __asm__("FUN_0022dba0");
 extern void push_piece_303160(float, struct Moby *, void *, void *, int) __asm__("FUN_L06_00303748");
-extern void FUN_L06_00303b68(struct Moby *);
+extern void break_apart_shuttle_linked_mobys(struct Moby *) __asm__("FUN_L06_00303b68");
 extern char D_L06_001B0C30_303160[] __asm__("D_L06_001B0C30");
 extern char *D_L06_001600EC_303160 __asm__("D_L06_001600EC");
 /* Moves the moby along three paths and plays the sound marked on the path points. */
@@ -7263,7 +7263,7 @@ int FUN_L06_00303160(char *moby, int path) {
             push_piece_303160(6.0f, (struct Moby *)moby, sound + 0x30, sound, 6);
         } else if (marker == 10 || prev_marker == 10) {
             allocate_voice_for_group_entry_303160(1, 0, moby);
-            FUN_L06_00303b68((struct Moby *)moby);
+            break_apart_shuttle_linked_mobys((struct Moby *)moby);
         }
     }
     return ride->progress == 1.0f;
@@ -7390,7 +7390,7 @@ extern int float_to_int_03b68(float) __asm__("FUN_001fa6d0");
 extern u8 *emit_particle_03b68(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
 /* Breaks the linked pieces apart: pushes each one out from their middle (smaller pieces faster), spins it and sheds dust. */
-void FUN_L06_00303b68(struct Moby *moby) {
+void break_apart_shuttle_linked_mobys(struct Moby *moby) {
     char *vars = (char *)moby->pvars;
     float center[4];
     float middle[4];
