@@ -1505,7 +1505,9 @@ void end_thruster_pack_lock_red_wait(struct Moby *moby) {
     }
 }
 /* Checks the moby's phase: 1 (and rearms it) when done, -1 when waiting with no timer, else 0. */
-int FUN_L18_002d8050(struct Moby *moby) {
+int poll_moby_state_and_rearm(struct Moby *moby) __asm__("FUN_L18_002d8050");
+
+int poll_moby_state_and_rearm(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     if (moby->state == 3) {
         moby->state = 1;

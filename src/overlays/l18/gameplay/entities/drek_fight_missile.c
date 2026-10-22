@@ -2699,7 +2699,7 @@ extern void FUN_001fa2b8_5e80(void *, void *) __asm__("FUN_001fa2b8");
 extern void moby_point_position_5e80(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8_5e80(void *) __asm__("FUN_L00_00250df8");
 extern int FUN_L00_0025ff38_5e80(float a, char *m, char *b, int c, int d, int *e, int f) __asm__("FUN_L00_0025ff38");
-extern int FUN_L18_002d8050_5e80(char *) __asm__("FUN_L18_002d8050");
+extern int poll_moby_state_and_rearm(char *) __asm__("FUN_L18_002d8050");
 extern char *FUN_L18_002dc3e0_5e80(void *, void *, float) __asm__("FUN_L18_002dc3e0");
 extern void FUN_L18_002f1cc8_5e80(void *) __asm__("FUN_L18_002f1cc8");
 extern void FUN_L18_002dfaa0_5e80(char *, void *, void *, void *, void *, void *, int, int, int) __asm__("FUN_L18_002dfaa0");
@@ -2855,7 +2855,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
     {
         int type = *(unsigned char *)(moby + 0x20);
         if (type >= 0xC && type <= 0x13) {
-            int linked_moby_state_transition_status = FUN_L18_002d8050_5e80((char *)*(int *)&D_L18_0015FFD8_5e80 + (*(int *)(boss_data + 0x21C) << 8));
+            int linked_moby_state_transition_status = poll_moby_state_and_rearm((char *)*(int *)&D_L18_0015FFD8_5e80 + (*(int *)(boss_data + 0x21C) << 8));
             if (linked_moby_state_transition_status == 1) {
                 moby[0x20] = 0x13;
                 if (*(unsigned char *)(moby + 0x53) != 1) {
