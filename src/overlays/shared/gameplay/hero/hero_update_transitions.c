@@ -125,7 +125,7 @@ extern void FUN_L00_00216de8(int, int);
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void FUN_L00_00228c18(void);
 extern void FUN_L00_00228fa8(void);
-extern void FUN_L00_002293a8(void);
+extern void update_hero_locomotion_state(void) __asm__("FUN_L00_002293a8");
 extern void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_00232628(void);
@@ -2229,7 +2229,7 @@ void hero_update_transitions(void) {
                         }
                     }
                     if (hero.unk418 > scale_game_frames(1) && hero.state.current != HERO_STATE_PACK_JUMP) {
-                        FUN_L00_002293a8();
+                        update_hero_locomotion_state();
                     } else if (hero.unk41E != 0 && !(hero.unk4AA > hero.state_timer) &&
                                hero.ground_distance > hero.unk490) {
                         hero_set_state(HERO_STATE_FALL, 1);
