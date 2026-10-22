@@ -2470,7 +2470,9 @@ extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern s32 allocate_voice_for_target_entry(s32, s32, Moby *) __asm__("FUN_0022da68");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern s32 FUN_L00_002b6bc8(Moby *, f32);
+s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) __asm__("FUN_L00_002b6bc8");
+
+extern s32 apply_taunter_to_nearby_mobies(Moby *, f32) __asm__("FUN_L00_002b6bc8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern u32 D_0013C940[];
 extern u32 D_0013CAE0[];
@@ -2492,7 +2494,7 @@ extern Moby *D_001ABA00_b6bc8[] __asm__("D_L00_001ABA00");
 extern s16 D_L00_001B07B0[] __asm__("D_L00_001B07B0");
 extern u8 *moby_table __asm__("D_L00_0015FFD8");
 
-s32 FUN_L00_002b6bc8(Moby *taunter_moby, f32 radius) {
+s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) {
     u128 velocity __attribute__((aligned(16)));
     union { u128 q; f32 f[4]; } pos __attribute__((aligned(16)));
     Moby *other;
@@ -2644,7 +2646,7 @@ void taunter_update(Moby *taunter_moby) {
             next_entry_scaled_y = truncate_float_to_s32(taunter_moby->cfg->tab[i].y * 10.0f);
             if (!(taunter_vars->idx < taunter_moby->cfg->count && next_entry_scaled_x == 0x1E && next_entry_scaled_y == next_entry_scaled_x))
                 taunter_vars->idx = 0;
-            FUN_L00_002b6bc8(taunter_moby, taunter_vars->radius);
+            apply_taunter_to_nearby_mobies(taunter_moby, taunter_vars->radius);
             taunter_vars->retry = 0;
             goto end;
         }
@@ -2677,7 +2679,7 @@ void taunter_update(Moby *taunter_moby) {
     goto end;
 L7340:
     if (!(D_L00_0015F5CC & 3))
-        FUN_L00_002b6bc8(taunter_moby, taunter_vars->radius);
+        apply_taunter_to_nearby_mobies(taunter_moby, taunter_vars->radius);
 end:
     if ((s32)(hero.items[0].state ^ 3) != 0)
         update_taunter_effect_slots(taunter_moby);
