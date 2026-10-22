@@ -751,8 +751,10 @@ extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int D_L18_0015F5C4;
 extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section(".data")));
 
-void FUN_L18_002fa640(struct Moby *moby);
-void FUN_L18_002fa640(struct Moby *moby) {
+void update_moby_visibility_and_half_turn(struct Moby *moby) __asm__("FUN_L18_002fa640");
+
+void update_moby_visibility_and_half_turn(struct Moby *moby) __asm__("FUN_L18_002fa640");
+void update_moby_visibility_and_half_turn(struct Moby *moby) {
     enum {
         INITIALIZE_STATE_MACHINE = 0,
         WAIT_TO_HIDE_AND_TURN = 1,
