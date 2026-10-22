@@ -2891,7 +2891,9 @@ extern void cart_release(int) __asm__("FUN_0022d798");
 void initialize_flight_path_state(struct Moby *moby) __asm__("FUN_L14_002fc890");
 
 extern void initialize_flight_path_state(struct Moby *) __asm__("FUN_L14_002fc890");
-extern void FUN_L14_002fc9a0(struct Moby *);
+void advance_enemy_fighter_along_flight_path(struct Moby *moby) __asm__("FUN_L14_002fc9a0");
+
+extern void advance_enemy_fighter_along_flight_path(struct Moby *) __asm__("FUN_L14_002fc9a0");
 extern void FUN_L14_002fc3e8(struct Moby *);
 extern void cart_print(const char *, short) __asm__("FUN_001e93b0");
 extern void cart_remove(struct Moby *) __asm__("FUN_0020c828");
@@ -2978,7 +2980,7 @@ void FUN_L14_002fc0f0(struct Moby *moby) {
         data->timer = cart_frames(D_L14_00161F5C);
         break;
     case ENEMY_FIGHTER_STATE_FOLLOW_PATH:
-        FUN_L14_002fc9a0(moby);
+        advance_enemy_fighter_along_flight_path(moby);
         break;
     case ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN:
       if (cart_tick(&data->timer)) {
@@ -3161,7 +3163,7 @@ extern short D_L14_00161F4C __attribute__((sda));
 extern short D_L14_00161F50 __attribute__((sda));
 extern short D_L14_00161F54 __attribute__((sda));
 extern short D_L14_00161F58 __attribute__((sda));
-void FUN_L14_002fc9a0(struct Moby *moby) {
+void advance_enemy_fighter_along_flight_path(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     float path_target_position[3];
     float path_position_delta[3];
