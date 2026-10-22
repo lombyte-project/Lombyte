@@ -1753,7 +1753,9 @@ extern float vendor_spring(float *p, float t, float *v, float u1, float u2, floa
 void FUN_L14_002eef60(struct Moby *m);
 int FUN_L14_002ef150(struct Moby *m);
 void FUN_L14_002ef3e0(struct Moby *m);
-void FUN_L14_002ef630(u8 *moby);
+void rebuild_elevator_world_path(u8 *moby) __asm__("FUN_L14_002ef630");
+
+void rebuild_elevator_world_path(u8 *moby) __asm__("FUN_L14_002ef630");
 void FUN_L14_002ef6f0(struct Moby *moby);
 
 /* pvars of the vendor platform (shared with FUN_L14_002eef60/ef150/ef3e0/ef630) */
@@ -1890,7 +1892,7 @@ void elevator_update(struct Moby *elevator_moby) {
             elevator_moby->state = 3;
             elevator_vars->level = elevator_vars->motor_volume;
         }
-        FUN_L14_002ef630((u8 *)elevator_moby);
+        rebuild_elevator_world_path((u8 *)elevator_moby);
         vendor_sub(&delta, &elevator_moby->pos, &old);
         update_entity_matrix(elevator_vars->spring, &delta, &rot, &elevator_moby->rot);
         break;
@@ -1903,7 +1905,7 @@ void elevator_update(struct Moby *elevator_moby) {
             elevator_vars->level = vendor_ftoi(level);
             if (elevator_vars->motor >= 0)
                 vendor_volume(elevator_vars->motor, elevator_vars->level);
-            FUN_L14_002ef630((u8 *)elevator_moby);
+            rebuild_elevator_world_path((u8 *)elevator_moby);
         } else {
             int voice;
             FUN_L14_002ef6f0(elevator_moby);
@@ -2136,7 +2138,7 @@ extern void add_vector_xyz(u8 *, u8 *, u8 *) __asm__("FUN_001f9a10");
  * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c:
  * func_L14_002F0AB8), where it is exact; names translated to the US level
  * program. */
-void FUN_L14_002ef630(u8 *moby) {
+void rebuild_elevator_world_path(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
     u8 *local_path_point_cursor = D_L14_001E03B0;
     u8 *world_path_point_cursor = D_L14_001B0BB0_u[*(s32 *)(data + 0x114)] + 0x10;
