@@ -1613,7 +1613,9 @@ void floating_platform_update(struct Moby *moby) {
     update_entity_matrix(data + 0x20, delta, old_rot, &moby->rot);
 }
 /* Starts the moby's next phase with the given pair if it is waiting. */
-int FUN_L18_002d8888(struct Moby *platform_moby, int tilt_delay_frames, int scaled_frame_count) {
+int request_floating_platform_tilt(struct Moby *platform_moby, int tilt_delay_frames, int scaled_frame_count) __asm__("FUN_L18_002d8888");
+
+int request_floating_platform_tilt(struct Moby *platform_moby, int tilt_delay_frames, int scaled_frame_count) {
     int *data = (int *)platform_moby->pvars;
     if (platform_moby->state == 1) {
         platform_moby->state = 3;
