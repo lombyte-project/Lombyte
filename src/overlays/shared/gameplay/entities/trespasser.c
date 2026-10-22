@@ -768,7 +768,7 @@ extern int FUN_L00_002beab0(char *,int,void *);
 extern void FUN_L00_00260400(void *,int,void *,void *,void *,void *);
 extern int FUN_L00_00258ad0(void *,void *,int,int,float,float);
 extern void FUN_L00_00258278(void *,float *,float,float,float,float);
-extern struct Moby *FUN_L00_002bed90(void *,void *,void *,void *,int);
+extern struct Moby *select_class5_target_or_hero(void *,void *,void *,void *,int) __asm__("FUN_L00_002bed90");
 extern float FUN_L00_002bf050(void *,void *,float,float,float,float,float,void *,void *,float);
 extern int FUN_L00_002bf9f0(void *,void *,void *,int);
 extern void FUN_L00_002bf8b0(void *,void *,void *);
@@ -926,7 +926,7 @@ void doom_bot_update(struct Moby *moby) {
         }
         qcopy(&scratch[0],&moby->pos);
         scratch[0].f[2]+=scale*0.3f;
-        if (random_integer_below(4)==0) data->target_moby=FUN_L00_002bed90(moby,&scratch[0],&moby->rot,data->last,1);
+        if (random_integer_below(4)==0) data->target_moby=select_class5_target_or_hero(moby,&scratch[0],&moby->rot,data->last,1);
         data->turn_rate=frame_scale*0.1f*speed;
         moby->state=4;
         if (!data->target_moby) {

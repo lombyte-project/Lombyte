@@ -2586,7 +2586,9 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float FUN_001f99c0(float);
 extern int FUN_001efa68_2bed90(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 
-char *FUN_L00_002bed90(char *self, float *position, float *angles, int unused, int mode) {
+char *select_class5_target_or_hero(char *self, float *position, float *angles, int unused, int mode) __asm__("FUN_L00_002bed90");
+
+char *select_class5_target_or_hero(char *self, float *position, float *angles, int unused, int mode) {
     char *candidate;
     char *best = 0;
     float target[4] __attribute__((aligned(16)));
