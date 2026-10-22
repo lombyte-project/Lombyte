@@ -7,7 +7,7 @@
 #include "rnc/math/vector.h"
 
 extern void FUN_L00_00268d48();
-extern void FUN_L00_00268fe8();
+extern void update_timed_effect_particle() __asm__("FUN_L00_00268fe8");
 extern void FUN_L00_00269290(void);
 extern void FUN_L00_002694f8(void);
 extern void FUN_L00_00269a70(void);
@@ -96,7 +96,7 @@ void register_part_types(void) {
     u32 *handlers = effect_handlers;
 
     handlers[0] = (u32)FUN_L00_00268d48;
-    handlers[1] = (u32)FUN_L00_00268fe8;
+    handlers[1] = (u32)update_timed_effect_particle;
     handlers[2] = (u32)FUN_L00_00269290;
     handlers[3] = (u32)FUN_L00_002694f8;
     handlers[4] = (u32)FUN_L00_00269a70;
@@ -268,7 +268,7 @@ void FUN_L00_00268f10(Vec4 *spawn_position, int initial_high_byte) {
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08(unsigned char *);
-void FUN_L00_00268fe8(unsigned char *particle) {
+void update_timed_effect_particle(unsigned char *particle) {
     int high_byte_duration_frames = scale_game_frames(0x1b);
     int k = *(short *)(particle + 0xa) * *(int *)(particle + 0x20) / high_byte_duration_frames;
     *(int *)(particle + 4) = (*(int *)(particle + 4) & 0xffffff) | (k << 24);
