@@ -2138,7 +2138,7 @@ void FUN_L10_002e3ef0(void *mv) {
     V_2E52B0 vB;
     V_2E52B0 W;
     V_2E52B0 X;
-    V_2E52B0 dst;
+    V_2E52B0 hit_to_moby_offset;
     int A;
     float B;
     float fx;
@@ -2207,8 +2207,8 @@ void FUN_L10_002e3ef0(void *mv) {
             vB.z += 1.0f;
             if (hit_record->f20->oclass == 0xBA || hit_record->f20->oclass == 0) vA.z += 0.25f;
             if (collision_line(&vA, &vB, 0x12, moby, 0) != 0) {
-                func_001F9BF0_2E52B0(&dst, &vB, &vA);
-                *(u128_2E52B0 *)&W = *(u128_2E52B0 *)&dst;
+                func_001F9BF0_2E52B0(&hit_to_moby_offset, &vB, &vA);
+                *(u128_2E52B0 *)&W = *(u128_2E52B0 *)&hit_to_moby_offset;
                 fast_vec_normalize(&W, &W, 1.0f);
                 fast_vec_normalize(&X, &D_L10_00174380_2E52B0, 1.0f);
                 if (0.5f < func_001F9B88_2E52B0(fast_vec_dot(&W, &X))) {
