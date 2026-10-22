@@ -3161,7 +3161,7 @@ extern float D_L11_001622EC __attribute__((sda));
 extern float D_L11_001622F0 __attribute__((sda));
 extern void FUN_L11_00315968(struct Moby *);
 extern void FUN_L11_00315f58(char *a0, float *a1);
-extern short FUN_L11_00316090(struct Moby *self);
+extern short count_group_class_4de_mobys_in_states_13_to_17(struct Moby *self) __asm__("FUN_L11_00316090");
 extern void spawn_4318(struct Moby *, int, void *, float) __asm__("FUN_L00_00263ac8");
 extern float distance_4318(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_distance_4318(void *, void *) __asm__("FUN_001f9b80");
@@ -3472,7 +3472,7 @@ void puffoid_update(struct Moby *moby) {
     case PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP: {
         float basis[16];
         float dest[4];
-        if (puffoid_vars->unk214 != 2 && FUN_L11_00316090(moby) < 5) {
+        if (puffoid_vars->unk214 != 2 && count_group_class_4de_mobys_in_states_13_to_17(moby) < 5) {
             struct Moby *carrier_moby = (struct Moby *)(D_L11_0015FFD8_4318 + (puffoid_vars->carrier << 8));
             invert_basis_4318(basis, &carrier_moby->rot_row0);
             sub_vector_4318(pos, &moby->pos, &carrier_moby->pos);

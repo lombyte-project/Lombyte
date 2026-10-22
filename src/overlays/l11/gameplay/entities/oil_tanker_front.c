@@ -281,7 +281,9 @@ extern short *D_L11_001AC240[];
 extern char *D_L11_0015FFD8;
 
 /* Counts the listed mobys of class 0x4DE in states 13 to 17. */
-short FUN_L11_00316090(struct Moby *self) {
+short count_group_class_4de_mobys_in_states_13_to_17(struct Moby *self) __asm__("FUN_L11_00316090");
+
+short count_group_class_4de_mobys_in_states_13_to_17(struct Moby *self) {
     unsigned short *moby_list_entry;
     short matching_moby_count;
     char *base;
