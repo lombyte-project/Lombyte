@@ -927,7 +927,9 @@ int advance_moby_path(char *moby) {
 
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
-void FUN_L05_00319690(char *moby) {
+void request_moby_variant_help_message(char *moby) __asm__("FUN_L05_00319690");
+
+void request_moby_variant_help_message(char *moby) {
     switch (*(short *)(*(char **)(moby + 0x78) + 0xB6)) {
     case 0:
         try_set_help_message(8, 0x13A5);

@@ -627,7 +627,7 @@ extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022d
 extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern void FUN_L00_00266858(void *, int);
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
-extern void FUN_L05_00319690(char *);
+extern void request_moby_variant_help_message(char *) __asm__("FUN_L05_00319690");
 extern void FUN_L05_00319740(char *);
 extern void FUN_L05_003198e8(char *);
 extern void FUN_L16_002e4900_c(void *) __asm__("FUN_L16_002e4900");
@@ -677,7 +677,7 @@ void taxi_update(struct Moby *moby) {
             transform_vector(hero_local_offset, hero_local_offset, transposed_rotation_or_start_position);
             if (absolute_float(hero_local_offset[1]) < 1.2f) {
                 FUN_L16_002e4a58_c(moby);
-                FUN_L05_00319690(moby);
+                request_moby_variant_help_message(moby);
                 if ((*(int *)(D_0013CAE4) & 0x10) && *(int *)&D_L16_0015F594 == 8) {
                     moby->state = 3;
                     matched_moby = FUN_L05_00319598(moby, *(short *)(taxi_data + 0xAE));

@@ -2214,7 +2214,7 @@ extern void FUN_0022da68_c(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
 extern void FUN_L00_00266858(void *, int);
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
-extern void FUN_L05_00319690(char *);
+extern void request_moby_variant_help_message(char *) __asm__("FUN_L05_00319690");
 extern void FUN_L05_00319740(char *);
 extern void FUN_L05_003198e8(char *);
 void FUN_L05_00319208(void *moby_v);
@@ -2263,7 +2263,7 @@ void taxi_update(struct Moby *moby) {
             FUN_001f9d20(hero_offset, hero_offset, rotation_or_start_position_scratch);
             if (absolute_float(hero_offset[1]) < 1.2f && hero_offset[0] < 1.0f && hero_offset[0] > -0.75f) {
                 FUN_L05_003193a8_u(moby);
-                FUN_L05_00319690(moby);
+                request_moby_variant_help_message(moby);
                 if (*(int *)(D_0013CAE4) & 0x10) {
                     moby->state = 3;
                     destination_stop_moby = FUN_L05_00319598(moby, *(short *)(taxi_data + 0xB6));
