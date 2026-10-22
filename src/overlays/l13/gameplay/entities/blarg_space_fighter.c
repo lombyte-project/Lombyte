@@ -418,7 +418,7 @@ void FUN_L13_002c2048(Moby_2C27B0 *moby) {
 }
 extern void FUN_L13_002c2d30(unsigned char *);
 extern unsigned char *FUN_L13_003058a8(void *, int);
-extern void FUN_L13_00305988(void *, void *, void *, float);
+extern void launch_attached_rocket(void *, void *, void *, float) __asm__("FUN_L13_00305988");
 extern char *D_L13_001600EC;
 extern float D_L13_0016149C __attribute__((sda));
 extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
@@ -531,14 +531,14 @@ void FUN_L13_002c25b8(unsigned char *moby) {
                 normalize_vector_xyz(shot_direction_vector, shot_direction_vector, D_L13_0016149C * frame_time);
                 if (*(int *)(moby_data + 0xF4) != 0) {
                     if (*(void **)(moby_data + 0xF8)) {
-                        FUN_L13_00305988(*(void **)(moby_data + 0xF8), shot_direction_vector, target, *(float *)(moby_data + 0xEC));
+                        launch_attached_rocket(*(void **)(moby_data + 0xF8), shot_direction_vector, target, *(float *)(moby_data + 0xEC));
                         allocate_voice_for_target_entry(0, 0, (int)moby);
                     }
                     *(unsigned char **)(moby_data + 0xF8) = FUN_L13_003058a8(moby, 1);
                     *(int *)(moby_data + 0xF4) = 0;
                 } else {
                     if (*(void **)(moby_data + 0xFC)) {
-                        FUN_L13_00305988(*(void **)(moby_data + 0xFC), shot_direction_vector, target, *(float *)(moby_data + 0xEC));
+                        launch_attached_rocket(*(void **)(moby_data + 0xFC), shot_direction_vector, target, *(float *)(moby_data + 0xEC));
                         allocate_voice_for_target_entry(0, 0, (int)moby);
                     }
                     *(unsigned char **)(moby_data + 0xFC) = FUN_L13_003058a8(moby, 0);

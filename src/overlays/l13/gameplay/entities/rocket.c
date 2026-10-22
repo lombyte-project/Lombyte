@@ -55,7 +55,9 @@ char *FUN_L13_003058a8(struct Moby *source_moby, short joint_index) {
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8(void *);
 
-void FUN_L13_00305988(struct Moby *moby, char *pos, int distance_reference_moby, float max_travel_distance) {
+void launch_attached_rocket(struct Moby *moby, char *pos, int distance_reference_moby, float max_travel_distance) __asm__("FUN_L13_00305988");
+
+void launch_attached_rocket(struct Moby *moby, char *pos, int distance_reference_moby, float max_travel_distance) {
     char *moby_vars = (char *)moby->pvars;
     char *source_moby = *(char **)(moby_vars + 0x20);
     char *mp;
