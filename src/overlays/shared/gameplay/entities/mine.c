@@ -288,11 +288,11 @@ void mine_update(M910 *mine_moby) {
         if (hero.items[0].moby != 0 && ((M910 *)hero.items[0].moby)->cls == 0xBE) {
             float mine_attachment_transform[4][4];
             float owner_bone_transform[4][4];
-            U910 rot;
+            U910 attachment_rotation_angles;
             {
-                rot.q = 0;
-                rot.f[0] = 3.1415927f;
-                euler_rotation_matrix(mine_attachment_transform, &rot);
+                attachment_rotation_angles.q = 0;
+                attachment_rotation_angles.f[0] = 3.1415927f;
+                euler_rotation_matrix(mine_attachment_transform, &attachment_rotation_angles);
                 build_moby_bone_transform((char *)v->owner, 0, (char *)owner_bone_transform);
                 multiply_matrix(mine_attachment_transform, owner_bone_transform, mine_attachment_transform);
                 copy_matrix3x4(mine_moby->mtx, mine_attachment_transform);
@@ -568,7 +568,7 @@ void mine_update(M910 *mine_moby) {
                     U910 collision_correction;
                     {
                         float sp;
-                        float lim;
+                        float max_homing_step;
                         int mode;
 
                         *(OvlQuad *)n = mine_moby->pos.q;
@@ -579,10 +579,10 @@ void mine_update(M910 *mine_moby) {
                             v->i68 = allocate_voice_for_target_entry(1, 4, (int)mine_moby);
                         }
                         sp = v->f40 + frame_time_sq * 15.0f;
-                        lim = frame_time * 4.0f;
+                        max_homing_step = frame_time * 4.0f;
                         v->f40 = sp;
-                        if (lim < sp) {
-                            v->f40 = lim;
+                        if (max_homing_step < sp) {
+                            v->f40 = max_homing_step;
                         }
                         mode = v->h52;
                         if (mode == 1) {
