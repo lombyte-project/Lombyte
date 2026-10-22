@@ -3088,7 +3088,9 @@ extern void FUN_00125180_212318(void *, void *) __asm__("FUN_00125180");
 #define X D_L00_00173E40_212318
 
 extern s32 D_L00_00173E5C __attribute__((section(".data")));
-void FUN_L00_00212318(int force) {
+void clip_hero_velocity_against_probed_surfaces(int force) __asm__("FUN_L00_00212318");
+
+void clip_hero_velocity_against_probed_surfaces(int force) {
     V_212318 primary_probe_start, primary_probe_offset_or_end, b, secondary_probe_offset_or_end;
     char *hero_position_base;
     struct Hero *g;

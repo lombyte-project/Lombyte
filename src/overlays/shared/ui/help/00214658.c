@@ -666,7 +666,7 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void FUN_L00_00212318(s32);
+extern void clip_hero_velocity_against_probed_surfaces(s32) __asm__("FUN_L00_00212318");
 extern f32 FUN_001f99c0(f32);
 
 void FUN_L00_002167d0(void) {
@@ -779,7 +779,7 @@ void FUN_L00_002167d0(void) {
     if (0.0f < k) {
         hero_state->unk3B0 = hero_state->unk3B0 / (k * (frame_time * 5.9f));
     }
-    FUN_L00_00212318(0);
+    clip_hero_velocity_against_probed_surfaces(0);
     if (hero_state->unk3B4.f < DEG_TO_RAD && 0.0872664601f < hero_state->ground_pitch.f) {
         fast_vec_scale(&hero.motion.velocity, &hero.motion.velocity, fast_cos(hero_state->ground_pitch.f));
     }
