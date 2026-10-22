@@ -1067,7 +1067,9 @@ extern char *FUN_L11_0030fd98_c(char *) __asm__("FUN_L11_0030fd98");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 
-int FUN_L11_0030f660(struct Moby *owner, char *data) {
+int sync_ship_pickup_child_pose(struct Moby *owner, char *data) __asm__("FUN_L11_0030f660");
+
+int sync_ship_pickup_child_pose(struct Moby *owner, char *data) {
     char *child;
     if (!*(char **)(data + 0x34)) {
         *(char **)(data + 0x34) = FUN_L11_0030fd98_c(owner);
@@ -1184,7 +1186,7 @@ void ammocrate_update(struct Moby *pickup) {
     switch (pickup->state) {
     case AMMOCRATE_STATE_INITIALIZE:
         *(struct Moby **)(pickup_vars + 0x34) = 0;
-        FUN_L11_0030f660(pickup, pickup_vars);
+        sync_ship_pickup_child_pose(pickup, pickup_vars);
         *(float *)(pickup_vars + 0x30) = 0.0f;
         pickup->state = 1;
         break;
@@ -1193,7 +1195,7 @@ void ammocrate_update(struct Moby *pickup) {
         *(float *)(pickup_vars + 0x18) -= frame_time_sq * 9.8f;
         add_vector_f728(pickup_vars, pickup_vars, pickup_vars + 0x10);
         add_vector_f728(&pickup->pos, pickup_vars, pickup_vars + 0x20);
-        if (FUN_L11_0030f660(pickup, pickup_vars)) {
+        if (sync_ship_pickup_child_pose(pickup, pickup_vars)) {
             if ((*(struct Moby **)(pickup_vars + 0x34))->seq == 1) {
                 scale_vector_f728(pickup_vars + 0x10, pickup_vars + 0x10, 0.8f);
                 pickup->state = 2;
@@ -1215,7 +1217,7 @@ void ammocrate_update(struct Moby *pickup) {
         }
         add_vector_f728(pickup_vars, pickup_vars, pickup_vars + 0x10);
         add_vector_f728(&pickup->pos, pickup_vars, pickup_vars + 0x20);
-        if (FUN_L11_0030f660(pickup, pickup_vars)) {
+        if (sync_ship_pickup_child_pose(pickup, pickup_vars)) {
             if ((*(struct Moby **)(pickup_vars + 0x34))->state == 2) {
                 pickup->state = (*(struct Moby **)(pickup_vars + 0x34))->state;
             }
