@@ -109,7 +109,7 @@ extern u8 big_head_cheat_enabled __asm__("D_0015EDB0");
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void initialize_npc_dialogue(struct Moby *, char *) __asm__("FUN_L00_002668a0");
 extern s32 update_npc_dialogue(struct Moby *, char *) __asm__("FUN_L00_00266448");
-extern void FUN_L02_00298c68(int);
+extern void start_indexed_disc_stream(int) __asm__("FUN_L02_00298c68");
 extern void approach_two_stage(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern f32 approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8");
 extern void lerp_vector(void *out, void *a, void *b, f32 t) __asm__("FUN_001f9a40");
@@ -211,7 +211,7 @@ void skids_agent_update(struct Moby *moby) {
                     (*(struct Moby **)(data + 0x178))->flags |= 1;
                     (*(struct Moby **)(data + 0x178))->visible = 0;
                 }
-                FUN_L02_00298c68(2);
+                start_indexed_disc_stream(2);
                 moby->state = 5;
             }
         } else if (talk_camera.placed == 0) {
