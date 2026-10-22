@@ -256,7 +256,7 @@ extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_00261968(int, void *, void *);
 extern int FUN_L00_002e1f28(void *, int, int);
 extern int FUN_L00_002e2040(char *);
-extern int FUN_L00_002e2190(void *, void *, void *);
+extern int set_beam_origin_transform_and_endpoint(void *, void *, void *) __asm__("FUN_L00_002e2190");
 extern int FUN_L14_002b39a0_c(unsigned char *) __asm__("FUN_L14_002b39a0");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -619,7 +619,7 @@ void update_plasmabot(char *moby) {
         if (coll_line_fix(bone_transform_scratch[3], end, 0, moby, &info) != 0) {
             qcopy(end, D_L14_00174560);
         }
-        FUN_L00_002e2190(moby, bone_transform_scratch, end);
+        set_beam_origin_transform_and_endpoint(moby, bone_transform_scratch, end);
         if (fast_dec_timer_s16(data + 0x262) != 0) {
             blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             ((unsigned char *)moby)[0x20] = 7;

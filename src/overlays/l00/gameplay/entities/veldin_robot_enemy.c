@@ -227,7 +227,7 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 compute_interpolated_record_value(ElectroidMoby *) __asm__("FUN_0020c9e0");
 extern s32 collision_line(void *, void *, s32, ElectroidMoby *, ElectroidProbe *) __asm__("FUN_001efa68");
 extern s32 FUN_L00_002e2040_c(ElectroidMoby *) __asm__("FUN_L00_002e2040");
-extern s32 FUN_L00_002e2190(ElectroidMoby *, void *, void *);
+extern s32 set_beam_origin_transform_and_endpoint(ElectroidMoby *, void *, void *) __asm__("FUN_L00_002e2190");
 extern s32 mine_fall(ElectroidMoby *, void *) __asm__("FUN_L00_0025c698");
 extern void cart_burst(ElectroidMoby *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00263e30(ElectroidMoby *, s32, s32, s32, s32, s32, s32);
@@ -411,7 +411,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
                 ELECTROID_ANIM(moby, 7, scale_game_frames_s32(10));
             }
         }
-        FUN_L00_002e2190(moby, mtx, &dir);
+        set_beam_origin_transform_and_endpoint(moby, mtx, &dir);
         if (moby->unk70 & 2) {
             if (vars->timer++ == D_L00_00161BE8) {
                 FUN_L00_002e2040_c(moby);

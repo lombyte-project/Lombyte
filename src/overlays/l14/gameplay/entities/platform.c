@@ -209,7 +209,7 @@ extern void to_quat_67e8(void *, void *) __asm__("FUN_00214260");
 extern void slerp_67e8(void *, void *, void *, float) __asm__("FUN_001fa400");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void FUN_L00_002e1f28(struct Moby *, int, int);
-extern int FUN_L00_002e2190(struct Moby *, void *, void *);
+extern int set_beam_origin_transform_and_endpoint(struct Moby *, void *, void *) __asm__("FUN_L00_002e2190");
 extern int ray_67e8(void *, void *, int, struct Moby *, void *) __asm__("FUN_001efa68");
 extern char *FUN_L00_00274948_c(void *, void *, int, struct Moby *) __asm__("FUN_L00_00274948");
 extern int FUN_L00_0023e738_c(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
@@ -363,7 +363,7 @@ void FUN_L14_002d67e8(struct Moby *racer_moby) {
             *(int *)(moby_data + 0x1C4) = 0;
         }
         if (racer_moby->command == 3) {
-            if (FUN_L00_002e2190(racer_moby, moby_data + 0xA0, moby_data + 0x1E0) == 0) {
+            if (set_beam_origin_transform_and_endpoint(racer_moby, moby_data + 0xA0, moby_data + 0x1E0) == 0) {
                 FUN_L00_002e1f28(racer_moby, 3, 1);
             }
             ray.flags = 0x10001;
