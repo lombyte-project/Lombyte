@@ -288,7 +288,7 @@ void skids_agent_update(struct Moby *moby) {
     {
         Vec4 target;
         Vec4 head;
-        Vec4 dir;
+        Vec4 head_to_target_delta;
         s32 look_enabled;
         f32 rotation_step;
         f32 rotation_limit;
@@ -333,9 +333,9 @@ void skids_agent_update(struct Moby *moby) {
         if (look_enabled) {
             qcopy(&head, &moby->pos);
             head.f[2] += 1.0f;
-            vec_sub(&dir, &target, &head);
-            yaw = angle_sub(angle_atan2(dir.f[0], dir.f[1]), moby->rot.z);
-            pitch = -angle_atan2(vec_len_xy(&dir), dir.f[2]);
+            vec_sub(&head_to_target_delta, &target, &head);
+            yaw = angle_sub(angle_atan2(head_to_target_delta.f[0], head_to_target_delta.f[1]), moby->rot.z);
+            pitch = -angle_atan2(vec_len_xy(&head_to_target_delta), head_to_target_delta.f[2]);
             if (yaw > 1.5707964f)
                 yaw = 1.5707964f;
             else if (yaw < -1.5707964f)
