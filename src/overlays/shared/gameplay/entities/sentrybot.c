@@ -74,7 +74,9 @@ extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025a120(void *);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00263b38(void *, float);
-extern void FUN_L15_00299a68(char *moby, void *a, float *point, void *b, void *c);
+void begin_sentrybot_turn_toward_point(char *moby, void *moby_data, float *point, void *next_state, void *next_animation) __asm__("FUN_L15_00299a68");
+
+extern void begin_sentrybot_turn_toward_point(char *moby, void *a, float *point, void *b, void *c) __asm__("FUN_L15_00299a68");
 void FUN_L15_0029a0d0(void *mp);
 extern void FUN_L15_0029a2a8_u(void *) __asm__("FUN_L15_0029a2a8");
 extern void FUN_L15_0029a570(void *, int);
@@ -244,7 +246,7 @@ void sentrybot_update(unsigned char *moby) {
             }
         } else if (*(short *)(data + 0x156) != 0 && data[0x15B] == 0) {
             if (data[0x15A] != 0 || *(int *)(data + 0x124) == -1) {
-                FUN_L15_00299a68((char *)moby, data, (float *)(target + 0x10), (void *)0x10,
+                begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(target + 0x10), (void *)0x10,
                                  (void *)3);
             } else {
                 if (*(int *)(data + 0x144) != 0) {
@@ -267,13 +269,13 @@ void sentrybot_update(unsigned char *moby) {
                 }
             }
         } else if (*(short *)(data + 0x19C) != 0) {
-            FUN_L15_00299a68((char *)moby, data, (float *)(*(char **)(data + 0x198) + 0x10),
+            begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(*(char **)(data + 0x198) + 0x10),
                              (void *)0xA, (void *)0xF);
         } else if (fast_dec_timer_s16(data + 0x196) != 0 &&
                    (*(int *)(data + 0x190) = FUN_L15_00299dd8((char *)moby)) != 0 &&
                    (*(short *)(data + 0x194) != 0 ||
                     random_integer_below(scale_game_frames(0x96)) == 0)) {
-            FUN_L15_00299a68((char *)moby, data, (float *)(*(char **)(data + 0x190) + 0x10),
+            begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(*(char **)(data + 0x190) + 0x10),
                              (void *)0xA, (void *)0xF);
         } else if (moby[0x20] == 2) {
             if (*(int *)(data + 0x124) != -1) {
@@ -301,7 +303,7 @@ void sentrybot_update(unsigned char *moby) {
                         (*(int *)(data + 0x13C) + 1) % *D_L15_001B0AB0[*(int *)(data + 0x124)];
                 }
                 *(int *)(data + 0x144) = 0;
-                FUN_L15_00299a68((char *)moby, data,
+                begin_sentrybot_turn_toward_point((char *)moby, data,
                                  (float *)((char *)D_L15_001B0AB0[*(int *)(data + 0x124)] +
                                            (*(int *)(data + 0x13C) * 0x10 + 0x10)),
                                  (void *)4, (void *)0xD);
@@ -434,7 +436,7 @@ void sentrybot_update(unsigned char *moby) {
             }
         } else if (*(short *)(data + 0x156) != 0 && data[0x15B] == 0) {
             if (data[0x15A] != 0) {
-                FUN_L15_00299a68((char *)moby, data, (float *)(target + 0x10), (void *)0x10,
+                begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(target + 0x10), (void *)0x10,
                                  (void *)3);
             } else {
                 *(int *)(data + 0x14C) = scale_game_frames(0x3C);
@@ -453,7 +455,7 @@ void sentrybot_update(unsigned char *moby) {
                 }
             }
         } else if (*(short *)(data + 0x19C) != 0) {
-            FUN_L15_00299a68((char *)moby, data, (float *)(*(char **)(data + 0x198) + 0x10),
+            begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(*(char **)(data + 0x198) + 0x10),
                              (void *)0xA, (void *)0xF);
         } else if (*(short *)(data + 0x158) != 0 && hero.state.current == 0x59) {
             if (*(int *)(data + 0x150) != -1 || *(int *)(data + 0x12C) != -1 ||
@@ -468,7 +470,7 @@ void sentrybot_update(unsigned char *moby) {
                    (*(int *)(data + 0x190) = FUN_L15_00299dd8((char *)moby)) != 0 &&
                    (*(short *)(data + 0x194) != 0 ||
                     random_integer_below(scale_game_frames(0x96)) == 0)) {
-            FUN_L15_00299a68((char *)moby, data, (float *)(*(char **)(data + 0x190) + 0x10),
+            begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(*(char **)(data + 0x190) + 0x10),
                              (void *)0xA, (void *)0xF);
         }
         break;
@@ -518,7 +520,7 @@ void sentrybot_update(unsigned char *moby) {
         } else if (*(int *)(data + 0x124) != -1) {
             moby[0xBC] = 0;
             *(int *)(data + 0x144) = 0;
-            FUN_L15_00299a68((char *)moby, data,
+            begin_sentrybot_turn_toward_point((char *)moby, data,
                              (float *)((char *)D_L15_001B0AB0[*(int *)(data + 0x124)] +
                                        (*(int *)(data + 0x13C) * 0x10 + 0x10)),
                              (void *)2, (void *)0);
@@ -535,7 +537,7 @@ void sentrybot_update(unsigned char *moby) {
             moby[0xBC] = 0;
             *(int *)(data + 0x144) = 0;
             if (*(int *)(data + 0x124) != -1) {
-                FUN_L15_00299a68((char *)moby, data,
+                begin_sentrybot_turn_toward_point((char *)moby, data,
                                  (float *)((char *)D_L15_001B0AB0[*(int *)(data + 0x124)] +
                                            (*(int *)(data + 0x13C) * 0x10 + 0x10)),
                                  (void *)2, (void *)0);
@@ -548,7 +550,7 @@ void sentrybot_update(unsigned char *moby) {
                                     *(float *)(data + 0xD4) - *(float *)(moby + 0x14))) >
                        0.7853982f &&
                    data[0x15B] == 0) {
-            FUN_L15_00299a68((char *)moby, data, (float *)(data + 0xD0), (void *)0x10, (void *)3);
+            begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(data + 0xD0), (void *)0x10, (void *)3);
         } else {
             moby[0x20] = 0xC;
             if (moby[0x53] != 0)
@@ -576,7 +578,7 @@ void sentrybot_update(unsigned char *moby) {
                     if (moby[0x53] != 0xE)
                         blend_moby_animation(moby, 0xE, 0, scale_game_frames(0x14));
                 } else if (data[0x15C] == 0x10) {
-                    FUN_L15_00299a68((char *)moby, data, (float *)(target + 0x10), (void *)0x10,
+                    begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(target + 0x10), (void *)0x10,
                                      (void *)3);
                 } else {
                     if (data[0x15C] != 0xFF)
@@ -605,7 +607,7 @@ void sentrybot_update(unsigned char *moby) {
         }
         if (moby[0x70] & 2) {
             FUN_L15_002cbac0((char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)), 0xB4);
-            FUN_L15_00299a68((char *)moby, data, (float *)(target + 0x10), (void *)0x14,
+            begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(target + 0x10), (void *)0x14,
                              (void *)0xE);
         }
         break;
@@ -687,7 +689,7 @@ void sentrybot_update(unsigned char *moby) {
                            fast_arc_tan(*(float *)(data + 0xD0) - *(float *)(moby + 0x10),
                                         *(float *)(data + 0xD4) - *(float *)(moby + 0x14))) >
                        0.7853982f) {
-                FUN_L15_00299a68((char *)moby, data, (float *)(data + 0xD0), (void *)0x10,
+                begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(data + 0xD0), (void *)0x10,
                                  (void *)3);
             } else if (*(int *)(data + 0x114) == 2) {
                 moby[0x20] = 0xC;
@@ -745,7 +747,7 @@ void sentrybot_update(unsigned char *moby) {
                            fast_arc_tan(*(float *)(data + 0xD0) - *(float *)(moby + 0x10),
                                         *(float *)(data + 0xD4) - *(float *)(moby + 0x14))) >
                        0.7853982f) {
-                FUN_L15_00299a68((char *)moby, data, (float *)(data + 0xD0), (void *)0x12,
+                begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(data + 0xD0), (void *)0x12,
                                  (void *)5);
             } else if (*(int *)(data + 0x114) == 2) {
                 moby[0x20] = 0xC;
@@ -772,7 +774,7 @@ void sentrybot_update(unsigned char *moby) {
         } else {
             int mode = *(int *)(data + 0x114);
             if (mode != 2 && data[0x15B] == 0) {
-                FUN_L15_00299a68((char *)moby, data, (float *)(data + 0xD0), (void *)0x10,
+                begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(data + 0xD0), (void *)0x10,
                                  (void *)3);
             } else if (*(short *)(data + 0x156) == 0) {
                 moby[0x20] = 9;
@@ -785,10 +787,10 @@ void sentrybot_update(unsigned char *moby) {
                 }
             } else if (data[0x15A] != 0) {
                 if (mode != 2 && data[0x15B] == 0) {
-                    FUN_L15_00299a68((char *)moby, data, (float *)(target + 0x10), (void *)0x10,
+                    begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(target + 0x10), (void *)0x10,
                                      (void *)3);
                 } else {
-                    FUN_L15_00299a68((char *)moby, data, (float *)(target + 0x10), (void *)0xC,
+                    begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(target + 0x10), (void *)0xC,
                                      (void *)0);
                 }
             } else if (*(int *)(data + 0x124) != -1) {
@@ -984,7 +986,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L15_00299880_u(void *, void *, void *, void *, float) __asm__("FUN_L15_00299880");
 
 /* Aims at point (heading from the moby) and passes it on to FUN_L15_00299880. */
-void FUN_L15_00299a68(char *moby, void *moby_data, float *point, void *next_state, void *next_animation) {
+void begin_sentrybot_turn_toward_point(char *moby, void *moby_data, float *point, void *next_state, void *next_animation) {
     float angle =
         fast_arc_tan(point[0] - *(float *)(moby + 0x10), point[1] - *(float *)(moby + 0x14));
     FUN_L15_00299880_u(moby, moby_data, next_state, next_animation, angle);
