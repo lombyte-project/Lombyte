@@ -398,7 +398,9 @@ void FUN_L01_0028b8c8(void *out, int *path_descriptor, int node_index_offset, fl
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L01_0028ba80(float segment_parameter, void *out, void *start_point, void *end_point, void *start_tangent, void *end_tangent) {
+void evaluate_cubic_hermite_segment(float segment_parameter, void *out, void *start_point, void *end_point, void *start_tangent, void *end_tangent) __asm__("FUN_L01_0028ba80");
+
+void evaluate_cubic_hermite_segment(float segment_parameter, void *out, void *start_point, void *end_point, void *start_tangent, void *end_tangent) {
     char weighted_vector[16];
     float t_squared = segment_parameter * segment_parameter;
     float t_cubed = t_squared * segment_parameter;
@@ -457,7 +459,7 @@ float FUN_L01_0028bb90(float tangent_tension, float tangent_bias, T_28b828 *path
             if (particles) {
                 draw_number(0.2f, &previousPoint, (int)moby, 0, 0x80404080, 0x7f, -1, 0xff);
             }
-            FUN_L01_0028ba80(segment_parameter, &point, &currentNode, &nextNode, &previousTangent, &nextTangent);
+            evaluate_cubic_hermite_segment(segment_parameter, &point, &currentNode, &nextNode, &previousTangent, &nextTangent);
             segment_parameter += step;
             segmentLength += fast_vec_dist(&previousPoint, &point);
             previousPoint.q = point.q;

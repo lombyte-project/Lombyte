@@ -1284,7 +1284,7 @@ extern int resolve_path_node_index(void *, int) __asm__("FUN_L01_0028b828");
 extern int advance_path_node_index(char *) __asm__("FUN_L01_0028b878");
 extern void initialize_path_descriptor(char *) __asm__("FUN_L01_0028b410");
 extern void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b);
-extern void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4);
+extern void evaluate_cubic_hermite_segment(float t, void *out, void *p1, void *p2, void *p3, void *p4) __asm__("FUN_L01_0028ba80");
 extern void FUN_L01_0028bb90(void *, int, void *, float, float);
 extern void FUN_L03_0029c8a8(char *, char *);
 extern void FUN_L03_0029d2e0(char *, void *, int);
@@ -1475,7 +1475,7 @@ void red_ship_1_update(char *moby) {
                *(float *)(data + 0xBC);
         *(float *)(data + 0x13C) = add_rotations_29dba8(*(float *)(data + 0x13C), *(float *)(data + 0x138) * DEG_TO_RAD);
         *(OvlQuad *)(data + 0xE0) = *(OvlQuad *)(data + 0xD0);
-        FUN_L01_0028ba80(*(float *)(data + 0x100) + step, data + 0xD0, data + 0xB0, data + 0xC0, data + 0x90, cur);
+        evaluate_cubic_hermite_segment(*(float *)(data + 0x100) + step, data + 0xD0, data + 0xB0, data + 0xC0, data + 0x90, cur);
         if (!flag) {
             FUN_L03_0029cff0(moby);
         } else {

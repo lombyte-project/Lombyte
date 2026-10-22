@@ -3031,7 +3031,7 @@ extern f32 FUN_001f9de0(f32);
 extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001fa580(f32, f32);
 extern f32 FUN_001fa5c8(f32, f32);
-extern void FUN_L01_0028ba80(f32, QVec *, QVec *, QVec *, QVec *, QVec *);
+extern void evaluate_cubic_hermite_segment(f32, QVec *, QVec *, QVec *, QVec *, QVec *) __asm__("FUN_L01_0028ba80");
 extern f32 FUN_L00_00258110(f32 *, f32, f32, f32, f32, f32);
 extern f32 FUN_L00_0025e310(f32);
 extern void FUN_001f99f8(void *);
@@ -3250,12 +3250,12 @@ void gunship_follow_path(struct Moby *m) {
         v->unk12C = FUN_001fa580(v->unk12C, v->unk128 * D_0015ED60 * 0.017453292f);
     }
     v->unkE0.q = v->unkD0.q;
-    FUN_L01_0028ba80(v->unkF0 + f24, &v->unkD0, &v->unkB0, &v->unkC0, &v->unk90, &v->unkA0);
+    evaluate_cubic_hermite_segment(v->unkF0 + f24, &v->unkD0, &v->unkB0, &v->unkC0, &v->unk90, &v->unkA0);
     if (!(v->unk120 & 0x40)) {
         f32 dd = FUN_001f9b48(&v->unkE0, &v->unkD0);
         if (dd != 0.0f) {
             f24 = f24 * (path_speed / dd);
-            FUN_L01_0028ba80(v->unkF0 + f24, &v->unkD0, &v->unkB0, &v->unkC0, &v->unk90, &v->unkA0);
+            evaluate_cubic_hermite_segment(v->unkF0 + f24, &v->unkD0, &v->unkB0, &v->unkC0, &v->unk90, &v->unkA0);
         }
     }
     if (!frozen) {
