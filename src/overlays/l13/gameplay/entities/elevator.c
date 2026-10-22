@@ -923,7 +923,9 @@ void release_robosquawker_particle(Level13VendorMoby *moby) {
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern f32 D_0015ED70;
 
-void FUN_L13_002b4ff0(struct Moby *moby, char *moby_vars) {
+void update_robosquawker_ground_height(struct Moby *moby, char *moby_vars) __asm__("FUN_L13_002b4ff0");
+
+void update_robosquawker_ground_height(struct Moby *moby, char *moby_vars) {
     float ground = probe_ground_height(&moby->pos, 0, 0.5f);
     float z = moby->pos.z;
     if (ground < z + 0.3f) {
@@ -1154,7 +1156,7 @@ extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
 void update_robosquawker_particle(struct Moby *moby, char *data) __asm__("FUN_L13_002b4f28");
-void FUN_L13_002b4ff0(struct Moby *m, char *d);
+void update_robosquawker_ground_height(struct Moby *m, char *d) __asm__("FUN_L13_002b4ff0");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
 void robosquawker_update(RsMoby *m) __asm__("FUN_L13_002b50d8");
@@ -1569,7 +1571,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
         }
-        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)robosquawker_vars);
+        update_robosquawker_ground_height((char *)robosquawker_moby, (char *)robosquawker_vars);
         break;
     case ROBOSQUAWKER_STATE_WAIT_FOR_CLOSE_TARGET:
         subtract_vector_xyz(&va, &selected_target_record, &robosquawker_moby->pos);
@@ -1667,7 +1669,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         if (robosquawker_moby->b53 == 4 && (robosquawker_moby->b70 & 2)) {
             blend_moby_animation_c(robosquawker_moby, 3, 0, scale_game_frames_alt(3));
         }
-        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)robosquawker_vars);
+        update_robosquawker_ground_height((char *)robosquawker_moby, (char *)robosquawker_vars);
         break;
     }
     case ROBOSQUAWKER_STATE_CHASE_TARGET: {
@@ -1716,7 +1718,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             }
         }
         robosquawker_moby->bBC = 0;
-        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)robosquawker_vars);
+        update_robosquawker_ground_height((char *)robosquawker_moby, (char *)robosquawker_vars);
         break;
     }
     case ROBOSQUAWKER_STATE_PECK_ATTACK: {
@@ -1763,7 +1765,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             robosquawker_vars->f198 = 0.0f;
             robosquawker_moby->pos.f[2] = g;
         }
-        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)robosquawker_vars);
+        update_robosquawker_ground_height((char *)robosquawker_moby, (char *)robosquawker_vars);
         break;
     }
     case ROBOSQUAWKER_STATE_RETURN_HOME: {
@@ -1809,7 +1811,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 blend_moby_animation_c(robosquawker_moby, 4, 0, scale_game_frames_alt(3));
             }
         }
-        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)robosquawker_vars);
+        update_robosquawker_ground_height((char *)robosquawker_moby, (char *)robosquawker_vars);
         robosquawker_moby->bBC = 0;
         break;
     }
