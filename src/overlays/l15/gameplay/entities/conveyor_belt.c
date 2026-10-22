@@ -973,7 +973,9 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_L15_002f78b8(int);
-extern int FUN_L15_002f78e0(int);
+int can_spawn_codebot_slot_effect(int slot) __asm__("FUN_L15_002f78e0");
+
+extern int can_spawn_codebot_slot_effect(int) __asm__("FUN_L15_002f78e0");
 extern int FUN_L15_002ebfb0(int);
 extern void FUN_L15_002ebf28(int, int);
 extern char *FUN_L15_002eb9e0(char *, char *);
@@ -1032,7 +1034,7 @@ void codebot_slot_update(struct Moby *moby) {
         }
         break;
     case CODEBOT_SLOT_WAIT_TO_CREATE_EFFECT:
-        if (FUN_L15_002f78e0(data[0])) {
+        if (can_spawn_codebot_slot_effect(data[0])) {
             vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
             vec[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
             vec[2] = 0.0f;
@@ -2132,7 +2134,7 @@ extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section
 extern char *D_L15_0015EF50;
 extern float D_L15_0015F3FC;
 
-int FUN_L15_002f78e0(int slot) {
+int can_spawn_codebot_slot_effect(int slot) {
     char *slot_state_data;
     if (*(short *)(D_L15_00167400_lui + 0x86) != 0x13)
         return 1;
