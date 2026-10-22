@@ -221,7 +221,9 @@ extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 extern float cos_67e8(float) __asm__("FUN_001f9dc8");
 extern float sin_67e8(float) __asm__("FUN_001f9de0");
 
-void FUN_L14_002d67e8(struct Moby *racer_moby) {
+void update_racer_path_and_weapon(struct Moby *racer_moby) __asm__("FUN_L14_002d67e8");
+
+void update_racer_path_and_weapon(struct Moby *racer_moby) {
     char *moby_data = (char *)racer_moby->pvars;
     char *path = *(char **)(D_L14_0015F70C + *(int *)(moby_data + 0x60) * 32 + 0x10);
     V_67e8 near;

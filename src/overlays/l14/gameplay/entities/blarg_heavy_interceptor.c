@@ -3203,7 +3203,7 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 void initialize_racer_path_tracking(struct Moby *m) __asm__("FUN_L14_002d6358");
 int interpolate_racer_to_path_start(struct Moby *m) __asm__("FUN_L14_002d64d0");
-void FUN_L14_002d67e8(struct Moby *m);
+void update_racer_path_and_weapon(struct Moby *m) __asm__("FUN_L14_002d67e8");
 void advance_moby_along_path(struct Moby *m) __asm__("FUN_L14_002d7198");
 void update_moby_joint_visual_effects(struct Moby *m) __asm__("FUN_L14_002d7490");
 
@@ -3282,7 +3282,7 @@ void update_level14_racer(struct Moby *racer_moby) {
         advance_moby_along_path(racer_moby);
         break;
     case RACER_STATE_WAIT_FOR_EXIT_VOLUME:
-        FUN_L14_002d67e8(racer_moby);
+        update_racer_path_and_weapon(racer_moby);
         if (is_point_inside_clip_volume(&racer_moby->pos, racer_vars->volume)) {
             moby_point_position(racer_moby, 2, pos);
             spark = FUN_L14_002dea98((char *)racer_moby, (char *)pos);
