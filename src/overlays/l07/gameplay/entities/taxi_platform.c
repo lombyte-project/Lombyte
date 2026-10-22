@@ -1730,7 +1730,9 @@ typedef struct {
 
 /* Slides out from its origin once its linked moby reaches one state and back when it reaches
    another; a level flag is set while it is out. */
-void FUN_L07_0030cf90(struct Moby *moby) {
+void update_linked_state_sliding_platform(struct Moby *moby) __asm__("FUN_L07_0030cf90");
+
+void update_linked_state_sliding_platform(struct Moby *moby) {
     enum {
         PLATFORM_INITIALIZE = 0,
         PLATFORM_WAIT_TO_MOVE_OUTWARD = 1,
