@@ -451,7 +451,9 @@ static __inline__ void vcopy_273090(float *d, float *s) {
     *(int *)&d[3] = 0;
 }
 
-void FUN_L00_002721f0(char *part) {
+void update_moving_size_alpha_tween_particle(char *part) __asm__("FUN_L00_002721f0");
+
+void update_moving_size_alpha_tween_particle(char *part) {
     char *data = part + 0x20;
     float interpolation_factor;
     float velocity[4] __attribute__((aligned(16)));
