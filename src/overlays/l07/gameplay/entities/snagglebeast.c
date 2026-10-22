@@ -246,7 +246,9 @@ extern void FUN_L00_00258278(struct Moby *, f32, void *, f32, f32, f32);
 extern void FUN_L07_00312e70(char *, float, int, float, int);
 
 /* Rope draw: moves the two end points along the rope direction, draws three strands, then casts a ray between the ends. */
-void FUN_L07_003131b0(char *moby) {
+void draw_and_probe_snagglebeast_rope_attack(char *moby) __asm__("FUN_L07_003131b0");
+
+void draw_and_probe_snagglebeast_rope_attack(char *moby) {
     RopeQuad rope_offset;
     char blk[0x30];
     RopeVec rope_direction;
@@ -1698,7 +1700,7 @@ void snagglebeast_update(unsigned char *moby) {
             *(float *)(data + 0x16C) += frame_scale;
             if (r <= *(float *)(data + 0x16C)) *(int *)(data + 0x164) = 4;
             if (tick_countdown_32_alt((int *)(data + 0x160))) *(int *)(data + 0x160) = scale_ticks(0x14);
-            enqueue_callback_list_1(FUN_L07_003131b0, moby);
+            enqueue_callback_list_1(draw_and_probe_snagglebeast_rope_attack, moby);
             break;
         }
         case SNAGGLEBEAST_ROPE_RETRACT:
@@ -1709,7 +1711,7 @@ void snagglebeast_update(unsigned char *moby) {
             if (*(int *)(data + 0x164) != 0) {
                 if (tick_countdown_32_alt((int *)(data + 0x160))) *(int *)(data + 0x164) = 5;
             }
-            enqueue_callback_list_1(FUN_L07_003131b0, moby);
+            enqueue_callback_list_1(draw_and_probe_snagglebeast_rope_attack, moby);
             break;
         case SNAGGLEBEAST_ROPE_RETURN_TO_IDLE:
             *(float *)(moby + 0x58) = 1.0f;
