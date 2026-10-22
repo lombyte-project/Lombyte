@@ -3231,7 +3231,9 @@ extern long tex_ec130(int) __asm__("FUN_001f44b8");
 extern float spread_k(float, float) __asm__("FUN_L00_00257c48");
 extern void draw_ec130(void *, void *, int) __asm__("FUN_001f7d30");
 
-void FUN_L18_002ec130(void *mv) {
+void draw_moby_billboard_quad_pair(void *mv) __asm__("FUN_L18_002ec130");
+
+void draw_moby_billboard_quad_pair(void *mv) {
     Qec130 quad;
     Vec130 quad_transform[4];
     Vec130 *pos;
