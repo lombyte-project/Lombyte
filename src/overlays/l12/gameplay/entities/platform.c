@@ -241,7 +241,9 @@ void initialize_level_12_slot_grid_neighbors(int selected_slot_index) {
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 extern void FUN_L01_0026e090(int, int);
 
-int FUN_L12_002e16b8(struct Moby *moby) {
+int update_moby_suck_cannon_suction_state(struct Moby *moby) __asm__("FUN_L12_002e16b8");
+
+int update_moby_suck_cannon_suction_state(struct Moby *moby) {
     int active;
     if (moby->state == 9 || moby->state == 11 || moby->state == 13)
         return 0;
