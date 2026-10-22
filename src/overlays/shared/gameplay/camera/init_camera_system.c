@@ -59,7 +59,9 @@ typedef struct {
 } S001eb448;
 extern S001eb448 D_L00_00166C80_u __asm__("D_L00_00166C80");
 /* Sets h and clears b in the block D_L00_00166C80 points to. */
-void FUN_L00_001eb448(void) {
+void initialize_camera_record_handoff_defaults(void) __asm__("FUN_L00_001eb448");
+
+void initialize_camera_record_handoff_defaults(void) {
     D_L00_00166C80_u.p->h = 1;
     D_L00_00166C80_u.p->b = 0;
 }

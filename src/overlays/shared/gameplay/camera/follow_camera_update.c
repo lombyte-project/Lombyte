@@ -875,7 +875,7 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 transition_duration_fra
     *(s32 *)(camera_state + 0xE0) = transition_duration_frames;
 }
 extern char D_L00_00166C80_2eac18[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
-void FUN_L00_001eb448_2eac18(void) __asm__("FUN_L00_001eb448");
+void initialize_camera_record_handoff_defaults(void) __asm__("FUN_L00_001eb448");
 void FUN_001fa050_2eac18(void *, void *) __asm__("FUN_001fa050");
 void FUN_001fa2b8_2eac18(void *, void *) __asm__("FUN_001fa2b8");
 void FUN_001f9bf8_2eac18(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -884,7 +884,7 @@ void FUN_L00_002eac18(int mode);
 void FUN_L00_002eac18(int mode) {
     char *camera_globals = D_L00_00166C80_2eac18;
     char *current_follow_camera = *(char **)(camera_globals + 0x180);
-    FUN_L00_001eb448_2eac18();
+    initialize_camera_record_handoff_defaults();
     if (mode == 0) {
         float v0[4] __attribute__((aligned(16)));
         float v1[4] __attribute__((aligned(16)));
