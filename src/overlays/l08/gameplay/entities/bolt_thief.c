@@ -2044,7 +2044,7 @@ extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L00_0025f730_c(void *a, float x) __asm__("FUN_L00_0025f730");
 extern void FUN_L00_00260668(void *, int, void *, void *, void *, void *);
-extern void FUN_L08_0026a0f8(void *, void *, float);
+extern void build_axis_roll_matrix(void *, void *, float) __asm__("FUN_L08_0026a0f8");
 extern void FUN_L08_002e4db8_c(char *a, float *v) __asm__("FUN_L08_002e4db8");
 extern void FUN_L08_002e4e90_c(char *m, float *out, float *rot) __asm__("FUN_L08_002e4e90");
 extern void FUN_L08_002e5188_c(char *m) __asm__("FUN_L08_002e5188");
@@ -2141,7 +2141,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
             if ((signed char)((struct Moby *)vars->u7C.i)->state < 0) {
                 vars = (Vars_4BE8 *)moby->pvars;
                 clear_u64_value(vars->velocity);
-                FUN_L08_0026a0f8(vars, &moby->rot_row1, D_L08_00161C98_gp * 0.017453292f * frame_time);
+                build_axis_roll_matrix(vars, &moby->rot_row1, D_L08_00161C98_gp * 0.017453292f * frame_time);
                 moby->state = 4;
                 break;
             }
@@ -2207,7 +2207,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
             subtract_vector_xyz(point, &moby->pos, hero_pos);
             fast_vec_normalize_c2(point, point, 1.0f);
             cross_vectors_xyz(point, direction, point);
-            FUN_L08_0026a0f8(vars, point, D_L08_00161C94_gp * deg_to_rad * frame_time);
+            build_axis_roll_matrix(vars, point, D_L08_00161C94_gp * deg_to_rad * frame_time);
             moby->flags |= 0x100;
             fast_vec_normalize_c2(vars->velocity, direction, frame_time * 8.0f);
             vars->f74 = 0.0f;

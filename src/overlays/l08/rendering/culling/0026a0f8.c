@@ -16,7 +16,9 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void copy_matrix3x4(void *, void *);
 
-void FUN_L08_0026a0f8(void *out, void *roll_axis_direction, float roll) {
+void build_axis_roll_matrix(void *out, void *roll_axis_direction, float roll) __asm__("FUN_L08_0026a0f8");
+
+void build_axis_roll_matrix(void *out, void *roll_axis_direction, float roll) {
     float M[4][4];
     float Rz[4][4];
     float Ry[4][4];
