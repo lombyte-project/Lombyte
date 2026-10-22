@@ -47,7 +47,9 @@ extern void FUN_L00_00262cf0(void *, void *, float, float, float);
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L03_002bae48(char *moby) {
+void update_parent_following_effect(char *moby) __asm__("FUN_L03_002bae48");
+
+void update_parent_following_effect(char *moby) {
     char *moby_pvars = *(char **)(moby + 0x78);
     float ratio;
     float accumulated_offset;
