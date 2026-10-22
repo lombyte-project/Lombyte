@@ -83,7 +83,9 @@ extern L05Fields_0013D4C0 l05_0013D4C0 __asm__("D_0013D4C0");
 
 extern int D_L05_0015ED84;
 extern int D_L05_0015EEA4;
-void FUN_L05_0031bf40(unsigned char *moby) {
+void update_moby_gameplay_events(unsigned char *moby) __asm__("FUN_L05_0031bf40");
+
+void update_moby_gameplay_events(unsigned char *moby) {
     int *data = *(int **)(moby + 0x78);
     int value, elapsed, limit;
     moby[0x30] = 0xff;
