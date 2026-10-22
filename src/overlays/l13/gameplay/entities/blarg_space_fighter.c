@@ -1938,7 +1938,9 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 rand();
 
-char *FUN_L13_002e1140(char *owner, char *spawn_position, char *initial_velocity, int remaining_split_count, float scale) {
+char *spawn_asteroid_fragment(char *owner, char *spawn_position, char *initial_velocity, int remaining_split_count, float scale) __asm__("FUN_L13_002e1140");
+
+char *spawn_asteroid_fragment(char *owner, char *spawn_position, char *initial_velocity, int remaining_split_count, float scale) {
     char *moby = func_0020D348_m(0x584);
     if (moby != 0) {
         char *moby_data;
@@ -1999,7 +2001,7 @@ char *FUN_L13_002e1140(char *owner, char *spawn_position, char *initial_velocity
  * pieces are left, or turns into its pop state / is deleted when none are. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E2690), where it is exact; names translated to the US level program. */
 
-char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int a3, float f);
+char *spawn_asteroid_fragment(char *owner, char *pos, char *vec, int a3, float f) __asm__("FUN_L13_002e1140");
 extern char D_L13_00160680[] __attribute__((section(".sdata")));
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
@@ -2042,7 +2044,7 @@ void FUN_L13_002e1348(struct Moby *moby, char *blob_data, float scale_ratio) {
             normalize_vector_xyz(split_spawn_position, split_velocity, 0.5f);
             add_vector_xyz(split_spawn_position, split_spawn_position, &moby->pos);
             add_vector_xyz(split_spawn_position, split_spawn_position, split_velocity);
-            FUN_L13_002e1140(moby, (char *)split_spawn_position, (char *)split_velocity, *(short *)(blob_data + 0x4E) - 1, part);
+            spawn_asteroid_fragment(moby, (char *)split_spawn_position, (char *)split_velocity, *(short *)(blob_data + 0x4E) - 1, part);
             moby->scale -= part;
             if (--*(short *)(blob_data + 0x4E) == 0) break;
             if (moby->scale / moby->pclass->scale <= 0.2f) break;
