@@ -20,7 +20,9 @@ extern void FUN_L00_0028e180(void);
 void set_moby_animation(struct Obj *o, s32 sel, s32 idx) __asm__("FUN_00212ed8");
 
 extern s32 D_L00_00160540_gp __asm__("D_L00_00160540") __attribute__((sda));
-void FUN_L00_0028e8a0(char *moby) {
+void initialize_moby_state_record(char *moby) __asm__("FUN_L00_0028e8a0");
+
+void initialize_moby_state_record(char *moby) {
     char *moby_state_record;
     int *moby_state_copy_source;
     D_L00_00160540_gp = 1;

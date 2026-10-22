@@ -2037,7 +2037,7 @@ extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_00299460(int);
 extern void FUN_L00_002607d0(int);
-extern void FUN_L00_0028e8a0(void *);
+extern void initialize_moby_state_record(void *) __asm__("FUN_L00_0028e8a0");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void FUN_L13_0030b628(struct Moby *moby) {
@@ -2184,7 +2184,7 @@ after_state_4:
             if (data[8] != -1) {
                 struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[8] * 0x100);
                 other->flags &= 0xffbe;
-                FUN_L00_0028e8a0(other);
+                initialize_moby_state_record(other);
                 D_0013E030.unk60 = 464.66f;
                 D_0013E030.unk64 = 580.68f;
                 D_0013E030.unk68 = 316.72f;

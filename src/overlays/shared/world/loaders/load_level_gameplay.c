@@ -482,7 +482,7 @@ extern void FUN_L00_0024a798(int, int);
 extern void FUN_L00_00250df8(void *);
 extern void resolve_lookup_record(short *) __asm__("FUN_L00_0028df58");
 extern void FUN_L00_0028e180();
-extern void FUN_L00_0028e8a0(char *);
+extern void initialize_moby_state_record(char *) __asm__("FUN_L00_0028e8a0");
 extern void FillTransferWords(void *, s32, s32);
 extern void FlushCache(s32);
 extern void PackDmaTag(unsigned long, unsigned long, unsigned long);
@@ -1464,7 +1464,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             if (D_L00_00160540 != 0) {
                 for (m = D_L00_0015FFD8; m->f20 != 0xFF; m++) {
                     if (m->fA6 == first_class_ids[D_0013E030.f26]) {
-                        FUN_L00_0028e8a0((char *)m);
+                        initialize_moby_state_record((char *)m);
                         set_moby_animation(m, 1, 0);
                         break;
                     }
