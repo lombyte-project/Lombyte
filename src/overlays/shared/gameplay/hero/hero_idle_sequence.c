@@ -289,7 +289,9 @@ extern Quad_56a8 D_L00_0017C0B0[];
 extern Quad_56a8 D_L00_0017C120[];
 extern s32 D_L00_0017C1C0[];
 extern f32 D_L00_0017C190[];
-void FUN_L00_002056a8(void) {
+void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
+
+void update_hero_rotation_targets_and_random_manipulators(void) {
     u8 *e;
 
     {
@@ -1107,7 +1109,7 @@ void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
 void FUN_L00_0020a540_u(void) __asm__("FUN_L00_0020a540");
 void FUN_L00_0020ac98_u(void) __asm__("FUN_L00_0020ac98");
 void FUN_L00_0020a9e8_u(void) __asm__("FUN_L00_0020a9e8");
-void FUN_L00_002056a8(void);
+void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
 void FUN_L00_002059d8(void);
 void FUN_L00_00214fe8(void);
 void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
@@ -1166,7 +1168,7 @@ void coordinate_hero_frame_update(void) {
     FUN_L00_0020a540_u();
     FUN_L00_0020ac98_u();
     FUN_L00_0020a9e8_u();
-    FUN_L00_002056a8();
+    update_hero_rotation_targets_and_random_manipulators();
     FUN_L00_002059d8();
     FUN_L00_00214fe8();
     update_hero_easing_records();

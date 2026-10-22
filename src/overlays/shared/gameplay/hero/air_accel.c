@@ -185,7 +185,7 @@ void FUN_L01_00228000(void) {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E533[];
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
-extern void FUN_L00_002056a8(void);
+extern void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
 extern void FUN_L00_002059d8(void);
 extern void FUN_L00_00205ea8(void);
 extern void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
@@ -251,7 +251,7 @@ void update_hero_frame(void) {
     FUN_L00_0020a540();
     FUN_L00_0020ac98();
     FUN_L00_0020a9e8();
-    FUN_L00_002056a8();
+    update_hero_rotation_targets_and_random_manipulators();
     FUN_L00_002059d8();
     FUN_L00_00214fe8();
     update_hero_easing_records();
