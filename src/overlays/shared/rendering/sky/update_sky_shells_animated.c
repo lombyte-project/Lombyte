@@ -362,7 +362,9 @@ void draw_two_sky_shells_with_particles(void) {
 
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
-void FUN_L00_0028b080(void) {
+void draw_seven_sky_shells_with_modulo_40000_and_60000_rotation(void) __asm__("FUN_L00_0028b080");
+
+void draw_seven_sky_shells_with_modulo_40000_and_60000_rotation(void) {
     float v[4] __attribute__((aligned(16)));
     *(short *)(D_L00_0016051C + 4) = 0;
     sky_draw_shell(0);
