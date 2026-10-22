@@ -98,7 +98,9 @@ void FUN_L18_002d6dc0(Level18VendorActionMoby *moby) {
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 s32 allocate_voice_for_group_entry(s32 arg0, s32 arg1, s32 arg2) __asm__("FUN_0022dba0");
 
-void FUN_L18_002d7f68(struct Moby *moby, int value) {
+void request_thruster_pack_lock_red_wait(struct Moby *moby, int value) __asm__("FUN_L18_002d7f68");
+
+void request_thruster_pack_lock_red_wait(struct Moby *moby, int value) {
     char *data = (char *)moby->pvars;
     if (moby->state != 2) {
         moby->state = 2;

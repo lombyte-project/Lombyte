@@ -1475,7 +1475,7 @@ extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0")
 extern void FUN_L15_00208ca8(void);
 extern void FUN_L18_002d6d50(int idx);
 extern void FUN_L18_002d6dc0(void *moby);
-extern void FUN_L18_002d7f68(unsigned char *arg, int value);
+extern void request_thruster_pack_lock_red_wait(unsigned char *arg, int value) __asm__("FUN_L18_002d7f68");
 extern void FUN_L18_002d7fd0(unsigned char *arg);
 extern void FUN_L18_002db938(char *pos, float *vec, int arg, float fa, float fb);
 extern void refresh_ring_effect(char *moby, void *pos, float f) __asm__("FUN_L18_002dc458");
@@ -1967,7 +1967,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                          *(int *)&D_L18_00162398, 1);
         hero.pending_item[3] = 3;
         moby->f20 = 8;
-        FUN_L18_002d7f68(D_L18_0015FFD8 + boss_data->f21C * 0x100, scale_game_frames(0x708));
+        request_thruster_pack_lock_red_wait(D_L18_0015FFD8 + boss_data->f21C * 0x100, scale_game_frames(0x708));
         break;
     }
     case DREK_BOSS_WAIT_TO_RESTORE_SAVED_TRANSFORM:
@@ -2430,7 +2430,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 ticks = scale_game_frames(600);
                 break;
             }
-            FUN_L18_002d7f68(D_L18_0015FFD8 + boss_data->f21C * 0x100, scale_game_frames(ticks));
+            request_thruster_pack_lock_red_wait(D_L18_0015FFD8 + boss_data->f21C * 0x100, scale_game_frames(ticks));
             boss_data->f354 = 0;
             if (boss_data->f34C == 4) {
                 moby->f20 = 0x14;
