@@ -85,7 +85,9 @@ void draw_sentrybot_effect_quads(char *moby) __asm__("FUN_L15_0029aba8");
 extern void draw_sentrybot_effect_quads(char *m) __asm__("FUN_L15_0029aba8");
 extern void FUN_L15_002a35d8(int);
 extern void FUN_L15_002cbac0(char *m, int a);
-extern void FUN_L15_002cbba0(unsigned char *moby);
+void prepare_sentrybot_alarm(unsigned char *moby) __asm__("FUN_L15_002cbba0");
+
+extern void prepare_sentrybot_alarm(unsigned char *moby) __asm__("FUN_L15_002cbba0");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
@@ -562,7 +564,7 @@ void sentrybot_update(unsigned char *moby) {
     }
     case SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION:
         if (*(int *)(data + 0x128) != -1) {
-            FUN_L15_002cbba0((unsigned char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)));
+            prepare_sentrybot_alarm((unsigned char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)));
         }
         if (moby[0x70] & 2) {
             if (hero.state.current == 0x65) {
@@ -592,7 +594,7 @@ void sentrybot_update(unsigned char *moby) {
         }
         break;
     case SENTRYBOT_APPROACH_LINKED_MOBY:
-        FUN_L15_002cbba0((unsigned char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)));
+        prepare_sentrybot_alarm((unsigned char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)));
         subtract_vector_xyz(va, (char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)) + 0x10,
                             moby + 0x10);
         normalize_vector_xyz(va, va, vector_length_xyz(va) - 1.5f);
@@ -3520,7 +3522,7 @@ void FUN_L15_002cbac0(char *moby, int duration_frames) {
 
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L15_002cbba0(unsigned char *moby) {
+void prepare_sentrybot_alarm(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
     if (moby[0x20] == 1) {
         moby[0x20] = 2;
