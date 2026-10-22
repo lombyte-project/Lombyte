@@ -395,7 +395,9 @@ typedef struct {
     s32 link2;
 } VendorVars2;
 
-void FUN_L09_00303fc8(struct Moby *moby, VendorVars2 *vars, f32 *health) {
+void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *vars, f32 *health) __asm__("FUN_L09_00303fc8");
+
+void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *vars, f32 *health) {
     enum {
         DAMAGE_RESULT_UNAVAILABLE = 0
     };
