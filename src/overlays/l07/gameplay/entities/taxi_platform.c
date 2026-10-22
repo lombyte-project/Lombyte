@@ -3460,7 +3460,9 @@ s32 allocate_voice_for_target_entry_c(s32 entry_index, s32 flags,
                                       void *target) __asm__("FUN_0022da68");
 void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
-void FUN_L07_00311bc8(char *moby) {
+void update_hero_triggered_falling_platform(char *moby) __asm__("FUN_L07_00311bc8");
+
+void update_hero_triggered_falling_platform(char *moby) {
     enum {
         LEAF_INITIALIZE = 0,
         LEAF_WAIT_FOR_HERO_CONTACT = 1,
