@@ -527,7 +527,9 @@ extern int D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern int D_L00_0015F72C __attribute__((sda));
 extern int D_L00_0015F740 __attribute__((sda));
 int scale_game_frames(int) __asm__("FUN_001f96f8");
-void FUN_L00_00238b18(char *hud_element) {
+void initialize_four_slot_hud_selector(char *hud_element) __asm__("FUN_L00_00238b18");
+
+void initialize_four_slot_hud_selector(char *hud_element) {
     int element_width, element_height;
     D_L00_0015FA90 = 4;
     D_L00_0015FAC0 = &D_L00_0015F740;

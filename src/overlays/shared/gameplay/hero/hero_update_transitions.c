@@ -137,7 +137,7 @@ extern void hud_keep_visible(int, int) __asm__("FUN_L00_00235e18");
 extern void FUN_L00_00237ae8(void);
 extern void FUN_L00_00237ba0(void);
 extern void FUN_L00_002382a0(void);
-extern void FUN_L00_00238b18(void);
+extern void initialize_four_slot_hud_selector(void) __asm__("FUN_L00_00238b18");
 extern void FUN_L00_00238b80(void);
 extern void FUN_L00_00238f88(void);
 extern void FUN_L00_00239cc8(void);
@@ -221,7 +221,7 @@ void hero_update_transitions(void) {
                         hud_keep_visible(id, scale_game_frames(0xB4));
                     } break;
                     case 1:
-                        queue_animation_update(3, 0, (int)FUN_L00_00238b18, (int)FUN_L00_00238b80,
+                        queue_animation_update(3, 0, (int)initialize_four_slot_hud_selector, (int)FUN_L00_00238b80,
                                                (int)FUN_L00_00238f88, 0, 0);
                         break;
                     }
