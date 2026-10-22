@@ -120,7 +120,9 @@ void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
-void FUN_L11_00253a18(void) {
+void update_hero_state_transitions(void) __asm__("FUN_L11_00253a18");
+
+void update_hero_state_transitions(void) {
     struct Moby *moby;
     int prevSub;
     int prevState;
