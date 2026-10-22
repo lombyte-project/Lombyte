@@ -98,8 +98,8 @@ extern f32 frame_time __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern int D_L09_001613C8 __attribute__((sda));
 /* Update for the airship parts (classes 0x49E-0x4A5): attach to the hull, ride it, then break off, tumble away and fall with smoke and sparks. */
-void FUN_L09_002c26c8(struct Moby *moby);
-void FUN_L09_002c26c8(struct Moby *moby) {
+void update_airship_part(struct Moby *moby) __asm__("FUN_L09_002c26c8");
+void update_airship_part(struct Moby *moby) {
     enum {
         AIRSHIP_PART_STATE_INITIALIZE = 0,
         AIRSHIP_PART_STATE_WAIT_FOR_BREAKUP_COMMAND = 1,
