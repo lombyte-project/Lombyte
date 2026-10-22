@@ -22,7 +22,9 @@ enum BoltCrankState {
     BOLT_CRANK_DONE = 0x5
 };
 
-void FUN_L01_002b8c08(f32 *grid_base_position) {
+void build_height_grid_positions(f32 *grid_base_position) __asm__("FUN_L01_002b8c08");
+
+void build_height_grid_positions(f32 *grid_base_position) {
     volatile f32 *grid_position_cursor = (volatile f32 *)0x70002000;
     f32 y = grid_base_position[1] + pool_light[3];
     s32 i, j;
@@ -3437,7 +3439,7 @@ void FUN_L01_002b91c8(f32 *water_record, s32 count) {
 
         FUN_L01_00261c10((void *)0x70000000, (u8 *)water_record + (D_L01_00161220 * 0x5c0 + 0x50));
         FUN_L01_00261df8(water_record);
-        FUN_L01_002b8c08(water_record);
+        build_height_grid_positions(water_record);
         FUN_L01_002b80d0(water_record);
         if (*(u32 *)(water_record + 0x11) & 1) {
             height = (f32 *)0x70002008;
