@@ -303,7 +303,9 @@ typedef struct {
     int idx;
     int r[6];
 } E_9aa0;
-void FUN_L00_002e9aa0(int unused_camera_moby) {
+void run_type5_grid_record_noop_callbacks(int unused_camera_moby) __asm__("FUN_L00_002e9aa0");
+
+void run_type5_grid_record_noop_callbacks(int unused_camera_moby) {
     int i, j, k;
     for (i = 0; i < 64; i++) {
         for (j = 0; j < 64; j++) {
@@ -333,14 +335,14 @@ extern void follow_camera_turn_and_pitch(int, float, float) __asm__("FUN_L00_002
 extern void follow_camera_auto_turn(int) __asm__("FUN_L00_002e8f40");
 extern void FUN_L00_002e9010_u(int) __asm__("FUN_L00_002e9010");
 extern void FUN_L00_002e9720_u(int) __asm__("FUN_L00_002e9720");
-extern void FUN_L00_002e9aa0(int);
+extern void run_type5_grid_record_noop_callbacks(int) __asm__("FUN_L00_002e9aa0");
 
 /* Runs eight FUN_L00_002e* steps on object a in order. */
 void update_follow_camera_pose(int camera_moby) __asm__("FUN_L00_002e9bb0");
 
 void update_follow_camera_pose(int camera_moby) {
     float camera_stick_input[2];
-    FUN_L00_002e9aa0(camera_moby);
+    run_type5_grid_record_noop_callbacks(camera_moby);
     follow_camera_auto_turn(camera_moby);
     follow_camera_read_stick(camera_moby, &camera_stick_input[0], &camera_stick_input[1]);
     follow_camera_turn_and_pitch(camera_moby, camera_stick_input[0], camera_stick_input[1]);
