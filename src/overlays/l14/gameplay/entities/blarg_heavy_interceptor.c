@@ -69,7 +69,9 @@ void activate_waiting_turrets_in_group(s32 index) {
 }
 
 /* Release the handle stored at 0x12 of the record, then hand the moby over. */
-void FUN_L14_002bb4d8(u8 *self) {
+void remove_flying_debris(u8 *self) __asm__("FUN_L14_002bb4d8");
+
+void remove_flying_debris(u8 *self) {
     u8 *debris_vars = *(u8 **)(self + 0x78);
     s16 light_index = *(s16 *)(debris_vars + 0x12);
 
@@ -2985,7 +2987,7 @@ void update_flying_debris(struct Moby *moby) {
     float blue = 0.2f;
 
     if (tick_countdown_16_d(debris_vars + 0x10) != 0)
-        { FUN_L14_002bb4d8((u8 *)moby); return; }
+        { remove_flying_debris((u8 *)moby); return; }
     add_d(&moby->pos, &moby->pos, debris_vars);
     if (abs_d(*(float *)(debris_vars + 0x0)) > D_L14_001615D8 * frame_scale)
         *(float *)(debris_vars + 0x0) *= (D_L14_001615D4 - 1.0f) * frame_scale + 1.0f;
@@ -2996,14 +2998,14 @@ void update_flying_debris(struct Moby *moby) {
     *(float *)(debris_vars + 0x8) -= D_L14_001615D0 * frame_scale_sq;
     if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f || moby->pos.z < 2.0f ||
         moby->pos.z > 1021.0f)
-        { FUN_L14_002bb4d8((u8 *)moby); return; }
+        { remove_flying_debris((u8 *)moby); return; }
     if (coll_sphere(0.75f, &moby->pos, 0, 0) != 0 ||
         (abs_d(moby->pos.x - hero.motion.pos.f[0]) < 10.0f && abs_d(moby->pos.y - hero.motion.pos.f[1]) < 10.0f)) {
         clear_d(joint);
         trooper_play_sound(1, 0, moby, (*(struct Moby **)(debris_vars + 0x20))->oclass);
         e450_b78(moby, joint, &moby->pos, 2.0f, 4.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 1.0f, -1, 5.0f, 0, 2,
                          -1, 0);
-        FUN_L14_002bb4d8((u8 *)moby);
+        remove_flying_debris((u8 *)moby);
         return;
     }
     moby->rot.x = add_rot_d(moby->rot.x, *(float *)(debris_vars + 0x14));
