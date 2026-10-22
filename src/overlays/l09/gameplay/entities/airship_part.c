@@ -1,3 +1,5 @@
+int find_nearest_moby_by_class() __asm__("FUN_L09_002c2610");
+
 int spawn_airship_part() __asm__("FUN_L09_002c2500");
 
 /* Airship parts update. Its own unit: it reads the spawn counter D_L09_001613C8 through gp, where FUN_L09_00300888 in asteroid.c reads it through lui. */
@@ -138,7 +140,7 @@ void FUN_L09_002c26c8(struct Moby *moby) {
         } else {
             struct Moby *p;
             nearest_parent_distance = 100000.0f;
-            p = (struct Moby *)FUN_L09_002c2610(((f32 *)&moby->pos), 0x4A0, &nearest_parent_distance);
+            p = (struct Moby *)find_nearest_moby_by_class(((f32 *)&moby->pos), 0x4A0, &nearest_parent_distance);
             if (nearest_parent_distance < 20.0f) {
                 part_vars->parent = p;
                 (*(Data_2c26c8 **)&p->pvars)->parts[moby->oclass - 0x49E] = moby;

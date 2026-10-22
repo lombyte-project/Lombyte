@@ -398,7 +398,9 @@ char *spawn_airship_part(struct Moby *rotation_source_moby, char *spawn_referenc
 
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
-char *FUN_L09_002c2610(void *search_position, int type, float *nearest_distance_out) {
+char *find_nearest_moby_by_class(void *search_position, int type, float *nearest_distance_out) __asm__("FUN_L09_002c2610");
+
+char *find_nearest_moby_by_class(void *search_position, int type, float *nearest_distance_out) {
     char *best = 0;
     float bestd = 100000.0f;
     char *candidate_moby;
