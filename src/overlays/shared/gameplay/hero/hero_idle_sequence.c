@@ -651,7 +651,9 @@ extern s32 FUN_L00_001fef20(s32);
 extern s32 FUN_L00_001fef98(void *);
 extern void FUN_L00_0025b868(f32, f32, void *);
 
-void FUN_L00_002062b0(void) {
+void update_hero_in_vehicle_mode(void) __asm__("FUN_L00_002062b0");
+
+void update_hero_in_vehicle_mode(void) {
     enum {
         GREEN_GLOW_PALETTE = 1,
         YELLOW_GLOW_PALETTE = 2,
@@ -1077,7 +1079,7 @@ void FUN_L00_00206e00(void) {
 }
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void fade_to_black(int) __asm__("FUN_001f4a58");
-void FUN_L00_002062b0(void);
+void update_hero_in_vehicle_mode(void) __asm__("FUN_L00_002062b0");
 void FUN_L00_00232670(void);
 void hero_update(void) __asm__("FUN_L00_00211670");
 void FUN_L00_0020b960(void);
@@ -1124,7 +1126,7 @@ void FUN_L00_002070d0(void) {
     hero_state->unk1EB2 = 0;
     hero_state->unk1EB0 = 0;
     if (hero_state->vehicle_mode) {
-        FUN_L00_002062b0();
+        update_hero_in_vehicle_mode();
         return;
     }
     FUN_L00_00232670();
