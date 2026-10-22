@@ -227,7 +227,9 @@ s32 FUN_001f96f8_0028ed58(s32) __asm__("FUN_001f96f8");
 void FUN_002049f0_0028ed58(s32) __asm__("FUN_002049f0");
 s32 FUN_0020b178_0028ed58(s32, s32) __asm__("FUN_0020b178");
 extern s32 D_L00_00160570[1] __attribute__((sda));
-void FUN_L00_0028ed58(s32 target_level_index) {
+void prepare_target_level_transition(s32 target_level_index) __asm__("FUN_L00_0028ed58");
+
+void prepare_target_level_transition(s32 target_level_index) {
     A_0028ed58 *shared_state_record = &D_0013E030_0028ed58;
     C_0028ed58 *shared_result_record;
     s32 shared_table_offset;

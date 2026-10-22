@@ -135,7 +135,7 @@ extern void select_moby_context(s32) __asm__("FUN_L00_00235668");
 extern void FUN_L00_00276368(void);
 extern void FUN_L00_00276908(void);
 extern void FUN_L00_002831c0(void);
-extern void FUN_L00_0028ed58(s32);
+extern void prepare_target_level_transition(s32) __asm__("FUN_L00_0028ed58");
 extern void start_scene(void *) __asm__("FUN_L00_00298840");
 extern void FUN_L00_00299460(void *);
 extern void queue_language_zero_movie(void *) __asm__("FUN_L00_002994f8");
@@ -496,7 +496,7 @@ void FUN_L00_00276bd0(void) {
         D_L00_001B9CF0.unk10 = 0;
         if (D_L00_001B9CF0.unkC == 2) {
             debug_print(D_L00_001E91B0, D_L00_001841F0.w224);
-            FUN_L00_0028ed58(D_L00_001841F0.w224);
+            prepare_target_level_transition(D_L00_001841F0.w224);
         } else if (D_L00_001B9CF0.unkC == 3) {
             previous_decode_mode = decode_mode;
             decode_mode = 2;
