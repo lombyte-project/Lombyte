@@ -2003,7 +2003,9 @@ extern void update_moby_transform_wobble(struct Moby *) __asm__("FUN_L08_002dc4a
 void update_shuttle_stop_world_points(struct Moby *moby) __asm__("FUN_L08_002dc0c8");
 
 void update_shuttle_stop_world_points(struct Moby *moby) __asm__("FUN_L08_002dc0c8");
-void FUN_L08_002dc180(struct Moby *moby);
+void select_shuttle_route_for_hero(struct Moby *moby) __asm__("FUN_L08_002dc180");
+
+void select_shuttle_route_for_hero(struct Moby *moby) __asm__("FUN_L08_002dc180");
 int advance_shuttle_path_travel(struct Moby *moby) __asm__("FUN_L08_002dc648");
 
 int advance_shuttle_path_travel(struct Moby *m) __asm__("FUN_L08_002dc648");
@@ -2051,7 +2053,7 @@ void shuttle_update(struct Moby *moby) {
         } else {
             vars->unk100 = -1;
             vars->unkE0 = -1;
-            FUN_L08_002dc180((char *)moby);
+            select_shuttle_route_for_hero((char *)moby);
             moby->state = 2;
             moby->update_dist = 0xFF;
         }
@@ -2068,7 +2070,7 @@ void shuttle_update(struct Moby *moby) {
                 }
             }
         } else {
-            FUN_L08_002dc180((char *)moby);
+            select_shuttle_route_for_hero((char *)moby);
         }
         break;
     case SHUTTLE_STATE_TRAVEL:
@@ -2076,7 +2078,7 @@ void shuttle_update(struct Moby *moby) {
         hero.unk1F4 = 5;
         hero.unk22DA = vars->stop;
         if (advance_shuttle_path_travel((char *)moby)) {
-            FUN_L08_002dc180((char *)moby);
+            select_shuttle_route_for_hero((char *)moby);
             moby->state = 2;
         }
         break;
@@ -2133,7 +2135,7 @@ extern int D_L08_001B0CB0[];
 extern int D_L08_0015F5CC; /* no foreign declaration */
 extern Route_2dd4f8 *D_L08_001B0FB0_r[] __asm__("D_L08_001B0CB0");
 
-void FUN_L08_002dc180(struct Moby *moby) {
+void select_shuttle_route_for_hero(struct Moby *moby) {
     enum {
         SHUTTLE_SELECT_ROUTE_END = 0,
         SHUTTLE_SELECT_CONFIGURED_PATH_START = 1,
