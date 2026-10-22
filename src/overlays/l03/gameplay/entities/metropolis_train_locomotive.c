@@ -1276,7 +1276,7 @@ extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 extern int FUN_L01_00275690(char *, float);
 extern int FUN_L01_0028b510(void *, void *, float);
-extern int FUN_L01_0028b828(void *, int);
+extern int resolve_path_node_index(void *, int) __asm__("FUN_L01_0028b828");
 extern int advance_path_node_index(char *) __asm__("FUN_L01_0028b878");
 extern void FUN_L01_0028b410(char *);
 extern void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b);
@@ -1465,7 +1465,7 @@ void red_ship_1_update(char *moby) {
             *(OvlQuad *)(data + 0x90) = *(OvlQuad *)(data + 0xA0);
             FUN_L01_0028b8c8(cur, (int *)pm, 1, *(float *)(data + 0x104), *(float *)(data + 0x108));
             *(OvlQuad *)(data + 0xB0) = *(OvlQuad *)(data + 0xC0);
-            *(OvlQuad *)(data + 0xC0) = *(OvlQuad *)(*(char **)(pm + 0x10) + FUN_L01_0028b828(pm, advanced_path_node_index + 1) * 0x10 + 0x10);
+            *(OvlQuad *)(data + 0xC0) = *(OvlQuad *)(*(char **)(pm + 0x10) + resolve_path_node_index(pm, advanced_path_node_index + 1) * 0x10 + 0x10);
         }
         step = (*(float *)(data + 0x10C) + *(float *)(data + 0x134) * fast_sin(*(float *)(data + 0x13C))) /
                *(float *)(data + 0xBC);

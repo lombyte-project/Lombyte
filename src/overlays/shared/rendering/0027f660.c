@@ -311,7 +311,9 @@ typedef struct {
     int *f10;
 } T_28b828;
 
-int FUN_L01_0028b828(T_28b828 *path, int node_index) {
+int resolve_path_node_index(T_28b828 *path, int node_index) __asm__("FUN_L01_0028b828");
+
+int resolve_path_node_index(T_28b828 *path, int node_index) {
     int last_index;
     last_index = (path->f4 < 0) ? 0 : (*path->f10 - 1);
     if (node_index < 0) {
@@ -440,7 +442,7 @@ float FUN_L01_0028bb90(float tangent_tension, float tangent_bias, T_28b828 *path
             draw_number(1.0f, &currentNode, (int)moby, index % 15 + 2, 0x80108010, 0x7f, -1, 0xff);
         }
         segment_parameter = 0.05f;
-        nextIndex = FUN_L01_0028b828(path, index + 1);
+        nextIndex = resolve_path_node_index(path, index + 1);
         segmentLength = 0.0f;
         nextNode.q = *(OvlQuad *)((char *)path->f10 + nextIndex * 16 + 0x10);
         *(int *)path = index;
