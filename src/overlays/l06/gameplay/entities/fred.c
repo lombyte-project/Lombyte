@@ -7809,7 +7809,9 @@ void FUN_L06_00305170_c(char *m) __asm__("FUN_L06_00305170");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void func_L00_00273F80_r(void *, void *, int, float, int, int, int) __asm__("FUN_L00_002730e0");
 
-void FUN_L06_003049f8(char *moby)
+void update_moby_vector_streams_and_particle_burst(char *moby) __asm__("FUN_L06_003049f8");
+
+void update_moby_vector_streams_and_particle_burst(char *moby)
 {
     enum {
         INITIALIZE_VECTOR_STREAMS = 0,
