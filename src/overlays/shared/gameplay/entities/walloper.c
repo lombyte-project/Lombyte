@@ -970,7 +970,9 @@ extern f32 D_L00_00161694 __attribute__((sda));
 f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_002bbbc8(void *, s32, s32, s32, f32, f32, f32);
-void FUN_L00_002bc1a0(void *);
+void draw_walloper_camera_facing_quad(void *mv) __asm__("FUN_L00_002bc1a0");
+
+void draw_walloper_camera_facing_quad(void *) __asm__("FUN_L00_002bc1a0");
 void FUN_L00_002bbb00(void *moby) {
     s32 i;
     s32 arc_alpha;
@@ -980,7 +982,7 @@ void FUN_L00_002bbb00(void *moby) {
             FUN_L00_002bbbc8(&D_L00_001DBBA0[i], arc_alpha, arc_alpha, 5, D_L00_00161690, D_L00_00161694, 0.2f);
         }
     }
-    FUN_L00_002bc1a0(moby);
+    draw_walloper_camera_facing_quad(moby);
 }
 
 #define NOT_SDA
@@ -1166,7 +1168,7 @@ extern int D_L00_001616C8 __attribute__((sda));
 extern unsigned int D_L00_001616C0 __attribute__((sda));
 extern unsigned int D_L00_001616C4 __attribute__((sda));
 extern V_2bc1a0 D_L00_001DBB60[] __attribute__((section(".data")));
-void FUN_L00_002bc1a0(void *mv) {
+void draw_walloper_camera_facing_quad(void *mv) {
     char *moby_bytes = mv;
     Q_2bc1a0 quad;
     V_2bc1a0 camera_facing_transform[4];
