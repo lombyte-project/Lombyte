@@ -380,7 +380,9 @@ void FUN_L16_002de3b8(float new_value) {
 
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
-void FUN_L16_002e0de0(struct Moby *moby) {
+void request_target_reposition(struct Moby *moby) __asm__("FUN_L16_002e0de0");
+
+void request_target_reposition(struct Moby *moby) {
     int state = 1;
     if (moby->state == state) {
         allocate_voice_for_target_entry(0, 0, moby);
