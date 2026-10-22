@@ -280,7 +280,9 @@ void FUN_L00_00232220(int animation_id, int frame_index, float blend_frames) {
 extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
 
 /* Copies &hero.anim_speed to +0x58 of the object at +0x2278 when FUN_L00_002321c0 succeeds. */
-void FUN_L00_002322c8(void) {
+void sync_hero_mapped_moby_animation_speed(void) __asm__("FUN_L00_002322c8");
+
+void sync_hero_mapped_moby_animation_speed(void) {
     struct Hero *base = &hero;
     int mapped_animation_id[4];
 
