@@ -1546,7 +1546,9 @@ extern int collide_y(void *, void *, int, void *, void *) __asm__("FUN_001efa68"
 extern int tick_y(void *) __asm__("FUN_001f9740");
 extern void remove_y(void *) __asm__("FUN_0020c828");
 void FUN_L15_0029ae18(char *moby);
-void FUN_L15_0029af88(char *moby);
+void spawn_rocket_detonation_glow(char *moby) __asm__("FUN_L15_0029af88");
+
+void spawn_rocket_detonation_glow(char *moby) __asm__("FUN_L15_0029af88");
 
 void rocket_update(unsigned char *m) __asm__("FUN_L15_0029ac30");
 void rocket_update(unsigned char *moby) {
@@ -1575,7 +1577,7 @@ void rocket_update(unsigned char *moby) {
     if (collide_y(back, next, 0x10, moby, col) != 0 || tick_y(rocket_data + 0x14) != 0) {
         if (D_L15_00174458_y[0] != *(int *)(rocket_data + 0x18)) {
             sound_y(8, 0, moby, 0x27E);
-            FUN_L15_0029af88((char *)moby);
+            spawn_rocket_detonation_glow((char *)moby);
             remove_y(moby);
             return;
         }
@@ -1649,7 +1651,7 @@ extern unsigned char D_L15_00161460 __attribute__((sda));
 extern unsigned char D_L15_00161464 __attribute__((sda));
 extern unsigned char D_L15_00161468 __attribute__((sda));
 extern unsigned char D_L15_0016146C __attribute__((sda));
-void FUN_L15_0029af88(char *moby) {
+void spawn_rocket_detonation_glow(char *moby) {
     char *glow_spawn_position = moby + 0x10;
     int scaled_frame_count = scale_game_frames(D_L15_0016145C);
     spawn_glow_particle(moby, glow_spawn_position, (int)&D_L15_0015F580, scaled_frame_count, D_L15_00161458,
