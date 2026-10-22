@@ -677,7 +677,9 @@ extern float approach_value(float *, float, float);
 extern int collision_line(void *, void *, int, void *, void *);
 extern f32 D_L06_00161FD0 __attribute__((sda));
 void FUN_L06_002ff680(char *moby);
-void FUN_L06_002ff978(char *moby);
+void spawn_blarg_space_commando_beam_sparks(char *moby) __asm__("FUN_L06_002ff978");
+
+void spawn_blarg_space_commando_beam_sparks(char *moby) __asm__("FUN_L06_002ff978");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -764,7 +766,7 @@ void FUN_L06_002ff2c8(void *owner_moby) {
     } while (j < 15);
 
     enqueue_callback_list_1((void *)FUN_L06_002ff680, moby);
-    FUN_L06_002ff978(moby);
+    spawn_blarg_space_commando_beam_sparks(moby);
 }
 
 /* GS quad packet for draw_geometry_quad: four corners, their colours and
@@ -896,7 +898,7 @@ extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L06_002ff978(char *moby) {
+void spawn_blarg_space_commando_beam_sparks(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int i, next_point_index;
     for (i = 0; i < 15; i = next_point_index) {
