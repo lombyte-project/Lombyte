@@ -1505,7 +1505,9 @@ extern short *D_L11_001AC240[];
 extern s32 random_integer_below_c(s32 arg0) __asm__("FUN_00213260");
 extern void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-char *FUN_L11_0031a7d8(int list) {
+char *activate_listed_blarg_ship(int list) __asm__("FUN_L11_0031a7d8");
+
+char *activate_listed_blarg_ship(int list) {
     short *moby_list_entry = D_L11_001AC240[list];
     float A[4], B[4], C[4], D[4], E[4], F[4];
     char *selected_moby;
