@@ -96,7 +96,9 @@ void FUN_L00_002899a8_2899a8(void) {
 extern void FUN_001fa070_cf(void *) __asm__("FUN_001f9fc8");
 void FUN_001f9fc8_cf(void *, void *) __asm__("FUN_001fa070");
 
-void FUN_L00_00289a90(void) {
+void draw_sky_shells_with_fast_and_slow_rotation(void) __asm__("FUN_L00_00289a90");
+
+void draw_sky_shells_with_fast_and_slow_rotation(void) {
     enum {
         SKY_SHELL_FAST_ROTATION = 1,
         SKY_SHELL_SLOW_ROTATION = 2
