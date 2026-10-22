@@ -1555,7 +1555,9 @@ unsigned char *FUN_L00_00274948(u128 *position, u128 *initial_velocity, int init
 s32 FUN_001f9770_274a70(void *) __asm__("FUN_001f9770");
 void FUN_001f9a10_274a70(void *, void *, void *) __asm__("FUN_001f9a10");
 f32 spread_k(f32, f32) __asm__("FUN_L00_00257c48");
-void FUN_L00_00274a70(u8 *particle) {
+void update_mode_controlled_rotating_alpha_fade_particle(u8 *particle) __asm__("FUN_L00_00274a70");
+
+void update_mode_controlled_rotating_alpha_fade_particle(u8 *particle) {
     u8 *particle_data = particle + 0x20;
     s32 k, rotation_accumulator;
     f32 f;
