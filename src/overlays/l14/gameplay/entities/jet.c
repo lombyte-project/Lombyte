@@ -153,7 +153,7 @@ void animate_ribbon_effect_paths(u8 *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002E0858), where it is exact; names translated to the US level program. */
 
-extern void FUN_L14_002df510(struct Moby *, void *, int, int, int);
+extern void draw_ribbon_effect_path(struct Moby *, void *, int, int, int) __asm__("FUN_L14_002df510");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void draw_ribbon_effect(struct Moby *ribbon_moby) {
@@ -164,8 +164,8 @@ void draw_ribbon_effect(struct Moby *ribbon_moby) {
         *(float *)(moby_vars + 0x1EC) = updated_texture_u_offset + 8.0f;
     }
     vu1_add_g_sregister(0x47, 0x51001);
-    FUN_L14_002df510(ribbon_moby, moby_vars, 0x80, 0x40, 10);
-    FUN_L14_002df510(ribbon_moby, moby_vars + 0xA0, 0x30, 0x10, 0x14);
+    draw_ribbon_effect_path(ribbon_moby, moby_vars, 0x80, 0x40, 10);
+    draw_ribbon_effect_path(ribbon_moby, moby_vars + 0xA0, 0x30, 0x10, 0x14);
 }
 /* Draws a two-layer ribbon along a path of points: each segment builds a basis from the segment direction and
  * the camera, sweeps two textured quads (an outer glow and an inner core) across it and, for the alpha-0x10
@@ -196,7 +196,7 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 
-void FUN_L14_002df510(struct Moby *ribbon_moby, void *path, int outer_alpha, int inner_alpha, int point_count) {
+void draw_ribbon_effect_path(struct Moby *ribbon_moby, void *path, int outer_alpha, int inner_alpha, int point_count) {
     V_DF510 *pts = (V_DF510 *)path;
     Q_DF510 layer_quads[2];
     V_DF510 w[2];
