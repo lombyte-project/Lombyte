@@ -336,7 +336,7 @@ typedef struct {
 
 extern char *D_L16_001B0930[];
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern char *FUN_L14_002ffaf8(void *, void *);
+extern char *spawn_floating_mine(void *, void *) __asm__("FUN_L14_002ffaf8");
 extern char D_L16_001E86A0[], D_L16_001E89D8[], D_L16_001E8A20[], D_L16_001E8A58[], D_L16_001E8AA0[];
 extern char D_L16_001E89A0[], D_L16_001E86D8[], D_L16_001E8A20[], D_L16_001E8A58[], D_L16_001E8AA0[] __asm__("D_L16_001E8AA0");
 extern char D_L16_001E89A0[], D_L16_001E89D8[], D_L16_001E8720[], D_L16_001E8A58[], D_L16_001E8AA0[] __asm__("D_L16_001E8AA0");
@@ -459,7 +459,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
             if (bolt_thief_data->mode == 1) {
                 set_moby_animation_alt(moby, 0, 0);
             } else {
-                bolt_thief_data->child = FUN_L14_002ffaf8(moby, moby->position);
+                bolt_thief_data->child = spawn_floating_mine(moby, moby->position);
                 FUN_L14_002fec28(moby);
                 set_moby_animation_alt(moby, 2, 0);
             }

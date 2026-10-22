@@ -189,7 +189,9 @@ extern char *func_0020D348_m(int);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_00250df8(void *);
 
-unsigned char *FUN_L14_002ffaf8(unsigned char *owner, char *spawn_position) {
+unsigned char *spawn_floating_mine(unsigned char *owner, char *spawn_position) __asm__("FUN_L14_002ffaf8");
+
+unsigned char *spawn_floating_mine(unsigned char *owner, char *spawn_position) {
     unsigned char *spawned_moby = func_0020D348_m(0x3A5);
     if (spawned_moby != 0) {
         char *spawned_vars = *(char **)(spawned_moby + 0x78);
