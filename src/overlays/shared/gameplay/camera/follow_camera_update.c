@@ -483,7 +483,9 @@ void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890")
 float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
 float FUN_001fa5c8_c(float, float) __asm__("FUN_001fa5c8");
 int coll_sphere(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
-void FUN_L00_002e9f38(u8 *camera_object) {
+void update_hero_aligned_camera_from_input(u8 *camera_object) __asm__("FUN_L00_002e9f38");
+
+void update_hero_aligned_camera_from_input(u8 *camera_object) {
     V up;
     V side;
     V horizontal_view_offset;
