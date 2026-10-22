@@ -520,7 +520,7 @@ void metropolis_train_locomotive_update(char *moby) {
     char *path;
     int i;
     int i6;
-    float lim;
+    float braking_speed_floor;
     char *linked_moby;
     int second_path_node_index;
     char *second_path;
@@ -706,12 +706,12 @@ void metropolis_train_locomotive_update(char *moby) {
         ENGINE_SOUND();
         if (cdata->i60 >= data->iD4) {
             data->fDC = 0.0f;
-            lim = data->fDC;
+            braking_speed_floor = data->fDC;
             data->fC8 -= data->fC0 / 1.9f * frame_time;
-            if (data->fC8 < lim) {
-                data->fC8 = lim;
+            if (data->fC8 < braking_speed_floor) {
+                data->fC8 = braking_speed_floor;
             }
-            if (data->fC8 == lim) {
+            if (data->fC8 == braking_speed_floor) {
                 ((char *)&D_L03_0015FFD8_m292[data->iD8])[0xBC] = 0;
                 moby[0xBC] = 6;
                 data->fC0 *= 0.5f;
