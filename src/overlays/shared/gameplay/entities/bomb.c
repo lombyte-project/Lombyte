@@ -1101,7 +1101,7 @@ extern float D_L00_00161870 __attribute__((sda));
 extern float D_L00_00161874 __attribute__((sda));
 extern float D_L00_00161878 __attribute__((sda));
 extern float D_L00_00161888 __attribute__((sda));
-extern unsigned char *FUN_L00_00275158(char *a, char *b, int c, float f);
+extern unsigned char *spawn_random_size_rotated_particle(char *a, char *b, int c, float f) __asm__("FUN_L00_00275158");
 extern unsigned char D_0013E05A[];
 extern unsigned char D_L00_00173E80[];
 extern void *FUN_L00_0026dd20(void *, void *, unsigned, int, float);
@@ -1216,7 +1216,7 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float vx, flo
         } else {
             FUN_L00_0026daa0(moby, 0x2F4F7F7F, *(short *)(vars + 0x24), -1, D_L00_00161888);
             for (i = 0; i < 17; i++) {
-                trail = (char *)FUN_L00_00275158(moby + 0x10, D_L00_0015F580, 1, 0.0f);
+                trail = (char *)spawn_random_size_rotated_particle(moby + 0x10, D_L00_0015F580, 1, 0.0f);
                 if (trail != 0) {
                     *(float *)(trail + 0xC) = random_float_between_c2(D_L00_00161870, D_L00_00161874);
                     index = convert_integer_to_float_c(i);

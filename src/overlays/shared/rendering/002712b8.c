@@ -1730,7 +1730,9 @@ typedef struct {
 } Q_275158;
 
 extern unsigned char *D_L00_001B21A0 __attribute__((section(".data")));
-unsigned char *FUN_L00_00275158(void *position, void *initial_particle_vector, int n, float particle_vector_w) {
+unsigned char *spawn_random_size_rotated_particle(void *position, void *initial_particle_vector, int n, float particle_vector_w) __asm__("FUN_L00_00275158");
+
+unsigned char *spawn_random_size_rotated_particle(void *position, void *initial_particle_vector, int n, float particle_vector_w) {
     unsigned char *particle = p27fe00_alloc(0x48);
     if (particle) {
         Q_275158 *particle_data;
