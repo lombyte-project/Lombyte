@@ -15,11 +15,11 @@ typedef union {
 
 void prepare_scaled_direction_and_perpendicular(PauseVec *dir, f32 scale) __asm__("FUN_00226fb8");
 
-void prepare_scaled_direction_and_perpendicular(PauseVec *dir, f32 scale) {
+void prepare_scaled_direction_and_perpendicular(PauseVec *input_direction, f32 scale) {
     PauseVec direction_copy;
     f32 *v = direction_copy.v;
 
-    direction_copy.q = dir->q;
+    direction_copy.q = input_direction->q;
     fast_vec_normalize(D_00160370, v, 1.0f);
     D_00160390[0] = D_00160370[0] * scale;
     D_00160390[1] = D_00160370[1] * scale;

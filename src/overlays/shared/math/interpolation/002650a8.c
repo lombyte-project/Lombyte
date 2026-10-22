@@ -10,7 +10,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00266060.c: func_L13_00266060), where it is exact; names translated to the US level program. */
 
 void jet_group_state(int idx, int a, int b, int c) __asm__("FUN_L13_002650a8");
-void jet_group_state(int idx, int clear_flag_bit_1, int b, int c) {
+void jet_group_state(int idx, int clear_flag_bit_1, int b, int copy_or_clear_field_94) {
     short *list = D_L13_001ABB40[idx];
     if (list) {
         short *group_member_entry = list;
@@ -33,8 +33,8 @@ void jet_group_state(int idx, int clear_flag_bit_1, int b, int c) {
                         *(unsigned short *)(moby + 0x34) |= 1;
                     }
                 }
-                if (c != -1) {
-                    if (c)
+                if (copy_or_clear_field_94 != -1) {
+                    if (copy_or_clear_field_94)
                         *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
                     else
                         *(int *)(moby + 0x94) = 0;

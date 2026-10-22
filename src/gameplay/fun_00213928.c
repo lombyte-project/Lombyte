@@ -44,14 +44,13 @@ extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 
 s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) __asm__("FUN_00213928");
 
-s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) {
+s32 fun_00213928(O_25a478 *hit_recipient_moby, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) {
     enum {
-        KIND_GATED_HIT_RESPONSE = 0,
-        FALLBACK_HIT_RESPONSE = 1,
-        DEFAULT_HIT_RESPONSE = 1,
-        AUXILIARY_FLAG_SETTING_HIT_RESPONSE = 4,
-        CONDITIONAL_DURATION_HIT_RESPONSE = 7,
-        DAMAGE_PRESERVING_COOLDOWN_RESPONSE = 11
+        KIND_GATED_HIT_RESPONSE = 0x0,
+        DEFAULT_HIT_RESPONSE = 0x1,
+        AUXILIARY_FLAG_SETTING_HIT_RESPONSE = 0x4,
+        CONDITIONAL_DURATION_HIT_RESPONSE = 0x7,
+        DAMAGE_PRESERVING_COOLDOWN_RESPONSE = 0xB
     };
     enum {
         KIND_GATED_HIT_STATE = 0,
@@ -62,11 +61,11 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s3
         SUBSTATE_GATED_AUXILIARY_FLAG_HIT_STATE = 5,
         SUBSTATE_GATED_COOLDOWN_DAMAGE_CLEARING_HIT_STATE = 7
     };
-    V_25a478 v;
+    V_25a478 hit_blend_vector;
     V_25a478 combined_hit_vector;
-    s32 r;
+    s32 hit_response_index;
     s32 kind;
-    s32 res;
+    s32 hit_response_code;
     Q_25a478 *object_state;
 
     *out = 0;
@@ -74,7 +73,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s3
     if (hit_record && hit_record->tgt && (hit_record->tgt->hA6 == 0x131 || hit_record->tgt->hA6 == 0xA8) && q) {
         hit_record->f2C = D_0015FFC8[q->b8];
     }
-    if (!obj) {
+    if (!hit_recipient_moby) {
         if (q) {
             q->h1C = 0;
             q->h14 = -1;
@@ -84,7 +83,7 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s3
         return 0;
     }
     if (!q) {
-        q = suck_get_aim_height(obj);
+        q = suck_get_aim_height(hit_recipient_moby);
         if (!q) {
             *out = 0;
             return 0;
@@ -101,19 +100,19 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s3
         return 0xB;
     }
     if (hit_record->u.s.f1C == 5627.9248f) {
-        V_25a478 *pv = &hit_record->u.pos;
-        fast_vec_scale(pv, pv, D_001CC0C8[idx][hit_record->state]);
+        V_25a478 *hit_vector = &hit_record->u.pos;
+        fast_vec_scale(hit_vector, hit_vector, D_001CC0C8[idx][hit_record->state]);
         kind = hit_record->kind;
         hit_record->u.s.f1C = 5627.9248f;
         if (kind == 0x47) {
-            v.f[0] = fast_cos(fast_arc_tan(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
-            v.f[1] = fast_sin(fast_arc_tan(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
-            v.f[2] = 1.0f;
-            fast_vec_normalize(&v, &v, fast_vec_length(pv) * 0.7f);
-            fast_vec_scale(pv, pv, 0.3f);
-            add_vector_xyz(&combined_hit_vector, pv, &v);
-            pv->q = combined_hit_vector.q;
-            set_vector_length_xy(pv, pv, 1.0f);
+            hit_blend_vector.f[0] = fast_cos(fast_arc_tan(hit_recipient_moby->x - hero.motion.pos.f[0], hit_recipient_moby->y - hero.motion.pos.f[1]));
+            hit_blend_vector.f[1] = fast_sin(fast_arc_tan(hit_recipient_moby->x - hero.motion.pos.f[0], hit_recipient_moby->y - hero.motion.pos.f[1]));
+            hit_blend_vector.f[2] = 1.0f;
+            fast_vec_normalize(&hit_blend_vector, &hit_blend_vector, fast_vec_length(hit_vector) * 0.7f);
+            fast_vec_scale(hit_vector, hit_vector, 0.3f);
+            add_vector_xyz(&combined_hit_vector, hit_vector, &hit_blend_vector);
+            hit_vector->q = combined_hit_vector.q;
+            set_vector_length_xy(hit_vector, hit_vector, 1.0f);
         }
     } else {
         if (!hit_record->tgt) { hit_record->state = 8; kind = 0x47; }
@@ -121,43 +120,43 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s3
     }
     switch (hit_record->state) {
     case KIND_GATED_HIT_STATE:
-        if (hit_record->kind == 1 || hit_record->kind == 2) { *out = 2; r = 0; break; }
+        if (hit_record->kind == 1 || hit_record->kind == 2) { *out = 2; hit_response_index = 0; break; }
         goto dflt;
     case SUBSTATE_GATED_DAMAGE_PRESERVING_HIT_STATE:
-        if (hit_record->sub < 2) { *out = 2; r = 0xB; break; }
-        if (hit_record->sub == 2) { *out = 2; r = 5; break; }
-        *out = 2; r = 9;
+        if (hit_record->sub < 2) { *out = 2; hit_response_index = 0xB; break; }
+        if (hit_record->sub == 2) { *out = 2; hit_response_index = 5; break; }
+        *out = 2; hit_response_index = 9;
         break;
     case SUBSTATE_GATED_HIT_STATE:
-        if (hit_record->sub < 2) { *out = 2; r = 8; break; }
-        *out = 2; r = 0xD;
+        if (hit_record->sub < 2) { *out = 2; hit_response_index = 8; break; }
+        *out = 2; hit_response_index = 0xD;
         break;
     case COOLDOWN_RESETTING_HIT_STATE:
-        if (hit_record->sub < 2) { *out = 2; r = 0xA; break; }
-        if (hit_record->sub < 3) { *out = 2; r = 0xF; break; }
-        *out = 2; r = 0x10; q->h14 = -1; q->h1C = 0;
+        if (hit_record->sub < 2) { *out = 2; hit_response_index = 0xA; break; }
+        if (hit_record->sub < 3) { *out = 2; hit_response_index = 0xF; break; }
+        *out = 2; hit_response_index = 0x10; q->h14 = -1; q->h1C = 0;
         break;
     case FIXED_RESPONSE_HIT_STATE:
-        *out = 2; r = 0xE;
+        *out = 2; hit_response_index = 0xE;
         break;
     case SUBSTATE_GATED_AUXILIARY_FLAG_HIT_STATE:
-        if (hit_record->sub < 2) { *out = 3; r = 4; break; }
-        *out = 4; r = 7;
+        if (hit_record->sub < 2) { *out = 3; hit_response_index = 4; break; }
+        *out = 4; hit_response_index = 7;
         break;
     case SUBSTATE_GATED_COOLDOWN_DAMAGE_CLEARING_HIT_STATE:
-        if (hit_record->sub < 2) { *out = 2; r = 0xC; break; }
-        *out = 2; r = 0x11;
+        if (hit_record->sub < 2) { *out = 2; hit_response_index = 0xC; break; }
+        *out = 2; hit_response_index = 0x11;
         break;
     default:
     dflt:
-        *out = 2; r = 1;
+        *out = 2; hit_response_index = 1;
         break;
     }
     if (kp) *kp = kind;
-    res = D_001CC080[r][q->b8];
+    hit_response_code = D_001CC080[hit_response_index][q->b8];
     if (q->h14 != kind) q->h1C = 0;
     if (fast_dec_timer_s16(&q->h1C)) {
-        switch (r) {
+        switch (hit_response_index) {
         case KIND_GATED_HIT_RESPONSE: q->h1C = scale_game_frames(0x25); break;
         case DEFAULT_HIT_RESPONSE: q->h1C = scale_game_frames(0xF); break;
         case AUXILIARY_FLAG_SETTING_HIT_RESPONSE: q->h1C = scale_game_frames(0x3C); break;
@@ -169,42 +168,42 @@ s32 fun_00213928(O_25a478 *obj, P_25a478 *hit_record, Q_25a478 *q, u32 flags, s3
         default: q->h1C = scale_game_frames(0x1E); break;
         }
     } else {
-        switch (r) {
+        switch (hit_response_index) {
         case KIND_GATED_HIT_RESPONSE:
-        case FALLBACK_HIT_RESPONSE:
-            if (!(flags & 0x10)) res = 0xB;
+        case DEFAULT_HIT_RESPONSE:
+            if (!(flags & 0x10)) hit_response_code = 0xB;
             if (!(flags & 0x20)) *out = 1;
             goto z;
         case AUXILIARY_FLAG_SETTING_HIT_RESPONSE:
-            if (!(flags & 1)) res = 0xB;
+            if (!(flags & 1)) hit_response_code = 0xB;
             if (!(flags & 2)) *out = 1;
             goto z;
         case CONDITIONAL_DURATION_HIT_RESPONSE:
-            if (!(flags & 4)) res = 0xB;
+            if (!(flags & 4)) hit_response_code = 0xB;
             if (!(flags & 8)) *out = 1;
         z:
             hit_record->f2C = 0;
             break;
         case DAMAGE_PRESERVING_COOLDOWN_RESPONSE:
-            res = 0xC;
+            hit_response_code = 0xC;
             break;
         default:
             hit_record->f2C = 0;
-            res = 0xD;
+            hit_response_code = 0xD;
             break;
         }
     }
     q->h14 = kind;
     q->h16 = kind;
     if (fp) *fp = hit_record->f2C;
-    if (r == 4) {
-        object_state = ReadStateField(obj);
+    if (hit_response_index == 4) {
+        object_state = ReadStateField(hit_recipient_moby);
         if (object_state) object_state->b2E = 1;
     } else {
-        Q_25a478 *o2 = ReadStateField(obj);
-        if (o2) o2->b2E = 0;
+        Q_25a478 *object_state_for_flag_clear = ReadStateField(hit_recipient_moby);
+        if (object_state_for_flag_clear) object_state_for_flag_clear->b2E = 0;
     }
-    return res;
+    return hit_response_code;
 }
 
 extern __typeof__(fun_00213928) func_00213928 __attribute__((alias("FUN_00213928")));

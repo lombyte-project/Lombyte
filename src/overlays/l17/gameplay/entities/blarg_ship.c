@@ -52,14 +52,14 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         CLIP_VOLUME_SEQUENCE_WAIT_FOR_ENTRY = 0,
         CLIP_VOLUME_SEQUENCE_MONITOR_FOLLOWUP = 1
     };
-    int off;
+    int clip_volume_entry_byte_offset;
     char *pvars = (char *)moby->pvars;
-    int st;
+    int clip_volume_sequence_state;
     int i;
     int j;
     int found;
     int tgt;
-    int idx;
+    int checked_moby_index;
     char *checked_moby;
     int *moby_indices;
     int *clip_volume_index_ptr;
@@ -69,8 +69,8 @@ void FUN_L17_002f26d0(struct Moby *moby) {
     unsigned char *sk;
     int wrap;
 
-    st = *(int *)(pvars + 0x6C);
-    switch (st) {
+    clip_volume_sequence_state = *(int *)(pvars + 0x6C);
+    switch (clip_volume_sequence_state) {
     case CLIP_VOLUME_SEQUENCE_WAIT_FOR_ENTRY: {
         char *h = (char *)&hero.motion.pos;
         if (is_point_inside_clip_volume(h, *(int *)(pvars + 0x60))) {
@@ -82,8 +82,8 @@ void FUN_L17_002f26d0(struct Moby *moby) {
     }
     case CLIP_VOLUME_SEQUENCE_MONITOR_FOLLOWUP: {
         struct Hero *h = &hero;
-        int v = h->state.current;
-        if (v == 0x76 || v == 0x32) {
+        int hero_current_state = h->state.current;
+        if (hero_current_state == 0x76 || hero_current_state == 0x32) {
             *(int *)(pvars + 0x6C) = 0;
         } else if (is_point_inside_clip_volume(&h->motion.pos, *(int *)(pvars + 0x64)) ||
                    is_point_inside_clip_volume(&h->motion.pos, *(int *)(pvars + 0x68))) {
@@ -137,16 +137,16 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         break;
     case CAMERA_BOX_WATCHER_MONITOR:
         tgt = -1;
-        idx = -1;
+        checked_moby_index = -1;
         found = 0;
         for (i = 0; i < 1; i++) {
-            off = i * 4;
-            if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(pvars + off))) {
+            clip_volume_entry_byte_offset = i * 4;
+            if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(pvars + clip_volume_entry_byte_offset))) {
                 found = 1;
-                if (*(int *)(pvars + 0x30) != *(int *)(pvars + off)) {
-                    tgt = *(int *)(pvars + off);
+                if (*(int *)(pvars + 0x30) != *(int *)(pvars + clip_volume_entry_byte_offset)) {
+                    tgt = *(int *)(pvars + clip_volume_entry_byte_offset);
                     moby_indices = (int *)(pvars + 0x10);
-                    idx = moby_indices[i];
+                    checked_moby_index = moby_indices[i];
                 }
                 break;
             }
@@ -157,8 +157,8 @@ void FUN_L17_002f26d0(struct Moby *moby) {
             *(int *)(pvars + 0xC) = 0;
             *(int *)(pvars + 0x30) = -1;
         }
-        if (idx != -1) {
-            checked_moby = D_L17_0015FFD8 + (idx << 8);
+        if (checked_moby_index != -1) {
+            checked_moby = D_L17_0015FFD8 + (checked_moby_index << 8);
             if (checked_moby == 0)
                 goto skip1;
             if (*(short *)(checked_moby + 0xA6) != 0x4E)
@@ -184,17 +184,17 @@ void FUN_L17_002f26d0(struct Moby *moby) {
     skip1:
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(pvars + 0x20)) && D_L17_00179D10[0] == 0 &&
             D_L17_00179D10[9] == -1 && D_0013D408_b[0xBC] == 0) {
-            int w = *(int *)(((char *)&D_00141D7C));
+            int help_gate_flags = *(int *)(((char *)&D_00141D7C));
             mask = 1 << D_0015ED80_e[1];
-            if (!(w & mask)) {
+            if (!(help_gate_flags & mask)) {
                 help_request(0x3A9D, 0x82);
             }
         }
         tgt = -1;
         found = 0;
         for (i = 0; i < 3; i++) {
-            off = i * 4;
-            clip_volume_index_ptr = (int *)(pvars + 0x20 + off);
+            clip_volume_entry_byte_offset = i * 4;
+            clip_volume_index_ptr = (int *)(pvars + 0x20 + clip_volume_entry_byte_offset);
             if (is_point_inside_clip_volume(&hero.motion.pos, *clip_volume_index_ptr)) {
                 found = 1;
                 if (*(int *)(pvars + 0x30) != *clip_volume_index_ptr) {
@@ -350,12 +350,12 @@ void FUN_L17_002f32f0(struct Moby *moby) {
     int j;
     OvlQuad *vb;
     float *pu;
-    float *pv;
+    float *quad_vertex_v_coordinates;
     vu1_add_g_sregister_c(0x47, 0x513F1);
     vb = &vv[2];
     pos = data + 0x10;
     pu = &pkt.uv[0];
-    pv = &pkt.uv[1];
+    quad_vertex_v_coordinates = &pkt.uv[1];
     D_L17_0016D3E4 = 8192000.0f;
     *(float *)(data + 0x14) = -8000.0f;
     for (i = 0; i < 2; i++) {
@@ -393,7 +393,7 @@ void FUN_L17_002f32f0(struct Moby *moby) {
         *(long *)&pkt.q[2] = get_effect_texture_alt(D_L17_001DE088[i]);
         for (j = 0; j < 4; j++) {
             pu[j * 2] = D_L17_001E6FA0[j * 2] + D_L17_001DE0A0[i];
-            pv[j * 2] = D_L17_001E6FA0[j * 2 + 1];
+            quad_vertex_v_coordinates[j * 2] = D_L17_001E6FA0[j * 2 + 1];
         }
         D_L17_001DE0A0[i] += D_L17_001623C0[i] * frame_delta_time;
         draw_geometry_quad(&pkt, 0, 0);
@@ -462,9 +462,9 @@ void FUN_L17_002f3848(struct Moby *moby) {
     float vector_sum[4];
     int i;
     if (*(int *)(moby_pvars + 0x4C) != -1) {
-        struct Hero *g = &hero;
-        if (g->state.current != 0x32 || ((char *)g->ship_moby) == 0 ||
-            *(short *)(((char *)g->ship_moby) + 0xA6) != 0x563) {
+        struct Hero *hero_data = &hero;
+        if (hero_data->state.current != 0x32 || ((char *)hero_data->ship_moby) == 0 ||
+            *(short *)(((char *)hero_data->ship_moby) + 0xA6) != 0x563) {
             if (is_point_inside_clip_volume_u(&hero.motion.pos, *(int *)(moby_pvars + 0x4C))) {
                 D_L17_0015F638 = 150.0f;
                 goto done;
@@ -583,7 +583,7 @@ void blarg_ship_update(struct Moby *moby) {
     float firing_direction[4];
     float sA0[4];
     float sB0[4];
-    float c0;
+    float movement_distance_accumulator;
     char *moby_pvars = (char *)moby->pvars;
     float offset_angle;
     float len;
@@ -665,7 +665,7 @@ void blarg_ship_update(struct Moby *moby) {
     case BLARG_SHIP_INACTIVE:
         break;
     case BLARG_SHIP_TRACK_HERO_AND_FIRE:
-        c0 = 0.0f;
+        movement_distance_accumulator = 0.0f;
         qcopy(clamped_euler_angles, D_L17_001676D0);
         clamped_euler_angles[0] = 0.0f;
         if (clamped_euler_angles[1] > 0.2617994f) {
@@ -687,13 +687,13 @@ void blarg_ship_update(struct Moby *moby) {
         subtract_vector_xyz(scratch_vector, movement_target_position, &moby->pos);
         len = vector_length_xyz(scratch_vector);
         if (*(char *)&hero.ship_flags & 2) {
-            advance_accelerated_scalar(&c0, (float *)(moby_pvars + 0x6C), len, frame_time_sq + frame_time_sq,
+            advance_accelerated_scalar(&movement_distance_accumulator, (float *)(moby_pvars + 0x6C), len, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, frame_time);
         } else if (moby->command) {
-            advance_accelerated_scalar(&c0, (float *)(moby_pvars + 0x6C), len, frame_time_sq + frame_time_sq,
+            advance_accelerated_scalar(&movement_distance_accumulator, (float *)(moby_pvars + 0x6C), len, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, frame_time * 15.0f);
         } else {
-            advance_accelerated_scalar(&c0, (float *)(moby_pvars + 0x6C), len, frame_time_sq + frame_time_sq,
+            advance_accelerated_scalar(&movement_distance_accumulator, (float *)(moby_pvars + 0x6C), len, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, frame_time * 5.0f);
         }
         FUN_L00_0025f730(scratch_vector, *(float *)(moby_pvars + 0x6C));
@@ -790,16 +790,16 @@ char *FUN_L17_002f4fb8(int list) {
     float A[4], B[4], C[4], D[4], E[4], F[4];
     char *selected_moby;
     char *moby_pvars;
-    int idx;
+    int moby_byte_offset;
     do {
-        idx = (*moby_index_ptr & 0x7FFF) << 8;
-        if (*(short *)(0xA6 + idx + D_L17_0015FFD8) != 0x733)
+        moby_byte_offset = (*moby_index_ptr & 0x7FFF) << 8;
+        if (*(short *)(0xA6 + moby_byte_offset + D_L17_0015FFD8) != 0x733)
             continue;
-        if (*(unsigned char *)(0x20 + idx + D_L17_0015FFD8) != 4)
+        if (*(unsigned char *)(0x20 + moby_byte_offset + D_L17_0015FFD8) != 4)
             continue;
         if (random_integer_below(10))
             continue;
-        selected_moby = D_L17_0015FFD8 + idx;
+        selected_moby = D_L17_0015FFD8 + moby_byte_offset;
         moby_pvars = *(char **)(selected_moby + 0x78);
         qcopy(C, D_L17_001676D0);
         C[0] = 0;
@@ -887,14 +887,14 @@ void FUN_L17_002f5390(struct Moby *moby) {
         HIT_EFFECT_EMIT_AND_REMOVE = 2
     };
     int flag = 0;
-    char *r = find_moby_hit(moby, 0x10000, 0);
+    char *hit_result = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
     case HIT_EFFECT_INITIALIZE:
         moby->state = 1;
         break;
     case HIT_EFFECT_WAIT_FOR_HIT:
-        if (r) {
-            if (*(float *)(r + 0x2C) > 0.0f)
+        if (hit_result) {
+            if (*(float *)(hit_result + 0x2C) > 0.0f)
                 flag = 1;
         }
         if (flag)
@@ -935,10 +935,10 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L17_002f54d8(int vertex_count, V3 *b, V3 *vertex_positions, int unused, float *out) {
+void FUN_L17_002f54d8(int vertex_count, V3 *input_directions, V3 *vertex_positions, int unused, float *out) {
     V4 normalized_position_delta;
     V4 vertex_position;
-    V4 r;
+    V4 reflection_mapping_vector;
     V4 normalized_input_direction;
     int i;
     for (i = 0; i < vertex_count; i++) {
@@ -951,19 +951,19 @@ void FUN_L17_002f54d8(int vertex_count, V3 *b, V3 *vertex_positions, int unused,
         fast_vec_sub(&normalized_position_delta, &vertex_position, D_L17_001676C0);
         fast_vec_normalize(&normalized_position_delta, &normalized_position_delta, 1.0f);
         normalized_input_direction.w = 1.0f;
-        normalized_input_direction.v.x = b[i].x;
-        normalized_input_direction.v.y = b[i].y;
-        normalized_input_direction.v.z = b[i].z;
+        normalized_input_direction.v.x = input_directions[i].x;
+        normalized_input_direction.v.y = input_directions[i].y;
+        normalized_input_direction.v.z = input_directions[i].z;
         fast_vec_normalize(&normalized_input_direction, &normalized_input_direction, 1.0f);
         direction_dot_product = fast_vec_dot(&normalized_input_direction, &normalized_position_delta);
-        fast_vec_scale(&r, &normalized_input_direction, direction_dot_product + direction_dot_product);
-        fast_vec_sub(&r, &normalized_position_delta, &r);
-        fast_vec_normalize(&r, &r, 1.0f);
-        r.v.z = r.v.z + 1.0f;
-        len = fast_vec_length(&r);
+        fast_vec_scale(&reflection_mapping_vector, &normalized_input_direction, direction_dot_product + direction_dot_product);
+        fast_vec_sub(&reflection_mapping_vector, &normalized_position_delta, &reflection_mapping_vector);
+        fast_vec_normalize(&reflection_mapping_vector, &reflection_mapping_vector, 1.0f);
+        reflection_mapping_vector.v.z = reflection_mapping_vector.v.z + 1.0f;
+        len = fast_vec_length(&reflection_mapping_vector);
         len = len + len;
-        out[i * 2] = (r.v.x / len + 0.5f) * 4.0f;
-        out[i * 2 + 1] = (r.v.y / len + 0.5f) * 4.0f;
+        out[i * 2] = (reflection_mapping_vector.v.x / len + 0.5f) * 4.0f;
+        out[i * 2 + 1] = (reflection_mapping_vector.v.y / len + 0.5f) * 4.0f;
     }
 }
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F71D0), where it is exact; names translated to the US level program. */
@@ -1041,7 +1041,7 @@ void FUN_L17_002f59a8(void) {
 void FUN_L17_002f6138(int vertex_count, char *nrm, char *pos, int unused, float *out) {
     float normalized_position_delta[4];
     float vertex_position[4];
-    float r[4];
+    float reflection_mapping_vector[4];
     float normalized_normal[4];
     int i;
     for (i = 0; i < vertex_count; i++) {
@@ -1060,12 +1060,12 @@ void FUN_L17_002f6138(int vertex_count, char *nrm, char *pos, int unused, float 
         normalized_normal[1] = normal_element[1];
         normalized_normal[2] = normal_element[2];
         fast_vec_normalize(normalized_normal, normalized_normal, 1.0f);
-        fast_vec_scale(r, normalized_normal, fast_vec_dot(normalized_normal, normalized_position_delta) * 2.0f);
-        fast_vec_sub(r, normalized_position_delta, r);
-        fast_vec_normalize(r, r, 1.0f);
-        r[2] += 1.0f;
-        len = fast_vec_length(r) * 2.0f;
-        out[i * 2] = (r[0] / len + 0.5f) * 4.0f;
-        out[i * 2 + 1] = (r[1] / len + 0.5f) * 4.0f;
+        fast_vec_scale(reflection_mapping_vector, normalized_normal, fast_vec_dot(normalized_normal, normalized_position_delta) * 2.0f);
+        fast_vec_sub(reflection_mapping_vector, normalized_position_delta, reflection_mapping_vector);
+        fast_vec_normalize(reflection_mapping_vector, reflection_mapping_vector, 1.0f);
+        reflection_mapping_vector[2] += 1.0f;
+        len = fast_vec_length(reflection_mapping_vector) * 2.0f;
+        out[i * 2] = (reflection_mapping_vector[0] / len + 0.5f) * 4.0f;
+        out[i * 2 + 1] = (reflection_mapping_vector[1] / len + 0.5f) * 4.0f;
     }
 }

@@ -2,9 +2,9 @@
 
 void decode_map_rle_row(u8 *buf, s32 row, u8 *data, s16 *offsets) __asm__("FUN_00206860");
 
-void decode_map_rle_row(u8 *buf, s32 row, u8 *data, s16 *offsets) {
-    u8 *dst;
-    u8 *src;
+void decode_map_rle_row(u8 *decoded_row_dst, s32 row, u8 *data, s16 *offsets) {
+    u8 *decoded_row_cursor;
+    u8 *compressed_row_start;
     s16 *op;
     s32 run_count;
     s32 i;
@@ -16,17 +16,17 @@ void decode_map_rle_row(u8 *buf, s32 row, u8 *data, s16 *offsets) {
     s32 count;
     u32 pair;
 
-    dst = buf;
+    decoded_row_cursor = decoded_row_dst;
     half = 0;
     if (row != 0) {
-        src = data + offsets[row - 1];
+        compressed_row_start = data + offsets[row - 1];
     } else {
-        src = data + 0x200;
+        compressed_row_start = data + 0x200;
     }
-    run_count = ((data + offsets[row]) - src) * 2 / 3;
+    run_count = ((data + offsets[row]) - compressed_row_start) * 2 / 3;
     for (i = 0; i < run_count; i++) {
         k = i * 3;
-        packed_run_src = src + (k >> 1);
+        packed_run_src = compressed_row_start + (k >> 1);
         lo = packed_run_src[0];
         hi = packed_run_src[1];
         if (k & 1) {
@@ -41,20 +41,20 @@ void decode_map_rle_row(u8 *buf, s32 row, u8 *data, s16 *offsets) {
         }
         pair = (lo | (lo << 4)) & 0xFF;
         if (half) {
-            *dst = *dst | (lo << 4);
+            *decoded_row_cursor = *decoded_row_cursor | (lo << 4);
             half = 0;
             count--;
-            dst++;
+            decoded_row_cursor++;
         }
         if (count != 0) {
             do {
-                *dst++ = pair;
+                *decoded_row_cursor++ = pair;
                 count -= 2;
             } while (count > 0);
             if (count != 0) {
-                dst--;
+                decoded_row_cursor--;
                 half = 1;
-                *dst = lo;
+                *decoded_row_cursor = lo;
             }
         }
     }

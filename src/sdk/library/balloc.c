@@ -92,20 +92,20 @@ typedef struct _reent {
 } _reent;
 extern void *_calloc_r(struct _reent *, u32, u32);
 
-_Bigint *_Balloc(struct _reent *ptr, s32 k) {
+_Bigint *_Balloc(struct _reent *reent_context, s32 k) {
     s32 x;
     _Bigint *rv;
 
-    if (ptr->_freelist == 0) {
-        ptr->_freelist = (_Bigint **)_calloc_r(ptr, 4, 16);
-        if (ptr->_freelist == 0)
+    if (reent_context->_freelist == 0) {
+        reent_context->_freelist = (_Bigint **)_calloc_r(reent_context, 4, 16);
+        if (reent_context->_freelist == 0)
             return 0;
     }
-    if (rv = ptr->_freelist[k]) {
-        ptr->_freelist[k] = rv->_next;
+    if (rv = reent_context->_freelist[k]) {
+        reent_context->_freelist[k] = rv->_next;
     } else {
         x = 1 << k;
-        rv = (_Bigint *)_calloc_r(ptr, 1, (x * 4) + 20);
+        rv = (_Bigint *)_calloc_r(reent_context, 1, (x * 4) + 20);
         if (rv == 0)
             return 0;
         rv->_k = k;

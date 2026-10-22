@@ -21,8 +21,8 @@ extern s32 EnableInterrupts();
 
 void _cpr8(struct MpegDecoder *decoder, struct MpegCopyParams *copy_params) {
     struct MpegDecoderFrame *sp0;
-    s32 sp4;
-    s32 sp8;
+    s32 transfer_pass_count;
+    s32 destination_pass_base;
     s32 temp_2_106;
     s32 temp_2_73;
     s32 temp_4_27;
@@ -37,7 +37,7 @@ void _cpr8(struct MpegDecoder *decoder, struct MpegCopyParams *copy_params) {
 
     sp0 = (struct MpegDecoderFrame *)decoder;
     var_18_22 = copy_params->unk0 & 0x0FFFFFFF;
-    sp8 = decoder->unkD8 & 0x0FFFFFFF;
+    destination_pass_base = decoder->unkD8 & 0x0FFFFFFF;
     if (sp0->unk174 == 3) {
         goto block_3;
     }
@@ -60,17 +60,17 @@ block_4:
 block_6:
     var_30_43 = var_21_38;
 block_7:
-    sp4 = 1;
+    transfer_pass_count = 1;
     goto block_9;
 block_8:
     var_30_43 = (temp_4_27 >> 4) * 0xC0;
     var_21_38 = ((s32)copy_params->unk10 >> 1) * 0x180;
-    sp4 = 2;
+    transfer_pass_count = 2;
     var_20_40 = var_21_38 >> 4;
 block_9:
     var_5_64 = 0;
-    while (var_5_64 < sp4) {
-        var_17_68 = sp8;
+    while (var_5_64 < transfer_pass_count) {
+        var_17_68 = destination_pass_base;
         for (var_16_70 = 0; var_16_70 < copy_params->unkC; var_16_70++) {
             temp_2_73 = DIntr();
             *(volatile s32 *)0x1000D480 = 0;
@@ -102,7 +102,7 @@ block_9:
             var_18_22 += var_21_38;
         }
         var_5_64++;
-        sp8 += sp0->unkE4 * 0xC0;
+        destination_pass_base += sp0->unkE4 * 0xC0;
     }
     return;
 }

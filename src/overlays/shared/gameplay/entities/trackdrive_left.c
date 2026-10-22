@@ -11,12 +11,12 @@ extern s32 D_L02_001612A8;
 extern s32 D_L02_001612AC;
 
 extern float D_L02_001CB500[];
-void FUN_L02_002a4058(char *arg, int val, float scale) {
+void FUN_L02_002a4058(char *value_target, int val, float scale) {
     int i;
     float *destination;
     float *source;
     float *base;
-    arg[0x3F] = val;
+    value_target[0x3F] = val;
     *(s32 *)(D_L02_001CB9C0 + 0x0) = D_L02_001612A0;
     *(s32 *)(D_L02_001CB9C0 + 0x4) = D_L02_001612A4;
     *(s32 *)(D_L02_001CB9C0 + 0x8) = D_L02_001612A8;
@@ -38,8 +38,8 @@ void FUN_L02_002a4058(char *arg, int val, float scale) {
 
 extern void FUN_L02_002a4058_u(char *arg, int val) __asm__("FUN_L02_002a4058");
 
-void FUN_L02_002a40d0(char *arg) {
-    FUN_L02_002a4058_u(arg, 0x80);
+void FUN_L02_002a40d0(char *value_target) {
+    FUN_L02_002a4058_u(value_target, 0x80);
 }
 #include "qcopy.h"
 
@@ -114,7 +114,7 @@ struct QuadTextureState {
 extern struct QuadTextureState quad_texture_state __asm__("D_L02_001612F0") __attribute__((section(".sdata")));
 #define TEXTURE_REGISTER (quad_texture_state.tex0)
 
-void FUN_L02_002a40f0(QuadDrawArgs *arg) {
+void FUN_L02_002a40f0(QuadDrawArgs *draw_parameters) {
     float view_matrix[16];
     int *base;
     int *cursor;
@@ -128,10 +128,10 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     D_L02_00161300 = ((QuadCamera *)D_L02_0016D040)->f228;
     D_L02_00161304 = ((QuadCamera *)D_L02_0016D040)->f22C;
     if (D_L02_0015F458 != 1) {
-        ((QuadCamera *)D_L02_0016D040)->f218 = arg->f20;
-        ((QuadCamera *)D_L02_0016D040)->f21C = arg->f24;
-        ((QuadCamera *)D_L02_0016D040)->f228 = arg->f28;
-        ((QuadCamera *)D_L02_0016D040)->f22C = arg->f2C;
+        ((QuadCamera *)D_L02_0016D040)->f218 = draw_parameters->f20;
+        ((QuadCamera *)D_L02_0016D040)->f21C = draw_parameters->f24;
+        ((QuadCamera *)D_L02_0016D040)->f228 = draw_parameters->f28;
+        ((QuadCamera *)D_L02_0016D040)->f22C = draw_parameters->f2C;
     }
     update_view_context();
     update_camera_view_matrices();
@@ -190,21 +190,21 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
         QuadFrame *frame_to;
         char *from_a, *from_b, *to_a, *to_b;
         frame = FRAME_COUNTER;
-        step = frame / arg->frames;
-        fraction = (float)frame / (float)arg->frames - (float)step;
-        frame_from = &D_L02_0016D780[arg->first + step % arg->count];
-        frame_to = &D_L02_0016D780[arg->first + (step + 1) % arg->count];
+        step = frame / draw_parameters->frames;
+        fraction = (float)frame / (float)draw_parameters->frames - (float)step;
+        frame_from = &D_L02_0016D780[draw_parameters->first + step % draw_parameters->count];
+        frame_to = &D_L02_0016D780[draw_parameters->first + (step + 1) % draw_parameters->count];
         from_a = D_L02_0015F420 + frame_from->a * 16;
         from_b = D_L02_0015F420 + frame_from->b * 16;
         to_b = D_L02_0015F420 + frame_to->b * 16;
         to_a = D_L02_0015F420 + frame_to->a * 16;
-        dst = arg->dst;
+        dst = draw_parameters->dst;
         *(long *)dst = 0x0800000000000400;
-        *(long *)(arg->dst + 8) = 0;
-        FUN_L02_0024fca0(arg->dst + 0x10, from_a, from_b, to_a, to_b, 0x1000, fraction);
+        *(long *)(draw_parameters->dst + 8) = 0;
+        FUN_L02_0024fca0(draw_parameters->dst + 0x10, from_a, from_b, to_a, to_b, 0x1000, fraction);
     }
     TEXTURE_REGISTER = (TEXTURE_CURSOR >> 8) | 0x18100000 | 0x580000000;
-    color = arg->c30 | arg->c31 << 8 | arg->c32 << 16;
+    color = draw_parameters->c30 | draw_parameters->c31 << 8 | draw_parameters->c32 << 16;
     if (D_L02_0015F458 == 1) {
         color = ((QuadCamera *)D_L02_0016D040)->c230 | ((QuadCamera *)D_L02_0016D040)->c234 << 8
             | ((QuadCamera *)D_L02_0016D040)->c238 << 16;
@@ -212,12 +212,12 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     words = (long *)PACKET_CURSOR;
     alpha_limit = 0x60;
     blend_mode = 0x5360A;
-    if (!(alpha_limit < arg->alpha)) {
+    if (!(alpha_limit < draw_parameters->alpha)) {
         blend_mode = 0x5370B;
     }
     words[0] = 0x8000000000008001;
     words[1] = 0xEEEEEEEE;
-    words[2] = (long)arg->alpha << 32 | 0x64;
+    words[2] = (long)draw_parameters->alpha << 32 | 0x64;
     words[3] = 0x42;
     words[4] = TEXTURE_REGISTER;
     words[5] = 6;
@@ -235,7 +235,7 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     words[17] = 0x47;
     PACKET_CURSOR = (int *)(words + 18);
     PACKET_CURSOR[0] = 0x30000401;
-    PACKET_CURSOR[1] = (int)arg->dst;
+    PACKET_CURSOR[1] = (int)draw_parameters->dst;
     PACKET_CURSOR[2] = 0;
     PACKET_CURSOR[3] = 0x50000401;
     PACKET_CURSOR += 4;
@@ -268,15 +268,15 @@ void aa_blur_pass(void) __asm__("FUN_001fb680");
 extern void aa_blur_pass_00233b68(void) __asm__("FUN_00233b68");
 
 void FUN_L02_002a46e0(void) {
-    char *b;
-    long *g;
+    char *camera_state;
+    long *gs_register_packet;
     int *packet_base;
     vu1_add_vif_code(0x13000000);
-    b = D_L02_0016D040;
-    *(float *)(b + 0x218) = D_L02_001612F8;
-    *(float *)(b + 0x21C) = D_L02_001612FC;
-    *(float *)(b + 0x228) = D_L02_00161300;
-    *(float *)(b + 0x22C) = D_L02_00161304;
+    camera_state = D_L02_0016D040;
+    *(float *)(camera_state + 0x218) = D_L02_001612F8;
+    *(float *)(camera_state + 0x21C) = D_L02_001612FC;
+    *(float *)(camera_state + 0x228) = D_L02_00161300;
+    *(float *)(camera_state + 0x22C) = D_L02_00161304;
     update_view_context();
     update_camera_view_matrices();
     (*(int *volatile *)&D_L02_001611C0)[0] = 0x10000002;
@@ -285,12 +285,12 @@ void FUN_L02_002a46e0(void) {
     (*(int *volatile *)&D_L02_001611C0)[3] = 0x50000002;
     packet_base = *(int *volatile *)&D_L02_001611C0;
     D_L02_001611C0 = packet_base + 4;
-    g = (long *)(packet_base + 4);
-    g[0] = 0x1000000000008001L;
-    g[1] = 0xE;
-    g[2] = (long)*(int *)(b + 0x230) | ((long)*(int *)(b + 0x234) << 8) |
-           ((long)*(int *)(b + 0x238) << 16);
-    g[3] = 0x3D;
+    gs_register_packet = (long *)(packet_base + 4);
+    gs_register_packet[0] = 0x1000000000008001L;
+    gs_register_packet[1] = 0xE;
+    gs_register_packet[2] = (long)*(int *)(camera_state + 0x230) | ((long)*(int *)(camera_state + 0x234) << 8) |
+           ((long)*(int *)(camera_state + 0x238) << 16);
+    gs_register_packet[3] = 0x3D;
     D_L02_001611C0 = packet_base + 12;
     aa_blur_pass_00233b68();
 }
@@ -326,7 +326,7 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 /* Spawn point for the moby: its slot's stored position and rotation, or, with no slot, a point beside it on the side facing the hero. */
 void FUN_L02_002d8910(float *pos, float *rot, char *moby) {
-    V2d8910 v;
+    V2d8910 midpoint_position;
     float left;
     float right;
     float pick;
@@ -343,9 +343,9 @@ void FUN_L02_002d8910(float *pos, float *rot, char *moby) {
                           D_L02_00167280_2d8910.y - *(float *)(moby + 0x14));
         dl = diffrot_2d8910(to, left);
         pick = dl < diffrot_2d8910(to, right) ? left : right;
-        fast_vec_add(v, &hero.motion.pos, moby + 0x10);
-        fast_vec_scale(v, v, 0.5f);
-        qcopy(pos, v);
+        fast_vec_add(midpoint_position, &hero.motion.pos, moby + 0x10);
+        fast_vec_scale(midpoint_position, midpoint_position, 0.5f);
+        qcopy(pos, midpoint_position);
         pos[0] += cos_2d8910(pick) * 2.0f;
         pos[1] += sin_2d8910(pick) * 2.0f;
         pos[2] += 1.0f;
@@ -678,16 +678,16 @@ extern float func_001FA748_d92f0(float, float) __asm__("FUN_001fa580");
 extern float func_001FA790_d92f0(float, float) __asm__("FUN_001fa5c8");
 extern float D_0015EE6C_d92f0 __asm__("D_0015ED6C");
 void FUN_L02_002d92f0(char *moby) {
-    float v[4];
+    float position_delta[4];
     char *g;
     float f;
     float lim;
     struct Hero *hero_ptr;
-    func_L00_00250800_d92f0(moby, 0, v);
+    func_L00_00250800_d92f0(moby, 0, position_delta);
     g = (char *)&hero.motion.pos;
-    fast_vec_sub(v, v, g);
-    func_L00_002607A8_d92f0(v, D_0015EE6C_d92f0 * 4.0f);
-    func_001F9BD8_d92f0(g, g, v);
+    fast_vec_sub(position_delta, position_delta, g);
+    func_L00_002607A8_d92f0(position_delta, D_0015EE6C_d92f0 * 4.0f);
+    func_001F9BD8_d92f0(g, g, position_delta);
     f = func_001FA748_d92f0(*(float *)(moby + 0x48), 3.14159f);
     f = func_001FA790_d92f0(f, *(float *)(g + 0x18));
     lim = D_0015EE6C_d92f0 * 6.2831855f;
@@ -781,7 +781,7 @@ extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern void clear_vector(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L02_002da6c0(int unused_texture, int p1, int sel, float angle, float radial_distance) {
+void FUN_L02_002da6c0(int unused_texture, int unused_parameter, int sel, float angle, float radial_distance) {
     enum {
         ARROW_STYLE_NEWLY_REACHED = 0,
         ARROW_STYLE_OCCUPIED = 1,
@@ -878,7 +878,7 @@ typedef unsigned long long u64_t;
         (dst) += (u64_t)q_;                                                                        \
     }
 
-void FUN_L02_002da938(void *unused, f32 angle, f32 b, f32 end_distance, s32 color) {
+void FUN_L02_002da938(void *unused, f32 angle, f32 start_distance, f32 end_distance, s32 color) {
     u64_t packed_vertices[4];
     s32 vertex_colors[4];
     s32 vertex_uvs[4];
@@ -899,8 +899,8 @@ void FUN_L02_002da938(void *unused, f32 angle, f32 b, f32 end_distance, s32 colo
     vertex_uvs[2] = (s32)(D_L02_00161AF4 + off);
     vertex_uvs[3] = (s32)(D_L02_00161AF8 + off);
 
-    f25 = fast_sin(angle) * b;
-    f24 = fast_cos(angle) * b;
+    f25 = fast_sin(angle) * start_distance;
+    f24 = fast_cos(angle) * start_distance;
     f28 = fast_sin(angle) * end_distance;
     f27 = fast_cos(angle) * end_distance;
     trig_value = fast_cos(angle);
@@ -942,8 +942,8 @@ void FUN_L02_002da938(void *unused, f32 angle, f32 b, f32 end_distance, s32 colo
     vertex_uvs[2] = (s32)D_L02_00161B04;
     vertex_uvs[3] = (s32)D_L02_00161B08;
 
-    f25 = fast_sin(angle) * b;
-    f24 = fast_cos(angle) * b;
+    f25 = fast_sin(angle) * start_distance;
+    f24 = fast_cos(angle) * start_distance;
     f28 = fast_sin(angle) * end_distance;
     f27 = fast_cos(angle) * end_distance;
     trig_value = fast_cos(angle);
@@ -993,17 +993,17 @@ extern int D_L02_00161AB8 __attribute__((sda));
 void FUN_L02_002dae88(void) {
     Q_2dae88 packed_vertices;
     int vertex_colors[4];
-    int b[4];
+    int vertex_uvs[4];
     Q_2dae88 *vertex_quad_cursor = D_L02_001D3310;
     int i;
     for (i = 3; i >= 0; i--) {
-        b[0] = D_L02_00161AAC;
-        b[1] = D_L02_00161AB0;
-        b[2] = D_L02_00161AB4;
-        b[3] = D_L02_00161AB8;
+        vertex_uvs[0] = D_L02_00161AAC;
+        vertex_uvs[1] = D_L02_00161AB0;
+        vertex_uvs[2] = D_L02_00161AB4;
+        vertex_uvs[3] = D_L02_00161AB8;
         vertex_colors[0] = vertex_colors[1] = vertex_colors[2] = vertex_colors[3] = D_L02_00161B94;
         packed_vertices = *vertex_quad_cursor++;
-        f20bc88_2dae88(&packed_vertices, b, vertex_colors, tex_2dae88(D_L02_00161B1C_gp + 0x28), 1);
+        f20bc88_2dae88(&packed_vertices, vertex_uvs, vertex_colors, tex_2dae88(D_L02_00161B1C_gp + 0x28), 1);
     }
 }
 
@@ -1144,8 +1144,8 @@ void swingshot_versatarget_update(char *moby) {
         VERSATARGET_STATE_INACTIVE = 2
     };
     char *moby_data = *(char **)(moby + 0x78);
-    float v[4];
-    float w[4];
+    float particle_position[4];
+    float particle_velocity[4];
     char *linked_moby;
     switch (((unsigned char *)moby)[0x20]) {
     case VERSATARGET_STATE_INITIALIZE:
@@ -1164,10 +1164,10 @@ void swingshot_versatarget_update(char *moby) {
         break;
     case VERSATARGET_STATE_ACTIVE:
         if (*(short *)(moby + 0xA6) == 0x323) {
-            struct Hero *g = &hero;
+            struct Hero *hero_ptr = &hero;
             float *rz = (float *)(moby + 0x48);
-            float yaw = fast_arc_tan(g->motion.pos.f[0] - *(float *)(moby + 0x10),
-                                     g->motion.pos.f[1] - *(float *)(moby + 0x14));
+            float yaw = fast_arc_tan(hero_ptr->motion.pos.f[0] - *(float *)(moby + 0x10),
+                                     hero_ptr->motion.pos.f[1] - *(float *)(moby + 0x14));
             func_L00_0025CE58_f(rz, yaw, (float *)(moby_data + 0x38), frame_time_sq * 6.2831855f,
                                 frame_time_sq * 6.2831855f, frame_time * 12.566371f);
             if (D_L02_0015F5CC & 1) {
@@ -1176,19 +1176,19 @@ void swingshot_versatarget_update(char *moby) {
                     int particle_lifetime;
                     if (D_L02_0015F5CC & 4)
                         direction_sign = -1.0f;
-                    normalize_vector_xyz(v, moby + 0xD0, direction_sign * D_L02_00161CBC);
-                    normalize_vector_xyz(w, v, -2.0f / multiply_global_factor_ed64(D_L02_00161CB0));
-                    add_vector_xyz(v, v, moby + 0x10);
+                    normalize_vector_xyz(particle_position, moby + 0xD0, direction_sign * D_L02_00161CBC);
+                    normalize_vector_xyz(particle_velocity, particle_position, -2.0f / multiply_global_factor_ed64(D_L02_00161CB0));
+                    add_vector_xyz(particle_position, particle_position, moby + 0x10);
                     particle_lifetime = truncate_float_to_s32(multiply_global_factor_ed64(D_L02_00161CB0)) & 0xFF;
-                    FUN_L00_002730e0(v, w, D_L02_00161CB4, particle_lifetime,
+                    FUN_L00_002730e0(particle_position, particle_velocity, D_L02_00161CB4, particle_lifetime,
                                      random_integer_below(0xFF) & 0xFF, 0,
                                      D_L02_00161CB8);
                 }
             }
         }
         {
-            struct Hero *g2 = &hero;
-            if (g2->state.current != 0x2C)
+            struct Hero *hero_reference = &hero;
+            if (hero_reference->state.current != 0x2C)
                 func_L02_002FBC00_c(moby);
         }
         break;
@@ -1560,8 +1560,8 @@ void FUN_L02_002d93e8(char *moby) {
     ctx.texture = get_effect_texture(0x10);
     FUN_L02_002dae88_c();
     {
-        int n, *marker_cursor;
-        for (n = 11, marker_cursor = markers->slot; n >= 0; --n, ++marker_cursor) {
+        int marker_reset_countdown, *marker_cursor;
+        for (marker_reset_countdown = 11, marker_cursor = markers->slot; marker_reset_countdown >= 0; --marker_reset_countdown, ++marker_cursor) {
             if (*marker_cursor != 0) *marker_cursor = 1;
         }
     }

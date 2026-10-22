@@ -25,16 +25,16 @@ extern s32 video_dec_put_ts(u8 *, s64, s64, u32, s32) __asm__("func_0023CC98");
 s32 video_callback(s32 unused_callback_arg, struct VdecCb *cb, struct VdecBuf *ab) __asm__("FUN_0023b5f0");
 
 s32 video_callback(s32 unused_callback_arg, struct VdecCb *cb, struct VdecBuf *ab) {
-    u32 ptr0;
+    u32 first_destination_address;
     s32 len0;
-    u32 ptr1;
+    u32 second_destination_address;
     s32 len1;
     u8 *ps;
     u8 *end;
     s32 len;
     s32 first_source_byte_count;
     s32 rest;
-    s32 ret;
+    s32 copied_byte_count;
 
     len = cb->len;
     ps = cb->data;
@@ -44,16 +44,16 @@ s32 video_callback(s32 unused_callback_arg, struct VdecCb *cb, struct VdecBuf *a
         first_source_byte_count = len;
     }
     rest = len - first_source_byte_count;
-    video_dec_begin_put(D_0016120C + 0xD9048, &ptr0, &len0, &ptr1, &len1);
-    ret = cpy2area((ptr0 & 0x0FFFFFFF) | 0x20000000, len0,
-                                   (ptr1 & 0x0FFFFFFF) | 0x20000000, len1, ps, first_source_byte_count, ab, rest);
-    if (ret > 0) {
-        if (video_dec_put_ts(D_0016120C + 0xD9048, cb->pts, cb->dts, ptr0, ret) == 0) {
+    video_dec_begin_put(D_0016120C + 0xD9048, &first_destination_address, &len0, &second_destination_address, &len1);
+    copied_byte_count = cpy2area((first_destination_address & 0x0FFFFFFF) | 0x20000000, len0,
+                                   (second_destination_address & 0x0FFFFFFF) | 0x20000000, len1, ps, first_source_byte_count, ab, rest);
+    if (copied_byte_count > 0) {
+        if (video_dec_put_ts(D_0016120C + 0xD9048, cb->pts, cb->dts, first_destination_address, copied_byte_count) == 0) {
             err_message(D_001E8B08);
         }
     }
-    video_dec_end_put(D_0016120C + 0xD9048, ret);
-    return ret > 0;
+    video_dec_end_put(D_0016120C + 0xD9048, copied_byte_count);
+    return copied_byte_count > 0;
 }
 
 extern __typeof__(video_callback) func_0023B5F0 __attribute__((alias("FUN_0023b5f0")));

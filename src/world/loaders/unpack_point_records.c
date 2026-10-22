@@ -12,17 +12,17 @@ extern struct Point D_0018D440[];
 extern s16 log2dim(s32) __asm__("FUN_001f97a0");
 void unpack_point_records(s32 *src, s32 count) __asm__("FUN_00202800");
 
-void unpack_point_records(s32 *src, s32 count) {
+void unpack_point_records(s32 *serialized_texture_records, s32 count) {
     s32 x;
     s32 y;
     s32 u;
     s32 v;
 
     for (effect_tex_cnt = 0; effect_tex_cnt < count; effect_tex_cnt++) {
-        x = *src++;
-        y = *src++;
-        u = *src++;
-        v = *src++;
+        x = *serialized_texture_records++;
+        y = *serialized_texture_records++;
+        u = *serialized_texture_records++;
+        v = *serialized_texture_records++;
         D_0018D440[effect_tex_cnt].x = x >> 4;
         D_0018D440[effect_tex_cnt].y = y >> 4;
         D_0018D440[effect_tex_cnt].u = log2dim(u);

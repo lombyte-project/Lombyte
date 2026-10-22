@@ -48,7 +48,7 @@ extern FpNumber D_001596F0;
 #define IMPLICIT_1 0x1000000000000000ULL
 #define IMPLICIT_2 0x2000000000000000ULL
 
-FpNumber *_fpadd_parts(FpNumber *left_operand, FpNumber *b, FpNumber *result) {
+FpNumber *_fpadd_parts(FpNumber *left_operand, FpNumber *right_operand, FpNumber *result) {
     s64 tfraction;
     s32 a_normal_exp;
     s32 b_normal_exp;
@@ -58,34 +58,34 @@ FpNumber *_fpadd_parts(FpNumber *left_operand, FpNumber *b, FpNumber *result) {
     if ((u32)left_operand->class < 2) {
         return left_operand;
     }
-    if ((u32)b->class < 2) {
-        return b;
+    if ((u32)right_operand->class < 2) {
+        return right_operand;
     }
     if ((left_operand->class ^ 4) == 0) {
-        if ((b->class ^ 4) == 0 && left_operand->sign != b->sign) {
+        if ((right_operand->class ^ 4) == 0 && left_operand->sign != right_operand->sign) {
             return &D_001596F0;
         }
         return left_operand;
     }
-    if ((b->class ^ 4) == 0) {
-        return b;
+    if ((right_operand->class ^ 4) == 0) {
+        return right_operand;
     }
-    if ((b->class ^ 2) == 0) {
+    if ((right_operand->class ^ 2) == 0) {
         if ((left_operand->class ^ 2) == 0) {
             *result = *left_operand;
-            result->sign = left_operand->sign & b->sign;
+            result->sign = left_operand->sign & right_operand->sign;
             return result;
         }
         return left_operand;
     }
     if ((left_operand->class ^ 2) == 0) {
-        return b;
+        return right_operand;
     }
 
     a_normal_exp = left_operand->normal_exp;
-    b_normal_exp = b->normal_exp;
+    b_normal_exp = right_operand->normal_exp;
     a_fraction = left_operand->fraction;
-    b_fraction = b->fraction;
+    b_fraction = right_operand->fraction;
 
     {
         s32 diff;
@@ -114,7 +114,7 @@ FpNumber *_fpadd_parts(FpNumber *left_operand, FpNumber *b, FpNumber *result) {
         }
     }
 
-    if (left_operand->sign != b->sign) {
+    if (left_operand->sign != right_operand->sign) {
         if (left_operand->sign) {
             tfraction = -a_fraction + b_fraction;
         } else {

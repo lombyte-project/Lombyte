@@ -96,6 +96,9 @@ void level_draw_dialog_text(void) {
         MESSAGE_BOX_CHOICE_DIALOG = 6
     };
     enum {
+        CHOICE_DIALOG_PAIRED_BUTTONS = 0,
+        CHOICE_DIALOG_SHARED_PAIRED_BUTTONS = 1,
+        CHOICE_DIALOG_ALTERNATE_BODY_PAIRED_BUTTONS = 2,
         CHOICE_DIALOG_SINGLE_CENTERED_BUTTON = 3
     };
     enum {
@@ -103,6 +106,8 @@ void level_draw_dialog_text(void) {
         FREEZE_DIALOG_CONDITIONAL_PAIRED_BUTTONS = 3,
         FREEZE_DIALOG_SHARED_CONDITIONAL_PAIRED_BUTTONS = 4,
         FREEZE_DIALOG_FORMATTED_BODY_CENTERED_BUTTON = 5,
+        FREEZE_DIALOG_PLAIN_BODY_ONLY = 7,
+        FREEZE_DIALOG_SHARED_PLAIN_BODY_ONLY = 8,
         FREEZE_DIALOG_BODY_ONLY = 10,
         FREEZE_DIALOG_SHARED_BODY_ONLY = 11,
         FREEZE_DIALOG_FLAG_GATED_PAIRED_BUTTONS = 12,
@@ -200,8 +205,8 @@ void level_draw_dialog_text(void) {
         case FREEZE_DIALOG_SHARED_BODY_ONLY:
             text = get_help_message_text(0x4FC1);
             break;
-        case 7:
-        case 8:
+        case FREEZE_DIALOG_PLAIN_BODY_ONLY:
+        case FREEZE_DIALOG_SHARED_PLAIN_BODY_ONLY:
             text = get_help_message_text(0x4FB7);
             break;
         case 14:
@@ -309,13 +314,13 @@ void level_draw_dialog_text(void) {
         text_color = fast_tween_color(D_L00_0015F4B0, D_L00_0015F4B4, alpha);
         button_color = fast_tween_color(0x20FFFF, 0x8020FFFF, alpha);
         switch (D_L00_00173040.choice) {
-        case 0:
-        case 1:
+        case CHOICE_DIALOG_PAIRED_BUTTONS:
+        case CHOICE_DIALOG_SHARED_PAIRED_BUTTONS:
             font_print_center(0xCA, 0x118, button_color, get_help_message_text(0x524E), -1);
             font_print_center(0x135, 0x118, button_color, get_help_message_text(0x524B), -1);
             id = 0x522A;
             break;
-        case 2:
+        case CHOICE_DIALOG_ALTERNATE_BODY_PAIRED_BUTTONS:
             font_print_center(0xCA, 0x118, button_color, get_help_message_text(0x524E), -1);
             font_print_center(0x135, 0x118, button_color, get_help_message_text(0x524B), -1);
             id = 0x522B;

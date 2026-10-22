@@ -47,29 +47,29 @@ typedef union {
 
 void __unpack_d(FLOUnion *src, FpNumber *dst);
 
-void __unpack_d(FLOUnion *src, FpNumber *dst) {
-    u64 fraction = src->value_raw & 0x000FFFFFFFFFFFFFULL;
-    s32 exp = ((s32)(src->value_raw >> 52)) & 0x7FF;
-    s32 sign = ((s32)(src->value_raw >> 63)) & 1;
-    dst->sign = sign;
+void __unpack_d(FLOUnion *packed_double, FpNumber *unpacked_parts) {
+    u64 fraction = packed_double->value_raw & 0x000FFFFFFFFFFFFFULL;
+    s32 exp = ((s32)(packed_double->value_raw >> 52)) & 0x7FF;
+    s32 sign = ((s32)(packed_double->value_raw >> 63)) & 1;
+    unpacked_parts->sign = sign;
     if (exp == 0) {
         do {
         } while (0);
-        dst->class = 2;
+        unpacked_parts->class = 2;
     } else if (exp == 0x7FF) {
         if (fraction == 0) {
-            dst->class = 4;
+            unpacked_parts->class = 4;
         } else {
             if (fraction & 0x8000000000000ULL) {
-                dst->class = 1;
+                unpacked_parts->class = 1;
             } else {
-                dst->class = 0;
+                unpacked_parts->class = 0;
             }
-            dst->fraction = fraction;
+            unpacked_parts->fraction = fraction;
         }
     } else {
-        dst->normal_exp = exp - 1023;
-        dst->class = 3;
-        dst->fraction = (fraction << 8) | 0x1000000000000000ULL;
+        unpacked_parts->normal_exp = exp - 1023;
+        unpacked_parts->class = 3;
+        unpacked_parts->fraction = (fraction << 8) | 0x1000000000000000ULL;
     }
 }

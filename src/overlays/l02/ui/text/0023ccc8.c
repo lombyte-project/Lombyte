@@ -68,7 +68,7 @@ s32 FUN_L02_0023cda8(HudElem *hud_element) {
     int frame;
     int bright;
     int dark;
-    int len;
+    int full_bar_width;
     int px;
     int bar;
     int bottom;
@@ -102,13 +102,13 @@ s32 FUN_L02_0023cda8(HudElem *hud_element) {
     sprintf_alt(text, D_L02_0015F850, hud_element->unk74);
     alpha = truncate_float_to_s32((f32)truncate_float_to_s32(grow * 128.0f) * 0.7f);
     if (hud_element->unk08 < 10) {
-        len = D_L02_0015F958;
+        full_bar_width = D_L02_0015F958;
     } else {
-        len = D_L02_0015F95C;
+        full_bar_width = D_L02_0015F95C;
     }
     px = x;
     bar = px + 4;
-    width = truncate_float_to_s32((f32)len * grow);
+    width = truncate_float_to_s32((f32)full_bar_width * grow);
     if (left) {
         frame = get_icon_frame(0x7580, 1);
         draw_hud_sprite(frame, px - 0x1C, y, 0x20, 0x20, alpha);

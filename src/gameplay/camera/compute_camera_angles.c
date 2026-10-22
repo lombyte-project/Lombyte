@@ -10,8 +10,8 @@ extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __as
 void compute_camera_angles(f32 *out, void *p0, void *p1, void *dir0, void *dir1,
                            void *axis) __asm__("FUN_001ec530");
 
-void compute_camera_angles(f32 *out, void *position, void *focus, void *dir0, void *dir1, void *axis) {
-    f32 diff[4];
+void compute_camera_angles(f32 *out, void *position, void *focus, void *orbit_reference_direction, void *orbit_yaw_side_direction, void *axis) {
+    f32 orbit_offset[4];
     f32 proj[4];
     f32 perp[4];
     f32 unit[4];
@@ -21,12 +21,12 @@ void compute_camera_angles(f32 *out, void *position, void *focus, void *dir0, vo
     f32 angle1, angle2;
     f32 yaw, pitch;
 
-    subtract_vector_xyz(diff, position, focus);
-    offset_axis_dot = fast_vec_dot(diff, axis);
+    subtract_vector_xyz(orbit_offset, position, focus);
+    offset_axis_dot = fast_vec_dot(orbit_offset, axis);
     fast_vec_normalize(proj, axis, offset_axis_dot);
-    subtract_vector_xyz(perp, diff, proj);
+    subtract_vector_xyz(perp, orbit_offset, proj);
 
-    planar_reference_dot = fast_vec_dot(dir0, perp);
+    planar_reference_dot = fast_vec_dot(orbit_reference_direction, perp);
     lenPerp = fast_vec_length(perp);
     if (lenPerp == 0.0f) {
         lenPerp = 0.0001f;
@@ -35,29 +35,29 @@ void compute_camera_angles(f32 *out, void *position, void *focus, void *dir0, vo
     yaw = 1.57079637f - angle1;
 
     fast_vec_normalize(unit, perp, 1.0f);
-    yaw_side_dot = fast_vec_dot(dir1, unit);
+    yaw_side_dot = fast_vec_dot(orbit_yaw_side_direction, unit);
     if (yaw_side_dot < 0.0f) {
         yaw = -yaw;
     }
     out[0] = yaw;
 
-    build_look_at_matrix(rotated, dir0, axis, yaw);
-    rotated_reference_dot = fast_vec_dot(rotated, diff);
-    lenDiff = fast_vec_length(diff);
+    build_look_at_matrix(rotated, orbit_reference_direction, axis, yaw);
+    rotated_reference_dot = fast_vec_dot(rotated, orbit_offset);
+    lenDiff = fast_vec_length(orbit_offset);
     if (lenDiff == 0.0f) {
         lenDiff = 0.0001f;
     }
     angle2 = fast_arc_sin(rotated_reference_dot / lenDiff);
     pitch = -(1.57079637f - angle2);
 
-    fast_vec_normalize(unit, diff, 1.0f);
+    fast_vec_normalize(unit, orbit_offset, 1.0f);
     pitch_axis_dot = fast_vec_dot(axis, unit);
     if (pitch_axis_dot < 0.0f) {
         pitch = 1.57079637f - angle2;
     }
     out[1] = pitch;
 
-    out[2] = fast_vec_length(diff);
+    out[2] = fast_vec_length(orbit_offset);
 }
 
 extern __typeof__(compute_camera_angles) func_001EC530 __attribute__((alias("FUN_001ec530")));

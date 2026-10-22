@@ -12,24 +12,24 @@
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 
 float animation_start(int a, unsigned int b) __asm__("FUN_L04_002418b0");
-float animation_start(int class_slot, unsigned int b) {
+float animation_start(int class_slot, unsigned int animation_id) {
     char *entry;
     char *nested;
-    if (b >= 0xFF)
+    if (animation_id >= 0xFF)
         return 0.0f;
-    entry = D_L04_00197480[class_slot] + b * 4;
+    entry = D_L04_00197480[class_slot] + animation_id * 4;
     nested = *(char **)(entry + 0x48);
     return convert_integer_to_float(*(short *)(*(char **)(nested + 0x1C) + 4)) * 0.0625f;
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_00242868.c: func_L04_002428C8), where it is exact; names translated to the US level program. */
 
 float animation_end(int a, unsigned int b) __asm__("FUN_L04_00241910");
-float animation_end(int class_slot, unsigned int b) {
+float animation_end(int class_slot, unsigned int animation_id) {
     char *entry;
     char *nested;
-    if (b >= 0xFF)
+    if (animation_id >= 0xFF)
         return 0.0f;
-    entry = D_L04_00197480[class_slot] + b * 4;
+    entry = D_L04_00197480[class_slot] + animation_id * 4;
     nested = *(char **)(entry + 0x48);
     nested += ((unsigned char)nested[0x10] - 1) * 4;
     return convert_integer_to_float(*(short *)(*(char **)(nested + 0x1C) + 4)) * 0.0625f;

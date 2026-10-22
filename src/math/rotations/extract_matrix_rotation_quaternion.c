@@ -6,10 +6,10 @@ void extract_matrix_rotation_quaternion(s32 arg0, s32 arg1) __asm__("FUN_002144d
 
 void extract_matrix_rotation_quaternion(s32 output_quaternion, s32 destination_matrix) {
     u8 sp_slot[0x40];
-    u8 *buf;
+    u8 *temporary_rotation_matrix;
 
-    buf = sp_slot;
-    copy_matrix_rotation(buf);
+    temporary_rotation_matrix = sp_slot;
+    copy_matrix_rotation(temporary_rotation_matrix);
     /* Fakematch: the single-iteration do/while wrappers compile to plain
        calls but select retail's callee-saved register roles. */
     do {

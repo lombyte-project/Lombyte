@@ -16,12 +16,12 @@ void FUN_L00_002e8540(float stored_value) {
 typedef struct { char b[0x140]; } Pane_2e3fa0;
 extern char *D_L00_00166E00_002e8590[] __asm__("D_L00_00166E00");
 void follow_camera_set_up_spring(float a, float b) __asm__("FUN_L00_002e85d8");
-void follow_camera_set_up_spring(float a, float b) {
+void follow_camera_set_up_spring(float up_spring_value, float b) {
     char *camera_record = D_L00_00166E00_002e8590[0];
     if (*(short *)(camera_record + 0x86) == 0) {
         char *camera_data_region = *(char **)(camera_record + 0x70) + 0x40;
-        if (a != 0.0f)
-            *(float *)(camera_data_region + 0xe4) = a;
+        if (up_spring_value != 0.0f)
+            *(float *)(camera_data_region + 0xe4) = up_spring_value;
         if (b != 0.0f)
             *(float *)(camera_data_region + 0xe8) = b;
     }
@@ -32,12 +32,12 @@ extern char *D_L00_00166E00 __attribute__((section(".data")));
 extern char *FUN_L00_001eb1f8(int);
 
 void FUN_L00_002eaa30(char *src);
-void FUN_L00_002eaa30(char *src) {
-    char *g = D_L00_00166E00;
+void FUN_L00_002eaa30(char *rotation_source) {
+    char *current_camera_record = D_L00_00166E00;
     char *camera_record;
-    if (*(short *)(g + 0x86) != 5)
+    if (*(short *)(current_camera_record + 0x86) != 5)
         camera_record = FUN_L00_001eb1f8(5);
     else
-        camera_record = g;
-    qcopy(*(char **)(camera_record + 0x70) + 0x90, src);
+        camera_record = current_camera_record;
+    qcopy(*(char **)(camera_record + 0x70) + 0x90, rotation_source);
 }

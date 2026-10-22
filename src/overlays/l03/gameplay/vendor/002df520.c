@@ -58,7 +58,7 @@ void FUN_L03_002df520(u8 *moby) {
     struct Moby *candidate_moby;
     s32 count;
     s32 i;
-    s32 t;
+    s32 scaled_time_value;
 
     tick_countdown(&data[22]);
     switch (moby[0x20]) {
@@ -93,8 +93,8 @@ void FUN_L03_002df520(u8 *moby) {
         if (is_point_inside_clip_volume(&hero.motion.pos, data[12]) && usage_stats.stat[3].count == 0 &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
             usage_stats.stat[3].count++;
-            t = scale_game_frames(D_0015EEA4) / 600;
-            if (usage_stats.stat[3].unk2 < t) {
+            scaled_time_value = scale_game_frames(D_0015EEA4) / 600;
+            if (usage_stats.stat[3].unk2 < scaled_time_value) {
                 usage_stats.stat[3].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
             usage_stats.stat[3].level_mask = usage_stats.stat[3].level_mask | (1 << current_level_index) | 0x80000000;
@@ -114,8 +114,8 @@ void FUN_L03_002df520(u8 *moby) {
         if (is_point_inside_clip_volume(&hero.motion.pos, data[10]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_00179510.state == 0 &&
             D_L03_00179510.cur == -1 && help_records[0x18].id == 0) {
-            t = scale_game_frames(D_0015EEA4) - usage_stats.stat[9].unk2 * 600;
-            if (scale_game_frames(216000) < t) {
+            scaled_time_value = scale_game_frames(D_0015EEA4) - usage_stats.stat[9].unk2 * 600;
+            if (scale_game_frames(216000) < scaled_time_value) {
                 help_request(0xBBC, 0x18);
             }
         }
@@ -135,8 +135,8 @@ void FUN_L03_002df520(u8 *moby) {
             if (usage_stats.stat[19].count < 0xFFFF) {
                 usage_stats.stat[19].count++;
             }
-            t = scale_game_frames(D_0015EEA4) / 600;
-            if (usage_stats.stat[19].unk2 < t) {
+            scaled_time_value = scale_game_frames(D_0015EEA4) / 600;
+            if (usage_stats.stat[19].unk2 < scaled_time_value) {
                 usage_stats.stat[19].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
             usage_stats.stat[19].level_mask = usage_stats.stat[19].level_mask | (1 << current_level_index) | 0x80000000;
@@ -164,8 +164,8 @@ void FUN_L03_002df520(u8 *moby) {
         if (is_point_inside_clip_volume(&hero.motion.pos, data[13]) && usage_stats.stat[15].count == 0 &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
             usage_stats.stat[15].count++;
-            t = scale_game_frames(D_0015EEA4) / 600;
-            if (usage_stats.stat[15].unk2 < t) {
+            scaled_time_value = scale_game_frames(D_0015EEA4) / 600;
+            if (usage_stats.stat[15].unk2 < scaled_time_value) {
                 usage_stats.stat[15].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
             usage_stats.stat[15].level_mask = usage_stats.stat[15].level_mask | (1 << current_level_index) | 0x80000000;
@@ -180,8 +180,8 @@ void FUN_L03_002df520(u8 *moby) {
         }
         if (hero.state.current == 0x74 && usage_stats.stat[16].count == 0) {
             usage_stats.stat[16].count++;
-            t = scale_game_frames(D_0015EEA4) / 600;
-            if (usage_stats.stat[16].unk2 < t) {
+            scaled_time_value = scale_game_frames(D_0015EEA4) / 600;
+            if (usage_stats.stat[16].unk2 < scaled_time_value) {
                 usage_stats.stat[16].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
             usage_stats.stat[16].level_mask = usage_stats.stat[16].level_mask | (1 << current_level_index) | 0x80000000;
@@ -259,12 +259,12 @@ void FUN_L03_002e01d0(char *owner_moby) {
         if (D_L03_0015F5C4 != 2)
             break;
         if (D_L03_0016C960.mode == 4 || D_L03_0016C960.mode == 10) {
-            int v = D_L03_0016C960.mode;
+            int cutscene_mode = D_L03_0016C960.mode;
             int i;
             i = 0;
-            if (v == 4)
+            if (cutscene_mode == 4)
                 i = 2;
-            else if (v == 10)
+            else if (cutscene_mode == 10)
                 i = 0;
             cutscene_set_camera_target(D_L03_0016C960.mobys[i]);
         }
@@ -297,22 +297,22 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 void FUN_L03_002eb7e0(char *camera) {
     char *camera_data = *(char **)(camera + 0x70);
     float *camera_target_data = (float *)(camera_data + 0xB0);
-    float *b = (float *)(camera_data + 0xF0);
+    float *camera_offset_direction = (float *)(camera_data + 0xF0);
     float *camera_look_direction = (float *)(camera_data + 0x100);
     float back[4];
     float side[4];
     float pos[4];
     float look[4];
-    float dir[4];
+    float camera_look_displacement[4];
 
     normalize_vector_xyz(side, &hero.gravity_dir, -*(float *)(camera_data + 0xE0));
-    normalize_vector_xyz(back, b, -*(float *)(camera_data + 0xD0));
+    normalize_vector_xyz(back, camera_offset_direction, -*(float *)(camera_data + 0xD0));
     add_vector_xyz(pos, &hero.motion.pos, side);
     add_vector_xyz(camera + 0x30, pos, back);
     normalize_vector_xyz(look, &hero.gravity_dir, -camera_target_data[5]);
     add_vector_xyz(look, &hero.motion.pos, look);
-    subtract_vector_xyz(dir, look, camera + 0x30);
-    normalize_vector_xyz(camera_look_direction, dir, 1.0f);
+    subtract_vector_xyz(camera_look_displacement, look, camera + 0x30);
+    normalize_vector_xyz(camera_look_direction, camera_look_displacement, 1.0f);
     normalize_vector_xyz(camera, camera_look_direction, 1.0f);
     normalize_vector_xyz(camera + 0x40, camera, 1.0f);
     qcopy(camera, camera + 0x40);
@@ -325,20 +325,20 @@ extern void clear_u64_value_eb978(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern s32 D_L03_00167074 NOT_SDA;
 /* vendor camera init: aims the camera data at the hero, resets its blend state and places it (FUN_L03_002eb7e0) */
-void FUN_L03_002eb978(void *arg) {
-    char *camera = arg;
+void FUN_L03_002eb978(void *camera_instance) {
+    char *camera = camera_instance;
     char *camera_config = *(char **)((char *)D_L03_0015EF50 + *(s16 *)(camera + 0x84) * 32 + 0x1C);
     char *target;
     char *pos;
     char *camera_data;
     char *timer;
-    char *ang;
-    int tbl;
+    char *camera_back_direction_data;
+    int camera_table_base;
     float *camera_parameter_values;
     int i;
     float f;
     float mtx[12];
-    float v[4];
+    float camera_rotation_angles[4];
 
     target = *(char **)(camera + 0x70) + 0xB0;
     *(float *)(target + 0x14) = 1.5f;
@@ -359,23 +359,23 @@ void FUN_L03_002eb978(void *arg) {
     qcopy(pos, &hero.motion.pos);
     timer = *(char **)(camera + 0x70);
     ((s32 *)timer)[12] = scale_game_frames(0x78);
-    tbl = D_L03_0015EF50;
-    ang = *(char **)(camera + 0x70) + 0xF0;
-    *(s32 *)(ang + 0x30) = 0;
-    *(s32 *)(ang + 0x28) = 0;
-    *(s32 *)(ang + 0x2C) = 0;
-    *(float *)(ang + 0x34) = hero.motion.pos.f[2];
-    *(s32 *)(ang + 0x20) = 0;
-    *(s32 *)(ang + 0x24) = 0;
-    i = (*(s16 *)(camera + 0x84) << 5) + tbl;
+    camera_table_base = D_L03_0015EF50;
+    camera_back_direction_data = *(char **)(camera + 0x70) + 0xF0;
+    *(s32 *)(camera_back_direction_data + 0x30) = 0;
+    *(s32 *)(camera_back_direction_data + 0x28) = 0;
+    *(s32 *)(camera_back_direction_data + 0x2C) = 0;
+    *(float *)(camera_back_direction_data + 0x34) = hero.motion.pos.f[2];
+    *(s32 *)(camera_back_direction_data + 0x20) = 0;
+    *(s32 *)(camera_back_direction_data + 0x24) = 0;
+    i = (*(s16 *)(camera + 0x84) << 5) + camera_table_base;
     i += 0x10;
     camera_parameter_values = (float *)i;
-    v[0] = camera_parameter_values[0];
-    v[1] = camera_parameter_values[1];
-    v[2] = camera_parameter_values[2];
-    v[3] = 0.0f;
-    euler_rotation_basis(mtx, v);
-    qcopy(ang, mtx);
+    camera_rotation_angles[0] = camera_parameter_values[0];
+    camera_rotation_angles[1] = camera_parameter_values[1];
+    camera_rotation_angles[2] = camera_parameter_values[2];
+    camera_rotation_angles[3] = 0.0f;
+    euler_rotation_basis(mtx, camera_rotation_angles);
+    qcopy(camera_back_direction_data, mtx);
     FUN_L03_002eb7e0(camera);
     *(s16 *)(camera + 0x7E) = 0;
     D_L03_00167074 = 0x78;
@@ -388,17 +388,17 @@ void FUN_L03_002ebb00(void *arg) {
     char *camera = arg;
     char *camera_data = *(char **)(camera + 0x70);
     char *camera_offset_params = camera_data + 0xD0;
-    char *b = camera_data + 0xF0;
+    char *camera_back_direction_data = camera_data + 0xF0;
     struct Hero *g = &hero;
     float camera_back_offset[4];
     float gravity_offset[4];
     float camera_position[4];
     struct Hero *hero_ptr;
     if (g->unk2284 != 0x50 || g->state.current == 0x11) {
-        *(float *)(b + 0x34) = g->motion.pos.f[2];
+        *(float *)(camera_back_direction_data + 0x34) = g->motion.pos.f[2];
     }
     func_L00_001FF4B0_ebb00(gravity_offset, &hero.gravity_dir, -*(float *)(camera_offset_params + 0x10));
-    func_L00_001FF4B0_ebb00(camera_back_offset, b, -*(float *)camera_offset_params);
+    func_L00_001FF4B0_ebb00(camera_back_offset, camera_back_direction_data, -*(float *)camera_offset_params);
     hero_ptr = &hero;
     *(float *)camera_data =
         func_001EC120_ebb00(camera_data + 0x10, *(float *)camera_data, hero_ptr->motion.pos.f[0], *(float *)(camera_data + 0x20),
@@ -407,7 +407,7 @@ void FUN_L03_002ebb00(void *arg) {
         func_001EC120_ebb00(camera_data + 0x14, *(float *)(camera_data + 4), hero_ptr->motion.pos.f[1], *(float *)(camera_data + 0x20),
                             *(float *)(camera_data + 0x24), *(float *)(camera_data + 0x28));
     *(float *)(camera_data + 8) =
-        func_001EC120_ebb00(camera_data + 0x18, *(float *)(camera_data + 8), *(float *)(b + 0x34), *(float *)(camera_data + 0x20),
+        func_001EC120_ebb00(camera_data + 0x18, *(float *)(camera_data + 8), *(float *)(camera_back_direction_data + 0x34), *(float *)(camera_data + 0x20),
                             *(float *)(camera_data + 0x24), *(float *)(camera_data + 0x28));
     func_001F9BD8_ebb00(camera_position, camera_data, gravity_offset);
     func_001F9BD8_ebb00(camera_position, camera_position, camera_back_offset);
@@ -430,19 +430,19 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 vel) __asm__("FUN_001ebd78");
 
-void FUN_L03_002ebc58(void *arg) {
-    char *camera = arg;
+void FUN_L03_002ebc58(void *camera_instance) {
+    char *camera = camera_instance;
     char *camera_data = *(char **)(camera + 0x70);
     float *camera_target_data = (float *)(camera_data + 0xB0);
     float look_direction[4];
-    float b[4];
+    float look_point[4];
     float look_offset[4];
-    qcopy(b, camera_data);
+    qcopy(look_point, camera_data);
     camera_target_data[2] = cam_interp_values(camera_data + 0xBC, camera_target_data[2], hero.motion.pos.f[2],
                              *(float *)&D_L03_00161E70, *(float *)&D_L03_00161E74, 0.0f);
     normalize_vector_xyz(look_offset, D_L03_00166F40, camera_target_data[5]);
-    add_vector_xyz(b, look_offset, b);
-    subtract_vector_xyz(look_direction, b, camera + 0x30);
+    add_vector_xyz(look_point, look_offset, look_point);
+    subtract_vector_xyz(look_direction, look_point, camera + 0x30);
     normalize_vector_xyz(camera, look_direction, 1.0f);
     qcopy(camera + 0x40, camera);
     cross_vectors_xyz(camera + 0x10, camera, D_L03_00166F40 - 0x10);
@@ -453,9 +453,9 @@ void FUN_L03_002ebc58(void *arg) {
 
 /* Returns -1 while the game is in one of two blocking states, else 0. */
 int FUN_L03_002ebd70(void) {
-    struct Hero *g = &hero;
+    struct Hero *hero_ptr = &hero;
 
-    if ((g->unk2284 == 0x50 && g->state.current != 0x11) || g->state.current == 6) {
+    if ((hero_ptr->unk2284 == 0x50 && hero_ptr->state.current != 0x11) || hero_ptr->state.current == 6) {
         return -1;
     }
     return 0;
@@ -471,10 +471,10 @@ extern void FUN_L03_002ebb00_u(void *) __asm__("FUN_L03_002ebb00");
 extern void FUN_L03_002ebc58_u(void *) __asm__("FUN_L03_002ebc58");
 void no_op_main_callback(void *) __asm__("FUN_001e93e8");
 
-void FUN_L03_002ebdb0(void *arg) {
-    FUN_L03_002ebb00_u(arg);
-    no_op_main_callback(arg);
-    FUN_L03_002ebc58_u(arg);
+void FUN_L03_002ebdb0(void *camera) {
+    FUN_L03_002ebb00_u(camera);
+    no_op_main_callback(camera);
+    FUN_L03_002ebc58_u(camera);
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED1B0), where it is exact; names translated to the US level program. */
 

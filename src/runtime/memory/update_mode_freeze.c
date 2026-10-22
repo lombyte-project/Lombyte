@@ -50,10 +50,14 @@ void update_mode_freeze(void) {
         VIDEO_MODE_TEST_AWAIT_TIMEOUT_ACK = 3
     };
     enum {
+        FREEZE_MODE_CONFIRM_CANCEL_CHOICE = 0,
         FREEZE_MODE_VIDEO_MODE_TEST = 6
     };
     enum {
-        FREEZE_CHOICE_AWAIT_INPUT = 1
+        FREEZE_CHOICE_PREPARE_INPUT = 0,
+        FREEZE_CHOICE_AWAIT_INPUT = 1,
+        FREEZE_CHOICE_CONFIRM_EXIT = 2,
+        FREEZE_CHOICE_CANCEL_EXIT = 3
     };
     s32 video_mode;
     s32 step;
@@ -163,9 +167,9 @@ void update_mode_freeze(void) {
         }
         break;
 
-    case 0:
+    case FREEZE_MODE_CONFIRM_CANCEL_CHOICE:
         switch (freeze.unk1C) {
-        case 0:
+        case FREEZE_CHOICE_PREPARE_INPUT:
             if (freeze.unk20 < 8) {
                 freeze.unk20++;
             } else if (freeze.unk24 < 8) {
@@ -186,8 +190,8 @@ void update_mode_freeze(void) {
             if (video_mode >= 0)
                 break;
 
-        case 2:
-        case 3:
+        case FREEZE_CHOICE_CONFIRM_EXIT:
+        case FREEZE_CHOICE_CANCEL_EXIT:
             if (freeze.unk24 != 0) {
                 freeze.unk24--;
             } else if (freeze.unk20 != 0) {

@@ -185,7 +185,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x41: {
+    case HERO_STATE_FIDGET_ALT: {
         int t = scale_game_frames(9);
         set_hero_animation(FUN_L06_0021d0a0(0), 0, (float)t);
         {
@@ -988,7 +988,7 @@ int hero_set_state(int a, int b) {
     }
     case HERO_STATE_JUMP:
     case HERO_STATE_RUN_JUMP:
-    case 0xA:
+    case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
@@ -1671,7 +1671,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x7A: {
+    case HERO_STATE_WALL_BONK: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;

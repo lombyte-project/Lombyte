@@ -10,7 +10,7 @@ extern void _flushBuf(void *, s32);
 extern u32 _nextBit(void *, s32);
 
 void _extensionAndUserData(void *decoder_state) {
-    ExtTable tbl = D_001538B8;
+    ExtTable extension_handlers = D_001538B8;
     u32 code;
     u32 id;
 
@@ -20,7 +20,7 @@ void _extensionAndUserData(void *decoder_state) {
             _flushBuf(decoder_state, 32);
             id = _nextBit(decoder_state, 4);
             id = id > 10 ? 0 : id;
-            tbl.f[id](decoder_state);
+            extension_handlers.f[id](decoder_state);
             _nextStartCode(decoder_state);
         } else {
             _flushBuf(decoder_state, 32);

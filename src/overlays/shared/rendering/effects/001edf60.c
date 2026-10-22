@@ -23,7 +23,7 @@ typedef struct {
 } T1edf60;
 extern T1edf60 D_L00_00169040;
 void suck_draw_reticle(int a, int b, OvlQuad *pos, int kind, int mode, float x, float y, float z) __asm__("FUN_L00_001edf60");
-void suck_draw_reticle(int source_entity, int b, OvlQuad *pos, int kind, int mode, float x, float y, float z) {
+void suck_draw_reticle(int source_entity, int queued_reticle_value, OvlQuad *pos, int kind, int mode, float x, float y, float z) {
     E1edf60 *e;
     if (D_L00_0015F5C4 == 2)
         return;
@@ -31,7 +31,7 @@ void suck_draw_reticle(int source_entity, int b, OvlQuad *pos, int kind, int mod
         return;
     e = &D_L00_00169040.e[D_L00_00169040.count];
     e->f20 = source_entity;
-    e->f14 = b;
+    e->f14 = queued_reticle_value;
     e->f10 = x;
     e->f1c = y;
     e->f18 = kind;

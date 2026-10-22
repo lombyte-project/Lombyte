@@ -38,39 +38,39 @@ extern s32 get_dma_packet_span_bytes(struct RestoreEntry *tbl) __asm__("GetDmaPa
 
 s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) __asm__("FUN_0020af20");
 
-s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) {
+s32 memcard_restore_data(u8 *save_packet, s32 slot, struct RestoreEntry *restore_entries) {
     struct RestoreEntry *matched_entry;
     s32 errors;
     s32 total;
     s32 i;
     s32 copySize;
-    u8 *dst;
+    u8 *slot_destination;
 
-    if (validate_data_crc(buf) == 0) {
+    if (validate_data_crc(save_packet) == 0) {
         return 1;
     }
-    buf += 8;
+    save_packet += 8;
     errors = 0;
     total = 8;
-    for (i = 0; tbl[i].data != 0; i++) {
-        tbl[i].status = 0;
+    for (i = 0; restore_entries[i].data != 0; i++) {
+        restore_entries[i].status = 0;
     }
-    while (((struct RestoreBlock *)buf)->id != -1) {
+    while (((struct RestoreBlock *)save_packet)->id != -1) {
         i = 0;
-        if (tbl[0].data == 0) {
+        if (restore_entries[0].data == 0) {
             goto missing;
         }
-        while (tbl[i].id != ((struct RestoreBlock *)buf)->id) {
+        while (restore_entries[i].id != ((struct RestoreBlock *)save_packet)->id) {
             i++;
-            if (tbl[i].data == 0) {
+            if (restore_entries[i].data == 0) {
                 goto missing;
             }
         }
-        matched_entry = (struct RestoreEntry *)(((u32)i << 4) + (u32)tbl);
+        matched_entry = (struct RestoreEntry *)(((u32)i << 4) + (u32)restore_entries);
         if (matched_entry->data != 0) {
-            s32 blockSize = ((struct RestoreBlock *)buf)->size;
+            s32 blockSize = ((struct RestoreBlock *)save_packet)->size;
             s32 entrySize = matched_entry->size;
-            dst = matched_entry->data + slot * entrySize;
+            slot_destination = matched_entry->data + slot * entrySize;
             if (blockSize == entrySize) {
                 s32 status = 1;
                 copySize = entrySize;
@@ -82,24 +82,24 @@ s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) {
                 copySize = entrySize;
                 matched_entry->status = -2;
             }
-            if (memcmp(dst, ((struct RestoreBlock *)buf)->data, copySize) != 0) {
+            if (memcmp(slot_destination, ((struct RestoreBlock *)save_packet)->data, copySize) != 0) {
                 D_0015FE90++;
             }
-            copy_memory_aligned(dst, ((struct RestoreBlock *)buf)->data, copySize);
+            copy_memory_aligned(slot_destination, ((struct RestoreBlock *)save_packet)->data, copySize);
             total += ((copySize + 3) & ~3) + 8;
         } else {
         missing:
             errors++;
         }
-        buf += ((((struct RestoreBlock *)buf)->size + 3) & ~3) + 8;
+        save_packet += ((((struct RestoreBlock *)save_packet)->size + 3) & ~3) + 8;
     }
     total += 8;
-    if (total != get_dma_packet_span_bytes(tbl)) {
+    if (total != get_dma_packet_span_bytes(restore_entries)) {
         errors++;
     }
-    buf += 8;
-    for (i = 0; tbl[i].data != 0 && tbl[i].id != ((struct RestoreBlock *)buf)->id; i++) {
-        if (tbl[i].status <= 0) {
+    save_packet += 8;
+    for (i = 0; restore_entries[i].data != 0 && restore_entries[i].id != ((struct RestoreBlock *)save_packet)->id; i++) {
+        if (restore_entries[i].status <= 0) {
             errors++;
         }
     }

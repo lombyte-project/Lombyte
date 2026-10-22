@@ -94,8 +94,8 @@ int memcard_save_data(int slot, int flags) {
         }
     }
 done: {
-    char *r = D_0013D290;
-    return *(int *)(r + 0xDC) == 0xF;
+    char *memory_card_status_base = D_0013D290;
+    return *(int *)(memory_card_status_base + 0xDC) == 0xF;
 }
 }
 

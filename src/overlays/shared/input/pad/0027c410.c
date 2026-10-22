@@ -16,7 +16,7 @@ extern s32 D_L00_00184414 __attribute__((section(".data")));
 extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
 s32 FUN_L00_0027c410(s32 object_address) {
     s32 flags_snapshot = D_0013C940_7c410.f1C4;
-    s32 v;
+    s32 owner_unk38_address;
     struct GameState *game_state;
     if (flags_snapshot & 0xD00) {
         if (*(s32 *)(object_address + 0x30) & 0x20) {
@@ -29,9 +29,9 @@ s32 FUN_L00_0027c410(s32 object_address) {
             D_L00_00184414 = current_level_index;
         }
         game_state = &D_L00_001B9CF0;
-        v = (s32)game_state->owner->unk38;
-        if (v != 0) {
-            game_state->unk8 = (struct Own *)v;
+        owner_unk38_address = (s32)game_state->owner->unk38;
+        if (owner_unk38_address != 0) {
+            game_state->unk8 = (struct Own *)owner_unk38_address;
         } else if (game_state->unk124 == 0) {
             return -1;
         }

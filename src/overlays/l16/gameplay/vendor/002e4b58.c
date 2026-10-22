@@ -44,22 +44,22 @@ typedef struct {
 } M_4be0;
 
 extern char *D_L16_0015FFD8_gp __asm__("D_L16_0015FFD8") __attribute__((sda));
-char *FUN_L16_002e4be0(struct Moby *arg, int id) {
-    unsigned short *moby_index_entry = D_L16_001ABCC0_4be0[arg->group];
+char *FUN_L16_002e4be0(struct Moby *group_source_moby, int id) {
+    unsigned short *moby_index_entry = D_L16_001ABCC0_4be0[group_source_moby->group];
     char *pool;
-    int idx;
+    int moby_pool_index;
     if (moby_index_entry != 0) {
         pool = D_L16_0015FFD8_gp;
         do {
-            idx = *moby_index_entry & 0x7FFF;
-            if (*(short *)(((M_4be0 *)pool)[idx].data + 0xAC) == id) {
+            moby_pool_index = *moby_index_entry & 0x7FFF;
+            if (*(short *)(((M_4be0 *)pool)[moby_pool_index].data + 0xAC) == id) {
                 goto found;
             }
         } while ((short)*moby_index_entry++ >= 0);
     }
     return 0;
 found:
-    return (char *)&((M_4be0 *)D_L16_0015FFD8_gp)[idx];
+    return (char *)&((M_4be0 *)D_L16_0015FFD8_gp)[moby_pool_index];
 }
 /* Advances a moby's path: steps the path position and returns whether it has reached the end. */
 
@@ -112,20 +112,20 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 void FUN_L16_002e4d88(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
-    float wobble_phase, wobble_value, w;
+    float wobble_phase, wobble_value, wobble_phase_step;
     qcopy(&moby->pos, moby_data + 0x60);
     qcopy(&moby->rot, moby_data + 0x70);
     wobble_phase = fast_add_rotations(*(float *)(moby_data + 0xb8), frame_time * 2.0943951f);
     *(float *)(moby_data + 0xb8) = wobble_phase;
     wobble_value = fast_sin(wobble_phase);
-    w = frame_time * 1.6929693f;
+    wobble_phase_step = frame_time * 1.6929693f;
     moby->pos.z += wobble_value * 0.25f;
-    wobble_phase = fast_add_rotations(*(float *)(moby_data + 0xbc), w);
+    wobble_phase = fast_add_rotations(*(float *)(moby_data + 0xbc), wobble_phase_step);
     *(float *)(moby_data + 0xbc) = wobble_phase;
     wobble_value = fast_add_rotations(moby->rot.y, fast_sin(wobble_phase) * 0.08726646f);
-    w = frame_time * 0.9250245f;
+    wobble_phase_step = frame_time * 0.9250245f;
     moby->rot.y = wobble_value;
-    wobble_phase = fast_add_rotations(*(float *)(moby_data + 0xc0), w);
+    wobble_phase = fast_add_rotations(*(float *)(moby_data + 0xc0), wobble_phase_step);
     *(float *)(moby_data + 0xc0) = wobble_phase;
     moby->rot.x =
         fast_add_rotations(moby->rot.x, fast_sin(wobble_phase) * 0.08726646f);
@@ -146,9 +146,9 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 
 void FUN_L16_002e4f30(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    int idx = *(int *)(data + 0xa0);
-    if (idx != -1) {
-        char *table_entry = D_L16_001B0930[idx];
+    int table_entry_index = *(int *)(data + 0xa0);
+    if (table_entry_index != -1) {
+        char *table_entry = D_L16_001B0930[table_entry_index];
         if (*(int *)table_entry == 7) {
             int i;
             struct Hero *g;
@@ -185,7 +185,7 @@ void FUN_L16_002e97a0(void) {
     int *b = (int *)&D_L16_00161F98;
     int *c = (int *)D_L16_00161FA0;
     int *input_vector_tables = (int *)D_L16_00161FA8;
-    int *e = (int *)D_L16_00161FB0;
+    int *packet_word_tables = (int *)D_L16_00161FB0;
     int i;
 
     vu1_add_g_sregister_l16(6, get_effect_texture_l16(0x29));
@@ -196,7 +196,7 @@ void FUN_L16_002e97a0(void) {
     for (i = 0; i < 0x2; i++) {
         if (fast_bsphere_check(D_L16_001DF2B0[i], 512.0f) != -1) {
             FUN_L16_002e8b98_i(element_counts[i], input_vector_tables[i], b[i], c[i], D_L16_001DF2D0);
-            FUN_L00_001fde98(element_counts[i], b[i], e[i], D_L16_001DF2D0, 1);
+            FUN_L00_001fde98(element_counts[i], b[i], packet_word_tables[i], D_L16_001DF2D0, 1);
         }
     }
 }

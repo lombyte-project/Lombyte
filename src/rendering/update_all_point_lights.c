@@ -15,19 +15,19 @@ extern void refresh_point_light(int) __asm__("FUN_00201f58");
 void update_all_point_lights(void) __asm__("FUN_00201a28");
 
 void update_all_point_lights(void) {
-    char *l = dir_lights;
+    char *lighting_presets_base = dir_lights;
     float ang;
     int i;
 
-    *(float *)(l + 0x34C) = -0.3f;
-    *(float *)(l + 0x340) = 0.8f;
-    *(float *)(l + 0x344) = 0.8f;
-    *(float *)(l + 0x348) = 0.8f;
+    *(float *)(lighting_presets_base + 0x34C) = -0.3f;
+    *(float *)(lighting_presets_base + 0x340) = 0.8f;
+    *(float *)(lighting_presets_base + 0x344) = 0.8f;
+    *(float *)(lighting_presets_base + 0x348) = 0.8f;
     ang = fast_add_rotations(*(float *)D_00187098, -0.8f);
-    *(float *)(l + 0x350) = fast_cos(ang) * 0.866f;
-    *(float *)(l + 0x354) = fast_sin(ang) * 0.866f;
-    *(float *)(l + 0x358) = -0.5f;
-    *(int *)(l + 0x35C) = 0;
+    *(float *)(lighting_presets_base + 0x350) = fast_cos(ang) * 0.866f;
+    *(float *)(lighting_presets_base + 0x354) = fast_sin(ang) * 0.866f;
+    *(float *)(lighting_presets_base + 0x358) = -0.5f;
+    *(int *)(lighting_presets_base + 0x35C) = 0;
     for (i = 0; i < 8; i++) {
         char *src = point_lights + i * 0x20;
         char *dst = point_light_data + i * 0x30;

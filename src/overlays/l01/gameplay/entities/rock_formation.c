@@ -146,15 +146,15 @@ extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 
 void fan_update(SwayMoby *m) __asm__("FUN_L01_002f9bf0");
 void fan_update(SwayMoby *fan_moby) {
-    SwayVars *v;
+    SwayVars *sway_vars;
     CollQuery collision_query;
 
-    v = fan_moby->pvars;
+    sway_vars = fan_moby->pvars;
     if (fan_moby->state == 0) {
         FUN_L00_0025d1b8(fan_moby);
         fan_moby->state = 1;
-        v->sway = random_float_between(-1.0f, 1.0f);
-        v->dir = (rand() & 1) ? 1.0f : -1.0f;
+        sway_vars->sway = random_float_between(-1.0f, 1.0f);
+        sway_vars->dir = (rand() & 1) ? 1.0f : -1.0f;
     }
     collision_query.moby = fan_moby;
     collision_query.flags = 0x10001;
@@ -162,20 +162,20 @@ void fan_update(SwayMoby *fan_moby) {
     clear_u64_value(&collision_query);
     collision_query.x20 = 0;
     collect_mobies_in_sphere(fan_moby->pos, 0x10, fan_moby, &collision_query, 1.2f);
-    if (v->dir == v->sway) {
-        if (fast_dec_timer(&v->timer)) {
-            v->dir = -v->dir;
-            v->timer = scale_game_frames(0x5A);
+    if (sway_vars->dir == sway_vars->sway) {
+        if (fast_dec_timer(&sway_vars->timer)) {
+            sway_vars->dir = -sway_vars->dir;
+            sway_vars->timer = scale_game_frames(0x5A);
         }
     }
-    v->sway += frame_time * 4.0f * v->dir;
-    if (v->sway > 1.0f) {
-        v->sway = 1.0f;
+    sway_vars->sway += frame_time * 4.0f * sway_vars->dir;
+    if (sway_vars->sway > 1.0f) {
+        sway_vars->sway = 1.0f;
     }
-    if (v->sway < -1.0f) {
-        v->sway = -1.0f;
+    if (sway_vars->sway < -1.0f) {
+        sway_vars->sway = -1.0f;
     }
-    fan_moby->rotz = fast_add_rotations(fan_moby->rotz, frame_time * -12.566371f * v->sway);
+    fan_moby->rotz = fast_add_rotations(fan_moby->rotz, frame_time * -12.566371f * sway_vars->sway);
 }
 typedef union {
     u128 q;
@@ -229,10 +229,10 @@ void bridge_piece_1_update(BurstMoby *self) __asm__("FUN_L01_002f9d80");
 void bridge_piece_1_update(BurstMoby *self) {
     BurstTarget *hit_result;
     BurstColors colors;
-    BurstVec dir;
+    BurstVec debris_velocity;
     BurstVec pos;
-    f32 r;
-    f32 ang;
+    f32 spawn_radius;
+    f32 spawn_angle_radians;
     s32 i;
 
     hit_result = trooper_find_hit(self, 0x830000, 0);
@@ -247,15 +247,15 @@ void bridge_piece_1_update(BurstMoby *self) {
             pos.f[0] = random_float_between(-frame_time, frame_time);
             pos.f[1] = random_float_between(-frame_time, frame_time);
             pos.f[2] = random_float_between(-frame_time, frame_time);
-            dir.q = pos.q;
-            r = random_float_between(2.0f, 3.0f);
-            ang = random_angle_radians();
-            pos.f[0] = fast_cos(ang) * r;
-            pos.f[1] = fast_sin(ang) * r;
+            debris_velocity.q = pos.q;
+            spawn_radius = random_float_between(2.0f, 3.0f);
+            spawn_angle_radians = random_angle_radians();
+            pos.f[0] = fast_cos(spawn_angle_radians) * spawn_radius;
+            pos.f[1] = fast_sin(spawn_angle_radians) * spawn_radius;
             pos.f[2] = 0.0f;
-            fast_vec_normalize(&dir, &dir, random_float_between(frame_time * 5.0f, frame_time * 20.0f));
+            fast_vec_normalize(&debris_velocity, &debris_velocity, random_float_between(frame_time * 5.0f, frame_time * 20.0f));
             fast_vec_add(&pos, &pos, &self->pos);
-            FUN_L01_002f8530(&pos, &dir, colors.c[random_integer_below(3)],
+            FUN_L01_002f8530(&pos, &debris_velocity, colors.c[random_integer_below(3)],
                              FUN_L00_00257b90(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
         }
         D_0014C190_257218[D_0015ED84_e[1]][self->id >> 5] |= 1 << (self->id & 0x1F);
@@ -297,7 +297,7 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     u128 position_copy;
     u128 target_copy;
     BeamMoby *spawned_moby;
-    BeamVars *v;
+    BeamVars *beam_vars;
     u128 *pp;
     u128 *tp;
 
@@ -307,8 +307,8 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     target_copy = *target;
     spawned_moby = spawn_beam_moby(0x2D2);
     if (spawned_moby != 0) {
-        v = spawned_moby->pvars;
-        v->owner = owner;
+        beam_vars = spawned_moby->pvars;
+        beam_vars->owner = owner;
         spawned_moby->b30 = 0x7F;
         spawned_moby->h32 = 0x7F;
         spawned_moby->b31 = 1;
@@ -318,10 +318,10 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
         spawned_moby->ry = random_angle_radians();
         spawned_moby->rz = random_angle_radians();
         qcopy(&spawned_moby->pos, pp);
-        qcopy(&v->target, tp);
-        v->color = color;
+        qcopy(&beam_vars->target, tp);
+        beam_vars->color = color;
         FUN_L00_0026daa0(spawned_moby, 0x2F00007F, color, -1, 210000.0f);
-        FUN_L00_0026daa0(spawned_moby, 0x4F004F7F, v->color, -1, 115500.0f);
+        FUN_L00_0026daa0(spawned_moby, 0x4F004F7F, beam_vars->color, -1, 115500.0f);
         FUN_L00_00250df8(spawned_moby);
     }
     return spawned_moby;
@@ -359,8 +359,8 @@ extern void mine_camera_blast(void *, void *, s32, s32) __asm__("FUN_L00_002d383
 
 void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 light)
 {
-    BurstVec pos;
-    BurstVec vel;
+    BurstVec burst_position;
+    BurstVec particle_base_velocity;
     BurstPalette inner;
     BurstPalette outer;
     BurstPalette *inner_p;
@@ -370,16 +370,16 @@ void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 
     s32 i;
 
     /* pos and inner are used through pointers, as in retail */
-    pos_p = &pos;
-    pos.q = *where;
-    clear_vector(&vel);
+    pos_p = &burst_position;
+    burst_position.q = *where;
+    clear_vector(&particle_base_velocity);
     inner_p = &inner;
     for (i = 2; i >= 0; i--) {
         speed = random_float_between(8.0f, 10.0f) * frame_time;
         size = scale * 400000.0f;
         inner = D_L01_0020B4F0;
         outer = D_L01_0020B508;
-        FUN_L00_0026a9f0(pos_p, &vel,
+        FUN_L00_0026a9f0(pos_p, &particle_base_velocity,
                          inner_p->c[random_integer_below(6)], outer.c[random_integer_below(6)],
                          size,
                          random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)),
@@ -388,8 +388,8 @@ void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 
     }
 
     if (moby != 0) {
-        spawn_glow_particle(moby, pos_p, &vel, scale + scale, scale_game_frames(0x14), 0x7F, 0, 0x40, 0x30);
-        spawn_glow_particle(moby, pos_p, &vel, scale * 1.5f, scale_game_frames(0x1D), 0x20, 0, 0x20, 0);
+        spawn_glow_particle(moby, pos_p, &particle_base_velocity, scale + scale, scale_game_frames(0x14), 0x7F, 0, 0x40, 0x30);
+        spawn_glow_particle(moby, pos_p, &particle_base_velocity, scale * 1.5f, scale_game_frames(0x1D), 0x20, 0, 0x20, 0);
         if (moby->state != 0xFE) {
             if (moby->state != 0xFD && sound != -1) {
                 FUN_0022da68(sound, 0, moby);
@@ -451,29 +451,29 @@ extern u128 D_L01_001742E0;
 
 void update_birdbot_projectile(DropMoby *) __asm__("FUN_L01_002fa4c0");
 void update_birdbot_projectile(DropMoby *projectile) {
-    DropVars *v;
+    DropVars *projectile_vars;
     u128 *pos;
-    Vec4 prev;
+    Vec4 previous_position;
     DropProbe probe;
     u128 burst_position;
     f32 scaled_ten;
-    f32 b;
+    f32 scaled_ten_product;
     f32 zero;
     f32 one;
     f32 ten;
     f32 half;
 
-    v = projectile->vars;
+    projectile_vars = projectile->vars;
     pos = &projectile->pos.q;
-    qcopy(&prev, pos);
+    qcopy(&previous_position, pos);
     zero = 0.0f;
     one = 1.0f;
     ten = 10.0f;
     scaled_ten = multiply_global_factor_ed64(ten);
-    b = multiply_global_factor_ed64(ten);
-    b = b * multiply_global_factor_ed64(ten);
-    ((f32 *)&v->vel)[2] -= (scaled_ten * zero + one) * 2.0f / b;
-    fast_vec_add(pos, pos, &v->vel);
+    scaled_ten_product = multiply_global_factor_ed64(ten);
+    scaled_ten_product = scaled_ten_product * multiply_global_factor_ed64(ten);
+    ((f32 *)&projectile_vars->vel)[2] -= (scaled_ten * zero + one) * 2.0f / scaled_ten_product;
+    fast_vec_add(pos, pos, &projectile_vars->vel);
     if (projectile->pos.f[0] < zero || projectile->pos.f[1] < zero || projectile->pos.f[2] < zero ||
         vector_distance(pos, D_L01_00167240) > 64.0f) {
         mark_moby_for_removal(projectile);
@@ -483,24 +483,24 @@ void update_birdbot_projectile(DropMoby *projectile) {
     probe.flags = 0x10001;
     probe.scale = one;
     probe.count = 1;
-    qcopy(&probe.dir, &v->vel);
+    qcopy(&probe.dir, &projectile_vars->vel);
     ((f32 *)&probe.dir)[2] = one;
     ((f32 *)&probe.dir)[3] = 5627.9248f;
     probe.b28 = 1;
     probe.b29 = 1;
     probe.id = projectile->hA6;
-    if (fast_dec_timer(v->sound) != 0) {
+    if (fast_dec_timer(projectile_vars->sound) != 0) {
         burst_position = projectile->pos.q;
         FUN_L01_002fa1b0(projectile, &burst_position, 0, 0.5f, zero);
         mark_moby_for_removal(projectile);
-    } else if (collision_line(&prev, pos, 0, v->coll, &probe) != 0) {
+    } else if (collision_line(&previous_position, pos, 0, projectile_vars->coll, &probe) != 0) {
         qcopy(pos, &D_L01_001742E0);
         burst_position = projectile->pos.q;
         FUN_L01_002fa1b0(projectile, &burst_position, 0, 0.5f, zero);
         mark_moby_for_removal(projectile);
     } else {
         half = 0.5f;
-        if (probe_world_sphere(half, pos, 0x10, v->coll, &probe) != 0) {
+        if (probe_world_sphere(half, pos, 0x10, projectile_vars->coll, &probe) != 0) {
             burst_position = projectile->pos.q;
             FUN_L01_002fa1b0(projectile, &burst_position, 0, half, zero);
             mark_moby_for_removal(projectile);
@@ -735,7 +735,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
     Data_2FC140 *data;
     Link_2FC140 *linked_moby_data;
     int level_table_byte;
-    int cnt;
+    int inactive_or_absent_link_count;
     int flag;
     int i;
     int scene_start_gate_value;
@@ -835,7 +835,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         break;
     case AGNOGG_SHIP_WAIT_FOR_LINKED_MOBIES_INACTIVE:
         flag = 1;
-        cnt = 0;
+        inactive_or_absent_link_count = 0;
         i = 0;
         do {
             if (data->list[i] != -1 && (char *)D_L01_00160058_2FC140 + (data->list[i] << 8) != 0
@@ -844,9 +844,9 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
                 flag = 0;
                 break;
             }
-            cnt++;
+            inactive_or_absent_link_count++;
             i++;
-        } while (cnt < 3);
+        } while (inactive_or_absent_link_count < 3);
         if (flag == 0) {
             break;
         }
@@ -965,19 +965,19 @@ void bridge_half_update(PendulumMoby *self) {
         BRIDGE_HALF_WAIT_FOR_TRIGGER = 1,
         BRIDGE_HALF_REDUCE_SWING_TO_ZERO = 2
     };
-    PendulumVars *v;
+    PendulumVars *pendulum_vars;
     PendVec4 arm;
     PendVec4 swing_offset;
     s32 voice_slot_index;
     u8 *voice;
 
-    v = self->vars;
+    pendulum_vars = self->vars;
     switch (self->state) {
     case BRIDGE_HALF_INITIALIZE:
-        qcopy(&v->pivot, &self->pos);
-        v->swing = 1.0f;
+        qcopy(&pendulum_vars->pivot, &self->pos);
+        pendulum_vars->swing = 1.0f;
         self->state = 1;
-        v->sound = -1;
+        pendulum_vars->sound = -1;
         break;
     case BRIDGE_HALF_WAIT_FOR_TRIGGER:
         if (self->trigger == 2 || D_0014C050[self->id + current_level_index * 16] == 0xFF) {
@@ -986,29 +986,29 @@ void bridge_half_update(PendulumMoby *self) {
         }
         break;
     case BRIDGE_HALF_REDUCE_SWING_TO_ZERO:
-        v->swing -= frame_time * 0.5f;
-        if (v->swing < 0.0f) {
-            v->swing = 0.0f;
+        pendulum_vars->swing -= frame_time * 0.5f;
+        if (pendulum_vars->swing < 0.0f) {
+            pendulum_vars->swing = 0.0f;
         }
-        if (v->swing == 0.0f) {
-            voice_slot_index = v->sound;
+        if (pendulum_vars->swing == 0.0f) {
+            voice_slot_index = pendulum_vars->sound;
             if (voice_slot_index != -1) {
                 voice = D_0013E550 + voice_slot_index * 0x70;
                 if (*(void **)(voice + 0x88) == self && voice[0x74] != 0) {
                     release_voice_slot(voice_slot_index);
                 }
             }
-            v->sound = -1;
+            pendulum_vars->sound = -1;
             self->state = 1;
-        } else if (!voice_is_playing(self, v->sound)) {
-            v->sound = FUN_0022da68(0, 4, self);
+        } else if (!voice_is_playing(self, pendulum_vars->sound)) {
+            pendulum_vars->sound = FUN_0022da68(0, 4, self);
         }
         break;
     }
-    self->rot_x = v->swing * 0.62831855f;
+    self->rot_x = pendulum_vars->swing * 0.62831855f;
     arm.q = 0;
     arm.f[2] = -11.0f;
-    fast_vec_add(&arm, &arm, &v->pivot);
+    fast_vec_add(&arm, &arm, &pendulum_vars->pivot);
     swing_offset.f[0] = fast_cos(self->rot_z) * 11.0f * fast_sin(self->rot_x);
     swing_offset.f[1] = fast_sin(self->rot_z) * 11.0f * fast_sin(self->rot_x);
     swing_offset.f[2] = fast_cos(self->rot_x) * 11.0f;
@@ -1095,12 +1095,12 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
     s32 found;
     s32 i;
     s32 j;
-    PoolVec v;
+    PoolVec drip_position_or_bubble_vector;
     PoolVec bubble_position;
     s32 k;
     f32 bubble_path_fraction;
     f32 zero;
-    u8 *tex;
+    u8 *tile_binding_output;
     s32 ripple_tile_index;
     s32 bind_tile_index;
     PoolTile *tiles;
@@ -1124,37 +1124,37 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
         pool_tiles[13].f2C = zero;
         pool_set_scale(1.0f);
         {
-            PoolLight *l;
+            PoolLight *pool_lighting;
             f32 sun_angle;
 
-            l = &pool_light;
-            l->f00 = 16.0f;
-            l->f04 = 16.0f;
-            l->f08 = -8.0f;
-            l->f0C = -8.0f;
-            l->f10 = 1.0f;
-            l->f14 = 1.0f;
-            l->f18 = 0.9f;
-            l->f20 = 0.1f;
+            pool_lighting = &pool_light;
+            pool_lighting->f00 = 16.0f;
+            pool_lighting->f04 = 16.0f;
+            pool_lighting->f08 = -8.0f;
+            pool_lighting->f0C = -8.0f;
+            pool_lighting->f10 = 1.0f;
+            pool_lighting->f14 = 1.0f;
+            pool_lighting->f18 = 0.9f;
+            pool_lighting->f20 = 0.1f;
             sun_angle = angle_atan2(pool_sun[4], pool_sun[5]);
-            l->f30 = fast_cos(sun_angle) * 0.57735f;
-            l->f34 = fast_sin(sun_angle) * 0.57735f;
-            l->f38 = -0.57735f;
-            l->i28 = 0x29;
-            l->i2C = 0x2A;
-            l->c3C = 0x1C;
-            l->c3D = 0x40;
+            pool_lighting->f30 = fast_cos(sun_angle) * 0.57735f;
+            pool_lighting->f34 = fast_sin(sun_angle) * 0.57735f;
+            pool_lighting->f38 = -0.57735f;
+            pool_lighting->i28 = 0x29;
+            pool_lighting->i2C = 0x2A;
+            pool_lighting->c3C = 0x1C;
+            pool_lighting->c3D = 0x40;
         }
         pool_draw_count = 21;
         D_L01_00161208 = zero;
-        tex = pool_tile_tex;
+        tile_binding_output = pool_tile_tex;
         D_L01_0016120C = 32768.0f;
         D_L01_00161210 = 255.0f;
         D_L01_00161214 = 48.0f;
         pool_draw_tiles = pool_tiles;
         pool_draw_tex = pool_tile_tex;
         for (bind_tile_index = 0; bind_tile_index < 21; bind_tile_index++) {
-            pool_bind_tile(&pool_tiles[bind_tile_index], tex + bind_tile_index * 16);
+            pool_bind_tile(&pool_tiles[bind_tile_index], tile_binding_output + bind_tile_index * 16);
         }
         for (ripple_tile_index = 0; ripple_tile_index < 21; ripple_tile_index++) {
             PoolTile *tile = &pool_tiles[ripple_tile_index];
@@ -1213,31 +1213,31 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
         if (found == 0 || found == 6) {
             pool_drip_timer--;
             if (pool_drip_timer <= 0) {
-                qcopy(&v, &pool_drips[random_integer_below(5)]);
-                v.x = v.x + random_float_between(-0.15f, 0.15f);
-                v.y = v.y + random_float_between(-0.15f, 0.15f);
-                pool_drip(&v, 0.2f);
+                qcopy(&drip_position_or_bubble_vector, &pool_drips[random_integer_below(5)]);
+                drip_position_or_bubble_vector.x = drip_position_or_bubble_vector.x + random_float_between(-0.15f, 0.15f);
+                drip_position_or_bubble_vector.y = drip_position_or_bubble_vector.y + random_float_between(-0.15f, 0.15f);
+                pool_drip(&drip_position_or_bubble_vector, 0.2f);
                 pool_drip_timer = random_int_between(300, 1200);
             }
         }
         if (found == 5) {
             bubble_path_fraction = pool_wave[level_frame_count % 20] / 20.0f;
-            v.x = 0.02f;
-            v.y = 0.0f;
-            v.z = 0.0f;
+            drip_position_or_bubble_vector.x = 0.02f;
+            drip_position_or_bubble_vector.y = 0.0f;
+            drip_position_or_bubble_vector.z = 0.0f;
             bubble_position.x = random_float_between(-0.6f, 0.6f) + 177.0f;
             bubble_position.y = bubble_path_fraction * -11.0f + 176.0f + random_float_between(-0.1f, 0.1f);
             bubble_position.z = 39.0f;
-            pool_bubbles(&bubble_position, &v, 1.0f, random_float_between(0.4f, 0.5f));
-            v.x = 0.0f;
-            v.y = 0.0f;
-            v.z = 0.0f;
-            for (bubble_path_fraction = v.x; bubble_path_fraction < 1.0f; bubble_path_fraction += 0.05f) {
+            pool_bubbles(&bubble_position, &drip_position_or_bubble_vector, 1.0f, random_float_between(0.4f, 0.5f));
+            drip_position_or_bubble_vector.x = 0.0f;
+            drip_position_or_bubble_vector.y = 0.0f;
+            drip_position_or_bubble_vector.z = 0.0f;
+            for (bubble_path_fraction = drip_position_or_bubble_vector.x; bubble_path_fraction < 1.0f; bubble_path_fraction += 0.05f) {
                 if (random_integer_below(32) == 0) {
                     bubble_position.x = random_float_between(-0.6f, 0.6f) + 178.0f;
                     bubble_position.y = bubble_path_fraction * -11.0f + 176.0f + random_float_between(-0.1f, 0.1f);
                     bubble_position.z = random_float_between(-0.2f, 0.0f) + 39.0f;
-                    pool_bubble(&bubble_position, &v, random_float_between(4.0f, 10.0f));
+                    pool_bubble(&bubble_position, &drip_position_or_bubble_vector, random_float_between(4.0f, 10.0f));
                 }
             }
         }
@@ -1289,10 +1289,10 @@ void green_mushroom_update(SparkMoby *mushroom_moby) {
     SparkHit *hit;
     s32 flag;
     s32 i;
-    f32 ang;
+    f32 fragment_placement_angle;
     f32 scale_ratio;
-    SparkVec off;
-    SparkVec rot;
+    SparkVec fragment_spawn_position;
+    SparkVec fragment_rotation;
 
     flag = 0;
     hit = trooper_find_hit(mushroom_moby, 0x10000, 0);
@@ -1313,15 +1313,15 @@ void green_mushroom_update(SparkMoby *mushroom_moby) {
         FUN_L01_002787a0(mushroom_moby);
         scale_ratio = mushroom_moby->scale / mushroom_moby->pclass->radius;
         for (i = 0; i < 4; i++) {
-            ang = (f32)i * 1.5707964f;
-            clear_u64_value(&rot);
-            rot.z = fast_add_rotations(ang, 0.87266463f);
-            off.x = fast_cos(ang) * -0.57f * scale_ratio;
-            off.y = fast_sin(ang) * -0.57f * scale_ratio;
-            off.z = 0.0f;
-            fast_vec_add(&off, &off, &mushroom_moby->pos);
-            off.z += scale_ratio * 1.2f;
-            FUN_L00_00263fd8(mushroom_moby, 0x719, &off, &rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f,
+            fragment_placement_angle = (f32)i * 1.5707964f;
+            clear_u64_value(&fragment_rotation);
+            fragment_rotation.z = fast_add_rotations(fragment_placement_angle, 0.87266463f);
+            fragment_spawn_position.x = fast_cos(fragment_placement_angle) * -0.57f * scale_ratio;
+            fragment_spawn_position.y = fast_sin(fragment_placement_angle) * -0.57f * scale_ratio;
+            fragment_spawn_position.z = 0.0f;
+            fast_vec_add(&fragment_spawn_position, &fragment_spawn_position, &mushroom_moby->pos);
+            fragment_spawn_position.z += scale_ratio * 1.2f;
+            FUN_L00_00263fd8(mushroom_moby, 0x719, &fragment_spawn_position, &fragment_rotation, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f,
                              &D_L01_0015F580);
         }
         FUN_L01_00278e20(mushroom_moby, 0x718);
@@ -1347,43 +1347,43 @@ extern void FUN_L01_002feb28(void);
 extern int enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 
 /* On first use, lowers and ripples the layers' vertices; every frame, pulses their glow and queues FUN_L01_002feb28. */
-void FUN_L01_002feb58(void *arg) {
+void FUN_L01_002feb58(void *callback_argument) {
     s32 i;
     s32 g;
     s32 j;
     s32 k;
-    s32 n;
+    s32 ripple_layer_index;
     s32 vertex_pair_start_index;
-    Vec4 *v;
-    Vec4 *w;
+    Vec4 *lowered_vertex;
+    Vec4 *ripple_vertex_pair;
     f32 glow_factor;
 
     if (D_L01_00161CE0 == 0) {
         D_L01_00161CE0 = 1;
         for (i = 0; i < 4; i++) {
-            v = (D_L01_001FBC80 + i)->verts;
+            lowered_vertex = (D_L01_001FBC80 + i)->verts;
             for (j = 0; j < (D_L01_001FBC80 + i)->count; j++) {
-                v->f[3] = v->f[2] = v->f[2] - 0.45f;
-                v++;
+                lowered_vertex->f[3] = lowered_vertex->f[2] = lowered_vertex->f[2] - 0.45f;
+                lowered_vertex++;
             }
         }
         k = 1;
-        for (n = 0; n < 4; n++) {
+        for (ripple_layer_index = 0; ripple_layer_index < 4; ripple_layer_index++) {
             k--;
-            w = (D_L01_001FBC80 + n)->verts;
-            for (vertex_pair_start_index = 0; vertex_pair_start_index < (D_L01_001FBC80 + n)->count; vertex_pair_start_index += 2) {
+            ripple_vertex_pair = (D_L01_001FBC80 + ripple_layer_index)->verts;
+            for (vertex_pair_start_index = 0; vertex_pair_start_index < (D_L01_001FBC80 + ripple_layer_index)->count; vertex_pair_start_index += 2) {
                 if (k & 1) {
-                    w[0].f[2] += 0.05f;
-                    w[0].f[3] -= 0.05f;
-                    w[1].f[2] -= 0.05f;
-                    w[1].f[3] += 0.05f;
+                    ripple_vertex_pair[0].f[2] += 0.05f;
+                    ripple_vertex_pair[0].f[3] -= 0.05f;
+                    ripple_vertex_pair[1].f[2] -= 0.05f;
+                    ripple_vertex_pair[1].f[3] += 0.05f;
                 } else {
-                    w[0].f[2] -= 0.05f;
-                    w[0].f[3] += 0.05f;
-                    w[1].f[2] += 0.05f;
-                    w[1].f[3] -= 0.05f;
+                    ripple_vertex_pair[0].f[2] -= 0.05f;
+                    ripple_vertex_pair[0].f[3] += 0.05f;
+                    ripple_vertex_pair[1].f[2] += 0.05f;
+                    ripple_vertex_pair[1].f[3] -= 0.05f;
                 }
-                w += 2;
+                ripple_vertex_pair += 2;
                 k++;
             }
         }
@@ -1393,7 +1393,7 @@ void FUN_L01_002feb58(void *arg) {
     for (g = 3; g >= 0; g--) {
         D_L01_001FBC80[g].glow = glow_factor;
     }
-    enqueue_callback_list_1(FUN_L01_002feb28, arg);
+    enqueue_callback_list_1(FUN_L01_002feb28, callback_argument);
 }
 typedef struct {
     Vec4 home;
@@ -1424,21 +1424,21 @@ void door_left_update(HoverMoby *door_moby) {
         DOOR_OPEN = 3,
         DOOR_CLOSING = 4
     };
-    HoverVars *v;
+    HoverVars *door_vars;
     Vec4 *player;
     Vec4 off;
     f32 k;
 
-    v = door_moby->vars;
+    door_vars = door_moby->vars;
     switch (door_moby->state) {
     case DOOR_INITIALIZE:
-        qcopy(&v->home, &door_moby->pos);
-        v->t = 0.0f;
+        qcopy(&door_vars->home, &door_moby->pos);
+        door_vars->t = 0.0f;
         door_moby->state = 1;
         break;
     case DOOR_CLOSED:
         player = &hero.motion.pos;
-        if (vector_distance(v, player) < v->radius &&
+        if (vector_distance(door_vars, player) < door_vars->radius &&
             FUN_001f99c0(door_moby->pos.f[2] - player->f[2]) < 2.0f) {
             door_moby->state = 2;
             if (door_moby->oclass == 0x300) {
@@ -1447,16 +1447,16 @@ void door_left_update(HoverMoby *door_moby) {
         }
         break;
     case DOOR_OPENING:
-        v->t += 1.0f / multiply_global_factor_ed64(20.0f);
-        if (v->t >= 1.0f) {
-            v->t = 1.0f;
+        door_vars->t += 1.0f / multiply_global_factor_ed64(20.0f);
+        if (door_vars->t >= 1.0f) {
+            door_vars->t = 1.0f;
             door_moby->state = 3;
         }
         break;
     case DOOR_OPEN:
         k = 1.1f;
-        if (vector_distance(v, &hero.motion.pos) > v->radius * k &&
-            vector_distance(v, D_L01_00167240) > v->radius * k) {
+        if (vector_distance(door_vars, &hero.motion.pos) > door_vars->radius * k &&
+            vector_distance(door_vars, D_L01_00167240) > door_vars->radius * k) {
             door_moby->state = 4;
             if (door_moby->oclass == 0x300) {
                 FUN_0022da68(0, 0, door_moby);
@@ -1465,23 +1465,23 @@ void door_left_update(HoverMoby *door_moby) {
         break;
     case DOOR_CLOSING:
         player = &hero.motion.pos;
-        if (vector_distance(v, player) < v->radius &&
+        if (vector_distance(door_vars, player) < door_vars->radius &&
             FUN_001f99c0(door_moby->pos.f[2] - player->f[2]) < 2.0f) {
             door_moby->state = 2;
         } else {
-            v->t -= 1.0f / multiply_global_factor_ed64(20.0f);
-            if (v->t <= 0.0f) {
-                v->t = 0.0f;
+            door_vars->t -= 1.0f / multiply_global_factor_ed64(20.0f);
+            if (door_vars->t <= 0.0f) {
+                door_vars->t = 0.0f;
                 door_moby->state = 1;
             }
         }
         break;
     }
-    off.f[0] = fast_cos(door_moby->rot_z) * v->t * (door_moby->oclass == 0x300 ? 2.0f : -2.0f);
-    off.f[1] = fast_sin(door_moby->rot_z) * v->t * (door_moby->oclass == 0x300 ? 2.0f : -2.0f);
+    off.f[0] = fast_cos(door_moby->rot_z) * door_vars->t * (door_moby->oclass == 0x300 ? 2.0f : -2.0f);
+    off.f[1] = fast_sin(door_moby->rot_z) * door_vars->t * (door_moby->oclass == 0x300 ? 2.0f : -2.0f);
     off.f[2] = 0.0f;
-    door_moby->pos.f[0] = v->home.f[0] + off.f[0];
-    door_moby->pos.f[1] = v->home.f[1] + off.f[1];
+    door_moby->pos.f[0] = door_vars->home.f[0] + off.f[0];
+    door_moby->pos.f[1] = door_vars->home.f[1] + off.f[1];
 }
 
 #define NOT_SDA
@@ -1511,8 +1511,8 @@ void pipe_update(struct Moby *moby) {
     char *hit = find_moby_hit(moby, 0x10000, 0);
     moby->hit_slot = 0xFF;
     if (hit != 0 && 0.0f < *(float *)(hit + 0x2C)) {
-        float v[4];
-        float w[4];
+        float particle_position[4];
+        float particle_velocity[4];
         int random_countdown = random_integer_below(*(int *)(pipe_vars + 4) - *(int *)pipe_vars + 1) + *(int *)pipe_vars;
         int k;
         if (random_countdown > 0) {
@@ -1522,24 +1522,24 @@ void pipe_update(struct Moby *moby) {
         }
         allocate_voice_for_target_entry(0, 0, (int)moby);
         for (k = 0x95; k >= 0;) {
-            float velocity_component_or_size, b;
-            *(OvlQuad *)v = 0;
-            v[0] = -0.2f;
-            v[2] = 1.2f;
+            float velocity_component_or_size, horizontal_speed_sample;
+            *(OvlQuad *)particle_position = 0;
+            particle_position[0] = -0.2f;
+            particle_position[2] = 1.2f;
             k--;
-            add_vector_xyz(v, v, &moby->pos);
+            add_vector_xyz(particle_position, particle_position, &moby->pos);
             velocity_component_or_size = fast_cos(random_angle_radians());
-            b = random_float_between(1.5f, 3.0f);
-            velocity_component_or_size = velocity_component_or_size * (b * frame_time);
-            w[0] = velocity_component_or_size;
+            horizontal_speed_sample = random_float_between(1.5f, 3.0f);
+            velocity_component_or_size = velocity_component_or_size * (horizontal_speed_sample * frame_time);
+            particle_velocity[0] = velocity_component_or_size;
             velocity_component_or_size = fast_sin(random_angle_radians());
-            b = random_float_between(1.5f, 3.0f);
-            velocity_component_or_size = velocity_component_or_size * (b * frame_time);
-            w[1] = velocity_component_or_size;
-            w[2] = 0;
-            w[2] = random_float_between(w[2], 3.0f) * frame_time;
+            horizontal_speed_sample = random_float_between(1.5f, 3.0f);
+            velocity_component_or_size = velocity_component_or_size * (horizontal_speed_sample * frame_time);
+            particle_velocity[1] = velocity_component_or_size;
+            particle_velocity[2] = 0;
+            particle_velocity[2] = random_float_between(particle_velocity[2], 3.0f) * frame_time;
             velocity_component_or_size = random_float_between(125000.0f, 175000.0f);
-            FUN_L00_0026ced0(v, w, 0x207F7F7F, 0x272727, velocity_component_or_size,
+            FUN_L00_0026ced0(particle_position, particle_velocity, 0x207F7F7F, 0x272727, velocity_component_or_size,
                              scale_game_frames(FUN_L00_00257b90(0x2D, 0x3C)));
         }
         FUN_L01_002ffa90_c(moby);
@@ -1565,7 +1565,7 @@ extern void FUN_L00_00250df8();
 
 SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
     SpawnedMoby *spawned_moby;
-    s32 *pv;
+    s32 *spawned_moby_vars;
 
     spawned_moby = create_moby(0x30B);
     if (spawned_moby != 0) {
@@ -1573,11 +1573,11 @@ SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
         spawned_moby->h32 = 0xFF;
         spawned_moby->b31 = 1;
         spawned_moby->state = 0;
-        pv = spawned_moby->pvars;
+        spawned_moby_vars = spawned_moby->pvars;
         spawned_moby->d38 = src->d38;
         qcopy(&spawned_moby->pos, &src->pos);
         qcopy(&spawned_moby->rot, &src->rot);
-        *pv = -1;
+        *spawned_moby_vars = -1;
         FUN_L00_00250df8(spawned_moby, -1);
     }
     return spawned_moby;
@@ -1604,16 +1604,16 @@ extern int FUN_L00_00257b90(int lo, int hi);
 extern void FUN_L00_0026ced0_u(void *, void *, u32, u32, f32, s32) __asm__("FUN_L00_0026ced0");
 
 void FUN_L01_002ffb28(SmokeMoby *self) {
-    SmokeVars *v;
+    SmokeVars *smoke_vars;
     Vec4 pos;
-    Vec4 vel;
+    Vec4 particle_velocity;
     Vec4 local_velocity;
     f32 size;
     s32 i;
 
-    v = self->vars;
-    if (voice_is_playing(self, v->sound) == 0) {
-        v->sound = FUN_0022da68(0, 4, self);
+    smoke_vars = self->vars;
+    if (voice_is_playing(self, smoke_vars->sound) == 0) {
+        smoke_vars->sound = FUN_0022da68(0, 4, self);
     }
     for (i = 0; i < 2; i++) {
         pos.q = 0;
@@ -1622,11 +1622,11 @@ void FUN_L01_002ffb28(SmokeMoby *self) {
         pos.f[2] = 1.2f;
         local_velocity.f[0] = random_float_between(0.8f, 1.2f) * (frame_time * 3.0f);
         local_velocity.f[2] = random_float_between(0.8f, 1.2f) * (frame_time + frame_time);
-        vel.q = local_velocity.q;
-        transform_vector_by_basis(&vel, &vel, self->mtx);
+        particle_velocity.q = local_velocity.q;
+        transform_vector_by_basis(&particle_velocity, &particle_velocity, self->mtx);
         fast_vec_add(&pos, &pos, &self->pos);
         size = random_float_between(125000.0f, 175000.0f);
-        FUN_L00_0026ced0_u(&pos, &vel, 0x207F7F7F, 0x272727, size,
+        FUN_L00_0026ced0_u(&pos, &particle_velocity, 0x207F7F7F, 0x272727, size,
                            scale_game_frames(FUN_L00_00257b90(0x2D, 0x3C)));
     }
 }
@@ -1660,11 +1660,11 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
 OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
     OrbMoby *spawned_moby;
-    OrbVars *pv;
+    OrbVars *spawned_moby_vars;
 
     spawned_moby = create_moby(0x313);
     if (spawned_moby != 0) {
-        pv = spawned_moby->pvars;
+        spawned_moby_vars = spawned_moby->pvars;
         FUN_L00_0025d1b8(spawned_moby);
         spawned_moby->w40 = 0;
         spawned_moby->h32 = 0x40;
@@ -1672,11 +1672,11 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
         spawned_moby->scale = spawned_moby->scale * scale;
         spawned_moby->rotz = random_angle_radians();
         qcopy(&spawned_moby->pos, pos);
-        qzero(pv);
-        pv->f8 = -frame_time;
-        pv->timer = 0x78;
-        pv->f10 = frame_time_sq * 15.0f;
-        pv->spin = random_float_between(0.0031415929f, 0.062831856f);
+        qzero(spawned_moby_vars);
+        spawned_moby_vars->f8 = -frame_time;
+        spawned_moby_vars->timer = 0x78;
+        spawned_moby_vars->f10 = frame_time_sq * 15.0f;
+        spawned_moby_vars->spin = random_float_between(0.0031415929f, 0.062831856f);
         FUN_L00_00250df8(spawned_moby);
     }
     return spawned_moby;
@@ -1742,9 +1742,9 @@ void FUN_L01_002ffdc0(struct Moby *moby) {
             }
             for (i = 0; i < 16; i++) {
                 float particle_angle = random_angle_radians();
-                float r = random_float_between(frame_time * 0.0f, frame_time * 3.0f);
-                particle_vel[0] = fast_cos(particle_angle) * r;
-                particle_vel[1] = fast_sin(particle_angle) * r;
+                float horizontal_velocity_magnitude = random_float_between(frame_time * 0.0f, frame_time * 3.0f);
+                particle_vel[0] = fast_cos(particle_angle) * horizontal_velocity_magnitude;
+                particle_vel[1] = fast_sin(particle_angle) * horizontal_velocity_magnitude;
                 particle_vel[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
                 {
                     int lifetime = FUN_L00_00257b90(0x5A, 0x78);
@@ -1847,7 +1847,7 @@ void beehive_update(SpawnerMoby *beehive_moby) {
         BEEHIVE_INITIALIZE = 0,
         BEEHIVE_TRY_SPAWN_CLONE = 1
     };
-    SpawnerVars *v = beehive_moby->pvars;
+    SpawnerVars *beehive_vars = beehive_moby->pvars;
     SpawnerMoby *spawned_clone;
     CloneAiVars *nv;
     f32 k;
@@ -1857,16 +1857,16 @@ void beehive_update(SpawnerMoby *beehive_moby) {
         beehive_moby->state = 1;
         break;
     case BEEHIVE_TRY_SPAWN_CLONE:
-        if (v->src_id < 0) {
+        if (beehive_vars->src_id < 0) {
             break;
         }
-        if (FUN_L01_0026e008(v->src_id, 0xC) != 0) {
+        if (FUN_L01_0026e008(beehive_vars->src_id, 0xC) != 0) {
             break;
         }
-        if (v->count >= D_L01_00161E90) {
+        if (beehive_vars->count >= D_L01_00161E90) {
             break;
         }
-        v->count++;
+        beehive_vars->count++;
         spawned_clone = (SpawnerMoby *)FUN_L01_00302328((ClonedMoby *)beehive_moby);
         if (spawned_clone != 0) {
             nv = spawned_clone->pvars;
@@ -1888,29 +1888,29 @@ void beehive_update(SpawnerMoby *beehive_moby) {
     }
 }
 
-ClonedMoby *FUN_L01_00302328(ClonedMoby *src) {
+ClonedMoby *FUN_L01_00302328(ClonedMoby *clone_spawner_moby) {
     ClonedMoby *destination_moby;
-    ClonedVars *v;
+    ClonedVars *destination_moby_vars;
 
     destination_moby = 0;
-    FUN_L00_002591d0(&destination_moby, *(s32 *)src->pvars, 0, 0);
-    v = destination_moby->pvars;
+    FUN_L00_002591d0(&destination_moby, *(s32 *)clone_spawner_moby->pvars, 0, 0);
+    destination_moby_vars = destination_moby->pvars;
     destination_moby->b30 = 0x80;
     destination_moby->h32 = 0x80;
-    destination_moby->d38 = src->d38;
+    destination_moby->d38 = clone_spawner_moby->d38;
     destination_moby->b31 = 1;
     destination_moby->w94 = destination_moby->mclass->w10;
     destination_moby->flags |= 0x1020;
     destination_moby->scale = destination_moby->mclass->f24;
     {
         ClonedMoby *transform_destination = destination_moby;
-        qcopy(&transform_destination->pos, &src->pos);
-        qcopy(&transform_destination->rot, &src->rot);
+        qcopy(&transform_destination->pos, &clone_spawner_moby->pos);
+        qcopy(&transform_destination->rot, &clone_spawner_moby->rot);
     }
-    v->f20 = 3.0f;
-    v->f250 = 1.0f;
-    v->w170 = truncate_float_to_s32(819.2f);
-    v->f224 = 30.0f;
+    destination_moby_vars->f20 = 3.0f;
+    destination_moby_vars->f250 = 1.0f;
+    destination_moby_vars->w170 = truncate_float_to_s32(819.2f);
+    destination_moby_vars->f224 = 30.0f;
     FUN_L00_00250df8(destination_moby);
     return destination_moby;
 }

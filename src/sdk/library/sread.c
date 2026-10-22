@@ -28,11 +28,11 @@ struct StdioFile {
 };
 
 extern s64 reentrant_read() __asm__("func_00116108");
-s64 __sread(struct StdioFile *fp, s32 buf, s32 len) {
+s64 __sread(struct StdioFile *fp, s32 destination_buffer, s32 max_bytes) {
     register s32 bytes_read;
 
     bytes_read =
-        (s32)reentrant_read(*(s32 *)((u8 *)fp + 0x54), *(s16 *)((u8 *)fp + 0xE), buf, len);
+        (s32)reentrant_read(*(s32 *)((u8 *)fp + 0x54), *(s16 *)((u8 *)fp + 0xE), destination_buffer, max_bytes);
     if (bytes_read >= 0) {
         goto block_2;
     }

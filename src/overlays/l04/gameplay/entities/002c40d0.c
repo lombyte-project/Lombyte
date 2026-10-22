@@ -14,9 +14,9 @@ extern int FUN_L00_002dbc30(char *, int, int, float);
 extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 
 /* Moby state 9 while FUN_L00_002dbc30 reports a hit; allocates a voice when the short at 0x68 of FUN_L00_002db890(moby) is 6. */
-int FUN_L04_002c40d0(struct Moby *moby, int a, int b, float f) {
+int FUN_L04_002c40d0(struct Moby *moby, int input_quad_address, int b, float f) {
     char *moby_callback_result = FUN_L00_002db890(moby);
-    int r = FUN_L00_002dbc30(moby, a, b, f);
+    int r = FUN_L00_002dbc30(moby, input_quad_address, b, f);
     if (r != 0) {
         moby->state = 0x9;
     } else if ((unsigned char)moby->state == 0x9) {
@@ -33,11 +33,11 @@ typedef struct {
 } T6;
 /* Returns the moby data pointer plus 0x180, or 0 when either is null. */
 s32 FUN_L04_002c41b0(T6 *data_owner) {
-    s32 v;
+    s32 data_base;
     if (data_owner != 0) {
-        v = data_owner->f;
-        if (v != 0) {
-            return v + 0x180;
+        data_base = data_owner->f;
+        if (data_base != 0) {
+            return data_base + 0x180;
         }
         return 0;
     }
@@ -49,7 +49,7 @@ extern void FUN_L00_00250df8(void *);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 /* Creates a class 0x23A moby at pos, copying a few fields from src. */
-void *FUN_L04_002d34d8(char *src, char *pos) {
+void *FUN_L04_002d34d8(char *source_moby, char *pos) {
     char saved_position[16];
     char *saved_position_ptr = saved_position;
     char *created_moby;
@@ -57,12 +57,12 @@ void *FUN_L04_002d34d8(char *src, char *pos) {
     created_moby = (char *)func_0020D348_m(0x23a);
     if (created_moby != 0) {
         *(unsigned char *)(created_moby + 0x30) = 0xFF;
-        *(unsigned short *)(created_moby + 0x32) = *(unsigned short *)(src + 0x32);
+        *(unsigned short *)(created_moby + 0x32) = *(unsigned short *)(source_moby + 0x32);
         created_moby[0x31] = 1;
         *(int *)(created_moby + 0x40) = 0;
         *(int *)(created_moby + 0x44) = 0;
-        *(float *)(created_moby + 0x48) = *(float *)(src + 0x48);
-        *(unsigned long *)(created_moby + 0x38) = *(unsigned long *)(src + 0x38);
+        *(float *)(created_moby + 0x48) = *(float *)(source_moby + 0x48);
+        *(unsigned long *)(created_moby + 0x38) = *(unsigned long *)(source_moby + 0x38);
         qcopy(created_moby + 0x10, saved_position_ptr);
         FUN_L00_00250df8(created_moby);
     }

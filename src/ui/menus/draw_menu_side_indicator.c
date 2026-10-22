@@ -18,19 +18,19 @@ extern void draw_rotated_sprite(float, float, int, int, int, float, float,
 int draw_menu_side_indicator(char *menu) __asm__("FUN_00221f58");
 
 int draw_menu_side_indicator(char *menu) {
-    Glyph2 buf;
+    Glyph2 indicator_glyph_string;
 
     setup_gif_paging(0);
     if (*(int *)(menu + 0x38) != 0) {
-        buf = *(Glyph2 *)D_001602F0;
-        func_001F68E8_c(4, *(int *)(menu + 0x24) / 2 - 8, 0x80FFA888L, &buf, -1);
+        indicator_glyph_string = *(Glyph2 *)D_001602F0;
+        func_001F68E8_c(4, *(int *)(menu + 0x24) / 2 - 8, 0x80FFA888L, &indicator_glyph_string, -1);
         draw_rotated_sprite(640.0f, (float)(*(int *)(menu + 0x24) << 3), 0x20, 0x10,
                             get_frame_texture(get_icon_frame(0xE99E, 6)), 128.0f,
                             256.0f, 0.0f);
     } else {
-        buf = *(Glyph2 *)D_001602F8;
+        indicator_glyph_string = *(Glyph2 *)D_001602F8;
         func_001F68E8_c(*(int *)(menu + 0x20) - 0x18, *(int *)(menu + 0x24) / 2 - 8, 0x80FFA888L,
-                        &buf, -1);
+                        &indicator_glyph_string, -1);
         draw_rotated_sprite(192.0f, (float)(*(int *)(menu + 0x24) << 3), 0x20, 0x10,
                             get_frame_texture(get_icon_frame(0xE99E, 6)), 128.0f,
                             256.0f, 3.14159274f);

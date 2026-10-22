@@ -31,7 +31,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L15_002e4580(char *src, float *v, char *pos) {
+char *FUN_L15_002e4580(char *src, float *direction_vector, char *pos) {
     char *spawned_moby = func_0020D348_m(0x3A6);
     if (spawned_moby != 0) {
         char *moby_vars;
@@ -43,13 +43,13 @@ char *FUN_L15_002e4580(char *src, float *v, char *pos) {
         *(float *)(spawned_moby + 0x2C) = *(float *)(spawned_moby + 0x2C) * 20.0f;
         qcopy(spawned_moby + 0x10, pos);
         moby_vars = *(char **)(spawned_moby + 0x78);
-        FUN_001f9a68(moby_vars, v, 5.0f);
+        FUN_001f9a68(moby_vars, direction_vector, 5.0f);
         *(int *)(moby_vars + 0x38) = scale_game_frames(0xF0);
         *(char **)(moby_vars + 0x3C) = src;
         spawned_moby[0x23] = 0x30;
         *(unsigned short *)(spawned_moby + 0x34) |= 0x200;
-        *(float *)(spawned_moby + 0x48) = fast_arc_tan(v[0], v[1]);
-        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(v), v[2]);
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(direction_vector[0], direction_vector[1]);
+        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(direction_vector), direction_vector[2]);
         FUN_L00_00250df8(spawned_moby);
         FUN_L00_0026daa0(spawned_moby, 0x600040FF, 0x80, -1, 170000.0f);
     }
@@ -544,19 +544,19 @@ extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) 
 void FUN_L15_002d77c0(char *moby) {
     char buf[8];
     char *data = *(char **)(moby + 0x78);
-    float v;
+    float color_blend_factor;
     int col;
 
     draw_ui_frame(W(D_L15_00161BE4) + W(D_L15_00161BD8), W(D_L15_00161BE8) + W(D_L15_00161BD8),
                 W(D_L15_00161BEC) + W(D_L15_00161BD4), W(D_L15_00161BF0) + W(D_L15_00161BD4),
                 W(D_L15_00161BF4));
-    v = fast_sin(func_001FA888(D_L15_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
-    if (v > 1.0f) {
-        v = 1.0f;
-    } else if (v < 0.0f) {
-        v = 0.0f;
+    color_blend_factor = fast_sin(func_001FA888(D_L15_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
+    if (color_blend_factor > 1.0f) {
+        color_blend_factor = 1.0f;
+    } else if (color_blend_factor < 0.0f) {
+        color_blend_factor = 0.0f;
     }
-    col = fast_tween_color(W(D_L15_00161BDC), W(D_L15_00161BE0), v);
+    col = fast_tween_color(W(D_L15_00161BDC), W(D_L15_00161BE0), color_blend_factor);
     buf[0] = 0x30;
     buf[1] = *(short *)(data + 0x12) / scale_ticks(0xE10) + 0x30;
     buf[2] = 0x3A;
@@ -599,7 +599,7 @@ extern int D_L15_00161CE0;
 extern int D_L15_00161CE4;
 void FUN_L15_002d79e8(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
-    float v[4];
+    float bolt_displacement[4];
     float step[4];
     int i;
     int j;
@@ -608,8 +608,8 @@ void FUN_L15_002d79e8(char *moby) {
         D_L15_00161CE4 = 0;
         D_L15_00161CE0 = scale_frames_r(D_L15_00161C8C);
         D_L15_00161C60_r = 0x7F2020;
-        fast_vec_sub(v, moby_vars + 0x100, moby_vars + 0xF0);
-        fast_vec_normalize(step, v, D_L15_00161BFC / 20.0f);
+        fast_vec_sub(bolt_displacement, moby_vars + 0x100, moby_vars + 0xF0);
+        fast_vec_normalize(step, bolt_displacement, D_L15_00161BFC / 20.0f);
         qcopy(D_L15_001D3750_r, moby_vars + 0xF0);
         for (i = 1; i < 20; i++) {
             fast_vec_add(D_L15_001D3750_r[i], D_L15_001D3740_r[i], step);
@@ -902,10 +902,10 @@ extern int D_L15_00161CCA;
 extern int D_L15_00161CCC;
 extern int D_L15_00161CCE;
 void FUN_L15_002d8710(char *moby) {
-    float v = F(D_L15_00161C54_8710) - F(D_L15_00161C58_8710) * frame_scale;
-    F(D_L15_00161C54_8710) = v;
-    if (v <= -8.0f) {
-        F(D_L15_00161C54_8710) = v + 8.0f;
+    float decremented_accumulator = F(D_L15_00161C54_8710) - F(D_L15_00161C58_8710) * frame_scale;
+    F(D_L15_00161C54_8710) = decremented_accumulator;
+    if (decremented_accumulator <= -8.0f) {
+        F(D_L15_00161C54_8710) = decremented_accumulator + 8.0f;
     }
     FUN_L00_002baae0_8710(D_L15_001D3750_8710, W(D_L15_00161C3C_8710), W(D_L15_00161C44_8710), 0x14,
                           F(D_L15_00161C64_8710), F(D_L15_00161C68_8710), F(D_L15_00161C9C_8710));

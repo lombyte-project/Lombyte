@@ -14,12 +14,12 @@ typedef struct {
 } O0024ed18;
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 s32 FUN_L00_0024ed18(O0024ed18 *animation_sequence, f32 target_sequence_position) {
-    s16 v = truncate_float_to_s32(target_sequence_position * 16.0f);
+    s16 scaled_target_position = truncate_float_to_s32(target_sequence_position * 16.0f);
     s32 i;
     for (i = 0; i < animation_sequence->n; i++) {
-        if (v < animation_sequence->k[i]->h) {
+        if (scaled_target_position < animation_sequence->k[i]->h) {
             if (i > 0) {
-                if (v - animation_sequence->k[i - 1]->h < animation_sequence->k[i]->h - v)
+                if (scaled_target_position - animation_sequence->k[i - 1]->h < animation_sequence->k[i]->h - scaled_target_position)
                     i = i - 1;
             }
             return i;

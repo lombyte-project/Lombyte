@@ -22,10 +22,10 @@ extern f32 frame_time __asm__("D_0015ED6C") MACRO_ADDR;
 void emit_six_spark_effects(u8 *source_object, f32 z) {
     Vec4 vel;
     Vec4 vel2;
-    Vec4 pos;
+    Vec4 spark_spawn_position;
     s32 i;
     s32 frame_count;
-    s32 b;
+    s32 second_frame_count;
     s32 third_frame_base_count;
 
     for (i = 0; i < 6; i++) {
@@ -35,13 +35,13 @@ void emit_six_spark_effects(u8 *source_object, f32 z) {
         vel.f[3] = 0.4f;
         qcopy(&vel2, &vel);
         vel2.f[3] = 0.6f;
-        qcopy(&pos, &D_001D9B60[level_render_state.content_variant][i]);
-        transform_vector_by_basis(&pos, &pos, source_object + 0xC0);
-        add_vector_xyz(&pos, &pos, source_object + 0x10);
+        qcopy(&spark_spawn_position, &D_001D9B60[level_render_state.content_variant][i]);
+        transform_vector_by_basis(&spark_spawn_position, &spark_spawn_position, source_object + 0xC0);
+        add_vector_xyz(&spark_spawn_position, &spark_spawn_position, source_object + 0x10);
         frame_count = scale_game_frames(4);
-        b = scale_game_frames(4);
+        second_frame_count = scale_game_frames(4);
         third_frame_base_count = scale_game_frames(4);
-        spawn_spark(&pos, &vel, &vel2, 0x24C0C0C0, 0x14C0C0C0, frame_count, b,
+        spawn_spark(&spark_spawn_position, &vel, &vel2, 0x24C0C0C0, 0x14C0C0C0, frame_count, second_frame_count,
                       third_frame_base_count + random_integer_below(scale_game_frames(4)), -1);
     }
 }

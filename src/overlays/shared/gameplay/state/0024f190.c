@@ -21,7 +21,7 @@ void FUN_L00_0024f190(void *unused, unsigned char *animation_state) {
             if (*(float *)(animation_state + 0x24) >= 1.0f) {
                 int u = animation_state[7];
                 do {
-                    int o, p, o2;
+                    int o, p, animation_table_byte_offset;
                     animation_state[6] = u;
                     animation_state[5] |= 1;
                     animation_state[0x20] = animation_state[0x21];
@@ -38,10 +38,10 @@ void FUN_L00_0024f190(void *unused, unsigned char *animation_state) {
                     {
                         float unscaled_frame_remainder = (*(float *)(animation_state + 0x24) - 1.0f) / *(float *)(animation_state + 0x2C);
                         float g;
-                        o2 = animation_state[0x22] * 4;
+                        animation_table_byte_offset = animation_state[0x22] * 4;
                         p = animation_state[0x20] * 4;
                         *(float *)(animation_state + 0x24) = unscaled_frame_remainder;
-                        g = **(float **)(*(int *)(*(unsigned char **)(animation_state + 0x14) + o2 + 0x48) + p + 0x1C);
+                        g = **(float **)(*(int *)(*(unsigned char **)(animation_state + 0x14) + animation_table_byte_offset + 0x48) + p + 0x1C);
                         *(float *)(animation_state + 0x2C) = g;
                         *(float *)(animation_state + 0x24) = unscaled_frame_remainder * g;
                     }

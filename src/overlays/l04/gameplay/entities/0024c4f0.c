@@ -7,12 +7,12 @@ typedef struct {
 } V_24c4f0;
 
 int FUN_L04_0024c4f0(float *query_point, float *poly, int vertex_count) {
-    V_24c4f0 *v = (V_24c4f0 *)poly;
+    V_24c4f0 *polygon_vertices = (V_24c4f0 *)poly;
     int i;
 
     for (i = 0; i < vertex_count; i++) {
-        if ((v[(i + 1) % vertex_count].x - v[i].x) * (query_point[1] - v[i].y) -
-                (v[(i + 1) % vertex_count].y - v[i].y) * (query_point[0] - v[i].x) >
+        if ((polygon_vertices[(i + 1) % vertex_count].x - polygon_vertices[i].x) * (query_point[1] - polygon_vertices[i].y) -
+                (polygon_vertices[(i + 1) % vertex_count].y - polygon_vertices[i].y) * (query_point[0] - polygon_vertices[i].x) >
             0.0f) {
             return i + 1;
         }
@@ -38,15 +38,15 @@ float FUN_L04_0024c660(float *dst, float *segment_start, float *b, float *query_
     float segment_direction[4];
     float perpendicular_direction_xy[4];
     float query_to_start_offset[4];
-    float d3[4];
+    float perpendicular_offset_point_xy[4];
     float det, t, r;
 
     subtract_vector_xyz(segment_direction, b, segment_start);
     subtract_vector_xyz(query_to_start_offset, segment_start, query_point);
-    d3[0] = segment_direction[1];
-    d3[1] = -segment_direction[0];
-    add_vector_xyz(d3, query_point, d3);
-    subtract_vector_xyz(perpendicular_direction_xy, query_point, d3);
+    perpendicular_offset_point_xy[0] = segment_direction[1];
+    perpendicular_offset_point_xy[1] = -segment_direction[0];
+    add_vector_xyz(perpendicular_offset_point_xy, query_point, perpendicular_offset_point_xy);
+    subtract_vector_xyz(perpendicular_direction_xy, query_point, perpendicular_offset_point_xy);
     det = segment_direction[1] * perpendicular_direction_xy[0] - segment_direction[0] * perpendicular_direction_xy[1];
     if (absolute_float(det) < 0.0001f) {
         qcopy(dst, segment_start);
@@ -83,7 +83,7 @@ int FUN_L04_0024c7d8(float *out, float *query_point, float *poly, int vertex_cou
     float diff[4];
     float best;
     int i;
-    int r = FUN_L04_0024c4f0(query_point, poly, vertex_count) != 0;
+    int has_positive_edge_cross = FUN_L04_0024c4f0(query_point, poly, vertex_count) != 0;
     best = 0;
     for (i = 0; i < vertex_count; i++) {
         float distance_to_edge;
@@ -95,5 +95,5 @@ int FUN_L04_0024c7d8(float *out, float *query_point, float *poly, int vertex_cou
             qcopy(out, edge_closest_point);
         }
     }
-    return r;
+    return has_positive_edge_cross;
 }

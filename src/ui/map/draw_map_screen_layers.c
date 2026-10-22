@@ -10,16 +10,16 @@ extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 s32 draw_map_screen_layers(void) __asm__("FUN_00220850");
 
 s32 draw_map_screen_layers(void) {
-    s32 st = level_map_selection.loaded;
+    s32 loaded_map_index = level_map_selection.loaded;
     s32 size;
-    s32 off;
+    s32 screen_extent_reduction;
     s32 map_adjusted_frame_count;
     s32 ph;
 
-    if (st < 0) {
+    if (loaded_map_index < 0) {
         return 0;
     }
-    if (st == 6 || st == 13 || st == 17) {
+    if (loaded_map_index == 6 || loaded_map_index == 13 || loaded_map_index == 17) {
         vu1_add_g_sregister(0x47, 0);
         vu1_add_g_sregister(8, 5);
         append_power_of_two_textured_screen_sprite(level_map_selection.tex0, 0, 0, 7, 7, fs_aa_buffer.target_width << 4, fs_aa_buffer.target_height << 4, 0, 0, 0x80);
@@ -33,20 +33,20 @@ s32 draw_map_screen_layers(void) {
                          0x80);
         }
     } else {
-        map_adjusted_frame_count = D_0015F438 + st * 0x2AB;
-        size = D_001DDF68[st];
-        off = size * 2;
+        map_adjusted_frame_count = D_0015F438 + loaded_map_index * 0x2AB;
+        size = D_001DDF68[loaded_map_index];
+        screen_extent_reduction = size * 2;
         ph = map_adjusted_frame_count % 0x800;
         vu1_add_g_sregister(0x47, 0);
         vu1_add_g_sregister(8, 0);
-        append_power_of_two_textured_screen_sprite(level_map_selection.tex0, size, size, 7, 7, (fs_aa_buffer.target_width << 4) - off,
-                     (fs_aa_buffer.target_height << 4) - off, ph, 0, 0x80);
+        append_power_of_two_textured_screen_sprite(level_map_selection.tex0, size, size, 7, 7, (fs_aa_buffer.target_width << 4) - screen_extent_reduction,
+                     (fs_aa_buffer.target_height << 4) - screen_extent_reduction, ph, 0, 0x80);
         vu1_add_g_sregister(0x47, 0x360B);
         vu1_add_g_sregister(8, 5);
-        append_power_of_two_textured_screen_sprite(level_map_selection.tex1, size, size, 7, 7, (fs_aa_buffer.target_width << 4) - off,
-                     (fs_aa_buffer.target_height << 4) - off, 0, 0, 0x80);
-        append_power_of_two_textured_screen_sprite(level_map_selection.tex2, size, size, 7, 7, (fs_aa_buffer.target_width << 4) - off,
-                     (fs_aa_buffer.target_height << 4) - off, 0, 0, 0x80);
+        append_power_of_two_textured_screen_sprite(level_map_selection.tex1, size, size, 7, 7, (fs_aa_buffer.target_width << 4) - screen_extent_reduction,
+                     (fs_aa_buffer.target_height << 4) - screen_extent_reduction, 0, 0, 0x80);
+        append_power_of_two_textured_screen_sprite(level_map_selection.tex2, size, size, 7, 7, (fs_aa_buffer.target_width << 4) - screen_extent_reduction,
+                     (fs_aa_buffer.target_height << 4) - screen_extent_reduction, 0, 0, 0x80);
     }
     return 4;
 }

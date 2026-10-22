@@ -15,30 +15,30 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 
-int FUN_L15_00247e90(struct Moby *obj, u128 *delta, int flags, float step, float radius) {
+int FUN_L15_00247e90(struct Moby *moving_moby, u128 *delta, int flags, float step, float radius) {
     Vec4 start;
     Vec4 probe;
     int pushed = 0;
     int i;
     int mask;
 
-    qcopy(&start, &obj->pos);
-    add_vector_xyz(&obj->pos, &obj->pos, delta);
+    qcopy(&start, &moving_moby->pos);
+    add_vector_xyz(&moving_moby->pos, &moving_moby->pos, delta);
     i = 0;
     do {
         mask = (flags << 1) & 0x20;
-        qcopy(&probe, &obj->pos);
+        qcopy(&probe, &moving_moby->pos);
         probe.f[2] += step;
-        if (coll_sphere(&probe, radius, mask | 4, obj) == 0) {
+        if (coll_sphere(&probe, radius, mask | 4, moving_moby) == 0) {
             break;
         }
         if (fast_arc_tan(coll_hit.normal_z, vector_length_xy(&coll_hit.normal_x)) > 0.5235988f) {
-            qcopy(&obj->pos, coll_hit.pad30);
-            obj->pos.z -= step;
+            qcopy(&moving_moby->pos, coll_hit.pad30);
+            moving_moby->pos.z -= step;
             pushed |= 1;
         }
         i++;
     } while (i < 6);
-    subtract_vector_xyz(delta, &obj->pos, &start);
+    subtract_vector_xyz(delta, &moving_moby->pos, &start);
     return pushed;
 }

@@ -1,5 +1,6 @@
 /* Ported from rac1-decomp (src/game/camera.c, func_001EC5B8). */
 #include "sda.h"
+#include "rnc/gameplay/camera/camera_modes.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/data_labels.h"
 typedef struct {
@@ -28,18 +29,11 @@ extern CamPrioHook D_001E8C00[];
    g < 0 exit so its `$v0 = 1` is not hoisted above the load. */
 int camera_activation_check_priority(void *cur, void *other) __asm__("FUN_001ec210");
 
-int camera_activation_check_priority(void *cur, void *other) {
-    enum {
-        CAMERA_ACTIVATION_BY_PRIORITY = 0,
-        CAMERA_ACTIVATION_HANDOFF_GATED_PRIORITY = 1,
-        CAMERA_ACTIVATION_REQUIRE_HANDOFF_PRIORITY = 2,
-        CAMERA_ACTIVATION_IN_CLIP_VOLUME = 4,
-        CAMERA_ACTIVATION_MATCH_LISTENER_GROUP = 7
-    };
+int camera_activation_check_priority(void *candidate_camera, void *other) {
     enum {
         CAMERA_COMPARE_ACCEPT = 1
     };
-    char *candidate_camera_bytes = (char *)cur;
+    char *candidate_camera_bytes = (char *)candidate_camera;
     char *current_camera_bytes = (char *)other;
     unsigned char *state = (unsigned char *)(candidate_camera_bytes + 0x74);
 
@@ -49,7 +43,7 @@ int camera_activation_check_priority(void *cur, void *other) {
     {
         int (*fn)(void *, void *) = D_001E8C00[*(short *)(candidate_camera_bytes + 0x8C)].fn_04;
         if (fn != 0) {
-            switch (fn(cur, other)) {
+            switch (fn(candidate_camera, other)) {
             case -1:
                 return 0;
             case CAMERA_COMPARE_ACCEPT:
@@ -101,10 +95,10 @@ int camera_activation_check_priority(void *cur, void *other) {
         }
         {
             CamRec20 *rec = &D_0015EF90[*(short *)(candidate_camera_bytes + 0x84)];
-            int g = *(int *)((char *)rec->unk1C + 0x24);
+            int secondary_descriptor_index = *(int *)((char *)rec->unk1C + 0x24);
 
-            if (g < 0 ||
-                (base->unk560 == D_0015EF40[g].unk10 && base->unk570 == 0)) {
+            if (secondary_descriptor_index < 0 ||
+                (base->unk560 == D_0015EF40[secondary_descriptor_index].unk10 && base->unk570 == 0)) {
                 return 1;
             }
         }

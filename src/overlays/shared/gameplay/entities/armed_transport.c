@@ -418,8 +418,8 @@ void FUN_L16_002e2fa0(void *arg) {
     if (point_count >= 2)
     {
         Path2fa0 *heading_source = (Path2fa0 *)((char *)path + (point_count - 2) * 16);
-        Path2fa0 *b = (Path2fa0 *)((char *)path + (point_count - 1) * 16);
-        b->pts[0].heading = heading_source->pts[0].heading;
+        Path2fa0 *heading_destination = (Path2fa0 *)((char *)path + (point_count - 1) * 16);
+        heading_destination->pts[0].heading = heading_source->pts[0].heading;
     }
 }
 #define NOT_SDA
@@ -433,10 +433,10 @@ extern void update_joint_animation(char *, char *, int, float, float) __asm__("F
 void FUN_L16_002e3050(char *moby) {
     float ticks = frame_scale_sq;
     float joint_animation_smoothing_factor = ticks * 0.03f;
-    float b = ticks * 0.3f;
+    float joint_animation_secondary_control = ticks * 0.3f;
     char *data = *(char **)(moby + 0x78);
     *(float *)(data + 0x144) = *(float *)(data + 0x17C);
-    update_joint_animation(moby, data + 0xE0, 2, joint_animation_smoothing_factor, b);
+    update_joint_animation(moby, data + 0xE0, 2, joint_animation_smoothing_factor, joint_animation_secondary_control);
 }
 /* Updates a moby effect and advances it when its linked object is ready. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E6B70), where it is exact; names translated to the US level program. */
@@ -617,8 +617,8 @@ typedef struct {
     char pad2[0x43];
 } M_5cd0;
 
-int FUN_L16_002e5cd0(int idx) {
-    unsigned short *moby_index_entry = (unsigned short *)D_L16_001ABCC0_5cd0[idx];
+int FUN_L16_002e5cd0(int moby_list_index) {
+    unsigned short *moby_index_entry = (unsigned short *)D_L16_001ABCC0_5cd0[moby_list_index];
     if (moby_index_entry == 0) {
         return 0;
     }

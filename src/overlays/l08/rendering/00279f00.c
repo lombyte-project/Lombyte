@@ -21,16 +21,16 @@ extern short D_L08_00160204 __attribute__((sda));
 extern short D_L08_00160208 __attribute__((sda));
 extern unsigned char *D_L08_001B291C __attribute__((section(".data")));
 unsigned char *FUN_L08_00279f00(char *source_moby) {
-    float v[4];
+    float position_offset[4];
     unsigned char *effect = FUN_L00_002678b8(0x27);
     char *source_position;
     char *effect_data;
     if (effect != 0) {
         source_position = source_moby + 0x10;
         effect_data = (char *)effect + 0x20;
-        subtract_vector_xyz(v, source_position, D_L08_001675C0);
-        normalize_vector_xyz(v, v, *(float *)&D_L08_00160208);
-        add_vector_xyz(effect + 0x10, source_position, v);
+        subtract_vector_xyz(position_offset, source_position, D_L08_001675C0);
+        normalize_vector_xyz(position_offset, position_offset, *(float *)&D_L08_00160208);
+        add_vector_xyz(effect + 0x10, source_position, position_offset);
         *(int *)(effect + 4) = *(int *)&D_L08_00160204;
         effect[9] = func_001FA898_r(4.0f) + 0x40;
         effect[3] = 0x48;
@@ -92,12 +92,12 @@ extern int p27fe00_trunc(float) __asm__("FUN_001fa6d0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern unsigned char *D_L08_001B29B4 __attribute__((section(".data")));
 
-void FUN_L08_0027fe00(u128 *pos, u128 *dir, int life, float scale) {
+void FUN_L08_0027fe00(u128 *spawn_position, u128 *dir, int life, float scale) {
     unsigned char *effect;
     unsigned char *effect_data;
     effect = p27fe00_alloc(0x4D);
     if (effect != 0) {
-        qcopy(effect + 0x10, pos);
+        qcopy(effect + 0x10, spawn_position);
         effect_data = effect + 0x20;
         *(int *)(effect + 4) = 0x50504040;
         effect[9] = p27fe00_trunc(2.0f) + 0x40;

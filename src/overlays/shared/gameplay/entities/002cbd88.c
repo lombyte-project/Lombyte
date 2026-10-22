@@ -23,14 +23,14 @@ void FUN_L15_002cbd88(void) {
     int period_frames = scale_game_frames(*(int *)&D_L15_00161AD4);
     float period_frames_float = convert_integer_to_float(period_frames);
     float sine_value = fast_sin((float)(D_L15_0015F5CC % period_frames) / period_frames_float * 6.28318f);
-    float v = *(float *)&D_L15_00161ABC + *(float *)&D_L15_00161AD0 * sine_value;
-    int r;
+    float alpha_scale = *(float *)&D_L15_00161ABC + *(float *)&D_L15_00161AD0 * sine_value;
+    int alpha;
     int k;
-    if (v < 0.0f)
-        v = 0.0f;
-    r = func_001FA898_r((float)D_L15_00161ACF[0] * v);
+    if (alpha_scale < 0.0f)
+        alpha_scale = 0.0f;
+    alpha = func_001FA898_r((float)D_L15_00161ACF[0] * alpha_scale);
     k = *(int *)&D_L15_00161ACC;
-    emit_rgba_draw_packet(k & 0xFF, k >= 9, k >= 17, r);
+    emit_rgba_draw_packet(k & 0xFF, k >= 9, k >= 17, alpha);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002D7B60), where it is exact; names translated to the US level program. */
 
@@ -41,15 +41,15 @@ f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 
 int FUN_L15_002d6770(void) {
     struct Hero *hero_ptr;
-    float vec[4];
+    float raised_probe_position[4];
     float ground_height;
     if (FUN_L00_0020d568() != 0)
         return 1;
     hero_ptr = &hero;
     if ((unsigned)(hero_ptr->state.current - 0x18) < 2) {
-        *(OvlQuad *)vec = *(OvlQuad *)&hero_ptr->motion.pos;
-        vec[2] = vec[2] + 2.0f;
-        ground_height = probe_ground_height(vec, 0, 0.5f);
+        *(OvlQuad *)raised_probe_position = *(OvlQuad *)&hero_ptr->motion.pos;
+        raised_probe_position[2] = raised_probe_position[2] + 2.0f;
+        ground_height = probe_ground_height(raised_probe_position, 0, 0.5f);
         if (collision_hit_material() != 0)
             return 0;
         if (hero_ptr->motion.pos.f[2] <= ground_height)

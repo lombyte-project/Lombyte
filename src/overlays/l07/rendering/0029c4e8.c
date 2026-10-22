@@ -19,7 +19,7 @@ extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L07_001B2164 __attribute__((section(".data")));
-void FUN_L07_0029c4e8(void *pos, void *pos2) {
+void FUN_L07_0029c4e8(void *pos, void *particle_payload_source) {
     unsigned char *particle = create_part(0x41);
     if (particle) {
         float *particle_payload = (float *)(particle + 0x20);
@@ -36,7 +36,7 @@ void FUN_L07_0029c4e8(void *pos, void *pos2) {
         particle_payload[6] = 1.0f;
         particle_payload[7] = 0.6f;
         *(short *)(particle + 0xA) = scale_game_frames(0x50);
-        qcopy(particle_payload, pos2);
+        qcopy(particle_payload, particle_payload_source);
     }
 }
 #include "rnc/math/vector.h"
@@ -55,25 +55,25 @@ extern f32 seg_fabs(f32) __asm__("FUN_001f99c0");
    from the surface (0 when within 1% of the radius). */
 f32 FUN_L07_0029e6d8(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *a, Vec4f *b, f32 radius) {
     Vec4f w, dir, line_projection_point, lower_segment_point, upper_segment_point;
-    f32 t, lower_segment_t, upper_segment_t, intersection_t_offset, dd, dist, e1, e2, eps;
+    f32 line_projection_t, lower_segment_t, upper_segment_t, intersection_t_offset, dd, dist, e1, e2, eps;
     Vec4f *upper_segment_point_ptr;
 
     seg_vec_sub(&w, a, center);
     seg_vec_sub(&dir, b, a);
     dd = seg_dot(&dir, &dir);
-    t = -seg_dot(&w, &dir) / dd;
-    seg_vec_scale(&line_projection_point, &dir, t);
+    line_projection_t = -seg_dot(&w, &dir) / dd;
+    seg_vec_scale(&line_projection_point, &dir, line_projection_t);
     seg_vec_add(&line_projection_point, &line_projection_point, a);
     dist = seg_dist(&line_projection_point, center);
     if (dist < radius) {
         intersection_t_offset = seg_sqrt(radius * radius - dist * dist);
         intersection_t_offset /= seg_len(&dir);
-        lower_segment_t = t - intersection_t_offset;
+        lower_segment_t = line_projection_t - intersection_t_offset;
         if (lower_segment_t < 0.0f)
             lower_segment_t = 0.0f;
         else if (1.0f < lower_segment_t)
             lower_segment_t = 1.0f;
-        upper_segment_t = t + intersection_t_offset;
+        upper_segment_t = line_projection_t + intersection_t_offset;
         if (upper_segment_t < 0.0f)
             upper_segment_t = 0.0f;
         else if (1.0f < upper_segment_t)
@@ -98,10 +98,10 @@ f32 FUN_L07_0029e6d8(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *a, Vec4f *b, 
             dist = e2;
         }
     } else {
-    if (t < 0.0f) {
+    if (line_projection_t < 0.0f) {
         qcopy(out, a);
         dist = seg_fabs(seg_dist(out, center) - radius);
-    } else if (1.0f < t) {
+    } else if (1.0f < line_projection_t) {
         qcopy(out, b);
         dist = seg_fabs(seg_dist(out, center) - radius);
     } else {

@@ -102,11 +102,11 @@ void seeker_update(struct Moby *moby) {
     Vec4 vel;
     s32 mode;
     s32 voice;
-    f32 dist;
+    f32 target_distance_xy;
     f32 z;
     f32 height;
     f32 limit;
-    f32 diff;
+    f32 vertical_follow_adjustment;
     VoiceSlot *slot;
 
     FUN_L09_002c6230_u(moby);
@@ -195,24 +195,24 @@ void seeker_update(struct Moby *moby) {
                          fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                          &vars->heading_speed, frame_time_sq * 8.726646f, frame_time_sq * 8.726646f,
                          frame_time * 12.566371f);
-        dist = vector_distance_xy(&moby->pos, &target->pos);
-        if (dist > 1.9f) {
+        target_distance_xy = vector_distance_xy(&moby->pos, &target->pos);
+        if (target_distance_xy > 1.9f) {
             vars->moving = 1;
         }
-        if (dist < 1.4f) {
+        if (target_distance_xy < 1.4f) {
             vars->moving = 0;
         }
         if (vars->moving != 0) {
             vel.f[0] = fast_cos(moby->rot.z) * vars->speed;
             vel.f[1] = fast_sin(moby->rot.z) * vars->speed;
             vel.f[2] = 0.0f;
-            diff = hero.motion.pos.f[2] + 0.8f - z;
+            vertical_follow_adjustment = hero.motion.pos.f[2] + 0.8f - z;
             if (moby->pos.z < hero.motion.pos.f[2] + 0.8f) {
-                diff *= 0.1f;
+                vertical_follow_adjustment *= 0.1f;
             } else {
-                diff *= 0.05f;
+                vertical_follow_adjustment *= 0.05f;
             }
-            vel.f[2] += diff;
+            vel.f[2] += vertical_follow_adjustment;
             limit = frame_scale * 0.3f;
             if (vel.f[2] > limit) {
                 vel.f[2] = limit;
@@ -225,13 +225,13 @@ void seeker_update(struct Moby *moby) {
             FUN_L00_00258830(moby, &vel, 0, 0.0f, 0.5f, 0.0f);
         } else {
             qzero(&vel);
-            diff = hero.motion.pos.f[2] + 0.2f - z;
+            vertical_follow_adjustment = hero.motion.pos.f[2] + 0.2f - z;
             if (moby->pos.z < hero.motion.pos.f[2] + 0.2f) {
-                diff *= 0.1f;
+                vertical_follow_adjustment *= 0.1f;
             } else {
-                diff *= 0.05f;
+                vertical_follow_adjustment *= 0.05f;
             }
-            vel.f[2] += diff;
+            vel.f[2] += vertical_follow_adjustment;
             limit = frame_scale * 0.3f;
             if (vel.f[2] > limit) {
                 vel.f[2] = limit;
@@ -243,7 +243,7 @@ void seeker_update(struct Moby *moby) {
             }
             FUN_L00_00258830(moby, &vel, 0, 0.0f, 0.5f, 0.0f);
         }
-        if (dist < 6.0f && moby->state == 2) {
+        if (target_distance_xy < 6.0f && moby->state == 2) {
             moby->state = 3;
             if (moby->prev_seq != 3) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(10));

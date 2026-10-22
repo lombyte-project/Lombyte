@@ -37,19 +37,19 @@ void FUN_L00_0029f990(char *vertex_batch) {
     float B[4];
     float C[4];
     float P[3][4];
-    int idx[3];
+    int vertex_indices[3];
     float E[4];
     QuadPkt quad_packet;
-    float g[4];
+    float projected_bounds[4];
     float edge_length;
     int i;
     float one = 1.0f;
     float uvv = 0.984375f;
     for (i = 1; i < 6; i++) {
-        idx[0] = i * 4;
-        idx[1] = i * 4 + 1;
-        idx[2] = i * 4 + 2;
-        transform_scaled_vertex_batch(vertex_batch, 3, idx, (char *)P);
+        vertex_indices[0] = i * 4;
+        vertex_indices[1] = i * 4 + 1;
+        vertex_indices[2] = i * 4 + 2;
+        transform_scaled_vertex_batch(vertex_batch, 3, vertex_indices, (char *)P);
         qcopy(C, P[0]);
         subtract_vector_xyz(A, P[1], P[0]);
         subtract_vector_xyz(B, P[2], P[0]);
@@ -63,7 +63,7 @@ void FUN_L00_0029f990(char *vertex_batch) {
         normalize_vector_xyz(B, B, edge_length - D_L00_001CA318[i][3] * 2.0f);
         add_vector_xyz(E, C, A);
         add_vector_xyz(E, E, B);
-        project_graphics_bounds_float(C, E, &g[0], &g[1], &g[2], &g[3]);
+        project_graphics_bounds_float(C, E, &projected_bounds[0], &projected_bounds[1], &projected_bounds[2], &projected_bounds[3]);
         qcopy(quad_packet.v[0], C);
         add_vector_xyz(quad_packet.v[1], C, A);
         add_vector_xyz(quad_packet.v[2], C, B);
@@ -115,7 +115,7 @@ void FUN_001f5450_29fcd0(int, int, int, int, int, int, int, int, long,
                          long) __asm__("FUN_001f5450");
 
 extern I3_29fcd0 D_L00_00161178 __attribute__((section(".data")));
-void FUN_L00_0029fcd0(void *m) {
+void FUN_L00_0029fcd0(void *moby) {
     OvlQuad first_edge[1];
     OvlQuad second_edge[1];
     OvlQuad base[1];
@@ -128,7 +128,7 @@ void FUN_L00_0029fcd0(void *m) {
     int x, y, w, h;
     float len;
     ids = D_L00_00161178;
-    FUN_0020cd48_29fcd0(m, 3, &ids, out);
+    FUN_0020cd48_29fcd0(moby, 3, &ids, out);
     qcopy(base, out);
     FUN_001f9a28_29fcd0(first_edge, &out[1], out);
     FUN_001f9a28_29fcd0(second_edge, &out[2], out);
@@ -150,12 +150,12 @@ void FUN_L00_0029fcd0(void *m) {
     FUN_00239690_29fcd0(9, 7, 1.0f);
     FUN_001fb740_29fcd0(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
-    FUN_L00_0029ead8_29fcd0(m, x, y);
+    FUN_L00_0029ead8_29fcd0(moby, x, y);
     FUN_00239328_29fcd0(6, (float)x, (float)y);
     FUN_001f7978_29fcd0();
     FUN_001fb740_29fcd0(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
-    FUN_0020d330_29fcd0(m, 1);
+    FUN_0020d330_29fcd0(moby, 1);
     FUN_001f5450_29fcd0(w, h, x, y, 0, 0, x, y, 0x80808080L, D_0015EED0_29fcd0);
 }
 /* Draws the four quads of the hologram cone, scrolling the texture coordinates. */
@@ -182,7 +182,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 
 void FUN_L00_0029ff58(void) {
     struct HoloPacket quad_packet;
-    float v[4][4];
+    float transformed_vertex_offsets[4][4];
     int i;
     D_L00_00161184 = D_L00_00161184 + 0.01f;
     if (D_L00_00161184 > 1.0f) D_L00_00161184 = D_L00_00161184 - 1.0f;
@@ -191,22 +191,22 @@ void FUN_L00_0029ff58(void) {
     quad_packet.hdr[0] = 0;
     quad_packet.hdr[1] = get_effect_texture_c(0x18);
     for (i = 0; i < 4; i++) {
-        transform_vector_by_basis(v[0], D_L00_001CA380[D_L00_001CA480[i].a], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
-        transform_vector_by_basis(v[1], D_L00_001CA380[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
-        transform_vector_by_basis(v[2], D_L00_001CA380[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
-        transform_vector_by_basis(v[3], D_L00_001CA380[D_L00_001CA480[i].d], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
-        quad_packet.pos[0][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + v[0][0];
-        quad_packet.pos[0][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + v[0][1];
-        quad_packet.pos[0][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + v[0][2];
-        quad_packet.pos[1][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + v[1][0];
-        quad_packet.pos[1][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + v[1][1];
-        quad_packet.pos[1][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + v[1][2];
-        quad_packet.pos[2][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + v[2][0];
-        quad_packet.pos[2][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + v[2][1];
-        quad_packet.pos[2][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + v[2][2];
-        quad_packet.pos[3][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + v[3][0];
-        quad_packet.pos[3][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + v[3][1];
-        quad_packet.pos[3][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + v[3][2];
+        transform_vector_by_basis(transformed_vertex_offsets[0], D_L00_001CA380[D_L00_001CA480[i].a], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[1], D_L00_001CA380[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[2], D_L00_001CA380[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[3], D_L00_001CA380[D_L00_001CA480[i].d], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        quad_packet.pos[0][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + transformed_vertex_offsets[0][0];
+        quad_packet.pos[0][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + transformed_vertex_offsets[0][1];
+        quad_packet.pos[0][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + transformed_vertex_offsets[0][2];
+        quad_packet.pos[1][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + transformed_vertex_offsets[1][0];
+        quad_packet.pos[1][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + transformed_vertex_offsets[1][1];
+        quad_packet.pos[1][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + transformed_vertex_offsets[1][2];
+        quad_packet.pos[2][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + transformed_vertex_offsets[2][0];
+        quad_packet.pos[2][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + transformed_vertex_offsets[2][1];
+        quad_packet.pos[2][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + transformed_vertex_offsets[2][2];
+        quad_packet.pos[3][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + transformed_vertex_offsets[3][0];
+        quad_packet.pos[3][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + transformed_vertex_offsets[3][1];
+        quad_packet.pos[3][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + transformed_vertex_offsets[3][2];
         quad_packet.col[0] = D_L00_001CA458[D_L00_001CA480[i].a];
         quad_packet.col[1] = D_L00_001CA458[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)];
         quad_packet.col[2] = D_L00_001CA458[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)];

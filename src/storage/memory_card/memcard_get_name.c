@@ -3,20 +3,20 @@
 extern char *strncpy(char *, const char *, u32);
 void memcard_get_name(u8 *src) __asm__("FUN_00209030");
 
-void memcard_get_name(u8 *src) {
+void memcard_get_name(u8 *rom_configuration) {
     s32 i;
 
-    if (src[0x12] == 'E') {
-        D_0013D1D0[2] = src[0x12];
+    if (rom_configuration[0x12] == 'E') {
+        D_0013D1D0[2] = rom_configuration[0x12];
     }
     for (i = 3; i < 7; i++) {
-        D_0013D1D0[i] = src[i + 0xD];
+        D_0013D1D0[i] = rom_configuration[i + 0xD];
     }
     for (i = 8; i < 11; i++) {
-        D_0013D1D0[i] = src[i + 0xD];
+        D_0013D1D0[i] = rom_configuration[i + 0xD];
     }
     for (i = 11; i < 13; i++) {
-        D_0013D1D0[i] = src[i + 0xE];
+        D_0013D1D0[i] = rom_configuration[i + 0xE];
     }
     strncpy(D_0013D1E8, D_0013D1D0, 13);
     strncpy(D_0013D200, D_0013D1D0, 13);

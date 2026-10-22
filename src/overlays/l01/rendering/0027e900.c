@@ -42,8 +42,8 @@ void FUN_L01_0027e900(s32 id, u128 *pos, s32 life, u8 kind, u8 tex, u8 mode, f32
                       f32 w, f32 alpha, f32 r, f32 g, f32 b, f32 size) {
     Spark *spark;
     SparkBody *spark_body;
-    u128 v = *pos;
-    u128 *pv = &v;
+    u128 position_snapshot = *pos;
+    u128 *position_copy_source = &position_snapshot;
 
     if (id == 0) {
         return;
@@ -53,7 +53,7 @@ void FUN_L01_0027e900(s32 id, u128 *pos, s32 life, u8 kind, u8 tex, u8 mode, f32
         return;
     }
     spark_body = &spark->body;
-    qcopy(&spark->pos, pv);
+    qcopy(&spark->pos, position_copy_source);
     if (mode == 0xFF) {
         spark->b9 = (kind >> 5) * 16 + truncate_float_to_s32(4.0f);
         if (kind & 1) {
@@ -109,7 +109,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern u8 *D_L01_001B25E0[];
 
 Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) __asm__("FUN_L01_00287b00");
-Particle *pool_bubble(u128 *pos, u128 *vel, f32 scale) {
+Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
     Particle *particle;
     s32 gray_channel;
     u32 col;
@@ -125,7 +125,7 @@ Particle *pool_bubble(u128 *pos, u128 *vel, f32 scale) {
         particle->active = 0;
         particle->tex = *D_L01_001B25E0[0];
         particle->scale = scale;
-        qcopy(&particle->m.pos, vel);
+        qcopy(&particle->m.pos, motion_position_source);
         particle->spin = random_integer_below(0x100);
     }
     return particle;
@@ -137,10 +137,10 @@ s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
 Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) __asm__("FUN_L01_00287c80");
-Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) {
+Particle *pool_bubbles(u128 *pos, u128 *motion_position_source, f32 scale, f32 speed) {
     Particle *particle;
     PartMotion *m;
-    f32 r;
+    f32 random_spin;
 
     particle = create_part(0x39);
     if (particle != NULL) {
@@ -153,10 +153,10 @@ Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) {
         particle->tex = *D_L01_001B25E4[0];
         particle->life = 0x80;
         particle->scale = scale * 210000.0f;
-        qcopy(&m->pos, dir);
-        r = random_float_between(0.0f, 256.0f);
-        m->size = r;
-        particle->spin = truncate_float_to_s32(r);
+        qcopy(&m->pos, motion_position_source);
+        random_spin = random_float_between(0.0f, 256.0f);
+        m->size = random_spin;
+        particle->spin = truncate_float_to_s32(random_spin);
         m->speed = speed;
     }
     return particle;

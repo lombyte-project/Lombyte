@@ -6,11 +6,11 @@ extern void *memcpy(void *, const void *, u32);
 #define UNCACHED_PWD ((char *)((u32)D_00159FC0 | 0x20000000))
 
 void mceStorePwd(char *pwd) {
-    s32 len;
+    s32 pwd_copy_byte_count;
 
     if (pwd != 0) {
-        len = (strlen(UNCACHED_PWD) < 1024) ? strlen(UNCACHED_PWD) : 1023;
-        memcpy(pwd, UNCACHED_PWD, len);
-        pwd[len] = 0;
+        pwd_copy_byte_count = (strlen(UNCACHED_PWD) < 1024) ? strlen(UNCACHED_PWD) : 1023;
+        memcpy(pwd, UNCACHED_PWD, pwd_copy_byte_count);
+        pwd[pwd_copy_byte_count] = 0;
     }
 }

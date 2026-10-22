@@ -9,13 +9,13 @@ void wait_for_graphics_pipeline_idle(int, int) __asm__("FUN_00120558");
 void FUN_L00_002a0f18(int dst, int src, int size) {
     char buf[0x70] __attribute__((aligned(16)));
     int left = (size + 0x3FFF) & ~0x3FFF;
-    int off = 0;
+    int transfer_byte_offset = 0;
     while (left > 0) {
-        FUN_00122518(buf, (src + off) >> 8, 1, 0, 0, 0, 0x40, 0x40);
+        FUN_00122518(buf, (src + transfer_byte_offset) >> 8, 1, 0, 0, 0, 0x40, 0x40);
         left -= 0x4000;
         flush_cache(0);
-        FUN_001227d8(buf, dst + off);
-        off += 0x4000;
+        FUN_001227d8(buf, dst + transfer_byte_offset);
+        transfer_byte_offset += 0x4000;
         wait_for_graphics_pipeline_idle(0, 0);
     }
 }
@@ -23,7 +23,7 @@ extern int D_L00_001611C0_002a0fc8 __asm__("D_L00_001611C0");
 void FUN_00122330_002a0fc8(int, short, int, int, int, int, int, int) __asm__("FUN_00122330");
 void FUN_L00_002a0fc8(int dst, int src, int size) {
     int left = (size + 0x3FFF) & ~0x3FFF;
-    int off = 0;
+    int transfer_byte_offset = 0;
     while (left > 0) {
         *(int *)D_L00_001611C0_002a0fc8 = 0x10000006;
         *(int *)(D_L00_001611C0_002a0fc8 + 4) = 0;
@@ -31,13 +31,13 @@ void FUN_L00_002a0fc8(int dst, int src, int size) {
         *(int *)(D_L00_001611C0_002a0fc8 + 12) = 0x50000006;
         D_L00_001611C0_002a0fc8 += 0x10;
         left -= 0x4000;
-        FUN_00122330_002a0fc8(D_L00_001611C0_002a0fc8, (src + off) >> 8, 1, 0, 0, 0, 0x40, 0x40);
+        FUN_00122330_002a0fc8(D_L00_001611C0_002a0fc8, (src + transfer_byte_offset) >> 8, 1, 0, 0, 0, 0x40, 0x40);
         D_L00_001611C0_002a0fc8 += 0x60;
         *(int *)D_L00_001611C0_002a0fc8 = 0x30000400;
-        *(int *)(D_L00_001611C0_002a0fc8 + 4) = dst + off;
+        *(int *)(D_L00_001611C0_002a0fc8 + 4) = dst + transfer_byte_offset;
         *(int *)(D_L00_001611C0_002a0fc8 + 8) = 0;
         *(int *)(D_L00_001611C0_002a0fc8 + 12) = 0x50000400;
         D_L00_001611C0_002a0fc8 += 0x10;
-        off += 0x4000;
+        transfer_byte_offset += 0x4000;
     }
 }

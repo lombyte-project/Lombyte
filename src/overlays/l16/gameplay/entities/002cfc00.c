@@ -22,20 +22,20 @@ extern void subtract_vector_xyz(void *, void *, void *);
 /* Same routine as FUN_L05_00307010, with this level's data offsets. */
 void FUN_L16_002cfc00(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    struct Hero *g = &hero;
-    float v[4];
+    struct Hero *hero_state = &hero;
+    float displacement_vector[4];
     char *l1;
     char *l2;
     char *other;
     char *od;
 
-    if (g->unk894 < scale_game_frames(0xB4)) {
+    if (hero_state->unk894 < scale_game_frames(0xB4)) {
         return;
     }
     if (!tick_countdown_32((int *)(data + 0x2DC))) {
         return;
     }
-    other = ((char *)g->unk86C);
+    other = ((char *)hero_state->unk86C);
     if (!other) {
         return;
     }
@@ -49,13 +49,13 @@ void FUN_L16_002cfc00(struct Moby *moby) {
                 char *pos = l1;
                 qcopy(adjusted_position, data + 0x260);
                 adjusted_position[2] += 0.8f;
-                subtract_vector_xyz(v, pos + 0x10, adjusted_position);
-                if (!(8.0f < vector_length_xyz(v))) {
+                subtract_vector_xyz(displacement_vector, pos + 0x10, adjusted_position);
+                if (!(8.0f < vector_length_xyz(displacement_vector))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, l1 + 0xC0);
-                    transform_vector(v, v, m);
-                    if (absolute_float(v[0]) < 0.5f && absolute_float(v[1]) < 2.5f &&
-                        absolute_float(v[2]) < 2.5f) {
+                    transform_vector(displacement_vector, displacement_vector, m);
+                    if (absolute_float(displacement_vector[0]) < 0.5f && absolute_float(displacement_vector[1]) < 2.5f &&
+                        absolute_float(displacement_vector[2]) < 2.5f) {
                         *(unsigned short *)(data + 0x2F6) += scale_game_frames(0x78);
                         *(int *)(data + 0x2DC) = scale_game_frames(0x3C);
                     }
@@ -69,13 +69,13 @@ void FUN_L16_002cfc00(struct Moby *moby) {
         while (l2) {
             if (*(short *)(l2 + 0xA6) == 0x474) {
                 float m[16];
-                subtract_vector_xyz(v, l2 + 0x10, data + 0x260);
-                if (!(8.0f < vector_length_xyz(v))) {
+                subtract_vector_xyz(displacement_vector, l2 + 0x10, data + 0x260);
+                if (!(8.0f < vector_length_xyz(displacement_vector))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, l2 + 0xC0);
-                    transform_vector(v, v, m);
-                    if (absolute_float(v[0]) < 2.8f && absolute_float(v[1]) < 1.4f &&
-                        absolute_float(v[2]) < 0.5f) {
+                    transform_vector(displacement_vector, displacement_vector, m);
+                    if (absolute_float(displacement_vector[0]) < 2.8f && absolute_float(displacement_vector[1]) < 1.4f &&
+                        absolute_float(displacement_vector[2]) < 0.5f) {
                         *(unsigned short *)(data + 0x2F6) += scale_game_frames(0x78);
                         *(int *)(data + 0x2DC) = scale_game_frames(0x3C);
                     }

@@ -18,7 +18,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 void FUN_L00_00235ea0(HudElem *hud_element) {
     unsigned char *counter_state_bytes = hud_element->cnt;
-    int v;
+    int counter_value;
     int cap;
     int value_distance;
     int easing_step;
@@ -26,13 +26,13 @@ void FUN_L00_00235ea0(HudElem *hud_element) {
     unsigned char easing_accumulator_value;
 
     if (hud_element->unk0C != 0) {
-        v = *hud_element->unk0C;
+        counter_value = *hud_element->unk0C;
         cap = hud_element->unk08;
-        if (v < 0) {
-            v = 0;
+        if (counter_value < 0) {
+            counter_value = 0;
         }
-        hud_element->unk78 = v;
-        if (cap < v) {
+        hud_element->unk78 = counter_value;
+        if (cap < counter_value) {
             hud_element->unk78 = cap;
         }
     }

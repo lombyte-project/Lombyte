@@ -15,12 +15,12 @@ extern Ent09 D_L00_00167150_u[] __asm__("D_L00_00167150");
 s32 FUN_L00_001eb1f8(s32 id) {
     s32 camera_record_address;
     s32 camera_table_end_address;
-    s16 v;
+    s16 camera_record_id;
     camera_record_address = (s32)&D_L00_00167150_u[0];
     camera_table_end_address = camera_record_address + 0x1E00;
     for (;;) {
-        v = *(s16 *)(camera_record_address + 0x86);
-        if (v != id) {
+        camera_record_id = *(s16 *)(camera_record_address + 0x86);
+        if (camera_record_id != id) {
             camera_record_address += 0xA0;
             if (camera_record_address < camera_table_end_address)
                 continue;
@@ -33,14 +33,14 @@ float FUN_001fa5c8_001eb328(float, float) __asm__("FUN_001fa5c8");
 float FUN_001f99c0_001eb328(float) __asm__("FUN_001f99c0");
 float FUN_001fa580_001eb328(float, float) __asm__("FUN_001fa580");
 float rope_spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_001eb328");
-float rope_spring_turn(float *spring_state, float current_angle, float b, float response_gain, float damping_factor, float lim) {
-    float angle_difference = FUN_001fa5c8_001eb328(b, current_angle);
+float rope_spring_turn(float *spring_state, float current_angle, float target_angle, float response_gain, float damping_factor, float spring_state_limit) {
+    float angle_difference = FUN_001fa5c8_001eb328(target_angle, current_angle);
     *spring_state = *spring_state + (response_gain * angle_difference - damping_factor * *spring_state);
-    if (lim != 0.0f) {
-        if (*spring_state > lim)
-            *spring_state = lim;
-        else if (*spring_state < -lim)
-            *spring_state = -lim;
+    if (spring_state_limit != 0.0f) {
+        if (*spring_state > spring_state_limit)
+            *spring_state = spring_state_limit;
+        else if (*spring_state < -spring_state_limit)
+            *spring_state = -spring_state_limit;
     }
     if (*spring_state > FUN_001f99c0_001eb328(angle_difference))
         *spring_state = FUN_001f99c0_001eb328(angle_difference);
@@ -106,33 +106,33 @@ void camera_run_setup_to_new_cam(struct Moby *cam) __asm__("FUN_001ebec8");
 
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 void init_camera_system(void) {
-    char *g = (char *)&D_L00_00166C80_c;
-    float *camera_vector_snapshot, *camera_record_vector_destination, *t, *u;
+    char *camera_system_state = (char *)&D_L00_00166C80_c;
+    float *camera_vector_snapshot, *camera_record_vector_destination, *vector_copy_source, *vector_copy_destination;
     char *current_camera_record;
-    if (*(char **)(g + 0x180) != 0) {
-        *(short *)(*(char **)(g + 0x180) + 0x8E) = 0;
-        *(*(char **)(g + 0x180) + 0x7D) = 0;
-        *(short *)(*(char **)(g + 0x180) + 0x7E) = 0;
+    if (*(char **)(camera_system_state + 0x180) != 0) {
+        *(short *)(*(char **)(camera_system_state + 0x180) + 0x8E) = 0;
+        *(*(char **)(camera_system_state + 0x180) + 0x7D) = 0;
+        *(short *)(*(char **)(camera_system_state + 0x180) + 0x7E) = 0;
     }
-    *(char **)(g + 0x180) = FUN_L00_001eb1f8_u(0);
-    *(short *)(*(char **)(g + 0x180) + 0x8E) = 1;
-    *(char **)(*(char **)(g + 0x180) + 0x70) = D_L00_00169110;
-    *(short *)(g + 0x270) = 0;
+    *(char **)(camera_system_state + 0x180) = FUN_L00_001eb1f8_u(0);
+    *(short *)(*(char **)(camera_system_state + 0x180) + 0x8E) = 1;
+    *(char **)(*(char **)(camera_system_state + 0x180) + 0x70) = D_L00_00169110;
+    *(short *)(camera_system_state + 0x270) = 0;
     update_camera_tracking_state();
-    camera_run_setup_to_new_cam(*(char **)(g + 0x180));
+    camera_run_setup_to_new_cam(*(char **)(camera_system_state + 0x180));
     backup_current_cam();
-    current_camera_record = *(char **)(g + 0x180);
-    camera_vector_snapshot = (float *)(g + 0x140);
+    current_camera_record = *(char **)(camera_system_state + 0x180);
+    camera_vector_snapshot = (float *)(camera_system_state + 0x140);
     qcopy(camera_vector_snapshot, current_camera_record + 0x30);
     camera_record_vector_destination = (float *)(current_camera_record + 0x64);
     camera_record_vector_destination[0] = camera_vector_snapshot[0];
     camera_record_vector_destination[1] = camera_vector_snapshot[1];
     camera_record_vector_destination[2] = camera_vector_snapshot[2];
-    t = (float *)(D_0013E533 + 0xE9D);
-    u = (float *)(g + 0x190);
-    u[0] = t[0];
-    u[1] = t[1];
-    u[2] = t[2];
+    vector_copy_source = (float *)(D_0013E533 + 0xE9D);
+    vector_copy_destination = (float *)(camera_system_state + 0x190);
+    vector_copy_destination[0] = vector_copy_source[0];
+    vector_copy_destination[1] = vector_copy_source[1];
+    vector_copy_destination[2] = vector_copy_source[2];
 }
 
 #define NOT_SDA
@@ -209,35 +209,35 @@ void setup_level_cameras(void) {
     clear_vector(g1 + 0x1E0);
     qcopy(g1 + 0x1F0, &base->motion.pos);
     {
-        float f0 = base->motion.rot.f[2];
-        float f1 = base->motion.pos.f[2];
+        float hero_rotation_z = base->motion.rot.f[2];
+        float hero_position_z = base->motion.pos.f[2];
         *(int *)(q + 0xC4) = 0;
         *(int *)(q + 0xCC) = 0;
         *(int *)(q + 0xC0) = 0;
         *(int *)(q + 0xC8) = 0;
         *(int *)(q + 0xD0) = 0;
-        *(float *)(q + 0xBC) = f0;
-        *(float *)(q + 0xB8) = f0;
-        *(float *)(q + 0xB4) = f0;
-        *(float *)(q + 0xB0) = f0;
+        *(float *)(q + 0xBC) = hero_rotation_z;
+        *(float *)(q + 0xB8) = hero_rotation_z;
+        *(float *)(q + 0xB4) = hero_rotation_z;
+        *(float *)(q + 0xB0) = hero_rotation_z;
         *(int *)(q + 0xD4) = 0;
         *(int *)(q + 0xDC) = 0;
-        *(float *)(q + 0xAC) = f0;
-        *(float *)(q + 0xD8) = f1;
+        *(float *)(q + 0xAC) = hero_rotation_z;
+        *(float *)(q + 0xD8) = hero_position_z;
     }
     i = 0;
     if (D_L00_0015EF54 > 0) {
         do {
             char *level_camera_entry;
-            char *r;
+            char *level_camera_data;
             Elem *el;
             int camera_id;
             level_camera_entry = (char *)(i * 32);
             level_camera_entry = D_L00_0015EF50 + (int)level_camera_entry;
-            r = *(char **)(level_camera_entry + 0x1C);
+            level_camera_data = *(char **)(level_camera_entry + 0x1C);
             el = &D_L00_00167150[i];
             el->s84 = i;
-            *(Elem **)(r + 4) = el;
+            *(Elem **)(level_camera_data + 4) = el;
             el->s8E = 0;
             el->c89 = 0;
             el->s8A = 0;
@@ -246,8 +246,8 @@ void setup_level_cameras(void) {
             el->c7D = 0;
             el->s7E = 0;
             el->f78 = -1.0f;
-            el->c7C = r[0x1C];
-            el->i74 = (unsigned char)r[0x1F];
+            el->c7C = level_camera_data[0x1C];
+            el->i74 = (unsigned char)level_camera_data[0x1F];
             camera_id = *(unsigned short *)(level_camera_entry + 0xC);
             D_L00_00169890[i] = 1;
             el->s86 = camera_id;
@@ -275,10 +275,10 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L00_001ed580(float *output_position, float *v, void *origin_position) {
-    output_position[0] = v[2] * fast_cos(v[1]) * fast_cos(v[0]);
-    output_position[1] = v[2] * fast_cos(v[1]) * fast_sin(v[0]);
-    output_position[2] = v[2] * fast_sin(v[1]);
+void FUN_L00_001ed580(float *output_position, float *angles_and_distance, void *origin_position) {
+    output_position[0] = angles_and_distance[2] * fast_cos(angles_and_distance[1]) * fast_cos(angles_and_distance[0]);
+    output_position[1] = angles_and_distance[2] * fast_cos(angles_and_distance[1]) * fast_sin(angles_and_distance[0]);
+    output_position[2] = angles_and_distance[2] * fast_sin(angles_and_distance[1]);
     *(int *)(output_position + 3) = 0;
     add_vector_xyz(output_position, output_position, origin_position);
 }
@@ -298,14 +298,14 @@ extern void fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Fills a from a subtract_vector_xyz result: two fast_arc_tan angles and its length. */
 int FUN_L00_001ed630(float *angles_and_distance) {
-    W v;
+    W difference_vector;
     float xy_angle;
-    subtract_vector_xyz(v);
-    angles_and_distance[1] = fast_arc_tan(vector_length_xy(v), v[2]);
-    xy_angle = fast_arc_tan(v[0], v[1]);
+    subtract_vector_xyz(difference_vector);
+    angles_and_distance[1] = fast_arc_tan(vector_length_xy(difference_vector), difference_vector[2]);
+    xy_angle = fast_arc_tan(difference_vector[0], difference_vector[1]);
     fast_subtract_rotations(xy_angle, angles_and_distance[0]);
     angles_and_distance[0] = xy_angle;
-    angles_and_distance[2] = fast_vec_length(v);
+    angles_and_distance[2] = fast_vec_length(difference_vector);
     return 0;
 }
 #include "qcopy.h"
@@ -330,7 +330,7 @@ extern int f0d60_1ed6a8(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 
 extern int D_L00_0016C06C __attribute__((section(".data")));
 extern int D_L00_0015EF5C_gp __asm__("D_L00_0015EF5C") __attribute__((sda));
-void FUN_L00_001ed6a8(OvlQuad *pos, float r) {
+void FUN_L00_001ed6a8(OvlQuad *pos, float collision_radius) {
     OvlQuad step_delta[1];
     float v[4] __attribute__((aligned(16)));
     char *o = D_166C80_1ed6a8.o;
@@ -349,12 +349,12 @@ void FUN_L00_001ed6a8(OvlQuad *pos, float r) {
         return;
     }
     f9a28_1ed6a8(step_delta, pos, v);
-    step_count = fa6d0_1ed6a8(f9af0_1ed6a8(step_delta) / (r * 0.9f)) + 1;
+    step_count = fa6d0_1ed6a8(f9af0_1ed6a8(step_delta) / (collision_radius * 0.9f)) + 1;
     ff378_1ed6a8(step_delta, step_delta, fa6c0_1ed6a8(step_count));
     qcopy(pos, v);
     for (i = 0; i < step_count; i++) {
         f9a10_1ed6a8(pos, pos, step_delta);
-        for (j = 0; j < 6 && f0d60_1ed6a8(pos, D_L00_0015EF5C_gp, ((int)hero.moby), r); j++) {
+        for (j = 0; j < 6 && f0d60_1ed6a8(pos, D_L00_0015EF5C_gp, ((int)hero.moby), collision_radius); j++) {
             qcopy(pos, &D_173E70_1ed6a8);
             {
                 char *current_camera_record = D_166C80_1ed6a8.o;

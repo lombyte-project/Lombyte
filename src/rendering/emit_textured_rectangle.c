@@ -8,9 +8,9 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 void emit_textured_rectangle(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s32 vh, u64 rgba, u64 tex) __asm__("FUN_001f5808");
 
-void emit_textured_rectangle(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s32 vh, u64 rgba, u64 tex) {
+void emit_textured_rectangle(f32 x, f32 y, f32 screen_width, f32 h, s32 u, s32 v, s32 uw, s32 vh, u64 rgba, u64 texture_packet_word) {
     s32 x0 = truncate_float_to_s32(x * 16.0f) + screen_extent.left - 8;
-    s32 x1 = truncate_float_to_s32((x + w) * 16.0f) + screen_extent.left - 8;
+    s32 x1 = truncate_float_to_s32((x + screen_width) * 16.0f) + screen_extent.left - 8;
     s32 y0 = truncate_float_to_s32(y * 16.0f) + screen_extent.top - 8;
     s32 y1 = truncate_float_to_s32((y + h) * 16.0f) + screen_extent.top - 8;
     s32 u1_fixed;
@@ -36,7 +36,7 @@ void emit_textured_rectangle(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s
     qcopy(base + 1, D_00160860);
     packet_words = (long *)(base + 2);
     render_packet_cursor.tag = base + 2;
-    packet_words[0] = tex;
+    packet_words[0] = texture_packet_word;
     packet_words[1] = 0x154;
     packet_words[2] = (u64)(0xA | ((long)u << 4) | ((long)ub << 14)) | ((long)v << 24) | ((long)vb << 34);
     packet_words[3] = rgba;

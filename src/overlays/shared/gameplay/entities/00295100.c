@@ -470,7 +470,7 @@ void fun_00216c48(F_298b18 *, void *, int) __asm__("FUN_00216c48");
 void FUN_L00_00265880(int);
 void FUN_L00_00298b18(void) {
     O_298b18 *moby;
-    float f, g;
+    float f, hero_candidate_z;
     int i;
     if ((unsigned short)(D_001516D0_298b18.x5a - 6) >= 2)
         D_001516D0_298b18.x5a = 5;
@@ -494,9 +494,9 @@ void FUN_L00_00298b18(void) {
             moby->flags &= ~0x80;
     }
     hero_set_state(HERO_STATE_IDLE, 1);
-    g = f213508_298b18(&hero.motion.pos, 0, 0.5f);
-    if (2.0f < g && absolute_float(hero.motion.pos.f[2] - g) < 4.5f)
-        hero.motion.pos.f[2] = g;
+    hero_candidate_z = f213508_298b18(&hero.motion.pos, 0, 0.5f);
+    if (2.0f < hero_candidate_z && absolute_float(hero.motion.pos.f[2] - hero_candidate_z) < 4.5f)
+        hero.motion.pos.f[2] = hero_candidate_z;
     hero.unk20A5 = 0;
     f2330d0_298b18();
     if (D_L00_0016C860_298b18.x46) {
@@ -513,10 +513,10 @@ void FUN_L00_00298b18(void) {
     }
     if (active_scene_trigger.moby) {
         F_298b18 *scene_trigger_moby = active_scene_trigger.moby;
-        void *b = active_scene_trigger.trigger;
+        void *scene_trigger = active_scene_trigger.trigger;
         active_scene_trigger.moby = 0;
         active_scene_trigger.trigger = 0;
-        fun_00216c48(scene_trigger_moby, b, 1);
+        fun_00216c48(scene_trigger_moby, scene_trigger, 1);
     }
     FUN_L00_00265880(scale_game_frames(0x1E));
 }
@@ -547,13 +547,13 @@ int FUN_L00_00298de8(void) {
     float m[16] __attribute__((aligned(16)));
     OvlQuad camera_offset[1];
     char *camera_key = D_L00_0016C860_298de8.p54 + D_L00_0016C860_298de8.i38 * 32;
-    float *v = (float *)(camera_key + 0x10);
-    int r = *(unsigned char *)(camera_key + 0xC);
+    float *camera_key_values = (float *)(camera_key + 0x10);
+    int camera_key_flag = *(unsigned char *)(camera_key + 0xC);
     char *x = D_L00_0016CA40_298de8;
     char *camera_position;
     char *camera_state;
     float k;
-    float unscaled_camera_value = v[3];
+    float unscaled_camera_value = camera_key_values[3];
     *(float *)(x + 0xB0) = unscaled_camera_value;
     if (D_0015EDB0_298de8)
         *(float *)(x + 0xB0) = unscaled_camera_value * D_L00_0015F59C;
@@ -561,9 +561,9 @@ int FUN_L00_00298de8(void) {
     camera_position = D_L00_00166C80_298de8 + 0x140;
     qcopy(camera_position, camera_key);
     munit_298de8(m);
-    mrx_298de8(m, m, v[0]);
-    mry_298de8(m, m, v[1]);
-    mrz_298de8(m, m, v[2]);
+    mrx_298de8(m, m, camera_key_values[0]);
+    mry_298de8(m, m, camera_key_values[1]);
+    mrz_298de8(m, m, camera_key_values[2]);
     camera_state = D_L00_00166C80_298de8;
     *(float *)(camera_state + 0x350) = -m[8];
     *(float *)(camera_state + 0x360) = -m[0];
@@ -582,7 +582,7 @@ int FUN_L00_00298de8(void) {
         normalize_vector_xyz(camera_offset, camera_offset, k);
         subtract_vector_xyz(camera_position, camera_position, camera_offset);
     }
-    return r;
+    return camera_key_flag;
 }
 /* Moby-sized (0x100) records used by the vendor menu. */
 typedef struct {
@@ -668,7 +668,7 @@ void FUN_L00_00298f90(void) {
     s32 last;
     s32 i;
     s32 id;
-    s32 lim;
+    s32 audio_chunk_frame_threshold;
     Vec4 *keys;
     f32 fade;
     f32 a[4] __attribute__((aligned(16)));
@@ -716,8 +716,8 @@ void FUN_L00_00298f90(void) {
     if (done) {
         FUN_L00_00298b18();
     } else {
-        lim = pal_mode ? 0x50 : 0x60;
-        if (D_L00_0016C860.f38 >= lim) {
+        audio_chunk_frame_threshold = pal_mode ? 0x50 : 0x60;
+        if (D_L00_0016C860.f38 >= audio_chunk_frame_threshold) {
             FUN_002168a8(1);
             D_L00_0016C860.f3C++;
             FUN_00204790();
@@ -818,17 +818,17 @@ void FUN_L00_002994f8(s32 i) {
 void FUN_L00_002995d0(s32, s32, s32);
 /* Passes movie i (the alt table while D_0015ED80 is set) and the language to FUN_L00_002995d0. */
 void FUN_L00_00299560(s32 i) {
-    s32 movie_sector, b;
+    s32 movie_sector, movie_size;
     if (i < 0)
         return;
     if (D_0015ED80) {
         movie_sector = disc_table.movies_alt[i].sector;
-        b = disc_table.movies_alt[i].size;
+        movie_size = disc_table.movies_alt[i].size;
     } else {
         movie_sector = disc_table.movies[i].sector;
-        b = disc_table.movies[i].size;
+        movie_size = disc_table.movies[i].size;
     }
-    FUN_L00_002995d0(movie_sector, b, game_language);
+    FUN_L00_002995d0(movie_sector, movie_size, game_language);
 }
 extern int D_L00_00161048_macro __asm__("D_L00_00161048") __attribute__((section(".sdata")));
 extern int D_L00_0016104C_macro __asm__("D_L00_0016104C") __attribute__((section(".sdata")));
@@ -1153,10 +1153,10 @@ void FUN_L00_0029a330(void) {
     int i;
     int *entry_offset_cursor;
     char *base;
-    int v;
-    v = D_L00_001CA4C0_d[6] + 0x80000;
+    int compressed_source_address;
+    compressed_source_address = D_L00_001CA4C0_d[6] + 0x80000;
     FlushCache(0);
-    fast_decompress(v, D_L00_001CA4C0_d[6]);
+    fast_decompress(compressed_source_address, D_L00_001CA4C0_d[6]);
     FlushCache(0);
     entry_offset_cursor = (int *)D_L00_001CA4C0_d[6];
     base = D_L00_00197300_d[D_L00_00197BCC];
@@ -1365,7 +1365,7 @@ extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdat
 void FUN_L00_0029a6b0(VendorMoby_29a6b0 *m);
 void FUN_L00_0029a6b0(VendorMoby_29a6b0 *vendor_moby) {
     s32 i;
-    Vec4 *v;
+    Vec4 *vector_destination_cursor;
     s32 half;
     s32 sel;
     s32 k;
@@ -1448,11 +1448,11 @@ void FUN_L00_0029a6b0(VendorMoby_29a6b0 *vendor_moby) {
         FUN_L00_002ea9d8_29a6b0(&vendor_29a6b0.eye);
         FUN_L00_002eaa30_29a6b0(&vendor_29a6b0.look);
     }
-    v = &D_L00_00180250;
-    FUN_001f9cf8_29a6b0(v, &D_L00_001610D0, vendor_29a6b0.moby + 0xC0);
-    qcopy(v - 1, &D_L00_001610E0);
-    v += 2;
-    qzero(v);
+    vector_destination_cursor = &D_L00_00180250;
+    FUN_001f9cf8_29a6b0(vector_destination_cursor, &D_L00_001610D0, vendor_29a6b0.moby + 0xC0);
+    qcopy(vector_destination_cursor - 1, &D_L00_001610E0);
+    vector_destination_cursor += 2;
+    qzero(vector_destination_cursor);
     qzero(&D_L00_00180260_29a6b0);
     for (i = 0; i < 4; i++) {
         slot = &vendor_slots_29a6b0[i];
@@ -1500,8 +1500,8 @@ extern void f216088_29ab70(void) __asm__("FUN_00216088");
 extern void f12dc80_29ab70(void) __asm__("FUN_0012dc80");
 extern int D_L00_00161070 __attribute__((sda));
 void FUN_L00_0029ab70(int exit_cutscene_completed) {
-    Vec4_29ab70 v;
-    Vec4_29ab70 r;
+    Vec4_29ab70 world_position;
+    Vec4_29ab70 euler_rotation;
     char *g = D_L00_001CA4C0_29ab70;
     if (*(int *)(g + 0x54) != -1)
         rel_29ab70(*(int *)(g + 0x54), 0);
@@ -1516,16 +1516,16 @@ void FUN_L00_0029ab70(int exit_cutscene_completed) {
     hero.unk20A5 = 0;
     f2330d0_29ab70();
     if (*(int *)(g + 0x40) == 0) {
-        f1f9cf8_29ab70(&v, &D_L00_00161070, *(char **)(g + 0x1C) + 0xC0);
-        f1f9a10_29ab70(&v, &v, *(char **)(g + 0x1C) + 0x10);
-        r.x = 0.0f;
-        r.y = 0.0f;
-        r.z = f1fa580_29ab70(*(float *)(*(char **)(g + 0x1C) + 0x48), 3.1415927f);
+        f1f9cf8_29ab70(&world_position, &D_L00_00161070, *(char **)(g + 0x1C) + 0xC0);
+        f1f9a10_29ab70(&world_position, &world_position, *(char **)(g + 0x1C) + 0x10);
+        euler_rotation.x = 0.0f;
+        euler_rotation.y = 0.0f;
+        euler_rotation.z = f1fa580_29ab70(*(float *)(*(char **)(g + 0x1C) + 0x48), 3.1415927f);
         if (exit_cutscene_completed == 0) {
-            f216f90_29ab70(&v, &r, 0, 0);
+            f216f90_29ab70(&world_position, &euler_rotation, 0, 0);
             f2eac18_29ab70(2);
         } else {
-            f216f90_29ab70(&v, &r, 0, 1);
+            f216f90_29ab70(&world_position, &euler_rotation, 0, 1);
         }
     }
     {
@@ -1571,10 +1571,10 @@ extern void sce_gs_sync_v(s32) __asm__("FUN_00122298");
 extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 
 void FUN_L00_0029ad08(void) {
-    Vendor_29a6b0 *g;
+    Vendor_29a6b0 *vendor_state;
     VendorMoby_29a6b0 *moby;
     s32 index, item, offset;
-    f32 *vec;
+    f32 *cutscene_world_origin;
     struct S16_29ad08 *state;
     s32 *selected;
     s16 mode;
@@ -1582,25 +1582,25 @@ void FUN_L00_0029ad08(void) {
     f2eac18_29ad08(2);
     if ((u16)(D_001516D0_29ad08.mode - 6) >= 2)
         D_001516D0_29ad08.mode = 5;
-    g = &D_L00_001CA4C0_29ad08;
+    vendor_state = &D_L00_001CA4C0_29ad08;
     D_L00_0015F5D8 = 1;
-    ((VendorMoby_29a6b0 *)g->moby)->state = 1;
-    g->f0 = 3;
-    g->f4 = 0;
-    vec = (f32 *)((char *)g + 0xC0);
-    f1f9cf8_29ad08(vec, &D_L00_001610F0, g->moby + 0xC0);
-    moby = (VendorMoby_29a6b0 *)g->moby;
-    f1f9a10_29ad08(vec, vec, (char *)moby + 0x10);
-    *(f32 *)((char *)g + 0xC8) += 2.0f;
-    *(f32 *)((char *)g + 0xC8) = f213508_29ad08(0.5f, vec, 0);
-    f1f99f8_29ad08((char *)g + 0xB0);
-    *(f32 *)((char *)g + 0xB8) = f1fa580_29ad08(((VendorMoby_29a6b0 *)g->moby)->rot.f[2], 3.1415927f);
-    vu_euler_rotation_basis((char *)g + 0x80, (char *)g + 0xB0);
+    ((VendorMoby_29a6b0 *)vendor_state->moby)->state = 1;
+    vendor_state->f0 = 3;
+    vendor_state->f4 = 0;
+    cutscene_world_origin = (f32 *)((char *)vendor_state + 0xC0);
+    f1f9cf8_29ad08(cutscene_world_origin, &D_L00_001610F0, vendor_state->moby + 0xC0);
+    moby = (VendorMoby_29a6b0 *)vendor_state->moby;
+    f1f9a10_29ad08(cutscene_world_origin, cutscene_world_origin, (char *)moby + 0x10);
+    *(f32 *)((char *)vendor_state + 0xC8) += 2.0f;
+    *(f32 *)((char *)vendor_state + 0xC8) = f213508_29ad08(0.5f, cutscene_world_origin, 0);
+    f1f99f8_29ad08((char *)vendor_state + 0xB0);
+    *(f32 *)((char *)vendor_state + 0xB8) = f1fa580_29ad08(((VendorMoby_29a6b0 *)vendor_state->moby)->rot.f[2], 3.1415927f);
+    vu_euler_rotation_basis((char *)vendor_state + 0x80, (char *)vendor_state + 0xB0);
     f1f97e8_29ad08(&D_L00_0016C860_298840, 0, 0x1C0);
     f1f97e8_29ad08(D_L00_0017C340_298840, 0, 0x40);
     FUN_L00_002a09d8(1);
     calculate_dma_transfer_address();
-    selected = (s32 *)((char *)g + 0x48);
+    selected = (s32 *)((char *)vendor_state + 0x48);
     offset = D_L00_001611CC - 0x40000;
     D_L00_001611CC = offset;
     index = D_L00_001CA4C0_29ad08.f48;
@@ -1645,21 +1645,21 @@ void snd_continue_all_sounds_in_group(int) __asm__("FUN_0012e418");
 void music_unpause(void) __asm__("FUN_00216088");
 void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 void FUN_L00_0029af80(void) {
-    Vec4 v;
-    Vec4 r;
-    char *g;
+    Vec4 world_position;
+    Vec4 euler_rotation;
+    char *vendor_state_base;
     D_L00_0015F5D8 = 1;
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
     hero.unk20A5 = 0;
     FUN_L00_002330d0();
-    g = D_L00_001CA4C0_u;
-    transform_vector_by_basis(&v, &D_L00_00161100, *(char **)(g + 0x28) + 0xC0);
-    add_vector_xyz(&v, &v, *(char **)(g + 0x28) + 0x10);
-    r.f[0] = 0.0f;
-    r.f[1] = 0.0f;
-    r.f[2] = fast_add_rotations(*(float *)(*(char **)(g + 0x28) + 0x48), -1.5707964f);
-    FUN_L00_00216f90(&v, &r, 0, 1);
+    vendor_state_base = D_L00_001CA4C0_u;
+    transform_vector_by_basis(&world_position, &D_L00_00161100, *(char **)(vendor_state_base + 0x28) + 0xC0);
+    add_vector_xyz(&world_position, &world_position, *(char **)(vendor_state_base + 0x28) + 0x10);
+    euler_rotation.f[0] = 0.0f;
+    euler_rotation.f[1] = 0.0f;
+    euler_rotation.f[2] = fast_add_rotations(*(float *)(*(char **)(vendor_state_base + 0x28) + 0x48), -1.5707964f);
+    FUN_L00_00216f90(&world_position, &euler_rotation, 0, 1);
     update_resource_counter();
     if ((unsigned short)(D_001516D0.mode - 6) >= 2)
         D_001516D0.mode = 5;
@@ -1692,7 +1692,7 @@ void FUN_L00_0029b4d8(int vendor_event) {
         VENDOR_ITEM_PURCHASE = 2,
         VENDOR_AMMO_PURCHASE = 3
     };
-    char *b;
+    char *vendor_state_base;
     unsigned char *auxiliary_moby;
     int auxiliary_moby_state;
     int moby_state;
@@ -1700,20 +1700,20 @@ void FUN_L00_0029b4d8(int vendor_event) {
     int ready_variant_index;
     if (D_L00_00161188 == 0)
         return;
-    b = D_L00_001CA4C0;
-    auxiliary_moby = *(unsigned char **)(b + 0x24);
+    vendor_state_base = D_L00_001CA4C0;
+    auxiliary_moby = *(unsigned char **)(vendor_state_base + 0x24);
     switch (vendor_event) {
     case VENDOR_SELECTION_CHANGED:
         auxiliary_moby_state = auxiliary_moby[0x20];
         if (auxiliary_moby_state == 2 || auxiliary_moby_state == 0) {
             if (random_integer_below(4) == 0) {
-                if (*(int *)(b + 0x30) + scale_game_frames(0x168) < D_L00_0015F3F8) {
-                    *(int *)(b + 0x30) = D_L00_0015F3F8;
+                if (*(int *)(vendor_state_base + 0x30) + scale_game_frames(0x168) < D_L00_0015F3F8) {
+                    *(int *)(vendor_state_base + 0x30) = D_L00_0015F3F8;
                     selection_variant_index = random_integer_below(2);
-                    *(int *)(b + 0x3C) = selection_variant_index;
+                    *(int *)(vendor_state_base + 0x3C) = selection_variant_index;
                     D_L00_00161190 = 1;
                     D_L00_00161194 = 0;
-                    *(int *)(D_001516EC) = (selection_variant_index * 3 + 2) * 6 + *(int *)(b + 0x38) + 10000;
+                    *(int *)(D_001516EC) = (selection_variant_index * 3 + 2) * 6 + *(int *)(vendor_state_base + 0x38) + 10000;
                     auxiliary_moby[0x20] = 0xB;
                 }
             }
@@ -1721,10 +1721,10 @@ void FUN_L00_0029b4d8(int vendor_event) {
         break;
     case VENDOR_AUXILIARY_MOBY_READY:
         ready_variant_index = random_integer_below(2);
-        *(int *)(b + 0x3C) = ready_variant_index;
+        *(int *)(vendor_state_base + 0x3C) = ready_variant_index;
         D_L00_00161190 = vendor_event;
         D_L00_00161194 = 0;
-        *(int *)(D_001516EC) = ready_variant_index * 0x12 + *(int *)(b + 0x38) + 10000;
+        *(int *)(D_001516EC) = ready_variant_index * 0x12 + *(int *)(vendor_state_base + 0x38) + 10000;
         if (auxiliary_moby[0x53] != vendor_event)
             blend_moby_animation(auxiliary_moby, 1, 0, 10);
         auxiliary_moby[0x20] = 10;
@@ -1778,7 +1778,7 @@ extern float D_L00_001C8920[][12] __attribute__((section(".data")));
 extern float D_L00_001C8900[][12] __attribute__((section(".data")));
 extern int D_L00_00161090 __attribute__((sda));
 void FUN_L00_0029b680(void) {
-    V_29b680 v;
+    V_29b680 item_local_position;
     int id;
     int k;
     int x;
@@ -1793,15 +1793,15 @@ void FUN_L00_0029b680(void) {
     FUN_0020c5f0_29b680(P.p20 + 0x100, id);
     *(short *)(P.p20 + 0x132) = 0x40;
     *(int *)(P.p20 + 0x194) = 0;
-    FUN_001f9a10_29b680(v, &D_L00_00161090, D_L00_001C8920[P.ent[P.i58].k]);
+    FUN_001f9a10_29b680(item_local_position, &D_L00_00161090, D_L00_001C8920[P.ent[P.i58].k]);
     if (P.ent[P.i58].f == 0) {
         float item_z_offset = D_L00_001C8920[P.ent[P.i58].k][3];
-        v[2] += item_z_offset;
+        item_local_position[2] += item_z_offset;
         if (discount_purchase_pricing) {
-            v[2] += item_z_offset;
+            item_local_position[2] += item_z_offset;
         }
     }
-    FUN_001f9cf8_29b680(P.p20 + 0x110, v, P.p1C + 0xC0);
+    FUN_001f9cf8_29b680(P.p20 + 0x110, item_local_position, P.p1C + 0xC0);
     FUN_001f9a10_29b680(P.p20 + 0x110, P.p20 + 0x110, P.p1C + 0x10);
     {
         float(*t)[12] = D_L00_001C8900;
@@ -2027,14 +2027,14 @@ extern void FUN_L00_0023a7a8_2ba78(void) __asm__("FUN_L00_0023a7a8");
 #define CUR_TB (D_L00_001C40B0[CUR_ITEM.fD0])
 void FUN_L00_0029ba78(void) {
     u128 lv;
-    s32 st;
+    s32 purchase_state;
     s32 purchase_cost, k, last_row_index;
 
-    st = vendor_menu.f5c;
-    if (st == 0) {
+    purchase_state = vendor_menu.f5c;
+    if (purchase_state == 0) {
         return;
     }
-    if (st == 1) {
+    if (purchase_state == 1) {
         D_L00_00161E34 = 1;
         D_L00_00161E0C = 0;
         FUN_0020c5f0_2ba78(&vendor_menu.f20[4], 0x471);
@@ -2072,7 +2072,7 @@ void FUN_L00_0029ba78(void) {
         vendor_menu.f5c = 2;
         return;
     }
-    if (st == 2) {
+    if (purchase_state == 2) {
         if (D_L00_00161E10 == 1) {
             if (pad_state.held_unmasked & 0x8000) {
                 D_L00_00161E28++;
@@ -2096,11 +2096,11 @@ void FUN_L00_0029ba78(void) {
             if ((pad_state.pressed_unmasked & 0x2000) ||
                 (D_L00_00161E2C >= 0x10 && (D_L00_00161E2C & 0x7) == 0) || D_L00_00161E2C >= 0x30) {
                 if ((vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8) > 0) {
-                    s32 cnt = D_0015ED98 / (vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8);
+                    s32 max_ammo_purchase_quantity = D_0015ED98 / (vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8);
                     s32 i = CUR_ITEM.fD0;
                     s32 left = D_L00_001C40B0[i].hE - weapon_ammo_counts[i];
-                    if (left < cnt) cnt = left;
-                    if (D_L00_00161E34 < cnt) {
+                    if (left < max_ammo_purchase_quantity) max_ammo_purchase_quantity = left;
+                    if (D_L00_00161E34 < max_ammo_purchase_quantity) {
                         D_L00_00161E34++;
                         if ((D_L00_00161E2C & 0x3) == 0 || D_L00_00161E2C < 0x10) {
                             FUN_0022da68_2ba78(1, 0, vendor_menu.f1c);
@@ -2134,7 +2134,7 @@ void FUN_L00_0029ba78(void) {
         FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
         return;
     }
-    if (st == 3) {
+    if (purchase_state == 3) {
         advance_moby_animation(&vendor_menu.f20[4]);
         if (!vendor_menu.f20[4].b53 && (vendor_menu.f20[4].b70 & 2)) {
             vendor_menu.f20[4].f58 = -1.0f;
@@ -2143,7 +2143,7 @@ void FUN_L00_0029ba78(void) {
         FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
         return;
     }
-    if (st != 4) {
+    if (purchase_state != 4) {
         return;
     }
     advance_moby_animation(&vendor_menu.f20[4]);
@@ -2237,10 +2237,10 @@ void FUN_L00_0029c648(void) {
         VENDOR_MENU_CLOSING = 2,
         VENDOR_MENU_EXIT_CUTSCENE = 3
     };
-    Vec4 a;
+    Vec4 position_scratch;
     Vec4 b;
     f32 camera_rotation_matrix[4][4];
-    s32 st;
+    s32 vendor_menu_state;
     s32 ok;
     s32 i;
     s32 j;
@@ -2282,8 +2282,8 @@ void FUN_L00_0029c648(void) {
             }
             noop_main_callback(D_L00_00161148, 5);
         }
-        st = vendor_menu.state;
-        if (st == 0) {
+        vendor_menu_state = vendor_menu.state;
+        if (vendor_menu_state == 0) {
             fade_level -= 0.34f;
             if (fade_level < 0.0f) {
                 fade_level = 0.0f;
@@ -2300,7 +2300,7 @@ void FUN_L00_0029c648(void) {
                 D_L00_00161E1C = 8;
                 allocate_voice_for_target_entry(4, 0, vendor_menu.f1c);
             }
-        } else if (st == 2) {
+        } else if (vendor_menu_state == 2) {
             ok = 0;
             if (vendor_menu.f40 == 0 && vendor_menu.f48 >= 0) {
                 if (D_L00_001CA020[vendor_menu.f48] >= 0) { ok = 1; }
@@ -2381,10 +2381,10 @@ void FUN_L00_0029c648(void) {
         FUN_L00_00250df8(&vendor_menu.f20[1]);
         b.q = 0;
         b.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
-        a.q = b.q;
-        add_vector_xyz(&a, &D_L00_001610A0, &a);
-        add_vector_xyz(&a, &a, &D_L00_001C8FF0[CUR_ITEM.fD0].v20);
-        transform_vector_by_basis(&vendor_menu.f20[2].pos, &a, vendor_menu.f1c->mtx);
+        position_scratch.q = b.q;
+        add_vector_xyz(&position_scratch, &D_L00_001610A0, &position_scratch);
+        add_vector_xyz(&position_scratch, &position_scratch, &D_L00_001C8FF0[CUR_ITEM.fD0].v20);
+        transform_vector_by_basis(&vendor_menu.f20[2].pos, &position_scratch, vendor_menu.f1c->mtx);
         add_vector_xyz(&vendor_menu.f20[2].pos, &vendor_menu.f20[2].pos, &vendor_menu.f1c->pos);
         vendor_menu.f20[2].rot.f[0] = D_L00_001C8FF0[CUR_ITEM.fD0].f10;
         vendor_menu.f20[2].rot.f[1] = D_L00_001C8FF0[CUR_ITEM.fD0].f14;
@@ -2392,10 +2392,10 @@ void FUN_L00_0029c648(void) {
         FUN_L00_00250df8(&vendor_menu.f20[2]);
         b.q = 0;
         b.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
-        a.q = b.q;
-        add_vector_xyz(&a, &D_L00_001610A0, &a);
-        add_vector_xyz(&a, &a, &D_L00_001C9930[CUR_ITEM.fD0].v20);
-        transform_vector_by_basis(&vendor_menu.f20[3].pos, &a, vendor_menu.f1c->mtx);
+        position_scratch.q = b.q;
+        add_vector_xyz(&position_scratch, &D_L00_001610A0, &position_scratch);
+        add_vector_xyz(&position_scratch, &position_scratch, &D_L00_001C9930[CUR_ITEM.fD0].v20);
+        transform_vector_by_basis(&vendor_menu.f20[3].pos, &position_scratch, vendor_menu.f1c->mtx);
         add_vector_xyz(&vendor_menu.f20[3].pos, &vendor_menu.f20[3].pos, &vendor_menu.f1c->pos);
         vendor_menu.f20[3].rot.f[0] = D_L00_001C9930[CUR_ITEM.fD0].f10;
         vendor_menu.f20[3].rot.f[1] = D_L00_001C9930[CUR_ITEM.fD0].f14;
@@ -2618,9 +2618,9 @@ void FUN_L00_0029c648(void) {
                 mb->blend = 1.0f;
             }
             keys = mb->keys;
-            fast_vec_scale(&a, &keys[mb->frame], 1.0f - mb->blend);
+            fast_vec_scale(&position_scratch, &keys[mb->frame], 1.0f - mb->blend);
             fast_vec_scale(&b, &keys[mb->next_frame], mb->blend);
-            add_vector_xyz(&mb->pos, &a, &b);
+            add_vector_xyz(&mb->pos, &position_scratch, &b);
             transform_vector_by_basis(&mb->pos, &mb->pos, vendor_menu.f80);
             add_vector_xyz(&mb->pos, &mb->pos, &vendor_menu.fC0);
             mb->rot.f[2] = vendor_menu.f80[3].f[2];

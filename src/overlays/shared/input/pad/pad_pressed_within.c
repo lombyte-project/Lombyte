@@ -12,11 +12,11 @@ typedef struct {
 extern S_266d60 D_0013C940_266d60 __asm__("D_0013C940");
 u32 pad_pressed_within(u32 mask, s32 n, s32 *out) __asm__("FUN_L00_00266d60");
 u32 pad_pressed_within(u32 mask, s32 n, s32 *out) {
-    s32 lim = D_0013C940_266d60.n;
+    s32 history_search_limit = D_0013C940_266d60.n;
     s32 i;
-    if (lim >= n)
-        lim = n;
-    for (i = 1; i < lim + 1; i++) {
+    if (history_search_limit >= n)
+        history_search_limit = n;
+    for (i = 1; i < history_search_limit + 1; i++) {
         s32 k = (D_0013C940_266d60.h - i + 30) % 30;
         if (D_0013C940_266d60.t[k] & mask) {
             if (out)
@@ -36,15 +36,15 @@ extern int FUN_L00_00266d60_u(int, int, int *) __asm__("FUN_L00_00266d60");
 extern s32 SubtractIntegerWithClamp(s32);
 
 /* True when both lookups succeed and the clamped difference of their values is below d. */
-int FUN_L00_00266e00(int first_button_mask, int b, int lookback_frames, int press_difference_limit) {
-    int v[2];
-    int r = 0;
-    if (FUN_L00_00266d60_u(first_button_mask, lookback_frames, &v[0])) {
-        if (FUN_L00_00266d60_u(b, lookback_frames, &v[1])) {
-            r = SubtractIntegerWithClamp(v[0] - v[1]) < press_difference_limit;
+int FUN_L00_00266e00(int first_button_mask, int second_button_mask, int lookback_frames, int press_difference_limit) {
+    int press_ages_frames[2];
+    int presses_within_limit = 0;
+    if (FUN_L00_00266d60_u(first_button_mask, lookback_frames, &press_ages_frames[0])) {
+        if (FUN_L00_00266d60_u(second_button_mask, lookback_frames, &press_ages_frames[1])) {
+            presses_within_limit = SubtractIntegerWithClamp(press_ages_frames[0] - press_ages_frames[1]) < press_difference_limit;
         }
     }
-    return r;
+    return presses_within_limit;
 }
 typedef struct {
     char pad[0x18E];

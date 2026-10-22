@@ -21,7 +21,7 @@ void set_moby_animation(struct Obj *o, s32 sel, s32 idx) __asm__("FUN_00212ed8")
 
 extern s32 D_L00_00160540_gp __asm__("D_L00_00160540") __attribute__((sda));
 void FUN_L00_0028e8a0(char *moby) {
-    char *g;
+    char *moby_state_record;
     int *src;
     D_L00_00160540_gp = 1;
     FUN_L00_0028e990_c();
@@ -32,17 +32,17 @@ void FUN_L00_0028e8a0(char *moby) {
         *(float *)(global_record + 0x68) = 316.72f;
         *(float *)(global_record + 0x78) = 2.77f;
     }
-    g = D_0013E030_c;
-    *(short *)(g + 0x26) = *(unsigned short *)(moby + 0xA6) - 0x213;
-    *(char **)g = moby;
+    moby_state_record = D_0013E030_c;
+    *(short *)(moby_state_record + 0x26) = *(unsigned short *)(moby + 0xA6) - 0x213;
+    *(char **)moby_state_record = moby;
     *(void **)(moby + 0x74) = FUN_L00_0028e180;
     *(unsigned short *)(moby + 0x34) &= 0xFFFC;
     *(int *)(moby + 0x94) = *(int *)(*(int *)(moby + 0x24) + 0x10);
     set_moby_animation(moby, 1, 0);
     src = *(int **)(moby + 0x78);
-    *(int *)(g + 0x30) = src[0];
-    *(int *)(g + 0x34) = src[1];
-    *(int *)(g + 0x38) = src[2];
+    *(int *)(moby_state_record + 0x30) = src[0];
+    *(int *)(moby_state_record + 0x34) = src[1];
+    *(int *)(moby_state_record + 0x38) = src[2];
 }
 #include "sda.h"
 extern u8 *D_0013E030 NOT_SDA;
@@ -101,12 +101,12 @@ void f2049f0_28e9c8(int) __asm__("FUN_002049f0");
 void f22ca50_28e9c8(void) __asm__("FUN_0022ca50");
 int f122298_28e9c8(int) __asm__("FUN_00122298");
 int f215b10_28e9c8(void) __asm__("FUN_00215b10");
-void FUN_L00_0028e9c8(int a) {
+void FUN_L00_0028e9c8(int audio_selection_mode) {
     O_28e9c8 *moby;
     int secondary_track_index, base_audio_selection_index, audio_stream_table_index, alternate_audio_stream_table_index, u;
     D_0013E030_28e9c8.x24 = -1;
     D_L00_0015F5D8 = 1;
-    D_0013E030_28e9c8.x20 = a;
+    D_0013E030_28e9c8.x20 = audio_selection_mode;
     D_0013E030_28e9c8.x8 = 0;
     memset_28e9c8(&D_L00_0016C860_28e9c8, 0, 0x1C0);
     memset_28e9c8(D_L00_0017C340, 0, 0x40);
@@ -127,7 +127,7 @@ void FUN_L00_0028e9c8(int a) {
         if (!(moby->st & 0x80) && (moby->type == 0x4A || moby->type == 0xCB))
             moby->flags |= 0x80;
     }
-    if (a == 0) {
+    if (audio_selection_mode == 0) {
         base_audio_selection_index = D_0013E030_28e9c8.x26;
         audio_stream_table_index = base_audio_selection_index + 1;
         secondary_track_index = base_audio_selection_index + 6;
@@ -140,7 +140,7 @@ void FUN_L00_0028e9c8(int a) {
         }
         FUN_L00_00245610(audio_stream_table_index, fr_28e9c8(6));
     } else {
-        int k, r;
+        int k, fade_frame_count;
         base_audio_selection_index = D_0013E030_28e9c8.x26;
         k = D_0013E030_28e9c8.x2c;
         secondary_track_index = base_audio_selection_index + 3;
@@ -158,10 +158,10 @@ void FUN_L00_0028e9c8(int a) {
                 secondary_track_index = 12;
             alternate_audio_stream_table_index = 9;
         }
-        r = 0;
+        fade_frame_count = 0;
         if (!D_0013E030_28e9c8.x2c)
-            r = fr_28e9c8(6);
-        FUN_L00_00245610(alternate_audio_stream_table_index, r);
+            fade_frame_count = fr_28e9c8(6);
+        FUN_L00_00245610(alternate_audio_stream_table_index, fade_frame_count);
     }
     music_stream_state.queued_secondary_track = secondary_track_index + 40000;
     f2049f0_28e9c8(0);
@@ -179,10 +179,10 @@ void FUN_L00_002039a0(void);
 void FUN_L00_0028e9c8(int);
 /* Sets D_L00_0015F5D8, keeps +0x22A8 >= 1, calls 00216050, sound_update, 002039a0, 0028e9c8. */
 void FUN_L00_0028ecd8(void) {
-    struct Hero *g = &hero;
+    struct Hero *hero_state = &hero;
     struct MusicStreamState *music_state;
-    if (g->health.hp <= 0)
-        g->health.hp = 1;
+    if (hero_state->health.hp <= 0)
+        hero_state->health.hp = 1;
     D_L00_0015F5D8 = 1;
     music_pause(0);
     music_state = &music_stream_state;
@@ -227,7 +227,7 @@ s32 FUN_0020b178_0028ed58(s32, s32) __asm__("FUN_0020b178");
 extern s32 D_L00_00160570[1] __attribute__((sda));
 void FUN_L00_0028ed58(s32 target_level_index) {
     A_0028ed58 *shared_state_record = &D_0013E030_0028ed58;
-    C_0028ed58 *c;
+    C_0028ed58 *shared_result_record;
     s32 shared_table_offset;
     (&D_L00_0015F5C4)[5] = 1; /* D_L00_0015F5D8: the unit declares it sda */
     D_L00_0015F5C4 = 6;
@@ -237,18 +237,18 @@ void FUN_L00_0028ed58(s32 target_level_index) {
     shared_state_record->h24 = -1;
     FUN_002335a0_0028ed58();
     shared_table_offset = D_L00_001611CC - 0x60000;
-    c = &D_L00_0016C860_0028ed58;
-    c->i58 = D_L00_00173E00_0028ed58.i4 + shared_table_offset;
-    c->i5C = D_L00_00173E00_0028ed58.i8 + shared_table_offset;
+    shared_result_record = &D_L00_0016C860_0028ed58;
+    shared_result_record->i58 = D_L00_00173E00_0028ed58.i4 + shared_table_offset;
+    shared_result_record->i5C = D_L00_00173E00_0028ed58.i8 + shared_table_offset;
     D_L00_001611CC = shared_table_offset;
     if (current_level_index == target_level_index) {
         s32 divisor;
         FUN_L00_0028e9c8_0028ed58(8);
         divisor = pal_mode ? 0x50 : 0x60;
-        c->i34 = FUN_001f96f8_0028ed58(D_L00_00160570[shared_state_record->h26]);
-        c->i3C = c->i34 / divisor;
-        FUN_002049f0_0028ed58(c->i3C);
-        c->i38 = c->i34 % divisor;
+        shared_result_record->i34 = FUN_001f96f8_0028ed58(D_L00_00160570[shared_state_record->h26]);
+        shared_result_record->i3C = shared_result_record->i34 / divisor;
+        FUN_002049f0_0028ed58(shared_result_record->i3C);
+        shared_result_record->i38 = shared_result_record->i34 % divisor;
     } else {
         FUN_0020b178_0028ed58(0, target_level_index);
         D_L00_0015F5C0 = target_level_index;
@@ -278,7 +278,7 @@ void FUN_L00_0028e9c8_eed0(s32) __asm__("FUN_L00_0028e9c8");
 extern u8 D_0013DD43 __attribute__((section(".data")));
 extern u8 D_0013D3F0[];
 void FUN_L00_0028eed0(void) {
-    int level_index, u;
+    int level_index, shared_table_offset;
     D_0013E030_eed0.x2c = 1;
     if (D_0013E030_eed0.x2a != 0)
         D_0013E030_eed0.x2a = 0;
@@ -304,10 +304,10 @@ in:
     fade_level = 1.0f;
     D_0013E030_eed0.x20 = 0;
     FUN_002335a0_eed0();
-    u = D_L00_001611CC - 0x60000;
-    D_L00_0016C860_eed0.x58 = D_L00_00173E00_eed0.x4 + u;
-    D_L00_0016C860_eed0.x5c = D_L00_00173E00_eed0.x8_c + u;
-    D_L00_001611CC = u;
+    shared_table_offset = D_L00_001611CC - 0x60000;
+    D_L00_0016C860_eed0.x58 = D_L00_00173E00_eed0.x4 + shared_table_offset;
+    D_L00_0016C860_eed0.x5c = D_L00_00173E00_eed0.x8_c + shared_table_offset;
+    D_L00_001611CC = shared_table_offset;
     FUN_L00_0028e9c8_eed0(8);
 }
 typedef struct {

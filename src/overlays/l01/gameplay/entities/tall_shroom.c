@@ -19,15 +19,15 @@ extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 
 void FUN_L01_00309bf8(void) {
-    f32 v;
+    f32 normalized_sine_value;
     s32 i;
 
     mine_blend_color();
     FUN_L01_002b96e0(3, D_L01_00202D80);
-    v = fast_sin((convert_integer_to_float(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
-    v = v * 0.5f + 0.5f;
+    normalized_sine_value = fast_sin((convert_integer_to_float(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
+    normalized_sine_value = normalized_sine_value * 0.5f + 0.5f;
     for (i = 2; i >= 0; i--) {
-        D_L01_00202D80[i].f5c = v;
+        D_L01_00202D80[i].f5c = normalized_sine_value;
     }
 }
 typedef struct {
@@ -41,9 +41,9 @@ void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
 
 /* Sets both flag fields to 0xFF and queues FUN_L01_00309bf8 for the moby. */
 void FUN_L01_00309c98(FlagMoby *moby) {
-    int v = 0xFF;
-    moby->h32 = v;
-    moby->b30 = v;
+    int flag_init_value = 0xFF;
+    moby->h32 = flag_init_value;
+    moby->b30 = flag_init_value;
     enqueue_callback_list_1(FUN_L01_00309bf8, moby);
 }
 #include "rnc/gameplay/hero.h"
@@ -91,7 +91,7 @@ void FUN_L01_0030acb8(struct Moby *moby) {
     s32 *data;
     struct Moby *hint_candidate_moby;
     struct Moby *health_hint_candidate_moby;
-    s32 t;
+    s32 usage_time_value;
 
     data = (s32 *)moby->pvars;
     tick_countdown_32(&data[6]);
@@ -128,9 +128,9 @@ void FUN_L01_0030acb8(struct Moby *moby) {
         if (is_point_inside_clip_volume(&hero.motion.pos, data[15]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && help_state.state == 0 &&
             help_state.cur == -1) {
-            t = scale_game_frames(D_0015EEA4_macro) - usage_stats.stat[9].unk2 * 600;
+            usage_time_value = scale_game_frames(D_0015EEA4_macro) - usage_stats.stat[9].unk2 * 600;
             /* "< 1" rather than "!": cc1 would otherwise test the bit as (v >> level) & 1 */
-            if (scale_game_frames(216000) < t && (u32)(help_records[0x43].v & (1 << current_level_index_macro)) < 1) {
+            if (scale_game_frames(216000) < usage_time_value && (u32)(help_records[0x43].v & (1 << current_level_index_macro)) < 1) {
                 help_request(0x3EF, 0x43);
             }
         }
@@ -167,8 +167,8 @@ void FUN_L01_0030acb8(struct Moby *moby) {
                 if (usage_stats.stat[22].count < 0xFFFF) {
                     usage_stats.stat[22].count++;
                 }
-                t = scale_game_frames(D_0015EEA4_macro) / 600;
-                if (usage_stats.stat[22].unk2 < t) {
+                usage_time_value = scale_game_frames(D_0015EEA4_macro) / 600;
+                if (usage_stats.stat[22].unk2 < usage_time_value) {
                     usage_stats.stat[22].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
                 }
                 usage_stats.stat[22].level_mask = usage_stats.stat[22].level_mask | (1 << current_level_index_macro) | 0x80000000;
@@ -178,8 +178,8 @@ void FUN_L01_0030acb8(struct Moby *moby) {
                 if (usage_stats.stat[23].count < 0xFFFF) {
                     usage_stats.stat[23].count++;
                 }
-                t = scale_game_frames(D_0015EEA4_macro) / 600;
-                if (usage_stats.stat[23].unk2 < t) {
+                usage_time_value = scale_game_frames(D_0015EEA4_macro) / 600;
+                if (usage_stats.stat[23].unk2 < usage_time_value) {
                     usage_stats.stat[23].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
                 }
                 usage_stats.stat[23].level_mask = usage_stats.stat[23].level_mask | (1 << current_level_index_macro) | 0x80000000;
@@ -197,8 +197,8 @@ void FUN_L01_0030acb8(struct Moby *moby) {
                     if (usage_stats.stat[13].count < 0xFFFF) {
                         usage_stats.stat[13].count++;
                     }
-                    t = scale_game_frames(D_0015EEA4_macro) / 600;
-                    if (usage_stats.stat[13].unk2 < t) {
+                    usage_time_value = scale_game_frames(D_0015EEA4_macro) / 600;
+                    if (usage_stats.stat[13].unk2 < usage_time_value) {
                         usage_stats.stat[13].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
                     }
                     usage_stats.stat[13].level_mask = usage_stats.stat[13].level_mask | (1 << current_level_index_macro) | 0x80000000;
@@ -252,10 +252,10 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void FUN_L01_0030ba18(struct Moby *moby) {
-    BlobVars *v;
+    BlobVars *blob_vars;
     s32 hit;
     s32 i;
-    s32 n;
+    s32 signed_puff_variation;
     s32 grey_intensity;
     s32 alpha;
     s32 grey;
@@ -263,39 +263,39 @@ void FUN_L01_0030ba18(struct Moby *moby) {
     u8 *puff;
     u8 *puff_data;
 
-    v = (BlobVars *)moby->pvars;
+    blob_vars = (BlobVars *)moby->pvars;
     if (random_integer_below(2)) {
         enqueue_callback_list_1(FUN_L01_0030bfa8, moby);
     }
-    add_vector_xyz(&moby->pos, &moby->pos, v);
-    if (FUN_001f99c0(v->vel.x) > D_L01_00162060 * frame_scale) {
-        v->vel.x *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
+    add_vector_xyz(&moby->pos, &moby->pos, blob_vars);
+    if (FUN_001f99c0(blob_vars->vel.x) > D_L01_00162060 * frame_scale) {
+        blob_vars->vel.x *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
     }
-    if (FUN_001f99c0(v->vel.y) > D_L01_00162060 * frame_scale) {
-        v->vel.y *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
+    if (FUN_001f99c0(blob_vars->vel.y) > D_L01_00162060 * frame_scale) {
+        blob_vars->vel.y *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
     }
-    if (v->vel.z > 0.0f) {
-        v->vel.z *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
+    if (blob_vars->vel.z > 0.0f) {
+        blob_vars->vel.z *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
     }
-    v->vel.z -= D_L01_00162058 * frame_time_sq;
-    moby->rot.x = fast_add_rotations(moby->rot.x, v->spin.x);
-    moby->rot.y = fast_add_rotations(moby->rot.y, v->spin.y);
-    moby->rot.z = fast_add_rotations(moby->rot.z, v->spin.z);
+    blob_vars->vel.z -= D_L01_00162058 * frame_time_sq;
+    moby->rot.x = fast_add_rotations(moby->rot.x, blob_vars->spin.x);
+    moby->rot.y = fast_add_rotations(moby->rot.y, blob_vars->spin.y);
+    moby->rot.z = fast_add_rotations(moby->rot.z, blob_vars->spin.z);
     if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f ||
         moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
         mark_moby_for_removal(moby);
         return;
     }
-    hit = coll_sphere(2.0f, &moby->pos, 0, (void *)v->owner);
-    if (tick_countdown_32(&v->timer) || hit) {
+    hit = coll_sphere(2.0f, &moby->pos, 0, (void *)blob_vars->owner);
+    if (tick_countdown_32(&blob_vars->timer) || hit) {
         if (hit) {
             if (D_L01_001742C0.have_normal) {
-                FUN_L00_001ff660(v, v, &D_L01_001742C0.normal);
+                FUN_L00_001ff660(blob_vars, blob_vars, &D_L01_001742C0.normal);
             } else {
-                clear_vector(v);
+                clear_vector(blob_vars);
             }
         }
-        FUN_L00_0025e450(moby, v, &moby->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 0, 3.0f, 15.0f, 1, 1,
+        FUN_L00_0025e450(moby, blob_vars, &moby->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 0, 3.0f, 15.0f, 1, 1,
                          -1, 0);
         mark_moby_for_removal(moby);
         return;
@@ -305,14 +305,14 @@ void FUN_L01_0030ba18(struct Moby *moby) {
                FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1);
     alpha = 0x60000000;
     for (i = 0; i < 2; i++) {
-        n = random_integer_below(6);
+        signed_puff_variation = random_integer_below(6);
         if (random_integer_below(2)) {
-            n = -n;
+            signed_puff_variation = -signed_puff_variation;
         }
         s = random_float_between(40000.0f, 100000.0f);
         grey_intensity = FUN_L00_00257b90(0x30, 0xFF);
         grey = (grey_intensity << 8) | alpha;
-        puff = spawn_puff(&moby->pos, 0.025f, 1.0f, 1.0f, n, &D_L01_0015F580, s, grey_intensity | ((grey_intensity << 16) | grey));
+        puff = spawn_puff(&moby->pos, 0.025f, 1.0f, 1.0f, signed_puff_variation, &D_L01_0015F580, s, grey_intensity | ((grey_intensity << 16) | grey));
         if (puff != NULL) {
             puff[3] = 0x44;
             puff_data = puff + 0x20;
@@ -358,26 +358,26 @@ extern f32 randf_sym(f32 lo, f32 hi) __asm__("FUN_L00_00257c48");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
-DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
+DebrisMoby *FUN_L01_0030be70(DebrisMoby *parent_moby, void *dir, f32 scale) {
     DebrisMoby *spawned_moby;
-    DebrisVars *v;
+    DebrisVars *debris_vars;
 
     spawned_moby = create_moby(0x5E6);
     if (spawned_moby != NULL) {
-        v = spawned_moby->vars;
-        v->parent = src;
-        qcopy(&spawned_moby->pos, &src->pos);
-        spawned_moby->rot = src->rot;
+        debris_vars = spawned_moby->vars;
+        debris_vars->parent = parent_moby;
+        qcopy(&spawned_moby->pos, &parent_moby->pos);
+        spawned_moby->rot = parent_moby->rot;
         spawned_moby->state = 0;
         spawned_moby->b30 = 0xFF;
         spawned_moby->h32 = 0xFF;
         spawned_moby->b31 = 1;
         spawned_moby->scale = spawned_moby->scale * scale;
-        fast_vec_normalize(v, dir, random_float_between(0.8f, 1.2f));
-        v->spin_x = randf_sym(0.0f, 0.008726646f);
-        v->spin_y = randf_sym(0.05235988f, 0.13962634f);
-        v->spin_z = randf_sym(0.0f, DEG_TO_RAD);
-        v->timer = scale_game_frames(200);
+        fast_vec_normalize(debris_vars, dir, random_float_between(0.8f, 1.2f));
+        debris_vars->spin_x = randf_sym(0.0f, 0.008726646f);
+        debris_vars->spin_y = randf_sym(0.05235988f, 0.13962634f);
+        debris_vars->spin_z = randf_sym(0.0f, DEG_TO_RAD);
+        debris_vars->timer = scale_game_frames(200);
         FUN_L00_00250df8(spawned_moby);
     }
     return spawned_moby;
@@ -453,11 +453,11 @@ void FUN_L01_0030c190(struct Moby *moby) {
     struct Moby *cutscene_moby;
     char *splash;
     FxSpark *spark;
-    f32 ang;
-    f32 r;
+    f32 debris_horizontal_angle_radians;
+    f32 debris_horizontal_magnitude;
     s32 i;
     s32 j;
-    s32 n;
+    s32 debris_spawn_random_value;
     s32 color;
     s32 spread;
     s32 step;
@@ -501,13 +501,13 @@ void FUN_L01_0030c190(struct Moby *moby) {
                         }
                     }
                     for (i = 0; i < 16; i++) {
-                        ang = random_angle_radians();
-                        r = random_float_between(frame_time * 0.0f, frame_time * 3.0f);
-                        b.f[0] = fast_cos(ang) * r;
-                        b.f[1] = fast_sin(ang) * r;
+                        debris_horizontal_angle_radians = random_angle_radians();
+                        debris_horizontal_magnitude = random_float_between(frame_time * 0.0f, frame_time * 3.0f);
+                        b.f[0] = fast_cos(debris_horizontal_angle_radians) * debris_horizontal_magnitude;
+                        b.f[1] = fast_sin(debris_horizontal_angle_radians) * debris_horizontal_magnitude;
                         b.f[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
-                        n = random_int_between(90, 120);
-                        spawn_debris_chunk(&a, &b, random_integer_below(2), n);
+                        debris_spawn_random_value = random_int_between(90, 120);
+                        spawn_debris_chunk(&a, &b, random_integer_below(2), debris_spawn_random_value);
                     }
                 }
             }
@@ -599,7 +599,7 @@ extern void FUN_L01_00278e20();
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void tall_shroom_update(TriggerMoby *obj) __asm__("FUN_L01_0030d0f0");
-void tall_shroom_update(TriggerMoby *obj) {
+void tall_shroom_update(TriggerMoby *shroom_moby) {
     enum {
         TALL_SHROOM_STATE_INITIALIZE = 0,
         TALL_SHROOM_STATE_WAIT_FOR_HIT = 1,
@@ -609,26 +609,26 @@ void tall_shroom_update(TriggerMoby *obj) {
     s32 flag;
 
     flag = 0;
-    hit = find_moby_hit(obj, 0x10000, 0);
-    switch (obj->state) {
+    hit = find_moby_hit(shroom_moby, 0x10000, 0);
+    switch (shroom_moby->state) {
     case TALL_SHROOM_STATE_INITIALIZE:
-        obj->state = 1;
+        shroom_moby->state = 1;
         break;
     case TALL_SHROOM_STATE_WAIT_FOR_HIT:
         if (hit != 0 && hit->f2c > 0.0f) {
             flag = 1;
         }
         if (flag) {
-            obj->state = 2;
+            shroom_moby->state = 2;
         }
         break;
     case TALL_SHROOM_STATE_REMOVE_WITH_EFFECTS:
-        allocate_voice_for_target_entry(0, 0, obj);
-        FUN_L01_002787a0(obj);
-        FUN_L00_00263fd8(obj, 0x717, obj->pos, obj->rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580,
+        allocate_voice_for_target_entry(0, 0, shroom_moby);
+        FUN_L01_002787a0(shroom_moby);
+        FUN_L00_00263fd8(shroom_moby, 0x717, shroom_moby->pos, shroom_moby->rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580,
                          0.0f, &D_L01_0015F580);
-        FUN_L01_00278e20(obj, 0x718);
-        mark_moby_for_removal(obj);
+        FUN_L01_00278e20(shroom_moby, 0x718);
+        mark_moby_for_removal(shroom_moby);
         break;
     }
 }
@@ -649,7 +649,7 @@ void FUN_L01_0030ef18(s32 vertex_count, f32 (*normals)[3], f32 (*verts)[3], s32 
     EnvVec refl;
     EnvVec nrm;
     s32 i;
-    f32 len;
+    f32 uv_projection_denominator;
 
     for (i = 0; i < vertex_count; i++) {
         pos.w = 1.0f;
@@ -667,9 +667,9 @@ void FUN_L01_0030ef18(s32 vertex_count, f32 (*normals)[3], f32 (*verts)[3], s32 
         fast_vec_sub(&refl, &eye, &refl);
         fast_vec_normalize(&refl, &refl, 1.0f);
         refl.z += 1.0f;
-        len = fast_vec_length(&refl) * 2.0f;
-        uv[i][0] = (refl.x / len + 0.5f) * 2.0f + D_L01_00162110[0];
-        uv[i][1] = (refl.y / len + 0.5f) * 2.0f + D_L01_00162110[1];
+        uv_projection_denominator = fast_vec_length(&refl) * 2.0f;
+        uv[i][0] = (refl.x / uv_projection_denominator + 0.5f) * 2.0f + D_L01_00162110[0];
+        uv[i][1] = (refl.y / uv_projection_denominator + 0.5f) * 2.0f + D_L01_00162110[1];
     }
 }
 extern s32 D_L01_00202EA0[];

@@ -24,9 +24,9 @@ void FUN_L12_0027b370(char *parent, char *list, int entry_count) {
     int i;
     euler_rotation_matrix(parent_rotation_matrix, (float *)(parent + 0x40));
     for (i = 0; i < entry_count; i++) {
-        int idx = *(int *)(list + i * 0x30 + 0x20);
-        if (idx != -1) {
-            linked_object = D_L12_0015FFD8_p + idx * 256;
+        int linked_object_index = *(int *)(list + i * 0x30 + 0x20);
+        if (linked_object_index != -1) {
+            linked_object = D_L12_0015FFD8_p + linked_object_index * 256;
             euler_rotation_matrix(composed_rotation_matrix, (float *)(list + i * 0x30 + 0x10));
             multiply_matrix(composed_rotation_matrix, parent_rotation_matrix, composed_rotation_matrix);
             matrix_to_euler(composed_rotation_matrix, linked_object + 0x40);
@@ -60,9 +60,9 @@ void FUN_L12_0027b268(char *moby, char *arr, int entry_count) {
     transpose_rotation_matrix(inverse_moby_rotation_matrix, moby_rotation_basis);
     for (i = 0; i < entry_count; i++) {
         char *entry = arr + i * 0x30;
-        int idx = *(int *)(entry + 0x20);
-        if (idx != -1) {
-            char *linked_moby = D_L12_0015FFD8_p + (idx << 8);
+        int linked_moby_index = *(int *)(entry + 0x20);
+        if (linked_moby_index != -1) {
+            char *linked_moby = D_L12_0015FFD8_p + (linked_moby_index << 8);
             subtract_vector_xyz(entry, linked_moby + 0x10, moby + 0x10);
             transform_vector(entry, entry, inverse_moby_rotation_matrix);
             euler_rotation_matrix(relative_rotation_matrix, linked_moby + 0x40);

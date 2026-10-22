@@ -249,11 +249,11 @@ extern unsigned char *D_L00_001B2084 __attribute__((section(".data")));
 unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
-void FUN_L00_00268f10(Vec4 *v, int initial_high_byte) {
+void FUN_L00_00268f10(Vec4 *spawn_position, int initial_high_byte) {
     unsigned char *particle = create_part(1);
     if (particle) {
-        v->f[2] += 0.1f;
-        qcopy(particle + 0x10, v);
+        spawn_position->f[2] += 0.1f;
+        qcopy(particle + 0x10, spawn_position);
         *(int *)(particle + 4) = (initial_high_byte << 24) | 0x907070;
         particle[9] = truncate_float_to_s32(2.0f) + 0x40;
         particle[3] = 0x48;
@@ -269,15 +269,15 @@ int scale_game_frames(int) __asm__("FUN_001f96f8");
 int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08(unsigned char *);
 void FUN_L00_00268fe8(unsigned char *particle) {
-    int r = scale_game_frames(0x1b);
-    int k = *(short *)(particle + 0xa) * *(int *)(particle + 0x20) / r;
+    int high_byte_duration_frames = scale_game_frames(0x1b);
+    int k = *(short *)(particle + 0xa) * *(int *)(particle + 0x20) / high_byte_duration_frames;
     *(int *)(particle + 4) = (*(int *)(particle + 4) & 0xffffff) | (k << 24);
     if (fast_dec_timer_s16(particle + 0xa))
         FUN_L00_00267a08(particle);
     else {
         int lifetime_frames = scale_game_frames(0x1b);
-        int b = scale_game_frames(0x1b);
-        particle[2] = D_L00_001B2084[(lifetime_frames - *(short *)(particle + 0xa)) * 9 / b];
+        int table_duration_frames = scale_game_frames(0x1b);
+        particle[2] = D_L00_001B2084[(lifetime_frames - *(short *)(particle + 0xa)) * 9 / table_duration_frames];
     }
 }
 

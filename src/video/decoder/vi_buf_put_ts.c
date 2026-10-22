@@ -7,9 +7,9 @@ extern void vi_buf_modify_pts(struct ViBuf *, struct ViBufTimeStamp *) __asm__("
 s32 vi_buf_put_ts(struct ViBuf *f, struct ViBufTimeStamp *ts) __asm__("FUN_0023c810");
 
 s32 vi_buf_put_ts(struct ViBuf *video_buffer, struct ViBufTimeStamp *ts) {
-    s32 ret;
+    s32 has_timestamp_capacity;
 
-    ret = 0;
+    has_timestamp_capacity = 0;
     WaitSema(video_buffer->sema);
     if (video_buffer->count_ts < video_buffer->n_ts) {
         vi_buf_modify_pts(video_buffer, ts);
@@ -21,10 +21,10 @@ s32 vi_buf_put_ts(struct ViBuf *video_buffer, struct ViBufTimeStamp *ts) {
             video_buffer->count_ts++;
             video_buffer->wt_ts = (video_buffer->wt_ts + 1) % video_buffer->n_ts;
         }
-        ret = 1;
+        has_timestamp_capacity = 1;
     }
     SignalSema(video_buffer->sema);
-    return ret;
+    return has_timestamp_capacity;
 }
 
 extern __typeof__(vi_buf_put_ts) func_0023C810 __attribute__((alias("FUN_0023c810")));

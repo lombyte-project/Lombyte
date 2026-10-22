@@ -14,17 +14,17 @@
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 
 int play_voice(int a, int b, int c, int d) __asm__("FUN_L00_0028ddd8");
-int play_voice(int voice_definition_index, int b, int sound_owner, int volume) {
-    int r;
+int play_voice(int voice_definition_index, int voice_flags, int sound_owner, int volume) {
+    int voice_slot_index;
     if (voice_definition_index >= D_L00_0015F5F0)
         return -1;
-    r = allocate_voice_slot(D_L00_0015F5F4 + voice_definition_index * 32, b, 0, sound_owner + 0x40, volume);
-    if (r >= 0) {
-        char *voice_slot = D_0013E533 + 0x1D + r * 0x70;
+    voice_slot_index = allocate_voice_slot(D_L00_0015F5F4 + voice_definition_index * 32, voice_flags, 0, sound_owner + 0x40, volume);
+    if (voice_slot_index >= 0) {
+        char *voice_slot = D_0013E533 + 0x1D + voice_slot_index * 0x70;
         *(int *)(voice_slot + 0x8C) = sound_owner;
         *(short *)(voice_slot + 0x7E) = voice_definition_index;
     }
-    return r;
+    return voice_slot_index;
 }
 /* Ported from rac1-decomp (src/overlays/shared/sound_0028EB98.c: func_L00_0028F140), where it is exact; names translated to the US level program. */
 
@@ -34,23 +34,23 @@ extern unsigned char D_L00_001BD820[];
 extern int D_L00_0015F574;
 
 int FUN_L00_0028de68(int voice_group_index, int voice_pair_index, int voice_index_offset, int voice_flags, int voice_moby) {
-    int idx;
+    int voice_definition_index;
     int voice_slot_index;
     int voice_definition_offset;
 
     voice_definition_offset = D_L00_001BD820[current_level_index] + voice_group_index * 4;
     voice_definition_offset += voice_pair_index * 2;
     voice_definition_offset += voice_index_offset;
-    idx = voice_definition_offset + D_L00_0015F574;
+    voice_definition_index = voice_definition_offset + D_L00_0015F574;
 
-    if (idx >= D_L00_0015F5F0) {
+    if (voice_definition_index >= D_L00_0015F5F0) {
         return -1;
     }
-    voice_slot_index = allocate_voice_slot(D_L00_0015F5F4 + idx * 32, voice_flags, voice_moby, 0, 0x400);
+    voice_slot_index = allocate_voice_slot(D_L00_0015F5F4 + voice_definition_index * 32, voice_flags, voice_moby, 0, 0x400);
     if (voice_slot_index >= 0) {
         char *rec = D_0013E550_c + voice_slot_index * 0x70;
         *(int *)(rec + 0x88) = voice_moby;
-        *(short *)(rec + 0x7E) = idx;
+        *(short *)(rec + 0x7E) = voice_definition_index;
     }
     return voice_slot_index;
 }
@@ -60,9 +60,9 @@ typedef struct {
 extern E0028df38 D_0013E550[];
 /* Sets word 0x21 of voice entry i to v; returns 1. */
 s32 engine_voice_set_pitch(s32 i, s32 v) __asm__("FUN_L00_0028df38");
-s32 engine_voice_set_pitch(s32 i, s32 v) {
+s32 engine_voice_set_pitch(s32 i, s32 pitch) {
     E0028df38 *voice_entry = &D_0013E550[i];
-    voice_entry->w[0x21] = v;
+    voice_entry->w[0x21] = pitch;
     return 1;
 }
 #define NOT_SDA

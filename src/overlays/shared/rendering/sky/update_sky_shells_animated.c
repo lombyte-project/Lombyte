@@ -77,17 +77,17 @@ extern void FUN_001fa070_2899a8(void *, void *) __asm__("FUN_001fa070");
 void FUN_L00_002899a8_2899a8(void) __asm__("FUN_L00_002899a8");
 
 void FUN_L00_002899a8_2899a8(void) {
-    SkyRotVec_2899a8 rot;
+    SkyRotVec_2899a8 shell_rotation;
     *(short *)(D_L00_0016051C_2899a8 + 4) = 0;
     FUN_001f9fc8_2899a8(D_L00_001BD7E0);
     sky_draw_shell(0);
-    qzero(&rot);
-    rot.f[2] = (f32) * (u16 *)&D_L00_0015F5CC_2899a8 * 9.5873802e-5f - 3.1415927f;
-    FUN_001fa070_2899a8(D_L00_001BD7E0, &rot);
+    qzero(&shell_rotation);
+    shell_rotation.f[2] = (f32) * (u16 *)&D_L00_0015F5CC_2899a8 * 9.5873802e-5f - 3.1415927f;
+    FUN_001fa070_2899a8(D_L00_001BD7E0, &shell_rotation);
     sky_draw_shell(1);
-    rot.f[2] =
+    shell_rotation.f[2] =
         (f32)(*(volatile int *)&D_L00_0015F5CC_2899a8 & 0x1FFFF) * 4.7936901e-5f - 3.1415927f;
-    FUN_001fa070_2899a8(D_L00_001BD7E0, &rot);
+    FUN_001fa070_2899a8(D_L00_001BD7E0, &shell_rotation);
     sky_draw_shell(2);
 }
 /* draws sky shells with two animated rotation offsets */
@@ -192,16 +192,16 @@ extern int D_L00_0015F5CC;
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void FUN_L00_0028a3a8(void) {
-    float v[3];
+    float shell_rotation[3];
     *(short *)(D_L00_0016051C + 4) = 0;
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(0);
     sky_draw_shell(1);
     sky_draw_shell(2);
-    v[0] = 0.0f;
-    v[1] = 0.3f;
-    v[2] = (D_L00_0015F5CC % 25000) * 0.000251327408f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, v);
+    shell_rotation[0] = 0.0f;
+    shell_rotation[1] = 0.3f;
+    shell_rotation[2] = (D_L00_0015F5CC % 25000) * 0.000251327408f - 3.14159265f;
+    fun_001fa070(D_L00_001BD7E0, shell_rotation);
     sky_draw_shell(3);
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(4);
@@ -220,34 +220,34 @@ void FUN_L00_0028a480(void) {
         SKY_SHELL_TENFOLD_PHASE_WIDE_WRAP_ROTATION = 2,
         SKY_SHELL_TENFOLD_PHASE_ROTATION = 3
     };
-    OvlQuad v[1];
+    OvlQuad shell_rotation[1];
     int i;
 
-    qzero(v);
+    qzero(shell_rotation);
     for (i = 0; i < *(short *)(D_L00_0016051C_28a480 + 6); i++) {
         switch (i) {
         case SKY_SHELL_DOUBLE_PHASE_ROTATION:
-            ((float *)v)[2] =
+            ((float *)shell_rotation)[2] =
                 (float)((D_L00_0015F5CC_28a480g * 2) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
-            FUN_001fa070_28a480(D_L00_001BD7E0_lui, v);
+            FUN_001fa070_28a480(D_L00_001BD7E0_lui, shell_rotation);
             break;
         case SKY_SHELL_QUINTUPLE_PHASE_ROTATION:
-            ((float *)v)[2] =
+            ((float *)shell_rotation)[2] =
                 (float)((D_L00_0015F5CC_28a480d * 5) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
-            FUN_001fa070_28a480(D_L00_001BD7E0_lui, v);
+            FUN_001fa070_28a480(D_L00_001BD7E0_lui, shell_rotation);
             break;
         case SKY_SHELL_TENFOLD_PHASE_WIDE_WRAP_ROTATION:
-            ((float *)v)[2] =
+            ((float *)shell_rotation)[2] =
                 (float)((D_L00_0015F5CC_28a480d * 10) & 0x3FFFF) * 2.39684496e-05f - 3.14159265f;
-            FUN_001fa070_28a480(D_L00_001BD7E0_lui, v);
+            FUN_001fa070_28a480(D_L00_001BD7E0_lui, shell_rotation);
             break;
         case SKY_SHELL_TENFOLD_PHASE_ROTATION:
-            ((float *)v)[2] =
+            ((float *)shell_rotation)[2] =
                 (float)((D_L00_0015F5CC_28a480g * 10) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
-            FUN_001fa070_28a480(D_L00_001BD7E0_lui, v);
+            FUN_001fa070_28a480(D_L00_001BD7E0_lui, shell_rotation);
             break;
         default:
             FUN_001f9fc8_28a480(D_L00_001BD7E0_lui);

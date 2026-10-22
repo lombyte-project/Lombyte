@@ -146,9 +146,9 @@ void update_world_object_animation(void *unused_arg) {
         mob->model = endp;
         mob->parts->entries[mob->idx] = sp;
         for (k = 0; k < ((unsigned char *)sp)[0x10]; k++) {
-            int *w = (int *)((unsigned char *)sp + 0x1C);
+            int *pointer_fixup_entries = (int *)((unsigned char *)sp + 0x1C);
 
-            w[k] = (int)sp + w[k];
+            pointer_fixup_entries[k] = (int)sp + pointer_fixup_entries[k];
         }
     }
 }

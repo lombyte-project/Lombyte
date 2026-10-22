@@ -63,7 +63,7 @@ void init_once(void) {
     };
     u8 buf[0x800];
     s32 lang;
-    u32 b;
+    u32 aligned_memory_base;
     u32 base;
     s32 *dst;
     s32 flag;
@@ -99,8 +99,8 @@ void init_once(void) {
     set_pal_mode();
     vu0_load_micro_program(vu0_micro_program);
     load_disc_sectors_into_global_buffer();
-    b = (u32)D_24135F & 0xFFFFC000;
-    base = b + 0x2C0000;
+    aligned_memory_base = (u32)D_24135F & 0xFFFFC000;
+    base = aligned_memory_base + 0x2C0000;
     dst = (s32 *)(D_1FF8000 - (disc_table.unk12C0.size << 0xB));
     wad_get_sectors(disc_table.unk12C0.sector, disc_table.unk12C0.size, dst);
     FlushCache(0);

@@ -29,7 +29,7 @@ s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) __asm__("FUN_00222948"
 s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) {
     struct MenuPacket packet;
     struct MenuPacket text_window_template;
-    void *tex;
+    void *first_message_text;
     s32 icon;
     s16 end_y;
     s32 first_y = 4;
@@ -44,8 +44,8 @@ s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) {
     draw_hud_sprite(get_icon_frame(0xE99A, 6), 4, 0xC, 0x10, 0x10, 0x80);
     packet.y = first_y;
     packet.x = pos_x;
-    tex = get_help_message_text(0x5182);
-    font_print_window_regular(&packet, ((u64)0x80FF << 16) | 0xA888, tex, -1);
+    first_message_text = get_help_message_text(0x5182);
+    font_print_window_regular(&packet, ((u64)0x80FF << 16) | 0xA888, first_message_text, -1);
     end_y = packet.end_y;
     first_y = end_y + 0x10;
     packet.y = first_y;

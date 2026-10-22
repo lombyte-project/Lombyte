@@ -14,19 +14,19 @@ extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 extern short D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")__attribute__((section(".data")));
 int FUN_L00_0025fcb8(char *query_moby, char *target_output, float best) {
-    struct Hero *g = &hero_lui;
+    struct Hero *hero_data = &hero_lui;
     char *selected_moby;
     char *candidate_moby;
-    int res;
+    int target_selection_status;
     int i;
     int j;
     float candidate_distance_score;
 
-    selected_moby = ((char *)g->moby);
-    res = 0;
-    if (g->state.control_mode == 0x18 || g->state.current == 0x72) {
+    selected_moby = ((char *)hero_data->moby);
+    target_selection_status = 0;
+    if (hero_data->state.control_mode == 0x18 || hero_data->state.current == 0x72) {
         selected_moby = 0;
-        res = 2;
+        target_selection_status = 2;
     }
     for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
         candidate_moby = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830_lui[i] << 8);
@@ -44,7 +44,7 @@ int FUN_L00_0025fcb8(char *query_moby, char *target_output, float best) {
         if (candidate_distance_score < best) {
             selected_moby = candidate_moby;
             best = candidate_distance_score;
-            res = 1;
+            target_selection_status = 1;
         }
     }
     for (j = 0; j < 20; j++) {
@@ -63,17 +63,17 @@ int FUN_L00_0025fcb8(char *query_moby, char *target_output, float best) {
         if (candidate_distance_score < best) {
             selected_moby = candidate_moby;
             best = candidate_distance_score;
-            res = 1;
+            target_selection_status = 1;
         }
     }
     if (selected_moby != 0) {
         *(char **)(target_output + 0x40) = selected_moby;
         qcopy(target_output, selected_moby + 0x10);
         qcopy(target_output + 0x10, selected_moby + 0x40);
-        g = &hero_lui;
-        if (selected_moby == ((char *)g->moby)) {
-            qcopy(target_output + 0x20, &g->motion.unkC0);
-            qcopy(target_output + 0x30, &g->motion.unkD0);
+        hero_data = &hero_lui;
+        if (selected_moby == ((char *)hero_data->moby)) {
+            qcopy(target_output + 0x20, &hero_data->motion.unkC0);
+            qcopy(target_output + 0x30, &hero_data->motion.unkD0);
         } else {
             qcopy(target_output + 0x30, target_output);
             *(float *)(target_output + 0x38) += 0.6f;
@@ -86,41 +86,41 @@ int FUN_L00_0025fcb8(char *query_moby, char *target_output, float best) {
         qzero(target_output + 0x30);
         qzero(target_output + 0x20);
     }
-    *(int *)(target_output + 0x44) = res;
-    return res;
+    *(int *)(target_output + 0x44) = target_selection_status;
+    return target_selection_status;
 }
 extern int FUN_00214720_25ff38(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_00259740_25ff38(void *, void *, int) __asm__("FUN_L00_00259740");
 int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, int nv);
-int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *list, int n, float *v, int nv) {
-    struct Hero *g = &hero_lui;
+int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *list, int exclusion_list_bound, float *v, int nv) {
+    struct Hero *hero_data = &hero_lui;
     char *selected_moby;
     char *indexed_candidate;
     char *listed_candidate;
-    int res;
+    int target_selection_status;
     int i;
     int j;
     int k;
     int ok;
     float candidate_distance_score;
 
-    selected_moby = (char *)g->moby;
-    res = 0;
-    if (g->state.control_mode == 0x18 || g->state.current == 0x72) {
+    selected_moby = (char *)hero_data->moby;
+    target_selection_status = 0;
+    if (hero_data->state.control_mode == 0x18 || hero_data->state.current == 0x72) {
         selected_moby = 0;
-        res = 2;
-    } else if (n > 0) {
-        for (k = 0; k < n - 1; k++) {
+        target_selection_status = 2;
+    } else if (exclusion_list_bound > 0) {
+        for (k = 0; k < exclusion_list_bound - 1; k++) {
             if (FUN_00214720_25ff38(&hero_lui.motion.pos, list[k]) != 0) {
                 selected_moby = 0;
-                res = 2;
+                target_selection_status = 2;
                 break;
             }
         }
     } else if (v != 0 && nv > 0) {
         if (FUN_L00_00259740_25ff38(&hero_lui.motion.pos, v, nv) == 0) {
             selected_moby = 0;
-            res = 2;
+            target_selection_status = 2;
         }
     }
     for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
@@ -134,8 +134,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         candidate_distance_score = FUN_001f9b80_25fcb8(query_moby + 0x10, indexed_candidate + 0x10);
         if (best <= candidate_distance_score) {
             ok = 0;
-        } else if (n > 0) {
-            for (k = 0; k < n - 1; k++) {
+        } else if (exclusion_list_bound > 0) {
+            for (k = 0; k < exclusion_list_bound - 1; k++) {
                 if (FUN_00214720_25ff38(indexed_candidate + 0x10, list[k]) != 0) {
                     ok = 0;
                     break;
@@ -146,7 +146,7 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         }
         if (ok) {
             selected_moby = indexed_candidate;
-            res = 1;
+            target_selection_status = 1;
             best = candidate_distance_score;
         }
     }
@@ -161,8 +161,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         candidate_distance_score = FUN_001f9b80_25fcb8(query_moby + 0x10, listed_candidate + 0x10);
         if (best <= candidate_distance_score) {
             ok = 0;
-        } else if (n > 0) {
-            for (k = 0; k < n - 1; k++) {
+        } else if (exclusion_list_bound > 0) {
+            for (k = 0; k < exclusion_list_bound - 1; k++) {
                 if (FUN_00214720_25ff38(listed_candidate + 0x10, list[k]) != 0) {
                     ok = 0;
                     break;
@@ -173,7 +173,7 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         }
         if (ok) {
             selected_moby = listed_candidate;
-            res = 1;
+            target_selection_status = 1;
             best = candidate_distance_score;
         }
     }
@@ -181,10 +181,10 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         *(char **)(target_output + 0x40) = selected_moby;
         qcopy(target_output, selected_moby + 0x10);
         qcopy(target_output + 0x10, selected_moby + 0x40);
-        g = &hero_lui;
-        if (selected_moby == (char *)g->moby) {
-            qcopy(target_output + 0x20, &g->motion.unkC0);
-            qcopy(target_output + 0x30, &g->motion.unkD0);
+        hero_data = &hero_lui;
+        if (selected_moby == (char *)hero_data->moby) {
+            qcopy(target_output + 0x20, &hero_data->motion.unkC0);
+            qcopy(target_output + 0x30, &hero_data->motion.unkD0);
         } else {
             qcopy(target_output + 0x30, target_output);
             *(float *)(target_output + 0x38) += 0.6f;
@@ -197,8 +197,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         qzero(target_output + 0x30);
         qzero(target_output + 0x20);
     }
-    *(int *)(target_output + 0x44) = res;
-    return res;
+    *(int *)(target_output + 0x44) = target_selection_status;
+    return target_selection_status;
 }
 typedef float M4_260400[16] __attribute__((aligned(16)));
 extern char *FUN_L00_002603d0_c(char *) __asm__("FUN_L00_002603d0");
@@ -209,16 +209,16 @@ void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out);
-int FUN_L00_00260400(int u0, char *reference_object, void *b, void *input_rotation, float *v, void *out) {
+int FUN_L00_00260400(int unused_subject_object, char *reference_object, void *input_position, void *input_rotation, float *output_position, void *out) {
     M4_260400 basis_rotation_matrix, composed_rotation_matrix;
     char *transform_record = FUN_L00_002603d0_c(reference_object);
     if (transform_record == 0)
         return 0;
     euler_rotation_matrix(basis_rotation_matrix, transform_record);
-    add_vector_xyz(v, b, transform_record + 0x10);
-    subtract_vector_xyz(v, v, reference_object + 0x10);
-    transform_vector_by_basis(v, v, basis_rotation_matrix);
-    add_vector_xyz(v, v, reference_object + 0x10);
+    add_vector_xyz(output_position, input_position, transform_record + 0x10);
+    subtract_vector_xyz(output_position, output_position, reference_object + 0x10);
+    transform_vector_by_basis(output_position, output_position, basis_rotation_matrix);
+    add_vector_xyz(output_position, output_position, reference_object + 0x10);
     euler_rotation_matrix(composed_rotation_matrix, input_rotation);
     multiply_matrix(composed_rotation_matrix, basis_rotation_matrix, composed_rotation_matrix);
     matrix_to_euler(composed_rotation_matrix, out);
@@ -238,26 +238,26 @@ void FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *,
                                void *) __asm__("FUN_L00_00260668");
 void FUN_L00_0025f730_002604f0(void *, float) __asm__("FUN_L00_0025f730");
 int FUN_L00_002604f0(u8 *a, u8 *b, void *c, void *d, void *e, void *f);
-int FUN_L00_002604f0(u8 *comparison_object, u8 *b, void *position, void *rotation, void *transformed_position, void *transformed_rotation) {
+int FUN_L00_002604f0(u8 *comparison_object, u8 *reference_object, void *position, void *rotation, void *transformed_position, void *transformed_rotation) {
     float m2[16] __attribute__((aligned(16)));
     float m[16] __attribute__((aligned(16)));
     V4_2604f0 translation_adjustment;
-    u8 *r = FUN_L00_002603d0_002604f0(b);
-    if (!r)
+    u8 *transform_record = FUN_L00_002603d0_002604f0(reference_object);
+    if (!transform_record)
         return 0;
-    FUN_001f9cf8_002604f0(transformed_position, position, b + 0xC0);
-    FUN_001f9a10_002604f0(transformed_position, transformed_position, b + 0x10);
+    FUN_001f9cf8_002604f0(transformed_position, position, reference_object + 0xC0);
+    FUN_001f9a10_002604f0(transformed_position, transformed_position, reference_object + 0x10);
     FUN_001fa050_002604f0(m, rotation);
-    FUN_001fa298_002604f0(m2, b + 0xC0);
+    FUN_001fa298_002604f0(m2, reference_object + 0xC0);
     FUN_001fa378_002604f0(m, m2, m);
     FUN_00214598_002604f0(m, transformed_rotation);
-    if (*(int *)(r + 0x3C) & 4) {
-        FUN_001f9a10_002604f0(transformed_position, transformed_position, r + 0x10);
-        FUN_L00_00260668_002604f0(comparison_object, b, transformed_position, transformed_rotation, position, rotation);
+    if (*(int *)(transform_record + 0x3C) & 4) {
+        FUN_001f9a10_002604f0(transformed_position, transformed_position, transform_record + 0x10);
+        FUN_L00_00260668_002604f0(comparison_object, reference_object, transformed_position, transformed_rotation, position, rotation);
         return 1;
     }
-    if (comparison_object[0x22] && comparison_object[0x22] < b[0x22]) {
-        qcopy(translation_adjustment, r + 0x10);
+    if (comparison_object[0x22] && comparison_object[0x22] < reference_object[0x22]) {
+        qcopy(translation_adjustment, transform_record + 0x10);
         FUN_L00_0025f730_002604f0(translation_adjustment, 1.0f);
         FUN_001f9a10_002604f0(transformed_position, transformed_position, translation_adjustment);
     }
@@ -278,19 +278,19 @@ extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
 int FUN_L00_00260668(int x, char *o, float *a, float *c, float *b, float *d);
-int FUN_L00_00260668(int x, char *reference_object, float *input_position, float *input_rotation, float *b, float *output_rotation) {
+int FUN_L00_00260668(int x, char *reference_object, float *input_position, float *input_rotation, float *output_position, float *output_rotation) {
     float transposed_rotation_matrix[16];
-    float v[4];
-    float w[4];
+    float position_offset[4];
+    float composed_rotation_matrix[4];
     float pad[12];
     if (FUN_L00_002603d0(reference_object) == 0)
         return 0;
-    subtract_vector_xyz(v, input_position, reference_object + 0x10);
+    subtract_vector_xyz(position_offset, input_position, reference_object + 0x10);
     transpose_rotation_matrix(transposed_rotation_matrix, reference_object + 0xC0);
-    transform_vector(b, v, transposed_rotation_matrix);
-    euler_rotation_matrix(w, input_rotation);
-    multiply_matrix(w, transposed_rotation_matrix, w);
-    matrix_to_euler(w, output_rotation);
+    transform_vector(output_position, position_offset, transposed_rotation_matrix);
+    euler_rotation_matrix(composed_rotation_matrix, input_rotation);
+    multiply_matrix(composed_rotation_matrix, transposed_rotation_matrix, composed_rotation_matrix);
+    matrix_to_euler(composed_rotation_matrix, output_rotation);
     return 1;
 }
 typedef float M4[16] __attribute__((aligned(16)));
@@ -300,14 +300,14 @@ void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 #include "qcopy.h"
 void update_entity_matrix(char *out, OvlQuad *pos, void *m1, void *m2) __asm__("FUN_L00_00260738");
-void update_entity_matrix(char *out, OvlQuad *pos, void *previous_rotation, void *current_rotation) {
-    M4 transposed_previous_rotation_matrix, b, relative_rotation_matrix;
+void update_entity_matrix(char *out, OvlQuad *position_delta, void *previous_rotation, void *current_rotation) {
+    M4 transposed_previous_rotation_matrix, current_rotation_matrix, relative_rotation_matrix;
     euler_rotation_matrix(transposed_previous_rotation_matrix, previous_rotation);
     transpose_rotation_matrix(transposed_previous_rotation_matrix, transposed_previous_rotation_matrix);
-    euler_rotation_matrix(b, current_rotation);
-    multiply_matrix(relative_rotation_matrix, transposed_previous_rotation_matrix, b);
+    euler_rotation_matrix(current_rotation_matrix, current_rotation);
+    multiply_matrix(relative_rotation_matrix, transposed_previous_rotation_matrix, current_rotation_matrix);
     matrix_to_euler(relative_rotation_matrix, out);
-    qcopy(out + 0x10, pos);
+    qcopy(out + 0x10, position_delta);
 }
 extern u8 level_available[] __asm__("D_0013DD40");
 extern s32 D_0013D510[] __asm__("D_0013D510");
@@ -355,37 +355,37 @@ void FUN_L00_00260860(int id, int flag);
 void FUN_L00_00260860(int id, int flag) {
     unsigned char *pa = &D_0013D4C0[id];
     unsigned char *pb = &items_acquired[id];
-    int idx = id + 0x25;
+    int dialogue_message_index = id + 0x25;
     int *dialogue_message_id_ptr;
     int i;
 
     if (*pa == 0) {
-        idx = id;
+        dialogue_message_index = id;
     }
-    dialogue_message_id_ptr = &D_L00_001B0340[idx];
+    dialogue_message_id_ptr = &D_L00_001B0340[dialogue_message_index];
     *pb = 1;
     if (*dialogue_message_id_ptr != -1) {
         queue_dialogue_message(*dialogue_message_id_ptr, scale_game_frames(0x12C));
     }
     if (*pa == 0) {
-        VendorItemInfo *r;
+        VendorItemInfo *vendor_item_info_ptr;
         *pa = 1;
-        r = &D_L00_001C40B0[id];
+        vendor_item_info_ptr = &D_L00_001C40B0[id];
         *pb = 1;
-        if (r->h8 != 0) {
+        if (vendor_item_info_ptr->h8 != 0) {
             int *ammo_count_ptr = &weapon_ammo_counts[id];
-            int v = r->h12;
-            if (v < *ammo_count_ptr) {
-                v = *ammo_count_ptr;
+            int updated_ammo_count = vendor_item_info_ptr->h12;
+            if (updated_ammo_count < *ammo_count_ptr) {
+                updated_ammo_count = *ammo_count_ptr;
             }
-            *ammo_count_ptr = v;
+            *ammo_count_ptr = updated_ammo_count;
         }
         for (i = 0; i < 20; i++) {
             if (id != 0 && D_L00_001C3E98[i] == id) {
                 int j;
                 for (j = 0;; j++) {
-                    unsigned char b = D_0015EDD0_257218[j];
-                    if ((b & 0x3F) == id || b == 0xFF) {
+                    unsigned char packed_item_entry = D_0015EDD0_257218[j];
+                    if ((packed_item_entry & 0x3F) == id || packed_item_entry == 0xFF) {
                         D_0015EDD0_257218[j] = id | 0x40;
                         break;
                     }

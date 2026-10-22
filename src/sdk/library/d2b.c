@@ -106,16 +106,16 @@ extern _Bigint *_Balloc(struct _reent *, s32);
 extern s32 _hi0bits(u32);
 extern s32 _lo0bits(u32 *);
 
-_Bigint *_d2b(struct _reent *ptr, f64 _d, s32 *binary_exponent, s32 *bits) {
+_Bigint *_d2b(struct _reent *reent_context, f64 _d, s32 *binary_exponent, s32 *bits) {
     double_union d;
-    _Bigint *b;
+    _Bigint *significand_bigint;
     s32 de, i, k;
     __ULong *x, y, z;
 
     d.d = _d;
     d.d = _d;
-    b = _Balloc(ptr, 1);
-    x = b->_x;
+    significand_bigint = _Balloc(reent_context, 1);
+    x = significand_bigint->_x;
     z = d0 & Frac_mask;
     d0 &= 0x7fffffff;
     if (de = (s32)(d0 >> Exp_shift))
@@ -127,11 +127,11 @@ _Bigint *_d2b(struct _reent *ptr, f64 _d, s32 *binary_exponent, s32 *bits) {
         } else {
             x[0] = y;
         }
-        i = b->_wds = (x[1] = z) ? 2 : 1;
+        i = significand_bigint->_wds = (x[1] = z) ? 2 : 1;
     } else {
         k = _lo0bits(&z);
         x[0] = z;
-        i = b->_wds = 1;
+        i = significand_bigint->_wds = 1;
         k += 32;
     }
     if (de) {
@@ -141,5 +141,5 @@ _Bigint *_d2b(struct _reent *ptr, f64 _d, s32 *binary_exponent, s32 *bits) {
         *binary_exponent = de - Bias - (P - 1) + 1 + k;
         *bits = 32 * i - _hi0bits(x[i - 1]);
     }
-    return b;
+    return significand_bigint;
 }

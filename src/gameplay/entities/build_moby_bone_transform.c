@@ -10,13 +10,13 @@ void build_moby_bone_transform(struct Moby *arg0, s32 arg1, s32 arg2) __asm__("F
 
 void build_moby_bone_transform(struct Moby *moby, s32 bone_index, s32 output_transform) {
     u8 sp_slot[0x40];
-    s32 sp40;
+    s32 bone_index_input;
     f32 scale;
     s32 temp_16_22;
 
-    sp40 = bone_index;
+    bone_index_input = bone_index;
     scale = (*(f32 *)((u8 *)moby + 0x2C)) * 0.0009765625f;
-    FUN_00210850(moby, 1, &sp40, output_transform);
+    FUN_00210850(moby, 1, &bone_index_input, output_transform);
     temp_16_22 = output_transform + 0x30;
     fast_vec_scale(temp_16_22, temp_16_22, scale);
     copy_matrix_rotation(sp_slot, ((u8 *)moby + (0xC0)));

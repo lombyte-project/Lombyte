@@ -60,7 +60,7 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
         RESIDENT_WAIT_TO_START_DIALOGUE_ANIMATION_BEFORE_TIMED_IDLE_RESTORE = 11,
         RESIDENT_WAIT_TO_START_DIALOGUE_ANIMATION = 12
     };
-    s32 r;
+    s32 dialogue_variant_index;
     s32 target_animation;
 
     if (big_head_cheat_enabled != 0) {
@@ -76,9 +76,9 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
     switch (resident_moby->state) {
     case RESIDENT_IDLE_WAIT_TO_REQUEST_DIALOGUE:
         if (D_001E63C0.timer > scale_game_frames(600)) {
-            r = random_integer_below(2);
-            D_001E63C0.pick = r;
-            D_001516EC = (r * 3 + 1) * 6 + D_001E63C0.base + 10000;
+            dialogue_variant_index = random_integer_below(2);
+            D_001E63C0.pick = dialogue_variant_index;
+            D_001516EC = (dialogue_variant_index * 3 + 1) * 6 + D_001E63C0.base + 10000;
             D_001610B0 = 1;
             D_001610B4 = 0;
             if (resident_moby->anim != 2) {

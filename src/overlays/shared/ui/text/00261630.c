@@ -18,42 +18,42 @@ f32 FUN_001f9b80_261630(void *, void *) __asm__("FUN_001f9b80");
 f32 FUN_001f9e90_261630(f32, f32) __asm__("FUN_001f9e90");
 s32 FUN_001f96f8_261630(s32) __asm__("FUN_001f96f8");
 f32 FUN_L00_0025b750_261630(f32, f32, f32) __asm__("FUN_L00_0025b750");
-void FUN_L00_00261630(u8 *o, u8 *s, f32 a, f32 b) {
+void FUN_L00_00261630(u8 *moving_object, u8 *movement_state, f32 a, f32 b) {
     OvlQuad v[1];
     u8 *pos;
     s32 movement_unconstrained, t;
     f32 planar_distance;
-    if (*(s16 *)(s + 0x28) == 0) {
-        pos = o + 0x10;
-        *(f32 *)(s + 0x24) += FUN_L00_00257c48_261630(0.7853982f, 2.6179938f);
-        *(s16 *)(s + 0x2A) = FUN_L00_00257b90_261630(*(s16 *)(s + 0x2C), *(s16 *)(s + 0x2E));
-        *(s16 *)(s + 0x28) = 1;
+    if (*(s16 *)(movement_state + 0x28) == 0) {
+        pos = moving_object + 0x10;
+        *(f32 *)(movement_state + 0x24) += FUN_L00_00257c48_261630(0.7853982f, 2.6179938f);
+        *(s16 *)(movement_state + 0x2A) = FUN_L00_00257b90_261630(*(s16 *)(movement_state + 0x2C), *(s16 *)(movement_state + 0x2E));
+        *(s16 *)(movement_state + 0x28) = 1;
     } else {
-        FUN_L00_0025bc00_261630(o + 0x48, 0, *(f32 *)(s + 0x24), *(f32 *)(s + 0x18));
-        if (FUN_001f9770_261630(s + 0x2A))
-            *(s16 *)(s + 0x28) = 0;
-        pos = o + 0x10;
+        FUN_L00_0025bc00_261630(moving_object + 0x48, 0, *(f32 *)(movement_state + 0x24), *(f32 *)(movement_state + 0x18));
+        if (FUN_001f9770_261630(movement_state + 0x2A))
+            *(s16 *)(movement_state + 0x28) = 0;
+        pos = moving_object + 0x10;
     }
     qcopy(v, pos);
-    ((f32 *)v)[0] += FUN_001f9dc8_261630(*(f32 *)(o + 0x48)) * *(f32 *)(s + 0x14);
-    ((f32 *)v)[1] += FUN_001f9de0_261630(*(f32 *)(o + 0x48)) * *(f32 *)(s + 0x14);
-    movement_unconstrained = FUN_L00_00258490_261630(o, pos, v, 0, a, *(f32 *)(s + 0x10), b, 0.52359879f);
-    *(f32 *)(o + 0x18) = FUN_00213508_261630(pos, 0, 0.5f);
-    planar_distance = FUN_001f9b80_261630(pos, s);
-    if (movement_unconstrained == 0 || *(f32 *)(s + 0x1C) < planar_distance) {
-        *(f32 *)(s + 0x24) = FUN_001f9e90_261630(*(f32 *)(s + 0) - *(f32 *)(o + 0x10),
-                                                 *(f32 *)(s + 4) - *(f32 *)(o + 0x14));
+    ((f32 *)v)[0] += FUN_001f9dc8_261630(*(f32 *)(moving_object + 0x48)) * *(f32 *)(movement_state + 0x14);
+    ((f32 *)v)[1] += FUN_001f9de0_261630(*(f32 *)(moving_object + 0x48)) * *(f32 *)(movement_state + 0x14);
+    movement_unconstrained = FUN_L00_00258490_261630(moving_object, pos, v, 0, a, *(f32 *)(movement_state + 0x10), b, 0.52359879f);
+    *(f32 *)(moving_object + 0x18) = FUN_00213508_261630(pos, 0, 0.5f);
+    planar_distance = FUN_001f9b80_261630(pos, movement_state);
+    if (movement_unconstrained == 0 || *(f32 *)(movement_state + 0x1C) < planar_distance) {
+        *(f32 *)(movement_state + 0x24) = FUN_001f9e90_261630(*(f32 *)(movement_state + 0) - *(f32 *)(moving_object + 0x10),
+                                                 *(f32 *)(movement_state + 4) - *(f32 *)(moving_object + 0x14));
         t = FUN_001f96f8_261630(0x1E);
-        *(s16 *)(s + 0x2A) = FUN_L00_00257b90_261630(t, FUN_001f96f8_261630(0x5A));
-        *(s16 *)(s + 0x28) = 1;
+        *(s16 *)(movement_state + 0x2A) = FUN_L00_00257b90_261630(t, FUN_001f96f8_261630(0x5A));
+        *(s16 *)(movement_state + 0x28) = 1;
     } else {
         planar_distance = FUN_001f9b80_261630(pos, &hero.motion.pos.f[0]);
-        if (planar_distance < *(f32 *)(s + 0x20)) {
-            planar_distance = planar_distance / *(f32 *)(s + 0x20);
-            *(f32 *)(s + 0x24) = FUN_L00_0025b750_261630(
-                *(f32 *)(s + 0x24),
-                FUN_001f9e90_261630(*(f32 *)(o + 0x10) - hero.motion.pos.f[0],
-                                    *(f32 *)(o + 0x14) - hero.motion.pos.f[1]),
+        if (planar_distance < *(f32 *)(movement_state + 0x20)) {
+            planar_distance = planar_distance / *(f32 *)(movement_state + 0x20);
+            *(f32 *)(movement_state + 0x24) = FUN_L00_0025b750_261630(
+                *(f32 *)(movement_state + 0x24),
+                FUN_001f9e90_261630(*(f32 *)(moving_object + 0x10) - hero.motion.pos.f[0],
+                                    *(f32 *)(moving_object + 0x14) - hero.motion.pos.f[1]),
                 planar_distance);
         }
     }

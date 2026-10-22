@@ -20,9 +20,9 @@ void update_moby_shadow_range(char *moby) {
     float dir[4];
     float scaled_position[4];
     float segment_start[4];
-    float b[4];
-    float h2;
-    float h1;
+    float segment_end[4];
+    float second_hit_height;
+    float first_hit_height;
     float padded_upper_height;
     char *hit;
 
@@ -32,23 +32,23 @@ void update_moby_shadow_range(char *moby) {
     qcopy(segment_start, scaled_position);
     segment_start[0] -= dir[0] * *(float *)(moby + 0xC) * 0.000732421875f;
     segment_start[1] -= dir[1] * *(float *)(moby + 0xC) * 0.000732421875f;
-    qcopy(b, segment_start);
-    b[2] -= 8.0f;
-    if (collision_line(segment_start, b, 0x22, 0, 0) != 0) {
+    qcopy(segment_end, segment_start);
+    segment_end[2] -= 8.0f;
+    if (collision_line(segment_start, segment_end, 0x22, 0, 0) != 0) {
         qcopy(segment_start, scaled_position);
         hit = coll_output;
-        h1 = *(float *)(hit + 0x28);
+        first_hit_height = *(float *)(hit + 0x28);
         segment_start[2] = segment_start[2] + *(float *)(moby + 0xC) * 0.00048828125f;
         segment_start[0] = segment_start[0] + dir[0] * *(float *)(moby + 0xC) * 0.000732421875f;
         segment_start[1] = segment_start[1] + dir[1] * *(float *)(moby + 0xC) * 0.000732421875f;
-        fast_vec_normalize(dir, dir, (segment_start[2] - h1) / -dir[2]);
-        add_vector_xyz(b, segment_start, dir);
-        h2 = h1;
-        if (collision_line(segment_start, b, 0x22, 0, 0) != 0) {
-            h2 = *(float *)(hit + 0x28);
+        fast_vec_normalize(dir, dir, (segment_start[2] - first_hit_height) / -dir[2]);
+        add_vector_xyz(segment_end, segment_start, dir);
+        second_hit_height = first_hit_height;
+        if (collision_line(segment_start, segment_end, 0x22, 0, 0) != 0) {
+            second_hit_height = *(float *)(hit + 0x28);
         }
-        *(float *)(moby + 0x84) = min_float(h1, h2) - 0.25f;
-        padded_upper_height = max_float(h1, h2) + 0.25f;
+        *(float *)(moby + 0x84) = min_float(first_hit_height, second_hit_height) - 0.25f;
+        padded_upper_height = max_float(first_hit_height, second_hit_height) + 0.25f;
         *(float *)(moby + 0x88) = padded_upper_height;
         if (*(float *)(moby + 0x84) + 4.0f < padded_upper_height) {
             *(float *)(moby + 0x88) = *(float *)(moby + 0x84) + 4.0f;

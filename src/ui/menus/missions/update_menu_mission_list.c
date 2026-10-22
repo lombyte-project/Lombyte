@@ -17,7 +17,7 @@ s32 update_menu_mission_list(struct MenuScreen *m) __asm__("FUN_0021c4c0");
 s32 update_menu_mission_list(struct MenuScreen *menu_screen) {
     s32 old;
     s32 i;
-    s32 prev;
+    s32 previous_mission_choice_index;
     u32 pad;
     s32 *mission_choice_ptr;
     s32 *ch;
@@ -58,14 +58,14 @@ s32 update_menu_mission_list(struct MenuScreen *menu_screen) {
     if (menu_screen->data.missions.count != 0) {
         pad = controller_state.pressed_unmasked;
         ch = menu_screen->data.missions.choice;
-        prev = menu_screen->data.missions.choice[level_map_selection.level];
+        previous_mission_choice_index = menu_screen->data.missions.choice[level_map_selection.level];
         if (pad & 0x1000) {
-            menu_screen->data.missions.choice[level_map_selection.level] = (prev + menu_screen->data.missions.count - 1) % menu_screen->data.missions.count;
+            menu_screen->data.missions.choice[level_map_selection.level] = (previous_mission_choice_index + menu_screen->data.missions.count - 1) % menu_screen->data.missions.count;
         }
         if (pad & 0x4000) {
             menu_screen->data.missions.choice[level_map_selection.level] = (menu_screen->data.missions.choice[level_map_selection.level] + 1) % menu_screen->data.missions.count;
         }
-        if (menu_screen->data.missions.choice[level_map_selection.level] != prev) {
+        if (menu_screen->data.missions.choice[level_map_selection.level] != previous_mission_choice_index) {
             allocate_voice_for_target_entry(1, 0x11, menu_screen->moby);
         }
         if ((pad & 0x5000) || level_map_selection.level != old) {

@@ -135,7 +135,7 @@ void skids_agent_update(struct Moby *moby) {
         SKIDS_AGENT_END_CONVERSATION = 5
     };
     char *data = (char *)moby->pvars;
-    s32 t;
+    s32 usage_time_value;
     f32 fade;
     struct Moby *prop;
 
@@ -167,19 +167,19 @@ void skids_agent_update(struct Moby *moby) {
             moby->state = 2;
         } else if (items_owned[0x5] == 0 && vec_dist(&moby->pos, &hero.motion.pos) < 3.0f) {
             if (D_00141968[14].count != 0) {
-                t = scale_frames(D_0015EEA4) - D_00141968[14].unk2 * 600;
-                if ((int)(scale_frames(0x12) * 60.0f) < t || D_00141968[14].unk2 * 600 == 0) {
+                usage_time_value = scale_frames(D_0015EEA4) - D_00141968[14].unk2 * 600;
+                if ((int)(scale_frames(0x12) * 60.0f) < usage_time_value || D_00141968[14].unk2 * 600 == 0) {
                     give_reward(0x7D4, 0xE);
                 } else {
-                    t = scale_frames(D_0015EEA4) / 600;
-                    if (D_00141968[14].unk2 < t) {
+                    usage_time_value = scale_frames(D_0015EEA4) / 600;
+                    if (D_00141968[14].unk2 < usage_time_value) {
                         D_00141968[14].unk2 = scale_frames(D_0015EEA4) / 600;
                     }
                 }
             } else {
                 D_00141968[14].count++;
-                t = scale_frames(D_0015EEA4) / 600;
-                if (D_00141968[14].unk2 < t) {
+                usage_time_value = scale_frames(D_0015EEA4) / 600;
+                if (D_00141968[14].unk2 < usage_time_value) {
                     D_00141968[14].unk2 = scale_frames(D_0015EEA4) / 600;
                 }
                 D_00141968[14].level_mask = D_00141968[14].level_mask | (1 << current_level_index) | 0x80000000;
@@ -366,7 +366,7 @@ void skid_mcmarx_update(struct Moby *moby) {
         SKID_MCMARX_IDLE_AND_TALK = 1,
         SKID_MCMARX_CONVERSATION_ACTIVE = 2
     };
-    WatcherVars *v = (WatcherVars *)moby->pvars;
+    WatcherVars *watcher_vars = (WatcherVars *)moby->pvars;
     WatcherLook look;
     f32 rate;
     f32 head_rate;
@@ -380,23 +380,23 @@ void skid_mcmarx_update(struct Moby *moby) {
             delete_moby(moby);
             return;
         }
-        v->unk180 = 0;
-        v->dialog = D_L02_00161D00;
+        watcher_vars->unk180 = 0;
+        watcher_vars->dialog = D_L02_00161D00;
         moby->state = 1;
         moby->update_dist = 0xFF;
-        watcher_init(moby, v);
+        watcher_init(moby, watcher_vars);
         initialize_moby_grounding(moby);
         break;
     case SKID_MCMARX_IDLE_AND_TALK:
-        if (v->zone_check == 1 && point_in_clip_volume(&hero.motion.pos, v->zone))
-            v->talk_radius = 255.0f;
+        if (watcher_vars->zone_check == 1 && point_in_clip_volume(&hero.motion.pos, watcher_vars->zone))
+            watcher_vars->talk_radius = 255.0f;
         else
-            v->talk_radius = 2.5f;
-        if (watcher_talk(moby, v)) {
+            watcher_vars->talk_radius = 2.5f;
+        if (watcher_talk(moby, watcher_vars)) {
             watcher_face(moby, 2.5f);
             moby->state = 2;
         }
-        if (v->talk_state == 2) {
+        if (watcher_vars->talk_state == 2) {
             give_reward(2000, 10);
             FUN_L00_00260860(30, 1);
             jet_clear_persistent(*((u8 *)moby + 0xB0));
@@ -405,9 +405,9 @@ void skid_mcmarx_update(struct Moby *moby) {
             delete_moby(moby);
             return;
         }
-        if (moby->prev_seq == 0 && count_down_16(&v->idle_timer)) {
+        if (moby->prev_seq == 0 && count_down_16(&watcher_vars->idle_timer)) {
             s32 idle_animation = 1;
-            v->idle_timer = float_to_int(scale_time(rand_range(1200.0f, 2400.0f)));
+            watcher_vars->idle_timer = float_to_int(scale_time(rand_range(1200.0f, 2400.0f)));
             if (rand_int(2) == 0)
                 idle_animation = 2;
             if (moby->prev_seq != idle_animation)
@@ -439,26 +439,26 @@ void skid_mcmarx_update(struct Moby *moby) {
             && angle_diff(moby->rot.z, angle_atan2(hero.motion.unkD0.f[0] - moby->pos.x,
                                                 hero.motion.unkD0.f[1] - moby->pos.y)) < 1.5707964f) {
             if (vec_len(&hero.motion.displacement) > 0.01f)
-                v->moving_timer = scale_frames(120);
+                watcher_vars->moving_timer = scale_frames(120);
             else
-                count_down(&v->moving_timer);
-        } else if (v->moving_timer) {
-            v->moving_timer = 0;
-            qcopy(&v->target, &hero.motion.unkD0);
+                count_down(&watcher_vars->moving_timer);
+        } else if (watcher_vars->moving_timer) {
+            watcher_vars->moving_timer = 0;
+            qcopy(&watcher_vars->target, &hero.motion.unkD0);
         }
-        if (count_down(&v->target_timer)) {
+        if (count_down(&watcher_vars->target_timer)) {
             f32 heading;
-            v->target_timer = float_to_int(scale_time(rand_range(180.0f, 300.0f)));
+            watcher_vars->target_timer = float_to_int(scale_time(rand_range(180.0f, 300.0f)));
             heading = angle_add(moby->rot.z, rand_range(-90.0f, 90.0f) * DEG_TO_RAD);
-            spherical_offset(&v->target, 6.0f, heading, rand_range(0.0f, 30.0f) * DEG_TO_RAD);
-            vec_add(&v->target, &v->target, &moby->pos);
+            spherical_offset(&watcher_vars->target, 6.0f, heading, rand_range(0.0f, 30.0f) * DEG_TO_RAD);
+            vec_add(&watcher_vars->target, &watcher_vars->target, &moby->pos);
         }
-        if (v->moving_timer) {
+        if (watcher_vars->moving_timer) {
             qcopy(&look.target, &hero.motion.unkD0);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(&look.target, &v->target);
+            qcopy(&look.target, &watcher_vars->target);
         }
     }
     if (tracking) {
@@ -477,14 +477,14 @@ void skid_mcmarx_update(struct Moby *moby) {
             pitch = 0.5235988f;
         else if (pitch < -0.5235988f)
             pitch = -0.5235988f;
-        v->pitch = pitch;
-        v->yaw = yaw * 0.6f;
-        v->head_yaw = yaw * 0.4f;
+        watcher_vars->pitch = pitch;
+        watcher_vars->yaw = yaw * 0.6f;
+        watcher_vars->head_yaw = yaw * 0.4f;
     }
     if (D_0015EDB0)
-        v->height = 2.75f;
-    drive_joint(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, v->body, 0);
-    drive_joint(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, v->head, 1);
+        watcher_vars->height = 2.75f;
+    drive_joint(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, watcher_vars->body, 0);
+    drive_joint(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, watcher_vars->head, 1);
 }
 #include "qcopy.h"
 extern char *D_L02_001600EC_n __asm__("D_L02_001600EC");

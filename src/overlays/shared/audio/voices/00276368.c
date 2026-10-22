@@ -357,7 +357,7 @@ void FUN_L00_00276908(void) {
     s32 i;
     s32 value;
     s32 handle;
-    void *obj;
+    void *owner_callback_object;
     void (*callback)(void *, s32);
     u8 *table;
 
@@ -367,11 +367,11 @@ void FUN_L00_00276908(void) {
         vu1_init_chain();
         if (D_L00_001B9CF0.owner != 0) {
             for (i = 0; i < 14; i++) {
-                obj = D_L00_001B9CF0.owner->objs[i];
-                if (obj != 0) {
-                    callback = *(void (**)(void *, s32))((u8 *)obj + 0xc);
+                owner_callback_object = D_L00_001B9CF0.owner->objs[i];
+                if (owner_callback_object != 0) {
+                    callback = *(void (**)(void *, s32))((u8 *)owner_callback_object + 0xc);
                     if (callback != 0) {
-                        callback(obj, 0);
+                        callback(owner_callback_object, 0);
                     }
                 }
             }
@@ -452,7 +452,7 @@ void FUN_L00_00276bd0(void) {
     Mth *active_callback_object;
     Ent *t;
     NO *obj;
-    s32 v;
+    s32 scene_state;
     s32 i, n, previous_decode_mode;
     s32 flag;
     s32 k;
@@ -542,8 +542,8 @@ void FUN_L00_00276bd0(void) {
         sound_update();
         return;
     }
-    v = D_L00_001B9CF0.state;
-    if (v == 0 || v == 0xA || v == 0xE || v == 0x11 || v == 0x21 || v == 0x2D || v == 0x23) {
+    scene_state = D_L00_001B9CF0.state;
+    if (scene_state == 0 || scene_state == 0xA || scene_state == 0xE || scene_state == 0x11 || scene_state == 0x21 || scene_state == 0x2D || scene_state == 0x23) {
         FUN_L00_00276368();
     }
     if ((mode_freeze_flags & 1) && !(level_timer < 8)) {
@@ -870,7 +870,7 @@ typedef struct {
 extern E_2779c8 D_0013C940_2779c8 __asm__("D_0013C940") NOT_SDA;
 
 int FUN_L00_002779c8(int x) {
-    int v;
+    int transition_owner;
 
     if ((s32)D_L00_001B9CF0.owner->unk40 != x) {
         return 0;
@@ -879,9 +879,9 @@ int FUN_L00_002779c8(int x) {
         return 1;
     }
     if (D_0013C940_2779c8.flags & 0x10) {
-        v = (s32)D_L00_001B9CF0.owner->unk38;
-        if (v != 0) {
-            D_L00_001B9CF0.unk8 = (struct Own *)v;
+        transition_owner = (s32)D_L00_001B9CF0.owner->unk38;
+        if (transition_owner != 0) {
+            D_L00_001B9CF0.unk8 = (struct Own *)transition_owner;
         } else if (D_L00_001B9CF0.unk124 == 0) {
             return -1;
         }

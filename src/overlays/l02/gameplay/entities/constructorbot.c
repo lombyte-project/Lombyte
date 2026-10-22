@@ -39,7 +39,7 @@ void FUN_L02_002ebf20(struct Moby *moby) {
         SHARD_STATE_REMOVE = 0,
         SHARD_STATE_ACTIVE = 1
     };
-    ShardVars *v = (ShardVars *)moby->pvars;
+    ShardVars *shard_vars = (ShardVars *)moby->pvars;
     Vec4f trail_position, back, half, jit;
     u8 *particle;
     s32 i;
@@ -53,12 +53,12 @@ void FUN_L02_002ebf20(struct Moby *moby) {
     default:
         return;
     }
-    vec_add(&moby->pos, &moby->pos, &v->vel);
-    approach_value(&v->vel.z, 0.0f, D_L02_00161F58 * frame_time_sq);
-    moby->rot.y = 1.5707964f - angle_atan2(vec_len_xy(&v->vel), v->vel.z);
+    vec_add(&moby->pos, &moby->pos, &shard_vars->vel);
+    approach_value(&shard_vars->vel.z, 0.0f, D_L02_00161F58 * frame_time_sq);
+    moby->rot.y = 1.5707964f - angle_atan2(vec_len_xy(&shard_vars->vel), shard_vars->vel.z);
     qcopy(&trail_position, &moby->pos);
-    vec_scale(&half, &v->vel, 0.5f);
-    vec_scale(&back, &v->vel, -0.1f);
+    vec_scale(&half, &shard_vars->vel, 0.5f);
+    vec_scale(&back, &shard_vars->vel, -0.1f);
     for (i = 1; i >= 0; i--) {
         s32 particle_frame_count = scale_frames(float_to_int(rand_range(20.0f, 60.0f)));
         particle = spawn_particle(&trail_position, &back, particle_frame_count, D_L02_00161F5C >> 24, D_L02_00161F5C & 0xFFFFFF, 3,
@@ -76,10 +76,10 @@ void FUN_L02_002ebf20(struct Moby *moby) {
     if (particle)
         particle[9] = float_to_int(4.0f) - 0x80;
     if (moby->visible == 0)
-        count_down(&v->timer);
+        count_down(&shard_vars->timer);
     else
-        v->timer = scale_frames(60);
-    if (v->timer == 0)
+        shard_vars->timer = scale_frames(60);
+    if (shard_vars->timer == 0)
         mark_moby_for_removal(moby);
 }
 #include "qcopy.h"
@@ -93,7 +93,7 @@ int D_L02_00161F50 = 0x60;
 int D_L02_00161F54 = 0x10;
 
 /* Spawns a projectile moby from src at pos, heading along dir, with its lifetime in the moby data. */
-char *FUN_L02_002ec228(char *src, void *pos, float *dir) {
+char *FUN_L02_002ec228(char *source_moby, void *pos, float *dir) {
     char *moby;
     char *data;
     moby = create_moby_c(0x4B8);
@@ -101,7 +101,7 @@ char *FUN_L02_002ec228(char *src, void *pos, float *dir) {
         moby[0x31] = 1;
         *(unsigned char *)(moby + 0x30) = *(short *)(moby + 0x32) = 0xFF;
         FUN_L00_002502f0_c(moby, D_L02_00161F4C, D_L02_00161F50, D_L02_00161F54);
-        *(short *)(moby + 0x34) = *(unsigned short *)(src + 0x34);
+        *(short *)(moby + 0x34) = *(unsigned short *)(source_moby + 0x34);
         qcopy(moby + 0x10, pos);
         *(float *)(moby + 0x48) = atan2_c(dir[0], dir[1]);
         *(float *)(moby + 0x44) = atan2_c(vlen_xy_c(dir), dir[2]);
@@ -452,7 +452,7 @@ void FUN_L02_002ef020(struct Moby *moby) {
     };
     char *data = (char *)moby->pvars;
     Vec4 view_sphere;
-    Vec4 vel;
+    Vec4 smoke_particle_velocity;
     Vec4 acc;
     Vec4 vector_perturbation;
     s32 count1;
@@ -494,17 +494,17 @@ void FUN_L02_002ef020(struct Moby *moby) {
             count1 = random_remainder(7) != 0 ? 1 : random_remainder(5) + 5;
             for (k1 = 0; k1 < count1; k1++) {
                 random_vector_jitter(&vector_perturbation, 0.0f, D_L02_001620D8 * frame_time);
-                scale_vector_by(D_L02_001620C8 * (random_float(-D_L02_001620D4, D_L02_001620D4) + 1.0f) * frame_time, &vel, &moby->rot_row0);
-                add_vector(&vel, &vel, &vector_perturbation);
-                scale_vector_by(D_L02_001620CC * (random_float(-D_L02_001620D4, D_L02_001620D4) + 1.0f) * frame_time, &acc, &vel);
+                scale_vector_by(D_L02_001620C8 * (random_float(-D_L02_001620D4, D_L02_001620D4) + 1.0f) * frame_time, &smoke_particle_velocity, &moby->rot_row0);
+                add_vector(&smoke_particle_velocity, &smoke_particle_velocity, &vector_perturbation);
+                scale_vector_by(D_L02_001620CC * (random_float(-D_L02_001620D4, D_L02_001620D4) + 1.0f) * frame_time, &acc, &smoke_particle_velocity);
                 acc.f[2] -= D_L02_001620D0 * frame_time;
-                vel.f[3] = random_float(D_L02_001620EC, D_L02_001620F0);
+                smoke_particle_velocity.f[3] = random_float(D_L02_001620EC, D_L02_001620F0);
                 acc.f[3] = random_float(D_L02_001620F4, D_L02_001620F8);
                 color_a1_burst = lerp_color(D_L02_001620FC, D_L02_00162100, random_float(0.0f, 1.0f));
                 color_b1_burst = lerp_color(D_L02_00162104, D_L02_00162108, random_float(0.0f, 1.0f));
                 time_a1_burst = truncate_time(scale_time((f32)D_L02_001620DC * random_float(0.0f, 1.0f) + 1.0f));
                 time_b1_burst = truncate_time(scale_time((f32)D_L02_001620E0 * (random_float(-D_L02_001620E8, D_L02_001620E8) + 1.0f)));
-                spawn_smoke_particle(&moby->pos, &vel, &acc, color_a1_burst, color_b1_burst, time_a1_burst, time_b1_burst,
+                spawn_smoke_particle(&moby->pos, &smoke_particle_velocity, &acc, color_a1_burst, color_b1_burst, time_a1_burst, time_b1_burst,
                                truncate_time(scale_time((f32)D_L02_001620E4 * (random_float(-D_L02_001620E8, D_L02_001620E8) + 1.0f))),
                                D_L02_00162114);
             }
@@ -512,19 +512,19 @@ void FUN_L02_002ef020(struct Moby *moby) {
         if (random_remainder(4) != 0) {
             break;
         }
-        scale_vector_by(D_L02_00162088 * (random_float(-D_L02_00162094, D_L02_00162094) + 1.0f) * frame_time, &vel, &moby->rot_row0);
+        scale_vector_by(D_L02_00162088 * (random_float(-D_L02_00162094, D_L02_00162094) + 1.0f) * frame_time, &smoke_particle_velocity, &moby->rot_row0);
         rise1_puff = D_L02_0016208C * (random_float(-D_L02_00162094, D_L02_00162094) + 1.0f) * frame_time;
         clear_vector(&acc);
         acc.f[2] = rise1_puff;
         scale_vector_by(random_float(-D_L02_00162090, D_L02_00162090) * frame_time, &vector_perturbation, &moby->rot_row1);
         add_vector(&acc, &acc, &vector_perturbation);
-        vel.f[3] = random_float(D_L02_001620A8, D_L02_001620AC);
+        smoke_particle_velocity.f[3] = random_float(D_L02_001620A8, D_L02_001620AC);
         acc.f[3] = random_float(D_L02_001620B0, D_L02_001620B4);
         color_a1_puff = lerp_color(D_L02_001620B8, D_L02_001620BC, random_float(0.0f, 1.0f));
         color_b1_puff = lerp_color(D_L02_001620C0, D_L02_001620C4, random_float(0.0f, 1.0f));
         time_a1_puff = truncate_time(scale_time((f32)D_L02_00162098 * random_float(0.0f, 1.0f) + 1.0f));
         time_b1_puff = truncate_time(scale_time((f32)D_L02_0016209C * (random_float(-D_L02_001620A4, D_L02_001620A4) + 1.0f)));
-        spawn_smoke_particle(&moby->pos, &vel, &acc, color_a1_puff, color_b1_puff, time_a1_puff, time_b1_puff,
+        spawn_smoke_particle(&moby->pos, &smoke_particle_velocity, &acc, color_a1_puff, color_b1_puff, time_a1_puff, time_b1_puff,
                        truncate_time(scale_time((f32)D_L02_001620A0 * (random_float(-D_L02_001620A4, D_L02_001620A4) + 1.0f))), -1);
         break;
     case SMOKE_VENT_STATE_ALTERNATING_PUFF_TIMING:
@@ -546,34 +546,34 @@ void FUN_L02_002ef020(struct Moby *moby) {
             count2 = random_remainder(7) != 0 ? 1 : random_remainder(5) + 5;
             for (k2 = 0; k2 < count2; k2++) {
                 random_vector_jitter(&vector_perturbation, 0.0f, D_L02_00162128 * frame_time);
-                scale_vector_by(D_L02_00162118 * (random_float(-D_L02_00162124, D_L02_00162124) + 1.0f) * frame_time, &vel, &moby->rot_row0);
-                add_vector(&vel, &vel, &vector_perturbation);
-                scale_vector_by(D_L02_0016211C * (random_float(-D_L02_00162124, D_L02_00162124) + 1.0f) * frame_time, &acc, &vel);
+                scale_vector_by(D_L02_00162118 * (random_float(-D_L02_00162124, D_L02_00162124) + 1.0f) * frame_time, &smoke_particle_velocity, &moby->rot_row0);
+                add_vector(&smoke_particle_velocity, &smoke_particle_velocity, &vector_perturbation);
+                scale_vector_by(D_L02_0016211C * (random_float(-D_L02_00162124, D_L02_00162124) + 1.0f) * frame_time, &acc, &smoke_particle_velocity);
                 acc.f[2] -= D_L02_00162120 * frame_time;
-                vel.f[3] = random_float(D_L02_0016213C, D_L02_00162140);
+                smoke_particle_velocity.f[3] = random_float(D_L02_0016213C, D_L02_00162140);
                 acc.f[3] = random_float(D_L02_00162144, D_L02_00162148);
                 color_a2_burst = lerp_color(D_L02_0016214C, D_L02_00162150, random_float(0.0f, 1.0f));
                 color_b2_burst = lerp_color(D_L02_00162154, D_L02_00162158, random_float(0.0f, 1.0f));
                 time_a2_burst = truncate_time(scale_time((f32)D_L02_0016212C * random_float(0.0f, 1.0f) + 1.0f));
                 time_b2_burst = truncate_time(scale_time((f32)D_L02_00162130 * (random_float(-D_L02_00162138, D_L02_00162138) + 1.0f)));
-                spawn_smoke_particle(&moby->pos, &vel, &acc, color_a2_burst, color_b2_burst, time_a2_burst, time_b2_burst,
+                spawn_smoke_particle(&moby->pos, &smoke_particle_velocity, &acc, color_a2_burst, color_b2_burst, time_a2_burst, time_b2_burst,
                                truncate_time(scale_time((f32)D_L02_00162134 * (random_float(-D_L02_00162138, D_L02_00162138) + 1.0f))),
                                D_L02_00162164);
             }
         }
-        scale_vector_by(D_L02_00162048 * (random_float(-D_L02_00162054, D_L02_00162054) + 1.0f) * frame_time, &vel, &moby->rot_row0);
+        scale_vector_by(D_L02_00162048 * (random_float(-D_L02_00162054, D_L02_00162054) + 1.0f) * frame_time, &smoke_particle_velocity, &moby->rot_row0);
         rise2_puff = D_L02_0016204C * (random_float(-D_L02_00162054, D_L02_00162054) + 1.0f) * frame_time;
         clear_vector(&acc);
         acc.f[2] = rise2_puff;
         scale_vector_by(random_float(-D_L02_00162050, D_L02_00162050) * frame_time, &vector_perturbation, &moby->rot_row1);
         add_vector(&acc, &acc, &vector_perturbation);
-        vel.f[3] = random_float(D_L02_00162068, D_L02_0016206C);
+        smoke_particle_velocity.f[3] = random_float(D_L02_00162068, D_L02_0016206C);
         acc.f[3] = random_float(D_L02_00162070, D_L02_00162074);
         color_a2_puff = lerp_color(D_L02_00162078, D_L02_0016207C, random_float(0.0f, 1.0f));
         color_b2_puff = lerp_color(D_L02_00162080, D_L02_00162084, random_float(0.0f, 1.0f));
         time_a2_puff = truncate_time(scale_time((f32)*(s32 *)(data + 0xC8) * random_float(0.0f, 1.0f) + 1.0f));
         time_b2_puff = truncate_time(scale_time((f32)D_L02_0016205C * (random_float(-D_L02_00162064, D_L02_00162064) + 1.0f)));
-        spawn_smoke_particle(&moby->pos, &vel, &acc, color_a2_puff, color_b2_puff, time_a2_puff, time_b2_puff,
+        spawn_smoke_particle(&moby->pos, &smoke_particle_velocity, &acc, color_a2_puff, color_b2_puff, time_a2_puff, time_b2_puff,
                        truncate_time(scale_time((f32)D_L02_00162060 * (random_float(-D_L02_00162064, D_L02_00162064) + 1.0f))), -1);
         break;
     case SMOKE_VENT_STATE_REMOVE:
@@ -584,7 +584,7 @@ void FUN_L02_002ef020(struct Moby *moby) {
 extern void FUN_L00_001ed630(void *, void *, void *);
 
 /* Sets the vendor camera mode; mode 3 also aims it from the hero's position. */
-void FUN_L02_002f8a18(int mode, int arg) {
+void FUN_L02_002f8a18(int mode, int camera_argument_value) {
     enum {
         VENDOR_CAMERA_MODE_SET_ARGUMENT_PAIR = 2,
         VENDOR_CAMERA_MODE_CAPTURE_HERO_POSITION = 3
@@ -600,8 +600,8 @@ void FUN_L02_002f8a18(int mode, int arg) {
         qcopy(camera_data + 0x110, &hero.motion.pos);
         FUN_L00_001ed630(camera_data + 0xFC, g + 0x140, &hero.motion.pos);
     case VENDOR_CAMERA_MODE_SET_ARGUMENT_PAIR:
-        *(int *)(camera_argument_pair + 4) = arg;
-        *(int *)(camera_data + 0xE0) = arg;
+        *(int *)(camera_argument_pair + 4) = camera_argument_value;
+        *(int *)(camera_data + 0xE0) = camera_argument_value;
         break;
     }
 }

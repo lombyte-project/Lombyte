@@ -18,12 +18,12 @@ struct __attribute__((packed)) Pair64 {
 };
 void update_instance_attachment_points_and_lengths(struct Arg *arg) __asm__("FUN_0023a318");
 
-void update_instance_attachment_points_and_lengths(struct Arg *arg) {
+void update_instance_attachment_points_and_lengths(struct Arg *instance) {
     u8 sp_slot[0x30];
     struct Node *node;
-    node = arg->node;
+    node = instance->node;
     *(struct Pair64 *)(sp_slot + 0x20) = *(struct Pair64 *)D_00160ED0;
-    transform_scaled_vertex_batch(arg, 4, sp_slot + 0x20, node);
+    transform_scaled_vertex_batch(instance, 4, sp_slot + 0x20, node);
     subtract_vector_xyz(sp_slot, (u8 *)node + 0x10, node);
     subtract_vector_xyz(sp_slot + 0x10, (u8 *)node + 0x20, node);
     node->a = fast_vec_length(sp_slot);

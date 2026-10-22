@@ -1,5 +1,6 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
+
 #include "asm.h"
 
 void probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
@@ -15,24 +16,24 @@ void FUN_L00_00259710(void *position) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A778), where it is exact; names translated to the US level program. */
 
 int point_in_path_xy(float *p, float *v, int n) __asm__("FUN_L00_00259740");
-int point_in_path_xy(float *test_point, float *v, int vertex_count) {
-    int r = 0;
+int point_in_path_xy(float *test_point, float *path_vertices, int vertex_count) {
+    int crossing_parity = 0;
     int i = 0;
     int k;
     for (k = 0; k < vertex_count; k++) {
-        float y1 = v[k * 4 + 1];
+        float y1 = path_vertices[k * 4 + 1];
         i++;
         if (i == vertex_count)
             i = 0;
-        if ((y1 < test_point[1] && test_point[1] <= v[i * 4 + 1]) || (v[i * 4 + 1] < test_point[1] && test_point[1] <= y1)) {
-            if (v[k * 4] +
-                    (test_point[1] - v[k * 4 + 1]) / (v[i * 4 + 1] - v[k * 4 + 1]) * (v[i * 4] - v[k * 4]) <
+        if ((y1 < test_point[1] && test_point[1] <= path_vertices[i * 4 + 1]) || (path_vertices[i * 4 + 1] < test_point[1] && test_point[1] <= y1)) {
+            if (path_vertices[k * 4] +
+                    (test_point[1] - path_vertices[k * 4 + 1]) / (path_vertices[i * 4 + 1] - path_vertices[k * 4 + 1]) * (path_vertices[i * 4] - path_vertices[k * 4]) <
                 test_point[0]) {
-                r = !r;
+                crossing_parity = !crossing_parity;
             }
         }
     }
-    return r;
+    return crossing_parity;
 }
 /* True when the pointer at a+0x94 is set and its word at +8 is non-zero. */
 int FUN_L00_00259830(char *moby) {
@@ -51,8 +52,8 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Fills a record with b, c, d and flag 0, and clears the 64-bit value at its start. */
 void FUN_L00_00259858(char *a, int b, int c, float d);
-void FUN_L00_00259858(char *hit_descriptor, int b, int hit_mask, float hit_priority) {
-    *(int *)(hit_descriptor + 0x10) = b;
+void FUN_L00_00259858(char *hit_descriptor, int source_moby, int hit_mask, float hit_priority) {
+    *(int *)(hit_descriptor + 0x10) = source_moby;
     *(int *)(hit_descriptor + 0x14) = hit_mask;
     *(float *)(hit_descriptor + 0x1C) = hit_priority;
     *(int *)(hit_descriptor + 0x20) = 0;
@@ -61,8 +62,8 @@ void FUN_L00_00259858(char *hit_descriptor, int b, int hit_mask, float hit_prior
 #include "qcopy.h"
 /* Fills a record with b, c, d and flag 1, and copies the vector q into its start. */
 void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
-void make_hit_descriptor(char *hit_descriptor, int b, int hit_mask, float hit_priority, void *direction_vector) {
-    *(int *)(hit_descriptor + 0x10) = b;
+void make_hit_descriptor(char *hit_descriptor, int source_moby, int hit_mask, float hit_priority, void *direction_vector) {
+    *(int *)(hit_descriptor + 0x10) = source_moby;
     *(int *)(hit_descriptor + 0x14) = hit_mask;
     *(float *)(hit_descriptor + 0x1C) = hit_priority;
     *(int *)(hit_descriptor + 0x20) = 1;
@@ -72,7 +73,7 @@ void make_hit_descriptor(char *hit_descriptor, int b, int hit_mask, float hit_pr
 #include "rnc/math/fast_math.h"
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 int play_entity_sound(void *moby, void *position, int c, float d, float e, float f, int g, int h, int i) __asm__("FUN_L00_002598b0");
-int play_entity_sound(void *moby, void *position, int hit_mask, float sphere_radius, float hit_priority, float direction_scale, int g, int hit_payload_byte, int i) {
+int play_entity_sound(void *moby, void *position, int hit_mask, float sphere_radius, float hit_priority, float direction_scale, int hit_descriptor_payload_byte, int hit_payload_byte, int i) {
     float direction[4] __attribute__((aligned(16)));
     char descriptor[0x30] __attribute__((aligned(16)));
     if (*(unsigned short *)((char *)moby + 0x34) & 0x100) {
@@ -86,7 +87,7 @@ int play_entity_sound(void *moby, void *position, int hit_mask, float sphere_rad
     direction[2] = 1.0f;
     direction[3] = 5627.9248046875f;
     make_hit_descriptor(descriptor, (int)moby, hit_mask, hit_priority, direction);
-    descriptor[0x18] = g;
+    descriptor[0x18] = hit_descriptor_payload_byte;
     descriptor[0x19] = hit_payload_byte;
     *(unsigned short *)(descriptor + 0x1a) = *(unsigned short *)((char *)moby + 0xa6);
     return collect_mobies_in_sphere(position, sphere_radius, i, moby, descriptor);
@@ -94,10 +95,10 @@ int play_entity_sound(void *moby, void *position, int hit_mask, float sphere_rad
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int play_entity_sound(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 /* Calls play_entity_sound at a moby point; the f13 argument is ignored and c is passed again as a float. */
-int FUN_L00_002599e8(void *moby, int point, int hit_mask, float sphere_radius, float unused, float direction_scale, int g, int hit_payload_byte, int i) {
+int FUN_L00_002599e8(void *moby, int point, int hit_mask, float sphere_radius, float unused, float direction_scale, int hit_descriptor_payload_byte, int hit_payload_byte, int i) {
     float position[4] __attribute__((aligned(16)));
     moby_point_position(moby, point, position);
-    return play_entity_sound(moby, position, hit_mask, sphere_radius, (float)hit_mask, direction_scale, g, hit_payload_byte, i);
+    return play_entity_sound(moby, position, hit_mask, sphere_radius, (float)hit_mask, direction_scale, hit_descriptor_payload_byte, hit_payload_byte, i);
 }
 typedef unsigned int u128_259a88 __attribute__((mode(TI), aligned(16)));
 typedef struct {
@@ -130,16 +131,16 @@ extern T_259a88 D_L00_00178100_259a88[] __asm__("D_L00_00178100") __attribute__(
 void FUN_001f99f8_259a88(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00259a88(unsigned char *m, L_259a88 *src);
 void FUN_L00_00259a88(unsigned char *owner_moby, L_259a88 *src) {
-    L_259a88 l;
+    L_259a88 hit_descriptor_copy;
     int i = D_L00_00173E40_259a88.idx;
     T_259a88 *hit_record;
-    ((u128_259a88 *)&l)[0] = ((u128_259a88 *)src)[0];
-    ((u128_259a88 *)&l)[1] = ((u128_259a88 *)src)[1];
-    ((u128_259a88 *)&l)[2] = ((u128_259a88 *)src)[2];
-    src = &l;
+    ((u128_259a88 *)&hit_descriptor_copy)[0] = ((u128_259a88 *)src)[0];
+    ((u128_259a88 *)&hit_descriptor_copy)[1] = ((u128_259a88 *)src)[1];
+    ((u128_259a88 *)&hit_descriptor_copy)[2] = ((u128_259a88 *)src)[2];
+    src = &hit_descriptor_copy;
     if (owner_moby[0xA4] != 0xFF) {
         T_259a88 *existing_hit = &D_L00_00178100_259a88[owner_moby[0xA4]];
-        if (existing_hit->owner == owner_moby && l.f < existing_hit->f)
+        if (existing_hit->owner == owner_moby && hit_descriptor_copy.f < existing_hit->f)
             return;
     }
     hit_record = &D_L00_00178100_259a88[i];
@@ -178,7 +179,7 @@ extern T_259bc8 moby_hits[] __asm__("D_L00_00178100") __attribute__((section(".d
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 
 void spawn_nearby_effect(unsigned char *m, int x, int y, u128 *p, u128 *q, float f) __asm__("FUN_L00_00259bc8");
-void spawn_nearby_effect(unsigned char *owner_moby, int x, int y, u128 *p, u128 *direction_vector, float f) {
+void spawn_nearby_effect(unsigned char *owner_moby, int x, int y, u128 *hit_vector_source, u128 *direction_vector, float f) {
     int i = D_L00_00173E40.idx;
     T_259bc8 *hit_record;
     if (owner_moby[0xA4] != 0xFF) {
@@ -197,7 +198,7 @@ void spawn_nearby_effect(unsigned char *owner_moby, int x, int y, u128 *p, u128 
     } else {
         hit_record->flag = 0;
     }
-    qcopy(&moby_hits[i].a, p);
+    qcopy(&moby_hits[i].a, hit_vector_source);
     qcopy(&moby_hits[i].b, direction_vector);
     owner_moby[0xA4] = i;
     D_L00_00173E40.idx = (i + 1) & 0x3F;
@@ -241,11 +242,11 @@ typedef struct {
 extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
 extern void FUN_L00_001fff28(void *, int, float);
 
-void FUN_L00_00259f50(void *output_quaternion, float *v) {
+void FUN_L00_00259f50(void *output_quaternion, float *axis_rotation_angles) {
     Vk z_axis_quaternion, y_axis_quaternion, x_axis_quaternion;
-    FUN_L00_001fff28(&x_axis_quaternion, 0, v[0]);
-    FUN_L00_001fff28(&y_axis_quaternion, 1, v[1]);
-    FUN_L00_001fff28(&z_axis_quaternion, 2, v[2]);
+    FUN_L00_001fff28(&x_axis_quaternion, 0, axis_rotation_angles[0]);
+    FUN_L00_001fff28(&y_axis_quaternion, 1, axis_rotation_angles[1]);
+    FUN_L00_001fff28(&z_axis_quaternion, 2, axis_rotation_angles[2]);
     multiply_quaternions(output_quaternion, &x_axis_quaternion, &y_axis_quaternion);
     multiply_quaternions(output_quaternion, output_quaternion, &z_axis_quaternion);
 }
@@ -266,7 +267,7 @@ extern float FUN_001f99c0_00259fe8(float) __asm__("FUN_001f99c0");
 
 extern E_259fe8_00259fe8 D_L00_0016E080[] __attribute__((section(".data")));
 void jet_animate(unsigned char *m, float r) __asm__("FUN_L00_00259fe8");
-void jet_animate(unsigned char *moby, float r) {
+void jet_animate(unsigned char *moby, float output_scale) {
     float ground_height, y;
     if (moby[0x31] == 0)
         return;
@@ -281,7 +282,7 @@ void jet_animate(unsigned char *moby, float r) {
     y = (8.0f - FUN_001f99c0_00259fe8(*(float *)(moby + 0x18) - ground_height)) * 0.125f;
     if (y < 0.25f)
         y = 0.25f;
-    D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[3] = r * y;
+    D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[3] = output_scale * y;
     D_L00_0015F434++;
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025B178), where it is exact; names translated to the US level program. */
@@ -292,16 +293,16 @@ extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68")
 void FUN_L00_0025a120(char *o);
 void FUN_L00_0025a120(char *moby) {
     float probe_end[4];
-    float b[4];
+    float probe_start[4];
     void *moby_position = moby + 0x10;
     qcopy(probe_end, moby_position);
     probe_end[2] = probe_end[2] - 16.0f;
     if (probe_end[2] < 0.5f) {
         probe_end[2] = 0.5f;
     }
-    qcopy(b, moby_position);
-    b[2] = b[2] + 0.5f;
-    if (collision_line(b, probe_end, 0x22, 0, 0) != 0) {
+    qcopy(probe_start, moby_position);
+    probe_start[2] = probe_start[2] + 0.5f;
+    if (collision_line(probe_start, probe_end, 0x22, 0, 0) != 0) {
         float *output_bounds_source = (float *)D_L00_00173E40_25a120;
         *(float *)(moby + 0x84) = output_bounds_source[10] - 0.2f;
         *(float *)(moby + 0x88) = output_bounds_source[10] + 0.2f;
@@ -448,9 +449,9 @@ typedef union {
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float vector_length_xy(void *) __asm__("FUN_001f9b20");
 void trooper_knockback_arc(OvlQuad *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
-void trooper_knockback_arc(OvlQuad *v, float *ang, float *xy_scaled_value, float *z_scaled_value) {
+void trooper_knockback_arc(OvlQuad *input_vector, float *ang, float *xy_scaled_value, float *z_scaled_value) {
     U25ab48 input_vector_copy;
-    input_vector_copy.q = *v;
+    input_vector_copy.q = *input_vector;
     if (input_vector_copy.f[3] != 5627.9248046875f) {
         *ang = fast_arc_tan(input_vector_copy.f[0], input_vector_copy.f[1]);
         return;
@@ -474,10 +475,10 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
-float FUN_L00_0025abf0(float *start_position, float *b, float *out, float speed, float g) {
+float FUN_L00_0025abf0(float *start_position, float *target_position, float *out, float speed, float vertical_acceleration) {
     Vc0 displacement;
     float travel_time;
-    subtract_vector_xyz(&displacement, b, start_position);
+    subtract_vector_xyz(&displacement, target_position, start_position);
     travel_time = vector_length_xy(&displacement) / speed;
     if (out) {
         *out = travel_time;
@@ -485,7 +486,7 @@ float FUN_L00_0025abf0(float *start_position, float *b, float *out, float speed,
     if (travel_time == 0.0f) {
         return 0.0f;
     }
-    return -((start_position[2] - b[2]) + g * (travel_time * travel_time) * 0.5f) / travel_time;
+    return -((start_position[2] - target_position[2]) + vertical_acceleration * (travel_time * travel_time) * 0.5f) / travel_time;
 }
 typedef union {
     u128 q;
@@ -508,13 +509,13 @@ extern float FUN_002132a8_25aca0(float, float) __asm__("FUN_002132a8");
 extern float FUN_00213308_25aca0(void) __asm__("FUN_00213308");
 
 int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25aca0 *out, int mask) {
-    enum {
-        SHAPE_INDEXED_CENTER_SPHERE = 2,
-        SHAPE_ENDPOINT_SEGMENT_WITH_BALL_OFFSET = 4
+    enum HitShape {
+        SHAPE_INLINE_CENTER_SPHERE = 0x0,
+        SHAPE_INDEXED_CENTER_SPHERE = 0x2,
+        SHAPE_XY_DISK_WITH_Z_EXTENT = 0x3,
+        SHAPE_ENDPOINT_SEGMENT_WITH_BALL_OFFSET = 0x4
     };
-    enum {
-        SHAPE_XY_DISK_WITH_Z_EXTENT = 3
-    };
+
     float weights[20];
     unsigned char *entries[20];
     Vec4_25aca0 first, second, third, fourth, fifth;
@@ -550,7 +551,7 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
                 if (!(((mask >> index) ^ 1) & 1) && active) {
                     entries[count] = entry;
                     switch (type) {
-                    case 0:
+                    case SHAPE_INLINE_CENTER_SPHERE:
                     case 1:
                     case SHAPE_INDEXED_CENTER_SPHERE: {
                         if (type < 2) {
@@ -607,7 +608,7 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
         }
         entry = entries[chosen];
         switch (type = *entry) {
-        case 0:
+        case SHAPE_INLINE_CENTER_SPHERE:
         case 1:
         case SHAPE_INDEXED_CENTER_SPHERE: {
             float radius, extent;
@@ -730,7 +731,7 @@ int FUN_L00_0025b440(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         DESCEND_TO_GROUND = 2,
         WAIT_AFTER_GROUND_CLAMP = 3
     };
-    float v[4];
+    float motion_displacement[4];
     float prediction_time;
     float g;
 
@@ -748,10 +749,10 @@ int FUN_L00_0025b440(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         }
     case INTEGRATE_ARC_MOTION:
         FUN_L00_00258278_25b440(moving_object, &arc_motion_state->f30, arc_motion_state->f18, arc_motion_state->f34, arc_motion_state->f38, arc_motion_state->f3C);
-        v[0] = FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
-        v[1] = FUN_001f9de0_25b440(arc_motion_state->f18) * arc_motion_state->f14;
-        v[2] = arc_motion_state->f10;
-        FUN_001f9a10_25b440(moving_object->pos, moving_object->pos, v);
+        motion_displacement[0] = FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
+        motion_displacement[1] = FUN_001f9de0_25b440(arc_motion_state->f18) * arc_motion_state->f14;
+        motion_displacement[2] = arc_motion_state->f10;
+        FUN_001f9a10_25b440(moving_object->pos, moving_object->pos, motion_displacement);
         arc_motion_state->f10 -= arc_motion_state->f1C;
         if (arc_motion_state->f10 < 0.0f) {
             prediction_time = FUN_001f96b0_25b440(arc_motion_state->f28 + arc_motion_state->f28 + 10.0f);
@@ -769,10 +770,10 @@ int FUN_L00_0025b440(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
             moving_object->z = g;
             arc_motion_state->state = 3;
         } else {
-            v[0] = FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
-            v[1] = FUN_001f9de0_25b440(arc_motion_state->f18) * arc_motion_state->f14;
-            v[2] = 0.0f;
-            FUN_001f9a10_25b440(moving_object->pos, moving_object->pos, v);
+            motion_displacement[0] = FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
+            motion_displacement[1] = FUN_001f9de0_25b440(arc_motion_state->f18) * arc_motion_state->f14;
+            motion_displacement[2] = 0.0f;
+            FUN_001f9a10_25b440(moving_object->pos, moving_object->pos, motion_displacement);
         }
     case WAIT_AFTER_GROUND_CLAMP:
         if (moving_object->b70 & 2) {
@@ -784,8 +785,8 @@ int FUN_L00_0025b440(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
 }
 /* Linear interpolation: a + (b - a) * t. */
 f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t);
-f32 FUN_L00_0025b6a8(f32 start_value, f32 b, f32 interpolation_factor) {
-    return start_value + (b - start_value) * interpolation_factor;
+f32 FUN_L00_0025b6a8(f32 start_value, f32 end_value, f32 interpolation_factor) {
+    return start_value + (end_value - start_value) * interpolation_factor;
 }
 #include "rnc/math/vector.h"
 
@@ -795,22 +796,22 @@ typedef struct {
 
 /* Interpolates the four components of two copied vectors by t into dst. */
 void FUN_L00_0025b6b8(f32 *dst, f32 *a, f32 *b, f32 t);
-void FUN_L00_0025b6b8(f32 *dst, f32 *start_vector, f32 *b, f32 interpolation_factor) {
+void FUN_L00_0025b6b8(f32 *interpolated_vector, f32 *start_vector, f32 *end_vector, f32 interpolation_factor) {
     Vec4 left, right;
     /* Fakematch: the struct copy of dst and the dead dst = 0 stores keep each store ahead of the next call's loads. */
-    OutPtr out = { dst };
+    OutPtr out = { interpolated_vector };
 
-    dst = 0;
+    interpolated_vector = 0;
     left.q = *(u128 *)start_vector;
-    right.q = *(u128 *)b;
-    b = right.f;
-    out.p[0] = FUN_L00_0025b6a8(left.f[0], b[0], interpolation_factor);
-    dst = out.p;
-    out = (OutPtr){ dst };
-    dst = 0;
-    out.p[1] = FUN_L00_0025b6a8(left.f[1], b[1], interpolation_factor);
-    out.p[2] = FUN_L00_0025b6a8(left.f[2], b[2], interpolation_factor);
-    out.p[3] = FUN_L00_0025b6a8(left.f[3], b[3], interpolation_factor);
+    right.q = *(u128 *)end_vector;
+    end_vector = right.f;
+    out.p[0] = FUN_L00_0025b6a8(left.f[0], end_vector[0], interpolation_factor);
+    interpolated_vector = out.p;
+    out = (OutPtr){ interpolated_vector };
+    interpolated_vector = 0;
+    out.p[1] = FUN_L00_0025b6a8(left.f[1], end_vector[1], interpolation_factor);
+    out.p[2] = FUN_L00_0025b6a8(left.f[2], end_vector[2], interpolation_factor);
+    out.p[3] = FUN_L00_0025b6a8(left.f[3], end_vector[3], interpolation_factor);
 }
 #define NOT_SDA
 
@@ -823,9 +824,9 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Turns from angle a toward angle b by fraction c of the difference. */
 float FUN_L00_0025b750(float a, float b, float c);
-float FUN_L00_0025b750(float start_angle, float b, float blend_fraction) {
-    float r = fast_subtract_rotations(b, start_angle);
-    return fast_add_rotations(start_angle, r * blend_fraction);
+float FUN_L00_0025b750(float start_angle, float target_angle, float blend_fraction) {
+    float angle_difference = fast_subtract_rotations(target_angle, start_angle);
+    return fast_add_rotations(start_angle, angle_difference * blend_fraction);
 }
 #define NOT_SDA
 
@@ -835,21 +836,21 @@ float FUN_L00_0025b750(float start_angle, float b, float blend_fraction) {
 
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L00_0025b798(float *ptr, float rate, float b, float damping_coefficient, float limit) {
-    float v = *ptr + (b * rate - damping_coefficient * (*ptr));
+void FUN_L00_0025b798(float *velocity, float rate, float error_gain, float damping_coefficient, float limit) {
+    float unclamped_velocity = *velocity + (error_gain * rate - damping_coefficient * (*velocity));
 
-    *ptr = v;
+    *velocity = unclamped_velocity;
     if (0.0f < limit) {
-        if (limit < v) {
-            *ptr = limit;
-        } else if (v < -limit) {
-            *ptr = -limit;
+        if (limit < unclamped_velocity) {
+            *velocity = limit;
+        } else if (unclamped_velocity < -limit) {
+            *velocity = -limit;
         }
     }
-    if (absolute_float(rate) < *ptr) {
-        *ptr = absolute_float(rate);
-    } else if (*ptr < -absolute_float(rate)) {
-        *ptr = -absolute_float(rate);
+    if (absolute_float(rate) < *velocity) {
+        *velocity = absolute_float(rate);
+    } else if (*velocity < -absolute_float(rate)) {
+        *velocity = -absolute_float(rate);
     }
 }
 

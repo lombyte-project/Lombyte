@@ -6,7 +6,7 @@ extern s32 DeleteSema(s32 buf);
 
 s32 vi_buf_delete(struct ViBuf *buf) __asm__("FUN_0023c5b8");
 
-s32 vi_buf_delete(struct ViBuf *buf) {
+s32 vi_buf_delete(struct ViBuf *decoder_buffer) {
     volatile s32 *dma4_qwc_register;
     volatile s32 *dma4_madr_register;
     volatile s32 *dma4_tadr_register;
@@ -17,7 +17,7 @@ s32 vi_buf_delete(struct ViBuf *buf) {
     *dma4_qwc_register = 0;
     *dma4_madr_register = 0;
     *dma4_tadr_register = 0;
-    DeleteSema(buf->sema);
+    DeleteSema(decoder_buffer->sema);
     return 1;
 }
 

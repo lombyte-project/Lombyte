@@ -368,14 +368,14 @@ extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 /* Multiplies the 001fa050 matrices of (x, y, z) and of a+0x40, stored back by matrix_to_euler. */
 void FUN_L00_00262480(char *rotation_target, float x, float y, float z) {
     float in[3];
-    float input_rotation_matrix[16], u[16];
+    float input_rotation_matrix[16], target_rotation_matrix[16];
     in[0] = x;
     in[1] = y;
     in[2] = z;
     euler_rotation_matrix(input_rotation_matrix, in);
-    euler_rotation_matrix(u, rotation_target + 0x40);
-    multiply_matrix(u, u, input_rotation_matrix);
-    matrix_to_euler(u, rotation_target + 0x40);
+    euler_rotation_matrix(target_rotation_matrix, rotation_target + 0x40);
+    multiply_matrix(target_rotation_matrix, target_rotation_matrix, input_rotation_matrix);
+    matrix_to_euler(target_rotation_matrix, rotation_target + 0x40);
 }
 #define NOT_SDA
 
@@ -384,13 +384,13 @@ void FUN_L00_00262480(char *rotation_target, float x, float y, float z) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263578), where it is exact; names translated to the US level program. */
 
 /* Unless the flag at b+0x13C is set: sets it, stores a at 0x134, clears 0x130..0x138. */
-void FUN_L00_00262500(int source_moby, char *b) {
-    if (*(int *)(b + 0x13C) == 0) {
-        *(int *)(b + 0x134) = source_moby;
-        *(int *)(b + 0x13C) = 1;
-        *(short *)(b + 0x132) = 0;
-        *(int *)(b + 0x138) = 0;
-        *(short *)(b + 0x130) = 0;
+void FUN_L00_00262500(int source_moby, char *history_state) {
+    if (*(int *)(history_state + 0x13C) == 0) {
+        *(int *)(history_state + 0x134) = source_moby;
+        *(int *)(history_state + 0x13C) = 1;
+        *(short *)(history_state + 0x132) = 0;
+        *(int *)(history_state + 0x138) = 0;
+        *(short *)(history_state + 0x130) = 0;
     }
 }
 typedef struct {
@@ -420,11 +420,11 @@ typedef struct {
     s32 x138;
 } O00262528;
 E00262528 *create_moby(s32) __asm__("FUN_0020c4f8");
-void FUN_L00_00262528(O00262528 *history_state, s32 initial_decay_value, s32 b) {
+void FUN_L00_00262528(O00262528 *history_state, s32 initial_decay_value, s32 sample_delay) {
     E00262528 *spawned_moby;
     if (history_state->x138 == 4)
         return;
-    if (b >= 9)
+    if (sample_delay >= 9)
         return;
     spawned_moby = create_moby(history_state->x134->xa6);
     if (spawned_moby == 0)
@@ -438,7 +438,7 @@ void FUN_L00_00262528(O00262528 *history_state, s32 initial_decay_value, s32 b) 
     if (spawned_moby->xa6 == 0)
         spawned_moby->x72 = 0;
     spawned_moby->x23 = initial_decay_value;
-    history_state->x110[history_state->x138] = b;
+    history_state->x110[history_state->x138] = sample_delay;
     history_state->x100[history_state->x138] = initial_decay_value;
     history_state->x120[history_state->x138] = spawned_moby;
     history_state->x138++;
@@ -499,11 +499,11 @@ void FUN_L00_00262608(S_262608 *history_state, int dec) {
         for (i = 0; i < history_state->n; i++) {
             unsigned char *history_moby = (unsigned char *)*(int *)((char *)&history_state->w[i] + 0x10);
             if (history_moby) {
-                int v = history_moby[0x23];
-                int a = v;
-                if (dec < v)
-                    v = dec;
-                a -= v;
+                int decrement_amount = history_moby[0x23];
+                int a = decrement_amount;
+                if (dec < decrement_amount)
+                    decrement_amount = dec;
+                a -= decrement_amount;
                 history_moby[0x23] = a;
                 if ((unsigned char)a)
                     done = 0;
@@ -600,9 +600,9 @@ void FUN_L00_00262b00(float x, float y, char *moby, float *phase_angle, float *p
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 
 /* Sets o[16] and o[17] from r and the sines/cosines of the two angles, then advances the angles by l1 and l2. */
-void FUN_L00_00262b80(float *moby, float *first_phase_angle, float *b, float r, float l1, float l2) {
-    moby[0x10] = r * fast_sin(*first_phase_angle) * fast_sin(*b);
-    moby[0x11] = r * fast_sin(*first_phase_angle) * fast_cos(*b);
-    *first_phase_angle = fast_add_rotations(*first_phase_angle, l1);
-    *b = fast_add_rotations(*b, l2);
+void FUN_L00_00262b80(float *moby, float *first_phase_angle, float *second_phase_angle, float r, float first_phase_increment, float second_phase_increment) {
+    moby[0x10] = r * fast_sin(*first_phase_angle) * fast_sin(*second_phase_angle);
+    moby[0x11] = r * fast_sin(*first_phase_angle) * fast_cos(*second_phase_angle);
+    *first_phase_angle = fast_add_rotations(*first_phase_angle, first_phase_increment);
+    *second_phase_angle = fast_add_rotations(*second_phase_angle, second_phase_increment);
 }

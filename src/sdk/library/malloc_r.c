@@ -14,10 +14,10 @@ struct malloc_chunk;
 extern struct malloc_chunk D_0012F790;
 typedef struct malloc_chunk *mchunkptr;
 typedef struct malloc_chunk *mbinptr;
-void *_malloc_r(struct _reent *ptr, u32 bytes) {
+void *_malloc_r(struct _reent *reent_context, u32 bytes) {
     mchunkptr victim;
     u32 victim_size;
-    s32 idx;
+    s32 bin_index;
     int new_var;
     mbinptr bin;
     mchunkptr remainder;
@@ -33,10 +33,10 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
     u32 nb = (((long)(bytes + (4 + (16 - 1)))) < ((long)(16 + (16 - 1))))
                  ? ((16 + (16 - 1)) & (~(16 - 1)))
                  : ((bytes + (4 + (16 - 1))) & (~(16 - 1)));
-    noop_core_utility(ptr);
+    noop_core_utility(reent_context);
     if (nb < (512 - 8)) {
-        idx = ((unsigned long)nb) >> 3;
-        bin_cursor = (mbinptr)(((u8 *)(&D_0012F788[(2 * idx) + 2])) - (2 * 4));
+        bin_index = ((unsigned long)nb) >> 3;
+        bin_cursor = (mbinptr)(((u8 *)(&D_0012F788[(2 * bin_index) + 2])) - (2 * 4));
         victim = bin_cursor->bk;
         if (victim != bin_cursor) {
             victim_size = victim->size & (~(1 | 0x2));
@@ -48,12 +48,12 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
             };
             ((mchunkptr)(((char *)victim) + victim_size))->size |= 1;
             (void)0;
-            noop_core_utility_secondary(ptr);
+            noop_core_utility_secondary(reent_context);
             return (void *)(((char *)victim) + (2 * 4));
         }
-        idx += 2;
+        bin_index += 2;
     } else {
-        idx = ((((unsigned long)nb) >> 9) == 0)
+        bin_index = ((((unsigned long)nb) >> 9) == 0)
                   ? (((unsigned long)nb) >> 3)
                   : ((((((unsigned long)nb) >> 4) >> 5) <= 4)
                          ? (56 + (((unsigned long)nb) >> 6))
@@ -66,13 +66,13 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
                                               : (((((unsigned long)nb) >> 9) <= 1364)
                                                      ? (124 + (((unsigned long)nb) >> 18))
                                                      : (126))))));
-        bin = (new_var2 = (mbinptr)(((u8 *)(&D_0012F788[(2 * idx) + 2])) - (2 * 4)));
+        bin = (new_var2 = (mbinptr)(((u8 *)(&D_0012F788[(2 * bin_index) + 2])) - (2 * 4)));
         for (victim = bin->bk; victim != bin; victim = victim->bk) {
             victim_size = victim->size & (~(1 | 0x2));
             remainder_size =
                 (victim_size < nb) ? (-((long)(nb - victim_size))) : (victim_size - nb);
             if (remainder_size >= ((long)16)) {
-                --idx;
+                --bin_index;
                 break;
             } else if (remainder_size >= 0) {
                 {
@@ -83,12 +83,12 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
                 };
                 ((mchunkptr)(((char *)victim) + victim_size))->size |= 1;
                 (void)0;
-                noop_core_utility_secondary(ptr);
+                noop_core_utility_secondary(reent_context);
                 return (void *)(((char *)victim) + (2 * 4));
             }
         }
 
-        ++idx;
+        ++bin_index;
     }
     if ((victim = (&D_0012F790)->fd) != (&D_0012F790)) {
         victim_size = victim->size & (~(1 | 0x2));
@@ -103,14 +103,14 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
             remainder->size = remainder_size | 1;
             ((mchunkptr)(((char *)remainder) + remainder_size))->prev_size = remainder_size;
             (void)0;
-            noop_core_utility_secondary(ptr);
+            noop_core_utility_secondary(reent_context);
             return (void *)(((char *)victim) + (2 * 4));
         }
         (&D_0012F790)->fd = ((&D_0012F790)->bk = &D_0012F790);
         if (remainder_size >= 0) {
             ((mchunkptr)(((char *)victim) + victim_size))->size |= 1;
             (void)0;
-            noop_core_utility_secondary(ptr);
+            noop_core_utility_secondary(reent_context);
             return (void *)(((char *)victim) + (2 * 4));
         }
         {
@@ -158,19 +158,19 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
             }
         };
     }
-    if ((block = ((unsigned long)1) << (idx / 4)) <=
+    if ((block = ((unsigned long)1) << (bin_index / 4)) <=
         ((mbinptr)(((u8 *)(&D_0012F788[(2 * 0) + 2])) - (2 * 4)))->size) {
         if ((block & ((mbinptr)(((u8 *)(&D_0012F788[(2 * 0) + 2])) - (2 * 4)))->size) == 0) {
-            idx = (idx & (~(4 - 1))) + 4;
+            bin_index = (bin_index & (~(4 - 1))) + 4;
             block <<= 1;
             while ((block & ((mbinptr)(((u8 *)(&D_0012F788[(2 * 0) + 2])) - (2 * 4)))->size) == 0) {
-                idx += 4;
+                bin_index += 4;
                 block <<= 1;
             }
         }
         for (;;) {
-            startidx = idx;
-            bin_cursor = (bin = (mbinptr)(((u8 *)(&D_0012F788[(2 * idx) + 2])) - (2 * 4)));
+            startidx = bin_index;
+            bin_cursor = (bin = (mbinptr)(((u8 *)(&D_0012F788[(2 * bin_index) + 2])) - (2 * 4)));
             do {
                 for (victim = bin->bk; victim != bin; victim = victim->bk) {
                     victim_size = victim->size & (~(1 | 0x2));
@@ -193,7 +193,7 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
                         ((mchunkptr)(((char *)remainder) + remainder_size))->prev_size =
                             remainder_size;
                         (void)0;
-                        noop_core_utility_secondary(ptr);
+                        noop_core_utility_secondary(reent_context);
                         return (void *)(((char *)victim) + (2 * 4));
                     } else if (remainder_size >= 0) {
                         ((mchunkptr)(((char *)victim) + victim_size))->size |= 1;
@@ -204,17 +204,17 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
                             bck->fd = fwd;
                         };
                         (void)0;
-                        noop_core_utility_secondary(ptr);
+                        noop_core_utility_secondary(reent_context);
                         return (void *)(((char *)victim) + (2 * 4));
                     }
                 }
 
                 bin = (mbinptr)(((char *)bin) + (2 * (sizeof(mbinptr))));
-                if (idx < ((512 / 8) - 1)) {
+                if (bin_index < ((512 / 8) - 1)) {
                     bin = (mbinptr)(((char *)bin) + (2 * (sizeof(mbinptr))));
-                    ++idx;
+                    ++bin_index;
                 }
-            } while (((++idx) & (4 - 1)) != 0);
+            } while (((++bin_index) & (4 - 1)) != 0);
             do {
                 if ((startidx & (4 - 1)) == 0) {
                     ((mbinptr)(((u8 *)(&D_0012F788[(2 * 0) + 2])) - (2 * 4)))->size &= ~block;
@@ -228,7 +228,7 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
                 (block != 0)) {
                 while ((block & ((mbinptr)(((u8 *)(&D_0012F788[(2 * 0) + 2])) - (2 * 4)))->size) ==
                        0) {
-                    idx += 4;
+                    bin_index += 4;
                     block <<= 1;
                 }
 
@@ -247,7 +247,7 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
     if (((((mbinptr)(((u8 *)(&D_0012F788[(2 * 0) + 2])) - (2 * 4)))->fd->size & (~(1 | 0x2))) <
          nb) ||
         (remainder_size < ((long)16))) {
-        malloc_extend_top(ptr, nb);
+        malloc_extend_top(reent_context, nb);
         remainder_size =
             ((((mbinptr)(((u8 *)(&D_0012F788[(2 * 0) + 2])) - (2 * 4)))->fd->size & (~(1 | 0x2))) <
              nb)
@@ -260,7 +260,7 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
         if (((((mbinptr)(((u8 *)(&D_0012F788[(2 * 0) + 2])) - (2 * 4)))->fd->size & (~(1 | 0x2))) <
              nb) ||
             (remainder_size < ((long)16))) {
-            noop_core_utility_secondary(ptr);
+            noop_core_utility_secondary(reent_context);
             return 0;
         }
     }
@@ -271,6 +271,6 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
         (mchunkptr)(((char *)victim) + nb);
     ((mbinptr)(((u8 *)(&D_0012F788[(2 * 0) + 2])) - (2 * 4)))->fd->size = remainder_size | 1;
     (void)0;
-    noop_core_utility_secondary(ptr);
+    noop_core_utility_secondary(reent_context);
     return (void *)(((char *)victim) + (2 * 4));
 }

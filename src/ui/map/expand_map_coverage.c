@@ -4,9 +4,9 @@ extern void fast_mem_copy(u8 *, void *, s32) __asm__("FUN_001f98d0");
 
 void expand_map_coverage(u8 *dest, u8 *src) __asm__("FUN_00207e58");
 
-void expand_map_coverage(u8 *dest, u8 *src) {
+void expand_map_coverage(u8 *dest, u8 *packed_coverage_data) {
     u32 mask[0x100];
-    u32 buf[0x10];
+    u32 expanded_coverage_words[0x10];
     s32 i = 0;
     u32 *expanded_word_cursor;
     s32 j;
@@ -40,19 +40,19 @@ void expand_map_coverage(u8 *dest, u8 *src) {
         }
     }
     for (k = 0; k < 0x80; k++) {
-        expanded_word_cursor = buf;
+        expanded_word_cursor = expanded_coverage_words;
         for (j = 0; j < 16; j++) {
-            *expanded_word_cursor = mask[*src];
+            *expanded_word_cursor = mask[*packed_coverage_data];
             expanded_word_cursor++;
-            src++;
+            packed_coverage_data++;
         }
-        fast_mem_copy(dest, buf, 0x40);
+        fast_mem_copy(dest, expanded_coverage_words, 0x40);
         dest += 0x40;
-        fast_mem_copy(dest, buf, 0x40);
+        fast_mem_copy(dest, expanded_coverage_words, 0x40);
         dest += 0x40;
-        fast_mem_copy(dest, buf, 0x40);
+        fast_mem_copy(dest, expanded_coverage_words, 0x40);
         dest += 0x40;
-        fast_mem_copy(dest, buf, 0x40);
+        fast_mem_copy(dest, expanded_coverage_words, 0x40);
         dest += 0x40;
     }
 }

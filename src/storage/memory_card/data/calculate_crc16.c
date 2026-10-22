@@ -1,15 +1,15 @@
 #include "types.h"
 u16 calculate_crc16(u8 *p, s32 len) __asm__("FUN_0020acc0");
 
-u16 calculate_crc16(u8 *data_cursor, s32 len) {
+u16 calculate_crc16(u8 *data_cursor, s32 byte_count) {
     u8 *end;
     u32 crc;
     s32 i;
 
-    if (len > 0x1800) {
+    if (byte_count > 0x1800) {
         return 0;
     }
-    end = data_cursor + len;
+    end = data_cursor + byte_count;
     crc = 0xEDB88320;
     while (data_cursor < end) {
         crc ^= *data_cursor++ << 8;

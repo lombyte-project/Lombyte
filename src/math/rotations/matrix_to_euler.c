@@ -21,36 +21,36 @@ extern void multiply_matrix(Mtx44 *, float *, Mtx44 *) __asm__("FUN_001fa378");
    interleaved lq/sq (a whole-struct copy becomes ld/sd here). */
 void matrix_to_euler(Mtx44 *src, float *out) __asm__("FUN_00214598");
 
-void matrix_to_euler(Mtx44 *src, float *out) {
-    float rot[16];
+void matrix_to_euler(Mtx44 *input_matrix, float *out) {
+    float cancellation_matrix[16];
     Mtx44 m;
-    float v[4];
+    float cancellation_angles[4];
     float x;
     float y;
     float z;
 
-    m.q[0] = src->q[0];
-    m.q[1] = src->q[1];
-    m.q[2] = src->q[2];
-    m.q[3] = src->q[3];
+    m.q[0] = input_matrix->q[0];
+    m.q[1] = input_matrix->q[1];
+    m.q[2] = input_matrix->q[2];
+    m.q[3] = input_matrix->q[3];
     clear_u64_value(m.m[3]);
     m.m[3][3] = 1.0f;
     z = fast_arc_tan(m.m[0][0], m.m[0][1]);
-    v[0] = 0.0f;
-    v[1] = 0.0f;
-    v[2] = -z;
-    euler_rotation_matrix(rot, v);
-    multiply_matrix(&m, rot, &m);
+    cancellation_angles[0] = 0.0f;
+    cancellation_angles[1] = 0.0f;
+    cancellation_angles[2] = -z;
+    euler_rotation_matrix(cancellation_matrix, cancellation_angles);
+    multiply_matrix(&m, cancellation_matrix, &m);
     y = fast_arc_tan(m.m[0][0], -m.m[0][2]);
-    v[0] = 0.0f;
-    v[2] = 0.0f;
-    v[1] = -y;
-    fun_001fa070(rot, v);
-    multiply_matrix(&m, rot, &m);
+    cancellation_angles[0] = 0.0f;
+    cancellation_angles[2] = 0.0f;
+    cancellation_angles[1] = -y;
+    fun_001fa070(cancellation_matrix, cancellation_angles);
+    multiply_matrix(&m, cancellation_matrix, &m);
     x = fast_arc_tan(m.m[1][1], m.m[1][2]);
-    v[1] = 0.0f;
-    v[0] = -x;
-    v[2] = 0.0f;
+    cancellation_angles[1] = 0.0f;
+    cancellation_angles[0] = -x;
+    cancellation_angles[2] = 0.0f;
     out[2] = z;
     out[1] = y;
     out[0] = x;

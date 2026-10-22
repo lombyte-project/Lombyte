@@ -13,15 +13,15 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 /* Steps rotation a toward b by at most c, clamped to the remaining difference. */
-float FUN_L00_00200510(float current_rotation, float b, float rotation_step) {
-    float r = fast_subtract_rotations(b, current_rotation);
-    if (!(r > 0.0f)) {
+float FUN_L00_00200510(float current_rotation, float target_rotation, float rotation_step) {
+    float rotation_difference = fast_subtract_rotations(target_rotation, current_rotation);
+    if (!(rotation_difference > 0.0f)) {
         rotation_step = -rotation_step;
     }
-    if (rotation_step > absolute_float(r)) {
-        rotation_step = absolute_float(r);
-    } else if (rotation_step < -absolute_float(r)) {
-        rotation_step = -absolute_float(r);
+    if (rotation_step > absolute_float(rotation_difference)) {
+        rotation_step = absolute_float(rotation_difference);
+    } else if (rotation_step < -absolute_float(rotation_difference)) {
+        rotation_step = -absolute_float(rotation_difference);
     }
     return fast_add_rotations(current_rotation, rotation_step);
 }

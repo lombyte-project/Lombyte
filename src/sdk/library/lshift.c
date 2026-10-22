@@ -38,7 +38,7 @@ struct Bigint *_lshift(s32 bigint_context, struct Bigint *input_bigint, s32 shif
     s32 k1;
     s32 whole_word_shift;
     s32 result_word_count_plus_one;
-    struct Bigint *b1;
+    struct Bigint *result_bigint;
     u32 *x;
     u32 *x1;
     u32 *xe;
@@ -50,8 +50,8 @@ struct Bigint *_lshift(s32 bigint_context, struct Bigint *input_bigint, s32 shif
     for (i = input_bigint->_maxwds; result_word_count_plus_one > i; i <<= 1) {
         k1++;
     }
-    b1 = _Balloc(bigint_context, k1);
-    x1 = b1->_x;
+    result_bigint = _Balloc(bigint_context, k1);
+    x1 = result_bigint->_x;
     for (i = 0; i < whole_word_shift; i++) {
         *x1++ = 0;
     }
@@ -72,7 +72,7 @@ struct Bigint *_lshift(s32 bigint_context, struct Bigint *input_bigint, s32 shif
             *x1++ = *x++;
         } while (x < xe);
     }
-    b1->_wds = result_word_count_plus_one - 1;
+    result_bigint->_wds = result_word_count_plus_one - 1;
     InsertLinkObject(bigint_context, input_bigint);
-    return b1;
+    return result_bigint;
 }

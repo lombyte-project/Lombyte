@@ -40,7 +40,7 @@ extern s32 GlobalTableStatus __asm__("D_0015ECC4") __attribute__((sda));
    in flight. */
 s32 snd_flush_sound_commands(void) {
     s32 i;
-    s32 idx;
+    s32 completed_batch_index;
     SndCallback fn;
     long arg;
 
@@ -52,10 +52,10 @@ s32 snd_flush_sound_commands(void) {
             snd_return_callback = 0;
             snd_return_callback_pending = 0;
         } else {
-            idx = snd_batch_index != 1;
-            for (i = 0; i < *snd_batch_command_buffers[idx]; i++) {
-                if (snd_stream_buffers[idx][i].fn != 0) {
-                    snd_stream_buffers[idx][i].fn(snd_batch_return_buffers[idx][i + 1], snd_stream_buffers[idx][i].arg);
+            completed_batch_index = snd_batch_index != 1;
+            for (i = 0; i < *snd_batch_command_buffers[completed_batch_index]; i++) {
+                if (snd_stream_buffers[completed_batch_index][i].fn != 0) {
+                    snd_stream_buffers[completed_batch_index][i].fn(snd_batch_return_buffers[completed_batch_index][i + 1], snd_stream_buffers[completed_batch_index][i].arg);
                 }
             }
         }

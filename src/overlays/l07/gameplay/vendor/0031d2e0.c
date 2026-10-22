@@ -173,7 +173,7 @@ void FUN_L07_0031eba8(char *moby) {
     int j;
     char *mob;
     char *S;
-    float buf[4];
+    float effect_spawn_position[4];
     switch (state) {
     case MOBY_STATE_INITIALIZE:
         *(unsigned char *)(moby + 0x30) = 0xFF;
@@ -186,8 +186,8 @@ void FUN_L07_0031eba8(char *moby) {
         S = D_L07_0016C960_c;
         scene_state_offset = *(int *)(S + 0x30) - 3;
         if ((unsigned)scene_state_offset < 2) {
-            int idx = (unsigned)scene_state_offset > 1 ? 0 : 2;
-            cutscene_set_camera_target(((L07SparkState *)S)->arr[idx]);
+            int camera_target_index = (unsigned)scene_state_offset > 1 ? 0 : 2;
+            cutscene_set_camera_target(((L07SparkState *)S)->arr[camera_target_index]);
         }
         if (*(int *)(S + 0x30) != current_scene_state)
             return;
@@ -199,16 +199,16 @@ void FUN_L07_0031eba8(char *moby) {
         if (k != 0) {
             mob = (char *)((L07SparkState *)S)->arr[k];
             for (i = 0; i < 4; i++) {
-                moby_point_position(mob, i, buf);
+                moby_point_position(mob, i, effect_spawn_position);
                 for (j = 9; j >= 0; j--) {
-                    float d = random_float_between(20000.0f, 200000.0f);
+                    float effect_size = random_float_between(20000.0f, 200000.0f);
                     int col = (random_int_between(0x20, 0x80) << 24) | 0x7F7F7F;
-                    int v = random_int_between(0, 4);
+                    int signed_random_value = random_int_between(0, 4);
                     char *effect;
                     char *effect_tail;
                     if (random_integer_below(2) != 0)
-                        v = -v;
-                    effect = func_L00_0026DEA0_c(buf, v, D_L07_0015F580, col, 0.6f, 1.0f, 1.01f, d);
+                        signed_random_value = -signed_random_value;
+                    effect = func_L00_0026DEA0_c(effect_spawn_position, signed_random_value, D_L07_0015F580, col, 0.6f, 1.0f, 1.01f, effect_size);
                     if (effect != 0) {
                         effect_tail = effect + 0x20;
                         *(short *)(effect + 0xA) = scale_game_frames(random_int_between(0x3C, 0x5A));
@@ -247,34 +247,34 @@ void FUN_L07_0031f900(unsigned char *moby) {
         break;
     case TRAIL_STATE_UPDATE:
         if (scene_state == 2) {
-            char *g = D_L07_0016C8E0;
-            int trail_source_selector = *(int *)(g + 0x30);
+            char *trail_source_state = D_L07_0016C8E0;
+            int trail_source_selector = *(int *)(trail_source_state + 0x30);
             if (trail_source_selector == 1 || trail_source_selector == 2) {
-                float point_0_position[4], point_1_position[4], point_2_position[4], b0[4], b1[4], b2[4], c0[4], c1[4], c2[4];
-                int idx = 0;
+                float point_0_position[4], point_1_position[4], point_2_position[4], point_3_position[4], point_4_position[4], point_5_position[4], point_0_trail_velocity[4], point_1_trail_velocity[4], point_2_trail_velocity[4];
+                int trail_source_moby_index = 0;
                 char *trail_source_moby;
                 if (trail_source_selector == 1)
-                    idx = 3;
+                    trail_source_moby_index = 3;
                 if (trail_source_selector == 2)
-                    idx = 4;
-                trail_source_moby = *(char **)(g - (-(idx * 4)) + 0x178);
+                    trail_source_moby_index = 4;
+                trail_source_moby = *(char **)(trail_source_state - (-(trail_source_moby_index * 4)) + 0x178);
                 moby_point_position(trail_source_moby, 0, point_0_position);
-                moby_point_position(trail_source_moby, 3, b0);
-                subtract_vector_xyz(c0, point_0_position, b0);
-                normalize_vector_xyz(c0, c0, *(float *)&D_L07_00161CD8);
-                draw_trail(point_0_position, point_0_position, c0, *(float *)&D_L07_00161CDC,
+                moby_point_position(trail_source_moby, 3, point_3_position);
+                subtract_vector_xyz(point_0_trail_velocity, point_0_position, point_3_position);
+                normalize_vector_xyz(point_0_trail_velocity, point_0_trail_velocity, *(float *)&D_L07_00161CD8);
+                draw_trail(point_0_position, point_0_position, point_0_trail_velocity, *(float *)&D_L07_00161CDC,
                                  *(float *)&D_L07_00161CE0);
                 moby_point_position(trail_source_moby, 1, point_1_position);
-                moby_point_position(trail_source_moby, 4, b1);
-                subtract_vector_xyz(c1, point_1_position, b1);
-                normalize_vector_xyz(c1, c1, *(float *)&D_L07_00161CD8);
-                draw_trail(point_1_position, point_1_position, c1, *(float *)&D_L07_00161CDC,
+                moby_point_position(trail_source_moby, 4, point_4_position);
+                subtract_vector_xyz(point_1_trail_velocity, point_1_position, point_4_position);
+                normalize_vector_xyz(point_1_trail_velocity, point_1_trail_velocity, *(float *)&D_L07_00161CD8);
+                draw_trail(point_1_position, point_1_position, point_1_trail_velocity, *(float *)&D_L07_00161CDC,
                                  *(float *)&D_L07_00161CE0);
                 moby_point_position(trail_source_moby, 2, point_2_position);
-                moby_point_position(trail_source_moby, 5, b2);
-                subtract_vector_xyz(c2, point_2_position, b2);
-                normalize_vector_xyz(c2, c2, *(float *)&D_L07_00161CD8);
-                draw_trail(point_2_position, point_2_position, c2, *(float *)&D_L07_00161CDC,
+                moby_point_position(trail_source_moby, 5, point_5_position);
+                subtract_vector_xyz(point_2_trail_velocity, point_2_position, point_5_position);
+                normalize_vector_xyz(point_2_trail_velocity, point_2_trail_velocity, *(float *)&D_L07_00161CD8);
+                draw_trail(point_2_position, point_2_position, point_2_trail_velocity, *(float *)&D_L07_00161CDC,
                                  *(float *)&D_L07_00161CE0);
             }
         }

@@ -36,13 +36,13 @@ int update_menu_icon_list(char *menu) {
         }
     }
     {
-        int v = controller_state.pressed_unmasked;
+        int pressed_buttons = controller_state.pressed_unmasked;
         int old = *(int *)(menu + 0x3C);
 
-        if ((v & 0x1000) && old != 0) {
+        if ((pressed_buttons & 0x1000) && old != 0) {
             *(int *)(menu + 0x3C) = old - 1;
         }
-        if (v & 0x4000) {
+        if (pressed_buttons & 0x4000) {
             int c = *(int *)(menu + 0x3C) + 1;
             if (c < *(int *)(menu + 0x40)) {
                 *(int *)(menu + 0x3C) = c;

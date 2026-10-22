@@ -8,17 +8,17 @@ s32 print_debug_text_centered(s32 x, s32 y, s32 color, u8 *text) {
     s32 width;
     u8 *text_cursor;
     u8 character_offset;
-    s32 idx;
+    s32 char_width_index;
 
     width = 0;
     text_cursor = text;
     while (*text_cursor != 0) {
         character_offset = *text_cursor++ - 0x20;
-        idx = character_offset;
+        char_width_index = character_offset;
         if (character_offset >= 0x60) {
-            idx = 0x20;
+            char_width_index = 0x20;
         }
-        width += font_char_widths[idx];
+        width += font_char_widths[char_width_index];
     }
     x -= width >> 1;
     print_debug_text(x, y, color, text);

@@ -10,26 +10,26 @@ extern void fast_mem_zero16(void *, s32) __asm__("FUN_001f9810");
 void set_tfrag_dists(void) __asm__("FUN_00233068");
 
 void set_tfrag_dists(void) {
-    float scaled_far_range, b, scaled_near_range, ab, bc;
+    float scaled_far_range, scaled_middle_range, scaled_near_range, ab, bc;
 
     tfrag_lod_dists_raw[0] = truncate_float_to_s32(D_00160EA0[0] * 1024.0f);
     tfrag_lod_dists_raw[1] = truncate_float_to_s32(D_00160EA0[1] * 1024.0f);
     tfrag_lod_dists_raw[2] = truncate_float_to_s32(D_00160EA0[2] * 1024.0f);
     scaled_far_range = D_00160EA0[0] * fog_params[0];
-    b = D_00160EA0[1] * fog_params[0];
+    scaled_middle_range = D_00160EA0[1] * fog_params[0];
     scaled_near_range = D_00160EA0[2] * fog_params[0];
-    ab = 1.0f / (scaled_far_range - b);
-    bc = 1.0f / (b - scaled_near_range);
+    ab = 1.0f / (scaled_far_range - scaled_middle_range);
+    bc = 1.0f / (scaled_middle_range - scaled_near_range);
     fast_mem_zero16(D_001DE7F0, 0x40);
     D_001DE7F0[0][0] = ab * 0.5f;
     D_001DE7F0[0][1] = -ab;
     D_001DE7F0[1][0] = bc * 0.5f;
     D_001DE7F0[1][1] = -bc;
-    D_001DE7F0[2][0] = b * ab * -0.5f;
+    D_001DE7F0[2][0] = scaled_middle_range * ab * -0.5f;
     D_001DE7F0[2][1] = scaled_far_range * ab;
     D_001DE7F0[3][0] = scaled_near_range * bc * -0.5f;
-    D_001DE7F0[3][1] = b * bc;
-    D_001DE7F0[1][3] = b;
+    D_001DE7F0[3][1] = scaled_middle_range * bc;
+    D_001DE7F0[1][3] = scaled_middle_range;
     D_001DE7F0[0][3] = scaled_far_range;
 }
 

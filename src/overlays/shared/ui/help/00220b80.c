@@ -14,9 +14,9 @@ void FUN_L02_00220b80(void) {
     x = D_0013E533 + 0xE1D;
     if (*(int *)(x + 0x2084) == 0x3F) {
         float two = frame_time + frame_time;
-        float v = frame_time * 3.5f * *(float *)(x + 0x190);
-        *(float *)(x + 0x190) = v;
-        if (v < two) {
+        float frame_scaled_value = frame_time * 3.5f * *(float *)(x + 0x190);
+        *(float *)(x + 0x190) = frame_scaled_value;
+        if (frame_scaled_value < two) {
             *(float *)(x + 0x190) = two;
         }
     } else if (0.0f < *(float *)(x + 0x190)) {
@@ -74,7 +74,7 @@ void FUN_L02_002226d8(void)
     Vec4 velocity_projection_source;
     f32 limit;
     f32 velocity_measure;
-    f32 w;
+    f32 saved_platform_delta_w;
 
     qcopy(&old_pos, &hero.motion.pos);
     FUN_L00_00233f80(hero.unk4F8, &hero.motion.platform_delta, &hero.motion.rot);
@@ -165,9 +165,9 @@ void FUN_L02_002226d8(void)
     qcopy(&movement_vector_scratch, &hero.motion.pos);
     if (vector_length_xyz(&hero.motion.platform_delta) > 0.0001f) {
         add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &hero.motion.platform_delta);
-        w = hero.motion.platform_delta.f[3];
+        saved_platform_delta_w = hero.motion.platform_delta.f[3];
         clear_vector(&hero.motion.platform_delta);
-        hero.motion.platform_delta.f[3] = w;
+        hero.motion.platform_delta.f[3] = saved_platform_delta_w;
         FUN_L00_002137a8();
         FUN_L02_002216a0();
         subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
@@ -394,6 +394,8 @@ s32 FUN_L02_0022ee00(void)
         HERO_ITEM_BUFFERED_ACTIVATE_WITH_VOICE = 18,
         HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_VOICE = 20,
         HERO_ITEM_PRESS_TO_ACTIVATE = 21,
+        HERO_ITEM_AMMO_GATED_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_VOICE = 24,
+        HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_EMPTY_AMMO_VOICE = 25,
         HERO_ITEM_CLASS_GATED_BUFFERED_ACTIVATE = 31,
         HERO_ITEM_BUFFERED_ACTIVATE = 32
     };
@@ -562,8 +564,8 @@ s32 FUN_L02_0022ee00(void)
     case HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE:
     case HERO_ITEM_AMMO_GATED_BUFFERED_OR_TIMED_HOLD_ACTIVATE:
     case HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_VOICE:
-    case 24:
-    case 25:
+    case HERO_ITEM_AMMO_GATED_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_VOICE:
+    case HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_EMPTY_AMMO_VOICE:
         if ((hero.state.control_mode == 0 && hero.state.current != 0x1E) || hero.state.control_mode == 1 ||
             hero.state.control_mode == 0xC || hero.state.control_mode == 5 || hero.state.control_mode == 0xF ||
             (hero.state.control_mode == 4 && hero.unk4AC != 0) ||

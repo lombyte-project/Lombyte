@@ -12,12 +12,12 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fde98.s", FUN_L00_001fde98);
 extern char D_L00_0016EA40_001fe990[] __asm__("D_L00_0016EA40");
 float random_angle_radians() __asm__("FUN_00213308");
 /* Fills the first free 0x20-byte glints slot with v, b and x; returns its index or -1. */
-int FUN_L00_001fe990(u128 *v, int b, float x) {
+int FUN_L00_001fe990(u128 *input_payload, int b, float x) {
     u128 input_copy;
     u128 *tp = &input_copy;
     char *slot;
     int i;
-    *tp = *v;
+    *tp = *input_payload;
     slot = D_L00_0016EA40_001fe990;
     for (i = 0; i < 16; i++, slot += 0x20) {
         if (*(short *)(slot + 0x10) <= 0) {
@@ -71,10 +71,10 @@ void FUN_L00_001fea18(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fefc8.s", FUN_L00_001fefc8);
 /* Ported from rac1-decomp (src/overlays/shared/fastfunc_001FEF78.c: func_L00_001FF200), where it is exact; names translated to the US level program. */
 
-void FUN_L00_001ff250(s64 *v) {
-    v[0] = 0;
+void FUN_L00_001ff250(s64 *destination) {
+    destination[0] = 0;
     __asm__ volatile ("nop");
-    ((s32 *)v)[2] = 0;
+    ((s32 *)destination)[2] = 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ff290.s", FUN_L00_001ff290);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ff2c0.s", FUN_L00_001ff2c0);

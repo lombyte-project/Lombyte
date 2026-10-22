@@ -28,13 +28,13 @@ extern s32 GetRpcPacket();
 extern void isceSifSendCmd();
 void _request_rdata(struct RpcRdataRequest *request, s32 rpc_state) {
     s32 packet_address;
-    s32 b;
+    s32 client_address;
     struct RpcRdataPacket *packet;
     packet = GetRpcPacket(rpc_state);
     packet_address = (s32)request->unk14;
-    b = (s32)request->unk1C;
+    client_address = (s32)request->unk1C;
     packet->unk14 = packet_address;
-    packet->unk1C = b;
+    packet->unk1C = client_address;
     packet->unk20 = 0x8000000C;
     isceSifSendCmd(0x80000008, packet, 0x40, request->unk20, request->unk24, request->unk28);
 }

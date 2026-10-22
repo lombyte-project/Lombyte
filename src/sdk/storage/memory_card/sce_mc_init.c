@@ -24,7 +24,7 @@ extern s32 scePrintf(const char *, ...);
 
 s32 sceMcInit(void) {
     struct SemaParam param;
-    s32 ret;
+    s32 rpc_call_result;
     s32 i;
 
     if (D_00132DAC[0] < 0) {
@@ -49,11 +49,11 @@ s32 sceMcInit(void) {
         while (--i != 0) {
         }
     }
-    ret = sceSifCallRpc(&D_00159A00, 0xFE, 0, D_00159A80, 48, D_0015AFC0, 12, 0, 0);
+    rpc_call_result = sceSifCallRpc(&D_00159A00, 0xFE, 0, D_00159A80, 48, D_0015AFC0, 12, 0, 0);
     SignalSema(D_00132DAC[0]);
-    if (ret < 0) {
+    if (rpc_call_result < 0) {
         D_00159A00.server = 0;
-        return ret - 100;
+        return rpc_call_result - 100;
     }
     if (D_0015AFC0[1] < 522) {
         scePrintf(D_00153468);

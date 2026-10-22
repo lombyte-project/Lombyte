@@ -12,13 +12,13 @@ void save_card_state_good_save(void) __asm__("FUN_002088d0");
 
 void save_card_state_good_save(void) {
     int flags = mode_freeze_flags;
-    struct MemoryCardState *b;
+    struct MemoryCardState *card_state;
     int nf;
     mode_freeze_flags = flags & ~4;
-    b = &memory_card_state;
+    card_state = &memory_card_state;
     nf = mode_freeze_flags & ~2;
     mode_freeze_flags = nf;
-    if (b->unkF4 == 0) {
+    if (card_state->unkF4 == 0) {
         mode_freeze_state = 3;
         return;
     }
@@ -32,8 +32,8 @@ void save_card_state_good_save(void) {
         mode_freeze_flags = (nf ^ 0x100) | 0x40;
         return;
     }
-    if (b->card[0].sync_result != 0) {
-        b->unkF4 = 0;
+    if (card_state->card[0].sync_result != 0) {
+        card_state->unkF4 = 0;
         mode_freeze_flags = nf | 1;
         mode_freeze_state = 2;
         return;

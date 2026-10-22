@@ -13,20 +13,20 @@ void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_0025d238(V0025d238 *src, V0025d238 *v) {
+void FUN_L00_0025d238(V0025d238 *src, V0025d238 *inout_vector) {
     V0025d238 source_copy, scaled_delta;
     f32 *pv, *source_component, *delta_component;
-    V0025d238 *source_copy_ptr = &source_copy, *b = &scaled_delta;
+    V0025d238 *source_copy_ptr = &source_copy, *scaled_delta_ptr = &scaled_delta;
     s32 i;
     source_copy.q = src->q;
     source_component = source_copy.f;
-    pv = v->f;
+    pv = inout_vector->f;
     delta_component = scaled_delta.f;
     for (i = 2; i >= 0; i--) {
         if (*pv < 0.0f) {
-            subtract_vector_xyz(b, v, source_copy_ptr);
-            fast_vec_scale(b, b, absolute_float((*source_component - 0.1f) / *delta_component));
-            add_vector_xyz(v, source_copy_ptr, b);
+            subtract_vector_xyz(scaled_delta_ptr, inout_vector, source_copy_ptr);
+            fast_vec_scale(scaled_delta_ptr, scaled_delta_ptr, absolute_float((*source_component - 0.1f) / *delta_component));
+            add_vector_xyz(inout_vector, source_copy_ptr, scaled_delta_ptr);
         }
         pv++;
         delta_component++;
@@ -152,7 +152,7 @@ typedef struct { int n; int pad[3]; Pt_0025E860 pt[1]; } Spline_0025E860;
 
 // Moves DIST along a spline from segment *IDX at offset *T, updates both, and writes the point reached to OUT; 1 when an end was passed.
 int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *idx, float *segment_offset, int loop, float dist) {
-    float v[4];
+    float segment_delta[4];
     int ret = 0;
     int dir = 1;
     int i;
@@ -213,9 +213,9 @@ int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *idx, float *segment
     if (j >= path->n) {
         j %= path->n;
     }
-    vec_sub_25d808(v, &path->pt[j], &path->pt[i]);
-    vec_scale_25d808(v, v, *segment_offset);
-    vec_add_25d808(out, out, v);
+    vec_sub_25d808(segment_delta, &path->pt[j], &path->pt[i]);
+    vec_scale_25d808(segment_delta, segment_delta, *segment_offset);
+    vec_add_25d808(out, out, segment_delta);
     return ret;
 }
 
@@ -226,12 +226,12 @@ typedef struct {
 float FUN_001f99c0_0025da70(float) __asm__("FUN_001f99c0");
 void FUN_001f9b80_0025da70(Vec4_0025da70 *, Vec4_0025da70 *) __asm__("FUN_001f9b80");
 void FUN_001f9b48_0025da70(Vec4_0025da70 *, Vec4_0025da70 *) __asm__("FUN_001f9b48");
-void FUN_L00_0025da70(u128_0025da70 *first_point, u128_0025da70 *b, float lim) {
-    Vec4_0025da70 v[2];
-    Vec4_0025da70 *pa = &v[0];
-    Vec4_0025da70 *pb = &v[1];
+void FUN_L00_0025da70(u128_0025da70 *first_point, u128_0025da70 *second_point, float lim) {
+    Vec4_0025da70 point_copies[2];
+    Vec4_0025da70 *pa = &point_copies[0];
+    Vec4_0025da70 *pb = &point_copies[1];
     *(u128_0025da70 *)pa = *first_point;
-    *(u128_0025da70 *)pb = *b;
+    *(u128_0025da70 *)pb = *second_point;
     if (0.0f < lim && FUN_001f99c0_0025da70(pa->z - pb->z) < lim) {
         FUN_001f9b80_0025da70(pa, pb);
     } else {
@@ -244,7 +244,7 @@ void FUN_001f9a28_25db00(void *, void *, void *) __asm__("FUN_001f9a28");
 void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
 float FUN_001f9ab0_25db00(void *, void *) __asm__("FUN_001f9ab0");
 float FUN_001f9b80_25db00(void *, void *) __asm__("FUN_001f9b80");
-float FUN_L00_0025db00(float *out, float *query_point, OvlQuad *segment_start, OvlQuad *b) {
+float FUN_L00_0025db00(float *out, float *query_point, OvlQuad *segment_start, OvlQuad *segment_end) {
     float segment_delta[4];
     float planar_normal[4];
     OvlQuad planar_endpoint_copy[1];
@@ -252,7 +252,7 @@ float FUN_L00_0025db00(float *out, float *query_point, OvlQuad *segment_start, O
     int i;
     float *projected_point_components, *pa, *pb;
 
-    FUN_001f9a28_25db00(segment_delta, segment_start, b);
+    FUN_001f9a28_25db00(segment_delta, segment_start, segment_end);
     planar_normal[0] = -segment_delta[1];
     planar_normal[1] = segment_delta[0];
     *(int *)&planar_normal[2] = 0;
@@ -265,17 +265,17 @@ float FUN_L00_0025db00(float *out, float *query_point, OvlQuad *segment_start, O
     *(int *)&out[2] = 0;
     projected_point_components = out;
     pa = (float *)segment_start;
-    pb = (float *)b;
+    pb = (float *)segment_end;
     for (i = 0; i < 2; i++) {
         if ((projected_point_components[i] > pa[i] && projected_point_components[i] > pb[i]) || (projected_point_components[i] < pa[i] && projected_point_components[i] < pb[i]))
             break;
     }
     if (i < 2) {
-        if (FUN_001f9b80_25db00(out, segment_start) < FUN_001f9b80_25db00(out, b)) {
+        if (FUN_001f9b80_25db00(out, segment_start) < FUN_001f9b80_25db00(out, segment_end)) {
             qcopy(out, segment_start);
             *(int *)&out[2] = 0;
         } else {
-            qcopy(out, b);
+            qcopy(out, segment_end);
             *(int *)&out[2] = 0;
         }
     }
@@ -294,31 +294,31 @@ extern float dot_25dcd8(void *, void *) __asm__("FUN_001f9ab0");
 extern float FUN_L00_0025da70_c(void *, void *, float) __asm__("FUN_L00_0025da70");
 float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r);
 float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) {
-    OvlQuad d[2];
+    OvlQuad segment_workspace[2];
     OvlQuad direction_copy[1];
     OvlQuad query_point_copy[1];
     OvlQuad g[1];
     float *output_component, *fa, *fb;
-    float res, negative_query_direction_dot, u;
+    float planar_distance, negative_query_direction_dot, segment_length_or_start_direction_dot;
     int i;
     if (r > 0.0f && fabs_25dcd8(((float *)query_point)[2] - ((float *)segment_start)[2]) < r &&
         fabs_25dcd8(((float *)query_point)[2] - ((float *)b)[2]) < r) {
-        res = FUN_L00_0025db00_c(out, query_point, segment_start, b);
+        planar_distance = FUN_L00_0025db00_c(out, query_point, segment_start, b);
         r = dist_25dcd8(segment_start, out);
-        u = dist_25dcd8(segment_start, b);
-        d[0] = *segment_start;
-        d[1] = *b;
-        b6b8_25dcd8(out, &d[0], &d[1], r / u);
-        return res;
+        segment_length_or_start_direction_dot = dist_25dcd8(segment_start, b);
+        segment_workspace[0] = *segment_start;
+        segment_workspace[1] = *b;
+        b6b8_25dcd8(out, &segment_workspace[0], &segment_workspace[1], r / segment_length_or_start_direction_dot);
+        return planar_distance;
     }
-    vsub_25dcd8(d, b, segment_start);
-    d[1] = *segment_start;
-    vscl_25dcd8(d, d, 1.0f);
-    qcopy(direction_copy, d);
-    negative_query_direction_dot = -dot_25dcd8(query_point, d);
-    u = dot_25dcd8(&d[1], direction_copy);
-    scale_vector_xyz(out, d, -(negative_query_direction_dot + u) / dot_25dcd8(d, direction_copy));
-    vadd_25dcd8(out, out, &d[1]);
+    vsub_25dcd8(segment_workspace, b, segment_start);
+    segment_workspace[1] = *segment_start;
+    vscl_25dcd8(segment_workspace, segment_workspace, 1.0f);
+    qcopy(direction_copy, segment_workspace);
+    negative_query_direction_dot = -dot_25dcd8(query_point, segment_workspace);
+    segment_length_or_start_direction_dot = dot_25dcd8(&segment_workspace[1], direction_copy);
+    scale_vector_xyz(out, segment_workspace, -(negative_query_direction_dot + segment_length_or_start_direction_dot) / dot_25dcd8(segment_workspace, direction_copy));
+    vadd_25dcd8(out, out, &segment_workspace[1]);
     i = 0;
     fb = (float *)b;
     fa = (float *)segment_start;
@@ -468,21 +468,21 @@ extern int FUN_L00_0025e3b8_u(void *) __asm__("FUN_L00_0025e3b8");
 
 /* False for null; true for a moby outside FUN_L00_0025e3b8's range or of class 0x1F6. */
 int FUN_L00_0025e368(char *moby) {
-    int r;
+    int predicate_result;
     if (moby == 0) {
-        r = 0;
+        predicate_result = 0;
     } else if (FUN_L00_0025e3b8_u(moby) == 0) {
-        r = 1;
+        predicate_result = 1;
     } else {
-        r = *(short *)(moby + 0xA6) == 0x1F6;
+        predicate_result = *(short *)(moby + 0xA6) == 0x1F6;
     }
-    return r;
+    return predicate_result;
 }
 /* True for a moby of one of eight listed classes. */
 s32 FUN_L00_0025e3f8(void *moby) {
-    s16 v = *(s16 *)((char *)moby + 0xA6);
-    if (v == 0xE2 || v == 0xCC || v == 0xDE || v == 0x3EE || v == 0xD6 || v == 0xE1 || v == 0xD5 ||
-        v == 0xDF) {
+    s16 moby_class_id = *(s16 *)((char *)moby + 0xA6);
+    if (moby_class_id == 0xE2 || moby_class_id == 0xCC || moby_class_id == 0xDE || moby_class_id == 0x3EE || moby_class_id == 0xD6 || moby_class_id == 0xE1 || moby_class_id == 0xD5 ||
+        moby_class_id == 0xDF) {
         return 1;
     }
     return 0;
@@ -538,18 +538,18 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
     Q_25e450 vb;
     Q_25e450 effect_vector_work;
     float dist;
-    float f3;
+    float effect_reduction_metric;
     float proximity_speed_reduction;
-    int cnt4;
+    int distance_limited_particle_pair_count;
     int i;
 
     *(u128_25e450 *)&effect_vector_work = 0;
     effect_vector_work.f[2] = frame_time_macro * 8.0f * fF;
-    f3 = D_L00_0015F5D4_macro + D_L00_0015F5D0_macro;
+    effect_reduction_metric = D_L00_0015F5D4_macro + D_L00_0015F5D0_macro;
     *(u128_25e450 *)&vb = *(u128_25e450 *)&effect_vector_work;
     if (effect_reduction_level == -1) {
         effect_reduction_level = 0;
-        if (1.7f < f3) effect_reduction_level = 1;
+        if (1.7f < effect_reduction_metric) effect_reduction_level = 1;
     }
     if (pos == 0) {
         if (owner_moby == 0) return;
@@ -615,15 +615,15 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
     }
     }
     if (dist < convert_integer_to_float_25e450(k8) * 2.0f) {
-        cnt4 = truncate_float_to_s32_25e450(dist) / 2;
+        distance_limited_particle_pair_count = truncate_float_to_s32_25e450(dist) / 2;
     } else {
-        cnt4 = k8;
+        distance_limited_particle_pair_count = k8;
     }
     proximity_speed_reduction = 0.0f;
     if (dist < 7.0f) proximity_speed_reduction = 7.0f - dist;
     {
     int i;
-    for (i = 0; i < cnt4; i++) {
+    for (i = 0; i < distance_limited_particle_pair_count; i++) {
         S6_25e450 c0;
         S6_25e450 c1;
         float sp;
@@ -663,18 +663,18 @@ void spawn_explosion(char *owner_moby, void *unused, char *pos, float fA, float 
     }
     }
     if (owner_moby != 0 && fC > 0.0f) {
-        int r1 = 150;
-        int r2 = 150;
-        int r3 = 127;
+        int first_glow_red = 150;
+        int first_glow_blue = 150;
+        int later_glow_red = 127;
         int u;
         if (flag) {
-            r1 = 70;
-            r2 = 70;
-            r3 = 60;
+            first_glow_red = 70;
+            first_glow_blue = 70;
+            later_glow_red = 60;
         }
-        u = r3 & 0xFF;
+        u = later_glow_red & 0xFF;
         if (D_L00_0015F5D0_macro < 0.95f && fE < dist) {
-            spawn_glow_particle_25e450(owner_moby, pos, &vb, fC, scale_game_frames_25e450(0x10), r1, 0x96, r2, 0x20);
+            spawn_glow_particle_25e450(owner_moby, pos, &vb, fC, scale_game_frames_25e450(0x10), first_glow_red, 0x96, first_glow_blue, 0x20);
             spawn_glow_particle_25e450(owner_moby, pos, &vb, fC, scale_game_frames_25e450(0x16), u, 0x7F, 0x50, 0x20);
         }
         spawn_glow_particle_25e450(owner_moby, pos, &vb, fC, scale_game_frames_25e450(0x1E), u, 0x7F, 0, 0x30);
@@ -753,29 +753,29 @@ extern Shake0025f090 D_L00_00166C80;
 /* Explosion burst at `pos`: three random-coloured particles, two tinted particles on `owner`, a camera shake when the
    spot is in view, the owner's sound unless it is dying, and a light flash of intensity `flash` (13 if negative). */
 void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) __asm__("FUN_L00_0025f090");
-void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) {
-    Vy10 vel;
+void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float flash) {
+    Vy10 particle_velocity;
     int i;
     float sp, big;
-    clear_u64_value(&vel);
+    clear_u64_value(&particle_velocity);
     for (i = 2; i >= 0; i--) {
-        S6y10 c0;
-        S6y10 c1;
+        S6y10 first_particle_color_palette;
+        S6y10 second_particle_color_palette;
         sp = random_float_between_c(8.0f, 10.0f) * frame_time;
         big = scale * 400000.0f;
-        c0 = D_L00_001E9030;
-        c1 = D_L00_001E9048;
-        FUN_L00_0026a9f0(pos, &vel, c0.v[random_integer_below(6)], c1.v[random_integer_below(6)],
+        first_particle_color_palette = D_L00_001E9030;
+        second_particle_color_palette = D_L00_001E9048;
+        FUN_L00_0026a9f0(burst_position, &particle_velocity, first_particle_color_palette.v[random_integer_below(6)], second_particle_color_palette.v[random_integer_below(6)],
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
     if (owner != 0) {
-        spawn_glow_particle(owner, pos, &vel, scale * 4.0f, scale_game_frames_c(0x14), 0x7F, 0x40, 0, 0x30);
-        spawn_glow_particle(owner, pos, &vel, scale * 3.0f, scale_game_frames_c(0x1D), 0x60, 0x20, 0, 0x20);
+        spawn_glow_particle(owner, burst_position, &particle_velocity, scale * 4.0f, scale_game_frames_c(0x14), 0x7F, 0x40, 0, 0x30);
+        spawn_glow_particle(owner, burst_position, &particle_velocity, scale * 3.0f, scale_game_frames_c(0x1D), 0x60, 0x20, 0, 0x20);
     }
     {
         Vy10 at;
-        *(u128 *)&at = *pos;
+        *(u128 *)&at = *burst_position;
         at.w = 2.0f;
         if (fast_bsphere_check(&at, 10.0f) != -1) {
             D_L00_00166C80.scale = scale * 0.1f;
@@ -795,7 +795,7 @@ void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) {
             D_L00_001B02F0[10] = 13.0f;
             D_L00_001B02F0[8] = 13.0f;
         }
-        mine_camera_blast(D_L00_001B02F0, pos, 0, 0);
+        mine_camera_blast(D_L00_001B02F0, burst_position, 0, 0);
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260460), where it is exact; names translated to the US level program. */
@@ -803,10 +803,10 @@ void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) {
 /* Spawns an explosion burst at `pos`: three random-coloured particles, two tinted particles when `owner` is set, and
    (when `flash` is nonzero) a light with intensity `flash` (or 13 if negative). */
 void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash);
-void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
+void FUN_L00_0025f3e8(char *owner, char *effect_position, float scale, float flash) {
     Vy10 zero_vec;
-    S6y10 c0;
-    S6y10 c1;
+    S6y10 first_particle_color_palette;
+    S6y10 second_particle_color_palette;
     int rgb[3];
     int i;
     float k5, sp, big, first_glow_scale, second_glow_scale;
@@ -815,9 +815,9 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
     for (i = 2; i >= 0; i--) {
         sp = random_float_between_c(8.0f, 10.0f) * frame_time;
         big = scale * k5;
-        c0 = D_L00_001E9030;
-        c1 = D_L00_001E9048;
-        FUN_L00_0026a9f0(pos, &zero_vec, FUN_L00_0025c0e8(c0.v[random_integer_below(6)], 1), FUN_L00_0025c0e8(c1.v[random_integer_below(6)], 1),
+        first_particle_color_palette = D_L00_001E9030;
+        second_particle_color_palette = D_L00_001E9048;
+        FUN_L00_0026a9f0(effect_position, &zero_vec, FUN_L00_0025c0e8(first_particle_color_palette.v[random_integer_below(6)], 1), FUN_L00_0025c0e8(second_particle_color_palette.v[random_integer_below(6)], 1),
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
@@ -825,11 +825,11 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
         rgb[0] = 0x7F; rgb[1] = 0x40; rgb[2] = 0;
         FUN_L00_0025c088(&rgb[0], &rgb[1], &rgb[2], 1);
         first_glow_scale = scale * 4.0f;
-        spawn_glow_particle(owner, pos, &zero_vec, first_glow_scale, scale_game_frames_c(0x14), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x30);
+        spawn_glow_particle(owner, effect_position, &zero_vec, first_glow_scale, scale_game_frames_c(0x14), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x30);
         rgb[0] = 0x60; rgb[1] = 0x20; rgb[2] = 0;
         FUN_L00_0025c088(&rgb[0], &rgb[1], &rgb[2], 1);
         second_glow_scale = scale * 3.0f;
-        spawn_glow_particle(owner, pos, &zero_vec, second_glow_scale, scale_game_frames_c(0x1D), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x20);
+        spawn_glow_particle(owner, effect_position, &zero_vec, second_glow_scale, scale_game_frames_c(0x1D), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x20);
     }
     if (flash != 0.0f) {
         if (flash > 0.0f) {
@@ -841,7 +841,7 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
             D_L00_001B02F0[10] = 13.0f;
             D_L00_001B02F0[8] = 13.0f;
         }
-        mine_camera_blast(D_L00_001B02F0, pos, 0, 0);
+        mine_camera_blast(D_L00_001B02F0, effect_position, 0, 0);
     }
 }
 #define NOT_SDA
@@ -917,17 +917,17 @@ M25f878 *FUN_L00_0025f878(s32 id) {
 }
 f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 /* Adds a random offset in [-r, r] to each of v[0..2]. */
-void FUN_L00_0025f8e0(f32 *v, f32 r) {
-    v[0] += random_float_between(-r, r);
-    v[1] += random_float_between(-r, r);
-    v[2] += random_float_between(-r, r);
+void FUN_L00_0025f8e0(f32 *inout_vector, f32 random_offset_bound) {
+    inout_vector[0] += random_float_between(-random_offset_bound, random_offset_bound);
+    inout_vector[1] += random_float_between(-random_offset_bound, random_offset_bound);
+    inout_vector[2] += random_float_between(-random_offset_bound, random_offset_bound);
 }
 extern u8 *D_L00_0015FFD8_c __asm__("D_L00_0015FFD8");
 extern u8 *D_L00_0015FFE0 __attribute__((sda));
 /* True for a moby inside the moby table whose class at 0xA6 is 0x1F4..0x21C. */
 s32 FUN_L00_0025e3b8(u8 *m);
 s32 FUN_L00_0025e3b8(u8 *moby) {
-    u32 v;
+    u32 moby_class_id;
     if (moby == 0) {
     bad:
         return 0;
@@ -938,6 +938,6 @@ s32 FUN_L00_0025e3b8(u8 *moby) {
     if (moby > D_L00_0015FFE0) {
         goto bad;
     }
-    v = *(u16 *)(moby + 0xA6);
-    return (v - 0x1F4) < 0x29;
+    moby_class_id = *(u16 *)(moby + 0xA6);
+    return (moby_class_id - 0x1F4) < 0x29;
 }

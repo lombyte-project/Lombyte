@@ -37,7 +37,7 @@ extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
-char *FUN_L11_00308670(float *pos, float *aim, float max_yaw_error, float max_pitch_error, float maxd) {
+char *FUN_L11_00308670(float *targeting_origin, float *aim, float max_yaw_error, float max_pitch_error, float maxd) {
     char *best = 0;
     char *candidate_position;
     char *candidate_moby = D_L11_0015FFE4;
@@ -47,21 +47,21 @@ char *FUN_L11_00308670(float *pos, float *aim, float max_yaw_error, float max_pi
             *(short *)(*(char **)(candidate_moby + 0x24) + 0x46) == 5) {
             float distance_xy;
             candidate_position = candidate_moby + 0x10;
-            distance_xy = vector_distance_xy(pos, candidate_position);
+            distance_xy = vector_distance_xy(targeting_origin, candidate_position);
             if (distance_xy < maxd) {
                 float adjusted_target_position[4];
                 float ra, rb, y, score;
                 qcopy(adjusted_target_position, candidate_position);
                 adjusted_target_position[2] = adjusted_target_position[2] + 0.4f;
                 ra = fast_difference_between_rotations(
-                    aim[2], fast_arc_tan(adjusted_target_position[0] - pos[0], adjusted_target_position[1] - pos[1]));
+                    aim[2], fast_arc_tan(adjusted_target_position[0] - targeting_origin[0], adjusted_target_position[1] - targeting_origin[1]));
                 ra = ra * ra;
                 if (ra < max_yaw_error * max_yaw_error) {
-                    y = fast_difference_between_rotations(aim[1], fast_arc_tan(distance_xy, adjusted_target_position[2] - pos[2]));
+                    y = fast_difference_between_rotations(aim[1], fast_arc_tan(distance_xy, adjusted_target_position[2] - targeting_origin[2]));
                     rb = y * y;
                     if (rb < max_pitch_error * max_pitch_error) {
                         score = ra * rb * 30.0f;
-                        score = score + square_root(fast_vec_dist(pos, adjusted_target_position));
+                        score = score + square_root(fast_vec_dist(targeting_origin, adjusted_target_position));
                         if (score < bestd) {
                             bestd = score;
                             best = candidate_moby;
@@ -93,7 +93,7 @@ extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_00250df8(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float travel_distance, float b) {
+unsigned char *FUN_L11_00308848(char *owner, float *launch_direction, float *spawn_position, float travel_distance, float step_length) {
     unsigned char *spawned_moby = func_0020D348_m(0x3F1);
     if (spawned_moby) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
@@ -103,18 +103,18 @@ unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float trave
         *(short *)(spawned_moby + 0x32) = func_001FA898_r(travel_distance);
         *(int *)(spawned_moby + 0x40) = 0;
         spawned_moby[0x31] = 1;
-        direction_length_xy = vector_length_xy(dir);
-        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(direction_length_xy, dir[2]);
-        *(float *)(spawned_moby + 0x48) = fast_arc_tan(dir[0], dir[1]);
+        direction_length_xy = vector_length_xy(launch_direction);
+        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(direction_length_xy, launch_direction[2]);
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(launch_direction[0], launch_direction[1]);
         *(float *)(moby_vars + 0x10) = 1.0f;
-        if (b > 0.0f) {
-            fast_vec_normalize(moby_vars, dir, b);
+        if (step_length > 0.0f) {
+            fast_vec_normalize(moby_vars, launch_direction, step_length);
         } else {
-            qcopy(moby_vars, dir);
-            b = fast_vec_length(dir);
+            qcopy(moby_vars, launch_direction);
+            step_length = fast_vec_length(launch_direction);
         }
-        qcopy(spawned_moby + 0x10, pos);
-        *(int *)(moby_vars + 0x18) = *(int *)(moby_vars + 0x14) = func_001FA898_r(travel_distance / b);
+        qcopy(spawned_moby + 0x10, spawn_position);
+        *(int *)(moby_vars + 0x18) = *(int *)(moby_vars + 0x14) = func_001FA898_r(travel_distance / step_length);
         *(short *)(spawned_moby + 0x34) = 0x200;
         *(float *)(spawned_moby + 0x2C) =
             *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) *
@@ -189,7 +189,7 @@ void FUN_L11_003089d0(struct Moby *moby) {
     float look[4];
     MissileHit_089d0 hit;
     float spark_velocity[4];
-    float r[4];
+    float spark_scatter_vector[4];
     struct Moby *target;
     float speed, yaw, yaw_off, pitch, pitch_off, max_yaw, max_pitch;
     int i;
@@ -241,14 +241,14 @@ void FUN_L11_003089d0(struct Moby *moby) {
     hit.oclass = moby->oclass;
     if (collision_line_089d0(old, &moby->pos, 0, vars->owner, &hit)) {
         for (i = 0; i < 5; i++) {
-            *(OvlQuad *)r = 0;
-            r[0] = random_float_between_089d0(-1.0f, 1.0f);
-            r[1] = random_float_between_089d0(-1.0f, 1.0f);
-            r[2] = random_float_between_089d0(-1.0f, 1.0f);
-            *(OvlQuad *)spark_velocity = *(OvlQuad *)r;
-            reflect_089d0(r, vars, D_L11_00174880);
-            normalize_vector_089d0(spark_velocity, spark_velocity, vector_length_089d0(r) * 0.5f);
-            add_vector_089d0(spark_velocity, r, spark_velocity);
+            *(OvlQuad *)spark_scatter_vector = 0;
+            spark_scatter_vector[0] = random_float_between_089d0(-1.0f, 1.0f);
+            spark_scatter_vector[1] = random_float_between_089d0(-1.0f, 1.0f);
+            spark_scatter_vector[2] = random_float_between_089d0(-1.0f, 1.0f);
+            *(OvlQuad *)spark_velocity = *(OvlQuad *)spark_scatter_vector;
+            reflect_089d0(spark_scatter_vector, vars, D_L11_00174880);
+            normalize_vector_089d0(spark_velocity, spark_velocity, vector_length_089d0(spark_scatter_vector) * 0.5f);
+            add_vector_089d0(spark_velocity, spark_scatter_vector, spark_velocity);
             normalize_vector_089d0(spark_velocity, spark_velocity, random_float_between_089d0(frame_time * 5.0f, frame_time * 9.0f));
             FUN_L00_0026dd20_c(&moby->pos, spark_velocity, 0x7F2F4F6F, random_int_between_089d0(scale_game_frames_089d0(10), scale_game_frames_089d0(15)), 90000.0f);
         }
@@ -268,7 +268,7 @@ char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len,
     char *spawned_moby = func_0020D348_m(0x3F9);
     if (spawned_moby != 0) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
-        int r;
+        int size_length_ratio;
         *(int *)(spawned_moby + 0x94) = 0;
         *(int *)(moby_vars + 0x1C) = owner;
         *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
@@ -285,10 +285,10 @@ char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len,
             len = fast_vec_length(dir);
         }
         qcopy(spawned_moby + 0x10, pos);
-        r = truncate_float_to_s32(size / len);
-        *(int *)(moby_vars + 0x14) = r;
+        size_length_ratio = truncate_float_to_s32(size / len);
+        *(int *)(moby_vars + 0x14) = size_length_ratio;
         *(float *)(moby_vars + 0x20) = z;
-        *(int *)(moby_vars + 0x18) = r - 13;
+        *(int *)(moby_vars + 0x18) = size_length_ratio - 13;
         *(short *)(spawned_moby + 0x34) = 0x200;
         FUN_L00_00250df8(spawned_moby);
     }
@@ -323,37 +323,37 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 void FUN_L11_00309098(char *moby) {
     float old[4];
     float trail_position[4];
-    float v[4];
+    float trail_velocity[4];
     float hit[4];
     float pad[4][2];
     float spark_velocity[4];
-    float r[4];
+    float spark_scatter_vector[4];
     char *data;
-    char *pos;
+    char *moby_position;
     int trail_color;
     if (moby == 0) return;
     data = *(char **)(moby + 0x78);
     if (data == 0) return;
-    pos = moby + 0x10;
-    qcopy(old, pos);
+    moby_position = moby + 0x10;
+    qcopy(old, moby_position);
     trail_color = fast_tween_color(D_L11_00161DC0, D_L11_00161DC4, random_float_between(0.0f, 1.0f));
     random_vector(trail_position, 0.0f, 0.1f);
-    add_vector_xyz(trail_position, trail_position, pos);
-    scale_vector_xyz(v, data, D_L11_00161DD0);
-    FUN_L00_0026dd20((char *)trail_position, (char *)v, trail_color, scale_game_frames(D_L11_00161DC8), (float)D_L11_00161DCC);
-    add_vector_xyz(pos, pos, data);
+    add_vector_xyz(trail_position, trail_position, moby_position);
+    scale_vector_xyz(trail_velocity, data, D_L11_00161DD0);
+    FUN_L00_0026dd20((char *)trail_position, (char *)trail_velocity, trail_color, scale_game_frames(D_L11_00161DC8), (float)D_L11_00161DCC);
+    add_vector_xyz(moby_position, moby_position, data);
     make_hit_descriptor(hit, moby, 0x10000, *(float *)(data + 0x20), data);
-    if (collision_line(old, pos, 0, *(void **)(data + 0x1C), hit)) {
+    if (collision_line(old, moby_position, 0, *(void **)(data + 0x1C), hit)) {
         int i;
         for (i = 0; i < 5; i++) {
-            *(OvlQuad *)r = 0;
-            r[0] = random_float_between(-1.0f, 1.0f);
-            r[1] = random_float_between(-1.0f, 1.0f);
-            r[2] = random_float_between(-1.0f, 1.0f);
-            *(OvlQuad *)spark_velocity = *(OvlQuad *)r;
-            FUN_L00_001ff660(r, data, D_L11_00174880);
-            normalize_vector_xyz(spark_velocity, spark_velocity, vector_length_xyz(r) * 0.5f);
-            add_vector_xyz(spark_velocity, r, spark_velocity);
+            *(OvlQuad *)spark_scatter_vector = 0;
+            spark_scatter_vector[0] = random_float_between(-1.0f, 1.0f);
+            spark_scatter_vector[1] = random_float_between(-1.0f, 1.0f);
+            spark_scatter_vector[2] = random_float_between(-1.0f, 1.0f);
+            *(OvlQuad *)spark_velocity = *(OvlQuad *)spark_scatter_vector;
+            FUN_L00_001ff660(spark_scatter_vector, data, D_L11_00174880);
+            normalize_vector_xyz(spark_velocity, spark_velocity, vector_length_xyz(spark_scatter_vector) * 0.5f);
+            add_vector_xyz(spark_velocity, spark_scatter_vector, spark_velocity);
             normalize_vector_xyz(spark_velocity, spark_velocity, random_float_between(frame_time * 5.0f, frame_time * 9.0f));
             FUN_L00_0026dd20(moby + 0x10, (char *)spark_velocity, 0x7F2F4F6F, random_int_between(scale_game_frames(10), scale_game_frames(15)), 90000.0f);
         }
@@ -542,7 +542,7 @@ void FUN_L11_0030a908(struct Moby *moby) {
     int colA;
     int colB;
     int vertex_count;
-    float t;
+    float color_interpolation_scalar;
     float x;
     float y;
 
@@ -587,10 +587,10 @@ void FUN_L11_0030a908(struct Moby *moby) {
     }
     FUN_001f9a28_30a908(&first_strip_edge_delta, &strip_corners[1], &strip_corners[0]);
     FUN_001f9a28_30a908(&second_strip_edge_delta, &strip_corners[3], &strip_corners[2]);
-    t = 10.0f;
+    color_interpolation_scalar = 10.0f;
     for (i = 0; i < 12; i += 2) {
         float strip_fraction = FUN_001fa6c0_30a908(i) / 10.0f;
-        int col = FUN_001fa6e0_30a908(ocean_vars->f0, ocean_vars->f4, FUN_001fa6c0_30a908(i) / t);
+        int col = FUN_001fa6e0_30a908(ocean_vars->f0, ocean_vars->f4, FUN_001fa6c0_30a908(i) / color_interpolation_scalar);
         FUN_001f9a68_30a908(&scratch_vector, &first_strip_edge_delta, strip_fraction);
         D_L11_001D9E08[i] = col;
         D_L11_001DA310[i].u = 0.0f;
@@ -641,13 +641,13 @@ void FUN_L11_0030a908(struct Moby *moby) {
     FUN_00233980_30a908(0x47, 0x513F1);
     colA = ocean_vars->fC;
     colB = ocean_vars->f10;
-    t = 1.0f - (((Cam_30a908 *)D_L11_00167680)->z - tide_level_macro) / ocean_vars->f2C;
-    if (t > 1.0f) {
-        t = 1.0f;
+    color_interpolation_scalar = 1.0f - (((Cam_30a908 *)D_L11_00167680)->z - tide_level_macro) / ocean_vars->f2C;
+    if (color_interpolation_scalar > 1.0f) {
+        color_interpolation_scalar = 1.0f;
     }
-    if (t >= 0.0f) {
-        colA = FUN_001fa6e0_30a908(0, colA, t);
-        colB = FUN_001fa6e0_30a908(0, colB, t);
+    if (color_interpolation_scalar >= 0.0f) {
+        colA = FUN_001fa6e0_30a908(0, colA, color_interpolation_scalar);
+        colB = FUN_001fa6e0_30a908(0, colB, color_interpolation_scalar);
         for (layer = 0; layer < 2; layer++) {
             int id = layer + 0x28;
             FUN_00233980_30a908(6, FUN_001f44b8_30a908(ocean_vars->f1C + id));
@@ -682,11 +682,11 @@ void FUN_L11_0030a908(struct Moby *moby) {
                         scratch_vector.y = D_L11_001D9F08[i].y - ((Cam_30a908 *)D_L11_00167680)->y;
                         scratch_vector.z = D_L11_001D9F08[i].z - ((Cam_30a908 *)D_L11_00167680)->z;
                         scratch_vector.w = 1.0f;
-                        t = FUN_001f9b20_30a908(&scratch_vector) / (ocean_vars->f18 * 2.0f);
-                        if (t > 1.0f) {
-                            t = 1.0f;
+                        color_interpolation_scalar = FUN_001f9b20_30a908(&scratch_vector) / (ocean_vars->f18 * 2.0f);
+                        if (color_interpolation_scalar > 1.0f) {
+                            color_interpolation_scalar = 1.0f;
                         }
-                        D_L11_001DA208[i] = FUN_001fa6e0_30a908(colA, colB, t);
+                        D_L11_001DA208[i] = FUN_001fa6e0_30a908(colA, colB, color_interpolation_scalar);
                     }
                     vertex_count += 4;
                     if (vertex_count >= 0x40) {
@@ -741,7 +741,7 @@ void ocean_pokitaru_update(OceanMoby_30b358 *moby) __asm__("FUN_L11_0030b358");
 void ocean_pokitaru_update(OceanMoby_30b358 *moby)
 {
     OceanVars_30b358 *ocean_vars = moby->vars;
-    float src[4];
+    float camera_displacement[4];
     float out[4];
     int k;
 
@@ -756,13 +756,13 @@ void ocean_pokitaru_update(OceanMoby_30b358 *moby)
         ocean_level = ocean_vars->level;
         return;
     }
-    subtract_vector_b358(src, camera_pos_b358, last_camera_pos);
+    subtract_vector_b358(camera_displacement, camera_pos_b358, last_camera_pos);
     qcopy(last_camera_pos, camera_pos_b358);
     if (!(ocean_vars->limit < camera_pos_b358[2])) {
         return;
     }
     for (k = 0; k < 2; k++) {
-        scale_vector_b358(out, src, (wave_speed[k] + wave_speed[k]) / (ocean_vars->scale * 5.0f));
+        scale_vector_b358(out, camera_displacement, (wave_speed[k] + wave_speed[k]) / (ocean_vars->scale * 5.0f));
         if (1.0f < out[0] || out[0] < 1.0f) {
             out[0] = out[0] - int_to_float_b358(float_to_int_b358(out[0]));
         }

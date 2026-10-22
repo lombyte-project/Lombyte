@@ -21,11 +21,11 @@ extern P00203908 D_00141968_00203908[] __asm__("D_00141968");
 void FUN_001fed30_00203908(s32) __asm__("FUN_001fed30");
 /* Starts help entry b with message a when no help is showing; pushes a to the help history. */
 s32 help_request(s32 a, s32 b) __asm__("FUN_L00_00203908");
-s32 help_request(s32 message_id, s32 b) {
+s32 help_request(s32 message_id, s32 help_record_index) {
     S00203908 *help_state_ptr = &D_L00_00179410_00203908;
     if (help_state_ptr->state == 0 && help_state_ptr->cur == -1 && music_stream_state.secondary.handle == 0 &&
-        music_stream_state.queued_secondary_track == help_state_ptr->cur && D_00141968_00203908[b].id != 0xFFFF) {
-        help_state_ptr->idx = b;
+        music_stream_state.queued_secondary_track == help_state_ptr->cur && D_00141968_00203908[help_record_index].id != 0xFFFF) {
+        help_state_ptr->idx = help_record_index;
         help_state_ptr->cur = message_id;
         FUN_001fed30_00203908(message_id);
         return 1;
@@ -44,12 +44,12 @@ extern char D_L00_00179410[];
 void FUN_L00_002039a0(void);
 void FUN_L00_002039a0(void) {
     if (*(int *)(D_L00_00179410) != 0) {
-        int v = *(int *)((char *)(*(int *)(D_L00_00179410 + 0x20) << 4) + (int)D_L00_0015F660 + 8);
-        if (v != -1) {
-            char *g = (char *)D_0014161B + 0x100B5;
-            if (v == *(short *)(g + 0x54) - 0x7530) {
-                if ((unsigned)(*(unsigned short *)(g + 0x5A) - 6) >= 2)
-                    *(short *)(g + 0x5A) = 5;
+        int help_entry_value = *(int *)((char *)(*(int *)(D_L00_00179410 + 0x20) << 4) + (int)D_L00_0015F660 + 8);
+        if (help_entry_value != -1) {
+            char *music_state_ptr = (char *)D_0014161B + 0x100B5;
+            if (help_entry_value == *(short *)(music_state_ptr + 0x54) - 0x7530) {
+                if ((unsigned)(*(unsigned short *)(music_state_ptr + 0x5A) - 6) >= 2)
+                    *(short *)(music_state_ptr + 0x5A) = 5;
             }
         }
         *(int *)(D_L00_00179410) = 0;

@@ -84,7 +84,7 @@ int FUN_L05_00266320(HudElem *hud_element) {
     extern int D_L05_0015F9C0 __attribute__((sda));
     extern int D_L05_0015F9C4 __attribute__((sda));
     extern int D_L05_0015F9C8 __attribute__((sda));
-    char buf[64];
+    char formatted_hud_text[64];
     char small_buf[16];
     int x, y, count;
 
@@ -98,35 +98,35 @@ int FUN_L05_00266320(HudElem *hud_element) {
         draw_stretchable_ui_frame(D_L05_0015F984, x, D_L05_0015F98C, D_L05_0015F990, D_L05_0015F994);
     }
     x = D_L05_0015F9A0;
-    sprintf(buf, D_L05_0015F9D8, get_help_message_text(0x523F));
-    FUN_L00_001fb470(x - 1, y + 1, 0x80000000, buf, -1);
-    FUN_L00_001fb470(x, y, D_L05_0015F998, buf, -1);
-    x += measure_text_width_regular(buf, -1);
+    sprintf(formatted_hud_text, D_L05_0015F9D8, get_help_message_text(0x523F));
+    FUN_L00_001fb470(x - 1, y + 1, 0x80000000, formatted_hud_text, -1);
+    FUN_L00_001fb470(x, y, D_L05_0015F998, formatted_hud_text, -1);
+    x += measure_text_width_regular(formatted_hud_text, -1);
     count = hero.unk89A + 1;
     if (count > 3) count = 3;
-    sprintf(buf, D_L05_0015F9E0, count);
-    FUN_L00_001fb470(x - 1, y + 2, 0x80000000, buf, -1);
-    FUN_L00_001fb470(x, y, D_L05_0015F99C, buf, -1);
+    sprintf(formatted_hud_text, D_L05_0015F9E0, count);
+    FUN_L00_001fb470(x - 1, y + 2, 0x80000000, formatted_hud_text, -1);
+    FUN_L00_001fb470(x, y, D_L05_0015F99C, formatted_hud_text, -1);
     {
         int count = hero.unk8C0;
         x = D_L05_0015F9B0;
         if (count == 1) {
-            sprintf(buf, D_L05_0015F9E8, 1);
+            sprintf(formatted_hud_text, D_L05_0015F9E8, 1);
         } else if (count == 2) {
-            sprintf(buf, D_L05_0015F9F0, 2);
+            sprintf(formatted_hud_text, D_L05_0015F9F0, 2);
         } else if (count == 3) {
-            sprintf(buf, D_L05_0015F9F8, 3);
+            sprintf(formatted_hud_text, D_L05_0015F9F8, 3);
         } else {
-            sprintf(buf, D_L05_0015FA00, count);
+            sprintf(formatted_hud_text, D_L05_0015FA00, count);
         }
     }
-    x -= measure_text_width_regular(buf, -1);
-    FUN_L00_001fb470(x + 1, y + 1, 0x80000000, buf, -1);
-    FUN_L00_001fb470(x, y, D_L05_0015F99C, buf, -1);
-    sprintf(buf, D_L05_0015FA08, get_help_message_text(0x5240));
-    x -= measure_text_width_regular(buf, -1);
-    FUN_L00_001fb470(x + 1, y + 1, 0x80000000, buf, -1);
-    FUN_L00_001fb470(x, y, D_L05_0015F998, buf, -1);
+    x -= measure_text_width_regular(formatted_hud_text, -1);
+    FUN_L00_001fb470(x + 1, y + 1, 0x80000000, formatted_hud_text, -1);
+    FUN_L00_001fb470(x, y, D_L05_0015F99C, formatted_hud_text, -1);
+    sprintf(formatted_hud_text, D_L05_0015FA08, get_help_message_text(0x5240));
+    x -= measure_text_width_regular(formatted_hud_text, -1);
+    FUN_L00_001fb470(x + 1, y + 1, 0x80000000, formatted_hud_text, -1);
+    FUN_L00_001fb470(x, y, D_L05_0015F998, formatted_hud_text, -1);
     if (D_0015ED84 == 0x10) {
         int y2, x2;
         sprintf(small_buf, D_L05_0015F860, hero.unk8CE);
@@ -152,7 +152,7 @@ int FUN_L05_00266320(HudElem *hud_element) {
 }
 
 int FUN_L05_00266710(HudElem *hud_element) {
-    char buf[64];
+    char formatted_hud_text[64];
     int y0, y1, y2;
     int frames, per_min, per_sec;
     int min, sec, hund;
@@ -177,25 +177,25 @@ int FUN_L05_00266710(HudElem *hud_element) {
     if (D_0013D388[0]) {
         draw_stretchable_ui_frame(D_L05_0015FA14, y0, D_L05_0015FA1C, D_L05_0015FA20, D_L05_0015FA24);
         x = D_L05_0015FA30;
-        sprintf(buf, D_L05_0015F788, get_help_message_text(0x50A6), hero.unk8A8);
-        x -= FUN_001f6250(buf, -1) >> 1;
-        sprintf(buf, D_L05_0015F9D8, get_help_message_text(0x50A6));
-        FUN_L00_001fb470(x + 1, y1 + 1, 0x80000000, buf, -1);
-        FUN_L00_001fb470(x, y1, D_L05_0015FA28, buf, -1);
-        x += FUN_001f6250(buf, -1);
-        sprintf(buf, D_L05_0015FA50, hero.unk8A8);
-        FUN_L00_001fb470(x + 1, y1 + 1, 0x80000000, buf, -1);
-        FUN_L00_001fb470(x, y1, D_L05_0015FA2C, buf, -1);
+        sprintf(formatted_hud_text, D_L05_0015F788, get_help_message_text(0x50A6), hero.unk8A8);
+        x -= FUN_001f6250(formatted_hud_text, -1) >> 1;
+        sprintf(formatted_hud_text, D_L05_0015F9D8, get_help_message_text(0x50A6));
+        FUN_L00_001fb470(x + 1, y1 + 1, 0x80000000, formatted_hud_text, -1);
+        FUN_L00_001fb470(x, y1, D_L05_0015FA28, formatted_hud_text, -1);
+        x += FUN_001f6250(formatted_hud_text, -1);
+        sprintf(formatted_hud_text, D_L05_0015FA50, hero.unk8A8);
+        FUN_L00_001fb470(x + 1, y1 + 1, 0x80000000, formatted_hud_text, -1);
+        FUN_L00_001fb470(x, y1, D_L05_0015FA2C, formatted_hud_text, -1);
     }
     x = D_L05_0015FA30;
-    sprintf(buf, D_L05_0015FA58, get_help_message_text(0x5241));
-    x -= FUN_001f6250(buf, -1) >> 1;
-    sprintf(buf, D_L05_0015FA68, get_help_message_text(0x5241));
-    FUN_L00_001fb470(x + 1, y2 + 1, 0x80000000, buf, -1);
-    FUN_L00_001fb470(x, y2, D_L05_0015FA28, buf, -1);
-    x += FUN_001f6250(buf, -1);
-    sprintf(buf, D_L05_0015FA70, min, sec, hund);
-    FUN_L00_001fb470(x + 1, y2 + 1, 0x80000000, buf, -1);
-    FUN_L00_001fb470(x, y2, D_L05_0015FA2C, buf, -1);
+    sprintf(formatted_hud_text, D_L05_0015FA58, get_help_message_text(0x5241));
+    x -= FUN_001f6250(formatted_hud_text, -1) >> 1;
+    sprintf(formatted_hud_text, D_L05_0015FA68, get_help_message_text(0x5241));
+    FUN_L00_001fb470(x + 1, y2 + 1, 0x80000000, formatted_hud_text, -1);
+    FUN_L00_001fb470(x, y2, D_L05_0015FA28, formatted_hud_text, -1);
+    x += FUN_001f6250(formatted_hud_text, -1);
+    sprintf(formatted_hud_text, D_L05_0015FA70, min, sec, hund);
+    FUN_L00_001fb470(x + 1, y2 + 1, 0x80000000, formatted_hud_text, -1);
+    FUN_L00_001fb470(x, y2, D_L05_0015FA2C, formatted_hud_text, -1);
     return hud_element->w;
 }

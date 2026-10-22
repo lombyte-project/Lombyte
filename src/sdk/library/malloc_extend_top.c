@@ -30,7 +30,7 @@ typedef unsigned long POINTER_UINT;
 #define MALLOC_ALIGNMENT      16
 #define MALLOC_ALIGN_MASK     (MALLOC_ALIGNMENT - 1)
 #define malloc_getpagesize    4096
-#define MORECORE(x)           _sbrk_r(ptr, (x))
+#define MORECORE(x)           _sbrk_r(reent_context, (x))
 #define MORECORE_FAILURE      ((void *)-1)
 #define chunksize(p)          ((p)->size & ~(SIZE_SZ - 1))
 #define set_head(p, s)        ((p)->size = (s))
@@ -49,7 +49,7 @@ typedef unsigned long POINTER_UINT;
 #define max_sbrked_mem (D_0012FBA8[0])
 #define max_total_mem  (D_0012FBB0[0])
 
-void malloc_extend_top(struct _reent *ptr, u32 nb) {
+void malloc_extend_top(struct _reent *reent_context, u32 nb) {
     char *brk;
     u32 front_misalign;
     u32 correction;
@@ -112,7 +112,7 @@ void malloc_extend_top(struct _reent *ptr, u32 nb) {
             chunk_at_offset(old_top, old_top_size)->size = SIZE_SZ | PREV_INUSE;
             chunk_at_offset(old_top, old_top_size + SIZE_SZ)->size = SIZE_SZ | PREV_INUSE;
             if (old_top_size >= MINSIZE)
-                _free_r(ptr, chunk2mem(old_top));
+                _free_r(reent_context, chunk2mem(old_top));
         }
     }
 

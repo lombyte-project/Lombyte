@@ -31,7 +31,7 @@ void FUN_L00_002e0988(HelpMoby *moby) {
     s32 *target_index_ptr;
     s32 i;
     HelpTarget *target_moby;
-    struct Hero *g;
+    struct Hero *hero_ptr;
 
     vars = moby->vars;
     if (moby->state == 0) {
@@ -62,13 +62,13 @@ void FUN_L00_002e0988(HelpMoby *moby) {
         }
     }
     if (D_00141968[0x8 / 2] == 0 && D_00141968[0x10 / 2] == 0) {
-        g = &hero;
+        hero_ptr = &hero;
         target_index_ptr = vars + 5;
         for (i = 0; i < 4; i++) {
             if (*target_index_ptr != -1) {
                 target_moby = (HelpTarget *)(D_L00_0015FFD8 + (*target_index_ptr << 8));
                 if (target_moby == 0 || target_moby->state == 0xFE || target_moby->state == 0xFD) {
-                    if (g->health.hp < 4) {
+                    if (hero_ptr->health.hp < 4) {
                         help_request(1, 1);
                     } else {
                         help_request(2, 2);
@@ -363,15 +363,15 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         }
         break;
     case VELDIN_ROBOT_STATE_PROCESS_COLLISION_PROBES: {
-        f32 ang;
+        f32 desired_heading;
 
-        ang = fast_arc_tan(vars->targetPos.f[0] - moby->pos.f[0], vars->targetPos.f[1] - moby->pos.f[1]);
+        desired_heading = fast_arc_tan(vars->targetPos.f[0] - moby->pos.f[0], vars->targetPos.f[1] - moby->pos.f[1]);
         if (moby->flags & 0x8000) {
-            ang = fast_add_rotations(ang, D_L00_00161BEC);
+            desired_heading = fast_add_rotations(desired_heading, D_L00_00161BEC);
         } else {
-            ang = fast_subtract_rotations(ang, D_L00_00161BEC);
+            desired_heading = fast_subtract_rotations(desired_heading, D_L00_00161BEC);
         }
-        ELECTROID_TURN(moby, vars, ang, 1.5707964f);
+        ELECTROID_TURN(moby, vars, desired_heading, 1.5707964f);
         build_moby_bone_transform(moby, 0, mtx);
         qcopy(&delta, &moby->unkC0);
         delta.f[2] = 0.0f;
@@ -487,7 +487,7 @@ void FUN_L00_002e1678(ElectroidMoby *moby) {
     ElectroidHit *coll;
     Path *path;
     ElectroidMoby *candidate_target;
-    ElectroidVec v;
+    ElectroidVec hit_position;
     struct Hero *g;
     s32 hit;
     f32 dmg;
@@ -522,8 +522,8 @@ void FUN_L00_002e1678(ElectroidMoby *moby) {
         if (vars->health <= 0.0f) {
             vars->unk94 = 0x29;
             moby->flags &= ~0x1000;
-            v.q = coll->pos.q;
-            trooper_knockback_arc(&v, &angle, &vars->unk88, &vars->unk8C);
+            hit_position.q = coll->pos.q;
+            trooper_knockback_arc(&hit_position, &angle, &vars->unk88, &vars->unk8C);
             trooper_start_knockback(moby, vars->unk70, 0xB, 1, 0, angle);
             vars->unkC0 = 7.0f;
             vars->unkC4 = 16.0f;
@@ -535,8 +535,8 @@ void FUN_L00_002e1678(ElectroidMoby *moby) {
         } else {
             vars->unk88 = D_L00_00161BDC * frame_time * 0.35f;
             vars->unk8C = D_L00_00161BE0 * frame_time * 0.5f;
-            v.q = coll->pos.q;
-            trooper_knockback_arc(&v, &unused, &vars->unk88, &vars->unk8C);
+            hit_position.q = coll->pos.q;
+            trooper_knockback_arc(&hit_position, &unused, &vars->unk88, &vars->unk8C);
             trooper_start_knockback(moby, vars->unk70, 8, 1, 0, fast_arc_tan(coll->pos.f[0], coll->pos.f[1]));
             vars->unkC4 = vars->unkC0 = -1.0f;
             moby->state = 7;
@@ -619,7 +619,7 @@ void FUN_L00_002e1aa8(SparkMoby *moby) {
     SparkPart *particle;
     SparkTail *particle_tail;
     f32 *pos;
-    f32 vel[4];
+    f32 particle_initial_velocity[4];
     s32 i;
     s32 life;
 
@@ -627,8 +627,8 @@ void FUN_L00_002e1aa8(SparkMoby *moby) {
     pos = vars->pos;
     moby_point_position(moby, 1, pos);
     vars->pos[2] -= 0.333f;
-    random_spherical_offset(vel, 0.005f, 0.03f);
-    particle = FUN_L00_00274948(pos, vel, 0x7F, moby);
+    random_spherical_offset(particle_initial_velocity, 0.005f, 0.03f);
+    particle = FUN_L00_00274948(pos, particle_initial_velocity, 0x7F, moby);
     if (particle != 0) {
         particle->unkC = random_float_between(6000.0f, 32000.0f);
     }
@@ -692,20 +692,20 @@ extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
 void FUN_L00_002e1c78(GlowMoby *moby) {
     GlowQuad quad;
-    GlowVec mat[4];
-    GlowVec *src;
-    GlowVec *dst;
+    GlowVec quad_transform[4];
+    GlowVec *template_corner;
+    GlowVec *quad_corner;
     s32 i;
     f32 one;
 
-    qcopy(&mat[3], &moby->vars->pos);
+    qcopy(&quad_transform[3], &moby->vars->pos);
     one = 1.0f;
-    mat[3].f[3] = one;
-    subtract_vector_xyz(&mat[0], &glow_origin, &mat[3]);
-    fast_vec_normalize(&mat[0], &mat[0], one);
-    fast_vec_cross(&mat[1], &mat[0], (GlowVec *)&hero.gravity_dir);
-    fast_vec_normalize(&mat[1], &mat[1], -1.0f);
-    fast_vec_cross(&mat[2], &mat[1], &mat[0]);
+    quad_transform[3].f[3] = one;
+    subtract_vector_xyz(&quad_transform[0], &glow_origin, &quad_transform[3]);
+    fast_vec_normalize(&quad_transform[0], &quad_transform[0], one);
+    fast_vec_cross(&quad_transform[1], &quad_transform[0], (GlowVec *)&hero.gravity_dir);
+    fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);
+    fast_vec_cross(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
     quad.tex = get_effect_texture(0xB);
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
@@ -722,12 +722,12 @@ void FUN_L00_002e1c78(GlowMoby *moby) {
     quad.unk64 = 0;
     quad.unk68 = one;
     quad.unk6C = one;
-    src = D_L00_001E6CA0;
-    dst = quad.corner;
+    template_corner = D_L00_001E6CA0;
+    quad_corner = quad.corner;
     for (i = 0; i < 4; i++) {
-        fast_vec_scale(0.2f, dst++, src++);
+        fast_vec_scale(0.2f, quad_corner++, template_corner++);
     }
-    fast_draw_quad_real(&quad, mat, 0);
+    fast_draw_quad_real(&quad, quad_transform, 0);
 }
 typedef struct {
     u8 pad0[0x20];
@@ -751,7 +751,7 @@ void FUN_L00_002e1df0(SlotMoby *slot_controller) {
     s32 i;
     s32 j;
     s32 dispatched_slot_count;
-    s32 st;
+    s32 slot_state;
 
     switch (slot_controller->state) {
     case SLOT_CONTROLLER_STATE_INITIALIZE:
@@ -765,11 +765,11 @@ void FUN_L00_002e1df0(SlotMoby *slot_controller) {
     case SLOT_CONTROLLER_STATE_PROCESS_SLOTS:
         dispatched_slot_count = 0;
         for (i = 0; i < 3; i++) {
-            st = D_L00_00161BF8[i];
-            if (st == 1) {
-            } else if (st == 4) {
+            slot_state = D_L00_00161BF8[i];
+            if (slot_state == 1) {
+            } else if (slot_state == 4) {
                 FUN_L00_002e20f8(i);
-            } else if (st != 0) {
+            } else if (slot_state != 0) {
                 dispatched_slot_count++;
                 FUN_L00_002e2250(D_L00_00161C88[i], i);
                 D_L00_00161BF8[i] = 4;
@@ -827,14 +827,14 @@ void FUN_L00_002e3800(FlockMoby *moby) {
         FLOCK_EFFECT_STATE_INITIALIZE = 0,
         FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS = 1
     };
-    f32 pos[4];
-    void *src;
+    f32 effect_spawn_position[4];
+    void *effect_source_moby;
     FlockPart *part;
     s32 color;
-    s32 v;
+    s32 random_magnitude;
     s32 i;
     s32 phase;
-    s32 idx;
+    s32 phase_effect_moby_index;
     FlockTail *tail;
 
     switch (moby->state) {
@@ -847,24 +847,24 @@ void FUN_L00_002e3800(FlockMoby *moby) {
              scale_game_frames_s32(0x618) <= D_L00_0016C860.level) ||
             (D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 3)) {
             phase = D_L00_0016C860.phase;
-            idx = -1;
+            phase_effect_moby_index = -1;
             if (phase == 2) {
-                idx = 3;
+                phase_effect_moby_index = 3;
             } else if (phase == 3) {
-                idx = 2;
+                phase_effect_moby_index = 2;
             }
-            cutscene_set_camera_target(D_L00_0016C860.mobys[idx]);
+            cutscene_set_camera_target(D_L00_0016C860.mobys[phase_effect_moby_index]);
         }
         if (D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 4) {
-            src = D_L00_0016C860.mobys[3];
-            if (src != 0 && scale_game_frames_s32(150) <= D_L00_0016C860.level &&
+            effect_source_moby = D_L00_0016C860.mobys[3];
+            if (effect_source_moby != 0 && scale_game_frames_s32(150) <= D_L00_0016C860.level &&
                 D_L00_0016C860.level <= scale_game_frames_s32(220)) {
-                moby_point_position(src, 0, pos);
-                draw_trail(pos, pos, D_L00_0015F580, 120000.0f, 50000.0f);
+                moby_point_position(effect_source_moby, 0, effect_spawn_position);
+                draw_trail(effect_spawn_position, effect_spawn_position, D_L00_0015F580, 120000.0f, 50000.0f);
                 for (i = 0; i < 10; i++) {
                     color = (random_int_between(0x40, 0x80) << 24) | 0x787878;
-                    v = random_int_between(0, 4);
-                    part = FUN_L00_0026d000(pos, random_integer_below(2) == 0 ? v : -v,
+                    random_magnitude = random_int_between(0, 4);
+                    part = FUN_L00_0026d000(effect_spawn_position, random_integer_below(2) == 0 ? random_magnitude : -random_magnitude,
                                             D_L00_0015F580, color, 0.75f, 1.0f, 1.03f, 120000.0f);
                     if (part != 0) {
                         part->unk3 = 0x44;

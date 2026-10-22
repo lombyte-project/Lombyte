@@ -30,12 +30,12 @@ Boston, MA 02111-1307, USA.  */
 
 #include "types.h"
 
-f64 __floatdidf(s64 u) {
+f64 __floatdidf(s64 signed_value) {
     f64 converted_value;
 
-    converted_value = (s32)(u >> 32);
+    converted_value = (s32)(signed_value >> 32);
     converted_value *= 65536.0;
     converted_value *= 65536.0;
-    converted_value += (u32)(u & 0xFFFFFFFF);
+    converted_value += (u32)(signed_value & 0xFFFFFFFF);
     return converted_value;
 }

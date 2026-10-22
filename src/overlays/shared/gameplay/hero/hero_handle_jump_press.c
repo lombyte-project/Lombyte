@@ -99,11 +99,11 @@ void FUN_L00_002325e0_002293a8(s32, s32) __asm__("FUN_L00_002325e0");
 void FUN_L00_0025f730_002293a8(void *, f32) __asm__("FUN_L00_0025f730");
 s32 FUN_L00_00205000_002293a8(s32) __asm__("FUN_L00_00205000");
 void FUN_L00_002293a8(void) {
-    u8 *b, *hero_run_base, *hero_stop_idle_base;
+    u8 *hero_byte_base, *hero_run_base, *hero_stop_idle_base;
     s32 animation_frames_or_id;
-    b = D_0013F350_002293a8;
-    *(s32 *)(b + 0x2284) = 0;
-    if (b[0x12E2] != 0 && frame_time * 0.5f < *(f32 *)(b + 0x164)) {
+    hero_byte_base = D_0013F350_002293a8;
+    *(s32 *)(hero_byte_base + 0x2284) = 0;
+    if (hero_byte_base[0x12E2] != 0 && frame_time * 0.5f < *(f32 *)(hero_byte_base + 0x164)) {
         hero_set_state(0x2F, 1);
         return;
     }
@@ -164,15 +164,15 @@ extern void hero_set_state_2(int, int) __asm__("FUN_L00_002223f8");
 
 int hero_handle_jump_press(void) __asm__("FUN_L00_00229660");
 int hero_handle_jump_press(void) {
-    int n, t, jump_press_history_limit;
+    int input_history_separation_limit, input_history_window_padding, jump_press_history_limit;
     int next_state;
 
     if (hero.state.current == 0xE)
         return 0;
-    n = FUN_L00_00221d98_229660();
-    t = FUN_001f96f8_229660(5);
-    if ((D_0013CAE0_229660 & 0xA) && n > 0 &&
-        FUN_L00_00266e00_229660(0x40, (void *)0x1F000, t + n, n)) {
+    input_history_separation_limit = FUN_L00_00221d98_229660();
+    input_history_window_padding = FUN_001f96f8_229660(5);
+    if ((D_0013CAE0_229660 & 0xA) && input_history_separation_limit > 0 &&
+        FUN_L00_00266e00_229660(0x40, (void *)0x1F000, input_history_window_padding + input_history_separation_limit, input_history_separation_limit)) {
         next_state = 0xB;
     found:
         hero_set_state(next_state, 1);
@@ -225,7 +225,7 @@ extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa6
 
 int FUN_L00_00229910(void) {
     struct Hero *g = &hero;
-    V_229910_00229910 v, w;
+    V_229910_00229910 collision_line_start, collision_line_end;
     float height_delta;
     if (g->motion.unk164 < g->unk234 / (float)FUN_001f96f8_00229910(20))
         return 0;
@@ -233,13 +233,13 @@ int FUN_L00_00229910(void) {
                                                                   g->motion.displacement.f[1]),
                                             g->motion.rot.f[2]))
         return 0;
-    qcopy(&v, &g->motion.pos);
-    v.f[0] += fast_cos(g->motion.rot.f[2]) * g->unk234 * 0.75f;
-    v.f[1] += fast_sin(g->motion.rot.f[2]) * g->unk234 * 0.75f;
-    qcopy(&w, &v);
-    v.f[2] += 0.47f;
-    w.f[2] -= 1.0f;
-    if (collision_line(&v, &w, 2, ((void *)g->moby), 0)) {
+    qcopy(&collision_line_start, &g->motion.pos);
+    collision_line_start.f[0] += fast_cos(g->motion.rot.f[2]) * g->unk234 * 0.75f;
+    collision_line_start.f[1] += fast_sin(g->motion.rot.f[2]) * g->unk234 * 0.75f;
+    qcopy(&collision_line_end, &collision_line_start);
+    collision_line_start.f[2] += 0.47f;
+    collision_line_end.f[2] -= 1.0f;
+    if (collision_line(&collision_line_start, &collision_line_end, 2, ((void *)g->moby), 0)) {
         height_delta = D_L00_00173E68_00229910 - g->motion.pos.f[2];
         if (height_delta < 0.37f && -1.0f < height_delta)
             return 1;
@@ -258,12 +258,12 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
 s32 FUN_L00_00229a98(void) {
-    struct Hero *b = &hero;
+    struct Hero *hero_ptr = &hero;
     s32 id, k;
-    if (b->unk20A8 == 0 || b->unk20AA == 0 || b->unk22C8 != 0)
+    if (hero_ptr->unk20A8 == 0 || hero_ptr->unk20AA == 0 || hero_ptr->unk22C8 != 0)
         return 0;
     id = hero_slot_item_id(0);
-    if (id != b->unk2298) {
+    if (id != hero_ptr->unk2298) {
         FUN_L00_0020e698();
         return 0;
     }
@@ -271,8 +271,8 @@ s32 FUN_L00_00229a98(void) {
     if (hero_set_state(HERO_STATE_IDLE, 0) == 0)
         return 0;
     set_hero_animation(k, 0, (f32)scale_game_frames(0xB));
-    if (((s32)b->unkD08[0]) != 0)
-        b->unkD14 = 1;
-    b->unk2294 = k;
+    if (((s32)hero_ptr->unkD08[0]) != 0)
+        hero_ptr->unkD14 = 1;
+    hero_ptr->unk2294 = k;
     return 1;
 }

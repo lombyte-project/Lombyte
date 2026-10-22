@@ -126,15 +126,15 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius, float la
 
 void FUN_L07_00312dc8(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    float ang;
+    float latitude_span;
     if (*(float *)(data + 0x1C8) < 0.8f) {
-        ang = *(float *)(data + 0x1C8) * 3.0434179f / 0.8f + 0.09817477f;
-        if (ang > 3.14159274f)
-            ang = 3.14159274f;
+        latitude_span = *(float *)(data + 0x1C8) * 3.0434179f / 0.8f + 0.09817477f;
+        if (latitude_span > 3.14159274f)
+            latitude_span = 3.14159274f;
     } else {
-        ang = 3.14159274f;
+        latitude_span = 3.14159274f;
     }
-    FUN_L07_00312948(moby, 0, 1.0f, 5.8f, ang, 1.0f, *(float *)(data + 0x1C8));
+    FUN_L07_00312948(moby, 0, 1.0f, 5.8f, latitude_span, 1.0f, *(float *)(data + 0x1C8));
 }
 #include "qcopy.h"
 #include "rnc/rendering/geometry_quad.h"
@@ -245,19 +245,19 @@ extern void FUN_L07_00312e70(char *, float, int, float, int);
 
 /* Rope draw: moves the two end points along the rope direction, draws three strands, then casts a ray between the ends. */
 void FUN_L07_003131b0(char *moby) {
-    RopeQuad v;
+    RopeQuad rope_offset;
     char blk[0x30];
     RopeVec rope_direction;
     char *data;
     float one;
 
     data = *(char **)(moby + 0x78);
-    qzero(&v);
+    qzero(&rope_offset);
     one = 1.0f;
-    normalize_vector_xyz(&v, data + 0x130, *(float *)(data + 0x16C) * 0.8f);
-    add_vector_xyz(data + 0x140, &v, data + 0x110);
-    normalize_vector_xyz(&v, &v, *(float *)(data + 0x16C));
-    add_vector_xyz(data + 0x120, &v, data + 0x110);
+    normalize_vector_xyz(&rope_offset, data + 0x130, *(float *)(data + 0x16C) * 0.8f);
+    add_vector_xyz(data + 0x140, &rope_offset, data + 0x110);
+    normalize_vector_xyz(&rope_offset, &rope_offset, *(float *)(data + 0x16C));
+    add_vector_xyz(data + 0x120, &rope_offset, data + 0x110);
     FUN_L07_00312e70(moby, one, 0, one, 0x20000080);
     FUN_L07_00312e70(moby, 0.7f, 10, 2.0f, 0x28008080);
     FUN_L07_00312e70(moby, 0.4f, 20, 3.0f, 0x30B0FFFF);
@@ -276,12 +276,12 @@ void *FUN_L07_00313350(void *unused, void *dp, void *op) {
     int *out = op;
     int output_count = 0;
     int output_candidate_0 = *(int *)(data + 0x170);
-    int b, output_candidate_2, output_candidate_3, output_candidate_4, output_candidate_5;
+    int output_candidate_1, output_candidate_2, output_candidate_3, output_candidate_4, output_candidate_5;
     if (output_candidate_0 != -1)
         out[output_count++] = output_candidate_0;
-    b = *(int *)(data + 0x174);
-    if (b != -1)
-        out[output_count++] = b;
+    output_candidate_1 = *(int *)(data + 0x174);
+    if (output_candidate_1 != -1)
+        out[output_count++] = output_candidate_1;
     output_candidate_2 = *(int *)(data + 0x178);
     if (output_candidate_2 != -1)
         out[output_count++] = output_candidate_2;
@@ -452,16 +452,16 @@ extern int follow_path(void *, void *, int, float, void *, void *, void *) __asm
 extern int FUN_L01_0028b510(void *, void *, float);
 extern void *FUN_L07_00313350_u(void *, void *, void *) __asm__("FUN_L07_00313350");
 
-void FUN_L07_00313988(char *moby, char *moby_vars, void *b, void *out_position) {
-    float v[8];
-    void *r = FUN_L07_00313350_u(moby, moby_vars, v);
-    if (follow_path(v, r, *(int *)(moby_vars + 0x188), 0.0f, moby + 0x10, b, out_position))
+void FUN_L07_00313988(char *moby, char *moby_vars, void *target_position, void *out_position) {
+    float navigation_ids[8];
+    void *navigation_id_count = FUN_L07_00313350_u(moby, moby_vars, navigation_ids);
+    if (follow_path(navigation_ids, navigation_id_count, *(int *)(moby_vars + 0x188), 0.0f, moby + 0x10, target_position, out_position))
         return;
     {
-        int i = FUN_L01_0028b510(b, D_L07_001B0530[*(int *)(moby_vars + 0x290)], 0.0f);
+        int i = FUN_L01_0028b510(target_position, D_L07_001B0530[*(int *)(moby_vars + 0x290)], 0.0f);
         int j = FUN_L01_0028b510(D_L07_001B0530[*(int *)(moby_vars + 0x290)] + (i * 16 + 0x10),
                                  D_L07_001B0530[*(int *)(moby_vars + 0x188)], 0.0f);
-        if (follow_path(v, r, *(int *)(moby_vars + 0x188), 0.0f, moby + 0x10,
+        if (follow_path(navigation_ids, navigation_id_count, *(int *)(moby_vars + 0x188), 0.0f, moby + 0x10,
                              D_L07_001B0530[*(int *)(moby_vars + 0x188)] + (j * 16 + 0x10), out_position))
             return;
         i = FUN_L01_0028b510(moby + 0x10, D_L07_001B0530[*(int *)(moby_vars + 0x188)], 0.0f);
@@ -508,21 +508,21 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int FUN_L00_002583f0(void *, struct Moby *, int, float, float);
 
 int FUN_L07_00313af0(struct Moby *chaser_moby, struct ChaserVars *chaser_vars, Vec4 *goal, int mode, float range) {
-    float v[4];
+    float position_delta[4];
     char *path;
     struct Moby *target_moby;
-    int r;
-    float dist;
+    int navigation_result;
+    float goal_distance;
 
-    dist = vector_distance(&chaser_moby->pos, goal);
-    r = 4;
+    goal_distance = vector_distance(&chaser_moby->pos, goal);
+    navigation_result = 4;
     path = D_L07_001B0530[chaser_vars->path];
-    if (range < dist) {
-        r = FUN_L00_00259028(chaser_moby, chaser_vars->nav, mode, chaser_vars->navOut);
-        if (r == 2) {
-            subtract_vector_xyz(v, path + (FUN_L01_0028b510(&chaser_moby->pos, path, 0.0f) * 16 + 0x10), &chaser_moby->pos);
-            clamp_vector_length(v, v, chaser_vars->pullSpeed);
-            add_vector_xyz(&chaser_moby->pos, &chaser_moby->pos, v);
+    if (range < goal_distance) {
+        navigation_result = FUN_L00_00259028(chaser_moby, chaser_vars->nav, mode, chaser_vars->navOut);
+        if (navigation_result == 2) {
+            subtract_vector_xyz(position_delta, path + (FUN_L01_0028b510(&chaser_moby->pos, path, 0.0f) * 16 + 0x10), &chaser_moby->pos);
+            clamp_vector_length(position_delta, position_delta, chaser_vars->pullSpeed);
+            add_vector_xyz(&chaser_moby->pos, &chaser_moby->pos, position_delta);
         }
     } else {
         FUN_L00_00258278(chaser_moby, fast_arc_tan(hero.motion.pos.f[0] - chaser_moby->pos.x, hero.motion.pos.f[1] - chaser_moby->pos.y),
@@ -532,35 +532,35 @@ int FUN_L07_00313af0(struct Moby *chaser_moby, struct ChaserVars *chaser_vars, V
         target_moby = D_L07_00173EC0.moby;
         if (target_moby != 0 && D_L07_00173EC0.count > 0 && target_moby->oclass == 0x42D && target_moby->command == 0) {
             if (((struct ChaserTargetVars *)target_moby->pvars)->sticky) {
-                subtract_vector_xyz(v, &target_moby->pos, &chaser_moby->pos);
-                *(s32 *)&v[2] = 0;
-                scale_vector_xyz(v, v, 0.5f);
-                add_vector_xyz(&chaser_moby->pos, &chaser_moby->pos, v);
+                subtract_vector_xyz(position_delta, &target_moby->pos, &chaser_moby->pos);
+                *(s32 *)&position_delta[2] = 0;
+                scale_vector_xyz(position_delta, position_delta, 0.5f);
+                add_vector_xyz(&chaser_moby->pos, &chaser_moby->pos, position_delta);
             }
             D_L07_00173EC0.moby->command = 1;
         }
     }
-    return r;
+    return navigation_result;
 }
 /* eases the chaser speed up with the gap to its target */
 struct ChaserSpeed { u8 pad0[0x80]; f32 base; u8 pad84[0x10]; f32 rate; u8 pad98[0x124]; f32 rate2; };
 struct ChaserAnim { u8 pad0[0x58]; f32 speed; };
 float FUN_L07_00313d30(struct ChaserAnim *chaser_anim, struct ChaserSpeed *chaser_speed, float x, float y, float k)
 {
-    float r = frame_scale * 0.06f;
+    float eased_rate = frame_scale * 0.06f;
     if (y < x) {
-        r = x - y;
-        if (50.0f < r) r = 50.0f;
-        if (r < 0.0f) r = 0.0f;
-        r = r / 50.0f;
-        r = r * r;
-        r = r * (frame_scale * 0.1f - frame_scale * 0.06f);
-        r = r + frame_scale * 0.06f;
+        eased_rate = x - y;
+        if (50.0f < eased_rate) eased_rate = 50.0f;
+        if (eased_rate < 0.0f) eased_rate = 0.0f;
+        eased_rate = eased_rate / 50.0f;
+        eased_rate = eased_rate * eased_rate;
+        eased_rate = eased_rate * (frame_scale * 0.1f - frame_scale * 0.06f);
+        eased_rate = eased_rate + frame_scale * 0.06f;
     }
-    chaser_speed->rate2 = r;
-    chaser_speed->rate = r;
+    chaser_speed->rate2 = eased_rate;
+    chaser_speed->rate = eased_rate;
     chaser_anim->speed = chaser_speed->base / (frame_scale * 0.06f) * k;
-    return r;
+    return eased_rate;
 }
 /* latches onto a target when it is turned toward enough, then picks a turn animation */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_003151C0), where it is exact; names translated to the US level program. */
@@ -570,14 +570,14 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
-int FUN_L07_00313de8(unsigned char *moby, unsigned char *obj, float *vec, int resume_animation, int b) {
+int FUN_L07_00313de8(unsigned char *moby, unsigned char *obj, float *vec, int resume_animation, int use_fixed_target_position) {
     float target_heading = fast_arc_tan(vec[0] - *(float *)(moby + 0x10), vec[1] - *(float *)(moby + 0x14));
     if (*(float *)(obj + 0x98) < fast_difference_between_rotations(*(float *)(moby + 0x48), target_heading)) {
         *(int *)(obj + 0x168) = 0;
         *(float *)(moby + 0x58) = 1.0f;
         obj[0x1F4] = moby[0x20];
         obj[0x1F6] = resume_animation;
-        obj[0x1F5] = b;
+        obj[0x1F5] = use_fixed_target_position;
         qcopy(obj + 0xC0, vec);
         if (fast_arc_tan(vec[0] - *(float *)(moby + 0x10), vec[1] - *(float *)(moby + 0x14)) < 0.0f) {
             if (moby[0x53] != 3) {
@@ -727,8 +727,11 @@ void snagglebeast_update(unsigned char *moby) {
         SNAGGLEBEAST_INITIALIZE = 0,
         SNAGGLEBEAST_IDLE = 1,
         SNAGGLEBEAST_TURN_TOWARD_TARGET = 7,
+        SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO = 8,
         SNAGGLEBEAST_ROPE_ATTACK = 9,
-        SNAGGLEBEAST_DEATH_EXPLOSION = 10
+        SNAGGLEBEAST_DEATH_EXPLOSION = 10,
+        SNAGGLEBEAST_APPLY_TIMED_DAMAGE_AND_SELECT_PATH = 14,
+        SNAGGLEBEAST_POST_DEATH_CLEANUP = 16
     };
     enum {
         SNAGGLEBEAST_ROPE_START_ATTACK_ANIMATION = 0,
@@ -1378,7 +1381,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     }
-    case 14:
+    case SNAGGLEBEAST_APPLY_TIMED_DAMAGE_AND_SELECT_PATH:
         scale_vector_xyz(data + 0x100, data + 0x100, 0.4f);
         add_vector_xyz(moby + 0x10, moby + 0x10, data + 0x100);
         if (FUN_0020c9e0(moby) < 168.0f) {
@@ -1473,7 +1476,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     }
-    case 8: {
+    case SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO: {
         float fr;
         if (*(int *)(data + 0x294) <= 0) {
             if (FUN_L07_00313de8(moby, data, (float *)(((char *)&hero) + 0x80), 6, 0)) break;
@@ -1736,7 +1739,7 @@ void snagglebeast_update(unsigned char *moby) {
             }
         }
         break;
-    case 16:
+    case SNAGGLEBEAST_POST_DEATH_CLEANUP:
         if (*(short *)(data + 0x280) != -1) FUN_L00_0023e838(*(short *)(data + 0x280));
         if (*(int *)(data + 0x1D0) == -1 || !(*(float *)(level_mobys + (*(int *)(data + 0x1D0) << 8) + 0x18) < 34.5f)) {
             mark_moby_for_removal(moby);
@@ -1862,7 +1865,7 @@ void FUN_L07_00317cb0(char *moby, void *anchor) {
     RopeVec up;
     RopeQuad rotation_input_vector;
     RopeQuad rotation_axis;
-    float r;
+    float initial_swing_angle;
     int i;
     int j;
     RopeQuad *pc;
@@ -1889,9 +1892,9 @@ void FUN_L07_00317cb0(char *moby, void *anchor) {
     rotation_input_vector.f[3] = 1.0f;
     rotation_axis.f[0] = 1.0f;
     rotation_axis.f[3] = 1.0f;
-    r = random_angle_radians();
-    build_look_at_matrix(D_L07_00161BA0, pc, pd, r);
-    D_L07_00161BB0 = r;
+    initial_swing_angle = random_angle_radians();
+    build_look_at_matrix(D_L07_00161BA0, pc, pd, initial_swing_angle);
+    D_L07_00161BB0 = initial_swing_angle;
     row_phase_step_gp = 0.006f;
     D_L07_00161B80 = 0;
     D_L07_00161B84 = 0;
@@ -2683,11 +2686,11 @@ extern struct Moby *break_spawn_shard(void *, void *, s32, f32, s32, f32, f32, f
 
 /* Breakable prop: when hit by moby 0x415 in state 8 or 0x452 in state 9 with hit kind 1.000123, scatters its shard count of pieces over its rotated extent, spawns debris and removes itself. */
 void FUN_L07_00319f48(struct Moby *moby) {
-    BreakableVars *v = (BreakableVars *)moby->pvars;
+    BreakableVars *breakable_vars = (BreakableVars *)moby->pvars;
     MobyHit *hit;
-    Vec4f ext, shard_position, vel;
+    Vec4f ext, shard_position, shard_velocity;
     f32 scale;
-    s32 cls;
+    s32 shard_class;
     s32 i;
 
     hit = find_moby_hit(moby, 0x30000, 0);
@@ -2695,23 +2698,23 @@ void FUN_L07_00319f48(struct Moby *moby) {
         && ((hit->moby->oclass == 0x415 && hit->moby->state == 8)
             || (hit->moby->oclass == 0x452 && hit->moby->state == 9))
         && hit->kind == 1.000123f) {
-        ext.x = v->size.x;
-        ext.y = v->size.y;
-        ext.z = v->size.z;
+        ext.x = breakable_vars->size.x;
+        ext.y = breakable_vars->size.y;
+        ext.z = breakable_vars->size.z;
         break_rotate(&ext, &ext, &moby->rot_row0);
-        for (i = 0; i < v->shards; i++) {
+        for (i = 0; i < breakable_vars->shards; i++) {
             shard_position.x = random_float_between(-ext.x, ext.x) * 0.5f;
             shard_position.y = random_float_between(-ext.y, ext.y) * 0.5f;
             shard_position.z = random_float_between(1.5f, ext.z);
             add_vector_xyz(&shard_position, &shard_position, &moby->pos);
-            break_rand_vec(&vel, D_0015ED6C * 5.0f, D_0015ED6C * 10.0f);
-            if (vel.z < 0.0f)
-                vel.z = -vel.z;
-            if (vel.z < D_0015ED6C + D_0015ED6C)
-                vel.z = vel.z + (D_0015ED6C + D_0015ED6C);
-            cls = i % 3 + 0x2B8;
+            break_rand_vec(&shard_velocity, D_0015ED6C * 5.0f, D_0015ED6C * 10.0f);
+            if (shard_velocity.z < 0.0f)
+                shard_velocity.z = -shard_velocity.z;
+            if (shard_velocity.z < D_0015ED6C + D_0015ED6C)
+                shard_velocity.z = shard_velocity.z + (D_0015ED6C + D_0015ED6C);
+            shard_class = i % 3 + 0x2B8;
             scale = random_float_between(0.41f, 0.5f);
-            break_spawn_shard(&shard_position, &vel, cls, scale, random_int_between(0x32, 0x50), 1.0f, 1.0f,
+            break_spawn_shard(&shard_position, &shard_velocity, shard_class, scale, random_int_between(0x32, 0x50), 1.0f, 1.0f,
                               0.75f, 0);
         }
         spawn_explosion(moby, &hit->pos, hit, 3.0f, 1.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);

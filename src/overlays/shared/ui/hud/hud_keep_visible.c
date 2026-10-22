@@ -120,7 +120,7 @@ void FUN_L00_00235ad8(HudElem *hud_element, int *x, int *y, int slide_index, int
 void FUN_L00_00235c80(HudElem *hud_element) {
     int *value = hud_element->unk0C;
     int digits;
-    int v, flags, width;
+    int decimal_quotient, flags, width;
     if (value && !((int)value & 3)) {
         hud_element->unk78 = *value;
         if (hud_element->unk08 < hud_element->unk78)
@@ -130,12 +130,12 @@ void FUN_L00_00235c80(HudElem *hud_element) {
         hud_element->unk78 = 99999;
         hud_element->unk74 = 99999;
     }
-    v = hud_element->unk08;
+    decimal_quotient = hud_element->unk08;
     digits = 0;
     flags = hud_element->flags;
     width = hud_element->h;
-    while (v >= 10) {
-        v /= 10;
+    while (decimal_quotient >= 10) {
+        decimal_quotient /= 10;
         digits++;
     }
     if (!(flags & 3) && (flags & 12)) {
@@ -276,17 +276,17 @@ extern void FUN_L00_0023aaa8(void *);
 
 void FUN_L00_00236128(HudElem *hud_element) {
     unsigned char *hud_counters = hud_element->cnt;
-    int v;
+    int sampled_value;
     int cap;
 
     if (hud_element->unk0C != 0) {
-        v = *hud_element->unk0C;
+        sampled_value = *hud_element->unk0C;
         cap = hud_element->unk08;
-        if (v < 0) {
-            v = 0;
+        if (sampled_value < 0) {
+            sampled_value = 0;
         }
-        hud_element->unk78 = v;
-        if (cap < v) {
+        hud_element->unk78 = sampled_value;
+        if (cap < sampled_value) {
             hud_element->unk78 = cap;
         }
     }

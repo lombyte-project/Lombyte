@@ -9,7 +9,7 @@ int enter_streamed_moby_screen(char *h) __asm__("FUN_00225588");
 
 int enter_streamed_moby_screen(char *screen_state) {
     char *preview_moby;
-    int r;
+    int stream_buffer_address;
     preview_moby = func_00226720_a(0x7A5);
     *(int *)(screen_state + 0x34) = 0;
     if (preview_moby != 0) {
@@ -29,9 +29,9 @@ int enter_streamed_moby_screen(char *screen_state) {
     } else {
         *(int *)(screen_state + 0x34) = 3;
     }
-    r = acquire_menu_stream_buffer(1);
-    *(int *)(screen_state + 0x3C) = r;
-    if (r == 0) {
+    stream_buffer_address = acquire_menu_stream_buffer(1);
+    *(int *)(screen_state + 0x3C) = stream_buffer_address;
+    if (stream_buffer_address == 0) {
         *(int *)(screen_state + 0x34) = 3;
     }
     return 0;

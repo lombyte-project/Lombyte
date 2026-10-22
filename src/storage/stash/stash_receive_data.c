@@ -1,31 +1,33 @@
 #include "types.h"
 #include "rnc/storage/stash.h"
-extern struct StashEntry D_001DD1D8[];
-extern u8 D_001DD1A8[];
-extern s32 LookupResourceEntry(s32);
 extern s32 sceSifCallRpc(void *, u32, u32, void *, s32, void *, s32, void (*)(void *), void *);
-s32 stash_receive_data(u8 *dst, u32 slot, s32 start, s32 count, u32 mode) __asm__("FUN_00232f20");
+s32 stash_receive_data(u8 *dst, u32 slot, s32 offset_qwords,
+                       s32 qword_count, u32 rpc_mode) __asm__("FUN_00232f20");
 
-s32 stash_receive_data(u8 *dst, u32 slot, s32 start, s32 count, u32 mode) {
-    s32 chunk_count;
-    s32 buf[4];
+s32 stash_receive_data(u8 *receive_destination, u32 slot, s32 offset_qwords,
+                       s32 qword_count, u32 rpc_mode) {
+    s32 chunk_qwords;
+    s32 request[4];
 
-    if (count == -1) {
-        count = LookupResourceEntry(slot);
+    if (qword_count == -1) {
+        qword_count = stash_get_reserved_qwords(slot);
     }
-    if (slot >= 64 || D_001DD1D8[slot].count == 0) {
+    if (slot >= STASH_SLOT_COUNT || stash_entries[slot].reserved_qwords == 0) {
         return -3;
     }
-    if (D_001DD1D8[slot].count < start + count) {
+    if (stash_entries[slot].reserved_qwords < offset_qwords + qword_count) {
         return -1;
     }
-    buf[0] = D_001DD1D8[slot].addr + start * 16;
-    while (count != 0) {
-        chunk_count = count > 0xFFFF ? 0xFFFF : count;
-        sceSifCallRpc(D_001DD1A8, 1, mode, buf, 16, dst, chunk_count * 16, 0, 0);
-        count -= chunk_count;
-        dst += chunk_count * 16;
-        buf[0] += chunk_count * 16;
+    request[0] = stash_entries[slot].iop_address + offset_qwords * STASH_QWORD_BYTES;
+    while (qword_count != 0) {
+        chunk_qwords = qword_count > STASH_MAX_FETCH_QWORDS
+                           ? STASH_MAX_FETCH_QWORDS : qword_count;
+        sceSifCallRpc(stash_rpc_client_address, STASH_RPC_FETCH, rpc_mode,
+                      request, STASH_QWORD_BYTES, receive_destination,
+                      chunk_qwords * STASH_QWORD_BYTES, 0, 0);
+        qword_count -= chunk_qwords;
+        receive_destination += chunk_qwords * STASH_QWORD_BYTES;
+        request[0] += chunk_qwords * STASH_QWORD_BYTES;
     }
     return 0;
 }

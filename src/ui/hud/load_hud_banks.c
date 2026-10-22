@@ -38,35 +38,35 @@ void load_hud_banks(void) __asm__("FUN_00202a98");
 
 void load_hud_banks(void) {
     struct HudFile *hud_file = level_root;
-    struct HudBank *b;
+    struct HudBank *hud_bank;
     void *bank_1_base;
     s32 i;
     u32 size;
     u32 chunk_1_qword_count;
     s32 vram;
-    u32 *dst;
+    u32 *aligned_chunk_size_cursor;
     s32 *chunk_size_cursor;
     struct HudState *hb;
-    struct Vram *v;
+    struct Vram *vram_state_ptr;
 
-    dst = D_0019A420;
+    aligned_chunk_size_cursor = D_0019A420;
     chunk_size_cursor = &hud_file->chunk[1].size;
     for (i = 0; i < 5; i++) {
-        *dst++ = ALIGN64(*chunk_size_cursor);
+        *aligned_chunk_size_cursor++ = ALIGN64(*chunk_size_cursor);
         chunk_size_cursor += 2;
     }
     size = ALIGN64(hud_file->chunk[0].size);
-    v = &D_001940C0;
-    b = hud_heap_alloc(size, 0, D_0015FBB0, 0x23A);
+    vram_state_ptr = &D_001940C0;
+    hud_bank = hud_heap_alloc(size, 0, D_0015FBB0, 0x23A);
     hb = &hud_state;
-    fast_mem_copy(b, (void *)(hud_file->chunk[0].offset + (s32)hud_file), size);
-    hb->header.bank = b;
-    hb->anim_defs = (struct HudAnimDef *)((u8 *)b + b->off4);
-    vram = v->base + 0x60000;
-    hb->frame_refs = (struct HudFrameRef *)((u8 *)b + b->off8);
-    hb->palette_pages = (struct HudTexPage *)((u8 *)b + b->offC);
-    hb->image_pages = (struct HudTexPage *)((u8 *)b + b->off10);
-    if (b->has54) {
+    fast_mem_copy(hud_bank, (void *)(hud_file->chunk[0].offset + (s32)hud_file), size);
+    hb->header.bank = hud_bank;
+    hb->anim_defs = (struct HudAnimDef *)((u8 *)hud_bank + hud_bank->off4);
+    vram = vram_state_ptr->base + 0x60000;
+    hb->frame_refs = (struct HudFrameRef *)((u8 *)hud_bank + hud_bank->off8);
+    hb->palette_pages = (struct HudTexPage *)((u8 *)hud_bank + hud_bank->offC);
+    hb->image_pages = (struct HudTexPage *)((u8 *)hud_bank + hud_bank->off10);
+    if (hud_bank->has54) {
         chunk_1_qword_count = ALIGN64(hud_file->chunk[1].size) >> 4;
         load_compressed_hud_bank(0, vram);
         hb->header.bank->unk94 = stash_send_data((void *)(hud_file->chunk[1].offset + (s32)hud_file), chunk_1_qword_count, chunk_1_qword_count, D_0015FBC0);

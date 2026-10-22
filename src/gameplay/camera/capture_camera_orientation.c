@@ -14,22 +14,22 @@ extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, vo
 void capture_camera_orientation(void) __asm__("FUN_001ec710");
 
 void capture_camera_orientation(void) {
-    struct Hero *g = &hero;
-    char *r = cam_trans_state;
-    char local0[16];
-    char local1[16];
-    char local2[16];
+    struct Hero *hero_state = &hero;
+    char *camera_transition_state = cam_trans_state;
+    char orbit_reference_direction[16];
+    char orbit_yaw_side_direction[16];
+    char orbit_axis[16];
 
-    fast_vec_normalize(local0, (char *)g->moby + 0xC0, 1.0f);
-    fast_vec_normalize(local1, (char *)g->moby + 0xD0, 1.0f);
-    fast_vec_normalize(local2, (char *)g->moby + 0xE0, 1.0f);
+    fast_vec_normalize(orbit_reference_direction, (char *)hero_state->moby + 0xC0, 1.0f);
+    fast_vec_normalize(orbit_yaw_side_direction, (char *)hero_state->moby + 0xD0, 1.0f);
+    fast_vec_normalize(orbit_axis, (char *)hero_state->moby + 0xE0, 1.0f);
 
-    qcopy(r + 0x90, local0);
-    qcopy(r + 0xA0, local2);
+    qcopy(camera_transition_state + 0x90, orbit_reference_direction);
+    qcopy(camera_transition_state + 0xA0, orbit_axis);
 
-    compute_camera_angles((float *)(r + 0x70), r + 0xC0, (char *)&g->motion.pos, local0, local1, local2);
+    compute_camera_angles((float *)(camera_transition_state + 0x70), camera_transition_state + 0xC0, (char *)&hero_state->motion.pos, orbit_reference_direction, orbit_yaw_side_direction, orbit_axis);
 
-    qcopy(r + 0xB0, r + 0xD0);
+    qcopy(camera_transition_state + 0xB0, camera_transition_state + 0xD0);
 }
 extern void fast_vec_normalize(void *dst, void *src, float len) __asm__("FUN_001f9bf8");
 

@@ -50,16 +50,16 @@ extern char D_L01_00161100 __attribute__((sda));
 extern int D_L01_0015F5D8 __attribute__((sda));
 extern short D_L01_0015F400 __attribute__((sda));
 void FUN_L01_002aea70(char *vendor_moby, int lvl) {
-    struct Hero *g = &hero;
+    struct Hero *hero_state = &hero;
     char *vendor_screen_state = D_L01_001CA940;
     char *relocated_address_block = D_L01_0016CCE0;
     char *sc;
-    char *c2;
-    struct Hero *g2;
+    char *relocated_address_source_block;
+    struct Hero *hero_moby_owner;
     struct MusicStreamState *music_state;
     struct MusicStreamState *qq;
     int adjusted_address_base;
-    int r;
+    int level_table_pair_index;
     snd_pause_all_sounds_in_group(0x1D);
     music_pause(0);
     snd_flush_sound_commands_alt();
@@ -73,8 +73,8 @@ void FUN_L01_002aea70(char *vendor_moby, int lvl) {
     FUN_L00_0023aef8();
     FUN_L00_002039a0();
     hero_set_state(100, 1);
-    *(char *)&g->unk20AC = 1;
-    *(char *)&g->unk20A5 = 1;
+    *(char *)&hero_state->unk20AC = 1;
+    *(char *)&hero_state->unk20A5 = 1;
     FUN_L00_00232fe8();
     transform_vector_by_basis(sc, &D_L01_00161100, vendor_moby + 0xC0);
     add_vector_xyz(sc, sc, vendor_moby + 0x10);
@@ -87,15 +87,15 @@ void FUN_L01_002aea70(char *vendor_moby, int lvl) {
     calculate_dma_transfer_address();
     adjusted_address_base = D_L01_001611CC + (int)0xFFFC0000;
     *(int *)(relocated_address_block + 0x58) = D_L01_00174280[1] + adjusted_address_base;
-    r = D_L01_001CA4A0[lvl];
+    level_table_pair_index = D_L01_001CA4A0[lvl];
     *(int *)(relocated_address_block + 0x5C) = D_L01_00174280[2] + adjusted_address_base;
     D_L01_0015F3FC = 1.0f;
     D_L01_001611CC = adjusted_address_base;
     *(int *)&D_L01_0015F400 = 0;
     FUN_L00_0020fca8(0, 0);
-    g->pending_item[0] = lvl;
+    hero_state->pending_item[0] = lvl;
     select_world_object_resource_tables(D_L01_00179F40[lvl].f10, -1);
-    FUN_L00_002454c8(r);
+    FUN_L00_002454c8(level_table_pair_index);
     music_state = &music_stream_state;
     music_state->queued_secondary_track = 0x2734;
     parse_space_scene_chunk(0);
@@ -103,8 +103,8 @@ void FUN_L01_002aea70(char *vendor_moby, int lvl) {
         sound_update();
         sceGsSyncV_alt(0);
     }
-    c2 = D_L01_0016CCE0;
-    g2 = &hero;
-    FUN_L00_00207330(*(int *)(c2 + 0x17C), ((int)g2->moby));
+    relocated_address_source_block = D_L01_0016CCE0;
+    hero_moby_owner = &hero;
+    FUN_L00_00207330(*(int *)(relocated_address_source_block + 0x17C), ((int)hero_moby_owner->moby));
     continue_audio_stream_if_ready();
 }

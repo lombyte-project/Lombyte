@@ -91,7 +91,7 @@ void init_moby_instance(void *moby_mem, int oClass) __asm__("FUN_0020c5f0");
 void init_moby_instance(void *moby_mem, int oClass) {
     MobyI *moby_instance = (MobyI *)moby_mem;
     unsigned char resident_class_slot;
-    int idx;
+    int resident_pool_slot_index;
     MobyIClass *pClass;
 
     fill_transfer_words(moby_instance, 0, 0x100);
@@ -105,9 +105,9 @@ void init_moby_instance(void *moby_mem, int oClass) {
     moby_instance->unkA6 = oClass;
     moby_instance->unk38 = 0x40404000000000L;
     moby_instance->unk36 = 0x7F80;
-    idx = ((char *)moby_instance - (char *)resident_object_pool) >> 8;
-    moby_instance->unkA8 = idx << 16;
-    moby_instance->unkAC = idx;
+    resident_pool_slot_index = ((char *)moby_instance - (char *)resident_object_pool) >> 8;
+    moby_instance->unkA8 = resident_pool_slot_index << 16;
+    moby_instance->unkAC = resident_pool_slot_index;
     moby_instance->unk7E = 0;
     moby_instance->unk7C = 0xFF;
     moby_instance->unkA0 = 0x7F;

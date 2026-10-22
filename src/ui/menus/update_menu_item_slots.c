@@ -16,7 +16,7 @@ s32 update_menu_item_slots(struct MenuScreen *menu) {
     s16 id;
     s32 *slots;
     s32 *scan;
-    s32 cur;
+    s32 slot_cursor_after_input;
     s32 cursor_or_scaled_frame_quotient;
     int index;
     int start_index;
@@ -34,8 +34,8 @@ s32 update_menu_item_slots(struct MenuScreen *menu) {
         cursor_or_scaled_frame_quotient = menu->data.slots.cursor;
         menu->data.slots.cursor = (cursor_or_scaled_frame_quotient + 7) % 8;
     }
-    cur = menu->data.slots.cursor;
-    if (cur != start_index) {
+    slot_cursor_after_input = menu->data.slots.cursor;
+    if (slot_cursor_after_input != start_index) {
         allocate_voice_for_target_entry(1, 0x11, menu->moby);
     }
     if (id != 0) {

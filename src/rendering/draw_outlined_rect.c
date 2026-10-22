@@ -2,7 +2,7 @@
 extern void draw_rect_overlay(s32, s32, s32, s32, u64) __asm__("func_001F52A0");
 void draw_outlined_rect(s32 x, s32 y, s32 w, s32 h, s32 color) __asm__("FUN_001f6060");
 
-void draw_outlined_rect(s32 x, s32 y, s32 w, s32 x_end, s32 color) {
+void draw_outlined_rect(s32 x, s32 y, s32 x_start, s32 x_end, s32 color) {
     s32 fill;
     s32 x_in;
     s32 x_off;
@@ -20,11 +20,11 @@ void draw_outlined_rect(s32 x, s32 y, s32 w, s32 x_end, s32 color) {
     s32 h_off;
 
     fill = (color & 0xFF000000) | 4;
-    draw_rect_overlay(x, y, w, x_end, fill);
+    draw_rect_overlay(x, y, x_start, x_end, fill);
     x_in = x + 1;
     x_off = x - 5;
-    w_in = w + 3;
-    w_left = w - 1;
+    w_in = x_start + 3;
+    w_left = x_start - 1;
     h_out = x_end + 5;
     h_top = h_out;
     h_in = x_end - 3;
@@ -35,10 +35,10 @@ void draw_outlined_rect(s32 x, s32 y, s32 w, s32 x_end, s32 color) {
     y_in = y - 3;
     y_top = y_in;
     y_off = y + 1;
-    draw_rect_overlay(x_off, y_in, w_left, w + 1, color);
-    w_left2 = w - 3;
+    draw_rect_overlay(x_off, y_in, w_left, x_start + 1, color);
+    w_left2 = x_start - 3;
     h_off = x_end + 1;
-    draw_rect_overlay(x_out, y_off, w_left2, w - 5, color);
+    draw_rect_overlay(x_out, y_off, w_left2, x_start - 5, color);
     draw_rect_overlay(y - 1, y_off, w_left2, h_in, color);
     draw_rect_overlay(y_out, y + 5, w_in, h_off, color);
     draw_rect_overlay(x_out, y_out, x_end - 1, h_off, color);

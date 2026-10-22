@@ -17,20 +17,20 @@ unsigned char transition_update_movie_camera(void) {
     char *camera_keyframe_state = D_0018CB20;
     char *key = *(char **)(camera_keyframe_state + 0x54) + *(int *)(camera_keyframe_state + 0x38) * 32;
     unsigned char flag = key[0xC];
-    float *ang = (float *)(key + 0x10);
-    char *pos;
+    float *keyframe_rotation_angles = (float *)(key + 0x10);
+    char *active_camera_position;
     char *cam;
     float camera_rotation_matrix[16];
 
     view_tan_half_fov = 0.63f;
     update_view_context();
-    pos = D_00187080;
-    qcopy(pos, key);
+    active_camera_position = D_00187080;
+    qcopy(active_camera_position, key);
     sceVu0UnitMatrix(camera_rotation_matrix);
     SceVu0RotMatrixX(camera_rotation_matrix, camera_rotation_matrix, *(float *)(key + 0x10));
-    SceVu0RotMatrixY(camera_rotation_matrix, camera_rotation_matrix, ang[1]);
-    sceVu0RotMatrixZ(camera_rotation_matrix, camera_rotation_matrix, ang[2]);
-    cam = pos - 0x140;
+    SceVu0RotMatrixY(camera_rotation_matrix, camera_rotation_matrix, keyframe_rotation_angles[1]);
+    sceVu0RotMatrixZ(camera_rotation_matrix, camera_rotation_matrix, keyframe_rotation_angles[2]);
+    cam = active_camera_position - 0x140;
     *(float *)(cam + 0x350) = -camera_rotation_matrix[8];
     *(float *)(cam + 0x360) = -camera_rotation_matrix[0];
     *(float *)(cam + 0x370) = camera_rotation_matrix[4];

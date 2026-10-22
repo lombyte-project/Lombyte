@@ -18,16 +18,16 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
 void FUN_L05_00237488(float *out, float *smoothed_values, float step) {
     char *g = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
-    float v[2];
-    v[0] = -*(float *)(g + 0x1D20);
-    v[1] = *(float *)(g + 0x1D24);
-    approach_value(smoothed_values + 2, v[0], step);
+    float target_values[2];
+    target_values[0] = -*(float *)(g + 0x1D20);
+    target_values[1] = *(float *)(g + 0x1D24);
+    approach_value(smoothed_values + 2, target_values[0], step);
     if (smoothed_values[2] > 1.0f)
         smoothed_values[2] = 1.0f;
     if (smoothed_values[2] < -1.0f)
         smoothed_values[2] = -1.0f;
     out[0] = smoothed_values[2];
-    approach_value(smoothed_values + 1, v[1], step);
+    approach_value(smoothed_values + 1, target_values[1], step);
     if (smoothed_values[1] > 1.0f)
         smoothed_values[1] = 1.0f;
     if (smoothed_values[1] < -1.0f)
@@ -262,18 +262,18 @@ void FUN_L05_0023dc88(int i) {
         if (*restore_item_flag != 0) {
             int *r;
             int *rb;
-            int w;
+            int restored_item_id;
             *restore_item_flag = 0;
             rb = g->saved_item;
             r = rb + i;
-            w = *r;
-            if (w != 0 && w != *(int *)((char *)g + i * 0x50 + 0x10B8)) {
-                if (w == 0x26) {
-                    w = 0;
+            restored_item_id = *r;
+            if (restored_item_id != 0 && restored_item_id != *(int *)((char *)g + i * 0x50 + 0x10B8)) {
+                if (restored_item_id == 0x26) {
+                    restored_item_id = 0;
                 }
                 *r = 0;
-                ((int *)(D_00141660))[i] = w;
-                g->selected_item[i] = w;
+                ((int *)(D_00141660))[i] = restored_item_id;
+                g->selected_item[i] = restored_item_id;
                 if (i == 0) {
                     D_L05_00179F20[g->selected_item[0]].unk20 = 0x20;
                 }
@@ -501,8 +501,8 @@ float absolute_float(float input) __asm__("FUN_001f99c0");
 int FUN_L05_002515d0(void) {
     struct Hero *hero_ptr = &hero;
     struct Hero *depth_check_hero;
-    struct Hero *u;
-    int r;
+    struct Hero *collision_check_hero;
+    int water_state_requested;
     float ray_start[4];
     float ray_end[4];
     float water_surface_tolerance;
@@ -513,13 +513,13 @@ int FUN_L05_002515d0(void) {
     if (hero_ptr->state.current == 0x6F || hero_ptr->state.current == 0x6D || hero_ptr->state.current == 0x6E || hero_ptr->state.current == 0x6A) {
         return 0;
     }
-    r = 0;
+    water_state_requested = 0;
     if (hero_ptr->base_condition != 0) {
         if (hero_ptr->state.control_mode == 0x11) {
             if (hero_ptr->state.step != 1) {
                 if (0.0f < hero_ptr->motion.displacement.f[2]) {
                     if (hero_ptr->water_surface_z - 0.4f < hero_ptr->motion.pos.f[2]) {
-                        r = 1;
+                        water_state_requested = 1;
                     }
                 }
             }
@@ -531,14 +531,14 @@ int FUN_L05_002515d0(void) {
             if (absolute_float(hero_ptr->water_surface_z - (hero_ptr->motion.pos.f[2] + 0.45f)) < water_surface_tolerance) {
                 if (hero_ptr->state.control_mode != 4 || hero_ptr->unk41E != 0) {
                     if (0.8f < hero_ptr->unk22A4 && hero_ptr->motion.displacement.f[2] < 0.0f) {
-                        r = 1;
+                        water_state_requested = 1;
                     }
                 }
             }
             depth_check_hero = &hero;
             if (depth_check_hero->motion.pos.f[2] < depth_check_hero->water_surface_z - 0.8f) {
                 if (depth_check_hero->state.control_mode != 4 || depth_check_hero->unk41E != 0) {
-                    r = 1;
+                    water_state_requested = 1;
                 }
             }
         }
@@ -551,36 +551,36 @@ int FUN_L05_002515d0(void) {
     if (hero_ptr->state.current == 0x12) {
         if (hero_ptr->unk41E != 0) {
             if (hero_ptr->motion.pos.f[2] < hero_ptr->water_surface_z - 0.7f) {
-                r = 1;
+                water_state_requested = 1;
             }
         }
     }
-    u = &hero;
-    if (u->state.control_mode - 0x11 >= 2u && u->state.control_mode != 7 &&
-        u->state.control_mode != 0x14 && u->state.current != 0x12 &&
+    collision_check_hero = &hero;
+    if (collision_check_hero->state.control_mode - 0x11 >= 2u && collision_check_hero->state.control_mode != 7 &&
+        collision_check_hero->state.control_mode != 0x14 && collision_check_hero->state.current != 0x12 &&
         (frame_number & 0xF) == 0) {
         scale = 4.0f;
         if ((frame_number & 0x3F) == 0) {
             scale = 16.0f;
         }
         hero_get_collision_ray_endpoints(ray_start, ray_end, 0, scale, 1.3f);
-        if (func_L00_001EFFF0(ray_start, ray_end, 2, *(int *)&u->moby, 0) != 0) {
+        if (func_L00_001EFFF0(ray_start, ray_end, 2, *(int *)&collision_check_hero->moby, 0) != 0) {
             int hit_material = collision_hit_material();
-            u->ground_type = hit_material;
+            collision_check_hero->ground_type = hit_material;
             if ((short)hit_material == 0) {
                 ray_start[2] = D_L05_00174268 - 0.01f;
-                if (func_L00_001EFFF0(ray_start, ray_end, 2, *(int *)&u->moby, 0) == 0) {
+                if (func_L00_001EFFF0(ray_start, ray_end, 2, *(int *)&collision_check_hero->moby, 0) == 0) {
                     hero_set_state(0x34, 1);
                     return 1;
                 }
             }
         }
     }
-    if (r != 0) {
+    if (water_state_requested != 0) {
         hero_set_state(0x37, 1);
         FUN_L00_00216de8_c(3, 0);
     }
-    return r;
+    return water_state_requested;
 }
 #include "rnc/input/pad_state.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -1051,18 +1051,18 @@ extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_002325e0(int bank, int seq);
 
 void FUN_L05_00253850(void) {
-    struct Hero *g = &hero;
+    struct Hero *hero_ptr = &hero;
     int pad;
-    g->unk888 =
-        truncate_float_to_s32(FUN_L00_00232b90(60.0f, g->unk860, -1.0f));
-    if (g->unk88D != 0 && ((pad = *(int *)(D_0013CAE0)) & 0xF) != 0) {
-        g->unk88F = 0;
+    hero_ptr->unk888 =
+        truncate_float_to_s32(FUN_L00_00232b90(60.0f, hero_ptr->unk860, -1.0f));
+    if (hero_ptr->unk88D != 0 && ((pad = *(int *)(D_0013CAE0)) & 0xF) != 0) {
+        hero_ptr->unk88F = 0;
         if (pad & 8)
-            g->unk88F = 1;
+            hero_ptr->unk88F = 1;
         else if (pad & 1)
-            g->unk88F = 2;
+            hero_ptr->unk88F = 2;
         else if (pad & 2)
-            g->unk88F = 3;
+            hero_ptr->unk88F = 3;
         {
             struct Hero *h = &hero;
             int a = h->unk88F + 0x69;
@@ -1208,18 +1208,18 @@ void FUN_L05_00253b48(void) {
         while (third != 0) {
 
             if (*(s16 *)(third + 0xA6) == 0x1D6 && FUN_L00_001fefc8_c(third + 0xBC) != 0 && FUN_001f9b48(&hero.motion.unkD0, third + 0x10) < 1.5f) {
-                struct Hero *g = &hero;
+                struct Hero *hero_ptr = &hero;
                 third[0xBC] = scale_game_frames(300);
-                if (*(s32 *)((u8 *)g + 0x10B8) != 0x24) {
-                    *(s32 *)((u8 *)g + 0x20B8) = 0x24;
-                    g->unk20AC = 0;
+                if (*(s32 *)((u8 *)hero_ptr + 0x10B8) != 0x24) {
+                    *(s32 *)((u8 *)hero_ptr + 0x20B8) = 0x24;
+                    hero_ptr->unk20AC = 0;
                     FUN_L05_0023dc88(0);
-                    g->unk20AC = 1;
+                    hero_ptr->unk20AC = 1;
                 }
-                g->unk8CE++;
-                if (g->unk8CE > 3)
-                    g->unk8CE = 3;
-                *(s32 *)((u8 *)g + 0x20B8) = 0x24;
+                hero_ptr->unk8CE++;
+                if (hero_ptr->unk8CE > 3)
+                    hero_ptr->unk8CE = 3;
+                *(s32 *)((u8 *)hero_ptr + 0x20B8) = 0x24;
                 weapon_ammo_counts[36]++;
             }
             FUN_L00_002592b8((void **)&third, third, 0, 0);
@@ -1371,8 +1371,8 @@ void FUN_L05_00254358(float *out, float *rot) {
     clear_u64_value(rot);
     {
         float *selected_path_record = (float *)(path + best * 16);
-        float *b = (float *)(path + (best + 1) * 16);
-        rot[2] = fast_arc_tan_c(b[4] - selected_path_record[4], b[5] - selected_path_record[5]);
+        float *heading_target_path_record = (float *)(path + (best + 1) * 16);
+        rot[2] = fast_arc_tan_c(heading_target_path_record[4] - selected_path_record[4], heading_target_path_record[5] - selected_path_record[5]);
     }
 }
 extern int D_0015ED84_lui __asm__("D_0015ED84") __attribute__((section(".sdata")));
@@ -1436,7 +1436,7 @@ void FUN_L05_00254608(void) {
     int near;
     int j;
     int k;
-    int m;
+    int comparison_opponent_index;
     float ang;
     float dir;
 
@@ -1563,8 +1563,8 @@ void FUN_L05_00254608(void) {
         if (hero.unk89A > hero.unk7A0[k] || (hero.unk7A0[k] == hero.unk89A && hero.unk898 > hero.unk7B0[k])) {
             hero.unk7C0[k] = 2;
         }
-        for (m = 0; m < race_pvars->f40; m++) {
-            if (hero.unk7A0[k] < hero.unk7A0[m] || (hero.unk7A0[k] == hero.unk7A0[m] && hero.unk7B0[k] < hero.unk7B0[m])) {
+        for (comparison_opponent_index = 0; comparison_opponent_index < race_pvars->f40; comparison_opponent_index++) {
+            if (hero.unk7A0[k] < hero.unk7A0[comparison_opponent_index] || (hero.unk7A0[k] == hero.unk7A0[comparison_opponent_index] && hero.unk7B0[k] < hero.unk7B0[comparison_opponent_index])) {
                 hero.unk7C0[k]++;
             }
         }
@@ -1656,20 +1656,20 @@ void FUN_L05_00254608(void) {
 
 
 int FUN_L05_002551b8(void) {
-    unsigned char b = hero.unk8CE; // selected help mode
-    int r = 0x7F;
-    if (b == 0)
-        r = 0x55;
-    return r;
+    unsigned char animation_variant_selector = hero.unk8CE; // selected help mode
+    int animation_id = 0x7F;
+    if (animation_variant_selector == 0)
+        animation_id = 0x55;
+    return animation_id;
 }
 int FUN_L05_002551d0(void) {
     struct Hero *hero_ptr = &hero;
     int hero_variant_selector = hero_ptr->unk8CE;
     if (hero_ptr->unk884 == 0) {
-        int r = 0x7D;
+        int return_value = 0x7D;
         if (hero_variant_selector == 0)
-            r = 0x52;
-        return r;
+            return_value = 0x52;
+        return return_value;
     }
     { return hero_variant_selector == 0 ? 0x68 : 0x7E; }
 }
@@ -1817,13 +1817,13 @@ extern char D_L05_0017C068[];
 
 void FUN_L05_0025b538(void) {
     char *g = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
-    int v = *(int *)(g + 0x86C);
+    int path_owner_moby = *(int *)(g + 0x86C);
 
     *(int *)(g + 0x2278) = 0;
     *(int *)(g + 0x227C) = 0;
-    if (v != 0) {
+    if (path_owner_moby != 0) {
         if ((unsigned)(*(int *)(g + 0x208C) - 0x15) < 2) {
-            *(int *)(g + 0x2278) = v;
+            *(int *)(g + 0x2278) = path_owner_moby;
             *(int *)(g + 0x227C) = (int)D_L05_0017C068;
         }
     }

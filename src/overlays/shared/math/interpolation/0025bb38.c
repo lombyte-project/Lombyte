@@ -24,13 +24,13 @@ float FUN_L00_0025bb38(int rotation_direction, float x, float y) {
 }
 extern float FUN_L00_0025bb38_c(float, void *, float) __asm__("FUN_L00_0025bb38");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-void FUN_L00_0025bc00(float *current_angle, void *rotation_direction, float target_angle, float lim) {
-    float r = FUN_L00_0025bb38_c(target_angle, rotation_direction, *current_angle);
-    if (lim < r)
-        r = lim;
-    else if (r < -lim)
-        r = -lim;
-    *current_angle = fast_add_rotations(*current_angle, r);
+void FUN_L00_0025bc00(float *current_angle, void *rotation_direction, float target_angle, float angle_step_limit) {
+    float angle_step = FUN_L00_0025bb38_c(target_angle, rotation_direction, *current_angle);
+    if (angle_step_limit < angle_step)
+        angle_step = angle_step_limit;
+    else if (angle_step < -angle_step_limit)
+        angle_step = -angle_step_limit;
+    *current_angle = fast_add_rotations(*current_angle, angle_step);
     FUN_L00_0025bb38_c(target_angle, rotation_direction, *current_angle);
 }
 extern float FUN_L00_0025bb38_0025bc98(float, int, float) __asm__("FUN_L00_0025bb38");
@@ -40,7 +40,7 @@ extern float FUN_001fa580_0025bc98(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f99c0_0025bc98(float) __asm__("FUN_001f99c0");
 
 float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c);
-float FUN_L00_0025bc98(float *current_angle, float *angular_velocity, int rotation_direction, float x, float angle_error_gain, float b, float angular_velocity_limit) {
+float FUN_L00_0025bc98(float *current_angle, float *angular_velocity, int rotation_direction, float x, float angle_error_gain, float angular_velocity_damping, float angular_velocity_limit) {
     float angle_error;
     if (rotation_direction == 2) {
         if ((0.0f < x && *current_angle < 0.0f) || (x < 0.0f && 0.0f < *current_angle)) {
@@ -52,7 +52,7 @@ float FUN_L00_0025bc98(float *current_angle, float *angular_velocity, int rotati
         }
     }
     angle_error = FUN_L00_0025bb38_0025bc98(x, rotation_direction, *current_angle);
-    FUN_L00_0025b798_0025bc98(angular_velocity, angle_error, angle_error_gain, b, angular_velocity_limit);
+    FUN_L00_0025b798_0025bc98(angular_velocity, angle_error, angle_error_gain, angular_velocity_damping, angular_velocity_limit);
     angle_error = FUN_L00_0025bb38_0025bc98(x, rotation_direction, *current_angle = FUN_001fa580_0025bc98(*current_angle, *angular_velocity));
     if (FUN_001f99c0_0025bc98(angle_error) < angular_velocity_limit * 0.01f) {
         *current_angle = x;
@@ -69,23 +69,23 @@ extern float FUN_00213ed8_25be00(float, float, float *) __asm__("FUN_00213ed8");
 extern void FUN_L00_0025bc00_25be00(float *, void *, float, float) __asm__("FUN_L00_0025bc00");
 
 float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) __asm__("FUN_L00_0025be00");
-float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) {
+float approach_angle(float *current_angle, float *angular_velocity, float target, float angular_velocity_step_limit, float accel, float maxv) {
     float angle_error;
-    float v;
+    float initial_angular_velocity;
     float stop;
     float target_angular_speed;
 
-    angle_error = FUN_001fa5c8_25be00(target, *cur);
-    v = *vel;
-    if (v * angle_error >= 0.0f && angle_error != 0.0f) {
-        stop = v * v / accel * 0.5f;
+    angle_error = FUN_001fa5c8_25be00(target, *current_angle);
+    initial_angular_velocity = *angular_velocity;
+    if (initial_angular_velocity * angle_error >= 0.0f && angle_error != 0.0f) {
+        stop = initial_angular_velocity * initial_angular_velocity / accel * 0.5f;
         if (FUN_001f99c0_25be00(angle_error) < stop) {
             maxv = FUN_001f99c0_25be00(angle_error);
-            maxv += FUN_001f99c0_25be00(*vel);
+            maxv += FUN_001f99c0_25be00(*angular_velocity);
             if (stop < maxv) {
-                FUN_00213ed8_25be00(0.0f, accel, vel);
+                FUN_00213ed8_25be00(0.0f, accel, angular_velocity);
             } else {
-                FUN_00213ed8_25be00(0.0f, accel * 1.1f, vel);
+                FUN_00213ed8_25be00(0.0f, accel * 1.1f, angular_velocity);
             }
         } else {
             target_angular_speed = FUN_001f9988_25be00((accel + accel) * angle_error);
@@ -93,21 +93,21 @@ float approach_angle(float *cur, float *vel, float target, float lim, float acce
                 target_angular_speed = maxv;
             }
             if (angle_error < 0.0f) {
-                FUN_L00_0025bc00_25be00(vel, 0, -target_angular_speed, lim);
+                FUN_L00_0025bc00_25be00(angular_velocity, 0, -target_angular_speed, angular_velocity_step_limit);
             } else {
-                FUN_L00_0025bc00_25be00(vel, 0, target_angular_speed, lim);
+                FUN_L00_0025bc00_25be00(angular_velocity, 0, target_angular_speed, angular_velocity_step_limit);
             }
         }
         maxv = FUN_001f99c0_25be00(angle_error);
-        if (!(FUN_001f99c0_25be00(*vel) < maxv)) {
-            *cur = target;
+        if (!(FUN_001f99c0_25be00(*angular_velocity) < maxv)) {
+            *current_angle = target;
             return angle_error;
         }
     } else {
-        FUN_L00_0025bc00_25be00(vel, 0, 0.0f, accel);
+        FUN_L00_0025bc00_25be00(angular_velocity, 0, 0.0f, accel);
     }
-    *cur = FUN_001fa580_25be00(*vel, *cur);
-    return *vel;
+    *current_angle = FUN_001fa580_25be00(*angular_velocity, *current_angle);
+    return *angular_velocity;
 }
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
@@ -132,18 +132,18 @@ unsigned int FUN_L00_0025bfe0(float r, float g, float b, float high_byte_compone
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D0E0), where it is exact; names translated to the US level program. */
 
 /* Swaps a/b, b/c and c/a as bits 1, 2 and 4 of mask select. */
-void FUN_L00_0025c088(int *red_channel, int *b, int *blue_channel, int mask) {
+void FUN_L00_0025c088(int *red_channel, int *green_channel, int *blue_channel, int mask) {
     int x, y;
     if (mask & 1) {
-        x = *b;
+        x = *green_channel;
         y = *red_channel;
         *red_channel = x;
-        *b = y;
+        *green_channel = y;
     }
     if (mask & 2) {
         x = *blue_channel;
-        y = *b;
-        *b = x;
+        y = *green_channel;
+        *green_channel = x;
         *blue_channel = y;
     }
     if (mask & 4) {
@@ -159,18 +159,18 @@ extern void FUN_L00_0025c088(int *, int *, int *, int);
 
 /* Splits colour c into bytes, passes the low three through 0025c088 with mask, and repacks them. */
 unsigned FUN_L00_0025c0e8(unsigned c, int mask);
-unsigned FUN_L00_0025c0e8(unsigned c, int mask) {
-    int v[3];
+unsigned FUN_L00_0025c0e8(unsigned packed_color, int mask) {
+    int rgb_channels[3];
     unsigned preserved_high_byte;
     unsigned repacked_color;
     if (mask == 0)
-        return c;
-    v[0] = c & 0xFF;
-    v[1] = ((int)(c & 0xFF00)) >> 8;
-    v[2] = (c >> 16) & 0xFF;
-    preserved_high_byte = c >> 24;
-    FUN_L00_0025c088(&v[0], &v[1], &v[2], mask);
-    repacked_color = (preserved_high_byte << 24) | (v[2] << 16);
-    repacked_color |= v[1] << 8;
-    return repacked_color | v[0];
+        return packed_color;
+    rgb_channels[0] = packed_color & 0xFF;
+    rgb_channels[1] = ((int)(packed_color & 0xFF00)) >> 8;
+    rgb_channels[2] = (packed_color >> 16) & 0xFF;
+    preserved_high_byte = packed_color >> 24;
+    FUN_L00_0025c088(&rgb_channels[0], &rgb_channels[1], &rgb_channels[2], mask);
+    repacked_color = (preserved_high_byte << 24) | (rgb_channels[2] << 16);
+    repacked_color |= rgb_channels[1] << 8;
+    return repacked_color | rgb_channels[0];
 }

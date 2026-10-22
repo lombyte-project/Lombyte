@@ -25,7 +25,7 @@ extern s32 D_0012FBB8[]; /* current_mallinfo.arena / sbrked_mem */
 #define MINSIZE                16
 #define DEFAULT_TRIM_THRESHOLD ((unsigned long)(64 * 1024))
 #define malloc_getpagesize     4096
-#define MORECORE(x)            _sbrk_r(ptr, (x))
+#define MORECORE(x)            _sbrk_r(reent_context, (x))
 #define MORECORE_FAILURE       ((void *)-1)
 #define chunksize(p)           ((p)->size & ~(SIZE_SZ - 1))
 #define set_head(p, s)         ((p)->size = (s))
@@ -38,25 +38,25 @@ extern s32 D_0012FBB8[]; /* current_mallinfo.arena / sbrked_mem */
 #define sbrk_base  (D_0012FBA0[0])
 #define sbrked_mem (D_0012FBB8[0])
 
-s32 _malloc_trim_r(struct _reent *ptr, u32 pad) {
+s32 _malloc_trim_r(struct _reent *reent_context, u32 pad) {
     s64 top_size;
     s64 extra;
     u8 *current_brk;
     u8 *new_brk;
     u64 pagesz = malloc_getpagesize;
 
-    noop_core_utility(ptr);
+    noop_core_utility(reent_context);
 
     top_size = chunksize(top);
     extra = ((top_size - pad - MINSIZE + (pagesz - 1)) / pagesz - 1) * pagesz;
 
     if (extra < (s64)pagesz) {
-        noop_core_utility_secondary(ptr);
+        noop_core_utility_secondary(reent_context);
         return 0;
     } else {
         current_brk = (u8 *)MORECORE(0);
         if (current_brk != (u8 *)(top) + top_size) {
-            noop_core_utility_secondary(ptr);
+            noop_core_utility_secondary(reent_context);
             return 0;
         } else {
             new_brk = (u8 *)MORECORE(-extra);
@@ -68,13 +68,13 @@ s32 _malloc_trim_r(struct _reent *ptr, u32 pad) {
                     set_head(top, top_size | 1);
                 }
                 check_chunk(top);
-                noop_core_utility_secondary(ptr);
+                noop_core_utility_secondary(reent_context);
                 return 0;
             } else {
                 set_head(top, (top_size - extra) | 1);
                 sbrked_mem -= (u32)extra;
                 check_chunk(top);
-                noop_core_utility_secondary(ptr);
+                noop_core_utility_secondary(reent_context);
                 return 1;
             }
         }

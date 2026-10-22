@@ -27,13 +27,13 @@ extern s32 EnableInterrupts(void);
 s32 _waitBdecOut(MpegDec *decoder) {
     s32 cb1[8];
     s32 cb2[8];
-    s32 ret;
+    s32 bdec_succeeded;
     s32 intr;
     u32 bp;
     s64 top;
     u32 rest;
 
-    ret = 1;
+    bdec_succeeded = 1;
     _waitIpuIdle(decoder);
     if (*D4_QWC != 0 && !(*IPU_CTRL & 0x4000)) {
         do {
@@ -66,8 +66,8 @@ s32 _waitBdecOut(MpegDec *decoder) {
         if (intr) {
             EnableInterrupts();
         }
-        ret = 0;
+        bdec_succeeded = 0;
         *D4_QWC = 0;
     }
-    return ret;
+    return bdec_succeeded;
 }

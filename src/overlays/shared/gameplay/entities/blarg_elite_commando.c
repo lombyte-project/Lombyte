@@ -25,7 +25,7 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
     if (moby != 0) {
         char *data;
         float xy_length;
-        float b;
+        float elevation_angle;
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
         moby[0x31] = 1;
@@ -40,8 +40,8 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
         *(int *)(data + 0x10) = 0;
         *(float *)(moby + 0x48) = fast_arc_tan(pos[0], pos[1]);
         xy_length = vector_length_xy(pos);
-        b = fast_arc_tan(xy_length, pos[2]);
-        *(float *)(moby + 0x44) = -b;
+        elevation_angle = fast_arc_tan(xy_length, pos[2]);
+        *(float *)(moby + 0x44) = -elevation_angle;
         moby[0x31] = 0;
         *(unsigned short *)(moby + 0x34) |= 1;
     }
@@ -96,8 +96,8 @@ void rocket_update(char *rocket_moby) {
     build_spherical_offset(desired, *(float *)(rocket_data + 0x24), yaw, pitch);
     if (tick_countdown_32_alt((int *)(rocket_data + 0x20)) == 0) {
         float blend_ticks_remaining = convert_integer_to_float(*(int *)(rocket_data + 0x20));
-        float b = convert_integer_to_float(*(int *)(rocket_data + 0x30));
-        lerp_vector(blend, desired, rocket_data, blend_ticks_remaining / b);
+        float blend_duration_ticks = convert_integer_to_float(*(int *)(rocket_data + 0x30));
+        lerp_vector(blend, desired, rocket_data, blend_ticks_remaining / blend_duration_ticks);
         add_vector_xyz(next, rocket_moby + 0x10, blend);
         *(float *)(rocket_moby + 0x48) = fast_arc_tan(blend[0], blend[1]);
         *(float *)(rocket_moby + 0x44) = -fast_arc_tan(vector_length_xy(blend), blend[2]);
@@ -125,7 +125,7 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern float D_L16_001613E0 __attribute__((sda));
 extern float D_L16_001613E4 __attribute__((sda));
 
-char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int blend_duration_ticks, float unused) {
+char *FUN_L16_002a0dc0(char *owner, char *initial_movement_vector, void *pos, void *vel, int blend_duration_ticks, float unused) {
     char *spawned_moby = (char *)func_0020D348_m(0x32);
     char *moby_data;
     float len, x, random_angle_radians, y;
@@ -138,11 +138,11 @@ char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int blend_d
         *(float *)(spawned_moby + 0x2C) = *(float *)(spawned_moby + 0x2C) * 3.0f;
         qcopy(spawned_moby + 0x10, pos);
         moby_data = *(char **)(spawned_moby + 0x78);
-        qcopy(moby_data, vec);
+        qcopy(moby_data, initial_movement_vector);
         qcopy(moby_data + 0x10, vel);
         *(int *)(moby_data + 0x30) = blend_duration_ticks;
         *(int *)(moby_data + 0x20) = blend_duration_ticks;
-        len = fast_vec_length(vec);
+        len = fast_vec_length(initial_movement_vector);
         x = D_L16_001613E0;
         *(float *)(moby_data + 0x24) = len;
         random_angle_radians = random_float_between_alt(-x, x) * DEG_TO_RAD;
@@ -150,8 +150,8 @@ char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int blend_d
         *(float *)(moby_data + 0x28) = random_angle_radians;
         *(float *)(moby_data + 0x2C) = random_float_between_alt(0.0f, y) * DEG_TO_RAD;
         *(int *)(moby_data + 0x34) = 0;
-        *(float *)(spawned_moby + 0x48) = fast_arc_tan(*(float *)vec, *(float *)(vec + 4));
-        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(vec), *(float *)(vec + 8));
+        *(float *)(spawned_moby + 0x48) = fast_arc_tan(*(float *)initial_movement_vector, *(float *)(initial_movement_vector + 4));
+        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(initial_movement_vector), *(float *)(initial_movement_vector + 8));
         spawned_moby[0x31] = 0;
         *(unsigned short *)(spawned_moby + 0x34) |= 1;
     }
@@ -720,7 +720,7 @@ void FUN_L16_002d3dc0(char *moby, void *owner, void *position, char *vector) {
 
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L16_002d3de0(struct Moby *moby, int arg) {
+void FUN_L16_002d3de0(struct Moby *moby, int return_countdown_ticks) {
     char *commando_data = (char *)moby->pvars;
     if (moby->state == 10) {
         moby->state = 1;
@@ -731,7 +731,7 @@ void FUN_L16_002d3de0(struct Moby *moby, int arg) {
         moby->flags &= 0xFFFE;
         moby->collision = moby->pclass->collision;
         moby->flags |= 0x1000;
-        *(short *)(commando_data + 0x2DC) = arg;
+        *(short *)(commando_data + 0x2DC) = return_countdown_ticks;
         *(float *)(commando_data + 0x2BC) = moby->pos.z;
         qcopy(commando_data + 0x2C0, &moby->pos);
         *(float *)(commando_data + 0x2D4) = frame_time * 5.0f;
@@ -751,11 +751,11 @@ float FUN_L16_002d3eb8(char *moby, float *target) {
     char *data = *(char **)(moby + 0x78);
     char *base_position = data + 0x2C0;
     float distance = fast_vec_dist(base_position);
-    float b = frame_time_sq * 4.0f;
+    float acceleration_braking_step = frame_time_sq * 4.0f;
     int zero[1];
     float vec[4];
     zero[0] = 0;
-    advance_accelerated_scalar((float *)zero, (float *)(data + 0x2D4), distance, b, b, frame_time * 5.0f);
+    advance_accelerated_scalar((float *)zero, (float *)(data + 0x2D4), distance, acceleration_braking_step, acceleration_braking_step, frame_time * 5.0f);
     fast_vec_sub(vec, target, base_position);
     fast_vec_normalize(vec, vec, *(float *)(data + 0x2D4));
     fast_vec_add(base_position, base_position, vec);
@@ -782,8 +782,8 @@ extern short *D_L16_001ABCC0[];
 extern float func_001F9878_timer(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_timer(float) __asm__("FUN_001fa6d0");
 
-void FUN_L16_002d3f78(void *arg, int lower, int upper) {
-    L16GroupMoby *source_moby = arg;
+void FUN_L16_002d3f78(void *group_source_moby, int lower, int upper) {
+    L16GroupMoby *source_moby = group_source_moby;
     L16GroupTimer *timer_data;
     short *group_entry;
     if (source_moby->group == 255) {
@@ -884,14 +884,14 @@ void FUN_L16_002d41f8(void *moby) {
         int remaining = count;
         do {
             float sample;
-            int *first_choice, *b, duration1, duration2;
+            int *first_choice, *second_choice, duration1, duration2;
             remaining--;
             sample = random_float_between_alt(8.0f, 10.0f);
             first = D_L16_001E8300;
             second = D_L16_001E8318;
             delay = sample * frame_time - range * frame_time;
             first_choice = &first.values[random_integer_below(6)];
-            b = &second.values[random_integer_below(6)];
+            second_choice = &second.values[random_integer_below(6)];
             {
                 int lo = scale_game_frames(15), hi = scale_game_frames(20);
                 duration1 = random_int_between(lo, hi);
@@ -900,7 +900,7 @@ void FUN_L16_002d41f8(void *moby) {
                 int lo = scale_game_frames(25), hi = scale_game_frames(30);
                 duration2 = random_int_between(lo, hi);
             }
-            FUN_L00_0026a9f0(origin, movement, *first_choice, *b, duration1, duration2, 0, 0, 400000.0f,
+            FUN_L00_0026a9f0(origin, movement, *first_choice, *second_choice, duration1, duration2, 0, 0, 400000.0f,
                              delay);
         } while (remaining != 0);
     }

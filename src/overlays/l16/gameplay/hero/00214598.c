@@ -2223,13 +2223,13 @@ void FUN_L16_00214598(void) {
                 }
             }
             if (hero.unk590 != 0 && hero.unk5A4 <= scale_game_frames(48)) {
-                f32 u;
+                f32 previous_path_blend_fraction;
                 subtract_vector_xyz(&auxiliary_vector_scratch, &primary_vector_scratch, &v10);
                 hero.unk5A4++;
                 fast_vec_scale(&auxiliary_vector_scratch, &auxiliary_vector_scratch, (f32)hero.unk5A4 / (f32)scale_game_frames(48));
-                u = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
+                previous_path_blend_fraction = (f32)(hero.unk5A4 - 1) / (f32)scale_game_frames(48);
                 subtract_vector_xyz(&vector_scratch, &primary_vector_scratch, &v10);
-                fast_vec_scale(&vector_scratch, &vector_scratch, u);
+                fast_vec_scale(&vector_scratch, &vector_scratch, previous_path_blend_fraction);
                 hero.motion.pos.f[2] += auxiliary_vector_scratch.f[2] - vector_scratch.f[2];
                 add_vector_xyz(&vector_scratch, &v10, &auxiliary_vector_scratch);
                 subtract_vector_xyz(&auxiliary_vector_scratch, &vector_scratch, &hero.motion.pos);
@@ -2564,7 +2564,7 @@ void FUN_L16_00214598(void) {
     case 0x4C:
     case 0x5E:
     case 0x69: {
-        s32 t198;
+        s32 jump_frame_or_trail_mode;
         s32 jump_phase_frame_threshold;
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
             if (FUN_L00_00211870(10.0f) != 0) {
@@ -2591,12 +2591,12 @@ void FUN_L16_00214598(void) {
                 FUN_L00_00209a40(7, 0);
             }
         }
-        t198 = hero.state_timer;
+        jump_frame_or_trail_mode = hero.state_timer;
         jump_phase_frame_threshold = hero.unk420;
-        if (t198 == jump_phase_frame_threshold) {
+        if (jump_frame_or_trail_mode == jump_phase_frame_threshold) {
             qcopy(&hero.unk400, &hero.motion.pos);
         }
-        if (hero.unk418 != 0 || (t198 < jump_phase_frame_threshold && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
+        if (hero.unk418 != 0 || (jump_frame_or_trail_mode < jump_phase_frame_threshold && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
                             hero.state.current != 0x11 && hero.state.current != 0x1C && hero.state.current != 0x4C)) {
             f32 sv;
             turn_to(0, frame_scale_sq * 0.015f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
@@ -2667,8 +2667,8 @@ void FUN_L16_00214598(void) {
             FUN_L00_00215340();
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP || hero.state.current == 0xD) {
-            t198 = (scale_game_frames(12) < hero.state_timer) * 2;
-            FUN_L00_00262608(&hero.trail.pos[0], t198);
+            jump_frame_or_trail_mode = (scale_game_frames(12) < hero.state_timer) * 2;
+            FUN_L00_00262608(&hero.trail.pos[0], jump_frame_or_trail_mode);
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP && scale_game_frames(8) < hero.state_timer && hero.anim_frame < 28.0f) {
             s32 n;
@@ -2845,11 +2845,11 @@ void FUN_L16_00214598(void) {
     }
     case 0x56: {
         f32 len = vector_length_xy(&hero.motion.velocity);
-        f32 l2 = len;
+        f32 initial_planar_speed = len;
         if (hero.air_frames.s != 0) {
-            len = frame_scale * -0.00999999f * l2 + l2;
+            len = frame_scale * -0.00999999f * initial_planar_speed + initial_planar_speed;
         } else {
-            len = frame_scale * -0.07999998f * l2 + l2;
+            len = frame_scale * -0.07999998f * initial_planar_speed + initial_planar_speed;
         }
         FUN_L00_001ff600(len, &hero.motion.velocity, &hero.motion.velocity);
         hero.motion.velocity.f[2] = 0.0f;

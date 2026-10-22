@@ -33,10 +33,10 @@ struct PES_TBL {
 } __attribute__((packed));
 
 s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
-    struct PES_TBL tbl;
+    struct PES_TBL header_skip_bit_counts;
     s32 ctx;
     s32 flag1;
-    s32 len;  /* PES_header_data_length */
+    s32 pes_header_data_length;  /* PES_header_data_length */
     s32 base; /* (s32)bs->stamp, captured before the header fields */
     s64 now;  /* the same stamp, re-read at the sync point */
     s32 pts_dts_flags;   /* PTS_DTS_flags */
@@ -45,7 +45,7 @@ s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
 
     ctx = error_context;
     hdr->unk28 = (s32)bs->stamp;
-    tbl = *(struct PES_TBL *)D_001539C8;
+    header_skip_bit_counts = *(struct PES_TBL *)D_001539C8;
     _sysbitGet(bs, 0x18);
     hdr->unk0 = (s64)_sysbitGet(bs, 8) << 0x20;
     hdr->unk8 = _sysbitGet(bs, 0x10);
@@ -62,7 +62,7 @@ s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
         flag1 = _sysbitGet(bs, 1);
         header_skip_table_index = _sysbitGet(bs, 4);
         pes_extension_flag = _sysbitGet(bs, 1);
-        len = _sysbitGet(bs, 8);
+        pes_header_data_length = _sysbitGet(bs, 8);
         base = bs->stamp;
         if (pts_dts_flags & 2) {
             u32 a, b, c;
@@ -90,7 +90,7 @@ s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
             _sysbitGet(bs, 0x30);
         }
         if (header_skip_table_index != 0) {
-            _sysbitGet(bs, tbl.v[header_skip_table_index]);
+            _sysbitGet(bs, header_skip_bit_counts.v[header_skip_table_index]);
         }
         if (pes_extension_flag == 1) {
             s32 skip_128_bits_flag;
@@ -131,13 +131,13 @@ s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
         }
         now = bs->stamp;
         {
-            s32 delta = len - (s32)((now - base) >> 3);
+            s32 delta = pes_header_data_length - (s32)((now - base) >> 3);
             if (delta != 0) {
                 _sysbitJump(bs, delta);
             }
         }
         {
-            s32 n = hdr->unk8 - len;
+            s32 n = hdr->unk8 - pes_header_data_length;
             s32 payload_bytes_to_skip;
             hdr->unk24 = n - 3;
             hdr->unk20 = (s32)bs->stamp;

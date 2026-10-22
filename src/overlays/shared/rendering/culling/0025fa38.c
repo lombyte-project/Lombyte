@@ -19,7 +19,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 
 int FUN_L00_0025fa38(void *point, int i) {
     Vp point_offset;
-    Vp b;
+    Vp transformed_point_offset;
     char *volume_entry;
     if (i < 0) {
         return 0;
@@ -27,9 +27,9 @@ int FUN_L00_0025fa38(void *point, int i) {
     volume_entry = D_L00_001600FC + i * 128;
     subtract_vector_xyz(&point_offset, point, volume_entry + 0x30);
     point_offset.w = 0;
-    transform_vector_by_basis(&b, &point_offset, volume_entry + 0x40);
-    if (vector_length_xy(&b) < 1.0f) {
-        if (-1.0f <= b.z && b.z <= 1.0f) {
+    transform_vector_by_basis(&transformed_point_offset, &point_offset, volume_entry + 0x40);
+    if (vector_length_xy(&transformed_point_offset) < 1.0f) {
+        if (-1.0f <= transformed_point_offset.z && transformed_point_offset.z <= 1.0f) {
             return 1;
         }
     }
@@ -46,12 +46,12 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 /* True when p lies inside the unit box of D_L00_001600F4 entry idx. */
-int FUN_L00_0025faf0(float *point, int idx) {
+int FUN_L00_0025faf0(float *point, int volume_index) {
     float a[4] __attribute__((aligned(16)));
     float b[4] __attribute__((aligned(16)));
     char *volume_entry;
-    if (idx >= 0) {
-        volume_entry = (char *)D_L00_001600F4 + idx * 128;
+    if (volume_index >= 0) {
+        volume_entry = (char *)D_L00_001600F4 + volume_index * 128;
         subtract_vector_xyz(a, point, volume_entry + 0x30);
         a[3] = 0;
         transform_vector_by_basis(b, a, volume_entry + 0x40);

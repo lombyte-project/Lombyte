@@ -31,8 +31,8 @@ void FUN_L03_002de370(char *moby) {
     *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *(float *)(moby_data + 0x18));
     {
         float remaining_timer_value = convert_integer_to_float(*(int *)(moby_data + 0x24));
-        float b = convert_integer_to_float(*(int *)(moby_data + 0x20));
-        moby[0x23] = func_001FA898_r(remaining_timer_value * 255.0f / b);
+        float timer_scale_denominator = convert_integer_to_float(*(int *)(moby_data + 0x20));
+        moby[0x23] = func_001FA898_r(remaining_timer_value * 255.0f / timer_scale_denominator);
     }
     if (fast_dec_timer((int *)(moby_data + 0x24)) != 0) {
         mark_moby_for_removal(moby);
@@ -56,7 +56,7 @@ void FUN_L03_002e8628(char *cam) {
     CamSub *camera_subrecord = &(*(CamInfo **)(cam + 0x70))->sub;
     CamInfo *camera_info;
     char *ent;
-    int idx;
+    int level_table_entry_index;
     char *entry_subrecord;
     camera_subrecord->x4C = 1.5f;
     camera_subrecord->x40 = 0;
@@ -65,10 +65,10 @@ void FUN_L03_002e8628(char *cam) {
     camera_info->f4 = 0.02f;
     camera_info->f8 = 0.1f;
     camera_info->fC = 0;
-    idx = *(short *)(cam + 0x84);
-    ent = (char *)D_L03_0015EF50 + (idx << 5);
+    level_table_entry_index = *(short *)(cam + 0x84);
+    ent = (char *)D_L03_0015EF50 + (level_table_entry_index << 5);
     entry_subrecord = *(char **)(ent + 0x1C);
-    if (idx < 0) {
+    if (level_table_entry_index < 0) {
         RaiseKernelTrap();
     } else {
         camera_subrecord->x4C = *(float *)(entry_subrecord + 0x18);

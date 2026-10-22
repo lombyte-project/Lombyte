@@ -15,37 +15,37 @@ void format_menu_item_text(s32 idx, u8 *dst) __asm__("FUN_00208280");
 /* Builds the label of map icon idx (update_map_icons): its help text with
    "%b" replaced by the name of item label_item. */
 
-void format_menu_item_text(s32 idx, u8 *dst) {
-    u8 buf[0x10];
-    u8 *src;
+void format_menu_item_text(s32 map_icon_index, u8 *output_text_cursor) {
+    u8 replacement_text[0x10];
+    u8 *template_cursor;
     u8 *replacement_cursor;
 
-    src = get_help_message_text(level_map_selection.icons[idx].label_text_id);
-    replacement_cursor = buf;
-    if (src == 0) {
+    template_cursor = get_help_message_text(level_map_selection.icons[map_icon_index].label_text_id);
+    replacement_cursor = replacement_text;
+    if (template_cursor == 0) {
         return;
     }
-    while (*src != '\0' && *src != '%') {
-        *dst++ = *src++;
+    while (*template_cursor != '\0' && *template_cursor != '%') {
+        *output_text_cursor++ = *template_cursor++;
     }
-    if (*src == '\0') {
-        *dst = *src;
+    if (*template_cursor == '\0') {
+        *output_text_cursor = *template_cursor;
         return;
     }
-    src++;
-    if (*src == 'b') {
-        sprintf((char *)buf, D_0015FDA0, D_001DFFB0[level_map_selection.icons[idx].label_item].name);
+    template_cursor++;
+    if (*template_cursor == 'b') {
+        sprintf((char *)replacement_text, D_0015FDA0, D_001DFFB0[level_map_selection.icons[map_icon_index].label_item].name);
     } else {
-        sprintf((char *)buf, D_0015FDA8);
+        sprintf((char *)replacement_text, D_0015FDA8);
     }
-    src++;
+    template_cursor++;
     while (*replacement_cursor != '\0') {
-        *dst++ = *replacement_cursor++;
+        *output_text_cursor++ = *replacement_cursor++;
     }
-    while (*src != '\0') {
-        *dst++ = *src++;
+    while (*template_cursor != '\0') {
+        *output_text_cursor++ = *template_cursor++;
     }
-    *dst = '\0';
+    *output_text_cursor = '\0';
 }
 
 extern __typeof__(format_menu_item_text) func_00208280 __attribute__((alias("FUN_00208280")));

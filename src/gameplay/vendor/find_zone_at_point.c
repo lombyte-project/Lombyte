@@ -21,19 +21,19 @@ int find_zone_at_point(float x, float y, float z) {
     int ix = truncate_float_to_s32(x * 1024.0f);
     int iy = truncate_float_to_s32(y * 1024.0f);
     int iz = truncate_float_to_s32(z * 1024.0f);
-    ZoneBox *b = occl_cell_table;
+    ZoneBox *zone_bounds = occl_cell_table;
     int i;
 
-    for (i = 0; i < occl_cell_count; i++, b++) {
+    for (i = 0; i < occl_cell_count; i++, zone_bounds++) {
         char *zn;
         int cx;
         int cy;
         int bit;
 
-        if (ix < b->x || iy < b->y || iz < b->z) {
+        if (ix < zone_bounds->x || iy < zone_bounds->y || iz < zone_bounds->z) {
             continue;
         }
-        if (ix >= b->x + b->w || iy >= b->y + b->h || iz >= b->z + 0x800) {
+        if (ix >= zone_bounds->x + zone_bounds->w || iy >= zone_bounds->y + zone_bounds->h || iz >= zone_bounds->z + 0x800) {
             continue;
         }
         zn = D_00161190 + i * 0x1190;

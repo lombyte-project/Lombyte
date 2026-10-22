@@ -4,32 +4,32 @@
 void audio_dec_begin_put(struct AudioDec *dec, void **ptr1, s32 *size1, void **ptr2,
                          s32 *size2) __asm__("FUN_0023ad58");
 
-void audio_dec_begin_put(struct AudioDec *dec, void **ptr1, s32 *size1, void **ptr2, s32 *size2) {
+void audio_dec_begin_put(struct AudioDec *dec, void **first_destination, s32 *size1, void **second_destination, s32 *size2) {
     s32 writable_byte_count;
 
     if (dec->state == 0) {
         if (dec->strType != 4) {
-            *ptr1 = ((u8 *)&dec->hdr + dec->hdrCount);
+            *first_destination = ((u8 *)&dec->hdr + dec->hdrCount);
             *size1 = 0x28 - dec->hdrCount;
-            *ptr2 = dec->data;
+            *second_destination = dec->data;
             *size2 = dec->size;
         } else {
-            *ptr1 = dec->data;
+            *first_destination = dec->data;
             *size1 = dec->size;
-            *ptr2 = NULL;
+            *second_destination = NULL;
             *size2 = 0;
         }
     } else {
         writable_byte_count = dec->size - dec->count;
         if ((dec->size - dec->put) >= writable_byte_count) {
-            *ptr1 = dec->data + dec->put;
+            *first_destination = dec->data + dec->put;
             *size1 = writable_byte_count;
-            *ptr2 = NULL;
+            *second_destination = NULL;
             *size2 = 0;
         } else {
-            *ptr1 = dec->data + dec->put;
+            *first_destination = dec->data + dec->put;
             *size1 = dec->size - dec->put;
-            *ptr2 = dec->data;
+            *second_destination = dec->data;
             *size2 = writable_byte_count - (dec->size - dec->put);
         }
     }

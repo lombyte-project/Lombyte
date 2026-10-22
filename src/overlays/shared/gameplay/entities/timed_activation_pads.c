@@ -33,9 +33,6 @@ void FUN_L07_002f8058(unsigned char *moby) {
 /* Ported from rac1-decomp src/overlays/shared/vendor_002F9438.c (func_L07_0030D370) */
 #include "sda.h"
 
-
-
-
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int vector_distance_xy() __asm__("FUN_001f9b80");
 extern int set_identity_matrix() __asm__("FUN_001f9fc8");
@@ -67,19 +64,19 @@ void timed_activation_pads_update(unsigned char *moby) __asm__("FUN_L07_0030bf90
 void timed_activation_pads_update(unsigned char *moby)
 {
     enum {
-        PAD_FLASH_APPLY_GREEN = 0,
-        PAD_FLASH_APPLY_WHITE = 1,
-        PAD_INITIALIZE_FLASHING = 6,
-        PAD_UPDATE_FLASHING = 7,
-        PAD_RESET_TO_ACTIVATION_WAIT = 8
-    };
-    enum {
         PAD_INITIALIZE = 0,
         PAD_WAIT_FOR_ACTIVATION = 1,
         PAD_ADVANCE_TO_FLASH_ACTIVATION_GATE = 2,
         PAD_WAIT_TO_ENTER_FLASH_ACTIVATION_WAIT = 3,
         PAD_ENTER_FLASH_ACTIVATION_WAIT = 4,
-        PAD_WAIT_FOR_FLASH_ACTIVATION = 5
+        PAD_WAIT_FOR_FLASH_ACTIVATION = 5,
+        PAD_INITIALIZE_FLASHING = 0x6,
+        PAD_UPDATE_FLASHING = 0x7,
+        PAD_RESET_TO_ACTIVATION_WAIT = 0x8
+    };
+    enum {
+        PAD_FLASH_APPLY_GREEN = 0x0,
+        PAD_FLASH_APPLY_WHITE = 0x1
     };
     char *pad_data;
     char *activation_reference_data;
@@ -87,7 +84,7 @@ void timed_activation_pads_update(unsigned char *moby)
     float transposed_pad_rotation[16];
     int flag;
     int on;
-    int st;
+    int pad_state;
 
     if (moby == 0)
         return;
@@ -127,8 +124,8 @@ void timed_activation_pads_update(unsigned char *moby)
         }
     }
 
-    st = moby[0x20];
-    if ((unsigned int)(st - 2) < 4) {
+    pad_state = moby[0x20];
+    if ((unsigned int)(pad_state - 2) < 4) {
         if (moby[0xBC] == 1) {
             if (func_001F9908_30D370((int *)pad_data)) {
                 func_0022ED80_30D370(2, 0, (int)moby);
@@ -229,7 +226,6 @@ extern f32 vector_length_xyz_310df0(void *) __asm__("FUN_001f9af0");
 extern void scale_vector_xyz_310df0(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz_310df0(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void play_sound_310df0(s32, s32, void *) __asm__("FUN_0022da68");
-
 
 void door_update(u8 *moby) __asm__("FUN_L07_00310df0");
 void door_update(u8 *moby)

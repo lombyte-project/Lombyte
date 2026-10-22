@@ -128,8 +128,8 @@ void FUN_L13_002eac00(void *mobyp, void *pp) {
     char *moby = mobyp;
     char *starfighter_data = pp;
     float sv[4];
-    float f1;
-    int v;
+    float joint_to_hero_distance;
+    int voice_slot_index;
     char *voice_slot_entry;
     unsigned char c, attack_mode;
 
@@ -190,19 +190,19 @@ s3:
     if (((unsigned char *)moby)[0x20] == 5) {
         goto s308;
     }
-    v = *(int *)(starfighter_data + 0x11C);
-    if (v != -1) {
-        voice_slot_entry = ((char *)&D_0013E550) + v * 0x70;
+    voice_slot_index = *(int *)(starfighter_data + 0x11C);
+    if (voice_slot_index != -1) {
+        voice_slot_entry = ((char *)&D_0013E550) + voice_slot_index * 0x70;
         if (*(int *)(voice_slot_entry + 0x88) == (int)moby && ((unsigned char *)voice_slot_entry)[0x74]) {
-            release_voice_slot(v);
+            release_voice_slot(voice_slot_index);
         }
         *(int *)(starfighter_data + 0x11C) = -1;
     }
     moby_point_position(moby, 0x13, sv);
-    f1 = distance_xyz(sv, ((char *)&D_0013F3D0));
+    joint_to_hero_distance = distance_xyz(sv, ((char *)&D_0013F3D0));
     if (*(int *)(starfighter_data + 0x100) == 0) {
-        if (f1 < 100.0f) {
-          if (60.0f < f1) {
+        if (joint_to_hero_distance < 100.0f) {
+          if (60.0f < joint_to_hero_distance) {
             if (*(int *)(starfighter_data + 0xF8) != 0) {
                 return;
             }
@@ -1122,26 +1122,26 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_L00_00250df8(void *);
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L13_002ecd10(char *src, int arg, int id) {
+char *FUN_L13_002ecd10(char *parent_moby, int attachment_joint_index, int id) {
     char *moby = create_moby(id);
     if (moby != 0) {
         char *data;
-        float f = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)(src + 0x2C) /
-                  *(float *)(*(char **)(src + 0x24) + 0x24);
+        float f = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)(parent_moby + 0x2C) /
+                  *(float *)(*(char **)(parent_moby + 0x24) + 0x24);
         data = *(char **)(moby + 0x78);
         *(unsigned char *)(moby + 0x30) = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
         *(float *)(moby + 0x2C) = f;
-        *(int *)(data + 0x44) = arg;
-        moby_point_position(src, arg, moby + 0x10);
-        *(char **)(data + 0x3C) = src;
+        *(int *)(data + 0x44) = attachment_joint_index;
+        moby_point_position(parent_moby, attachment_joint_index, moby + 0x10);
+        *(char **)(data + 0x3C) = parent_moby;
         FUN_L00_00250df8(moby);
-        qcopy(moby + 0x40, src + 0x40);
-        *(OvlQuad *)(moby + 0xC0) = *(OvlQuad *)(src + 0xC0);
-        *(OvlQuad *)(moby + 0xD0) = *(OvlQuad *)(src + 0xD0);
-        *(OvlQuad *)(moby + 0xE0) = *(OvlQuad *)(src + 0xE0);
+        qcopy(moby + 0x40, parent_moby + 0x40);
+        *(OvlQuad *)(moby + 0xC0) = *(OvlQuad *)(parent_moby + 0xC0);
+        *(OvlQuad *)(moby + 0xD0) = *(OvlQuad *)(parent_moby + 0xD0);
+        *(OvlQuad *)(moby + 0xE0) = *(OvlQuad *)(parent_moby + 0xE0);
         *(int *)(data + 0x40) = scale_game_frames(0x258);
         FUN_L00_00250df8(moby);
     }
@@ -1414,12 +1414,12 @@ extern char D_00141CE4[];
 
 void FUN_L13_002f3778(struct Moby *moby) {
     char *data;
-    unsigned char *p;
+    unsigned char *menu_item_enable_base;
     moby->update_dist = 0xFF;
     data = (char *)moby->pvars;
     if (D_L13_00179710[0] == 0 && D_L13_00179710[9] == -1) {
-        unsigned int v = *(unsigned int *)(&hero.state.control_mode);
-        if ((v < 2 || v == 9) ? D_L13_0015F5C4 == 0 : 0) {
+        unsigned int hero_control_mode = *(unsigned int *)(&hero.state.control_mode);
+        if ((hero_control_mode < 2 || hero_control_mode == 9) ? D_L13_0015F5C4 == 0 : 0) {
             int idx = *(int *)(data + 4);
             char *linked_moby;
             if (idx != -1) {
@@ -1433,18 +1433,18 @@ void FUN_L13_002f3778(struct Moby *moby) {
                 }
             }
         join:
-            p = menu_item_enabled_115 + 0xB9;
-            if (p[0xB] != 0 || p[0xD] != 0) {
-                unsigned char *q = ((char *)&D_00141968);
-                unsigned int saturating_count = *(unsigned short *)(q + 0x378);
+            menu_item_enable_base = menu_item_enabled_115 + 0xB9;
+            if (menu_item_enable_base[0xB] != 0 || menu_item_enable_base[0xD] != 0) {
+                unsigned char *statistics_base = ((char *)&D_00141968);
+                unsigned int saturating_count = *(unsigned short *)(statistics_base + 0x378);
                 if (saturating_count <= 0xFFFE) {
-                    *(unsigned short *)(q + 0x378) = saturating_count + 1;
+                    *(unsigned short *)(statistics_base + 0x378) = saturating_count + 1;
                 }
-                if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(q + 0x37A)) {
-                    *(unsigned short *)(q + 0x37A) = scale_game_frames(D_0015EEA4) / 600;
+                if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(statistics_base + 0x37A)) {
+                    *(unsigned short *)(statistics_base + 0x37A) = scale_game_frames(D_0015EEA4) / 600;
                 }
-                *(unsigned int *)(q + 0x37C) =
-                    *(unsigned int *)(q + 0x37C) | (1 << current_level_index) | 0x80000000;
+                *(unsigned int *)(statistics_base + 0x37C) =
+                    *(unsigned int *)(statistics_base + 0x37C) | (1 << current_level_index) | 0x80000000;
             } else {
             direct:
                 if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)data) != 0) {
@@ -1506,11 +1506,11 @@ void FUN_L13_002f8880(char *moby) {
     };
     char *data = *(char **)(moby + 0x78);
     char *monitored_moby = 0;
-    int idx = *(int *)data;
+    int monitored_moby_index = *(int *)data;
     int found;
     int i;
-    if (idx != -1) {
-        monitored_moby = D_L13_0015FFD8_m + (idx << 8);
+    if (monitored_moby_index != -1) {
+        monitored_moby = D_L13_0015FFD8_m + (monitored_moby_index << 8);
     }
     switch (data[0x1C]) {
     case STATE_RELAY_INITIALIZE:

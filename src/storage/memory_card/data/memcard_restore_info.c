@@ -19,18 +19,18 @@ extern int validate_data_crc(char *) __asm__("func_0020AD38"); /* memcard_TestCh
    registers; re-indexing the entry per store keeps its daddu copies. */
 void memcard_restore_info(char *buf, int slot, int idx) __asm__("FUN_0020ae60");
 
-void memcard_restore_info(char *buf, int slot, int idx) {
-    D_0013D290[slot].e[idx].valid = validate_data_crc(buf) == 0;
-    buf += 0x10;
-    D_0013D290[slot].e[idx].a = *(int *)buf;
-    buf += 0xC;
-    D_0013D290[slot].e[idx].b = *(int *)buf;
-    buf += 0xC;
-    D_0013D290[slot].e[idx].c = *(int *)buf;
-    buf += 0xC;
-    D_0013D290[slot].e[idx].d = *(int *)buf;
-    buf += 0xC;
-    memcpy(D_0013D290[slot].e[idx].name, buf, 8);
+void memcard_restore_info(char *restore_data, int slot, int entry_index) {
+    D_0013D290[slot].e[entry_index].valid = validate_data_crc(restore_data) == 0;
+    restore_data += 0x10;
+    D_0013D290[slot].e[entry_index].a = *(int *)restore_data;
+    restore_data += 0xC;
+    D_0013D290[slot].e[entry_index].b = *(int *)restore_data;
+    restore_data += 0xC;
+    D_0013D290[slot].e[entry_index].c = *(int *)restore_data;
+    restore_data += 0xC;
+    D_0013D290[slot].e[entry_index].d = *(int *)restore_data;
+    restore_data += 0xC;
+    memcpy(D_0013D290[slot].e[entry_index].name, restore_data, 8);
 }
 
 extern __typeof__(memcard_restore_info) func_0020AE60 __attribute__((alias("FUN_0020ae60")));

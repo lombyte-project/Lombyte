@@ -145,7 +145,7 @@ void seashell_update(unsigned char *seashell_moby) {
     };
     int flag = 0;
     float z;
-    char *zero_vector, *pos, *vel;
+    char *zero_vector, *pos, *source_rotation;
     char *x = find_moby_hit(seashell_moby, 0x10000, 0);
     switch (seashell_moby[0x20]) {
     case SEASHELL_INITIALIZE:
@@ -165,10 +165,10 @@ void seashell_update(unsigned char *seashell_moby) {
         zero_vector = D_L07_0015F580;
         pos = seashell_moby + 0x10;
         FUN_L01_002787a0(seashell_moby);
-        vel = seashell_moby + 0x40;
-        FUN_L00_00263fd8(seashell_moby, 0x698, pos, vel, 0, 0, z, zero_vector, zero_vector, zero_vector);
-        FUN_L00_00263fd8(seashell_moby, 0x699, pos, vel, 0, 0, z, zero_vector, zero_vector, zero_vector);
-        FUN_L00_00263fd8(seashell_moby, 0x69a, pos, vel, 0, 0, z, zero_vector, zero_vector, zero_vector);
+        source_rotation = seashell_moby + 0x40;
+        FUN_L00_00263fd8(seashell_moby, 0x698, pos, source_rotation, 0, 0, z, zero_vector, zero_vector, zero_vector);
+        FUN_L00_00263fd8(seashell_moby, 0x699, pos, source_rotation, 0, 0, z, zero_vector, zero_vector, zero_vector);
+        FUN_L00_00263fd8(seashell_moby, 0x69a, pos, source_rotation, 0, 0, z, zero_vector, zero_vector, zero_vector);
         mark_moby_for_removal_c_c2(seashell_moby);
         break;
     }

@@ -284,11 +284,11 @@ void FUN_L08_002ea4c0(struct Moby *moby) {
     SwingGateVars *vars = (SwingGateVars *)moby->pvars;
     f32 progress = *(f32 *)D_L08_0015FFD8[vars->driver].pvars;
     Vec4 mat[4];
-    Vec4 off;
+    Vec4 gate_position_offset;
     f32 yaw;
 
-    off.q = 0;
-    off.f[2] = 30.0f;
+    gate_position_offset.q = 0;
+    gate_position_offset.f[2] = 30.0f;
     if (D_L08_0015F5C4 == 2) {
         moby->visible = 0;
         moby->flags |= 1;
@@ -326,8 +326,8 @@ void FUN_L08_002ea4c0(struct Moby *moby) {
         }
     }
     euler_rotation_matrix(mat, &moby->rot);
-    transform_vector(&off, &off, mat);
-    add_vector_xyz(&moby->pos, &vars->home, &off);
+    transform_vector(&gate_position_offset, &gate_position_offset, mat);
+    add_vector_xyz(&moby->pos, &vars->home, &gate_position_offset);
     if (progress == 1.0f && moby->oclass == 0x1D4) {
         D_0013D388[vars->flag + 0x30] = 1;
         moby->state = 2;
@@ -417,8 +417,8 @@ void FUN_L08_002f1548(struct Moby *moby) {
         DRAW_ELEMENTS_UPDATE = 1
     };
     int i;
-    float v[4];
-    float w[4];
+    float culling_sphere[4];
+    float distance_vector[4];
     float distance;
 
     switch (moby->state) {
@@ -446,17 +446,17 @@ void FUN_L08_002f1548(struct Moby *moby) {
         }
         break;
     case DRAW_ELEMENTS_UPDATE:
-        v[0] = *(float *)&D_L08_00161DC0;
-        v[1] = D_L08_00161DC4;
-        v[2] = D_L08_00161DC8;
-        v[3] = D_L08_00161DCC;
-        if (fast_bsphere_check((char *)v, 1000.0f) >= 0) {
-            w[0] = *(float *)&D_L08_00161DC0;
-            w[1] = D_L08_00161DC4;
-            w[2] = D_L08_00161DC8;
-            w[3] = 1.0f;
-            subtract_vector_xyz(w, D_L08_001675C0, w);
-            distance = vector_length_xyz(w);
+        culling_sphere[0] = *(float *)&D_L08_00161DC0;
+        culling_sphere[1] = D_L08_00161DC4;
+        culling_sphere[2] = D_L08_00161DC8;
+        culling_sphere[3] = D_L08_00161DCC;
+        if (fast_bsphere_check((char *)culling_sphere, 1000.0f) >= 0) {
+            distance_vector[0] = *(float *)&D_L08_00161DC0;
+            distance_vector[1] = D_L08_00161DC4;
+            distance_vector[2] = D_L08_00161DC8;
+            distance_vector[3] = 1.0f;
+            subtract_vector_xyz(distance_vector, D_L08_001675C0, distance_vector);
+            distance = vector_length_xyz(distance_vector);
             if (distance <= 84.0f) {
                 FUN_L08_002f12a0(0);
                 FUN_L08_002f1158(D_L08_001E8350, 0.52f, 0.62f, 0.06f, (void *)&D_L08_00161E28);
@@ -603,7 +603,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-float FUN_L08_002f5d98(float x, char *arg) {
+float FUN_L08_002f5d98(float x, char *sample_ring_data) {
     float sample_position = x * 8.0f;
     int i = func_001FA898_r(sample_position);
     float fr = sample_position - convert_integer_to_float(i);
@@ -612,7 +612,7 @@ float FUN_L08_002f5d98(float x, char *arg) {
     i = i % 8;
     j = i + 1;
     j = j % 8;
-    samples_base = arg + 0x90;
+    samples_base = sample_ring_data + 0x90;
     return *(float *)(samples_base - (-(i * 4))) * (1.0f - fr) + *(float *)(samples_base - (-(j * 4))) * fr;
 }
 #ifndef NON_MATCHING
@@ -1001,7 +1001,7 @@ void FUN_L08_002f70a0(struct Moby *moby) {
     Vec4 pos;
     f32 view, dist, fade;
     s32 hidden;
-    PointLight *l;
+    PointLight *point_light_slot;
     Vec4f *at;
     int i;
 
@@ -1064,10 +1064,10 @@ void FUN_L08_002f70a0(struct Moby *moby) {
                                             light_vars->intensity * convert_integer_to_float(light_vars->green) / 100.0f,
                                             light_vars->intensity * convert_integer_to_float(light_vars->blue) / 100.0f);
             } else {
-                l = &D_L08_00180AC0[light_vars->light];
-                l->red = light_vars->intensity * convert_integer_to_float(light_vars->red) / 100.0f;
-                l->green = light_vars->intensity * convert_integer_to_float(light_vars->green) / 100.0f;
-                l->blue = light_vars->intensity * convert_integer_to_float(light_vars->blue) / 100.0f;
+                point_light_slot = &D_L08_00180AC0[light_vars->light];
+                point_light_slot->red = light_vars->intensity * convert_integer_to_float(light_vars->red) / 100.0f;
+                point_light_slot->green = light_vars->intensity * convert_integer_to_float(light_vars->green) / 100.0f;
+                point_light_slot->blue = light_vars->intensity * convert_integer_to_float(light_vars->blue) / 100.0f;
             }
         }
     } else if (light_vars->light != -1) {

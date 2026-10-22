@@ -34,13 +34,13 @@ extern s32 game_language __asm__("D_0015ED88") MACRO_ADDR;
 void draw_subtitles(void) {
     Subtitle *subtitle;
     int lang;
-    int idx;
+    int language_text_slot;
 
     if (D_0018CB20.subs == 0) {
         return;
     }
     lang = game_language;
-    idx = (lang >= 2 && lang <= 5) ? lang - 1 : 0;
+    language_text_slot = (lang >= 2 && lang <= 5) ? lang - 1 : 0;
     for (subtitle = (Subtitle *)D_0018CB20.subs; subtitle->start >= 0; subtitle++) {
         if (D_0018CB20.time < subtitle->start) {
             continue;
@@ -50,23 +50,23 @@ void draw_subtitles(void) {
         }
         {
             short win[16];
-            short w, measured_text_height;
+            short measured_text_width, measured_text_height;
             int hw, hh;
 
             font_set_window(win, 0xC8, 0x208, 0x28, 0x1D8, 0x100, screen_extent.height - 0x38, 0x12,
                                 7);
-            font_print_window_regular(win, 0x80B0B0B0, D_0018CB20.subs + subtitle->text[idx], -1);
+            font_print_window_regular(win, 0x80B0B0B0, D_0018CB20.subs + subtitle->text[language_text_slot], -1);
             win[5] = screen_extent.height - 0x3C;
-            w = win[6];
+            measured_text_width = win[6];
             measured_text_height = win[7];
             hh = (measured_text_height >> 1) + 5;
-            hw = (w >> 1) + 10;
+            hw = (measured_text_width >> 1) + 10;
             if (win[5] + hh > screen_extent.height - 0x14) {
                 win[5] = screen_extent.height - 0x14 - hh;
             }
             draw_ui_frame(win[5] - hh, win[5] + hh, 0x100 - hw, 0x100 + hw, 0x60);
             win[9] &= ~4;
-            font_print_window_regular(win, 0x80B0B0B0, D_0018CB20.subs + subtitle->text[idx], -1);
+            font_print_window_regular(win, 0x80B0B0B0, D_0018CB20.subs + subtitle->text[language_text_slot], -1);
             return;
         }
     }

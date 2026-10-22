@@ -14,19 +14,19 @@ extern char *D_L07_001D1600[] __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 int get_target_sight(char *a, char *o, float best) __asm__("FUN_L07_002886d8");
 int get_target_sight(char *source_moby, char *sight_out, float best) {
-    struct Hero *g = &hero_lui;
+    struct Hero *hero_context = &hero_lui;
     char *target_moby;
     char *candidate_moby;
-    int res;
+    int target_selection_status;
     int i;
     int j;
     float candidate_metric;
 
-    target_moby = ((char *)g->moby);
-    res = 0;
-    if (g->state.control_mode == 0x18 || g->state.current == 0x72) {
+    target_moby = ((char *)hero_context->moby);
+    target_selection_status = 0;
+    if (hero_context->state.control_mode == 0x18 || hero_context->state.current == 0x72) {
         target_moby = 0;
-        res = 2;
+        target_selection_status = 2;
     }
     for (i = 1; i <= D_L07_001B08B0[0]; i++) {
         candidate_moby = level_mobys + (D_L07_001B08B0[i] << 8);
@@ -44,7 +44,7 @@ int get_target_sight(char *source_moby, char *sight_out, float best) {
         if (candidate_metric < best) {
             target_moby = candidate_moby;
             best = candidate_metric;
-            res = 1;
+            target_selection_status = 1;
         }
     }
     for (j = 0; j < 20; j++) {
@@ -63,17 +63,17 @@ int get_target_sight(char *source_moby, char *sight_out, float best) {
         if (candidate_metric < best) {
             target_moby = candidate_moby;
             best = candidate_metric;
-            res = 1;
+            target_selection_status = 1;
         }
     }
     if (target_moby != 0) {
         *(char **)(sight_out + 0x40) = target_moby;
         qcopy(sight_out, target_moby + 0x10);
         qcopy(sight_out + 0x10, target_moby + 0x40);
-        g = &hero_lui;
-        if (target_moby == ((char *)g->moby)) {
-            qcopy(sight_out + 0x20, &g->motion.unkC0);
-            qcopy(sight_out + 0x30, &g->motion.unkD0);
+        hero_context = &hero_lui;
+        if (target_moby == ((char *)hero_context->moby)) {
+            qcopy(sight_out + 0x20, &hero_context->motion.unkC0);
+            qcopy(sight_out + 0x30, &hero_context->motion.unkD0);
         } else {
             qcopy(sight_out + 0x30, sight_out);
             *(float *)(sight_out + 0x38) += 0.6f;
@@ -86,6 +86,6 @@ int get_target_sight(char *source_moby, char *sight_out, float best) {
         qzero(sight_out + 0x30);
         qzero(sight_out + 0x20);
     }
-    *(int *)(sight_out + 0x44) = res;
-    return res;
+    *(int *)(sight_out + 0x44) = target_selection_status;
+    return target_selection_status;
 }

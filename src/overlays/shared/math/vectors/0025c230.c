@@ -14,13 +14,13 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 /* Returns component d of c - a transformed by the matrix transpose_rotation_matrix builds from b. */
-float FUN_L00_0025c230(void *subtrahend_vector, void *b, void *minuend_vector, int component_index) {
+float FUN_L00_0025c230(void *subtrahend_vector, void *rotation_matrix_source, void *minuend_vector, int component_index) {
     float delta[4], transformed_delta[4], transposed_rotation_matrix[16];
-    float *w = transformed_delta;
+    float *transformed_delta_ptr = transformed_delta;
     subtract_vector_xyz(delta, minuend_vector, subtrahend_vector);
-    transpose_rotation_matrix(transposed_rotation_matrix, b);
-    transform_vector(w, delta, transposed_rotation_matrix);
-    return w[component_index];
+    transpose_rotation_matrix(transposed_rotation_matrix, rotation_matrix_source);
+    transform_vector(transformed_delta_ptr, delta, transposed_rotation_matrix);
+    return transformed_delta_ptr[component_index];
 }
 #define NOT_SDA
 
@@ -39,11 +39,11 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 /* Sets a to b plus c (normalised) scaled by s times the dot of c and b. */
 void FUN_L00_0025c2b0(void *a, void *b, void *c, float s);
-void FUN_L00_0025c2b0(void *destination_vector, void *b, void *direction_vector, float projection_scale) {
+void FUN_L00_0025c2b0(void *destination_vector, void *minuend_vector, void *direction_vector, float projection_scale) {
     Vq scaled_vector, normalized_vector;
     fast_vec_normalize(&normalized_vector, direction_vector, 1.0f);
-    fast_vec_scale(&scaled_vector, &normalized_vector, fast_vec_dot(&normalized_vector, b) * projection_scale);
-    subtract_vector_xyz(destination_vector, b, &scaled_vector);
+    fast_vec_scale(&scaled_vector, &normalized_vector, fast_vec_dot(&normalized_vector, minuend_vector) * projection_scale);
+    subtract_vector_xyz(destination_vector, minuend_vector, &scaled_vector);
 }
 
 #define NOT_SDA
@@ -67,11 +67,11 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
 void FUN_L00_0025c398(void *source_object, void *base_vector, void *point_source_mask) {
-    V4 buf[20];
+    V4 generated_points[20];
     float randomized_vector[4];
     int point_count, i;
 
-    point_count = FUN_L00_0025aca0(source_object, 20, buf, point_source_mask, 14.0f);
+    point_count = FUN_L00_0025aca0(source_object, 20, generated_points, point_source_mask, 14.0f);
     if (point_count == 0) {
         return;
     }
@@ -79,19 +79,19 @@ void FUN_L00_0025c398(void *source_object, void *base_vector, void *point_source
         float y = random_angle_radians();
         float z = random_angle_radians();
         unsigned char *flag = D_0013E520;
-        int randomized_frame_count, b;
+        int randomized_frame_count, randomized_record_value;
 
         build_spherical_offset(randomized_vector, frame_time * 1.8f, y, z);
         add_vector_xyz(randomized_vector, randomized_vector, base_vector);
         randomized_vector[2] += frame_time * 0.9f;
         if (flag[0x10]) {
             randomized_frame_count = scale_game_frames(random_int_between(20, 35));
-            b = random_int_between(40, 60);
-            FUN_L00_00269958(&buf[i], randomized_vector, 0x7000FFA0, 0xFF00, randomized_frame_count, 30, b, 1);
+            randomized_record_value = random_int_between(40, 60);
+            FUN_L00_00269958(&generated_points[i], randomized_vector, 0x7000FFA0, 0xFF00, randomized_frame_count, 30, randomized_record_value, 1);
         } else {
             randomized_frame_count = scale_game_frames(random_int_between(20, 35));
-            b = random_int_between(40, 60);
-            FUN_L00_00269958(&buf[i], randomized_vector, 0x7000A0FF, 0xFF, randomized_frame_count, 30, b, 1);
+            randomized_record_value = random_int_between(40, 60);
+            FUN_L00_00269958(&generated_points[i], randomized_vector, 0x7000A0FF, 0xFF, randomized_frame_count, 30, randomized_record_value, 1);
         }
     }
 }
@@ -122,26 +122,26 @@ float *FUN_002141f8_0025c558(void *) __asm__("FUN_002141f8");
 void FUN_002130d8_0025c558(void *, int, int, int, int) __asm__("FUN_002130d8");
 void FUN_00212f90_0025c558(void *, int, int, int) __asm__("FUN_00212f90");
 void trooper_start_knockback(u8 *a, B_25c558 *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
-void trooper_start_knockback(u8 *moby, B_25c558 *b, int animation_index, int d, int e, float knockback_angle) {
-    float *r;
-    b->f0 = FUN_001f9dc8_0025c558(knockback_angle) * b->f18;
-    b->f4 = FUN_001f9de0_0025c558(knockback_angle) * b->f18;
-    b->f8 = b->f1C;
-    b->fC = 1.0f;
-    b->f40 = FUN_001fa580_0025c558(knockback_angle, 3.1415927f);
-    b->w44 = 0;
-    b->h2C = FUN_001f96f8_0025c558(300);
-    b->h3E = 0;
-    b->b3C = 1;
-    r = FUN_002141f8_0025c558(moby);
-    if (r && *r == 0.0f) {
-        b->w24 |= 0x20;
+void trooper_start_knockback(u8 *moby, B_25c558 *knockback_state, int animation_index, int animation_timing_divisor, int e, float knockback_angle) {
+    float *moby_vars_record;
+    knockback_state->f0 = FUN_001f9dc8_0025c558(knockback_angle) * knockback_state->f18;
+    knockback_state->f4 = FUN_001f9de0_0025c558(knockback_angle) * knockback_state->f18;
+    knockback_state->f8 = knockback_state->f1C;
+    knockback_state->fC = 1.0f;
+    knockback_state->f40 = FUN_001fa580_0025c558(knockback_angle, 3.1415927f);
+    knockback_state->w44 = 0;
+    knockback_state->h2C = FUN_001f96f8_0025c558(300);
+    knockback_state->h3E = 0;
+    knockback_state->b3C = 1;
+    moby_vars_record = FUN_002141f8_0025c558(moby);
+    if (moby_vars_record && *moby_vars_record == 0.0f) {
+        knockback_state->w24 |= 0x20;
         *(int *)(moby + 0x94) = 0;
     }
-    if (b->w24 & 2)
-        FUN_002130d8_0025c558(moby, animation_index, e, d, 1);
+    if (knockback_state->w24 & 2)
+        FUN_002130d8_0025c558(moby, animation_index, e, animation_timing_divisor, 1);
     else
-        FUN_00212f90_0025c558(moby, animation_index, e, d);
+        FUN_00212f90_0025c558(moby, animation_index, e, animation_timing_divisor);
 }
 #include "rnc/math/vector.h"
 
@@ -198,13 +198,13 @@ int mine_fall(char *moby, char *st) {
     float predicted_query_position[4];
     float surface_normal[4];
     float normal_response_vector[4];
-    float f60, f64, f68, f6c;
+    float horizontal_motion_magnitude, larger_quadratic_root, smaller_quadratic_root, f6c;
     
     Vec4 *g;
     char *collision_metadata;
     int flags = 0;
 
-    float sc, f21, f20, f12, motion_or_record_value, r, rr, one;
+    float sc, f21, landing_prediction_divisor, f12, motion_or_record_value, r, rr, one;
     int result_count, i;
 
     *(float *)(st + 0x8) = *(float *)(st + 0x8) - *(float *)(st + 0x10);
@@ -214,10 +214,10 @@ int mine_fall(char *moby, char *st) {
         }
     }
 
-    f60 = vector_length_xy(st);
+    horizontal_motion_magnitude = vector_length_xy(st);
     motion_or_record_value = (*(short *)(st + 0x3E) == 2) ? 0.0f : *(float *)(st + 0x4C);
-    approach_value(&f60, motion_or_record_value, *(float *)(st + 0x14));
-    set_vector_length_xy((float *)st, (float *)st, f60);
+    approach_value(&horizontal_motion_magnitude, motion_or_record_value, *(float *)(st + 0x14));
+    set_vector_length_xy((float *)st, (float *)st, horizontal_motion_magnitude);
     if (*(float *)(st + 0x1C) < *(float *)(st + 0x8)) {
         *(float *)(st + 0x8) = *(float *)(st + 0x1C);
     }
@@ -276,16 +276,16 @@ int mine_fall(char *moby, char *st) {
                 *(int *)(moby + 0x58) = 0;
             } else {
                 float negative_half_gravity_step = *(float *)(st + 0x10) * -0.5f;
-                f20 = 60.0f;
-                result_count = FUN_L00_002595a0(&f64, &f68, negative_half_gravity_step, *(float *)(st + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - f21);
-                if (result_count > 0 && 0.0f < f64 && f64 < f20) {
-                    f20 = f64;
+                landing_prediction_divisor = 60.0f;
+                result_count = FUN_L00_002595a0(&larger_quadratic_root, &smaller_quadratic_root, negative_half_gravity_step, *(float *)(st + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - f21);
+                if (result_count > 0 && 0.0f < larger_quadratic_root && larger_quadratic_root < landing_prediction_divisor) {
+                    landing_prediction_divisor = larger_quadratic_root;
                 }
-                if (f20 < 0.0001f) {
-                    f20 = 0.0001f;
+                if (landing_prediction_divisor < 0.0001f) {
+                    landing_prediction_divisor = 0.0001f;
                 }
                 motion_or_record_value = compute_interpolated_record_value(moby);
-                rr = (*(float *)(st + 0x54) - motion_or_record_value) / f20;
+                rr = (*(float *)(st + 0x54) - motion_or_record_value) / landing_prediction_divisor;
                 if (2.0f < rr) {
                     rr = 2.0f;
                 } else if (rr < 0.0f) {

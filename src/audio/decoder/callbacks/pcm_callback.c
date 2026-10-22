@@ -17,15 +17,15 @@ extern void audio_dec_end_put(void *, s32) __asm__("func_0023AE28");
 s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) __asm__("FUN_0023b728");
 
 s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) {
-    void *ptr0;
-    s32 len0;
-    void *ptr1;
-    s32 len1;
+    void *first_destination;
+    s32 first_destination_byte_count;
+    void *second_destination;
+    s32 second_destination_byte_count;
     u8 *ps;
     u8 *end;
     s32 len;
     s32 first_source_byte_count;
-    s32 ret;
+    s32 copied_byte_count;
     s32 rest;
 
     len = cb->len - 4;
@@ -39,10 +39,10 @@ s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) {
         first_source_byte_count = len;
     }
     rest = len - first_source_byte_count;
-    audio_dec_begin_put(D_0016120C + 0xD9100, &ptr0, &len0, &ptr1, &len1);
-    ret = cpy2area(ptr0, len0, ptr1, len1, ps, first_source_byte_count, ab, rest);
-    audio_dec_end_put(D_0016120C + 0xD9100, ret);
-    return ret > 0;
+    audio_dec_begin_put(D_0016120C + 0xD9100, &first_destination, &first_destination_byte_count, &second_destination, &second_destination_byte_count);
+    copied_byte_count = cpy2area(first_destination, first_destination_byte_count, second_destination, second_destination_byte_count, ps, first_source_byte_count, ab, rest);
+    audio_dec_end_put(D_0016120C + 0xD9100, copied_byte_count);
+    return copied_byte_count > 0;
 }
 
 extern __typeof__(pcm_callback) func_0023B728 __attribute__((alias("FUN_0023b728")));

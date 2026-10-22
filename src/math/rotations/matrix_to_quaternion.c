@@ -9,10 +9,10 @@ extern QuatNext D_0015FFD8;
 void matrix_to_quaternion(void *arg0, void *arg1) __asm__("FUN_00214260");
 
 void matrix_to_quaternion(void *output_quaternion, void *rotation_matrix) {
-    float *q = output_quaternion;
+    float *quaternion_components = output_quaternion;
     float(*m)[4] = rotation_matrix;
     QuatNext next_axis_indices = D_0015FFD8;
-    float mat[3][3];
+    float packed_rotation_matrix[3][3];
     float trace;
     float quaternion_scale;
     int i, j, k;
@@ -20,38 +20,38 @@ void matrix_to_quaternion(void *output_quaternion, void *rotation_matrix) {
     trace = m[0][0] + m[1][1] + m[2][2];
     if (trace > 0.0f) {
         quaternion_scale = square_root(trace + 1.0f);
-        q[3] = quaternion_scale * 0.5f;
+        quaternion_components[3] = quaternion_scale * 0.5f;
         quaternion_scale = 0.5f / quaternion_scale;
-        q[0] = (m[2][1] - m[1][2]) * quaternion_scale;
-        q[1] = (m[0][2] - m[2][0]) * quaternion_scale;
-        q[2] = (m[1][0] - m[0][1]) * quaternion_scale;
+        quaternion_components[0] = (m[2][1] - m[1][2]) * quaternion_scale;
+        quaternion_components[1] = (m[0][2] - m[2][0]) * quaternion_scale;
+        quaternion_components[2] = (m[1][0] - m[0][1]) * quaternion_scale;
     } else {
-        mat[0][0] = m[0][0];
-        mat[0][1] = m[0][1];
-        mat[0][2] = m[0][2];
-        mat[1][0] = m[1][0];
-        mat[1][1] = m[1][1];
-        mat[1][2] = m[1][2];
-        mat[2][0] = m[2][0];
-        mat[2][1] = m[2][1];
-        mat[2][2] = m[2][2];
+        packed_rotation_matrix[0][0] = m[0][0];
+        packed_rotation_matrix[0][1] = m[0][1];
+        packed_rotation_matrix[0][2] = m[0][2];
+        packed_rotation_matrix[1][0] = m[1][0];
+        packed_rotation_matrix[1][1] = m[1][1];
+        packed_rotation_matrix[1][2] = m[1][2];
+        packed_rotation_matrix[2][0] = m[2][0];
+        packed_rotation_matrix[2][1] = m[2][1];
+        packed_rotation_matrix[2][2] = m[2][2];
         i = 0;
-        if (mat[1][1] > mat[0][0]) {
+        if (packed_rotation_matrix[1][1] > packed_rotation_matrix[0][0]) {
             i = 1;
         }
-        if (mat[2][2] > mat[i][i]) {
+        if (packed_rotation_matrix[2][2] > packed_rotation_matrix[i][i]) {
             i = 2;
         }
         j = next_axis_indices.next[i];
         k = next_axis_indices.next[j];
-        quaternion_scale = square_root(mat[i][i] - (mat[j][j] + mat[k][k]) + 1.0f);
-        q[i] = quaternion_scale * 0.5f;
+        quaternion_scale = square_root(packed_rotation_matrix[i][i] - (packed_rotation_matrix[j][j] + packed_rotation_matrix[k][k]) + 1.0f);
+        quaternion_components[i] = quaternion_scale * 0.5f;
         if (quaternion_scale != 0.0f) {
             quaternion_scale = 0.5f / quaternion_scale;
         }
-        q[3] = (mat[k][j] - mat[j][k]) * quaternion_scale;
-        q[j] = (mat[j][i] + mat[i][j]) * quaternion_scale;
-        q[k] = (mat[k][i] + mat[i][k]) * quaternion_scale;
+        quaternion_components[3] = (packed_rotation_matrix[k][j] - packed_rotation_matrix[j][k]) * quaternion_scale;
+        quaternion_components[j] = (packed_rotation_matrix[j][i] + packed_rotation_matrix[i][j]) * quaternion_scale;
+        quaternion_components[k] = (packed_rotation_matrix[k][i] + packed_rotation_matrix[i][k]) * quaternion_scale;
     }
 }
 

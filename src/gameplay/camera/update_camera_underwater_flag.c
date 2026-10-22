@@ -18,7 +18,7 @@ extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 void update_camera_underwater_flag(void) {
     char *cam = preview_camera;
     float probe_start[4];
-    float b[4];
+    float probe_end[4];
     int i;
 
     if (*(short *)(*(char **)(cam + 0x180) + 0x86) == 6 || game_mode_macro != 0) {
@@ -26,19 +26,19 @@ void update_camera_underwater_flag(void) {
         return;
     }
     qcopy(probe_start, cam + 0x140);
-    qcopy(b, cam + 0x140);
+    qcopy(probe_end, cam + 0x140);
     probe_start[2] += 0.75f;
-    b[2] -= 0.75f;
+    probe_end[2] -= 0.75f;
     i = 0;
-    while (i < 6 && collision_line(probe_start, b, 0x12, 0, 0) != 0) {
+    while (i < 6 && collision_line(probe_start, probe_end, 0x12, 0, 0) != 0) {
         if (collision_hit_material() == 0) {
             float submersion_height_threshold = resolve_camera_surface_height(D_00194120, 0) + 0.04f;
-            char *c2 = preview_camera;
+            char *preview_camera_state = preview_camera;
 
-            if (*(float *)(c2 + 0x148) < submersion_height_threshold) {
-                *(int *)(c2 + 0x394) = 1;
+            if (*(float *)(preview_camera_state + 0x148) < submersion_height_threshold) {
+                *(int *)(preview_camera_state + 0x394) = 1;
             } else {
-                *(int *)(c2 + 0x394) = 0;
+                *(int *)(preview_camera_state + 0x394) = 0;
             }
             return;
         }

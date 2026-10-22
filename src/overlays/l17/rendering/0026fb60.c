@@ -19,7 +19,7 @@ extern unsigned char *D_L17_001B2A54 __attribute__((section(".data")));
 unsigned char *FUN_L17_0026fb60(struct Moby *parent, void *pos, float *vec) {
     int r = func_002140B0_6fb60(5);
     unsigned char unscaled_header_value = func_001F9850_6fb60(r + 2);
-    unsigned char b = func_002140B0_6fb60(0xFF);
+    unsigned char header_byte_value = func_002140B0_6fb60(0xFF);
     unsigned char *record = func_00218928_6fb60(0x4F);
     if (record != 0) {
         char *record_data = (char *)record + 0x20;
@@ -38,7 +38,7 @@ unsigned char *FUN_L17_0026fb60(struct Moby *parent, void *pos, float *vec) {
         record[9] = func_001FA898_r_6fb60(1.0f) + 0x20;
         record[3] = 0x48;
         *(float *)(record + 0xC) = 42000.0f;
-        record[8] = b;
+        record[8] = header_byte_value;
         record[1] = 0;
         record[2] = *D_L17_001B2A54;
     }
@@ -57,7 +57,7 @@ extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r_q(float) __asm__("FUN_001fa6d0");
 
-unsigned char *FUN_L17_0026fdd0(char *pos, int mode, int step) {
+unsigned char *FUN_L17_0026fdd0(char *position_source, int mode, int step) {
     unsigned char *record;
     int remaining_steps;
     if (mode)
@@ -67,7 +67,7 @@ unsigned char *FUN_L17_0026fdd0(char *pos, int mode, int step) {
     if (remaining_steps >= 0) {
         record = FUN_L00_002678b8_q(0x50);
         if (record != 0) {
-            qcopy(record + 0x10, pos);
+            qcopy(record + 0x10, position_source);
             record[9] = func_001FA898_r_q(1.0f) + 0x70;
             *(int *)(record + 0x20) = mode;
             if (mode == 0) {

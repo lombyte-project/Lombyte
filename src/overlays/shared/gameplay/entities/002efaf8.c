@@ -25,9 +25,9 @@ extern int FUN_L00_002dbe20(void *);
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 0xE. */
 int FUN_L01_002efb98(char *moby) {
-    int r = FUN_L00_002dbe20(moby);
+    int helper_result = FUN_L00_002dbe20(moby);
     moby[0x20] = 0xe;
-    return r;
+    return helper_result;
 }
 typedef struct {
     char pad[0x78];
@@ -35,11 +35,11 @@ typedef struct {
 } T6;
 /* Returns the moby data pointer plus 0xC0, or 0 when either is null. */
 s32 FUN_L01_002efbc8(T6 *moby) {
-    s32 v;
+    s32 moby_data_address;
     if (moby != 0) {
-        v = moby->f;
-        if (v != 0) {
-            return v + 0xc0;
+        moby_data_address = moby->f;
+        if (moby_data_address != 0) {
+            return moby_data_address + 0xc0;
         }
         return 0;
     }
@@ -62,17 +62,17 @@ int FUN_L01_002f1c78(char *a) {
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 7. */
 int FUN_L01_002f1dc8(char *moby) {
-    int r = FUN_L00_002dbe20(moby);
+    int helper_result = FUN_L00_002dbe20(moby);
     moby[0x20] = 0x7;
-    return r;
+    return helper_result;
 }
 /* Returns the moby data pointer plus 0x60, or 0 when either is null. */
 s32 FUN_L01_002f1df8(T6 *moby) {
-    s32 v;
+    s32 moby_data_address;
     if (moby != 0) {
-        v = moby->f;
-        if (v != 0) {
-            return v + 0x60;
+        moby_data_address = moby->f;
+        if (moby_data_address != 0) {
+            return moby_data_address + 0x60;
         }
         return 0;
     }

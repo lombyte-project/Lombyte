@@ -176,32 +176,32 @@ extern unsigned char *FUN_L00_00272060(float *, int, float, float, float, int, i
 extern int rf_23e008(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_0023e008(void *moby) {
-    OvlQuad dir[1];
+    OvlQuad initial_velocity[1];
     OvlQuad old[1];
     float pos[4] __attribute__((aligned(16)));
     int i;
-    unsigned char *r;
+    unsigned char *particle;
     getpos_23e008(moby, 0, pos);
     for (i = 3; i >= 0; i--) {
         float particle_size_scale = rndf_23e008(0.15f, 0.5f);
         int k = rndi_23e008(2);
-        float azimuth_angle, b;
+        float azimuth_angle, elevation_angle;
         if (k == 0)
             k--;
         azimuth_angle = rnda_23e008();
-        b = rndf_23e008(0.34906584f, 1.53588974f);
-        dir_23e008(dir, rndf_23e008(0.05f, 0.2f) * frame_scale, azimuth_angle, b);
+        elevation_angle = rndf_23e008(0.34906584f, 1.53588974f);
+        dir_23e008(initial_velocity, rndf_23e008(0.05f, 0.2f) * frame_scale, azimuth_angle, elevation_angle);
         qcopy(old, pos);
         pos[0] += rnd_23e008(0.0f, 0.15f);
         pos[1] += rnd_23e008(0.0f, 0.15f);
         pos[2] += rnd_23e008(0.0f, 0.15f);
-        r = FUN_L00_00272060(pos, fr_23e008(0x3C), particle_size_scale * 0.1f, particle_size_scale, 0.009f, 0x7F7F2020, 0, k, dir);
-        if (r)
-            r[9] = rf_23e008(4.0f) + 0x70;
+        particle = FUN_L00_00272060(pos, fr_23e008(0x3C), particle_size_scale * 0.1f, particle_size_scale, 0.009f, 0x7F7F2020, 0, k, initial_velocity);
+        if (particle)
+            particle[9] = rf_23e008(4.0f) + 0x70;
         k = -k;
-        r = FUN_L00_00272060(pos, fr_23e008(0x3C), particle_size_scale * 0.07f, particle_size_scale * 0.7f, 0.009f, 0x7F7F7F7F, 1, k, dir);
-        if (r)
-            r[9] = rf_23e008(4.0f) + 0x70;
+        particle = FUN_L00_00272060(pos, fr_23e008(0x3C), particle_size_scale * 0.07f, particle_size_scale * 0.7f, 0.009f, 0x7F7F7F7F, 1, k, initial_velocity);
+        if (particle)
+            particle[9] = rf_23e008(4.0f) + 0x70;
     }
 }
 #include "eetypes.h"
@@ -243,7 +243,7 @@ u8 D_L15_00180C40[8][1024] = {0};
 u8 D_L16_00180AC0[8][1024] = {0};
 u8 D_L17_00180F40[8][1024] = {0};
 u8 D_L18_00181040[8][1024] = {0};
-int FUN_L00_0023e5e0(u128 *v, float radius, float b, int col) {
+int FUN_L00_0023e5e0(u128 *position, float radius, float b, int col) {
     int i;
     T_0023e5e0 *slot_state;
     P_0023e5e0 *parameter_entry;
@@ -256,7 +256,7 @@ int FUN_L00_0023e5e0(u128 *v, float radius, float b, int col) {
         return -1;
     slot_state = &D_L00_001804C0_0023e5e0[i];
     parameter_entry = &D_L00_001802C0_0023e5e0[i];
-    qcopy(&parameter_entry->pos, v);
+    qcopy(&parameter_entry->pos, position);
     parameter_entry->pos.f[3] = radius;
     parameter_entry->x = FUN_001fa6c0_0023e5e0(col & 0xFF) * 0.0078125f;
     parameter_entry->y = FUN_001fa6c0_0023e5e0((col >> 8) & 0xFF) * 0.0078125f;
@@ -287,7 +287,7 @@ extern T_0023e738 D_L00_001804C0_0023e738[] __asm__("D_L00_001804C0");
 extern P_0023e738 D_L00_001802C0_0023e738[] __asm__("D_L00_001802C0");
 void FUN_001f9810_0023e738(void *, int) __asm__("FUN_001f9810");
 int FUN_L00_0023e738(u128 *v, float a, float b_0023e738, float c, float d, float e);
-int FUN_L00_0023e738(u128 *v, float position_w, float b_0023e738, float c, float d, float e) {
+int FUN_L00_0023e738(u128 *position, float position_w, float b_0023e738, float color_component_x, float color_component_y, float color_component_z) {
     int i;
     T_0023e738 *slot_state;
     P_0023e738 *parameter_entry;
@@ -300,11 +300,11 @@ int FUN_L00_0023e738(u128 *v, float position_w, float b_0023e738, float c, float
         return -1;
     slot_state = &D_L00_001804C0_0023e738[i];
     parameter_entry = &D_L00_001802C0_0023e738[i];
-    qcopy(&parameter_entry->pos, v);
+    qcopy(&parameter_entry->pos, position);
     parameter_entry->pos.f[3] = position_w;
-    parameter_entry->x = c;
-    parameter_entry->y = d;
-    parameter_entry->z = e;
+    parameter_entry->x = color_component_x;
+    parameter_entry->y = color_component_y;
+    parameter_entry->z = color_component_z;
     parameter_entry->b_0023e738 = b_0023e738;
     FUN_001f9810_0023e738(slot_state, 0x30);
     slot_state->used = 1;

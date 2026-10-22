@@ -8,8 +8,8 @@ extern char D_00160068[];
 extern void DebugPrint(char *, ...);
 void set_sound_handle_id(u32 id, s64 arg) __asm__("FUN_00216b68");
 
-void set_sound_handle_id(u32 id, s64 arg) {
-    struct Handle *playback_record = (struct Handle *)(s32)arg;
+void set_sound_handle_id(u32 id, s64 playback_record_address) {
+    struct Handle *playback_record = (struct Handle *)(s32)playback_record_address;
 
     if (playback_record != 0) {
         if (playback_record->id != 0xFFFFFFFF) {

@@ -18,7 +18,7 @@ extern void debug_print(char *) __asm__("FUN_001e93b0");
 extern char D_L00_001E78B0[];
 extern s32 FUN_L00_001ee318_c(V *, s32 *, f32) __asm__("FUN_L00_001ee318");
 
-s32 *FUN_L00_001ee1b0(OvlQuad *v, f32 rad) {
+s32 *FUN_L00_001ee1b0(OvlQuad *input_point, f32 rad) {
     V query_point;
     V volume_delta;
     V *tp;
@@ -28,7 +28,7 @@ s32 *FUN_L00_001ee1b0(OvlQuad *v, f32 rad) {
     f32 f;
 
     tp = &query_point;
-    query_point.q = *v;
+    query_point.q = *input_point;
     i = truncate_float_to_s32(query_point.f[0] * 0.0625f);
     j = truncate_float_to_s32(query_point.f[1] * 0.0625f);
     if (i < 0 || j < 0 || i > 0x40 || j > 0x40) {
@@ -79,7 +79,7 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
     V_1ee318 endpoint_test_vector;
     V_1ee318 volume_delta;
     V_1ee318 l;
-    int r;
+    int is_inside_cylinder;
 
     query_point.q = pt->q;
     pt = &query_point;
@@ -98,14 +98,14 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
         unsigned char *e;
         e = D_L00_001600FC_1ee318;
         e += vol[5] << 7;
-        r = 0;
+        is_inside_cylinder = 0;
         FUN_001f9a28_1ee318(&volume_delta, pt, e + 0x30);
         volume_delta.i[3] = 0;
         FUN_001f9cf8_1ee318(&l, &volume_delta, e + 0x40);
         if (FUN_001f9b20_1ee318(&l) < 1.0f && -1.0f <= l.f[2] && l.f[2] <= 1.0f) {
-            r = 1;
+            is_inside_cylinder = 1;
         }
-        return r;
+        return is_inside_cylinder;
     }
     case VOLUME_TYPE_SPHERE: {
         unsigned char *e;

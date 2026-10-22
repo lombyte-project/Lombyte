@@ -1,7 +1,7 @@
 #include "types.h"
 void compose_bitmap_from_mask(u8 *dst, u8 *src_set, u8 *src_clear, u8 *mask) __asm__("FUN_002053d8");
 
-void compose_bitmap_from_mask(u8 *dst, u8 *src_set, u8 *src_clear, u8 *mask) {
+void compose_bitmap_from_mask(u8 *composed_bitmap, u8 *src_set, u8 *src_clear, u8 *mask) {
     s32 outer = 0;
     s32 limit = 0x7FFF;
     do {
@@ -14,10 +14,10 @@ void compose_bitmap_from_mask(u8 *dst, u8 *src_set, u8 *src_clear, u8 *mask) {
                 value = *src_set;
             else
                 value = *src_clear;
-            *dst = value;
+            *composed_bitmap = value;
             src_set += 1;
             src_clear += 1;
-            dst += 1;
+            composed_bitmap += 1;
             count -= 1;
             bit <<= 1;
         } while (count >= 0);

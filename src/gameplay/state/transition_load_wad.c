@@ -166,15 +166,15 @@ void transition_load_wad(void)
   s32 i;
   s32 j;
   s32 k;
-  s32 cnt;
+  s32 sound_entry_count_or_moby_class_slot;
   s32 v;
   s32 *out;
   int new_var;
-  WadTex *tex;
+  WadTex *texture_definition_entries;
   s32 new_var4;
-  WadClass20 *c20;
+  WadClass20 *render_class_entry;
   u8 *new_var3;
-  WadClass30 *c30;
+  WadClass30 *shrub_class_entry;
   WadSound *snd;
   TextEntry *te;
   WadTex *new_var2;
@@ -211,73 +211,73 @@ void transition_load_wad(void)
   special_material_template[0] = (special_texture_state_base_bits | u) | (((s64) (-1)) << 63);
   special_material_template[1] = 0xFFA0000000E0;
   special_material_template[2] = 0x0040000400004000;
-  tex = (WadTex *) (((u8 *) hdr) + hdr->x34);
+  texture_definition_entries = (WadTex *) (((u8 *) hdr) + hdr->x34);
   if ((D_00160E94 = hdr->n30) > 0)
   {
     do
     {
-      tfrag_texture_size_table[i] = (((s32) base) + tex[i].offset) + (log2dim(tex[i].x4) << 28);
+      tfrag_texture_size_table[i] = (((s32) base) + texture_definition_entries[i].offset) + (log2dim(texture_definition_entries[i].x4) << 28);
       i++;
     }
     while (i < D_00160E94);
   }
   k = 0;
-  tex = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x3C));
+  texture_definition_entries = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x3C));
   if ((D_0015FF08 = hdr->n38) > 0)
   {
     do
     {
-      D_001B5980[k] = (((s32) base) + tex[k].offset) + (log2dim(tex[k].x4) << 28);
+      D_001B5980[k] = (((s32) base) + texture_definition_entries[k].offset) + (log2dim(texture_definition_entries[k].x4) << 28);
       k++;
     }
     while (k < D_0015FF08);
   }
   k = 0;
-  tex = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x44));
+  texture_definition_entries = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x44));
   if ((D_00160F64 = hdr->n40) > 0)
   {
     do
     {
-      D_001E2600[k] = (((s32) base) + tex[k].offset) + (log2dim(tex[k].x4) << 28);
+      D_001E2600[k] = (((s32) base) + texture_definition_entries[k].offset) + (log2dim(texture_definition_entries[k].x4) << 28);
       k++;
     }
     while (k < D_00160F64);
   }
   k = 0;
-  tex = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x4C));
+  texture_definition_entries = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x4C));
   if ((D_001603EC = hdr->n48) > 0)
   {
     do
     {
-      D_001D84B0[k] = (((s32) base) + tex[k].offset) + (log2dim(tex[k].x4) << 28);
+      D_001D84B0[k] = (((s32) base) + texture_definition_entries[k].offset) + (log2dim(texture_definition_entries[k].x4) << 28);
       k++;
     }
     while (k < D_001603EC);
   }
   initialize_tfrag_render_data(data + hdr->x10, ((u8 *) hdr) + hdr->x34);
   relocate_sky_definition(data + hdr->x14);
-  c20 = (WadClass20 *) (((u8 *) hdr) + hdr->x1C);
+  render_class_entry = (WadClass20 *) (((u8 *) hdr) + hdr->x1C);
   D_0015FF00 = 0;
   registered_object_render_class_count = 0;
   registered_shrub_render_class_count = 0;
   for (k = 0; k < hdr->n18; k++)
   {
-    register_moby_class((c20->offset != 0) ? (data + c20->offset) : (0), ((u8 *) hdr) + hdr->x3C, c20->x10, c20->x4);
-    c20++;
+    register_moby_class((render_class_entry->offset != 0) ? (data + render_class_entry->offset) : (0), ((u8 *) hdr) + hdr->x3C, render_class_entry->x10, render_class_entry->x4);
+    render_class_entry++;
   }
 
-  c20 = (WadClass20 *) (((u8 *) hdr) + hdr->x24);
+  render_class_entry = (WadClass20 *) (((u8 *) hdr) + hdr->x24);
   for (k = 0; k < hdr->n20; k++)
   {
-    register_object_render_class(data + c20->offset, ((u8 *) hdr) + hdr->x44, c20->x10, c20->x4);
-    c20++;
+    register_object_render_class(data + render_class_entry->offset, ((u8 *) hdr) + hdr->x44, render_class_entry->x10, render_class_entry->x4);
+    render_class_entry++;
   }
 
-  c30 = (WadClass30 *) (((u8 *) hdr) + hdr->x2C);
+  shrub_class_entry = (WadClass30 *) (((u8 *) hdr) + hdr->x2C);
   for (k = 0; k < hdr->n28; k++)
   {
-    register_shrub_render_class(data + c30->offset, ((u8 *) hdr) + hdr->x4C, c30->x10, c30->x20, c30->x4);
-    c30++;
+    register_shrub_render_class(data + shrub_class_entry->offset, ((u8 *) hdr) + hdr->x4C, shrub_class_entry->x10, shrub_class_entry->x20, shrub_class_entry->x4);
+    shrub_class_entry++;
   }
 
   level_texture_payload_address = (s32) (data + hdr->x68);
@@ -301,18 +301,18 @@ void transition_load_wad(void)
   D_0018CB20.x5C = (D_001940C0.x1C += 0x40000);
   D_001940C0.x1C += 0x40000;
   snd = (WadSound *) (data + hdr->x80);
-  cnt = 0;
+  sound_entry_count_or_moby_class_slot = 0;
   if (snd->size != 0)
   {
     out = D_0018CB20.x60;
     do
     {
-      cnt++;
+      sound_entry_count_or_moby_class_slot++;
       *out = ((s32) (data + hdr->x80)) + (snd->offset + k_800);
       snd++;
       out++;
     }
-    while ((cnt < 0x46) && (snd->size != 0));
+    while ((sound_entry_count_or_moby_class_slot < 0x46) && (snd->size != 0));
   }
   parse_space_scene_chunk(0);
   help_msg_data = D_001940C0.x1C;
@@ -339,11 +339,11 @@ void transition_load_wad(void)
   }
 
   QueueDmaTransfer(0);
-  cnt = (new_var = resident_class_slot_by_id[0x472]);
-  if (cnt >= 0)
+  sound_entry_count_or_moby_class_slot = (new_var = resident_class_slot_by_id[0x472]);
+  if (sound_entry_count_or_moby_class_slot >= 0)
   {
-    ((MobyClass *)moby_class_resources[cnt])->x28 = boot_sound_defs_b;
-    ((MobyClass *)moby_class_resources[cnt])->xD = 5;
+    ((MobyClass *)moby_class_resources[sound_entry_count_or_moby_class_slot])->x28 = boot_sound_defs_b;
+    ((MobyClass *)moby_class_resources[sound_entry_count_or_moby_class_slot])->xD = 5;
   }
 }
 

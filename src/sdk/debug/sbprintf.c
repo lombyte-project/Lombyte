@@ -19,24 +19,24 @@ extern s32 fflush(RncFile *file);
 #define __SERR 0x0040
 
 s32 __sbprintf(RncFile *fp, const s8 *fmt, va_list ap) {
-    s32 ret;
+    s32 print_result;
     RncFile fake;
-    u8 buf[1024];
+    u8 output_buffer[1024];
 
     fake._data = fp->_data;
     fake._flags = (u16)(fp->_flags & ~__SNBF);
     fake._file = fp->_file;
     fake._cookie = fp->_cookie;
     fake._write = fp->_write;
-    fake._bf._base = fake._p = buf;
-    fake._bf._size = fake._w = sizeof(buf);
+    fake._bf._base = fake._p = output_buffer;
+    fake._bf._size = fake._w = sizeof(output_buffer);
     fake._lbfsize = 0;
-    ret = Vfprintf(&fake, fmt, ap);
-    if (ret >= 0 && fflush(&fake)) {
-        ret = -1;
+    print_result = Vfprintf(&fake, fmt, ap);
+    if (print_result >= 0 && fflush(&fake)) {
+        print_result = -1;
     }
     if (fake._flags & __SERR) {
         fp->_flags |= __SERR;
     }
-    return ret;
+    return print_result;
 }

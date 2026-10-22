@@ -49,13 +49,13 @@ int map_filter_l01_3(void *arg0, int arg1, float unused1, float unused2, float a
 
 int map_filter_l01_3(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     struct Hero *hero_ptr = &hero;
-    int b = hero_ptr->state.control_mode == 16;
+    int hero_state_blocks_high_range_reveal = hero_ptr->state.control_mode == 16;
     int hero_state_blocks_low_range_reveal = hero_ptr->state.control_mode == 17 || hero_ptr->state.control_mode == 18 || hero_ptr->base_condition == 1;
 
     if (reveal_test_selector < 0xC8 && reveal_test_value >= 39.5f && reveal_test_value <= 42.5f && !hero_state_blocks_low_range_reveal) {
         return 1;
     }
-    if (reveal_test_selector >= 0xC8 && reveal_test_value >= 87.0f && !b) {
+    if (reveal_test_selector >= 0xC8 && reveal_test_value >= 87.0f && !hero_state_blocks_high_range_reveal) {
         return 1;
     }
     return 0;
@@ -279,17 +279,17 @@ extern s32 D_001A03B4[];
 s32 map_filter_l07_4(s32 arg0, s32 arg1) __asm__("func_002071C0");
 
 s32 map_filter_l07_4(s32 point_x, s32 point_y) {
-    s32 ret1;
-    s32 ret2;
+    s32 point_clockwise_of_first_edge;
+    s32 point_clockwise_of_second_edge;
 
-    ret1 = point_is_clockwise(point_x, point_y, 0x99, 0xED, 0x160, 0x117);
-    ret2 = point_is_clockwise(point_x, point_y, 0x10E, 0xF7, 0x13D, 0x119);
+    point_clockwise_of_first_edge = point_is_clockwise(point_x, point_y, 0x99, 0xED, 0x160, 0x117);
+    point_clockwise_of_second_edge = point_is_clockwise(point_x, point_y, 0x10E, 0xF7, 0x13D, 0x119);
     if (D_001A03B4[0] == 0) {
         return 0;
     }
-    if (ret1 == 0) {
-        if (ret2 != 0) {
-            if (ret1) {
+    if (point_clockwise_of_first_edge == 0) {
+        if (point_clockwise_of_second_edge != 0) {
+            if (point_clockwise_of_first_edge) {
                 return 1;
             } else {
                 return 1;
@@ -326,7 +326,7 @@ int map_filter_l07_5(void *unused_input, int reveal_test_selector, float unused1
 extern s32 D_001A03AC[];
 s32 map_filter_l07_6(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) __asm__("func_00207300");
 
-s32 map_filter_l07_6(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) {
+s32 map_filter_l07_6(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 reveal_test_value) {
     s32 hit;
 
     hit = 0;
@@ -345,7 +345,7 @@ block_3:
     if (D_001A03AC[0] == 0) {
         return 0;
     }
-    if (fparg2 >= 47.7f) {
+    if (reveal_test_value >= 47.7f) {
         return 1;
     }
     return 0;
@@ -361,7 +361,7 @@ block_7:
 
 s32 map_filter_l07_7(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) __asm__("func_002073B8");
 
-s32 map_filter_l07_7(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) {
+s32 map_filter_l07_7(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 reveal_test_value) {
     s32 var_4_15;
 
     var_4_15 = 0;
@@ -371,7 +371,7 @@ s32 map_filter_l07_7(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) {
     if (var_4_15 != 0) {
         return 0;
     }
-    if (fparg2 < 71.5f) {
+    if (reveal_test_value < 71.5f) {
         return 0;
     }
     if (point_is_clockwise(px, py, 0x131, 0xE2, 0xC6, 0x93) != 0) {
@@ -618,12 +618,12 @@ int map_filter_l11_5(void) {
 int map_filter_l12_0(void *arg0, int arg1, float unused1, float unused2, float arg3) __asm__("func_002079D8");
 
 int map_filter_l12_0(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
-    int r = 1;
+    int reveal_allowed = 1;
 
     if (reveal_test_selector < 0x141 && !(63.5f <= reveal_test_value)) {
-        r = 0;
+        reveal_allowed = 0;
     }
-    return r;
+    return reveal_allowed;
 }
 
 /* Ported from rac1-decomp (src/game/menu.c, func_00208238). */
@@ -645,17 +645,17 @@ s32 map_filter_l15_0(s32 x, s32 y) __asm__("func_00207A18");
 
 s32 map_filter_l15_0(s32 x, s32 y) {
     Vec4 point_position;
-    Vec4 b;
+    Vec4 region_center;
     s32 near;
 
     if (D_001A03A8[0] == 0) {
         point_position.q = 0;
-        b.q = 0;
+        region_center.q = 0;
         point_position.f[0] = x;
         point_position.f[1] = y;
-        b.f[0] = 161.5f;
-        b.f[1] = 249.0f;
-        near = vector_distance_xy(&point_position, &b) <= 35.0f;
+        region_center.f[0] = 161.5f;
+        region_center.f[1] = 249.0f;
+        near = vector_distance_xy(&point_position, &region_center) <= 35.0f;
     } else {
         near = 1;
     }

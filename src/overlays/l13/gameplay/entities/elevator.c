@@ -238,7 +238,7 @@ void elevator_update(struct Moby *moby) {
     float delta[4];
     float rot[4];
     float camera_position_scratch[4];
-    float b[4];
+    float camera_pose_scratch[4];
     float blended_camera_rotation[4];
 
     scale_vector_xyz(delta, &moby->pos, -1.0f);
@@ -256,14 +256,14 @@ void elevator_update(struct Moby *moby) {
         if (vars->blend < 1.0f) {
             float t = (1.0f - vars->blend) / (1.0f - old);
             char *base;
-            FUN_L13_002b4060(moby, b, blended_camera_rotation);
-            subtract_vector_xyz(camera_position_scratch, D_L13_001670C0_2b39e0, b);
+            FUN_L13_002b4060(moby, camera_pose_scratch, blended_camera_rotation);
+            subtract_vector_xyz(camera_position_scratch, D_L13_001670C0_2b39e0, camera_pose_scratch);
             base = D_L13_001670C0_2b39e0 - 0x140;
             scale_vector_xyz(camera_position_scratch, camera_position_scratch, t);
-            add_vector_xyz(b, b, camera_position_scratch);
+            add_vector_xyz(camera_pose_scratch, camera_pose_scratch, camera_position_scratch);
             blended_camera_rotation[1] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x154), blended_camera_rotation[1]) * t, blended_camera_rotation[1]);
             blended_camera_rotation[2] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x158), blended_camera_rotation[2]) * t, blended_camera_rotation[2]);
-            FUN_L00_002ea9d8(b);
+            FUN_L00_002ea9d8(camera_pose_scratch);
             FUN_L00_002eaa30(blended_camera_rotation);
         } else {
             u8 s = moby->command;
@@ -279,9 +279,9 @@ void elevator_update(struct Moby *moby) {
             vars->voice = allocate_voice_2b39e0(0, 4, moby);
         }
         if (moby->command != 0) {
-            FUN_L13_002b4060(moby, camera_position_scratch, b);
+            FUN_L13_002b4060(moby, camera_position_scratch, camera_pose_scratch);
             FUN_L00_002ea9d8(camera_position_scratch);
-            FUN_L00_002eaa30(b);
+            FUN_L00_002eaa30(camera_pose_scratch);
         }
         if (moby->state == 2) {
             target = vars->top;
@@ -389,9 +389,9 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void FUN_L13_002b4060(struct Moby *moby, float *v, float *w);
-void FUN_L13_002b4060(struct Moby *moby, float *v, float *w) {
+void FUN_L13_002b4060(struct Moby *moby, float *camera_position, float *camera_rotation) {
     float ang = moby->rot.z;
-    float r = 2.5f;
+    float horizontal_offset_radius = 2.5f;
     float z = 1.5f;
     unsigned char *x;
     if ((moby->command >= 2 && (moby->command & 1)) || (moby->state >= 2 && (moby->state & 1))) {
@@ -400,17 +400,17 @@ void FUN_L13_002b4060(struct Moby *moby, float *v, float *w) {
         ang = fast_add_rotations(ang, 1.5707964f);
     }
     if (moby->oclass == 0x15) {
-        r = 2.0f;
+        horizontal_offset_radius = 2.0f;
         z = 1.2f;
     }
-    v[0] = fast_cos(ang) * r;
-    v[1] = fast_sin(ang) * r;
-    v[2] = z;
-    fast_vec_add(v, v, &moby->pos);
-    clear_u64_value(w);
+    camera_position[0] = fast_cos(ang) * horizontal_offset_radius;
+    camera_position[1] = fast_sin(ang) * horizontal_offset_radius;
+    camera_position[2] = z;
+    fast_vec_add(camera_position, camera_position, &moby->pos);
+    clear_u64_value(camera_rotation);
     x = D_0013E533 + 0xE1D;
-    w[2] = fast_arc_tan(*(float *)(x + 0xD0) - v[0], *(float *)(x + 0xD4) - v[1]);
-    *(int *)(w + 1) = 0;
+    camera_rotation[2] = fast_arc_tan(*(float *)(x + 0xD0) - camera_position[0], *(float *)(x + 0xD4) - camera_position[1]);
+    *(int *)(camera_rotation + 1) = 0;
 }
 /* Ported from rac1-decomp src/overlays/l13_gemlik/vendor_002B2020.c (func_L13_002B5368) */
 
@@ -500,7 +500,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
     Data_2B5368 *data = turret_moby->data;
     Moby_2B5368 *target_moby;
     Moby_2B5368 *gun;
-    float r;
+    float target_yaw_scratch;
 
     FUN_L13_002b48d8_2b0e80(turret_moby);
     target_moby = data->target;
@@ -518,8 +518,8 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         turret_moby->state = 1;
         break;
     case BLARG_TURRET_STATE_WAIT_FOR_TARGET:
-        r = fast_difference_between_rotations(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
-        if (r < 1.5707964f && vector_distance(&turret_moby->pos, &target_moby->pos) < 20.0f
+        target_yaw_scratch = fast_difference_between_rotations(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
+        if (target_yaw_scratch < 1.5707964f && vector_distance(&turret_moby->pos, &target_moby->pos) < 20.0f
             && (data->volume == -1 || is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) != 0)) {
             data->f68 = 8.0f;
             if (turret_moby->b53 != 1) {
@@ -539,25 +539,25 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         }
         break;
     case BLARG_TURRET_STATE_TRACK_TARGET:
-        r = fast_difference_between_rotations(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
-        if (r >= 1.5707964f || vector_distance(&turret_moby->pos, &target_moby->pos) > 22.0f
+        target_yaw_scratch = fast_difference_between_rotations(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
+        if (target_yaw_scratch >= 1.5707964f || vector_distance(&turret_moby->pos, &target_moby->pos) > 22.0f
             || (data->volume != -1 && is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) == 0)) {
             if (turret_moby->b53 != 0) {
                 FUN_00212f90_2b0e80(turret_moby, 0, 0, random_int_between(7, 13));
             }
             turret_moby->state = 1;
         } else {
-            float lim;
+            float yaw_offset_limit_radians;
             approach_value(&data->f68, 20.0f, frame_time * 6.0f);
-            r = FUN_001fa5c8_2b0e80(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
-            lim = data->f6C * 0.017453292f;
-            if (lim < r) {
-                r = lim;
-            } else if (r < -lim) {
-                r = -lim;
+            target_yaw_scratch = FUN_001fa5c8_2b0e80(angle_atan2(target_moby->pos.x - turret_moby->pos.x, target_moby->pos.y - turret_moby->pos.y), data->f54);
+            yaw_offset_limit_radians = data->f6C * 0.017453292f;
+            if (yaw_offset_limit_radians < target_yaw_scratch) {
+                target_yaw_scratch = yaw_offset_limit_radians;
+            } else if (target_yaw_scratch < -yaw_offset_limit_radians) {
+                target_yaw_scratch = -yaw_offset_limit_radians;
             }
-            r = FUN_001fa580_2b0e80(r, data->f54);
-            approach_angle(&turret_moby->rot.z, r, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, frame_time * 12.566371f);
+            target_yaw_scratch = FUN_001fa580_2b0e80(target_yaw_scratch, data->f54);
+            approach_angle(&turret_moby->rot.z, target_yaw_scratch, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, frame_time * 12.566371f);
             FUN_L13_002b47a0_2b0e80(turret_moby);
             if (data->gun == 0 || data->gun->cls_id != 0x24 || (unsigned char)data->gun->state == 0xFE
                 || (unsigned char)data->gun->state == 0xFD || (unsigned char)data->gun->state == 2) {
@@ -570,10 +570,10 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         }
         break;
     case BLARG_TURRET_STATE_DESTROY: {
-        V4_2B5368 v;
-        random_vector(&v.x, 0.5f, 1.0f);
+        V4_2B5368 destruction_effect_vector;
+        random_vector(&destruction_effect_vector.x, 0.5f, 1.0f);
         mark_moby_for_removal_cf(turret_moby, 0, -1);
-        FUN_L00_0025e450_2b0e80(turret_moby, &v, &turret_moby->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
+        FUN_L00_0025e450_2b0e80(turret_moby, &destruction_effect_vector, &turret_moby->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
         delete_moby(turret_moby);
         return;
     }
@@ -606,22 +606,22 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern float D_L13_00161388 __attribute__((sda));
 int D_L13_0016138C = 2;
 void FUN_L13_002b47a0(struct Moby *moby) {
-    float v[4];
+    float projectile_spawn_position[4];
     float horizontal_offset[4];
     char *data;
-    float target_distance, x, ang;
+    float target_distance, x, projectile_yaw;
     data = (char *)moby->pvars;
     if (frame_count % D_L13_0016138C == 0) {
-        moby_point_position(moby, 0, v);
+        moby_point_position(moby, 0, projectile_spawn_position);
         target_distance = vector_distance(&moby->pos, *(char **)(data + 0x40) + 0x10);
         x = (20.0f - target_distance) / 20.0f * 5.0f + 2.5f;
-        ang = fast_add_rotations(random_float_between(-x, x) * DEG_TO_RAD,
+        projectile_yaw = fast_add_rotations(random_float_between(-x, x) * DEG_TO_RAD,
                                  moby->rot.z);
-        horizontal_offset[0] = fast_cos(ang) * (D_L13_00161388 * frame_time);
-        horizontal_offset[1] = fast_sin(ang) * (D_L13_00161388 * frame_time);
+        horizontal_offset[0] = fast_cos(projectile_yaw) * (D_L13_00161388 * frame_time);
+        horizontal_offset[1] = fast_sin(projectile_yaw) * (D_L13_00161388 * frame_time);
         horizontal_offset[2] = 0;
-        fast_vec_add(v, v, horizontal_offset);
-        FUN_L13_003061c8(*(float *)(data + 0x68), v, horizontal_offset, moby);
+        fast_vec_add(projectile_spawn_position, projectile_spawn_position, horizontal_offset);
+        FUN_L13_003061c8(*(float *)(data + 0x68), projectile_spawn_position, horizontal_offset, moby);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5A88), where it is exact; names translated to the US level program. */
@@ -672,28 +672,28 @@ extern void FUN_L00_0025d1b8(struct Moby *moby);
 /* spawns a class 0x24 child that copies its parent's position and scale */
 struct Moby *FUN_L13_002b4958(struct Moby *parent) {
     struct Moby *child_moby;
-    Vars *v;
+    Vars *child_vars;
 
     child_moby = create_moby(0x24);
     if (child_moby != 0) {
-        v = (Vars *)child_moby->pvars;
-        v->parent = parent;
-        v->unk0 = &v->unk20;
-        v->unkC = v->unk60;
+        child_vars = (Vars *)child_moby->pvars;
+        child_vars->parent = parent;
+        child_vars->unk0 = &child_vars->unk20;
+        child_vars->unkC = child_vars->unk60;
         child_moby->update_dist = parent->update_dist;
-        child_moby->draw_dist = v->parent->draw_dist;
+        child_moby->draw_dist = child_vars->parent->draw_dist;
         child_moby->visible = 1;
         child_moby->flags |= 0x20;
         child_moby->state = 0;
         child_moby->command = 0;
-        qcopy(&child_moby->pos, &v->parent->pos);
+        qcopy(&child_moby->pos, &child_vars->parent->pos);
         child_moby->scale = child_moby->pclass->scale * parent->scale / parent->pclass->scale;
-        v->unk20 = 1.0f;
-        v->unk24 = 1;
-        v->unk29 = 1;
-        v->unk2A = 3;
-        v->unk28 = 0;
-        v->unk30 = 0.9f;
+        child_vars->unk20 = 1.0f;
+        child_vars->unk24 = 1;
+        child_vars->unk29 = 1;
+        child_vars->unk2A = 3;
+        child_vars->unk28 = 0;
+        child_vars->unk30 = 0.9f;
         FUN_L00_00250df8(child_moby);
         FUN_L00_0025d1b8(child_moby);
     }
@@ -828,7 +828,7 @@ void blarg_gunner_update(struct Moby *moby) {
     };
     unsigned char *moby_vars = moby->pvars;
     float explosion_offset[4];
-    float b[4];
+    float explosion_spawn_position[4];
     switch (moby->state) {
     case BLARG_GUNNER_STATE_INITIALIZE:
         moby_vars[0x29] = 1;
@@ -862,8 +862,8 @@ void blarg_gunner_update(struct Moby *moby) {
     case BLARG_GUNNER_STATE_DESTROY:
         if (moby->anim_flags & 2) {
             subtract_vector_xyz(explosion_offset, D_L13_001670C0, &moby->pos);
-            moby_point_position(moby, 0, b);
-            spawn_explosion(moby, explosion_offset, b, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, -1, 2.0f,
+            moby_point_position(moby, 0, explosion_spawn_position);
+            spawn_explosion(moby, explosion_offset, explosion_spawn_position, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, -1, 2.0f,
                              40.0f, 0, 1, -1, 0);
             mark_moby_for_removal(moby);
         }
@@ -923,9 +923,9 @@ void FUN_L13_002b4ff0(struct Moby *moby, char *moby_vars) {
     float ground = probe_ground_height(&moby->pos, 0, 0.5f);
     float z = moby->pos.z;
     if (ground < z + 0.3f) {
-        float v = *(float *)(moby_vars + 0x128) - *(float *)&D_0015ED70 * 9.8f;
-        *(float *)(moby_vars + 0x128) = v;
-        moby->pos.z = moby->pos.z + v;
+        float vertical_step = *(float *)(moby_vars + 0x128) - *(float *)&D_0015ED70 * 9.8f;
+        *(float *)(moby_vars + 0x128) = vertical_step;
+        moby->pos.z = moby->pos.z + vertical_step;
         if (moby->pos.z < ground)
             moby->pos.z = ground;
     } else if (z < ground) {
@@ -1176,22 +1176,22 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         ROBOSQUAWKER_STATE_FOLLOW_FLIGHT_PATH = 0x12,
         ROBOSQUAWKER_STATE_DEATH_KNOCKBACK = 0x63
     };
-    RsVars *v;
+    RsVars *robosquawker_vars;
     RsVec old;
-    RsTarget tgt;
+    RsTarget selected_target_record;
     RsVec va;
     RsVec vb;
     RsVec vc;
     int hits;
     float dmg;
-    float ang;
+    float knockback_yaw;
     float flight_step_length;
     float out;
     RsHit *hit;
     RsTargetMoby *tm;
 
-    v = robosquawker_moby->vars;
-    FUN_L00_00263ac8(2.5f, (int)robosquawker_moby, 0, v->x230);
+    robosquawker_vars = robosquawker_moby->vars;
+    FUN_L00_00263ac8(2.5f, (int)robosquawker_moby, 0, robosquawker_vars->x230);
     if (robosquawker_moby->b31 != 0) {
         if (distance_xyz(&robosquawker_moby->pos, D_L13_001670C0) < 28.0f) {
             FUN_L00_0025a120(robosquawker_moby);
@@ -1205,82 +1205,82 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
     }
     robosquawker_moby->w94 = *(int *)(robosquawker_moby->w24 + 0x10);
     robosquawker_moby->h34 &= 0xFFBE;
-    FUN_L13_0026bd00(robosquawker_moby, &tgt, v->f1FC + 4.0f);
-    tm = tgt.moby;
-    if (tm == 0 || (v->h214 == 0 && v->w22C != -1 && is_point_inside_clip_volume(&tgt, v->w22C) == 0)) {
-        tgt.moby = 0;
+    FUN_L13_0026bd00(robosquawker_moby, &selected_target_record, robosquawker_vars->f1FC + 4.0f);
+    tm = selected_target_record.moby;
+    if (tm == 0 || (robosquawker_vars->h214 == 0 && robosquawker_vars->w22C != -1 && is_point_inside_clip_volume(&selected_target_record, robosquawker_vars->w22C) == 0)) {
+        selected_target_record.moby = 0;
         tm = 0;
-        qzero(&tgt);
+        qzero(&selected_target_record);
     }
     qcopy(&old, &robosquawker_moby->pos);
-    if (v->w38 != 0) {
-        v->h214 = scale_game_frames_alt(0xF0);
+    if (robosquawker_vars->w38 != 0) {
+        robosquawker_vars->h214 = scale_game_frames_alt(0xF0);
     }
-    v->w38 = 0;
-    fast_dec_timer_s16(&v->h208);
+    robosquawker_vars->w38 = 0;
+    fast_dec_timer_s16(&robosquawker_vars->h208);
     if (robosquawker_moby->state != 0) {
-        if (fast_dec_timer_s16(&v->h214) != 0) {
-            v->f1FC = v->v1D0.f[3];
+        if (fast_dec_timer_s16(&robosquawker_vars->h214) != 0) {
+            robosquawker_vars->f1FC = robosquawker_vars->v1D0.f[3];
         } else {
-            v->f1FC = v->f200;
+            robosquawker_vars->f1FC = robosquawker_vars->f200;
         }
     }
     dmg = 0.0f;
     hit = FUN_L00_0025a420(robosquawker_moby, 0x330000, 0);
-    fun_00213928(robosquawker_moby, hit, &v->f20, 0, &hits, &dmg, 0, 4);
-    fast_dec_timer_s16(&v->h26);
-    if (v->h26 < scale_game_frames_alt(0x2D) && hit != 0 && robosquawker_moby->state != 0x63) {
-        if (hit->src->hA6 >= 0xB0 && hit->src->hA6 <= 0xB1 && v->h26 != 0) {
+    fun_00213928(robosquawker_moby, hit, &robosquawker_vars->f20, 0, &hits, &dmg, 0, 4);
+    fast_dec_timer_s16(&robosquawker_vars->h26);
+    if (robosquawker_vars->h26 < scale_game_frames_alt(0x2D) && hit != 0 && robosquawker_moby->state != 0x63) {
+        if (hit->src->hA6 >= 0xB0 && hit->src->hA6 <= 0xB1 && robosquawker_vars->h26 != 0) {
             hit->f2C = 0.0f;
         }
         if (robosquawker_moby->b21 != 0xFF) {
             FUN_L01_0026e090(robosquawker_moby->b21, 1);
         }
         if (hit->f2C != 0.0f) {
-            ang = fast_arc_tan(robosquawker_moby->pos.f[0] - tgt.pos.f[0], robosquawker_moby->pos.f[1] - tgt.pos.f[1]);
-            v->f148 = 0.5f;
-            v->w140 = 0x202;
-            v->f20 -= hit->f2C;
-            v->f130 = 0.0055f;
-            v->f134 = 0.0011f;
-            v->f138 = D_L13_00161394 * frame_time;
-            v->f13C = D_L13_00161390 * frame_time;
-            v->w144 = 9;
-            v->b15D = 0;
-            if (v->f20 <= 0.0f) {
+            knockback_yaw = fast_arc_tan(robosquawker_moby->pos.f[0] - selected_target_record.pos.f[0], robosquawker_moby->pos.f[1] - selected_target_record.pos.f[1]);
+            robosquawker_vars->f148 = 0.5f;
+            robosquawker_vars->w140 = 0x202;
+            robosquawker_vars->f20 -= hit->f2C;
+            robosquawker_vars->f130 = 0.0055f;
+            robosquawker_vars->f134 = 0.0011f;
+            robosquawker_vars->f138 = D_L13_00161394 * frame_time;
+            robosquawker_vars->f13C = D_L13_00161390 * frame_time;
+            robosquawker_vars->w144 = 9;
+            robosquawker_vars->b15D = 0;
+            if (robosquawker_vars->f20 <= 0.0f) {
                 robosquawker_moby->h34 &= 0xEFFF;
-                v->f138 = frame_time * 10.0f;
-                v->f13C = frame_time * 5.5f;
+                robosquawker_vars->f138 = frame_time * 10.0f;
+                robosquawker_vars->f13C = frame_time * 5.5f;
                 *(u128 *)&va = *(u128 *)&hit->pos;
-                trooper_knockback_arc(&va, &ang, &v->f138, &v->f13C);
-                trooper_start_knockback(robosquawker_moby, v->x120, ang, (rand() & 1) + 9, 1, 0);
-                v->f170 = 11.0f;
-                v->f174 = 18.0f;
+                trooper_knockback_arc(&va, &knockback_yaw, &robosquawker_vars->f138, &robosquawker_vars->f13C);
+                trooper_start_knockback(robosquawker_moby, robosquawker_vars->x120, knockback_yaw, (rand() & 1) + 9, 1, 0);
+                robosquawker_vars->f170 = 11.0f;
+                robosquawker_vars->f174 = 18.0f;
                 robosquawker_moby->state = 0x63;
-                FUN_L13_002b4fb8((Level13VendorMoby *)v);
-                v->x110[7] = 0x78;
-                trooper_anim_update(robosquawker_moby, (short *)v->x110);
+                FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
+                robosquawker_vars->x110[7] = 0x78;
+                trooper_anim_update(robosquawker_moby, (short *)robosquawker_vars->x110);
                 FUN_L00_00257470(robosquawker_moby, 0, -1);
             } else {
                 *(u128 *)&va = *(u128 *)&hit->pos;
-                trooper_knockback_arc(&va, &ang, &v->f138, &v->f13C);
-                trooper_start_knockback(robosquawker_moby, v->x120, ang, (rand() & 1) + 9, 1, 0);
-                v->f170 = 5.0f;
-                v->f174 = 10.0f;
+                trooper_knockback_arc(&va, &knockback_yaw, &robosquawker_vars->f138, &robosquawker_vars->f13C);
+                trooper_start_knockback(robosquawker_moby, robosquawker_vars->x120, knockback_yaw, (rand() & 1) + 9, 1, 0);
+                robosquawker_vars->f170 = 5.0f;
+                robosquawker_vars->f174 = 10.0f;
                 robosquawker_moby->state = 6;
-                FUN_L13_002b4fb8((Level13VendorMoby *)v);
-                *(unsigned char *)&v->x110[7] = 0xFA;
-                v->h26 = scale_game_frames_alt(0x3C);
-                trooper_anim_update(robosquawker_moby, (short *)v->x110);
+                FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
+                *(unsigned char *)&robosquawker_vars->x110[7] = 0xFA;
+                robosquawker_vars->h26 = scale_game_frames_alt(0x3C);
+                trooper_anim_update(robosquawker_moby, (short *)robosquawker_vars->x110);
             }
         }
     }
     robosquawker_moby->bA4 = 0xFF;
     switch (robosquawker_moby->state) {
     case ROBOSQUAWKER_STATE_INITIALIZE:
-        qcopy(&v->v1D0, &robosquawker_moby->pos);
-        v->v1D0.f[3] = v->f1FC;
-        if (v->h20A != 0) {
+        qcopy(&robosquawker_vars->v1D0, &robosquawker_moby->pos);
+        robosquawker_vars->v1D0.f[3] = robosquawker_vars->f1FC;
+        if (robosquawker_vars->h20A != 0) {
             robosquawker_moby->state = 1;
             if (robosquawker_moby->b53 != 3) {
                 blend_moby_animation_c(robosquawker_moby, 3, 0, 0);
@@ -1292,71 +1292,71 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 blend_moby_animation_c(robosquawker_moby, 0, 0, 0);
             }
         }
-        v->h214 = 0;
-        v->h208 = 0;
-        v->b29 = 0;
-        v->f20 = 1.0f;
-        v->h24 = 1;
-        v->b58 = 8;
-        v->b5A = 4;
-        FUN_L01_0026d930((char *)&v->w180);
-        v->w180 = 0x38D;
-        v->f18C = 2.0f;
-        v->f188 = 2.0f;
-        v->f1A4 = v->f204 * frame_time;
-        v->w1B8 |= 0x30;
+        robosquawker_vars->h214 = 0;
+        robosquawker_vars->h208 = 0;
+        robosquawker_vars->b29 = 0;
+        robosquawker_vars->f20 = 1.0f;
+        robosquawker_vars->h24 = 1;
+        robosquawker_vars->b58 = 8;
+        robosquawker_vars->b5A = 4;
+        FUN_L01_0026d930((char *)&robosquawker_vars->w180);
+        robosquawker_vars->w180 = 0x38D;
+        robosquawker_vars->f18C = 2.0f;
+        robosquawker_vars->f188 = 2.0f;
+        robosquawker_vars->f1A4 = robosquawker_vars->f204 * frame_time;
+        robosquawker_vars->w1B8 |= 0x30;
         if (rand() & 1) {
             robosquawker_moby->h34 |= 0x8000;
         }
-        v->pD0 = &D_L13_001613A0;
-        if (v->w220 != -1) {
-            v->w224 = FUN_L01_0028b510(&robosquawker_moby->pos, D_L13_001B07B0[v->w220], 0.0f);
+        robosquawker_vars->pD0 = &D_L13_001613A0;
+        if (robosquawker_vars->w220 != -1) {
+            robosquawker_vars->w224 = FUN_L01_0028b510(&robosquawker_moby->pos, D_L13_001B07B0[robosquawker_vars->w220], 0.0f);
         }
         break;
     case ROBOSQUAWKER_STATE_FLIGHT_IDLE: {
         float d;
 
-        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)v);
-        subtract_vector_xyz(&va, &tgt, &robosquawker_moby->pos);
+        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
+        subtract_vector_xyz(&va, &selected_target_record, &robosquawker_moby->pos);
         d = probe_ground_height(&robosquawker_moby->pos, 0x120, 0.5f);
         if (d > 1.0f
-            && vector_length_xy(&va) < v->f1FC + 4.0f
-            && absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]) < 10.0f
+            && vector_length_xy(&va) < robosquawker_vars->f1FC + 4.0f
+            && absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]) < 10.0f
             && random_integer_below(0x13) == 0) {
             if (robosquawker_moby->b53 != 0) {
                 blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
             robosquawker_moby->state = 0x11;
-            FUN_L13_002b4fb8((Level13VendorMoby *)v);
+            FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
         } else if (d > 1.0f && robosquawker_moby->bBC == 1 && random_integer_below(4) == 0) {
             if (random_integer_below(0x100) & 1) {
-                v->f1F8 = -v->f1F8;
+                robosquawker_vars->f1F8 = -robosquawker_vars->f1F8;
             }
-            v->f1F4 = v->f1F8 * 0.017453292f;
-            v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
+            robosquawker_vars->f1F4 = robosquawker_vars->f1F8 * 0.017453292f;
+            robosquawker_vars->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
             if (robosquawker_moby->b53 != 0) {
                 blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
-            FUN_L13_002b4fb8((Level13VendorMoby *)v);
+            FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
             robosquawker_moby->state = 0x11;
-            clear_u64_value(&v->v40);
+            clear_u64_value(&robosquawker_vars->v40);
             robosquawker_moby->bBC = 0;
-        } else if (v->w220 != -1) {
+        } else if (robosquawker_vars->w220 != -1) {
             char *path;
 
-            path = D_L13_001B07B0[v->w220];
-            if (distance_xyz(&robosquawker_moby->pos, path + (v->w224 * 16 + 16)) < 0.25f) {
-                v->w224 += 1;
-                if (v->w224 >= *(int *)path) {
-                    v->w224 = 0;
+            path = D_L13_001B07B0[robosquawker_vars->w220];
+            if (distance_xyz(&robosquawker_moby->pos, path + (robosquawker_vars->w224 * 16 + 16)) < 0.25f) {
+                robosquawker_vars->w224 += 1;
+                if (robosquawker_vars->w224 >= *(int *)path) {
+                    robosquawker_vars->w224 = 0;
                 }
             }
-            qcopy(&v->v1E0, path + v->w224 * 16 + 16);
+            qcopy(&robosquawker_vars->v1E0, path + robosquawker_vars->w224 * 16 + 16);
             robosquawker_moby->state = 0x12;
-        } else if (func_001F9908_i(&v->w20C) != 0) {
+        } else if (func_001F9908_i(&robosquawker_vars->w20C) != 0) {
             int i;
 
-            v->w20C = scale_game_frames_alt(FUN_L00_00257b90(0x28, 0x78));
+            robosquawker_vars->w20C = scale_game_frames_alt(FUN_L00_00257b90(0x28, 0x78));
             for (i = 0; i < 10; i++) {
                 float r;
                 float a;
@@ -1367,8 +1367,8 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 vb.f[1] = fast_sin(a) * r;
                 vb.f[2] = 0.0f;
                 vb.f[2] = random_float_between(5.0f, 7.0f);
-                add_vector_xyz(&v->v1E0, &vb, &v->v1D0);
-                if (probe_ground_height(&v->v1E0, 0x120, 0.5f) > 1.0f) {
+                add_vector_xyz(&robosquawker_vars->v1E0, &vb, &robosquawker_vars->v1D0);
+                if (probe_ground_height(&robosquawker_vars->v1E0, 0x120, 0.5f) > 1.0f) {
                     break;
                 }
             }
@@ -1382,20 +1382,20 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
     case ROBOSQUAWKER_STATE_FLY_TO_RANDOM_POINT: {
         float a;
 
-        a = fast_arc_tan(v->v1E0.f[0] - robosquawker_moby->pos.f[0], v->v1E0.f[1] - robosquawker_moby->pos.f[1]);
-        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.03f, 0.6f, 0.09f);
-        flight_step_length = vector_length_xyz(&v->v40);
+        a = fast_arc_tan(robosquawker_vars->v1E0.f[0] - robosquawker_moby->pos.f[0], robosquawker_vars->v1E0.f[1] - robosquawker_moby->pos.f[1]);
+        FUN_L00_00258278((char *)robosquawker_moby, &robosquawker_vars->f1F0, a, 0.03f, 0.6f, 0.09f);
+        flight_step_length = vector_length_xyz(&robosquawker_vars->v40);
         robosquawker_moby->f58 = flight_step_length * 20.0f + 1.0f;
-        subtract_vector_xyz(&v->v40, &v->v1E0, &robosquawker_moby->pos);
-        if (vector_length_xyz(&v->v40) > 1.0f) {
+        subtract_vector_xyz(&robosquawker_vars->v40, &robosquawker_vars->v1E0, &robosquawker_moby->pos);
+        if (vector_length_xyz(&robosquawker_vars->v40) > 1.0f) {
             approach_value(&flight_step_length, frame_time * 4.0f, frame_time_sq * 6.0f);
         } else {
             approach_value(&flight_step_length, frame_time, frame_time_sq * 8.0f);
         }
-        FUN_L00_0025f730(&v->v40, flight_step_length);
-        add_vector_xyz(&va, &v->v40, &robosquawker_moby->pos);
+        FUN_L00_0025f730(&robosquawker_vars->v40, flight_step_length);
+        add_vector_xyz(&va, &robosquawker_vars->v40, &robosquawker_moby->pos);
         if (coll_sphere(1.2f, &va, 0, robosquawker_moby) != 0) {
-            clear_u64_value(&v->v40);
+            clear_u64_value(&robosquawker_vars->v40);
             if (robosquawker_moby->b53 != 0) {
                 blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
@@ -1403,13 +1403,13 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         } else {
             qcopy(&robosquawker_moby->pos, &va);
         }
-        if (distance_xyz(&robosquawker_moby->pos, &v->v1E0) < flight_step_length || flight_step_length == 0.0f) {
+        if (distance_xyz(&robosquawker_moby->pos, &robosquawker_vars->v1E0) < flight_step_length || flight_step_length == 0.0f) {
             if (robosquawker_moby->b53 != 0) {
                 blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
             robosquawker_moby->state = 0xE;
         }
-        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)v);
+        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
         break;
     }
     case ROBOSQUAWKER_STATE_FOLLOW_FLIGHT_PATH: {
@@ -1417,17 +1417,17 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         float a;
         float d;
 
-        path = D_L13_001B07B0[v->w220];
-        a = fast_arc_tan(v->v1E0.f[0] - robosquawker_moby->pos.f[0], v->v1E0.f[1] - robosquawker_moby->pos.f[1]);
-        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.018f, 0.8f, 0.09f);
-        subtract_vector_xyz(&v->v40, &v->v1E0, &robosquawker_moby->pos);
-        FUN_L00_0025f730(&v->v40, frame_time * 4.0f);
-        add_vector_xyz(&va, &v->v40, &robosquawker_moby->pos);
-        robosquawker_moby->f58 = vector_length_xyz(&v->v40) * 20.0f + 1.0f;
+        path = D_L13_001B07B0[robosquawker_vars->w220];
+        a = fast_arc_tan(robosquawker_vars->v1E0.f[0] - robosquawker_moby->pos.f[0], robosquawker_vars->v1E0.f[1] - robosquawker_moby->pos.f[1]);
+        FUN_L00_00258278((char *)robosquawker_moby, &robosquawker_vars->f1F0, a, 0.018f, 0.8f, 0.09f);
+        subtract_vector_xyz(&robosquawker_vars->v40, &robosquawker_vars->v1E0, &robosquawker_moby->pos);
+        FUN_L00_0025f730(&robosquawker_vars->v40, frame_time * 4.0f);
+        add_vector_xyz(&va, &robosquawker_vars->v40, &robosquawker_moby->pos);
+        robosquawker_moby->f58 = vector_length_xyz(&robosquawker_vars->v40) * 20.0f + 1.0f;
         if (coll_sphere(1.2f, &va, 0, robosquawker_moby) != 0) {
             int i;
 
-            v->w20C = scale_game_frames_alt(0x78);
+            robosquawker_vars->w20C = scale_game_frames_alt(0x78);
             for (i = 0; i < 10; i++) {
                 float r;
                 float an;
@@ -1438,8 +1438,8 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 vb.f[1] = fast_sin(an) * r;
                 vb.f[2] = 0.0f;
                 vb.f[2] = random_float_between(5.0f, 7.0f);
-                add_vector_xyz(&v->v1E0, &vb, &v->v1D0);
-                if (probe_ground_height(&v->v1E0, 0x120, 0.5f) > 1.0f) {
+                add_vector_xyz(&robosquawker_vars->v1E0, &vb, &robosquawker_vars->v1D0);
+                if (probe_ground_height(&robosquawker_vars->v1E0, 0x120, 0.5f) > 1.0f) {
                     break;
                 }
             }
@@ -1450,52 +1450,52 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         } else {
             qcopy(&robosquawker_moby->pos, &va);
         }
-        d = distance_xyz(&robosquawker_moby->pos, &v->v1E0);
-        if (d < vector_length_xyz(&v->v40)) {
+        d = distance_xyz(&robosquawker_moby->pos, &robosquawker_vars->v1E0);
+        if (d < vector_length_xyz(&robosquawker_vars->v40)) {
             float g;
 
-            v->w224 += 1;
-            if (v->w224 >= *(int *)path) {
-                v->w224 = 0;
+            robosquawker_vars->w224 += 1;
+            if (robosquawker_vars->w224 >= *(int *)path) {
+                robosquawker_vars->w224 = 0;
             }
-            qcopy(&v->v1E0, path + v->w224 * 16 + 16);
-            v->v1E0.f[2] = v->v1E0.f[2] + random_float_between(-0.2f, 0.2f);
+            qcopy(&robosquawker_vars->v1E0, path + robosquawker_vars->w224 * 16 + 16);
+            robosquawker_vars->v1E0.f[2] = robosquawker_vars->v1E0.f[2] + random_float_between(-0.2f, 0.2f);
             g = probe_ground_height(&robosquawker_moby->pos, 0x120, 0.5f);
             if (g > 1.0f
-                && vector_length_xy(&vb) < v->f1FC + 4.0f
-                && absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]) < 10.0f
+                && vector_length_xy(&vb) < robosquawker_vars->f1FC + 4.0f
+                && absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]) < 10.0f
                 && random_integer_below(0x13) == 0) {
                 if (robosquawker_moby->b53 != 0) {
                     blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
                 }
-                qzero(&v->v40);
+                qzero(&robosquawker_vars->v40);
                 robosquawker_moby->state = 0x11;
-                FUN_L13_002b4fb8((Level13VendorMoby *)v);
+                FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
             } else if (g > 1.0f && robosquawker_moby->bBC == 1 && random_integer_below(4) == 0) {
                 if (random_integer_below(0x100) & 1) {
-                    v->f1F8 = -v->f1F8;
+                    robosquawker_vars->f1F8 = -robosquawker_vars->f1F8;
                 }
-                v->f1F4 = v->f1F8 * 0.017453292f;
-                v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
+                robosquawker_vars->f1F4 = robosquawker_vars->f1F8 * 0.017453292f;
+                robosquawker_vars->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
                 if (robosquawker_moby->b53 != 0) {
                     blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
                 }
-                FUN_L13_002b4fb8((Level13VendorMoby *)v);
-                qzero(&v->v40);
+                FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
+                qzero(&robosquawker_vars->v40);
                 robosquawker_moby->state = 0x11;
-                clear_u64_value(&v->v40);
+                clear_u64_value(&robosquawker_vars->v40);
                 robosquawker_moby->bBC = 0;
             }
         }
-        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)v);
+        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
         break;
     }
     case ROBOSQUAWKER_STATE_LAND: {
         float g;
 
         g = probe_ground_height(&robosquawker_moby->pos, 0x120, 0.5f);
-        approach_value(&v->v40.f[2], -(frame_time * 8.0f), frame_time_sq * 10.8f);
-        FUN_L00_00258830(robosquawker_moby, &v->v40, 0.6f, 0.5f, 0.0f, 0);
+        approach_value(&robosquawker_vars->v40.f[2], -(frame_time * 8.0f), frame_time_sq * 10.8f);
+        FUN_L00_00258830(robosquawker_moby, &robosquawker_vars->v40, 0.6f, 0.5f, 0.0f, 0);
         if (robosquawker_moby->b53 != 2
             && robosquawker_moby->pos.f[2] - g <= frame_time * 8.0f * FUN_L04_001f1978(45.0f)
             && robosquawker_moby->b53 != 2) {
@@ -1504,12 +1504,12 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         if (robosquawker_moby->pos.f[2] <= g) {
             robosquawker_moby->pos.f[2] = g;
             if (random_integer_below(0x100) & 1) {
-                v->f1F8 = -v->f1F8;
+                robosquawker_vars->f1F8 = -robosquawker_vars->f1F8;
             }
-            v->f1F4 = v->f1F8 * 0.017453292f;
-            v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
+            robosquawker_vars->f1F4 = robosquawker_vars->f1F8 * 0.017453292f;
+            robosquawker_vars->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
             robosquawker_moby->state = 3;
-            clear_u64_value(&v->v40);
+            clear_u64_value(&robosquawker_vars->v40);
             if (robosquawker_moby->b53 != 5) {
                 blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
             }
@@ -1521,11 +1521,11 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
 
         g = probe_ground_height(&robosquawker_moby->pos, 0x120, 0.5f);
         if (robosquawker_moby->pos.f[2] - g < 3.0f) {
-            approach_value(&v->v40.f[2], frame_time * 8.0f, frame_time_sq * 10.8f);
+            approach_value(&robosquawker_vars->v40.f[2], frame_time * 8.0f, frame_time_sq * 10.8f);
         } else {
-            approach_value(&v->v40.f[2], frame_time, frame_time_sq * 10.8f);
+            approach_value(&robosquawker_vars->v40.f[2], frame_time, frame_time_sq * 10.8f);
         }
-        FUN_L00_00258830(robosquawker_moby, &v->v40, 0.6f, 0.5f, 0.0f, 0);
+        FUN_L00_00258830(robosquawker_moby, &robosquawker_vars->v40, 0.6f, 0.5f, 0.0f, 0);
         robosquawker_moby->f58 = 6.0f - (robosquawker_moby->pos.f[2] - g) / 6.0f * 5.0f;
         if (g + 6.0f <= robosquawker_moby->pos.f[2]) {
             robosquawker_moby->pos.f[2] = g + 6.0f;
@@ -1533,15 +1533,15 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
             robosquawker_moby->state = 0xE;
-            clear_u64_value(&v->v40);
+            clear_u64_value(&robosquawker_vars->v40);
         }
-        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)v);
+        FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
         break;
     }
     case ROBOSQUAWKER_STATE_GROUND_IDLE:
-        subtract_vector_xyz(&va, &tgt, &robosquawker_moby->pos);
-        if (vector_length_xyz(&va) < v->f1FC + 4.0f
-            && absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]) < 8.0f
+        subtract_vector_xyz(&va, &selected_target_record, &robosquawker_moby->pos);
+        if (vector_length_xyz(&va) < robosquawker_vars->f1FC + 4.0f
+            && absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]) < 8.0f
             && random_integer_below(0x13) == 0) {
             robosquawker_moby->state = 2;
             if (robosquawker_moby->b53 != 4) {
@@ -1549,28 +1549,28 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             }
         } else if (robosquawker_moby->bBC == 1 && random_integer_below(0x13) == 0) {
             if (random_integer_below(0x100) & 1) {
-                v->f1F8 = -v->f1F8;
+                robosquawker_vars->f1F8 = -robosquawker_vars->f1F8;
             }
-            v->f1F4 = v->f1F8 * 0.017453292f;
-            v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
+            robosquawker_vars->f1F4 = robosquawker_vars->f1F8 * 0.017453292f;
+            robosquawker_vars->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
             robosquawker_moby->state = 3;
             if (robosquawker_moby->b53 != 5) {
                 blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
             }
             robosquawker_moby->bBC = 0;
-        } else if (vector_length_xyz(&va) > v->f1FC + 6.0f && v->h20A == 0) {
-            qzero(&v->v40);
+        } else if (vector_length_xyz(&va) > robosquawker_vars->f1FC + 6.0f && robosquawker_vars->h20A == 0) {
+            qzero(&robosquawker_vars->v40);
             robosquawker_moby->state = 0x10;
             if (robosquawker_moby->b53 != 0) {
                 blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
             }
         }
-        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)v);
+        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)robosquawker_vars);
         break;
     case ROBOSQUAWKER_STATE_WAIT_FOR_CLOSE_TARGET:
-        subtract_vector_xyz(&va, &tgt, &robosquawker_moby->pos);
-        if (vector_length_xyz(&va) < v->f1FC - 4.0f
-            && absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]) < 8.0f
+        subtract_vector_xyz(&va, &selected_target_record, &robosquawker_moby->pos);
+        if (vector_length_xyz(&va) < robosquawker_vars->f1FC - 4.0f
+            && absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]) < 8.0f
             && random_integer_below(0x13) == 0) {
             robosquawker_moby->state = 2;
             robosquawker_moby->pos.f[2] += 1.0f;
@@ -1582,40 +1582,40 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
     case ROBOSQUAWKER_STATE_PREPARE_HOME_HOP: {
         float a;
 
-        a = fast_arc_tan(v->v1D0.f[0] - robosquawker_moby->pos.f[0], v->v1D0.f[1] - robosquawker_moby->pos.f[1]);
-        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.05f, 0.3f, 0.2f);
-        subtract_vector_xyz(&va, &tgt, &v->v1D0);
-        if ((vector_length_xyz(&va) < v->f1FC && absolute_float(v->v1D0.f[2] - tgt.pos.f[2]) < 8.0f) || robosquawker_moby->bBC == 2) {
+        a = fast_arc_tan(robosquawker_vars->v1D0.f[0] - robosquawker_moby->pos.f[0], robosquawker_vars->v1D0.f[1] - robosquawker_moby->pos.f[1]);
+        FUN_L00_00258278((char *)robosquawker_moby, &robosquawker_vars->f1F0, a, 0.05f, 0.3f, 0.2f);
+        subtract_vector_xyz(&va, &selected_target_record, &robosquawker_vars->v1D0);
+        if ((vector_length_xyz(&va) < robosquawker_vars->f1FC && absolute_float(robosquawker_vars->v1D0.f[2] - selected_target_record.pos.f[2]) < 8.0f) || robosquawker_moby->bBC == 2) {
             if (robosquawker_moby->b21 != 0xFF) {
                 FUN_L01_0026e090(robosquawker_moby->b21, 2);
             }
             if (robosquawker_moby->b53 != (rand() & 1) + 9) {
                 blend_moby_animation_c(robosquawker_moby, (rand() & 1) + 9, 0, scale_game_frames_alt(3));
             }
-            v->f134 = 0.0f;
-            v->f130 = D_L13_0016139C;
-            v->f138 = D_L13_00161398 * frame_time;
-            v->f13C = FUN_L00_0025abf0(&robosquawker_moby->pos, &v->v1D0, &out, D_L13_00161398 * frame_time, -D_L13_0016139C);
-            v->w144 = 0xD;
-            v->b15D = 0;
-            trooper_start_knockback(robosquawker_moby, v->x120, robosquawker_moby->rot.f[2], (rand() & 1) + 9, 1, 0);
-            v->f170 = 5.0f;
-            v->f174 = 10.0f;
-            FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)v);
+            robosquawker_vars->f134 = 0.0f;
+            robosquawker_vars->f130 = D_L13_0016139C;
+            robosquawker_vars->f138 = D_L13_00161398 * frame_time;
+            robosquawker_vars->f13C = FUN_L00_0025abf0(&robosquawker_moby->pos, &robosquawker_vars->v1D0, &out, D_L13_00161398 * frame_time, -D_L13_0016139C);
+            robosquawker_vars->w144 = 0xD;
+            robosquawker_vars->b15D = 0;
+            trooper_start_knockback(robosquawker_moby, robosquawker_vars->x120, robosquawker_moby->rot.f[2], (rand() & 1) + 9, 1, 0);
+            robosquawker_vars->f170 = 5.0f;
+            robosquawker_vars->f174 = 10.0f;
+            FUN_L13_002b4f28((unsigned char *)robosquawker_moby, (char *)robosquawker_vars);
             robosquawker_moby->state = 0xB;
         }
         break;
     }
     case ROBOSQUAWKER_STATE_HOME_HOP:
-        if (mine_fall(robosquawker_moby, v->x120) & 1) {
-            FUN_L13_002b4fb8((Level13VendorMoby *)v);
-            qzero(v->x120);
+        if (mine_fall(robosquawker_moby, robosquawker_vars->x120) & 1) {
+            FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
+            qzero(robosquawker_vars->x120);
             robosquawker_moby->state = 3;
             if (random_integer_below(0x100) & 1) {
-                v->f1F8 = -v->f1F8;
+                robosquawker_vars->f1F8 = -robosquawker_vars->f1F8;
             }
-            v->f1F4 = v->f1F8 * 0.017453292f;
-            v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
+            robosquawker_vars->f1F4 = robosquawker_vars->f1F8 * 0.017453292f;
+            robosquawker_vars->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
             if (robosquawker_moby->b53 != 5) {
                 blend_moby_animation_c(robosquawker_moby, 5, 8, scale_game_frames_alt(3));
             }
@@ -1629,20 +1629,20 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
     case ROBOSQUAWKER_STATE_FACE_AWAY_WAIT_FOR_CHASE: {
         float a;
 
-        a = fast_arc_tan(robosquawker_moby->pos.f[0] - tgt.pos.f[0], robosquawker_moby->pos.f[1] - tgt.pos.f[1]);
-        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.02f, 0.3f, 0.1f);
-        subtract_vector_xyz(&va, &tgt, &robosquawker_moby->pos);
-        if (vector_length_xyz(&va) < v->f1FC
-            && absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]) < 8.0f
+        a = fast_arc_tan(robosquawker_moby->pos.f[0] - selected_target_record.pos.f[0], robosquawker_moby->pos.f[1] - selected_target_record.pos.f[1]);
+        FUN_L00_00258278((char *)robosquawker_moby, &robosquawker_vars->f1F0, a, 0.02f, 0.3f, 0.1f);
+        subtract_vector_xyz(&va, &selected_target_record, &robosquawker_moby->pos);
+        if (vector_length_xyz(&va) < robosquawker_vars->f1FC
+            && absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]) < 8.0f
             && random_integer_below(0x13) == 0) {
             if (robosquawker_moby->b21 != 0xFF) {
                 FUN_L01_0026e090(robosquawker_moby->b21, 1);
             }
             if (random_integer_below(0x100) & 1) {
-                v->f1F8 = -v->f1F8;
+                robosquawker_vars->f1F8 = -robosquawker_vars->f1F8;
             }
-            v->f1F4 = v->f1F8 * 0.017453292f;
-            v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
+            robosquawker_vars->f1F4 = robosquawker_vars->f1F8 * 0.017453292f;
+            robosquawker_vars->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
             robosquawker_moby->state = 3;
             if (robosquawker_moby->b53 != 5) {
                 blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
@@ -1650,10 +1650,10 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             robosquawker_moby->bBC = 0;
         } else if (robosquawker_moby->bBC == 1 && random_integer_below(0x13) == 0) {
             if (random_integer_below(0x100) & 1) {
-                v->f1F8 = -v->f1F8;
+                robosquawker_vars->f1F8 = -robosquawker_vars->f1F8;
             }
-            v->f1F4 = v->f1F8 * 0.017453292f;
-            v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
+            robosquawker_vars->f1F4 = robosquawker_vars->f1F8 * 0.017453292f;
+            robosquawker_vars->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
             robosquawker_moby->state = 3;
             if (robosquawker_moby->b53 != 5) {
                 blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
@@ -1663,7 +1663,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         if (robosquawker_moby->b53 == 4 && (robosquawker_moby->b70 & 2)) {
             blend_moby_animation_c(robosquawker_moby, 3, 0, scale_game_frames_alt(3));
         }
-        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)v);
+        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)robosquawker_vars);
         break;
     }
     case ROBOSQUAWKER_STATE_CHASE_TARGET: {
@@ -1672,27 +1672,27 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         float a;
         float d;
 
-        r = absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]);
-        r = r / vector_distance(&robosquawker_moby->pos, &tgt);
-        if (v->w21C != -1) {
-            FUN_L01_0028b5e0(robosquawker_moby, D_L13_001B07B0[v->w21C], &tgt, &vb);
+        r = absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]);
+        r = r / vector_distance(&robosquawker_moby->pos, &selected_target_record);
+        if (robosquawker_vars->w21C != -1) {
+            FUN_L01_0028b5e0(robosquawker_moby, D_L13_001B07B0[robosquawker_vars->w21C], &selected_target_record, &vb);
         } else {
-            qcopy(&vb, &tgt);
+            qcopy(&vb, &selected_target_record);
         }
-        a = fast_arc_tan(vb.f[0] - robosquawker_moby->pos.f[0], vb.f[1] - robosquawker_moby->pos.f[1]) + v->f1F4;
-        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.05f, 0.3f, 0.2f);
+        a = fast_arc_tan(vb.f[0] - robosquawker_moby->pos.f[0], vb.f[1] - robosquawker_moby->pos.f[1]) + robosquawker_vars->f1F4;
+        FUN_L00_00258278((char *)robosquawker_moby, &robosquawker_vars->f1F0, a, 0.05f, 0.3f, 0.2f);
         va.f[0] = fast_cos(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[2] = 0.0f;
-        res = FUN_L00_00258b50(robosquawker_moby, &v->w180, &va, &vb, 1.0f);
-        if (func_001F9908_i(&v->w210) != 0) {
-            v->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
-            v->f1F4 = -v->f1F4;
+        res = FUN_L00_00258b50(robosquawker_moby, &robosquawker_vars->w180, &va, &vb, 1.0f);
+        if (func_001F9908_i(&robosquawker_vars->w210) != 0) {
+            robosquawker_vars->w210 = scale_game_frames_alt((int)random_float_between(30.0f, 90.0f));
+            robosquawker_vars->f1F4 = -robosquawker_vars->f1F4;
         }
-        subtract_vector_xyz(&vc, &tgt, &v->v1D0);
-        d = vector_distance(&robosquawker_moby->pos, &tgt);
+        subtract_vector_xyz(&vc, &selected_target_record, &robosquawker_vars->v1D0);
+        d = vector_distance(&robosquawker_moby->pos, &selected_target_record);
         if ((d < 1.5f
-             || (tgt.moby != 0 && tgt.moby->hA6 == 0x10E && tgt.moby->state != 0xFE && tgt.moby->state != 0xFD && d < 2.3f))
+             || (selected_target_record.moby != 0 && selected_target_record.moby->hA6 == 0x10E && selected_target_record.moby->state != 0xFE && selected_target_record.moby->state != 0xFD && d < 2.3f))
             && !(res & 2)) {
             robosquawker_moby->state = 4;
             if (robosquawker_moby->b53 != 6) {
@@ -1703,7 +1703,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_moby->pos.f[0] = old.f[0];
                 robosquawker_moby->pos.f[1] = old.f[1];
             }
-            if (vector_length_xyz(&vc) < v->f1FC + 4.0f && absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]) < 8.0f) {
+            if (vector_length_xyz(&vc) < robosquawker_vars->f1FC + 4.0f && absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]) < 8.0f) {
                 if (robosquawker_moby->b21 != 0xFF) {
                     FUN_L01_0026e090(robosquawker_moby->b21, 1);
                 }
@@ -1712,7 +1712,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             }
         }
         robosquawker_moby->bBC = 0;
-        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)v);
+        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)robosquawker_vars);
         break;
     }
     case ROBOSQUAWKER_STATE_PECK_ATTACK: {
@@ -1724,67 +1724,67 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         float da;
         float g;
 
-        a = fast_arc_tan(tgt.pos.f[0] - robosquawker_moby->pos.f[0], tgt.pos.f[1] - robosquawker_moby->pos.f[1]);
-        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.05f, 0.3f, 0.2f);
+        a = fast_arc_tan(selected_target_record.pos.f[0] - robosquawker_moby->pos.f[0], selected_target_record.pos.f[1] - robosquawker_moby->pos.f[1]);
+        FUN_L00_00258278((char *)robosquawker_moby, &robosquawker_vars->f1F0, a, 0.05f, 0.3f, 0.2f);
         same = robosquawker_moby->b52 == robosquawker_moby->b53;
         hh = compute_interpolated_record_value(robosquawker_moby);
-        dz = absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]);
-        d = vector_distance(&robosquawker_moby->pos, &tgt);
-        da = fast_difference_between_rotations(fast_arc_tan(tgt.pos.f[0] - robosquawker_moby->pos.f[0], tgt.pos.f[1] - robosquawker_moby->pos.f[1]), robosquawker_moby->rot.f[2]);
+        dz = absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]);
+        d = vector_distance(&robosquawker_moby->pos, &selected_target_record);
+        da = fast_difference_between_rotations(fast_arc_tan(selected_target_record.pos.f[0] - robosquawker_moby->pos.f[0], selected_target_record.pos.f[1] - robosquawker_moby->pos.f[1]), robosquawker_moby->rot.f[2]);
         if (same
             && absolute_float(hh - 13.0f) < 0.2f
             && dz < 1.5f
             && (d < 2.0f
-                || (tgt.moby != 0 && tgt.moby->hA6 == 0x10E && tgt.moby->state != 0xFE && tgt.moby->state != 0xFD && d < 2.6f))
+                || (selected_target_record.moby != 0 && selected_target_record.moby->hA6 == 0x10E && selected_target_record.moby->state != 0xFE && selected_target_record.moby->state != 0xFD && d < 2.6f))
             && da < 0.2617994f) {
             va.f[0] = fast_cos(robosquawker_moby->rot.f[2]) * 0.2f;
             va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * 0.2f;
             va.f[2] = 0.0f;
-            qcopy(&vb, &tgt);
+            qcopy(&vb, &selected_target_record);
             vb.f[2] += 0.75f;
             if (tm != 0) {
                 spawn_nearby_effect(tm, (int)robosquawker_moby, 1, &vb, &va, 1.0f);
             }
         }
-        if ((robosquawker_moby->b70 & 2) && vector_distance(&robosquawker_moby->pos, &tgt) > 1.5f) {
+        if ((robosquawker_moby->b70 & 2) && vector_distance(&robosquawker_moby->pos, &selected_target_record) > 1.5f) {
             robosquawker_moby->state = 3;
             if (robosquawker_moby->b53 != 5) {
                 blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
             }
         }
         g = probe_ground_height(&robosquawker_moby->pos, 0x120, 0.5f);
-        v->f198 -= frame_time_sq * 9.8f;
-        robosquawker_moby->pos.f[2] += v->f198;
+        robosquawker_vars->f198 -= frame_time_sq * 9.8f;
+        robosquawker_moby->pos.f[2] += robosquawker_vars->f198;
         if (robosquawker_moby->pos.f[2] < g) {
-            v->f198 = 0.0f;
+            robosquawker_vars->f198 = 0.0f;
             robosquawker_moby->pos.f[2] = g;
         }
-        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)v);
+        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)robosquawker_vars);
         break;
     }
     case ROBOSQUAWKER_STATE_RETURN_HOME: {
         int res;
         float a;
 
-        if (v->w21C != -1) {
-            FUN_L01_0028b5e0(robosquawker_moby, D_L13_001B07B0[v->w21C], &v->v1D0, &vb);
+        if (robosquawker_vars->w21C != -1) {
+            FUN_L01_0028b5e0(robosquawker_moby, D_L13_001B07B0[robosquawker_vars->w21C], &robosquawker_vars->v1D0, &vb);
         } else {
-            qcopy(&vb, &v->v1D0);
+            qcopy(&vb, &robosquawker_vars->v1D0);
         }
         a = fast_arc_tan(vb.f[0] - robosquawker_moby->pos.f[0], vb.f[1] - robosquawker_moby->pos.f[1]);
-        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.02f, 0.3f, 0.1f);
+        FUN_L00_00258278((char *)robosquawker_moby, &robosquawker_vars->f1F0, a, 0.02f, 0.3f, 0.1f);
         va.f[0] = fast_cos(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[2] = 0.0f;
-        res = FUN_L00_00258b50(robosquawker_moby, &v->w180, &va, &vb, 1.0f);
-        if (vector_distance(&robosquawker_moby->pos, &v->v1D0) < 2.0f) {
+        res = FUN_L00_00258b50(robosquawker_moby, &robosquawker_vars->w180, &va, &vb, 1.0f);
+        if (vector_distance(&robosquawker_moby->pos, &robosquawker_vars->v1D0) < 2.0f) {
             robosquawker_moby->state = 1;
             if (robosquawker_moby->b53 != 3) {
                 blend_moby_animation_c(robosquawker_moby, 3, 0, scale_game_frames_alt(3));
             }
         }
-        subtract_vector_xyz(&vc, &tgt, &v->v1D0);
-        if (vector_length_xyz(&vc) < v->f1FC) {
+        subtract_vector_xyz(&vc, &selected_target_record, &robosquawker_vars->v1D0);
+        if (vector_length_xyz(&vc) < robosquawker_vars->f1FC) {
             if (robosquawker_moby->b21 != 0xFF) {
                 FUN_L01_0026e090(robosquawker_moby->b21, 1);
             }
@@ -1805,13 +1805,13 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 blend_moby_animation_c(robosquawker_moby, 4, 0, scale_game_frames_alt(3));
             }
         }
-        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)v);
+        FUN_L13_002b4ff0((char *)robosquawker_moby, (char *)robosquawker_vars);
         robosquawker_moby->bBC = 0;
         break;
     }
     case ROBOSQUAWKER_STATE_DAMAGE_KNOCKBACK:
-        if (mine_fall(robosquawker_moby, v->x120) & 1) {
-            qzero(v->x120);
+        if (mine_fall(robosquawker_moby, robosquawker_vars->x120) & 1) {
+            qzero(robosquawker_vars->x120);
             robosquawker_moby->state = 3;
             if (robosquawker_moby->b53 != 5) {
                 blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
@@ -1824,20 +1824,20 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         }
         break;
     case ROBOSQUAWKER_STATE_RECOVER_TO_FLIGHT_IDLE:
-        FUN_L13_002b4fb8((Level13VendorMoby *)v);
-        if (FUN_L00_002dc9f0(robosquawker_moby, v->x120) != 0) {
+        FUN_L13_002b4fb8((Level13VendorMoby *)robosquawker_vars);
+        if (FUN_L00_002dc9f0(robosquawker_moby, robosquawker_vars->x120) != 0) {
             robosquawker_moby->state = 0xE;
             if (robosquawker_moby->b53 != 0) {
                 blend_moby_animation_c(robosquawker_moby, 0, 0, 0);
             }
-            v->hC8 = 0;
+            robosquawker_vars->hC8 = 0;
         }
         break;
     case ROBOSQUAWKER_STATE_DEATH_KNOCKBACK: {
         int slot_reuse_delay_frames;
 
         robosquawker_moby->h34 &= 0xEFFF;
-        if (mine_fall(robosquawker_moby, v->x120) & 0x140) {
+        if (mine_fall(robosquawker_moby, robosquawker_vars->x120) & 0x140) {
             clear_u64_value(&va);
             slot_reuse_delay_frames = (int)((float)scale_game_frames_alt(1) * 60.0f);
             if (FUN_L01_002efbf8(D_L13_001613B0, 3, slot_reuse_delay_frames) >= 0) {
@@ -1856,21 +1856,21 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         int res;
         float a;
 
-        r = absolute_float(robosquawker_moby->pos.f[2] - tgt.pos.f[2]);
-        r = r / vector_distance(&robosquawker_moby->pos, &tgt);
-        if (v->w21C != -1) {
-            FUN_L01_0028b5e0(robosquawker_moby, D_L13_001B07B0[v->w21C], &v->v1D0, &vb);
+        r = absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]);
+        r = r / vector_distance(&robosquawker_moby->pos, &selected_target_record);
+        if (robosquawker_vars->w21C != -1) {
+            FUN_L01_0028b5e0(robosquawker_moby, D_L13_001B07B0[robosquawker_vars->w21C], &robosquawker_vars->v1D0, &vb);
         } else {
-            qcopy(&vb, &v->v1D0);
+            qcopy(&vb, &robosquawker_vars->v1D0);
         }
         a = fast_arc_tan(vb.f[0] - robosquawker_moby->pos.f[0], vb.f[1] - robosquawker_moby->pos.f[1]);
-        FUN_L00_00258278((char *)robosquawker_moby, &v->f1F0, a, 0.05f, 0.3f, 0.2f);
+        FUN_L00_00258278((char *)robosquawker_moby, &robosquawker_vars->f1F0, a, 0.05f, 0.3f, 0.2f);
         va.f[0] = fast_cos(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * 2.0f;
         va.f[2] = 0.0f;
-        res = FUN_L00_00258b50(robosquawker_moby, &v->w180, &va, &vb, 1.0f);
-        subtract_vector_xyz(&vc, &tgt, &v->v1D0);
-        if (vector_distance(&robosquawker_moby->pos, &tgt) < 1.5f && r <= 1.0f) {
+        res = FUN_L00_00258b50(robosquawker_moby, &robosquawker_vars->w180, &va, &vb, 1.0f);
+        subtract_vector_xyz(&vc, &selected_target_record, &robosquawker_vars->v1D0);
+        if (vector_distance(&robosquawker_moby->pos, &selected_target_record) < 1.5f && r <= 1.0f) {
             robosquawker_moby->state = 4;
             if (robosquawker_moby->b53 != 6) {
                 blend_moby_animation_c(robosquawker_moby, 6, 0, scale_game_frames_alt(3));
@@ -1892,7 +1892,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 blend_moby_animation_c(robosquawker_moby, anim, 0, scale_game_frames_alt(3));
             }
             if (random_integer_below(0x63) == 0) {
-                qzero(&v->v40);
+                qzero(&robosquawker_vars->v40);
                 robosquawker_moby->state = 0x10;
                 if (robosquawker_moby->b53 != 0) {
                     blend_moby_animation_c(robosquawker_moby, 0, 0, scale_game_frames_alt(3));
@@ -1909,8 +1909,8 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         if (robosquawker_moby->b52 != 5 && robosquawker_moby->b53 != 5) {
             blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
         }
-        va.f[0] = fast_cos(robosquawker_moby->rot.f[2]) * (v->f204 * frame_time);
-        va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * (v->f204 * frame_time);
+        va.f[0] = fast_cos(robosquawker_moby->rot.f[2]) * (robosquawker_vars->f204 * frame_time);
+        va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * (robosquawker_vars->f204 * frame_time);
         va.f[2] = 0.0f;
         add_vector_xyz(&vb, &robosquawker_moby->pos, &va);
         for (candidate_moby = (RsOther *)D_L13_0015FFE4; candidate_moby != 0; candidate_moby = candidate_moby->next) {
@@ -1944,13 +1944,13 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         }
         qcopy(&robosquawker_moby->pos, &vb);
         g = probe_ground_height(&robosquawker_moby->pos, 0x120, 0.5f);
-        v->f198 -= frame_time_sq * 9.8f;
-        robosquawker_moby->pos.f[2] += v->f198;
+        robosquawker_vars->f198 -= frame_time_sq * 9.8f;
+        robosquawker_moby->pos.f[2] += robosquawker_vars->f198;
         if (robosquawker_moby->pos.f[2] < g) {
-            v->f198 = 0.0f;
+            robosquawker_vars->f198 = 0.0f;
             robosquawker_moby->pos.f[2] = g;
         }
-        if (v->p218 == 0 || vector_distance(&robosquawker_moby->pos, v->p218 + 0x10) > convert_integer_to_float(v->h216)) {
+        if (robosquawker_vars->p218 == 0 || vector_distance(&robosquawker_moby->pos, robosquawker_vars->p218 + 0x10) > convert_integer_to_float(robosquawker_vars->h216)) {
             robosquawker_moby->state = 5;
             if (robosquawker_moby->b53 != 5) {
                 blend_moby_animation_c(robosquawker_moby, 5, 0, scale_game_frames_alt(3));
@@ -1960,7 +1960,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         break;
     }
     }
-    trooper_anim_finish(robosquawker_moby, v->x110);
+    trooper_anim_finish(robosquawker_moby, robosquawker_vars->x110);
     if (robosquawker_moby->pos.f[0] < 2.0f || robosquawker_moby->pos.f[0] > 1021.0f
         || robosquawker_moby->pos.f[1] < 2.0f || robosquawker_moby->pos.f[1] > 1021.0f
         || robosquawker_moby->pos.f[2] < 2.0f || robosquawker_moby->pos.f[2] > 1021.0f) {
@@ -1982,66 +1982,66 @@ short D_L13_001613E8 = -1;
 short D_L13_001613F8 = 0x7f4f;
 short D_L13_00161408 = -32513;
 short D_L13_00161418 = 0x7f00;
-void FUN_L13_002b8590(void *moby, char *obj) {
-    float vel[4];
-    float pos[4];
+void FUN_L13_002b8590(void *moby, char *flight_data) {
+    float initial_particle_velocity[4];
+    float joint_world_position[4];
     float first_particle_spawn_position[4];
-    float b[4];
+    float second_particle_spawn_position[4];
     float third_particle_spawn_position[4];
     float particle_velocity_scale;
     int i;
 
     for (i = 1; i < 3; i++) {
-        *(OvlQuad *)vel = 0;
-        particle_velocity_scale = *(float *)(obj + 0x64) / (frame_time * 24.0f);
+        *(OvlQuad *)initial_particle_velocity = 0;
+        particle_velocity_scale = *(float *)(flight_data + 0x64) / (frame_time * 24.0f);
         if (particle_velocity_scale > 1.0f)
             particle_velocity_scale = 1.0f;
         else if (particle_velocity_scale < 0.35f)
             particle_velocity_scale = 0.35f;
-        moby_point_position(moby, i, pos);
-        pos[3] = 0;
-        qcopy(first_particle_spawn_position, pos);
-        qcopy(b, pos);
-        qcopy(third_particle_spawn_position, pos);
-        FUN_L00_0025f8e0(first_particle_spawn_position, *(float *)(obj + 0xC4) * 0.02f + 0.02f);
-        FUN_L00_0025f8e0(b, *(float *)(obj + 0xC4) * 0.02f + 0.02f);
-        FUN_L00_0025f8e0(third_particle_spawn_position, *(float *)(obj + 0xC4) * 0.01f + 0.02f);
-        vel[0] =
-            -((random_float_between(6.0f, 7.0f) + *(float *)(obj + 0xC4) * 2.0f) * frame_time) *
+        moby_point_position(moby, i, joint_world_position);
+        joint_world_position[3] = 0;
+        qcopy(first_particle_spawn_position, joint_world_position);
+        qcopy(second_particle_spawn_position, joint_world_position);
+        qcopy(third_particle_spawn_position, joint_world_position);
+        FUN_L00_0025f8e0(first_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.02f);
+        FUN_L00_0025f8e0(second_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.02f);
+        FUN_L00_0025f8e0(third_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.01f + 0.02f);
+        initial_particle_velocity[0] =
+            -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 2.0f) * frame_time) *
             particle_velocity_scale;
-        FUN_L01_0028a7a8(moby, first_particle_spawn_position, vel, &D_L13_001613D8, 1);
-        vel[0] =
-            -((random_float_between(6.0f, 7.0f) + *(float *)(obj + 0xC4) * 3.0f) * frame_time) *
+        FUN_L01_0028a7a8(moby, first_particle_spawn_position, initial_particle_velocity, &D_L13_001613D8, 1);
+        initial_particle_velocity[0] =
+            -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 3.0f) * frame_time) *
             particle_velocity_scale;
-        FUN_L01_0028a7a8(moby, b, vel, &D_L13_001613E8, 1);
-        vel[0] =
-            -((random_float_between(6.0f, 7.0f) + *(float *)(obj + 0xC4) * 4.0f) * frame_time) *
+        FUN_L01_0028a7a8(moby, second_particle_spawn_position, initial_particle_velocity, &D_L13_001613E8, 1);
+        initial_particle_velocity[0] =
+            -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 4.0f) * frame_time) *
             particle_velocity_scale;
-        FUN_L01_0028a7a8(moby, third_particle_spawn_position, vel, &D_L13_001613F8, 1);
-        if (*(float *)(obj + 0xC4) > 0.5f) {
-            FUN_L00_0025f8e0(first_particle_spawn_position, *(float *)(obj + 0xC4) * 0.02f + 0.01f);
-            FUN_L00_0025f8e0(b, *(float *)(obj + 0xC4) * 0.02f + 0.01f);
-            FUN_L00_0025f8e0(third_particle_spawn_position, *(float *)(obj + 0xC4) * 0.01f + 0.01f);
-            vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(obj + 0xC4) * 2.0f) *
+        FUN_L01_0028a7a8(moby, third_particle_spawn_position, initial_particle_velocity, &D_L13_001613F8, 1);
+        if (*(float *)(flight_data + 0xC4) > 0.5f) {
+            FUN_L00_0025f8e0(first_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.01f);
+            FUN_L00_0025f8e0(second_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.01f);
+            FUN_L00_0025f8e0(third_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.01f + 0.01f);
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 2.0f) *
                        frame_time) *
                      particle_velocity_scale;
-            FUN_L01_0028a7a8(moby, first_particle_spawn_position, vel, &D_L13_001613D8, 1);
-            vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(obj + 0xC4) * 3.0f) *
+            FUN_L01_0028a7a8(moby, first_particle_spawn_position, initial_particle_velocity, &D_L13_001613D8, 1);
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 3.0f) *
                        frame_time) *
                      particle_velocity_scale;
-            FUN_L01_0028a7a8(moby, b, vel, &D_L13_001613E8, 1);
-            vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(obj + 0xC4) * 4.0f) *
+            FUN_L01_0028a7a8(moby, second_particle_spawn_position, initial_particle_velocity, &D_L13_001613E8, 1);
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 4.0f) *
                        frame_time) *
                      particle_velocity_scale;
-            FUN_L01_0028a7a8(moby, third_particle_spawn_position, vel, &D_L13_001613F8, 1);
-            vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(obj + 0xC4) * 2.0f) *
+            FUN_L01_0028a7a8(moby, third_particle_spawn_position, initial_particle_velocity, &D_L13_001613F8, 1);
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 2.0f) *
                        frame_time) *
                      particle_velocity_scale;
-            FUN_L01_0028a7a8(moby, first_particle_spawn_position, vel, &D_L13_00161408, 1);
-            vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(obj + 0xC4) * 3.0f) *
+            FUN_L01_0028a7a8(moby, first_particle_spawn_position, initial_particle_velocity, &D_L13_00161408, 1);
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 3.0f) *
                        frame_time) *
                      particle_velocity_scale;
-            FUN_L01_0028a7a8(moby, pos, vel, &D_L13_00161418, 1);
+            FUN_L01_0028a7a8(moby, joint_world_position, initial_particle_velocity, &D_L13_00161418, 1);
         }
     }
 }
@@ -2071,26 +2071,26 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 /* Draws a map icon for a moby relative to the hero (level copy of FUN_L17_002eaae0 without the mirror flag). */
-void FUN_L13_002b89f8(char *rot, char *from, char *moby, int icon, long color, int tex) {
+void FUN_L13_002b89f8(char *radar_rotation, char *from, char *moby, int icon, long color, int tex) {
     float turn[4];
-    float mat[16];
+    float radar_rotation_matrix[16];
     float delta[4];
-    float pos[4];
+    float radar_offset[4];
     float len;
     int x, y;
     IconEC5D0 *icon_definition;
 
     qzero(turn);
-    turn[2] = *(float *)(rot + 8);
+    turn[2] = *(float *)(radar_rotation + 8);
     turn[2] = fast_subtract_rotations(1.5707964f, turn[2]);
-    euler_rotation_matrix(mat, turn);
+    euler_rotation_matrix(radar_rotation_matrix, turn);
     subtract_vector_xyz(delta, moby + 0x10, from);
     delta[2] = 0.0f;
-    transform_vector(pos, delta, mat);
-    scale_vector_xyz(pos, pos, 0.0714285746f);
-    len = vector_length_xyz(pos);
-    x = func_001FA898_r(pos[0]);
-    y = func_001FA898_r(-pos[1]);
+    transform_vector(radar_offset, delta, radar_rotation_matrix);
+    scale_vector_xyz(radar_offset, radar_offset, 0.0714285746f);
+    len = vector_length_xyz(radar_offset);
+    x = func_001FA898_r(radar_offset[0]);
+    y = func_001FA898_r(-radar_offset[1]);
     if (len < 46.0f) {
         if (len > 38.0f) {
             float distance_weighted_alpha;
@@ -2162,7 +2162,7 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
     char *ret;
     int best;
     int *scr;
-    int dx, dy, r, screen_distance_squared;
+    int dx, dy, target_selection_radius, screen_distance_squared;
     float ang, dist, yaw_error, k, angular_error_magnitude, arrow_pulse_phase;
     char *tab;
 
@@ -2186,8 +2186,8 @@ int FUN_L13_002b8be0(int source_moby, char *moby_vars, char *radar_origin_positi
             FUN_L11_00311210(v, &tx, &ty, 0);
             tx -= sx;
             ty -= sy;
-            r = func_001FA898_r(seg_sqrt(convert_integer_to_float(tx * tx + ty * ty))) + 0x1C;
-            if (dx < r && dy < r) {
+            target_selection_radius = func_001FA898_r(seg_sqrt(convert_integer_to_float(tx * tx + ty * ty))) + 0x1C;
+            if (dx < target_selection_radius && dy < target_selection_radius) {
                 if (cur != 0) {
                     if (candidate_moby == cur) {
                         best = 0;
@@ -2345,11 +2345,11 @@ extern void tick_countdown_32(int *arg0) __asm__("FUN_001f9740");
 #define FLAG    hero.ship_ammo
 
 void FUN_L13_002b95b8(int source_moby, char *moby_vars) {
-    char *g = 0;
+    char *excluded_target_moby = 0;
     char *pad;
     char *current_target_moby;
-    char *r;
-    float v[4];
+    char *selected_target_moby;
+    float radar_rotation_copy[4];
     if (!(D_L13_0015F5C4 >= 3 && D_L13_0015F5C4 <= 4)) {
         tick_countdown_32((int *)(moby_vars + 0x8C));
     }
@@ -2368,27 +2368,27 @@ void FUN_L13_002b95b8(int source_moby, char *moby_vars) {
     pad = D_0013C940;
     if (W(pad, 0x1B4) & 0x2000) {
     take:
-        g = P(moby_vars, 0x88);
+        excluded_target_moby = P(moby_vars, 0x88);
     }
     W(moby_vars, 0xEC) = 0;
     W(moby_vars, 0x124) = -1;
     W(moby_vars, 0x88) = 0;
 skip:
-    qcopy(v, D_L13_001670D0);
-    r = (char *)FUN_L13_002b8be0(source_moby, moby_vars, D_L13_001670D0 - 0x10, v, 0.19634955f, 0.19634955f, 255.0f,
-                                 P(moby_vars, 0x88), g);
-    if ((r != P(moby_vars, 0x88) && W(moby_vars, 0x8C) >= 0x1F5) || FLAG == 0) {
+    qcopy(radar_rotation_copy, D_L13_001670D0);
+    selected_target_moby = (char *)FUN_L13_002b8be0(source_moby, moby_vars, D_L13_001670D0 - 0x10, radar_rotation_copy, 0.19634955f, 0.19634955f, 255.0f,
+                                 P(moby_vars, 0x88), excluded_target_moby);
+    if ((selected_target_moby != P(moby_vars, 0x88) && W(moby_vars, 0x8C) >= 0x1F5) || FLAG == 0) {
         W(moby_vars, 0xEC) = 0;
         W(moby_vars, 0x124) = -1;
         W(moby_vars, 0x88) = 0;
     }
-    if (r != 0 && (P(moby_vars, 0x88) == 0 || (H(P(moby_vars, 0x88), 0xA6) != 0x3EB && H(r, 0xA6) == 0x3EB)) &&
+    if (selected_target_moby != 0 && (P(moby_vars, 0x88) == 0 || (H(P(moby_vars, 0x88), 0xA6) != 0x3EB && H(selected_target_moby, 0xA6) == 0x3EB)) &&
         FLAG != 0) {
-        P(moby_vars, 0x88) = r;
-        W(moby_vars, 0x124) = H(r, 0xA6);
+        P(moby_vars, 0x88) = selected_target_moby;
+        W(moby_vars, 0x124) = H(selected_target_moby, 0xA6);
         W(moby_vars, 0x8C) = W(moby_vars, 0x138);
     }
-    if (r != P(moby_vars, 0x88)) {
+    if (selected_target_moby != P(moby_vars, 0x88)) {
         W(moby_vars, 0x118) = W(moby_vars, 0x118) + 1;
         if (scale_game_frames(0x3C) < W(moby_vars, 0x118)) {
             W(moby_vars, 0xEC) = 0;
@@ -2437,10 +2437,10 @@ void FUN_L13_002b97f8(char *moby) {
     char *screen_dimensions;
     unsigned char *base;
     unsigned char *g;
-    unsigned char *h;
+    unsigned char *player_health_state;
     unsigned char *b;
-    int sp10;
-    int sp14;
+    int target_screen_x;
+    int target_screen_y;
     int tex;
     int i;
     unsigned char ammo_icon_count;
@@ -2451,10 +2451,10 @@ void FUN_L13_002b97f8(char *moby) {
     int ex;
     int ey;
     int a;
-    int v;
+    int health_palette_fill_end;
     int lo;
     int hi;
-    int idx;
+    int health_palette_index;
     float marker_transition_fraction;
     float k;
     float marker_opacity_factor;
@@ -2463,7 +2463,7 @@ void FUN_L13_002b97f8(char *moby) {
 
     FUN_L13_002b95b8_c((int)moby, moby_vars);
     if (*(int *)(moby_vars + 0x88) != 0) {
-        FUN_L11_00311210(*(char **)(moby_vars + 0x88) + 0x10, &sp10, &sp14, 0);
+        FUN_L11_00311210(*(char **)(moby_vars + 0x88) + 0x10, &target_screen_x, &target_screen_y, 0);
         if (*(int *)(moby_vars + 0x8C) > scale_game_frames_alt(0x1F4)) {
             marker_transition_fraction = convert_integer_to_float(*(int *)(moby_vars + 0x8C) - scale_game_frames_alt(0x1F4));
             marker_transition_fraction = marker_transition_fraction / convert_integer_to_float(scale_game_frames_alt(0x4B));
@@ -2471,12 +2471,12 @@ void FUN_L13_002b97f8(char *moby) {
             k = marker_transition_fraction * 5.0f + 1.0f;
             if (marker_opacity_factor > 1.0f) marker_opacity_factor = 1.0f;
             c = func_001FA898_r(marker_opacity_factor * 96.0f);
-            func_L13_002B9590_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), k, normalize_angle(convert_integer_to_float(frame_count) / 30.0f), 0, 0xFF, 0, c);
+            func_L13_002B9590_f(convert_integer_to_float(target_screen_x), convert_integer_to_float(target_screen_y), k, normalize_angle(convert_integer_to_float(frame_count) / 30.0f), 0, 0xFF, 0, c);
             *(int *)(moby_vars + 0xEC) = 0;
         } else {
             a = 0xFF;
             if ((*(int *)(moby_vars + 0x8C) / scale_game_frames_alt(0x14)) & 1) a = 0;
-            func_L13_002B9590_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), 1.0f, 0.0f, 0xFF, a, 0, 0x60);
+            func_L13_002B9590_f(convert_integer_to_float(target_screen_x), convert_integer_to_float(target_screen_y), 1.0f, 0.0f, 0xFF, a, 0, 0x60);
             *(int *)(moby_vars + 0xEC) = *(int *)(moby_vars + 0x88);
         }
     }
@@ -2508,29 +2508,29 @@ void FUN_L13_002b97f8(char *moby) {
     if (*(float *)(b + 0x15FC) < *(float *)(b + 0x1600) / 10.0f && (frame_count / 90) & 1) {
         font_print_center_small(0x100, 0x186, 0x80000080L, func_001FE540_id(0x5269), 0x64);
     }
-    h = D_0013F350;
-    hud_health_step = *(float *)(h + 0x15FC) - *(float *)(moby_vars + 0xF0);
+    player_health_state = D_0013F350;
+    hud_health_step = *(float *)(player_health_state + 0x15FC) - *(float *)(moby_vars + 0xF0);
     hud_health_step *= 0.2f;
     hud_health_step_magnitude = absolute_float(hud_health_step);
     if (hud_health_step_magnitude > 1.0f) hud_health_step /= hud_health_step_magnitude;
     *(float *)(moby_vars + 0xF0) += hud_health_step;
-    v = func_001FA898_r(*(float *)(moby_vars + 0xF0) * 251.0f / *(float *)(h + 0x1600)) + 2;
-    if (v > 0xFD) v = 0xFD;
-    if (v < 2) v = 2;
-    lo = *(int *)(moby_vars + 0xF4) <= v ? *(int *)(moby_vars + 0xF4) : v;
-    hi = *(int *)(moby_vars + 0xF4) < v ? v : *(int *)(moby_vars + 0xF4);
+    health_palette_fill_end = func_001FA898_r(*(float *)(moby_vars + 0xF0) * 251.0f / *(float *)(player_health_state + 0x1600)) + 2;
+    if (health_palette_fill_end > 0xFD) health_palette_fill_end = 0xFD;
+    if (health_palette_fill_end < 2) health_palette_fill_end = 2;
+    lo = *(int *)(moby_vars + 0xF4) <= health_palette_fill_end ? *(int *)(moby_vars + 0xF4) : health_palette_fill_end;
+    hi = *(int *)(moby_vars + 0xF4) < health_palette_fill_end ? health_palette_fill_end : *(int *)(moby_vars + 0xF4);
     for (j = lo; j <= hi; j++) {
-        idx = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
-        if (j < v) {
-            hp_bar_clut[0][idx] = D_L13_001CBE70[idx];
+        health_palette_index = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
+        if (j < health_palette_fill_end) {
+            hp_bar_clut[0][health_palette_index] = D_L13_001CBE70[health_palette_index];
         } else {
-            hp_bar_clut[0][idx] = 0x80000000;
+            hp_bar_clut[0][health_palette_index] = 0x80000000;
         }
     }
     screen_dimensions = (char *)D_0013E500;
     draw_textured_quad_local(0x170, *(int *)(screen_dimensions + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(moby_vars + 0x104) + 0x28));
     draw_textured_quad_local(0x170, *(int *)(screen_dimensions + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(moby_vars + 0x104) + 0x29));
-    *(int *)(moby_vars + 0xF4) = v;
+    *(int *)(moby_vars + 0xF4) = health_palette_fill_end;
 }
 /* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB068), where it is exact; names translated to the US level program. */
@@ -2543,51 +2543,51 @@ extern void FUN_L11_00311210(void *, void *, void *, int);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 
-void FUN_L13_002b9df8(struct Moby *moby, char *obj, float azimuth_angle, float elevation_angle) {
+void FUN_L13_002b9df8(struct Moby *moby, char *flight_data, float azimuth_angle, float elevation_angle) {
     char aim_vector[16];
-    char b[16];
+    char projectile_spawn_position[16];
     char muzzle_offset[16];
     char aim_world_position[16];
     build_spherical_offset(aim_vector, frame_time * 400.0f, azimuth_angle, elevation_angle);
-    fast_vec_add(aim_vector, aim_vector, obj);
-    if (fast_dec_timer(obj + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
+    fast_vec_add(aim_vector, aim_vector, flight_data);
+    if (fast_dec_timer(flight_data + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
         allocate_voice_for_target_entry(3, 0, (int)moby);
         fast_vec_normalize(muzzle_offset, aim_vector, 2.2f);
-        moby_point_position(moby, 3 + (obj[0x61] & 1), b);
-        fast_vec_add(b, b, muzzle_offset);
-        FUN_L11_00308848(moby, aim_vector, b, 200.0f, -1.0f);
-        *(int *)(obj + 0x80) = scale_game_frames(4);
-        obj[0x61] ^= 1;
+        moby_point_position(moby, 3 + (flight_data[0x61] & 1), projectile_spawn_position);
+        fast_vec_add(projectile_spawn_position, projectile_spawn_position, muzzle_offset);
+        FUN_L11_00308848(moby, aim_vector, projectile_spawn_position, 200.0f, -1.0f);
+        *(int *)(flight_data + 0x80) = scale_game_frames(4);
+        flight_data[0x61] ^= 1;
     }
     fast_vec_normalize(aim_vector, aim_vector, 23.0f);
     fast_vec_add(aim_world_position, aim_vector, &moby->pos);
-    FUN_L11_00311210(aim_world_position, obj + 0xE0, obj + 0xE4, 0);
+    FUN_L11_00311210(aim_world_position, flight_data + 0xE0, flight_data + 0xE4, 0);
 }
 /* Fires a timed burst from a moby while a pad button is held and ammo remains. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB1C8), where it is exact; names translated to the US level program. */
 
 extern int FUN_L13_002e6a58(void *, void *, float, int, void *, int);
 
-void FUN_L13_002b9f58(struct Moby *moby, char *obj) {
-    if (fast_dec_timer(obj + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
-        unsigned char *u = D_0013E533 + 0xE1D;
-        if (u[0x15F6] != 0) {
+void FUN_L13_002b9f58(struct Moby *moby, char *flight_data) {
+    if (fast_dec_timer(flight_data + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
+        unsigned char *player_ammo_state = D_0013E533 + 0xE1D;
+        if (player_ammo_state[0x15F6] != 0) {
             char projectile_spawn_position[16];
-            char b[16];
+            char projectile_spawn_offset[16];
             float projectile_scale;
-            int h;
-            char *pos = &moby->rot;
-            short t = (*(unsigned short *)(obj + 0x6A) + 1) & 3;
-            *(short *)(obj + 0x6A) = t;
+            int projectile_frame_count;
+            char *projectile_initial_rotation = &moby->rot;
+            short t = (*(unsigned short *)(flight_data + 0x6A) + 1) & 3;
+            *(short *)(flight_data + 0x6A) = t;
             moby_point_position(moby, t + 7, projectile_spawn_position);
-            fast_vec_normalize(b, obj, 0.3f);
-            fast_vec_add(projectile_spawn_position, projectile_spawn_position, b);
+            fast_vec_normalize(projectile_spawn_offset, flight_data, 0.3f);
+            fast_vec_add(projectile_spawn_position, projectile_spawn_position, projectile_spawn_offset);
             projectile_scale = frame_time * 100.0f;
-            h = scale_game_frames(300);
-            if (FUN_L13_002e6a58(moby, projectile_spawn_position, projectile_scale, *(int *)(obj + 0xEC), pos, h) != 0) {
+            projectile_frame_count = scale_game_frames(300);
+            if (FUN_L13_002e6a58(moby, projectile_spawn_position, projectile_scale, *(int *)(flight_data + 0xEC), projectile_initial_rotation, projectile_frame_count) != 0) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
-                u[0x15F6]--;
-                *(int *)(obj + 0x84) = scale_game_frames(30);
+                player_ammo_state[0x15F6]--;
+                *(int *)(flight_data + 0x84) = scale_game_frames(30);
             }
         }
     }

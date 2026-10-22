@@ -66,7 +66,7 @@ void FUN_L14_003015d0(unsigned char *moby) {
     D1224 *beam_vars = *(D1224 **)(moby + 0x78);
     float v[4] __attribute__((aligned(16)));
     int beam_state;
-    int arg;
+    int phase_duration_frames;
     if (moby[0x20] != 0) {
         qcopy(v, moby + 0x10);
         v[3] = beam_vars->f624;
@@ -106,11 +106,11 @@ void FUN_L14_003015d0(unsigned char *moby) {
         if (fast_dec_timer_s16(&beam_vars->s10) != 0) {
             if (beam_vars->s6 != 0) {
                 moby[0x20] = 2;
-                arg = beam_vars->s6;
+                phase_duration_frames = beam_vars->s6;
             } else {
-                arg = beam_vars->s4;
+                phase_duration_frames = beam_vars->s4;
             }
-            beam_vars->s10 = scale_game_frames(arg);
+            beam_vars->s10 = scale_game_frames(phase_duration_frames);
         } else if (beam_vars->s12 == 0) {
             FUN_L14_003017f8((char *)moby);
         }
@@ -283,7 +283,7 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L14_00301de8(char *moby) {
     char *vars = *(char **)(moby + 0x78);
-    char *dst, *src;
+    char *beam_point, *src;
     u8 *indices;
     int i, j, k, copy_i, next_i;
     float fraction;
@@ -292,10 +292,10 @@ void FUN_L14_00301de8(char *moby) {
         *(s16 *)(vars + 0x12) = *(u16 *)(vars + 0x12) - 1;
         indices = (u8 *)(vars + 0x18);
         src = vars + 0x260;
-        dst = vars + 0x60;
+        beam_point = vars + 0x60;
         for (j = 22; j >= 0; j--) {
-            add_vector_xyz(dst, dst, src);
-            dst += 0x10;
+            add_vector_xyz(beam_point, beam_point, src);
+            beam_point += 0x10;
             src += 0x10;
         }
         i = 0;
@@ -503,7 +503,7 @@ void FUN_L14_00302538(char *self) {
     struct Moby *beam_moby = (struct Moby *)self;
     D1224 *beam_vars = (D1224 *)beam_moby->pvars;
     VendorBeamReq req;
-    Vec4 dir, to_hero, base, end_a, end_b, from, to, off;
+    Vec4 dir, to_hero, base, end_a, end_b, from, to, beam_radius_offset;
     f32 dot, len;
 
     if (beam_vars->radius == 0.0f)
@@ -557,19 +557,19 @@ void FUN_L14_00302538(char *self) {
     }
     qcopy(&end_a, &beam_vars->end_a);
     qcopy(&end_b, &beam_vars->end_b);
-    normalize_vector_xyz(&off, &D_L14_001600EC[beam_vars->w0].axis[0], beam_vars->radius);
-    add_vector_xyz(&from, &end_a, &off);
-    add_vector_xyz(&to, &end_b, &off);
+    normalize_vector_xyz(&beam_radius_offset, &D_L14_001600EC[beam_vars->w0].axis[0], beam_vars->radius);
+    add_vector_xyz(&from, &end_a, &beam_radius_offset);
+    add_vector_xyz(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
-    subtract_vector_xyz(&from, &end_a, &off);
-    subtract_vector_xyz(&to, &end_b, &off);
+    subtract_vector_xyz(&from, &end_a, &beam_radius_offset);
+    subtract_vector_xyz(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
-    normalize_vector_xyz(&off, &D_L14_001600EC[beam_vars->w0].axis[2], beam_vars->radius);
-    add_vector_xyz(&from, &end_a, &off);
-    add_vector_xyz(&to, &end_b, &off);
+    normalize_vector_xyz(&beam_radius_offset, &D_L14_001600EC[beam_vars->w0].axis[2], beam_vars->radius);
+    add_vector_xyz(&from, &end_a, &beam_radius_offset);
+    add_vector_xyz(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
-    subtract_vector_xyz(&from, &end_a, &off);
-    subtract_vector_xyz(&to, &end_b, &off);
+    subtract_vector_xyz(&from, &end_a, &beam_radius_offset);
+    subtract_vector_xyz(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
 }
 #include "sda.h"
@@ -591,7 +591,7 @@ void FUN_L14_003039e0(unsigned char *moby) {
     int i;
     int j;
     int started_slot_count;
-    int st;
+    int slot_state;
 
     switch (moby[0x20]) {
     case SLOT_UPDATE_STATE_INITIALIZE:
@@ -605,15 +605,15 @@ void FUN_L14_003039e0(unsigned char *moby) {
     case SLOT_UPDATE_STATE_PROCESS_SLOTS:
         started_slot_count = 0;
         for (i = 0; i < 3; i++) {
-            st = D_L14_00162148[i];
-            if (st == 1) {
+            slot_state = D_L14_00162148[i];
+            if (slot_state == 1) {
                 if (((signed char *)D_L14_001621D8[i])[0x20] < 0) {
                     D_L14_00162148[i] = 0;
                     D_L14_001621D8[i] = 0;
                 }
-            } else if (st == 4) {
+            } else if (slot_state == 4) {
                 FUN_L00_002e20f8(i);
-            } else if (st != 0) {
+            } else if (slot_state != 0) {
                 started_slot_count++;
                 FUN_L00_002e2250(D_L14_001621D8[i], i);
                 D_L14_00162148[i] = 4;

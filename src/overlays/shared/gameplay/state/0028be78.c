@@ -12,8 +12,8 @@
 
 extern int FUN_L00_00261968(int, void *, void *);
 
-void FUN_L05_0028be78(int *list, int list_count, int idx) {
-    char *adjacency_table = D_L05_001B0930[idx];
+void FUN_L05_0028be78(int *list, int list_count, int adjacency_table_index) {
+    char *adjacency_table = D_L05_001B0930[adjacency_table_index];
     int i, j, k, found;
     {
         int mask_clear_index;

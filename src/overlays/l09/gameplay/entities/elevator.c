@@ -151,7 +151,7 @@ void elevator_update(unsigned char *moby) {
             *(int *)(data + 0xC4) = -1;
         } else {
             int i;
-            float f20, node_index_as_float;
+            float segment_fraction, node_index_as_float;
             char *segment_start;
             if (!voice_is_playing(moby, *(int *)(data + 0xC4))) {
                 *(int *)(data + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
@@ -185,18 +185,18 @@ void elevator_update(unsigned char *moby) {
                 }
                 *(int *)(data + 0xC4) = -1;
             }
-            f20 = convert_integer_to_float(*(int *)path - 1);
-            i = func_001FA898_r(f20 * F(data, 0xA4));
-            f20 = convert_integer_to_float(*(int *)path - 1);
+            segment_fraction = convert_integer_to_float(*(int *)path - 1);
+            i = func_001FA898_r(segment_fraction * F(data, 0xA4));
+            segment_fraction = convert_integer_to_float(*(int *)path - 1);
             node_index_as_float = convert_integer_to_float(i);
-            f20 *= F(data, 0xA4);
-            f20 -= node_index_as_float;
+            segment_fraction *= F(data, 0xA4);
+            segment_fraction -= node_index_as_float;
             if (i == *(int *)path - 1) {
                 qcopy((moby + 0x10), path + 0x10 + i * 16);
             } else {
                 segment_start = path + 0x10 + i * 16;
                 subtract_vector_xyz(segment_offset, path + 0x20 + i * 16, segment_start);
-                scale_vector_xyz(segment_offset, segment_offset, f20);
+                scale_vector_xyz(segment_offset, segment_offset, segment_fraction);
                 add_vector_xyz((moby + 0x10), segment_offset, segment_start);
             }
             F(data, 0xBC) = F(moby, 0x18) - orig[2];
@@ -325,7 +325,7 @@ void refueling_station_update(struct Moby *moby) {
         REFUELING_STATION_STATE_EXPLODE = 3
     };
     char *station_vars = (char *)moby->pvars;
-    float v[4];
+    float explosion_offset[4];
     unsigned char *removal_check_base;
     FUN_L09_00303b30(moby, station_vars, station_vars + 0x20);
     switch (moby->state) {
@@ -378,8 +378,8 @@ void refueling_station_update(struct Moby *moby) {
         }
         break;
     case REFUELING_STATION_STATE_EXPLODE:
-        subtract_vector_xyz_c(v, D_L09_00166F40, &moby->pos);
-        spawn_explosion(moby, v, 0, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, 2.0f, 0,
+        subtract_vector_xyz_c(explosion_offset, D_L09_00166F40, &moby->pos);
+        spawn_explosion(moby, explosion_offset, 0, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, 2.0f, 0,
                               40.0f, 0, 1, -1, 0);
         mark_moby_for_removal(moby);
         break;
@@ -467,7 +467,7 @@ char *FUN_L09_003041d0(char *self, char *pos, int bone) {
     char *best = 0;
     float bestd = 1000000000.0f;
     char query_position[16];
-    char vec[16];
+    char candidate_joint_position[16];
     char *candidate_moby;
     char *tp = query_position;
     *(OvlQuad *)query_position = *(OvlQuad *)pos;
@@ -480,8 +480,8 @@ char *FUN_L09_003041d0(char *self, char *pos, int bone) {
                 *(short *)(candidate_moby + 0xA6) == 0x4A0) {
                 float candidate_distance;
                 if (bone != -1) {
-                    moby_point_position(candidate_moby, bone, vec);
-                    candidate_distance = FUN_001f9b48(tp, vec);
+                    moby_point_position(candidate_moby, bone, candidate_joint_position);
+                    candidate_distance = FUN_001f9b48(tp, candidate_joint_position);
                 } else {
                     candidate_distance = FUN_001f9b48(tp, candidate_moby + 0x10);
                 }
@@ -984,7 +984,7 @@ void turret_update(struct Moby *moby) {
     Vec4 rnd;
     TurretVars *vars;
     TurretBeam *beam;
-    float len;
+    float stick_magnitude;
     float stick_y;
     int beam_frame_count;
     int i;
@@ -1104,9 +1104,9 @@ void turret_update(struct Moby *moby) {
             stick_y = hero.stick_y;
         }
         work_vector.f[1] = stick_y;
-        len = vector_length_xy(&work_vector);
-        if (len > 1.0f) {
-            divide_vector_xyz(&work_vector, &work_vector, len);
+        stick_magnitude = vector_length_xy(&work_vector);
+        if (stick_magnitude > 1.0f) {
+            divide_vector_xyz(&work_vector, &work_vector, stick_magnitude);
         }
         vars->yaw_speed += frame_time_sq * 3.1415927f * -work_vector.f[0];
         vars->pitch_speed += frame_time_sq * 0.7853982f * -work_vector.f[1];
@@ -1265,8 +1265,8 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
-char *FUN_L09_00308220(struct Moby *owner, int cls) {
-    char *moby = func_0020D348_m(cls);
+char *FUN_L09_00308220(struct Moby *owner, int spawned_moby_class) {
+    char *moby = func_0020D348_m(spawned_moby_class);
     if (moby != 0) {
         unsigned char state;
         ((unsigned char *)moby)[0x30] = 0xFF;
@@ -1348,7 +1348,7 @@ void barrier_update(Moby *moby) __asm__("FUN_L09_003082d8");
 void barrier_update(Moby *moby)
 {
     BarrierData_309688 *data = (*(BarrierData_309688 **)&moby->pvars);
-    float origin[4], center[4], piece_pos[4], vel[4], push[4];
+    float origin[4], center[4], piece_pos[4], piece_velocity[4], push[4];
     Hit_309688 *hit;
     int has_next;
     int count;
@@ -1386,25 +1386,25 @@ void barrier_update(Moby *moby)
     if (0.85f < D_L09_0015F5D0 || 0.85f < D_L09_0015F5D4) count = 30;
     angle = -3.1415927f;
     for (i = 0; i < count; i++) {
-        *(u128 *)vel = 0;
-        vel[0] = func_002140F8_309688(-0.4f, 0.4f);
-        vel[1] = func_002140F8_309688(-0.6f, 0.6f);
-        vel[2] = func_002140F8_309688(-0.4f, 0.4f);
-        *(u128 *)piece_pos = *(u128 *)vel;
+        *(u128 *)piece_velocity = 0;
+        piece_velocity[0] = func_002140F8_309688(-0.4f, 0.4f);
+        piece_velocity[1] = func_002140F8_309688(-0.6f, 0.6f);
+        piece_velocity[2] = func_002140F8_309688(-0.4f, 0.4f);
+        *(u128 *)piece_pos = *(u128 *)piece_velocity;
         scale = func_002140F8_309688(0.3f, 2.6f);
         piece_pos[0] = piece_pos[0] + scale * func_001F9F90_309688(angle);
         scale = scale * func_001F9FA8_309688(angle);
         piece_pos[2] = piece_pos[2] + scale;
         func_001F9EC0_309688(piece_pos, piece_pos, ((f32 *)&moby->rot_row0));
         fast_vec_add(piece_pos, piece_pos, center);
-        fast_vec_sub(vel, piece_pos, origin);
-        scale = func_001F9B88_309688(6.0f - fast_vec_length(vel)) / 6.0f;
+        fast_vec_sub(piece_velocity, piece_pos, origin);
+        scale = func_001F9B88_309688(6.0f - fast_vec_length(piece_velocity)) / 6.0f;
         func_L00_001FF4B0_309688(push, hit->pos, scale * scale * 8.0f);
-        fast_vec_add(vel, vel, push);
-        func_L00_001FF4B0_309688(vel, vel, scale * (func_002140F8_309688(5.0f, 8.0f) * frame_time));
+        fast_vec_add(piece_velocity, piece_velocity, push);
+        func_L00_001FF4B0_309688(piece_velocity, piece_velocity, scale * (func_002140F8_309688(5.0f, 8.0f) * frame_time));
         if (moby->oclass == 0x508) {
             int odd = i & 1;
-            func_L09_002F0BB8_309688(moby, piece_pos, vel, odd, func_002140F8_309688(1.0f, 1.3f));
+            func_L09_002F0BB8_309688(moby, piece_pos, piece_velocity, odd, func_002140F8_309688(1.0f, 1.3f));
         }
         if (i % 3 == 0) {
             func_L00_00260108_309688(moby, piece_pos, -1, func_002140F8_309688(0.3f, 0.6f), 0.0f);
@@ -1782,10 +1782,10 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_0030B5E8.c: func_L09_0030B5E8), where it is exact; names translated to the US level program. */
 
-void FUN_L09_0030a238(float *dst, float current_angle, float b, float scale) {
-    float v = fast_subtract_rotations(b, current_angle) * scale;
-    *dst = v;
-    *dst = fast_add_rotations(v, current_angle);
+void FUN_L09_0030a238(float *dst, float current_angle, float target_angle, float scale) {
+    float scaled_angle_delta = fast_subtract_rotations(target_angle, current_angle) * scale;
+    *dst = scaled_angle_delta;
+    *dst = fast_add_rotations(scaled_angle_delta, current_angle);
 }
 typedef struct {
     s32 count;

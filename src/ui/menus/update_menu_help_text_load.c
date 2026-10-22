@@ -39,21 +39,21 @@ int update_menu_help_text_load(char *menu) {
         break;
     case HELP_TEXT_LOAD_WAIT_FOR_READ:
         if (cd_read_active[0] == 0) {
-            struct MenuSystem *g = &menu_system;
-            int *archive = (int *)g->help_text_buffer;
+            struct MenuSystem *menu_system_state = &menu_system;
+            int *archive = (int *)menu_system_state->help_text_buffer;
             int *language_entries = (int *)((char *)archive + archive[game_language]);
             int entry_count = *language_entries++;
             int entry_bytes = *language_entries++;
-            char *b;
+            char *entry_count_base;
             int *text_entries;
             int i;
 
             copy_memory_aligned(archive, language_entries, ((entry_bytes + 3) & ~3) - 8);
-            b = D_001996D0;
+            entry_count_base = D_001996D0;
             *(int *)(menu + 0x54) = help_msgs;
-            *(int *)(menu + 0x38) = *(int *)(b + 0x2C);
-            *(int *)(b + 0x2C) = entry_count;
-            text_entries = (int *)g->help_text_buffer;
+            *(int *)(menu + 0x38) = *(int *)(entry_count_base + 0x2C);
+            *(int *)(entry_count_base + 0x2C) = entry_count;
+            text_entries = (int *)menu_system_state->help_text_buffer;
             help_msgs = (int)text_entries;
             for (i = 0; i < pauseSlotCount(); i++) {
                 int text_base = (int)text_entries - 8;

@@ -236,7 +236,7 @@ extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 /* Picks slot w74 from the stick angle (or steps it with the 0x1000-0x8000 pad bits), counts hold frames in b71/b70, records the slot's entry when released, and closes when b70 runs out. */
 void FUN_L00_00237ba0(Obj *hud_element) {
-    float x, y, mag, ang, a, slot_position, r;
+    float x, y, mag, ang, a, slot_position, previous_slot_angle;
     int old, slot_step, stick_slot_index, k, id;
     u8 *counters = &hud_element->b70;
 
@@ -263,8 +263,8 @@ void FUN_L00_00237ba0(Obj *hud_element) {
         if (mag > 0.9f) {
             a = ang + 3.1415927f + 3.1415927f + 1.5707964f + 3.1415927f / (float)D_L00_0015FA90;
             slot_position = a * ((float)D_L00_0015FA90 / 6.2831855f);
-            r = (float)old * 6.2831855f / convert_integer_to_float(D_L00_0015FA90) - 3.1415927f;
-            if (old == -1 || fast_difference_between_rotations(r, fast_subtract_rotations(ang, 1.5707964f)) > 0.58904862f) {
+            previous_slot_angle = (float)old * 6.2831855f / convert_integer_to_float(D_L00_0015FA90) - 3.1415927f;
+            if (old == -1 || fast_difference_between_rotations(previous_slot_angle, fast_subtract_rotations(ang, 1.5707964f)) > 0.58904862f) {
                 stick_slot_index = (int)slot_position % D_L00_0015FA90;
                 if (((stick_slot_index ^ 1) & 1)) {
                     float fr = slot_position - (float)FUN_001fa6d0(slot_position);
@@ -278,13 +278,13 @@ void FUN_L00_00237ba0(Obj *hud_element) {
                 if (D_L00_0015F784 > 0.0f) slot_step = 1;
             }
         } else if (D_0013C940.w1D8 == 0 && (D_0013C940.w1C4 & 0xF000)) {
-            int w;
-            w = old;
-            if (D_0013C940.w1C4 & 0x1000) { int slot_lookup; if (w == -1) slot_lookup = D_L00_0017DC20; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][w].unk10; w = slot_lookup; }
-            if (D_0013C940.w1C4 & 0x4000) { int slot_lookup; if (w == -1) slot_lookup = D_L00_0017DC24; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][w].unk14; w = slot_lookup; }
-            if (D_0013C940.w1C4 & 0x8000) { int slot_lookup; if (w == -1) slot_lookup = D_L00_0017DC18; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][w].unk8; w = slot_lookup; }
-            if (D_0013C940.w1C4 & 0x2000) { int slot_lookup; if (w == -1) slot_lookup = D_L00_0017DC1C; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][w].unkC; w = slot_lookup; }
-            hud_element->w74 = w;
+            int pad_slot_index;
+            pad_slot_index = old;
+            if (D_0013C940.w1C4 & 0x1000) { int slot_lookup; if (pad_slot_index == -1) slot_lookup = D_L00_0017DC20; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk10; pad_slot_index = slot_lookup; }
+            if (D_0013C940.w1C4 & 0x4000) { int slot_lookup; if (pad_slot_index == -1) slot_lookup = D_L00_0017DC24; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk14; pad_slot_index = slot_lookup; }
+            if (D_0013C940.w1C4 & 0x8000) { int slot_lookup; if (pad_slot_index == -1) slot_lookup = D_L00_0017DC18; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk8; pad_slot_index = slot_lookup; }
+            if (D_0013C940.w1C4 & 0x2000) { int slot_lookup; if (pad_slot_index == -1) slot_lookup = D_L00_0017DC1C; else slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unkC; pad_slot_index = slot_lookup; }
+            hud_element->w74 = pad_slot_index;
         }
         {
             Ent *slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C];
@@ -318,8 +318,8 @@ void FUN_L00_00237ba0(Obj *hud_element) {
     if (counters[0] == 0) {
         {
             int a = hud_element->w78;
-            int b = hud_element->w74;
-            D_L00_0015FA9C = b;
+            int selected_slot_snapshot = hud_element->w74;
+            D_L00_0015FA9C = selected_slot_snapshot;
             D_L00_0015FA98 = a;
         }
         remove_hud_item(hud_element->w64);
@@ -528,15 +528,15 @@ extern int D_L00_0015F72C __attribute__((sda));
 extern int D_L00_0015F740 __attribute__((sda));
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00238b18(char *hud_element) {
-    int element_width, b;
+    int element_width, element_height;
     D_L00_0015FA90 = 4;
     D_L00_0015FAC0 = &D_L00_0015F740;
     element_width = D_L00_0015F718_gp;
-    b = D_L00_0015F71C_gp;
+    element_height = D_L00_0015F71C_gp;
     *(short *)(hud_element + 0x48) = 0;
     *(short *)(hud_element + 0x4A) = 0;
     *(int *)(hud_element + 0x58) = element_width;
-    *(int *)(hud_element + 0x5C) = b;
+    *(int *)(hud_element + 0x5C) = element_height;
     *(int *)(hud_element + 0x74) = -2;
     *(int *)(hud_element + 0x78) = scale_game_frames(30);
     D_L00_0015F72C = 0;
@@ -623,8 +623,8 @@ void FUN_L00_00238b80(Obj *hud_element) {
     if (counters[0] == 0) {
         {
             int selection_state_snapshot = hud_element->w78;
-            int b = hud_element->w74;
-            D_L00_0015FA9C = b;
+            int selected_slot_snapshot = hud_element->w74;
+            D_L00_0015FA9C = selected_slot_snapshot;
             D_L00_0015FA98 = selection_state_snapshot;
         }
         remove_hud_item(hud_element->w64);
@@ -809,8 +809,8 @@ int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00235c80();
 /* Sets 0x7C, 0x58/0x5C = 64, 0x48 = 32, calls 00235c80 and links D_L00_0015FAB0. */
 void FUN_L00_002395b0(char *hud_element) {
-    int r = scale_game_frames(0xB4);
-    *(int *)(hud_element + 0x7C) = r + 30;
+    int scaled_duration_frames = scale_game_frames(0xB4);
+    *(int *)(hud_element + 0x7C) = scaled_duration_frames + 30;
     *(int *)(hud_element + 0x58) = 64;
     *(int *)(hud_element + 0x5C) = 64;
     *(short *)(hud_element + 0x48) = 32;
@@ -842,7 +842,7 @@ extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 void FUN_L00_00239630(HudElem *hud_element) {
     unsigned char *visibility_counters = hud_element->cnt;
     HudCounter *animation_counters;
-    HudCounter *g;
+    HudCounter *health_icon_animation_counters;
     int unclamped_target_value;
     int max;
 
@@ -866,14 +866,14 @@ void FUN_L00_00239630(HudElem *hud_element) {
         if (animation_counters->unk2 >= 0x1000) {
             animation_counters->unk2 = 0xFFF;
         }
-        g = animation_counters;
-        if (g->unk2 < 0x7FF) {
-            if (g->unk4 < 0) {
-                g->unk6 = 1;
+        health_icon_animation_counters = animation_counters;
+        if (health_icon_animation_counters->unk2 < 0x7FF) {
+            if (health_icon_animation_counters->unk4 < 0) {
+                health_icon_animation_counters->unk6 = 1;
             }
         }
-        if (g->unk2 < 0) {
-            g->unk2 = 0;
+        if (health_icon_animation_counters->unk2 < 0) {
+            health_icon_animation_counters->unk2 = 0;
         }
         if (hud_element->unk78 > hud_element->unk08) {
             hud_element->unk78 = hud_element->unk08;
@@ -943,19 +943,19 @@ s32 FUN_L00_00239810(Hud *hud_element) {
     f32 ratio_x;
     f32 ratio_y;
     s32 alpha;
-    s32 w;
+    s32 panel_alpha;
     s16 *p;
     s32 sel;
     Pt *tab;
     s32 mode;
     s32 first_panel_half_width;
-    s32 b;
+    s32 second_panel_half_width;
     s32 x0;
     s32 yy;
-    s32 h1;
-    s32 h2;
+    s32 panel_cap_frame_index;
+    s32 panel_middle_frame_index;
     s32 i;
-    s32 r;
+    s32 health_icon_frame_index;
     Pt *e;
     u8 *visibility_counters;
 
@@ -983,7 +983,7 @@ s32 FUN_L00_00239810(Hud *hud_element) {
     else if (ratio_y < 0.0f)
         ratio_y = 0.0f;
     alpha = truncate_float_to_s32(ratio_y * 128.0f);
-    w = truncate_float_to_s32((f32)D_L00_0015F820 * ratio_x);
+    panel_alpha = truncate_float_to_s32((f32)D_L00_0015F820 * ratio_x);
     p = hud_element->p;
     sel = p[0] >> 1;
     mode = hero_max_health;
@@ -994,37 +994,37 @@ s32 FUN_L00_00239810(Hud *hud_element) {
     if (mode == 8) {
         tab = D_L00_0017E478;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
-        b = truncate_float_to_s32(ratio_x * 48.0f);
+        second_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
     } else if (mode == 5) {
         tab = D_L00_0017E460;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 32.0f);
-        b = truncate_float_to_s32(ratio_x * 16.0f);
+        second_panel_half_width = truncate_float_to_s32(ratio_x * 16.0f);
     } else {
-        b = 0;
+        second_panel_half_width = 0;
         tab = (Pt *)D_L00_0015F7F8;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
     }
     yy = y + D_L00_0015F810;
-    h1 = FUN_001ff960_c(0x7580, 1);
-    h2 = FUN_001ff960_c(0x7580, 0);
-    draw_hud_sprite_flipped(h1, x + first_panel_half_width, yy, D_L00_0015F81C, D_L00_0015F81C, w);
-    FUN_001ffc30_c(h2, x - first_panel_half_width, yy, first_panel_half_width * 2, D_L00_0015F81C, w);
-    FUN_001ffc30_c(h1, x - first_panel_half_width - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, w);
-    if (b != 0) {
+    panel_cap_frame_index = FUN_001ff960_c(0x7580, 1);
+    panel_middle_frame_index = FUN_001ff960_c(0x7580, 0);
+    draw_hud_sprite_flipped(panel_cap_frame_index, x + first_panel_half_width, yy, D_L00_0015F81C, D_L00_0015F81C, panel_alpha);
+    FUN_001ffc30_c(panel_middle_frame_index, x - first_panel_half_width, yy, first_panel_half_width * 2, D_L00_0015F81C, panel_alpha);
+    FUN_001ffc30_c(panel_cap_frame_index, x - first_panel_half_width - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, panel_alpha);
+    if (second_panel_half_width != 0) {
         yy += D_L00_0015F80C;
-        draw_hud_sprite_flipped(h1, x + b, yy, D_L00_0015F81C, D_L00_0015F81C, w);
-        x0 = x - b;
-        FUN_001ffc30_c(h2, x0, yy, b * 2, D_L00_0015F81C, w);
-        FUN_001ffc30_c(h1, x0 - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, w);
+        draw_hud_sprite_flipped(panel_cap_frame_index, x + second_panel_half_width, yy, D_L00_0015F81C, D_L00_0015F81C, panel_alpha);
+        x0 = x - second_panel_half_width;
+        FUN_001ffc30_c(panel_middle_frame_index, x0, yy, second_panel_half_width * 2, D_L00_0015F81C, panel_alpha);
+        FUN_001ffc30_c(panel_cap_frame_index, x0 - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, panel_alpha);
     }
     for (i = 0; i < mode; i++) {
-        r = FUN_001ff960_c(0x7536, sel);
-        FUN_L00_0023b120_c(hud_element, r, x + tab[i].x, y + tab[i].y, 1, alpha);
+        health_icon_frame_index = FUN_001ff960_c(0x7536, sel);
+        FUN_L00_0023b120_c(hud_element, health_icon_frame_index, x + tab[i].x, y + tab[i].y, 1, alpha);
         if (sel != 0x1E) {
-            r = FUN_001ff960_c(0x7536, 0x1E);
-            FUN_L00_0023b120_c(hud_element, r, x + tab[i].x, y + tab[i].y, 1, alpha);
-            r = FUN_001ff960_c(0x7536, 0x1F);
-            FUN_001ffc30_c(r, x + tab[i].x + 0xE, y + tab[i].y - 0x11, 0x22, 0x22,
+            health_icon_frame_index = FUN_001ff960_c(0x7536, 0x1E);
+            FUN_L00_0023b120_c(hud_element, health_icon_frame_index, x + tab[i].x, y + tab[i].y, 1, alpha);
+            health_icon_frame_index = FUN_001ff960_c(0x7536, 0x1F);
+            FUN_001ffc30_c(health_icon_frame_index, x + tab[i].x + 0xE, y + tab[i].y - 0x11, 0x22, 0x22,
                            truncate_float_to_s32((f32)(p[1] >> 4) * ratio_y));
             if (cnt == i + 1)
                 sel = 0x1E;
@@ -1133,19 +1133,19 @@ extern char D_L00_0015F858[] __attribute__((section(".data")));
 extern char D_L00_0015F860[] __attribute__((section(".data")));
 int FUN_L00_00239df8(HudElem *hud_element)
 {
-    char buf[16];
+    char bolt_display_text[16];
     s16 *frame;
     u8 *fade;
     int apostrophe;
-    int off;
+    int panel_open_counter_offset;
     int panel_x, cap_x, icon_x;
     int y, x, digits, alpha, bolt_count_quotient, slide, color, shadow, sx, sy, i, dx, dy;
     f32 open, text;
 
     frame = hud_element->unk80;
     /* the byte offset kept in a local is load-bearing (retail tests m + off) */
-    off = 0x70;
-    if (camera_secondary_mode == 50 || ((u8 *)hud_element)[off] == 0)
+    panel_open_counter_offset = 0x70;
+    if (camera_secondary_mode == 50 || ((u8 *)hud_element)[panel_open_counter_offset] == 0)
         return hud_element->w;
 
     fade = hud_element->cnt;
@@ -1183,21 +1183,21 @@ int FUN_L00_00239df8(HudElem *hud_element)
     /* the count, shadow first */
     color = fast_tween_color(bolt_text_color_clear, bolt_text_color_opaque, text);
     shadow = fast_tween_color(0, 0x80000000, text);
-    sprintf_alt(buf, bolt_count_format, current_bolt_count);
-    font_print_right(x + D_L00_0015F834 + 1, y + D_L00_0015F838 + 1, shadow, buf, -1);
-    font_print_right(x + D_L00_0015F834, y + D_L00_0015F838, color, buf, -1);
+    sprintf_alt(bolt_display_text, bolt_count_format, current_bolt_count);
+    font_print_right(x + D_L00_0015F834 + 1, y + D_L00_0015F838 + 1, shadow, bolt_display_text, -1);
+    font_print_right(x + D_L00_0015F834, y + D_L00_0015F838, color, bolt_display_text, -1);
 
     /* thousands separators */
     if (game_language != 3)
         apostrophe = game_language != 5;
-    sprintf_alt(buf, apostrophe ? D_L00_0015F858 : D_L00_0015F860);
+    sprintf_alt(bolt_display_text, apostrophe ? D_L00_0015F858 : D_L00_0015F860);
     dy = apostrophe ? D_L00_0015F840 : D_L00_0015F848;
     dx = apostrophe ? D_L00_0015F83C : D_L00_0015F844;
     for (i = 3; i < digits; i += 3) {
         sx = x + dx;
         sy = y + dy;
-        font_print_right(sx - digit_width * i + 2, sy + 2, shadow, buf, -1);
-        font_print_right(sx - digit_width * i, sy, color, buf, -1);
+        font_print_right(sx - digit_width * i + 2, sy + 2, shadow, bolt_display_text, -1);
+        font_print_right(sx - digit_width * i, sy, color, bolt_display_text, -1);
     }
     return hud_element->w;
 }
@@ -1208,9 +1208,9 @@ s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void FUN_L00_0023a218(u8 *hud_element) {
     u8 *visibility_counters = hud_element + 0x70;
     if (D_00141398) {
-        s32 r = scale_game_frames(10);
+        s32 scaled_duration_frames = scale_game_frames(10);
         s32 lim = D_L00_0015F7F0_gp;
-        *(s32 *)(hud_element + 0x7C) = r;
+        *(s32 *)(hud_element + 0x7C) = scaled_duration_frames;
         if (hud_element[0x70] < lim) {
             hud_element[0x70]++;
         } else if (visibility_counters[1] < lim) {
@@ -1245,7 +1245,7 @@ extern void FUN_L00_001fb470(s32, s32, s32, char *, s32);
 
 /* Draws the short counter panel, its spinning icon, and a pulsing label. */
 s32 FUN_L00_0023a2d0(Hud *hud_element) {
-    char buf[16];
+    char formatted_label_text[16];
     u8 *visibility_counters;
     s32 x, y, panel_right, panel_left, slide, alpha, text_alpha;
     s32 color, shadow, period, text_x, text_y;
@@ -1288,7 +1288,7 @@ s32 FUN_L00_0023a2d0(Hud *hud_element) {
     draw_hud_sprite(get_icon_frame(0x7580, 1), panel_left - 32, y, 32, 32, alpha);
     draw_hud_icon(hud_element, get_icon_frame(0x754f, D_L00_0015F5CC % 60 >> 1), x - 32, y, 0, text_alpha);
 
-    sprintf_alt(buf, D_L00_0015F918);
+    sprintf_alt(formatted_label_text, D_L00_0015F918);
     text_x = x + D_L00_0015F904;
     text_y = y + D_L00_0015F908;
     period = scale_game_frames(D_L00_0015F914);
@@ -1299,8 +1299,8 @@ s32 FUN_L00_0023a2d0(Hud *hud_element) {
     scaled_text = pulse * text;
     shadow = fast_tween_color(0, 0x80000000, scaled_text);
     color = fast_tween_color(D_L00_0015F90C, D_L00_0015F910, scaled_text);
-    FUN_L00_001fb470(text_x + 1, text_y + 1, shadow, buf, -1);
-    FUN_L00_001fb470(text_x, text_y, color, buf, -1);
+    FUN_L00_001fb470(text_x + 1, text_y + 1, shadow, formatted_label_text, -1);
+    FUN_L00_001fb470(text_x, text_y, color, formatted_label_text, -1);
 out:
     return hud_element->ret;
 }

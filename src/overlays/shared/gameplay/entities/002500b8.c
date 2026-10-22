@@ -26,9 +26,9 @@ void FUN_L00_002500b8(char *object) {
     int idx = -1;
     int i;
     int off;
-    char *e1;
-    char *e2;
-    char *e3;
+    char *packing_source_entry;
+    char *global_update_source_entry;
+    char *conditional_update_source_entry;
     char *g;
     unsigned char *entry_update_destination;
 
@@ -45,27 +45,27 @@ void FUN_L00_002500b8(char *object) {
         return;
     }
     off = idx * 0x30;
-    e1 = (char *)(off + (int)D_L00_00160040);
+    packing_source_entry = (char *)(off + (int)D_L00_00160040);
     pack_render_command_fields(object,
-                            *(int *)(object + 0x80) = (*(int *)(e1 + 0x18) << 16) +
-                                                 (*(int *)(e1 + 0x14) << 8) + *(int *)(e1 + 0x10),
+                            *(int *)(object + 0x80) = (*(int *)(packing_source_entry + 0x18) << 16) +
+                                                 (*(int *)(packing_source_entry + 0x14) << 8) + *(int *)(packing_source_entry + 0x10),
                             0, 0, 0);
     *(int *)(object + 0x38) = *(int *)((char *)(off + (int)D_L00_00160040) + 0x1C);
-    e2 = (char *)(off + (int)D_L00_00160040);
-    if (*(unsigned char *)(e2 + 0x27) != 0) {
+    global_update_source_entry = (char *)(off + (int)D_L00_00160040);
+    if (*(unsigned char *)(global_update_source_entry + 0x27) != 0) {
         g = D_0013E533 + 0x1D;
-        *(int *)(g + 0x64) = *(int *)(e2 + 0x20);
-        g[0x68] = e2[0x24];
-        g[0x69] = e2[0x25];
-        g[0x6A] = e2[0x26];
+        *(int *)(g + 0x64) = *(int *)(global_update_source_entry + 0x20);
+        g[0x68] = global_update_source_entry[0x24];
+        g[0x69] = global_update_source_entry[0x25];
+        g[0x6A] = global_update_source_entry[0x26];
         g[0x6B] |= 7;
     }
-    e3 = (char *)(off + (int)D_L00_00160040);
-    if (*(int *)(e3 + 0x28) >= 0) {
+    conditional_update_source_entry = (char *)(off + (int)D_L00_00160040);
+    if (*(int *)(conditional_update_source_entry + 0x28) >= 0) {
         entry_update_destination = D_0014161B + 0x100B5;
         if (*(short *)(entry_update_destination + 0x3E) == 0) {
             if ((*(int *)(entry_update_destination + 0x20) & 0xFFFFFF) == 0xFF0000) {
-                *(unsigned short *)(entry_update_destination + 0x38) = *(int *)(e3 + 0x28);
+                *(unsigned short *)(entry_update_destination + 0x38) = *(int *)(conditional_update_source_entry + 0x28);
             }
         }
     }
@@ -78,8 +78,8 @@ void FUN_L00_002500b8(char *object) {
 
 /* Clears slot idx of this level's 16-entry table to 0xFF. */
 void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
-void jet_clear_persistent(int idx) {
-    if (idx != 0xFF) {
-        visited52[idx + current_level_index * 16] = 0xFF;
+void jet_clear_persistent(int persistent_slot_index) {
+    if (persistent_slot_index != 0xFF) {
+        visited52[persistent_slot_index + current_level_index * 16] = 0xFF;
     }
 }

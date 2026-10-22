@@ -64,7 +64,7 @@ void FUN_L12_00308708(void *unused, struct Moby *moby) {
     float ang;
     float rise_sqrt_term, frame_rise_sqrt_term;
     float frame_scaled_rise;
-    float g;
+    float frame_time_squared;
 
     if (random_integer_below(3) == 0) {
         allocate_voice_for_target_entry(1, 0x20, moby);
@@ -79,9 +79,9 @@ void FUN_L12_00308708(void *unused, struct Moby *moby) {
     dir[1] = fast_sin(ang);
     dir[2] = 1.0f;
     dir[3] = 5627.925f;
-    g = frame_time_sq;
-    lobbed_vars->rise = g * 40.0f;
-    lobbed_vars->fall = g * 100.0f;
+    frame_time_squared = frame_time_sq;
+    lobbed_vars->rise = frame_time_squared * 40.0f;
+    lobbed_vars->fall = frame_time_squared * 100.0f;
     rise_sqrt_term = fast_sqrt(lobbed_vars->rise * 4.0f);
     frame_rise_sqrt_term = fast_sqrt(frame_time_sq * 40.0f * 4.0f);
     frame_scaled_rise = frame_time_sq * 40.0f;
@@ -117,25 +117,25 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void blarg_commander_update(char *m) __asm__("FUN_L12_00308918");
 void blarg_commander_update(char *moby) {
-    int st;
+    int moby_state;
     char *moby_pvars;
     char *motion_state;
-    int r;
+    int motion_result_flags;
     MO *mo = (MO *)moby;
-    char v[16];
-    st = *(unsigned char *)(moby + 0x53);
+    char raised_position[16];
+    moby_state = *(unsigned char *)(moby + 0x53);
     moby_pvars = *(char **)(moby + 0x78);
-    if (st == 1) {
+    if (moby_state == 1) {
         motion_state = moby_pvars + 0x20;
-        r = mine_fall(moby, motion_state);
+        motion_result_flags = mine_fall(moby, motion_state);
         mo->vx = fast_add_rotations(mo->vx, frame_time * 4.3633232f);
         mo->vy = fast_add_rotations(mo->vy, frame_time * 4.3633232f);
         *(unsigned short *)(moby + 0x34) &= 0xEFFF;
-        if (r & 0x61) {
-            qcopy(v, moby + 0x10);
-            ((float *)v)[2] += 1.0f;
-            func_L00_0025F4A8_alt(moby, motion_state, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 0, 15.0f, 1,
-                                  st, -1, 0);
+        if (motion_result_flags & 0x61) {
+            qcopy(raised_position, moby + 0x10);
+            ((float *)raised_position)[2] += 1.0f;
+            func_L00_0025F4A8_alt(moby, motion_state, raised_position, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 0, 15.0f, 1,
+                                  moby_state, -1, 0);
             mark_moby_for_removal(moby);
         } else if (*(float *)(moby + 0x18) < 5.0f) {
             mark_moby_for_removal(moby);

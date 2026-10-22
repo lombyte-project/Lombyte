@@ -9,7 +9,7 @@
 void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh, s64 color,
                         s64 extra) __asm__("FUN_001f5450");
 
-void draw_textured_quad(s32 x, s32 y, s32 w, s32 quad_height, s32 u, s32 v, s32 uw, s32 vh, s64 color,
+void draw_textured_quad(s32 x, s32 y, s32 quad_width, s32 quad_height, s32 u, s32 v, s32 uw, s32 vh, s64 color,
                         s64 extra) {
     struct DmaTag *tag;
     u64 *packet_words;
@@ -26,7 +26,7 @@ void draw_textured_quad(s32 x, s32 y, s32 w, s32 quad_height, s32 u, s32 v, s32 
     sx = screen_extent.left;
     sy = screen_extent.top;
     x0 = (x << 4) + sx - 8;
-    x1 = ((x + w) << 4) + sx - 8;
+    x1 = ((x + quad_width) << 4) + sx - 8;
     y0 = (y << 4) + sy - 8;
     y1 = ((y + quad_height) << 4) + sy - 8;
     u1 = (u + uw) << 4;

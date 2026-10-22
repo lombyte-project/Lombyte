@@ -22,7 +22,7 @@ void downsample_map_coverage(u8 *out) {
     s32 j;
     s32 k;
     s32 packed_column_start;
-    u32 b;
+    u32 packed_source_byte;
 
     dst = out;
     src = D_001A00FC[0];
@@ -32,9 +32,9 @@ void downsample_map_coverage(u8 *out) {
             fill_transfer_words(acc, 0, 0x200);
         }
         for (j = 0; j < 128; j += 2) {
-            b = *src++;
-            acc[j] += tbl.v[b & 0xF];
-            acc[j + 1] += tbl.v[b >> 4];
+            packed_source_byte = *src++;
+            acc[j] += tbl.v[packed_source_byte & 0xF];
+            acc[j + 1] += tbl.v[packed_source_byte >> 4];
         }
         if (i % 4 == 3) {
             for (k = 0; k < 128; k++) {

@@ -19,14 +19,14 @@ s32 enter_menu_help_text(struct MenuScreen *menu) __asm__("FUN_0021d1f8");
 
 s32 enter_menu_help_text(struct MenuScreen *menu) {
     s32 i;
-    struct MenuSystem *g;
+    struct MenuSystem *menu_system_state;
 
     initialize_menu_stream_buffers(1);
     menu->data.raw.unk54 = 0;
     menu->data.raw.unk38 = 0;
-    g = &menu_system;
+    menu_system_state = &menu_system;
     for (i = 0; i < 5; i++) {
-        if (menu_stream_buffers[i].address != 0 && (u32)menu_stream_buffers[i].address < (u32)g->unk10C) {
+        if (menu_stream_buffers[i].address != 0 && (u32)menu_stream_buffers[i].address < (u32)menu_system_state->unk10C) {
             menu_stream_buffers[i].flags |= MENU_STREAM_BUFFER_ALLOCATED;
         }
     }

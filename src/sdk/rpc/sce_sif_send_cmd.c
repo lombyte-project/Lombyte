@@ -15,7 +15,7 @@ extern u32 D_00154E60[];
 extern void sceSifWriteBackDCache(void *addr, s32 size);
 extern s32 sceSifSetDma();
 extern s32 isceSifSetDma();
-s32 _sceSifSendCmd(u32 packet, s32 mode, SifCmd *cmd, s32 size, u32 src, u32 dst, s32 dst_size) {
+s32 _sceSifSendCmd(u32 packet, s32 mode, SifCmd *cmd, s32 size, u32 extra_data_source, u32 extra_data_destination, s32 dst_size) {
     SifDma tags[2];
     s32 num;
     register u32 mode44;
@@ -27,14 +27,14 @@ s32 _sceSifSendCmd(u32 packet, s32 mode, SifCmd *cmd, s32 size, u32 src, u32 dst
     num = 0;
     if (dst_size > 0) {
         cmd->dsize = dst_size;
-        tags[0].data = src;
-        tags[0].addr = dst;
-        cmd->addr = dst;
+        tags[0].data = extra_data_source;
+        tags[0].addr = extra_data_destination;
+        cmd->addr = extra_data_destination;
         tags[0].size = dst_size;
         tags[0].mode = 0;
         num = 1;
         if (mode & 4) {
-            sceSifWriteBackDCache(src, dst_size);
+            sceSifWriteBackDCache(extra_data_source, dst_size);
         }
     } else {
         cmd->addr = 0;

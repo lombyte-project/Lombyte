@@ -26,9 +26,9 @@ void draw_screen_effect(void) {
     s32 background_color;
     u64 background_alpha_state;
     s32 first_stripe_color;
-    u64 e18;
+    u64 first_stripe_alpha_state;
     s32 second_stripe_color;
-    u64 e28;
+    u64 second_stripe_alpha_state;
 
     i = 0;
     height = fs_aa_buffer.display_height;
@@ -43,9 +43,9 @@ void draw_screen_effect(void) {
     if (height > 0) {
         mask = 0xFF000000FFULL;
         do {
-            e18 = screen_color_effect_now->unk18;
-            if (e18 != 0) {
-                vu1_add_g_sregister(0x42, e18 & mask);
+            first_stripe_alpha_state = screen_color_effect_now->unk18;
+            if (first_stripe_alpha_state != 0) {
+                vu1_add_g_sregister(0x42, first_stripe_alpha_state & mask);
             }
             first_stripe_color = screen_color_effect_now->unk14;
             if (first_stripe_color & 0xFF000000) {
@@ -54,9 +54,9 @@ void draw_screen_effect(void) {
                                   0, fs_aa_buffer.display_width, (u64)((s64)first_stripe_color << 0x20) >> 0x20);
             }
             i = i + screen_color_effect_now->unk10;
-            e28 = screen_color_effect_now->unk28;
-            if (e28 != 0) {
-                vu1_add_g_sregister(0x42, e28 & mask);
+            second_stripe_alpha_state = screen_color_effect_now->unk28;
+            if (second_stripe_alpha_state != 0) {
+                vu1_add_g_sregister(0x42, second_stripe_alpha_state & mask);
             }
             second_stripe_color = screen_color_effect_now->unk24;
             if (second_stripe_color & 0xFF000000) {

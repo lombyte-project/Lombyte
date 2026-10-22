@@ -25,21 +25,21 @@ extern short D_L10_00161E68 __attribute__((sda));
 extern short D_L10_00161E6C __attribute__((sda));
 extern short D_L10_00161E70 __attribute__((sda));
 void FUN_L10_002e3de8(char *moby) {
-    float v[3];
-    int g, h;
+    float spawn_position[3];
+    int g, particle_data_value;
     float offset_angle_radians = random_angle_radians();
-    float b = random_float_between_alt(0.0f, *(float *)&D_L10_00161E70);
+    float offset_radius = random_float_between_alt(0.0f, *(float *)&D_L10_00161E70);
     float particle_scale = random_float_between_alt(0.0f, *(float *)&D_L10_00161E60);
     float random_particle_value = random_float_between_alt(*(float *)&D_L10_00161E60, *(float *)&D_L10_00161E64);
     int random_divisor = random_int_between(*(int *)&D_L10_00161E68, *(int *)&D_L10_00161E6C);
-    v[0] = fast_cos(offset_angle_radians) * b;
-    v[1] = fast_sin(offset_angle_radians) * b;
-    v[2] = 0.0f;
-    fast_vec_add(v, v, (float *)(moby + 0x10));
-    v[2] = v[2] + 0.025f;
+    spawn_position[0] = fast_cos(offset_angle_radians) * offset_radius;
+    spawn_position[1] = fast_sin(offset_angle_radians) * offset_radius;
+    spawn_position[2] = 0.0f;
+    fast_vec_add(spawn_position, spawn_position, (float *)(moby + 0x10));
+    spawn_position[2] = spawn_position[2] + 0.025f;
     g = *(int *)&D_L10_00161E58;
-    h = *(int *)&D_L10_00161E5C;
-    FUN_L01_00287158(v, particle_scale, random_particle_value, g, h, random_divisor);
+    particle_data_value = *(int *)&D_L10_00161E5C;
+    FUN_L01_00287158(spawn_position, particle_scale, random_particle_value, g, particle_data_value, random_divisor);
 }
 
 #define NOT_SDA
@@ -293,8 +293,8 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern struct { char pad0[0x184]; char *source; } D_L10_00167100;
 extern VendorView_5f18 D_L10_0016CEC0;
 
-void FUN_L10_002f5b58(struct UpdateCam *cam) {
-    char *rec = *(char **)(D_L10_0015EF50 + cam->descriptor_index * 32 + 0x1C);
+void FUN_L10_002f5b58(struct UpdateCam *path_camera) {
+    char *rec = *(char **)(D_L10_0015EF50 + path_camera->descriptor_index * 32 + 0x1C);
     VendorCamRun_5f18 *run;
     VendorCamStops_5f18 *stops;
     f32 *fov;
@@ -302,7 +302,7 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
     char *saved;
 
     rec[0x38] = 1;
-    run = (VendorCamRun_5f18 *)((char *)cam->saved_state + 0x40);
+    run = (VendorCamRun_5f18 *)((char *)path_camera->saved_state + 0x40);
     run->seg = 0;
     run->t = 0.0f;
     run->path_length = 0.0f;
@@ -310,7 +310,7 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
     run->dist = 0.0f;
     run->started = 0;
     run->timer = scale_game_frames(*(s16 *)(rec + 0x3A));
-    stops = (VendorCamStops_5f18 *)((char *)cam->saved_state + 0x58);
+    stops = (VendorCamStops_5f18 *)((char *)path_camera->saved_state + 0x58);
     fov = stops->fov;
     {
         int k;
@@ -319,9 +319,9 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
             stops->seg[k] = -1;
         }
     }
-    pos = &cam->pos;
-    m1 = (Vec4f *)&cam->m1;
-    m2 = (Vec4f *)&cam->m2;
+    pos = &path_camera->pos;
+    m1 = (Vec4f *)&path_camera->m1;
+    m2 = (Vec4f *)&path_camera->m2;
     stops->fov_end = angle_atan2(1.0f, D_L10_0016CEC0.tan_half_fov) * 2.0f;
     if (*(int *)(rec + 0x20) >= 0) {
         char *path = D_L10_001B0930_5a78[*(int *)(rec + 0x20)];
@@ -370,18 +370,18 @@ void FUN_L10_002f5b58(struct UpdateCam *cam) {
                 run->look_path_length += length;
         }
     }
-    saved = (char *)cam->saved_state;
+    saved = (char *)path_camera->saved_state;
     *(f32 *)(saved + 0x00) = 0.03f;
     *(f32 *)(saved + 0x04) = 0.2f;
     clear_u64_value(saved + 0x10);
-    saved = (char *)cam->saved_state;
+    saved = (char *)path_camera->saved_state;
     *(f32 *)(saved + 0x20) = 0.03f;
     *(f32 *)(saved + 0x24) = 0.2f;
     clear_u64_value(saved + 0x30);
     {
         char *source = D_L10_00167100.source;
         qcopy(pos, source + 0x30);
-        qcopy(cam, source);
+        qcopy(path_camera, source);
         qcopy(m1, source + 0x10);
         qcopy(m2, source + 0x20);
     }
@@ -565,20 +565,20 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
 extern char *D_L10_0015EF50;
 extern int FUN_L10_002f5a78_u(char *, char *) __asm__("FUN_L10_002f5a78");
 
-int FUN_L10_002f65f8(char *descriptor_owner, char *b) {
+int FUN_L10_002f65f8(char *descriptor_owner, char *comparison_object) {
     unsigned char *descriptor_record = *(unsigned char **)(D_L10_0015EF50 + *(short *)(descriptor_owner + 0x84) * 32 + 0x1C);
     int x;
     int y;
     if (descriptor_record[0x39] != 0) {
         return -1;
     }
-    if (descriptor_record[0x38] != 0 && *(short *)(b + 0x86) != 0x13) {
+    if (descriptor_record[0x38] != 0 && *(short *)(comparison_object + 0x86) != 0x13) {
         return 1;
     }
-    if (b != 0 && *(short *)(b + 0x7E) == 0 && (unsigned char)b[0x7C] >= (unsigned char)descriptor_owner[0x7C]) {
+    if (comparison_object != 0 && *(short *)(comparison_object + 0x7E) == 0 && (unsigned char)comparison_object[0x7C] >= (unsigned char)descriptor_owner[0x7C]) {
         return 0;
     }
-    if (FUN_L10_002f5a78_u(descriptor_owner, b) == 0) {
+    if (FUN_L10_002f5a78_u(descriptor_owner, comparison_object) == 0) {
         return 0;
     }
     x = *(int *)(descriptor_record + 0x48);

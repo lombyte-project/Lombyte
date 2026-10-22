@@ -72,13 +72,13 @@ extern s32 _PES_packet(MpegSys *sys, SysBit *bs, PesHdr *pes);
 int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufsize) {
     SysBit bs;
     PssHdr hdr;
-    SysBit *b;
+    SysBit *bitstream;
     PssHdr *pss_header;
     sceMpegCbDataStr cb;
     sceMpegCallback cbfunc = 0;
     void *cbdata = 0;
     StreamCb *tbl;
-    int ret;
+    int consumed_bytes;
     int i;
     int cont;
     MpegSys *sys;
@@ -89,9 +89,9 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
     sys = mp->sys;
     tbl = sys->tbl;
     _sysbitInit(&bs, start, bufstart, bufsize);
-    ret = 0;
+    consumed_bytes = 0;
     i = 0;
-    b = &bs;
+    bitstream = &bs;
     if (i < sys->n) {
         do {
             if (tbl[i].id == 0xBDFF000000) {
@@ -105,21 +105,21 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
         } while (i < sys->n);
     }
     for (;;) {
-        if (SignExtendPackedValue(b, 32) == 0x1BA) {
-            _pack_header(b, &pss_header->pack);
+        if (SignExtendPackedValue(bitstream, 32) == 0x1BA) {
+            _pack_header(bitstream, &pss_header->pack);
         }
-        while (SignExtendPackedValue(b, 24) == 1 && SignExtendPackedValue(b, 32) != 0x1BA &&
-               SignExtendPackedValue(b, 32) != 0x1B9 && b->pos < size * 8 && cont) {
-            _PES_packet(sys, b, &pss_header->pes);
-            if (b->pos > size * 8) {
+        while (SignExtendPackedValue(bitstream, 24) == 1 && SignExtendPackedValue(bitstream, 32) != 0x1BA &&
+               SignExtendPackedValue(bitstream, 32) != 0x1B9 && bitstream->pos < size * 8 && cont) {
+            _PES_packet(sys, bitstream, &pss_header->pes);
+            if (bitstream->pos > size * 8) {
                 continue;
             }
             for (i = 0; i < sys->n; i++) {
                 if (tbl[i].id == (pss_header->pes.id & tbl[i].mask)) {
                     headerpos = pss_header->pes.header;
                     cb.type = 6;
-                    cb.header = GetSysbitPointer(b, headerpos);
-                    cb.data = GetSysbitPointer(b, pss_header->pes.data);
+                    cb.header = GetSysbitPointer(bitstream, headerpos);
+                    cb.data = GetSysbitPointer(bitstream, pss_header->pes.data);
                     cb.len = pss_header->pes.datalen;
                     cb.pts = pss_header->pes.pts;
                     cb.dts = pss_header->pes.dts;
@@ -130,20 +130,20 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
             if (i == sys->n && cbfunc != 0) {
                 headerpos = pss_header->pes.header;
                 cb.type = 6;
-                cb.header = GetSysbitPointer(b, headerpos);
-                cb.data = GetSysbitPointer(b, pss_header->pes.data);
+                cb.header = GetSysbitPointer(bitstream, headerpos);
+                cb.data = GetSysbitPointer(bitstream, pss_header->pes.data);
                 cb.len = pss_header->pes.datalen;
                 cb.pts = pss_header->pes.pts;
                 cb.dts = pss_header->pes.dts;
                 cont = cbfunc(mp, &cb, cbdata);
             }
             if (cont) {
-                ret = b->pos >> 3;
+                consumed_bytes = bitstream->pos >> 3;
             }
         }
-        if (b->pos > size * 8 || SignExtendPackedValue(b, 32) != 0x1BA) {
+        if (bitstream->pos > size * 8 || SignExtendPackedValue(bitstream, 32) != 0x1BA) {
             break;
         }
     }
-    return ret;
+    return consumed_bytes;
 }

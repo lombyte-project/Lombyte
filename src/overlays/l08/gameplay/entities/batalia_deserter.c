@@ -471,15 +471,15 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
     head_rate = 0.3f;
     tracking = 0;
     if (moby->animation == 0) {
-        char *g = (char *)&hero.motion.pos;
+        char *hero_position = (char *)&hero.motion.pos;
         L14Player *hero_aim_view;
         tracking = 1;
-        if (FUN_001f9b80_c(moby->position, g) < 8.0f &&
-            (hero_aim_view = (L14Player *)(g - 0x80),
+        if (FUN_001f9b80_c(moby->position, hero_position) < 8.0f &&
+            (hero_aim_view = (L14Player *)(hero_position - 0x80),
              fast_difference_between_rotations(
                  moby->yaw, fast_arc_tan(hero_aim_view->aim[0] - moby->position[0], hero_aim_view->aim[1] - moby->position[1]))) <
                 1.5707964f) {
-            if (fast_vec_length(g + 0x80) > 0.01f)
+            if (fast_vec_length(hero_position + 0x80) > 0.01f)
                 watch_data->moving_timer = scale_game_frames(120);
             else
                 FUN_001f9740_c(&watch_data->moving_timer);
@@ -736,7 +736,7 @@ extern void FUN_L08_0027fe00(float *, float *, int, float);
 void FUN_L08_00308c90(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float effect_position[4];
-    float b[12];
+    float rotation_basis[12];
     float effect_direction[4];
     int i;
     for (i = 0; i < *(int *)(data + 0x14); i++) {
@@ -744,8 +744,8 @@ void FUN_L08_00308c90(struct Moby *moby) {
         effect_position[1] = random_float_between_alt(-*(float *)(data + 4), *(float *)(data + 4));
         effect_position[2] = 0;
         effect_position[3] = 1.0f;
-        euler_rotation_basis(b, &moby->rot);
-        transform_vector_by_basis(effect_position, effect_position, b);
+        euler_rotation_basis(rotation_basis, &moby->rot);
+        transform_vector_by_basis(effect_position, effect_position, rotation_basis);
         fast_vec_add(effect_position, effect_position, &moby->pos);
         effect_direction[0] = 0;
         effect_direction[1] = random_float_between_alt(*(float *)(data + 0x18) * frame_time,
@@ -781,12 +781,12 @@ float *D_L08_001623D8[2] = {D_L08_001EFB20, D_L08_001EFC40};
 void FUN_L08_00308f68(int x) {
     int i;
     int *element_counts = D_L08_001623C8;
-    float **b = D_L08_001623D8;
+    float **float_pair_tables = D_L08_001623D8;
     float **float_triplet_tables = D_L08_001623D0;
     int **element_word_tables = D_L08_001623E8;
 
     for (i = 0; i < 2; i++) {
-        FUN_L08_00258090(D_L08_001F8560, b[i], element_counts[i], &D_L08_00162408[x]);
+        FUN_L08_00258090(D_L08_001F8560, float_pair_tables[i], element_counts[i], &D_L08_00162408[x]);
         FUN_L00_001fde98(element_counts[i], float_triplet_tables[i], element_word_tables[i], D_L08_001F8560, 1);
     }
 }
@@ -828,8 +828,8 @@ void FUN_L08_003097b0(struct Moby *moby) {
         MOBY_ACTIVE = 1
     };
     int i;
-    float v[4];
-    float w[4];
+    float sphere_check_input[4];
+    float position_delta[4];
     float distance;
 
     switch (moby->state) {
@@ -857,17 +857,17 @@ void FUN_L08_003097b0(struct Moby *moby) {
         }
         break;
     case MOBY_ACTIVE:
-        v[0] = *(float *)&D_L08_00162380;
-        v[1] = D_L08_00162384;
-        v[2] = D_L08_00162388;
-        v[3] = D_L08_0016238C;
-        if (fast_bsphere_check((char *)v, 1000.0f) >= 0) {
-            w[0] = *(float *)&D_L08_00162380;
-            w[1] = D_L08_00162384;
-            w[2] = D_L08_00162388;
-            w[3] = 1.0f;
-            subtract_vector_xyz(w, D_L08_001675C0, w);
-            distance = vector_length_xyz(w);
+        sphere_check_input[0] = *(float *)&D_L08_00162380;
+        sphere_check_input[1] = D_L08_00162384;
+        sphere_check_input[2] = D_L08_00162388;
+        sphere_check_input[3] = D_L08_0016238C;
+        if (fast_bsphere_check((char *)sphere_check_input, 1000.0f) >= 0) {
+            position_delta[0] = *(float *)&D_L08_00162380;
+            position_delta[1] = D_L08_00162384;
+            position_delta[2] = D_L08_00162388;
+            position_delta[3] = 1.0f;
+            subtract_vector_xyz(position_delta, D_L08_001675C0, position_delta);
+            distance = vector_length_xyz(position_delta);
             if (distance <= 84.0f) {
                 FUN_L08_002f12a0(0);
                 FUN_L08_002f1158(D_L08_001F8550, 0.52f, 0.62f, 0.06f, &D_L08_001623F0_e[8]);

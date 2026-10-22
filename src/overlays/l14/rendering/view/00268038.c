@@ -12,7 +12,7 @@ extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 extern short D_L14_001B0F30[] __attribute__((section(".data")));
 extern char *D_L14_001DE5C0[] __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
-int FUN_L14_00268038(char *a, char *selection_output, float best) {
+int FUN_L14_00268038(char *selection_reference, char *selection_output, float best) {
     struct Hero *g = &hero_lui;
     char *selected_moby;
     char *candidate_moby;
@@ -39,7 +39,7 @@ int FUN_L14_00268038(char *a, char *selection_output, float best) {
             continue;
         if (*(unsigned char *)(candidate_moby + 0x20) != 3)
             continue;
-        candidate_metric = FUN_001f9b80_25fcb8(a + 0x10, candidate_moby + 0x10);
+        candidate_metric = FUN_001f9b80_25fcb8(selection_reference + 0x10, candidate_moby + 0x10);
         if (candidate_metric < best) {
             selected_moby = candidate_moby;
             best = candidate_metric;
@@ -58,7 +58,7 @@ int FUN_L14_00268038(char *a, char *selection_output, float best) {
             continue;
         if (*(unsigned char *)(candidate_moby + 0xBC) == 0)
             continue;
-        candidate_metric = FUN_001f9b80_25fcb8(a + 0x10, candidate_moby + 0x10);
+        candidate_metric = FUN_001f9b80_25fcb8(selection_reference + 0x10, candidate_moby + 0x10);
         if (candidate_metric < best) {
             selected_moby = candidate_moby;
             best = candidate_metric;

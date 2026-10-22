@@ -5,7 +5,7 @@ to make that code easier to read. To decompile new code, see
 [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 For a bounded example of names, partial layouts and module boundaries, see
-[game-side voice allocation](audio-voices.md).
+[game-side voice allocation](audio-voices.md) and [IOP stash transfers](stash.md).
 
 > **The one rule:** after every change, the build must still produce exactly
 > the same bytes. Cleanup never changes what the game does.
@@ -103,6 +103,17 @@ removing the trick does not change the code, it is not a fakematch: delete it.
 - Group fields by what they are for.
 - Name unused fields `pad_XXX[n]`.
 - Put offset checks in `src/check/*_layout_check.c`. `make check` runs them.
+
+**Enums**
+
+- Reuse the shared definitions in [enum scope and shared definitions](enum-layout.md).
+- Constants used by several C files belong in the owning subsystem's header.
+  Constants shared only by functions in one C file stay at file scope; a private
+  callback's selector stays local.
+- Use one canonical member per numeric ID within a domain and update callers
+  to reuse it. Describe consumer-specific behavior in comments, not aliases.
+- Extend an existing enum for the same selector. Keep state, substate, command,
+  class ID and callback-result domains separate, even when their values overlap.
 
 ## Data
 

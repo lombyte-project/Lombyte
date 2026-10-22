@@ -11,8 +11,8 @@
 extern float square_root(float) __asm__("FUN_001f9988");
 
 void trooper_set_knockback(float *p, float a, float b) __asm__("FUN_L03_00250a78");
-void trooper_set_knockback(float *knockback_state, float horizontal_knockback_scale, float b) {
-    float root = square_root((b + b) * knockback_state[4]);
+void trooper_set_knockback(float *knockback_state, float horizontal_knockback_scale, float vertical_knockback_scale) {
+    float root = square_root((vertical_knockback_scale + vertical_knockback_scale) * knockback_state[4]);
     float x = (root + root) / knockback_state[4];
     knockback_state[7] = root;
     knockback_state[6] = (horizontal_knockback_scale + horizontal_knockback_scale) / x;
@@ -32,7 +32,7 @@ extern void FUN_L00_001ff290(void *, void *, void *);
 extern void *FUN_L00_002712b8(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32);
 extern void *FUN_L00_0026cbb0(void *, void *, s32, s32, s32, s32, f32);
 
-void FUN_L03_00250ae8(char *orientation_source, u128 *emission_position, void *param_3) {
+void FUN_L03_00250ae8(char *orientation_source, u128 *emission_position, void *velocity_addend) {
     struct { u128 position; u128 velocity; u128 temp; } vectors;
     s32 i;
     s32 j;
@@ -59,7 +59,7 @@ void FUN_L03_00250ae8(char *orientation_source, u128 *emission_position, void *p
         minimum = scale_game_frames(30);
         maximum = scale_game_frames(90);
         duration = random_int_between(minimum, maximum);
-        if (param_3) FUN_L00_001ff290(&vectors.temp, &vectors.velocity, param_3);
+        if (velocity_addend) FUN_L00_001ff290(&vectors.temp, &vectors.velocity, velocity_addend);
         FUN_L00_002712b8(position, &vectors.velocity, duration, 30, 0xffffff, spin,
                          60000.0f, 3000.0f, 0.85f, -0.001f, 0.85f);
     }
@@ -71,7 +71,7 @@ void FUN_L03_00250ae8(char *orientation_source, u128 *emission_position, void *p
         minimum = scale_game_frames(20);
         maximum = scale_game_frames(60);
         duration = random_int_between(minimum, maximum);
-        if (param_3) FUN_L00_001ff290(&vectors.temp, &vectors.velocity, param_3);
+        if (velocity_addend) FUN_L00_001ff290(&vectors.temp, &vectors.velocity, velocity_addend);
         FUN_L00_0026cbb0(position, &vectors.velocity, 0x4f007fff, 0x1fffffff, duration, 1, 10000.0f);
     }
 }

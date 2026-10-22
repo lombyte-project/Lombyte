@@ -28,7 +28,7 @@ s32 draw_selected_item_ammo(s32 image_descriptor_input) {
     u8 sp_slot[0x50];
     u8 descriptor[0x20];
     s16 temp_4_20;
-    s32 idx;
+    s32 selected_item_id;
     s32 temp_17_38;
     s32 temp_18_40;
     struct ImageEntry *entry;
@@ -37,12 +37,12 @@ s32 draw_selected_item_ammo(s32 image_descriptor_input) {
 
     grid = menu_system.current->focus;
     temp_4_20 = grid->data.grid.cells[grid->data.grid.selected_cell].id;
-    idx = temp_4_20;
-    if (*(idx + item_available) == 0) {
+    selected_item_id = temp_4_20;
+    if (*(selected_item_id + item_available) == 0) {
         return 0;
     }
-    temp_17_38 = weapon_ammo_counts[idx];
-    entry = &D_001DFFB0[idx];
+    temp_17_38 = weapon_ammo_counts[selected_item_id];
+    entry = &D_001DFFB0[selected_item_id];
     temp_18_40 = (s32)entry->unkE;
     vu1_add_g_sregister(0x42, 0x44);
     vu1_add_g_sregister(0x47, 0xB);

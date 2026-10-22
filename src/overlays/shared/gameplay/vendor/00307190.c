@@ -20,7 +20,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5);
-char *FUN_L08_00307190(char *pos, char *dir, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) {
+char *FUN_L08_00307190(char *initial_velocity, char *spawn_position, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) {
     char *spawned_moby = func_0020D348_m(0x50C);
     if (spawned_moby != 0) {
         char *moby_data;
@@ -29,8 +29,8 @@ char *FUN_L08_00307190(char *pos, char *dir, int collision_ignore_moby, int trac
         moby_data = *(char **)(spawned_moby + 0x78);
         spawned_moby[0x31] = 1;
         spawned_moby[0x20] = 1;
-        qcopy(spawned_moby + 0x10, dir);
-        qcopy(moby_data, pos);
+        qcopy(spawned_moby + 0x10, spawn_position);
+        qcopy(moby_data, initial_velocity);
         *(int *)(moby_data + 0x18) = scale_game_frames(lifetime_frames);
         *(int *)(moby_data + 0x10) = collision_ignore_moby;
         *(int *)(moby_data + 0x14) = tracked_moby;
@@ -67,14 +67,14 @@ void FUN_L08_00307298(char *fire_bolt) {
         FIRE_BOLT_STATE_BURST_AND_REMOVE = 2
     };
     char *bolt_data = *(char **)(fire_bolt + 0x78);
-    float prev[4];
+    float previous_position[4];
     float sc[4];
-    float off[4];
+    float trail_spawn_position[4];
     float unused_vector_argument[4];
     char *tracked_moby;
     switch (((unsigned char *)fire_bolt)[0x20]) {
     case FIRE_BOLT_STATE_FLYING:
-        qcopy(prev, fire_bolt + 0x10);
+        qcopy(previous_position, fire_bolt + 0x10);
         tracked_moby = *(char **)(bolt_data + 0x14);
         if (tracked_moby == 0 || ((unsigned char *)tracked_moby)[0x20] == 0xFE || ((unsigned char *)tracked_moby)[0x20] == 0xFD) {
             fire_bolt[0x20] = 2;
@@ -83,14 +83,14 @@ void FUN_L08_00307298(char *fire_bolt) {
             int trail_frame_count;
             float trail_velocity_scale = random_float_between_alt(0.95f, 0.985f);
             scale_vector_xyz(sc, bolt_data, trail_velocity_scale);
-            normalize_vector_xyz(off, bolt_data, -0.1f);
-            FUN_L00_001ff290(unused_vector_argument, off, fire_bolt + 0x10);
+            normalize_vector_xyz(trail_spawn_position, bolt_data, -0.1f);
+            FUN_L00_001ff290(unused_vector_argument, trail_spawn_position, fire_bolt + 0x10);
             trail_frame_count = scale_game_frames(random_int_between(0xF, 0x14));
-            FUN_L00_00269958(off, sc, 0x6F00AFFF, 0xFF, trail_frame_count, 0x28,
+            FUN_L00_00269958(trail_spawn_position, sc, 0x6F00AFFF, 0xFF, trail_frame_count, 0x28,
                              scale_game_frames(random_int_between(7, 0xA)), 1);
         }
         add_vector_xyz(fire_bolt + 0x10, fire_bolt + 0x10, bolt_data);
-        if (collision_line(fire_bolt + 0x10, prev, 0x10, *(int *)(bolt_data + 0x10), 0) != 0) {
+        if (collision_line(fire_bolt + 0x10, previous_position, 0x10, *(int *)(bolt_data + 0x10), 0) != 0) {
             char *collision_result = D_L08_00174640;
             if (*(int *)(collision_result + 0x18) != *(int *)(bolt_data + 0x10)) {
                 if (*(int *)(collision_result + 0x18) != 0) {
@@ -124,17 +124,17 @@ extern int D_L08_00162374;
 extern short D_L08_0016234C __attribute__((sda));
 extern short D_L08_00162350 __attribute__((sda));
 void FUN_L08_00307b90(int arg) {
-    float xy_random_range_scale, b, count_interpolation_end, count_interpolation_start;
-    float v[2];
+    float xy_random_range_scale, countdown_range_start, count_interpolation_end, count_interpolation_start;
+    float xy_range_reference_vector[2];
     float xy_length_ratio;
     if (arg == 0) {
         xy_random_range_scale = 5.0f;
-        b = 2.0f;
+        countdown_range_start = 2.0f;
         count_interpolation_end = 8.0f;
         count_interpolation_start = 4.0f;
     } else {
         xy_random_range_scale = 2.5f;
-        b = 20.0f;
+        countdown_range_start = 20.0f;
         count_interpolation_end = 3.0f;
         count_interpolation_start = 2.0f;
     }
@@ -144,11 +144,11 @@ void FUN_L08_00307b90(int arg) {
         count_interpolation_end = *(float *)&D_L08_00162350;
     D_L08_00162360[0] = random_float_between_alt(-(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
     D_L08_00162360[1] = random_float_between_alt(-(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
-    b = multiply_global_factor_ed64(b);
-    D_L08_00162370 = random_float_between_alt(b, multiply_global_factor_ed64(10.0f));
-    v[0] = xy_random_range_scale * frame_time;
-    v[1] = v[0];
-    xy_length_ratio = vector_length_xy(D_L08_00162360) / fast_vec_length(v);
+    countdown_range_start = multiply_global_factor_ed64(countdown_range_start);
+    D_L08_00162370 = random_float_between_alt(countdown_range_start, multiply_global_factor_ed64(10.0f));
+    xy_range_reference_vector[0] = xy_random_range_scale * frame_time;
+    xy_range_reference_vector[1] = xy_range_reference_vector[0];
+    xy_length_ratio = vector_length_xy(D_L08_00162360) / fast_vec_length(xy_range_reference_vector);
     D_L08_00162374 = (int)(xy_length_ratio * (count_interpolation_end - count_interpolation_start) + count_interpolation_start);
 }
 #include "rnc/gameplay/entities/moby.h"
@@ -215,8 +215,8 @@ void FUN_L08_00307cf0(Moby *moby) {
     int flag;
     int big;
     int pass_attempt_count;
-    int cnt;
-    Obj_3091B0 *obj;
+    int remaining_pass_attempts;
+    Obj_3091B0 *moby_data;
     float lo;
     float hi;
     float fall;
@@ -255,7 +255,7 @@ void FUN_L08_00307cf0(Moby *moby) {
         zero = 0.0f;
         if (zero <= k) lo = k;
     }
-    obj = (Obj_3091B0 *)moby->pvars;
+    moby_data = (Obj_3091B0 *)moby->pvars;
     switch (moby->state) {
     case GROUND_PARTICLES_STATE_INITIALIZE:
         moby->state = 2;
@@ -264,7 +264,7 @@ void FUN_L08_00307cf0(Moby *moby) {
         break;
     case GROUND_PARTICLES_STATE_SCATTER:
         if (update_float_countdown(&D_L08_00162370)) func_L08_00309050_3091B0(flag);
-        func_001F9BF0_3091B0(&dv, D_L08_00167640_3091B0, &obj->v30);
+        func_001F9BF0_3091B0(&dv, D_L08_00167640_3091B0, &moby_data->v30);
         D_L08_00160250 = *(u128_3091B0 *)&dv;
         *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
         pass_attempt_count = D_L08_00162374;
@@ -273,7 +273,7 @@ void FUN_L08_00307cf0(Moby *moby) {
         base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344;
         if (pass_attempt_count > 0) {
             V_3091B0 *po = &off;
-            cnt = pass_attempt_count;
+            remaining_pass_attempts = pass_attempt_count;
             do {
                 float origin_distance_xy;
                 float t;
@@ -318,14 +318,14 @@ void FUN_L08_00307cf0(Moby *moby) {
                     if (flag == 0) func_L08_00273A80_3091B0(&pt, distance_selected_spawn_argument, w, &par);
                     if (flag == 1) func_L08_002803B8_3091B0(&pt, distance_selected_spawn_argument, w, &par);
                 }
-            } while (--cnt != 0);
+            } while (--remaining_pass_attempts != 0);
         }
         pass_attempt_count = (int)((float)pass_attempt_count * 1.4f);
         *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
         base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344;
         if (pass_attempt_count > 0) {
             float negative_spread = -spread;
-            cnt = pass_attempt_count;
+            remaining_pass_attempts = pass_attempt_count;
             do {
                 float u;
                 float t;
@@ -353,7 +353,7 @@ void FUN_L08_00307cf0(Moby *moby) {
                     if (flag == 0) func_L08_00273A80_3091B0(&pt, 0, w, &off);
                     if (flag == 1) func_L08_002803B8_3091B0(&pt, 0, w, &off);
                 }
-            } while (--cnt != 0);
+            } while (--remaining_pass_attempts != 0);
         }
         if (big != 0) {
             int sign;
@@ -365,7 +365,7 @@ void FUN_L08_00307cf0(Moby *moby) {
             sign = pass_attempt_count >> 31;
             base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344;
             if (pass_attempt_count > 0) {
-                cnt = pass_attempt_count;
+                remaining_pass_attempts = pass_attempt_count;
                 do {
                         *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
                     w = func_001F9F90_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
@@ -375,7 +375,7 @@ void FUN_L08_00307cf0(Moby *moby) {
                     w = w * func_002140F8_3091B0(0.0f, 30.0f);
                     pt.y += w;
                     func_L00_00264570_3091B0(&pt);
-                } while (--cnt != 0);
+                } while (--remaining_pass_attempts != 0);
             }
             *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
             func_L00_00263D68_3091B0(&base, &base, 4.0f, ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f158,
@@ -383,7 +383,7 @@ void FUN_L08_00307cf0(Moby *moby) {
             base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344;
             h = (pass_attempt_count - sign) >> 1;
             if (h > 0) {
-                        cnt = h;
+                        remaining_pass_attempts = h;
                 do {
                         *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
                     w = func_001F9F90_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
@@ -393,12 +393,12 @@ void FUN_L08_00307cf0(Moby *moby) {
                     w = w * func_002140F8_3091B0(0.0f, 8.0f);
                     pt.y += w;
                     func_L00_00264570_3091B0(&pt);
-                } while (--cnt != 0);
+                } while (--remaining_pass_attempts != 0);
             }
         }
         break;
     }
-    qcopy(&obj->v30, D_L08_00167640_3091B0);
+    qcopy(&moby_data->v30, D_L08_00167640_3091B0);
 }
 /* While the player is within range, scatters spawned particles around the moby on a random disc. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00309AB0), where it is exact; names translated to the US level program. */
@@ -422,23 +422,23 @@ void FUN_L08_003085f0(char *moby) {
     subtract_vector_xyz(v, D_L08_001675C0, moby + 0x10);
     v[2] = 0.0f;
     if (dot_vectors_xyz(v, v) < *(float *)(moby_data + 4) * *(float *)(moby_data + 4)) {
-        float angle_start_radians, b, r;
+        float angle_start_radians, angle_end_radians, xy_random_range;
         i = 0;
-        r = *(float *)(moby_data + 0x24) * frame_time;
+        xy_random_range = *(float *)(moby_data + 0x24) * frame_time;
         *(OvlQuad *)pos = *(OvlQuad *)(moby + 0x10);
         angle_start_radians = (*(float *)(moby_data + 0x28) - 180.0f) / 180.0f * 3.1415927f;
-        b = (*(float *)(moby_data + 0x2C) - 180.0f) / 180.0f * 3.1415927f;
+        angle_end_radians = (*(float *)(moby_data + 0x2C) - 180.0f) / 180.0f * 3.1415927f;
         for (; i < *(int *)(moby_data + 0x14); i++) {
             float ang, rad;
             *(OvlQuad *)v = *(OvlQuad *)pos;
-            ang = random_float_between_alt(angle_start_radians, b);
+            ang = random_float_between_alt(angle_start_radians, angle_end_radians);
             rad = random_float_between_alt(*(float *)(moby_data + 0xC), *(float *)(moby_data + 8));
             v[0] = v[0] + fast_cos(ang) * rad;
             v[1] = v[1] + fast_sin(ang) * rad;
             subtract_vector_xyz(w, v, D_L08_001675C0);
             if (!(vector_length_xy(w) <= *(float *)(moby_data + 0x10))) {
-                randomized_spawn_vector[0] = D_L08_00162360[0] + random_float_between_alt(-r, r);
-                randomized_spawn_vector[1] = D_L08_00162364 + random_float_between_alt(-r, r);
+                randomized_spawn_vector[0] = D_L08_00162360[0] + random_float_between_alt(-xy_random_range, xy_random_range);
+                randomized_spawn_vector[1] = D_L08_00162364 + random_float_between_alt(-xy_random_range, xy_random_range);
                 randomized_spawn_vector[2] = -(random_float_between_alt(*(float *)(moby_data + 0x18), *(float *)(moby_data + 0x1C)) *
                          frame_time);
                 randomized_spawn_vector[3] = 0.0f;

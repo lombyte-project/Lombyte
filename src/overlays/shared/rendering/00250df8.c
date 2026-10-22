@@ -94,14 +94,14 @@ extern s32 D_0014C190_257218[][64] __asm__("D_0014C190") __attribute__((section(
 extern int D_L00_001BA4D0_lui[] __asm__("D_L00_001BA4D0") __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 void FUN_L00_00257470(unsigned char *m, int flags, int arg);
-void FUN_L00_00257470(unsigned char *moby, int flags, int arg) {
+void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_index) {
     float amt;
     int lvl;
     int k;
-    int d;
+    int amount_delta;
     int n;
     int call_flags;
-    int r;
+    int bound_offset;
     int cnt;
     unsigned char *g;
 
@@ -128,9 +128,9 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int arg) {
     }
     if ((signed char)moby[0xB1] >= 0) {
         int n1 = *(short *)(moby + 0xB6);
-        d = n1 - D_0014D590_257470[D_0015ED84_257470b][moby[0xB1]][1];
+        amount_delta = n1 - D_0014D590_257470[D_0015ED84_257470b][moby[0xB1]][1];
         {
-            int x = (n1 + 1) / 2 < d ? d : 0;
+            int x = (n1 + 1) / 2 < amount_delta ? amount_delta : 0;
             if (x) {
                 amt = x;
             }
@@ -165,17 +165,17 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int arg) {
         amt = 0.0f;
     }
     if (amt > 0.0f) {
-        r = 0;
+        bound_offset = 0;
         if (amt >= 8.0f) {
-            r = FUN_001fa6d0_257470(amt * 0.25f);
+            bound_offset = FUN_001fa6d0_257470(amt * 0.25f);
         } else if (amt >= 2.0f) {
-            r = 1;
+            bound_offset = 1;
         }
         {
             int lower_bound = FUN_001fa6d0_257470(amt);
-            int hi = lower_bound + r;
-            lower_bound -= r;
-            FUN_L00_00260a88_257470(moby, lower_bound, hi, call_flags, arg);
+            int hi = lower_bound + bound_offset;
+            lower_bound -= bound_offset;
+            FUN_L00_00260a88_257470(moby, lower_bound, hi, call_flags, trajectory_target_index);
         }
     }
 }

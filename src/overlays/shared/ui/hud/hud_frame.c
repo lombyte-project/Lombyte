@@ -25,41 +25,41 @@ extern G0023b120 D_L00_0017E4D8;
 void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 void hud_frame(O0023b120 *o, s32 id, s32 x, s32 y, u32 flags, s32 extra) __asm__("FUN_L00_0023b120");
 void hud_frame(O0023b120 *hud_element, s32 id, s32 x, s32 y, u32 flags, s32 extra) {
-    s32 w0, h0, w, draw_height;
-    R0023b120 *r;
+    s32 base_width, base_height, draw_width, draw_height;
+    R0023b120 *image_page;
     if (id < 0)
         return;
     x += hud_element->x;
     y += hud_element->y;
-    r = &D_L00_0017E4D8.rec[D_L00_0017E4D8.tab[id].k];
-    w0 = 1 << r->lw;
-    h0 = 1 << r->lh;
-    w = w0;
-    draw_height = h0;
+    image_page = &D_L00_0017E4D8.rec[D_L00_0017E4D8.tab[id].k];
+    base_width = 1 << image_page->lw;
+    base_height = 1 << image_page->lh;
+    draw_width = base_width;
+    draw_height = base_height;
     if (flags & 1) {
-        x -= w >> 1;
+        x -= draw_width >> 1;
         y -= draw_height >> 1;
     }
     if (flags & 2) {
-        x += w >> 2;
+        x += draw_width >> 2;
         y += draw_height >> 2;
-        w >>= 1;
+        draw_width >>= 1;
         draw_height >>= 1;
     }
     if (flags & 4) {
-        x -= w0 >> 1;
-        y -= h0 >> 1;
-        w <<= 1;
+        x -= base_width >> 1;
+        y -= base_height >> 1;
+        draw_width <<= 1;
         draw_height <<= 1;
     }
-    draw_hud_sprite(id, x, y, w, draw_height, extra);
+    draw_hud_sprite(id, x, y, draw_width, draw_height, extra);
 }
 extern char *D_L00_001611C0_23b6c0 __asm__("D_L00_001611C0");
 extern int D_0013E500_23b6c0[] __asm__("D_0013E500");
 extern int D_L00_0017E4D8_23b6c0[] __asm__("D_L00_0017E4D8") __attribute__((section(".data")));
 extern u64 FUN_001ffa10_23b6c0(int) __asm__("FUN_001ffa10");
 
-void FUN_L00_0023b6c0(int tex, int x, int y, int w, int h, int alpha) {
+void FUN_L00_0023b6c0(int tex, int x, int y, int w, int draw_height, int alpha) {
     u64 *packet_words;
     int *coordinate_offsets;
     int *g;
@@ -78,9 +78,9 @@ void FUN_L00_0023b6c0(int tex, int x, int y, int w, int h, int alpha) {
     coordinate_offsets = D_0013E500_23b6c0;
     g = D_L00_0017E4D8_23b6c0;
     packet_words[6] = (u64)(((x << 4) + coordinate_offsets[4] - 8) | (((u64)((y << 4) + coordinate_offsets[5] - 8)) << 16)) | ((u64)g[3] << 32);
-    packet_words[7] = (h << 20) + (w << 4);
+    packet_words[7] = (draw_height << 20) + (w << 4);
     x += w;
-    y += h;
+    y += draw_height;
     packet_words[8] = (u64)(((x << 4) + coordinate_offsets[4] - 8) | (((u64)((y << 4) + coordinate_offsets[5] - 8)) << 16)) | ((u64)g[3] << 32);
     packet_words[9] = 0;
     *(char *volatile *)&D_L00_001611C0_23b6c0 += 0x50;
@@ -106,7 +106,7 @@ extern char *D_L00_001611C0_23bac0 __asm__("D_L00_001611C0");
 extern int D_0013E500_23bac0[] __asm__("D_0013E500");
 extern G_23bac0 D_L00_0017E4D8_23bac0 __asm__("D_L00_0017E4D8") __attribute__((section(".data")));
 extern u64_23bac0 FUN_001ffa10_23bac0(int) __asm__("FUN_001ffa10");
-void FUN_L00_0023bac0(int id, int x, int y, int w, int h, int alpha) {
+void FUN_L00_0023bac0(int id, int x, int y, int w, int draw_height, int alpha) {
     u64_23bac0 *packet_words;
     int *coordinate_offsets;
     G_23bac0 *g = &D_L00_0017E4D8_23bac0;
@@ -133,11 +133,11 @@ void FUN_L00_0023bac0(int id, int x, int y, int w, int h, int alpha) {
            ((u64_23bac0)g->zc << 32);
     packet_words[9] = 0;
     packet_words[10] =
-        (u64_23bac0)(((x << 4) + coordinate_offsets[4] - 8) | (((u64_23bac0)(((y + h) << 4) + coordinate_offsets[5] - 8)) << 16)) |
+        (u64_23bac0)(((x << 4) + coordinate_offsets[4] - 8) | (((u64_23bac0)(((y + draw_height) << 4) + coordinate_offsets[5] - 8)) << 16)) |
         ((u64_23bac0)g->zc << 32);
     packet_words[11] = hh << 20;
     packet_words[12] = (u64_23bac0)((((x + w) << 4) + coordinate_offsets[4] - 8) |
-                         (((u64_23bac0)(((y + h) << 4) + coordinate_offsets[5] - 8)) << 16)) |
+                         (((u64_23bac0)(((y + draw_height) << 4) + coordinate_offsets[5] - 8)) << 16)) |
             ((u64_23bac0)g->zc << 32);
     packet_words[13] = 0;
     *(char *volatile *)&D_L00_001611C0_23bac0 += 0x70;
@@ -158,11 +158,11 @@ extern s32 D_L00_0015F920_gp __asm__("D_L00_0015F920") __attribute__((sda));
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void FUN_L00_0023cdb8(O23cdb8 *value_state) {
     u8 *c = value_state->c;
-    s32 v = *value_state->src;
-    value_state->val = v;
-    if (value_state->max < v)
+    s32 source_value = *value_state->src;
+    value_state->val = source_value;
+    if (value_state->max < source_value)
         value_state->val = value_state->max;
-    else if (v < 0)
+    else if (source_value < 0)
         value_state->val = 0;
     if (value_state->timer >= scale_game_frames(5)) {
         value_state->timer = scale_game_frames(5);

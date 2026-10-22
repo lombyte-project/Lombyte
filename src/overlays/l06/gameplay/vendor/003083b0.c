@@ -223,11 +223,11 @@ void FUN_L06_00308c68(struct Moby *emitter) {
     }
     case SPARK_EMITTER_RANDOMIZED_SPRAY:
         if (timer_step(&emitter_data->f20)) {
-            int cnt;
+            int spray_spark_count;
             int k;
             emitter_data->f20 = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between_alt((float)D_L06_00162374, (float)D_L06_00162378)));
-            cnt = random_integer_below(7) ? 1 : random_integer_below(5) + 5;
-            for (k = 0; k < cnt; k++) {
+            spray_spark_count = random_integer_below(7) ? 1 : random_integer_below(5) + 5;
+            for (k = 0; k < spray_spark_count; k++) {
                     int c19, c18, c17, c16, c2;
                     random_vector(&spark_vector_offset, 0.0f, D_L06_00162340 * frame_time_macro);
                     normalize_vector_xyz(&rotation_based_spark_vector, &*(SparkVector *)&emitter->rot_row0, D_L06_00162330 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * frame_time_macro);
@@ -269,15 +269,15 @@ void FUN_L06_00309240(int idx) {
     short *moby_index_entry;
     char *moby;
     char *data;
-    float v[4];
+    float position_test_vector[4];
     if (D_L06_001ABFC0[idx] != 0) {
         moby_index_entry = D_L06_001ABFC0[idx];
         do {
             moby = D_L06_0015FFD8 + ((*(unsigned short *)moby_index_entry & 0x7FFF) << 8);
             if (*(short *)(moby + 0xA6) == 0x5E8 && (unsigned char)moby[0x20] == 1) {
-                qcopy(v, moby + 0x10);
-                v[3] = 0.25f;
-                if (fast_bsphere_check((char *)v, 64.0f) >= 0) {
+                qcopy(position_test_vector, moby + 0x10);
+                position_test_vector[3] = 0.25f;
+                if (fast_bsphere_check((char *)position_test_vector, 64.0f) >= 0) {
                     data = *(char **)(moby + 0x78);
                     moby[0x20] = 2;
                     *(int *)(data + 0x28) =
