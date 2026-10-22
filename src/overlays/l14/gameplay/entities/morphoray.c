@@ -1356,7 +1356,9 @@ typedef struct {
     s16 started;
     s16 timer;
 } Run_4f00;
-void FUN_L14_00314f00(char *camera) {
+void initialize_path_camera(char *camera) __asm__("FUN_L14_00314f00");
+
+void initialize_path_camera(char *camera) {
     u128 stand;
     char *rec = *(char **)(D_L14_0015EF50 + *(short *)(camera + 0x84) * 32 + 0x1C);
     char *camera_saved_state;
