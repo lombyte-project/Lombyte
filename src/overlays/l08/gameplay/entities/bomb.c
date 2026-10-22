@@ -2550,8 +2550,8 @@ extern Route_2dd4f8_2dd3c0 *D_L08_001B0FB0_r_c[] __asm__("D_L08_001B0CB0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern int timer46(int*) __asm__("FUN_001f9740");
 
-void FUN_L08_002dd3c0(M46 *moby);
-void FUN_L08_002dd3c0(M46 *moby) {
+void update_rocket(M46 *moby) __asm__("FUN_L08_002dd3c0");
+void update_rocket(M46 *moby) {
     enum {
         ROCKET_STATE_INITIALIZE = 0,
         ROCKET_STATE_APPROACH_TARGET_OFFSET = 1,
