@@ -1992,7 +1992,7 @@ extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 extern void FUN_L03_00250ae8(void *, void *, int);
-extern void FUN_L15_002d0fa8(void *);
+extern void process_ultramech_hits_and_update_target(void *) __asm__("FUN_L15_002d0fa8");
 extern void no_op_main_callback(void *, void *) __asm__("func_001E93E8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -2037,7 +2037,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
 
     moving = 0;
     ultramech_vars = ultramech_moby->data;
-    FUN_L15_002d0fa8(ultramech_moby);
+    process_ultramech_hits_and_update_target(ultramech_moby);
     combat_target = ultramech_vars->target;
     if (ultramech_moby->state != 0 && ultramech_moby->state != 0x40 && hero.vehicle_mode != 2) {
         ultramech_moby->w94 = 0;
@@ -2535,7 +2535,7 @@ extern void FUN_0024f560(float, void *, void *) __asm__("FUN_L02_00261c80");
 extern void FUN_0024f7e0(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern float FUN_001f8bc8(void *, void *) __asm__("FUN_001f9b48");
 
-void FUN_L15_002d0fa8(void *ultramech_instance) {
+void process_ultramech_hits_and_update_target(void *ultramech_instance) {
     enum {
         HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_DEATH = 1,
