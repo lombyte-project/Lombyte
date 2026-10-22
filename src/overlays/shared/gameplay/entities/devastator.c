@@ -89,7 +89,7 @@ extern float approximate_arcsine_2b2100(float) __asm__("FUN_001f9df8");
 extern int find_listed_moby_by_data_id(void *) __asm__("FUN_L00_0025f878");
 extern int allocate_voice_for_target_entry_2b2100(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_002b1de0_2b2100(void *) __asm__("FUN_L00_002b1de0");
-extern void *FUN_L00_002afc70_2b2100(void *, void *, void *, float, float, float, float, float) __asm__("FUN_L00_002afc70");
+extern void *spawn_devastator_missile(void *, void *, void *, float, float, float, float, float) __asm__("FUN_L00_002afc70");
 extern float calculate_eased_step_sum(int) __asm__("FUN_L00_002aff50");
 extern void FUN_L00_002323b8_2b2100(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_0020e4c8_2b2100(void) __asm__("FUN_L00_0020e4c8");
@@ -264,11 +264,11 @@ void devastator_update(struct Moby *devastator_moby) {
                 yaw = devastator_moby->rot.z;
                 aim_info = get_moby_aim_info_2b2100(data->target);
                 if (aim_info) height = aim_info->height;
-                FUN_L00_002afc70_2b2100(devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
+                spawn_devastator_missile(devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
             } else if (limit < 2.0f) {
                 aim_info = get_moby_aim_info_2b2100(data->target);
                 if (aim_info) height = aim_info->height;
-                FUN_L00_002afc70_2b2100(devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
+                spawn_devastator_missile(devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
             } else {
                 if (!data->target) {
                     if (best) {
@@ -287,7 +287,7 @@ void devastator_update(struct Moby *devastator_moby) {
                         pitch0 -= hero.ground_pitch.f * 0.5f;
                     }
                 }
-                FUN_L00_002afc70_2b2100(devastator_moby, &launch, data->target, yaw, pitch, height, yaw0, pitch0);
+                spawn_devastator_missile(devastator_moby, &launch, data->target, yaw, pitch, height, yaw0, pitch0);
             }
             if (hero.state.control_mode == 0 || (hero.state.current == 2 && hero.unk229C < 0.7f)) {
                 FUN_L00_002323b8_2b2100(0x36, 1, (float)scale_game_frames_2b2100(10));
