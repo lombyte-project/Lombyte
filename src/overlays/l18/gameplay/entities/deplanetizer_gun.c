@@ -993,7 +993,7 @@ extern int random_integer_below(int);
 extern int scale_game_frames(int);
 extern float D_L18_00162600 __attribute__((sda));
 extern void FUN_L00_002599e8(void *, float, float, float, int, int, int, int, int);
-extern void FUN_L18_002fc100(struct Moby *);
+extern void update_gadgebot_damage_target_and_glow(struct Moby *) __asm__("FUN_L18_002fc100");
 void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
 
 void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
@@ -1023,7 +1023,7 @@ void gadgebot_update(unsigned char *moby) {
     char position_scratch[16];
     unsigned char *moby_vars = *(unsigned char **)(moby + 0x78);
     unsigned char *moby_transform_ptr;
-    FUN_L18_002fc100((struct Moby *)moby);
+    update_gadgebot_damage_target_and_glow((struct Moby *)moby);
     switch (moby[0x20]) {
     case GADGEBOT_INITIALIZE: {
         unsigned short moby_flags;
@@ -1224,7 +1224,7 @@ extern float D_L18_00162620 __attribute__((sda));
 extern float D_L18_00162624 __attribute__((sda));
 extern float D_L18_00162628 __attribute__((sda));
 /* Sentry update: spins and tints the moby, takes hits (knockback, then a fall), and follows its path toward the hero. */
-void FUN_L18_002fc100(struct Moby *moby) {
+void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
     SentryVars_c100 *sentry_vars = (SentryVars_c100 *)moby->pvars;
     union { u128 q; float f[4]; } v;
     int hit;
