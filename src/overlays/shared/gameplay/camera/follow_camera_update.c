@@ -761,7 +761,9 @@ extern float FUN_001f9af0_2ea810(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9df8_2ea810(float) __asm__("FUN_001f9df8");
 #define Q D_L00_00166C80_2ea810
 
-void FUN_L00_002ea810(A_2ea810 *camera_object) {
+void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) __asm__("FUN_L00_002ea810");
+
+void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) {
     float scaled_axis_scratch[4];
     float camera_vector_residual[4];
     float hero_vector_residual[4];
