@@ -1072,7 +1072,9 @@ extern int func_L00_00203F20_2F69D0(int, int) __asm__("FUN_L00_00203908");
 extern void func_L00_00264DB8_2F69D0(int, int) __asm__("FUN_L00_00263d40");
 extern int func_0020BFC8_2F69D0(int, int) __asm__("FUN_0020b178");
 
-void FUN_L06_002f55a0(Moby *moby) {
+void update_drawbridge(Moby *moby) __asm__("FUN_L06_002f55a0");
+
+void update_drawbridge(Moby *moby) {
     enum {
         INITIALIZE_DRAWBRIDGE_SEGMENTS = 0,
         WAIT_FOR_DRAWBRIDGE_ACTIVATION = 1,
