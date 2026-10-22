@@ -1204,7 +1204,9 @@ extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
-void *FUN_L16_002d5db0(int index, void *position);
+void *find_nearest_test_dummy_door(int index, void *position) __asm__("FUN_L16_002d5db0");
+
+void *find_nearest_test_dummy_door(int index, void *position) __asm__("FUN_L16_002d5db0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
@@ -1281,7 +1283,7 @@ void test_dummy_update(unsigned char *moby) {
         dummy_data->h24 = 2;
         dummy_data->f20 = 2.0f;
         dummy_data->f11C = random_angle_radians();
-        dummy_data->route = FUN_L16_002d5db0(dummy_data->iCC, moby + 0x10);
+        dummy_data->route = find_nearest_test_dummy_door(dummy_data->iCC, moby + 0x10);
         qcopy(dummy_data->spawn, moby + 0x10);
         switch (dummy_data->kind) {
         case TEST_DUMMY_KIND_THROWER:
@@ -2767,7 +2769,7 @@ extern char *D_L16_0015FFD8;
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int *D_L16_001ABCC0[];
 
-void *FUN_L16_002d5db0(int index, void *position) {
+void *find_nearest_test_dummy_door(int index, void *position) {
     short *group_entry = (short *)D_L16_001ABCC0[index];
     char *nearest = 0;
     float distance = 37.0f;
