@@ -1729,7 +1729,9 @@ extern void FUN_L00_00260738_309ac0(void *, void *, void *, void *) __asm__("FUN
 extern void FUN_L00_00262b80_309ac0(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void FUN_L00_002e8450_309ac0(int, float, float) __asm__("FUN_L00_002e8450");
 extern void FUN_L00_002e84b8_309ac0(float, float) __asm__("FUN_L00_002e84b8");
-extern void FUN_L11_0030a500(struct Moby *);
+void update_pokitaru_boat_joint_effects(struct Moby *moby) __asm__("FUN_L11_0030a500");
+
+extern void update_pokitaru_boat_joint_effects(struct Moby *) __asm__("FUN_L11_0030a500");
 extern float sin_309ac0(float) __asm__("FUN_001f9de0");
 int is_pokitaru_boat_target_group_clear(struct Moby *moby) __asm__("FUN_L11_0030a850");
 
@@ -1765,7 +1767,7 @@ void pokitaru_boat_update(struct Moby *moby) {
     if (moby->state != 0) {
         moby->pos.z = boat_vars->height_e4;
     }
-    FUN_L11_0030a500(moby);
+    update_pokitaru_boat_joint_effects(moby);
 
     switch (moby->state) {
     case POKITARU_BOAT_INITIALIZE: {
@@ -1984,7 +1986,7 @@ struct DataA500 {
     struct PartA500 parts[4];
 };
 
-void FUN_L11_0030a500(struct Moby *moby) {
+void update_pokitaru_boat_joint_effects(struct Moby *moby) {
     struct DataA500 *moby_vars = (struct DataA500 *)moby->pvars;
     float base[4];
     float pos[4];
