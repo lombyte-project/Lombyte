@@ -502,7 +502,9 @@ extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 float absolute_float(float input) __asm__("FUN_001f99c0");
 
 
-int FUN_L05_002515d0(void) {
+int try_apply_hero_water_and_ground_transitions(void) __asm__("FUN_L05_002515d0");
+
+int try_apply_hero_water_and_ground_transitions(void) {
     struct Hero *hero_ptr = &hero;
     struct Hero *depth_check_hero;
     struct Hero *collision_check_hero;
