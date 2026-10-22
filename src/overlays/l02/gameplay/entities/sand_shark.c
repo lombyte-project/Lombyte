@@ -1247,7 +1247,9 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L00_00250df8(void *);
 extern void func_00213DE0(void *, int, int, int) __asm__("FUN_00212f90");
 
-void FUN_L02_002d6118(struct Moby *moby, void *position, float *direction) {
+void launch_sand_shark(struct Moby *moby, void *position, float *direction) __asm__("FUN_L02_002d6118");
+
+void launch_sand_shark(struct Moby *moby, void *position, float *direction) {
     char *data = (char *)moby->pvars;
     moby->state = 0x1B;
     moby->flags &= 0xFFBE;
@@ -2302,7 +2304,7 @@ void sand_shark_nest_update(unsigned char *moby) {
                 fast_vec_sub(&launch_velocity_or_explosion_position, od + 0x220, moby + 0x10);
                 set_vector_length_xy(&launch_velocity_or_explosion_position, &launch_velocity_or_explosion_position, 2.0f * D_0015ED6C);
                 launch_velocity_or_explosion_position.f[2] = D_0015ED6C * 6.0f;
-                FUN_L02_002d6118((unsigned char *)launched_shark, &launch_position, launch_velocity_or_explosion_position.f);
+                launch_sand_shark((unsigned char *)launched_shark, &launch_position, launch_velocity_or_explosion_position.f);
             }
         }
         break;
