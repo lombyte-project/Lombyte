@@ -586,7 +586,7 @@ void blarg_ship_update(struct Moby *moby) {
     float movement_distance_accumulator;
     char *moby_pvars = (char *)moby->pvars;
     float offset_angle;
-    float len;
+    float movement_target_distance;
     char *firing_moby;
 
     FUN_L11_0031a1c0(moby);
@@ -685,15 +685,15 @@ void blarg_ship_update(struct Moby *moby) {
         normalize_vector_xyz(scratch_vector, rotation_basis_row0, 20.0f);
         add_vector_xyz(movement_target_position, movement_target_position, scratch_vector);
         subtract_vector_xyz(scratch_vector, movement_target_position, &moby->pos);
-        len = vector_length_xyz(scratch_vector);
+        movement_target_distance = vector_length_xyz(scratch_vector);
         if (*(char *)&hero.ship_flags & 2) {
-            advance_accelerated_scalar(&movement_distance_accumulator, (float *)(moby_pvars + 0x6C), len, frame_time_sq + frame_time_sq,
+            advance_accelerated_scalar(&movement_distance_accumulator, (float *)(moby_pvars + 0x6C), movement_target_distance, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, frame_time);
         } else if (moby->command) {
-            advance_accelerated_scalar(&movement_distance_accumulator, (float *)(moby_pvars + 0x6C), len, frame_time_sq + frame_time_sq,
+            advance_accelerated_scalar(&movement_distance_accumulator, (float *)(moby_pvars + 0x6C), movement_target_distance, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, frame_time * 15.0f);
         } else {
-            advance_accelerated_scalar(&movement_distance_accumulator, (float *)(moby_pvars + 0x6C), len, frame_time_sq + frame_time_sq,
+            advance_accelerated_scalar(&movement_distance_accumulator, (float *)(moby_pvars + 0x6C), movement_target_distance, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, frame_time * 5.0f);
         }
         FUN_L00_0025f730(scratch_vector, *(float *)(moby_pvars + 0x6C));
@@ -708,22 +708,22 @@ void blarg_ship_update(struct Moby *moby) {
                 moby->command = 0;
             }
         } else {
-            float *tgt = (float *)(&hero.motion.pos);
+            float *hero_position = (float *)(&hero.motion.pos);
             float *yaw = &moby->rot.z;
             float *pitch = &moby->rot.y;
-            float ang;
-            subtract_vector_xyz(hero_relative_position, tgt, &moby->pos.x);
-            ang = fast_arc_tan(hero_relative_position[0], hero_relative_position[1]);
-            approach_angle(yaw, (float *)(moby_pvars + 0x8C), ang, frame_time_sq * 12.566371f,
+            float target_rotation_angle;
+            subtract_vector_xyz(hero_relative_position, hero_position, &moby->pos.x);
+            target_rotation_angle = fast_arc_tan(hero_relative_position[0], hero_relative_position[1]);
+            approach_angle(yaw, (float *)(moby_pvars + 0x8C), target_rotation_angle, frame_time_sq * 12.566371f,
                              frame_time_sq * 12.566371f, frame_time * 12.566371f);
-            ang = -fast_arc_tan(vector_length_xy(hero_relative_position), hero_relative_position[2]);
-            approach_angle(pitch, (float *)(moby_pvars + 0x90), ang, frame_time_sq * 12.566371f,
+            target_rotation_angle = -fast_arc_tan(vector_length_xy(hero_relative_position), hero_relative_position[2]);
+            approach_angle(pitch, (float *)(moby_pvars + 0x90), target_rotation_angle, frame_time_sq * 12.566371f,
                              frame_time_sq * 12.566371f, frame_time * 12.566371f);
             if (D_L17_0015F5CC % 10 == 0) {
                 FUN_0022da68(2, 0, (int)moby);
                 approach_value((float *)(moby_pvars + 0x94), 0.0f, 0.25f);
                 normalize_vector_xyz(sB0, hero_position_delta, *(float *)(moby_pvars + 0x94));
-                add_vector_xyz(sB0, sB0, tgt);
+                add_vector_xyz(sB0, sB0, hero_position);
                 if (D_L17_0015F5CC % 20 == 0) {
                     transform_vector_by_basis(sA0, D_L17_001DE110, &moby->rot_row0);
                 } else {
