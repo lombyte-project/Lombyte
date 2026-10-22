@@ -892,7 +892,9 @@ extern char *func_0020D348_c(int) __asm__("FUN_0020c4f8");
 extern void func_L00_0025E210_u(void *) __asm__("FUN_L00_0025d1b8");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 
-char *FUN_L15_002eb9e0(char *spawn_position, char *spawn_rotation) {
+char *spawn_codebot_slot_effect(char *spawn_position, char *spawn_rotation) __asm__("FUN_L15_002eb9e0");
+
+char *spawn_codebot_slot_effect(char *spawn_position, char *spawn_rotation) {
     char tmp[32] __attribute__((aligned(16)));
     char *saved_position = tmp;
     char *spawned_moby;
@@ -982,7 +984,7 @@ int can_spawn_codebot_slot_effect(int slot) __asm__("FUN_L15_002f78e0");
 extern int can_spawn_codebot_slot_effect(int) __asm__("FUN_L15_002f78e0");
 extern int count_missing_or_dying_mobys_in_list(int) __asm__("FUN_L15_002ebfb0");
 extern void set_moby_list_visibility(int, int) __asm__("FUN_L15_002ebf28");
-extern char *FUN_L15_002eb9e0(char *, char *);
+extern char *spawn_codebot_slot_effect(char *, char *) __asm__("FUN_L15_002eb9e0");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 
 /* Bind this call to its checked overlay instance rather than a duplicate. */
@@ -1046,7 +1048,7 @@ void codebot_slot_update(struct Moby *moby) {
             clear_u64_value(tmp);
             tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
             tmp[1] = 1.5707964f;
-            data[1] = (int)FUN_L15_002eb9e0((char *)vec, (char *)tmp);
+            data[1] = (int)spawn_codebot_slot_effect((char *)vec, (char *)tmp);
             data[2] = 0;
             vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 3.0f;
             vec[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 3.0f;
@@ -1094,7 +1096,7 @@ void codebot_slot_update(struct Moby *moby) {
             tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
             tmp[1] = 1.5707964f;
             *(OvlQuad *)&position = *(OvlQuad *)&moby->pos;
-            data[1] = (int)FUN_L15_002eb9e0((char *)&position, (char *)tmp);
+            data[1] = (int)spawn_codebot_slot_effect((char *)&position, (char *)tmp);
         } else {
             vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
             vec[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
