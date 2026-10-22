@@ -69,7 +69,9 @@ typedef struct {
 } E5;
 extern E5 D_L00_001EA880[];
 /* Index of id in the table that ends with -1 (the end index when it is missing). */
-s32 FUN_L00_001ed230(s32 id) {
+s32 find_camera_table_index_by_id(s32 id) __asm__("FUN_L00_001ed230");
+
+s32 find_camera_table_index_by_id(s32 id) {
     s32 table_index = 0;
     while (D_L00_001EA880[table_index].id != -1 && D_L00_001EA880[table_index].id != id)
         table_index++;
@@ -175,7 +177,7 @@ extern int D_L00_0015EF4C;
 extern int D_L00_00169890[];
 extern void clear_vector(void *);
 extern void normalize_vector_xyz(void *, void *, float);
-s32 FUN_L00_001ed230(s32 id);
+s32 find_camera_table_index_by_id(s32 id) __asm__("FUN_L00_001ed230");
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 
 void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
@@ -251,7 +253,7 @@ void setup_level_cameras(void) {
             camera_id = *(unsigned short *)(level_camera_entry + 0xC);
             D_L00_00169890[i] = 1;
             el->s86 = camera_id;
-            el->s8C = FUN_L00_001ed230((short)camera_id);
+            el->s8C = find_camera_table_index_by_id((short)camera_id);
             i++;
         } while (i < D_L00_0015EF54);
     }
