@@ -1380,8 +1380,10 @@ void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern char D_L00_0017A6C0[] __attribute__((section(".data")));
-void FUN_L00_002078a8(void);
-void FUN_L00_002078a8(void) {
+void apply_hero_vertical_oscillation(void) __asm__("FUN_L00_002078a8");
+
+void apply_hero_vertical_oscillation(void) __asm__("FUN_L00_002078a8");
+void apply_hero_vertical_oscillation(void) {
     struct Hero *P = &hero;
     Vec4_2078a8 position_offset;
     float m[16] __attribute__((aligned(16)));
@@ -1789,7 +1791,7 @@ void FUN_L00_002080b0(void) {
 extern unsigned char D_0015EDB5_208820 __asm__("D_0015EDB5");
 extern void FUN_L00_00232fe8(void);
 extern void FUN_L00_002330d0(void);
-extern void FUN_L00_002078a8(void);
+extern void apply_hero_vertical_oscillation(void) __asm__("FUN_L00_002078a8");
 extern void apply_hero_rotation_oscillation(void) __asm__("FUN_L00_002079e8");
 extern void ff090_208820(void *, void *, int) __asm__("FUN_001f9838");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
@@ -1809,7 +1811,7 @@ void FUN_L00_00208820(void) {
         FUN_L00_002330d0();
     }
     qcopy(((unsigned char *)hero.moby) + 0x10, &hero.motion.pos);
-    FUN_L00_002078a8();
+    apply_hero_vertical_oscillation();
     qcopy(((unsigned char *)hero.moby) + 0x40, &hero.motion.rot);
     apply_hero_rotation_oscillation();
     ff090_208820(((unsigned char *)hero.moby) + 0xC0, &hero, 0x30);
