@@ -166,7 +166,7 @@ extern float D_L00_00173E68[];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float FUN_L00_00200510(float, float, float);
+extern float step_rotation_toward_target(float, float, float) __asm__("FUN_L00_00200510");
 extern float FUN_L00_00259710(void *);
 extern float dot_vectors_xyz(void *a, void *b);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -469,12 +469,12 @@ void mine_update(M910 *mine_moby) {
                                 r[0] = n[0] * fast_cos(mine_moby->rz) + n[1] * fast_sin(mine_moby->rz);
                                 r[1] = n[1] * fast_cos(mine_moby->rz) - n[0] * fast_sin(mine_moby->rz);
                                 r[2] = n[2];
-                                mine_moby->rx = FUN_L00_00200510(
+                                mine_moby->rx = step_rotation_toward_target(
                                     mine_moby->rx,
                                     -fast_arc_tan(square_root(r[0] * r[0] + r[2] * r[2]), r[1]),
                                     0.05235988f);
                                 mine_moby->ry =
-                                    FUN_L00_00200510(mine_moby->ry, fast_arc_tan(r[2], r[0]), 0.05235988f);
+                                    step_rotation_toward_target(mine_moby->ry, fast_arc_tan(r[2], r[0]), 0.05235988f);
                             }
                             }
                         }

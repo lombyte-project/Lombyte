@@ -1115,7 +1115,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED70;
 extern float FUN_001f9e90_u(float, float) __asm__("FUN_001f9e90");
-extern float FUN_L00_00200510(float, float, float);
+extern float step_rotation_toward_target(float, float, float) __asm__("FUN_L00_00200510");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern float seg_sqrt(float) __asm__("func_001F9988");
 extern float D_0015ED6C;
@@ -1165,9 +1165,9 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
                 v40[1] = v30[1] * yaw_cosine - v30[0] * yaw_sine;
                 collision_xz_length_or_ground_height = seg_sqrt(v40[0] * v40[0] + v40[2] * v40[2]);
                 collision_tilt_angle = FUN_001f9e90_u(collision_xz_length_or_ground_height, v40[1]);
-                *(float *)(moby + 0x40) = FUN_L00_00200510(*(float *)(moby + 0x40), -collision_tilt_angle, k);
+                *(float *)(moby + 0x40) = step_rotation_toward_target(*(float *)(moby + 0x40), -collision_tilt_angle, k);
                 collision_rotation_y_target = FUN_001f9e90_u(v40[2], v40[0]);
-                *(float *)(moby + 0x44) = FUN_L00_00200510(*(float *)(moby + 0x44), collision_rotation_y_target, k);
+                *(float *)(moby + 0x44) = step_rotation_toward_target(*(float *)(moby + 0x44), collision_rotation_y_target, k);
                 allocate_voice_for_target_entry(1, 0, (int)moby);
             return 1;
         }
@@ -1199,9 +1199,9 @@ int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
                 v40[1] = v30[1] * yaw_cosine - v30[0] * yaw_sine;
                 collision_xz_length_or_ground_height = seg_sqrt(v40[0] * v40[0] + v40[2] * v40[2]);
                 collision_tilt_angle = FUN_001f9e90_u(collision_xz_length_or_ground_height, v40[1]);
-                *(float *)(moby + 0x40) = FUN_L00_00200510(*(float *)(moby + 0x40), -collision_tilt_angle, k);
+                *(float *)(moby + 0x40) = step_rotation_toward_target(*(float *)(moby + 0x40), -collision_tilt_angle, k);
                 collision_rotation_y_target = FUN_001f9e90_u(v40[2], v40[0]);
-                *(float *)(moby + 0x44) = FUN_L00_00200510(*(float *)(moby + 0x44), collision_rotation_y_target, k);
+                *(float *)(moby + 0x44) = step_rotation_toward_target(*(float *)(moby + 0x44), collision_rotation_y_target, k);
                 allocate_voice_for_target_entry(1, 0, (int)moby);
             return 2;
         }
