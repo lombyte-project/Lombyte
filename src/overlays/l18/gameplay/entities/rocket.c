@@ -549,7 +549,9 @@ extern float D_L18_00161960 __attribute__((sda));
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
-char *FUN_L18_002d5348(float *pos, float *initial_movement_step, float *target, float movement_rotation_z, float movement_rotation_y, int frames, int kind) {
+char *create_rocket_moby(float *pos, float *initial_movement_step, float *target, float movement_rotation_z, float movement_rotation_y, int frames, int kind) __asm__("FUN_L18_002d5348");
+
+char *create_rocket_moby(float *pos, float *initial_movement_step, float *target, float movement_rotation_z, float movement_rotation_y, int frames, int kind) {
     char *moby = create_moby(0x234);
     if (moby != 0) {
         char *data;

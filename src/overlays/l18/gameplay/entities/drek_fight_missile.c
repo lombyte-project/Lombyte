@@ -1415,8 +1415,8 @@ typedef struct BossShared {
 
 extern MobyList D_L18_0016D260_c __asm__("D_L18_0016D260");
 extern char *D_L18_001600EC;
-extern char *FUN_L18_002d5348(float *pos, float *dir, float *target, float a, float b, int frames,
-                              int kind);
+extern char *create_rocket_moby(float *pos, float *dir, float *target, float a, float b, int frames,
+                              int kind) __asm__("FUN_L18_002d5348");
 extern char *FUN_L18_002d5cf8(int owner, int idx, float *from, float *to, float speed, int frames);
 extern char *find_nearest_class_247_moby_in_list(void *pos, int idx) __asm__("FUN_L18_002d6c80");
 extern char *FUN_L18_002dc3e0(void *owner, void *vector, float value);
@@ -1797,7 +1797,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                     } else if (e < 60.0f) {
                         e = 60.0f;
                     }
-                    FUN_L18_002d5348(v1, v2, position_and_displacement_scratch, a, c, func_001FA898_r(multiply_global_factor_ed64(e)), 0);
+                    create_rocket_moby(v1, v2, position_and_displacement_scratch, a, c, func_001FA898_r(multiply_global_factor_ed64(e)), 0);
                 }
             }
         }
@@ -1893,7 +1893,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             {
                 float a = randf_sym(0.5235988f, 0.7853982f);
                 float c = -random_float_between_alt(0.34906584f, 0.5235988f);
-                FUN_L18_002d5348(position_and_displacement_scratch, v1, v2, a, c, scale_game_frames(0x3C), 5);
+                create_rocket_moby(position_and_displacement_scratch, v1, v2, a, c, scale_game_frames(0x3C), 5);
             }
         }
         if (boss_data->f348 == *boss_data->f340 - 2) {
@@ -2211,7 +2211,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 } else if (e < 60.0f) {
                     e = 60.0f;
                 }
-                FUN_L18_002d5348(v1, v2, position_and_displacement_scratch, a, c, func_001FA898_r(multiply_global_factor_ed64(e)), 2);
+                create_rocket_moby(v1, v2, position_and_displacement_scratch, a, c, func_001FA898_r(multiply_global_factor_ed64(e)), 2);
                 spawn_drek_boss_firing_effects((char *)moby, v1);
             }
         }
