@@ -2226,7 +2226,9 @@ extern char *func_L00_0026E940_29FF90(float, char *, int, int, int) __asm__("FUN
 extern void *func_L00_0026CA10_29FF90(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
-void FUN_L15_0029edb0(Moby29FF90 *moby) {
+void update_charged_blast(Moby29FF90 *moby) __asm__("FUN_L15_0029edb0");
+
+void update_charged_blast(Moby29FF90 *moby) {
     enum {
         CHARGING = 0,
         EXPANDING_BLAST = 1
