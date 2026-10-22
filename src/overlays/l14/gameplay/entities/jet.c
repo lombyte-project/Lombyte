@@ -3251,7 +3251,7 @@ extern int tram_tick(void *) __asm__("FUN_001f9740");
 extern void tram_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void tram_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void initialize_flight_path_state(struct Moby *moby) __asm__("FUN_L14_002fc890");
-void FUN_L14_002fd310(struct Moby *m);
+void spawn_moby_exhaust_puffs(struct Moby *m) __asm__("FUN_L14_002fd310");
 int advance_moby_along_flight_path(struct Moby *moby) __asm__("FUN_L14_002fd918");
 
 int advance_moby_along_flight_path(struct Moby *m) __asm__("FUN_L14_002fd918");
@@ -3426,7 +3426,7 @@ void FUN_L14_002fcbb0(struct Moby *moby) {
         }
         break;
     }
-    FUN_L14_002fd310(moby);
+    spawn_moby_exhaust_puffs(moby);
     if (moby->state != 0 && moby->state != 3 && moby->state != 1 && voice_is_playing(moby, moby_vars->sound) == 0)
         moby_vars->sound = tram_sound(0, 4, moby);
 }
@@ -3439,7 +3439,7 @@ extern s32 D_L14_00161F74 __attribute__((sda));
 extern int FUN_L00_00257b90(int, int);
 
 /* Exhaust of the second engine moby: puffs and rings on both sides plus a grey puff in the middle. */
-void FUN_L14_002fd310(struct Moby *moby) {
+void spawn_moby_exhaust_puffs(struct Moby *moby) {
     Vec4 step;
     Vec4 pos;
     Vec4 base;
