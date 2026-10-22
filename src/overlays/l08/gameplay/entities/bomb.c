@@ -1614,7 +1614,7 @@ extern int D_L08_001619AC_gp __asm__("D_L08_001619AC") __attribute__((sda));
 extern int D_L08_001619D0_gp __asm__("D_L08_001619D0") __attribute__((sda));
 extern int FUN_L00_00259028(char *m, char *p, float *pos, char *v);
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern int FUN_L08_0026a3d0(void *, float, void *);
+extern int select_nearest_xy_moby_with_hero_fallback(void *, float, void *) __asm__("FUN_L08_0026a3d0");
 extern s32 scale_game_frames_c2(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c4(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_00258278(void*,void*,float,float,float,float);
@@ -1735,7 +1735,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         effects_start_2D5FA8_c(moby, vars->anim);
     }
     moby->hit_slot = 0xFF;
-    search.result = FUN_L08_0026a3d0(moby, 16.0f, &search);
+    search.result = select_nearest_xy_moby_with_hero_fallback(moby, 16.0f, &search);
     if (search.target == 0) {
         search.target = *(struct Moby **)&D_001413D0;
     }
