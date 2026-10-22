@@ -188,7 +188,9 @@ extern void FUN_L00_001fde98(int, int, int, char *, int);
 extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
 extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");
 
-void FUN_L16_002e97a0(void) {
+void draw_level16_visible_textured_batches(void) __asm__("FUN_L16_002e97a0");
+
+void draw_level16_visible_textured_batches(void) {
     int *element_counts = (int *)&D_L16_00161F90;
     int *packet_vector_tables = (int *)&D_L16_00161F98;
     int *c = (int *)D_L16_00161FA0;
