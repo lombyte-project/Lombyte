@@ -2428,7 +2428,7 @@ extern void update_blarg_helicopter_motion_tilt(struct Moby *) __asm__("FUN_L12_
 extern int FUN_L12_002eaf68(struct Moby *, int);
 extern void cache_consecutive_point_distances(int) __asm__("FUN_L12_0027ba70");
 extern struct Moby *create_class_55b_moby_from_source(struct Moby *) __asm__("FUN_L12_00308670");
-extern void FUN_L12_00308708(struct Moby *, struct Moby *);
+extern void start_blarg_commander_knockback(struct Moby *, struct Moby *) __asm__("FUN_L12_00308708");
 extern int allocate_voice_for_target_entry_e9f68(int, int, int) __asm__("FUN_0022da68");
 extern void release_voice(int) __asm__("FUN_0022d798");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
@@ -2524,7 +2524,7 @@ check_mode:
     if (index == 0) goto update_state;
     if (D_L12_001619A0 != 0) {
         if (*(struct Moby **)(data + 0xac)) {
-            FUN_L12_00308708(moby, *(struct Moby **)(data + 0xac));
+            start_blarg_commander_knockback(moby, *(struct Moby **)(data + 0xac));
             *(struct Moby **)(data + 0xac) = 0;
         }
         mark_moby_for_removal(moby);
@@ -2709,7 +2709,7 @@ update_state:
         int index;
         if (D_L12_00167100.moby == moby) D_L12_00167100.moby = 0;
         if (*(struct Moby **)(data + 0xac)) {
-            FUN_L12_00308708(moby, *(struct Moby **)(data + 0xac));
+            start_blarg_commander_knockback(moby, *(struct Moby **)(data + 0xac));
             *(struct Moby **)(data + 0xac) = 0;
         }
         spawn_explosion(moby, ((char *)&D_L12_0015F580_gp), &moby->pos, 0.0f, 0.0f, 20, 3, 4, 4.0f, 2.0f, 100000.0f, 2, 3.0f, 15.0f, 1, 1, -1, 0);

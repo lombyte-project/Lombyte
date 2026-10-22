@@ -1298,7 +1298,7 @@ extern float D_L15_00161A08 __attribute__((sda));
 extern float D_L15_00161A0C __attribute__((sda));
 
 extern struct Moby *create_class_55b_moby_from_source(struct Moby *) __asm__("FUN_L12_00308670");
-extern void FUN_L12_00308708(void *, struct Moby *);
+extern void start_blarg_commander_knockback(void *, struct Moby *) __asm__("FUN_L12_00308708");
 void FUN_L15_002c6900(struct Moby *m);
 extern void FUN_L02_00261c80(void *, float *, float);
 extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
@@ -1621,7 +1621,7 @@ void helicopter_update(struct Moby *moby) {
         }
         moby_point_position(moby, 5, &aim);
         if (vars->pilot != 0) {
-            FUN_L12_00308708(moby, vars->pilot);
+            start_blarg_commander_knockback(moby, vars->pilot);
             vars->pilot = 0;
         }
         spawn_explosion(moby, &move, &moby->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, 2,

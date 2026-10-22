@@ -60,7 +60,9 @@ typedef struct {
     f32 unk74;          /* 0x74: -1 on launch */
 } LobbedVars;
 
-void FUN_L12_00308708(void *unused, struct Moby *moby) {
+void start_blarg_commander_knockback(void *unused, struct Moby *moby) __asm__("FUN_L12_00308708");
+
+void start_blarg_commander_knockback(void *unused, struct Moby *moby) {
     LobbedVars *lobbed_vars = (LobbedVars *)moby->pvars;
     float knockback_input_vector[4];
     float knockback_heading;
