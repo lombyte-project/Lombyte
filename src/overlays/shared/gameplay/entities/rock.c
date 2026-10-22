@@ -226,7 +226,9 @@ extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 extern char D_0013F3D0[];
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L01_002f6a30(struct Moby *moby) {
+void update_explosive_projectile(struct Moby *moby) __asm__("FUN_L01_002f6a30");
+
+void update_explosive_projectile(struct Moby *moby) {
     Vec_2F7E08 old_pos;
     Vec_2F7E08 smoke_pos;
     Data_2F7E08 *data;
