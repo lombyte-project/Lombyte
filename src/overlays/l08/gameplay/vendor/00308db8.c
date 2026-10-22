@@ -50,7 +50,9 @@ extern void FUN_L08_00308e90_u(int) __asm__("FUN_L08_00308e90");
 extern void queue_batalia_offset_textured_batches(int) __asm__("FUN_L08_00308f68");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-void FUN_L08_00309030(void) {
+void queue_batalia_textured_batch_passes(void) __asm__("FUN_L08_00309030");
+
+void queue_batalia_textured_batch_passes(void) {
     vu1_add_g_sregister(0x42, 0x8000000044L);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);

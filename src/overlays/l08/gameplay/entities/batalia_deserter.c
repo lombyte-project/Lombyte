@@ -819,7 +819,7 @@ int D_L08_001623C4 = 0;
 extern int *D_L08_001623E8[2] __attribute__((sda));
 extern int D_L08_001623C8[2] __attribute__((sda));
 extern void FUN_L08_002f0dc8(void);
-extern void FUN_L08_00309030(void);
+extern void queue_batalia_textured_batch_passes(void) __asm__("FUN_L08_00309030");
 extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
 extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
 extern void FUN_L08_002f12a0(int);
@@ -890,7 +890,7 @@ void FUN_L08_003097b0(struct Moby *moby) {
             FUN_L08_002f1378(0);
             FUN_L08_002f1378(0);
             FUN_L08_002f1378(1);
-            enqueue_callback_list_1(FUN_L08_00309030, moby);
+            enqueue_callback_list_1(queue_batalia_textured_batch_passes, moby);
         }
         break;
     }
