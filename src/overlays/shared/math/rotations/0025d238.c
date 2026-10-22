@@ -912,7 +912,9 @@ typedef struct {
 extern s16 D_L00_001B0770[] __attribute__((section(".data")));
 extern u8 *D_L00_0015FFD8_c3 __asm__("D_L00_0015FFD8");
 /* Finds the moby in the D_L00_001B0770 index list whose data id matches id; 0 when none. */
-M25f878 *FUN_L00_0025f878(s32 id) {
+M25f878 *find_listed_moby_by_data_id(s32 id) __asm__("FUN_L00_0025f878");
+
+M25f878 *find_listed_moby_by_data_id(s32 id) {
     s32 i;
     for (i = 1; i <= D_L00_001B0770[0]; i++) {
         M25f878 *candidate_moby = (M25f878 *)(D_L00_001B0770[i] * 0x100 + (s32)D_L00_0015FFD8_c3);

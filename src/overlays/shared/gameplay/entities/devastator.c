@@ -86,7 +86,7 @@ extern float distance_xy_2b2100(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations_2b2100(float, float) __asm__("FUN_001fa688");
 extern void build_spherical_offset_2b2100(void *, float, float, float) __asm__("FUN_00214db0");
 extern float approximate_arcsine_2b2100(float) __asm__("FUN_001f9df8");
-extern int FUN_L00_0025f878_2b2100(void *) __asm__("FUN_L00_0025f878");
+extern int find_listed_moby_by_data_id(void *) __asm__("FUN_L00_0025f878");
 extern int allocate_voice_for_target_entry_2b2100(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_002b1de0_2b2100(void *) __asm__("FUN_L00_002b1de0");
 extern void *FUN_L00_002afc70_2b2100(void *, void *, void *, float, float, float, float, float) __asm__("FUN_L00_002afc70");
@@ -237,7 +237,7 @@ void devastator_update(struct Moby *devastator_moby) {
                                         limit = distance;
                                         pitch = -tpitch;
                                         yaw = tyaw;
-                                        if (!FUN_L00_0025f878_2b2100(best)) {
+                                        if (!find_listed_moby_by_data_id(best)) {
                                             height = 0.5f;
                                             data->target = best;
                                             if (aim_info) height = aim_info->height;

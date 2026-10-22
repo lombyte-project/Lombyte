@@ -1654,7 +1654,7 @@ extern int mine_fall(struct Moby *, void *) __asm__("FUN_L00_0025c698");
 extern void FUN_L00_00257470(struct Moby *, int, int);
 extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025f730(void *, float);
-extern int FUN_L00_0025f878(struct Moby *);
+extern int find_listed_moby_by_data_id(struct Moby *) __asm__("FUN_L00_0025f878");
 extern void FUN_L00_002a7210(struct Moby *, struct Moby *, float, float);
 extern void FUN_00212f90(struct Moby *, int, int, int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -1918,7 +1918,7 @@ void bolt_thief_update(struct Moby *moby) {
         hero_position = hero.motion.pos.f;
         FUN_L00_00258278(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
         distance = FUN_001f9b48(hero_position, &moby->pos);
-        if (distance < 17.0f || FUN_L00_0025f878(moby) != 0) {
+        if (distance < 17.0f || find_listed_moby_by_data_id(moby) != 0) {
             SwarmPathFollower *follower;
             int next;
 

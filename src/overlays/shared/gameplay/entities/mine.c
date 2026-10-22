@@ -2383,7 +2383,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_00214db0(void *, f32, f32, f32);
 extern s32 FUN_001efa68_u(void *, void *, s32, char *, void *) __asm__("FUN_001efa68");
 extern s32 FUN_002141f8_u(char *) __asm__("FUN_002141f8");
-extern s32 FUN_L00_0025f878(char *);
+extern s32 find_listed_moby_by_data_id(char *) __asm__("FUN_L00_0025f878");
 
 void select_gold_devastator_missile_target(char *self, O *out, char *skip) __asm__("FUN_L00_002affa8");
 
@@ -2472,7 +2472,7 @@ void select_gold_devastator_missile_target(char *self, O *out, char *skip) {
             best = candidate_aim_distance;
             pitch = -angv;
             yaw = angh;
-            if (FUN_L00_0025f878(candidate_moby) != 0)
+            if (find_listed_moby_by_data_id(candidate_moby) != 0)
                 goto next;
             z = 0.5f;
             out->owner = candidate_moby;
