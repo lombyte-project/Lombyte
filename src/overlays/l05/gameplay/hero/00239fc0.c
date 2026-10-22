@@ -13,7 +13,9 @@ int FUN_001f0b58_239fc0(void) __asm__("FUN_001f0b58");
 f32 FUN_001f99c0_239fc0(f32) __asm__("FUN_001f99c0");
 void FUN_L00_0020b930_239fc0(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
-void FUN_L05_00239fc0(void) {
+void apply_hero_ground_material_effects(void) __asm__("FUN_L05_00239fc0");
+
+void apply_hero_ground_material_effects(void) {
     u8 save = hero.unk12ED;
     s16 saved_ground_type = hero.ground_type;
     f32 water_depth;
