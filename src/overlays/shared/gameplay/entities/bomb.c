@@ -168,7 +168,7 @@ extern s32 coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern char *FUN_L00_002603d0(char *);
-extern void FUN_L00_0026ed28(struct Moby *);
+extern void spawn_moby_bound_effect_particle(struct Moby *) __asm__("FUN_L00_0026ed28");
 extern void spawn_moby_collision_particles(struct Moby *) __asm__("FUN_L00_002c8078");
 extern void spawn_doom_bot(struct Moby *, void *, void *) __asm__("FUN_L00_002bfe08");
 extern void FUN_L00_00260400(struct Moby *, s32, void *, void *, void *, void *);
@@ -230,7 +230,7 @@ void FUN_L00_002c89e8(struct Moby *thrown_moby)
         }
         if (fast_dec_timer(&vars->effect_timer)) {
             vars->effect_timer = scale_game_frames(4);
-            if (!hero.unk20A5) FUN_L00_0026ed28(thrown_moby);
+            if (!hero.unk20A5) spawn_moby_bound_effect_particle(thrown_moby);
         }
         if (!hero.vehicle_mode && vars->holder && (vars->holder->state & 0xf0) != 0xf0 &&
             hero.items[0].moby && hero.items[0].moby->oclass == 0xe5) return;
@@ -249,7 +249,7 @@ void FUN_L00_002c89e8(struct Moby *thrown_moby)
         }
         if (fast_dec_timer(&vars->effect_timer)) {
             vars->effect_timer = scale_game_frames(4);
-            FUN_L00_0026ed28(thrown_moby);
+            spawn_moby_bound_effect_particle(thrown_moby);
         }
         vars->vel.f[2] -= frame_time_sq * 9.0f;
         fast_vec_add(&next_pos, &thrown_moby->pos, vars);
@@ -351,7 +351,7 @@ collision_miss:
         }
         if (vars->spawn_count < 2 && fast_dec_timer(&vars->effect_timer)) {
             vars->effect_timer = scale_game_frames(4);
-            FUN_L00_0026ed28(thrown_moby);
+            spawn_moby_bound_effect_particle(thrown_moby);
         }
         break;
     }
