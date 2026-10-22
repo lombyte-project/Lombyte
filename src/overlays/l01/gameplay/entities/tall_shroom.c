@@ -716,7 +716,9 @@ extern f32 frame_delta_time __asm__("D_0015ED7C");
 void draw_level01_environment_mapped_meshes(void) __asm__("FUN_L01_0030f0e0");
 void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
 
-void FUN_L01_0030f208(ScrollMoby *moby) {
+void update_level01_environment_map_uv_scroll(ScrollMoby *moby) __asm__("FUN_L01_0030f208");
+
+void update_level01_environment_map_uv_scroll(ScrollMoby *moby) {
     enum {
         UV_SCROLL_STATE_INITIALIZE = 0,
         UV_SCROLL_STATE_UPDATE_AND_QUEUE_DRAW = 1
