@@ -20,7 +20,9 @@ extern int collision_line(void *from, void *to, int mask, void *ignore, int) __a
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 coll_sphere(f32, Vec4 *, s32, s32) __asm__("FUN_L00_001f0d60");
 
-void FUN_L00_00221310(void) {
+void update_hero_motion_and_collision_probes(void) __asm__("FUN_L00_00221310");
+
+void update_hero_motion_and_collision_probes(void) {
     Vec4 first;
     Vec4 second;
     Vec4 probe;
