@@ -961,7 +961,9 @@ extern float mine_sin(float) __asm__("FUN_001f9de0");
 extern int mine_ftoi(float) __asm__("FUN_001fa6d0");
 
 /* Mine update: drifts along its looped path while spinning and pulsing; blows up on a hit. */
-void FUN_L14_002ec810(struct Moby *moby) {
+void update_looping_path_moby(struct Moby *moby) __asm__("FUN_L14_002ec810");
+
+void update_looping_path_moby(struct Moby *moby) {
     enum {
         MINE_STATE_INITIALIZE = 0,
         MINE_STATE_FOLLOW_PATH = 1
