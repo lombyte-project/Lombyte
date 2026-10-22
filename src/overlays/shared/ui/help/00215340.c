@@ -19,7 +19,9 @@ extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 
 #define TF(o) (D_L00_0017A680.f[(o) / 4])
 
-void FUN_L00_00215340(void) {
+void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340");
+
+void adjust_hero_pose_targets_from_motion(void) {
     f32 run_step_pose_input, nv, k, run_pose_magnitude, motion_correction_scale, relative_displacement_angle;
     f32 run_pose_weight, nw;
     f32 scaled_pose_input, c1, c2, c3;
