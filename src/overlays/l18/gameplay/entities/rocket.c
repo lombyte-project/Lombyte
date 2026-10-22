@@ -1453,7 +1453,9 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
 extern char D_0013E550[];
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
-void FUN_L18_002d7fd0(struct Moby *moby) {
+void end_thruster_pack_lock_red_wait(struct Moby *moby) __asm__("FUN_L18_002d7fd0");
+
+void end_thruster_pack_lock_red_wait(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     if (moby->state == 2) {
         int voice_slot_index;

@@ -1476,7 +1476,7 @@ extern void FUN_L15_00208ca8(void);
 extern void FUN_L18_002d6d50(int idx);
 extern void FUN_L18_002d6dc0(void *moby);
 extern void request_thruster_pack_lock_red_wait(unsigned char *arg, int value) __asm__("FUN_L18_002d7f68");
-extern void FUN_L18_002d7fd0(unsigned char *arg);
+extern void end_thruster_pack_lock_red_wait(unsigned char *arg) __asm__("FUN_L18_002d7fd0");
 extern void FUN_L18_002db938(char *pos, float *vec, int arg, float fa, float fb);
 extern void refresh_ring_effect(char *moby, void *pos, float f) __asm__("FUN_L18_002dc458");
 extern void FUN_L18_002dfaa0(char *moby, void *v0, void *v1, void *v2, void *v3, void *v4, int a6,
@@ -2482,7 +2482,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         if (moby->f52 == moby->f53 && moby->f52 == 14 &&
             is_value_within_interpolated_window((char *)moby, 30.0f) != 0) {
             moby->f20 = 0x1B;
-            FUN_L18_002d7fd0(D_L18_0015FFD8 + boss_data->f21C * 0x100);
+            end_thruster_pack_lock_red_wait(D_L18_0015FFD8 + boss_data->f21C * 0x100);
         }
         break;
     }
