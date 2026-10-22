@@ -439,7 +439,9 @@ s32 FUN_L06_00252dd0(s32 full, s32 keep) {
 #include "qcopy.h"
 #include "sda.h"
 
-void FUN_L06_002fc630(unsigned char *moby) {
+void set_moby_state_3(unsigned char *moby) __asm__("FUN_L06_002fc630");
+
+void set_moby_state_3(unsigned char *moby) {
     moby[0x20] = 0x3;
 }
 
