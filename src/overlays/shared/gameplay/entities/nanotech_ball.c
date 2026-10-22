@@ -44,7 +44,9 @@ void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-void FUN_L00_002d7f88(S_002d7f88 *self) {
+void update_linked_moby_transform_and_lifetime(S_002d7f88 *self) __asm__("FUN_L00_002d7f88");
+
+void update_linked_moby_transform_and_lifetime(S_002d7f88 *self) {
     D_002d7f88 *moby_data = self->p78;
     O_002d7f88 *o;
     void *linked_moby_data;
