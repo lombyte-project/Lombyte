@@ -481,7 +481,9 @@ extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 void spawn_rocket_trail_effects(void *mobyp, void *vec) __asm__("FUN_L18_002d5488");
 extern void FUN_L18_002d5610_u(void *, void *) __asm__("FUN_L18_002d5610");
-void FUN_L18_002d5768(struct Moby *m);
+void draw_rocket_target_pulse_quad(struct Moby *m) __asm__("FUN_L18_002d5768");
+
+void draw_rocket_target_pulse_quad(struct Moby *m) __asm__("FUN_L18_002d5768");
 
 void FUN_L18_002d5050(struct Moby *moby) {
     L18D *moby_vars = (L18D *)moby->pvars;
@@ -543,7 +545,7 @@ void FUN_L18_002d5050(struct Moby *moby) {
         } else if (moby_vars->flags & 2) {
             pitch_angle_or_remaining_frames = (float)(moby_vars->end - moby_vars->c);
             if (pitch_angle_or_remaining_frames <= FUN_L04_001f1978(D_L18_00161964)) {
-                enqueue_callback_list_1(FUN_L18_002d5768, moby);
+                enqueue_callback_list_1(draw_rocket_target_pulse_quad, moby);
             }
         }
     }
@@ -679,7 +681,7 @@ extern int D_L18_00161978 __attribute__((sda));
 extern int D_L18_0016197C __attribute__((sda));
 extern int D_L18_00161980 __attribute__((sda));
 extern int D_L18_00161984 __attribute__((sda));
-void FUN_L18_002d5768(struct Moby *m) {
+void draw_rocket_target_pulse_quad(struct Moby *m) {
     Pk_d5768 pk;
     char *d = (char *)m->pvars;
     unsigned int col;
