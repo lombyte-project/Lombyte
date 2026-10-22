@@ -23,7 +23,7 @@ extern unsigned char D_0013F350[];
 extern float D_L15_0017C06C[];
 extern float D_L15_0017C1CC[];
 extern unsigned int fast_tween_color(float, unsigned int, unsigned int);
-extern void FUN_L00_002054e8(void);
+extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void FUN_L00_002059d8(void);
 extern void update_hero_bone_attachment(void) __asm__("FUN_L00_002061f0");
 extern void FUN_L00_00207a58(void);
@@ -57,7 +57,7 @@ void FUN_L15_001ff938(void) {
     if (hero0[0x20A4] == 0)
         return;
     FUN_L00_00216f10();
-    FUN_L00_002054e8();
+    update_hero_easing_records();
     if (hero0[0x20A4] == 0)
         return;
     FUN_L00_00208a10();

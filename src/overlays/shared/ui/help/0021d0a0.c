@@ -73,7 +73,7 @@ extern void FUN_L00_0020bed0_u(void) __asm__("FUN_L00_0020bed0");
 extern void FUN_L00_00215b68(void);
 extern void FUN_L06_0023b440(void);
 extern void FUN_L00_00216f10(void);
-extern void FUN_L00_002054e8(void);
+extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void FUN_L00_00208a10(void);
 extern void FUN_L00_00207c48(void);
 extern void FUN_L00_00207a58(void);
@@ -139,7 +139,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
     FUN_L06_0023b440();
     if (*(u8 *)(g + 0x20a4) == 0) return;
     FUN_L00_00216f10();
-    FUN_L00_002054e8();
+    update_hero_easing_records();
     if (*(u8 *)(g + 0x20a4) == 0) return;
     FUN_L00_00208a10();
     FUN_L00_00207c48();

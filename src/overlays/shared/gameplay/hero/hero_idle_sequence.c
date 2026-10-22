@@ -207,7 +207,9 @@ void FUN_L00_00205168(struct HeroEase *ease_record) {
 }
 extern struct HeroEase D_L00_0017A680_002054e8[] __asm__("D_L00_0017A680");
 /* Runs FUN_L00_00205168 on each entry of D_L00_0017A680 (0x1550 bytes). */
-void FUN_L00_002054e8(void) {
+void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
+
+void update_hero_easing_records(void) {
     struct HeroEase *ease_record = D_L00_0017A680_002054e8;
     struct HeroEase *end = (struct HeroEase *)((u8 *)ease_record + 0x1550);
     do {
@@ -621,7 +623,7 @@ extern void FUN_L00_0020bed0_u(void) __asm__("FUN_L00_0020bed0");
 extern void FUN_L00_00215b68(void);
 extern void FUN_L00_00229b70(void);
 extern void FUN_L00_00216f10(void);
-extern void FUN_L00_002054e8(void);
+extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void FUN_L00_00208a10(void);
 extern void FUN_L00_00207c48(void);
 extern void FUN_L00_00207a58(void);
@@ -687,7 +689,7 @@ void update_hero_in_vehicle_mode(void) {
     FUN_L00_00229b70();
     if (*(u8 *)(g + 0x20a4) == 0) return;
     FUN_L00_00216f10();
-    FUN_L00_002054e8();
+    update_hero_easing_records();
     if (*(u8 *)(g + 0x20a4) == 0) return;
     FUN_L00_00208a10();
     FUN_L00_00207c48();
@@ -1096,7 +1098,7 @@ void FUN_L00_0020a9e8_u(void) __asm__("FUN_L00_0020a9e8");
 void FUN_L00_002056a8(void);
 void FUN_L00_002059d8(void);
 void FUN_L00_00214fe8(void);
-void FUN_L00_002054e8(void);
+void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 void FUN_L00_00208820(void);
 void FUN_L00_00209240(int);
 void FUN_L00_00210928(void);
@@ -1147,7 +1149,7 @@ void FUN_L00_002070d0(void) {
     FUN_L00_002056a8();
     FUN_L00_002059d8();
     FUN_L00_00214fe8();
-    FUN_L00_002054e8();
+    update_hero_easing_records();
     FUN_L00_00208820();
     FUN_L00_00209240(0);
     FUN_L00_00210928();

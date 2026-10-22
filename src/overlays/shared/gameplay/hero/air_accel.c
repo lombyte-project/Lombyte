@@ -68,7 +68,7 @@ extern unsigned char D_0013D4DC[];
 #include "rnc/gameplay/state/options.h"
 extern float D_L01_0017C04C[];
 extern unsigned int fast_tween_color(float, unsigned int, unsigned int);
-extern void FUN_L00_002054e8(void);
+extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void FUN_L00_00207a58(void);
 extern void FUN_L00_00207c48(void);
 extern void FUN_L00_00207d00(void);
@@ -98,7 +98,7 @@ void FUN_L01_00228000(void) {
     if (hero.vehicle_mode == 0)
         return;
     FUN_L00_00216f10();
-    FUN_L00_002054e8();
+    update_hero_easing_records();
     if (hero.vehicle_mode == 0)
         return;
     FUN_L00_00208a10();
@@ -184,7 +184,7 @@ void FUN_L01_00228000(void) {
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E533[];
-extern void FUN_L00_002054e8(void);
+extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void FUN_L00_002056a8(void);
 extern void FUN_L00_002059d8(void);
 extern void FUN_L00_00205ea8(void);
@@ -250,7 +250,7 @@ void FUN_L01_00228870(void) {
     FUN_L00_002056a8();
     FUN_L00_002059d8();
     FUN_L00_00214fe8();
-    FUN_L00_002054e8();
+    update_hero_easing_records();
     FUN_L00_00208820();
     FUN_L00_00209240(0);
     FUN_L00_00210928();
