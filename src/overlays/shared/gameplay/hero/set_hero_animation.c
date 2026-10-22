@@ -1700,14 +1700,14 @@ void FUN_L00_00234d40(void) {
     FUN_L00_00233ee8_00234d40(pos, hero_base->motion.rot.f[2], 1);
     qcopy(pos, &candidate_ground_position);
 }
-void FUN_L00_002395b0();
+void initialize_hud_element_with_counters() __asm__("FUN_L00_002395b0");
 void FUN_L00_00239630();
 void FUN_L00_00239810();
 void queue_animation_update() __asm__("FUN_001ff308");
 /* Queues animation update 0x7535 with three FUN_L00_ callbacks and D_001415F8. */
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 void show_health_hud(void) {
-    queue_animation_update(1, 0x7535, FUN_L00_002395b0, FUN_L00_00239630, FUN_L00_00239810,
+    queue_animation_update(1, 0x7535, initialize_hud_element_with_counters, FUN_L00_00239630, FUN_L00_00239810,
                            &hero.health, 8);
 }
 
