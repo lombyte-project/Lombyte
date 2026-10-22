@@ -353,7 +353,9 @@ extern void mark_moby_for_removal_98b68(struct Moby *) __asm__("FUN_0020c828");
 
 extern short D_00141948 __attribute__((section(".data")));
 /* Level 10 pickup: saves its collected bit, flips the linked switch pair and moves the hero to the spot for the current state. */
-void FUN_L10_00298b68(struct Moby *moby) {
+void update_hero_relocation_trigger(struct Moby *moby) __asm__("FUN_L10_00298b68");
+
+void update_hero_relocation_trigger(struct Moby *moby) {
     PickupVars_98b68 *vars;
     struct Moby *target;
     moby->update_dist = 0xFF;
