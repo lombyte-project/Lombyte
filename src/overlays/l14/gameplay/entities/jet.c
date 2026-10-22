@@ -2239,7 +2239,7 @@ extern void FUN_L00_002e8450(int, float, float);
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void FUN_L05_00319740(char *);
-extern void FUN_L05_003198e8(char *);
+extern void transform_moby_vector_table_to_world_space(char *) __asm__("FUN_L05_003198e8");
 extern void taxi_release(s32) __asm__("FUN_0022d798");
 extern void taxi_sample(float, s32 *, int, void *, void *, int) __asm__("FUN_00214e58");
 extern void taxi_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -2475,7 +2475,7 @@ void taxi_update(struct Moby *moby) {
         if (g->ground_moby == moby && g->air_frames.s == 0) {
             g->unk1F2 = 2;
             g->unk1F4 = 2;
-            FUN_L05_003198e8((char *)moby);
+            transform_moby_vector_table_to_world_space((char *)moby);
         }
         if (voice_is_playing(moby, taxi_vars->sound) == 0) {
             taxi_vars->sound = taxi_sound(0, 4, moby);

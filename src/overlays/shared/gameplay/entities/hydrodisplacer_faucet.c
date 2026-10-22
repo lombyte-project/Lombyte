@@ -996,7 +996,9 @@ extern char D_L05_00215C00[];
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-void FUN_L05_003198e8(char *moby) {
+void transform_moby_vector_table_to_world_space(char *moby) __asm__("FUN_L05_003198e8");
+
+void transform_moby_vector_table_to_world_space(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int vector_table_index = *(int *)(data + 0xDC);
     if (vector_table_index != -1) {

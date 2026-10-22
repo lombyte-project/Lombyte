@@ -2216,7 +2216,7 @@ extern void FUN_L00_00266858(void *, int);
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void request_moby_variant_help_message(char *) __asm__("FUN_L05_00319690");
 extern void FUN_L05_00319740(char *);
-extern void FUN_L05_003198e8(char *);
+extern void transform_moby_vector_table_to_world_space(char *) __asm__("FUN_L05_003198e8");
 void FUN_L05_00319208(void *moby_v);
 extern void FUN_L05_003193a8_u(char *) __asm__("FUN_L05_003193a8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -2344,7 +2344,7 @@ void taxi_update(struct Moby *moby) {
         travel_hero = &hero;
         travel_hero->unk1F2 = 2;
         travel_hero->unk1F4 = 2;
-        FUN_L05_003198e8(moby);
+        transform_moby_vector_table_to_world_space(moby);
         if (voice_is_playing(moby, *(short *)(taxi_data + 0xB2)) == 0) {
             *(short *)(taxi_data + 0xB2) = func_0022ED80_i(0, 4, moby);
         }
