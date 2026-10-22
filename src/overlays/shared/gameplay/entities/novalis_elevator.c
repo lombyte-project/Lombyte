@@ -619,7 +619,7 @@ extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0")
 extern void FUN_L00_002eac18(int);
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void FUN_L01_0029b0a0(void *, int, void *, int, void *);
-extern void FUN_L01_00316e88(f32, f32);
+extern void set_camera_5_track_acceleration_yz(f32, f32) __asm__("FUN_L01_00316e88");
 
 /* Turned by the hero (state 0x3B) until progress reaches 1, then lowered and saved as done. */
 void bolt_crank_update(struct Moby *moby) __asm__("FUN_L01_002e0c68");
@@ -692,7 +692,7 @@ void bolt_crank_update(struct Moby *moby) {
                                 jet_mount(D_L01_00167240, D_L01_00167240 + 0x10, 3, scale_game_frames(0xB4), 0);
                                 set_camera_rotation(D_L01_001600EC + (crank->camera_point << 7) + 0x70);
                                 set_camera_position(D_L01_001600EC + (crank->camera_point << 7) + 0x30);
-                                FUN_L01_00316e88(crank->camera_params[0], crank->camera_params[1]);
+                                set_camera_5_track_acceleration_yz(crank->camera_params[0], crank->camera_params[1]);
                                 moby->state = BOLT_CRANK_TURNING;
                                 crank->fall_speed = 0.0f;
                                 crank->turned = crank->progress * (crank->turns * 6.2831855f);
