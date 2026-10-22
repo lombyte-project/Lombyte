@@ -1511,7 +1511,9 @@ extern void f12e418_29ab70(int) __asm__("FUN_0012e418");
 extern void f216088_29ab70(void) __asm__("FUN_00216088");
 extern void f12dc80_29ab70(void) __asm__("FUN_0012dc80");
 extern int D_L00_00161070 __attribute__((sda));
-void FUN_L00_0029ab70(int exit_cutscene_completed) {
+void close_vendor_menu(int exit_cutscene_completed) __asm__("FUN_L00_0029ab70");
+
+void close_vendor_menu(int exit_cutscene_completed) {
     Vec4_29ab70 world_position;
     Vec4_29ab70 euler_rotation;
     char *vendor_state_base = D_L00_001CA4C0_29ab70;
@@ -1952,7 +1954,7 @@ extern void FUN_00212f90(void *, s32, s32, s32);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
 extern void FUN_L00_0029ad08(void);
-extern void FUN_L00_0029ab70(s32);
+extern void close_vendor_menu(s32) __asm__("FUN_L00_0029ab70");
 extern void update_hud_elements(s32) __asm__("FUN_L00_0023ac78");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L00_0029f990(void);
@@ -2332,7 +2334,7 @@ void FUN_L00_0029c648(void) {
                 if (ok) {
                     FUN_L00_0029ad08();
                 } else {
-                    FUN_L00_0029ab70(0);
+                    close_vendor_menu(0);
                     allocate_voice_for_target_entry(6, 0, vendor_menu.f1c);
                 }
             }
@@ -2590,7 +2592,7 @@ void FUN_L00_0029c648(void) {
             if (vendor_menu.f28 != 0) {
                 restore_hero_after_vendor_exit_cutscene();
             } else {
-                FUN_L00_0029ab70(1);
+                close_vendor_menu(1);
             }
             break;
         }
