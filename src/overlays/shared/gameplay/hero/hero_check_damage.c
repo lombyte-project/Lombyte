@@ -2853,7 +2853,9 @@ void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 void FUN_L00_00211cf8(float, float, float);
 extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
-void FUN_L00_00211d78(int rotation_direction, float x, float y, float z) {
+void turn_hero_toward_transformed_move_direction(int rotation_direction, float x, float y, float z) __asm__("FUN_L00_00211d78");
+
+void turn_hero_toward_transformed_move_direction(int rotation_direction, float x, float y, float z) {
     V4_211d78 transformed_direction;
     float out;
     float zero = 0.0f;
@@ -2871,14 +2873,14 @@ void FUN_L00_00211d78(int rotation_direction, float x, float y, float z) {
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002124E8), where it is exact; names translated to the US level program. */
 
 extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
-extern void FUN_L00_00211d78(int, float, float, float);
+extern void turn_hero_toward_transformed_move_direction(int, float, float, float) __asm__("FUN_L00_00211d78");
 
 /* Calls 00211d78 when hero.unk20B3 is set, else updates hero.motion.unk188 via 0025bc98. */
 void turn_to(int a, float x, float y, float z) __asm__("FUN_L00_00211e30");
 void turn_to(int rotation_direction, float x, float y, float z) {
     struct Hero *hero_state = &hero;
     if (hero_state->unk20B3 != 0) {
-        FUN_L00_00211d78(rotation_direction, x, y, z);
+        turn_hero_toward_transformed_move_direction(rotation_direction, x, y, z);
     } else {
         hero_state->motion.unk188 =
             FUN_L00_0025bc98(&hero_state->motion.rot.f[2], &hero_state->motion.unk184, rotation_direction, hero_state->motion.move_yaw, x, y, z);
