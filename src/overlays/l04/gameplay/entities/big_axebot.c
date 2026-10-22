@@ -1590,7 +1590,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     };
     D_35F0 *data = moby->data;
     T_35F0 tg;
-    V4_35F0 prev;
+    V4_35F0 initial_position_snapshot;
     V4_35F0 dest;
     int flag = 0;
     float rot = moby->rot;
@@ -1613,7 +1613,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     target_moby = tg.f40;
     hd = compute_interpolated_record_value(moby);
     target_distance = vector_distance(moby->pos, (float *)&tg);
-    qcopy(prev, moby->pos);
+    qcopy(initial_position_snapshot, moby->pos);
     qcopy(dest, moby->pos);
     moby->f30 = 0x20;
     FUN_L04_002c1b80((struct Moby *)moby);
@@ -1851,7 +1851,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     case CIRCULAR_SAW_STATE_FOLLOW_PATH: {
         P_35F0 *path = D_L04_001B0930_2C35F0[data->f150];
         int i;
-        float *vel;
+        float *yaw_velocity;
 
         if (flag ? target_distance < data->f140 * 2.0f : target_distance < data->f140) {
             if (flag || data->f138 == -1 ||
@@ -1887,7 +1887,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             }
         }
         i = 0;
-        vel = &data->f130;
+        yaw_velocity = &data->f130;
         for (; i < 4; i++) {
             if (data->f146 == 0 && data->f160[i] != -1 &&
                 is_point_inside_clip_volume(moby->pos, data->f160[i]) != 0) {
@@ -1901,7 +1901,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             int n = data->f154;
             qcopy(dest, path->pts[n]);
             ta = fast_arc_tan(path->pts[n][0] - moby->pos[0], path->pts[n][1] - moby->pos[1]);
-            func_L00_002592B0_b((char *)moby, ta, vel, frame_time_sq * 1.0471976f,
+            func_L00_002592B0_b((char *)moby, ta, yaw_velocity, frame_time_sq * 1.0471976f,
                                 frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
         }
         break;
