@@ -2936,7 +2936,9 @@ extern float D_0015ED6C_211f38 __asm__("D_0015ED6C");
 extern int FUN_L00_0020d498_211f38(int) __asm__("FUN_L00_0020d498");
 extern void FUN_L00_00211e30_211f38(int, float, float, float) __asm__("FUN_L00_00211e30");
 
-void FUN_L00_00211f38(void) {
+void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_L00_00211f38");
+
+void turn_hero_toward_move_direction_with_stick_scale(void) {
     struct Hero *hero_state = &hero;
     float stick_turn_scale, frame_scaled_turn_coefficient, frame_scaled_secondary_turn_coefficient, scaled_turn_amount;
     stick_turn_scale = (hero_state->unk229C + 1.0f) * 0.5f;

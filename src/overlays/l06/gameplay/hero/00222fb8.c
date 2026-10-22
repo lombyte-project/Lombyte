@@ -993,7 +993,7 @@ extern struct HeroAnimRow D_L06_0017A240_t[] __asm__("D_L06_0017A240");
 extern void spawn_random_alpha_rotated_particle(void *, void *, f32) __asm__("FUN_L00_00271b18");
 extern void FUN_L00_00215340(void);
 extern void FUN_L00_00215ef8(void);
-extern void FUN_L00_00211f38(void);
+extern void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_L00_00211f38");
 extern f32 D_L06_0017C544[];
 extern void FUN_L06_00228b40_c(void) __asm__("FUN_L06_00228b40");
 extern void initialize_moby_transform_history(void *, void *) __asm__("FUN_L00_00262500");
@@ -1828,7 +1828,7 @@ void FUN_L06_0022e020(void) {
                 k = 0.0f;
             }
             if (turn_control_value > D_L06_0017C544[0]) {
-                FUN_L00_00211f38();
+                turn_hero_toward_move_direction_with_stick_scale();
             } else {
                 f32 f = hero.unk229C + 0.35f;
                 turn_to(0, frame_scale_sq * 0.005f * f, frame_scale_sq * 0.1f,
@@ -2551,7 +2551,7 @@ void FUN_L06_0022e020(void) {
                 turn_to(0, frame_scale_sq * 0.016f, frame_scale_sq * 0.15f,
                                  D_0015ED6C_c * 9.948377f);
             } else {
-                FUN_L00_00211f38();
+                turn_hero_toward_move_direction_with_stick_scale();
             }
         }
         if (hero.vehicle_mode == 0) {

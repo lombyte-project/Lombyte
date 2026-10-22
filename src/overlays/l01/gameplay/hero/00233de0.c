@@ -460,7 +460,7 @@ extern void FUN_L00_0020b5b8_cf(void) __asm__("FUN_L00_00214108");
 extern void stick_target(float, int) __asm__("FUN_L00_002118c8");
 extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 extern void turn_hero_toward_move_direction_for_item(void) __asm__("FUN_L00_00211e98");
-extern void FUN_L00_00211f38(void);
+extern void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_L00_00211f38");
 extern void speed_step(float, float) __asm__("FUN_L00_00212088");
 extern void set_planar_vel(float) __asm__("FUN_L00_002120d8");
 extern void FUN_L00_002132b8(float, float);
@@ -1614,7 +1614,7 @@ void FUN_L01_002370b8(void) {
                 }
             }
             if (sp > D_L01_0017C238.fC) {
-                FUN_L00_00211f38();
+                turn_hero_toward_move_direction_with_stick_scale();
             } else {
                 float t;
 
@@ -2119,7 +2119,7 @@ void FUN_L01_002370b8(void) {
                 turn_to(0, frame_scale_sq * 0.016f, frame_scale_sq * 0.15f,
                                  frame_time * 9.948377f);
             } else {
-                FUN_L00_00211f38();
+                turn_hero_toward_move_direction_with_stick_scale();
             }
         }
         if (hero.vehicle_mode == 0) {
