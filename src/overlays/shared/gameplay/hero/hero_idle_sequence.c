@@ -582,7 +582,9 @@ int scale_game_frames(int) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void advance_moby_animation(void *) __asm__("FUN_0020d580");
 void FUN_L00_00250df8(void *);
-void FUN_L00_002061f0(void) {
+void update_hero_bone_attachment(void) __asm__("FUN_L00_002061f0");
+
+void update_hero_bone_attachment(void) {
     M4_2061f0 bone_transform;
     struct Hero *hero_state = &hero;
     char *destination_moby = ((char *)hero_state->unkA88);
@@ -807,7 +809,7 @@ void FUN_L00_002062b0(void) {
         char *g = (char *)&hero;
         if (D_0015EDB3_macro) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x210) = 1.4f * D_0015EE18_gp;
         FUN_L00_002059d8();
-        FUN_L00_002061f0();
+        update_hero_bone_attachment();
         g = (char *)&hero;
         if ((*(u16 *)(*(char **)(g + 0x2080) + 0x34) ^ 1) & 1) {
             FUN_L00_0024f7c8(*(char **)(g + 0x2080), 6, scratch.rotation);
