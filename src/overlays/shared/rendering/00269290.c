@@ -677,7 +677,9 @@ extern void FUN_L00_0026a9f0_u(void *, void *, int, int, int, int, int, float, i
                                float) __asm__("FUN_L00_0026a9f0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
-void FUN_L00_0026ac78(char *particle) {
+void update_branching_and_fading_effect_particle(char *particle) __asm__("FUN_L00_0026ac78");
+
+void update_branching_and_fading_effect_particle(char *particle) {
     char *particle_data = particle + 0x20;
     particle[8]++;
     if ((particle_data[0x19] ^ 1) & 1) {
