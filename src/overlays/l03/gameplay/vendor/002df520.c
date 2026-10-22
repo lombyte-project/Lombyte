@@ -325,7 +325,9 @@ extern void clear_u64_value_eb978(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern s32 D_L03_00167074 NOT_SDA;
 /* vendor camera init: aims the camera data at the hero, resets its blend state and places it (FUN_L03_002eb7e0) */
-void FUN_L03_002eb978(void *camera_instance) {
+void initialize_hero_relative_camera(void *camera_instance) __asm__("FUN_L03_002eb978");
+
+void initialize_hero_relative_camera(void *camera_instance) {
     char *camera = camera_instance;
     char *camera_config = *(char **)((char *)D_L03_0015EF50 + *(s16 *)(camera + 0x84) * 32 + 0x1C);
     char *target;
