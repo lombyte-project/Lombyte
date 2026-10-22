@@ -1492,7 +1492,9 @@ extern void normalize_5290(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void cross_5290(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern s32 tick_countdown_16_5290(s16 *) __asm__("FUN_001f9770");
 
-void FUN_L14_00315290(struct UpdateCam *path_camera) {
+void update_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L14_00315290");
+
+void update_path_camera(struct UpdateCam *path_camera) {
     float initial_look_direction_or_previous_position[4];
     float t[4];
     float u[4];
