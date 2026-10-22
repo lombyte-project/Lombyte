@@ -35,7 +35,10 @@ static inline int tint_color(int color) {
 
 /* Draws a textured sphere around point 9 of the moby, one ring of latitude strips per
    longitude step, its alpha ramped from alpha to end_alpha. */
-void FUN_L07_00312948(char *moby, int phase, float speed, float radius, float latitude_span,
+void draw_snagglebeast_sphere_quad_strips(char *moby, int phase, float speed, float radius, float latitude_span,
+                      float alpha, float end_alpha) __asm__("FUN_L07_00312948");
+
+void draw_snagglebeast_sphere_quad_strips(char *moby, int phase, float speed, float radius, float latitude_span,
                       float alpha, float end_alpha) {
     char *data = *(char **)(moby + 0x78);
     int shade = *(unsigned char *)(data + 0x1C6);
@@ -136,7 +139,7 @@ void draw_snagglebeast_sphere_effect(char *moby) {
     } else {
         latitude_span = 3.14159274f;
     }
-    FUN_L07_00312948(moby, 0, 1.0f, 5.8f, latitude_span, 1.0f, *(float *)(data + 0x1C8));
+    draw_snagglebeast_sphere_quad_strips(moby, 0, 1.0f, 5.8f, latitude_span, 1.0f, *(float *)(data + 0x1C8));
 }
 #include "qcopy.h"
 #include "rnc/rendering/geometry_quad.h"
