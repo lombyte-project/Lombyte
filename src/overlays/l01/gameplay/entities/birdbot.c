@@ -3025,14 +3025,14 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
     int j;
     GunshipTargets explosion_vector_or_target_indices;
     GunshipTargets explosion_vector_or_filtered_target_indices;
-    SplashVec dir;
+    SplashVec beam_step_vector;
     SplashVec pos;
     SplashVec col;
     {
-        float dist = distance_xyz(bomber_jet_moby->pos, camera_pos);
+        float camera_distance = distance_xyz(bomber_jet_moby->pos, camera_pos);
         float x0 = gunship_near_dist;
         float k = -((1.0f - gunship_min_scale) / (gunship_far_dist - x0));
-        distance_scale = k * dist + (1.0f - k * x0);
+        distance_scale = k * camera_distance + (1.0f - k * x0);
     }
     hit = find_moby_hit(bomber_jet_moby, 0x800000, 0);
     bomber_jet_moby->bA4 = 0xFF;
@@ -3161,17 +3161,17 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                 if (gunship_vars->sub.cur == t[i]) found = i;
             }
             if (found != -1) {
-                int cnt;
+                int remaining_target_count;
                 explosion_vector_or_target_indices = gunship_no_targets;
                 j = 0;
                 explosion_vector_or_filtered_target_indices = gunship_no_targets;
-                cnt = 0;
+                remaining_target_count = 0;
                 for (i = 0; i < 4; i++) {
                     if (gunship_vars->targets[found][i] != -1) {
                         explosion_vector_or_target_indices.v[j] = gunship_vars->targets[found][i];
                         j++;
-                        explosion_vector_or_filtered_target_indices.v[cnt] = gunship_vars->targets[found][i];
-                        cnt++;
+                        explosion_vector_or_filtered_target_indices.v[remaining_target_count] = gunship_vars->targets[found][i];
+                        remaining_target_count++;
                     }
                 }
                 if (j == 0) break;
@@ -3180,12 +3180,12 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                     if (collision_line(camera_pos, camera_points + (explosion_vector_or_target_indices.v[i] << 7) + 0x30, 0x86, bomber_jet_moby, 0)) {
                         if (collision_hit.moby == 0 || collision_hit.moby != bomber_jet_moby) {
                             explosion_vector_or_filtered_target_indices.v[i] = -1;
-                            cnt--;
+                            remaining_target_count--;
                             break;
                         }
                     }
                 }
-                if (cnt != 0) {
+                if (remaining_target_count != 0) {
                     int k = 0;
                     for (i = 0; i < j; i++) {
                         if (explosion_vector_or_filtered_target_indices.v[i] != -1) {
@@ -3193,17 +3193,17 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                             k++;
                         }
                     }
-                    j = cnt;
+                    j = remaining_target_count;
                 }
                 if (j != 0) {
                     GunshipMoby *bm;
                     i = explosion_vector_or_target_indices.v[random_integer_below(j)];
                     gunship_vars->gun_side ^= 1;
                     moby_point_position(bomber_jet_moby, gunship_vars->gun_side, &pos);
-                    subtract_vector_xyz(&dir, camera_points + (i << 7) + 0x30, &pos);
-                    normalize_vector_xyz(&dir, &dir, frame_time_macro * 160.0f);
+                    subtract_vector_xyz(&beam_step_vector, camera_points + (i << 7) + 0x30, &pos);
+                    normalize_vector_xyz(&beam_step_vector, &beam_step_vector, frame_time_macro * 160.0f);
                     col.q = *(u128 *)((i << 7) + (int)camera_points + 0x30);
-                    bm = spawn_beam(bomber_jet_moby, &pos, &dir, &col, is_point_inside_clip_volume(&hero.motion.pos, gunship_vars->beam_volume), gunship_vars->trigger_volume != -1);
+                    bm = spawn_beam(bomber_jet_moby, &pos, &beam_step_vector, &col, is_point_inside_clip_volume(&hero.motion.pos, gunship_vars->beam_volume), gunship_vars->trigger_volume != -1);
                     if (bm != 0) {
                         int k = 0;
                         int *out = (int *)((char *)bm->vars + 0x20);
@@ -3215,10 +3215,10 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                             if (gunship_vars->guards[i] != -1) {
                                 GunshipMoby *o = (GunshipMoby *)((gunship_vars->guards[i] << 8) + moby_array);
                                 if (o->oclass == 0x2BC) {
-                                    GunshipGuardVars *g = o->vars;
-                                    if (g->f4 == 0 && g->f0 == 0 && random_integer_below(0x64) < 0x64
-                                        && is_point_inside_clip_volume(&hero.motion.pos, g->f8)
-                                        && is_point_inside_clip_volume(camera_pos, g->f8)) {
+                                    GunshipGuardVars *guard_vars = o->vars;
+                                    if (guard_vars->f4 == 0 && guard_vars->f0 == 0 && random_integer_below(0x64) < 0x64
+                                        && is_point_inside_clip_volume(&hero.motion.pos, guard_vars->f8)
+                                        && is_point_inside_clip_volume(camera_pos, guard_vars->f8)) {
                                         out[k] = gunship_vars->guards[i];
                                         k++;
                                     }
