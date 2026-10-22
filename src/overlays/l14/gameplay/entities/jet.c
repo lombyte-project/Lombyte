@@ -1563,7 +1563,7 @@ void FUN_L14_002edc18(void) {
     transform_vector(&layer_quads[1].v[0], &layer_quads[1].v[0], &quad_to_world[0]);
     transform_vector(&layer_quads[1].v[1], &layer_quads[1].v[1], &quad_to_world[0]);
     for (i = 1; i < 0x28; i++) {
-        int b;
+        int main_arc_end_vertex_alpha;
         float *arc_endpoint = D_L14_00161CC0;
         qcopy(&layer_quads[0].v[2], &sz[0]);
         scale_vector_xyz(&layer_quads[0].v[3], &layer_quads[0].v[2], -1.0f);
@@ -1584,14 +1584,14 @@ void FUN_L14_002edc18(void) {
         transform_vector(&layer_quads[1].v[2], &layer_quads[1].v[2], &quad_to_world[0]);
         transform_vector(&layer_quads[1].v[3], &layer_quads[1].v[3], &quad_to_world[0]);
         if (i == 0x27) {
-            b = 0;
+            main_arc_end_vertex_alpha = 0;
         } else {
-            b = func_001FA898_r(convert_integer_to_float(D_L14_001E0000[i]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70_gp)) * 255.0f) - D_L14_00161CE0[0];
-            if (b < 0) b = 0;
-            if (b > 0xFF) b = 0xFF;
+            main_arc_end_vertex_alpha = func_001FA898_r(convert_integer_to_float(D_L14_001E0000[i]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70_gp)) * 255.0f) - D_L14_00161CE0[0];
+            if (main_arc_end_vertex_alpha < 0) main_arc_end_vertex_alpha = 0;
+            if (main_arc_end_vertex_alpha > 0xFF) main_arc_end_vertex_alpha = 0xFF;
         }
-        layer_quads[0].col[2] = layer_quads[0].col[3] = D_L14_00161C78 | (b << 24);
-        layer_quads[1].col[2] = layer_quads[1].col[3] = D_L14_00161C7C | ((b >> 1) << 24);
+        layer_quads[0].col[2] = layer_quads[0].col[3] = D_L14_00161C78 | (main_arc_end_vertex_alpha << 24);
+        layer_quads[1].col[2] = layer_quads[1].col[3] = D_L14_00161C7C | ((main_arc_end_vertex_alpha >> 1) << 24);
         draw_geometry_quad(&layer_quads[0], 0, 0);
         draw_geometry_quad(&layer_quads[1], 0, 0);
         layer_quads[0].col[0] = layer_quads[0].col[1] = layer_quads[0].col[2];
