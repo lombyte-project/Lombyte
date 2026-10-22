@@ -344,7 +344,7 @@ extern void FUN_001f9c90_30ab80(void *, void *, float) __asm__("FUN_001f9c90");
 extern float vector_length_xyz_30ab80(void *) __asm__("FUN_001f9af0");
 extern void normalize_vector_xyz_30ab80(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int random_int_between_30ab80(int, int) __asm__("FUN_L00_00257b90");
-extern void FUN_L09_00277758_30ab80(float *, float) __asm__("FUN_L09_00277758");
+extern void generate_random_scaled_vector2(float *, float) __asm__("FUN_L09_00277758");
 extern void add_vector_xyz_30ab80(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float random_float_between_30ab80(float, float) __asm__("FUN_002132a8");
 extern float FUN_00213508_30ab80(void *, int, float) __asm__("FUN_00213508");
@@ -472,7 +472,7 @@ void spawner_update(char *moby)
                 float target_offset_scale = *(float *)(spawner_vars + 0x80);
                 if (target_offset_scale < 3.0f)
                     target_offset_scale = 3.0f;
-                FUN_L09_00277758_30ab80(target, target_offset_scale);
+                generate_random_scaled_vector2(target, target_offset_scale);
                 add_vector_xyz_30ab80(target, target, moby + 0x10);
             } else {
                 qcopy(target, sel + 0x30);
