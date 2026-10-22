@@ -1670,7 +1670,9 @@ void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 void FUN_L00_002092c8(void *, void *, void *, int, void *);
-void FUN_L00_00234c78(void *source_moby, char *destination_moby) {
+void configure_moby_from_source_bone4(void *source_moby, char *destination_moby) __asm__("FUN_L00_00234c78");
+
+void configure_moby_from_source_bone4(void *source_moby, char *destination_moby) {
     u128 mt[4];
     build_moby_bone_transform(source_moby, 4, mt);
     qcopy(destination_moby + 0x10, &mt[3]);
