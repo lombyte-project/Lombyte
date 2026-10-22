@@ -163,7 +163,9 @@ extern Sky2895a0 *D_L00_0016051C_2895a0 __asm__("D_L00_0016051C");
 extern char D_L00_001BD7E0[] __asm__("D_L00_001BD7E0");
 #define SKY D_L00_0016051C_2895a0
 /* Render four sky layers with an intervening particle pass. */
-void FUN_L00_002895a0(void) {
+void draw_four_sky_shells_with_animated_particles(void) __asm__("FUN_L00_002895a0");
+
+void draw_four_sky_shells_with_animated_particles(void) {
     int i, j;
     SkyParticle *particle;
     f32 a, polar_angle_radians;

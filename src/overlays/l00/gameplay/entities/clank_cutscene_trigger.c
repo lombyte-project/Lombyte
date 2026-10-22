@@ -17,7 +17,7 @@ void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00
 
 extern void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00289330");
 extern void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
-extern void FUN_L00_002895a0(void);
+extern void draw_four_sky_shells_with_animated_particles(void) __asm__("FUN_L00_002895a0");
 extern void FUN_L00_002899a8(void);
 extern void draw_sky_shells_with_fast_and_slow_rotation(void) __asm__("FUN_L00_00289a90");
 extern void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_00289bd8");
@@ -70,7 +70,7 @@ void draw_level_sky(void) {
         update_sky_shells_animated();
         break;
     case LEVEL_WITH_ANIMATED_SKY_PARTICLE_POSITIONS:
-        FUN_L00_002895a0();
+        draw_four_sky_shells_with_animated_particles();
         break;
     case LEVEL_WITH_TWO_ROTATING_SKY_SHELLS:
         FUN_L00_002899a8();
