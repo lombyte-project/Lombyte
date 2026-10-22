@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/lombyte-logo.png" alt="Lombyte" width="150">
+  <img src="assets/lombyte-logo.png" alt="Lombyte" width="135">
 </p>
 
 <p align="center">
