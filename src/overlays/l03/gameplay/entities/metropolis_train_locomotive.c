@@ -320,7 +320,9 @@ extern void debug_print(void *, int) __asm__("FUN_001e93b0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Drags each linked car to follow the train after it moved, then flags the coupling moby; with no cars it reports and deletes the train. */
-void FUN_L03_00292d10(struct Moby *moby) {
+void update_metropolis_train_idle_motion(struct Moby *moby) __asm__("FUN_L03_00292d10");
+
+void update_metropolis_train_idle_motion(struct Moby *moby) {
     float old_pos[4];
     float old_rot[4];
     float delta[4];
@@ -599,7 +601,7 @@ void metropolis_train_locomotive_update(char *moby) {
         data->fC8 = 0.0f;
         break;
     case TRAIN_WAIT_FOR_BOARDING:
-        FUN_L03_00292d10(moby);
+        update_metropolis_train_idle_motion(moby);
         if (!is_point_inside_clip_volume(&hero.motion, data->iB4)) {
             break;
         }
@@ -739,7 +741,7 @@ void metropolis_train_locomotive_update(char *moby) {
             data->fDC = 20.0f;
             moby[0xBC] = 1;
         } else {
-            FUN_L03_00292d10(moby);
+            update_metropolis_train_idle_motion(moby);
         }
         break;
     case 7:
