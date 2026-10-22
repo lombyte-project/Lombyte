@@ -456,7 +456,7 @@ extern int D_L00_0016C058[];
 extern int D_L00_001AB840[];
 extern int D_L00_001BA4D0[];
 extern int fast_decompress(void *, void *) __asm__("FUN_L00_0024d8d0");
-extern int FUN_L00_00284d90(int, int);
+extern int find_or_assign_bolt_source_slot(int, int) __asm__("FUN_L00_00284d90");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short D_L00_001AC780[];
 extern short D_L00_001B0770[];
@@ -965,7 +965,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             if (flags != 0) {
                 level_or_group_scratch = D_0015ED84; /* read before the test: see the group loop */
                 if (flags & 0x10) {
-                    vis = FUN_L00_00284d90(level_or_group_scratch, uid);
+                    vis = find_or_assign_bolt_source_slot(level_or_group_scratch, uid);
                 } else {
                     vis = 0xFF;
                 }

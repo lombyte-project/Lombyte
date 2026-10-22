@@ -42,7 +42,9 @@ typedef struct { short uid; short bolts; } BoltSourceStats;
 
 extern BoltSourceStats D_0014D590[][64];
 
-int FUN_L00_00284d90(int lvl, int uid) {
+int find_or_assign_bolt_source_slot(int lvl, int uid) __asm__("FUN_L00_00284d90");
+
+int find_or_assign_bolt_source_slot(int lvl, int uid) {
     int k = -1;
 
     if (uid >= 0) {
