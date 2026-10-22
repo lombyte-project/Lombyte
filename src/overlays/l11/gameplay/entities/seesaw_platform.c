@@ -63,7 +63,9 @@ void update_child_set_poses(struct Moby *m) __asm__("FUN_L11_0030d1b0");
 
 /* Controller for the child moby sets laid out by FUN_L11_0030d1b0: spawns them, waits for its linked
    moby, fades in, then unfolds the sets one after another while blending between two D_L11_001600EC points. */
-void FUN_L11_0030c788(struct Moby *child_sets_controller) {
+void update_child_sets_controller(struct Moby *child_sets_controller) __asm__("FUN_L11_0030c788");
+
+void update_child_sets_controller(struct Moby *child_sets_controller) {
     enum {
         CHILD_SETS_STATE_CREATE_CHILDREN = 0,
         CHILD_SETS_STATE_WAIT_FOR_LINK_TRIGGER = 1,
