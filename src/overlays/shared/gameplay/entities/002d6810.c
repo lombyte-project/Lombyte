@@ -10,13 +10,13 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002DA990), where it is exact; names translated to the US level program. */
 
-extern int FUN_L03_002c6c60(void *);
+extern int is_moby_class_23e_in_state_14(void *) __asm__("FUN_L03_002c6c60");
 
 /* A class 0x23E moby in state 14 goes to state 1 and rises 1.5. */
 void reset_electric_water_switch(char *moby) __asm__("FUN_L15_002d95a0");
 
 void reset_electric_water_switch(char *moby) {
-    if (FUN_L03_002c6c60(moby)) {
+    if (is_moby_class_23e_in_state_14(moby)) {
         moby[0x20] = 1;
         *(float *)(moby + 0x18) += 1.5f;
     }

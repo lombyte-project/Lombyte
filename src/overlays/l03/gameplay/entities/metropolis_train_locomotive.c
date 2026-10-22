@@ -451,7 +451,7 @@ extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern int is_hero_on_moby(char *) __asm__("FUN_L01_00277fb8");
-extern int FUN_L03_002c6c60(char *);
+extern int is_moby_class_23e_in_state_14(char *) __asm__("FUN_L03_002c6c60");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void fade_to_black(int) __asm__("FUN_001f4a58");
 extern void FUN_L00_00266858(void *, int);
@@ -668,7 +668,7 @@ void metropolis_train_locomotive_update(char *moby) {
         for (i = 0; i < 8; i++) {
             car = D_L03_0015FFD8_292e98 + (data->ids[i] << 8);
             if (data->ids[i] != -1 && car != 0 && ((unsigned char *)car)[0x20] != 0xFE &&
-                ((unsigned char *)car)[0x20] != 0xFD && !FUN_L03_002c6c60(car)) {
+                ((unsigned char *)car)[0x20] != 0xFD && !is_moby_class_23e_in_state_14(car)) {
                 set_moby_state_14(car);
                 break;
             }

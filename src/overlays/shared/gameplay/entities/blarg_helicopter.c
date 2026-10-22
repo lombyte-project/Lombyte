@@ -903,7 +903,9 @@ remove_moby:
 /* Recognize the active vendor object state. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00310738), where it is exact; names translated to the US level program. */
 
-int FUN_L03_002c6c60(char *moby) {
+int is_moby_class_23e_in_state_14(char *moby) __asm__("FUN_L03_002c6c60");
+
+int is_moby_class_23e_in_state_14(char *moby) {
     if (*(short *)(moby + 0xA6) == 0x23e && ((unsigned char *)moby)[0x20] == 14) {
         return 1;
     }
