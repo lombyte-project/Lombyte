@@ -2121,7 +2121,9 @@ extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern void play_entity_sound(float, char *, char *, float, float, int, int, int, int) __asm__("FUN_L00_002598b0");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 
-void FUN_L15_0029ead0(struct Moby *moby) {
+void update_scaling_fading_hit_sphere(struct Moby *moby) __asm__("FUN_L15_0029ead0");
+
+void update_scaling_fading_hit_sphere(struct Moby *moby) {
     char *moby_class = moby->pclass;
     char *state = (char *)moby->pvars;
     float half_relative_scale = moby->scale / *(float *)(moby_class + 0x24) * 0.5f;
