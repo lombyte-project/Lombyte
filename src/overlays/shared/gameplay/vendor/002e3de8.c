@@ -60,7 +60,9 @@ extern void FUN_L10_002e91b8(unsigned char *m);
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
 
-void FUN_L10_002e9028(unsigned char *moby) {
+void update_hero_flag_from_moby_local_box(unsigned char *moby) __asm__("FUN_L10_002e9028");
+
+void update_hero_flag_from_moby_local_box(unsigned char *moby) {
     enum {
         MOBY_UPDATE_INITIALIZE = 0,
         MOBY_UPDATE_ACTIVE = 1
