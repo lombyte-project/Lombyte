@@ -607,7 +607,9 @@ void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_002726d8(P_2726d8 *particle) {
+void update_moby_point_attached_particle(P_2726d8 *particle) __asm__("FUN_L00_002726d8");
+
+void update_moby_point_attached_particle(P_2726d8 *particle) {
     Q_2726d8 *q = &particle->q;
     u128_2726d8 position_delta;
     f32 save, sc, length_jitter, target_length;
