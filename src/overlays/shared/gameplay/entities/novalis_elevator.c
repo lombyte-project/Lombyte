@@ -3030,7 +3030,7 @@ extern f32 FUN_001f9e90(f32, f32);
 extern void compute_path_node_tangent(QVec *, PathCursor *, s32, f32, f32) __asm__("FUN_L01_0028b8c8");
 extern f32 FUN_001f9b20(void *);
 extern f32 FUN_00213308(void);
-extern f32 FUN_L01_0028bb90(f32, f32, PathCursor *, s32, struct Moby *);
+extern f32 compute_sampled_spline_path_lengths(f32, f32, PathCursor *, s32, struct Moby *) __asm__("FUN_L01_0028bb90");
 extern void FUN_L00_0024f7c8(struct Moby *, s32, QVec *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, f32);
@@ -3188,7 +3188,7 @@ void gunship_follow_path(struct Moby *m) {
             v->unk12C = FUN_00213308();
         }
         v->unkD0.q = v->unkC0.q;
-        FUN_L01_0028bb90(v->unkF4, v->unkF8, p, v->unk120 & 0x20, m);
+        compute_sampled_spline_path_lengths(v->unkF4, v->unkF8, p, v->unk120 & 0x20, m);
         if ((v->unk120 & 0x1E) && !(v->unk120 & 1)) {
             s32 i;
             for (i = 0; i < 4; i++) {

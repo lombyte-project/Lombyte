@@ -1291,7 +1291,7 @@ extern int advance_path_node_index(char *) __asm__("FUN_L01_0028b878");
 extern void initialize_path_descriptor(char *) __asm__("FUN_L01_0028b410");
 extern void compute_path_node_tangent(void *out, int *l, int idx, float a, float b) __asm__("FUN_L01_0028b8c8");
 extern void evaluate_cubic_hermite_segment(float t, void *out, void *p1, void *p2, void *p3, void *p4) __asm__("FUN_L01_0028ba80");
-extern void FUN_L01_0028bb90(void *, int, void *, float, float);
+extern void compute_sampled_spline_path_lengths(void *, int, void *, float, float) __asm__("FUN_L01_0028bb90");
 extern void add_moby_rotation_based_offsets(char *, char *) __asm__("FUN_L03_0029c8a8");
 extern void FUN_L03_0029d2e0(char *, void *, int);
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
@@ -1439,7 +1439,7 @@ void red_ship_1_update(char *moby) {
             *(float *)(data + 0x13C) = random_angle_radians();
         }
         *(OvlQuad *)(data + 0xD0) = *(OvlQuad *)(data + 0xC0);
-        FUN_L01_0028bb90(pm, 0, moby, *(float *)(data + 0x104), *(float *)(data + 0x108));
+        compute_sampled_spline_path_lengths(pm, 0, moby, *(float *)(data + 0x104), *(float *)(data + 0x108));
         if (*(short *)(data + 0x12C) > 0) {
             moby[0x20] = 3;
         } else {

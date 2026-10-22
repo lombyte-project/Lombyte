@@ -425,7 +425,9 @@ void evaluate_cubic_hermite_segment(float segment_parameter, void *out, void *st
     fast_vec_scale(weighted_vector, end_point, three_times_t_squared - twice_t_cubed);
     fast_vec_add(out, out, weighted_vector);
 }
-float FUN_L01_0028bb90(float tangent_tension, float tangent_bias, T_28b828 *path, int particles, void *moby) {
+float compute_sampled_spline_path_lengths(float tangent_tension, float tangent_bias, T_28b828 *path, int particles, void *moby) __asm__("FUN_L01_0028bb90");
+
+float compute_sampled_spline_path_lengths(float tangent_tension, float tangent_bias, T_28b828 *path, int particles, void *moby) {
     OvlVec4 previousTangent;
     OvlVec4 nextTangent;
     OvlVec4 currentNode;
