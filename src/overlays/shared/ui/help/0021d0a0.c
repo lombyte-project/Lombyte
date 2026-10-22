@@ -546,7 +546,9 @@ extern s32 coll1_22a1d0(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32 coll2_22a1d0(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 coll3_22a1d0(void *, f32) __asm__("FUN_L00_001f3170");
 extern void vscl_22a1d0(void *, void *, f32) __asm__("FUN_001f9bf8");
-s32 FUN_L06_0022a1d0(s32 mode) {
+s32 resolve_hero_position_collisions(s32 mode) __asm__("FUN_L06_0022a1d0");
+
+s32 resolve_hero_position_collisions(s32 mode) {
     V_22a1d0 old;
     V_22a1d0 collision_query_offset;
     V_22a1d0 position_displacement;
