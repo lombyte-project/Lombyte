@@ -758,7 +758,7 @@ extern struct Moby *FUN_L00_002bed90(void *,void *,void *,void *,int);
 extern float FUN_L00_002bf050(void *,void *,float,float,float,float,float,void *,void *,float);
 extern int FUN_L00_002bf9f0(void *,void *,void *,int);
 extern void FUN_L00_002bf8b0(void *,void *,void *);
-extern int FUN_L00_002bfec8(void *);
+extern int compute_moby_state_from_vertical_probe(void *) __asm__("FUN_L00_002bfec8");
 extern int FUN_L00_0025b440(void *,void *);
 extern int FUN_L00_00259028(void *,void *,void *,void *);
 
@@ -1107,7 +1107,7 @@ Falling: do {
         FUN_L00_002bebc8((char*)data);
 Contact:
         /* Fakematch: the zero term keeps data live so combine keeps the no-op update above. */
-        moby->state=FUN_L00_002bfec8(moby)|((unsigned char)(int)data>>8);
+        moby->state=compute_moby_state_from_vertical_probe(moby)|((unsigned char)(int)data>>8);
         break;
     case DOOM_BOT_RESET_TO_INITIALIZE: moby->state=0; break;
     default: moby->state=0; break;

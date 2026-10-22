@@ -3066,7 +3066,9 @@ unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector)
 extern char *D_L00_00173E58 __attribute__((section(".data")));
 int FUN_001efa68(Vec4 *, Vec4 *, int, void *, int);
 unsigned int collision_hit_material(void) __asm__("FUN_001f0b58");
-int FUN_L00_002bfec8(unsigned char *moby) {
+int compute_moby_state_from_vertical_probe(unsigned char *moby) __asm__("FUN_L00_002bfec8");
+
+int compute_moby_state_from_vertical_probe(unsigned char *moby) {
     enum {
         COLLISION_MATERIAL_WATER = 0
     };
