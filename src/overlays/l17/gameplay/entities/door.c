@@ -1259,7 +1259,9 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
 
-void FUN_L17_002ec360(Moby *ship_moby, Obj *ship_vars) {
+void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) __asm__("FUN_L17_002ec360");
+
+void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
     W4 old;
     W4 vel;
     UQ_c4 movement_delta;
@@ -1859,7 +1861,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 }
                 jet_camera_mode();
                 D_L17_0015F608 = 2;
-                FUN_L17_002ec360((Moby *)moby, (Obj *)ship_vars);
+                update_fighter_jet_flight((Moby *)moby, (Obj *)ship_vars);
                 moby->state = 4;
             }
             break;
@@ -1871,7 +1873,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 ship_vars->voice = -1;
                 ship_vars->voice = allocate_voice_ed(0, 4, moby);
             }
-            FUN_L17_002ec360((Moby *)moby, (Obj *)ship_vars);
+            update_fighter_jet_flight((Moby *)moby, (Obj *)ship_vars);
             if (ship_vars->iE8 <= 0) {
                 ship_vars->timerF8 = D_L17_00162178;
                 moby->state = 8;
@@ -1958,7 +1960,7 @@ void fighter_jet_update(ShipMoby *moby) {
         case FIGHTER_JET_STATE_VICTORY_EXIT:
             force_help_message(6, 0);
             D_L17_0015F608 = 2;
-            FUN_L17_002ec360((Moby *)moby, (Obj *)ship_vars);
+            update_fighter_jet_flight((Moby *)moby, (Obj *)ship_vars);
             if (fast_dec_timer(&ship_vars->timerF8)) {
                 FUN_00213ed8(&ship_vars->fade, 1.0f, frame_time * 4.0f);
                 D_L17_0015F3FC = ship_vars->fade;
