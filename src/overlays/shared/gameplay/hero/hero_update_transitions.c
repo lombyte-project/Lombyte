@@ -68,7 +68,7 @@ extern float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step);
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float FUN_L00_00259468(float *a, float *b, int *out, float f);
 extern float FUN_L00_0025abf0(void *a, void *b, void *out, float speed, float g);
-extern float FUN_L00_00266e80(int);
+extern float read_pad_float_history(int) __asm__("FUN_L00_00266e80");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float);
@@ -917,7 +917,7 @@ void hero_update_transitions(void) {
                         if (hero.unk229C < 0.17f) {
                             if (frame_time * 2.7f < hero.motion.speed_xy && hero.unk20AA == 0) {
                                 if (hero.motion.speed_xy < frame_time * 4.4f ||
-                                    FUN_L00_00266e80(4) < 0.8f) {
+                                    read_pad_float_history(4) < 0.8f) {
                                     if (hero_set_state(HERO_STATE_STOP, 0) == 0) {
                                         break;
                                     }

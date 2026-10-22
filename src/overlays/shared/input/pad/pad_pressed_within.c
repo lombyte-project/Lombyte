@@ -55,7 +55,9 @@ typedef struct {
 } Hist_266e80;
 extern Hist_266e80 D_0013C940;
 /* The value n entries back in the 30-entry history ring (n is capped at the count). */
-f32 FUN_L00_00266e80(s32 history_offset) {
+f32 read_pad_float_history(s32 history_offset) __asm__("FUN_L00_00266e80");
+
+f32 read_pad_float_history(s32 history_offset) {
     s32 m;
     if (D_0013C940.count < history_offset)
         history_offset = D_0013C940.count;
