@@ -1412,7 +1412,9 @@ extern unsigned char menu_item_enabled_115[] __asm__("D_0013D407");
 extern char D_00141968[];
 extern char D_00141CE4[];
 
-void FUN_L13_002f3778(struct Moby *moby) {
+void update_linked_moby_statistics_and_hero_volume_flag(struct Moby *moby) __asm__("FUN_L13_002f3778");
+
+void update_linked_moby_statistics_and_hero_volume_flag(struct Moby *moby) {
     char *data;
     unsigned char *menu_item_enable_base;
     moby->update_dist = 0xFF;
