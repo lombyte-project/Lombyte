@@ -1635,7 +1635,9 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void FUN_L00_00263ac8_c5bb8(void *, int, void *, float) __asm__("FUN_L00_00263ac8");
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_0026d930(char *p, void *);
-extern void FUN_L03_002c6a20(struct Moby *moby);
+void update_robot_dog_hit_reaction(struct Moby *moby) __asm__("FUN_L03_002c6a20");
+
+extern void update_robot_dog_hit_reaction(struct Moby *moby) __asm__("FUN_L03_002c6a20");
 extern void blend_moby_animation_c5bb8(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void mark_moby_for_removal_c5bb8(void *) __asm__("FUN_0020c828");
@@ -1675,7 +1677,7 @@ void robot_dog_update(char *moby) {
     data = *(Data2c5bb8 **)(moby + 0x78);
     FUN_L03_0024e830(moby, (char *)&selected_target, data->f230);
     FUN_L00_00263ac8_c5bb8(moby, 0, data->m280, 2.1f);
-    FUN_L03_002c6a20((struct Moby *)moby);
+    update_robot_dog_hit_reaction((struct Moby *)moby);
     fast_dec_timer(&data->i244);
     switch (((unsigned char *)moby)[0x20]) {
     case ROBOT_DOG_INITIALIZE:
@@ -1933,7 +1935,7 @@ extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void FUN_L01_0026e090(int, int);
 extern void trooper_set_knockback(float *, float, float) __asm__("FUN_L03_00250a78");
 
-void FUN_L03_002c6a20(struct Moby *moby) {
+void update_robot_dog_hit_reaction(struct Moby *moby) {
  float vector[4]; int result; float damage; float angle;
  char *data=(char *)moby->pvars;
  char *hit;
