@@ -33,7 +33,9 @@ extern void draw_moby_color_cycling_bone_glows(void *) __asm__("FUN_L18_002f9a98
 void draw_moby_two_tint_glow_quads(struct Moby *m) __asm__("FUN_L18_002f9c20");
 
 extern void draw_moby_two_tint_glow_quads(struct Moby *) __asm__("FUN_L18_002f9c20");
-extern void FUN_L18_002f9eb8(struct Moby *);
+void draw_moby_three_scaled_two_tint_quads(struct Moby *m) __asm__("FUN_L18_002f9eb8");
+
+extern void draw_moby_three_scaled_two_tint_quads(struct Moby *) __asm__("FUN_L18_002f9eb8");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int,
                                float, float, float, float, int, float, int, int, int, int)
     __asm__("FUN_L00_0025e450");
@@ -209,7 +211,7 @@ void FUN_L18_002f88e8(struct Moby *moby) {
             numerator *= 200.0f;
             numerator += 0.25f;
             D_L18_0016252C = numerator;
-            enqueue_callback_list_1_overlay(FUN_L18_002f9eb8, D_L18_00162528);
+            enqueue_callback_list_1_overlay(draw_moby_three_scaled_two_tint_quads, D_L18_00162528);
         }
         if (frames_9780(D_L18_00162498) <= D_L18_0016D260_update.n &&
             D_L18_0016D260_update.n < frames_9780(D_L18_001624A0)) {
@@ -258,7 +260,7 @@ void FUN_L18_002f88e8(struct Moby *moby) {
             numerator *= 200.0f;
             numerator += 0.25f;
             D_L18_0016252C = numerator;
-            enqueue_callback_list_1_overlay(FUN_L18_002f9eb8, D_L18_00162528);
+            enqueue_callback_list_1_overlay(draw_moby_three_scaled_two_tint_quads, D_L18_00162528);
         }
         if (frames_9780(D_L18_00162498) <= D_L18_0016D260_update.n &&
             D_L18_0016D260_update.n < frames_9780(D_L18_001624A0)) {
@@ -602,7 +604,7 @@ extern float D_L18_00162514 __attribute__((sda));
 extern float D_L18_00162518 __attribute__((sda));
 extern float D_L18_0016251C __attribute__((sda));
 extern float D_L18_001DFBD0[4][4];
-void FUN_L18_002f9eb8(struct Moby *m) {
+void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     Pk_9c20 pk;
     float quad_transform[4][4];
     float up[4];
