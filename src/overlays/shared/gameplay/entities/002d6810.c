@@ -13,7 +13,9 @@
 extern int FUN_L03_002c6c60(void *);
 
 /* A class 0x23E moby in state 14 goes to state 1 and rises 1.5. */
-void FUN_L15_002d95a0(char *moby) {
+void reset_electric_water_switch(char *moby) __asm__("FUN_L15_002d95a0");
+
+void reset_electric_water_switch(char *moby) {
     if (FUN_L03_002c6c60(moby)) {
         moby[0x20] = 1;
         *(float *)(moby + 0x18) += 1.5f;
@@ -213,7 +215,7 @@ void electric_water_update(struct Moby *moby) {
                 save_id = moby_array[vars->switches[reset_sw]].save_id;
                 D_L15_001BAAD0[(short)save_id >> 5] &= ~(1 << (save_id & 0x1F));
             } else {
-                FUN_L15_002d95a0((char *)&moby_array[vars->switches[reset_sw]]);
+                reset_electric_water_switch((char *)&moby_array[vars->switches[reset_sw]]);
             }
         }
         vars->on_timer = truncate_float_to_s32(scale_time(D_L15_00161BC8 * 60.0f));
@@ -501,7 +503,7 @@ void electric_water_update(struct Moby *moby) {
             if (moby_array[vars->switches[i]].oclass == 0x33E) {
                 moby_array[vars->switches[i]].state = 1;
             } else {
-                FUN_L15_002d95a0((char *)&moby_array[vars->switches[i]]);
+                reset_electric_water_switch((char *)&moby_array[vars->switches[i]]);
             }
         }
         vars->on_timer = truncate_float_to_s32(scale_time(D_L15_00161BC8 * 60.0f));
