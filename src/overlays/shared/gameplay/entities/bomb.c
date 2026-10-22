@@ -1788,7 +1788,7 @@ void ryno_update(struct Moby *ryno_moby) {
         RYNO_STATE_FIRE_SALVO = 4,
         RYNO_STATE_COOLDOWN = 5
     };
-    Mat3_2cc608 cam;
+    Mat3_2cc608 launch_direction_basis;
     Mat4_2cc608 view;
     Vec4 aim;
     Vec4 muzzle_position_and_launch_direction;
@@ -1799,8 +1799,8 @@ void ryno_update(struct Moby *ryno_moby) {
     float yaw, pitch;
     int i;
 
-    matcopy_2cc608(&cam, D_L00_00166C80);
-    transpose_2cc608(&view, &cam);
+    matcopy_2cc608(&launch_direction_basis, D_L00_00166C80);
+    transpose_2cc608(&view, &launch_direction_basis);
     if ((unsigned int)(ryno_moby->state - 2) < 2) {
         if (timer32_2cc608(&ryno_vars->lock_timer) || ryno_vars->target == 0 || ryno_vars->target->state == 0xFE || ryno_vars->target->state == 0xFD) {
             ryno_vars->target = 0;
