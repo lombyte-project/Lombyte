@@ -52,7 +52,9 @@ extern int D_L03_0015EF50;
 extern void RaiseKernelTrap();
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 
-void FUN_L03_002e8628(char *transform_state) {
+void initialize_transform_state_from_level_table(char *transform_state) __asm__("FUN_L03_002e8628");
+
+void initialize_transform_state_from_level_table(char *transform_state) {
     float v[4] __attribute__((aligned(16)));
     float mat[16] __attribute__((aligned(16)));
     CamSub *camera_subrecord = &(*(CamInfo **)(transform_state + 0x70))->sub;
