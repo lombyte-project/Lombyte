@@ -796,7 +796,9 @@ extern int FUN_L17_002eace8_u(int, char *, char *, char *, float, float, float, 
 #define FLAG    (hero.ship_ammo)
 
 extern char D_L17_001676D0_lui[] __asm__("D_L17_001676D0") __attribute__((section(".data")));
-void FUN_L17_002eb768(int ship_moby, char *ship_vars) {
+void update_fighter_jet_target_lock(int ship_moby, char *ship_vars) __asm__("FUN_L17_002eb768");
+
+void update_fighter_jet_target_lock(int ship_moby, char *ship_vars) {
     char *excluded_target = 0;
     char *pad;
     char *locked_target;
@@ -880,7 +882,7 @@ extern void append_rotated_sprite_quad(float, float, float, float, float, int, i
                                        int, int, float, float) __asm__("FUN_001f5ab0");
 extern void append_scaled_screen_triangle_strip(float, float, float, void *, int, int, long) __asm__("FUN_L11_00310ad0");
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
-extern void FUN_L17_002eb768(int a, char *p);
+extern void update_fighter_jet_target_lock(int a, char *p) __asm__("FUN_L17_002eb768");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
@@ -929,7 +931,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     draw_textured_quad(0x170, *(int *)(screen_dimensions + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080,
                        func_001F4868_l(*(int *)(ship_vars + 0x104) + 0x29));
     vu1_add_g_sregister(0x42, 0x8000000048L);
-    FUN_L17_002eb768((int)moby, ship_vars);
+    update_fighter_jet_target_lock((int)moby, ship_vars);
     if (*(int *)(ship_vars + 0x88) != 0) {
         project_world_point_to_screen_pixels(*(char **)(ship_vars + 0x88) + 0x10, &locked_target_screen_x, &locked_target_screen_y, 0);
         if (*(int *)(ship_vars + 0x8C) > lock_hold_frames) {
