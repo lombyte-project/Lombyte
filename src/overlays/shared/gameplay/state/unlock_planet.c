@@ -442,7 +442,7 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern int FUN_L00_002595a0(float *, float *, float, float, float);
 extern int FUN_L00_00261b48(int, void *, void *, void *);
-extern void FUN_L00_002a7438(void *, void *, void *, int, int, int);
+extern void spawn_bolt_by_value(void *, void *, void *, int, int, int) __asm__("FUN_L00_002a7438");
 
 void FUN_L00_00260a88(struct Moby *moby, int min_bolts, int max_bolts, int flags, int path_index)
 {
@@ -645,16 +645,16 @@ void FUN_L00_00260a88(struct Moby *moby, int min_bolts, int max_bolts, int flags
         }
         add_vector_xyz(velocity, velocity, base_velocity);
         if (fifties) {
-            FUN_L00_002a7438(moby, position, velocity, flags, 50, counted);
+            spawn_bolt_by_value(moby, position, velocity, flags, 50, counted);
             fifties--;
         } else if (twenties) {
-            FUN_L00_002a7438(moby, position, velocity, flags, 20, counted);
+            spawn_bolt_by_value(moby, position, velocity, flags, 20, counted);
             twenties--;
         } else if (fives) {
-            FUN_L00_002a7438(moby, position, velocity, flags, 5, counted);
+            spawn_bolt_by_value(moby, position, velocity, flags, 5, counted);
             fives--;
         } else {
-            FUN_L00_002a7438(moby, position, velocity, flags, 1, counted);
+            spawn_bolt_by_value(moby, position, velocity, flags, 1, counted);
             ones--;
         }
     }

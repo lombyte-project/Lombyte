@@ -1340,7 +1340,9 @@ extern void FUN_L00_001ff500(void *, void *, float);
  * toward D_001413D0 (& 0x10 with a random angle). When no moby is free the
  * value goes straight into the bolt count.
  */
-struct Moby *FUN_L00_002a7438(struct Moby *bolt_source, void *pos, void *vel, int flags, int value, int counted)
+struct Moby *spawn_bolt_by_value(struct Moby *bolt_source, void *pos, void *vel, int flags, int value, int counted) __asm__("FUN_L00_002a7438");
+
+struct Moby *spawn_bolt_by_value(struct Moby *bolt_source, void *pos, void *vel, int flags, int value, int counted)
 {
     enum {
         BOLT_VALUE_ONE = 1,
