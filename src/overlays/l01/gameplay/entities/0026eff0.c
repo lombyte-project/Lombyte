@@ -9,7 +9,9 @@ typedef struct {
 } Range;
 
 /* Sets the range to x plus or minus 0.2. */
-void FUN_L01_0026eff8(Range *range, f32 x) {
+void set_range_centered_on_value(Range *range, f32 x) __asm__("FUN_L01_0026eff8");
+
+void set_range_centered_on_value(Range *range, f32 x) {
     range->lo = x - 0.2f;
     range->hi = x + 0.2f;
 }

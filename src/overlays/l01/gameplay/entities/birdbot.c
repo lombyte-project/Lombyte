@@ -682,7 +682,7 @@ extern void FUN_L00_00263ac8_u(float, int, int, unsigned char *) __asm__("FUN_L0
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18(int);
 extern void FUN_L01_0026d930_u(char *p) __asm__("FUN_L01_0026d930");
-extern void FUN_L01_0026eff8(char *arg, float value);
+extern void set_range_centered_on_value(char *arg, float value) __asm__("FUN_L01_0026eff8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation_cf(void *, int, int, int) __asm__("FUN_00212f90");
 extern void build_spherical_offset_cf(void *, float, float, float) __asm__("FUN_00214db0");
@@ -1333,7 +1333,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
     } else {
         ground = probe_ground_height(&birdbot_moby->pos, 0, 0.5f);
     }
-    FUN_L01_0026eff8((char *)birdbot_moby, ground);
+    set_range_centered_on_value((char *)birdbot_moby, ground);
     if (collision_hit_material() == 0 && birdbot_moby->pos.f[2] < ground + 1.0f) {
         spawn_explosion(birdbot_moby, &birdbot_vars->v40, &birdbot_moby->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 4, 15.0f,
                          1, 1, -1, 0);
