@@ -912,7 +912,9 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 
-void FUN_L00_002ead60(char *camera_object) {
+void initialize_camera_pose_springs(char *camera_object) __asm__("FUN_L00_002ead60");
+
+void initialize_camera_pose_springs(char *camera_object) {
     float rotation_matrix[16];
     char *rotation_spring_state;
     char *camera_state;
