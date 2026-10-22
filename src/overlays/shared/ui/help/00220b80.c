@@ -64,7 +64,7 @@ extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 
 extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
-extern void FUN_L02_002216a0(void);
+extern void update_hero_ground_contact(void) __asm__("FUN_L02_002216a0");
 extern void correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
 
 void integrate_hero_movement(void) __asm__("FUN_L02_002226d8");
@@ -116,11 +116,11 @@ void integrate_hero_movement(void)
 
     if (vector_length_xyz(&hero.motion.platform_delta) <= 0.0001f) {
         resolve_hero_collisions_with_history();
-        FUN_L02_002216a0();
+        update_hero_ground_contact();
         subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
         correct_hero_ground_penetration();
     } else {
-        FUN_L02_002216a0();
+        update_hero_ground_contact();
     }
 
     /* movement direction, scaled by the velocity along it (never negative) */
@@ -171,7 +171,7 @@ void integrate_hero_movement(void)
         clear_vector(&hero.motion.platform_delta);
         hero.motion.platform_delta.f[3] = saved_platform_delta_w;
         resolve_hero_collisions_with_history();
-        FUN_L02_002216a0();
+        update_hero_ground_contact();
         subtract_vector_xyz(&hero.motion.displacement, &hero.motion.pos, &old_pos);
         correct_hero_ground_penetration();
     }

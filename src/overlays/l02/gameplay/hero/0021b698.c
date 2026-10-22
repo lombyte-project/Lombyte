@@ -321,7 +321,9 @@ extern CollisionHit HH __asm__("D_L02_00174440") __attribute__((section(".data")
 #define HI(o) (*(s32 *)(D_L02_00174440 + (o)))
 #define HF(o) (*(f32 *)(D_L02_00174440 + (o)))
 
-void FUN_L02_002216a0(void) {
+void update_hero_ground_contact(void) __asm__("FUN_L02_002216a0");
+
+void update_hero_ground_contact(void) {
     V collision_ray_end, collision_ray_start, ground_geometry_scratch, probe_ray_start, unused_probe_point, probe_surface_angles, normalized_probe_hit_normal;
     f32 f;
     s32 collision_sound_class;
