@@ -39,7 +39,9 @@ extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
-char *FUN_L11_00308670(float *targeting_origin, float *aim, float max_yaw_error, float max_pitch_error, float maxd) {
+char *select_homing_missile_target(float *targeting_origin, float *aim, float max_yaw_error, float max_pitch_error, float maxd) __asm__("FUN_L11_00308670");
+
+char *select_homing_missile_target(float *targeting_origin, float *aim, float max_yaw_error, float max_pitch_error, float maxd) {
     char *best = 0;
     char *candidate_position;
     char *candidate_moby = D_L11_0015FFE4;
@@ -177,7 +179,7 @@ extern int random_int_between_089d0(int, int) __asm__("FUN_L00_00257b90");
 extern char *FUN_L00_0026dd20_c(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
 extern void remove_moby_089d0(void *) __asm__("FUN_0020c828");
 extern int tick_countdown_089d0(int *) __asm__("FUN_001f9740");
-char *FUN_L11_00308670(float *pos, float *aim, float r1, float r2, float maxd);
+char *select_homing_missile_target(float *pos, float *aim, float r1, float r2, float maxd) __asm__("FUN_L11_00308670");
 
 static inline void copy_xyz_089d0(float *dst, float *src) {
     dst[0] = src[0];
@@ -208,7 +210,7 @@ void FUN_L11_003089d0(struct Moby *moby) {
     target = vars->target;
     if (target == 0 || target->state == 0xFE || target->state == 0xFD ||
         distance_089d0(&target->pos, look) > 3.0f)
-        vars->target = (struct Moby *)FUN_L11_00308670((float *)&moby->pos, (float *)&moby->rot, 0.2617994f, 0.2617994f, 60.0f);
+        vars->target = (struct Moby *)select_homing_missile_target((float *)&moby->pos, (float *)&moby->rot, 0.2617994f, 0.2617994f, 60.0f);
     if (vars->target != 0) {
         copy_xyz_089d0(vars->target_pos, (float *)&vars->target->pos);
         speed = vector_length_089d0(vars);
