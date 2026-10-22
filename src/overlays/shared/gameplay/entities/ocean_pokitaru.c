@@ -324,7 +324,9 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 /* Per-frame update of a projectile moby: moves it by its velocity and leaves a trail particle; on impact it bursts into
    five sparks and removes itself, otherwise it shrinks when its timer runs out and is removed once tiny. */
-void FUN_L11_00309098(char *moby) {
+void update_projectile_with_trail(char *moby) __asm__("FUN_L11_00309098");
+
+void update_projectile_with_trail(char *moby) {
     float old[4];
     float trail_position[4];
     float trail_velocity[4];
