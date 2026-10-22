@@ -20,7 +20,7 @@ extern void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 extern void FUN_L00_00206e00(void);
 extern void FUN_L00_00207a58(void);
 extern void FUN_L00_00207c48(void);
-extern void FUN_L00_00208820(void);
+extern void update_hero_moby(void) __asm__("FUN_L00_00208820");
 extern void FUN_L00_00208b60(void);
 extern void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
 extern void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
@@ -80,7 +80,7 @@ void FUN_L03_002002f8(void) {
     FUN_L00_002059d8();
     FUN_L00_00214fe8();
     update_hero_easing_records();
-    FUN_L00_00208820();
+    update_hero_moby();
     update_hero_world_matrices(0);
     update_hero_equipped_items();
     begin_draw_frame();

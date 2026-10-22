@@ -1111,7 +1111,9 @@ void FUN_L00_002056a8(void);
 void FUN_L00_002059d8(void);
 void FUN_L00_00214fe8(void);
 void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
-void FUN_L00_00208820(void);
+void update_hero_moby(void) __asm__("FUN_L00_00208820");
+
+void update_hero_moby(void) __asm__("FUN_L00_00208820");
 void update_hero_world_matrices(s32 moby_override) __asm__("FUN_L00_00209240");
 
 void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
@@ -1164,7 +1166,7 @@ void FUN_L00_002070d0(void) {
     FUN_L00_002059d8();
     FUN_L00_00214fe8();
     update_hero_easing_records();
-    FUN_L00_00208820();
+    update_hero_moby();
     update_hero_world_matrices(0);
     update_hero_equipped_items();
     begin_draw_frame();
@@ -1805,7 +1807,7 @@ extern void FUN_L00_002336e8(void *, void *, float);
 extern void FUN_L00_0024eed8(void *, int, void *, float, float);
 extern int FUN_L00_0020d568(void);
 
-void FUN_L00_00208820(void) {
+void update_hero_moby(void) {
     OvlQuad position_scratch[1];
     float minimum_top_gap, second_position_offset, top_gap;
     unsigned char *hero_moby;
