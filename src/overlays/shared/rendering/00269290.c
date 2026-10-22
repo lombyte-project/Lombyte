@@ -1370,7 +1370,9 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 /* Moves both points by the vector at 0x30; lowers the top byte at a+4 by 6, 00267a08 below 0. */
-void FUN_L00_0026c7f0(char *particle) {
+void move_and_fade_two_point_particle(char *particle) __asm__("FUN_L00_0026c7f0");
+
+void move_and_fade_two_point_particle(char *particle) {
     int faded_color;
     fast_vec_add(particle + 0x10, particle + 0x10, particle + 0x30);
     fast_vec_add(particle + 0x20, particle + 0x20, particle + 0x30);
