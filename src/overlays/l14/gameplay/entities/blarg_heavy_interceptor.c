@@ -49,7 +49,9 @@ extern void FUN_0020c828(void *);
 
 /* Walk the record list at D_L14_001ABF40_u[index] (terminated by a negative
  * entry) and flag the objects whose state byte at 0x20 is 1. */
-void FUN_L14_002b44a8(s32 index) {
+void activate_waiting_turrets_in_group(s32 index) __asm__("FUN_L14_002b44a8");
+
+void activate_waiting_turrets_in_group(s32 index) {
     u16 *list_entry = D_L14_001ABF40_u[index];
     u8 *base;
     u8 *listed_moby;
@@ -583,7 +585,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
             }
         }
         *(s32 *)(moby_vars + 0x1D0) = -1;
-        FUN_L14_002b44a8(*(int *)(moby_vars + 0x70));
+        activate_waiting_turrets_in_group(*(int *)(moby_vars + 0x70));
         moby->state = 3;
         *(s16 *)(moby_vars + 0x1F2) = scale_game_frames(D_L14_001613D0);
         break;
@@ -719,7 +721,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
         float death_launch_angle;
 
         *(s16 *)(moby_vars + 0x1F0) = scale_game_frames(D_L14_001613D4);
-        FUN_L14_002b44a8(*(int *)(moby_vars + 0x70));
+        activate_waiting_turrets_in_group(*(int *)(moby_vars + 0x70));
         voice = *(s32 *)(moby_vars + 0x1D0);
         if (voice != -1) {
             VoicePoolWindow *slot = (VoicePoolWindow *)((u8 *)&voice_pool + voice * 0x70);
