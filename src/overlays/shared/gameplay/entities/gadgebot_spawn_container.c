@@ -739,7 +739,9 @@ extern float D_0015ED6C;
 extern int hit_check_e94f0(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void stop_moby_sound_e94f0(void *, int, int) __asm__("FUN_L00_00257470");
 extern int allocate_voice_e94f0(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L06_002ea198(struct Moby *, Vec4 *);
+void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_direction) __asm__("FUN_L06_002ea198");
+
+extern void spawn_moby_directional_spark_bursts(struct Moby *, Vec4 *) __asm__("FUN_L06_002ea198");
 extern void FUN_L06_002e9f30(struct Moby *);
 extern void spawn_moby_death_effect_burst(char *) __asm__("FUN_L06_002ea498");
 extern float fast_add_rotations_e94f0(float, float) __asm__("FUN_001fa580");
@@ -777,7 +779,7 @@ void FUN_L06_002e94f0(struct Moby *moby) {
     if (vars->carried != 0) {
         hit = hit_moby_e94f0(vars->carried, 0x330000, 0);
         if (hit != 0 && (hit->source == 0 || hit->source->oclass != 0xAF)) {
-            FUN_L06_002ea198(moby, (Vec4 *)D_L06_0015F580);
+            spawn_moby_directional_spark_bursts(moby, (Vec4 *)D_L06_0015F580);
             FUN_L06_002e9f30(moby);
             stop_moby_sound_e94f0(moby, 0, -1);
             goto remove;
@@ -795,7 +797,7 @@ void FUN_L06_002e94f0(struct Moby *moby) {
         case HIT_RESULT_LETHAL:
         case HIT_RESULT_REMOVE_OR_RESPAWN:
             stop_moby_sound_e94f0(moby, 0, -1);
-            FUN_L06_002ea198(moby, (Vec4 *)&hit->pos);
+            spawn_moby_directional_spark_bursts(moby, (Vec4 *)&hit->pos);
             if (vars->sparks_pending == 1) {
                 spawn_moby_death_effect_burst((char *)moby);
                 vars->sparks_pending = 0;
@@ -1037,7 +1039,7 @@ extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) _
 
 /* Throws D_L06_00161C18 bursts of sparks from around the moby: each burst gets a random heading, speed and rise on top
    of a push along dir, and spawns D_L06_00161C1C sparks with random sizes, colours and lifetimes. */
-void FUN_L06_002ea198(struct Moby *moby, Vec4 *spark_push_direction) {
+void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_direction) {
     Vec4 pos;
     Vec4 burst_spark_velocity;
     Vec4 accel;
