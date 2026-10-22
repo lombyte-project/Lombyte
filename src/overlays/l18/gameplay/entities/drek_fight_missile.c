@@ -52,7 +52,9 @@ extern short D_L18_00162218 __attribute__((sda));
 extern short D_L18_00162234 __attribute__((sda));
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L18_002f02e8(char *moby, void *out);
+void select_drek_fight_missile_wander_target(char *moby, void *out) __asm__("FUN_L18_002f02e8");
+
+extern void select_drek_fight_missile_wander_target(char *moby, void *out) __asm__("FUN_L18_002f02e8");
 extern void FUN_L18_002f0848(struct Moby *moby);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
@@ -85,7 +87,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         qcopy(missile_vars + 0x120, &moby->pos);
         *(float *)(missile_vars + 0x128) += 5.0f;
         *(float *)(missile_vars + 0x128) = probe_ground_height(missile_vars + 0x120, 0, 0.5f);
-        FUN_L18_002f02e8(moby, missile_vars + 0x110);
+        select_drek_fight_missile_wander_target(moby, missile_vars + 0x110);
         moby->state = 1;
         moby->flags |= 1;
         moby->visible = 0;
@@ -95,7 +97,7 @@ void drek_fight_missile_update(struct Moby *moby) {
     case DREK_MISSILE_WANDER: {
         char *wander_target_position = missile_vars + 0x110;
         if (FUN_L18_002f0120(moby, (float *)wander_target_position)) {
-            FUN_L18_002f02e8(moby, wander_target_position);
+            select_drek_fight_missile_wander_target(moby, wander_target_position);
         }
         FUN_L18_002f0848(moby);
         if (random_integer_below(*(int *)&D_L18_00162234)) {
@@ -266,7 +268,7 @@ extern short D_L18_0016221C __attribute__((sda));
 extern short D_L18_00162220 __attribute__((sda));
 extern short D_L18_00162224 __attribute__((sda));
 extern short D_L18_00162228 __attribute__((sda));
-void FUN_L18_002f02e8(char *moby, void *out) {
+void select_drek_fight_missile_wander_target(char *moby, void *out) {
     char *data = *(char **)(moby + 0x78);
     float wander_target_offset[3];
     float wander_radius = random_float_between_alt(*(float *)&D_L18_00162224, *(float *)&D_L18_00162228);
