@@ -2327,7 +2327,9 @@ extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section
 extern unsigned char D_001413F4 __attribute__((section(".data")));
 void FUN_L15_002f88e8(char *m);
 
-int FUN_L15_002f8ba8(char *moby) {
+int dispatch_moby_follow_camera_update(char *moby) __asm__("FUN_L15_002f8ba8");
+
+int dispatch_moby_follow_camera_update(char *moby) {
     char *slot_data = *(char **)(D_L15_0015EF48[2] + *(short *)(moby + 0x84) * 32 + 0x1C);
     if (*(short *)(D_L15_00167400_lui + 0x86) == 0 && *(short *)(slot_data + 0x20) >= 0 &&
         D_001413F4 == 2)
