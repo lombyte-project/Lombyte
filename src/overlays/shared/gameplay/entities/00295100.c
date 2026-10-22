@@ -658,7 +658,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_00250df8(void *);
 extern void update_moby_shadow_range(void *) __asm__("FUN_00213700");
 extern void apply_hero_moby_scale(void *) __asm__("FUN_L00_00234b38");
-extern void FUN_L00_00207430(void *);
+extern void update_moby_pulsing_glow_effects(void *) __asm__("FUN_L00_00207430");
 
 /* Per-frame update while the cutscene in D_L00_0016C860 plays: runs the debug-gated subsystem
    updates, fades, advances the frame counters and either finishes the cutscene (end frame
@@ -749,7 +749,7 @@ void FUN_L00_00298f90(void) {
                 apply_hero_moby_scale(cutscene_moby);
             }
             if (cutscene_moby->oclass == 10 || cutscene_moby->oclass == 0x1A3 || cutscene_moby->oclass == 0x555) {
-                FUN_L00_00207430(cutscene_moby);
+                update_moby_pulsing_glow_effects(cutscene_moby);
             }
         }
     }

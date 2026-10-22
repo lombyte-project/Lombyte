@@ -1260,7 +1260,9 @@ extern void FUN_L00_00208038_c(void *, int, float, float) __asm__("FUN_L00_00208
 extern void fcb10_207430(void *, int, void *) __asm__("FUN_0020cb10");
 
 extern float D_0015EE18_gp __attribute__((sda));
-void FUN_L00_00207430(char *moby) {
+void update_moby_pulsing_glow_effects(char *moby) __asm__("FUN_L00_00207430");
+
+void update_moby_pulsing_glow_effects(char *moby) {
     union {
         OvlQuad q;
         float f[4];
