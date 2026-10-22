@@ -61,9 +61,12 @@ extern void FUN_L02_002101b8(void *, int, int);
 extern char D_L02_001CB400[];
 extern void FUN_L02_002a40f0(void *);
 
-void FUN_L02_002a4818(int a, int b, int c, int d, float x, float y, float z, float w, int e, int f,
-                      int g);
-void FUN_L02_002a4818(int fog_red, int fog_green, int fog_blue, int ticks_per_frame, float x, float y, float z, float w, int frame_table_start_index, int frame_count,
+void begin_animated_frame_rendering(int fog_red, int fog_green, int fog_blue, int ticks_per_frame, float x, float y, float z, float w, int frame_table_start_index, int frame_count,
+                      int frame_packet_address) __asm__("FUN_L02_002a4818");
+
+void begin_animated_frame_rendering(int a, int b, int c, int d, float x, float y, float z, float w, int e, int f,
+                      int g) __asm__("FUN_L02_002a4818");
+void begin_animated_frame_rendering(int fog_red, int fog_green, int fog_blue, int ticks_per_frame, float x, float y, float z, float w, int frame_table_start_index, int frame_count,
                       int frame_packet_address) {
     char scratch[0x40];
     scratch[0x30] = fog_red;
