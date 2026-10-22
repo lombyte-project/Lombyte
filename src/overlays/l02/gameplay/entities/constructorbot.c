@@ -449,7 +449,9 @@ s32 D_L02_00162164 = 0x10019;
 /* Smoke vent: once visible within 120 units it puffs bursts (D_L02_001620C8 / D_L02_00162118 parameter blocks)
  * on a timer plus occasional single puffs (D_L02_00162088 / D_L02_00162048); state 2 alternates its puff life.
  * Each burst and puff block has its own locals: shared ones become long-lived pseudos and shift the allocation. */
-void FUN_L02_002ef020(struct Moby *moby) {
+void update_smoke_vent(struct Moby *moby) __asm__("FUN_L02_002ef020");
+
+void update_smoke_vent(struct Moby *moby) {
     enum {
         SMOKE_VENT_STATE_INITIALIZE = 0,
         SMOKE_VENT_STATE_VIEW_GATED_EMISSION = 1,
