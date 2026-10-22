@@ -483,8 +483,10 @@ extern float FUN_L00_0020d6b0(void *, int *, float, float, float, float);
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 
-int FUN_L00_00222158(void);
-int FUN_L00_00222158(void) {
+int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
+
+int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
+int select_hero_grapple_target(void) {
     char *hero_target_check_base, *hero_angle_state_base, *gb, *hero_target_output_base, *hero_target_result_base;
     char *candidate_moby;
     char *best;
@@ -3297,7 +3299,7 @@ extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern void FUN_L00_00217658(void);
 extern int f_fun_l00_002223f8_227fa0(int, int) __asm__("FUN_L00_002223f8");
 extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
-extern int FUN_L00_00222158(void);
+extern int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 extern int FUN_L00_0020fe30(void);
 extern int FUN_L00_00216de8(int, int);
 extern void FUN_L00_0029a6b0(void *);
@@ -3451,7 +3453,7 @@ int FUN_L00_00227fa0(void) {
             int t;
 
             select_hero_grapple_swing_target();
-            FUN_L00_00222158();
+            select_hero_grapple_target();
             t = f_fun_001f96f8_227fa0(5);
             if (D_0013F450_h228770.f30E != 0) {
                 t = f_fun_001f96f8_227fa0(8);

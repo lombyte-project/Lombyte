@@ -619,7 +619,7 @@ extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int FUN_L00_0020d498(int);
 extern int FUN_L00_0020fe30_c(void) __asm__("FUN_L00_0020fe30");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
-extern int FUN_L00_00222158(void);
+extern int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 extern int FUN_L00_00233e98(int);
 extern int FUN_L00_00266d60(int, int, int *);
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
@@ -789,7 +789,7 @@ int FUN_L05_00251be8(void) {
             int window;
 
             select_hero_grapple_swing_target();
-            FUN_L00_00222158();
+            select_hero_grapple_target();
             window = scale_game_frames_alt(5);
             if ((*(Hero *)((char *)&hero)).air_frames.s != 0) {
                 window = scale_game_frames_alt(8);
