@@ -414,7 +414,7 @@ extern s16 D_L00_00161664;
 extern s16 D_L00_00161666;
 extern u8 D_L00_001DB5C0[];
 extern u8 D_L00_001DBA20[];
-void FUN_L00_002baae0(void *, s32, s32, s32, f32, f32, f32);
+void draw_beam_and_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002baae0");
 void draw_beam_anchor_camera_facing_quads(void *mv) __asm__("FUN_L00_002bb0b0");
 
 void draw_beam_anchor_camera_facing_quads(void *) __asm__("FUN_L00_002bb0b0");
@@ -426,17 +426,17 @@ void draw_beam_and_arc_effects(u8 *moby) {
     if (D_L00_001615EC <= -8.0f) {
         D_L00_001615EC += 8.0f;
     }
-    FUN_L00_002baae0(D_L00_001DB5C0, D_L00_001615D4, D_L00_001615DC, moby_vars->h3E, D_L00_001615FC,
+    draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0, D_L00_001615D4, D_L00_001615DC, moby_vars->h3E, D_L00_001615FC,
                      D_L00_00161600, D_L00_00161630);
-    FUN_L00_002baae0(D_L00_001DB5C0 + 0x140, D_L00_00161604, D_L00_00161608, moby_vars->h3E, D_L00_0016160C,
+    draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0 + 0x140, D_L00_00161604, D_L00_00161608, moby_vars->h3E, D_L00_0016160C,
                      D_L00_00161610, D_L00_00161634);
-    FUN_L00_002baae0(D_L00_001DBA20, D_L00_00161660, D_L00_00161660, 5, D_L00_0016160C,
+    draw_beam_and_arc_two_pass_quads(D_L00_001DBA20, D_L00_00161660, D_L00_00161660, 5, D_L00_0016160C,
                      D_L00_00161610, 0.2f);
-    FUN_L00_002baae0(D_L00_001DBA20 + 0x50, D_L00_00161662, D_L00_00161662, 5, D_L00_0016160C,
+    draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0x50, D_L00_00161662, D_L00_00161662, 5, D_L00_0016160C,
                      D_L00_00161610, 0.2f);
-    FUN_L00_002baae0(D_L00_001DBA20 + 0xA0, D_L00_00161664, D_L00_00161664, 5, D_L00_0016160C,
+    draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0xA0, D_L00_00161664, D_L00_00161664, 5, D_L00_0016160C,
                      D_L00_00161610, 0.2f);
-    FUN_L00_002baae0(D_L00_001DBA20 + 0xF0, D_L00_00161666, D_L00_00161666, 5, D_L00_0016160C,
+    draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0xF0, D_L00_00161666, D_L00_00161666, 5, D_L00_0016160C,
                      D_L00_00161610, 0.2f);
     draw_beam_anchor_camera_facing_quads(moby);
 }
@@ -466,7 +466,7 @@ extern void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 extern void draw_2baae0(void *, void *, int) __asm__("FUN_001f7d30");
 extern void gsreg_2baae0(int, long) __asm__("FUN_00233980");
 
-void FUN_L00_002baae0(void *mv, int first_pass_alpha, int second_pass_alpha, int point_count, float sx, float sy, float sz) {
+void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second_pass_alpha, int point_count, float sx, float sy, float sz) {
     char *point_bytes = mv;
     RW_2baae0 *v = mv;
     RW_2baae0 first_pass_corners[4];
