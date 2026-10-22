@@ -186,7 +186,7 @@ extern int FUN_L00_00258490(void *, void *, void *, float, float, float, float, 
 extern int FUN_L00_00260400(void *, void *, void *, void *, void *, void *);
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int FUN_L00_002aa2a8(W910 *, M910 *, int);
+extern int predict_mine_impact(W910 *, M910 *, int) __asm__("FUN_L00_002aa2a8");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 D_L00_00166DC0[];
 extern s32 D_L00_00173E40[0x1C];
@@ -278,9 +278,9 @@ void mine_update(M910 *mine_moby) {
     if (v->owner != 0 && v->owner->state != 0xFE && v->owner->state != 0xFD &&
         v->owner->cls == 0xBE && v->h36 == 0 && 0.0f < vector_length_xyz(v)) {
         if (hero.ground_moby == 0 || FUN_002141f8_cf(hero.ground_moby) == 0) {
-            FUN_L00_002aa2a8(v, mine_moby, 1);
-        } else if (FUN_L00_002aa2a8(v, mine_moby, 0) == 0) {
-            FUN_L00_002aa2a8(v, mine_moby, 2);
+            predict_mine_impact(v, mine_moby, 1);
+        } else if (predict_mine_impact(v, mine_moby, 0) == 0) {
+            predict_mine_impact(v, mine_moby, 2);
         }
     }
     mine_state_snapshot = mine_moby->state;

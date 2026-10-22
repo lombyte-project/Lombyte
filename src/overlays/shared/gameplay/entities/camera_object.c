@@ -2605,7 +2605,9 @@ extern void FUN_L00_002a9c50_c(void) __asm__("FUN_L00_002a9c50");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 
-int FUN_L00_002aa2a8(char *trajectory_state, char *moby, int mode) {
+int predict_mine_impact(char *trajectory_state, char *moby, int mode) __asm__("FUN_L00_002aa2a8");
+
+int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
     float trajectory_position[4];
     float B[4];
     float C[4];
