@@ -36,7 +36,9 @@ extern void FUN_L00_0028ac88(void);
 extern void draw_seven_sky_shells_with_modulo_40000_and_60000_rotation(void) __asm__("FUN_L00_0028b080");
 extern void FUN_L00_0028b1a0(void);
 
-void FUN_L00_0023d968(void) {
+void draw_level_sky(void) __asm__("FUN_L00_0023d968");
+
+void draw_level_sky(void) {
     enum {
         LEVEL_WITH_SKY_PARTICLES_AND_ROTATING_SHELL = 0,
         LEVEL_WITH_THREE_SKY_SHELL_ROTATION_RATES = 1,
