@@ -876,7 +876,7 @@ void FUN_L00_002e2250(int unused, int beam) {
     Vec_2E3700 span2;
     Vec_2E3700 tip;
     Vec4 particle_velocity;
-    Vec_2E3700 pos;
+    Vec_2E3700 first_endpoint_effect_position;
     int strand = beam * 2;
     int next_strand = strand + 1;
     float step;
@@ -965,9 +965,9 @@ void FUN_L00_002e2250(int unused, int beam) {
         if (func_002140B0_2E3700(3) == 0) {
             Part_2E3700 *spark;
 
-            fast_vec_scale(pos, &D_L00_001E7070_2E3700[beam], 0.3f);
-            func_001F9BD8_2E3700(pos, pos, D_L00_001E7070_2E3700[beam].v30);
-            spark = func_L00_002757E8_2E3700(pos, D_L00_0015F660_2E3700, 0x7F, D_L00_00161D58_2E3700[beam]);
+            fast_vec_scale(first_endpoint_effect_position, &D_L00_001E7070_2E3700[beam], 0.3f);
+            func_001F9BD8_2E3700(first_endpoint_effect_position, first_endpoint_effect_position, D_L00_001E7070_2E3700[beam].v30);
+            spark = func_L00_002757E8_2E3700(first_endpoint_effect_position, D_L00_0015F660_2E3700, 0x7F, D_L00_00161D58_2E3700[beam]);
             if (spark != 0) {
                 PartSub_2E3700 *sub = &spark->sub;
 
@@ -997,15 +997,15 @@ void FUN_L00_002e2250(int unused, int beam) {
     }
     if (D_L00_00161D28_2E3700[beam] != 0) {
         if (D_L00_00161D28_2E3700[beam] & 1) {
-            qcopy(pos, &D_L00_001E70A0_2E3700[beam]);
-            pos[2] -= 0.25f;
+            qcopy(first_endpoint_effect_position, &D_L00_001E70A0_2E3700[beam]);
+            first_endpoint_effect_position[2] -= 0.25f;
             if (D_L00_00161D08_2E3700[beam] == -1) {
-                D_L00_00161D08_2E3700[beam] = func_L00_0023F0D0_2E3700(pos, D_L00_00161CC0_2E3700, 0.0f, 1.0f, 1.0f, 2.0f);
+                D_L00_00161D08_2E3700[beam] = func_L00_0023F0D0_2E3700(first_endpoint_effect_position, D_L00_00161CC0_2E3700, 0.0f, 1.0f, 1.0f, 2.0f);
             }
             if (D_L00_00161D08_2E3700[beam] >= 0) {
                 Snd_2E3700 *light = &D_L00_001803C0_2E3700[D_L00_00161D08_2E3700[beam]];
 
-                qcopy(light->v10, pos);
+                qcopy(light->v10, first_endpoint_effect_position);
                 light->f1C = D_L00_00161CC0_2E3700;
             }
         }
