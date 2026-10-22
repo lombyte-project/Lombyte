@@ -6452,7 +6452,7 @@ extern float D_L06_001620A8 __asm__("D_L06_001620A8") __attribute__((sda));
 extern float D_L06_001620B0 __asm__("D_L06_001620B0") __attribute__((sda));
 extern float D_L06_001620C4 __asm__("D_L06_001620C4") __attribute__((sda));
 extern int D_L06_0015F880 __asm__("D_L06_0015F880");
-extern void FUN_L06_002f45f0(int);
+extern void set_moby_list_state_4(int) __asm__("FUN_L06_002f45f0");
 extern void FUN_L06_002f9948(int);
 extern int FUN_L01_0026e008(int, int);
 void begin_red_button_rotation(char *moby) __asm__("FUN_L06_003047b8");
@@ -6490,7 +6490,7 @@ extern int FUN_L00_00211250(void);
 extern void FUN_001f4600(int, char *) __asm__("FUN_L06_00210fc8");
 extern void FUN_L06_003021d8(char *);
 extern void allocate_voice_for_group_entry(int, int, int) __asm__("FUN_0022dba0");
-extern void FUN_L06_002f45f0(int);
+extern void set_moby_list_state_4(int) __asm__("FUN_L06_002f45f0");
 extern void FUN_L00_002eac18(int);
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
@@ -6515,7 +6515,7 @@ void FUN_L06_00301b90(unsigned char *moby) {
             mark_moby_for_removal((struct Obj *)moby);
             return;
         }
-        FUN_L06_002f45f0(*(int *)(moby_vars + 0));
+        set_moby_list_state_4(*(int *)(moby_vars + 0));
         FUN_L06_002f9948(*(int *)(moby_vars + 4));
         FUN_L06_002f9948(*(int *)(moby_vars + 8));
         moby[0x20] = 1;
