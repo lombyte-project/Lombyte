@@ -2249,7 +2249,9 @@ extern int FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float,
 extern int FUN_L09_00294ae0(void *, void *, void *, int, int, float);
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
-void FUN_L13_0030bb70(struct Moby *moby) {
+void update_moby_path_follower(struct Moby *moby) __asm__("FUN_L13_0030bb70");
+
+void update_moby_path_follower(struct Moby *moby) {
     int *moby_vars = (int *)moby->pvars;
     char *path;
     char *pth;
