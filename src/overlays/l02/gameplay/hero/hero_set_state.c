@@ -64,7 +64,7 @@ extern void FUN_L00_0020e698(void);
 extern void stick_target(float, int) __asm__("FUN_L00_002118c8");
 extern void FUN_L00_00213de8(float);
 extern void update_hero_target_heading(float a, float b, float c) __asm__("FUN_L00_00214ed8");
-extern void FUN_L00_00217450(void);
+extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_002325e0(int bank, int seq);
 extern void FUN_L00_0025f730(void *a, float x);
@@ -1318,7 +1318,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0x19;
         p->unk2284 = 0;
         if (current_level_index == 0xF)
-            FUN_L00_00217450();
+            spawn_hero_radial_particle_burst();
         p->unk1CC = 0x2710;
         FUN_L00_00216de8(9, 0);
         p->rand_timer.range = 0x68;

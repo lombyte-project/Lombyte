@@ -1049,7 +1049,9 @@ extern float FUN_001f9de0_217450(float) __asm__("FUN_001f9de0");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int,
                                     int);
 
-void FUN_L00_00217450(void) {
+void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
+
+void spawn_hero_radial_particle_burst(void) {
     V_217450 randomized_position[1];
     V_217450 out;
     int scaled_frame_count;

@@ -159,7 +159,7 @@ extern void reduce_and_apply_hero_planar_velocity_addend(f32) __asm__("FUN_L00_0
 extern void FUN_L00_002334d0(void *, void *, f32);
 extern void FUN_L06_002291d0(s32);
 extern void FUN_L00_002121c0(void);
-extern void FUN_L00_00217450(void);
+extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
 extern struct MobyView *create_moby(s32) __asm__("FUN_0020c4f8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_00250df8(struct MobyView *);
@@ -453,7 +453,7 @@ void update_hero_motion_for_current_state(void) {
             }
         }
         if (hero.unk22F4 != 0) {
-            FUN_L00_00217450();
+            spawn_hero_radial_particle_burst();
         }
         break;
     case HERO_STATE_SINK:
@@ -2583,7 +2583,7 @@ void update_hero_motion_for_current_state(void) {
         hero.motion.velocity.f[2] = -frame_time;
         break;
     case 0x7C:
-        FUN_L00_00217450();
+        spawn_hero_radial_particle_burst();
         clear_u64_value(&hero.motion.velocity);
         hero.motion.velocity.f[2] = -frame_time;
         break;

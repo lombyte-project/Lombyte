@@ -646,7 +646,7 @@ extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern void FUN_L00_00213de8(float);
 extern void update_hero_target_heading(float a, float b, float c) __asm__("FUN_L00_00214ed8");
 extern void FUN_L00_00216ec0(int, int, int);
-extern void FUN_L00_00217450(void);
+extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
 void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
@@ -2491,7 +2491,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0x19;
         p->unk2284 = 0;
         if (current_level_index == 0xF)
-            FUN_L00_00217450();
+            spawn_hero_radial_particle_burst();
         p->unk1CC = 0x2710;
         FUN_L00_00216de8(9, 0);
         p->rand_timer.range = 0x68;
