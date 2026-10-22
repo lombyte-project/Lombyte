@@ -1122,7 +1122,9 @@ void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm_
 
 /* Grabbed check: while FUN_L00_002db8f8 holds the moby, park it in state 0x10 (remembering the state it came from)
    unless it is in a state that cannot be grabbed; once released, drop it back to state 8. */
-int FUN_L06_002ea5e0(struct Moby *moby) {
+int update_moby_grab_state(struct Moby *moby) __asm__("FUN_L06_002ea5e0");
+
+int update_moby_grab_state(struct Moby *moby) {
     int grab_check_result = FUN_L00_002db8f8(moby);
     if (grab_check_result != 0) {
         if (moby->state == 8 || moby->state == 9 || moby->state == 0xC || moby->state == 0xD || moby->state == 0x10) {
