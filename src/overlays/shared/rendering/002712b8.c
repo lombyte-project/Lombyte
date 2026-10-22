@@ -1478,7 +1478,9 @@ extern void FUN_0020cca8_274818(void *, int, void *) __asm__("FUN_0020cca8");
 extern float FUN_001fa6c0_274818(int) __asm__("FUN_001fa6c0");
 extern void FUN_001f9a10_274818(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L00_00274818(char *particle) {
+void update_randomized_moby_point_attached_particle(char *particle) __asm__("FUN_L00_00274818");
+
+void update_randomized_moby_point_attached_particle(char *particle) {
     S_274818 *attachment_data = (S_274818 *)(particle + 0x30);
     char *o = attachment_data->o;
     u128 attachment_vector_scratch[4];
