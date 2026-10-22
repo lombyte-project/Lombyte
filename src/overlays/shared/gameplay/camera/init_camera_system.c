@@ -332,7 +332,9 @@ extern int f0d60_1ed6a8(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 
 extern int D_L00_0016C06C __attribute__((section(".data")));
 extern int D_L00_0015EF5C_gp __asm__("D_L00_0015EF5C") __attribute__((sda));
-void FUN_L00_001ed6a8(OvlQuad *camera_position, float collision_radius) {
+void resolve_camera_movement_collisions(OvlQuad *camera_position, float collision_radius) __asm__("FUN_L00_001ed6a8");
+
+void resolve_camera_movement_collisions(OvlQuad *camera_position, float collision_radius) {
     OvlQuad step_delta[1];
     float v[4] __attribute__((aligned(16)));
     char *o = D_166C80_1ed6a8.o;

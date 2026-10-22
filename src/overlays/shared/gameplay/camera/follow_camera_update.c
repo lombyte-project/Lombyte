@@ -1030,7 +1030,7 @@ void FUN_L00_002eae20(void *camera) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC6C8), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_001ed6a8(void *, float);
+extern void resolve_camera_movement_collisions(void *, float) __asm__("FUN_L00_001ed6a8");
 extern void FUN_L00_002eae20_u(void *) __asm__("FUN_L00_002eae20");
 
 /* Runs FUN_L00_002eae20; if word +0x120 of its object is set, clears 0x89 and calls 001ed6a8. */
@@ -1041,7 +1041,7 @@ void update_camera_pose_with_optional_collision(char *camera_object) {
     FUN_L00_002eae20_u(camera_object);
     if (*(int *)(transition_state + 0x40) != 0) {
         camera_object[0x89] = 0;
-        FUN_L00_001ed6a8(camera_object + 0x30, 0.5f);
+        resolve_camera_movement_collisions(camera_object + 0x30, 0.5f);
     }
 }
 #define NOT_SDA
@@ -1631,7 +1631,7 @@ void update_target_tracking_camera(char *camera_object) {
     }
 done:
     refresh_point_light((int)camera_object);
-    FUN_L00_001ed6a8(camera_position, 0.5f);
+    resolve_camera_movement_collisions(camera_position, 0.5f);
     *(int *)(*(char **)(camera_object + 0x70) + 0x80) = 0;
 }
 #define NOT_SDA
