@@ -58,7 +58,9 @@ extern Part_2FF358 *spawn_puff(void *, float, float, float, int, void *, float, 
 extern int func_002140B0_2FF358(int) __asm__("FUN_00213260");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
-void FUN_L14_002fded0(Moby_2FF358 *source_moby) {
+void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) __asm__("FUN_L14_002fded0");
+
+void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
     Vec_2FF358 A;
     Vec_2FF358 B;
     Vec_2FF358 C;

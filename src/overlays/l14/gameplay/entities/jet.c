@@ -3626,7 +3626,7 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern void FUN_L14_002fded0(struct Moby *);
+extern void spawn_moby_offset_puffs(struct Moby *) __asm__("FUN_L14_002fded0");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
 void rocket_update(struct Moby *moby) __asm__("FUN_L14_002fdbb8");
@@ -3688,7 +3688,7 @@ void rocket_update(struct Moby *moby) {
         moby->rot.z = FUN_L00_0025b750(moby->rot.z, fast_arc_tan(destination_delta.x, destination_delta.y), D_L14_00161FAC);
         fast_vec_scale(&step, &moby->rot_row0, speed);
         add_vector_xyz((u8 *)&moby->pos, (u8 *)&moby->pos, (u8 *)&step);
-        FUN_L14_002fded0(moby);
+        spawn_moby_offset_puffs(moby);
         if (voice_is_playing(moby, vars->sound) == 0) {
             vars->sound = allocate_voice_for_target_entry(1, 4, (int)moby);
         }
