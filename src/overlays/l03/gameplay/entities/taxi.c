@@ -149,7 +149,9 @@ extern f32 D_L03_00161914 __attribute__((sda));
 extern char D_L03_00166EC0[];
 extern void FUN_L03_0024e830(void *, void *, f32);
 extern void FUN_L00_00263ac8(struct Moby *, int, void *, f32);
-void FUN_L03_002ca808(struct Moby *m);
+void handle_mine_layer_damage(struct Moby *damaged_moby) __asm__("FUN_L03_002ca808");
+
+void handle_mine_layer_damage(struct Moby *m) __asm__("FUN_L03_002ca808");
 char *spawn_mine_layer_projectile(char *parent_moby, void *pos, float *launch_velocity) __asm__("FUN_L03_002cc888");
 
 char *spawn_mine_layer_projectile(char *p, void *pos, float *dir) __asm__("FUN_L03_002cc888");
@@ -207,7 +209,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
     FUN_L03_0024e830(mine_layer_moby, &target, 100.0f);
     sight = 14.0f;
     FUN_L00_00263ac8(mine_layer_moby, 0, mine_layer_vars->unk160, 4.5f);
-    FUN_L03_002ca808(mine_layer_moby);
+    handle_mine_layer_damage(mine_layer_moby);
     if (mine_layer_vars->alerted) {
         mine_layer_vars->alerted = 0;
         mine_layer_vars->alert_timer = trooper_frames(240);
@@ -374,7 +376,7 @@ extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538
 
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 /* Trooper hit handler: takes damage, then knocks back away from the attacker by hit strength (dying on lethal hits). */
-void FUN_L03_002ca808(struct Moby *damaged_moby) {
+void handle_mine_layer_damage(struct Moby *damaged_moby) {
     enum {
         TROOPER_DAMAGE_LETHAL = 1,
         TROOPER_DAMAGE_SHORT_KNOCKBACK = 3,
