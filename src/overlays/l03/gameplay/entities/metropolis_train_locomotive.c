@@ -2293,7 +2293,9 @@ extern void normalize_vector_xyz_cf(void *, void *, void *) __asm__("FUN_001f9a2
 extern void subtract_vector_xyz_cf(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void vector_length_xyz_cf(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L03_002c6fd0(Moby2C8398 *m) {
+void update_kerwan_path_enemy(Moby2C8398 *m) __asm__("FUN_L03_002c6fd0");
+
+void update_kerwan_path_enemy(Moby2C8398 *m) {
     enum {
         ENEMY_INITIALIZE = 0,
         ENEMY_WAIT_FOR_ACTIVATION = 1,
