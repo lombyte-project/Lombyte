@@ -50,7 +50,9 @@ extern u32 is_vector_outside_clip(void *) __asm__("FUN_001f9958");
 extern void FUN_L01_00262388(s32, s32);
 extern char D_L01_00167240[];
 
-void FUN_L01_002b8cb0(f32 *grid_center_position, s32 index, s32 mode) {
+void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 mode) __asm__("FUN_L01_002b8cb0");
+
+void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 mode) {
     f32 corners[4][4];
     f32 near_clip[4];
     f32 far_clip[4];
@@ -3503,7 +3505,7 @@ void FUN_L01_002b91c8(f32 *water_record, s32 count) {
             D_L01_00161234 = *(u8 *)((u8 *)water_record + 0x1d);
         }
         for (index = 0; index < 16; index++, mask = (s32)mask >> 1) {
-            if (mask & 1) FUN_L01_002b8cb0(water_record, index, mode);
+            if (mask & 1) cull_and_submit_water_grid_tile(water_record, index, mode);
         }
 next_entity:
         i++;
