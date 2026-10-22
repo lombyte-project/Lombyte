@@ -2063,7 +2063,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         BOLT_PICKUP_RETURN_TO_SURFACE = 5
     };
 
-    char *cam;
+    char *collection_motion_reference;
     float direction[4];
     float point[4];
     float local[4];
@@ -2252,15 +2252,15 @@ void FUN_L08_002e3870(struct Moby *moby) {
         add_vector_xyz(&moby->pos, &moby->pos, vars->velocity);
         fast_vec_normalize_c2(direction, direction, vars->f74);
         add_vector_xyz(&moby->pos, &moby->pos, direction);
-        cam = D_0013F490;
-        add_vector_xyz(&moby->pos, &moby->pos, cam);
-        subtract_vector_xyz(local, &moby->pos, cam + 0x160);
-        transform_vector(local, local, cam - 0x100);
+        collection_motion_reference = D_0013F490;
+        add_vector_xyz(&moby->pos, &moby->pos, collection_motion_reference);
+        subtract_vector_xyz(local, &moby->pos, collection_motion_reference + 0x160);
+        transform_vector(local, local, collection_motion_reference - 0x100);
         if (((struct Moby *)vars->u78.p)->oclass != 0 || local[2] > 0.0f) {
             func_00214D28_2E16A0(&vars->u70.f, 0.0f, D_L08_00161C8C_gp * frame_time_sq);
             func_00214D28_2E16A0(&vars->f74, D_L08_00161C88_gp * frame_time, D_L08_00161C8C_gp * frame_time_sq);
         } else {
-            fast_vec_normalize_c2(scratch, cam - 0x120, vars->u70.f);
+            fast_vec_normalize_c2(scratch, collection_motion_reference - 0x120, vars->u70.f);
             subtract_vector_xyz(scratch + 4, scratch, vars->velocity);
             FUN_L00_0025f730_c(scratch + 4, D_L08_00161C8C_gp * frame_time_sq);
             add_vector_xyz(vars->velocity, vars->velocity, scratch + 4);
