@@ -1212,7 +1212,9 @@ extern void attach_2da710(void *, int, void *) __asm__("FUN_0020cb10");
 
 /* During the cutscene, nudges a camera value at two time windows and attaches
  * the shared manipulator to every listed moby of the same class as m. */
-void FUN_L03_002da710(struct Moby *class_reference_moby) {
+void apply_helga_big_head_cutscene_adjustments(struct Moby *class_reference_moby) __asm__("FUN_L03_002da710");
+
+void apply_helga_big_head_cutscene_adjustments(struct Moby *class_reference_moby) {
     char *shared_attachment_record;
     int i;
 
@@ -1329,7 +1331,7 @@ void helga_update(struct Moby *helga_moby) {
     float pitch;
     int tracking;
 
-    FUN_L03_002da710(helga_moby);
+    apply_helga_big_head_cutscene_adjustments(helga_moby);
     switch (helga_moby->state) {
     case HELGA_INITIALIZE:
         if (D_0013D4CC[0] != 0) {
