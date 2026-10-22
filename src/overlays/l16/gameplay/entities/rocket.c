@@ -1480,16 +1480,16 @@ void test_dummy_update(unsigned char *moby) {
         break;
     case TEST_DUMMY_STATE_BURST: { /* burst into three pieces; respawn at home or delete */
         char *position = (char *)moby + 16;
-        char *rot = (char *)moby + 0x40;
+        char *moby_rotation = (char *)moby + 0x40;
         float burst;
         dummy_data->f20 = 2.0f;
         dummy_data->timer = scale_game_frames(60);
         burst = frame_time_sq * 12.0f;
-        FUN_L00_00263fd8(moby, 0x655, position, rot, 0, 0, burst, &D_L16_0015F580_c, &D_L16_0015F580_c,
+        FUN_L00_00263fd8(moby, 0x655, position, moby_rotation, 0, 0, burst, &D_L16_0015F580_c, &D_L16_0015F580_c,
                          &D_L16_0015F580_c);
-        FUN_L00_00263fd8(moby, 0x656, position, rot, 0, 0, burst, &D_L16_0015F580_c, &D_L16_0015F580_c,
+        FUN_L00_00263fd8(moby, 0x656, position, moby_rotation, 0, 0, burst, &D_L16_0015F580_c, &D_L16_0015F580_c,
                          &D_L16_0015F580_c);
-        FUN_L00_00263fd8(moby, 0x657, position, rot, 0, 0, burst, &D_L16_0015F580_c, &D_L16_0015F580_c,
+        FUN_L00_00263fd8(moby, 0x657, position, moby_rotation, 0, 0, burst, &D_L16_0015F580_c, &D_L16_0015F580_c,
                          &D_L16_0015F580_c);
         qcopy(position_or_delta.f, position);
         position_or_delta.f[2] += 1.2f;
