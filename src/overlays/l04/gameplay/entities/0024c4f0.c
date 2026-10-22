@@ -6,7 +6,9 @@ typedef struct {
     float x, y, z, w;
 } V_24c4f0;
 
-int FUN_L04_0024c4f0(float *query_point, float *poly, int vertex_count) {
+int find_first_positive_polygon_edge_cross_xy(float *query_point, float *poly, int vertex_count) __asm__("FUN_L04_0024c4f0");
+
+int find_first_positive_polygon_edge_cross_xy(float *query_point, float *poly, int vertex_count) {
     V_24c4f0 *polygon_vertices = (V_24c4f0 *)poly;
     int i;
 
@@ -74,7 +76,7 @@ float FUN_L04_0024c660(float *closest_point, float *segment_start, float *segmen
 /* Ported from rac1-decomp (src/overlays/l04_eudora/mobyutil_0024D4A8.c: func_L04_0024D790), where it is exact; names translated to the US level program. */
 
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern int FUN_L04_0024c4f0(float *, float *, int);
+extern int find_first_positive_polygon_edge_cross_xy(float *, float *, int) __asm__("FUN_L04_0024c4f0");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L04_0024c660_u(float *, float *, float *, float *) __asm__("FUN_L04_0024c660");
 
@@ -83,7 +85,7 @@ int FUN_L04_0024c7d8(float *out, float *query_point, float *poly, int vertex_cou
     float edge_to_query_offset[4];
     float best;
     int i;
-    int has_positive_edge_cross = FUN_L04_0024c4f0(query_point, poly, vertex_count) != 0;
+    int has_positive_edge_cross = find_first_positive_polygon_edge_cross_xy(query_point, poly, vertex_count) != 0;
     best = 0;
     for (i = 0; i < vertex_count; i++) {
         float distance_to_edge;
