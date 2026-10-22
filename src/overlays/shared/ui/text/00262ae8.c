@@ -31,7 +31,9 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_00235c80(void *);
 extern s32 D_L05_0015FAFC;
 
-void FUN_L05_00262ae8(HudElemX *hud_element) {
+void initialize_trick_combo_hud(HudElemX *hud_element) __asm__("FUN_L05_00262ae8");
+
+void initialize_trick_combo_hud(HudElemX *hud_element) {
     s32 i;
     s32 *reset_slot;
     hud_element->unk7C = scale_game_frames(0xB4) + 0x1E;
