@@ -1756,7 +1756,9 @@ extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void FUN_L00_0025d1b8(void *);
 extern void FUN_L00_0025f780(void *, void *, s32);
 
-u8 *FUN_L00_002c35c0(s32 value, u128 *position, u128 *other_position) {
+u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) __asm__("FUN_L00_002c35c0");
+
+u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) {
     u8 *flags = item_text_variant;
     u8 *spawned_moby;
     u8 *data;

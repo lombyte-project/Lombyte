@@ -1163,7 +1163,7 @@ extern int D_0015EEA4;
 extern int FUN_L00_00216de8(int, int);
 extern int FUN_L00_00233db8(int, int);
 extern int FUN_L00_00233e98(int);
-extern int FUN_L00_002c35c0(void *, void *, void *);
+extern int spawn_decoy(void *, void *, void *) __asm__("FUN_L00_002c35c0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames_c2(s32) __asm__("func_001F96F8");
 extern short D_L00_001B0830[];
@@ -1225,7 +1225,7 @@ void decoy_glove_update(unsigned char *moby) {
             qzero(&loc);
             mine_spawn_drops(*(char **)(glove_vars + 0x50), D_L00_001B0830);
             ((void (*)(void *))mark_moby_for_removal)(*(char **)(glove_vars + 0x50));
-            *(int *)(glove_vars + 0x50) = FUN_L00_002c35c0(moby, glove_vars + 0x40, &loc);
+            *(int *)(glove_vars + 0x50) = spawn_decoy(moby, glove_vars + 0x40, &loc);
         }
         if (*(char **)(glove_vars + 0x50) != 0 &&
             *(unsigned char *)(*(char **)(glove_vars + 0x50) + 0x20) != 0xFE &&
@@ -1299,12 +1299,12 @@ L3D34:
     }
     if (FUN_L00_00233e98(-1)) {
         qzero(&loc);
-        *(int *)(glove_vars + 0x50) = FUN_L00_002c35c0(moby, glove_vars + 0x40, &loc);
+        *(int *)(glove_vars + 0x50) = spawn_decoy(moby, glove_vars + 0x40, &loc);
     } else {
         char *h = ((char *)&hero);
         if (*(unsigned char *)(h + 0x20A8)) {
             qzero(&loc);
-            *(int *)(glove_vars + 0x50) = FUN_L00_002c35c0(moby, glove_vars + 0x40, &loc);
+            *(int *)(glove_vars + 0x50) = spawn_decoy(moby, glove_vars + 0x40, &loc);
         }
     }
 }
