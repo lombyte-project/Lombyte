@@ -2446,7 +2446,9 @@ extern void func_L13_002B9590_f(float, float, float, float, unsigned char, unsig
 extern void *func_001FE540_id(int) __asm__("FUN_001fdd10");
 extern int font_print_center_small(int, int, long, void *, int) __asm__("FUN_001f6b88");
 
-void FUN_L13_002b97f8(char *moby) {
+void draw_fighter_jet_hud(char *moby) __asm__("FUN_L13_002b97f8");
+
+void draw_fighter_jet_hud(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
     char *screen_dimensions;
     unsigned char *base;
@@ -2925,7 +2927,7 @@ void FUN_L13_002ba178(void *moby_arg, void *data_arg) {
             }
         }
     }
-    enqueue_callback_list_1(FUN_L13_002b97f8, moby);
+    enqueue_callback_list_1(draw_fighter_jet_hud, moby);
     fire_fighter_jet_rocket((struct Moby *)moby, (char *)data);
     update_fighter_jet_gun_and_aim((struct Moby *)moby, (char *)data, fast_add_rotations(data->camera_yaw, -data->steer_x / 7.0f),
                      -fast_add_rotations(data->camera_pitch, -(data->steer_y / 7.0f) - 0.1f));
