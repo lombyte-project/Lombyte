@@ -17,7 +17,9 @@ extern void FUN_L00_002a0f18(void *, int, int);
 void vu1_init_chain(void) __asm__("FUN_002335d0");
 
 /* Calls 002a09d8(1), waits for vsync, counts a frame, starts the VU1 chain, calls 002a0f18. */
-void FUN_L00_001f99c0(void *destination) {
+void capture_draw_buffer(void *destination) __asm__("FUN_L00_001f99c0");
+
+void capture_draw_buffer(void *destination) {
     FUN_L00_002a09d8(1);
     sceGsSyncV(0);
     D_L00_0015F3F8 = D_L00_0015F3F8 + 1;
