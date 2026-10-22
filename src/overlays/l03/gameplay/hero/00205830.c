@@ -24,7 +24,10 @@ extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 
-s32 FUN_L03_00205830(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF, s32 *outKind,
+s32 find_first_nearby_registered_path(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF, s32 *outKind,
+                     s32 *skip, s32 *only) __asm__("FUN_L03_00205830");
+
+s32 find_first_nearby_registered_path(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF, s32 *outKind,
                      s32 *skip, s32 *only) {
     Vec4 source_position;
     s32 gotI;
