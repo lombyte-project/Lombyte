@@ -14,7 +14,9 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L03_00260130(int part_word_3c, int *part_quadword_20_source, int *source_quadword, float *source_floats, int part_halfword_0a) {
+void create_type_31_part(int part_word_3c, int *part_quadword_20_source, int *source_quadword, float *source_floats, int part_halfword_0a) __asm__("FUN_L03_00260130");
+
+void create_type_31_part(int part_word_3c, int *part_quadword_20_source, int *source_quadword, float *source_floats, int part_halfword_0a) {
     unsigned char *created_part = create_part(0x31);
     if (created_part != 0) {
         float *destination_floats;

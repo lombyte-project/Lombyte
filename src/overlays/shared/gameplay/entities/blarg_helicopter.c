@@ -1533,7 +1533,7 @@ extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022d
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_00259888(void *, void *, int, float, void *);
 extern void FUN_L03_0024e830(void *, void *, float);
-extern void FUN_L03_00260130(void *, void *, void *, void *, int);
+extern void create_type_31_part(void *, void *, void *, void *, int) __asm__("FUN_L03_00260130");
 extern void mark_moby_for_removal_c_c(void *) __asm__("func_0020C828");
 extern char D_0013E550[];
 
@@ -1650,7 +1650,7 @@ void FUN_L03_002d47c0(Moby *moby) {
                 *(u128_2D5B88 *)&spark_vel = *(u128_2D5B88 *)&tracer_offset;
                 add_vector_xyz(&spark_dir, &spark_dir, &spark_vel);
                 normalize_vector_xyz(&tracer_vel, &tracer_vel, D_0015ED6C_c * 100.0f);
-                FUN_L03_00260130(data->target, &spark_vel, &spark_dir, &tracer_vel, scale_game_frames_alt(0x2D));
+                create_type_31_part(data->target, &spark_vel, &spark_dir, &tracer_vel, scale_game_frames_alt(0x2D));
                 if (collision_line(&muzzle, &ray_end, 0, data->target, 0) != 0) {
                     qcopy(&muzzle, &coll_hit);
                     normalize_vector_xyz(&aim, &aim, D_0015ED6C_c * 10.0f);
