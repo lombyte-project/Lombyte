@@ -417,7 +417,7 @@ void FUN_L13_002c2048(Moby_2C27B0 *moby) {
     }
 }
 extern void FUN_L13_002c2d30(unsigned char *);
-extern unsigned char *FUN_L13_003058a8(void *, int);
+extern unsigned char *create_attached_rocket(void *, int) __asm__("FUN_L13_003058a8");
 extern void launch_attached_rocket(void *, void *, void *, float) __asm__("FUN_L13_00305988");
 extern char *D_L13_001600EC;
 extern float D_L13_0016149C __attribute__((sda));
@@ -467,8 +467,8 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         *(float *)(moby + 0x18) += 1.0f;
         if (moby[0x53] != 0) blend_moby_animation_c13(moby, 0, 0, 10);
         moby[0xBC] = 0;
-        *(unsigned char **)(moby_data + 0xFC) = FUN_L13_003058a8(moby, 0);
-        *(unsigned char **)(moby_data + 0xF8) = FUN_L13_003058a8(moby, 1);
+        *(unsigned char **)(moby_data + 0xFC) = create_attached_rocket(moby, 0);
+        *(unsigned char **)(moby_data + 0xF8) = create_attached_rocket(moby, 1);
         if (*(int *)(moby_data + 0xD4) != -1) moby[0x20] = 5;
         else moby[0x20] = 2;
         *(float *)(moby_data + 0x100) = random_angle_radians_c();
@@ -534,14 +534,14 @@ void FUN_L13_002c25b8(unsigned char *moby) {
                         launch_attached_rocket(*(void **)(moby_data + 0xF8), shot_direction_vector, target, *(float *)(moby_data + 0xEC));
                         allocate_voice_for_target_entry(0, 0, (int)moby);
                     }
-                    *(unsigned char **)(moby_data + 0xF8) = FUN_L13_003058a8(moby, 1);
+                    *(unsigned char **)(moby_data + 0xF8) = create_attached_rocket(moby, 1);
                     *(int *)(moby_data + 0xF4) = 0;
                 } else {
                     if (*(void **)(moby_data + 0xFC)) {
                         launch_attached_rocket(*(void **)(moby_data + 0xFC), shot_direction_vector, target, *(float *)(moby_data + 0xEC));
                         allocate_voice_for_target_entry(0, 0, (int)moby);
                     }
-                    *(unsigned char **)(moby_data + 0xFC) = FUN_L13_003058a8(moby, 0);
+                    *(unsigned char **)(moby_data + 0xFC) = create_attached_rocket(moby, 0);
                     *(int *)(moby_data + 0xF4) = 1;
                 }
 

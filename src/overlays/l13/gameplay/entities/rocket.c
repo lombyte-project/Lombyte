@@ -17,7 +17,9 @@ extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L13_003058a8(struct Moby *source_moby, short joint_index) {
+char *create_attached_rocket(struct Moby *source_moby, short joint_index) __asm__("FUN_L13_003058a8");
+
+char *create_attached_rocket(struct Moby *source_moby, short joint_index) {
     char *moby = create_moby(0x4D1);
     char *moby_vars;
     char *spawned_moby_position;
