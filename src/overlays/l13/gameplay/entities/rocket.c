@@ -2048,7 +2048,9 @@ extern void FUN_L00_002607d0(int);
 extern void initialize_moby_state_record(void *) __asm__("FUN_L00_0028e8a0");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
-void FUN_L13_0030b628(struct Moby *moby) {
+void update_gemlik_scene_controller(struct Moby *moby) __asm__("FUN_L13_0030b628");
+
+void update_gemlik_scene_controller(struct Moby *moby) {
     enum {
         WAIT_TO_START_INITIAL_SCENE = 0,
         START_INITIAL_SCENE = 1,
