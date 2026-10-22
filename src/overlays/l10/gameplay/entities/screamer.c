@@ -2811,7 +2811,9 @@ extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0")
 extern s32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern unsigned char *FUN_L00_002738e8(void *, void *, s32, f32, f32, f32, s32, s32, s32);
 
-void FUN_L10_002e5be0(struct Moby *moby) {
+void emit_moby_directional_particles(struct Moby *moby) __asm__("FUN_L10_002e5be0");
+
+void emit_moby_directional_particles(struct Moby *moby) {
     f32 *pvars = (f32 *)moby->pvars;
     Vec4 *moby_position;
     s32 i = 0;
