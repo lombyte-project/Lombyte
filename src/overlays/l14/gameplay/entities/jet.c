@@ -1319,7 +1319,9 @@ extern float arc_fabs(float) __asm__("FUN_001f99c0");
 extern int arc_tick(void *) __asm__("FUN_001f9740");
 extern void allocate_voice_for_group_entry(int, int, void *) __asm__("FUN_0022dba0");
 extern void arc_enqueue(void (*)(char *), char *) __asm__("FUN_001f4600");
-void FUN_L14_002ee6b0(float *pos, int n);
+void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spawn_pair_count) __asm__("FUN_L14_002ee6b0");
+
+void spawn_lightning_arc_particle_pairs(float *pos, int n) __asm__("FUN_L14_002ee6b0");
 void FUN_L14_002edc18();
 extern float D_L14_00161CD0_d530[] __asm__("D_L14_00161CD0") __attribute__((section(".sdata")));
 
@@ -1447,7 +1449,7 @@ void FUN_L14_002ed530(char *moby) {
                 D_L14_00161CF4 = 0;
             }
             if (D_L14_00161CE0_d530 < 50) {
-                FUN_L14_002ee6b0(D_L14_00161CC0, 3);
+                spawn_lightning_arc_particle_pairs(D_L14_00161CC0, 3);
             }
         } else {
             D_L14_00161CE0_d530 = 0;
@@ -1703,7 +1705,7 @@ extern short D_L14_00161CA4 __attribute__((sda));
 extern short D_L14_00161CA8 __attribute__((sda));
 extern short D_L14_00161CAC __attribute__((sda));
 extern short D_L14_00161CB0 __attribute__((sda));
-void FUN_L14_002ee6b0(float *particle_spawn_position, int spawn_pair_count) {
+void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spawn_pair_count) {
     float initial_velocity[4];
     float saved_position[4];
     float particle_scale, velocity_horizontal_angle, velocity_vertical_angle;
