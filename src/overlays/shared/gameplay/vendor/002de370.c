@@ -21,7 +21,9 @@ extern void FUN_L00_001ff290(void *, void *, void *);
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L03_002de370(char *moby) {
+void update_falling_moby(char *moby) __asm__("FUN_L03_002de370");
+
+void update_falling_moby(char *moby) {
     float unused_vector_add_argument[4];
     char *moby_data = *(char **)(moby + 0x78);
     *(float *)(moby_data + 8) = *(float *)(moby_data + 8) - frame_time_sq * 9.8f;
