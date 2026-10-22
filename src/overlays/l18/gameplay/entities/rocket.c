@@ -257,7 +257,9 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 
-char *FUN_L18_002e22c0(void *vector) {
+char *create_class_326_moby(void *vector) __asm__("FUN_L18_002e22c0");
+
+char *create_class_326_moby(void *vector) {
     char *moby = create_moby(0x326);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
@@ -1008,7 +1010,7 @@ extern PathLink *D_L18_0015F70C;
 extern s32 D_L18_0015F710;
 extern char *D_L18_001600EC;
 extern float FUN_001f9b48(void *, void *);
-extern char *FUN_L18_002e22c0(void *vector);
+extern char *create_class_326_moby(void *vector) __asm__("FUN_L18_002e22c0");
 
 void FUN_L18_002d62e8(struct Moby *moby) {
     enum {
@@ -1051,7 +1053,7 @@ void FUN_L18_002d62e8(struct Moby *moby) {
             }
         } while (pair_or_node_index < 4);
         for (pair_or_node_index = 0; pair_or_node_index < 2; pair_or_node_index++) {
-            FUN_L18_002e22c0(D_L18_001600EC + vars->node[pair_or_node_index] * 0x80 + 0x30);
+            create_class_326_moby(D_L18_001600EC + vars->node[pair_or_node_index] * 0x80 + 0x30);
         }
         break;
     case STATE_SELECT_NEARER_PATH:
