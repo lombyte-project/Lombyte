@@ -1618,7 +1618,9 @@ extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, 
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L13_002ce688(unsigned char *source_moby, void *effect_position, int emit_extra_effects)
+void emit_forcefield_tower_destruction_effects(unsigned char *source_moby, void *effect_position, int emit_extra_effects) __asm__("FUN_L13_002ce688");
+
+void emit_forcefield_tower_destruction_effects(unsigned char *source_moby, void *effect_position, int emit_extra_effects)
 {
     int k;
     int j;
@@ -1938,7 +1940,7 @@ voice_done:
             scale = random_float_between(0.0f, 3.0f);
             scale_vector_xyz(rotated, velocity, scale);
             add_vector_xyz(rotated, rotated, moby_bytes + 0x10);
-            FUN_L13_002ce688(moby_bytes, rotated, 1);
+            emit_forcefield_tower_destruction_effects(moby_bytes, rotated, 1);
         } while (i >= 0);
         linked_index = data[0x74 / 4];
         if (linked_index != -1) linked_state_flags[linked_index] = 1;
