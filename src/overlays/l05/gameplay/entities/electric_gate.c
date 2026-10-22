@@ -2005,7 +2005,7 @@ extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_00260860(int, int);
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void FUN_L02_002e0cd8(char *);
+extern void attach_big_head_cheat_manipulator_to_matching_moby(char *) __asm__("FUN_L02_002e0cd8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void subtract_vector_xyz(void *, void *, void *);
@@ -2022,7 +2022,7 @@ void shady_salesman_update(WM *moby) {
     float rate;
     float head_rate;
     int tracking;
-    FUN_L02_002e0cd8((char *)moby);
+    attach_big_head_cheat_manipulator_to_matching_moby((char *)moby);
     if (moby->opacity) {
         if (FUN_001f9b48(moby->position, D_L05_001671C0) < 40.0f) {
             FUN_L00_0025a120(moby);

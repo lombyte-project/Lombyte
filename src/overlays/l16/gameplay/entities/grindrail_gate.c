@@ -1493,7 +1493,7 @@ extern void FUN_L00_00263d40(int, int);
 extern void FUN_L00_00299460(int);
 extern void FUN_L16_002923d0(int);
 extern void begin_dialogue_camera_transition(float, void *) __asm__("FUN_L01_002783a8");
-extern void FUN_L02_002e0cd8(void *);
+extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 void activate_gadgetron_ceo_challenge_environment(struct Moby *moby) __asm__("FUN_L16_002e70c0");
 
 extern void activate_gadgetron_ceo_challenge_environment(struct Moby *) __asm__("FUN_L16_002e70c0");
@@ -1524,7 +1524,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         FUN_L00_0025a120(ceo_moby);
         ceo_moby->distance_class = 22;
     }
-    FUN_L02_002e0cd8(ceo_moby);
+    attach_big_head_cheat_manipulator_to_matching_moby(ceo_moby);
     switch (ceo_moby->state) {
     case GADGETRON_CEO_INITIALIZE_DIALOGUE:
         ceo_moby->opacity = 255;

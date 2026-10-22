@@ -2748,7 +2748,7 @@ extern char D_L14_001674C0[];
 extern char *D_L14_001600EC;
 extern unsigned char *D_L14_0015FFD8;
 extern int D_L14_0015F5C4;
-extern void FUN_L02_002e0cd8(void *);
+extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
@@ -2774,7 +2774,7 @@ void qwark_oltanis_update(L14WatchMoby *moby) {
     float rate;
     float head_rate;
     int tracking;
-    FUN_L02_002e0cd8(moby);
+    attach_big_head_cheat_manipulator_to_matching_moby(moby);
     if (moby->near_flag) {
         if (FUN_001f9b48(moby->position, D_L14_001674C0) < 28.0f) {
             FUN_L00_0025a120(moby);

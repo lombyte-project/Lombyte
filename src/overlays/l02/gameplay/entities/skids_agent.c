@@ -61,7 +61,7 @@ extern u8 D_0015EDB0 __attribute__((section(".sdata")));
 extern s32 level_game_mode_macro __asm__("D_L02_0015F5C4") __attribute__((section(".sdata")));
 extern WatcherReward D_L02_0016CE60;
 extern char D_L02_00161D00[];
-extern void FUN_L02_002e0cd8(struct Moby *);
+extern void attach_big_head_cheat_manipulator_to_matching_moby(struct Moby *) __asm__("FUN_L02_002e0cd8");
 void update_skid_mcmarx_relocation_sequence(struct Moby *moby) __asm__("FUN_L02_002e1fb8");
 
 extern void update_skid_mcmarx_relocation_sequence(struct Moby *) __asm__("FUN_L02_002e1fb8");
@@ -141,7 +141,7 @@ void skids_agent_update(struct Moby *moby) {
     f32 fade;
     struct Moby *prop;
 
-    FUN_L02_002e0cd8(moby);
+    attach_big_head_cheat_manipulator_to_matching_moby(moby);
     switch (moby->state) {
     case SKIDS_AGENT_INITIALIZE:
         if (items_owned[0x2D] != 0) {
@@ -374,7 +374,7 @@ void skid_mcmarx_update(struct Moby *moby) {
     f32 head_rate;
     s32 tracking;
 
-    FUN_L02_002e0cd8(moby);
+    attach_big_head_cheat_manipulator_to_matching_moby(moby);
     update_skid_mcmarx_relocation_sequence((char *)moby);
     switch (moby->state) {
     case SKID_MCMARX_INITIALIZE:

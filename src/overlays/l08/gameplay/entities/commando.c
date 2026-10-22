@@ -1191,7 +1191,7 @@ extern char *D_L08_001600EC;
 extern void FUN_L00_00262d38(int);
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
-extern void FUN_L08_00305138_c(void *) __asm__("FUN_L02_002e0cd8");
+extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 extern void FUN_L00_0025a120(void *);
 extern float FUN_001f9b48(void *, void *);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
@@ -1213,7 +1213,7 @@ void commando_update(WM *moby) {
     float rate;
     float head_rate;
     int tracking;
-    FUN_L08_00305138_c(moby);
+    attach_big_head_cheat_manipulator_to_matching_moby(moby);
     if (moby->opacity) {
         if (FUN_001f9b48(moby->position, D_L08_001675C0_c) < (float)D_L08_001621D8) {
             FUN_L00_0025a120(moby);

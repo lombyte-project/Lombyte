@@ -1226,7 +1226,9 @@ extern unsigned char D_L02_0017CA40[];
 void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 extern Level02MobyList talk_camera __asm__("D_L02_0016CE60");
-void FUN_L02_002e0cd8(char *moby) {
+void attach_big_head_cheat_manipulator_to_matching_moby(char *moby) __asm__("FUN_L02_002e0cd8");
+
+void attach_big_head_cheat_manipulator_to_matching_moby(char *moby) {
     int i;
     if (level_game_mode == 2 && big_head_cheat_enabled != 0) {
         for (i = 0; i < talk_camera.count; i++) {
