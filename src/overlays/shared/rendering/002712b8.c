@@ -60,7 +60,9 @@ extern void FUN_L00_001ff318_271450(void *, void *, float) __asm__("FUN_L00_001f
 extern void FUN_L00_001ff290_271450(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_001f9a68_271450(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L00_00271450(unsigned char *particle) {
+void update_moving_rotating_resizing_alpha_fade_particle(unsigned char *particle) __asm__("FUN_L00_00271450");
+
+void update_moving_rotating_resizing_alpha_fade_particle(unsigned char *particle) {
     float particle_velocity[4];
     OvlQuad scaled_platform_carry[1];
     OvlQuad gravity_velocity_delta[1];
