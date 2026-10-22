@@ -3394,7 +3394,9 @@ extern void FUN_L01_00261df8(f32 *) __asm__("FUN_L01_00261df8");
 extern void update_animated_offset_pairs(f32 *) __asm__("FUN_L01_002b80d0");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
-void FUN_L01_002b91c8(f32 *water_record, s32 count) {
+void render_water_grids(f32 *water_record, s32 count) __asm__("FUN_L01_002b91c8");
+
+void render_water_grids(f32 *water_record, s32 count) {
     f32 corners[4][4];
     f32 near_clip[4];
     f32 far_clip[4];

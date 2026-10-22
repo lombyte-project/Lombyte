@@ -755,10 +755,10 @@ void update_cutscene_trigger(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FE498), where it is exact; names translated to the US level program. */
 
 extern char D_L01_001E34C0[];
-extern void FUN_L01_002b91c8(char *, int);
+extern void render_water_grids(char *, int) __asm__("FUN_L01_002b91c8");
 
 void FUN_L01_002fd0c0(void) {
-    FUN_L01_002b91c8(D_L01_001E34C0, 0x15);
+    render_water_grids(D_L01_001E34C0, 0x15);
 }
 /* Resets the marker record's scale once, for mobys of the caller's class or class 0x32B. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00300400), where it is exact; names translated to the US level program. */

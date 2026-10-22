@@ -195,8 +195,8 @@ void spawn_point_table_sparks(struct Moby *moby) {
 /* Register this level's vendor data set. */
 
 extern char D_L13_001D9BC0[];
-extern void FUN_L01_002b91c8(char *, int);
+extern void render_water_grids(char *, int) __asm__("FUN_L01_002b91c8");
 
 void FUN_L13_0030a460(void) {
-    FUN_L01_002b91c8(D_L13_001D9BC0, 0x16);
+    render_water_grids(D_L13_001D9BC0, 0x16);
 }

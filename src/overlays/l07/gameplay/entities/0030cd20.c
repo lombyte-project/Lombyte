@@ -12,10 +12,10 @@
 
 /* Register this level's vendor data set. */
 
-extern void FUN_L01_002b91c8(char *, int);
+extern void render_water_grids(char *, int) __asm__("FUN_L01_002b91c8");
 
 void FUN_L07_0030cd20(void) {
-    FUN_L01_002b91c8(D_L07_001DCE40, 0x24);
+    render_water_grids(D_L07_001DCE40, 0x24);
 }
 struct L07MovingVars {
     Vec4f home;

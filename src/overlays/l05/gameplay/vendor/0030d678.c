@@ -8,8 +8,8 @@
 
 /* Register this level's vendor data set. */
 
-extern void FUN_L01_002b91c8(char *, int);
+extern void render_water_grids(char *, int) __asm__("FUN_L01_002b91c8");
 
 void FUN_L05_0030d678(void) {
-    FUN_L01_002b91c8(water_records, 0x30);
+    render_water_grids(water_records, 0x30);
 }

@@ -28,10 +28,10 @@ void copy_moby_z_to_group_records(struct Moby *moby) {
 
 /* Register this level's vendor data set. */
 
-extern void FUN_L01_002b91c8(char *, int);
+extern void render_water_grids(char *, int) __asm__("FUN_L01_002b91c8");
 
 void FUN_L12_002bf748(void) {
-    FUN_L01_002b91c8(D_L12_001CBF40, 0x11);
+    render_water_grids(D_L12_001CBF40, 0x11);
 }
 #include "eetypes.h"
 
