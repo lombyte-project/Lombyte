@@ -675,7 +675,9 @@ extern void draw_menu_flashing_panel(int) __asm__("FUN_00223e28");
 extern void do_gif_paging(void) __asm__("FUN_001f4398");
 
 /* Draws the pause menu pages: lays out each page moby's screen rect, then renders each page's texture. */
-void FUN_L00_002772c0(int transfer_only) {
+void draw_pause_menu_pages(int transfer_only) __asm__("FUN_L00_002772c0");
+
+void draw_pause_menu_pages(int transfer_only) {
     u128 corners[4];
     u128 pad[5];
     u128 box[2];
