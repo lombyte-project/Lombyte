@@ -922,7 +922,9 @@ extern float D_L14_001D7A60[][3];
 extern s32 D_L14_001D80C8[];
 extern char D_L14_001D7E38[];
 extern char D_L14_001674C0_r[] __asm__("D_L14_001674C0");
-extern void FUN_L14_002ae0a8(struct Moby *m);
+void draw_blarg_heavy_interceptor_camera_facing_glow(struct Moby *m) __asm__("FUN_L14_002ae0a8");
+
+extern void draw_blarg_heavy_interceptor_camera_facing_glow(struct Moby *m) __asm__("FUN_L14_002ae0a8");
 extern void FUN_L00_001fde98(int, void *, void *, void *, int);
 extern void cross_r(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void normalize_r(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -944,7 +946,7 @@ void FUN_L14_002ada18(char *moby) {
     int i;
     int j;
 
-    FUN_L14_002ae0a8((struct Moby *)moby);
+    draw_blarg_heavy_interceptor_camera_facing_glow((struct Moby *)moby);
     qcopy(f.mat[0], moby_vars + 0xA0);
     sub_r(f.mat[2], moby_vars + 0xD0, D_L14_001674C0_r);
     cross_r(f.mat[1], f.mat[0], f.mat[2]);
@@ -1153,7 +1155,7 @@ extern void draw_e(void *, int, int) __asm__("FUN_001f7d30");
 
 extern float D_L14_00161474 __attribute__((sda));
 extern float D_L14_00161478 __attribute__((sda));
-void FUN_L14_002ae0a8(struct Moby *m) {
+void draw_blarg_heavy_interceptor_camera_facing_glow(struct Moby *m) {
     char *d = (char *)m->pvars;
     float glow_quad_transform[4][4];
     float glow_position_offset[4];
