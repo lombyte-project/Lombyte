@@ -21,7 +21,9 @@ extern int hit_reaction(void *, void *, void *, int, void *, void *, int, int) _
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
-void FUN_L17_002cbc10(char *turret_moby) {
+void process_dreks_fleet_turret_hits(char *turret_moby) __asm__("FUN_L17_002cbc10");
+
+void process_dreks_fleet_turret_hits(char *turret_moby) {
     char *turret_vars;
     char *hit_animation_state;
     char *hit_record;
@@ -376,7 +378,7 @@ extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8,
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025fcb8(void *, void *, float);
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
-extern void FUN_L17_002cbc10(char *m);
+extern void process_dreks_fleet_turret_hits(char *m) __asm__("FUN_L17_002cbc10");
 extern void FUN_L17_002cbd38(char *m);
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
@@ -400,7 +402,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
     float from[4];
     Vars347 *turret_vars = (Vars347 *)turret_moby->pvars;
 
-    FUN_L17_002cbc10(turret_moby);
+    process_dreks_fleet_turret_hits(turret_moby);
     switch (turret_moby->state) {
     case FLEET_TURRET_INITIALIZE:
         turret_moby->state = 1;
