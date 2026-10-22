@@ -85,7 +85,7 @@ s32 FUN_L17_0020dbe8(s32 apply_state_and_motion_response) {
     u8 *mob;
     s32 flag;
     s32 id;
-    f32 xy_scale, b, frame_duration;
+    f32 xy_scale, z_response, frame_duration;
     OvlVec4 motion_delta;
 
     if (G.state.control_mode == 0x14) {
@@ -188,12 +188,12 @@ s32 FUN_L17_0020dbe8(s32 apply_state_and_motion_response) {
         }
         frame_duration = frame_time;
         xy_scale = frame_duration * 5.7f;
-        b = frame_duration * 2.4f;
+        z_response = frame_duration * 2.4f;
         if (G.unk12E7 != 0) {
             xy_scale = 0.0f;
-            b = frame_duration * 1.7f;
+            z_response = frame_duration * 1.7f;
         }
-        FUN_L00_00210c80_8(&motion_delta, flag, xy_scale, b);
+        FUN_L00_00210c80_8(&motion_delta, flag, xy_scale, z_response);
         if (flag != 0 && hero_moby_entry->unk28 == 4) {
             motion_delta.f[2] += motion_delta.f[2];
         }
