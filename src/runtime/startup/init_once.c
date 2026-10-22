@@ -61,7 +61,7 @@ void init_once(void) {
         SYSTEM_LANGUAGE_GAME_COLUMN_THREE = 4,
         SYSTEM_LANGUAGE_GAME_COLUMN_FIVE = 5
     };
-    u8 buf[0x800];
+    u8 disc_sector_and_image_descriptor_buffer[0x800];
     s32 lang;
     u32 aligned_memory_base;
     u32 base;
@@ -88,12 +88,12 @@ void init_once(void) {
     sceCdDiskReady(0);
     sceCdMmode(2);
     sceFsReset();
-    wad_get_sectors(0x121, 1, buf);
+    wad_get_sectors(0x121, 1, disc_sector_and_image_descriptor_buffer);
     FlushCache(0);
-    flag = buf[0x33] != 0x4E;
+    flag = disc_sector_and_image_descriptor_buffer[0x33] != 0x4E;
     pal_mode = flag;
     pause_action_list_mode = flag;
-    memcard_get_name(buf);
+    memcard_get_name(disc_sector_and_image_descriptor_buffer);
     sceGsResetGraph(0, 1, pal_mode ? 3 : 2, 0);
     init_dma();
     set_pal_mode();
@@ -130,9 +130,9 @@ void init_once(void) {
     sceCdDiskReady(0);
     initialize_gameplay_sound_system();
     fill_transfer_words(image_clear_buffer, 0x80808080, 0x100);
-    sceGsSetDefLoadImage(buf, 0x3FFB, 1, 0, 0, 0, 8, 8);
+    sceGsSetDefLoadImage(disc_sector_and_image_descriptor_buffer, 0x3FFB, 1, 0, 0, 0, 8, 8);
     FlushCache(0);
-    sceGsExecLoadImage(buf, image_clear_buffer);
+    sceGsExecLoadImage(disc_sector_and_image_descriptor_buffer, image_clear_buffer);
     wait_for_graphics_pipeline_idle(0, 0);
     load_debug_font();
     *(volatile s32 *)0x10000810 = 0x82;
