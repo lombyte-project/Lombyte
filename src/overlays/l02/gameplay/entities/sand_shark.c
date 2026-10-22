@@ -1906,7 +1906,7 @@ typedef struct {
 extern char *D_L02_001600FC;
 extern float D_L02_00161BD0 __attribute__((sda));
 extern unsigned char D_0013D4DA __attribute__((section(".data")));
-extern int FUN_L00_0025fa38(void *, int);
+extern int test_point_in_transformed_unit_cylinder(void *, int) __asm__("FUN_L00_0025fa38");
 extern float D_L02_00161BDC __attribute__((sda));
 extern float D_L02_00161BE0 __attribute__((sda));
 void draw_elevator_rotating_rings(struct Moby *moby) __asm__("FUN_L02_002dc2c8");
@@ -2003,7 +2003,7 @@ void elevator_update(L16PlatformMoby *moby) {
         case ELEVATOR_MOVE_TO_GOAL: {
             float speed;
 
-            if (!FUN_L00_0025fa38(&hero.motion.unkD0, elevator_vars->joint)
+            if (!test_point_in_transformed_unit_cylinder(&hero.motion.unkD0, elevator_vars->joint)
                 || absolute_float(moby->position[2] - hero.motion.pos.f[2] - 2.0f) > 1.0f
                 || moby->position[2] < elevator_vars->goal) {
                 speed = advance_accelerated_scalar(&moby->position[2], &elevator_vars->speed, elevator_vars->goal,

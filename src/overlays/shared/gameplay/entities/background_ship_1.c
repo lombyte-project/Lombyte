@@ -835,7 +835,7 @@ extern char *D_L02_0015EF50;
 extern char *D_L02_001674DC __attribute__((section(".data")));
 extern float FUN_001f9b48(void *, void *);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern int FUN_L00_0025fa38(void *, int);
+extern int test_point_in_transformed_unit_cylinder(void *, int) __asm__("FUN_L00_0025fa38");
 extern int test_point_in_transformed_unit_sphere(void *, int) __asm__("FUN_L00_0025faf0");
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 
@@ -865,7 +865,7 @@ int test_moby_camera_control_activation(char *moby) {
         return 1;
     }
     if (*(int *)(data + 0x10) >= 0) {
-        result = FUN_L00_0025fa38(&hero.motion.pos, *(int *)(data + 0x10));
+        result = test_point_in_transformed_unit_cylinder(&hero.motion.pos, *(int *)(data + 0x10));
         if (result == 0) {
             goto rejected;
         }

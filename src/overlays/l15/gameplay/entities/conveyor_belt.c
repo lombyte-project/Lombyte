@@ -2175,7 +2175,7 @@ int can_spawn_codebot_slot_effect(int slot) {
 extern char D_0013E533[];
 extern int *D_L15_001B0AB0[];
 extern int point_in_path_xy(float *p, float *v, int n) __asm__("FUN_L00_00259740");
-extern int FUN_L00_0025fa38(void *p, int i);
+extern int test_point_in_transformed_unit_cylinder(void *p, int i) __asm__("FUN_L00_0025fa38");
 extern int test_point_in_transformed_unit_sphere(float *p, int idx) __asm__("FUN_L00_0025faf0");
 
 extern char *D_L15_0015EF48[] __attribute__((section(".sdata")));
@@ -2185,7 +2185,7 @@ int is_hero_in_moby_follow_camera_region(char *moby) {
     int *slot_data = *(int **)(D_L15_0015EF48[2] + *(short *)(moby + 0x84) * 32 + 0x1C);
     int r;
     int i;
-    if (slot_data[10] >= 0 && FUN_L00_0025fa38(D_0013E533 + 0xE9D, slot_data[10])) {
+    if (slot_data[10] >= 0 && test_point_in_transformed_unit_cylinder(D_0013E533 + 0xE9D, slot_data[10])) {
         return 0;
     }
     if (slot_data[3] >= 0) {
@@ -2193,7 +2193,7 @@ int is_hero_in_moby_follow_camera_region(char *moby) {
             return 1;
         }
     } else if (slot_data[4] >= 0) {
-        if (FUN_L00_0025fa38(D_0013E533 + 0xE9D, slot_data[4])) {
+        if (test_point_in_transformed_unit_cylinder(D_0013E533 + 0xE9D, slot_data[4])) {
             return 1;
         }
     } else if (slot_data[2] >= 0) {
