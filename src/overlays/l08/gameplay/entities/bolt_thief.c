@@ -722,7 +722,9 @@ extern void func_001F49B0_2E16A0(void *,void *) __asm__("FUN_001f4600");
 extern void func_L08_002E0258_2E16A0(void *) __asm__("FUN_L08_002deee0");
 
 extern unsigned char D_0014095F[];
-void FUN_L08_002e0328(Moby *moby) {
+void update_batalia_cannon(Moby *moby) __asm__("FUN_L08_002e0328");
+
+void update_batalia_cannon(Moby *moby) {
     enum {
         CANNON_INITIALIZE = 0,
         CANNON_UNMOUNTED_IDLE = 4,
