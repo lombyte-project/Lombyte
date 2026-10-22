@@ -242,7 +242,9 @@ extern void trooper_anim_update(struct Moby *, u8 *) __asm__("FUN_L00_0025d458")
 extern void trooper_anim_finish(struct Moby *, u8 *) __asm__("FUN_L00_0025d538");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
-void FUN_L09_00303b30(struct Moby *moby, VendorVars *vars, f32 *health) {
+void handle_refueling_station_damage(struct Moby *moby, VendorVars *vars, f32 *health) __asm__("FUN_L09_00303b30");
+
+void handle_refueling_station_damage(struct Moby *moby, VendorVars *vars, f32 *health) {
     enum {
         DAMAGE_RESULT_UNAVAILABLE = 0
     };
@@ -327,7 +329,7 @@ void refueling_station_update(struct Moby *moby) {
     char *station_vars = (char *)moby->pvars;
     float explosion_offset[4];
     unsigned char *removal_check_base;
-    FUN_L09_00303b30(moby, station_vars, station_vars + 0x20);
+    handle_refueling_station_damage(moby, station_vars, station_vars + 0x20);
     switch (moby->state) {
     case REFUELING_STATION_STATE_INITIALIZE:
         if (*(short *)(station_vars + 0x76) != -1 &&
