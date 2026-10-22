@@ -552,7 +552,9 @@ char *FUN_L09_0030b218(int owner, void *pos, void *initial_velocity, unsigned ch
 
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L09_0030b350(void *moby, char *data) {
+void remove_spawner_egg(void *moby, char *data) __asm__("FUN_L09_0030b350");
+
+void remove_spawner_egg(void *moby, char *data) {
     char *other = *(char **)(data + 0x10);
     if (other != 0 && *(short *)(other + 0xA6) == 0x75D && (unsigned char)other[0x20] != 0xFE &&
         (unsigned char)other[0x20] != 0xFD) {
@@ -709,14 +711,14 @@ void spawner_egg_update(struct Moby *moby) {
             held = vars->held;
             if (held == NULL || held->state == 0xFE || held->state == 0xFD || vars->unk1A == 0 ||
                 held->pclass->scale - 0.01f <= held->scale) {
-                FUN_L09_0030b350(moby, (char *)vars);
+                remove_spawner_egg(moby, (char *)vars);
             }
         }
         break;
     }
     jet_animate(moby, moby->scale * 0.3f / moby->pclass->scale);
     if (moby->pos.z < 5.0f || moby->pos.z > 500.0f) {
-        FUN_L09_0030b350(moby, (char *)vars);
+        remove_spawner_egg(moby, (char *)vars);
         return;
     }
     if (moby->pos.x < 5.0f) {
