@@ -1250,7 +1250,9 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void normalize_vector_xyz(void *, void *, float);
 
-void FUN_L09_002ee110(struct Moby *moby) {
+void handle_moby_damage_and_destruction(struct Moby *moby) __asm__("FUN_L09_002ee110");
+
+void handle_moby_damage_and_destruction(struct Moby *moby) {
     char *moby_vars_or_random_frames = (char *)moby->pvars;
     char *hit_record = find_moby_hit(moby, 0x10000, 0);
     Vx v;
