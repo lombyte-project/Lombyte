@@ -1,16 +1,16 @@
 {
   "measures": {
-    "fuzzy_match_percent": 98.861726,
+    "fuzzy_match_percent": 98.974016,
     "total_code": "3547932",
-    "matched_code": "3502500",
-    "matched_code_percent": 98.719479,
+    "matched_code": "3506484",
+    "matched_code_percent": 98.83177,
     "total_functions": 4244,
-    "matched_functions": 4218,
-    "matched_functions_percent": 99.38737,
-    "complete_code": "3502500",
-    "complete_code_percent": 98.719479,
+    "matched_functions": 4219,
+    "matched_functions_percent": 99.410933,
+    "complete_code": "3506484",
+    "complete_code_percent": 98.83177,
     "total_units": 517,
-    "complete_units": 495,
+    "complete_units": 496,
     "total_data": "12433372",
     "matched_data": "5418333",
     "matched_data_percent": 43.57895,
@@ -35265,17 +35265,17 @@
     {
       "name": "shared/gameplay/entities/novalis_elevator",
       "measures": {
-        "fuzzy_match_percent": 87.325019,
+        "fuzzy_match_percent": 100.0,
         "total_code": "31432",
-        "matched_code": "27448",
-        "matched_code_percent": 87.325019,
+        "matched_code": "31432",
+        "matched_code_percent": 100.0,
         "total_functions": 31,
-        "matched_functions": 30,
-        "matched_functions_percent": 96.774194,
-        "complete_code": "27448",
-        "complete_code_percent": 87.325019,
+        "matched_functions": 31,
+        "matched_functions_percent": 100.0,
+        "complete_code": "31432",
+        "complete_code_percent": 100.0,
         "total_units": 1,
-        "complete_units": 0
+        "complete_units": 1
       },
       "functions": [
         {
@@ -35551,7 +35551,7 @@
         {
           "name": "FUN_L01_002f5168",
           "size": "3984",
-          "fuzzy_match_percent": 0.0,
+          "fuzzy_match_percent": 100.0,
           "address": "247136",
           "metadata": {
             "virtual_address": "3101032"
@@ -35559,7 +35559,7 @@
         }
       ],
       "metadata": {
-        "complete": false,
+        "complete": true,
         "progress_categories": [
           "overlays",
           "shared"
@@ -51390,17 +51390,17 @@
       "id": "overlays",
       "name": "Level overlays",
       "measures": {
-        "fuzzy_match_percent": 98.795151,
+        "fuzzy_match_percent": 98.919907,
         "total_code": "3193428",
-        "matched_code": "3154952",
-        "matched_code_percent": 98.795151,
+        "matched_code": "3158936",
+        "matched_code_percent": 98.919907,
         "total_functions": 3014,
-        "matched_functions": 2996,
-        "matched_functions_percent": 99.402787,
-        "complete_code": "3154952",
-        "complete_code_percent": 98.795151,
+        "matched_functions": 2997,
+        "matched_functions_percent": 99.435965,
+        "complete_code": "3158936",
+        "complete_code_percent": 98.919907,
         "total_units": 395,
-        "complete_units": 379,
+        "complete_units": 380,
         "total_data": "11734236",
         "matched_data": "5402095",
         "matched_data_percent": 46.037041,
@@ -51412,17 +51412,17 @@
       "id": "shared",
       "name": "Shared level code",
       "measures": {
-        "fuzzy_match_percent": 97.344165,
+        "fuzzy_match_percent": 97.696578,
         "total_code": "1130492",
-        "matched_code": "1100468",
-        "matched_code_percent": 97.344165,
+        "matched_code": "1104452",
+        "matched_code_percent": 97.696578,
         "total_functions": 1583,
-        "matched_functions": 1569,
-        "matched_functions_percent": 99.115603,
-        "complete_code": "1100468",
-        "complete_code_percent": 97.344165,
+        "matched_functions": 1570,
+        "matched_functions_percent": 99.178774,
+        "complete_code": "1104452",
+        "complete_code_percent": 97.696578,
         "total_units": 207,
-        "complete_units": 195
+        "complete_units": 196
       }
     },
     {
