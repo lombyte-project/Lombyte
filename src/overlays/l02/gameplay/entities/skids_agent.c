@@ -505,7 +505,7 @@ extern void FUN_L00_00216f90_n(void *, void *, int, int) __asm__("FUN_L00_00216f
 extern int FUN_001ff308_n(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void FUN_L00_0023a760(void);
 extern void update_hud_counter_transition(void) __asm__("FUN_L02_0023ccc8");
-extern void FUN_L02_0023cda8(void);
+extern void draw_hud_counter(void) __asm__("FUN_L02_0023cda8");
 
 /* Three-state controller (data+0x180): 0 waits for its trigger, 1 runs timed effects until released, then moves the moby to its spawn point, sets the two linked mobys' flags and enters state 2. */
 void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
@@ -561,8 +561,8 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
     } else if (*(int *)(data + 0x180) == 0) {
         if (FUN_00214720_n(&hero.motion.pos, *(int *)(data + 0x148)) != 0) {
             *(int *)(data + 0x180) = 1;
-            *(int *)(data + 0x164) = FUN_001ff308_n(0x15, 0x7D0, FUN_L00_0023a760, update_hud_counter_transition, FUN_L02_0023cda8, data + 0x14C, 100);
-            *(int *)(data + 0x160) = FUN_001ff308_n(0x17, 0x7D1, FUN_L00_0023a760, update_hud_counter_transition, FUN_L02_0023cda8, data + 0x150, 7);
+            *(int *)(data + 0x164) = FUN_001ff308_n(0x15, 0x7D0, FUN_L00_0023a760, update_hud_counter_transition, draw_hud_counter, data + 0x14C, 100);
+            *(int *)(data + 0x160) = FUN_001ff308_n(0x17, 0x7D1, FUN_L00_0023a760, update_hud_counter_transition, draw_hud_counter, data + 0x150, 7);
         }
     }
 }

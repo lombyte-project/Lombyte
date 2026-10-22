@@ -57,7 +57,9 @@ s32 D_L02_0015F958 = 0x30;
 s32 D_L02_0015F95C = 0x46;
 
 /* Draws the counter: a stretched bar behind the icon and the count, on whichever side of the screen it sits. */
-s32 FUN_L02_0023cda8(HudElem *hud_element) {
+s32 draw_hud_counter(HudElem *hud_element) __asm__("FUN_L02_0023cda8");
+
+s32 draw_hud_counter(HudElem *hud_element) {
     char text[16];
     int x;
     int y;
