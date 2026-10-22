@@ -1334,7 +1334,7 @@ extern void arc_enqueue(void (*)(char *), char *) __asm__("FUN_001f4600");
 void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spawn_pair_count) __asm__("FUN_L14_002ee6b0");
 
 void spawn_lightning_arc_particle_pairs(float *pos, int n) __asm__("FUN_L14_002ee6b0");
-void FUN_L14_002edc18();
+void draw_branched_lightning_arc() __asm__("FUN_L14_002edc18");
 extern float D_L14_00161CD0_d530[] __asm__("D_L14_00161CD0") __attribute__((section(".sdata")));
 
 extern float D_L14_001DFFE0[];
@@ -1466,7 +1466,7 @@ void update_branched_lightning_arc(char *moby) {
         } else {
             D_L14_00161CE0_d530 = 0;
         }
-        arc_enqueue(FUN_L14_002edc18, moby);
+        arc_enqueue(draw_branched_lightning_arc, moby);
     }
 }
 #include "sda.h"
@@ -1515,7 +1515,7 @@ extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L14_002edc18(void) {
+void draw_branched_lightning_arc(void) {
     Q_2EF078 layer_quads[2];
     V_2EF078 arc_to_world[4];
     V_2EF078 sz[2];
