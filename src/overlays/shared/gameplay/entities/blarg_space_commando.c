@@ -457,7 +457,9 @@ extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm_
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_00263d40(int, int);
-void FUN_L06_002ff2c8(void *arg);
+void update_blarg_space_commando_beam(void *owner_moby) __asm__("FUN_L06_002ff2c8");
+
+void update_blarg_space_commando_beam(void *arg) __asm__("FUN_L06_002ff2c8");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 float absolute_float(float input) __asm__("func_001F99C0");
 
@@ -493,7 +495,7 @@ void FUN_L06_002feb40(char *moby) {
 
     vars = *(char **)(moby + 0x78);
     *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L06_00161FA8;
-    FUN_L06_002ff2c8(moby);
+    update_blarg_space_commando_beam(moby);
     if (*(int *)(vars + 0x38) != 0) {
         *(int *)(vars + 0x188) = truncate_float_to_s32_c(FUN_L04_001f1978(random_float_between_c(180.0f, 240.0f)));
         *(int *)(vars + 0x38) = 0;
@@ -686,7 +688,7 @@ extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L06_002ff2c8(void *owner_moby) {
+void update_blarg_space_commando_beam(void *owner_moby) {
     char *moby = owner_moby;
     FanData *data = *(FanData **)(moby + 0x78);
     int frames;
