@@ -2709,7 +2709,9 @@ extern void break_rand_vec(void *, f32, f32) __asm__("FUN_L00_00257d78");
 extern struct Moby *break_spawn_shard(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 
 /* Breakable prop: when hit by moby 0x415 in state 8 or 0x452 in state 9 with hit kind 1.000123, scatters its shard count of pieces over its rotated extent, spawns debris and removes itself. */
-void FUN_L07_00319f48(struct Moby *moby) {
+void process_breakable_prop_hit(struct Moby *moby) __asm__("FUN_L07_00319f48");
+
+void process_breakable_prop_hit(struct Moby *moby) {
     BreakableVars *breakable_vars = (BreakableVars *)moby->pvars;
     MobyHit *hit;
     Vec4f ext, shard_position, shard_velocity;
