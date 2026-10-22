@@ -1012,7 +1012,9 @@ extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L12_00308350(struct Moby *);
 
 /* Pvars: d[0] is the moby to watch, d[1] the voice slot held for this moby. */
-void FUN_L12_003081b0(struct Moby *moby) {
+void update_moby_draw_and_monitor_linked_state(struct Moby *moby) __asm__("FUN_L12_003081b0");
+
+void update_moby_draw_and_monitor_linked_state(struct Moby *moby) {
     enum {
         CHECK_PERSISTENT_REMOVAL = 0,
         QUEUE_DRAW_AND_MONITOR_LINKED_MOBY = 1
