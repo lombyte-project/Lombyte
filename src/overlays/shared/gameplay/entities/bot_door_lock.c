@@ -368,7 +368,9 @@ void FUN_L06_0030bfa8(char *moby);
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L06_0030be60(char *moby) {
+void update_timed_sprite_effect(char *moby) __asm__("FUN_L06_0030be60");
+
+void update_timed_sprite_effect(char *moby) {
     enum {
         SPRITE_EFFECT_STATE_REMOVE = 0,
         SPRITE_EFFECT_STATE_ANIMATE = 1
