@@ -293,7 +293,9 @@ void set_moby_color(void *, s32, s32, s32) __asm__("FUN_L00_002502f0");
 void FUN_L00_0026daa0(void *, u32, s32, s32, f32);
 extern void FUN_L00_00250df8();
 
-BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
+BeamMoby *spawn_colored_half_scale_moby(s32 owner, u128 *pos, u128 *target, s32 color) __asm__("FUN_L01_002fa068");
+
+BeamMoby *spawn_colored_half_scale_moby(s32 owner, u128 *pos, u128 *target, s32 color) {
     u128 position_copy;
     u128 target_copy;
     BeamMoby *spawned_moby;

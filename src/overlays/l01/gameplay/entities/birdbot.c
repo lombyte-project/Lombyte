@@ -634,7 +634,7 @@ typedef struct {
 
 extern char *D_L01_001B0930_u[] __asm__("D_L01_001B0930");
 extern char *D_L01_001600EC;
-extern char *FUN_L01_002fa068(void *, void *, void *, float, float, int);
+extern char *spawn_colored_half_scale_moby(void *, void *, void *, float, float, int) __asm__("FUN_L01_002fa068");
 extern char D_L01_0020AF80[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L01_0015F580[] __attribute__((section(".sdata")));
@@ -1098,7 +1098,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
             if (collision_line(&vc, &va, 0, birdbot_moby, 0) == 0) {
                 yaw = FUN_001f9e90_cf(vb.f[0], vb.f[1]);
                 pitch = FUN_001f9e90_cf(vector_length_xy_cf(&vb), vb.f[2]);
-                FUN_L01_002fa068(birdbot_moby, &va, &vb, yaw, pitch, func_001FA898_r(FUN_L04_001f1978(10.0f)));
+                spawn_colored_half_scale_moby(birdbot_moby, &va, &vb, yaw, pitch, func_001FA898_r(FUN_L04_001f1978(10.0f)));
                 birdbot_vars->h1A4++;
             } else {
                 if (birdbot_moby->b53 != 0) {
