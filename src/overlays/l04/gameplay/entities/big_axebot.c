@@ -575,6 +575,7 @@ void big_axebot_update(M_B7B0 *moby) {
         BIG_AXEBOT_HIT_REACTION_CONDITIONAL_RECOIL_RECOVERY = 6,
         BIG_AXEBOT_HIT_REACTION_KNOCKBACK = 7,
         BIG_AXEBOT_HIT_REACTION_CONDITIONAL_RECOVERY = 8,
+        BIG_AXEBOT_HIT_REACTION_NO_ADDITIONAL_RESPONSE = 9,
         BIG_AXEBOT_HIT_REACTION_IGNORED = 11
     };
     D_B7B0 *data = moby->data;
@@ -738,7 +739,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     FUN_L00_00257470(moby, 0, -1);
                     break;
                 case 2:
-                case 9:
+                case BIG_AXEBOT_HIT_REACTION_NO_ADDITIONAL_RESPONSE:
                 case 10:
                 case BIG_AXEBOT_HIT_REACTION_IGNORED:
                     break;
