@@ -1143,7 +1143,7 @@ extern void FUN_L00_00284e50(void *, void *);
 extern void FUN_L00_00299460(int);
 extern void FUN_L01_0027a248(int, int);
 extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
-extern void FUN_L12_002e6b60(void *);
+extern void apply_npc_big_head_cheat(void *) __asm__("FUN_L12_002e6b60");
 extern void FUN_L15_00208ca8(void);
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
@@ -1169,7 +1169,7 @@ void ultramech_scientist_update(struct Moby *moby) {
     int control_mode;
 
     data = (char *)moby->pvars;
-    FUN_L12_002e6b60(moby);
+    apply_npc_big_head_cheat(moby);
     if (*(int *)(data + 0x14C) == -1) {
         return;
     }

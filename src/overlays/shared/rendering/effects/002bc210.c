@@ -64,7 +64,9 @@ extern L12MobyList D_L12_0016CCE0;
 extern unsigned char D_L12_0017C8C0[];
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
-void FUN_L12_002e6b60(char *moby) {
+void apply_npc_big_head_cheat(char *moby) __asm__("FUN_L12_002e6b60");
+
+void apply_npc_big_head_cheat(char *moby) {
     int i;
 
     if (D_L12_0015F5C4 == 2 && big_head_cheat_enabled != 0) {

@@ -93,7 +93,7 @@ extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_00260860(int, int);
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void FUN_L12_002e6b60(char *);
+extern void apply_npc_big_head_cheat(char *) __asm__("FUN_L12_002e6b60");
 extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void subtract_vector_xyz(void *, void *, void *);
@@ -114,7 +114,7 @@ void help_desk_lady_update(L16WatchMoby *moby) {
     float head_rate;
     int tracking;
     void *activation;
-    FUN_L12_002e6b60((char *)moby);
+    apply_npc_big_head_cheat((char *)moby);
     activation = &watch_data->activation;
     switch (moby->state) {
     case HELP_DESK_INITIALIZE_DIALOGUE:
