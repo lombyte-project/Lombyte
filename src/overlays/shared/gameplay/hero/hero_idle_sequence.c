@@ -160,7 +160,9 @@ void FUN_L00_00259f50(void *, void *);
 
 /* Eases one record's rotation and position toward their targets and rebuilds its matrix;
    once targets are zero and it has settled, detaches it from its moby. */
-void FUN_L00_00205168(struct HeroEase *ease_record) {
+void update_hero_easing_record(struct HeroEase *ease_record) __asm__("FUN_L00_00205168");
+
+void update_hero_easing_record(struct HeroEase *ease_record) {
     s32 moby = FUN_L00_00205110(ease_record->kind);
     if (moby == 0)
         return;
@@ -215,7 +217,7 @@ void update_hero_easing_records(void) {
     struct HeroEase *ease_record = D_L00_0017A680_002054e8;
     struct HeroEase *end = (struct HeroEase *)((u8 *)ease_record + 0x1550);
     do {
-        FUN_L00_00205168(ease_record);
+        update_hero_easing_record(ease_record);
         ease_record++;
     } while ((s32)ease_record < (s32)end);
 }

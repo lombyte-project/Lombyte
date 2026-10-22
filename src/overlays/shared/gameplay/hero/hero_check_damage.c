@@ -2136,7 +2136,7 @@ void hero_switch_item(int i) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210E00), where it is exact; names translated to the US level program. */
 #include "rnc/gameplay/entities/moby.h"
-extern void FUN_L00_00205168(void *);
+extern void update_hero_easing_record(void *) __asm__("FUN_L00_00205168");
 extern s32 D_L00_0015F3F8;
 
 #define ITEM_SLOT(i) ((struct Hero *)((char *)&hero_lui + (i) * sizeof(struct HeroItemSlot)))
@@ -2162,7 +2162,7 @@ void hero_update_items(void) {
                     for (k = 0; k < 3; k++) {
                         if (hero_lui.unk18F0[k].unkA0 != -1) {
                             hero_lui.unk18F0[k].kind = 5;
-                            FUN_L00_00205168(&hero_lui.unk18F0[k]);
+                            update_hero_easing_record(&hero_lui.unk18F0[k]);
                         }
                     }
                 }
