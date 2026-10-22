@@ -182,7 +182,9 @@ extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001
 extern void func_L16_002D0990_2D0870(void *) __asm__("FUN_L16_002cf5c8");
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 
-void FUN_L16_002cf4a8(struct Moby *moby) {
+void update_linked_pair_effect(struct Moby *moby) __asm__("FUN_L16_002cf4a8");
+
+void update_linked_pair_effect(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE_LINKED_PAIRS = 0,
         MOBY_STATE_UPDATE_DRAW_AND_SOUND = 1
