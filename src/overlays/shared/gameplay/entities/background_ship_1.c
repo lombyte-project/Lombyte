@@ -965,7 +965,7 @@ extern int D_L02_0015FFD8 MACRO_ADDR;
 extern int D_L02_001ABE40[];
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 extern void clear_follow_camera_volume_if_current(char *) __asm__("FUN_L00_002e8388");
-extern int FUN_L00_002e83c0(char *);
+extern int try_select_follow_camera_volume(char *) __asm__("FUN_L00_002e83c0");
 extern void FUN_L00_002e8450(int, float, float) __asm__("FUN_L00_002e8450");
 extern void FUN_L00_002e84b8(float, float) __asm__("FUN_L00_002e84b8");
 extern void FUN_L00_002e8568(int) __asm__("FUN_L00_002e8568");
@@ -1056,7 +1056,7 @@ void apply_moby_camera_control(char *moby) {
         clear_follow_camera_volume_if_current(moby);
         return;
     }
-    if (FUN_L00_002e83c0(moby) <= 0) {
+    if (try_select_follow_camera_volume(moby) <= 0) {
         *(short *)(data + 0x20) = 0;
         return;
     }

@@ -2282,7 +2282,7 @@ int check_moby_target_angular_limits(char *moby, float projected_angle_limit_deg
 extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section(".data")));
 typedef struct { char pad[0x100]; float x; float y; } G_88e8;
 extern G_88e8 D_0013C940_s __asm__("D_0013C940") __attribute__((section(".data")));
-extern int FUN_L00_002e83c0(char *);
+extern int try_select_follow_camera_volume(char *) __asm__("FUN_L00_002e83c0");
 extern void clear_follow_camera_volume_if_current(char *) __asm__("FUN_L00_002e8388");
 extern int frames_s(int) __asm__("FUN_001f96f8");
 extern void set_nonzero_follow_camera_parameters(float, float, float) __asm__("FUN_L02_002f6598");
@@ -2306,7 +2306,7 @@ void update_moby_follow_camera(char *moby) {
     int spin_ramp_frames;
     float spin_ramp_ratio;
     float spin_angle_radians;
-    if (FUN_L00_002e83c0(moby) <= 0) {
+    if (try_select_follow_camera_volume(moby) <= 0) {
         *(short *)(slot_data + 0x20) = 0;
         return;
     }

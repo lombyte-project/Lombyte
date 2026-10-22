@@ -2453,8 +2453,8 @@ typedef struct {
     char pad00[0x84];
     short f84;
 } O842e83c0;
-int FUN_L00_002e83c0(int arg1, int arg2);
-int FUN_L00_002e83c0(int candidate_object, int unused) {
+int try_select_follow_camera_volume(int arg1, int arg2) __asm__("FUN_L00_002e83c0");
+int try_select_follow_camera_volume(int candidate_object, int unused) {
     void *current_camera = D_L00_00166E00_c2;
     C842e83c0 *camera_state;
     u8 x;
