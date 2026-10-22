@@ -446,7 +446,7 @@ void FUN_L01_0030c190(struct Moby *moby) {
         CUTSCENE_FX_STATE_INITIALIZE = 0,
         CUTSCENE_FX_STATE_UPDATE = 1
     };
-    FxVec a;
+    FxVec effect_position_or_motion_delta;
     FxVec debris_vector_or_effect_position;
     FxVec c;
     FxVec secondary_effect_position;
@@ -484,17 +484,17 @@ void FUN_L01_0030c190(struct Moby *moby) {
             if (fx_cutscene.scene == 1) {
                 if (fx_cutscene.frame >= scale_game_frames(472) && fx_cutscene.frame <= scale_game_frames(537) &&
                     fx_cutscene.slot[0] != 0) {
-                    moby_point_position(fx_cutscene.slot[0], 1, &a);
-                    splash = spawn_splash(random_float_between(0.5f, 2.0f), random_integer_below(2) ? 2.0f : -2.0f, &a, &D_L01_0015F580,
-                                        &a.f[2]);
+                    moby_point_position(fx_cutscene.slot[0], 1, &effect_position_or_motion_delta);
+                    splash = spawn_splash(random_float_between(0.5f, 2.0f), random_integer_below(2) ? 2.0f : -2.0f, &effect_position_or_motion_delta, &D_L01_0015F580,
+                                        &effect_position_or_motion_delta.f[2]);
                     if (splash != 0) {
                         *(s16 *)(splash + 0xA) = scale_game_frames(60);
                     }
                 }
                 if (fx_cutscene.scene == 1 && fx_cutscene.frame == scale_game_frames(472) && fx_cutscene.slot[0] != 0) {
-                    moby_point_position(fx_cutscene.slot[0], 1, &a);
+                    moby_point_position(fx_cutscene.slot[0], 1, &effect_position_or_motion_delta);
                     {
-                        char *burst = spawn_burst(&a, 3.0f);
+                        char *burst = spawn_burst(&effect_position_or_motion_delta, 3.0f);
 
                         if (burst != 0) {
                             burst[0x23] = 0x70;
@@ -507,7 +507,7 @@ void FUN_L01_0030c190(struct Moby *moby) {
                         debris_vector_or_effect_position.f[1] = fast_sin(debris_horizontal_angle_radians) * debris_horizontal_magnitude;
                         debris_vector_or_effect_position.f[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
                         debris_spawn_random_value = random_int_between(90, 120);
-                        spawn_debris_chunk(&a, &debris_vector_or_effect_position, random_integer_below(2), debris_spawn_random_value);
+                        spawn_debris_chunk(&effect_position_or_motion_delta, &debris_vector_or_effect_position, random_integer_below(2), debris_spawn_random_value);
                     }
                 }
             }
@@ -518,10 +518,10 @@ void FUN_L01_0030c190(struct Moby *moby) {
                     if (fx_cutscene.frame >= scale_game_frames(850) && fx_cutscene.frame <= scale_game_frames(1160)) {
                         color = 0x7F204080;
                         for (node = 1; node < 7; node++) {
-                            moby_point_position(cutscene_moby, node, &a);
+                            moby_point_position(cutscene_moby, node, &effect_position_or_motion_delta);
                             for (j = 0; j < 2; j++) {
                                 spread = random_integer_below(16);
-                                spark = spawn_spark(&a, 0.1f, 1.0f, 0.9f, random_integer_below(2) == 0 ? spread : -spread,
+                                spark = spawn_spark(&effect_position_or_motion_delta, 0.1f, 1.0f, 0.9f, random_integer_below(2) == 0 ? spread : -spread,
                                                    &D_L01_0015F580, 200000.0f, color);
                                 if (spark != 0) {
                                     FxSparkTail *spark_tail = &spark->tail;
@@ -544,10 +544,10 @@ void FUN_L01_0030c190(struct Moby *moby) {
             if (fx_cutscene.scene == 5 && fx_cutscene.frame < scale_game_frames(120)) {
                 cutscene_moby = fx_cutscene.slot[2];
                 if (cutscene_moby != 0) {
-                    a.q = 0;
+                    effect_position_or_motion_delta.q = 0;
                     moby_point_position(cutscene_moby, 5, &debris_vector_or_effect_position);
                     if (fx_cutscene.frame >= 2) {
-                        subtract_vector_xyz(&a, &debris_vector_or_effect_position, &fx_prev_pos);
+                        subtract_vector_xyz(&effect_position_or_motion_delta, &debris_vector_or_effect_position, &fx_prev_pos);
                         qcopy(&fx_prev_pos, &debris_vector_or_effect_position);
                     } else {
                         qcopy(&fx_prev_pos, &debris_vector_or_effect_position);
@@ -562,14 +562,14 @@ void FUN_L01_0030c190(struct Moby *moby) {
                     enqueue_callback_list_1(render_environment_mapped_object, cutscene_moby);
                     moby_point_position(cutscene_moby, 1, &c);
                     moby_point_position(cutscene_moby, 2, &secondary_effect_position);
-                    subtract_vector_xyz(&c, &c, &a);
-                    subtract_vector_xyz(&secondary_effect_position, &secondary_effect_position, &a);
-                    scale_vector_xyz(&a, &a, 0.25f);
+                    subtract_vector_xyz(&c, &c, &effect_position_or_motion_delta);
+                    subtract_vector_xyz(&secondary_effect_position, &secondary_effect_position, &effect_position_or_motion_delta);
+                    scale_vector_xyz(&effect_position_or_motion_delta, &effect_position_or_motion_delta, 0.25f);
                     for (step = 0; step < 4; step++) {
                         draw_trail(&c, &c, &D_L01_0015F580, 150000.0f, 60000.0f);
                         draw_trail(&secondary_effect_position, &secondary_effect_position, &D_L01_0015F580, 150000.0f, 60000.0f);
-                        add_vector_xyz(&c, &c, &a);
-                        add_vector_xyz(&secondary_effect_position, &secondary_effect_position, &a);
+                        add_vector_xyz(&c, &c, &effect_position_or_motion_delta);
+                        add_vector_xyz(&secondary_effect_position, &secondary_effect_position, &effect_position_or_motion_delta);
                     }
                 }
             }
