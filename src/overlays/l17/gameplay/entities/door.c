@@ -3539,7 +3539,9 @@ extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void vu_euler_rotation_basis(void *, void *);
 int FUN_L17_002f2180(char *moby, int idx);
-void FUN_L17_002f20d8(struct Moby *moby);
+void update_shuttle_help_message(struct Moby *moby) __asm__("FUN_L17_002f20d8");
+
+void update_shuttle_help_message(struct Moby *moby) __asm__("FUN_L17_002f20d8");
 extern char D_0014C190[];
 extern char D_0013CAE4[];
 
@@ -3601,7 +3603,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         }
         pl = &hero;
         if (((unsigned char *)pl->ground_moby) == shuttle_moby && pl->air_frames.s == 0) {
-            FUN_L17_002f20d8(shuttle_moby);
+            update_shuttle_help_message(shuttle_moby);
             if ((*(int *)(((char *)&D_0013CAE4)) & 0x10) && D_L17_0015F594 == 10) {
                 int s = shuttle_vars->dir;
                 if (s >= 0) {
@@ -3719,7 +3721,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
 
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
-void FUN_L17_002f20d8(struct Moby *moby) {
+void update_shuttle_help_message(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int mode = *(int *)(data + 0x94);
     switch (mode) {
