@@ -965,7 +965,9 @@ void metropolis_train_carriage_update(struct Moby *moby) {
 extern int D_L03_0015F5CC; /* no foreign declaration */
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 
-void FUN_L03_0029c9d0(struct Moby *moby) {
+void maintain_emitter_sound_voice(struct Moby *moby) __asm__("FUN_L03_0029c9d0");
+
+void maintain_emitter_sound_voice(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     if (moby->state == 0) {
         *(int *)(data + 0x150) = -1;
@@ -1362,7 +1364,7 @@ void red_ship_1_update(char *moby) {
             }
         }
     }
-    FUN_L03_0029c9d0((unsigned char *)moby);
+    maintain_emitter_sound_voice((unsigned char *)moby);
     FUN_L03_0029d1b8(moby);
     switch (((unsigned char *)moby)[0x20]) {
     case RED_SHIP_INITIALIZE:
