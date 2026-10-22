@@ -10,7 +10,9 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern unsigned char D_L14_001E9C60[];
 extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
 
-void FUN_L14_00303370(struct Moby *moby) {
+void update_moby_draw_registration(struct Moby *moby) __asm__("FUN_L14_00303370");
+
+void update_moby_draw_registration(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_REGISTER_DRAW_CALLBACK = 1
