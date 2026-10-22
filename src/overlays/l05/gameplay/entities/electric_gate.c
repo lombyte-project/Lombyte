@@ -2121,7 +2121,9 @@ extern int D_L05_001612DC;
 extern float D_L05_001612EC;
 /* Two-state marker: arms the moby, then once its target is found copies the
  * target position and sets the bob height from the frame counter. */
-void FUN_L05_00318a68(char *moby) {
+void update_hero_clip_volume_outputs(char *moby) __asm__("FUN_L05_00318a68");
+
+void update_hero_clip_volume_outputs(char *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_CHECK_HERO_VOLUME = 1
