@@ -1329,7 +1329,9 @@ extern int *D_L18_001AC240_c[] __asm__("D_L18_001AC240");
 extern int D_L18_0015FFD8; /* no foreign declaration */
 extern int D_L18_0015FFD8; /* no foreign declaration */
 
-char *FUN_L18_002d6c80(void *reference_position, int moby_list_index) {
+char *find_nearest_class_247_moby_in_list(void *reference_position, int moby_list_index) __asm__("FUN_L18_002d6c80");
+
+char *find_nearest_class_247_moby_in_list(void *reference_position, int moby_list_index) {
     short *moby_list_entry = (short *)D_L18_001AC240_c[moby_list_index];
     char *best = 0;
     float bestd = 255.0f;

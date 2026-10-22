@@ -1412,7 +1412,7 @@ extern char *D_L18_001600EC;
 extern char *FUN_L18_002d5348(float *pos, float *dir, float *target, float a, float b, int frames,
                               int kind);
 extern char *FUN_L18_002d5cf8(int owner, int idx, float *from, float *to, float speed, int frames);
-extern char *FUN_L18_002d6c80(void *pos, int idx);
+extern char *find_nearest_class_247_moby_in_list(void *pos, int idx) __asm__("FUN_L18_002d6c80");
 extern char *FUN_L18_002dc3e0(void *owner, void *vector, float value);
 extern char *FUN_L18_002ea0f0(void *owner, void *vector, int value);
 extern char D_0013E550[];
@@ -1936,7 +1936,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             *(int *)&D_L18_00162360 = 1;
             moby->f20 = 7;
             boss_data->f39C = 5;
-            boss_data->f330 = (BossMoby *)FUN_L18_002d6c80(hero.motion.pos.f, boss_data->f200);
+            boss_data->f330 = (BossMoby *)find_nearest_class_247_moby_in_list(hero.motion.pos.f, boss_data->f200);
             moby->f34 |= 0x41;
             start_scene(2);
             for (i = 0; i < 3; i++) {
