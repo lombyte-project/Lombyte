@@ -676,7 +676,9 @@ extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
 extern float approach_value(float *, float, float);
 extern int collision_line(void *, void *, int, void *, void *);
 extern f32 D_L06_00161FD0 __attribute__((sda));
-void FUN_L06_002ff680(char *moby);
+void draw_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff680");
+
+void draw_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff680");
 void spawn_blarg_space_commando_beam_sparks(char *moby) __asm__("FUN_L06_002ff978");
 
 void spawn_blarg_space_commando_beam_sparks(char *moby) __asm__("FUN_L06_002ff978");
@@ -765,7 +767,7 @@ void FUN_L06_002ff2c8(void *owner_moby) {
         j = next;
     } while (j < 15);
 
-    enqueue_callback_list_1((void *)FUN_L06_002ff680, moby);
+    enqueue_callback_list_1((void *)draw_blarg_space_commando_beam, moby);
     spawn_blarg_space_commando_beam_sparks(moby);
 }
 
@@ -802,7 +804,7 @@ extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 /* Draws the beam as 15 textured quads between consecutive points of the
    moby's point list (data + 0x230), each twice: once with the odd corners
    pulled toward the centre (data + 0x210) and once raised by 0.25. */
-void FUN_L06_002ff680(char *moby) {
+void draw_blarg_space_commando_beam(char *moby) {
     char *data = *(char **)(moby + 0x78);
     QuadPacket_f680 pk[2];
     f32 quad_identity_matrix[4][4];
