@@ -1487,8 +1487,8 @@ extern void FUN_L18_002db938(char *pos, float *vec, int arg, float fa, float fb)
 extern void refresh_ring_effect(char *moby, void *pos, float f) __asm__("FUN_L18_002dc458");
 extern void FUN_L18_002dfaa0(char *moby, void *v0, void *v1, void *v2, void *v3, void *v4, int a6,
                              int a7, int a8);
-extern void FUN_L18_002ea168(unsigned char *arg, void *src, void *position, int active,
-                             float speed);
+extern void refresh_moby_position_and_activate(unsigned char *arg, void *src, void *position, int active,
+                             float speed) __asm__("FUN_L18_002ea168");
 void count_drek_boss_platform_event_once(struct Moby *moby) __asm__("FUN_L18_002f5e18");
 
 extern void count_drek_boss_platform_event_once(struct Moby *moby) __asm__("FUN_L18_002f5e18");
@@ -1830,7 +1830,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             qcopy(v2, D_L18_001600EC + boss_data->f344 * 0x80 + 0x30);
             v2[2] = v2[2] + 10.0f;
             v2[2] = probe_ground_height(v2, 0, 0.5f);
-            FUN_L18_002ea168(boss_data->f33C, v1, D_L18_001600EC + boss_data->f344 * 0x80 + 0x30, 1, 1.0f);
+            refresh_moby_position_and_activate(boss_data->f33C, v1, D_L18_001600EC + boss_data->f344 * 0x80 + 0x30, 1, 1.0f);
             boss_data->f33C = 0;
         } else if (lvl >= 0.729f) {
             int i;
@@ -1855,7 +1855,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             if (f > 1.0f) {
                 f = 1.0f;
             }
-            FUN_L18_002ea168(boss_data->f33C, v1, D_L18_0015F580, 0, f);
+            refresh_moby_position_and_activate(boss_data->f33C, v1, D_L18_0015F580, 0, f);
         }
         break;
     }
@@ -2128,7 +2128,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 v2[2] = 2.0f;
                 set_vector_length_xy(v2, v2, 180.0f);
                 add_vector_xyz(v2, v2, v1);
-                FUN_L18_002ea168(boss_data->f33C, v1, v2, 1, 1.0f);
+                refresh_moby_position_and_activate(boss_data->f33C, v1, v2, 1, 1.0f);
                 boss_data->f33C = 0;
                 if (boss_data->f358 == 0) {
                     boss_data->f350 = 0xE;
@@ -2143,7 +2143,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                     f = 0.0f;
                 }
                 moby_point_position(moby, 1, v1);
-                FUN_L18_002ea168(boss_data->f33C, v1, boss_data->f320, 0, f);
+                refresh_moby_position_and_activate(boss_data->f33C, v1, boss_data->f320, 0, f);
                 if (scale_game_frames(0xF) < boss_data->f354) {
                     qcopy(boss_data->f320, aim_target_moby->f10);
                 }

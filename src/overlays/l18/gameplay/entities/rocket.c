@@ -294,7 +294,9 @@ char *FUN_L18_002ea0f0(void *owner, void *vector, int value) {
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB558), where it is exact; names translated to the US level program. */
 
-void FUN_L18_002ea168(struct Moby *moby, void *moby_position, void *position, int active, float speed) {
+void refresh_moby_position_and_activate(struct Moby *moby, void *moby_position, void *position, int active, float speed) __asm__("FUN_L18_002ea168");
+
+void refresh_moby_position_and_activate(struct Moby *moby, void *moby_position, void *position, int active, float speed) {
     char *data = (char *)moby->pvars;
     qcopy(&moby->pos, moby_position);
     *(int *)(data + 0x28) = scale_ticks(5);
