@@ -430,7 +430,7 @@ extern s32 FUN_001f96f8_215e58(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_00266d60_215e58(s32, s32, s32) __asm__("FUN_L00_00266d60");
 extern struct Moby *FUN_0020c4f8_215e58(s32) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_215e58(struct Moby *) __asm__("FUN_L00_00250df8");
-extern void FUN_L00_00210a08_215e58(s32, s32, struct Moby *) __asm__("FUN_L00_00210a08");
+extern void enter_hero_vehicle_mode(s32, s32, struct Moby *) __asm__("FUN_L00_00210a08");
 extern f32 FUN_L00_00233a78_215e58(void *) __asm__("FUN_L00_00233a78");
 extern void FUN_001f99f8_215e58(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a28_215e58(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -519,7 +519,7 @@ void update_hero_timers_and_auxiliary_state(void) {
                 ((struct Moby *)hero.unkA8C)->glow_color = 0;
                 ((struct Moby *)hero.unkA8C)->spawn_frame = hero.moby->spawn_frame;
                 FUN_L00_00250df8_215e58(hero.unkA8C);
-                FUN_L00_00210a08_215e58(3, 0x53, hero.unkA8C);
+                enter_hero_vehicle_mode(3, 0x53, hero.unkA8C);
             }
         }
     }

@@ -78,7 +78,7 @@ extern u8 *D_L00_0015FFDC;
 extern unsigned short D_00151708 __attribute__((section(".data")));
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
-extern void FUN_L00_00210a08(s32, s32, void *);
+extern void enter_hero_vehicle_mode(s32, s32, void *) __asm__("FUN_L00_00210a08");
 extern void FUN_L00_00250df8(void *);
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void init_camera_system(void) __asm__("FUN_L00_001ed280");
@@ -132,7 +132,7 @@ void restore_or_clear_level_state(void) {
                 break;
             if (*(short *)(record_cursor + 0xA6) == id) {
                 char *s = D_L00_001BB230;
-                FUN_L00_00210a08(*(int *)(s + 0x44), *(int *)(s + 0x4C), record_cursor);
+                enter_hero_vehicle_mode(*(int *)(s + 0x44), *(int *)(s + 0x4C), record_cursor);
                 break;
             }
         }
