@@ -583,7 +583,9 @@ extern void release_beam_slot(int) __asm__("FUN_L00_002e20f8");
 extern void FUN_L00_002e2250(int, int);
 extern void FUN_L00_002e2af0(void);
 
-void FUN_L14_003039e0(unsigned char *moby) {
+void update_beam_slots(unsigned char *moby) __asm__("FUN_L14_003039e0");
+
+void update_beam_slots(unsigned char *moby) {
     enum {
         SLOT_UPDATE_STATE_INITIALIZE = 0,
         SLOT_UPDATE_STATE_PROCESS_SLOTS = 1
