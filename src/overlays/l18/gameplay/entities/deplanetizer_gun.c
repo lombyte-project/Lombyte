@@ -21,7 +21,9 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 extern void enqueue_callback_list_1_overlay(void *, void *) __asm__("FUN_L18_002020c8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern void FUN_L18_002fa250(void *, void *, void *, float, float);
+void spawn_deplanetizer_gun_trail_effects(void *first_position_source, void *second_position_source, void *effect_velocity_source, float f0, float f1) __asm__("FUN_L18_002fa250");
+
+extern void spawn_deplanetizer_gun_trail_effects(void *, void *, void *, float, float) __asm__("FUN_L18_002fa250");
 extern void FUN_L18_002f9780(void);
 void draw_moby_color_cycling_bone_glows(void *moby) __asm__("FUN_L18_002f9a98");
 
@@ -281,8 +283,8 @@ void FUN_L18_002f88e8(struct Moby *moby) {
                     fraction = convert_integer_to_float(i) / 12.0f;
                     interpolate_vector(&interpolated_joint_zero_position, &scratch.vectors.pos, &D_L18_00162530, fraction);
                     interpolate_vector(&interpolated_joint_two_position, &scratch.vectors.velocity, &D_L18_00162540, fraction);
-                    FUN_L18_002fa250(&interpolated_joint_zero_position, &interpolated_joint_zero_position, D_L18_0015F580, D_L18_001624D0, D_L18_001624D0 * 0.4f);
-                    FUN_L18_002fa250(&interpolated_joint_two_position, &interpolated_joint_two_position, D_L18_0015F580, D_L18_001624D0, D_L18_001624D0 * 0.4f);
+                    spawn_deplanetizer_gun_trail_effects(&interpolated_joint_zero_position, &interpolated_joint_zero_position, D_L18_0015F580, D_L18_001624D0, D_L18_001624D0 * 0.4f);
+                    spawn_deplanetizer_gun_trail_effects(&interpolated_joint_two_position, &interpolated_joint_two_position, D_L18_0015F580, D_L18_001624D0, D_L18_001624D0 * 0.4f);
                 }
                 qcopy(&D_L18_00162530, &scratch.vectors.pos);
                 qcopy(&D_L18_00162540, &scratch.vectors.velocity);
@@ -702,7 +704,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float,
                                  int) __asm__("FUN_L00_0026d000");
 
-void FUN_L18_002fa250(void *first_position_source, void *second_position_source, void *effect_velocity_source, float f0, float f1) {
+void spawn_deplanetizer_gun_trail_effects(void *first_position_source, void *second_position_source, void *effect_velocity_source, float f0, float f1) {
     char first_effect_position[16];
     char second_effect_position[16];
     int i;
