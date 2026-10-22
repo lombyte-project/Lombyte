@@ -1286,7 +1286,7 @@ extern void initialize_path_descriptor(char *) __asm__("FUN_L01_0028b410");
 extern void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b);
 extern void evaluate_cubic_hermite_segment(float t, void *out, void *p1, void *p2, void *p3, void *p4) __asm__("FUN_L01_0028ba80");
 extern void FUN_L01_0028bb90(void *, int, void *, float, float);
-extern void FUN_L03_0029c8a8(char *, char *);
+extern void add_moby_rotation_based_offsets(char *, char *) __asm__("FUN_L03_0029c8a8");
 extern void FUN_L03_0029d2e0(char *, void *, int);
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
@@ -1424,7 +1424,7 @@ void red_ship_1_update(char *moby) {
         *(float *)(data + 0x114) = 0.0f;
         *(float *)(data + 0x11C) = 0.0f;
         *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(data + 0xE0);
-        FUN_L03_0029c8a8(moby, moby_position);
+        add_moby_rotation_based_offsets(moby, moby_position);
         data[0x131] = 7;
         initial_speed_oscillation_phase = *(float *)(data + 0x13C);
         if (initial_speed_oscillation_phase > 6.2831855f) {
@@ -1487,7 +1487,7 @@ void red_ship_1_update(char *moby) {
         *(float *)(data + 0x100) += step;
         *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(data + 0xE0);
         if (!flag) {
-            FUN_L03_0029c8a8(moby, cur);
+            add_moby_rotation_based_offsets(moby, cur);
         }
         subtract_vector_xyz(position_delta, cur, old_pos);
         *(OvlQuad *)vec = *(OvlQuad *)position_delta;
