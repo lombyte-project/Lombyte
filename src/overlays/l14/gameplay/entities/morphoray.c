@@ -1654,7 +1654,9 @@ extern void add_59d8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_59d8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void cross_59d8(void *, void *, void *) __asm__("FUN_001f9ad8");
 
-void FUN_L14_003159d8(struct UpdateCam *cam) {
+void initialize_path_key_camera(struct UpdateCam *cam) __asm__("FUN_L14_003159d8");
+
+void initialize_path_key_camera(struct UpdateCam *cam) {
     float camera_placement_parameters[4];
     float pad[4]; /* unused; keeps the frame layout */
     float hero_look_direction[4];
