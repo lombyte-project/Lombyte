@@ -2543,7 +2543,9 @@ s32 FUN_L00_002603d0_2aa008(void *) __asm__("FUN_L00_002603d0");
 s32 FUN_001f96f8_2aa008(s32) __asm__("FUN_001f96f8");
 s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 void FUN_L00_001ff660_2aa008(void *, void *, void *) __asm__("FUN_L00_001ff660");
-void FUN_L00_002aa008(V_2aa008 *requested_position, N_2aa008 *self, void *base_motion_vector) {
+void initialize_moby_motion_at_position(V_2aa008 *requested_position, N_2aa008 *self, void *base_motion_vector) __asm__("FUN_L00_002aa008");
+
+void initialize_moby_motion_at_position(V_2aa008 *requested_position, N_2aa008 *self, void *base_motion_vector) {
     V_2aa008 random_offset;
     V_2aa008 vector_scratch;
     V_2aa008 collision_position_offset;

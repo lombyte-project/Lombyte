@@ -1205,7 +1205,7 @@ extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".
 extern OvlVec4 D_L00_00166DC0_2c1ad0 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern OvlVec4 D_L00_00166C80_2c1ad0[3] __asm__("D_L00_00166C80") __attribute__((section(".data")));
 extern s16 D_L00_001B07B0_lui[]  __asm__("D_L00_001B07B0")__attribute__((section(".data")));
-extern void FUN_L00_002aa008(void *, void *, void *);
+extern void initialize_moby_motion_at_position(void *, void *, void *) __asm__("FUN_L00_002aa008");
 extern struct Moby *FUN_L00_002a9ed0(void *, void *, void *);
 extern void FUN_L00_0025f780(void *, void *, int);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -1384,7 +1384,7 @@ void mine_glove_update(struct Moby *moby) {
         break;
     case MINE_GLOVE_RELEASE_HELD_MOBY:
         if (vars->held != 0) {
-            FUN_L00_002aa008(&pos, vars->held, vars->held->pvars);
+            initialize_moby_motion_at_position(&pos, vars->held, vars->held->pvars);
             if (D_00141680_2c1ad0.deliveries <= 0xfffe)
                 ++D_00141680_2c1ad0.deliveries;
             {
@@ -1544,7 +1544,7 @@ extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".
 extern OvlVec4 D_L00_00166DC0_2c1ad0 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern OvlVec4 D_L00_00166C80_2c1ad0[3] __asm__("D_L00_00166C80") __attribute__((section(".data")));
 extern s16 D_L00_001B07B0_lui[]  __asm__("D_L00_001B07B0")__attribute__((section(".data")));
-extern void FUN_L00_002aa008(void *, void *, void *);
+extern void initialize_moby_motion_at_position(void *, void *, void *) __asm__("FUN_L00_002aa008");
 extern struct Moby *FUN_L00_002a9ed0(void *, void *, void *);
 extern void FUN_L00_0025f780(void *, void *, int);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
