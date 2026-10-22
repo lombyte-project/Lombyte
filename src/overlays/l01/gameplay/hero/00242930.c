@@ -109,7 +109,7 @@ extern void configure_hero_point_effect_emission(float a, float b, short c, unsi
 extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_00233b20");
 extern void hud_keep_visible(int, int) __asm__("FUN_L00_00235e18");
 extern void initialize_eight_slot_hud_selector(void) __asm__("FUN_L00_00237ae8");
-extern void FUN_L00_00237ba0(void);
+extern void update_hud_item_selector_selection_and_visibility(void) __asm__("FUN_L00_00237ba0");
 extern void FUN_L00_002382a0(void);
 extern void FUN_L00_00239cc8(void);
 extern void FUN_L00_00239d00(void);
@@ -165,7 +165,7 @@ void FUN_L01_00242930(void) {
                     } else {
                         hero.unk22D2 = scale_game_frames(0xF);
                     }
-                    queue_animation_update(3, 0, (int)initialize_eight_slot_hud_selector, (int)FUN_L00_00237ba0,
+                    queue_animation_update(3, 0, (int)initialize_eight_slot_hud_selector, (int)update_hud_item_selector_selection_and_visibility,
                                            (int)FUN_L00_002382a0, 0, 0);
                     id = func_L00_00235790_r();
                     hud_keep_visible(id, scale_game_frames(0xB4));

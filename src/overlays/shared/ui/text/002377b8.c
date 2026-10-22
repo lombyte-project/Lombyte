@@ -239,7 +239,9 @@ extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
 
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 /* Picks slot w74 from the stick angle (or steps it with the 0x1000-0x8000 pad bits), counts hold frames in b71/b70, records the slot's entry when released, and closes when b70 runs out. */
-void FUN_L00_00237ba0(Obj *hud_element) {
+void update_hud_item_selector_selection_and_visibility(Obj *hud_element) __asm__("FUN_L00_00237ba0");
+
+void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
     float x, y, mag, stick_angle, a, slot_position, previous_slot_angle;
     int old, slot_step, stick_slot_index, k, id;
     u8 *counters = &hud_element->b70;
