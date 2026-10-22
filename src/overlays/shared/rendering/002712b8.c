@@ -625,7 +625,9 @@ void FUN_L00_002726d8(P_2726d8 *particle) {
 void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_00272838(u8 *particle) {
+void update_expanding_damped_rgb_fading_particle(u8 *particle) __asm__("FUN_L00_00272838");
+
+void update_expanding_damped_rgb_fading_particle(u8 *particle) {
     s32 faded_intensity;
     fast_vec_scale(particle + 0x20, particle + 0x20, 0.975f);
     fast_vec_add(particle + 0x10, particle + 0x10, particle + 0x20);
