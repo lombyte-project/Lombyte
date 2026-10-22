@@ -3195,7 +3195,7 @@ extern void synchronize_group_water_heights(char *) __asm__("FUN_L05_0030d5c0");
 extern void pool_splash_30ca80(void *, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
 extern int FUN_L01_00275690_30ca80(char *, float) __asm__("FUN_L01_00275690");
 extern void finish_slots_30ca80(char *, int) __asm__("FUN_L01_002b7fe0");
-extern void FUN_L05_0030d678_30ca80(void) __asm__("FUN_L05_0030d678");
+extern void render_level_water_grids(void) __asm__("FUN_L05_0030d678");
 
 extern Cam_30ca80 D_L05_00180340;
 extern Light_30ca80 light __asm__("D_L05_001CAD00");
@@ -3465,7 +3465,7 @@ void water_update(struct Moby *moby) {
         }
         if (water_vars->record_index == 0) {
             finish_slots_30ca80((char *)water_records_30ca80, 0x30);
-            enqueue_callback_list_1_30ca80(FUN_L05_0030d678_30ca80, moby);
+            enqueue_callback_list_1_30ca80(render_level_water_grids, moby);
         }
         if (water_vars->record_index == D_L05_00161D10) {
             water_records_30ca80[water_vars->record_index].h1E = D_L05_00161D14;
