@@ -81,7 +81,9 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 #define G hero
 
 extern OvlMobyEntry40 D_L17_00178A00[];
-s32 FUN_L17_0020dbe8(s32 apply_state_and_motion_response) {
+s32 process_hero_hit_response(s32 apply_state_and_motion_response) __asm__("FUN_L17_0020dbe8");
+
+s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     u8 *hero_moby;
     OvlMobyEntry40 *hero_moby_entry;
     u8 *mob;
