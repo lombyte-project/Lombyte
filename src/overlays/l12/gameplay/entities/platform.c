@@ -1749,7 +1749,9 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern char D_L12_00167240[];
 extern void draw_level_12_effects(void) __asm__("FUN_L12_002e71b0");
 
-void FUN_L12_002e7208(struct Moby *moby) {
+void register_level_12_effects_draw_callback(struct Moby *moby) __asm__("FUN_L12_002e7208");
+
+void register_level_12_effects_draw_callback(struct Moby *moby) {
     enum {
         DRAW_CALLBACK_INITIALIZE = 0,
         DRAW_CALLBACK_CHECK_VOLUME_AND_REGISTER = 1
