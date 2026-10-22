@@ -496,7 +496,9 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 void FUN_L08_002d4ca0(Moby *moby);
 void FUN_L08_002d55c8(struct Moby *moby, int path_id);
 void FUN_L08_002d5d08(char *moby);
-void FUN_L08_002d6450(struct Moby *moby);
+void remove_bomber_tank_linked_debris(struct Moby *moby) __asm__("FUN_L08_002d6450");
+
+void remove_bomber_tank_linked_debris(struct Moby *moby) __asm__("FUN_L08_002d6450");
 
 typedef struct {
     u8 pad0[0x20];
@@ -620,7 +622,7 @@ void update_bomber_tank(Moby *moby) {
                 vars->part_b->collision = 0;
                 if (moby->prev_seq != 0) blend_moby_animation(moby, 0, 0, 0);
             } else {
-                FUN_L08_002d6450(moby);
+                remove_bomber_tank_linked_debris(moby);
                 qcopy(&moby->pos, (char *)D_L08_001B0CB0[vars->path] + 0x10);
                 moby->state = 6;
                 if (moby->prev_seq != 1) blend_moby_animation(moby, 1, 0, 0);
@@ -1317,7 +1319,7 @@ extern char *D_L08_0015FFD8;
 extern short *D_L08_001AC040[];
 
 /* Remove active mobys of the selected classes from this moby's linked group. */
-void FUN_L08_002d6450(struct Moby *moby) {
+void remove_bomber_tank_linked_debris(struct Moby *moby) {
     short *list = D_L08_001AC040[(((struct Moby *)D_L08_0015FFD8) + *(s32 *)(moby->pvars + 0x144))->group];
     struct Moby *other;
     u16 index;
