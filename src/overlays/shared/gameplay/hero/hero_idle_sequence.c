@@ -1654,7 +1654,9 @@ extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata"
 
 // Hero gadget glow: pulses the colour of the hero's gadget moby (hero state 13, 16, 17, 19, 20) and
 // queues its glow sprites. c and g are shared by cases 17 and 20 (one pseudo each, retail's $s0/$s1).
-void FUN_L00_002080b0(void) {
+void update_hero_and_equipped_item_glows(void) __asm__("FUN_L00_002080b0");
+
+void update_hero_and_equipped_item_glows(void) {
     enum {
         ITEM_RED_GREEN_GLOW = 13,
         ITEM_SINE_RED_GREEN_GLOW = 16,

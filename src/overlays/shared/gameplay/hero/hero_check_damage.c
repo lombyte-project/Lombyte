@@ -2193,7 +2193,7 @@ s32 FUN_L00_0020d568_u() __asm__("FUN_L00_0020d568");
 void spawn_hero_item_mobies() __asm__("FUN_L00_0020ea80");
 void FUN_L00_0020f580();
 void FUN_L00_00234808();
-void FUN_L00_002080b0();
+void update_hero_and_equipped_item_glows() __asm__("FUN_L00_002080b0");
 void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
 
 void update_hero_equipped_items(void) {
@@ -2212,7 +2212,7 @@ void update_hero_equipped_items(void) {
     spawn_hero_item_mobies();
     FUN_L00_0020f580();
     FUN_L00_00234808();
-    FUN_L00_002080b0();
+    update_hero_and_equipped_item_glows();
     hero_update_items();
 }
 void FUN_L00_0020e698_210a08(void) __asm__("FUN_L00_0020e698");
