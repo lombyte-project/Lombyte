@@ -2195,7 +2195,9 @@ s32 FUN_L00_0028ddd8_2ed950(s32, s32, void *, s32) __asm__("FUN_L00_0028ddd8");
 s32 FUN_00213260_2ed950(s32) __asm__("FUN_00213260");
 s32 FUN_001f96f8_2ed950(s32) __asm__("FUN_001f96f8");
 void release_voice_slot(s32) __asm__("FUN_0022d798");
-void FUN_L00_002ed950(u8 *sound_emitter) {
+void update_sound_emitter_playback_by_distance(u8 *sound_emitter) __asm__("FUN_L00_002ed950");
+
+void update_sound_emitter_playback_by_distance(u8 *sound_emitter) {
     S_2ed950 *playback_state = *(S_2ed950 **)(sound_emitter + 8);
     f32 reference_distance, playback_radius;
     if (playback_state->id < 0)
