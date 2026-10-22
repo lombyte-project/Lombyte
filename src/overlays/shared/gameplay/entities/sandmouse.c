@@ -394,7 +394,9 @@ extern char D_0013E533[];
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L01_0030d260(void *unused, float *destination_position) {
+void compute_sandmouse_follow_goal(void *unused, float *destination_position) __asm__("FUN_L01_0030d260");
+
+void compute_sandmouse_follow_goal(void *unused, float *destination_position) {
     float normalized_offset[4];
     float unit_offset[4];
     char *hero_bytes = D_0013E533 + 0xE1D;
@@ -825,7 +827,7 @@ extern void compute_sand_mouse_approach_target(void *, void *) __asm__("FUN_L01_
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-void FUN_L01_0030d260(void *unused, float *p);
+void compute_sandmouse_follow_goal(void *unused, float *p) __asm__("FUN_L01_0030d260");
 void FUN_L01_0030d5f0(char *moby, char *state);
 void FUN_L01_0030dda0(char *m);
 void update_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030ded0");
@@ -1016,7 +1018,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
         }
         if (0.6f < vector_distance(&sandmouse_moby->pos, &sandmouse_vars->a30) && sandmouse_vars->timer == 0) {
             D_L01_001DEB38_lui.unk4 = 0.7f;
-            FUN_L01_0030d260(sandmouse_moby, sandmouse_vars);
+            compute_sandmouse_follow_goal(sandmouse_moby, sandmouse_vars);
             FUN_L01_0030d880(sandmouse_moby, (struct HoverVars *)sandmouse_vars);
             movement_result_flags = sandmouse_vars->stuck < 0x15;
             movement_result_flags = movement_result_flags ? 0 : 2;
@@ -1083,7 +1085,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 && *(int *)(hero_bytes + 0x208C) != 0x16 && *(int *)(hero_bytes + 0x208C) != 0x14
                 && *(u8 *)(hero_bytes + 0x20A4) == 0 && *(s16 *)(D_L01_00167280 + 0x86) != 0x14
                 && fast_dec_timer(&sandmouse_vars->k58) == 0 && sandmouse_vars->k5C < *(int *)&D_L01_0016209C) {
-                FUN_L01_0030d260(sandmouse_moby, sandmouse_vars);
+                compute_sandmouse_follow_goal(sandmouse_moby, sandmouse_vars);
                 FUN_L01_0030d880(sandmouse_moby, (struct HoverVars *)sandmouse_vars);
             } else {
                 qzero(&sandmouse_vars->vel);
