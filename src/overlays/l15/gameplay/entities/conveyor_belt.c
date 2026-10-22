@@ -2253,7 +2253,7 @@ extern G_88e8 D_0013C940_s __asm__("D_0013C940") __attribute__((section(".data")
 extern int FUN_L00_002e83c0(char *);
 extern void FUN_L00_002e8388(char *);
 extern int frames_s(int) __asm__("FUN_001f96f8");
-extern void FUN_L02_002f6598(float, float, float);
+extern void set_nonzero_follow_camera_parameters(float, float, float) __asm__("FUN_L02_002f6598");
 extern float itof_s(int) __asm__("FUN_001fa6c0");
 extern void set_follow_camera_angle_blend_from_position(void *, float, float) __asm__("FUN_L00_002e8970");
 extern void pitch_s(int, float, float) __asm__("FUN_L00_002e8450");
@@ -2288,7 +2288,7 @@ void FUN_L15_002f88e8(char *moby) {
     cone_check_delay_frames = frames_s(400);
     cycle_reset_frames = frames_s(560);
     spin_ramp_frames = frames_s(200);
-    FUN_L02_002f6598(1.0f, 12.0f, 0.11f);
+    set_nonzero_follow_camera_parameters(1.0f, 12.0f, 0.11f);
     if (D_0013C940_s.x != 0.0f)
         *(short *)(slot_data + 0x20) = hold_start_frames;
     else if (D_0013C940_s.y != 0.0f)

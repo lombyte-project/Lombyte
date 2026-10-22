@@ -677,8 +677,10 @@ void FUN_L02_002f6570(int value) {
 
 extern char *D_L02_00167400_d __asm__("D_L02_00167400") __attribute__((section(".data")));
 
-void FUN_L02_002f6598(float x, float y, float z);
-void FUN_L02_002f6598(float x, float y, float z) {
+void set_nonzero_follow_camera_parameters(float x, float y, float z) __asm__("FUN_L02_002f6598");
+
+void set_nonzero_follow_camera_parameters(float x, float y, float z) __asm__("FUN_L02_002f6598");
+void set_nonzero_follow_camera_parameters(float x, float y, float z) {
     char *moby = D_L02_00167400_d;
     if (*(short *)(moby + 0x86) == 0) {
         char *data = *(char **)(moby + 0x70) + 0x1D0;
@@ -1108,7 +1110,7 @@ void FUN_L02_002fb9c8(char *moby) {
         }
     } else if ((unsigned short)(*(short *)(data + 0x3c) - 1) < 2) {
         FUN_L02_002f6570(176);
-        FUN_L02_002f6598(1.0f, 12.0f, 0.11f);
+        set_nonzero_follow_camera_parameters(1.0f, 12.0f, 0.11f);
         if (controller_state.analog[0] != 0.0f || controller_state.analog[1] != 0.0f)
             *(short *)(data + 0x20) = duration;
         if (*(short *)(data + 0x20) >= duration) {
