@@ -975,7 +975,9 @@ extern float D_0015ED6C;
 extern OvlQuad D_L10_00167240;
 extern struct Moby *D_001413D0_d7b80 __asm__("D_001413D0") __attribute__((section(".data")));
 
-void FUN_L10_002d7b80(struct Moby *moby) {
+void update_height_adjusted_projectile(struct Moby *moby) __asm__("FUN_L10_002d7b80");
+
+void update_height_adjusted_projectile(struct Moby *moby) {
     enum {
         HEIGHT_MODE_SKIP_ADJUSTMENT = 0,
         HEIGHT_MODE_APPROACH_FIXED_HEIGHT = 1,
