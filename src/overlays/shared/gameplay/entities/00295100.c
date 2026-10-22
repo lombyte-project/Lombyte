@@ -144,7 +144,7 @@ extern void enqueue_voice_request(void) __asm__("FUN_0022dc50");
 extern void FUN_L00_002a4890(void);
 extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
 extern void no_op_main_callback_alt(void) __asm__("FUN_001e93e8");
-extern void FUN_L00_002070d0(void);
+extern void coordinate_hero_frame_update(void) __asm__("FUN_L00_002070d0");
 extern void update_parts(void) __asm__("FUN_00217b88");
 extern void update_glints(void) __asm__("FUN_L00_001fea18");
 extern void update_camera(void) __asm__("FUN_001edaa8");
@@ -265,7 +265,7 @@ void handle_pause_input(void) {
     }
     noop_main_callback(D_L00_00160FF8, 3);
     if (DBG(1))
-        FUN_L00_002070d0();
+        coordinate_hero_frame_update();
     noop_main_callback(D_L00_00161008, 7);
     if (DBG(4)) {
         update_parts();
@@ -688,7 +688,7 @@ void FUN_L00_00298f90(void) {
     }
     noop_main_callback(D_L00_00160FF8, 3);
     if ((g_debug_menu.update_flags & 1) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
-        FUN_L00_002070d0();
+        coordinate_hero_frame_update();
     }
     noop_main_callback(D_L00_00161008, 7);
     if ((g_debug_menu.update_flags & 4) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
@@ -1950,7 +1950,7 @@ extern void FUN_L00_00297e30(void);
 extern void FUN_L00_00297e70(void);
 extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern void FUN_0022dc50(void);
-extern void FUN_L00_002070d0(void);
+extern void coordinate_hero_frame_update(void) __asm__("FUN_L00_002070d0");
 extern void update_parts(void) __asm__("FUN_00217b88");
 extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -2294,7 +2294,7 @@ void FUN_L00_0029c648(void) {
             }
             noop_main_callback(D_L00_00161128, 3);
             if ((g_debug_menu.update_flags & 1) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
-                FUN_L00_002070d0();
+                coordinate_hero_frame_update();
             }
             noop_main_callback(D_L00_00161138, 7);
             if ((g_debug_menu.update_flags & 4) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
@@ -2564,7 +2564,7 @@ void FUN_L00_0029c648(void) {
         FUN_L00_00297e30();
         update_visible_resident_objects();
         FUN_0022dc50();
-        FUN_L00_002070d0();
+        coordinate_hero_frame_update();
         update_parts();
         D_L00_0016C860.f38++;
         D_L00_0016C860.f34++;

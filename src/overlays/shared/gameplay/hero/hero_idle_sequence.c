@@ -1130,7 +1130,9 @@ void FUN_L00_002484e0(void *);
 void FUN_L00_00257024(int);
 void FUN_L00_002076a8(void);
 void FUN_L00_00208b60_u(void) __asm__("FUN_L00_00208b60");
-void FUN_L00_002070d0(void) {
+void coordinate_hero_frame_update(void) __asm__("FUN_L00_002070d0");
+
+void coordinate_hero_frame_update(void) {
     struct Hero *hero_state = &hero;
     if (hero_state->motion.pos.f[0] < 2.0f || hero_state->motion.pos.f[1] < 2.0f ||
         1022.0f < hero_state->motion.pos.f[0] || 1022.0f < hero_state->motion.pos.f[1]) {
