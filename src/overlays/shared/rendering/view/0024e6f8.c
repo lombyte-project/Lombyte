@@ -20,7 +20,9 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void rotate_vector_by_quaternion(void *arg0, void *arg1, void *arg2) __asm__("FUN_00214800");
 
-void FUN_L03_0024e6f8(float rotation_scale, float *output_vector, float *source_vector, float *reference_vector, int flag) {
+void rotate_vector_by_scaled_angle_between_vectors(float rotation_scale, float *output_vector, float *source_vector, float *reference_vector, int flag) __asm__("FUN_L03_0024e6f8");
+
+void rotate_vector_by_scaled_angle_between_vectors(float rotation_scale, float *output_vector, float *source_vector, float *reference_vector, int flag) {
     float rotation_quaternion[4];
     float dot_product, vector_length_product, half_rotation_angle;
     fast_vec_cross(rotation_quaternion, reference_vector, source_vector);

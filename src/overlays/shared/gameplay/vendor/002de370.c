@@ -97,7 +97,7 @@ extern f32 approximate_arcsine(f32) __asm__("func_001F9DF8");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern float D_L03_00166F30[];
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
-extern void FUN_L03_0024e6f8(float, float *, float *, float *, int);
+extern void rotate_vector_by_scaled_angle_between_vectors(float, float *, float *, float *, int) __asm__("FUN_L03_0024e6f8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -117,7 +117,7 @@ void FUN_L03_002e8730(char *transform_state) {
     angle = approximate_arcsine(dot_vectors_xyz(direction, transform_state));
     rotation_scale = rope_spring_turn(data, 0.0f, 1.57079637f - angle, *(float *)(data + 4),
                          *(float *)(data + 8), *(float *)(data + 12));
-    FUN_L03_0024e6f8(rotation_scale, (float *)transform_state, (float *)result, direction, 1);
+    rotate_vector_by_scaled_angle_between_vectors(rotation_scale, (float *)transform_state, (float *)result, direction, 1);
     normalize_vector_xyz(result, transform_state, 1.0f);
     qcopy(transform_state, result);
     cross_vectors_xyz(transform_state + 0x10, transform_state, D_L03_00166F30);
