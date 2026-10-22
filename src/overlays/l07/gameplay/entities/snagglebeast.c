@@ -515,7 +515,9 @@ extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int FUN_L00_002583f0(void *, struct Moby *, int, float, float);
 
-int FUN_L07_00313af0(struct Moby *chaser_moby, struct ChaserVars *chaser_vars, Vec4 *goal, int mode, float range) {
+int update_snagglebeast_chase_movement(struct Moby *chaser_moby, struct ChaserVars *chaser_vars, Vec4 *goal, int mode, float range) __asm__("FUN_L07_00313af0");
+
+int update_snagglebeast_chase_movement(struct Moby *chaser_moby, struct ChaserVars *chaser_vars, Vec4 *goal, int mode, float range) {
     float position_delta[4];
     char *path;
     struct Moby *target_moby;
@@ -1201,7 +1203,7 @@ void snagglebeast_update(unsigned char *moby) {
             }
             moby[0x20] = 7;
         } else {
-            int hit = FUN_L07_00313af0((struct Moby *)moby, (struct ChaserVars *)data, &velocity, (int)&position, thr);
+            int hit = update_snagglebeast_chase_movement((struct Moby *)moby, (struct ChaserVars *)data, &velocity, (int)&position, thr);
             float spd;
             int near;
             int moving;
