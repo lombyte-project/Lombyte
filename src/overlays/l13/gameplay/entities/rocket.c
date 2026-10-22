@@ -1574,7 +1574,9 @@ void initialize_gemlik_pool_tile_neighbors(int tile_index) __asm__("FUN_L13_0030
 
 extern void initialize_gemlik_pool_tile_neighbors(int) __asm__("FUN_L13_0030a488");
 
-void FUN_L13_00309e88(struct Moby *moby) {
+void update_gemlik_bobbing_pool_tile(struct Moby *moby) __asm__("FUN_L13_00309e88");
+
+void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
     enum {
         BOBBING_PLATFORM_INITIALIZE = 0,
         BOBBING_PLATFORM_UPDATE = 1
