@@ -1117,7 +1117,7 @@ void FUN_L00_0020ac98_u(void) __asm__("FUN_L00_0020ac98");
 void FUN_L00_0020a9e8_u(void) __asm__("FUN_L00_0020a9e8");
 void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
 void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
-void FUN_L00_00214fe8(void);
+void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
 void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 void update_hero_moby(void) __asm__("FUN_L00_00208820");
 
@@ -1176,7 +1176,7 @@ void coordinate_hero_frame_update(void) {
     FUN_L00_0020a9e8_u();
     update_hero_rotation_targets_and_random_manipulators();
     update_hero_glow_and_extra_manipulators();
-    FUN_L00_00214fe8();
+    update_hero_transformed_negative_z_angle_parameters();
     update_hero_easing_records();
     update_hero_moby();
     update_hero_world_matrices(0);

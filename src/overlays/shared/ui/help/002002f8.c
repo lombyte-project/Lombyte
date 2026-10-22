@@ -31,7 +31,7 @@ extern void FUN_L00_0020b1d8(void);
 extern void update_hero_offset_rail_candidate(void) __asm__("FUN_L00_0020d330");
 extern void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
 extern void hero_update(void) __asm__("FUN_L00_00211670");
-extern void FUN_L00_00214fe8(void);
+extern void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
 extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_002484e0(void *);
@@ -78,7 +78,7 @@ void FUN_L03_002002f8(void) {
     FUN_L00_0020a9e8();
     update_hero_rotation_targets_and_random_manipulators();
     update_hero_glow_and_extra_manipulators();
-    FUN_L00_00214fe8();
+    update_hero_transformed_negative_z_angle_parameters();
     update_hero_easing_records();
     update_hero_moby();
     update_hero_world_matrices(0);

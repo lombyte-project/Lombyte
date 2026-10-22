@@ -220,7 +220,9 @@ extern struct { f32 f[0xB68 / 4]; } D_L00_0017A680_214fe8 __asm__("D_L00_0017A68
 extern void FUN_001f9d20_214fe8(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_L00_0020a1f8_214fe8(f32, f32) __asm__("FUN_L00_0020a1f8");
 #define V214(off) (D_L00_0017A680_214fe8.f[(off) / 4])
-void FUN_L00_00214fe8(void) {
+void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
+
+void update_hero_transformed_negative_z_angle_parameters(void) {
     HopVec_214658 transformed_negative_z_vector;
     f32 *vector_components = transformed_negative_z_vector.f;
     f32 limit, x, y, pitch, z, lean;
