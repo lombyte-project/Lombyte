@@ -1927,7 +1927,9 @@ extern char D_L01_00167240[];
 extern int play_voice(int, int, int, int) __asm__("FUN_L00_0028ddd8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
-void FUN_L01_0031a078(int sound_owner) {
+void update_listener_following_voice(int sound_owner) __asm__("FUN_L01_0031a078");
+
+void update_listener_following_voice(int sound_owner) {
     char *sound_data = *(char **)(sound_owner + 8);
     int voice_slot_index = *(int *)(sound_data + 4);
     char *voice_slot;
