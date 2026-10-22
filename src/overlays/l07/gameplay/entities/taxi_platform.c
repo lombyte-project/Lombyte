@@ -1486,12 +1486,12 @@ void water_update(Moby_30D8E8 *water_moby) {
         water_moby->flags |= 0x81;
         if (water_data->idx == 0) {
             Cab_30D8E8 *cab;
-            Dir_30D8E8 *dir;
+            Dir_30D8E8 *water_direction_source;
             int (*p)[4];
             FUN_L01_002b7a48_2cd2b0(D_L07_001DCE40_2cd2b0, 0x24);
             FUN_L01_002b7ef0_2cd2b0(1.0f);
             cab = &D_L07_001CA900;
-            dir = &D_L07_0017FF40;
+            water_direction_source = &D_L07_0017FF40;
             cab->f0 = 16.0f;
             cab->f4 = 16.0f;
             cab->f8 = -8.0f;
@@ -1500,7 +1500,7 @@ void water_update(Moby_30D8E8 *water_moby) {
             cab->f14 = 1.0f;
             cab->f18 = 0.9f;
             cab->f20 = 0.1f;
-            water_direction_xy_angle = fast_arc_tan(dir->f10, dir->f14);
+            water_direction_xy_angle = fast_arc_tan(water_direction_source->f10, water_direction_source->f14);
             cab->f30 = fast_cos(water_direction_xy_angle) * 0.57735f;
             cab->f34 = fast_sin(water_direction_xy_angle) * 0.57735f;
             cab->f38 = -0.57735f;
