@@ -116,7 +116,9 @@ void request_moby_help_message(struct Moby *moby) {
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
-void FUN_L16_002e4d88(struct Moby *moby) {
+void apply_moby_wobble(struct Moby *moby) __asm__("FUN_L16_002e4d88");
+
+void apply_moby_wobble(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
     float wobble_phase, wobble_value, wobble_phase_step;
     qcopy(&moby->pos, moby_data + 0x60);
