@@ -397,7 +397,9 @@ extern int FUN_L07_0030e370_c() __asm__("FUN_L07_0030e370");
 extern void FUN_L00_001ff600(float, void *, void *);
 extern void FUN_L07_00311eb8_u(float, void *, void *, short, void *, short, unsigned int, int) __asm__("FUN_L07_00311eb8");
 
-int FUN_L07_003122b0(void *mp, char *emitter_state, float *target_position) {
+int update_alternating_joint_emission_burst(void *mp, char *emitter_state, float *target_position) __asm__("FUN_L07_003122b0");
+
+int update_alternating_joint_emission_burst(void *mp, char *emitter_state, float *target_position) {
     unsigned char *moby = mp;
     float A[4];
     float B[4];

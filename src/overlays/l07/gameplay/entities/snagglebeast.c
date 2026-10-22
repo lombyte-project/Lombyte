@@ -704,7 +704,7 @@ extern int FUN_001160d8(void);
 extern int tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
 extern int FUN_00213260(int);
 extern void FUN_L07_0029b8d8(char *, int, float, float);
-extern int FUN_L07_003122b0(void *, char *, float *);
+extern int update_alternating_joint_emission_burst(void *, char *, float *) __asm__("FUN_L07_003122b0");
 extern int FUN_00214cc8(void *, float);
 extern void *spawn_moby_class_1046(int, void *, int, float, float, float, float, float) __asm__("FUN_L07_0030dbb0");
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -1040,7 +1040,7 @@ void snagglebeast_update(unsigned char *moby) {
                 FUN_00212f90(moby, 9, r, random_int_between(0xF, 0x16));
             }
         }
-        if (moby[0x52] == 9 || moby[0x52] == 0xD) moby[0x20] = FUN_L07_003122b0(moby, (char *)data, (float *)&sight);
+        if (moby[0x52] == 9 || moby[0x52] == 0xD) moby[0x20] = update_alternating_joint_emission_burst(moby, (char *)data, (float *)&sight);
         if ((moby[0xBC] % 3U == 0 && vector_distance(&sight, moby + 0x10) > 13.0f)
             || (moby[0xBC] % 3U == 1 && vector_distance(&sight, moby + 0x10) > 20.0f)) {
             *(short *)(data + 0x198) = scale_ticks(0x23);
@@ -1281,7 +1281,7 @@ void snagglebeast_update(unsigned char *moby) {
                 }
                 moby[0x20] = 1;
             }
-            if (moby[0x52] == 0xC) FUN_L07_003122b0(moby, (char *)data, (float *)&sight);
+            if (moby[0x52] == 0xC) update_alternating_joint_emission_burst(moby, (char *)data, (float *)&sight);
         }
         if (moby[0x52] == 0xA || moby[0x52] == 0xC) {
             if (FUN_00214cc8(moby, 27.5f)) FUN_L07_003120d8((char *)moby);
