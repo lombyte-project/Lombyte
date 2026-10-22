@@ -447,7 +447,9 @@ extern char D_0013E550[];
 
 #define F(p, o) (*(float *)((p) + (o)))
 
-void FUN_L07_002cd2b0(unsigned char *moby) {
+void update_taxi_platform(unsigned char *moby) __asm__("FUN_L07_002cd2b0");
+
+void update_taxi_platform(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *path;
     float orig[4], delta[4], path_segment_offset[4];
