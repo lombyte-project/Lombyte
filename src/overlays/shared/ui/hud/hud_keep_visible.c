@@ -166,7 +166,9 @@ void FUN_L00_00235d80(HudElem *hud_element) {
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236750), where it is exact; names translated to the US level program. */
 
 /* Sets unk7C to scale_game_frames(0xB4) + 0x1E, clears 0x48/0x4A, w/h 0x20, calls 00235c80. */
-void FUN_L00_00235dc0(HudElem *hud_element) {
+void reset_numeric_hud_element_32x32_base(HudElem *hud_element) __asm__("FUN_L00_00235dc0");
+
+void reset_numeric_hud_element_32x32_base(HudElem *hud_element) {
     hud_element->unk7C = scale_game_frames(0xB4) + 0x1E;
     hud_element->unk48 = 0;
     hud_element->unk4A = 0;

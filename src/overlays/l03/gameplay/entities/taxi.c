@@ -2027,7 +2027,7 @@ int is_rail_lift_started(struct Moby *moby) {
 /* Shows a help message for the mode, then keeps a hud queue entry alive. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002DDF90), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00235dc0(void);
+extern void reset_numeric_hud_element_32x32_base(void) __asm__("FUN_L00_00235dc0");
 extern void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
 extern void hud_keep_visible(int, int) __asm__("FUN_L00_00235e18");
 extern void FUN_L00_002371e0(void);
