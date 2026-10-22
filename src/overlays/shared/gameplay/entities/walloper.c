@@ -416,7 +416,9 @@ extern u8 D_L00_001DB5C0[];
 extern u8 D_L00_001DBA20[];
 void FUN_L00_002baae0(void *, s32, s32, s32, f32, f32, f32);
 void FUN_L00_002bb0b0(void *);
-void FUN_L00_002ba970(u8 *moby) {
+void draw_beam_and_arc_effects(u8 *moby) __asm__("FUN_L00_002ba970");
+
+void draw_beam_and_arc_effects(u8 *moby) {
     S2ba970 *moby_vars = *(S2ba970 **)(moby + 0x78);
     D_L00_001615EC -= D_L00_001615F0 * frame_scale;
     if (D_L00_001615EC <= -8.0f) {

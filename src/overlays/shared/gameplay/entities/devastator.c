@@ -3317,7 +3317,7 @@ extern int FUN_L00_00233db8(int, int);
 extern int FUN_L00_00233e98();
 extern int FUN_L00_002b94d0();
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L00_002ba970(char *);
+extern void draw_beam_and_arc_effects(char *) __asm__("FUN_L00_002ba970");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
 extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
@@ -3490,7 +3490,7 @@ void tesla_claw_update(struct Moby *m) {
                 }
                 FUN_L00_002b9310_2b2100(m);
                 FUN_L00_002b94d0_2b2100(m);
-                FUN_001f4600_2b2100(FUN_L00_002ba970, m);
+                FUN_001f4600_2b2100(draw_beam_and_arc_effects, m);
             } else {
                 s->target = 0;
                 s->target2 = 0;
