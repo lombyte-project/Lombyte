@@ -1295,7 +1295,7 @@ extern ULevelState D_L15_001BB830;
 extern float D_L15_00161A08 __attribute__((sda));
 extern float D_L15_00161A0C __attribute__((sda));
 
-extern struct Moby *FUN_L12_00308670(struct Moby *);
+extern struct Moby *create_class_55b_moby_from_source(struct Moby *) __asm__("FUN_L12_00308670");
 extern void FUN_L12_00308708(void *, struct Moby *);
 void FUN_L15_002c6900(struct Moby *m);
 extern void FUN_L02_00261c80(void *, float *, float);
@@ -1356,7 +1356,7 @@ void helicopter_update(struct Moby *moby) {
     previous_pos.q = *(u128 *)&moby->pos;
     vars = (HelicopterVars *)moby->pvars;
     if (vars->pilot == 0) {
-        vars->pilot = FUN_L12_00308670(moby);
+        vars->pilot = create_class_55b_moby_from_source(moby);
     }
     if (moby->state != 0 && moby->state != 0x40 && vars->unk1A4 != 0 && hero.vehicle_mode != 2) {
         moby->collision = 0;

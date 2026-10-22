@@ -2421,7 +2421,7 @@ extern void FUN_L12_002eb220(struct Moby *);
 extern void FUN_L12_002eae00(struct Moby *);
 extern int FUN_L12_002eaf68(struct Moby *, int);
 extern void FUN_L12_0027ba70(int);
-extern struct Moby *FUN_L12_00308670(struct Moby *);
+extern struct Moby *create_class_55b_moby_from_source(struct Moby *) __asm__("FUN_L12_00308670");
 extern void FUN_L12_00308708(struct Moby *, struct Moby *);
 extern int allocate_voice_for_target_entry_e9f68(int, int, int) __asm__("FUN_0022da68");
 extern void release_voice(int) __asm__("FUN_0022d798");
@@ -2542,7 +2542,7 @@ update_state:
         FUN_L12_0027ba70(*(int *)(data + 0xa4));
         if (moby->draw_dist < 128) moby->draw_dist = 128;
         if (*(struct Moby **)(data + 0xac) == 0) {
-            *(struct Moby **)(data + 0xac) = FUN_L12_00308670(moby);
+            *(struct Moby **)(data + 0xac) = create_class_55b_moby_from_source(moby);
             (*(struct Moby **)(data + 0xac))->update_dist = 0;
             (*(struct Moby **)(data + 0xac))->flags |= 0x41;
         }

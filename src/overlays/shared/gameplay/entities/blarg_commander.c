@@ -9,7 +9,9 @@ extern char *FUN_0020c4f8_8670(int) __asm__("FUN_0020c4f8");
 extern void FUN_001f9810_8670(void *, int) __asm__("FUN_001f9810");
 extern void FUN_L00_00250df8_8670(void *) __asm__("FUN_L00_00250df8");
 
-char *FUN_L12_00308670(char *source_object) {
+char *create_class_55b_moby_from_source(char *source_object) __asm__("FUN_L12_00308670");
+
+char *create_class_55b_moby_from_source(char *source_object) {
     unsigned char *allocated_object = (unsigned char *)FUN_0020c4f8_8670(0x55B);
     if (allocated_object != 0) {
         char *object_data = *(char **)(allocated_object + 0x78);
