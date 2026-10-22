@@ -1395,7 +1395,9 @@ int FUN_L18_002fc668(int group, void *from, void *to, float speed) {
 extern int D_L18_001AC240[];
 extern int D_L18_0015FFD8;
 
-short FUN_L18_002fc7e0(int group_index) {
+short count_group_class_0772_mobys_not_in_state_8(int group_index) __asm__("FUN_L18_002fc7e0");
+
+short count_group_class_0772_mobys_not_in_state_8(int group_index) {
     unsigned short *group_moby_entry = (unsigned short *)D_L18_001AC240[group_index];
     short n = 0;
     int base;

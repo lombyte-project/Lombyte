@@ -1443,7 +1443,7 @@ extern int FUN_L18_002f0030(char *moby, int idx, float *pos);
 extern int FUN_L18_002f6878(char *moby, float arg, void *x);
 extern int FUN_L18_002f70b8(struct Moby *moby);
 extern int FUN_L18_002fc668(int idx, float *pos, float *dir, float speed);
-extern int FUN_L18_002fc7e0(int idx);
+extern int count_group_class_0772_mobys_not_in_state_8(int idx) __asm__("FUN_L18_002fc7e0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
@@ -2317,7 +2317,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 }
             }
         }
-        n = FUN_L18_002fc7e0(boss_data->f210);
+        n = count_group_class_0772_mobys_not_in_state_8(boss_data->f210);
         if (n >= 11 && scale_game_frames(0x3C) > boss_data->f354) {
             boss_data->f354 = scale_game_frames(1000);
         } else if (n < 3 && scale_game_frames(0x3C) < boss_data->f354) {
