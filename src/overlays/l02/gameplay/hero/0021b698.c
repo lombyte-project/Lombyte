@@ -1461,7 +1461,7 @@ void FUN_L02_00225c20(void) {
         r = &D_L02_0017C228[hero.attack_record];
         if (((Moby *)hero.unkA54) != 0 && hero.state_timer < scale_game_frames(4)) {
             float d;
-            float off;
+            float attack_distance_offset;
             float range;
             float cap;
             float e;
@@ -1471,19 +1471,19 @@ void FUN_L02_00225c20(void) {
                 d = 0.0f;
             }
             if (r->kind == 0) {
-                off = 0.75f;
+                attack_distance_offset = 0.75f;
                 range = 0.8f;
                 cap = 4.0f;
             } else if (r->kind == 1) {
-                off = 0.6f;
+                attack_distance_offset = 0.6f;
                 range = 1.7f;
                 cap = 4.0f;
             } else {
-                off = 1.3f;
+                attack_distance_offset = 1.3f;
                 range = 1.7f;
                 cap = 1.9f;
             }
-            e = d - off;
+            e = d - attack_distance_offset;
             if (absolute_float(e) < range + 3.0f) {
                 float attack_speed_scale;
 
