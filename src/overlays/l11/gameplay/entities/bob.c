@@ -378,6 +378,8 @@ int D_L11_001613F0 = 0;
 extern int D_L11_0016D260[];
 extern int D_L11_0015FFD8;
 
+int try_activate_pokitaru_gate(struct Moby *moby) __asm__("FUN_L11_0030a480");
+
 void FUN_L11_002d1030(void *mp) {
     struct Moby *moby = mp;
     char *pvars = (char *)moby->pvars;
@@ -450,7 +452,7 @@ void FUN_L11_002d1030(void *mp) {
         gate_moby = (char *)D_L11_0015FFD8;
         gate_moby += *gate_moby_index_ptr << 8;
         FUN_L00_002604f0(moby, gate_moby, &D_L11_001613E0, &D_L11_001613F0, (char *)moby + 0x10, (char *)moby + 0x40);
-        if (FUN_L11_0030a480((struct Moby *)gate_moby) == 0)
+        if (try_activate_pokitaru_gate((struct Moby *)gate_moby) == 0)
             break;
     }
         if (moby->prev_seq != 5)
@@ -1926,7 +1928,7 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-int FUN_L11_0030a480(struct Moby *moby) {
+int try_activate_pokitaru_gate(struct Moby *moby) {
     char *current;
     if (moby->state != 1)
         return 0;
