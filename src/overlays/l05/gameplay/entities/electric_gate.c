@@ -548,7 +548,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
     DrainCoverHero *hero;
     DrainCoverLid *lid;
     float minimum_rise_height;
-    float ang;
+    float particle_offset_angle;
 
     qcopy(old_position, moby->pos);
     qcopy(old_rotation, moby->rot);
@@ -597,9 +597,9 @@ void drain_cover_update(DrainCoverMoby *moby) {
                 g = convert_effect_value(scale_game_frames_float_30e7f8(random_float_between_30e7f8(10.0f, 20.0f)));
                 bl = convert_effect_value(scale_game_frames_float_30e7f8(random_float_between_30e7f8(10.0f, 40.0f)));
                 for (i = 0; i < 20; i++) {
-                    ang = random_angle_radians_30e7f8();
-                    particle_position[0] = angle_cos(ang) * 0.75f;
-                    particle_position[1] = angle_sin(ang) * 0.75f;
+                    particle_offset_angle = random_angle_radians_30e7f8();
+                    particle_position[0] = angle_cos(particle_offset_angle) * 0.75f;
+                    particle_position[1] = angle_sin(particle_offset_angle) * 0.75f;
                     particle_position[2] = 0.0f;
                     rotate_vector(effect_velocity, particle_position, random_float_between_30e7f8(D_L05_00161DEC, D_L05_00161DF0) * frame_time);
                     effect_velocity[2] = random_float_between_30e7f8(0.0f, D_L05_00161DFC) * frame_time;
