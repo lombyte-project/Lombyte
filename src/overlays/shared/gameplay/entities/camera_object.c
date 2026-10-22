@@ -1756,7 +1756,9 @@ void FUN_L00_002a82c0(unsigned char *wrench_moby) {
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void FUN_001f9bf8_u(float *, float *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L00_002a8418(float *in_out_vector) {
+void scale_wrench_collision_vector_by_heading(float *in_out_vector) __asm__("FUN_L00_002a8418");
+
+void scale_wrench_collision_vector_by_heading(float *in_out_vector) {
     float k = 1.8325957f;
     float vector_heading_angle = fast_arc_tan(in_out_vector[0], in_out_vector[1]);
     float clamped_heading_difference = fast_difference_between_rotations(hero.motion.rot.f[2], vector_heading_angle);
@@ -1878,7 +1880,7 @@ void FUN_L00_002a7c70_c(void *m) __asm__("FUN_L00_002a7c70");
 void FUN_L00_002a7e20(float *pos, int n);
 void FUN_L00_002a8028(u8 *o);
 void FUN_L00_002a82c0(unsigned char *m);
-void FUN_L00_002a8418(float *v);
+void scale_wrench_collision_vector_by_heading(float *v) __asm__("FUN_L00_002a8418");
 extern char D_0013CAE0[];
 extern char D_00140B00[];
 extern char D_001403C0[];
@@ -1993,7 +1995,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
         if (sweep_hero()->move_mode!=15 && sweep_hero()->state!=112 && sweep_hero()->state!=20) {
             difference=fast_difference_between_rotations(sweep_hero()->yaw,fast_arc_tan(sweep_hero()->sweep_end[0]-sweep_hero()->position[0],sweep_hero()->sweep_end[1]-sweep_hero()->position[1]));
             if (difference>1.5707964f) active=0;
-            FUN_L00_002a8418(work.v[0]);
+            scale_wrench_collision_vector_by_heading(work.v[0]);
         }
         add_vector_xyz(sweep_end(),(sweep_end()-4),work.v[0]);
         if (sweep_hero()->state!=43 && sweep_hero()->state!=112 && difference<1.2217305f && scale_game_frames_alt(10)<sweep_hero()->state_timer) {
@@ -2002,7 +2004,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             angle=fast_arc_tan(sweep_hero()->sweep_end[0]-sweep_hero()->position[0],sweep_hero()->sweep_end[1]-sweep_hero()->position[1]);
             qcopy(work.v[1],sweep_hero()->position); work.v[1][2]+=0.5f;
             work.v[2][0]=fast_cos(angle)*1.4f; work.v[2][1]=fast_sin(angle)*1.4f; work.v[2][2]=0.0f;
-            FUN_L00_002a8418(work.v[2]); add_vector_xyz(work.v[1],work.v[1],work.v[2]);
+            scale_wrench_collision_vector_by_heading(work.v[2]); add_vector_xyz(work.v[1],work.v[1],work.v[2]);
             if (!sweep_hero()->attack_cooldown && FUN_001efa68(work.v[0],work.v[1],2,0,0) && collision_hit_material()) {
                 if (!collision_hit.moby || FUN_L00_0025e368((char*)collision_hit.moby)) {
                     sweep_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(2,0,(int)wrench_moby); FUN_L00_002a8028((char*)wrench_moby);
