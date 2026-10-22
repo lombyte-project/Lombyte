@@ -1002,7 +1002,9 @@ extern void FUN_L00_0026ced0(void *, void *, int, int, int, float);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void scale_vector_xyz(void *out, void *a, float s) __asm__("FUN_001f9a68");
 struct Moby;
-char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int a3, int a4, float f, float scale);
+char *spawn_emitter_child_effect(struct Moby *parent, int unused, int color, int secondary_color, int timer_frames, float f, float scale) __asm__("FUN_L03_002bad40");
+
+char *spawn_emitter_child_effect(struct Moby *parent, int unused, int color, int a3, int a4, float f, float scale) __asm__("FUN_L03_002bad40");
 
 /* Hit effects for the Kerwan train and turret classes: sparks or smoke puffs pushed along the hit velocity,
  * with countdowns in the moby data (0x12E, 0x12F) limiting how often they spawn. */
@@ -1095,7 +1097,7 @@ void FUN_L03_0029caa8(char *moby, void *vel_in, int quiet) {
                 color = 0x30A0;
                 color2 = 0x90A0;
             }
-            FUN_L03_002bad40((struct Moby *)moby, (int)(data + 0xF0), color, color2, scale_game_frames(50), frame_time * 2.5f, 0.15f);
+            spawn_emitter_child_effect((struct Moby *)moby, (int)(data + 0xF0), color, color2, scale_game_frames(50), frame_time * 2.5f, 0.15f);
             ((unsigned char *)data)[0x12F] = scale_game_frames(50);
         }
         data[0x12E] = scale_game_frames(13);
@@ -1500,7 +1502,7 @@ float f213308_2bad40(void) __asm__("FUN_00213308");
 void f2502f0_2bad40(char *, int, int, int) __asm__("FUN_L00_002502f0");
 void f250df8_2bad40(char *) __asm__("FUN_L00_00250df8");
 /* Spawns a child effect (moby 0xEB) on the parent: copies its position and rotation, then sets the colour, timers and scale. */
-char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int secondary_color, int timer_frames, float f, float scale) {
+char *spawn_emitter_child_effect(struct Moby *parent, int unused, int color, int secondary_color, int timer_frames, float f, float scale) {
     char *child_moby = f20c4f8_2bad40(0xEB);
     if (child_moby) {
         char *child_data = *(char **)(child_moby + 0x78);
