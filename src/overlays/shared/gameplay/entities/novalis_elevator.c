@@ -976,7 +976,9 @@ void gold_weapon_case_update(struct Moby *moby) {
 
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L01_002e30b8(int unused, void *out) {
+void compute_sand_mouse_approach_target(int unused, void *out) __asm__("FUN_L01_002e30b8");
+
+void compute_sand_mouse_approach_target(int unused, void *out) {
     char scratch[16];
     char *base = D_0013E533 + 0xE1D;
     fast_vec_normalize(scratch, *(char **)(base + 0x2080) + 0xD0, 1.0f);
@@ -1363,7 +1365,7 @@ extern int FUN_L00_00257b90(int, int);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void FUN_L01_002e30b8(int, void *);
+extern void compute_sand_mouse_approach_target(int, void *) __asm__("FUN_L01_002e30b8");
 extern void FUN_L01_002e3110(char *, char *);
 extern s32 FUN_L01_002e3208(void *, struct Moby *);
 extern void FUN_L01_002e35a8(char *, char *);
@@ -1489,7 +1491,7 @@ void sand_mouse_update(struct Moby *moby) {
                 if (is_point_inside_clip_volume(hero_2e3f20->pos, sand_mouse_vars->vol)) {
                     if (!collision_line(va, vb, 0, moby, 0)
                         || D_L01_001742D8 == hero_2e3f20->p2080) {
-                        FUN_L01_002e30b8((int)moby, sand_mouse_vars);
+                        compute_sand_mouse_approach_target((int)moby, sand_mouse_vars);
                         if (hero_2e3f20->helper != 0
                             && hero_2e3f20->helper->oclass == 0x1B1
                             && hero_2e3f20->helper->state != 0xFE
@@ -1525,7 +1527,7 @@ void sand_mouse_update(struct Moby *moby) {
         }
         break;
     case SAND_MOUSE_MOVE_TOWARD_HERO:
-        FUN_L01_002e30b8((int)moby, sand_mouse_vars);
+        compute_sand_mouse_approach_target((int)moby, sand_mouse_vars);
         desired_facing_yaw = fast_arc_tan(sand_mouse_vars->target[0] - moby->pos.x, sand_mouse_vars->target[1] - moby->pos.y);
         face_target_2e3f20(moby, desired_facing_yaw, &mover_2e3f20.yaw_speed,
                                 frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);

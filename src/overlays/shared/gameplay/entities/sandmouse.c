@@ -817,7 +817,7 @@ extern void FUN_L00_00258278_df40(void *, f32, void *, f32, f32, f32) __asm__("F
 extern void jet_animate(void *, f32) __asm__("FUN_L00_00259fe8");
 extern void FUN_L00_0025f8e0(void *, f32);
 extern void FUN_L01_0026d930(void *);
-extern void FUN_L01_002e30b8(void *, void *);
+extern void compute_sand_mouse_approach_target(void *, void *) __asm__("FUN_L01_002e30b8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -958,7 +958,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 if (collision_line(&linked_probe_start, &hero_probe_end, 0, sandmouse_moby, 0)) {
                     if (D_L01_001742D8 != *(Moby **)(hero_bytes + 0x2080)) break;
                 }
-                FUN_L01_002e30b8(sandmouse_moby, sandmouse_vars);
+                compute_sand_mouse_approach_target(sandmouse_moby, sandmouse_vars);
                 if (*(Moby **)(hero_bytes + 0x1130) != 0 && (*(Moby **)(hero_bytes + 0x1130))->oclass == 0x1B1
                     && (*(Moby **)(hero_bytes + 0x1130))->state != 0xFE && (*(Moby **)(hero_bytes + 0x1130))->state != 0xFD) {
                     (*(Moby **)(hero_bytes + 0x1130))->state = 1;
@@ -1017,7 +1017,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
             movement_result_flags = sandmouse_vars->stuck < 0x15;
             movement_result_flags = movement_result_flags ? 0 : 2;
         } else {
-            FUN_L01_002e30b8(sandmouse_moby, sandmouse_vars);
+            compute_sand_mouse_approach_target(sandmouse_moby, sandmouse_vars);
             goal_bearing_yaw = fast_arc_tan(sandmouse_vars->goal.f[0] - sandmouse_moby->pos.x, sandmouse_vars->goal.f[1] - sandmouse_moby->pos.y);
             FUN_L00_00258278_df40(sandmouse_moby, goal_bearing_yaw, &D_L01_001DEB38_lui.yaw_speed,
                 frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
