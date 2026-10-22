@@ -1118,7 +1118,7 @@ extern s32 rand();
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_00257470(void *, int, int);
-extern void FUN_L00_002599e8(void *, int, int, float, float, float, int, int, int);
+extern void collect_mobies_in_sphere_at_moby_point(void *, int, int, float, float, float, int, int, int) __asm__("FUN_L00_002599e8");
 extern void FUN_L00_0025a120(void *);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
@@ -1192,7 +1192,7 @@ void chomper_update(struct Moby *chomper_moby) {
         approach_angle(yaw, (float *)(chomper_data + 0x1F4), angle, frame_time_sq * 12.566371f,
                          frame_time_sq * 12.566371f, frame_time * 12.566371f);
         if (is_value_within_interpolated_window(chomper_moby, 13.0f)) {
-            FUN_L00_002599e8(chomper_moby, 0, 1, 0.333f, 1.0f, 1.0f, 0, 1, 0);
+            collect_mobies_in_sphere_at_moby_point(chomper_moby, 0, 1, 0.333f, 1.0f, 1.0f, 0, 1, 0);
         } else if ((chomper_moby->anim_flags & 2) && FUN_001f9b48(&chomper_moby->pos, chomper_data + 0x180) > 1.5f) {
             chomper_moby->state = 4;
             if (chomper_moby->prev_seq != 0)

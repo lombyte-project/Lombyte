@@ -97,7 +97,9 @@ int play_entity_sound(void *moby, void *position, int hit_mask, float sphere_rad
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int play_entity_sound(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 /* Calls play_entity_sound at a moby point; the f13 argument is ignored and c is passed again as a float. */
-int FUN_L00_002599e8(void *moby, int point, int hit_mask, float sphere_radius, float unused, float direction_scale, int hit_descriptor_payload_byte, int hit_payload_byte, int i) {
+int collect_mobies_in_sphere_at_moby_point(void *moby, int point, int hit_mask, float sphere_radius, float unused, float direction_scale, int hit_descriptor_payload_byte, int hit_payload_byte, int i) __asm__("FUN_L00_002599e8");
+
+int collect_mobies_in_sphere_at_moby_point(void *moby, int point, int hit_mask, float sphere_radius, float unused, float direction_scale, int hit_descriptor_payload_byte, int hit_payload_byte, int i) {
     float position[4] __attribute__((aligned(16)));
     moby_point_position(moby, point, position);
     return play_entity_sound(moby, position, hit_mask, sphere_radius, (float)hit_mask, direction_scale, hit_descriptor_payload_byte, hit_payload_byte, i);

@@ -2245,7 +2245,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_00261630_2d4610(char *moby, char *d, float a, float b) __asm__("FUN_L00_00261630");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
-extern void FUN_L00_002599e8_2d4610(void *, float, float, float, int, int, int, int, int) __asm__("FUN_L00_002599e8");
+extern void collect_mobies_in_sphere_at_moby_point(void *, float, float, float, int, int, int, int, int) __asm__("FUN_L00_002599e8");
 extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -2403,7 +2403,7 @@ void horny_toad_update(Moby *moby) {
         break;
     case HORNY_TOAD_PLAY_TARGET_ANIMATION:
         if (is_value_within_interpolated_window(moby, 34.0f) != 0) {
-            FUN_L00_002599e8_2d4610(moby, 0.333f, 1.0f, 1.0f, 0, 1, 0, 1, 0);
+            collect_mobies_in_sphere_at_moby_point(moby, 0.333f, 1.0f, 1.0f, 0, 1, 0, 1, 0);
         } else if (moby->anim_flags & 2) {
             if (data->unk1C4 == 2) {
                 moby->state = 8;
