@@ -1102,7 +1102,9 @@ void FUN_L00_002059d8(void);
 void FUN_L00_00214fe8(void);
 void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 void FUN_L00_00208820(void);
-void FUN_L00_00209240(int);
+void update_hero_world_matrices(s32 moby_override) __asm__("FUN_L00_00209240");
+
+void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
 void FUN_L00_00210928(void);
 void begin_draw_frame(void) __asm__("FUN_001f7978");
 void FUN_L00_00207c48(void);
@@ -1153,7 +1155,7 @@ void FUN_L00_002070d0(void) {
     FUN_L00_00214fe8();
     update_hero_easing_records();
     FUN_L00_00208820();
-    FUN_L00_00209240(0);
+    update_hero_world_matrices(0);
     FUN_L00_00210928();
     begin_draw_frame();
     FUN_L00_00207c48();
@@ -2152,7 +2154,7 @@ extern T00209240 D_L00_001E7C10;
 extern int D_001413D0[] __attribute__((section(".data")));
 void FUN_L00_0024f8f0(s32, s32, T00209240 *, void *);
 /* Calls 0024f8f0 with mode 9 and a copy of D_L00_001E7C10 on a, or on D_001413D0 when a is 0. */
-void FUN_L00_00209240(s32 moby_override) {
+void update_hero_world_matrices(s32 moby_override) {
     T00209240 matrix_input_copy;
     if (moby_override == 0)
         moby_override = (*(s32 *)D_001413D0);

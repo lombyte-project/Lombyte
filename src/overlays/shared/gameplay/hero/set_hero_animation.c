@@ -1568,7 +1568,7 @@ void FUN_L00_00234808(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002352D0), where it is exact; names translated to the US level program. */
 
 extern char D_L00_0016C860[];
-extern void FUN_L00_00209240(int);
+extern void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
 extern void FUN_L00_0020f580(void);
 extern void FUN_L00_00234808_u(void) __asm__("FUN_L00_00234808");
 
@@ -1586,7 +1586,7 @@ void FUN_L00_00234a50(int moby_override) {
                 *(unsigned short *)(listed_moby + 0x34) |= 0x800;
             }
         }
-        FUN_L00_00209240(moby_override);
+        update_hero_world_matrices(moby_override);
         FUN_L00_0020f580();
         FUN_L00_00234808_u();
         base = &hero;

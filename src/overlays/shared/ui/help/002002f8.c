@@ -22,7 +22,7 @@ extern void FUN_L00_00207a58(void);
 extern void FUN_L00_00207c48(void);
 extern void FUN_L00_00208820(void);
 extern void FUN_L00_00208b60(void);
-extern void FUN_L00_00209240(int);
+extern void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
 extern void FUN_L00_0020a318(void);
 extern void FUN_L00_0020a540(void);
 extern void FUN_L00_0020a9e8(void);
@@ -81,7 +81,7 @@ void FUN_L03_002002f8(void) {
     FUN_L00_00214fe8();
     update_hero_easing_records();
     FUN_L00_00208820();
-    FUN_L00_00209240(0);
+    update_hero_world_matrices(0);
     FUN_L00_00210928();
     begin_draw_frame();
     FUN_L00_00207c48();
