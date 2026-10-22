@@ -2892,7 +2892,7 @@ extern s32 D_L00_00161530 __attribute__((sda));
 extern f32 D_L00_001601E8;
 
 void update_pyrocitor_usage_and_cleanup(unsigned char *) __asm__("FUN_L00_002b8230");
-void FUN_L00_002b8438(char *);
+void update_pyrocitor_flame_effect_slots(char *) __asm__("FUN_L00_002b8438");
 extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
 extern struct Moby *FUN_L00_002bb360_2b77f0(struct Moby *) __asm__("FUN_L00_002bb360");
 extern void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
@@ -3084,7 +3084,7 @@ void pyrocitor_update(struct Moby *moby) {
         qcopy(&v->other->pos, &pos);
         FUN_L00_00250df8_2b77f0();
     }
-    FUN_L00_002b8438((char *)moby);
+    update_pyrocitor_flame_effect_slots((char *)moby);
 }
 #endif
 extern unsigned char D_0013E550_2b8230[] __asm__("D_0013E550");
@@ -3177,7 +3177,9 @@ extern short D_L00_00161558 __attribute__((sda));
 extern short D_L00_0016155C __attribute__((sda));
 /* Walks the 15 entry pointers in the moby's data; for each live type-0xC entry builds a hit record and, for sub-type 10,
    spawns a burst of particles. Entries that are invalid or have sub-type < 2 are cleared. */
-void FUN_L00_002b8438(char *moby) {
+void update_pyrocitor_flame_effect_slots(char *moby) __asm__("FUN_L00_002b8438");
+
+void update_pyrocitor_flame_effect_slots(char *moby) {
     float hit_direction_vector[4];
     char hit_descriptor[0x30];
     char qv[16];
