@@ -2936,7 +2936,9 @@ typedef struct {
 } L14CartVars;
 
 /* Cart update: follows its path, bursts when shot and respawns at the path start after a delay. */
-void FUN_L14_002fc0f0(struct Moby *moby) {
+void update_enemy_fighter(struct Moby *moby) __asm__("FUN_L14_002fc0f0");
+
+void update_enemy_fighter(struct Moby *moby) {
     enum {
         ENEMY_FIGHTER_STATE_INITIALIZE = 0,
         ENEMY_FIGHTER_STATE_FOLLOW_PATH = 1,
