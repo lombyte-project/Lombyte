@@ -930,7 +930,9 @@ extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 
 /* Gate: waits for its trigger moby, then rises to topZ and swings its yaw back to 0, with sounds per class. */
-void FUN_L05_00314eb0(struct Moby *gate_moby) {
+void update_triggered_gate_motion(struct Moby *gate_moby) __asm__("FUN_L05_00314eb0");
+
+void update_triggered_gate_motion(struct Moby *gate_moby) {
     enum {
         GATE_INITIALIZE = 0,
         GATE_WAIT_FOR_TRIGGER = 1,
