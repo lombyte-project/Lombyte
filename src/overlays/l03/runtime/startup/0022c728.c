@@ -20,7 +20,9 @@ extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 extern void clear_vector(void *);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-void FUN_L03_0022c728(void) {
+void emit_level3_state5_moby_effects(void) __asm__("FUN_L03_0022c728");
+
+void emit_level3_state5_moby_effects(void) {
     char *level_state;
     char *moby;
     float world_position[4];
