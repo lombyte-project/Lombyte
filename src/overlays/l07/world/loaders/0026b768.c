@@ -165,7 +165,7 @@ extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern char *FUN_L00_0023fa00(char *, s32 *);
 extern char *FUN_L00_00241940_26b768(s32) __asm__("FUN_L00_00241940");
 extern f32 int_to_float(s32) __asm__("FUN_001fa6c0");
-extern void FUN_L00_00285008(void);
+extern void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
 extern void clear_scene_state_buffers(void) __asm__("FUN_00226f50");
 extern void FUN_L00_00264740(void);
 
@@ -424,7 +424,7 @@ s32 FUN_L07_0026b768(s32 full, s32 keep) {
         printf_1e93b0(D_L07_0015FC80);
     }
     if (keep) {
-        FUN_L00_00285008();
+        restore_or_clear_level_state();
     } else {
         clear_scene_state_buffers();
         for (z = 15; z >= 0; z--)

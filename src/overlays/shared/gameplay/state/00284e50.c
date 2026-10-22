@@ -84,7 +84,9 @@ extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void init_camera_system(void) __asm__("FUN_L00_001ed280");
 extern void FUN_L00_002852c0(void);
 
-void FUN_L00_00285008(void) {
+void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
+
+void restore_or_clear_level_state(void) {
     char *s = D_L00_001BB230;
     int i;
     short id;
