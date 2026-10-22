@@ -403,7 +403,9 @@ typedef struct {
 } Data_303370;
 
 /* Raises the timer while one of the ten targets is in the view cone, otherwise counts it down. */
-void FUN_L12_00303370(void *moby) {
+void update_hoven_turret_target_alignment_timer(void *moby) __asm__("FUN_L12_00303370");
+
+void update_hoven_turret_target_alignment_timer(void *moby) {
     Data_303370 *data = (Data_303370 *)((struct Moby *)moby)->pvars;
     int found = 0;
     int i;
@@ -546,7 +548,7 @@ extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_00299460(int);
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L08_002e7eb0(void *, void *, void *, int);
-extern void FUN_L12_00303370(void *);
+extern void update_hoven_turret_target_alignment_timer(void *) __asm__("FUN_L12_00303370");
 extern void FUN_L12_00304218_c() __asm__("FUN_L12_00304218");
 extern void FUN_L12_00304d98_c() __asm__("FUN_L12_00304d98");
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
@@ -652,7 +654,7 @@ void hoven_turret_update(struct Moby *moby) {
         if (D_L12_0015F5C4_macro != 2 && D_L12_001619A0 == 0) {
             enqueue_callback_list_1(FUN_L12_00304218_c, moby);
         }
-        FUN_L12_00303370(moby);
+        update_hoven_turret_target_alignment_timer(moby);
         if (fast_dec_timer(&data->f90)) {
             Hit_304920 *hit = (Hit_304920 *)FUN_L00_0025a420(moby, 0x10000, 0);
             if (hit != 0) {
