@@ -1402,8 +1402,10 @@ void FUN_L00_002078a8(void) {
 
 extern void FUN_L00_00262b80(int, char *, char *, float, float, float);
 
-void FUN_L00_002079e8(void);
-void FUN_L00_002079e8(void) {
+void apply_hero_rotation_oscillation(void) __asm__("FUN_L00_002079e8");
+
+void apply_hero_rotation_oscillation(void) __asm__("FUN_L00_002079e8");
+void apply_hero_rotation_oscillation(void) {
     struct Hero *hero_state = &hero;
     if (hero_state->state.current == 0x7F) {
         FUN_L00_00262b80(((int)hero_state->moby), &hero_state->unk6B0, &hero_state->unk6B4, 0.1745329201221466f,
@@ -1778,7 +1780,7 @@ extern unsigned char D_0015EDB5_208820 __asm__("D_0015EDB5");
 extern void FUN_L00_00232fe8(void);
 extern void FUN_L00_002330d0(void);
 extern void FUN_L00_002078a8(void);
-extern void FUN_L00_002079e8(void);
+extern void apply_hero_rotation_oscillation(void) __asm__("FUN_L00_002079e8");
 extern void ff090_208820(void *, void *, int) __asm__("FUN_001f9838");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_002336e8(void *, void *, float);
@@ -1799,7 +1801,7 @@ void FUN_L00_00208820(void) {
     qcopy(((unsigned char *)hero.moby) + 0x10, &hero.motion.pos);
     FUN_L00_002078a8();
     qcopy(((unsigned char *)hero.moby) + 0x40, &hero.motion.rot);
-    FUN_L00_002079e8();
+    apply_hero_rotation_oscillation();
     ff090_208820(((unsigned char *)hero.moby) + 0xC0, &hero, 0x30);
     upd_a(((unsigned char *)hero.moby));
     if (hero.unk1CC == 0 && *(int *)(((unsigned char *)hero.moby) + 0x94) != 0) {
