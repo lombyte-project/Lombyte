@@ -380,7 +380,9 @@ int count_moby_group_members(struct Moby *moby) __asm__("FUN_L14_002af048");
 
 extern int count_moby_group_members(struct Moby *) __asm__("FUN_L14_002af048");
 extern int FUN_L14_002b4500(int);
-extern int FUN_L14_002b4670(int);
+int is_turret_group_activated_or_empty(int index) __asm__("FUN_L14_002b4670");
+
+extern int is_turret_group_activated_or_empty(int) __asm__("FUN_L14_002b4670");
 extern void blend_moby_animation_c618(struct Moby *, int, int, int) __asm__("FUN_00212f90");
 extern u8 *FUN_002141f8_c618(struct Moby *) __asm__("FUN_002141f8");
 extern void FUN_L00_0025a120(void *);
@@ -548,7 +550,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
         int hit;
 
         moby->glow_color = 0xFF000000 | (D_L14_00161408 << 16) | (D_L14_00161404 << 8) | D_L14_00161400;
-        if (FUN_L14_002b4670(*(int *)(moby_vars + 0x70))) {
+        if (is_turret_group_activated_or_empty(*(int *)(moby_vars + 0x70))) {
             moby->state = 3;
             *(s16 *)(moby_vars + 0x1F2) = scale_game_frames(D_L14_001613D0);
         }
@@ -2061,7 +2063,7 @@ int FUN_L14_002b4500(int index) {
 extern char *D_L14_ffd0_e[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
 extern short *D_L14_001AC2C0_2B0168[] __asm__("D_L14_001ABF40");
 
-int FUN_L14_002b4670(int index) {
+int is_turret_group_activated_or_empty(int index) {
     unsigned short *list = (unsigned short *)D_L14_001AC2C0_2B0168[index];
     int count = 0;
     char *base;
