@@ -1650,7 +1650,7 @@ extern s32 D_L09_0015F5CC __attribute__((section(".data")));
 extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern int FUN_L09_0030a298(struct Moby *);
+extern int advance_shuttle_along_path(struct Moby *) __asm__("FUN_L09_0030a298");
 
 void shuttle_update(struct Moby *moby) __asm__("FUN_L09_00309c08");
 void shuttle_update(struct Moby *moby) {
@@ -1757,7 +1757,7 @@ void shuttle_update(struct Moby *moby) {
             }
         }
     advance_path:
-        if (FUN_L09_0030a298(moby)) {
+        if (advance_shuttle_along_path(moby)) {
             voice = *(s32 *)((u8 *)vars + 0xC4);
             if (voice != -1) {
                 u8 *entry = (u8 *)D_0013E550 + voice * 0x70;
@@ -1829,7 +1829,7 @@ extern void FUN_L00_002715e8(void *, int, int, float, float);
 /* Flies the moby along its path toward the current node, turning and banking
  * toward it, steps the node at each arrival and now and then drops a puff.
  * Returns nonzero once it has run off the end of the path. */
-int FUN_L09_0030a298(struct Moby *moby) {
+int advance_shuttle_along_path(struct Moby *moby) {
     PathFlyerVars *vars = (PathFlyerVars *)moby->pvars;
     PathNodes *path;
     f32 endpoint_distance;
