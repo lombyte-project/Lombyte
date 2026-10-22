@@ -3035,7 +3035,7 @@ extern void evaluate_cubic_hermite_segment(f32, QVec *, QVec *, QVec *, QVec *, 
 extern f32 FUN_L00_00258110(f32 *, f32, f32, f32, f32, f32);
 extern f32 FUN_L00_0025e310(f32);
 extern void FUN_001f99f8(void *);
-extern void FUN_L01_0027f660(QVec *, QVec *);
+extern void spawn_type_10_particle(QVec *, QVec *) __asm__("FUN_L01_0027f660");
 extern void FUN_001f9a68(void *, void *, f32);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_L00_0025e450(struct Moby *, QVec *, QVec *, f32, f32, s32, s32, s32, f32, f32, f32, f32,
@@ -3313,9 +3313,9 @@ void gunship_follow_path(struct Moby *m) {
                 cv->unk80.q = off[1].q;
             } else if (v->unk121 == 0) {
                 FUN_001f9bf8(&off[1], &off[1], FUN_002132a8(0.016f, 0.031f) * D_0015ED60);
-                FUN_L01_0027f660(&off[0], &off[1]);
+                spawn_type_10_particle(&off[0], &off[1]);
                 FUN_001f9bf8(&off[1], &off[1], FUN_002132a8(0.016f, 0.031f) * D_0015ED60);
-                FUN_L01_0027f660(&off[0], &off[1]);
+                spawn_type_10_particle(&off[0], &off[1]);
             }
         }
         if (v->unk121 == 0)

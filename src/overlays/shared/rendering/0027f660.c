@@ -20,7 +20,9 @@ extern unsigned char *FUN_L00_002678b8(int);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L01_001B250C __attribute__((section(".data")));
-void FUN_L01_0027f660(char *spawn_position, char *initial_particle_velocity) {
+void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocity) __asm__("FUN_L01_0027f660");
+
+void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocity) {
     unsigned char *particle = FUN_L00_002678b8(10);
     if (particle != 0) {
         char *particle_data = (char *)particle + 0x20;
