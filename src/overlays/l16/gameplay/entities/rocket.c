@@ -1964,7 +1964,9 @@ int is_linked_pair_effect_enabled(void *mv) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0B70), where it is exact; names translated to the US level program. */
 
 extern int *D_L16_001ABCC0_c3[] __asm__("D_L16_001ABCC0");
-void FUN_L16_002cf850(char *moby, char *partner);
+void draw_linked_pair_ribbons(char *moby, char *partner) __asm__("FUN_L16_002cf850");
+
+void draw_linked_pair_ribbons(char *moby, char *partner) __asm__("FUN_L16_002cf850");
 
 void FUN_L16_002cf7a8(struct Moby *moby) {
     short *group_entry = (short *)D_L16_001ABCC0_c3[moby->group];
@@ -1980,7 +1982,7 @@ void FUN_L16_002cf7a8(struct Moby *moby) {
                         char *otherData = *(char **)(partner + 0x78);
                         *(int *)(data + 4) = generation;
                         *(int *)(otherData + 4) = generation;
-                        FUN_L16_002cf850(group_moby, partner);
+                        draw_linked_pair_ribbons(group_moby, partner);
                     }
                 }
             }
@@ -2019,7 +2021,7 @@ extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Draws a four-pass textured ribbon quad from the moby toward its partner moby. */
-void FUN_L16_002cf850(char *moby, char *partner) {
+void draw_linked_pair_ribbons(char *moby, char *partner) {
     L16RibbonPacket packet;
     float frame[4][4]; /* direction, side, up, origin */
     int color;
