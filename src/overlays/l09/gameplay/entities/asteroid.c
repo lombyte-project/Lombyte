@@ -173,7 +173,7 @@ extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
 extern void transform_packet_data(void *, void *, void *) __asm__("FUN_001fa378");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
-extern void FUN_L02_002a46e0(void *);
+extern void restore_view_after_textured_grid(void *) __asm__("FUN_L02_002a46e0");
 extern int D_L09_0015F458;
 extern int D_L09_0016CDD0;
 extern int D_L09_0016CDD8[];
@@ -344,7 +344,7 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
         }
         i++;
     } while (i < count);
-    FUN_L02_002a46e0(data);
+    restore_view_after_textured_grid(data);
 }
 #undef PACKET_CURSOR
 #define NOT_SDA

@@ -267,7 +267,9 @@ extern void update_view_context(void) __asm__("FUN_001f2d98");
 void aa_blur_pass(void) __asm__("FUN_001fb680");
 extern void aa_blur_pass_00233b68(void) __asm__("FUN_00233b68");
 
-void FUN_L02_002a46e0(void) {
+void restore_view_after_textured_grid(void) __asm__("FUN_L02_002a46e0");
+
+void restore_view_after_textured_grid(void) {
     char *camera_state;
     long *gs_register_packet;
     int *packet_base;

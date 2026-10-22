@@ -18,7 +18,7 @@ extern char D_L03_001CAF00[];
 extern void FUN_L02_0024f748(char *);
 extern void FUN_L02_0024fa80(char *);
 extern void FUN_L02_002a40f0(char *);
-extern void FUN_L02_002a46e0(char *);
+extern void restore_view_after_textured_grid(char *) __asm__("FUN_L02_002a46e0");
 extern void WriteDmaChannel(u32, u32, u32);
 extern void FUN_L02_002101b8(u32, u32, u32);
 
@@ -29,7 +29,7 @@ void draw_textured_grid(char *moby) {
     FUN_L02_002101b8(D_L03_001CAF00, 0x70002800, 0xF8);
     FUN_L02_0024f748(moby);
     FUN_L02_0024fa80(moby);
-    FUN_L02_002a46e0(moby);
+    restore_view_after_textured_grid(moby);
 }
 #include "qcopy.h"
 #include "rnc/overlay/entities.h"
