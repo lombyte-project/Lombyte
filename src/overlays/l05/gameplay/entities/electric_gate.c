@@ -1426,7 +1426,7 @@ void FUN_L05_00315f70(char *moby) {
 extern char D_L05_001671C0[];
 extern f32 D_L05_00211B20[];
 extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
-extern void FUN_L03_00291918(char *);
+extern void draw_textured_grid(char *) __asm__("FUN_L03_00291918");
 
 void FUN_L05_00316070(char *moby) {
     int *clip_volume_index_cursor = *(int **)(moby + 0x78);
@@ -1441,7 +1441,7 @@ void FUN_L05_00316070(char *moby) {
         }
     }
     if (none)
-        FUN_L03_00291918(D_L05_00211B20);
+        draw_textured_grid(D_L05_00211B20);
 }
 /* Updates the pulsing marker: spawns it, then each frame animates its height and queues the draw. */
 extern char D_L05_00211B28[];

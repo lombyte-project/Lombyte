@@ -1395,7 +1395,7 @@ extern char D_L09_001F3080[];
 extern char D_L09_001F63C0[];
 extern char D_L09_001FC740[];
 extern int D_L09_0015F5CC;
-extern void FUN_L03_00291918(char *moby);
+extern void draw_textured_grid(char *moby) __asm__("FUN_L03_00291918");
 extern void FUN_L09_002c1978(void *, void *, int);
 
 void FUN_L09_002ef750(void) {
@@ -1404,7 +1404,7 @@ void FUN_L09_002ef750(void) {
     float texture_sequence_position = (float)texture_sequence_numerator / 20.0f;
     float texture_sequence_step_float = (float)texture_sequence_step;
     FUN_L09_0021e8c0(D_L09_001F3080, 0x6C, texture_sequence_position - texture_sequence_step_float, (texture_sequence_step & 15) + 0x2C, ((texture_sequence_step + 1) & 15) + 0x2C);
-    FUN_L03_00291918(D_L09_001FC740);
+    draw_textured_grid(D_L09_001FC740);
     FUN_L09_002c1978(D_L09_001FC740, D_L09_001F63C0, 10);
 }
 struct DebrisVars {
