@@ -1554,7 +1554,7 @@ void metal_detector_update(struct Moby *moby) {
     f32 pitch;
     f32 abs_yaw;
     f32 abs_pitch;
-    f32 lim;
+    f32 aim_angle_limit_radians;
     f32 zero;
     f32 one;
 
@@ -1598,15 +1598,15 @@ void metal_detector_update(struct Moby *moby) {
             pitch = fast_subtract_rotations(pitch, -1.5707964f);
             abs_yaw = FUN_001f99c0(yaw);
             abs_pitch = FUN_001f99c0(pitch);
-            lim = D_L00_00161950 * 0.017453292f;
-            if (lim < abs_yaw) {
+            aim_angle_limit_radians = D_L00_00161950 * 0.017453292f;
+            if (aim_angle_limit_radians < abs_yaw) {
                 yaw /= abs_yaw;
-                yaw *= lim;
+                yaw *= aim_angle_limit_radians;
             }
-            lim = D_L00_00161954 * 0.017453292f;
-            if (lim < abs_pitch) {
+            aim_angle_limit_radians = D_L00_00161954 * 0.017453292f;
+            if (aim_angle_limit_radians < abs_pitch) {
                 pitch /= abs_pitch;
-                pitch *= lim;
+                pitch *= aim_angle_limit_radians;
             }
             zero = 0.0f;
             yaw = fast_add_rotations(yaw, hero.motion.rot.f[2]);
