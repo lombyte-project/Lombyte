@@ -1795,7 +1795,9 @@ extern void update_blarg_trooper_attachment(struct Moby *) __asm__("FUN_L12_002e
 void ease_blarg_trooper_height_to_ground(char *moby) __asm__("FUN_L12_002e87b0");
 
 extern void ease_blarg_trooper_height_to_ground(char *) __asm__("FUN_L12_002e87b0");
-extern void FUN_L12_002e8808(struct Moby *, float *, float, float);
+void steer_blarg_trooper_toward_point(struct Moby *moby, float *target, float max_angle, float approach_speed) __asm__("FUN_L12_002e8808");
+
+extern void steer_blarg_trooper_toward_point(struct Moby *, float *, float, float) __asm__("FUN_L12_002e8808");
 extern s32 D_001413D0_e81e0 __asm__("D_001413D0") __attribute__((section(".data")));
 extern s32 scale_game_frames_e81e0(s32) __asm__("FUN_001f96f8");
 extern f32 fast_cos_e81e0(f32) __asm__("FUN_001f9dc8");
@@ -1961,7 +1963,7 @@ hide:
         path = (int *)D_L12_001B0930_w[TROOPER_I(0x254)];
         if (vector_distance(&moby->pos, path + (TROOPER_I(0x260) * 4 + 4)) < 3.0f) ++TROOPER_I(0x260);
         if (*path - 1 < TROOPER_I(0x260)) TROOPER_I(0x260) = *path - 1;
-        FUN_L12_002e8808(moby, (float *)(path + (TROOPER_I(0x260) * 4 + 4)), 0.0f, D_0015ED6C * 8.0f);
+        steer_blarg_trooper_toward_point(moby, (float *)(path + (TROOPER_I(0x260) * 4 + 4)), 0.0f, D_0015ED6C * 8.0f);
         if (TROOPER_I(0x260) == *path - 1) goto state3;
         else if (vector_distance(&moby->pos, &target->pos) < TROOPER_F(0x264)) moby->state = 3;
         break;
@@ -1993,7 +1995,7 @@ hide:
         else if (angle < -0.9599311f) angle = -0.9599311f;
         TROOPER_F(0x188) = angle * 0.5f;
         TROOPER_F(0x208) = angle * 0.5f;
-        FUN_L12_002e8808(moby, (float *)&target->pos, TROOPER_F(0x244), 0.0f);
+        steer_blarg_trooper_toward_point(moby, (float *)&target->pos, TROOPER_F(0x244), 0.0f);
         if (vector_distance(&moby->pos, &target->pos) < 5.5f || TROOPER_B(0x242)) {
             angle = fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
             if (angle_difference_8808(moby->rot.z, angle) < 0.08726646f) goto state5;
@@ -2053,7 +2055,7 @@ hide:
     }
     case BLARG_TROOPER_RETURN_HOME: {
         float angle;
-        FUN_L12_002e8808(moby, (float *)(data + 0x220), 0.0f, 0.0f);
+        steer_blarg_trooper_toward_point(moby, (float *)(data + 0x220), 0.0f, 0.0f);
         angle = TROOPER_F(0x23c) * 30.0f;
         if (angle > 0.7853982f) angle = 0.7853982f;
         else if (angle < -0.7853982f) angle = -0.7853982f;
@@ -2358,7 +2360,7 @@ extern int path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
 extern int inside_8808(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int frames_8808(int) __asm__("FUN_001f96f8");
 
-void FUN_L12_002e8808(struct Moby *moby, float *target, float max_angle, float approach_speed) {
+void steer_blarg_trooper_toward_point(struct Moby *moby, float *target, float max_angle, float approach_speed) {
     char *data = (char *)moby->pvars;
     float distance;
     float angle;
