@@ -990,7 +990,7 @@ extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_001f96b0");
 extern void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
 extern u8 D_L06_0017A240[];
 extern struct HeroAnimRow D_L06_0017A240_t[] __asm__("D_L06_0017A240");
-extern void FUN_L00_00271b18(void *, void *, f32);
+extern void spawn_random_alpha_rotated_particle(void *, void *, f32) __asm__("FUN_L00_00271b18");
 extern void FUN_L00_00215340(void);
 extern void FUN_L00_00215ef8(void);
 extern void FUN_L00_00211f38(void);

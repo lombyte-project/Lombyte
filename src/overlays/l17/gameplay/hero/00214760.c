@@ -288,7 +288,7 @@ extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_001f96b0");
 extern void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
 extern u8 D_L17_0017A3C0[];
 extern struct HeroAnimRow D_L00_00179AC0_t[] __asm__("D_L17_0017A3C0");
-extern void FUN_L00_00271b18(void *, void *, f32);
+extern void spawn_random_alpha_rotated_particle(void *, void *, f32) __asm__("FUN_L00_00271b18");
 extern void FUN_L00_00215340(void);
 extern void FUN_L00_00215ef8(void);
 extern void FUN_L00_00211f38(void);
@@ -1715,7 +1715,7 @@ void FUN_L17_00214760(void) {
             v10.f[0] += random_float_between(frame_time * -0.7f, frame_time * 0.7f);
             v10.f[1] += random_float_between(frame_time * -0.7f, frame_time * 0.7f);
             v10.f[2] += random_float_between(frame_time, frame_time * 2.0f);
-            FUN_L00_00271b18(&scratch_vector, &v10, random_float_between(37800.0f, 75600.0f));
+            spawn_random_alpha_rotated_particle(&scratch_vector, &v10, random_float_between(37800.0f, 75600.0f));
         }
         f = fast_vec_length(&hero.motion.platform_delta);
         if (f > frame_time * 0.5f) {

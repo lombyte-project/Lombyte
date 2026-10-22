@@ -442,7 +442,7 @@ extern s32 D_L01_0015F688 __attribute__((sda));
 extern s32 D_L01_0015F68C __attribute__((sda));
 extern unsigned char *D_L01_001612D0;
 extern unsigned char *FUN_L00_00250df8_cf(int) __asm__("FUN_0020c4f8");
-extern unsigned char *FUN_L00_00271b18(void *, void *, float);
+extern unsigned char *spawn_random_alpha_rotated_particle(void *, void *, float) __asm__("FUN_L00_00271b18");
 extern unsigned char D_0013D4C0[];
 extern void FUN_001efa68_cf(float *, float *, float) __asm__("FUN_L00_00233810");
 extern void FUN_001f9770_cf(int) __asm__("FUN_0022d798");
@@ -1673,7 +1673,7 @@ void FUN_L01_002370b8(void) {
             vec[1][0] += FUN_L00_00262cf0_cf(frame_time * -0.7f, frame_time * 0.7f);
             vec[1][1] += FUN_L00_00262cf0_cf(frame_time * -0.7f, frame_time * 0.7f);
             vec[1][2] += FUN_L00_00262cf0_cf(frame_time, frame_time * 2.0f);
-            FUN_L00_00271b18(vec[0], vec[1], FUN_L00_00262cf0_cf(37800.0f, 75600.0f));
+            spawn_random_alpha_rotated_particle(vec[0], vec[1], FUN_L00_00262cf0_cf(37800.0f, 75600.0f));
         }
         {
             float sp;

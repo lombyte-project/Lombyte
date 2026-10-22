@@ -226,7 +226,9 @@ extern unsigned char *D_L00_001B213C __attribute__((section(".data")));
 unsigned char *FUN_L00_002678b8(int);
 int FUN_00213260(int);
 int FUN_001fa6d0(float);
-unsigned char *FUN_L00_00271b18(u128 *position, u128 *initial_velocity, float x) {
+unsigned char *spawn_random_alpha_rotated_particle(u128 *position, u128 *initial_velocity, float x) __asm__("FUN_L00_00271b18");
+
+unsigned char *spawn_random_alpha_rotated_particle(u128 *position, u128 *initial_velocity, float x) {
     unsigned char *particle = FUN_L00_002678b8(0x2f);
     if (particle) {
         qcopy(particle + 0x10, position);
