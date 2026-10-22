@@ -1394,7 +1394,9 @@ struct BarrierVars {
 
 /* Beam barrier: pushes the hero back and counts the touches; once every linked
    moby is done it bursts into sparks and removes itself. */
-void FUN_L06_002f6470(struct Moby *moby) {
+void update_beam_barrier(struct Moby *moby) __asm__("FUN_L06_002f6470");
+
+void update_beam_barrier(struct Moby *moby) {
     enum {
         BEAM_BARRIER_INITIALIZE = 0,
         BEAM_BARRIER_ACTIVE = 1,
