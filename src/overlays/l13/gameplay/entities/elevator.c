@@ -2574,7 +2574,9 @@ void FUN_L13_002b9df8(struct Moby *moby, char *flight_data, float azimuth_angle,
 
 extern int spawn_ship_rocket(void *, void *, float, int, void *, int) __asm__("FUN_L13_002e6a58");
 
-void FUN_L13_002b9f58(struct Moby *moby, char *flight_data) {
+void fire_fighter_jet_rocket(struct Moby *moby, char *flight_data) __asm__("FUN_L13_002b9f58");
+
+void fire_fighter_jet_rocket(struct Moby *moby, char *flight_data) {
     if (fast_dec_timer(flight_data + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
         unsigned char *player_ammo_state = D_0013E533 + 0xE1D;
         if (player_ammo_state[0x15F6] != 0) {
@@ -2914,7 +2916,7 @@ void FUN_L13_002ba178(void *moby_arg, void *data_arg) {
         }
     }
     enqueue_callback_list_1(FUN_L13_002b97f8, moby);
-    FUN_L13_002b9f58((struct Moby *)moby, (char *)data);
+    fire_fighter_jet_rocket((struct Moby *)moby, (char *)data);
     FUN_L13_002b9df8((struct Moby *)moby, (char *)data, fast_add_rotations(data->camera_yaw, -data->steer_x / 7.0f),
                      -fast_add_rotations(data->camera_pitch, -(data->steer_y / 7.0f) - 0.1f));
 }
