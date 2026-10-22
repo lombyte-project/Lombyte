@@ -79,7 +79,7 @@ extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
 extern void FUN_L00_00207c48(void);
 extern void FUN_L00_00207a58(void);
-extern void FUN_L00_002059d8(void);
+extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 extern void FUN_L00_00207d00(void);
 extern void FUN_L00_00208b60(void);
 extern void FUN_L00_002484e0(void *);
@@ -148,7 +148,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
     FUN_L00_00207a58();
     if (*(u8 *)(g + 0x20a4) == 1) {
         D_L06_0017BFDC_lui = D_0015EE18_macro;
-        FUN_L00_002059d8();
+        update_hero_glow_and_extra_manipulators();
         if (*(char **)(g + 0x1624) == 0) {
             *(char **)(g + 0x1624) = create_moby(0x4b4);
             if (*(char **)(g + 0x1624)) {

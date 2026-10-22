@@ -24,7 +24,7 @@ extern float D_L15_0017C06C[];
 extern float D_L15_0017C1CC[];
 extern unsigned int fast_tween_color(float, unsigned int, unsigned int);
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
-extern void FUN_L00_002059d8(void);
+extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 extern void update_hero_bone_attachment(void) __asm__("FUN_L00_002061f0");
 extern void FUN_L00_00207a58(void);
 extern void FUN_L00_00207c48(void);
@@ -68,7 +68,7 @@ void FUN_L15_001ff938(void) {
     if (hero0[0x20A4] == 2) {
         if ((&big_head_cheat_enabled)[3] != 0)
             D_L15_0017C06C[0] = D_0015EE18 * 1.4f;
-        FUN_L00_002059d8();
+        update_hero_glow_and_extra_manipulators();
         update_hero_bone_attachment();
         {
         unsigned char *hero_moby = *(unsigned char **)(hero0 + 0x2080);

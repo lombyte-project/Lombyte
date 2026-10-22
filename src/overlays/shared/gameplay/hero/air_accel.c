@@ -186,7 +186,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E533[];
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
-extern void FUN_L00_002059d8(void);
+extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 extern void FUN_L00_00205ea8(void);
 extern void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
 extern void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
@@ -252,7 +252,7 @@ void update_hero_frame(void) {
     FUN_L00_0020ac98();
     FUN_L00_0020a9e8();
     update_hero_rotation_targets_and_random_manipulators();
-    FUN_L00_002059d8();
+    update_hero_glow_and_extra_manipulators();
     FUN_L00_00214fe8();
     update_hero_easing_records();
     update_hero_moby();

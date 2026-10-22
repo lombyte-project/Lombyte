@@ -375,7 +375,9 @@ extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 
 /* Pulses the glow colour of the hero's moby (or of the item slot 3 moby2),
    then attaches the four extra manipulators while their timer runs. */
-void FUN_L00_002059d8(void) {
+void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
+
+void update_hero_glow_and_extra_manipulators(void) {
     struct Hero *player, *glow_owner, *manip_owner;
     struct Moby *moby;
     s32 alpha, blue_swing, green_swing, red, blue, green, red_pulse, green_pulse, blue_pulse, period, min_delay, delay;
@@ -639,7 +641,7 @@ void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
 extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
 extern void FUN_L00_00207c48(void);
 extern void FUN_L00_00207a58(void);
-extern void FUN_L00_002059d8(void);
+extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 extern void FUN_L00_00207d00(void);
 extern void FUN_L00_00208b60(void);
 extern void FUN_L00_002484e0(void *);
@@ -708,7 +710,7 @@ void update_hero_in_vehicle_mode(void) {
     FUN_L00_00207a58();
     if (*(u8 *)(g + 0x20a4) == 1) {
         D_L00_0017B85C_002062b0 = D_0015EE18_macro;
-        FUN_L00_002059d8();
+        update_hero_glow_and_extra_manipulators();
         if (*(char **)(g + 0x1624) == 0) {
             *(char **)(g + 0x1624) = create_moby(0x4b4);
             if (*(char **)(g + 0x1624)) {
@@ -824,7 +826,7 @@ void update_hero_in_vehicle_mode(void) {
     if (hero.vehicle_mode == 2) {
         char *g = (char *)&hero;
         if (D_0015EDB3_macro) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x210) = 1.4f * D_0015EE18_gp;
-        FUN_L00_002059d8();
+        update_hero_glow_and_extra_manipulators();
         update_hero_bone_attachment();
         g = (char *)&hero;
         if ((*(u16 *)(*(char **)(g + 0x2080) + 0x34) ^ 1) & 1) {
@@ -1112,7 +1114,7 @@ void FUN_L00_0020a540_u(void) __asm__("FUN_L00_0020a540");
 void FUN_L00_0020ac98_u(void) __asm__("FUN_L00_0020ac98");
 void FUN_L00_0020a9e8_u(void) __asm__("FUN_L00_0020a9e8");
 void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
-void FUN_L00_002059d8(void);
+void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 void FUN_L00_00214fe8(void);
 void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 void update_hero_moby(void) __asm__("FUN_L00_00208820");
@@ -1171,7 +1173,7 @@ void coordinate_hero_frame_update(void) {
     FUN_L00_0020ac98_u();
     FUN_L00_0020a9e8_u();
     update_hero_rotation_targets_and_random_manipulators();
-    FUN_L00_002059d8();
+    update_hero_glow_and_extra_manipulators();
     FUN_L00_00214fe8();
     update_hero_easing_records();
     update_hero_moby();
