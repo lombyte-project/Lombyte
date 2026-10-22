@@ -649,7 +649,7 @@ extern s32 D_L00_001B23C0[];
 extern s32 D_L00_00160270 __attribute__((sda));
 extern long capture_texture_tex0 __asm__("D_0015EED0");
 extern void append_gif_transfer_packet() __asm__("FUN_001fb368");
-extern void FUN_L00_002a0fc8(s32, s32, s32);
+extern void append_draw_buffer_upload_packets(s32, s32, s32) __asm__("FUN_L00_002a0fc8");
 extern void reset_gs_registers() __asm__("FUN_001f3868");
 extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("FUN_001f5210");
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
@@ -693,7 +693,7 @@ void FUN_L00_002772c0(int transfer_only) {
     append_gif_transfer_packet();
     page_objects = 0;
     never = 0;
-    FUN_L00_002a0fc8(D_L00_001B9CF0.unk10, draw_buffer_address, frame_size << 11);
+    append_draw_buffer_upload_packets(D_L00_001B9CF0.unk10, draw_buffer_address, frame_size << 11);
     if (transfer_only != 0) {
         return;
     }

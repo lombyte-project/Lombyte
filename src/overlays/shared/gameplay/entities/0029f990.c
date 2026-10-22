@@ -294,7 +294,7 @@ extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_
 extern void FUN_L00_0029b680(void);
 extern void fast_mem_zero16(void *, s32) __asm__("FUN_001f9810");
 extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
-extern void FUN_L00_002a0fc8(s32, u32, u32);
+extern void append_draw_buffer_upload_packets(s32, u32, u32) __asm__("FUN_L00_002a0fc8");
 extern void setup_gif_paging(s32) __asm__("FUN_001f4280");
 extern void reset_gs_registers(void) __asm__("FUN_001f3868");
 extern void draw_mobys_setup(void) __asm__("FUN_0020d278");
@@ -397,7 +397,7 @@ void draw_vendor_screen(void) {
     default:
         return;
     }
-    FUN_L00_002a0fc8(p->f10, draw_buffer_address, frame_size[0] << 11);
+    append_draw_buffer_upload_packets(p->f10, draw_buffer_address, frame_size[0] << 11);
     setup_gif_paging(0);
     update_camera_view_matrices();
     reset_gs_registers();
