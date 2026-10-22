@@ -853,7 +853,9 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_001f9b48(void *, void *);
 float absolute_float(float input) __asm__("func_001F99C0");
 
-int FUN_L13_002c3ac8(char *pt, int *path_point_table, int start, float ref) {
+int select_blarg_space_fighter_path_point_by_distance(char *pt, int *path_point_table, int start, float ref) __asm__("FUN_L13_002c3ac8");
+
+int select_blarg_space_fighter_path_point_by_distance(char *pt, int *path_point_table, int start, float ref) {
     int best = start;
     int i = 0;
     float bestd = 1e11f;
@@ -1009,7 +1011,7 @@ int FUN_L13_002c3fc0(struct Moby *moby, char *vars, int aim) {
             qcopy(point, linked + 0x10);
         }
     }
-    backward = FUN_L13_002c3ac8((char *)point, (int *)path, *(short *)(vars + 0xB4), 0.0f);
+    backward = select_blarg_space_fighter_path_point_by_distance((char *)point, (int *)path, *(short *)(vars + 0xB4), 0.0f);
     forward = backward + 5;
     point_count = *(int *)path;
     if (forward >= point_count) {
