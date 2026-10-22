@@ -1652,7 +1652,7 @@ extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void FUN_L11_003112b8(void *, void *);
 extern void jet_group_state(int, int, int, int) __asm__("FUN_L13_002650a8");
 extern void FUN_L17_0021e530(int, int);
-extern void FUN_L17_00253a90(int, int, int, int);
+extern void update_moby_class_flags_and_link(int, int, int, int) __asm__("FUN_L17_00253a90");
 extern int allocate_voice_ed(int, int, void *) __asm__("FUN_0022da68");
 extern void release_voice_ed(int) __asm__("FUN_0022d798");
 extern void spherical_offset_ed(void *, float, float, float) __asm__("FUN_00214db0");
@@ -1769,7 +1769,7 @@ void fighter_jet_update(ShipMoby *moby) {
             if (ship_vars->i11C > 0) {
                 jet_group_state(ship_vars->i11C, 0, 0, 0);
             }
-            FUN_L17_00253a90(0x325, 1, 1, -1);
+            update_moby_class_flags_and_link(0x325, 1, 1, -1);
             ship_vars->i124 = -1;
             break;
         case FIGHTER_JET_STATE_WAIT_FOR_BOARDING: {
@@ -1834,7 +1834,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 if (ship_vars->i11C > 0) {
                     jet_group_state(ship_vars->i11C, 1, 1, 1);
                 }
-                FUN_L17_00253a90(0x325, 0, 0, -1);
+                update_moby_class_flags_and_link(0x325, 0, 0, -1);
                 moby->pos[2] += 3.0f;
                 moby->scale = *(float *)(moby->pclass + 0x24) * D_L17_0016209C;
                 g->unk20A5 = 1;
@@ -1972,7 +1972,7 @@ void fighter_jet_update(ShipMoby *moby) {
                     if (ship_vars->i11C > 0) {
                         jet_group_state(ship_vars->i11C, 0, 0, 0);
                     }
-                    FUN_L17_00253a90(0x325, 1, 1, -1);
+                    update_moby_class_flags_and_link(0x325, 1, 1, -1);
                     p = D_L17_001600EC + (ship_vars->exit_path << 7);
                     FUN_L00_00216f90(p + 0x30, p + 0x70, 0, 1);
                 }

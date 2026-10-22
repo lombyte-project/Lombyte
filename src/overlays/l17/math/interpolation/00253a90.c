@@ -33,7 +33,9 @@ typedef struct {
 extern Level17Moby *D_L17_0015FFD8;
 extern Level17Moby *D_L17_0015FFE0;
 
-void FUN_L17_00253a90(int class_id, int flag2, int flag1, int link_mode) {
+void update_moby_class_flags_and_link(int class_id, int flag2, int flag1, int link_mode) __asm__("FUN_L17_00253a90");
+
+void update_moby_class_flags_and_link(int class_id, int flag2, int flag1, int link_mode) {
     Level17Moby *moby;
     for (moby = D_L17_0015FFD8; moby <= D_L17_0015FFE0; moby++) {
         if (moby->class_id == class_id && moby->state >= 0) {
