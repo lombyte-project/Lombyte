@@ -2687,7 +2687,7 @@ typedef struct {
     char pad40[0x40];
 } VendorNode_5e80;
 
-extern void FUN_L18_00265ff8_5e80(void *, float) __asm__("FUN_L18_00265ff8");
+extern void set_moby_attached_effect_alpha_from_distance(void *, float) __asm__("FUN_L18_00265ff8");
 extern char *find_moby_hit_5e80(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int moby_take_hits_5e80(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
 extern void FUN_L00_0025d458_5e80(void *m, short *p) __asm__("FUN_L00_0025d458");
@@ -2741,7 +2741,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
     float VA0[4];
 
     *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)&D_L18_00162330;
-    FUN_L18_00265ff8_5e80(moby, 0.5f);
+    set_moby_attached_effect_alpha_from_distance(moby, 0.5f);
     f20 = (7.0f - (float)*(int *)(boss_data + 0x34C) - 2.0f) / 7.0f * 350.0f;
     step = 0.0f;
     hit_record = find_moby_hit_5e80(moby, 0x330000, 0);
