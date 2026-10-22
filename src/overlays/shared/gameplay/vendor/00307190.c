@@ -204,7 +204,9 @@ extern void func_L08_00273A80_3091B0(void *, void *, float, void *) __asm__("FUN
 extern void func_L08_002803B8_3091B0(void *, void *, float, void *) __asm__("FUN_L08_0027f5f0");
 extern void func_L00_00264570_3091B0(void *) __asm__("FUN_L00_002634f8");
 
-void FUN_L08_00307cf0(Moby *moby) {
+void scatter_ground_particles(Moby *moby) __asm__("FUN_L08_00307cf0");
+
+void scatter_ground_particles(Moby *moby) {
     enum {
         GROUND_PARTICLES_STATE_INITIALIZE = 0,
         GROUND_PARTICLES_STATE_SCATTER = 2
