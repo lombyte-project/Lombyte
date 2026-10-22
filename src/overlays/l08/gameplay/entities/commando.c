@@ -357,7 +357,9 @@ extern void FUN_L08_002f0c18(int);
 extern void emit_pair_offset_render_batch(int) __asm__("FUN_L08_002f0cf0");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-void FUN_L08_002f0dc8(void) {
+void draw_layered_mesh_effect(void) __asm__("FUN_L08_002f0dc8");
+
+void draw_layered_mesh_effect(void) {
     vu1_add_g_sregister(0x42, 0x8000000044L);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
@@ -405,7 +407,7 @@ extern short D_L08_00161DC0 __attribute__((sda));
 extern short D_L08_00161E04 __attribute__((sda));
 extern s32 D_L08_001DDF20[];
 extern s32 D_L08_001DB518[];
-extern void FUN_L08_002f0dc8(void);
+extern void draw_layered_mesh_effect(void) __asm__("FUN_L08_002f0dc8");
 extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
 extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
 extern void FUN_L08_002f12a0(int);
@@ -477,7 +479,7 @@ void FUN_L08_002f1548(struct Moby *moby) {
             FUN_L08_002f1378(0);
             FUN_L08_002f1378(0);
             FUN_L08_002f1378(1);
-            enqueue_callback_list_1(FUN_L08_002f0dc8, moby);
+            enqueue_callback_list_1(draw_layered_mesh_effect, moby);
         }
         break;
     }
