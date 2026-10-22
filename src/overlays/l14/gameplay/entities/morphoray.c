@@ -691,7 +691,9 @@ extern float func_L00_0025C700_3071B0(float, float, float) __asm__("FUN_L00_0025
 extern void func_L00_0028EBF0_3071B0(int) __asm__("FUN_0022d798");
 extern char D_0013E633_3071B0[] __asm__("D_0013E550");
 
-void FUN_L14_00305d28(Moby_3071B0 *moby) {
+void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) __asm__("FUN_L14_00305d28");
+
+void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
     enum {
         HELPER_SEQUENCE_INITIALIZE = 0,
         HELPER_SEQUENCE_WAIT_FOR_TRIGGER = 1,
