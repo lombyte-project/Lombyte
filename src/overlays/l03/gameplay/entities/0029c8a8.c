@@ -61,7 +61,9 @@ extern float D_L03_00161BE8 __attribute__((sda));
 extern void FUN_L00_00262b00(float, float, char *, float *, float *);
 extern void FUN_L00_00262b80(char *, char *, char *, float, float, float);
 
-void FUN_L03_002dd0f0(struct Moby *moby) {
+void update_moby_oscillation(struct Moby *moby) __asm__("FUN_L03_002dd0f0");
+
+void update_moby_oscillation(struct Moby *moby) {
     char *moby_pvars = (char *)moby->pvars;
     FUN_L00_00262b00(D_L03_00161BD8, D_L03_00161BDC * DEG_TO_RAD * frame_time, moby,
                      (float *)(moby_pvars + 0xac), (float *)(moby_pvars + 0xa8));

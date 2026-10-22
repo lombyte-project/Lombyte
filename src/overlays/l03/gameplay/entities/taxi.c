@@ -2091,7 +2091,7 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void FUN_L00_00233ee8(void *, float, int);
 extern s32 FUN_L00_00233f38(void);
-void FUN_L03_002dd0f0(struct Moby *m);
+void update_moby_oscillation(struct Moby *m) __asm__("FUN_L03_002dd0f0");
 
 void FUN_L03_002dccc0(struct Moby *lift_moby) {
     enum {
@@ -2172,7 +2172,7 @@ void FUN_L03_002dccc0(struct Moby *lift_moby) {
         }
         break;
     }
-    FUN_L03_002dd0f0(lift_moby);
+    update_moby_oscillation(lift_moby);
     vec_sub(&move, &lift_moby->pos, &oldPos);
     update_entity_matrix(lift_vars->coll, &move, &oldRot, &lift_moby->rot);
     if (!is_hero_on_moby(lift_moby) && vector_distance(&lift_moby->pos, &hero.motion.pos) > 2.0f && lift_vars->timer == 0)
