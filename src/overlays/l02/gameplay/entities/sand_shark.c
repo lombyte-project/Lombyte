@@ -2592,7 +2592,7 @@ extern void path_marker_dc88(void *, void *, int, int, int, int, int, float) __a
 extern void FUN_L02_0022b728(int, int);
 extern void FUN_L02_00237478(void);
 extern void FUN_L02_002def80(struct Moby *moby);
-extern void FUN_L02_002df0b0(struct Moby *moby);
+extern void snap_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_002df0b0");
 extern void FUN_L02_002f8a18(int, int);
 extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
 
@@ -2676,7 +2676,7 @@ void transport_pod_update(unsigned char *moby) {
         transport_pod_vars->rail_b_off = -1.0f;
         transport_pod_vars->cam_max = frame_time_sq * 0.1f * (float)*D_L02_001B0AB0_dc88[transport_pod_vars->path];
         transport_pod_vars->cam_accel = D_0015ED6C * 0.3f * (float)*D_L02_001B0AB0_dc88[transport_pod_vars->path];
-        FUN_L02_002df0b0((struct Moby *)moby);
+        snap_transport_pod_rails_to_offsets((struct Moby *)moby);
         break;
     case TRANSPORT_POD_WAIT_FOR_GEAR_MOVEMENT_TRIGGER:
         if (D_0014C050_dc88[moby[0xB0] + current_level_index * 16] == 0xFF) {
@@ -2711,7 +2711,7 @@ void transport_pod_update(unsigned char *moby) {
         FUN_00213f38((float *)(moby + 0x18), &transport_pod_vars->speed, D_L02_001600EC_n[transport_pod_vars->node_a].pos[2],
                      D_L02_00161C34_gp * frame_time_sq, D_L02_00161C34_gp * frame_time_sq,
                      D_L02_00161C30_gp * D_0015ED6C);
-        FUN_L02_002df0b0((struct Moby *)moby);
+        snap_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (D_L02_001600EC_n[transport_pod_vars->node_a].pos[2] - 0.0001f <= ((struct Moby *)moby)->pos.z) {
             moby[0x20] = 4;
             FUN_0022da68_dc88(0, 0, moby);
@@ -2733,7 +2733,7 @@ void transport_pod_update(unsigned char *moby) {
             ((struct Moby *)moby)->pos.z -= 6.0f;
             transport_pod_vars->rail_a_off = -1.0f;
             transport_pod_vars->rail_b_off = -1.0f;
-            FUN_L02_002df0b0((struct Moby *)moby);
+            snap_transport_pod_rails_to_offsets((struct Moby *)moby);
             moby[0x20] = 3;
             moby[0xBC] = 1;
             FUN_0022da68_dc88(1, 0, moby);
@@ -2743,7 +2743,7 @@ void transport_pod_update(unsigned char *moby) {
             ((struct Moby *)moby)->pos.z -= 6.0f;
             transport_pod_vars->rail_a_off = -1.0f;
             transport_pod_vars->rail_b_off = -1.0f;
-            FUN_L02_002df0b0((struct Moby *)moby);
+            snap_transport_pod_rails_to_offsets((struct Moby *)moby);
             moby[0xBC] = 0;
             moby[0x20] = 3;
             FUN_0022da68_dc88(1, 0, moby);
@@ -2807,7 +2807,7 @@ void transport_pod_update(unsigned char *moby) {
                      D_L02_001600EC_n[transport_pod_vars->node_a].pos[2] - 6.0f,
                      D_L02_00161C34_gp * frame_time_sq, D_L02_00161C34_gp * frame_time_sq,
                      D_L02_00161C30_gp * D_0015ED6C);
-        FUN_L02_002df0b0((struct Moby *)moby);
+        snap_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (((struct Moby *)moby)->pos.z < D_L02_001600EC_n[transport_pod_vars->node_a].pos[2] - 5.999f) {
             if (moby[0xBC] == 0) {
                 moby[0xBC] = 1;
@@ -2846,7 +2846,7 @@ void transport_pod_update(unsigned char *moby) {
         FUN_00213f38((float *)(moby + 0x18), &transport_pod_vars->speed, D_L02_001600EC_n[transport_pod_vars->node_a].pos[2],
                      D_L02_00161C34_gp * frame_time_sq, D_L02_00161C34_gp * frame_time_sq,
                      D_L02_00161C30_gp * D_0015ED6C);
-        FUN_L02_002df0b0((struct Moby *)moby);
+        snap_transport_pod_rails_to_offsets((struct Moby *)moby);
         if (D_L02_001600EC_n[transport_pod_vars->node_a].pos[2] <= ((struct Moby *)moby)->pos.z) {
             moby[0x20] = 0xB;
             FUN_0022da68_dc88(0, 0, moby);
@@ -2976,7 +2976,9 @@ void FUN_L02_002def80(struct Moby *moby) {
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
-void FUN_L02_002df0b0(struct Moby *moby) {
+void snap_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_002df0b0");
+
+void snap_transport_pod_rails_to_offsets(struct Moby *moby) {
     char *transport_pod_vars = (char *)moby->pvars;
     char *rail_a = *(char **)(transport_pod_vars + 0x84);
     float k, k2;
