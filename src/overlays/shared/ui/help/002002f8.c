@@ -16,7 +16,7 @@ extern void FUN_L00_002056a8(void);
 extern void FUN_L00_002059d8(void);
 extern void FUN_L00_00205ea8(void);
 extern void FUN_L00_00206080(void);
-extern void FUN_L00_00206cf8(void);
+extern void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 extern void FUN_L00_00206e00(void);
 extern void FUN_L00_00207a58(void);
 extern void FUN_L00_00207c48(void);
@@ -86,7 +86,7 @@ void FUN_L03_002002f8(void) {
     begin_draw_frame();
     FUN_L00_00207c48();
     FUN_L00_00207a58();
-    FUN_L00_00206cf8();
+    check_hero_item_reward_conditions();
     FUN_L00_00205ea8();
     FUN_L00_00206080();
     FUN_L00_00206e00();
