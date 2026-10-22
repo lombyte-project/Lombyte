@@ -836,7 +836,7 @@ extern void *FUN_L00_00272060(void *, int, f32, f32, int, int, int, void *, f32)
 extern void FUN_L00_002323b8(f32, int, int);
 extern void FUN_L00_00258278_df40(void *, f32, void *, f32, f32, f32) __asm__("FUN_L00_00258278");
 extern void jet_animate(void *, f32) __asm__("FUN_L00_00259fe8");
-extern void FUN_L00_0025f8e0(void *, f32);
+extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8e0");
 extern void FUN_L01_0026d930(void *);
 extern void compute_sand_mouse_approach_target(void *, void *) __asm__("FUN_L01_002e30b8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -1142,7 +1142,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
             int fade_particle_color_low_byte, c1, c2, color, life, spin;
             f32 size;
             qcopy(&pos, &sandmouse_moby->pos);
-            FUN_L00_0025f8e0(&pos, *(f32 *)&D_L01_001620B0);
+            add_random_offset_to_vector_xyz(&pos, *(f32 *)&D_L01_001620B0);
             fade_particle_color_low_byte = (rand() + 0x30) & 0x3F;
             c1 = (rand() + 0x20) & 0x3F;
             c2 = rand() & 0x2F;

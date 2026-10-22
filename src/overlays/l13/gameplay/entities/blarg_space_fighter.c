@@ -1172,7 +1172,7 @@ extern s32 rand(void);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
 extern void DebugPrint(char *, ...);
-extern void FUN_L00_0025f8e0(float *v, float s);
+extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -1361,7 +1361,7 @@ void update_blarg_space_fighter(Moby_2C56B0 *moby) {
                         normalize_vector_xyz(lateral_aim_offset, lateral_aim_offset, fighter_data->fAC * 5.0f * fast_cos(fighter_data->fB0));
                         add_vector_xyz(scratch_vector, hpos, up);
                         add_vector_xyz(scratch_vector, scratch_vector, lateral_aim_offset);
-                        FUN_L00_0025f8e0(scratch_vector, 0.6f);
+                        add_random_offset_to_vector_xyz(scratch_vector, 0.6f);
                         lead = vector_distance(&moby->pos, ((char *)&D_0013F3D0));
                         normalize_vector_xyz(vehicle_lead_offset, &vehd->vel, vehd->f64 * (lead / (vehd->f64 + D_0015ED6C * 50.0f)));
                         add_vector_xyz(scratch_vector, scratch_vector, vehicle_lead_offset);
@@ -2708,7 +2708,7 @@ extern int FUN_L00_00257b90(int, int);
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_0025f8e0(float *v, float s);
+extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -2724,7 +2724,7 @@ void FUN_L13_002e8b58(struct Moby *moby) {
         randomized_scale_ratio = moby->scale / (moby->pclass->scale * 4.0f);
         randomized_scale_ratio = randomized_scale_ratio * random_float_between_alt(0.8f, 1.1f);
         moby_point_position(moby, D_L13_001D3538[i], effect_position);
-        FUN_L00_0025f8e0(effect_position, randomized_scale_ratio * 1.4f);
+        add_random_offset_to_vector_xyz(effect_position, randomized_scale_ratio * 1.4f);
         if (frame_count & 1) {
             effect_frame_count = scale_game_frames(FUN_L00_00257b90(0x14, 0x3C));
             k = func_001FA898_r(random_float_between_alt(450.0f, 550.0f) * randomized_scale_ratio);
@@ -2979,7 +2979,7 @@ int update_moby_path_following_away_from_hero(struct Moby *moby, char *path_foll
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void FUN_L00_0025f8e0(float *v, float s);
+extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 
 void FUN_L13_002e9680(void *unused, char *parent_data, int child_slot_index) {
     char *base = parent_data + 0xC4;
@@ -2992,7 +2992,7 @@ void FUN_L13_002e9680(void *unused, char *parent_data, int child_slot_index) {
         float random_half_range, random_small_angle_step, random_second_angle_step, random_third_angle_step;
         cart_burst(unused, moby + 0x10, -1, 2.0f, 13.0f);
         fast_vec_scale(child_launch_vector, parent_data + 0x70, 0.95f);
-        FUN_L00_0025f8e0(child_launch_vector, frame_time * 30.0f);
+        add_random_offset_to_vector_xyz(child_launch_vector, frame_time * 30.0f);
         moby[0x20] = 3;
         fast_vec_add(moby + 0x10, moby + 0x10, child_launch_vector);
         random_half_range = frame_time;

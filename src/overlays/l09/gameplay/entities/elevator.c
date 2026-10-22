@@ -1825,7 +1825,7 @@ extern float advance_accelerated_scalar(float, float, float, float, float *, flo
 extern void FUN_L00_001fff28(void *, int, float);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern void FUN_L00_0025f8e0(void *, f32);
+extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8e0");
 extern void FUN_L00_002715e8(void *, int, int, float, float);
 
 /* Flies the moby along its path toward the current node, turning and banking
@@ -1882,7 +1882,7 @@ int advance_shuttle_along_path(struct Moby *moby) {
     if (vector_distance(&moby->pos, &path->node[path->count - 1]) > 8.0f &&
         vector_distance(&moby->pos, &path->node[0]) > 8.0f && !random_integer_below(7)) {
         qcopy(&puff, &moby->pos);
-        FUN_L00_0025f8e0(&puff, 0.5f);
+        add_random_offset_to_vector_xyz(&puff, 0.5f);
         puff.f[2] = 25.01f;
         FUN_L00_002715e8(&puff, 0, 0x40103080, vars->speed * 3.0f / (frame_time * 10.0f), 12600.0f);
     }

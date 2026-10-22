@@ -2224,7 +2224,7 @@ extern void release_voice_slot_2b6140(int) __asm__("FUN_0022d798");
 extern void spawn_explosion_2b6140(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int collect_mobies_in_sphere_2b6140(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void send_blast_hits_2b6140(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
-extern void func_L00_00260958_2b6140(void *, float) __asm__("FUN_L00_0025f8e0");
+extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 
 extern int D_L00_0015F458 __attribute__((sda));
 extern float D_L00_00161498 __attribute__((sda));
@@ -2420,7 +2420,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         qcopy(&vA0, &missile_moby->pos);
         for (k = 4; k >= 0; k--) {
             qcopy(&missile_moby->pos, &vA0);
-            func_L00_00260958_2b6140(&missile_moby->pos, 1.5f);
+            add_random_offset_to_vector_xyz(&missile_moby->pos, 1.5f);
             func_L00_002B6FF0_2b6140(missile_moby, 1);
             qcopy(&missile_moby->pos, &vA0);
         }

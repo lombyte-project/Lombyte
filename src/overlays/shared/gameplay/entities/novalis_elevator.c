@@ -1365,7 +1365,7 @@ extern void face_target_2e3f20(struct Moby *, float, float *, float, float, floa
 extern int FUN_L01_0023cf98(int, int);
 extern void play_sound_2e3f20(int, int, float) __asm__("FUN_L00_002323b8");
 extern int step_mover_2e3f20(void *, void *, float *, float *) __asm__("FUN_L00_00259028");
-extern void FUN_L00_0025f8e0(void *, float);
+extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern void spawn_particle_2e3f20(float *, int, int, int, int, float *, float, float, float) __asm__("FUN_L00_00272060");
 extern void finish_moby_2e3f20(void *, float) __asm__("FUN_L00_00259fe8");
 extern int random_integer_3830(void) __asm__("FUN_001160d8");
@@ -1614,7 +1614,7 @@ void sand_mouse_update(struct Moby *moby) {
             float particle_random_float;
             *(u128_2e3f20 *)vb = 0;
             qcopy(va, ((float *)&moby->pos));
-            FUN_L00_0025f8e0(va, D_L01_00161930);
+            add_random_offset_to_vector_xyz(va, D_L01_00161930);
             cr = (random_integer_3830() + 0x30) & 0x3F;
             cg = (random_integer_3830() + 0x20) & 0x3F;
             cb = random_integer_3830() & 0x2F;
@@ -2577,7 +2577,7 @@ extern s32 D_L01_00161A34 __attribute__((sda));
 extern f32 D_L01_00161A38 __attribute__((sda));
 
 extern f32 D_0015ED70;
-extern void FUN_L00_0025f8e0(void *, f32);
+extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8e0");
 extern int fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern f32 FUN_00220e20(f32) __asm__("FUN_001f96b0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -2599,7 +2599,7 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
       origin_copy = origin;
       do {
         qcopy_nc(dest, source);
-        FUN_L00_0025f8e0(dest, D_L01_001619F4 * *(f32 *)(data + 0x250));
+        add_random_offset_to_vector_xyz(dest, D_L01_001619F4 * *(f32 *)(data + 0x250));
         spawn_position[2] += 1.0f;
         angle = random_angle_radians();
         radius = random_float_between_alt(D_L01_00161A00, D_L01_00161A04);
@@ -2620,8 +2620,8 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
             scale = random_float_between_alt(0.5f, 1.5f);
             origin[3] = scale * D_L01_00161A14;
             velocity[3] = scale * D_L01_00161A18;
-            FUN_L00_0025f8e0(spawn_position, D_L01_001619F8);
-            FUN_L00_0025f8e0(velocity, D_L01_001619FC * frame_time_gp);
+            add_random_offset_to_vector_xyz(spawn_position, D_L01_001619F8);
+            add_random_offset_to_vector_xyz(velocity, D_L01_001619FC * frame_time_gp);
             lower = fast_tween_color(random_float_between_alt(0.0f, 1.0f), D_L01_00161A1C, D_L01_00161A24);
             upper = fast_tween_color(random_float_between_alt(0.0f, 1.0f), D_L01_00161A20, D_L01_00161A28);
             first = scale_game_frames(D_L01_00161A2C);

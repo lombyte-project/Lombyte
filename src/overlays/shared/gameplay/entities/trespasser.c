@@ -2053,7 +2053,7 @@ extern void update_decoy_proximity_motion(S_2c40a0 *) __asm__("FUN_L00_002c40a0"
 extern void destroy_decoy_on_selected_materials(void *) __asm__("FUN_L00_002c4328");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void FUN_L00_0025f8e0(float, void *);
+extern void add_random_offset_to_vector_xyz(float, void *) __asm__("FUN_L00_0025f8e0");
 extern void spawn_explosion(float, void *, void *, int, float, float, int, int, int,
                               float, float, float, float, int, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void initialize_hit_descriptor(float, void *, void *, int) __asm__("FUN_L00_00259858");
@@ -2243,7 +2243,7 @@ void decoy_update(char *moby) {
                 if (FUN_001fefc8_2c4380(vars + 0x6f))
                     FUN_0028dbe8_2c4380(0, 0, moby), vars[0x6f] = FUN_001fef20_2c4380(20);
                 else
-                    FUN_L00_0025f8e0(D_0015ED6C_2c4380, vars + 0x10);
+                    add_random_offset_to_vector_xyz(D_0015ED6C_2c4380, vars + 0x10);
             }
         }
         if (hero.state.current == 0x1e) {
@@ -2291,7 +2291,7 @@ void decoy_update(char *moby) {
                         scratch.w[2] = D_0015ED60_2c4380 * 0.7f;
                         scratch.w[1] = scratch.w[0];
                         *(OvlQuad *)v = *(OvlQuad *)scratch.w;
-                        FUN_L00_0025f8e0(scratch.w[0], v);
+                        add_random_offset_to_vector_xyz(scratch.w[0], v);
                         spawn_explosion(0, moby, v, 0, 0, 4.0f, 0, 0, 0,
                                          3.0f, 9.0f, 1.0f, 12.0f, 2, 1, 1, -1, active);
                         if (active) {

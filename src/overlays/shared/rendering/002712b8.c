@@ -744,7 +744,7 @@ extern char D_0013F3D0[] __attribute__((section(".data")));
 extern unsigned char *D_L00_0016016C_272bc0 __asm__("D_L00_0016016C");
 extern float FUN_001fa6c0_272bc0(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
-extern void FUN_L00_0025f8e0_272bc0(void *, float) __asm__("FUN_L00_0025f8e0");
+extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern int FUN_001f96f8_272bc0(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_002729c8_272bc0(void *, int, int, int, int, int, int, float,
                                    float) __asm__("FUN_L00_002729c8");
@@ -792,7 +792,7 @@ void update_color_tween_emitter_particle(unsigned char *particle) {
         for (i = 0; i < particle_data[0x13]; i++) {
             qcopy(particle_vector_scratch, particle + 0x10);
             emitted_speed_scale = 1.0f;
-            FUN_L00_0025f8e0_272bc0(particle_vector_scratch, 0.05f);
+            add_random_offset_to_vector_xyz(particle_vector_scratch, 0.05f);
             if (*(short *)(particle + 0xA) < FUN_001f96f8_272bc0(10)) {
                 emitted_speed_scale = FUN_001fa6c0_272bc0(*(short *)(particle + 0xA)) / (float)FUN_001f96f8_272bc0(10);
             }

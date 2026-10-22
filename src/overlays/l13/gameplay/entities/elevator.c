@@ -1984,7 +1984,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B9800), where it is exact; names translated to the US level program. */
 
 
-extern void FUN_L00_0025f8e0(float *v, float s);
+extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 extern void spawn_type_74_particle(void *, float *, float *, void *, int) __asm__("FUN_L01_0028a7a8");
 
 short D_L13_001613D8 = 0xff;
@@ -2015,9 +2015,9 @@ void spawn_fighter_jet_joint_particles(void *moby, char *flight_data) {
         qcopy(first_particle_spawn_position, joint_world_position);
         qcopy(second_particle_spawn_position, joint_world_position);
         qcopy(third_particle_spawn_position, joint_world_position);
-        FUN_L00_0025f8e0(first_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.02f);
-        FUN_L00_0025f8e0(second_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.02f);
-        FUN_L00_0025f8e0(third_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.01f + 0.02f);
+        add_random_offset_to_vector_xyz(first_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.02f);
+        add_random_offset_to_vector_xyz(second_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.02f);
+        add_random_offset_to_vector_xyz(third_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.01f + 0.02f);
         initial_particle_velocity[0] =
             -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 2.0f) * frame_time) *
             particle_velocity_scale;
@@ -2031,9 +2031,9 @@ void spawn_fighter_jet_joint_particles(void *moby, char *flight_data) {
             particle_velocity_scale;
         spawn_type_74_particle(moby, third_particle_spawn_position, initial_particle_velocity, &D_L13_001613F8, 1);
         if (*(float *)(flight_data + 0xC4) > 0.5f) {
-            FUN_L00_0025f8e0(first_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.01f);
-            FUN_L00_0025f8e0(second_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.01f);
-            FUN_L00_0025f8e0(third_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.01f + 0.01f);
+            add_random_offset_to_vector_xyz(first_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.01f);
+            add_random_offset_to_vector_xyz(second_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.02f + 0.01f);
+            add_random_offset_to_vector_xyz(third_particle_spawn_position, *(float *)(flight_data + 0xC4) * 0.01f + 0.01f);
             initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(flight_data + 0xC4) * 2.0f) *
                        frame_time) *
                      particle_velocity_scale;

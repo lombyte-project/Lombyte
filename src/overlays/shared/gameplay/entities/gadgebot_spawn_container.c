@@ -1027,7 +1027,7 @@ extern s32 D_L06_00161C58 __attribute__((sda));
 extern s32 D_L06_00161C5C __attribute__((sda));
 extern s32 D_L06_00161C60 __attribute__((sda));
 extern f32 D_L06_00161C64 __attribute__((sda));
-extern void FUN_L00_0025f8e0(void *, float);
+extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -1057,7 +1057,7 @@ void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_dir
         origin = &moby->pos;
         spark_position_destination = &pos;
         qcopy_nc(spark_position_destination, origin);
-        FUN_L00_0025f8e0(&pos, D_L06_00161C20);
+        add_random_offset_to_vector_xyz(&pos, D_L06_00161C20);
         pos.f[2] += 0.25f;
         angle = random_angle_radians();
         speed = random_float_between(D_L06_00161C2C, D_L06_00161C30);
@@ -1077,8 +1077,8 @@ void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_dir
             float third_frame_count_base;
             burst_spark_velocity.f[3] = size * D_L06_00161C40;
             accel.f[3] = size * D_L06_00161C44;
-            FUN_L00_0025f8e0(&pos, D_L06_00161C24);
-            FUN_L00_0025f8e0(&accel, D_L06_00161C28 * frame_time);
+            add_random_offset_to_vector_xyz(&pos, D_L06_00161C24);
+            add_random_offset_to_vector_xyz(&accel, D_L06_00161C28 * frame_time);
             color0 = fast_tween_color(D_L06_00161C48, D_L06_00161C50, random_float_between(0.0f, 1.0f));
             color1 = fast_tween_color(D_L06_00161C4C, D_L06_00161C54, random_float_between(0.0f, 1.0f));
             life = scale_game_frames(D_L06_00161C58);

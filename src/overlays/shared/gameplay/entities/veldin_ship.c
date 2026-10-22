@@ -1528,7 +1528,7 @@ extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void engine_voice_set_pitch(s32, s32) __asm__("FUN_L00_0028df38");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern void FUN_L00_0025f8e0(void *, f32);
+extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8e0");
 extern void spawn_bolt_by_value(void *, void *, void *, s32, s32, s32) __asm__("FUN_L00_002a7438");
 /* the unit declares mark_moby_for_removal() without a prototype further down */
 extern void delete_moby(void *) __asm__("FUN_0020c828");
@@ -1676,7 +1676,7 @@ void metal_detector_update(struct Moby *moby) {
                             Vec4f *target_position = &hero.unk2040->pos;
 
                             qcopy(target_position, &vars->pos);
-                            FUN_L00_0025f8e0(target_position, 0.2f);
+                            add_random_offset_to_vector_xyz(target_position, 0.2f);
                         }
                         target_moby = hero.unk2040;
                         spawn_bolt_by_value(target_moby, &target_moby->pos, scratch_vector, 0x13, 5, 0);

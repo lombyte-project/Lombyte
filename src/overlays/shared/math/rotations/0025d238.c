@@ -925,7 +925,9 @@ M25f878 *find_listed_moby_by_data_id(s32 id) {
 }
 f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 /* Adds a random offset in [-r, r] to each of v[0..2]. */
-void FUN_L00_0025f8e0(f32 *inout_vector, f32 random_offset_bound) {
+void add_random_offset_to_vector_xyz(f32 *inout_vector, f32 random_offset_bound) __asm__("FUN_L00_0025f8e0");
+
+void add_random_offset_to_vector_xyz(f32 *inout_vector, f32 random_offset_bound) {
     inout_vector[0] += random_float_between(-random_offset_bound, random_offset_bound);
     inout_vector[1] += random_float_between(-random_offset_bound, random_offset_bound);
     inout_vector[2] += random_float_between(-random_offset_bound, random_offset_bound);

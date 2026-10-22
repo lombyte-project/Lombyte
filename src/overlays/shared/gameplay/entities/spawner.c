@@ -349,7 +349,7 @@ extern void add_vector_xyz_30ab80(void *, void *, void *) __asm__("FUN_001f9a10"
 extern float random_float_between_30ab80(float, float) __asm__("FUN_002132a8");
 extern float FUN_00213508_30ab80(void *, int, float) __asm__("FUN_00213508");
 extern void moby_point_position_30ab80(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_0025f8e0_30ab80(float *, float) __asm__("FUN_L00_0025f8e0");
+extern void add_random_offset_to_vector_xyz(float *, float) __asm__("FUN_L00_0025f8e0");
 extern float FUN_L00_0025abf0_30ab80(void *, void *, void *, float, float) __asm__("FUN_L00_0025abf0");
 extern char *FUN_L09_0030b218_30ab80(int, void *, void *, unsigned char, unsigned char) __asm__("FUN_L09_0030b218");
 extern int scale_game_frames_30ab80(int) __asm__("FUN_001f96f8");
@@ -496,7 +496,7 @@ void spawner_update(char *moby)
             normalize_vector_xyz_30ab80(launch_velocity, launch_velocity, speed);
             moby_point_position_30ab80(moby, 0, spawn_position);
             normalize_vector_xyz_30ab80(offset, launch_velocity, 0.05f);
-            FUN_L00_0025f8e0_30ab80(offset, 0.025f);
+            add_random_offset_to_vector_xyz(offset, 0.025f);
             add_vector_xyz_30ab80(spawn_position, spawn_position, offset);
             launch_velocity[2] = FUN_L00_0025abf0_30ab80(spawn_position, target, 0, speed, -(frame_time_sq_macro * 9.8f));
         }

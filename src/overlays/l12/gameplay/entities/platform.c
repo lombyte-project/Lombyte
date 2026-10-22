@@ -882,7 +882,7 @@ extern int D_L12_00161878 __attribute__((sda));
 extern int D_L12_0016187C __attribute__((sda));
 extern int D_L12_00161880 __attribute__((sda));
 extern int D_L12_00161884 __attribute__((sda));
-extern void FUN_L00_0025f8e0(void *, float);
+extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern float random_float_between_e3098(float, float) __asm__("FUN_002132a8");
 extern float fast_cos_e3098(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_e3098(float) __asm__("FUN_001f9de0");
@@ -924,7 +924,7 @@ void FUN_L12_002e3098(struct Moby *moby) {
         pos_ptr = pos;
         src = &moby->pos;
         qcopy_nc(pos, src);
-        FUN_L00_0025f8e0(pos_ptr, D_L12_00161844);
+        add_random_offset_to_vector_xyz(pos_ptr, D_L12_00161844);
         pos[2] += 0.55f;
         angle = random_angle_radians();
         speed = random_float_between_e3098(D_L12_00161850, D_L12_00161854);
@@ -946,8 +946,8 @@ void FUN_L12_002e3098(struct Moby *moby) {
             size = random_float_between_e3098(0.5f, 1.5f);
             vel[3] = size * D_L12_00161864;
             accel[3] = size * D_L12_00161868;
-            FUN_L00_0025f8e0(pos, D_L12_00161848);
-            FUN_L00_0025f8e0(accel, D_L12_0016184C * D_0015ED6C);
+            add_random_offset_to_vector_xyz(pos, D_L12_00161848);
+            add_random_offset_to_vector_xyz(accel, D_L12_0016184C * D_0015ED6C);
             start_color = fast_tween_color(D_L12_0016186C, D_L12_00161874, random_float_between_e3098(0.0f, 1.0f));
             end_color = fast_tween_color(D_L12_00161870, D_L12_00161878, random_float_between_e3098(0.0f, 1.0f));
             life = scale_game_frames_e3098(D_L12_0016187C);

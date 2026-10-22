@@ -1120,7 +1120,7 @@ extern void mark_moby_for_removal_edc30(struct Moby *) __asm__("FUN_0020c828");
 extern char *find_moby_hit_edc30(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_L00_001fefc8(u8 *);
 extern void FUN_L00_00257470_edc30(struct Moby *, int, int) __asm__("FUN_L00_00257470");
-extern void FUN_L00_0025f8e0_edc30(void *, float) __asm__("FUN_L00_0025f8e0");
+extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern int allocate_target_entry_edc30(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern void subtract_vector_edc30(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_edc30(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1188,7 +1188,7 @@ void display_update(struct Moby *moby) {
     qcopy(top, &moby->pos);
     top[2] += 1.25f;
     qcopy(center, top);
-    FUN_L00_0025f8e0_edc30(center, 0.4f);
+    add_random_offset_to_vector_xyz(center, 0.4f);
     if (moby->oclass < 0x513) {
         allocate_target_entry_edc30(0, 0, moby);
     } else {

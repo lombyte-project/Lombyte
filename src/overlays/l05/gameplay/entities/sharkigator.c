@@ -1025,7 +1025,7 @@ extern f32 random_angle_radians_c(void) __asm__("func_00213308");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
-extern void FUN_L00_0025f8e0(float *v, float s);
+extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 
 void FUN_L05_002db238(void *moby, void *base_spark_vector) {
@@ -1037,7 +1037,7 @@ void FUN_L05_002db238(void *moby, void *base_spark_vector) {
     for (i = 0; i < 20; i++) {
         float spark_xy_spread_heading, sp, up;
         qcopy(spark_position, moby_position_ptr);
-        FUN_L00_0025f8e0(spark_position, 0.25f);
+        add_random_offset_to_vector_xyz(spark_position, 0.25f);
         spark_position[2] += 1.0f;
         spark_xy_spread_heading = random_angle_radians_c();
         sp = random_float_between_c(1.0f, 8.0f);
@@ -1053,8 +1053,8 @@ void FUN_L05_002db238(void *moby, void *base_spark_vector) {
             int first_spark_color, second_spark_color, spark_frame_count, second_spark_frame_count;
             first_spark_vector[3] = spark_vector_w_scale * 0.125f;
             second_spark_vector[3] = spark_vector_w_scale * 0.065f;
-            FUN_L00_0025f8e0(spark_position, 0.2f);
-            FUN_L00_0025f8e0(second_spark_vector, frame_time * 0.5f);
+            add_random_offset_to_vector_xyz(spark_position, 0.2f);
+            add_random_offset_to_vector_xyz(second_spark_vector, frame_time * 0.5f);
             first_spark_color = fast_tween_color(0x8000EEEE, 0x8000FF90, random_float_between_c(0.0f, 1.0f));
             second_spark_color = fast_tween_color(0xFFEE, 0xFFEE, random_float_between_c(0.0f, 1.0f));
             spark_frame_count = scale_game_frames(10);

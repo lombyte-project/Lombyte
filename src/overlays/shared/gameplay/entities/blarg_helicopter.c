@@ -332,7 +332,7 @@ extern float FUN_001f9af0_2bef68(void *a) __asm__("FUN_001f9af0");
 extern void FUN_001f9bf8_2bef68(void *,void *,float) __asm__("FUN_001f9bf8");
 extern float FUN_00213508_2bef68(void *, int, float) __asm__("FUN_00213508");
 extern int FUN_001160d8_2bef68(void) __asm__("FUN_001160d8");
-extern void FUN_L00_0025f8e0_2bef68(float *v, float s) __asm__("FUN_L00_0025f8e0");
+extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 extern void FUN_L00_001ff290_2bef68(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern float FUN_L00_0025abf0_2bef68(void *, void *, void *, float, float) __asm__("FUN_L00_0025abf0");
 extern char *FUN_L03_002c45d8_2bef68(char *owner, float *pos, float *dir, short ang, int arg) __asm__("FUN_L03_002c45d8");
@@ -686,7 +686,7 @@ void spawner_update(struct Moby *moby) {
                 launch_velocity.z = 0.0f;
                 FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, speed);
                 FUN_001f9bf8_2bef68(&spawn_position, &launch_velocity, 0.05f);
-                FUN_L00_0025f8e0_2bef68((float *)&spawn_position, 0.025f);
+                add_random_offset_to_vector_xyz((float *)&spawn_position, 0.025f);
                 FUN_L00_001ff290_2bef68(&sampled_point_scratch, &spawn_position, &launch_origin);
                 launch_velocity.z = FUN_L00_0025abf0_2bef68(&spawn_position, &target_position, 0, speed, -(spawner_data->fDC * frame_time_sq_macro));
                 spawned_moby = FUN_L03_002c45d8_2bef68((char *)moby, (float *)&spawn_position, (float *)&launch_velocity, spawner_data->h8C, spawner_data->b83);
