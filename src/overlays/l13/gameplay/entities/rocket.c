@@ -1414,7 +1414,7 @@ extern float dot_vector_xyz(void *, void *) __asm__("FUN_001f9ab0");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void spawn_point_table_sparks(struct Moby *) __asm__("FUN_L13_00309bc8");
-extern void FUN_L13_003098d0(struct Moby *);
+extern void draw_point_table_quads(struct Moby *) __asm__("FUN_L13_003098d0");
 extern float D_L13_00161E7C __attribute__((sda));
 extern struct { char pad[0x28]; float height; } D_L13_00174140;
 typedef struct {
@@ -1506,7 +1506,7 @@ void FUN_L13_003094f8(struct Moby *moby) {
         }
         j++;
     } while (j < 15);
-    enqueue_callback_list_1((void *)FUN_L13_003098d0, moby);
+    enqueue_callback_list_1((void *)draw_point_table_quads, moby);
     spawn_point_table_sparks(moby);
 }
 /* Drives the grid of 22 tiles: sets them up on the first frame, then moves the bobbing platform. */

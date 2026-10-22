@@ -44,7 +44,9 @@ extern void draw_quad_packet(void *, void *, s32) __asm__("FUN_001f7d30");
 /* Draws the beam as 15 textured quads between consecutive points of the
    moby's point list (data + 0x210), each twice: once with the odd corners
    pulled toward the centre (data + 0x1F0) and once raised by 0.25. */
-void FUN_L13_003098d0(struct Moby *moby) {
+void draw_point_table_quads(struct Moby *moby) __asm__("FUN_L13_003098d0");
+
+void draw_point_table_quads(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     QuadPacket pk[2];
     f32 identity_matrix[4][4];
