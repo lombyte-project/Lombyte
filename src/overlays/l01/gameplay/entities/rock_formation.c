@@ -1345,7 +1345,7 @@ s32 D_L01_00161CE0 = 0;
 extern s32 level_frame_count __asm__("D_L01_0015F5CC");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern void FUN_L01_002feb28(void);
+extern void draw_four_scroll_layers(void) __asm__("FUN_L01_002feb28");
 extern int enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 
 /* On first use, lowers and ripples the layers' vertices; every frame, pulses their glow and queues FUN_L01_002feb28. */
@@ -1395,7 +1395,7 @@ void FUN_L01_002feb58(void *callback_argument) {
     for (glow_layer_index = 3; glow_layer_index >= 0; glow_layer_index--) {
         D_L01_001FBC80[glow_layer_index].glow = glow_factor;
     }
-    enqueue_callback_list_1(FUN_L01_002feb28, callback_argument);
+    enqueue_callback_list_1(draw_four_scroll_layers, callback_argument);
 }
 typedef struct {
     Vec4 home;

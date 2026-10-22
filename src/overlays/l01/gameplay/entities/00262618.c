@@ -27,7 +27,9 @@ void draw_two_scroll_layers(void) {
 #include "sda.h"
 extern u8 D_L01_001FBC80[];
 
-void FUN_L01_002feb28(void) {
+void draw_four_scroll_layers(void) __asm__("FUN_L01_002feb28");
+
+void draw_four_scroll_layers(void) {
     mine_blend_color();
     FUN_L01_002b96e0(0x4, D_L01_001FBC80);
 }
