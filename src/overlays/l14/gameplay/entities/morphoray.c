@@ -1861,7 +1861,9 @@ extern void vec_cross_5d48(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void rotate_axis_5d48(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
 
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002FF358.c (func_L14_003171D0) */
-void FUN_L14_00315d48(char *cam) {
+void update_path_key_camera(char *cam) __asm__("FUN_L14_00315d48");
+
+void update_path_key_camera(char *cam) {
     CamData5d48 *data = ((CamObj5d48 *)cam)->data;
     CamState5d48 *st = &data->st;
     CamRec5d48 *rec = D_L14_0015EF50_s[((CamObj5d48 *)cam)->slot].rec;
