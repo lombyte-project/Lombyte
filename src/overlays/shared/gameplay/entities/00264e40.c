@@ -117,7 +117,9 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
 
 extern int collect_mobies_in_sphere(float, void *, int, int, int) __asm__("FUN_L00_001f2868");
 
-void FUN_L02_002651d0(char **slots, int excluded_moby, int moby_record_payload) {
+void collect_mobies_around_tracked_objects(char **slots, int excluded_moby, int moby_record_payload) __asm__("FUN_L02_002651d0");
+
+void collect_mobies_around_tracked_objects(char **slots, int excluded_moby, int moby_record_payload) {
     int i;
     for (i = 6; i >= 0; i--, slots++) {
         char *slot_object = *slots;

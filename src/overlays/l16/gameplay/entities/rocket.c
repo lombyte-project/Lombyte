@@ -1216,7 +1216,7 @@ extern void FUN_L00_0025f730(void *, float);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void reset_shot_tracking(char *) __asm__("FUN_L02_00264e40");
 extern void FUN_L02_00264e70(void *, void *, void *, float);
-extern void FUN_L02_002651d0(char **, int, int);
+extern void collect_mobies_around_tracked_objects(char **, int, int) __asm__("FUN_L02_002651d0");
 extern void FUN_L16_002ce9f0_u(void *) __asm__("FUN_L16_002ce9f0");
 void refresh_test_dummy_door_timer(struct Moby *moby) __asm__("FUN_L16_002d5e80");
 
@@ -1466,7 +1466,7 @@ void test_dummy_update(unsigned char *moby) {
             fx.kind = 5;
             fx.enabled = 1;
             fx.cls = *(unsigned short *)(moby + 0xA6);
-            FUN_L02_002651d0((char **)slots, (int)moby, (int)&fx);
+            collect_mobies_around_tracked_objects((char **)slots, (int)moby, (int)&fx);
         }
         if (moby[0x70] & 2) {
             dummy_data->node = (dummy_data->node + 1) & 1;

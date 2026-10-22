@@ -1416,7 +1416,7 @@ extern void FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
 extern void FUN_L01_0026d930(char *p);
 extern void reset_shot_tracking(char *moby) __asm__("FUN_L02_00264e40");
 extern void FUN_L02_00264e70(void *, void *, void *, float);
-extern void FUN_L02_002651d0(char **slots, int a, int b);
+extern void collect_mobies_around_tracked_objects(char **slots, int a, int b) __asm__("FUN_L02_002651d0");
 extern void FUN_L02_002d85b8(void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_c3(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -1675,7 +1675,7 @@ void FUN_L02_002d7748(struct Moby *moby) {
         shot[0x18] = 5;
         shot[0x19] = 1;
         *(short *)(shot + 0x1A) = (u16)moby->oclass;
-        FUN_L02_002651d0(data->shots, (int)moby, (int)shot);
+        collect_mobies_around_tracked_objects(data->shots, (int)moby, (int)shot);
         if (moby->anim_flags & 2) {
             moby->anim_speed = 1.0f;
             moby->state = 0xD;
