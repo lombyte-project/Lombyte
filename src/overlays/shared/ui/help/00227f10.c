@@ -70,7 +70,7 @@ extern void FUN_L00_00233708_235c08(void *, void *, f32) __asm__("FUN_L00_002337
 extern void FUN_001f9bf8_235c08(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void FUN_001f9c48_235c08(float *, float *, float) __asm__("FUN_001f9c48");
 extern void FUN_001f9a10_235c08(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_L00_00213e68_235c08(f32) __asm__("FUN_L00_00213e68");
+extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 
 #define ED64 frame_scale_sq
 #define ED6C frame_time
@@ -106,7 +106,7 @@ void FUN_L12_00235c08(void) {
     } else if (state == 0x1C) {
         if (FUN_001f96f8_235c08(0x28) < hero.state_timer) {
             FUN_L00_00211e30_235c08(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 15.009831f);
-            FUN_L00_00213e68_235c08(ED70 * 20.0f);
+            steer_hero_planar_velocity(ED70 * 20.0f);
         }
         if (13.0f <= hero.anim_frame && hero.anim_frame <= 30.0f) {
             if (27.0f < hero.anim_frame) {
@@ -196,6 +196,6 @@ void FUN_L12_00235c08(void) {
                 arg = hero.ground_slope.f * (ED70 * 9.0f) / 0.7853982f;
             }
         }
-        FUN_L00_00213e68_235c08(arg);
+        steer_hero_planar_velocity(arg);
     }
 }

@@ -3858,7 +3858,9 @@ extern void FUN_L00_00233708(void *, void *, f32);
 static inline struct Hero *hero_ptr(void) { return &hero; }
 
 /* Steers the velocity's xy toward the move yaw at the target speed. */
-void FUN_L00_00213e68(f32 step) {
+void steer_hero_planar_velocity(f32 step) __asm__("FUN_L00_00213e68");
+
+void steer_hero_planar_velocity(f32 step) {
     struct Hero *player = &hero;
     f32 delta[4];
     Vec4 impulse;

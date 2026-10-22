@@ -622,7 +622,7 @@ extern void probe_hero_airborne_wall_contact(void) __asm__("FUN_L00_0020b5b8");
 extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern f32 D_L12_001C4130[];
-extern void FUN_L00_00213e68(f32);
+extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 extern void FUN_L00_002091d8(f32, f32, f32);
 extern void FUN_L12_00235c08(void);
 extern void FUN_L00_0020d2f8(void *);
@@ -2101,7 +2101,7 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
-        FUN_L00_00213e68(frame_time_sq * 25.0f);
+        steer_hero_planar_velocity(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 18.0f);
         break;
     case HERO_STATE_FALL:
@@ -2182,7 +2182,7 @@ void update_hero_motion_for_current_state(void) {
                     g = frame_time_sq * 1.2f;
                 }
             }
-            FUN_L00_00213e68(g);
+            steer_hero_planar_velocity(g);
         }
         adjust_hero_pose_targets_from_motion();
         clip_hero_horizontal_velocity(1);
@@ -2497,7 +2497,7 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_VEHICLE_MODE_3_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
-        FUN_L00_00213e68(frame_time_sq * 25.0f);
+        steer_hero_planar_velocity(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, frame_time_sq * 18.0f);
         break;
     case 0x55:
