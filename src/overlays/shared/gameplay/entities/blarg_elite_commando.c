@@ -209,7 +209,9 @@ extern void transform_vector_by_basis(void *, void *, void *);
 float FUN_L16_002d3eb8(char *moby, float *target);
 extern void FUN_L16_002d41f8_2(void *, void *) __asm__("FUN_L16_002d41f8");
 void FUN_L16_002d4590(char *m);
-void FUN_L16_002d4908(char *m);
+void emit_blarg_elite_commando_joint_sparks(char *commando_moby) __asm__("FUN_L16_002d4908");
+
+void emit_blarg_elite_commando_joint_sparks(char *m) __asm__("FUN_L16_002d4908");
 extern float func_L16_002D5280_update(char *, void *, int) __asm__("FUN_L16_002d3eb8");
 extern int func_0022ED80_update(int, int, void *) __asm__("FUN_0022da68");
 extern float func_001F9D10_update(void *, void *) __asm__("FUN_001f9b48");
@@ -474,7 +476,7 @@ void blarg_elite_commando_update(char *commando_moby) {
     if (D_L16_00161A78)
         FUN_L16_002d4590(commando_moby);
     if (D_L16_00161A7C && D_001413DC != 22)
-        FUN_L16_002d4908(commando_moby);
+        emit_blarg_elite_commando_joint_sparks(commando_moby);
     if (current_level_index == 18 && D_L16_0015F5C4 == 2 && (unsigned int)(D_L16_0016CC90 - 3) < 3U)
         mark_moby_for_removal(commando_moby);
 }
@@ -999,7 +1001,7 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
-void FUN_L16_002d4908(char *commando_moby) {
+void emit_blarg_elite_commando_joint_sparks(char *commando_moby) {
     float matrix[16], velocity[4], acceleration[4], scatter[4];
     int i;
     if (*(unsigned char *)(commando_moby + 0x31) == 0 || *(unsigned char *)(commando_moby + 0x20) == 10)
