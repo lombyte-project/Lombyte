@@ -2819,7 +2819,9 @@ void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 int mine_blend_color(int, int, float) __asm__("FUN_L00_002371e0");
-void FUN_L00_0026fa00(char *particle) {
+void update_offset_and_pulse_effect_particle(char *particle) __asm__("FUN_L00_0026fa00");
+
+void update_offset_and_pulse_effect_particle(char *particle) {
     V4 position_offset;
     int *particle_data = (int *)(particle + 0x20);
     int color_blend_peak_ticks, k;
