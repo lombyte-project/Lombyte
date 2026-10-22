@@ -483,7 +483,9 @@ int FUN_L00_0020d5d0(int mode, float *out) {
    base-first index add. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020DCF0), where it is exact; names translated to the US level program. */
 
-float FUN_L00_0020d658(int back) {
+float get_hero_yaw_history(int back) __asm__("FUN_L00_0020d658");
+
+float get_hero_yaw_history(int back) {
     struct Hero *hero_state = &hero;
     int history_lookback = back < 32 ? back : 31;
 

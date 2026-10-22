@@ -31,7 +31,7 @@ extern float D_L11_0017C7F0[][25];
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern float FUN_L00_0020d658(int back);
+extern float get_hero_yaw_history(int back) __asm__("FUN_L00_0020d658");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -1205,7 +1205,7 @@ int hero_set_state(int a, int b) {
                 u->unk490 = 4.5f;
                 u->unk4AA = scale_game_frames(0x32);
                 u->unk494 = 1.0f;
-                u->unk43C = FUN_L00_0020d658(scale_game_frames(0xA));
+                u->unk43C = get_hero_yaw_history(scale_game_frames(0xA));
                 u->unk450 = stick_direction_vs_facing();
                 u->unk438 = u->motion.move_yaw;
                 if (frame_time * 1.5f < u->motion.unk164) {
