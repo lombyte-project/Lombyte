@@ -376,7 +376,9 @@ int hero_slot_item_id(int i) {
 extern int FUN_L00_0020d498_u(int) __asm__("FUN_L00_0020d498");
 
 /* True when hero_slot_item_id(arg) is 0x11, 10, 0x14 or 0x19. */
-int FUN_L00_0020d4d0(int slot_index) {
+int is_hero_slot_item_id_10_17_20_or_25(int slot_index) __asm__("FUN_L00_0020d4d0");
+
+int is_hero_slot_item_id_10_17_20_or_25(int slot_index) {
     int item_id = FUN_L00_0020d498_u(slot_index);
 
     if (item_id == 0x11 || item_id == 10 || item_id == 0x14 || item_id == 0x19) {
@@ -1567,7 +1569,7 @@ void FUN_L00_0020f580(void)
                     } else {
                         *(u128 *)(moby + 0x10) = *(u128 *)(D_0013FE40_f580 + index * 0x40);
                         if (large_font_height == 0 || *(s32 *)(D_00179AC0_f580 + *(s32 *)(slot + 0x10b8) * 0x4c + 0x18) == 0) {
-                            first = FUN_L00_0020d4d0(i);
+                            first = is_hero_slot_item_id_10_17_20_or_25(i);
                             second = is_hero_slot_item_id_5_to_7(i);
                             third = FUN_L00_0020d540_f580(i);
                             if (first == 0 && second == 0 && third == 0) FUN_00250480_f580(moby);
