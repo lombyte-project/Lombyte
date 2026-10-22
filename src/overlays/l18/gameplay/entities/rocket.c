@@ -1513,7 +1513,9 @@ extern float D_L18_00161A5C __attribute__((sda));
 extern float D_L18_00161A60 __attribute__((sda));
 extern float D_L18_00161A64 __attribute__((sda));
 extern int D_L18_001623A8 __attribute__((sda));
-extern void FUN_L18_002d88b8(struct Moby *);
+void spawn_floating_platform_sparks(struct Moby *moby) __asm__("FUN_L18_002d88b8");
+
+extern void spawn_floating_platform_sparks(struct Moby *) __asm__("FUN_L18_002d88b8");
 extern void FUN_L18_00227dd0(int, int);
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -1580,7 +1582,7 @@ void floating_platform_update(struct Moby *moby) {
         break;
     case STATE_WAIT_FOR_SINK_TRIGGER:
         if (moby->visible != 0 && tick_countdown_32((int *)(data + 0x8C)) != 0) {
-            FUN_L18_002d88b8(moby);
+            spawn_floating_platform_sparks(moby);
             *(int *)(data + 0x8C) = scale_ticks(random_int_between(0x5A, 0x78));
         }
         if (hero.ground_moby == moby && hero.air_frames.s == 0) {
@@ -1598,7 +1600,7 @@ void floating_platform_update(struct Moby *moby) {
         break;
     case STATE_SINKING:
         if (moby->visible != 0 && tick_countdown_32((int *)(data + 0x8C)) != 0) {
-            FUN_L18_002d88b8(moby);
+            spawn_floating_platform_sparks(moby);
             *(int *)(data + 0x8C) = scale_ticks(random_int_between(0xF, 0x1E));
         }
         sink = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) / (D_L18_00161A64 - D_L18_00161A60);
@@ -1680,7 +1682,7 @@ extern short D_L18_00161AB4 __attribute__((sda));
 extern void set_vector_unit_z(void *) __asm__("FUN_001f9a00");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L18_002d88b8(struct Moby *moby) {
+void spawn_floating_platform_sparks(struct Moby *moby) {
     float spark_spawn_position[4];
     float world_emission_direction[4];
     float first_spark_vector[4];
