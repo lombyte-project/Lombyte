@@ -1184,7 +1184,9 @@ extern int D_L12_0015F5CC;
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
-void FUN_L12_003093c8(struct Moby *moby) {
+void trigger_scene_once_in_clip_volume(struct Moby *moby) __asm__("FUN_L12_003093c8");
+
+void trigger_scene_once_in_clip_volume(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *base;
     char *hero_position;
