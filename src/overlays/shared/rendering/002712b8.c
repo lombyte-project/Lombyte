@@ -1900,7 +1900,9 @@ void FUN_L00_00259430();
 int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle() __asm__("FUN_L00_00267a08");
 /* Lowers the top byte at p+4 by D_L00_00160240; calls 00267a08 once fast_dec_timer_s16(p+0xA) is set. */
-void FUN_L00_00275810(char *particle) {
+void update_timed_alpha_fade_particle(char *particle) __asm__("FUN_L00_00275810");
+
+void update_timed_alpha_fade_particle(char *particle) {
     FUN_L00_00259430(particle + 4, D_L00_00160240);
     if (fast_dec_timer_s16(particle + 0xA))
         free_effect_particle(particle);

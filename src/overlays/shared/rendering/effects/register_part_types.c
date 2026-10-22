@@ -82,7 +82,7 @@ extern void update_size_gated_rotating_particle(void) __asm__("FUN_L00_002752e0"
 extern void FUN_L00_00275320(void);
 extern void FUN_L00_00275510(void);
 extern void FUN_L00_002756f0(void);
-extern void FUN_L00_00275810(void);
+extern void update_timed_alpha_fade_particle(void) __asm__("FUN_L00_00275810");
 extern void FUN_L00_00275860(void);
 extern void FUN_L00_00275aa0(void);
 extern void update_moving_fading_particle(void) __asm__("FUN_L00_00275d68");
@@ -171,7 +171,7 @@ void register_part_types(void) {
     handlers[73] = (u32)FUN_L00_00275320;
     handlers[74] = (u32)FUN_L00_00275510;
     handlers[75] = (u32)FUN_L00_002756f0;
-    handlers[76] = (u32)FUN_L00_00275810;
+    handlers[76] = (u32)update_timed_alpha_fade_particle;
     handlers[77] = (u32)FUN_L00_00275860;
     handlers[78] = (u32)FUN_L00_00275aa0;
     handlers[79] = (u32)update_moving_fading_particle;
