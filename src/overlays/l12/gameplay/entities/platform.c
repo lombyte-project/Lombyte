@@ -265,7 +265,9 @@ int FUN_L12_002e16b8(struct Moby *moby) {
 
 extern int cancel_suck_cannon_suction(struct Moby *) __asm__("FUN_L00_002dbe20");
 
-int FUN_L12_002e17f8(struct Moby *moby) {
+int cancel_suck_cannon_suction_and_set_state_eight(struct Moby *moby) __asm__("FUN_L12_002e17f8");
+
+int cancel_suck_cannon_suction_and_set_state_eight(struct Moby *moby) {
     int result = cancel_suck_cannon_suction(moby);
     if (moby->state == 9 || moby->state == 11) {
         return 0;
