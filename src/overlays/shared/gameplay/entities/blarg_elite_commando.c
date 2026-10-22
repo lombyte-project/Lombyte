@@ -710,7 +710,9 @@ void FUN_L16_002d38b0(struct Moby *commando_moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5188), where it is exact; names translated to the US level program. */
 
-void FUN_L16_002d3dc0(char *moby, void *owner, void *position, char *vector) {
+void set_blarg_elite_commando_parent_transform(char *moby, void *owner, void *position, char *vector) __asm__("FUN_L16_002d3dc0");
+
+void set_blarg_elite_commando_parent_transform(char *moby, void *owner, void *position, char *vector) {
     char *data = *(char **)(moby + 0x78);
     *(void **)(data + 0x2D0) = owner;
     qcopy(data + 0x2C0, position);

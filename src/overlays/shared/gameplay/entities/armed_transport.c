@@ -55,7 +55,7 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
-void FUN_L16_002d3dc0(char *moby, void *owner, void *position, char *vector);
+void set_blarg_elite_commando_parent_transform(char *moby, void *owner, void *position, char *vector) __asm__("FUN_L16_002d3dc0");
 void FUN_L16_002d3de0(char *moby, int arg);
 extern int func_0022ED80_update(int, int, void *) __asm__("FUN_0022da68");
 extern float func_001F9D10_update(void *, void *) __asm__("FUN_001f9b48");
@@ -123,7 +123,7 @@ void armed_transport_update(char *transport_moby) {
             vector.f[2] = 3.14159f;
             for (i = 0; i < 4; i++) {
                 if (((int *)(transport_data + 0xC0))[i] >= 0) {
-                    FUN_L16_002d3dc0(D_L16_0015FFD8 + (((int *)(transport_data + 0xC0))[i] << 8), transport_moby, D_L16_001D9680,
+                    set_blarg_elite_commando_parent_transform(D_L16_0015FFD8 + (((int *)(transport_data + 0xC0))[i] << 8), transport_moby, D_L16_001D9680,
                                       (char *)vector.f);
                 }
             }
