@@ -2602,7 +2602,7 @@ extern void FUN_0022da68_dc88(int, int, void *) __asm__("FUN_0022da68");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_00233ee8(void *, int, float);
-extern int FUN_L00_00233f38();
+extern int get_hero_target_pose_status() __asm__("FUN_L00_00233f38");
 extern void FUN_L00_00250df8(void *);
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void FUN_L00_002ea9d8(void *);
@@ -2801,7 +2801,7 @@ void transport_pod_update(unsigned char *moby) {
         }
         break;
     case TRANSPORT_POD_WAIT_FOR_RIDER_READY_FOR_DEPARTURE: {
-        int rider_readiness_status = FUN_L00_00233f38();
+        int rider_readiness_status = get_hero_target_pose_status();
         if (rider_readiness_status == 2) {
             moby[0x20] = 7;
             FUN_0022da68_dc88(2, 0, moby);

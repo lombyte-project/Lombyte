@@ -1781,13 +1781,13 @@ void FUN_L00_0020fde0(int id) {
         break;
     }
 }
-s32 FUN_L00_00233f38_0020fe30(void) __asm__("FUN_L00_00233f38");
+s32 get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 /* True when 00233f38, D_L00_0015F5C4 and hero.vehicle_mode are 0, control_mode <3 or 4, and base_condition is 0. */
 s32 FUN_L00_0020fe30(void);
 s32 FUN_L00_0020fe30(void) {
     struct Hero *hero_state;
     u32 control_mode;
-    if (FUN_L00_00233f38_0020fe30())
+    if (get_hero_target_pose_status())
         return 0;
     if (D_L00_0015F5C4)
         return 0;

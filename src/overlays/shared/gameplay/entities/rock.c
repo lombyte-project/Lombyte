@@ -1712,7 +1712,7 @@ extern void FUN_L00_00233ee8(float *, int, float);
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void advance_accelerated_scalar(float *, float *, float, float, float,
                                        float) __asm__("FUN_00213f38");
-extern int FUN_L00_00233f38(void);
+extern int get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern int enqueue_callback_list_1(void (*)(char *), char *) __asm__("FUN_001f4600");
@@ -1837,7 +1837,7 @@ void teleporter_update(struct Moby *moby) {
         FUN_L01_003092d0_c(moby);
         break;
     case TELEPORTER_PREPARE_TRANSFER: {
-        int transfer_preparation_status = FUN_L00_00233f38();
+        int transfer_preparation_status = get_hero_target_pose_status();
         if (*(float *)(data + 0x20) < 1.0f) {
             advance_accelerated_scalar((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
                                        D_L01_00161F88 * frame_time_sq,

@@ -1274,7 +1274,7 @@ extern void FUN_L01_003092d0_2518(char *) __asm__("FUN_L01_003092d0");
 extern int allocate_voice_2518(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_00233ee8_2518(float *, int, float) __asm__("FUN_L00_00233ee8");
 extern void FUN_L00_002598b0_2518(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
-extern int FUN_L00_00233f38_2518(void) __asm__("FUN_L00_00233f38");
+extern int get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 extern void advance_accelerated_scalar_2518(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void approach_value_2518(float *, float, float) __asm__("FUN_00213ed8");
 extern void FUN_L00_00216f90_2518(void *, void *, int, int) __asm__("FUN_L00_00216f90");
@@ -1357,7 +1357,7 @@ void teleporter_update(struct Moby *moby) {
         break;
     }
     case TELEPORTER_OPEN_PARTS: {
-        int teleport_transition_status = FUN_L00_00233f38_2518();
+        int teleport_transition_status = get_hero_target_pose_status();
         if (*(float *)(data + 0x20) < 1.0f) {
             advance_accelerated_scalar_2518((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
                                             D_L11_00161910 * D_0015ED70_2518,

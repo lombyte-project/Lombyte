@@ -1284,7 +1284,9 @@ void FUN_L00_00233ee8(void *source_position, float f, int state_entry_option) {
 extern s32 D_001413D4[];
 
 /* Maps D_001413D4[0]: 0x65/0x66 to 1, 0x67 to 2, others to 0. */
-s32 FUN_L00_00233f38(void) {
+s32 get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
+
+s32 get_hero_target_pose_status(void) {
     s32 current_hero_state = D_001413D4[0];
     switch (current_hero_state) {
     case HERO_STATE_APPROACH_TARGET_POSE:

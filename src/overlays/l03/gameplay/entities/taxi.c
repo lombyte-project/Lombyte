@@ -763,7 +763,7 @@ extern void draw_number(void *, struct Moby *, s32, u32, s32, s32, s32, f32) __a
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void FUN_L00_00233ee8(void *, float, int);
-extern s32 FUN_L00_00233f38(void);
+extern s32 get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void taxi_kill(struct Moby *) __asm__("FUN_0020c828");
 extern f32 taxi_atan2(f32, f32) __asm__("FUN_001f9e90");
@@ -880,7 +880,7 @@ void update_rail_taxi(struct Moby *taxi_moby) {
         }
         break;
     case TAXI_WAIT_FOR_RETURN_DEPARTURE:
-        if (!FUN_L00_00233f38()) {
+        if (!get_hero_target_pose_status()) {
             taxi_moby->state = 5;
         }
         break;
@@ -2110,7 +2110,7 @@ extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_0026685
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void FUN_L00_00233ee8(void *, float, int);
-extern s32 FUN_L00_00233f38(void);
+extern s32 get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 void update_moby_oscillation(struct Moby *m) __asm__("FUN_L03_002dd0f0");
 
 void update_rail_lift(struct Moby *lift_moby) __asm__("FUN_L03_002dccc0");
@@ -2180,7 +2180,7 @@ void update_rail_lift(struct Moby *lift_moby) {
         }
         break;
     case LIFT_WAIT_FOR_HERO_ANIMATION:
-        if (!FUN_L00_00233f38())
+        if (!get_hero_target_pose_status())
             lift_moby->state = 3;
         break;
     case LIFT_FOLLOW_PATH:
