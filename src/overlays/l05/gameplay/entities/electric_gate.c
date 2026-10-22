@@ -441,7 +441,9 @@ void FUN_L05_0030e508(char *moby) {
     }
 }
 void FUN_L05_0030f218(char *, float, float);
-void FUN_L05_0030f408(char *, float, float);
+void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) __asm__("FUN_L05_0030f408");
+
+void update_drain_cover_tilt(char *, float, float) __asm__("FUN_L05_0030f408");
 extern int is_target_entry_for_moby(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_target_entry(int) __asm__("FUN_0022d798");
 extern int allocate_target_entry(int, int, void *) __asm__("FUN_0022da68");
@@ -582,7 +584,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
         }
         break;
     case DRAIN_COVER_WAIT_TO_RISE:
-        FUN_L05_0030f408((char *)moby, 0.0f, 8.0f);
+        update_drain_cover_tilt((char *)moby, 0.0f, 8.0f);
         if (D_L05_0015F5C4 == 0 && vector_distance_xyz(moby->pos, D_0013F3D0) < 24.0f && timer_finished(&data->timer) != 0) {
             moby->state = 2;
             clear_vector_30e7f8(data->vel);
@@ -617,7 +619,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
             play_entity_sound((int)moby, 1.0f, moby->pos, 0x10000, 2.0f, 1.0f, 0, 1, 0);
         }
         FUN_L05_0030f218((char *)moby, data->home[2], data->vel[2] * (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) * 0.5f + moby->pos[2]);
-        FUN_L05_0030f408((char *)moby, D_L05_00161DD4, 1.0f);
+        update_drain_cover_tilt((char *)moby, D_L05_00161DD4, 1.0f);
         add_vector(moby->pos, moby->pos, data->vel);
         data->vel[2] = data->vel[2] - D_L05_00161DAC * frame_time_sq;
         if (data->vel[2] <= 0.0f) {
@@ -628,7 +630,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
         break;
     case DRAIN_COVER_HOVER:
         FUN_L05_0030f218((char *)moby, data->home[2], moby->pos[2]);
-        FUN_L05_0030f408((char *)moby, D_L05_00161DD4, 1.0f);
+        update_drain_cover_tilt((char *)moby, D_L05_00161DD4, 1.0f);
         approach_position(data->home[2] + data->home[3], D_L05_00161DB0 * frame_time_sq, D_L05_00161DB0 * frame_time_sq, frame_time * 20.0f, &moby->pos[2], &data->vel[2]);
         if (data->vel[2] == 0.0f) {
             if (data->home[3] > data->f84) {
@@ -643,7 +645,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
         break;
     case DRAIN_COVER_FALL_TO_HOME:
         FUN_L05_0030f218((char *)moby, data->home[2], data->vel[2] * (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) + moby->pos[2]);
-        FUN_L05_0030f408((char *)moby, data->home[2] + 1.0f < moby->pos[2] ? D_L05_00161DD4 : 0.0f, data->home[2] + 1.0f < moby->pos[2] ? 1.0f : 10.0f);
+        update_drain_cover_tilt((char *)moby, data->home[2] + 1.0f < moby->pos[2] ? D_L05_00161DD4 : 0.0f, data->home[2] + 1.0f < moby->pos[2] ? 1.0f : 10.0f);
         add_vector(moby->pos, moby->pos, data->vel);
         data->vel[2] = data->vel[2] - D_L05_00161DAC * frame_time_sq;
         if (moby->pos[2] < data->home[2]) {
@@ -748,7 +750,7 @@ extern float D_L05_00161DE4 __attribute__((sda));
 extern float approach_angle(float *, float, float *, float, float,
                             float) __asm__("FUN_L00_0025be00");
 
-void FUN_L05_0030f408(char *moby, float turn_scale, float speed_scale) {
+void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
     char *data = (char *)MOBY(moby)->pvars;
     struct Hero *game = &hero;
     float offset[4];
