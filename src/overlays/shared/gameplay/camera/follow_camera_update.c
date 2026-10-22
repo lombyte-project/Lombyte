@@ -1294,7 +1294,9 @@ extern char D_00166C80_c[] __asm__("D_L00_00166C80");
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 float FUN_001f9b48(void *, void *);
-void FUN_L00_002eba18(char *camera_object) {
+void select_camera_mode_by_hero_alignment_and_distance(char *camera_object) __asm__("FUN_L00_002eba18");
+
+void select_camera_mode_by_hero_alignment_and_distance(char *camera_object) {
     struct Hero *hero_data = &hero;
     char *camera_globals = D_00166C80_c;
     char *hero_moby = ((char *)hero_data->moby);

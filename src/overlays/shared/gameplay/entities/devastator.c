@@ -2008,7 +2008,7 @@ unsigned char *FUN_L00_002b58d8(unsigned char *source_moby, V_2b58d8 *pos, float
     return spawned_moby;
 }
 extern int D_00141330[];
-void FUN_L00_002eba18();
+void select_camera_mode_by_hero_alignment_and_distance() __asm__("FUN_L00_002eba18");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_002b57f0_u() __asm__("FUN_L00_002b57f0");
 void FUN_L00_00203b78();
@@ -2019,7 +2019,7 @@ void FUN_L00_002b5b20(void *missile_moby, char **missile_vars) {
     if (x)
         *(int *)(x + 4) = 0;
     D_00141330[0] = 0;
-    FUN_L00_002eba18(*(int *)((char *)missile_vars + 0x14));
+    select_camera_mode_by_hero_alignment_and_distance(*(int *)((char *)missile_vars + 0x14));
     *(int *)((char *)missile_vars + 0x14) = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
     FUN_L00_002b57f0_u(missile_moby, 1);
