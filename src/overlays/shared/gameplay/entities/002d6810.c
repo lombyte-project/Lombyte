@@ -140,7 +140,9 @@ extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_L00_0023e738(void *, float, float, float, float, float);
 void FUN_L15_002d79e8(char *m);
 void FUN_L15_002d7bb0(struct Moby *moby);
-void FUN_L15_002d8710(char *moby);
+void draw_electric_water_bolt_effect(char *moby) __asm__("FUN_L15_002d8710");
+
+void draw_electric_water_bolt_effect(char *moby) __asm__("FUN_L15_002d8710");
 void FUN_L15_002d77c0(char *moby);
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern int FUN_L00_0028dc90(int, int, void *, int);
@@ -304,7 +306,7 @@ void electric_water_update(struct Moby *moby) {
                     }
                     FUN_L15_002d79e8((char *)moby);
                     FUN_L15_002d7bb0(moby);
-                    enqueue_callback_list_1(FUN_L15_002d8710, moby);
+                    enqueue_callback_list_1(draw_electric_water_bolt_effect, moby);
                 }
             }
         }
@@ -355,7 +357,7 @@ void electric_water_update(struct Moby *moby) {
             vars->bolt_start = hero.motion.unkD0.q;
             FUN_L15_002d79e8((char *)moby);
             FUN_L15_002d7bb0(moby);
-            enqueue_callback_list_1(FUN_L15_002d8710, moby);
+            enqueue_callback_list_1(draw_electric_water_bolt_effect, moby);
             hit.attacker = moby;
             hit.flags = 0x10001;
             hit.damage = 1.0f;
@@ -905,7 +907,7 @@ extern void FUN_L15_002d8e48_8710(char *) __asm__("FUN_L15_002d8e48");
 extern int D_L15_00161CCA;
 extern int D_L15_00161CCC;
 extern int D_L15_00161CCE;
-void FUN_L15_002d8710(char *moby) {
+void draw_electric_water_bolt_effect(char *moby) {
     float decremented_accumulator = F(D_L15_00161C54_8710) - F(D_L15_00161C58_8710) * frame_scale;
     F(D_L15_00161C54_8710) = decremented_accumulator;
     if (decremented_accumulator <= -8.0f) {

@@ -2551,7 +2551,7 @@ remove:
 extern float approach_value_alt(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
 extern float probe_ground_height_c(void *, int, float) __asm__("func_00213508");
-extern void FUN_L15_002d8710(char *);
+extern void draw_electric_water_bolt_effect(char *) __asm__("FUN_L15_002d8710");
 extern void FUN_L18_002ea1f8_u(struct Moby *) __asm__("FUN_L18_002ea1f8");
 void spawn_explosion_burst(void *arg) __asm__("FUN_L18_002ea800");
 void FUN_L18_002eacd8(struct Moby *m);
@@ -2595,7 +2595,7 @@ void FUN_L18_002e9e70(struct Moby *moby) {
         add_vector_xyz(arc_endpoint_position, arc_endpoint_position, position);
         FUN_L18_002eacd8(moby);
         FUN_L18_002eaea0_u(moby);
-        enqueue_callback_list_1((void (*)(void))FUN_L15_002d8710, moby);
+        enqueue_callback_list_1((void (*)(void))draw_electric_water_bolt_effect, moby);
         if (target_distance < movement_step_length) {
             spawn_explosion_burst(moby);
             mark_moby_for_removal_c2(moby);
