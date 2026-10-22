@@ -7,7 +7,9 @@ extern int D_L01_001B0930[];
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Expands a bit mask through a table of per-bit masks until it meets another mask.
-int FUN_L01_00276c40(int path_index, int from_mask, int mask) {
+int expand_path_mask_to_intersection(int path_index, int from_mask, int mask) __asm__("FUN_L01_00276c40");
+
+int expand_path_mask_to_intersection(int path_index, int from_mask, int mask) {
     char *path_data = D_L01_001B0930[path_index];
     int i;
     int j;
@@ -129,7 +131,7 @@ s32 follow_path(s32 *ids, s32 id_count, s32 path_index, f32 radius,
         path = D_L01_001B0930_276a48[path_index];
         from_mask = FUN_L01_00276a48(ids, id_count, radius, path_index, start_position);
         to_mask = FUN_L01_00276a48(ids, id_count, radius, path_index, target);
-        mask = FUN_L01_00276c40(path_index, from_mask, to_mask);
+        mask = expand_path_mask_to_intersection(path_index, from_mask, to_mask);
         if (mask != 0) {
             nearest = 10000.0f;
             best = -1;
