@@ -281,7 +281,7 @@ extern void emit_hero_timed_effects(void) __asm__("FUN_L00_00209ec8");
 extern void gravity_flatten(void *, void *) __asm__("FUN_L00_002338d0");
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern void FUN_L00_0020b5b8(void);
-extern void FUN_L01_0022d090(void);
+extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern f32 D_L05_001C4130[];
 extern void air_accel(f32) __asm__("FUN_L01_00234358");
@@ -1911,14 +1911,14 @@ void update_hero_motion_by_state(void) {
             rotation_and_collision_scratch[0].f[2] = 0.0f;
         }
         add_vector_xyz(&vector_and_rotation_scratch, &vector_matrix_and_hit_scratch, &rotation_and_collision_scratch[0]);
-        FUN_L01_0022d090();
+        update_hero_ledge_probe();
         if (hero.unk4E8 == 0) {
             break;
         }
         qcopy(&vector_and_hit_scratch, &hero.unk4D0);
         a = fast_add_rotations(hero.unk4E4, 3.1415927f);
         qcopy(&hero.motion.pos, &vector_and_rotation_scratch);
-        FUN_L01_0022d090();
+        update_hero_ledge_probe();
         qcopy(&hero.motion.pos, &vector_matrix_and_hit_scratch);
         if (hero.unk4E8 == 0) {
             break;

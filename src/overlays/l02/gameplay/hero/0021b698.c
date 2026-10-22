@@ -780,7 +780,7 @@ extern void FUN_L00_0025f730(void *, float);
 extern void initialize_moby_transform_history(int, void *) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(void *, int, int) __asm__("FUN_L00_00262528");
 extern void update_moby_transform_history(void *, int) __asm__("FUN_L00_00262608");
-extern void FUN_L01_0022d090(void);
+extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
 extern void clip_hero_horizontal_velocity(int) __asm__("FUN_L01_00232978");
 extern void air_accel(float) __asm__("FUN_L01_00234358");
 extern void FUN_L02_00220b80(void);
@@ -1842,12 +1842,12 @@ void update_hero_state_motion(void) {
             vec[4][2] = 0.0f;
         }
         add_vector_xyz(vec[3], vec[2], vec[4]);
-        FUN_L01_0022d090();
+        update_hero_ledge_probe();
         if (hero.unk4E8 != 0) {
             qcopy(vec[0], hero.unk4D0.f);
             initial_probe_yaw = FUN_001f9b80_cf(hero.unk4E4, 3.1415927f);
             qcopy(hero.motion.pos.f, vec[3]);
-            FUN_L01_0022d090();
+            update_hero_ledge_probe();
             qcopy(hero.motion.pos.f, vec[2]);
             if (hero.unk4E8 != 0) {
                 qcopy(vec[1], hero.unk4D0.f);

@@ -213,7 +213,7 @@ void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
 
 extern void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
 extern void FUN_L01_0022cd48_u(void) __asm__("FUN_L01_0022cd48");
-extern void FUN_L01_0022d090(void);
+extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
 extern void update_hero_state_machine(void) __asm__("FUN_L01_00242930");
 extern void no_op_main_callback_alt(void *) __asm__("FUN_001e93e8");
 void begin_draw_frame(void) __asm__("FUN_001f7978");
@@ -240,7 +240,7 @@ void update_hero_frame(void) {
     FUN_L00_00232670();
     hero_update();
     FUN_L01_0022cd48_u();
-    FUN_L01_0022d090();
+    update_hero_ledge_probe();
     update_hero_state_machine();
     if (*(unsigned char *)(hero_state_base + 0x20A4) != 0) {
         return;
@@ -444,7 +444,7 @@ extern u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 extern s32 coll2_2d090(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 
 /* Probes for a reachable ledge ahead of the hero and records its edge. */
-void FUN_L01_0022d090(void)
+void update_hero_ledge_probe(void)
 {
     Vec4 probe, top, low, from, head, wall, to, edge;
     f32 grab_drop, drop, fwd, up, reach, step, top_margin, max_slope, edge_offset;
