@@ -21,7 +21,9 @@ extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
-void FUN_L13_002ea8c8(struct Moby *moby) {
+void draw_starfighter_tractor_beam(struct Moby *moby) __asm__("FUN_L13_002ea8c8");
+
+void draw_starfighter_tractor_beam(struct Moby *moby) {
     char *vars = (char *)moby->pvars;
     struct GeometryQuad quad;
     float start[4];
@@ -489,7 +491,7 @@ extern void update_moby_joint_attachments(void *, void *) __asm__("FUN_L13_002e8
 extern void FUN_L13_002e9018(void *, void *, float, float);
 extern void FUN_L13_002e9680(void *, void *, int);
 extern void FUN_L13_002e9a48(void *, void *);
-extern void FUN_L13_002ea8c8();
+extern void draw_starfighter_tractor_beam();
 extern void FUN_L13_002eac00_c(void *, void *) __asm__("FUN_L13_002eac00");
 extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -800,7 +802,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
         {
             char *hero = ((char *)&D_0013F350);
             if (fast_difference_between_rotations(moby->rot[2], fast_arc_tan(*(float *)(hero + 0x80) - moby->pos[0], *(float *)(hero + 0x84) - moby->pos[1])) < 1.0471976f) {
-                enqueue_callback_list_1(FUN_L13_002ea8c8, moby);
+                enqueue_callback_list_1(draw_starfighter_tractor_beam, moby);
             }
         }
         break;
