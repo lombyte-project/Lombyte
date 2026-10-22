@@ -123,7 +123,7 @@ extern void request_hero_voice_if_enabled(int a0, int a1, int a2) __asm__("FUN_L
 extern void FUN_L01_00232290(void);
 extern void FUN_L01_002405a0(void);
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
-extern void FUN_L05_0023dc88(int i);
+extern void apply_hero_item_slot_selection(int i) __asm__("FUN_L05_0023dc88");
 extern void update_hero_hoverboard_trick_animations(void) __asm__("FUN_L05_00253850");
 extern void process_hero_race_object_interactions(void) __asm__("FUN_L05_00253b48");
 extern void update_hero_hoverboard_trick_score(void) __asm__("FUN_L05_00254058");
@@ -2057,7 +2057,7 @@ void FUN_L05_00255960(void) {
                             hero.unk22DE = 0x12;
                             hero.unk22DC = 1;
                         }
-                        FUN_L05_0023dc88(0);
+                        apply_hero_item_slot_selection(0);
                         break;
                     }
                     stick_target(0, 1.0f);
@@ -2122,7 +2122,7 @@ void FUN_L05_00255960(void) {
                             hero.unk22DE = 0x12;
                             hero.unk22DC = 1;
                         }
-                        FUN_L05_0023dc88(0);
+                        apply_hero_item_slot_selection(0);
                         break;
                     }
                     if (controller_state.pressed & 0x20) {

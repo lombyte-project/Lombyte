@@ -95,7 +95,9 @@ void FUN_L00_0020fd80(int id);
 void FUN_L00_0020fde0(int id);
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L05_0023dc88(int i) {
+void apply_hero_item_slot_selection(int i) __asm__("FUN_L05_0023dc88");
+
+void apply_hero_item_slot_selection(int i) {
     int changed;
     int flag6;
     int flag4;
@@ -1225,7 +1227,7 @@ void process_hero_race_object_interactions(void) {
                 if (*(s32 *)((u8 *)hero_ptr + 0x10B8) != 0x24) {
                     *(s32 *)((u8 *)hero_ptr + 0x20B8) = 0x24;
                     hero_ptr->unk20AC = 0;
-                    FUN_L05_0023dc88(0);
+                    apply_hero_item_slot_selection(0);
                     hero_ptr->unk20AC = 1;
                 }
                 hero_ptr->unk8CE++;
