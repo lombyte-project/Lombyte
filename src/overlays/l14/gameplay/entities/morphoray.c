@@ -1479,7 +1479,7 @@ extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern float fast_sin_5290(float) __asm__("FUN_001f9de0");
 extern float fast_cos_5290(float) __asm__("FUN_001f9dc8");
-extern void FUN_L14_002d6570(struct Moby *m);
+extern void reset_racer_group_to_hero_path_position(struct Moby *m) __asm__("FUN_L14_002d6570");
 extern float FUN_001f9b48_5290(void *, void *) __asm__("FUN_001f9b48");
 extern void sub_5290(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_5290(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1548,7 +1548,7 @@ void FUN_L14_00315290(struct UpdateCam *path_camera) {
         path_camera->transition_state = 4;
         D_L14_0015F404 = 0;
         mb = D_L14_0015FFD8_5290;
-        FUN_L14_002d6570((struct Moby *)(mb + *(int *)(rec + 0x50) * 256));
+        reset_racer_group_to_hero_path_position((struct Moby *)(mb + *(int *)(rec + 0x50) * 256));
         hp = (char *)hero.unk560;
         seg = hero.unk564;
         tt = hero.unk568;

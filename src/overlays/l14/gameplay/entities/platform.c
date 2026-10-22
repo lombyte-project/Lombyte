@@ -107,7 +107,9 @@ extern void FUN_L00_0025d808_6570(void *, void *, void *, void *, int, float) __
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_0023e838(int);
 
-void FUN_L14_002d6570(struct Moby *group_anchor_moby) {
+void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) __asm__("FUN_L14_002d6570");
+
+void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
     char *list[4];
     float near[4];
     float path_heading_delta[4];
