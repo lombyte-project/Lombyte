@@ -1788,7 +1788,9 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_0030B5E8.c: func_L09_0030B5E8), where it is exact; names translated to the US level program. */
 
-void FUN_L09_0030a238(float *output_angle, float current_angle, float target_angle, float scale) {
+void interpolate_rotation_angle(float *output_angle, float current_angle, float target_angle, float scale) __asm__("FUN_L09_0030a238");
+
+void interpolate_rotation_angle(float *output_angle, float current_angle, float target_angle, float scale) {
     float scaled_angle_delta = fast_subtract_rotations(target_angle, current_angle) * scale;
     *output_angle = scaled_angle_delta;
     *output_angle = fast_add_rotations(scaled_angle_delta, current_angle);
@@ -1843,13 +1845,13 @@ int FUN_L09_0030a298(struct Moby *moby) {
     subtract_vector_xyz(&step, &target, &moby->pos);
     normalize_vector_xyz(&step, &step, vars->speed);
     add_vector_xyz(&moby->pos, &moby->pos, &step);
-    FUN_L09_0030a238(&moby->rot.z, moby->rot.z,
+    interpolate_rotation_angle(&moby->rot.z, moby->rot.z,
                      fast_add_rotations(atan2_f(path->node[vars->node].f[0] - moby->pos.x,
                                          path->node[vars->node].f[1] - moby->pos.y),
                                  vars->yaw_offset),
                      (1.0f - vars->lag) * 0.02f);
-    FUN_L09_0030a238(&moby->rot.x, moby->rot.x, 0.0f, 0.02f);
-    FUN_L09_0030a238(&moby->rot.y, moby->rot.y, 0.0f, 0.02f);
+    interpolate_rotation_angle(&moby->rot.x, moby->rot.x, 0.0f, 0.02f);
+    interpolate_rotation_angle(&moby->rot.y, moby->rot.y, 0.0f, 0.02f);
     if (vars->dir > 0) {
         f32 v;
         if (FUN_001f9b48(&target, &moby->pos) < vars->speed + vars->speed) {
