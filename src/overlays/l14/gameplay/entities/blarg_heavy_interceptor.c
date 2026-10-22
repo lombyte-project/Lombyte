@@ -391,7 +391,9 @@ extern void draw_blarg_heavy_interceptor_group_effects(struct Moby *) __asm__("F
 int count_moby_group_members(struct Moby *moby) __asm__("FUN_L14_002af048");
 
 extern int count_moby_group_members(struct Moby *) __asm__("FUN_L14_002af048");
-extern int FUN_L14_002b4500(int);
+int try_retract_turret_group(int index) __asm__("FUN_L14_002b4500");
+
+extern int try_retract_turret_group(int) __asm__("FUN_L14_002b4500");
 int is_turret_group_activated_or_empty(int index) __asm__("FUN_L14_002b4670");
 
 extern int is_turret_group_activated_or_empty(int) __asm__("FUN_L14_002b4670");
@@ -671,7 +673,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
                 FUN_L00_001fff28(moby_vars + 0xF0, 2, *(float *)(moby_vars + 0x1BC));
                 FUN_L00_001fff28(moby_vars + 0x130, 1, *(float *)(moby_vars + 0x1C0));
             }
-            if (FUN_L14_002b4500(*(int *)(moby_vars + 0x70))) {
+            if (try_retract_turret_group(*(int *)(moby_vars + 0x70))) {
                 MoverPath *p = (MoverPath *)D_L14_001B0BB0[*(int *)(moby_vars + 0x204)];
 
                 moby->state = 5;
@@ -2022,7 +2024,7 @@ extern void FUN_00212ed8_b45(unsigned char *, int, int) __asm__("FUN_00212ed8");
 extern int FUN_001f96f8_b45(int) __asm__("FUN_001f96f8");
 extern float FUN_001fa6c0_b45(short) __asm__("FUN_001fa6c0");
 
-int FUN_L14_002b4500(int index) {
+int try_retract_turret_group(int index) {
     short *list_entry = D_L14_001ABF40_b45[index];
     unsigned char *base;
     unsigned char *checked_moby;
