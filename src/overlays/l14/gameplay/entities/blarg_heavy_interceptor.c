@@ -370,7 +370,9 @@ void ease_path_mover_to_endpoint(struct Moby *moby) {
  * tumbling and 9 the fall that ends in a burst of debris. 8 only draws. */
 extern void FUN_L14_002ad8b8(struct Moby *);
 extern void FUN_L14_002ae448(struct Moby *);
-extern void FUN_L14_002ae6d8(struct Moby *);
+void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) __asm__("FUN_L14_002ae6d8");
+
+extern void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *) __asm__("FUN_L14_002ae6d8");
 extern void FUN_L14_002ae7d8(struct Moby *);
 extern void FUN_L14_002ae900(struct Moby *, float, float, float);
 extern void FUN_L14_002aea08_c618(struct Moby *) __asm__("FUN_L14_002aea08");
@@ -560,7 +562,7 @@ void FUN_L14_002ac618(struct Moby *moby) {
         *(s16 *)(moby_vars + 0x200) = 1;
         found = 0;
         hit = FUN_L14_002aeba0(moby, 1);
-        FUN_L14_002ae6d8(moby);
+        update_blarg_heavy_interceptor_patrol_aim_point(moby);
         FUN_L14_002ae7d8(moby);
         FUN_L14_002aea08_c618(moby);
         if (hit) {
@@ -1340,7 +1342,7 @@ extern void sample_path(int a, char *pos, char *b, char *c, int d, float f) __as
 extern int FUN_L00_0025d808_2af918(int *tab, float *out, int *a, float *b, int c,
                                     float d) __asm__("FUN_L00_0025d808");
 
-void FUN_L14_002ae6d8(struct Moby *moby) {
+void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float path_target_position[4];
     float save = *(float *)(data + 0x1CC);
