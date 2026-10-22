@@ -2629,7 +2629,9 @@ void FUN_L00_0020a318(void) {
 }
 extern char D_0013F350_0020a500[] __asm__("D_0013F350");
 /* Clears the words at 0x1004/0x1008 of ((char *)&hero) and four 0x10-byte slots from 0x1024. */
-void FUN_L00_0020a500(void) {
+void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
+
+void clear_hero_idle_rotation_targets(void) {
     char *hero_base = D_0013F350_0020a500;
     char *slot_cursor;
     int i;

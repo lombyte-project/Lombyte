@@ -1801,7 +1801,7 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_0020d568_c() __asm__("FUN_L00_0020d568");
 extern int FUN_L00_00216de8(int, int);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_0020a500(void);
+extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void FUN_L00_0020e698_c(void) __asm__("FUN_L00_0020e698");
 extern void FUN_L00_002cdcc0(void);
 s32 FUN_L00_0020fe30_c(void) __asm__("FUN_L00_0020fe30");
@@ -2071,7 +2071,7 @@ void hero_switch_item(int i) {
     if (changed) {
         struct Hero *g = &hero;
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
-        FUN_L00_0020a500();
+        clear_hero_idle_rotation_targets();
         g->unk1010 =
             random_int_between(scale_game_frames(0x32), scale_game_frames(0x5A));
         FUN_L00_0020fde0_c(*(hero.selected_item + i));

@@ -57,7 +57,7 @@ extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");
 extern void FUN_L00_00206c08(void);
 extern void FUN_L00_00209ca8(int, int, int);
-extern void FUN_L00_0020a500(void);
+extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void FUN_L00_0020b930(void);
 extern void FUN_L00_0020e360(int a, int b);
 extern void FUN_L00_0020e698(void);
@@ -139,7 +139,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0;
         p->unk2284 = 0;
         p->unk1010 = random_int_between(scale_game_frames(0x32), scale_game_frames(0x64));
-        FUN_L00_0020a500();
+        clear_hero_idle_rotation_targets();
         if (p->vehicle_mode != 0) {
             FUN_L01_002405a0();
             return 1;
