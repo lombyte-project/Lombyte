@@ -983,7 +983,9 @@ void memcard_update_state(void) __asm__("FUN_002093d8");
 void music_stop(void) __asm__("FUN_00215ee8");
 void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
 
-void FUN_L00_002999a8(void) {
+void play_queued_movie(void) __asm__("FUN_L00_002999a8");
+
+void play_queued_movie(void) {
     FlushCache(0);
     sound_stop_all_sounds();
     music_stop();
