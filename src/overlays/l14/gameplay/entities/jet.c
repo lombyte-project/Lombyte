@@ -2112,7 +2112,9 @@ void FUN_L14_002ef578(Level14VendorMoby *moby) {
 extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L14_001BABD0[];
 
-void FUN_L14_002ef5a8(Level14VendorMoby *vendor_moby) {
+void mark_elevator_collected(Level14VendorMoby *vendor_moby) __asm__("FUN_L14_002ef5a8");
+
+void mark_elevator_collected(Level14VendorMoby *vendor_moby) {
     vendor_moby->state = 0;
     vendor_moby->data->field124 = 0;
     D_0014C190_257218[D_0015ED84_m][(short)*(unsigned short *)((char *)vendor_moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)((char *)vendor_moby + 0xB2) & 0x1F);
@@ -2713,7 +2715,7 @@ extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void FUN_L14_002ef578_c(void *) __asm__("FUN_L14_002ef578");
-void FUN_L14_002ef5a8(Level14VendorMoby *m);
+void mark_elevator_collected(Level14VendorMoby *m) __asm__("FUN_L14_002ef5a8");
 extern void FUN_L00_00263d40(int, int);
 extern void FUN_L00_00260860(int, int);
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
@@ -2784,7 +2786,7 @@ void qwark_oltanis_update(L14WatchMoby *moby) {
                 else
                     FUN_L00_00263d40(0x36B3, -1);
                 FUN_L00_00260860(0x20, 1);
-                FUN_L14_002ef5a8(D_L14_0015FFD8 + moby_vars->i44 * 256);
+                mark_elevator_collected(D_L14_0015FFD8 + moby_vars->i44 * 256);
                 D_0014C190_257218[D_0015ED84_m][(short)moby->hB2 >> 5] |= 1 << (moby->hB2 & 0x1F);
                 D_L14_001BABD0[(short)moby->hB2 >> 5] |= 1 << (moby->hB2 & 0x1F);
                 memcard_save_data(0, -1);
