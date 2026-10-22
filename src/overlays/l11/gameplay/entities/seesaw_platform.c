@@ -2054,7 +2054,9 @@ extern void font_print_center_large(s32 x, s32 y, u64 color, char *text, s32 sca
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
 /* Ship HUD: radar, ammo pips, reticle, lock-on marker, help hints and the health bar. */
-void FUN_L11_00311d50(struct Moby *moby) {
+void draw_ship_hud(struct Moby *moby) __asm__("FUN_L11_00311d50");
+
+void draw_ship_hud(struct Moby *moby) {
     ShipVars *vars = (ShipVars *)moby->pvars;
     short *list;
     void *found[12];
@@ -2444,7 +2446,7 @@ extern float FUN_L00_0025bc98(float *, float *, int, float, float, float, float)
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L11_00311d50();
+extern void draw_ship_hud();
 void adjust_ship_steering_for_flight_bounds(struct Moby *moby, float *horizontal_steering_input, float *vertical_steering_input) __asm__("FUN_L11_00313f60");
 
 void adjust_ship_steering_for_flight_bounds(struct Moby *moby, float *a, float *b) __asm__("FUN_L11_00313f60");
@@ -2665,7 +2667,7 @@ void FUN_L11_00312838(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
     if (D_00141C10 == 0) {
         help_request(0x2AFC, 0x55);
     }
-    enqueue_2838(FUN_L11_00311d50, ship_moby);
+    enqueue_2838(draw_ship_hud, ship_moby);
     try_fire_ship_projectile(ship_moby, (char *)ship_vars);
     update_ship_shot_firing_and_reticle(ship_moby, (char *)ship_vars, fast_add_rot_2838(ship_vars->f28, -ship_vars->f6C / 7.0f),
                      -fast_add_rot_2838(ship_vars->f24, -(ship_vars->f70 / 7.0f) - 0.1f));
