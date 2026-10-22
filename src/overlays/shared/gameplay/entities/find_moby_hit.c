@@ -36,7 +36,9 @@ int point_in_path_xy(float *test_point, float *path_vertices, int vertex_count) 
     return crossing_parity;
 }
 /* True when the pointer at a+0x94 is set and its word at +8 is non-zero. */
-int FUN_L00_00259830(char *moby) {
+int test_moby_linked_record_word8(char *moby) __asm__("FUN_L00_00259830");
+
+int test_moby_linked_record_word8(char *moby) {
     char *moby_linked_record = *(char **)(moby + 0x94);
     if (moby_linked_record && *(int *)(moby_linked_record + 8))
         return 1;

@@ -68,7 +68,7 @@ extern int FUN_L00_00257b90(int, int), FUN_00213260(int);
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void FUN_L00_00259a88(void *, void *);
-extern int FUN_L00_00259830(void *);
+extern int test_moby_linked_record_word8(void *) __asm__("FUN_L00_00259830");
 extern int FUN_001efa68(Vec4 *, Vec4 *, int, void *, int);
 extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_0022da68(int, int, void *);
@@ -294,7 +294,7 @@ next_candidate:;
                 qcopy(point, &collision_hit_point);
                 *(short *)(v + 0x3e) = i;
                 qcopy(v + 0x10, &collision_hit_point);
-                if (!D_L00_00173E58 || FUN_L00_00259830(D_L00_00173E58)) {
+                if (!D_L00_00173E58 || test_moby_linked_record_word8(D_L00_00173E58)) {
                     *(char **)(v + 0x20) = 0; *(short *)(v + 0x40) = 0;
                 }
                 break;

@@ -1169,7 +1169,7 @@ extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section
 
 void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 extern s32 probe_world_sphere(void *, s32, void *, s32, f32) __asm__("FUN_L00_001f2868");
-s32 FUN_L00_00259830(void *);
+s32 test_moby_linked_record_word8(void *) __asm__("FUN_L00_00259830");
 extern void FUN_001f9a28_2e7d20(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 FUN_001f9ab0_2e7d20(void *, void *) __asm__("FUN_001f9ab0");
 extern void FUN_001f9a68_2e7d20(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -1242,7 +1242,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
             if (*(s32 *)(nearby_moby + 0x94) == 0) {
                 goto next;
             }
-            if (FUN_L00_00259830(nearby_moby) && !any) {
+            if (test_moby_linked_record_word8(nearby_moby) && !any) {
                 goto next;
             }
             nearby_moby_type_id = *(s16 *)(nearby_moby + 0xA6);
