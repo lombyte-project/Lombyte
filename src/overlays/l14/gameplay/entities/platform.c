@@ -67,7 +67,9 @@ extern int tick_countdown_32(void *);
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern char *D_L14_001B0F30_a[] __asm__("D_L14_001B0BB0");
 
-int FUN_L14_002d64d0(struct Moby *racer_moby) {
+int interpolate_racer_to_path_start(struct Moby *racer_moby) __asm__("FUN_L14_002d64d0");
+
+int interpolate_racer_to_path_start(struct Moby *racer_moby) {
     char *moby_data = (char *)racer_moby->pvars;
     char *ent = *(char **)((char *)((*(int *)(moby_data + 0x60) << 5) + (int)D_L14_0015F70C) + 0x10);
     int ok;

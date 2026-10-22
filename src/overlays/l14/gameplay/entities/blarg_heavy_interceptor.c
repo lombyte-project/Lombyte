@@ -3176,7 +3176,7 @@ extern void FUN_L14_002e0170(struct Moby *, s32 *, int);
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 void FUN_L14_002d6358(struct Moby *m);
-int FUN_L14_002d64d0(struct Moby *m);
+int interpolate_racer_to_path_start(struct Moby *m) __asm__("FUN_L14_002d64d0");
 void FUN_L14_002d67e8(struct Moby *m);
 void advance_moby_along_path(struct Moby *m) __asm__("FUN_L14_002d7198");
 void FUN_L14_002d7490(struct Moby *m);
@@ -3237,7 +3237,7 @@ void FUN_L14_002d5f40(struct Moby *racer_moby) {
         qcopy(&racer_moby->pos, (char *)D_L14_001B0BB0[racer_vars->end_point] + 0x10);
     case RACER_STATE_WAIT_FOR_START_ANIMATION:
         if (compute_interpolated_record_value(racer_moby) >= 3.0f)
-            FUN_L14_002d64d0(racer_moby);
+            interpolate_racer_to_path_start(racer_moby);
         if ((racer_moby->anim_flags & 2) && racer_moby->seq == racer_moby->prev_seq) {
             racer_moby->state = 4;
             blend_moby_animation((MobyAnim *)racer_moby, 0, 0, 10);
@@ -3245,7 +3245,7 @@ void FUN_L14_002d5f40(struct Moby *racer_moby) {
         }
         break;
     case RACER_STATE_COMPLETE_START_INTERPOLATION:
-        if (FUN_L14_002d64d0(racer_moby)) {
+        if (interpolate_racer_to_path_start(racer_moby)) {
             racer_moby->state = 5;
             racer_vars->timer = scale_game_frames(D_L14_00161A34);
         }
