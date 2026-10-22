@@ -1644,7 +1644,9 @@ void update_resource_counter(void) __asm__("FUN_001ff768");
 void snd_continue_all_sounds_in_group(int) __asm__("FUN_0012e418");
 void music_unpause(void) __asm__("FUN_00216088");
 void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
-void FUN_L00_0029af80(void) {
+void restore_hero_after_vendor_exit_cutscene(void) __asm__("FUN_L00_0029af80");
+
+void restore_hero_after_vendor_exit_cutscene(void) {
     Vec4 world_position;
     Vec4 euler_rotation;
     char *vendor_state_base;
@@ -1970,7 +1972,7 @@ extern void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 extern void FUN_L00_0029b680(void);
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void FUN_L00_0029af80(void);
+extern void restore_hero_after_vendor_exit_cutscene(void) __asm__("FUN_L00_0029af80");
 extern void FUN_002049f0(s32);
 extern void sce_vu0_unit_matrix(void *) __asm__("FUN_00125218");
 extern void sce_vu0_rot_matrix_x(void *, void *, f32) __asm__("FUN_00125360");
@@ -2574,7 +2576,7 @@ void FUN_L00_0029c648(void) {
                 }
             }
             if (vendor_menu.f28 != 0) {
-                FUN_L00_0029af80();
+                restore_hero_after_vendor_exit_cutscene();
             } else {
                 FUN_L00_0029ab70(1);
             }
