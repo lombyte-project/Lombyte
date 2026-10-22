@@ -576,7 +576,9 @@ void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void FUN_L00_00237200(void);
 s32 queue_animation_update(s32, s32, void *, void *, void *, s32, s32) __asm__("FUN_001ff308");
 void hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
-void FUN_L00_00264328(void) {
+void update_timed_hud_visibility(void) __asm__("FUN_L00_00264328");
+
+void update_timed_hud_visibility(void) {
     if (D_L00_0015F590 != 0) {
         if (--D_L00_0015F590 == 0)
             D_L00_0015F594 = 0;

@@ -128,7 +128,7 @@ extern u8 D_L00_00160FF8[], D_L00_00161008[], D_L00_00161018[], D_L00_00161028[]
 extern void mode_freeze_init(s32, s32) __asm__("FUN_001fbab8");
 extern void pause_all_sounds(s32) __asm__("FUN_00218d78");
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
-extern void FUN_L00_00264328(void);
+extern void update_timed_hud_visibility(void) __asm__("FUN_L00_00264328");
 extern s32 show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern void hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *,
@@ -231,7 +231,7 @@ void handle_pause_input(void) {
         return;
     }
     if (hero.state.current != 0x1D && hero.state.current != 0x32)
-        FUN_L00_00264328();
+        update_timed_hud_visibility();
     if ((D_0013C940_c.w1A4 & 0x200) && hero.state.current != 0x1D && hero.state.current != 0x32) {
         s32 x;
         x = show_health_hud();
