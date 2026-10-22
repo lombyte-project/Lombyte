@@ -15,7 +15,7 @@ extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void FUN_L00_002056a8(void);
 extern void FUN_L00_002059d8(void);
 extern void FUN_L00_00205ea8(void);
-extern void FUN_L00_00206080(void);
+extern void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
 extern void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 extern void FUN_L00_00206e00(void);
 extern void FUN_L00_00207a58(void);
@@ -88,7 +88,7 @@ void FUN_L03_002002f8(void) {
     FUN_L00_00207a58();
     check_hero_item_reward_conditions();
     FUN_L00_00205ea8();
-    FUN_L00_00206080();
+    dispatch_hero_animation_timed_events();
     FUN_L00_00206e00();
     no_op_main_callback_alt(*(void **)(g + 0x2080));
     if (*(int *)(g + 0x208C) != 0x16 && *(int *)(g + 0x2084) != 0x32) {

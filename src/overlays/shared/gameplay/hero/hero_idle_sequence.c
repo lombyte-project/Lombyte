@@ -544,7 +544,9 @@ extern int FUN_001f96f8_206080(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_00211870_206080(float) __asm__("FUN_L00_00211870");
 extern void FUN_L00_00205f60_206080(int, char *, int) __asm__("FUN_L00_00205f60");
 
-void FUN_L00_00206080(void) {
+void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
+
+void dispatch_hero_animation_timed_events(void) {
     struct Hero *hero_state = &hero;
     int k;
     if (hero_state->state.current == 2 && hero_state->state_timer < FUN_001f96f8_206080(0xF)) {
@@ -1117,7 +1119,7 @@ void FUN_L00_00207c48(void);
 void FUN_L00_00207a58(void);
 void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 void FUN_L00_00205ea8(void);
-void FUN_L00_00206080(void);
+void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
 void FUN_L00_00206e00_u(void) __asm__("FUN_L00_00206e00");
 void noop_main_callback(int) __asm__("FUN_001e93e8");
 void FUN_L00_002484e0(void *);
@@ -1168,7 +1170,7 @@ void FUN_L00_002070d0(void) {
     FUN_L00_00207a58();
     check_hero_item_reward_conditions();
     FUN_L00_00205ea8();
-    FUN_L00_00206080();
+    dispatch_hero_animation_timed_events();
     FUN_L00_00206e00_u();
     noop_main_callback((int)hero_state->moby);
     if (hero_state->state.control_mode != 0x16 && hero_state->state.current != 0x32)
