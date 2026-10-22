@@ -16,7 +16,9 @@ extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L12_002400d0");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L12_0022de30(void) {
+void update_hero_ground_material_flags(void) __asm__("FUN_L12_0022de30");
+
+void update_hero_ground_material_flags(void) {
     struct Hero *hero_for_ground_flags_update = &hero;
     unsigned char saved;
     int state;
