@@ -194,7 +194,9 @@ extern CollisionHit HH __asm__("D_L16_00174240") __attribute__((section(".data")
 #define HI(o) (*(s32 *)(D_L16_00174240 + (o)))
 #define HF(o) (*(f32 *)(D_L16_00174240 + (o)))
 
-void FUN_L16_0020ffb0(void) {
+void update_hero_ground_contact(void) __asm__("FUN_L16_0020ffb0");
+
+void update_hero_ground_contact(void) {
     V_u collision_ray_endpoint, ground_probe_endpoint, ground_offset_or_angles, side_probe_endpoint, unused_side_probe_endpoint, probe_surface_angles, normalized_hit_normal;
     f32 f;
     s32 collision_sound_class;
@@ -550,7 +552,7 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-void FUN_L16_0020ffb0(void);
+void update_hero_ground_contact(void) __asm__("FUN_L16_0020ffb0");
 extern char D_0013F430[] __attribute__((section(".sdata")));
 
 void integrate_hero_motion(void) __asm__("FUN_L16_00211098");
@@ -659,11 +661,11 @@ void integrate_hero_motion(void) {
     contact_player->contact_state = 0;
     if (vector_length_xyz((char *)position + 0x70) <= 0.0001f) {
         resolve_hero_collisions_with_history();
-        FUN_L16_0020ffb0();
+        update_hero_ground_contact();
         subtract_vector_xyz((char *)position + 0x80, position, previous.f);
         correct_hero_ground_penetration();
     } else {
-        FUN_L16_0020ffb0();
+        update_hero_ground_contact();
     }
     delta = (float *)(&hero.motion.unk110);
     new_position = (float *)((char *)delta - 0x90);
@@ -708,7 +710,7 @@ void integrate_hero_motion(void) {
         clear_u64_value(contact);
         motion_player->contact[3] = saved;
         resolve_hero_collisions_with_history();
-        FUN_L16_0020ffb0();
+        update_hero_ground_contact();
         subtract_vector_xyz(external, new_position, previous.f);
         correct_hero_ground_penetration();
     }
