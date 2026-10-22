@@ -1692,7 +1692,9 @@ typedef struct {
     void (*fn)(void);
 } O;
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-void FUN_L00_0020fca8(int i, int respawn_threshold) {
+void clear_hero_item_slot(int i, int respawn_threshold) __asm__("FUN_L00_0020fca8");
+
+void clear_hero_item_slot(int i, int respawn_threshold) {
     struct Hero *slot_owner; /* hero shifted by i slots, so items[0] is slot i */
     {
         struct Hero *pre_removal_slot_owner = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
@@ -2161,7 +2163,7 @@ void hero_update_items(void) {
             case HERO_ITEM_SLOT_STATE_REMOVING:
                 ITEM_SLOT(i)->items[0].unk1B++;
                 if ((moby->anim_flags & 2) || i == 1 || i == 0) {
-                    FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
+                    clear_hero_item_slot(i, D_L00_0015F3F8 + 2);
                 }
                 break;
             }

@@ -29,7 +29,7 @@ extern void select_world_object_resource_tables(int, int) __asm__("FUN_00204a40"
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void FUN_L00_002039a0(void);
 extern void FUN_L00_00207330(int, int);
-extern void FUN_L00_0020fca8(int, int);
+extern void clear_hero_item_slot(int, int) __asm__("FUN_L00_0020fca8");
 extern void FUN_L00_00232fe8(void);
 extern void FUN_L00_0023aef8(void);
 extern void FUN_L00_002454c8(int);
@@ -92,7 +92,7 @@ void FUN_L01_002aea70(char *vendor_moby, int lvl) {
     D_L01_0015F3FC = 1.0f;
     D_L01_001611CC = adjusted_address_base;
     *(int *)&D_L01_0015F400 = 0;
-    FUN_L00_0020fca8(0, 0);
+    clear_hero_item_slot(0, 0);
     hero_state->pending_item[0] = lvl;
     select_world_object_resource_tables(D_L01_00179F40[lvl].f10, -1);
     FUN_L00_002454c8(level_table_pair_index);

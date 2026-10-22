@@ -1571,7 +1571,7 @@ extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void f1f99f8_29ad08(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_002a09d8(s32);
 extern void sound_update(void) __asm__("FUN_0022ca50");
-extern void FUN_L00_0020fca8(s32, s32);
+extern void clear_hero_item_slot(s32, s32) __asm__("FUN_L00_0020fca8");
 extern void parse_space_scene_chunk(s32, s32) __asm__("FUN_002049f0");
 extern void FUN_L00_002454c8(s32);
 extern void f204a40_29ad08(s32, s32) __asm__("FUN_00204a40");
@@ -1620,7 +1620,7 @@ void FUN_L00_0029ad08(void) {
     D_L00_0015F3FC = 0;
     D_L00_0015F400 = 0;
     if (hero.items[0].item_id != 0 && index != hero.items[0].item_id)
-        FUN_L00_0020fca8(0, 0);
+        clear_hero_item_slot(0, 0);
     hero.pending_item[0] = D_L00_001CA4C0_29ad08.f48;
     if (hero.pending_item[0] == 0x18)
         hero.pending_item[0] = 0;
