@@ -588,7 +588,9 @@ extern int wind_inside(void *, int) __asm__("FUN_00214720");
 extern int wind_tick(short *) __asm__("FUN_001f9770");
 extern void wind_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L14_002eb568(struct Moby *m);
-void FUN_L14_002eb388(struct Moby *m, int i, void *dir);
+void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_travel_direction) __asm__("FUN_L14_002eb388");
+
+void initialize_wind_spark(struct Moby *m, int i, void *dir) __asm__("FUN_L14_002eb388");
 
 extern f32 D_L14_00161C08 __attribute__((sda));
 extern s32 D_L14_00161C04 __attribute__((sda));
@@ -626,7 +628,7 @@ void FUN_L14_002eaf88(struct Moby *wind_control_moby) {
         wind_direction_or_push_delta[1] = wind_sin(wind_control_moby->rot.z);
         wind_direction_or_push_delta[2] = 0.0f;
         for (i = 0; i < 48; i++) {
-            FUN_L14_002eb388(wind_control_moby, i, wind_direction_or_push_delta);
+            initialize_wind_spark(wind_control_moby, i, wind_direction_or_push_delta);
         }
     }
     pos = (char *)&hero.motion.pos;
@@ -710,7 +712,7 @@ extern int D_L14_00161C30 __attribute__((sda));
 extern int D_L14_00161C34 __attribute__((sda));
 extern float D_L14_00161C38 __attribute__((sda));
 extern float D_L14_00161C3C __attribute__((sda));
-void FUN_L14_002eb388(struct Moby *wind_control_moby, int i, void *spark_travel_direction) {
+void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_travel_direction) {
     Spk_k *spark_vars = (Spk_k *)wind_control_moby->pvars;
     float fwd[4];
     float side[4];
@@ -791,7 +793,7 @@ void FUN_L14_002eb568(struct Moby *wind_control_moby) {
     do {
         if (tick_spark_timer(&spark_vars->n320[i]) != 0) {
             if (in_clip == 0 || i < 24) {
-                FUN_L14_002eb388(wind_control_moby, i, spark_travel_direction);
+                initialize_wind_spark(wind_control_moby, i, spark_travel_direction);
             }
         } else {
             opacity = D_L14_00161C10;
