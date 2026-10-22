@@ -456,7 +456,9 @@ extern int follow_path(void *, void *, int, float, void *, void *, void *) __asm
 extern int FUN_L01_0028b510(void *, void *, float);
 extern void *FUN_L07_00313350_u(void *, void *, void *) __asm__("FUN_L07_00313350");
 
-void FUN_L07_00313988(char *moby, char *moby_vars, void *target_position, void *out_position) {
+void select_snagglebeast_chase_waypoint(char *moby, char *moby_vars, void *target_position, void *out_position) __asm__("FUN_L07_00313988");
+
+void select_snagglebeast_chase_waypoint(char *moby, char *moby_vars, void *target_position, void *out_position) {
     float navigation_ids[8];
     void *navigation_id_count = FUN_L07_00313350_u(moby, moby_vars, navigation_ids);
     if (follow_path(navigation_ids, navigation_id_count, *(int *)(moby_vars + 0x188), 0.0f, moby + 0x10, target_position, out_position))
@@ -1178,7 +1180,7 @@ void snagglebeast_update(unsigned char *moby) {
             dd = vector_distance(moby + 0x10, &velocity);
         }
         update_snagglebeast_chase_speed((struct ChaserAnim *)moby, (struct ChaserSpeed *)data, dd, thr, 1.5f);
-        if ((*(int *)(data + 0x298) & 3) == 0) FUN_L07_00313988((char *)moby, (char *)data, &velocity, data + 0x140);
+        if ((*(int *)(data + 0x298) & 3) == 0) select_snagglebeast_chase_waypoint((char *)moby, (char *)data, &velocity, data + 0x140);
         qcopy(&position, data + 0x140);
         *(int *)(data + 0x298) += 1;
         if (*(float *)(data + 0x98) < fast_difference_between_rotations(*(float *)(moby + 0x48), fast_arc_tan(position.f[0] - *(float *)(moby + 0x10), position.f[1] - *(float *)(moby + 0x14)))) {
