@@ -3179,7 +3179,9 @@ extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L15_002a7628(char *moby) {
+void draw_spiderbot_effect_quad(char *moby) __asm__("FUN_L15_002a7628");
+
+void draw_spiderbot_effect_quad(char *moby) {
     float B[4];
     float A[4];
     Quad effect_quad;
