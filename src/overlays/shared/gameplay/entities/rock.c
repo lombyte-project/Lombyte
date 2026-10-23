@@ -1461,7 +1461,9 @@ void FUN_L01_00308550(char *m);
 extern void FUN_L01_003089f0_u(char *) __asm__("FUN_L01_003089f0");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-void FUN_L01_00308380(struct Moby *moby) {
+void update_gold_bolt_visuals(struct Moby *moby) __asm__("FUN_L01_00308380");
+
+void update_gold_bolt_visuals(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float updated_rotation_z;
     float bobbing_sine;
