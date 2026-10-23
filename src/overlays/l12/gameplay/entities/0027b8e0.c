@@ -49,7 +49,9 @@ extern void FUN_001fa2b8(void *, void *);
 extern void func_0020DAF8(void *, int, void *) __asm__("FUN_0020cca8");
 extern void func_0020EEE8(void *) __asm__("FUN_0020e098");
 
-void FUN_L12_0027b9c0(struct Moby *parent, unsigned char *child, int mode) {
+void update_moby_bone_attachment(struct Moby *parent, unsigned char *child, int mode) __asm__("FUN_L12_0027b9c0");
+
+void update_moby_bone_attachment(struct Moby *parent, unsigned char *child, int mode) {
     char workspace[0x40];
     func_0020DAF8(parent, mode, workspace);
     qcopy(child + 0x10, workspace + 0x30);

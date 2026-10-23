@@ -1605,7 +1605,7 @@ extern void FUN_0020c828_c(void *) __asm__("FUN_0020c828");
 extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
 extern char *func_0020D348_m_x(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_x(void *) __asm__("FUN_L00_00250df8");
-extern void FUN_L12_0027b9c0_x(void *, void *, int) __asm__("FUN_L12_0027b9c0");
+extern void update_moby_bone_attachment(void *, void *, int) __asm__("FUN_L12_0027b9c0");
 extern void FUN_L00_00263d40_c(int, int) __asm__("FUN_L00_00263d40");
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
@@ -1749,7 +1749,7 @@ void miner_update(L16WatchMoby *moby) {
             FUN_L00_00250df8_x(moby);
         }
     } else {
-        FUN_L12_0027b9c0_x(moby, *(void **)((char *)moby_data + 0x180), 2);
+        update_moby_bone_attachment(moby, *(void **)((char *)moby_data + 0x180), 2);
     }
 }
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
@@ -2322,14 +2322,14 @@ void remove_blarg_trooper_and_attachment(struct Moby *moby) {
 
 extern void *spawn_moby_attachment(void *, void *) __asm__("FUN_L04_002ce080");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L12_0027b9c0(void *, void *, int);
+extern void update_moby_bone_attachment(void *, void *, int) __asm__("FUN_L12_0027b9c0");
 
 void update_blarg_trooper_attachment(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     unsigned char *target = *(unsigned char **)(data + 0x248);
     if (target != 0) {
         unsigned char *current;
-        FUN_L12_0027b9c0(moby, target, 1);
+        update_moby_bone_attachment(moby, target, 1);
         current = *(unsigned char **)(data + 0x248);
         if (moby->flags & 1) {
             *(unsigned short *)(current + 0x34) |= 0x41;
