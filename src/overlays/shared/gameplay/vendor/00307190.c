@@ -190,7 +190,7 @@ extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28"
 float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
 void FUN_L00_00262cf0(void *a, void *b);
 void spawn_ground_contact_effect_particle(void *v) __asm__("FUN_L00_002634f8");
-void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f);
+void create_type_49_particle(void *pos, int kind, void *vel, float f) __asm__("FUN_L08_0027f5f0");
 void randomize_ground_particle_scatter_parameters(int arg) __asm__("FUN_L08_00307b90");
 extern char D_L08_00167640_3091B0[] __asm__("D_L08_001675C0");
 extern void randomize_ground_particle_scatter_parameters(int) __asm__("FUN_L08_00307b90");
