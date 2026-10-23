@@ -18,7 +18,9 @@ extern void FUN_L00_0025d1b8(void *);
 
 extern float D_L08_00161468 __attribute__((sda));
 extern float D_L08_0016146C __attribute__((sda));
-void FUN_L08_002b8228(struct Moby *moby) {
+void initialize_bolt_pickup(struct Moby *moby) __asm__("FUN_L08_002b8228");
+
+void initialize_bolt_pickup(struct Moby *moby) {
     float random_range_start = D_L08_00161468;
     float random_range_end = D_L08_0016146C;
     char *moby_vars;
