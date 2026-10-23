@@ -2398,7 +2398,9 @@ void replenish_hero_drones(void) {
 
 extern int spawn_moby_point_attached_particle(void *, int, float, float, unsigned, unsigned) __asm__("FUN_L00_002725d8");
 
-void FUN_L00_002cde78(char *owner_moby) {
+void ensure_drone_attached_particles(char *owner_moby) __asm__("FUN_L00_002cde78");
+
+void ensure_drone_attached_particles(char *owner_moby) {
     char *moby_vars = *(char **)(owner_moby + 0x78);
     if (*(int *)(moby_vars + 0x4C) == 0) {
         *(int *)(moby_vars + 0x4C) = spawn_moby_point_attached_particle(owner_moby, 0, 0.05f, 0.01f, 0x80808080, 0x10808080);
