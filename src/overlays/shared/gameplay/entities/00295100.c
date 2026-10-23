@@ -1809,7 +1809,9 @@ extern void FUN_0020d4f0_29b680(void *, int, int, int, int) __asm__("FUN_0020d4f
 extern float D_L00_001C8920[][12] __attribute__((section(".data")));
 extern float D_L00_001C8900[][12] __attribute__((section(".data")));
 extern int D_L00_00161090 __attribute__((sda));
-void FUN_L00_0029b680(void) {
+void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
+
+void initialize_vendor_selected_item_mobys(void) {
     V_29b680 item_local_position;
     int id;
     int k;
@@ -1999,7 +2001,7 @@ void update_vendor_purchase(void) __asm__("FUN_L00_0029ba78");
 extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
 extern void update_moby_animation_state(void *) __asm__("FUN_0020c880");
-extern void FUN_L00_0029b680(void);
+extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void restore_hero_after_vendor_exit_cutscene(void) __asm__("FUN_L00_0029af80");
@@ -2050,7 +2052,7 @@ extern void set_scrolling_status_message(int) __asm__("FUN_00237e90");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void FUN_001ff570_2ba78(int, int) __asm__("FUN_001ff570");
 extern s32 FUN_001ff308_2ba78(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
-extern void FUN_L00_0029b680_2ba78(void) __asm__("FUN_L00_0029b680");
+extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void FUN_L00_00235ea0_2ba78(void) __asm__("FUN_L00_00235ea0");
 extern void FUN_L00_0023a7a8_2ba78(void) __asm__("FUN_L00_0023a7a8");
@@ -2245,7 +2247,7 @@ void update_vendor_purchase(void) {
                         if (last_row_index < vendor_menu.f58) {
                             vendor_menu.f58 = last_row_index;
                         }
-                        FUN_L00_0029b680_2ba78();
+                        initialize_vendor_selected_item_mobys();
                     }
                     set_scrolling_status_message(get_help_message_text(0x4F5F));
                     FUN_0022da68_2ba78(7, 0, vendor_menu.f1c);
@@ -2570,7 +2572,7 @@ void update_vendor_menu(void) {
                 }
             }
         } else if (D_L00_00161E38 != 0) {
-            FUN_L00_0029b680();
+            initialize_vendor_selected_item_mobys();
         }
         update_hud_elements(1);
         break;

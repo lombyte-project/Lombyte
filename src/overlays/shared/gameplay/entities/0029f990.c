@@ -297,7 +297,7 @@ extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
 extern void FUN_L00_00250df8(void *);
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
-extern void FUN_L00_0029b680(void);
+extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
 extern void fast_mem_zero16(void *, s32) __asm__("FUN_001f9810");
 extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 extern void append_draw_buffer_upload_packets(s32, u32, u32) __asm__("FUN_L00_002a0fc8");
@@ -383,7 +383,7 @@ void draw_vendor_screen(void) {
         *(u16 *)(p->f20 + 0x532) = 0x40;
         FUN_L00_00250df8(p->f20 + 0x500);
         pack_render_command_fields(p->f20 + 0x500, 0x202020, 0xE, 0xE, 0);
-        FUN_L00_0029b680();
+        initialize_vendor_selected_item_mobys();
         p->f2C = p->f14 + 0x1400;
         fast_mem_zero16(p->f2C, 0x400);
         p->f18 = p->f2C + 0x400;
