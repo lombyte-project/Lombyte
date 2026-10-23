@@ -150,7 +150,7 @@ extern s32 FUN_L00_0024d8d0_252dd0(void *, char *) __asm__("FUN_L00_0024d8d0");
 extern s32 log2dim(s32) __asm__("FUN_001f97a0");
 extern void initialize_tfrag_render_data(char *, void *) __asm__("FUN_002040e0");
 extern void relocate_sky_definition(char *) __asm__("FUN_002028e0");
-extern void FUN_L00_00241728_252dd0(char *) __asm__("FUN_L00_00241728");
+extern void resolve_level_asset_block_pointers(char *) __asm__("FUN_L00_00241728");
 extern void register_moby_class(char *, void *, void *, s32) __asm__("FUN_00203640");
 extern void print_moby_class_sizes(void *, s32) __asm__("FUN_L00_00241788");
 extern void relocate_asset_entry_pointers(Class252dd0 *, s32) __asm__("FUN_002032e0");
@@ -275,7 +275,7 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
             relocate_sky_definition(base + level_header[4]);
         else
             D_L06_0016051C = 0;
-        FUN_L00_00241728_252dd0(base + level_header[5]);
+        resolve_level_asset_block_pointers(base + level_header[5]);
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[7]; i < level_header[6]; i++, class_entry_cursor += 0x20)
             register_moby_class(*(s32 *)class_entry_cursor ? base + *(s32 *)class_entry_cursor : 0, (char *)level_header + level_header[0xF], class_entry_cursor + 0x10, *(s32 *)(class_entry_cursor + 4));
         print_moby_class_sizes((char *)level_header + level_header[7], level_header[7]);
