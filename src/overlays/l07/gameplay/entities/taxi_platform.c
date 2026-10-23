@@ -2595,7 +2595,9 @@ extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int line_blocked_30eee8(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
-void FUN_L07_0030eee8(struct Moby *moby, struct WalkerData *data) {
+void select_sharkigator_navigation_heading(struct Moby *moby, struct WalkerData *data) __asm__("FUN_L07_0030eee8");
+
+void select_sharkigator_navigation_heading(struct Moby *moby, struct WalkerData *data) {
     float probe[4];
     float angle;
     float swept;
