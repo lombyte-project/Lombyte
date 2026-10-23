@@ -64,7 +64,9 @@ void update_emitter_intermittent_sound(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C6F40), where it is exact; names translated to the US level program. */
 
-int FUN_L03_002c5b78(struct Moby *moby) {
+int is_moby_class_23d_in_state_5(struct Moby *moby) __asm__("FUN_L03_002c5b78");
+
+int is_moby_class_23d_in_state_5(struct Moby *moby) {
     if (moby && moby->state != 0xFE && moby->state != 0xFD && moby->oclass == 0x23D &&
         moby->state == 5) {
         return 1;
