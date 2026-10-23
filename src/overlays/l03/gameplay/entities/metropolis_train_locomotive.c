@@ -77,7 +77,9 @@ int is_moby_class_23d_in_state_5(struct Moby *moby) {
 
 f32 compute_interpolated_record_value(struct InterpolatedStateEntry *arg0) __asm__("FUN_0020c9e0");
 
-int FUN_L03_002c6ca0(struct Moby *moby) {
+int can_release_linked_robot_dog(struct Moby *moby) __asm__("FUN_L03_002c6ca0");
+
+int can_release_linked_robot_dog(struct Moby *moby) {
     unsigned char state;
     char *data;
     data = (char *)moby->pvars;
@@ -1629,7 +1631,7 @@ extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern int FUN_L00_002dc9f0(void *, void *);
 extern int FUN_L03_0024e830(char *, char *, float);
-extern int FUN_L03_002c6ca0(struct Moby *moby);
+extern int can_release_linked_robot_dog(struct Moby *moby) __asm__("FUN_L03_002c6ca0");
 extern int is_point_inside_clip_volume_cf(int id) __asm__("FUN_L03_002c6d98");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -1755,7 +1757,7 @@ void robot_dog_update(char *moby) {
         if (random_integer_below(14) == 0) {
             partner_moby_index = data->i248;
             if (partner_moby_index == -1 || (partner_moby = D_L03_0015FFD8_c5bb8 + (partner_moby_index << 8)) == 0 || ((unsigned char *)partner_moby)[0x20] == 0xFE ||
-                ((unsigned char *)partner_moby)[0x20] == 0xFD || FUN_L03_002c6ca0((struct Moby *)partner_moby)) {
+                ((unsigned char *)partner_moby)[0x20] == 0xFD || can_release_linked_robot_dog((struct Moby *)partner_moby)) {
                 data->i23C = scale_game_frames((int)random_float_between(30.0f, 90.0f));
                 moby[0x20] = 4;
                 if (((unsigned char *)moby)[0x53] != 3) {
@@ -1823,7 +1825,7 @@ void robot_dog_update(char *moby) {
         if (random_integer_below(14) == 0) {
             partner_moby_index = data->i248;
             if (partner_moby_index == -1 || (partner_moby = D_L03_0015FFD8_c5bb8 + (partner_moby_index << 8)) == 0 || ((unsigned char *)partner_moby)[0x20] == 0xFE ||
-                ((unsigned char *)partner_moby)[0x20] == 0xFD || FUN_L03_002c6ca0((struct Moby *)partner_moby)) {
+                ((unsigned char *)partner_moby)[0x20] == 0xFD || can_release_linked_robot_dog((struct Moby *)partner_moby)) {
                 data->i270 = -1;
                 data->i23C = scale_game_frames((int)random_float_between(30.0f, 90.0f));
                 moby[0x20] = 4;
