@@ -363,7 +363,9 @@ extern int D_L12_001FB688[];
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 
-void FUN_L12_00306350(struct Moby *moby, int slot) {
+void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
+
+void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int slot) {
     char *data = (char *)moby->pvars;
     struct Moby *selected;
     float *speed;
