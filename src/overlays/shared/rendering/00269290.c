@@ -783,7 +783,7 @@ extern int FUN_001fa6d0_26b230(float) __asm__("FUN_001fa6d0");
 extern int FUN_001fa6e0_26b230(int, int, float) __asm__("FUN_001fa6e0");
 extern int FUN_00213260_26b230(int) __asm__("FUN_00213260");
 extern float FUN_002132a8_26b230(float, float) __asm__("FUN_002132a8");
-extern unsigned FUN_L00_0025c0e8_26b230(unsigned, int) __asm__("FUN_L00_0025c0e8");
+extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern unsigned char *D_L00_001B20B0_26b230 __asm__("D_L00_001B20B0") __attribute__((section(".data")));
 
 extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
@@ -862,9 +862,9 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, v
         motion[0x1F] = flags;
         if (flags & 4) {
             *(short *)(particle + 0xA) = *(short *)(particle + 0xA) * (gold_weapon_purchased[0x10] + 2) / 2;
-            FUN_L00_0025c0e8_26b230(*(int *)(particle + 4), gold_weapon_purchased[0x10]);
-            FUN_L00_0025c0e8_26b230(*(unsigned *)(motion + 0x14), gold_weapon_purchased[0x10]);
-            FUN_L00_0025c0e8_26b230(*(unsigned *)(motion + 0x18), gold_weapon_purchased[0x10]);
+            swap_packed_color_channels(*(int *)(particle + 4), gold_weapon_purchased[0x10]);
+            swap_packed_color_channels(*(unsigned *)(motion + 0x14), gold_weapon_purchased[0x10]);
+            swap_packed_color_channels(*(unsigned *)(motion + 0x18), gold_weapon_purchased[0x10]);
         }
         motion[0x1D] = particle[0xA];
     }

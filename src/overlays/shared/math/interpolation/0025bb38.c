@@ -160,8 +160,8 @@ void swap_color_channel_words(int *red_channel, int *green_channel, int *blue_ch
 extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
 
 /* Splits colour c into bytes, passes the low three through 0025c088 with mask, and repacks them. */
-unsigned FUN_L00_0025c0e8(unsigned c, int mask);
-unsigned FUN_L00_0025c0e8(unsigned packed_color, int mask) {
+unsigned swap_packed_color_channels(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
+unsigned swap_packed_color_channels(unsigned packed_color, int mask) {
     int rgb_channels[3];
     unsigned preserved_high_byte;
     unsigned repacked_color;

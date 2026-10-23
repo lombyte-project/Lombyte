@@ -511,7 +511,7 @@ extern float convert_integer_to_float_25e450(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32_25e450(float) __asm__("FUN_001fa6d0");
 extern int random_integer_below_25e450(int) __asm__("FUN_00213260");
 extern void build_spherical_offset_25e450(void *, float, float, float) __asm__("FUN_00214db0");
-extern unsigned func_L00_0025D140_25e450(unsigned, int) __asm__("FUN_L00_0025c0e8");
+extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern int random_int_between_25e450(int, int) __asm__("FUN_L00_00257b90");
 extern void initialize_hit_descriptor(void *, void *, int, float) __asm__("FUN_L00_00259858");
 extern int collect_mobies_in_sphere_25e450(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -581,7 +581,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         build_spherical_offset_25e450(&dir, fF * (random_float_between_25e450(7.0f, 10.5f) * frame_time_macro), b, a);
         dir.f[2] += frame_time_macro * 3.0f;
         dist = fF * 40000.0f;
-        func_L00_0026CA10_25e450(explosion_position, &dir, func_L00_0025D140_25e450(0x4F007FFF, flag), func_L00_0025D140_25e450(0x1F00007F, flag),
+        func_L00_0026CA10_25e450(explosion_position, &dir, swap_packed_color_channels(0x4F007FFF, flag), swap_packed_color_channels(0x1F00007F, flag),
             random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x78)) - effect_reduction_level * 10, 1, -1, -1, dist);
         }
     }
@@ -638,8 +638,8 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         c1 = D_L00_001E9048_25e450;
         sp = sp - proximity_speed_reduction * frame_time_macro;
         sp = sp * fF;
-        func_L00_0026B890_25e450(explosion_position, &vb, func_L00_0025D140_25e450(c0.v[random_integer_below_25e450(6)], flag),
-            func_L00_0025D140_25e450(c1.v[random_integer_below_25e450(6)], flag), fF * 400000.0f,
+        func_L00_0026B890_25e450(explosion_position, &vb, swap_packed_color_channels(c0.v[random_integer_below_25e450(6)], flag),
+            swap_packed_color_channels(c1.v[random_integer_below_25e450(6)], flag), fF * 400000.0f,
             random_int_between_25e450(scale_game_frames_25e450(0xF), scale_game_frames_25e450(0x14)) - effect_reduction_level * 3,
             random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - effect_reduction_level * 5, 0, 0, sp);
         func_L00_0026B890_25e450(explosion_position, &vb, 0x7FFFFFFF, 0xFFFFFF, fF * 400000.0f,
@@ -662,8 +662,8 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         rnd.f[2] = random_float_between_25e450(-1.0f, 1.0f);
         *(u128_25e450 *)&vel = *(u128_25e450 *)&rnd;
         normalize_vector_xyz_25e450(&vel, &vel, fF * (random_float_between_25e450(0.0f, 3.0f) * frame_time_macro));
-        first_packed_color = func_L00_0025D140_25e450(c0.v[random_integer_below_25e450(6)], flag);
-        second_packed_color = func_L00_0025D140_25e450(c1.v[random_integer_below_25e450(6)], flag);
+        first_packed_color = swap_packed_color_channels(c0.v[random_integer_below_25e450(6)], flag);
+        second_packed_color = swap_packed_color_channels(c1.v[random_integer_below_25e450(6)], flag);
         func_L00_0026B368_25e450(explosion_position, &vel, first_packed_color, second_packed_color,
             random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - effect_reduction_level * 5, 200000.0f);
     }
@@ -738,7 +738,7 @@ extern int FUN_L00_00257b90(int, int);
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern unsigned FUN_L00_0025c0e8(unsigned, int);
+extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
 extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
@@ -823,7 +823,7 @@ void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, flo
         big = scale * k5;
         first_particle_color_palette = D_L00_001E9030;
         second_particle_color_palette = D_L00_001E9048;
-        FUN_L00_0026a9f0(effect_position, &zero_vec, FUN_L00_0025c0e8(first_particle_color_palette.v[random_integer_below(6)], 1), FUN_L00_0025c0e8(second_particle_color_palette.v[random_integer_below(6)], 1),
+        FUN_L00_0026a9f0(effect_position, &zero_vec, swap_packed_color_channels(first_particle_color_palette.v[random_integer_below(6)], 1), swap_packed_color_channels(second_particle_color_palette.v[random_integer_below(6)], 1),
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
