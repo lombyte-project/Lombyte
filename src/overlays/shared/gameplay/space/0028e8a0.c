@@ -177,7 +177,7 @@ extern int D_L00_0015F5D8;
 extern short D_0013E05C __attribute__((section(".data")));
 void music_pause(int) __asm__("FUN_00216050");
 void sound_update(void) __asm__("FUN_0022ca50");
-void FUN_L00_002039a0(void);
+void f2039a0_298840(void) __asm__("FUN_L00_002039a0");
 void FUN_L00_0028e9c8(int);
 /* Sets D_L00_0015F5D8, keeps +0x22A8 >= 1, calls 00216050, sound_update, 002039a0, 0028e9c8. */
 void FUN_L00_0028ecd8(void) {
@@ -191,7 +191,7 @@ void FUN_L00_0028ecd8(void) {
     if ((unsigned)((unsigned short)music_state->secondary.state - 6) >= 2)
         music_state->secondary.state = 5;
     sound_update();
-    FUN_L00_002039a0();
+    f2039a0_298840();
     FUN_L00_0028e9c8(0);
     D_0013E05C = 0;
 }
