@@ -729,7 +729,7 @@ void emit_sandmouse_particles(char *source_moby) {
 /* Initialize both consecutive effect entries. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F240), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00263618(void *, int, float, float);
+extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 void draw_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030de68");
 
@@ -738,7 +738,7 @@ void draw_sandmouse_billboard_quads(char *moby) {
     char *entry = data + 0x70;
     int i;
     for (i = 1; i >= 0; i--) {
-        FUN_L00_00263618(entry, 0x2528AA28, 0.1f, 0.08f);
+        draw_offset_textured_effect_quad(entry, 0x2528AA28, 0.1f, 0.08f);
         entry += 0x10;
     }
 }

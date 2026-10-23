@@ -374,7 +374,7 @@ extern float FUN_001f9de0_c7(float) __asm__("FUN_001f9de0");
 extern int FUN_001fa6e0_c7(float, int, int) __asm__("FUN_001fa6e0");
 extern void FUN_001f9bf8_c7(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a10_c7(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_L00_00263618_c7(void *, int, float, float) __asm__("FUN_L00_00263618");
+extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 extern float FUN_001fa580_c7(float, float) __asm__("FUN_001fa580");
 
 extern float D_L18_00162258 __attribute__((sda));
@@ -410,11 +410,11 @@ void render_drek_fight_missile_group_effects(struct Moby *group_moby) {
             switch (missile_moby[0x20]) {
             case DREK_MISSILE_WANDER:
             case DREK_MISSILE_DIVE:
-                FUN_L00_00263618_c7(effect_world_position, phase_blended_color, D_L18_00162268, 0.0f);
+                draw_offset_textured_effect_quad(effect_world_position, phase_blended_color, D_L18_00162268, 0.0f);
                 *(float *)(missile_vars + 0x168) = FUN_001fa580_c7(*(float *)(missile_vars + 0x168), moving_phase_step);
                 break;
             case DREK_MISSILE_WAIT_TO_EXPLODE:
-                FUN_L00_00263618_c7(effect_world_position, phase_blended_color, D_L18_00162268, 0.0f);
+                draw_offset_textured_effect_quad(effect_world_position, phase_blended_color, D_L18_00162268, 0.0f);
                 *(float *)(missile_vars + 0x168) = FUN_001fa580_c7(*(float *)(missile_vars + 0x168), wait_to_explode_phase_step);
                 break;
             }
@@ -3550,7 +3550,7 @@ extern s32 D_L18_00162458_gp __asm__("D_L18_00162458") __attribute__((sda));
 extern s32 D_L18_0016245C_gp __asm__("D_L18_0016245C") __attribute__((sda));
 extern s32 D_L18_00162460_gp __asm__("D_L18_00162460") __attribute__((sda));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00263618(void *, int, float, float);
+extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 extern short D_L18_00162464 __attribute__((sda));
 extern short D_L18_00162468 __attribute__((sda));
@@ -3570,9 +3570,9 @@ void render_drek_boss_joint_glows(struct Moby *moby) {
     attached_glow_cycle_value = fast_sin(attached_glow_cycle_value - 3.14159f);
     attached_glow_color = fast_tween_color(*(int *)&D_L18_00162458_gp, *(int *)&D_L18_0016245C_gp, attached_glow_cycle_value * 0.5f + 0.5f);
     moby_point_position(boss_vars->p3A0, 1, joint_world_position);
-    FUN_L00_00263618(joint_world_position, attached_glow_color, *(float *)&D_L18_00162450_gp, *(float *)&D_L18_00162454_gp);
+    draw_offset_textured_effect_quad(joint_world_position, attached_glow_color, *(float *)&D_L18_00162450_gp, *(float *)&D_L18_00162454_gp);
     moby_point_position(boss_vars->p3A0, 2, joint_world_position);
-    FUN_L00_00263618(joint_world_position, attached_glow_color, *(float *)&D_L18_00162450_gp, *(float *)&D_L18_00162454_gp);
+    draw_offset_textured_effect_quad(joint_world_position, attached_glow_color, *(float *)&D_L18_00162450_gp, *(float *)&D_L18_00162454_gp);
     if ((unsigned)(moby->prev_seq - 11) < 3) {
         int animation_glow_period_frames = scale_game_frames(*(int *)&D_L18_00162474);
         float animation_glow_cycle_value = convert_integer_to_float(game_frame % animation_glow_period_frames);
@@ -3582,13 +3582,13 @@ void render_drek_boss_joint_glows(struct Moby *moby) {
         animation_glow_cycle_value = fast_sin(animation_glow_cycle_value - 3.14159f);
         animation_glow_color = fast_tween_color(*(int *)&D_L18_0016246C, *(int *)&D_L18_00162470, animation_glow_cycle_value * 0.5f + 0.5f);
         moby_point_position(moby, 5, animation_glow_world_position);
-        FUN_L00_00263618(animation_glow_world_position, animation_glow_color, *(float *)&D_L18_00162464, *(float *)&D_L18_00162468);
+        draw_offset_textured_effect_quad(animation_glow_world_position, animation_glow_color, *(float *)&D_L18_00162464, *(float *)&D_L18_00162468);
         moby_point_position(moby, 6, animation_glow_world_position);
-        FUN_L00_00263618(animation_glow_world_position, animation_glow_color, *(float *)&D_L18_00162464, *(float *)&D_L18_00162468);
+        draw_offset_textured_effect_quad(animation_glow_world_position, animation_glow_color, *(float *)&D_L18_00162464, *(float *)&D_L18_00162468);
     }
     for (i = 0; i < 8; i++) {
         moby_point_position(moby, 11 + i, joint_world_position);
-        FUN_L00_00263618(joint_world_position, boss_vars->p3B8, 0.7f, 0.5f);
+        draw_offset_textured_effect_quad(joint_world_position, boss_vars->p3B8, 0.7f, 0.5f);
     }
 }
 #define NOT_SDA

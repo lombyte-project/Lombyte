@@ -46,14 +46,14 @@ extern void draw_three_moby_effect_quads(struct Moby *m) __asm__("FUN_L17_002f04
 
 /* Applies the same effect to three consecutive 16-byte slots of a moby's data, tagged with its colour word. */
 
-extern void FUN_L00_00263618(void *, int, float, float);
+extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 void draw_three_moby_effect_quads(struct Moby *effect_owner) {
     int effect_color = (effect_owner->glow_color & 0xFFFFFF) | 0x30000000;
     char *effect_position = (char *)effect_owner->pvars + 0x200;
     int i;
     for (i = 2; i >= 0; i--) {
-        FUN_L00_00263618(effect_position, effect_color, 0.2f, 0.08f);
+        draw_offset_textured_effect_quad(effect_position, effect_color, 0.2f, 0.08f);
         effect_position += 0x10;
     }
 }

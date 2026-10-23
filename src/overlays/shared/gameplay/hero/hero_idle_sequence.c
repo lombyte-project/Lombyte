@@ -1562,7 +1562,7 @@ typedef struct {
     s32 i2300;
 } P_207d40;
 extern P_207d40 D_0013F350_207d40 __asm__("D_0013F350") __attribute__((section(".data")));
-extern void FUN_L00_00263618_207d40(void *, s32, f32, f32) __asm__("FUN_L00_00263618");
+extern void draw_offset_textured_effect_quad(void *, s32, f32, f32) __asm__("FUN_L00_00263618");
 extern int FUN_L00_0020d498_207d40(int) __asm__("FUN_L00_0020d498");
 extern void FUN_00213ed8_207d40(void *, f32, f32) __asm__("FUN_00213ed8");
 #define P D_0013F350_207d40
@@ -1578,7 +1578,7 @@ void FUN_L00_00207d40(void) {
     mode = D_L00_0015F5C4;
     if (mode == 2 || mode == 6) {
         for (i = 0; i < P.h1EB0; i++)
-            FUN_L00_00263618_207d40(&P.v1DD0[i], P.i1E50[i], P.f1E70[i], P.f1E90[i]);
+            draw_offset_textured_effect_quad(&P.v1DD0[i], P.i1E50[i], P.f1E70[i], P.f1E90[i]);
         return;
     }
     vehicle_mode = P.b20A4;
@@ -1587,7 +1587,7 @@ void FUN_L00_00207d40(void) {
         glow_color = P.i22E4;
         glow_position_cursor = P.v1D50;
         for (j = 2; j >= 0; j--) {
-            FUN_L00_00263618_207d40(glow_position_cursor, glow_color, 0.2f, 0.08f);
+            draw_offset_textured_effect_quad(glow_position_cursor, glow_color, 0.2f, 0.08f);
             glow_position_cursor++;
         }
         return;
@@ -1595,16 +1595,16 @@ void FUN_L00_00207d40(void) {
     if (vehicle_mode == 0) {
         if ((FUN_L00_0020d498_207d40(3) == 3 || FUN_L00_0020d498_207d40(3) == 2) && P.h22D8 == 0) {
             P.v1D80.f[2] += 0.015f;
-            FUN_L00_00263618_207d40(&P.v1D80, 0x280000C0, 0.057f, 0.08f);
+            draw_offset_textured_effect_quad(&P.v1D80, 0x280000C0, 0.057f, 0.08f);
             P.v1D80.f[2] -= 0.015f;
         }
         for (i = 0; i < P.h1EB0; i++)
-            FUN_L00_00263618_207d40(&P.v1DD0[i], P.i1E50[i], P.f1E70[i], P.f1E90[i]);
+            draw_offset_textured_effect_quad(&P.v1DD0[i], P.i1E50[i], P.f1E70[i], P.f1E90[i]);
         return;
     }
     if (vehicle_mode == 2) {
         P.v1D80.f[2] -= 0.07f;
-        FUN_L00_00263618_207d40(&P.v1D80, 0x300000C0, 0.25f, 0.08f);
+        draw_offset_textured_effect_quad(&P.v1D80, 0x300000C0, 0.25f, 0.08f);
         P.v1D80.f[2] += 0.07f;
         return;
     }
@@ -1619,7 +1619,7 @@ void FUN_L00_00207d40(void) {
             P.v1D80.f[2] -= 0.02f;
         }
         FUN_00213ed8_207d40(&P.f162C, k, frame_scale * 0.003f);
-        FUN_L00_00263618_207d40(&P.v1D80, P.i2300, P.f162C, 0.08f);
+        draw_offset_textured_effect_quad(&P.v1D80, P.i2300, P.f162C, 0.08f);
     }
 }
 #include "eetypes.h"

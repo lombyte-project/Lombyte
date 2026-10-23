@@ -2747,7 +2747,7 @@ void FUN_L06_002f3640(unsigned char *moby) {
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 extern unsigned char D_0015EEB0[] __asm__("D_0015EDB0") MACRO_ADDR;
-extern void FUN_L00_00263618(void *, int, float, float);
+extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 void FUN_L06_002f37d0(char *owner) {
     int list;
@@ -2764,7 +2764,7 @@ void FUN_L06_002f37d0(char *owner) {
             if (*(short *)(list + 0xA6) == *(short *)(owner + 0xA6)) {
                 effect_position = moby_vars + 0x140;
                 for (i = 2; i >= 0; i--) {
-                    FUN_L00_00263618(effect_position, *(int *)(moby_vars + 0x290), effect_scale, 0.08f);
+                    draw_offset_textured_effect_quad(effect_position, *(int *)(moby_vars + 0x290), effect_scale, 0.08f);
                     effect_position += 0x10;
                 }
             }

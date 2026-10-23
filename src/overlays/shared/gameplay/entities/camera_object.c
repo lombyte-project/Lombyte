@@ -304,7 +304,7 @@ extern void transform_point_2a5040(void *, void *, void *) __asm__("FUN_001f9cf8
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_cos_2a5040(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-void FUN_L00_00263618(void *, int, float, float);
+void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 typedef unsigned int Q_2a5040 __attribute__((mode(TI), aligned(16)));
 typedef union { Q_2a5040 q; float f[4]; } V_2a5040;
@@ -473,7 +473,7 @@ void FUN_L00_002a5040(char *m) {
         T[0].f[2] = 0.59f;
         transform_point_2a5040(T[0].f, T[0].f, m + 0xC0);
         add_vector_xyz(T[0].f, T[0].f, m + 0x10);
-        FUN_L00_00263618(T[0].f, *(int *)(m + 0x90) & 0xFFFF0000, 0.1333f, zf);
+        draw_offset_textured_effect_quad(T[0].f, *(int *)(m + 0x90) & 0xFFFF0000, 0.1333f, zf);
     }
 }
 #endif

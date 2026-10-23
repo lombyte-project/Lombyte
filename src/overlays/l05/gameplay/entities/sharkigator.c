@@ -15,7 +15,7 @@
 
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
-extern void FUN_L00_00263618(void *, int, float, float);
+extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 void draw_group_moby_glow_quads(unsigned char *moby) __asm__("FUN_L05_002d6f48");
 
@@ -31,7 +31,7 @@ void draw_group_moby_glow_quads(unsigned char *moby) {
             if (*(short *)(it + 0xA6) == *(short *)(moby + 0xA6)) {
                 glow_position = data + 0x330;
                 for (i = 2; i >= 0; i--) {
-                    FUN_L00_00263618(glow_position, *(int *)(data + 0x360), 0.45f, 0.4f);
+                    draw_offset_textured_effect_quad(glow_position, *(int *)(data + 0x360), 0.45f, 0.4f);
                     glow_position += 0x10;
                 }
             }

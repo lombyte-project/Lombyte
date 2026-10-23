@@ -8,7 +8,7 @@
 
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
-extern void FUN_L00_00263618(void *, int, float, float);
+extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 void draw_matching_moby_slot_quads(char *self) __asm__("FUN_L02_002ecc68");
 
@@ -23,7 +23,7 @@ void draw_matching_moby_slot_quads(char *self) {
                     char *slot_position = data + 0x80;
                     int i;
                     for (i = 0x5; i >= 0; i--) {
-                        FUN_L00_00263618(slot_position, *(int *)(data + 0xe0), 1.2f, 0.57f);
+                        draw_offset_textured_effect_quad(slot_position, *(int *)(data + 0xe0), 1.2f, 0.57f);
                         slot_position += 0x10;
                     }
                 }

@@ -1530,14 +1530,14 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
 /* Applies the same effect to three consecutive 16-byte slots of a moby's data, tagged with its colour word. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029BD88), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00263618(void *, int, float, float);
+extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 void draw_sentrybot_effect_quads(char *moby) {
     int effect_color = (*(int *)(moby + 0x90) & 0xFFFFFF) | 0x30000000;
     char *effect_position = *(char **)(moby + 0x78) + 0x2A0;
     int i;
     for (i = 2; i >= 0; i--) {
-        FUN_L00_00263618(effect_position, effect_color, 0.2f, 0.08f);
+        draw_offset_textured_effect_quad(effect_position, effect_color, 0.2f, 0.08f);
         effect_position += 0x10;
     }
 }

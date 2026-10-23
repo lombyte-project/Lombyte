@@ -479,7 +479,7 @@ extern int D_L18_0016245C;
 extern int D_L18_00162460;
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_L00_00263618(void *, int, float, float);
+extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -503,11 +503,11 @@ void draw_moby_color_cycling_bone_glows(void *moby) {
     build_moby_bone_transform(moby, 1, bone_transform_rows0_1);
     scale_vector_xyz(scaled_bone_offset, bone_transform_row2, *(float *)&D_L18_00162500);
     subtract_vector_xyz(glow_position, bone_world_position, scaled_bone_offset);
-    FUN_L00_00263618(glow_position, tweened_color, D_L18_00162450, D_L18_00162454);
+    draw_offset_textured_effect_quad(glow_position, tweened_color, D_L18_00162450, D_L18_00162454);
     build_moby_bone_transform(moby, 2, bone_transform_rows0_1);
     scale_vector_xyz(scaled_bone_offset, bone_transform_row2, *(float *)&D_L18_00162500);
     subtract_vector_xyz(glow_position, bone_world_position, scaled_bone_offset);
-    FUN_L00_00263618(glow_position, tweened_color, D_L18_00162450, D_L18_00162454);
+    draw_offset_textured_effect_quad(glow_position, tweened_color, D_L18_00162450, D_L18_00162454);
 }
 /* Draws the moby's two glow quads facing the camera, in the inner and outer tints. */
 typedef unsigned int u128_9c20 __attribute__((mode(TI)));
@@ -1514,7 +1514,7 @@ void draw_gadgebot_launch_glow_quad(struct Moby *m) {
 extern int D_L18_0015FFD8;
 extern short D_L18_00162654;
 extern unsigned short *D_L18_001AC240_c[] __asm__("D_L18_001AC240");
-extern void FUN_L00_00263618(void *, int, float, float);
+extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 void draw_group_class_0772_joint_glows(struct Moby *moby) {
     unsigned short *group_moby_entry = D_L18_001AC240_c[moby->group];
@@ -1528,7 +1528,7 @@ void draw_group_class_0772_joint_glows(struct Moby *moby) {
                 float joint_world_position[4];
                 for (i = 2; i < 5; i++) {
                     moby_point_position(group_moby, i, joint_world_position);
-                    FUN_L00_00263618(joint_world_position, col, 0.175f, 0.08f);
+                    draw_offset_textured_effect_quad(joint_world_position, col, 0.175f, 0.08f);
                 }
             }
             if (*(short *)group_moby_entry < 0)

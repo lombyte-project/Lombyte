@@ -14,7 +14,7 @@
 
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
-extern void FUN_L00_00263618(void *, int, float, float);
+extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 void draw_background_ship_1_joint_billboards(char *self) __asm__("FUN_L02_002ec308");
 
@@ -29,7 +29,7 @@ void draw_background_ship_1_joint_billboards(char *self) {
                     char *joint_position = data + 0x80;
                     int i;
                     for (i = 2; i >= 0; i--) {
-                        FUN_L00_00263618(joint_position, *(int *)(data + 0xB0), 0.9f, 0.45f);
+                        draw_offset_textured_effect_quad(joint_position, *(int *)(data + 0xB0), 0.9f, 0.45f);
                         joint_position += 0x10;
                     }
                 }

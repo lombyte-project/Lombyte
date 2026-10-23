@@ -176,7 +176,9 @@ void FUN_001f9a10_00263618(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9d20_00263618(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f7d30_00263618(void *, s32, s32) __asm__("FUN_001f7d30");
 extern float D_L00_001B0470[4][4] __attribute__((section(".data")));
-void FUN_L00_00263618(float *quad_base_position, u32 col, float quad_scale, float position_offset_scale) {
+void draw_offset_textured_effect_quad(float *quad_base_position, u32 col, float quad_scale, float position_offset_scale) __asm__("FUN_L00_00263618");
+
+void draw_offset_textured_effect_quad(float *quad_base_position, u32 col, float quad_scale, float position_offset_scale) {
     Pk_00263618 pk;
     float up[4];
     float M[4][4];
