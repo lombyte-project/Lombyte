@@ -452,7 +452,7 @@ extern void FUN_001efa68_cf(float *, float *, float) __asm__("FUN_L00_00233810")
 extern void FUN_001f9770_cf(int) __asm__("FUN_0022d798");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_00209018_cf(void *, float, float, float) __asm__("FUN_00214db0");
-extern void FUN_L00_002091d8(float, float, float);
+extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void emit_hero_periodic_surface_effect(int, int) __asm__("FUN_L00_00209540");
 extern void emit_hero_periodic_surface_particles(int, int) __asm__("FUN_L00_00209848");
 extern void FUN_L00_00209848_cf(float, float) __asm__("FUN_L00_0020a1e0");
@@ -1809,7 +1809,7 @@ void update_hero_motion_for_current_state(void) {
         hero.unk20AC = 1;
         fast_cos_cf(&hero.unk948, hero.unk950, frame_time_sq * 8.726646f);
         fast_cos_cf(&hero.unk94C, hero.unk954, frame_time_sq * 8.726646f);
-        FUN_L00_002091d8(hero.unk948, hero.unk94C, 0.0f);
+        rotate_hero_about_fixed_local_pivot(hero.unk948, hero.unk94C, 0.0f);
         {
             float len;
 

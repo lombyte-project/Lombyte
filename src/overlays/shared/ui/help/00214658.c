@@ -27,7 +27,7 @@ extern void FUN_L00_00211e30_214658(int, float, float, float) __asm__("FUN_L00_0
 extern void FUN_L00_002118c8_214658(int, float) __asm__("FUN_L00_002118c8");
 extern f32 FUN_L00_0025bc98_214658(float *, float *, int, float, float, float,
                                    float) __asm__("FUN_L00_0025bc98");
-extern void FUN_L00_002091d8_214658(float, float, float) __asm__("FUN_L00_002091d8");
+extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void FUN_L00_00233ba0_214658(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void FUN_L00_00233708_214658(void *, void *, f32) __asm__("FUN_L00_00233708");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -135,7 +135,7 @@ void FUN_L00_00214658(void) {
             hero.motion.unk188 = FUN_L00_0025bc98_214658(&x, &hero.motion.unk184, 0, hero.motion.move_yaw, ED64 * 0.018f, ED64 * 0.2f,
                                              ED6C * 7.330383f);
             a = fast_subtract_rotations(x, hero.motion.rot.f[2]);
-            FUN_L00_002091d8_214658(0.0f, 0.0f, a);
+            rotate_hero_about_fixed_local_pivot(0.0f, 0.0f, a);
         } else {
             FUN_L00_00211e30_214658(0, ED64 * 0.04f, ED64 * 0.2f, hero.unk414);
         }

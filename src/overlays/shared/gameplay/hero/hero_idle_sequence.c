@@ -2185,7 +2185,9 @@ typedef float V[4] __attribute__((aligned(16)));
 extern void rotate_hero_about_local_pivot(float *, float, float, float) __asm__("FUN_L00_002090d0");
 
 /* Calls FUN_L00_002090d0 with a vector (0, 0, 0.6) and x, y, z. */
-void FUN_L00_002091d8(float x, float y, float z) {
+void rotate_hero_about_fixed_local_pivot(float x, float y, float z) __asm__("FUN_L00_002091d8");
+
+void rotate_hero_about_fixed_local_pivot(float x, float y, float z) {
     V rotation_reference_vector;
 
     clear_u64_value(rotation_reference_vector);

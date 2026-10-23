@@ -276,7 +276,7 @@ extern void check_ledge_grab(void) __asm__("FUN_L00_0020bed0");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern f32 D_L17_001C45B0[];
 extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
-extern void FUN_L00_002091d8(f32, f32, f32);
+extern void rotate_hero_about_fixed_local_pivot(f32, f32, f32) __asm__("FUN_L00_002091d8");
 extern void FUN_L00_00214658(void);
 extern void compute_hero_fixed_offset_world_position(void *) __asm__("FUN_L00_0020d2f8");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
@@ -2202,7 +2202,7 @@ void update_hero_motion_for_current_state(void) {
                              frame_time * 2.6179938f);
             FUN_L00_0025bc98(&scratch_vector.f[0], 0.0f, &hero.motion.unkA0.f[0], 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
                              frame_time * 2.6179938f);
-            FUN_L00_002091d8(hero.motion.unkA0.f[0], hero.motion.unkA0.f[1], 0.0f);
+            rotate_hero_about_fixed_local_pivot(hero.motion.unkA0.f[0], hero.motion.unkA0.f[1], 0.0f);
             if (hero.ground_distance > 1.0f) {
                 hero.state.step = 1;
             }
@@ -2223,7 +2223,7 @@ void update_hero_motion_for_current_state(void) {
         hero.unk20AC = 1;
         approach_value(&hero.unk948, hero.unk950, frame_time_sq * 8.726646f);
         approach_value(&hero.unk94C, hero.unk954, frame_time_sq * 8.726646f);
-        FUN_L00_002091d8(hero.unk948, hero.unk94C, 0.0f);
+        rotate_hero_about_fixed_local_pivot(hero.unk948, hero.unk94C, 0.0f);
         len = vector_length_xy(&hero.motion.velocity);
         FUN_L00_001ff600(frame_scale * -0.100000024f * len + len, &hero.motion.velocity, &hero.motion.velocity);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, hero.unk940);
