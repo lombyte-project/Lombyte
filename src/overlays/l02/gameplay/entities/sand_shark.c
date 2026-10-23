@@ -2462,7 +2462,9 @@ typedef struct {
 extern Level02GroupMoby *D_L02_0015FFD8_g __asm__("D_L02_0015FFD8");
 
 /* Finds the group's moby of type 0x244 in state 0x1A, hands it arg as target, and transfers hp to arg; returns it or 0. */
-Level02GroupMoby *FUN_L02_002dd2a8(Level02GroupMoby *owner) {
+Level02GroupMoby *select_inactive_group_sand_shark_for_nest(Level02GroupMoby *owner) __asm__("FUN_L02_002dd2a8");
+
+Level02GroupMoby *select_inactive_group_sand_shark_for_nest(Level02GroupMoby *owner) {
     short *group_ids;
     Level02GroupMoby *mobys;
     if (owner->group == 0xFF) {
