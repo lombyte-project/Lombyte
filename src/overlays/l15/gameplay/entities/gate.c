@@ -1944,7 +1944,7 @@ typedef struct {
     int idx[2];
 } UPaths;
 
-char *FUN_L10_002cc1b8(float scale, void *vel, void *pos, int a, int b, int c);
+char *create_rocket(float scale, void *vel, void *pos, int a, int b, int c) __asm__("FUN_L10_002cc1b8");
 extern ULevelState D_L15_001BABD0;
 extern ULevelState D_L15_001BB830;
 extern UPath *D_L15_001B0AB0[];

@@ -2453,7 +2453,7 @@ typedef struct ShipD_5E48 {
 } ShipD_5E48;
 
 extern Ship_5E48 *D_L10_001742D8 __attribute__((section(".data")));
-extern char *FUN_L10_002cc1b8(void *vel, void *pos, int a, int b, int c, float scale);
+extern char *create_rocket(void *vel, void *pos, int a, int b, int c, float scale) __asm__("FUN_L10_002cc1b8");
 extern char D_L10_00179890[];
 extern char D_L10_001DD390[];
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
@@ -2621,7 +2621,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
                 fast_vec_scale(&E, &B, FUN_L04_001f1978(3.0f));
                 FUN_L00_001ff290(&D, &E, &C);
                 emit_radial_particle_burst(ship, &E, 0);
-                FUN_L10_002cc1b8(&B, &C, (int)ship, (int)tgt, scale_game_frames_c2(300), 1.0f);
+                create_rocket(&B, &C, (int)ship, (int)tgt, scale_game_frames_c2(300), 1.0f);
             }
         } else if (ship->b52 == 3 && ship->b53 != 2) {
             blend_moby_animation(ship, 2, 0, scale_game_frames_c2(10));
