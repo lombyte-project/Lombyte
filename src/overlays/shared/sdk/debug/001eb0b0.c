@@ -3,7 +3,9 @@
 #include "asm.h"
 
 /* Zeroes five words at p. */
-void FUN_L00_001eb0b0(s32 *destination) {
+void zero_five_words(s32 *destination) __asm__("FUN_L00_001eb0b0");
+
+void zero_five_words(s32 *destination) {
     destination[0] = 0;
     destination[1] = 0;
     destination[2] = 0;

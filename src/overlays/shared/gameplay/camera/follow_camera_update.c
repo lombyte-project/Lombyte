@@ -1082,7 +1082,7 @@ void FUN_L00_002eb278(void *camera) {
 #include "eetypes.h"
 #include "qcopy.h"
 void FUN_L00_001eb0c8_002eb320(void *, void *, float) __asm__("FUN_L00_001eb0c8");
-void FUN_L00_001eb0b0_002eb320(void *) __asm__("FUN_L00_001eb0b0");
+void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
 void clear_twelve_bytes(void *) __asm__("FUN_L00_001ff250");
 void FUN_L00_002eb278_002eb320(char *) __asm__("FUN_L00_002eb278");
 void FUN_L00_002eb320(char *camera_object, void *camera_initialization_values, u128 *initial_orbit_origin, float x) {
@@ -1093,7 +1093,7 @@ void FUN_L00_002eb320(char *camera_object, void *camera_initialization_values, u
     *(float *)(orbit_origin + 0x18) = x;
     FUN_L00_001eb0c8_002eb320(camera_state + 0x14, camera_initialization_values, x);
     FUN_L00_001eb0c8_002eb320(camera_object + 0x50, camera_initialization_values, 0.0f);
-    FUN_L00_001eb0b0_002eb320(camera_state);
+    zero_five_words(camera_state);
     clear_twelve_bytes(camera_state + 0x90);
     FUN_L00_002eb278_002eb320(camera_object);
 }
@@ -1126,7 +1126,7 @@ typedef struct {
     s16 f7E;
 } S002eb3b0;
 
-extern void FUN_L00_001eb0b0_c(void *) __asm__("FUN_L00_001eb0b0");
+extern void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
 extern void clear_twelve_bytes(void *) __asm__("FUN_L00_001ff250");
 extern void FUN_L00_002eb278_c(void *) __asm__("FUN_L00_002eb278");
 
@@ -1149,8 +1149,8 @@ void FUN_L00_002eb3b0(S002eb3b0 *camera_object) {
     m->f30 = 0.07f;
     m->f34 = 1.0f;
     m->f38 = 0.07f;
-    FUN_L00_001eb0b0_c((u8 *)m + 0x50);
-    FUN_L00_001eb0b0_c(m);
+    zero_five_words((u8 *)m + 0x50);
+    zero_five_words(m);
     clear_twelve_bytes((u8 *)m + 0x90);
     FUN_L00_002eb278_c(camera_object);
     camera_object->f7E = 0;
@@ -1283,7 +1283,7 @@ void FUN_001ebf10_002eb930(char *) __asm__("FUN_001ebf10");
 void FUN_L00_002eb648_002eb930(char *, void *) __asm__("FUN_L00_002eb648");
 void FUN_L00_001eb0c8_002eb930(void *, void *, float) __asm__("FUN_L00_001eb0c8");
 void FUN_L00_002eb3b0_002eb930(char *) __asm__("FUN_L00_002eb3b0");
-void FUN_L00_001eb0b0_002eb930(void *) __asm__("FUN_L00_001eb0b0");
+void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
 extern char D_L00_001E77C0[];
 extern char D_L00_001E77D8[];
 extern char D_L00_001E77F0[];
@@ -1303,7 +1303,7 @@ char *initialize_mode6_orbit_camera(void *target_moby) {
     *(int *)(camera_state + 0x9C) = 1;
     FUN_L00_001eb0c8_002eb930(camera_state + 0x28, D_L00_001E77D8, 0.0f);
     FUN_L00_001eb0c8_002eb930(camera_state + 0x3C, D_L00_001E77F0, 0.0f);
-    FUN_L00_001eb0b0_002eb930(camera_state + 0x50);
+    zero_five_words(camera_state + 0x50);
     return camera_record;
 }
 extern char D_00166C80_c[] __asm__("D_L00_00166C80");
@@ -1335,7 +1335,7 @@ typedef struct {
     u8 x50[0x20];
     u8 *m;
 } O002ebb00;
-void FUN_L00_001eb0b0(void *);
+void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
 void FUN_L00_001eb0c8(void *, void *, f32);
 void FUN_L00_002eb3b0_u(O002ebb00 *) __asm__("FUN_L00_002eb3b0");
 void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) __asm__("FUN_L00_002ebb00");
@@ -1349,7 +1349,7 @@ void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) {
     qcopy(m + 0xC0, &hero.motion.rot);
     camera_state = camera_object->m;
     qcopy(camera_state + 0x80, raised_hero_position);
-    FUN_L00_001eb0b0(camera_state + 0x14);
+    zero_five_words(camera_state + 0x14);
     *(f32 *)(camera_state + 0x1C) = 4.64f;
     FUN_L00_001eb0c8(camera_object->x50, camera_state + 0x14, 0.0f);
     FUN_L00_002eb3b0_u(camera_object);
