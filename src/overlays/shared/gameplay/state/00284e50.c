@@ -146,7 +146,9 @@ void restore_or_clear_level_state(void) {
 extern u8 *D_L00_0015FFD8;
 extern u8 *D_L00_0015FFDC;
 /* Finds the moby (0x100 bytes each) whose short at 0xB2 equals id; 0 when none. */
-u8 *FUN_L00_002851c0(s32 unused_parameter, s32 id) {
+u8 *find_moby_by_id(s32 unused_parameter, s32 id) __asm__("FUN_L00_002851c0");
+
+u8 *find_moby_by_id(s32 unused_parameter, s32 id) {
     u8 *record_cursor;
     for (record_cursor = D_L00_0015FFD8; record_cursor != D_L00_0015FFDC; record_cursor += 0x100) {
         if (*(s16 *)(record_cursor + 0xB2) == id)
