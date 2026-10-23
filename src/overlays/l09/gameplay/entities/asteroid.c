@@ -1571,7 +1571,9 @@ char *spawn_class_144_moby(struct Moby *owner, void *position, float angle) {
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
 
-char *FUN_L09_002efe48(void *unused, float lower_radius, float upper_radius, void *origin, float *direction) {
+char *spawn_radially_scattered_moby(void *unused, float lower_radius, float upper_radius, void *origin, float *direction) __asm__("FUN_L09_002efe48");
+
+char *spawn_radially_scattered_moby(void *unused, float lower_radius, float upper_radius, void *origin, float *direction) {
     float offset[4];
     char *moby = (char *)create_moby(0x1A1);
     if (moby != 0) {
