@@ -766,7 +766,7 @@ extern int allocate_voice_for_target_entry(int,int,void *) __asm__("FUN_0022da68
 extern int FUN_L00_001ff600(float,void *,void *);
 extern void save_state_fields_to_hero(char *) __asm__("FUN_L00_002beb90");
 extern void restore_state_fields_from_hero(char *) __asm__("FUN_L00_002bebc8");
-extern void FUN_L00_002bec00(char *);
+extern void save_state_vector_and_fields_to_hero(char *) __asm__("FUN_L00_002bec00");
 extern void restore_saved_state_fields_from_hero(char *) __asm__("FUN_L00_002bec48");
 extern int FUN_L00_002beab0(char *,int,void *);
 extern void FUN_L00_00260400(void *,int,void *,void *,void *,void *);
@@ -852,7 +852,7 @@ void doom_bot_update(struct Moby *moby) {
             data->target_moby=0; moby->state=14; data->timer=0;
             data->turn_rate=frame_scale*0.1f*speed;
             save_state_fields_to_hero((char*)data);
-            FUN_L00_002bec00((char*)data);
+            save_state_vector_and_fields_to_hero((char*)data);
             if (moby->prev_seq!=5) blend_moby_animation(moby,5,0,scale_game_frames(5));
         }
         if (moby->state==13) {
@@ -919,7 +919,7 @@ void doom_bot_update(struct Moby *moby) {
             }
             if (vector_distance_xy(&moby->pos,&data->target_moby->pos)<reach*0.5f &&
                 absolute_float(height-(moby->pos.z+speed*0.1f))<reach*0.5f) {
-                FUN_L00_002bec00((char*)data);
+                save_state_vector_and_fields_to_hero((char*)data);
                 FUN_L00_002bf8b0(moby,&((DoomBotParams*)&hero)->config,&data->target_moby->pos);
                 restore_saved_state_fields_from_hero((char*)data);
                 qcopy(data,&data->target_moby->pos);
@@ -1059,7 +1059,7 @@ void doom_bot_update(struct Moby *moby) {
     }
     case DOOM_BOT_EXECUTE_JUMP:
         z=moby->pos.z;
-        FUN_L00_002bec00((char*)data);
+        save_state_vector_and_fields_to_hero((char*)data);
         result=update_arc_motion(moby,&((DoomBotParams*)&hero)->config);
         if (result==4) {
             moby->state=result;

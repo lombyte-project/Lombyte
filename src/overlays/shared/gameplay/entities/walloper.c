@@ -2510,7 +2510,9 @@ void restore_state_fields_from_hero(char *destination_state) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF08), where it is exact; names translated to the US level program. */
 
 /* Saves moby fields 0x44..0x68 and its vector into ((char *)&hero) at 0x1F10..0x1F40. */
-void FUN_L00_002bec00(char *source_state) {
+void save_state_vector_and_fields_to_hero(char *source_state) __asm__("FUN_L00_002bec00");
+
+void save_state_vector_and_fields_to_hero(char *source_state) {
     struct Hero *hero_state = &hero;
     hero_state->unk1F20 = *(float *)(source_state + 0x50);
     hero_state->unk1F24 = *(float *)(source_state + 0x54);
