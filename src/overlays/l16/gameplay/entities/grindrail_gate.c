@@ -2749,7 +2749,9 @@ extern float D_L16_001DD4A8[];
 float *D_L16_00161F70[2] = {D_L16_001DD4A8, 0};
 extern float D_L16_001DDA88[];
 float *D_L16_00161F78[2] = {D_L16_001DDA88, 0};
-void FUN_L16_002e9270(void) {
+void draw_level16_visible_single_reflection_mesh(void) __asm__("FUN_L16_002e9270");
+
+void draw_level16_visible_single_reflection_mesh(void) {
     int *point_counts = (int *)D_L16_00161F40;
     int *point_positions = (int *)D_L16_00161F60;
     int *unused_reflection_arguments = (int *)D_L16_00161F68;
@@ -2776,7 +2778,7 @@ typedef struct {
     float x, y, z, radius;
 } L16SingleSphere;
 
-extern void FUN_L16_002e9270_u(void) __asm__("FUN_L16_002e9270");
+extern void draw_level16_visible_single_reflection_mesh(void) __asm__("FUN_L16_002e9270");
 void enqueue_callback_list_1_u(int arg0, int arg1) __asm__("FUN_001f4600");
 extern L16SingleSphere D_L16_00161F60_bounds[] __asm__("D_L16_00161F80")
     __attribute__((section(".sdata")));
@@ -2844,7 +2846,7 @@ void update_level16_single_mesh_render_state(unsigned char *moby) {
         break;
     }
     case SINGLE_MESH_RENDER_QUEUE_CALLBACK:
-        enqueue_callback_list_1_u(FUN_L16_002e9270_u, moby);
+        enqueue_callback_list_1_u(draw_level16_visible_single_reflection_mesh, moby);
         break;
     }
 }
