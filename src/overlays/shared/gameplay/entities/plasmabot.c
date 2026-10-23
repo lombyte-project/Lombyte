@@ -80,7 +80,9 @@ void FUN_L14_002b3358(char *moby) {
 
 
 extern float D_L14_001614DC __attribute__((sda));
-void FUN_L14_002b3578(char *moby) {
+void scale_and_apply_plasmabot_planar_velocity(char *moby) __asm__("FUN_L14_002b3578");
+
+void scale_and_apply_plasmabot_planar_velocity(char *moby) {
     float planar_velocity_scale = (D_L14_001614DC - 1.0f) * frame_scale + 1.0f;
     char *moby_vars = *(char **)(moby + 0x78);
     *(float *)(moby_vars + 0x254) = *(float *)(moby_vars + 0x254) * planar_velocity_scale;
@@ -296,7 +298,7 @@ void FUN_L14_002b3268_c(char *moby) __asm__("FUN_L14_002b3268");
 void FUN_L14_002b3318_c(char *moby) __asm__("FUN_L14_002b3318");
 void activate_plasmabot(char *moby) __asm__("FUN_L14_002b3330");
 void FUN_L14_002b3358_c(char *moby) __asm__("FUN_L14_002b3358");
-void FUN_L14_002b3578_c(char *moby) __asm__("FUN_L14_002b3578");
+void scale_and_apply_plasmabot_planar_velocity(char *moby) __asm__("FUN_L14_002b3578");
 void FUN_L14_002b37b0_c(char *moby, float angle) __asm__("FUN_L14_002b37b0");
 void FUN_L14_002b3890_c(int idx) __asm__("FUN_L14_002b3890");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
@@ -529,7 +531,7 @@ void update_plasmabot(char *moby) {
         float ang;
         float k;
         float aim;
-        FUN_L14_002b3578_c(moby);
+        scale_and_apply_plasmabot_planar_velocity(moby);
         ang = fast_arc_tan_c(*(float *)(owner + 0x10) - *(float *)(moby + 0x10),
                                 *(float *)(owner + 0x14) - *(float *)(moby + 0x14));
         k = frame_time_sq * 12.566371f;
