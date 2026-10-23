@@ -3577,7 +3577,7 @@ void update_hero_triggered_falling_platform(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313298), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_0023e5e0(float *, float, float, int);
+extern int allocate_packed_color_point_light_slot(float *, float, float, int) __asm__("FUN_L00_0023e5e0");
 
 void configure_timed_point_light(float radius, void *moby_, void *obj_, short pa, void *effect_position_override, short duration_frames, unsigned int color, int ca) {
     char *moby = moby_;
@@ -3601,7 +3601,7 @@ void configure_timed_point_light(float radius, void *moby_, void *obj_, short pa
             if (ca == -1) {
                 ca = 0;
             }
-            *(short *)(light_effect_state + 0x280) = FUN_L00_0023e5e0(effect_position, radius, 0.0f, color);
+            *(short *)(light_effect_state + 0x280) = allocate_packed_color_point_light_slot(effect_position, radius, 0.0f, color);
             *(short *)(light_effect_state + 0x284) = 0;
         }
     }

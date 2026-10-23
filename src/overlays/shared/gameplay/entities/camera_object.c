@@ -2279,7 +2279,7 @@ void *spawn_class_593_moby(int unused, void *spawn_position, int initial_paired_
 extern char *func_0020D348_m_q(int) __asm__("func_0020D348_m");
 extern int D_L00_0015F320;
 extern int D_L00_0015F330;
-extern int FUN_L00_0023e5e0_q(float *pos, float radius, float intensity,
+extern int allocate_packed_color_point_light_slot(float *pos, float radius, float intensity,
                               int color) __asm__("FUN_L00_0023e5e0");
 extern short D_L00_001613C8_q __asm__("D_L00_001613C8") __attribute__((sda));
 
@@ -2307,7 +2307,7 @@ void *spawn_tracked_class_5f3_moby(int unused, float *spawn_position) {
         D_L00_0015F320 = 0;
         D_L00_0015F330 = 0;
         *(int *)(moby_vars + 0x10) = 0;
-        *(short *)(moby_vars + 0x2C) = FUN_L00_0023e5e0_q(spawn_position, 0.0f, 0.0f, 0);
+        *(short *)(moby_vars + 0x2C) = allocate_packed_color_point_light_slot(spawn_position, 0.0f, 0.0f, 0);
     }
     return spawned_moby;
 }

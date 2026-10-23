@@ -245,7 +245,9 @@ u8 D_L15_00180C40[8][1024] = {0};
 u8 D_L16_00180AC0[8][1024] = {0};
 u8 D_L17_00180F40[8][1024] = {0};
 u8 D_L18_00181040[8][1024] = {0};
-int FUN_L00_0023e5e0(u128 *position, float radius, float b, int col) {
+int allocate_packed_color_point_light_slot(u128 *position, float radius, float b, int col) __asm__("FUN_L00_0023e5e0");
+
+int allocate_packed_color_point_light_slot(u128 *position, float radius, float b, int col) {
     int i;
     T_0023e5e0 *slot_state;
     P_0023e5e0 *parameter_entry;

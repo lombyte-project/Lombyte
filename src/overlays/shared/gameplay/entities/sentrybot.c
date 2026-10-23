@@ -2225,7 +2225,7 @@ extern float D_0015ED6C __attribute__((section(".sdata")));
 extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
 extern int D_L15_00161484; /* no foreign declaration */
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
-extern int FUN_L00_0023e5e0(float *pos, float radius, float intensity, int color);
+extern int allocate_packed_color_point_light_slot(float *pos, float radius, float intensity, int color) __asm__("FUN_L00_0023e5e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
@@ -2323,7 +2323,7 @@ void update_charged_blast(Moby29FF90 *moby) {
                     (D_L15_001808C0 + moby_data->light)->f0 < (D_L15_001808C0 + moby_data->light)->f4 * 0.8f ? (D_L15_001808C0 + moby_data->light)->f0 : (D_L15_001808C0 + moby_data->light)->f4 * 0.8f,
                     (D_L15_001808C0 + moby_data->light)->f0);
             } else if ((D_L15_0015F5CC_macro & 3) == 0) {
-                moby_data->light = FUN_L00_0023e5e0(moby->pos, 0.0f, 0.0f, 0);
+                moby_data->light = allocate_packed_color_point_light_slot(moby->pos, 0.0f, 0.0f, 0);
             }
         } else {
             D_L15_0015F320.on = 0;
