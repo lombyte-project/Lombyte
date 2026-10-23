@@ -120,7 +120,9 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
-void FUN_L05_00306d30(char *moby, int path_node_index, float *out) {
+void copy_racer_path_node(char *moby, int path_node_index, float *out) __asm__("FUN_L05_00306d30");
+
+void copy_racer_path_node(char *moby, int path_node_index, float *out) {
     char *path = *(char **)(*(char **)(moby + 0x78) + 0x244);
     float next_path_node[4];
     float perpendicular_heading;
@@ -2566,7 +2568,7 @@ extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
 extern char *D_L05_001B0930[];
 extern int random_integer_below_e10(int) __asm__("FUN_00213260");
 extern int trunc_f2i_e10(float) __asm__("FUN_001fa6d0");
-void FUN_L05_00306d30(char *moby, int idx, float *out);
+void copy_racer_path_node(char *moby, int idx, float *out) __asm__("FUN_L05_00306d30");
 
 typedef struct {
     int count;                  /* 0x00: number of nodes */
@@ -2603,13 +2605,13 @@ void FUN_L05_00306e10(char *patrol_moby) {
     float target[4];
     float heading, distance;
 
-    FUN_L05_00306d30((char *)moby, patrol_data->node, target);
+    copy_racer_path_node((char *)moby, patrol_data->node, target);
     heading = fast_arc_tan(target[0] - moby->position[0], target[1] - moby->position[1]);
     for (;;) {
         L16PatrolPath *path;
         L16PatrolPath *base;
 
-        FUN_L05_00306d30((char *)moby, patrol_data->node, target);
+        copy_racer_path_node((char *)moby, patrol_data->node, target);
         distance = vector_distance(target, patrol_data->position);
         if ((fast_difference_between_rotations(heading, moby->yaw) < 1.5707964f || distance > 4.0f) && distance > 2.0f) {
             break;
@@ -2632,7 +2634,7 @@ void FUN_L05_00306e10(char *patrol_moby) {
             patrol_data->node = 0;
         }
         /* The same two statements as before the loop, written out again: the compiler merges the copies. */
-        FUN_L05_00306d30((char *)moby, patrol_data->node, target);
+        copy_racer_path_node((char *)moby, patrol_data->node, target);
         heading = fast_arc_tan(target[0] - moby->position[0], target[1] - moby->position[1]);
     }
 }
@@ -2805,7 +2807,7 @@ extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_00263b38(void *, float);
-extern void FUN_L05_00306d30_c(char *moby, int idx, float *out) __asm__("FUN_L05_00306d30");
+extern void copy_racer_path_node(char *moby, int idx, float *out) __asm__("FUN_L05_00306d30");
 extern void add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L05_00306e10_c(char *obj) __asm__("FUN_L05_00306e10");
@@ -2840,7 +2842,7 @@ void skid_mcmarx_update(Moby *moby) {
         moby->flags |= 0x41;
         path = (Path_308D68 *)D_L05_001B0930[data->path_id];
         data->path = path;
-        FUN_L05_00306d30_c((char *)moby, 0, path_point);
+        copy_racer_path_node((char *)moby, 0, path_point);
         qcopy(((float *)&moby->pos), path_point);
         qcopy(data->pos, ((float *)&moby->pos));
         moby->rot.x = 0.0f;
@@ -2931,7 +2933,7 @@ void skid_mcmarx_update(Moby *moby) {
                 }
             }
             FUN_L05_00307570_c((unsigned char *)moby);
-            FUN_L05_00306d30_c((char *)moby, data->point_index, path_point);
+            copy_racer_path_node((char *)moby, data->point_index, path_point);
             FUN_L00_0025bc98(&moby->rot.z, fast_arc_tan(path_point[0] - moby->pos.x, path_point[1] - moby->pos.y), &data->yaw_speed, 0,
                               frame_scale_sq_macro * 0.035f, frame_scale_sq_macro * 0.3f, D_0015ED6C_gp * 6.981317f);
             if (data->pos[2] < path_point[2] - 5.0f) {
