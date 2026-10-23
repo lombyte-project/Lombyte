@@ -21,7 +21,9 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-int FUN_L08_002e0228(struct Moby *moby) {
+int find_batalia_cannon_aim_target(struct Moby *moby) __asm__("FUN_L08_002e0228");
+
+int find_batalia_cannon_aim_target(struct Moby *moby) {
     float facing_direction[4];
     float target_direction[4];
     int *linked_targets = (int *)((char *)moby->pvars + 0x60);
