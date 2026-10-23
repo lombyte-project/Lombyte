@@ -17,7 +17,9 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int *D_L14_001B0BB0[];
 extern int FUN_L00_0025ff38(char *, char *, float, int, int, int *, int);
 
-void FUN_L14_002b3268(char *moby) {
+void update_plasmabot_target(char *moby) __asm__("FUN_L14_002b3268");
+
+void update_plasmabot_target(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int *target_filter_record = D_L14_001B0BB0[*(int *)(data + 0x244)];
     if (FUN_L00_0025ff38(moby, data + 0xD0, *(float *)(data + 0x234), 0, 0, target_filter_record + 4, *target_filter_record) != 2) {
@@ -294,7 +296,7 @@ unsigned char *FUN_L14_002e0170_c(char *owner, float *scale, int mode) __asm__("
 void FUN_L14_002b2600_c(struct Moby *m) __asm__("FUN_L14_002b2600");
 void FUN_L14_002b2ed8_c(struct Moby *m) __asm__("FUN_L14_002b2ed8");
 void FUN_L14_002b2f60_c(char *m) __asm__("FUN_L14_002b2f60");
-void FUN_L14_002b3268_c(char *moby) __asm__("FUN_L14_002b3268");
+void update_plasmabot_target(char *moby) __asm__("FUN_L14_002b3268");
 void FUN_L14_002b3318_c(char *moby) __asm__("FUN_L14_002b3318");
 void activate_plasmabot(char *moby) __asm__("FUN_L14_002b3330");
 void FUN_L14_002b3358_c(char *moby) __asm__("FUN_L14_002b3358");
@@ -362,7 +364,7 @@ void update_plasmabot(char *moby) {
     }
     if (((unsigned char *)moby)[0x20] != 0) {
         FUN_L14_002b2f60_c(moby);
-        FUN_L14_002b3268_c(moby);
+        update_plasmabot_target(moby);
         FUN_L14_002b2ed8_c((struct Moby *)moby);
         owner = *(char **)(data + 0x110);
     }
