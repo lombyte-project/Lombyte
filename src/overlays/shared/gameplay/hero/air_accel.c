@@ -1443,7 +1443,7 @@ extern void FUN_001f9a28_23c710(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_23c710(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a68_23c710(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 FUN_001f9af0_23c710(void *) __asm__("FUN_001f9af0");
-extern void FUN_L00_00221b68_23c710(void) __asm__("FUN_L00_00221b68");
+extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_00221b68");
 extern void FUN_L00_00233660_23c710(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00211250_23c710(void) __asm__("FUN_L00_00211250");
 
@@ -1553,7 +1553,7 @@ void update_hero_timers_and_vehicle_transitions(void) {
     }
     hero.unk1E2 = 0;
 skip:
-    FUN_L00_00221b68_23c710();
+    update_hero_planar_distance_spring_motion();
     FUN_L00_00233660_23c710(&hero.motion.unkD0, 0.0f, 0.0f, 0.7f);
     if (D_0013D4C0_23c710[0x22]) {
         hero.reach_distance = 12.0f;

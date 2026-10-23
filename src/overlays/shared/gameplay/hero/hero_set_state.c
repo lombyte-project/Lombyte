@@ -118,7 +118,7 @@ extern void FUN_001f9a28_2215c8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 FUN_001f9af0_2215c8(void *) __asm__("FUN_001f9af0");
-extern void FUN_L00_00221b68_2215c8(void) __asm__("FUN_L00_00221b68");
+extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_00221b68");
 extern void FUN_L00_00233660_2215c8(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00211250_2215c8(void) __asm__("FUN_L00_00211250");
 
@@ -231,7 +231,7 @@ void update_hero_timers_and_reach_state(void) {
     }
     hero.unk1E2 = 0;
 skip:
-    FUN_L00_00221b68_2215c8();
+    update_hero_planar_distance_spring_motion();
     switch (hero.vehicle_mode) {
     case HERO_VEHICLE_MODE_CLANK:
         FUN_L00_00233660_2215c8(&hero.motion.unkD0, 0.0f, 0.0f, 0.4f);
@@ -282,7 +282,7 @@ extern float vendor_spring(float *p, float *v, float t, float u1, float u2, floa
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E533[];
 
-void FUN_L00_00221b68(void) {
+void update_hero_planar_distance_spring_motion(void) {
     char *hero_check_base = (char *)D_0013E533 + 0xE1D;
     char *hero_base;
     char *hero_timer_base;
