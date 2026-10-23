@@ -1747,7 +1747,9 @@ extern int *D_L16_001ABCC0_c2[] __asm__("D_L16_001ABCC0");
 extern float D_L16_001619DC;
 extern void draw_test_dummy_group_glows() __asm__("FUN_L16_002cef60");
 
-void FUN_L16_002cee70(struct Moby *moby) {
+void update_test_dummy_group_glow_phases(struct Moby *moby) __asm__("FUN_L16_002cee70");
+
+void update_test_dummy_group_glow_phases(struct Moby *moby) {
     short *group_entry;
     float angle_increment;
     char *group_moby;
