@@ -172,7 +172,7 @@ void FUN_L07_0030e0e0(char *affected_moby, char *effect_moby, char *effect_data)
 extern char *D_L07_0015FFE4;
 extern int FUN_L07_0030e0e0_c() __asm__("FUN_L07_0030e0e0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_L07_0030dcf0_u(unsigned char *) __asm__("FUN_L07_0030dcf0");
+extern void draw_fading_ring_effect(unsigned char *) __asm__("FUN_L07_0030dcf0");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 void delete_moby(struct Obj *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -197,7 +197,7 @@ void update_fading_ring_effect(unsigned char *moby) {
         delete_moby(moby);
         return;
     }
-    enqueue_callback_list_1((void *)FUN_L07_0030dcf0_u, moby);
+    enqueue_callback_list_1((void *)draw_fading_ring_effect, moby);
     FUN_L07_0030e0e0_c(*(void **)(D_0013E533 + 0x2E9D), moby, moby_data);
     for (affected_moby = D_L07_0015FFE4; affected_moby; affected_moby = *(char **)(affected_moby + 0x28)) {
         FUN_L07_0030e0e0_c(affected_moby, moby, moby_data);
@@ -2177,7 +2177,7 @@ extern int D_L07_0015F5CC;
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void fast_draw_quad_real(void *, int, int) __asm__("func_001F7D30");
 
-void FUN_L07_0030dcf0(unsigned char *moby) {
+void draw_fading_ring_effect(unsigned char *moby) {
     char packet[0x90] __attribute__((aligned(16)));
     char second[0x90] __attribute__((aligned(16)));
     char phase_work[0x10] __attribute__((aligned(16)));
