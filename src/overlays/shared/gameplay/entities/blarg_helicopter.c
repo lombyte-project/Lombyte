@@ -1022,14 +1022,14 @@ float absolute_float(float input) __asm__("func_001F99C0");
 s32 FUN_L00_0025df68(s32 *path, void *point, void *nearest, f32 *fraction, s32 *segment, s32 wrap, f32 limit, f32 step, f32 height_tolerance);
 void FUN_L00_00259a88(unsigned char *m, void *src);
 void FUN_L00_00263b38(char *p, float x);
-void FUN_L03_002ce238_c(char *m) __asm__("FUN_L03_002ce238");
+void handle_blarg_helicopter_hits(char *m) __asm__("FUN_L03_002ce238");
 extern int D_L03_001BA5D0[] __asm__("D_L03_001BA5D0");
 extern HPath49_2CDDC8 *D_L03_001B08B0_2CDDC8[] __asm__("D_L03_001B05B0");
 extern unsigned char D_0014171B_2CDDC8[] __asm__("D_0014C050");
 extern int FUN_L03_0024e830_c(void*,void*,float) __asm__("FUN_L03_0024e830");
 extern void func_L00_00264BB0_2CDDC8(void*,float) __asm__("FUN_L00_00263b38");
 extern void func_L00_00263950_2CDDC8(char*,char*,int,float,float) __asm__("FUN_L00_002628d8");
-extern void func_L03_002CF600_2CDDC8(char*) __asm__("FUN_L03_002ce238");
+extern void handle_blarg_helicopter_hits(char*) __asm__("FUN_L03_002ce238");
 extern void func_0020D960_2CDDC8(char*,int,void*) __asm__("FUN_0020cb10");
 extern void func_00213DE0_2CDDC8(void*,int,int,int) __asm__("FUN_00212f90");
 extern int func_L00_0025EFC0_2CDDC8(void*,void*,void*,int*,float*,int,float,float,float) __asm__("FUN_L00_0025df68");
@@ -1114,7 +1114,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
             func_L00_00263950_2CDDC8((char*)child,gun,2,frame_scale_sq*0.03f,frame_scale_sq*0.3f);
         }
     }
-    func_L03_002CF600_2CDDC8((char*)moby);
+    handle_blarg_helicopter_hits((char*)moby);
     switch (moby->state) {
     case BLARG_HELICOPTER_INITIALIZE: {
         HPath49_2CDDC8 **paths;
@@ -1375,7 +1375,7 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L03_002ce238(char *helicopter_moby) {
+void handle_blarg_helicopter_hits(char *helicopter_moby) {
     int hit_reaction_status;
     float fv;
     int hit_reaction_result;
