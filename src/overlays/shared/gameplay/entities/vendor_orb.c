@@ -1675,7 +1675,9 @@ extern void FUN_001f9a28(float *, float *, float *);
 extern void FUN_001f9a68_c3(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_L00_002e4168_c2(char *, void *) __asm__("FUN_L00_002e4168");
 
-float FUN_L00_002e4580(char *camera, float target_offset_scale) {
+float compute_follow_camera_signed_target_angle(char *camera, float target_offset_scale) __asm__("FUN_L00_002e4580");
+
+float compute_follow_camera_signed_target_angle(char *camera, float target_offset_scale) {
     float hero_position[4], offset_target_position[4], angle_direction[4], axis_projection[4];
     float reference_dot_or_signed_angle, axis_dot_or_direction_length;
     char *camera_view = D_L00_00166E10;
