@@ -713,7 +713,9 @@ extern void draw_2ea048(void *) __asm__("FUN_00201f58");
 
 /* Draws the parts whose clip volumes contain the camera (all of them when
  * the override flag is set). */
-void FUN_L02_002ea048(struct Moby *moby) {
+void draw_aridia_ocean_parts(struct Moby *moby) __asm__("FUN_L02_002ea048");
+
+void draw_aridia_ocean_parts(struct Moby *moby) {
     int *clip_volume_indices = (int *)moby->pvars;
 
     begin_animated_frame_rendering(0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, D_L02_001F3E80);
