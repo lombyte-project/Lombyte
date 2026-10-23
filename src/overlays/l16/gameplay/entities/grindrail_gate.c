@@ -1111,7 +1111,7 @@ typedef struct {
 extern char D_L16_001671C0[];
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
-extern float FUN_L16_002e6428_u(void *, void *) __asm__("FUN_L16_002e6428");
+extern float move_chomper_toward_position(void *, void *) __asm__("FUN_L16_002e6428");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_002dc9f0(void *, void *);
 extern s32 rand();
@@ -1178,7 +1178,7 @@ void chomper_update(struct Moby *chomper_moby) {
     case 3:
         break;
     case CHOMPER_APPROACH_TARGET:
-        if (FUN_L16_002e6428_u(chomper_moby, chomper_data + 0x180) < 1.25f) {
+        if (move_chomper_toward_position(chomper_moby, chomper_data + 0x180) < 1.25f) {
             chomper_moby->state = 5;
             if (chomper_moby->prev_seq != 1)
                 blend_moby_animation_u(chomper_moby, 1, 0, scale_game_frames(20));
@@ -1201,7 +1201,7 @@ void chomper_update(struct Moby *chomper_moby) {
         break;
     }
     case CHOMPER_RETURN_HOME:
-        if (FUN_L16_002e6428_u(chomper_moby, chomper_data + 0x1D0) < 1.0f) {
+        if (move_chomper_toward_position(chomper_moby, chomper_data + 0x1D0) < 1.0f) {
             chomper_moby->state = 1;
             if (chomper_moby->prev_seq != 2)
                 blend_moby_animation_u(chomper_moby, 2, 0, scale_game_frames(20));
@@ -1362,7 +1362,7 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 extern float func_00214D88_7890(float *, float, float, float, float,
                                 float *) __asm__("FUN_00213f38");
 
-float FUN_L16_002e6428(void *m_v, void *t_v) {
+float move_chomper_toward_position(void *m_v, void *t_v) {
     char *moby = m_v;
     float *target_position = t_v;
     char *moby_data = *(char **)(moby + 0x78);
