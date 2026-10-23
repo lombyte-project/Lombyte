@@ -1065,13 +1065,13 @@ out:
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023A658), where it is exact; names translated to the US level program. */
 
 extern HudCounter D_L00_0015FAB8;
-extern void FUN_L00_0023a760(HudElem *);
+extern void initialize_numeric_hud_timer_and_base_dimensions(HudElem *) __asm__("FUN_L00_0023a760");
 
 /* Runs FUN_L00_0023a760 on e, points its unk80 at D_L00_0015FAB8 and clears that entry. */
 void initialize_bolt_counter_hud(HudElem *hud_element) __asm__("FUN_L00_00239cc8");
 
 void initialize_bolt_counter_hud(HudElem *hud_element) {
-    FUN_L00_0023a760(hud_element);
+    initialize_numeric_hud_timer_and_base_dimensions(hud_element);
     hud_element->unk80 = &D_L00_0015FAB8;
     D_L00_0015FAB8.unk0 = 0;
 }
@@ -1362,7 +1362,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void initialize_numeric_hud_values_and_dimensions(HudElem *) __asm__("FUN_L00_00235c80");
 
 /* Sets unk7C to scale_game_frames(0x78) + 0x1E and w/h to 0x20, calls FUN_L00_00235c80. */
-void FUN_L00_0023a760(HudElem *hud_element) {
+void initialize_numeric_hud_timer_and_base_dimensions(HudElem *hud_element) {
     hud_element->unk7C = scale_game_frames(0x78) + 0x1E;
     hud_element->w = 0x20;
     hud_element->h = 0x20;
