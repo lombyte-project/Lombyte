@@ -86,7 +86,7 @@ void spawn_explosion(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_ef
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 void update_scoutbot_health_and_target(char *m) __asm__("FUN_L08_002d36e0");
 void FUN_L08_002d3878(char *m);
-void FUN_L08_002d3d78_c(char *m) __asm__("FUN_L08_002d3d78");
+void update_scoutbot_movement(char *m) __asm__("FUN_L08_002d3d78");
 void FUN_L08_002d4108_c(char *arg) __asm__("FUN_L08_002d4108");
 extern void sound_3DF8(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
 extern float distance_3DF8(void *, void *) __asm__("FUN_001f9b48");
@@ -322,7 +322,7 @@ void scoutbot_update(Moby *moby) {
         delete_3DF8(moby);
         return;
     }
-    FUN_L08_002d3d78_c((char *)moby);
+    update_scoutbot_movement((char *)moby);
     if (moby->state != 5 && (signed char)moby->state >= 0) {
         int col = 0x7F20FF20;
 
@@ -524,7 +524,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L08_002d3d78(char *moby) {
+void update_scoutbot_movement(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float movement_length = vector_length_xyz((float *)(data + 0x40)) - frame_time_sq * 6.0f;
     float movement_length_limit = frame_time * 3.0f;
