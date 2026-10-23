@@ -138,7 +138,9 @@ void copy_racer_path_node(char *moby, int path_node_index, float *out) {
 extern char *D_L05_001B0930[];
 extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
 
-void FUN_L05_00307358(char *moby) {
+void start_racer_branch_jump(char *moby) __asm__("FUN_L05_00307358");
+
+void start_racer_branch_jump(char *moby) {
     char *moby_data = *(char **)(moby + 0x78);
     char *active_path = *(char **)(moby_data + 0x244);
     int path_node_index;
@@ -2811,7 +2813,7 @@ extern void copy_racer_path_node(char *moby, int idx, float *out) __asm__("FUN_L
 extern void add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L05_00306e10_c(char *obj) __asm__("FUN_L05_00306e10");
-void FUN_L05_00307358_c(char *moby) __asm__("FUN_L05_00307358");
+void start_racer_branch_jump(char *moby) __asm__("FUN_L05_00307358");
 void FUN_L05_00307570_c(struct Moby *m) __asm__("FUN_L05_00307570");
 extern char D_001413DC[];
 extern char D_0013F350[];
@@ -2910,7 +2912,7 @@ void skid_mcmarx_update(Moby *moby) {
 
             FUN_L05_00306e10_c((char *)moby);
             add_moby_frames_for_group_proximity((char *)moby);
-            FUN_L05_00307358_c((char *)moby);
+            start_racer_branch_jump((char *)moby);
             if (data->jump_frames != 0) {
                 data->jump_frames++;
                 if (data->jump_frames < scale_game_frames_alt(0x11)) {
