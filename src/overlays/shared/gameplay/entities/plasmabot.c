@@ -291,7 +291,7 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
-float FUN_L14_002b35d8_c(char *moby, int flag, float angle) __asm__("FUN_L14_002b35d8");
+float update_plasmabot_aim_quaternion(char *moby, int flag, float angle) __asm__("FUN_L14_002b35d8");
 int follow_plasmabot_path(char *moby) __asm__("FUN_L14_002b3418");
 int count_listed_plasmabots_preparing_or_sweeping_beam(int index) __asm__("FUN_L14_002b3920");
 int FUN_L14_002d9870_c(int i) __asm__("FUN_L14_002d9870");
@@ -542,7 +542,7 @@ void update_plasmabot(char *moby) {
                                 *(float *)(owner + 0x14) - *(float *)(moby + 0x14));
         k = frame_time_sq * 12.566371f;
         call_CE58((float *)(moby + 0x48), ang, (float *)(data + 0x23C), k, k, frame_time * 6.2831855f);
-        aim = FUN_L14_002b35d8_c(moby, 0, *(float *)(moby + 0x48));
+        aim = update_plasmabot_aim_quaternion(moby, 0, *(float *)(moby + 0x48));
         update_plasmabot_aim_joint_rotation(moby, ang);
         if (*(int *)(data + 0x114) == 2) {
             if (*(int *)(data + 0x240) == -1) break;
@@ -580,7 +580,7 @@ void update_plasmabot(char *moby) {
         float ang;
         ang = fast_arc_tan_c(*(float *)(owner + 0x10) - *(float *)(moby + 0x10),
                                 *(float *)(owner + 0x14) - *(float *)(moby + 0x14));
-        FUN_L14_002b35d8_c(moby, 0, fast_subtract_rotations_c2(ang, D_L14_001614E8_gp));
+        update_plasmabot_aim_quaternion(moby, 0, fast_subtract_rotations_c2(ang, D_L14_001614E8_gp));
         update_plasmabot_aim_joint_rotation(moby, ang);
         if ((moby[0x70] & 2) && ((unsigned char *)moby)[0x52] == ((unsigned char *)moby)[0x53]) {
             blend_moby_animation(moby, 5, 0, scale_game_frames(10));
@@ -606,7 +606,7 @@ void update_plasmabot(char *moby) {
                 flag = 1;
             }
         }
-        FUN_L14_002b35d8_c(moby, flag, angle);
+        update_plasmabot_aim_quaternion(moby, flag, angle);
         update_plasmabot_aim_joint_rotation(moby, ang);
         build_moby_bone_transform_c(moby, 0, bone_transform_scratch);
         qcopy(direction, bone_transform_scratch[1]);
@@ -684,7 +684,7 @@ void update_plasmabot(char *moby) {
     }
     state = ((unsigned char *)moby)[0x20];
     if (!(state >= 4 && state <= 7) && state != 1) {
-        FUN_L14_002b35d8_c(moby, 0, *(float *)(moby + 0x48));
+        update_plasmabot_aim_quaternion(moby, 0, *(float *)(moby + 0x48));
         update_plasmabot_aim_joint_rotation(moby, *(float *)(moby + 0x48));
     }
     FUN_L14_002b2600_c((struct Moby *)moby);
@@ -1127,7 +1127,7 @@ extern float func_L00_0025CE58_2B4828(float *, float, float *, float, float, flo
 
 /* Eases the moby's yaw offset toward target_angle (clamped to about 70 degrees); with `flag` also eases the pitch toward its owner.
    Returns the remaining difference between the target and the current yaw offset. */
-float FUN_L14_002b35d8(char *moby, int flag, float target_angle) {
+float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) {
     char *state = *(char **)(moby + 0x78);
     char *owner = *(char **)(state + 0x110);
     float turn = fast_subtract_rotations_c(target_angle, *(float *)(moby + 0x48));
