@@ -16,7 +16,9 @@ extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void FUN_L00_00250df8(void *);
 
-void FUN_L12_0027b370(char *parent, char *list, int entry_count) {
+void apply_linked_moby_relative_transforms(char *parent, char *list, int entry_count) __asm__("FUN_L12_0027b370");
+
+void apply_linked_moby_relative_transforms(char *parent, char *list, int entry_count) {
     float parent_rotation_matrix[16];
     float composed_rotation_matrix[16];
     float rotated_offset[4];

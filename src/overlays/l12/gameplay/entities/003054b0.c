@@ -580,7 +580,7 @@ extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void FUN_L00_002eac18(int);
 extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");
-extern void FUN_L12_0027b370(char *, char *, int);
+extern void apply_linked_moby_relative_transforms(char *, char *, int) __asm__("FUN_L12_0027b370");
 extern void update_planetbuster_maximus_detached_parts(char *) __asm__("FUN_L12_003064e8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
@@ -693,7 +693,7 @@ void planetbuster_maximus_part_update(char *moby) {
         FUN_L00_00262b80(moby, moby_data + 0x5E4, moby_data + 0x5E8, D_L12_00161F30,
                           D_L12_00161F28 * 0.017453292f * D_0015ED6C_gp,
                           D_L12_00161F2C * 0.017453292f * D_0015ED6C_gp);
-        FUN_L12_0027b370(moby, moby_data, 0x11);
+        apply_linked_moby_relative_transforms(moby, moby_data, 0x11);
         if (is_point_inside_clip_volume_c(D_0013F3D0, *(int *)(moby_data + 0x5EC)) || D_L12_00161F00_gp) {
             int i;
             D_L12_001619B4 = 1;
@@ -737,7 +737,7 @@ void planetbuster_maximus_part_update(char *moby) {
                                                *(float *)((char *)path + (*(short *)(moby_data + 0x5F8) << 4) + 0x14) - *(float *)(moby + 0x14))) > 1.5707964f) {
             *(short *)(moby_data + 0x5F8) = (*(short *)(moby_data + 0x5F8) + 1) % *(int *)path;
         }
-        FUN_L12_0027b370(moby, moby_data, 0x11);
+        apply_linked_moby_relative_transforms(moby, moby_data, 0x11);
         FUN_L12_003054b0_u(moby);
         break;
     }
@@ -748,7 +748,7 @@ void planetbuster_maximus_part_update(char *moby) {
         FUN_L00_00262b80(moby, moby_data + 0x5E4, moby_data + 0x5E8, D_L12_00161F30,
                           D_L12_00161F28 * 0.017453292f * D_0015ED6C_gp,
                           D_L12_00161F2C * 0.017453292f * D_0015ED6C_gp);
-        FUN_L12_0027b370(moby, moby_data, 0x11);
+        apply_linked_moby_relative_transforms(moby, moby_data, 0x11);
         FUN_L12_003054b0_u(moby);
         break;
     case PLANETBUSTER_DROP_PARTS_AND_TRANSITION:
