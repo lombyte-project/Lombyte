@@ -2285,7 +2285,9 @@ extern int D_L00_0015F324;
 extern int D_L00_0015F334;
 extern long D_L00_0015F328;
 extern long D_L00_0015F338;
-void *FUN_L00_002a9aa0(int unused, float *spawn_position) {
+void *spawn_tracked_class_5f3_moby(int unused, float *spawn_position) __asm__("FUN_L00_002a9aa0");
+
+void *spawn_tracked_class_5f3_moby(int unused, float *spawn_position) {
     char *spawned_moby = func_0020D348_m_q(0x5F3);
     if (spawned_moby != 0 && *(int *)&D_L00_001613C8_q == 0) {
         char *moby_vars;
