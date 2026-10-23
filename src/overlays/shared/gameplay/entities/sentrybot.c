@@ -90,7 +90,7 @@ void draw_sentrybot_effect_quads(char *moby) __asm__("FUN_L15_0029aba8");
 
 extern void draw_sentrybot_effect_quads(char *m) __asm__("FUN_L15_0029aba8");
 extern void FUN_L15_002a35d8(int);
-extern void FUN_L15_002cbac0(char *m, int a);
+extern void set_sentrybot_alarm_duration(char *m, int a) __asm__("FUN_L15_002cbac0");
 void prepare_sentrybot_alarm(unsigned char *moby) __asm__("FUN_L15_002cbba0");
 
 extern void prepare_sentrybot_alarm(unsigned char *moby) __asm__("FUN_L15_002cbba0");
@@ -195,7 +195,7 @@ void sentrybot_update(unsigned char *moby) {
     if (*(short *)(data + 0x156) != 0 && *(int *)(data + 0x128) != -1) {
         char *o = (char *)((*(int *)(data + 0x128) << 8) + D_L15_0015FFD8_m);
         if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
-            FUN_L15_002cbac0(o, 0xB4);
+            set_sentrybot_alarm_duration(o, 0xB4);
     }
     if (moby[0xBC] == 0)
         data[0x15F] = 0;
@@ -518,7 +518,7 @@ void sentrybot_update(unsigned char *moby) {
             if (*(int *)(data + 0x128) != -1) {
                 char *o = (char *)((*(int *)(data + 0x128) << 8) + D_L15_0015FFD8_m);
                 if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
-                    FUN_L15_002cbac0(o, scale_game_frames(0x1E));
+                    set_sentrybot_alarm_duration(o, scale_game_frames(0x1E));
             }
         }
         break;
@@ -613,10 +613,10 @@ void sentrybot_update(unsigned char *moby) {
         break;
     case SENTRYBOT_ACTIVATE_LINKED_MOBY:
         if (moby[0x52] == moby[0x53] && compute_interpolated_record_value(moby) >= 12.0f) {
-            FUN_L15_002cbac0((char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)), 0xB4);
+            set_sentrybot_alarm_duration((char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)), 0xB4);
         }
         if (moby[0x70] & 2) {
-            FUN_L15_002cbac0((char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)), 0xB4);
+            set_sentrybot_alarm_duration((char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)), 0xB4);
             begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(target + 0x10), (void *)0x14,
                              (void *)0xE);
         }
@@ -779,7 +779,7 @@ void sentrybot_update(unsigned char *moby) {
             if (*(int *)(data + 0x128) != -1) {
                 char *o = (char *)((*(int *)(data + 0x128) << 8) + D_L15_0015FFD8_m);
                 if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
-                    FUN_L15_002cbac0(o, -1);
+                    set_sentrybot_alarm_duration(o, -1);
             }
         } else {
             int mode = *(int *)(data + 0x114);
@@ -793,7 +793,7 @@ void sentrybot_update(unsigned char *moby) {
                 if (*(int *)(data + 0x128) != -1) {
                     char *o = (char *)((*(int *)(data + 0x128) << 8) + D_L15_0015FFD8_m);
                     if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
-                        FUN_L15_002cbac0(o, scale_game_frames(0x1E));
+                        set_sentrybot_alarm_duration(o, scale_game_frames(0x1E));
                 }
             } else if (data[0x15A] != 0) {
                 if (mode != 2 && data[0x15B] == 0) {
@@ -3442,7 +3442,7 @@ stop_animation:
         *(int *)(moby + 0x90) = color;
         *(float *)(data + 5) = fast_add_rotations(*(float *)(data + 5), step * 12.566371f);
         if (tick_countdown_32_alt(data + 6) || D_L15_0015F5C4 == 2) {
-            FUN_L15_002cbac0((char *)moby, 0);
+            set_sentrybot_alarm_duration((char *)moby, 0);
             data[2] = 0;
             if (moby[0x53] != 8)
                 blend_moby_animation(moby, 8, 0, scale_game_frames(10));
@@ -3472,7 +3472,7 @@ stop_animation:
                 data[3] = data[4];
         }
         if (tick_countdown_32_alt(data + 6) || D_L15_0015F5C4 == 2) {
-            FUN_L15_002cbac0((char *)moby, 0);
+            set_sentrybot_alarm_duration((char *)moby, 0);
             data[2] = 0;
             moby[0x20] = 9;
             if (moby[0x53] != 7)
@@ -3516,7 +3516,7 @@ extern int D_L15_001ABE40_q[] __asm__("D_L15_001ABE40") __attribute__((section("
 extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
 extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
 
-void FUN_L15_002cbac0(char *moby, int duration_frames) {
+void set_sentrybot_alarm_duration(char *moby, int duration_frames) {
     char *moby_data = *(char **)(moby + 0x78);
     int flag;
     short *group_moby_entry;
