@@ -1280,7 +1280,9 @@ void ammocrate_update(struct Moby *pickup) {
 extern char *func_0020D348_m(int);
 void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-char *FUN_L11_0030fd98(struct Moby *owner) {
+char *spawn_ship_pickup_child(struct Moby *owner) __asm__("FUN_L11_0030fd98");
+
+char *spawn_ship_pickup_child(struct Moby *owner) {
     char *moby = func_0020D348_m(0x4C3);
     if (moby != 0) {
         char *data;
