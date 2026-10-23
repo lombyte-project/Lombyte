@@ -99,7 +99,9 @@ int lookup_hero_slot3_animation_key(int key, int *out) {
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L00_00231e78(int id, int frame_index, float blend_frames) {
+void blend_hero_slot3_mapped_animation_pair(int id, int frame_index, float blend_frames) __asm__("FUN_L00_00231e78");
+
+void blend_hero_slot3_mapped_animation_pair(int id, int frame_index, float blend_frames) {
     struct Hero *base = &hero;
     struct Hero *blk2;
     struct Hero *blk3;
@@ -401,7 +403,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L00_0015F6E0 __attribute__((sda));
 extern void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
 extern void FUN_L00_002321a8(void);
-extern void FUN_L00_00231e78_c(int, int, float) __asm__("FUN_L00_00231e78");
+extern void blend_hero_slot3_mapped_animation_pair(int, int, float) __asm__("FUN_L00_00231e78");
 extern void blend_hero_mapped_moby_animation(int, int, float) __asm__("FUN_L00_00232220");
 extern void FUN_L00_00232628(void);
 extern void FUN_L00_00251ce8(void *, int);
@@ -466,7 +468,7 @@ void set_hero_animation(int a0, int a1, float t) {
         t = *(int *)((char *)&D_L00_0015F6E0 + g3->unkAA0 * 4);
     }
     if (g3->vehicle_mode == 0) {
-        FUN_L00_00231e78_c(a0, a1, t);
+        blend_hero_slot3_mapped_animation_pair(a0, a1, t);
     }
     FUN_L00_002321a8();
     if (((int)g3->unk2278) != 0) {
