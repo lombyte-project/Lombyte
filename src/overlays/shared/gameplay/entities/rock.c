@@ -1706,7 +1706,7 @@ extern void activate_teleporter_and_record_state(char *) __asm__("FUN_L01_00308b
 extern void show_teleporter_and_children(char *) __asm__("FUN_L01_00309838");
 extern void FUN_L01_003097e8_c(L01Moby *) __asm__("FUN_L01_003097e8");
 extern void update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
-extern void FUN_L01_00309430_c(char *) __asm__("FUN_L01_00309430");
+extern void try_set_teleporter_help_message(char *) __asm__("FUN_L01_00309430");
 extern void FUN_L01_003094f0_u(char *) __asm__("FUN_L01_003094f0");
 extern void set_moby_list_state(char *, int) __asm__("FUN_L01_0026e0e0");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
@@ -1808,7 +1808,7 @@ void teleporter_update(struct Moby *moby) {
             break;
         if (g->air_frames.s != 0)
             break;
-        FUN_L01_00309430_c(moby);
+        try_set_teleporter_help_message(moby);
         if (!(D_0013CAE4[0] & 0x10))
             break;
         allocate_voice_for_target_entry(0, 0, (void *)moby);
@@ -1959,7 +1959,7 @@ extern short D_L01_00161F98 __attribute__((sda));
 extern short D_L01_00161FA0 __attribute__((sda));
 extern short D_L01_00161FA8 __attribute__((sda));
 extern short D_L01_00161FB0 __attribute__((sda));
-void FUN_L01_00309430(char *moby) {
+void try_set_teleporter_help_message(char *moby) {
     int *data = *(int **)(moby + 0x78);
     switch (D_0015ED84) {
     case 12:
