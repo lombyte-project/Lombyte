@@ -2219,7 +2219,7 @@ typedef struct {
 } PickupPose_318c78;
 
 extern PickupPose_318c78 *D_L05_001600EC_p __asm__("D_L05_001600EC");
-extern char *FUN_L05_00319598(void *, int);
+extern char *find_moby_in_owner_list_by_id(void *, int) __asm__("FUN_L05_00319598");
 extern char D_0013CAE4[];
 extern float advance_accelerated_scalar_c(float, float, float, float, float *,
                                           float *) __asm__("FUN_00213f38");
@@ -2286,7 +2286,7 @@ void taxi_update(struct Moby *moby) {
                 request_moby_variant_help_message(moby);
                 if (*(int *)(D_0013CAE4) & 0x10) {
                     moby->state = 3;
-                    destination_stop_moby = FUN_L05_00319598(moby, *(short *)(taxi_data + 0xB6));
+                    destination_stop_moby = find_moby_in_owner_list_by_id(moby, *(short *)(taxi_data + 0xB6));
                     if (destination_stop_moby != 0) {
                         destination_stop_moby[0x20] = 2;
                         *(unsigned short *)(destination_stop_moby + 0x34) |= 1;

@@ -607,7 +607,7 @@ typedef struct {
 } L16PickupPose;
 
 extern L16PickupPose *D_L16_001600EC;
-extern char *FUN_L05_00319598(void *, int);
+extern char *find_moby_in_owner_list_by_id(void *, int) __asm__("FUN_L05_00319598");
 extern char D_0013CAE4[];
 extern char D_0013E550[];
 extern float advance_accelerated_scalar_c(float, float, float, float, float *,
@@ -682,7 +682,7 @@ void taxi_update(struct Moby *moby) {
                 request_moby_variant_help_message(moby);
                 if ((*(int *)(D_0013CAE4) & 0x10) && *(int *)&D_L16_0015F594 == 8) {
                     moby->state = 3;
-                    matched_moby = FUN_L05_00319598(moby, *(short *)(taxi_data + 0xAE));
+                    matched_moby = find_moby_in_owner_list_by_id(moby, *(short *)(taxi_data + 0xAE));
                     if (matched_moby != 0) {
                         matched_moby[0x20] = 2;
                         *(unsigned short *)(matched_moby + 0x34) |= 1;
