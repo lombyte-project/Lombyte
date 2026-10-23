@@ -644,7 +644,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 void emit_toxic_gas_vent_sparks(char *vent_moby) __asm__("FUN_L06_002f3d70");
 
 extern void emit_toxic_gas_vent_sparks(char *) __asm__("FUN_L06_002f3d70");
-extern void FUN_L06_002f4130_c(char *) __asm__("FUN_L06_002f4130");
+extern void check_oscillating_toxic_gas_vent_collisions(char *) __asm__("FUN_L06_002f4130");
 extern void check_timed_toxic_gas_vent_collisions(char *) __asm__("FUN_L06_002f4390");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern char D_0013E550[];
@@ -692,7 +692,7 @@ void toxic_gas_vent_update(char *vent_moby) {
             *(int *)(vent_data + 0x94) = func_0022ED80_r(0, 4, (int)vent_moby);
         }
         emit_toxic_gas_vent_sparks(vent_moby);
-        FUN_L06_002f4130_c(vent_moby);
+        check_oscillating_toxic_gas_vent_collisions(vent_moby);
         heading_offset_radians = *(float *)(vent_data + 0x64) * DEG_TO_RAD * fast_sin(*(float *)(vent_data + 0x7C));
         *(float *)(vent_data + 0x7C) = fast_add_rotations(*(float *)(vent_data + 0x7C), *(float *)(vent_data + 0x80));
         *(float *)(vent_moby + 0x48) = fast_add_rotations(*(float *)(vent_data + 0x84), heading_offset_radians);
@@ -833,7 +833,7 @@ extern f32 spark_speed_gp __asm__("D_L06_00161CEC") __attribute__((sda));
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern short D_L06_00161CF0 __attribute__((sda));
-void FUN_L06_002f4130(char *m) {
+void check_oscillating_toxic_gas_vent_collisions(char *m) {
     Sx collision_params;
     Vx segment_start;
     Vx segment_end;
