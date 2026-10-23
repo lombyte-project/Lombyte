@@ -1087,7 +1087,9 @@ void FUN_L00_001eb0c8_002eb320(void *, void *, float) __asm__("FUN_L00_001eb0c8"
 void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
 void clear_twelve_bytes(void *) __asm__("FUN_L00_001ff250");
 void FUN_L00_002eb278_002eb320(char *) __asm__("FUN_L00_002eb278");
-void FUN_L00_002eb320(char *camera_object, void *camera_initialization_values, u128 *initial_orbit_origin, float x) {
+void initialize_orbit_camera_from_parameters(char *camera_object, void *camera_initialization_values, u128 *initial_orbit_origin, float x) __asm__("FUN_L00_002eb320");
+
+void initialize_orbit_camera_from_parameters(char *camera_object, void *camera_initialization_values, u128 *initial_orbit_origin, float x) {
     char *camera_state = *(char **)(camera_object + 0x70);
     char *orbit_origin = camera_state + 0xb0;
     qcopy(orbit_origin, initial_orbit_origin);
