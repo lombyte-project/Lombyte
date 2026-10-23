@@ -1144,7 +1144,9 @@ extern char *D_L14_001B0BB0[];
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
-void FUN_L14_00307510(struct Moby *moby) {
+void initialize_flying_car_path(struct Moby *moby) __asm__("FUN_L14_00307510");
+
+void initialize_flying_car_path(struct Moby *moby) {
     char *flying_car_data = (char *)moby->pvars;
     char *path = D_L14_001B0BB0[*(int *)(flying_car_data + 0x78)];
     int i;
