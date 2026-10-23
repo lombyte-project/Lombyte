@@ -2663,7 +2663,9 @@ float update_follow_camera_angle_blend_from_direction(char *camera, float *input
 }
 void FUN_001f9a28_c2(void *, void *, void *) __asm__("FUN_001f9a28");
 /* Passes b minus the vector at +0x40 of p's object, with x, to FUN_L00_002e86b0. */
-float FUN_L00_002e88c8(char *camera, void *target_position, f32 x) {
+float update_follow_camera_angle_blend_from_position(char *camera, void *target_position, f32 x) __asm__("FUN_L00_002e88c8");
+
+float update_follow_camera_angle_blend_from_position(char *camera, void *target_position, f32 x) {
     float focus_to_target_direction[4];
     FUN_001f9a28_c2(focus_to_target_direction, target_position, *(char **)(camera + 0x70) + 0x40);
     return update_follow_camera_angle_blend_from_direction(camera, focus_to_target_direction, x);
