@@ -1507,7 +1507,9 @@ extern char *D_L08_0015FFD8;
 extern float FUN_001f9b48(void *, void *);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
-char *FUN_L08_002daa10(struct Moby *moby) {
+char *select_blarg_bombthrower_waypoint(struct Moby *moby) __asm__("FUN_L08_002daa10");
+
+char *select_blarg_bombthrower_waypoint(struct Moby *moby) {
     short *group_entry = D_L08_001AC040[moby->group];
     char *best;
     char *candidate_moby;
