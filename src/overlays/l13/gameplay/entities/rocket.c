@@ -1567,7 +1567,7 @@ extern void pool_set_scale(float) __asm__("FUN_L01_002b7ef0");
 extern void pool_flush(void *, int) __asm__("FUN_L01_002b7fe0");
 extern void pool_ripple(float, float, float, float, void *, int) __asm__("FUN_L01_002b8288");
 extern void pool_splash(float, float, float, float, void *, int, int) __asm__("FUN_L00_002a3ec8");
-extern int FUN_L01_00275690(float, void *);
+extern int check_scaled_vector_bsphere(float, void *) __asm__("FUN_L01_00275690");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void render_level13_water_grids(void) __asm__("FUN_L13_0030a460");
 void initialize_gemlik_pool_tile_neighbors(int tile_index) __asm__("FUN_L13_0030a488");
@@ -1676,7 +1676,7 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
     if (bobbing_platform_vars->idx >= 0) {
         height_half_span_or_tile_enabled = 0.0f;
         (Tiles_9e88 + bobbing_platform_vars->idx)->z = moby->pos.z;
-        if (FUN_L01_00275690(48.0f, moby) != -1)
+        if (check_scaled_vector_bsphere(48.0f, moby) != -1)
             height_half_span_or_tile_enabled = 1.0f;
         if (height_half_span_or_tile_enabled == 0.0f)
             Tiles_9e88[bobbing_platform_vars->idx].c1E = 0;

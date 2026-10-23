@@ -1008,7 +1008,7 @@ void update_homing_mine_spawner_target(struct Moby *spawner) {
 
 #include "rnc/gameplay/state/game_globals.h"
 
-extern int FUN_L01_00275690(void *, float);
+extern int check_scaled_vector_bsphere(void *, float) __asm__("FUN_L01_00275690");
 extern int FUN_0022da68(int, int, void *);
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
@@ -1039,7 +1039,7 @@ void update_moby_draw_and_monitor_linked_state(struct Moby *moby) {
         break;
     case QUEUE_DRAW_AND_MONITOR_LINKED_MOBY:
         vis = 1;
-        if (FUN_L01_00275690(moby, 48.0f) == -1) {
+        if (check_scaled_vector_bsphere(moby, 48.0f) == -1) {
             vis = 0;
         }
         if (vis) {

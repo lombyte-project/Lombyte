@@ -1292,7 +1292,7 @@ extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
-extern int FUN_L01_00275690(char *, float);
+extern int check_scaled_vector_bsphere(char *, float) __asm__("FUN_L01_00275690");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int resolve_path_node_index(void *, int) __asm__("FUN_L01_0028b828");
 extern int advance_path_node_index(char *) __asm__("FUN_L01_0028b878");
@@ -1364,7 +1364,7 @@ void red_ship_1_update(char *moby) {
                 if (item == 0) {
                     break;
                 }
-                if (FUN_L01_00275690(item, convert_integer_to_float(*(short *)(item + 0x32))) != -1) {
+                if (check_scaled_vector_bsphere(item, convert_integer_to_float(*(short *)(item + 0x32))) != -1) {
                     found = 1;
                     break;
                 }

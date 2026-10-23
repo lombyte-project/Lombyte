@@ -644,7 +644,7 @@ extern void synchronize_linked_moby_heights(struct Moby *) __asm__("FUN_L11_0030
 extern int random_below_e088(int) __asm__("FUN_00213260");
 extern float rand_range_e088(float, float) __asm__("FUN_002132a8");
 extern void pool_splash(float, float, float, float, void *, int, int) __asm__("FUN_L00_002a3ec8");
-extern int FUN_L01_00275690(float, void *);
+extern int check_scaled_vector_bsphere(float, void *) __asm__("FUN_L01_00275690");
 extern void pool_flush(void *, int) __asm__("FUN_L01_002b7fe0");
 extern void render_level_11_water_grids(void) __asm__("FUN_L11_0030e708");
 extern void enqueue_e088(void *, void *) __asm__("FUN_001f4600");
@@ -761,7 +761,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
     }
     if (water_tile_vars[1] >= 0) {
         tile_query_has_result = 0.0f;
-        if (FUN_L01_00275690(64.0f, water_tile_moby) != -1) {
+        if (check_scaled_vector_bsphere(64.0f, water_tile_moby) != -1) {
             tile_query_has_result = 1.0f;
         }
         if (tile_query_has_result == 0.0f) {

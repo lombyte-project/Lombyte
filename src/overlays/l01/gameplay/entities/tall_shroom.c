@@ -82,7 +82,7 @@ extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern s32 is_moby_in_state_one(void *) __asm__("FUN_L00_002d8128");
-extern s32 FUN_L01_00275690(f32, void *);
+extern s32 check_scaled_vector_bsphere(f32, void *) __asm__("FUN_L01_00275690");
 
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
@@ -209,7 +209,7 @@ void update_level01_tutorial_hints(struct Moby *moby) {
                     }
                     usage_stats.stat[13].level_mask = usage_stats.stat[13].level_mask | (1 << current_level_index_macro) | 0x80000000;
                     help_request(1, 1);
-                } else if (FUN_L01_00275690(255.0f, health_hint_candidate_moby) != 0) {
+                } else if (check_scaled_vector_bsphere(255.0f, health_hint_candidate_moby) != 0) {
                     help_request(2, 2);
                 }
             }

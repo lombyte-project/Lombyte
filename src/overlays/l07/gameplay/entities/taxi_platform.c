@@ -1466,7 +1466,7 @@ extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 int FUN_L07_00281ef8(int id);
 void FUN_L01_0026e090(int i, int v);
 void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
-void FUN_L01_00275690(char *vec, float scale);
+void check_scaled_vector_bsphere(char *vec, float scale) __asm__("FUN_L01_00275690");
 void pool_bind_tile(float *in, int *out) __asm__("FUN_L01_002b7c68");
 void pool_set_scale(float s) __asm__("FUN_L01_002b7ef0");
 void pool_flush(char *p, int n) __asm__("FUN_L01_002b7fe0");

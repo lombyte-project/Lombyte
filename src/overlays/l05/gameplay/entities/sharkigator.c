@@ -3207,7 +3207,7 @@ void synchronize_group_water_heights(char *moby) __asm__("FUN_L05_0030d5c0");
 
 extern void synchronize_group_water_heights(char *) __asm__("FUN_L05_0030d5c0");
 extern void pool_splash_30ca80(void *, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
-extern int FUN_L01_00275690_30ca80(char *, float) __asm__("FUN_L01_00275690");
+extern int check_scaled_vector_bsphere(char *, float) __asm__("FUN_L01_00275690");
 extern void finish_slots_30ca80(char *, int) __asm__("FUN_L01_002b7fe0");
 extern void render_level_water_grids(void) __asm__("FUN_L05_0030d678");
 
@@ -3468,7 +3468,7 @@ void water_update(struct Moby *moby) {
 
         e->z = moby->pos.z;
         restore_record_draw_value = 0.0f;
-        if (FUN_L01_00275690_30ca80((char *)moby, 48.0f) != -1
+        if (check_scaled_vector_bsphere((char *)moby, 48.0f) != -1
             && (!(moby->state >= 3 && moby->state <= 7) || (moby->pos.z > water_vars->lowered_z && moby->pos.z < water_vars->raised_z))) {
             restore_record_draw_value = 1.0f;
         }

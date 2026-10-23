@@ -3024,7 +3024,7 @@ extern f32 D_0015ED70;
 extern void *D_L01_00160770;
 
 extern f32 FUN_001fa6c0(s32);
-extern s32 FUN_L01_00275690(struct Moby *, f32);
+extern s32 check_scaled_vector_bsphere(struct Moby *, f32) __asm__("FUN_L01_00275690");
 extern s32 FUN_L00_002591d0(struct Moby **, s32, s32, s32);
 extern s32 get_next_moby_in_group(struct Moby **, struct Moby *, s32, s32) __asm__("FUN_L00_002592b8");
 extern s32 FUN_001f96f8(s32);
@@ -3086,7 +3086,7 @@ void gunship_follow_path(struct Moby *m) {
     frozen = 0;
     v = (Vars *)m->pvars;
     if (m->oclass != 0x336) {
-        frozen = FUN_L01_00275690(m, FUN_001fa6c0(m->draw_dist)) == -1;
+        frozen = check_scaled_vector_bsphere(m, FUN_001fa6c0(m->draw_dist)) == -1;
     }
     if (v == 0 || D_L01_00161B00 != 0) {
         return;
@@ -3102,7 +3102,7 @@ void gunship_follow_path(struct Moby *m) {
             check:
                 if (it == 0)
                     goto done;
-            } while (FUN_L01_00275690(it, FUN_001fa6c0(it->draw_dist)) == -1);
+            } while (check_scaled_vector_bsphere(it, FUN_001fa6c0(it->draw_dist)) == -1);
             bad = 1;
         done:
             if (bad == 0) {
