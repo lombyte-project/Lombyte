@@ -2228,7 +2228,7 @@ void FUN_L00_00262840_210a08(void *) __asm__("FUN_L00_00262840");
 void FUN_L00_00232fe8_210a08(void) __asm__("FUN_L00_00232fe8");
 void FUN_L00_00206c08_210a08(void) __asm__("FUN_L00_00206c08");
 void FUN_L00_00205538_210a08(void) __asm__("FUN_L00_00205538");
-void FUN_L00_00211380_210a08(void) __asm__("FUN_L00_00211380");
+void update_hero_collision_capsule_dimensions(void) __asm__("FUN_L00_00211380");
 void FUN_L00_00232628_210a08(void) __asm__("FUN_L00_00232628");
 void FUN_L00_00257024_210a08(char *) __asm__("FUN_L00_00257024");
 void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
@@ -2250,7 +2250,7 @@ void enter_hero_vehicle_mode(int mode, int requested_state, char *vehicle_moby) 
     hero_state->vehicle_mode = mode;
     hero_state->unkA84 = (u8 *)vehicle_moby;
     hero_state->moby = (struct Moby *)vehicle_moby;
-    FUN_L00_00211380_210a08();
+    update_hero_collision_capsule_dimensions();
     hero_state->capsule_top = hero_state->unk228;
     hero_state->unk224 = hero_state->unk22C;
     *(unsigned short *)((char *)hero_state->moby + 0x34) |= 6;
@@ -2593,7 +2593,7 @@ extern f32 D_0015ED6C_211380 __asm__("D_0015ED6C");
 f32 FUN_001f9b80_211380(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_211380(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_211380(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-void FUN_L00_00211380(void) {
+void update_hero_collision_capsule_dimensions(void) {
     switch (hero.vehicle_mode) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         hero.unk228 = 0.8f;
@@ -2710,7 +2710,7 @@ void hero_update(void)
     FUN_L00_001ffa70(hero_state, &hero_state->motion.rot);
     FUN_L00_001ff9e8(hero_state->unk40);
     matrix_from_basis_rows(hero_state->unk40, hero_state);
-    FUN_L00_00211380();
+    update_hero_collision_capsule_dimensions();
     update_hero_motion_and_collision_probes();
     update_hero_timers_and_reach_state();
 }
