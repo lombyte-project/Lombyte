@@ -367,7 +367,9 @@ extern f32 D_L00_00161A14_gp __asm__("D_L00_00161A14") __attribute__((sda));
 void build_look_at_matrix(V4 *, V4 *, V4 *, f32) __asm__("FUN_00214890");
 void FUN_001f9bf8(V4 *, V4 *, f32);
 /* Rebuilds the eight D_L00_001E3CA0 entries with build_look_at_matrix and normalizes them. */
-void FUN_L00_002d8908(void) {
+void update_nanotech_ball_slot_offsets(void) __asm__("FUN_L00_002d8908");
+
+void update_nanotech_ball_slot_offsets(void) {
     s32 i;
     for (i = 0; i < 8; i++) {
         build_look_at_matrix(&D_L00_001E3CA0[i], &D_L00_001E3CA0[i], &D_L00_001E3D20[i],
@@ -478,7 +480,7 @@ unsigned char *FUN_L00_00273708(void *a, int b, int c);
 void FUN_L00_002d81b8_c(unsigned char *m) __asm__("FUN_L00_002d81b8");
 void FUN_L00_002d8418_c(char *p) __asm__("FUN_L00_002d8418");
 void FUN_L00_002d8850_c(unsigned char *p, float *out, int i) __asm__("FUN_L00_002d8850");
-void FUN_L00_002d8908_c(void) __asm__("FUN_L00_002d8908");
+void update_nanotech_ball_slot_offsets(void) __asm__("FUN_L00_002d8908");
 void draw_nanotech_ball(Moby *moby) __asm__("FUN_L00_002d9810");
 extern V_2D9EA0 D_L00_001E4070_2D9EA0[] __asm__("D_L00_001E3D20");
 extern float D_L00_001E17F0_2D9EA0[] __asm__("D_L00_001E14A0");
@@ -499,7 +501,7 @@ extern int func_L00_002D9E30_2D9EA0(void *) __asm__("FUN_L00_002d8980");
 extern void func_001F9C30_2D9EA0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void func_002156E0_2D9EA0(void *, void *, float, void *) __asm__("FUN_00214890");
 extern int func_L00_00258BC8_2D9EA0(int, int) __asm__("FUN_L00_00257b90");
-extern void func_L00_002D9DB8_2D9EA0(void) __asm__("FUN_L00_002d8908");
+extern void update_nanotech_ball_slot_offsets(void) __asm__("FUN_L00_002d8908");
 extern int func_L00_00200290_2D9EA0(void *, float) __asm__("FUN_001fa728");
 extern void func_001F49B0_2D9EA0(void (*)(void), int) __asm__("FUN_001f4600");
 extern float func_001F9D48_2D9EA0(void *, void *) __asm__("FUN_001f9b80");
@@ -653,7 +655,7 @@ void nanotech_ball_update(Moby *moby) {
         }
         data->bob_offset = D_L00_00161A10_gp * func_001F9FA8_2D9EA0(data->bob_phase);
         data->bob_phase = func_001FA748_2D9EA0(data->bob_phase, D_L00_00161A0C);
-        if (D_L00_0015F63C == moby) func_L00_002D9DB8_2D9EA0();
+        if (D_L00_0015F63C == moby) update_nanotech_ball_slot_offsets();
         qcopy(&slot_rotation_basis_or_cull_position_or_start_tangent, &moby->pos);
         slot_rotation_basis_or_cull_position_or_start_tangent.z += 0.5f;
         slot_rotation_basis_or_cull_position_or_start_tangent.w = 1.0f;
@@ -696,7 +698,7 @@ void nanotech_ball_update(Moby *moby) {
         }
         break;
     case NANOTECH_BALL_STATE_COLLECTING:
-        if (D_L00_0015F63C == moby) func_L00_002D9DB8_2D9EA0();
+        if (D_L00_0015F63C == moby) update_nanotech_ball_slot_offsets();
         if (data->h56 != 0) {
             func_001F9C30_2D9EA0(&moby->pos, D_0013F5E0, -D_L00_00161A54);
             func_001F9BD8_2D9EA0(&moby->pos, D_0013F5E0 - 0x210, &moby->pos);
@@ -801,7 +803,7 @@ void nanotech_ball_update(Moby *moby) {
         }
         break;
     case NANOTECH_BALL_STATE_BASIS_ONLY:
-        if (D_L00_0015F63C == moby) func_L00_002D9DB8_2D9EA0();
+        if (D_L00_0015F63C == moby) update_nanotech_ball_slot_offsets();
         break;
     }
 }
