@@ -1717,7 +1717,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_001516EC[];
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
-void FUN_L00_0029b4d8(int vendor_event) {
+void handle_vendor_auxiliary_moby_event(int vendor_event) __asm__("FUN_L00_0029b4d8");
+
+void handle_vendor_auxiliary_moby_event(int vendor_event) {
     enum {
         VENDOR_SELECTION_CHANGED = 0,
         VENDOR_AUXILIARY_MOBY_READY = 1,
@@ -1983,7 +1985,7 @@ extern void decompress_and_relocate_vendor_moby_assets(void) __asm__("FUN_L00_00
 extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
 extern void FUN_L00_00250df8(void *);
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
-extern void FUN_L00_0029b4d8(s32);
+extern void handle_vendor_auxiliary_moby_event(s32) __asm__("FUN_L00_0029b4d8");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void update_resident_dialogue_animation_state(void *) __asm__("FUN_00237ed0");
 extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_001f96b0");
@@ -2383,7 +2385,7 @@ void update_vendor_menu(void) {
             pack_render_command_fields(vendor_menu.f24, 0x202020, 0xE, 0xE, 0);
             D_L00_00161188 = 1;
             D_L00_0016118C = 0;
-            FUN_L00_0029b4d8(1);
+            handle_vendor_auxiliary_moby_event(1);
         }
         advance_moby_animation(vendor_menu.f1c);
         FUN_L00_00250df8(vendor_menu.f1c);
@@ -2453,7 +2455,7 @@ void update_vendor_menu(void) {
                 if ((pad_state.pressed_unmasked & 0x2000) && !(D_L00_00161E30 & 0x2000)) {
                     if (vendor_menu.f58 < vendor_menu.f210 - 1) {
                         D_L00_00161E38 = 1;
-                        FUN_L00_0029b4d8(0);
+                        handle_vendor_auxiliary_moby_event(0);
                         vendor_menu.f58++;
                         allocate_voice_for_target_entry(1, 0, vendor_menu.f1c);
                         FUN_00237e90(FUN_001fdd10(D_L00_001C2108[CUR_ITEM.fD0].sound));
@@ -2470,7 +2472,7 @@ void update_vendor_menu(void) {
                 if ((pad_state.pressed_unmasked & 0x8000) && !(D_L00_00161E30 & 0x8000)) {
                     if (vendor_menu.f58 > 0) {
                         D_L00_00161E38 = 1;
-                        FUN_L00_0029b4d8(0);
+                        handle_vendor_auxiliary_moby_event(0);
                         vendor_menu.f58--;
                         allocate_voice_for_target_entry(1, 0, vendor_menu.f1c);
                         FUN_00237e90(FUN_001fdd10(D_L00_001C2108[CUR_ITEM.fD0].sound));
@@ -2490,7 +2492,7 @@ void update_vendor_menu(void) {
                         D_L00_00161E38 = 1;
                         vendor_menu.f4c += 0x38;
                         allocate_voice_for_target_entry(1, 0, vendor_menu.f1c);
-                        FUN_L00_0029b4d8(0);
+                        handle_vendor_auxiliary_moby_event(0);
                         if (vendor_menu.f58 < vendor_menu.f210 - 1) {
                             vendor_menu.f58++;
                         } else {
@@ -2512,7 +2514,7 @@ void update_vendor_menu(void) {
                         D_L00_00161E38 = 1;
                         vendor_menu.f4c -= 0x38;
                         allocate_voice_for_target_entry(1, 0, vendor_menu.f1c);
-                        FUN_L00_0029b4d8(0);
+                        handle_vendor_auxiliary_moby_event(0);
                         if (vendor_menu.f58 > 0) {
                             vendor_menu.f58--;
                         } else {
