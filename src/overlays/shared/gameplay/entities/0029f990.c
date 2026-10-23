@@ -117,7 +117,9 @@ void FUN_001f5450_29fcd0(int, int, int, int, int, int, int, int, long,
                          long) __asm__("FUN_001f5450");
 
 extern I3_29fcd0 D_L00_00161178 __attribute__((section(".data")));
-void FUN_L00_0029fcd0(void *moby) {
+void draw_vendor_purchase_panel(void *moby) __asm__("FUN_L00_0029fcd0");
+
+void draw_vendor_purchase_panel(void *moby) {
     OvlQuad first_edge[1];
     OvlQuad second_edge[1];
     OvlQuad base[1];
@@ -305,7 +307,7 @@ extern void stash_moby_class_dists(void) __asm__("FUN_0020d218");
 extern void draw_moby_list(void *, s32) __asm__("FUN_0020d330");
 extern void FUN_L00_0029ff58_u(void) __asm__("FUN_L00_0029ff58");
 extern void render_vendor_capture_pass_sequence(s32) __asm__("FUN_00239780");
-extern void FUN_L00_0029fcd0_c(void *) __asm__("FUN_L00_0029fcd0");
+extern void draw_vendor_purchase_panel(void *) __asm__("FUN_L00_0029fcd0");
 extern void FUN_00233980(s32, s64);
 extern void update_hud(void) __asm__("FUN_001ff780");
 extern void do_gif_paging(void) __asm__("FUN_001f4398");
@@ -422,7 +424,7 @@ void draw_vendor_screen(void) {
     }
     render_vendor_capture_pass_sequence(p->f1C);
     if (p->f5C != 0) {
-        FUN_L00_0029fcd0_c(p->f20 + 0x400);
+        draw_vendor_purchase_panel(p->f20 + 0x400);
     }
     draw_vendor_inset_quads(p->f1C);
     FUN_00233980(0x42, 0x8000000044LL);
