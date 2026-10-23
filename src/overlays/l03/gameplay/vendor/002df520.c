@@ -392,7 +392,9 @@ void initialize_hero_relative_camera(void *camera_instance) {
 extern void func_L00_001FF4B0_ebb00(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float func_001EC120_ebb00(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
 extern void func_001F9BD8_ebb00(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L03_002ebb00(void *camera_instance) {
+void update_smoothed_hero_relative_camera_position(void *camera_instance) __asm__("FUN_L03_002ebb00");
+
+void update_smoothed_hero_relative_camera_position(void *camera_instance) {
     char *camera = camera_instance;
     char *camera_data = *(char **)(camera + 0x70);
     char *camera_offset_params = camera_data + 0xD0;
@@ -477,14 +479,14 @@ int FUN_L03_002ebd70(void) {
 
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED178), where it is exact; names translated to the US level program. */
 
-extern void FUN_L03_002ebb00_u(void *) __asm__("FUN_L03_002ebb00");
+extern void update_smoothed_hero_relative_camera_position(void *) __asm__("FUN_L03_002ebb00");
 extern void rebuild_camera_orientation_axes(void *) __asm__("FUN_L03_002ebc58");
 void no_op_main_callback(void *) __asm__("FUN_001e93e8");
 
 void update_camera_position_and_orientation(void *camera) __asm__("FUN_L03_002ebdb0");
 
 void update_camera_position_and_orientation(void *camera) {
-    FUN_L03_002ebb00_u(camera);
+    update_smoothed_hero_relative_camera_position(camera);
     no_op_main_callback(camera);
     rebuild_camera_orientation_axes(camera);
 }
