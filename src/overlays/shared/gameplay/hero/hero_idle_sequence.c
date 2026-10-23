@@ -1824,7 +1824,7 @@ extern void apply_hero_rotation_oscillation(void) __asm__("FUN_L00_002079e8");
 extern void ff090_208820(void *, void *, int) __asm__("FUN_001f9838");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_002336e8(void *, void *, float);
-extern void FUN_L00_0024eed8(void *, int, void *, float, float);
+extern void set_moby_local_table_entry(void *, int, void *, float, float) __asm__("FUN_L00_0024eed8");
 extern int FUN_L00_0020d568(void);
 
 void update_hero_moby(void) {
@@ -1851,7 +1851,7 @@ void update_hero_moby(void) {
         top_gap = hero.capsule_top - hero.unk224;
         if (top_gap < minimum_top_gap)
             top_gap = minimum_top_gap;
-        FUN_L00_0024eed8(((unsigned char *)hero.moby), 0, position_scratch, hero.unk234, top_gap);
+        set_moby_local_table_entry(((unsigned char *)hero.moby), 0, position_scratch, hero.unk234, top_gap);
         second_position_offset = hero.unk234 + minimum_top_gap;
         if (hero.state.control_mode == 4)
             second_position_offset += 0.15f;
@@ -1862,7 +1862,7 @@ void update_hero_moby(void) {
         top_gap = hero.capsule_top - second_position_offset;
         if (top_gap < minimum_top_gap)
             top_gap = minimum_top_gap;
-        FUN_L00_0024eed8(((unsigned char *)hero.moby), 1, position_scratch, hero.unk234, top_gap);
+        set_moby_local_table_entry(((unsigned char *)hero.moby), 1, position_scratch, hero.unk234, top_gap);
     }
     hero_moby = ((unsigned char *)hero.moby);
     if (*(short *)(hero_moby + 0xA6) == 0) {
@@ -1878,7 +1878,7 @@ extern void clear_hero_moby_flag_bit0(void) __asm__("FUN_L00_00233248");
 extern void FUN_L00_00232fe8_00208a10(void) __asm__("FUN_L00_00232fe8");
 extern void FUN_001f9838_00208a10(void *, void *, int) __asm__("FUN_001f9838");
 extern void FUN_L00_002336e8_00208a10(void *, void *, float) __asm__("FUN_L00_002336e8");
-extern void FUN_L00_0024eed8_00208a10(void *, int, void *, float,
+extern void set_moby_local_table_entry(void *, int, void *, float,
                                       float) __asm__("FUN_L00_0024eed8");
 
 void update_hero_vehicle_moby(void) {
@@ -1900,12 +1900,12 @@ void update_hero_vehicle_moby(void) {
     if (hero.unk1CC == 0 && *(int *)(((unsigned char *)hero.moby) + 0x94) != 0) {
         qcopy(&position_scratch, &hero.motion.pos);
         FUN_L00_002336e8_00208a10(&position_scratch, &position_scratch, hero.unk224);
-        FUN_L00_0024eed8_00208a10(((unsigned char *)hero.moby), 0, &position_scratch, hero.unk234,
+        set_moby_local_table_entry(((unsigned char *)hero.moby), 0, &position_scratch, hero.unk234,
                                   hero.capsule_top - hero.unk224);
         second_position_offset = hero.unk234 + 0.05f;
         qcopy(&position_scratch, &hero.motion.pos);
         FUN_L00_002336e8_00208a10(&position_scratch, &position_scratch, second_position_offset);
-        FUN_L00_0024eed8_00208a10(((unsigned char *)hero.moby), 1, &position_scratch, hero.unk234,
+        set_moby_local_table_entry(((unsigned char *)hero.moby), 1, &position_scratch, hero.unk234,
                                   hero.capsule_top - second_position_offset);
     }
 }

@@ -23,8 +23,8 @@ void transpose_rotation_matrix(Mtx *, void *) __asm__("FUN_001fa2d8");
 void subtract_vector_xyz(Vec4 *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector(Vec4 *, Vec4 *, Mtx *) __asm__("FUN_001f9d20");
 void fast_vec_scale(Vec4 *, Vec4 *, float) __asm__("FUN_001f9a68");
-void FUN_L00_0024eed8(char *p, int idx, void *v, float a, float b);
-void FUN_L00_0024eed8(char *moby, int table_entry_index, void *v, float unscaled_entry_w, float b) {
+void set_moby_local_table_entry(char *p, int idx, void *v, float a, float b) __asm__("FUN_L00_0024eed8");
+void set_moby_local_table_entry(char *moby, int table_entry_index, void *v, float unscaled_entry_w, float b) {
     Mtx transposed_rotation;
     Vec4 local_offset;
     Ent32 *e = &(*(Tbl **)(moby + 0x94))->e[table_entry_index];
