@@ -257,7 +257,9 @@ void draw_moby_offset_textured_quad(char *moby) {
 extern char *func_0020D348_m(int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
-char *FUN_L01_0030c898(char *owner, char *spawn_position, float target_yaw, float target_pitch, float initial_yaw, float initial_pitch) {
+char *spawn_sandmouse_projectile(char *owner, char *spawn_position, float target_yaw, float target_pitch, float initial_yaw, float initial_pitch) __asm__("FUN_L01_0030c898");
+
+char *spawn_sandmouse_projectile(char *owner, char *spawn_position, float target_yaw, float target_pitch, float initial_yaw, float initial_pitch) {
     OvlQuad spawn_position_copy;
     char *cp = (char *)&spawn_position_copy;
     char *spawned_moby;

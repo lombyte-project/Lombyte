@@ -1114,7 +1114,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern void *select_sand_mouse_spawn_target(void *, void *, void *, float, float, float, float, float, float) __asm__("FUN_L01_002e32a8");
-extern void FUN_L01_0030c898(void *, void *, float, float, float, float);
+extern void spawn_sandmouse_projectile(void *, void *, float, float, float, float) __asm__("FUN_L01_0030c898");
 
 extern float D_L01_00161904 __attribute__((sda));
 extern float D_L01_00161908 __attribute__((sda));
@@ -1169,7 +1169,7 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
                     initial_yaw = fast_arc_tan(target_aim_position.f[0] - spawn_position.f[0], target_aim_position.f[1] - spawn_position.f[1]);
                     spawn_to_target_distance = vector_distance(&spawn_position, &target_aim_position);
                     initial_pitch = -fast_arc_tan(spawn_to_target_distance, target_aim_position.f[2] - spawn_position.f[2]);
-                    FUN_L01_0030c898(moby, &spawn_position, aim_yaw, aim_pitch, initial_yaw, initial_pitch);
+                    spawn_sandmouse_projectile(moby, &spawn_position, aim_yaw, aim_pitch, initial_yaw, initial_pitch);
                     *(short *)(state + 0x4E) = scale_game_frames(D_L01_00161900);
                     *(int *)(state + 0x64) = *(int *)(state + 0x64) + 1;
                 }
