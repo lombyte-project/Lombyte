@@ -3115,7 +3115,9 @@ extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-unsigned char *FUN_L14_002bb310(struct Moby *owner, float angle, char *posp) {
+unsigned char *spawn_flying_debris(struct Moby *owner, float angle, char *posp) __asm__("FUN_L14_002bb310");
+
+unsigned char *spawn_flying_debris(struct Moby *owner, float angle, char *posp) {
     float spawn_vector_scratch[12];
     unsigned char *spawned_moby;
     char *spawned_vars;
