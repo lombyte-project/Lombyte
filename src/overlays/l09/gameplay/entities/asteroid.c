@@ -1136,7 +1136,7 @@ extern float FUN_001f99c0_edc30(float) __asm__("FUN_001f99c0");
 extern float random_float_between_edc30(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below_edc30(int) __asm__("FUN_00213260");
 extern int scale_game_frames_edc30(int) __asm__("FUN_001f96f8");
-extern struct Moby *FUN_L09_002ef868(struct Moby *, Vec4 *, Vec4 *, s32, f32);
+extern struct Moby *spawn_tumbling_debris(struct Moby *, Vec4 *, Vec4 *, s32, f32) __asm__("FUN_L09_002ef868");
 extern void FUN_L00_0025f090_edc30(struct Moby *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025e450_edc30(struct Moby *, void *, void *, float, float, int, int, int, float, float, float,
                                    float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -1220,7 +1220,7 @@ void display_update(struct Moby *moby) {
         set_vector_length_edc30(debris_offset_or_velocity, debris_offset_or_velocity, falloff * (random_float_between_edc30(6.0f, 10.0f) * frame_time_edc30));
         add_vector_edc30(pos, pos, push);
         if (moby->oclass == 0x514 || random_integer_below_edc30(4) == 0) {
-            FUN_L09_002ef868(moby, (Vec4 *)pos, (Vec4 *)debris_offset_or_velocity, i & 1, random_float_between_edc30(1.0f, 2.0f));
+            spawn_tumbling_debris(moby, (Vec4 *)pos, (Vec4 *)debris_offset_or_velocity, i & 1, random_float_between_edc30(1.0f, 2.0f));
         }
         if (i % 3 == 0) {
             FUN_L00_0025f090_edc30(moby, pos, -1, random_float_between_edc30(1.0f, 1.6f), 0.0f);
@@ -1436,7 +1436,7 @@ extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 
 /* spawns a debris moby of class 0x140 + kind at pos with velocity vel and a random spin */
-struct Moby *FUN_L09_002ef868(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, f32 scale) {
+struct Moby *spawn_tumbling_debris(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, f32 scale) {
     Vec4 position_copy;
     Vec4 velocity_copy;
     Vec4 *pp = &position_copy;
