@@ -1696,7 +1696,9 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 extern float D_L10_00161C0C __attribute__((sda));
 extern float D_L10_00161C10 __attribute__((sda));
-int FUN_L10_002d9000(struct Moby *moby, float *world_point) {
+int test_point_in_lab_door_local_xy_bounds(struct Moby *moby, float *world_point) __asm__("FUN_L10_002d9000");
+
+int test_point_in_lab_door_local_xy_bounds(struct Moby *moby, float *world_point) {
     float a[4] __attribute__((aligned(16)));
     float t10[16] __attribute__((aligned(16)));
     float t50[4] __attribute__((aligned(16)));
