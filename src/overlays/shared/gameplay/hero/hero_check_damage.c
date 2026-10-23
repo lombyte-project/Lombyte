@@ -967,7 +967,7 @@ extern s32 FUN_L00_0020d498_c(s32) __asm__("FUN_L00_0020d498");
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 extern u8 *FUN_L00_0024f028(u8 *, s32);
 extern void FUN_L00_0024f0e8(u8 *, u8 **);
-extern void FUN_L00_0024f3e0(u8 *, u8 *, s32, s32, s32, s32);
+extern void initialize_moby_animation_blend(u8 *, u8 *, s32, s32, s32, s32) __asm__("FUN_L00_0024f3e0");
 extern void FUN_L00_002323b8_c(s32, s32, f32) __asm__("FUN_L00_002323b8");
 
 void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
@@ -1009,7 +1009,7 @@ void f_fun_l00_0020e4c8_227fa0(void) {
             hero.unk2294 = slot_animation_id;
             hero.unkD14 = 0;
             *(f32 *)(slot_animation_object + 8) = 1.0f;
-            FUN_L00_0024f3e0((u8 *)hero.moby, slot_animation_object, hero.unk2294, 0, animation_step_divisor, 1);
+            initialize_moby_animation_blend((u8 *)hero.moby, slot_animation_object, hero.unk2294, 0, animation_step_divisor, 1);
         }
     }
 }
@@ -1082,7 +1082,7 @@ void update_hero_held_items_and_orientation(void) {
             }
             if (animation != -1 && (*slot)[0x23] != animation) {
                 slot_owner->unk2294 = animation;
-                FUN_L00_0024f3e0((u8 *)slot_owner->moby, *slot, slot_owner->unk2294, 0, scale_game_frames(8), 1);
+                initialize_moby_animation_blend((u8 *)slot_owner->moby, *slot, slot_owner->unk2294, 0, scale_game_frames(8), 1);
             }
         }
 

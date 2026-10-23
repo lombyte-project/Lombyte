@@ -244,7 +244,9 @@ typedef struct {
     u8 b51, b52, b53;
 } A;
 /* Fills a1 from a0's bytes, a2/a3 and a 1/a4 step; calls FUN_L00_0024f190 when a5 is set. */
-void FUN_L00_0024f3e0(A *source, S *destination, s32 target_animation_index, s32 target_frame_index, s32 step_divisor, s32 update_immediately) {
+void initialize_moby_animation_blend(A *source, S *destination, s32 target_animation_index, s32 target_frame_index, s32 step_divisor, s32 update_immediately) __asm__("FUN_L00_0024f3e0");
+
+void initialize_moby_animation_blend(A *source, S *destination, s32 target_animation_index, s32 target_frame_index, s32 step_divisor, s32 update_immediately) {
     destination->b22 = source->b53;
     destination->b20 = source->b51;
     destination->b23 = target_animation_index;
