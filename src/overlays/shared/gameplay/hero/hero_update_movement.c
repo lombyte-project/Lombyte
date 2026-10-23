@@ -242,7 +242,7 @@ extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
 extern void offset_hero_position_against_gravity(void *, void *, f32) __asm__("FUN_L00_002336e8");
 extern void make_hit_descriptor(void *, struct MobyView *, s32, f32, void *) __asm__("FUN_L00_00259888");
 extern s32 collect_mobies_in_sphere(f32, void *, s32, struct MobyView *, void *) __asm__("FUN_L00_001f2868");
-extern f32 FUN_L00_0025bb38(s32, f32, f32);
+extern f32 compute_directed_angle_delta(s32, f32, f32) __asm__("FUN_L00_0025bb38");
 extern void update_hero_target_heading(f32, f32, f32) __asm__("FUN_L00_00214ed8");
 extern void update_hero_planar_movement_velocity(void) __asm__("FUN_L00_002167d0");
 extern void FUN_L00_001ff290(void *, void *, void *);
@@ -1253,7 +1253,7 @@ void hero_update_movement(void) {
                 s32 ok = 1;
                 if (hero.unk308 == 0) {
                     f32 d = fast_subtract_rotations(hero.unkA5C, hero.motion.rot.f[2]);
-                    f32 a = FUN_L00_0025bb38(1, hero.unkA5C, hero.motion.rot.f[2]);
+                    f32 a = compute_directed_angle_delta(1, hero.unkA5C, hero.motion.rot.f[2]);
                     if (a > 4.363323f) {
                         ok = 0;
                     }

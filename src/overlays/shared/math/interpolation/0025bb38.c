@@ -12,7 +12,9 @@
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-float FUN_L00_0025bb38(int rotation_direction, float x, float y) {
+float compute_directed_angle_delta(int rotation_direction, float x, float y) __asm__("FUN_L00_0025bb38");
+
+float compute_directed_angle_delta(int rotation_direction, float x, float y) {
     float angle_delta = fast_subtract_rotations(x, y);
     if (rotation_direction == 0 || angle_delta * (float)rotation_direction > 0.0f)
         return angle_delta;

@@ -412,7 +412,7 @@ extern float forward_component(void *) __asm__("FUN_L00_00213350");
 extern float FUN_L00_00233a78(float *);
 extern float FUN_L00_0024f7c8_cf(float, float) __asm__("FUN_001fa5c8");
 extern float vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
-extern float FUN_L00_0025bb38(int, float, float);
+extern float compute_directed_angle_delta(int, float, float) __asm__("FUN_L00_0025bb38");
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern float FUN_L00_00262cf0_cf(float, float) __asm__("FUN_002132a8");
 extern float approach_value_cf(void *) __asm__("FUN_001f9af0");
@@ -1300,7 +1300,7 @@ void update_hero_motion_for_current_state(void) {
                     float e;
 
                     d = FUN_L00_0024f7c8_cf(hero.unkA5C, hero.motion.rot.f[2]);
-                    e = FUN_L00_0025bb38(1, hero.unkA5C, hero.motion.rot.f[2]);
+                    e = compute_directed_angle_delta(1, hero.unkA5C, hero.motion.rot.f[2]);
                     if (e > 4.363323f) {
                         near = 0;
                     }

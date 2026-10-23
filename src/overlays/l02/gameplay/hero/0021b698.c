@@ -718,7 +718,7 @@ extern float adjust_hero_animation_speed_for_target_frame(float, float, float, f
 extern float forward_component(void *) __asm__("FUN_L00_00213350");
 extern float gravity_z(float *) __asm__("FUN_L00_00233a78");
 extern float vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
-extern float FUN_L00_0025bb38(int, float, float);
+extern float compute_directed_angle_delta(int, float, float) __asm__("FUN_L00_0025bb38");
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern float FUN_L00_0025bc98(void *, float, void *, int, float, float, float);
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
@@ -1420,7 +1420,7 @@ void update_hero_state_motion(void) {
                     float e;
 
                     d = fast_subtract_rotations(hero.unkA5C, hero.motion.rot.f[2]);
-                    e = FUN_L00_0025bb38(1, hero.unkA5C, hero.motion.rot.f[2]);
+                    e = compute_directed_angle_delta(1, hero.unkA5C, hero.motion.rot.f[2]);
                     if (e > 4.363323f) {
                         near = 0;
                     }
