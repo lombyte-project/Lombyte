@@ -1067,7 +1067,9 @@ extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
 
-void FUN_L00_002eb278(void *camera) {
+void initialize_orbit_camera_pose(void *camera) __asm__("FUN_L00_002eb278");
+
+void initialize_orbit_camera_pose(void *camera) {
     char *camera_object = camera;
     float rotation_matrix[16];
     char *orbit_origin = *(char **)(camera_object + 0x70) + 0xB0;
