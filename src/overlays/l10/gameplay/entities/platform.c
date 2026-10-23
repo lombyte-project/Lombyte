@@ -1136,7 +1136,9 @@ extern void FUN_L00_001ff660(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 
-int FUN_L10_002d8170(char *moby, char *motion_data, float *previous_position) {
+int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *previous_position) __asm__("FUN_L10_002d8170");
+
+int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *previous_position) {
     float v0[4] __attribute__((aligned(16)));
     float v10[4] __attribute__((aligned(16)));
     float v20[4] __attribute__((aligned(16)));
@@ -1275,10 +1277,10 @@ extern void FUN_L00_0025a420(void *, void *, void *);
 extern void FUN_L00_0025f090(void *,void *,void *,int,int,int,int,int,float,float,float);
 extern void add_vector_xyz_alt(void *) __asm__("FUN_001f9a10");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-int FUN_L10_002d8170(char *m, char *c, float *a2);
+int resolve_bouncing_projectile_collision(char *m, char *c, float *a2) __asm__("FUN_L10_002d8170");
 extern char D_0013E633_2D9988[] __asm__("D_0013F350");
 extern char *func_L00_0025B478_2D9988(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int func_L10_002D9530_2D9988(char *, char *, float *) __asm__("FUN_L10_002d8170");
+extern int resolve_bouncing_projectile_collision(char *, char *, float *) __asm__("FUN_L10_002d8170");
 extern char D_L10_00178380[];
 extern void func_001F9BD8_2D9988(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
@@ -1341,7 +1343,7 @@ void FUN_L10_002d85c8(char *m) {
             }
         }
         *(unsigned char *)(m + 0xA4) = 0xFF;
-        if (func_001F9938_2D9988(data + 0x14) != 0 && func_L10_002D9530_2D9988(m, data, v0) == 3) {
+        if (func_001F9938_2D9988(data + 0x14) != 0 && resolve_bouncing_projectile_collision(m, data, v0) == 3) {
             *(short *)(data + 0x14) = func_001F9850_2D9988(0xF0);
             *(unsigned char *)(m + 0x20) = 1;
         } else if (*(float *)(m + 0x18) < 2.0f) {
@@ -1395,7 +1397,7 @@ void FUN_L10_002d85c8(char *m) {
         sb.s3a = *(unsigned short *)(m + 0xA6);
         func_001F9BD8_2D9988(m + 0x10, m + 0x10, data);
         *(float *)(data + 0x8) = *(float *)(data + 0x8) - D_0015ED70 * 9.8f;
-        if ((func_001F9938_2D9988(data + 0x14) != 0 && func_L10_002D9530_2D9988(m, data, v0) != 0) || *(float *)(m + 0x18) < 2.0f) {
+        if ((func_001F9938_2D9988(data + 0x14) != 0 && resolve_bouncing_projectile_collision(m, data, v0) != 0) || *(float *)(m + 0x18) < 2.0f) {
             flag21 = 1;
         }
         if (flag21) {
@@ -1497,7 +1499,7 @@ state0:
         }
         *(unsigned char *)(m + 0xa4) = 0xff;
         if (fast_dec_timer_s16(c + 0x14)) {
-            if (FUN_L10_002d8170(m, c, prev) == 3) {
+            if (resolve_bouncing_projectile_collision(m, c, prev) == 3) {
                 *(short *)(c + 0x14) = scale_game_frames(0xf0);
                 *(unsigned char *)(m + 0x20) = 1;
                 goto finish;
@@ -1562,7 +1564,7 @@ state2:
         add_vector_xyz(m + 0x10, m + 0x10, c);
         *(float *)(c + 8) -= D_0015ED70_d85c8 * 9.8f;
         if (fast_dec_timer_s16(c + 0x14)) {
-            if (FUN_L10_002d8170(m, c, prev) != 0) done = 1;
+            if (resolve_bouncing_projectile_collision(m, c, prev) != 0) done = 1;
             else if (*(float *)(m + 0x18) < 2.0f) done = 1;
         } else if (*(float *)(m + 0x18) < 2.0f) done = 1;
         if (done) *(unsigned char *)(m + 0x20) = 3;
