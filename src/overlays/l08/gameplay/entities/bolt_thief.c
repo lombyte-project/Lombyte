@@ -90,7 +90,9 @@ extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 
-void FUN_L08_002e4db8(struct Moby *moby, float *direction_vector) {
+void set_batalia_bolt_pickup_surface_rotation(struct Moby *moby, float *direction_vector) __asm__("FUN_L08_002e4db8");
+
+void set_batalia_bolt_pickup_surface_rotation(struct Moby *moby, float *direction_vector) {
     float direction_basis_matrix[16];
     float reconstructed_rotation_matrix[16];
     float first_basis_vector[4];
