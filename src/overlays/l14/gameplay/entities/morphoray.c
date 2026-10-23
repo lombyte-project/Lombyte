@@ -954,7 +954,7 @@ extern void fill_6ee0(void *, int, int) __asm__("FUN_001f97e8");
 extern void FUN_0020cb10_6ee0(void *, int, void *) __asm__("FUN_0020cb10");
 extern void FUN_L00_0025d458_6ee0(void *, void *) __asm__("FUN_L00_0025d458");
 extern int inside_clip_6ee0(void *, int) __asm__("FUN_00214720");
-extern void FUN_L00_00262b80_6ee0(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
+extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern int FUN_L14_00307620_6ee0(void *) __asm__("FUN_L14_00307620");
 extern void scale_vec_6ee0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void add_vec_6ee0(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1064,7 +1064,7 @@ void update_flying_car(struct Moby *flying_car_moby) {
     case FLYING_CAR_FOLLOW_PATH:
         flying_car_data->fx.b2 = 1;
         flying_car_data->fx.f20 = flying_car_data->fx.f24 = flying_car_data->fx.f28 = 0.0001f;
-        FUN_L00_00262b80_6ee0(flying_car_moby, &flying_car_data->fBC, &flying_car_data->fC0, D_L14_00162290, D_L14_00162294, D_L14_00162298);
+        update_moby_rotation_oscillation(flying_car_moby, &flying_car_data->fBC, &flying_car_data->fC0, D_L14_00162290, D_L14_00162294, D_L14_00162298);
         if (FUN_L14_00307620_6ee0(flying_car_moby)) {
             if (flying_car_data->part >= 0) {
                 struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (flying_car_data->part << 8));

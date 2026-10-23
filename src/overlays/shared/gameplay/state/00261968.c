@@ -616,7 +616,9 @@ void update_moby_vertical_oscillation(float x, float y, char *moby, float *phase
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 
 /* Sets o[16] and o[17] from r and the sines/cosines of the two angles, then advances the angles by l1 and l2. */
-void FUN_L00_00262b80(float *moby, float *first_phase_angle, float *second_phase_angle, float oscillation_amplitude, float first_phase_increment, float second_phase_increment) {
+void update_moby_rotation_oscillation(float *moby, float *first_phase_angle, float *second_phase_angle, float oscillation_amplitude, float first_phase_increment, float second_phase_increment) __asm__("FUN_L00_00262b80");
+
+void update_moby_rotation_oscillation(float *moby, float *first_phase_angle, float *second_phase_angle, float oscillation_amplitude, float first_phase_increment, float second_phase_increment) {
     moby[0x10] = oscillation_amplitude * fast_sin(*first_phase_angle) * fast_sin(*second_phase_angle);
     moby[0x11] = oscillation_amplitude * fast_sin(*first_phase_angle) * fast_cos(*second_phase_angle);
     *first_phase_angle = fast_add_rotations(*first_phase_angle, first_phase_increment);

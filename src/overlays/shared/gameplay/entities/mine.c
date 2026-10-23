@@ -217,7 +217,7 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
-extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
+extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void FUN_L00_0026f548(void *, void *, int, int);
 extern void spawn_gravity_floor_burst_particle(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002738e8");
 extern void pool_splash(int, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
@@ -620,7 +620,7 @@ void mine_update(M910 *mine_moby) {
                         }
                     }
                 }
-                FUN_L00_00262b80(mine_moby, (char *)&v->f60, (char *)&v->f64, 0.5235988f,
+                update_moby_rotation_oscillation(mine_moby, (char *)&v->f60, (char *)&v->f64, 0.5235988f,
                                  frame_time * 0.5235988f, frame_time * 0.29670596f);
                 if (mine_moby->state & 4) {
                     V910 t;

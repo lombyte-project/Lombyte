@@ -179,7 +179,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
-extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
+extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void update_sinking_platform(struct Moby *moby) __asm__("FUN_L10_00295c20");
@@ -216,7 +216,7 @@ void update_sinking_platform(struct Moby *moby) {
     case PLATFORM_STATE_BOBBING:
         *(int *)(platform_vars + 0xA4) = 0;
         update_moby_vertical_oscillation(0.1f, *(float *)(platform_vars + 0xB0), moby, (float *)(platform_vars + 0xA8), (float *)(platform_vars + 0xAC));
-        FUN_L00_00262b80(moby, platform_vars + 0xB4, platform_vars + 0xB8, 0.047123890f, frame_time * 0.34906584f, frame_time * 0.5235988f);
+        update_moby_rotation_oscillation(moby, platform_vars + 0xB4, platform_vars + 0xB8, 0.047123890f, frame_time * 0.34906584f, frame_time * 0.5235988f);
         break;
     case PLATFORM_STATE_SINKING_WITH_HERO: {
         float a = *(float *)(platform_vars + 0xA4) - (frame_time_sq + frame_time_sq);

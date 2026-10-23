@@ -1446,7 +1446,7 @@ void apply_hero_vertical_oscillation(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00208000), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00262b80(int, char *, char *, float, float, float);
+extern void update_moby_rotation_oscillation(int, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 
 void apply_hero_rotation_oscillation(void) __asm__("FUN_L00_002079e8");
 
@@ -1454,7 +1454,7 @@ void apply_hero_rotation_oscillation(void) __asm__("FUN_L00_002079e8");
 void apply_hero_rotation_oscillation(void) {
     struct Hero *hero_state = &hero;
     if (hero_state->state.current == 0x7F) {
-        FUN_L00_00262b80(((int)hero_state->moby), &hero_state->unk6B0, &hero_state->unk6B4, 0.1745329201221466f,
+        update_moby_rotation_oscillation(((int)hero_state->moby), &hero_state->unk6B0, &hero_state->unk6B4, 0.1745329201221466f,
                          frame_time * 1.5707963705062866f, frame_time * 2.094395160675049f);
     }
 }

@@ -1730,7 +1730,7 @@ extern float FUN_00213308_309ac0(void) __asm__("FUN_00213308");
 extern float advance_309ac0(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void scale_vec_309ac0(float *, float) __asm__("FUN_L00_0025f730");
 extern void FUN_L00_00260738_309ac0(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void FUN_L00_00262b80_309ac0(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
+extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void FUN_L00_002e8450_309ac0(int, float, float) __asm__("FUN_L00_002e8450");
 extern void FUN_L00_002e84b8_309ac0(float, float) __asm__("FUN_L00_002e84b8");
 void update_pokitaru_boat_joint_effects(struct Moby *moby) __asm__("FUN_L11_0030a500");
@@ -1943,7 +1943,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         boat_vars->angle_e0 = fast_add_rotations(boat_vars->angle_e0, spin);
         amp = 0.13f;
         moby->pos.z = moby->pos.z + sin_309ac0(boat_vars->angle_e0) * amp;
-        FUN_L00_00262b80_309ac0(moby, &boat_vars->spr_e8, &boat_vars->spr_ec, 0.0418879017f, tilt_a, tilt_b);
+        update_moby_rotation_oscillation(moby, &boat_vars->spr_e8, &boat_vars->spr_ec, 0.0418879017f, tilt_a, tilt_b);
     }
     subtract_vector_xyz(delta, &moby->pos, start_pos);
     FUN_L00_00260738_309ac0(boat_vars->ctl60, delta, start_rot, &moby->rot);

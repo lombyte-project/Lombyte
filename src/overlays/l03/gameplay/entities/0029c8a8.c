@@ -61,7 +61,7 @@ extern float D_L03_00161BE0 __attribute__((sda));
 extern float D_L03_00161BE4 __attribute__((sda));
 extern float D_L03_00161BE8 __attribute__((sda));
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
-extern void FUN_L00_00262b80(char *, char *, char *, float, float, float);
+extern void update_moby_rotation_oscillation(char *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 
 void update_moby_oscillation(struct Moby *moby) __asm__("FUN_L03_002dd0f0");
 
@@ -69,7 +69,7 @@ void update_moby_oscillation(struct Moby *moby) {
     char *moby_pvars = (char *)moby->pvars;
     update_moby_vertical_oscillation(D_L03_00161BD8, D_L03_00161BDC * DEG_TO_RAD * frame_time, moby,
                      (float *)(moby_pvars + 0xac), (float *)(moby_pvars + 0xa8));
-    FUN_L00_00262b80(moby, moby_pvars + 0xb0, moby_pvars + 0xb4, D_L03_00161BE0,
+    update_moby_rotation_oscillation(moby, moby_pvars + 0xb0, moby_pvars + 0xb4, D_L03_00161BE0,
                      D_L03_00161BE4 * DEG_TO_RAD * frame_time,
                      D_L03_00161BE8 * DEG_TO_RAD * frame_time);
 }

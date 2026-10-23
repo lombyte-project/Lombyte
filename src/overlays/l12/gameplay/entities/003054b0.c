@@ -576,7 +576,7 @@ extern float D_L12_00161F30 __attribute__((sda));
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);
 extern void vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
-extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
+extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
@@ -692,7 +692,7 @@ void planetbuster_maximus_part_update(char *moby) {
                               D_0015ED64 * 0.03f, D_0015ED64 * 0.3f, D_0015ED6C_gp * 2.7f);
         }
         update_moby_vertical_oscillation(0.7f, D_0015ED6C_gp * 1.2217305f, moby, (float *)(moby_data + 0x5CC), (float *)(moby_data + 0x5C8));
-        FUN_L00_00262b80(moby, moby_data + 0x5E4, moby_data + 0x5E8, D_L12_00161F30,
+        update_moby_rotation_oscillation(moby, moby_data + 0x5E4, moby_data + 0x5E8, D_L12_00161F30,
                           D_L12_00161F28 * 0.017453292f * D_0015ED6C_gp,
                           D_L12_00161F2C * 0.017453292f * D_0015ED6C_gp);
         apply_linked_moby_relative_transforms(moby, moby_data, 0x11);
@@ -712,7 +712,7 @@ void planetbuster_maximus_part_update(char *moby) {
         int nx;
         float target_yaw;
         update_moby_vertical_oscillation(0.7f, D_0015ED6C_gp * 1.2217305f, moby, (float *)(moby_data + 0x5CC), (float *)(moby_data + 0x5C8));
-        FUN_L00_00262b80(moby, moby_data + 0x5E4, moby_data + 0x5E8, D_L12_00161F30,
+        update_moby_rotation_oscillation(moby, moby_data + 0x5E4, moby_data + 0x5E8, D_L12_00161F30,
                           D_L12_00161F28 * 0.017453292f * D_0015ED6C_gp,
                           D_L12_00161F2C * 0.017453292f * D_0015ED6C_gp);
         path = ((P_7DB0 * *)&D_L12_001B0930)[*(int *)(moby_data + 0x5C0)];
@@ -747,7 +747,7 @@ void planetbuster_maximus_part_update(char *moby) {
         D_L12_00161F34++;
         FUN_L00_0025bc98(moby + 0x48, 3.0543261f, moby_data + 0x5F4, -1, D_0015ED64 * 0.0015f, D_0015ED64 * 0.3f, D_0015ED6C_gp * 0.17453292f);
         update_moby_vertical_oscillation(0.7f, D_0015ED6C_gp * 1.2217305f, moby, (float *)(moby_data + 0x5CC), (float *)(moby_data + 0x5C8));
-        FUN_L00_00262b80(moby, moby_data + 0x5E4, moby_data + 0x5E8, D_L12_00161F30,
+        update_moby_rotation_oscillation(moby, moby_data + 0x5E4, moby_data + 0x5E8, D_L12_00161F30,
                           D_L12_00161F28 * 0.017453292f * D_0015ED6C_gp,
                           D_L12_00161F2C * 0.017453292f * D_0015ED6C_gp);
         apply_linked_moby_relative_transforms(moby, moby_data, 0x11);
