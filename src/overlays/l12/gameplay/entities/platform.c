@@ -1123,7 +1123,9 @@ unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r,
 extern void *func_L00_0026DEA0_x(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
 float D_L12_00161920[4] __attribute__((section(".sdata"))) = {-1.5f, 0.8f, -0.5f, 0.0f};
-void FUN_L12_002e3948(struct Moby *moby) {
+void emit_platform_exhaust_effects(struct Moby *moby) __asm__("FUN_L12_002e3948");
+
+void emit_platform_exhaust_effects(struct Moby *moby) {
     float emission_direction[4];
     float secondary_emission_direction[4];
     float emission_position[4];
