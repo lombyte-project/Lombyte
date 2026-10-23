@@ -1303,7 +1303,7 @@ extern void trooper_set_knockback(float *p, float a, float b) __asm__("FUN_L03_0
 extern void FUN_L10_002e0138(struct Moby *m);
 extern void FUN_L10_002e3a90_u(void *) __asm__("FUN_L10_002e3a90");
 extern void spawn_type_52_particle_near_moby(char *moby) __asm__("FUN_L10_002e3de8");
-extern void FUN_L10_002e3ef0_u(void *) __asm__("FUN_L10_002e3ef0");
+extern void update_toxic_crab_hit_reactions_and_targeting(void *) __asm__("FUN_L10_002e3ef0");
 extern void add_vector_xyz(void *, void *, void *);
 extern void clear_vector(void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -1335,7 +1335,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
     float from[4];
     float to[4];
 
-    FUN_L10_002e3ef0_u(m);
+    update_toxic_crab_hit_reactions_and_targeting(m);
     target_moby = crab_data->tgt;
     m->f2C = *(float *)(m->p24 + 0x24) * D_L10_00161E24;
     FUN_L00_00263ac8(2.5f, (int)m, 2, crab_data->q2B0);
@@ -2120,7 +2120,7 @@ extern char D_0013D50F_2E52B0[] __asm__("D_0013D408");
 extern V_2E52B0 D_L10_00174380_2E52B0 __asm__("D_L10_00174300");
 extern Path_2E52B0 *D_L10_001B0C30_2E52B0[] __asm__("D_L10_001B0930");
 
-void FUN_L10_002e3ef0(void *mv) {
+void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     enum {
         NO_STATE_TRANSITION_HIT_RESPONSE = 0,
         LETHAL_HIT_RESPONSE = 1,
