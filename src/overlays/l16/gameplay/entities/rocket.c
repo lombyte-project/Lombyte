@@ -2726,7 +2726,9 @@ extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int *D_L16_001ABCC0[];
 extern float D_L16_00161A80 __attribute__((sda));
 
-void *FUN_L16_002d5ad0(int index, int secondary) {
+void *set_class_0287_group_activation_and_find_nearest(int index, int secondary) __asm__("FUN_L16_002d5ad0");
+
+void *set_class_0287_group_activation_and_find_nearest(int index, int secondary) {
     short *group_entry = (short *)D_L16_001ABCC0[index];
     char *nearest = 0;
     float distance = 1000.0f;
@@ -2855,7 +2857,7 @@ extern char D_L16_001671C0_lui[] __asm__("D_L16_001671C0") __attribute__((sectio
 extern int D_L16_001600EC_m __asm__("D_L16_001600EC");
 extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
 extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
-extern void *FUN_L16_002d5ad0_q(int, int) __asm__("FUN_L16_002d5ad0");
+extern void *set_class_0287_group_activation_and_find_nearest(int, int) __asm__("FUN_L16_002d5ad0");
 extern void *activate_class_0287_group_and_find_nearest(int, int) __asm__("FUN_L16_002d5bc8");
 extern void FUN_0022da68_q(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_00216f90_q(void *, void *, int, int) __asm__("FUN_L00_00216f90");
@@ -2900,7 +2902,7 @@ void update_triggered_group_objective(struct Moby *moby) {
             moby->collision = 0;
         } else {
             moby->state = 1;
-            FUN_L16_002d5ad0_q(scene_data->helper, 1);
+            set_class_0287_group_activation_and_find_nearest(scene_data->helper, 1);
         }
         break;
     case SCENE_STATE_WAIT_FOR_TRIGGER: {
@@ -2945,7 +2947,7 @@ void update_triggered_group_objective(struct Moby *moby) {
         FUN_L00_002598b0_q((int)moby, 5.0f, D_L16_001600EC_m + (scene_data->pose << 7) + 0x30, 0x10000, 50.0f,
                            1.0f, 0, 1, 0);
         ((L16ObjectiveEntry_q *)(D_0013D388 + scene_data->objective))->complete = 1;
-        helper = FUN_L16_002d5ad0_q(scene_data->helper, 0);
+        helper = set_class_0287_group_activation_and_find_nearest(scene_data->helper, 0);
     notify:
         if (helper)
             FUN_0022da68_q(1, 0, helper);
@@ -2965,7 +2967,7 @@ void update_triggered_group_objective(struct Moby *moby) {
             *(unsigned short *)(player + 0x225A) = *(unsigned short *)&scene_data->camera;
         if (!count_group_e81e0(scene_data->path, -1)) {
             moby->state = 4;
-            helper = FUN_L16_002d5ad0_q(scene_data->helper, 0);
+            helper = set_class_0287_group_activation_and_find_nearest(scene_data->helper, 0);
             if (helper)
                 FUN_0022da68_q(1, 0, helper);
             ((L16ObjectiveEntry_q *)(D_0013D388 + scene_data->objective))->complete = 1;
