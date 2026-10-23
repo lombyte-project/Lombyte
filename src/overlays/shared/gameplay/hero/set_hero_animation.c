@@ -1550,7 +1550,9 @@ void FUN_0020cb10_234808(void *, s32, void *) __asm__("FUN_0020cb10");
 void FUN_L00_001fff28_234808(void *, s32, f32) __asm__("FUN_L00_001fff28");
 #define X  D_L00_0015F5C4_234808
 #define DD frame_time
-void FUN_L00_00234808(void) {
+void animate_hero_slot4_and_slot5_visuals(void) __asm__("FUN_L00_00234808");
+
+void animate_hero_slot4_and_slot5_visuals(void) {
     char *slot4_moby, *slot4_secondary_moby, *slot5_moby;
     f32 k;
     s32 a, slot4_secondary_target_color;
@@ -1602,7 +1604,7 @@ void FUN_L00_00234808(void) {
 extern char D_L00_0016C860[];
 extern void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
 extern void FUN_L00_0020f580(void);
-extern void FUN_L00_00234808_u(void) __asm__("FUN_L00_00234808");
+extern void animate_hero_slot4_and_slot5_visuals(void) __asm__("FUN_L00_00234808");
 
 void FUN_L00_00234a50(int moby_override) {
     char *moby_collection_base;
@@ -1620,7 +1622,7 @@ void FUN_L00_00234a50(int moby_override) {
         }
         update_hero_world_matrices(moby_override);
         FUN_L00_0020f580();
-        FUN_L00_00234808_u();
+        animate_hero_slot4_and_slot5_visuals();
         base = &hero;
         item_moby = ((char *)base->items[4].moby);
         if (item_moby != 0) {
