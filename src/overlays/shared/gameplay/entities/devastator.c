@@ -2051,7 +2051,9 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 
-void FUN_L00_002b5ba0(unsigned char *source_moby, unsigned char *attachment_state) {
+void update_attached_moby_transform(unsigned char *source_moby, unsigned char *attachment_state) __asm__("FUN_L00_002b5ba0");
+
+void update_attached_moby_transform(unsigned char *source_moby, unsigned char *attachment_state) {
     M_2b5ba0 combined_rotation, attachment_rotation, source_rotation;
     V_2b5ba0 k, rotated_attachment_offset;
     unsigned char *attached_moby = *(unsigned char **)(attachment_state + 0x20);
