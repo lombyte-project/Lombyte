@@ -1644,7 +1644,9 @@ extern int D_L01_00161F68 __attribute__((sda));
 extern int D_L01_00161F6C __attribute__((sda));
 extern float D_L01_00161F70 __attribute__((sda));
 extern float D_L01_00161F74 __attribute__((sda));
-void FUN_L01_003089f0(char *moby) {
+void spawn_gold_bolt_particles(char *moby) __asm__("FUN_L01_003089f0");
+
+void spawn_gold_bolt_particles(char *moby) {
     float v[4];
     float particle_velocity[4];
     float u[4];
