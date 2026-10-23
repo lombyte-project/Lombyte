@@ -153,7 +153,9 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void spawn_nearby_effect(char *m, float t, int a, int b, void *pos, void *vel) __asm__("FUN_L00_00259bc8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L07_0030e0e0(char *affected_moby, char *effect_moby, char *effect_data) {
+void register_fading_ring_hit(char *affected_moby, char *effect_moby, char *effect_data) __asm__("FUN_L07_0030e0e0");
+
+void register_fading_ring_hit(char *affected_moby, char *effect_moby, char *effect_data) {
     float hit_direction[4];
     float radial_offset[4];
     if (*(float *)(affected_moby + 0x18) < *(float *)(effect_moby + 0x18) + *(float *)(effect_data + 0x10) * 0.3f) {
