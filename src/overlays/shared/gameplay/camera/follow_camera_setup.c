@@ -318,7 +318,9 @@ extern char D_L00_00173F60_a[] __asm__("D_L00_00173E60");
 
 /* Updates the follow camera: when `snap` is set, re-places the eye behind the followed target (backing off from walls found by
    ray traces, nudging it sideways when directly above or below), then rebuilds the camera basis looking at the target. */
-void FUN_L00_002e66b8(int snap) {
+void rebuild_follow_camera_pose(int snap) __asm__("FUN_L00_002e66b8");
+
+void rebuild_follow_camera_pose(int snap) {
     char *cams = D_L00_00166C80;
     char *camera_moby = *(char **)(cams + 0x180);
     char *track = cams + 0x190; /* the followed player: position at 0, up vector at 0x30 */
@@ -633,7 +635,7 @@ extern int D_L00_00161D24_gp __asm__("D_L00_00161D24") __attribute__((sda));
 extern int D_L00_00161D8C __attribute__((sda));
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 void follow_camera_reset(char *o) __asm__("FUN_L00_002e4430");
-void FUN_L00_002e66b8_c(int snap) __asm__("FUN_L00_002e66b8");
+void rebuild_follow_camera_pose(int snap) __asm__("FUN_L00_002e66b8");
 void FUN_L00_002e6bf8_c(char *m) __asm__("FUN_L00_002e6bf8");
 extern Hero_2E8210 D_0013F450_2E8210 __asm__("D_0013F350");
 extern char D_0013F4D0_2E8210[] __asm__("D_0013F3D0");
@@ -643,7 +645,7 @@ extern float dot_vectors_xyz_c(void *, void *) __asm__("FUN_001f9ab0");
 extern float func_001F9CB8_2E8210(void *) __asm__("FUN_001f9af0");
 extern void func_L00_002E80A8_2E8210(Moby_2E8210 *) __asm__("FUN_L00_002e6bf8");
 extern void func_L00_002E58E0_2E8210(Moby_2E8210 *) __asm__("FUN_L00_002e4430");
-extern void func_L00_002E7B68_2E8210(int) __asm__("FUN_L00_002e66b8");
+extern void rebuild_follow_camera_pose(int) __asm__("FUN_L00_002e66b8");
 
 void follow_camera_setup(Moby_2E8210 *m) __asm__("FUN_L00_002e6d60");
 void follow_camera_setup(Moby_2E8210 *camera_moby) {
@@ -776,7 +778,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
         }
     } else {
         func_L00_002E58E0_2E8210(camera_moby);
-        func_L00_002E7B68_2E8210(1);
+        rebuild_follow_camera_pose(1);
     }
     subtract_vector_xyz(b->v0, camera_moby->v30, a->f50);
     qcopy(b->v10, b->v0);
