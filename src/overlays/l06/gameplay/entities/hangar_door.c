@@ -3231,7 +3231,9 @@ extern int *D_L06_001B0FB0[] __asm__("D_L06_001B0C30");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 
-void FUN_L06_002fb148(char *moby) {
+void start_alien_queen_intro(char *moby) __asm__("FUN_L06_002fb148");
+
+void start_alien_queen_intro(char *moby) {
     float output_position[4], output_rotation[4], moby_offset_vector[4];
     char *data = *(char **)(moby + 0x78);
     char *base = D_L06_0016016C + (*(int *)(data + 0xF8) << 7);
