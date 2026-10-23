@@ -3238,7 +3238,7 @@ extern char D_L14_001FCED0[];
 extern s32 D_L14_00161F8C __attribute__((sda));
 extern void mark_moby_and_linked_moby_for_removal(char *moby) __asm__("FUN_L14_002fe238");
 extern void set_moby_state_two(unsigned char *moby) __asm__("FUN_L06_00303150");
-extern void FUN_L10_002f5a50(int);
+extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 extern void *tram_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void FUN_L00_00263d40(int, int);
@@ -3385,7 +3385,7 @@ void update_enemy_fighter_921(struct Moby *moby) {
                         moby->collision = moby->pclass->collision;
                         carrier->flags &= 0xFFBE;
                         moby->state = 2;
-                        FUN_L10_002f5a50(moby_vars->i90);
+                        activate_descriptor(moby_vars->i90);
                         rider->draw_dist = 0xFF;
                         rider->update_dist = 0xFF;
                     }

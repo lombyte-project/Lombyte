@@ -3328,7 +3328,7 @@ extern int D_0014C190_e9648[][64] __asm__("D_0014C190");
 extern unsigned char D_001413F4_e9648[] __asm__("D_001413F4");
 extern unsigned char D_0013DD4C_e9648[] __asm__("D_0013DD4C");
 extern int inside_clip_volume_e9648(void *, int) __asm__("FUN_00214720");
-extern void FUN_L10_002f5a50(int);
+extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 extern int truncate_float_e9648(float) __asm__("FUN_001fa6d0");
 extern int tick_countdown_e9648(int *) __asm__("FUN_001f9740");
 
@@ -3373,7 +3373,7 @@ void gate_1_update(struct Moby *moby) {
         save_id = moby->save_id;
         D_L10_001BA950[(short)save_id >> 5] |= 1 << (save_id & 31);
         if (inside_clip_volume_e9648(&hero.motion.pos, vars->clip_volume))
-            FUN_L10_002f5a50(vars->sound);
+            activate_descriptor(vars->sound);
         vars->timer = truncate_float_e9648(FUN_L04_001f1978(90.0f));
         moby->state = 2;
         return;
@@ -3436,12 +3436,12 @@ extern struct Moby * D_L10_0015FFD8_gp __asm__("D_L10_0015FFD8") __attribute__((
 extern s32 FUN_001f96b0_c(f32) __asm__("FUN_001f96b0");
 extern unsigned char D_001413F4[];
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L10_002f5a50(int i);
+void activate_descriptor(int i) __asm__("FUN_L10_002f5a50");
 extern unsigned char D_001413F4[];
 extern unsigned char D_0013DE4B_2EAD50[] __asm__("D_0013DD4C");
 extern int D_L10_001BA950[] __asm__("D_L10_001BA950");
 extern L10State_2EAD50 D_L10_001BB9C0_2EAD50 __asm__("D_L10_001BB6B0");
-extern void func_L10_002F6E10_2EAD50(int) __asm__("FUN_L10_002f5a50");
+extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 extern float func_001F9F90_2EAD50(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2EAD50(float) __asm__("FUN_001f9de0");
 extern void func_001F9BD8_2EAD50(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -3494,7 +3494,7 @@ void gate_2_update(GateMoby_2EAD50 *moby)
             *(int *)(bits + ((((short)moby->uid >> 5) * 4) + (current_level_index << 8))) |= entry_gate_state << (moby->uid & 0x1F);
             D_L10_001BA950[(short)moby->uid >> 5] |= entry_gate_state << (moby->uid & 0x1F);
             if (vars->sound > 0) {
-                func_L10_002F6E10_2EAD50(vars->sound);
+                activate_descriptor(vars->sound);
             }
             vars->timer = func_001F9878_2EAD50(FUN_L04_001f1978(90.0f));
             moby->state = 2;

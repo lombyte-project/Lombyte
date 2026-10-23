@@ -224,7 +224,9 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
 }
 extern char *D_L10_0015EF50;
 
-void FUN_L10_002f5a50(int i) {
+void activate_descriptor(int i) __asm__("FUN_L10_002f5a50");
+
+void activate_descriptor(int i) {
     unsigned char *descriptor_record;
     descriptor_record = *(unsigned char **)(D_L10_0015EF50 + i * 0x20 + 0x1C);
     descriptor_record[0x38] = 1;

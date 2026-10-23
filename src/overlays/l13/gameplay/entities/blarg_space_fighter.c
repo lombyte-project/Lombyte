@@ -3018,7 +3018,7 @@ extern void FUN_L00_00257470(struct Moby *, int, int);
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern void FUN_L10_002f5a50(int);
+extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern char *D_L13_001B07B0[];
@@ -3087,7 +3087,7 @@ void FUN_L13_002e97e0(struct Moby *moby, char *vars, int *result) {
     mobys[*(int *)(vars + 0x134)].flags |= 2;
     mobys[*(int *)(vars + 0x134)].flags |= 1;
     mobys[*(int *)(vars + 0x134)].visible = 0;
-    FUN_L10_002f5a50(*(int *)(vars + 0x12C));
+    activate_descriptor(*(int *)(vars + 0x12C));
     moby->state = 7;
     *(float *)(vars + 0xAC) = D_0015ED6C * 80.0f;
     *(int *)(vars + 0xF8) = scale_game_frames(600);

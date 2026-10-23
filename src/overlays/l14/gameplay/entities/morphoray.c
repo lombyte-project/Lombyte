@@ -353,7 +353,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern void FUN_L10_002f5a50(int);
+extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 void save_and_lower_unlock_sequence_mobys(struct Moby *moby) __asm__("FUN_L14_00305600");
 
 extern void save_and_lower_unlock_sequence_mobys(struct Moby *) __asm__("FUN_L14_00305600");
@@ -401,7 +401,7 @@ void update_unlock_sequence_controller(unsigned char *moby) {
         moby[0x20] = 2;
         unlock_sequence_data[1] = scale_game_frames(0x78);
         ((float *)unlock_sequence_data)[2] = 1.0f / convert_integer_to_float(unlock_sequence_data[1]);
-        FUN_L10_002f5a50(unlock_sequence_data[4]);
+        activate_descriptor(unlock_sequence_data[4]);
         break;
     case UNLOCK_SEQUENCE_COUNTDOWN:
         fast_dec_timer(&unlock_sequence_data[1]);
