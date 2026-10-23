@@ -632,7 +632,9 @@ void FUN_L13_002b47a0(struct Moby *moby) {
 
 extern int FUN_L00_0025fcb8(void *, void *, float);
 
-void FUN_L13_002b48d8(struct Moby *moby) {
+void update_blarg_turret_target_and_state(struct Moby *moby) __asm__("FUN_L13_002b48d8");
+
+void update_blarg_turret_target_and_state(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float distance;
     if (moby->state == 3)
