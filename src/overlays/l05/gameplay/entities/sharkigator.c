@@ -529,7 +529,9 @@ void draw_group_moby_glow_quads(unsigned char *moby) __asm__("FUN_L05_002d6f48")
 
 /* Per-frame glow: updates three parts, pulses the colour, and queues a redraw
  * once per frame. */
-void FUN_L05_002d7020(char *moby) {
+void update_moby_glow_and_queue_draw(char *moby) __asm__("FUN_L05_002d7020");
+
+void update_moby_glow_and_queue_draw(char *moby) {
     char *moby_data;
     int i;
     int interpolated_glow_color;
@@ -614,7 +616,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 float absolute_float(float input) __asm__("func_001F99C0");
 int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
-void FUN_L05_002d7020_c(char *m) __asm__("FUN_L05_002d7020");
+void update_moby_glow_and_queue_draw(char *m) __asm__("FUN_L05_002d7020");
 void advance_scenery_ship_along_path(char *moby, int *path) __asm__("FUN_L05_002d7890");
 void FUN_L05_002d7920(char *moby);
 extern char *func_L00_0025B478_2D8388(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -636,7 +638,7 @@ extern void func_001F9C30_2D8388(void *, void *, float) __asm__("FUN_001f9a68");
 extern int func_001F9850_2D8388(int) __asm__("FUN_001f96f8");
 extern void *func_L00_00265050_2D8388(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12) __asm__("FUN_L00_00263fd8");
 extern void func_0020D678_2D8388(void *) __asm__("FUN_0020c828");
-extern void func_L05_002D8268_2D8388(char *moby) __asm__("FUN_L05_002d7020");
+extern void update_moby_glow_and_queue_draw(char *moby) __asm__("FUN_L05_002d7020");
 extern void func_L05_002D8B68_2D8388(void) __asm__("FUN_L05_002d7920");
 extern float D_L05_001672C8_2D8388[] __asm__("D_L05_001671C8");
 extern char *D_L05_001B0CB0_2D8388[] __asm__("D_L05_001B0930");
@@ -783,7 +785,7 @@ void scenery_ship_update(char *moby) {
         return;
     }
     }
-    if (D_L05_001613E4) func_L05_002D8268_2D8388(moby);
+    if (D_L05_001613E4) update_moby_glow_and_queue_draw(moby);
 }
 /* Retail quad packet: vertices +0x00, colors +0x40, UVs +0x50, commands +0x70. */
 typedef struct {
