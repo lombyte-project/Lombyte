@@ -1365,7 +1365,9 @@ void spawn_hero_item_mobies(void) {
 
 float absolute_float(float input) __asm__("func_001F99C0");
 
-float FUN_L00_0020f0b8(float *first_components, float *second_components) {
+float sum_basis_absolute_differences(float *first_components, float *second_components) __asm__("FUN_L00_0020f0b8");
+
+float sum_basis_absolute_differences(float *first_components, float *second_components) {
     float absolute_difference_sum = 0.0f;
     int i, j;
     for (i = 0; i < 3; i++) {
@@ -1383,7 +1385,7 @@ float FUN_L00_0020f0b8(float *first_components, float *second_components) {
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_F7F8;
 
 extern char D_0013E533_lui[] __asm__("D_0013E533") __attribute__((section(".data")));
-extern float FUN_L00_0020f0b8_c(float *a, float *b) __asm__("FUN_L00_0020f0b8");
+extern float sum_basis_absolute_differences(float *a, float *b) __asm__("FUN_L00_0020f0b8");
 extern int D_L00_0015F694 __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
@@ -1466,7 +1468,7 @@ void update_hero_item_rotation_from_history(char *rotation_output_moby, u8 *entr
                 char *b = ((char *)((char *)&hero_lui));
                 int comparison_ring_index_offset = k - 15;
                 int rj = (*(int *)(b + 0x21B8) - comparison_ring_index_offset) % 16;
-                *(float *)((char *)sums - (-(i * 4))) += FUN_L00_0020f0b8_c(
+                *(float *)((char *)sums - (-(i * 4))) += sum_basis_absolute_differences(
                     (float *)(((char *)((char *)&hero_lui)) + 0x12F0 + ri * 0x30),
                     (float *)(((char *)((char *)&hero_lui)) + 0x12F0 + rj * 0x30));
             }
