@@ -81,7 +81,7 @@ extern void FUN_L00_00232670(void);
 extern void FUN_L00_002484e0(void *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257024(void *);
-extern void FUN_L01_0022cd48(void);
+extern void update_hero_ground_material_effects(void) __asm__("FUN_L01_0022cd48");
 extern void update_hero_state_machine(void) __asm__("FUN_L01_00242930");
 
 /* Per-frame hero update; in vehicle mode 3 it also pulses the hero moby's glow colour. */
@@ -93,7 +93,7 @@ void FUN_L01_00228000(void) {
 
     FUN_L00_00232670();
     hero_update();
-    FUN_L01_0022cd48();
+    update_hero_ground_material_effects();
     update_hero_state_machine();
     if (hero.vehicle_mode == 0)
         return;
@@ -212,7 +212,7 @@ extern void FUN_L01_00228000_u(void) __asm__("FUN_L01_00228000");
 void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
 
 extern void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
-extern void FUN_L01_0022cd48_u(void) __asm__("FUN_L01_0022cd48");
+extern void update_hero_ground_material_effects(void) __asm__("FUN_L01_0022cd48");
 extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
 extern void update_hero_state_machine(void) __asm__("FUN_L01_00242930");
 extern void no_op_main_callback_alt(void *) __asm__("FUN_001e93e8");
@@ -239,7 +239,7 @@ void update_hero_frame(void) {
     }
     FUN_L00_00232670();
     hero_update();
-    FUN_L01_0022cd48_u();
+    update_hero_ground_material_effects();
     update_hero_ledge_probe();
     update_hero_state_machine();
     if (*(unsigned char *)(hero_state_base + 0x20A4) != 0) {
@@ -330,7 +330,7 @@ extern int func_L00_001F3958_2cd48(void) __asm__("FUN_001f0b58");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern float func_001F9B88_2cd48(float) __asm__("FUN_001f99c0");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
-void FUN_L01_0022cd48(void) {
+void update_hero_ground_material_effects(void) {
     struct Hero *hero_ptr = &hero;
     int saved_ground_type;
     int x;
