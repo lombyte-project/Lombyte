@@ -838,7 +838,9 @@ extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L13_002c3988(struct Moby *moby, char *moby_data, float target_yaw, float target_pitch) {
+void steer_blarg_space_fighter(struct Moby *moby, char *moby_data, float target_yaw, float target_pitch) __asm__("FUN_L13_002c3988");
+
+void steer_blarg_space_fighter(struct Moby *moby, char *moby_data, float target_yaw, float target_pitch) {
     float roll_attenuation_factor;
     float unclamped_roll;
     FUN_L00_00258278(moby, (float *)(moby_data + 0x88), target_yaw, frame_time_sq * 25.132742f,
