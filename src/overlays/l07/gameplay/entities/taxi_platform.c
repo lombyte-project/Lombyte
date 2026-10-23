@@ -2634,7 +2634,10 @@ extern int probe_world_sphere(void *, float, int, void *, void *) __asm__("FUN_L
 
 /* In the given state and animation, when the walker is within range, pushes it along its
  * velocity; a hit on the target bounces it back up and switches to the next state. */
-void FUN_L07_0030f308(char *moby, char *moby_data, int state, int anim, int seq, int frame, int next, int id,
+void handle_sharkigator_contact_attack(char *moby, char *moby_data, int state, int anim, int seq, int frame, int next, int id,
+                      float lo, float hi, float hit_direction_length, float scale, float radius) __asm__("FUN_L07_0030f308");
+
+void handle_sharkigator_contact_attack(char *moby, char *moby_data, int state, int anim, int seq, int frame, int next, int id,
                       float lo, float hi, float hit_direction_length, float scale, float radius) {
     float hit_direction[4];
     float hit_descriptor[12];
@@ -2758,7 +2761,7 @@ void FUN_L00_002a3ec8_c(void *grids, s32 count, s32 mode, f32 x, f32 z, f32 radi
 void handle_sharkigator_hit(char *m, char *x, float *hp) __asm__("FUN_L07_0030e998");
 void FUN_L07_0030eee8_c(struct Moby *moby, struct WalkerData *data) __asm__("FUN_L07_0030eee8");
 void advance_sharkigator_swim_movement(char *a, char *b, float f12, float f13, float f14) __asm__("FUN_L07_0030f0f8");
-void FUN_L07_0030f308_c(char *moby, char *obj, int state, int anim, int seq, int frame, int next, int id, float lo, float hi, float len, float scale, float radius) __asm__("FUN_L07_0030f308");
+void handle_sharkigator_contact_attack(char *moby, char *obj, int state, int anim, int seq, int frame, int next, int id, float lo, float hi, float len, float scale, float radius) __asm__("FUN_L07_0030f308");
 extern char D_0013F65C[];
 extern char D_0013F350[];
 extern void func_L00_002A5158_30D8E8(void *, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
@@ -3193,7 +3196,7 @@ void sharkigator_update(unsigned char *moby) {
             }
             moby[0x20] = 8;
         }
-        ((void (*)(char *, float, char *, float, int, float, int, float, float, int, int, int, int))FUN_L07_0030f308_c)((char *)moby, 17.0f, data, 20.0f, 10, 1.0f, 5, 1.0f, 1.0f, 4, 4, 11, target.moby);
+        ((void (*)(char *, float, char *, float, int, float, int, float, float, int, int, int, int))handle_sharkigator_contact_attack)((char *)moby, 17.0f, data, 20.0f, 10, 1.0f, 5, 1.0f, 1.0f, 4, 4, 11, target.moby);
         if (moby[0x70] & 2) {
             if (moby[0x53] != 4) {
                 blend_moby_animation(moby, 4, 0, 10);
