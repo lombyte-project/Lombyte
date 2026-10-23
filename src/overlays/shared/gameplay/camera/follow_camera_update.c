@@ -1136,7 +1136,9 @@ extern void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
 extern void clear_twelve_bytes(void *) __asm__("FUN_L00_001ff250");
 extern void FUN_L00_002eb278_c(void *) __asm__("FUN_L00_002eb278");
 
-void FUN_L00_002eb3b0(S002eb3b0 *camera_object) {
+void initialize_orbit_camera_state(S002eb3b0 *camera_object) __asm__("FUN_L00_002eb3b0");
+
+void initialize_orbit_camera_state(S002eb3b0 *camera_object) {
     Moby002eb3b0 *m;
     camera_object->m->fF0 = 0;
     m = camera_object->m;
