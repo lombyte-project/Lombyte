@@ -74,7 +74,7 @@ extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_0023
 extern void FUN_L00_0025f730(void *a, float x);
 extern void initialize_moby_transform_history(int a, char *b) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(char *o, int a, int b) __asm__("FUN_L00_00262528");
-extern void FUN_L00_00262840(char *o);
+extern void clear_moby_transform_history(char *o) __asm__("FUN_L00_00262840");
 extern void pool_splash(void *, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
 extern void set_hero_state_for_vehicle_mode(void) __asm__("FUN_L15_0021ab60");
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
@@ -127,7 +127,7 @@ int hero_set_state(int a, int b) {
             p->unk20B2 = 0;
             p->unk20AF = 0;
             p->unk22E0 = 0;
-            FUN_L00_00262840(&p->trail);
+            clear_moby_transform_history(&p->trail);
         }
         if (p->vehicle_mode == 3) {
             int s = p->state.current;

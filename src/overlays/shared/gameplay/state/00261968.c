@@ -534,7 +534,9 @@ void update_moby_transform_history(S_262608 *history_state, int dec) {
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 /* When o+0x13C is set, marks each nonzero moby of the 0x120 list for removal; clears the flag. */
-void FUN_L00_00262840(char *history_state) {
+void clear_moby_transform_history(char *history_state) __asm__("FUN_L00_00262840");
+
+void clear_moby_transform_history(char *history_state) {
     int i;
     if (*(int *)(history_state + 0x13C) != 0) {
         for (i = 0; i < *(int *)(history_state + 0x138); i++) {

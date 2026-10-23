@@ -900,7 +900,7 @@ extern int D_001413D0_00216f90 __asm__("D_001413D0") __attribute__((section(".da
 void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void FUN_001fa030_00216f90(void *, void *) __asm__("FUN_001fa030");
 void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
-void FUN_L00_00262840_00216f90(void *) __asm__("FUN_L00_00262840");
+void clear_moby_transform_history(void *) __asm__("FUN_L00_00262840");
 void FUN_001f99f8_00216f90(void *) __asm__("FUN_001f99f8");
 void FUN_00217020_00216f90(void) __asm__("FUN_00217020");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
@@ -924,7 +924,7 @@ void FUN_L00_00216f90(Vec4_00216f90 *hero_world_position, Vec4_00216f90 *hero_eu
     rotation_matrix(hero_base, rotation_destination);
     FUN_001fa030_00216f90(*(char **)(hero_base + 0x2080) + 0xC0, rotation_destination);
     clear_hero_target_and_ground_speeds();
-    FUN_L00_00262840_00216f90(position_destination + 0x15F0);
+    clear_moby_transform_history(position_destination + 0x15F0);
     *(short *)(hero_base + 0x30E) = 1;
     *(int *)(hero_base + 0x364) &= ~1;
     *(int *)(hero_base + 0x364) &= ~2;

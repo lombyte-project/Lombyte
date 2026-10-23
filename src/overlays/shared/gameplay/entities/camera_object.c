@@ -1873,7 +1873,7 @@ extern void spawn_nearby_effect(void*,int,int,void*,void*,float) __asm__("FUN_L0
 extern void FUN_L00_0025b6b8(void*,void*,void*,float);
 extern void compose_target_euler_rotation(char*,float,float,float) __asm__("FUN_L00_00262480");
 extern void update_moby_transform_history(void*,int) __asm__("FUN_L00_00262608");
-extern void FUN_L00_00262840(char*);
+extern void clear_moby_transform_history(char*) __asm__("FUN_L00_00262840");
 extern void FUN_L00_002a7780_cb(void) __asm__("FUN_L00_002a7780");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -2119,7 +2119,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 allocate_hero_voice_for_entry(5,0);
                 sound=wrench_hero()->thrown_sound;
                 if (sound!=-1) { unsigned char *audio=voice_slot(sound); if (*(WrenchMoby**)(audio+0x88)==wrench_hero()->moby && audio[0x74]) release_voice_slot(sound); }
-                wrench_hero()->thrown_sound=-1; FUN_L00_00262840((char*)wrench_hero()+0x17B0); wrench_hero()->thrown=0; wrench_moby->state=0;
+                wrench_hero()->thrown_sound=-1; clear_moby_transform_history((char*)wrench_hero()+0x17B0); wrench_hero()->thrown=0; wrench_moby->state=0;
             }
         }
         collided=0;
