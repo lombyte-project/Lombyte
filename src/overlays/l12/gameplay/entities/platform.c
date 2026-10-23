@@ -504,7 +504,7 @@ void FUN_L00_0025a120(char *o);
 void FUN_L00_00261630(u8 *o, u8 *s, f32 a, f32 b);
 void FUN_L00_00263b38(char *p, float x);
 void FUN_L01_0026d930(char *p);
-void FUN_L10_002e3de8(char *moby);
+void spawn_type_52_particle_near_moby(char *moby) __asm__("FUN_L10_002e3de8");
 void FUN_L12_002e18e8_c(struct Moby *moby) __asm__("FUN_L12_002e18e8");
 void FUN_L12_002e19a8_c(void *pos) __asm__("FUN_L12_002e19a8");
 void FUN_L12_002e3528_c(struct Moby *moby) __asm__("FUN_L12_002e3528");
@@ -553,7 +553,7 @@ extern int func_L00_0025A778_2E2EF0(void *,void *,int) __asm__("FUN_L00_00259740
 extern int func_L00_002DDEA0_2E2EF0(void *,void *) __asm__("FUN_L00_002dc9f0");
 extern float height54(void *) __asm__("FUN_0020c9e0");
 extern void func_L00_002584A8_2E2EF0(void *,int,int) __asm__("FUN_L00_00257470");
-extern void func_L10_002E51A8_2E2EF0(char *) __asm__("FUN_L10_002e3de8");
+extern void spawn_type_52_particle_near_moby(char *) __asm__("FUN_L10_002e3de8");
 extern void func_L12_002E43A8_2E2EF0(void *) __asm__("FUN_L12_002e3098");
 extern void func_0020D678_2E2EF0(void *) __asm__("FUN_0020c828");
 extern void func_L00_00263950_2E2EF0(char *,char *,int,float,float) __asm__("FUN_L00_002628d8");
@@ -799,10 +799,10 @@ void update_hoven_anklebiter(AnklebiterMoby_2E2EF0 *moby) {
         if((hit&0x40)||(height54(moby)>37.0f && moby->anim_end==moby->anim)) {
             moby->anim_rate=0.0f; func_L00_002584A8_2E2EF0(moby,0,-1); moby->state=15; moby->flags|=8;
         } else if(moby->pos[2]<10.0f) { func_L00_002584A8_2E2EF0(moby,0,-1); { func_0020D678_2E2EF0(moby); return; } }
-        else if(hit&1) func_L10_002E51A8_2E2EF0((char *)moby);
+        else if(hit&1) spawn_type_52_particle_near_moby((char *)moby);
         break;
     case ANKLEBITER_DEATH_EFFECTS_AND_REMOVE:
-        func_L10_002E51A8_2E2EF0((char *)moby); func_L12_002E43A8_2E2EF0(moby); func_L12_002E43A8_2E2EF0(moby); { func_0020D678_2E2EF0(moby); return; }
+        spawn_type_52_particle_near_moby((char *)moby); func_L12_002E43A8_2E2EF0(moby); func_L12_002E43A8_2E2EF0(moby); { func_0020D678_2E2EF0(moby); return; }
     }
     if(moby->enabled && moby->state!=9 && moby->state!=8) {
         func_L00_00263950_2E2EF0((char *)moby,data->collision_data,0,D_0015ED64*0.018f,D_0015ED64*0.3f);

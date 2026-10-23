@@ -657,7 +657,7 @@ extern int hit_check_7b10(void *, void *, void *, int, int *, float *, int, int)
 extern void stop_moby_sound_7b10(void *, int, int) __asm__("FUN_L00_00257470");
 extern void anim_reset_7b10(struct Moby *, void *) __asm__("FUN_L00_0025d458");
 extern void anim_update_7b10(struct Moby *, void *) __asm__("FUN_L00_0025d538");
-extern void FUN_L10_002e3de8(struct Moby *);
+extern void spawn_type_52_particle_near_moby(struct Moby *) __asm__("FUN_L10_002e3de8");
 extern int allocate_voice_7b10(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames_7b10(int) __asm__("FUN_001f96f8");
 extern float random_float_7b10(float, float) __asm__("FUN_002132a8");
@@ -720,7 +720,7 @@ void poison_vessel_update(struct Moby *moby) {
                 anim_reset_7b10(moby, effects);
                 vars->timer = 0;
                 spawn_poison_vessel_destruction_effects(moby, vars);
-                FUN_L10_002e3de8(moby);
+                spawn_type_52_particle_near_moby(moby);
                 allocate_voice_7b10(0, 0, (int)moby);
                 moby->state = 1;
             } else {
@@ -745,14 +745,14 @@ void poison_vessel_update(struct Moby *moby) {
         blast_mobys_7b10(moby, pos, D_L13_00178200, hits, 0, 0x830001, 2, 1, D_L13_00161E38, 1.0f, 1.0f);
         if (vars->timer > scale_time_7b10((float)D_L13_00161E2C * 0.5f)) {
             moby->flags |= 0x41;
-            FUN_L10_002e3de8(moby);
+            spawn_type_52_particle_near_moby(moby);
         } else {
             moby->alpha = moby->alpha * 7 / 8;
         }
         timer = vars->timer + 1;
         vars->timer = timer;
         if (scale_game_frames_7b10(D_L13_00161E2C) < timer) {
-            FUN_L10_002e3de8(moby);
+            spawn_type_52_particle_near_moby(moby);
             remove_7b10(moby);
         }
         break;

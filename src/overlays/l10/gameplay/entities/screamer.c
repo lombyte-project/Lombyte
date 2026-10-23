@@ -1302,7 +1302,7 @@ extern void FUN_L01_0026d930(char *p);
 extern void trooper_set_knockback(float *p, float a, float b) __asm__("FUN_L03_00250a78");
 extern void FUN_L10_002e0138(struct Moby *m);
 extern void FUN_L10_002e3a90_u(void *) __asm__("FUN_L10_002e3a90");
-extern void FUN_L10_002e3de8(char *moby);
+extern void spawn_type_52_particle_near_moby(char *moby) __asm__("FUN_L10_002e3de8");
 extern void FUN_L10_002e3ef0_u(void *) __asm__("FUN_L10_002e3ef0");
 extern void add_vector_xyz(void *, void *, void *);
 extern void clear_vector(void *);
@@ -1858,7 +1858,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             float p[4];
 
             {
-                FUN_L10_002e3de8((char *)m);
+                spawn_type_52_particle_near_moby((char *)m);
                 {
                     float *dp = D_L10_0015F580;
                     float zz = 0.0f;

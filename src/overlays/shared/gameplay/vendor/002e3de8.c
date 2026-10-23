@@ -24,7 +24,9 @@ extern short D_L10_00161E64 __attribute__((sda));
 extern short D_L10_00161E68 __attribute__((sda));
 extern short D_L10_00161E6C __attribute__((sda));
 extern short D_L10_00161E70 __attribute__((sda));
-void FUN_L10_002e3de8(char *moby) {
+void spawn_type_52_particle_near_moby(char *moby) __asm__("FUN_L10_002e3de8");
+
+void spawn_type_52_particle_near_moby(char *moby) {
     float spawn_position[3];
     int particle_header_value, particle_data_value;
     float offset_angle_radians = random_angle_radians();
