@@ -1149,7 +1149,9 @@ extern short D_L11_0016239C __attribute__((sda));
 extern short D_L11_001623A0 __attribute__((sda));
 extern short D_L11_001623A4 __attribute__((sda));
 extern short D_L11_001623A8 __attribute__((sda));
-void FUN_L11_00318ed8(struct Moby *source_moby) {
+void spawn_moby_radial_spark(struct Moby *source_moby) __asm__("FUN_L11_00318ed8");
+
+void spawn_moby_radial_spark(struct Moby *source_moby) {
     float spark_position[4];
     float radial_offset[4];
     float row1_offset[4];
