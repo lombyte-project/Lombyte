@@ -2065,7 +2065,7 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_00239df8(HudElem *m);
 void initialize_bolt_counter_hud(HudElem *e) __asm__("FUN_L00_00239cc8");
-void FUN_L00_00239d00(void *o);
+void update_bolt_counter_hud_animation_and_visibility(void *o) __asm__("FUN_L00_00239d00");
 extern char D_0013F3D0[];
 extern char D_0013F490[];
 extern void func_L00_0023A658_4BE8(void) __asm__("FUN_L08_002444a8");

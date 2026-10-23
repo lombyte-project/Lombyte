@@ -1089,7 +1089,9 @@ typedef struct T00239d00 {
 extern s32 bolt_panel_open_steps_gp __asm__("D_L00_0015F824") __attribute__((sda));
 extern s32 bolt_text_fade_steps_gp __asm__("D_L00_0015F828") __attribute__((sda));
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
-void FUN_L00_00239d00(T00239d00 *hud_element) {
+void update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) __asm__("FUN_L00_00239d00");
+
+void update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) {
     u8 *visibility_counters = &hud_element->a;
     s32 icon_cycle_period = 60;
     s32 bolt_count_snapshot;

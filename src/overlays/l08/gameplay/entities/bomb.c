@@ -116,7 +116,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float func_001F9FA8_2B94B0(float) __asm__("FUN_001f9de0");
 extern void func_L08_002B9438_2B94B0(void *moby) __asm__("FUN_L08_002b8228");
 extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
-extern void func_L00_0023A690_2B94B0(void) __asm__("FUN_L00_00239d00");
+extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
 extern void func_L00_0023A788_2B94B0(void) __asm__("FUN_L00_00239df8");
 extern char D_L08_001746D8_2B94B0[] __asm__("D_L08_00174658");
 extern int D_L08_001746D8_2B94B0i __asm__("D_L08_00174658") __attribute__((section(".data")));
@@ -206,7 +206,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
         current_bolt_count = current_bolt_count + moby_data->f20;
         ((int *)D_0013DF38_arr)[D_0015ED84] = ((int *)D_0013DF38_arr)[D_0015ED84] + moby_data->f20;
         allocate_voice_for_target_entry(0, 0, moby);
-        func_001FFB38_2B94B0(2, 0x754E, initialize_bolt_counter_hud, func_L00_0023A690_2B94B0,
+        func_001FFB38_2B94B0(2, 0x754E, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility,
                              func_L00_0023A788_2B94B0, &current_bolt_count, 0x98967F);
         mark_moby_for_removal(moby);
         return;
