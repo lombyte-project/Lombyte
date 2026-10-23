@@ -2251,7 +2251,7 @@ extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int FUN_L00_0025c698_2d4610(void *, void *) __asm__("FUN_L00_0025c698");
 extern void FUN_0022da68_2d4610(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L00_0025f3e8_2d4610(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
+extern void spawn_color_swapped_explosion_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void FUN_0020c828_2d4610(void *) __asm__("FUN_0020c828");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void FUN_L00_00261d78_2d4610(int, float, void *, void *) __asm__("FUN_L00_00261d78");
@@ -2458,7 +2458,7 @@ void horny_toad_update(Moby *moby) {
     case HORNY_TOAD_DYING:
         if (FUN_L00_0025c698_2d4610(moby, data->unk70) & 0x140) {
             FUN_0022da68_2d4610(7, 0, (int)moby);
-            FUN_L00_0025f3e8_2d4610(moby, (*(ToadVec *)&moby->pos), -1, 0.75f, 10.0f);
+            spawn_color_swapped_explosion_burst(moby, (*(ToadVec *)&moby->pos), -1, 0.75f, 10.0f);
             FUN_0020c828_2d4610(moby);
             return;
         }

@@ -808,8 +808,8 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
 
 /* Spawns an explosion burst at `pos`: three random-coloured particles, two tinted particles when `owner` is set, and
    (when `flash` is nonzero) a light with intensity `flash` (or 13 if negative). */
-void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash);
-void FUN_L00_0025f3e8(char *owner, char *effect_position, float scale, float flash) {
+void spawn_color_swapped_explosion_burst(char *owner, char *pos, float scale, float flash) __asm__("FUN_L00_0025f3e8");
+void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, float scale, float flash) {
     Vy10 zero_vec;
     S6y10 first_particle_color_palette;
     S6y10 second_particle_color_palette;

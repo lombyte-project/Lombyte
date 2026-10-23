@@ -3216,7 +3216,7 @@ extern void spray_4318(struct Moby *, void *, float, int, float, float, int, int
 extern float jump_speed_4318(void *, void *, int, float, float) __asm__("FUN_L00_0025abf0");
 extern float turn_to_4318(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern int FUN_L00_0025c698_4318(struct Moby *, void *) __asm__("FUN_L00_0025c698");
-extern void FUN_L00_0025f3e8(struct Moby *, void *, int, float, float);
+extern void spawn_color_swapped_explosion_burst(struct Moby *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void follow_carrier_4318(struct Moby *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern void move_4318(struct Moby *, void *, float, float, float, int) __asm__("FUN_L00_00258830");
@@ -3498,7 +3498,7 @@ void puffoid_update(struct Moby *moby) {
     case PUFFOID_STATE_DEATH_KNOCKBACK:
         if (FUN_L00_0025c698_4318(moby, puffoid_vars->unk120) & 0x160) {
             zero_vector_4318(pos);
-            FUN_L00_0025f3e8(moby, &moby->pos, -1, 0.5f, 10.0f);
+            spawn_color_swapped_explosion_burst(moby, &moby->pos, -1, 0.5f, 10.0f);
             mark_for_removal_4318(moby);
             return;
         }
@@ -3628,7 +3628,7 @@ void puffoid_update(struct Moby *moby) {
                             &moby->pos, &moby->rot);
         if (FUN_L00_0025c698_4318(moby, puffoid_vars->unk120) & 0x160) {
             zero_vector_4318(pos);
-            FUN_L00_0025f3e8(moby, &moby->pos, -1, 0.5f, 10.0f);
+            spawn_color_swapped_explosion_burst(moby, &moby->pos, -1, 0.5f, 10.0f);
             mark_for_removal_4318(moby);
             return;
         }

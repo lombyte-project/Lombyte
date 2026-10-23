@@ -1787,12 +1787,12 @@ void register_level_12_effects_draw_callback(struct Moby *moby) {
 /* Forward the vendor parameters with fixed range and scale values. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E8610), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_0025f3e8(void *, void *, int, float, float);
+extern void spawn_color_swapped_explosion_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 
 void spawn_blarg_trooper_death_effects(void *moby, void *effect_position) __asm__("FUN_L12_002e7290");
 
 void spawn_blarg_trooper_death_effects(void *moby, void *effect_position) {
-    FUN_L00_0025f3e8(moby, effect_position, -1, 1.0f, 10.0f);
+    spawn_color_swapped_explosion_burst(moby, effect_position, -1, 1.0f, 10.0f);
 }
 extern void process_blarg_trooper_damage_and_alerts(struct Moby *) __asm__("FUN_L12_002e81e0");
 void set_blarg_trooper_aim_yaw_offsets(struct Moby *moby, float *pos) __asm__("FUN_L12_002e8608");

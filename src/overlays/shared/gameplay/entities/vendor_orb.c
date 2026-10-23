@@ -1425,7 +1425,7 @@ extern void quaternion_to_matrix(void *, void *) __asm__("FUN_001fa4f8");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void spawn_explosion(void *, void *, void *, float, float, int, float, int, float, float, int, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L00_0025f3e8(void *, void *, int, float, float);
+extern void spawn_color_swapped_explosion_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_quaternion_from_axis_angle(void *, void *, f32) __asm__("FUN_00214530");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -1477,7 +1477,7 @@ void robot_arm_update(char *moby) {
         transform_vector_by_basis(effect_offset_or_world_position, moby_data + 0x20, moby + 0xC0);
         add_vector_xyz(effect_offset_or_world_position, effect_offset_or_world_position, moby + 0x10);
         if (*(int *)(moby_data + 0x34) & 2) {
-            FUN_L00_0025f3e8(moby, effect_offset_or_world_position, -1, *(float *)(moby_data + 0x2C) * 0.5f, 0.0f);
+            spawn_color_swapped_explosion_burst(moby, effect_offset_or_world_position, -1, *(float *)(moby_data + 0x2C) * 0.5f, 0.0f);
         } else {
             float half_collision_radius = *(float *)(moby_data + 0x2C) * 0.5f;
             spawn_explosion(moby, D_L00_0015F580, effect_offset_or_world_position, 0.0f, 0.0f, 5, *(float *)(moby_data + 0x2C), 3, half_collision_radius, 9.0f, 5, half_collision_radius, -1, 0.0f, 0, 0, -1, 0);

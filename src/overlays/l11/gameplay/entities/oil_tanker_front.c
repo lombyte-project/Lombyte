@@ -75,7 +75,7 @@ struct L11HitInfo {
 
 extern struct L11HitInfo *FUN_L00_0025a420_h(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 fun_00213928(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
-extern void FUN_L00_0025f3e8(void *, void *, s32, f32, f32);
+extern void spawn_color_swapped_explosion_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f3e8");
 extern s32 is_moby_in_state_five(void *) __asm__("FUN_L11_0030a830");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern s32 FUN_001fa6d0(float);
@@ -123,7 +123,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     if (patrol_vars->carrier != -1 && moby->state != 0xB && moby->state != 9 && moby->state != 0x12 &&
         moby->state != 0x11 && moby->state != 0 && moby->state != 0xC && moby->state != 0xD) {
         if (moby->pos.z < ((struct Moby *)D_L11_0015FFD8)[patrol_vars->carrier].pos.z + 0.5f) {
-            FUN_L00_0025f3e8(moby, &moby->pos, -1, 0.5f, 10.0f);
+            spawn_color_swapped_explosion_burst(moby, &moby->pos, -1, 0.5f, 10.0f);
             mark_moby_for_removal(moby);
         }
     }

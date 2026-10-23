@@ -1296,7 +1296,7 @@ extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, floa
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
 extern void FUN_L00_0025d458(void *m, short *p);
-extern void FUN_L00_0025f3e8(void *, void *, int, float, float);
+extern void spawn_color_swapped_explosion_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void FUN_L01_0026d930(char *p);
 extern void trooper_set_knockback(float *p, float a, float b) __asm__("FUN_L03_00250a78");
@@ -1866,7 +1866,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                     FUN_L10_002e3a90_u(m);
                     pb = (char *)m + 0x40;
                     FUN_L10_002e3a90_u(m);
-                    FUN_L00_0025f3e8(m, m->pos, -1, 1.25f, 20.0f);
+                    spawn_color_swapped_explosion_burst(m, m->pos, -1, 1.25f, 20.0f);
                     FUN_L00_00263fd8((char *)m, 0x775, m->pos, pb, 0, 2, zz, dp, dp, dp);
                     FUN_L00_00263fd8((char *)m, 0x77A, m->pos, pb, 0, 2, zz, dp, dp, dp);
                     FUN_L00_00263fd8((char *)m, 0x77B, m->pos, pb, 0, 2, zz, dp, dp, dp);

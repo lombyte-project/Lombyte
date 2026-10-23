@@ -1897,7 +1897,7 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void FUN_L00_0025a120(char *o);
 void trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
-void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash);
+void spawn_color_swapped_explosion_burst(char *owner, char *pos, float scale, float flash) __asm__("FUN_L00_0025f3e8");
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 void FUN_L00_00263e30(unsigned char *m, int n, int cnt, int base, int range, int cnt2, int flag);
 void FUN_L01_0026d930(char *p);
@@ -2612,7 +2612,7 @@ s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__
 void FUN_L00_00235d80(HudElem *e);
 void FUN_L00_00235ea0(HudElem *e);
 void FUN_L00_0025a120(char *o);
-void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash);
+void spawn_color_swapped_explosion_burst(char *owner, char *pos, float scale, float flash) __asm__("FUN_L00_0025f3e8");
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 void FUN_L00_00263e30(unsigned char *m, int n, int cnt, int base, int range, int cnt2, int flag);
 void set_listed_class_16f_state_2_and_data_28_to_one(int index) __asm__("FUN_L06_002d9e08");
