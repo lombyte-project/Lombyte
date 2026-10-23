@@ -2360,7 +2360,9 @@ extern void tick_countdown_32(int *arg0) __asm__("FUN_001f9740");
 #define B(p, o) (*(unsigned char *)((char *)(p) + (o)))
 #define FLAG    hero.ship_ammo
 
-void FUN_L13_002b95b8(int source_moby, char *moby_vars) {
+void update_fighter_jet_target_tracking(int source_moby, char *moby_vars) __asm__("FUN_L13_002b95b8");
+
+void update_fighter_jet_target_tracking(int source_moby, char *moby_vars) {
     char *excluded_target_moby = 0;
     char *pad;
     char *current_target_moby;
@@ -2442,7 +2444,7 @@ extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __
 extern void append_rotated_sprite_quad(float, float, float, float, float, int, int, int, int, int, int, int, float, float);
 extern void draw_textured_quad_local(int, int, int, int, int, int, int, int, long, long) __asm__("FUN_001f5450");
 void FUN_L13_002b8320(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x, float y, float s, float ang);
-void FUN_L13_002b95b8_c(int a, char *p) __asm__("FUN_L13_002b95b8");
+void update_fighter_jet_target_tracking(int a, char *p) __asm__("FUN_L13_002b95b8");
 extern long func_001F4868_l(int) __asm__("FUN_001f44b8");
 extern void func_L13_002B9590_f(float, float, float, float, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L13_002b8320");
 extern void *func_001FE540_id(int) __asm__("FUN_001fdd10");
@@ -2479,7 +2481,7 @@ void draw_fighter_jet_hud(char *moby) {
     float hud_health_step;
     float hud_health_step_magnitude;
 
-    FUN_L13_002b95b8_c((int)moby, moby_vars);
+    update_fighter_jet_target_tracking((int)moby, moby_vars);
     if (*(int *)(moby_vars + 0x88) != 0) {
         project_world_point_to_screen_pixels(*(char **)(moby_vars + 0x88) + 0x10, &target_screen_x, &target_screen_y, 0);
         if (*(int *)(moby_vars + 0x8C) > scale_game_frames_alt(0x1F4)) {
