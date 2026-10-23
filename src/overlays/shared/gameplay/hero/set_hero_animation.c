@@ -971,7 +971,9 @@ void FUN_001f9d20_00233708(Vec4_00233708 *, Vec4_00233708 *,
                            Mtx_00233708 *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_00233708(Vec4_00233708 *, Vec4_00233708 *,
                            Vec4_00233708 *) __asm__("FUN_001f9a10");
-void FUN_L00_00233708(Vec4_00233708 *out, Vec4_00233708 *in, float offset_scale) {
+void add_hero_forward_offset(Vec4_00233708 *out, Vec4_00233708 *in, float offset_scale) __asm__("FUN_L00_00233708");
+
+void add_hero_forward_offset(Vec4_00233708 *out, Vec4_00233708 *in, float offset_scale) {
     struct Hero *hero_base = &hero;
     Mtx_00233708 moby_rotation_matrix;
     Vec4_00233708 offset_vector;

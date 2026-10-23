@@ -66,7 +66,7 @@ extern f32 FUN_L00_0025bc98_235c08(float *, float *, int, float, float, float,
                                    float) __asm__("FUN_L00_0025bc98");
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void set_gravity_relative_vector_length_xy(void *, void *, f32) __asm__("FUN_L00_00233ba0");
-extern void FUN_L00_00233708_235c08(void *, void *, f32) __asm__("FUN_L00_00233708");
+extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
 extern void FUN_001f9bf8_235c08(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void FUN_001f9c48_235c08(float *, float *, float) __asm__("FUN_001f9c48");
 extern void FUN_001f9a10_235c08(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -102,7 +102,7 @@ void FUN_L12_00235c08(void) {
         }
         FUN_L00_00212088_235c08(ED70 * 44.0f, ED70 * 45.0f);
         set_gravity_relative_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
-        FUN_L00_00233708_235c08(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
+        add_hero_forward_offset(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
     } else if (state == 0x1C) {
         if (FUN_001f96f8_235c08(0x28) < hero.state_timer) {
             FUN_L00_00211e30_235c08(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 15.009831f);

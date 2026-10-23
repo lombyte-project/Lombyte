@@ -1112,7 +1112,7 @@ extern float FUN_001f9e90_c2(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_L00_00216de8_c(int, int) __asm__("FUN_L00_00216de8");
 extern void clear_u64_value_c(void *) __asm__("FUN_001f99f8");
-extern void FUN_L00_00233708(void *, void *, f32);
+extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void rotmat_e(void *, void *) __asm__("FUN_001fa030");
 extern void multiply_matrix3x3(void *, void *, void *) __asm__("FUN_001fa328");
@@ -1176,7 +1176,7 @@ void launch_hero_wrench(void) {
     }
     clear_u64_value_c(launched_item_vars->unk40);
     if (!aimed) {
-        FUN_L00_00233708(launched_item_vars->unk40, launched_item_vars->unk40, 1.0f);
+        add_hero_forward_offset(launched_item_vars->unk40, launched_item_vars->unk40, 1.0f);
     } else {
         build_spherical_offset(launched_item_vars->unk40, 1.0f, hero.aim_yaw, hero.aim_pitch);
     }

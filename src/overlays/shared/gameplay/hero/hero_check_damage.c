@@ -3873,7 +3873,7 @@ void scale_hero_motion(float scale_factor) {
 #define HERO_OF(v) ((struct Hero *)((char *)(v) - 0xE0))
 extern Vec4 hero_velocity __asm__("D_0013F430");
 extern f32 approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8");
-extern void FUN_L00_00233708(void *, void *, f32);
+extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
 
 static inline struct Hero *hero_ptr(void) { return &hero; }
 
@@ -3959,7 +3959,7 @@ void steer_hero_planar_velocity(f32 step) {
         planar_speed = gravity_length_xy(current_velocity);
         approach_value(&planar_speed, HERO_OF(current_velocity)->target_speed, step);
         set_gravity_relative_vector_length_xy(current_velocity->f, current_velocity->f, 0.0f);
-        FUN_L00_00233708(current_velocity, current_velocity, planar_speed);
+        add_hero_forward_offset(current_velocity, current_velocity, planar_speed);
         break;
     }
     }
@@ -4047,7 +4047,7 @@ void air_accel(f32 step) {
         planar_speed = gravity_length_xy(current_velocity);
         approach_value(&planar_speed, HERO_OF(current_velocity)->target_speed, step);
         set_gravity_relative_vector_length_xy(current_velocity->f, current_velocity->f, 0.0f);
-        FUN_L00_00233708(current_velocity, current_velocity, planar_speed);
+        add_hero_forward_offset(current_velocity, current_velocity, planar_speed);
         break;
     }
     }

@@ -770,7 +770,7 @@ extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_002334d0(float *dst, float *src, float h);
 extern void offset_hero_position_against_gravity(float *, float *, float) __asm__("FUN_L00_002336e8");
 extern void FUN_L00_00233708_cf(int, int) __asm__("FUN_L00_00216de8");
-extern void FUN_L00_00233810_cf(void *, void *, float) __asm__("FUN_L00_00233708");
+extern void add_hero_forward_offset(void *, void *, float) __asm__("FUN_L00_00233708");
 extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
 extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
 extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
@@ -2080,12 +2080,12 @@ void update_hero_state_motion(void) {
                 build_scaled_hero_move_impulse(0.5f, frame_time * 2.0f);
                 if (hero.state.current == HERO_STATE_RUN_JUMP &&
                     hero.state_timer < hero.unk420 + scale_game_frames(4)) {
-                    FUN_L00_00233810_cf(hero.motion.velocity.f, hero.motion.velocity.f,
+                    add_hero_forward_offset(hero.motion.velocity.f, hero.motion.velocity.f,
                                         frame_time_sq * 16.0f * hero.state_timer);
                 }
                 if (hero.state.current == HERO_STATE_PACK_JUMP) {
                     if (hero.state_timer < scale_game_frames(0x22)) {
-                        FUN_L00_00233810_cf(hero.motion.velocity.f, hero.motion.velocity.f,
+                        add_hero_forward_offset(hero.motion.velocity.f, hero.motion.velocity.f,
                                             frame_time_sq * 53.0f * hero.state_timer);
                     }
                 }

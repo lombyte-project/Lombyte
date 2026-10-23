@@ -225,7 +225,7 @@ extern f32 FUN_L00_0025bc98_223450(float *, float *, int, float, float, float,
                                    float) __asm__("FUN_L00_0025bc98");
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void FUN_L00_00233ba0_223450(void *, void *, f32) __asm__("FUN_L00_00233ba0");
-extern void FUN_L00_00233708_223450(void *, void *, f32) __asm__("FUN_L00_00233708");
+extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
 extern void FUN_001f9bf8_223450(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void FUN_001f9c48_223450(void *, void *, f32) __asm__("FUN_001f9c48");
 extern void FUN_001f9a10_223450(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -261,7 +261,7 @@ void FUN_L02_00223450(void) {
         }
         FUN_L00_00212088_223450(ED70 * 44.0f, ED70 * 45.0f);
         FUN_L00_00233ba0_223450(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
-        FUN_L00_00233708_223450(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
+        add_hero_forward_offset(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
     } else if (state == 0x1C) {
         if (FUN_001f96f8_223450(0x28) < hero.state_timer) {
             FUN_L00_00211e30_223450(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 15.009831f);

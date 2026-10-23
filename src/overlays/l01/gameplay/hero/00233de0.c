@@ -198,7 +198,7 @@ extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8")
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 extern void FUN_L00_00233ba0_u(void *, void *, f32) __asm__("FUN_L00_00233ba0");
-extern void FUN_L00_00233708(void *, void *, f32);
+extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void FUN_001f9c48_u(float *, float *, float) __asm__("FUN_001f9c48");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -230,7 +230,7 @@ void update_hero_airborne_planar_motion(void) {
         }
         speed_step(frame_time_sq * 44.0f, frame_time_sq * 45.0f);
         FUN_L00_00233ba0_u(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
-        FUN_L00_00233708(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
+        add_hero_forward_offset(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
     } else if (state == 0x1C) {
         if (scale_game_frames(0x28) < hero.state_timer) {
             turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 15.009831f);

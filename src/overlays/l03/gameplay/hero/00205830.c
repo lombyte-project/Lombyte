@@ -306,7 +306,7 @@ struct PlayerSpeedTuning {
 };
 extern struct PlayerSpeedTuning D_L03_0017BEB8;
 extern s32 allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
-extern void FUN_L00_00233708(void *, void *, f32);
+extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
 extern void FUN_L00_00233810(void *, void *, f32);
 extern s32 collision_line(void *, void *, s32, struct MobyView *, s32) __asm__("FUN_001efa68");
 extern void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340");
@@ -1965,10 +1965,10 @@ void update_hero_motion_for_current_state(void) {
             }
             build_scaled_hero_move_impulse(0.5f, frame_time * 2.0f);
             if (hero.state.current == HERO_STATE_RUN_JUMP && hero.state_timer < hero.unk420 + scale_game_frames(4)) {
-                FUN_L00_00233708(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 16.0f * (f32)hero.state_timer);
+                add_hero_forward_offset(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 16.0f * (f32)hero.state_timer);
             }
             if (hero.state.current == HERO_STATE_PACK_JUMP && hero.state_timer < scale_game_frames(34)) {
-                FUN_L00_00233708(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 53.0f * (f32)hero.state_timer);
+                add_hero_forward_offset(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 53.0f * (f32)hero.state_timer);
             }
             if (hero.state_timer < scale_game_frames(10) && hero.unk229C > 0.2f) {
                 qcopy(&spatial_scratch_or_hit_descriptor, &hero.motion.pos);
