@@ -364,7 +364,9 @@ extern int *D_L06_001B0C30[];
 extern void FUN_L00_002eac18(int);
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 
-void FUN_L06_002fb4b0(char *moby) {
+void finish_alien_queen_intro(char *moby) __asm__("FUN_L06_002fb4b0");
+
+void finish_alien_queen_intro(char *moby) {
     char *data = *(char **)(moby + 0x78);
     hero_set_state(HERO_STATE_IDLE, 0);
     *D_L06_001B0C30[*(int *)(data + 0xEC)] = *(int *)(data + 0x114);
