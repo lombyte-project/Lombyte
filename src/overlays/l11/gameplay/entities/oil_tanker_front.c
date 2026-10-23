@@ -1225,7 +1225,9 @@ extern short D_L11_001623C0 __attribute__((sda));
 extern short D_L11_001623C4 __attribute__((sda));
 extern short D_L11_001623C8 __attribute__((sda));
 extern short D_L11_001623CC __attribute__((sda));
-void FUN_L11_003191c0(struct Moby *moby) {
+void spawn_energy_sphere_spark(struct Moby *moby) __asm__("FUN_L11_003191c0");
+
+void spawn_energy_sphere_spark(struct Moby *moby) {
     float first_spark_vector[4];
     float second_spark_vector[4];
     int first_spark_color;
