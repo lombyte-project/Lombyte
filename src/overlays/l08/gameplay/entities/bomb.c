@@ -237,7 +237,9 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L08_002d22e0(int source_moby, char *spawn_position, char *initial_velocity) {
+char *spawn_bomb_with_velocity(int source_moby, char *spawn_position, char *initial_velocity) __asm__("FUN_L08_002d22e0");
+
+char *spawn_bomb_with_velocity(int source_moby, char *spawn_position, char *initial_velocity) {
     char *spawned_moby = func_0020D348_m(0xF8);
     if (spawned_moby != 0) {
         char *bomb_vars = *(char **)(spawned_moby + 0x78);
@@ -1601,7 +1603,7 @@ typedef struct {
 
 typedef struct { char pad0[0x140]; float x,y,z,w; } Camera46_c;
 
-char *FUN_L08_002d22e0_c(int arg, char *pos, char *vec) __asm__("FUN_L08_002d22e0");
+char *spawn_bomb_with_velocity(int arg, char *pos, char *vec) __asm__("FUN_L08_002d22e0");
 char *FUN_L08_002daa10_c(struct Moby *moby) __asm__("FUN_L08_002daa10");
 extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern f32 fast_arc_tan_c2(f32, f32) __asm__("func_001F9E90");
@@ -1902,7 +1904,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             subtract_vector_xyz(velocity, &target->pos, point);
             set_vector_length_xy(velocity, velocity, time);
             velocity[2] = FUN_L00_0025abf0(point, aim, &scratch, time, -(frame_time_sq * 15.0f));
-            next = FUN_L08_002d22e0_c((int)moby, (char *)point, (char *)velocity);
+            next = spawn_bomb_with_velocity((int)moby, (char *)point, (char *)velocity);
             vars->p124 = (struct Moby *)next;
             if (next != 0) {
                 char *next_vars = *(char **)(next + 0x78);
