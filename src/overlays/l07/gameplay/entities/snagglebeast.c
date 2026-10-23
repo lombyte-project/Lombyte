@@ -723,7 +723,7 @@ extern int update_alternating_joint_emission_burst(void *, char *, float *) __as
 extern int FUN_00214cc8(void *, float);
 extern void *spawn_moby_class_1046(int, void *, int, float, float, float, float, float) __asm__("FUN_L07_0030dbb0");
 extern void FUN_L00_0024f7c8(void *, int, void *);
-extern void FUN_L07_00311eb8(void *, void *, int, void *, short, unsigned int, int, float);
+extern void configure_timed_point_light(void *, void *, int, void *, short, unsigned int, int, float) __asm__("FUN_L07_00311eb8");
 extern void FUN_00214db0(void *, float, float, float);
 extern void spawn_white_particle_with_payload(void *, void *) __asm__("FUN_L07_0029c4e8");
 extern void FUN_L07_003120d8(char *);
@@ -1076,7 +1076,7 @@ void snagglebeast_update(unsigned char *moby) {
             *(int *)(data + 0x168) = 0;
             spawn_moby_class_1046((int)moby, &position, 0x3A, 1.0f, 25.0f, 2.0f, speed, 1.0f);
             FUN_L00_0024f7c8(moby, (*(int *)(data + 0x164) & 1) + 5, &position);
-            FUN_L07_00311eb8(moby, data, 1, &position, scale_ticks(0x1E), 0x800060FF, 0, 10.0f);
+            configure_timed_point_light(moby, data, 1, &position, scale_ticks(0x1E), 0x800060FF, 0, 10.0f);
             position.f[2] = *(float *)(moby + 0x18);
             for (i = 0; i < 55; i++) {
                 float r1 = random_angle_radians();
@@ -1112,7 +1112,7 @@ void snagglebeast_update(unsigned char *moby) {
         if (start_snagglebeast_turn_toward_target(moby, data, (float *)(((char *)&hero) + 0x80), 5, 0)) break;
         if (*(int *)(data + 0x160) < scale_ticks(0x3C) / 2) {
             FUN_L00_0024f7c8(moby, 2, &position);
-            FUN_L07_00311eb8(moby, data, 2, &position, scale_ticks(0x1E), 0x800060FF, 0, 10.0f);
+            configure_timed_point_light(moby, data, 2, &position, scale_ticks(0x1E), 0x800060FF, 0, 10.0f);
             if ((level_frame_count & 7) == 0) spawn_moby_point_offset_particle((char *)moby, 2, 0.0f, 0.2f);
             if (((level_frame_count - 4) & 7) == 0) spawn_moby_point_offset_particle((char *)moby, 3, 0.0f, 0.2f);
         }
@@ -1720,7 +1720,7 @@ void snagglebeast_update(unsigned char *moby) {
             subtract_vector_xyz(&position, data + 0x120, data + 0x110);
             normalize_vector_xyz(&position, &position, frame_scale);
             add_vector_xyz(data + 0x110, data + 0x110, &position);
-            FUN_L07_00311eb8(moby, data, 3, data + 0x110, scale_ticks(0x1E), 0x800060FF, 0, 10.0f);
+            configure_timed_point_light(moby, data, 3, data + 0x110, scale_ticks(0x1E), 0x800060FF, 0, 10.0f);
             if (*(int *)(data + 0x164) != 0) {
                 if (tick_countdown_32_alt((int *)(data + 0x160))) *(int *)(data + 0x164) = 5;
             }

@@ -410,7 +410,7 @@ extern int fast_dec_timer(int *counter) __asm__("FUN_001f9740");
 extern int FUN_0022da68(int, int, int);
 extern int FUN_L07_0030e370_c() __asm__("FUN_L07_0030e370");
 extern void FUN_L00_001ff600(float, void *, void *);
-extern void FUN_L07_00311eb8_u(float, void *, void *, short, void *, short, unsigned int, int) __asm__("FUN_L07_00311eb8");
+extern void configure_timed_point_light(float, void *, void *, short, void *, short, unsigned int, int) __asm__("FUN_L07_00311eb8");
 
 int update_alternating_joint_emission_burst(void *mp, char *emitter_state, float *target_position) __asm__("FUN_L07_003122b0");
 
@@ -428,7 +428,7 @@ int update_alternating_joint_emission_burst(void *mp, char *emitter_state, float
         fast_vec_normalize(B, B, frame_time * 9.0f);
         FUN_L07_0030e370_c(A, B, moby);
         FUN_0022da68(0, 0, (int)moby);
-        FUN_L07_00311eb8_u(10.0f, moby, emitter_state, 0, A, scale_game_frames(0x1E), 0x800060FF, 0);
+        configure_timed_point_light(10.0f, moby, emitter_state, 0, A, scale_game_frames(0x1E), 0x800060FF, 0);
         *(int *)(emitter_state + 0x160) = scale_game_frames(9);
         if (++*(int *)(emitter_state + 0x164) >= 0x15) {
             *(short *)(emitter_state + 0x198) = scale_game_frames(0x23);
@@ -3575,7 +3575,7 @@ void update_hero_triggered_falling_platform(char *moby) {
 
 extern int FUN_L00_0023e5e0(float *, float, float, int);
 
-void FUN_L07_00311eb8(float radius, void *moby_, void *obj_, short pa, void *effect_position_override, short duration_frames, unsigned int color, int ca) {
+void configure_timed_point_light(float radius, void *moby_, void *obj_, short pa, void *effect_position_override, short duration_frames, unsigned int color, int ca) {
     char *moby = moby_;
     char *light_effect_state = obj_;
     float effect_position[4];
