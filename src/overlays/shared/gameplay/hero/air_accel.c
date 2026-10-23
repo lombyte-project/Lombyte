@@ -731,7 +731,9 @@ extern void clear_moby_transform_history(char *o) __asm__("FUN_L00_00262840");
 extern void update_hero_collision_dimensions(void) __asm__("FUN_L01_00231ae0");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
-void FUN_L01_00231348(int vehicle_mode, int initial_state, int new_moby) {
+void enter_hero_vehicle_mode_and_set_moby(int vehicle_mode, int initial_state, int new_moby) __asm__("FUN_L01_00231348");
+
+void enter_hero_vehicle_mode_and_set_moby(int vehicle_mode, int initial_state, int new_moby) {
     char *hero_state_base;
     cancel_hero_item_animation();
     hero_state_base = (char *)D_0013E533 + 0xE1D;

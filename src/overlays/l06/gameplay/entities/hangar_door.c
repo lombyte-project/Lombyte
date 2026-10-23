@@ -3619,7 +3619,7 @@ extern int FUN_001fa6e0(int, int, float);
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void FUN_L01_00231348(int, int, int);
+extern void enter_hero_vehicle_mode_and_set_moby(int, int, int) __asm__("FUN_L01_00231348");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void restore_hero_from_vehicle_mode(void) __asm__("FUN_L06_00227cf8");
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
@@ -3749,7 +3749,7 @@ void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
                         char *b = D_L06_001600EC_c + (moby_data->f80 << 7);
                         FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
                     }
-                    FUN_L01_00231348(1, 0x43, (int)(D_L06_0015FFD8_c + (moby_data->f6C << 8)));
+                    enter_hero_vehicle_mode_and_set_moby(1, 0x43, (int)(D_L06_0015FFD8_c + (moby_data->f6C << 8)));
                     jet_game_state(2, 7);
                 } else if (moby_data->f84 == 0) {
                     fade_to_black(scale_game_frames_alt(0x10));
