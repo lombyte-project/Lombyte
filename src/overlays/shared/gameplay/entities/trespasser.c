@@ -329,7 +329,9 @@ float f9de0_2c5dc8(float) __asm__("FUN_001f9de0");
 float fa610_2c5dc8(float) __asm__("FUN_001fa610");
 void scale_2c5dc8(void *, void *, float) __asm__("FUN_001f9bf8");
 void draw_2c5dc8(void *, int, int) __asm__("FUN_001f7d30");
-void FUN_L00_002c5dc8(char *moby) {
+void draw_swingshot_cable(char *moby) __asm__("FUN_L00_002c5dc8");
+
+void draw_swingshot_cable(char *moby) {
     Quad_2c5dc8 segment_quad;
     V_2c5dc8 b, segment_center, attachment_position, segment_direction, f, g, wobble_vector_scratch, segment_to_reference, k;
     Vars_2c5dc8 *v;
@@ -2719,7 +2721,7 @@ extern float FUN_001f9af0_2bffa8(void *) __asm__("FUN_001f9af0");
 extern int FUN_001efa68_2bffa8(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_L00_00205000_2bffa8(int) __asm__("FUN_L00_00205000");
 extern void FUN_L00_002323b8_2bffa8(int, int, float) __asm__("FUN_L00_002323b8");
-extern void FUN_L00_002c5dc8_2bffa8(char *) __asm__("FUN_L00_002c5dc8");
+extern void draw_swingshot_cable(char *) __asm__("FUN_L00_002c5dc8");
 
 void swingshot_update(Moby *m) __asm__("FUN_L00_002c6158");
 void swingshot_update(Moby *m) {
@@ -2787,7 +2789,7 @@ void swingshot_update(Moby *m) {
         }
         break;
     case 2:
-        FUN_001f4600_2bffa8(FUN_L00_002c5dc8_2bffa8, m);
+        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         if (m->anim_flags & 2) {
             if (m->prev_seq != 4) FUN_00212f90_2bffa8(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
@@ -2818,7 +2820,7 @@ void swingshot_update(Moby *m) {
         break;
     case 3:
         FUN_0022da68_2bffa8(1, 0, m);
-        FUN_001f4600_2bffa8(FUN_L00_002c5dc8_2bffa8, m);
+        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         qcopy(&d->hook->pos, &hero.unk964->pos);
         m->state = 4;
         break;
@@ -2835,7 +2837,7 @@ void swingshot_update(Moby *m) {
         if (m->anim_flags & 2) {
             if (m->prev_seq != 4) FUN_00212f90_2bffa8(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
-        FUN_001f4600_2bffa8(FUN_L00_002c5dc8_2bffa8, m);
+        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         d->spin = d->spin + 0.69813168f;
         d->size = d->size * (frame_scale * -0.100000024f + 1.0f);
         if (d->size < 0.168000013f) {
@@ -2865,11 +2867,11 @@ void swingshot_update(Moby *m) {
         }
         d->size = d->size * (frame_scale * -0.100000024f + 1.0f);
         d->spin = d->spin + 0.69813168f;
-        FUN_001f4600_2bffa8(FUN_L00_002c5dc8_2bffa8, m);
+        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         if ((unsigned int)(hero.state.current - 0x25) >= 2) m->state = 6;
         break;
     case 6:
-        FUN_001f4600_2bffa8(FUN_L00_002c5dc8_2bffa8, m);
+        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         hd->speed = frame_time * 80.0f;
         m->state = 7;
         break;
@@ -2879,7 +2881,7 @@ void swingshot_update(Moby *m) {
         if (hd->speed < FUN_001f9b48_2bffa8(&d->hook->pos, &v10)) {
             FUN_001f9bf8_2bffa8(&v0, &v0, hd->speed);
             FUN_001f9a10_2bffa8(&d->hook->pos, &d->hook->pos, &v0);
-            FUN_001f4600_2bffa8(FUN_L00_002c5dc8_2bffa8, m);
+            FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         } else {
             qcopy(&d->hook->pos, &v10);
             if (m->prev_seq != 1) FUN_00212f90_2bffa8(m, 1, 0, FUN_001f96f8_2bffa8(10));
@@ -2889,7 +2891,7 @@ void swingshot_update(Moby *m) {
     case 8:
         break;
     case 9:
-        FUN_001f4600_2bffa8(FUN_L00_002c5dc8_2bffa8, m);
+        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         if (m->anim_flags & 2) {
             if (m->prev_seq != 4) FUN_00212f90_2bffa8(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
@@ -2904,14 +2906,14 @@ void swingshot_update(Moby *m) {
         }
         break;
     case 10:
-        FUN_001f4600_2bffa8(FUN_L00_002c5dc8_2bffa8, m);
+        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         m->state = 11;
         break;
     case 11:
         if (m->anim_flags & 2) {
             if (m->prev_seq != 4) FUN_00212f90_2bffa8(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
-        FUN_001f4600_2bffa8(FUN_L00_002c5dc8_2bffa8, m);
+        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         d->spin = d->spin + 0.69813168f;
         d->size = d->size * (frame_scale * -0.600000024f + 1.0f);
         if (d->size < 0.168000013f) {
@@ -2927,14 +2929,14 @@ void swingshot_update(Moby *m) {
         }
         d->size = d->size * (frame_scale * -0.600000024f + 1.0f);
         d->spin = d->spin + 0.69813168f;
-        FUN_001f4600_2bffa8(FUN_L00_002c5dc8_2bffa8, m);
+        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         if (hero.state.current != 0x2C) m->state = 13;
         break;
     case 13:
         if (m->anim_flags & 2) {
             if (m->prev_seq != 4) FUN_00212f90_2bffa8(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
-        FUN_001f4600_2bffa8(FUN_L00_002c5dc8_2bffa8, m);
+        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         hd->speed = frame_time * 80.0f;
         m->state = 14;
         break;
@@ -2947,7 +2949,7 @@ void swingshot_update(Moby *m) {
         if (hd->speed < FUN_001f9b48_2bffa8(&d->hook->pos, &v10)) {
             FUN_001f9bf8_2bffa8(&v0, &v0, hd->speed);
             FUN_001f9a10_2bffa8(&d->hook->pos, &d->hook->pos, &v0);
-            FUN_001f4600_2bffa8(FUN_L00_002c5dc8_2bffa8, m);
+            FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         } else {
             qcopy(&d->hook->pos, &v10);
             if (m->prev_seq != 1) FUN_00212f90_2bffa8(m, 1, 0, FUN_001f96f8_2bffa8(10));
@@ -3068,7 +3070,7 @@ child_ready:;
         }
         return;
     case 2:
-        FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+        FUN_001f93e0_2c6158(draw_swingshot_cable, m);
         if ((m[0x70] & 2) && m[0x53] != 4) blend_moby_animation(m, 4, 0, scale_game_frames(10));
         FUN_001ff2a8_2c6158(&a, ((u8 *)hero.unk964) + 0x10, (*(u8 **)(vars + 0x14)) + 0x10);
         speed = *(float *)(motion + 4);
@@ -3098,7 +3100,7 @@ child_ready:;
         return;
     case 3:
         FUN_0028dbe8_2c6158(1, 0, m);
-        FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+        FUN_001f93e0_2c6158(draw_swingshot_cable, m);
         qcopy((*(u8 **)(vars + 0x14)) + 0x10, ((u8 *)hero.unk964) + 0x10);
         m[0x20] = 4;
         return;
@@ -3115,7 +3117,7 @@ child_ready:;
                 return;
             }
             if ((m[0x70] & 2) && m[0x53] != 4) blend_moby_animation(m, 4, 0, scale_game_frames(10));
-            FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+            FUN_001f93e0_2c6158(draw_swingshot_cable, m);
             factor = *(float *)(vars + 0x20) * (D_0015ED60_2c6158 * -0.100000024f + 1.0f);
             *(float *)(vars + 0x18) += 0.6981317f;
             *(float *)(vars + 0x20) = factor;
@@ -3152,13 +3154,13 @@ child_ready:;
             }
             *(float *)(vars + 0x18) += 0.6981317f;
             *(float *)(vars + 0x20) *= fade_scale * -0.100000024f + 1.0f;
-            FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+            FUN_001f93e0_2c6158(draw_swingshot_cable, m);
             if ((u32)(hero.state.current - 37) < 2) return;
             m[0x20] = 6;
             return;
         }
     case 6:
-        FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+        FUN_001f93e0_2c6158(draw_swingshot_cable, m);
         *(float *)(motion + 4) = D_0015ED6C_2c6158 * 80.0f;
         m[0x20] = 7;
         return;
@@ -3169,7 +3171,7 @@ child_ready:;
         if (*(float *)(motion + 4) < distance) {
             FUN_001ff500_2c6158(*(float *)(motion + 4), &a, &a);
             FUN_001ff278_2c6158((*(u8 **)(vars + 0x14)) + 0x10, (*(u8 **)(vars + 0x14)) + 0x10, &a);
-            FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+            FUN_001f93e0_2c6158(draw_swingshot_cable, m);
             return;
         }
         qcopy((*(u8 **)(vars + 0x14)) + 0x10, &b);
@@ -3178,7 +3180,7 @@ child_ready:;
         return;
     case 9: {
             float step;
-            FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+            FUN_001f93e0_2c6158(draw_swingshot_cable, m);
             if ((m[0x70] & 2) && m[0x53] != 4) blend_moby_animation(m, 4, 0, scale_game_frames(10));
             FUN_001ff2a8_2c6158(&a, ((u8 *)hero.unk994) + 0x10, (*(u8 **)(vars + 0x14)) + 0x10);
             distance = FUN_001ff3d8_2c6158(&a);
@@ -3194,13 +3196,13 @@ child_ready:;
             return;
         }
     case 10:
-        FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+        FUN_001f93e0_2c6158(draw_swingshot_cable, m);
         m[0x20] = 11;
         return;
     case 11: {
             float factor;
             if ((m[0x70] & 2) && m[0x53] != 4) blend_moby_animation(m, 4, 0, scale_game_frames(10));
-            FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+            FUN_001f93e0_2c6158(draw_swingshot_cable, m);
             factor = *(float *)(vars + 0x20) * (D_0015ED60_2c6158 * -0.6f + 1.0f);
             *(float *)(vars + 0x18) += 0.6981317f;
             *(float *)(vars + 0x20) = factor;
@@ -3219,13 +3221,13 @@ child_ready:;
             }
             *(float *)(vars + 0x18) += 0.6981317f;
             *(float *)(vars + 0x20) *= fade_scale * -0.6f + 1.0f;
-            FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+            FUN_001f93e0_2c6158(draw_swingshot_cable, m);
             if (hero.state.current != 44) m[0x20] = 13;
             return;
         }
     case 13:
         if ((m[0x70] & 2) && m[0x53] != 4) blend_moby_animation(m, 4, 0, scale_game_frames(10));
-        FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+        FUN_001f93e0_2c6158(draw_swingshot_cable, m);
         *(float *)(motion + 4) = D_0015ED6C_2c6158 * 80.0f;
         m[0x20] = 14;
         return;
@@ -3237,7 +3239,7 @@ child_ready:;
         if (*(float *)(motion + 4) < distance) {
             FUN_001ff500_2c6158(*(float *)(motion + 4), &a, &a);
             FUN_001ff278_2c6158((*(u8 **)(vars + 0x14)) + 0x10, (*(u8 **)(vars + 0x14)) + 0x10, &a);
-            FUN_001f93e0_2c6158(FUN_L00_002c5dc8, m);
+            FUN_001f93e0_2c6158(draw_swingshot_cable, m);
         } else {
             qcopy((*(u8 **)(vars + 0x14)) + 0x10, &b);
             if (m[0x53] != 1) blend_moby_animation(m, 1, 0, scale_game_frames(10));
