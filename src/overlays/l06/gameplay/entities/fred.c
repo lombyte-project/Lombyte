@@ -6184,7 +6184,7 @@ extern void FUN_L06_002f53e8_301070(char *) __asm__("FUN_L06_002f53e8");
 extern void FUN_L06_002f5360_301070(char *) __asm__("FUN_L06_002f5360");
 extern float probe_ground_height_301070(void *, int, float) __asm__("FUN_00213508");
 extern int initialize_npc_dialogue_301070(void *, void *) __asm__("FUN_L00_002668a0");
-extern int FUN_L06_002e9ea0_301070(int) __asm__("FUN_L06_002e9ea0");
+extern int check_all_listed_class_33b_states_fe_fd_or_10(int) __asm__("FUN_L06_002e9ea0");
 extern int FUN_001f9770_301070(void *) __asm__("FUN_001f9770");
 extern int update_npc_dialogue_301070(void *, void *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition_301070(float, void *) __asm__("FUN_L01_002783a8");
@@ -6275,7 +6275,7 @@ void fred_update(struct Moby *moby) {
         } else {
             fred_vars->fC = 3.7f;
         }
-        if (FUN_L06_002e9ea0_301070(fred_vars->f170) != 0) {
+        if (check_all_listed_class_33b_states_fe_fd_or_10(fred_vars->f170) != 0) {
             if (FUN_001f9770_301070(&fred_vars->f174) != 0 && update_npc_dialogue_301070(moby, fred_vars) != 0) {
                 moby->state = 2;
                 if (fred_vars->f176 != 0) {

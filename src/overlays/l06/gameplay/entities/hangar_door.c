@@ -609,7 +609,9 @@ int activate_state_15_moby_at_position(void *m_, void *activation_position) {
     return 0;
 }
 /* Returns 0 while any listed class-0x33B moby is in a state other than 0xFE, 0xFD or 0x10; else 1. */
-int FUN_L06_002e9ea0(int index) {
+int check_all_listed_class_33b_states_fe_fd_or_10(int index) __asm__("FUN_L06_002e9ea0");
+
+int check_all_listed_class_33b_states_fe_fd_or_10(int index) {
     unsigned short *moby_index_cursor = (unsigned short *)D_L06_001ABFC0[index];
     char *base;
     char *moby;
@@ -2601,7 +2603,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float_c4(float input) __asm__("func_001F99C0");
 int count_group_e81e0(int i, int st) __asm__("FUN_L01_0026e008");
-int FUN_L06_002e9ea0_c(int index) __asm__("FUN_L06_002e9ea0");
+int check_all_listed_class_33b_states_fe_fd_or_10(int index) __asm__("FUN_L06_002e9ea0");
 int FUN_L06_002fb2a8_c(char *moby) __asm__("FUN_L06_002fb2a8");
 int FUN_L06_002fb668_c(char *moby) __asm__("FUN_L06_002fb668");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
@@ -2650,7 +2652,7 @@ extern void func_L06_002FC4C0_q(void *) __asm__("FUN_L06_002fb090");
 extern int func_L06_002FCA98_q(void *) __asm__("FUN_L06_002fb668");
 extern void clear_moby_list_state_18(int) __asm__("FUN_L06_002f99b0");
 extern void func_L06_002FD0B8_q(void *) __asm__("FUN_L06_002fbc88");
-extern int func_L06_002EB2D0_q(int) __asm__("FUN_L06_002e9ea0");
+extern int check_all_listed_class_33b_states_fe_fd_or_10(int) __asm__("FUN_L06_002e9ea0");
 extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
 extern float func_L00_001FF860_q(float, float) __asm__("FUN_001f9e90");
 extern float func_001FA850_q(float, float) __asm__("FUN_001fa688");
@@ -2805,7 +2807,7 @@ void alien_queen_update(unsigned char *moby)
         func_L06_002FC4C0_q(moby);
     case 6:
         func_L06_002FD0B8_q(moby);
-        if (((unsigned char)moby[0x20] == 4 && func_L06_002EB2D0_q(*(int *)(data + 0xF0)) != 0)
+        if (((unsigned char)moby[0x20] == 4 && check_all_listed_class_33b_states_fe_fd_or_10(*(int *)(data + 0xF0)) != 0)
             || ((unsigned char)moby[0x20] == 6 && count_group_e81e0(*(int *)(data + 0xF4), -1) == 0)) {
             moby[0x20] = 8;
             *(int *)(data + 0x120) = func_001F9850_q(0x4B0);
