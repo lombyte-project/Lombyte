@@ -886,7 +886,9 @@ typedef unsigned long long u64_t;
         (dst) += (u64_t)q_;                                                                        \
     }
 
-void FUN_L02_002da938(void *unused, f32 angle, f32 start_distance, f32 end_distance, s32 color) {
+void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_distance, f32 end_distance, s32 color) __asm__("FUN_L02_002da938");
+
+void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_distance, f32 end_distance, s32 color) {
     u64_t packed_vertices[4];
     s32 vertex_colors[4];
     s32 vertex_uvs[4];
@@ -1548,14 +1550,14 @@ extern int D_L02_00161BC0 __attribute__((sda));
 extern int D_L02_00161BC4 __attribute__((sda));
 extern void draw_tresspasser_puzzle_ring_arc(int, u32, float, float, float, float) __asm__("FUN_L02_002da3d8");
 extern void FUN_L02_002da6c0_c(int, int, int, float, float) __asm__("FUN_L02_002da6c0");
-extern void FUN_L02_002da938_c(void *, f32, f32, f32, s32) __asm__("FUN_L02_002da938");
+extern void draw_tresspasser_puzzle_radial_strip(void *, f32, f32, f32, s32) __asm__("FUN_L02_002da938");
 extern void draw_tresspasser_puzzle_textured_quads(void) __asm__("FUN_L02_002dae88");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 #define get_effect_texture ((u64 (*)(int))get_effect_texture)
 #define draw_tresspasser_puzzle_ring_arc ((void (*)(u64, float, float, float, float, u32))draw_tresspasser_puzzle_ring_arc)
 #define FUN_L02_002da6c0_c ((void (*)(u64, int, int, float, float))FUN_L02_002da6c0_c)
-#define FUN_L02_002da938_c ((void (*)(u64, f32, f32, f32, s32))FUN_L02_002da938_c)
+#define draw_tresspasser_puzzle_radial_strip ((void (*)(u64, f32, f32, f32, s32))draw_tresspasser_puzzle_radial_strip)
 
 void FUN_L02_002d93e8(char *moby) {
     /* Fakematch: the texture sits at retail's stack offset inside this frame. */
@@ -1627,9 +1629,9 @@ void FUN_L02_002d93e8(char *moby) {
                     }
                 }
             }
-            FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)D_L02_00161B50, distance, color);
+            draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)D_L02_00161B50, distance, color);
             if (draw_second) {
-                FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)D_L02_00161B50, D_L02_00161BB4);
+                draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)D_L02_00161B50, D_L02_00161BB4);
             }
         }
     }
@@ -1663,9 +1665,9 @@ void FUN_L02_002d93e8(char *moby) {
                     color = D_L02_00161BB0;
                 }
             }
-            FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)D_L02_00161B44, distance, color);
+            draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)D_L02_00161B44, distance, color);
             if (draw_second) {
-                FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)D_L02_00161B44, D_L02_00161BB4);
+                draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)D_L02_00161B44, D_L02_00161BB4);
             }
         }
     }
@@ -1697,9 +1699,9 @@ void FUN_L02_002d93e8(char *moby) {
                     color = D_L02_00161BB0;
                 }
             }
-            FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)D_L02_00161B38, distance, color);
+            draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)D_L02_00161B38, distance, color);
             if (draw_second) {
-                FUN_L02_002da938_c(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)D_L02_00161B38, D_L02_00161BB4);
+                draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)D_L02_00161B38, D_L02_00161BB4);
             }
         }
     }
