@@ -186,7 +186,9 @@ int D_L02_001619EC = 0xa;
 int D_L02_001619F0 = 0xa;
 int D_L02_001619F4 = 8;
 int D_L02_001619F8 = 8;
-void FUN_L02_002d3dd0(void *moby) {
+void emit_sand_shark_dust_burst(void *moby) __asm__("FUN_L02_002d3dd0");
+
+void emit_sand_shark_dust_burst(void *moby) {
     emit_sand_shark_dust_segment(moby, 0, 1, D_L02_001619F0);
     emit_sand_shark_dust_segment(moby, 2, 3, D_L02_001619EC);
     emit_sand_shark_dust_segment(moby, 4, 5, D_L02_001619F4);
@@ -304,7 +306,7 @@ extern void FUN_L00_00263ac8_e50(void *, int, void *, float) __asm__("FUN_L00_00
 extern void FUN_L00_00269958_e50(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern int FUN_L00_002dc9f0_e50(void *, void *) __asm__("FUN_L00_002dc9f0");
 extern void FUN_L01_0026d930_e50(void *) __asm__("FUN_L01_0026d930");
-extern void FUN_L02_002d3dd0_e50(void *) __asm__("FUN_L02_002d3dd0");
+extern void emit_sand_shark_dust_burst(void *) __asm__("FUN_L02_002d3dd0");
 extern int FUN_L02_002d5658_e50(void *) __asm__("FUN_L02_002d5658");
 extern void FUN_L02_002d57f8_e50(void *, int) __asm__("FUN_L02_002d57f8");
 extern void FUN_L02_002d5a68_e50(void *) __asm__("FUN_L02_002d5a68");
@@ -771,7 +773,7 @@ void sand_shark_update(struct Moby *moby) {
             return;
         }
         if (moby->pos.z < 0.0f) {
-            FUN_L02_002d3dd0_e50(moby);
+            emit_sand_shark_dust_burst(moby);
             remove_moby_e50(moby);
             return;
         }
@@ -853,7 +855,7 @@ void sand_shark_update(struct Moby *moby) {
             FUN_L00_00257470_e50(moby, 0, -1);
             vars->unk27C = FUN_L02_002d5658_e50(moby);
             if (vars->unk27C != 0) {
-                FUN_L02_002d3dd0_e50(moby);
+                emit_sand_shark_dust_burst(moby);
                 moby->state = 0x1A;
                 moby->anim_speed = 0.0f;
                 qcopy(&moby->pos, &vars->home);
@@ -861,12 +863,12 @@ void sand_shark_update(struct Moby *moby) {
                 moby->flags |= 0x41;
                 moby->pos.z -= 10.0f;
             } else {
-                FUN_L02_002d3dd0_e50(moby);
+                emit_sand_shark_dust_burst(moby);
                 remove_moby_e50(moby);
                 return;
             }
         } else if (moby->pos.z < 0.0f) {
-            FUN_L02_002d3dd0_e50(moby);
+            emit_sand_shark_dust_burst(moby);
             remove_moby_e50(moby);
             return;
         }
@@ -878,14 +880,14 @@ void sand_shark_update(struct Moby *moby) {
         } else {
             vars->unk27C = FUN_L02_002d5658_e50(moby);
             if (vars->unk27C != 0) {
-                FUN_L02_002d3dd0_e50(moby);
+                emit_sand_shark_dust_burst(moby);
                 moby->alpha = 0x80;
                 moby->state = 0x1A;
                 qcopy(&moby->pos, &vars->home);
                 moby->collision = 0;
                 moby->pos.z -= 10.0f;
             } else {
-                FUN_L02_002d3dd0_e50(moby);
+                emit_sand_shark_dust_burst(moby);
                 remove_moby_e50(moby);
                 return;
             }
@@ -1299,7 +1301,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7778), where it is exact; names translated to the US level program. */
 
-extern void FUN_L02_002d3dd0(void *);
+extern void emit_sand_shark_dust_burst(void *) __asm__("FUN_L02_002d3dd0");
 
 void prepare_sand_shark_for_relaunch_or_remove(struct Moby *moby) __asm__("FUN_L02_002d6340");
 
@@ -1314,7 +1316,7 @@ void prepare_sand_shark_for_relaunch_or_remove(struct Moby *moby) {
         moby->collision = 0;
         moby->pos.z -= 10.0f;
     } else {
-        FUN_L02_002d3dd0(moby);
+        emit_sand_shark_dust_burst(moby);
         mark_moby_for_removal(moby);
     }
 }
