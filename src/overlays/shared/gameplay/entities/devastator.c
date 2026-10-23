@@ -1308,7 +1308,9 @@ extern void FUN_001f9a10_c(V4 *, V4 *, V4 *) __asm__("FUN_001f9a10");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern u8 *FUN_L00_0026d000(V4 *, f32, f32, f32, f32, s32, V4 *, u32);
 
-void FUN_L00_002b3c50(X *x) {
+void emit_beam_trail_particles(X *x) __asm__("FUN_L00_002b3c50");
+
+void emit_beam_trail_particles(X *x) {
     V4 effect_input_and_position_offset;
     V4 emission_position;
     V4 previous_position_delta;
