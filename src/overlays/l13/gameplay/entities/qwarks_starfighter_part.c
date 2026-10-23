@@ -490,7 +490,7 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 extern void emit_gated_moby_joint_effects(void *, void *) __asm__("FUN_L13_002e8920");
 extern void splash_L13(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void update_moby_joint_attachments(void *, void *) __asm__("FUN_L13_002e8d28");
-extern void FUN_L13_002e9018(void *, void *, float, float);
+extern void update_moby_spring_steering_and_banking(void *, void *, float, float) __asm__("FUN_L13_002e9018");
 extern void FUN_L13_002e9680(void *, void *, int);
 extern void process_moby_attachment_damage(void *, void *) __asm__("FUN_L13_002e9a48");
 extern void draw_starfighter_tractor_beam();
@@ -759,7 +759,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
             float yaw, pitch, distance;
             yaw = fast_arc_tan(*(float *)(hero + 0x80) - moby->pos[0], *(float *)(hero + 0x84) - moby->pos[1]);
             pitch = -fast_arc_tan(vector_distance_xy(moby->pos, hero + 0x80), *(float *)(hero + 0x88) - moby->pos[2]);
-            FUN_L13_002e9018(moby, data, yaw, pitch);
+            update_moby_spring_steering_and_banking(moby, data, yaw, pitch);
             if (*(Moby388 **)(hero + 0x15F0) != 0 && (*(Moby388 **)(hero + 0x15F0))->cls_id == 0x45) {
                 (*(Moby388 **)(hero + 0x15F0))->bBC = 1;
             }

@@ -2831,7 +2831,9 @@ void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_da
 
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L13_002e9018(struct Moby *moby, char *moby_data, float target_yaw, float target_pitch) {
+void update_moby_spring_steering_and_banking(struct Moby *moby, char *moby_data, float target_yaw, float target_pitch) __asm__("FUN_L13_002e9018");
+
+void update_moby_spring_steering_and_banking(struct Moby *moby, char *moby_data, float target_yaw, float target_pitch) {
     float absolute_roll;
     FUN_L00_00258278(moby, (float *)(moby_data + 0xA8), target_yaw, frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f,
                      frame_time * 6.2831855f);
