@@ -2503,7 +2503,9 @@ extern float dist_2ce1f0(void *, void *) __asm__("FUN_001f9b80");
 
 /* Spawns moby 0x1DF at pos, aims it at the player and puts it in the first
  * free of six slots. */
-char *FUN_L00_002ce1f0(int previous_spawn_result, void *pos) {
+char *spawn_hero_drone(int previous_spawn_result, void *pos) __asm__("FUN_L00_002ce1f0");
+
+char *spawn_hero_drone(int previous_spawn_result, void *pos) {
     char *spawned_moby = spawn_2ce1f0(0x1DF);
     char *moby_vars;
     struct Hero *player;
