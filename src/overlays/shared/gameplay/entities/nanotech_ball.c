@@ -476,7 +476,7 @@ int FUN_L00_002d8980_c(char *a) __asm__("FUN_L00_002d8980");
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 s32 FUN_L00_002d8510_c(M_2d8510 *m) __asm__("FUN_L00_002d8510");
 s32 scale_game_frames_alt_c(s32) __asm__("FUN_001f96f8");
-unsigned char *FUN_L00_00273708(void *a, int b, int c);
+unsigned char *spawn_mode_controlled_alpha_fade_particle(void *a, int b, int c) __asm__("FUN_L00_00273708");
 void FUN_L00_002d81b8_c(unsigned char *m) __asm__("FUN_L00_002d81b8");
 void FUN_L00_002d8418_c(char *p) __asm__("FUN_L00_002d8418");
 void FUN_L00_002d8850_c(unsigned char *p, float *out, int i) __asm__("FUN_L00_002d8850");

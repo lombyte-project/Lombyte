@@ -1055,7 +1055,9 @@ void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 extern unsigned char *D_L00_001B2178 __attribute__((section(".data")));
-unsigned char *FUN_L00_00273708(void *position, int alpha_fade_divisor, int particle_mode) {
+unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position, int alpha_fade_divisor, int particle_mode) __asm__("FUN_L00_00273708");
+
+unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position, int alpha_fade_divisor, int particle_mode) {
     unsigned char *particle = p27fe00_alloc(0x3E);
     if (particle != 0) {
         unsigned char *particle_data = particle + 0x20;
