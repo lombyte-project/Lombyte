@@ -2451,7 +2451,9 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int D_L00_00173E40[];
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
-int FUN_L00_002beab0(char *moby, int b, Vx *position_override) {
+int probe_moby_raised_sphere_collision(char *moby, int b, Vx *position_override) __asm__("FUN_L00_002beab0");
+
+int probe_moby_raised_sphere_collision(char *moby, int b, Vx *position_override) {
     Vx probe_position;
     float probe_scale;
     float vertical_offset;

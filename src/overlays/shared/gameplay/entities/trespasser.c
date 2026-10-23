@@ -768,7 +768,7 @@ extern void save_state_fields_to_hero(char *) __asm__("FUN_L00_002beb90");
 extern void restore_state_fields_from_hero(char *) __asm__("FUN_L00_002bebc8");
 extern void save_state_vector_and_fields_to_hero(char *) __asm__("FUN_L00_002bec00");
 extern void restore_saved_state_fields_from_hero(char *) __asm__("FUN_L00_002bec48");
-extern int FUN_L00_002beab0(char *,int,void *);
+extern int probe_moby_raised_sphere_collision(char *,int,void *) __asm__("FUN_L00_002beab0");
 extern void FUN_L00_00260400(void *,int,void *,void *,void *,void *);
 extern int move_moby_with_collision_integer_radius(void *,void *,int,int,float,float) __asm__("FUN_L00_00258ad0");
 extern void FUN_L00_00258278(void *,float *,float,float,float,float);
@@ -866,7 +866,7 @@ void doom_bot_update(struct Moby *moby) {
         if (scale_game_frames(3600)<data->age) moby->state=11;
         fast_dec_timer(&data->timer);
         qcopy(&data->previous_position,&moby->pos);
-        if (FUN_L00_002beab0((char*)moby,5,0)) {
+        if (probe_moby_raised_sphere_collision((char*)moby,5,0)) {
             if (coll_hit.moby && coll_hit.unk1C<0 && (((struct Moby *)coll_hit.moby)->flags&0x1000) &&
                 ((struct Moby *)coll_hit.moby)->pclass && ((struct Moby *)coll_hit.moby)->pclass->type==5) {
                 moby->state=11;
@@ -1012,7 +1012,7 @@ void doom_bot_update(struct Moby *moby) {
             move_flags=FUN_L00_00259028(moby,&((DoomBotParams*)&hero)->damage,data,&data->velocity);
             if (absolute_float(moby->pos.z-z)>1.0f) {
                 moby->pos.z=z;
-                if (FUN_L00_002beab0((char*)moby,5,0)) {
+                if (probe_moby_raised_sphere_collision((char*)moby,5,0)) {
                     qcopy(&moby->pos,coll_hit.pad30);
                     if (absolute_float(moby->pos.z-z)>1.0f) moby->pos.z=z;
                 }
