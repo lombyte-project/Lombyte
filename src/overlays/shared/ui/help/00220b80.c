@@ -371,7 +371,7 @@ extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
 extern s32 FUN_L00_0020fe30(void);
 extern s32 is_wrench_moby(struct Moby *) __asm__("FUN_L00_00211360");
-extern s32 FUN_L00_00216de8(s32, s32);
+extern s32 allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern void select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
@@ -532,7 +532,7 @@ s32 process_hero_item_action_input(void)
         if (hero.vehicle_mode == 0 && FUN_L00_0020fe30() != 0) {
             if (pad_pressed_within(buttons, scale_game_frames(7), NULL) != 0 && D_00141660 == 0x1F &&
                 hero.items[0].moby->oclass == 0x1E3 && hero.unk22DE == 0) {
-                FUN_L00_00216de8(0x18, 0);
+                allocate_hero_voice_for_entry(0x18, 0);
                 hero.unk22DE = 0x12;
                 hero.unk22DC = 1;
             }

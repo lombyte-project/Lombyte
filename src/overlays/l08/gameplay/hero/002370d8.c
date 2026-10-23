@@ -110,7 +110,7 @@ extern void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8");
-extern void FUN_L00_00216de8(int, int);
+extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void update_hero_animation_for_movement_speed(void) __asm__("FUN_L00_00228c18");
 extern void remove_hero_cached_moby_and_clear_slot_three_moby_flags(void) __asm__("FUN_L00_00228fa8");
 extern void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
@@ -1981,7 +1981,7 @@ void update_hero_state_transitions(void) {
                             break;
                         }
                         if (hero.unk2F8 == 1) {
-                            FUN_L00_00216de8(0x11, 0);
+                            allocate_hero_voice_for_entry(0x11, 0);
                             emit_hero_surface_effect_burst(3, 0x18, 1);
                         }
                         if (hero.unk418 != 0) {
@@ -2210,7 +2210,7 @@ void update_hero_state_transitions(void) {
                     }
                     if (pad_pressed_within(0x80, scale_game_frames(7), 0)) {
                         if (hero.unk22DE == 0) {
-                            FUN_L00_00216de8(0x19, 0);
+                            allocate_hero_voice_for_entry(0x19, 0);
                             hero.unk22DE = 0x12;
                             hero.unk22DC = 1;
                         }
@@ -2275,7 +2275,7 @@ void update_hero_state_transitions(void) {
                     }
                     if (pad_pressed_within(0x80, scale_game_frames(7), 0)) {
                         if (hero.unk22DE == 0) {
-                            FUN_L00_00216de8(0x19, 0);
+                            allocate_hero_voice_for_entry(0x19, 0);
                             hero.unk22DE = 0x12;
                             hero.unk22DC = 1;
                         }

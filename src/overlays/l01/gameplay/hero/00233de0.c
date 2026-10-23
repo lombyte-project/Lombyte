@@ -432,7 +432,7 @@ extern int test_hero_animation_frame_window(float) __asm__("FUN_L00_00211870");
 extern int FUN_L00_00227d40_cf(float, void *, void *) __asm__("FUN_L00_001ff600");
 extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int FUN_L00_00233660_cf(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern int FUN_L00_00233708_cf(int, int) __asm__("FUN_L00_00216de8");
+extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int FUN_L00_00257b90_cf(int) __asm__("FUN_00213260");
 extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
 extern int FUN_L01_00226f10(int);
@@ -1925,7 +1925,7 @@ void update_hero_motion_for_current_state(void) {
     case 0x69:
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
             if (test_hero_animation_frame_window(10.0f)) {
-                FUN_L00_00233708_cf(4, 0);
+                allocate_hero_voice_for_entry(4, 0);
             }
         }
         if (hero.unk4A8 != 0 && hero.unk12E2 != 0) {

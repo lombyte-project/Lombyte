@@ -95,7 +95,7 @@ extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern int allocate_voice_for_target_entry(void *, s32, void *) __asm__("FUN_0022da68");
-extern void FUN_L00_00216de8(s32, s32);
+extern void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
@@ -317,7 +317,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
             if (*(u8 *)(g + 0x20a4) == 3) {
                 if (*(s32 *)(g + 0x20b8) != 0 && *(s32 *)(g + 0x20b8) != 0x1f) {
                     if (*(s16 *)(g + 0x22de) == 0) {
-                        FUN_L00_00216de8(0x19, 0);
+                        allocate_hero_voice_for_entry(0x19, 0);
                         *(s16 *)(g + 0x22de) = 0x12;
                         *(s16 *)(g + 0x22dc) = 1;
                     }
@@ -325,7 +325,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
                     char *g = (char *)&hero;
                     *(s32 *)(g + 0x20b8) = 0;
                     if (*(u8 *)(g + 0x12e7) && *(s32 *)(g + 0x300) && *(u8 *)(D_0013F350_lui - 0x1e74) && *(s16 *)(g + 0x22de) == 0) {
-                        FUN_L00_00216de8(0x19, 0);
+                        allocate_hero_voice_for_entry(0x19, 0);
                         *(s16 *)(g + 0x22de) = 0x12;
                         *(s16 *)(g + 0x22dc) = 1;
                     }

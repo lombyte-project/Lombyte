@@ -665,7 +665,7 @@ extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void blend_moby_animation_2062b0(void *, s32, s32, s32) __asm__("FUN_L00_00257880");
 extern int FUN_L00_0028dbe8(void *, s32, void *);
-extern void FUN_L00_00216de8(s32, s32);
+extern void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 extern s32 FUN_L00_00200298(f32, s32, s32);
 extern f32 FUN_L00_001ff800(f32);
 extern f32 FUN_L00_002000e8(f32, f32);
@@ -898,7 +898,7 @@ void update_hero_in_vehicle_mode(void) {
             if (*(u8 *)(g + 0x20a4) == 3) {
                 if (*(s32 *)(g + 0x20b8) != 0 && *(s32 *)(g + 0x20b8) != 0x1f) {
                     if (*(s16 *)(g + 0x22de) == 0) {
-                        FUN_L00_00216de8(0x19, 0);
+                        allocate_hero_voice_for_entry(0x19, 0);
                         *(s16 *)(g + 0x22de) = 0x12;
                         *(s16 *)(g + 0x22dc) = 1;
                     }
@@ -906,7 +906,7 @@ void update_hero_in_vehicle_mode(void) {
                     char *g = (char *)&hero;
                     *(s32 *)(g + 0x20b8) = 0;
                     if (*(u8 *)(g + 0x12e7) && *(s32 *)(g + 0x300) && *(u8 *)(D_0013F350_002062b0 - 0x1e74) && *(s16 *)(g + 0x22de) == 0) {
-                        FUN_L00_00216de8(0x19, 0);
+                        allocate_hero_voice_for_entry(0x19, 0);
                         *(s16 *)(g + 0x22de) = 0x12;
                         *(s16 *)(g + 0x22dc) = 1;
                     }

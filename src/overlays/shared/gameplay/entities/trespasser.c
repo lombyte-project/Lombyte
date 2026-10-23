@@ -1232,7 +1232,7 @@ extern f32 vector_length_xy_2c1ad0(void *) __asm__("FUN_001f9b20");
 extern f32 fast_subtract_rotations_2c1ad0(f32, f32) __asm__("FUN_001fa5c8");
 extern void build_spherical_offset_2c1ad0(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern int hero_set_state_2c1ad0(int, int) __asm__("FUN_L00_002223f8");
-extern int FUN_L00_00216de8_2c1ad0(int, int) __asm__("FUN_L00_00216de8");
+extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int FUN_L00_00233db8_2c1ad0(int, int) __asm__("FUN_L00_00233db8");
 extern int FUN_L00_00233e98_2c1ad0(int) __asm__("FUN_L00_00233e98");
 #include "rnc/input/pad_state.h"
@@ -1315,7 +1315,7 @@ void mine_glove_update(struct Moby *moby) {
             ((D_0013CAE4 & hero.items[0].button_mask) &&
              hero.state.current == 0x1E && FUN_L00_00233e98_2c1ad0(-1)) ||
             (hero.state.current == 0x23 && hero.state_timer == scale_game_frames(0x10))) {
-            FUN_L00_00216de8_2c1ad0(0x1A, 0);
+            allocate_hero_voice_for_entry(0x1A, 0);
             FUN_L00_00233db8_2c1ad0(-1, 1);
             moby->state = 3;
         }
@@ -1571,7 +1571,7 @@ extern f32 vector_length_xy_2c1ad0(void *) __asm__("FUN_001f9b20");
 extern f32 fast_subtract_rotations_2c1ad0(f32, f32) __asm__("FUN_001fa5c8");
 extern void build_spherical_offset_2c1ad0(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern int hero_set_state_2c1ad0(int, int) __asm__("FUN_L00_002223f8");
-extern int FUN_L00_00216de8_2c1ad0(int, int) __asm__("FUN_L00_00216de8");
+extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int FUN_L00_00233db8_2c1ad0(int, int) __asm__("FUN_L00_00233db8");
 extern int FUN_L00_00233e98_2c1ad0(int) __asm__("FUN_L00_00233e98");
 /* Updates the grip, chooses a throw target, and handles the held moby states. */
@@ -1624,7 +1624,7 @@ void bomb_glove_update(struct Moby *moby) {
             ((D_0013CAE4 & hero.items[0].button_mask) &&
              hero.state.current == 0x1E && FUN_L00_00233e98_2c1ad0(-1)) ||
             (hero.state.current == 0x23 && hero.state_timer == scale_game_frames(0x10))) {
-            FUN_L00_00216de8_2c1ad0(0x1A, 0);
+            allocate_hero_voice_for_entry(0x1A, 0);
             FUN_L00_00233db8_2c1ad0(-1, 1);
             moby->state = 3;
         }
@@ -3398,7 +3398,7 @@ extern s32 D_0015EEA4;
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern int FUN_L00_00216de8(int, int);
+extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int use_ammo(int, int) __asm__("FUN_L00_00233db8");
 extern int get_ammo(int) __asm__("FUN_L00_00233e98");
 extern void compute_glove_of_doom_throw_velocity(struct Moby *, CarrierVars *, OvlVec4 *) __asm__("FUN_L00_002c7548");
@@ -3445,7 +3445,7 @@ void glove_of_doom_update(struct Moby *moby) {
         if ((hero.unk20A8 && hero.unk1BC == scale_game_frames(0x11)) ||
             ((D_0013CAE4 & hero.items[0].button_mask) && hero.state.current == 0x1E && get_ammo(-1)) ||
             (hero.state.current == 0x23 && hero.state_timer == scale_game_frames(0x10))) {
-            FUN_L00_00216de8(0x1A, 0);
+            allocate_hero_voice_for_entry(0x1A, 0);
             use_ammo(-1, 1);
             moby->state = 3;
         }

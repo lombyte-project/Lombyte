@@ -121,7 +121,7 @@ extern void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8");
-extern void FUN_L00_00216de8(int, int);
+extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void update_hero_animation_for_movement_speed(void) __asm__("FUN_L00_00228c18");
 extern void remove_hero_cached_moby_and_clear_slot_three_moby_flags(void) __asm__("FUN_L00_00228fa8");
@@ -1617,7 +1617,7 @@ void hero_update_transitions(void) {
                 case 116:
                     if (((unsigned char *)hero.moby)[0x53] == 0x73) {
                         if (test_hero_animation_frame_window(11.0f)) {
-                            FUN_L00_00216de8(0xD, 0);
+                            allocate_hero_voice_for_entry(0xD, 0);
                             FUN_L00_002a7e20(hero.unk5E0.f, 4);
                         }
                         if (hero.unkA98 & 2) {
@@ -2140,7 +2140,7 @@ void hero_update_transitions(void) {
                             break;
                         }
                         if (hero.unk2F8 == 1) {
-                            FUN_L00_00216de8(0x11, 0);
+                            allocate_hero_voice_for_entry(0x11, 0);
                             emit_hero_surface_effect_burst(3, 0x18, 1);
                         }
                         if (hero.unk418 != 0) {
@@ -3004,7 +3004,7 @@ void hero_update_transitions(void) {
                     }
                     if (pad_pressed_within(0x80, scale_game_frames(7), 0)) {
                         if (hero.unk22DE == 0) {
-                            FUN_L00_00216de8(0x19, 0);
+                            allocate_hero_voice_for_entry(0x19, 0);
                             hero.unk22DE = 0x12;
                             hero.unk22DC = 1;
                         }
@@ -3069,7 +3069,7 @@ void hero_update_transitions(void) {
                     }
                     if (pad_pressed_within(0x80, scale_game_frames(7), 0)) {
                         if (hero.unk22DE == 0) {
-                            FUN_L00_00216de8(0x19, 0);
+                            allocate_hero_voice_for_entry(0x19, 0);
                             hero.unk22DE = 0x12;
                             hero.unk22DC = 1;
                         }

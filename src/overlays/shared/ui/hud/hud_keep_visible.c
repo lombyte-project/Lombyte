@@ -421,7 +421,7 @@ extern float D_L00_0015F768 __attribute__((sda));
 extern float D_L00_0015F76C __attribute__((sda));
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
 extern float scale_game_seconds(float) __asm__("FUN_001f96b0");
-extern void FUN_L00_00216de8(int, int);
+extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_rotated_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023bac0");
 extern void FUN_L00_001ff348(void *, void *, void *);
@@ -477,7 +477,7 @@ int draw_hud_stars(HudElem *element) {
         current = 0;
     }
     if (!previous && current == 1) {
-        FUN_L00_00216de8(0xB, 0);
+        allocate_hero_voice_for_entry(0xB, 0);
     }
     star_width = 0;
     image = get_icon_frame(*(int *)element, current);

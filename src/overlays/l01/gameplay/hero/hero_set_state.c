@@ -39,7 +39,7 @@ extern float vector_length_xy(void *);
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 extern int FUN_L00_0020d568(void);
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
-extern int FUN_L00_00216de8(int, int);
+extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -229,7 +229,7 @@ int hero_set_state(int a, int b) {
         p->unk20A7 = 1;
         *(int *)&p->unk8FC = 0;
         if (p->state.prev_control_mode == 0x12) {
-            FUN_L00_00216de8(3, 0);
+            allocate_hero_voice_for_entry(3, 0);
             p->state.step = 1;
         } else {
             p->unk8F4 = scale_game_frames(0x2D);
@@ -253,7 +253,7 @@ int hero_set_state(int a, int b) {
         p->unk20A7 = 1;
         p->unk8F4 = scale_game_frames(0x3C);
         if (p->state.prev_control_mode == 0x12) {
-            FUN_L00_00216de8(3, 0);
+            allocate_hero_voice_for_entry(3, 0);
             p->state.step = 1;
         }
         p->unk8E0 = 0;
@@ -638,7 +638,7 @@ int hero_set_state(int a, int b) {
             qcopy(&q->motion.unk150, &q->motion.unk110);
             FUN_L00_0025f730(&q->motion.unk150, frame_time * 7.0f);
             if (frame_time * 3.5f < q->motion.unk168)
-                FUN_L00_00216de8(0xC, 0);
+                allocate_hero_voice_for_entry(0xC, 0);
             if (b) {
                 if (*(unsigned char *)(((char *)q->moby) + 0x52) == FUN_L01_00226f10(0)) {
                     set_hero_animation(0xD, 2, (float)scale_game_frames(9));
@@ -728,7 +728,7 @@ int hero_set_state(int a, int b) {
         p->unk944 = frame_time_sq * 7.0f;
         if (p->state.current == 0x77) {
             if (p->vehicle_mode == 0) {
-                p->health.unk22B2 = FUN_L00_00216de8(0x17, 0x20);
+                p->health.unk22B2 = allocate_hero_voice_for_entry(0x17, 0x20);
             }
             p->unk950 =
                 randf_sym(frame_time * 3.1415927f, frame_time * 4.3633232f);
@@ -1612,7 +1612,7 @@ extern unsigned int FUN_L00_00266d60(unsigned int, int, int *);
 extern int FUN_L00_0020d498(int);
 extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
 extern int FUN_L00_0020fe30(void);
-extern int FUN_L00_00216de8(int, int);
+extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern int FUN_L00_00233e98(int);
 extern int voice_is_playing(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
@@ -1707,7 +1707,7 @@ int handle_hero_gadget_button(void) {
             FUN_L00_00266d60(buttons, scale_game_frames(7), 0) != 0 &&
             D_00141660 == 0x1f && hero.items[0].moby->oclass == 0x1e3 &&
             hero.unk22DE == 0) {
-            FUN_L00_00216de8(0x18, 0);
+            allocate_hero_voice_for_entry(0x18, 0);
             hero.unk22DE = 0x12;
             hero.unk22DC = 1;
         }

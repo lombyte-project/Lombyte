@@ -75,7 +75,7 @@ extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00
 extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
 extern void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b60");
 extern void hero_update(void) __asm__("FUN_L00_00211670");
-extern void FUN_L00_00216de8(int, int);
+extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_002484e0(void *);
@@ -157,7 +157,7 @@ void FUN_L01_00228000(void) {
             int pending = hero.pending_item[0];
             if (pending != 0 && pending != 0x1F) {
                 if (hero.unk22DE == 0) {
-                    FUN_L00_00216de8(0x19, 0);
+                    allocate_hero_voice_for_entry(0x19, 0);
                     hero.unk22DE = 0x12;
                     hero.unk22DC = 1;
                 }
@@ -165,7 +165,7 @@ void FUN_L01_00228000(void) {
                 hero.pending_item[0] = 0;
                 if (hero.unk12E7 != 0 && hero.grounded_frames != 0 && D_0013D4DC[0] != 0 &&
                     hero.unk22DE == 0) {
-                    FUN_L00_00216de8(0x19, 0);
+                    allocate_hero_voice_for_entry(0x19, 0);
                     hero.unk22DE = 0x12;
                     hero.unk22DC = 1;
                 }

@@ -173,7 +173,7 @@ f32 FUN_001f9dc8_210ce8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_210ce8(f32) __asm__("FUN_001f9de0");
 void FUN_001f9a10_210ce8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
-void FUN_L00_00216de8_210ce8(s32, s32) __asm__("FUN_L00_00216de8");
+void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 void FUN_001f99f8_210ce8(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
@@ -282,7 +282,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
                 mob = ((u8 *)hero.unk2280);
                 if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B ||
                                  *(s16 *)(mob + 0xA6) == 0x29D)) {
-                    FUN_L00_00216de8_210ce8(0x1C, 0);
+                    allocate_hero_voice_for_entry(0x1C, 0);
                 }
             }
             hero_set_state(0x76, 1);

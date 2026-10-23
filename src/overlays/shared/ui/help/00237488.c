@@ -85,7 +85,7 @@ extern ItemDef D_L05_00179F20[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_0020d568();
-extern int FUN_L00_00216de8(int, int);
+extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
@@ -301,7 +301,7 @@ void apply_hero_item_slot_selection(int i) {
             if (FUN_L00_0020fe30()) {
                 int v;
                 if (*(short *)((char *)g + 0x22DE) == 0) {
-                    FUN_L00_00216de8(0x18, 0);
+                    allocate_hero_voice_for_entry(0x18, 0);
                     *(short *)((char *)g + 0x22DE) = 0x12;
                     *(short *)((char *)g + 0x22DC) = 1;
                 }
@@ -499,7 +499,7 @@ void update_hero_movement_and_collision_probes(void) {
 extern float D_L05_00174268 __attribute__((section(".data")));
 extern int frame_number __asm__("D_L05_0015F5CC");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
-extern int FUN_L00_00216de8_c(int a, int b) __asm__("FUN_L00_00216de8");
+extern int allocate_hero_voice_for_entry(int a, int b) __asm__("FUN_L00_00216de8");
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void hero_get_collision_ray_endpoints(void *, void *, int, float, float) __asm__("FUN_L00_002126b8");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
@@ -588,7 +588,7 @@ int try_apply_hero_water_and_ground_transitions(void) {
     }
     if (water_state_requested != 0) {
         hero_set_state(0x37, 1);
-        FUN_L00_00216de8_c(3, 0);
+        allocate_hero_voice_for_entry(3, 0);
     }
     return water_state_requested;
 }
@@ -846,7 +846,7 @@ int process_hero_primary_item_input(void) {
         if ((*(Hero *)((char *)&hero)).unk22DE != 0) {
             break;
         }
-        FUN_L00_00216de8(0x18, 0);
+        allocate_hero_voice_for_entry(0x18, 0);
         (*(Hero *)((char *)&hero)).unk22DE = 0x12;
         (*(Hero *)((char *)&hero)).unk22DC = 1;
         break;

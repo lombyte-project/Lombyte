@@ -1162,7 +1162,7 @@ extern char D_0013E533[];
 extern unsigned char D_0014161B;
 extern int D_0015ED84;
 extern int D_0015EEA4;
-extern int FUN_L00_00216de8(int, int);
+extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int FUN_L00_00233db8(int, int);
 extern int FUN_L00_00233e98(int);
 extern int spawn_decoy(void *, void *, void *) __asm__("FUN_L00_002c35c0");
@@ -1250,7 +1250,7 @@ target_valid:
     }
     goto L3D34;
 L3D10:
-    FUN_L00_00216de8(0x1A, 0);
+    allocate_hero_voice_for_entry(0x1A, 0);
     FUN_L00_00233db8(-1, 1);
     moby[0x20] = 3;
 L3D34:

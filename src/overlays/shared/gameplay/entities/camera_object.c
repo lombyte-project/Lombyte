@@ -1856,7 +1856,7 @@ extern int FUN_001efa68(void*,void*,int,int,int);
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int test_hero_animation_frame_window(float) __asm__("FUN_L00_00211870");
-extern int FUN_L00_00216de8(int,int);
+extern int allocate_hero_voice_for_entry(int,int) __asm__("FUN_L00_00216de8");
 extern int FUN_L00_002223f8(int,int);
 extern int sweep_hit_segment(void*,void*,void*,void*,void*,void*,int) __asm__("FUN_L00_00259d08");
 extern int FUN_L00_0025e368(char*);
@@ -2116,7 +2116,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             }
             if (arrived) {
                 int sound;
-                FUN_L00_00216de8(5,0);
+                allocate_hero_voice_for_entry(5,0);
                 sound=wrench_hero()->thrown_sound;
                 if (sound!=-1) { unsigned char *audio=voice_slot(sound); if (*(WrenchMoby**)(audio+0x88)==wrench_hero()->moby && audio[0x74]) release_voice_slot(sound); }
                 wrench_hero()->thrown_sound=-1; FUN_L00_00262840((char*)wrench_hero()+0x17B0); wrench_hero()->thrown=0; wrench_moby->state=0;

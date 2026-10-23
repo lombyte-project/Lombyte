@@ -809,8 +809,8 @@ extern char D_0013E533[];
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
 /* In mode 3 allocates a voice for the object at D_0013F350+0xA88, else for the one at +0x2080. */
-int FUN_L00_00216de8(int a, int b);
-int FUN_L00_00216de8(int entry_index, int voice_allocation_flags) {
+int allocate_hero_voice_for_entry(int a, int b) __asm__("FUN_L00_00216de8");
+int allocate_hero_voice_for_entry(int entry_index, int voice_allocation_flags) {
     char *hero_base = D_0013E533 + 0xE1D;
     int voice_target;
     if (*(unsigned char *)(hero_base + 0x20A4) == 3) {
@@ -875,7 +875,7 @@ void FUN_L00_00216ec0_00216ec0(s32 voice_entry_index, s32 voice_delay_timer, s32
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217698), where it is exact; names translated to the US level program. */
 
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int FUN_L00_00216de8();
+extern int allocate_hero_voice_for_entry();
 
 /* For each of eight timers that fast_dec_timer reports as 2, clears a field and calls 00216de8. */
 void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
@@ -888,7 +888,7 @@ void update_hero_delayed_voice_requests(void) {
     for (i = 0; i < 8; i++) {
         if (fast_dec_timer_s16(slot_timer_base + i * 8) == 2) {
             slot_voice_argument_base[i * 4 - 3] = 0;
-            FUN_L00_00216de8(slot_voice_argument_base[i * 4 - 2], slot_voice_argument_base[i * 4]);
+            allocate_hero_voice_for_entry(slot_voice_argument_base[i * 4 - 2], slot_voice_argument_base[i * 4]);
         }
     }
 }

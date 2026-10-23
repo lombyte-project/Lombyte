@@ -361,7 +361,7 @@ struct PlayerSpeedTuning {
     f32 x18;
 };
 extern struct PlayerSpeedTuning D_L11_0017C7B8;
-extern s32 FUN_L00_00216de8(s32, s32);
+extern s32 allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 extern void FUN_L00_00233708(void *, void *, f32);
 extern void FUN_L00_00233810(void *, void *, f32);
 extern s32 collision_line(void *, void *, s32, struct MobyView *, s32) __asm__("FUN_001efa68");
@@ -1871,7 +1871,7 @@ void update_hero_motion_by_state(void) {
         s32 position_capture_frame;
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
             if (test_hero_animation_frame_window(10.0f) != 0) {
-                FUN_L00_00216de8(4, 0);
+                allocate_hero_voice_for_entry(4, 0);
             }
         }
         if (hero.unk4A8 != 0 && hero.unk12E2 != 0) {
