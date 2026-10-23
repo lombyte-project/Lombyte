@@ -1404,7 +1404,9 @@ void tresspasser_update(struct Moby *moby) {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-void FUN_L02_002ea7d0(char *moby) {
+void initialize_collectible_sprite_state(char *moby) __asm__("FUN_L02_002ea7d0");
+
+void initialize_collectible_sprite_state(char *moby) {
     float *moby_data = *(float **)(moby + 0x78);
     int *sprite_timers;
     int i;

@@ -228,7 +228,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D388_bd78[] __asm__("D_0013D388");
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void FUN_L02_002ea7d0(char *);
+extern void initialize_collectible_sprite_state(char *) __asm__("FUN_L02_002ea7d0");
 extern void FUN_L02_002ea8b0(char *);
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
@@ -250,7 +250,7 @@ void codebot_update(struct Moby *moby) {
             moby->pclass->scale * D_L15_001621A0;
         switch (moby->state) {
         case CODEBOT_INITIALIZE:
-            FUN_L02_002ea7d0(moby);
+            initialize_collectible_sprite_state(moby);
             if (D_0013D388_bd78[2] != 0) {
                 mark_moby_for_removal(moby);
             } else {

@@ -3013,7 +3013,7 @@ void update_moby_rotation_group(Moby *moby) {
 extern float random_angle_radians_alt(void) __asm__("FUN_00213308");
 extern int D_L06_001BAC50[];
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
-extern void FUN_L02_002ea7d0(char *);
+extern void initialize_collectible_sprite_state(char *) __asm__("FUN_L02_002ea7d0");
 extern void initialize_energy_sphere_holder_vars(char *) __asm__("FUN_L06_002f7548");
 void update_energy_sphere_holder_beam_effects(char *moby) __asm__("FUN_L06_002f7628");
 
