@@ -381,7 +381,9 @@ remove:
  * the US level program (data still reached through the MACRO_ADDR form). */
 // resets the fields of a record (if non-null) to their defaults
 /* Fills the block from 0x78 with fixed defaults and -1 ids. */
-void FUN_L00_002c92d8(char *record) {
+void reset_morphoray_chicken_slot_defaults(char *record) __asm__("FUN_L00_002c92d8");
+
+void reset_morphoray_chicken_slot_defaults(char *record) {
     if (record != 0) {
         *(int *)(record + 0x78) = 0;
         *(float *)(record + 0x7C) = 0.05f;
