@@ -2027,7 +2027,7 @@ extern float D_L08_00161CB8;
 extern float D_L08_00161CBC_gp __asm__("D_L08_00161CBC") __attribute__((sda));
 extern float D_L08_00161CD0_gp __asm__("D_L08_00161CD0") __attribute__((sda));
 extern float FUN_L04_001f1978(float);
-extern float FUN_L00_0025bc00(float *, float, float, int);
+extern float step_angle_toward_target(float *, float, float, int) __asm__("FUN_L00_0025bc00");
 extern float fast_add_rotations_c4(float, float) __asm__("func_001FA580");
 extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
 extern int D_L08_00161CC0;
@@ -2238,13 +2238,13 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
             if (scale_game_frames_c(10) < vars->timer) {
                 float goal_yaw = fast_add_rotations_c4(vars->f60, fast_sin((float)(vars->timer % 8 - 4) * 0.7854f) * 0.17453292f);
 
-                FUN_L00_0025bc00(&vars->f60, goal_yaw, 0.5235988f, 0);
+                step_angle_toward_target(&vars->f60, goal_yaw, 0.5235988f, 0);
             } else {
                 float goal_yaw = fast_add_rotations_c4(fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x,
                                                           hero.motion.pos.f[1] - moby->pos.y),
                                         1.5707964f);
 
-                FUN_L00_0025bc00(&vars->f60, goal_yaw, 0.08726646f, 0);
+                step_angle_toward_target(&vars->f60, goal_yaw, 0.08726646f, 0);
                 if (func_001FA850_2E16A0(vars->f60, goal_yaw) < 0.08726646f) {
                     vars->timer = 0;
                 }

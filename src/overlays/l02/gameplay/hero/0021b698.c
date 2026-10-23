@@ -719,7 +719,7 @@ extern float forward_component(void *) __asm__("FUN_L00_00213350");
 extern float gravity_z(float *) __asm__("FUN_L00_00233a78");
 extern float vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern float FUN_L00_0025bb38(int, float, float);
-extern float FUN_L00_0025bc00(float *, int, float, float);
+extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern float FUN_L00_0025bc98(void *, float, void *, int, float, float, float);
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -1079,14 +1079,14 @@ void update_hero_state_motion(void) {
             hero.unk974 = 1;
         }
         if (hero.unk974 != 0) {
-            FUN_L00_0025bc00(&hero.motion.rot.f[1], 0, 0.0f, frame_time * 3.8397243f);
+            step_angle_toward_target(&hero.motion.rot.f[1], 0, 0.0f, frame_time * 3.8397243f);
         } else {
             float a;
 
             a = FUN_001f9b80_cf(-fast_arc_tan(fast_add_rotations_cf(hero.motion.pos.f, vec[0]),
                                               vec[0][2] - hero.motion.pos.f[2]),
                                 1.5707964f);
-            FUN_L00_0025bc00(&hero.motion.rot.f[1], 0, a, frame_time * 6.4577184f);
+            step_angle_toward_target(&hero.motion.rot.f[1], 0, a, frame_time * 6.4577184f);
         }
         vec[2][0] = fast_cos(FUN_001f9b80_cf(hero.motion.rot.f[2], -1.5707964f)) * -0.57f;
         vec[2][1] = fast_sin(FUN_001f9b80_cf(hero.motion.rot.f[2], -1.5707964f)) * -0.57f;
@@ -1818,7 +1818,7 @@ void update_hero_state_motion(void) {
     case 0x19:
         hero.motion.move_yaw = FUN_001f9b80_cf(hero.unk4E4, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 6.2831855f);
-        FUN_L00_0025bc00(&hero.motion.rot.f[1], 0, 0.0f, frame_time * 4.712389f);
+        step_angle_toward_target(&hero.motion.rot.f[1], 0, 0.0f, frame_time * 4.712389f);
         subtract_vector_xyz(hero.motion.velocity.f, hero.unk4D0.f, hero.motion.pos.f);
         FUN_L00_0025f730(hero.motion.velocity.f, frame_time * 4.0f);
         approach_value(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);

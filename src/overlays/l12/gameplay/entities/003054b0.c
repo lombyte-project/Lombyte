@@ -52,7 +52,7 @@ extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED64 __attribute__((section(".sdata")));
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern float FUN_L00_00257c48(float, float);
-extern float FUN_L00_0025bc00(float *, float, int, float);
+extern float step_angle_toward_target(float *, float, int, float) __asm__("FUN_L00_0025bc00");
 extern float FUN_L00_0025bc98(void *, float, void *, int, float, float, float);
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
@@ -134,7 +134,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                                           -1.5707964f),
                             *(float *)(moby + 0x48));
         if (md->h90 == 0) {
-            if (FUN_L00_0025bc00((float *)(ent + 0x18), yaw, 0,
+            if (step_angle_toward_target((float *)(ent + 0x18), yaw, 0,
                                   D_0015ED6C_gp * 0.5235988f + D_0015ED6C_gp * 0.17453292f * (float)i) < 0.08726646f) {
                 md->h90 = 1;
                 md->f8C = 1.0f;

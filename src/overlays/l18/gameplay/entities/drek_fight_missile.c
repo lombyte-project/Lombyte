@@ -35,7 +35,7 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C_a[] __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern float D_L18_001677C0[];
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float FUN_L00_0025bc00(float *p, int n, float x, float y);
+extern float step_angle_toward_target(float *p, int n, float x, float y) __asm__("FUN_L00_0025bc00");
 extern float approach_value_alt(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
@@ -144,7 +144,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         if (x < 0.87266463f) {
             x = 0.87266463f;
         }
-        FUN_L00_0025bc00(&moby->rot.y, 0, x, frame_time * 12.566371f);
+        step_angle_toward_target(&moby->rot.y, 0, x, frame_time * 12.566371f);
         if (tick_countdown_32_alt((int *)(missile_vars + 0x160))) {
             int i;
             char *pos = &moby->pos;

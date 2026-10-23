@@ -24,7 +24,9 @@ float FUN_L00_0025bb38(int rotation_direction, float x, float y) {
 }
 extern float FUN_L00_0025bb38_c(float, void *, float) __asm__("FUN_L00_0025bb38");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-void FUN_L00_0025bc00(float *current_angle, void *rotation_direction, float target_angle, float angle_step_limit) {
+void step_angle_toward_target(float *current_angle, void *rotation_direction, float target_angle, float angle_step_limit) __asm__("FUN_L00_0025bc00");
+
+void step_angle_toward_target(float *current_angle, void *rotation_direction, float target_angle, float angle_step_limit) {
     float angle_step = FUN_L00_0025bb38_c(target_angle, rotation_direction, *current_angle);
     if (angle_step_limit < angle_step)
         angle_step = angle_step_limit;
@@ -66,7 +68,7 @@ extern float FUN_001fa580_25be00(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f99c0_25be00(float) __asm__("FUN_001f99c0");
 extern float FUN_001f9988_25be00(float) __asm__("FUN_001f9988");
 extern float FUN_00213ed8_25be00(float, float, float *) __asm__("FUN_00213ed8");
-extern void FUN_L00_0025bc00_25be00(float *, void *, float, float) __asm__("FUN_L00_0025bc00");
+extern void step_angle_toward_target(float *, void *, float, float) __asm__("FUN_L00_0025bc00");
 
 float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) __asm__("FUN_L00_0025be00");
 float approach_angle(float *current_angle, float *angular_velocity, float target, float angular_velocity_step_limit, float angular_braking_step, float maxv) {
@@ -93,9 +95,9 @@ float approach_angle(float *current_angle, float *angular_velocity, float target
                 target_angular_speed = maxv;
             }
             if (angle_error < 0.0f) {
-                FUN_L00_0025bc00_25be00(angular_velocity, 0, -target_angular_speed, angular_velocity_step_limit);
+                step_angle_toward_target(angular_velocity, 0, -target_angular_speed, angular_velocity_step_limit);
             } else {
-                FUN_L00_0025bc00_25be00(angular_velocity, 0, target_angular_speed, angular_velocity_step_limit);
+                step_angle_toward_target(angular_velocity, 0, target_angular_speed, angular_velocity_step_limit);
             }
         }
         maxv = FUN_001f99c0_25be00(angle_error);
@@ -104,7 +106,7 @@ float approach_angle(float *current_angle, float *angular_velocity, float target
             return angle_error;
         }
     } else {
-        FUN_L00_0025bc00_25be00(angular_velocity, 0, 0.0f, angular_braking_step);
+        step_angle_toward_target(angular_velocity, 0, 0.0f, angular_braking_step);
     }
     *current_angle = FUN_001fa580_25be00(*angular_velocity, *current_angle);
     return *angular_velocity;

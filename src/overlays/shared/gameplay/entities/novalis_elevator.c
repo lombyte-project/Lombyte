@@ -618,7 +618,7 @@ extern void divide_vector_xyz(void *, void *, f32) __asm__("FUN_L00_001ff378");
 extern void set_hero_animation(int, int, f32) __asm__("FUN_L00_002323b8");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-extern f32 FUN_L00_0025bc00(f32 *, f32, int, f32);
+extern f32 step_angle_toward_target(f32 *, f32, int, f32) __asm__("FUN_L00_0025bc00");
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
@@ -849,7 +849,7 @@ void bolt_crank_update(struct Moby *moby) {
                 player->motion.move_yaw = fast_add_rotations(1.5707964f, angle);
             }
         }
-        FUN_L00_0025bc00(&hero.motion.rot.f[2], hero.motion.move_yaw, 0, frame_time * 6.2831855f);
+        step_angle_toward_target(&hero.motion.rot.f[2], hero.motion.move_yaw, 0, frame_time * 6.2831855f);
         crank->fall_speed = crank->fall_speed + frame_time_sq * 9.8f;
         hero.motion.pos.f[2] = hero.motion.pos.f[2] - (crank->fall_speed - 2.0f);
         ground = probe_ground_height(&hero.motion.pos, 0, 0.5f);
@@ -861,7 +861,7 @@ void bolt_crank_update(struct Moby *moby) {
         if (hero.moby->prev_seq != 0x44) {
             float limit = 1.0471976f;
             float handle_yaw = fast_add_rotations(0.2617994f, angle);
-            FUN_L00_0025bc00(&moby->rot.z, handle_yaw, 0, frame_time * 3.1415927f);
+            step_angle_toward_target(&moby->rot.z, handle_yaw, 0, frame_time * 3.1415927f);
             if (limit < fast_subtract_rotations(moby->rot.z, handle_yaw)) {
                 moby->rot.z = fast_subtract_rotations(moby->rot.z, limit);
             } else if (fast_subtract_rotations(moby->rot.z, handle_yaw) < -1.0471976f) {

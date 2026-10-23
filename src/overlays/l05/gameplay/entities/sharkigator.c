@@ -2046,7 +2046,7 @@ extern f32 fast_cos_c5(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c7(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between_c4(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float FUN_L00_0025bc00(float *, int, float, float);
+extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern float fast_add_rotations_c5(float, float) __asm__("func_001FA580");
 extern int frame_number_gp __asm__("D_L05_0015F5CC") __attribute__((section(".sdata")));
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
@@ -2232,11 +2232,11 @@ void extermitank_update(unsigned char *moby) {
         if (vector_distance_xy_alt(moby + 0x10, ((char *)&D_0013F350 + 0x80)) < 16.0f) {
             char *g = ((char *)&D_0013F350);
             float a = fast_arc_tan(*(float *)(g + 0x80) - *(float *)(moby + 0x10), *(float *)(g + 0x84) - *(float *)(moby + 0x14));
-            FUN_L00_0025bc00((float *)(data + 0x194), 0, a, D_0015ED6C_gp * 1.5707964f);
-            FUN_L00_0025bc00((float *)(data + 0x198), 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
+            step_angle_toward_target((float *)(data + 0x194), 0, a, D_0015ED6C_gp * 1.5707964f);
+            step_angle_toward_target((float *)(data + 0x198), 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
         } else {
-            FUN_L00_0025bc00((float *)(data + 0x194), 0, *(float *)(moby + 0x48), D_0015ED6C_gp * 1.5707964f);
-            FUN_L00_0025bc00((float *)(data + 0x198), 0, 0.0f, D_0015ED6C_gp * 1.5707964f);
+            step_angle_toward_target((float *)(data + 0x194), 0, *(float *)(moby + 0x48), D_0015ED6C_gp * 1.5707964f);
+            step_angle_toward_target((float *)(data + 0x198), 0, 0.0f, D_0015ED6C_gp * 1.5707964f);
         }
         FUN_L00_001fff28(data + 0x140, 1, *(float *)(data + 0x198));
         FUN_L00_001fff28(data + 0x100, 2, fast_subtract_rotations(*(float *)(data + 0x194), *(float *)(moby + 0x48)));
@@ -2340,8 +2340,8 @@ void extermitank_update(unsigned char *moby) {
         {
             char *g = ((char *)&D_0013F350);
             float a = fast_arc_tan(*(float *)(g + 0x80) - *(float *)(moby + 0x10), *(float *)(g + 0x84) - *(float *)(moby + 0x14));
-            FUN_L00_0025bc00((float *)(data + 0x194), 0, a, D_0015ED6C_gp * 1.5707964f);
-            FUN_L00_0025bc00((float *)(data + 0x198), 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
+            step_angle_toward_target((float *)(data + 0x194), 0, a, D_0015ED6C_gp * 1.5707964f);
+            step_angle_toward_target((float *)(data + 0x198), 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
         }
         FUN_L00_001fff28(data + 0x140, 1, *(float *)(data + 0x198));
         FUN_L00_001fff28(data + 0x100, 2, fast_subtract_rotations(*(float *)(data + 0x194), *(float *)(moby + 0x48)));

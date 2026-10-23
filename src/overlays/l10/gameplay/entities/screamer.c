@@ -91,7 +91,7 @@ void FUN_L00_00257470_c(unsigned char *m, int flags, int arg) __asm__("FUN_L00_0
 void FUN_L00_00258278_c(unsigned char *m, float *ptr, float t, float b, float c, float limit) __asm__("FUN_L00_00258278");
 void move_moby_with_collision_integer_radius(int a, int b, float x, float y, int c, int d) __asm__("FUN_L00_00258ad0");
 void FUN_L00_0025a120_c(char *o) __asm__("FUN_L00_0025a120");
-void FUN_L00_0025bc00(float *p, void *o, float a, float lim);
+void step_angle_toward_target(float *p, void *o, float a, float lim) __asm__("FUN_L00_0025bc00");
 void FUN_L00_0025f3e8_c(char *owner, char *pos, float scale, float flash) __asm__("FUN_L00_0025f3e8");
 void FUN_L00_0025f730(void *a, float x);
 void FUN_L00_00263ac8_c(float x, int a, int b, unsigned char *p) __asm__("FUN_L00_00263ac8");
