@@ -2325,7 +2325,7 @@ int FUN_L00_002da218(char *a);
 s32 scale_game_frames_alt_c2(s32) __asm__("FUN_001f96f8");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d);
-void FUN_L00_0026c3d0(void *pos, void *mat);
+void spawn_effect_particle_with_transformed_random_offset(void *pos, void *mat) __asm__("FUN_L00_0026c3d0");
 void FUN_L00_002dc938_c(char *p, char *q, int flag) __asm__("FUN_L00_002dc938");
 void no_op_main_callback(void *) __asm__("FUN_001e93e8");
 extern float frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata")));
@@ -2384,7 +2384,7 @@ extern float func_001F9CE8_2DDEA0(void *) __asm__("FUN_001f9b20");
 extern int func_0022ED80_2DDEA0(int, int, void *) __asm__("FUN_0022da68");
 extern void func_L00_001FF610_2DDEA0(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern int func_001F9908_2DDEA0(void *) __asm__("FUN_001f9740");
-extern void func_L00_0026D270_2DDEA0(void *, void *) __asm__("FUN_L00_0026c3d0");
+extern void spawn_effect_particle_with_transformed_random_offset(void *, void *) __asm__("FUN_L00_0026c3d0");
 extern int func_001FA898_2DDEA0(float) __asm__("FUN_001fa6d0");
 extern int func_L00_00259B08_2DDEA0(void *, void *, float, int, float, int) __asm__("FUN_L00_00258ad0");
 extern void func_001E9730_2DDEA0(void *) __asm__("FUN_001e93b0");
@@ -2635,7 +2635,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 return 0;
             }
             record->vel.z = record->vel.z - frame_scale_sq_macro * 0.00925f;
-            func_L00_0026D270_2DDEA0(&moby->pos, &moby->rot_row0);
+            spawn_effect_particle_with_transformed_random_offset(&moby->pos, &moby->rot_row0);
             break;
         }
         case SUCK_UPDATE_FALLING_AFTER_CANCEL: {

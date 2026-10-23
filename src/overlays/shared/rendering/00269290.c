@@ -1285,7 +1285,9 @@ extern int FUN_001160d8_26c3d0(void) __asm__("FUN_001160d8");
 extern int FUN_001f96f8_26c3d0(int) __asm__("FUN_001f96f8");
 
 extern unsigned char *D_L00_001B20C8 __attribute__((section(".data")));
-void FUN_L00_0026c3d0(void *spawn_origin, u128 *spawn_offset_matrix) {
+void spawn_effect_particle_with_transformed_random_offset(void *spawn_origin, u128 *spawn_offset_matrix) __asm__("FUN_L00_0026c3d0");
+
+void spawn_effect_particle_with_transformed_random_offset(void *spawn_origin, u128 *spawn_offset_matrix) {
     unsigned char *particle = FUN_L00_002678b8_26c3d0(0x12);
     if (particle) {
         float *particle_data = (float *)(particle + 0x20);
