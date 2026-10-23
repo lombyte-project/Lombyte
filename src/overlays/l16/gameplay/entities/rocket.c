@@ -1243,7 +1243,7 @@ extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void reset_shot_tracking(char *) __asm__("FUN_L02_00264e40");
 extern void FUN_L02_00264e70(void *, void *, void *, float);
 extern void collect_mobies_around_tracked_objects(char **, int, int) __asm__("FUN_L02_002651d0");
-extern void FUN_L16_002ce9f0_u(void *) __asm__("FUN_L16_002ce9f0");
+extern void update_test_dummy_damage_and_respawn(void *) __asm__("FUN_L16_002ce9f0");
 void refresh_test_dummy_door_timer(struct Moby *moby) __asm__("FUN_L16_002d5e80");
 
 extern void refresh_test_dummy_door_timer(struct Moby *) __asm__("FUN_L16_002d5e80");
@@ -1290,7 +1290,7 @@ void test_dummy_update(unsigned char *moby) {
        is what this compiler does with a multiplication and with a shift in an address. */
     char *path;
 
-    FUN_L16_002ce9f0_u(moby);
+    update_test_dummy_damage_and_respawn(moby);
     path = D_L16_001B0930[dummy_data->path];
     FUN_L00_00263ac8(2.5f, (int)moby, 2, (unsigned char *)dummy_data->block140);
     switch (moby[0x20]) {
@@ -1615,7 +1615,7 @@ extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz_c2(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 /* Per-frame update of a hit-point moby: handles a hit (respawn at the spawn point or removal when out of lives) and its state timers. */
-void FUN_L16_002ce9f0(void *moby) {
+void update_test_dummy_damage_and_respawn(void *moby) {
     L16HitMoby *hit_moby = moby;
     float matrix[16];
     int status;
