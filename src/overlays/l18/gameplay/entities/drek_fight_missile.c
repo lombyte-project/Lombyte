@@ -681,7 +681,7 @@ void update_linked_moby_group_transform_and_fall(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F3038), where it is exact; names translated to the US level program. */
 
-extern void FUN_L18_002f1d08_u(int, int) __asm__("FUN_L18_002f1d08");
+extern void mark_block_entries_within_transform_xy_bounds(int, int) __asm__("FUN_L18_002f1d08");
 extern void set_group_class_0630_moby_byte_bc(int, int) __asm__("FUN_L18_002fa888");
 
 void activate_drek_boss_class_0565_moby(struct Moby *moby) __asm__("FUN_L18_002f1c38");
@@ -690,9 +690,9 @@ void activate_drek_boss_class_0565_moby(struct Moby *moby) {
     char *state = (char *)moby->pvars;
     if (moby->oclass == 0x565 && moby->state == 1) {
         if (*(int *)(state + 0xC) != -1) {
-            FUN_L18_002f1d08_u(0x802, *(int *)(state + 0xC));
-            FUN_L18_002f1d08_u(0x908, *(int *)(state + 0xC));
-            FUN_L18_002f1d08_u(0x954, *(int *)(state + 0xC));
+            mark_block_entries_within_transform_xy_bounds(0x802, *(int *)(state + 0xC));
+            mark_block_entries_within_transform_xy_bounds(0x908, *(int *)(state + 0xC));
+            mark_block_entries_within_transform_xy_bounds(0x954, *(int *)(state + 0xC));
         }
         moby->state = 2;
         set_group_class_0630_moby_byte_bc(moby->group, 1);
@@ -759,7 +759,7 @@ extern unsigned char D_L18_001C6500[];
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L18_002f1d08(int block_lookup_index, int transform_record_index) {
+void mark_block_entries_within_transform_xy_bounds(int block_lookup_index, int transform_record_index) {
     int i = 0;
     int k;
     if (((Blk *)D_L18_001C6200[D_L18_001C6500[block_lookup_index]])->n > i)
