@@ -26,7 +26,9 @@ typedef struct {
 } TextureEntry;
 
 /* Queues the GS packet for one texture (tex0 == tex1), or builds the strip between two texture entries and queues it. */
-void FUN_L09_0021e560(int first_texture_index, int second_texture_index) {
+void queue_level09_strip_texture_packets(int first_texture_index, int second_texture_index) __asm__("FUN_L09_0021e560");
+
+void queue_level09_strip_texture_packets(int first_texture_index, int second_texture_index) {
     if (first_texture_index == second_texture_index) {
         int *packet;
         long *words;
@@ -116,7 +118,7 @@ extern int *D_L09_001611C0;
 extern int D_L09_0015F5CC;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern void FUN_L01_0021fa98(int, int, int, int, int, int);
-extern void FUN_L09_0021e560_u(int, int) __asm__("FUN_L09_0021e560");
+extern void queue_level09_strip_texture_packets(int, int) __asm__("FUN_L09_0021e560");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 extern int *D_L09_001611B8[] __attribute__((section(".sdata")));
@@ -130,7 +132,7 @@ void draw_level09_scrolling_textured_strips(char *list, int count, float unused,
     int idx;
     float first_scroll_offset;
     float second_scroll_offset;
-    FUN_L09_0021e560_u(first_texture_index, second_texture_index);
+    queue_level09_strip_texture_packets(first_texture_index, second_texture_index);
     D_L09_001611B8[2][0] = 0x30000009;
     D_L09_001611B8[2][1] = (int)D_L09_0016EAA0;
     D_L09_001611B8[2][2] = 0;
