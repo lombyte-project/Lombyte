@@ -966,7 +966,9 @@ extern s32 truncate_float_to_s32_2b2ed8(f32) __asm__("FUN_001fa6d0");
 extern s32 tick_countdown_2b2ed8(s32 *) __asm__("FUN_001f9740");
 
 extern f32 D_L14_001614C4 __attribute__((sda));
-void FUN_L14_002b2ed8(struct Moby *moby) {
+void update_plasmabot_target_range(struct Moby *moby) __asm__("FUN_L14_002b2ed8");
+
+void update_plasmabot_target_range(struct Moby *moby) {
     DelayVars_2b2ed8 *delay_state = (DelayVars_2b2ed8 *)moby->pvars;
 
     if (delay_state->restart != 0) {
