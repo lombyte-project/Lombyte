@@ -1018,7 +1018,9 @@ extern unsigned char D_0015EDB4[4] __attribute__((section(".sdata")));
 extern unsigned char D_0015EDC0[] __attribute__((section(".sdata")));
 extern void FUN_L00_00263d40(int, int);
 
-void FUN_L00_00206e00(void) {
+void scan_hero_input_sequences(void) __asm__("FUN_L00_00206e00");
+
+void scan_hero_input_sequences(void) {
     char *g;
     int input_token;
     int i;
@@ -1138,7 +1140,7 @@ void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 void update_hero_bolt_exclamation_hud(void) __asm__("FUN_L00_00205ea8");
 void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
-void FUN_L00_00206e00_u(void) __asm__("FUN_L00_00206e00");
+void scan_hero_input_sequences(void) __asm__("FUN_L00_00206e00");
 void noop_main_callback(int) __asm__("FUN_001e93e8");
 void FUN_L00_002484e0(void *);
 void FUN_L00_00257024(int);
@@ -1193,7 +1195,7 @@ void coordinate_hero_frame_update(void) {
     check_hero_item_reward_conditions();
     update_hero_bolt_exclamation_hud();
     dispatch_hero_animation_timed_events();
-    FUN_L00_00206e00_u();
+    scan_hero_input_sequences();
     noop_main_callback((int)hero_state->moby);
     if (hero_state->state.control_mode != 0x16 && hero_state->state.current != 0x32)
         FUN_L00_002484e0(&hero_state->motion.pos);
