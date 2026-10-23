@@ -280,7 +280,9 @@ void draw_and_probe_snagglebeast_rope_attack(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00314730), where it is exact; names translated to the US level program. */
 
-void *FUN_L07_00313350(void *unused, void *dp, void *op) {
+void *collect_snagglebeast_navigation_ids(void *unused, void *dp, void *op) __asm__("FUN_L07_00313350");
+
+void *collect_snagglebeast_navigation_ids(void *unused, void *dp, void *op) {
     char *data = dp;
     int *out = op;
     int output_count = 0;
@@ -463,13 +465,13 @@ void add_random_xy_offset(float *out, float value) {
 extern char *D_L07_001B0530[];
 extern int follow_path(void *, void *, int, float, void *, void *, void *) __asm__("FUN_L01_00276fe8");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
-extern void *FUN_L07_00313350_u(void *, void *, void *) __asm__("FUN_L07_00313350");
+extern void *collect_snagglebeast_navigation_ids(void *, void *, void *) __asm__("FUN_L07_00313350");
 
 void select_snagglebeast_chase_waypoint(char *moby, char *moby_vars, void *target_position, void *out_position) __asm__("FUN_L07_00313988");
 
 void select_snagglebeast_chase_waypoint(char *moby, char *moby_vars, void *target_position, void *out_position) {
     float navigation_ids[8];
-    void *navigation_id_count = FUN_L07_00313350_u(moby, moby_vars, navigation_ids);
+    void *navigation_id_count = collect_snagglebeast_navigation_ids(moby, moby_vars, navigation_ids);
     if (follow_path(navigation_ids, navigation_id_count, *(int *)(moby_vars + 0x188), 0.0f, moby + 0x10, target_position, out_position))
         return;
     {
@@ -1178,7 +1180,7 @@ void snagglebeast_update(unsigned char *moby) {
         float thr = 2.0f;
         float rot = *(float *)(moby + 0x48);
         float dd;
-        FUN_L07_00313350(moby, data, &direction);
+        collect_snagglebeast_navigation_ids(moby, data, &direction);
         if (!path_point_ready) {
             thr = 6.0f;
             if (*(int *)(data + 0x29C) != -1 && (data[0x19C] & 3) == 0 && FUN_00214720(&sight, *(int *)(data + 0x29C))) {
@@ -1472,7 +1474,7 @@ void snagglebeast_update(unsigned char *moby) {
                 }
                 }
                 *(int *)(data + 0x1A8) = ((ChaserPathPoints *)data)->path_points[data[0x19D]];
-                build_symmetric_adjacency_masks((int *)&position, (int)FUN_L07_00313350(moby, data, &position), *(int *)(data + 0x188));
+                build_symmetric_adjacency_masks((int *)&position, (int)collect_snagglebeast_navigation_ids(moby, data, &position), *(int *)(data + 0x188));
                 moby[0x20] = 0xF;
             }
         }
