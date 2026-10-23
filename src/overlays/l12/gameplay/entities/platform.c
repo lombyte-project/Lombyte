@@ -315,7 +315,9 @@ extern int random_integer_below(int);
 extern int scale_game_frames(int);
 extern void blend_moby_animation(void *, int, int, int);
 
-void FUN_L12_002e18e8(struct Moby *moby) {
+void select_hoven_anklebiter_pursuit_animation(struct Moby *moby) __asm__("FUN_L12_002e18e8");
+
+void select_hoven_anklebiter_pursuit_animation(struct Moby *moby) {
     enum {
         ANKLEBITER_PURSUIT_ANIMATION_VARIANT_A = 0,
         ANKLEBITER_PURSUIT_ANIMATION_VARIANT_B = 1
