@@ -3357,7 +3357,7 @@ void FUN_L00_00203908(int, int);
 void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void light_off_67e8(int) __asm__("FUN_L00_0023e838");
-void FUN_L00_002b9310(char *moby);
+void initialize_tesla_claw_beam(char *moby) __asm__("FUN_L00_002b9310");
 extern int D_0015EEA4;
 extern int D_0015ED84_2b2100 __asm__("D_0015ED84");
 extern char D_0013F350_2b2100[] __asm__("D_0013F350");
@@ -3662,7 +3662,7 @@ extern short D_L00_00161676;
 extern V2b9310 D_L00_001DB5B0[];
 extern V2b9310 D_L00_001DB5C0[];
 /* Starts the beam when one is pending: lays 19 points from the moby toward its target and resets the segment state. */
-void FUN_L00_002b9310(char *moby) {
+void initialize_tesla_claw_beam(char *moby) {
     V2b9310 beam_endpoint_delta;
     V2b9310 step;
     char *data;
