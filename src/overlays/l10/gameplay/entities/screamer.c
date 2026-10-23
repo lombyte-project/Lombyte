@@ -1109,7 +1109,9 @@ void FUN_L10_002e17c0(struct Moby *moby)
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E3070), where it is exact; names translated to the US level program. */
 
 extern int D_L10_00161E00 __attribute__((sda));
-void FUN_L10_002e1cb0(struct Moby *moby) {
+void set_moby_group_command_frames(struct Moby *moby) __asm__("FUN_L10_002e1cb0");
+
+void set_moby_group_command_frames(struct Moby *moby) {
     short *group_entry;
     if (moby->group != 0xFF) {
         group_entry = D_L10_001ABCC0[moby->group];
