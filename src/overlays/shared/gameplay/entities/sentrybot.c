@@ -89,7 +89,7 @@ extern void update_sentrybot_hit_response_and_target_visibility(void *, int) __a
 void draw_sentrybot_effect_quads(char *moby) __asm__("FUN_L15_0029aba8");
 
 extern void draw_sentrybot_effect_quads(char *m) __asm__("FUN_L15_0029aba8");
-extern void FUN_L15_002a35d8(int);
+extern void mark_moby_killed_and_release_owned_voice(int) __asm__("FUN_L15_002a35d8");
 extern void set_sentrybot_alarm_duration(char *m, int a) __asm__("FUN_L15_002cbac0");
 void prepare_sentrybot_alarm(unsigned char *moby) __asm__("FUN_L15_002cbba0");
 
@@ -347,11 +347,11 @@ void sentrybot_update(unsigned char *moby) {
         if (moby[0x70] & 2) {
             *(short *)(data + 0x154) = scale_game_frames(0xF0);
             if (*(int *)(data + 0x150) != -1) {
-                FUN_L15_002a35d8(D_L15_0015FFD8_m + (*(int *)(data + 0x150) << 8));
+                mark_moby_killed_and_release_owned_voice(D_L15_0015FFD8_m + (*(int *)(data + 0x150) << 8));
                 *(int *)(data + 0x150) = -1;
             }
             if (*(int *)(data + 0x12C) != -1) {
-                FUN_L15_002a35d8(D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8));
+                mark_moby_killed_and_release_owned_voice(D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8));
                 *(int *)(data + 0x12C) = -1;
             }
             moby[0x20] = data[0x15C];
@@ -853,11 +853,11 @@ void sentrybot_update(unsigned char *moby) {
                 return;
             }
             if (*(int *)(data + 0x12C) != -1) {
-                FUN_L15_002a35d8(D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8));
+                mark_moby_killed_and_release_owned_voice(D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8));
                 *(int *)(data + 0x12C) = -1;
             }
             if (*(int *)(data + 0x150) != -1) {
-                FUN_L15_002a35d8(D_L15_0015FFD8_m + (*(int *)(data + 0x150) << 8));
+                mark_moby_killed_and_release_owned_voice(D_L15_0015FFD8_m + (*(int *)(data + 0x150) << 8));
                 *(int *)(data + 0x150) = -1;
             }
             allocate_voice_for_target_entry(0xD, 0, (int)moby);
@@ -874,11 +874,11 @@ void sentrybot_update(unsigned char *moby) {
     case SENTRYBOT_DEATH_KNOCKBACK:
         if (mine_fall(moby, data + 0x70) & 0x160) {
             if (*(int *)(data + 0x12C) != -1) {
-                FUN_L15_002a35d8(D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8));
+                mark_moby_killed_and_release_owned_voice(D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8));
                 *(int *)(data + 0x12C) = -1;
             }
             if (*(int *)(data + 0x150) != -1) {
-                FUN_L15_002a35d8(D_L15_0015FFD8_m + (*(int *)(data + 0x150) << 8));
+                mark_moby_killed_and_release_owned_voice(D_L15_0015FFD8_m + (*(int *)(data + 0x150) << 8));
                 *(int *)(data + 0x150) = -1;
             }
             allocate_voice_for_target_entry(0xD, 0, (int)moby);
@@ -2950,7 +2950,7 @@ extern u8 D_0013E550[] __attribute__((section(".data")));
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 /* Marks the moby as killed in the level's spawn tables and releases the voice slot it still owns. */
-void FUN_L15_002a35d8(int addr) {
+void mark_moby_killed_and_release_owned_voice(int addr) {
     struct Moby *moby = (struct Moby *)addr;
     s32 slot;
     moby->collision = 0;
