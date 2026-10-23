@@ -333,7 +333,9 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 /* Spawn point for the moby: its slot's stored position and rotation, or, with no slot, a point beside it on the side facing the hero. */
-void FUN_L02_002d8910(float *pos, float *camera_rotation_output, char *moby) {
+void compute_tresspasser_pad_camera_transform(float *pos, float *camera_rotation_output, char *moby) __asm__("FUN_L02_002d8910");
+
+void compute_tresspasser_pad_camera_transform(float *pos, float *camera_rotation_output, char *moby) {
     V2d8910 midpoint_position;
     float left;
     float right;
