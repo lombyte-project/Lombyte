@@ -6181,7 +6181,7 @@ extern void attach_shared_manipulator_to_matching_class_moby(char *) __asm__("FU
 extern float distance_xyz_301070(void *, void *) __asm__("FUN_001f9b48");
 extern void FUN_L00_0025a120_301070(void *) __asm__("FUN_L00_0025a120");
 extern void FUN_L06_002f53e8_301070(char *) __asm__("FUN_L06_002f53e8");
-extern void FUN_L06_002f5360_301070(char *) __asm__("FUN_L06_002f5360");
+extern void set_moby_and_links_to_states_4_and_5(char *) __asm__("FUN_L06_002f5360");
 extern float probe_ground_height_301070(void *, int, float) __asm__("FUN_00213508");
 extern int initialize_npc_dialogue_301070(void *, void *) __asm__("FUN_L00_002668a0");
 extern int check_all_listed_class_33b_states_fe_fd_or_10(int) __asm__("FUN_L06_002e9ea0");
@@ -6289,7 +6289,7 @@ void fred_update(struct Moby *moby) {
             }
         }
         if (hero.state.control_mode == 15) {
-            FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (fred_vars->f160 << 8));
+            set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_301070 + (fred_vars->f160 << 8));
         }
         break;
     case HANDLE_FRED_DIALOGUE_RESULT:
@@ -6299,7 +6299,7 @@ void fred_update(struct Moby *moby) {
             }
             if (fred_vars->f4 < 2) {
                 FUN_L00_002502a0_301070(moby->mission);
-                FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
+                set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
                 moby->state = 1;
             }
             if (fred_vars->f4 == 2) {
@@ -6356,7 +6356,7 @@ void fred_update(struct Moby *moby) {
         camera_end_rotation.f[2] = -1.21f;
         advance_accelerated_scalar_301070(&fred_vars->f178, &fred_vars->f17C, 1.0f, frame_time_sq_macro * 0.1f, frame_time_sq_macro * 0.1f, frame_time_macro * 0.1f);
         if (fred_vars->f178 > 0.1f) {
-            FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (fred_vars->f160 << 8));
+            set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_301070 + (fred_vars->f160 << 8));
         }
         lerp_vector_301070(pos, camera_start_position.f, camera_end_position.f, fred_vars->f178);
         rot[2] = fast_add_rotations_301070(fast_subtract_rotations_301070(camera_end_rotation.f[2], camera_start_rotation.f[2]) * fred_vars->f178, camera_start_rotation.f[2]);
@@ -6389,7 +6389,7 @@ void fred_update(struct Moby *moby) {
         break;
     case WAIT_FOR_FRED_REMOVAL_TRIGGER:
         if (hero.state.control_mode == 15) {
-            FUN_L06_002f5360_301070(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
+            set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
         del:
             mark_moby_for_removal_301070(moby);
             return;

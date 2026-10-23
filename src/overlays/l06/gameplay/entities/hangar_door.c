@@ -112,7 +112,9 @@ void set_moby_list_state_4(int moby_list_index) {
 
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
-void FUN_L06_002f5360(char *moby) {
+void set_moby_and_links_to_states_4_and_5(char *moby) __asm__("FUN_L06_002f5360");
+
+void set_moby_and_links_to_states_4_and_5(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char **linked_moby_cursor;
     int i;
