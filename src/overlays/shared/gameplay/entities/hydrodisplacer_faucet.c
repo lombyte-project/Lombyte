@@ -181,7 +181,7 @@ void update_moby_spatial_trigger(struct Moby *trigger_moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F9478), where it is exact; names translated to the US level program. */
 
 extern short D_L05_0015FFD8;
-extern void FUN_L05_002f81b8_u(void *) __asm__("FUN_L05_002f81b8");
+extern void update_hydrodisplacer_faucet_pulse_color(void *) __asm__("FUN_L05_002f81b8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void hydrodisplacer_faucet_update(char *m) __asm__("FUN_L05_002f8080");
@@ -218,7 +218,7 @@ void hydrodisplacer_faucet_update(char *faucet_moby) {
             blend_moby_animation(faucet_moby, 2, 0, 0);
         break;
     }
-    FUN_L05_002f81b8_u(faucet_moby);
+    update_hydrodisplacer_faucet_pulse_color(faucet_moby);
 }
 /* eases the pulse level of the moby that holds the focus and mixes its colour from two palettes */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F95B0), where it is exact; names translated to the US level program. */
@@ -234,7 +234,7 @@ extern short D_L05_001618CC __attribute__((sda));
 extern short D_L05_001618D0 __attribute__((sda));
 extern short D_0015EE6C_s __asm__("D_0015ED6C");
 
-void FUN_L05_002f81b8(void *mv) {
+void update_hydrodisplacer_faucet_pulse_color(void *mv) {
     char *moby = mv;
     struct Hero *base = &hero;
     char *data = *(char **)(moby + 0x78);
