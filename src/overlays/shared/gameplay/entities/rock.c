@@ -781,7 +781,9 @@ extern unsigned char D_L01_0017C8C0_q[] __asm__("D_L01_0017C8C0") __attribute__(
 extern void attach_manipulator_q(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 extern float D_L01_00161D30 __attribute__((sda));
-void FUN_L01_002ff028(char *class_reference_moby) {
+void attach_cutscene_big_head_manipulator(char *class_reference_moby) __asm__("FUN_L01_002ff028");
+
+void attach_cutscene_big_head_manipulator(char *class_reference_moby) {
     if (cutscene_mode == 2 && big_head_cheat_enabled != 0) {
         int i;
         for (i = 0; i < D_L01_0016CCE0_q.n; i++) {
