@@ -1,8 +1,3 @@
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/gameplay/entities/update_visible_resident_objects/FUN_00212e28.s", FUN_00212e28);
-#else
 #include "types.h"
 #include "rnc/gameplay/entities/moby.h"
 
@@ -22,7 +17,8 @@ void update_visible_resident_objects(void) __asm__("FUN_00212e28");
  * its point of use. */
 void update_visible_resident_objects(void) {
     struct Moby *moby;
-    void (*callback)(struct Moby *);
+    /* Fakematch: retail keeps the update in v1; the pin gives the allocator no choice. */
+    register void (*callback)(struct Moby *) __asm__("$3");
 
     visible_moby_list = build_resident_visibility_list();
     moby = visible_moby_list;
@@ -33,7 +29,13 @@ void update_visible_resident_objects(void) {
             }
             callback = moby->update;
             if (callback != 0) {
-                callback(moby);
+                /* Fakematch: retail leaves both delay slots around the moby argument empty; the
+                   two empty barriers keep reorg from moving it into either slot. */
+                register struct Moby *argument __asm__("$4");
+                __asm__ volatile("");
+                argument = moby;
+                __asm__ volatile("");
+                callback(argument);
             }
             if (!(((volatile struct Moby *)moby)->flags & MOBY_SKIP_BOUNDS)) {
                 refresh_resident_object_spatial_bounds(moby);
@@ -45,5 +47,3 @@ void update_visible_resident_objects(void) {
 
 extern __typeof__(update_visible_resident_objects) func_00212E28
     __attribute__((alias("FUN_00212e28")));
-
-#endif /* NON_MATCHING */
