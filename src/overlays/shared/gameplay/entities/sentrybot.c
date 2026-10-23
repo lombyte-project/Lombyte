@@ -2216,7 +2216,7 @@ extern Fade29FF90 D_L15_0015F330 __attribute__((section(".sdata")));
 extern Fade29FF90 D_L15_0015F320 __attribute__((section(".sdata")));
 extern Light29FF90 D_L15_001808C0[];
 extern s32 D_L15_00178500[];
-extern char *FUN_L00_00274948(void *, void *, int, void *);
+extern char *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, int, void *) __asm__("FUN_L00_00274948");
 extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos_c2(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
@@ -2377,7 +2377,7 @@ void update_charged_blast(Moby29FF90 *moby) {
                 random_spherical_offset(random_effect_vector, r * D_0015ED6C, r * 2.0f * D_0015ED6C);
                 random_spherical_offset(effect_vector_scratch, 0.0f, r * 0.5f);
                 FUN_L00_001ff290(temporary_position, effect_vector_scratch, moby->pos);
-                p = (Part29FF90 *)FUN_L00_00274948(effect_vector_scratch, random_effect_vector, 0x7F, moby);
+                p = (Part29FF90 *)spawn_mode_controlled_rotating_alpha_fade_particle(effect_vector_scratch, random_effect_vector, 0x7F, moby);
                 if (p != 0) {
                     p->fC = random_float_between(6000.0f, 32000.0f) * r * 0.4f;
                 }
@@ -2387,7 +2387,7 @@ void update_charged_blast(Moby29FF90 *moby) {
             int i;
 
             for (i = 0; i < 12; i++) {
-                Part29FF90 *p = (Part29FF90 *)FUN_L00_00274948(moby->pos, D_L15_0015F580, 0x7F, moby);
+                Part29FF90 *p = (Part29FF90 *)spawn_mode_controlled_rotating_alpha_fade_particle(moby->pos, D_L15_0015F580, 0x7F, moby);
 
                 if (p != 0) {
                     PartSub29FF90 *particle_subrecord = &p->sub;

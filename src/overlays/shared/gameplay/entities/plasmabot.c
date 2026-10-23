@@ -732,7 +732,7 @@ extern void enqueue_callback_list_1(void (*)(struct Moby *), struct Moby *) __as
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void build_moby_bone_transform(struct Moby *, s32, void *) __asm__("FUN_0020cca8");
 extern void FUN_00213358(void *, f32, f32);
-extern Particle *FUN_L00_00274948(void *, void *, s32, struct Moby *);
+extern Particle *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, s32, struct Moby *) __asm__("FUN_L00_00274948");
 extern f32 FUN_002132a8(f32, f32);
 extern s32 FUN_00213260(s32);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -765,12 +765,12 @@ void FUN_L14_002b2600(struct Moby *moby)
     fast_vec_normalize(&exhaust_position_offset, &exhaust_position_offset, -0.5f);
     fast_vec_add(&effect_positions->exhaust, &particle_spawn_position, &exhaust_position_offset);
     FUN_00213358(&particle_initial_velocity, 0.005f, 0.03f);
-    particle = FUN_L00_00274948(&particle_spawn_position, &particle_initial_velocity, 0x7F, moby);
+    particle = spawn_mode_controlled_rotating_alpha_fade_particle(&particle_spawn_position, &particle_initial_velocity, 0x7F, moby);
     if (particle != NULL) {
         particle->life = FUN_002132a8(6000.0f, 32000.0f);
     }
     for (i = 0; i < 3; i++) {
-        particle = FUN_L00_00274948(&particle_spawn_position, D_L14_0015F580, 0x7F, moby);
+        particle = spawn_mode_controlled_rotating_alpha_fade_particle(&particle_spawn_position, D_L14_0015F580, 0x7F, moby);
         if (particle == NULL) {
             continue;
         }

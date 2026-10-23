@@ -531,7 +531,7 @@ void draw_racer_glow_quads(struct Moby *m) {
 /* Puffs smoke from the moby's exhaust joint: keeps its light in place while active, then spawns four puffs. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D87A0), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_00274948(void *, void *, int, void *);
+extern char *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, int, void *) __asm__("FUN_L00_00274948");
 extern char D_L14_001809C0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L14_0015F580[] __attribute__((section(".sdata")));
@@ -574,14 +574,14 @@ void update_moby_joint_visual_effects(struct Moby *moby) {
         joint_position[2] -= 1.0f;
     }
     random_spherical_offset(random_particle_vector, 0.005f, 0.03f);
-    particle = FUN_L00_00274948(joint_position, random_particle_vector, 0x7F, moby);
+    particle = spawn_mode_controlled_rotating_alpha_fade_particle(joint_position, random_particle_vector, 0x7F, moby);
     if (particle != 0) {
         *(float *)(particle + 0xC) = random_float_between(6000.0f, 32000.0f);
     }
     for (i = 0; i < 3; i++) {
         char *e;
         int lifetime_frames;
-        particle = FUN_L00_00274948(joint_position, D_L14_0015F580, 0x7F, moby);
+        particle = spawn_mode_controlled_rotating_alpha_fade_particle(joint_position, D_L14_0015F580, 0x7F, moby);
         if (particle == 0)
             continue;
         e = particle + 0x20;

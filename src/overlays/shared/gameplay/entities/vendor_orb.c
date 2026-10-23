@@ -835,7 +835,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 f32 FUN_L00_00257c48(f32, f32);
 f32 normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
 int allocate_colored_effect_slot(void *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
-unsigned char *FUN_L00_00274948(void *a, void *b, int c, int d);
+unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(void *a, void *b, int c, int d) __asm__("FUN_L00_00274948");
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern Slot_2E3700 D_L00_001E7070_2E3700[] __asm__("D_L00_001E6D20");
 extern End_2E3700 D_L00_001E70A0_2E3700[] __asm__("D_L00_001E6D50");

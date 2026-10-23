@@ -1538,8 +1538,8 @@ extern int FUN_001f96f8_274948(int) __asm__("FUN_001f96f8");
 extern float FUN_001fa6c0_274948(int) __asm__("FUN_001fa6c0");
 
 extern unsigned char *D_L00_001B2194 __attribute__((section(".data")));
-unsigned char *FUN_L00_00274948(u128 *a, u128 *b, int c, int d);
-unsigned char *FUN_L00_00274948(u128 *position, u128 *initial_velocity, int initial_alpha, int moby_reference) {
+unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(u128 *a, u128 *b, int c, int d) __asm__("FUN_L00_00274948");
+unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(u128 *position, u128 *initial_velocity, int initial_alpha, int moby_reference) {
     unsigned char *particle = p27fe00_alloc(0x45);
     if (particle) {
         unsigned char *particle_data;
