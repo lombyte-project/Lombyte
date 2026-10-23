@@ -295,7 +295,9 @@ int activate_state_15_moby_at_position(void *m_, void *activation_position) __as
 int activate_state_15_moby_at_position(void *m_, void *pos) __asm__("FUN_L06_002e9d10");
 extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
 
-void FUN_L06_002fb090(char *moby) {
+void activate_listed_state_15_mobys_at_raised_positions(char *moby) __asm__("FUN_L06_002fb090");
+
+void activate_listed_state_15_mobys_at_raised_positions(char *moby) {
     char *data = *(char **)(moby + 0x78);
     short *moby_index_list = D_L06_001ABFC0_c[*(int *)(data + 0xF0)];
     short *moby_index_cursor;
