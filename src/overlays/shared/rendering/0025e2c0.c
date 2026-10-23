@@ -58,7 +58,10 @@ void load_display_text_resource_entry(void *arg0, s32 *arg1) __asm__("FUN_00214b
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern int *D_L15_001B2770 NOT_SDA;
-unsigned char *FUN_L15_002647f0(void *particle_position, float *p_vector, float *c_vector, int particle_color, int e, int particle_frame_count, int g, int h,
+unsigned char *create_type_47_particle(void *particle_position, float *p_vector, float *c_vector, int particle_color, int e, int particle_frame_count, int g, int h,
+                                char *owner) __asm__("FUN_L15_002647f0");
+
+unsigned char *create_type_47_particle(void *particle_position, float *p_vector, float *c_vector, int particle_color, int e, int particle_frame_count, int g, int h,
                                 char *owner) {
     unsigned char *particle = create_part(0x47);
     if (particle != 0) {
