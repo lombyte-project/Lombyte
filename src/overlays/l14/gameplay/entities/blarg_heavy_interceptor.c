@@ -3195,7 +3195,7 @@ extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern void set_moby_animation(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
 extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern unsigned char *FUN_L14_002dea98(char *owner, char *pos);
+extern unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) __asm__("FUN_L14_002dea98");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void FUN_L14_002e0170(struct Moby *, s32 *, int);
@@ -3285,7 +3285,7 @@ void update_level14_racer(struct Moby *racer_moby) {
         update_racer_path_and_weapon(racer_moby);
         if (is_point_inside_clip_volume(&racer_moby->pos, racer_vars->volume)) {
             moby_point_position(racer_moby, 2, pos);
-            spark = FUN_L14_002dea98((char *)racer_moby, (char *)pos);
+            spark = spawn_plasmabot_death_debris((char *)racer_moby, (char *)pos);
             if (spark) {
                 sv = *(f32 **)(spark + 0x78);
                 spawned_object_planar_velocity[0] = fast_cos(racer_moby->rot.z) * (frame_scale * 0.4f);

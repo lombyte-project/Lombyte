@@ -285,7 +285,7 @@ float FUN_L14_002b35d8_c(char *moby, int flag, float angle) __asm__("FUN_L14_002
 int FUN_L14_002b3418_c(char *moby) __asm__("FUN_L14_002b3418");
 int FUN_L14_002b3920_c(int index) __asm__("FUN_L14_002b3920");
 int FUN_L14_002d9870_c(int i) __asm__("FUN_L14_002d9870");
-unsigned char *FUN_L14_002dea98_c(char *owner, char *pos) __asm__("FUN_L14_002dea98");
+unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) __asm__("FUN_L14_002dea98");
 unsigned char *FUN_L14_002e0170_c(char *owner, float *scale, int mode) __asm__("FUN_L14_002e0170");
 void FUN_L14_002b2600_c(struct Moby *m) __asm__("FUN_L14_002b2600");
 void FUN_L14_002b2ed8_c(struct Moby *m) __asm__("FUN_L14_002b2ed8");
@@ -653,7 +653,7 @@ void update_plasmabot(char *moby) {
         if ((mine_fall(moby, data + 0x60) & 0x160) == 0) return;
         FUN_L00_002e2040(moby);
         FUN_L00_0024f7c8(moby, 2, bone_transform_scratch);
-        FUN_L14_002dea98_c(moby, (char *)bone_transform_scratch);
+        spawn_plasmabot_death_debris(moby, (char *)bone_transform_scratch);
         call_F4A8(moby, data + 0x40, moby + 0x10, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
         if (((unsigned char *)D_001413F4)[0] == 2) {
             FUN_L00_00257470(moby, 0x200, -1);
@@ -664,7 +664,7 @@ void update_plasmabot(char *moby) {
     }
     case PLASMABOT_SPAWN_DEBRIS_AND_REMOVE: {
         FUN_L00_0024f7c8(moby, 2, bone_transform_scratch);
-        FUN_L14_002dea98_c(moby, (char *)bone_transform_scratch);
+        spawn_plasmabot_death_debris(moby, (char *)bone_transform_scratch);
         status = 0;
         ((void (*)(char *, int *, int))FUN_L14_002e0170_c)(moby, &status, 1);
         FUN_L00_002e2040(moby);
@@ -1478,7 +1478,7 @@ extern float D_L14_00161B08 __attribute__((sda));
 extern float D_L14_00161B0C __attribute__((sda));
 extern float D_L14_00161B10 __attribute__((sda));
 extern float D_L14_00161B14 __attribute__((sda));
-unsigned char *FUN_L14_002dea98(char *owner, char *pos) {
+unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) {
     unsigned char *spawned_moby = func_0020D348_m(0x145);
     char *spawned_vars;
     char *hero_launch_reference;
