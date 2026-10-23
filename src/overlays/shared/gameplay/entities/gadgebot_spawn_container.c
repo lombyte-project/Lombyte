@@ -2479,7 +2479,9 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_normalize_angle(f32) __asm__("FUN_001fa610");
 extern Moby *D_L06_0015FFD8;
 
-int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
+int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int flag, int *out) __asm__("FUN_L06_002f2c28");
+
+int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int flag, int *out) {
     float candidate_position[4];
     float vB[4];
     float vA[4];
