@@ -996,7 +996,9 @@ extern int D_L02_00161AAC __attribute__((sda));
 extern int D_L02_00161AB0 __attribute__((sda));
 extern int D_L02_00161AB4 __attribute__((sda));
 extern int D_L02_00161AB8 __attribute__((sda));
-void FUN_L02_002dae88(void) {
+void draw_tresspasser_puzzle_textured_quads(void) __asm__("FUN_L02_002dae88");
+
+void draw_tresspasser_puzzle_textured_quads(void) {
     Q_2dae88 packed_vertices;
     int vertex_colors[4];
     int vertex_uvs[4];
@@ -1545,7 +1547,7 @@ extern int D_L02_00161BC4 __attribute__((sda));
 extern void FUN_L02_002da3d8_c(int, u32, float, float, float, float) __asm__("FUN_L02_002da3d8");
 extern void FUN_L02_002da6c0_c(int, int, int, float, float) __asm__("FUN_L02_002da6c0");
 extern void FUN_L02_002da938_c(void *, f32, f32, f32, s32) __asm__("FUN_L02_002da938");
-extern void FUN_L02_002dae88_c(void) __asm__("FUN_L02_002dae88");
+extern void draw_tresspasser_puzzle_textured_quads(void) __asm__("FUN_L02_002dae88");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 #define get_effect_texture ((u64 (*)(int))get_effect_texture)
@@ -1566,7 +1568,7 @@ void FUN_L02_002d93e8(char *moby) {
 
     vu1_add_g_sregister(0x47, 0x5380b);
     ctx.texture = get_effect_texture(0x10);
-    FUN_L02_002dae88_c();
+    draw_tresspasser_puzzle_textured_quads();
     {
         int marker_reset_countdown, *marker_cursor;
         for (marker_reset_countdown = 11, marker_cursor = markers->slot; marker_reset_countdown >= 0; --marker_reset_countdown, ++marker_cursor) {
