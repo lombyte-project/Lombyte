@@ -1444,7 +1444,9 @@ void teleporter_update(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F4040), where it is exact; names translated to the US level program. */
 
-void FUN_L11_002f2cd0(struct Moby *moby) {
+void request_teleporter_help_message(struct Moby *moby) __asm__("FUN_L11_002f2cd0");
+
+void request_teleporter_help_message(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     switch (*(int *)(data + 0x10)) {
     case 0:
