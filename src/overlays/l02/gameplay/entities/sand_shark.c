@@ -308,7 +308,7 @@ extern int FUN_L00_002dc9f0_e50(void *, void *) __asm__("FUN_L00_002dc9f0");
 extern void FUN_L01_0026d930_e50(void *) __asm__("FUN_L01_0026d930");
 extern void emit_sand_shark_dust_burst(void *) __asm__("FUN_L02_002d3dd0");
 extern int select_group_class_29c_moby(void *) __asm__("FUN_L02_002d5658");
-extern void FUN_L02_002d57f8_e50(void *, int) __asm__("FUN_L02_002d57f8");
+extern void emit_sand_shark_radial_particles(void *, int) __asm__("FUN_L02_002d57f8");
 extern void FUN_L02_002d5a68_e50(void *) __asm__("FUN_L02_002d5a68");
 extern void FUN_L02_002d5c88_e50(void *) __asm__("FUN_L02_002d5c88");
 extern void FUN_L02_002d63c0_e50(void *) __asm__("FUN_L02_002d63c0");
@@ -581,7 +581,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         moby->pos.z -= D_L02_0016191C;
         if (scale_ticks_e50(0xA) < D_L02_0015F5CC_e50) {
-            FUN_L02_002d57f8_e50(&position_or_offset_scratch, 6);
+            emit_sand_shark_radial_particles(&position_or_offset_scratch, 6);
         }
         break;
     }
@@ -614,7 +614,7 @@ void sand_shark_update(struct Moby *moby) {
             }
         }
         moby->pos.z -= D_L02_0016191C;
-        FUN_L02_002d57f8_e50(&position_or_offset_scratch, 6);
+        emit_sand_shark_radial_particles(&position_or_offset_scratch, 6);
         break;
     }
     case SAND_SHARK_APPROACH_TARGET:
@@ -840,7 +840,7 @@ void sand_shark_update(struct Moby *moby) {
             }
         } else if (moby->pos.z < vars->home.f[2] + 0.6f) {
             position_or_offset_scratch.q = *(OvlQuad *)&moby->pos;
-            FUN_L02_002d57f8_e50(&position_or_offset_scratch, 6);
+            emit_sand_shark_radial_particles(&position_or_offset_scratch, 6);
         }
         break;
     }
@@ -849,7 +849,7 @@ void sand_shark_update(struct Moby *moby) {
         if ((knockback_status_flags & 1) && vars->unk29C == 0) {
             vars->unk29C = 1;
             position_or_offset_scratch.q = *(OvlQuad *)&moby->pos;
-            FUN_L02_002d57f8_e50(&position_or_offset_scratch, 0x1B);
+            emit_sand_shark_radial_particles(&position_or_offset_scratch, 0x1B);
         }
         if (knockback_status_flags & 0x140) {
             FUN_L00_00257470_e50(moby, 0, -1);
@@ -992,7 +992,7 @@ int D_L02_0016195C = 0x20306058;
 int D_L02_00161960 = -1;
 
 /* Same routine as FUN_L12_002e19a8: spawns n particles around pos, fewer when D_L02_00160178 is high. */
-void FUN_L02_002d57f8(void *particle_origin, int particle_count) {
+void emit_sand_shark_radial_particles(void *particle_origin, int particle_count) {
     float saved_source_position[4];
     float particle_position[4];
     float vertical_motion[4];
