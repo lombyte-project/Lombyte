@@ -2594,7 +2594,7 @@ void spawn_explosion_burst(void *arg) __asm__("FUN_L18_002ea800");
 void initialize_electric_bolt_effect_if_requested(struct Moby *moby) __asm__("FUN_L18_002eacd8");
 
 void initialize_electric_bolt_effect_if_requested(struct Moby *m) __asm__("FUN_L18_002eacd8");
-extern void FUN_L18_002eaea0_u(void *) __asm__("FUN_L18_002eaea0");
+extern void update_electric_bolt_geometry_and_particles(void *) __asm__("FUN_L18_002eaea0");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 void FUN_L18_002ea598_c(char *moby) __asm__("FUN_L18_002ea598");
 extern void spark_s(int, void *, float, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
@@ -2635,7 +2635,7 @@ void update_moby_target_travel_and_electric_effects(struct Moby *moby) {
         FUN_L00_00257d78(arc_endpoint_position, D_L18_00161ED8 * moby_vars[9], D_L18_00161ED8 * moby_vars[9]);
         add_vector_xyz(arc_endpoint_position, arc_endpoint_position, position);
         initialize_electric_bolt_effect_if_requested(moby);
-        FUN_L18_002eaea0_u(moby);
+        update_electric_bolt_geometry_and_particles(moby);
         enqueue_callback_list_1((void (*)(void))draw_electric_water_bolt_effect, moby);
         if (target_distance < movement_step_length) {
             spawn_explosion_burst(moby);
@@ -3061,7 +3061,7 @@ unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, fl
 extern void spawn_ec290(void *, int, float, float, int, int, int, void *, float) __asm__("FUN_L00_00272060");
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
-void FUN_L18_002eaea0(void *moby) {
+void update_electric_bolt_geometry_and_particles(void *moby) {
     V_ec290 scratch_vectors[10];
     V_ec290 side_arc_segment_offsets[5];
     unsigned char flag = *(unsigned char *)D_0013E533;
