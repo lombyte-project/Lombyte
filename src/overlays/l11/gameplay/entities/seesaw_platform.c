@@ -2050,7 +2050,7 @@ extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 extern void append_rotated_sprite_quad(f32, f32, f32, f32, f32, s32, s32, s64, s32, s32, s32, s32, f32,
                                        f32) __asm__("FUN_001f5ab0");
 extern void append_scaled_screen_triangle_strip(short *pts, int n, f32 x, f32 y, u32 col, u64 prim, f32 scale) __asm__("FUN_L11_00310ad0");
-extern void FUN_L11_00311048(f32 x, f32 y, f32 scale, f32 angle, u8 r, u8 g, u8 b, u8 a);
+extern void draw_quarter_turn_textured_quads(f32 x, f32 y, f32 scale, f32 angle, u8 r, u8 g, u8 b, u8 a) __asm__("FUN_L11_00311048");
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 extern s32 help_request(s32 message, s32 help) __asm__("FUN_L00_00203908");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
@@ -2150,7 +2150,7 @@ void draw_ship_hud(struct Moby *moby) {
                 fade = 1.0f;
             }
             alpha = truncate_float_to_s32(fade * 96.0f);
-            FUN_L11_00311048(convert_integer_to_float(sx), convert_integer_to_float(sy), grow,
+            draw_quarter_turn_textured_quads(convert_integer_to_float(sx), convert_integer_to_float(sy), grow,
                              normalize_angle(convert_integer_to_float(level_frame) / 30.0f), 0, 0xFF, 0, alpha);
             vars->locked = NULL;
         } else {
@@ -2158,7 +2158,7 @@ void draw_ship_hud(struct Moby *moby) {
             if ((vars->lock_timer / scale_game_frames(0x14)) & 1) {
                 blink = 0;
             }
-            FUN_L11_00311048(convert_integer_to_float(sx), convert_integer_to_float(sy), 1.0f, 0.0f, 0xFF, blink, 0,
+            draw_quarter_turn_textured_quads(convert_integer_to_float(sx), convert_integer_to_float(sy), 1.0f, 0.0f, 0xFF, blink, 0,
                              0x60);
             vars->locked = vars->target;
         }

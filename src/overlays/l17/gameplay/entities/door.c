@@ -893,8 +893,8 @@ extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 float absolute_float(float input) __asm__("func_001F99C0");
 s32 font_print_center(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6af0");
-void FUN_L11_00311048(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x,
-                      float y, float s, float ang);
+void draw_quarter_turn_textured_quads(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x,
+                      float y, float s, float ang) __asm__("FUN_L11_00311048");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern long func_001F4868_l(int) __asm__("FUN_001f44b8");
 extern void func_L17_002EBF08_f(float, float, float, float, unsigned char, unsigned char,

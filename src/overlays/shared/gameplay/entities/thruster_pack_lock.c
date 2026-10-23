@@ -311,7 +311,10 @@ void append_rotated_textured_screen_quad(float x, float y, float width, float he
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
 
-void FUN_L11_00311048(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
+void draw_quarter_turn_textured_quads(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
+                      float y, float scale, float quad_rotation_angle) __asm__("FUN_L11_00311048");
+
+void draw_quarter_turn_textured_quads(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
                       float y, float scale, float quad_rotation_angle) {
     int texture;
     float quad_size;
