@@ -292,7 +292,7 @@ extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float FUN_L14_002b35d8_c(char *moby, int flag, float angle) __asm__("FUN_L14_002b35d8");
-int FUN_L14_002b3418_c(char *moby) __asm__("FUN_L14_002b3418");
+int follow_plasmabot_path(char *moby) __asm__("FUN_L14_002b3418");
 int count_listed_plasmabots_preparing_or_sweeping_beam(int index) __asm__("FUN_L14_002b3920");
 int FUN_L14_002d9870_c(int i) __asm__("FUN_L14_002d9870");
 unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) __asm__("FUN_L14_002dea98");
@@ -472,7 +472,7 @@ void update_plasmabot(char *moby) {
     }
     case PLASMABOT_START_PATH_TRAVERSAL:
         if (compute_interpolated_record_value(moby) >= 3.0f) {
-            FUN_L14_002b3418_c(moby);
+            follow_plasmabot_path(moby);
         }
         if ((moby[0x70] & 2) && ((unsigned char *)moby)[0x52] == ((unsigned char *)moby)[0x53]) {
             ((unsigned char *)moby)[0x20] = 3;
@@ -514,7 +514,7 @@ void update_plasmabot(char *moby) {
         break;
     }
     case PLASMABOT_FOLLOW_PATH_FORWARD:
-        if (FUN_L14_002b3418_c(moby) != 0) {
+        if (follow_plasmabot_path(moby) != 0) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             ((unsigned char *)moby)[0x20] = 4;
         }
@@ -523,7 +523,7 @@ void update_plasmabot(char *moby) {
         if (((unsigned char *)data)[0x24A] != 0) {
             FUN_L14_002d9870_c(*(int *)(data + 0x264));
         }
-        if (FUN_L14_002b3418_c(moby) != 0) {
+        if (follow_plasmabot_path(moby) != 0) {
             if (((unsigned char *)data)[0x24A] != 0) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
                 ((unsigned char *)moby)[0x20] = 9;
@@ -1096,7 +1096,7 @@ extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28"
 extern float func_L00_0025CE58_2B4668(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 
 extern float D_L14_001614D8 __attribute__((sda));
-int FUN_L14_002b3418(char *moby) {
+int follow_plasmabot_path(char *moby) {
     float path_target_position[4];
     float pre_spring_position[4];
     float target_offset[4];
