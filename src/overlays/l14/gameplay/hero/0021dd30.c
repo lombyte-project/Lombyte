@@ -395,7 +395,7 @@ extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
 s32 D_L14_0015F68C = 0;
 
 extern void emit_hero_periodic_surface_effect(s32, s32) __asm__("FUN_L00_00209540");
-extern void FUN_L00_002132b8(f32, f32);
+extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void stop_hero_motion_without_forward_support(f32, f32) __asm__("FUN_L00_00217118");
 extern void stick_target(f32, s32) __asm__("FUN_L00_002118c8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -586,9 +586,9 @@ void update_hero_motion_by_state(void) {
     case 0x72:
     case 0x80:
         if (hero.unk12E2 != 0) {
-            FUN_L00_002132b8(0.7f, frame_time * 0.0f);
+            build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
         } else {
-            FUN_L00_002132b8(0.5f, frame_time * 2.0f);
+            build_scaled_hero_move_impulse(0.5f, frame_time * 2.0f);
         }
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         stick_target(1.0f, 0);
@@ -746,9 +746,9 @@ void update_hero_motion_by_state(void) {
         s32 anim = -1;
         s32 frames = 0;
         if (hero.unk12E2 != 0) {
-            FUN_L00_002132b8(0.7f, frame_time * 0.0f);
+            build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
         } else {
-            FUN_L00_002132b8(0.5f, frame_time * 2.0f);
+            build_scaled_hero_move_impulse(0.5f, frame_time * 2.0f);
         }
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         stick_target(1.0f, 0);
@@ -1445,7 +1445,7 @@ void update_hero_motion_by_state(void) {
         update_hero_stick_target_magnitude();
         if (hero.unk930 > 0.0f) {
             Vec4 *move_impulse_ptr = &hero.move_impulse;
-            FUN_L00_002132b8(0.7f, 0.0f);
+            build_scaled_hero_move_impulse(0.7f, 0.0f);
             vector_and_descriptor_scratch.q = hero.move_impulse.q;
             hero.target_speed += forward_component(&vector_and_descriptor_scratch);
             if (hero.target_speed < frame_time * 0.7f) {
@@ -1943,7 +1943,7 @@ void update_hero_motion_by_state(void) {
             FUN_L12_00235c08();
         }
         adjust_hero_pose_targets_from_motion();
-        FUN_L00_002132b8(0.7f, frame_time * 0.0f);
+        build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, hero.unk940);
         if (gravity_z(&hero.motion.velocity) < -(frame_time * 50.0f)) {
             gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, -(frame_time * 50.0f));
@@ -2122,7 +2122,7 @@ void update_hero_motion_by_state(void) {
                         reduce_and_apply_hero_planar_velocity_addend(hero.unk484);
                     }
                 }
-                FUN_L00_002132b8(0.5f, frame_time * 2.0f);
+                build_scaled_hero_move_impulse(0.5f, frame_time * 2.0f);
                 if (hero.state.current == HERO_STATE_RUN_JUMP && hero.state_timer < hero.unk420 + scale_game_frames(4)) {
                     FUN_L00_00233708(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 16.0f * (f32)hero.state_timer);
                 }

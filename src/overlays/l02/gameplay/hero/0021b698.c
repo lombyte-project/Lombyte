@@ -754,7 +754,7 @@ extern void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_
 extern void speed_step(float, float) __asm__("FUN_L00_00212088");
 extern void set_planar_vel(float) __asm__("FUN_L00_002120d8");
 extern void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
-extern void FUN_L00_002132b8(float, float);
+extern void build_scaled_hero_move_impulse(float, float) __asm__("FUN_L00_002132b8");
 extern void FUN_L00_00214108_cf(void *, int, int, void *, void *,
                                 float) __asm__("FUN_L00_00259bc8");
 extern void update_hero_target_heading(float, float, float) __asm__("FUN_L00_00214ed8");
@@ -836,7 +836,7 @@ void update_hero_state_motion(void) {
     case 0x80: {
         float speed;
 
-        FUN_L00_002132b8(0.5f, frame_time * 2.0f);
+        build_scaled_hero_move_impulse(0.5f, frame_time * 2.0f);
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         stick_target(1.0f, 0);
         if (hero.state.current == HERO_STATE_LOOK || hero.state.current == 0x1E) {
@@ -1011,9 +1011,9 @@ void update_hero_state_motion(void) {
         anim = -1;
         frames = 0;
         if (hero.unk12E2 != 0) {
-            FUN_L00_002132b8(0.7f, frame_time * 0.0f);
+            build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
         } else {
-            FUN_L00_002132b8(0.5f, frame_time * 2.0f);
+            build_scaled_hero_move_impulse(0.5f, frame_time * 2.0f);
         }
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         stick_target(1.0f, 0);
@@ -1743,7 +1743,7 @@ void update_hero_state_motion(void) {
         update_hero_stick_target_magnitude();
         if (hero.unk930 > 0.0f) {
 
-            FUN_L00_002132b8(0.7f, 0.0f);
+            build_scaled_hero_move_impulse(0.7f, 0.0f);
             *(OvlQuad *)vec[0] = *(OvlQuad *)hero.move_impulse.f;
             hero.target_speed = hero.target_speed + forward_component(vec[0]);
             if (hero.target_speed < frame_time * 0.7f) {
@@ -1901,7 +1901,7 @@ void update_hero_state_motion(void) {
             FUN_L02_00223450();
         }
         adjust_hero_pose_targets_from_motion();
-        FUN_L00_002132b8(0.7f, frame_time * 0.0f);
+        build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, hero.unk940);
         if (gravity_z(hero.motion.velocity.f) < -(frame_time * 50.0f)) {
             gravity_set_z(hero.motion.velocity.f, hero.motion.velocity.f, -(frame_time * 50.0f));
@@ -2077,7 +2077,7 @@ void update_hero_state_motion(void) {
                 if (hero.unk418 != 0) {
                     reduce_and_apply_hero_planar_velocity_addend(hero.unk484);
                 }
-                FUN_L00_002132b8(0.5f, frame_time * 2.0f);
+                build_scaled_hero_move_impulse(0.5f, frame_time * 2.0f);
                 if (hero.state.current == HERO_STATE_RUN_JUMP &&
                     hero.state_timer < hero.unk420 + scale_game_frames(4)) {
                     FUN_L00_00233810_cf(hero.motion.velocity.f, hero.motion.velocity.f,

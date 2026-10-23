@@ -194,7 +194,7 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
-extern void FUN_L00_002132b8(f32, f32);
+extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 extern void FUN_L00_00233ba0_u(void *, void *, f32) __asm__("FUN_L00_00233ba0");
@@ -216,7 +216,7 @@ void update_hero_airborne_planar_motion(void) {
 
     state = hero.state.current;
     if (state == 10) {
-        FUN_L00_002132b8(0.7f, frame_time * 0.0f);
+        build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
         hero.ground_speed = hero.motion.unk164;
     } else if (state == 16) {
@@ -265,7 +265,7 @@ void update_hero_airborne_planar_motion(void) {
         additional_planar_speed = hero.unk454 * fast_sin(fast_difference_between_rotations(hero.unk43C, hero.unk438));
         hero.motion.velocity.f[0] += fast_cos(hero.unk43C) * additional_planar_speed;
         hero.motion.velocity.f[1] += fast_sin(hero.unk43C) * additional_planar_speed;
-        FUN_L00_002132b8(0.7f, frame_time * 0.0f);
+        build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
     } else if (state == 0x11) {
         hero.motion.move_yaw = hero.unk470.f[3];
@@ -286,7 +286,7 @@ void update_hero_airborne_planar_motion(void) {
         hero.ground_speed = hero.motion.unk164;
     } else {
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, hero.unk414);
-        FUN_L00_002132b8(0.7f, frame_time * 0.0f);
+        build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
         air_acceleration = frame_time_sq * 20.0f;
         if (hero.target_speed < D_L01_0017C250[0] * frame_time * 0.2f) {
@@ -467,7 +467,7 @@ extern void turn_hero_toward_move_direction_for_item(void) __asm__("FUN_L00_0021
 extern void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_L00_00211f38");
 extern void speed_step(float, float) __asm__("FUN_L00_00212088");
 extern void set_planar_vel(float) __asm__("FUN_L00_002120d8");
-extern void FUN_L00_002132b8(float, float);
+extern void build_scaled_hero_move_impulse(float, float) __asm__("FUN_L00_002132b8");
 extern void FUN_L00_00214108_cf(void *, int, int, void *, void *,
                                 float) __asm__("FUN_L00_00259bc8");
 extern void update_hero_target_heading(float, float, float) __asm__("FUN_L00_00214ed8");
@@ -546,7 +546,7 @@ void update_hero_motion_for_current_state(void) {
         if (hero.unk20A9 != 0) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
-        FUN_L00_002132b8(0.5f, frame_time * 2.0f);
+        build_scaled_hero_move_impulse(0.5f, frame_time * 2.0f);
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         stick_target(1.0f, 0);
         if (hero.state.current == HERO_STATE_LOOK || hero.state.current == 0x1E) {
@@ -1140,9 +1140,9 @@ void update_hero_motion_for_current_state(void) {
         anim = -1;
         frames = 0;
         if (hero.unk12E2 != 0) {
-            FUN_L00_002132b8(0.7f, frame_time * 0.0f);
+            build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
         } else {
-            FUN_L00_002132b8(0.5f, frame_time * 2.0f);
+            build_scaled_hero_move_impulse(0.5f, frame_time * 2.0f);
         }
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         stick_target(1.0f, 0);
@@ -1592,7 +1592,7 @@ void update_hero_motion_for_current_state(void) {
         FUN_L01_00232290();
         if (hero.unk930 > 0.0f) {
 
-            FUN_L00_002132b8(0.7f, 0.0f);
+            build_scaled_hero_move_impulse(0.7f, 0.0f);
             *(OvlQuad *)vec[0] = *(OvlQuad *)hero.move_impulse.f;
             hero.target_speed = hero.target_speed + forward_component(vec[0]);
             if (hero.target_speed < frame_time * 0.7f) {
@@ -1799,7 +1799,7 @@ void update_hero_motion_for_current_state(void) {
             update_hero_airborne_planar_motion();
         }
         adjust_hero_pose_targets_from_motion();
-        FUN_L00_002132b8(0.7f, frame_time * 0.0f);
+        build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, hero.unk940);
         if (FUN_L00_00233a78(hero.motion.velocity.f) < -(frame_time * 50.0f)) {
             FUN_L00_00233b20(hero.motion.velocity.f, hero.motion.velocity.f, -(frame_time * 50.0f));
@@ -1987,7 +1987,7 @@ void update_hero_motion_for_current_state(void) {
                 if (hero.unk418 != 0) {
                     reduce_and_apply_hero_planar_velocity_addend(hero.unk484);
                 }
-                FUN_L00_002132b8(0.5f, frame_time * 2.0f);
+                build_scaled_hero_move_impulse(0.5f, frame_time * 2.0f);
                 if (hero.state.current == HERO_STATE_RUN_JUMP &&
                     hero.state_timer < hero.unk420 + scale_game_frames(4)) {
                     FUN_L00_00233810_cf(hero.motion.velocity.f, hero.motion.velocity.f,

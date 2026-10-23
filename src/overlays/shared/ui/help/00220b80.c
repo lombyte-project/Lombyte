@@ -218,7 +218,7 @@ extern f32 FUN_001fa688_223450(f32, f32) __asm__("FUN_001fa688");
 extern f32 FUN_001fa5c8_223450(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 FUN_001f9b20_223450(void *) __asm__("FUN_001f9b20");
 extern f32 approach_value_223450(f32, f32, f32 *) __asm__("FUN_00213ed8");
-extern void FUN_L00_002132b8_223450(f32, f32) __asm__("FUN_L00_002132b8");
+extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void FUN_L00_00212088_223450(f32, f32) __asm__("FUN_L00_00212088");
 extern void FUN_L00_00211e30_223450(int, float, float, float) __asm__("FUN_L00_00211e30");
 extern f32 FUN_L00_0025bc98_223450(float *, float *, int, float, float, float,
@@ -247,7 +247,7 @@ void FUN_L02_00223450(void) {
 
     state = hero.state.current;
     if (state == 10) {
-        FUN_L00_002132b8_223450(0.7f, ED6C * 0.0f);
+        build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
         hero.ground_speed = hero.motion.unk164;
     } else if (state == 16) {
@@ -296,7 +296,7 @@ void FUN_L02_00223450(void) {
         a = hero.unk454 * FUN_001f9de0_223450(FUN_001fa688_223450(hero.unk43C, hero.unk438));
         hero.motion.velocity.f[0] += FUN_001f9dc8_223450(hero.unk43C) * a;
         hero.motion.velocity.f[1] += FUN_001f9de0_223450(hero.unk43C) * a;
-        FUN_L00_002132b8_223450(0.7f, ED6C * 0.0f);
+        build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
     } else if (state == 0x11) {
         hero.motion.move_yaw = hero.unk470.f[3];
@@ -325,7 +325,7 @@ void FUN_L02_00223450(void) {
         } else {
             FUN_L00_00211e30_223450(0, ED64 * 0.04f, ED64 * 0.2f, hero.unk414);
         }
-        FUN_L00_002132b8_223450(0.7f, ED6C * 0.0f);
+        build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
         arg = ED70 * 20.0f;
         if (hero.target_speed < D_L02_0017C3D0[0] * ED6C * 0.2f) {

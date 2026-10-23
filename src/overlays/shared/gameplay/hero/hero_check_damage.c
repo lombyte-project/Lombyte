@@ -3500,7 +3500,9 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-void FUN_L00_002132b8(float scale_factor, float impulse_length_reduction) {
+void build_scaled_hero_move_impulse(float scale_factor, float impulse_length_reduction) __asm__("FUN_L00_002132b8");
+
+void build_scaled_hero_move_impulse(float scale_factor, float impulse_length_reduction) {
     char *move_impulse = D_0013E533_lui + 0x173D;
     char *hero_base = move_impulse - 0x920;
     float scaled_impulse_length;
