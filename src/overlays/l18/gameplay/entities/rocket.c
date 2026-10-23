@@ -2100,7 +2100,9 @@ extern float D_L18_00161C88 __attribute__((sda));
 extern int D_L18_00161C8C __attribute__((sda));
 extern int D_L18_00161C90 __attribute__((sda));
 extern float D_L18_00161C98 __attribute__((sda));
-void FUN_L18_002dc0c8(struct Moby *moby, void *segment_start, void *segment_end) {
+void spawn_expanding_ring_segment_particles(struct Moby *moby, void *segment_start, void *segment_end) __asm__("FUN_L18_002dc0c8");
+
+void spawn_expanding_ring_segment_particles(struct Moby *moby, void *segment_start, void *segment_end) {
     float segment_bounding_sphere[4];
     float particle_spawn_position[4];
     float particle_velocity[4];
