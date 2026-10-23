@@ -1999,7 +1999,7 @@ extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
-extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 extern void process_ultramech_hits_and_update_target(void *) __asm__("FUN_L15_002d0fa8");
@@ -2454,7 +2454,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                          dd);
         FUN_L00_00263fd8(ultramech_moby, 0x64C, pp, rr, 0, 0, 0.0f, dd, dd, D_L15_0015F580);
     }
-        FUN_L00_00263e30(ultramech_moby, 0x7A9, 1, 0x7A9, 2, 4, 2);
+        spawn_moby_break_fragments(ultramech_moby, 0x7A9, 1, 0x7A9, 2, 4, 2);
         ultramech_moby->state = 0x40;
         return;
     case ULTRAMECH_DEAD_WAIT_FOR_RESET:

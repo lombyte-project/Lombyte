@@ -1643,7 +1643,7 @@ extern void FUN_L00_0025a120(void *);
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00263ac8_c5bb8(void *, int, void *, float) __asm__("FUN_L00_00263ac8");
-extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void FUN_L01_0026d930(char *p, void *);
 void update_robot_dog_hit_reaction(struct Moby *moby) __asm__("FUN_L03_002c6a20");
 
@@ -1911,7 +1911,7 @@ void robot_dog_update(char *moby) {
             cart_burst(moby, moby + 0x10, -1, 0.5f, 13.0f);
             spawn_debris_c5bb8(moby, 0x6CE, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L03_0015F580_macro, D_L03_0015F580_macro, D_L03_0015F580_macro);
             spawn_debris_c5bb8(moby, 0x6CF, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L03_0015F580_macro, D_L03_0015F580_macro, D_L03_0015F580_macro);
-            FUN_L00_00263e30(moby, 0x77D, 1, 0x77D, 1, 3, 2);
+            spawn_moby_break_fragments(moby, 0x77D, 1, 0x77D, 1, 3, 2);
             FUN_L00_00257470(moby, 0, -1);
             mark_moby_for_removal_c5bb8(moby);
             return;

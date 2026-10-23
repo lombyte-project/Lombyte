@@ -633,7 +633,7 @@ void spawn_background_ship_2_level_10_joint_sparks(char *moby, void *previous_po
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
@@ -660,7 +660,7 @@ void white_flower_update(char *moby) {
     case WHITE_FLOWER_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);
         spawn_proximity_gated_bolts(moby);
-        FUN_L00_00263e30(moby, 0x71D, 1, 0x71D, 1, 5, 2);
+        spawn_moby_break_fragments(moby, 0x71D, 1, 0x71D, 1, 5, 2);
         spawn_moby_from_placement(moby, 0x71C);
         mark_moby_for_removal(moby);
         break;

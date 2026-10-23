@@ -346,7 +346,7 @@ void test_dummy_door_update(struct Moby *moby) {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_00257470(void *, int, int);
-extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -374,7 +374,7 @@ void update_moby_hit_triggered_removal(struct Moby *moby) {
         allocate_voice_for_target_entry(0, 0, moby);
         FUN_L00_00257470(moby, 0, -1);
         spawn_proximity_gated_bolts(moby);
-        FUN_L00_00263e30(moby, 0x74E, 1, 0x74E, 1, 0xB, 2);
+        spawn_moby_break_fragments(moby, 0x74E, 1, 0x74E, 1, 0xB, 2);
         mark_moby_for_removal_u(moby);
         break;
     }
@@ -2396,7 +2396,7 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_00263b38(void *, float);
-extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
 void advance_hoverboard_dummy_path_node(char *m) __asm__("FUN_L16_002cf9f8");
@@ -2523,8 +2523,8 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             path_node_or_explosion_position[2] += 0.5f;
             spawn_explosion(moby, &D_L16_0015F580, path_node_or_explosion_position, 0.0f, 0.0f, 5, 15, 25, 2.5f, 1.5f, 4.0f, -1,
                              1.0f, 7.0f, 0, 9, -1, 0);
-            FUN_L00_00263e30(moby, 0x655, 1, 0x656, 2, 2, 0);
-            FUN_L00_00263e30(moby, 0x6FA, 1, 0x6FB, 1, 1, 0);
+            spawn_moby_break_fragments(moby, 0x655, 1, 0x656, 2, 2, 0);
+            spawn_moby_break_fragments(moby, 0x6FA, 1, 0x6FB, 1, 1, 0);
             *(short *)(hoverboard_dummy_data + 0x2F2) = 0;
             *(int *)(hero_base + 0x8A8) += 250;
             moby[0x20] = 3;

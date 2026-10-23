@@ -342,7 +342,7 @@ void update_level_mode_dispatcher(struct Moby *moby) {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
 
@@ -369,7 +369,7 @@ void update_hit_triggered_fragment_spawner(struct Moby *moby) {
     case HIT_RESPONSE_STATE_RESPOND_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);
         spawn_proximity_gated_bolts(moby);
-        FUN_L00_00263e30(moby, 0x742, 1, 0x742, 1, 11, 2);
+        spawn_moby_break_fragments(moby, 0x742, 1, 0x742, 1, 11, 2);
         mark_moby_for_removal(moby);
         break;
     }

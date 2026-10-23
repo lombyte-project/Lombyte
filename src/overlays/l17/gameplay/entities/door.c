@@ -2450,7 +2450,7 @@ extern void spawn_nearby_effect(int, int, int, void *, void *, float) __asm__("F
 extern void FUN_L00_0025a120(void *);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00263b38(void *, float);
-extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_volume_suppressed) __asm__("FUN_L17_002efa48");
 
 void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int arg) __asm__("FUN_L17_002efa48");
@@ -2804,7 +2804,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
                              zero, zero);
             FUN_L00_00263fd8((char *)robot_dog_moby, 0x6CF, (float *)(robot_dog_moby + 0x10), robot_dog_moby + 0x40, 0, 0, 0.0f, zero,
                              zero, zero);
-            FUN_L00_00263e30(robot_dog_moby, 0x77D, 1, 0x77D, 1, 3, 2);
+            spawn_moby_break_fragments(robot_dog_moby, 0x77D, 1, 0x77D, 1, 3, 2);
             FUN_L00_00257470(robot_dog_moby, 0, -1);
             mark_moby_for_removal_c(robot_dog_moby);
         } else if (*(float *)(robot_dog_moby + 0x18) < 2.0f) {
