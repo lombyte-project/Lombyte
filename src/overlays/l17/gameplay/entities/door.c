@@ -558,7 +558,10 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 short D_L17_00162188 = 2;
-int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *current_target,
+int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *current_target,
+                     char *excluded_target) __asm__("FUN_L17_002eace8");
+
+int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *current_target,
                      char *excluded_target) {
     float v[4];
     float arrow_target_position_scratch[4];
@@ -789,7 +792,7 @@ extern int D_L17_0015F5C4;
 int D_L17_0016216C = 600;
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int FUN_L17_002eace8_u(int, char *, char *, char *, float, float, float, char *,
+extern int select_fighter_jet_target_and_draw_contacts(int, char *, char *, char *, float, float, float, char *,
                               char *) __asm__("FUN_L17_002eace8");
 #define W(p, o) (*(int *)((char *)(p) + (o)))
 #define P(p, o) (*(char **)((char *)(p) + (o)))
@@ -832,7 +835,7 @@ void update_fighter_jet_target_lock(int ship_moby, char *ship_vars) {
     W(ship_vars, 0x88) = 0;
 skip:
     qcopy(radar_rotation, D_L17_001676D0_lui);
-    candidate_target = (char *)FUN_L17_002eace8_u(ship_moby, ship_vars, D_L17_001676D0_lui - 0x10, (char *)radar_rotation, 0.19634955f, 0.19634955f,
+    candidate_target = (char *)select_fighter_jet_target_and_draw_contacts(ship_moby, ship_vars, D_L17_001676D0_lui - 0x10, (char *)radar_rotation, 0.19634955f, 0.19634955f,
                                    255.0f, P(ship_vars, 0x88), excluded_target);
     if ((candidate_target != P(ship_vars, 0x88) && W(ship_vars, 0x8C) >= 0x1F5) || FLAG == 0) {
         W(ship_vars, 0xEC) = 0;
