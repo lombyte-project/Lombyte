@@ -714,7 +714,9 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
-void FUN_L09_002eaea8(Moby *falling_rock) {
+void update_falling_asteroid(Moby *falling_rock) __asm__("FUN_L09_002eaea8");
+
+void update_falling_asteroid(Moby *falling_rock) {
     float movement_step[4];
     float collision_probe_offset[4];
     float position_or_movement_step[4];
