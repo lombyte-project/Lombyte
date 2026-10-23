@@ -52,7 +52,7 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern int FUN_L15_00299880(unsigned char *, char *, int, int, float);
+extern int begin_sentrybot_turn_toward_heading(unsigned char *, char *, int, int, float) __asm__("FUN_L15_00299880");
 int move_sentrybot_toward_point(char *moby, float *point, float target_forward_step) __asm__("FUN_L15_00299ae0");
 
 extern int move_sentrybot_toward_point(char *moby, float *point, float arg) __asm__("FUN_L15_00299ae0");
@@ -304,7 +304,7 @@ void sentrybot_update(unsigned char *moby) {
                         blend_moby_animation(moby, 2, 0, scale_game_frames(10));
                 }
             } else if (*(int *)(data + 0x124) == -1) {
-                FUN_L15_00299880(moby, data, 2, 0, *(float *)(data + 0x16C));
+                begin_sentrybot_turn_toward_heading(moby, data, 2, 0, *(float *)(data + 0x16C));
             }
         } else if (moby[0x20] == 3) {
             if (tick_countdown_32(data + 0x14C) != 0) {
@@ -535,7 +535,7 @@ void sentrybot_update(unsigned char *moby) {
                                        (*(int *)(data + 0x13C) * 0x10 + 0x10)),
                              (void *)2, (void *)0);
         } else {
-            FUN_L15_00299880(moby, data, 2, 0, *(float *)(data + 0x16C));
+            begin_sentrybot_turn_toward_heading(moby, data, 2, 0, *(float *)(data + 0x16C));
         }
         break;
     }
@@ -552,7 +552,7 @@ void sentrybot_update(unsigned char *moby) {
                                            (*(int *)(data + 0x13C) * 0x10 + 0x10)),
                                  (void *)2, (void *)0);
             } else {
-                FUN_L15_00299880(moby, data, 2, 0, *(float *)(data + 0x16C));
+                begin_sentrybot_turn_toward_heading(moby, data, 2, 0, *(float *)(data + 0x16C));
             }
         } else if (fast_difference_between_rotations(
                        *(float *)(moby + 0x48),
@@ -945,7 +945,7 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-int FUN_L15_00299880(unsigned char *moby, char *moby_data, int next_state, int next_animation, float angle) {
+int begin_sentrybot_turn_toward_heading(unsigned char *moby, char *moby_data, int next_state, int next_animation, float angle) {
     float heading_delta = -fast_subtract_rotations(*(float *)(moby + 0x48), angle);
     float stored_heading_delta;
     int turn_required = 1;
