@@ -651,7 +651,7 @@ extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
-extern void FUN_L00_00208b60(void);
+extern void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b60");
 extern void FUN_L00_002484e0(void *);
 extern void FUN_L00_00257024(int);
 extern void FUN_L00_00250df8(void *);
@@ -914,7 +914,7 @@ void update_hero_in_vehicle_mode(void) {
             }
         }
     }
-    FUN_L00_00208b60();
+    update_hero_moby_probed_height_bounds();
     FUN_L00_00257024((s32)hero.moby);
 }
 #include "rnc/audio/voice_pool.h"
@@ -1147,7 +1147,7 @@ void FUN_L00_00257024(int);
 void update_hero_color_and_item_tint(void) __asm__("FUN_L00_002076a8");
 
 void update_hero_color_and_item_tint(void) __asm__("FUN_L00_002076a8");
-void FUN_L00_00208b60_u(void) __asm__("FUN_L00_00208b60");
+void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b60");
 void coordinate_hero_frame_update(void) __asm__("FUN_L00_002070d0");
 
 void coordinate_hero_frame_update(void) {
@@ -1204,7 +1204,7 @@ void coordinate_hero_frame_update(void) {
         FUN_L00_00257024((int)g2->moby);
     }
     update_hero_color_and_item_tint();
-    FUN_L00_00208b60_u();
+    update_hero_moby_probed_height_bounds();
 }
 #define NOT_SDA
 
@@ -1968,7 +1968,7 @@ f32 FUN_001f99c8_208b60(f32, f32) __asm__("FUN_001f99c8");
 #define G D_0013F350_208b60
 extern V_208b60 D_L00_001AEB90;
 extern T_208b60 D_L00_0017C300[];
-void FUN_L00_00208b60(void) {
+void update_hero_moby_probed_height_bounds(void) {
     V_208b60 v, collision_probe_start, x;
     f32 k, rotation_step, planar_angle, planar_cosine, planar_sine, probe_reference_z, hi, lo, sc;
     T_208b60 *t;

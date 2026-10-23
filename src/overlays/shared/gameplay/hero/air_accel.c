@@ -73,7 +73,7 @@ extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58")
 extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
-extern void FUN_L00_00208b60(void);
+extern void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b60");
 extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void FUN_L00_00216de8(int, int);
 extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
@@ -172,7 +172,7 @@ void FUN_L01_00228000(void) {
             }
         }
     }
-    FUN_L00_00208b60();
+    update_hero_moby_probed_height_bounds();
     FUN_L00_00257024(hero.moby);
 }
 #define NOT_SDA
@@ -194,7 +194,7 @@ extern void scan_hero_input_sequences(void) __asm__("FUN_L00_00206e00");
 extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 extern void update_hero_moby(void) __asm__("FUN_L00_00208820");
-extern void FUN_L00_00208b60(void);
+extern void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b60");
 extern void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
 extern void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
 extern void FUN_L00_0020a540(void);
@@ -274,7 +274,7 @@ void update_hero_frame(void) {
         FUN_L00_00257024(*(void **)(q + 0x2080));
     }
     update_hero_blink_and_gold_weapon_tint();
-    FUN_L00_00208b60();
+    update_hero_moby_probed_height_bounds();
 }
 extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
 extern void get_moby_color(struct Moby *, int *, int *, int *) __asm__("FUN_L00_00250320");

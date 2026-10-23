@@ -30,7 +30,7 @@ extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58")
 extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
-extern void FUN_L00_00208b60(void);
+extern void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b60");
 extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void FUN_L00_00216de8(int, int);
 extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
@@ -145,7 +145,7 @@ void FUN_L15_001ff938(void) {
             }
         }
     }
-    FUN_L00_00208b60();
+    update_hero_moby_probed_height_bounds();
     hero6 = ((char *)&D_0013F350);
     FUN_L00_00257024(*(void **)(hero6 + 0x2080));
 }
