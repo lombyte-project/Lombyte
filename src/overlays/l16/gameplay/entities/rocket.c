@@ -147,7 +147,9 @@ extern int D_L16_0015FFD8_d __asm__("D_L16_0015FFD8");
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // For each listed moby of class 0x21D: sets its state bytes and clears bit 0 of its flags.
-void FUN_L16_002ceca8(int moby_group_index) {
+void activate_test_dummy_group(int moby_group_index) __asm__("FUN_L16_002ceca8");
+
+void activate_test_dummy_group(int moby_group_index) {
     short *group_entry = (short *)D_L16_001ABCC0_u[moby_group_index];
     if (group_entry != 0) {
         do {
@@ -2859,7 +2861,7 @@ extern void FUN_L00_002ea9d8_q(void *) __asm__("FUN_L00_002ea9d8");
 extern void FUN_L00_002ea9d8_q_002eaa30(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L00_002eaaa0_q(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18_q(int) __asm__("FUN_L00_002eac18");
-extern void FUN_L16_002ceca8_q(int) __asm__("FUN_L16_002ceca8");
+extern void activate_test_dummy_group(int) __asm__("FUN_L16_002ceca8");
 extern void FUN_L16_002d6260_q(char *, void *, float *) __asm__("FUN_L16_002d6260");
 extern int tick_countdown_32_q(void *) __asm__("FUN_001f9740");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
@@ -2917,7 +2919,7 @@ void update_triggered_group_objective(struct Moby *moby) {
             scene_data->timer_q = scale_game_frames_q(60);
             moby->visible = 0;
             moby->flags |= 1;
-            FUN_L16_002ceca8_q(scene_data->path);
+            activate_test_dummy_group(scene_data->path);
         }
         break;
     case SCENE_STATE_WAIT_FOR_LINKED_MOBYS_AND_TIMER:
@@ -2949,7 +2951,7 @@ void update_triggered_group_objective(struct Moby *moby) {
     case SCENE_STATE_HIDDEN_WAIT_FOR_TRIGGER:
         if (is_point_inside_clip_volume(D_0013F3D0, scene_data->trigger)) {
             FUN_L16_002d5bc8_q(scene_data->helper, 0);
-            FUN_L16_002ceca8_q(scene_data->path);
+            activate_test_dummy_group(scene_data->path);
             moby->state = 6;
         }
         break;
