@@ -1701,7 +1701,7 @@ extern int D_L01_0015F594 __attribute__((sda));
 
 extern int FUN_00214720(void *, int);
 extern void FUN_L01_00308b28_c(char *) __asm__("FUN_L01_00308b28");
-extern void FUN_L01_00309838_u(char *) __asm__("FUN_L01_00309838");
+extern void show_teleporter_and_children(char *) __asm__("FUN_L01_00309838");
 extern void FUN_L01_003097e8_c(L01Moby *) __asm__("FUN_L01_003097e8");
 extern void update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
 extern void FUN_L01_00309430_c(char *) __asm__("FUN_L01_00309430");
@@ -1747,7 +1747,7 @@ void teleporter_update(struct Moby *moby) {
         FUN_00214720(&hero.motion.pos, *(int *)(data + 4)) != 0) {
         active = 1;
         FUN_L01_00308b28_c(moby);
-        FUN_L01_00309838_u(moby);
+        show_teleporter_and_children(moby);
         if (moby->state == 5)
             moby->state = active;
     }
@@ -2094,7 +2094,7 @@ void FUN_L01_003097e8(L01Moby *moby) {
         }
     }
 }
-void FUN_L01_00309838(char *parent_moby) {
+void show_teleporter_and_children(char *parent_moby) {
     char *parent_record = *(char **)(parent_moby + 0x24);
     char **child_slot;
     s32 i;
