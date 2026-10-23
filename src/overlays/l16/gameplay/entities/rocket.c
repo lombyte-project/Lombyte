@@ -2764,7 +2764,9 @@ extern char D_L16_001671C0[];
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int *D_L16_001ABCC0[];
 
-void *FUN_L16_002d5bc8(int index, int secondary) {
+void *activate_class_0287_group_and_find_nearest(int index, int secondary) __asm__("FUN_L16_002d5bc8");
+
+void *activate_class_0287_group_and_find_nearest(int index, int secondary) {
     short *group_entry = (short *)D_L16_001ABCC0[index];
     char *nearest = 0;
     float distance = 1000.0f;
@@ -2854,7 +2856,7 @@ extern int D_L16_001600EC_m __asm__("D_L16_001600EC");
 extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
 extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
 extern void *FUN_L16_002d5ad0_q(int, int) __asm__("FUN_L16_002d5ad0");
-extern void *FUN_L16_002d5bc8_q(int, int) __asm__("FUN_L16_002d5bc8");
+extern void *activate_class_0287_group_and_find_nearest(int, int) __asm__("FUN_L16_002d5bc8");
 extern void FUN_0022da68_q(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_00216f90_q(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int,
@@ -2910,7 +2912,7 @@ void update_triggered_group_objective(struct Moby *moby) {
         if (scene_data->camera >= 0)
             *(unsigned short *)(player + 0x225A) = *(unsigned short *)&scene_data->camera;
         FUN_L00_002eaaa0_q(D_L16_001671C0_lui, D_L16_001671C0_lui + 0x10, 1, 0, 0);
-        helper = FUN_L16_002d5bc8_q(scene_data->helper, 0);
+        helper = activate_class_0287_group_and_find_nearest(scene_data->helper, 0);
         goto notify;
     }
     case SCENE_STATE_WAIT_TO_HIDE:
@@ -2952,7 +2954,7 @@ void update_triggered_group_objective(struct Moby *moby) {
         break;
     case SCENE_STATE_HIDDEN_WAIT_FOR_TRIGGER:
         if (is_point_inside_clip_volume(D_0013F3D0, scene_data->trigger)) {
-            FUN_L16_002d5bc8_q(scene_data->helper, 0);
+            activate_class_0287_group_and_find_nearest(scene_data->helper, 0);
             activate_test_dummy_group(scene_data->path);
             moby->state = 6;
         }
