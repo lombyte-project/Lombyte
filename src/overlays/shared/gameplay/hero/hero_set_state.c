@@ -11,7 +11,7 @@
 extern s32 D_L00_0015F5CC;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern void apply_hero_motion_and_resolve_collisions(void) __asm__("FUN_L00_00213880");
-extern s32 FUN_L00_0020a240(f32 *, f32, f32);
+extern s32 probe_hero_forward_collision(f32 *, f32, f32) __asm__("FUN_L00_0020a240");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
 extern s32 FUN_L00_0025e3b8(s32);
@@ -38,7 +38,7 @@ void update_hero_motion_and_collision_probes(void) {
         hero.wall_probe_distance = 4.0f;
         hero.unk254 = 0;
         hero.unk255 = 0;
-        if (FUN_L00_0020a240(&hero.wall_probe_distance, 0.7f, 4.0f)) {
+        if (probe_hero_forward_collision(&hero.wall_probe_distance, 0.7f, 4.0f)) {
             hero.unk250 = atan2_f(coll_hit.normal_z, vector_length_xy(&coll_hit.normal_x));
             if (coll_hit.moby != 0) {
                 hero.unk255 = 1;

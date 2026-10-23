@@ -2615,7 +2615,9 @@ extern u8 D_L00_00173E60[];
 extern void FUN_L00_002335c8(V0020a240 *, f32, f32, f32);
 extern s32 FUN_001efa68(V0020a240 *, V0020a240 *, s32, s32, s32);
 extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-s32 FUN_L00_0020a240(f32 *out, f32 probe_z_offset, f32 probe_end_radius) {
+s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_radius) __asm__("FUN_L00_0020a240");
+
+s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_radius) {
     G0020a240 *hero_state = (G0020a240 *)&hero;
     V0020a240 probe_start;
     V0020a240 probe_end;

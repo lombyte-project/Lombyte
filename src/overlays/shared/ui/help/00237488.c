@@ -416,7 +416,7 @@ extern int frame_number __asm__("D_L05_0015F5CC");
 extern CollisionHit D_L05_00174240 __attribute__((section(".data")));
 extern u8 D_L05_00174260[] __attribute__((section(".data")));
 extern u8 D_L05_0017AB20[] __attribute__((section(".data")));
-extern int FUN_L05_002388a0(float, float, float *) __asm__("FUN_L00_0020a240");
+extern int probe_hero_forward_collision(float, float, float *) __asm__("FUN_L00_0020a240");
 extern float FUN_L00_0022e0f0(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern s32 FUN_L00_0025e3b8(s32);
@@ -447,7 +447,7 @@ void update_hero_movement_and_collision_probes(void) {
         hero.wall_probe_distance = 4.0f;
         hero.unk254 = 0;
         hero.unk255 = 0;
-        if (FUN_L05_002388a0(0.7f, 4.0f, &hero.wall_probe_distance)) {
+        if (probe_hero_forward_collision(0.7f, 4.0f, &hero.wall_probe_distance)) {
             CollisionHit *wall = &D_L05_00174240;
             float normal_xy = FUN_L00_0022e0f0(&wall->normal_x);
             hero.unk250 = fast_arc_tan(wall->normal_z, normal_xy);
