@@ -117,7 +117,9 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 extern void spawn_moby_table_puff_pattern(void *) __asm__("FUN_L04_002c46d0");
 
-void FUN_L04_002c4808(char *moby) {
+void destroy_blarg_trooper(char *moby) __asm__("FUN_L04_002c4808");
+
+void destroy_blarg_trooper(char *moby) {
     char *data = *(char **)(moby + 0x78);
     void *other = *(void **)(data + 0xF8);
     if (other != 0) {
@@ -2348,7 +2350,7 @@ extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 extern void refresh_moby_spatial_bounds_from_basis(void *);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern void tick_countdown_32(int *counter);
-void FUN_L04_002c4808_c(char *arg) __asm__("FUN_L04_002c4808");
+void destroy_blarg_trooper(char *arg) __asm__("FUN_L04_002c4808");
 extern int func_L00_002594C8_o(void *, void *, void *, float, float, float, float,
                                int) __asm__("FUN_L00_00258490");
 
@@ -2451,7 +2453,7 @@ void blarg_trooper_update(struct Moby *moby) {
     path_index_when_selector_nonzero = *(int *)(data + 0xE0);
     if (path_index_when_selector_nonzero == -1 || (path_index_when_selector_zero = *(int *)(data + 0xE4), path_index_when_selector_zero == -1)) {
         DebugPrint(D_L04_001DBC80, truncate_float_to_s32((float)(((char *)moby - D_L04_0015FFD8) >> 8)));
-        FUN_L04_002c4808_c(moby);
+        destroy_blarg_trooper(moby);
         return;
     }
     bi = -1;
@@ -2905,7 +2907,7 @@ void blarg_trooper_update(struct Moby *moby) {
         break;
     case BLARG_TROOPER_STATE_DYING:
         if (mine_fall(moby, data + 0x70) & 0x60) {
-            FUN_L04_002c4808_c(moby);
+            destroy_blarg_trooper(moby);
             return;
         }
         break;
@@ -2974,7 +2976,7 @@ void blarg_trooper_update(struct Moby *moby) {
     }
     if (moby->pos.z < *(float *)(data + 0xD4) - 5.0f) {
         FUN_L00_00257470(moby, 0, -1);
-        FUN_L04_002c4808_c(moby);
+        destroy_blarg_trooper(moby);
         return;
     }
     *(float *)(data + 0xD8) = alive;
