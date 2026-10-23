@@ -260,7 +260,9 @@ end:
 
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L00_00232220(int animation_id, int frame_index, float blend_frames) {
+void blend_hero_mapped_moby_animation(int animation_id, int frame_index, float blend_frames) __asm__("FUN_L00_00232220");
+
+void blend_hero_mapped_moby_animation(int animation_id, int frame_index, float blend_frames) {
     struct Hero *base = &hero;
     int mapped_animation_id[4];
     int ok;
@@ -400,7 +402,7 @@ extern short D_L00_0015F6E0 __attribute__((sda));
 extern void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
 extern void FUN_L00_002321a8(void);
 extern void FUN_L00_00231e78_c(int, int, float) __asm__("FUN_L00_00231e78");
-extern void FUN_L00_00232220_c(int, int, float) __asm__("FUN_L00_00232220");
+extern void blend_hero_mapped_moby_animation(int, int, float) __asm__("FUN_L00_00232220");
 extern void FUN_L00_00232628(void);
 extern void FUN_L00_00251ce8(void *, int);
 extern void FlushCache(s32);
@@ -468,7 +470,7 @@ void set_hero_animation(int a0, int a1, float t) {
     }
     FUN_L00_002321a8();
     if (((int)g3->unk2278) != 0) {
-        FUN_L00_00232220_c(a0, a1, t);
+        blend_hero_mapped_moby_animation(a0, a1, t);
     }
 }
 extern char *D_001413D0_2325a0[] __asm__("D_001413D0");
