@@ -25,7 +25,9 @@ extern u8 *D_L14_00167500 __attribute__((section(".data")));
 /* 0x003135B8, 80 bytes.  When the level record's field at 0x86 is 7, seed the
  * sub-record reached through +0x70 with the caller's argument and two float
  * constants, and set both floats on the record itself. */
-void FUN_L14_003135b8(u8 *flying_car_moby) {
+void seed_linked_record_for_flying_car(u8 *flying_car_moby) __asm__("FUN_L14_003135b8");
+
+void seed_linked_record_for_flying_car(u8 *flying_car_moby) {
     u8 *link_source_record = D_L14_00167500;
     u8 *linked_subrecord;
     u8 *linked_record;
