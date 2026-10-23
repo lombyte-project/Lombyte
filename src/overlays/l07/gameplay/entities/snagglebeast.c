@@ -710,7 +710,7 @@ extern float FUN_001f99c0(float);
 extern void FUN_L00_002defe0(int);
 extern void enqueue_callback_list_1(void (*)(), void *) __asm__("FUN_001f4600");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
-extern void FUN_L00_00235d80(void);
+extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
 extern void FUN_L00_00235ea0(void);
 extern void FUN_L06_00249738(void);
 extern void build_symmetric_adjacency_masks(int *, int, int) __asm__("FUN_L05_0028be78");
@@ -929,7 +929,7 @@ void snagglebeast_update(unsigned char *moby) {
     if (*(float *)(data + 0x1C8) > 0.0f) enqueue_callback_list_1(draw_snagglebeast_sphere_effect, moby);
     update_snagglebeast_target_joint_animation((char *)moby, (char *)data, (float *)(((char *)&hero) + 0x80));
     if (moby[0x20] != 0 && moby[0x20] != 0xA && moby[0x20] != 0x10) {
-        *(int *)(data + 0x1B0) = queue_animation_update(0x16, 0xFFFF, (int)FUN_L00_00235d80, (int)FUN_L00_00235ea0,
+        *(int *)(data + 0x1B0) = queue_animation_update(0x16, 0xFFFF, (int)reset_numeric_hud_element, (int)FUN_L00_00235ea0,
                                             (int)FUN_L06_00249738, (int)(data + 0x1B4),
                                             (*(short *)(data + 0x24) << 4) | 0xF);
     }

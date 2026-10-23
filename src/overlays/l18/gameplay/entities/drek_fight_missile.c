@@ -3329,7 +3329,7 @@ extern void FUN_L06_00316330(void *);
 extern int D_L18_0016A290[];
 extern char D_L18_00167B50[];
 extern char D_L18_00167680[];
-extern void FUN_L00_00235d80(void);
+extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
 extern void FUN_L00_00235ea0(void);
 extern void FUN_L06_00249738(void);
 extern float advance_accelerated_scalar_7288(float *, float, float *, float, float, float)
@@ -3437,7 +3437,7 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
         second_scalar_update_state = (float *)(boss_data + 0x37c);
         if (*(float *)(boss_data + 0x38c) > 0.0f) {
             *(int *)(boss_data + 0x368) = queue_animation_update(0x16, 0xffff,
-                     FUN_L00_00235d80, FUN_L00_00235ea0, FUN_L06_00249738,
+                     reset_numeric_hud_element, FUN_L00_00235ea0, FUN_L06_00249738,
                      boss_data + 0x36c, 0x15e);
         }
     }

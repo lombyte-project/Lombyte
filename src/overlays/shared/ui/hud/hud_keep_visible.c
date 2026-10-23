@@ -160,7 +160,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void initialize_numeric_hud_values_and_dimensions(HudElem *) __asm__("FUN_L00_00235c80");
 
 /* Sets unk7C to scale_game_frames(0xB4) + 0x1E, clears 0x48/0x4A, calls FUN_L00_00235c80. */
-void FUN_L00_00235d80(HudElem *hud_element) {
+void reset_numeric_hud_element(HudElem *hud_element) __asm__("FUN_L00_00235d80");
+
+void reset_numeric_hud_element(HudElem *hud_element) {
     hud_element->unk7C = scale_game_frames(0xB4) + 0x1E;
     hud_element->unk48 = 0;
     hud_element->unk4A = 0;
@@ -341,7 +343,7 @@ void FUN_L00_00236268(HudElem *elem) {
     float margin, lo, band, hi;
     int bands;
 
-    FUN_L00_00235d80(elem);
+    reset_numeric_hud_element(elem);
     for (i = 0; i < 100; i++) {
         margin = star_init_limit0_gp;
         if (i >= 10) {

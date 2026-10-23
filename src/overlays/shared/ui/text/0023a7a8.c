@@ -228,7 +228,7 @@ extern void FUN_001ff570_23adb8(int, int) __asm__("FUN_001ff570");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void FUN_L00_0023cdb8_23adb8(void) __asm__("FUN_L00_0023cdb8");
 extern void FUN_L00_0023a7a8_23adb8(void) __asm__("FUN_L00_0023a7a8");
-extern void FUN_L00_00235d80_23adb8(void) __asm__("FUN_L00_00235d80");
+extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
 extern void FUN_L00_00235ea0_23adb8(void) __asm__("FUN_L00_00235ea0");
 extern void draw_hud_cropped_gauge_panel(void) __asm__("FUN_L00_0023a640");
 
@@ -254,7 +254,7 @@ void update_weapon_hud_state(void) {
             D_L00_0015F970 = k;
         }
         hero_state->unk1634 =
-            FUN_001ff308_23adb8(0x10, 0xFFFF, FUN_L00_00235d80_23adb8, FUN_L00_00235ea0_23adb8,
+            FUN_001ff308_23adb8(0x10, 0xFFFF, reset_numeric_hud_element, FUN_L00_00235ea0_23adb8,
                                 draw_hud_cropped_gauge_panel, &hero_state->unk1630, 200);
     } else {
         if (D_L00_0015F970 != k) {

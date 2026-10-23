@@ -2609,7 +2609,7 @@ int check_all_listed_class_33b_states_fe_fd_or_10(int index) __asm__("FUN_L06_00
 int FUN_L06_002fb2a8_c(char *moby) __asm__("FUN_L06_002fb2a8");
 int FUN_L06_002fb668_c(char *moby) __asm__("FUN_L06_002fb668");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
-void FUN_L00_00235d80(HudElem *e);
+void reset_numeric_hud_element(HudElem *e) __asm__("FUN_L00_00235d80");
 void FUN_L00_00235ea0(HudElem *e);
 void FUN_L00_0025a120(char *o);
 void spawn_color_swapped_explosion_burst(char *owner, char *pos, float scale, float flash) __asm__("FUN_L00_0025f3e8");
