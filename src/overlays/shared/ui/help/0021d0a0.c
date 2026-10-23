@@ -803,7 +803,9 @@ skip:
 
 #include "rnc/data_labels.h"
 
-void FUN_L06_00239528(void) {
+void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
+
+void enter_hero_idle_state_for_current_vehicle_mode(void) {
     switch (((unsigned char *)&D_0013E533)[0x2EC1]) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         hero_set_state(HERO_STATE_IDLE, 1);

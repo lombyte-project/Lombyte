@@ -93,7 +93,7 @@ extern void initialize_moby_transform_history(int a, char *b) __asm__("FUN_L00_0
 extern void create_moby_transform_history_entry(char *o, int a, int b) __asm__("FUN_L00_00262528");
 extern void FUN_L00_00262840(char *o);
 extern void pool_splash(int, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
-extern void FUN_L06_00239528(void);
+extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
@@ -170,7 +170,7 @@ int hero_set_state(int a, int b) {
         p->unk1010 = random_int_between(scale_game_frames(0x32), scale_game_frames(0x64));
         clear_hero_idle_rotation_targets();
         if (p->vehicle_mode != 0) {
-            FUN_L06_00239528();
+            enter_hero_idle_state_for_current_vehicle_mode();
             return 1;
         }
         qcopy(&p->motion.unk150, &p->motion.unk110);

@@ -34,7 +34,7 @@ extern void FUN_L00_002039a0(void);
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 extern void set_follow_camera_angle_blend_from_position(int a, float x, float y) __asm__("FUN_L00_002e8970");
-extern void FUN_L06_00239528(void);
+extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 extern char D_00141D54[];
 extern char D_00141D7C[];
@@ -261,7 +261,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
                              *(float *)(D_L17_001600EC + ((*(int *)(pvars + 0x40) << 7) + 0x34)) -
                                  *(float *)(cam + 0x144));
             if (fast_difference_between_rotations(*(float *)(cam + 0x158), target_heading) < 0.034906585f) {
-                FUN_L06_00239528();
+                enter_hero_idle_state_for_current_vehicle_mode();
                 *(unsigned char *)(pvars + 0x4C) = 1;
                 moby->state = 1;
             }

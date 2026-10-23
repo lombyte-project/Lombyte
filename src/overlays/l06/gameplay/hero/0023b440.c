@@ -121,7 +121,7 @@ extern void FUN_L00_0025f730(void *a, float x);
 extern void request_hero_voice_if_enabled(int a0, int a1, int a2) __asm__("FUN_L01_00227e48");
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void quantize_hero_input_target_speed(void) __asm__("FUN_L06_00228b40");
-extern void FUN_L06_00239528(void);
+extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void scale_vector_xyz(void *, void *, float);
@@ -514,7 +514,7 @@ void update_hero_state_machine(void) {
                         }
                     }
                     if (hero.vehicle_mode != 0) {
-                        FUN_L06_00239528();
+                        enter_hero_idle_state_for_current_vehicle_mode();
                         break;
                     }
                     if (controller_state.held & 0xA) {

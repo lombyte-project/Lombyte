@@ -6812,7 +6812,7 @@ extern void FUN_L00_00299460_302578(int) __asm__("FUN_L00_00299460");
 extern void FUN_L00_00262d38_302578(int) __asm__("FUN_L00_00262d38");
 extern void FUN_L00_002502a0_302578(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_00284e50_302578(void *, void *) __asm__("FUN_L00_00284e50");
-extern void FUN_L06_00239528_302578(void) __asm__("FUN_L06_00239528");
+extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern int memcard_Save_302578(int, long) __asm__("FUN_0020b178");
 extern void subtract_vector_xyz_302578(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_00260738_302578(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
@@ -7065,7 +7065,7 @@ void shuttle_update(struct Moby *moby) {
             } else {
                 FUN_L00_00262d38_302578(5);
                 moby->state = 1;
-                FUN_L06_00239528_302578();
+                enter_hero_idle_state_for_current_vehicle_mode();
                 memcard_Save_302578(0, -1);
             }
         }

@@ -1026,7 +1026,7 @@ float absolute_float_c2(float input) __asm__("func_001F99C0");
 s32 FUN_L00_00203908(s32 a, s32 b);
 void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
 void FUN_L00_00263d40(int a, int b);
-void FUN_L06_00239528(void);
+void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern unsigned char D_0013E633_2F69D0[] __asm__("D_0013F350");
 extern char D_0013E650_2F69D0[] __asm__("D_0013E550");
 extern unsigned char D_0013D5DD_2F69D0[] __asm__("D_001413F4");
@@ -1068,7 +1068,7 @@ extern float func_001FA790_2F69D0(float, float) __asm__("FUN_001fa5c8");
 extern float func_001FA748_2F69D0(float, float) __asm__("FUN_001fa580");
 extern void func_L00_002EBE88_2F69D0(void *) __asm__("FUN_L00_002ea9d8");
 extern void func_L00_002EBEE0_2F69D0(void *) __asm__("FUN_L00_002eaa30");
-extern void func_L06_00239CD0_2F69D0(void) __asm__("FUN_L06_00239528");
+extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern void func_L00_002EC0C8_2F69D0(int) __asm__("FUN_L00_002eac18");
 extern int func_L00_00203F20_2F69D0(int, int) __asm__("FUN_L00_00203908");
 extern void func_L00_00264DB8_2F69D0(int, int) __asm__("FUN_L00_00263d40");
@@ -1211,7 +1211,7 @@ void update_drawbridge(Moby *moby) {
         func_00214D28_2F69D0(&data->fade, 1.0f, 1.0f / func_001F9850_2F69D0(20));
         D_L06_0015F3FC = 1.0f - func_001F9B88_2F69D0(data->fade);
         if (previous_fade < 0.0f && 0.0f <= data->fade) {
-            func_L06_00239CD0_2F69D0();
+            enter_hero_idle_state_for_current_vehicle_mode();
             func_L00_002EC0C8_2F69D0(3);
         } else if (1.0f <= data->fade) {
             moby->state = 6;
