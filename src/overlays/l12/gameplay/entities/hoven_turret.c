@@ -369,7 +369,9 @@ extern void FUN_L00_002eaa30(void *);
 extern void FUN_L08_00313ba8(void *);
 
 extern char D_L12_00161EF0 __attribute__((sda));
-void FUN_L12_003032e8(struct Moby *moby) {
+void update_hoven_turret_camera(struct Moby *moby) __asm__("FUN_L12_003032e8");
+
+void update_hoven_turret_camera(struct Moby *moby) {
     float position_and_rotation[8];
     char *data = (char *)moby->pvars;
     FUN_L08_00313ba8(moby);
