@@ -996,7 +996,9 @@ void draw_nanotech_ball(Moby *moby) {
 }
 int collision_line(Vec4 *, Vec4 *, int, int, int) __asm__("FUN_001efa68");
 /* True when coll_line_fix returns 0 for the moby and (*(char * *)&D_001413D0_lui) positions, both raised by 0.5. */
-int FUN_L00_002d8980(char *moby) {
+int is_nanotech_ball_target_line_clear(char *moby) __asm__("FUN_L00_002d8980");
+
+int is_nanotech_ball_target_line_clear(char *moby) {
     Vec4 raised_moby_position, raised_target_position;
     qcopy(&raised_moby_position, moby + 0x10);
     raised_moby_position.f[2] += 0.5f;
