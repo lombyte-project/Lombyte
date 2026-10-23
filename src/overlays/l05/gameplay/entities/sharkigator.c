@@ -44,7 +44,9 @@ void draw_group_moby_glow_quads(unsigned char *moby) {
 extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
 
 extern float D_L05_001613D0 __attribute__((sda));
-void FUN_L05_002d7890(char *moby, int *path) {
+void advance_scenery_ship_along_path(char *moby, int *path) __asm__("FUN_L05_002d7890");
+
+void advance_scenery_ship_along_path(char *moby, int *path) {
     float *moby_data = *(float **)(moby + 0x78);
     moby_data[2] = moby_data[2] + D_L05_001613D0 * frame_time / moby_data[3];
     if ((float)path[0] < moby_data[2]) {
@@ -607,7 +609,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
 void FUN_L05_002d7020_c(char *m) __asm__("FUN_L05_002d7020");
-void FUN_L05_002d7890_c(char *moby, int *path) __asm__("FUN_L05_002d7890");
+void advance_scenery_ship_along_path(char *moby, int *path) __asm__("FUN_L05_002d7890");
 void FUN_L05_002d7920(char *moby);
 extern char *func_L00_0025B478_2D8388(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float func_00214158_2D8388(void) __asm__("FUN_00213308");
@@ -618,7 +620,7 @@ extern float func_001F9D10_2D8388(float *, float *) __asm__("FUN_001f9b48");
 extern float func_001FA748_2D8388(float, float) __asm__("FUN_001fa580");
 extern float func_001F9FA8_2D8388(float) __asm__("FUN_001f9de0");
 extern int func_001FA8A8_2D8388(int, int, float) __asm__("FUN_001fa6e0");
-extern void func_L05_002D8AD8_2D8388(char *moby, int *path) __asm__("FUN_L05_002d7890");
+extern void advance_scenery_ship_along_path(char *moby, int *path) __asm__("FUN_L05_002d7890");
 extern int func_L00_0028EB98_2D8388(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int func_0022ED80_2D8388(int, int, int) __asm__("FUN_0022da68");
 extern void func_001F9EC0_2D8388(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -713,7 +715,7 @@ void scenery_ship_update(char *moby) {
         data->f1C = phase;
         wave = func_001F9FA8_2D8388(phase);
         *(int *)(moby + 0x90) = func_001FA8A8_2D8388(D_L05_001613D8, D_L05_001613DC, (wave + 1.0f) * 0.5f);
-        func_L05_002D8AD8_2D8388(moby, (int *)D_L05_001B0CB0_2D8388[data->path]);
+        advance_scenery_ship_along_path(moby, (int *)D_L05_001B0CB0_2D8388[data->path]);
         if (func_L00_0028EB98_2D8388(moby, data->f328) == 0) {
             data->f328 = func_0022ED80_2D8388(1, 4, (int)moby);
         }
