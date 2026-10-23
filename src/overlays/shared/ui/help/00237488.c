@@ -1056,7 +1056,7 @@ typedef struct {
 extern SndPair_254030 D_L05_00179BC0[];
 extern char D_0013CAE0[];
 extern float predict_hero_trajectory_intercept_time(float a, float b, float c) __asm__("FUN_L00_00232b90");
-extern int FUN_L05_002551b8_c(void) __asm__("FUN_L05_002551b8");
+extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
@@ -1099,13 +1099,13 @@ void update_hero_hoverboard_trick_animations(void) {
             ((unsigned char *)((char *)k->moby))[0x51] < k->unkAB4) {
             int animation_transition_frames = k->unk888;
             if (animation_transition_frames > scale_game_frames(0x1E)) {
-                int x = FUN_L05_002551b8_c();
+                int x = select_hero_hoverboard_animation_variant();
                 set_hero_animation(x, 9, (float)scale_game_frames(0x11));
             } else {
                 animation_transition_frames = k->unk888;
                 if (animation_transition_frames < scale_game_frames(0xA))
                     animation_transition_frames = scale_game_frames(0xA);
-                set_hero_animation(FUN_L05_002551b8_c(), 0xD, (float)animation_transition_frames);
+                set_hero_animation(select_hero_hoverboard_animation_variant(), 0xD, (float)animation_transition_frames);
             }
         }
     }
@@ -1114,7 +1114,7 @@ void update_hero_hoverboard_trick_animations(void) {
         if (h->unk8BC != 0) {
             int a = ((unsigned char *)((char *)h->moby))[0x53];
             if (a == 0x52 || a == 0x7D || a == 0x68 || a == 0x7E) {
-                int x = FUN_L05_002551b8_c();
+                int x = select_hero_hoverboard_animation_variant();
                 set_hero_animation(x, 0xB, (float)scale_game_frames(0xA));
             }
         }
@@ -1122,7 +1122,7 @@ void update_hero_hoverboard_trick_animations(void) {
     {
         struct Hero *h = &hero;
         if ((h->unkA98 & 2) && h->frames_off_ground.s != 0) {
-            int x = FUN_L05_002551b8_c();
+            int x = select_hero_hoverboard_animation_variant();
             set_hero_animation(x, 9, (float)scale_game_frames(7));
         }
     }
@@ -1675,7 +1675,7 @@ void update_hero_hoverboard_race_progress(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_002559A0), where it is exact; names translated to the US level program. */
 
 
-int FUN_L05_002551b8(void) {
+int select_hero_hoverboard_animation_variant(void) {
     unsigned char animation_variant_selector = hero.unk8CE; // selected help mode
     int animation_id = 0x7F;
     if (animation_variant_selector == 0)
@@ -1783,7 +1783,7 @@ int FUN_L05_00255208(void) {
         if ((&hero)->frames_off_ground.s == 0 && (&hero)->unk8BC && (&hero)->unk89C == 0 &&
             (*((unsigned char *)(&hero)->moby + 0x53) == 0x55 || *((unsigned char *)(&hero)->moby + 0x53) == 0x7F) &&
             *((unsigned char *)(&hero)->moby + 0x51) < 13) {
-            int animation = FUN_L05_002551b8();
+            int animation = select_hero_hoverboard_animation_variant();
             int frames = scale_game_frames(7);
             set_hero_animation(animation, 14, (float)frames);
         }
@@ -1817,14 +1817,14 @@ continue_fall:
     if ((&hero)->state.current == 0x6C) {
         hero_set_state(0x6B, 0);
         if (*((unsigned char *)(&hero)->moby + 0x53) != 0x55 && *((unsigned char *)(&hero)->moby + 0x53) != 0x7F) {
-            int animation = FUN_L05_002551b8();
+            int animation = select_hero_hoverboard_animation_variant();
             int frames = scale_game_frames(7);
             set_hero_animation(animation, 14, (float)frames);
         }
         return 1;
     }
     if (*((unsigned char *)(&hero)->moby + 0x53) != 0x55 && *((unsigned char *)(&hero)->moby + 0x53) != 0x7F) {
-        int animation = FUN_L05_002551b8();
+        int animation = select_hero_hoverboard_animation_variant();
         int frames = scale_game_frames(7);
         set_hero_animation(animation, 14, (float)frames);
     }

@@ -51,7 +51,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int sample_path(int *tab, float *out, int *a, float *b, int c, float d) __asm__("FUN_L00_0025d808");
 extern int FUN_L01_00226f10(int a);
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
-extern int FUN_L05_002551b8(void);
+extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -558,7 +558,7 @@ int hero_set_state(int a, int b) {
         p->unk20A7 = 1;
         p->unk870 = 0;
         if (b)
-            set_hero_animation(FUN_L05_002551b8(), 5, (float)scale_game_frames(8));
+            set_hero_animation(select_hero_hoverboard_animation_variant(), 5, (float)scale_game_frames(8));
         break;
     }
     case 0x6D: {

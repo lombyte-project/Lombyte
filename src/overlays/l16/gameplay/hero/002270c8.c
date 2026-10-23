@@ -97,7 +97,7 @@ extern int test_hero_ledge_ahead(float *, float *) __asm__("FUN_L01_0022d838");
 extern int try_apply_hero_water_and_ground_transitions(void) __asm__("FUN_L05_002515d0");
 extern int process_hero_primary_item_input(void) __asm__("FUN_L05_00251be8");
 extern int FUN_L05_00254358(float *, float *);
-extern int FUN_L05_002551b8(void);
+extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
 extern int FUN_L05_002551d0(void);
 extern int FUN_L05_00255208(void);
 extern int handle_hero_hit(int) __asm__("FUN_L08_00222800");
@@ -2273,7 +2273,7 @@ void update_hero_state_transitions(void) {
                                         int t = scale_game_frames(0xA);
                                         float z;
 
-                                        set_hero_animation(FUN_L05_002551b8(), 5, t);
+                                        set_hero_animation(select_hero_hoverboard_animation_variant(), 5, t);
                                         if (((unsigned char *)hero.unk86C) != 0) {
                                             blend_moby_animation(((unsigned char *)hero.unk86C), 6, 5, t);
                                         }
@@ -2322,7 +2322,7 @@ void update_hero_state_transitions(void) {
                             if ((((unsigned char *)hero.moby)[0x53] == 0x55 ||
                                  ((unsigned char *)hero.moby)[0x53] == 0x7F) &&
                                 hero.anim_frame < 25.0f) {
-                                set_hero_animation(FUN_L05_002551b8(), 0xE, scale_game_frames(8));
+                                set_hero_animation(select_hero_hoverboard_animation_variant(), 0xE, scale_game_frames(8));
                             }
                         }
                         if (hero.unkA98 & 2) {
