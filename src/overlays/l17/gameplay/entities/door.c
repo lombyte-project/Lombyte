@@ -2369,7 +2369,9 @@ extern char D_L17_001B0DB0[];
 extern char D_L17_001D9F70[];
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-void FUN_L17_002eea70(struct Moby *moby) {
+void rebuild_magnet_elevator_world_path(struct Moby *moby) __asm__("FUN_L17_002eea70");
+
+void rebuild_magnet_elevator_world_path(struct Moby *moby) {
     char *state = (char *)moby->pvars;
     if (hero.unk308 && hero.ground_moby == moby) {
         char *world_path_point = *(char **)(D_L17_001B0DB0 + *(int *)(state + 0x80) * 4) + 0x10;
