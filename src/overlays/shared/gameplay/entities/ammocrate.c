@@ -151,7 +151,7 @@ extern void vec_scale_1cc8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_add_1cc8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void allocate_voice_for_target_entry_1cc8(int, int, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal_1cc8(void *) __asm__("FUN_0020c828");
-extern void FUN_L00_00262b00_1cc8(float, float, void *, void *, void *) __asm__("FUN_L00_00262b00");
+extern void update_moby_vertical_oscillation(float, float, void *, void *, void *) __asm__("FUN_L00_00262b00");
 
 void ammocrate_update(char *moby) __asm__("FUN_L13_002e1cc8");
 void ammocrate_update(char *moby) {
@@ -286,7 +286,7 @@ collected:
     }
 frame_tail:
     speed = D_0015ED6C_1cc8;
-    FUN_L00_00262b00_1cc8(0.7f, speed * 1.2217305f, moby, vars + 6, vars + 5);
+    update_moby_vertical_oscillation(0.7f, speed * 1.2217305f, moby, vars + 6, vars + 5);
     if (*(float *)(moby + 0x10) < 20.0f) *(float *)(moby + 0x10) = 20.0f;
     if (1003.0f < *(float *)(moby + 0x10)) *(float *)(moby + 0x10) = 1003.0f;
     if (*(float *)(moby + 0x14) < 20.0f) *(float *)(moby + 0x14) = 20.0f;

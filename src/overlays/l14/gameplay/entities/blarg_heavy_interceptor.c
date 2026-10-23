@@ -1453,7 +1453,7 @@ extern f32 D_L14_001613C0 __attribute__((sda));
 extern f32 D_L14_001613C4 __attribute__((sda));
 extern f32 D_L14_001613C8 __attribute__((sda));
 extern f32 D_L14_001613CC __attribute__((sda));
-extern void FUN_L00_00262b00(f32, f32, u8 *, f32 *, f32 *);
+extern void update_moby_vertical_oscillation(f32, f32, u8 *, f32 *, f32 *) __asm__("FUN_L00_00262b00");
 extern void FUN_L00_00262b80(u8 *, u8 *, u8 *, f32, f32, f32);
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -1469,7 +1469,7 @@ extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025
 void FUN_L14_002aea08(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
     f32 heading_offset;
-    FUN_L00_00262b00(D_L14_001613A8, D_L14_001613AC, moby, (f32 *)(data + 0x1A0),
+    update_moby_vertical_oscillation(D_L14_001613A8, D_L14_001613AC, moby, (f32 *)(data + 0x1A0),
                      (f32 *)(data + 0x1A4));
     FUN_L00_00262b80(moby, data + 0x1A8, data + 0x1AC, D_L14_001613B0, D_L14_001613B4,
                      D_L14_001613B8);

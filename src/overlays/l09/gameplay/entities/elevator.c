@@ -1460,7 +1460,7 @@ extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern unsigned char D_0013F350[];
 extern void FUN_L00_00260738_c(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void FUN_L00_00262b00(float, float, char *, float *, float *);
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
 float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c);
@@ -1475,7 +1475,7 @@ extern void func_001F9BF0_30A560(void *, void *, void *) __asm__("FUN_001f9a28")
 extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float func_L00_0025CCF0_30A560(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
-extern void func_L00_00263B78_30A560(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void func_L00_00263BF8_30A560(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern float func_001FA748_30A560(float, float) __asm__("FUN_001fa580");
 extern void func_001F9BD8_30A560(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1616,7 +1616,7 @@ void update_floating_ship_piece(char *moby) {
                 }
             }
         }
-        func_L00_00263B78_30A560(0.140000001f, frame_time * 0.52359879f, moby, (float *)(data + 0x98), (float *)(data + 0x9C));
+        update_moby_vertical_oscillation(0.140000001f, frame_time * 0.52359879f, moby, (float *)(data + 0x98), (float *)(data + 0x9C));
         func_L00_00263BF8_30A560(moby, data + 0x90, data + 0x94, 0.0872664601f,
                           frame_time * 0.436332315f, frame_time * 0.541052043f);
         *(float *)(moby + 0x40) = func_001FA748_30A560(*(float *)(data + 0x60), *(float *)(moby + 0x40));
@@ -1706,7 +1706,7 @@ void shuttle_update(struct Moby *moby) {
         break;
     case SHUTTLE_STATE_WAIT_FOR_DISMOUNT:
         vars->lag += (1.0f - vars->lag) * 0.01f;
-        FUN_L00_00262b00(vars->lag * 0.14f, frame_time * 0.5235988f,
+        update_moby_vertical_oscillation(vars->lag * 0.14f, frame_time * 0.5235988f,
                           (char *)moby, (f32 *)((u8 *)vars + 0xD8), (f32 *)((u8 *)vars + 0xDC));
         FUN_L00_00262b80(moby, (char *)vars + 0xD0, (char *)vars + 0xD4,
                           vars->lag * 0.08726646f, frame_time * 0.31415927f,
@@ -1715,7 +1715,7 @@ void shuttle_update(struct Moby *moby) {
         break;
     case SHUTTLE_STATE_WAIT_FOR_DEPARTURE:
         vars->lag += (1.0f - vars->lag) * 0.01f;
-        FUN_L00_00262b00(vars->lag * 0.14f, frame_time * 0.5235988f,
+        update_moby_vertical_oscillation(vars->lag * 0.14f, frame_time * 0.5235988f,
                           (char *)moby, (f32 *)((u8 *)vars + 0xD8), (f32 *)((u8 *)vars + 0xDC));
         FUN_L00_00262b80(moby, (char *)vars + 0xD0, (char *)vars + 0xD4,
                           vars->lag * 0.08726646f, frame_time * 0.31415927f,

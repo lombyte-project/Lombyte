@@ -599,7 +599,9 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 /* Advances angle *p by y and swaps the old x*sin offset in a+0x18 for the new one. */
-void FUN_L00_00262b00(float x, float y, char *moby, float *phase_angle, float *previous_sine_offset) {
+void update_moby_vertical_oscillation(float x, float y, char *moby, float *phase_angle, float *previous_sine_offset) __asm__("FUN_L00_00262b00");
+
+void update_moby_vertical_oscillation(float x, float y, char *moby, float *phase_angle, float *previous_sine_offset) {
     float sine_offset;
     *phase_angle = fast_add_rotations(*phase_angle, y);
     *(float *)(moby + 0x18) -= *previous_sine_offset;

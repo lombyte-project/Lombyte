@@ -47,14 +47,14 @@ extern float D_L03_00161AF4 __attribute__((sda));
 extern float D_L03_00161AF8 __attribute__((sda));
 extern float D_L03_00161AFC __attribute__((sda));
 extern float D_L03_00161B00 __attribute__((sda));
-extern void FUN_L00_00262b00(float, float, char *, float *, float *);
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void FUN_L00_00262b80(char *, char *, char *, float, float, float);
 
 void update_taxi_bobbing_and_rocking(struct Moby *taxi_moby) __asm__("FUN_L03_002d3c40");
 
 void update_taxi_bobbing_and_rocking(struct Moby *taxi_moby) {
     char *moby_vars = (char *)taxi_moby->pvars;
-    FUN_L00_00262b00(D_L03_00161AF0, D_L03_00161AF4 * DEG_TO_RAD * frame_time, taxi_moby,
+    update_moby_vertical_oscillation(D_L03_00161AF0, D_L03_00161AF4 * DEG_TO_RAD * frame_time, taxi_moby,
                      (float *)(moby_vars + 0xEC), (float *)(moby_vars + 0xE8));
     FUN_L00_00262b80(taxi_moby, moby_vars + 0xF0, moby_vars + 0xF4, D_L03_00161AF8,
                      D_L03_00161AFC * DEG_TO_RAD * frame_time,

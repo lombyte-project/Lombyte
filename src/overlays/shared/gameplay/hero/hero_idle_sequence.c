@@ -1406,7 +1406,7 @@ typedef struct {
     int w2084;
 } S13F350_2078a8;
 extern float D_0015ED6C;
-void FUN_L00_00262b00_002078a8(char *, float *, float *, float, float) __asm__("FUN_L00_00262b00");
+void update_moby_vertical_oscillation(char *, float *, float *, float, float) __asm__("FUN_L00_00262b00");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -1420,11 +1420,11 @@ void apply_hero_vertical_oscillation(void) {
     Vec4_2078a8 position_offset;
     float m[16] __attribute__((aligned(16)));
     if (P->state.current == 0x7F) {
-        FUN_L00_00262b00_002078a8(P->moby, &P->unk6A8, &P->unk6AC, 0.3f,
+        update_moby_vertical_oscillation(P->moby, &P->unk6A8, &P->unk6AC, 0.3f,
                                   D_0015ED6C * 6.981317f);
     }
     if (P->state.current == 0x6B && P->unk8BC == 0) {
-        FUN_L00_00262b00_002078a8(P->moby, &P->unk6A8, &P->unk6AC, 1.1f,
+        update_moby_vertical_oscillation(P->moby, &P->unk6A8, &P->unk6AC, 1.1f,
                                   D_0015ED6C * 5.2359877f);
         if (P->unk86C) {
             char *hero_moby = P->moby;

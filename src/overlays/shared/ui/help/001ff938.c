@@ -180,7 +180,7 @@ extern float D_L15_0017ACC0_d __asm__("D_L15_0017ACC0") __attribute__((section("
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
-extern void FUN_L00_00262b00(float, float, char *, float *, float *);
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void update_hero_bobbing_and_target_position(void) __asm__("FUN_L15_002007d8");
@@ -191,7 +191,7 @@ void update_hero_bobbing_and_target_position(void) {
         char *position_target;
         float position_offset[4];
         float rotation_matrix[16];
-        FUN_L00_00262b00(1.1f, frame_time * 5.2359877f, ((char *)base->moby),
+        update_moby_vertical_oscillation(1.1f, frame_time * 5.2359877f, ((char *)base->moby),
                          (float *)(&base->unk6A8), (float *)(&base->unk6AC));
         position_target = ((char *)base->unk86C);
         if (position_target != 0) {

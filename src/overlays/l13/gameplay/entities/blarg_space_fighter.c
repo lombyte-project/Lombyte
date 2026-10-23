@@ -610,7 +610,7 @@ void update_hovering_rocket_attacker(unsigned char *moby) {
 }
 extern int FUN_L13_002c2d30_update(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L13_002c2d30_allocate(int, int, void *) __asm__("FUN_L13_00297fa0");
-extern void FUN_L00_00262b00(float, float, void *, float *, float *);
+extern void update_moby_vertical_oscillation(float, float, void *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void FUN_L00_00262b80(void *, void *, void *, float, float, float);
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -665,7 +665,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         *(int *)(moby_data + 0x110) = -1;
         *(int *)(moby_data + 0x110) = FUN_L13_002c2d30_allocate(1, 4, moby);
     }
-    FUN_L00_00262b00(0.5f, frame_time * 1.39626336f, moby, (float *)(moby_data + 0x100), (float *)(moby_data + 0x104));
+    update_moby_vertical_oscillation(0.5f, frame_time * 1.39626336f, moby, (float *)(moby_data + 0x100), (float *)(moby_data + 0x104));
     FUN_L00_00262b80(moby, moby_data + 0x108, moby_data + 0x10C, 0.104719758f, frame_time * 0.314159274f, frame_time * 0.366519153f);
     *(float *)(moby + 0x10) = *(float *)(moby_data + 0xC0) + fast_sin(*(float *)(moby_data + 0x108));
     *(float *)(moby + 0x14) = *(float *)(moby_data + 0xC4) + fast_sin(*(float *)(moby_data + 0x10C));
