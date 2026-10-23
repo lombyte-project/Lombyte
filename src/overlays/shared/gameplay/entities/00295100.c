@@ -50,7 +50,9 @@ extern int D_0015EEA4;
 extern int D_L00_0015F598;
 extern int D_0015EE28;
 int scale_game_frames(int) __asm__("FUN_001f96f8");
-void FUN_L00_00297e70(void) {
+void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70");
+
+void update_game_frame_and_idle_counters(void) {
     if (D_0013C940.buttons.w.held != 0 || D_0013C940.analog[2] != 0.0f || D_0013C940.analog[3] != 0.0f ||
         D_0013C940.analog[0] != 0.0f || D_0013C940.analog[1] != 0.0f) {
         D_L00_00160FF0 = 0;
@@ -155,7 +157,7 @@ extern void update_all_point_lights(void) __asm__("FUN_00201a28");
 extern void update_resident_packed_direction(void) __asm__("FUN_0020cfd0");
 extern void update_hud_elements(s32) __asm__("FUN_L00_0023ac78");
 extern void update_help_state(void) __asm__("FUN_001fde90");
-extern void FUN_L00_00297e70_c(void) __asm__("FUN_L00_00297e70");
+extern void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70");
 
 #define DBG(b)                                                                                     \
     ((D_L00_0016C058.w8 & (b)) || ((D_L00_0016C058.w8 & 0x10) && (D_0013C940_c.w1A4 & 0x200)))
@@ -287,7 +289,7 @@ void handle_pause_input(void) {
     update_hud_elements(1);
     update_help_state();
     if (DBG(2))
-        FUN_L00_00297e70_c();
+        update_game_frame_and_idle_counters();
     if (D_L00_0016C058.w18 == 2)
         no_op_main_callback_alt();
     if (D_L00_0016C058.w18 == 3)
@@ -763,7 +765,7 @@ void update_cutscene_playback(void) {
     update_all_point_lights();
     update_resident_packed_direction();
     if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
-        FUN_L00_00297e70();
+        update_game_frame_and_idle_counters();
     }
 }
 typedef struct {
@@ -1957,7 +1959,7 @@ extern ViewCamera D_L00_00166C80;
 extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
 
 extern void FUN_L00_00297e30(void);
-extern void FUN_L00_00297e70(void);
+extern void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70");
 extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern void FUN_0022dc50(void);
 extern void coordinate_hero_frame_update(void) __asm__("FUN_L00_002070d0");
@@ -2365,7 +2367,7 @@ void update_vendor_menu(void) {
         }
         FUN_00201a28();
         if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
-            FUN_L00_00297e70();
+            update_game_frame_and_idle_counters();
         }
         break;
     case VENDOR_MENU_OPEN:
@@ -2666,7 +2668,7 @@ void update_vendor_menu(void) {
             }
         }
         FUN_00201a28();
-        FUN_L00_00297e70();
+        update_game_frame_and_idle_counters();
         break;
     }
     FUN_0022ca50();
