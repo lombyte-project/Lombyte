@@ -75,7 +75,9 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L10_002dd848(struct Moby *owner) {
+char *spawn_fixed_height_destruction_moby(struct Moby *owner) __asm__("FUN_L10_002dd848");
+
+char *spawn_fixed_height_destruction_moby(struct Moby *owner) {
     char *moby = create_moby(0x462);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;
