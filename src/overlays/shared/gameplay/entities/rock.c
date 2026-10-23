@@ -496,7 +496,7 @@ extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa6
 extern s32 coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern s32 FUN_L00_00257b90(s32, s32);
-extern void FUN_L00_0026ced0(void *, void *, s32, s32, f32, s32);
+extern void spawn_effect_particle_with_target_scalar(void *, void *, s32, s32, f32, s32) __asm__("FUN_L00_0026ced0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Debris update: falls and spins, bounces off what it hits with a random kick, bursts into 40 sparks once it
@@ -568,7 +568,7 @@ void rock_update(struct Moby *m) {
             fast_vec_add(&p, &p, &m->pos);
             fast_vec_normalize(&v, &v, random_float_between(0.0f, 0.5f) * frame_time);
             fast_vec_add(&v, &v, &d->vel);
-            FUN_L00_0026ced0(&p, &v, 0x1F0C1820, 0x81020, random_float_between(70000.0f, 140000.0f),
+            spawn_effect_particle_with_target_scalar(&p, &v, 0x1F0C1820, 0x81020, random_float_between(70000.0f, 140000.0f),
                              scale_game_frames(FUN_L00_00257b90(20, 60)));
         }
         mark_moby_for_removal(m);

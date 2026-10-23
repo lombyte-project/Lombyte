@@ -1936,7 +1936,7 @@ extern f32 talker_rand_range(f32, f32) __asm__("FUN_002132a8");
 extern f32 talker_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 talker_sin(f32) __asm__("FUN_001f9de0");
 extern s32 talker_rand_below(s32) __asm__("FUN_00213260");
-extern void FUN_L00_0026ced0(void *, void *, u32, u32, s32, f32);
+extern void spawn_effect_particle_with_target_scalar(void *, void *, u32, u32, s32, f32) __asm__("FUN_L00_0026ced0");
 
 /* A talking moby that can be shot down: talks (and may warp the hero) when
  * approached, and once hit by a type 3 hit or already recorded as collected
@@ -2026,7 +2026,7 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         pos.f[2] = 0.0f;
         FUN_L00_001ff290(unused_vector_scratch, &pos, &robot_qwark_moby->pos);
         if (talker_rand_below(3) == 0) {
-            FUN_L00_0026ced0(&pos, &particle_velocity, 0x20202020, 0x7F7F7F, scale_game_frames(FUN_L00_00257b90(0x3C, 0x78)),
+            spawn_effect_particle_with_target_scalar(&pos, &particle_velocity, 0x20202020, 0x7F7F7F, scale_game_frames(FUN_L00_00257b90(0x3C, 0x78)),
                              157500.0f);
         }
         break;

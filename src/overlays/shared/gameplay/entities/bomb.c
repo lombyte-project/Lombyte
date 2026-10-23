@@ -660,7 +660,7 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void blend_moby_animation(Moby *, int, int, int) __asm__("FUN_00212f90");
 /* Argument order as the chicken passes them: the order of their definitions changes the code. */
 extern void FUN_L00_00263ac8(void *, int, void *, float);
-extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
+extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern int FUN_L00_001f2868(void *, float, int, void *, void *);
 void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9, float fC, float fD, float fE, float fF, int k10, float fG, int k11, int s16, int s18, unsigned char flag) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
@@ -779,7 +779,7 @@ void update_morphoray_chicken(Moby *chicken_moby) {
                 radius = random_float_between(frame_time * 0.1f, frame_time) * size;
                 angle = random_angle_radians();
                 build_spherical_offset(&motion_and_normal_scratch, radius, angle, random_angle_radians());
-                FUN_L00_0026ced0(&point, &motion_and_normal_scratch, 0x3F7F7F7F, 0x2F2F2F, size * 150000.0f, random_int_between(scale_game_frames(0x1E), scale_game_frames(0x39)));
+                spawn_effect_particle_with_target_scalar(&point, &motion_and_normal_scratch, 0x3F7F7F7F, 0x2F2F2F, size * 150000.0f, random_int_between(scale_game_frames(0x1E), scale_game_frames(0x39)));
             }
         } else {
             *(u128 *)&point = 0;

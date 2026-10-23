@@ -2000,7 +2000,7 @@ extern void play_entity_sound(int, float, void *, int, float, float, int, int, i
 extern void FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
-extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
+extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 extern void process_ultramech_hits_and_update_target(void *) __asm__("FUN_L15_002d0fa8");
 extern void no_op_main_callback(void *, void *) __asm__("func_001E93E8");
@@ -2502,7 +2502,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                 k = random_integer_below(100) & 1;
                 moby_point_position(ultramech_moby, j, &position_or_motion_vector);
                 transform_vector_by_basis(&vector_or_hit_descriptor, &vector_or_hit_descriptor, ultramech_moby->mtx);
-                FUN_L00_0026ced0(&position_or_motion_vector, &vector_or_hit_descriptor, k ? 0x400F0F7F : 0x407F7F7F, 0x272727,
+                spawn_effect_particle_with_target_scalar(&position_or_motion_vector, &vector_or_hit_descriptor, k ? 0x400F0F7F : 0x407F7F7F, 0x272727,
                                  random_float_between(1.5f, 3.0f) * 210000.0f,
                                  scale_game_frames(k ? FUN_L00_00257b90(0xA, 0xF)
                                                      : FUN_L00_00257b90(0x14, 0x1E)));

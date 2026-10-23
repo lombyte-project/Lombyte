@@ -1557,7 +1557,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025fcb8(char *, float *, float);
 extern void FUN_L00_00261630(char *moby, char *d, float a, float b);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
-extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
+extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern void FUN_L01_0026d930(char *p);
 extern void update_circular_saw_engine_sound(struct Moby *) __asm__("FUN_L04_002c1b80");
 extern void add_vector_xyz(void *, void *, void *);
@@ -2166,7 +2166,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             alt = random_integer_below(100) & 1;
             moby_point_position(moby, 0, joint_position_scratch);
             transform_vector_by_basis(b, b, moby->fC0);
-            FUN_L00_0026ced0(
+            spawn_effect_particle_with_target_scalar(
                 joint_position_scratch, b, alt ? 0x400F0F7F : 0x407F7F7F, 0x272727,
                 random_float_between(75000.0f, 100000.0f),
                 scale_game_frames(alt ? random_int_between(10, 15) : random_int_between(20, 30)));

@@ -1621,7 +1621,9 @@ int FUN_001160d8_0026ced0(void) __asm__("FUN_001160d8");
 float FUN_001fa6c0_0026ced0(int) __asm__("FUN_001fa6c0");
 
 extern unsigned char *D_L00_001B20D8 __attribute__((section(".data")));
-void FUN_L00_0026ced0(u128 *spawn_position, u128 *initial_velocity, int initial_color, int secondary_color, int lifetime, float target_particle_scalar) {
+void spawn_effect_particle_with_target_scalar(u128 *spawn_position, u128 *initial_velocity, int initial_color, int secondary_color, int lifetime, float target_particle_scalar) __asm__("FUN_L00_0026ced0");
+
+void spawn_effect_particle_with_target_scalar(u128 *spawn_position, u128 *initial_velocity, int initial_color, int secondary_color, int lifetime, float target_particle_scalar) {
     unsigned char *particle = FUN_L00_002678b8_0026ced0(0x16);
     if (particle) {
         unsigned char *particle_data = particle + 0x20;

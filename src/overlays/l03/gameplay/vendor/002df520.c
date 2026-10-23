@@ -239,7 +239,7 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
+extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 
 /* Starts the cutscene, then during mode 3 (frames 900-10000) emits two particle beams from the listed moby. */
 void update_kerwan_cutscene_effects(char *owner_moby) __asm__("FUN_L03_002e01d0");
@@ -284,9 +284,9 @@ void update_kerwan_cutscene_effects(char *owner_moby) {
         zero.q = 0;
         moby_point_position(moby, 0, from);
         moby_point_position(moby, 1, to);
-        FUN_L00_0026ced0(from, &zero, 0x7F7F7F7F, 0x7F7F7F, random_float_between(0.25f, 0.5f) * 210000.0f,
+        spawn_effect_particle_with_target_scalar(from, &zero, 0x7F7F7F7F, 0x7F7F7F, random_float_between(0.25f, 0.5f) * 210000.0f,
                          scale_game_frames(random_int_between(45, 60)));
-        FUN_L00_0026ced0(to, &zero, 0x407F7F7F, 0x7F7F7F, random_float_between(0.25f, 0.5f) * 210000.0f,
+        spawn_effect_particle_with_target_scalar(to, &zero, 0x407F7F7F, 0x7F7F7F, random_float_between(0.25f, 0.5f) * 210000.0f,
                          scale_game_frames(random_int_between(45, 60)));
         break;
     }

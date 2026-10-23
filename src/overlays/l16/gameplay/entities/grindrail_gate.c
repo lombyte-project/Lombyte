@@ -1963,7 +1963,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int D_L16_0015F5CC;
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
-void FUN_L00_0026ced0(OvlQuad *p, OvlQuad *q, int c, int d, int n, float s);
+void spawn_effect_particle_with_target_scalar(OvlQuad *p, OvlQuad *q, int c, int d, int n, float s) __asm__("FUN_L00_0026ced0");
 void build_spherical_offset_u(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern void func_L00_0026DD70_emit(void *, void *, int, int, float,
                                    int) __asm__("FUN_L00_0026ced0");

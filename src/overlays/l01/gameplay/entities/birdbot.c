@@ -259,7 +259,7 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern void FUN_L00_0026ced0(void *, void *, u32, u32, f32, s32);
+extern void spawn_effect_particle_with_target_scalar(void *, void *, u32, u32, f32, s32) __asm__("FUN_L00_0026ced0");
 
 void FUN_L01_002e6518(SplashMoby_u *moby, u128 *origin) {
     SplashVec base;
@@ -291,7 +291,7 @@ void FUN_L01_002e6518(SplashMoby_u *moby, u128 *origin) {
         inner_color_entry = &inner.c[random_integer_below(6)];
         outer_color_entry = &outer.c[random_integer_below(6)];
         size = random_float_between(105000.0f, 157500.0f);
-        FUN_L00_0026ced0(&vector_scratch, &world_motion_delta, *inner_color_entry, *outer_color_entry, size, scale_game_frames(random_int_between(5, 0xF)));
+        spawn_effect_particle_with_target_scalar(&vector_scratch, &world_motion_delta, *inner_color_entry, *outer_color_entry, size, scale_game_frames(random_int_between(5, 0xF)));
     }
 }
 #include "qcopy.h"

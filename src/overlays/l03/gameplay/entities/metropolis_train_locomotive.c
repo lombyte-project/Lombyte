@@ -1008,7 +1008,7 @@ void maintain_emitter_sound_voice(struct Moby *moby) {
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_L00_001fefc8(void *);
-extern void FUN_L00_0026ced0(void *, void *, int, int, int, float);
+extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, int, float) __asm__("FUN_L00_0026ced0");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void scale_vector_xyz(void *out, void *a, float s) __asm__("FUN_001f9a68");
 struct Moby;
@@ -1050,7 +1050,7 @@ void update_moby_emitter_effects(char *moby, void *vel_in, int quiet) {
                 elevation_angle = random_angle_radians();
                 build_spherical_offset(particle_velocity, frame_time * 0.15f, azimuth_angle, elevation_angle);
                 add_vector_xyz(particle_velocity, particle_velocity, vp);
-                FUN_L00_0026ced0(joint_world_position, particle_velocity, 0x8040C0F0, 0x808080, scale_game_frames(20), 84000.0f);
+                spawn_effect_particle_with_target_scalar(joint_world_position, particle_velocity, 0x8040C0F0, 0x808080, scale_game_frames(20), 84000.0f);
             }
         }
         break;
@@ -1067,7 +1067,7 @@ void update_moby_emitter_effects(char *moby, void *vel_in, int quiet) {
                     elevation_angle = random_angle_radians();
                     build_spherical_offset(particle_velocity, frame_time * 0.6f, azimuth_angle, elevation_angle);
                     add_vector_xyz(particle_velocity, particle_velocity, vp);
-                    FUN_L00_0026ced0(joint_world_position, particle_velocity, 0x80808080, 0x808080, scale_game_frames(35), 105000.0f);
+                    spawn_effect_particle_with_target_scalar(joint_world_position, particle_velocity, 0x80808080, 0x808080, scale_game_frames(35), 105000.0f);
                 }
             }
             data[0x12E] = random_int_between(scale_game_frames(7), scale_game_frames(20));
@@ -1083,7 +1083,7 @@ void update_moby_emitter_effects(char *moby, void *vel_in, int quiet) {
                     elevation_angle = random_angle_radians();
                     build_spherical_offset(particle_velocity, frame_time * 1.2f, azimuth_angle, elevation_angle);
                     add_vector_xyz(particle_velocity, particle_velocity, vp);
-                    FUN_L00_0026ced0(joint_world_position, particle_velocity, 0x80808080, 0x808080, scale_game_frames(45), 168000.0f);
+                    spawn_effect_particle_with_target_scalar(joint_world_position, particle_velocity, 0x80808080, 0x808080, scale_game_frames(45), 168000.0f);
                 }
             }
             data[0x12E] = random_int_between(scale_game_frames(7), scale_game_frames(20));

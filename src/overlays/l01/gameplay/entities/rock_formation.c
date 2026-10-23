@@ -35,7 +35,7 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int FUN_L00_00257b90(int lo, int hi);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
+extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern struct Moby *spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 extern void FUN_L00_00257470(void *, s32, s32);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -76,7 +76,7 @@ void rock_formation_update(struct Moby *rock_formation_moby) {
                 fast_vec_add(&pos, &pos, &rock_formation_moby->pos);
                 fast_vec_normalize(&vel, &vel, random_float_between(0.5f, 1.5f) * frame_time);
                 offset_component_or_particle_size = random_float_between(0.5f, 1.0f) * 210000.0f;
-                FUN_L00_0026ced0(&pos, &vel, 0x5F787878, 0x181818, offset_component_or_particle_size, scale_game_frames(FUN_L00_00257b90(30, 90)));
+                spawn_effect_particle_with_target_scalar(&pos, &vel, 0x5F787878, 0x181818, offset_component_or_particle_size, scale_game_frames(FUN_L00_00257b90(30, 90)));
             }
         }
         for (j = 0; j < 40; j++) {
@@ -552,7 +552,7 @@ void destroyable_cave_wall_update(struct Moby *cave_wall_moby) {
                 fast_vec_add(&pos, &pos, &cave_wall_moby->pos);
                 fast_vec_normalize(&vel, &vel, random_float_between(1.5f, 3.5f) * frame_time);
                 offset_component_or_smoke_scale = random_float_between(1.5f, 3.5f) * 210000.0f;
-                FUN_L00_0026ced0(&pos, &vel, 0x5F787878, 0x181818, offset_component_or_smoke_scale, scale_game_frames(FUN_L00_00257b90(120, 240)));
+                spawn_effect_particle_with_target_scalar(&pos, &vel, 0x5F787878, 0x181818, offset_component_or_smoke_scale, scale_game_frames(FUN_L00_00257b90(120, 240)));
             }
         }
         for (j = 0; j < 100; j++) {
@@ -1511,7 +1511,7 @@ extern int FUN_L00_00257b90(int lo, int hi);
 extern int allocate_voice_for_target_entry(int, int, int);
 extern int scale_game_frames(int);
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
+extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern void add_vector_xyz(void *, void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
@@ -1549,7 +1549,7 @@ void pipe_update(struct Moby *moby) {
             particle_velocity[2] = 0;
             particle_velocity[2] = random_float_between(particle_velocity[2], 3.0f) * frame_time;
             velocity_component_or_size = random_float_between(125000.0f, 175000.0f);
-            FUN_L00_0026ced0(particle_position, particle_velocity, 0x207F7F7F, 0x272727, velocity_component_or_size,
+            spawn_effect_particle_with_target_scalar(particle_position, particle_velocity, 0x207F7F7F, 0x272727, velocity_component_or_size,
                              scale_game_frames(FUN_L00_00257b90(0x2D, 0x3C)));
         }
         FUN_L01_002ffa90_c(moby);

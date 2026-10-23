@@ -696,7 +696,7 @@ extern s32 random_integer_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void fast_draw_quad_real(void *, void *, s32) __asm__("FUN_001f7d30");
-extern void FUN_L00_0026ced0(void *, void *, u32, u32, s32, f32);
+extern void spawn_effect_particle_with_target_scalar(void *, void *, u32, u32, s32, f32) __asm__("FUN_L00_0026ced0");
 extern void spawn_colored_effect(struct Moby *, void *, void *, s32, s32, s32, s32, s32, f32) __asm__("FUN_L08_0027b450");
 
 /* The draw helper reads this contiguous 0x90-byte packet. */
@@ -983,7 +983,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
             velocity.f[1] = random_float_between(-f[0x41], f[0x41])*frame_scale;
             velocity.f[2] = random_float_between(0.0f, f[0x42])*frame_scale;
             fast_vec_scale(&velocity, &velocity, (1.0f-f[0x4a])+shape*f[0x4a]);
-            FUN_L00_0026ced0(&offset, &velocity, color_a, color_b, lifetime, c);
+            spawn_effect_particle_with_target_scalar(&offset, &velocity, color_a, color_b, lifetime, c);
         } while (i < b[0x120]);
     }
     light = d->light;

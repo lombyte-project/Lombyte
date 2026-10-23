@@ -74,7 +74,7 @@ extern void *spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
-extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
+extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern void update_planetbuster_maximus_detached_parts(char *) __asm__("FUN_L12_003064e8");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
@@ -302,7 +302,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                         scratch_vector[1] = fast_sin(particle_xy_angle) * radial_scale;
                         scratch_vector[2] = 0.0f;
                         scratch_vector[2] = random_float_between_c(D_0015ED6C_gp, D_0015ED6C_gp * 5.5f);
-                        FUN_L00_0026ced0(position_buffer, scratch_vector, 0x500A1414, 0xA0A0A, 420000.0f, c);
+                        spawn_effect_particle_with_target_scalar(position_buffer, scratch_vector, 0x500A1414, 0xA0A0A, 420000.0f, c);
                     }
                     *(int *)(gun_moby + 0x94) = 0;
                     *(unsigned short *)(gun_moby + 0x34) |= 0x41;
@@ -332,7 +332,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                 scratch_vector[2] = 0.0f;
                 scratch_vector[2] = random_float_between_c(D_0015ED6C_gp * 7.0f, D_0015ED6C_gp * 17.0f) * func_001FA888_3055F8(lvl) * 1.5f
                         / func_001FA888_3055F8(5);
-                FUN_L00_0026ced0(position_buffer, scratch_vector, (FUN_L00_00257b90(0x46, 0xCD) << 8) | 0x460A00AA, 0xA0A46, 420000.0f, c);
+                spawn_effect_particle_with_target_scalar(position_buffer, scratch_vector, (FUN_L00_00257b90(0x46, 0xCD) << 8) | 0x460A00AA, 0xA0A46, 420000.0f, c);
             }
             for (j = 0; j < 3; j++) {
                 int c;
@@ -347,7 +347,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                 scratch_vector[1] = fast_sin(particle_xy_angle) * radial_scale;
                 scratch_vector[2] = 0.0f;
                 scratch_vector[2] = random_float_between_c(D_0015ED6C_gp * 2.4f, D_0015ED6C_gp * 5.5f);
-                FUN_L00_0026ced0(position_buffer, scratch_vector, 0x460A1414, 0xA0A0A, 504000.03f, c);
+                spawn_effect_particle_with_target_scalar(position_buffer, scratch_vector, 0x460A1414, 0xA0A0A, 504000.03f, c);
             }
         }
         }
