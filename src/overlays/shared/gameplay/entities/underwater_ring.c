@@ -292,7 +292,7 @@ extern u8 D_0014C050[];
 extern u32 D_0013CAE4 __attribute__((section(".data")));
 extern void mark_moby_for_removal_002ed068(struct Moby *) __asm__("FUN_0020c828");
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
-extern void FUN_L15_00208ca8(void);
+extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern void set_moby_animation(struct Moby *, int, int) __asm__("FUN_00212ed8");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
@@ -348,7 +348,7 @@ void giant_clank_pad_update(struct Moby *moby) {
                 pad->flags |= 1;
                 pad->collision = 0;
                 pad->visible = 0;
-                FUN_L15_00208ca8();
+                restore_saved_hero_moby_and_clear_vehicle_mode();
                 set_moby_animation(pad, 0, 0);
                 if (current_level_index != 0xf) return;
                 start_scene(9);

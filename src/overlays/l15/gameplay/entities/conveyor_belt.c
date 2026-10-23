@@ -1154,7 +1154,7 @@ extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460"
 extern void FUN_L01_0027a248(int, int);
 extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
 extern void apply_npc_big_head_cheat(void *) __asm__("FUN_L12_002e6b60");
-extern void FUN_L15_00208ca8(void);
+extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 #include "rnc/gameplay/state/game_globals.h"
@@ -1336,7 +1336,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         if (fast_dec_timer(data + 0x15C) == 0) {
             break;
         }
-        FUN_L15_00208ca8();
+        restore_saved_hero_moby_and_clear_vehicle_mode();
         set_moby_animation((char *)D_L15_0015FFD8 + (*(int *)(data + 0x14C) << 8), 0, 0);
         *(int *)(data + 0x140) = 1;
         *(short *)(data + 0x36) = 1;
