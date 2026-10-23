@@ -294,7 +294,9 @@ extern void approach_value_c(f32 *, f32, f32) __asm__("func_00213ED8");
 extern float func_00214358_order(float, void *, int) __asm__("FUN_00213508");
 extern void func_00214D28_order(float, float, void *) __asm__("FUN_00213ed8");
 
-void FUN_L12_002e1878(char *moby) {
+void ease_hoven_anklebiter_height_to_ground(char *moby) __asm__("FUN_L12_002e1878");
+
+void ease_hoven_anklebiter_height_to_ground(char *moby) {
     L12Vector position;
     float value;
     qcopy(&position, moby + 0x10);
@@ -812,7 +814,7 @@ void update_hoven_anklebiter(AnklebiterMoby_2E2EF0 *moby) {
 #include "qcopy.h"
 extern char *D_L12_001B0930_w[] __asm__("D_L12_001B0930");
 extern float D_0015ED6C_w __asm__("D_0015ED6C");
-extern void FUN_L12_002e1878_w(char *) __asm__("FUN_L12_002e1878");
+extern void ease_hoven_anklebiter_height_to_ground(char *) __asm__("FUN_L12_002e1878");
 extern void approach_w(char *, float *, float, float, float, float) __asm__("FUN_L00_00258278");
 extern float cos_w(float) __asm__("FUN_001f9dc8");
 extern float sin_w(float) __asm__("FUN_001f9de0");
@@ -835,7 +837,7 @@ int FUN_L12_002e2eb8(struct Moby *moby, float speed) {
     float path_test_offset[4];
     int move_result;
     *(OvlQuad *)old = *(OvlQuad *)&moby->pos;
-    FUN_L12_002e1878_w(moby);
+    ease_hoven_anklebiter_height_to_ground(moby);
     approach_w(moby, (float *)(moby_vars + 0x2A0), speed, 0.05f, 0.3f, 0.2f);
     forward_movement_vector[0] = cos_w(moby->rot.z) * 2.0f;
     forward_movement_vector[1] = sin_w(moby->rot.z) * 2.0f;
