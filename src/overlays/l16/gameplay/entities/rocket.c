@@ -234,7 +234,9 @@ void update_linked_pair_effect(struct Moby *moby) {
 extern int *D_L16_001ABCC0_c[] __asm__("D_L16_001ABCC0");
 extern int FUN_L16_002cf678_u(char *) __asm__("FUN_L16_002cf678");
 
-void FUN_L16_002cf5c8(struct Moby *moby) {
+void initialize_linked_pair_group(struct Moby *moby) __asm__("FUN_L16_002cf5c8");
+
+void initialize_linked_pair_group(struct Moby *moby) {
     short *group_entry = D_L16_001ABCC0_c[moby->group];
     if (group_entry != 0) {
         do {
