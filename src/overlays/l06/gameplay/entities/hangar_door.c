@@ -935,7 +935,9 @@ void FUN_L06_002f4390(char *vent_moby) {
 
 extern void FUN_L00_00250df8(void *);
 
-void FUN_L06_002f54a0(char *moby) {
+void set_moby_and_links_to_states_2_and_3(char *moby) __asm__("FUN_L06_002f54a0");
+
+void set_moby_and_links_to_states_2_and_3(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char **linked_mobys;
     int i;
@@ -3604,7 +3606,7 @@ float absolute_float(float input) __asm__("FUN_001f99c0");
 s32 try_set_help_message(s32 owner, s32 message_id) __asm__("FUN_00215130");
 void FUN_L06_002f5360_c(char *moby) __asm__("FUN_L06_002f5360");
 void FUN_L06_002f53e8_c(char *moby) __asm__("FUN_L06_002f53e8");
-void FUN_L06_002f54a0_c(char *a) __asm__("FUN_L06_002f54a0");
+void set_moby_and_links_to_states_2_and_3(char *a) __asm__("FUN_L06_002f54a0");
 extern unsigned char D_0013D5DD_2FDA70[] __asm__("D_0013D4C6");
 extern unsigned char D_0013D4AF_2FDA70[] __asm__("D_0013D3A8");
 extern unsigned char D_0013D5CA_2FDA70[] __asm__("D_0013D4C6");
@@ -3694,8 +3696,8 @@ void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
                 moby_data->f90 = scale_game_frames_alt(0x78);
                 if (((Hero_2FDA70 *)(D_0013F350))->f20A4 == 1) {
                     fade_to_black(scale_game_frames_alt(0x10));
-                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (moby_data->f64 << 8));
-                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (moby_data->f68 << 8));
+                    set_moby_and_links_to_states_2_and_3(D_L06_0015FFD8_c + (moby_data->f64 << 8));
+                    set_moby_and_links_to_states_2_and_3(D_L06_0015FFD8_c + (moby_data->f68 << 8));
                     FUN_L06_002f5360_c(D_L06_0015FFD8_c + (moby_data->f60 << 8));
                     moby_data->f84 = 0;
                     ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].f94 = 0;
@@ -3717,7 +3719,7 @@ void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
                     fade_to_black(scale_game_frames_alt(0x10));
                     FUN_L06_002f5360_c(D_L06_0015FFD8_c + (moby_data->f64 << 8));
                     FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (moby_data->f68 << 8));
-                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (moby_data->f60 << 8));
+                    set_moby_and_links_to_states_2_and_3(D_L06_0015FFD8_c + (moby_data->f60 << 8));
                     moby_data->f84 = 1;
                     ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].f94 = ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].cls->f10;
                     ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].f34 &= 0xFFFE;
@@ -3731,7 +3733,7 @@ void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
                     fade_to_black(scale_game_frames_alt(0x10));
                     FUN_L06_002f5360_c(D_L06_0015FFD8_c + (moby_data->f64 << 8));
                     FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (moby_data->f68 << 8));
-                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (moby_data->f60 << 8));
+                    set_moby_and_links_to_states_2_and_3(D_L06_0015FFD8_c + (moby_data->f60 << 8));
                     moby_data->f84 = 1;
                     moby_data->f94 = 1;
                     {
@@ -3740,7 +3742,7 @@ void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
                     }
                 } else {
                     fade_to_black(scale_game_frames_alt(0x10));
-                    FUN_L06_002f54a0_c(D_L06_0015FFD8_c + (moby_data->f64 << 8));
+                    set_moby_and_links_to_states_2_and_3(D_L06_0015FFD8_c + (moby_data->f64 << 8));
                     FUN_L06_002f53e8_c(D_L06_0015FFD8_c + (moby_data->f68 << 8));
                     FUN_L06_002f5360_c(D_L06_0015FFD8_c + (moby_data->f60 << 8));
                     moby_data->f84 = 0;
