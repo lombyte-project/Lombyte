@@ -1573,7 +1573,9 @@ typedef struct {
 extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8();
 
-SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *transform_source_moby) {
+SpawnedMoby *spawn_pipe_replacement_moby(SpawnedMoby *transform_source_moby) __asm__("FUN_L01_002ffa90");
+
+SpawnedMoby *spawn_pipe_replacement_moby(SpawnedMoby *transform_source_moby) {
     SpawnedMoby *spawned_moby;
     s32 *spawned_moby_vars;
 
