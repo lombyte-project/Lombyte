@@ -2351,7 +2351,9 @@ extern char D_L17_001676C0[];
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 
-void FUN_L17_002ee9c0(struct Moby *moby, char *camera_position, char *state) {
+void build_magnet_elevator_camera_pose(struct Moby *moby, char *camera_position, char *state) __asm__("FUN_L17_002ee9c0");
+
+void build_magnet_elevator_camera_pose(struct Moby *moby, char *camera_position, char *state) {
     subtract_vector_xyz(camera_position, D_L17_001676C0, &moby->pos);
     set_vector_length_xy(camera_position, camera_position, 2.5f);
     *(float *)(camera_position + 8) = 1.5f;
