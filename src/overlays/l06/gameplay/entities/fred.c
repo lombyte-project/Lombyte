@@ -6793,7 +6793,7 @@ extern void FUN_L06_0030bef8_302578(void *, int, int, int) __asm__("FUN_L06_0030
 extern void blend_moby_animation_302578(void *, int, int, int) __asm__("FUN_00212f90");
 extern int is_point_inside_clip_volume(void *, int);
 extern void play_sound_302578(int, int) __asm__("FUN_L01_0027a248");
-extern int FUN_L00_002644e0_302578(int) __asm__("FUN_L00_002644e0");
+extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern void fade_to_black_302578(int) __asm__("FUN_001f4a58");
 extern float angle_atan2_302578(float, float) __asm__("FUN_001f9e90");
 extern float vector_distance_302578(void *, void *) __asm__("FUN_001f9b80");
@@ -6965,7 +6965,7 @@ void shuttle_update(struct Moby *moby) {
         if (shuttle_vars->go != 0) {
             shuttle_vars->go = 0;
             moby->state = 3;
-            FUN_L00_002644e0_302578(10);
+            remove_help_message_for_selector(10);
             if (moby->prev_seq != 0) {
                 blend_moby_animation_302578(moby, 0, 0, 0);
             }
@@ -7522,7 +7522,7 @@ extern void event_304098(int, int, void *) __asm__("FUN_0022dba0");
 extern float vector_distance_304098(void *, void *) __asm__("FUN_001f9b80");
 extern int try_set_help_message_304098(int, int) __asm__("FUN_00215130");
 extern int scale_game_frames_304098(int) __asm__("FUN_001f96f8");
-extern int FUN_L00_002644e0(int);
+extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern int tick_countdown_304098(int *) __asm__("FUN_001f9740");
 extern void fade_to_black_304098(int) __asm__("FUN_001f4a58");
 extern void start_camera_move_304098(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
@@ -7601,7 +7601,7 @@ void red_button_update(struct Moby *moby) {
             help_message_available = try_set_help_message_304098(4, 0x1783) != 0;
             if ((*(int *)(D_0013A5E0 + 0x2504) & 0x10) && help_message_available) {
                 allocate_voice_for_target_entry_304098(2, 0, moby);
-                FUN_L00_002644e0(4);
+                remove_help_message_for_selector(4);
                 moby->state = 4;
                 data->timer = scale_game_frames_304098(0x1E);
             }

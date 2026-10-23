@@ -1657,7 +1657,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float jet_distance(void *, void *) __asm__("FUN_L00_00250430");
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
-extern int FUN_L00_002644e0(int);
+extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18(int);
@@ -1795,7 +1795,7 @@ void fighter_jet_update(ShipMoby *moby) {
             board = jet_distance(moby, (ShipCamera *)g->moby) < D_L17_00161FE0 &&
                     FUN_00215130(7, 0x53E4) != 0 && (*(int *)D_0013CAE4_ed & 0x10);
             if (board) {
-                FUN_L00_002644e0(7);
+                remove_help_message_for_selector(7);
                 moby->state = 2;
                 ship_vars->i124 = -1;
             } else if (ship_vars->fade != 0.0f) {
@@ -3548,7 +3548,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float);
 extern int D_L17_001BADD0[];
-extern int FUN_L00_002644e0(int);
+extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames(int);
 extern short D_L17_001623A8 __attribute__((sda));
@@ -3661,7 +3661,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         }
         if (shuttle_vars->go != 0) {
             shuttle_vars->go = 0;
-            FUN_L00_002644e0(10);
+            remove_help_message_for_selector(10);
             shuttle_moby->state = 2;
             allocate_voice_for_target_entry(2, 0, (int)shuttle_moby);
             if (shuttle_moby->prev_seq != 0) {

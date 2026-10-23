@@ -15,7 +15,7 @@ extern float fast_cos(float) __asm__("func_001F9DC8");
 extern int D_L00_0015F5C4;
 extern char D_L00_001BD880[];
 extern int D_L00_0015F630 __asm__("D_L00_0015F630");
-extern int FUN_L00_002644e0(int);
+extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern unsigned char D_0013CAE4[];
 extern unsigned char D_0013D388[];
 extern unsigned char D_0013DD4B[];
@@ -83,7 +83,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
                     *(unsigned short *)(moby + 0x34) |= 0x41;
                     start_scene(9);
                 } else {
-                    FUN_L00_002644e0(2);
+                    remove_help_message_for_selector(2);
                     D_L00_0015F630 = 1;
                     ship_index[1] = 0;
                 }
