@@ -964,7 +964,9 @@ extern void interpolate_wrapped_rotations_cosine_eased(float *, float *, float *
 f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 vel) __asm__("FUN_001ebd78");
 
-void FUN_L00_002eae20(void *camera) {
+void update_camera_pose_from_targets(void *camera) __asm__("FUN_L00_002eae20");
+
+void update_camera_pose_from_targets(void *camera) {
     char *camera_object = camera;
     float mtx[16];
     char *camera_state = *(char **)(camera_object + 0x70);
@@ -1039,14 +1041,14 @@ void FUN_L00_002eae20(void *camera) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC6C8), where it is exact; names translated to the US level program. */
 
 extern void resolve_camera_movement_collisions(void *, float) __asm__("FUN_L00_001ed6a8");
-extern void FUN_L00_002eae20_u(void *) __asm__("FUN_L00_002eae20");
+extern void update_camera_pose_from_targets(void *) __asm__("FUN_L00_002eae20");
 
 /* Runs FUN_L00_002eae20; if word +0x120 of its object is set, clears 0x89 and calls 001ed6a8. */
 void update_camera_pose_with_optional_collision(char *camera_object) __asm__("FUN_L00_002eb218");
 
 void update_camera_pose_with_optional_collision(char *camera_object) {
     char *transition_state = *(char **)(camera_object + 0x70) + 0xE0;
-    FUN_L00_002eae20_u(camera_object);
+    update_camera_pose_from_targets(camera_object);
     if (*(int *)(transition_state + 0x40) != 0) {
         camera_object[0x89] = 0;
         resolve_camera_movement_collisions(camera_object + 0x30, 0.5f);
