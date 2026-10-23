@@ -639,7 +639,7 @@ extern f32 D_L00_0017B85C_002062b0 __asm__("D_L00_0017B85C") __attribute__((sect
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_00211670(void);
 extern void apply_hero_selected_flags_and_state_transitions(void) __asm__("FUN_L00_0020b960");
-extern void FUN_L00_0020bed0_u(void) __asm__("FUN_L00_0020bed0");
+extern void check_ledge_grab(void) __asm__("FUN_L00_0020bed0");
 extern void update_hero_motion_response_parameters(void) __asm__("FUN_L00_00215b68");
 extern void FUN_L00_00229b70(void);
 extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
@@ -705,7 +705,7 @@ void update_hero_in_vehicle_mode(void) {
     apply_hero_selected_flags_and_state_transitions();
     g = (char *)&hero;
     if (*(u8 *)(g + 0x20a4) == 1) {
-        FUN_L00_0020bed0_u();
+        check_ledge_grab();
         update_hero_motion_response_parameters();
     }
     FUN_L00_00229b70();
@@ -1111,7 +1111,7 @@ void update_hero_in_vehicle_mode(void) __asm__("FUN_L00_002062b0");
 void FUN_L00_00232670(void);
 void hero_update(void) __asm__("FUN_L00_00211670");
 void apply_hero_selected_flags_and_state_transitions(void) __asm__("FUN_L00_0020b960");
-void FUN_L00_0020bed0_u(void) __asm__("FUN_L00_0020bed0");
+void check_ledge_grab(void) __asm__("FUN_L00_0020bed0");
 void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
 void update_hero_offset_rail_candidate(void) __asm__("FUN_L00_0020d330");
 void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
@@ -1170,7 +1170,7 @@ void coordinate_hero_frame_update(void) {
     FUN_L00_00232670();
     hero_update();
     apply_hero_selected_flags_and_state_transitions();
-    FUN_L00_0020bed0_u();
+    check_ledge_grab();
     find_grind_rail();
     update_hero_offset_rail_candidate();
     hero_update_transitions();
@@ -3465,7 +3465,7 @@ extern int func_L00_001F1D20_20C568(float, float, void *, int, int) __asm__("FUN
 extern float func_001FA748_20C568(float, float) __asm__("FUN_001fa580");
 extern float func_001FA850_20C568(float, float) __asm__("FUN_001fa688");
 
-void FUN_L00_0020bed0(void) {
+void check_ledge_grab(void) {
     float probe[4], ledge[4], ray_end[4], hero_level[4], clearance[4], edge_start[4], edge_end[4], grab_point[4];
     float down, fwd, up, top, drop, rise, back;
     float speed, ledge_yaw, offset;
