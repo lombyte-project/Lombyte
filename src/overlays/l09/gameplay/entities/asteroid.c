@@ -637,7 +637,9 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void delete_moby(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L09_002ead30(unsigned char *moby) {
+void update_fading_asteroid_debris(unsigned char *moby) __asm__("FUN_L09_002ead30");
+
+void update_fading_asteroid_debris(unsigned char *moby) {
     if (moby[0x23] < 3) {
         delete_moby(moby);
     } else {
@@ -952,7 +954,7 @@ extern float vector_length_xyz_c3(void *) __asm__("FUN_001f9af0");
 extern int FUN_L09_002eaea8_c() __asm__("FUN_L09_002eaea8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below_c3(s32) __asm__("func_00213260");
-extern void FUN_L09_002ead30_c(unsigned char *m) __asm__("FUN_L09_002ead30");
+extern void update_fading_asteroid_debris(unsigned char *m) __asm__("FUN_L09_002ead30");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
 extern void normalize_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -975,7 +977,7 @@ void asteroid_update(struct Moby *asteroid_moby) {
     int i;
 
     if (moby_vars->mode == 2) {
-        FUN_L09_002ead30_c((unsigned char *)asteroid_moby);
+        update_fading_asteroid_debris((unsigned char *)asteroid_moby);
         return;
     }
     if (moby_vars->mode == 1) {
