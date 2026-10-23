@@ -248,7 +248,9 @@ void FUN_001f9a28_25db00(void *, void *, void *) __asm__("FUN_001f9a28");
 void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
 float FUN_001f9ab0_25db00(void *, void *) __asm__("FUN_001f9ab0");
 float FUN_001f9b80_25db00(void *, void *) __asm__("FUN_001f9b80");
-float FUN_L00_0025db00(float *out, float *query_point, OvlQuad *segment_start, OvlQuad *segment_end) {
+float project_level_path_point_onto_segment(float *out, float *query_point, OvlQuad *segment_start, OvlQuad *segment_end) __asm__("FUN_L00_0025db00");
+
+float project_level_path_point_onto_segment(float *out, float *query_point, OvlQuad *segment_start, OvlQuad *segment_end) {
     float segment_delta[4];
     float planar_normal[4];
     OvlQuad planar_endpoint_copy[1];
