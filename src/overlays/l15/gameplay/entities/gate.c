@@ -1318,7 +1318,7 @@ extern void FUN_L02_00261c80(void *, float *, float);
 extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
 extern void FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
-extern struct Moby *FUN_L03_002d5208(void *, void *, struct Moby *, int, float);
+extern struct Moby *spawn_homing_spark_projectile(void *, void *, struct Moby *, int, float) __asm__("FUN_L03_002d5208");
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_001fff28(void *, int, float);
@@ -1588,7 +1588,7 @@ void helicopter_update(struct Moby *moby) {
                 subtract_vector_xyz(&aim, &target_pos, &point);
                 set_vector_length_xy(&aim, &aim, frame_time * 6.0f);
                 aim.i[2] = 0;
-                vars->shot = FUN_L03_002d5208(&aim, &point, moby, scale_game_frames(0xF0), goal.pos.f[2]);
+                vars->shot = spawn_homing_spark_projectile(&aim, &point, moby, scale_game_frames(0xF0), goal.pos.f[2]);
             }
         } else {
             aim.q = *(u128 *)&moby->pos;

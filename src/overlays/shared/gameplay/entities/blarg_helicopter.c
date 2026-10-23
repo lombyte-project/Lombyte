@@ -968,7 +968,7 @@ typedef struct {
     HVec49_2CDDC8 direction,shot_velocity,shot_origin; int segment_a; float fraction_a; int segment_b; float fraction_b;
 } HWork49_2CDDC8;
 
-char *FUN_L03_002d5208_c(char *a, char *pos, int c, int d, float f) __asm__("FUN_L03_002d5208");
+char *spawn_homing_spark_projectile(char *a, char *pos, int c, int d, float f) __asm__("FUN_L03_002d5208");
 extern char *D_L03_0015FFD8_c __asm__("D_L03_0015FFD8") __attribute__((sda));
 extern char D_L03_00166EC0[];
 extern f32 approach_value(f32 target, f32 step, f32 *value) __asm__("FUN_00213ed8");
@@ -1047,7 +1047,7 @@ extern void func_L00_001FF500_2CDDC8(void*,void*,float) __asm__("FUN_001f9c48");
 extern void func_L00_0028EBF0_2CDDC8(int) __asm__("FUN_0022d798");
 extern void func_001F9978_2CDDC8(void) __asm__("FUN_001f97b0");
 extern float func_00214158_2CDDC8(void) __asm__("FUN_00213308");
-extern char *func_L03_002D65D0_2CDDC8(char*,char*,int,int,float) __asm__("FUN_L03_002d5208");
+extern char *spawn_homing_spark_projectile(char*,char*,int,int,float) __asm__("FUN_L03_002d5208");
 extern void func_L00_0025AAC0_2CDDC8(void*,void*) __asm__("FUN_L00_00259a88");
 extern void func_0020D9D8_2CDDC8(void*,void*) __asm__("FUN_0020cb88");
 extern void func_L00_002514B8_2CDDC8(void*) __asm__("FUN_0020d580");
@@ -1251,7 +1251,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         } else if (func_00215570_2CDDC8(work.target.position,data->shoot_region) && (func_001F9938_2CDDC8(&data->shot_timer) || (!data->projectile && data->timer))) {
             data->shot_timer=func_001F9850_2CDDC8(360); qcopy(work.shot_origin,work.target.position);
             fast_vec_sub(work.shot_velocity,work.shot_origin,work.movement); func_L00_001FF500_2CDDC8(work.shot_velocity,work.shot_velocity,D_0015ED6C*6.0f); work.shot_velocity[2]=0;
-            data->projectile=(HMob49_2CDDC8*)func_L03_002D65D0_2CDDC8((char*)work.shot_velocity,(char*)work.movement,(int)moby,func_001F9850_2CDDC8(240),work.target.position[2]);
+            data->projectile=(HMob49_2CDDC8*)spawn_homing_spark_projectile((char*)work.shot_velocity,(char*)work.movement,(int)moby,func_001F9850_2CDDC8(240),work.target.position[2]);
         }
         break;
     }
@@ -1719,7 +1719,7 @@ void update_homing_spark_projectile(Moby *moby) {
 
 extern char *func_0020D348_m5208(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L03_002d5208(char *velocity, char *spawn_position, int target_moby, int lifetime_frames, float target_height) {
+char *spawn_homing_spark_projectile(char *velocity, char *spawn_position, int target_moby, int lifetime_frames, float target_height) {
     char *spawned_moby = (char *)func_0020D348_m5208(0x350);
     char *data;
     if (spawned_moby != 0) {
