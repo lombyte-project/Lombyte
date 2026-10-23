@@ -237,7 +237,9 @@ void sync_hero_slot3_animation_speed(void) {
 }
 extern s16 *D_001415CC[];
 /* Looks a0 up in the -1-terminated pair list at D_001415CC[0]; stores the pair value in *a1. */
-s32 FUN_L00_002321c0(s32 key, s32 *out_value) {
+s32 lookup_s16_pair_value(s32 key, s32 *out_value) __asm__("FUN_L00_002321c0");
+
+s32 lookup_s16_pair_value(s32 key, s32 *out_value) {
     s16 *pair_table = D_001415CC[0];
     s16 *current_pair;
     if (pair_table == 0) {
