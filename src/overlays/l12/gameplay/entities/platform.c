@@ -499,7 +499,7 @@ f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_00257b90(int lo, int hi);
-int FUN_L00_002591d0(char **out, int idx, int a, int b);
+int get_first_moby_in_group(char **out, int idx, int a, int b) __asm__("FUN_L00_002591d0");
 int get_next_moby_in_group(char **out, char *target, int a, int b) __asm__("FUN_L00_002592b8");
 int mine_fall(void *moby, void *motion) __asm__("FUN_L00_0025c698");
 int FUN_L12_002e2eb8_c(struct Moby *m, float speed) __asm__("FUN_L12_002e2eb8");

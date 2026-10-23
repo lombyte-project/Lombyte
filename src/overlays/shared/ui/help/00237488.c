@@ -1138,7 +1138,7 @@ extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 FUN_001fa6d0(f32);
 extern f32 FUN_001f9b48(void *, void *);
-extern s32 FUN_L00_002591d0(void **, s32, s32, s32);
+extern s32 get_first_moby_in_group(void **, s32, s32, s32) __asm__("FUN_L00_002591d0");
 extern s32 get_next_moby_in_group(void **, void *, s32, s32) __asm__("FUN_L00_002592b8");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern s32 D_L00_0015F5CC __asm__("D_L00_0015F5CC");
@@ -1162,7 +1162,7 @@ void process_hero_race_object_interactions(void) {
         return;
     state = *(u8 **)(hero.unk86C + 0x78);
     if (*(s32 *)(state + 0x44) != -1) {
-        FUN_L00_002591d0((void **)&first, *(s32 *)(state + 0x44), 0, 0);
+        get_first_moby_in_group((void **)&first, *(s32 *)(state + 0x44), 0, 0);
         if (first != 0) {
             do {
 
@@ -1194,7 +1194,7 @@ void process_hero_race_object_interactions(void) {
         green = 0xFF;
     if (*(s32 *)(state + 0x48) != -1) {
         if (hero.unk8BC == 0) {
-            FUN_L00_002591d0((void **)&second, *(s32 *)(state + 0x48), 0, 0);
+            get_first_moby_in_group((void **)&second, *(s32 *)(state + 0x48), 0, 0);
             if (second != 0) {
                 u32 color = (blue << 16) | (0x80000000U | (green << 8)) | red;
                 do {
@@ -1220,7 +1220,7 @@ void process_hero_race_object_interactions(void) {
         }
     }
     if (*(s32 *)(state + 0x4C) != -1) {
-        FUN_L00_002591d0((void **)&third, *(s32 *)(state + 0x4C), 0, 0);
+        get_first_moby_in_group((void **)&third, *(s32 *)(state + 0x4C), 0, 0);
         while (third != 0) {
 
             if (*(s16 *)(third + 0xA6) == 0x1D6 && FUN_L00_001fefc8_c(third + 0xBC) != 0 && FUN_001f9b48(&hero.motion.unkD0, third + 0x10) < 1.5f) {

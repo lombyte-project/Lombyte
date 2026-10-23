@@ -565,7 +565,9 @@ extern char *D_L00_0015FFD8_2591d0 __asm__("D_L00_0015FFD8");
 int FUN_L00_002592b8_c(char **, char *) __asm__("FUN_L00_002592b8");
 /* Looks up table entry idx and makes it current; the flag test reads the
  * current entry back, as the original did. */
-int FUN_L00_002591d0(char **out, int moby_group_index, int include_sign_bit_set_entries, int require_sign_bit_set_entries) {
+int get_first_moby_in_group(char **out, int moby_group_index, int include_sign_bit_set_entries, int require_sign_bit_set_entries) __asm__("FUN_L00_002591d0");
+
+int get_first_moby_in_group(char **out, int moby_group_index, int include_sign_bit_set_entries, int require_sign_bit_set_entries) {
     unsigned short *entry_index_list;
     char *entry_address;
     int entry_sign_bit_set;

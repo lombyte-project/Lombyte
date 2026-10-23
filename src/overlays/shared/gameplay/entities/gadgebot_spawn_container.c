@@ -2404,7 +2404,7 @@ void assign_gadgebot_attack_targets(void) {
     }
 }
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern int FUN_L00_002591d0(int *, int, int, int);
+extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int D_L06_001AC180[];
 
@@ -2418,7 +2418,7 @@ void select_nearest_gadgebot_interaction_target(void *moby_arg) {
 
     gadgebot_vars->target = 0;
     if (gadgebot_vars->target_group != -1) {
-        FUN_L00_002591d0(&list, gadgebot_vars->target_group, 0, 0);
+        get_first_moby_in_group(&list, gadgebot_vars->target_group, 0, 0);
         while (list != 0) {
             if (((GbMoby *)list)->cls_id == 0x3b1 || ((GbMoby *)list)->cls_id == 0x400 ||
                 ((GbMoby *)list)->cls_id == 0x515 || ((GbMoby *)list)->cls_id == 0x516) {
@@ -2603,7 +2603,7 @@ int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int 
     }
     return 0;
 }
-extern int FUN_L00_002591d0_c(int *, int, int, int) __asm__("FUN_L00_002591d0");
+extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int FUN_L06_002f2c28_c(char *, char *, int, int, int *) __asm__("FUN_L06_002f2c28");
 extern int D_L06_001AC180[];
@@ -2630,7 +2630,7 @@ int process_gadgebot_interactions(char *moby, int flag)
     iter.out = 0;
     list_id = *(int *)(state + 0x30C);
     if (list_id != -1) {
-        FUN_L00_002591d0_c(&iter.list, list_id, 0, 0);
+        get_first_moby_in_group(&iter.list, list_id, 0, 0);
         while (iter.list != 0) {
             if (FUN_L06_002f2c28_c(moby, state, iter.list, flag, &iter.out)) return iter.out;
             get_next_moby_in_group(&iter.list, iter.list, 0, 0);
@@ -2748,7 +2748,7 @@ void FUN_L06_002f3640(unsigned char *moby) {
 /* for each moby in a search list with the owner's id, start three effects on its data */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F4C00), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_002591d0(int *, int, int, int);
+extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern unsigned char D_0015EEB0[] __asm__("D_0015EDB0") MACRO_ADDR;
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
@@ -2763,7 +2763,7 @@ void draw_gadgebot_group_glow_effects(char *owner) {
     char *effect_position;
     if (D_0015EEB0[3] != 0)
         effect_scale = 0.114f;
-    FUN_L00_002591d0(&list, ((unsigned char *)owner)[0x21], 0, 0);
+    get_first_moby_in_group(&list, ((unsigned char *)owner)[0x21], 0, 0);
     while (list != 0) {
         if (*(unsigned char *)(list + 0x31) != 0) {
             moby_vars = *(char **)(list + 0x78);

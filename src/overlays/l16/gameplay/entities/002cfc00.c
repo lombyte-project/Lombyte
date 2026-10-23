@@ -10,7 +10,7 @@
 
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float vector_length_xyz(void *);
-extern int FUN_L00_002591d0(int *, int, int, int);
+extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32(int *);
@@ -43,7 +43,7 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
     }
     od = *(char **)(other + 0x78);
     if (*(int *)(od + 0x44) != -1) {
-        FUN_L00_002591d0((int *)&l1, *(int *)(od + 0x44), 0, 0);
+        get_first_moby_in_group((int *)&l1, *(int *)(od + 0x44), 0, 0);
         while (l1) {
             if (*(short *)(l1 + 0xA6) == 0x473) {
                 float adjusted_position[4];
@@ -67,7 +67,7 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
         }
     }
     if (*(int *)(od + 0x48) != -1) {
-        FUN_L00_002591d0((int *)&l2, *(int *)(od + 0x48), 0, 0);
+        get_first_moby_in_group((int *)&l2, *(int *)(od + 0x48), 0, 0);
         while (l2) {
             if (*(short *)(l2 + 0xA6) == 0x474) {
                 float m[16];

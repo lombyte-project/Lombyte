@@ -33,7 +33,7 @@ extern s16 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_0024f7c8(struct Moby *, int, void *);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern int FUN_L00_002591d0(struct Moby **, int, int, int);
+extern int get_first_moby_in_group(struct Moby **, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(struct Moby **, struct Moby *, int, int) __asm__("FUN_L00_002592b8");
 extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
@@ -71,7 +71,7 @@ void underwater_ring_update(struct Moby *moby) {
             vars->distance = FUN_001f9b48(&moby->pos, delta);
             vars->notified_count = 0;
             vars->parent = moby;
-            FUN_L00_002591d0(&child, moby->group, 0, 0);
+            get_first_moby_in_group(&child, moby->group, 0, 0);
             while (child != 0) {
                 if (child != moby && child->oclass == 0x4b9) {
                     VendorVars_2e5958 *other = (VendorVars_2e5958 *)child->pvars;

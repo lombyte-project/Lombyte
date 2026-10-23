@@ -68,7 +68,7 @@ extern s32 FUN_001efa68_2cfcb8(V_2cfcb8 *, V_2cfcb8 *, s32, M_2cfcb8 *, s32) __a
 extern s32 FUN_L00_0025e3b8_2cfcb8(M_2cfcb8 *) __asm__("FUN_L00_0025e3b8");
 extern s32 FUN_L00_002603d0_2cfcb8(M_2cfcb8 *) __asm__("FUN_L00_002603d0");
 extern int convert_pose_to_reference_local(M_2cfcb8 *, M_2cfcb8 *, V_2cfcb8 *, f32 *, V_2cfcb8 *, V_2cfcb8 *) __asm__("FUN_L00_00260668");
-extern int FUN_L00_002591d0_2cfcb8(M_2cfcb8 **, s32, s32, s32) __asm__("FUN_L00_002591d0");
+extern int get_first_moby_in_group(M_2cfcb8 **, s32, s32, s32) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(M_2cfcb8 **, M_2cfcb8 *, s32, s32) __asm__("FUN_L00_002592b8");
 extern void FUN_001f9a10_2cfcb8(V_2cfcb8 *, V_2cfcb8 *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f97b0_2cfcb8(void) __asm__("FUN_001f97b0");
@@ -129,7 +129,7 @@ void FUN_L00_002cfcb8(M_2cfcb8 *moby) {
         return;
     }
 
-    FUN_L00_002591d0_2cfcb8(&moby, group, 0, 0);
+    get_first_moby_in_group(&moby, group, 0, 0);
     while (moby != 0) {
         vars = moby->vars;
         if (FUN_L00_0025e3b8_2cfcb8(moby) != 0) {
@@ -186,7 +186,7 @@ void FUN_L00_002cfcb8(M_2cfcb8 *moby) {
         get_next_moby_in_group(&moby, moby, 0, 0);
     }
 
-    FUN_L00_002591d0_2cfcb8(&member, group, 0, 0);
+    get_first_moby_in_group(&member, group, 0, 0);
     while (member != 0) {
         vars = member->vars;
         if (FUN_L00_0025e3b8_2cfcb8(member) != 0 && vars->pA4 == 0) {
@@ -248,7 +248,7 @@ void FUN_L00_002cfcb8(M_2cfcb8 *moby) {
         get_next_moby_in_group(&member, member, 0, 0);
     }
 
-    FUN_L00_002591d0_2cfcb8(&moby, group, 0, 0);
+    get_first_moby_in_group(&moby, group, 0, 0);
     while (moby != 0) {
         if (FUN_L00_0025e3b8_2cfcb8(moby) != 0) {
             get_next_moby_in_group(&other, moby, 0, 0);

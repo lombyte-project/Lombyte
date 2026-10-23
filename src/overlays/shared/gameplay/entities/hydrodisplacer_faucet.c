@@ -389,7 +389,7 @@ void hoverboard_update(unsigned char *moby) {
 
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float vector_length_xyz(void *);
-extern int FUN_L00_002591d0(int *, int, int, int);
+extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int tick_countdown_32(int *);
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -420,7 +420,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
     }
     od = *(char **)(other + 0x78);
     if (*(int *)(od + 0x44) != -1) {
-        FUN_L00_002591d0((int *)&l1, *(int *)(od + 0x44), 0, 0);
+        get_first_moby_in_group((int *)&l1, *(int *)(od + 0x44), 0, 0);
         while (l1) {
             if (*(short *)(l1 + 0xA6) == 0x473) {
                 float offset_test_position[4];
@@ -444,7 +444,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
         }
     }
     if (*(int *)(od + 0x48) != -1) {
-        FUN_L00_002591d0((int *)&l2, *(int *)(od + 0x48), 0, 0);
+        get_first_moby_in_group((int *)&l2, *(int *)(od + 0x48), 0, 0);
         while (l2) {
             if (*(short *)(l2 + 0xA6) == 0x474) {
                 float m[16];

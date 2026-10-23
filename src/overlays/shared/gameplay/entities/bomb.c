@@ -2977,7 +2977,7 @@ extern void crate_drop_bolts(struct Moby *) __asm__("FUN_L00_002d0538");
 extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int FUN_L00_001fefc8(void *);
-extern int FUN_L00_002591d0(struct Moby **, int, int, int);
+extern int get_first_moby_in_group(struct Moby **, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(struct Moby **, struct Moby *, int, int) __asm__("FUN_L00_002592b8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 
@@ -3217,7 +3217,7 @@ void crate_update(struct Moby *moby) {
                 break;
             }
         }
-        FUN_L00_002591d0(&it, moby->group, 0, 0);
+        get_first_moby_in_group(&it, moby->group, 0, 0);
         while (it != NULL) {
             if (moby != it && !(vector_distance(&moby->pos, &it->pos) > 0.1f) && it->state == 1) {
                 CrateVars *ipv = (CrateVars *)it->pvars;

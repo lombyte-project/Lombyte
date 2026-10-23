@@ -12,7 +12,7 @@
 /* Walks the moby list matching this moby's id and pulses each match's data slots while it is bright. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED740), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_002591d0(int *, int, int, int);
+extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
@@ -20,7 +20,7 @@ void draw_background_ship_1_joint_billboards(char *self) __asm__("FUN_L02_002ec3
 
 void draw_background_ship_1_joint_billboards(char *self) {
     char *current_moby;
-    FUN_L00_002591d0((int *)&current_moby, *(unsigned char *)(self + 0x21), 0, 0);
+    get_first_moby_in_group((int *)&current_moby, *(unsigned char *)(self + 0x21), 0, 0);
     while (current_moby != 0) {
         if (*(unsigned char *)(current_moby + 0x31) != 0) {
             char *data = *(char **)(current_moby + 0x78);

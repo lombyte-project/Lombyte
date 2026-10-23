@@ -1292,7 +1292,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern int FUN_L00_002591d0(int *, int, int, int);
+extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int check_scaled_vector_bsphere(char *, float) __asm__("FUN_L01_00275690");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
@@ -1357,7 +1357,7 @@ void red_ship_1_update(char *moby) {
     if (((unsigned char *)moby)[0x21] != 0xFF && ((unsigned char *)moby)[0x20] != 0 &&
         ((unsigned char *)moby)[0x20] != 3) {
         found = 0;
-        FUN_L00_002591d0((int *)&item, ((unsigned char *)moby)[0x21], 0, 0);
+        get_first_moby_in_group((int *)&item, ((unsigned char *)moby)[0x21], 0, 0);
         if (item == moby) {
             goto test;
             for (;;) {
@@ -1372,7 +1372,7 @@ void red_ship_1_update(char *moby) {
                 }
             }
             if (!found) {
-                FUN_L00_002591d0((int *)&item, ((unsigned char *)moby)[0x21], 0, 0);
+                get_first_moby_in_group((int *)&item, ((unsigned char *)moby)[0x21], 0, 0);
                 while (item != 0) {
                     group_member_data = *(char **)(item + 0x78);
                     item[0x20] = 3;
@@ -1985,7 +1985,7 @@ void update_robot_dog_hit_reaction(struct Moby *moby) {
 /* scans class instances for either predicate */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8160), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_002591d0(int *, int, int, int);
+extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int FUN_L03_002c5b78_c(unsigned char *) __asm__("FUN_L03_002c5b78");
 extern int FUN_L03_002c5b78_c_002c6d58(unsigned char *) __asm__("FUN_L03_002c6d58");
@@ -1994,7 +1994,7 @@ int is_point_inside_clip_volume_cf(int id) __asm__("FUN_L03_002c6d98");
 int is_point_inside_clip_volume_cf(int id) {
     unsigned char *item;
     if (id == 0xFF) goto absent;
-    FUN_L00_002591d0((int *)&item, id, 0, 0);
+    get_first_moby_in_group((int *)&item, id, 0, 0);
     while (item != 0) {
         if (FUN_L03_002c5b78_c_002c6d58(item)) return 1;
         if (FUN_L03_002c5b78_c(item)) return 1;

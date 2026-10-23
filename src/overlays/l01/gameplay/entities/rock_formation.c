@@ -1815,7 +1815,7 @@ typedef struct {
     u8 pad7C[0x18];
     s32 w94;
 } ClonedMoby;
-extern void FUN_L00_002591d0(ClonedMoby **, s32, s32, s32);
+extern void get_first_moby_in_group(ClonedMoby **, s32, s32, s32) __asm__("FUN_L00_002591d0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 typedef struct {
     s32 src_id;
@@ -1911,7 +1911,7 @@ ClonedMoby *initialize_beehive_spawn_moby(ClonedMoby *clone_spawner_moby) {
     ClonedVars *destination_moby_vars;
 
     destination_moby = 0;
-    FUN_L00_002591d0(&destination_moby, *(s32 *)clone_spawner_moby->pvars, 0, 0);
+    get_first_moby_in_group(&destination_moby, *(s32 *)clone_spawner_moby->pvars, 0, 0);
     destination_moby_vars = destination_moby->pvars;
     destination_moby->b30 = 0x80;
     destination_moby->h32 = 0x80;

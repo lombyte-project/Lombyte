@@ -13,7 +13,7 @@
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8190), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_002591d0(int *, int, int, int);
+extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
@@ -24,7 +24,7 @@ void draw_group_moby_glow_quads(unsigned char *moby) {
     int i;
     char *data;
     char *glow_position;
-    FUN_L00_002591d0((int *)&it, moby[0x21], 0, 0);
+    get_first_moby_in_group((int *)&it, moby[0x21], 0, 0);
     while (it != 0) {
         if (it[0x31] != 0) {
             data = *(char **)(it + 0x78);

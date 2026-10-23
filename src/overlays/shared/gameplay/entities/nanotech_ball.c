@@ -3295,7 +3295,7 @@ void FUN_L00_002df1e0(O_2df1e0 *p) {
         }
     }
 }
-int FUN_L00_002591d0(void *, s32, s32, s32);
+int get_first_moby_in_group(void *, s32, s32, s32) __asm__("FUN_L00_002591d0");
 int get_next_moby_in_group(void *, s32, s32, s32) __asm__("FUN_L00_002592b8");
 void draw_offset_textured_effect_quad(void *, void *, f32, f32) __asm__("FUN_L00_00263618");
 void FUN_L00_002df3d8(u8 *reference_moby) {
@@ -3304,7 +3304,7 @@ void FUN_L00_002df3d8(u8 *reference_moby) {
     if (current_level_index == 0 || current_level_index == 0x12) {
         quad_scale = 1.0f;
     }
-    FUN_L00_002591d0(it, reference_moby[0x21], 0, 0);
+    get_first_moby_in_group(it, reference_moby[0x21], 0, 0);
     while (it[0] != 0) {
         u8 *candidate_moby = it[0];
         if (candidate_moby[0x31] != 0) {

@@ -1041,7 +1041,7 @@ extern char D_L07_00211580[];
 extern char D_L07_002115D0[];
 extern float fast_vec_dist(void *, void *);
 extern int debug_print() __asm__("FUN_001e93b0");
-extern int FUN_L00_002591d0(int *, int, int, int);
+extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int sample_path(void *path, void *pos, int *segment, float *distance, float step, int loop) __asm__("FUN_L00_0025d808");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
@@ -1152,7 +1152,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
                 fast_vec_dist(path + 0x10 + j * 16,
                               path + 0x10 + ((j + 1) % *(int *)path) * 16);
         }
-        if (FUN_L00_002591d0(&current, *(int *)(data + 0x74), 1, 0)) {
+        if (get_first_moby_in_group(&current, *(int *)(data + 0x74), 1, 0)) {
             debug_print(D_L07_00211550, *(int *)(data + 0x74));
             return;
         }
@@ -1189,7 +1189,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
     }
     case ADVANCE_PATH_CHILDREN: {
         int cursor = 0;
-        FUN_L00_002591d0(&cursor, ((CrateGroupView *)data)->group, 1, 0);
+        get_first_moby_in_group(&cursor, ((CrateGroupView *)data)->group, 1, 0);
         for (i = 0; i < *(int *)(data + 0x78); i++) {
             child = *(int *)(cursor + 0x78);
             {
@@ -2685,14 +2685,14 @@ void handle_sharkigator_contact_attack(char *moby, char *moby_data, int state, i
 /* Finds another moby whose state lies within the inclusive range. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00310920), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_002591d0(int *, int, int, int);
+extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 
 int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper) __asm__("FUN_L07_0030f540");
 
 int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper) {
     unsigned char *other = 0;
-    if (!FUN_L00_002591d0((int *)&other, moby[0x21], 0, 0)) {
+    if (!get_first_moby_in_group((int *)&other, moby[0x21], 0, 0)) {
         if (other) {
             do {
                 if (other != moby) {
