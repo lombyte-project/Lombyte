@@ -10,7 +10,7 @@
 
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern void FUN_L10_002ea4e8_c(void *,short *,short *) __asm__("FUN_L10_002ea4e8");
-extern void FUN_L10_002ea7b0_c(void *,short *) __asm__("FUN_L10_002ea7b0");
+extern void emit_timed_spark_particle(void *,short *) __asm__("FUN_L10_002ea7b0");
 void FUN_L10_002eaa08_c(void *pos, short *timer, short *burst, float height) __asm__("FUN_L10_002eaa08");
 extern void func_L10_002EBDC8_a01(float,void *,short *,short *) __asm__("FUN_L10_002eaa08");
 
@@ -65,12 +65,12 @@ void update_configurable_particle_emitter(char *moby) {
   }
   break;
  case EFFECT_STATE_EMIT_TIMED_PARTICLES:
-  if(*(int *)(effect_pvars+4)==-1)FUN_L10_002ea7b0_c(moby+0x10,(short *)(effect_pvars+8));
+  if(*(int *)(effect_pvars+4)==-1)emit_timed_spark_particle(moby+0x10,(short *)(effect_pvars+8));
   else {
    char *tab=D_L10_001B0930[*(int *)(effect_pvars+4)];int point_count=*(int *)tab;
    if(point_count>32)point_count=32;
    if(point_count>0) {short *timer=(short *)(effect_pvars+8);char *path_point_position=tab+0x10;int count=point_count;
-   do {FUN_L10_002ea7b0_c(path_point_position,timer);++timer;--count;path_point_position+=0x10;}while(count);}
+   do {emit_timed_spark_particle(path_point_position,timer);++timer;--count;path_point_position+=0x10;}while(count);}
   }
   break;
  }
@@ -187,7 +187,7 @@ extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void clear_u64_value(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L10_002ea7b0(void *emission_position, short *timer) {
+void emit_timed_spark_particle(void *emission_position, short *timer) {
     float visibility_sphere[4];
     float vel[4];
     float acc[4];
