@@ -281,7 +281,9 @@ extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-unsigned char *FUN_L13_002c1f28(char *owner, char *spawn_position, char *initial_velocity) {
+unsigned char *spawn_class_53_projectile(char *owner, char *spawn_position, char *initial_velocity) __asm__("FUN_L13_002c1f28");
+
+unsigned char *spawn_class_53_projectile(char *owner, char *spawn_position, char *initial_velocity) {
     unsigned char *moby = (unsigned char *)func_0020D348_m(0x53);
     if (moby != 0) {
         char *data;
@@ -3532,7 +3534,7 @@ unsigned char *fire_starfighter_homing_rocket(struct Moby *firing_moby, unsigned
 /* computes a velocity vector for a moby from the camera/player and spawns a projectile */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EBAF0), where it is exact; names translated to the US level program. */
 
-extern unsigned char *FUN_L13_002c1f28_c(char *owner, char *pos,
+extern unsigned char *spawn_class_53_projectile(char *owner, char *pos,
                                          char *vec) __asm__("FUN_L13_002c1f28");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -3563,7 +3565,7 @@ unsigned char *fire_class_53_projectile(char *firing_moby, char *velocity_source
         random_vector(projectile_velocity, frame_time * 0.0f, frame_time * 30.0f);
     }
     add_vector_xyz(projectile_velocity, projectile_velocity, velocity_source_data + 0x70);
-    spawned_projectile_moby = FUN_L13_002c1f28_c(firing_moby, (char *)spawn_position, (char *)projectile_velocity);
+    spawned_projectile_moby = spawn_class_53_projectile(firing_moby, (char *)spawn_position, (char *)projectile_velocity);
     if (spawned_projectile_moby)
         allocate_voice_for_target_entry(3, 0, (int)firing_moby);
     return spawned_projectile_moby;
