@@ -61,7 +61,9 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 
 extern void FUN_L00_00250df8(void *, void *);
 
-char *FUN_L15_002e7ed8(void *unused, void *vector) {
+char *spawn_poison_vessel(void *unused, void *vector) __asm__("FUN_L15_002e7ed8");
+
+char *spawn_poison_vessel(void *unused, void *vector) {
     char *moby = create_moby(0x4E9);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
@@ -401,7 +403,7 @@ void bolt_grabber_update(struct Moby *moby) {
 /* Per-frame update: picks a random value on spawn, then re-rolls and spawns a child when triggered. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002EBFC8), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L15_002e7ed8_c(void *, void *) __asm__("FUN_L15_002e7ed8");
+extern char *spawn_poison_vessel(void *, void *) __asm__("FUN_L15_002e7ed8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -425,7 +427,7 @@ void update_poison_vessel_spawner(struct Moby *moby) {
     case WAIT_FOR_SPAWN_TIMER:
         if (fast_dec_timer(data)) {
             data[0] = func_001FA898_r(multiply_global_factor_ed64(*(float *)&D_L15_0016207C * 60.0f));
-            FUN_L15_002e7ed8_c(moby, &moby->pos);
+            spawn_poison_vessel(moby, &moby->pos);
         }
         break;
     }
