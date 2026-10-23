@@ -2238,7 +2238,7 @@ extern void request_moby_variant_help_message(char *) __asm__("FUN_L05_00319690"
 extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_00319740");
 extern void transform_moby_vector_table_to_world_space(char *) __asm__("FUN_L05_003198e8");
 void initialize_taxi_stop_state(void *moby_v) __asm__("FUN_L05_00319208");
-extern void FUN_L05_003193a8_u(char *) __asm__("FUN_L05_003193a8");
+extern void select_taxi_route(char *) __asm__("FUN_L05_003193a8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -2282,7 +2282,7 @@ void taxi_update(struct Moby *moby) {
             hero_offset[3] = 0;
             FUN_001f9d20(hero_offset, hero_offset, rotation_or_start_position_scratch);
             if (absolute_float(hero_offset[1]) < 1.2f && hero_offset[0] < 1.0f && hero_offset[0] > -0.75f) {
-                FUN_L05_003193a8_u(moby);
+                select_taxi_route(moby);
                 request_moby_variant_help_message(moby);
                 if (*(int *)(D_0013CAE4) & 0x10) {
                     moby->state = 3;
@@ -2441,7 +2441,7 @@ void initialize_taxi_stop_state(void *moby_v) {
 }
 /* Picks the path for the current point (five points, point 2 chosen by the table entry) and sets the travel speeds; same source as FUN_L16_002e4a58. */
 
-void FUN_L05_003193a8(char *moby) {
+void select_taxi_route(char *moby) {
     char *taxi_data = *(char **)(moby + 0x78);
     char *selected_path;
     float inv, frame_scaled_travel_step, frame_squared_travel_step, first_path_segment_length;
