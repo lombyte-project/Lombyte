@@ -1610,7 +1610,7 @@ extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int FUN_0022da68(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern unsigned int FUN_L00_00266d60(unsigned int, int, int *);
 extern int FUN_L00_0020d498(int);
-extern void FUN_L00_0020e4c8(void);
+extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
 extern int FUN_L00_0020fe30(void);
 extern int FUN_L00_00216de8(int, int);
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
@@ -1730,7 +1730,7 @@ int handle_hero_gadget_button(void) {
                       scale_game_frames(5) < hero.items[0].unk20) ||
                      (controller_state.pressed & buttons) != 0) &&
                     FUN_L00_00233e98(-1) != 0) {
-                    if (hero.unk20A8 == 0) FUN_L00_0020e4c8();
+                    if (hero.unk20A8 == 0) f_fun_l00_0020e4c8_227fa0();
                 } else if ((controller_state.held & buttons) != 0 &&
                            FUN_L00_00233e98(-1) == 0 &&
                            voice_is_playing(hero.items[0].moby, vars->voice) == 0) {
@@ -1762,7 +1762,7 @@ int handle_hero_gadget_button(void) {
                             hero.state.current == 3 ||
                             (hero.state.control_mode == 1 && hero.unk229C < 0.7f))
                             hero_set_state(0x23, 1);
-                        else FUN_L00_0020e4c8();
+                        else f_fun_l00_0020e4c8_227fa0();
                     } else if (hero.items[0].moby != 0) {
                         FUN_0022da68(0, 0, hero.items[0].moby);
                     }
@@ -1786,7 +1786,7 @@ int handle_hero_gadget_button(void) {
         break;
     case 0x15:
         if (hero.items[0].moby != 0 && (controller_state.pressed & buttons) != 0)
-            FUN_L00_0020e4c8();
+            f_fun_l00_0020e4c8_227fa0();
         break;
     }
     if (hero.state_timer == saved) {

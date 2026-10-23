@@ -1434,7 +1434,7 @@ int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 s32 remove_hud_item(s32 item) __asm__("FUN_001ff480");
 struct Moby *FUN_L00_002c9348(void *a);
-void FUN_L00_0020e4c8(void);
+void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_00236268(HudElem *e);
 void FUN_L00_00236458(void);
@@ -1448,7 +1448,7 @@ extern char D_L00_001803C0_2BDAF0[] __asm__("D_L00_001802C0");
 extern char D_L00_00166C80[];
 extern float func_0020D830_2BDAF0(void *) __asm__("FUN_0020c9e0");
 extern int func_001F9938_2BDAF0(void *) __asm__("FUN_001f9770");
-extern void func_L00_0020EB60_2BDAF0(void) __asm__("FUN_L00_0020e4c8");
+extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
 extern int func_001F9850_2BDAF0(int) __asm__("FUN_001f96f8");
 extern void func_L00_00250800_2BDAF0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void func_L00_00222B80_2BDAF0(int, int) __asm__("FUN_L00_002223f8");
@@ -1514,7 +1514,7 @@ void morphoray_update(Moby *moby) {
         && (*(int *)D_0013A5E0_2BDAF0 & ((Hero *)((char *)&hero))->items[0].button_mask) != 0
         && !busy && in_range) {
         if (((Hero *)((char *)&hero))->unk20A8 == 0) {
-            func_L00_0020EB60_2BDAF0();
+            f_fun_l00_0020e4c8_227fa0();
         }
         if (data->seen == 0) {
             data->seen = 1;
