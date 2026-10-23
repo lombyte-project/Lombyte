@@ -57,7 +57,9 @@ extern void FUN_L00_00250df8(u8 *);
  * the header fields and hand it to the level's post-create hook.  Returns the
  * allocation, null when it failed.  The two 16-byte copies go through $2 with
  * each address in its own register -- the qcopy idiom, see include/qcopy.h. */
-u8 *FUN_L14_00306158(u8 *self) {
+u8 *create_helper_sequence_owner_moby(u8 *self) __asm__("FUN_L14_00306158");
+
+u8 *create_helper_sequence_owner_moby(u8 *self) {
     u8 *created_moby = create_moby(0x574);
 
     if (created_moby != 0) {
