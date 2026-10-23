@@ -2087,7 +2087,7 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal_c3(void *) __asm__("func_0020C828");
 float absolute_float(float input) __asm__("func_001F99C0");
-void FUN_L05_00305178_c(char *moby) __asm__("FUN_L05_00305178");
+void handle_extermitank_hits_and_sync_children(char *moby) __asm__("FUN_L05_00305178");
 void process_extermitank_particle_hits(char *m) __asm__("FUN_L05_00305898");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 extern char D_0013F350[];
@@ -2110,7 +2110,7 @@ void extermitank_update(unsigned char *moby) {
     float particle_vector_b[4];
     float working_position[4];
 
-    FUN_L05_00305178_c((char *)moby);
+    handle_extermitank_hits_and_sync_children((char *)moby);
     process_extermitank_particle_hits((char *)moby);
     if (*(unsigned char *)(data + 0x2E) == 2) {
         if (*(char **)(data + 0x184) != 0) mark_moby_for_removal_c3(*(char **)(data + 0x184));
@@ -2380,7 +2380,7 @@ extern float D_L05_00161AF0 __attribute__((sda));
 extern const float frame_time_const __asm__("D_0015ED6C");
 extern float D_L05_00161AF4 __attribute__((sda));
 
-void FUN_L05_00305178(char *moby) {
+void handle_extermitank_hits_and_sync_children(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *first;
     char *second;
