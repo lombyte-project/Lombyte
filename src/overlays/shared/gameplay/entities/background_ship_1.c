@@ -325,7 +325,9 @@ void FUN_L02_002eca30(char *moby, void *previous_position) {
 void draw_background_ship_1_joint_billboards(char *self) __asm__("FUN_L02_002ec308");
 void draw_matching_moby_slot_quads(char *self) __asm__("FUN_L02_002ecc68");
 
-void FUN_L02_002ecd50(char *moby) {
+void prepare_background_ship_2_joint_draw_data(char *moby) __asm__("FUN_L02_002ecd50");
+
+void prepare_background_ship_2_joint_draw_data(char *moby) {
     int i;
     char *data;
     char *joint_position_out;
@@ -371,7 +373,7 @@ extern int D_L02_00161FC8 __attribute__((sda));
 extern int D_L02_00161FCC __attribute__((sda));
 extern float D_L02_00161FD0 __attribute__((sda));
 extern float D_L02_00161FD4 __attribute__((sda));
-extern void FUN_L02_002ecd50_c(char *m) __asm__("FUN_L02_002ecd50");
+extern void prepare_background_ship_2_joint_draw_data(char *m) __asm__("FUN_L02_002ecd50");
 extern void FUN_L02_002ed420_c(char *m, void *arg1) __asm__("FUN_L02_002ed420");
 extern void FUN_L02_002ed658_c(char *moby, void *arg) __asm__("FUN_L02_002ed658");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
@@ -526,7 +528,7 @@ void background_ship_2_update(char *moby) {
             *(int *)(moby + 0x90) = tweened_color;
             *(float *)(moby_data + 0x68) = fast_add_rotations(*(float *)(moby_data + 0x68), k);
         }
-        FUN_L02_002ecd50_c(moby);
+        prepare_background_ship_2_joint_draw_data(moby);
     }
 }
 extern short D_L02_00161FD8 __attribute__((sda));
