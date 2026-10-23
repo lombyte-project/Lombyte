@@ -84,7 +84,7 @@ extern void begin_sentrybot_turn_toward_point(char *moby, void *a, float *point,
 void alert_visible_group_sentrybots(void *mp) __asm__("FUN_L15_0029a0d0");
 
 void alert_visible_group_sentrybots(void *mp) __asm__("FUN_L15_0029a0d0");
-extern void FUN_L15_0029a2a8_u(void *) __asm__("FUN_L15_0029a2a8");
+extern void update_sentrybot_joint_aim(void *) __asm__("FUN_L15_0029a2a8");
 extern void update_sentrybot_hit_response_and_target_visibility(void *, int) __asm__("FUN_L15_0029a570");
 void draw_sentrybot_effect_quads(char *moby) __asm__("FUN_L15_0029aba8");
 
@@ -889,7 +889,7 @@ void sentrybot_update(unsigned char *moby) {
         }
         break;
     }
-    FUN_L15_0029a2a8_u(moby);
+    update_sentrybot_joint_aim(moby);
     if (*(short *)(data + 0x156) != 0) {
         lvl = 2;
     } else if (*(int *)(data + 0x114) != 2) {
@@ -1232,7 +1232,7 @@ extern f32 vector_length_xy_c(void *) __asm__("FUN_001f9b20");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L15_0029a2a8(void *mv) {
+void update_sentrybot_joint_aim(void *mv) {
     char *moby = mv;
     char *moby_data = *(char **)(moby + 0x78);
     float target_position[4];
