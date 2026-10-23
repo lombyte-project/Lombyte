@@ -1581,7 +1581,9 @@ extern struct Hero hero_data2 __asm__("D_0013F350") __attribute__((section(".dat
 s32 FUN_001f96f8_002a7c70(s32) __asm__("FUN_001f96f8");
 void FUN_00212f90_002a7c70(void *, s32, s32, s32) __asm__("FUN_00212f90");
 void update_moby_animation_state(void *) __asm__("FUN_0020c880");
-void FUN_L00_002a7c70(O_002a7c70 *wrench_moby) {
+void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) __asm__("FUN_L00_002a7c70");
+
+void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) {
     struct Hero *hero_context = &hero_data2;
     if (hero_context->state.current == 0x3B) {
         u8 hero_current_animation = ((O_002a7c70 *)hero_context->moby)->b53;
