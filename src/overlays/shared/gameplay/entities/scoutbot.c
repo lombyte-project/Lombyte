@@ -1192,7 +1192,7 @@ typedef struct {
     short f20E;
 } Paratrooper302618;
 
-char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5);
+char *spawn_paratrooper_projectile(char *pos, char *dir, int a2, int a3, int a4, int a5) __asm__("FUN_L08_00307190");
 extern char D_L08_001675C0[];
 extern char D_L08_001FC8F0[];
 extern char D_L08_001FC630[];
