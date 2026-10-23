@@ -351,7 +351,7 @@ extern float FUN_00213508_30ab80(void *, int, float) __asm__("FUN_00213508");
 extern void moby_point_position_30ab80(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_random_offset_to_vector_xyz(float *, float) __asm__("FUN_L00_0025f8e0");
 extern float FUN_L00_0025abf0_30ab80(void *, void *, void *, float, float) __asm__("FUN_L00_0025abf0");
-extern char *FUN_L09_0030b218_30ab80(int, void *, void *, unsigned char, unsigned char) __asm__("FUN_L09_0030b218");
+extern char *spawn_spawner_egg(int, void *, void *, unsigned char, unsigned char) __asm__("FUN_L09_0030b218");
 extern int scale_game_frames_30ab80(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_0025e450_30ab80(void *, void *, void *, float, float, int, int, int, float, float, float, float, int,
                                     float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -501,7 +501,7 @@ void spawner_update(char *moby)
             launch_velocity[2] = FUN_L00_0025abf0_30ab80(spawn_position, target, 0, speed, -(frame_time_sq_macro * 9.8f));
         }
         ((SpawnerVars_30ab80 *)spawner_vars)->slots[last] =
-            FUN_L09_0030b218_30ab80((int)moby, spawn_position, launch_velocity, (unsigned char)spawner_vars[0x93], (unsigned char)last);
+            spawn_spawner_egg((int)moby, spawn_position, launch_velocity, (unsigned char)spawner_vars[0x93], (unsigned char)last);
         *(short *)(spawner_vars + 0x8E) = scale_game_frames_30ab80(*(short *)(spawner_vars + 0x8C));
         spawner_vars[0x91] = (char)(spawner_vars[0x91] + 1);
         }
@@ -531,7 +531,7 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L09_0030b218(int owner, void *pos, void *initial_velocity, unsigned char grow_held_moby, unsigned char owner_slot_index) {
+char *spawn_spawner_egg(int owner, void *pos, void *initial_velocity, unsigned char grow_held_moby, unsigned char owner_slot_index) {
     char *spawned_moby = (char *)func_0020D348_m(0x75E);
     if (spawned_moby) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
