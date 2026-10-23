@@ -2873,7 +2873,9 @@ extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
  * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002B6EE8), where it is exact; names translated to the US level
  * program. */
-void FUN_L14_002b5c98(u8 *moby) {
+void hide_minibomber_and_release_voice(u8 *moby) __asm__("FUN_L14_002b5c98");
+
+void hide_minibomber_and_release_voice(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
     s32 voice_slot_index;
     *(u16 *)(moby + 0x34) |= 0x41;
