@@ -133,7 +133,9 @@ void set_moby_and_links_to_states_4_and_5(char *moby) {
 /* Switches a moby from state 6 to 8 and sets its ten children to state 9. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F6818), where it is exact; names translated to the US level program. */
 
-void FUN_L06_002f53e8(char *moby) {
+void set_moby_and_links_to_states_8_and_9(char *moby) __asm__("FUN_L06_002f53e8");
+
+void set_moby_and_links_to_states_8_and_9(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int i;
     char **linked_moby_cursor;

@@ -6180,7 +6180,7 @@ typedef struct Busy_301070 {
 extern void attach_shared_manipulator_to_matching_class_moby(char *) __asm__("FUN_L03_002db480");
 extern float distance_xyz_301070(void *, void *) __asm__("FUN_001f9b48");
 extern void FUN_L00_0025a120_301070(void *) __asm__("FUN_L00_0025a120");
-extern void FUN_L06_002f53e8_301070(char *) __asm__("FUN_L06_002f53e8");
+extern void set_moby_and_links_to_states_8_and_9(char *) __asm__("FUN_L06_002f53e8");
 extern void set_moby_and_links_to_states_4_and_5(char *) __asm__("FUN_L06_002f5360");
 extern float probe_ground_height_301070(void *, int, float) __asm__("FUN_00213508");
 extern int initialize_npc_dialogue_301070(void *, void *) __asm__("FUN_L00_002668a0");
@@ -6253,7 +6253,7 @@ void fred_update(struct Moby *moby) {
                 blend_moby_animation_301070(moby, 1, 0, scale_game_frames_301070(10));
             }
             fred_vars->f176 = 1;
-            FUN_L06_002f53e8_301070(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
+            set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
         } else {
             {
                 Vec_301070 t;
@@ -6264,7 +6264,7 @@ void fred_update(struct Moby *moby) {
             }
         }
         fred_vars->f174 = scale_game_frames_301070(0x2D);
-        FUN_L06_002f53e8_301070(D_L06_0015FFD8_301070 + (fred_vars->f160 << 8));
+        set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_301070 + (fred_vars->f160 << 8));
         fred_vars->f20 = D_L06_00201880;
         moby->state = 1;
         initialize_npc_dialogue_301070(moby, fred_vars);
@@ -6322,7 +6322,7 @@ void fred_update(struct Moby *moby) {
                     cutscene_camera_start_301070(pos.f, rot.f, 1, 0, 0);
                 }
                 FUN_L00_00216f90_301070(&hero.motion.pos, &hero.motion.rot, 0x72, 1);
-                FUN_L06_002f53e8_301070(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
+                set_moby_and_links_to_states_8_and_9(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
                 moby->state = 3;
                 moby->visible = 0;
                 moby->flags |= 1;
