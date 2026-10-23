@@ -2325,7 +2325,7 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 f32 normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
 float absolute_float_c(float input) __asm__("func_001F99C0");
-int FUN_L00_002da218(char *a);
+int invoke_optional_moby_callback_or_return_one(char *a) __asm__("FUN_L00_002da218");
 s32 scale_game_frames_alt_c2(s32) __asm__("FUN_001f96f8");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d);

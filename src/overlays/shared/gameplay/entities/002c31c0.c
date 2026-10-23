@@ -148,7 +148,9 @@ int cancel_suck_cannon_suction_and_set_moby_state_9(char *moby) {
 
 
 /* Calls the optional function reached through the moby pointer at +0x24; 1 when it is null. */
-int FUN_L00_002da218(char *moby) {
+int invoke_optional_moby_callback_or_return_one(char *moby) __asm__("FUN_L00_002da218");
+
+int invoke_optional_moby_callback_or_return_one(char *moby) {
     int (*fn)(char *) = *(int (**)(char *))(*(char **)(*(char **)(moby + 0x24) + 0x2C) + 0x4);
     if (fn != 0) {
         return fn(moby);
