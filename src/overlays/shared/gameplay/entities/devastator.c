@@ -3253,7 +3253,9 @@ typedef struct {
 } ListSlots8;
 
 /* Stores val in the first empty of 15 slots after the list head. */
-void FUN_L00_002b8798(ListSlots8 *list, s32 val) {
+void register_pyrocitor_flame_effect(ListSlots8 *list, s32 val) __asm__("FUN_L00_002b8798");
+
+void register_pyrocitor_flame_effect(ListSlots8 *list, s32 val) {
     s32 *list_data = list->slots;
     s32 i = 0;
     s32 *first_slot;
