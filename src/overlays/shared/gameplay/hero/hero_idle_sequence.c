@@ -1120,7 +1120,7 @@ void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
 void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
 void FUN_L00_0020a540_u(void) __asm__("FUN_L00_0020a540");
 void FUN_L00_0020ac98_u(void) __asm__("FUN_L00_0020ac98");
-void FUN_L00_0020a9e8_u(void) __asm__("FUN_L00_0020a9e8");
+void update_hero_idle_random_rotation_targets(void) __asm__("FUN_L00_0020a9e8");
 void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
 void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
@@ -1179,7 +1179,7 @@ void coordinate_hero_frame_update(void) {
     update_hero_collision_ease_target();
     FUN_L00_0020a540_u();
     FUN_L00_0020ac98_u();
-    FUN_L00_0020a9e8_u();
+    update_hero_idle_random_rotation_targets();
     update_hero_rotation_targets_and_random_manipulators();
     update_hero_glow_and_extra_manipulators();
     update_hero_transformed_negative_z_angle_parameters();
@@ -2836,7 +2836,7 @@ extern int tick_countdown_32_alt_c(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern char D_001403B0[];
 
-void FUN_L00_0020a9e8(void) {
+void update_hero_idle_random_rotation_targets(void) {
     char *base = (char *)((char *)&D_0013F350_002062b0);
     int *motion_timers;
     char *hero_state_base;

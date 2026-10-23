@@ -25,7 +25,7 @@ extern void FUN_L00_00208b60(void);
 extern void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
 extern void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
 extern void FUN_L00_0020a540(void);
-extern void FUN_L00_0020a9e8(void);
+extern void update_hero_idle_random_rotation_targets(void) __asm__("FUN_L00_0020a9e8");
 extern void FUN_L00_0020ac98(void);
 extern void FUN_L00_0020b1d8(void);
 extern void update_hero_offset_rail_candidate(void) __asm__("FUN_L00_0020d330");
@@ -75,7 +75,7 @@ void FUN_L03_002002f8(void) {
     update_hero_collision_ease_target();
     FUN_L00_0020a540();
     FUN_L00_0020ac98();
-    FUN_L00_0020a9e8();
+    update_hero_idle_random_rotation_targets();
     update_hero_rotation_targets_and_random_manipulators();
     update_hero_glow_and_extra_manipulators();
     update_hero_transformed_negative_z_angle_parameters();
