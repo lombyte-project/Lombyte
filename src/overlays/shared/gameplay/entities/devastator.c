@@ -2095,7 +2095,9 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L00_002b5d00(char *source_moby, int flag) {
+void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) __asm__("FUN_L00_002b5d00");
+
+void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
     float elevated_spawn_position[4];
     float view_origin_delta[4];
     float particle_velocity[4];
