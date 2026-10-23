@@ -286,7 +286,9 @@ extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
 extern void FUN_L00_0025d538_c(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
 
-void FUN_L09_0030a9e8(unsigned char *moby, char *spawner_vars) {
+void process_spawner_hit_record(unsigned char *moby, char *spawner_vars) __asm__("FUN_L09_0030a9e8");
+
+void process_spawner_hit_record(unsigned char *moby, char *spawner_vars) {
     char *moby_record;
     int record_processing_status;
     float remaining_value;
