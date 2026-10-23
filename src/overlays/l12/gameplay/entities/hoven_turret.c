@@ -1057,7 +1057,9 @@ typedef struct {
     Level12VendorCounterData *data;
 } Level12VendorCounterMoby;
 
-void FUN_L12_00304d98(Level12VendorCounterMoby *moby) {
+void draw_hoven_turret_destruction_fade(Level12VendorCounterMoby *moby) __asm__("FUN_L12_00304d98");
+
+void draw_hoven_turret_destruction_fade(Level12VendorCounterMoby *moby) {
     Level12VendorCounterData *data = moby->data;
     int count = scale_ticks(0x50);
     int value = data->value;
