@@ -438,7 +438,9 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 vel) __asm__("FUN_001ebd78");
 
-void FUN_L03_002ebc58(void *camera_instance) {
+void rebuild_camera_orientation_axes(void *camera_instance) __asm__("FUN_L03_002ebc58");
+
+void rebuild_camera_orientation_axes(void *camera_instance) {
     char *camera = camera_instance;
     char *camera_data = *(char **)(camera + 0x70);
     float *camera_target_data = (float *)(camera_data + 0xB0);
@@ -476,7 +478,7 @@ int FUN_L03_002ebd70(void) {
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED178), where it is exact; names translated to the US level program. */
 
 extern void FUN_L03_002ebb00_u(void *) __asm__("FUN_L03_002ebb00");
-extern void FUN_L03_002ebc58_u(void *) __asm__("FUN_L03_002ebc58");
+extern void rebuild_camera_orientation_axes(void *) __asm__("FUN_L03_002ebc58");
 void no_op_main_callback(void *) __asm__("FUN_001e93e8");
 
 void update_camera_position_and_orientation(void *camera) __asm__("FUN_L03_002ebdb0");
@@ -484,7 +486,7 @@ void update_camera_position_and_orientation(void *camera) __asm__("FUN_L03_002eb
 void update_camera_position_and_orientation(void *camera) {
     FUN_L03_002ebb00_u(camera);
     no_op_main_callback(camera);
-    FUN_L03_002ebc58_u(camera);
+    rebuild_camera_orientation_axes(camera);
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED1B0), where it is exact; names translated to the US level program. */
 
