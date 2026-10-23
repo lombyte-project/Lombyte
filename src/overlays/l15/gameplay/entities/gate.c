@@ -1794,7 +1794,9 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 int FUN_L00_0025fcb8(char *a, char *o, float best);
 extern void func_L00_00260D30_t(void *, float *, float) __asm__("FUN_L00_0025fcb8");
 
-float FUN_L15_002cf110(void *m_, void *out, float target_search_range) {
+float compute_ultramech_flocking_steering_point(void *m_, void *out, float target_search_range) __asm__("FUN_L15_002cf110");
+
+float compute_ultramech_flocking_steering_point(void *m_, void *out, float target_search_range) {
     char *moby = m_;
     float steering_offset[4];
     float target_position[4];
@@ -1954,7 +1956,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float FUN_L00_0025abf0(void *a, void *b, void *out, float speed, float g);
 extern float approach_angle(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
-extern float FUN_L15_002cf110_u(void *, void *, float) __asm__("FUN_L15_002cf110");
+extern float compute_ultramech_flocking_steering_point(void *, void *, float) __asm__("FUN_L15_002cf110");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float fast_cos(float);
 extern float fast_sin(float);
@@ -2333,7 +2335,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
     case ULTRAMECH_APPROACH_TARGET: {
         float desired_heading = fast_arc_tan(combat_target->pos.f[0] - ultramech_moby->pos.f[0], combat_target->pos.f[1] - ultramech_moby->pos.f[1]);
         if (ultramech_vars->w164 != 2) {
-            desired_heading = FUN_L15_002cf110_u(ultramech_moby, &position_or_motion_vector, ultramech_vars->f1B8);
+            desired_heading = compute_ultramech_flocking_steering_point(ultramech_moby, &position_or_motion_vector, ultramech_vars->f1B8);
             if (vector_distance(&ultramech_moby->pos, &combat_target->pos) < *(float *)&D_L15_00161B28) {
                 ultramech_moby->state = 8;
                 if (ultramech_moby->anim != 2)
