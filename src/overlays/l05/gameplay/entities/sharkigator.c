@@ -92,7 +92,9 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L05_002f8718(char *owner) {
+char *spawn_racer_child(char *owner) __asm__("FUN_L05_002f8718");
+
+char *spawn_racer_child(char *owner) {
     char *moby = create_moby(0x1B7);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;
@@ -2778,7 +2780,7 @@ typedef struct {
     int f50;
 } ChildData_308D68;
 
-char *FUN_L05_002f8718_c(char *owner) __asm__("FUN_L05_002f8718");
+char *spawn_racer_child(char *owner) __asm__("FUN_L05_002f8718");
 extern char D_L05_001671C0[];
 extern f32 approach_value(f32 *, f32, f32);
 extern f32 fast_add_rotations_c3(f32, f32) __asm__("func_001FA580");
@@ -2871,7 +2873,7 @@ void skid_mcmarx_update(Moby *moby) {
             data->f264 = 0;
             data->speed = 0.0f;
             if (data->child == 0) {
-                Moby *child = (Moby *)FUN_L05_002f8718_c((char *)moby);
+                Moby *child = (Moby *)spawn_racer_child((char *)moby);
 
                 data->child = child;
                 if (child != 0) {
