@@ -34,7 +34,7 @@ extern void init_stash(void) __asm__("FUN_00232d00");
 extern void init_level_runtime_state(void) __asm__("FUN_L00_0023d028");
 extern int load_level_assets_and_gameplay(int, int) __asm__("FUN_L00_00244110");
 extern void clear_dma_queue_entry(void) __asm__("FUN_001f0b88");
-extern void FUN_L00_002464a8_u(void) __asm__("FUN_L00_002464a8");
+extern void initialize_level_map_archive(void) __asm__("FUN_L00_002464a8");
 extern void init_hud(void) __asm__("FUN_001fee88");
 extern void load_misc_animations_into_stash(void) __asm__("FUN_L00_00276078");
 extern void prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");
@@ -134,7 +134,7 @@ void run_level_main_loop(void) {
     g_debug_menu.selected_column = one;
     g_debug_menu.actuator_enabled = one;
     clear_dma_queue_entry();
-    FUN_L00_002464a8_u();
+    initialize_level_map_archive();
     init_hud();
     load_misc_animations_into_stash();
     prepare_level_entry_transition();
@@ -386,7 +386,7 @@ extern struct DiscFile D_00138438[];
 extern char D_001383A0[];
 extern char D_00141EC0[];
 
-void FUN_L00_002464a8(void) {
+void initialize_level_map_archive(void) {
     int i;
     RenderArchiveState *state;
     int level;
