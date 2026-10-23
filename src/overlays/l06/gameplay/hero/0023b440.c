@@ -120,7 +120,7 @@ extern void FUN_L00_00239df8(void);
 extern void FUN_L00_0025f730(void *a, float x);
 extern void request_hero_voice_if_enabled(int a0, int a1, int a2) __asm__("FUN_L01_00227e48");
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
-extern void FUN_L06_00228b40(void);
+extern void quantize_hero_input_target_speed(void) __asm__("FUN_L06_00228b40");
 extern void FUN_L06_00239528(void);
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -435,7 +435,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(HERO_STATE_FIDGET_ALT, 1);
                         break;
                     }
-                    FUN_L06_00228b40();
+                    quantize_hero_input_target_speed();
                     if (hero.target_speed > 0.0f) {
                         hero_set_state(HERO_STATE_FIDGET_ALT, 1);
                         break;
@@ -459,7 +459,7 @@ void update_hero_state_machine(void) {
                             hero_set_state(HERO_STATE_CROUCH, 1);
                             break;
                         }
-                        FUN_L06_00228b40();
+                        quantize_hero_input_target_speed();
                         if (hero.target_speed > 0.0f) {
                             hero_set_state(HERO_STATE_RUN, 1);
                             break;
