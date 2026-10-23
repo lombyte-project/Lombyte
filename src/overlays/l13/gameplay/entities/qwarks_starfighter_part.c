@@ -117,7 +117,9 @@ extern char D_0013E550[];
 extern char D_0013F3D0[];
 extern char D_00140940[];
 
-void FUN_L13_002eac00(void *mobyp, void *pp) {
+void update_qwarks_starfighter_attack_commands(void *mobyp, void *pp) __asm__("FUN_L13_002eac00");
+
+void update_qwarks_starfighter_attack_commands(void *mobyp, void *pp) {
     enum {
         STARFIGHTER_COMMAND_TIMED_VOLLEY = 1,
         STARFIGHTER_COMMAND_ALTERNATING_ATTACKS = 2,
@@ -492,7 +494,7 @@ extern void FUN_L13_002e9018(void *, void *, float, float);
 extern void FUN_L13_002e9680(void *, void *, int);
 extern void process_moby_attachment_damage(void *, void *) __asm__("FUN_L13_002e9a48");
 extern void draw_starfighter_tractor_beam();
-extern void FUN_L13_002eac00_c(void *, void *) __asm__("FUN_L13_002eac00");
+extern void update_qwarks_starfighter_attack_commands(void *, void *) __asm__("FUN_L13_002eac00");
 extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
@@ -666,7 +668,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
         if (*(Moby388 **)(((char *)&D_00140940)) != 0 && (*(Moby388 **)(((char *)&D_00140940)))->cls_id == 0x45) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
         }
-        FUN_L13_002eac00_c(moby, data);
+        update_qwarks_starfighter_attack_commands(moby, data);
         if (update_moby_path_following_away_from_hero(moby, data, data->b13B, 1) & 2) {
             if (data->b13B != D_L13_001D3448[moby->bBC]) {
                 data->b13B = D_L13_001D3448[moby->bBC];
@@ -690,7 +692,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
         data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)FUN_L00_00235d80, (int)FUN_L00_00235ea0,
                                   (int)FUN_L06_00249738, (int)&data->i108,
                                   (data->s24 << 4) | 0xF);
-        FUN_L13_002eac00_c(moby, data);
+        update_qwarks_starfighter_attack_commands(moby, data);
         FUN_L00_0024f7c8(moby, 0x13, joint);
         hero_distance = distance_xyz(data->v80, ((char *)&D_0013F3D0));
         if (data->snd11C != -1) {
