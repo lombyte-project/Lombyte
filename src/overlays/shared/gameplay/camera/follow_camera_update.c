@@ -378,7 +378,9 @@ extern void FUN_001f9bf8_002e9cc0(void *, void *, float) __asm__("FUN_001f9bf8")
 extern void FUN_001f9a68_002e9cc0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_002e9cc0(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L00_002e9cc0(char *camera_object) {
+void update_hero_aligned_camera_position(char *camera_object) __asm__("FUN_L00_002e9cc0");
+
+void update_hero_aligned_camera_position(char *camera_object) {
     char a[16] __attribute__((aligned(16)));
     char b[16] __attribute__((aligned(16)));
     struct Hero *hero_data = &hero;
