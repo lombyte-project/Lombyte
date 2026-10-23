@@ -17,7 +17,7 @@ f32 FUN_00213508_261630(void *, s32, f32) __asm__("FUN_00213508");
 f32 FUN_001f9b80_261630(void *, void *) __asm__("FUN_001f9b80");
 f32 FUN_001f9e90_261630(f32, f32) __asm__("FUN_001f9e90");
 s32 FUN_001f96f8_261630(s32) __asm__("FUN_001f96f8");
-f32 FUN_L00_0025b750_261630(f32, f32, f32) __asm__("FUN_L00_0025b750");
+f32 interpolate_angle(f32, f32, f32) __asm__("FUN_L00_0025b750");
 void FUN_L00_00261630(u8 *moving_object, u8 *movement_state, f32 a, f32 b) {
     OvlQuad proposed_position[1];
     u8 *pos;
@@ -50,7 +50,7 @@ void FUN_L00_00261630(u8 *moving_object, u8 *movement_state, f32 a, f32 b) {
         planar_distance = FUN_001f9b80_261630(pos, &hero.motion.pos.f[0]);
         if (planar_distance < *(f32 *)(movement_state + 0x20)) {
             planar_distance = planar_distance / *(f32 *)(movement_state + 0x20);
-            *(f32 *)(movement_state + 0x24) = FUN_L00_0025b750_261630(
+            *(f32 *)(movement_state + 0x24) = interpolate_angle(
                 *(f32 *)(movement_state + 0x24),
                 FUN_001f9e90_261630(*(f32 *)(moving_object + 0x10) - hero.motion.pos.f[0],
                                     *(f32 *)(moving_object + 0x14) - hero.motion.pos.f[1]),

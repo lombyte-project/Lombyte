@@ -833,8 +833,8 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Turns from angle a toward angle b by fraction c of the difference. */
-float FUN_L00_0025b750(float a, float b, float c);
-float FUN_L00_0025b750(float start_angle, float target_angle, float blend_fraction) {
+float interpolate_angle(float a, float b, float c) __asm__("FUN_L00_0025b750");
+float interpolate_angle(float start_angle, float target_angle, float blend_fraction) {
     float angle_difference = fast_subtract_rotations(target_angle, start_angle);
     return fast_add_rotations(start_angle, angle_difference * blend_fraction);
 }

@@ -2019,7 +2019,7 @@ void initialize_elevator_path_state(struct Moby *moby) {
 
 extern char *D_L14_001B0BB0_c3[] __asm__("D_L14_001B0BB0");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
-extern float FUN_L00_0025b750(float, float, float);
+extern float interpolate_angle(float, float, float) __asm__("FUN_L00_0025b750");
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern int sample_path() __asm__("FUN_L00_0025d808");
 extern int FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int,
@@ -2069,9 +2069,9 @@ int advance_elevator_along_path(struct Moby *elevator_moby) {
     }
     if (1.0f < x_rotation_blend)
         x_rotation_blend = 1.0f;
-    elevator_moby->rot.x = FUN_L00_0025b750(*(float *)(moby_vars + 0xD0), rot[0], x_rotation_blend);
-    elevator_moby->rot.y = FUN_L00_0025b750(*(float *)(moby_vars + 0xD4), rot[1], rotation_blend);
-    elevator_moby->rot.z = FUN_L00_0025b750(*(float *)(moby_vars + 0xD8), rot[2], rotation_blend);
+    elevator_moby->rot.x = interpolate_angle(*(float *)(moby_vars + 0xD0), rot[0], x_rotation_blend);
+    elevator_moby->rot.y = interpolate_angle(*(float *)(moby_vars + 0xD4), rot[1], rotation_blend);
+    elevator_moby->rot.z = interpolate_angle(*(float *)(moby_vars + 0xD8), rot[2], rotation_blend);
     if (path_endpoint_reached != 0) {
         if (0.0f < *(float *)(moby_vars + 0xAC)) {
             int last_segment_index = *(int *)selected_path - 2;
@@ -3698,8 +3698,8 @@ void rocket_update(struct Moby *moby) {
             return;
         }
         moby->rot.x = fast_add_rotations(moby->rot.x, 2.0f * DEG_TO_RAD);
-        moby->rot.y = FUN_L00_0025b750(moby->rot.y, -fast_arc_tan(vector_length_xy(&destination_delta), destination_delta.z), D_L14_00161FAC);
-        moby->rot.z = FUN_L00_0025b750(moby->rot.z, fast_arc_tan(destination_delta.x, destination_delta.y), D_L14_00161FAC);
+        moby->rot.y = interpolate_angle(moby->rot.y, -fast_arc_tan(vector_length_xy(&destination_delta), destination_delta.z), D_L14_00161FAC);
+        moby->rot.z = interpolate_angle(moby->rot.z, fast_arc_tan(destination_delta.x, destination_delta.y), D_L14_00161FAC);
         fast_vec_scale(&step, &moby->rot_row0, speed);
         add_vector_xyz((u8 *)&moby->pos, (u8 *)&moby->pos, (u8 *)&step);
         spawn_moby_offset_puffs(moby);
