@@ -2390,7 +2390,10 @@ void update_position_and_rotation_transition(struct Moby *moby) {
 extern float D_0015EE70 __asm__("D_0015ED70");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
-void FUN_L18_002dfaa0(struct Moby *moby, void *transition_start_position, void *transition_target_position, void *transition_start_rotation, void *transition_target_rotation, void *transition_setup_vector, int invulnerability_duration_frames, int transition_delay_frames,
+void start_position_and_rotation_transition(struct Moby *moby, void *transition_start_position, void *transition_target_position, void *transition_start_rotation, void *transition_target_rotation, void *transition_setup_vector, int invulnerability_duration_frames, int transition_delay_frames,
+                      int transition_mode) __asm__("FUN_L18_002dfaa0");
+
+void start_position_and_rotation_transition(struct Moby *moby, void *transition_start_position, void *transition_target_position, void *transition_start_rotation, void *transition_target_rotation, void *transition_setup_vector, int invulnerability_duration_frames, int transition_delay_frames,
                       int transition_mode) {
     char *data = (char *)moby->pvars;
     *(int *)(data + 0x60) = 0;

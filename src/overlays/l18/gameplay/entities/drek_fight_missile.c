@@ -1515,8 +1515,8 @@ extern void request_thruster_pack_lock_red_wait(unsigned char *arg, int value) _
 extern void end_thruster_pack_lock_red_wait(unsigned char *arg) __asm__("FUN_L18_002d7fd0");
 extern void spawn_class_270_moby(char *pos, float *vec, int arg, float fa, float fb) __asm__("FUN_L18_002db938");
 extern void refresh_ring_effect(char *moby, void *pos, float f) __asm__("FUN_L18_002dc458");
-extern void FUN_L18_002dfaa0(char *moby, void *v0, void *v1, void *v2, void *v3, void *v4, int a6,
-                             int a7, int a8);
+extern void start_position_and_rotation_transition(char *moby, void *v0, void *v1, void *v2, void *v3, void *v4, int a6,
+                             int a7, int a8) __asm__("FUN_L18_002dfaa0");
 extern void refresh_moby_position_and_activate(unsigned char *arg, void *src, void *position, int active,
                              float speed) __asm__("FUN_L18_002ea168");
 void count_drek_boss_platform_event_once(struct Moby *moby) __asm__("FUN_L18_002f5e18");
@@ -2011,7 +2011,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             qcopy(node_position_and_yaw, recs + idx * 0x80 + 0x30);
             node_position_and_yaw[3] = *(float *)(recs + idx * 0x80 + 0x78);
         }
-        FUN_L18_002dfaa0((char *)boss_data->f334, position_and_displacement_scratch, v1, v2, second_rotation_angles, node_position_and_yaw, *(int *)&D_L18_00162394,
+        start_position_and_rotation_transition((char *)boss_data->f334, position_and_displacement_scratch, v1, v2, second_rotation_angles, node_position_and_yaw, *(int *)&D_L18_00162394,
                          *(int *)&D_L18_00162398, 1);
         hero.pending_item[3] = 3;
         moby->f20 = 8;
@@ -2702,7 +2702,7 @@ extern int FUN_L00_0025ff38_5e80(float a, char *m, char *b, int c, int d, int *e
 extern int poll_moby_state_and_rearm(char *) __asm__("FUN_L18_002d8050");
 extern char *create_class_274_ring_effect(void *, void *, float) __asm__("FUN_L18_002dc3e0");
 extern void FUN_L18_002f1cc8_5e80(void *) __asm__("FUN_L18_002f1cc8");
-extern void FUN_L18_002dfaa0_5e80(char *, void *, void *, void *, void *, void *, int, int, int) __asm__("FUN_L18_002dfaa0");
+extern void start_position_and_rotation_transition(char *, void *, void *, void *, void *, void *, int, int, int) __asm__("FUN_L18_002dfaa0");
 extern void blend_moby_animation_5e80(void *, int, int, int) __asm__("FUN_00212f90");
 extern int scale_game_frames_5e80(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_0028d8c0_5e80(void *, int) __asm__("FUN_L00_0028d8c0");
@@ -2930,7 +2930,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                     V80[2] = atan2_5e80(current_path[4] - V60[0], current_path[5] - V60[1]);
                 }
                 V80[1] = 0.34906584f;
-                FUN_L18_002dfaa0_5e80(*(char **)(boss_data + 0x334), V50, V60, V70, V80, V90, D_L18_00162384_5e80, D_L18_00162388, 0);
+                start_position_and_rotation_transition(*(char **)(boss_data + 0x334), V50, V60, V70, V80, V90, D_L18_00162384_5e80, D_L18_00162388, 0);
             } else {
                 moby[0x20] = 0x15;
                 if (FUN_L00_0028d8c0_5e80(moby, *(int *)(boss_data + 0x3B0)) != 0) {
