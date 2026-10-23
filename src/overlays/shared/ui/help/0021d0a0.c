@@ -348,7 +348,9 @@ extern void FUN_L00_00206c08_227cf8(void) __asm__("FUN_L00_00206c08");
 extern void FUN_L00_00232628_227cf8(void) __asm__("FUN_L00_00232628");
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 
-void FUN_L06_00227cf8(void) {
+void restore_hero_from_vehicle_mode(void) __asm__("FUN_L06_00227cf8");
+
+void restore_hero_from_vehicle_mode(void) {
     struct Hero *hero_context = &hero;
     unsigned char *flag_clear_target;
     if (hero_context->vehicle_mode == 1) {
@@ -645,7 +647,7 @@ extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") __attribute__((section(".data")))
 extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_2348d0(s32 *) __asm__("FUN_001f9740");
 extern s16 FUN_001f9770_2348d0(s16 *) __asm__("FUN_001f9770");
-extern void FUN_L06_00227cf8_2348d0(void) __asm__("FUN_L06_00227cf8");
+extern void restore_hero_from_vehicle_mode(void) __asm__("FUN_L06_00227cf8");
 extern s32 FUN_001f96f8_2348d0(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_00266d60_2348d0(s32, s32, s32) __asm__("FUN_L00_00266d60");
 extern struct Moby *FUN_0020c4f8_2348d0(s32) __asm__("FUN_0020c4f8");
@@ -723,7 +725,7 @@ void update_hero_timers_and_spatial_state(void) {
     if (hero.unk22DE != 0 && FUN_001f9770_2348d0(&hero.unk22DE) != 0 &&
         hero.health.hp != 0 && D_L06_0015F5C4 == 0) {
         if (hero.vehicle_mode == 3) {
-            FUN_L06_00227cf8_2348d0();
+            restore_hero_from_vehicle_mode();
             if (FUN_L00_00266d60_2348d0(0x80, FUN_001f96f8_2348d0(0x12), 0)) {
                 hero.unk20A6 = 1;
             }

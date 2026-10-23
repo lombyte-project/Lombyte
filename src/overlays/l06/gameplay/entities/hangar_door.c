@@ -3603,7 +3603,7 @@ extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L0
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L01_00231348(int, int, int);
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
-extern void FUN_L06_00227cf8(void);
+extern void restore_hero_from_vehicle_mode(void) __asm__("FUN_L06_00227cf8");
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 float absolute_float(float input) __asm__("FUN_001f99c0");
@@ -3705,7 +3705,7 @@ void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
                     FUN_L06_002f5360_c(D_L06_0015FFD8_c + (moby_data->f60 << 8));
                     moby_data->f84 = 0;
                     ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].f94 = 0;
-                    FUN_L06_00227cf8();
+                    restore_hero_from_vehicle_mode();
                     {
                         char *b = D_L06_001600EC_c + (moby_data->f7C << 7);
                         FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
