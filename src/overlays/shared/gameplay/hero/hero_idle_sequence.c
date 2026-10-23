@@ -137,7 +137,9 @@ extern s32 D_001404D4[];
 extern s32 D_001403E0[];
 
 /* Returns D_001413D0[0] for a = 0, 2, 3, 4, D_001404D4[0] for 1, D_001403E0[0] for 5, else 0. */
-int FUN_L00_00205110(int ease_kind) {
+int get_hero_easing_moby_by_kind(int ease_kind) __asm__("FUN_L00_00205110");
+
+int get_hero_easing_moby_by_kind(int ease_kind) {
     if (ease_kind == 0 || ease_kind == 2 || ease_kind == 3 || ease_kind == 4) {
         return D_001413D0[0];
     }
@@ -167,7 +169,7 @@ void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259
 void update_hero_easing_record(struct HeroEase *ease_record) __asm__("FUN_L00_00205168");
 
 void update_hero_easing_record(struct HeroEase *ease_record) {
-    s32 moby = FUN_L00_00205110(ease_record->kind);
+    s32 moby = get_hero_easing_moby_by_kind(ease_record->kind);
     if (moby == 0)
         return;
     if (D_001413F4 == 0) {
