@@ -926,7 +926,9 @@ void update_hero_in_vehicle_mode(void) {
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 /* Stops the sounds the hero still owns in its 8 sound slots and clears them. */
-void FUN_L00_00206c08(void) {
+void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
+
+void release_and_clear_hero_voice_slots(void) {
     s32 *slot;
     s32 i;
     s32 expected_owner_byte_offset;

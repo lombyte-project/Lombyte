@@ -214,7 +214,7 @@ void update_hero_bobbing_and_target_position(void) {
 
 extern int D_L15_0015F5C4;
 extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
-extern void FUN_L00_00206c08(void);
+extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void FUN_L00_00232628(void);
 extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
@@ -248,7 +248,7 @@ void restore_saved_hero_moby_and_clear_vehicle_mode(void) {
         mark_moby_for_removal(moby_to_remove);
         *(int *)(hero_state_bytes + 0xA8C) = 0;
     }
-    FUN_L00_00206c08();
+    release_and_clear_hero_voice_slots();
     restored_hero_moby = *(char **)(hero_state_bytes + 0xA88);
     *(char **)(hero_state_bytes + 0x2080) = restored_hero_moby;
     qcopy(restored_hero_moby + 0x10, hero_state_bytes + 0x80);

@@ -101,7 +101,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern unsigned char D_0013D4C0[];
 extern void *spawn_class_593_moby(int unused, void *pos, int c, float scale, float a, float b) __asm__("FUN_L00_002a99b0");
-extern void FUN_L00_00206c08(void);
+extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
@@ -2217,7 +2217,7 @@ void update_hero_state_machine(void) {
         }
     }
     if (prevSub != hero.state.control_mode) {
-        FUN_L00_00206c08();
+        release_and_clear_hero_voice_slots();
     }
     if ((hero.state.prev == 0x40 && hero.state.current != HERO_STATE_FIDGET_ALT) ||
         (hero.state.prev == 0x41 && hero.unk1614 != 0)) {

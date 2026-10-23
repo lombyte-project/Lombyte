@@ -109,7 +109,7 @@ void apply_hero_ground_material_response(void) {
 extern s32 D_L06_0015F5C4 __asm__("D_L06_0015F5C4");
 extern f32 D_0015ED6C_8 __asm__("D_0015ED6C");
 
-void FUN_L00_00206c08_8(void) __asm__("FUN_L00_00206c08");
+void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 void FUN_001f9a28_8(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001fa580_8(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8_8(f32) __asm__("FUN_001f9dc8");
@@ -170,7 +170,7 @@ s32 process_hero_hit_response(s32 apply_hurt_response) {
     if (apply_hurt_response == 0) {
         return 1;
     }
-    FUN_L00_00206c08_8();
+    release_and_clear_hero_voice_slots();
     flag = 0;
     if (hero_hit_entry->flags & 1) {
         qcopy(&hurt_impulse, &hero_hit_entry->pos);

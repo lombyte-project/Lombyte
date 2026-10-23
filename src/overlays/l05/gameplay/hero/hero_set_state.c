@@ -62,7 +62,7 @@ extern unsigned char D_L05_0017C238[];
 extern void *D_L05_001612D0;
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");
-extern void FUN_L00_00206c08(void);
+extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
@@ -551,7 +551,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->unk20A7 = 1;
         p->unk2284 = 0;
-        FUN_L00_00206c08();
+        release_and_clear_hero_voice_slots();
         p->unk8C4 = 0;
         scale_vector_xyz(&p->motion.velocity, &p->motion.unk110, 0.7f);
         p->motion.velocity.f[2] = frame_time * 10.0f;
@@ -564,7 +564,7 @@ int hero_set_state(int a, int b) {
         int v;
         p->unk20A7 = 1;
         p->unk2284 = 0;
-        FUN_L00_00206c08();
+        release_and_clear_hero_voice_slots();
         p->unk8C4 = 0;
         p->unk8BE = scale_game_frames(0x46);
         p->water_surface_z = p->unk8A0;
@@ -604,7 +604,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->unk20A7 = 1;
         p->unk2284 = 0;
-        FUN_L00_00206c08();
+        release_and_clear_hero_voice_slots();
         p->unk8C4 = 0;
         p->rand_timer.range = 0x68;
         if (b)
@@ -2012,7 +2012,7 @@ int hero_set_state(int a, int b) {
             t->unk20AC = 1;
         }
         if (t->state.control_mode != t->state.prev_control_mode) {
-            FUN_L00_00206c08();
+            release_and_clear_hero_voice_slots();
         }
         t->state_timer = 0;
         t->unk1A0 = 0;

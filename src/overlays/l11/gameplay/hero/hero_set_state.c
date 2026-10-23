@@ -55,7 +55,7 @@ struct HeroVelocityKey D_L11_0015F6E8[1] __attribute__((section(".sdata"))) = {{
 extern unsigned char D_L11_0017C7D8[];
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");
-extern void FUN_L00_00206c08(void);
+extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
@@ -1708,7 +1708,7 @@ int hero_set_state(int a, int b) {
             t->unk20AC = 1;
         }
         if (t->state.control_mode != t->state.prev_control_mode) {
-            FUN_L00_00206c08();
+            release_and_clear_hero_voice_slots();
         }
         t->state_timer = 0;
         t->unk1A0 = 0;

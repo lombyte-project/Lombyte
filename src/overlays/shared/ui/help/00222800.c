@@ -12,7 +12,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 
-void FUN_L00_00206c08_8(void) __asm__("FUN_L00_00206c08");
+void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 void FUN_001f9a28_8(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001fa580_8(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8_8(f32) __asm__("FUN_001f9dc8");
@@ -73,7 +73,7 @@ s32 handle_hero_hit(s32 apply_response) {
     if (apply_response == 0) {
         return 1;
     }
-    FUN_L00_00206c08_8();
+    release_and_clear_hero_voice_slots();
     flag = 0;
     if (hero_moby_entry->flags & 1) {
         qcopy(&response_vector, &hero_moby_entry->pos);

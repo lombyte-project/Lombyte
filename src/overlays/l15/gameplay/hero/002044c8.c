@@ -167,7 +167,7 @@ extern s32 D_0015ED84_210ce8 __asm__("D_0015ED84");
 extern f32 D_0015ED6C_210ce8 __asm__("D_0015ED6C");
 
 s32 FUN_001fa6d0_210ce8(f32) __asm__("FUN_001fa6d0");
-void FUN_L00_00206c08_210ce8(void) __asm__("FUN_L00_00206c08");
+void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 void FUN_001f9a28_210ce8(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001fa580_210ce8(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8_210ce8(f32) __asm__("FUN_001f9dc8");
@@ -233,7 +233,7 @@ s32 process_hero_incoming_hit(s32 apply_hit_reaction) {
     if (apply_hit_reaction == 0) {
         return 1;
     }
-    FUN_L00_00206c08_210ce8();
+    release_and_clear_hero_voice_slots();
     flag = 0;
     if (incoming_hit_record->i30 & 1) {
         qcopy(&knockback_vector, &incoming_hit_record->v10);

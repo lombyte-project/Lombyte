@@ -344,7 +344,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
 
 extern void FUN_0020c828_227cf8(void *) __asm__("FUN_0020c828");
 extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
-extern void FUN_L00_00206c08_227cf8(void) __asm__("FUN_L00_00206c08");
+extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void FUN_L00_00232628_227cf8(void) __asm__("FUN_L00_00232628");
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 
@@ -378,7 +378,7 @@ void restore_hero_from_vehicle_mode(void) {
             FUN_0020c828_227cf8(hero_restore_context->unkA8C);
             hero_restore_context->unkA8C = 0;
         }
-        FUN_L00_00206c08_227cf8();
+        release_and_clear_hero_voice_slots();
         {
             unsigned char *restored_hero_moby = hero_restore_context->unkA88;
             hero_restore_context->moby = (struct Moby *)restored_hero_moby;

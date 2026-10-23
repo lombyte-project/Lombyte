@@ -111,7 +111,7 @@ void resolve_hero_surface_reactions(void) {
 /* Same source as the exact FUN_L08_00222800, with only the 0x16 animation in mode 0. */
 extern f32 D_0015ED6C_8 __asm__("D_0015ED6C");
 
-void FUN_L00_00206c08_8(void) __asm__("FUN_L00_00206c08");
+void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 void FUN_001f9a28_8(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001fa580_8(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8_8(f32) __asm__("FUN_001f9dc8");
@@ -172,7 +172,7 @@ s32 process_hero_hit_reaction(s32 apply_hit_reaction) {
     if (apply_hit_reaction == 0) {
         return 1;
     }
-    FUN_L00_00206c08_8();
+    release_and_clear_hero_voice_slots();
     flag = 0;
     if (hero_hit_entry->flags & 1) {
         qcopy(&knockback_impulse, &hero_hit_entry->pos);

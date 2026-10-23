@@ -722,7 +722,7 @@ int test_hero_ledge_ahead(Vec4 *ledge_probe_origin, f32 *facing_yaw)
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00231960), where it is exact; names translated to the US level program. */
 
 extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
-extern void FUN_L00_00206c08(void);
+extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void hero_update_items() __asm__("FUN_L00_00210748");
 extern void FUN_L00_00232628(void);
@@ -741,7 +741,7 @@ void FUN_L01_00231348(int vehicle_mode, int initial_state, int new_moby) {
     clear_moby_transform_history(hero_state_base + 0x1670);
     *(int *)(*(char **)(hero_state_base + 0x2080) + 0x98) = -1;
     FUN_L00_00232fe8();
-    FUN_L00_00206c08();
+    release_and_clear_hero_voice_slots();
     reset_hero_easing_records();
     *(char *)(hero_state_base + 0x20A4) = vehicle_mode;
     *(int *)(hero_state_base + 0xA84) = new_moby;
@@ -790,7 +790,7 @@ void exit_hero_vehicle_mode_and_restore_moby(void) {
         mark_moby_for_removal(moby_to_remove);
         *(int *)(hero_state_base + 0xA8C) = 0;
     }
-    FUN_L00_00206c08();
+    release_and_clear_hero_voice_slots();
     restored_moby = *(char **)(hero_state_base + 0xA88);
     *(char **)(hero_state_base + 0x2080) = restored_moby;
     qcopy(restored_moby + 0x10, hero_state_base + 0x80);
@@ -809,7 +809,7 @@ extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern s32 D_0013DF88[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8 __asm__("D_0015EEA8");
 
-void FUN_L00_00206c08_8(void) __asm__("FUN_L00_00206c08");
+void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 void FUN_001f9a28_8(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001fa580_8(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8_8(f32) __asm__("FUN_001f9dc8");
@@ -866,7 +866,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     if (apply_state_and_motion_response == 0) {
         return 1;
     }
-    FUN_L00_00206c08_8();
+    release_and_clear_hero_voice_slots();
     flag = 0;
     if (hero_moby_entry->flags & 1) {
         qcopy(&motion_delta, &hero_moby_entry->pos);
