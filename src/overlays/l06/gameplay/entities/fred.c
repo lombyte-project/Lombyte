@@ -7806,7 +7806,7 @@ extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 unsigned char *FUN_L00_002730e0(float *pos, void *vel, int color, u8 life, u8 b, int mode, float scale);
-void FUN_L06_00305000_c(char *m) __asm__("FUN_L06_00305000");
+void test_moby_vector_stream_collision_lines(char *m) __asm__("FUN_L06_00305000");
 void FUN_L06_00305170_c(char *m) __asm__("FUN_L06_00305170");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void func_L00_00273F80_r(void *, void *, int, float, int, int, int) __asm__("FUN_L00_002730e0");
@@ -7870,7 +7870,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
         if (voice_is_playing(moby, vector_stream_vars->f18) == 0) {
             vector_stream_vars->f18 = allocate_voice_for_target_entry(0, 4, moby);
         }
-        FUN_L06_00305000_c(moby);
+        test_moby_vector_stream_collision_lines(moby);
         v = D_L06_001621F8 + D_L06_001621FC * D_0015ED6C;
         D_L06_001621F8 = v;
         if (1.0f < v) {
@@ -7960,7 +7960,7 @@ extern void initialize_hit_descriptor(char *a, int b, int c, float d) __asm__("F
 extern float D_L06_001621E8 __attribute__((sda));
 extern float D_L06_001621EC __attribute__((sda));
 extern float D_L06_001621F0 __attribute__((sda));
-void FUN_L06_00305000(char *moby) {
+void test_moby_vector_stream_collision_lines(char *moby) {
     float P[4];
     float Q[4];
     float A[12];
