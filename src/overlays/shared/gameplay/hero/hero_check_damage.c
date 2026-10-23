@@ -586,7 +586,9 @@ char *find_best_hero_heading_target(float range_limit, float reference_yaw, floa
     return best;
 }
 /* Maps 1, 2, 3 to 0x79, 0x77, 0x75; others to 0. */
-s32 FUN_L00_0020da10(s32 animation_selector) {
+s32 select_hero_condition_animation_id(s32 animation_selector) __asm__("FUN_L00_0020da10");
+
+s32 select_hero_condition_animation_id(s32 animation_selector) {
     switch (animation_selector) {
     case 1:
         return 0x79;
