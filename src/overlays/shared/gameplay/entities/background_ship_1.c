@@ -46,7 +46,9 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 void draw_background_ship_1_joint_billboards(char *self) __asm__("FUN_L02_002ec308");
 
-void FUN_L02_002ec3f0(char *moby) {
+void prepare_background_ship_1_joint_billboards(char *moby) __asm__("FUN_L02_002ec3f0");
+
+void prepare_background_ship_1_joint_billboards(char *moby) {
     int i;
     char *data;
     char *joint_position_out;
@@ -116,7 +118,7 @@ extern void delete_moby(void *) __asm__("func_0020C828");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
-void FUN_L02_002ec3f0_c(char *moby) __asm__("FUN_L02_002ec3f0");
+void prepare_background_ship_1_joint_billboards(char *moby) __asm__("FUN_L02_002ec3f0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_0022ED80_r(int, int, int) __asm__("FUN_0022da68");
 
@@ -255,7 +257,7 @@ void background_ship_1_update(char *moby) {
             *(int *)(moby + 0x90) = tweened_color;
             *(float *)(moby_data + 0x68) = fast_add_rotations(*(float *)(moby_data + 0x68), k);
         }
-        FUN_L02_002ec3f0_c(moby);
+        prepare_background_ship_1_joint_billboards(moby);
     }
 }
 /* Spawns three particles around a moby with randomized direction, speed and colour. */
