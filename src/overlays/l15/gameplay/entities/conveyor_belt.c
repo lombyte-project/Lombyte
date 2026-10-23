@@ -728,7 +728,7 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void start_scene_p(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_002502a0_v(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_00232fe8_v(void) __asm__("FUN_L00_00232fe8");
-extern void FUN_L00_00299460_v(int) __asm__("FUN_L00_00299460");
+extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L00_002330d0_v(void) __asm__("FUN_L00_002330d0");
 extern void FUN_L00_00216f90_v(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_002607d0_v(int) __asm__("FUN_L00_002607d0");
@@ -768,7 +768,7 @@ void update_quartu_cutscene_trigger(struct Moby *moby) {
         break;
     case CUTSCENE_TRIGGER_WAIT_FOR_FIRST_SCENE:
         if (D_L15_0015F5C4 != 2) {
-            FUN_L00_00299460_v(0x11);
+            queue_scene_movie_with_game_language(0x11);
             moby->state = 1;
         }
         break;
@@ -1150,7 +1150,7 @@ extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void update_joint_animation(void *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_00262d38(int);
 extern void FUN_L00_00284e50(void *, void *);
-extern void FUN_L00_00299460(int);
+extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L01_0027a248(int, int);
 extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
 extern void apply_npc_big_head_cheat(void *) __asm__("FUN_L12_002e6b60");
@@ -1361,7 +1361,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         if (D_L15_0015F5C4 == 2) {
             break;
         }
-        FUN_L00_00299460(0x10);
+        queue_scene_movie_with_game_language(0x10);
         moby->state = 7;
         break;
     case ULTRAMECH_SCIENTIST_START_SECOND_SCENE_AND_SAVE:

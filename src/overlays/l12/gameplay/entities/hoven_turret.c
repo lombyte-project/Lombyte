@@ -547,7 +547,7 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 extern void FUN_L00_002607d0(int);
 extern void FUN_L00_00262cf0(void *, void *, float, float, float);
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void FUN_L00_00299460(int);
+extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L08_002e7eb0(void *, void *, void *, int);
 extern void update_hoven_turret_target_alignment_timer(void *) __asm__("FUN_L12_00303370");
@@ -692,7 +692,7 @@ void hoven_turret_update(struct Moby *moby) {
                 moby->rot.z = 3.1415927f;
             } else {
                 jet_clear_persistent(moby->mission);
-                FUN_L00_00299460(0xD);
+                queue_scene_movie_with_game_language(0xD);
                 FUN_L00_002607d0(0xD);
                 {
                     Vec_304920 cpos;

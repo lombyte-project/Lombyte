@@ -710,7 +710,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
-extern void func_L00_0029A7D0_2FC140(int) __asm__("FUN_L00_00299460");
+extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void func_L00_00261848_2FC140(int) __asm__("FUN_L00_002607d0");
 extern void func_L00_00263DB0_2FC140(int) __asm__("FUN_L00_00262d38");
 extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
@@ -877,7 +877,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         if (cutscene_mode == 2) {
             break;
         }
-        func_L00_0029A7D0_2FC140(3);
+        queue_scene_movie_with_game_language(3);
         moby->state = 7;
         break;
     case AGNOGG_SHIP_WAIT_TO_START_SCENE_4:

@@ -66,7 +66,7 @@ extern void fun_00216c48(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN
 extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern s32 FUN_L00_002667d0_c2(struct Moby *) __asm__("FUN_L00_002667d0");
-extern void FUN_L00_00299460(s32);
+extern void queue_scene_movie_with_game_language(s32) __asm__("FUN_L00_00299460");
 extern void remove_hud_item(s32) __asm__("FUN_001ff480");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern s32 hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
@@ -145,7 +145,7 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
         active_scene_trigger.moby = moby;
         active_scene_trigger.trigger = trigger;
         if (entry->scene & 0x4000) {
-            FUN_L00_00299460((s16)(entry->scene ^ 0x4000));
+            queue_scene_movie_with_game_language((s16)(entry->scene ^ 0x4000));
             return 1;
         }
         remove_hud_item(bolt_hud_item);

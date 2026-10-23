@@ -6808,7 +6808,7 @@ extern void FUN_L06_002e6148_302578(void *) __asm__("FUN_L06_002e6148");
 extern void FUN_L00_002eac18_302578(int) __asm__("FUN_L00_002eac18");
 extern void FUN_L00_00298840_302578(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_002607d0_302578(int) __asm__("FUN_L00_002607d0");
-extern void FUN_L00_00299460_302578(int) __asm__("FUN_L00_00299460");
+extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L00_00262d38_302578(int) __asm__("FUN_L00_00262d38");
 extern void FUN_L00_002502a0_302578(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_00284e50_302578(void *, void *) __asm__("FUN_L00_00284e50");
@@ -7079,7 +7079,7 @@ void shuttle_update(struct Moby *moby) {
         break;
     case WAIT_TO_ENTER_SHUTTLE_SAVE_FLOW:
         if (D_L06_0015F5C4 != 2) {
-            FUN_L00_00299460_302578(5);
+            queue_scene_movie_with_game_language(5);
             moby->state = 7;
         }
         break;

@@ -780,7 +780,9 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) __asm__("FUN_L00
 
 void prepare_movie_playback(s32, s32, s32) __asm__("FUN_L00_002995d0");
 void hero_respawn() __asm__("FUN_L00_00211250");
-void FUN_L00_00299460(s32 i) {
+void queue_scene_movie_with_game_language(s32 i) __asm__("FUN_L00_00299460");
+
+void queue_scene_movie_with_game_language(s32 i) {
     s32 a, b;
     struct Hero *hero_ptr;
     if (i < 0)

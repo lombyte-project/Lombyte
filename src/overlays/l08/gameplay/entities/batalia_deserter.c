@@ -409,7 +409,7 @@ extern char *D_L08_001600EC;
 extern unsigned char *D_L08_0015FFD8;
 extern void FUN_L08_003063f0_c(void *) __asm__("FUN_L08_003063f0");
 extern void request_batalia_cannon_mount(void *) __asm__("FUN_L08_002e1698");
-extern void FUN_L00_00299460(int);
+extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L08_002a1880(int);
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void FUN_L00_00260860(int, int);

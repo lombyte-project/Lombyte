@@ -2047,7 +2047,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void FUN_L00_00299460(int);
+extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L00_002607d0(int);
 extern void initialize_moby_state_record(void *) __asm__("FUN_L00_0028e8a0");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
@@ -2179,7 +2179,7 @@ after_state_4:
     case WAIT_SCENE_BEFORE_FOLLOWUP:
         if (D_L13_0015F5C4 != 2) {
             moby->state = 9;
-            FUN_L00_00299460(14);
+            queue_scene_movie_with_game_language(14);
         }
         break;
     case START_FOLLOWUP_SCENE:

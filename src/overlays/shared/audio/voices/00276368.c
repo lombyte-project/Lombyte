@@ -139,7 +139,7 @@ extern void close_pause_menu(void) __asm__("FUN_L00_00276908");
 extern void process_unlock_code_input(void) __asm__("FUN_L00_002831c0");
 extern void prepare_target_level_transition(s32) __asm__("FUN_L00_0028ed58");
 extern void start_scene(void *) __asm__("FUN_L00_00298840");
-extern void FUN_L00_00299460(void *);
+extern void queue_scene_movie_with_game_language(void *) __asm__("FUN_L00_00299460");
 extern void queue_language_zero_movie(void *) __asm__("FUN_L00_002994f8");
 extern void queue_movie_with_game_language(void *) __asm__("FUN_L00_00299560");
 extern void start_slideshow(void) __asm__("FUN_L00_00299a68");
@@ -507,7 +507,7 @@ void update_pause_menu(void) {
             D_L00_001B9CF0.unk130 = previous_decode_mode;
             fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
-            FUN_L00_00299460(D_L00_001B9CF0.unkE4);
+            queue_scene_movie_with_game_language(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 4) {
             previous_decode_mode = decode_mode;
             decode_mode = 1;

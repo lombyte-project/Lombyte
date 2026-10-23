@@ -1490,7 +1490,7 @@ extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_00260860(int, int);
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_00263d40(int, int);
-extern void FUN_L00_00299460(int);
+extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L16_002923d0(int);
 extern void begin_dialogue_camera_transition(float, void *) __asm__("FUN_L01_002783a8");
 extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");

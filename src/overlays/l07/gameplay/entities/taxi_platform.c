@@ -796,7 +796,7 @@ extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern int is_point_inside_clip_volume_i(void *, int) __asm__("FUN_00214720");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
-extern void FUN_L00_00299460(int);
+extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern void clear_bit_grid_rectangle(int x, int y, int w, int h) __asm__("FUN_L07_00270248");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
@@ -928,7 +928,7 @@ void update_umbris_scene_progression(struct Moby *moby)
     case CONTROLLER_WAIT_FOR_FINISH_VOLUME_SCENE:
         if (scene_state == 2) break;
         moby->state = 10;
-        FUN_L00_00299460(8);
+        queue_scene_movie_with_game_language(8);
         break;
     case CONTROLLER_WAIT_TO_START_FINAL_SCENE:
         if (scene_state == 2) break;
