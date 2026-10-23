@@ -824,7 +824,9 @@ void initialize_taxi_stop_state(void *moby_v) {
 extern char *D_L16_001B0930[];
 extern float FUN_001f9b48(void *, void *);
 
-void FUN_L16_002e4a58(struct Moby *moby) {
+void prepare_taxi_departure_path(struct Moby *moby) __asm__("FUN_L16_002e4a58");
+
+void prepare_taxi_departure_path(struct Moby *moby) {
     enum {
         TAXI_DEPART_FROM_FIRST_STOP = 0,
         TAXI_DEPART_FROM_SECOND_STOP = 1,
