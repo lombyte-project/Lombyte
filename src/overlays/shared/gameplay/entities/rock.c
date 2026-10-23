@@ -2085,7 +2085,9 @@ struct L01Moby {
     int field94;
 };
 
-void FUN_L01_003097e8(L01Moby *moby) {
+void hide_teleporter_and_children(L01Moby *moby) __asm__("FUN_L01_003097e8");
+
+void hide_teleporter_and_children(L01Moby *moby) {
     L01Moby **slots = moby->data->slots;
     int i;
     moby->field94 = 0;
