@@ -957,7 +957,7 @@ extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FU
 extern float interpolate_wrapped_angle_cosine_eased(float, float, float) __asm__("FUN_L00_00257ef0");
 extern float cosine_interpolate_alt(float, float, float) __asm__("FUN_002133d0");
 extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
-extern void FUN_L00_001ed580(void *, void *, void *);
+extern void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
 extern void FUN_L00_001ed630(void *, void *, void *);
 extern void interpolate_vector_xyz_cosine_eased(void *, void *, void *, float) __asm__("FUN_L00_00257f70");
 extern void interpolate_wrapped_rotations_cosine_eased(float *, float *, float *, float) __asm__("FUN_L00_00258050");
@@ -1008,7 +1008,7 @@ void FUN_L00_002eae20(void *camera) {
                                           cubic_hermite_scalar(F(transition_state, 0x44), 0, 1.0f, F(transition_state, 0x48), t);
             F(transition_state, 0x20) = interpolate_wrapped_angle_cosine_eased(F(transition_state, 0x20), F(transition_state, 0xC), t);
             interpolate_vector_xyz_cosine_eased(transition_state + 0x30, transition_state + 0x30, &hero.motion.pos, t);
-            FUN_L00_001ed580(camera_object + 0x30, transition_state + 0x1C, transition_state + 0x30);
+            compute_position_from_spherical_offset(camera_object + 0x30, transition_state + 0x1C, transition_state + 0x30);
             interpolate_wrapped_rotations_cosine_eased((float *)(camera_object + 0x40), (float *)(camera_object + 0x40), (float *)(target_position + 0x10), t);
         }
     } else {
@@ -1061,13 +1061,13 @@ void update_camera_pose_with_optional_collision(char *camera_object) {
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
-extern void FUN_L00_001ed580(void *, void *, void *);
+extern void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
 
 void FUN_L00_002eb278(void *camera) {
     char *camera_object = camera;
     float rotation_matrix[16];
     char *orbit_origin = *(char **)(camera_object + 0x70) + 0xB0;
-    FUN_L00_001ed580(camera_object + 0x30, camera_object + 0x50, orbit_origin);
+    compute_position_from_spherical_offset(camera_object + 0x30, camera_object + 0x50, orbit_origin);
     *(float *)(camera_object + 0x50) = fast_add_rotations(*(float *)(camera_object + 0x50), *(float *)(orbit_origin + 0x18));
     *(int *)(camera_object + 0x40) = 0;
     *(float *)(camera_object + 0x44) = fast_add_rotations(*(float *)(camera_object + 0x54), *(float *)(camera_object + 0x5C));
@@ -1156,7 +1156,7 @@ void FUN_L00_002eb3b0(S002eb3b0 *camera_object) {
 float FUN_001fa580_2eb480(float, float) __asm__("FUN_001fa580");
 void FUN_001fa050_2eb480(void *, void *) __asm__("FUN_001fa050");
 void FUN_001fa2b8_2eb480(void *, void *) __asm__("FUN_001fa2b8");
-void FUN_L00_001ed580_2eb480(void *, void *, void *) __asm__("FUN_L00_001ed580");
+void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
 float FUN_L00_001eb328_2eb480(void *, float, float, float, float,
                               float) __asm__("FUN_L00_001eb328");
 float FUN_001ebd78_2eb480(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
@@ -1187,7 +1187,7 @@ void update_orbit_camera_pose(char *camera_object) {
     } else {
         qcopy(orbit_origin, camera_state + 0x80);
     }
-    FUN_L00_001ed580_2eb480(camera_object + 0x30, camera_object + 0x50, orbit_origin);
+    compute_position_from_spherical_offset(camera_object + 0x30, camera_object + 0x50, orbit_origin);
     F(camera_object, 0x40) = F(camera_state, 0xAC);
     F(camera_object, 0x44) = FUN_001fa580_2eb480(F(camera_object, 0x54), F(camera_object, 0x5C));
     F(camera_object, 0x48) = FUN_001fa580_2eb480(3.14159274101257324f, F(camera_object, 0x50));

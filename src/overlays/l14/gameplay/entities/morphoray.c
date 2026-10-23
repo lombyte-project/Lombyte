@@ -1655,7 +1655,7 @@ extern float D_L14_001F6C80[][1000];
 extern float D_L14_001F6488_59d8[] __asm__("D_L14_001F6488");
 extern float D_L14_001624A8 __attribute__((sda));
 extern float atan2_59d8(float, float) __asm__("FUN_001f9e90");
-extern void FUN_L00_001ed580(void *, void *, void *);
+extern void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
 extern void sub_59d8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void scale_59d8(void *, void *, float) __asm__("FUN_001f9a68");
 extern void add_59d8(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1731,7 +1731,7 @@ void initialize_path_key_camera(struct UpdateCam *cam) {
     camera_placement_parameters[1] = camera_parameters[1];
     camera_placement_parameters[0] = hero_heading_radians;
     camera_placement_parameters[2] = camera_parameters[2];
-    FUN_L00_001ed580(&cam->pos, camera_placement_parameters, &hero.motion);
+    compute_position_from_spherical_offset(&cam->pos, camera_placement_parameters, &hero.motion);
     sub_59d8(hero_look_direction, &hero.motion, &cam->pos);
     scale_59d8(up, &hero.gravity_dir, -1.5f);
     add_59d8(hero_look_direction, hero_look_direction, up);
@@ -1852,7 +1852,7 @@ extern float cam_interp_5d48(void *, float, float, float, float, float) __asm__(
 extern float atan2_5d48(float, float) __asm__("FUN_001f9e90");
 extern float add_rots_5d48(float, float) __asm__("FUN_001fa580");
 extern float ease_5d48(float, float, float, float, float) __asm__("FUN_L00_00257e20");
-extern void FUN_L00_001ed580_5d48(void *, void *, void *) __asm__("FUN_L00_001ed580");
+extern void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
 extern void vec_sub_5d48(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vec_scale_5d48(void *, void *, float) __asm__("FUN_001f9a68");
 extern void vec_add_5d48(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2062,7 +2062,7 @@ void update_path_key_camera(char *cam) {
     camera_placement_parameters[1] = cur->f4;
     camera_placement_parameters[0] = camera_placement_heading;
     camera_placement_parameters[2] = cur->f8;
-    FUN_L00_001ed580_5d48(cam + 0x30, camera_placement_parameters, &hero.motion.pos);
+    compute_position_from_spherical_offset(cam + 0x30, camera_placement_parameters, &hero.motion.pos);
     vec_sub_5d48(look_direction, &hero.motion.pos, cam + 0x30);
     vec_scale_5d48(scaled_up_vector, &hero.gravity_dir, -1.5f);
     vec_add_5d48(look_direction, look_direction, scaled_up_vector);

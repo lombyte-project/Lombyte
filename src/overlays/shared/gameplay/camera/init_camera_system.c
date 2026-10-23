@@ -279,7 +279,9 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L00_001ed580(float *output_position, float *angles_and_distance, void *origin_position) {
+void compute_position_from_spherical_offset(float *output_position, float *angles_and_distance, void *origin_position) __asm__("FUN_L00_001ed580");
+
+void compute_position_from_spherical_offset(float *output_position, float *angles_and_distance, void *origin_position) {
     output_position[0] = angles_and_distance[2] * fast_cos(angles_and_distance[1]) * fast_cos(angles_and_distance[0]);
     output_position[1] = angles_and_distance[2] * fast_cos(angles_and_distance[1]) * fast_sin(angles_and_distance[0]);
     output_position[2] = angles_and_distance[2] * fast_sin(angles_and_distance[1]);
