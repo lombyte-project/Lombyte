@@ -1004,7 +1004,7 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void scale_vector_xyz(void *, void *, float);
 extern void vu_euler_rotation_basis(void *, void *);
-float FUN_L18_002fc4e0(char *self, float *src);
+float move_gadgebot_toward_target(char *self, float *src) __asm__("FUN_L18_002fc4e0");
 extern float FUN_L18_002fc4e0_c(void *, void *) __asm__("FUN_L18_002fc4e0");
 extern float f9d48_i(void *, void *) __asm__("FUN_001f9b80");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
@@ -1331,7 +1331,7 @@ extern float fast_cos(float) __asm__("func_001F9DC8");
 extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void FUN_L00_00261d78(float, void *, void *, void *);
 
-float FUN_L18_002fc4e0(char *self, float *target_position_source) {
+float move_gadgebot_toward_target(char *self, float *target_position_source) {
     QVec target_position;
     float v[4];
     float movement_distance_scratch[4];
