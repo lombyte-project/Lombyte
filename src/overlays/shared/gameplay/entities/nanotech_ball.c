@@ -2070,7 +2070,9 @@ extern char *func_L00_002E0CB8_DD3D8(float, void *, void *, void *, int, unsigne
 extern char D_L00_00166C80[];
 extern int func_L00_001F2BE8_DD3D8(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
-void FUN_L00_002dbf28(char *self, char *q) {
+void spawn_suck_cannon_projectile_explosion(char *self, char *q) __asm__("FUN_L00_002dbf28");
+
+void spawn_suck_cannon_projectile_explosion(char *self, char *q) {
     B50_DD3D8 blk;
     float to_camera[4];
     float spray_bias_vector[4];
@@ -2217,7 +2219,7 @@ void FUN_L00_002dbf28(char *self, char *q) {
 typedef struct {
     int v[16];
 } __attribute__((aligned(16))) Mtx_002dc938;
-void FUN_L00_002dbf28_002dc938(char *, char *) __asm__("FUN_L00_002dbf28");
+void spawn_suck_cannon_projectile_explosion(char *, char *) __asm__("FUN_L00_002dbf28");
 void FUN_001fa050_002dc938(Mtx_002dc938 *, void *) __asm__("FUN_001fa050");
 void FUN_001fa2b8_002dc938(void *, Mtx_002dc938 *) __asm__("FUN_001fa2b8");
 void FUN_0020e098_002dc938(char *) __asm__("FUN_0020e098");
@@ -2226,7 +2228,7 @@ void FUN_L00_002dc938(char *moby, char *suction_record, int flag) {
     Mtx_002dc938 rotation_matrix;
     void (*fn)(char *);
     if (flag)
-        FUN_L00_002dbf28_002dc938(moby, suction_record);
+        spawn_suck_cannon_projectile_explosion(moby, suction_record);
     *(int *)(moby + 0x98) = *(int *)(suction_record + 0x84);
     qzero(moby + 0x40);
     FUN_001fa050_002dc938(&rotation_matrix, moby + 0x40);
