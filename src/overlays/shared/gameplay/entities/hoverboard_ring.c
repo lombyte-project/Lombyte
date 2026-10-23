@@ -325,7 +325,9 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
-void FUN_L05_00329358(char *moby) {
+void update_hero_follow_camera_focus(char *moby) __asm__("FUN_L05_00329358");
+
+void update_hero_follow_camera_focus(char *moby) {
     float hero_focus_offset[4];
     char *orbit = *(char **)(moby + 0x70);
     float *focus_position = (float *)(orbit + 0x80);
