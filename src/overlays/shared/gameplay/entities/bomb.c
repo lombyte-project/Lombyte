@@ -1039,14 +1039,14 @@ int FUN_L00_002cadc0(char *a) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC2B0), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_002db890(char *);
+extern char *get_moby_suck_cannon_record(char *) __asm__("FUN_L00_002db890");
 extern int launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");
 extern int allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 
 int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int a, int target_moby, float target_height_offset) __asm__("FUN_L00_002cae60");
 
 int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int a, int target_moby, float target_height_offset) {
-    char *class_callback_data = FUN_L00_002db890(moby);
+    char *class_callback_data = get_moby_suck_cannon_record(moby);
     int r = launch_suck_cannon_projectile(moby, a, target_moby, target_height_offset);
     if (r != 0) {
         moby[0x20] = 5;
@@ -2484,7 +2484,7 @@ char *FUN_L00_002cdf28(char *search_position, int *excl) {
     skip:
         if (!(search_to_candidate_distance < best))
             continue;
-        class_callback_data = FUN_L00_002db890(candidate_moby);
+        class_callback_data = get_moby_suck_cannon_record(candidate_moby);
         if (class_callback_data != 0 && *(short *)(class_callback_data + 0x68) > 0)
             continue;
         x = (char *)FUN_002141f8_c(candidate_moby);

@@ -145,7 +145,7 @@ extern s32 D_L03_0015F5CC;
 extern char D_L03_001E2FA0[];
 
 extern void set_moby_animation(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
-extern SpawnTarget *FUN_L00_002db890(struct Moby *);
+extern SpawnTarget *get_moby_suck_cannon_record(struct Moby *) __asm__("FUN_L00_002db890");
 extern void FUN_L00_0025d1b8(struct Moby *);
 extern SpawnSound *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 extern void debug_print() __asm__("FUN_001e93b0");
@@ -219,7 +219,7 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
             current_moby->scale = ((SpawnClass *)current_moby->pclass)->scale * 0.1f;
         }
         set_moby_animation(current_moby, 0, 0);
-        target = FUN_L00_002db890(current_moby);
+        target = get_moby_suck_cannon_record(current_moby);
         if (target != NULL) {
             target->unk94 = 0;
             target->unk68 = 0;

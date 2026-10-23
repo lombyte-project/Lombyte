@@ -9,7 +9,7 @@
 #include "rnc/overlay/quad.h"
 
 
-extern char *FUN_L00_002db890(char *);
+extern char *get_moby_suck_cannon_record(char *) __asm__("FUN_L00_002db890");
 extern int launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");
 extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 
@@ -17,7 +17,7 @@ extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022d
 int process_moby_hit_state_and_voice(struct Moby *moby, int input_quad_address, int b, float f) __asm__("FUN_L04_002c40d0");
 
 int process_moby_hit_state_and_voice(struct Moby *moby, int input_quad_address, int b, float f) {
-    char *moby_callback_result = FUN_L00_002db890(moby);
+    char *moby_callback_result = get_moby_suck_cannon_record(moby);
     int hit_processing_result = launch_suck_cannon_projectile(moby, input_quad_address, b, f);
     if (hit_processing_result != 0) {
         moby->state = 0x9;

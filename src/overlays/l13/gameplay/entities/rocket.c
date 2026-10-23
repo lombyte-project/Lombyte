@@ -1967,7 +1967,7 @@ void compute_lift_mount_transform(struct Moby *moby, float *mount_position, floa
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C320), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_002db890(char *);
+extern char *get_moby_suck_cannon_record(char *) __asm__("FUN_L00_002db890");
 extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern short *D_L13_001ABB40[];
 
@@ -1984,7 +1984,7 @@ int count_eligible_mobies_in_list(int moby_list_index, int excluded_moby_state) 
         int id = *moby_id_cursor & 0x7FFF;
         char *moby = (char *)(id << 8) + (int)D_L13_0015FFD8_m;
         if (moby[0x20] >= 0) {
-            char *moby_callback_record = FUN_L00_002db890(moby);
+            char *moby_callback_record = get_moby_suck_cannon_record(moby);
             if (moby_callback_record == 0 || *(short *)(moby_callback_record + 0x68) < 4) {
                 if (excluded_moby_state == -1 ||
                     *(unsigned char *)((char *)(id << 8) + (int)D_L13_0015FFD8_m + 0x20) != excluded_moby_state) {

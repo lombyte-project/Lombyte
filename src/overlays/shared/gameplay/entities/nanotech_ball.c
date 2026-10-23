@@ -1789,7 +1789,9 @@ typedef struct Obj_db890 {
     s32 f78;
 } Obj_db890;
 /* Calls the class function at +0x10 for a moby not in state 0xFE/0xFD with data; else 0. */
-s32 FUN_L00_002db890(Obj_db890 *moby) {
+s32 get_moby_suck_cannon_record(Obj_db890 *moby) __asm__("FUN_L00_002db890");
+
+s32 get_moby_suck_cannon_record(Obj_db890 *moby) {
     Fn_db890 class_callback;
     if (moby == 0 || moby->f20 == 0xFE)
         return 0;
