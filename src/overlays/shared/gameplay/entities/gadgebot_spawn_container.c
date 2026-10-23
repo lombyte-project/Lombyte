@@ -927,7 +927,9 @@ extern f32 D_0015ED6C;
 extern u128 D_L06_001745E0 __attribute__((section(".data")));
 extern u128 D_L06_001745F0 __attribute__((section(".data")));
 
-void FUN_L06_002e9b60(float scale, float threshold, char *moby, float *out, int follow_path) {
+void move_frog_with_collision_resolution(float scale, float threshold, char *moby, float *out, int follow_path) __asm__("FUN_L06_002e9b60");
+
+void move_frog_with_collision_resolution(float scale, float threshold, char *moby, float *out, int follow_path) {
     extern int coll_sphere(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
     float start[4];
     float end[4];
