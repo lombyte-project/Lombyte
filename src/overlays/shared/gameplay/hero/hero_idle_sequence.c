@@ -1121,7 +1121,7 @@ void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
 
 void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
 void update_hero_pitch_and_yaw_easing_targets(void) __asm__("FUN_L00_0020a540");
-void FUN_L00_0020ac98_u(void) __asm__("FUN_L00_0020ac98");
+void update_hero_target_tracking(void) __asm__("FUN_L00_0020ac98");
 void update_hero_idle_random_rotation_targets(void) __asm__("FUN_L00_0020a9e8");
 void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
 void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
@@ -1180,7 +1180,7 @@ void coordinate_hero_frame_update(void) {
     update_hero_easing_targets_and_point_effects();
     update_hero_collision_ease_target();
     update_hero_pitch_and_yaw_easing_targets();
-    FUN_L00_0020ac98_u();
+    update_hero_target_tracking();
     update_hero_idle_random_rotation_targets();
     update_hero_rotation_targets_and_random_manipulators();
     update_hero_glow_and_extra_manipulators();
@@ -2902,7 +2902,7 @@ void FUN_L00_0020a1e0(float a, float b);
 void FUN_L00_0020a228(float a, float b);
 void FUN_L00_0020a210(float a, float b);
 
-void FUN_L00_0020ac98(void) {
+void update_hero_target_tracking(void) {
     char *hero_control_mode_owner = (char *)hero_pos - 0x80;
     char *hero_animation_owner, *candidate_reference_hero_state, *target_selection_owner, *target_aim_owner, *aim_limit_hero_state;
     int i;
