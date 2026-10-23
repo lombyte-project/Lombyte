@@ -40,7 +40,9 @@ extern float FUN_001f9988_2c1928(float) __asm__("FUN_001f9988");
 extern float FUN_001f9dc8_2c1928(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2c1928(float) __asm__("FUN_001f9de0");
 
-void FUN_L00_002c1928(float *origin_position, OvlQuad *target_position, float *out, float gravity, float min_horizontal_distance, float max_range) {
+void compute_mine_launch_velocity(float *origin_position, OvlQuad *target_position, float *out, float gravity, float min_horizontal_distance, float max_range) __asm__("FUN_L00_002c1928");
+
+void compute_mine_launch_velocity(float *origin_position, OvlQuad *target_position, float *out, float gravity, float min_horizontal_distance, float max_range) {
     OvlQuad effective_target_position[1];
     float half = gravity * max_range * 0.5f;
     float effective_horizontal_distance, dz, launch_heading, launch_component_speed_squared, launch_component_speed;
