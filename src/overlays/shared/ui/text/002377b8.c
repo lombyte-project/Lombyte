@@ -1155,7 +1155,9 @@ extern s32 D_L00_0015F844 __attribute__((sda));
 extern s32 D_L00_0015F848 __attribute__((sda));
 extern char D_L00_0015F858[] __attribute__((section(".data")));
 extern char D_L00_0015F860[] __attribute__((section(".data")));
-int FUN_L00_00239df8(HudElem *hud_element)
+int draw_bolt_counter_hud_panel(HudElem *hud_element) __asm__("FUN_L00_00239df8");
+
+int draw_bolt_counter_hud_panel(HudElem *hud_element)
 {
     char bolt_display_text[16];
     s16 *frame;

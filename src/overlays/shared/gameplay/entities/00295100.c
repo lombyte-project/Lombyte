@@ -137,7 +137,7 @@ extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *,
                                   s32) __asm__("FUN_001ff308");
 extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
-extern void FUN_L00_00239df8(void);
+extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void FUN_L00_0028ecd8(void);
 extern void FUN_L00_00297e30_c(void) __asm__("FUN_L00_00297e30");
 extern void FUN_L00_0024e7a8(void);
@@ -238,7 +238,7 @@ void handle_pause_input(void) {
         s32 x;
         x = show_health_hud();
         hud_keep_visible(x, FUN_001f96f8_c(0xB4));
-        x = queue_animation_update(2, 0x754E, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility, FUN_L00_00239df8,
+        x = queue_animation_update(2, 0x754E, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility, draw_bolt_counter_hud_panel,
                                    &current_bolt_count, 9999999);
         hud_keep_visible(x, FUN_001f96f8_c(0xB4));
     }
@@ -1360,7 +1360,7 @@ extern void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8
 extern s32 add_text_29a6b0(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
-extern void FUN_L00_00239df8_29a6b0(void) __asm__("FUN_L00_00239df8");
+extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void FUN_L00_00235ea0_29a6b0(void) __asm__("FUN_L00_00235ea0");
 extern void FUN_L00_0023a7a8_29a6b0(void) __asm__("FUN_L00_0023a7a8");
@@ -1434,7 +1434,7 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
     vendor_29a6b0.scroll = (sel - half / 2) * 0x28;
     reset_hud_and_suspend_weapon_updates();
     vendor_29a6b0.title_text = add_text_29a6b0(0x12, 0x754E, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility,
-                                               FUN_L00_00239df8_29a6b0, &D_0015ED98_29a6b0, 0x98967F);
+                                               draw_bolt_counter_hud_panel, &D_0015ED98_29a6b0, 0x98967F);
     if (vendor_29a6b0.entries[vendor_29a6b0.cursor].selected == 1) {
         s32 item = vendor_29a6b0.entries[vendor_29a6b0.cursor].item;
 

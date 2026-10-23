@@ -2063,7 +2063,7 @@ extern void mark_moby_for_removal_c3(void *) __asm__("func_0020C828");
 extern void multiply_matrix_basis_columns(void *, void *, void *) __asm__("func_001FA328");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 float absolute_float(float input) __asm__("func_001F99C0");
-int FUN_L00_00239df8(HudElem *m);
+int draw_bolt_counter_hud_panel(HudElem *m) __asm__("FUN_L00_00239df8");
 void initialize_bolt_counter_hud(HudElem *e) __asm__("FUN_L00_00239cc8");
 void update_bolt_counter_hud_animation_and_visibility(void *o) __asm__("FUN_L00_00239d00");
 extern char D_0013F3D0[];

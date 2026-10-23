@@ -76,7 +76,7 @@ extern void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 extern void draw_hud_text_panel(void) __asm__("FUN_L00_00237200");
 extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
-extern void FUN_L00_00239df8(void);
+extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
 s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) __asm__("FUN_L00_00266448");
@@ -164,7 +164,7 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
 
         if (unpaid->cost_kind == 1 || unpaid->cost_kind == 6) {
             handle = queue_animation_update(2, 0x754E, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility,
-                                            FUN_L00_00239df8, &current_bolt_count, 9999999);
+                                            draw_bolt_counter_hud_panel, &current_bolt_count, 9999999);
             hud_keep_visible(handle, scale_game_frames(60));
         }
     }

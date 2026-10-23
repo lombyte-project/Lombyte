@@ -1077,7 +1077,7 @@ extern void *D_L00_0015FFDC_u __asm__("D_L00_0015FFDC");
 extern f32 D_0015ED6C;                       /* frame-rate scale */
 extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");          /* bolt counter HUD: init */
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");          /* update */
-extern void FUN_L00_00239df8(void);          /* draw */
+extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");          /* draw */
 extern void queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -1128,7 +1128,7 @@ void FUN_L00_002a6b70(struct Moby *bolt)
     level_bolts[current_level_index_b] += value;
 
     k = 0.7f;
-    queue_animation_update(2, 0x754E, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility, FUN_L00_00239df8,
+    queue_animation_update(2, 0x754E, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility, draw_bolt_counter_hud_panel,
                            &current_bolt_count, 9999999);
 
     /* two sparkles 10 units out along a random direction, spinning opposite ways */
