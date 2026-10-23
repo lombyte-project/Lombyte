@@ -2849,7 +2849,9 @@ typedef struct {
 extern int *D_L14_001B0BB0[];
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
-void FUN_L14_002b5c30(struct Moby *moby) {
+void initialize_minibomber_path_retrace(struct Moby *moby) __asm__("FUN_L14_002b5c30");
+
+void initialize_minibomber_path_retrace(struct Moby *moby) {
     Mover_5c30 *mover_vars = (Mover_5c30 *)moby->pvars;
     int *active_path;
     int penultimate_node_index;
