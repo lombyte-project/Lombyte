@@ -1866,7 +1866,7 @@ extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt(int*) __asm__("FUN_001f9740");
 extern void set_vector_length_xy(void*,void*,float) __asm__("FUN_001f9c48");
 extern void FUN_L00_00232640(int);
-extern void FUN_L00_002336e8(float*,float*,float);
+extern void offset_hero_position_against_gravity(float*,float*,float) __asm__("FUN_L00_002336e8");
 extern void moby_point_position(void*,int,void*) __asm__("FUN_L00_0024f7c8");
 extern void make_hit_descriptor(void*,void*,int,float,void*) __asm__("FUN_L00_00259888");
 extern void spawn_nearby_effect(void*,int,int,void*,void*,float) __asm__("FUN_L00_00259bc8");
@@ -2028,7 +2028,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
         if (wrench_hero()->state==20 && test_hero_animation_frame_window(27.0f)) {
             allocate_voice_for_target_entry_alt(2,0,(int)wrench_moby);
             qcopy(work.v[0],wrench_hero()->sweep_end); qcopy(work.v[1],work.v[0]);
-            FUN_L00_002336e8(work.v[0],work.v[0],0.7f); FUN_L00_002336e8(work.v[1],work.v[1],-0.9f);
+            offset_hero_position_against_gravity(work.v[0],work.v[0],0.7f); offset_hero_position_against_gravity(work.v[1],work.v[1],-0.9f);
             if (FUN_001efa68(work.v[0],work.v[1],2,0,0)) spawn_wrench_impact_effects((char*)wrench_moby);
         }
         if (active) {

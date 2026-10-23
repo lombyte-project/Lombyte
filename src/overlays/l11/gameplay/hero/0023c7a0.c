@@ -341,7 +341,7 @@ extern struct LevelTable_QS D_L11_00167680;
 #define Q D_L11_00167680
 extern void FUN_L00_00233ba0(void *, void *, f32);
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
-extern void FUN_L00_002336e8(void *, void *, f32);
+extern void offset_hero_position_against_gravity(void *, void *, f32) __asm__("FUN_L00_002336e8");
 extern void make_hit_descriptor(void *, struct MobyView *, s32, f32, void *) __asm__("FUN_L00_00259888");
 extern s32 collect_mobies_in_sphere(f32, void *, s32, struct MobyView *, void *) __asm__("FUN_L00_001f2868");
 extern f32 FUN_L00_0025bb38(s32, f32, f32);
@@ -1289,7 +1289,7 @@ void update_hero_motion_by_state(void) {
         t2 = scale_game_frames(14);
         if (hero.unkA9C == 0 && hero.anim_frame > 23.5f && hero.motion.displacement.f[2] < 0.0f && hero.air_frames.s != 0) {
             qcopy(&vector_and_hit_descriptor_head_scratch, &hero.motion.pos);
-            FUN_L00_002336e8(&vector_and_hit_descriptor_head_scratch, &vector_and_hit_descriptor_head_scratch, -0.5f);
+            offset_hero_position_against_gravity(&vector_and_hit_descriptor_head_scratch, &vector_and_hit_descriptor_head_scratch, -0.5f);
             matrix_and_vector_scratch[0].f[0] = fast_cos(hero.motion.rot.f[2]) * 2.0f;
             matrix_and_vector_scratch[0].f[1] = fast_sin(hero.motion.rot.f[2]) * 2.0f;
             matrix_and_vector_scratch[0].f[2] = 0.0f;

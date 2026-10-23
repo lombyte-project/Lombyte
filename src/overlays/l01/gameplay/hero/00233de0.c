@@ -481,7 +481,7 @@ extern void FUN_L00_00217368(int, int);
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_002334d0(float *, float *, float);
-extern void FUN_L00_002336e8(float *, float *, float);
+extern void offset_hero_position_against_gravity(float *, float *, float) __asm__("FUN_L00_002336e8");
 extern void FUN_L00_00233810_cf(void *, void *, float) __asm__("FUN_L00_00233708");
 extern void FUN_L00_002338d0(float *, float *);
 extern void FUN_L00_00233b20(float *, float *, float);
@@ -1251,7 +1251,7 @@ void update_hero_motion_for_current_state(void) {
             hero.air_frames.s != 0) {
 
             qcopy(vec[0], hero.motion.pos.f);
-            FUN_L00_002336e8(vec[0], vec[0], -0.5f);
+            offset_hero_position_against_gravity(vec[0], vec[0], -0.5f);
             vec[4][0] = FUN_L00_0020a1e0_cf(hero.motion.rot.f[2]) * 2.0f;
             vec[4][1] = FUN_L00_002121c0_cf(hero.motion.rot.f[2]) * 2.0f;
             vec[4][2] = 0.0f;

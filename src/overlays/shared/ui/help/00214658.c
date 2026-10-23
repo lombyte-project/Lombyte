@@ -1019,7 +1019,7 @@ void stop_hero_motion_without_forward_support(float velocity_scale, float planar
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217AF0), where it is exact; names translated to the US level program. */
 
 extern int *D_L00_00177F00[];
-extern void FUN_L00_002336e8(float *dst, float *src, float h);
+extern void offset_hero_position_against_gravity(float *dst, float *src, float h) __asm__("FUN_L00_002336e8");
 extern void FUN_L00_002a7e20(void *, int);
 
 void FUN_L00_00217368(int voice_target, int entry_count) {
@@ -1036,7 +1036,7 @@ void FUN_L00_00217368(int voice_target, int entry_count) {
             if (entry_type == 5 || entry_type == 9) {
                 float v[4] __attribute__((aligned(16)));
                 qcopy(v, (char *)D_L00_00177F00[i] + 0x10);
-                FUN_L00_002336e8(v, v, 0.5f);
+                offset_hero_position_against_gravity(v, v, 0.5f);
                 FUN_L00_002a7e20(v, 4);
             }
         }

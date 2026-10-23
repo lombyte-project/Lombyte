@@ -943,8 +943,8 @@ void FUN_L00_00233660(float *out, float x, float y, float z) {
 }
 void FUN_L00_002334d0_002336e8(float) __asm__("FUN_L00_002334d0");
 /* Calls FUN_L00_002334d0 with -x. */
-void FUN_L00_002336e8(float x);
-void FUN_L00_002336e8(float x) {
+void offset_hero_position_against_gravity(float x) __asm__("FUN_L00_002336e8");
+void offset_hero_position_against_gravity(float x) {
     FUN_L00_002334d0_002336e8(-x);
 }
 typedef unsigned int u128_00233708 __attribute__((mode(TI), aligned(16)));
