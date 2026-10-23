@@ -1574,7 +1574,9 @@ extern s32 D_L14_001D8210[];
  * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002AFF90), where it is exact; names translated to the US level
  * program. */
-void FUN_L14_002aed50(u8 *moby) {
+void update_blarg_heavy_interceptor_light_ring_alpha(u8 *moby) __asm__("FUN_L14_002aed50");
+
+void update_blarg_heavy_interceptor_light_ring_alpha(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
     s32 step;
     s32 i;
