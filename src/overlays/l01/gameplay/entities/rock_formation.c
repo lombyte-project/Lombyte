@@ -613,7 +613,9 @@ extern Effect D_L01_0017C8C0;
 extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 
 extern MobyList fx_cutscene __asm__("D_L01_0016CCE0");
-void FUN_L01_002fac80(void) {
+void apply_cutscene_big_head_cheat(void) __asm__("FUN_L01_002fac80");
+
+void apply_cutscene_big_head_cheat(void) {
     s32 i;
 
     if (cutscene_mode == 2 && big_head_cheat_enabled != 0) {
@@ -699,7 +701,7 @@ extern Lv_2FC140 D_L01_001BB9C0_2FC140 __asm__("D_L01_001BB6B0");
 extern char D_L01_001BAAA0[] __asm__("D_L01_001BAAA0");
 extern unsigned char D_0014C050_u[] __asm__("D_0014C050");
 extern unsigned char alternate_item_available[] __asm__("D_0013D388");
-extern void func_L01_002FC058_2FC140(void) __asm__("FUN_L01_002fac80");
+extern void apply_cutscene_big_head_cheat(void) __asm__("FUN_L01_002fac80");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9770");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -747,7 +749,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
     float fd;
 
     data = moby->data;
-    func_L01_002FC058_2FC140();
+    apply_cutscene_big_head_cheat();
     fast_dec_timer(&data->timer);
     switch (moby->state) {
     case AGNOGG_SHIP_INITIALIZE:
