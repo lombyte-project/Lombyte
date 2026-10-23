@@ -320,7 +320,9 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 
-int FUN_L06_002fb2a8(char *moby) {
+int update_alien_queen_intro_camera(char *moby) __asm__("FUN_L06_002fb2a8");
+
+int update_alien_queen_intro_camera(char *moby) {
     float output_position[4], output_rotation[4], moby_offset_position[4], hero_offset_position[4];
     char *data;
     char *pos;
