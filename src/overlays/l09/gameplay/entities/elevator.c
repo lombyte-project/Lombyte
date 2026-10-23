@@ -467,7 +467,9 @@ extern char *D_L09_0015FFE4;
 extern float FUN_001f9b48(void *, void *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
-char *FUN_L09_003041d0(char *self, char *search_position, int bone) {
+char *find_nearby_chain_attachment(char *self, char *search_position, int bone) __asm__("FUN_L09_003041d0");
+
+char *find_nearby_chain_attachment(char *self, char *search_position, int bone) {
     char *best = 0;
     float bestd = 1000000000.0f;
     char query_position[16];
@@ -536,7 +538,7 @@ typedef struct {
     unsigned char b39;
 } Flags_305710;
 
-char *FUN_L09_003041d0(char *self, char *pos, int bone);
+char *find_nearby_chain_attachment(char *self, char *pos, int bone) __asm__("FUN_L09_003041d0");
 extern Moby *D_L09_0015FFD8;
 extern char D_0013D388[];
 extern char D_L09_00209050[];
@@ -739,7 +741,7 @@ case 0:
         }
         if (*(int *)(data + 0x60) == -1) {
             FUN_L00_0024f7c8(moby, 0, work);
-            link = (unsigned char *)FUN_L09_003041d0((char *)moby, (char *)work, -1);
+            link = (unsigned char *)find_nearby_chain_attachment((char *)moby, (char *)work, -1);
             if (link != 0) {
                 *(int *)(data + 0x60) = ((char *)link - (char *)moby_list) >> 8;
             } else {
@@ -748,7 +750,7 @@ case 0:
         }
         if (*(int *)(data + 0x64) == -1) {
             *(OvlQuad *)work = *(OvlQuad *)(moby + 0x10);
-            link = (unsigned char *)FUN_L09_003041d0((char *)moby, (char *)work, 0);
+            link = (unsigned char *)find_nearby_chain_attachment((char *)moby, (char *)work, 0);
             if (link != 0) {
                 *(int *)(data + 0x64) = ((char *)link - (char *)moby_list) >> 8;
             } else {
