@@ -992,7 +992,7 @@ extern f32 D_L06_001C4430[];
 extern void FUN_L01_00234358(f32);
 extern void FUN_L00_002091d8(f32, f32, f32);
 extern void update_hero_airborne_planar_velocity(void) __asm__("FUN_L06_0022b438");
-extern void FUN_L00_0020d2f8(void *);
+extern void compute_hero_fixed_offset_world_position(void *) __asm__("FUN_L00_0020d2f8");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern void spawn_color_decaying_effect_particle(void *, void *, s32) __asm__("FUN_L00_0026d598");
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);

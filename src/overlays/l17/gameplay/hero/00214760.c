@@ -278,7 +278,7 @@ extern f32 D_L17_001C45B0[];
 extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 extern void FUN_L00_002091d8(f32, f32, f32);
 extern void FUN_L00_00214658(void);
-extern void FUN_L00_0020d2f8(void *);
+extern void compute_hero_fixed_offset_world_position(void *) __asm__("FUN_L00_0020d2f8");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern void spawn_color_decaying_effect_particle(void *, void *, s32) __asm__("FUN_L00_0026d598");
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
@@ -2060,7 +2060,7 @@ void update_hero_motion_for_current_state(void) {
     case 0x74: {
         s32 idx;
         s32 n;
-        FUN_L00_0020d2f8(&scratch_vector);
+        compute_hero_fixed_offset_world_position(&scratch_vector);
         if (((struct MobyView *)hero.moby)->b53 == 0x66) {
             FUN_L00_00216e48(0, (struct MobyView *)hero.moby, 0);
             if (D_L17_0015F5CC & 1) {

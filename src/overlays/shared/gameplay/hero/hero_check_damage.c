@@ -299,7 +299,9 @@ void find_grind_rail(void) {
 
 extern void FUN_L00_00233660(float *, float, float, float);
 
-void FUN_L00_0020d2f8(float *out) {
+void compute_hero_fixed_offset_world_position(float *out) __asm__("FUN_L00_0020d2f8");
+
+void compute_hero_fixed_offset_world_position(float *out) {
     FUN_L00_00233660(out, 0.3f, 0.0f, 1.34f);
 }
 typedef unsigned int u128_20d330 __attribute__((mode(TI), aligned(16)));

@@ -323,7 +323,7 @@ extern f32 D_L03_001C3DB0[];
 extern void air_accel(f32) __asm__("FUN_L01_00234358");
 extern void FUN_L00_002091d8(f32, f32, f32);
 extern void FUN_L02_00223450(void);
-extern void FUN_L00_0020d2f8(void *);
+extern void compute_hero_fixed_offset_world_position(void *) __asm__("FUN_L00_0020d2f8");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern void spawn_color_decaying_effect_particle(void *, void *, s32) __asm__("FUN_L00_0026d598");
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
@@ -1644,7 +1644,7 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_FOLLOW_PATH: {
         s32 idx;
         s32 n;
-        FUN_L00_0020d2f8(&spatial_scratch_or_hit_descriptor);
+        compute_hero_fixed_offset_world_position(&spatial_scratch_or_hit_descriptor);
         if (MV(hero.moby)->b53 == 0x66) {
             FUN_L00_00216e48(0, MV(hero.moby), 0);
             if (D_L03_0015F5CC & 1) {
