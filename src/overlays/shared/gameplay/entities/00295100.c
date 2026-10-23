@@ -654,7 +654,7 @@ extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern s32 FUN_002168a8(s32);
 extern void FUN_00204790(void);
-extern void FUN_L00_002451b8(s32);
+extern void start_cutscene_chunk_read(s32) __asm__("FUN_L00_002451b8");
 extern void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -729,7 +729,7 @@ void update_cutscene_playback(void) {
             FUN_002168a8(1);
             D_L00_0016C860.f3C++;
             FUN_00204790();
-            FUN_L00_002451b8(D_L00_0016C860.f3C + 1);
+            start_cutscene_chunk_read(D_L00_0016C860.f3C + 1);
         }
         last = apply_cutscene_camera_key();
         for (i = 0; i < D_L00_0016C860.h44; i++) {

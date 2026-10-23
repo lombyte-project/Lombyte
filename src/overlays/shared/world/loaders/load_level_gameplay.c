@@ -2099,8 +2099,8 @@ extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 
 /* streams entry i of the current sector list into the loader buffer */
-s32 FUN_L00_002451b8(s32 i);
-s32 FUN_L00_002451b8(s32 i) {
+s32 start_cutscene_chunk_read(s32 i) __asm__("FUN_L00_002451b8");
+s32 start_cutscene_chunk_read(s32 i) {
     u8 *buf = D_L00_0016C860.buf;
     s32 start;
     s32 size;
