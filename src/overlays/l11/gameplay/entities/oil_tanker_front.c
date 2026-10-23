@@ -1188,7 +1188,9 @@ extern int func_001FA898_r_q(float) __asm__("FUN_001fa6d0");
 
 extern short D_L11_00162384 __attribute__((sda));
 extern short D_L11_00162380 __attribute__((sda));
-void FUN_L11_00319028(struct Moby *moby) {
+void spawn_energy_sphere_particles(struct Moby *moby) __asm__("FUN_L11_00319028");
+
+void spawn_energy_sphere_particles(struct Moby *moby) {
     float effect_position[4];
     float position_step[4];
     char *data = (char *)moby->pvars;
