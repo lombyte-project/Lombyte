@@ -1231,7 +1231,9 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 unsigned long get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
 
-void FUN_L14_002b3a20(char *m) {
+void draw_plasmabot_glow_quad(char *m) __asm__("FUN_L14_002b3a20");
+
+void draw_plasmabot_glow_quad(char *m) {
     float glow_position[4];
     Pk_2af4a0 pk;
     float camera_displacement[4];
