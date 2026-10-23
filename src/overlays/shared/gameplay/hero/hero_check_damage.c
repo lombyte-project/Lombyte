@@ -1542,7 +1542,7 @@ extern void FUN_0025d330_f580(void *, void *) __asm__("FUN_00214598");
 extern void FUN_001ff3c0_f580(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void *FUN_0024e838_f580(s32) __asm__("FUN_0020c4f8");
 extern void FUN_0024f728_f580(void *, s32, void *) __asm__("FUN_0020cca8");
-extern void FUN_00207d00_f580(void) __asm__("FUN_L00_00207d00");
+extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 extern s32 FUN_001fef20_f580(s32) __asm__("FUN_001f96f8");
 extern f32 FUN_00200240_f580(s32) __asm__("FUN_001fa6c0");
 extern f32 FUN_001ff800_f580(f32) __asm__("FUN_001f9de0");
@@ -1673,7 +1673,7 @@ after_moby:
                         if (((*(u16 *)(effect + 0x34) ^ 1) & 1) != 0) {
                             FUN_0024f728_f580(moby, 6, source);
                             *(u128 *)((u8 *)&hero + 0x1d80) = *(u128 *)(source + 0x30);
-                            FUN_00207d00_f580();
+                            enqueue_hero_glow_draw_callback_once();
                             *(u128 *)(effect + 0x10) = *(u128 *)(source + 0x30);
                             FUN_001ffcd8_f580(effect + 0xc0, source);
                             FUN_00250df8_f580(effect);

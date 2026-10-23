@@ -71,7 +71,7 @@ extern unsigned int fast_tween_color(float, unsigned int, unsigned int);
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
-extern void FUN_L00_00207d00(void);
+extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
 extern void FUN_L00_00208b60(void);
 extern void hero_update(void) __asm__("FUN_L00_00211670");
@@ -151,7 +151,7 @@ void FUN_L01_00228000(void) {
             packed |= red;
             *(unsigned int *)((char *)&hero + 0x22E4) = packed;
         }
-        FUN_L00_00207d00();
+        enqueue_hero_glow_draw_callback_once();
         hero.unk22E0 = 0;
         if (hero.vehicle_mode == 3) {
             int pending = hero.pending_item[0];

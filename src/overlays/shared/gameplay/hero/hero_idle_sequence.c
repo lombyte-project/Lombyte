@@ -648,7 +648,7 @@ extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
 extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
-extern void FUN_L00_00207d00(void);
+extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 extern void FUN_L00_00208b60(void);
 extern void FUN_L00_002484e0(void *);
 extern void FUN_L00_00257024(int);
@@ -740,7 +740,7 @@ void update_hero_in_vehicle_mode(void) {
             if ((*(u16 *)(*(char **)(g + 0x2080) + 0x34) ^ 1) & 1) {
                 FUN_L00_0024f7c8(*(char **)(g + 0x2080), 7, scratch.rotation);
                 qcopy(g + 0x1d80, &scratch.rotation[0]);
-                FUN_L00_00207d00();
+                enqueue_hero_glow_draw_callback_once();
                 if (*(char **)(g + 0x1624) != 0) {
                     build_moby_bone_transform(*(char **)(g + 0x2080), 7, scratch.help.transform);
                     qcopy_nc(*(char **)(g + 0x1624) + 0x10, &scratch.help.transform[3]);
@@ -839,7 +839,7 @@ void update_hero_in_vehicle_mode(void) {
             FUN_L00_0024f7c8(*(char **)(g + 0x2080), 6, scratch.rotation);
             /* Retail uses &hero.motion.pos + 0x1d00, hence hero + 0x1d80. */
             qcopy(g + 0x1d80, &scratch.rotation[0]);
-            FUN_L00_00207d00();
+            enqueue_hero_glow_draw_callback_once();
         }
     }
     if (hero.vehicle_mode == 3) {
@@ -891,7 +891,7 @@ void update_hero_in_vehicle_mode(void) {
             if (*(s16 *)(g + 0x22de))
                 alpha = FUN_L00_00200250(FUN_L00_00200240(*(s16 *)(g + 0x22de)) / FUN_L00_00200240(0x12) * (f32)alpha);
             *(u32 *)(g + 0x22e4) = (alpha << 24) | ((u32)blue << 16) | ((u32)green << 8) | (u32)red;
-            FUN_L00_00207d00();
+            enqueue_hero_glow_draw_callback_once();
             *(s16 *)(g + 0x22e0) = 0;
             if (*(u8 *)(g + 0x20a4) == 3) {
                 if (*(s32 *)(g + 0x20b8) != 0 && *(s32 *)(g + 0x20b8) != 0x1f) {
@@ -1526,7 +1526,7 @@ extern void FUN_L00_00207d40_u(void) __asm__("FUN_L00_00207d40");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 /* Once (flag at ((char *)&hero)+0x1EB2) queues FUN_L00_00207d40 with the object at +0x2080. */
-void FUN_L00_00207d00(void) {
+void enqueue_hero_glow_draw_callback_once(void) {
     struct Hero *hero_state = &hero;
     if (hero_state->unk1EB2 == 0) {
         hero_state->unk1EB2 = 1;
@@ -1630,7 +1630,7 @@ typedef struct {
     short n;
 } G_00208038;
 extern G_00208038 D_0013F350_00208038 __asm__("D_0013F350");
-void FUN_L00_00207d00_00208038(void) __asm__("FUN_L00_00207d00");
+void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 /* Appends v, b, x and y to the list in ((char *)&hero) and calls FUN_L00_00207d00. */
 void FUN_L00_00208038(u128 *glow_position, int b, float x, float y) {
     G_00208038 *hero_glow_queue_owner = &D_0013F350_00208038;
@@ -1640,7 +1640,7 @@ void FUN_L00_00208038(u128 *glow_position, int b, float x, float y) {
     hero_glow_queue_owner->b[n] = b;
     hero_glow_queue_owner->x[hero_glow_queue_owner->n] = x;
     hero_glow_queue_owner->y[hero_glow_queue_owner->n] = y;
-    FUN_L00_00207d00_00208038();
+    enqueue_hero_glow_draw_callback_once();
     hero_glow_queue_owner->n++;
 }
 #include "rnc/gameplay/entities/moby.h"

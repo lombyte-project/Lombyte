@@ -80,7 +80,7 @@ extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
 extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
-extern void FUN_L00_00207d00(void);
+extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 extern void FUN_L00_00208b60(void);
 extern void FUN_L00_002484e0(void *);
 extern void FUN_L00_00257024(int);
@@ -172,7 +172,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
             if ((*(u16 *)(*(char **)(g + 0x2080) + 0x34) ^ 1) & 1) {
                 FUN_L00_0024f7c8(*(char **)(g + 0x2080), 7, scratch.rotation);
                 qcopy(g + 0x1d80, &scratch.rotation[0]);
-                FUN_L00_00207d00();
+                enqueue_hero_glow_draw_callback_once();
                 if (*(char **)(g + 0x1624) != 0) {
                     build_moby_bone_transform(*(char **)(g + 0x2080), 7, scratch.help.transform);
                     qcopy_nc(*(char **)(g + 0x1624) + 0x10, &scratch.help.transform[3]);
@@ -312,7 +312,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
             if (*(s16 *)(g + 0x22de))
                 alpha = truncate_float_to_s32(convert_integer_to_float(*(s16 *)(g + 0x22de)) / convert_integer_to_float(0x12) * (f32)alpha);
             *(u32 *)(g + 0x22e4) = (alpha << 24) | ((u32)blue << 16) | ((u32)green << 8) | (u32)red;
-            FUN_L00_00207d00();
+            enqueue_hero_glow_draw_callback_once();
             *(s16 *)(g + 0x22e0) = 0;
             if (*(u8 *)(g + 0x20a4) == 3) {
                 if (*(s32 *)(g + 0x20b8) != 0 && *(s32 *)(g + 0x20b8) != 0x1f) {

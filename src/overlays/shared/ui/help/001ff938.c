@@ -28,7 +28,7 @@ extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_00205
 extern void update_hero_bone_attachment(void) __asm__("FUN_L00_002061f0");
 extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
-extern void FUN_L00_00207d00(void);
+extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
 extern void FUN_L00_00208b60(void);
 extern void hero_update(void) __asm__("FUN_L00_00211670");
@@ -75,7 +75,7 @@ void FUN_L15_001ff938(void) {
         if (((*(unsigned short *)(hero_moby + 0x34) ^ 1) & 1) != 0) {
             moby_point_position(hero_moby, 6, copy);
             qcopy(hero0 + 0x1D80, copy);
-            FUN_L00_00207d00();
+            enqueue_hero_glow_draw_callback_once();
         }
         }
     }
@@ -123,7 +123,7 @@ void FUN_L15_001ff938(void) {
         if (*(short *)(hero4 + 0x22DE) != 0)
             alpha = truncate_float_to_s32((convert_integer_to_float(*(short *)(hero4 + 0x22DE)) / convert_integer_to_float(0x12)) * (float)alpha);
         *(unsigned int *)(hero4 + 0x22E4) = (alpha << 24) | (blue << 16) | (green << 8) | red;
-        FUN_L00_00207d00();
+        enqueue_hero_glow_draw_callback_once();
         *(short *)(hero4 + 0x22E0) = 0;
         if (hero4[0x20A4] == 3) {
             int pending = ((struct Hero *)hero4)->pending_item[0];
