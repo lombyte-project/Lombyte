@@ -732,7 +732,9 @@ typedef struct {
 extern S_2fa6d8 D_L02_00167600_2fa6d8 __asm__("D_L02_00167600");
 extern void apply_camera_offset_effect(void) __asm__("FUN_L02_002fa710");
 
-void FUN_L02_002fa6d8(void) {
+void initialize_camera_offset_effect_state(void) __asm__("FUN_L02_002fa6d8");
+
+void initialize_camera_offset_effect_state(void) {
     D_L02_00167600_2fa6d8.a = 0;
     D_L02_00167600_2fa6d8.b = 0;
     D_L02_00167600_2fa6d8.c = 10000.0f;

@@ -1140,7 +1140,7 @@ extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_002730e0(void *, void *, int, int, int, int, float);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-void FUN_L02_002fa6d8(void);
+void initialize_camera_offset_effect_state(void) __asm__("FUN_L02_002fa6d8");
 void try_select_camera_offset_effect_moby(char *m) __asm__("FUN_L02_002fa7c8");
 extern unsigned char D_0014171B_x[] __asm__("D_0015ED84");
 extern void func_L02_002FBB10_c(char *) __asm__("FUN_L02_002fa6d8");
