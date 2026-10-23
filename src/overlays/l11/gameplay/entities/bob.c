@@ -1554,7 +1554,9 @@ void FUN_L11_002f2d58(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F43B0), where it is exact; names translated to the US level program. */
 
-void FUN_L11_002f3040(struct Moby *moby) {
+void restore_teleporter_visibility_and_collision(struct Moby *moby) __asm__("FUN_L11_002f3040");
+
+void restore_teleporter_visibility_and_collision(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char **child = (char **)(data + 0x14);
     int count;
