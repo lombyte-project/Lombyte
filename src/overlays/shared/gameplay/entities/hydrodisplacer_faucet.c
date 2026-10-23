@@ -97,7 +97,9 @@ void FUN_L05_002f4f60(int index, int trigger_arg, int inside) {
 extern int *D_L05_001ABCC0[];
 extern void FUN_L05_002f4f60(int, int, int);
 
-void FUN_L05_002f5190(int unused_trigger_moby, int trigger_vars_arg, int i, int inside) {
+void apply_spatial_trigger_to_moby_list(int unused_trigger_moby, int trigger_vars_arg, int i, int inside) __asm__("FUN_L05_002f5190");
+
+void apply_spatial_trigger_to_moby_list(int unused_trigger_moby, int trigger_vars_arg, int i, int inside) {
     unsigned short *moby_index_entry = (unsigned short *)D_L05_001ABCC0[i];
     if (moby_index_entry != 0) {
         do {
