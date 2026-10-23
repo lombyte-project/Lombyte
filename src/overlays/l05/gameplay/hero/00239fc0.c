@@ -346,7 +346,7 @@ typedef union {
 } V_2133a8;
 extern void vzero_2133a8(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_002347c0(void);
-extern void FUN_L00_00233660(void *, f32, f32, f32);
+extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00233810(void *, void *, f32);
 extern void FUN_L00_002334d0(void *, void *, f32);
 extern void vadd_2133a8(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -378,7 +378,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     }
     if (hero.state.control_mode != 0x11) {
         if (hero.state.control_mode == 0x16) {
-            FUN_L00_00233660(&collision_query_offset, 0.0f, 0.0f, 0.7f);
+            transform_hero_local_offset_to_world(&collision_query_offset, 0.0f, 0.0f, 0.7f);
             vsub_2133a8(&collision_query_offset, &collision_query_offset, &hero.motion.pos.q);
         } else if (hero.unk20B3 != 0 || hero.unk1F8 != 0) {
             if (hero.unk20B3 == 1 || hero.unk1F8 != 0 ||

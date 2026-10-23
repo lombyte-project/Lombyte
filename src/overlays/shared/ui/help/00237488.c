@@ -420,7 +420,7 @@ extern int probe_hero_forward_collision(float, float, float *) __asm__("FUN_L00_
 extern float FUN_L00_0022e0f0(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
-extern void FUN_L00_0025c9d8(float *, float, float, float) __asm__("FUN_L00_00233660");
+extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern int FUN_L00_0021e8d8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float FUN_L00_0022e138(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_L00_0021f9c8(float, void *, int, int) __asm__("FUN_L00_001f0d60");
@@ -461,14 +461,14 @@ void update_hero_movement_and_collision_probes(void) {
         hero.unk260 = 0;
         hero.unk258 = 0.0f;
         if (hero.grounded_frames) {
-            FUN_L00_0025c9d8(start, 1.1f, 0.0f, 1.0f);
-            FUN_L00_0025c9d8(end, 1.1f, 0.0f, -20.0f);
+            transform_hero_local_offset_to_world(start, 1.1f, 0.0f, 1.0f);
+            transform_hero_local_offset_to_world(end, 1.1f, 0.0f, -20.0f);
             if (end[2] < 0.5f) end[2] = 0.5f;
             distance = 20.0f;
             hit = FUN_L00_0021e8d8(start, end, 2, hero.moby, 0);
             if (!hit || (distance = FUN_L00_0022e138(start, D_L05_00174260), distance > 3.0f)) {
                 for (offset = -0.4f; offset < 0.5f; offset += 0.1f) {
-                    FUN_L00_0025c9d8(probe, 1.1f + offset, 0.0f, 0.0f);
+                    transform_hero_local_offset_to_world(probe, 1.1f + offset, 0.0f, 0.0f);
                     if (!FUN_L00_0021f9c8(hero.unk234, probe, 2, 0)) {
                         hero.unk260 = 1;
                         if (!hit) hero.unk258 = 20.0f;
@@ -1713,7 +1713,7 @@ int FUN_L05_00255208(void) {
     int state;
     int can_fall;
     if (frame_time * 12.0f < player->motion.unk164) {
-        FUN_L00_0025c9d8(start, 0.0f, 0.0f, 0.75f);
+        transform_hero_local_offset_to_world(start, 0.0f, 0.0f, 0.75f);
         qcopy(end, start);
         qcopy(velocity, &player->motion.velocity);
         fast_vec_normalize(velocity, velocity, 0.55f);

@@ -261,7 +261,7 @@ extern void FUN_L00_00233708(void *, void *, f32);
 extern void FUN_L00_00233810(void *, void *, f32);
 extern s32 collision_line(void *, void *, s32, struct MobyView *, s32) __asm__("FUN_001efa68");
 extern void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340");
-extern void FUN_L00_00233660(void *, f32, f32, f32);
+extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern void spawn_nearby_effect(s32, struct MobyView *, s32, void *, void *, f32) __asm__("FUN_L00_00259bc8");
 extern s32 D_L18_00178900[];
@@ -2237,7 +2237,7 @@ void update_hero_motion_for_current_state(void) {
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP && scale_game_frames(8) < hero.state_timer && hero.anim_frame < 28.0f) {
             s32 n;
-            FUN_L00_00233660(&general_vector_or_hit_descriptor_scratch, 0.8f, 0.0f, 0.3f);
+            transform_hero_local_offset_to_world(&general_vector_or_hit_descriptor_scratch, 0.8f, 0.0f, 0.3f);
             n = collect_mobies_in_sphere(0.9f, &general_vector_or_hit_descriptor_scratch, 0, (struct MobyView *)hero.moby, NULL);
             if (n != 0) {
                 s32 i;

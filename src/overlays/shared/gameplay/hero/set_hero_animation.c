@@ -931,8 +931,8 @@ void FUN_L00_002335c8(float *out, float radius, float angle, float z) {
 
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 /* Builds (x, y, z), transforms it by the hero matrix at 0 and adds the hero position. */
-void FUN_L00_00233660(float *out, float x, float y, float z);
-void FUN_L00_00233660(float *out, float x, float y, float z) {
+void transform_hero_local_offset_to_world(float *out, float x, float y, float z) __asm__("FUN_L00_00233660");
+void transform_hero_local_offset_to_world(float *out, float x, float y, float z) {
     struct Hero *base;
 
     clear_u64_value(out);

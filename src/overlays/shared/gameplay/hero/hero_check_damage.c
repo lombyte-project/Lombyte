@@ -297,12 +297,12 @@ void find_grind_rail(void) {
    (func_L00_00233EE0). */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020D990), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00233660(float *, float, float, float);
+extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
 
 void compute_hero_fixed_offset_world_position(float *out) __asm__("FUN_L00_0020d2f8");
 
 void compute_hero_fixed_offset_world_position(float *out) {
-    FUN_L00_00233660(out, 0.3f, 0.0f, 1.34f);
+    transform_hero_local_offset_to_world(out, 0.3f, 0.0f, 1.34f);
 }
 typedef unsigned int u128_20d330 __attribute__((mode(TI), aligned(16)));
 #include "qcopy.h"

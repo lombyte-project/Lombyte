@@ -2902,7 +2902,7 @@ extern int D_L00_0015F6B0 __asm__("D_L00_0015F5CC");
 extern int FUN_001efa68_ac98(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int suck_get_aim_height(char *) __asm__("FUN_002141f8");
 extern unsigned char hero_pos[] __asm__("D_0013F3D0") NOT_SDA;
-extern void FUN_L00_00233660(float *, float, float, float);
+extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
 float absolute_float(float input) __asm__("FUN_001f99c0");
 void FUN_L00_0020a1e0(float a, float b);
 void FUN_L00_0020a228(float a, float b);
@@ -2973,7 +2973,7 @@ void update_hero_target_tracking(void) {
     target_aim_owner = (char *)hero_pos - 0x80;
     if (*(int *)(target_aim_owner + 0x2274) == 0)
         return;
-    FUN_L00_00233660(aim_position_scratch, 0.0f, 0.0f, 1.2f);
+    transform_hero_local_offset_to_world(aim_position_scratch, 0.0f, 0.0f, 1.2f);
     secondary_position = (char *)&aim_position_scratch[4];
     qcopy(secondary_position, *(char **)(target_aim_owner + 0x2274) + 0x10);
     aim_position_scratch[6] += 0.5f;
@@ -2986,7 +2986,7 @@ void update_hero_target_tracking(void) {
     info2 = (char *)suck_get_aim_height(selected_moby);
     if (info2 != 0)
         aim_position_scratch[2] += (float)*(unsigned char *)(info2 + 0x3A) * 0.125f;
-    FUN_L00_00233660(&aim_position_scratch[4], 0.3f, 0.0f, 0.85f);
+    transform_hero_local_offset_to_world(&aim_position_scratch[4], 0.3f, 0.0f, 0.85f);
     yaw_delta = fast_subtract_rotations(FUN_001f9e90_c(aim_position_scratch[0] - aim_position_scratch[4], aim_position_scratch[1] - aim_position_scratch[5]), *(float *)(target_aim_owner + 0x98));
     pitch = FUN_001f9e90_c(vector_distance(aim_position_scratch, secondary_position), aim_position_scratch[6] - aim_position_scratch[2]);
     if (yaw_delta > 1.02974427f)

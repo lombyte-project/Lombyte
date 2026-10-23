@@ -15,7 +15,7 @@ extern s32 probe_hero_forward_collision(f32 *, f32, f32) __asm__("FUN_L00_0020a2
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
 extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
-extern void FUN_L00_00233660(Vec4 *, f32, f32, f32);
+extern void transform_hero_local_offset_to_world(Vec4 *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern int collision_line(void *from, void *to, int mask, void *ignore, int) __asm__("FUN_001efa68");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 coll_sphere(f32, Vec4 *, s32, s32) __asm__("FUN_L00_001f0d60");
@@ -53,8 +53,8 @@ void update_hero_motion_and_collision_probes(void) {
         hero.unk258 = 0.0f;
         if (hero.grounded_frames != 0) {
             base = hero.unk258;
-            FUN_L00_00233660(&first, 1.1f, base, 1.0f);
-            FUN_L00_00233660(&second, 1.1f, base, -20.0f);
+            transform_hero_local_offset_to_world(&first, 1.1f, base, 1.0f);
+            transform_hero_local_offset_to_world(&second, 1.1f, base, -20.0f);
             if (second.f[2] < 0.5f) {
                 second.f[2] = 0.5f;
             }
@@ -71,7 +71,7 @@ void update_hero_motion_and_collision_probes(void) {
                already hold them (base is known to be the 0.0f just stored),
                which gives retail's two mov.s before the loop. */
             for (probe_local_x_offset = -0.4f; probe_local_x_offset < 0.5f; probe_local_x_offset += 0.1f) {
-                FUN_L00_00233660(&probe, probe_local_x_offset + 1.1f, 0.0f, 0.0f);
+                transform_hero_local_offset_to_world(&probe, probe_local_x_offset + 1.1f, 0.0f, 0.0f);
                 if (!coll_sphere(hero.unk234, &probe, 2, 0)) {
                     hero.unk260 = 1;
                     if (hit == 0) {

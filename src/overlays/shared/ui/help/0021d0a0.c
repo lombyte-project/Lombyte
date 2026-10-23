@@ -660,7 +660,7 @@ extern void FUN_001f9a10_2348d0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a68_2348d0(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 FUN_001f9af0_2348d0(void *) __asm__("FUN_001f9af0");
 extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_00221b68");
-extern void FUN_L00_00233660_2348d0(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
+extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00211250_2348d0(void) __asm__("FUN_L00_00211250");
 
 extern Entry70_2348d0 D_L06_0017A070[];
@@ -771,11 +771,11 @@ void update_hero_timers_and_spatial_state(void) {
 skip:
     update_hero_planar_distance_spring_motion();
     if (hero.vehicle_mode == 1) {
-        FUN_L00_00233660_2348d0(&hero.motion.unkD0, 0.0f, 0.0f, 0.4f);
+        transform_hero_local_offset_to_world(&hero.motion.unkD0, 0.0f, 0.0f, 0.4f);
         hero.reach_distance = 2.125f;
         hero.reach_height = 1.25f;
     } else {
-        FUN_L00_00233660_2348d0(&hero.motion.unkD0, 0.0f, 0.0f, 0.7f);
+        transform_hero_local_offset_to_world(&hero.motion.unkD0, 0.0f, 0.0f, 0.7f);
         if (D_0013D4E2_lui) {
             hero.reach_distance = 12.0f;
             hero.reach_height = 4.5f;

@@ -775,7 +775,7 @@ extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
 extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
 extern void FUN_L00_00233ba0(float *, float *, float);
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
-extern void FUN_L00_0025e3b8_cf(float *, float, float, float) __asm__("FUN_L00_00233660");
+extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern void FUN_L00_0025f730(void *, float);
 extern void initialize_moby_transform_history(int, void *) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(void *, int, int) __asm__("FUN_L00_00262528");
@@ -2133,7 +2133,7 @@ void update_hero_state_motion(void) {
             if (hero.anim_frame < 28.0f) {
                 int n;
 
-                FUN_L00_0025e3b8_cf(vec[0], 0.8f, 0.0f, 0.3f);
+                transform_hero_local_offset_to_world(vec[0], 0.8f, 0.0f, 0.3f);
                 n = collect_mobies_in_sphere(0.9f, vec[0], 0, ((Moby *)hero.moby), 0);
                 if (n != 0) {
                     int i;

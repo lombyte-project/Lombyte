@@ -1615,7 +1615,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_0023e738(void *v, float a, float b_0023e738, float c, float d, float e);
 struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Moby *other, f32 vx, f32 vy, f32 height, f32 speed);
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
-void FUN_L00_00233660(float *out, float x, float y, float z);
+void transform_hero_local_offset_to_world(float *out, float x, float y, float z) __asm__("FUN_L00_00233660");
 void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 extern unsigned char item_usage[] __asm__("D_00141680");
 extern char player_camera[] __asm__("D_L00_00166C80");
@@ -1779,7 +1779,7 @@ void blaster_update(struct Moby *moby) {
                 work.spawn.b18 = 1;
                 work.spawn.b19 = 1;
                 work.spawn.cls = (*(unsigned short *)&moby->oclass);
-                FUN_L00_00233660(&inverse, 0.7f, -0.15f, 0.5f);
+                transform_hero_local_offset_to_world(&inverse, 0.7f, -0.15f, 0.5f);
                 collect_mobies_in_sphere(&inverse, 0.42f, 5, hero.moby, &work.spawn);
                 FUN_L00_002caf70_49a8(hero.moby, yaw, pitch, base_yaw, base_pitch, &launch, target);
                 data->glow = scale_game_frames(15);

@@ -1107,7 +1107,7 @@ typedef struct {
 
 extern f32 player_camera[] __asm__("D_L00_00166C80");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
-extern void FUN_L00_00233660(void *, f32, f32, f32);
+extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern float FUN_001f9e90_c2(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_L00_00216de8_c(int, int) __asm__("FUN_L00_00216de8");
@@ -1150,7 +1150,7 @@ void launch_hero_wrench(void) {
             tpv = (ThrowPvars_217658 *)target->pvars;
             if (tpv->unk7E) {
                 has_target = 1;
-                FUN_L00_00233660(aim_origin_or_euler_angles, 0.5f, 0.0f, 0.5f);
+                transform_hero_local_offset_to_world(aim_origin_or_euler_angles, 0.5f, 0.0f, 0.5f);
                 fast_vec_sub(delta, tpv->unk50, aim_origin_or_euler_angles);
                 hero.aim_yaw = FUN_001f9e90_c2(delta[0], delta[1]);
                 hero.aim_pitch = FUN_001f9e90_c2(vector_length_xy(delta), delta[2]);
