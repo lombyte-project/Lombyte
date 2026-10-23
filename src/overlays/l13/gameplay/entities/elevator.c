@@ -674,7 +674,9 @@ extern void FUN_L00_00250df8(struct Moby *moby);
 extern void FUN_L00_0025d1b8(struct Moby *moby);
 
 /* spawns a class 0x24 child that copies its parent's position and scale */
-struct Moby *FUN_L13_002b4958(struct Moby *parent) {
+struct Moby *spawn_blarg_turret_child(struct Moby *parent) __asm__("FUN_L13_002b4958");
+
+struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
     struct Moby *child_moby;
     Vars *child_vars;
 
