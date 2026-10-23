@@ -792,7 +792,9 @@ extern short D_L02_0016238C;
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L02_002fa7c8(char *candidate_moby) {
+void try_select_camera_offset_effect_moby(char *candidate_moby) __asm__("FUN_L02_002fa7c8");
+
+void try_select_camera_offset_effect_moby(char *candidate_moby) {
     float candidate_displacement[4];
     char *g = D_L02_00167280_c;
     char *selection_reference = *(char **)(g + 0x180);

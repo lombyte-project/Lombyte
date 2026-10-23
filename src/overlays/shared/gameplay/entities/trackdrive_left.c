@@ -1137,10 +1137,10 @@ extern void FUN_L00_002730e0(void *, void *, int, int, int, int, float);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_L02_002fa6d8(void);
-void FUN_L02_002fa7c8(char *m);
+void try_select_camera_offset_effect_moby(char *m) __asm__("FUN_L02_002fa7c8");
 extern unsigned char D_0014171B_x[] __asm__("D_0015ED84");
 extern void func_L02_002FBB10_c(char *) __asm__("FUN_L02_002fa6d8");
-extern void func_L02_002FBC00_c(char *) __asm__("FUN_L02_002fa7c8");
+extern void try_select_camera_offset_effect_moby(char *) __asm__("FUN_L02_002fa7c8");
 extern float func_L00_0025CE58_f(float *, float, float *, float, float,
                                  float) __asm__("FUN_L00_0025be00");
 
@@ -1197,7 +1197,7 @@ void swingshot_versatarget_update(char *moby) {
         {
             struct Hero *hero_reference = &hero;
             if (hero_reference->state.current != 0x2C)
-                func_L02_002FBC00_c(moby);
+                try_select_camera_offset_effect_moby(moby);
         }
         break;
     case VERSATARGET_STATE_INACTIVE:
