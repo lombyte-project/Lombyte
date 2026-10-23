@@ -265,7 +265,9 @@ typedef struct {
     Level16VendorVectorData_u *data;
 } Level16VendorVectorMoby_u;
 
-void FUN_L16_002cf9d0(Level16VendorVectorMoby_u *moby, int index, void *out) {
+void copy_hoverboard_dummy_path_node(Level16VendorVectorMoby_u *moby, int index, void *out) __asm__("FUN_L16_002cf9d0");
+
+void copy_hoverboard_dummy_path_node(Level16VendorVectorMoby_u *moby, int index, void *out) {
     qcopy(out, moby->data->vectors + index * 16 + 16);
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D1310), where it is exact; names translated to the US level program. */
@@ -2121,7 +2123,7 @@ extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-void FUN_L16_002cf9d0(Level16VendorVectorMoby_u *moby, int index, void *out);
+void copy_hoverboard_dummy_path_node(Level16VendorVectorMoby_u *moby, int index, void *out) __asm__("FUN_L16_002cf9d0");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
 /* Patrol step: advances the moby's path node until the next node is ahead and far enough, switching between the base path and its branches. */
@@ -2133,13 +2135,13 @@ void advance_hoverboard_dummy_path_node(char *patrol_moby) {
     float target[4];
     float heading, distance;
 
-    FUN_L16_002cf9d0((Level16VendorVectorMoby_c *)moby, patrol_data->node, target);
+    copy_hoverboard_dummy_path_node((Level16VendorVectorMoby_c *)moby, patrol_data->node, target);
     heading = fast_arc_tan(target[0] - moby->position[0], target[1] - moby->position[1]);
     for (;;) {
         L16PatrolPath *path;
         L16PatrolPath *base;
 
-        FUN_L16_002cf9d0((Level16VendorVectorMoby_c *)moby, patrol_data->node, target);
+        copy_hoverboard_dummy_path_node((Level16VendorVectorMoby_c *)moby, patrol_data->node, target);
         distance = vector_distance_xy(target, patrol_data->position);
         if ((fast_difference_between_rotations(heading, moby->yaw) < 1.5707964f || distance > 4.0f) && distance > 2.0f) {
             break;
@@ -2162,7 +2164,7 @@ void advance_hoverboard_dummy_path_node(char *patrol_moby) {
             patrol_data->node = 0;
         }
         /* The same two statements as before the loop, written out again: the compiler merges the copies. */
-        FUN_L16_002cf9d0((Level16VendorVectorMoby_c *)moby, patrol_data->node, target);
+        copy_hoverboard_dummy_path_node((Level16VendorVectorMoby_c *)moby, patrol_data->node, target);
         heading = fast_arc_tan(target[0] - moby->position[0], target[1] - moby->position[1]);
     }
 }
