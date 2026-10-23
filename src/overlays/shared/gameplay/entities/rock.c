@@ -1707,7 +1707,7 @@ extern void show_teleporter_and_children(char *) __asm__("FUN_L01_00309838");
 extern void FUN_L01_003097e8_c(L01Moby *) __asm__("FUN_L01_003097e8");
 extern void update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
 extern void try_set_teleporter_help_message(char *) __asm__("FUN_L01_00309430");
-extern void FUN_L01_003094f0_u(char *) __asm__("FUN_L01_003094f0");
+extern void draw_moby_radius_ring(char *) __asm__("FUN_L01_003094f0");
 extern void set_moby_list_state(char *, int) __asm__("FUN_L01_0026e0e0");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void request_hero_target_pose(float *, int, float) __asm__("FUN_L00_00233ee8");
@@ -1863,7 +1863,7 @@ void teleporter_update(struct Moby *moby) {
     }
     case TELEPORTER_TRANSFER_TO_DESTINATION:
         if (*(float *)(data + 0x34) != 0.0f) {
-            enqueue_callback_list_1(FUN_L01_003094f0_u, moby);
+            enqueue_callback_list_1(draw_moby_radius_ring, moby);
             approach_value((float *)(data + 0x34), 0.0f, frame_time * 4.0f);
         } else {
             char *destination_moby = D_L01_0015FFD8 + (*(int *)data << 8);
@@ -1895,7 +1895,7 @@ void teleporter_update(struct Moby *moby) {
     case TELEPORTER_RETURN_TO_IDLE:
     case TELEPORTER_EFFECT_CYCLE_RETURN_TO_IDLE:
         if (*(float *)(data + 0x34) < 1.95f) {
-            enqueue_callback_list_1(FUN_L01_003094f0_u, moby);
+            enqueue_callback_list_1(draw_moby_radius_ring, moby);
             approach_value((float *)(data + 0x34), 1.95f, frame_time * 4.0f);
         } else if (0.0f < *(float *)(data + 0x24)) {
             advance_accelerated_scalar((float *)(data + 0x24), (float *)(data + 0x28), 0.0f,
@@ -2006,7 +2006,7 @@ extern float D_L01_00161FD0 __attribute__((sda));
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 
-void FUN_L01_003094f0(char *moby) {
+void draw_moby_radius_ring(char *moby) {
     Quad_30a8c8 quad;
     float rotation_matrix[12];
     float moby_position_snapshot[4];
