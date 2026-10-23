@@ -438,7 +438,7 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
-extern void FUN_L00_00259508(void *, void *, void *, int, float);
+extern void predict_position_with_vertical_drop(void *, void *, void *, int, float) __asm__("FUN_L00_00259508");
 extern char *FUN_L00_002603d0(char *);
 extern u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 extern s32 coll2_2d090(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
@@ -483,7 +483,7 @@ void update_hero_ledge_probe(void)
     frames = scale_game_frames(2);
     step = 0.25f;
     top_margin = 0.15f;
-    FUN_L00_00259508(&probe, &hero.motion.pos, &hero.motion.unk110, frames, launch_scale);
+    predict_position_with_vertical_drop(&probe, &hero.motion.pos, &hero.motion.unk110, frames, launch_scale);
     found = 0;
     i = 0;
     probe.f[0] += fast_cos(hero.motion.rot.f[2]) * hero.unk234;
