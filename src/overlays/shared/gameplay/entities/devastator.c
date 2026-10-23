@@ -2020,7 +2020,9 @@ void FUN_L00_002b57f0_u() __asm__("FUN_L00_002b57f0");
 void clear_jet_camera_mode_latch() __asm__("FUN_L00_00203b78");
 void mark_moby_for_removal() __asm__("FUN_0020c828");
 /* Clears the moby state word 4 and the 0x14 handle, calls release helpers, marks a for removal. */
-void FUN_L00_002b5b20(void *missile_moby, char **missile_vars) {
+void terminate_visibomb_missile(void *missile_moby, char **missile_vars) __asm__("FUN_L00_002b5b20");
+
+void terminate_visibomb_missile(void *missile_moby, char **missile_vars) {
     char *x = *(char **)(*missile_vars + 0x78);
     if (x)
         *(int *)(x + 4) = 0;

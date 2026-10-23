@@ -1210,7 +1210,7 @@ extern s32 absolute_float_cf(void *, void *, s32) __asm__("FUN_L00_00259740");
 extern s32 FUN_00214720_302648(void *, s32) __asm__("FUN_00214720");
 extern void FUN_001f4600_302648(void (*)(char *), void *) __asm__("FUN_001f4600");
 extern void FUN_L01_00302438_302648(char *) __asm__("FUN_L01_00302438");
-extern void FUN_L00_002b5b20_302648(struct Moby *, void *) __asm__("FUN_L00_002b5b20");
+extern void terminate_visibomb_missile(struct Moby *, void *) __asm__("FUN_L00_002b5b20");
 
 extern s32 D_L01_0015F30C __attribute__((sda));
 /* While the camera is in mode 0x1D, counts the frames the class 0xAC moby spends outside every zone.
@@ -1258,7 +1258,7 @@ void update_target_outside_zone_timeout(struct Moby *moby) {
             FUN_001f4600_302648(FUN_L01_00302438_302648, moby);
         }
         if (scale_game_frames(90) < zone_vars->count) {
-            FUN_L00_002b5b20_302648(target_moby, target_moby->pvars);
+            terminate_visibomb_missile(target_moby, target_moby->pvars);
         }
     }
 }
