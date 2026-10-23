@@ -333,7 +333,9 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int D_L07_00173ED8 __attribute__((section(".data")));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
-int FUN_L07_0030f4d0(void *moby, int id, float scale) {
+int test_sharkigator_target_sphere_collision(void *moby, int id, float scale) __asm__("FUN_L07_0030f4d0");
+
+int test_sharkigator_target_sphere_collision(void *moby, int id, float scale) {
     char collision_center[16];
     moby_point_position(moby, 0, collision_center);
     if (coll_sphere(scale, collision_center, 0x21, moby) && D_L07_00173ED8 == id) {
@@ -2735,7 +2737,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L07_0030ed30_c(char *moby, char *data) __asm__("FUN_L07_0030ed30");
 int FUN_L07_0030f1e0_c(char *moby, char *obj, float a, float lo, float up, float hi, float down, float vmax, float vmin) __asm__("FUN_L07_0030f1e0");
-int FUN_L07_0030f4d0_c(void *moby, int id, float scale) __asm__("FUN_L07_0030f4d0");
+int test_sharkigator_target_sphere_collision(void *moby, int id, float scale) __asm__("FUN_L07_0030f4d0");
 int FUN_L07_0030f540_c(unsigned char *moby, int lower, int upper) __asm__("FUN_L07_0030f540");
 void FUN_L00_002a3ec8_c(void *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount) __asm__("FUN_L00_002a3ec8");
 void FUN_L07_0030e998_c(char *m, char *x, float *hp) __asm__("FUN_L07_0030e998");
@@ -2895,7 +2897,7 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = 4;
         }
         if (target.moby != 0 && target.moby == *(int *)&D_001413D0 &&
-            FUN_L07_0030f4d0_c(moby, target.moby, 1.5f)) {
+            test_sharkigator_target_sphere_collision(moby, target.moby, 1.5f)) {
             if (moby[0x53] != 2) {
                 blend_moby_animation(moby, 2, 0, 2);
             }
@@ -2954,7 +2956,7 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = 1;
         }
         if (target.moby != 0 && target.moby == *(int *)&D_001413D0 &&
-            FUN_L07_0030f4d0_c(moby, target.moby, 1.5f)) {
+            test_sharkigator_target_sphere_collision(moby, target.moby, 1.5f)) {
             if (moby[0x53] != 2) {
                 blend_moby_animation(moby, 2, 0, 2);
             }
