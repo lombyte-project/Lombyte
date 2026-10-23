@@ -2239,7 +2239,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int FUN_L00_002dc9f0_2d4610(void *, void *) __asm__("FUN_L00_002dc9f0");
 extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
 extern float approach_angle(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
-extern float FUN_L00_002d54c8_2d4610(unsigned char *m, float *t, float vel) __asm__("FUN_L00_002d54c8");
+extern float move_horny_toad_toward_position(unsigned char *m, float *t, float vel) __asm__("FUN_L00_002d54c8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_00261630_2d4610(char *moby, char *d, float a, float b) __asm__("FUN_L00_00261630");
@@ -2352,7 +2352,7 @@ void horny_toad_update(Moby *moby) {
         break;
     }
     case HORNY_TOAD_MOVE_TO_PATH_POINT:
-        if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, toad_paths[data->path]->pts[data->path_point], 0.5f) < 1.0f) {
+        if (move_horny_toad_toward_position((unsigned char *)moby, toad_paths[data->path]->pts[data->path_point], 0.5f) < 1.0f) {
             moby->state = 1;
             if (moby->prev_seq != 2) FUN_00212f90_2d4610(moby, 2, 0, scale_game_frames(10));
         }
@@ -2365,7 +2365,7 @@ void horny_toad_update(Moby *moby) {
         break;
     case HORNY_TOAD_FOLLOW_PATH: {
         ToadPath *path = toad_paths[data->path];
-        if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, path->pts[data->path_point], 0.5f) < 1.0f) {
+        if (move_horny_toad_toward_position((unsigned char *)moby, path->pts[data->path_point], 0.5f) < 1.0f) {
             if (data->path_point < path->count - 1) {
                 data->path_point++;
             } else {
@@ -2392,7 +2392,7 @@ void horny_toad_update(Moby *moby) {
         }
         break;
     case HORNY_TOAD_APPROACH_AND_FACE_TARGET:
-        if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->unk180, 0.5f) < D_L00_00161980
+        if (move_horny_toad_toward_position((unsigned char *)moby, data->unk180, 0.5f) < D_L00_00161980
             && fast_difference_between_rotations(moby->rot.z, angle_atan2((*(ToadVec *)&target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&target->pos)[1] - (*(ToadVec *)&moby->pos)[1])) < 0.17453292f) {
             moby->state = 7;
             if (moby->prev_seq != 5) FUN_00212f90_2d4610(moby, 5, (int)D_L00_00161984, scale_game_frames(10));
@@ -2416,7 +2416,7 @@ void horny_toad_update(Moby *moby) {
         }
         break;
     case HORNY_TOAD_RETURN_HOME:
-        if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->home, 0.5f) < 1.5f) {
+        if (move_horny_toad_toward_position((unsigned char *)moby, data->home, 0.5f) < 1.5f) {
             moby->state = 5;
             if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, scale_game_frames(10));
         } else if (data->unk1C4 != 2) {
@@ -2436,7 +2436,7 @@ void horny_toad_update(Moby *moby) {
             }
         } else {
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(20));
-            FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->unk180, 0.5f);
+            move_horny_toad_toward_position((unsigned char *)moby, data->unk180, 0.5f);
         }
         if (moby->anim_flags & 2) {
             if (data->unk1C4 != 2) {
@@ -2607,7 +2607,7 @@ float FUN_001f9dc8_2d54c8(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_2d54c8(float) __asm__("FUN_001f9de0");
 void FUN_L00_00258830_2d54c8(void *, void *, int, float, float, float) __asm__("FUN_L00_00258830");
 
-float FUN_L00_002d54c8(unsigned char *moby, float *target_position, float vel) {
+float move_horny_toad_toward_position(unsigned char *moby, float *target_position, float vel) {
     float vec[4] __attribute__((aligned(16)));
     unsigned char *moby_vars;
     float desired_yaw, target_distance, z, movement_yaw, maximum_vertical_displacement, vertical_displacement;
