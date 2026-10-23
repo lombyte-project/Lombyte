@@ -1005,7 +1005,9 @@ int FUN_L00_002d8980(char *moby) {
     return collision_line(&raised_moby_position, &raised_target_position, 0x12, 0, 0) == 0;
 }
 /* False in modes 0, 1, 5, 12, and in modes 2 and 4 unless the state is 0x3C. */
-int FUN_L00_002d9f78(void) {
+int is_suck_cannon_suction_blocked_by_hero_state(void) __asm__("FUN_L00_002d9f78");
+
+int is_suck_cannon_suction_blocked_by_hero_state(void) {
     int suction_blocked = 1;
     switch (hero.state.control_mode) {
     case 0:
@@ -1425,7 +1427,7 @@ extern int collision_segment_hits(void *, void *, int, int, int) __asm__("FUN_00
 extern int allocate_voice_for_target_entry_alt(int,int,int) __asm__("FUN_0022da68");
 extern int queue_animation_update_alt(int,int,int,int,int,int,int) __asm__("FUN_001ff308");
 extern s32 D_0015EEA4;
-extern s32 FUN_L00_002d9f78(void);
+extern s32 is_suck_cannon_suction_blocked_by_hero_state(void) __asm__("FUN_L00_002d9f78");
 extern void transpose_rotation_matrix(void *,void *) __asm__("FUN_001fa2d8");
 extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
@@ -1515,7 +1517,7 @@ void suckcannon_update(SuckMoby *self) {
             break;
         }
         if ((suck_input.held & suck_hero.fire_buttons) && cannon->cooldown==0 && suck_hero.unk20A7==0 &&
-            suck_hero.unk20AC==0 && scale_game_frames_alt(15) < suck_hero.ready_frames && FUN_L00_002d9f78()==0) {
+            suck_hero.unk20AC==0 && scale_game_frames_alt(15) < suck_hero.ready_frames && is_suck_cannon_suction_blocked_by_hero_state()==0) {
             f_fun_l00_0020e4c8_227fa0();
             cannon->sound = allocate_voice_for_target_entry_alt(2,4,(int)self);
             cannon->cooldown = scale_game_frames_alt(10);
@@ -1529,7 +1531,7 @@ void suckcannon_update(SuckMoby *self) {
         break;
     case SUCKCANNON_STATE_SUCTION_STARTUP:
         if (self->anim_flags & 2) blend_moby_animation(self,3,0,scale_game_frames_alt(5));
-        if (FUN_L00_002d9f78()!=0 || suck_hero.unk20AC || suck_hero.unk20A7) {
+        if (is_suck_cannon_suction_blocked_by_hero_state()!=0 || suck_hero.unk20AC || suck_hero.unk20A7) {
             sound = cannon->sound;
             if (sound!=-1) {
                 SuckVoice *s=(SuckVoice *)(((char *)&D_0013E550))+sound;
@@ -1559,7 +1561,7 @@ void suckcannon_update(SuckMoby *self) {
             blend_moby_animation(self,3,0,scale_game_frames_alt(5));
         func_001F9908_r(&cannon->cooldown);
         if (!(suck_hero.sucking || (suck_hero.count < (suck_item_variant.gold==0?5:10) &&
-            FUN_L00_002d9f78()==0 && ((suck_input.held&suck_hero.fire_buttons) || cannon->cooldown) &&
+            is_suck_cannon_suction_blocked_by_hero_state()==0 && ((suck_input.held&suck_hero.fire_buttons) || cannon->cooldown) &&
             !suck_hero.unk20AC && !suck_hero.unk20A7))) {
             cancel_hero_item_animation();
             sound=cannon->sound;
