@@ -2899,7 +2899,9 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
-void FUN_L14_002b5d18(struct Moby *moby) {
+void initialize_minibomber_path_following(struct Moby *moby) __asm__("FUN_L14_002b5d18");
+
+void initialize_minibomber_path_following(struct Moby *moby) {
     float initial_spring_value = D_L14_00161540 * 1.5f;
     char *moby_vars = (char *)moby->pvars;
     char *active_path;
