@@ -1202,7 +1202,9 @@ void FUN_001f9d20_00233d30(void *, void *, void *) __asm__("FUN_001f9d20");
 f32 FUN_001f9b20_00233d30(void *) __asm__("FUN_001f9b20");
 f32 FUN_001f9e90_00233d30(f32, f32) __asm__("FUN_001f9e90");
 /* Returns 001f9e90 of v (or v in the 0x40 hero frame), chosen by hero byte 0x20B3. */
-f32 FUN_L00_00233d30(f32 *input_vector) {
+f32 compute_gravity_relative_vector_inclination(f32 *input_vector) __asm__("FUN_L00_00233d30");
+
+f32 compute_gravity_relative_vector_inclination(f32 *input_vector) {
     struct Hero *hero_base = &hero;
     V00233d30 gravity_frame_vector;
     f32 xy_length, z;

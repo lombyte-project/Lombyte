@@ -3132,7 +3132,7 @@ extern s32 FUN_L00_0020a240_20b5b8(s32, f32, f32) __asm__("FUN_L00_0020a240");
 extern void FUN_L00_002335c8_20b5b8(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 extern s32 FUN_001efa68_20b5b8(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
 extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
-extern f32 FUN_L00_00233d30_20b5b8(void *) __asm__("FUN_L00_00233d30");
+extern f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 extern f32 FUN_001fa688_20b5b8(f32, f32) __asm__("FUN_001fa688");
 extern f32 FUN_001f9b80_20b5b8(void *, void *) __asm__("FUN_001f9b80");
 
@@ -3202,7 +3202,7 @@ void probe_hero_airborne_wall_contact(void) {
         return;
     }
     pz = (u8 *)coll_hit_normal;
-    if (FUN_L00_00233d30_20b5b8(pz) < 1.3089969f) {
+    if (compute_gravity_relative_vector_inclination(pz) < 1.3089969f) {
         return;
     }
     transform_vector(&z, pz, k2->unk40);

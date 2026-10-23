@@ -965,7 +965,7 @@ void gravity_set_z(void *, void *, float) __asm__("FUN_L00_00233b20");
 void FUN_001f9a10_217118(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00233810_217118(void *, void *, float) __asm__("FUN_L00_00233810");
 int FUN_L00_001efc70_217118(void *, void *, int, void *, int) __asm__("FUN_L00_001efc70");
-float FUN_L00_00233d30_217118(void *) __asm__("FUN_L00_00233d30");
+float compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 void scale_hero_motion(float) __asm__("FUN_L00_00213de8");
 
 void stop_hero_motion_without_forward_support(float velocity_scale, float planar_length_threshold) __asm__("FUN_L00_00217118");
@@ -1009,7 +1009,7 @@ void stop_hero_motion_without_forward_support(float velocity_scale, float planar
     final_call_enabled = 1.0f;
     if (FUN_L00_001efc70_217118(collision_query_position, collision_query_second_position, 4, *(void **)(P + 0x2080), 0)) {
         collision_hit_data = coll_hit;
-        if (*(int *)(collision_hit_data + 0x1C) > 0 && FUN_L00_00233d30_217118(collision_hit_data + 0x40) <= 0.87266463f)
+        if (*(int *)(collision_hit_data + 0x1C) > 0 && compute_gravity_relative_vector_inclination(collision_hit_data + 0x40) <= 0.87266463f)
             final_call_enabled = 0.0f;
     }
     if (final_call_enabled != 0.0f)

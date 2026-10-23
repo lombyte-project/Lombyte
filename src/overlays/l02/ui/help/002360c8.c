@@ -22,7 +22,7 @@ extern void FUN_001f9a10_32b90(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9bf8_32b90(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void clip_negative_segment_endpoint_xyz(V4_32b90 *, void *) __asm__("FUN_L00_0025d238");
 extern s32 FUN_001efa68_32b90(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-extern f32 FUN_L00_00233d30_32b90(void *) __asm__("FUN_L00_00233d30");
+extern f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
 extern s32 solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 
@@ -52,7 +52,7 @@ f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_a
             clip_negative_segment_endpoint_xyz(&v, trajectory_position);
             qcopy(&v, &hero.motion.pos);
             if (FUN_001efa68_32b90(&v, trajectory_position, 0x324, 0, 0) != 0) {
-                if (FUN_L00_00233d30_32b90((f32 *)D_L02_00174480) <= 0.87266463f) {
+                if (compute_gravity_relative_vector_inclination((f32 *)D_L02_00174480) <= 0.87266463f) {
                     target_z = *(f32 *)(D_L02_00174480 - 0x18);
                 }
             }

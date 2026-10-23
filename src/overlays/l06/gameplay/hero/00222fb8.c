@@ -315,7 +315,7 @@ s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
-f32 FUN_L00_00233d30(void *);
+f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9ab0_c(void *, void *) __asm__("FUN_001f9ab0");
@@ -484,7 +484,7 @@ void update_hero_ground_contact(void) {
         hero_lui.ground_distance = fast_vec_dist((u8 *)&hero_lui + 0x80, ((u8 *)&hero_lui + 0x2A0));
         hero_lui.ground_moby = HH.moby;
         sceVu0Normalize((u8 *)&hero_lui + 0x270, (u8 *)&HH.normal_x);
-        hero_lui.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
+        hero_lui.ground_slope.f = compute_gravity_relative_vector_inclination((u8 *)&HH.normal_x);
         hero_lui.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
         subtract_vector_xyz(&ground_offset_or_angles, ((u8 *)&hero_lui + 0x2A0), (u8 *)&hero_lui + 0x80);
         if (0.0f < FUN_001f9ab0_c(&ground_offset_or_angles, (u8 *)&hero_lui + 0x270)) {
