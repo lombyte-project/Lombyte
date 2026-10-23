@@ -75,7 +75,7 @@ extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
-extern void FUN_L12_003064e8_c2(char *) __asm__("FUN_L12_003064e8");
+extern void update_planetbuster_maximus_detached_parts(char *) __asm__("FUN_L12_003064e8");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -350,7 +350,7 @@ void FUN_L12_003054b0(char *moby) {
         }
         }
     }
-    FUN_L12_003064e8_c2(moby);
+    update_planetbuster_maximus_detached_parts(moby);
     if (*(short *)(owner_data + 0x5FC) <= 0 && D_L12_00161F04_gp == 0) {
         D_L12_00161F24 = 1;
         moby[0x20] = 4;
@@ -412,7 +412,7 @@ extern float fast_add_rotations_c4(float, float) __asm__("func_001FA580");
 extern void FUN_L00_00250df8_c(void *) __asm__("FUN_L00_00250df8");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 
-void FUN_L12_003064e8(char *moby) {
+void update_planetbuster_maximus_detached_parts(char *moby) {
     int i;
     int vertical_step_decrement_offset;
     char *data = *(char **)(moby + 0x78);
@@ -581,7 +581,7 @@ extern void FUN_L00_002eaa30(void *);
 extern void FUN_L00_002eac18(int);
 extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");
 extern void FUN_L12_0027b370(char *, char *, int);
-extern void FUN_L12_003064e8_c(char *) __asm__("FUN_L12_003064e8");
+extern void update_planetbuster_maximus_detached_parts(char *) __asm__("FUN_L12_003064e8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
@@ -815,7 +815,7 @@ void planetbuster_maximus_part_update(char *moby) {
             for (i = 0; i < 18; i++) FUN_L12_00306350_c((struct Moby *)moby, i);
         }
         *(short *)(moby_data + 0x5FA) = *(short *)(moby_data + 0x5FA) + 1;
-        FUN_L12_003064e8_c(moby);
+        update_planetbuster_maximus_detached_parts(moby);
         break;
     }
     update_planetbuster_maximus_glow_color(moby);
