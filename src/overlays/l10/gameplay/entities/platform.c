@@ -1719,7 +1719,7 @@ extern char D_0013D388[];
 char D_L10_001DD160[] = "Moby Class %d Instance %d has no pVars!  May be in the art file.\n\tMobyDeleted\n";
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int FUN_L00_002591d0(int *, int, int, int);
-extern int FUN_L00_002592b8(int *, int, int, int);
+extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int FUN_L10_002d9000_c() __asm__("FUN_L10_002d9000");
 extern OvlQuad D_L10_00167240;
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
@@ -1766,7 +1766,7 @@ void lab_door_update(unsigned char *door_moby) {
                         flag = 1;
                         break;
                     }
-                } while (FUN_L00_002592b8(&it, it, 0, 0));
+                } while (get_next_moby_in_group(&it, it, 0, 0));
             }
         }
         hit = 0;

@@ -498,7 +498,7 @@ float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_00257b90(int lo, int hi);
 int FUN_L00_002591d0(char **out, int idx, int a, int b);
-int FUN_L00_002592b8(char **out, char *target, int a, int b);
+int get_next_moby_in_group(char **out, char *target, int a, int b) __asm__("FUN_L00_002592b8");
 int mine_fall(void *moby, void *motion) __asm__("FUN_L00_0025c698");
 int FUN_L12_002e2eb8_c(struct Moby *m, float speed) __asm__("FUN_L12_002e2eb8");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");

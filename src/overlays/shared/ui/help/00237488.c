@@ -1139,7 +1139,7 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 FUN_001fa6d0(f32);
 extern f32 FUN_001f9b48(void *, void *);
 extern s32 FUN_L00_002591d0(void **, s32, s32, s32);
-extern s32 FUN_L00_002592b8(void **, void *, s32, s32);
+extern s32 get_next_moby_in_group(void **, void *, s32, s32) __asm__("FUN_L00_002592b8");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern s32 D_L00_0015F5CC __asm__("D_L00_0015F5CC");
 extern s32 D_0013D4B8;
@@ -1178,7 +1178,7 @@ void process_hero_race_object_interactions(void) {
                             allocate_voice_for_target_entry(1, 0, hero.unk86C);
                     }
                 }
-                FUN_L00_002592b8((void **)&first, first, 0, 0);
+                get_next_moby_in_group((void **)&first, first, 0, 0);
             } while (first != 0);
         }
     }
@@ -1214,7 +1214,7 @@ void process_hero_race_object_interactions(void) {
                             }
                         }
                     }
-                    FUN_L00_002592b8((void **)&second, second, 0, 0);
+                    get_next_moby_in_group((void **)&second, second, 0, 0);
                 } while (second != 0);
             }
         }
@@ -1238,7 +1238,7 @@ void process_hero_race_object_interactions(void) {
                 *(s32 *)((u8 *)hero_ptr + 0x20B8) = 0x24;
                 weapon_ammo_counts[36]++;
             }
-            FUN_L00_002592b8((void **)&third, third, 0, 0);
+            get_next_moby_in_group((void **)&third, third, 0, 0);
         }
     }
 }

@@ -1289,7 +1289,7 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int FUN_L00_002591d0(int *, int, int, int);
-extern int FUN_L00_002592b8(int *, int, int, int);
+extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int FUN_L01_00275690(char *, float);
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int resolve_path_node_index(void *, int) __asm__("FUN_L01_0028b828");
@@ -1357,7 +1357,7 @@ void red_ship_1_update(char *moby) {
         if (item == moby) {
             goto test;
             for (;;) {
-                FUN_L00_002592b8((int *)&item, (int)item, 0, 0);
+                get_next_moby_in_group((int *)&item, (int)item, 0, 0);
             test:
                 if (item == 0) {
                     break;
@@ -1373,7 +1373,7 @@ void red_ship_1_update(char *moby) {
                     group_member_data = *(char **)(item + 0x78);
                     item[0x20] = 3;
                     *(short *)(group_member_data + 0x12C) = scale_game_frames(5);
-                    FUN_L00_002592b8((int *)&item, (int)item, 0, 0);
+                    get_next_moby_in_group((int *)&item, (int)item, 0, 0);
                 }
             }
         }
@@ -1982,7 +1982,7 @@ void update_robot_dog_hit_reaction(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8160), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002591d0(int *, int, int, int);
-extern int FUN_L00_002592b8(int *, int, int, int);
+extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int FUN_L03_002c5b78_c(unsigned char *) __asm__("FUN_L03_002c5b78");
 extern int FUN_L03_002c5b78_c_002c6d58(unsigned char *) __asm__("FUN_L03_002c6d58");
 
@@ -1994,7 +1994,7 @@ int is_point_inside_clip_volume_cf(int id) {
     while (item != 0) {
         if (FUN_L03_002c5b78_c_002c6d58(item)) return 1;
         if (FUN_L03_002c5b78_c(item)) return 1;
-        FUN_L00_002592b8((int *)&item, (int)item, 0, 0);
+        get_next_moby_in_group((int *)&item, (int)item, 0, 0);
     }
 absent:
     return 0;

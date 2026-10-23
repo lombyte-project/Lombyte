@@ -2342,7 +2342,7 @@ int process_linked_switch_damage(struct Moby *moby, char *moby_data, float *heal
     return result;
 }
 extern void FUN_L00_002591d0(char **, int, int, int);
-extern void FUN_L00_002592b8(char **, char *, int, int);
+extern void get_next_moby_in_group(char **, char *, int, int) __asm__("FUN_L00_002592b8");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int fast_dec_timer_s16(short *) __asm__("FUN_001f9770");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -2406,7 +2406,7 @@ void update_linked_switch_group(char *moby) {
                     other_data->unk79 = 1;
                 }
                 data->unk7B++;
-                FUN_L00_002592b8(iter, iter[0], 0, 0);
+                get_next_moby_in_group(iter, iter[0], 0, 0);
             }
         }
         data->unk70 = 0;

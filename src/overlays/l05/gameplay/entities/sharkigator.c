@@ -14,7 +14,7 @@
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8190), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002591d0(int *, int, int, int);
-extern int FUN_L00_002592b8(int *, int, int, int);
+extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 void draw_group_moby_glow_quads(unsigned char *moby) __asm__("FUN_L05_002d6f48");
@@ -36,7 +36,7 @@ void draw_group_moby_glow_quads(unsigned char *moby) {
                 }
             }
         }
-        FUN_L00_002592b8((int *)&it, (int)it, 0, 0);
+        get_next_moby_in_group((int *)&it, (int)it, 0, 0);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8AD8), where it is exact; names translated to the US level program. */

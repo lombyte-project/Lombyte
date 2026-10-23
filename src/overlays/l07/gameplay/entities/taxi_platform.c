@@ -1040,7 +1040,7 @@ extern char D_L07_002115D0[];
 extern float fast_vec_dist(void *, void *);
 extern int debug_print() __asm__("FUN_001e93b0");
 extern int FUN_L00_002591d0(int *, int, int, int);
-extern int FUN_L00_002592b8(int *, int, int, int);
+extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int sample_path(void *path, void *pos, int *segment, float *distance, float step, int loop) __asm__("FUN_L00_0025d808");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);
@@ -1164,7 +1164,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
             qcopy((void *)(follower + 0x70), position);
             ((FollowerSegmentView *)follower)->segment = first;
             ((FollowerSegmentView *)follower)->next_segment = first + 1;
-            if (FUN_L00_002592b8(&current, current, 1, 0)) {
+            if (get_next_moby_in_group(&current, current, 1, 0)) {
                 int child_count = *(int *)(data + 0x78);
                 if (placed < child_count - 1) {
                     debug_print(D_L07_00211580, placed + 1, *(int *)(data + 0x74), child_count);
@@ -1209,7 +1209,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
                         reset_moby_from_class_defaults((struct Moby *)cursor);
                 }
             }
-            FUN_L00_002592b8(&cursor, cursor, 1, 0);
+            get_next_moby_in_group(&cursor, cursor, 1, 0);
         }
         break;
     }
@@ -2684,7 +2684,7 @@ void handle_sharkigator_contact_attack(char *moby, char *moby_data, int state, i
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00310920), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002591d0(int *, int, int, int);
-extern int FUN_L00_002592b8(int *, int, int, int);
+extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 
 int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper) __asm__("FUN_L07_0030f540");
 
@@ -2701,7 +2701,7 @@ int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper)
                         }
                     }
                 }
-                if (FUN_L00_002592b8((int *)&other, (int)other, 0, 0)) break;
+                if (get_next_moby_in_group((int *)&other, (int)other, 0, 0)) break;
             } while (other);
         }
     }

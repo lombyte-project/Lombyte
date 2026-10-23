@@ -3026,7 +3026,7 @@ extern void *D_L01_00160770;
 extern f32 FUN_001fa6c0(s32);
 extern s32 FUN_L01_00275690(struct Moby *, f32);
 extern s32 FUN_L00_002591d0(struct Moby **, s32, s32, s32);
-extern s32 FUN_L00_002592b8(struct Moby **, struct Moby *, s32, s32);
+extern s32 get_next_moby_in_group(struct Moby **, struct Moby *, s32, s32) __asm__("FUN_L00_002592b8");
 extern s32 FUN_001f96f8(s32);
 extern s32 FUN_L00_0028d8c0(struct Moby *, s32);
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
@@ -3098,7 +3098,7 @@ void gunship_follow_path(struct Moby *m) {
         if (it == m) {
             goto check;
             do {
-                FUN_L00_002592b8(&it, it, 0, 0);
+                get_next_moby_in_group(&it, it, 0, 0);
             check:
                 if (it == 0)
                     goto done;
@@ -3112,7 +3112,7 @@ void gunship_follow_path(struct Moby *m) {
                     bad = 3;
                     it->state = bad;
                     iv->unk11C = FUN_001f96f8(5);
-                    FUN_L00_002592b8(&it, it, 0, 0);
+                    get_next_moby_in_group(&it, it, 0, 0);
                 }
             }
         }

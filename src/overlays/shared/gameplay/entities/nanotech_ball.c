@@ -3288,7 +3288,7 @@ void FUN_L00_002df1e0(O_2df1e0 *p) {
     }
 }
 int FUN_L00_002591d0(void *, s32, s32, s32);
-int FUN_L00_002592b8(void *, s32, s32, s32);
+int get_next_moby_in_group(void *, s32, s32, s32) __asm__("FUN_L00_002592b8");
 void draw_offset_textured_effect_quad(void *, void *, f32, f32) __asm__("FUN_L00_00263618");
 void FUN_L00_002df3d8(u8 *reference_moby) {
     u8 *it[2] __attribute__((aligned(16)));
@@ -3305,7 +3305,7 @@ void FUN_L00_002df3d8(u8 *reference_moby) {
                 draw_offset_textured_effect_quad(candidate_moby + 0x10, moby_data[1], quad_scale, 0.5f);
             }
         }
-        FUN_L00_002592b8(it, it[0], 0, 0);
+        get_next_moby_in_group(it, it[0], 0, 0);
     }
 }
 extern s32 D_L00_0015F5CC;

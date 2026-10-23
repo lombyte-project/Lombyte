@@ -2405,7 +2405,7 @@ void assign_gadgebot_attack_targets(void) {
 }
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int FUN_L00_002591d0(int *, int, int, int);
-extern int FUN_L00_002592b8(int *, int, int, int);
+extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int D_L06_001AC180[];
 
 void select_nearest_gadgebot_interaction_target(void *moby_arg) {
@@ -2434,7 +2434,7 @@ void select_nearest_gadgebot_interaction_target(void *moby_arg) {
                     }
                 }
             }
-            FUN_L00_002592b8(&list, list, 0, 0);
+            get_next_moby_in_group(&list, list, 0, 0);
         }
     } else {
         cursor = D_L06_001AC180;
@@ -2602,7 +2602,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
     return 0;
 }
 extern int FUN_L00_002591d0_c(int *, int, int, int) __asm__("FUN_L00_002591d0");
-extern int FUN_L00_002592b8_c(int *, int, int, int) __asm__("FUN_L00_002592b8");
+extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int FUN_L06_002f2c28_c(char *, char *, int, int, int *) __asm__("FUN_L06_002f2c28");
 extern int D_L06_001AC180[];
 
@@ -2629,7 +2629,7 @@ int FUN_L06_002f32f0(char *moby, int flag)
         FUN_L00_002591d0_c(&iter.list, list_id, 0, 0);
         while (iter.list != 0) {
             if (FUN_L06_002f2c28_c(moby, state, iter.list, flag, &iter.out)) return iter.out;
-            FUN_L00_002592b8_c(&iter.list, iter.list, 0, 0);
+            get_next_moby_in_group(&iter.list, iter.list, 0, 0);
         }
     } else {
         cursor = D_L06_001AC180;
@@ -2745,7 +2745,7 @@ void FUN_L06_002f3640(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F4C00), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002591d0(int *, int, int, int);
-extern int FUN_L00_002592b8(int *, int, int, int);
+extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern unsigned char D_0015EEB0[] __asm__("D_0015EDB0") MACRO_ADDR;
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
@@ -2769,7 +2769,7 @@ void FUN_L06_002f37d0(char *owner) {
                 }
             }
         }
-        FUN_L00_002592b8(&list, list, 0, 0);
+        get_next_moby_in_group(&list, list, 0, 0);
     }
 }
 extern float add_angle(f32, f32) __asm__("FUN_001fa580");

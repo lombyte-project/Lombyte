@@ -7,7 +7,7 @@
 /* Walks the moby list matching this moby's id and pulses each match's data slots while it is bright. */
 
 extern int FUN_L00_002591d0(int *, int, int, int);
-extern int FUN_L00_002592b8(int *, int, int, int);
+extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 void draw_matching_moby_slot_quads(char *self) __asm__("FUN_L02_002ecc68");
@@ -29,6 +29,6 @@ void draw_matching_moby_slot_quads(char *self) {
                 }
             }
         }
-        FUN_L00_002592b8((int *)&current_moby, (int)current_moby, 0, 0);
+        get_next_moby_in_group((int *)&current_moby, (int)current_moby, 0, 0);
     }
 }

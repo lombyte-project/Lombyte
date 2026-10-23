@@ -2974,7 +2974,7 @@ extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("F
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int FUN_L00_001fefc8(void *);
 extern int FUN_L00_002591d0(struct Moby **, int, int, int);
-extern int FUN_L00_002592b8(struct Moby **, struct Moby *, int, int);
+extern int get_next_moby_in_group(struct Moby **, struct Moby *, int, int) __asm__("FUN_L00_002592b8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 
 void crate_update(struct Moby *moby) __asm__("FUN_L00_002cf218");
@@ -3233,7 +3233,7 @@ void crate_update(struct Moby *moby) {
                     break;
                 }
             }
-            FUN_L00_002592b8(&it, it, 0, 0);
+            get_next_moby_in_group(&it, it, 0, 0);
         }
         if (moby->state != 1) {
             moby->pos.z = probe_ground_height(&moby->pos, 0, 0.5f);

@@ -34,7 +34,7 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_0024f7c8(struct Moby *, int, void *);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int FUN_L00_002591d0(struct Moby **, int, int, int);
-extern int FUN_L00_002592b8(struct Moby **, struct Moby *, int, int);
+extern int get_next_moby_in_group(struct Moby **, struct Moby *, int, int) __asm__("FUN_L00_002592b8");
 extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern u8 D_0013F3D0[];
@@ -80,7 +80,7 @@ void underwater_ring_update(struct Moby *moby) {
                     other->distance = vars->distance;
                 }
                 vars->notified_count++;
-                FUN_L00_002592b8(&child, child, 0, 0);
+                get_next_moby_in_group(&child, child, 0, 0);
             }
         }
         vars->timer = 0;

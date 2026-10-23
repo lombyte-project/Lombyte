@@ -69,7 +69,7 @@ extern s32 FUN_L00_0025e3b8_2cfcb8(M_2cfcb8 *) __asm__("FUN_L00_0025e3b8");
 extern s32 FUN_L00_002603d0_2cfcb8(M_2cfcb8 *) __asm__("FUN_L00_002603d0");
 extern int FUN_L00_00260668_2cfcb8(M_2cfcb8 *, M_2cfcb8 *, V_2cfcb8 *, f32 *, V_2cfcb8 *, V_2cfcb8 *) __asm__("FUN_L00_00260668");
 extern int FUN_L00_002591d0_2cfcb8(M_2cfcb8 **, s32, s32, s32) __asm__("FUN_L00_002591d0");
-extern int FUN_L00_002592b8_2cfcb8(M_2cfcb8 **, M_2cfcb8 *, s32, s32) __asm__("FUN_L00_002592b8");
+extern int get_next_moby_in_group(M_2cfcb8 **, M_2cfcb8 *, s32, s32) __asm__("FUN_L00_002592b8");
 extern void FUN_001f9a10_2cfcb8(V_2cfcb8 *, V_2cfcb8 *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f97b0_2cfcb8(void) __asm__("FUN_001f97b0");
 extern f32 FUN_001f9b48_2cfcb8(V_2cfcb8 *, V_2cfcb8 *) __asm__("FUN_001f9b48");
@@ -183,7 +183,7 @@ void FUN_L00_002cfcb8(M_2cfcb8 *moby) {
                 }
             }
         }
-        FUN_L00_002592b8_2cfcb8(&moby, moby, 0, 0);
+        get_next_moby_in_group(&moby, moby, 0, 0);
     }
 
     FUN_L00_002591d0_2cfcb8(&member, group, 0, 0);
@@ -245,21 +245,21 @@ void FUN_L00_002cfcb8(M_2cfcb8 *moby) {
                 }
             }
         }
-        FUN_L00_002592b8_2cfcb8(&member, member, 0, 0);
+        get_next_moby_in_group(&member, member, 0, 0);
     }
 
     FUN_L00_002591d0_2cfcb8(&moby, group, 0, 0);
     while (moby != 0) {
         if (FUN_L00_0025e3b8_2cfcb8(moby) != 0) {
-            FUN_L00_002592b8_2cfcb8(&other, moby, 0, 0);
+            get_next_moby_in_group(&other, moby, 0, 0);
             while (other != 0) {
                 if (FUN_L00_0025e3b8_2cfcb8(other) != 0) {
                     FUN_001f9b48_2cfcb8(&moby->pos, &other->pos);
                 }
-                FUN_L00_002592b8_2cfcb8(&other, other, 0, 0);
+                get_next_moby_in_group(&other, other, 0, 0);
             }
         }
-        FUN_L00_002592b8_2cfcb8(&moby, moby, 0, 0);
+        get_next_moby_in_group(&moby, moby, 0, 0);
     }
 }
 typedef struct {
