@@ -1325,7 +1325,9 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int *D_L18_001AC240[];
 
-void *FUN_L18_002d6b58(float *reference_position, float *comparison_position, int moby_list_index) {
+void *find_class_247_moby_with_largest_xy_angle_in_list(float *reference_position, float *comparison_position, int moby_list_index) __asm__("FUN_L18_002d6b58");
+
+void *find_class_247_moby_with_largest_xy_angle_in_list(float *reference_position, float *comparison_position, int moby_list_index) {
     short *moby_list_entry = (short *)D_L18_001AC240[moby_list_index];
     char *best = 0;
     float bestd = 0.0f;

@@ -1494,7 +1494,7 @@ extern unsigned char *D_L18_0015FFD8;
 unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) __asm__("FUN_L18_002f6e10");
 
 extern unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) __asm__("FUN_L18_002f6e10");
-extern void *FUN_L18_002d6b58(float *a, float *b, int idx);
+extern void *find_class_247_moby_with_largest_xy_angle_in_list(float *a, float *b, int idx) __asm__("FUN_L18_002d6b58");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void FUN_L00_00216f90(void *, void *, int, int);
@@ -1960,7 +1960,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                     moby->f20 = 4;
                 } else {
                     moby->f20 = 0x15;
-                    boss_data->f330 = FUN_L18_002d6b58(boss_data->f3C0, hero.motion.pos.f, boss_data->f200);
+                    boss_data->f330 = find_class_247_moby_with_largest_xy_angle_in_list(boss_data->f3C0, hero.motion.pos.f, boss_data->f200);
                 }
                 break;
             }
@@ -2718,7 +2718,7 @@ extern float atan2_5e80(float, float) __asm__("FUN_001f9e90");
 extern float fast_cos_5e80(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_5e80(float) __asm__("FUN_001f9de0");
 extern float probe_ground_height_5e80(void *, int, float) __asm__("FUN_00213508");
-extern void *FUN_L18_002d6b58_5e80(float *a, float *b, int idx) __asm__("FUN_L18_002d6b58");
+extern void *find_class_247_moby_with_largest_xy_angle_in_list(float *a, float *b, int idx) __asm__("FUN_L18_002d6b58");
 
 extern short D_L18_00162330 __attribute__((sda));
 extern int D_L18_00162388 __attribute__((sda));
@@ -2946,7 +2946,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                 if (*(unsigned char *)(moby + 0x53) != 0) {
                     blend_moby_animation_5e80(moby, 0, 0, scale_game_frames_5e80(0x14));
                 }
-                *(void **)(boss_data + 0x330) = FUN_L18_002d6b58_5e80((float *)(boss_data + 0x3C0), hero.motion.pos.f, *(int *)(boss_data + 0x200));
+                *(void **)(boss_data + 0x330) = find_class_247_moby_with_largest_xy_angle_in_list((float *)(boss_data + 0x3C0), hero.motion.pos.f, *(int *)(boss_data + 0x200));
                 *(int *)(boss_data + 0x390) = 0;
                 *(int *)(boss_data + 0x394) = 0;
             }
