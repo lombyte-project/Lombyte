@@ -1497,7 +1497,9 @@ extern void fast_vec_normalize(u8 *, u8 *, f32) __asm__("FUN_001f9bf8");
  * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002AFD18), where it is exact; names translated to the US level
  * program. */
-void FUN_L14_002aead8(u8 *moby) {
+void prepare_blarg_heavy_interceptor_light_ring_transform(u8 *moby) __asm__("FUN_L14_002aead8");
+
+void prepare_blarg_heavy_interceptor_light_ring_transform(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
     u8 *bone_transform;
     f32 bounding_sphere[4];
