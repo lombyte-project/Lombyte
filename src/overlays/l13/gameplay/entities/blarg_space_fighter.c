@@ -3446,7 +3446,9 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
 extern float FUN_001f9b48(void *, void *);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-void FUN_L13_002ea330(char *predicted_target_position, char *projectile_origin_position, float projectile_speed) {
+void predict_hero_ship_projectile_lead_position(char *predicted_target_position, char *projectile_origin_position, float projectile_speed) __asm__("FUN_L13_002ea330");
+
+void predict_hero_ship_projectile_lead_position(char *predicted_target_position, char *projectile_origin_position, float projectile_speed) {
     char *base = D_0013E533 + 0xE1D;
     char *vehicle_data = *(char **)(*(char **)(base + 0x15F0) + 0x78);
     float y =
@@ -3460,7 +3462,7 @@ void FUN_L13_002ea330(char *predicted_target_position, char *projectile_origin_p
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EB838), where it is exact; names translated to the US level program. */
 
-extern void FUN_L13_002ea330_c2(char *a, char *b, float f) __asm__("FUN_L13_002ea330");
+extern void predict_hero_ship_projectile_lead_position(char *a, char *b, float f) __asm__("FUN_L13_002ea330");
 
 float FUN_L13_002ea400(float *pos, float *pitch, float *yaw, float lead) {
     struct Hero *base = &hero;
@@ -3470,7 +3472,7 @@ float FUN_L13_002ea400(float *pos, float *pitch, float *yaw, float lead) {
     float pitch_angle;
     if (hero_ship_moby != 0 && *(short *)(hero_ship_moby + 0xA6) == 0x45) {
         if (lead > 0.0f) {
-            FUN_L13_002ea330_c2((char *)target_position, (char *)pos, lead);
+            predict_hero_ship_projectile_lead_position((char *)target_position, (char *)pos, lead);
         } else {
             qcopy(target_position, hero_ship_moby + 0x10);
         }
@@ -3538,7 +3540,7 @@ extern unsigned char *spawn_class_53_projectile(char *owner, char *pos,
                                          char *vec) __asm__("FUN_L13_002c1f28");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L13_002ea330_c(char *a, char *b, float f) __asm__("FUN_L13_002ea330");
+extern void predict_hero_ship_projectile_lead_position(char *a, char *b, float f) __asm__("FUN_L13_002ea330");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 unsigned char *fire_class_53_projectile(char *firing_moby, char *velocity_source_data) __asm__("FUN_L13_002ea6b8");
@@ -3550,7 +3552,7 @@ unsigned char *fire_class_53_projectile(char *firing_moby, char *velocity_source
     moby_point_position(firing_moby, 0xE, spawn_position);
     x = &hero;
     if (((char *)x->ship_moby) != 0 && *(short *)(((char *)x->ship_moby) + 0xA6) == 0x45) {
-        FUN_L13_002ea330_c((char *)predicted_target_position, (char *)spawn_position, frame_time * 20.0f);
+        predict_hero_ship_projectile_lead_position((char *)predicted_target_position, (char *)spawn_position, frame_time * 20.0f);
         subtract_vector_xyz(scratch_vector, predicted_target_position, spawn_position);
         normalize_vector_xyz(projectile_velocity, scratch_vector, frame_time * 20.0f);
         normalize_vector_xyz(random_velocity_offset, ((char *)x->ship_moby) + 0xD0,
