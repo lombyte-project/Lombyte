@@ -1688,7 +1688,7 @@ int count_moby_group_members(struct Moby *moby) {
 
 typedef struct Moby Moby;
 
-char *FUN_L14_002eccf0(void *a, float *b, int c, int d);
+char *spawn_flying_bolt(void *a, float *b, int c, int d) __asm__("FUN_L14_002eccf0");
 extern f32 fast_add_rotations_c3(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
 extern int D_L14_0015F5CC __attribute__((section(".sdata"))); /* no foreign declaration */
@@ -1728,7 +1728,7 @@ extern void func_00213D28_2B4E40(void *, int, int) __asm__("FUN_00212ed8");
 extern int func_00215570_2B4E40(void *, int) __asm__("FUN_00214720");
 extern float func_001F9FA8_2B4E40(float) __asm__("FUN_001f9de0");
 extern int func_L00_00260D30_2B4E40(void *, void *, float) __asm__("FUN_L14_00268038");
-extern char *func_L14_002EE150_2B4E40(void *, float *, int, int) __asm__("FUN_L14_002eccf0");
+extern char *spawn_flying_bolt(void *, float *, int, int) __asm__("FUN_L14_002eccf0");
 extern void func_L00_00251328_2B4E40(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void func_L00_0025F4A8_2B4E40(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int func_001F9850_2B4E40(int) __asm__("FUN_001f96f8");
@@ -1901,7 +1901,7 @@ void machinegun_turret_update(char *moby) {
             func_001F9BD8_2B4E40(spawn_position, spawn_position, moby + 0x10);
             func_L00_001FF4B0_2B4E40(spawn_vector_scratch, moby + 0xC0, D_L14_0016151C * frame_time);
             if (*(short *)(data + 0x9C) == 0) {
-                func_L00_00251328_2B4E40(func_L14_002EE150_2B4E40(spawn_position, spawn_vector_scratch, (int)moby, 1), 0xE0, 0xE0, 0xE0);
+                func_L00_00251328_2B4E40(spawn_flying_bolt(spawn_position, spawn_vector_scratch, (int)moby, 1), 0xE0, 0xE0, 0xE0);
             }
         }
         r = func_L00_00260D30_2B4E40(moby, target_query_result, 34.0f);

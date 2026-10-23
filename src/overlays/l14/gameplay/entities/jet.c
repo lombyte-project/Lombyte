@@ -1050,7 +1050,9 @@ extern void FUN_L00_00250df8(void *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L14_002eccf0(void *spawn_position, float *launch_vector, int collision_ignore_moby, int collision_mode) {
+char *spawn_flying_bolt(void *spawn_position, float *launch_vector, int collision_ignore_moby, int collision_mode) __asm__("FUN_L14_002eccf0");
+
+char *spawn_flying_bolt(void *spawn_position, float *launch_vector, int collision_ignore_moby, int collision_mode) {
     char *projectile_moby = func_0020D348_m(0x2A9);
     if (projectile_moby) {
         char *data;
