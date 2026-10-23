@@ -1703,7 +1703,7 @@ extern int FUN_00214720(void *, int);
 extern void FUN_L01_00308b28_c(char *) __asm__("FUN_L01_00308b28");
 extern void FUN_L01_00309838_u(char *) __asm__("FUN_L01_00309838");
 extern void FUN_L01_003097e8_c(L01Moby *) __asm__("FUN_L01_003097e8");
-extern void FUN_L01_003092d0_c(char *) __asm__("FUN_L01_003092d0");
+extern void update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
 extern void FUN_L01_00309430_c(char *) __asm__("FUN_L01_00309430");
 extern void FUN_L01_003094f0_u(char *) __asm__("FUN_L01_003094f0");
 extern void FUN_L01_0026e0e0_c(char *, int) __asm__("FUN_L01_0026e0e0");
@@ -1785,7 +1785,7 @@ void teleporter_update(struct Moby *moby) {
             moby->state = 5;
             FUN_L01_003097e8_c((L01Moby *)moby);
         }
-        FUN_L01_003092d0_c(moby);
+        update_teleporter_child_transforms(moby);
         break;
     }
     case TELEPORTER_ENTER_WAIT_FOR_USE:
@@ -1834,7 +1834,7 @@ void teleporter_update(struct Moby *moby) {
             moby->state = 8;
             *(float *)(data + 0x34) = 0.0f;
         }
-        FUN_L01_003092d0_c(moby);
+        update_teleporter_child_transforms(moby);
         break;
     case TELEPORTER_PREPARE_TRANSFER: {
         int transfer_preparation_status = get_hero_target_pose_status();
@@ -1856,7 +1856,7 @@ void teleporter_update(struct Moby *moby) {
                 moby->state = 4;
             }
         }
-        FUN_L01_003092d0_c(moby);
+        update_teleporter_child_transforms(moby);
         break;
     }
     case TELEPORTER_TRANSFER_TO_DESTINATION:
@@ -1887,7 +1887,7 @@ void teleporter_update(struct Moby *moby) {
             *(float *)(data + 0x28) = 0.0f;
             *(float *)(data + 0x2C) = 0.0f;
             *(float *)(data + 0x34) = 1.95f;
-            FUN_L01_003092d0_c(moby);
+            update_teleporter_child_transforms(moby);
         }
         break;
     case TELEPORTER_RETURN_TO_IDLE:
@@ -1908,7 +1908,7 @@ void teleporter_update(struct Moby *moby) {
         } else {
             moby->state = 1;
         }
-        FUN_L01_003092d0_c(moby);
+        update_teleporter_child_transforms(moby);
         break;
     }
 }
@@ -1922,7 +1922,7 @@ extern void FUN_L00_00250df8(void *);
 
 extern float D_L01_00161F78 __attribute__((sda));
 extern float D_L01_00161F80 __attribute__((sda));
-void FUN_L01_003092d0(char *parent_moby) {
+void update_teleporter_child_transforms(char *parent_moby) {
     char *parent_data = *(char **)(parent_moby + 0x78);
     char **child_slot = (char **)(parent_data + 0x14);
     float v[4];

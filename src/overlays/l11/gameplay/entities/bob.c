@@ -1270,7 +1270,7 @@ extern float fast_add_rotations_2518(float, float) __asm__("FUN_001fa580");
 extern void FUN_L11_002f3040_2518(char *) __asm__("FUN_L11_002f3040");
 extern void FUN_L11_002f2cd0_2518(char *) __asm__("FUN_L11_002f2cd0");
 extern void FUN_L11_002f2d58_2518(char *) __asm__("FUN_L11_002f2d58");
-extern void FUN_L01_003092d0_2518(char *) __asm__("FUN_L01_003092d0");
+extern void update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
 extern int allocate_voice_2518(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_00233ee8_2518(float *, int, float) __asm__("FUN_L00_00233ee8");
 extern void FUN_L00_002598b0_2518(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
@@ -1328,7 +1328,7 @@ void teleporter_update(struct Moby *moby) {
                 *(int *)(slots[j] + 0x94) = 0;
             }
         }
-        FUN_L01_003092d0_2518(moby);
+        update_teleporter_child_transforms(moby);
         break;
     }
     case TELEPORTER_WAIT_FOR_ACTIVATION: {
@@ -1376,7 +1376,7 @@ void teleporter_update(struct Moby *moby) {
                 moby->state = 4;
             }
         }
-        FUN_L01_003092d0_2518(moby);
+        update_teleporter_child_transforms(moby);
         break;
     }
     case TELEPORTER_CONTRACT_RING:
@@ -1412,7 +1412,7 @@ void teleporter_update(struct Moby *moby) {
             *(float *)(data + 0x28) = 0.0f;
             *(float *)(data + 0x2C) = 0.0f;
             *(float *)(data + 0x3C) = 1.95f;
-            FUN_L01_003092d0_2518(moby);
+            update_teleporter_child_transforms(moby);
         }
         break;
     case TELEPORTER_RESET:
@@ -1434,7 +1434,7 @@ void teleporter_update(struct Moby *moby) {
         } else {
             moby->state = 1;
         }
-        FUN_L01_003092d0_2518(moby);
+        update_teleporter_child_transforms(moby);
         break;
     }
 }
