@@ -1167,8 +1167,8 @@ struct EmberParticle {
 
 extern s32 FUN_L00_00257b90(s32, s32);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern unsigned char *FUN_L00_0026bb70(void *a, void *b, int c, int d, float f, int n, int e, int g,
-                                       int h);
+extern unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *a, void *b, int c, int d, float f, int n, int e, int g,
+                                       int h) __asm__("FUN_L00_0026bb70");
 extern unsigned char *mine_debris(void *a, void *b, int c, int d, float f, int n, int k) __asm__("FUN_L00_0026bed0");
 extern int FUN_L00_002371e0(int, int, float);
 extern u32 D_L00_00160228 __attribute__((sda));
@@ -1199,7 +1199,7 @@ void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) {
         f = ember_particle->size;
         f *= 0.5f;
         emitted_lifetime_frames = FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x78));
-        FUN_L00_0026bb70(&ember_particle->pos, &m->vel, ember_particle->color, m->color2, f, emitted_lifetime_frames, 0, ember_particle->tex, ember_particle->blend);
+        spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(&ember_particle->pos, &m->vel, ember_particle->color, m->color2, f, emitted_lifetime_frames, 0, ember_particle->tex, ember_particle->blend);
     } else {
         ember_particle->pos.f[2] = m->floor_z;
         m->vel.f[0] += random_float_between(-5.0f, 5.0f) * frame_time;
@@ -1208,7 +1208,7 @@ void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) {
         f = ember_particle->size;
         f *= 0.25f;
         emitted_lifetime_frames = FUN_L00_00257b90(scale_game_frames(0x1E), scale_game_frames(0x3C));
-        FUN_L00_0026bb70(&ember_particle->pos, &m->vel, ember_particle->color, m->color2, f, emitted_lifetime_frames, 0, ember_particle->tex, ember_particle->blend);
+        spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(&ember_particle->pos, &m->vel, ember_particle->color, m->color2, f, emitted_lifetime_frames, 0, ember_particle->tex, ember_particle->blend);
     }
     if (current_level_index == 10) {
         if (!random_integer_below(0x13)) {

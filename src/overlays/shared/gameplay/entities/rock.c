@@ -219,7 +219,7 @@ extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void FUN_L00_0026a4c8(void *, void *, int, int, int, float);
 extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
-extern void FUN_L00_0026bb70(void *, void *, int, int, float, int, int, int, int);
+extern void spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
@@ -388,7 +388,7 @@ void update_explosive_projectile(struct Moby *moby) {
                 if (cutscene_active_macro != 0) {
                     size = 21000.0f;
                 }
-                FUN_L00_0026bb70(&(*(Vec_2F7E08 *)&moby->pos), &spark_vel, 0x4F007FFF, 0x1F00007F, size,
+                spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(&(*(Vec_2F7E08 *)&moby->pos), &spark_vel, 0x4F007FFF, 0x1F00007F, size,
                                   FUN_L00_00257b90_c(scale_game_frames_alt(0x5A), scale_game_frames_alt(0x96)) / rate_divisor, 1, -1, -1);
         }
         size_scale = (200.0f - camera_distance) / 200.0f;

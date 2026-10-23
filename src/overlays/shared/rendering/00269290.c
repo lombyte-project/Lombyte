@@ -1053,7 +1053,10 @@ extern int FUN_001fa6d0_26bb70(float) __asm__("FUN_001fa6d0");
 extern int FUN_001160d8_26bb70(void) __asm__("FUN_001160d8");
 
 extern unsigned char *D_L00_001B20BC __attribute__((section(".data")));
-unsigned char *FUN_L00_0026bb70(void *spawn_position, void *initial_velocity, int initial_color, int final_color, float initial_size, int lifetime, int secondary_spawn_enabled, int texture_id,
+unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *spawn_position, void *initial_velocity, int initial_color, int final_color, float initial_size, int lifetime, int secondary_spawn_enabled, int texture_id,
+                                int blend_mode) __asm__("FUN_L00_0026bb70");
+
+unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *spawn_position, void *initial_velocity, int initial_color, int final_color, float initial_size, int lifetime, int secondary_spawn_enabled, int texture_id,
                                 int blend_mode) {
     unsigned char *particle;
     unsigned char *particle_data;
@@ -1106,7 +1109,7 @@ float FUN_001f9af0_26bca8(void *) __asm__("FUN_001f9af0");
 void FUN_001f9bf8_26bca8(void *, void *, float) __asm__("FUN_001f9bf8");
 int FUN_L00_00257b90_26bca8(int, int) __asm__("FUN_L00_00257b90");
 int FUN_001f96f8_26bca8(int) __asm__("FUN_001f96f8");
-unsigned char *FUN_L00_0026bb70_26bca8(void *, void *, int, int, float, int, int, int,
+unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, float, int, int, int,
                                        int) __asm__("FUN_L00_0026bb70");
 void update_shrinking_effect_particle_with_gravity_and_secondary_spawns(unsigned char *particle) __asm__("FUN_L00_0026bca8");
 
@@ -1141,7 +1144,7 @@ void update_shrinking_effect_particle_with_gravity_and_secondary_spawns(unsigned
         FUN_001f9bf8_26bca8(&spawn_velocity, &spawn_velocity, initial_lifetime_or_speed_scratch * FUN_002132a8_26bca8(0.15f, 0.25f));
         FUN_001f9a10_26bca8(&spawn_velocity, &spawn_velocity, particle_data);
         FUN_001f9a68_26bca8(&spawn_velocity, &spawn_velocity, FUN_002132a8_26bca8(0.75f, 0.95f));
-        FUN_L00_0026bb70_26bca8(particle_position, &spawn_velocity, *(int *)(particle + 4), *(int *)(particle_data + 0x14),
+        spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(particle_position, &spawn_velocity, *(int *)(particle + 4), *(int *)(particle_data + 0x14),
                                 *(float *)(particle + 0xC),
                                 FUN_001f96f8_26bca8(FUN_L00_00257b90_26bca8(0xF, 0x1E)), 0, particle[2], particle[3]);
     } else {

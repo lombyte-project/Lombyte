@@ -515,7 +515,7 @@ extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c
 extern int random_int_between_25e450(int, int) __asm__("FUN_L00_00257b90");
 extern void initialize_hit_descriptor(void *, void *, int, float) __asm__("FUN_L00_00259858");
 extern int collect_mobies_in_sphere_25e450(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern void *func_L00_0026CA10_25e450(void *, void *, int, int, int, int, int, int, float) __asm__("FUN_L00_0026bb70");
+extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, int, int, int, int, float) __asm__("FUN_L00_0026bb70");
 extern void subtract_vector_xyz_25e450(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float vector_length_xyz_25e450(void *) __asm__("FUN_001f9af0");
 extern void normalize_vector_xyz_25e450(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -581,7 +581,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         build_spherical_offset_25e450(&dir, fF * (random_float_between_25e450(7.0f, 10.5f) * frame_time_macro), b, a);
         dir.f[2] += frame_time_macro * 3.0f;
         dist = fF * 40000.0f;
-        func_L00_0026CA10_25e450(explosion_position, &dir, swap_packed_color_channels(0x4F007FFF, flag), swap_packed_color_channels(0x1F00007F, flag),
+        spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(explosion_position, &dir, swap_packed_color_channels(0x4F007FFF, flag), swap_packed_color_channels(0x1F00007F, flag),
             random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x78)) - effect_reduction_level * 10, 1, -1, -1, dist);
         }
     }
