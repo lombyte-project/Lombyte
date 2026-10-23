@@ -236,7 +236,9 @@ char *FUN_L07_0030e370(char *spawn_position, char *initial_velocity, int spawnin
 
 extern float FUN_L00_00259710(void *);
 
-int FUN_L07_0030ebc8(char *moby, char *data) {
+int classify_sharkigator_water_height_gap(char *moby, char *data) __asm__("FUN_L07_0030ebc8");
+
+int classify_sharkigator_water_height_gap(char *moby, char *data) {
     float distance = FUN_L00_00259710(moby + 0x10);
     float delta;
     *(float *)(data + 0x130) = distance;
@@ -2530,7 +2532,7 @@ int FUN_L07_0030ed30(char *moby, char *data) {
         return 1;
     }
     *(char **)(data + 0x12C) = D_L07_0015FFD8_30ed30 + (*(int *)(data + 0x118) << 8) + 0x18;
-    moby[0xBC] = FUN_L07_0030ebc8(moby, data);
+    moby[0xBC] = classify_sharkigator_water_height_gap(moby, data);
     if (*(int *)(data + 0x114) == -1) {
         stub_printf(D_L07_002117C0, (moby - D_L07_0015FFD8_30ed30) >> 8);
         return 1;
@@ -2716,7 +2718,7 @@ extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_00259740(void *, void *, int);
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern int FUN_L07_0030ebc8_c(char *moby, char *data) __asm__("FUN_L07_0030ebc8");
+extern int classify_sharkigator_water_height_gap(char *moby, char *data) __asm__("FUN_L07_0030ebc8");
 extern int is_point_inside_clip_volume_c2(void *arg0, int arg1) __asm__("func_00214720");
 extern int tick_countdown_32_alt(int *counter) __asm__("FUN_001f9740");
 extern s32 rand(void);
@@ -2836,7 +2838,7 @@ void sharkigator_update(unsigned char *moby) {
     old_command = moby[0xBC];
     next_state = 0xFF;
     next_sequence = 0xFF;
-    moby[0xBC] = FUN_L07_0030ebc8_c((char *)moby, data);
+    moby[0xBC] = classify_sharkigator_water_height_gap((char *)moby, data);
     command = moby[0xBC];
     if (old_command != command) {
         next_state = ((struct { unsigned char t[3][3]; } *)D_L07_00161B40_gp)->t[old_command][command];
