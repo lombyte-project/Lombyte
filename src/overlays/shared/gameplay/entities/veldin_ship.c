@@ -2543,7 +2543,12 @@ void FUN_L00_002d5160(unsigned char *m) {
         health = *(f32 *)(v + 0x20) - damage;
         v[0xAD] = 0;
         duration = D_0015ED6C_2d5160 + D_0015ED6C_2d5160;
-        *(volatile s32 *)(v + 0x94) = 0x29;
+        /* Near miss, 3 bytes: retail stores 0x29 after the float stores.
+           Fakematch: the pin keeps 0x29 in t0 as retail has it. */
+        {
+            register s32 value __asm__("$8") = 0x29;
+            *(volatile s32 *)(v + 0x94) = value;
+        }
         *(volatile s32 *)(v + 0x90) = 0x200;
         *(f32 *)(v + 0x98) = 0.75f;
         *(f32 *)(v + 0x20) = health;
