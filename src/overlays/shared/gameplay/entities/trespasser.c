@@ -253,7 +253,7 @@ extern float D_0015ED60_2c5be8 __asm__("D_0015ED60");
 extern float D_0015ED6C_2c5be8 __asm__("D_0015ED6C");
 extern int D_15F5CC_2c5be8 __asm__("D_L00_0015F5CC");
 extern int f33e40_2c5be8(int, int) __asm__("FUN_L00_00233e40");
-extern void FUN_L00_00263db0(int, int, int);
+extern void queue_formatted_dialogue_message(int, int, int) __asm__("FUN_L00_00263db0");
 extern void f99f8_2c5be8(void *) __asm__("FUN_001f99f8");
 extern int f99a8_2c5be8(int) __asm__("FUN_001f99a8");
 extern int f96f8_2c5be8(int) __asm__("FUN_001f96f8");
@@ -279,7 +279,7 @@ int try_collect_ammo_pickup(char *pickup_moby) {
         goto fail;
     }
     ammo_added = weapon_ammo_counts[pickup_vars[2]] - before;
-    FUN_L00_00263db0(ammo_added == 1 ? ((E_2c5be8 *)(pickup_vars[2] * 0x4C + (char *)D_179AC0_2c5be8))->h36
+    queue_formatted_dialogue_message(ammo_added == 1 ? ((E_2c5be8 *)(pickup_vars[2] * 0x4C + (char *)D_179AC0_2c5be8))->h36
                          : ((E_2c5be8 *)(pickup_vars[2] * 0x4C + (char *)D_179AC0_2c5be8))->h34,
                   ammo_added, -1);
     if (excess_ammo_amount < (float)pickup_vars[0]) {
@@ -2420,7 +2420,7 @@ extern void FUN_001f99f8_2c53c0(void *) __asm__("FUN_001f99f8");
 extern float FUN_00213ed8_2c53c0(void *, float, float) __asm__("FUN_00213ed8");
 extern int FUN_001fa6d0_2c53c0(float) __asm__("FUN_001fa6d0");
 extern int FUN_L00_00233e40_2c53c0(int, int) __asm__("FUN_L00_00233e40");
-extern void FUN_L00_00263db0_2c53c0(int, int, int) __asm__("FUN_L00_00263db0");
+extern void queue_formatted_dialogue_message(int, int, int) __asm__("FUN_L00_00263db0");
 extern int FUN_001f99a8_2c53c0(int) __asm__("FUN_001f99a8");
 extern int FUN_L00_0028dc90_2c53c0(int, int, int, int) __asm__("FUN_L00_0028dc90");
 extern float FUN_L00_00250430_2c53c0(void *, void *) __asm__("FUN_L00_00250430");
@@ -2548,7 +2548,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
                 } else {
                     sound = ((FxAmmoRecord *)(ammo_sounds_2c53c0 + sound_idx * sizeof(FxAmmoRecord)))->sound_multiple;
                 }
-                FUN_L00_00263db0_2c53c0(sound, difference, -1);
+                queue_formatted_dialogue_message(sound, difference, -1);
             }
             account_idx = pickup_vars->weapon;
             D_0013DE08[account_idx] += weapon_ammo_counts[account_idx] - before;
