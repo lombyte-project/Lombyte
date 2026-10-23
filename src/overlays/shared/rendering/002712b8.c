@@ -1357,7 +1357,10 @@ int FUN_001fa6d0(float);
 int FUN_00213260(int);
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
-unsigned char *FUN_L00_002743a8(int k, u128 *initial_position, int lifetime_frames, float x, float y, int mode, int col,
+unsigned char *spawn_mode_controlled_orbiting_trail_particle(int k, u128 *initial_position, int lifetime_frames, float x, float y, int mode, int col,
+                                float *vec) __asm__("FUN_L00_002743a8");
+
+unsigned char *spawn_mode_controlled_orbiting_trail_particle(int k, u128 *initial_position, int lifetime_frames, float x, float y, int mode, int col,
                                 float *vec) {
     unsigned char *particle = FUN_L00_002678b8(0x43);
     if (particle) {

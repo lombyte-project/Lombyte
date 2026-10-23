@@ -16,8 +16,8 @@
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern unsigned char *FUN_L00_002743a8(float f0, float f1, int a0, void *pos, int timer, int flag,
-                                       int col, float *vel);
+extern unsigned char *spawn_mode_controlled_orbiting_trail_particle(float f0, float f1, int a0, void *pos, int timer, int flag,
+                                       int col, float *vel) __asm__("FUN_L00_002743a8");
 
 void hoverboard_ring_update(char *moby) __asm__("FUN_L05_0031abe0");
 void hoverboard_ring_update(char *moby) {
@@ -41,7 +41,7 @@ void hoverboard_ring_update(char *moby) {
                 for (i = 0; i < 3; i++) {
                     float first_random_angle = random_angle_radians();
                     float second_random_angle = random_angle_radians();
-                    FUN_L00_002743a8(first_random_angle, second_random_angle, (int)moby, D_L05_0015F580, scale_game_frames(0x28), 1,
+                    spawn_mode_controlled_orbiting_trail_particle(first_random_angle, second_random_angle, (int)moby, D_L05_0015F580, scale_game_frames(0x28), 1,
                                      0x7F, 0);
                 }
             }
