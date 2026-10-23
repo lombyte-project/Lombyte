@@ -1293,7 +1293,7 @@ extern f32 FUN_001f99c0(f32);
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void FUN_001f99f8(void *);
 extern void fade_to_black(s32) __asm__("FUN_001f4a58");
-extern void FUN_L01_00231450(void);
+extern void exit_hero_vehicle_mode_and_restore_moby(void) __asm__("FUN_L01_00231450");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void set_hero_animation(f32, s32, s32) __asm__("FUN_L00_002323b8");
@@ -1380,7 +1380,7 @@ void gold_bolt_update(struct Moby *moby) {
         look.z = FUN_001fa580_c(vars->home.w, 3.1415927f);
         fade_to_black(scale_game_frames(10));
         if (hero.vehicle_mode == 3) {
-            FUN_L01_00231450();
+            exit_hero_vehicle_mode_and_restore_moby();
         }
         FUN_L00_00216f90(&at, &look, 0x72, 0);
         allocate_voice_for_target_entry(0, 0, moby);
