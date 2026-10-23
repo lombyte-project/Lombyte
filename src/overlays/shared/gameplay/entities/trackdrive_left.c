@@ -1255,7 +1255,7 @@ extern float ea210_addrot(float, float) __asm__("FUN_001fa580");
 extern float ea210_dist(void *, void *) __asm__("FUN_001f9b80");
 extern float ea210_abs(float) __asm__("FUN_001f99c0");
 extern void ea210_sound(int) __asm__("FUN_L00_00298840");
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void ea210_play(int, int) __asm__("FUN_L00_00263d40");
 extern void f2039a0_298840(void) __asm__("FUN_L00_002039a0");
 extern void ea210_timing(int, int) __asm__("FUN_L00_00203908");
@@ -1328,13 +1328,13 @@ void tresspasser_update(struct Moby *moby) {
         if (level_game_mode == 2) return;
         if (D_001413F4 != 0) {
             if (which == 0x16) {
-                FUN_L00_00260860(0x16, 0);
+                grant_inventory_item(0x16, 0);
                 D_L02_0015F640 = 0;
             } else {
-                FUN_L00_00260860(which, 0);
+                grant_inventory_item(which, 0);
             }
         } else {
-            FUN_L00_00260860(which, 1);
+            grant_inventory_item(which, 1);
         }
         if (moby->oclass == 0x3ED) {
             ea210_play(0x7DF, -1);

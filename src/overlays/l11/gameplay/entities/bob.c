@@ -209,7 +209,7 @@ extern int FUN_00214720(void *, int);
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void memcard_save_data_d0710(int, int) __asm__("FUN_0020b178");
 extern void f2039a0_298840(void) __asm__("FUN_L00_002039a0");
@@ -269,7 +269,7 @@ void bob_update(WM11 *moby) {
         if (D_L11_0015F5C4 != 2) {
             moby->state = 1;
             if (moby_vars->h04 == 2) {
-                FUN_L00_00260860(3, 1);
+                grant_inventory_item(3, 1);
                 jet_reset_camera(hero.motion.pos.f, hero.motion.pos.f + 4);
                 memcard_save_data_d0710(0, -1);
                 f2039a0_298840();
@@ -791,7 +791,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         break;
     case RESORT_OWNER_WAIT_FOR_POST_PATH_DIALOGUE_END:
         if (D_L11_0015F5C4 != 2) {
-            FUN_L00_00260860(6, 1);
+            grant_inventory_item(6, 1);
             memcard_save_data(0, -1);
             help_request(0x2AF8, 0x3A);
             mark_moby_for_removal(moby);

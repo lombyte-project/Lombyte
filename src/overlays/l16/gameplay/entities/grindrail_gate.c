@@ -90,7 +90,7 @@ extern s32 D_L16_0015F5C4 ;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void apply_npc_big_head_cheat(char *) __asm__("FUN_L12_002e6b60");
@@ -138,7 +138,7 @@ void help_desk_lady_update(L16WatchMoby *moby) {
             moby->state = 1;
             FUN_L00_00216f90(D_L16_001D96C0, D_L16_001D96C0 + 4, 0, 1);
             help_request(0x3E82, 0x84);
-            FUN_L00_00260860(0x21, 1);
+            grant_inventory_item(0x21, 1);
             jet_clear_persistent(moby->widget);
             player = (char *)&D_0013E633_watch + 0xE9D;
             jet_reset_camera(player, player + 0x10);
@@ -1487,7 +1487,7 @@ extern unsigned char D_0013D507 __attribute__((section(".data")));
 extern unsigned char D_0013D408[];
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_0025a120(void *);
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_00263d40(int, int);
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
@@ -1598,7 +1598,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
     case GADGETRON_CEO_WAIT_TO_SAVE:
         if (*(int *)&D_L16_0015F5C4 == 0) {
             ceo_moby->state = 1;
-            FUN_L00_00260860(31, 1);
+            grant_inventory_item(31, 1);
             memcard_save_data(0, -1);
         }
         break;

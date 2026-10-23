@@ -61,7 +61,7 @@ void init_level_runtime_state(void) {
 extern int D_L00_001C3E98[];
 extern unsigned char D_0015EDD0[] __attribute__((sda));
 extern int D_00141660_23d028[] __asm__("D_00141660");
-void FUN_L00_00260860_23d028(int, int) __asm__("FUN_L00_00260860");
+void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 void append_level_item_if_absent(int i) __asm__("FUN_L00_0023d3d8");
 void FUN_L00_0023d198(void) {
     int j;
@@ -110,7 +110,7 @@ void FUN_L00_0023d198(void) {
     } else {
         int i;
         if (item_available[10] == 0) {
-            FUN_L00_00260860_23d028(10, 1);
+            grant_inventory_item(10, 1);
             D_0015EDD0[0] = 0x4A;
             D_00141660_23d028[0] = 10;
         }

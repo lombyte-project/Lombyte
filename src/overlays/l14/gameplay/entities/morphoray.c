@@ -475,7 +475,7 @@ extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-extern void FUN_L00_00260860(s32, s32);
+extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern int memcard_save_data(s32, s32) __asm__("FUN_0020b178");
@@ -526,7 +526,7 @@ void morphoray_update(struct Moby *moby) {
             *(s32 *)(morphoray_pvars + 0x18) = state;
         else
             *(s32 *)(morphoray_pvars + 0x18) = 0;
-        FUN_L00_00260860(0x15, 1);
+        grant_inventory_item(0x15, 1);
         start_scene(6);
         moby->state = 2;
         break;

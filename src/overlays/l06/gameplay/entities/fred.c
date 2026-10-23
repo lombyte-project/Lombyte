@@ -6189,7 +6189,7 @@ extern int FUN_001f9770_301070(void *) __asm__("FUN_001f9770");
 extern int update_npc_dialogue_301070(void *, void *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition_301070(float, void *) __asm__("FUN_L01_002783a8");
 extern void FUN_L00_002502a0_301070(int) __asm__("FUN_L00_002502a0");
-extern void FUN_L00_00260860_301070(int, int) __asm__("FUN_L00_00260860");
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern int memcard_save_data_301070(int, int) __asm__("FUN_0020b178");
 extern int help_request_301070(int a, int b) __asm__("FUN_L00_00203908");
 extern void cutscene_camera_start_301070(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
@@ -6303,7 +6303,7 @@ void fred_update(struct Moby *moby) {
                 moby->state = 1;
             }
             if (fred_vars->f4 == 2) {
-                FUN_L00_00260860_301070(0x1D, 1);
+                grant_inventory_item(0x1D, 1);
                 memcard_save_data_301070(0, -1);
                 help_request_301070(0x1775, 0x2C);
                 D_L06_0015F3FC_macro = 1.0f;

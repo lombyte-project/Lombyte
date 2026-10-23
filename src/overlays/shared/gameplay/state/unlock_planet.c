@@ -353,8 +353,8 @@ extern int D_00141414 __attribute__((section(".data")));
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 
 extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") __attribute__((section(".sdata")));
-void FUN_L00_00260860(int id, int flag);
-void FUN_L00_00260860(int id, int flag) {
+void grant_inventory_item(int id, int flag) __asm__("FUN_L00_00260860");
+void grant_inventory_item(int id, int flag) {
     unsigned char *pa = &D_0013D4C0[id];
     unsigned char *pb = &items_acquired[id];
     int dialogue_message_index = id + 0x25;

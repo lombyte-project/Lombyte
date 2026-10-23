@@ -2004,7 +2004,7 @@ extern char D_L05_00161EF8[];
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void attach_big_head_cheat_manipulator_to_matching_moby(char *) __asm__("FUN_L02_002e0cd8");
@@ -2047,7 +2047,7 @@ void shady_salesman_update(WM *moby) {
         if (update_npc_dialogue(moby, npc_data))
             begin_dialogue_camera_transition(moby, 2.0f);
         if ((unsigned)(npc_data->sub - 3) < 2) {
-            FUN_L00_00260860(0x17, 1);
+            grant_inventory_item(0x17, 1);
             queue_dialogue_message(0x1396, -1);
             memcard_save_data(0, -1);
             mark_moby_for_removal(moby);

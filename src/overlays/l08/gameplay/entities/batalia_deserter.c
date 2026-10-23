@@ -412,7 +412,7 @@ extern void request_batalia_cannon_mount(void *) __asm__("FUN_L08_002e1698");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L08_002a1880(int);
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 
 /* Watcher moby update with a scripted reveal, then turns its head toward the hero or a random target. */
 void the_plumber_batalia_update(L14WatchMoby *m) __asm__("FUN_L08_003065d8");
@@ -462,7 +462,7 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
         break;
     case PLUMBER_SAVE_AND_REMOVE:
         jet_clear_persistent(moby->bB0);
-        FUN_L00_00260860(0x1B, 1);
+        grant_inventory_item(0x1B, 1);
         memcard_save_data(0, -1);
         mark_moby_for_removal(moby);
         return;

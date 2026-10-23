@@ -1621,7 +1621,7 @@ extern int tick_countdown_32(int *);
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void apply_npc_big_head_cheat(char *) __asm__("FUN_L12_002e6b60");
@@ -2944,7 +2944,7 @@ extern int D_L12_0015F5C4 __asm__("D_L12_0015F5C4");
 extern float D_0015ED64_b570 __asm__("D_0015ED64");
 extern void attach_shared_manipulator_to_matching_class_moby(void *) __asm__("FUN_L03_002db480");
 extern void blend_moby_animation_b570(void *, int, int, int) __asm__("FUN_00212f90");
-extern void FUN_L00_00260860_b570(int, int) __asm__("FUN_L00_00260860");
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 
 void edwina_update(L16WatchMoby *m) __asm__("FUN_L12_002eb570");
 void edwina_update(L16WatchMoby *moby) {
@@ -2991,7 +2991,7 @@ void edwina_update(L16WatchMoby *moby) {
             }
             moby->state = 1;
             if (*(short *)((char *)moby_data + 0x24) == 2) {
-                FUN_L00_00260860_b570(4, 0);
+                grant_inventory_item(4, 0);
                 FUN_L00_00263d40_c(0x2EE6, -1);
                 if (moby_data->region != -1) {
                     char *p = D_L12_001600EC + (moby_data->region << 7);

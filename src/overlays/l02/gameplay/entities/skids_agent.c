@@ -72,7 +72,7 @@ extern s32 watcher_talk(struct Moby *, WatcherVars *) __asm__("FUN_L00_00266448"
 extern void watcher_face(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern s32 point_in_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern void give_reward(s32, s32) __asm__("FUN_L00_00203908");
-extern void FUN_L00_00260860(s32, s32);
+extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
 extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void end_conversation(s32, s32) __asm__("FUN_0020b178");
@@ -226,7 +226,7 @@ void skids_agent_update(struct Moby *moby) {
         }
         break;
     case SKIDS_AGENT_END_CONVERSATION:
-        FUN_L00_00260860(5, 1);
+        grant_inventory_item(5, 1);
         end_conversation(0, -1);
         goto kill;
     case SKIDS_AGENT_INTERPOLATE_TRANSFORM_AND_FADE: {
@@ -400,7 +400,7 @@ void skid_mcmarx_update(struct Moby *moby) {
         }
         if (watcher_vars->talk_state == 2) {
             give_reward(2000, 10);
-            FUN_L00_00260860(30, 1);
+            grant_inventory_item(30, 1);
             jet_clear_persistent(*((u8 *)moby + 0xB0));
             jet_reset_camera(&hero.motion.pos, &hero.motion.rot);
             end_conversation(0, -1);

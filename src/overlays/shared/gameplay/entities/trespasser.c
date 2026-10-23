@@ -1137,7 +1137,7 @@ void FUN_00213508_2c1778(void *, int, float) __asm__("FUN_00213508");
 float FUN_001fa580_2c1778(float, float) __asm__("FUN_001fa580");
 float FUN_001f9b80_2c1778(void *, void *) __asm__("FUN_001f9b80");
 float FUN_001f99c0_2c1778(float) __asm__("FUN_001f99c0");
-void FUN_L00_00260860_2c1778(int, int) __asm__("FUN_L00_00260860");
+void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 float FUN_00213ed8_2c1778(void *, float, float) __asm__("FUN_00213ed8");
 void FUN_0020c828_2c1778(void *) __asm__("FUN_0020c828");
 
@@ -1168,7 +1168,7 @@ void update_trespasser_pickup(void *mv) {
             if (P->health.hp) {
                 if (FUN_001f9b80_2c1778(trespasser_moby + 0x10, &P->motion.pos) < 1.0f) {
                     if (FUN_001f99c0_2c1778(*(float *)(trespasser_moby + 0x18) - P->motion.pos.f[2]) < 2.0f) {
-                        FUN_L00_00260860_2c1778(0x1A, 1);
+                        grant_inventory_item(0x1A, 1);
                         trespasser_moby[0x20] = 2;
                     }
                 }

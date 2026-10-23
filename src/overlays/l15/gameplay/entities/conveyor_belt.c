@@ -350,7 +350,7 @@ extern int D_L15_0015F5C4;
 extern int D_L15_0015F640;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D4FD[];
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_002d6bf0(char *);
@@ -390,7 +390,7 @@ void bolt_grabber_update(struct Moby *moby) {
         if (D_L15_0015F5C4 != 2) {
             queue_dialogue_message(0x3AA3, -1);
             D_L15_0015F640 = scale_game_frames(0xB4);
-            FUN_L00_00260860(0x22, 1);
+            grant_inventory_item(0x22, 1);
             memcard_save_data(0, -1);
             moby->state = 3;
         }

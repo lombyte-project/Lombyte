@@ -500,7 +500,7 @@ extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 FUN_001f99c0_2e03a0(f32) __asm__("FUN_001f99c0");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
-extern void FUN_L00_00260860_2e03a0(s32, s32) __asm__("FUN_L00_00260860");
+extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
 extern void give_reward(s32, s32) __asm__("FUN_L00_00203908");
 extern void FUN_L00_002502a0_2e03a0(s32) __asm__("FUN_L00_002502a0");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
@@ -562,7 +562,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
         stub_printf(D_L00_00161BC0);
         queue_dialogue_message(0x232A, -1);
         D_L00_0015F640 = 0xB4;
-        FUN_L00_00260860_2e03a0(7, 1);
+        grant_inventory_item(7, 1);
         if (D_00141B08[0] == 0)
             give_reward(0x2328, 0x34);
         if (p->b != -1) {

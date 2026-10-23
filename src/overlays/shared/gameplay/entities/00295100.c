@@ -2047,7 +2047,7 @@ extern void FUN_L00_0029b4d8_2ba78(int) __asm__("FUN_L00_0029b4d8");
 extern void FUN_L00_0029a400_2ba78(int) __asm__("FUN_L00_0029a400");
 extern int get_help_message_text(int) __asm__("FUN_001fdd10");
 extern void set_scrolling_status_message(int) __asm__("FUN_00237e90");
-extern void FUN_L00_00260860_2ba78(int, int) __asm__("FUN_L00_00260860");
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void FUN_001ff570_2ba78(int, int) __asm__("FUN_001ff570");
 extern s32 FUN_001ff308_2ba78(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void FUN_L00_0029b680_2ba78(void) __asm__("FUN_L00_0029b680");
@@ -2223,7 +2223,7 @@ void update_vendor_purchase(void) {
                 purchase_cost = D_0013D4E3[0] ? CUR_TB.f4 : CUR_TB.f0;
                 if (D_0015ED98 >= purchase_cost) {
                     FUN_L00_0029b4d8_2ba78(2);
-                    FUN_L00_00260860_2ba78(CUR_ITEM.fD0, 1);
+                    grant_inventory_item(CUR_ITEM.fD0, 1);
                     vendor_menu.f48 = CUR_ITEM.fD0;
                     if (CUR_ITEM.fD0 == 0x18) {
                         D_00141345[0] = 1;

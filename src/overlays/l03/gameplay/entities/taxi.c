@@ -1302,7 +1302,7 @@ extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758")
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -1404,7 +1404,7 @@ void helga_update(struct Moby *helga_moby) {
             }
             helga_moby->state = 1;
             if (helga_vars->talk.mode == 2) {
-                FUN_L00_00260860(0xC, 1);
+                grant_inventory_item(0xC, 1);
                 queue_dialogue_message(0xBC8, -1);
                 if (helga_vars->reward != -1) {
                     D_L03_001BA6D0.collected[(s16)((struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i))->save_id] =
@@ -1698,7 +1698,7 @@ extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758")
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern int guide_save(int, int) __asm__("FUN_0020b178");
@@ -1811,7 +1811,7 @@ void big_al_update(struct Moby *guide_moby) {
         if (v->talk.mode != 2) {
             break;
         }
-        FUN_L00_00260860(2, 1);
+        grant_inventory_item(2, 1);
         queue_dialogue_message(0xBC7, -1);
         if (v->reward != -1) {
             referenced_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
