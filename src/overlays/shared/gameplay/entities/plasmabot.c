@@ -35,7 +35,9 @@ void update_plasmabot_target(char *moby) {
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Manipulate moby flags and clear field
-void FUN_L14_002b3318(char *moby) {
+void deactivate_plasmabot(char *moby) __asm__("FUN_L14_002b3318");
+
+void deactivate_plasmabot(char *moby) {
     unsigned short *field = (unsigned short *)(moby + 0x34);
     *field = (*field | 0x41) & 0xEFFF;
     *(int *)(moby + 0x94) = 0;
@@ -301,7 +303,7 @@ void FUN_L14_002b2600_c(struct Moby *m) __asm__("FUN_L14_002b2600");
 void FUN_L14_002b2ed8_c(struct Moby *m) __asm__("FUN_L14_002b2ed8");
 void process_plasmabot_hit_reaction(char *m) __asm__("FUN_L14_002b2f60");
 void update_plasmabot_target(char *moby) __asm__("FUN_L14_002b3268");
-void FUN_L14_002b3318_c(char *moby) __asm__("FUN_L14_002b3318");
+void deactivate_plasmabot(char *moby) __asm__("FUN_L14_002b3318");
 void activate_plasmabot(char *moby) __asm__("FUN_L14_002b3330");
 void initialize_plasmabot_path_state(char *moby) __asm__("FUN_L14_002b3358");
 void scale_and_apply_plasmabot_planar_velocity(char *moby) __asm__("FUN_L14_002b3578");
@@ -434,7 +436,7 @@ void update_plasmabot(char *moby) {
             attach_manipulator(moby, 3, data + 0x160);
         }
         if (((unsigned char *)data)[0x24A] != 0) {
-            FUN_L14_002b3318_c(moby);
+            deactivate_plasmabot(moby);
             ((unsigned char *)moby)[0x20] = 1;
             return;
         }
@@ -488,7 +490,7 @@ void update_plasmabot(char *moby) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             ((unsigned char *)moby)[0x20] = 1;
             *(float *)(moby + 0x58) = 1.0f;
-            FUN_L14_002b3318_c(moby);
+            deactivate_plasmabot(moby);
             return;
         }
         break;
