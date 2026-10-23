@@ -1039,7 +1039,9 @@ extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void fast_vec_sub(float *, float *, float *) __asm__("FUN_001f9a28");
 
 /* For arg1 1: true when (D_L00_00173E60 - arg2) points against the object's +0x130 vector. */
-int FUN_L00_002e79c8(void *camera_moby, int step_index, float *sample_position) {
+int reject_follow_camera_first_step_backward_hit(void *camera_moby, int step_index, float *sample_position) __asm__("FUN_L00_002e79c8");
+
+int reject_follow_camera_first_step_backward_hit(void *camera_moby, int step_index, float *sample_position) {
     V sample_to_reference_delta;
     char *camera_orbit_vector;
 
