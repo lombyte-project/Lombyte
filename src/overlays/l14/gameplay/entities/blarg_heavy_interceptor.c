@@ -427,7 +427,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
 extern unsigned char *FUN_L00_0026d000_c618(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color) __asm__("FUN_L00_0026d000");
-extern void FUN_L00_0025c398_c618(void *, void *, int) __asm__("FUN_L00_0025c398");
+extern void spawn_particles_at_shape_points(void *, void *, int) __asm__("FUN_L00_0025c398");
 extern s32 allocate_voice_c618(s32, s32, void *) __asm__("FUN_0022da68");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern s32 random_integer_below(s32 n) __asm__("FUN_00213260");
@@ -835,7 +835,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
     }
     if ((s8)moby->state >= 0 && moby->prev_seq == 1) {
         if (moby->command == 1) {
-            FUN_L00_0025c398_c618(moby, D_L14_0015F580, 0xFFFF);
+            spawn_particles_at_shape_points(moby, D_L14_0015F580, 0xFFFF);
         }
     } else {
         moby->command = 0;

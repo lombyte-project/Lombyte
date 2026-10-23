@@ -70,7 +70,9 @@ extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
-void FUN_L00_0025c398(void *source_object, void *base_vector, void *point_source_mask) {
+void spawn_particles_at_shape_points(void *source_object, void *base_vector, void *point_source_mask) __asm__("FUN_L00_0025c398");
+
+void spawn_particles_at_shape_points(void *source_object, void *base_vector, void *point_source_mask) {
     V4 generated_points[20];
     float randomized_vector[4];
     int point_count, i;
@@ -180,7 +182,7 @@ int solve_quadratic_equation(float *r0, float *r1, float a, float b, float c) __
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void FUN_L00_00259710(void *a);
 void spawn_nearby_effect(char *, float, int, int, void *, void *) __asm__("FUN_L00_00259bc8");
-void FUN_L00_0025c398_c(void *a0, void *a1, void *a2) __asm__("FUN_L00_0025c398");
+void spawn_particles_at_shape_points(void *a0, void *a1, void *a2) __asm__("FUN_L00_0025c398");
 extern Vec4 D_94C8_60 __asm__("D_L00_00173E60");
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -214,7 +216,7 @@ int mine_fall(char *moby, char *motion_state) {
     *(float *)(motion_state + 0x8) = *(float *)(motion_state + 0x8) - *(float *)(motion_state + 0x10);
     if (*(unsigned char *)(motion_state + 0x2E) == 1) {
         if (*(unsigned char *)(motion_state + 0x2F) != 0) {
-            FUN_L00_0025c398_c(moby, motion_state, (void *)(int)*(unsigned char *)(motion_state + 0x2F));
+            spawn_particles_at_shape_points(moby, motion_state, (void *)(int)*(unsigned char *)(motion_state + 0x2F));
         }
     }
 
