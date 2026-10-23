@@ -1043,7 +1043,9 @@ extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 
 /* Composes the 0xC0 matrix of a with the one built from c into b+0xC0 and flags b for update. */
-void FUN_L00_002d9fd0(char *source_moby, char *destination_moby, void *euler_angles) {
+void compose_moby_rotation_with_euler_offset(char *source_moby, char *destination_moby, void *euler_angles) __asm__("FUN_L00_002d9fd0");
+
+void compose_moby_rotation_with_euler_offset(char *source_moby, char *destination_moby, void *euler_angles) {
     V euler_rotation, source_rotation, composed_rotation;
     euler_rotation_matrix(&euler_rotation, euler_angles);
     copy_matrix_rotation(&source_rotation, source_moby + 0xC0);
@@ -1437,7 +1439,7 @@ extern void FUN_L00_002223f8(int,int);
 extern void update_hud_counter_cap_and_visibility(void) __asm__("FUN_L00_002377b8");
 extern void FUN_L00_00237840(void);
 extern void FUN_L00_0024f7c8(void *, int, void *);
-extern void FUN_L00_002d9fd0(char *,char *,void *);
+extern void compose_moby_rotation_with_euler_offset(char *,char *,void *) __asm__("FUN_L00_002d9fd0");
 extern void update_suck_cannon_suction(u8 *,void *) __asm__("FUN_L00_002da360");
 extern void refresh_suck_cannon_slots(void) __asm__("FUN_L00_002da660");
 extern void FUN_L00_002defe0(int);
@@ -1742,7 +1744,7 @@ void suckcannon_update(SuckMoby *self) {
                 }
                 if(best) cannon->target=best;
             }
-            FUN_L00_002d9fd0((char *)self,(char *)stored,suck_fire_tuning);
+            compose_moby_rotation_with_euler_offset((char *)self,(char *)stored,suck_fire_tuning);
             if(stored->cls->handlers->fire) stored->cls->handlers->fire(stored,&work.fire.velocity,cannon->target,cannon->target_height);
             suck_hero.count--;
             if(suck_hero.count>0) {
