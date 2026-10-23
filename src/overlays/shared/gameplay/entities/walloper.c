@@ -2204,9 +2204,15 @@ void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sy, float s
        through $v0 as retail does. */
     col |= (unsigned char)col >> 8;
     col1 = x | ((unsigned char)x >> 8);
-    u.q2 = t.q2;
-    u.q1 = t.q1;
-    u.z4 = t.z4;
+    /* Near miss, 4 rows: the two locals put t.q1 and t.z4 in retail's registers; the
+       colour home store is still scheduled one slot early. */
+    {
+        long q1v = t.q1;
+        long z4v = t.z4;
+        u.q2 = t.q2;
+        u.q1 = q1v;
+        u.z4 = z4v;
+    }
     u.c[3] = col1;
     u.c[2] = col1;
     u.c[1] = col1;
