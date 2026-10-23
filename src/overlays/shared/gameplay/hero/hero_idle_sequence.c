@@ -1116,7 +1116,7 @@ void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
 void update_hero_offset_rail_candidate(void) __asm__("FUN_L00_0020d330");
 void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
 void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
-void FUN_L00_0020b1d8_u(void) __asm__("FUN_L00_0020b1d8");
+void update_hero_easing_targets_and_point_effects(void) __asm__("FUN_L00_0020b1d8");
 void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
 
 void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
@@ -1177,7 +1177,7 @@ void coordinate_hero_frame_update(void) {
     if (hero_state->vehicle_mode)
         return;
     update_hero_delayed_voice_requests();
-    FUN_L00_0020b1d8_u();
+    update_hero_easing_targets_and_point_effects();
     update_hero_collision_ease_target();
     FUN_L00_0020a540_u();
     FUN_L00_0020ac98_u();
@@ -3050,7 +3050,7 @@ extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern void configure_hero_point_effect_emission(s32, s32, s32, s32, f32, f32) __asm__("FUN_L00_00233288");
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void spawn_jittered_effect_particle_with_optional_basis(void *, void *, f32) __asm__("FUN_L00_0026de90");
-void FUN_L00_0020b1d8(void) {
+void update_hero_easing_targets_and_point_effects(void) {
     u8 buf[0x10] __attribute__((aligned(16)));
     f32 clamped_rotation_angle, secondary_clamped_rotation_angle;
     u8 *optional_moby_basis;

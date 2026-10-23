@@ -200,7 +200,7 @@ extern void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
 extern void FUN_L00_0020a540(void);
 extern void update_hero_idle_random_rotation_targets(void) __asm__("FUN_L00_0020a9e8");
 extern void FUN_L00_0020ac98(void);
-extern void FUN_L00_0020b1d8(void);
+extern void update_hero_easing_targets_and_point_effects(void) __asm__("FUN_L00_0020b1d8");
 extern void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
 extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
@@ -246,7 +246,7 @@ void update_hero_frame(void) {
         return;
     }
     update_hero_delayed_voice_requests();
-    FUN_L00_0020b1d8();
+    update_hero_easing_targets_and_point_effects();
     update_hero_collision_ease_target();
     FUN_L00_0020a540();
     FUN_L00_0020ac98();
