@@ -2782,7 +2782,9 @@ extern short D_L18_00161F5C __attribute__((sda));
 extern short D_L18_00161F60 __attribute__((sda));
 extern short D_L18_00161F64 __attribute__((sda));
 extern short D_L18_00161F68 __attribute__((sda));
-void FUN_L18_002ea598(struct Moby *moby) {
+void spawn_sparks_along_target_direction(struct Moby *moby) __asm__("FUN_L18_002ea598");
+
+void spawn_sparks_along_target_direction(struct Moby *moby) {
     float spark_spawn_position[4];
     float first_spark_vector[4];
     float second_spark_vector[4];
