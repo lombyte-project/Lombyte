@@ -873,7 +873,9 @@ extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float
 extern void spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L16_002d41f8(void *moby) {
+void emit_blarg_elite_commando_death_particles(void *moby) __asm__("FUN_L16_002d41f8");
+
+void emit_blarg_elite_commando_death_particles(void *moby) {
     float delta[4], velocity[4], position[4];
     L16ParticleChoices first, second;
     float distance, range, delay;
