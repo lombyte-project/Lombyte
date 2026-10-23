@@ -308,7 +308,9 @@ extern unsigned char D_0015EDB0_c[] __asm__("D_0015EDB0") __attribute__((section
 extern unsigned char D_L08_0017CC40_d[] __asm__("D_L08_0017CC40") __attribute__((section(".data")));
 
 extern short D_L08_00162300 __attribute__((sda));
-void FUN_L08_003063f0(struct Moby *moby) {
+void attach_batalia_plumber_class_manipulator(struct Moby *moby) __asm__("FUN_L08_003063f0");
+
+void attach_batalia_plumber_class_manipulator(struct Moby *moby) {
     int i;
     if (D_L08_0015F5C4 == 2 && D_0015EDB0_c[0]) {
         if (D_L08_0016D060_d.a == 6 && D_L08_0016D060_d.b >= 0x26C && D_L08_0016D060_d.b < 0x2CC) {
