@@ -977,7 +977,9 @@ void draw_walloper_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __as
 void draw_walloper_camera_facing_quad(void *mv) __asm__("FUN_L00_002bc1a0");
 
 void draw_walloper_camera_facing_quad(void *) __asm__("FUN_L00_002bc1a0");
-void FUN_L00_002bbb00(void *moby) {
+void draw_walloper_arc_and_quad_effects(void *moby) __asm__("FUN_L00_002bbb00");
+
+void draw_walloper_arc_and_quad_effects(void *moby) {
     s32 i;
     s32 arc_alpha;
     for (i = 0; i < 10; i++) {
