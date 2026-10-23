@@ -773,7 +773,7 @@ extern void FUN_L00_00233708_cf(int, int) __asm__("FUN_L00_00216de8");
 extern void FUN_L00_00233810_cf(void *, void *, float) __asm__("FUN_L00_00233708");
 extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
 extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
-extern void FUN_L00_00233ba0(float *, float *, float);
+extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern void FUN_L00_0025f730(void *, float);
@@ -1289,7 +1289,7 @@ void update_hero_state_motion(void) {
 
         hero.target_speed = 0.0f;
         speed_step(frame_time_sq * 30.0f, frame_time_sq * 30.0f);
-        FUN_L00_00233ba0(hero.motion.velocity.f, hero.motion.velocity.f, hero.ground_speed);
+        set_gravity_relative_vector_length_xy(hero.motion.velocity.f, hero.motion.velocity.f, hero.ground_speed);
         t0 = scale_game_frames(0xC);
         a = frame_time * 5.7f;
         b = frame_time_sq * 70.0f;
@@ -1350,7 +1350,7 @@ void update_hero_state_motion(void) {
             hero.motion.velocity.f[1] = fast_sin(hero.motion.rot.f[2]) * hero.ground_speed;
         } else {
             speed_step(frame_time_sq * 15.0f, frame_time_sq * 15.0f);
-            FUN_L00_00233ba0(hero.motion.velocity.f, hero.motion.velocity.f, hero.ground_speed);
+            set_gravity_relative_vector_length_xy(hero.motion.velocity.f, hero.motion.velocity.f, hero.ground_speed);
         }
         if (hero.unkA58 != 0 || ((Moby *)hero.unkA54) != 0) {
             hero.motion.move_yaw = hero.unkA5C;

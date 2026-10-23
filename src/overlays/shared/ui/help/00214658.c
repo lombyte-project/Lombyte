@@ -632,7 +632,7 @@ void update_hero_tilt(void) {
 }
 float gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
 void gravity_set_z(void *, void *, float) __asm__("FUN_L00_00233b20");
-void FUN_L00_00233ba0(void *, void *, float);
+void set_gravity_relative_vector_length_xy(void *, void *, float) __asm__("FUN_L00_00233ba0");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void reduce_and_apply_hero_planar_velocity_addend(float x) __asm__("FUN_L00_00216710");
@@ -647,7 +647,7 @@ void reduce_and_apply_hero_planar_velocity_addend(float x) {
         reduced_planar_length = planar_length - x;
         if (reduced_planar_length < z)
             reduced_planar_length = z;
-        FUN_L00_00233ba0(planar_velocity_addend, planar_velocity_addend, reduced_planar_length);
+        set_gravity_relative_vector_length_xy(planar_velocity_addend, planar_velocity_addend, reduced_planar_length);
         add_vector_xyz(planar_velocity_addend - 0x70, planar_velocity_addend - 0x70, planar_velocity_addend);
     } else
         clear_u64_value(planar_velocity_addend);

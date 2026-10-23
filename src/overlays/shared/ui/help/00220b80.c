@@ -53,7 +53,7 @@ extern f32 gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
 extern void gravity_flatten(void *, void *) __asm__("FUN_L00_002338d0");
-extern void FUN_L00_00233ba0(float *, float *, float);
+extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern f32 forward_component(void *) __asm__("FUN_L00_00213350");  /* dot with (cos, sin) of the hero yaw */
 
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -147,8 +147,8 @@ void integrate_hero_movement(void)
     normalize_vector_xyz(&hero.motion.unk130, &movement_vector_scratch, velocity_measure);
 
     qcopy(&velocity_projection_source, &hero.motion.velocity);
-    FUN_L00_00233ba0((float *)&velocity_projection_source, (float *)&velocity_projection_source, 0.0f);
-    FUN_L00_00233ba0((float *)&hero.motion.unk120, (float *)&hero.motion.unk120, 0.0f);
+    set_gravity_relative_vector_length_xy((float *)&velocity_projection_source, (float *)&velocity_projection_source, 0.0f);
+    set_gravity_relative_vector_length_xy((float *)&hero.motion.unk120, (float *)&hero.motion.unk120, 0.0f);
     normalize_vector_xyz(&hero.motion.unk120, &hero.motion.unk120, 1.0f);
     velocity_measure = dot_vectors_xyz(&hero.motion.unk120, &velocity_projection_source);
     if (velocity_measure < 0.0f) {

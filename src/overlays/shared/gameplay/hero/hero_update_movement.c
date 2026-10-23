@@ -237,7 +237,7 @@ extern f32 forward_component(void *) __asm__("FUN_L00_00213350");
 extern struct HeroTableRow2C attack_records[] __asm__("D_L00_0017BC28");
 extern struct LevelTable_QS D_L00_00166C80;
 #define Q D_L00_00166C80
-extern void FUN_L00_00233ba0(void *, void *, f32);
+extern void set_gravity_relative_vector_length_xy(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
 extern void offset_hero_position_against_gravity(void *, void *, f32) __asm__("FUN_L00_002336e8");
 extern void make_hit_descriptor(void *, struct MobyView *, s32, f32, void *) __asm__("FUN_L00_00259888");
@@ -1128,7 +1128,7 @@ void hero_update_movement(void) {
         f32 mx;
         hero.target_speed = 0.0f;
         speed_step(frame_time_sq * 30.0f, frame_time_sq * 30.0f);
-        FUN_L00_00233ba0(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
+        set_gravity_relative_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
         t1 = scale_game_frames(12);
         r = frame_time * 5.7f;
         mx = frame_time_sq * 70.0f;
@@ -1181,7 +1181,7 @@ void hero_update_movement(void) {
                 hero.motion.velocity.f[1] = fast_sin(hero.motion.rot.f[2]) * hero.ground_speed;
             } else {
                 speed_step(frame_time_sq * 2.0f, frame_time_sq * 2.0f);
-                FUN_L00_00233ba0(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
+                set_gravity_relative_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
             }
         } else {
             if ((struct MobyView *)hero.unkA54 != NULL) {
@@ -1194,7 +1194,7 @@ void hero_update_movement(void) {
                 hero.motion.velocity.f[1] = fast_sin(hero.motion.rot.f[2]) * hero.ground_speed;
             } else {
                 speed_step(frame_time_sq * 15.0f, frame_time_sq * 15.0f);
-                FUN_L00_00233ba0(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
+                set_gravity_relative_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
             }
         }
         if (hero.unkA58 != 0 || (struct MobyView *)hero.unkA54 != NULL) {

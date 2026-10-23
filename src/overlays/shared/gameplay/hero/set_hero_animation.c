@@ -1140,7 +1140,9 @@ void gravity_set_z(f32 *out, f32 *in, f32 z) {
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
 
-void FUN_L00_00233ba0(float *output_vector, float *input_vector, float z) {
+void set_gravity_relative_vector_length_xy(float *output_vector, float *input_vector, float z) __asm__("FUN_L00_00233ba0");
+
+void set_gravity_relative_vector_length_xy(float *output_vector, float *input_vector, float z) {
     struct Hero *base = &hero;
 
     switch (base->unk20B3) {
