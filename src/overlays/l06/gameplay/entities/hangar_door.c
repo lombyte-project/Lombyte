@@ -234,7 +234,9 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 /* 0x002f9948, 100 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
-void FUN_L06_002f9948(int moby_list_index) {
+void set_moby_list_state_18(int moby_list_index) __asm__("FUN_L06_002f9948");
+
+void set_moby_list_state_18(int moby_list_index) {
     short *moby_index_cursor = D_L06_001ABFC0[moby_list_index];
     if (moby_index_cursor != 0) {
         do {
@@ -2609,7 +2611,7 @@ void FUN_L06_002d9e08_c(int index) __asm__("FUN_L06_002d9e08");
 void set_listed_class_16f_state_2_and_clear_data_28(int idx) __asm__("FUN_L06_002d9e78");
 void FUN_L06_002f5360_c2(char *moby) __asm__("FUN_L06_002f5360");
 void FUN_L06_002f53e8_c2(char *moby) __asm__("FUN_L06_002f53e8");
-void FUN_L06_002f9948_c(int idx) __asm__("FUN_L06_002f9948");
+void set_moby_list_state_18(int idx) __asm__("FUN_L06_002f9948");
 void FUN_L06_002f99b0_c(int index) __asm__("FUN_L06_002f99b0");
 void FUN_L06_002fb090_c(char *moby) __asm__("FUN_L06_002fb090");
 void FUN_L06_002fb148_c(char *moby) __asm__("FUN_L06_002fb148");
@@ -2631,7 +2633,7 @@ extern int func_001F9850_q(int) __asm__("FUN_001f96f8");
 extern void func_001F9C08_q(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern float func_001F9D48_q(void *, void *) __asm__("FUN_001f9b80");
 extern float func_00214158_q(void) __asm__("FUN_00213308");
-extern void func_L06_002FAD78_q(int) __asm__("FUN_L06_002f9948");
+extern void set_moby_list_state_18(int) __asm__("FUN_L06_002f9948");
 extern void func_0020D678_q(void *) __asm__("FUN_0020c828");
 extern void func_L06_002F6818_q(void *) __asm__("FUN_L06_002f53e8");
 extern void func_L06_002DB1D8_q(int) __asm__("FUN_L06_002d9e08");
@@ -2718,7 +2720,7 @@ void alien_queen_update(unsigned char *moby)
         *(int *)(moby + 0x94) = 0;
         *(unsigned short *)(moby + 0x34) = (*(unsigned short *)(moby + 0x34) | 0x4001) & 0xEFFF;
         *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + 17.5f;
-        func_L06_002FAD78_q(*(int *)(data + 0xF4));
+        set_moby_list_state_18(*(int *)(data + 0xF4));
         if (D_0013D3A7_q[4] != 0 && D_0013D4FD_q[8] == 0) {
             func_0020D678_q(moby);
             return;

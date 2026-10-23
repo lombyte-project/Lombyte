@@ -6469,7 +6469,7 @@ extern float D_L06_001620B0 __asm__("D_L06_001620B0") __attribute__((sda));
 extern float D_L06_001620C4 __asm__("D_L06_001620C4") __attribute__((sda));
 extern int D_L06_0015F880 __asm__("D_L06_0015F880");
 extern void set_moby_list_state_4(int) __asm__("FUN_L06_002f45f0");
-extern void FUN_L06_002f9948(int);
+extern void set_moby_list_state_18(int) __asm__("FUN_L06_002f9948");
 extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
 void begin_red_button_rotation(char *moby) __asm__("FUN_L06_003047b8");
 
@@ -6538,8 +6538,8 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
             return;
         }
         set_moby_list_state_4(*(int *)(moby_vars + 0));
-        FUN_L06_002f9948(*(int *)(moby_vars + 4));
-        FUN_L06_002f9948(*(int *)(moby_vars + 8));
+        set_moby_list_state_18(*(int *)(moby_vars + 4));
+        set_moby_list_state_18(*(int *)(moby_vars + 8));
         moby[0x20] = 1;
         moby[0x30] = 0xFF;
         return;
