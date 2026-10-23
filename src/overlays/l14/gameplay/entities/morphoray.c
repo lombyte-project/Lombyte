@@ -1626,7 +1626,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
 #ifndef MACRO_ADDR
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
-extern int func_L10_002F6E38_15920(void *) __asm__("FUN_L10_002f5a78");
+extern int check_descriptor_hero_trigger(void *) __asm__("FUN_L10_002f5a78");
 extern char *D_L14_0015F050_15920 __asm__("D_L14_0015EF50");
 int check_camera_hero_requirements(char *camera, char *control_mode_gate_object) __asm__("FUN_L14_00315920");
 
@@ -1639,7 +1639,7 @@ int check_camera_hero_requirements(char *camera, char *control_mode_gate_object)
         if (hero.state.control_mode != 15)
             return 0;
     }
-    if (func_L10_002F6E38_15920(camera) == 0)
+    if (check_descriptor_hero_trigger(camera) == 0)
         return 0;
     required_control_mode = *(int *)(rec + 0x48);
     if (required_control_mode >= 0 && hero.state.control_mode != required_control_mode)

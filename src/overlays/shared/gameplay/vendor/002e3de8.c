@@ -241,7 +241,9 @@ extern int test_point_in_transformed_unit_cylinder(void *, int) __asm__("FUN_L00
 extern int test_point_in_transformed_unit_sphere(float *, int) __asm__("FUN_L00_0025faf0");
 extern int FUN_L00_00259740_5a78(float *, float *, int) __asm__("FUN_L00_00259740");
 
-int FUN_L10_002f5a78(char *moby) {
+int check_descriptor_hero_trigger(char *moby) __asm__("FUN_L10_002f5a78");
+
+int check_descriptor_hero_trigger(char *moby) {
     unsigned char *e =
         *(unsigned char **)(D_L10_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
 
