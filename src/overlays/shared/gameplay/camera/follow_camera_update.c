@@ -1081,7 +1081,7 @@ void FUN_L00_002eb278(void *camera) {
 #include "qcopy.h"
 void FUN_L00_001eb0c8_002eb320(void *, void *, float) __asm__("FUN_L00_001eb0c8");
 void FUN_L00_001eb0b0_002eb320(void *) __asm__("FUN_L00_001eb0b0");
-void FUN_L00_001ff250_002eb320(void *) __asm__("FUN_L00_001ff250");
+void clear_twelve_bytes(void *) __asm__("FUN_L00_001ff250");
 void FUN_L00_002eb278_002eb320(char *) __asm__("FUN_L00_002eb278");
 void FUN_L00_002eb320(char *camera_object, void *camera_initialization_values, u128 *initial_orbit_origin, float x) {
     char *camera_state = *(char **)(camera_object + 0x70);
@@ -1092,7 +1092,7 @@ void FUN_L00_002eb320(char *camera_object, void *camera_initialization_values, u
     FUN_L00_001eb0c8_002eb320(camera_state + 0x14, camera_initialization_values, x);
     FUN_L00_001eb0c8_002eb320(camera_object + 0x50, camera_initialization_values, 0.0f);
     FUN_L00_001eb0b0_002eb320(camera_state);
-    FUN_L00_001ff250_002eb320(camera_state + 0x90);
+    clear_twelve_bytes(camera_state + 0x90);
     FUN_L00_002eb278_002eb320(camera_object);
 }
 typedef struct {
@@ -1125,7 +1125,7 @@ typedef struct {
 } S002eb3b0;
 
 extern void FUN_L00_001eb0b0_c(void *) __asm__("FUN_L00_001eb0b0");
-extern void FUN_L00_001ff250(void *);
+extern void clear_twelve_bytes(void *) __asm__("FUN_L00_001ff250");
 extern void FUN_L00_002eb278_c(void *) __asm__("FUN_L00_002eb278");
 
 void FUN_L00_002eb3b0(S002eb3b0 *camera_object) {
@@ -1149,7 +1149,7 @@ void FUN_L00_002eb3b0(S002eb3b0 *camera_object) {
     m->f38 = 0.07f;
     FUN_L00_001eb0b0_c((u8 *)m + 0x50);
     FUN_L00_001eb0b0_c(m);
-    FUN_L00_001ff250((u8 *)m + 0x90);
+    clear_twelve_bytes((u8 *)m + 0x90);
     FUN_L00_002eb278_c(camera_object);
     camera_object->f7E = 0;
 }
