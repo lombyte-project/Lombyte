@@ -2525,7 +2525,9 @@ extern void stub_printf(char *, int) __asm__("FUN_001e93b0");
 extern int rand_e50(void) __asm__("FUN_001160d8");
 
 /* Sets up the walker from its path, target and spot ids; reports a missing id and returns 1, else returns 0. */
-int FUN_L07_0030ed30(char *moby, char *data) {
+int initialize_sharkigator(char *moby, char *data) __asm__("FUN_L07_0030ed30");
+
+int initialize_sharkigator(char *moby, char *data) {
     if (*(int *)(data + 0x110) == -1) {
         stub_printf(D_L07_00211720, (moby - D_L07_0015FFD8_30ed30) >> 8);
         return 1;
@@ -2748,7 +2750,7 @@ extern void mark_moby_for_removal_c4(void *) __asm__("func_0020C828");
 extern void no_op_main_callback_alt(void *, void *) __asm__("FUN_001e93e8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
-int FUN_L07_0030ed30_c(char *moby, char *data) __asm__("FUN_L07_0030ed30");
+int initialize_sharkigator(char *moby, char *data) __asm__("FUN_L07_0030ed30");
 int update_sharkigator_horizontal_velocity_by_heading(char *moby, char *obj, float a, float lo, float up, float hi, float down, float vmax, float vmin) __asm__("FUN_L07_0030f1e0");
 int test_sharkigator_target_sphere_collision(void *moby, int id, float scale) __asm__("FUN_L07_0030f4d0");
 int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper) __asm__("FUN_L07_0030f540");
@@ -2808,7 +2810,7 @@ void sharkigator_update(unsigned char *moby) {
     }
     FUN_L00_00263ac8(moby, 0, data + 0x150, 2.2f);
     if (moby[0x20] == 0) {
-        if (FUN_L07_0030ed30_c((char *)moby, data)) {
+        if (initialize_sharkigator((char *)moby, data)) {
             DebugPrint_alt(D_L07_002117F8, (int)((char *)moby - (char *)level_mobys) >> 8);
             mark_moby_for_removal_c4(moby);
             return;
