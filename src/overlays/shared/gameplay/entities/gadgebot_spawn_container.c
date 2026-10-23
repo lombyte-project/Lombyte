@@ -1399,7 +1399,7 @@ extern void FUN_L00_00261630(char *moby, char *d, float a, float b);
 extern void FUN_L00_00261d78(float, int, void *, void *);
 extern void FUN_L00_00272060(void *, int, float, float, int, int, int, float, void *);
 extern void build_symmetric_adjacency_masks(int *list, int n, int idx) __asm__("FUN_L05_0028be78");
-extern void FUN_L06_002f2250_u(void) __asm__("FUN_L06_002f2250");
+extern void assign_gadgebot_attack_targets(void) __asm__("FUN_L06_002f2250");
 void select_nearest_gadgebot_interaction_target(void *moby_arg) __asm__("FUN_L06_002f2910");
 
 extern void select_nearest_gadgebot_interaction_target(void *) __asm__("FUN_L06_002f2910");
@@ -1809,7 +1809,7 @@ void gadgebot_update(GbMoby *moby) {
         switch (moby->sub) {
         case GADGEBOT_ATTACK_SEEK_AND_APPROACH_TARGET:
             if (gadgebot_vars->unk18C < level_frame_count) {
-                FUN_L06_002f2250_u();
+                assign_gadgebot_attack_targets();
             }
             if (gadgebot_vars->target != 0) {
                 float approach_heading;
@@ -1906,7 +1906,7 @@ void gadgebot_update(GbMoby *moby) {
             break;
         case GADGEBOT_ATTACK_WAIT_FOR_TARGET:
             if (gadgebot_vars->unk18C < level_frame_count) {
-                FUN_L06_002f2250_u();
+                assign_gadgebot_attack_targets();
             }
             if (moby->anim != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(7));
@@ -2235,7 +2235,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 /* Shares targets among the idle class-0x359 mobys: each one ranks up to 8 candidates
    by score, each target goes to its best-scoring mobys, and their approach angles
    are spread apart. */
-void FUN_L06_002f2250(void) {
+void assign_gadgebot_attack_targets(void) {
     char *mobys[50];
     char end[16];
     char start[16];
