@@ -3715,7 +3715,9 @@ extern float D_L00_001D15A0_lui[] __asm__("D_L00_001D15A0") __attribute__((secti
 extern float D_L00_001D31C0_lui[] __asm__("D_L00_001D31C0") __attribute__((section(".data")));
 extern float D_L00_001D4480_lui[] __asm__("D_L00_001D4480") __attribute__((section(".data")));
 extern u8 D_L00_001D2D10_lui[] __asm__("D_L00_001D2D10") __attribute__((section(".data")));
-void FUN_L00_002d7d58(char *spawner, int i) {
+void initialize_smoke_fire_spawner_mesh_particle(char *spawner, int i) __asm__("FUN_L00_002d7d58");
+
+void initialize_smoke_fire_spawner_mesh_particle(char *spawner, int i) {
     char *spawner_vars = *(char **)(spawner + 0x78);
     float base_particle_height;
     V_2d7d58 *particle_position;
