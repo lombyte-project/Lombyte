@@ -410,7 +410,9 @@ void FUN_L00_002e01b0(char *moby) {
 extern u8 *D_L00_0015FFD8;
 
 /* Tests flag 2 (or 1 when &hero.unk20B0 is set) at 0xBC of the moby selected by +0x2FC. */
-s32 FUN_L00_002e02e0(void) {
+s32 test_hydrodisplacer_activation_flag(void) __asm__("FUN_L00_002e02e0");
+
+s32 test_hydrodisplacer_activation_flag(void) {
     struct Hero *base;
     u8 *linked_moby;
     s32 ground_moby_address;
