@@ -374,7 +374,7 @@ extern void FUN_L00_00257470(void *, int, int);
 extern void collect_mobies_in_sphere_at_moby_point(void *, int, int, float, float, float, int, int, int) __asm__("FUN_L00_002599e8");
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
-extern void FUN_L06_002e9998_c(char *, float *, float *) __asm__("FUN_L06_002e9998");
+extern void blend_frog_rotation_to_facing_frame(char *, float *, float *) __asm__("FUN_L06_002e9998");
 extern void probe_frog_local_z_collision(char *) __asm__("FUN_L06_002e9aa8");
 extern void FUN_L06_002e9b60_c(void *, void *, int, float, float) __asm__("FUN_L06_002e9b60");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -498,7 +498,7 @@ void frog_update(unsigned char *moby) {
     case 3:
         subtract_vector_xyz(A, target + 0x10, moby + 0x10);
         probe_frog_local_z_collision((char *)moby);
-        FUN_L06_002e9998_c((char *)moby, (float *)D_L06_00174600, A);
+        blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, A);
         if (vector_distance(((char *)&D_0013F3D0), moby + 0x10) < *(float *)(data + 0x24C)) {
             moby[0x20] = 4;
             if (moby[0x53] != 4) blend_moby_animation_c(moby, 4, 0, scale_game_frames_alt(5));
@@ -510,7 +510,7 @@ void frog_update(unsigned char *moby) {
         qcopy(B, (char *)D_L06_001B0C30[*(int *)(data + 0x1F8)] + *(short *)(data + 0x208) * 16 + 0x10);
         subtract_vector_xyz(A, B, moby + 0x10);
         probe_frog_local_z_collision((char *)moby);
-        FUN_L06_002e9998_c((char *)moby, (float *)D_L06_00174600, A);
+        blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, A);
         normalize_vector_xyz(C, moby + 0xC0, *(float *)(data + 0x1E4) * D_0015ED6C_gp);
         FUN_L06_002e9b60_c(moby, C, 0, 0.3f, 0.3f);
         transform_vector_by_basis(A, A, moby + 0xC0);
@@ -539,7 +539,7 @@ void frog_update(unsigned char *moby) {
     }
     case 5:
         set_vector_unit_z(A);
-        FUN_L06_002e9998_c((char *)moby, A, (float *)(data + 0x120));
+        blend_frog_rotation_to_facing_frame((char *)moby, A, (float *)(data + 0x120));
         if (mine_fall(moby, data + 0x120) & 1) {
             moby[0x20] = 7;
             if (moby[0x53] != 3) blend_moby_animation_c(moby, 3, 0, 1);
@@ -580,7 +580,7 @@ void frog_update(unsigned char *moby) {
             }
             subtract_vector_xyz(C, data + 0x230, moby + 0x10);
             probe_frog_local_z_collision((char *)moby);
-            FUN_L06_002e9998_c((char *)moby, (float *)D_L06_00174600, C);
+            blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, C);
             normalize_vector_xyz(B, moby + 0xC0, *(float *)(data + 0x1E4) * D_0015ED6C_gp);
             FUN_L06_002e9b60_c(moby, B, 1, 0.3f, 0.3f);
         }
@@ -600,7 +600,7 @@ void frog_update(unsigned char *moby) {
         B[1] = fast_sin_c(angle);
         B[2] = 0.0f;
         probe_frog_local_z_collision((char *)moby);
-        FUN_L06_002e9998_c((char *)moby, (float *)D_L06_00174600, B);
+        blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, B);
         normalize_vector_xyz(A, moby + 0xC0, *(float *)(data + 0x1E4) * D_0015ED6C_gp);
         FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
         if (vector_distance(moby + 0x10, target + 0x10) < 2.0f) {
@@ -620,7 +620,7 @@ void frog_update(unsigned char *moby) {
         B[2] = 0.0f;
         near = 0;
         probe_frog_local_z_collision((char *)moby);
-        FUN_L06_002e9998_c((char *)moby, (float *)D_L06_00174600, B);
+        blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, B);
         normalize_vector_xyz(A, moby + 0xC0, *(float *)(data + 0x1E4) * D_0015ED6C_gp);
         FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
         if (FUN_L00_00261b48(*(int *)(data + 0x1EC), moby + 0x10, target + 0x10, D) != 0
@@ -649,7 +649,7 @@ void frog_update(unsigned char *moby) {
         B[0] = fast_cos_c(fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14)));
         B[1] = fast_sin_c(fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14)));
         B[2] = 0.0f;
-        FUN_L06_002e9998_c((char *)moby, (float *)(moby + 0xE0), B);
+        blend_frog_rotation_to_facing_frame((char *)moby, (float *)(moby + 0xE0), B);
         wait = compute_interpolated_record_value_c(moby);
         if (moby[0x52] == moby[0x53] && wait >= 10.0f && wait <= 15.0f && *(int *)(((char *)&D_001413D4)) != 0x51) {
             normalize_vector_xyz(A, moby + 0xC0, (*(float *)(data + 0x1E4) + *(float *)(data + 0x1E4)) * D_0015ED6C_gp);
@@ -666,7 +666,7 @@ void frog_update(unsigned char *moby) {
     case 13:
         subtract_vector_xyz(B, data + 0x210, moby + 0x10);
         probe_frog_local_z_collision((char *)moby);
-        FUN_L06_002e9998_c((char *)moby, (float *)D_L06_00174600, B);
+        blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, B);
         normalize_vector_xyz(A, moby + 0xC0, *(float *)(data + 0x1E4) * D_0015ED6C_gp);
         FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
         if (vector_distance(moby + 0x10, data + 0x210) < 2.0f) {
@@ -887,7 +887,7 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 
 extern float D_L06_00161C00 __attribute__((sda));
-void FUN_L06_002e9998(char *moby, float *reference_axis, float *facing_direction) {
+void blend_frog_rotation_to_facing_frame(char *moby, float *reference_axis, float *facing_direction) {
     float facing_projection;
     float A[4], B[4], C[4], D[4], E[4], F[4], G[4], H[4];
     fast_vec_normalize(C, reference_axis, 1.0f);
