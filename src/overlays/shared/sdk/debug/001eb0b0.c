@@ -14,7 +14,9 @@ void zero_five_words(s32 *destination) {
 }
 f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 /* Copies the five floats of s to d, adding x to the first as a rotation. */
-void FUN_L00_001eb0c8(f32 *destination, f32 *source, f32 x) {
+void copy_five_floats_with_rotation_offset(f32 *destination, f32 *source, f32 x) __asm__("FUN_L00_001eb0c8");
+
+void copy_five_floats_with_rotation_offset(f32 *destination, f32 *source, f32 x) {
     destination[0] = fast_add_rotations(source[0], x);
     destination[1] = source[1];
     destination[2] = source[2];

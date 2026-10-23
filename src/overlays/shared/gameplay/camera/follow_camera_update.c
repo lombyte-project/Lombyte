@@ -1338,7 +1338,7 @@ typedef struct {
     u8 *m;
 } O002ebb00;
 void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
-void FUN_L00_001eb0c8(void *, void *, f32);
+void copy_five_floats_with_rotation_offset(void *, void *, f32) __asm__("FUN_L00_001eb0c8");
 void FUN_L00_002eb3b0_u(O002ebb00 *) __asm__("FUN_L00_002eb3b0");
 void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) __asm__("FUN_L00_002ebb00");
 
@@ -1353,7 +1353,7 @@ void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) {
     qcopy(camera_state + 0x80, raised_hero_position);
     zero_five_words(camera_state + 0x14);
     *(f32 *)(camera_state + 0x1C) = 4.64f;
-    FUN_L00_001eb0c8(camera_object->x50, camera_state + 0x14, 0.0f);
+    copy_five_floats_with_rotation_offset(camera_object->x50, camera_state + 0x14, 0.0f);
     FUN_L00_002eb3b0_u(camera_object);
 }
 /* Sets up the camera activation moby: tuning floats, then the pose copied from the current camera. */
