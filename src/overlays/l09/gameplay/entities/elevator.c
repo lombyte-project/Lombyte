@@ -1828,7 +1828,7 @@ extern void FUN_L00_001fff28(void *, int, float);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8e0");
-extern void FUN_L00_002715e8(void *, int, int, float, float);
+extern void spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
 
 /* Flies the moby along its path toward the current node, turning and banking
  * toward it, steps the node at each arrival and now and then drops a puff.
@@ -1886,7 +1886,7 @@ int advance_shuttle_along_path(struct Moby *moby) {
         qcopy(&puff, &moby->pos);
         add_random_offset_to_vector_xyz(&puff, 0.5f);
         puff.f[2] = 25.01f;
-        FUN_L00_002715e8(&puff, 0, 0x40103080, vars->speed * 3.0f / (frame_time * 10.0f), 12600.0f);
+        spawn_moving_resizing_height_snapped_alpha_fade_particle(&puff, 0, 0x40103080, vars->speed * 3.0f / (frame_time * 10.0f), 12600.0f);
     }
     return done;
 }

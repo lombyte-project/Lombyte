@@ -470,7 +470,7 @@ extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void * FUN_L00_002715e8(void *, int, int, float, float);
+extern void * spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
 extern void * FUN_L00_00272060(void *, int, float, float, int, int, int, void *, float);
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_00216f90(void *, void *, int, int);
@@ -491,7 +491,7 @@ extern struct Moby * D_L10_0015FFD8;
 #define func_001F9FA8_2BFBB8 ((float (*)(float))fast_sin)
 #define func_L00_001FF4B0_2BFBB8 ((void (*)(void *, void *, float))fast_vec_normalize_c)
 #define func_L00_00272F00_2BFBB8 FUN_L00_00272060
-#define func_L00_00272488_2BFBB8 FUN_L00_002715e8
+#define func_L00_00272488_2BFBB8 spawn_moving_resizing_height_snapped_alpha_fade_particle
 #define func_0022ED80_2BFBB8 ((int (*)(int, int, int))allocate_voice_for_target_entry)
 #define func_L00_00217718_2BFBB8 FUN_L00_00216f90
 #define func_001FA888_2BFBB8 ((float (*)(int))convert_integer_to_float)

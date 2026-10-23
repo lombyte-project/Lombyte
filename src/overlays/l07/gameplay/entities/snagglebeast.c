@@ -732,7 +732,7 @@ extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void draw_collision_clipped_moby_beam(void) __asm__("FUN_L07_00312420");
 extern float FUN_0020c9e0(void *);
-extern void *FUN_L00_002715e8(void *, int, int, float, float);
+extern void *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
 extern void FUN_00210850(void *, int, void *, void *);
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -1390,7 +1390,7 @@ void snagglebeast_update(unsigned char *moby) {
         if (FUN_0020c9e0(moby) > 10.0f) {
             FUN_L00_0024f7c8(moby, 0xA, &position);
             position.f[2] = 34.6f;
-            if (FUN_00213260(0x1A) == 0) FUN_L00_002715e8(&position, 0, 0x40103080, 1.6f, 14700.0f);
+            if (FUN_00213260(0x1A) == 0) spawn_moving_resizing_height_snapped_alpha_fade_particle(&position, 0, 0x40103080, 1.6f, 14700.0f);
         }
         if (moby[0xBC] == 8) {
             float z = *(float *)(data + 0x108);
@@ -1416,7 +1416,7 @@ void snagglebeast_update(unsigned char *moby) {
         if (FUN_0020c9e0(moby) < 168.0f) {
             FUN_L00_0024f7c8(moby, 0xA, &position);
             position.f[2] = 34.6f;
-            if (FUN_00213260(0x1A) == 0) FUN_L00_002715e8(&position, 0, 0x40103080, 1.6f, 14700.0f);
+            if (FUN_00213260(0x1A) == 0) spawn_moving_resizing_height_snapped_alpha_fade_particle(&position, 0, 0x40103080, 1.6f, 14700.0f);
         }
         if (FUN_00214cc8(moby, 168.0f)) {
             FUN_L00_0024f7c8(moby, 5, &position);

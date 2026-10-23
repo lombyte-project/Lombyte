@@ -2771,7 +2771,7 @@ typedef struct {
 
 extern V D_L00_00173E60;
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
-extern void FUN_L00_002715e8(void *, int, int, float, float);
+extern void spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
 extern void spawn_random_planar_drift_particle(void *, int, float, float) __asm__("FUN_L00_002741a0");
 
 void update_ballistic_effect_particle_with_contact_spawns(char *particle) __asm__("FUN_L00_0026f660");
@@ -2789,7 +2789,7 @@ void update_ballistic_effect_particle_with_contact_spawns(char *particle) {
         fast_vec_add(&next_position, particle_position, particle_data);
         if (func_L00_001EFFF0(particle_position, &next_position, 2, 0, 0)) {
             if (collision_hit_material() == 0) {
-                FUN_L00_002715e8(&D_L00_00173E60, 0, -1, 0.2f, 5250.0f);
+                spawn_moving_resizing_height_snapped_alpha_fade_particle(&D_L00_00173E60, 0, -1, 0.2f, 5250.0f);
             }
             free_effect_particle(particle);
             return;
@@ -2802,7 +2802,7 @@ void update_ballistic_effect_particle_with_contact_spawns(char *particle) {
         water_surface_z = hero.water_surface_z;
         if (*(float *)(particle + 0x18) < water_surface_z) {
             *(float *)(particle + 0x18) = water_surface_z;
-            FUN_L00_002715e8(particle_position, 0, -1, 0.2f, 5250.0f);
+            spawn_moving_resizing_height_snapped_alpha_fade_particle(particle_position, 0, -1, 0.2f, 5250.0f);
             free_effect_particle(particle);
             return;
         }

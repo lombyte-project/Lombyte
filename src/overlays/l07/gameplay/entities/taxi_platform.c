@@ -2745,7 +2745,7 @@ extern s32 rand(void);
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern unsigned char D_L07_00161B50_gp[1] __asm__("D_L07_00161B50") __attribute__((sda));
 extern unsigned char D_L07_00161B40_gp[1] __asm__("D_L07_00161B40") __attribute__((sda));
-extern unsigned char *FUN_L00_002715e8(void *, int, int, float, float);
+extern unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
 extern void FUN_L00_002223f8(int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void FUN_L00_0025e450_c2(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -2896,7 +2896,7 @@ void sharkigator_update(unsigned char *moby) {
             point[0] += random_float_between_c2(-0.15f, 0.15f);
             point[1] += random_float_between_c2(-0.15f, 0.15f);
             point[2] = resolve_camera_surface_height((Vec4 *)&D_L07_00173EE0, 0);
-            FUN_L00_002715e8(point, 0, -1, size, 5250.0f);
+            spawn_moving_resizing_height_snapped_alpha_fade_particle(point, 0, -1, size, 5250.0f);
         }
     }
     if (1.0f <= F(data, 0x14C)) {

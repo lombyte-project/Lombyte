@@ -110,7 +110,9 @@ float FUN_002132a8_2715e8(float, float) __asm__("FUN_002132a8");
 float fast_cos(float) __asm__("FUN_001f9dc8");
 float fast_sin(float) __asm__("FUN_001f9de0");
 extern unsigned char *D_L00_001B2134 __attribute__((section(".data")));
-unsigned char *FUN_L00_002715e8(void *initial_position, int x, int color, float size, float size_increment) {
+unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *initial_position, int x, int color, float size, float size_increment) __asm__("FUN_L00_002715e8");
+
+unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *initial_position, int x, int color, float size, float size_increment) {
     unsigned char *particle = p27fe00_alloc(0x2D);
     if (particle) {
         unsigned char *particle_data;
@@ -1214,7 +1216,7 @@ void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) {
         if (!random_integer_below(0x13)) {
             emitted_position.q = ember_particle->pos.q;
             emitted_position.f[2] += 0.1f;
-            FUN_L00_002715e8(&emitted_position, 0, ((random_integer_below(6) + 0x34) << 24) | (cb << 16) | (cg << 8) | cr,
+            spawn_moving_resizing_height_snapped_alpha_fade_particle(&emitted_position, 0, ((random_integer_below(6) + 0x34) << 24) | (cb << 16) | (cg << 8) | cr,
                              0.05f, 10500.0f);
         }
         if (!random_integer_below(9)) {

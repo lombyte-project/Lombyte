@@ -2488,7 +2488,7 @@ extern f32 random_float_between(f32 a, f32 b) __asm__("FUN_002132a8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 FUN_L00_00257b90(s32, s32);
 extern void FUN_L00_002d7e90(Vec4 *, f32);
-extern void FUN_L00_002715e8(Vec4 *, f32 *, s32, f32, f32);
+extern void spawn_moving_resizing_height_snapped_alpha_fade_particle(Vec4 *, f32 *, s32, f32, f32) __asm__("FUN_L00_002715e8");
 extern void FUN_L00_0026f548(Vec4 *, Vec4 *, s32, s32);
 
 /* Kicks up dust at the hero's feet (hero.water_surface_z): with flash set,
@@ -2516,7 +2516,7 @@ void emit_hero_surface_effect_burst(s32 puffs, s32 debris, s32 flash) {
         effect_vector.f[0] = hero.motion.pos.f[0] + random_float_between(-0.3f, 0.3f);
         effect_vector.f[1] = hero.motion.pos.f[1] + random_float_between(-0.3f, 0.3f);
         effect_vector.f[2] = hero.water_surface_z;
-        FUN_L00_002715e8(&effect_vector, &hero.water_surface_z, -1, random_float_between(0.3f, 0.6f), 5250.0f);
+        spawn_moving_resizing_height_snapped_alpha_fade_particle(&effect_vector, &hero.water_surface_z, -1, random_float_between(0.3f, 0.6f), 5250.0f);
     }
     for (i = 0; i < debris; i++) {
         debris_planar_angle_radians = random_angle_radians();
