@@ -1466,7 +1466,9 @@ extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025
  * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002AFC48), where it is exact; names translated to the US level
  * program. */
-void FUN_L14_002aea08(u8 *moby) {
+void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(u8 *moby) __asm__("FUN_L14_002aea08");
+
+void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
     f32 heading_offset;
     update_moby_vertical_oscillation(D_L14_001613A8, D_L14_001613AC, moby, (f32 *)(data + 0x1A0),
