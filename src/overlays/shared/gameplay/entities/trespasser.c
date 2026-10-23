@@ -767,7 +767,7 @@ extern int FUN_L00_001ff600(float,void *,void *);
 extern void save_state_fields_to_hero(char *) __asm__("FUN_L00_002beb90");
 extern void restore_state_fields_from_hero(char *) __asm__("FUN_L00_002bebc8");
 extern void FUN_L00_002bec00(char *);
-extern void FUN_L00_002bec48(char *);
+extern void restore_saved_state_fields_from_hero(char *) __asm__("FUN_L00_002bec48");
 extern int FUN_L00_002beab0(char *,int,void *);
 extern void FUN_L00_00260400(void *,int,void *,void *,void *,void *);
 extern int FUN_L00_00258ad0(void *,void *,int,int,float,float);
@@ -921,7 +921,7 @@ void doom_bot_update(struct Moby *moby) {
                 absolute_float(height-(moby->pos.z+speed*0.1f))<reach*0.5f) {
                 FUN_L00_002bec00((char*)data);
                 FUN_L00_002bf8b0(moby,&((DoomBotParams*)&hero)->config,&data->target_moby->pos);
-                FUN_L00_002bec48((char*)data);
+                restore_saved_state_fields_from_hero((char*)data);
                 qcopy(data,&data->target_moby->pos);
                 data->turn_rate=frame_scale*0.066f*speed;
                 if (moby->prev_seq!=0) blend_moby_animation(moby,0,0,scale_game_frames(2));
@@ -1066,7 +1066,7 @@ void doom_bot_update(struct Moby *moby) {
             if (moby->prev_seq!=7) blend_moby_animation(moby,7,0,scale_game_frames(3));
             data->turn_rate=frame_scale*0.1f*speed;
         }
-        FUN_L00_002bec48((char*)data);
+        restore_saved_state_fields_from_hero((char*)data);
         absolute_float(moby->pos.z-z);
         goto Contact;
     case DOOM_BOT_DETONATE: {

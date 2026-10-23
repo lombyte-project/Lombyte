@@ -2527,7 +2527,9 @@ void FUN_L00_002bec00(char *source_state) {
 
 
 /* Copies fields from ((char *)&hero) at 0x1F20..0x1F40 into the moby. */
-void FUN_L00_002bec48(char *destination_state) {
+void restore_saved_state_fields_from_hero(char *destination_state) __asm__("FUN_L00_002bec48");
+
+void restore_saved_state_fields_from_hero(char *destination_state) {
     struct Hero *hero_state = &hero;
     *(float *)(destination_state + 0x50) = hero_state->unk1F20;
     *(float *)(destination_state + 0x54) = hero_state->unk1F24;
