@@ -314,7 +314,9 @@ void FUN_L09_0030a9e8(unsigned char *moby, char *spawner_vars) {
 
 extern int FUN_L01_0026e008(int, int);
 
-int FUN_L09_0030aae0(int unused, char *spawner_vars) {
+int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars) __asm__("FUN_L09_0030aae0");
+
+int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars) {
     int last = -1;
     int i;
     char **slot;
@@ -336,7 +338,7 @@ extern int FUN_L00_002591d0_30ab80(int *, int, int, int) __asm__("FUN_L00_002591
 extern int tick_countdown_16_30ab80(void *) __asm__("FUN_001f9770");
 extern int random_integer_below_30ab80(int) __asm__("FUN_00213260");
 extern int pick_target_30ab80(void *, void *, float, void *, int, void *, int) __asm__("FUN_L00_0025ff38");
-extern int FUN_L09_0030aae0_30ab80(int, char *) __asm__("FUN_L09_0030aae0");
+extern int refresh_spawner_population_and_find_free_slot(int, char *) __asm__("FUN_L09_0030aae0");
 extern float distance_30ab80(void *, void *) __asm__("FUN_001f9b48");
 extern void subtract_vector_xyz_30ab80(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void scale_vector_xyz_30ab80(void *, void *, float) __asm__("FUN_001f9a68");
@@ -425,7 +427,7 @@ void spawner_update(char *moby)
         if (*(int *)(spawner_vars + 0x144) == 2)
             return;
         {
-        int last = FUN_L09_0030aae0_30ab80((int)moby, spawner_vars);
+        int last = refresh_spawner_population_and_find_free_slot((int)moby, spawner_vars);
         char *sel;
         if ((unsigned char)spawner_vars[0x91] >= (unsigned char)spawner_vars[0x90])
             return;
