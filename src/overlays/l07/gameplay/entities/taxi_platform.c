@@ -88,7 +88,9 @@ extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L07_0030ba90(char *spawn_position, char *initial_velocity, int spawning_moby, short burst_index) {
+char *spawn_bombomatic_projectile(char *spawn_position, char *initial_velocity, int spawning_moby, short burst_index) __asm__("FUN_L07_0030ba90");
+
+char *spawn_bombomatic_projectile(char *spawn_position, char *initial_velocity, int spawning_moby, short burst_index) {
     char *spawned_moby = func_0020D348_m(0x372);
     char *moby_data;
     if (spawned_moby) {
@@ -1873,7 +1875,7 @@ void update_linked_state_sliding_platform(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030E8B8), where it is exact; names translated to the US level program. */
 
-char *FUN_L07_0030ba90_c(char *pos, char *vec, int c, short d) __asm__("FUN_L07_0030ba90");
+char *spawn_bombomatic_projectile(char *pos, char *vec, int c, short d) __asm__("FUN_L07_0030ba90");
 extern char *FUN_L00_0025a420(void *, int, int);
 extern f32 fast_arc_tan_c(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
@@ -2096,7 +2098,7 @@ eb20:
                 add_vector_xyz(launch_work_vector, launch_work_vector, moby + 0x10);
                 debris_velocity[2] = FUN_L00_0025abf0(vA0, launch_work_vector, 0, D_0015ED6C_gp * 7.0f, -(D_0015ED70 * 9.8f));
                 add_vector_xyz(vA0, vA0, debris_velocity);
-                FUN_L07_0030ba90_c(vA0, debris_velocity, (int)moby, *(short *)(moby_data + 0xBA));
+                spawn_bombomatic_projectile(vA0, debris_velocity, (int)moby, *(short *)(moby_data + 0xBA));
                 *(short *)(moby_data + 0xBA) = *(short *)(moby_data + 0xBA) + 1;
             }
         eeE4:
