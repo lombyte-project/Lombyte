@@ -1120,7 +1120,7 @@ void update_hero_easing_targets_and_point_effects(void) __asm__("FUN_L00_0020b1d
 void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
 
 void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
-void FUN_L00_0020a540_u(void) __asm__("FUN_L00_0020a540");
+void update_hero_pitch_and_yaw_easing_targets(void) __asm__("FUN_L00_0020a540");
 void FUN_L00_0020ac98_u(void) __asm__("FUN_L00_0020ac98");
 void update_hero_idle_random_rotation_targets(void) __asm__("FUN_L00_0020a9e8");
 void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
@@ -1179,7 +1179,7 @@ void coordinate_hero_frame_update(void) {
     update_hero_delayed_voice_requests();
     update_hero_easing_targets_and_point_effects();
     update_hero_collision_ease_target();
-    FUN_L00_0020a540_u();
+    update_hero_pitch_and_yaw_easing_targets();
     FUN_L00_0020ac98_u();
     update_hero_idle_random_rotation_targets();
     update_hero_rotation_targets_and_random_manipulators();
@@ -2761,7 +2761,7 @@ extern u8 D_0015EDB3 __asm__("D_0015EDB3");
 #define G D_0013F350_a540
 #define P D_L00_0017A680_a540
 
-void FUN_L00_0020a540(void) {
+void update_hero_pitch_and_yaw_easing_targets(void) {
     G_a540 *g;
     G_a540 *h;
     P_a540 *p;
