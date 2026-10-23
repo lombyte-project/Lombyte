@@ -11,7 +11,9 @@
 
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 
-int FUN_L04_001f3038(char *moby, char *points, int count) {
+int find_nearest_point_index_xy(char *moby, char *points, int count) __asm__("FUN_L04_001f3038");
+
+int find_nearest_point_index_xy(char *moby, char *points, int count) {
     int best = -1;
     int i;
     float best_distance = 32767.0f;
