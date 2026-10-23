@@ -1470,13 +1470,13 @@ void pool_set_scale(float s) __asm__("FUN_L01_002b7ef0");
 void pool_flush(char *p, int n) __asm__("FUN_L01_002b7fe0");
 void pool_ripple(void *a, int b) __asm__("FUN_L01_002b8288");
 void render_level07_water_grids(void) __asm__("FUN_L07_0030cd20");
-void FUN_L07_0030cd48_c(int arg) __asm__("FUN_L07_0030cd48");
+void initialize_level07_water_grid_neighbors(int arg) __asm__("FUN_L07_0030cd48");
 extern Rec_30D8E8 D_L07_001DCE40_2cd2b0[] __asm__("D_L07_001DCE40");
 extern void FUN_L01_002b7a48_2cd2b0(void *, int) __asm__("FUN_L01_002b7a48");
 extern void FUN_L01_002b7ef0_2cd2b0(float) __asm__("FUN_L01_002b7ef0");
 extern void FUN_L01_002b7c68_2cd2b0(void *, void *) __asm__("FUN_L01_002b7c68");
 extern void FUN_L01_002b8288_2cd2b0(void *, int, float, float, float, float) __asm__("FUN_L01_002b8288");
-extern void FUN_L07_0030cd48_2cd2b0(int) __asm__("FUN_L07_0030cd48");
+extern void initialize_level07_water_grid_neighbors(int) __asm__("FUN_L07_0030cd48");
 extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern int FUN_L07_00281ef8_2cd2b0(void *, int, int, int) __asm__("FUN_L07_00281ef8");
 extern float FUN_00213ed8_2cd2b0(float *, float, float) __asm__("FUN_00213ed8");
@@ -1563,7 +1563,7 @@ void water_update(Moby_30D8E8 *water_moby) {
                 }
             }
             for (water_record_index = 0; water_record_index < 0x24; water_record_index++) {
-                FUN_L07_0030cd48_2cd2b0(water_record_index);
+                initialize_level07_water_grid_neighbors(water_record_index);
             }
         }
         if (water_data->fC != 0) {
@@ -1687,7 +1687,7 @@ typedef struct {
 extern Ent D_L07_001DCE40[];
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L07_0030cd48(int selected_entry_index) {
+void initialize_level07_water_grid_neighbors(int selected_entry_index) {
     int i;
     D_L07_001DCE40[selected_entry_index].n[0] = 0xFF;
     D_L07_001DCE40[selected_entry_index].n[2] = 0xFF;
