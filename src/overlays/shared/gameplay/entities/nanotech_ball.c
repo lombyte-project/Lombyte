@@ -1116,7 +1116,9 @@ int process_suck_cannon_suction_candidate(u8 *cannon_moby, void *cannon_data, vo
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DB690), where it is exact; names translated to the US level program. */
 
 /* Calls the optional function reached through the moby pointer at +0x24 (slot 0xC); 1 if null. */
-int FUN_L00_002da1e0(char *moby) {
+int dispatch_suck_cannon_suction_cancel(char *moby) __asm__("FUN_L00_002da1e0");
+
+int dispatch_suck_cannon_suction_cancel(char *moby) {
     int (*fn)(char *) = *(int (**)(char *))(*(char **)(*(char **)(moby + 0x24) + 0x2C) + 0xC);
     if (fn != 0) {
         return fn(moby);
