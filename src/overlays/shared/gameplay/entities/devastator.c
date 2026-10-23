@@ -1612,7 +1612,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_0023e738(void *v, float a, float b_0023e738, float c, float d, float e);
 struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Moby *other, f32 vx, f32 vy, f32 height, f32 speed);
-void FUN_L00_0020e698(void);
+void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_00233660(float *out, float x, float y, float z);
 void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 extern unsigned char item_usage[] __asm__("D_00141680");
@@ -1814,7 +1814,7 @@ void blaster_update(struct Moby *moby) {
             set_moby_animation(moby, 1, 0);
             advance_moby_animation(moby);
         }
-        FUN_L00_0020e698();
+        cancel_hero_item_animation();
         data->cooldown = 0;
     }
     if (moby->seq != 2 && data->glow > 0) {
@@ -3069,7 +3069,7 @@ void pyrocitor_update(struct Moby *moby) {
             if ((controller_state.held & hero.items[0].button_mask) && !hero.unk20AC && ready)
                 break;
             moby->state = 2;
-            FUN_L00_0020e698();
+            cancel_hero_item_animation();
             h = v->voice;
             if (h != -1) {
                 u8 *slot = D_0013E550 + h * 0x70;
@@ -3345,7 +3345,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 int FUN_L00_0023e5e0(u128 *v, float a, float b, int col);
 void FUN_L00_00203908(int, int);
 void FUN_L00_0020e4c8(void);
-void FUN_L00_0020e698(void);
+void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 void FUN_L00_002b9310(char *moby);
 extern int D_0015EEA4;
@@ -3381,7 +3381,7 @@ extern void FUN_0022d798_2b2100(int) __asm__("FUN_0022d798");
 extern int FUN_L00_0028d8c0_2b2100(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_0022da68_2b2100(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_0020e4c8_2b2100a(void) __asm__("FUN_L00_0020e4c8");
-extern void FUN_L00_0020e698_2b2100(void) __asm__("FUN_L00_0020e698");
+extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 
 void tesla_claw_update(struct Moby *m) __asm__("FUN_L00_002b87e0");
@@ -3568,7 +3568,7 @@ void tesla_claw_update(struct Moby *m) {
                 s->lock2 = 0;
                 m->state = 1;
                 FUN_0022da68_2b2100(0, 0, m);
-                FUN_L00_0020e698_2b2100();
+                cancel_hero_item_animation();
             }
         }
         break;
@@ -3593,7 +3593,7 @@ void tesla_claw_update(struct Moby *m) {
             s->lock = 0;
             s->lock2 = 0;
             s->reach = 0.0f;
-            FUN_L00_0020e698_2b2100();
+            cancel_hero_item_animation();
             m->state = 1;
         }
         break;

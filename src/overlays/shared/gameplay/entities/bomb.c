@@ -1781,7 +1781,7 @@ extern float fabs_2cc608(float) __asm__("FUN_001f99c0");
 extern void reticle_2cc608(struct Moby *, int, float, float, float *, int, int, float, int) __asm__("FUN_L00_001edf60");
 extern void hud_2cc608(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_0020e4c8(void);
-extern void FUN_L00_0020e698(void);
+extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void apply_mat4_2cc608(float *, float *, void *) __asm__("FUN_001f9d20");
 extern void apply_mat3_2cc608(float *, float *, void *) __asm__("FUN_001f9cf8");
 extern void add_2cc608(float *, void *, void *) __asm__("FUN_001f9a10");
@@ -1940,7 +1940,7 @@ void ryno_update(struct Moby *ryno_moby) {
         FUN_L00_002ccee0_c(ryno_moby, aim.f, ryno_vars->target, ryno_vars->height, yaw, pitch);
         if (ryno_vars->shots >= 7) {
             hero.items[0].unk1C = 0;
-            FUN_L00_0020e698();
+            cancel_hero_item_animation();
             ryno_moby->state = 5;
             ryno_vars->shot_timer = ticks_2cc608(60);
             ryno_vars->track_timer = ticks_2cc608(60);

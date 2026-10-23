@@ -1435,7 +1435,7 @@ s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__
 s32 remove_hud_item(s32 item) __asm__("FUN_001ff480");
 struct Moby *FUN_L00_002c9348(void *a);
 void FUN_L00_0020e4c8(void);
-void FUN_L00_0020e698(void);
+void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_00236268(HudElem *e);
 void FUN_L00_00236458(void);
 void light_off_67e8(int i) __asm__("FUN_L00_0023e838");
@@ -1477,7 +1477,7 @@ extern int func_0022ED80_2BDAF0(int, int, void *) __asm__("FUN_0022da68");
 extern int func_001FFCB0_2BDAF0(int) __asm__("FUN_001ff480");
 extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 extern void func_L00_0028EBF0_2BDAF0(int) __asm__("FUN_0022d798");
-extern void func_L00_0020ED30_2BDAF0(void) __asm__("FUN_L00_0020e698");
+extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void func_L00_00236BF8_2BDAF0(void) __asm__("FUN_L00_00236268");
 extern void func_L00_00236DE8_2BDAF0(void) __asm__("FUN_L00_00236458");
 extern void func_L00_002377E0_2BDAF0(void) __asm__("FUN_L00_00236e50");
@@ -1648,7 +1648,7 @@ void morphoray_update(Moby *moby) {
             }
             D_L00_001617C8 = -1;
         }
-        func_L00_0020ED30_2BDAF0();
+        cancel_hero_item_animation();
     }
     if (busy && D_L00_001617C0 >= 0) {
         light_off_67e8(D_L00_001617C0);

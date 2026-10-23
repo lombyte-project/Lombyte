@@ -255,7 +255,7 @@ typedef struct {
 } E00229a98;
 extern E00229a98 item_defs[] __asm__("D_L00_00179AC0");
 s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
-void FUN_L00_0020e698(void);
+void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
@@ -268,7 +268,7 @@ s32 try_start_hero_item_idle_animation(void) {
         return 0;
     id = hero_slot_item_id(0);
     if (id != hero_ptr->unk2298) {
-        FUN_L00_0020e698();
+        cancel_hero_item_animation();
         return 0;
     }
     k = item_defs[id].x24;

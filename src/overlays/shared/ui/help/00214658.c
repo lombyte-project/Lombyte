@@ -901,7 +901,7 @@ void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
 void FUN_L00_00262840_00216f90(void *) __asm__("FUN_L00_00262840");
 void FUN_001f99f8_00216f90(void *) __asm__("FUN_001f99f8");
 void FUN_00217020_00216f90(void) __asm__("FUN_00217020");
-void FUN_L00_0020e698_00216f90(void) __asm__("FUN_L00_0020e698");
+void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_00205538_00216f90(void) __asm__("FUN_L00_00205538");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void set_hero_animation_sequence_and_frame(int, int) __asm__("FUN_L00_002325a0");
@@ -937,7 +937,7 @@ void FUN_L00_00216f90(Vec4_00216f90 *hero_world_position, Vec4_00216f90 *hero_eu
     *(int *)(hero_base + 0x184) = 0;
     *(unsigned char *)(hero_base + 0x22CA) = 0;
     FUN_00217020_00216f90();
-    FUN_L00_0020e698_00216f90();
+    cancel_hero_item_animation();
     FUN_L00_00205538_00216f90();
     if (mode != -1)
         hero_set_state(mode, 1);

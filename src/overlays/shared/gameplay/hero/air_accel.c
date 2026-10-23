@@ -721,7 +721,7 @@ int test_hero_ledge_ahead(Vec4 *ledge_probe_origin, f32 *facing_yaw)
 
 extern void FUN_L00_00205538(void);
 extern void FUN_L00_00206c08(void);
-extern void FUN_L00_0020e698(void);
+extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void hero_update_items() __asm__("FUN_L00_00210748");
 extern void FUN_L00_00232628(void);
 extern void FUN_L00_00232fe8(void);
@@ -731,7 +731,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
 void FUN_L01_00231348(int vehicle_mode, int initial_state, int new_moby) {
     char *hero_state_base;
-    FUN_L00_0020e698();
+    cancel_hero_item_animation();
     hero_state_base = (char *)D_0013E533 + 0xE1D;
     *(char *)(hero_state_base + 0x20A6) = 1;
     hero_update_items();

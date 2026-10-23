@@ -116,7 +116,7 @@ extern void *spawn_class_593_moby(int unused, void *pos, int c, float scale, flo
 extern void FUN_L00_00205f60(int a0, int a1, int a2);
 extern void FUN_L00_00206c08(void);
 extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
-extern void FUN_L00_0020e698(void);
+extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
@@ -359,7 +359,7 @@ void hero_update_transitions(void) {
                         hero.unk22C8 == 0) {
                         int id = hero_slot_item_id(0);
                         if (id != hero.unk2298) {
-                            FUN_L00_0020e698();
+                            cancel_hero_item_animation();
                         } else {
                             int anim = item_defs[id].anim;
                             if (((unsigned char *)hero.moby)[0x53] != anim) {

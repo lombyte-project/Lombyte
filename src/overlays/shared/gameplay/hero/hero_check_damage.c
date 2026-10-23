@@ -1018,8 +1018,8 @@ void FUN_L00_0020e4c8(void) {
 extern int hero_idle_sequence(int) __asm__("FUN_L00_00205000");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 
-void FUN_L00_0020e698(void);
-void FUN_L00_0020e698(void) {
+void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
+void cancel_hero_item_animation(void) {
     struct Hero *hero_state = &hero;
     if (hero_state->unk20A8 != 0) {
         if (hero_state->unkD08[0] != 0) {
@@ -1056,7 +1056,7 @@ void update_hero_held_items_and_orientation(void) {
 
     if (owner->unk20A8 != 0 && owner->unk20AA != 0) {
         if (get_ammo(-1) == 0) {
-            FUN_L00_0020e698();
+            cancel_hero_item_animation();
         }
     }
 
@@ -1826,7 +1826,7 @@ extern int FUN_L00_0020d568_c() __asm__("FUN_L00_0020d568");
 extern int FUN_L00_00216de8(int, int);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
-extern void FUN_L00_0020e698_c(void) __asm__("FUN_L00_0020e698");
+extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
 s32 FUN_L00_0020fe30_c(void) __asm__("FUN_L00_0020fe30");
 void set_hero_condition_animation_timer_for_item(int id) __asm__("FUN_L00_0020fd80");
@@ -2101,7 +2101,7 @@ void hero_switch_item(int i) {
         set_hero_item_switch_timer_for_item(*(hero.selected_item + i));
         set_hero_condition_animation_timer_for_item(*(hero.selected_item + i));
         if (g->unk20A8 != 0) {
-            FUN_L00_0020e698_c();
+            cancel_hero_item_animation();
         }
         if (i == 0) {
             if (*hero.selected_item == 8) {
@@ -2221,7 +2221,7 @@ void update_hero_equipped_items(void) {
     update_hero_and_equipped_item_glows();
     hero_update_items();
 }
-void FUN_L00_0020e698_210a08(void) __asm__("FUN_L00_0020e698");
+void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_00262840_210a08(void *) __asm__("FUN_L00_00262840");
 void FUN_L00_00232fe8_210a08(void) __asm__("FUN_L00_00232fe8");
 void FUN_L00_00206c08_210a08(void) __asm__("FUN_L00_00206c08");
@@ -2235,7 +2235,7 @@ void enter_hero_vehicle_mode(int mode, int requested_state, char *vehicle_moby) 
 
 void enter_hero_vehicle_mode(int mode, int requested_state, char *vehicle_moby) {
     struct Hero *hero_state;
-    FUN_L00_0020e698_210a08();
+    cancel_hero_item_animation();
     hero_state = &hero;
     hero_state->unk20A6 = 1;
     hero_update_items();

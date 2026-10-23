@@ -1426,7 +1426,7 @@ extern s32 D_0015EEA4;
 extern s32 FUN_L00_002d9f78(void);
 extern void transpose_rotation_matrix(void *,void *) __asm__("FUN_001fa2d8");
 extern void FUN_L00_0020e4c8(void);
-extern void FUN_L00_0020e698(void);
+extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void FUN_L00_002223f8(int,int);
 extern void update_hud_counter_cap_and_visibility(void) __asm__("FUN_L00_002377b8");
 extern void FUN_L00_00237840(void);
@@ -1506,7 +1506,7 @@ void suckcannon_update(SuckMoby *self) {
     case SUCKCANNON_STATE_EMPTY_IDLE:
         if (self->anim_flags & 2) blend_moby_animation(self,1,0,scale_game_frames_alt(0));
         func_001F9908_r(&cannon->cooldown);
-        if (cannon->cooldown == 0) FUN_L00_0020e698();
+        if (cannon->cooldown == 0) cancel_hero_item_animation();
         if (suck_hero.count > 0) {
             blend_moby_animation(self,6,0,scale_game_frames_alt(4));
             self->state = 4;
@@ -1534,7 +1534,7 @@ void suckcannon_update(SuckMoby *self) {
                 if (s[1].owner==self && s[1].active) release_voice_slot(sound);
             }
             cannon->sound=-1;
-            FUN_L00_0020e698();
+            cancel_hero_item_animation();
             suck_hero.firing=0;
             if (suck_hero.count>0) {
                 blend_moby_animation(self,6,0,scale_game_frames_alt(4));
@@ -1559,7 +1559,7 @@ void suckcannon_update(SuckMoby *self) {
         if (!(suck_hero.sucking || (suck_hero.count < (suck_item_variant.gold==0?5:10) &&
             FUN_L00_002d9f78()==0 && ((suck_input.held&suck_hero.fire_buttons) || cannon->cooldown) &&
             !suck_hero.unk20AC && !suck_hero.unk20A7))) {
-            FUN_L00_0020e698();
+            cancel_hero_item_animation();
             sound=cannon->sound;
             if(sound!=-1) {
                 SuckVoice *s=(SuckVoice *)(((char *)&D_0013E550))+sound;
@@ -1587,10 +1587,10 @@ void suckcannon_update(SuckMoby *self) {
         break;
     case SUCKCANNON_STATE_LOADED_AIM:
         func_001F9908_r(&cannon->cooldown);
-        if (!cannon->cooldown) FUN_L00_0020e698();
+        if (!cannon->cooldown) cancel_hero_item_animation();
         if (self->anim_flags&2) {
             blend_moby_animation(self,6,0,scale_game_frames_alt(0));
-            FUN_L00_0020e698();
+            cancel_hero_item_animation();
         }
         if (!(suck_input.held&suck_hero.fire_buttons)) cannon->blocked=0;
         if (func_001F9908_r(&cannon->target_timer) ||

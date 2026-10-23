@@ -88,7 +88,7 @@ extern int FUN_L00_0020d568();
 extern int FUN_L00_00216de8(int, int);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
-extern void FUN_L00_0020e698(void);
+extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
 s32 FUN_L00_0020fe30(void);
 void set_hero_condition_animation_timer_for_item(int id) __asm__("FUN_L00_0020fd80");
@@ -371,7 +371,7 @@ void apply_hero_item_slot_selection(int i) {
         set_hero_item_switch_timer_for_item(*(hero.selected_item + i));
         set_hero_condition_animation_timer_for_item(*(hero.selected_item + i));
         if (g->unk20A8 != 0) {
-            FUN_L00_0020e698();
+            cancel_hero_item_animation();
         }
         if (i == 0) {
             if (*hero.selected_item == 8) {
