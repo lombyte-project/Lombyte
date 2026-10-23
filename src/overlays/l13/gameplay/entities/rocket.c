@@ -1389,7 +1389,9 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 
-void FUN_L13_00309370(struct Moby *moby) {
+void initialize_gemlik_trail(struct Moby *moby) __asm__("FUN_L13_00309370");
+
+void initialize_gemlik_trail(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     float point_offset[4];
     int i;
