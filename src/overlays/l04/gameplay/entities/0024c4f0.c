@@ -80,7 +80,9 @@ extern int find_first_positive_polygon_edge_cross_xy(float *, float *, int) __as
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L04_0024c660_u(float *, float *, float *, float *) __asm__("FUN_L04_0024c660");
 
-int FUN_L04_0024c7d8(float *out, float *query_point, float *poly, int vertex_count) {
+int find_closest_polygon_edge_point(float *out, float *query_point, float *poly, int vertex_count) __asm__("FUN_L04_0024c7d8");
+
+int find_closest_polygon_edge_point(float *out, float *query_point, float *poly, int vertex_count) {
     float edge_closest_point[4];
     float edge_to_query_offset[4];
     float best;

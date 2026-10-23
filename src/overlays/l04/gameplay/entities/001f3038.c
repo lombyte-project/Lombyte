@@ -87,7 +87,7 @@ extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 int FUN_L04_001f3038_c(char *a, char *b, int n) __asm__("FUN_L04_001f3038");
-int FUN_L04_0024c7d8(float *out, float *p, float *poly, int n);
+int find_closest_polygon_edge_point(float *out, float *p, float *poly, int n) __asm__("FUN_L04_0024c7d8");
 extern PathEl_1F3010 *D_L04_001B0930_1F3010[] __asm__("D_L04_001B0630");
 extern Coll_1F3010 D_L04_00174040_1F3010 __asm__("D_L04_00173FC0");
 extern s32 D_L04_00173FF0[];
