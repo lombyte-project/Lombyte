@@ -2821,7 +2821,7 @@ void spawn_sparks_along_target_direction(struct Moby *moby) {
         spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, initial_spark_color, second_spark_color, spark_frame_count, second_spark_frame_count, third_spark_frame_count, (*(int *)&(D_L18_00161F68)));
     }
 }
-extern void FUN_L06_0030bef8(void *, int, int, int);
+extern void spawn_timed_projected_sprite_effect(void *, int, int, int) __asm__("FUN_L06_0030bef8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern char *spawn_glow_particle(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L00_002ac910");
 extern int D_L18_00161F6C __attribute__((sda));
@@ -2871,7 +2871,7 @@ void spawn_explosion_burst(void *source_moby) {
     int j;
     L18FlareView *camera;
     *(Q128 *)velocity = *(Q128 *)&moby->pos;
-    FUN_L06_0030bef8(velocity, scale_ticks(30), 0x80806060, 0x801010);
+    spawn_timed_projected_sprite_effect(velocity, scale_ticks(30), 0x80806060, 0x801010);
     trooper_play_sound(0x10, 0, (int)source_moby, 0x58E);
     if (i < D_L18_00161F6C) {
         int a, b, third_spark_frame_count;
