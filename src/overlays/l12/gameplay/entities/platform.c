@@ -1206,7 +1206,9 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
 extern float D_L12_00161914 __attribute__((sda));
-void FUN_L12_002e3e28(struct Moby *moby, float *out, int on) {
+void compute_platform_target_tilt(struct Moby *moby, float *out, int on) __asm__("FUN_L12_002e3e28");
+
+void compute_platform_target_tilt(struct Moby *moby, float *out, int on) {
     float inverse_yaw_angles[4];
     float reference_offset[4];
     float inverse_yaw_matrix[4];
