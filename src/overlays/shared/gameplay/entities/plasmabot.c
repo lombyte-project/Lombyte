@@ -1189,7 +1189,9 @@ int count_listed_plasmabots_preparing_or_sweeping_beam(int moby_list_index) {
 extern char *D_L14_0015FFD8;
 extern short *D_L14_001ABF40[];
 
-int FUN_L14_002b39a0(unsigned char *source_moby) {
+int check_listed_plasmabots_not_starting_path_traversal(unsigned char *source_moby) __asm__("FUN_L14_002b39a0");
+
+int check_listed_plasmabots_not_starting_path_traversal(unsigned char *source_moby) {
     unsigned short *moby_list_entry;
     if (*(volatile unsigned char *)(source_moby + 0x21) == 0xFF || (moby_list_entry = (unsigned short *)D_L14_001ABF40[source_moby[0x21]]) == 0)
         return 1;
