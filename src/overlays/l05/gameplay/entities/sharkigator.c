@@ -2088,7 +2088,7 @@ extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal_c3(void *) __asm__("func_0020C828");
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L05_00305178_c(char *moby) __asm__("FUN_L05_00305178");
-void FUN_L05_00305898_c(char *m) __asm__("FUN_L05_00305898");
+void process_extermitank_particle_hits(char *m) __asm__("FUN_L05_00305898");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 extern char D_0013F350[];
 extern float D_0013F3D0[];
@@ -2111,7 +2111,7 @@ void extermitank_update(unsigned char *moby) {
     float working_position[4];
 
     FUN_L05_00305178_c((char *)moby);
-    FUN_L05_00305898_c((char *)moby);
+    process_extermitank_particle_hits((char *)moby);
     if (*(unsigned char *)(data + 0x2E) == 2) {
         if (*(char **)(data + 0x184) != 0) mark_moby_for_removal_c3(*(char **)(data + 0x184));
         if (*(char **)(data + 0x188) != 0) mark_moby_for_removal_c3(*(char **)(data + 0x188));
@@ -2528,7 +2528,7 @@ extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 
-void FUN_L05_00305898(char *moby) {
+void process_extermitank_particle_hits(char *moby) {
     char **slots = (char **)(*(char **)(moby + 0x78) + 0x1A0);
     struct Hero *base;
     Hit_306CF0 hit_info;
