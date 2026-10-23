@@ -443,7 +443,9 @@ typedef struct {
 extern Ent *D_L10_0015FFD0_e[] __asm__("D_L10_0015FFD0") __attribute__((section(".sdata")));
 extern short *D_L10_001ABCC0[];
 
-void FUN_L10_002e0138(struct Moby *moby) {
+void activate_waiting_moby_group_members(struct Moby *moby) __asm__("FUN_L10_002e0138");
+
+void activate_waiting_moby_group_members(struct Moby *moby) {
     short *group_entry;
     if (moby->group != 0xFF) {
         group_entry = D_L10_001ABCC0[moby->group];
@@ -1300,7 +1302,7 @@ extern void spawn_color_swapped_explosion_burst(void *, void *, int, float, floa
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void FUN_L01_0026d930(char *p);
 extern void trooper_set_knockback(float *p, float a, float b) __asm__("FUN_L03_00250a78");
-extern void FUN_L10_002e0138(struct Moby *m);
+extern void activate_waiting_moby_group_members(struct Moby *m) __asm__("FUN_L10_002e0138");
 extern void FUN_L10_002e3a90_u(void *) __asm__("FUN_L10_002e3a90");
 extern void spawn_type_52_particle_near_moby(char *moby) __asm__("FUN_L10_002e3de8");
 extern void update_toxic_crab_hit_reactions_and_targeting(void *) __asm__("FUN_L10_002e3ef0");
@@ -1418,7 +1420,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                 m->state = 2;
                 crab_data->i1A8 = scale_game_frames(1);
                 if (m->b21 != 0xFF) {
-                    FUN_L10_002e0138((struct Moby *)m);
+                    activate_waiting_moby_group_members((struct Moby *)m);
                 }
             }
         }
@@ -1426,7 +1428,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             m->state = 2;
             crab_data->i1A8 = scale_game_frames(1);
             if (m->b21 != 0xFF) {
-                FUN_L10_002e0138((struct Moby *)m);
+                activate_waiting_moby_group_members((struct Moby *)m);
             }
         }
         break;
