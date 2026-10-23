@@ -3000,7 +3000,9 @@ extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 extern float D_L16_00161A8C __attribute__((sda));
-void FUN_L16_002d6260(struct Moby *moby, void *out1, float *out2) {
+void compute_triggered_scene_path_pose(struct Moby *moby, void *out1, float *out2) __asm__("FUN_L16_002d6260");
+
+void compute_triggered_scene_path_pose(struct Moby *moby, void *out1, float *out2) {
     char *data = (char *)moby->pvars;
     float hero_offset[4];
     char *entry = D_L16_001600EC + (*(int *)data << 7);
