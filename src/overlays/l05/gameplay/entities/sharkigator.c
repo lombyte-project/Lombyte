@@ -915,7 +915,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern void FUN_L01_0026d930(char *p);
 extern void handle_amoeboid_hits(unsigned char *m) __asm__("FUN_L05_002daf58");
-extern void FUN_L05_002db018_c(unsigned char *moby) __asm__("FUN_L05_002db018");
+extern void spawn_amoeboid_particles(unsigned char *moby) __asm__("FUN_L05_002db018");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char *D_L05_001B0CB0_x[] __asm__("D_L05_001B0930");
@@ -969,7 +969,7 @@ void amoeboid_update(struct Moby *moby) {
                 (*(int *)(moby_data + 0xB4) + r) % *(int *)D_L05_001B0CB0_x[*(int *)(moby_data + 0xB0)];
             *(int *)(moby_data + 0xB8) = scale_game_frames(600);
         }
-        FUN_L05_002db018_c(moby);
+        spawn_amoeboid_particles(moby);
         break;
     }
     case AMOEBOID_WAIT_FOR_HERO_TO_LEAVE:
@@ -996,7 +996,7 @@ extern void spawn_type_52_particle(float *, float, float, int, int, int) __asm__
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L05_002db018(unsigned char *moby) {
+void spawn_amoeboid_particles(unsigned char *moby) {
     float particle_spawn_position[3];
     if (moby[0x31] != 0) {
         if (random_integer_below(0x13) == 0) {
