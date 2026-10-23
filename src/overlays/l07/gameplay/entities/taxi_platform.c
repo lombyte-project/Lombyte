@@ -254,7 +254,9 @@ int classify_sharkigator_water_height_gap(char *moby, char *data) {
 
 void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
-void FUN_L07_0030ec58(char *sharkigator_moby) {
+void set_sharkigator_idle_state_from_water_height_gap(char *sharkigator_moby) __asm__("FUN_L07_0030ec58");
+
+void set_sharkigator_idle_state_from_water_height_gap(char *sharkigator_moby) {
     enum {
         SHARKIGATOR_LARGE_WATER_HEIGHT_GAP = 0,
         SHARKIGATOR_MEDIUM_WATER_HEIGHT_GAP = 1,
@@ -2539,7 +2541,7 @@ int FUN_L07_0030ed30(char *moby, char *data) {
     }
     qcopy(data + 0xF0, &D_L07_001600EC_30ed30[*(int *)(data + 0x114) * 0x80 + 0x30]);
     qcopy(data + 0xE0, moby + 0x10);
-    ((void (*)(char *, char *))FUN_L07_0030ec58)(moby, data);
+    ((void (*)(char *, char *))set_sharkigator_idle_state_from_water_height_gap)(moby, data);
     *(int *)(data + 0x134) = rand_e50() % 0x78;
     if (rand_e50() & 1) {
         *(float *)(data + 0x140) = 0.34906584f;
@@ -2732,7 +2734,7 @@ extern void FUN_L00_002223f8(int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void FUN_L00_0025e450_c2(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263ac8(void *, int, void *, float);
-extern void FUN_L07_0030ec58_c(char *arg) __asm__("FUN_L07_0030ec58");
+extern void set_sharkigator_idle_state_from_water_height_gap(char *arg) __asm__("FUN_L07_0030ec58");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
 extern void mark_moby_for_removal_c4(void *) __asm__("func_0020C828");
@@ -3205,12 +3207,12 @@ void sharkigator_update(unsigned char *moby) {
         goto end;
     case SHARKIGATOR_HIT_KNOCKBACK_RECOVERY:
         if (mine_fall(moby, data + 0x70) & 1) {
-            ((void (*)(char *, char *))FUN_L07_0030ec58_c)((char *)moby, data);
+            ((void (*)(char *, char *))set_sharkigator_idle_state_from_water_height_gap)((char *)moby, data);
         }
         goto end;
     case SHARKIGATOR_HIT_ANIMATION_RECOVERY:
         if (moby[0x70] & 2) {
-            ((void (*)(char *, char *))FUN_L07_0030ec58_c)((char *)moby, data);
+            ((void (*)(char *, char *))set_sharkigator_idle_state_from_water_height_gap)((char *)moby, data);
         }
         goto end;
     case SHARKIGATOR_DEATH_FALL_AND_REMOVE:
@@ -3226,7 +3228,7 @@ void sharkigator_update(unsigned char *moby) {
         F(data, 0xD8) -= frame_time * 9.8f;
         FUN_L00_00258ad0((int)moby, (int)(data + 0xD0), 0x400, 0x10, 1.0f, 0.0f);
         if (moby[0x70] & 2) {
-            ((void (*)(char *, char *))FUN_L07_0030ec58_c)((char *)moby, data);
+            ((void (*)(char *, char *))set_sharkigator_idle_state_from_water_height_gap)((char *)moby, data);
         }
         goto end;
     case SHARKIGATOR_SMALL_WATER_GAP_GRAVITY_IDLE:
@@ -3243,7 +3245,7 @@ void sharkigator_update(unsigned char *moby) {
     case SHARKIGATOR_DAMPED_RECOVERY:
         fast_vec_scale_c(data + 0xD0, data + 0xD0, frame_scale * (0.95f - 1.0f) + 1.0f);
         if (moby[0x70] & 2) {
-            ((void (*)(char *, char *))FUN_L07_0030ec58_c)((char *)moby, data);
+            ((void (*)(char *, char *))set_sharkigator_idle_state_from_water_height_gap)((char *)moby, data);
         }
         goto end;
     default:
