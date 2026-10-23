@@ -368,7 +368,9 @@ extern int D_L12_001618C0 __attribute__((sda));
 int D_L12_001618C4 = 0xa0f0e8e0;
 int D_L12_001618C8 = 0x20f0e8e0;
 int D_L12_001618CC = 0x10017;
-void FUN_L12_002e19a8(void *spark_scatter_origin) {
+void spawn_spark_scatter(void *spark_scatter_origin) __asm__("FUN_L12_002e19a8");
+
+void spawn_spark_scatter(void *spark_scatter_origin) {
     float base_position[4];
     float spark_position[4];
     float vertical_spark_vector[4];
@@ -506,7 +508,7 @@ void FUN_L00_00263b38(char *p, float x);
 void FUN_L01_0026d930(char *p);
 void spawn_type_52_particle_near_moby(char *moby) __asm__("FUN_L10_002e3de8");
 void FUN_L12_002e18e8_c(struct Moby *moby) __asm__("FUN_L12_002e18e8");
-void FUN_L12_002e19a8_c(void *pos) __asm__("FUN_L12_002e19a8");
+void spawn_spark_scatter(void *pos) __asm__("FUN_L12_002e19a8");
 void FUN_L12_002e3528_c(struct Moby *moby) __asm__("FUN_L12_002e3528");
 extern char D_0013E633_2E2EF0[] __asm__("D_001413D0");
 extern char *D_L12_001B0C30_2E2EF0[] __asm__("D_L12_001B0930");
@@ -535,7 +537,7 @@ extern int func_L00_0025A208_2E2EF0(int *,int,int,int) __asm__("FUN_L00_002591d0
 extern int func_L00_0025A2F0_2E2EF0(int *,int,int,int) __asm__("FUN_L00_002592b8");
 extern int func_001F9938_2E2EF0(void *) __asm__("FUN_001f9770");
 extern void func_L01_0026F040_2E2EF0(int,int) __asm__("FUN_L01_0026e090");
-extern void func_L12_002E2CB8_2E2EF0(void *) __asm__("FUN_L12_002e19a8");
+extern void spawn_spark_scatter(void *) __asm__("FUN_L12_002e19a8");
 extern void func_L00_002592B0_2E2EF0(char *,float *,float,float,float,float) __asm__("FUN_L00_00258278");
 extern void func_L12_002E2BF8_2E2EF0(unsigned char *) __asm__("FUN_L12_002e18e8");
 extern float func_L00_0025BC48_2E2EF0(void *,void *,void *,float,float) __asm__("FUN_L00_0025abf0");
@@ -670,7 +672,7 @@ void update_hoven_anklebiter(AnklebiterMoby_2E2EF0 *moby) {
         if(moby->anim!=7) func_00213DE0_2E2EF0(moby,7,0,1);
         moby->flags|=0x1000;
         *(u128 *)work.v10=*(u128 *)moby->pos;
-        func_L12_002E2CB8_2E2EF0(work.v10);
+        spawn_spark_scatter(work.v10);
         break;
     case ANKLEBITER_ACTIVATE_FROM_DORMANCY: {
         int collision=*(int *)(moby->model+0x10);
