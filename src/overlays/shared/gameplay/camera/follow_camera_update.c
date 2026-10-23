@@ -1365,7 +1365,9 @@ extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L00_002ebbd8(void *camera) {
+void initialize_target_tracking_camera(void *camera) __asm__("FUN_L00_002ebbd8");
+
+void initialize_target_tracking_camera(void *camera) {
     char *camera_object = camera;
     char *hero_data;
     int lvl0 = D_0015ED84;
@@ -1610,7 +1612,7 @@ void turn_camera_view_toward_hero(unsigned char *camera_object) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EDB70), where it is exact; names translated to the US level program. */
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_002ebbd8_u(void *) __asm__("FUN_L00_002ebbd8");
+extern void initialize_target_tracking_camera(void *) __asm__("FUN_L00_002ebbd8");
 void refresh_point_light(s32 arg0) __asm__("FUN_00201f58");
 extern char D_L00_00166D80_c[] __asm__("D_L00_00166C80");
 
@@ -1640,7 +1642,7 @@ void update_target_tracking_camera(char *camera_object) {
         qcopy(r, camera_object);
         qcopy(r + 0x10, camera_object + 0x10);
         qcopy(r + 0x20, camera_object + 0x20);
-        FUN_L00_002ebbd8_u(camera_object);
+        initialize_target_tracking_camera(camera_object);
         *(int *)(g + 0x2F4) = scale_game_frames(0x2D);
     }
 done:
