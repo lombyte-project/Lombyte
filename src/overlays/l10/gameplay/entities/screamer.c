@@ -2809,7 +2809,7 @@ extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_L10_001f2578");
 extern void scale_vector_xyz(f32 *, f32 *, f32) __asm__("FUN_001f9a68");
 extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
 extern s32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
-extern unsigned char *FUN_L00_002738e8(void *, void *, s32, f32, f32, f32, s32, s32, s32);
+extern unsigned char *spawn_gravity_floor_burst_particle(void *, void *, s32, f32, f32, f32, s32, s32, s32) __asm__("FUN_L00_002738e8");
 
 void emit_moby_directional_particles(struct Moby *moby) __asm__("FUN_L10_002e5be0");
 
@@ -2873,7 +2873,7 @@ void emit_moby_directional_particles(struct Moby *moby) {
             x = random_float_between(0.25f, 0.5f);
             fade_color = fast_tween_color(x, D_L10_00161EF4, first_color);
             life = truncate_float_to_s32(multiply_global_factor_ed64(pvars[2] * 60.0f));
-            FUN_L00_002738e8(&position, &velocity, life, amount, pvars[0],
+            spawn_gravity_floor_burst_particle(&position, &velocity, life, amount, pvars[0],
                                D_L10_00161F00 * frame_time_sq, color, fade_color, variant);
         }
     }

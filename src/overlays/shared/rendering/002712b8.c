@@ -1113,7 +1113,9 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char *D_L00_001B2180[];
 extern unsigned char D_0013F3D0_c[] __asm__("D_0013F3D0");
 
-unsigned char *FUN_L00_002738e8(void *initial_position, void *initial_velocity, float scale, int life, float floor_z, int col, float gravity, int secondary_color, int big) {
+unsigned char *spawn_gravity_floor_burst_particle(void *initial_position, void *initial_velocity, float scale, int life, float floor_z, int col, float gravity, int secondary_color, int big) __asm__("FUN_L00_002738e8");
+
+unsigned char *spawn_gravity_floor_burst_particle(void *initial_position, void *initial_velocity, float scale, int life, float floor_z, int col, float gravity, int secondary_color, int big) {
     unsigned char *particle = p27fe00_alloc(0x40);
     unsigned char *particle_data;
     if (particle != 0) {

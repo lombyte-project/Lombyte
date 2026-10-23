@@ -219,7 +219,7 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
 extern void FUN_L00_0026f548(void *, void *, int, int);
-extern void FUN_L00_002738e8(void *, void *, int, float, float, float, int, int, int);
+extern void spawn_gravity_floor_burst_particle(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002738e8");
 extern void pool_splash(int, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -812,7 +812,7 @@ void mine_update(M910 *mine_moby) {
                             add_vector_xyz(r, r, &mine_moby->pos);
                             r[2] = wz + 0.5f;
                             n[2] -= rr * frame_time * 8.0f;
-                            FUN_L00_002738e8(r, n, 0, random_float_between(0.35f, 1.25f), wz,
+                            spawn_gravity_floor_burst_particle(r, n, 0, random_float_between(0.35f, 1.25f), wz,
                                              frame_time_sq * 20.0f,
                                              (0x16 << 24) | (cb << 16) | (cg << 8) | cr,
                                              (cb << 16) | (cg << 8) | cr, 1);
@@ -1579,7 +1579,7 @@ extern void FUN_L00_0026a9f0_2adb30(void *, void *, int, int, float, int, int, i
 extern void *FUN_L00_0026bb70_2adb30(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 extern void FUN_L00_0026f548_2adb30(void *, void *, int, int) __asm__("FUN_L00_0026f548");
-extern void FUN_L00_002738e8_2adb30(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002738e8");
+extern void spawn_gravity_floor_burst_particle(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002738e8");
 extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 extern void FUN_L00_002a3ec8_2adb30(int, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
 extern int FUN_L00_002ad410_2adb30(void *, void *, int) __asm__("FUN_L00_002ad410");
@@ -1952,7 +1952,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                             FUN_001f9a10_2adb30(&particle_work_vector, &particle_work_vector, &bomb_moby->pos);
                             particle_work_vector.f[2] = gz + 0.5f;
                             v2.f[2] -= r * D_0015ED6C_2adb30 * 8.0f;
-                            FUN_L00_002738e8_2adb30(&particle_work_vector, &v2, delay, FUN_002132a8_2adb30(0.25f, 1.0f), gz, frame_time_sq_macro * 20.0f, (0x16 << 24) | (cb << 16) | (cg << 8) | cr, (cb << 16) | (cg << 8) | cr, 1);
+                            spawn_gravity_floor_burst_particle(&particle_work_vector, &v2, delay, FUN_002132a8_2adb30(0.25f, 1.0f), gz, frame_time_sq_macro * 20.0f, (0x16 << 24) | (cb << 16) | (cg << 8) | cr, (cb << 16) | (cg << 8) | cr, 1);
                         }
                         for (j = 0; j < 20; j++) {
                             int c0 = mine_blend_color(0x7F << 24, (0x7F << 24) | (cb << 16) | (cg << 8) | cr, FUN_002132a8_2adb30(0.25f, 1.0f));
