@@ -2753,7 +2753,9 @@ extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b
 extern unsigned char D_0015EEB0[] __asm__("D_0015EDB0") MACRO_ADDR;
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
-void FUN_L06_002f37d0(char *owner) {
+void draw_gadgebot_group_glow_effects(char *owner) __asm__("FUN_L06_002f37d0");
+
+void draw_gadgebot_group_glow_effects(char *owner) {
     int list;
     float effect_scale = 0.057f;
     int i;
