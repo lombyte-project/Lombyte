@@ -1673,7 +1673,9 @@ extern s32 D_L00_001DD0D0 __attribute__((section(".data")));
 extern void scale_vector_2bcf98(float, void *, void *) __asm__("FUN_001f9a68");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L00_002bcf98(u8 *moby) {
+void reset_beam_chain_and_pulse_state(u8 *moby) __asm__("FUN_L00_002bcf98");
+
+void reset_beam_chain_and_pulse_state(u8 *moby) {
     u128 step;
     u128 *source = *(u128 **)(moby + 0x78);
     s32 i;
@@ -1754,7 +1756,7 @@ extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
 unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x, float y, float z);
 unsigned char *FUN_L00_00275910(void *pos, int s, int col, int mode, int b, float *vec, int h, float x, float y);
-void FUN_L00_002bcf98(u8 *moby);
+void reset_beam_chain_and_pulse_state(u8 *moby) __asm__("FUN_L00_002bcf98");
 void draw_beam_ring_and_rail_effects(void *o) __asm__("FUN_L00_002bdc50");
 extern float D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
 extern float D_L00_001617C0_2BE3A8 __asm__("D_L00_001616F0") __attribute__((sda));
