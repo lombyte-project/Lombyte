@@ -3198,7 +3198,7 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) __asm__("FUN_L14_002dea98");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void FUN_L14_002e0170(struct Moby *, s32 *, int);
+extern void spawn_path_or_ballistic_debris(struct Moby *, s32 *, int) __asm__("FUN_L14_002e0170");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 void initialize_racer_path_tracking(struct Moby *m) __asm__("FUN_L14_002d6358");
@@ -3294,7 +3294,7 @@ void update_level14_racer(struct Moby *racer_moby) {
                 sv[0] = spawned_object_planar_velocity[0];
                 sv[1] = spawned_object_planar_velocity[1];
             }
-            FUN_L14_002e0170(racer_moby, &D_L14_00161A5C, 0);
+            spawn_path_or_ballistic_debris(racer_moby, &D_L14_00161A5C, 0);
             spawn_explosion(racer_moby, &racer_vars->trail, &racer_moby->pos, 0.0f, 0.0f, 5, 2, 4, 4.0f, 2.0f, 9.0f, 1, 1.0f,
                              15.0f, 1, 5, -1, 0);
             FUN_0020c828(racer_moby);

@@ -296,7 +296,7 @@ int follow_plasmabot_path(char *moby) __asm__("FUN_L14_002b3418");
 int count_listed_plasmabots_preparing_or_sweeping_beam(int index) __asm__("FUN_L14_002b3920");
 int FUN_L14_002d9870_c(int i) __asm__("FUN_L14_002d9870");
 unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) __asm__("FUN_L14_002dea98");
-unsigned char *FUN_L14_002e0170_c(char *owner, float *scale, int mode) __asm__("FUN_L14_002e0170");
+unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mode) __asm__("FUN_L14_002e0170");
 void FUN_L14_002b2600_c(struct Moby *m) __asm__("FUN_L14_002b2600");
 void FUN_L14_002b2ed8_c(struct Moby *m) __asm__("FUN_L14_002b2ed8");
 void FUN_L14_002b2f60_c(char *m) __asm__("FUN_L14_002b2f60");
@@ -676,7 +676,7 @@ void update_plasmabot(char *moby) {
         FUN_L00_0024f7c8(moby, 2, bone_transform_scratch);
         spawn_plasmabot_death_debris(moby, (char *)bone_transform_scratch);
         status = 0;
-        ((void (*)(char *, int *, int))FUN_L14_002e0170_c)(moby, &status, 1);
+        ((void (*)(char *, int *, int))spawn_path_or_ballistic_debris)(moby, &status, 1);
         FUN_L00_002e2040(moby);
         call_D678(moby);
         return;
@@ -1641,7 +1641,7 @@ extern float D_L14_00161B30 __attribute__((sda));
 extern float D_L14_00161B34 __attribute__((sda));
 extern float D_L14_00161B38 __attribute__((sda));
 extern float D_L14_00161B3C __attribute__((sda));
-unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
+unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mode) {
     unsigned char *spawned_moby = spawn_moby_2e0170(0x193);
     unsigned char *pos;
     if (spawned_moby != 0) {
