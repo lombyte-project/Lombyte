@@ -60,7 +60,9 @@ void activate_plasmabot(char *moby) {
 
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
-void FUN_L14_002b3358(char *moby) {
+void initialize_plasmabot_path_state(char *moby) __asm__("FUN_L14_002b3358");
+
+void initialize_plasmabot_path_state(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
     char *path;
     int i;
@@ -299,7 +301,7 @@ void FUN_L14_002b2f60_c(char *m) __asm__("FUN_L14_002b2f60");
 void update_plasmabot_target(char *moby) __asm__("FUN_L14_002b3268");
 void FUN_L14_002b3318_c(char *moby) __asm__("FUN_L14_002b3318");
 void activate_plasmabot(char *moby) __asm__("FUN_L14_002b3330");
-void FUN_L14_002b3358_c(char *moby) __asm__("FUN_L14_002b3358");
+void initialize_plasmabot_path_state(char *moby) __asm__("FUN_L14_002b3358");
 void scale_and_apply_plasmabot_planar_velocity(char *moby) __asm__("FUN_L14_002b3578");
 void FUN_L14_002b37b0_c(char *moby, float angle) __asm__("FUN_L14_002b37b0");
 void FUN_L14_002b3890_c(int idx) __asm__("FUN_L14_002b3890");
@@ -402,7 +404,7 @@ void update_plasmabot(char *moby) {
         if (random_integer_below(2) != 0) {
             *(unsigned short *)(moby + 0x34) |= 0x8000;
         }
-        FUN_L14_002b3358_c(moby);
+        initialize_plasmabot_path_state(moby);
         if (*(int *)(data + 0x240) != -1) {
             qcopy(moby + 0x10, (char *)D_L14_001B0BB0[*(int *)(data + 0x240)] + 0x10);
         }
