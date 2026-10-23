@@ -11980,7 +11980,7 @@
           }
         },
         {
-          "name": "FUN_0022e1b0",
+          "name": "build_variant_effect_quads",
           "size": "624",
           "fuzzy_match_percent": 100.0,
           "address": "108680",
