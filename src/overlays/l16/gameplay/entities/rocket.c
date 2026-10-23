@@ -130,7 +130,9 @@ extern int *D_L16_001ABCC0_c[] __asm__("D_L16_001ABCC0");
 extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern short *D_L16_001ABFC0_2CB000[] __asm__("D_L16_001ABCC0");
 
-void FUN_L16_002c9c38(int index, void *conveyor_motion_vector) {
+void update_conveyor_group_motion_transforms(int index, void *conveyor_motion_vector) __asm__("FUN_L16_002c9c38");
+
+void update_conveyor_group_motion_transforms(int index, void *conveyor_motion_vector) {
     short *group_entry = D_L16_001ABFC0_2CB000[index];
     if (group_entry) {
         do {
@@ -918,7 +920,7 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED6C, D_0015EE70;
 extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), D_0015ED70_c __asm__("D_0015ED70");
 extern void FUN_L16_002c9a50_u(unsigned char *) __asm__("FUN_L16_002c9a50");
-extern void FUN_L16_002c9c38_c(int, void *) __asm__("FUN_L16_002c9c38");
+extern void update_conveyor_group_motion_transforms(int, void *) __asm__("FUN_L16_002c9c38");
 void draw_conveyor_belt_strips(char *m) __asm__("FUN_L16_002c9cd0");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
@@ -952,7 +954,7 @@ void conveyor_belt_update(struct Moby *moby) {
         if (*(float *)(conveyor_data + 0x6C) != target) {
             approach_value((float *)(conveyor_data + 0x6C), target, D_0015ED70_c * 12.0f);
             normalize_vector_xyz(conveyor_motion_vector, &moby->rot_row0, *(float *)(conveyor_data + 0x6C));
-            FUN_L16_002c9c38_c(moby->group, conveyor_motion_vector);
+            update_conveyor_group_motion_transforms(moby->group, conveyor_motion_vector);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(conveyor_data + 0x68)))
             moby->state = one;
@@ -963,7 +965,7 @@ void conveyor_belt_update(struct Moby *moby) {
         if (*(float *)(conveyor_data + 0x6C) != target) {
             approach_value((float *)(conveyor_data + 0x6C), target, D_0015ED70_c * 12.0f);
             normalize_vector_xyz(conveyor_motion_vector, &moby->rot_row0, *(float *)(conveyor_data + 0x6C));
-            FUN_L16_002c9c38_c(moby->group, conveyor_motion_vector);
+            update_conveyor_group_motion_transforms(moby->group, conveyor_motion_vector);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(conveyor_data + 0x64)))
             moby->state = 2;
