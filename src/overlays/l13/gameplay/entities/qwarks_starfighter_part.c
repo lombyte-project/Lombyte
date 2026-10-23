@@ -437,7 +437,7 @@ typedef struct {
 
 extern Moby388 *D_L13_00174158[];
 extern char *spawn_owner_linked_class_160_moby(void *) __asm__("FUN_L13_002e8438");
-extern char *FUN_L13_002ecd10_c(char *, int, int) __asm__("FUN_L13_002ecd10");
+extern char *spawn_moby_joint_attachment(char *, int, int) __asm__("FUN_L13_002ecd10");
 extern char D_L13_001F4F38[];
 extern char D_L13_00161958[];
 extern char D_L13_00161968[];
@@ -555,7 +555,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
         }
         moby->scale = *(float *)(moby->cls + 0x24) * 4.0f;
         for (i = 0; i < 10; i++) {
-            data->parts[i] = FUN_L13_002ecd10_c((char *)moby, i, D_L13_001D34D8[i]);
+            data->parts[i] = spawn_moby_joint_attachment((char *)moby, i, D_L13_001D34D8[i]);
         }
         data->owner = (char *)moby;
         for (j = 0; j < 5; j++) {
@@ -1126,7 +1126,7 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_L00_00250df8(void *);
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L13_002ecd10(char *parent_moby, int attachment_joint_index, int id) {
+char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index, int id) {
     char *moby = create_moby(id);
     if (moby != 0) {
         char *data;

@@ -2742,7 +2742,7 @@ void FUN_L13_002e8b58(struct Moby *moby) {
 }
 /* Places the attached pieces on their bones, keeping each position inside a box, and copies the moby's pose to them. */
 extern int D_L13_001D34A8[];
-extern char *FUN_L13_002ecd10(char *, int, int);
+extern char *spawn_moby_joint_attachment(char *, int, int) __asm__("FUN_L13_002ecd10");
 extern void FUN_0020c828(char *);
 
 void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_data) __asm__("FUN_L13_002e8d28");
@@ -2780,7 +2780,7 @@ void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_da
     if (attachment_joint_index != -1) {
         if (*(char **)(attachment_data + 0xF0) == 0 || *(unsigned char *)(*(char **)(attachment_data + 0xF0) + 0x20) == 0xFE ||
             *(unsigned char *)(*(char **)(attachment_data + 0xF0) + 0x20) == 0xFD)
-            *(char **)(attachment_data + 0xF0) = FUN_L13_002ecd10(parent_moby, attachment_joint_index, 0x191);
+            *(char **)(attachment_data + 0xF0) = spawn_moby_joint_attachment(parent_moby, attachment_joint_index, 0x191);
         attached_moby = *(char **)(attachment_data + 0xF0);
         if (attached_moby != 0 && *(unsigned char *)(attached_moby + 0x20) != 0xFE && *(unsigned char *)(attached_moby + 0x20) != 0xFD) {
             moby_point_position(parent_moby, attachment_joint_index, attached_moby + 0x10);
