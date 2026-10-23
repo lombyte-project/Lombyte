@@ -1374,7 +1374,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern int FUN_L00_0025e3b8(void *);
+extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
 extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 extern int compute_clear_path_point_mask(float, int *, int, int, void *) __asm__("FUN_L01_00276a48");
@@ -2141,7 +2141,7 @@ void gadgebot_update(GbMoby *moby) {
     position_and_displacement_scratch[2] += 1.0f;
     if (collision_line(position_and_displacement_scratch, vector_and_hit_scratch, 0, (int)moby, 0) != 0 && D_L06_001745C0.unk18 != 0 &&
         (D_L06_001745C0.unk18->cls_id == 0x409 || D_L06_001745C0.unk18->cls_id == 0x359 ||
-         FUN_L00_0025e3b8(D_L06_001745C0.unk18) != 0)) {
+         is_moby_in_class_range_500_to_540(D_L06_001745C0.unk18) != 0)) {
         *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
     }
     if (moby->unk31 != 0) {

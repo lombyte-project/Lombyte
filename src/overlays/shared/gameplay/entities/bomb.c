@@ -2959,7 +2959,7 @@ extern int D_L00_0015F5CC_macro __asm__("D_L00_0015F5CC") __attribute__((section
 extern void *D_001413D0 __attribute__((section(".data")));
 extern s32 D_001413DC __attribute__((section(".data")));
 
-extern s32 FUN_L00_0025e3b8(void *);
+extern s32 is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
 extern void update_crate_stack_motion(struct Moby *) __asm__("FUN_L00_002d1428");
 extern Contact *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int fun_00213928(void *, void *, void *, int, int *, int *, int *, int) __asm__("FUN_00213928");
@@ -3002,12 +3002,12 @@ void crate_update(struct Moby *moby) {
 
     crate_vars = (CrateVars *)moby->pvars;
     if (crate_vars->rider != NULL) {
-        if (FUN_L00_0025e3b8(crate_vars->rider) == 0) {
+        if (is_moby_in_class_range_500_to_540(crate_vars->rider) == 0) {
             crate_vars->rider = NULL;
         }
     }
     if (crate_vars->below != NULL) {
-        if (FUN_L00_0025e3b8(crate_vars->below) == 0) {
+        if (is_moby_in_class_range_500_to_540(crate_vars->below) == 0) {
             crate_vars->below = NULL;
         }
     }

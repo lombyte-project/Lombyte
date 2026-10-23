@@ -434,7 +434,7 @@ extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int FUN_L00_00233660_cf(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_L00_00233708_cf(int, int) __asm__("FUN_L00_00216de8");
 extern int FUN_L00_00257b90_cf(int) __asm__("FUN_00213260");
-extern int FUN_L00_00259bc8_cf(int) __asm__("FUN_L00_0025e3b8");
+extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
 extern int FUN_L01_00226f10(int);
 extern int random_float_between_cf(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
@@ -2059,7 +2059,7 @@ void update_hero_motion_for_current_state(void) {
 
                     scale_vector_xyz(vec[1], hero.motion.displacement.f, 7.0f);
                     for (i = 0; i < n; i++) {
-                        if (FUN_L00_00259bc8_cf((int)D_L01_00178380[i])) {
+                        if (is_moby_in_class_range_500_to_540((int)D_L01_00178380[i])) {
                             FUN_L00_00214108_cf(D_L01_00178380[i], (int)((Moby *)hero.moby), 0x10000,
                                                 hero.motion.pos.f, vec[1], 1.0f);
                         }

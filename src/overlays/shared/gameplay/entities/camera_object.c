@@ -1860,7 +1860,7 @@ extern int FUN_L00_00216de8(int,int);
 extern int FUN_L00_002223f8(int,int);
 extern int sweep_hit_segment(void*,void*,void*,void*,void*,void*,int) __asm__("FUN_L00_00259d08");
 extern int FUN_L00_0025e368(char*);
-extern int FUN_L00_0025e3b8(int);
+extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt(int*) __asm__("FUN_001f9740");
@@ -2123,7 +2123,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             }
         }
         collided=0;
-        if (FUN_001efa68(work.v[0],position,2,0,0) && collision_hit_material() && (!collision_hit.moby || !FUN_L00_0025e3b8((int)collision_hit.moby))) collided=collision_hit.surface!=0;
+        if (FUN_001efa68(work.v[0],position,2,0,0) && collision_hit_material() && (!collision_hit.moby || !is_moby_in_class_range_500_to_540((int)collision_hit.moby))) collided=collision_hit.surface!=0;
         if (collided || wrench_vars->collision) {
             wrench_vars->collision=0;
             if (!wrench_hero()->attack_cooldown) { wrench_vars->timer=scale_game_frames_alt(30); wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(2,0,(int)wrench_moby); }

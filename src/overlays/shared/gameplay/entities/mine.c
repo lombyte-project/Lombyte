@@ -190,7 +190,7 @@ extern int predict_mine_impact(W910 *, M910 *, int) __asm__("FUN_L00_002aa2a8");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 D_L00_00166DC0[];
 extern s32 D_L00_00173E40[0x1C];
-extern s32 FUN_L00_0025e3b8(s32);
+extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -387,7 +387,7 @@ void mine_update(M910 *mine_moby) {
                     V910 ov;
                     {
                         if (coll_hit.moby != 0 &&
-                            (FUN_L00_0025e3b8((int)coll_hit.moby) != 0 ||
+                            (is_moby_in_class_range_500_to_540((int)coll_hit.moby) != 0 ||
                              (coll_hit.moby->flags & 0x5000)) &&
                             coll_hit.moby->cls != mine_moby->cls && coll_hit.moby != hero.moby &&
                             coll_hit.moby != v->owner) {
@@ -683,7 +683,7 @@ void mine_update(M910 *mine_moby) {
                             mine_moby->bBC = 1;
                             break;
                         }
-                        if (FUN_L00_0025e3b8((int)candidate_moby) != 0) {
+                        if (is_moby_in_class_range_500_to_540((int)candidate_moby) != 0) {
                             goto next;
                         }
                         rg = range;

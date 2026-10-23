@@ -266,7 +266,7 @@ extern void FUN_L00_00233810(void *, void *, f32);
 extern s32 collision_line(void *, void *, s32, struct MobyView *, s32) __asm__("FUN_001efa68");
 extern void update_hero_motion_response_parameters(void) __asm__("FUN_L00_00215b68");
 extern void FUN_L00_00233660(void *, f32, f32, f32);
-extern s32 FUN_L00_0025e3b8(s32);
+extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern void spawn_nearby_effect(s32, struct MobyView *, s32, void *, void *, f32) __asm__("FUN_L00_00259bc8");
 extern s32 D_L00_00177F00[];
 extern void emit_hero_timed_effects(void) __asm__("FUN_L00_00209ec8");
@@ -2464,7 +2464,7 @@ void hero_update_movement(void) {
                 s32 i;
                 fast_vec_scale(&v10, &hero.motion.displacement, 7.0f);
                 for (i = 0; i < n; i++) {
-                    if (FUN_L00_0025e3b8(D_L00_00177F00[i]) != 0) {
+                    if (is_moby_in_class_range_500_to_540(D_L00_00177F00[i]) != 0) {
                         spawn_nearby_effect(D_L00_00177F00[i], (struct MobyView *)hero.moby, 0x10000, &hero.motion.pos, &v10,
                                          1.0f);
                     }

@@ -2376,7 +2376,7 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
-extern int FUN_L00_0025e3b8(int);
+extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
 extern int add_moby_frames_for_group_proximity() __asm__("FUN_L05_00307010");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D4DF __attribute__((section(".data")));
@@ -2574,7 +2574,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         if (nearby_moby_count) {
             scale_vector_xyz(impact, delta, 7.0f);
             for (i = 0; i < nearby_moby_count; i++) {
-                if (FUN_L00_0025e3b8((int)D_L16_00178300[i])) {
+                if (is_moby_in_class_range_500_to_540((int)D_L16_00178300[i])) {
                     spawn_nearby_effect(D_L16_00178300[i], (int)moby, mask, hoverboard_dummy_data + 0x260, impact, 1.0f);
                 }
             }

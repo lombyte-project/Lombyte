@@ -2807,7 +2807,7 @@ extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_0015EE38_macro __asm__("D_0015EE38") __attribute__((section(".sdata")));
 extern int D_L05_00178300[];
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int FUN_L00_0025e3b8(int);
+extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
 extern unsigned char D_0013D388[];
 extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
@@ -2955,7 +2955,7 @@ void skid_mcmarx_update(Moby *moby) {
             if (hit_count != 0) {
                 scale_vector_xyz(push, step, 7.0f);
                 for (j = 0; j < hit_count; j++) {
-                    if (FUN_L00_0025e3b8(D_L05_00178300[j]) != 0) {
+                    if (is_moby_in_class_range_500_to_540(D_L05_00178300[j]) != 0) {
                         spawn_nearby_effect((void *)D_L05_00178300[j], (int)moby, 0x30000, data->pos, push, 1.0f);
                     }
                 }

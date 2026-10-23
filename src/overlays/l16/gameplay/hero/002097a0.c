@@ -175,7 +175,7 @@ s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
-s32 FUN_L00_0025e3b8(s32);
+s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
@@ -264,7 +264,7 @@ void update_hero_ground_contact(void) {
         goto d1;
     }
     if (HH.moby != 0) {
-        if (FUN_L00_0025e3b8(HH.moby)) {
+        if (is_moby_in_class_range_500_to_540(HH.moby)) {
             hero.unk30A = 1;
             if ((u32)(hero.state.control_mode - 0x15) < 2) {
                 FUN_L00_002334d0((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);

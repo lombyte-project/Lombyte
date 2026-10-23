@@ -170,7 +170,7 @@ extern int FUN_001efa68(void *, void *, int, int, int);
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern int FUN_L00_0025e3b8(void *);
+extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
@@ -325,7 +325,7 @@ int mine_fall(char *moby, char *motion_state) {
         int **pp = D_L00_00177F00;
         int k = result_count;
         do {
-            if (FUN_L00_0025e3b8(*pp) == 0) {
+            if (is_moby_in_class_range_500_to_540(*pp) == 0) {
                 if (*(int *)(motion_state + 0x24) & 0x20) {
                     if (*(short *)(motion_state + 0x3E) == 2) {
                         flags |= 0x100;

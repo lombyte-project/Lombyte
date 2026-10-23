@@ -2637,7 +2637,7 @@ extern V collision_hit_point __asm__("D_L00_00173E60") __attribute__((section(".
 extern char D_L00_0017A680_d[] __asm__("D_L00_0017A680") __attribute__((section(".data")));
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_L00_0020a240_u(int, float, float) __asm__("FUN_L00_0020a240");
-extern int FUN_L00_0025e3b8(void *);
+extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
 extern void *D_L00_00173E58_d __asm__("D_L00_00173E58") __attribute__((section(".data")));
 
 void update_hero_collision_ease_target(void) {
@@ -2669,7 +2669,7 @@ void update_hero_collision_ease_target(void) {
         return;
     if (*(unsigned char *)(hero_state_base + 0x20A8) != 0) {
         if (D_L00_00173E58_d != 0) {
-            if (FUN_L00_0025e3b8(D_L00_00173E58_d) != 0)
+            if (is_moby_in_class_range_500_to_540(D_L00_00173E58_d) != 0)
                 return;
         }
     }

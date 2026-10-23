@@ -937,8 +937,8 @@ void add_random_offset_to_vector_xyz(f32 *inout_vector, f32 random_offset_bound)
 extern u8 *D_L00_0015FFD8_c __asm__("D_L00_0015FFD8");
 extern u8 *D_L00_0015FFE0 __attribute__((sda));
 /* True for a moby inside the moby table whose class at 0xA6 is 0x1F4..0x21C. */
-s32 FUN_L00_0025e3b8(u8 *m);
-s32 FUN_L00_0025e3b8(u8 *moby) {
+s32 is_moby_in_class_range_500_to_540(u8 *m) __asm__("FUN_L00_0025e3b8");
+s32 is_moby_in_class_range_500_to_540(u8 *moby) {
     u32 moby_class_id;
     if (moby == 0) {
     bad:

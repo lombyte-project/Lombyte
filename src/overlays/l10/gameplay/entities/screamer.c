@@ -1276,7 +1276,7 @@ extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int tick_countdown_32(void *);
-extern s32 FUN_L00_0025e3b8(s32);
+extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern float D_L10_00161E24 __attribute__((sda));
 extern float D_L10_00161E28 __attribute__((sda));
@@ -1351,7 +1351,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         see = collision_line(from, to, 2, m, 0) == 0;
     }
     if (!see || (!(absolute_float(*(float *)(target_moby + 0x18) - m->pos[2]) < 1.0f) &&
-                 FUN_L00_0025e3b8(((int)hero.ground_moby)) == 0)) {
+                 is_moby_in_class_range_500_to_540(((int)hero.ground_moby)) == 0)) {
         see = 0;
     }
     switch (m->state) {

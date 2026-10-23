@@ -149,7 +149,7 @@ extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section
 extern float D_L00_00173E68_2d81b8 __asm__("D_L00_00173E68") __attribute__((section(".data")));
 extern float frame_time_sq __asm__("D_0015ED70");
 int FUN_001efa68_2d81b8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-int FUN_L00_0025e3b8_2d81b8(void *) __asm__("FUN_L00_0025e3b8");
+int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
 void FUN_L00_002d81b8(unsigned char *moby) {
     V_2d81b8 probe_start_position, probe_end_position;
     D_2d81b8 *moby_data = *(D_2d81b8 **)(moby + 0x78);
@@ -168,7 +168,7 @@ void FUN_L00_002d81b8(unsigned char *moby) {
     if (hit) {
         G_2d81b8 *collision_result = &(*(G_2d81b8 *)D_L00_00173E40_lui);
         if (collision_result->o) {
-            if (FUN_L00_0025e3b8_2d81b8(collision_result->o)) {
+            if (is_moby_in_class_range_500_to_540(collision_result->o)) {
                 *(float *)(moby + 0x10) = moby_data->f10 = collision_result->o->x;
                 *(float *)(moby + 0x14) = moby_data->f14 = collision_result->o->y;
                 {

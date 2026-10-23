@@ -1829,7 +1829,7 @@ extern void FUN_L00_00257470(struct Moby *, int, int);
 extern struct Moby *D_L12_00178380[];
 extern int coll_line_fix_72(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int query_mobys_72(void *, int, void *, int, float) __asm__("FUN_L00_001f2868");
-extern int FUN_L00_0025e3b8(void *);
+extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
 extern float FUN_L00_00257c48(float, float);
 extern void blend_moby_animation_ex(void *, int, int, int, int) __asm__("FUN_002130d8");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
@@ -1996,7 +1996,7 @@ hide:
                     struct Moby **iterator = D_L12_00178380;
                     int count = hit;
                     do {
-                        if (FUN_L00_0025e3b8(*iterator) && func_001F9B88_2E2EF0(moby->pos.z - (*iterator)->pos.z) < 0.7f)
+                        if (is_moby_in_class_range_500_to_540(*iterator) && func_001F9B88_2E2EF0(moby->pos.z - (*iterator)->pos.z) < 0.7f)
                             call_for_help_e81e0(*iterator, (int)hero.moby, 0x10000, &moby->pos, delta.f, 1.0f);
                         --count;
                         ++iterator;

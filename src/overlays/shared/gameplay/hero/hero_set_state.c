@@ -14,7 +14,7 @@ extern void apply_hero_motion_and_resolve_collisions(void) __asm__("FUN_L00_0021
 extern s32 probe_hero_forward_collision(f32 *, f32, f32) __asm__("FUN_L00_0020a240");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
-extern s32 FUN_L00_0025e3b8(s32);
+extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern void FUN_L00_00233660(Vec4 *, f32, f32, f32);
 extern int collision_line(void *from, void *to, int mask, void *ignore, int) __asm__("FUN_001efa68");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
@@ -42,7 +42,7 @@ void update_hero_motion_and_collision_probes(void) {
             hero.unk250 = atan2_f(coll_hit.normal_z, vector_length_xy(&coll_hit.normal_x));
             if (coll_hit.moby != 0) {
                 hero.unk255 = 1;
-                if (FUN_L00_0025e3b8(coll_hit.moby)) {
+                if (is_moby_in_class_range_500_to_540(coll_hit.moby)) {
                     hero.unk254 = 1;
                 }
             }

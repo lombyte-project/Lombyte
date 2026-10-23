@@ -474,7 +474,7 @@ typedef struct G2d1428 {
     f32 f234;
 } G2d1428;
 extern V2d1428 D_L00_00173E60;
-s32 FUN_L00_0025e3b8(M2d1428 *);
+s32 is_moby_in_class_range_500_to_540(M2d1428 *) __asm__("FUN_L00_0025e3b8");
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -735,7 +735,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
         if (!(vars->flags & 4))
             vars->flags &= ~0x10;
         vars->flags &= ~4;
-        if (!FUN_L00_0025e3b8(moby))
+        if (!is_moby_in_class_range_500_to_540(moby))
             return;
         if (vars->flags & 2)
             return;

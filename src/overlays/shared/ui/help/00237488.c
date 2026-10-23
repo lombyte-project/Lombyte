@@ -419,7 +419,7 @@ extern u8 D_L05_0017AB20[] __attribute__((section(".data")));
 extern int probe_hero_forward_collision(float, float, float *) __asm__("FUN_L00_0020a240");
 extern float FUN_L00_0022e0f0(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern s32 FUN_L00_0025e3b8(s32);
+extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern void FUN_L00_0025c9d8(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern int FUN_L00_0021e8d8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float FUN_L00_0022e138(void *, void *) __asm__("FUN_001f9b48");
@@ -453,7 +453,7 @@ void update_hero_movement_and_collision_probes(void) {
             hero.unk250 = fast_arc_tan(wall->normal_z, normal_xy);
             if (wall->moby != 0) {
                 hero.unk255 = 1;
-                if (FUN_L00_0025e3b8(wall->moby)) hero.unk254 = 1;
+                if (is_moby_in_class_range_500_to_540(wall->moby)) hero.unk254 = 1;
             }
         }
     }

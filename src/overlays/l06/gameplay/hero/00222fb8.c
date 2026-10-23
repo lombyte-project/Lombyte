@@ -311,7 +311,7 @@ s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
-s32 FUN_L00_0025e3b8(s32);
+s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
@@ -470,7 +470,7 @@ void update_hero_ground_contact(void) {
         goto d1;
     }
     if (HH.moby != 0) {
-        if (FUN_L00_0025e3b8(HH.moby)) {
+        if (is_moby_in_class_range_500_to_540(HH.moby)) {
             hero_lui.unk30A = 1;
         }
         hit_moby_data = suck_get_aim_height(HH.moby);
@@ -979,7 +979,7 @@ extern void FUN_L00_00233810(void *, void *, f32);
 extern s32 FUN_001efa68_c(void *, void *, s32, struct MobyView *, s32) __asm__("FUN_001efa68");
 extern void update_hero_motion_response_parameters(void) __asm__("FUN_L00_00215b68");
 extern void FUN_L00_00233660(void *, f32, f32, f32);
-extern s32 FUN_L00_0025e3b8_c(s32) __asm__("FUN_L00_0025e3b8");
+extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern void spawn_nearby_effect(s32, struct MobyView *, s32, void *, void *, f32) __asm__("FUN_L00_00259bc8");
 extern s32 D_L06_00178680[];
 extern void emit_hero_timed_effects(void) __asm__("FUN_L00_00209ec8");
@@ -2499,7 +2499,7 @@ void update_hero_motion_for_current_state(void) {
                 s32 i;
                 fast_vec_scale(&v10, &hero.motion.displacement, 7.0f);
                 for (i = 0; i < collected_moby_count; i++) {
-                    if (FUN_L00_0025e3b8_c(D_L06_00178680[i]) != 0) {
+                    if (is_moby_in_class_range_500_to_540(D_L06_00178680[i]) != 0) {
                         spawn_nearby_effect(D_L06_00178680[i], (struct MobyView *)hero.moby, 0x10000, &hero.motion.pos, &v10,
                                          1.0f);
                     }
