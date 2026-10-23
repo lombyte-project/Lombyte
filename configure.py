@@ -142,9 +142,7 @@ ROUTE_EXCEPTIONS = {
     # fun_00221460: A dead `p = m->items;` statement that cc1 deletes still
     # perturbs the local hard-register order into retail's, and declaring
     # func_001F6530 void removes the unused-return pseudo so its argument copies
-    # emit in retail's order a2<-s0, a3<-v0, a1<-s2. NOTE:
-    # src/assembly/textbin/ui/map/draw_level_selection_map.c still declares that callee as s32 in
-    # another translation unit.
+    # emit in retail's order a2<-s0, a3<-v0, a1<-s2.
     "ui/menus/draw_menu_choice_list": "cc_sn_padless",
     # fun_00232d00: bind the stash RPC server, read its IOP buffer and reset the
     # stash slots
@@ -486,7 +484,7 @@ DATA_OVERLAYS = {
     "rendering/register_shrub_render_class": (0x1D8030, 0xD8FB0, 128),
     "gameplay/build_variant_effect_quads": (0x1D9890, 0xDA810, 384),
     "rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1D9A10, 0xDA990, 32),
-    "assembly/textbin/ui/map/draw_level_selection_map": (0x1DDE28, 0xDEDA8, 320),
+    "ui/map/draw_level_selection_map": (0x1DDE28, 0xDEDA8, 320),
     "rendering/register_object_render_class": (0x1E1900, 0xE2880, 256),
     "gameplay/vendor/render_capture_scrolling_text": (0x1E6018, 0xE6F98, 512),
     "gameplay/vendor/render_vendor_capture_pass_sequence": (0x1E6218, 0xE7198, 96),

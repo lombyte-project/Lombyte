@@ -1205,7 +1205,7 @@ segments:
           - [0xfdda8, c, runtime/memory/update_mode_freeze]
           - [0xfe660, c, runtime/memory/calculate_ring_buffer_bounds]
           - [0xfe6c4, textbin, text_gap_001fd744_after_fun_001fd6e0]
-          - [0xfe6c8, c, assembly/textbin/ui/map/draw_level_selection_map]
+          - [0xfe6c8, c, ui/map/draw_level_selection_map]
           - [0xfeb84, textbin, text_gap_001fdc04_before_fun_001fdca0]
           - [0xfeb88, c, ui/help/dismiss_help]
           - [0xfec10, textbin, text_gap_001fdc90_after_fun_001fdc08]

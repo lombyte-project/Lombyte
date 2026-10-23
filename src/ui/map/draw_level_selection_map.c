@@ -1,16 +1,7 @@
 #include "types.h"
-#include "asm.h"
 #include "sda.h"
-#include "rnc/ui/map/level_map.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/map/draw_level_selection_map/FUN_001fd748.s", FUN_001fd748);
-#else
-#include "types.h"
-
 #include "rnc/ui/map/map_state.h"
 #include "rnc/ui/map/level_map.h"
-
 #include "rnc/gameplay/state/level_state.h"
 extern s32 pal_mode __asm__("D_0015ED80");
 extern s32 game_frame_counter __asm__("D_0015F438");
@@ -50,7 +41,6 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
     s32 text_x;
     u8 *label_text;
     s32 texture_index;
-    register s32 visited __asm__("$3");
 
     setup_gif_paging(0);
     vu1_add_g_sregister(0x42, 0x8000000044);
@@ -69,21 +59,17 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
         if (level_map_markers[level_index].x == 0) {
             continue;
         }
-        /* Near miss, 2 rows: retail sets availability to 2 after the level_available
-           address. Fakematch: the pin keeps the visit flag in v1. */
-        visited = level_visit_state[level_index];
-        availability = 3;
-        if (visited == 0) {
+        if (level_visit_state[level_index] != 0) {
+            availability = 3;
+        } else if (level_available[level_index] == 0) {
+            availability = 0;
+        } else {
             availability = 2;
-            if (level_available[level_index] == 0) {
-                availability = 0;
-            }
         }
         if (availability == 0) {
             continue;
         }
-        /* Fakematch: retail loads x again here instead of reusing the check above. */
-        marker_x = *(volatile s32 *)&level_map_markers[level_index].x;
+        marker_x = level_map_markers[level_index].x;
         marker_y = level_map_markers[level_index].y;
         if (pal_mode != 0) {
             marker_y = marker_y * 0x1C0 / 0x1A0;
@@ -126,6 +112,8 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
     }
     do_gif_paging();
 }
-#endif /* NON_MATCHING */
+
 
 LevelMapMarker level_map_markers[20] = {{0}, {0x50, 0x5f, 0x14, -20}, {0x55, 0x82, -16, -8}, {0x5a, 0x41, -16, -16}, {0x6c, 0x6e, -16, 0x28}, {0xa0, 0x6e, 0xa, -16}, {0x78, 0x55, 0x10, 0x12}, {0x96, 0x96, -16, 0x10}, {0xb4, 0x82, 0x20, -12}, {0xc8, 0x6e, 0x10, 0x10}, {0xdc, 0x8c, 0x10, 0x10}, {0x118, 0x64, -16, 3}, {0xe6, 0x50, 0x10, -16}, {0xd2, 0x28, -16, -16}, {0xc8, 0x32, -16, -16}, {0xa0, 0x28, -16, -16}, {0x82, 0x32, -16, -16}, {0x2d, 0x5a, 0x20, -60}, {0x23, 0x50, 0x20, -50}, {0}};
+
+extern __typeof__(draw_level_selection_map) func_001FD748 __attribute__((alias("FUN_001fd748")));
