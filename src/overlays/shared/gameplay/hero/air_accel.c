@@ -726,7 +726,7 @@ extern void hero_update_items() __asm__("FUN_L00_00210748");
 extern void FUN_L00_00232628(void);
 extern void FUN_L00_00232fe8(void);
 extern void FUN_L00_00262840(char *o);
-extern void FUN_L01_00231ae0_u(void) __asm__("FUN_L01_00231ae0");
+extern void update_hero_collision_dimensions(void) __asm__("FUN_L01_00231ae0");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
 void FUN_L01_00231348(int vehicle_mode, int initial_state, int new_moby) {
@@ -744,7 +744,7 @@ void FUN_L01_00231348(int vehicle_mode, int initial_state, int new_moby) {
     *(char *)(hero_state_base + 0x20A4) = vehicle_mode;
     *(int *)(hero_state_base + 0xA84) = new_moby;
     *(int *)(hero_state_base + 0x2080) = new_moby;
-    FUN_L01_00231ae0_u();
+    update_hero_collision_dimensions();
     *(float *)(hero_state_base + 0x220) = *(float *)(hero_state_base + 0x228);
     *(float *)(hero_state_base + 0x224) = *(float *)(hero_state_base + 0x22C);
     *(unsigned short *)(*(char **)(hero_state_base + 0x2080) + 0x34) |= 6;
@@ -953,7 +953,7 @@ extern f32 D_0013F570[] __asm__("D_0013F570");
 f32 FUN_001f9b80_231ae0(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_231ae0(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_231ae0(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-void FUN_L01_00231ae0(void) {
+void update_hero_collision_dimensions(void) {
     switch (hero.vehicle_mode) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         hero.unk228 = 0.8f;
