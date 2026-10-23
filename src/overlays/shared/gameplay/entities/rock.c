@@ -1708,7 +1708,7 @@ extern void FUN_L01_00309430_c(char *) __asm__("FUN_L01_00309430");
 extern void FUN_L01_003094f0_u(char *) __asm__("FUN_L01_003094f0");
 extern void FUN_L01_0026e0e0_c(char *, int) __asm__("FUN_L01_0026e0e0");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern void FUN_L00_00233ee8(float *, int, float);
+extern void request_hero_target_pose(float *, int, float) __asm__("FUN_L00_00233ee8");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void advance_accelerated_scalar(float *, float *, float, float, float,
                                        float) __asm__("FUN_00213f38");
@@ -1814,7 +1814,7 @@ void teleporter_update(struct Moby *moby) {
         *(int *)(data + 0x30) = -1;
         *(int *)(data + 0x2C) = 0;
         *(int *)(data + 0x28) = 0;
-        FUN_L00_00233ee8(&moby->pos.x, 0, moby->rot.z);
+        request_hero_target_pose(&moby->pos.x, 0, moby->rot.z);
         play_entity_sound((int)moby, 1.5f, &moby->pos, 0x10000, 20.0f, 1.0f, 0, 1, 0);
         break;
     }

@@ -2601,7 +2601,7 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 extern void FUN_0022da68_dc88(int, int, void *) __asm__("FUN_0022da68");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void FUN_L00_00216f90(void *, void *, int, int);
-extern void FUN_L00_00233ee8(void *, int, float);
+extern void request_hero_target_pose(void *, int, float) __asm__("FUN_L00_00233ee8");
 extern int get_hero_target_pose_status() __asm__("FUN_L00_00233f38");
 extern void FUN_L00_00250df8(void *);
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
@@ -2792,7 +2792,7 @@ void transport_pod_update(unsigned char *moby) {
             }
             moby[0x20] = 6;
             transport_pod_vars->ride_timer = scale_ticks(0xB4);
-            FUN_L00_00233ee8(moby + 0x10, 0, a.f[2]);
+            request_hero_target_pose(moby + 0x10, 0, a.f[2]);
             jet_mount(D_L02_001673C0, D_L02_001673C0 + 0x10, 3, scale_ticks(0xF0), 0);
             set_selected_object_float_triplets(D_L02_00161C48, D_L02_00161C4C, D_L02_00161C50, D_L02_00161C54, D_L02_00161C58,
                              D_L02_00161C60);

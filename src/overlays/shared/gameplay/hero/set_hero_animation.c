@@ -1275,7 +1275,9 @@ s32 get_ammo(s32 weapon_index) {
 }
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 /* Stores v, f and n in hero; calls 002223f8(0x65, 1) unless state is 0x65..0x67. */
-void FUN_L00_00233ee8(void *source_position, float f, int state_entry_option) {
+void request_hero_target_pose(void *source_position, float f, int state_entry_option) __asm__("FUN_L00_00233ee8");
+
+void request_hero_target_pose(void *source_position, float f, int state_entry_option) {
     qcopy(&hero.unk1640, source_position);
     hero.unk1640.f[3] = f;
     hero.unk1650 = state_entry_option;
@@ -1716,7 +1718,7 @@ void FUN_001f9a10_00234d40(Vec4_00234d40 *, Vec4_00234d40 *,
                            Vec4_00234d40 *) __asm__("FUN_001f9a10");
 float probe_ground_height(Vec4_00234d40 *, int, float) __asm__("FUN_00213508");
 float absolute_float(float) __asm__("FUN_001f99c0");
-void FUN_L00_00233ee8_00234d40(void *, float, int) __asm__("FUN_L00_00233ee8");
+void request_hero_target_pose(void *, float, int) __asm__("FUN_L00_00233ee8");
 void try_reposition_hero_on_nearby_ground(void) __asm__("FUN_L00_00234d40");
 
 void try_reposition_hero_on_nearby_ground(void) {
@@ -1729,7 +1731,7 @@ void try_reposition_hero_on_nearby_ground(void) {
     candidate_ground_position.z = probe_ground_height(&candidate_ground_position, 0, 0.5f);
     if (absolute_float(hero_base->motion.pos.f[2] - candidate_ground_position.z) > 0.3f)
         return;
-    FUN_L00_00233ee8_00234d40(pos, hero_base->motion.rot.f[2], 1);
+    request_hero_target_pose(pos, hero_base->motion.rot.f[2], 1);
     qcopy(pos, &candidate_ground_position);
 }
 void initialize_hud_element_with_counters() __asm__("FUN_L00_002395b0");

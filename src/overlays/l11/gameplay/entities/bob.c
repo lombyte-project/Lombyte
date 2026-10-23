@@ -1272,7 +1272,7 @@ extern void FUN_L11_002f2cd0_2518(char *) __asm__("FUN_L11_002f2cd0");
 extern void FUN_L11_002f2d58_2518(char *) __asm__("FUN_L11_002f2d58");
 extern void update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
 extern int allocate_voice_2518(int, int, void *) __asm__("FUN_0022da68");
-extern void FUN_L00_00233ee8_2518(float *, int, float) __asm__("FUN_L00_00233ee8");
+extern void request_hero_target_pose(float *, int, float) __asm__("FUN_L00_00233ee8");
 extern void FUN_L00_002598b0_2518(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern int get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 extern void advance_accelerated_scalar_2518(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
@@ -1352,7 +1352,7 @@ void teleporter_update(struct Moby *moby) {
         moby->state = 2;
         *(int *)(data + 0x28) = 0;
         *(int *)(data + 0x2C) = 0;
-        FUN_L00_00233ee8_2518(&moby->pos.x, 0, moby->rot.z);
+        request_hero_target_pose(&moby->pos.x, 0, moby->rot.z);
         FUN_L00_002598b0_2518((int)moby, 1.5f, &moby->pos, 0x10000, 20.0f, 1.0f, 0, 1, 0);
         break;
     }

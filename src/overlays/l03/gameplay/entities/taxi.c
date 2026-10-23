@@ -762,7 +762,7 @@ extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_0026685
 extern void draw_number(void *, struct Moby *, s32, u32, s32, s32, s32, f32) __asm__("FUN_L01_00285768");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
-extern void FUN_L00_00233ee8(void *, float, int);
+extern void request_hero_target_pose(void *, float, int) __asm__("FUN_L00_00233ee8");
 extern s32 get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void taxi_kill(struct Moby *) __asm__("FUN_0020c828");
@@ -873,7 +873,7 @@ void update_rail_taxi(struct Moby *taxi_moby) {
         if (hero.ground_moby == taxi_moby && hero.air_frames.s == 0) {
             request_taxi_return_help_message(taxi_moby, taxi_vars->help[taxi_moby->command]);
             if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
-                FUN_L00_00233ee8(&taxi_moby->pos, taxi_moby->rot.z, 0);
+                request_hero_target_pose(&taxi_moby->pos, taxi_moby->rot.z, 0);
                 taxi_moby->state = 4;
                 taxi_vars->idx = 1;
             }
@@ -2109,7 +2109,7 @@ extern s32 D_L03_0015F594 __attribute__((sda));
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
-extern void FUN_L00_00233ee8(void *, float, int);
+extern void request_hero_target_pose(void *, float, int) __asm__("FUN_L00_00233ee8");
 extern s32 get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 void update_moby_oscillation(struct Moby *m) __asm__("FUN_L03_002dd0f0");
 
@@ -2166,7 +2166,7 @@ void update_rail_lift(struct Moby *lift_moby) {
         } else if (lift_vars->ready && is_hero_on_moby(lift_moby)) {
             update_rail_lift_help_and_hud((char *)lift_moby, lift_vars->help[lift_moby->command ^ 1]);
             if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
-                FUN_L00_00233ee8(&lift_moby->pos, lift_moby->rot.z, 0);
+                request_hero_target_pose(&lift_moby->pos, lift_moby->rot.z, 0);
                 lift_moby->command ^= 1;
                 lift_vars->unk64 = 1;
                 lift_vars->ready = 0;
