@@ -136,7 +136,9 @@ int FUN_001efa68_002634f8(Vec4_2634f8 *, Vec4_2634f8 *, int, void *, int) __asm_
 void FUN_001f9a28_002634f8(void *, void *, void *) __asm__("FUN_001f9a28");
 float FUN_001f9b20_002634f8(void *) __asm__("FUN_001f9b20");
 void spawn_timed_effect_particle(Vec4_2634f8 *, int) __asm__("FUN_L00_00268f10");
-void FUN_L00_002634f8(Vec4_2634f8 *v) {
+void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) __asm__("FUN_L00_002634f8");
+
+void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) {
     Vec4_2634f8 ground_probe_start, u, position_delta;
     float k, f;
     S166C80_2634f8 *position_owner;

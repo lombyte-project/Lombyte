@@ -187,7 +187,7 @@ extern void FUN_L08_00272cb8(void *, void *, void *, float);
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
 void FUN_L00_00262cf0(void *a, void *b);
-void FUN_L00_002634f8(void *v);
+void spawn_ground_contact_effect_particle(void *v) __asm__("FUN_L00_002634f8");
 void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f);
 void FUN_L08_00307b90_c(int arg) __asm__("FUN_L08_00307b90");
 extern char D_L08_00167640_3091B0[] __asm__("D_L08_001675C0");
@@ -202,7 +202,7 @@ extern float func_001F9CE8_3091B0(void *) __asm__("FUN_001f9b20");
 extern float func_L00_002644E0_3091B0(void *) __asm__("FUN_L00_00263468");
 extern void func_L08_00273A80_3091B0(void *, void *, float, void *) __asm__("FUN_L08_00272cb8");
 extern void func_L08_002803B8_3091B0(void *, void *, float, void *) __asm__("FUN_L08_0027f5f0");
-extern void func_L00_00264570_3091B0(void *) __asm__("FUN_L00_002634f8");
+extern void spawn_ground_contact_effect_particle(void *) __asm__("FUN_L00_002634f8");
 
 void scatter_ground_particles(Moby *moby) __asm__("FUN_L08_00307cf0");
 
@@ -378,7 +378,7 @@ void scatter_ground_particles(Moby *moby) {
                     w = func_001F9FA8_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
                     w = w * func_002140F8_3091B0(0.0f, 30.0f);
                     pt.y += w;
-                    func_L00_00264570_3091B0(&pt);
+                    spawn_ground_contact_effect_particle(&pt);
                 } while (--remaining_pass_attempts != 0);
             }
             *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
@@ -396,7 +396,7 @@ void scatter_ground_particles(Moby *moby) {
                     w = func_001F9FA8_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
                     w = w * func_002140F8_3091B0(0.0f, 8.0f);
                     pt.y += w;
-                    func_L00_00264570_3091B0(&pt);
+                    spawn_ground_contact_effect_particle(&pt);
                 } while (--remaining_pass_attempts != 0);
             }
         }

@@ -1817,7 +1817,7 @@ typedef struct {
 } O_275320;
 extern void FUN_001f9a10_275320(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float ground_height_at(void *) __asm__("FUN_L00_00263468");
-extern void FUN_L00_002634f8_275320(void *) __asm__("FUN_L00_002634f8");
+extern void spawn_ground_contact_effect_particle(void *) __asm__("FUN_L00_002634f8");
 
 void update_gravity_ground_culled_particle(O_275320 *particle) __asm__("FUN_L00_00275320");
 
@@ -1838,7 +1838,7 @@ void update_gravity_ground_culled_particle(O_275320 *particle) {
     }
     if (particle->pos.f[2] < ground_height_threshold) {
         particle_vector_scratch.q = particle->pos.q;
-        FUN_L00_002634f8_275320(&particle_vector_scratch);
+        spawn_ground_contact_effect_particle(&particle_vector_scratch);
         free_effect_particle(particle);
         return;
     }
@@ -1859,7 +1859,7 @@ void update_gravity_ground_culled_particle(O_275320 *particle) {
         }
         if (particle->pos.f[2] < ground_height_threshold) {
             ground_probe_position.q = particle->pos.q;
-            FUN_L00_002634f8_275320(&ground_probe_position);
+            spawn_ground_contact_effect_particle(&ground_probe_position);
             free_effect_particle(particle);
             return;
         }
