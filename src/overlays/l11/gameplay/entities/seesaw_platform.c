@@ -1858,7 +1858,7 @@ void draw_ship_radar_moby_icon(char *radar_reference_rotation, char *from, char 
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00312E10), where it is exact; names translated to the US level program. */
 
-extern float FUN_L11_00311a88_u(void *, void *) __asm__("FUN_L11_00311a88");
+extern float compute_ship_target_reticle_distance_squared(void *, void *) __asm__("FUN_L11_00311a88");
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern int collect_oil_tanker_chain_mobys(char *moby, void **out) __asm__("FUN_L11_00318050");
 extern short *D_L11_001AC240[];
@@ -1875,7 +1875,7 @@ void *select_ship_lock_on_target(void *moby, char *ship_vars, float *reference_p
     void *list[12];
     count_active_and_visible_listed_mobys(moby, ship_vars + 0xE8, ship_vars + 0xEA);
     if (current_target != 0) {
-        if (FUN_L11_00311a88_u(moby, current_target) < bestd)
+        if (compute_ship_target_reticle_distance_squared(moby, current_target) < bestd)
             return current_target;
     }
     moby_list_entry = D_L11_001AC240[*(short *)(ship_vars + 0x108)];
@@ -1887,7 +1887,7 @@ void *select_ship_lock_on_target(void *moby, char *ship_vars, float *reference_p
             int moby_count = collect_oil_tanker_chain_mobys(listed_moby, list);
             int i;
             for (i = 1; i < moby_count; i++) {
-                float reticle_distance_sq = FUN_L11_00311a88_u(moby, list[i]);
+                float reticle_distance_sq = compute_ship_target_reticle_distance_squared(moby, list[i]);
                 if (reticle_distance_sq < bestd) {
                     best = list[i];
                     bestd = reticle_distance_sq;
@@ -1909,7 +1909,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-float FUN_L11_00311a88(void *moby_v, void *o_v) {
+float compute_ship_target_reticle_distance_squared(void *moby_v, void *o_v) {
     char *moby = moby_v;
     char *target_moby = o_v;
     char *data = *(char **)(moby + 0x78);
