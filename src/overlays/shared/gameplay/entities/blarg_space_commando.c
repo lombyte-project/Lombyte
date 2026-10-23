@@ -634,7 +634,9 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 extern float D_L06_00161FD4 __attribute__((sda));
 extern int D_L06_00161FD8 __attribute__((sda));
-void FUN_L06_002ff100(char *moby) {
+void initialize_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff100");
+
+void initialize_blarg_space_commando_beam(char *moby) {
     char *vars = *(char **)(moby + 0x78);
     float point_offset[4];
     int i;
