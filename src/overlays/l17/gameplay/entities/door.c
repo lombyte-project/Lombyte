@@ -3558,7 +3558,7 @@ extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L0
 extern void FUN_L00_002ea9d8(void *);
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18(int);
-extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
+extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
@@ -3676,7 +3676,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
             rot[2] = fast_arc_tan(b[0] - a[0], b[1] - a[1]);
             rot[1] = -fast_arc_tan(vector_distance(a, b), b[2] - a[2]);
             jet_mount(a, rot, 2, scale_game_frames(300), 0);
-            FUN_L02_002f8aa0(0.001f, 1.0f, 1.0f, 0.001f, 1.0f, 1.0f);
+            set_selected_object_float_triplets(0.001f, 1.0f, 1.0f, 0.001f, 1.0f, 1.0f);
             FUN_L00_002ea9d8(a);
             FUN_L00_002eaa30(rot);
             FUN_L00_00216f90(D_L17_001600EC + (shuttle_vars->cut << 7) + 0x30,

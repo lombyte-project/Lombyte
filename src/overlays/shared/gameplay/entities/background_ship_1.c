@@ -702,8 +702,8 @@ void set_nonzero_follow_camera_parameters(float x, float y, float z) {
 /* stores two coordinate triples in the selected object data */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F9ED8), where it is exact; names translated to the US level program. */
 
-void FUN_L02_002f8aa0(float a, float b, float c, float d, float e, float f);
-void FUN_L02_002f8aa0(float first_triplet_middle, float first_triplet_first, float first_triplet_last, float second_triplet_middle, float second_triplet_first, float second_triplet_last) {
+void set_selected_object_float_triplets(float a, float b, float c, float d, float e, float f) __asm__("FUN_L02_002f8aa0");
+void set_selected_object_float_triplets(float first_triplet_middle, float first_triplet_first, float first_triplet_last, float second_triplet_middle, float second_triplet_first, float second_triplet_last) {
     char *moby = D_L02_00167400_d;
     char *data = *(char **)(moby + 0x70);
     char *second_triplet_store_base = data + 0x30;

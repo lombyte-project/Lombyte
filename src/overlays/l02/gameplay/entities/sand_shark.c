@@ -2617,7 +2617,7 @@ void advance_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_
 extern void advance_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_002def80");
 extern void snap_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_002df0b0");
 extern void set_vendor_camera_mode(int, int) __asm__("FUN_L02_002f8a18");
-extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
+extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 
 /* D_L02_001600EC entries (0x80 bytes): lift stops. */
 typedef struct {
@@ -2794,7 +2794,7 @@ void transport_pod_update(unsigned char *moby) {
             transport_pod_vars->ride_timer = scale_ticks(0xB4);
             FUN_L00_00233ee8(moby + 0x10, 0, a.f[2]);
             jet_mount(D_L02_001673C0, D_L02_001673C0 + 0x10, 3, scale_ticks(0xF0), 0);
-            FUN_L02_002f8aa0(D_L02_00161C48, D_L02_00161C4C, D_L02_00161C50, D_L02_00161C54, D_L02_00161C58,
+            set_selected_object_float_triplets(D_L02_00161C48, D_L02_00161C4C, D_L02_00161C50, D_L02_00161C54, D_L02_00161C58,
                              D_L02_00161C60);
             FUN_L00_002ea9d8(&camera_position_or_stop_look);
             FUN_L00_002eaa30(&initial_camera_rotation);

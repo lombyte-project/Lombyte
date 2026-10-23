@@ -6513,7 +6513,7 @@ extern void allocate_voice_for_group_entry(int, int, int) __asm__("FUN_0022dba0"
 extern void set_moby_list_state_4(int) __asm__("FUN_L06_002f45f0");
 extern void FUN_L00_002eac18(int);
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
+extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 
 extern float D_L06_0015F400;
 void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) __asm__("FUN_L06_00301b90");
@@ -6798,7 +6798,7 @@ extern void fade_to_black_302578(int) __asm__("FUN_001f4a58");
 extern float angle_atan2_302578(float, float) __asm__("FUN_001f9e90");
 extern float vector_distance_302578(void *, void *) __asm__("FUN_001f9b80");
 extern void FUN_L00_002eaaa0_302578(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L02_002f8aa0_302578(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
+extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 extern void FUN_L00_002ea9d8_302578(void *) __asm__("FUN_L00_002ea9d8");
 extern void FUN_L00_002eaa30_302578(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L00_00216f90_302578(void *, void *, int, int) __asm__("FUN_L00_00216f90");
@@ -6978,7 +6978,7 @@ void shuttle_update(struct Moby *moby) {
             rot[2] = angle_atan2_302578(b[0] - a[0], b[1] - a[1]);
             rot[1] = -angle_atan2_302578(vector_distance_302578(a, b), b[2] - a[2]);
             FUN_L00_002eaaa0_302578(a, rot, 2, scale_game_frames_302578(300), 0);
-            FUN_L02_002f8aa0_302578(0.001f, 1.0f, 1.0f, 0.001f, 1.0f, 1.0f);
+            set_selected_object_float_triplets(0.001f, 1.0f, 1.0f, 0.001f, 1.0f, 1.0f);
             FUN_L00_002ea9d8_302578(a);
             FUN_L00_002eaa30_302578(rot);
             FUN_L00_00216f90_302578(D_L06_001600EC_302578 + (shuttle_vars->cut << 7) + 0x30, D_L06_001600EC_302578 + (shuttle_vars->cut << 7) + 0x70, 0x72, 0);
@@ -7528,7 +7528,7 @@ extern void fade_to_black_304098(int) __asm__("FUN_001f4a58");
 extern void start_camera_move_304098(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void set_camera_position_304098(void *) __asm__("FUN_L00_002ea9d8");
 extern void set_camera_rotation_304098(void *) __asm__("FUN_L00_002eaa30");
-extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
+extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 extern void copy_camera_304098(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void finish_camera_move_304098(int) __asm__("FUN_L00_002eac18");
 extern void clear_vector_304098(void *) __asm__("FUN_001f99f8");
@@ -7616,7 +7616,7 @@ void red_button_update(struct Moby *moby) {
             data->vel = 0.0f;
             fade_to_black_304098(scale_game_frames_304098(0xF));
             start_camera_move_304098(&camera_position, &camera_rotation, 2, scale_game_frames_304098(0x12C), 0);
-            FUN_L02_002f8aa0(D_L06_00162198, D_L06_0016219C, D_L06_001621A0,
+            set_selected_object_float_triplets(D_L06_00162198, D_L06_0016219C, D_L06_001621A0,
                                      D_L06_001621A4, D_L06_001621A8, D_L06_001621B0);
             set_camera_position_304098(&camera_position);
             set_camera_rotation_304098(&camera_rotation);
