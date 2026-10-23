@@ -307,7 +307,7 @@ extern void FUN_L00_00269958_e50(void *, void *, int, int, int, int, int, int) _
 extern int FUN_L00_002dc9f0_e50(void *, void *) __asm__("FUN_L00_002dc9f0");
 extern void FUN_L01_0026d930_e50(void *) __asm__("FUN_L01_0026d930");
 extern void emit_sand_shark_dust_burst(void *) __asm__("FUN_L02_002d3dd0");
-extern int FUN_L02_002d5658_e50(void *) __asm__("FUN_L02_002d5658");
+extern int select_group_class_29c_moby(void *) __asm__("FUN_L02_002d5658");
 extern void FUN_L02_002d57f8_e50(void *, int) __asm__("FUN_L02_002d57f8");
 extern void FUN_L02_002d5a68_e50(void *) __asm__("FUN_L02_002d5a68");
 extern void FUN_L02_002d5c88_e50(void *) __asm__("FUN_L02_002d5c88");
@@ -853,7 +853,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         if (knockback_status_flags & 0x140) {
             FUN_L00_00257470_e50(moby, 0, -1);
-            vars->unk27C = FUN_L02_002d5658_e50(moby);
+            vars->unk27C = select_group_class_29c_moby(moby);
             if (vars->unk27C != 0) {
                 emit_sand_shark_dust_burst(moby);
                 moby->state = 0x1A;
@@ -878,7 +878,7 @@ void sand_shark_update(struct Moby *moby) {
         if (moby->alpha >= 8) {
             moby->alpha -= 8;
         } else {
-            vars->unk27C = FUN_L02_002d5658_e50(moby);
+            vars->unk27C = select_group_class_29c_moby(moby);
             if (vars->unk27C != 0) {
                 emit_sand_shark_dust_burst(moby);
                 moby->alpha = 0x80;
@@ -894,7 +894,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     case SAND_SHARK_INACTIVE_WAIT_FOR_RELAUNCH:
-        vars->unk27C = FUN_L02_002d5658_e50(moby);
+        vars->unk27C = select_group_class_29c_moby(moby);
         if (vars->unk27C == 0) {
             remove_moby_e50(moby);
             return;
@@ -914,7 +914,7 @@ extern int D_L02_0015FFD8_m __asm__("D_L02_0015FFD8");
 extern int D_L02_001ABE40[];
 extern int random_integer_below(int) __asm__("FUN_00213260");
 
-int FUN_L02_002d5658(void *argp) {
+int select_group_class_29c_moby(void *argp) {
     char *moby = argp;
     int result = 0;
     short *group_ids;
@@ -1144,7 +1144,7 @@ extern float absolute_float_5c88(float) __asm__("func_001F99C0");
 extern float FUN_00213508(void *, int, float);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
-extern int FUN_L02_002d5658(void *argp);
+extern int select_group_class_29c_moby(void *argp) __asm__("FUN_L02_002d5658");
 extern void extend_group_sand_shark_timers(char *arg) __asm__("FUN_L02_002d5728");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
@@ -1175,7 +1175,7 @@ void FUN_L02_002d5c88(unsigned char *moby) {
         if (moby_vars->i288 >= 0) {
             (*(Vars5c88 **)((moby_vars->i288 << 8) + D_L02_0015FFD8 + 0x78))->i14C -= 1;
         }
-        if ((moby_vars->i27C = FUN_L02_002d5658(moby)) == 0) {
+        if ((moby_vars->i27C = select_group_class_29c_moby(moby)) == 0) {
             mark_moby_for_removal(moby);
             return;
         }
@@ -1307,7 +1307,7 @@ void prepare_sand_shark_for_relaunch_or_remove(struct Moby *moby) __asm__("FUN_L
 
 void prepare_sand_shark_for_relaunch_or_remove(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    int result = FUN_L02_002d5658(moby);
+    int result = select_group_class_29c_moby(moby);
     *(int *)(data + 0x27C) = result;
     if (result != 0) {
         moby->state = 0x1A;
