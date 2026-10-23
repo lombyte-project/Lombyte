@@ -2574,7 +2574,9 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L16_002e8b98(int point_count, Vec3f *direction_vectors, Vec3f *point_positions, int unused, float *out) {
+void compute_level16_reflection_map_coordinates(int point_count, Vec3f *direction_vectors, Vec3f *point_positions, int unused, float *out) __asm__("FUN_L16_002e8b98");
+
+void compute_level16_reflection_map_coordinates(int point_count, Vec3f *direction_vectors, Vec3f *point_positions, int unused, float *out) {
     int i;
     float relative_direction[4];
     float point_position[4];
@@ -2940,7 +2942,7 @@ extern char D_L16_001E28D0[];
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
-void FUN_L16_002e8b98(int n, Vec3f *p1, Vec3f *p2, int unused, float *out);
+void compute_level16_reflection_map_coordinates(int n, Vec3f *p1, Vec3f *p2, int unused, float *out) __asm__("FUN_L16_002e8b98");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 int D_L16_00161FB8[4] __attribute__((section(".sdata"))) = {148, 148, 53, 0};
@@ -2970,7 +2972,7 @@ void draw_level16_reflection_mesh_batch(void) {
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     font_queue_vu_state();
     for (i = 0; i < 3; i++) {
-        FUN_L16_002e8b98(D_L16_00161FB8[i], ((int *)D_L16_00161FE8)[i],
+        compute_level16_reflection_map_coordinates(D_L16_00161FB8[i], ((int *)D_L16_00161FE8)[i],
                          ((int *)D_L16_00161FC8)[i], ((int *)D_L16_00161FD8)[i],
                          D_L16_001E28D0);
         FUN_L00_001fde98(D_L16_00161FB8[i], ((int *)D_L16_00161FC8)[i],

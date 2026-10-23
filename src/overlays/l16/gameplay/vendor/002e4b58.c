@@ -189,7 +189,7 @@ extern float D_L16_001DF278[];
 float *D_L16_00161FB0[2] = {D_L16_001DF0C0, D_L16_001DF278};
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
-extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
+extern void compute_level16_reflection_map_coordinates(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
 extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");
 
 void draw_level16_visible_textured_batches(void) __asm__("FUN_L16_002e97a0");
@@ -209,7 +209,7 @@ void draw_level16_visible_textured_batches(void) {
     font_queue_vu_state();
     for (i = 0; i < 0x2; i++) {
         if (fast_bsphere_check(D_L16_001DF2B0[i], 512.0f) != -1) {
-            FUN_L16_002e8b98_i(element_counts[i], input_vector_tables[i], packet_vector_tables[i], c[i], D_L16_001DF2D0);
+            compute_level16_reflection_map_coordinates(element_counts[i], input_vector_tables[i], packet_vector_tables[i], c[i], D_L16_001DF2D0);
             FUN_L00_001fde98(element_counts[i], packet_vector_tables[i], packet_word_tables[i], D_L16_001DF2D0, 1);
         }
     }
