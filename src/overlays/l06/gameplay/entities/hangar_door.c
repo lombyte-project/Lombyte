@@ -259,7 +259,9 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Resets every moby of a list that is in state 0x12.
-void FUN_L06_002f99b0(int index) {
+void clear_moby_list_state_18(int index) __asm__("FUN_L06_002f99b0");
+
+void clear_moby_list_state_18(int index) {
     short *moby_index_cursor = D_L06_001ABFC0[index];
     if (moby_index_cursor != 0) {
         do {
@@ -2614,7 +2616,7 @@ void set_listed_class_16f_state_2_and_clear_data_28(int idx) __asm__("FUN_L06_00
 void FUN_L06_002f5360_c2(char *moby) __asm__("FUN_L06_002f5360");
 void FUN_L06_002f53e8_c2(char *moby) __asm__("FUN_L06_002f53e8");
 void set_moby_list_state_18(int idx) __asm__("FUN_L06_002f9948");
-void FUN_L06_002f99b0_c(int index) __asm__("FUN_L06_002f99b0");
+void clear_moby_list_state_18(int index) __asm__("FUN_L06_002f99b0");
 void FUN_L06_002fb090_c(char *moby) __asm__("FUN_L06_002fb090");
 void FUN_L06_002fb148_c(char *moby) __asm__("FUN_L06_002fb148");
 void FUN_L06_002fb4b0_c(char *arg) __asm__("FUN_L06_002fb4b0");
@@ -2646,7 +2648,7 @@ extern int func_L06_002FC6D8_q(void *) __asm__("FUN_L06_002fb2a8");
 extern void func_L06_002FC8E0_q(void *) __asm__("FUN_L06_002fb4b0");
 extern void func_L06_002FC4C0_q(void *) __asm__("FUN_L06_002fb090");
 extern int func_L06_002FCA98_q(void *) __asm__("FUN_L06_002fb668");
-extern void func_L06_002FADE0_q(int) __asm__("FUN_L06_002f99b0");
+extern void clear_moby_list_state_18(int) __asm__("FUN_L06_002f99b0");
 extern void func_L06_002FD0B8_q(void *) __asm__("FUN_L06_002fbc88");
 extern int func_L06_002EB2D0_q(int) __asm__("FUN_L06_002e9ea0");
 extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
@@ -2792,7 +2794,7 @@ void alien_queen_update(unsigned char *moby)
     case 5:
         if ((unsigned char)moby[0x53] == 6 && *(float *)(moby + 0x54) == 0.0f && (moby[0x70] & 2)) {
             func_00213DE0_q(moby, 1, 0, func_001F9850_q(0x14));
-            func_L06_002FADE0_q(*(int *)(data + 0xF4));
+            clear_moby_list_state_18(*(int *)(data + 0xF4));
         }
         if (FUN_L06_002fba28(moby) != 0) {
             moby[0x20] = 6;

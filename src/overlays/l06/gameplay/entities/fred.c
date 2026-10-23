@@ -6483,7 +6483,7 @@ extern void select_localized_moby_voice_line(struct Moby *, int) __asm__("FUN_L0
 extern void set_moby_list_state_17(int) __asm__("FUN_L06_002ffc38");
 extern void set_moby_list_state_15(int) __asm__("FUN_L06_002e9e30");
 extern void clear_moby_list_state_4(int) __asm__("FUN_L06_002f45a0");
-extern void FUN_L06_002f99b0(int);
+extern void clear_moby_list_state_18(int) __asm__("FUN_L06_002f99b0");
 extern void set_moby_state_3(char *) __asm__("FUN_L06_002fc630");
 extern void activate_listed_class_5e8_mobys(int) __asm__("FUN_L06_00309240");
 extern void FUN_L06_00312a78(void *);
@@ -6562,8 +6562,8 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
         set_moby_list_state_15(*(int *)(moby_vars + 0x14));
         set_moby_list_state_15(*(int *)(moby_vars + 0x18));
         clear_moby_list_state_4(*(int *)(moby_vars + 0));
-        FUN_L06_002f99b0(*(int *)(moby_vars + 4));
-        FUN_L06_002f99b0(*(int *)(moby_vars + 8));
+        clear_moby_list_state_18(*(int *)(moby_vars + 4));
+        clear_moby_list_state_18(*(int *)(moby_vars + 8));
         set_moby_state_3(D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x20) << 8));
         {
             *(float *)((char *)((*(int *)(moby_vars + 0xC) << 7) + (int)D_L06_001600EC_301b90) + 0x38) += 10.0f;
