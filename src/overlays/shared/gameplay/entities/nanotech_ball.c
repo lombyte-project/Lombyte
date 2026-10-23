@@ -348,7 +348,9 @@ extern u128 D_L00_001E3CA0_002d8850[] __asm__("D_L00_001E3CA0");
 void FUN_00214890_002d8850(void *, void *, void *, float) __asm__("FUN_00214890");
 void FUN_001f9bf8_002d8850(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_002d8850(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_002d8850(unsigned char *moby, float *out, int i) {
+void compute_nanotech_ball_slot_position(unsigned char *moby, float *out, int i) __asm__("FUN_L00_002d8850");
+
+void compute_nanotech_ball_slot_position(unsigned char *moby, float *out, int i) {
     u128 slot_offset;
     M_002d8850 *moby_data = *(M_002d8850 **)(moby + 0x78);
     char *e;
