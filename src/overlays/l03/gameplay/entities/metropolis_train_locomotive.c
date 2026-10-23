@@ -2011,7 +2011,9 @@ extern short D_L03_0015FFD8_u __asm__("D_L03_0015FFD8");
 float absolute_float(float input) __asm__("func_001F99C0");
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-int FUN_L03_002c6e18(float desired_heading, struct Moby *moby, struct Moby *target) {
+int try_start_kerwan_path_enemy_heading_turn(float desired_heading, struct Moby *moby, struct Moby *target) __asm__("FUN_L03_002c6e18");
+
+int try_start_kerwan_path_enemy_heading_turn(float desired_heading, struct Moby *moby, struct Moby *target) {
     char *data = (char *)moby->pvars;
     int linked_moby_index;
     float heading_delta;
