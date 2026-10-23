@@ -1815,7 +1815,7 @@ void update_camera_mode_from_preset(CamUser_316030 *camera_user) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00318260), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_001eb1f8(int);
+extern char *find_camera_record_by_id(int) __asm__("FUN_L00_001eb1f8");
 
 extern char *D_L01_00167280_lui __asm__("D_L01_00167280") __attribute__((section(".data")));
 void set_camera_5_track_acceleration_yz(float camera_track_accel_y, float camera_track_accel_z) __asm__("FUN_L01_00316e88");
@@ -1825,7 +1825,7 @@ void set_camera_5_track_acceleration_yz(float camera_track_accel_y, float camera
     char *selected_camera;
     char *destination;
     if (*(short *)(camera_candidate + 0x86) != 5)
-        selected_camera = FUN_L00_001eb1f8(5);
+        selected_camera = find_camera_record_by_id(5);
     else
         selected_camera = camera_candidate;
     destination = *(char **)(selected_camera + 0x70) + 0xE0;

@@ -815,7 +815,7 @@ void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EBE88), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_00166E00 __attribute__((section(".data")));
-extern char *FUN_L00_001eb1f8(int);
+extern char *find_camera_record_by_id(int) __asm__("FUN_L00_001eb1f8");
 
 /* Copies src to +0x80 of the object of entry 5 (from FUN_L00_001eb1f8 if needed). */
 void FUN_L00_002ea9d8(char *src);
@@ -823,7 +823,7 @@ void FUN_L00_002ea9d8(char *requested_position) {
     char *current_camera_record = D_L00_00166E00;
     char *camera_record;
     if (*(short *)(current_camera_record + 0x86) != 5)
-        camera_record = FUN_L00_001eb1f8(5);
+        camera_record = find_camera_record_by_id(5);
     else
         camera_record = current_camera_record;
     qcopy(*(char **)(camera_record + 0x70) + 0x80, requested_position);

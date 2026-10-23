@@ -12,7 +12,9 @@ typedef struct {
 } Ent09;
 extern Ent09 D_L00_00167150_u[] __asm__("D_L00_00167150");
 /* Finds the 0xA0-byte entry in D_L00_00167150 whose short at 0x86 equals id; 0 when none. */
-s32 FUN_L00_001eb1f8(s32 id) {
+s32 find_camera_record_by_id(s32 id) __asm__("FUN_L00_001eb1f8");
+
+s32 find_camera_record_by_id(s32 id) {
     s32 camera_record_address;
     s32 camera_table_end_address;
     s16 camera_record_id;
