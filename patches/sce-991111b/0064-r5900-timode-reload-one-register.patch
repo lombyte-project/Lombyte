@@ -1,0 +1,23 @@
+diff --git a/gcc/config/mips/mips.h b/gcc/config/mips/mips.h
+--- a/gcc/config/mips/mips.h
++++ b/gcc/config/mips/mips.h
+@@ -2198,13 +2198,17 @@
+ extern enum reg_class	mips_secondary_reload_class ();
+ 
+ /* Return the maximum number of consecutive registers
+-   needed to represent mode MODE in a register of class CLASS.  */
++   needed to represent mode MODE in a register of class CLASS.
++   On the R5900, one general register holds a TImode value, as in
++   HARD_REGNO_NREGS; the classes up to GR_REGS hold only general
++   registers.  */
+ 
+ #define CLASS_UNITS(mode, size)						\
+   ((GET_MODE_SIZE (mode) + (size) - 1) / (size))
+ 
+ #define CLASS_MAX_NREGS(CLASS, MODE)					\
+-  ((CLASS) == FP_REGS							\
++  (TARGET_MIPS5900 && (MODE) == TImode && (CLASS) <= GR_REGS ? 1	\
++   : (CLASS) == FP_REGS							\
+    ? (TARGET_FLOAT64							\
+       ? CLASS_UNITS (MODE, 8)						\
+       : 2 * CLASS_UNITS (MODE, 8))					\

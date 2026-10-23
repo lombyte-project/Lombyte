@@ -74,6 +74,7 @@ gap is a patch that was dropped. The kinds:
 | [0060](0060-alias-static-chain-not-a-base.patch) | upstream | the static chain and struct value registers are not alias bases | gcc-2.95.3, Richard Henderson 2000-08-22 (`alias.c`) |
 | [0061](0061-copy-rtx-if-shared-virtual-mems.patch) | upstream | a stack MEM is not shared | gcc-2.95.3, Jeff Law 1999-08-30 (`emit-rtl.c`) |
 | [0062](0062-reload-reg-unavailable.patch) | upstream | reload never picks a register outside the insn's spill set | gcc-2.95.3, Bernd Schmidt 2000-01-12 (`reload1.c`) |
+| [0064](0064-r5900-timode-reload-one-register.patch) | retail | a TImode reload in general registers takes one register, as `HARD_REGNO_NREGS` already says, not two | SN's ee-gcc 2.95.2 spills only `$v0` for a TImode reload; `textbin/rendering/buffers/setup_fs_aa_buffer` |
 
 ### SDK assembler
 
@@ -118,4 +119,5 @@ the slot. Both rules come from the retail SDK code only.
 0061-copy-rtx-if-shared-virtual-mems.patch        4f21bbdd604aa90367775c96d39aea13c14fe21217e4e1f2fc24ee7d9470d928
 0062-reload-reg-unavailable.patch                 9bddaf0912802fba0a322dcfaace0ec3626da4a11b9f5c698b60cebab7a7c2c0
 0063-gas-sync-no-swap.patch                       e4bf497eb0ab4ab8d3f584fa17fc8cab33733b7f216f2f1be129093312d2bf96
+0064-r5900-timode-reload-one-register.patch       e769215547b8b2dc6df055851e9bb65e12497d68b2240960428de1a6ca3ee489
 ```

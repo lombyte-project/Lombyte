@@ -1180,7 +1180,7 @@ segments:
           - [0xfb7dc, textbin, text_gap_001fa85c_after_fun_001fa820]
           - [0xfb7e0, c, assembly/textbin/fun_001fa860]
           - [0xfb8d8, textbin, text_gap_001fa958_after_fun_001fa860]
-          - [0xfb8f8, c, assembly/textbin/rendering/buffers/setup_fs_aa_buffer]
+          - [0xfb8f8, c, rendering/buffers/setup_fs_aa_buffer]
           - [0xfc1fc, textbin, text_gap_001fb27c_after_fun_001fa978]
           - [0xfc200, c, rendering/color/set_background_color]
           - [0xfc228, c, rendering/packets/put_disp_buffer]

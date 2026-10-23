@@ -2,11 +2,6 @@
 #include "asm.h"
 #include "rnc/globals.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM(
-    "config/us/expected/asm/assembly/textbin/rendering/buffers/setup_fs_aa_buffer/FUN_001fa978.s",
-    FUN_001fa978);
-#else
 #include "sda.h"
 #include "eetypes.h"
 #include "rnc/rendering/fs_aa_buffer.h"
@@ -206,5 +201,3 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     }
 }
 extern __typeof__(setup_fs_aa_buffer) func_001FA978 __attribute__((alias("FUN_001fa978")));
-
-#endif /* NON_MATCHING */
