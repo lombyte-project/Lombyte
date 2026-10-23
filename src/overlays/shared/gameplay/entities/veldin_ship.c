@@ -67,7 +67,7 @@ extern void FUN_0020c828_2cfcb8(M_2cfcb8 *) __asm__("FUN_0020c828");
 extern s32 FUN_001efa68_2cfcb8(V_2cfcb8 *, V_2cfcb8 *, s32, M_2cfcb8 *, s32) __asm__("FUN_001efa68");
 extern s32 FUN_L00_0025e3b8_2cfcb8(M_2cfcb8 *) __asm__("FUN_L00_0025e3b8");
 extern s32 FUN_L00_002603d0_2cfcb8(M_2cfcb8 *) __asm__("FUN_L00_002603d0");
-extern int FUN_L00_00260668_2cfcb8(M_2cfcb8 *, M_2cfcb8 *, V_2cfcb8 *, f32 *, V_2cfcb8 *, V_2cfcb8 *) __asm__("FUN_L00_00260668");
+extern int convert_pose_to_reference_local(M_2cfcb8 *, M_2cfcb8 *, V_2cfcb8 *, f32 *, V_2cfcb8 *, V_2cfcb8 *) __asm__("FUN_L00_00260668");
 extern int FUN_L00_002591d0_2cfcb8(M_2cfcb8 **, s32, s32, s32) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(M_2cfcb8 **, M_2cfcb8 *, s32, s32) __asm__("FUN_L00_002592b8");
 extern void FUN_001f9a10_2cfcb8(V_2cfcb8 *, V_2cfcb8 *, void *) __asm__("FUN_001f9a10");
@@ -122,7 +122,7 @@ void FUN_L00_002cfcb8(M_2cfcb8 *moby) {
         vars->flags |= 8;
         if (FUN_L00_002603d0_2cfcb8((*(H_2cfcb8 *)&D_L00_00173E40).moby) != 0) {
             if (moby != 0) moby->occlusion = 0x7F80;
-            FUN_L00_00260668_2cfcb8(member, (*(H_2cfcb8 *)&D_L00_00173E40).moby, &moby->pos, &moby->rot_x, &vars->link_pos, &vars->link_rot);
+            convert_pose_to_reference_local(member, (*(H_2cfcb8 *)&D_L00_00173E40).moby, &moby->pos, &moby->rot_x, &vars->link_pos, &vars->link_rot);
             vars->stack_level = 0;
             vars->standing_on = (*(H_2cfcb8 *)&D_L00_00173E40).moby;
         }
@@ -198,7 +198,7 @@ void FUN_L00_002cfcb8(M_2cfcb8 *moby) {
             if (FUN_001efa68_2cfcb8(&probe_up, &probe_down, 2, moby, 0) != 0) {
                         if ((*(H_2cfcb8 *)&D_L00_00173E40).moby != 0 && FUN_L00_002603d0_2cfcb8((*(H_2cfcb8 *)&D_L00_00173E40).moby) != 0) {
                     if (moby != 0) moby->occlusion = 0x7F80;
-                    FUN_L00_00260668_2cfcb8(member, (*(H_2cfcb8 *)&D_L00_00173E40).moby, &member->pos, &member->rot_x, &vars->link_pos, &vars->link_rot);
+                    convert_pose_to_reference_local(member, (*(H_2cfcb8 *)&D_L00_00173E40).moby, &member->pos, &member->rot_x, &vars->link_pos, &vars->link_rot);
                     vars->stack_level = 0;
                     vars->standing_on = (*(H_2cfcb8 *)&D_L00_00173E40).moby;
                     vars->flags |= 8;

@@ -3106,7 +3106,7 @@ void floating_platform_update(unsigned char *moby) {
     }
 }
 extern char *D_L05_0015FFD8_c __asm__("D_L05_0015FFD8");
-extern void FUN_L00_00260668(char *, char *, char *, char *, char *, char *);
+extern void convert_pose_to_reference_local(char *, char *, char *, char *, char *, char *) __asm__("FUN_L00_00260668");
 extern void transform_attachment_pose(char *, char *, char *, char *, char *, char *) __asm__("FUN_L00_002604f0");
 extern void FUN_L00_00260738_c(char *, float *, float *, char *) __asm__("FUN_L00_00260738");
 
@@ -3125,7 +3125,7 @@ void box_update(char *moby)
     case BOX_INITIALIZE:
         *(int *)(moby_data + 0x5C) = 1;
         if (*(int *)(moby_data + 0x80) >= 0) {
-            FUN_L00_00260668(moby, D_L05_0015FFD8_c + (*(int *)(moby_data + 0x80) << 8), moby + 0x10, moby + 0x40, moby_data + 0x60, moby_data + 0x70);
+            convert_pose_to_reference_local(moby, D_L05_0015FFD8_c + (*(int *)(moby_data + 0x80) << 8), moby + 0x10, moby + 0x40, moby_data + 0x60, moby_data + 0x70);
             *(u8 *)(moby + 0x20) = 1;
         }
         break;

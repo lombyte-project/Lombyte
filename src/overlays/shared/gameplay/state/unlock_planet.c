@@ -279,8 +279,8 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
-int FUN_L00_00260668(int x, char *o, float *a, float *c, float *b, float *d);
-int FUN_L00_00260668(int x, char *reference_object, float *input_position, float *input_rotation, float *output_position, float *output_rotation) {
+int convert_pose_to_reference_local(int x, char *o, float *a, float *c, float *b, float *d) __asm__("FUN_L00_00260668");
+int convert_pose_to_reference_local(int x, char *reference_object, float *input_position, float *input_rotation, float *output_position, float *output_rotation) {
     float transposed_rotation_matrix[16];
     float position_offset[4];
     float composed_rotation_matrix[4];

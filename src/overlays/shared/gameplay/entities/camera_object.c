@@ -789,7 +789,7 @@ extern s32 FUN_L00_001f0d60(void *, s32, void *, f32);
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern s32 allocate_glint_slot(void *, s32, f32) __asm__("FUN_L00_001fe990");
 extern s32 FUN_L00_002603d0(void *);
-extern void FUN_L00_00260668(void *, void *, void *, void *, void *, void *);
+extern void convert_pose_to_reference_local(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
 extern s32 FUN_L00_00257b90(s32, s32);
 extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 extern void FUN_L00_0025f730(void *, f32);
@@ -857,7 +857,7 @@ void bolt_update(Bolt *bolt_moby) {
             if (D_L00_00173E40.moby != 0 && FUN_L00_002603d0((void *)D_L00_00173E40.moby) != 0) {
                 void *gm = (void *)D_L00_00173E40.moby;
                 v->ground_moby = gm;
-                FUN_L00_00260668(bolt_moby, gm, v, &v->rot, v, &v->rot);
+                convert_pose_to_reference_local(bolt_moby, gm, v, &v->rot, v, &v->rot);
             }
         } else {
             qcopy(&v->pos, &bolt_moby->pos);
@@ -936,7 +936,7 @@ void bolt_update(Bolt *bolt_moby) {
         if (D_L00_00173E40.moby != 0 && FUN_L00_002603d0((void *)D_L00_00173E40.moby) != 0) {
             void *gm = (void *)D_L00_00173E40.moby;
             v->ground_moby = gm;
-            FUN_L00_00260668(bolt_moby, gm, v, &v->rot, v, &v->rot);
+            convert_pose_to_reference_local(bolt_moby, gm, v, &v->rot, v, &v->rot);
         }
         matrix_to_euler(&bolt_moby->rot, &vector_scratch);
         build_quaternion_from_axis_rotations(&v->spin, &vector_scratch);

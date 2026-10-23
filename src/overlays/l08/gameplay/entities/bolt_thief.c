@@ -2055,7 +2055,7 @@ extern unsigned char D_L08_0015FC88_macro[] __asm__("D_L08_0015FC88") __attribut
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L00_0025f730_c(void *a, float x) __asm__("FUN_L00_0025f730");
-extern void FUN_L00_00260668(void *, int, void *, void *, void *, void *);
+extern void convert_pose_to_reference_local(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
 extern void build_axis_roll_matrix(void *, void *, float) __asm__("FUN_L08_0026a0f8");
 extern void FUN_L08_002e4db8_c(char *a, float *v) __asm__("FUN_L08_002e4db8");
 extern void FUN_L08_002e4e90_c(char *m, float *out, float *rot) __asm__("FUN_L08_002e4e90");
@@ -2139,7 +2139,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
         FUN_L08_002e4e90_c((char *)moby, (float *)&moby->pos, (float *)&moby->rot);
         if (linked != 0 && FUN_L00_002603d0(linked) != 0) {
             vars->u7C.i = linked;
-            FUN_L00_00260668(moby, linked, vars->anchor, vars->v10, vars->v20, vars->v30);
+            convert_pose_to_reference_local(moby, linked, vars->anchor, vars->v10, vars->v20, vars->v30);
         }
         moby->state = 1;
         vars->s6C = 0;
@@ -2481,7 +2481,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                 if (vars->u7C.i != 0) {
                     Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
-                    FUN_L00_00260668(moby, vars->u7C.i, vars->anchor, vars->v10, vars->v20, vars->v30);
+                    convert_pose_to_reference_local(moby, vars->u7C.i, vars->anchor, vars->v10, vars->v20, vars->v30);
                 } else {
                     qcopy(&moby->pos, vars->v20);
                     qcopy(&moby->rot, vars->v30);
