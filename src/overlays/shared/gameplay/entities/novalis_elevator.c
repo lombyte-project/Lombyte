@@ -2178,7 +2178,7 @@ typedef union { u128_2F0040 q; float f[4]; } V_2F0040;
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char *activate_smaller_amoeboid(void *) __asm__("FUN_L01_002ef350");
-extern char *FUN_L01_002ef478_c(char *, int) __asm__("FUN_L01_002ef478");
+extern char *find_nearest_class_26f_moby_in_list(char *, int) __asm__("FUN_L01_002ef478");
 extern char D_0013E533[];
 extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
@@ -2375,7 +2375,7 @@ void FUN_L01_002eec68(char *moby) {
     }
     candidate_list_index = *(int *)(moby_vars + 0x248);
     if (candidate_list_index >= 0) {
-        cand = FUN_L01_002ef478_c(moby, candidate_list_index);
+        cand = find_nearest_class_26f_moby_in_list(moby, candidate_list_index);
         if (cand != 0) {
             candidate_distance = vector_distance_xy_alt(moby + 0x10, cand + 0x10);
             if (candidate_distance < *(float *)(moby_vars + 0x228)) {
@@ -2473,7 +2473,7 @@ extern char *D_L01_0015FFD8;
 extern char *D_L01_0015FFD8;
 
 /* Nearest live entity of type 0x26F in list idx within 120 units of self, or 0. */
-char *FUN_L01_002ef478(char *self, int candidate_list_index) {
+char *find_nearest_class_26f_moby_in_list(char *self, int candidate_list_index) {
     short *list = D_L01_001ABCC0[candidate_list_index];
     float best = 120.0f;
     char *nearest_entity = 0;
