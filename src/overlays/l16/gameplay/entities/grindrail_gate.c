@@ -1080,7 +1080,9 @@ void grindrail_button_update(struct Moby *button_moby) {
 /* Start the vendor moby's turn and mark it active. */
 /* Ported from rac1-decomp (src/overlays/l16/vendor_002A50F0.c: func_L16_002E6B48), where it is exact; names translated to the US level program. */
 
-void FUN_L16_002e56e0(Level16VendorTurnMoby *moby) {
+void activate_grindrail_button(Level16VendorTurnMoby *moby) __asm__("FUN_L16_002e56e0");
+
+void activate_grindrail_button(Level16VendorTurnMoby *moby) {
     moby->data->value = -3.1415925f;
     moby->active = 1;
     moby->state = 2;
