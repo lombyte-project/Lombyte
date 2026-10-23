@@ -670,7 +670,9 @@ u8 *create_moby(s32) __asm__("FUN_0020c4f8");
 void clear_u64_value() __asm__("FUN_001f99f8");
 void refresh_moby_spatial_bounds_from_basis() __asm__("FUN_0020e098");
 void FUN_L00_00250df8();
-u8 *FUN_L00_002bb360(u8 *basis_source_moby) {
+u8 *spawn_linked_moby_from_basis(u8 *basis_source_moby) __asm__("FUN_L00_002bb360");
+
+u8 *spawn_linked_moby_from_basis(u8 *basis_source_moby) {
     u8 *spawned_moby = create_moby(0xB3);
     if (spawned_moby) {
         u8 *spawned_moby_vars = *(u8 **)(spawned_moby + 0x78);
