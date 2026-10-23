@@ -3254,7 +3254,7 @@ extern float D_L06_00161E78 __attribute__((sda));
 extern float D_L06_00161E7C __attribute__((sda));
 extern float D_L06_00161E80 __attribute__((sda));
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void FUN_L06_002f7c68_c(char *m) __asm__("FUN_L06_002f7c68");
+extern void spawn_energy_sphere_destruction_particles(char *m) __asm__("FUN_L06_002f7c68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -3267,7 +3267,7 @@ void energy_sphere_update(struct Moby *sphere_moby) {
     char *sphere_vars = (char *)sphere_moby->pvars;
     if (find_moby_hit(sphere_moby, 0x330000, 0) != 0) {
         int voice_slot_index;
-        FUN_L06_002f7c68_c(sphere_moby);
+        spawn_energy_sphere_destruction_particles(sphere_moby);
         allocate_voice_for_target_entry(1, 0, (int)sphere_moby);
         voice_slot_index = *(int *)(sphere_vars + 0x60);
         if (voice_slot_index != -1) {
@@ -3322,7 +3322,7 @@ extern int D_L06_00161EA4 __attribute__((sda));
 extern float D_L06_00161EA8 __attribute__((sda));
 extern float D_L06_00161EAC __attribute__((sda));
 extern unsigned char D_L06_00161E94 __attribute__((sda));
-void FUN_L06_002f7c68(char *moby) {
+void spawn_energy_sphere_destruction_particles(char *moby) {
     float particle_velocity[4];
     int i;
     for (i = 0x27; i >= 0; i--) {
