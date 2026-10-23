@@ -962,7 +962,7 @@ extern void update_fading_asteroid_debris(unsigned char *m) __asm__("FUN_L09_002
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
 extern void normalize_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9bf8");
-s32 FUN_L09_00294ae0(struct Moby *m, void *path, void *out, s32 i, s32 dir, f32 dist);
+s32 compute_advanced_moby_path_position(struct Moby *m, void *path, void *out, s32 i, s32 dir, f32 dist) __asm__("FUN_L09_00294ae0");
 struct Moby *FUN_L09_002eaa50_c(struct Moby *owner) __asm__("FUN_L09_002eaa50");
 extern Path_2ECC50 *D_L09_001B0930_2ECC50[] __asm__("D_L09_001B0630");
 extern struct Moby *func_L09_002EBD30_2ECC50(void *m) __asm__("FUN_L09_002eaa50");

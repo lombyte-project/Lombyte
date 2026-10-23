@@ -2256,7 +2256,7 @@ extern char *D_L13_001B07B0[];
 extern float FUN_001f9b48(void *, void *);
 extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern int FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float, float, float);
-extern int FUN_L09_00294ae0(void *, void *, void *, int, int, float);
+extern int compute_advanced_moby_path_position(void *, void *, void *, int, int, float) __asm__("FUN_L09_00294ae0");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void update_moby_path_follower(struct Moby *moby) __asm__("FUN_L13_0030bb70");
@@ -2308,7 +2308,7 @@ void update_moby_path_follower(struct Moby *moby) {
         }
         if (moby->state == 2) {
             if (moby_vars[2] < *(int *)pth - 1) {
-                int k = FUN_L09_00294ae0(moby, pth, &moby->pos, moby_vars[2], 1, frame_scale * 0.25f);
+                int k = compute_advanced_moby_path_position(moby, pth, &moby->pos, moby_vars[2], 1, frame_scale * 0.25f);
                 moby_vars[2] = k;
                 ((float *)moby_vars)[3] = FUN_001f9b48(&moby->pos, pth + (k * 16 + 0x10));
             } else {

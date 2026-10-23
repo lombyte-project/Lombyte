@@ -26,7 +26,9 @@ static inline s32 path_next(PathPoints *path, s32 i, s32 dir) {
     return i + dir;
 }
 
-s32 FUN_L09_00294ae0(struct Moby *moby, PathPoints *path, Vec4 *out, s32 i, s32 path_index_step, f32 advance_distance) {
+s32 compute_advanced_moby_path_position(struct Moby *moby, PathPoints *path, Vec4 *out, s32 i, s32 path_index_step, f32 advance_distance) __asm__("FUN_L09_00294ae0");
+
+s32 compute_advanced_moby_path_position(struct Moby *moby, PathPoints *path, Vec4 *out, s32 i, s32 path_index_step, f32 advance_distance) {
     Vec4 seg;
     Vec4 rel;
     s32 next;
