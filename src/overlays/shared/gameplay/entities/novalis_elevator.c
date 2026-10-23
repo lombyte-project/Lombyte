@@ -1056,7 +1056,10 @@ extern char D_L01_00174340_h[] __asm__("D_L01_001742C0");
 extern float *func_L00_0025D390_t(void *) __asm__("FUN_002141f8");
 extern int func_L00_001EFFF0_t(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
-void *FUN_L01_002e32a8(void *moby, void *from, void *reference_rotation, float yawMax, float pitchMax, float range, float near,
+void *select_sand_mouse_spawn_target(void *moby, void *from, void *reference_rotation, float yawMax, float pitchMax, float range, float near,
+                        float nearYaw, float nearPitch) __asm__("FUN_L01_002e32a8");
+
+void *select_sand_mouse_spawn_target(void *moby, void *from, void *reference_rotation, float yawMax, float pitchMax, float range, float near,
                         float nearYaw, float nearPitch) {
     float tp[4];
     char *best = 0;
@@ -1110,7 +1113,7 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
-extern void *FUN_L01_002e32a8_u(void *, void *, void *, float, float, float, float, float, float) __asm__("FUN_L01_002e32a8");
+extern void *select_sand_mouse_spawn_target(void *, void *, void *, float, float, float, float, float, float) __asm__("FUN_L01_002e32a8");
 extern void FUN_L01_0030c898(void *, void *, float, float, float, float);
 
 extern float D_L01_00161904 __attribute__((sda));
@@ -1140,7 +1143,7 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
     qzero(&spawn_position);
     fast_vec_add(&spawn_position, &spawn_position, moby + 0x10);
     spawn_position.f[2] = spawn_position.f[2] + D_L01_00161914;
-    target_moby = FUN_L01_002e32a8_u(moby, &spawn_position, moby + 0x40, D_L01_00161908 * DEG_TO_RAD,
+    target_moby = select_sand_mouse_spawn_target(moby, &spawn_position, moby + 0x40, D_L01_00161908 * DEG_TO_RAD,
                          D_L01_0016190C * DEG_TO_RAD, D_L01_00161904, 2.0f, 3.1415927f,
                          3.1415927f);
     if (target_moby != 0) {
