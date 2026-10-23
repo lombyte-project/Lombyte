@@ -141,7 +141,9 @@ typedef struct {
 
 extern void memset_words(void *, s32, s32) __asm__("FUN_001f97e8");
 
-void FUN_L00_0024f0e8(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot) {
+void release_moby_animation_slot(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot) __asm__("FUN_L00_0024f0e8");
+
+void release_moby_animation_slot(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot) {
     ListNode_24f0e8 *list_cursor;
 
     if (*slot == 0)
