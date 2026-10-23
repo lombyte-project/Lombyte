@@ -960,7 +960,7 @@ extern float interpolate_wrapped_angle_cosine_eased(float, float, float) __asm__
 extern float cosine_interpolate_alt(float, float, float) __asm__("FUN_002133d0");
 extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
 extern void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
-extern void FUN_L00_001ed630(void *, void *, void *);
+extern void compute_spherical_offset_from_positions(void *, void *, void *) __asm__("FUN_L00_001ed630");
 extern void interpolate_vector_xyz_cosine_eased(void *, void *, void *, float) __asm__("FUN_L00_00257f70");
 extern void interpolate_wrapped_rotations_cosine_eased(float *, float *, float *, float) __asm__("FUN_L00_00258050");
 f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
@@ -993,7 +993,7 @@ void update_camera_pose_from_targets(void *camera) {
             float t, x, y, transition_azimuth_delta, z;
             t = (float)(*(int *)(transition_state + 4) - *(int *)(camera_state + 0xE0)) /
                 convert_integer_to_float(*(int *)(transition_state + 4));
-            FUN_L00_001ed630(camera_state + 0xE8, target_position, &hero.motion.pos);
+            compute_spherical_offset_from_positions(camera_state + 0xE8, target_position, &hero.motion.pos);
             x = fast_subtract_rotations(F(transition_state, 8), F(transition_state, 0x1C));
             y = fast_subtract_rotations(F(target_position, 0x18), D_L00_00166DD8);
             if ((x > 0.34906584f && y < -0.34906584f) || (x < -0.34906584f && y > 0.34906584f)) {

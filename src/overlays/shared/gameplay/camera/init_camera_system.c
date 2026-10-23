@@ -305,7 +305,9 @@ extern void subtract_vector_xyz(float *) __asm__("FUN_001f9a28");
 extern void fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Fills a from a subtract_vector_xyz result: two fast_arc_tan angles and its length. */
-int FUN_L00_001ed630(float *angles_and_distance) {
+int compute_spherical_offset_from_positions(float *angles_and_distance) __asm__("FUN_L00_001ed630");
+
+int compute_spherical_offset_from_positions(float *angles_and_distance) {
     W difference_vector;
     float xy_angle;
     subtract_vector_xyz(difference_vector);
