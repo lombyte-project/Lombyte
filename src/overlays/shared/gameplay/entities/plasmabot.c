@@ -287,7 +287,7 @@ extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float FUN_L14_002b35d8_c(char *moby, int flag, float angle) __asm__("FUN_L14_002b35d8");
 int FUN_L14_002b3418_c(char *moby) __asm__("FUN_L14_002b3418");
-int FUN_L14_002b3920_c(int index) __asm__("FUN_L14_002b3920");
+int count_listed_plasmabots_preparing_or_sweeping_beam(int index) __asm__("FUN_L14_002b3920");
 int FUN_L14_002d9870_c(int i) __asm__("FUN_L14_002d9870");
 unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) __asm__("FUN_L14_002dea98");
 unsigned char *FUN_L14_002e0170_c(char *owner, float *scale, int mode) __asm__("FUN_L14_002e0170");
@@ -557,7 +557,7 @@ void update_plasmabot(char *moby) {
             break;
         }
         if (fast_dec_timer_s16(data + 0x260) == 0) break;
-        if (FUN_L14_002b3920_c(((unsigned char *)moby)[0x21]) >= 2) break;
+        if (count_listed_plasmabots_preparing_or_sweeping_beam(((unsigned char *)moby)[0x21]) >= 2) break;
         if (register_beam_slot(moby, 1, 0) == 0) break;
         if (random_integer_below(4) != 0) break;
         if (!(fast_difference_between_rotations(*(float *)(moby + 0x48), ang) < 0.017453292f)) break;
@@ -1157,7 +1157,7 @@ float FUN_L14_002b35d8(char *moby, int flag, float target_angle) {
 extern short *D_L14_001ABF40_3920[] __asm__("D_L14_001ABF40");
 extern char *D_L14_0015FFD8_3920 __asm__("D_L14_0015FFD8");
 
-int FUN_L14_002b3920(int moby_list_index) {
+int count_listed_plasmabots_preparing_or_sweeping_beam(int moby_list_index) {
     int count = 0;
     short *moby_list_entry;
 
