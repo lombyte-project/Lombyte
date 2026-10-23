@@ -2449,7 +2449,7 @@ extern void append_scaled_screen_triangle_strip(float, float, float, void *, int
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 extern void append_rotated_sprite_quad(float, float, float, float, float, int, int, int, int, int, int, int, float, float);
 extern void draw_textured_quad_local(int, int, int, int, int, int, int, int, long, long) __asm__("FUN_001f5450");
-void FUN_L13_002b8320(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x, float y, float s, float ang);
+void append_four_quarter_turn_effect_quads(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x, float y, float s, float ang) __asm__("FUN_L13_002b8320");
 void update_fighter_jet_target_tracking(int a, char *p) __asm__("FUN_L13_002b95b8");
 extern long func_001F4868_l(int) __asm__("FUN_001f44b8");
 extern void func_L13_002B9590_f(float, float, float, float, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L13_002b8320");

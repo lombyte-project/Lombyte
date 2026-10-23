@@ -8,7 +8,10 @@ extern void append_rotated_textured_screen_quad(float, float, float, float, floa
                              int) __asm__("FUN_L11_00310cf8");
 
 /* Draws four quads a quarter turn apart; same routine as FUN_L11_00311048 with this level's texture. */
-void FUN_L13_002b8320(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
+void append_four_quarter_turn_effect_quads(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
+                      float y, float size_scale, float quad_rotation_angle) __asm__("FUN_L13_002b8320");
+
+void append_four_quarter_turn_effect_quads(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
                       float y, float size_scale, float quad_rotation_angle) {
     int effect_texture;
     float quad_size;
