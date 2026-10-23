@@ -831,7 +831,9 @@ extern int inside_w(void *, void *, int) __asm__("FUN_L00_00259740");
 extern float dist_w(void *, void *) __asm__("FUN_001f9b48");
 extern int frames_w(int) __asm__("FUN_001f96f8");
 
-int FUN_L12_002e2eb8(struct Moby *moby, float speed) {
+int move_hoven_anklebiter_toward_heading(struct Moby *moby, float speed) __asm__("FUN_L12_002e2eb8");
+
+int move_hoven_anklebiter_toward_heading(struct Moby *moby, float speed) {
     char *moby_vars = (char *)moby->pvars;
     float old[4] __attribute__((aligned(16)));
     float forward_movement_vector[4];
