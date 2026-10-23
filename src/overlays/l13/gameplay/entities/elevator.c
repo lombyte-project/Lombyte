@@ -609,7 +609,9 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 
 extern float D_L13_00161388 __attribute__((sda));
 int D_L13_0016138C = 2;
-void FUN_L13_002b47a0(struct Moby *moby) {
+void fire_blarg_turret_projectile(struct Moby *moby) __asm__("FUN_L13_002b47a0");
+
+void fire_blarg_turret_projectile(struct Moby *moby) {
     float projectile_spawn_position[4];
     float horizontal_offset[4];
     char *data;
