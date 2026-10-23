@@ -195,6 +195,9 @@ void blend_racer_and_child_animations(char *moby, int animation_index, int frame
     }
 }
 
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d1688.s", FUN_L05_002d1688);
+#else
 typedef unsigned int U128_2d1688 __attribute__((mode(TI)));
 extern char *D_L05_001B0930[];
 extern float D_L05_00161388 __attribute__((sda));
@@ -358,15 +361,9 @@ state_three:
             struct Hero *h = &hero;
             if (h->water_surface_z < *(float *)(moby + 0x18) || *(float *)(data + 0x78) < 0.0f) {
                 if (h->state.current != 0x72) {
-                    /* Fakematch: retail sets the position argument before the splash height
-                       store and the moby argument last; the pin and barriers fix that order. */
-                    register char *position __asm__("$5");
                     qcopy_nc(v, &h->motion.pos);
-                    position = (char *)v;
-                    __asm__ volatile("");
                     v[2] = h->water_surface_z;
-                    __asm__ volatile("");
-                    spawn_sharkigator_splash_effects((int)moby, position);
+                    spawn_sharkigator_splash_effects((int)moby, (char *)v);
                     set_camera_2d1688(&h->motion.pos, &h->motion.rot, 0x72, 0);
                 } else {
                     qcopy(&h->motion.pos, moby + 0x10);
@@ -411,6 +408,7 @@ state_three:
             set_action_2d1688(moby, 1, 0, timer_2d1688(10));
     }
 }
+#endif
 
 typedef float V2d1e30[4] __attribute__((aligned(16)));
 extern int tick_2d1e30(void *) __asm__("FUN_001f9740");
