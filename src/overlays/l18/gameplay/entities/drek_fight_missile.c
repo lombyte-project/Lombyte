@@ -1439,7 +1439,7 @@ extern char *create_rocket_moby(float *pos, float *dir, float *target, float a, 
                               int kind) __asm__("FUN_L18_002d5348");
 extern char *launch_class_238_moby_from_list(int owner, int idx, float *from, float *to, float speed, int frames) __asm__("FUN_L18_002d5cf8");
 extern char *find_nearest_class_247_moby_in_list(void *pos, int idx) __asm__("FUN_L18_002d6c80");
-extern char *FUN_L18_002dc3e0(void *owner, void *vector, float value);
+extern char *create_class_274_ring_effect(void *owner, void *vector, float value) __asm__("FUN_L18_002dc3e0");
 extern char *create_class_3d7_moby(void *owner, void *vector, int value) __asm__("FUN_L18_002ea0f0");
 extern char D_0013E550[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -2135,7 +2135,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             }
             boss_data->f358 = scale_game_frames(600);
             boss_data->f35C = scale_game_frames(600);
-            boss_data->f338 = FUN_L18_002dc3e0(moby, boss_data->f3C0, 5.8f);
+            boss_data->f338 = create_class_274_ring_effect(moby, boss_data->f3C0, 5.8f);
             break;
         }
         break;
@@ -2700,7 +2700,7 @@ extern void moby_point_position_5e80(void *, int, void *) __asm__("FUN_L00_0024f
 extern void FUN_L00_00250df8_5e80(void *) __asm__("FUN_L00_00250df8");
 extern int FUN_L00_0025ff38_5e80(float a, char *m, char *b, int c, int d, int *e, int f) __asm__("FUN_L00_0025ff38");
 extern int poll_moby_state_and_rearm(char *) __asm__("FUN_L18_002d8050");
-extern char *FUN_L18_002dc3e0_5e80(void *, void *, float) __asm__("FUN_L18_002dc3e0");
+extern char *create_class_274_ring_effect(void *, void *, float) __asm__("FUN_L18_002dc3e0");
 extern void FUN_L18_002f1cc8_5e80(void *) __asm__("FUN_L18_002f1cc8");
 extern void FUN_L18_002dfaa0_5e80(char *, void *, void *, void *, void *, void *, int, int, int) __asm__("FUN_L18_002dfaa0");
 extern void blend_moby_animation_5e80(void *, int, int, int) __asm__("FUN_00212f90");
@@ -2864,7 +2864,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                 *(int *)(boss_data + 0x358) = scale_game_frames_5e80(0x258);
                 *(int *)(boss_data + 0x354) = scale_game_frames_5e80(0x14);
                 *(int *)(boss_data + 0x364) = 0;
-                *(char **)(boss_data + 0x338) = FUN_L18_002dc3e0_5e80(moby, boss_data + 0x3C0, 5.8f);
+                *(char **)(boss_data + 0x338) = create_class_274_ring_effect(moby, boss_data + 0x3C0, 5.8f);
             } else if (linked_moby_state_transition_status == -1) {
                 *(unsigned short *)(moby + 0x34) |= 0x41;
                 moby[0x20] = 7;

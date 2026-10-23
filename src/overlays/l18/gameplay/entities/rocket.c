@@ -223,7 +223,9 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD7D0), where it is exact; names translated to the US level program. */
 
-char *FUN_L18_002dc3e0(void *owner, void *vector, float value) {
+char *create_class_274_ring_effect(void *owner, void *vector, float value) __asm__("FUN_L18_002dc3e0");
+
+char *create_class_274_ring_effect(void *owner, void *vector, float value) {
     char *moby = create_moby(0x274);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
