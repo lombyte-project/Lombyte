@@ -353,7 +353,7 @@ extern unsigned char D_0013D4FD[];
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void FUN_L00_002d6bf0(char *);
+extern void initialize_moby_particle_effect(char *) __asm__("FUN_L00_002d6bf0");
 extern void emit_moby_sprite_particles(char *) __asm__("FUN_L10_00298940");
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 
@@ -370,7 +370,7 @@ void bolt_grabber_update(struct Moby *moby) {
     moby->scale = moby->pclass->scale * *(float *)&D_L15_00162078;
     switch (moby->state) {
     case BOLT_GRABBER_INITIALIZE:
-        FUN_L00_002d6bf0((char *)moby);
+        initialize_moby_particle_effect((char *)moby);
         if (D_0013D4FD[0xD] != 0) {
             mark_moby_for_removal(moby);
             return;

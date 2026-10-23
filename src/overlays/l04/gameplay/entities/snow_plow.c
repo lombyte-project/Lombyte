@@ -1694,7 +1694,7 @@ extern u8 D_0013D4F1[];
 extern u8 D_0013D4C9[];
 extern char D_L04_001DC760[];
 extern struct Moby *portal_mobys_2e1a10 __asm__("D_L04_0015FFD8");
-extern void FUN_L00_002d6bf0(struct Moby *);
+extern void initialize_moby_particle_effect(struct Moby *) __asm__("FUN_L00_002d6bf0");
 extern void remove_moby_2e1a10(struct Moby *) __asm__("FUN_0020c828");
 extern void FUN_L04_002e1d00_m(struct Moby *) __asm__("FUN_L04_002e1d00");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
@@ -1722,7 +1722,7 @@ void suck_cannon_update(struct Moby *moby) {
         moby->flags &= ~0x41;
     switch (moby->state) {
     case SUCK_CANNON_INITIALIZE:
-        FUN_L00_002d6bf0(moby);
+        initialize_moby_particle_effect(moby);
         if (D_0013D4F1[0]) {
             remove_moby_2e1a10(moby);
             break;

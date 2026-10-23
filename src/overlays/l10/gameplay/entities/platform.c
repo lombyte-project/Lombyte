@@ -259,7 +259,7 @@ void update_sinking_platform(struct Moby *moby) {
 }
 /* Spinning pickup: waits until the hero is close and level with it, then plays the scene, saves and goes away. */
 extern char *D_L10_0015FFD8_p __asm__("D_L10_0015FFD8");
-extern void FUN_L00_002d6bf0_p(void *) __asm__("FUN_L00_002d6bf0");
+extern void initialize_moby_particle_effect(void *) __asm__("FUN_L00_002d6bf0");
 extern void emit_moby_sprite_particles(void *) __asm__("FUN_L10_00298940");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
@@ -282,7 +282,7 @@ void magnetboots_update(struct Moby *moby) {
     moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 1.5707964f);
     switch (moby->state) {
     case MAGNETBOOTS_STATE_INITIALIZE:
-        FUN_L00_002d6bf0_p(moby);
+        initialize_moby_particle_effect(moby);
         if (D_0013D504[0] != 0) {
             delete_moby(moby);
             return;

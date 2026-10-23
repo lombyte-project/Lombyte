@@ -329,12 +329,12 @@ void gadgebot_spawn_pad_update(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002E7578), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_002d6bf0(char *);
+extern void initialize_moby_particle_effect(char *) __asm__("FUN_L00_002d6bf0");
 
 void FUN_L06_002e6148(char *moby) {
     moby[0x20] = 2;
     *(unsigned short *)(moby + 0x34) &= 0xFFBE;
-    FUN_L00_002d6bf0(moby);
+    initialize_moby_particle_effect(moby);
 }
 /* Frog (class 827) update: hops along a path, wanders near home, and chases or flees its target. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002E9AA8), where it is exact; names translated to the US level program. */

@@ -496,7 +496,7 @@ extern u8 D_0014C050_2e03a0[] __asm__("D_0014C050");
 extern s32 D_00141410_2e03a0[] __asm__("D_00141410");
 extern u8 item_available[] __asm__("D_0013D4C0");
 extern f32 FUN_001fa580_2e03a0(f32, f32) __asm__("FUN_001fa580");
-extern void FUN_L00_002d6bf0_2e03a0(void *) __asm__("FUN_L00_002d6bf0");
+extern void initialize_moby_particle_effect(void *) __asm__("FUN_L00_002d6bf0");
 extern void stub_printf() __asm__("FUN_001e93b0");
 extern void FUN_0020c828_2e03a0(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_002e0788_2e03a0(void *) __asm__("FUN_L00_002e0788");
@@ -534,7 +534,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
     moby->ang = FUN_001fa580_2e03a0(moby->ang, D_0015ED6C_2e03a0 * 1.5707964f);
     switch (moby->state) {
     case PILOTS_HELMET_INITIALIZE:
-        FUN_L00_002d6bf0_2e03a0(moby);
+        initialize_moby_particle_effect(moby);
         if (p->fa_2e03a0 == -1)
             stub_printf(D_L00_001EA1B0, moby->h);
         if (item_available[7]) {
