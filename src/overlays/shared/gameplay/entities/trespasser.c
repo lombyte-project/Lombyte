@@ -775,7 +775,7 @@ extern void FUN_L00_00258278(void *,float *,float,float,float,float);
 extern struct Moby *select_class5_target_or_hero(void *,void *,void *,void *,int) __asm__("FUN_L00_002bed90");
 extern float select_moby_heading_by_collision_probes(void *,void *,float,float,float,float,float,void *,void *,float) __asm__("FUN_L00_002bf050");
 extern int try_start_moby_hop(void *,void *,void *,int) __asm__("FUN_L00_002bf9f0");
-extern void FUN_L00_002bf8b0(void *,void *,void *);
+extern void initialize_moby_hop_trajectory(void *,void *,void *) __asm__("FUN_L00_002bf8b0");
 extern int compute_moby_state_from_vertical_probe(void *) __asm__("FUN_L00_002bfec8");
 extern int update_arc_motion(void *,void *) __asm__("FUN_L00_0025b440");
 extern int FUN_L00_00259028(void *,void *,void *,void *);
@@ -920,7 +920,7 @@ void doom_bot_update(struct Moby *moby) {
             if (vector_distance_xy(&moby->pos,&data->target_moby->pos)<reach*0.5f &&
                 absolute_float(height-(moby->pos.z+speed*0.1f))<reach*0.5f) {
                 save_state_vector_and_fields_to_hero((char*)data);
-                FUN_L00_002bf8b0(moby,&((DoomBotParams*)&hero)->config,&data->target_moby->pos);
+                initialize_moby_hop_trajectory(moby,&((DoomBotParams*)&hero)->config,&data->target_moby->pos);
                 restore_saved_state_fields_from_hero((char*)data);
                 qcopy(data,&data->target_moby->pos);
                 data->turn_rate=frame_scale*0.066f*speed;

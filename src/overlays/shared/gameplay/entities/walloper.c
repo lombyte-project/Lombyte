@@ -2895,7 +2895,9 @@ extern float FUN_001f99c0(float);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025abf0(void *, void *, int, float, float);
 
-void FUN_L00_002bf8b0(unsigned char *m, unsigned char *o, u128 *src) {
+void initialize_moby_hop_trajectory(unsigned char *m, unsigned char *o, u128 *src) __asm__("FUN_L00_002bf8b0");
+
+void initialize_moby_hop_trajectory(unsigned char *m, unsigned char *o, u128 *src) {
     float s, t, r, lim;
 #define F2BF(p, x) (*(float *)((p) + (x)))
     *(int *)(o + 0x30) = 0;
