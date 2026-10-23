@@ -1855,7 +1855,7 @@ extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_001fefc8(void *);
-extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned char D_L00_001802C0[];
@@ -2162,7 +2162,7 @@ void update_animated_point_light_moby(unsigned char *moby) {
         r = *(int *)(vars + 0x50);
         if (r == -1) {
             float kk = convert_integer_to_float_c(vars[0x24]) / 100.0f;
-            *(int *)(vars + 0x50) = FUN_L00_0023e738((float *)moby_position, *(float *)(vars + 0x60), kk, *(float *)(vars + 0x54), *(float *)(vars + 0x58), *(float *)(vars + 0x5C));
+            *(int *)(vars + 0x50) = allocate_colored_effect_slot((float *)moby_position, *(float *)(vars + 0x60), kk, *(float *)(vars + 0x54), *(float *)(vars + 0x58), *(float *)(vars + 0x5C));
         } else {
             unsigned char *point_light_entry = D_L00_001802C0 + (r << 5);
             qcopy(point_light_entry + 0x10, moby_position);

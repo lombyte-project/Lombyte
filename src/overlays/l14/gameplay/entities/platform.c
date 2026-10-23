@@ -536,7 +536,7 @@ extern char D_L14_001809C0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L14_0015F580[] __attribute__((section(".sdata")));
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
-extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern float D_L14_00161A60 __attribute__((sda));
@@ -564,7 +564,7 @@ void update_moby_joint_visual_effects(struct Moby *moby) {
     if ((unsigned int)(moby->state - 3) < 3) {
         joint_position[2] += 1.0f;
         if (*(int *)(moby_data + 0xF0) == -1) {
-            *(int *)(moby_data + 0xF0) = FUN_L00_0023e738(joint_position, D_L14_00161A60, 0.0f, 0.5f, 0.5f, 1.0f);
+            *(int *)(moby_data + 0xF0) = allocate_colored_effect_slot(joint_position, D_L14_00161A60, 0.0f, 0.5f, 0.5f, 1.0f);
         }
         if (*(int *)(moby_data + 0xF0) >= 0) {
             char *e = D_L14_001809C0 + *(int *)(moby_data + 0xF0) * 32;

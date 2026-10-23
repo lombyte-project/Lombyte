@@ -1599,7 +1599,7 @@ extern char D_L10_001DD120[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern int *D_L10_001B0930[];
 extern int D_L10_0015F5CC;
-extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern int FUN_L00_00262360();
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -1656,7 +1656,7 @@ void update_path_spark_emitter(char *moby) {
         *(float *)(spark_vars + 4) += frame_time * 5.0f;
         func_L00_002633D8_f(*(float *)(spark_vars + 4), first_path_segment_length, path, &seg, &frac, spark_path_position);
         if (*(int *)(spark_vars + 0xC) == -1) {
-            *(int *)(spark_vars + 0xC) = FUN_L00_0023e738(spark_path_position, 3.0f, 0.0f, 1.0f, 1.0f, 0.5f);
+            *(int *)(spark_vars + 0xC) = allocate_colored_effect_slot(spark_path_position, 3.0f, 0.0f, 1.0f, 1.0f, 0.5f);
         } else {
             char *light_parameter_entry = D_L10_00180740 + *(int *)(spark_vars + 0xC) * 32;
             qcopy(light_parameter_entry + 0x10, spark_path_position);

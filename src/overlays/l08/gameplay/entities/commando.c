@@ -679,7 +679,7 @@ char D_L08_001FC250[] = "M671 Warning: texture h count (%f) is greater than max 
 extern char D_L08_001FC2A0[];
 extern char D_L08_001FC2D0[];
 extern s32 DebugPrint();
-extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 void FUN_L08_002f5e58(struct Moby *m);
 #ifdef NON_MATCHING
@@ -1074,7 +1074,7 @@ void update_flickering_mesh_effect(struct Moby *moby) {
         enqueue_callback_list_1(FUN_L08_002f5e58, moby);
         if (light_vars->flags & 4) {
             if (light_vars->light == -1) {
-                light_vars->light = FUN_L00_0023e738(light_vars->light_pos.f, (f32)light_vars->radius,
+                light_vars->light = allocate_colored_effect_slot(light_vars->light_pos.f, (f32)light_vars->radius,
                                             convert_integer_to_float(light_vars->falloff) / 100.0f,
                                             light_vars->intensity * convert_integer_to_float(light_vars->red) / 100.0f,
                                             light_vars->intensity * convert_integer_to_float(light_vars->green) / 100.0f,

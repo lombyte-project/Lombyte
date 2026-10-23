@@ -288,8 +288,8 @@ typedef struct {
 extern T_0023e738 D_L00_001804C0_0023e738[] __asm__("D_L00_001804C0");
 extern P_0023e738 D_L00_001802C0_0023e738[] __asm__("D_L00_001802C0");
 void FUN_001f9810_0023e738(void *, int) __asm__("FUN_001f9810");
-int FUN_L00_0023e738(u128 *v, float a, float b_0023e738, float c, float d, float e);
-int FUN_L00_0023e738(u128 *position, float position_w, float b_0023e738, float color_component_x, float color_component_y, float color_component_z) {
+int allocate_colored_effect_slot(u128 *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
+int allocate_colored_effect_slot(u128 *position, float position_w, float b_0023e738, float color_component_x, float color_component_y, float color_component_z) {
     int i;
     T_0023e738 *slot_state;
     P_0023e738 *parameter_entry;

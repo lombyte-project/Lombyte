@@ -95,7 +95,7 @@ extern void FUN_L00_002323b8_2b2100(int, int, float) __asm__("FUN_L00_002323b8")
 extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
 extern float fast_cos_2b2100(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2b2100(float) __asm__("FUN_001f9de0");
-extern int FUN_L00_0023e738_2b2100(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
+extern int allocate_colored_effect_slot(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 extern int FUN_001f9770_2b2100(short *) __asm__("FUN_001f9770");
 
@@ -314,7 +314,7 @@ void devastator_update(struct Moby *devastator_moby) {
         velocity.f.y += fast_sin_2b2100(atan2_fast_2b2100(hero.unk670, hero.unk674));
         velocity.f.z += 0.3f;
         if (data->light == -1) {
-            data->light = FUN_L00_0023e738_2b2100(&velocity, 7.0f, 0.0f, muzzle_light_color_x, muzzle_light_color_y, muzzle_light_color_z);
+            data->light = allocate_colored_effect_slot(&velocity, 7.0f, 0.0f, muzzle_light_color_x, muzzle_light_color_y, muzzle_light_color_z);
         } else {
             Light_2b2100 *muzzle_light = &lights_2b2100[data->light];
             qcopy(&muzzle_light->pos, &velocity);
@@ -1612,7 +1612,7 @@ extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float absolute_float(float input) __asm__("func_001F99C0");
-int FUN_L00_0023e738(void *v, float a, float b_0023e738, float c, float d, float e);
+int allocate_colored_effect_slot(void *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
 struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Moby *other, f32 vx, f32 vy, f32 height, f32 speed);
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void transform_hero_local_offset_to_world(float *out, float x, float y, float z) __asm__("FUN_L00_00233660");
@@ -1827,7 +1827,7 @@ void blaster_update(struct Moby *moby) {
         work.point.f.y = hero.motion.pos.f[1] + fast_sin(fast_arc_tan(hero.unk670, hero.unk674)) * 2.0f;
         work.point.f.z = hero.motion.pos.f[2] + 1.0f;
         if (data->light == -1) {
-            data->light = FUN_L00_0023e738(&work.point, 6.0f, 0.0f, red, green, blue);
+            data->light = allocate_colored_effect_slot(&work.point, 6.0f, 0.0f, red, green, blue);
         } else {
             PointLight *light = &((PointLight *)D_L00_001802C0)[data->light];
             qcopy(&light->pos, &work.point);

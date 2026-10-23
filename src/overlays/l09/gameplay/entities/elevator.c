@@ -943,7 +943,7 @@ extern TurretBeam D_L09_00180440[];
 extern void spawn_class_144_moby(struct Moby *, Vec4 *) __asm__("FUN_L09_002efda8");
 extern struct Moby *spawn_class_4ea_projectile(void *, void *, void *, int) __asm__("FUN_L09_00307ba8");
 extern void FUN_L08_00313ba8(void);
-extern int FUN_L00_0023e738(void *, float, float, float, float, float);
+extern int allocate_colored_effect_slot(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
@@ -1064,7 +1064,7 @@ void turret_update(struct Moby *moby) {
             add_vector_xyz(&work_vector, &work_vector, &seat);
             if (vars->beam == -1) {
                 vars->beam_frames = 0;
-                vars->beam = FUN_L00_0023e738(&work_vector, 0.4f, 0.0f, 4.0f, 4.0f, 4.0f);
+                vars->beam = allocate_colored_effect_slot(&work_vector, 0.4f, 0.0f, 4.0f, 4.0f, 4.0f);
                 allocate_voice_for_target_entry(1, 0, moby);
             } else {
                 beam = &D_L09_00180440[vars->beam];

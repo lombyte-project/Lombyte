@@ -137,7 +137,7 @@ extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern int FUN_L00_0023e738(void *, float, float, float, float, float);
+extern int allocate_colored_effect_slot(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 void initialize_electric_water_bolt_effect(char *moby) __asm__("FUN_L15_002d79e8");
 
 void initialize_electric_water_bolt_effect(char *m) __asm__("FUN_L15_002d79e8");
@@ -298,7 +298,7 @@ void electric_water_update(struct Moby *moby) {
                     vars->bolt_start = *(u128 *)((D_L15_001600EC + best[pick] * 128) + 0x30);
                     vars->bolt_aim = vars->bolt_end = *(u128 *)((D_L15_001600EC + best[pick + 1] * 128) + 0x30);
                     if (vars->light == -1) {
-                        vars->light = FUN_L00_0023e738(&vars->bolt_start, 8.0f, 0.0f, 1.0f, 1.0f, 0.5f);
+                        vars->light = allocate_colored_effect_slot(&vars->bolt_start, 8.0f, 0.0f, 1.0f, 1.0f, 0.5f);
                     } else {
                         Light29FF90 *light = &D_L15_001808C0[vars->light];
                         qcopy(&light->pos, &vars->bolt_start);

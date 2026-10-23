@@ -17,7 +17,7 @@ extern s32 random_integer_between_b618(s32, s32) __asm__("FUN_L00_00257b90");
 extern f32 itof_s_b618(s32) __asm__("FUN_001fa6c0");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void interpolate_vector_b618(void *, void *, void *, f32) __asm__("FUN_L00_0025b6b8");
-extern s32 FUN_L00_0023e738(void *, f32, f32, f32, f32, f32);
+extern s32 allocate_colored_effect_slot(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_0023e738");
 extern void light_off_67e8(s32) __asm__("FUN_L00_0023e838");
 extern void mark_moby_for_removal_b618(void *) __asm__("FUN_0020c828");
 extern char D_L01_00167240_b618[] __asm__("D_L01_00167240");
@@ -127,7 +127,7 @@ void update_moby_interpolated_point_light(u8 *moby) {
         }
         slot = *(s32 *)(effect_vars + 0x68);
         if (slot == -1) {
-            slot = FUN_L00_0023e738(moby + 0x10, *(f32 *)(effect_vars + 0x60), *(f32 *)(effect_vars + 0x4c),
+            slot = allocate_colored_effect_slot(moby + 0x10, *(f32 *)(effect_vars + 0x60), *(f32 *)(effect_vars + 0x4c),
                                   *(f32 *)(effect_vars + 0x40), *(f32 *)(effect_vars + 0x44),
                                   *(f32 *)(effect_vars + 0x48));
             *(s32 *)(effect_vars + 0x68) = slot;

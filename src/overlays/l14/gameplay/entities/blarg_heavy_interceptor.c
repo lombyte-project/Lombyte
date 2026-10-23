@@ -3000,7 +3000,7 @@ extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90")
 extern void e450_b78(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern char *FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
-extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern PuffParticle *spawn_puff_d(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
 void update_flying_debris(struct Moby *moby) __asm__("FUN_L14_002bac78");
@@ -3089,7 +3089,7 @@ void update_flying_debris(struct Moby *moby) {
         qcopy(push, (char *)moby + 0xE0);
     add_d(at, at, push);
     if (*(short *)(debris_vars + 0x12) == -1) {
-        *(short *)(debris_vars + 0x12) = FUN_L00_0023e738(at, range, 0.0f, bright, green, blue);
+        *(short *)(debris_vars + 0x12) = allocate_colored_effect_slot(at, range, 0.0f, bright, green, blue);
     } else {
         light_record = (float *)(D_L14_001809C0 + *(short *)(debris_vars + 0x12) * 32);
         qcopy(light_record + 4, at);

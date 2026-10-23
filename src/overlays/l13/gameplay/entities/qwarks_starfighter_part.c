@@ -469,7 +469,7 @@ extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
-extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int FUN_L13_002e9160(void *, void *, int, int);
 extern int update_moby_path_following_away_from_hero(void *, void *, int, int) __asm__("FUN_L13_002e9408");
@@ -1063,7 +1063,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
         subtract_vector_xyz(offset, moby->pos, offset);
         offset[3] = 50.0f;
         if (data->light120 == -1) {
-            data->light120 = FUN_L00_0023e738(offset, 50.0f, 0.0f, 3.0f, 0.5f, 0.01f);
+            data->light120 = allocate_colored_effect_slot(offset, 50.0f, 0.0f, 3.0f, 0.5f, 0.01f);
         } else {
             char *light = D_L13_001805C0 + (data->light120 << 5);
             qcopy(light + 0x10, offset);
