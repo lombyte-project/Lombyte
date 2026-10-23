@@ -2615,7 +2615,9 @@ typedef struct {
 
 /* Runs the candidate check FUN_L06_002f2c28 over the moby's candidate list (or the global default list when it has none);
    returns the output of the first accepted candidate. */
-int FUN_L06_002f32f0(char *moby, int flag)
+int process_gadgebot_interactions(char *moby, int flag) __asm__("FUN_L06_002f32f0");
+
+int process_gadgebot_interactions(char *moby, int flag)
 {
     char **moby_ref;
     Iter32f0 iter;
