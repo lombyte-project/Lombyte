@@ -1001,7 +1001,7 @@ typedef struct {
     float a[4];
 } Vs __attribute__((aligned(16)));
 
-extern int FUN_L00_002583f0(Vs *p, int x, int y, float f, float g);
+extern int probe_vertical_ground_collision(Vs *p, int x, int y, float f, float g) __asm__("FUN_L00_002583f0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
@@ -1015,7 +1015,7 @@ void FUN_L01_002e3110(char *a, char *m) {
     add_vector_xyz(m, &t0, &t1);
     add_vector_xyz(m, m, &g->motion.pos);
     if (*(int *)(m + 0x68) == 0) {
-        if (FUN_L00_002583f0((Vs *)m, (int)a, 0, D_L01_001DEB40[0], 2.0f)) {
+        if (probe_vertical_ground_collision((Vs *)m, (int)a, 0, D_L01_001DEB40[0], 2.0f)) {
             *(float *)(m + 8) = D_L01_001742E8;
         }
     } else {

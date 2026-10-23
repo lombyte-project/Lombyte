@@ -522,7 +522,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int FUN_L00_00259028(struct Moby *, void *, int, void *);
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int FUN_L00_002583f0(void *, struct Moby *, int, float, float);
+extern int probe_vertical_ground_collision(void *, struct Moby *, int, float, float) __asm__("FUN_L00_002583f0");
 
 int update_snagglebeast_chase_movement(struct Moby *chaser_moby, struct ChaserVars *chaser_vars, Vec4 *goal, int mode, float range) __asm__("FUN_L07_00313af0");
 
@@ -547,7 +547,7 @@ int update_snagglebeast_chase_movement(struct Moby *chaser_moby, struct ChaserVa
         FUN_L00_00258278(chaser_moby, fast_arc_tan(hero.motion.pos.f[0] - chaser_moby->pos.x, hero.motion.pos.f[1] - chaser_moby->pos.y),
                            chaser_vars->turn, frame_time_sq * 2.0943952f, frame_time_sq * 0.69813168f, D_0015ED6C * 2.0943952f);
     }
-    if ((level_frame_count & 3) == 3 && FUN_L00_002583f0(&chaser_moby->pos, chaser_moby, 0, 0.1f, 1.0f)) {
+    if ((level_frame_count & 3) == 3 && probe_vertical_ground_collision(&chaser_moby->pos, chaser_moby, 0, 0.1f, 1.0f)) {
         target_moby = D_L07_00173EC0.moby;
         if (target_moby != 0 && D_L07_00173EC0.count > 0 && target_moby->oclass == 0x42D && target_moby->command == 0) {
             if (((struct ChaserTargetVars *)target_moby->pvars)->sticky) {
