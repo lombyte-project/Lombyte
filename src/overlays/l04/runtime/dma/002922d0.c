@@ -16,7 +16,9 @@
 extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 
 extern float D_L04_00173FE8 __attribute__((section(".data")));
-float FUN_L04_002922d0(float *probe_origin) {
+float probe_leg_rig_ground_height(float *probe_origin) __asm__("FUN_L04_002922d0");
+
+float probe_leg_rig_ground_height(float *probe_origin) {
     float clamped_probe_point[4];
     float raised_probe_point[4];
     qcopy(clamped_probe_point, probe_origin);
@@ -173,7 +175,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 float absolute_float(float input) __asm__("func_001F99C0");
-float FUN_L04_002922d0_c(float *pos) __asm__("FUN_L04_002922d0");
+float probe_leg_rig_ground_height(float *pos) __asm__("FUN_L04_002922d0");
 extern void func_001F9BC0_2939E8(float *) __asm__("FUN_001f99f8");
 extern float func_001F9F90_2939E8(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2939E8(float) __asm__("FUN_001f9de0");
@@ -215,7 +217,7 @@ int FUN_L04_00292828(StMoby_2939E8 *moby, Steer_2939E8 *steer_state)
         for (j = 0; j < 4; j++) {
             Vec_2939E8 *probe_point = &steer_state->pts[j];
             if (steer_state->mask & bit) {
-                ground_height = FUN_L04_002922d0_c((float *)probe_point);
+                ground_height = probe_leg_rig_ground_height((float *)probe_point);
                 sum += ground_height;
                 if (0.0f < ground_height) {
                     xy_abs_sum_or_tilt = absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.x);
