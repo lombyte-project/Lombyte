@@ -11,7 +11,9 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Walks a moby index list and, for each moby of one type, sets its state to 2 and a float to 1.0.
-void FUN_L06_002d9e08(int index) {
+void set_listed_class_16f_state_2_and_data_28_to_one(int index) __asm__("FUN_L06_002d9e08");
+
+void set_listed_class_16f_state_2_and_data_28_to_one(int index) {
     short *moby_index_cursor = D_L06_001ABFC0[index];
     if (moby_index_cursor != 0) {
         do {
@@ -2607,7 +2609,7 @@ void FUN_L00_0025a120(char *o);
 void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash);
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 void FUN_L00_00263e30(unsigned char *m, int n, int cnt, int base, int range, int cnt2, int flag);
-void FUN_L06_002d9e08_c(int index) __asm__("FUN_L06_002d9e08");
+void set_listed_class_16f_state_2_and_data_28_to_one(int index) __asm__("FUN_L06_002d9e08");
 void set_listed_class_16f_state_2_and_clear_data_28(int idx) __asm__("FUN_L06_002d9e78");
 void FUN_L06_002f5360_c2(char *moby) __asm__("FUN_L06_002f5360");
 void FUN_L06_002f53e8_c2(char *moby) __asm__("FUN_L06_002f53e8");
@@ -2636,7 +2638,7 @@ extern float func_00214158_q(void) __asm__("FUN_00213308");
 extern void set_moby_list_state_18(int) __asm__("FUN_L06_002f9948");
 extern void func_0020D678_q(void *) __asm__("FUN_0020c828");
 extern void func_L06_002F6818_q(void *) __asm__("FUN_L06_002f53e8");
-extern void func_L06_002DB1D8_q(int) __asm__("FUN_L06_002d9e08");
+extern void set_listed_class_16f_state_2_and_data_28_to_one(int) __asm__("FUN_L06_002d9e08");
 extern void func_00213DE0_q(void *, int, int, int) __asm__("FUN_00212f90");
 extern void func_L06_002FC578_q(void *) __asm__("FUN_L06_002fb148");
 extern float func_001F9B88_q(float) __asm__("FUN_001f99c0");
@@ -2739,7 +2741,7 @@ void alien_queen_update(unsigned char *moby)
         if (*(int *)(data + 0x12C) != 0) return;
         func_L06_002F6818_q(level_mobys_q + (*(int *)(data + 0xFC) << 8));
         func_L06_002F6818_q(level_mobys_q + (*(int *)(data + 0x100) << 8));
-        func_L06_002DB1D8_q(*(int *)(data + 0x104));
+        set_listed_class_16f_state_2_and_data_28_to_one(*(int *)(data + 0x104));
         *(int *)(data + 0x170) = 0;
         moby[0x20] = 2;
         *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
