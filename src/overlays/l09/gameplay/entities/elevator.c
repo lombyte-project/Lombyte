@@ -1271,7 +1271,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
-char *FUN_L09_00308220(struct Moby *owner, int spawned_moby_class) {
+char *spawn_barrier_replacement(struct Moby *owner, int spawned_moby_class) __asm__("FUN_L09_00308220");
+
+char *spawn_barrier_replacement(struct Moby *owner, int spawned_moby_class) {
     char *moby = func_0020D348_m(spawned_moby_class);
     if (moby != 0) {
         unsigned char state;
