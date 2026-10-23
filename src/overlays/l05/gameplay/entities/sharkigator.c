@@ -61,7 +61,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_0013E533[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L05_002db238_u(void *, void *) __asm__("FUN_L05_002db238");
+extern void spawn_amoeboid_hit_sparks(void *, void *) __asm__("FUN_L05_002db238");
 
 void handle_amoeboid_hits(unsigned char *moby) __asm__("FUN_L05_002daf58");
 
@@ -74,7 +74,7 @@ void handle_amoeboid_hits(unsigned char *moby) {
         moby[0x31] = 0;
         *(int *)(moby + 0x94) = 0;
         *(unsigned short *)(moby + 0x34) |= 1;
-        FUN_L05_002db238_u(moby, base_spark_vector);
+        spawn_amoeboid_hit_sparks(moby, base_spark_vector);
         allocate_voice_for_target_entry(0, 0, (int)moby);
         hit_owner = *(char **)(hit_record + 0x20);
         if (hit_owner != 0 && *(short *)(hit_owner + 0xA6) == 0) {
@@ -1040,7 +1040,7 @@ extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L05_002db238(void *moby, void *base_spark_vector) {
+void spawn_amoeboid_hit_sparks(void *moby, void *base_spark_vector) {
     float spark_position[4];
     float first_spark_vector[4];
     float second_spark_vector[4];
