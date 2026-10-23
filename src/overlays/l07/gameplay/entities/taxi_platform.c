@@ -291,7 +291,9 @@ extern float advance_accelerated_scalar(float *, float *, float, float, float,
 extern int FUN_L00_00258ad0(int a, int b, int g, int e, float c, float d);
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L07_0030f0f8(char *moby, char *moby_data, float acceleration_step, float braking_step, float maximum_speed) {
+void advance_sharkigator_swim_movement(char *moby, char *moby_data, float acceleration_step, float braking_step, float maximum_speed) __asm__("FUN_L07_0030f0f8");
+
+void advance_sharkigator_swim_movement(char *moby, char *moby_data, float acceleration_step, float braking_step, float maximum_speed) {
     float position_work[4];
     char *velocity;
     if (**(float **)(moby_data + 0x12C) - 0.3f < *(float *)(moby + 0x18)) {
@@ -2748,7 +2750,7 @@ int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper)
 void FUN_L00_002a3ec8_c(void *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount) __asm__("FUN_L00_002a3ec8");
 void FUN_L07_0030e998_c(char *m, char *x, float *hp) __asm__("FUN_L07_0030e998");
 void FUN_L07_0030eee8_c(struct Moby *moby, struct WalkerData *data) __asm__("FUN_L07_0030eee8");
-void FUN_L07_0030f0f8_c(char *a, char *b, float f12, float f13, float f14) __asm__("FUN_L07_0030f0f8");
+void advance_sharkigator_swim_movement(char *a, char *b, float f12, float f13, float f14) __asm__("FUN_L07_0030f0f8");
 void FUN_L07_0030f308_c(char *moby, char *obj, int state, int anim, int seq, int frame, int next, int id, float lo, float hi, float len, float scale, float radius) __asm__("FUN_L07_0030f308");
 extern char D_0013F65C[];
 extern char D_0013F350[];
@@ -2917,7 +2919,7 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = 2;
         }
         fast_vec_scale_c(data + 0xD0, data + 0xD0, frame_scale * (0.95f - 1.0f) + 1.0f);
-        FUN_L07_0030f0f8_c((char *)moby, data, frame_time_sq * 15.0f, frame_time_sq * 50.0f, frame_time * 8.0f);
+        advance_sharkigator_swim_movement((char *)moby, data, frame_time_sq * 15.0f, frame_time_sq * 50.0f, frame_time * 8.0f);
         if (next_state != 0xFF) {
             if (moby[0x53] != next_sequence) {
                 blend_moby_animation(moby, next_sequence, 0, 6);
@@ -2968,7 +2970,7 @@ void sharkigator_update(unsigned char *moby) {
             }
             moby[0x20] = 5;
         }
-        FUN_L07_0030f0f8_c((char *)moby, data, frame_time_sq * 15.0f, frame_time_sq * 50.0f, frame_time * 8.0f);
+        advance_sharkigator_swim_movement((char *)moby, data, frame_time_sq * 15.0f, frame_time_sq * 50.0f, frame_time * 8.0f);
         if (next_state != 0xFF) {
             if (moby[0x53] != next_sequence) {
                 blend_moby_animation(moby, next_sequence, 0, 6);
@@ -3008,7 +3010,7 @@ void sharkigator_update(unsigned char *moby) {
             qcopy(data + 0x100, moby + 0x10);
         }
         ((struct { char pad[0x138]; float f; } *)data)->f = target.pos[2] - 0.25f;
-        FUN_L07_0030f0f8_c((char *)moby, data, frame_time_sq * 38.0f, frame_time_sq * 0.0f, frame_time * 38.0f);
+        advance_sharkigator_swim_movement((char *)moby, data, frame_time_sq * 38.0f, frame_time_sq * 0.0f, frame_time * 38.0f);
         if (!inside || *(short *)&D_0013F65C == 0) {
             if (moby[0x53] != 1) {
                 blend_moby_animation(moby, 1, 0, 10);
@@ -3073,7 +3075,7 @@ void sharkigator_update(unsigned char *moby) {
         FUN_L07_0030eee8_c((struct Moby *)moby, (struct WalkerData *)data);
         FUN_L07_0030f1e0_c((char *)moby, data, F(data, 0x13C), 0.209439516f, frame_time_sq * 6.0f,
                           0.52359879f, frame_time_sq * 4.0f, frame_time * seven, frame_time * 3.0f);
-        FUN_L07_0030f0f8_c((char *)moby, data, frame_time_sq * 12.0f, frame_time_sq * 50.0f, frame_time * seven);
+        advance_sharkigator_swim_movement((char *)moby, data, frame_time_sq * 12.0f, frame_time_sq * 50.0f, frame_time * seven);
         FUN_L00_00258278((char *)moby, (float *)(data + 0x120), F(data, 0x13C),
                           frame_time_sq * pi2, frame_time_sq * pi, frame_time * pi);
         F(moby, 0x44) = FUN_L00_00258110((float *)(data + 0x124), F(moby, 0x44), 0.0f,
