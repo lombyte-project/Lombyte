@@ -608,7 +608,9 @@ extern void FUN_L01_00234358_2b438(f32) __asm__("FUN_L01_00234358");
 #define ED70 frame_time_sq
 
 extern f32 D_L06_0017C550[];
-void FUN_L06_0022b438(void) {
+void update_hero_airborne_planar_velocity(void) __asm__("FUN_L06_0022b438");
+
+void update_hero_airborne_planar_velocity(void) {
     HopVec_2b438 velocity_contribution;
     f32 x;
     f32 speed;
@@ -989,7 +991,7 @@ extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern f32 D_L06_001C4430[];
 extern void FUN_L01_00234358(f32);
 extern void FUN_L00_002091d8(f32, f32, f32);
-extern void FUN_L06_0022b438_c(void) __asm__("FUN_L06_0022b438");
+extern void update_hero_airborne_planar_velocity(void) __asm__("FUN_L06_0022b438");
 extern void FUN_L00_0020d2f8(void *);
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern void spawn_color_decaying_effect_particle(void *, void *, s32) __asm__("FUN_L00_0026d598");
@@ -2277,7 +2279,7 @@ void update_hero_motion_for_current_state(void) {
         }
         quantize_hero_input_target_speed();
         if (hero.unk1C4 == 0) {
-            FUN_L06_0022b438_c();
+            update_hero_airborne_planar_velocity();
         }
         adjust_hero_pose_targets_from_motion();
         build_scaled_hero_move_impulse(0.7f, D_0015ED6C_c * 0.0f);
@@ -2461,7 +2463,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
         } else {
-            FUN_L06_0022b438_c();
+            update_hero_airborne_planar_velocity();
         }
         if (hero.ground_z.f > hero.unk410) {
             hero.unk410 = hero.unk410 + D_0015ED6C_c * 6.0f;
@@ -2691,7 +2693,7 @@ void update_hero_motion_for_current_state(void) {
     case 0x45:
         FUN_L00_002118c8_c(D_0015ED6C_c * 3.0f, 0);
         if (hero.unk1C4 == 0) {
-            FUN_L06_0022b438_c();
+            update_hero_airborne_planar_velocity();
         }
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 12.0f);
         if (hero.motion.velocity.f[2] < D_0015ED6C_c * -10.0f) {
@@ -2824,7 +2826,7 @@ void update_hero_motion_for_current_state(void) {
     case 0x55:
         FUN_L00_002118c8_c(D_0015ED6C_c * 1.5f, 0);
         if (hero.unk1C4 == 0) {
-            FUN_L06_0022b438_c();
+            update_hero_airborne_planar_velocity();
         }
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 21.0f);
         if (hero.motion.velocity.f[2] < D_0015ED6C_c * -15.0f) {
