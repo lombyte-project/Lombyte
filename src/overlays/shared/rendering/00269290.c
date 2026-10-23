@@ -345,6 +345,7 @@ void FUN_L00_00269d20(unsigned char *m) {
     float collision[4] __attribute__((aligned(16)));
     float rotation[16] __attribute__((aligned(16)));
     float red, green, blue, limit;
+    float step;
     int color;
     next[0] = *(float *)(m + 0x10) + *(float *)(p + 0x0);
     next[1] = *(float *)(m + 0x14) + *(float *)(p + 0x4);
@@ -406,25 +407,20 @@ void FUN_L00_00269d20(unsigned char *m) {
             blue = limit;
             if (*(unsigned int *)(e + 0x70) & 0x400) p[0x1b] ^= 0x40;
         }
-        /* Fakematch: the pins put the last limit in f0 and 65535 in f21, as retail has them. */
-        {
-            register float last __asm__("$f0");
-            last = *(float *)(e + 0x60);
-            if (blue < last) {
-                blue = last;
-                if (*(unsigned int *)(e + 0x70) & 0x40) p[0x1b] ^= 0x40;
-            }
+        /* Fakematch: the dead copy into step puts the 65535 and 255 constants in retail's order. */
+        limit = step = *(float *)(e + 0x60);
+        if (blue < limit) {
+            blue = limit;
+            if (*(unsigned int *)(e + 0x70) & 0x40) p[0x1b] ^= 0x40;
         }
-        {
-            register float word_scale __asm__("$f21") = 65535.0f;
-            p[0x18] = particle_color_int_269d20(red * word_scale);
-            p[0x19] = particle_color_int_269d20(green * word_scale);
-            p[0x1a] = particle_color_int_269d20(blue * word_scale);
-            color = (particle_color_int_269d20(red * 255.0f) & 0xff) |
-                    ((particle_color_int_269d20(green * 255.0f) & 0xff) << 8) |
-                    ((particle_color_int_269d20(blue * 255.0f) & 0xff) << 16) |
-                    (particle_color_int_269d20(*(float *)(p + 0x10) * 255.0f) << 24);
-        }
+        step = 65535.0f;
+        p[0x18] = particle_color_int_269d20(red * step);
+        p[0x19] = particle_color_int_269d20(green * step);
+        p[0x1a] = particle_color_int_269d20(blue * step);
+        color = (particle_color_int_269d20(red * 255.0f) & 0xff) |
+                ((particle_color_int_269d20(green * 255.0f) & 0xff) << 8) |
+                ((particle_color_int_269d20(blue * 255.0f) & 0xff) << 16) |
+                (particle_color_int_269d20(*(float *)(p + 0x10) * 255.0f) << 24);
         *(int *)(m + 4) = color;
     } else if (*(unsigned int *)(e + 0x70) & 4) {
         color = particle_color_int_269d20(*(float *)(p + 0x10) * 255.0f);
