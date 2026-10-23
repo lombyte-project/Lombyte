@@ -389,7 +389,9 @@ extern char D_L06_00167540[];
 extern void FUN_L06_00312a78(void *);
 extern void FUN_L06_00312ad0(void *);
 
-int FUN_L06_002fb668(char *moby) {
+int update_alien_queen_first_recovery_camera(char *moby) __asm__("FUN_L06_002fb668");
+
+int update_alien_queen_first_recovery_camera(char *moby) {
     float output_position[4], output_rotation[4], moby_offset_position[4], hero_offset_position[4];
     char *data;
     char *pos;
