@@ -1553,7 +1553,7 @@ extern void FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, f32, void *,
 extern s32 FUN_L00_002dc9f0(void *, void *);
 extern void FUN_L01_0026d930(void *);
 extern void FUN_L01_0026e090(s32, s32);
-extern void FUN_L01_0028b5e0(void *, s32, void *, void *);
+extern void select_list_point_toward_target(void *, s32, void *, void *) __asm__("FUN_L01_0028b5e0");
 extern s32 reserve_expired_frame_slot(void *, s32, s32) __asm__("FUN_L01_002efbf8");
 
 #define SET_ANIM(m, a, b, c)                                                                       \
@@ -1895,7 +1895,7 @@ void peckbot_update(Mob577 *self) {
         chase_target_height_distance_ratio = FUN_001f99c0(self->pos.f[2] - target.pos.f[2]);
         chase_target_height_distance_ratio = chase_target_height_distance_ratio / vector_distance(&self->pos, &target.pos);
         if (peckbot_vars->path != -1) {
-            FUN_L01_0028b5e0(self, D_L01_001B0930[peckbot_vars->path], &target.pos, &position_scratch);
+            select_list_point_toward_target(self, D_L01_001B0930[peckbot_vars->path], &target.pos, &position_scratch);
         } else {
             qcopy(&position_scratch, &target.pos);
         }
@@ -1967,7 +1967,7 @@ void peckbot_update(Mob577 *self) {
         break;
     case PECKBOT_STATE_RETURN_HOME:
         if (peckbot_vars->path != -1) {
-            FUN_L01_0028b5e0(self, D_L01_001B0930[peckbot_vars->path], &peckbot_vars->home, &position_scratch);
+            select_list_point_toward_target(self, D_L01_001B0930[peckbot_vars->path], &peckbot_vars->home, &position_scratch);
         } else {
             qcopy(&position_scratch, &peckbot_vars->home);
         }
@@ -2054,7 +2054,7 @@ void peckbot_update(Mob577 *self) {
         recovery_target_height_distance_ratio = FUN_001f99c0(self->pos.f[2] - target.pos.f[2]);
         recovery_target_height_distance_ratio = recovery_target_height_distance_ratio / vector_distance(&self->pos, &target.pos);
         if (peckbot_vars->path != -1) {
-            FUN_L01_0028b5e0(self, D_L01_001B0930[peckbot_vars->path], &peckbot_vars->home, &position_scratch);
+            select_list_point_toward_target(self, D_L01_001B0930[peckbot_vars->path], &peckbot_vars->home, &position_scratch);
         } else {
             qcopy(&position_scratch, &peckbot_vars->home);
         }

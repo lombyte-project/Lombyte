@@ -1135,7 +1135,7 @@ extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_002dc9f0(void *, void *);
 extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
-extern int FUN_L01_0028b5e0(void *, void *, void *, void *);
+extern int select_list_point_toward_target(void *, void *, void *, void *) __asm__("FUN_L01_0028b5e0");
 extern int reserve_expired_frame_slot(int *, int, int) __asm__("FUN_L01_002efbf8");
 extern int select_robosquawker_target(void *, void *, float) __asm__("FUN_L13_0026bd00");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
@@ -1691,7 +1691,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         r = absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]);
         r = r / vector_distance(&robosquawker_moby->pos, &selected_target_record);
         if (robosquawker_vars->w21C != -1) {
-            FUN_L01_0028b5e0(robosquawker_moby, D_L13_001B07B0[robosquawker_vars->w21C], &selected_target_record, &vb);
+            select_list_point_toward_target(robosquawker_moby, D_L13_001B07B0[robosquawker_vars->w21C], &selected_target_record, &vb);
         } else {
             qcopy(&vb, &selected_target_record);
         }
@@ -1783,7 +1783,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         float a;
 
         if (robosquawker_vars->w21C != -1) {
-            FUN_L01_0028b5e0(robosquawker_moby, D_L13_001B07B0[robosquawker_vars->w21C], &robosquawker_vars->v1D0, &vb);
+            select_list_point_toward_target(robosquawker_moby, D_L13_001B07B0[robosquawker_vars->w21C], &robosquawker_vars->v1D0, &vb);
         } else {
             qcopy(&vb, &robosquawker_vars->v1D0);
         }
@@ -1875,7 +1875,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         r = absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]);
         r = r / vector_distance(&robosquawker_moby->pos, &selected_target_record);
         if (robosquawker_vars->w21C != -1) {
-            FUN_L01_0028b5e0(robosquawker_moby, D_L13_001B07B0[robosquawker_vars->w21C], &robosquawker_vars->v1D0, &vb);
+            select_list_point_toward_target(robosquawker_moby, D_L13_001B07B0[robosquawker_vars->w21C], &robosquawker_vars->v1D0, &vb);
         } else {
             qcopy(&vb, &robosquawker_vars->v1D0);
         }

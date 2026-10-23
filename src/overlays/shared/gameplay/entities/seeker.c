@@ -621,7 +621,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_00257b90_c(int lo, int hi) __asm__("FUN_L00_00257b90");
 int FUN_L00_0025c698_c(void *moby, void *motion) __asm__("FUN_L00_0025c698");
 int FUN_L00_0025fcb8(char *a, char *o, float best);
-int FUN_L01_0028b5e0(char *a0, void *list, char *pt, char *out);
+int select_list_point_toward_target(char *a0, void *list, char *pt, char *out) __asm__("FUN_L01_0028b5e0");
 s32 FUN_L00_00258b50(void *m, void *c, void *v, Vec4 *out, f32 f);
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void spawn_nearby_effect(unsigned char *m, int x, int y, void *p, void *q, float f) __asm__("FUN_L00_00259bc8");
