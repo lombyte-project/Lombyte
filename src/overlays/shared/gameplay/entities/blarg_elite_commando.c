@@ -564,7 +564,7 @@ extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm_
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void FUN_L16_002d3f78_u(void *, int, int) __asm__("FUN_L16_002d3f78");
+extern void randomize_blarg_elite_commando_group_pursuit_timers(void *, int, int) __asm__("FUN_L16_002d3f78");
 extern s32 tick_countdown_32(void *) __asm__("func_001F9740");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
@@ -600,7 +600,7 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
     }
     response = hit_reaction(commando_moby, hit, &commando_data->health, 0, &scratch.status, &scratch.amount, 0, 4);
     if (scratch.status != 1 && commando_moby->state != 9) {
-        FUN_L16_002d3f78_u(commando_moby, 0x12C, 0x168);
+        randomize_blarg_elite_commando_group_pursuit_timers(commando_moby, 0x12C, 0x168);
         if (hit && *(char **)(hit + 0x20) && *(short *)(*(char **)(hit + 0x20) + 0xA6) != 0x47) {
             commando_data->reward_hits = 0;
         }
@@ -796,7 +796,7 @@ extern short *D_L16_001ABCC0[];
 extern float func_001F9878_timer(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_timer(float) __asm__("FUN_001fa6d0");
 
-void FUN_L16_002d3f78(void *group_source_moby, int lower, int upper) {
+void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby, int lower, int upper) {
     L16GroupMoby *source_moby = group_source_moby;
     L16GroupTimer *timer_data;
     short *group_entry;
