@@ -77,6 +77,7 @@ void FUN_L06_00307578(char *moby) {
         draw_geometry_quad(&quad, 0, 1);
     }
     quad.texture = get_effect_texture(0x1b);
+    /* Near miss, 10 bytes: retail keeps 1.4 in f5 and 1.1 in f4. */
     data[8] += 0.01f;
     if (1.0f < data[8]) data[8] = 0.0f;
     corners[0].q = 0;
@@ -94,12 +95,12 @@ void FUN_L06_00307578(char *moby) {
     corners[3].q = 0;
     corners[3].f[0] = data[8] * 1.2f * data[9];
     corners[3].f[1] = data[8] * 1.2f * data[9];
-    rotation[0] = 0.0f; rotation[1] = 0.0f; rotation[2] = D_L06_00167400[86];
-    pos[0].q = corners[0].q;
-    pos[2].q = corners[2].q;
-    pos[1].q = corners[1].q;
     corners[3].f[2] = data[8] * 1.4f + 1.1f - 0.2f;
+    pos[0].q = corners[0].q;
     pos[3].q = corners[3].q;
+    pos[1].q = corners[1].q;
+    pos[2].q = corners[2].q;
+    rotation[2] = D_L06_00167400[86]; rotation[0] = 0.0f; rotation[1] = 0.0f;
     euler_rotation_basis(matrix, rotation);
     transform_vector_by_basis(result0, pos0, matrix);
     transform_vector_by_basis(result1, pos1, matrix);
