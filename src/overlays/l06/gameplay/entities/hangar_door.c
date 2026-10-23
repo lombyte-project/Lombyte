@@ -29,7 +29,9 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 /* 0x002d9e78, 100 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
-void FUN_L06_002d9e78(int moby_list_index) {
+void set_listed_class_16f_state_2_and_clear_data_28(int moby_list_index) __asm__("FUN_L06_002d9e78");
+
+void set_listed_class_16f_state_2_and_clear_data_28(int moby_list_index) {
     short *moby_index_cursor = D_L06_001ABFC0[moby_list_index];
     if (moby_index_cursor != 0) {
         do {
@@ -2604,7 +2606,7 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash);
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 void FUN_L00_00263e30(unsigned char *m, int n, int cnt, int base, int range, int cnt2, int flag);
 void FUN_L06_002d9e08_c(int index) __asm__("FUN_L06_002d9e08");
-void FUN_L06_002d9e78_c(int idx) __asm__("FUN_L06_002d9e78");
+void set_listed_class_16f_state_2_and_clear_data_28(int idx) __asm__("FUN_L06_002d9e78");
 void FUN_L06_002f5360_c2(char *moby) __asm__("FUN_L06_002f5360");
 void FUN_L06_002f53e8_c2(char *moby) __asm__("FUN_L06_002f53e8");
 void FUN_L06_002f9948_c(int idx) __asm__("FUN_L06_002f9948");
@@ -2659,7 +2661,7 @@ extern float func_001F9FA8_q(float) __asm__("FUN_001f9de0");
 extern void func_L00_00250800_q(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int func_L00_001F2BE8_q(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void func_L06_002F6790_q(void *) __asm__("FUN_L06_002f5360");
-extern void func_L06_002DB248_q(int) __asm__("FUN_L06_002d9e78");
+extern void set_listed_class_16f_state_2_and_clear_data_28(int) __asm__("FUN_L06_002d9e78");
 extern void func_L00_00260460_q(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void func_L00_00264EA8_q(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern int func_0022EE28_q(int, int, int) __asm__("FUN_0022db10");
@@ -2964,7 +2966,7 @@ void alien_queen_update(unsigned char *moby)
         moby[0x30] = 0xFF;
         if (data[0x2E] == 2) {
             func_L06_002F6790_q(level_mobys_q + (*(int *)(data + 0x100) << 8));
-            func_L06_002DB248_q(*(int *)(data + 0x104));
+            set_listed_class_16f_state_2_and_clear_data_28(*(int *)(data + 0x104));
             *(unsigned short *)(moby + 0x34) |= 1;
             moby[0x20] = 0xF;
             moby[0x31] = 0;
@@ -2981,7 +2983,7 @@ void alien_queen_update(unsigned char *moby)
         func_L00_00260460_q(moby, step, -1, 2.0f, 20.0f);
         func_L00_00264EA8_q(moby, 0x6A2, 1, 0x6A3, 3, 6, 2);
         func_L06_002F6790_q(level_mobys_q + (*(int *)(data + 0x100) << 8));
-        func_L06_002DB248_q(*(int *)(data + 0x104));
+        set_listed_class_16f_state_2_and_clear_data_28(*(int *)(data + 0x104));
         moby[0x20] = 0xF;
         if ((unsigned char)moby[0x53] != 1) {
             func_00213DE0_q(moby, 1, 0, func_001F9850_q(0x14));
