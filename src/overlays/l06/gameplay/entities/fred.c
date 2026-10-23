@@ -7807,7 +7807,7 @@ extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 unsigned char *FUN_L00_002730e0(float *pos, void *vel, int color, u8 life, u8 b, int mode, float scale);
 void test_moby_vector_stream_collision_lines(char *m) __asm__("FUN_L06_00305000");
-void FUN_L06_00305170_c(char *m) __asm__("FUN_L06_00305170");
+void draw_moby_vector_streams(char *m) __asm__("FUN_L06_00305170");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void func_L00_00273F80_r(void *, void *, int, float, int, int, int) __asm__("FUN_L00_002730e0");
 
@@ -7900,7 +7900,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
             }
         }
         if (fast_vec_dist(moby + 0x10, ((char *)D_L06_00167540)) < 48.0f) {
-            enqueue_callback_list_1((int)FUN_L06_00305170_c, moby);
+            enqueue_callback_list_1((int)draw_moby_vector_streams, moby);
         }
         if (vector_stream_vars->f14 >= 0 && *(unsigned char *)(D_L06_0015FFD8_301070 + 0xBC + (vector_stream_vars->f14 << 8)) != 0) {
             int voice_slot_index;
@@ -8017,7 +8017,7 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
-void FUN_L06_00305170(char *moby) {
+void draw_moby_vector_streams(char *moby) {
     float rotation_scale_matrix[16];
     float scale_matrix[16];
     float copy_transform_matrices[5][16];
