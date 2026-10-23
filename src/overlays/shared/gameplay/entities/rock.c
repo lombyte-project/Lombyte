@@ -1670,7 +1670,9 @@ extern int moby_killed[] __asm__("D_L01_001BA950");
 extern s32 D_0014C190[][64];
 extern void set_moby_list_state(char *arg, int val) __asm__("FUN_L01_0026e0e0");
 
-void FUN_L01_00308b28(char *moby) {
+void activate_teleporter_and_record_state(char *moby) __asm__("FUN_L01_00308b28");
+
+void activate_teleporter_and_record_state(char *moby) {
     int level_bitset_byte_offset = D_0015ED84 << 8;
     unsigned char moby_group_index;
     *(int *)((u8 *)D_0014C190 + (((short)*(unsigned short *)(moby + 0xB2) >> 5) * 4 + level_bitset_byte_offset)) |=
@@ -1700,7 +1702,7 @@ extern char *D_L01_0015FFD8;
 extern int D_L01_0015F594 __attribute__((sda));
 
 extern int FUN_00214720(void *, int);
-extern void FUN_L01_00308b28_c(char *) __asm__("FUN_L01_00308b28");
+extern void activate_teleporter_and_record_state(char *) __asm__("FUN_L01_00308b28");
 extern void show_teleporter_and_children(char *) __asm__("FUN_L01_00309838");
 extern void FUN_L01_003097e8_c(L01Moby *) __asm__("FUN_L01_003097e8");
 extern void update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
@@ -1746,7 +1748,7 @@ void teleporter_update(struct Moby *moby) {
     if (moby->state != 0 && *(int *)(data + 4) != -1 && !active &&
         FUN_00214720(&hero.motion.pos, *(int *)(data + 4)) != 0) {
         active = 1;
-        FUN_L01_00308b28_c(moby);
+        activate_teleporter_and_record_state(moby);
         show_teleporter_and_children(moby);
         if (moby->state == 5)
             moby->state = active;
