@@ -63,7 +63,9 @@ void reset_walker_gait_helpers(u8 *gait_data) {
 
 extern float square_root(float) __asm__("FUN_001f9988");
 
-float FUN_L00_002a15c8(char *walker_moby, char *gait_data) {
+float compute_walker_time_to_landing(char *walker_moby, char *gait_data) __asm__("FUN_L00_002a15c8");
+
+float compute_walker_time_to_landing(char *walker_moby, char *gait_data) {
     float root_denominator = *(float *)(gait_data + 0xDC);
     float gap = *(float *)(walker_moby + 0x18) - *(float *)(gait_data + 0x68);
     float root_numerator_base = *(float *)(gait_data + 0xD8) + root_denominator * 0.5f;
@@ -169,7 +171,7 @@ extern void debug_print_alt() __asm__("FUN_001e93b0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
-float FUN_L00_002a15c8_c(char *a, char *b) __asm__("FUN_L00_002a15c8");
+float compute_walker_time_to_landing(char *a, char *b) __asm__("FUN_L00_002a15c8");
 void reset_walker_gait_helpers(u8 *a0) __asm__("FUN_L00_002a1538");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
@@ -846,7 +848,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
             reset_walker_gait_helpers((char *)gait_data);
             gait_data->bB7 = 0x10;
         } else if ((gait_data->uEE & 4) && gait_data->fD8 < 0.0f) {
-            float t = FUN_L00_002a15c8_c((char *)walker_moby, (char *)gait_data);
+            float t = compute_walker_time_to_landing((char *)walker_moby, (char *)gait_data);
             float len = (gait_data->anim[12]->f44 - gait_data->anim[12]->f0C) * 2.0f;
             if (t < len + 15.0f) {
                 int bl = truncate_float_to_s32(t - len) >> 1;
@@ -876,7 +878,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
             reset_walker_gait_helpers((char *)gait_data);
             gait_data->bB7 = 0x10;
         } else if ((gait_data->uEE & 4) && gait_data->fD8 < 0.0f) {
-            float t = FUN_L00_002a15c8_c((char *)walker_moby, (char *)gait_data);
+            float t = compute_walker_time_to_landing((char *)walker_moby, (char *)gait_data);
             float len = (gait_data->anim[10]->f44 - gait_data->anim[10]->f0C) * 2.0f;
             if (t < len + 15.0f) {
                 int bl = truncate_float_to_s32(t - len) >> 1;
@@ -895,7 +897,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
         break;
     case WALKER_GAIT_WAIT_FOR_LANDING:
         if (walker_moby->b52 == gait_data->bB3) {
-            float t = FUN_L00_002a15c8_c((char *)walker_moby, (char *)gait_data);
+            float t = compute_walker_time_to_landing((char *)walker_moby, (char *)gait_data);
             float len = (gait_data->anim[12]->f44 - gait_data->anim[12]->f0C) * 2.0f;
             if (t < len + 15.0f) {
                 int bl = truncate_float_to_s32(t - len) >> 1;
@@ -909,7 +911,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
         break;
     case WALKER_GAIT_SYNC_LANDING_ANIMATION:
         if (walker_moby->b52 == gait_data->anim[12]->id) {
-            float t = FUN_L00_002a15c8_c((char *)walker_moby, (char *)gait_data);
+            float t = compute_walker_time_to_landing((char *)walker_moby, (char *)gait_data);
             if (t > 1.0f) {
                 float base = convert_integer_to_float(walker_moby->b50) + walker_moby->f54;
                 t = gait_data->anim[12]->f44 + 2.0f - t * 0.5f - gait_data->anim[12]->f0C;
@@ -936,7 +938,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
         break;
     case WALKER_GAIT_SYNC_ALTERNATE_LANDING_ANIMATION:
         if (walker_moby->b52 == gait_data->anim[10]->id) {
-            float t = FUN_L00_002a15c8_c((char *)walker_moby, (char *)gait_data);
+            float t = compute_walker_time_to_landing((char *)walker_moby, (char *)gait_data);
             if (t > 1.0f) {
                 float base = convert_integer_to_float(walker_moby->b50) + walker_moby->f54;
                 t = gait_data->anim[10]->f44 + 2.0f - t * 0.5f - gait_data->anim[10]->f0C;
