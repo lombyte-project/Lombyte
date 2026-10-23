@@ -17,13 +17,13 @@
 
 extern unsigned char D_0013A4E0[];
 #include "rnc/data_labels.h"
-extern void FUN_L00_002c1778_u(void *) __asm__("FUN_L00_002c1778");
+extern void update_trespasser_pickup(void *) __asm__("FUN_L00_002c1778");
 
 /* Runs FUN_L00_002c1778 when the moby data word 4 is set, else sets byte 0xBC from a mask test. */
 void trespasser_update(char *m) __asm__("FUN_L00_002c1718");
 void trespasser_update(char *trespasser_moby) {
     if (*(int *)(*(char **)(trespasser_moby + 0x78) + 4) != 0) {
-        FUN_L00_002c1778_u(trespasser_moby);
+        update_trespasser_pickup(trespasser_moby);
     } else if (*(int *)(D_0013A4E0 + 0x2600) & *(int *)(((unsigned char *)&D_0013E533) + 0x1EBD)) {
         trespasser_moby[0xBC] = 1;
     } else {
@@ -1143,7 +1143,7 @@ void FUN_0020c828_2c1778(void *) __asm__("FUN_0020c828");
 
 extern const float D_L00_00161828 __attribute__((sda));
 extern float D_L00_00161830 __attribute__((sda));
-void FUN_L00_002c1778(void *mv) {
+void update_trespasser_pickup(void *mv) {
     enum {
         TRESPASSER_INITIALIZE = 0,
         TRESPASSER_WAIT_FOR_HERO_PROXIMITY = 1,
