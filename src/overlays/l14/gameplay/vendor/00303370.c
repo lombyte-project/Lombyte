@@ -5,7 +5,7 @@
 
 #include "qcopy.h"
 #include "sda.h"
-extern void FUN_L02_002a4058(void *, int, float);
+extern void prepare_scaled_float_table_with_target_byte(void *, int, float) __asm__("FUN_L02_002a4058");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern unsigned char D_L14_001E9C60[];
 extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
@@ -19,7 +19,7 @@ void update_moby_draw_registration(struct Moby *moby) {
     };
     switch (moby->state) {
     case MOBY_STATE_INITIALIZE:
-        FUN_L02_002a4058(D_L14_001E9C60, 0x40, 0.6666667f);
+        prepare_scaled_float_table_with_target_byte(D_L14_001E9C60, 0x40, 0.6666667f);
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;

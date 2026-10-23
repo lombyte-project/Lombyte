@@ -11,7 +11,9 @@ extern s32 D_L02_001612A8;
 extern s32 D_L02_001612AC;
 
 extern float D_L02_001CB500[];
-void FUN_L02_002a4058(char *value_target, int val, float scale) {
+void prepare_scaled_float_table_with_target_byte(char *value_target, int val, float scale) __asm__("FUN_L02_002a4058");
+
+void prepare_scaled_float_table_with_target_byte(char *value_target, int val, float scale) {
     int i;
     float *destination;
     float *source;

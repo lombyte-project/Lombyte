@@ -1985,7 +1985,7 @@ void qwark_rilgar_update(L03WatchMoby *moby) {
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, watch_data, 0);
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, (char *)watch_data + 0x80, 1);
 }
-extern void FUN_L02_002a4058(void *, int, float);
+extern void prepare_scaled_float_table_with_target_byte(void *, int, float) __asm__("FUN_L02_002a4058");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern unsigned char D_L03_001DC1A0[];
 extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
@@ -1999,7 +1999,7 @@ void update_moby_draw_callback(unsigned char *moby) {
     };
     switch (moby[0x20]) {
     case DRAW_CALLBACK_INITIALIZE:
-        FUN_L02_002a4058(D_L03_001DC1A0, 0x20, 0.6666667f);
+        prepare_scaled_float_table_with_target_byte(D_L03_001DC1A0, 0x20, 0.6666667f);
         moby[0x20] = 1;
         moby[0x30] = 0xFF;
         break;
