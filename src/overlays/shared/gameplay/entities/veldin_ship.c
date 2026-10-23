@@ -2680,7 +2680,9 @@ extern u8 D_0014C050[][16] __attribute__((section(".data")));
 
 /* Kills a live moby: marks it in the level's spawn tables, starts its death sound and
  * clears its key out of the shared key table. */
-void FUN_L00_002d5830(struct Moby *moby) {
+void collect_moby_and_clear_path_keys(struct Moby *moby) __asm__("FUN_L00_002d5830");
+
+void collect_moby_and_clear_path_keys(struct Moby *moby) {
     KeyVars *key_vars = (KeyVars *)moby->pvars;
     s32 i;
     if (moby->state != 1) {
