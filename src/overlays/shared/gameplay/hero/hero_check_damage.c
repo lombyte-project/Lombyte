@@ -967,7 +967,7 @@ extern ID_20e4c8 D_L00_00179AC0_c[] __asm__("D_L00_00179AC0");
 extern s32 D_L00_0015F6A0_gp[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
 extern s32 FUN_L00_0020d498_c(s32) __asm__("FUN_L00_0020d498");
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
-extern u8 *FUN_L00_0024f028(u8 *, s32);
+extern u8 *allocate_moby_animation_slot(u8 *, s32) __asm__("FUN_L00_0024f028");
 extern void release_moby_animation_slot(u8 *, u8 **) __asm__("FUN_L00_0024f0e8");
 extern void initialize_moby_animation_blend(u8 *, u8 *, s32, s32, s32, s32) __asm__("FUN_L00_0024f3e0");
 extern void FUN_L00_002323b8_c(s32, s32, f32) __asm__("FUN_L00_002323b8");
@@ -1005,7 +1005,7 @@ void f_fun_l00_0020e4c8_227fa0(void) {
         if (hero.unkD08[i] != 0) {
             release_moby_animation_slot((u8 *)hero.moby, &hero.unkD08[i]);
         }
-        slot_animation_object = FUN_L00_0024f028((u8 *)hero.moby, D_L00_0015F6A0_gp[i]);
+        slot_animation_object = allocate_moby_animation_slot((u8 *)hero.moby, D_L00_0015F6A0_gp[i]);
         hero.unkD08[i] = slot_animation_object;
         if (slot_animation_object != 0) {
             hero.unk2294 = slot_animation_id;

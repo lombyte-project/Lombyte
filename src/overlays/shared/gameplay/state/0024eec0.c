@@ -107,7 +107,9 @@ SlotBuffer slot_buffers_l16[6] __asm__("D_L16_001871C0") = {{0}};
 SlotBuffer slot_buffers_l17[6] __asm__("D_L17_00187640") = {{0}};
 SlotBuffer slot_buffers_l18[6] __asm__("D_L18_00187740") = {{0}};
 
-Slot *FUN_L00_0024f028(char *owner, int id) {
+Slot *allocate_moby_animation_slot(char *owner, int id) __asm__("FUN_L00_0024f028");
+
+Slot *allocate_moby_animation_slot(char *owner, int id) {
     int i = 0;
     Slot *selected_slot;
     unsigned char *selected_record;
