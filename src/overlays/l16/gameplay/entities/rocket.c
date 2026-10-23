@@ -1944,7 +1944,9 @@ void wall_button_update(struct Moby *moby) {
 float absolute_float(float input) __asm__("func_001F99C0");
 extern short *D_L16_001ABFC0_2d0a40[] __asm__("D_L16_001ABCC0");
 
-int FUN_L16_002cf678(struct Moby *moby) {
+int find_linked_pair_partner_by_height(struct Moby *moby) __asm__("FUN_L16_002cf678");
+
+int find_linked_pair_partner_by_height(struct Moby *moby) {
     short *group_entry = D_L16_001ABFC0_2d0a40[moby->group];
     if (group_entry == 0)
         return 0;
