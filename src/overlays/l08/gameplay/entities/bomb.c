@@ -792,7 +792,7 @@ typedef struct { char pad0[0x20]; Moby *moby; } Hit_2D5FA8;
 
 typedef struct { int count; char pad4[0xC]; char list[1]; } Path_2D5FA8;
 
-void *FUN_L05_002899f8(void *a, void *b, void *c, void *d);
+void *select_candidate_by_max_float_2c(void *a, void *b, void *c, void *d) __asm__("FUN_L05_002899f8");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C;

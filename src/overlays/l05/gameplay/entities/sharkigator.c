@@ -2355,7 +2355,7 @@ void extermitank_update(unsigned char *moby) {
     }
 }
 extern char *find_collision_part_305178(void *, int, int) __asm__("FUN_L00_0025a420");
-extern void *FUN_L05_002899f8(void *, void *, void *, int);
+extern void *select_candidate_by_max_float_2c(void *, void *, void *, int) __asm__("FUN_L05_002899f8");
 extern void hit_update_305178(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern int allocate_voice_305178(int, int, void *) __asm__("FUN_0022da68");
 extern void stop_animation_305178(void *, int, int) __asm__("FUN_L00_00257470");
@@ -2402,7 +2402,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
     part1 = first ? find_collision_part_305178(first, 0x210000, 0) : 0;
     second = *(char **)(data + 0x188);
     part2 = second ? find_collision_part_305178(second, 0x210000, 0) : 0;
-    part0 = FUN_L05_002899f8(part0, part1, part2, 0);
+    part0 = select_candidate_by_max_float_2c(part0, part1, part2, 0);
     if (part0 != 0) {
         if (*(char **)(part0 + 0x20) == moby)
             part0 = 0;
