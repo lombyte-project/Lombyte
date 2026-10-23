@@ -488,7 +488,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 void spawn_rocket_trail_effects(void *mobyp, void *vec) __asm__("FUN_L18_002d5488");
-extern void FUN_L18_002d5610_u(void *, void *) __asm__("FUN_L18_002d5610");
+extern void spawn_rocket_explosion(void *, void *) __asm__("FUN_L18_002d5610");
 void draw_rocket_target_pulse_quad(struct Moby *m) __asm__("FUN_L18_002d5768");
 
 void draw_rocket_target_pulse_quad(struct Moby *m) __asm__("FUN_L18_002d5768");
@@ -550,7 +550,7 @@ void update_rocket_moby(struct Moby *moby) {
             }
         }
         if (moby_vars->c == moby_vars->end || movement_collision_result) {
-            FUN_L18_002d5610_u(moby, movement_step);
+            spawn_rocket_explosion(moby, movement_step);
             mark_moby_for_removal(moby);
         } else if (moby_vars->flags & 2) {
             pitch_angle_or_remaining_frames = (float)(moby_vars->end - moby_vars->c);
@@ -644,7 +644,7 @@ typedef struct {
 
 extern float D_L18_0016196C __attribute__((sda));
 
-void FUN_L18_002d5610(void *moby_object, void *movement_step) {
+void spawn_rocket_explosion(void *moby_object, void *movement_step) {
     char *moby = moby_object;
     float movement_step_copy[4];
     float *qp = movement_step_copy;
