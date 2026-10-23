@@ -335,7 +335,7 @@ extern int FUN_001160d8_2bef68(void) __asm__("FUN_001160d8");
 extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 extern void FUN_L00_001ff290_2bef68(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern float FUN_L00_0025abf0_2bef68(void *, void *, void *, float, float) __asm__("FUN_L00_0025abf0");
-extern char *FUN_L03_002c45d8_2bef68(char *owner, float *pos, float *dir, short ang, int arg) __asm__("FUN_L03_002c45d8");
+extern char *spawn_class_221_moby(char *owner, float *pos, float *dir, short ang, int arg) __asm__("FUN_L03_002c45d8");
 extern int FUN_001f96f8_2bef68(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_0025d538_2bef68(void *, void *) __asm__("FUN_L00_0025d538");
 extern char D_L03_00166EC0[];
@@ -689,7 +689,7 @@ void spawner_update(struct Moby *moby) {
                 add_random_offset_to_vector_xyz((float *)&spawn_position, 0.025f);
                 FUN_L00_001ff290_2bef68(&sampled_point_scratch, &spawn_position, &launch_origin);
                 launch_velocity.z = FUN_L00_0025abf0_2bef68(&spawn_position, &target_position, 0, speed, -(spawner_data->fDC * frame_time_sq_macro));
-                spawned_moby = FUN_L03_002c45d8_2bef68((char *)moby, (float *)&spawn_position, (float *)&launch_velocity, spawner_data->h8C, spawner_data->b83);
+                spawned_moby = spawn_class_221_moby((char *)moby, (float *)&spawn_position, (float *)&launch_velocity, spawner_data->h8C, spawner_data->b83);
                 if (spawned_moby != 0) {
                     *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
                 }
@@ -707,7 +707,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 extern char *func_0020D348_m_2C59A0(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L03_002c45d8(char *owner, float *pos, float *launch_velocity, short ang, int spawn_options) {
+char *spawn_class_221_moby(char *owner, float *pos, float *launch_velocity, short ang, int spawn_options) {
     char *spawned_moby;
     char *moby_pvars;
     spawned_moby = func_0020D348_m_2C59A0(0x221);
