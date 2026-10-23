@@ -685,7 +685,9 @@ extern void func_001F9BD8_d92f0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float func_001FA748_d92f0(float, float) __asm__("FUN_001fa580");
 extern float func_001FA790_d92f0(float, float) __asm__("FUN_001fa5c8");
 extern float D_0015EE6C_d92f0 __asm__("D_0015ED6C");
-void FUN_L02_002d92f0(char *moby) {
+void align_hero_to_tresspasser_pad(char *moby) __asm__("FUN_L02_002d92f0");
+
+void align_hero_to_tresspasser_pad(char *moby) {
     float position_delta[4];
     char *hero_position;
     float f;
