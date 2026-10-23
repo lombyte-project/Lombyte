@@ -92,7 +92,7 @@ extern void FUN_L00_0020e698(void);
 extern void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
 s32 FUN_L00_0020fe30(void);
 void FUN_L00_0020fd80(int id);
-void FUN_L00_0020fde0(int id);
+void set_hero_item_switch_timer_for_item(int id) __asm__("FUN_L00_0020fde0");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void apply_hero_item_slot_selection(int i) __asm__("FUN_L05_0023dc88");
@@ -368,7 +368,7 @@ void apply_hero_item_slot_selection(int i) {
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
         clear_hero_idle_rotation_targets();
         *(int *)((char *)g + 0x1010) = random_int_between(scale_game_frames(0x32), scale_game_frames(0x5A));
-        FUN_L00_0020fde0(*(hero.selected_item + i));
+        set_hero_item_switch_timer_for_item(*(hero.selected_item + i));
         FUN_L00_0020fd80(*(hero.selected_item + i));
         if (g->unk20A8 != 0) {
             FUN_L00_0020e698();

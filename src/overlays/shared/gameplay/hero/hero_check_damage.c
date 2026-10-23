@@ -1766,7 +1766,9 @@ void FUN_L00_0020fd80(int id) {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 /* Sets the short at hero.unk1DA to scale_game_frames(0x46) for the listed ids. */
-void FUN_L00_0020fde0(int id) {
+void set_hero_item_switch_timer_for_item(int id) __asm__("FUN_L00_0020fde0");
+
+void set_hero_item_switch_timer_for_item(int id) {
     switch (id) {
     case 9:
     case 11:
@@ -1826,7 +1828,7 @@ extern void FUN_L00_0020e698_c(void) __asm__("FUN_L00_0020e698");
 extern void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
 s32 FUN_L00_0020fe30_c(void) __asm__("FUN_L00_0020fe30");
 void FUN_L00_0020fd80_c(int id) __asm__("FUN_L00_0020fd80");
-void FUN_L00_0020fde0_c(int id) __asm__("FUN_L00_0020fde0");
+void set_hero_item_switch_timer_for_item(int id) __asm__("FUN_L00_0020fde0");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
@@ -2094,7 +2096,7 @@ void hero_switch_item(int i) {
         clear_hero_idle_rotation_targets();
         g->unk1010 =
             random_int_between(scale_game_frames(0x32), scale_game_frames(0x5A));
-        FUN_L00_0020fde0_c(*(hero.selected_item + i));
+        set_hero_item_switch_timer_for_item(*(hero.selected_item + i));
         FUN_L00_0020fd80_c(*(hero.selected_item + i));
         if (g->unk20A8 != 0) {
             FUN_L00_0020e698_c();
