@@ -125,7 +125,9 @@ extern int D_L08_00162374;
 
 extern short D_L08_0016234C __attribute__((sda));
 extern short D_L08_00162350 __attribute__((sda));
-void FUN_L08_00307b90(int use_reduced_xy_range_preset) {
+void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_preset) __asm__("FUN_L08_00307b90");
+
+void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_preset) {
     float xy_random_range_scale, countdown_range_start, count_interpolation_end, count_interpolation_start;
     float xy_range_reference_vector[2];
     float xy_length_ratio;
@@ -189,9 +191,9 @@ float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
 void FUN_L00_00262cf0(void *a, void *b);
 void spawn_ground_contact_effect_particle(void *v) __asm__("FUN_L00_002634f8");
 void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f);
-void FUN_L08_00307b90_c(int arg) __asm__("FUN_L08_00307b90");
+void randomize_ground_particle_scatter_parameters(int arg) __asm__("FUN_L08_00307b90");
 extern char D_L08_00167640_3091B0[] __asm__("D_L08_001675C0");
-extern void func_L08_00309050_3091B0(int) __asm__("FUN_L08_00307b90");
+extern void randomize_ground_particle_scatter_parameters(int) __asm__("FUN_L08_00307b90");
 extern int update_float_countdown(float *) __asm__("FUN_L08_00211b08");
 extern void func_001F9BF0_3091B0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_00263D68_3091B0(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
@@ -264,10 +266,10 @@ void scatter_ground_particles(Moby *moby) {
     case GROUND_PARTICLES_STATE_INITIALIZE:
         moby->state = 2;
         moby->update_dist = 0xFF;
-        func_L08_00309050_3091B0(flag);
+        randomize_ground_particle_scatter_parameters(flag);
         break;
     case GROUND_PARTICLES_STATE_SCATTER:
-        if (update_float_countdown(&D_L08_00162370)) func_L08_00309050_3091B0(flag);
+        if (update_float_countdown(&D_L08_00162370)) randomize_ground_particle_scatter_parameters(flag);
         func_001F9BF0_3091B0(&dv, D_L08_00167640_3091B0, &moby_data->v30);
         D_L08_00160250 = *(u128_3091B0 *)&dv;
         *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
