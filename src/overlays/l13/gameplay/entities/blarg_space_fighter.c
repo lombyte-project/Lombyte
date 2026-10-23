@@ -27,7 +27,10 @@ extern char *FUN_L00_0026daa0(char *, int, int, int, float);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_c13(void *, int, int, int) __asm__("FUN_00212f90");
 
-unsigned char *FUN_L13_002c13b0(char *owner_moby, char *pos, char *target, char *initial_rotation, int arg, float scale,
+unsigned char *spawn_level_13_homing_rocket(char *owner_moby, char *pos, char *target, char *initial_rotation, int arg, float scale,
+                                float max_speed) __asm__("FUN_L13_002c13b0");
+
+unsigned char *spawn_level_13_homing_rocket(char *owner_moby, char *pos, char *target, char *initial_rotation, int arg, float scale,
                                 float max_speed) {
     unsigned char *moby = (unsigned char *)create_moby_c13(0x52);
     if (moby != 0) {
