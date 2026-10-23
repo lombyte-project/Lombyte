@@ -35,7 +35,9 @@ extern volatile unsigned char D_0015EDB0[1];
 extern unsigned char D_L08_0017CC40[];
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
-void FUN_L08_00305138(struct Moby *moby) {
+void attach_batalia_deserter_class_manipulator(struct Moby *moby) __asm__("FUN_L08_00305138");
+
+void attach_batalia_deserter_class_manipulator(struct Moby *moby) {
     int i;
     if (D_L08_0015F5C4 == 2 && D_0015EDB0[0]) {
         if (D_L08_0016D060.a == 3 && D_L08_0016D060.b >= 0x1BA && D_L08_0016D060.b < 0x284) {
