@@ -312,7 +312,10 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
-int FUN_L07_0030f1e0(char *moby, char *moby_data, float target_heading, float lo, float up, float hi, float down,
+int update_sharkigator_horizontal_velocity_by_heading(char *moby, char *moby_data, float target_heading, float lo, float up, float hi, float down,
+                     float vmax, float vmin) __asm__("FUN_L07_0030f1e0");
+
+int update_sharkigator_horizontal_velocity_by_heading(char *moby, char *moby_data, float target_heading, float lo, float up, float hi, float down,
                      float vmax, float vmin) {
     float speed = vector_length_xy(moby_data + 0xD0);
     int heading_below_lower_threshold = 0;
@@ -2744,7 +2747,7 @@ extern void no_op_main_callback_alt(void *, void *) __asm__("FUN_001e93e8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L07_0030ed30_c(char *moby, char *data) __asm__("FUN_L07_0030ed30");
-int FUN_L07_0030f1e0_c(char *moby, char *obj, float a, float lo, float up, float hi, float down, float vmax, float vmin) __asm__("FUN_L07_0030f1e0");
+int update_sharkigator_horizontal_velocity_by_heading(char *moby, char *obj, float a, float lo, float up, float hi, float down, float vmax, float vmin) __asm__("FUN_L07_0030f1e0");
 int test_sharkigator_target_sphere_collision(void *moby, int id, float scale) __asm__("FUN_L07_0030f4d0");
 int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper) __asm__("FUN_L07_0030f540");
 void FUN_L00_002a3ec8_c(void *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount) __asm__("FUN_L00_002a3ec8");
@@ -2954,7 +2957,7 @@ void sharkigator_update(unsigned char *moby) {
             }
         }
         FUN_L07_0030eee8_c((struct Moby *)moby, (struct WalkerData *)data);
-        if (FUN_L07_0030f1e0_c((char *)moby, data, F(data, 0x13C), 0.209439516f, frame_time_sq * 6.0f,
+        if (update_sharkigator_horizontal_velocity_by_heading((char *)moby, data, F(data, 0x13C), 0.209439516f, frame_time_sq * 6.0f,
                               0.52359879f, frame_time_sq * 4.0f, frame_time * 7.0f, frame_time * 3.0f) &&
             wander) {
             if (moby[0x53] != 0) {
@@ -2998,7 +3001,7 @@ void sharkigator_update(unsigned char *moby) {
         if (close) {
             fast_vec_scale_c(data + 0xD0, data + 0xD0, frame_scale * (0.9f - 1.0f) + 1.0f);
         }
-        if (FUN_L07_0030f1e0_c((char *)moby, data, angle, 0.209439516f, frame_time_sq * 20.0f,
+        if (update_sharkigator_horizontal_velocity_by_heading((char *)moby, data, angle, 0.209439516f, frame_time_sq * 20.0f,
                               0.52359879f, frame_time_sq * three, frame_time * 20.0f, frame_time * 5.0f) &&
             close) {
             if (moby[0x53] != 2) {
@@ -3073,7 +3076,7 @@ void sharkigator_update(unsigned char *moby) {
         float pi = 3.14159274f;
         float pi2 = 1.57079637f;
         FUN_L07_0030eee8_c((struct Moby *)moby, (struct WalkerData *)data);
-        FUN_L07_0030f1e0_c((char *)moby, data, F(data, 0x13C), 0.209439516f, frame_time_sq * 6.0f,
+        update_sharkigator_horizontal_velocity_by_heading((char *)moby, data, F(data, 0x13C), 0.209439516f, frame_time_sq * 6.0f,
                           0.52359879f, frame_time_sq * 4.0f, frame_time * seven, frame_time * 3.0f);
         advance_sharkigator_swim_movement((char *)moby, data, frame_time_sq * 12.0f, frame_time_sq * 50.0f, frame_time * seven);
         FUN_L00_00258278((char *)moby, (float *)(data + 0x120), F(data, 0x13C),
@@ -3139,7 +3142,7 @@ void sharkigator_update(unsigned char *moby) {
             }
         }
         FUN_L07_0030eee8_c((struct Moby *)moby, (struct WalkerData *)data);
-        if (FUN_L07_0030f1e0_c((char *)moby, data, F(data, 0x13C), 0.34906584f, frame_time_sq * 3.0f,
+        if (update_sharkigator_horizontal_velocity_by_heading((char *)moby, data, F(data, 0x13C), 0.34906584f, frame_time_sq * 3.0f,
                               1.04719758f, frame_time_sq * 9.0f, frame_time, frame_time) &&
             wander) {
             if (moby[0x53] != 3) {
@@ -3166,7 +3169,7 @@ void sharkigator_update(unsigned char *moby) {
         angle = fast_arc_tan_c2(target.pos[0] - F(moby, 0x10), target.pos[1] - F(moby, 0x14));
         func_L00_002592B0_t((char *)moby, angle, (float *)(data + 0x120),
                           frame_time_sq * 0.785398185f, frame_time_sq * pi2, frame_time * 0.785398185f);
-        if (FUN_L07_0030f1e0_c((char *)moby, data, angle, 0.52359879f, frame_time_sq * 4.0f,
+        if (update_sharkigator_horizontal_velocity_by_heading((char *)moby, data, angle, 0.52359879f, frame_time_sq * 4.0f,
                               pi2, frame_time_sq * 9.0f, frame_time * 1.5f, frame_time) &&
             vector_distance_xy_alt(moby + 0x10, &target) < 1.9f && moby[0x20] != 10) {
             if (moby[0x53] != 5) {
